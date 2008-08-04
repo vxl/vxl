@@ -276,7 +276,7 @@ vcl_ostream& operator<<( vcl_ostream& strm, const bprb_filepath& fp )
 }
 
 //: Input stream operator for bprb_filepath objects
-vcl_istream& operator>>( vcl_istream& strm, const bprb_filepath& fp )
+vcl_istream& operator>>( vcl_istream& strm, bprb_filepath& fp )
 {
   strm >> fp.path >> fp.ext;
   return strm;

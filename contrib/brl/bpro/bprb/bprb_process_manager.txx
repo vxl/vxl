@@ -50,7 +50,7 @@ bprb_process_manager<T>::get_process_by_name( const vcl_string& name ) const
   if ( it == process_map.end() ) {
     return NULL ;
   }
-  return it->second;
+  return it->second->clone();
 }
 
 

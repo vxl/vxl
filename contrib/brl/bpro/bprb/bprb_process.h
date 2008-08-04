@@ -81,22 +81,22 @@ class bprb_process : public vbl_ref_count
   virtual vcl_string name() = 0;
 
   //: The number of inputs
-  unsigned n_inputs();
+  unsigned n_inputs() const;
 
   //: Get all input types at once
-  vcl_vector<vcl_string>& input_types(){return input_types_;}
+  vcl_vector<vcl_string> const& input_types() const {return input_types_;}
 
   // The type of each input
-  vcl_string input_type(unsigned i);
+  vcl_string input_type(unsigned i) const;
 
   //: The number of outputs
-  unsigned n_outputs();
+  unsigned n_outputs() const;
 
   //: Get all output types at once
-  vcl_vector<vcl_string>& output_types(){return output_types_;}
+  vcl_vector<vcl_string> const& output_types() const {return output_types_;}
 
   // The type of each output
-  vcl_string output_type(unsigned i);
+  vcl_string output_type(unsigned i) const;
 
   //: Set all the inputs at once
   bool set_input_data(vcl_vector<brdb_value_sptr> const& inputs);

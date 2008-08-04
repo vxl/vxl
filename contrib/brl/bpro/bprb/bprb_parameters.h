@@ -361,7 +361,7 @@ bool operator<=( const bprb_filepath& lhs, const bprb_filepath& rhs );
 //: Output stream operator for bprb_filepath objects
 vcl_ostream& operator<<( vcl_ostream& strm, const bprb_filepath& fp );
 //: Input stream operator for bprb_filepath objects
-vcl_istream& operator>>( vcl_istream& strm, const bprb_filepath& fp );
+vcl_istream& operator>>( vcl_istream& strm, bprb_filepath& fp );
 
 
 #endif // bprb_parameters_h_

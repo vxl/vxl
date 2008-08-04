@@ -20,7 +20,9 @@ bprb_process::~bprb_process()
 
 //: Copy Constructor
 bprb_process::bprb_process(const bprb_process& other)
-  : parameters_(new bprb_parameters(other.parameters_))
+: parameters_(new bprb_parameters(other.parameters_)), 
+  input_data_(other.n_inputs()), output_data_(other.n_outputs()),
+  input_types_(other.input_types()),output_types_(other.output_types())
 {
 }
 
@@ -42,13 +44,13 @@ bool bprb_process::parse_params_XML(const vcl_string& xml_path)
 }
 
 //: The number of inputs
-unsigned bprb_process::n_inputs()
+unsigned bprb_process::n_inputs() const
 {
   return input_data_.size();
 }
 
 //: The type of each input
-vcl_string bprb_process::input_type(unsigned i)
+vcl_string bprb_process::input_type(unsigned i) const
 {
   if (i<n_inputs())
     return input_types_[i];
@@ -56,13 +58,13 @@ vcl_string bprb_process::input_type(unsigned i)
 }
 
 //: The number of outputs
-unsigned bprb_process::n_outputs()
+unsigned bprb_process::n_outputs() const
 {
   return output_data_.size();
 }
 
 //: The type of each output
-vcl_string bprb_process::output_type(unsigned i)
+vcl_string bprb_process::output_type(unsigned i) const
 {
   if (i<n_outputs())
     return output_types_[i];
