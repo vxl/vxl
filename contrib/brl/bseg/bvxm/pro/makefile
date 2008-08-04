@@ -31,6 +31,9 @@ SOURCES += bvxm_ocp_hist_process.cxx
 SOURCES += bvxm_roc_process.cxx
 SOURCES += bvxm_pmap_hist_process.cxx
 SOURCES += bvxm_pmap_ratio_process.cxx
+SOURCES += bvxm_edges_lidar_init_process.cxx
+SOURCES += bvxm_rpc_prob_registration_process.cxx
+SOURCES += bvxm_update_edges_lidar_process.cxx
 
 SOURCES += multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 SOURCES += multiscale_pro/bvxm_create_multiscale_voxel_world_process.cxx
