@@ -73,9 +73,6 @@ void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,
 }
 
 
-
-
-
 //---------------------- Perform inverse transform -------------------
 // Note this is mainly used in testing
 // Note only the first 4*nA*ni*nj elements of v are accessed
@@ -112,16 +109,13 @@ void mipa_sample_histo_boxes_3L_inv(vil_image_view<srcT>& h_im,
     {
       for (unsigned a=0;a<nA;++a,++v,++h)
       {
-        // Copy elements from vector into 2 x 2 block 
-	h[0]=v[0];     h[dh1]=v[dv1];
+        // Copy elements from vector into 2 x 2 block
+        h[0]=v[0];     h[dh1]=v[dv1];
         h[dh2]=v[dv2]; h[dh3]=v[dv3];
       }
     }
   }
 }
-
-
-
 
 
 #undef MIPA_SAMPLE_HISTO_BOXES_INSTANTIATE
