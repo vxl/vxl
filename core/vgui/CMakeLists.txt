@@ -441,17 +441,7 @@ IF (wxWidgets_FOUND)
 
   IF(VGUI_USE_WX)
 
-    IF(wxWidgets_INCLUDE_DIRS)
-      INCLUDE_DIRECTORIES(${wxWidgets_INCLUDE_DIRS})
-    ENDIF(wxWidgets_INCLUDE_DIRS)
-    
-    IF (wxWidgets_CXX_FLAGS)
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
-    ENDIF(wxWidgets_CXX_FLAGS)
-    
-    #IF(wxWidgets_DEFINITIONS)
-    #  ADD_DEFINITIONS(${wxWidgets_DEFINITIONS})
-    #ENDIF(wxWidgets_DEFINITIONS)
+    INCLUDE( ${wxWidgets_USE_FILE} )
 
     SET(vgui_wx_sources
       impl/wx/vgui_wx_tag.cxx
