@@ -85,6 +85,32 @@ void test_math()
   testlib_test_assert("rnd(8.5001)  == 9", vnl_math_rnd(8.5001) ==  9);
   testlib_test_assert("rnd(8.5001f) == 9", vnl_math_rnd(8.5001f) == 9);
 
+  testlib_test_assert("floor(8.0)  == 8", vnl_math_floor(8.0) == 8);
+  testlib_test_assert("floor(8.0f) == 8", vnl_math_floor(8.0f) == 8);
+  testlib_test_assert("floor(8.9999)  == 8", vnl_math_floor(8.9999) ==  8);
+  testlib_test_assert("floor(8.9999f) == 8", vnl_math_floor(8.9999f) == 8);
+  testlib_test_assert("floor(8.0001)  == 8", vnl_math_floor(8.0001) ==  8);
+  testlib_test_assert("floor(8.0001f) == 8", vnl_math_floor(8.0001f) == 8);
+  testlib_test_assert("floor(-8.0)  == -8", vnl_math_floor(-8.0) == -8);
+  testlib_test_assert("floor(-8.0f) == -8", vnl_math_floor(-8.0f) == -8);
+  testlib_test_assert("floor(-8.9999)  == -9", vnl_math_floor(-8.9999) ==  -9);
+  testlib_test_assert("floor(-8.9999f) == -9", vnl_math_floor(-8.9999f) == -9);
+  testlib_test_assert("floor(-8.0001)  == -9", vnl_math_floor(-8.0001) ==  -9);
+  testlib_test_assert("floor(-8.0001f) == -9", vnl_math_floor(-8.0001f) == -9);
+
+  testlib_test_assert("ceil(8.0)  == 8", vnl_math_ceil(8.0) == 8);
+  testlib_test_assert("ceil(8.0f) == 8", vnl_math_ceil(8.0f) == 8);
+  testlib_test_assert("ceil(8.9999)  == 9", vnl_math_ceil(8.9999) ==  9);
+  testlib_test_assert("ceil(8.9999f) == 9", vnl_math_ceil(8.9999f) == 9);
+  testlib_test_assert("ceil(8.0001)  == 9", vnl_math_ceil(8.0001) ==  9);
+  testlib_test_assert("ceil(8.0001f) == 9", vnl_math_ceil(8.0001f) == 9);
+  testlib_test_assert("ceil(-8.0)  == -8", vnl_math_ceil(-8.0) == -8);
+  testlib_test_assert("ceil(-8.0f) == -8", vnl_math_ceil(-8.0f) == -8);
+  testlib_test_assert("ceil(-8.9999)  == -8", vnl_math_ceil(-8.9999) ==  -8);
+  testlib_test_assert("ceil(-8.9999f) == -8", vnl_math_ceil(-8.9999f) == -8);
+  testlib_test_assert("ceil(-8.0001)  == -8", vnl_math_ceil(-8.0001) ==  -8);
+  testlib_test_assert("ceil(-8.0001f) == -8", vnl_math_ceil(-8.0001f) == -8);
+
   testlib_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
   testlib_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));
   testlib_test_assert(" isfinite(i)    ",  vnl_math_isfinite(i));
