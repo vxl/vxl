@@ -101,7 +101,7 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
 
     area += t_area;
   }
- 
+
   return area/2;
 }
 
@@ -110,6 +110,6 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
 template T vgl_area(vgl_polygon<T > const&); \
 template T vgl_area_signed(vgl_polygon<T > const&); \
 template T vgl_area_enforce_orientation(vgl_polygon<T > const&); \
-template vgl_point_2d<T> vgl_centroid(vgl_polygon<T> const& poly)
+template vgl_point_2d<T > vgl_centroid(vgl_polygon<T > const&)
 
 #endif // vgl_area_txx_
