@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_resample_bicub.cxx
+// This is core/vil/tests/test_resample_nearest.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -7,9 +7,9 @@
 
 static void test_resample_nearest_byte()
 {
-  vcl_cout << "****************************\n"
+  vcl_cout << "******************************\n"
            << " Testing vil_resample_nearest\n"
-           << "****************************\n";
+           << "******************************\n";
 
   vil_image_view<vxl_byte> image0;
   vil_image_view<double> dest_im;
@@ -18,8 +18,8 @@ static void test_resample_nearest_byte()
   vcl_cout<<"Testing one plane image\n";
 
   for (unsigned int j=0;j<image0.nj();++j)
-     for (unsigned int i=0;i<image0.ni();++i)
-       image0(i,j) = i+j*10;
+    for (unsigned int i=0;i<image0.ni();++i)
+      image0(i,j) = i+j*10;
 
   double x0 = 5.0, y0= 5.0;
   double dx1 = 1.0, dy1 = 0.0;
@@ -50,7 +50,7 @@ static void test_resample_nearest_byte()
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
       for (unsigned int p=0;p<2;++p)
-       image0(i,j,p) = i+j*10+p*100;
+        image0(i,j,p) = i+j*10+p*100;
 
   vcl_cout<<"Fully in image\n";
   x0 = 5.0;

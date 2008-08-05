@@ -1,4 +1,4 @@
-// This is mul/vimt3d/tests/test_load.cxx
+// This is mul/vimt3d/tests/test_save.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_test.h>
 #include <vil3d/vil3d_load.h>
@@ -11,7 +11,7 @@
 
 namespace
 {
-  //: Stream output operator for class reference
+  // Stream output operator for class reference
   void vsl_print_summary(vcl_ostream& os,const vimt3d_transform_3d& b)
   {
     os << b;
@@ -39,12 +39,11 @@ static void test_save(int argc, char* argv[])
   vimt3d_transform_3d tr_in1 = vimt3d_load_transform(im_in1, true);
 
 
-  vcl_cout << "Golden transform: " << tr_gold1 <<
-    "\nLoaded transform: " << tr_in1 << vcl_endl;
+  vcl_cout << "Golden transform: " << tr_gold1
+           << "\nLoaded transform: " << tr_in1 << vcl_endl;
 
   TEST("v3i image round-trip has same zoom transform",
-    mbl_test_summaries_are_equal(tr_in1, tr_gold1 ), true);
-
+       mbl_test_summaries_are_equal(tr_in1, tr_gold1 ), true);
 }
 
 TESTMAIN_ARGS(test_save);

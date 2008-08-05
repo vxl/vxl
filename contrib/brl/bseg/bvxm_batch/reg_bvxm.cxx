@@ -102,8 +102,8 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_roc_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_update_edges_lidar_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_edges_lidar_init_process, bprb_batch_process_manager);
- 
-  //: multiscale
+
+  // multiscale
   REG_PROCESS(bvxm_detect_scale_process, bprb_batch_process_manager);
   //REG_PROCESS(bvxm_create_multiscale_voxel_world_process, bprb_batch_process_manager);
   //REG_PROCESS(bvxm_update_multiscale_process, bprb_batch_process_manager);
