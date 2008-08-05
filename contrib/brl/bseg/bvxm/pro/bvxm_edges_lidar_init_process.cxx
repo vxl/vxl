@@ -84,7 +84,7 @@ bool bvxm_edges_lidar_init_process::execute()
       float curr_difference = image_first_return(i,j)-image_second_return(i,j);
       if (curr_difference>threshold_edge_difference){
         edges_lidar(i,j) = image_first_return(i,j);
-        // todo : fix this probability estimation here
+        // todo : fix this probability estimation here (e.g., gamma distribution)
         edges_prob(i,j) = 1.0f - 0.5f*(1.0f/(1.0f+curr_difference-threshold_edge_difference));
       }
     }
