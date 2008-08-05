@@ -169,7 +169,7 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 }
 
 
-#if 0
+#if 0 // function commented out completely
 vcl_vector<vpgl_camera_double_sptr >
 generate_cameras_z(vgl_box_3d<double>& world)
 {
@@ -215,7 +215,7 @@ generate_cameras_z(vgl_box_3d<double>& world)
   }
   return rat_cameras;
 }
-#endif
+#endif // 0
 
 vcl_vector<vpgl_camera_double_sptr >
 generate_cameras_yz(vgl_box_3d<double>& world)
@@ -251,13 +251,13 @@ generate_cameras_yz(vgl_box_3d<double>& world)
 
         vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
         for (unsigned i=0; i<corners.size(); i++) {
-            vgl_point_3d<double> c = corners[i];
-            double u,v, u2, v2;
-            persp_cam->project(c.x(), c.y() ,c.z(), u, v);
-            bb.add(vgl_point_2d<double> (u,v));
+          vgl_point_3d<double> c = corners[i];
+          double u,v, u2, v2;
+          persp_cam->project(c.x(), c.y() ,c.z(), u, v);
+          bb.add(vgl_point_2d<double> (u,v));
 #ifdef DEBUG
-            vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-                << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
+          vcl_cout << "Perspective [" << u << ',' << v << "]\n"
+                   << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
 #endif
         }
 #ifdef DEBUG
@@ -265,51 +265,54 @@ generate_cameras_yz(vgl_box_3d<double>& world)
 #endif
     }
     return persp_cameras;
-//  vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
-//
-//  vgl_point_3d<double> centroid = world.centroid();
-//  double x,y;
-//  double alpha = (vnl_math::pi/8.) * 3;
-//  double delta_alpha = vnl_math::pi/40.;
-//  vcl_vector<vgl_point_3d<double> > centers;
-//  for (unsigned i=0; i<11; i++) {
-//    x = camera_dist*vcl_cos(alpha);
-//    y = camera_dist*vcl_sin(alpha);
-//    centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
-//#ifdef DEBUG
-//    vcl_cout << centers[i] << vcl_endl;
-//#endif
-//    alpha += delta_alpha;
-//  }
-//
-//  vgl_box_2d<double> bb;
-//  vcl_vector<vpgl_camera_double_sptr> rat_cameras;
-//  for (unsigned i=0; i<centers.size(); i++)
-//  {
-//    vgl_point_3d<double> camera_center  = centers[i];
-//    vpgl_perspective_camera<double> persp_cam;
-//    generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
-//    persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
-//    vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
-//    rat_cameras.push_back(rat_cam);
-//
-//    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
-//    for (unsigned i=0; i<corners.size(); i++) {
-//      vgl_point_3d<double> c = corners[i];
-//      double u,v, u2, v2;
-//      persp_cam.project(c.x(), c.y() ,c.z(), u, v);
-//      rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
-//      bb.add(vgl_point_2d<double> (u,v));
-//#ifdef DEBUG
-//      vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-//               << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
-//#endif
-//    }
-//#ifdef DEBUG
-//    vcl_cout << bb << vcl_endl;
-//#endif
-//  }
-//  return rat_cameras;
+
+#if 0 // rest of code section commented out
+  vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
+
+  vgl_point_3d<double> centroid = world.centroid();
+  double x,y;
+  double alpha = (vnl_math::pi/8.) * 3;
+  double delta_alpha = vnl_math::pi/40.;
+  vcl_vector<vgl_point_3d<double> > centers;
+  for (unsigned i=0; i<11; i++) {
+    x = camera_dist*vcl_cos(alpha);
+    y = camera_dist*vcl_sin(alpha);
+    centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
+#ifdef DEBUG
+    vcl_cout << centers[i] << vcl_endl;
+#endif
+    alpha += delta_alpha;
+  }
+
+  vgl_box_2d<double> bb;
+  vcl_vector<vpgl_camera_double_sptr> rat_cameras;
+  for (unsigned i=0; i<centers.size(); i++)
+  {
+    vgl_point_3d<double> camera_center  = centers[i];
+    vpgl_perspective_camera<double> persp_cam;
+    generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
+    persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
+    vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
+    rat_cameras.push_back(rat_cam);
+
+    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
+    for (unsigned i=0; i<corners.size(); i++) {
+      vgl_point_3d<double> c = corners[i];
+      double u,v, u2, v2;
+      persp_cam.project(c.x(), c.y() ,c.z(), u, v);
+      rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
+      bb.add(vgl_point_2d<double> (u,v));
+#ifdef DEBUG
+      vcl_cout << "Perspective [" << u << ',' << v << "]\n"
+               << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
+#endif
+    }
+#ifdef DEBUG
+    vcl_cout << bb << vcl_endl;
+#endif
+  }
+  return rat_cameras;
+#endif // 0
 }
 
 bool gen_images(vgl_vector_3d<unsigned> grid_size,
@@ -399,24 +402,20 @@ bool reconstruct_world(bvxm_voxel_world_sptr recon_world,
 
   for (unsigned i = 0;i<cameras.size();i++)
   {
-            vil_image_view_base_sptr curr_img=image_set[i];
-        for (unsigned scale_idx = 0;scale_idx < recon_world->get_params()->max_scale();scale_idx++)
-        {
-            
-            if (scale_idx != 0)
-                curr_img=bvxm_util::downsample_image_by_two(curr_img);
-            
+    vil_image_view_base_sptr curr_img=image_set[i];
+    for (unsigned scale_idx = 0;scale_idx < recon_world->get_params()->max_scale();scale_idx++)
+    {
+      if (scale_idx != 0)
+        curr_img=bvxm_util::downsample_image_by_two(curr_img);
 
-            vpgl_camera_double_sptr camera = bvxm_util::downsample_persp_camera(cameras[i],scale_idx);
+      vpgl_camera_double_sptr camera = bvxm_util::downsample_persp_camera(cameras[i],scale_idx);
 
-            vpgl_perspective_camera<double>* persp_cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
-            vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(*persp_cam));
+      vpgl_perspective_camera<double>* persp_cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
+      vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(*persp_cam));
 
-            bvxm_image_metadata observation(curr_img,rat_cam);
-            recon_world->update<APM_MOG_GREY>(observation,bin_num,scale_idx);
-
-
-        }
+      bvxm_image_metadata observation(curr_img,rat_cam);
+      recon_world->update<APM_MOG_GREY>(observation,bin_num,scale_idx);
+    }
   }
 
   for (unsigned i=0; i<cameras.size(); i++) {
@@ -435,7 +434,7 @@ bool reconstruct_world(bvxm_voxel_world_sptr recon_world,
     //cam->save(c.str().c_str());
     image_set.push_back(expected);
   }
-   return true;
+  return true;
 }
 
 void gen_texture_map(vgl_box_3d<double> box,
@@ -635,7 +634,6 @@ void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
 
 bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale)
 {
-    
   bvxm_voxel_grid<float>* ocp_grid =
     dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0,scale).ptr());
 
@@ -677,8 +675,8 @@ static void test_gen_synthetic_world()
                                  vgl_point_3d<double> (nx, ny, nz));
 
   unsigned max_scale=2;
-      float min_ocp_prob = 0.001;
-    float max_ocp_prob = 0.999;
+  float min_ocp_prob = 0.001;
+  float max_ocp_prob = 0.999;
 
   bvxm_world_params_sptr world_params = new bvxm_world_params();
   world_params->set_params("./test_gen_synthetic_world",
@@ -690,7 +688,7 @@ static void test_gen_synthetic_world()
   world->clean_grids();
 
   unsigned int bin_num_1 = 0,bin_num_2 = 10;
-    bvxm_voxel_world_sptr recon_world = new bvxm_voxel_world();
+  bvxm_voxel_world_sptr recon_world = new bvxm_voxel_world();
 
   bvxm_world_params_sptr recon_world_params = new bvxm_world_params();
   recon_world_params->set_params("./recon_world",vgl_point_3d<float> (0,0,0),
@@ -727,23 +725,22 @@ static void test_gen_synthetic_world()
   of<<"./test_gen_synthetic_world/ocp"<<0<<".raw";
   vcl_string ocp_raw_filename=of.str();
   world->save_occupancy_raw(ocp_raw_filename, 0);
-    for (unsigned scale=0;scale<max_scale;scale++)
+  for (unsigned scale=0;scale<max_scale;scale++)
   {
-
-  recon_world->get_grid<APM_MOG_GREY>(bin_num_1,scale);
-  recon_world->get_grid<APM_MOG_GREY>(bin_num_2,scale);
-  recon_world->get_grid<OCCUPANCY>(0,scale);
-    }
+    recon_world->get_grid<APM_MOG_GREY>(bin_num_1,scale);
+    recon_world->get_grid<APM_MOG_GREY>(bin_num_2,scale);
+    recon_world->get_grid<OCCUPANCY>(0,scale);
+  }
   //reconstruct the world from synthetic images and the apm grid stored in bin bin_num_1
   reconstruct_world(recon_world,cameras, image_set_1,bin_num_1,max_scale);
-      for (unsigned scale=0;scale<max_scale;scale++)
+  for (unsigned scale=0;scale<max_scale;scale++)
   {
-  vcl_stringstream of1;
-  of1<<"./recon_world/ocp"<<scale<<".raw";
-  vcl_string rec_filename=of1.str();
-  recon_world->save_occupancy_raw(rec_filename, scale);
+    vcl_stringstream of1;
+    of1<<"./recon_world/ocp"<<scale<<".raw";
+    vcl_string rec_filename=of1.str();
+    recon_world->save_occupancy_raw(rec_filename, scale);
 
-  test_reconstructed_ocp(recon_world,scale);
+    test_reconstructed_ocp(recon_world,scale);
   }
   return;
 }
