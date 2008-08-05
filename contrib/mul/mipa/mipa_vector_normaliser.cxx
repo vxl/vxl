@@ -1,20 +1,15 @@
-
-
 //:
 // \file
 // \author Martin Roberts
 // \brief Base class for normalisation algorithms for image texture vectors
 
 #include "mipa_vector_normaliser.h"
-#include <vcl_sstream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
-
-
 
 //=======================================================================
 
@@ -27,7 +22,7 @@ void vsl_add_to_binary_loader(const mipa_vector_normaliser& b)
 
 void vsl_b_write(vsl_b_ostream& bfs, const mipa_vector_normaliser& b)
 {
-    b.b_write(bfs);    
+  b.b_write(bfs);
 }
 
 //=======================================================================
@@ -58,7 +53,7 @@ vcl_auto_ptr<mipa_vector_normaliser>
 
   vcl_auto_ptr<mipa_vector_normaliser> ps =
     mbl_cloneables_factory<mipa_vector_normaliser>::get_clone(name);
-  
+
   ps -> config_from_stream(is, extra_props);
   return ps;
 }
@@ -67,7 +62,7 @@ vcl_auto_ptr<mipa_vector_normaliser>
 
 void vsl_b_read(vsl_b_istream& bfs, mipa_vector_normaliser& b)
 {
-    b.b_read(bfs);
+  b.b_read(bfs);
 }
 
 //=======================================================================
@@ -85,9 +80,9 @@ vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser& b)
 
 vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser* b)
 {
-    if (b)  
+  if (b)
     return os << *b;
-    else      
+  else
     return os << "No mipa_vector_normaliser defined.";
 }
 
@@ -97,7 +92,7 @@ void vsl_print_summary(vcl_ostream& os,const mipa_vector_normaliser& b)
 {
   os << b;
 }
- 
+
 //=======================================================================
 //: Stream output operator for class reference
 void vsl_print_summary(vcl_ostream& os,const mipa_vector_normaliser* b)
@@ -106,4 +101,4 @@ void vsl_print_summary(vcl_ostream& os,const mipa_vector_normaliser* b)
     os << *b;
   else
     os << vsl_indent() << "No mipa_vector_normaliser defined.";
-} 
+}

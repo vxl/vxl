@@ -21,20 +21,17 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 
 #include <bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_resource_sptr.h>
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_lidar_camera.h>
 
 class bvxm_edges_lidar_init_process : public bprb_process
 {
-public:
+ public:
 
   bvxm_edges_lidar_init_process();
 
@@ -52,7 +49,7 @@ public:
 
   bool init() { return true; }
   bool execute();
-  bool finish(){return true;}
+  bool finish() { return true; }
 };
 
 #endif // bvxm_edges_lidar_init_process_h_

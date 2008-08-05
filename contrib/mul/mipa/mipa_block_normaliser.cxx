@@ -7,14 +7,10 @@
 
 #include "mipa_block_normaliser.h"
 #include <vcl_iostream.h>
-#include <vcl_iterator.h>
 #include <vcl_algorithm.h>
-#include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
-#include <vnl/vnl_vector_ref.h>
-#include <vul/vul_string.h>
-#include <mbl/mbl_cloneables_factory.h>
+#include <vnl/vnl_vector.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
@@ -24,14 +20,11 @@
 //: Apply transform to texture vector
 void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
 {
-
-
     //Assume layout is cell values (e.g. histogram), the columns most contiguous, then rows.
 
     //Note any leftover regions not spanned by an integral number of blocks remain unnormalised!!!
     //e.g. a 17x17 region with 4x4 blocks has the final row and column not normalised
 
-    
     unsigned nblockCols=ni_region_/nc_per_block_; //Number of blocks across region
     unsigned nblockRows=nj_region_/nc_per_block_; //Number of blocks down region
 
@@ -43,39 +36,36 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
     vcl_ptrdiff_t colStep=nA_; //Columns are contiguous
     vcl_ptrdiff_t rowStep=nA_*ni_region_;
 
-    
-    for(unsigned jbRows=0;jbRows<nblockRows;++jbRows) //move down rows of region in block chunks
+    for (unsigned jbRows=0;jbRows<nblockRows;++jbRows) //move down rows of region in block chunks
     {
-        for(unsigned ibCols=0;ibCols<nblockCols;++ibCols) //move down rows of regionc_per_block_n in block chunks
+        for (unsigned ibCols=0;ibCols<nblockCols;++ibCols) //move down rows of regionc_per_block_n in block chunks
         {
             {
                 unsigned rowNum=jbRows*nc_per_block_;
                 unsigned colNum=ibCols*nc_per_block_;
                 double* pBlockTopLeft=v.data_block() + rowNum*rowStep + colNum*colStep; //Source
-                double* pTarget=vblock.data_block(); 
-                for(unsigned j=0;j<nc_per_block_;++j) //rows of this target block
+                double* pTarget=vblock.data_block();
+                for (unsigned j=0;j<nc_per_block_;++j) //rows of this target block
                 {
                     //Copy all elements across the columns of the block
                     vcl_copy(pBlockTopLeft,pBlockTopLeft+nTargetColEls,pTarget);
                     pBlockTopLeft+= rowStep; //Next row of block source
                     pTarget+= nTargetColEls; //Next row of block target
                 }
-                
                 normaliser_->normalise(vblock);
-
             }
             //Now copy back into input vector
             {
                 unsigned rowNum=jbRows*nc_per_block_;
                 unsigned colNum=ibCols*nc_per_block_;
                 double* pBlockTopLeft=v.data_block() + rowNum*rowStep + colNum*colStep; //Source
-                double* pTarget=vblock.data_block(); 
-                for(unsigned j=0;j<nc_per_block_;++j) //rows of this target block
+                double* pTarget=vblock.data_block();
+                for (unsigned j=0;j<nc_per_block_;++j) //rows of this target block
                 {
                     //Copy all elements across the columns of the block
                     vcl_copy(pTarget,pTarget+nTargetColEls,pBlockTopLeft);
                     pBlockTopLeft+= rowStep; //Next row of block in overall normalised vecor
-                    pTarget+= nTargetColEls; //Next row of block 
+                    pTarget+= nTargetColEls; //Next row of block
                 }
             }
         }
@@ -101,35 +91,35 @@ mipa_vector_normaliser* mipa_block_normaliser::clone() const
     // required if data is present in this base class
 void mipa_block_normaliser::print_summary(vcl_ostream& os) const
 {
-    os<<"mipa_block_normaliser: "<<vcl_endl;
-    os<<"\tni_region_\t"<<ni_region_;
-    os<<"\tnj_region_\t"<<nj_region_;
-    os<<"\tnA_\t"<<nA_;
-    os<<"\tnc_per_block_\t"<<nc_per_block_;
-    os<<vcl_endl;
-    os<<"Block normaliser summary is:"<<vcl_endl;
+    os<<"mipa_block_normaliser:\n"
+      <<"\tni_region_\t"<<ni_region_
+      <<"\tnj_region_\t"<<nj_region_
+      <<"\tnA_\t"<<nA_
+      <<"\tnc_per_block_\t"<<nc_per_block_
+      <<'\n'
+      <<"Block normaliser summary is:"<<vcl_endl;
     normaliser_->print_summary(os);
 }
 
 //=======================================================================
 
-  // required if data is present in this base class
+// required if data is present in this base class
 void mipa_block_normaliser::b_write(vsl_b_ostream& bfs) const
 {
     const short version_no=1;
     vsl_b_write(bfs, version_no);
-    
+
     vsl_b_write(bfs, ni_region_);
     vsl_b_write(bfs, nj_region_);
     vsl_b_write(bfs, nA_);
     vsl_b_write(bfs, nc_per_block_);
-    
+
     vsl_b_write(bfs, normaliser_);
 }
 
 //=======================================================================
 
-  // required if data is present in this base class
+// required if data is present in this base class
 void mipa_block_normaliser::b_read(vsl_b_istream& bfs)
 {
     if (!bfs) return;
@@ -144,12 +134,12 @@ void mipa_block_normaliser::b_read(vsl_b_istream& bfs)
             vsl_b_read(bfs, nj_region_);
             vsl_b_read(bfs, nA_);
             vsl_b_read(bfs, nc_per_block_);
-            
+
             vsl_b_read(bfs,normaliser_);
-        break;
+            break;
         default:
-            vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_block_normaliser&) \n";
-            vcl_cerr << "           Unknown version number "<< version << "\n";
+            vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_block_normaliser&)\n"
+                     << "           Unknown version number "<< version << '\n';
             bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
             return;
         }
@@ -160,32 +150,30 @@ void mipa_block_normaliser::b_read(vsl_b_istream& bfs)
 //: Initialise from a text stream.
 // The next non-ws character in the stream should be a '{'
 // syntax
-  // \verbatim
-  // {
-  //   normaliser: mipa_l2norm_vector_normaliser
-  //   ni: 16
-  //   nj: 16
-  //   nc_per_block: 4
-  // }
-  // \endverbatim
-
+// \verbatim
+// {
+//   normaliser: mipa_l2norm_vector_normaliser
+//   ni: 16
+//   nj: 16
+//   nc_per_block: 4
+// }
+// \endverbatim
 
 void mipa_block_normaliser::config_from_stream(
     vcl_istream &is, const mbl_read_props_type &extra_props)
 {
     vcl_string s = mbl_parse_block(is);
 
-
     vcl_istringstream ss(s);
     mbl_read_props_type props = mbl_read_props(ss);
 
     props = mbl_read_props_merge(props, extra_props, true);
-  
+
     if (props["normaliser"].empty())
     {
         mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a normaliser property"));
         mbl_exception_error(x);
-    }    
+    }
     vcl_istringstream ss2(props["normaliser"]);
     vcl_auto_ptr<mipa_vector_normaliser> norm = new_normaliser_from_stream(ss2, extra_props);
     normaliser_=norm.release();
@@ -197,14 +185,14 @@ void mipa_block_normaliser::config_from_stream(
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a ni  property"));
             mbl_exception_error(x);
         }
-  
+
         //Decode the feature indices using a string stream
         vcl_string sfi=props["ni"];
 //    vcl_istringstream ssInner(sfi.substr(1,sfi.size()-2));
         vcl_istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
-        if(ssInner.bad() || n<=0)
+        if (ssInner.bad() || n<=0)
         {
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of ni property"));
             mbl_exception_error(x);
@@ -214,21 +202,20 @@ void mipa_block_normaliser::config_from_stream(
         props.erase("ni");
     }
 
-
     {
         if (props["nj"].empty())
         {
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a nj  property"));
             mbl_exception_error(x);
         }
-  
+
         //Decode the feature indices using a string stream
         vcl_string sfi=props["nj"];
 //    vcl_istringstream ssInner(sfi.substr(1,sfi.size()-2));
         vcl_istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
-        if(ssInner.bad() || n<=0)
+        if (ssInner.bad() || n<=0)
         {
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of nj property"));
             mbl_exception_error(x);
@@ -243,12 +230,12 @@ void mipa_block_normaliser::config_from_stream(
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a nA  property"));
             mbl_exception_error(x);
         }
-  
+
         vcl_string sfi=props["nA"];
         vcl_istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
-        if(ssInner.bad() || n<=0)
+        if (ssInner.bad() || n<=0)
         {
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of nj property"));
             mbl_exception_error(x);
@@ -262,12 +249,12 @@ void mipa_block_normaliser::config_from_stream(
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a block_size  property"));
             mbl_exception_error(x);
         }
-  
+
         vcl_string sfi=props["block_size"];
         vcl_istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
-        if(ssInner.bad() || n<=0)
+        if (ssInner.bad() || n<=0)
         {
             mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of block_size property"));
             mbl_exception_error(x);
@@ -277,9 +264,7 @@ void mipa_block_normaliser::config_from_stream(
         props.erase("block_size");
     }
 
-
     mbl_read_props_look_for_unused_props(
             "mipa_block_normaliser::config_from_stream", props, extra_props);
-
 }
 

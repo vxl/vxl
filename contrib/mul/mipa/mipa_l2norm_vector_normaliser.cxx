@@ -1,25 +1,18 @@
-
 //:
 // \file
 // \author Martin Roberts
 // \brief Normalise the sampled vector by its overall L2 norm
 
 #include "mipa_l2norm_vector_normaliser.h"
-#include <vcl_cassert.h>
-#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-
-
 
 //=======================================================================
 
 void mipa_l2norm_vector_normaliser::normalise(vnl_vector<double>& v) const
 {
-// The mapping is g-> g/(L2norm(g)+epsilon)
+    // The mapping is g-> g/(L2norm(g)+epsilon)
 
-    
     const double epsilon=1.0E-4;//lower bound to avoid divide by zero in flat regions
 
     double L2norm=vcl_sqrt(v.squared_magnitude()+epsilon);

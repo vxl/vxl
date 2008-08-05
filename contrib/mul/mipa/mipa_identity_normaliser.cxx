@@ -1,17 +1,11 @@
-
 //:
 // \file
 // \author Martin Roberts
 // \brief Do nowt
 
 #include "mipa_identity_normaliser.h"
-#include <vcl_cassert.h>
-#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-
-
 
 //=======================================================================
 
