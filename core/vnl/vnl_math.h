@@ -178,6 +178,14 @@ inline int vnl_math_rnd(float  x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5
 inline int vnl_math_rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
 #endif
 
+// floor -- round towards minus infinity
+inline int vnl_math_floor(float  x) { return (x>=0.0)?(int)(x):-(int)(-x); }
+inline int vnl_math_floor(double x) { return (x>=0.0)?(int)(x):-(int)(-x); }
+
+// ceil -- round towards plus infinity
+inline int vnl_math_ceil(float  x) { return (x>=0.0)?-(int)(-x):(int)(x); }
+inline int vnl_math_ceil(double x) { return (x>=0.0)?-(int)(-x):(int)(x); }
+
 // abs
 inline bool           vnl_math_abs(bool x)          { return x; }
 inline unsigned char  vnl_math_abs(unsigned char x) { return x; }
