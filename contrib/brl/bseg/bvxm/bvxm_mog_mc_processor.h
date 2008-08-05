@@ -29,14 +29,14 @@
 // The first argument may correspond to the number of planes on an image. The second argument is 
 // determined by the user based on the data.
 
-template <unsigned dim, unsigned modes> class bvxm_mog_mc_processor
+template <unsigned int dim, unsigned int modes> class bvxm_mog_mc_processor
 {
-  protected:
+protected:
   unsigned n_gaussian_modes_;
 
-  typedef bsta_num_obs<bsta_gaussian_indep<float,dim>> gauss_type;
-  typedef bsta_mixture_fixed<gauss_type, modes> mix_gauss;
-  typedef bsta_num_obs<mix_gauss> mix_gauss_type;
+  typedef typename bsta_num_obs<bsta_gaussian_indep<float,dim>> gauss_type;
+  typedef typename bsta_mixture_fixed<gauss_type, modes> mix_gauss;
+  typedef typename bsta_num_obs<mix_gauss> mix_gauss_type;
 
 public:
 
