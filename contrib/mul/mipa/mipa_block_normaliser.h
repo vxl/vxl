@@ -7,41 +7,40 @@
 // \brief Class to independently normalise sub-blocks with a region
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_fwd.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mipa/mipa_vector_normaliser.h>
 #include <mipa/mipa_identity_normaliser.h>
 
 //: Independently normalise (non-overlapping) blocks within a region
-//(e.g. as in simplified R-HOG without overlap)
+//  (e.g. as in simplified R-HOG without overlap)
 
-class mipa_block_normaliser : public mipa_vector_normaliser {
-
+class mipa_block_normaliser : public mipa_vector_normaliser
+{
  private:
-    //: The actual normaliser.
-    mbl_cloneable_nzptr<mipa_vector_normaliser> normaliser_;
-
+  //: The actual normaliser.
+  mbl_cloneable_nzptr<mipa_vector_normaliser> normaliser_;
 
  protected:
-    //: Number of x cells  in region
-    unsigned ni_region_;
-    //: Number of y cells  in region
-    unsigned nj_region_;
+  //: Number of x cells  in region
+  unsigned ni_region_;
+  //: Number of y cells  in region
+  unsigned nj_region_;
 
-        //: Number of cells per block
-    unsigned nc_per_block_;
+  //: Number of cells per block
+  unsigned nc_per_block_;
 
-    //: Number of histogram bins per cell
-    unsigned nA_;
+  //: Number of histogram bins per cell
+  unsigned nA_;
 
-public:
+ public:
 
   mipa_block_normaliser():
     normaliser_(mipa_identity_normaliser()) {}
-  
+
   //: The actual normaliser.
-    const mipa_vector_normaliser& normaliser() const { return *normaliser_; }
+  const mipa_vector_normaliser& normaliser() const { return *normaliser_; }
 
   //: Set the actual normaliser.
   void set_normaliser(const mipa_vector_normaliser& norm) { normaliser_ = norm; }
@@ -89,10 +88,6 @@ public:
   unsigned ni_region() const {return ni_region_;}
   unsigned nj_region() const {return nj_region_;}
   unsigned nc_per_block() const {return nc_per_block_;}
-      
 };
 
-
 #endif // mipa_block_normaliser_h_
-
-

@@ -7,34 +7,33 @@
 // \brief Class to independently normalise sub-blocks with a region
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_fwd.h>
-#include <mbl/mbl_cloneable_ptr.h>
 #include <mipa/mipa_block_normaliser.h>
 #include <mipa/mipa_identity_normaliser.h>
 
 //: Independently normalise (non-overlapping) blocks within a region
 //(e.g. as in simplified R-HOG without overlap)
 
-class mipa_ms_block_normaliser : public mipa_block_normaliser {
+class mipa_ms_block_normaliser : public mipa_block_normaliser
+{
+  //: Number of SIFT-like scales at which the histogram cells are combined
+  unsigned nscales_;
 
-    //: Number of SIFT-like scales at which the histogram cells are combined
-    unsigned nscales_;
+  //: Is there an overall histogram (over all cells) included at the end
+  bool include_overall_histogram_;
 
-    //:Is there an overall histogram (over all cells) included at the end 
-    bool include_overall_histogram_;
+ public:
 
-public:
-
-  mipa_ms_block_normaliser(): mipa_block_normaliser(),
+  mipa_ms_block_normaliser():
+      mipa_block_normaliser(),
       nscales_(1), include_overall_histogram_(false) {}
-  
+
   mipa_ms_block_normaliser(const mipa_block_normaliser& lbn,
                            unsigned nscales,bool include_overall_histogram):
       mipa_block_normaliser(lbn),
       nscales_(nscales), include_overall_histogram_(include_overall_histogram) {}
-  
-  
+
   //: Apply transform independently to each block (at multi-scales)
   virtual void normalise(vnl_vector<double>& v) const;
 
@@ -67,10 +66,10 @@ public:
   // }
   // \endverbatim
   virtual void config_from_stream(
-    vcl_istream &is, const mbl_read_props_type &extra_props);
+      vcl_istream &is, const mbl_read_props_type &extra_props);
 
   void set_nscales(unsigned n)
-       {nscales_ = n;}
+      {nscales_ = n;}
 
   void set_include_overall_histogram(bool bIn)
       {include_overall_histogram_ = bIn;}
@@ -78,11 +77,6 @@ public:
   unsigned  nscales() const {return nscales_;}
 
   bool include_overall_histogram() const  {return include_overall_histogram_ ;}
- 
-
 };
 
-
 #endif // mipa_ms_block_normaliser_h_
-
-
