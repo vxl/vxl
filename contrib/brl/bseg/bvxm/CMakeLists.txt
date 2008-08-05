@@ -5,18 +5,19 @@ INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 
-IF (WIN32 AND VXL_USE_LFS)
+#IF (WIN32 AND VXL_USE_LFS)
 #This is a hack since win32 doesn't have transparent Large File Support.
-  ADD_DEFINITIONS( -DBVXM_USE_FSTREAM64 )
+ADD_DEFINITIONS( -DBVXM_USE_FSTREAM64 )
   # so we can include vil_stream_fstream64
-  ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
-ENDIF (WIN32 AND VXL_USE_LFS)
+ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
+#ENDIF (WIN32 AND VXL_USE_LFS)
 
 SET(bvxm_sources
 
     bvxm_memory_chunk.h             bvxm_memory_chunk.cxx
     bvxm_mog_grey_processor.h       bvxm_mog_grey_processor.cxx
     bvxm_mog_rgb_processor.h        bvxm_mog_rgb_processor.cxx
+    bvxm_mog_mc_processor.h         bvxm_mog_mc_processor.txx
     bvxm_lidar_processor.h          bvxm_lidar_processor.cxx
     bvxm_world_params.h             bvxm_world_params.cxx
     bvxm_voxel_slab_base.h
@@ -31,7 +32,6 @@ SET(bvxm_sources
     bvxm_voxel_traits.h
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
-
     bvxm_util.h                     bvxm_util.cxx
 
 
