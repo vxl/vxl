@@ -1093,28 +1093,22 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
   return;
 }
 
-bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
-                                          vil_image_view_base_sptr& img_mask,
-                                          vil_image_view_base_sptr& img_prob,
-                                          vpgl_camera_double_sptr& camera,
-                                          unsigned scale_idx)
-{
-#if 1
-  return true;
-#else // complete body commented out
-  typedef bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
-  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
-  vpgl_camera_double_sptr dummy_cam = metadata.camera;
-  vcl_cout << dummy_cam << vcl_endl;
+bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height, 
+                        vil_image_view_base_sptr& img_prob,
+                        vpgl_camera_double_sptr& camera, 
+                        unsigned scale)
+{
+  typedef bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
 
   //typedef bvxm_voxel_traits<LIDAR>::lidar_processor lidar_processor;
   bvxm_lidar_processor lidar_processor(10);
 
   // parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
-  ocp_datatype min_vox_prob = params_->min_occupancy_prob();
-  ocp_datatype max_vox_prob = params_->max_occupancy_prob();
+  edges_datatype min_vox_prob = params_->min_occupancy_prob();
+  edges_datatype max_vox_prob = params_->max_occupancy_prob();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
@@ -1123,86 +1117,47 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p, scale);
+      compute_plane_image_H(camera,z,Hp2i,Hi2p,scale);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
   }
 
   // convert image to a voxel_slab
-  bvxm_voxel_slab<obs_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
-  if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
+  bvxm_voxel_slab<obs_datatype> image_height_slab(img_height->ni(), img_height->nj(), 1);
+  bvxm_voxel_slab<float> image_prob_slab(img_prob->ni(), img_prob->nj(), 1);
+  if ((!bvxm_util::img_to_slab(img_height,image_height_slab)) || 
+      (!bvxm_util::img_to_slab(img_prob,image_prob_slab))) {
     vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
     return false;
   }
 
-#ifdef DEBUG
-  vil_save(*metadata.img, "lidar_img.tiff");
-  bvxm_util::write_slab_as_image(image_slab,"lidar_slab.tiff");
-#endif
+  bvxm_voxel_slab<obs_datatype> image_height_backproj(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<float> image_prob_backproj(grid_size.x(),grid_size.y(),1);
 
+  // get edges probability grid
+  bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0,scale);
+  bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
-  // temporary voxel grids to hold preX and PL*visX values
-  bvxm_voxel_grid<float> preX(grid_size);
-  bvxm_voxel_grid<float> PLvisX(grid_size);
+  bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it = edges_grid->begin();
 
-  bvxm_voxel_slab<float> PLPX(grid_size.x(),grid_size.y(),1);
-  bvxm_voxel_slab<float> PXvisX(grid_size.x(), grid_size.y(),1);
-
-  bvxm_voxel_slab<float> preX_accum(image_slab.nx(),image_slab.ny(),1);
-  bvxm_voxel_slab<float> visX_accum(image_slab.nx(),image_slab.ny(),1);
-  bvxm_voxel_slab<float> img_scratch(image_slab.nx(),image_slab.ny(),1);
-  bvxm_voxel_slab<float> PLPX_img(image_slab.nx(), image_slab.ny(),1);
-  bvxm_voxel_slab<float> PX_img(image_slab.nx(), image_slab.ny(),1);
-  bvxm_voxel_slab<float> mask_slab(image_slab.nx(), image_slab.ny(),1);
-
-  preX_accum.fill(0.0f);
-  visX_accum.fill(1.0f);
-
-  // slabs for holding backprojections of visX
-  bvxm_voxel_slab<float> visX(grid_size.x(),grid_size.y(),1);
-
-  bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
-
-  vcl_cout << "Pass 1:" << vcl_endl;
-
-  // get ocuppancy probability grid
-  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,  scale);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
-
-
-  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
-
-  bvxm_voxel_grid<float>::iterator preX_slab_it = preX.begin();
-  bvxm_voxel_grid<float>::iterator PLvisX_slab_it = PLvisX.begin();
   double p_max = 0.0;
-  for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it, ++preX_slab_it, ++PLvisX_slab_it)
+  for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++edges_slab_it)
   {
     vcl_cout << k_idx << vcl_endl;
 
     // backproject image onto voxel plane
-    bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[k_idx], frame_backproj);
+    bvxm_util::warp_slab_bilinear(image_height_slab, H_plane_to_img[k_idx], image_height_backproj);
+    bvxm_util::warp_slab_bilinear(image_prob_slab, H_plane_to_img[k_idx], image_prob_backproj);
 
-#ifdef DEBUG
-    vcl_stringstream ss;
-    ss << "./frame_backproj_" << k_idx <<".tiff";
-    bvxm_util::write_slab_as_image(frame_backproj,ss.str());
-#endif
-    // transform preX to voxel plane for this level
-    bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[k_idx], *preX_slab_it);
-    // transform visX to voxel plane for this level
-    bvxm_util::warp_slab_bilinear(visX_accum, H_plane_to_img[k_idx], visX);
+    bvxm_voxel_slab<float> lidar_prob(image_height_backproj.nx(), image_height_backproj.ny(), image_height_backproj.nz());
+    lidar_prob.fill(0.0);
 
-    // initialize PLvisX with PL(X)
-
-    bvxm_voxel_slab<float> PL(frame_backproj.nx(), frame_backproj.ny(), frame_backproj.nz());
-    PL.fill(0.0);
-    vil_image_view_base_sptr lidar = metadata.img;
-    vnl_vector_fixed<float,3> sigmas(.5, .5, 0.0009);
+    vnl_vector_fixed<float,3> sigmas(0.5f,0.5f,0.0009f);
     vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx,scale);
 
-    for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++) {
-      for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++) {
+    for (unsigned i_idx=0; i_idx<image_height_backproj.nx(); i_idx++) {
+      for (unsigned j_idx=0; j_idx<image_height_backproj.ny(); j_idx++) {
         vcl_vector<vgl_homg_point_2d<double> > vp(4);
         int i = i_idx+1;
         int j = j_idx-1;
@@ -1225,147 +1180,18 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
           lidar_roi.add(img_pos_min);
         }
 
-        float p = lidar_processor.prob_density(lidar, local_xyz.z(), sigmas, lidar_roi, params_->voxel_length(scale));
-#ifdef DEBUG
-        if (p > p_max) {
-          p_max = p;
-          vcl_cout << "-------------max_p=" << p << vcl_endl;
-        }
-        if (p >1.0) {
-          vcl_cout << "ERROR!" << vcl_endl;
-          p=max_vox_prob;
-        }
-#endif
-        PL(i_idx, j_idx) = p;
+        lidar_prob(i_idx, j_idx) = lidar_processor.prob_density(img_height, local_xyz.z(), sigmas, lidar_roi, params_->voxel_length(scale));
       }
     }
 
-    // now multiply by visX
-    bvxm_util::multiply_slabs(visX,PL,*PLvisX_slab_it);
+    bvxm_voxel_slab<float>::iterator lidar_prob_it = lidar_prob.begin();
+    bvxm_voxel_slab<float>::iterator edges_slab_it_it = (*edges_slab_it).begin();
+    bvxm_voxel_slab<float>::iterator image_prob_backproj_it = image_prob_backproj.begin();
 
-    //Is this needed?
-    // update appearance model, using PX*visX as the weights
-    bvxm_util::multiply_slabs(visX,*ocp_slab_it,PXvisX);
-
-    // multiply to get PLPX
-    bvxm_util::multiply_slabs(PL,*ocp_slab_it,PLPX);
-#ifdef DEBUG
-    vcl_stringstream ss1, ss2, ss3;
-    ss1 << "PL_" << k_idx <<".tiff";
-    ss2 <<"PX_" << k_idx <<".tiff";
-    ss3 << "PL_P" << k_idx <<".tiff";
-    bvxm_util::write_slab_as_image(PL,ss1.str());
-    bvxm_util::write_slab_as_image(*ocp_slab_it,ss2.str());
-    //bvxm_util::write_slab_as_image(PL_p,ss3.str());
-#endif
-    // warp PLPX back to image domain
-    bvxm_util::warp_slab_bilinear(PLPX, H_img_to_plane[k_idx], PLPX_img);
-
-    // multiply PLPX by visX and add to preX_accum
-    bvxm_voxel_slab<float>::iterator PLPX_img_it = PLPX_img.begin();
-    bvxm_voxel_slab<float>::iterator visX_accum_it = visX_accum.begin();
-    bvxm_voxel_slab<float>::iterator preX_accum_it = preX_accum.begin();
-
-    for (; preX_accum_it != preX_accum.end(); ++preX_accum_it, ++PLPX_img_it, ++visX_accum_it) {
-      *preX_accum_it += (*PLPX_img_it) * (*visX_accum_it);
-    }
-#ifdef DEBUG
-    vcl_stringstream plpx, vis, prex;
-    plpx << "PLPX_" << k_idx <<".tiff";
-    vis  << "visX_" << k_idx <<".tiff";
-    prex << "preX_" << k_idx <<".tiff";
-    bvxm_util::write_slab_as_image(PLPX_img,plpx.str());
-    bvxm_util::write_slab_as_image(visX_accum,vis.str());
-    bvxm_util::write_slab_as_image(preX_accum,prex.str());
-#endif
-    // scale and offset voxel probabilities to get (1-P(X))
-    // transform (1-P(X)) to image plane to accumulate visX for next level
-    bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[k_idx], PX_img);
-
-    if (return_mask) {
-      bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
-    }
-
-    // note: doing scale and offset in image domain so invalid PLxels become 1.0 and dont affect visX
-    bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
-    visX_accum_it = visX_accum.begin();
-    for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
-      *visX_accum_it *= (1 - *PX_img_it);
+    for (; lidar_prob_it != lidar_prob.end(); ++lidar_prob_it, ++edges_slab_it_it, ++image_prob_backproj_it) {
+      (*edges_slab_it_it) = (*edges_slab_it_it) * (*lidar_prob_it) * (*image_prob_backproj_it);
     }
   }
-  // now traverse a second time, computing new P(X) along the way.
-
-  bvxm_voxel_slab<float> preX_accum_vox(grid_size.x(),grid_size.y(),1);
-  bvxm_voxel_slab<float> visX_accum_vox(grid_size.x(),grid_size.y(),1);
-
-#ifdef DEBUG
-  vcl_stringstream vis2, prex2;
-  vis2  << "visX2_.tiff";
-  prex2 << "preX2_.tiff";
-  bvxm_util::write_slab_as_image(visX_accum,vis2.str());
-  bvxm_util::write_slab_as_image(preX_accum,prex2.str());
-#endif
-
-  vcl_cout << "\nPass 2:" << vcl_endl;
-  PLvisX_slab_it = PLvisX.begin();
-  preX_slab_it = preX.begin();
-  bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
-  for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++PLvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2) {
-    vcl_cout << '.';
-
-    // transform preX_sum to current level
-    bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[k_idx], preX_accum_vox);
-
-    // transform visX_sum to current level
-    bvxm_util::warp_slab_bilinear(visX_accum, H_plane_to_img[k_idx], visX_accum_vox);
-
-    const float preX_sum_thresh = 0.0f;
-
-    bvxm_voxel_slab<float>::const_iterator preX_it = preX_slab_it->begin(), PLvisX_it = PLvisX_slab_it->begin(), preX_sum_it = preX_accum_vox.begin(), visX_sum_it = visX_accum_vox.begin();
-    bvxm_voxel_slab<float>::iterator PX_it = ocp_slab_it2->begin();
-
-    for (; PX_it != ocp_slab_it2->end(); ++PX_it, ++preX_it, ++PLvisX_it, ++preX_sum_it, ++visX_sum_it) {
-      // if preX_sum is zero at the voxel, no ray passed through the voxel (out of image)
-      if (*preX_sum_it > preX_sum_thresh) {
-        float multiplier = (*PLvisX_it + *preX_it) / *preX_sum_it;
-        // leave out normalization for now - results seem a little better without it.  -DEC
-        //float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
-        *PX_it *= multiplier; // * ray_norm;
-      }
-      if (*PX_it < min_vox_prob)
-        *PX_it = min_vox_prob;
-      if (*PX_it > max_vox_prob)
-        *PX_it = max_vox_prob;
-    }
-  }
-  vcl_cout << "\ndone." << vcl_endl;
-
-  if (return_prob) {
-    // fill pixel_probabilities with preX_accum
-    vil_image_view<float>::iterator pix_prob_it = pix_prob_density.begin();
-    bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
-
-    for (; pix_prob_it != pix_prob_density.end(); ++pix_prob_it, ++preX_accum_it) {
-      *pix_prob_it = *preX_accum_it;
-    }
-  }
-
-  if (return_mask) {
-    // fill mask values
-    vil_image_view<bool>::iterator mask_it = mask.begin();
-    bvxm_voxel_slab<float>::const_iterator mask_slab_it = mask_slab.begin();
-
-    for (; mask_it != mask.end(); ++mask_it, ++mask_slab_it) {
-      *mask_it = (*mask_slab_it > 0);
-    }
-  }
-
-#ifdef DEBUG
-  bvxm_util::write_slab_as_image(preX_accum,"prob.tiff");
-#endif
-
-  //Check:
-  // increment the observation count
-  //this->increment_observations<APM_T>(bin_index);
-#endif // 0
+  
+  return true;
 }

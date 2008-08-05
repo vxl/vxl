@@ -130,7 +130,7 @@ public:
   bool update_lidar(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask, unsigned scale_idx=0);
 
   //: update voxel grid edge probabilities with data from LIDAR/camera pair
-  bool update_edges_lidar(vil_image_view_base_sptr& img_height, vil_image_view_base_sptr& img_mask, vil_image_view_base_sptr& img_prob,
+  bool update_edges_lidar(vil_image_view_base_sptr& img_height, vil_image_view_base_sptr& img_prob,
                           vpgl_camera_double_sptr& camera, unsigned scale_idx=0);
 
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.

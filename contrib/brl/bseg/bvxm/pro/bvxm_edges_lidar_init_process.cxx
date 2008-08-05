@@ -24,11 +24,10 @@ bvxm_edges_lidar_init_process::bvxm_edges_lidar_init_process()
   input_types_[1] = "vil_image_view_base_sptr";  // second ret image ROI
 
   //output
-  output_data_.resize(3,brdb_value_sptr(0));
-  output_types_.resize(3);
+  output_data_.resize(2,brdb_value_sptr(0));
+  output_types_.resize(2);
   output_types_[0]= "vil_image_view_base_sptr";  // lidar edge image
-  output_types_[1]= "vil_image_view_base_sptr";  // lidar edge mask
-  output_types_[2]= "vil_image_view_base_sptr";  // lidar edge probability
+  output_types_[1]= "vil_image_view_base_sptr";  // lidar edge probability
 
   // adding parameters
   parameters()->add("threshold_edge_difference", "threshold_edge_difference", 10.0f);
@@ -77,8 +76,6 @@ bool bvxm_edges_lidar_init_process::execute()
 
   vil_image_view<float> edges_lidar(ni,nj);
   edges_lidar.fill(0.0f);
-  vil_image_view<vxl_byte> edges_mask(ni,nj);
-  edges_mask.fill(0);
   vil_image_view<float> edges_prob(ni,nj);
   edges_prob.fill(0.0f);
 
@@ -87,7 +84,6 @@ bool bvxm_edges_lidar_init_process::execute()
       float curr_difference = image_first_return(i,j)-image_second_return(i,j);
       if (curr_difference>threshold_edge_difference){
         edges_lidar(i,j) = image_first_return(i,j);
-        edges_mask(i,j) = 255;
         // todo : fix this probability estimation here
         edges_prob(i,j) = 1.0f - 0.5f*(1.0f/(1.0f+curr_difference-threshold_edge_difference));
       }
@@ -95,16 +91,10 @@ bool bvxm_edges_lidar_init_process::execute()
   }
 
   // store image output
-  brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(edges_lidar));
-  output_data_[0] = output0;
+  output_data_[0] = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(edges_lidar));
 
-  // store image output
-  brdb_value_sptr output1 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(edges_mask));
-  output_data_[1] = output1;
-
-  // store image output
-  brdb_value_sptr output2 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(edges_prob));
-  output_data_[2] = output2;
+  // store prob output
+  output_data_[1] = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(edges_prob));
 
   return true;
 }
