@@ -34,7 +34,7 @@ template <unsigned int dim, unsigned int modes> class bvxm_mog_mc_processor
 protected:
   unsigned n_gaussian_modes_;
 
-  typedef typename bsta_num_obs<bsta_gaussian_indep<float,dim>> gauss_type;
+  typedef typename bsta_num_obs<bsta_gaussian_indep<float,dim> > gauss_type;
   typedef typename bsta_mixture_fixed<gauss_type, modes> mix_gauss;
   typedef typename bsta_num_obs<mix_gauss> mix_gauss_type;
 

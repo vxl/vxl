@@ -122,7 +122,7 @@ void test_mog_rgb_processor()
 
 void test_mog_mc_processor()
 {
-   typedef bsta_num_obs<bsta_gaussian_indep<float,3>> gauss_type;
+   typedef bsta_num_obs<bsta_gaussian_indep<float,3> > gauss_type;
    typedef bsta_num_obs<bsta_mixture_fixed<gauss_type,3> > mix_gauss_type;
 
    bvxm_voxel_slab<bvxm_mog_mc_processor<3,3>::obs_datatype> obs(10,10,1);
