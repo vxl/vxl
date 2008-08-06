@@ -415,7 +415,9 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   bvxm_voxel_grid<float>::iterator preX_slab_it = preX.begin();
   bvxm_voxel_grid<float>::iterator PLvisX_slab_it = PLvisX.begin();
+#ifdef DEBUG
   double p_max = 0.0;
+#endif
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it, ++preX_slab_it, ++PLvisX_slab_it)
   {
     vcl_cout << k_idx << vcl_endl;
@@ -611,10 +613,10 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   return true;
 }
 
-bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height, 
-                        vil_image_view_base_sptr& img_prob,
-                        vpgl_camera_double_sptr& camera, 
-                        unsigned scale)
+bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
+                                          vil_image_view_base_sptr& img_prob,
+                                          vpgl_camera_double_sptr& camera,
+                                          unsigned scale)
 {
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
@@ -643,7 +645,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_height_slab(img_height->ni(), img_height->nj(), 1);
   bvxm_voxel_slab<float> image_prob_slab(img_prob->ni(), img_prob->nj(), 1);
-  if ((!bvxm_util::img_to_slab(img_height,image_height_slab)) || 
+  if ((!bvxm_util::img_to_slab(img_height,image_height_slab)) ||
       (!bvxm_util::img_to_slab(img_prob,image_prob_slab))) {
     vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
     return false;
@@ -658,7 +660,6 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it = edges_grid->begin();
 
-  double p_max = 0.0;
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++edges_slab_it)
   {
     vcl_cout << k_idx << vcl_endl;
@@ -709,7 +710,6 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
       (*edges_slab_it_it) = (*edges_slab_it_it) * (*lidar_prob_it) * (*image_prob_backproj_it);
     }
   }
-  
   return true;
 }
 
