@@ -40,9 +40,9 @@ void test_vector_normalisers1()
 
     mipa_l2norm_vector_normaliser l2norm_normaliser;
 
-    vcl_cout << "===============Testing L2 Norm normalisation============" << vcl_endl;
+    vcl_cout << "===============Testing L2 Norm normalisation============\n"
 
-    vcl_cout << "rms before normalisation" <<data.rms()<<vcl_endl;
+             << "rms before normalisation" <<data.rms()<<vcl_endl;
     vnl_vector<double> x1(x);
 
     l2norm_normaliser.normalise(x1);
@@ -88,23 +88,23 @@ void test_vector_normalisers1()
 
         unsigned nA_bins=pBlockNormaliser->nA(); //Num angle bins
         unsigned nc=8; //Num pixels per cell
-
+#if 0
         const int npi=16*nc; //Total number of nominal pixels in region
         const int npj=16*nc;
-
+        const int npixels=npi*npj;
+#endif // 0
         unsigned ncPerBlock=4; //Num cells per block (in each dimension)
         pBlockNormaliser->set_nc_per_block(ncPerBlock);
         unsigned npixPerBlock=ncPerBlock*nc;
         unsigned sni = 2+npixPerBlock; //add on borders for gradients
         unsigned snj= 2+npixPerBlock;
 
-        //const int npixels=npi*npj;
         const unsigned nData=sni*snj; //Block worth  of pixels +border
 
         vil_image_view<float> srcBlock(sni,snj);
         vnl_random rng(123456);
         vnl_vector<double> data(nData);
-        for (int i = 0; i < nData; i++)
+        for (unsigned int i = 0; i < nData; ++i)
             data(i) = rng.normal();
         data *= 5.0;
         //Copy in some background noise
@@ -241,9 +241,9 @@ void test_vector_normalisers1()
         TEST_NEAR("Overall Histogram mean square is near unity", sumSq, 1.0, 1e-4);
     }//Castable to block normaliser
 
-    vcl_cout << "===============Testing IO============" <<vcl_endl;
+    vcl_cout << "===============Testing IO============\n"
 
-    vcl_cout << "===============Testing MS Block Normaliser stream config============" <<vcl_endl;
+             << "===============Testing MS Block Normaliser stream config============" <<vcl_endl;
 
     mipa_ms_block_normaliser* pMSBlockNormaliser=0;
     {
