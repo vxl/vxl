@@ -252,10 +252,11 @@ generate_cameras_yz(vgl_box_3d<double>& world)
         vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
         for (unsigned i=0; i<corners.size(); i++) {
           vgl_point_3d<double> c = corners[i];
-          double u,v, u2, v2;
+          double u, v;
           persp_cam->project(c.x(), c.y() ,c.z(), u, v);
           bb.add(vgl_point_2d<double> (u,v));
 #ifdef DEBUG
+          double u2, v2; // not initialised?
           vcl_cout << "Perspective [" << u << ',' << v << "]\n"
                    << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
 #endif
@@ -430,8 +431,10 @@ bool reconstruct_world(bvxm_voxel_world_sptr recon_world,
     vcl_stringstream c;
     c << camera_path << i << ".rpc";
     vil_save(*expected, s.str().c_str());
+#if 0
     vpgl_rational_camera<double>* cam = static_cast<vpgl_rational_camera<double>*> (cameras[i].as_pointer());
-    //cam->save(c.str().c_str());
+    cam->save(c.str().c_str());
+#endif
     image_set.push_back(expected);
   }
   return true;
