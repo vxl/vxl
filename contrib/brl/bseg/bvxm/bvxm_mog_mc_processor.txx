@@ -16,9 +16,9 @@ bvxm_mog_mc_processor<dim,modes>::prob_density(bvxm_voxel_slab<apm_datatype> con
   bvxm_voxel_slab<float> probabilities(appear.nx(), appear.ny(), appear.nz());
 
   //the slab iterators
-  bvxm_voxel_slab<apm_datatype>::const_iterator appear_it;
-  bvxm_voxel_slab<obs_datatype>::const_iterator obs_it = obs.begin();
-  bvxm_voxel_slab<float>::iterator prob_it = probabilities.begin();
+  typename bvxm_voxel_slab<apm_datatype>::const_iterator appear_it;
+  typename bvxm_voxel_slab<obs_datatype>::const_iterator obs_it = obs.begin();
+  typename bvxm_voxel_slab<float>::iterator prob_it = probabilities.begin();
 
   for (appear_it = appear.begin(); appear_it!= appear.end(); ++appear_it, ++obs_it, ++prob_it)
   {
@@ -42,10 +42,10 @@ bvxm_mog_mc_processor<dim, modes>::prob_range(bvxm_voxel_slab<apm_datatype> cons
   bvxm_voxel_slab<float> probabilities(appear.nx(), appear.ny(), appear.nz());
 
   //the slab iterators
-  bvxm_voxel_slab<apm_datatype>::const_iterator appear_it;
-  bvxm_voxel_slab<obs_datatype>::const_iterator min_it = obs_min.begin();
-  bvxm_voxel_slab<obs_datatype>::const_iterator max_it = obs_max.begin();
-  bvxm_voxel_slab<float>::iterator prob_it = probabilities.begin();
+  typename bvxm_voxel_slab<apm_datatype>::const_iterator appear_it;
+  typename bvxm_voxel_slab<obs_datatype>::const_iterator min_it = obs_min.begin();
+  typename bvxm_voxel_slab<obs_datatype>::const_iterator max_it = obs_max.begin();
+  typename bvxm_voxel_slab<float>::iterator prob_it = probabilities.begin();
 
   for (appear_it = appear.begin(); appear_it!= appear.end(); ++appear_it, ++min_it, ++max_it, ++prob_it)
   {
@@ -70,7 +70,7 @@ bool bvxm_mog_mc_processor<dim, modes>::update( bvxm_voxel_slab<apm_datatype> &a
   float min_stddev = 0.02f;
   float g_thresh = 2.5; // number of std devs from mean sample must be
   //bsta_gauss_if3 init_gauss(obs_datatype(0.0f),obs_datatype(0.01f));
-  bsta_gaussian_indep<float,dim>::covar_type init_covar(init_variance);
+  typename bsta_gaussian_indep<float,dim>::covar_type init_covar(init_variance);
   bsta_gaussian_indep<float,dim> init_gauss(obs_datatype(0.0f),init_covar);
 
   // the updater
@@ -83,9 +83,9 @@ bool bvxm_mog_mc_processor<dim, modes>::update( bvxm_voxel_slab<apm_datatype> &a
   assert(appear.nz() == obs.nz());
 
   //the iterators
-  bvxm_voxel_slab<apm_datatype>::iterator appear_it;
-  bvxm_voxel_slab<obs_datatype>::const_iterator obs_it = obs.begin();
-  bvxm_voxel_slab<float>::const_iterator weight_it = weight.begin();
+  typename bvxm_voxel_slab<apm_datatype>::iterator appear_it;
+  typename bvxm_voxel_slab<obs_datatype>::const_iterator obs_it = obs.begin();
+  typename bvxm_voxel_slab<float>::const_iterator weight_it = weight.begin();
 
   for (appear_it = appear.begin(); appear_it!= appear.end(); ++appear_it, ++obs_it, ++weight_it)
   {
@@ -105,8 +105,8 @@ bvxm_mog_mc_processor<dim, modes>::expected_color(bvxm_voxel_slab<mix_gauss_type
    bvxm_voxel_slab<obs_datatype> expected_color(appear.nx(),appear.ny(),appear.nz());
 
    //the iterator
-   bvxm_voxel_slab<apm_datatype>::const_iterator appear_it;
-   bvxm_voxel_slab<obs_datatype>::iterator ec_it = expected_color.begin();
+   typename bvxm_voxel_slab<apm_datatype>::const_iterator appear_it;
+   typename bvxm_voxel_slab<obs_datatype>::iterator ec_it = expected_color.begin();
 
   for (appear_it = appear.begin(); appear_it!= appear.end();++appear_it, ++ec_it)
   {
@@ -137,8 +137,8 @@ bvxm_mog_mc_processor<dim, modes>::most_probable_mode_color(bvxm_voxel_slab<mix_
    bvxm_voxel_slab<obs_datatype> color(appear.nx(),appear.ny(),appear.nz());
 
    //the iterator
-   bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it;
-   bvxm_voxel_slab<obs_datatype>::iterator ec_it = color.begin();
+   typename bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it;
+   typename bvxm_voxel_slab<obs_datatype>::iterator ec_it = color.begin();
 
   for (appear_it = appear.begin(); appear_it!= appear.end();++appear_it, ++ec_it)
   {
