@@ -27,6 +27,7 @@
 #include <vil3d/algo/vil3d_threshold.h>
 
 #include <vil3d/vil3d_convert.h>
+#include <vil3d/vil3d_clamp.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_crop.h>
 #include <vil3d/vil3d_decimate.h>

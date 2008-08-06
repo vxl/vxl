@@ -68,9 +68,10 @@ void vil3d_copy_to_window(const vil3d_image_view<T> &src, vil3d_image_view<T> &d
 
 // For everything else
 #define VIL3D_COPY_INSTANTIATE(T) \
-template void vil3d_copy_to_window(const vil3d_image_view<T > &src, vil3d_image_view<T > &dest, \
-                                  unsigned i0, unsigned j0, unsigned k0); \
-template void vil3d_copy_reformat(const vil3d_image_view<T > &src, vil3d_image_view<T > &dest); \
-template vil3d_image_view<T > vil3d_copy_deep(const vil3d_image_view<T > &rhs)
+template void vil3d_copy_to_window(const vil3d_image_view<T > &, vil3d_image_view<T > &, \
+                                  unsigned, unsigned, unsigned); \
+template void vil3d_copy_reformat(const vil3d_image_view<T > &, vil3d_image_view<T > &); \
+template vil3d_image_view<T > vil3d_copy_deep(const vil3d_image_view<T > &); \
+template void vil3d_copy_deep(const vil3d_image_view<T > &, vil3d_image_view<T > &)
 
 #endif // vil3d_copy_txx_
