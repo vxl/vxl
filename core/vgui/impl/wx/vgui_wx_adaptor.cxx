@@ -472,37 +472,39 @@ namespace
   // ***** check if design allows for multiple modifiers... if so, this needs to change
   inline vgui_modifier get_modifiers(const wxMouseEvent& e)
   {
-#if 1
     int mod = 0;
-    if (e.ControlDown()) { mod |= vgui_CTRL;  }
     if (e.ShiftDown())   { mod |= vgui_SHIFT; }
-    if (e.MetaDown())    { mod |= vgui_META;  }
     if (e.AltDown())     { mod |= vgui_ALT;   }
-    return static_cast<vgui_modifier>(mod);
+#ifdef __WXMAC__
+    // Swap META(CMD) and CTRL on Mac because this is closer to native behavior
+    // and CTRL-Left-Click triggers a Right-Click which interferes with some
+    // built-in vgui controls
+    if (e.MetaDown())     { mod |= vgui_CTRL;  }
+    if (e.ControlDown()) { mod |= vgui_META;  }
 #else
-    return static_cast<vgui_modifier>( e.ControlDown() ? vgui_CTRL  : 0
-                                     | e.ShiftDown()   ? vgui_SHIFT : 0
-                                     | e.MetaDown()    ? vgui_META  : 0
-                                     | e.AltDown()     ? vgui_ALT   : 0 );
+    if (e.ControlDown()) { mod |= vgui_CTRL;  }
+    if (e.MetaDown())    { mod |= vgui_META;  }
 #endif
+    return static_cast<vgui_modifier>(mod);
   }
 
   // ***** check if design allows for multiple modifiers... if so, this needs to change
   inline vgui_modifier get_modifiers(const wxKeyEvent& e)
   {
-#if 1
     int mod = 0;
-    if (e.ControlDown()) { mod |= vgui_CTRL;  }
     if (e.ShiftDown())   { mod |= vgui_SHIFT; }
-    if (e.MetaDown())    { mod |= vgui_META;  }
     if (e.AltDown())     { mod |= vgui_ALT;   }
-    return static_cast<vgui_modifier>(mod);
+#ifdef __WXMAC__
+    // Swap META(CMD) and CTRL on Mac because this is closer to native behavior
+    // and CTRL-Left-Click triggers a Right-Click which interferes with some
+    // built-in vgui controls
+    if (e.MetaDown())     { mod |= vgui_CTRL;  }
+    if (e.ControlDown()) { mod |= vgui_META;  }
 #else
-    return static_cast<vgui_modifier>( e.ControlDown() ? vgui_CTRL  : 0
-                                     | e.ShiftDown()   ? vgui_SHIFT : 0
-                                     | e.MetaDown()    ? vgui_META  : 0
-                                     | e.AltDown()     ? vgui_ALT   : 0 );
+    if (e.ControlDown()) { mod |= vgui_CTRL;  }
+    if (e.MetaDown())    { mod |= vgui_META;  }
 #endif
+    return static_cast<vgui_modifier>(mod);
   }
 
   inline vgui_event_type translate_mouse_event_type(const wxMouseEvent& e)
