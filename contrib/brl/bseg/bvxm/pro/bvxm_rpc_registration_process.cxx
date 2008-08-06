@@ -70,15 +70,17 @@ bool bvxm_rpc_registration_process::execute()
 
   vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
+#if 0 // unused variable
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
+#endif
 
   // get parameters
   double cedt_image_gaussian_sigma=0.0;
   int offset_search_size=0;
   if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
-    !parameters()->get_value("offset_search_size", offset_search_size)) {
-      vcl_cout << "problems in retrieving parameters\n";
-      return false;
+      !parameters()->get_value("offset_search_size", offset_search_size)) {
+    vcl_cout << "problems in retrieving parameters\n";
+    return false;
   }
 
   int ni = edge_image.ni();
@@ -224,7 +226,7 @@ bool bvxm_rpc_registration_process::execute()
     for (unsigned curr_scale = scale;curr_scale < max_scale;curr_scale++)
     {
       bool result;
-      if(curr_scale!=scale)
+      if (curr_scale!=scale)
       {
         vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
         cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
@@ -241,8 +243,8 @@ bool bvxm_rpc_registration_process::execute()
 
       // updates the edge probabilities in the voxel world
 
-      if(!result){
-        vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage" << vcl_endl;
+      if (!result){
+        vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage\n";
         return false;
       }
     }
