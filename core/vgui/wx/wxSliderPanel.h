@@ -1,4 +1,4 @@
-// This is vgui/impl/wx/widgets/wxSliderPanel.cxx
+// This is vgui/wx/wxSliderPanel.cxx
 #ifndef wxSliderPanel_h_
 #define wxSliderPanel_h_
 //:

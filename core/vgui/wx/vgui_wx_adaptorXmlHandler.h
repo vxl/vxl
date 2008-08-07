@@ -1,4 +1,4 @@
-// This is core/vgui/impl/wx/widgets/vgui_wx_adaptorXmlHandler.h
+// This is core/vgui/wx/vgui_wx_adaptorXmlHandler.h
 #ifndef vgui_wx_adaptorXmlHandler_h_
 #define vgui_wx_adaptorXmlHandler_h_
 //:

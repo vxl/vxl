@@ -1,4 +1,4 @@
-// This is core/vgui/impl/wx/widgets/wxSliderPanelXmlHandler.cxx
+// This is core/vgui/wx/wxSliderPanelXmlHandler.cxx
 
 #include "wxSliderPanelXmlHandler.h"
 
