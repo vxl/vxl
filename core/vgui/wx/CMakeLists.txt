@@ -11,8 +11,12 @@ IF(wxWidgets_FOUND)
   INCLUDE( ${wxWidgets_USE_FILE} )
 
   SET(vgui_wx_sources
+    vgui_wx.cxx                     vgui_wx.h
+
+    # wxWidgets
     wxSliderPanel.cxx               wxSliderPanel.h
 
+    # XML Resource Handlers
     vgui_wx_adaptorXmlHandler.cxx   vgui_wx_adaptorXmlHandler.h
     wxSliderPanelXmlHandler.cxx     wxSliderPanelXmlHandler.h
   )
