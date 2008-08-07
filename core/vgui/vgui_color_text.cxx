@@ -17,10 +17,6 @@
 
 static bool debug = false;
 
-static float red;
-static float green;
-static float blue;
-
 vcl_string colors[][2] = {
   { "white",          "1.000 1.000 1.000" },
   { "black",          "0.000 0.000 0.000" },
@@ -50,7 +46,7 @@ vcl_string colors[][2] = {
 #define NB_COLORS (sizeof(colors)/sizeof(colors[0]))
 
 //:
-vcl_string text_to_color(vcl_string txt)
+vcl_string text_to_color(const vcl_string& txt)
 {
   vcl_string color = "";
   if (txt[0] == '0' || txt[0] == '1')
@@ -62,32 +58,42 @@ vcl_string text_to_color(vcl_string txt)
       color =  colors[i][1];
   }
 
-  if (color == "")
+  if (color == ""){
     vgui_macro_warning << "Unknown color string: " << txt << vcl_endl;
-  else
-    vcl_sscanf(color.c_str(), "%f %f %f", &red, &green, &blue);
+    color = colors[1][1];
+  }
 
-  if (debug)
+  if (debug){
+    float red, green, blue;
+    vcl_sscanf(color.c_str(), "%f %f %f", &red, &green, &blue);
     vcl_cerr << "vgui_color_text:: color string= " << color << ", red="
              << red << ", green=" << green << ", blue=" << blue << vcl_endl;
+  }
+
   return color;
 }
 
-float red_value(vcl_string txt)
+float red_value(const vcl_string& txt)
 {
   vcl_string nb_txt = text_to_color(txt);
+  float red, green, blue;
+  vcl_sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return red;
 }
 
-float green_value(vcl_string txt)
+float green_value(const vcl_string& txt)
 {
   vcl_string nb_txt = text_to_color(txt);
+  float red, green, blue;
+  vcl_sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return green;
 }
 
-float blue_value(vcl_string txt)
+float blue_value(const vcl_string& txt)
 {
   vcl_string nb_txt = text_to_color(txt);
+  float red, green, blue;
+  vcl_sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return blue;
 }
 

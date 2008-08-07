@@ -17,12 +17,12 @@
 #include <vcl_string.h>
 
 //: Convert a string naming a colour to a string of the RGB values.
-vcl_string text_to_color(vcl_string);
+vcl_string text_to_color(const vcl_string&);
 //: Given a string naming a colour, return its red value.
-float red_value(vcl_string);
+float red_value(const vcl_string&);
 //: Given a string naming a colour, return its green value.
-float green_value(vcl_string);
+float green_value(const vcl_string&);
 //: Given a string naming a colour, return its blue value.
-float blue_value(vcl_string);
+float blue_value(const vcl_string&);
 
 #endif // vgui_color_text_h_
