@@ -105,6 +105,8 @@ bool bvxm_render_virtual_view_process::execute()
   vil_image_view<float> *vis_prob_view = static_cast<vil_image_view<float>*>(vis_prob.ptr());
   
   bool result;
+    if (voxel_type == "apm_mog_grey")
+      result = world->virtual_view<APM_MOG_GREY>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
    if (voxel_type == "apm_mog_rgb"){
      if (img_og->nplanes() == 3)
       result = world->virtual_view<APM_MOG_RGB>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
@@ -113,10 +115,16 @@ bool bvxm_render_virtual_view_process::execute()
        return false;
      }
    }
-   else {
-     result = world->virtual_view<APM_MOG_GREY>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
+    if (voxel_type == "apm_mog_mc_3_3")
+     {
+     if (img_og->nplanes() == 3)
+       result = world->virtual_view<APM_MOG_MC_3_3>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
+     else {
+       vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_mc_3_3) does not match, input image" << vcl_endl;
+       return false;
+     }
    }
-
+ 
   //store output
   brdb_value_sptr output0 = 
     new brdb_value_t<vil_image_view_base_sptr>(virtual_img);

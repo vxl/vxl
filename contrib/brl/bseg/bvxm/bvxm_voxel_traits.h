@@ -14,28 +14,57 @@
 // \date   February 24, 2008
 // \verbatim
 //  Modifications
-//   <none yet>
+//   8/5/2008 Isabel Restrepo -Added template class bvxm_voxel_traits_mc<unsigned dim, unsigned modes>
+//                             This class is incharged of proper instantiation of multi-channel appereance model processor
+//                            -Added bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>,
+//                             Everytime an user needs an mog appereance model with unexisting dimension of number
+//                             of gaussian modes, it needs to add an entry in the enum and and new class that looks as follows
+//                             class bvxm_voxel_traits<APM_MOG_MC_DIM_MODES> : public bvxm_voxel_traits_mc<DIM,MODES> {};
+//                            
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include "bvxm_mog_grey_processor.h"
 #include "bvxm_mog_rgb_processor.h"
+#include "bvxm_mog_mc_processor.h"
 #include "bvxm_lidar_processor.h"
+
 
 enum bvxm_voxel_type
 {
   OCCUPANCY = 0,
   APM_MOG_GREY,
   APM_MOG_RGB,
+  APM_MOG_MC_3_3,
+  APM_MOG_MC_4_3,
   EDGES,
   LIDAR,
   UNKNOWN,
-};
 
+
+};
 
 //: Pixel properties for templates.
 template <bvxm_voxel_type>
 class bvxm_voxel_traits;
 
+//: Specialization of Pixel properties for bvxm_mog_mc_processor templates.
+template <unsigned int dim, unsigned int modes>
+class bvxm_voxel_traits_mc{
+public:
+  //:Datatype of the occupancy probabilities 
+  typedef typename bvxm_mog_mc_processor<dim,modes> appearance_processor;
+  typedef typename bvxm_mog_mc_processor<dim,modes>::apm_datatype voxel_datatype;
+  typedef typename bvxm_mog_mc_processor<dim,modes>::obs_datatype obs_datatype;
+  typedef typename bvxm_mog_mc_processor<dim,modes>::obs_mathtype obs_mathtype;
+
+  static inline vcl_string filename_prefix(){ return "apm_mog_mc"; }
+  static inline bool is_multibin() { return false; }
+  static inline voxel_datatype initial_val()
+  {
+    voxel_datatype init_val;
+    return init_val;
+  }
+};
 
 template<>
 class bvxm_voxel_traits<OCCUPANCY>
@@ -87,6 +116,12 @@ class bvxm_voxel_traits<APM_MOG_RGB>
     return init_val;
   }
 };
+
+template<>
+class bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>{};
+
+template<>
+class bvxm_voxel_traits<APM_MOG_MC_4_3> : public bvxm_voxel_traits_mc<4,3>{};
 
 template<>
 class bvxm_voxel_traits<EDGES>

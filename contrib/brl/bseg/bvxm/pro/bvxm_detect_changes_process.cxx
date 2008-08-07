@@ -87,11 +87,12 @@ bool bvxm_detect_changes_process::execute()
 
   bool result;
 
-
+  if (voxel_type == "apm_mog_grey")
+    result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index,scale_index);
   if (voxel_type == "apm_mog_rgb")
     result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index,scale_index);
-   else
-    result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index,scale_index);
+  if (voxel_type == "apm_mog_mc_3_3")
+    result = world->pixel_probability_density<APM_MOG_MC_3_3>(observation,prob_map, mask, bin_index,scale_index);
     
    if(!result){
     vcl_cerr << "error bvxm_detect_changes_process: failed to detect changes" << vcl_endl;

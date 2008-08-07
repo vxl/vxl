@@ -86,14 +86,22 @@ bool bvxm_render_expected_image_process::execute()
   vil_image_view_base_sptr expected_img;
   vil_image_view<float> *mask_img = new vil_image_view<float>(npixels_x,npixels_y,1);
 
-  if (voxel_type == "apm_mog_rgb"){  
-    expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
-    result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
-  }
-  else {
+
+  if (voxel_type == "apm_mog_grey")
+  {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
+  else if (voxel_type == "apm_mog_rgb"){  
+    expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
+    result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
+  }
+  else if (voxel_type == "apm_mog_mc_3_3"){  
+    expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
+    result = world->expected_image<APM_MOG_MC_3_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
+  }
+  else
+    vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appereance model" << vcl_endl;
 
   //store output
   brdb_value_sptr output0 =

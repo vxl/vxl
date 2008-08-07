@@ -96,11 +96,13 @@ bool bvxm_update_process::execute()
       bvxm_image_metadata observation(img,camera);
  
       bool result; 
-
+      
+      if (voxel_type == "apm_mog_grey")
+        result = world->update<APM_MOG_GREY>(observation, prob_map, mask, bin_index,scale);
       if (voxel_type == "apm_mog_rgb")
-          result = world->update<APM_MOG_RGB>(observation, prob_map, mask, bin_index,scale);
-      else
-          result = world->update<APM_MOG_GREY>(observation, prob_map, mask, bin_index,scale);
+        result = world->update<APM_MOG_RGB>(observation, prob_map, mask, bin_index,scale);
+      if (voxel_type == "apm_mog_mc_3_3")
+        result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
 
       vcl_cout<<"update done ";
       vcl_cout.flush();

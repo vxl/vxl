@@ -120,7 +120,7 @@ void test_mog_rgb_processor()
 
 }
 
-void test_mog_mc_processor()
+void test_mog_mc_processor_3_3()
 {
    typedef bsta_num_obs<bsta_gaussian_indep<float,3> > gauss_type;
    typedef bsta_num_obs<bsta_mixture_fixed<gauss_type,3> > mix_gauss_type;
@@ -157,11 +157,62 @@ void test_mog_mc_processor()
    TEST_NEAR("expected", (*out.first_voxel())[3],0.63f,0.01f);
 }
 
+void test_mog_mc_processor_4_3()
+{
+   typedef bsta_num_obs<bsta_gaussian_indep<float,4> > gauss_type;
+   typedef bsta_num_obs<bsta_mixture_fixed<gauss_type,3> > mix_gauss_type;
+
+   bvxm_voxel_slab<bvxm_mog_mc_processor<4,3>::obs_datatype> obs(10,10,1);
+   bvxm_voxel_slab<float> weight(10,10,1);
+   
+   bvxm_mog_mc_processor<4,3> processor;
+
+   bool a = true;
+    
+   // test the  update, expected_color and most_probable_mode_color methods
+   bvxm_voxel_slab<mix_gauss_type> appear(10,10,1);
+   appear.fill(mix_gauss_type());
+
+   obs.fill(bvxm_mog_mc_processor<4,3>::obs_datatype(0.3f, 0.3f, 0.3f, 0.3f));
+   weight.fill(1.0f/100.0f);
+   a = a & processor.update(appear, obs, weight);
+   obs.fill(bvxm_mog_mc_processor<4,3>::obs_datatype(0.8f, 0.8f, 0.8f, 0.8f));
+   a = a & processor.update(appear, obs, weight);
+   obs.fill(bvxm_mog_mc_processor<4,3>::obs_datatype(0.81f, 0.81f, 0.81f, 0.81f));
+   a = a & processor.update(appear, obs, weight);
+   TEST("processor.update()", a, true);
+
+   bvxm_voxel_slab<bvxm_mog_mc_processor<4,3>::obs_datatype> out = processor.most_probable_mode_color(appear);
+  
+   TEST_NEAR("most probable", (*out.first_voxel())[1], 0.8f,0.01f);
+   TEST_NEAR("most probable", (*out.first_voxel())[2], 0.8f,0.01f);
+   TEST_NEAR("most probable", (*out.first_voxel())[3], 0.8f,0.01f);
+   TEST_NEAR("most probable", (*out.first_voxel())[4], 0.8f,0.01f);
+
+   out = processor.expected_color(appear);
+   TEST_NEAR("expected", (*out.first_voxel())[1],0.63f,0.01f);
+   TEST_NEAR("expected", (*out.first_voxel())[2],0.63f,0.01f);
+   TEST_NEAR("expected", (*out.first_voxel())[3],0.63f,0.01f);
+   TEST_NEAR("expected", (*out.first_voxel())[4],0.63f,0.01f);
+}
+
 MAIN( test_apm_processors )
 {
-   test_mog_grey_processor();
-   test_mog_rgb_processor();
-   test_mog_mc_processor();
-   
-   SUMMARY();
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl; 
+  vcl_cout << "Starting mog_grey_processot  TESTS" <<vcl_endl;
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl; 
+  test_mog_grey_processor();
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl;  
+  vcl_cout << "Starting mog_rgb_processot  TESTS" <<vcl_endl;
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl; 
+  test_mog_rgb_processor();
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl; 
+  vcl_cout << "Starting mog_mc_3_3_processot  TESTS" <<vcl_endl;
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl; 
+  test_mog_mc_processor_3_3();
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl; 
+  vcl_cout << "Starting mog_mc_4_3_processot  TESTS" <<vcl_endl;
+  vcl_cout << "-------------------------------------------------------------------------" <<vcl_endl; 
+  test_mog_mc_processor_4_3();
+  SUMMARY();
 }
