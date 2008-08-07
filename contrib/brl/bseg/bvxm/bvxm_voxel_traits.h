@@ -28,12 +28,15 @@
 #include "bvxm_mog_mc_processor.h"
 #include "bvxm_lidar_processor.h"
 
+#include <vcl_map.h>
+
 
 enum bvxm_voxel_type
 {
   OCCUPANCY = 0,
   APM_MOG_GREY,
   APM_MOG_RGB,
+  APM_MOG_MC_2_3,
   APM_MOG_MC_3_3,
   APM_MOG_MC_4_3,
   EDGES,
@@ -52,7 +55,7 @@ template <unsigned int dim, unsigned int modes>
 class bvxm_voxel_traits_mc{
 public:
   //:Datatype of the occupancy probabilities 
-  typedef typename bvxm_mog_mc_processor<dim,modes> appearance_processor;
+  typedef bvxm_mog_mc_processor<dim,modes> appearance_processor;
   typedef typename bvxm_mog_mc_processor<dim,modes>::apm_datatype voxel_datatype;
   typedef typename bvxm_mog_mc_processor<dim,modes>::obs_datatype obs_datatype;
   typedef typename bvxm_mog_mc_processor<dim,modes>::obs_mathtype obs_mathtype;
@@ -66,6 +69,7 @@ public:
   }
 };
 
+//: Voxel traits for an occupancy grid
 template<>
 class bvxm_voxel_traits<OCCUPANCY>
 {
@@ -78,6 +82,8 @@ class bvxm_voxel_traits<OCCUPANCY>
   static inline voxel_datatype initial_val() { return 0.01f; }
 };
 
+
+//: Voxel traits for a mixture of gaussian appereance model of grey-scale images
 template<>
 class bvxm_voxel_traits<APM_MOG_GREY>
 {
@@ -97,7 +103,7 @@ class bvxm_voxel_traits<APM_MOG_GREY>
   }
 };
 
-
+//: Voxel traits for a mixture of gaussian appereance model of rgb images
 template<>
 class bvxm_voxel_traits<APM_MOG_RGB>
 {
@@ -117,12 +123,19 @@ class bvxm_voxel_traits<APM_MOG_RGB>
   }
 };
 
+//: Initialize voxel traits for a mixture of gaussian appereance model of 2-d images, with 3 gaussian modes
+template<>
+class bvxm_voxel_traits<APM_MOG_MC_2_3> : public bvxm_voxel_traits_mc<2,3>{};
+
+//: Initialize voxel traits for a mixture of gaussian appereance model of 3-d images, with 3 gaussian modes
 template<>
 class bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>{};
 
+//: Initialize voxel traits for a mixture of gaussian appereance model of 4-d images, with 3 gaussian modes
 template<>
 class bvxm_voxel_traits<APM_MOG_MC_4_3> : public bvxm_voxel_traits_mc<4,3>{};
 
+//: Voxel traits for an EDGES grid
 template<>
 class bvxm_voxel_traits<EDGES>
 {
@@ -135,6 +148,7 @@ class bvxm_voxel_traits<EDGES>
   static inline voxel_datatype initial_val() { return 0.01f; }
 };
 
+//: Voxel traits for an LIDAR grid
 template<>
 class bvxm_voxel_traits<LIDAR>
 {

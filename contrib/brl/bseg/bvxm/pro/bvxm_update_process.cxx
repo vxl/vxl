@@ -74,45 +74,51 @@ bool bvxm_update_process::execute()
   unsigned curr_scale = input5->value();
   //create metadata:
   bvxm_image_metadata observation(img,camera);
-    unsigned max_scale = world->get_params()->max_scale();
+  unsigned max_scale = world->get_params()->max_scale();
 
   //update
   vcl_vector<vil_image_view<float> > prob_map_vec;
   vcl_vector<vil_image_view<bool> >mask_vec;
 
-  
+
   for (unsigned scale = curr_scale;scale < max_scale;scale++)
   {
-     vil_image_view<float> prob_map(img->ni(),img->nj(),1);
-      vil_image_view<bool> mask(img->ni(),img->nj(),1);
-      
-      if(scale!=curr_scale)
-      {
-          img=bvxm_util::downsample_image_by_two(img);
-          camera=bvxm_util::downsample_camera( camera, scale);
-          prob_map.set_size(img->ni(),img->nj());
-          mask.set_size(img->ni(),img->nj());
-      }
-      bvxm_image_metadata observation(img,camera);
- 
-      bool result; 
-      
-      if (voxel_type == "apm_mog_grey")
-        result = world->update<APM_MOG_GREY>(observation, prob_map, mask, bin_index,scale);
-      if (voxel_type == "apm_mog_rgb")
-        result = world->update<APM_MOG_RGB>(observation, prob_map, mask, bin_index,scale);
-      if (voxel_type == "apm_mog_mc_3_3")
-        result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+    vil_image_view<float> prob_map(img->ni(),img->nj(),1);
+    vil_image_view<bool> mask(img->ni(),img->nj(),1);
 
-      vcl_cout<<"update done ";
-      vcl_cout.flush();
+    if(scale!=curr_scale)
+    {
+      img=bvxm_util::downsample_image_by_two(img);
+      camera=bvxm_util::downsample_camera( camera, scale);
+      prob_map.set_size(img->ni(),img->nj());
+      mask.set_size(img->ni(),img->nj());
+    }
+    bvxm_image_metadata observation(img,camera);
 
-      prob_map_vec.push_back(prob_map);
-      mask_vec.push_back(mask);
-      if(!result){
-          vcl_cerr << "error bvxm_update_multiscale_process: failed to update observation" << vcl_endl;
-          return false;
-      }
+    bool result = true;
+
+    if (voxel_type == "apm_mog_grey")
+      result = world->update<APM_MOG_GREY>(observation, prob_map, mask, bin_index,scale);
+    else if (voxel_type == "apm_mog_rgb")
+      result = world->update<APM_MOG_RGB>(observation, prob_map, mask, bin_index,scale);
+    else if (voxel_type == "apm_mog_mc_2_3")
+      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+    else if (voxel_type == "apm_mog_mc_3_3")
+      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+    else if (voxel_type == "apm_mog_mc_4_3")
+      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+    else 
+      vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appereance model" << vcl_endl;
+
+    vcl_cout<<"update done ";
+    vcl_cout.flush();
+
+    prob_map_vec.push_back(prob_map);
+    mask_vec.push_back(mask);
+    if(!result){
+      vcl_cerr << "error bvxm_update_multiscale_process: failed to update observation" << vcl_endl;
+      return false;
+    }
   }
 
   //store output
@@ -120,12 +126,9 @@ bool bvxm_update_process::execute()
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map_vec[0]));
   output_data_[0] = output0;
 
-    brdb_value_sptr output1 = 
+  brdb_value_sptr output1 = 
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask_vec[0]));
   output_data_[1] = output1;
 
   return true;
 }
-
-
-

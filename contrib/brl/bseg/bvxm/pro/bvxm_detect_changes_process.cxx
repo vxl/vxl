@@ -33,7 +33,7 @@ bvxm_detect_changes_process::bvxm_detect_changes_process()
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
 
-   
+
   //output has 2 outputs
   //output[0] : The updated probability map
   //output[1] : The mask of image pixels used in update
@@ -74,7 +74,7 @@ bool bvxm_detect_changes_process::execute()
     static_cast<brdb_value_t<unsigned>* >(input_data_[4].ptr());
   unsigned bin_index = input4->value();
 
-    brdb_value_t<unsigned>* input5 =
+  brdb_value_t<unsigned>* input5 =
     static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
   unsigned scale_index = input5->value();
 
@@ -89,12 +89,18 @@ bool bvxm_detect_changes_process::execute()
 
   if (voxel_type == "apm_mog_grey")
     result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index,scale_index);
-  if (voxel_type == "apm_mog_rgb")
+  else if (voxel_type == "apm_mog_rgb")
     result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index,scale_index);
-  if (voxel_type == "apm_mog_mc_3_3")
+  else if (voxel_type == "apm_mog_mc_2_3")
+    result = world->pixel_probability_density<APM_MOG_MC_2_3>(observation,prob_map, mask, bin_index,scale_index);
+  else if (voxel_type == "apm_mog_mc_3_3")
     result = world->pixel_probability_density<APM_MOG_MC_3_3>(observation,prob_map, mask, bin_index,scale_index);
-    
-   if(!result){
+  else if (voxel_type == "apm_mog_mc_4_3")
+    result = world->pixel_probability_density<APM_MOG_MC_4_3>(observation,prob_map, mask, bin_index,scale_index);
+  else 
+    vcl_cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appereance model" << vcl_endl;
+
+  if(!result){
     vcl_cerr << "error bvxm_detect_changes_process: failed to detect changes" << vcl_endl;
     return false;
   }
@@ -110,7 +116,7 @@ bool bvxm_detect_changes_process::execute()
   vil_image_view<bool> binary_img;
   vil_threshold_above<float>(prob_map, binary_img, threshold_value);
 
-    //store output
+  //store output
   brdb_value_sptr output0 = 
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
   output_data_[0] = output0;

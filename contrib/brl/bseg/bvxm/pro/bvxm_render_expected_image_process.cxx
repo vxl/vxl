@@ -96,9 +96,17 @@ bool bvxm_render_expected_image_process::execute()
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
     result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
+  else if (voxel_type == "apm_mog_mc_2_3"){  
+    expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,2);
+    result = world->expected_image<APM_MOG_MC_2_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
+  }
   else if (voxel_type == "apm_mog_mc_3_3"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
     result = world->expected_image<APM_MOG_MC_3_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
+  }
+  else if (voxel_type == "apm_mog_mc_4_3"){  
+    expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,4);
+    result = world->expected_image<APM_MOG_MC_4_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
   else
     vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appereance model" << vcl_endl;

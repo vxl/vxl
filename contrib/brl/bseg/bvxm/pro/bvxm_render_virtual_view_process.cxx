@@ -81,50 +81,71 @@ bool bvxm_render_virtual_view_process::execute()
 
   //create original image metadata:
   bvxm_image_metadata obs_og(img_og,camera_og);
- 
+
   // render view
   vil_image_view_base_sptr vis_prob = new vil_image_view<float>(img_og->ni(),img_og->nj(),1);
   // the world expects the virtual view to be of the same type as the input view.
   vil_image_view_base_sptr virtual_img;
   switch(img_og->pixel_format())
   {
-    case VIL_PIXEL_FORMAT_BYTE:
-      virtual_img = new vil_image_view<vxl_byte>(img_og->ni(),img_og->nj(),img_og->nplanes());
-      break;
-    case VIL_PIXEL_FORMAT_FLOAT:
-      virtual_img = new vil_image_view<float>(img_og->ni(),img_og->nj(),img_og->nplanes());
-      break;
-    case VIL_PIXEL_FORMAT_RGB_BYTE:
-      virtual_img = new vil_image_view<vil_rgb<unsigned char> >(img_og->ni(),img_og->nj(),img_og->nplanes());
-      break;
-    default:
-      vcl_cerr << "error: bvxm_render_virtual_view_process: unknown pixel format " << img_og->pixel_format() << vcl_endl;
-      return false;
+  case VIL_PIXEL_FORMAT_BYTE:
+    virtual_img = new vil_image_view<vxl_byte>(img_og->ni(),img_og->nj(),img_og->nplanes());
+    break;
+  case VIL_PIXEL_FORMAT_FLOAT:
+    virtual_img = new vil_image_view<float>(img_og->ni(),img_og->nj(),img_og->nplanes());
+    break;
+  case VIL_PIXEL_FORMAT_RGB_BYTE:
+    virtual_img = new vil_image_view<vil_rgb<unsigned char> >(img_og->ni(),img_og->nj(),img_og->nplanes());
+    break;
+  default:
+    vcl_cerr << "error: bvxm_render_virtual_view_process: unknown pixel format " << img_og->pixel_format() << vcl_endl;
+    return false;
   }
 
   vil_image_view<float> *vis_prob_view = static_cast<vil_image_view<float>*>(vis_prob.ptr());
-  
+
   bool result;
-    if (voxel_type == "apm_mog_grey")
-      result = world->virtual_view<APM_MOG_GREY>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
-   if (voxel_type == "apm_mog_rgb"){
-     if (img_og->nplanes() == 3)
+
+  if (voxel_type == "apm_mog_grey")
+    result = world->virtual_view<APM_MOG_GREY>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
+  else if (voxel_type == "apm_mog_rgb"){
+    if (img_og->nplanes() == 3)
       result = world->virtual_view<APM_MOG_RGB>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
-     else {
-       vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_rgb) does not match, input image" << vcl_endl;
-       return false;
-     }
-   }
-    if (voxel_type == "apm_mog_mc_3_3")
-     {
-     if (img_og->nplanes() == 3)
-       result = world->virtual_view<APM_MOG_MC_3_3>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
-     else {
-       vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_mc_3_3) does not match, input image" << vcl_endl;
-       return false;
-     }
-   }
- 
+    else {
+      vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_rgb) does not match, input image" << vcl_endl;
+      return false;
+    }
+  }
+  else if (voxel_type == "apm_mog_mc_2_3")
+  {
+    if (img_og->nplanes() == 2)
+      result = world->virtual_view<APM_MOG_MC_2_3>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
+    else {
+      vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_mc_2_3) does not match, input image" << vcl_endl;
+      return false;
+    }
+  }
+  else if (voxel_type == "apm_mog_mc_3_3")
+  {
+    if (img_og->nplanes() == 3)
+      result = world->virtual_view<APM_MOG_MC_3_3>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
+    else {
+      vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_mc_3_3) does not match, input image" << vcl_endl;
+      return false;
+    }
+  }
+  else if (voxel_type == "apm_mog_mc_4_3")
+  {
+    if (img_og->nplanes() == 4)
+      result = world->virtual_view<APM_MOG_MC_4_3>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
+    else {
+      vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_mc_4_3) does not match, input image" << vcl_endl;
+      return false;
+    }
+  }
+  else 
+    vcl_cerr << "Error in bvxm_render_virtual_view_process: Unknown appereance model" << vcl_endl;
+
   //store output
   brdb_value_sptr output0 = 
     new brdb_value_t<vil_image_view_base_sptr>(virtual_img);
@@ -136,6 +157,3 @@ bool bvxm_render_virtual_view_process::execute()
 
   return result;
 }
-
-
-
