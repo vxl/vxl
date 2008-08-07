@@ -66,6 +66,8 @@ SET(VXL_VGUI_FOUND "@VGUI_FOUND@")
 SET(VXL_VGUI_INCLUDE_DIR "@OPENGL_INCLUDE_DIR@")
 SET(VXL_VGUI_LIBRARIES "vgui")
 
+SET(VXL_VGUI_WX_FOUND "@BUILD_VGUI_WX@")
+
 SET(VXL_CONTRIB_FOUND "@BUILD_CONTRIB@")
 # VXL contrib has subdirectories handled independently below
 # VXL contrib has many libraries
