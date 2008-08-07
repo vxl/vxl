@@ -10,8 +10,7 @@
 #include "wx_xrc_app.h"
 #include "wx_xrc_frame.h"
 
-#include <vgui/wx/vgui_wx_adaptorXmlHandler.h>
-#include <vgui/wx/wxSliderPanelXmlHandler.h>
+#include <vgui/wx/vgui_wx.h>
 #include <wx/xrc/xmlres.h>
 #include <vgui/vgui.h>
 
@@ -33,8 +32,7 @@ bool wx_xrc_app::OnInit(void)
   // select the vgui_wx toolkit
   vgui::select("wx");
 
-  wxXmlResource::Get()->AddHandler(new vgui_wx_adaptorXmlHandler);
-  wxXmlResource::Get()->AddHandler(new wxSliderPanelXmlHandler);
+  vgui_wx::InitVguiHandlers();
   wxXmlResource::Get()->InitAllHandlers();
   InitXmlResource();
 
