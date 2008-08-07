@@ -707,7 +707,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
     bvxm_voxel_slab<float>::iterator image_prob_backproj_it = image_prob_backproj.begin();
 
     for (; lidar_prob_it != lidar_prob.end(); ++lidar_prob_it, ++edges_slab_it_it, ++image_prob_backproj_it) {
-      (*edges_slab_it_it) = (*edges_slab_it_it) * (*lidar_prob_it) * (*image_prob_backproj_it);
+      (*edges_slab_it_it) = (*lidar_prob_it) * (*image_prob_backproj_it);
     }
   }
   return true;
