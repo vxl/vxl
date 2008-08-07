@@ -42,4 +42,20 @@ IF(wxWidgets_FOUND)
   IF(wxWidgets_LIBRARIES)
     TARGET_LINK_LIBRARIES(wx_docview_example ${wxWidgets_LIBRARIES})
   ENDIF(wxWidgets_LIBRARIES)
+
+
+  # Examples using vgui_wx 
+  IF(BUILD_VGUI_WX)
+
+    # Example uses the wxWidgets XML resource fi
+    SET(wx_xrc_example_sources
+      wx_xrc_app.h    wx_xrc_app.cxx
+      wx_xrc_frame.h  wx_xrc_frame.cxx
+    )
+    WXWIDGETS_ADD_RESOURCES(wx_xrc_example_sources wx_xrc.xrc)
+    ADD_EXECUTABLE(wx_xrc_example WIN32 MACOSX_BUNDLE ${wx_xrc_example_sources})
+    TARGET_LINK_LIBRARIES(wx_xrc_example vgui_wx)
+
+  ENDIF(BUILD_VGUI_WX)
+
 ENDIF(wxWidgets_FOUND)
