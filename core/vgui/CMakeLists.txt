@@ -455,6 +455,11 @@ IF (wxWidgets_FOUND)
 
     SET( vgui_sources ${vgui_sources} ${vgui_wx_sources} )
 
+    OPTION(BUILD_VGUI_WX "Build extras for VGUI use in wxWidgets apps" NO)
+    IF(BUILD_VGUI_WX)
+      SUBDIRS(wx)
+    ENDIF(BUILD_VGUI_WX)
+
   ENDIF(VGUI_USE_WX)
 
 ENDIF (wxWidgets_FOUND)
