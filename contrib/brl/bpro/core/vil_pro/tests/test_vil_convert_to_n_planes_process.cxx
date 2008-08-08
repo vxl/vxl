@@ -103,7 +103,7 @@ MAIN( test_vil_convert_to_n_planes_process )
   vil_image_view_base_sptr f_base = test_process(f_image_ref);
   vil_image_view<float> f_observed(f_base);
  
-  TEST("Flota-Image as expected",vil_image_view_deep_equality(f_observed, f_expected), true);
+  TEST("Float-Image as expected",vil_image_view_deep_equality(f_observed, f_expected), true);
   
   bprb_batch_process_manager::instance()->clear();
 
