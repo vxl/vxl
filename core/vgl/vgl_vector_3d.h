@@ -74,6 +74,10 @@ class vgl_vector_3d
 
 
   //: One-parameter family of unit vectors that are orthogonal to *this, v(s).
+  // To get two orthogonal vectors call this function twice with s=0 and
+  // s=0.25 for example.
+  // \note This function is not continuous near z==0. (Under the Hairy Ball
+  // theorem no such smooth function can exist.)
   vgl_vector_3d<T> orthogonal_vectors(double s);// 0<=s<1, v(0)==v(1)
 };
 
