@@ -9,14 +9,14 @@
 //
 //  
 
-#include <wx/panel.h>
+#include <wx/scrolwin.h>
 #include <vgui/vgui_observable.h>
 #include <vcl_vector.h>
 
 //: A wxPanel with a bank of sliders and text fields
 // This is useful for adjusting a point in N-D parameter space
 // Each dimension has a min and max (for the slider)
-class wxSliderPanel: public wxPanel, public vgui_observable
+class wxSliderPanel: public wxScrolledWindow, public vgui_observable
 {    
     DECLARE_DYNAMIC_CLASS( wxSliderPanel )
     DECLARE_EVENT_TABLE()
@@ -29,7 +29,7 @@ public:
                 wxWindowID base_id = 10100,
                 const wxPoint& pos = wxDefaultPosition, 
                 const wxSize& size = wxDefaultSize, 
-                long style = wxSUNKEN_BORDER|wxTAB_TRAVERSAL,
+                long style = wxVSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL,
                 const wxString& name = wxT("wxSliderPanel"));
 
   //: Creation
@@ -38,7 +38,7 @@ public:
               wxWindowID base_id = 10100,
               const wxPoint& pos = wxDefaultPosition, 
               const wxSize& size = wxDefaultSize, 
-              long style = wxSUNKEN_BORDER|wxTAB_TRAVERSAL,
+              long style = wxVSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL,
               const wxString& name = wxT("wxSliderPanel"));
 
   //: Destructor

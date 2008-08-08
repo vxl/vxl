@@ -19,7 +19,7 @@
 #include <vgui/vgui_message.h>
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxSliderPanel, wxPanel )
+IMPLEMENT_DYNAMIC_CLASS( wxSliderPanel, wxScrolledWindow )
 
 
 //: Event Table 
@@ -140,6 +140,7 @@ void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
   CreateControls();
   if (GetSizer())
     GetSizer()->Fit(this);
+  SetScrollRate(0,1);
 }
 
 
