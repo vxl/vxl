@@ -179,12 +179,12 @@ inline int vnl_math_rnd(double x) { return x>=0.0?int(x + 0.5):int(x - 0.5); }
 #endif
 
 // floor -- round towards minus infinity
-inline int vnl_math_floor(float  x) { return x>=0.f?int(x):x==int(x)?x:int(x-1.f); }
-inline int vnl_math_floor(double x) { return x>=0.0?int(x):x==int(x)?x:int(x-1.0); }
+inline int vnl_math_floor(float  x) { return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f)); }
+inline int vnl_math_floor(double x) { return static_cast<int>(x>=0.0?x:(x==static_cast<int>(x)?x:x-1.0)); }
 
 // ceil -- round towards plus infinity
-inline int vnl_math_ceil(float  x) { return x<0.f?int(x):x==int(x)?x:int(x+1.f); }
-inline int vnl_math_ceil(double x) { return x<0.0?int(x):x==int(x)?x:int(x+1.0); }
+inline int vnl_math_ceil(float  x) { return static_cast<int>(x<0.f?x:(x==static_cast<int>(x)?x:x+1.f)); }
+inline int vnl_math_ceil(double x) { return static_cast<int>(x<0.0?x:(x==static_cast<int>(x)?x:x+1.0)); }
 
 // abs
 inline bool           vnl_math_abs(bool x)          { return x; }
