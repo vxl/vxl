@@ -57,7 +57,7 @@ class vgui_mfc_mainfrm : public CFrameWnd
   //: Updates status bar
   afx_msg void OnUpdateStatusBar(CCmdUI *sbar);
   //: Called when specified timer has expired
-  afx_msg void OnTimer(UINT);
+  afx_msg void OnTimer(UINT_PTR);
 
   DECLARE_MESSAGE_MAP()
 };

@@ -186,7 +186,7 @@ void vgui_mfc_mainfrm::OnUpdateStatusBar(CCmdUI *sbar)
   sbar->SetText(statusbar->linebuffer.c_str());
 }
 
-void vgui_mfc_mainfrm::OnTimer(UINT id)
+void vgui_mfc_mainfrm::OnTimer(UINT_PTR id)
 {
   vgui_event e(vgui_TIMER);
   e.timer_id = id;
