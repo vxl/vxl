@@ -17,13 +17,13 @@
 
 //: This procces is based on vil_convert_to_n_planes function,
 // refer to this function for limitations
-// It creates an n plane image from any image src.
+// It creates an n plane image from any image src. 
 // If the input images have too many planes, the higher planes will be
 // truncated. If the input image has too few planes, the new planes will be
 // copies of the first plane.
 //
-// This function works on scalar pixel types only, however it can be used to
-// produce an rgb image as in the following example
+// The pixel type of the output image is the same as the input image.
+// However, this function works on scalar pixel types only
 
 class vil_convert_to_n_planes_process : public bprb_process
 {

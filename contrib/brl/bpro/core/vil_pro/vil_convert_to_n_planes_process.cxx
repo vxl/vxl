@@ -13,13 +13,13 @@ vil_convert_to_n_planes_process::vil_convert_to_n_planes_process()
   //this process takes two inputs:
   // input(0): the input image vil_image_view_base_sptr
   // input(1): the number of planes in the output image 
-   input_data_.resize(2,brdb_value_sptr(0));
+  input_data_.resize(2,brdb_value_sptr(0));
   input_types_.resize(2);
   input_types_[0]="vil_image_view_base_sptr";
   input_types_[1]="unsigned";
 
   //this process has 1 outputs
-  // output(0): the floating point image with the specified number of planes
+  // output(0): the output image with the specified number of planes
   output_data_.resize(1,brdb_value_sptr(0));
   output_types_.resize(1);
   output_types_[0]="vil_image_view_base_sptr";
@@ -47,12 +47,11 @@ vil_convert_to_n_planes_process::execute()
 
 
   brdb_value_t<unsigned>* input1 =
-        static_cast<brdb_value_t<unsigned>* >(input_data_[1].ptr());
+    static_cast<brdb_value_t<unsigned>* >(input_data_[1].ptr());
 
-    unsigned nplanes = input1->value();
+  unsigned nplanes = input1->value();
 
-  vil_image_view<float> out_float_view = *(vil_convert_cast(float(),vil_convert_to_n_planes(nplanes, img)));
-  vil_image_view_base_sptr out_img_ptr= new vil_image_view<float>(out_float_view);
+  vil_image_view_base_sptr out_img_ptr = vil_convert_to_n_planes(nplanes, img);
 
 
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(out_img_ptr);
