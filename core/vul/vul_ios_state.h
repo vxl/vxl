@@ -45,6 +45,7 @@
 
 #include <vcl_ios.h>
 
+//: Use RAII to save and restore precision and other state on an iostream
 class vul_ios_state_saver
 {
   public:

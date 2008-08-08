@@ -20,7 +20,7 @@
 //: Clamp an image view between two values.
 // \relates vil_image_view
 template <class T>
-inline void vil_clamp(vil_image_view<T >&src, vil_image_view<T >&dest, T lo, T hi)
+inline void vil_clamp(const vil_image_view<T >&src, vil_image_view<T >&dest, T lo, T hi)
 {
   assert (hi >= lo);
   assert (src.nplanes() == dest.nplanes() &&
@@ -30,8 +30,8 @@ inline void vil_clamp(vil_image_view<T >&src, vil_image_view<T >&dest, T lo, T h
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
       {
-        const T v = dest(i,j,p);
-        src(i,j,p) = v<lo?lo:(v>hi?hi:v);
+        const T v = src(i,j,p);
+        dest(i,j,p) = v<lo?lo:(v>hi?hi:v);
       }
 }
 
