@@ -12,7 +12,7 @@
 
 //: Save vector from file with format "v1 v2 .. vn"
 template <class T>
-void mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path);
+bool mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path);
 
 
 

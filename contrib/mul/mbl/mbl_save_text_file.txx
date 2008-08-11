@@ -13,12 +13,13 @@
 
 //: Save vector to file with format  { n v1 v2 .. vn }
 template <class T>
-void mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
+bool mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
 {
   vcl_ofstream ofs(path.c_str());
   if (!ofs)
   {
     mbl_exception_throw_os_error( path, "mbl_save_text_file: failed to save" );
+    return false;
   }
 
   //ofs<<v.size()<<vcl_endl;
@@ -27,11 +28,12 @@ void mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
     ofs<<v[i]<<vcl_endl;
   }
   ofs.close();
+  return true;
 }
 
 
 #undef MBL_SAVE_TEXT_FILE_INSTANTIATE
 #define MBL_SAVE_TEXT_FILE_INSTANTIATE(T ) \
-template void mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
+template bool mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
 
 #endif // mbl_save_text_file_txx_

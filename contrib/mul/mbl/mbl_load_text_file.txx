@@ -16,7 +16,7 @@
 
 //: Load vector from file with format "v1 v2 .. vn"
 template <class T>
-void mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
+bool mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
 {
   v.resize(0);
   vcl_ifstream ifs(path.c_str());
@@ -28,11 +28,14 @@ void mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
   else
   {
     mbl_exception_throw_os_error( path, "mbl_load_text_file: failed to load" );
+    return false;
   }
+  
+  return true;
 }
 
 #undef MBL_LOAD_TEXT_FILE_INSTANTIATE
 #define MBL_LOAD_TEXT_FILE_INSTANTIATE(T ) \
-template void mbl_load_text_file(vcl_vector<T >& v, const vcl_string& path)
+template bool mbl_load_text_file(vcl_vector<T >& v, const vcl_string& path)
 
 #endif //mbl_load_text_file_txx_
