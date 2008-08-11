@@ -35,8 +35,6 @@ bvxm_update_edges_lidar_process::bvxm_update_edges_lidar_process()
 
 bool bvxm_update_edges_lidar_process::execute()
 {
-  char temp_string[1024];
-
   // Sanity check
   if(!this->verify_inputs())
     return false;
@@ -54,9 +52,6 @@ bool bvxm_update_edges_lidar_process::execute()
   {
     result = result && world->update_edges_lidar(img_height,img_prob,camera,curr_scale);
     world->increment_observations<EDGES>(0,curr_scale);
-
-    vcl_sprintf(temp_string,"voxel_world_edges_obs_%d_scale_%d.raw",world->num_observations<EDGES>(),curr_scale);
-    world->save_edges_raw(temp_string,curr_scale);
   }
 
   if(!result){
