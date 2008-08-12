@@ -30,8 +30,8 @@ bool vpgl_nitf_camera_coverage::coverage_list(vcl_vector<vgl_point_2d<double> > 
     return false; 
   }
 
-
-  for (vul_awk awk=ifs; awk; ++awk)
+  vul_awk awk(ifs);
+  for (; awk; ++awk)
   {
     vcl_string img_file = awk.line();
 
