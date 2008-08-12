@@ -15,3 +15,7 @@ TARGET_LINK_LIBRARIES(crop_image_3d mbl vimt3d)
 ADD_EXECUTABLE( print_image print_image.cxx )
 TARGET_LINK_LIBRARIES(print_image vimt3d mbl)
 
+ADD_EXECUTABLE( image3d_math image3d_math.cxx )
+TARGET_LINK_LIBRARIES(image3d_math vimt3d mbl)
+
+
