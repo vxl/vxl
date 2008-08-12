@@ -424,7 +424,7 @@ private:
   static operations singleton_;
 
   //: Add a single operation to the list.
-  void add_operation(const vcl_string& name, function_t func, function_type_t& t)
+  void add_operation(const char* name, function_t func, function_type_t& t)
   {
     names_.push_back(name);
     functions_.push_back(func);
@@ -434,27 +434,29 @@ private:
   //: Add all operations to the list.
   operations()
   {
-    add_operation("--convert_to_float", convert_to_float__image_3d_of_int,
+    function_type_t no_operands;
+
+    add_operation("--convert_to_float", &convert_to_float__image_3d_of_int,
       function_type_t() << operand::e_image_3d_of_int);
-    add_operation("--convert_to_int", convert_to_int__image_3d_of_float,
+    add_operation("--convert_to_int", &convert_to_int__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float);
-    add_operation("--help", help,
-      function_type_t());
-    add_operation("--option_load_as_image_float", option_load_as_image_float,
-      function_type_t());
-    add_operation("--option_load_as_image_int", option_load_as_image_int,
-      function_type_t());
-    add_operation("--product", product__image_3d_of_float__image_3d_of_float,
+    add_operation("--help", &help,
+      no_operands);
+    add_operation("--option_load_as_image_float", &option_load_as_image_float,
+      no_operands);
+    add_operation("--option_load_as_image_int", &option_load_as_image_int,
+      no_operands);
+    add_operation("--product", &product__image_3d_of_float__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float);
-    add_operation("--save", save__image_3d_of_float__string,
+    add_operation("--save", &save__image_3d_of_float__string,
       function_type_t() << operand::e_image_3d_of_float << operand::e_string);
-    add_operation("--save", save__image_3d_of_int__string,
+    add_operation("--save", &save__image_3d_of_int__string,
       function_type_t() << operand::e_image_3d_of_int << operand::e_string);
-    add_operation("--scale_and_offset", scale_and_offset__image_3d_of_float__double__double,
+    add_operation("--scale_and_offset", &scale_and_offset__image_3d_of_float__double__double,
       function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double);
-    add_operation("--signed_distance_transform", signed_distance_transform__image_3d_of_float,
+    add_operation("--signed_distance_transform", &signed_distance_transform__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float);
-    add_operation("--sum", sum__image_3d_of_float__image_3d_of_float,
+    add_operation("--sum", &sum__image_3d_of_float__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float);
 
 
@@ -583,3 +585,5 @@ int main(int argc, char*argv[])
   vcl_cerr << "ERROR: image3d_math needs exception support to compile properly.\n";
 }
 #endif
+
+
