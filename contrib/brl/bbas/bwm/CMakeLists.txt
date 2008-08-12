@@ -36,21 +36,18 @@ SET(bwm_sources
    bwm_command_macros.h
    bwm_load_commands.h
    bwm_process_commands.h
-#   bwm_site.cxx                     bwm_site.h               bwm_site_sptr.h
    bwm_site_mgr.cxx                 bwm_site_mgr.h
    bwm_world.cxx                    bwm_world.h
                                     bwm_tableau.h            bwm_tableau_sptr.h
    bwm_tableau_cam.cxx              bwm_tableau_cam.h
    bwm_tableau_rat_cam.cxx          bwm_tableau_rat_cam.h
    bwm_tableau_proj_cam.cxx         bwm_tableau_proj_cam.h
-#  bwm_tableau_coin3d.cxx
                                     bwm_tableau_coin3d.h
                                     bwm_tableau_proj2d.h
-#   bwm_tableau_lidar.cxx
                                     bwm_tableau_lidar.h
    bwm_tableau_text.cxx             bwm_tableau_text.h
    bwm_tableau_img.cxx              bwm_tableau_img.h
-   bwm_tableau_video.cxx           bwm_tableau_video.h
+   bwm_tableau_video.cxx            bwm_tableau_video.h
    bwm_tableau_mgr.cxx              bwm_tableau_mgr.h
    bwm_tableau_factory.cxx          bwm_tableau_factory.h
    bwm_process_mgr.cxx              bwm_process_mgr.h
@@ -66,11 +63,9 @@ SET(bwm_sources
                                     bwm_observer_cam_proj.h
    bwm_observer_proj_cam.cxx        bwm_observer_proj_cam.h
    bwm_observer_rat_cam.cxx         bwm_observer_rat_cam.h
-#  bwm_observer_coin3d.cxx
                                     bwm_observer_coin3d.h                                  
                                     bwm_observer_proj2d.h
                                     bwm_observer_proj2d_simple.h
-#  bwm_observer_lidar.cxx
                                     bwm_observer_lidar.h
    bwm_observer_video.cxx           bwm_observer_video.h
    bwm_observer_mgr.cxx             bwm_observer_mgr.h
@@ -99,7 +94,7 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bgui3d bwm_algo bmsh3d bmsh3d_algo bgeo bmsh3d_vis expatpp bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl vpgl vpgl_algo vpgl_file_formats)
+TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io bmsh3d bmsh3d_algo bgeo bmsh3d_vis expatpp bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl vpgl vpgl_algo vpgl_file_formats)
 
 SUBDIRS(exe)
 SUBDIRS(algo)
