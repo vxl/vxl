@@ -22,6 +22,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   top_menu.add("SITE   ", load_menu);
 
   vgui_menu file_menu;
+  file_menu.add("Load shape file (.shp)", load_shape_file);
   file_menu.add("Save (ply)", save_ply);
   file_menu.add("Save (gml)", save_gml);
   file_menu.add("Save (kml)", save_kml);

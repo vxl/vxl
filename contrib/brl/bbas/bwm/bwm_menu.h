@@ -28,6 +28,7 @@ class bwm_menu
   static void save_video_site() 
     { bwm_site_mgr::instance()->save_video_site();}
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
+  static void load_shape_file() { bwm_world::instance()->load_shape_file(); }
   static void save_ply() { bwm_world::instance()->save_ply(); }
   static void save_gml() { bwm_world::instance()->save_gml(); }
   static void save_kml() { bwm_world::instance()->save_kml(); }
