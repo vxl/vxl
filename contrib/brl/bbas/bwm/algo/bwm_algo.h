@@ -48,6 +48,9 @@ class bwm_algo
 
   static vpgl_rational_camera<double>* extract_nitf_camera(vil_image_resource_sptr img);
   static vpgl_rational_camera<double>* extract_nitf_camera(vcl_string img_path);
+
+  static bool fit_circle(const vcl_list<vgl_point_2d<double> > &points,
+    double &radius, vgl_point_2d<double> &center);
 };
 
 #endif

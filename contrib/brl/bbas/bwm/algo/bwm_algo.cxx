@@ -17,6 +17,9 @@
 
 #include <vil/vil_load.h>
 
+// The well-known square function
+static inline double square(double x) { return x * x; }
+
 //: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays
 void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
                                float **x, float **y)
@@ -165,6 +168,56 @@ bwm_algo::fit_sphere_to_corner(vgl_point_3d<double> P1, vgl_vector_3d<double> N1
   return (vgl_point_3d<double> (Q.x()/Q.w(), Q.y()/Q.w(), Q.z()/Q.w()));
 }
 
+bool bwm_algo::fit_circle(const vcl_list<vgl_point_2d<double> > &points,
+                          double &radius, vgl_point_2d<double> &center)
+{
+  int rows = points.size();
+
+  // must have at least 3 points to find circle
+  if (rows < 3)    
+    return false;
+
+  vnl_vector<double> col1(rows);
+  vnl_vector<double> col2(rows);
+  vnl_vector<double> col3(rows);
+  vnl_vector<double> col4(rows);
+
+  vcl_list<vgl_point_2d<double> >::const_iterator it = points.begin();
+  for (int i = 0; it != points.end(); ++it, ++i)
+  {
+      col2.put(i, (*it).y());
+      col3.put(i, (*it).x());
+  }
+
+  for (int i = 0; i < rows; ++i)
+  {
+      col1.put(i, square(col2.get(i)) + square(col3.get(i)));
+      col4.put(i, 1.0);
+  }
+
+  vnl_matrix<double> m(rows, 4);
+
+  m.set_column(0, col1);
+  m.set_column(1, col2);
+  m.set_column(2, col3);
+  m.set_column(3, col4);
+
+  vnl_svd<double> svd(m);
+
+  // singular values are stored by vnl_svd in decreasing
+  // order, so get last column to get optimal solution
+  vnl_vector<double> u = svd.V().get_column(3);
+
+  double a = u(0);
+  vnl_double_2 b(u(1),u(2));
+
+  double c = u(3);
+
+  center.set(-b(1) / 2 / a, -b(0) / 2 / a);
+  radius = vcl_sqrt(square(center.x()) + square(center.y()) - c / a);
+  return true;
+}
+
 vpgl_rational_camera<double> *
 bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
 {
@@ -194,3 +247,5 @@ bwm_algo::extract_nitf_camera(vcl_string img_path)
   //vil_image_resource_sptr img_res = load_image(img_path, params);
   return extract_nitf_camera(img_res);
 }
+
+
