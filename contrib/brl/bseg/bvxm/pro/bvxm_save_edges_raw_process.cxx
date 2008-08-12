@@ -20,6 +20,7 @@ bvxm_save_edges_raw_process::bvxm_save_edges_raw_process()
   input_types_.resize(2);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
+  input_types_[2] = "unsigned";
 
   // process has 0 outputs.
   output_data_.resize(0,brdb_value_sptr(0));
@@ -40,6 +41,9 @@ bool bvxm_save_edges_raw_process::execute()
   brdb_value_t<vcl_string>* input1 =
     static_cast<brdb_value_t<vcl_string>* >(input_data_[1].ptr());
   vcl_string filename = input1->value();
+  
+  brdb_value_t<unsigned>* input2 = static_cast<brdb_value_t<unsigned>* >(input_data_[2].ptr());
+  unsigned scale = input2->value();
 
-  return world->save_edges_raw(filename);
+  return world->save_edges_raw(filename,scale);
 }
