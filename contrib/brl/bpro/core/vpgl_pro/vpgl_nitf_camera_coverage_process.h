@@ -3,7 +3,7 @@
 #define vpgl_nitf_camera_coverage_process_h_
 //:
 // \file
-// \brief A process for computing a list of images covering a geo point
+// \brief A process for computing a list of images covering a Geographical point
 // \author Isabel Restrepo (mir@lems.brown.edu)
 // \date 08/08/2008
 //
