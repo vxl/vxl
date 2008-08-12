@@ -1,5 +1,8 @@
 #include "bwm_world.h"
 #include "bwm_observer_mgr.h"
+#include "algo/bwm_shape_file.h"
+#include "algo/bwm_algo.h"
+#include "algo/bwm_utils.h"
 
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
@@ -85,6 +88,24 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
     return false;
   lvcs = bgeo_lvcs(lat, lon, elev);
   return true;
+}
+
+void bwm_world::load_shape_file()
+{
+  vcl_string file = bwm_utils::select_file();
+  bwm_shape_file sfile;
+  if (sfile.load(file)) {
+    // "#define SHPT_POLYGONZ 15" in shapefil.h
+    if (sfile.shape_type() == 15) {
+      vcl_vector<vcl_vector<vsol_point_3d_sptr> > polys = sfile.vertices();
+      for (unsigned i=0; i<polys.size(); i++) {
+        bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+        bwm_observer_mgr::instance()->attach(mesh);
+        vsol_polygon_3d_sptr poly3d = bwm_algo::move_points_to_plane(polys[i]);
+        mesh->set_object(poly3d);
+      }
+    }
+  }
 }
 
 #if 0

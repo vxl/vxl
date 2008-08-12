@@ -53,6 +53,7 @@ class bwm_world
   //: returns true if it can figure out a value, false otherwise
   bool get_lvcs(bgeo_lvcs &lvcs);
 
+  void load_shape_file();
   //*********** Save methods
   void save_ply();
   void save_gml();
