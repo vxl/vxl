@@ -43,7 +43,7 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
           vil_print_value(os,view(i,j,k,p));
           os<<' ';
         }
-        os<<'\n' << vcl_flush;
+        os<<'\n';
       }
     }
   }

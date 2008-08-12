@@ -54,7 +54,7 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
 
 
 bool vimt3d_save(const vcl_string& path,
-                 vimt3d_image_3d& image,
+                 const vimt3d_image_3d& image,
                  bool use_millimetres /*=false*/)
 {
   const vimt3d_image_3d & iv = image;
