@@ -10,7 +10,6 @@
 #include "algo/bwm_algo.h"
 #include "algo/bwm_utils.h"
 
-#include <bgui3d/bgui3d.h>
 #include <bgui/bgui_image_utils.h>
 
 #include <vil/vil_blocked_image_resource.h>
@@ -25,7 +24,6 @@ bwm_tableau_mgr* bwm_tableau_mgr::instance()
 {
   if (!instance_) {
     instance_ = new bwm_tableau_mgr();
-    bgui3d_init();
   }
   return bwm_tableau_mgr::instance_;
 }
