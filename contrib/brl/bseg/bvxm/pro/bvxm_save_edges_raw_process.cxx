@@ -16,8 +16,8 @@ bvxm_save_edges_raw_process::bvxm_save_edges_raw_process()
   //input[0]: The voxel world
   //input[1]: The filename to write to
 
-  input_data_.resize(2,brdb_value_sptr(0));
-  input_types_.resize(2);
+  input_data_.resize(3,brdb_value_sptr(0));
+  input_types_.resize(3);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
