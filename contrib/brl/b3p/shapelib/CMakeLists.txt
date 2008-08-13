@@ -16,18 +16,9 @@ ENDIF (WIN32)
 
 SET(shapelib_sources
    shapefil.h
-   shputils.c
-   shptreedump.c
    shptree.c
-   shprewind.c
    shpopen.c
-   shpdump.c
-   shpcreate.c
-   shpadd.c
    dbfopen.c
-   dbfdump.c
-   dbfcreate.c
-   dbfadd.c
 )
 
 ADD_LIBRARY(shapelib ${shapelib_sources})
