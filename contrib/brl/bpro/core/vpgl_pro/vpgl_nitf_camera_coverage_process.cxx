@@ -50,7 +50,7 @@ vpgl_nitf_camera_coverage_process::get_regions(vcl_string file,
       ifs >> x; ifs >> y;
       region.push_back( vgl_point_2d<double>( x, y ) );
   }
-};
+}
 
 //: Execute the process
 bool
@@ -77,7 +77,7 @@ vpgl_nitf_camera_coverage_process::execute()
   vcl_string out_img_list = input2->value();
 
  
-  vcl_vector<vgl_point_2d<double>> regions;
+  vcl_vector<vgl_point_2d<double> > regions;
 
   this->get_regions(region_file, regions);
  
