@@ -53,6 +53,9 @@
  ******************************************************************************
  *
  * Log: shputils.c
+ * Revision 1.1  2008/08/12 17:52:50  gamze
+ * lib for reading/writing shape files
+ *
  * Revision 1.7  2003/02/25 17:20:22  warmerda
  * Set psCShape to NULL after SHPDestroyObject() to avoid multi-frees of
  * the same memory ... as submitted by Fred Fox.
@@ -274,7 +277,7 @@ int main( int argc, char ** argv )
                 if (factor == 0)
                 {
                   if (infactor ==0)
-                  { puts("ERROR: Input unit must be defined before output unit"); exit(); }
+                  { puts("ERROR: Input unit must be defined before output unit"); exit(1); }
                   factor=infactor/outfactor;
                 }
                 printf("Output file coordinate values will be factored by %lg\n",factor);
