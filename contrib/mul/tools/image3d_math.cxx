@@ -21,6 +21,7 @@
 #include <vil3d/file_formats/vil3d_gen_synthetic.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vil3d/vil3d_convert.h>
+#include <vil3d/vil3d_clamp.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_transform_3d.h>
@@ -400,6 +401,33 @@ void signed_distance_transform__image_3d_of_float(opstack_t& s)
   s.push_front(operand(o1));
 }
 
+void clamp_above__image_3d_of_float__double__double(stack_t& s)
+{
+  vimt3d_image_3d_of<float> o1(s[2].as_image_3d_of_float());
+
+  vil3d_clamp_above(o1.image(), static_cast<float>(s[1].as_double()),
+    static_cast<float>(s[0].as_double()) );
+
+  s.pop_front();
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1));
+}
+
+void clamp_below__image_3d_of_float__double__double(stack_t& s)
+{
+  vimt3d_image_3d_of<float> o1(s[2].as_image_3d_of_float());
+
+  vil3d_clamp_below(o1.image(), static_cast<float>(s[1].as_double()),
+    static_cast<float>(s[0].as_double()) );
+
+  s.pop_front();
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1));
+}
+
+
 
 class operations
 {
@@ -436,6 +464,10 @@ private:
   {
     function_type_t no_operands;
 
+    add_operation("--clamp_above", &clamp_above__image_3d_of_float__double__double,
+      function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double);
+    add_operation("--clamp_below", &clamp_below__image_3d_of_float__double__double,
+      function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double);
     add_operation("--convert_to_float", &convert_to_float__image_3d_of_int,
       function_type_t() << operand::e_image_3d_of_int);
     add_operation("--convert_to_int", &convert_to_int__image_3d_of_float,
