@@ -14,8 +14,11 @@
 #include <vcl_stdexcept.h>
 #include <vcl_sstream.h>
 #include <vcl_deque.h>
+#include <vcl_iomanip.h>
 #include <vsl/vsl_stream.h>
 #include <vsl/vsl_deque_io.txx>
+#include <vnl/vnl_math.h>
+#include <vul/vul_ios_state.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_exception.h>
 #include <vil3d/file_formats/vil3d_gen_synthetic.h>
@@ -48,6 +51,44 @@ bool global_option_load_as_image_int = false;
 class operand;
 vcl_ostream& operator <<( vcl_ostream&, const operand&);
 
+bool string_to_double(const vcl_string&s, double&d)
+{
+  vcl_istringstream ss(s);
+  ss >> d;
+  if (!ss) return false;
+  char dummy;
+  ss >> dummy;
+  if (ss) return false;
+  return true;
+}
+bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<float>&d)
+{
+  try
+  {
+    vimt3d_load(s, d, true);
+  }
+  catch (const vcl_exception& e)
+  {
+    vcl_cerr << e.what() << '\n';
+    return false;
+  }
+  return true;
+}
+bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<int>&d)
+{
+  try
+  {
+    vimt3d_load(s, d, true);
+  }
+  catch (const vcl_exception& e)
+  {
+    vcl_cerr << e.what() << '\n';
+    return false;
+  }
+  return true;
+}
+
+
 //: A value on the stack, to be used as by an operation.
 // This is a rather inefficient VARIANT-type class.
 class operand
@@ -57,42 +98,6 @@ class operand
   vimt3d_image_3d_of<int> image_3d_of_int_;
   double double_;
 
-  bool string_to_double(const vcl_string&s, double&d) const
-  {
-    vcl_istringstream ss(s);
-    ss >> d;
-    if (!ss) return false;
-    char dummy;
-    ss >> dummy;
-    if (ss) return false;
-    return true;
-  }
-  bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<float>&d) const
-  {
-    try
-    {
-      vimt3d_load(s, d, true);
-    }
-    catch (const vcl_exception& e)
-    {
-      vcl_cerr << e.what() << '\n';
-      return false;
-    }
-    return true;
-  }
-  bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<int>&d) const
-  {
-    try
-    {
-      vimt3d_load(s, d, true);
-    }
-    catch (const vcl_exception& e)
-    {
-      vcl_cerr << e.what() << '\n';
-      return false;
-    }
-    return true;
-  }
 public:
   enum operand_type_t { e_string, e_image_3d_of_float, e_image_3d_of_int, e_double };
   operand_type_t operand_type_;
@@ -314,6 +319,24 @@ void save__image_3d_of_int__string(opstack_t& s)
   s.pop_front();
 }
 
+void load__string(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  if (global_option_load_as_image_int)
+  {
+    vimt3d_image_3d_of<int> v;
+    string_to_image(s[0].as_string(), v);
+    s.pop_front();
+    s.push_front(operand(v));
+  }
+  else
+  {
+    vimt3d_image_3d_of<float> v;
+    string_to_image(s[0].as_string(), v);
+    s.pop_front();
+    s.push_front(operand(v));
+  }
+}
 
 void scale_and_offset__image_3d_of_float__double__double(opstack_t& s)
 {
@@ -384,8 +407,111 @@ void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
 
 }
 
+void copy__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> result;
+  result.deep_copy(o1);
+
+  s.push_front(operand(result));
+}
+
+void copy__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> result;
+  result.deep_copy(o1);
+
+  s.push_front(operand(result));
+}
+
+void print_histogram__image_3d_of_float__double(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  vil3d_image_view<float> storage(o1.image().ni(), o1.image().nj(),
+    o1.image().nk(), o1.image().nplanes());
+  vil3d_copy_reformat(o1.image(), storage);
+
+  double nsteps = vnl_math_floor(s[0].as_double());
+  double step = storage.size() / nsteps;
+  vul_ios_state_saver saved(vcl_cout);
+
+  vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
+
+  vcl_cout << "     0%: " << vcl_setw(16) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
+    << '\n' << vcl_setw(6) << 100.0/nsteps << "%: "
+    << vcl_setw(16) << *(storage.begin() + vnl_math_rnd(step)) << '\n';
+  for (unsigned i=1; i+1<nsteps; ++i)
+  {
+    vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
+      storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
+    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16) <<
+      *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
+  }
+  vcl_cout << "   100%: " << vcl_setw(16) <<
+    *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+  s.pop_front();
+  s.pop_front();
+}
+
+void print_histogram__image_3d_of_int__double(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+  vil3d_image_view<int> storage(o1.image().ni(), o1.image().nj(),
+    o1.image().nk(), o1.image().nplanes());
+  vil3d_copy_reformat(o1.image(), storage);
+
+  double nsteps = vnl_math_floor(s[0].as_double());
+  double step = storage.size() / nsteps;
+  vul_ios_state_saver saved(vcl_cout);
+  vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
+
+
+  vcl_cout << "   0%: " << vcl_setw(16) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
+    << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << *(storage.begin() + vnl_math_rnd(step)) << '\n';
+  for (unsigned i=1; i <9; ++i)
+  {
+    vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
+      storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
+    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16) <<
+      *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
+  }
+  vcl_cout << " 100%: " << vcl_setw(16) <<
+    *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+  s.pop_front();
+  s.pop_front();
+}
+
+void print_stats__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+
+  double mean=0, var=0;
+  vil3d_math_mean_and_variance(mean, var, o1.image(), 0);
+  vcl_cout << "Mean: " << mean << " Std: " << vcl_sqrt(var) << vcl_endl;
+
+  s.pop_front();
+}
+void print_stats__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+
+  double mean=0, var=0;
+  vil3d_math_mean_and_variance(mean, var, o1.image(), 0);
+  vcl_cout << "Mean: " << mean << " Std: " << vcl_sqrt(var) << vcl_endl;
+
+  s.pop_front();
+}
+
 void signed_distance_transform__image_3d_of_float(opstack_t& s)
 {
+  assert(s.size() >= 1);
   vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
 
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
@@ -401,7 +527,7 @@ void signed_distance_transform__image_3d_of_float(opstack_t& s)
   s.push_front(operand(o1));
 }
 
-void clamp_above__image_3d_of_float__double__double(stack_t& s)
+void clamp_above__image_3d_of_float__double__double(opstack_t& s)
 {
   vimt3d_image_3d_of<float> o1(s[2].as_image_3d_of_float());
 
@@ -414,7 +540,7 @@ void clamp_above__image_3d_of_float__double__double(stack_t& s)
   s.push_front(operand(o1));
 }
 
-void clamp_below__image_3d_of_float__double__double(stack_t& s)
+void clamp_below__image_3d_of_float__double__double(opstack_t& s)
 {
   vimt3d_image_3d_of<float> o1(s[2].as_image_3d_of_float());
 
@@ -472,12 +598,26 @@ private:
       function_type_t() << operand::e_image_3d_of_int);
     add_operation("--convert_to_int", &convert_to_int__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float);
+    add_operation("--copy", &copy__image_3d_of_int,
+      function_type_t() << operand::e_image_3d_of_int);
+    add_operation("--copy", &copy__image_3d_of_float,
+      function_type_t() << operand::e_image_3d_of_float);
     add_operation("--help", &help,
       no_operands);
+    add_operation("--load", &load__string,
+      function_type_t() << operand::e_string);
     add_operation("--option_load_as_image_float", &option_load_as_image_float,
       no_operands);
     add_operation("--option_load_as_image_int", &option_load_as_image_int,
       no_operands);
+    add_operation("--print_histogram", &print_histogram__image_3d_of_int__double,
+      function_type_t() << operand::e_image_3d_of_int << operand::e_double);
+    add_operation("--print_histogram", &print_histogram__image_3d_of_float__double,
+      function_type_t() << operand::e_image_3d_of_float << operand::e_double);
+    add_operation("--print_stats", &print_stats__image_3d_of_int,
+      function_type_t() << operand::e_image_3d_of_int);
+    add_operation("--print_stats", &print_stats__image_3d_of_float,
+      function_type_t() << operand::e_image_3d_of_float);
     add_operation("--product", &product__image_3d_of_float__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float);
     add_operation("--save", &save__image_3d_of_float__string,
