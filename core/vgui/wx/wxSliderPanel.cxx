@@ -25,8 +25,18 @@ IMPLEMENT_DYNAMIC_CLASS( wxSliderPanel, wxScrolledWindow )
 //: Event Table 
 BEGIN_EVENT_TABLE( wxSliderPanel, wxPanel )
   EVT_SCROLL_THUMBTRACK( wxSliderPanel::OnSliderTrack )
+  EVT_SCROLL_PAGEDOWN( wxSliderPanel::OnSliderTrack )
+  EVT_SCROLL_PAGEUP( wxSliderPanel::OnSliderTrack )
+  EVT_SCROLL_LINEDOWN( wxSliderPanel::OnSliderTrack )
+  EVT_SCROLL_LINEUP( wxSliderPanel::OnSliderTrack )
+  EVT_SCROLL_CHANGED( wxSliderPanel::OnSliderChange )
   EVT_TEXT( wxID_ANY, wxSliderPanel::OnChangeText )
+  EVT_TEXT_ENTER( wxID_ANY, wxSliderPanel::OnEnterText )
 END_EVENT_TABLE()
+
+
+const char wxSliderPanel::update[] = "";
+const char wxSliderPanel::enter[] = "";
 
 
 //: Constructor - Default
@@ -118,7 +128,7 @@ void wxSliderPanel::CreateControls()
 
     wxTextCtrl* itemTextCtrl = new wxTextCtrl(this, base_id_+2*i+1, 
                                               wxString::Format(wxT("%g"),vals_[i]), 
-                                              wxDefaultPosition, wxSize(70, -1), 0 );
+                                              wxDefaultPosition, wxSize(70, -1), wxTE_PROCESS_ENTER );
     itemFlexGridSizer->Add(itemTextCtrl, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 3);
     // Numeric text validator
     itemTextCtrl->SetValidator( wxTextValidator(wxFILTER_NUMERIC) );
@@ -150,40 +160,88 @@ bool wxSliderPanel::ShowToolTips()
 }
 
 
+//: Used by event handles to validate and lookup widgets
+int wxSliderPanel::GetWidgets(const wxEvent& event,
+                              wxSlider*& slider,
+                              wxTextCtrl*& text)
+{
+  slider = NULL;
+  text = NULL;
+  int idx = (event.GetId()-base_id_)/2;
+  if(idx < 0 || idx >= static_cast<int>(vals_.size()))
+    return -1;
+
+  text = dynamic_cast<wxTextCtrl*>(FindWindowById(base_id_+2*idx+1));
+  slider = dynamic_cast<wxSlider*>(FindWindowById(base_id_+2*idx));
+  return idx;
+}
 
 
 //: Handle Slider Tracking (dragging)
 void wxSliderPanel::OnSliderTrack( wxScrollEvent& event )
 {
-  int idx = (event.GetId()-base_id_)/2;
-  if(idx < 0 || idx >= static_cast<int>(vals_.size()))
+  wxSlider* slider;
+  wxTextCtrl* text;
+  int idx = GetWidgets(event, slider, text);
+  if(!slider || !text)
     return;
-  
-  int id = event.GetId() + 1; // id of text box
-  wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(FindWindowById(id));
+
   int spos = event.GetInt();
   double val = sp_to_val(idx,spos);
   text->SetValue(wxString::Format(wxT("%g"),val));
-  event.Skip();
+}
+
+//: Handle Slider Release (stop dragging)
+void wxSliderPanel::OnSliderChange( wxScrollEvent& event )
+{
+  wxSlider* slider;
+  wxTextCtrl* text;
+  int idx = GetWidgets(event, slider, text);
+  if(!slider || !text)
+    return;
+
+  vgui_message m;
+  m.from = this;
+  m.user = wxSliderPanel::enter;
+  m.data = &idx;
+  notify(m);
 }
 
 
 //: Handle Textbox value change (typing)
 void wxSliderPanel::OnChangeText( wxCommandEvent& event )
 {
-  int idx = (event.GetId()-base_id_)/2;
-  if(idx < 0 || idx >= static_cast<int>(vals_.size()))
+  wxSlider* slider;
+  wxTextCtrl* text;
+  int idx = GetWidgets(event, slider, text);
+  if(!slider || !text)
     return;
-  
-  int id = event.GetId() - 1; // id of slider
-  wxSlider* slider = dynamic_cast<wxSlider*>(FindWindowById(id));
+
   event.GetString().ToDouble(&vals_[idx]);
   int spos = val_to_sp(idx,vals_[idx]);
   slider->SetValue(spos);
   event.Skip();
-  
+
   vgui_message m;
   m.from = this;
+  m.user = wxSliderPanel::update;
+  m.data = &idx;
+  notify(m);
+}
+
+
+//: Handle Textbox press of Enter key
+void wxSliderPanel::OnEnterText( wxCommandEvent& event )
+{
+  wxSlider* slider;
+  wxTextCtrl* text;
+  int idx = GetWidgets(event, slider, text);
+  if(!slider || !text)
+    return;
+
+  vgui_message m;
+  m.from = this;
+  m.user = wxSliderPanel::enter;
   m.data = &idx;
   notify(m);
 }

@@ -13,6 +13,10 @@
 #include <vgui/vgui_observable.h>
 #include <vcl_vector.h>
 
+// forward declarations
+class wxSlider;
+class wxTextCtrl;
+
 //: A wxPanel with a bank of sliders and text fields
 // This is useful for adjusting a point in N-D parameter space
 // Each dimension has a min and max (for the slider)
@@ -57,8 +61,12 @@ public:
   
   //: Event handlers
   void OnSliderTrack( wxScrollEvent& event );
+  void OnSliderChange( wxScrollEvent& event );
   void OnChangeText( wxCommandEvent& event );
-  
+  void OnEnterText( wxCommandEvent& event );
+
+  //: Used by event handles to validate and lookup widgets
+  int GetWidgets(const wxEvent& event, wxSlider*& slider, wxTextCtrl*& text);
   
   //: Return the vector of data
   const vcl_vector<double>& data() const { return vals_; }
@@ -78,6 +86,10 @@ public:
 
   //: Should we show tooltips?
   static bool ShowToolTips();
+
+  //: These static memory address are used to identify vgui_message types
+  static const char update[];
+  static const char enter[];
 
 
 private:
