@@ -1,0 +1,170 @@
+@chapsummary
+@code{vidl2} is a library for managing video streams.
+
+The purpose of this library is to provide a unified interface for
+reading and writing video data in VXL. Unlike the previous vidl
+library, this library treats video as a data stream.  The input
+streams are derived from @code{vidl2_istream} and can provide
+data from disk or from a live capture (a camera, for example).
+The output streams are dervied from @code{vidl2_ostream} 
+and can write data to disk or potentially display on a screen
+or stream onto the internet (not implemented yet).
+@endchapsummary
+
+@section Comparison with Previous Video Library
+This design has the following advantages over the old vxl video 
+library that treated videos as container objects.
+@itemize @bullet
+@item Better support for large video files
+@item Better support for encoding options
+@item Support for live video streams
+@item Better integration with vil
+@end itemize
+
+
+@subsection Streams vs. Codecs
+
+Various stream subclasses are used to interface with different types 
+of video streams. Note that these are not called codecs. The codec in 
+the old @code{vidl} library was somewhat of a misnomer. Each 
+@code{vidl2_istream} and @code{vidl2_ostream} subclass is a wrapper 
+for another video API that may or may not provide encoding, and may 
+support many different codecs. For example,
+@code{vidl2_ffmpeg_istream} provides a input using the FFMPEG
+library. The FFMPEG library can open a large variety of video file
+formats (avi, mpeg, etc.) and decode using an even larger variety of
+codecs (MPEG2, MPEG4, MJPEG, H.264, Cinepak, etc.).  
+
+The video stream design also allows for streams that receive images
+from live video feeds. This could be from a camera, network video
+feed, or other source. Thus, video capture and video transcoding are
+both accomplished by directing an input stream into and output stream.
+
+
+@section Stream Types
+
+At the time of this writing, the following stream classes had been
+implemented.
+
+@subsection Input Stream Types
+
+@table @code
+@item vidl2_image_list_istream
+Treats an ordered list of vil_image_resource_sptr as a video stream. 
+Also supports reading a list of images from disk given a list of 
+filenames or a file glob.
+@item vidl2_ffmpeg_istream
+Uses the @url{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
+decode many common video file formats.
+@item vidl2_v4l_istream
+Use a video for Linux input stream.
+@item vidl2_dshow_live_istream 
+Use the DirectShow API to stream video directly from camera and 
+frame-grabber devices in Windows using native Windows codecs.
+@item vidl2_dshow_file_istream 
+Use the DirectShow API to encode video files in Windows using 
+native Windows codecs
+@item vidl2_dc1394_istream
+Use libdc1394 v2 to stream video directly from IEEE 1394 (firewire) 
+based cameras (Windows not supported yet)
+@end table
+
+@subsection Ouput Stream Types
+
+@table @code
+@item vidl2_image_list_ostream 
+Writes a video to disk as a sequence of numbered image files using 
+any image file format supported by vil.
+@item vidl2_ffmpeg_ostream 
+Uses the @url{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
+encode to many common video file formats with many encoding options 
+for video quality and compression.
+@end table
+
+@section Video Frames
+
+The @code{vidl2_frame_sptr} is data structure used to transport video
+frame data from a @code{vidl2_istream} to a @code{vidl2_ostream}. The
+@code{vidl2_frame} contains a pointer to the frame buffer, the image
+resolution, the pixel format, and may eventually contain a time
+stamp. A @code{vidl2_frame} is more restrictive than a
+@code{vil_image_view} since it requires contiguous memory and is
+limited in pixel data types. However, it also handles many pixels
+formats not supported by @code{vil} such as those with subsampled
+chrominance (i.e. YUV 4:2:2).
+
+In some cases the @code{vidl2_frame} data can be wrapped by a
+@code{vil_image_view}, but usually this is not a good idea. The
+@code{vidl2_frame} should be considered a volatile data structure. The
+image buffer is only guaranteed to be valid until the next call of
+@code{vidl2_ostream::advance()}. The ostream will keep a pointer to
+the released frame and then invalidate it before reusing memory. Use
+the functions in @code{vidl2_convert.h} to obtain a non-volatile
+@code{vil_image_view}.
+
+@section Pixel Formats and Conversions
+
+The supported pixel formats are enumerated in
+@code{vidl2_pixel_format} enum.  The naming convention is
+@code{VIDL2_PIXEL_FORMAT_color_num[P]}, where @emph{color} is the color
+encoding, @emph{num} is the bit number, and the @code{P} character
+is optionally appended to indicate a planar encoding.  There are also
+two special formats.  @code{VIDL2_PIXEL_FORMAT_UNKNOWN} is used when
+the pixel format is not known or does not matter.
+@code{VIDL2_PIXEL_FORMAT_ENUM_END} is an end of enum marker that
+should never be used in a @code{vidl2_frame}.  This marker is used to
+count the number of pixel formats, all new formats should be added
+before the end marker in the enum.
+
+The @emph{color} of a pixel format specifies the color encoding.  A
+separate enum named @code{vidl2_pixel_color} enumerates the available
+color modes.  These are
+@table @code
+@item VIDL2_PIXEL_COLOR_MONO
+Monochrome or greyscale (1 color channel)
+@item VIDL2_PIXEL_COLOR_RGB
+Red Green Blue (3 color channels)
+@item VIDL2_PIXEL_COLOR_RGBA
+Red Green Blue Alpha (4 color channels)
+@item VIDL2_PIXEL_COLOR_YUV
+Luma Chroma-Blue Chroma-Red, aka YCrCb (3 color channels)
+@end table
+The multichannel color formats are not always encoded in the order
+given above.  The characters are permuted in the
+@code{vidl2_pixel_format} names to indicate the actual ordering.  For
+example, @code{BGR} indicates RGB color stored in reverse order.
+
+The @emph{bit number} in the indicates how the bits are laid out.  
+This is most important in packed color frames where a group 
+of 2 or 4 pixels is encoded together and differing numbers of bits are 
+added to different color channels.  When no packing occurs, the number
+in the @code{vidl2_pixel_format} name is the total number of bits
+(i.e. @code{RGB_24} is RGB with 8 bits for each channel).  When the
+number of bits per channel is different the standard chroma subsambing
+numbering is used (i.e. @code{422} for 4:2:2).  See
+@url{http://en.wikipedia.org/wiki/Chroma_subsampling} for more
+details. A separate enum named @code{vidl2_pixel_arrangement}
+enumerates the available arrangements.  These are
+@table @code
+@item VIDL2_PIXEL_ARRANGE_SINGLE
+Each pixel is listed in single file with equal bit allocation to each
+channel (ex. RGBRGBRGBRGBRGB...)
+@item VIDL2_PIXEL_ARRANGE_PACKED
+Small blocks of data represent a group of pixels and bit allocation
+generally differs between channels
+@item VIDL2_PIXEL_ARRANGE_PLANAR
+All data from one channel is provided before providing all data from
+the next channel (ex. RRRR... GGGG... BBBB...).  Chroma subsampling
+may still apply.
+@item VIDL2_PIXEL_ARRANGE_PALETTE
+(Not currently used) 
+Each pixel is an index into a look-up table of colors.
+@end table 
+
+A set of template specializations is used to define a set of traits
+for each format. A new pixel format may be introduced by simply adding
+an entry in the table in @code{vidl2_pixel_format.h}. The traits of a
+pixel format are used in the generation of conversion routines with
+templates.
+
+

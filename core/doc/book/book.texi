@@ -166,6 +166,13 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 
 @include chapter_vidl.texi
 
+@comment ------------------------------------------------------------------
+@node    vidl2
+@comment node-name, next,      previous, up
+@chapter vidl2: Video Streaming (Coming Soon)
+@cindex video
+
+@include chapter_vidl2.texi
 
 @comment ------------------------------------------------------------------
 @node    vcsl
