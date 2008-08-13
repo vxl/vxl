@@ -16,16 +16,6 @@
 
 # If this FORCE variable is unset or is FALSE, try to find a native library.
 IF( VXL_FORCE_B3P_SHAPELIB )
-ELSE( VXL_FORCE_B3P_SHAPELIB )
-  INCLUDE( ${CMAKE_ROOT}/Modules/FindSHAPELIB.cmake )
-ENDIF( VXL_FORCE_B3P_SHAPELIB )
-
-IF(SHAPELIB_FOUND)
-
-  SET(VXL_USING_NATIVE_SHAPELIB "YES")
-
-ELSE(SHAPELIB_FOUND)
-
   #
   # At some point, in a "release" version, it is possible that someone
   # will not have the b3p SHAPELIB library
@@ -40,4 +30,4 @@ ELSE(SHAPELIB_FOUND)
         
   ENDIF(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib/shapefil.h)
 
-ENDIF(SHAPELIB_FOUND)
+ENDIF(VXL_FORCE_B3P_SHAPELIB)
