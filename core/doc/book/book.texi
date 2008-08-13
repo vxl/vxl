@@ -53,6 +53,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vsl::
 * vgui::
 * vidl::
+* vidl2::
 * vcsl::
 * structure::
 * build::
