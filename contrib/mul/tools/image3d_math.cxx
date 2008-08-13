@@ -509,22 +509,26 @@ void print_stats__image_3d_of_int(opstack_t& s)
   s.pop_front();
 }
 
-void signed_distance_transform__image_3d_of_float(opstack_t& s)
+void signed_distance_transform__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
-  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+  vil3d_image_view<bool> mask;
+  vil3d_convert_cast(o1.image(), mask);
 
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
     vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
 
+  vimt3d_image_3d_of<float> result;
+  result.world2im() = o1.world2im();
 
-  vil3d_signed_distance_transform(o1.image(),
+  vil3d_signed_distance_transform(mask, result.image(), 1000.f,
     static_cast<float>(vcl_abs(voxel_size.x())),
     static_cast<float>(vcl_abs(voxel_size.y())),
     static_cast<float>(vcl_abs(voxel_size.z())) );
 
   s.pop_front();
-  s.push_front(operand(o1));
+  s.push_front(operand(result));
 }
 
 void clamp_above__image_3d_of_float__double__double(opstack_t& s)
@@ -626,8 +630,8 @@ private:
       function_type_t() << operand::e_image_3d_of_int << operand::e_string);
     add_operation("--scale_and_offset", &scale_and_offset__image_3d_of_float__double__double,
       function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double);
-    add_operation("--signed_distance_transform", &signed_distance_transform__image_3d_of_float,
-      function_type_t() << operand::e_image_3d_of_float);
+    add_operation("--signed_distance_transform", &signed_distance_transform__image_3d_of_int,
+      function_type_t() << operand::e_image_3d_of_int);
     add_operation("--sum", &sum__image_3d_of_float__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float);
 
