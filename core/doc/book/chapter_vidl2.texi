@@ -54,7 +54,7 @@ Treats an ordered list of vil_image_resource_sptr as a video stream.
 Also supports reading a list of images from disk given a list of 
 filenames or a file glob.
 @item vidl2_ffmpeg_istream
-Uses the @url{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
+Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
 decode many common video file formats.
 @item vidl2_v4l_istream
 Use a video for Linux input stream.
@@ -76,7 +76,7 @@ based cameras (Windows not supported yet)
 Writes a video to disk as a sequence of numbered image files using 
 any image file format supported by vil.
 @item vidl2_ffmpeg_ostream 
-Uses the @url{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
+Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
 encode to many common video file formats with many encoding options 
 for video quality and compression.
 @end table
@@ -142,7 +142,7 @@ in the @code{vidl2_pixel_format} name is the total number of bits
 (i.e. @code{RGB_24} is RGB with 8 bits for each channel).  When the
 number of bits per channel is different the standard chroma subsambing
 numbering is used (i.e. @code{422} for 4:2:2).  See
-@url{http://en.wikipedia.org/wiki/Chroma_subsampling} for more
+@uref{http://en.wikipedia.org/wiki/Chroma_subsampling} for more
 details. A separate enum named @code{vidl2_pixel_arrangement}
 enumerates the available arrangements.  These are
 @table @code
