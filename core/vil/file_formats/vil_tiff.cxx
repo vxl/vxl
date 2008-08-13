@@ -540,7 +540,7 @@ unsigned vil_tiff_image::size_block_i() const
 {
   if (h_->tile_width.valid)
     return static_cast<unsigned>(h_->tile_width.val);
-  if (h_->rows_per_strip.valid&&h_->image_width.valid)
+  if (h_->image_width.valid)
     return static_cast<unsigned>(h_->image_width.val);
   return 0;
 }
@@ -566,9 +566,7 @@ unsigned vil_tiff_image::n_block_i() const
 {
   if (h_->tile_width.valid)
     return static_cast<unsigned>(h_->tiles_across());
-  if (h_->rows_per_strip.valid)
-    return 1;
-  return 0;
+  return 1;
 }
 
 // Number of blocks in image height
@@ -576,9 +574,7 @@ unsigned vil_tiff_image::n_block_j() const
 {
   if (h_->tile_length.valid&&h_->image_length.valid)
     return static_cast<unsigned>(h_->tiles_down());
-  if (h_->rows_per_strip.valid)
-    return static_cast<unsigned>(h_->strips_per_image());
-  return 0;
+  return static_cast<unsigned>(h_->strips_per_image());
 }
 
 ///// end of simple virtual methods

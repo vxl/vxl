@@ -27,6 +27,8 @@
 //   -  The width and height of a tile must be a multiple of 16
 //   -  The current implementation can't handle Planar Configuration =2,
 //      which is RGB in separate color bands.
+//   -  If rows_per_strip is missing, it is assumed to be infinity
+//      (http://www.awaresystems.be/imaging/tiff/tifftags/rowsperstrip.html)
 //
 // \verbatim
 //  Modifications
@@ -144,7 +146,7 @@ class vil_tiff_header
 
   vxl_uint_32 strips_per_image() const
   { return rows_per_strip.valid ?
-      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 0L;
+      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 1L;
   }
 
   //the acutal size of the strip in the file

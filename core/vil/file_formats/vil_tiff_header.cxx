@@ -247,7 +247,9 @@ bool vil_tiff_header::is_tiled() const
 
 bool vil_tiff_header::is_striped() const
 {
-  return rows_per_strip.valid && rows_per_strip.val > 0;
+  // Assume if rows_per_strip is not provided, assume it is infinity,
+  // and that the image is striped.
+  return (rows_per_strip.valid && rows_per_strip.val > 0) || !rows_per_strip.valid;
 }
 
 #if HAS_GEOTIFF
@@ -297,6 +299,10 @@ vxl_uint_32 vil_tiff_header::rows_in_strip() const
     if (rps>image_length.val)
       return image_length.val;
     return rps;
+  }
+  else if(image_length.valid)
+  {
+    return image_length.val;
   }
   return 0;
 }

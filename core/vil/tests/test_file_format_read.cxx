@@ -513,6 +513,8 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform(CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float.tif" ) );
   testlib_test_begin( "  8-bit RGBA uncompressed" );
   testlib_test_perform(CheckFile(CompareRGBA<vxl_byte>(), "ff_rgba8bit_true.txt", "ff_rgba8bit_uncompressed.tif" ) );
+  testlib_test_begin( "  8-bit RGBA without RowsPerStrip" );
+  testlib_test_perform(CheckFile(CompareRGBA<vxl_byte>(), "no_rowsperstrip_true.txt", "no_rowsperstrip.tif" ) );
 
   //The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and 
   //NSIF 1.0 files.  All three of these formats are covered here as well as all four different
