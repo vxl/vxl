@@ -261,13 +261,13 @@ vcl_ostream& operator <<( vcl_ostream&ss, const operand::operand_type_t& t)
   }
   return ss;
 }
-typedef vcl_deque<operand> stack_t;
+typedef vcl_deque<operand> opstack_t;
 
 
 void print_operations(vcl_ostream&);
 
 //: Operation implementation
-void help(stack_t& s)
+void help(opstack_t& s)
 {
   vcl_cerr <<
     "usage: image3d_math [--operand | operation] [--operand | operation] ... --operand\n"
@@ -278,7 +278,7 @@ void help(stack_t& s)
 }
 
 //: Operation implementation
-void sum__image_3d_of_float__image_3d_of_float(stack_t& s)
+void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 2);
   vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
@@ -293,7 +293,7 @@ void sum__image_3d_of_float__image_3d_of_float(stack_t& s)
   s.push_front(operand(result));
 }
 
-void save__image_3d_of_float__string(stack_t& s)
+void save__image_3d_of_float__string(opstack_t& s)
 {
   assert(s.size() >= 2);
 
@@ -303,7 +303,7 @@ void save__image_3d_of_float__string(stack_t& s)
   s.pop_front();
 }
 
-void save__image_3d_of_int__string(stack_t& s)
+void save__image_3d_of_int__string(opstack_t& s)
 {
   assert(s.size() >= 2);
 
@@ -314,7 +314,7 @@ void save__image_3d_of_int__string(stack_t& s)
 }
 
 
-void scale_and_offset__image_3d_of_float__double__double(stack_t& s)
+void scale_and_offset__image_3d_of_float__double__double(opstack_t& s)
 {
   assert(s.size() >= 3);
   vimt3d_image_3d_of<float> o1=s[2].as_image_3d_of_float();
@@ -329,7 +329,7 @@ void scale_and_offset__image_3d_of_float__double__double(stack_t& s)
 
 }
 
-void convert_to_int__image_3d_of_float(stack_t& s)
+void convert_to_int__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 1);
   vimt3d_image_3d_of<float> o1=s[0].as_image_3d_of_float();
@@ -343,17 +343,17 @@ void convert_to_int__image_3d_of_float(stack_t& s)
 
 }
 
-void option_load_as_image_int(stack_t& s)
+void option_load_as_image_int(opstack_t& s)
 {
   global_option_load_as_image_int = true;
 }
 
-void option_load_as_image_float(stack_t& s)
+void option_load_as_image_float(opstack_t& s)
 {
   global_option_load_as_image_int = false;
 }
 
-void convert_to_float__image_3d_of_int(stack_t& s)
+void convert_to_float__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
   vimt3d_image_3d_of<int> o1=s[0].as_image_3d_of_int();
@@ -368,7 +368,7 @@ void convert_to_float__image_3d_of_int(stack_t& s)
 
 
 
-void product__image_3d_of_float__image_3d_of_float(stack_t& s)
+void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 2);
   vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
@@ -383,7 +383,7 @@ void product__image_3d_of_float__image_3d_of_float(stack_t& s)
 
 }
 
-void signed_distance_transform__image_3d_of_float(stack_t& s)
+void signed_distance_transform__image_3d_of_float(opstack_t& s)
 {
   vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
 
@@ -416,7 +416,7 @@ private:
   };
 
 
-  typedef void(*function_t)(stack_t& stack);
+  typedef void(*function_t)(opstack_t& stack);
   vcl_vector<vcl_string> names_;
   vcl_vector<function_t> functions_;
   vcl_vector<function_type_t > function_types_;
@@ -470,7 +470,7 @@ private:
     }
   }
 
-  static bool operation_type_matches(const function_type_t& type, const stack_t& stack)
+  static bool operation_type_matches(const function_type_t& type, const opstack_t& stack)
   {
     if (stack.size() < type.size()) return false;
     for (unsigned i=0; i<type.size(); ++i)
@@ -481,7 +481,7 @@ private:
     return true;
   }
 public:
-  static void run(vcl_string &name, stack_t& stack)
+  static void run(vcl_string &name, opstack_t& stack)
   {
     typedef vcl_pair<vcl_vector<vcl_string>::iterator, vcl_vector<vcl_string>::iterator> range_t;
     range_t range =
@@ -522,7 +522,7 @@ void print_operations(vcl_ostream&ss) { operations::print(ss); }
 //========================================================================
 int main2(int argc, char*argv[])
 {
-  stack_t stack;
+  opstack_t stack;
 
   if (argc==1)
     help(stack);
