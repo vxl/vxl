@@ -7,7 +7,7 @@ SET(vil3d_sources
     vil3d_print.h
     vil3d_plane.h
     vil3d_slice.h
-    vil3d_crop.h					           vil3d_crop.cxx
+    vil3d_crop.h                     vil3d_crop.cxx
     vil3d_clamp.h
     vil3d_transform.h
     vil3d_trilin_interp.h
@@ -18,7 +18,7 @@ SET(vil3d_sources
     vil3d_load.h                     vil3d_load.cxx
     vil3d_save.h                     vil3d_save.cxx
     vil3d_memory_image.h             vil3d_memory_image.cxx
-    vil3d_copy.h                     vil3d_copy.cxx                      vil3d_copy.txx
+    vil3d_copy.h                     vil3d_copy.cxx          vil3d_copy.txx
     vil3d_image_resource.h
     vil3d_new.h                      vil3d_new.cxx
     vil3d_convert.h
@@ -30,9 +30,9 @@ SET(vil3d_sources
     vil3d_reflect.h
     vil3d_scan_image.h
 
-    file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
-    file_formats/vil3d_dicom.h       file_formats/vil3d_dicom.cxx
-    file_formats/vil3d_slice_list.h  file_formats/vil3d_slice_list.cxx
+    file_formats/vil3d_gipl_format.h     file_formats/vil3d_gipl_format.cxx
+    file_formats/vil3d_dicom.h           file_formats/vil3d_dicom.cxx
+    file_formats/vil3d_slice_list.h      file_formats/vil3d_slice_list.cxx
     file_formats/vil3d_analyze_format.h  file_formats/vil3d_analyze_format.cxx
     file_formats/vil3d_gen_synthetic.h   file_formats/vil3d_gen_synthetic.cxx
 )

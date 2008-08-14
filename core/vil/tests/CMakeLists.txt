@@ -17,7 +17,7 @@ ADD_EXECUTABLE( vil_test_all
   test_save_load_image.cxx
   test_image_loader_robustness.cxx
   test_stream.cxx
-  test_image_list.cxx	
+  test_image_list.cxx
   test_4_plane_tiff.cxx
 
   # image operations
