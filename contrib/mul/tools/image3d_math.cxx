@@ -26,6 +26,7 @@
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_clamp.h>
+#include <vil3d/vil3d_math.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_transform_3d.h>
@@ -287,7 +288,7 @@ void help(opstack_t& s)
   vcl_exit(3);
 }
 
-//: Operation implementation
+//: Add voxels of two images together
 void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -303,6 +304,7 @@ void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
   s.push_front(operand(result));
 }
 
+//: Save a float image using vil3d saver
 void save__image_3d_of_float__string(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -313,6 +315,7 @@ void save__image_3d_of_float__string(opstack_t& s)
   s.pop_front();
 }
 
+//: Save an int image using vil3d saver
 void save__image_3d_of_int__string(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -323,6 +326,39 @@ void save__image_3d_of_int__string(opstack_t& s)
   s.pop_front();
 }
 
+//: Save a float image to a ascii matlab format
+void save_to_mat__image_3d_of_float__string(opstack_t& s)
+{
+  assert(s.size() >= 2);
+
+  vcl_string o1(s[0].as_string());
+  vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
+  const vil3d_image_view<float>& o2_image = o2.image();;
+  
+
+  vcl_ofstream output(o1.c_str());
+
+  if (!output)
+    mbl_exception_throw_os_error(o1);
+
+  output <<
+    "# Created by vxl/image3d_math\n"
+    "# name: image3d\n"
+    "# type: matrix\n"
+    "# ndims: 3\n"
+    << o2.image().ni() << ' ' << o2.image().nj() << ' ' << o2.image().nk() << '\n';
+
+  for (unsigned k=0;k<o2_image.nk();++k)
+    for (unsigned j=0;j<o2_image.nj();++j)
+      for (unsigned i=0;i<o2_image.ni();++i)
+        output <<  o2_image(i,j,k) << '\n';
+
+  s.pop_front();
+  s.pop_front();
+}
+
+//: Force an image to load - replace the filename in the operand stack with the image.
+// Uses global_option_load_as_image_int to decide whether to load as float or int.
 void load__string(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -438,6 +474,8 @@ void print_histogram__image_3d_of_float__double(opstack_t& s)
   double nsteps = vnl_math_floor(s[0].as_double());
   double step = storage.size() / nsteps;
   vul_ios_state_saver saved(vcl_cout);
+  vcl_cout.precision(9);
+
 
   vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
 
@@ -626,6 +664,8 @@ class operations
       function_type_t() << operand::e_image_3d_of_float << operand::e_string);
     add_operation("--save", &save__image_3d_of_int__string,
       function_type_t() << operand::e_image_3d_of_int << operand::e_string);
+    add_operation("--save_to_mat", &save_to_mat__image_3d_of_float__string,
+      function_type_t() << operand::e_image_3d_of_float << operand::e_string);
     add_operation("--scale_and_offset", &scale_and_offset__image_3d_of_float__double__double,
       function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double);
     add_operation("--signed_distance_transform", &signed_distance_transform__image_3d_of_int,
