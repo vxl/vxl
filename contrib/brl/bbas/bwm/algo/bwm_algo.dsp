@@ -29,6 +29,9 @@ SOURCE=.\bwm_utm_lat_lon.cxx
 # Begin Source File
 SOURCE=.\bwm_delaunay_tri.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_shape_file.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -61,6 +64,9 @@ SOURCE=.\bwm_utm_lat_lon.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_delaunay_tri.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_shape_file.h
 # End Source File
 # End Group
 # End Target

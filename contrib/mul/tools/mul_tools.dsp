@@ -255,6 +255,9 @@ SOURCE=.\crop_image_3d.cxx
 # Begin Source File
 SOURCE=.\print_image.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\image3d_math.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
