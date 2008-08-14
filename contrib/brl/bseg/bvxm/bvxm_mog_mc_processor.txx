@@ -1,3 +1,6 @@
+#ifndef bvxm_mog_mc_processor_txx_
+#define bvxm_mog_mc_processor_txx_
+
 #include "bvxm_mog_mc_processor.h"
 //:
 // \file
@@ -8,7 +11,7 @@
 
 //: Return probability density of observing pixel values
 template <unsigned int dim, unsigned int modes>
-bvxm_voxel_slab<float> 
+bvxm_voxel_slab<float>
 bvxm_mog_mc_processor<dim,modes>::prob_density(bvxm_voxel_slab<apm_datatype> const& appear,
                   bvxm_voxel_slab<obs_datatype> const& obs)
 {
@@ -98,7 +101,7 @@ bool bvxm_mog_mc_processor<dim, modes>::update( bvxm_voxel_slab<apm_datatype> &a
 
 //: Expected value
 template <unsigned int dim, unsigned int modes>
-bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim, modes>::obs_datatype> 
+bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim, modes>::obs_datatype>
 bvxm_mog_mc_processor<dim, modes>::expected_color(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {
   //the output
@@ -131,7 +134,7 @@ bvxm_mog_mc_processor<dim, modes>::expected_color(bvxm_voxel_slab<mix_gauss_type
 //: Color of the most probable mode in the mixtures in the slab
 template <unsigned int dim, unsigned int modes>
 bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim, modes>::obs_datatype>
-bvxm_mog_mc_processor<dim, modes>::most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear) 
+bvxm_mog_mc_processor<dim, modes>::most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {
   //the output
    bvxm_voxel_slab<obs_datatype> color(appear.nx(),appear.ny(),appear.nz());
@@ -153,4 +156,6 @@ bvxm_mog_mc_processor<dim, modes>::most_probable_mode_color(bvxm_voxel_slab<mix_
 }
 
 #define BVXM_MOG_MC_PROCESSOR_INSTANTIATE(dim, modes) \
-template class bvxm_mog_mc_processor<dim, modes>
+template class bvxm_mog_mc_processor<dim, modes >
+
+#endif // bvxm_mog_mc_processor_txx_
