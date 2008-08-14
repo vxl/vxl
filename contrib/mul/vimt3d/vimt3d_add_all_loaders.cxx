@@ -14,15 +14,13 @@ void vimt3d_add_all_loaders()
   vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<vxl_byte>());
   vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<float>());
   vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<int>());
-//  vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<double>()); // NYI
-  vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<vxl_int_32>());
+  //vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<double>()); // NYI - Placeholder only
+
   vsl_add_to_binary_loader(vimt3d_image_3d_of<vxl_byte>());
   vsl_add_to_binary_loader(vimt3d_image_3d_of<float>());
   vsl_add_to_binary_loader(vimt3d_image_3d_of<int>());
   vsl_add_to_binary_loader(vimt3d_image_3d_of<double>());
-  vsl_add_to_binary_loader(vimt3d_image_3d_of<vxl_int_32>());
 
 // Allow vil3d_load with the vimt3d-specific .v3i format.
-  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);
-  
+  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
 }
