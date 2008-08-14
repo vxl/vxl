@@ -15,6 +15,7 @@
 #include <vcl_sstream.h>
 #include <vcl_deque.h>
 #include <vcl_iomanip.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_stream.h>
 #include <vsl/vsl_deque_io.txx>
 #include <vnl/vnl_math.h>
@@ -29,7 +30,6 @@
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
-
 
 
 //=========================================================================
@@ -61,6 +61,7 @@ bool string_to_double(const vcl_string&s, double&d)
   if (ss) return false;
   return true;
 }
+
 bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<float>&d)
 {
   try
@@ -74,6 +75,7 @@ bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<float>&d)
   }
   return true;
 }
+
 bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<int>&d)
 {
   try
@@ -98,7 +100,7 @@ class operand
   vimt3d_image_3d_of<int> image_3d_of_int_;
   double double_;
 
-public:
+ public:
   enum operand_type_t { e_string, e_image_3d_of_float, e_image_3d_of_int, e_double };
   operand_type_t operand_type_;
 
@@ -110,9 +112,9 @@ public:
     image_3d_of_int_(i), operand_type_(e_image_3d_of_int) {}
   explicit operand(const double& i):
     double_(i), operand_type_(e_double) {}
-  
+
   operand_type_t operand_type() const { return operand_type_; }
-  
+
   const bool is_string() const { return operand_type_==e_string; }
   const vcl_string& as_string() const { assert(is_string()); return string_; }
 
@@ -188,7 +190,7 @@ public:
     ss << operand_type_ << ": ";
     switch (operand_type_)
     {
-    case e_string: 
+    case e_string:
       ss << string_;
       break;
     case e_image_3d_of_float:
@@ -212,7 +214,7 @@ public:
   {
     switch (t)
     {
-    case e_string: 
+    case e_string:
       return is_string();
     case e_image_3d_of_float:
       return is_image_3d_of_float();
@@ -246,11 +248,12 @@ void vsl_print_summary(vcl_ostream& os, const vcl_deque<operand> &v)
   if (v.size() > 5)
     os << " ...\n";
 }
+
 vcl_ostream& operator <<( vcl_ostream&ss, const operand::operand_type_t& t)
 {
   switch (t)
   {
-    case operand::e_string: 
+    case operand::e_string:
       ss << "string"; break;
     case operand::e_image_3d_of_float:
       ss << "image_3d_of_float"; break;
@@ -267,6 +270,7 @@ vcl_ostream& operator <<( vcl_ostream&ss, const operand::operand_type_t& t)
   }
   return ss;
 }
+
 typedef vcl_deque<operand> opstack_t;
 
 
@@ -278,7 +282,7 @@ void help(opstack_t& s)
   vcl_cerr <<
     "usage: image3d_math [--operand | operation] [--operand | operation] ... --operand\n"
     "Manipulate images using Reverse polish notiation.\n"
-    "List of commands: \n";
+    "List of commands:\n";
   print_operations(vcl_cerr);
   vcl_exit(3);
 }
@@ -350,7 +354,6 @@ void scale_and_offset__image_3d_of_float__double__double(opstack_t& s)
   s.pop_front();
   s.pop_front();
   s.push_front(operand(o1));
-
 }
 
 void convert_to_int__image_3d_of_float(opstack_t& s)
@@ -364,7 +367,6 @@ void convert_to_int__image_3d_of_float(opstack_t& s)
 
   s.pop_front();
   s.push_front(operand(result));
-
 }
 
 void option_load_as_image_int(opstack_t& s)
@@ -391,7 +393,6 @@ void convert_to_float__image_3d_of_int(opstack_t& s)
 }
 
 
-
 void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -404,7 +405,6 @@ void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
   s.pop_front();
   s.pop_front();
   s.push_front(operand(result));
-
 }
 
 void copy__image_3d_of_float(opstack_t& s)
@@ -442,17 +442,17 @@ void print_histogram__image_3d_of_float__double(opstack_t& s)
   vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
 
   vcl_cout << "     0%: " << vcl_setw(16) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
-    << '\n' << vcl_setw(6) << 100.0/nsteps << "%: "
+           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: "
     << vcl_setw(16) << *(storage.begin() + vnl_math_rnd(step)) << '\n';
   for (unsigned i=1; i+1<nsteps; ++i)
   {
     vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
       storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
-    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16) <<
-      *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
+    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16)
+             << *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
   }
-  vcl_cout << "   100%: " << vcl_setw(16) <<
-    *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+  vcl_cout << "   100%: " << vcl_setw(16)
+           << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
   s.pop_front();
   s.pop_front();
 }
@@ -470,18 +470,17 @@ void print_histogram__image_3d_of_int__double(opstack_t& s)
   vul_ios_state_saver saved(vcl_cout);
   vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
 
-
   vcl_cout << "   0%: " << vcl_setw(16) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
-    << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << *(storage.begin() + vnl_math_rnd(step)) << '\n';
+           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << *(storage.begin() + vnl_math_rnd(step)) << '\n';
   for (unsigned i=1; i <9; ++i)
   {
     vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
       storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
-    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16) <<
-      *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
+    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16)
+             << *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
   }
-  vcl_cout << " 100%: " << vcl_setw(16) <<
-    *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+  vcl_cout << " 100%: " << vcl_setw(16)
+           << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
   s.pop_front();
   s.pop_front();
 }
@@ -497,6 +496,7 @@ void print_stats__image_3d_of_float(opstack_t& s)
 
   s.pop_front();
 }
+
 void print_stats__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -558,10 +558,9 @@ void clamp_below__image_3d_of_float__double__double(opstack_t& s)
 }
 
 
-
 class operations
 {
-private:
+ private:
   //: Syntax sugar to allow
   class function_type_t:public vcl_vector<operand::operand_type_t>
   {
@@ -572,7 +571,6 @@ private:
       return *this;
     }
   };
-
 
   typedef void(*function_t)(opstack_t& stack);
   vcl_vector<vcl_string> names_;
@@ -635,7 +633,6 @@ private:
     add_operation("--sum", &sum__image_3d_of_float__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float);
 
-
     // Check they are correctly sorted.
     vcl_vector<vcl_string>::iterator it=names_.begin(), end=names_.end();
     while ((it+1)!=end)
@@ -656,7 +653,7 @@ private:
     }
     return true;
   }
-public:
+ public:
   static void run(vcl_string &name, opstack_t& stack)
   {
     typedef vcl_pair<vcl_vector<vcl_string>::iterator, vcl_vector<vcl_string>::iterator> range_t;
@@ -672,8 +669,8 @@ public:
       }
     }
     vcl_ostringstream ss;
-    ss << "Unable to match command \"" << name << "\"\n"
-      "Stack is :\n" << vsl_stream_summary(stack);
+    ss << "Unable to match command \"" << name << '"'
+       << "\nStack is :\n" << vsl_stream_summary(stack);
     throw vcl_runtime_error(ss.str());
   }
   static void print(vcl_ostream& ss)
@@ -684,10 +681,9 @@ public:
       ss << singleton_.names_[i] << ' ';
       for (unsigned j=0, nj=singleton_.function_types_[i].size(); j<nj; ++j)
         ss << singleton_.function_types_[i][j] << ' ';
-      ss << "\n";
+      ss << '\n';
     }
   }
-
 };
 
 operations operations::singleton_ = operations();
@@ -748,10 +744,9 @@ int main(int argc, char*argv[])
   }
   catch (...)
   {
-    vcl_cout << "caught unknown exception " << vcl_endl;
+    vcl_cout << "caught unknown exception" << vcl_endl;
     return 3;
   }
-
 
   return 0;
 }
@@ -761,5 +756,3 @@ int main(int argc, char*argv[])
   vcl_cerr << "ERROR: image3d_math needs exception support to compile properly.\n";
 }
 #endif
-
-
