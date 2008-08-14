@@ -88,9 +88,9 @@ SET( rgrl_sources
   rgrl_est_homo2d_lm.h                 rgrl_est_homo2d_lm.cxx
   rgrl_est_dis_homo2d_lm.h             rgrl_est_dis_homo2d_lm.cxx
 
-  #generic estimator for homogenous projection matrix
+  #generic estimator for homogeneous projection matrix
   rgrl_est_proj_func.h                 rgrl_est_proj_func.txx
-  #generic estimator for homogenous projection matrix w/ radial lens distortion
+  #generic estimator for homogeneous projection matrix w/ radial lens distortion
   rgrl_est_proj_rad_func.h             rgrl_est_proj_rad_func.txx
 
   rgrl_est_homo2d_proj.h               rgrl_est_homo2d_proj.cxx
