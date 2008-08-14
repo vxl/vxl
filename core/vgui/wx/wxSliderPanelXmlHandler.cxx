@@ -2,9 +2,6 @@
 
 #include "wxSliderPanelXmlHandler.h"
 
-#include <vcl_iostream.h>
-
-
 IMPLEMENT_DYNAMIC_CLASS(wxSliderPanelXmlHandler, wxXmlResourceHandler)
 
 wxSliderPanelXmlHandler::wxSliderPanelXmlHandler()
@@ -30,7 +27,6 @@ wxObject *wxSliderPanelXmlHandler::DoCreateResource()
 
   return panel;
 }
-
 
 
 bool wxSliderPanelXmlHandler::CanHandle(wxXmlNode *node)
