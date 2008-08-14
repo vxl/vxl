@@ -1,4 +1,4 @@
-USES += contrib/gel core
+USES += contrib/gel contrib/rpl contrib/gel/mrc core
 
 LIBRARY := vpgl-algo
 VERSION := 1.0
@@ -26,6 +26,7 @@ SOURCES += vpgl_interpolate.cxx
 SOURCES += vpgl_rational_geo_adjust.cxx
 SOURCES += vpgl_ray.cxx
 SOURCES += vpgl_ray_intersect.cxx
+SOURCES += vpgl_nitf_camera_coverage.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -9,6 +9,7 @@ SOURCES += vpgl_load_rational_camera_nitf_process.cxx
 SOURCES += vpgl_load_perspective_camera_process.cxx
 SOURCES += vpgl_save_perspective_camera_process.cxx
 SOURCES += vpgl_save_rational_camera_process.cxx
+SOURCES += vpgl_nitf_camera_coverage_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

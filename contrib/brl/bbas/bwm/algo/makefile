@@ -1,4 +1,5 @@
 USES += contrib/brl contrib/brl/bbas core
+USE_SHAPELIB := 1
 
 LIBRARY := bwm_algo
 VERSION := 1.0
@@ -14,6 +15,7 @@ MANPAGE_SOURCES += bwm_soview2D_vertex.h
 SOURCES += bwm_utils.cxx
 SOURCES += bwm_utm_lat_lon.cxx
 SOURCES += bwm_delaunay_tri.cxx
+SOURCES += bwm_shape_file.cxx
 endif
 
 ################################
