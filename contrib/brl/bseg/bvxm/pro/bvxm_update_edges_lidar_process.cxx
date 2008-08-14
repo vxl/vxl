@@ -10,8 +10,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
 
-#include <vcl_cstdio.h>
-
 bvxm_update_edges_lidar_process::bvxm_update_edges_lidar_process()
 {
   //process takes 4inputs
@@ -19,7 +17,7 @@ bvxm_update_edges_lidar_process::bvxm_update_edges_lidar_process()
   //input[1]: The lidar edge prob image
   //input[2]: The camera of the observation (dummy)
   //input[3]: The voxel world
-  //input[4]: scale index  
+  //input[4]: scale index
   input_data_.resize(5,brdb_value_sptr(0));
   input_types_.resize(5);
   input_types_[0] = "vil_image_view_base_sptr";
@@ -36,7 +34,7 @@ bvxm_update_edges_lidar_process::bvxm_update_edges_lidar_process()
 bool bvxm_update_edges_lidar_process::execute()
 {
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
   //get the inputs
@@ -46,16 +44,16 @@ bool bvxm_update_edges_lidar_process::execute()
   bvxm_voxel_world_sptr world = (static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[3].ptr()))->value();
   unsigned scale_idx = (static_cast<brdb_value_t<unsigned>* >(input_data_[4].ptr()))->value();
 
-  bool result = true; 
+  bool result = true;
 
-  for(unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
+  for (unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
   {
     result = result && world->update_edges_lidar(img_height,img_prob,camera,curr_scale);
     world->increment_observations<EDGES>(0,curr_scale);
   }
 
-  if(!result){
-    vcl_cerr << "error bvxm_update_edges_lidar_process: failed to update observation" << vcl_endl;
+  if (!result) {
+    vcl_cerr << "error bvxm_update_edges_lidar_process: failed to update observation\n";
     return false;
   }
 
