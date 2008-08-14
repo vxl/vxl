@@ -1,4 +1,4 @@
-// This is contrib/mul/vil3d/vil3d_clamp.h
+// This is mul/vil3d/vil3d_clamp.h
 #ifndef vil3d_clamp_h_
 #define vil3d_clamp_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -7,7 +7,6 @@
 //:
 // \file
 // \author Ian Scott.
-//
 
 
 #include <vil3d/vil3d_image_view.h>
