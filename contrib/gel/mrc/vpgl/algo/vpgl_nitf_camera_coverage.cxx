@@ -10,24 +10,22 @@
 #include <vgl/vgl_polygon.h>
 
 bool vpgl_nitf_camera_coverage::coverage_list(vcl_vector<vgl_point_2d<double> > geo_pts,
-                   vcl_string img_list,
-                   vcl_string img_coverage_list)
+                                              vcl_string img_list,
+                                              vcl_string img_coverage_list)
 {
   vcl_ifstream ifs( img_list.c_str() );
   vcl_ofstream ofs( img_coverage_list.c_str() );
 
   if (!ifs)
   {
-    vcl_cerr << "Error in vpgl_nitf_camera_coverage::coverage_list: Failed to open image list file"
-      << vcl_endl;
-    return false; 
+    vcl_cerr << "Error in vpgl_nitf_camera_coverage::coverage_list: Failed to open image list file\n";
+    return false;
   }
 
   if (!ofs)
   {
-    vcl_cerr << "Error in vpgl_nitf_camera_coverage::coverage_list: Failed to create output file"
-      << vcl_endl;
-    return false; 
+    vcl_cerr << "Error in vpgl_nitf_camera_coverage::coverage_list: Failed to create output file\n";
+    return false;
   }
 
   vul_awk awk(ifs);
@@ -38,13 +36,12 @@ bool vpgl_nitf_camera_coverage::coverage_list(vcl_vector<vgl_point_2d<double> > 
     //load rational camera from image file
     vpgl_nitf_rational_camera *nitf_cam = new vpgl_nitf_rational_camera(img_file);
 
-    if(!nitf_cam)
+    if (!nitf_cam)
     {
-      vcl_cerr << "Error in vpgl_nitf_camera_coverage::coverage_list: Failed to load NITF camera"
-        << vcl_endl;
+      vcl_cerr << "Error in vpgl_nitf_camera_coverage::coverage_list: Failed to load NITF camera\n";
       return false;
     }
-    
+
     //create a the coverage polygon-only one sheet.
     vgl_polygon<double> poly_region(1);
     poly_region.push_back(nitf_cam->upper_right()[0],nitf_cam->upper_right()[1]);
@@ -54,7 +51,7 @@ bool vpgl_nitf_camera_coverage::coverage_list(vcl_vector<vgl_point_2d<double> > 
 
     bool contain = true;
 
-    for( unsigned i = 0; i<geo_pts.size(); i++)
+    for ( unsigned i = 0; i<geo_pts.size(); i++)
     {
       contain = contain && poly_region.contains( vgl_point_2d<double>(
         geo_pts[i].x(), geo_pts[i].y() ) );
@@ -62,10 +59,9 @@ bool vpgl_nitf_camera_coverage::coverage_list(vcl_vector<vgl_point_2d<double> > 
 
     //If all the points aren't contained within the image region, continue to next image
     //otherwise add th image to the list file
-    if(!contain) continue;
+    if (!contain) continue;
 
     ofs << img_file << '\n';
-
   }
 
   return true;
