@@ -27,13 +27,15 @@
 
 #include <vgui/wx/wxSliderPanel.h>
 
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for std::exit()
+
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 namespace
 {
   vgui_easy2D_tableau_sptr create_tableau()
   {
-
     // Put the image.tableau into a easy2D tableau
     vgui_easy2D_tableau_new easy2D;
 
@@ -52,17 +54,16 @@ namespace
 
     return easy2D;
   }
-  
 }
 
 class vgui_wx_observer: public vgui_observer
 {
-public:
+ public:
   virtual void update(const vgui_message& m)
   {
     const wxSliderPanel* p = static_cast<const wxSliderPanel*>(m.from);
     frame->move_point(p->data()[0], p->data()[1]);
-    
+
     int i = *static_cast<const int*>(m.data);
     vgui::out << "updated index "<<i << vcl_endl;
   }
@@ -88,26 +89,26 @@ wx_xrc_frame::wx_xrc_frame(wxWindow* parent,
   wxXmlResource::Get()->LoadFrame(this,parent,wxT("wx_xrc_frame"));
 
   wxWindow* w = this->FindWindow(wxT("vgui_adaptor"));
-  if(!w){
+  if (!w) {
     vcl_cout << "could not find vgui_adaptor" << vcl_endl;
-    exit(-1);
+    vcl_exit(-1);
   }
   canvas_ = dynamic_cast<vgui_wx_adaptor*>(w);
-  if(!canvas_){
+  if (!canvas_) {
     vcl_cout << "In valid widget type for vgui adaptor" << vcl_endl;
-    exit(-1);
+    vcl_exit(-1);
   }
   this->SetSize(wxSize(600,400));
-  
+
   w = this->FindWindow(wxT("slider_panel"));
-  if(!w){
+  if (!w) {
     vcl_cout << "could not find slider panel" << vcl_endl;
-    exit(-1);
+    vcl_exit(-1);
   }
   sliders_ = dynamic_cast<wxSliderPanel*>(w);
-  if(!sliders_){
+  if (!sliders_) {
     vcl_cout << "In valid widget type for slider panel" << vcl_endl;
-    exit(-1);
+    vcl_exit(-1);
   }
   vcl_vector<double> min_vals, max_vals, init_vals;
   min_vals.push_back(1.0);
@@ -118,10 +119,10 @@ wx_xrc_frame::wx_xrc_frame(wxWindow* parent,
   init_vals.push_back(10.0);
   sliders_->CreateSliders(init_vals,min_vals,max_vals);
   sliders_->attach(static_cast<vgui_observer*>(observer_));
-  
+
   w = this->FindWindow(wxT("statusbar"));
   wxStatusBar* b = dynamic_cast<wxStatusBar*>(w);
-  if(b){
+  if (b) {
     statusbar_ = new vgui_wx_statusbar;
     statusbar_->set_widget(b);
     vgui::out.rdbuf(statusbar_->statusbuf());
