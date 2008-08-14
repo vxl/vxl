@@ -161,11 +161,7 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   {
     vil_image_view<vxl_uint_16> nitf_image_vxl_uint_16(roi);
 
-    //Isa: This is temoporary as for now there is no code supporting update for more than 3 colors
-    if (roi->nplanes() > 3)
-      *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),3);
-    else
-      *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
+    *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
 
     int bigendian = 0;
     { union { unsigned int i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }

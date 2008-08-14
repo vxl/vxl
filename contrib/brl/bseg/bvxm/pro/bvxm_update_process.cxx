@@ -17,10 +17,14 @@ bvxm_update_process::bvxm_update_process()
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The voxel world
-  //input[3]: The apperance model type :this input must be either apm_mog_grey or apm_mog_rgb
-  //          any other string will initialize the value for apm_mog_grey
+  //input[3]: The apperance model type, the supported strings are:
+  //          -apm_mog_grey
+  //          -apm_mog_rgb
+  //          -apm_mog_mc_2_3
+  //          -apm_mog_mc_3_3
+  //          -apm_mog_mc_4_3
   //input[4]: The bin index to be updatet
-  //input[5]: The scale index  of the voxel world to be updatet (default is 0)
+  //input[5]: The scale index  of the voxel world to be updated (default is 0)
   input_data_.resize(6,brdb_value_sptr(0));
   input_types_.resize(6);
   input_types_[0] = "vil_image_view_base_sptr";
@@ -102,11 +106,29 @@ bool bvxm_update_process::execute()
     else if (voxel_type == "apm_mog_rgb")
       result = world->update<APM_MOG_RGB>(observation, prob_map, mask, bin_index,scale);
     else if (voxel_type == "apm_mog_mc_2_3")
+    {
+      if (observation.img->nplanes()!= 2)
+      {
+        vcl_cerr << "appereance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
+          << " planes" << vcl_endl;
+        return false;
+      }
+
       result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+
+    }
     else if (voxel_type == "apm_mog_mc_3_3")
       result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
     else if (voxel_type == "apm_mog_mc_4_3")
-      result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
+    {
+      if (observation.img->nplanes()!= 4)
+      {
+        vcl_cerr << "appereance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
+          << " planes" << vcl_endl;
+        return false;
+      }
+      result = world->update<APM_MOG_MC_4_3>(observation, prob_map, mask, bin_index,scale);
+    }
     else 
       vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appereance model" << vcl_endl;
 
@@ -116,7 +138,7 @@ bool bvxm_update_process::execute()
     prob_map_vec.push_back(prob_map);
     mask_vec.push_back(mask);
     if(!result){
-      vcl_cerr << "error bvxm_update_multiscale_process: failed to update observation" << vcl_endl;
+      vcl_cerr << "error bvxm_update_process: failed to update observation" << vcl_endl;
       return false;
     }
   }
