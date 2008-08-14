@@ -1,28 +1,28 @@
-// This is vgui/wx/wxSliderPanel.cxx
-
+// This is core/vgui/wx/wxSliderPanel.cxx
 #include "wxSliderPanel.h"
+//:
+// \file
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include <wx/wx.h>
 #endif
 
-
-
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vgui/vgui_message.h>
 
 
 IMPLEMENT_DYNAMIC_CLASS( wxSliderPanel, wxScrolledWindow )
 
 
-//: Event Table 
+//: Event Table
 BEGIN_EVENT_TABLE( wxSliderPanel, wxPanel )
   EVT_SCROLL_THUMBTRACK( wxSliderPanel::OnSliderTrack )
   EVT_SCROLL_PAGEDOWN( wxSliderPanel::OnSliderTrack )
@@ -47,11 +47,11 @@ wxSliderPanel::wxSliderPanel()
 }
 
 //: Constructor
-wxSliderPanel::wxSliderPanel(wxWindow* parent, 
+wxSliderPanel::wxSliderPanel(wxWindow* parent,
                              wxWindowID id,
                              wxWindowID base_id,
-                             const wxPoint& pos, 
-                             const wxSize& size, 
+                             const wxPoint& pos,
+                             const wxSize& size,
                              long style,
                              const wxString& name)
 {
@@ -61,11 +61,11 @@ wxSliderPanel::wxSliderPanel(wxWindow* parent,
 
 
 //: Creator
-bool wxSliderPanel::Create(wxWindow* parent, 
+bool wxSliderPanel::Create(wxWindow* parent,
                            wxWindowID id,
-                           wxWindowID base_id, 
-                           const wxPoint& pos, 
-                           const wxSize& size, 
+                           wxWindowID base_id,
+                           const wxPoint& pos,
+                           const wxSize& size,
                            long style,
                            const wxString& name)
 {
@@ -103,37 +103,35 @@ int wxSliderPanel::val_to_sp(unsigned int idx, double val) const
 }
 
 
-
 //: Create the controls
 void wxSliderPanel::CreateControls()
-{    
+{
   wxFlexGridSizer* itemFlexGridSizer = new wxFlexGridSizer(vals_.size(), 3, 0, 0);
   itemFlexGridSizer->AddGrowableCol(1);
   this->SetSizer(itemFlexGridSizer);
-  
+
   vcl_cout << "num sliders = "<<vals_.size()<<vcl_endl;
 
-  for(unsigned int i=0; i<vals_.size(); ++i)
+  for (unsigned int i=0; i<vals_.size(); ++i)
   {
-    wxStaticText* itemLabel = new wxStaticText( this, wxID_STATIC,
+    wxStaticText* itemLabel = new wxStaticText(this, wxID_STATIC,
                                                wxString::Format(wxT("%u"),i+1),
                                                wxDefaultPosition, wxDefaultSize, 0 );
     itemFlexGridSizer->Add(itemLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_TOP|wxLEFT, 3);
-  
+
     int pos = val_to_sp(i,vals_[i]);
-    wxSlider* itemSlider = new wxSlider(this, base_id_+2*i, pos, 0, 1000, 
-                                        wxDefaultPosition, wxSize(100, -1), 
+    wxSlider* itemSlider = new wxSlider(this, base_id_+2*i, pos, 0, 1000,
+                                        wxDefaultPosition, wxSize(100, -1),
                                         wxSL_HORIZONTAL );
     itemFlexGridSizer->Add(itemSlider, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT, 3);
 
-    wxTextCtrl* itemTextCtrl = new wxTextCtrl(this, base_id_+2*i+1, 
-                                              wxString::Format(wxT("%g"),vals_[i]), 
+    wxTextCtrl* itemTextCtrl = new wxTextCtrl(this, base_id_+2*i+1,
+                                              wxString::Format(wxT("%g"),vals_[i]),
                                               wxDefaultPosition, wxSize(70, -1), wxTE_PROCESS_ENTER );
     itemFlexGridSizer->Add(itemTextCtrl, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 3);
     // Numeric text validator
     itemTextCtrl->SetValidator( wxTextValidator(wxFILTER_NUMERIC) );
   }
-
 }
 
 void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
@@ -145,7 +143,7 @@ void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
   vals_ = init_vals;
   min_vals_ = min_vals;
   max_vals_ = max_vals;
-  
+
   DestroyChildren();
   CreateControls();
   if (GetSizer())
@@ -156,7 +154,7 @@ void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
 
 bool wxSliderPanel::ShowToolTips()
 {
-    return true;
+  return true;
 }
 
 
@@ -168,7 +166,7 @@ int wxSliderPanel::GetWidgets(const wxEvent& event,
   slider = NULL;
   text = NULL;
   int idx = (event.GetId()-base_id_)/2;
-  if(idx < 0 || idx >= static_cast<int>(vals_.size()))
+  if (idx < 0 || idx >= static_cast<int>(vals_.size()))
     return -1;
 
   text = dynamic_cast<wxTextCtrl*>(FindWindowById(base_id_+2*idx+1));
@@ -183,7 +181,7 @@ void wxSliderPanel::OnSliderTrack( wxScrollEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if(!slider || !text)
+  if (!slider || !text)
     return;
 
   int spos = event.GetInt();
@@ -197,7 +195,7 @@ void wxSliderPanel::OnSliderChange( wxScrollEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if(!slider || !text)
+  if (!slider || !text)
     return;
 
   vgui_message m;
@@ -214,7 +212,7 @@ void wxSliderPanel::OnChangeText( wxCommandEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if(!slider || !text)
+  if (!slider || !text)
     return;
 
   event.GetString().ToDouble(&vals_[idx]);
@@ -236,7 +234,7 @@ void wxSliderPanel::OnEnterText( wxCommandEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if(!slider || !text)
+  if (!slider || !text)
     return;
 
   vgui_message m;
@@ -250,7 +248,7 @@ void wxSliderPanel::OnEnterText( wxCommandEvent& event )
 //: Update the data
 void wxSliderPanel::update_data(vcl_vector<double>& data)
 {
-  for(unsigned int i=0; i<data.size() && i<vals_.size(); ++i)
+  for (unsigned int i=0; i<data.size() && i<vals_.size(); ++i)
   {
     update_data(i,data[i]);
   }
