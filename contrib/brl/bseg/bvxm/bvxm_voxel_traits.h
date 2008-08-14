@@ -20,16 +20,12 @@
 //                             Everytime an user needs an mog appereance model with unexisting dimension of number
 //                             of gaussian modes, it needs to add an entry in the enum and and new class that looks as follows
 //                             class bvxm_voxel_traits<APM_MOG_MC_DIM_MODES> : public bvxm_voxel_traits_mc<DIM,MODES> {};
-//                            
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include "bvxm_mog_grey_processor.h"
 #include "bvxm_mog_rgb_processor.h"
 #include "bvxm_mog_mc_processor.h"
 #include "bvxm_lidar_processor.h"
-
-#include <vcl_map.h>
-
 
 enum bvxm_voxel_type
 {
@@ -41,9 +37,7 @@ enum bvxm_voxel_type
   APM_MOG_MC_4_3,
   EDGES,
   LIDAR,
-  UNKNOWN,
-
-
+  UNKNOWN
 };
 
 //: Pixel properties for templates.
@@ -52,9 +46,10 @@ class bvxm_voxel_traits;
 
 //: Specialization of Pixel properties for bvxm_mog_mc_processor templates.
 template <unsigned int dim, unsigned int modes>
-class bvxm_voxel_traits_mc{
-public:
-  //:Datatype of the occupancy probabilities 
+class bvxm_voxel_traits_mc
+{
+ public:
+  //:Datatype of the occupancy probabilities
   typedef bvxm_mog_mc_processor<dim,modes> appearance_processor;
   typedef typename bvxm_mog_mc_processor<dim,modes>::apm_datatype voxel_datatype;
   typedef typename bvxm_mog_mc_processor<dim,modes>::obs_datatype obs_datatype;
