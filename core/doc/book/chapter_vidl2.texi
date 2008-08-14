@@ -11,7 +11,27 @@ and can write data to disk or potentially display on a screen
 or stream onto the internet (not implemented yet).
 @endchapsummary
 
-@section Comparison with Previous Video Library
+@section Introduction
+
+An example of simple compact video transcoding with @code{vidl2}
+@example
+  // create an input stream
+  vidl2_image_list_istream my_istream("*.png");
+
+  // create an output stream
+  vidl2_ffmpeg_ostream my_ostream("video.avi",
+      vidl2_ffmpeg_ostream_params()
+          .encoder( vidl2_ffmpeg_ostream_params::DVVIDEO )
+          .frame_rate( 29.95 ) );
+
+  // transcode the video
+  vidl2_frame_sptr frame;
+  while (bool(frame = my_istream.read_frame()) &&
+         my_ostream.write_frame(frame) );
+
+@end example
+
+@subsection Comparison with Previous Video Library
 This design has the following advantages over the old vxl video 
 library that treated videos as container objects.
 @itemize @bullet
@@ -22,7 +42,7 @@ library that treated videos as container objects.
 @end itemize
 
 
-@subsection Streams vs. Codecs
+@subheading Streams vs. Codecs
 
 Various stream subclasses are used to interface with different types 
 of video streams. Note that these are not called codecs. The codec in 
@@ -46,7 +66,7 @@ both accomplished by directing an input stream into and output stream.
 At the time of this writing, the following stream classes had been
 implemented.
 
-@subsection Input Stream Types
+@subheading Input Stream Types
 
 @table @code
 @item vidl2_image_list_istream
@@ -69,7 +89,7 @@ Use libdc1394 v2 to stream video directly from IEEE 1394 (firewire)
 based cameras (Windows not supported yet)
 @end table
 
-@subsection Ouput Stream Types
+@subheading Ouput Stream Types
 
 @table @code
 @item vidl2_image_list_ostream 
@@ -80,6 +100,28 @@ Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to
 encode to many common video file formats with many encoding options 
 for video quality and compression.
 @end table
+
+Additional details for using these stream types is provide below.
+
+@subsection Image List Streams
+
+@emph{Not written yet.}
+
+@subsection FFMPEG Streams
+
+@emph{Not written yet.}
+
+@subsection DirectShow Streams
+
+@emph{Not written yet.}
+
+@subsection 1394 (Firewire) Camera Streams
+
+@emph{Not written yet.}
+
+@subsection Video 4 Linux Streams
+
+@emph{Not written yet.}
 
 @section Video Frames
 
@@ -102,7 +144,7 @@ the released frame and then invalidate it before reusing memory. Use
 the functions in @code{vidl2_convert.h} to obtain a non-volatile
 @code{vil_image_view}.
 
-@section Pixel Formats and Conversions
+@section Pixel Formats
 
 The supported pixel formats are enumerated in
 @code{vidl2_pixel_format} enum.  The naming convention is
@@ -161,10 +203,113 @@ may still apply.
 Each pixel is an index into a look-up table of colors.
 @end table 
 
-A set of template specializations is used to define a set of traits
-for each format. A new pixel format may be introduced by simply adding
-an entry in the table in @code{vidl2_pixel_format.h}. The traits of a
-pixel format are used in the generation of conversion routines with
-templates.
+@subsection The Pixel Traits Table
+
+To determine properties of each pixel type, @code{vidl2} relies
+heavily on template specialization and metaprogramming.  The template
+@code{vidl2_pixel_traits_of<FMT>} is specialized for each pixel format
+@code{FMT}.  The traits class provides several static members that
+describe the properties of each format.  The trait specializations are
+created using the macro @code{vidl2_pt_mac}.  This macro lets all the
+properties appear in a nice table.  It also makes it easy to add a new
+pixel format.
+
+The following is a subset of the pixel traits table.
+@example
+//            format    name        type         bpp  color    arrange  xcs  ycs
+//            ------    ---------   ----         ---  -------  -------  ---  ---
+vidl2_pt_mac( UNKNOWN,  "unknown",  void,        0,   UNKNOWN, UNKNOWN, 0,   0  );
+
+vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,    24,  RGB,     PLANAR,  0,   0  );
+vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  RGBA,    SINGLE,  0,   0  );
+vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  YUV,     PLANAR,  0,   0  );
+vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  YUV,     PLANAR,  1,   0  );
+vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
+vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  YUV,     PLANAR,  2,   1  );
+vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,    16,  YUV,     PACKED,  1,   0  );
+vidl2_pt_mac( MONO_1,   "Mono 1",   bool,        1,   MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,    8,   MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_16,  "Mono 16",  vxl_uint_16, 16,  MONO,    SINGLE,  0,   0  );
+@end example
+
+The meaning of each column in the pixel traits table are as follows.
+@table @code
+@item format
+The format identifier symbol.  Appended to @code{VIDL2_PIXEL_FORMAT_},
+this should match the @code{vidl2_pixel_format} enum value.
+@item name
+The string name of the format for human readability.
+@item type
+The data type to be used when converting to a @code{vil_image_view}.
+@item bpp
+The number of bits per pixel. Not always an even multiple of
+@code{sizeof(type)} because pixels may be packed or subsampled in some
+planes (see @code{xcs} and @code{ycs}).
+@item color
+The color format.  Appended to @code{VIDL2_PIXEL_COLOR_} this
+determines the @code{vidl2_pixel_color}.
+@item arrange
+The pixel arrangement.  Appended to @code{VIDL2_PIXEL_ARRANGE_} this
+determines the @code{vidl2_pixel_arrangement}.
+@item xcs
+The X color subsampling factor.  In YUV color space, the U and V
+channels have a horizontal (X) resolution that is @math{2^{-xcs}} times that of the Y channel.
+@item ycs
+The Y color subsampling factor.  In YUV color space, the U and V
+channels have a vertical (Y) resolution that is @math{2^{-xcs}} times that of the Y channel.
+@end table
+
+A new pixel format may be introduced by simply adding an entry in this
+table in @code{vidl2_pixel_format.h}. The traits of a pixel format are
+used in the automatic generation of conversion routines.  The ultimate
+goal of the @code{vidl2} pixel format framework is that new formats
+added to the table should automatically work (possibly slowly) without
+writing any additional conversion routines.
 
 
+@subsection Run-time Pixel Traits
+
+The template specializations used to define traits are very useful at
+compile-time, but less useful given a pixel format that is not known
+until run-time.  A second (non-templated) struct named
+@code{vidl2_pixel_traits} is available to dynamically hold traits at
+run-time.  The function @code{vidl2_pixel_format_traits} provides
+dynamic look-up of traits from a @code{vidl2_pixel_format} variable.
+
+@example
+// find the pixel format of a frame
+vidl2_pixel_format format = my_frame_sptr->pixel_format();
+
+// look up the pixel traits
+vidl2_pixel_traits pt = vidl2_pixel_format_traits(format);
+
+// print out some information
+vcl_cout << "The frame has format " << pt.name
+         << " with " << pt.bits_per_pixels << " bits per pixel"
+         << " and " << pt.num_channels << " channels" << vcl_endl;
+@end example
+
+To simplify this process there are several convenience functions, such
+as @code{vidl2_pixel_format_bpp}, to directly look up a pixel trait
+given the format without the need for the traits struct.  There is
+also a vcl_ostream operator for @code{vidl2_pixel_format} so that the
+human readable string name is printed.  The following example
+@example
+vidl2_pixel_format format = VIDL2_PIXEL_FORMAT_RGB_24;
+vcl_cout << "pixel format is " << format << vcl_endl;
+@end example
+produces the output
+@example
+pixel format is RGB 24
+@end example
+
+There is also a function that allows the look up of a pixel format
+from its string name.  Use @code{vidl2_pixel_format_from_string} for
+this purpose.  The expression
+@example
+vidl2_pixel_format_from_string("RGB 24") == VIDL2_PIXEL_FORMAT_RGB_24
+@end example
+should evalute to @code{true}.
+@section Pixel Format Conversion
