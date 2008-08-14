@@ -4,3 +4,5 @@ SOURCES += wx_docview_app.cxx
 SOURCES += wx_docview_doc.cxx
 SOURCES += wx_docview_frame.cxx
 SOURCES += wx_docview_view.cxx
+SOURCES += wx_xrc_app.cxx
+SOURCES += wx_xrc_frame.cxx

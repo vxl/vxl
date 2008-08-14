@@ -312,6 +312,9 @@ endif
 #####################
 # SUBDIRS
 #####################
+
+SUBDIRS += wx
+
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
