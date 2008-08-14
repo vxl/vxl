@@ -15,9 +15,8 @@
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
-//: This procces is based on vil_convert_to_n_planes function,
-// refer to this function for limitations
-// It creates an n plane image from any image src. 
+//: This process is based on vil_convert_to_n_planes function, refer to this function for limitations.
+// It creates an n plane image from any image src.
 // If the input images have too many planes, the higher planes will be
 // truncated. If the input image has too few planes, the new planes will be
 // copies of the first plane.
