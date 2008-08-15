@@ -10,6 +10,16 @@ The scripts assume that the following can be run at the command line:
              - If not available the book documentation won't be built,
 			   but the main scripts should still run without breaking.
 
+
+Quick setup on Debian/Ubuntu:
+
+aptitude update
+aptitude safe-upgrade
+aptitude install cvs doxygen texi2html build-essential linux-headers-`uname -r` graphviz netpbm
+
+You need "netpbm" for the pstopnm convertion script and "graphviz" to make nice inheritance diagrams.
+Although doxygen will still work without these.
+
 Usage:
 Arrange that the perl scripts in this directory are executable.
 (eg "chmod +x *.pl" under unix).
