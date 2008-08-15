@@ -6,7 +6,7 @@
 
 // Includes for XML Resource Handlers
 #include "vgui_wx_adaptorXmlHandler.h"
-#include <wxSliderPanelXmlHandler.h>
+#include "wxSliderPanelXmlHandler.h"
 
 
 //: Initialize all vgui_wx XML Resource Handlers
