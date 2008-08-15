@@ -70,10 +70,7 @@ bool wxSliderPanel::Create(wxWindow* parent,
                            const wxString& name)
 {
   base_id_ = base_id;
-  wxPanel::Create(parent, id, pos, size, style, name);
-  CreateControls();
-  if (GetSizer())
-      GetSizer()->Fit(this);
+  wxScrolledWindow::Create(parent, id, pos, size, style, name);
   return true;
 }
 
@@ -109,8 +106,6 @@ void wxSliderPanel::CreateControls()
   wxFlexGridSizer* itemFlexGridSizer = new wxFlexGridSizer(vals_.size(), 3, 0, 0);
   itemFlexGridSizer->AddGrowableCol(1);
   this->SetSizer(itemFlexGridSizer);
-
-  vcl_cout << "num sliders = "<<vals_.size()<<vcl_endl;
 
   itemFlexGridSizer->Add(0,3,0,wxGROW,0);
   itemFlexGridSizer->Add(0,3,0,wxGROW,0);
@@ -188,8 +183,10 @@ void wxSliderPanel::OnSliderTrack( wxScrollEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if (!slider || !text)
+  if (!slider || !text){
+    event.Skip();
     return;
+  }
 
   int spos = event.GetInt();
   double val = sp_to_val(idx,spos);
@@ -202,8 +199,10 @@ void wxSliderPanel::OnSliderChange( wxScrollEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if (!slider || !text)
+  if (!slider || !text){
+    event.Skip();
     return;
+  }
 
   vgui_message m;
   m.from = this;
@@ -219,8 +218,10 @@ void wxSliderPanel::OnChangeText( wxCommandEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if (!slider || !text)
+  if (!slider || !text){
+    event.Skip();
     return;
+  }
 
   event.GetString().ToDouble(&vals_[idx]);
   int spos = val_to_sp(idx,vals_[idx]);
@@ -241,8 +242,10 @@ void wxSliderPanel::OnEnterText( wxCommandEvent& event )
   wxSlider* slider;
   wxTextCtrl* text;
   int idx = GetWidgets(event, slider, text);
-  if (!slider || !text)
+  if (!slider || !text){
+    event.Skip();
     return;
+  }
 
   vgui_message m;
   m.from = this;
