@@ -39,12 +39,17 @@ static unsigned try_3d_image(const char * filename, float unit_scaling)
     }
 
     vgl_vector_3d<double> voxel = w2i.inverse().delta(vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1,1,1));
+
+    vgl_point_3d<double> world_min_point = w2i.inverse().origin();
+    vgl_point_3d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999, ir->nk()+0.999);
     vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
              << "size: " << ir->ni()*voxel.x() << 'x' << ir->nj()*voxel.y() << 'x' << ir->nk()*voxel.z()
              << " in units of " << 1.0/unit_scaling << "m\n"
              << "voxel size: " << voxel.x() << 'x' << voxel.y() << 'x' << voxel.z()
              << " in units of " << 1.0/unit_scaling << "m\n"
              << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << 'x' << w2i.origin().z() << " voxels\n"
+             << "world bounds: [" << world_min_point.x() << ',' << world_min_point.y() << ',' << world_min_point.z() << "] -> ["
+             << world_max_point.x() << ',' << world_max_point.y() << ',' << world_max_point.z() << "]\n"
              << "voxel_type: " << ir->pixel_format() << '\n';
     return 0;
   }

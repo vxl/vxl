@@ -27,6 +27,7 @@
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_clamp.h>
 #include <vil3d/vil3d_math.h>
+#include <vil3d/algo/vil3d_locally_z_normalise.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_transform_3d.h>
@@ -569,6 +570,28 @@ void signed_distance_transform__image_3d_of_int(opstack_t& s)
   s.push_front(operand(result));
 }
 
+void local_z_normalise__image_3d_of_float__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  double o1(s[0].as_double());
+  vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
+
+
+  vgl_vector_3d<double> voxel_size=o2.world2im().inverse().delta(
+    vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
+
+  vimt3d_image_3d_of<float> result;
+  result.world2im() = o2.world2im();
+
+  vil3d_locally_z_normalise(o2.image(),
+    o1/voxel_size.x(), o1/voxel_size.y(), o1/voxel_size.z(),
+    result.image());
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
 void clamp_above__image_3d_of_float__double__double(opstack_t& s)
 {
   vimt3d_image_3d_of<float> o1(s[2].as_image_3d_of_float());
@@ -646,6 +669,8 @@ class operations
       no_operands);
     add_operation("--load", &load__string,
       function_type_t() << operand::e_string);
+    add_operation("--local_z_normalise", &local_z_normalise__image_3d_of_float__double,
+      function_type_t() << operand::e_image_3d_of_float << operand::e_double);
     add_operation("--option_load_as_image_float", &option_load_as_image_float,
       no_operands);
     add_operation("--option_load_as_image_int", &option_load_as_image_int,
