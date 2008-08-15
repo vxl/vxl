@@ -112,6 +112,9 @@ void wxSliderPanel::CreateControls()
 
   vcl_cout << "num sliders = "<<vals_.size()<<vcl_endl;
 
+  itemFlexGridSizer->Add(0,3,0,wxGROW,0);
+  itemFlexGridSizer->Add(0,3,0,wxGROW,0);
+  itemFlexGridSizer->Add(0,3,0,wxGROW,0);
   for (unsigned int i=0; i<vals_.size(); ++i)
   {
     wxStaticText* itemLabel = new wxStaticText(this, wxID_STATIC,
@@ -128,10 +131,13 @@ void wxSliderPanel::CreateControls()
     wxTextCtrl* itemTextCtrl = new wxTextCtrl(this, base_id_+2*i+1,
                                               wxString::Format(wxT("%g"),vals_[i]),
                                               wxDefaultPosition, wxSize(70, -1), wxTE_PROCESS_ENTER );
-    itemFlexGridSizer->Add(itemTextCtrl, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 3);
+    itemFlexGridSizer->Add(itemTextCtrl, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3);
     // Numeric text validator
     itemTextCtrl->SetValidator( wxTextValidator(wxFILTER_NUMERIC) );
   }
+  itemFlexGridSizer->Add(0,3,0,wxGROW,0);
+  itemFlexGridSizer->Add(0,3,0,wxGROW,0);
+  itemFlexGridSizer->Add(0,3,0,wxGROW,0);
 }
 
 void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
@@ -144,11 +150,12 @@ void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
   min_vals_ = min_vals;
   max_vals_ = max_vals;
 
-  DestroyChildren();
+  Freeze();
   CreateControls();
-  if (GetSizer())
-    GetSizer()->Fit(this);
-  SetScrollRate(0,1);
+  FitInside();
+  SetScrollRate(0,20);
+  Thaw();
+  Refresh();
 }
 
 
