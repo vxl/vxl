@@ -9,7 +9,7 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_mesh_break_face.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmsh3d_tests_face_geom.cxx
+SOURCE=.\bmsh3d_test_face_geom.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
