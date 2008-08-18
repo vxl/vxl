@@ -3,6 +3,7 @@
 // \file
 #include "bwm_observer_mgr.h"
 #include "bwm_observable_mesh.h"
+#include "bwm_observable_mesh_circular.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_plane_fitting_lsf.h"
 #include "algo/bwm_image_processor.h"
@@ -66,17 +67,6 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   float x, y;
   pi.window_to_image_coordinates(e.wx, e.wy, x, y);
 
-#if 0
-  if (e.type == vgui_MOTION) {
-    vcl_vector<vgui_soview*> so;
-    so = get_selected_soviews();
-    for (unsigned i=0; i<so.size(); i++) {
-      so[i]->set_line_width(5.0); //_style(select_style_);
-      so[i]->draw();
-    }
-  }
-#endif // 0
-
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE &&
       e.modifier == vgui_SHIFT)
   {
@@ -98,8 +88,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
         unsigned face_id;
         bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
         if (obj) {
-          // it is OK to move faces but not meshes with more than one face
           if (obj->num_faces() == 1) {
+            // it is OK to move faces but not meshes with more than one face
             moving_p_ = (bgui_vsol_soview2D*) select_list[0];
             moving_face_ = obj;
             vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
@@ -201,7 +191,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     moving_polygon_ = false;
     return true;
   }
-  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE &&  moving_vertex_ && moving_face_)
+  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE &&  
+    moving_vertex_ && moving_face_)
   {
     unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
     if (i == -1)
@@ -242,7 +233,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
         extrude_obj_->move_extr_face(-0.1);
     in_jog_mode_ = true;
     return true;
-  }
+  } 
+
   // stops the extrude mode
   if (extrude_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_END)
     extrude_mode_ = false;
@@ -264,6 +256,45 @@ bool bwm_observer_cam::handle(const vgui_event &e)
         this->translate_along_optical_axis(-1.0);
       else
         this->translate_along_optical_axis(-0.1);
+    in_jog_mode_ = true;
+    return true;
+  }
+  // changing radius
+  if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_LEFT && e.modifier == vgui_SHIFT) {
+    vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+    if (select_list.size() == 1)
+    {
+      if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+        unsigned face_id;
+        bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+        if (obj) {
+          if (obj->type_name().compare("bwm_observable_mesh_circular") == 0) {
+            bwm_observable_mesh_circular* circle = static_cast<bwm_observable_mesh_circular*> (obj.as_pointer());
+            circle->decrease_radius(0.1);
+          }
+        }
+      }
+    }  
+    in_jog_mode_ = true;
+    return true;
+  }
+  
+  // changing radius
+  if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_RIGHT && e.modifier == vgui_SHIFT) {
+    vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+    if (select_list.size() == 1)
+    {
+      if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+        unsigned face_id;
+        bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+        if (obj) {
+          if (obj->type_name().compare("bwm_observable_mesh_circular") == 0) {
+            bwm_observable_mesh_circular* circle = static_cast<bwm_observable_mesh_circular*> (obj.as_pointer());
+            circle->increase_radius(0.1);
+          }
+        }
+      }
+    }  
     in_jog_mode_ = true;
     return true;
   }
@@ -479,19 +510,48 @@ void bwm_observer_cam::proj_poly(vsol_polygon_3d_sptr poly3d,
   poly2d = new vsol_polygon_2d (vertices);
 }
 
-#if 0 // commented out
-void bwm_observer_cam::proj_poly(vcl_vector<bmsh3d_vertex*> verts,
-                                 vcl_vector<vgl_point_2d<double> > &projections)
+void bwm_observer_cam::create_circular_polygon(vcl_vector< vsol_point_2d_sptr > ps_list,
+                                               vsol_polygon_3d_sptr &circle3d,
+                                               int num_sect, double &r, vgl_point_2d<double> &c)
 {
-  for (unsigned v=0; v<verts.size(); v++) {
-    bmsh3d_vertex* vert = (bmsh3d_vertex*)verts[v];
-    double img_x = 0, img_y = 0;
-    camera_->project(vert->pt().x(),vert->pt().y(),vert->pt().z(),img_x,img_y);
-    vgl_point_2d<double> projection(img_x,img_y);
-    projections.push_back(projection);
+  // need at least 3 points to create a circle
+  assert (ps_list.size() >= 3);
+
+  // project the points into 3D
+  vsol_polygon_2d_sptr poly2d = new vsol_polygon_2d(ps_list);
+  vsol_polygon_3d_sptr poly3d;
+  vgl_plane_3d<double> proj_plane(0,0,1,0);
+  backproj_poly(poly2d, poly3d, proj_plane);
+
+  vcl_list< vgl_point_2d<double> > points;
+  for (unsigned i=0; i<poly3d->size(); i++) {
+    vsol_point_3d_sptr v = poly3d->vertex(i);
+    points.push_back(vgl_point_2d<double>(v->x(), v->y())); //z's are 0
   }
+
+  if (!bwm_algo::fit_circle(points, r, c)) {
+    vcl_cerr << "There is an error computing the circle" << vcl_endl;
+    return;
+  } 
+    
+  num_sect = (2*vnl_math::pi*r)/(r/4.0);
+  
+  // create points on the circle
+  vcl_vector< vsol_point_3d_sptr > circle_pts;
+  double rho= 2*vnl_math::pi / num_sect;
+  double x, y;
+  double cx = c.x(), cy = c.y();
+  for (int i=0; i<num_sect; i++) {
+    x = cx + r*vcl_sin(rho*i);
+    y = cy + r*vcl_cos(rho*i);
+    circle_pts.push_back(new vsol_point_3d(x,y,0));
+  }
+
+  circle3d = new vsol_polygon_3d(circle_pts);
+  vsol_polygon_2d_sptr circle2d;
+  proj_poly(circle3d, circle2d);
+  backproj_poly(circle2d, circle3d);
 }
-#endif // 0
 
 void bwm_observer_cam::triangulate_meshes()
 {
@@ -1351,19 +1411,24 @@ void  bwm_observer_cam::geo_position_vertex()
   img_tab_->post_redraw();
 }
 
-void bwm_observer_cam::create_terrain(vsol_polygon_2d_sptr boundary)
+//: Creates a terrain from a given boundary and the building bottoms and 
+// correspondence points
+void bwm_observer_cam::create_terrain()
 {
-  vsol_polygon_3d_sptr p3d;
-  vgl_plane_3d<double> plane = bwm_world::instance()->world_plane();
-  backproj_poly(boundary, p3d, plane);
+  //vsol_polygon_3d_sptr p3d;
+  //vgl_plane_3d<double> plane = bwm_world::instance()->world_plane();
+  //backproj_poly(boundary, p3d, plane);
 
   // add boundary points
   vcl_vector<vgl_point_2d<double> > points;
   vcl_vector<vgl_point_3d<double> > points_3d;
-  for (unsigned i=0; i<p3d->size(); i++) {
-    vsol_point_3d_sptr v = p3d->vertex(i);
-    points.push_back(vgl_point_2d<double>(v->x(), v->y()));
-    points_3d.push_back(vgl_point_3d<double>(points[i].x(), points[i].y(), p3d->vertex(i)->z()));
+
+  // get the terrain boundary from observer manager
+  bwm_observer_mgr::instance()->find_terrain_points(points_3d);
+  for (unsigned i=0; i<points_3d.size(); i++) {
+    vgl_point_3d<double> v = points_3d[i];
+    points.push_back(vgl_point_2d<double>(v.x(), v.y()));
+    //points_3d.push_back(vgl_point_3d<double>(points[i].x(), points[i].y(), p3d->vertex(i)->z()));
   }
 
   // add the building bases
@@ -1378,6 +1443,14 @@ void bwm_observer_cam::create_terrain(vsol_polygon_2d_sptr boundary)
   }
 
   // add the correspondence points
+  vcl_vector<vgl_point_2d<double> > 
+    corr_points = bwm_observer_mgr::instance()->get_corr_points(this);
+  for (unsigned i=0; i<corr_points.size(); i++) {
+    vsol_point_3d_sptr p3d;
+    vsol_point_2d_sptr p2d = new vsol_point_2d(corr_points[i]);
+    backproj_point(p2d, p3d);
+    points_3d.push_back(p3d->get_p());
+  }
 
   // triangulate
   bwm_delaunay_tri tri;

@@ -124,7 +124,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   virtual void camera_center(vgl_point_3d<double> &center){};
 
   bool corr_pt(vgl_point_2d<double> &p)
-  { if (corr_.second) {p = corr_.first; return true;} else return false; }
+  { if (corr_.size()>0) {p = corr_[corr_.size()-1].first; return true;} else return false; }
 
   //virtual vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin)=0;
 
@@ -158,8 +158,13 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void geo_position_vertex();
 
-  void create_terrain(vsol_polygon_2d_sptr boundary);
+  void create_terrain();
 
+  void create_circular_polygon(vcl_vector< vsol_point_2d_sptr > ps_list,
+                               vsol_polygon_3d_sptr &circle, 
+                               int num_sect, double &r, vgl_point_2d<double> &c);
+
+  void set_draw_mode(BWM_DRAW_MODE mode) {mode_=mode; update_all();}
   void set_mesh_mode() { mode_ = bwm_observer_vgui::MODE_MESH; update_all();}
   void set_face_mode() { mode_ = bwm_observer_vgui::MODE_FACE; update_all();}
   void set_edge_mode() { mode_ = bwm_observer_vgui::MODE_EDGE; update_all();}
