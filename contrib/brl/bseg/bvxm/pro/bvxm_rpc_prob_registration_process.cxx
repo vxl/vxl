@@ -13,8 +13,6 @@
 
 #include <brip/brip_vil_float_ops.h>
 
-#include <vcl_cstdio.h>
-
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -60,7 +58,7 @@ bvxm_rpc_prob_registration_process::bvxm_rpc_prob_registration_process()
 bool bvxm_rpc_prob_registration_process::execute()
 {
   bool ANALYZER_MODE = false;
-  char temp_string[1024];
+
   vcl_ifstream file_inp;
   vcl_ofstream file_out;
 
@@ -97,8 +95,8 @@ bool bvxm_rpc_prob_registration_process::execute()
   double cedt_image_gaussian_sigma;
   int offset_search_size;
   if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
-      !parameters()->get_value("offset_search_size", offset_search_size)
-     )
+    !parameters()->get_value("offset_search_size", offset_search_size)
+    )
   {
     vcl_cout << "problems in retrieving parameters\n";
     return false;
@@ -114,11 +112,6 @@ bool bvxm_rpc_prob_registration_process::execute()
   vil_image_view<vxl_byte> expected_edge_image_output;
   expected_edge_image_output.set_size(ni,nj);
   expected_edge_image_output.fill(0);
-
-  if (ANALYZER_MODE) {
-    vcl_sprintf(temp_string,"edge_image_%d.jpg",num_observations);
-    vil_save(edge_image,temp_string);
-  }
 
   // part 1: correction
   // this part contains the correction rpc camera parameters using the expected edge image obtained
@@ -143,11 +136,6 @@ bool bvxm_rpc_prob_registration_process::execute()
       }
     }
 
-    if (ANALYZER_MODE) {
-      vcl_sprintf(temp_string,"expected_image_%d.jpg",num_observations);
-      vil_save(expected_edge_image_output,temp_string);
-    }
-
     double max_prob = vcl_numeric_limits<double>::min();
     vnl_matrix<double> edge_fit_matrix(2*offset_search_size+1,2*offset_search_size+1,0.0);
 
@@ -157,44 +145,29 @@ bool bvxm_rpc_prob_registration_process::execute()
     int offset_upper_limit_u =  offset_search_size;
     int offset_upper_limit_v =  offset_search_size;
     vcl_cout << "Estimating image offsets:" << vcl_endl;
-    for (int level=1; level<=2; level++)
-    {
-      for (int u=offset_lower_limit_u; u<=offset_upper_limit_u; u++) {
-        if (level==1 && (vnl_math_abs(u)%20)%((vnl_math_abs(u)/20)+1)!=0) {
-          continue;
-        }
-        vcl_cout << '.';
-        for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
-          if (level==1 && (vnl_math_abs(v)%20)%((vnl_math_abs(v)/20)+1)!=0) {
-            continue;
-          }
-          // for each offset pair (u,v)
-          double prob = 0.0;
-          // find the total probability of the edge image given the expected edge image
-          for (int m=offset_search_size; m<ni-offset_search_size; m++) {
-            for (int n=offset_search_size; n<nj-offset_search_size; n++) {
-              if (edge_image(m,n)==255) {
-                prob += expected_edge_image(m-u,n-v);
-              }
+    for (int u=offset_lower_limit_u; u<=offset_upper_limit_u; u++) {
+      vcl_cout << '.';
+      for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
+        // for each offset pair (u,v)
+        double prob = 0.0;
+        // find the total probability of the edge image given the expected edge image
+        for (int m=offset_search_size; m<ni-offset_search_size; m++) {
+          for (int n=offset_search_size; n<nj-offset_search_size; n++) {
+            if (edge_image(m,n)==255) {
+              prob += expected_edge_image(m-u,n-v);
             }
           }
+        }
 
-          edge_fit_matrix(u+offset_search_size,v+offset_search_size) = prob;
+        edge_fit_matrix(u+offset_search_size,v+offset_search_size) = prob;
 
-          // if maximum is found
-          if (prob > max_prob) {
-            max_prob = prob;
-            best_offset_u = (double)u;
-            best_offset_v = (double)v;
-          }
+        // if maximum is found
+        if (prob > max_prob) {
+          max_prob = prob;
+          best_offset_u = (double)u;
+          best_offset_v = (double)v;
         }
       }
-
-      int level_two_search_size = 2*vnl_math_max(vnl_math_abs(vnl_math_rnd(best_offset_u))/20,vnl_math_abs(vnl_math_rnd(best_offset_v))/20);
-      offset_lower_limit_u = vnl_math_max(-offset_search_size,vnl_math_rnd(best_offset_u)-level_two_search_size);
-      offset_lower_limit_v = vnl_math_max(-offset_search_size,vnl_math_rnd(best_offset_v)-level_two_search_size);
-      offset_upper_limit_u = vnl_math_min( offset_search_size,vnl_math_rnd(best_offset_u)+level_two_search_size);
-      offset_upper_limit_v = vnl_math_min( offset_search_size,vnl_math_rnd(best_offset_v)+level_two_search_size);
     }
     vcl_cout << vcl_endl;
 
@@ -220,15 +193,13 @@ bool bvxm_rpc_prob_registration_process::execute()
           }
         }
       }
-
-      vcl_sprintf(temp_string,"edge_fit_image_%d.jpg",num_observations);
-      vil_save(edge_fit_image,temp_string);
+      vil_save(edge_fit_image,vcl_string(vcl_string("output_edge_fit_image_" + num_observations) + ".jpg").c_str());
     }
   }
 
   if (ANALYZER_MODE) {
     file_out.clear();
-    file_out.open("offsets.txt",vcl_ofstream::app);
+    file_out.open("output_offsets.txt",vcl_ofstream::app);
     file_out << best_offset_u << '\t' << best_offset_v << vcl_endl;
     file_out.close();
   }
@@ -343,31 +314,31 @@ bool bvxm_rpc_prob_registration_process::execute()
     unsigned max_scale=vox_world->get_params()->max_scale();
     for (unsigned curr_scale = scale;curr_scale < max_scale;curr_scale++)
     {
-        bool result;
-        if(curr_scale!=scale)
-        {
-            vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-            cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
-            vpgl_camera_double_sptr new_camera_out=bvxm_util::downsample_camera( camera_out, curr_scale);
-            bvxm_image_metadata camera_metadata_out(cedt_image_sptr,new_camera_out);
-            result=vox_world->update_edges_prob(camera_metadata_out, curr_scale);
+      bool result;
+      if(curr_scale!=scale)
+      {
+        vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
+        cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
+        vpgl_camera_double_sptr new_camera_out=bvxm_util::downsample_camera( camera_out, curr_scale);
+        bvxm_image_metadata camera_metadata_out(cedt_image_sptr,new_camera_out);
+        result=vox_world->update_edges_prob(camera_metadata_out, curr_scale);
 
-        }
-        else
-        {
+      }
+      else
+      {
 
-            vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-            bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_out);
-            result=vox_world->update_edges_prob(camera_metadata_out, curr_scale);
-        }
-        
+        vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
+        bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_out);
+        result=vox_world->update_edges_prob(camera_metadata_out, curr_scale);
+      }
 
-        // updates the edge probabilities in the voxel world
 
-        if(!result){
-            vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage" << vcl_endl;
-            return false;
-        }
+      // updates the edge probabilities in the voxel world
+
+      if(!result){
+        vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage" << vcl_endl;
+        return false;
+      }
     }
 
   }
