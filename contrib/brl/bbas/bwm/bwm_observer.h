@@ -12,6 +12,7 @@
 class bwm_observer : public vgui_observer
 {
  public:
+  enum BWM_DRAW_MODE {MODE_MESH, MODE_FACE, MODE_EDGE, MODE_VERTEX, MODE_UNDEF};
 
   bwm_observer() {}
 
