@@ -113,7 +113,7 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
 
 vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_sptr image)
 {
-  vil_image_view<float>*img_view_float = new vil_image_view<float>(image->ni(),image->nj());
+  vil_image_view<float>*img_view_float = new vil_image_view<float>(image->ni(),image->nj(),image->nplanes());
 
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
@@ -125,7 +125,9 @@ vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_
     img_view_float = dynamic_cast<vil_image_view<float>*>(image.ptr());
   }
 
-  vil_image_view<float> output((int)vcl_floor((float)img_view_float->ni()/2),(int)vcl_floor((float)img_view_float->nj()/2));
+  vil_image_view<float> output((int)vcl_floor((float)img_view_float->ni()/2),
+                               (int)vcl_floor((float)img_view_float->nj()/2),
+                               img_view_float->nplanes());
 
 #if 0
   vil_image_view<unsigned char>* img_view_out
@@ -136,21 +138,22 @@ vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_
 #endif // 0
 
   vil_resample_bilin<float,float>(*img_view_float,output,output.ni(),output.nj());
-  vil_image_view<unsigned char>* img_view_out = new vil_image_view<unsigned char>(output.ni(),output.nj());
+  vil_image_view<unsigned char>* img_view_out = new vil_image_view<unsigned char>(output.ni(),output.nj(),output.nplanes());
   img_view_out->fill(0);
 
-  for (unsigned i=0;i<output.ni();i++)
-    for (unsigned j=0;j<output.nj();j++)
-    {
-      if (output(i,j)>255.0)
-        (*img_view_out)(i,j)=255;
-      else if (output(i,j)<0.0)
-        (*img_view_out)(i,j)=0;
-      else
-        (*img_view_out)(i,j)=static_cast<vxl_byte>(output(i,j)+0.5);
+  for (unsigned p=0; p<output.nplanes(); p++)
+    for (unsigned i=0;i<output.ni();i++)
+      for (unsigned j=0;j<output.nj();j++)
+      {
+        if (output(i,j,p)>255.0)
+          (*img_view_out)(i,j,p)=255;
+        else if (output(i,j,p)<0.0)
+          (*img_view_out)(i,j,p)=0;
+        else
+          (*img_view_out)(i,j,p)=static_cast<vxl_byte>(output(i,j)+0.5);
 
         //vcl_cout<<(*img_view_out)(i,j);
-    }
+      }
   ////vil_convert_stretch_range_limited<float>(output,*img_view_out,min_b,max_b);
   vil_image_view_base_sptr return_img=img_view_out;
   return return_img;
