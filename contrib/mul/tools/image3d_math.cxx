@@ -618,6 +618,32 @@ void clamp_below__image_3d_of_float__double__double(opstack_t& s)
   s.push_front(operand(o1));
 }
 
+void clamp_above__image_3d_of_int__double__double(opstack_t& s)
+{
+  vimt3d_image_3d_of<int> o1(s[2].as_image_3d_of_int());
+
+  vil3d_clamp_above(o1.image(), static_cast<int>(s[1].as_double()),
+    static_cast<int>(s[0].as_double()) );
+
+  s.pop_front();
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1));
+}
+
+void clamp_below__image_3d_of_int__double__double(opstack_t& s)
+{
+  vimt3d_image_3d_of<int> o1(s[2].as_image_3d_of_int());
+
+  vil3d_clamp_below(o1.image(), static_cast<int>(s[1].as_double()),
+    static_cast<int>(s[0].as_double()) );
+
+  s.pop_front();
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1));
+}
+
 
 class operations
 {
@@ -655,8 +681,12 @@ class operations
 
     add_operation("--clamp_above", &clamp_above__image_3d_of_float__double__double,
       function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double);
+    add_operation("--clamp_above", &clamp_above__image_3d_of_int__double__double,
+      function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double);
     add_operation("--clamp_below", &clamp_below__image_3d_of_float__double__double,
       function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double);
+    add_operation("--clamp_below", &clamp_below__image_3d_of_int__double__double,
+      function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double);
     add_operation("--convert_to_float", &convert_to_float__image_3d_of_int,
       function_type_t() << operand::e_image_3d_of_int);
     add_operation("--convert_to_int", &convert_to_int__image_3d_of_float,
