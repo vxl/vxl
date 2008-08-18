@@ -69,12 +69,14 @@ vcl_vector<bwm_observer_cam*> bwm_corr::observers()
   return obs;
 }
 
-bool bwm_corr::obs_in(bwm_observer_cam* obs)
+bool bwm_corr::obs_in(bwm_observer_cam* obs, vgl_point_2d<double> &corr)
 {
   vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
   while (iter != matches_.end()) {
-    if (obs == iter->first)
+    if (obs == iter->first) {
+      corr = iter->second;
       return true;
+    }
     iter++;
   }
   return false;

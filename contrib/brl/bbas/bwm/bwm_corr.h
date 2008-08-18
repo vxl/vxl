@@ -40,7 +40,9 @@ class bwm_corr : public vbl_ref_count
   vgl_point_3d<double> world_pt() const { return world_pt_;}
   void erase(bwm_observer_cam* obs);
   vcl_vector<bwm_observer_cam*> observers();
-  bool obs_in(bwm_observer_cam* obs);
+
+  //: returns true, if the observer contributes to the correspondence
+  bool obs_in(bwm_observer_cam* obs, vgl_point_2d<double> &corr);
 
   // returns the match list as tableau name mapped to the 2D points
   vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > match_list();
