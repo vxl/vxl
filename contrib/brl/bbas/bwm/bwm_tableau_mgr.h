@@ -54,6 +54,10 @@ class bwm_tableau_mgr
 
   void redraw() { grid_->post_redraw(); }
 
+  void set_draw_mode_vertex();
+  void set_draw_mode_edge();
+  void set_draw_mode_face();
+  void set_draw_mode_mesh();
 
  private:
 
@@ -80,6 +84,8 @@ class bwm_tableau_mgr
   void add_to_grid(vgui_tableau_sptr tab, unsigned& col, unsigned& row);
 
   vgui_tableau_sptr find_tableau(vcl_string name);
+
+  void set_observer_draw_mode(int mode);
 };
 
 #endif

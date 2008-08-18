@@ -267,3 +267,34 @@ void bwm_tableau_mgr::exit()
     }
   vgui::quit();
 }
+
+void bwm_tableau_mgr::set_draw_mode_vertex()
+{
+  set_observer_draw_mode(bwm_observer::MODE_VERTEX);
+  
+}
+
+void bwm_tableau_mgr::set_draw_mode_edge()
+{
+  this->set_observer_draw_mode(bwm_observer::MODE_EDGE);
+}
+
+void bwm_tableau_mgr::set_draw_mode_face()
+{
+  this->set_observer_draw_mode(bwm_observer::MODE_FACE);
+}
+
+void bwm_tableau_mgr::set_draw_mode_mesh()
+{
+  set_observer_draw_mode(bwm_observer::MODE_MESH);
+}
+
+void bwm_tableau_mgr::set_observer_draw_mode(int mode)
+{
+  vcl_vector<bwm_observer_cam*> obs =
+    bwm_observer_mgr::instance()->observers_cam();
+  for (unsigned i=0; i<obs.size(); i++)
+    {
+      obs[i]->set_draw_mode((bwm_observer::BWM_DRAW_MODE)mode);
+    }
+}
