@@ -26,8 +26,8 @@
 #include <vsol/vsol_box_3d.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
-#include <bmsh3d/vis/bmsh3d_vis_backpt.h>
-#include <bmsh3d/vis/bmsh3d_vis_mesh.h>
+//#include <bmsh3d/vis/bmsh3d_vis_backpt.h>
+//#include <bmsh3d/vis/bmsh3d_vis_mesh.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
@@ -1167,6 +1167,7 @@ bwm_observable_sptr bwm_observable_mesh::global_to_local(bgeo_lvcs* lvcs, double
   return 0;
 }
 
+#if 0
 SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
                                                  float transp,
                                                  int colorcode)
@@ -1179,6 +1180,7 @@ SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
   mesh->ref();
   return mesh;
 }
+#endif
 
 void bwm_observable_mesh::load_from(vcl_string filename)
 {

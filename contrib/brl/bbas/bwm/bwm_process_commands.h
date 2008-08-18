@@ -171,6 +171,7 @@ public:
     menu.add("Move to First Correspondence", new bwm_move_to_corr_command());
     menu.add("Adjust Cameras (One Corr.)",
              new bwm_adjust_camera_offsets_command());
+  
   }
   void execute() {}
 };

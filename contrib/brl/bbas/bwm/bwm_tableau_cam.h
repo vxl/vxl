@@ -80,6 +80,8 @@ class bwm_tableau_cam : public bwm_tableau_img
   void geo_position_vertex();
 
   void create_terrain();
+
+  void create_circular_polygon();
   //------------ save methods
 
   //: saves the observables with their save method specific to the object
@@ -119,6 +121,7 @@ class bwm_tableau_cam : public bwm_tableau_img
   void label_wall();
   void help_pop();
 
+  void set_draw_mode(int mode) { my_observer_->set_draw_mode((bwm_observer::BWM_DRAW_MODE)mode); }
   void set_mesh_mode() { my_observer_->set_mesh_mode(); }
   void set_face_mode() { my_observer_->set_face_mode(); }
   void set_edge_mode() { my_observer_->set_edge_mode(); }

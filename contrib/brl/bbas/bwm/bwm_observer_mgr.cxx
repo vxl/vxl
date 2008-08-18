@@ -30,6 +30,7 @@ void bwm_observer_mgr::clear()
 {
   corr_mode_ = IMAGE_TO_IMAGE;
   n_corrs_ = SINGLE_PT_CORR;
+  corr_type_ = FEATURE_CORR;
   start_corr_ = false;
   corr_list_.clear();
 }
@@ -140,7 +141,6 @@ void bwm_observer_mgr::set_corr_mode()
   vcl_string empty="";
   vcl_vector<vcl_string> modes;
   int mode = bwm_observer_mgr::instance()->corr_mode();
-
   modes.push_back("Image to Image");
   modes.push_back("World to Image");
 
@@ -149,9 +149,16 @@ void bwm_observer_mgr::set_corr_mode()
   n_corrs.push_back("Single Correspondence ");
   n_corrs.push_back("Multiple Correspondence ");
 
-  vcl_string name;
+  vcl_vector<vcl_string> types;
+  int t = bwm_observer_mgr::instance()->corr_type();
+  types.push_back("Feature Correspondence ");
+  types.push_back("Terrain Correspondence ");
+
+  vcl_string name, type;
   params.choice("Correspondence Mode", modes, mode);
+  params.choice("Correspondence Type ", types, t);
   params.choice("Number of Correspondences ", n_corrs, n);
+  
   if (!params.ask())
     return;
   if (mode ==bwm_observer_mgr::WORLD_TO_IMAGE)
@@ -164,9 +171,18 @@ void bwm_observer_mgr::set_corr_mode()
                << " point is not defined\n";
     }
 
+  if (t == bwm_observer_mgr::FEATURE_CORR) {
+    corr_type_ = bwm_observer_mgr::FEATURE_CORR;
+  } else if (t == bwm_observer_mgr::TERRAIN_CORR) {
+    corr_type_ = bwm_observer_mgr::TERRAIN_CORR;
+  } else 
+    vcl_cout << "In bwm_observer_mgr::set_corr_mode() Undefined TYPE -\n" ;
+
+
   corr_mode_ = bwm_observer_mgr::IMAGE_TO_IMAGE;
 
   n_corrs_ = (BWM_N_CORRS) n;
+
 }
 
 void bwm_observer_mgr::collect_corr()
@@ -197,6 +213,7 @@ void bwm_observer_mgr::collect_corr()
     bwm_observer_cam* obs = obs_cam[i];
     if (obs->corr_pt(pt)) {
       corr->set_match(obs, pt.x(), pt.y());
+      obs->record_corr_pt();
       found = true;
     }
   }
@@ -204,13 +221,21 @@ void bwm_observer_mgr::collect_corr()
   if (found)
   {
     if (n_corrs_==MULTIPLE_CORRS) {
-      corr_list_.push_back(corr);
+      if (corr_type_ == FEATURE_CORR)
+        corr_list_.push_back(corr);
+      else if (corr_type_ == TERRAIN_CORR)
+        terrain_corr_list_.push_back(corr);
       return;
     }
     else if (n_corrs_==SINGLE_PT_CORR) // in this case there can be only one
     {
-      corr_list_.clear();
-      corr_list_.push_back(corr);
+      if (corr_type_ == FEATURE_CORR) {
+        corr_list_.clear();
+        corr_list_.push_back(corr);
+      } else if (corr_type_ == TERRAIN_CORR) {
+        terrain_corr_list_.clear();
+        terrain_corr_list_.push_back(corr);
+      }
       return;
     }
   }
@@ -220,7 +245,11 @@ void bwm_observer_mgr::collect_corr()
 void bwm_observer_mgr::set_corr(bwm_corr_sptr corr)
 {
   if (corr->num_matches() > 0)
-    corr_list_.push_back(corr);
+    if (corr_type_ == FEATURE_CORR) {
+      corr_list_.push_back(corr);
+    } else if (corr_type_ == TERRAIN_CORR) {
+      terrain_corr_list_.push_back(corr);
+    }
 }
 
 void bwm_observer_mgr::update_corr(bwm_observer_cam* obs,
@@ -228,9 +257,15 @@ void bwm_observer_mgr::update_corr(bwm_observer_cam* obs,
                                    vgl_point_2d<double> new_pt)
 {
   for (unsigned i=0; i< corr_list_.size(); i++) {
-    bwm_corr_sptr corr = corr_list_[i];
-    if (corr->update_match(obs, old_pt, new_pt))
-      return;
+    if (corr_type_ == FEATURE_CORR) {
+      bwm_corr_sptr corr = corr_list_[i];
+      if (corr->update_match(obs, old_pt, new_pt))
+       return;
+    } else if (corr_type_ == TERRAIN_CORR) {
+      bwm_corr_sptr corr = terrain_corr_list_[i];
+      if (corr->update_match(obs, old_pt, new_pt))
+       return;
+    }
   }
 }
 
@@ -238,10 +273,25 @@ void bwm_observer_mgr::update_corr(bwm_observer_cam* obs,
 bool bwm_observer_mgr::obs_in_corr(bwm_observer_cam *obs)
 {
   for (unsigned i=0; i<corr_list_.size(); i++) {
-    if (corr_list_[i]->obs_in(obs))
+    vgl_point_2d<double> c;
+    if (corr_list_[i]->obs_in(obs, c))
       return true;
   }
   return false;
+}
+
+//: returns the list correspondence points of a given observer
+vcl_vector<vgl_point_2d<double> > 
+bwm_observer_mgr::get_corr_points(bwm_observer_cam *obs)
+{
+  vcl_vector<vgl_point_2d<double> > corr_list;
+  for (unsigned i=0; i<corr_list_.size(); i++) {
+    vgl_point_2d<double> corr;
+    if (corr_list_[i]->obs_in(obs, corr)) {
+      corr_list.push_back(corr); 
+    }
+  }
+  return corr_list;
 }
 
 void bwm_observer_mgr::save_corr(vcl_ostream& s)
@@ -402,8 +452,9 @@ void bwm_observer_mgr::delete_last_corr()
 
 void bwm_observer_mgr::delete_all_corr()
 {
-  delete_last_corr();
-  corr_list_.resize(0);
+  while (corr_list_.size() > 0) {
+    delete_last_corr();
+  }
 }
 
 void bwm_observer_mgr::print_observers()
@@ -517,4 +568,48 @@ void bwm_observer_mgr::adjust_camera_offsets()
 
   bwm_world::instance()->set_world_pt(intersection);
   this->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
+}
+
+void bwm_observer_mgr::find_terrain_points(vcl_vector<vgl_point_3d<double> >& points)
+{
+  if (!terrain_corr_list_.size())
+    return;
+
+  for (unsigned i=0; i<terrain_corr_list_.size(); i++) {
+    bwm_corr_sptr corr = terrain_corr_list_[i];
+    vcl_vector<bwm_observer_cam*> obs = corr->observers();
+    vcl_vector<vpgl_rational_camera<double> > rcams;
+    vcl_vector<vgl_point_2d<double> > cpoints;
+    for (vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+         oit != obs.end(); ++oit)
+    {
+      if ((*oit)->type_name() != "bwm_observer_rat_cam")
+        continue;
+      bwm_observer_rat_cam* obscr =
+        static_cast<bwm_observer_rat_cam*>(*oit);
+      rcams.push_back(obscr->camera());
+      vgl_point_2d<double> p;
+      if (corr->match(*oit, p))
+        cpoints.push_back(p);
+    }
+    if (cpoints.size()!=rcams.size())
+    {
+      vcl_cerr << "In bwm_observer_mgr::adjust_image_offsets - "
+               << " inconsistent number of points and cameras\n";
+      return;
+    }
+
+    vcl_cout << "Executing adjust image offsets\n";
+    vcl_vector<vgl_vector_2d<double> > cam_trans;
+    vgl_point_3d<double> intersection;
+    if (!vpgl_adjust_rational_trans_onept::adjust(rcams, cpoints, cam_trans,
+                                                  intersection))
+    {
+      vcl_cerr << "In bwm_observer_rat_cam::find_terrain_points - "
+               << " adjustment failed\n";
+      return;
+    }
+    points.push_back(intersection);
+  }
+  terrain_corr_list_.clear();
 }

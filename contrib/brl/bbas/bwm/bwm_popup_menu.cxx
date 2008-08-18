@@ -175,6 +175,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
     mesh_submenu.separator();
 
+    mesh_submenu.add("Create Circular Polygon",
+      new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::create_circular_polygon),
+    vgui_key('c'), vgui_modifier(vgui_SHIFT) );
+    mesh_submenu.separator();
+
     mesh_submenu.add("Triangulate..",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::triangulate_mesh),
       vgui_key('t'), vgui_modifier(vgui_SHIFT));

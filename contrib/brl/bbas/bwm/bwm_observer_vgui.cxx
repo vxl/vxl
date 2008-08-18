@@ -3,6 +3,7 @@
 // \file
 #include "bwm_observer_mgr.h"
 #include "bwm_world.h"
+#include "bwm_observable_mesh.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_image_processor.h"
 
@@ -36,7 +37,7 @@
 bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
   : bwm_observer_img(img), moving_face_(0), corr_valid_(false)
 {
-  corr_.second = 0;
+  //corr_.second = 0;
   mesh_style_= vgui_style::new_style();
   mesh_style_->rgba[0] = 0.75f;
   mesh_style_->rgba[1] = 0.75f;
@@ -49,6 +50,8 @@ bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
   vertex_style_->rgba[2] = 0.0f;
   vertex_style_->line_width = 2.0;
 
+  terrain_style_ = vgui_style::new_style(0.6f, 0.6f, 0.0f, 5.0f, 1.0f);
+//#include "bwm_observer_mgr.h"
   vgui_style_sptr select_style_= vgui_style::new_style();
   select_style_->rgba[0] = 0.1f;
   select_style_->rgba[1] = 0.0f;
@@ -81,22 +84,25 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
 void bwm_observer_vgui::add_cross(float x, float y, float r)
 {
   bwm_soview2D_cross* cross = new bwm_soview2D_cross(x, y, r);
-  corr_.second = cross;
+  vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > c;
+  c.first = vgl_point_2d<double> (x,y);
+  c.second = cross;
+  corr_.push_back(c);
   this->add(cross);
   this->post_redraw();
 }
 
 void bwm_observer_vgui::corr_image_pt(float& x, float& y)
 {
-  vgl_point_2d<double> pt = corr_.first;
+  vgl_point_2d<double> pt = corr_[corr_.size()-1].first;
   x = pt.x(); y = pt.y();
 }
 
 //: the current location of the correspondence point, if corr is valid
 bool bwm_observer_vgui::corr_image_pt(vgl_point_2d<double>& pt)
 {
-  if (corr_valid_) {
-    pt = corr_.first;
+  if (corr_valid_){
+    pt = corr_[corr_.size()-1].first;
     return true;
   }
   else
@@ -158,6 +164,12 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
                                   vcl_vector<vsol_point_2d_sptr> &vertx_xy_list)
 {
   if (observable) {
+    vgui_style_sptr style;
+    if (observable->obj_type() == bwm_observable_mesh::BWM_MESH_FEATURE)
+      style = mesh_style_;
+    else if (observable->obj_type() == bwm_observable_mesh::BWM_MESH_TERRAIN)
+      style = terrain_style_;
+  
     if (mode_ == MODE_FACE) {
       vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
 
@@ -168,7 +180,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
         vsol_polygon_3d_sptr obj = iter->second;
         vsol_polygon_2d_sptr poly_2d;
         proj_poly(obj, poly_2d);
-        bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d, mesh_style_);
+        bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d, style);
         list[face_id] = polygon;
 
         // get the inner faces connected to this face
@@ -202,7 +214,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
         vsol_line_2d_sptr edge_2d;
         proj_line(edge_3d, edge_2d);
 
-        bgui_vsol_soview2D_line_seg* edge = this->add_vsol_line_2d(edge_2d, mesh_style_);
+        bgui_vsol_soview2D_line_seg* edge = this->add_vsol_line_2d(edge_2d, style);
         list[edge_id] = edge;
         iter++;
        }
@@ -222,7 +234,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
         vsol_line_2d_sptr edge_2d;
         proj_line(edge_3d, edge_2d);
 
-        bgui_vsol_soview2D_line_seg* edge = this->add_vsol_line_2d(edge_2d, mesh_style_);
+        bgui_vsol_soview2D_line_seg* edge = this->add_vsol_line_2d(edge_2d, style);
         edge->set_selectable(false);
         list[edge_id] = edge;
         iter++;
@@ -388,7 +400,7 @@ void bwm_observer_vgui::delete_object()
 {
   // first get the selected polygon
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-
+  vcl_cout << "Delete object works only at MESH mode!" << vcl_endl; 
   if ((select_list.size() == 1) &&
     (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon_set") == 0)) {
       unsigned face_id;
@@ -417,15 +429,17 @@ void bwm_observer_vgui::delete_all()
   objects_.clear();
 }
 
-
 void bwm_observer_vgui::set_corr(float x, float y)
 {
-  corr_.first = vgl_homg_point_2d<double> (x, y);
+  vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > c;
 
-  // delete the previous correlation point if valid
-  if (corr_valid_&&corr_.second) {
-    this->remove(corr_.second);
-    corr_.second=0;
+  c.first = vgl_homg_point_2d<double> (x, y);
+
+  // delete the previous correspondence point if valid
+  if (corr_valid_ && (corr_.size()>1)) {
+    this->remove(corr_[corr_.size()-1].second);
+    //corr_.second=0;
+    corr_.pop_back();
   }
 
   // draw a cross at that point
@@ -435,9 +449,10 @@ void bwm_observer_vgui::set_corr(float x, float y)
 
 void bwm_observer_vgui::remove_corr_pt()
 {
-  if (corr_.second) {
-    this->remove(corr_.second);
-    corr_.second = 0;
+  if (corr_.size()>0) {
+    this->remove(corr_[corr_.size()-1].second);
+    //corr_.second = 0;
+    corr_.pop_back();
   }
   corr_valid_ = false;
 }

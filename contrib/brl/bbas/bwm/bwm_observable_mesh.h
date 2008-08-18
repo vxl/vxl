@@ -39,7 +39,7 @@ class bwm_observable_mesh : public bwm_observable
 
   void set_mesh_type(BWM_MESH_TYPES type) { mesh_type_ = type; }
 
-  BWM_MESH_TYPES mesh_type() { return mesh_type_; }
+  int obj_type() { return mesh_type_; }
 
   void remove();
 
@@ -115,7 +115,7 @@ class bwm_observable_mesh : public bwm_observable
   void create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices,
                            vcl_vector<vgl_point_3d<int> > triangles);
 
-  SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode);
+  //SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode);
 
   bwm_observable_sptr global_to_local(bgeo_lvcs* lvcs, double& min_z);
 
@@ -125,7 +125,7 @@ class bwm_observable_mesh : public bwm_observable
 
   void save(const char* filename);
 
- private:
+ protected:
 
   bmsh3d_mesh_mc* object_;
 

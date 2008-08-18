@@ -1,10 +1,12 @@
 #include "bwm_tableau_cam.h"
 #include "algo/bwm_utils.h"
+#include "algo/bwm_algo.h"
 //:
 // \file
 #include "bwm_tableau_mgr.h"
 #include "bwm_observer_mgr.h"
 #include "bwm_observable_mesh.h"
+#include "bwm_observable_mesh_circular.h"
 #include "bwm_tableau_text.h"
 #include "bwm_popup_menu.h"
 #include "bwm_world.h"
@@ -12,12 +14,16 @@
 
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
+
+
+#define NUM_CIRCL_SEC 12
 
 void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 {
@@ -53,6 +59,32 @@ void bwm_tableau_cam::create_polygon_mesh()
 void bwm_tableau_cam::triangulate_mesh()
 {
   my_observer_->triangulate_meshes();
+}
+
+void bwm_tableau_cam::create_circular_polygon()
+{
+  this->lock();
+  bwm_observer_mgr::instance()->stop_corr();
+  vsol_polygon_2d_sptr poly2d;
+  set_color(1, 0, 0);
+
+  vcl_vector< vsol_point_2d_sptr > ps_list;
+  unsigned max = 10;
+  pick_point_set(ps_list, max);
+  if (ps_list.size() == 0){
+    vcl_cerr << "In bwm_tableau_cam::create_circle -"
+             << " pick_points failed\n";
+    return ;
+  }
+  vsol_polygon_3d_sptr poly3d;
+  double r;
+  vgl_point_2d<double> center;
+  my_observer_->create_circular_polygon(ps_list, poly3d, NUM_CIRCL_SEC, r, center);
+  bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh_circular(r, center);
+  bwm_world::instance()->add(my_polygon);
+  bwm_observer_mgr::instance()->attach(my_polygon);
+  my_polygon->set_object(poly3d);
+  this->unlock();
 }
 
 void bwm_tableau_cam::set_master()
@@ -284,14 +316,14 @@ void bwm_tableau_cam::geo_position_vertex()
 
 void bwm_tableau_cam::create_terrain()
 {
-  this->lock();
+  /*(this->lock();
   //1. pick a boundary for the terrain as a polygon
   bwm_observer_mgr::instance()->stop_corr();
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
-  pick_polygon(poly2d);
-  my_observer_->create_terrain(poly2d);
-  this->unlock();
+  pick_polygon(poly2d);*/
+  my_observer_->create_terrain();
+  //this->unlock();
 }
 
 void bwm_tableau_cam::help_pop()

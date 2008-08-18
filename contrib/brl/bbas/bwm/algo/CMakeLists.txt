@@ -1,13 +1,7 @@
 # world modeling application
 # brl/bbas/bwm/algo/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/UseBGUI3D.cmake )
 INCLUDE( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
-
-IF(HAS_BGUI3D)
-IF(SHAPELIB_FOUND) 
-
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/shapelib)
 
 SET(bwm_algo_sources
    bwm_algo.cxx                   bwm_algo.h
@@ -20,13 +14,17 @@ SET(bwm_algo_sources
    bwm_image_processor.cxx        bwm_image_processor.h
    bwm_utils.cxx                  bwm_utils.h
    bwm_delaunay_tri.cxx           bwm_delaunay_tri.h
-   bwm_shape_file.cxx             bwm_shape_file.h
 )
 
+IF(SHAPELIB_FOUND) 
 
-#ADD_EXECUTABLE( bwm_algo ${bwm_algo_sources} )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/shapelib)
+  SET(bwm_algo_sources             ${bwm_algo_sources}
+      bwm_shape_file.cxx             bwm_shape_file.h
+     )
+ENDIF(SHAPELIB_FOUND)
+
 ADD_LIBRARY(bwm_algo ${bwm_algo_sources})
 
 TARGET_LINK_LIBRARIES( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vcl shapelib)
-ENDIF(SHAPELIB_FOUND)
-ENDIF(HAS_BGUI3D)
+

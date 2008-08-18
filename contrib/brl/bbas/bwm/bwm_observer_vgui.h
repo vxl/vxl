@@ -33,8 +33,6 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   typedef bwm_observer_img base;
 
-  enum DRAW_MODE {MODE_MESH, MODE_FACE, MODE_EDGE, MODE_VERTEX};
-
   bwm_observer_vgui(bgui_image_tableau_sptr const& img);
 
   virtual ~bwm_observer_vgui() {}
@@ -98,6 +96,8 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   //: remove the cross soview and set its pointer to null
   void remove_corr_pt();
 
+  void record_corr_pt() { corr_valid_ = false; }
+
   //: display a cross soview at the specified location
   void add_cross(float x, float y, float r);
 
@@ -105,18 +105,20 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   //allows children to take some action if a correspondence is set
   virtual void correspondence_action(){};
 
-  bwm_observer_vgui() { corr_.second = 0; show_vertices_ = true; }
+  bwm_observer_vgui() { show_vertices_ = true; }
 
-  enum DRAW_MODE mode_; 
+  enum BWM_DRAW_MODE mode_; 
 
   vgui_style_sptr mesh_style_;
   vgui_style_sptr vertex_style_;
   vgui_style_sptr select_style_;
+  vgui_style_sptr terrain_style_;
 
   bool show_vertices_;
   bool corr_valid_;
+
   //: the current correspondence point
-  vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > corr_;
+  vcl_vector<vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > > corr_;
 
   //: objects are kept as a triple (bwm_observable *, face_id, bgui_vsol_soview2D_polygon*)
   //vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > > objects_;

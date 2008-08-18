@@ -23,7 +23,6 @@
 #include <vsol/vsol_line_3d_sptr.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
-class SoSeparator;
 
 class bwm_observable : public vgui_observable, public vbl_ref_count
 {
@@ -32,9 +31,13 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
   // constructor
   bwm_observable() {}
 
+  bwm_observable(const bwm_observable&) {}
+
   virtual ~bwm_observable() {}
 
   virtual vcl_string type_name() const {return "bwm_observable"; }
+
+  virtual int obj_type() = 0;
 
   // removes the object from 3D scene by notifiying the observers of deletion
   virtual void remove()=0;
@@ -87,8 +90,6 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
   virtual void label_roof(unsigned face_id)=0;
 
   virtual void label_wall(unsigned face_id)=0;
-
-  virtual SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode)=0;
 
   virtual bwm_observable_sptr global_to_local(bgeo_lvcs* lvcs, double& min_z)=0;
 
