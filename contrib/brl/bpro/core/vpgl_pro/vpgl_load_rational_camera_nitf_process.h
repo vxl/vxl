@@ -3,7 +3,7 @@
 #define vpgl_load_rational_camera_nitf_process_h_
 //:
 // \file
-// \brief A process for loading a vpgl_rational_camera from ascii file
+// \brief A process for loading a vpgl_rational_camera from NITF image file
 // \author Daniel Crispell
 // \date 02/06/2008
 //
