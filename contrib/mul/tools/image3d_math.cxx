@@ -835,7 +835,8 @@ class operations
 
     for (unsigned i=0; i<n; ++i)
     {
-      ss << vul_string_upcase(singleton_.names_[i].substr(2,-1)) << ":  " <<
+      vcl_string name = singleton_.names_[i].substr(2,-1);
+      ss << vul_string_upcase(name) << ":  " <<
         singleton_.help_desc_[i] << "\n    usage: " <<
         singleton_.help_input_[i] << ' ' << singleton_.names_[i];
       if (!singleton_.help_output_[i].empty())
