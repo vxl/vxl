@@ -214,12 +214,6 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   else
     vcl_cout << "bvxm_roi_init_process - Unsupported Pixel Format = " << roi->pixel_format() << vcl_endl;
 
-  //isa:remove, currently there is no implementation for four colors only rgb
-  //*nitf_image_unsigned_char = vil_image_view<unsigned char>(vil_convert_to_n_planes(3, nitf_image_unsigned_char));
-
-  //rgb_img = new vil_image_view<unsigned char>(vil_convert_to_n_planes(3, img));
-  vil_save(*nitf_image_unsigned_char, "C:/Debug/rgb2.png");
-
   double u, v;
   camera->image_offset(u, v);
   double tu =  u - roi_box->min_x();
