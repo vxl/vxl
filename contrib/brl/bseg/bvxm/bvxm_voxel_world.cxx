@@ -903,7 +903,7 @@ bool bvxm_voxel_world::expected_edge_prob_image(bvxm_image_metadata const& camer
   bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0, scale);
   bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
-  bvxm_voxel_grid<edges_datatype>::const_iterator edges_slab_it(edges_grid->begin());
+  bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it(edges_grid->begin());
 
   vcl_cout << "Generating Expected Edge Image:" << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it) {
@@ -911,7 +911,7 @@ bool bvxm_voxel_world::expected_edge_prob_image(bvxm_image_metadata const& camer
     // warp slice_probability to image plane
     bvxm_util::warp_slab_bilinear(*edges_slab_it, H_img_to_plane[z], edges_image);
 
-    bvxm_voxel_slab<edges_datatype>::const_iterator edges_image_it = edges_image.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator edges_image_it = edges_image.begin();
     bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
 
     for (; expected_edge_image_it != expected_edge_image.end(); ++edges_image_it, ++expected_edge_image_it) {
@@ -919,21 +919,6 @@ bool bvxm_voxel_world::expected_edge_prob_image(bvxm_image_metadata const& camer
     }
   }
   vcl_cout << vcl_endl;
-
-  float min_expected_edge_image = vcl_numeric_limits<float>::max();
-  float max_expected_edge_image = vcl_numeric_limits<float>::min();
-  for (unsigned i=0; i<expected_edge_image.nx(); i++) {
-    for (unsigned j=0; j<expected_edge_image.ny(); j++) {
-      min_expected_edge_image = vnl_math_min(min_expected_edge_image,expected_edge_image(i,j));
-      max_expected_edge_image = vnl_math_max(max_expected_edge_image,expected_edge_image(i,j));
-    }
-  }
-
-  for (unsigned i=0; i<expected_edge_image.nx(); i++) {
-    for (unsigned j=0; j<expected_edge_image.ny(); j++) {
-      expected_edge_image(i,j) = (expected_edge_image(i,j)-min_expected_edge_image)/(max_expected_edge_image-min_expected_edge_image);
-    }
-  }
 
   // convert back to vil_image_view
   bvxm_util::slab_to_img(expected_edge_image, expected);
@@ -970,7 +955,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
   bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0,scale);
   bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
-  bvxm_voxel_grid<edges_datatype>::const_iterator edges_slab_it(edges_grid->begin());
+  bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it(edges_grid->begin());
 
   vcl_cout << "Generating Expected Edge Image:" << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it) {
@@ -978,7 +963,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
     // warp slice_probability to image plane
     bvxm_util::warp_slab_bilinear(*edges_slab_it, H_img_to_plane[z], slice_edges);
 
-    bvxm_voxel_slab<edges_datatype>::const_iterator slice_edges_it = slice_edges.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator slice_edges_it = slice_edges.begin();
     bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
 
     for (; expected_edge_image_it != expected_edge_image.end(); ++slice_edges_it, ++expected_edge_image_it) {
