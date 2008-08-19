@@ -223,7 +223,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
        }
     }
     else if (mode_ == MODE_VERTEX) {
-       vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
+       /*vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
        vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
 
        vcl_map<int, vsol_line_3d_sptr>::iterator iter = edges.begin();
@@ -238,10 +238,36 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
         edge->set_selectable(false);
         list[edge_id] = edge;
         iter++;
-       }
-       if (show_vertices_) {
+       }*/
+      vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
+      vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
+      while (iter != faces.end()) {
+        // project the new object with the given camera
+        int face_id = iter->first;
+        vsol_polygon_3d_sptr obj = iter->second;
+        vsol_polygon_2d_sptr poly_2d;
+        proj_poly(obj, poly_2d);
+        bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d, style);
+        polygon->set_selectable(false);
+        list[face_id] = polygon;
+
+        // get the inner faces connected to this face
+        vcl_map<int, vsol_polygon_3d_sptr> inner_faces = observable->extract_inner_faces(face_id);
+        vcl_map<int, vsol_polygon_3d_sptr>::iterator inner_iter= inner_faces.begin();
+        while (inner_iter != inner_faces.end()) {
+          vsol_polygon_3d_sptr poly = inner_iter->second;
+          vsol_polygon_2d_sptr poly_2d;
+          proj_poly(poly, poly_2d);
+          bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
+          polygon->set_selectable(false);
+          list[face_id] = polygon;
+          inner_iter++;
+        }
+        iter++;
+      }
+      if (show_vertices_) {
         draw_vertices(observable, list, true, vertx_list, vertx_xy_list);
-       }
+      }
     }
     else if (mode_ == MODE_MESH) {
        vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
