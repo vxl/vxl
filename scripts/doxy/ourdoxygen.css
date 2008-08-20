@@ -17,6 +17,36 @@ H3 {
 CAPTION { 
 	font-weight: bold 
 }
+
+.tabs ul {
+        /* margin-left: 0; */
+        /* padding-left: 0; */
+        display: inline;
+        }
+
+.tabs ul li {
+        /* margin-left: 0; */
+        /* margin-bottom: 0; */
+        /* padding: 2px 15px 5px; */
+        /* border: 1px solid #000; */
+        /* list-style: none; */
+        border-left: 1px solid #000;
+        /* border-right: 1px solid #000; */
+        padding: 0px 15px;
+        display: inline;
+        }
+
+
+.tabs ul li:first-child {
+        /* border-bottom: 1px solid #ffc; */
+        /* list-style: none; */
+        /* display: inline; */
+        border-left: none;   
+        /* border-right: 1px solid #000; */
+        }
+
+
+
 DIV.qindex {
 	width: 100%;
 	background-color: #e8eef2;
