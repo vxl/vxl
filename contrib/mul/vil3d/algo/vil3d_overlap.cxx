@@ -3,7 +3,7 @@
 // \brief Compute overlaps of images
 // \author Tim Cootes
 
-#include <vil3d/vil3d_scan_image.h>
+#include "vil3d_overlap.h"
 
 class vil3d_bool_overlap_functor
 {
