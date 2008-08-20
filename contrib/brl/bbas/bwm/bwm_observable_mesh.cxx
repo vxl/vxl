@@ -26,8 +26,6 @@
 #include <vsol/vsol_box_3d.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
-//#include <bmsh3d/vis/bmsh3d_vis_backpt.h>
-//#include <bmsh3d/vis/bmsh3d_vis_mesh.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
