@@ -10,6 +10,7 @@
 #include "vgui_wx.h"
 #include "vgui_wx_window.h"
 #include "vgui_wx_dialog_impl.h"
+#include <vgui/vgui_gl.h>
 
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_cstddef.h> // for vcl_size_t
@@ -199,27 +200,24 @@ void vgui_wx::run(void)
 //: Run the next event.
 void vgui_wx::run_one_event(void)
 {
-  // ***** not implemented, yet
-  assert(false);
+  wxTheApp->Dispatch();
 }
 
 //: Run until event queue is empty.
 void vgui_wx::run_till_idle(void)
 {
-  // ***** not implemented, yet
-  assert(false);
-
   while (wxTheApp->Pending())
   {
     wxTheApp->Dispatch();
+    glFlush();
   }
 }
 
 //: Clear all events from the queue.
 void vgui_wx::flush(void)
 {
-  // ***** not implemented, yet
-  assert(false);
+  glFlush();
+  run_till_idle();
 }
 
 //: Add an event to the queue.
