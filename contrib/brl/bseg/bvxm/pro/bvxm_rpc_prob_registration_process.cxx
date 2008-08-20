@@ -7,7 +7,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 
 #include <bil/algo/bil_cedt.h>
-#include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
@@ -57,8 +56,6 @@ bvxm_rpc_prob_registration_process::bvxm_rpc_prob_registration_process()
 
 bool bvxm_rpc_prob_registration_process::execute()
 {
-  bool ANALYZER_MODE = false;
-
   vcl_ifstream file_inp;
   vcl_ofstream file_out;
 
@@ -132,12 +129,11 @@ bool bvxm_rpc_prob_registration_process::execute()
     // setting the output edge image for viewing purposes
     for (int i=0; i<ni; i++) {
       for (int j=0; j<nj; j++) {
-        expected_edge_image_output(i,j) = (vxl_byte)(256.0*expected_edge_image(i,j));
+        expected_edge_image_output(i,j) = (vxl_byte)(255.0*expected_edge_image(i,j));
       }
     }
 
     double max_prob = vcl_numeric_limits<double>::min();
-    vnl_matrix<double> edge_fit_matrix(2*offset_search_size+1,2*offset_search_size+1,0.0);
 
     // this is the two level offset search algorithm
     int offset_lower_limit_u = -offset_search_size;
@@ -159,8 +155,6 @@ bool bvxm_rpc_prob_registration_process::execute()
           }
         }
 
-        edge_fit_matrix(u+offset_search_size,v+offset_search_size) = prob;
-
         // if maximum is found
         if (prob > max_prob) {
           max_prob = prob;
@@ -170,39 +164,12 @@ bool bvxm_rpc_prob_registration_process::execute()
       }
     }
     vcl_cout << vcl_endl;
-
-    if (ANALYZER_MODE) {
-      double edge_fit_matrix_min = vcl_numeric_limits<double>::max();
-      double edge_fit_matrix_max = vcl_numeric_limits<double>::min();
-
-      for (unsigned i=0; i<edge_fit_matrix.rows(); i++) {
-        for (unsigned j=0; j<edge_fit_matrix.cols(); j++) {
-          if (edge_fit_matrix(i,j)>0.0) {
-            edge_fit_matrix_min = vnl_math_min(edge_fit_matrix_min,edge_fit_matrix(i,j));
-            edge_fit_matrix_max = vnl_math_max(edge_fit_matrix_max,edge_fit_matrix(i,j));
-          }
-        }
-      }
-
-      vil_image_view<vxl_byte> edge_fit_image(2*offset_search_size+1,2*offset_search_size+1);
-      edge_fit_image.fill(0);
-      for (unsigned i=0; i<edge_fit_matrix.rows(); i++) {
-        for (unsigned j=0; j<edge_fit_matrix.cols(); j++) {
-          if (edge_fit_matrix(i,j)>=edge_fit_matrix_min) {
-            edge_fit_image(i,j) = (int)(256.0*((edge_fit_matrix(i,j)-edge_fit_matrix_min)/(edge_fit_matrix_max-edge_fit_matrix_min)));
-          }
-        }
-      }
-      vil_save(edge_fit_image,vcl_string(vcl_string("output_edge_fit_image_" + num_observations) + ".jpg").c_str());
-    }
   }
 
-  if (ANALYZER_MODE) {
-    file_out.clear();
-    file_out.open("output_offsets.txt",vcl_ofstream::app);
-    file_out << best_offset_u << '\t' << best_offset_v << vcl_endl;
-    file_out.close();
-  }
+  file_out.clear();
+  file_out.open("output_offsets.txt",vcl_ofstream::app);
+  file_out << best_offset_u << '\t' << best_offset_v << vcl_endl;
+  file_out.close();
 
   float nlx,nly,nlz;
   if (rpc_shift_3d_flag)
@@ -304,13 +271,9 @@ bool bvxm_rpc_prob_registration_process::execute()
     bil_cedt_operator.compute_cedt();
     vil_image_view<float> cedt_image = bil_cedt_operator.cedtimg();
 
-    // multiplies the edge distance transform with a gaussian kernel
-    vnl_gaussian_kernel_1d gaussian(cedt_image_gaussian_sigma);
-    for (int i=0; i<ni; i++) {
-      for (int j=0; j<nj; j++) {
-        cedt_image(i,j) = (float)gaussian.G((double)cedt_image(i,j));
-      }
-    }
+    vil_image_view<float> gaussian_image = bvxm_util::multiply_image_with_gaussian_kernel(cedt_image,cedt_image_gaussian_sigma);
+
+    // todo : fix the multiscale update here
     unsigned max_scale=vox_world->get_params()->max_scale();
     for (unsigned curr_scale = scale;curr_scale < max_scale;curr_scale++)
     {
@@ -322,16 +285,13 @@ bool bvxm_rpc_prob_registration_process::execute()
         vpgl_camera_double_sptr new_camera_out=bvxm_util::downsample_camera( camera_out, curr_scale);
         bvxm_image_metadata camera_metadata_out(cedt_image_sptr,new_camera_out);
         result=vox_world->update_edges_prob(camera_metadata_out, curr_scale);
-
       }
       else
       {
-
         vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
         bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_out);
         result=vox_world->update_edges_prob(camera_metadata_out, curr_scale);
       }
-
 
       // updates the edge probabilities in the voxel world
 
@@ -340,7 +300,6 @@ bool bvxm_rpc_prob_registration_process::execute()
         return false;
       }
     }
-
   }
 
   if (rpc_shift_3d_flag) {
