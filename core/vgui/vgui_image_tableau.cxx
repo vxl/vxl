@@ -380,11 +380,13 @@ class vgui_set_rangemap_command : public vgui_command
   void execute()
   {
     vgui_range_map_params_sptr old_rmp = tab_->map_params();
-    vgui_range_map_params_sptr rmp = new vgui_range_map_params(*old_rmp);
-    if (!rmp || rmp->n_components_ != nc_) {
+    vgui_range_map_params_sptr rmp = NULL;
+    if (!old_rmp || old_rmp->n_components_ != nc_) {
       rmp = new vgui_range_map_params(0.0, 1.0);
       rmp->n_components_ = nc_;
     }
+    else
+      rmp = new vgui_range_map_params(*old_rmp);
 
     // use this array because vgui_dialog does not support long double fields
     double ranges[8];
