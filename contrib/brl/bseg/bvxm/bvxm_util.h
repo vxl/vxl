@@ -10,6 +10,10 @@
 //  Modifications
 //   07 Mar.2008 - Ozge C. Ozcanli - Added support for VIL_PIXEL_FORMAT_RGB_FLOAT and VIL_PIXEL_FORMAT_FLOAT to the img_to_slab method
 //                                   Assumes the float image is already scaled to [0,1] range
+//
+//   08/20/2008 - Ibrahim Eden - Added the method 
+//                               static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
+//
 // \endverbatim
 
 #include <vcl_string.h>
@@ -117,6 +121,9 @@ class bvxm_util
   static vpgl_camera_double_sptr downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale);
 
   static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
+  
+  static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
+
  protected:
 
   static void bilinear_weights(vgl_h_matrix_2d<double> invH,

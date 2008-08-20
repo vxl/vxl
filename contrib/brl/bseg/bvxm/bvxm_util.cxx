@@ -8,6 +8,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>
+#include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vil/vil_resample_bilin.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
@@ -207,3 +208,16 @@ vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sp
   }
 }
 
+vil_image_view<float> bvxm_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma){
+  vil_image_view<float> ret_img(img.ni(),img.nj(),1);
+
+  vnl_gaussian_kernel_1d gaussian(gaussian_sigma);
+
+  for (unsigned i=0; i<img.ni(); i++) {
+    for (unsigned j=0; j<img.nj(); j++) {
+      ret_img(i,j) = (float)gaussian.G((double)img(i,j));
+    }
+  }
+
+  return ret_img;
+}
