@@ -899,7 +899,7 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
    case FORMAT: { \
     vil_image_view<T> view = static_cast<const vil_image_view<T>& >(im);\
     view_istep = view.istep(); view_jstep = view.jstep(); view_pstep = view.planestep(); \
-    view_buf = reinterpret_cast<vxl_byte*>(view.memory_chunk()->data());\
+    view_buf = reinterpret_cast<vxl_byte*>(view.top_left_ptr());\
    } break
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
