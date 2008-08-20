@@ -7,7 +7,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 
 #include <bil/algo/bil_cedt.h>
-#include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
@@ -213,14 +212,7 @@ bool bvxm_rpc_registration_process::execute()
     bil_cedt bil_cedt_operator(edge_image_negated);
     bil_cedt_operator.compute_cedt();
     vil_image_view<float> cedt_image = bil_cedt_operator.cedtimg();
-
-    // multiplies the edge distance transform with a gaussian kernel
-    vnl_gaussian_kernel_1d gaussian(cedt_image_gaussian_sigma);
-    for (int i=0; i<ni; i++) {
-      for (int j=0; j<nj; j++) {
-        cedt_image(i,j) = (float)gaussian.G((double)cedt_image(i,j));
-      }
-    }
+    cedt_image = bvxm_util::multiply_image_with_gaussian_kernel(cedt_image,cedt_image_gaussian_sigma);
 
     unsigned max_scale=vox_world->get_params()->max_scale();
     for (unsigned curr_scale = scale;curr_scale < max_scale;curr_scale++)
