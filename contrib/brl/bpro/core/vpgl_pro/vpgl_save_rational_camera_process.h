@@ -15,7 +15,7 @@
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
-//: saves a proj camera from a text file
+//: saves a local-rational o rational camera to a text file
 class vpgl_save_rational_camera_process : public bprb_process
 {
  public:

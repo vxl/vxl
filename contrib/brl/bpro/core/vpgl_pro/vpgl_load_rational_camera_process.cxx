@@ -7,6 +7,7 @@
 #include <vcl_iostream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
 
 //: Constructor
 vpgl_load_rational_camera_process::vpgl_load_rational_camera_process()
@@ -51,7 +52,13 @@ vpgl_load_rational_camera_process::execute()
 
   vcl_string camera_filename = input0->value();
 
-  vpgl_camera_double_sptr ratcam = read_rational_camera<double>(camera_filename);
+  vpgl_camera_double_sptr ratcam = read_local_rational_camera<double>(camera_filename);
+
+  if ( !ratcam.as_pointer() ) {
+    vcl_cerr << "Rational camera isn't local... trying global" << vcl_endl;
+    ratcam = read_rational_camera<double>(camera_filename);
+
+  }
 
   if ( !ratcam.as_pointer() ) {
     vcl_cerr << "Failed to load rational camera from file" << camera_filename << vcl_endl;
