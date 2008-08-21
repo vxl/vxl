@@ -2,14 +2,11 @@
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
-
 #include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_camera.h>
-
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
 
 bvxm_update_lidar_process::bvxm_update_lidar_process()
 {
@@ -18,16 +15,13 @@ bvxm_update_lidar_process::bvxm_update_lidar_process()
   //input[1]: The camera of the observation
   //input[2]: The voxel world
   //input[3]: scale index
-  
+
   input_data_.resize(4,brdb_value_sptr(0));
   input_types_.resize(4);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
   input_types_[3] = "unsigned";
-
-//  input_types_[4] = "vil_image_view_base_sptr";
-
 
   //output has 1 output
   //output[0] : The updated probability map
@@ -36,14 +30,10 @@ bvxm_update_lidar_process::bvxm_update_lidar_process()
   output_types_.resize(2);
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1]= "vil_image_view_base_sptr";
-
-
 }
-
 
 bool bvxm_update_lidar_process::execute()
 {
-
   // Sanity check
   if(!this->verify_inputs())
     return false;
@@ -61,7 +51,6 @@ bool bvxm_update_lidar_process::execute()
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[2].ptr());
   bvxm_voxel_world_sptr world = input2->value();
 
- 
   brdb_value_t<unsigned>* input3 = 
     static_cast<brdb_value_t<unsigned>* >(input_data_[3].ptr());
   unsigned scale_idx = input3->value();
@@ -72,34 +61,27 @@ bool bvxm_update_lidar_process::execute()
   //update
   vil_image_view<float> prob_map(img->ni(),img->nj(),1);
   vil_image_view<bool> mask(img->ni(),img->nj(),1);
-  
+
   bool result=true;; 
 
   for(unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
   {
-      
-        result =result && world->update_lidar(observation, prob_map, mask,curr_scale);
-        if(curr_scale==scale_idx)
-      {
-        brdb_value_sptr output0 = 
-            new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
-        output_data_[0] = output0;
+    result =result && world->update_lidar(observation, prob_map, mask,curr_scale);
+    if(curr_scale==scale_idx)
+    {
+      brdb_value_sptr output0 = 
+        new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
+      output_data_[0] = output0;
 
-        brdb_value_sptr output1 = 
-            new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
-        output_data_[1] = output1;
-      }
+      brdb_value_sptr output1 = 
+        new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
+      output_data_[1] = output1;
+    }
   }
   if(!result){
     vcl_cerr << "error bvxm_update_lidar_process: failed to update observation" << vcl_endl;
     return false;
   }
 
-  //store output
-
-
   return true;
 }
-
-
-
