@@ -15,7 +15,7 @@
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
-//: Loads a rational camera from a text file
+//: Loads a local-rational or rational camera from a text file
 class vpgl_load_rational_camera_process : public bprb_process
 {
  public:
