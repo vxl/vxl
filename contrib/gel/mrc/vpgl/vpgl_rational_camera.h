@@ -214,7 +214,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
   //: print the camera parameters
   virtual void print(vcl_ostream& s = vcl_cout) const;
 
-  bool save(vcl_string cam_path);
+  virtual bool save(vcl_string cam_path);
 
   // binary IO
 

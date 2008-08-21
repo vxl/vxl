@@ -70,7 +70,7 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
   virtual void print(vcl_ostream& s = vcl_cout) const;
 
   //: save to file (the lvcs is after the global rational camera parameters)
-  bool save(vcl_string cam_path);
+  virtual bool save(vcl_string cam_path);
 
   // binary IO
 
