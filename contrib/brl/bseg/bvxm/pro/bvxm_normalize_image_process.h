@@ -32,7 +32,7 @@
 
 class bvxm_normalize_image_process : public bprb_process
 {
- public:
+public:
 
   bvxm_normalize_image_process();
 
@@ -51,20 +51,20 @@ class bvxm_normalize_image_process : public bprb_process
   bool finish() { return true; }
 
 protected:
-  
- //:This local function calculates and retrieves optimal normalization parameters
- template <bvxm_voxel_type APM_T> 
- bool norm_parameters(vil_image_view_base_sptr const &input_img,
-                      vil_image_view<float>*  &input_img_float_streched,
-                      vpgl_camera_double_sptr const &camera,
-                      bvxm_voxel_world_sptr const &world,
-                      unsigned const bin_index,
-                      unsigned const scale_index,
-                      bool verbose,
-                      float &a, float &b);
- unsigned ni_;
- unsigned nj_;
- unsigned nplanes_;
+
+  //:This local function calculates and retrieves optimal normalization parameters
+  template <bvxm_voxel_type APM_T> 
+  bool norm_parameters(vil_image_view_base_sptr const &input_img,
+    vil_image_view<float>*  &input_img_float_streched,
+    vpgl_camera_double_sptr const &camera,
+    bvxm_voxel_world_sptr const &world,
+    unsigned const bin_index,
+    unsigned const scale_index,
+    bool verbose,
+    float &a, float &b);
+  unsigned ni_;
+  unsigned nj_;
+  unsigned nplanes_;
 
 };
 
@@ -104,8 +104,8 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
       vcl_cout << "using expected colors to create mog image ";
 
     vcl_cout << "normalization parameters to be used in this run:\n"
-             << "a_start: " << a_start << " a_end: " << a_end << " a_inc: " << a_inc << vcl_endl
-             << "b_start: " << b_start << " b_end: " << b_end << " b_ratio: " << b_ratio << vcl_endl;
+      << "a_start: " << a_start << " a_end: " << a_end << " a_inc: " << a_inc << vcl_endl
+      << "b_start: " << b_start << " b_end: " << b_end << " b_ratio: " << b_ratio << vcl_endl;
   }
 
   // CAUTION: Assumption: Input image is of type vxl_byte
@@ -131,22 +131,22 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   typedef bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
   typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
 
-    if (most_prob) {
-      world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); 
-    } else {
-      world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index);
-    }
+  if (most_prob) {
+    world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); 
+  } else {
+    world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index);
+  }
 
-    bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
+  bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
 
-    bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
-    if (verbose) {
-      bvxm_voxel_slab<obs_datatype> exp_img = apm_processor.expected_color(*mog_image_ptr);
-      vil_image_view_base_sptr temp_img = new vil_image_view<vxl_byte>(ni_, nj_, nplanes_);
-      bvxm_util::slab_to_img(exp_img, temp_img);
-      vil_save(*temp_img, "./mixture_expected_img.png");
-    }
-  
+  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  if (verbose) {
+    bvxm_voxel_slab<obs_datatype> exp_img = apm_processor.expected_color(*mog_image_ptr);
+    vil_image_view_base_sptr temp_img = new vil_image_view<vxl_byte>(ni_, nj_, nplanes_);
+    bvxm_util::slab_to_img(exp_img, temp_img);
+    vil_save(*temp_img, "./mixture_expected_img.png");
+  }
+
 
   //3) optimize two parameters for the input image so that it is the maximally probable image seen wrt mog_image
   for ( float sa = a_start; sa <= a_end; sa+=a_inc ){
