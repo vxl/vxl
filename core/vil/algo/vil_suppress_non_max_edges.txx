@@ -19,7 +19,7 @@
 //  their neighbours.
 //
 //  Note: Currently assumes single plane only.
-//  1 pixel border around output set to zero
+//  2 pixel border around output set to zero
 template<class srcT, class destT>
 void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
                                 const vil_image_view<srcT>& grad_j,
@@ -88,11 +88,136 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
   }
 }
 
+namespace {
+//: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
+//  returns the peak value by reference in \p y_peak
+//  returns the peak location offset from the x of \p y_0
+double interpolate_parabola(double y_1, double y_0, double y_2,
+                            double& y_peak)
+{
+  double diff1 = y_2 - y_1;      // first derivative
+  double diff2 = 2 * y_0 - y_1 - y_2; // second derivative
+  y_peak = y_0 + diff1 * diff1 / (8 * diff2);        // interpolate y as max/min
+  return diff1 / (2 * diff2);   // interpolate x offset
+}
+
+}
+
+
+//: Given gradient images, computes magnitude image of maximal subpixel edges
+//  Computes magnitude image.  Zeros any below a threshold.
+//  Points with magnitude above a threshold are tested against gradient
+//  along normal to the edge and retained only if they are higher than
+//  their neighbours.  The magnitude of retained points is revised using
+//  parabolic interpolation in the normal direction.  The same interpolation
+//  provides a subpixel offset from the integral pixel location. The
+//  magnitude is returned in the first plane of \p grad_mag_offset. The
+//  i and j offsets are returned in the second and third planes.
+//
+//  Note: Currently assumes single plane only.
+//  2 pixel border around output set to zero.
+//  If two neighbouring edges have exactly the same strength, it retains
+//  both (ie an edge is eliminated if it is strictly lower than a neighbour,
+//  but not if it is the same as two neighbours).
+template<class srcT, class destT>
+void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i,
+                                         const vil_image_view<srcT>& grad_j,
+                                         double grad_mag_threshold,
+                                         vil_image_view<destT>& grad_mag_offset)
+{
+  assert(grad_i.nplanes()==grad_j.nplanes());
+  assert(grad_i.nplanes()==1);
+  unsigned ni = grad_i.ni(), nj = grad_i.nj();
+  assert(ni>2 && nj>2);
+  assert(grad_j.ni()==ni && grad_j.nj()==nj);
+  grad_mag_offset.set_size(ni,nj,3);
+
+  // Fill 2 pixel border with zero
+  vil_fill_col(grad_mag_offset,0,destT(0));
+  vil_fill_col(grad_mag_offset,1,destT(0));
+  vil_fill_col(grad_mag_offset,ni-1,destT(0));
+  vil_fill_col(grad_mag_offset,ni-2,destT(0));
+  vil_fill_row(grad_mag_offset,0,destT(0));
+  vil_fill_row(grad_mag_offset,1,destT(0));
+  vil_fill_row(grad_mag_offset,nj-1,destT(0));
+  vil_fill_row(grad_mag_offset,nj-2,destT(0));
+
+  const vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
+  const vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
+  const vcl_ptrdiff_t gm_istep = grad_mag_offset.istep(), gm_jstep = grad_mag_offset.jstep();
+  const vcl_ptrdiff_t gm_pstep = grad_mag_offset.planestep();
+
+  const srcT * gi_data = &grad_i(0,0);
+  const srcT * gj_data = &grad_j(0,0);
+  const srcT * gi_row = &grad_i(2,2);
+  const srcT * gj_row = &grad_j(2,2);
+  destT * gm_row = &grad_mag_offset(2,2);
+  unsigned ihi=ni-3;
+  unsigned jhi=nj-3;
+
+  for (unsigned j=2; j<=jhi; ++j, gi_row+=gi_jstep, gj_row+=gj_jstep,
+                                  gm_row+=gm_jstep)
+  {
+    const srcT* pgi = gi_row;
+    const srcT* pgj = gj_row;
+    destT *pgm = gm_row;
+    for (unsigned i=2; i<=ihi; ++i, pgi+=gi_istep, pgj+=gj_istep,
+                                    pgm+=gm_istep)
+    {
+      double gmag=vcl_sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
+      if (gmag<grad_mag_threshold){
+        *pgm=0;
+        *(pgm+gm_pstep)=0;
+        *(pgm+2*gm_pstep)=0;
+      }
+      else
+      {
+        double dx=pgi[0]/gmag;
+        double dy=pgj[0]/gmag;
+        // Evaluate gradient along direction (dx,dy) at point (i+dx,j+dy)
+        double gx1=vil_bilin_interp_unsafe(i+dx,j+dy,gi_data,gi_istep,gi_jstep);
+        double gy1=vil_bilin_interp_unsafe(i+dx,j+dy,gj_data,gj_istep,gj_jstep);
+        double g1mag = dx*gx1+dy*gy1;
+        if (g1mag>gmag){
+          *pgm=0;
+          *(pgm+gm_pstep)=0;
+          *(pgm+2*gm_pstep)=0;
+        }
+        else
+        {
+          // Evaluate gradient along direction (dx,dy) at point (i-dx,j-dy)
+          double gx2=vil_bilin_interp_unsafe(i-dx,j-dy,gi_data,gi_istep,gi_jstep);
+          double gy2=vil_bilin_interp_unsafe(i-dx,j-dy,gj_data,gj_istep,gj_jstep);
+          double g2mag = dx*gx2+dy*gy2;
+          if (g2mag>gmag){
+            *pgm=0;
+            *(pgm+gm_pstep)=0;
+            *(pgm+2*gm_pstep)=0;
+          }
+          else
+          {
+            // This is a maximal edge!
+            double peak;
+            double offset = interpolate_parabola(g2mag, gmag, g1mag, peak);
+            *pgm = destT(peak);
+            *(pgm+gm_pstep) = destT(dx*offset);
+            *(pgm+2*gm_pstep) = destT(dy*offset);
+          }
+        }
+      }
+    }
+  }
+}
+
 #undef VIL_SUPPRESS_NON_MAX_EDGES_INSTANTIATE
 #define VIL_SUPPRESS_NON_MAX_EDGES_INSTANTIATE(srcT, destT) \
 template void vil_suppress_non_max_edges(const vil_image_view<srcT >& grad_i,\
                                          const vil_image_view<srcT >& grad_j,\
                                          double grad_mag_threshold,\
-                                         vil_image_view<destT >& grad_mag)
+                                         vil_image_view<destT >& grad_mag);\
+template void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT >& grad_i,\
+                                                  const vil_image_view<srcT >& grad_j,\
+                                                  double grad_mag_threshold,\
+                                                  vil_image_view<destT >& grad_mag_offset)
 
 #endif // vil_suppress_non_max_edges_txx_
