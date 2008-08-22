@@ -4,6 +4,7 @@
 //  \brief Program to print info about an image.
 
 #include <vcl_exception.h>
+#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
 #include <vgl/vgl_point_2d.h>
@@ -18,6 +19,7 @@
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
+
 
 static unsigned try_3d_image(const char * filename, float unit_scaling)
 {

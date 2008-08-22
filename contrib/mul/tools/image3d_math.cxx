@@ -16,6 +16,7 @@
 #include <vcl_deque.h>
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vsl/vsl_stream.h>
 #include <vsl/vsl_deque_io.txx>
 #include <vnl/vnl_math.h>
