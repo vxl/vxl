@@ -427,6 +427,17 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
   //  -- similar to polygon except that we don't need to draw anything between points --
   if (obj_type == point_set_enum)
   {
+    if (e.type == vgui_OVERLAY_DRAW ) {
+      unsigned n = point_set_list.size();
+      glPointSize(3);
+      glColor3f(r,g,b);
+      glBegin(GL_POINTS);
+      for (unsigned i=0; i<n; ++i){
+        glVertex2f(point_set_list[i]->x(),point_set_list[i]->y());
+      }
+      glEnd();
+    }
+
     float ix, iy;
     vgui_projection_inspector().window_to_image_coordinates(e.wx,
                                                             e.wy,
@@ -434,7 +445,9 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
 
     // gesture0 = left mouse click, just add point to list
     if ( gesture0(e) ) {
-      point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d(ix,iy) ));
+      point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d(ix,iy) ));   
+      post_overlay_redraw();
+      return true;
 #if BGUI_DEBUG
       vcl_cout << "Left click returned " << ix << ",  " << iy  << vcl_endl;
       vcl_cout.flush();
@@ -447,6 +460,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       // if middle mouse, add point to list and end, if END key just end
       if (gesture1(e)) {
         point_set_list.push_back(vsol_point_2d_sptr(new vsol_point_2d(ix,iy)));
+        post_overlay_redraw();
 #if BGUI_DEBUG
         vcl_cout << "Shift left returned " << ix << ",  " << iy << vcl_endl;
         vcl_cout.flush();
