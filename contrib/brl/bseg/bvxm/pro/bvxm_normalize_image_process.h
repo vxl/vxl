@@ -24,6 +24,9 @@
 #include <vcl_iostream.h>
 #endif
 #include <bprb/bprb_process.h>
+#include <brdb/brdb_value.h>
+#include <bprb/bprb_parameters.h>
+
 #include <vil/vil_image_view.h>
 #include <bvxm/bvxm_voxel_world.h>
 
