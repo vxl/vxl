@@ -137,8 +137,6 @@ bool bvxm_normalize_image_process::execute()
     return false;
   }
   
-  
-
   // Normalize the image with the best a and b.
   //vil_image_view<vxl_byte> output_img(ni, nj, nplanes);
   //normalize_image<vxl_byte>(*input_image_sptr, output_img, a, b, 255);

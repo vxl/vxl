@@ -11,6 +11,10 @@
 // \verbatim
 //  Modifications
 //   Ozge C Ozcanli - 03/25/08 - fixed a compiler warning as suggested by Daniel Lyddy
+//   Isabel Restrepo- 08/22/08 - Moved most of calculations to template function
+//                    norm_parameters<bvxm_voxel_type APM_T>.
+//                  - Added support for multichannel appereance model processor,
+//                  - Removed support for rgb_mog_processor
 // \endverbatim
 
 #include <vcl_string.h>
