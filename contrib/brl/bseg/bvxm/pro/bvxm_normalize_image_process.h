@@ -137,7 +137,7 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
     world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index);
   }
 
-  bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
+  bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>* >(mog_image.ptr());
 
   bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
   if (verbose) {
