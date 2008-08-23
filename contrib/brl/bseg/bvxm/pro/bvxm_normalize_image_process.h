@@ -68,6 +68,55 @@ protected:
 
 };
 
+//: Float specialized function to normalize and image given a,b where new_I = a*I +b;
+inline bool normalize_image(const vil_image_view<float>& in_view, vil_image_view<float>& out_img, float a, float b, float max_value)
+{
+  unsigned ni = in_view.ni();
+  unsigned nj = in_view.nj();
+  unsigned np = in_view.nplanes();
+
+  if (ni != out_img.ni() || nj != out_img.nj() || np != out_img.nplanes())
+    return false;
+
+  for (unsigned k=0;k<np;++k)
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+      {
+        float p = (float)(a*in_view(i,j,k) + b);
+
+        // Proposed fix
+        float min_value = (float) 0;
+        out_img(i, j, k) = vcl_min(vcl_max(min_value, p), max_value);
+      }
+
+      return true;
+}
+
+//: Byte specialized function to normalize and image given a,b where new_I = a*I +b;
+inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_view<vxl_byte>& out_img, float a, float b, unsigned char max_value)
+{
+  unsigned ni = in_view.ni();
+  unsigned nj = in_view.nj();
+  unsigned np = in_view.nplanes();
+
+  if (ni != out_img.ni() || nj != out_img.nj() || np != out_img.nplanes())
+    return false;
+
+  for (unsigned k=0;k<np;++k)
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+      {
+        int p = (int)vcl_floor(a*in_view(i,j,k) + b);
+        if ( !(p >= 0) ) out_img(i, j, k)  = 0;
+        else if ( p > 255 ) out_img(i, j, k)  = 255;
+        else out_img(i, j, k)  = p;
+      }
+#ifdef DEBUG
+      vcl_cerr << "entered byte case..................\n";
+#endif
+      return true;
+}
+
 template <bvxm_voxel_type APM_T>
 bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr const &input_img,
                                                    vil_image_view<float>* &input_img_float_stretched,
@@ -201,53 +250,6 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   return true;
 }
 
-//: Float specialized function to normalize and image given a,b where new_I = a*I +b;
-inline bool normalize_image(const vil_image_view<float>& in_view, vil_image_view<float>& out_img, float a, float b, float max_value)
-{
-  unsigned ni = in_view.ni();
-  unsigned nj = in_view.nj();
-  unsigned np = in_view.nplanes();
 
-  if (ni != out_img.ni() || nj != out_img.nj() || np != out_img.nplanes())
-    return false;
-
-  for (unsigned k=0;k<np;++k)
-    for (unsigned j=0;j<nj;++j)
-      for (unsigned i=0;i<ni;++i)
-      {
-        float p = (float)(a*in_view(i,j,k) + b);
-
-        // Proposed fix
-        float min_value = (float) 0;
-        out_img(i, j, k) = vcl_min(vcl_max(min_value, p), max_value);
-      }
-
-      return true;
-}
-
-//: Byte specialized function to normalize and image given a,b where new_I = a*I +b;
-inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_view<vxl_byte>& out_img, float a, float b, unsigned char max_value)
-{
-  unsigned ni = in_view.ni();
-  unsigned nj = in_view.nj();
-  unsigned np = in_view.nplanes();
-
-  if (ni != out_img.ni() || nj != out_img.nj() || np != out_img.nplanes())
-    return false;
-
-  for (unsigned k=0;k<np;++k)
-    for (unsigned j=0;j<nj;++j)
-      for (unsigned i=0;i<ni;++i)
-      {
-        int p = (int)vcl_floor(a*in_view(i,j,k) + b);
-        if ( !(p >= 0) ) out_img(i, j, k)  = 0;
-        else if ( p > 255 ) out_img(i, j, k)  = 255;
-        else out_img(i, j, k)  = p;
-      }
-#ifdef DEBUG
-      vcl_cerr << "entered byte case..................\n";
-#endif
-      return true;
-}
 
 #endif // bvxm_normalize_image_process_h_
