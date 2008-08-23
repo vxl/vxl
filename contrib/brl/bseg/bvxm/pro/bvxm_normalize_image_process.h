@@ -128,8 +128,8 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   b = 0.0f;
   float best_prob = 0.0;
 
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
-  typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
 
   if (most_prob) {
     world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); 
