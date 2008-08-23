@@ -139,7 +139,7 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
 
   bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>* >(mog_image.ptr());
 
-  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
   if (verbose) {
     bvxm_voxel_slab<obs_datatype> exp_img = apm_processor.expected_color(*mog_image_ptr);
     vil_image_view_base_sptr temp_img = new vil_image_view<vxl_byte>(ni_, nj_, nplanes_);
