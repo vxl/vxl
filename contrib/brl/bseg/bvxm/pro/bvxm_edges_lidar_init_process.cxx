@@ -24,10 +24,11 @@ bvxm_edges_lidar_init_process::bvxm_edges_lidar_init_process()
   input_types_[1] = "vil_image_view_base_sptr";  // second ret image ROI
 
   //output
-  output_data_.resize(2,brdb_value_sptr(0));
-  output_types_.resize(2);
-  output_types_[0]= "vil_image_view_base_sptr";  // lidar edge image
-  output_types_[1]= "vil_image_view_base_sptr";  // lidar edge probability
+  output_data_.resize(3,brdb_value_sptr(0));
+  output_types_.resize(3);
+  output_types_[0]= "vil_image_view_base_sptr";  // lidar height image
+  output_types_[1]= "vil_image_view_base_sptr";  // lidar edge image
+  output_types_[2]= "vil_image_view_base_sptr";  // lidar edge probability image
 
   // adding parameters
   parameters()->add("threshold_edge_difference", "threshold_edge_difference", 10.0f);
@@ -74,27 +75,33 @@ bool bvxm_edges_lidar_init_process::execute()
   unsigned ni = image_first_return.ni();
   unsigned nj = image_first_return.nj();
 
-  vil_image_view<float> edges_lidar(ni,nj);
-  edges_lidar.fill(0.0f);
-  vil_image_view<float> edges_prob(ni,nj);
-  edges_prob.fill(0.0f);
+  vil_image_view<float> lidar_height(ni,nj);
+  lidar_height.fill(0.0f);
+  vil_image_view<float> lidar_edges(ni,nj);
+  lidar_edges.fill(0.0f);
+  vil_image_view<float> lidar_edges_prob(ni,nj);
+  lidar_edges_prob.fill(0.0f);
 
   for (unsigned i=0; i<ni; i++){
     for (unsigned j=0; j<nj; j++){
       float curr_difference = image_first_return(i,j)-image_second_return(i,j);
+      lidar_height(i,j) = image_first_return(i,j);
+      lidar_edges_prob(i,j) = 1.0f - 0.5f*(1.0f/(1.0f+curr_difference-threshold_edge_difference));
       if (curr_difference>threshold_edge_difference){
-        edges_lidar(i,j) = image_first_return(i,j);
-        // todo : fix this probability estimation here (e.g., gamma distribution)
-        edges_prob(i,j) = 1.0f - 0.5f*(1.0f/(1.0f+curr_difference-threshold_edge_difference));
+        lidar_edges(i,j) = 1.0f;
+      }
+      else{
+        lidar_edges(i,j) = 0.0f;
       }
     }
   }
 
-  // store image output
-  output_data_[0] = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(edges_lidar));
-
-  // store prob output
-  output_data_[1] = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(edges_prob));
+  // store image height
+  output_data_[0] = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(lidar_height));
+  // store image edge
+  output_data_[1] = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(lidar_edges));
+  // store image edge prob
+  output_data_[2] = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(lidar_edges_prob));
 
   return true;
 }
