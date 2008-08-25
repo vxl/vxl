@@ -1476,3 +1476,28 @@ void bwm_observer_cam::deselect()
  }
   selected_soviews_.clear();
 }
+
+void bwm_observer_cam::project_meshes(vcl_vector<vcl_string> paths,
+                  vpgl_camera<double>* cam, 
+                  vcl_vector<vgl_polygon<double> > &poly_2d_list)
+{
+  for (unsigned i=0; i<paths.size(); i++) {
+    bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+    mesh->load_from(paths[i]);
+    if (!mesh) 
+      vcl_cout << "There is a problem loading " << paths[i] << vcl_endl;
+    else {  
+      vcl_map<int, vsol_polygon_3d_sptr > faces = mesh->extract_faces();
+      for (unsigned f=0; f<faces.size(); f++) {
+        vsol_polygon_3d_sptr face = faces[f];
+        vgl_polygon<double> poly2d(1);
+        for (unsigned i=0; i<face->size(); i++) {
+          double u = 0,v = 0;
+          cam->project(face->vertex(i)->x(), face->vertex(i)->y(), face->vertex(i)->z(),u,v);
+          poly2d.push_back(u,v);
+        }
+        poly_2d_list.push_back(poly2d);
+      }
+    }
+  }
+}

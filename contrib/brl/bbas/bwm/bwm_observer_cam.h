@@ -172,6 +172,10 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
 
+  static void project_meshes(vcl_vector<vcl_string> paths,
+                             vpgl_camera<double>* cam, 
+                             vcl_vector<vgl_polygon<double> > &poly_2d_list);
+
  protected:
 
   vpgl_camera<double> *camera_;
