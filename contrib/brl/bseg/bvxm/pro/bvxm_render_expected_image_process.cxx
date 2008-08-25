@@ -18,7 +18,7 @@ bvxm_render_expected_image_process::bvxm_render_expected_image_process()
   //input[1]: number of pixels (x)
   //input[2]: number of pixels (y)
   //input[3]: The voxel world
-  //input[4]: The apperance model type :this input must be either apm_mog_grey or apm_mog_rgb
+  //input[4]: The apperance model type :this input must be either apm_mog_grey, apm_mog_rgb, edges or edges_prob
   //          any other string will initialize the value for apm_mog_grey
   //input[5]: The bin index to be updated
       //input[6]: The scale index to be updated
@@ -108,6 +108,14 @@ bool bvxm_render_expected_image_process::execute()
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,4);
     result = world->expected_image<APM_MOG_MC_4_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
+  else if (voxel_type == "edges"){  
+    expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
+    result = world->expected_edge_image(camera_metadata,expected_img,scale_index);
+  }
+  else if (voxel_type == "edges_prob"){  
+    expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
+    result = world->expected_edge_prob_image(camera_metadata,expected_img,scale_index);
+  }
   else
     vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appereance model" << vcl_endl;
 
@@ -123,4 +131,3 @@ bool bvxm_render_expected_image_process::execute()
 
   return result;
 }
-
