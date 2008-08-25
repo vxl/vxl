@@ -613,8 +613,9 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   return true;
 }
 
-bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
-                                          vil_image_view_base_sptr& img_prob,
+bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height, 
+                                          vil_image_view_base_sptr& lidar_edges,
+                                          vil_image_view_base_sptr& lidar_edges_prob,
                                           vpgl_camera_double_sptr& camera,
                                           unsigned scale)
 {
@@ -643,16 +644,19 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
   }
 
   // convert image to a voxel_slab
-  bvxm_voxel_slab<obs_datatype> image_height_slab(img_height->ni(), img_height->nj(), 1);
-  bvxm_voxel_slab<float> image_prob_slab(img_prob->ni(), img_prob->nj(), 1);
-  if ((!bvxm_util::img_to_slab(img_height,image_height_slab)) ||
-      (!bvxm_util::img_to_slab(img_prob,image_prob_slab))) {
+  bvxm_voxel_slab<float> lidar_height_slab(lidar_height->ni(), lidar_height->nj(), 1);
+  bvxm_voxel_slab<float> lidar_edges_slab(lidar_edges->ni(), lidar_edges->nj(), 1);
+  bvxm_voxel_slab<float> lidar_edges_prob_slab(lidar_edges_prob->ni(), lidar_edges_prob->nj(), 1);
+  if ((!bvxm_util::img_to_slab(lidar_height,lidar_height_slab)) ||
+      (!bvxm_util::img_to_slab(lidar_edges,lidar_edges_slab)) ||
+      (!bvxm_util::img_to_slab(lidar_edges_prob,lidar_edges_prob_slab))) {
     vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
     return false;
   }
 
-  bvxm_voxel_slab<obs_datatype> image_height_backproj(grid_size.x(),grid_size.y(),1);
-  bvxm_voxel_slab<float> image_prob_backproj(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<float> lidar_height_backproj(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<float> lidar_edges_backproj(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<float> lidar_edges_prob_backproj(grid_size.x(),grid_size.y(),1);
 
   // get edges probability grid
   bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0,scale);
@@ -665,17 +669,18 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
     vcl_cout << k_idx << vcl_endl;
 
     // backproject image onto voxel plane
-    bvxm_util::warp_slab_bilinear(image_height_slab, H_plane_to_img[k_idx], image_height_backproj);
-    bvxm_util::warp_slab_bilinear(image_prob_slab, H_plane_to_img[k_idx], image_prob_backproj);
+    bvxm_util::warp_slab_bilinear(lidar_height_slab, H_plane_to_img[k_idx], lidar_height_backproj);
+    bvxm_util::warp_slab_bilinear(lidar_edges_slab, H_plane_to_img[k_idx], lidar_edges_backproj);
+    bvxm_util::warp_slab_bilinear(lidar_edges_prob_slab, H_plane_to_img[k_idx], lidar_edges_prob_backproj);
 
-    bvxm_voxel_slab<float> lidar_prob(image_height_backproj.nx(), image_height_backproj.ny(), image_height_backproj.nz());
+    bvxm_voxel_slab<float> lidar_prob(lidar_height_backproj.nx(), lidar_height_backproj.ny(), lidar_height_backproj.nz());
     lidar_prob.fill(0.0);
 
     vnl_vector_fixed<float,3> sigmas(0.5f,0.5f,0.0009f);
     vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx,scale);
 
-    for (unsigned i_idx=0; i_idx<image_height_backproj.nx(); i_idx++) {
-      for (unsigned j_idx=0; j_idx<image_height_backproj.ny(); j_idx++) {
+    for (unsigned i_idx=0; i_idx<lidar_height_backproj.nx(); i_idx++) {
+      for (unsigned j_idx=0; j_idx<lidar_height_backproj.ny(); j_idx++) {
         vcl_vector<vgl_homg_point_2d<double> > vp(4);
         int i = i_idx+1;
         int j = j_idx-1;
@@ -698,16 +703,18 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& img_height,
           lidar_roi.add(img_pos_min);
         }
 
-        lidar_prob(i_idx, j_idx) = lidar_processor.prob_density(img_height, local_xyz.z(), sigmas, lidar_roi, params_->voxel_length(scale));
+        lidar_prob(i_idx, j_idx) = lidar_processor.prob_density(lidar_height, local_xyz.z(), sigmas, lidar_roi, params_->voxel_length(scale));
       }
     }
 
     bvxm_voxel_slab<float>::iterator lidar_prob_it = lidar_prob.begin();
     bvxm_voxel_slab<float>::iterator edges_slab_it_it = (*edges_slab_it).begin();
-    bvxm_voxel_slab<float>::iterator image_prob_backproj_it = image_prob_backproj.begin();
 
-    for (; lidar_prob_it != lidar_prob.end(); ++lidar_prob_it, ++edges_slab_it_it, ++image_prob_backproj_it) {
-      (*edges_slab_it_it) = (*lidar_prob_it) * (*image_prob_backproj_it);
+    bvxm_voxel_slab<float>::iterator lidar_edges_backproj_it = lidar_edges_backproj.begin();
+    bvxm_voxel_slab<float>::iterator lidar_edges_prob_backproj_it = lidar_edges_prob_backproj.begin();
+
+    for (; lidar_prob_it != lidar_prob.end(); ++lidar_prob_it, ++edges_slab_it_it, ++lidar_edges_backproj_it, ++lidar_edges_prob_backproj_it) {
+      (*edges_slab_it_it) = (*lidar_prob_it)*(*lidar_edges_backproj_it)*(*lidar_edges_prob_backproj_it);
     }
   }
   return true;
