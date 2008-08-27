@@ -50,6 +50,12 @@ class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
   virtual void f(vnl_vector<double> const& a, vnl_vector<double> const& b,
                  vnl_vector<double>& e);
 
+  //: Compute the residuals from the ith component of a and the jth component of b.
+  //  This is not normally used because f() has a self-contained efficient implementation
+  //  It is used for finite-differencing if the gradient is marked as unavailable
+  virtual void fij(int i, int j, vnl_vector<double> const& ai,
+                   vnl_vector<double> const& bj, vnl_vector<double>& fij);
+
   //: Compute the sparse Jacobian in block form.
   virtual void jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b,
                           vcl_vector<vnl_matrix<double> >& A,

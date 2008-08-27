@@ -103,6 +103,7 @@ vpgl_bundle_adj_lsqr::f(vnl_vector<double> const& a,
       // Project jth point with the ith camera
       vgl_homg_point_2d<double> xij = Pi(Xj);
 
+
       double* eij = e.data_block()+index_e(k);
       eij[0] = xij.x()/xij.w() - image_points_[k].x();
       eij[1] = xij.y()/xij.w() - image_points_[k].y();
@@ -137,6 +138,27 @@ vpgl_bundle_adj_lsqr::f(vnl_vector<double> const& a,
     }
     vcl_cout << vcl_endl;
   }
+}
+
+
+//: Compute the residuals from the ith component of a and the jth component of b.
+//  This is not normally used because f() has a self-contained efficient implementation
+//  It is used for finite-differencing if the gradient is marked as unavailable
+void
+vpgl_bundle_adj_lsqr::fij(int i, int j, vnl_vector<double> const& ai,
+                          vnl_vector<double> const& bj, vnl_vector<double>& fij)
+{
+  //: Construct the ith camera
+  vpgl_perspective_camera<double> Pi = param_to_cam(i,ai.data_block());
+  // Construct the jth point
+  vgl_homg_point_3d<double> Xj(bj[0], bj[1], bj[2]);
+  int k = residual_indices_(i,j);
+
+  // Project jth point with the ith camera
+  vgl_homg_point_2d<double> xij = Pi(Xj);
+
+  fij[0] = xij.x()/xij.w() - image_points_[k].x();
+  fij[1] = xij.y()/xij.w() - image_points_[k].y();
 }
 
 
@@ -230,9 +252,9 @@ vpgl_bundle_adj_lsqr::jac_Bij(vnl_double_3x4 const& Pi, vnl_vector<double> const
   double ty  = Pi(0,1)*Pi(2,3) - Pi(0,3)*Pi(2,1);
   double tz  = Pi(0,2)*Pi(2,3) - Pi(0,3)*Pi(2,2);
 
-  Bij(0,0) = (txy*bj[1] + txz*bj[2] + tx) / denom;
-  Bij(0,1) = (txy*bj[0] + tyz*bj[2] + ty) / denom;
-  Bij(0,2) = (txz*bj[0] + tyz*bj[1] + tz) / denom;
+  Bij(0,0) = ( txy*bj[1] + txz*bj[2] + tx) / denom;
+  Bij(0,1) = (-txy*bj[0] + tyz*bj[2] + ty) / denom;
+  Bij(0,2) = (-txz*bj[0] - tyz*bj[1] + tz) / denom;
 
   txy = Pi(1,0)*Pi(2,1) - Pi(1,1)*Pi(2,0);
   txz = Pi(1,0)*Pi(2,2) - Pi(1,2)*Pi(2,0);
@@ -241,9 +263,9 @@ vpgl_bundle_adj_lsqr::jac_Bij(vnl_double_3x4 const& Pi, vnl_vector<double> const
   ty  = Pi(1,1)*Pi(2,3) - Pi(1,3)*Pi(2,1);
   tz  = Pi(1,2)*Pi(2,3) - Pi(1,3)*Pi(2,2);
 
-  Bij(1,0) = (txy*bj[1] + txz*bj[2] + tx) / denom;
-  Bij(1,1) = (txy*bj[0] + tyz*bj[2] + ty) / denom;
-  Bij(1,2) = (txz*bj[0] + tyz*bj[1] + tz) / denom;
+  Bij(1,0) = ( txy*bj[1] + txz*bj[2] + tx) / denom;
+  Bij(1,1) = (-txy*bj[0] + tyz*bj[2] + ty) / denom;
+  Bij(1,2) = (-txz*bj[0] - tyz*bj[1] + tz) / denom;
 }
 
 
