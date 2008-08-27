@@ -11,6 +11,7 @@ SET(vil_pro_sources
     vil_binary_image_op_process.h       vil_binary_image_op_process.cxx
     vil_rgbi_to_grey_process.h          vil_rgbi_to_grey_process.cxx
     vil_convert_to_n_planes_process.h   vil_convert_to_n_planes_process.cxx
+    vil_combine_grey_images_process.h   vil_combine_grey_images_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)
