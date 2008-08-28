@@ -125,7 +125,7 @@ vpgl_bundle_adj_lsqr::f(vnl_vector<double> const& a,
     }
   }
 
-  if (use_weights_ && iteration_count_++ > 50 ){
+  if (use_weights_){
     vnl_vector<double> unweighted(e);
     for (unsigned int k=0; k<weights_.size(); ++k){
       e[2*k]   *= weights_[k];
@@ -448,36 +448,54 @@ vpgl_bundle_adj_lsqr::create_param_vector(const vcl_vector<vgl_point_3d<double> 
 //===============================================================
 
 
+vpgl_bundle_adjust::vpgl_bundle_adjust()
+  : ba_func_(NULL),
+    use_weights_(false),
+    use_gradient_(true),
+    start_error_(0.0),
+    end_error_(0.0)
+{
+}
+
+vpgl_bundle_adjust::~vpgl_bundle_adjust()
+{
+  delete ba_func_;
+}
+
 //: Bundle Adjust
 bool
 vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
                              vcl_vector<vgl_point_3d<double> >& world_points,
                              const vcl_vector<vgl_point_2d<double> >& image_points,
-                             const vcl_vector<vcl_vector<bool> >& mask,
-                             bool use_weights)
+                             const vcl_vector<vcl_vector<bool> >& mask)
 {
   // Extract the camera and point parameters
   vcl_vector<vpgl_calibration_matrix<double> > K;
-  vnl_vector<double> a = vpgl_bundle_adj_lsqr::create_param_vector(cameras);
-  vnl_vector<double> b = vpgl_bundle_adj_lsqr::create_param_vector(world_points);
+  a_ = vpgl_bundle_adj_lsqr::create_param_vector(cameras);
+  b_ = vpgl_bundle_adj_lsqr::create_param_vector(world_points);
   for (unsigned int i=0; i<cameras.size(); ++i){
     K.push_back(cameras[i].get_calibration());
   }
 
   // do the bundle adjustment
-  vpgl_bundle_adj_lsqr ba_func(K,image_points,mask,use_weights);
-  vnl_sparse_lm lm(ba_func);
+  delete ba_func_;
+  ba_func_ = new vpgl_bundle_adj_lsqr(K,image_points,mask,use_weights_);
+  vnl_sparse_lm lm(*ba_func_);
   lm.set_trace(true);
   lm.set_verbose(true);
-  if (!lm.minimize(a,b))
+  if (!lm.minimize(a_,b_,use_gradient_))
     return false;
+
+  start_error_ = lm.get_start_error();
+  end_error_ = lm.get_end_error();
+  num_iterations_ = lm.get_num_iterations();
 
   // Update the camera parameters
   for (unsigned int i=0; i<cameras.size(); ++i)
-    cameras[i] = ba_func.param_to_cam(i,a);
+    cameras[i] = ba_func_->param_to_cam(i,a_);
   // Update the point locations
   for (unsigned int j=0; j<world_points.size(); ++j)
-    world_points[j] = ba_func.param_to_point(j,b);
+    world_points[j] = ba_func_->param_to_point(j,b_);
 
   return true;
 }

@@ -146,15 +146,31 @@ class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
 class vpgl_bundle_adjust
 {
  public:
+  //: Constructor
+  vpgl_bundle_adjust();
+  //: Destructor
   ~vpgl_bundle_adjust();
 
+  void set_use_weights(bool use_weights) { use_weights_ = use_weights; }
+  void set_use_gradient(bool use_gradient) { use_gradient_ = use_gradient; }
+
+  //: Return the ending error
+  double end_error() const { return end_error_; }
+  //: Return the starting error
+  double start_error() const { return start_error_; }
+  //: Return the number of iterations
+  int num_iterations() const { return num_iterations_; }
+
+  //: Return the raw camera parameters
+  const vnl_vector<double>& cam_params() const { return a_; }
+  //: Return the raw world point parameters
+  const vnl_vector<double>& point_params() const { return b_; }
+
   //: Bundle Adjust
-  static bool
-    optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
-             vcl_vector<vgl_point_3d<double> >& world_points,
-             const vcl_vector<vgl_point_2d<double> >& image_points,
-             const vcl_vector<vcl_vector<bool> >& mask,
-             bool use_weights = false );
+  bool optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
+                vcl_vector<vgl_point_3d<double> >& world_points,
+                const vcl_vector<vgl_point_2d<double> >& image_points,
+                const vcl_vector<vcl_vector<bool> >& mask);
 
   //: Write cameras and points to a file in VRML 2.0 for debugging
   static void write_vrml(const vcl_string& filename,
@@ -162,8 +178,20 @@ class vpgl_bundle_adjust
                          vcl_vector<vgl_point_3d<double> >& world_points);
 
  private:
-  //: Constructor private - static methods only
-  vpgl_bundle_adjust();
+  //: The bundle adjustment error function
+  vpgl_bundle_adj_lsqr* ba_func_;
+  //: The last camera parameters
+  vnl_vector<double> a_;
+  //: The last point parameters
+  vnl_vector<double> b_;
+
+  bool use_weights_;
+  bool use_gradient_;
+
+  double start_error_;
+  double end_error_;
+  int num_iterations_;
+  
 };
 
 #endif // vpgl_bundle_adjust_h_

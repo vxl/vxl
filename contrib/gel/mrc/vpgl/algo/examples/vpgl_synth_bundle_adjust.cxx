@@ -18,6 +18,7 @@ int main(int argc, char** argv)
   vul_arg<int>     a_num_cameras("-ncam", "number of cameras", 30);
   vul_arg<int>     a_num_points("-npt", "number of points", 30);
   vul_arg<double>  a_frac_miss("-miss", "fraction of missing correspondences", 0.1);
+  vul_arg<bool>    a_no_gradient("-no_grad", "use numeric differencing instead of gradients", false);
   vul_arg_parse(argc, argv);
 
   const double max_p_err = 1.0; // maximum image error to introduce (pixels)
@@ -27,7 +28,7 @@ int main(int argc, char** argv)
   vnl_random rnd(seed);
 
   vcl_vector<vgl_point_3d<double> > world;
-  for(unsigned int i=0; i<a_num_cameras(); ++i)
+  for(int i=0; i<a_num_cameras(); ++i)
     world.push_back(vgl_point_3d<double>(rnd.drand32(-1,1), rnd.drand32(-1,1), rnd.drand32(-1,1)));
 
   // our known internal calibration
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
   vgl_rotation_3d<double> I; // no rotation initially
 
   vcl_vector<vpgl_perspective_camera<double> > cameras;
-  for(unsigned int i=0; i<a_num_points(); ++i)
+  for(int i=0; i<a_num_points(); ++i)
   {
     vnl_double_3 p;
     do{
@@ -106,14 +107,11 @@ int main(int argc, char** argv)
     }
   }
 
-  // make some correspondences incorrect
-  //subset_image_points[crs(0,3)] = subset_image_points[crs(0,4)];
 
+  vpgl_bundle_adjust ba;
+  ba.set_use_gradient(!a_no_gradient());
+  ba.optimize(unknown_cameras, unknown_world, subset_image_points, mask);
 
-  vpgl_bundle_adjust::optimize(unknown_cameras, unknown_world, subset_image_points, mask);
-
-
-
-  //vpgl_bundle_adjust::write_vrml("test_bundle2.wrl",unknown_cameras,unknown_world);
+  vpgl_bundle_adjust::write_vrml("results.wrl",unknown_cameras,unknown_world);
 }
 
