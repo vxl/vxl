@@ -188,7 +188,6 @@ vpgl_bundle_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double>
                                  vcl_vector<vnl_matrix<double> >& A,
                                  vcl_vector<vnl_matrix<double> >& B)
 {
-  const double stepsize = 0.001;
   typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
