@@ -15,8 +15,9 @@
 // The Main Function
 int main(int argc, char** argv)
 {
-  vul_arg<int>    a_num_cameras("-ncam", "number of cameras", 30);
-  vul_arg<int>    a_num_points("-npt", "number of points", 30);
+  vul_arg<int>     a_num_cameras("-ncam", "number of cameras", 30);
+  vul_arg<int>     a_num_points("-npt", "number of points", 30);
+  vul_arg<double>  a_frac_miss("-miss", "fraction of missing correspondences", 0.1);
   vul_arg_parse(argc, argv);
 
   const double max_p_err = 1.0; // maximum image error to introduce (pixels)
@@ -34,7 +35,7 @@ int main(int argc, char** argv)
   vgl_rotation_3d<double> I; // no rotation initially
 
   vcl_vector<vpgl_perspective_camera<double> > cameras;
-  for(unsigned int i=0; i<a_num_cameras(); ++i)
+  for(unsigned int i=0; i<a_num_points(); ++i)
   {
     vnl_double_3 p;
     do{
@@ -78,25 +79,21 @@ int main(int argc, char** argv)
   // make the mask (using all the points)
   vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
 
-#if 0
 
-  // remove several correspondences
-  mask[0][1] = false;
-  mask[0][2] = false;
-  mask[1][0] = false;
-  mask[1][1] = false;
-  mask[1][3] = false;
-  mask[2][3] = false;
-  mask[2][5] = false;
-  mask[2][6] = false;
-  mask[3][7] = false;
-  mask[3][8] = false;
-  mask[4][0] = false;
-  mask[4][1] = false;
-  mask[4][6] = false;
-  mask[4][8] = false;
-#endif
+  unsigned int num_missing = vcl_floor(a_frac_miss()*cameras.size()*world.size());
+  if(a_frac_miss() >= 1.0 )
+    num_missing = cameras.size()*world.size();
 
+  vcl_cout << "removing "<<num_missing<<" random correspondences"<<vcl_endl;
+  for(unsigned int i=0; i<num_missing;)
+  {
+    int c = rnd.lrand32(cameras.size()-1);
+    int w = rnd.lrand32(world.size()-1);
+    if(mask[c][w]){
+      mask[c][w] = false;
+      ++i;
+    }
+  }
 
   // create a subset of projections based on the mask
   vnl_crs_index crs(mask);
