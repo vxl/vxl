@@ -22,7 +22,7 @@
 #include <vnl/vnl_crs_index.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>
 
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/algo/vnl_cholesky.h>
 
 
 // ctor
@@ -234,9 +234,8 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a, vnl_vector<double>& b, bool 
 
       // compute inv(Vj) and Yij
       for (unsigned int j=0; j<f_->number_of_b(); ++j) {
-        // LU decomposition would be faster here (Vj is symmetric)
         vnl_matrix<double>& inv_Vj = inv_V[j];
-        inv_Vj = vnl_svd<double>(V[j]).inverse();
+        inv_Vj = vnl_cholesky(V[j]).inverse();
 
         vnl_crs_index::sparse_vector col = crs.sparse_col(j);
         for (sv_itr c_itr=col.begin(); c_itr!=col.end(); ++c_itr)
@@ -303,9 +302,9 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a, vnl_vector<double>& b, bool 
         }
       }
 
-      // again, we could use a faster solver since S is symmetric
+      // We could use a faster solver here, maybe conjugate gradients?
       // Solve the system  S*da = se  for da
-      da = vnl_svd<double>(S).solve(se);
+      da = vnl_cholesky(S).solve(se);
 
       // substitute da to compute db
       for (unsigned int j=0; j<f_->number_of_b(); ++j) {
