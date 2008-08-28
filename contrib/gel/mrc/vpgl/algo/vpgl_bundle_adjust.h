@@ -61,6 +61,11 @@ class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
                           vcl_vector<vnl_matrix<double> >& A,
                           vcl_vector<vnl_matrix<double> >& B);
 
+  //: compute the Jacobian Aij
+  void jac_Aij(vnl_double_3x4 const& Pi, vnl_double_3x3 const& K,
+               vnl_vector<double> const& ai, vnl_vector<double> const& bj,
+               vnl_matrix<double>& Aij);
+
   //: compute the Jacobian Bij
   void jac_Bij(vnl_double_3x4 const& Pi, vnl_vector<double> const& bj,
                vnl_matrix<double>& Bij);
@@ -85,6 +90,25 @@ class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
     return vpgl_perspective_camera<double>(K_[i],t,vgl_rotation_3d<double>(w));
   }
 
+  //: construct the ith perspective camera matrix from parameter vector a
+  // bypass vpgl for efficiency
+  vnl_double_3x4 param_to_cam_matrix(int i, const vnl_vector<double>& a) const
+  {
+    return param_to_cam_matrix(i, a.data_block()+index_a(i));
+  }
+  vnl_double_3x4 param_to_cam_matrix(int i, const double* d) const
+  {
+    vnl_double_3x3 M = Km_[i]*rod_to_matrix(d);
+    vnl_double_3x4 P;
+    P.update(M);
+    const vnl_vector_ref<double> c(3,const_cast<double*>(d+3));
+    P.set_column(3,-(M*c));
+    return P;
+  }
+
+  //: Fast conversion of rotation from Rodrigues vector to matrix
+  vnl_matrix_fixed<double,3,3> rod_to_matrix(const double* r) const;
+
   //: Create the parameter vector \p a from a vector of cameras
   static vnl_vector<double>
     create_param_vector(const vcl_vector<vpgl_perspective_camera<double> >& cameras);
@@ -102,6 +126,8 @@ class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
  protected:
   //: The fixed internal camera calibration
   vcl_vector<vpgl_calibration_matrix<double> > K_;
+  //: The fixed internal camera calibration in matrix form
+  vcl_vector<vnl_double_3x3> Km_;
   //: The corresponding points in the image
   vcl_vector<vgl_point_2d<double> > image_points_;
   //: The Cholesky factored inverse covariances for each image point
@@ -127,7 +153,8 @@ class vpgl_bundle_adjust
     optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
              vcl_vector<vgl_point_3d<double> >& world_points,
              const vcl_vector<vgl_point_2d<double> >& image_points,
-             const vcl_vector<vcl_vector<bool> >& mask );
+             const vcl_vector<vcl_vector<bool> >& mask,
+             bool use_weights = false );
 
   //: Write cameras and points to a file in VRML 2.0 for debugging
   static void write_vrml(const vcl_string& filename,
