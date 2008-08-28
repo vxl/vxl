@@ -9,6 +9,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+#include <vcl_algorithm.h>
 
 // It used to be necessary to add 0.5 to the scanline coordinates
 // obtained from a vgl_polygon_scan_iterator. Presumably this had
@@ -39,59 +40,41 @@ static const float vgl_polygon_scan_iterator_offset = 0.0f; // was 0.5f;
 #undef MAX
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
-// file global used by compare functions of qsort
-static vgl_polygon<float>::sheet_t* chs_float;
-static vgl_polygon<double>::sheet_t* chs_double;
-
-//===============================================================
-// comparison routines for qsort
-//===============================================================
-static int compare_vertind_float(vgl_polygon_scan_iterator<float>::vertind *u,
-                                 vgl_polygon_scan_iterator<float>::vertind *v)
+template <class T>
+struct compare_vertind
 {
-  return ( chs_float[u->chainnum][u->vertnum].y() <= chs_float[v->chainnum][v->vertnum].y() ) ? -1 : 1;
+  compare_vertind(typename vgl_polygon<T>::sheet_t* chs) : chs_(chs)
+  {}	
+  
+  inline bool operator()(const typename vgl_polygon_scan_iterator<T>::vertind &u,
+			 const typename vgl_polygon_scan_iterator<T>::vertind &v)
+  {
+    return (chs_[u.chainnum][u.vertnum].y() <= chs_[v.chainnum][v.vertnum].y());
+  }
+  
+  typename vgl_polygon<T>::sheet_t* chs_;
+};
+
+template <class T>
+struct compare_crossedges
+{
+  inline bool operator()(const typename vgl_polygon_scan_iterator<T>::crossedge &u,
+			 const typename vgl_polygon_scan_iterator<T>::crossedge &v)
+  {
+    return u.x <= v.x;
+  }
+};
+
+template <class T>
+inline static void local_qsort(typename vgl_polygon_scan_iterator<T>::vertind* yverts, int numverts, vgl_polygon<T>& p)
+{
+  vcl_sort(yverts, yverts + numverts, compare_vertind<T>(&p[0]));
 }
 
-static int compare_vertind_double(vgl_polygon_scan_iterator<double>::vertind *u,
-                                  vgl_polygon_scan_iterator<double>::vertind *v)
+template <class T>
+inline static void local_qsort(typename vgl_polygon_scan_iterator<T>::crossedge* crossedges, int numcrossedges)
 {
-  return ( chs_double[u->chainnum][u->vertnum].y() <= chs_double[v->chainnum][v->vertnum].y() ) ? -1 : 1;
-}
-
-static int compare_crossedges_float(vgl_polygon_scan_iterator<float>::crossedge *u,
-                                    vgl_polygon_scan_iterator<float>::crossedge *v)
-{
-  return u->x <= v->x ? -1 : 1;
-}
-
-static int compare_crossedges_double(vgl_polygon_scan_iterator<double>::crossedge *u,
-                                     vgl_polygon_scan_iterator<double>::crossedge *v)
-{
-  return u->x <= v->x ? -1 : 1;
-}
-
-typedef int (* qsort_arg_type)(void const*, void const*);
-
-inline static void local_qsort(vgl_polygon_scan_iterator<float>::vertind* yverts, int numverts, vgl_polygon<float>& p)
-{
-  chs_float = &p[0]; // a hack -- but apparently must do it to use qsort
-  vcl_qsort(yverts, numverts, sizeof(yverts[0]), (qsort_arg_type)compare_vertind_float);
-}
-
-inline static void local_qsort(vgl_polygon_scan_iterator<double>::vertind* yverts, int numverts, vgl_polygon<double>& p)
-{
-  chs_double = &p[0]; // a hack -- but apparently must do it to use qsort
-  vcl_qsort(yverts, numverts, sizeof(yverts[0]), (qsort_arg_type)compare_vertind_double);
-}
-
-inline static void local_qsort(vgl_polygon_scan_iterator<float>::crossedge* crossedges, int numcrossedges)
-{
-  vcl_qsort( crossedges, numcrossedges, sizeof crossedges[0], (qsort_arg_type)compare_crossedges_float);
-}
-
-inline static void local_qsort(vgl_polygon_scan_iterator<double>::crossedge* crossedges, int numcrossedges)
-{
-  vcl_qsort( crossedges, numcrossedges, sizeof crossedges[0], (qsort_arg_type)compare_crossedges_double);
+  vcl_sort(crossedges, crossedges + numcrossedges, compare_crossedges<T>());
 }
 
 //===============================================================
@@ -171,7 +154,7 @@ void vgl_polygon_scan_iterator<T>::init()
     vcl_cout << "Error:  i does not equal numverts!\n";
 
   // sort vertices by y coordinate
-  local_qsort(yverts, numverts, poly_);
+  local_qsort<T>(yverts, numverts, poly_);
 
   T miny, maxy;   // min and max y coordinate of vertices
   miny = get_y( yverts[ 0 ] );
@@ -378,7 +361,7 @@ bool vgl_polygon_scan_iterator<T>::next( )
       }
 
       // sort edges crossing scan line by their intersection with scan line
-      local_qsort(crossedges, numcrossedges);
+      local_qsort<T>(crossedges, numcrossedges);
 
       curcrossedge = 0; // Process the next set of horizontal spans
       y++;
