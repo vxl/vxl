@@ -336,6 +336,16 @@ SET( vcl_sources
   stlport/vcl_cmath.h
   stlport/vcl_complex.h
   stlport/vcl_cstdlib.h
+
+  # The following shall not be used other than as reference count for smart pointers
+  vcl_atomic_count.h
+  internal/vcl_atomic_count_gcc.h
+  internal/vcl_atomic_count_gcc_x86.h
+  internal/vcl_atomic_count_pthreads.h
+  internal/vcl_atomic_count_solaris.h
+  internal/vcl_atomic_count_sync.h
+  internal/vcl_atomic_count_win32.h
+  internal/vcl_interlocked.h
 )
 
 # We use implicit instantiation of the standard library now,
