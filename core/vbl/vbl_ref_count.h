@@ -10,9 +10,11 @@
 //   10/09/2004 Peter Vanroose   Inlined all 1-line methods in class decl
 // \endverbatim
 
+#include <vcl_atomic_count.h>
+
 class vbl_ref_count
 {
-  int ref_count_;
+  vcl_atomic_count ref_count_;
  public:
   vbl_ref_count() : ref_count_(0) { }
   // Copying an object should not copy the ref count.
@@ -25,7 +27,7 @@ class vbl_ref_count
   virtual ~vbl_ref_count() {}
 
   void ref() { ++ref_count_; }
-  void unref() { if (--ref_count_ <= 0) delete this; }
+  void unref() { /*assert(ref_count_>0);*/ if (--ref_count_ == 0) delete this; }
   int get_references() const { return ref_count_; }
   bool is_referenced() const { return ref_count_ > 0; }
 };

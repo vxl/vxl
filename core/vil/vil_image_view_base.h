@@ -17,6 +17,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
+#include <vcl_atomic_count.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_smart_ptr.h>
 
@@ -85,7 +86,7 @@ class vil_image_view_base
   void unref() {
     assert(reference_count_>0);
     if (--reference_count_<=0) delete this;}
-  int reference_count_;
+  vcl_atomic_count reference_count_;
 };
 
 

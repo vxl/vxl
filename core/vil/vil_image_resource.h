@@ -13,6 +13,7 @@
 
 #include <vil/vil_image_view_base.h>
 #include <vcl_cassert.h>
+#include <vcl_atomic_count.h>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>
 
@@ -110,7 +111,7 @@ class vil_image_resource
   void unref() {
     assert(reference_count_>0);
     if (--reference_count_<=0) delete this;}
-  int reference_count_;
+  vcl_atomic_count reference_count_;
 };
 
 #endif // vil_image_resource_h_

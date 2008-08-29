@@ -11,6 +11,8 @@
 // \date 16 Feb 00
 
 #include <vxl_config.h>
+#include <vcl_atomic_count.h>
+
 #if VXL_HAS_INT_64
 typedef vxl_int_64 vil_streampos;
 #else //VXL_HAS_INT_64
@@ -52,7 +54,7 @@ class vil_stream
   virtual ~vil_stream();
 
  private: // use the methods, Luke!
-  int refcount_;
+  vcl_atomic_count refcount_;
 };
 
 #endif // vil_stream_h_

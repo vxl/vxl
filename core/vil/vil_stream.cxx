@@ -13,8 +13,8 @@
 #endif
 
 vil_stream::vil_stream()
+: refcount_(0)
 {
-  refcount_ = 0;
 #if log_xtor
   vcl_cerr << __FILE__ ", vil_stream ctor : this = " << (void*)this << vcl_endl;
 #endif

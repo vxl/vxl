@@ -8,6 +8,7 @@
 
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>
+#include <vcl_atomic_count.h>
 
 //: Ref. counted block of data on the heap.
 //  Image data block used by vil_image_view<T>.
@@ -24,7 +25,7 @@ class vil_memory_chunk
     vil_pixel_format pixel_format_;
 
     //: Reference count
-    int ref_count_;
+    vcl_atomic_count ref_count_;
 
  public:
     //: Dflt ctor
@@ -45,7 +46,7 @@ class vil_memory_chunk
     virtual ~vil_memory_chunk();
 
     //: Increment reference count
-    void ref() { ref_count_++; }
+    void ref() { ++ref_count_; }
 
     //: Decrement reference count
     void unref();

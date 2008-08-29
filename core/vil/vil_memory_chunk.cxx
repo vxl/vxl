@@ -47,7 +47,7 @@ vil_memory_chunk& vil_memory_chunk::operator=(const vil_memory_chunk& d)
 void vil_memory_chunk::unref()
 {
   assert (ref_count_ >0);
-  ref_count_--;
+  --ref_count_;
   if (ref_count_==0)
   {
     delete [] reinterpret_cast<char*>(data_); data_=0;
