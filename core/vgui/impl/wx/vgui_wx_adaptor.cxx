@@ -188,10 +188,9 @@ END_EVENT_TABLE()
 void vgui_wx_adaptor::on_size(wxSizeEvent& event)
 {
   wxGLCanvas::OnSize(event);
-
   dispatch_to_tableau(vgui_RESHAPE);
   post_redraw();
-  invalidate_canvas();
+  Update();
 }
 
 //: Called when a window needs to be repainted.
