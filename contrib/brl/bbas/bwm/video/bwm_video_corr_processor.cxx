@@ -416,7 +416,8 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
   vcl_vector<vgl_point_3d<double> > unknown_world(npoints,pun);
 
   // exectute the bundle adjustment
-  bool success = vpgl_bundle_adjust::optimize(unknown_cameras,
+  vpgl_bundle_adjust adj;
+  bool success = adj.optimize(unknown_cameras,
                                               unknown_world, cimage_points,
                                               cmask);
   //save the solved world points in the correspondences
@@ -851,7 +852,8 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
       unknown_world[w]=corrs_[w]->world_pt();
 
   // exectute the bundle adjustment
-  bool success = vpgl_bundle_adjust::optimize(unknown_cameras,
+  vpgl_bundle_adjust adj;
+  bool success = adj.optimize(unknown_cameras,
                                               unknown_world, cimage_points,
                                               cmask);
   //save the solved world points in the correspondences
