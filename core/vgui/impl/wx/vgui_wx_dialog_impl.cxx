@@ -417,7 +417,7 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
 
   // resize to contents
   // ***** fix for case when larger than screen, make scrollable maybe?
-  dialog_->SetSize(dialog_->GetBestFittingSize());
+  dialog_->SetSize(dialog_->GetEffectiveMinSize());
   dialog_->PushEventHandler(handler);
 
   dialog_->SetSizer(top_sizer);
