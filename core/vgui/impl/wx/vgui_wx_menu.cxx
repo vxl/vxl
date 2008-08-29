@@ -144,8 +144,7 @@ wxMenu* vgui_wx_menu::create_wx_submenu(const vgui_menu& menu)
 vcl_string
 vgui_wx_menu::create_accelerator_string(const vgui_menu_item& item) const
 {
-  if ( item.short_cut.mod == vgui_MODIFIER_NULL ||
-       item.short_cut.key == vgui_KEY_NULL )
+  if ( item.short_cut.key == vgui_KEY_NULL )
   {
     return vcl_string("");
   }
