@@ -24,7 +24,7 @@ MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
 # number. The format follows a DNS-style numbering: the current date
 # followed by a modification time within the day.
 #
-SET( VXL_CONFIG_SERIAL_CURRENT "2008-01-05-001" )
+SET( VXL_CONFIG_SERIAL_CURRENT "2008-08-29-001" )
 
 IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
@@ -277,6 +277,17 @@ SET_INVERT(VXL_LITTLE_ENDIAN "${VXL_BIG_ENDIAN}")
 SET(VCL_USE_NATIVE_STL 1) # change if no
 SET(VCL_USE_NATIVE_COMPLEX 1)
 SET(VCL_USE_IMPLICIT_TEMPLATES 1) # change if no
+SET(VCL_USE_ATOMIC_COUNT 1)
+#OPTION(VCL_USE_ATOMIC_COUNT
+#  "Whether thread-safe vcl_atomic_count implementations are used." ON)
+#MARK_AS_ADVANCED( VCL_USE_ATOMIC_COUNT )
+## Need to enforce 1/0 values for configuration.
+#IF(VCL_USE_ATOMIC_COUNT)
+#  SET(VCL_USE_ATOMIC_COUNT 1)
+#ELSE(VCL_USE_ATOMIC_COUNT)
+#  SET(VCL_USE_ATOMIC_COUNT 0)
+#ENDIF(VCL_USE_ATOMIC_COUNT)
+
 SET(VXL_TWO_ARG_GETTIME 0) # not used
 
 IF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
