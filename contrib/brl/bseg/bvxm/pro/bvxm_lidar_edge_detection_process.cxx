@@ -49,6 +49,16 @@ bool bvxm_lidar_edge_detection_process::execute()
   brdb_value_t<vil_image_view_base_sptr>* input1 = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
   vil_image_view_base_sptr image_second_return_base = input1->value();
 
+  if (image_first_return_base == 0) {
+    vcl_cout << "first return image is NULL\n";
+    return false;
+  } 
+  
+  if (image_second_return_base == 0) {
+    vcl_cout << "last return image is NULL\n";
+    return false;
+  } 
+
   bool is_input_float = true;
   if (input_pixel_format == VIL_PIXEL_FORMAT_BYTE){
     is_input_float = false;
@@ -61,7 +71,7 @@ bool bvxm_lidar_edge_detection_process::execute()
     return false;
   }
 
-
+  
   vil_image_view<float> image_first_return = *(vil_convert_cast(float(), image_first_return_base));
   vil_image_view<float> image_second_return = *(vil_convert_cast(float(), image_second_return_base));
 
