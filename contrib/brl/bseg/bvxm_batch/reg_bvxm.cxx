@@ -41,7 +41,7 @@
 #include <bvxm/pro/bvxm_pmap_ratio_process.h>
 #include <bvxm/pro/bvxm_roc_process.h>
 #include <bvxm/pro/bvxm_update_edges_lidar_process.h>
-#include <bvxm/pro/bvxm_edges_lidar_init_process.h>
+#include <bvxm/pro/bvxm_lidar_edge_detection_process.h>
 
 // multiscale
 #include <bvxm/pro/multiscale_pro/bvxm_detect_scale_process.h>
@@ -101,7 +101,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_pmap_ratio_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_roc_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_update_edges_lidar_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_edges_lidar_init_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_lidar_edge_detection_process, bprb_batch_process_manager);
 
   // multiscale
   REG_PROCESS(bvxm_detect_scale_process, bprb_batch_process_manager);
