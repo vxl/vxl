@@ -20,7 +20,7 @@
 
 //: This procces combines grey scale images into a single multi-channel
 // image of the same format as input images. All input images must be of 
-// the same type. Only byte images are supported for now. Further support 
+// the same type. Only flaot images are supported for now. Further support 
 // should be implemented as needed
 
 class vil_combine_grey_images_process : public bprb_process

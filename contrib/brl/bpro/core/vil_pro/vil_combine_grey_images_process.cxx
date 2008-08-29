@@ -86,11 +86,11 @@ vil_combine_grey_images_process::combine(vcl_vector<vil_image_view_base_sptr>con
                                          vil_image_view_base_sptr &mul_img)
 {
   
-  vil_image_view<vxl_byte> byte_img(width_,height_,grey_imgs.size());
+  vil_image_view<float> byte_img(width_,height_,grey_imgs.size());
     
   for (unsigned int p = 0; p < grey_imgs.size(); p++)
   {
-    vil_image_view<vxl_byte> grey_img = static_cast<vil_image_view<vxl_byte> >(*grey_imgs[p]);
+    vil_image_view<float> grey_img = static_cast<vil_image_view<float> >(*grey_imgs[p]);
 
     for (unsigned i = 0; i < width_; i++)
       for (unsigned j = 0; j < height_; j++)
@@ -98,7 +98,7 @@ vil_combine_grey_images_process::combine(vcl_vector<vil_image_view_base_sptr>con
 
   }
 
-  mul_img = new vil_image_view<vxl_byte>(byte_img);
+  mul_img = new vil_image_view<float>(byte_img);
  
   return true;
 }
