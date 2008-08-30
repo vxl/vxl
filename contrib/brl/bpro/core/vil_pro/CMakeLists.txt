@@ -18,7 +18,7 @@ SET(vil_pro_sources
 AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)
 
 ADD_LIBRARY(vil_pro ${vil_pro_sources})
-TARGET_LINK_LIBRARIES(vil_pro bprb vul vsl vil vil_io)
+TARGET_LINK_LIBRARIES(vil_pro bprb vul vsl vil vnl vil_io)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
