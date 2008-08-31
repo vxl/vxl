@@ -8,7 +8,6 @@
 #include <vcl_cstring.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 #include <vcl_algorithm.h>
 
 // It used to be necessary to add 0.5 to the scanline coordinates
@@ -44,14 +43,14 @@ template <class T>
 struct compare_vertind
 {
   compare_vertind(typename vgl_polygon<T>::sheet_t* chs) : chs_(chs)
-  {}	
-  
+  {}
+
   inline bool operator()(const typename vgl_polygon_scan_iterator<T>::vertind &u,
-			 const typename vgl_polygon_scan_iterator<T>::vertind &v)
+                         const typename vgl_polygon_scan_iterator<T>::vertind &v)
   {
-    return (chs_[u.chainnum][u.vertnum].y() <= chs_[v.chainnum][v.vertnum].y());
+    return chs_[u.chainnum][u.vertnum].y() <= chs_[v.chainnum][v.vertnum].y();
   }
-  
+
   typename vgl_polygon<T>::sheet_t* chs_;
 };
 
@@ -59,7 +58,7 @@ template <class T>
 struct compare_crossedges
 {
   inline bool operator()(const typename vgl_polygon_scan_iterator<T>::crossedge &u,
-			 const typename vgl_polygon_scan_iterator<T>::crossedge &v)
+                         const typename vgl_polygon_scan_iterator<T>::crossedge &v)
   {
     return u.x <= v.x;
   }
