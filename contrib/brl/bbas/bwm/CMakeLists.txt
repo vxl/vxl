@@ -60,6 +60,10 @@ SET(bwm_sources
    bwm_observer_vgui.cxx            bwm_observer_vgui.h
    bwm_observer_cam.cxx             bwm_observer_cam.h
                                     bwm_observer_cam_proj.h
+                                    bwm_observer_coin3d.h
+                                    bwm_observer_lidar.h
+                                    bwm_observer_proj2d.h
+                                    bwm_observer_proj2d_simple.h
    bwm_observer_proj_cam.cxx        bwm_observer_proj_cam.h
    bwm_observer_rat_cam.cxx         bwm_observer_rat_cam.h
    bwm_observer_video.cxx           bwm_observer_video.h
