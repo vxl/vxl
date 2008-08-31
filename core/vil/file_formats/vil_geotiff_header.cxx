@@ -1,5 +1,6 @@
 #include "vil_geotiff_header.h"
 //:
+// \file
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
