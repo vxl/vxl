@@ -6,13 +6,14 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_sparse_lm.h>
-#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
-
 
 
 //: Constructor
@@ -29,7 +30,7 @@ vpgl_bundle_adj_lsqr::
    weights_(image_points.size(),1.0),
    iteration_count_(0)
 {
-  for(unsigned int i=0; i<K_.size(); ++i)
+  for (unsigned int i=0; i<K_.size(); ++i)
     Km_.push_back(K_[i].get_matrix());
 }
 
@@ -51,7 +52,7 @@ vpgl_bundle_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
    weights_(image_points.size(),1.0),
    iteration_count_(0)
 {
-  for(unsigned int i=0; i<K_.size(); ++i)
+  for (unsigned int i=0; i<K_.size(); ++i)
     Km_.push_back(K_[i].get_matrix());
 
   assert(image_points.size() == inv_covars.size());
@@ -110,7 +111,6 @@ vpgl_bundle_adj_lsqr::f(vnl_vector<double> const& a,
 
       // Project jth point with the ith camera
       vnl_vector_fixed<double,3> xij = Pi*Xj;
-
 
       double* eij = e.data_block()+index_e(k);
       eij[0] = xij[0]/xij[2] - image_points_[k].x();
@@ -219,7 +219,6 @@ vpgl_bundle_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double>
         B[k] *= weights_[k];
       }
     }
-
   }
 }
 
@@ -248,7 +247,6 @@ vpgl_bundle_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     Aij.update(Aij_sub,0,3);
   }
 
-
   // The rotation part.
   //==================
   // relative translation vector
@@ -261,8 +259,7 @@ vpgl_bundle_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     double x2 = x*x, y2 = y*y, z2 = z*z;
     double m2 = x2 + y2 + z2;
 
-
-    if(m2 == 0.0)
+    if (m2 == 0.0)
     {
       Aij(0,0) = 0;
       Aij(1,0) = -1;
@@ -300,7 +297,6 @@ vpgl_bundle_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
       double u = ct*utc + st*uts + t[0];
       double v = ct*vtc + st*vts + t[1];
       double w = ct*wtc + st*wts + t[2];
-
 
       double w2 = w*w;
 
@@ -383,7 +379,7 @@ vpgl_bundle_adj_lsqr::rod_to_matrix(const double* r) const
 
   vnl_matrix_fixed<double,3,3> R(0.0);
   R(0,0) = R(1,1) = R(2,2) = 1.0;
-  if(m == 0.0)
+  if (m == 0.0)
     return R;
 
   R(0,0) -= (y2 + z2) * c;
