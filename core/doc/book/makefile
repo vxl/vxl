@@ -67,7 +67,7 @@ book.dvi: $(SOURCEFILES) rosenbrock.eps
 	$(TEX) book.texi || touch -t 200001010000 book.dvi
 
 
-# Windows help files. Process hpj the help compiler 
+# Windows help files. Process hpj the help compiler
 book.hpj book.rtf: book.texi
 	-mkinfrtf.exe $(MAKEINFOFLAGS) book --force -o book.rtf --hpj-output book.hpj
 
