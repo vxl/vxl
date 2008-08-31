@@ -4,15 +4,10 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 
-#include <vnl/vnl_matlab_read.h>
 #include <vnl/vnl_matrix.h>
-
-#include <vcl_iostream.h>
-
 
 //: Constructor
 vil_load_from_ascii_process::vil_load_from_ascii_process()
@@ -63,7 +58,7 @@ vil_load_from_ascii_process::execute()
 
   vnl_matrix<float> M;
   ifs >> M;
-   
+
   //create image from memory
   vil_image_view<float> img(M.cols(),M.rows());
 
@@ -71,7 +66,7 @@ vil_load_from_ascii_process::execute()
     1,1,M.cols(),M.rows()*M.cols());
 
   vil_save(img, img_file.c_str());
-  
+
   return true;
 }
 
