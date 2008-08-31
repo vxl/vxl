@@ -12,7 +12,9 @@
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
+#if 0
 #include <mbl/mbl_exception.h>
+#endif
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_image_view.h>
@@ -245,16 +247,17 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
   bool reonfigureNormaliser=false;
   if (props.find("norm")!=props.end())
   {
-
     vcl_istringstream ss2(props["norm"]);
     mbl_read_props_type dummy_extra_props;
     vcl_auto_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss2, dummy_extra_props);
     normaliser_=norm.release();
     reonfigureNormaliser=true;
-    //if (props["norm"]=="none") norm_method_=0;
-    //else
-    //if (props["norm"]=="linear") norm_method_=1;
-    //else throw mbl_exception_parse_error("Unknown norm: "+props["norm"]);
+#if 0
+    if (props["norm"]=="none") norm_method_=0;
+    else
+    if (props["norm"]=="linear") norm_method_=1;
+    else throw mbl_exception_parse_error("Unknown norm: "+props["norm"]);
+#endif
 
     props.erase("norm");
   }
@@ -297,37 +300,39 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
   }
 
   //Some classes of normaliser may require reconfiguration (e.g. to pass on the region size)
-  if(reonfigureNormaliser)
+  if (reonfigureNormaliser)
   {
-      reconfigure_normaliser();
+    reconfigure_normaliser();
   }
   // Check for unused props
   mbl_read_props_look_for_unused_props(
       "mfpf_hog_box_finder_builder::set_from_stream", props, mbl_read_props_type());
   return true;
 }
+
 void mfpf_hog_box_finder_builder::reconfigure_normaliser()
 {
     mipa_vector_normaliser* pNormaliser=normaliser_.ptr();
     mipa_block_normaliser* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
-    if(pBlockNormaliser)
+    if (pBlockNormaliser)
     {
       pBlockNormaliser->set_region(2*ni_,2*nj_);
       pBlockNormaliser->set_nbins(nA_bins_);
       //Also this builder always uses 2 SIFT scales and a final overall histogram
       mipa_ms_block_normaliser* pMSBlockNormaliser= dynamic_cast<mipa_ms_block_normaliser*>(pNormaliser);
-      if(pMSBlockNormaliser)
+      if (pMSBlockNormaliser)
       {
-          pMSBlockNormaliser->set_nscales(2);
-          pMSBlockNormaliser->set_include_overall_histogram(true);
+        pMSBlockNormaliser->set_nscales(2);
+        pMSBlockNormaliser->set_include_overall_histogram(true);
       }
       else
       {
-          vcl_cerr<<"WARNING from fpf_hog_box_finder_builder::reconfigure_normaliser..."<<vcl_endl;
-          vcl_cerr<<"The normaliser may not be multi-scale but this HOG Builder uses multi-scale histograms"<<vcl_endl;
+        vcl_cerr<<"WARNING from fpf_hog_box_finder_builder::reconfigure_normaliser...\n"
+                <<"The normaliser may not be multi-scale but this HOG Builder uses multi-scale histograms\n";
       }
     }
 }
+
 //=======================================================================
 // Method: is_a
 //=======================================================================
@@ -426,7 +431,7 @@ void mfpf_hog_box_finder_builder::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
