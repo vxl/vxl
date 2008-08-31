@@ -316,12 +316,14 @@ void bwm_tableau_cam::geo_position_vertex()
 
 void bwm_tableau_cam::create_terrain()
 {
-  /*(this->lock();
+#if 0 // commented out
+  (this->lock();
   //1. pick a boundary for the terrain as a polygon
   bwm_observer_mgr::instance()->stop_corr();
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
-  pick_polygon(poly2d);*/
+  pick_polygon(poly2d);
+#endif // 0
   my_observer_->create_terrain();
   //this->unlock();
 }

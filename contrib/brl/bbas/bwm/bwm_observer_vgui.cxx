@@ -169,7 +169,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
       style = mesh_style_;
     else if (observable->obj_type() == bwm_observable_mesh::BWM_MESH_TERRAIN)
       style = terrain_style_;
-  
+
     if (mode_ == MODE_FACE) {
       vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
 
@@ -223,22 +223,24 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
        }
     }
     else if (mode_ == MODE_VERTEX) {
-       /*vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
+#if 0 // commented out
+       vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
        vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
 
        vcl_map<int, vsol_line_3d_sptr>::iterator iter = edges.begin();
        while (iter != edges.end()) {
-        // project the new object with the given camera
-        int edge_id = iter->first;
-        vsol_line_3d_sptr edge_3d = iter->second;
-        vsol_line_2d_sptr edge_2d;
-        proj_line(edge_3d, edge_2d);
+         // project the new object with the given camera
+         int edge_id = iter->first;
+         vsol_line_3d_sptr edge_3d = iter->second;
+         vsol_line_2d_sptr edge_2d;
+         proj_line(edge_3d, edge_2d);
 
-        bgui_vsol_soview2D_line_seg* edge = this->add_vsol_line_2d(edge_2d, style);
-        edge->set_selectable(false);
-        list[edge_id] = edge;
-        iter++;
-       }*/
+         bgui_vsol_soview2D_line_seg* edge = this->add_vsol_line_2d(edge_2d, style);
+         edge->set_selectable(false);
+         list[edge_id] = edge;
+         iter++;
+       }
+#endif // 0
       vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
       vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
       while (iter != faces.end()) {
@@ -426,7 +428,7 @@ void bwm_observer_vgui::delete_object()
 {
   // first get the selected polygon
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-  vcl_cout << "Delete object works only at MESH mode!" << vcl_endl; 
+  vcl_cout << "Delete object works only at MESH mode!" << vcl_endl;
   if ((select_list.size() == 1) &&
     (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon_set") == 0)) {
       unsigned face_id;
