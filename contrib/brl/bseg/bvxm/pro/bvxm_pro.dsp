@@ -201,13 +201,13 @@ SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 SOURCE=.\Templates/brdb_value_t+unsigned-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_edges_lidar_init_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_rpc_prob_registration_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_update_edges_lidar_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_lidar_edge_detection_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -315,13 +315,13 @@ SOURCE=.\multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h
 SOURCE=.\multiscale_pro/bvxm_update_multiscale_process.h
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_edges_lidar_init_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_rpc_prob_registration_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_update_edges_lidar_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_lidar_edge_detection_process.h
 # End Source File
 # End Group
 # End Target

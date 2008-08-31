@@ -309,6 +309,30 @@ SOURCE=.\gcc-libstdcxx-v3/vcl_utility.txx
 SOURCE=.\gcc-libstdcxx-v3/vcl_vector.txx
 # End Source File
 # Begin Source File
+SOURCE=.\internal/vcl_atomic_count_gcc.h
+# End Source File
+# Begin Source File
+SOURCE=.\internal/vcl_atomic_count_gcc_x86.h
+# End Source File
+# Begin Source File
+SOURCE=.\internal/vcl_atomic_count_pthreads.h
+# End Source File
+# Begin Source File
+SOURCE=.\internal/vcl_atomic_count_solaris.h
+# End Source File
+# Begin Source File
+SOURCE=.\internal/vcl_atomic_count_sync.h
+# End Source File
+# Begin Source File
+SOURCE=.\internal/vcl_atomic_count_win32.h
+# End Source File
+# Begin Source File
+SOURCE=.\internal/vcl_interlocked.h
+# End Source File
+# Begin Source File
+SOURCE=.\vcl_atomic_count.h
+# End Source File
+# Begin Source File
 SOURCE=.\iso/vcl_algorithm.h
 # End Source File
 # Begin Source File

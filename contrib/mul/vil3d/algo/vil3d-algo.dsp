@@ -269,6 +269,9 @@ SOURCE=.\vil3d_max_product_filter.h
 # Begin Source File
 SOURCE=.\vil3d_overlap.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_locally_z_normalise.h
+# End Source File
 # End Group
 # End Target
 # End Project

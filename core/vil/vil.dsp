@@ -1011,9 +1011,6 @@ SOURCE=.\vil_pyramid_image_resource_sptr.h
 SOURCE=.\vil_image_list.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil_nearest_neighbour_interp.h
-# End Source File
-# Begin Source File
 SOURCE=.\vil_stream_fstream64.h
 # End Source File
 # Begin Source File
@@ -1054,9 +1051,6 @@ SOURCE=.\vil_chord.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_nearest_interp.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_nearest_interp.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_resample_nearest.h

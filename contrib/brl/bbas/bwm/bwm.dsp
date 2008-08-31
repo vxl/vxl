@@ -104,6 +104,9 @@ SOURCE=.\bwm_site_mgr.cxx
 # Begin Source File
 SOURCE=.\bwm_tableau_factory.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_observable_mesh_circular.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -268,6 +271,9 @@ SOURCE=.\bwm_site_mgr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_tableau_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_observable_mesh_circular.h
 # End Source File
 # End Group
 # End Target

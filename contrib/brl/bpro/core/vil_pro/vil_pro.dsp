@@ -116,6 +116,12 @@ SOURCE=.\vil_rgbi_to_grey_process.cxx
 # Begin Source File
 SOURCE=.\vil_convert_to_n_planes_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_combine_grey_images_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_load_from_ascii_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -142,6 +148,12 @@ SOURCE=.\vil_rgbi_to_grey_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_convert_to_n_planes_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_combine_grey_images_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_load_from_ascii_process.h
 # End Source File
 # End Group
 # End Target
