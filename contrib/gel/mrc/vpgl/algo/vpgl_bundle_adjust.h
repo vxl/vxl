@@ -90,8 +90,8 @@ class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
     return vpgl_perspective_camera<double>(K_[i],t,vgl_rotation_3d<double>(w));
   }
 
-  //: construct the ith perspective camera matrix from parameter vector a
-  // bypass vpgl for efficiency
+  //: construct the ith perspective camera matrix from parameter vector \param a
+  //  Bypass vpgl for efficiency
   vnl_double_3x4 param_to_cam_matrix(int i, const vnl_vector<double>& a) const
   {
     return param_to_cam_matrix(i, a.data_block()+index_a(i));
@@ -191,7 +191,6 @@ class vpgl_bundle_adjust
   double start_error_;
   double end_error_;
   int num_iterations_;
-  
 };
 
 #endif // vpgl_bundle_adjust_h_
