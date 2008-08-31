@@ -11,6 +11,8 @@ SOURCES += vil_map_image_process.cxx
 MANPAGE_SOURCES += vil_math_functors.h
 SOURCES += vil_rgbi_to_grey_process.cxx
 SOURCES += vil_convert_to_n_planes_process.cxx
+SOURCES += vil_combine_grey_images_process.cxx
+SOURCES += vil_load_from_ascii_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

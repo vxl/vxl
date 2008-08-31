@@ -1,8 +1,7 @@
-USES += contrib/brl contrib/brl/bbas core
+USES += contrib/gel core
 include ../config.mk
 
-MINI_PROG_SOURCES += bwm_main.cxx
-MINI_PROG_SOURCES += bwm_batch_project.cxx
+MINI_PROG_SOURCES += vpgl_synth_bundle_adjust.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

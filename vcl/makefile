@@ -177,6 +177,16 @@ MANPAGE_SOURCES += iso/vcl_utility.txx
 MANPAGE_SOURCES += iso/vcl_vector.txx
 MANPAGE_SOURCES += iso/vcl_memory_tr1.h
 
+# Atomic count (non-standard)
+MANPAGE_SOURCES += vcl_atomic_count.h
+MANPAGE_SOURCES += internal/vcl_atomic_count_gcc.h
+MANPAGE_SOURCES += internal/vcl_atomic_count_gcc_x86.h
+MANPAGE_SOURCES += internal/vcl_atomic_count_pthreads.h
+MANPAGE_SOURCES += internal/vcl_atomic_count_solaris.h
+MANPAGE_SOURCES += internal/vcl_atomic_count_sync.h
+MANPAGE_SOURCES += internal/vcl_atomic_count_win32.h
+MANPAGE_SOURCES += internal/vcl_interlocked.h
+
 MANPAGE_SOURCES += gcc/vcl_cmath.h
 MANPAGE_SOURCES += gcc/vcl_cstdlib.h
 MANPAGE_SOURCES += egcs/vcl_algorithm.txx # without corresponding .h

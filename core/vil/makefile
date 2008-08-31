@@ -143,6 +143,7 @@ MANPAGE_SOURCES += vil_sample_profile_bicub.txx
 MANPAGE_SOURCES += vil_sample_grid_bicub.txx
 MANPAGE_SOURCES += vil_resample_bicub.txx
 MANPAGE_SOURCES += vil_resample_nearest.txx
+MANPAGE_SOURCES += vil_nearest_interp.h
 
 # Stuff
 MANPAGE_SOURCES += vil_smart_ptr.txx

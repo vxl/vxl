@@ -32,6 +32,7 @@ MANPAGE_SOURCES += vil3d_max_product_filter.h
 SOURCES += vil3d_make_distance_filter.cxx
 SOURCES += vil3d_make_edt_filter.cxx
 SOURCES += vil3d_overlap.cxx
+MANPAGE_SOURCES += vil3d_locally_z_normalise.h
 
 ################################
 include ${VXLROOT}/config/top.mk

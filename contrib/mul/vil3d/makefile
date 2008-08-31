@@ -22,7 +22,6 @@ MANPAGE_SOURCES += vil3d_transform.h
 MANPAGE_SOURCES += vil3d_image_resource.h
 SOURCES += vil3d_memory_image.cxx
 SOURCES += vil3d_new.cxx
-MANPAGE_SOURCES += vil3d_copy.txx
 MANPAGE_SOURCES += vil3d_convert.h
 
 SOURCES += file_formats/vil3d_gipl_format.cxx
@@ -33,6 +32,7 @@ SOURCES += file_formats/vil3d_gen_synthetic.cxx
 
 SOURCES += vil3d_crop.cxx
 SOURCES += vil3d_copy.cxx
+MANPAGE_SOURCES += vil3d_copy.txx
 SOURCES += vil3d_save.cxx
 MANPAGE_SOURCES += vil3d_from_image_2d.h
 MANPAGE_SOURCES += vil3d_reflect.h

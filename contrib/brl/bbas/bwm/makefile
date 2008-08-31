@@ -37,6 +37,7 @@ SOURCES += bwm_tableau_text.cxx
 SOURCES += bwm_tableau_video.cxx
 SOURCES += bwm_texture_map_generator.cxx
 SOURCES += bwm_world.cxx
+SOURCES += bwm_observable_mesh_circular.cxx
 MANPAGE_SOURCES += bwm_command.h
 MANPAGE_SOURCES += bwm_command_macros.h
 MANPAGE_SOURCES += bwm_command_sptr.h
