@@ -76,7 +76,7 @@ void bwm_observer_mgr::add(bwm_observer* o)
   for (unsigned i=0; i<objects.size(); i++) {
     bwm_observable_sptr obj = objects[i];
     if (!obj)
-      vcl_cerr << "ERROR: world has an invalid (NULL) object!" << vcl_endl;
+      vcl_cerr << "ERROR: world has an invalid (NULL) object!\n";
     else {
       obj->attach(o);
       o->add_new_obj(obj);
@@ -158,14 +158,15 @@ void bwm_observer_mgr::set_corr_mode()
   params.choice("Correspondence Mode", modes, mode);
   params.choice("Correspondence Type ", types, t);
   params.choice("Number of Correspondences ", n_corrs, n);
-  
+
   if (!params.ask())
     return;
   if (mode ==bwm_observer_mgr::WORLD_TO_IMAGE)
     if (bwm_world::instance()->world_pt_valid()) {
       corr_mode_ =  bwm_observer_mgr::WORLD_TO_IMAGE;
       return;
-    } else {
+    }
+    else {
       vcl_cout << "In bwm_observer_mgr::set_corr_mode() -\n"
                << " can't use WORLD_TO_IMAGE mode since the 3-d world"
                << " point is not defined\n";
@@ -173,16 +174,17 @@ void bwm_observer_mgr::set_corr_mode()
 
   if (t == bwm_observer_mgr::FEATURE_CORR) {
     corr_type_ = bwm_observer_mgr::FEATURE_CORR;
-  } else if (t == bwm_observer_mgr::TERRAIN_CORR) {
+  }
+  else if (t == bwm_observer_mgr::TERRAIN_CORR) {
     corr_type_ = bwm_observer_mgr::TERRAIN_CORR;
-  } else 
+  }
+  else
     vcl_cout << "In bwm_observer_mgr::set_corr_mode() Undefined TYPE -\n" ;
 
 
   corr_mode_ = bwm_observer_mgr::IMAGE_TO_IMAGE;
 
   n_corrs_ = (BWM_N_CORRS) n;
-
 }
 
 void bwm_observer_mgr::collect_corr()
@@ -232,7 +234,8 @@ void bwm_observer_mgr::collect_corr()
       if (corr_type_ == FEATURE_CORR) {
         corr_list_.clear();
         corr_list_.push_back(corr);
-      } else if (corr_type_ == TERRAIN_CORR) {
+      }
+      else if (corr_type_ == TERRAIN_CORR) {
         terrain_corr_list_.clear();
         terrain_corr_list_.push_back(corr);
       }
@@ -247,7 +250,8 @@ void bwm_observer_mgr::set_corr(bwm_corr_sptr corr)
   if (corr->num_matches() > 0)
     if (corr_type_ == FEATURE_CORR) {
       corr_list_.push_back(corr);
-    } else if (corr_type_ == TERRAIN_CORR) {
+    }
+    else if (corr_type_ == TERRAIN_CORR) {
       terrain_corr_list_.push_back(corr);
     }
 }
@@ -261,7 +265,8 @@ void bwm_observer_mgr::update_corr(bwm_observer_cam* obs,
       bwm_corr_sptr corr = corr_list_[i];
       if (corr->update_match(obs, old_pt, new_pt))
        return;
-    } else if (corr_type_ == TERRAIN_CORR) {
+    }
+    else if (corr_type_ == TERRAIN_CORR) {
       bwm_corr_sptr corr = terrain_corr_list_[i];
       if (corr->update_match(obs, old_pt, new_pt))
        return;
@@ -281,14 +286,14 @@ bool bwm_observer_mgr::obs_in_corr(bwm_observer_cam *obs)
 }
 
 //: returns the list correspondence points of a given observer
-vcl_vector<vgl_point_2d<double> > 
+vcl_vector<vgl_point_2d<double> >
 bwm_observer_mgr::get_corr_points(bwm_observer_cam *obs)
 {
   vcl_vector<vgl_point_2d<double> > corr_list;
   for (unsigned i=0; i<corr_list_.size(); i++) {
     vgl_point_2d<double> corr;
     if (corr_list_[i]->obs_in(obs, corr)) {
-      corr_list.push_back(corr); 
+      corr_list.push_back(corr);
     }
   }
   return corr_list;

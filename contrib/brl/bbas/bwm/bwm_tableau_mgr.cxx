@@ -16,7 +16,6 @@
 #include <vil/vil_property.h>
 
 
-
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
 
@@ -87,9 +86,9 @@ void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)//vgui_t
 
 bool bwm_tableau_mgr::is_registered(vcl_string const& name)
 {
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = 
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter =
     tab_types_.find(name);
-  return iter != tab_types_.end();   
+  return iter != tab_types_.end();
 }
 
 void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)
@@ -113,7 +112,7 @@ vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
 
   // tableau is not found
   if (!tab) {
-    vcl_cerr << "Tableau " << tab_name << "is not found!" << vcl_endl;
+    vcl_cerr << "Tableau " << tab_name << "is not found!\n";
     return "";
   }
 
@@ -122,7 +121,7 @@ vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
     vcl_string path = tab_cam->save_camera();
     return path;
   }
-  vcl_cerr << "Tableau " << tab_name << "is not a rational camera tableau!" << vcl_endl;
+  vcl_cerr << "Tableau " << tab_name << "is not a rational camera tableau!\n";
   return "";
 }
 
@@ -271,7 +270,6 @@ void bwm_tableau_mgr::exit()
 void bwm_tableau_mgr::set_draw_mode_vertex()
 {
   set_observer_draw_mode(bwm_observer::MODE_VERTEX);
-  
 }
 
 void bwm_tableau_mgr::set_draw_mode_edge()
@@ -294,7 +292,7 @@ void bwm_tableau_mgr::set_observer_draw_mode(int mode)
   vcl_vector<bwm_observer_cam*> obs =
     bwm_observer_mgr::instance()->observers_cam();
   for (unsigned i=0; i<obs.size(); i++)
-    {
-      obs[i]->set_draw_mode((bwm_observer::BWM_DRAW_MODE)mode);
-    }
+  {
+    obs[i]->set_draw_mode((bwm_observer::BWM_DRAW_MODE)mode);
+  }
 }
