@@ -89,18 +89,17 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
 }
 
 namespace {
-//: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
-//  returns the peak value by reference in \p y_peak
-//  returns the peak location offset from the x of \p y_0
-double interpolate_parabola(double y_1, double y_0, double y_2,
-                            double& y_peak)
-{
-  double diff1 = y_2 - y_1;      // first derivative
-  double diff2 = 2 * y_0 - y_1 - y_2; // second derivative
-  y_peak = y_0 + diff1 * diff1 / (8 * diff2);        // interpolate y as max/min
-  return diff1 / (2 * diff2);   // interpolate x offset
-}
-
+  //: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
+  //  \returns the peak value by reference in \p y_peak
+  //  \returns the peak location offset from the x of \p y_0
+  double interpolate_parabola(double y_1, double y_0, double y_2,
+                              double& y_peak)
+  {
+    double diff1 = y_2 - y_1;      // first derivative
+    double diff2 = 2 * y_0 - y_1 - y_2; // second derivative
+    y_peak = y_0 + diff1 * diff1 / (8 * diff2);        // interpolate y as max/min
+    return diff1 / (2 * diff2);   // interpolate x offset
+  }
 }
 
 
@@ -213,7 +212,7 @@ void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i,
             double peak;
             double offset = interpolate_parabola(g2mag, gmag, g1mag, peak);
             *pgm = destT(peak);
-            *(pgm+gm_pstep) = destT(atan2(dy,dx));
+            *(pgm+gm_pstep) = destT(vcl_atan2(dy,dx));
             *(pgm+2*gm_pstep) = destT(offset);
           }
         }
