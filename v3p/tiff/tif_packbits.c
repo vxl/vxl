@@ -40,9 +40,9 @@ PackBitsPreEncode(TIFF* tif, tsample_t s)
          * Calculate the scanline/tile-width size in bytes.
          */
         if (isTiled(tif))
-                tif->tif_data = (tidata_t) TIFFTileRowSize(tif);
+                tif->tif_data = TIFFTileRowSize(tif) + (tidata_t)0;
         else
-                tif->tif_data = (tidata_t) TIFFScanlineSize(tif);
+                tif->tif_data = TIFFScanlineSize(tif) + (tidata_t)0;
         return (1);
 }
 
@@ -189,7 +189,7 @@ PackBitsEncodeChunk(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 #if defined(__hpux) && defined(__LP64__)
         tsize_t rowsize = (tsize_t)(unsigned long) tif->tif_data;
 #else
-        tsize_t rowsize = (tsize_t) tif->tif_data;
+        tsize_t rowsize = (tsize_t) (tif->tif_data - (tidata_t)0) ;
 #endif
 
         assert(rowsize > 0);
@@ -203,7 +203,7 @@ PackBitsEncodeChunk(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 #if defined(__hpux) && defined(__LP64__)
                 rowsize = (tsize_t)(unsigned long) tif->tif_data;
 #else
-                rowsize = (tsize_t) tif->tif_data;
+                rowsize = (tsize_t) (tif->tif_data - (tidata_t)0);
 #endif
         }
 #endif

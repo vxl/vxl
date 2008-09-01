@@ -33,29 +33,29 @@
 static tsize_t
 _tiffReadProc(thandle_t fd, tdata_t buf, tsize_t size)
 {
-        return ((tsize_t) read((int) fd, buf, (size_t) size));
+        return ((tsize_t) read((int) (fd-(thandle_t)0), buf, (size_t) size));
 }
 
 static tsize_t
 _tiffWriteProc(thandle_t fd, tdata_t buf, tsize_t size)
 {
-        return ((tsize_t) write((int) fd, buf, (size_t) size));
+        return ((tsize_t) write((int) (fd-(thandle_t)0), buf, (size_t) size));
 }
 
 static toff_t
 _tiffSeekProc(thandle_t fd, toff_t off, int whence)
 {
 #if USE_64BIT_API == 1
-        return ((toff_t) lseek64((int) fd, (off64_t) off, whence));
+        return ((toff_t) lseek64((int) (fd-(thandle_t)0), (off64_t) off, whence));
 #else
-        return ((toff_t) lseek((int) fd, (off_t) off, whence));
+        return ((toff_t) lseek((int) (fd-(thandle_t)0), (off_t) off, whence));
 #endif
 }
 
 static int
 _tiffCloseProc(thandle_t fd)
 {
-        return (close((int) fd));
+        return (close((int) (fd-(thandle_t)0)));
 }
 
 #include <sys/stat.h>
@@ -65,14 +65,14 @@ _tiffSizeProc(thandle_t fd)
 {
 #ifdef _AM29K
         long fsize;
-        return ((fsize = lseek((int) fd, 0, SEEK_END)) < 0 ? 0 : fsize);
+        return ((fsize = lseek((int) (fd-(thandle_t)0), 0, SEEK_END)) < 0 ? 0 : fsize);
 #else
 #if USE_64BIT_API == 1
         struct stat64 sb;
-        return (toff_t) (fstat64((int) fd, &sb) < 0 ? 0 : sb.st_size);
+        return (toff_t) (fstat64((int) (fd-(thandle_t)0), &sb) < 0 ? 0 : sb.st_size);
 #else
         struct stat sb;
-        return (toff_t) (fstat((int) fd, &sb) < 0 ? 0 : sb.st_size);
+        return (toff_t) (fstat((int) (fd-(thandle_t)0), &sb) < 0 ? 0 : sb.st_size);
 #endif
 #endif
 }
@@ -125,7 +125,7 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
         TIFF* tif;
 
         tif = TIFFClientOpen(name, mode,
-            (thandle_t) fd,
+            fd+(thandle_t)0,
             _tiffReadProc, _tiffWriteProc,
             _tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
             _tiffMapProc, _tiffUnmapProc);
