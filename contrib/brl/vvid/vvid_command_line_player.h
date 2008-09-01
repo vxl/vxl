@@ -18,7 +18,7 @@
 #include <vul/vul_arg.h>
 #include <vidl_vil1/vidl_vil1_movie_sptr.h>
 
-//: A class for proccessing videos.
+//: A class for processing videos.
 class vvid_command_line_player
 {
  public:
