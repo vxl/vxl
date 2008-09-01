@@ -45,7 +45,7 @@ foreach $dir (@DIRS)
   # temporarily skip this directory -- it gives useless messages:
   next if ($dir =~ m!bmvl/brct/tests$!);
   # Now read directory content and open relevant files (like CMakeLists.txt, makefile and *.dsp)
-  opendir(TMP,$dir);
+  next unless opendir(TMP,$dir);
   @tmp_list = readdir(TMP);
   closedir(TMP);
   if ($dir =~ m/\bvcl$/) {
@@ -267,10 +267,8 @@ foreach $dir (@DIRS)
   @hsource_files = ();
   @subdirs2 = ();
   if (open(CMAKEFILE, $cmakef)) {
-    $old_v=$/; undef $/;
-    $cmakefile = <CMAKEFILE>;
+    $cmakefile = join '',<CMAKEFILE>;
     close CMAKEFILE;
-    $/=$old_v;
     %names = qw(MAKECOMMAND make CMAKE_CURRENT_SOURCE_DIR $dir);
   }
   $moc_files = '';
