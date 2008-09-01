@@ -32,7 +32,9 @@
 
 //=======================================================================
 static inline bool almostEqualsOne(double value);
+#ifndef NDEBUG
 static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs);
+#endif // NDEBUG
 #if 0
 static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
 #endif
@@ -156,8 +158,8 @@ static bool almostEqualsOne(double value)
 }
 
 //=======================================================================
-
-static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
+#ifndef NDEBUG
+static inline bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
 {
   const int m = vecs.rows();
   const int n = vecs.cols();
@@ -170,6 +172,7 @@ static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
   }
   return true;
 }
+#endif //NDEBUG
 //=======================================================================
 
 #if 0

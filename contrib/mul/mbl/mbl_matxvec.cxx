@@ -116,11 +116,11 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 {
   if (R.size()==0) return;
 
-  int nc = M.cols();
-  int nr = M.rows();
 
   int nR = R.size();
 #ifndef NDEBUG
+  int nc = M.cols();
+  int nr = M.rows();
   if (nR>nr)
   {
     vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() R too long.\n";
@@ -260,10 +260,10 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
                              vnl_vector<double>& R)
 // R += M'V
 {
-  unsigned int nc = M.cols();
   unsigned int nr = M.rows();
 
 #ifndef NDEBUG
+  unsigned int nc = M.cols();
   if (nr!=V.size())
   {
     vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - V wrong length\n"
@@ -273,10 +273,10 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
 #endif //!NDEBUG
 
   unsigned int t = R.size();
-  assert(t<=nc); // R too long
   if (t==0) return;
 
 #ifndef NDEBUG
+  assert(t<=nc); // R too long
   if ((nr<1) || (nc<1))
   {
     vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - vnl_matrix<double> is 0 x 0\n"

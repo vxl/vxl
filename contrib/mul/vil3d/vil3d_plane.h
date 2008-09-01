@@ -38,9 +38,11 @@ inline vil3d_image_view<T> vil3d_planes(const vil3d_image_view<T> &im,
                                         unsigned n)
 {
   assert(first<im.nplanes());
+#ifndef NDEBUG
   int end = first + n*skip;
   assert(end >= 0);
   assert((unsigned)end <= im.nplanes());
+#endif // NDEBUG
   return vil3d_image_view<T>(im.memory_chunk(),
     im.origin_ptr()+first*im.planestep(), im.ni(), im.nj(), im.nk(), n,
     im.istep(),im.jstep(),im.kstep(), skip*im.planestep());

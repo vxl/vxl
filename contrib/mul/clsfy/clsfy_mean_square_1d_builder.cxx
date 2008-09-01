@@ -175,7 +175,6 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
   assert (wts1.size() == n1 );
 
   // calc weighted mean of positive data
-  double tot_wts0= wts0.mean()*n0;
   double tot_wts1= wts1.mean()*n1;
   double wm_pos=0.0;
   for (unsigned int i=0; i< n1; ++i)
@@ -256,7 +255,7 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
   }
 
   assert( vcl_fabs (wt_pos - tot_wts1) < 1e-9 );
-  assert( vcl_fabs (wt_neg - tot_wts0) < 1e-9 );
+  assert( vcl_fabs (wt_neg - wts0.mean()*n0) < 1e-9 );
   vcl_cout<<"min_error= "<<min_error<<vcl_endl
           <<"min_thresh= "<<min_thresh<<vcl_endl;
 

@@ -279,7 +279,10 @@ int main(int argc, char*argv[])
     new vil3d_gen_synthetic_image(sizes_i.back(), sizes_j.back(), sizes_k.back(),
                                   im_resources(0,0,0)->pixel_format(), pv);
 
-  bool rv = vil3d_copy_deep(blank, output);
+#ifndef NDEBUG
+  bool rv =
+#endif
+    vil3d_copy_deep(blank, output);
   assert(rv);
 
   for (unsigned int k = 0; k < im_resources.get_row3_count(); ++k)

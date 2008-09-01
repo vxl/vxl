@@ -69,8 +69,7 @@ void pdf1d_weighted_kernel_pdf::set_centres(const vnl_vector<double>& x,
   //: Set the weights
 void pdf1d_weighted_kernel_pdf::set_weight(const vnl_vector<double>& weights)
 {
-  const unsigned n  = x_.size();
-  assert(weights.size() == n);
+  assert(weights.size() == x_.size());
 
   weight_ = weights;
   sum_weights_ = vnl_c_vector<double>::sum(weight_.data_block(), weight_.size());
@@ -88,8 +87,7 @@ void pdf1d_weighted_kernel_pdf::set_weight(const vnl_vector<double>& weights)
   // The weights will be scaled to sum to n
 void pdf1d_weighted_kernel_pdf::swap_weight(vnl_vector<double>& weights)
 {
-  const unsigned n  = x_.size();
-  assert(weights.size() == n);
+  assert(weights.size() == x_.size());
 
   swap(weights, weight_);
   sum_weights_ = vnl_c_vector<double>::sum(weight_.data_block(), weight_.size());

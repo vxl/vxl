@@ -14,8 +14,10 @@ m23d_correction_matrix_error::m23d_correction_matrix_error(const vnl_matrix<doub
   : vnl_least_squares_function(9*(n_modes+1),A.rows(),use_gradient),
     A_(A),rhs_(rhs),n_modes_(n_modes),k_(k)
 {
+#ifndef NDEBUG
   unsigned t = 3*(n_modes+1);
   assert(A.cols() == (t*(t+1))/2);
+#endif
   q_.set_size(A.cols());
 }
 

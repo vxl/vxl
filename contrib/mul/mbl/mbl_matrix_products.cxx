@@ -267,12 +267,11 @@ void mbl_matrix_product_adb(vnl_matrix<double>& ADB,
 {
   unsigned int nr1 = A.rows();
   unsigned int nc1 = A.cols();
-  unsigned int nr2 = B.rows();
   unsigned int nc2 = B.cols();
 
-  assert ( nr2 == nc1 ); //Product : B.nrows != A.ncols
+  assert ( B.rows() == nc1 ); //Product : B.nrows != A.ncols
 
-  assert ( nr2 == d.size() ); // Product : d.nelems != A.ncols
+  assert ( B.rows() == d.size() ); // Product : d.nelems != A.ncols
 
   if ( (ADB.rows()!=nr1) || (ADB.cols()!= nc2) )
     ADB.set_size( nr1, nc2 ) ;

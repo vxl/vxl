@@ -100,9 +100,8 @@ double clsfy_knn_builder::build(clsfy_classifier_base& model,
                                 unsigned /* nClasses */,
                                 const vcl_vector<unsigned> &outputs) const
 {
-  const unsigned n = inputs.size();
   assert(model.is_class("clsfy_k_nearest_neighbour")); // equiv to dynamic_cast<> != 0
-  assert(n==outputs.size());
+  assert(inputs.size()==outputs.size());
 
   clsfy_k_nearest_neighbour &knn = (clsfy_k_nearest_neighbour&) model;
 
@@ -115,7 +114,7 @@ double clsfy_knn_builder::build(clsfy_classifier_base& model,
     vin[i++] = inputs.current();
   } while (inputs.next());
 
-  assert(i==n);
+  assert(i==inputs.size());
 
   knn.set(vin, outputs);
   knn.set_k(k_);

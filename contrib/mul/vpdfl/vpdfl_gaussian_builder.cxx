@@ -164,9 +164,7 @@ void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
 {
   vpdfl_gaussian& g = gaussian(model);
 
-  unsigned long n_samples = data.size();
-
-  assert(n_samples >= 2L); // Not enough examples available
+  assert(data.size() >= 2L); // Not enough examples available
 
   vnl_vector<double> mean;
   vnl_matrix<double> S;

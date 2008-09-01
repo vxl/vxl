@@ -101,9 +101,8 @@ double clsfy_parzen_builder::build(clsfy_classifier_base& model,
                                    unsigned /* nClasses */,
                                    const vcl_vector<unsigned> &outputs) const
 {
-  const unsigned n = inputs.size();
   assert(model.is_class("clsfy_rbf_parzen")); // equiv to dynamic_cast<> != 0
-  assert(n==outputs.size());
+  assert(inputs.size()==outputs.size());
 
   clsfy_rbf_parzen &parzen = (clsfy_rbf_parzen&) model;
 
@@ -116,7 +115,7 @@ double clsfy_parzen_builder::build(clsfy_classifier_base& model,
     vin[i++] = inputs.current();
   } while (inputs.next());
 
-  assert(i==n);
+  assert(i==inputs.size());
 
   parzen.set(vin, outputs);
   parzen.set_power(power_);
