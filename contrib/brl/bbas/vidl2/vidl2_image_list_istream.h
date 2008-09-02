@@ -63,6 +63,10 @@ class vidl2_image_list_istream
   //: Return true if the stream support seeking
   virtual bool is_seekable() const { return true; }
 
+  //: Return the number of frames if known
+  //  returns -1 for non-seekable streams
+  virtual int num_frames() const { return image_paths_.size(); }
+
   //: Return the current frame number
   virtual unsigned int frame_number() const { return index_; }
 

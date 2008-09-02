@@ -32,6 +32,10 @@ class vidl2_istream
   //: Return true if the stream support seeking
   virtual bool is_seekable() const = 0;
 
+  //: Return the number of frames if known
+  //  returns -1 for non-seekable streams
+  virtual int num_frames() const = 0;
+
   //: Return the current frame number
   virtual unsigned int frame_number() const = 0;
 

@@ -201,7 +201,13 @@ void vidl2_player_manager::redraw()
     if (frame_num == unsigned(-1))
       vgui::out << "invalid frame\n";
     else
-      vgui::out << "frame["<< frame_num <<"]\n";
+      vgui::out << "frame["<< frame_num <<"]";
+
+    int num_frames = istream_->num_frames();
+    if(num_frames >=0)
+      vgui::out << " of "<<num_frames<<"\n";
+    else
+      vgui::out << "\n";
 
     vidl2_frame_sptr frame = istream_->current_frame();
     if(!frame)

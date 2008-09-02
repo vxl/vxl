@@ -69,6 +69,13 @@ vidl2_ffmpeg_istream
   return false;
 }
 
+int
+vidl2_ffmpeg_istream
+::num_frames() const
+{
+  return -1;
+}
+
 unsigned int
 vidl2_ffmpeg_istream
 ::frame_number() const

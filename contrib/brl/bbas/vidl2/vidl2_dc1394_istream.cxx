@@ -457,6 +457,16 @@ is_seekable() const
 }
 
 
+//: Return the number of frames if known
+//  returns -1 for non-seekable streams
+int
+vidl2_dc1394_istream::
+num_frames() const
+{
+  return -1;
+}
+
+
 //: Return the current frame number
 unsigned int
 vidl2_dc1394_istream::

@@ -35,6 +35,7 @@ struct vidl2_ffmpeg_istream::pimpl
     vid_str_( NULL ),
     last_dts( 0 ),
     frame_( NULL ),
+    num_frames_( 0 ),
     sws_context_( NULL ),
     cur_frame_( NULL ),
     deinterlace_( false ),
@@ -58,6 +59,9 @@ struct vidl2_ffmpeg_istream::pimpl
   // the codec state, so that codec.width and so on apply to the
   // frame data.
   AVFrame* frame_;
+
+  //: number of counted frames
+  int num_frames_;
 
   //: A software scaling context
   //
@@ -170,6 +174,11 @@ open(const vcl_string& filename)
     is_->frame_number_offset_ = 1;
   }
 
+  is_->num_frames_ = 0;
+  while(advance())
+    ++is_->num_frames_;
+  seek_frame(0);
+
   advance();
 
   return true;
@@ -185,6 +194,7 @@ close()
     av_freep( &is_->frame_ );
   }
 
+  is_->num_frames_ = 0;
   is_->contig_memory_ = 0;
   is_->vid_index_ = -1;
   if ( is_->vid_str_ ) {
@@ -222,6 +232,15 @@ vidl2_ffmpeg_istream::
 is_seekable() const
 {
   return true;
+}
+
+
+//: Return the number of frames if known
+//  returns -1 for non-seekable streams
+int
+vidl2_ffmpeg_istream::num_frames() const
+{
+  return is_->num_frames_;
 }
 
 
