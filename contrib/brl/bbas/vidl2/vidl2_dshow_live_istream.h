@@ -109,7 +109,7 @@ class vidl2_dshow_live_istream : public vidl2_istream
 
   //: Return the number of frames if known
   //  returns -1 for non-seekable streams
-  virtual int num_frames() const { return -1 };
+  virtual int num_frames() const { return -1; }
 
   //: Return the current frame number.
   // ***** through exception ??
