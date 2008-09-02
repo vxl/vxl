@@ -211,6 +211,7 @@ void vgui_wx::run_till_idle(void)
     wxTheApp->Dispatch();
     glFlush();
   }
+  wxTheApp->ProcessIdle();
 }
 
 //: Clear all events from the queue.
