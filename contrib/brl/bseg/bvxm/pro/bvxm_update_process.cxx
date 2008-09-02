@@ -9,7 +9,7 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-#include <bvxm/multiscale/bvxm_multiscale_util.h>
+
 
 bvxm_update_process::bvxm_update_process()
 {
