@@ -10,7 +10,6 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-#include <bvxm/multiscale/bvxm_multiscale_util.h>
 
 bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 {
