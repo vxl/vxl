@@ -56,6 +56,7 @@ int main(int argc, char** argv)
   vcl_vector<vgl_polygon<double> > poly_2d_list;
   vul_awk awk_cam(cam_fs);
   vul_awk awk_img(img_fs);
+  
   unsigned img_idx = 0;
   for (; awk_cam; ++awk_cam, ++img_idx)
   {
@@ -128,10 +129,11 @@ int main(int argc, char** argv)
           for (int x = psi.startx(); x<= psi.endx(); ++x)
           {
             if (x < img->ni() & y < img ->nj())
-            color_ofs << (*img)(x,y,p) << vcl_endl;
+              color_ofs << (*img)(x,y,p) << vcl_endl;
+            else 
+              color_ofs << vcl_endl;
           }
         }
-        
       }
     }
   }  
