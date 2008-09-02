@@ -160,8 +160,6 @@ open(const vcl_string& filename)
     ++is_->num_frames_;
   seek_frame(0);
 
-  advance();
-
   return true;
 }
 
