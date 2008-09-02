@@ -45,15 +45,15 @@
 *    FFMPEG</a> library to encode to many common video file formats with
 *    many encoding options for video quality and compression.
 *  - vidl2_v4l_istream - use a video for Linux input stream
-*  - vidl2_v4l_ostream - use a video for Linux output stream
 *  - vidl2_dshow_live_istream - use the DirectShow API to stream video directly
 *    from camera and frame-grabber devices in Windows using native Windows codecs.
 *  - vidl2_dshow_file_istream - use the DirectShow API to encode video files
 *    in Windows using native Windows codecs
-*
-* The following streams are currently under development
 *  - vidl2_dc1394_istream - use libdc1394 to stream video directly from IEEE
 *    1394 (firewire) based cameras (using Linux/BSD)
+*
+* The following streams are currently under development
+*  - vidl2_v4l_ostream - use a video for Linux output stream
 *
 * The following streams sound useful but need someone to work on them
 *  - vidl2_cmu1394_istream - use the CMU 1394 driver to stream video directly
@@ -102,7 +102,7 @@
 *
 * \todo Add support for more parameters in the 1394 camera standard.
 *
-* \todo Write a VXL book chapter for vidl2. This is required to
+* \todo Write a VXL book chapter for vidl2 (in progress).  This is required to
 * promote vidl2 to core and ultimately replace vidl (which has a very
 * limited book chapter). Also, it would be good to have a user's
 * guide other than the Doxygen generated pages.
@@ -111,10 +111,6 @@
 * and add code to read and write these files. This is related to the
 * factory creation stuff. Should we push to put modern factory creation
 * code in vbl?
-*
-* \todo Create an add-on GUI library to create vgui_menus for the
-* parameter classes. This would allow users to easily create a GUI
-* with vidl2 where the user can set the parameters for streaming.
 *
 * \todo Update vidl2/examples/vidl2_player to include all implemented
 * streams. We'd like to have a single GUI demo application that can
