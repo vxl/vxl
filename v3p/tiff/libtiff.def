@@ -1,6 +1,7 @@
-LIBRARY libtiff
 EXPORTS TIFFOpen
+	TIFFOpenW
 	TIFFGetVersion
+	TIFFCleanup
 	TIFFClose
 	TIFFFlush
 	TIFFFlushData
@@ -19,9 +20,13 @@ EXPORTS TIFFOpen
 	TIFFTileSize
 	TIFFVTileSize
 	TIFFFileno
+	TIFFSetFileno
 	TIFFGetMode
 	TIFFIsTiled
 	TIFFIsByteSwapped
+	TIFFIsBigEndian
+	TIFFIsMSB2LSB
+	TIFFIsUpSampled
 	TIFFCIELabToRGBInit
 	TIFFCIELabToXYZ
 	TIFFXYZToRGB
@@ -33,6 +38,8 @@ EXPORTS TIFFOpen
 	TIFFCurrentTile
 	TIFFDataWidth
 	TIFFReadBufferSetup
+	TIFFWriteBufferSetup
+	TIFFSetupStrips
 	TIFFLastDirectory
 	TIFFSetDirectory
 	TIFFSetSubDirectory
@@ -47,17 +54,17 @@ EXPORTS TIFFOpen
 	TIFFWriteScanline
 	TIFFReadRGBAImage
 	TIFFReadRGBAImageOriented
-	TIFFPrintDirectory
-	TIFFReadScanline
-	TIFFWriteScanline
-	TIFFReadRGBAImage
 	TIFFFdOpen
 	TIFFClientOpen
 	TIFFFileName
 	TIFFError
+	TIFFErrorExt
 	TIFFWarning
+	TIFFWarningExt
 	TIFFSetErrorHandler
+	TIFFSetErrorHandlerExt
 	TIFFSetWarningHandler
+	TIFFSetWarningHandlerExt
 	TIFFComputeTile
 	TIFFCheckTile
 	TIFFNumberOfTiles
@@ -66,6 +73,7 @@ EXPORTS TIFFOpen
 	TIFFComputeStrip
 	TIFFNumberOfStrips
 	TIFFRGBAImageBegin
+	TIFFRGBAImageGet
 	TIFFRGBAImageEnd
 	TIFFReadEncodedStrip
 	TIFFReadRawStrip
@@ -84,6 +92,7 @@ EXPORTS TIFFOpen
 	TIFFSwabArrayOfShort
 	TIFFSwabArrayOfLong
 	TIFFSwabArrayOfDouble
+	TIFFSwabArrayOfTriples
 	TIFFReverseBits
 	TIFFGetBitRevTable
 	TIFFDefaultStripSize
@@ -96,7 +105,36 @@ EXPORTS TIFFOpen
 	_TIFFmemcpy
 	_TIFFmemcmp
 	TIFFCreateDirectory
-	TIFFDefaultStripSize
-
-
-
+	TIFFSetTagExtender
+	TIFFMergeFieldInfo
+	TIFFFindFieldInfo
+	TIFFFindFieldInfoByName
+	TIFFFieldWithName
+	TIFFFieldWithTag
+	TIFFCurrentDirOffset
+	TIFFWriteCheck
+	TIFFRGBAImageOK
+	TIFFNumberOfDirectories
+	TIFFSetFileName
+	TIFFSetClientdata
+	TIFFSetMode
+	TIFFClientdata
+	TIFFGetReadProc
+	TIFFGetWriteProc
+	TIFFGetSeekProc
+	TIFFGetCloseProc
+	TIFFGetSizeProc
+	TIFFGetMapFileProc
+	TIFFGetUnmapFileProc
+	TIFFIsCODECConfigured
+	TIFFGetConfiguredCODECs
+ 	TIFFFindCODEC
+ 	TIFFRegisterCODEC
+ 	TIFFUnRegisterCODEC
+	TIFFFreeDirectory
+	TIFFReadCustomDirectory
+	TIFFReadEXIFDirectory
+ 	TIFFAccessTagMethods
+ 	TIFFGetClientInfo
+ 	TIFFSetClientInfo
+ 	TIFFReassignTagToIgnore
