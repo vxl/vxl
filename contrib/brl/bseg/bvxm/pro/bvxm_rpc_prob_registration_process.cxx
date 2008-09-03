@@ -18,8 +18,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 
-#include <bvxm/multiscale/bvxm_multiscale_util.h>
-
 bvxm_rpc_prob_registration_process::bvxm_rpc_prob_registration_process()
 {
   // process takes 5 inputs:
@@ -166,10 +164,7 @@ bool bvxm_rpc_prob_registration_process::execute()
     vcl_cout << vcl_endl;
   }
 
-  file_out.clear();
-  file_out.open("output_offsets.txt",vcl_ofstream::app);
-  file_out << best_offset_u << '\t' << best_offset_v << vcl_endl;
-  file_out.close();
+  vcl_cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << vcl_endl;
 
   float nlx,nly,nlz;
   if (rpc_shift_3d_flag)
