@@ -68,10 +68,6 @@ bool bvxm_rpc_registration_process::execute()
 
   vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
-#if 0 // unused variable
-  int num_observations = vox_world->num_observations<EDGES>(0,scale);
-#endif
-
   // get parameters
   double cedt_image_gaussian_sigma=0.0;
   int offset_search_size=0;
