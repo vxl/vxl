@@ -13,10 +13,12 @@
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
@@ -591,6 +593,100 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   camera = vpgl_optimize_camera::opt_orient_pos_cal(tcam, h_world_pts, image_pts, 0.00005, 20000);
   return true;
 }
+
+
+//: Compute from two sets of corresponding 2D points (image and ground plane).
+// \param ground_pts are 2D points representing world points with Z=0
+// The calibration matrix of \a camera is enforced
+// This computation is simplier than the general case above and only requires 4 points
+// Put the resulting camera into camera, return true if successful.
+bool vpgl_perspective_camera_compute::
+compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
+         const vcl_vector< vgl_point_2d<double> >& ground_pts,
+               vpgl_perspective_camera<double>& camera )
+{
+  unsigned num_pts = ground_pts.size();
+  if (image_pts.size()!=num_pts)
+  {
+    vcl_cout << "Unequal points sets in"
+             << " vpgl_perspective_camera_compute::compute()\n";
+    return false;
+  }
+  if (num_pts<4)
+  {
+    vcl_cout << "Need at least 4 points for"
+             << " vpgl_perspective_camera_compute::compute()\n";
+    return false;
+  }
+
+  vcl_vector<vgl_homg_point_2d<double> > pi, pg;
+  for(unsigned i=0; i<num_pts; ++i){
+#ifdef CAMERA_DEBUG
+    vcl_cout << "("<<image_pts[i].x()<<", "<<image_pts[i].y()<<") -> "
+             << "("<<ground_pts[i].x()<<", "<<ground_pts[i].y()<<")"<<vcl_endl;
+#endif
+    pi.push_back(vgl_homg_point_2d<double>(image_pts[i].x(),image_pts[i].y()));
+    pg.push_back(vgl_homg_point_2d<double>(ground_pts[i].x(),ground_pts[i].y()));
+  }
+
+  // compute a homography from the ground plane to image plane
+  vgl_h_matrix_2d_compute_linear est_H;
+  vnl_double_3x3 H = est_H.compute(pg,pi).get_matrix();
+  if(vnl_det(H) > 0)
+    H *= -1.0;
+
+  // invert the effects of intrinsic parameters
+  vnl_double_3x3 Kinv = vnl_inverse(camera.get_calibration().get_matrix());
+  vnl_double_3x3 A(Kinv*H);
+  // get the translation vector (up to a scale)
+  vnl_vector_fixed<double,3> t = A.get_column(2);
+  t.normalize();
+
+  // compute the closest rotation matrix
+  A.set_column(2, vnl_cross_3d(A.get_column(0), A.get_column(1)));
+  vnl_svd<double> svdA(A);
+  vnl_double_3x3 R = svdA.U()*svdA.V().conjugate_transpose();
+
+  // find the point farthest from the origin
+  int max_idx = 0;
+  double max_dist = 0.0;
+  for(unsigned int i=0; i < ground_pts.size(); ++i){
+    double d = (ground_pts[i]-vgl_point_2d<double>(0,0)).length();
+    if(d >= max_dist){
+      max_dist = d;
+      max_idx = i;
+    }
+  }
+
+  // compute the unknown scale
+  vnl_vector_fixed<double,3> i1 = Kinv*vnl_double_3(image_pts[max_idx].x(),image_pts[max_idx].y(),1.0);
+  vnl_vector_fixed<double,3> t1 = vnl_cross_3d(i1, t);
+  vnl_vector_fixed<double,3> p1 = vnl_cross_3d(i1, R*vnl_double_3(ground_pts[max_idx].x(),ground_pts[max_idx].y(),1.0));
+  double s = p1.magnitude()/t1.magnitude();
+
+  // compute the camera center
+  t *= s;
+  t = -R.transpose()*t;
+
+  camera.set_rotation(vgl_rotation_3d<double>(R));
+  camera.set_camera_center(vgl_point_3d<double>(t[0],t[1],t[2]));
+
+
+
+  //perform a final non-linear optimization
+  vcl_vector<vgl_homg_point_3d<double> > h_world_pts;
+  for (unsigned i = 0; i<num_pts; ++i){
+    h_world_pts.push_back(vgl_homg_point_3d<double>(ground_pts[i].x(),ground_pts[i].y(),0,1));
+    if(camera.is_behind_camera(h_world_pts.back())){
+      vcl_cout << "behind camera" << vcl_endl;
+      return false;
+    }
+  }
+  camera = vpgl_optimize_camera::opt_orient_pos(camera, h_world_pts, image_pts);
+
+  return true;
+}
+
 
 bool vpgl_perspective_camera_compute::
 compute( vpgl_rational_camera<double> const& rat_cam,
