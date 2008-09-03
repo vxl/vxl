@@ -1,5 +1,3 @@
-/* Id */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -28,6 +26,14 @@
  * TIFF Library UNIX-specific Routines. These are should also work with the
  * Windows Common RunTime Library.
  */
+
+#include "tiffiop.h"
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+
+#if 0     // original header
 #include "tif_config.h"
 
 #ifdef HAVE_SYS_TYPES_H
@@ -51,6 +57,7 @@
 #endif
 
 #include "tiffiop.h"
+#endif
 
 static tsize_t
 _tiffReadProc(thandle_t fd, tdata_t buf, tsize_t size)
