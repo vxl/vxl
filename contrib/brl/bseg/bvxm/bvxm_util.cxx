@@ -11,6 +11,13 @@
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vil/vil_resample_bilin.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#include <sdet/sdet_detector.h>
+#include <vtol/vtol_edge_2d.h>
+#include <vil/vil_new.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_edgel.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator.h>
 
 #include "bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
@@ -220,4 +227,73 @@ vil_image_view<float> bvxm_util::multiply_image_with_gaussian_kernel(vil_image_v
   }
 
   return ret_img;
+}
+
+vil_image_view<vxl_byte> bvxm_util::detect_edges(vil_image_view<vxl_byte> img, 
+                                                 double noise_multiplier, 
+                                                 double smooth, 
+                                                 bool automatic_threshold, 
+                                                 bool junctionp, 
+                                                 bool aggressive_junction_closure)
+{
+  if( img.nplanes() >= 3 ) 
+  {
+    vil_image_view<vxl_byte> img_rgb;
+    img_rgb.deep_copy(img);
+    vil_convert_planes_to_grey(img_rgb,img);
+  }
+
+  // set parameters for the edge detector
+  sdet_detector_params dp;
+  dp.noise_multiplier = (float)noise_multiplier;
+  dp.smooth = (float)smooth;
+  dp.automatic_threshold = automatic_threshold;
+  dp.junctionp = junctionp;
+  dp.aggressive_junction_closure = aggressive_junction_closure;
+
+  // detect edgels from the input image
+  sdet_detector detector(dp);
+  vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
+  detector.SetImage(img_res_sptr);
+  detector.DoContour();
+  vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
+
+  // initialize the output edge image
+  vil_image_view<vxl_byte> img_edge(img.ni(),img.nj(),1);
+  img_edge.fill(0);
+
+  // iterate over each connected edge component
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  {
+    vsol_curve_2d_sptr c = (*eit)->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
+    if (!dc)
+      continue;
+    vdgl_interpolator_sptr intp = dc->get_interpolator();
+    vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+
+    // iterate over each point in the connected edge component
+    for (unsigned j=0; j<ec->size(); j++) {
+      vdgl_edgel curr_edgel = ec->edgel(j);
+      int cr_x = (int)curr_edgel.x();
+      int cr_y = (int)curr_edgel.y();
+
+      // set the current edge pixel in the edge image
+      img_edge(cr_x,cr_y) = 255;
+    }
+  }
+
+  // Following loop removes the edges in the image boundary
+  int temp_index = img_edge.nj()-1;
+  for (unsigned i=0; i<img_edge.ni(); i++) {
+    img_edge(i,0) = 0;
+    img_edge(i,temp_index) = 0;
+  }
+  temp_index = img_edge.ni()-1;
+  for (unsigned j=0; j<img_edge.nj(); j++) {
+    img_edge(0,j) = 0;
+    img_edge(temp_index,j) = 0;
+  }
+
+  return img_edge;
 }
