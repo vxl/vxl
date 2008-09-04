@@ -20,8 +20,12 @@ bvxm_detect_changes_process::bvxm_detect_changes_process()
   //input[0]: The observation to detect changes
   //input[1]: The camera of the observation
   //input[2]: The voxel world
-  //input[3]: The apperance model type :this input must be either apm_mog_grey or apm_mog_rgb
-  //          any other string will initialize the value for apm_mog_grey
+  //input[3]: The apperance model type, the supported strings are:
+  //          -apm_mog_grey
+  //          -apm_mog_rgb
+  //          -apm_mog_mc_2_3
+  //          -apm_mog_mc_3_3
+  //          -apm_mog_mc_4_3
   //input[4]: The bin index to be updated
   //input[5]: The image scale index  detected
   input_data_.resize(6,brdb_value_sptr(0));
@@ -92,16 +96,34 @@ bool bvxm_detect_changes_process::execute()
   else if (voxel_type == "apm_mog_rgb")
     result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index,scale_index);
   else if (voxel_type == "apm_mog_mc_2_3")
+  {
+    
+    if (observation.img->nplanes()!= 2)
+      {
+        vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
+          << observation.img->nplanes()<< " planes" << vcl_endl;
+        return false;
+      }
     result = world->pixel_probability_density<APM_MOG_MC_2_3>(observation,prob_map, mask, bin_index,scale_index);
+
+  }
   else if (voxel_type == "apm_mog_mc_3_3")
     result = world->pixel_probability_density<APM_MOG_MC_3_3>(observation,prob_map, mask, bin_index,scale_index);
   else if (voxel_type == "apm_mog_mc_4_3")
+  {
+    if (observation.img->nplanes()!= 4)
+      {
+        vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
+          << observation.img->nplanes()<< " planes" << vcl_endl;
+        return false;
+      }
     result = world->pixel_probability_density<APM_MOG_MC_4_3>(observation,prob_map, mask, bin_index,scale_index);
+  }
   else 
     vcl_cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appereance model" << vcl_endl;
 
   if(!result){
-    vcl_cerr << "error bvxm_detect_changes_process: failed to detect changes" << vcl_endl;
+    vcl_cerr << "Error bvxm_detect_changes_process: failed to detect changes" << vcl_endl;
     return false;
   }
   // TODO: filtering / thresholding if necessary (Thom?)
