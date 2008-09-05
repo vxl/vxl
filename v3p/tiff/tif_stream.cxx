@@ -108,7 +108,7 @@ _tiffosSeekProc(thandle_t fd, toff_t off, int whence)
 	// '\0' characters.
 	if( os->fail() ) {
 		ios::iostate	old_state;
-		toff_t		origin;
+		toff_t		origin=0;
 
 		old_state = os->rdstate();
 		// reset the fail bit or else tellp() won't work below
