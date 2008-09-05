@@ -37,6 +37,7 @@
 #include <vul/vul_file.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
+#include <vpgl/vpgl_local_rational_camera.h>
 
 bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
                                            vcl_string& name,
@@ -68,7 +69,14 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
   }
 
   //vpgl_rational_camera<double> *
-  camera_ = read_rational_camera<double>(cam_path);
+  //rational camera may be local, therefore we check if it's local first
+  camera_ = read_local_rational_camera<double>(cam_path);
+
+  if ( !camera_ ) {
+    vcl_cout << "Rational camera isn't local... trying global" << vcl_endl;
+    camera_ = read_rational_camera<double>(cam_path);
+  }
+
   if (!camera_) {
     bwm_utils::show_error("[" + cam_path + "] is not a valid rational camera path");
     return;
