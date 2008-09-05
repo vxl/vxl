@@ -613,7 +613,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   return true;
 }
 
-bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height, 
+bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height,
                                           vil_image_view_base_sptr& lidar_edges,
                                           vil_image_view_base_sptr& lidar_edges_prob,
                                           vpgl_camera_double_sptr& camera,
@@ -627,8 +627,6 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
 
   // parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
-  edges_datatype min_vox_prob = params_->min_occupancy_prob();
-  edges_datatype max_vox_prob = params_->max_occupancy_prob();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
@@ -744,7 +742,7 @@ bool bvxm_voxel_world::update_edges_prob(bvxm_image_metadata const& metadata, un
   // convert image to a voxel_slab
   bvxm_voxel_slab<edges_datatype> image_image(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_image)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << '\n';
     return false;
   }
 
@@ -777,7 +775,7 @@ bool bvxm_voxel_world::update_edges_prob(bvxm_image_metadata const& metadata, un
   {
     vcl_cout << '.';
     if ( (edges_slab_it == edges_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -801,7 +799,7 @@ bool bvxm_voxel_world::update_edges_prob(bvxm_image_metadata const& metadata, un
   {
     vcl_cout << '.';
     if ( (edges_slab_it == edges_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -846,7 +844,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigne
   // convert image to a voxel_slab
   bvxm_voxel_slab<edges_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << '\n';
     return false;
   }
 
@@ -863,7 +861,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigne
   {
     vcl_cout << '.';
     if ( (edges_slab_it == edges_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
