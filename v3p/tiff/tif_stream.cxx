@@ -129,7 +129,7 @@ _tiffosSeekProc(thandle_t fd, toff_t off, int whence)
 		os->clear(old_state);	
 
 		// only do something if desired seek position is valid
-		if( origin + off > data->myStreamStartPos ) {
+		if( (long) (origin + off) > data->myStreamStartPos ) {
 			toff_t	num_fill;
 
 			// clear the fail bit 

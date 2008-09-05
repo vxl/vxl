@@ -126,6 +126,7 @@ uIntf *v;               /* working area: values in order of bit length */
   int y;                        /* number of dummy codes added */
   uInt z;                       /* number of entries in current table */
 
+  r.base=0; // IMS - fix gcc 4.3.2 uninitialised warning
 
   /* Generate counts for each bit length */
   p = c;
