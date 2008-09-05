@@ -116,11 +116,11 @@ class bmsh3d_halfedge
   bmsh3d_vertex* e_vertex() const;
 
   //: brute-force search for the previous halfedge pair
-  bmsh3d_halfedge* get_prev () const {
+  const bmsh3d_halfedge* get_prev () const {
     //: be careful on the only-one-halfedge case!
     if (pair_ == NULL)
       return NULL;
-    bmsh3d_halfedge* HE = (bmsh3d_halfedge*) this; // casting away const!
+    const bmsh3d_halfedge* HE = this;
     while (HE->pair() != this)
       HE = HE->pair();
     return HE;

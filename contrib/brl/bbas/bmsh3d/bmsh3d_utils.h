@@ -30,7 +30,7 @@ class vispt_elm
 {
  protected:
   // pointer to the visualization object
-  void* vis_pointer_;
+  const void* vis_pointer_;
 
   // ====== Constructor/Destructor ======
 
@@ -40,7 +40,7 @@ class vispt_elm
 
   // ====== Data access functions ======
 
-  void set_vis_pointer (const void* pointer) { vis_pointer_ = (void*) pointer; } // casting away const!
+  void set_vis_pointer (const void* pointer) { vis_pointer_ = pointer; }
   const void* vis_pointer() const { return vis_pointer_; }
 
   //: Ming: don't make this function pure virtual. It eats up 4 bytes of mem for each derived object!

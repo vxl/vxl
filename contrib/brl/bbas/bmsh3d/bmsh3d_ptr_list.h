@@ -12,7 +12,7 @@
 class bmsh3d_ptr_node
 {
  protected:
-  void* ptr_;
+  const void* ptr_;
   bmsh3d_ptr_node* next_;
 
  public:
@@ -22,19 +22,16 @@ class bmsh3d_ptr_node
     next_ = NULL;
   }
   bmsh3d_ptr_node (const void* ptr) {
-    ptr_ = (void*) ptr; // casting away const!
+    ptr_ = ptr;
     next_ = NULL;
   }
 
   //====== Data access functions ======
-  void* ptr() {
-    return ptr_;
-  }
   const void* ptr() const {
     return ptr_;
   }
   void set_ptr (const void* ptr) {
-    ptr_ = (void*) ptr; // casting away const!
+    ptr_ = ptr;
   }
 
   bmsh3d_ptr_node* next() {
@@ -49,24 +46,40 @@ class bmsh3d_ptr_node
 };
 
 //: return size of the list.
-inline unsigned int get_all_ptrs (const bmsh3d_ptr_node* head, vcl_set<void*>& ptrs)
+inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<const void*>& ptrs)
 {
   unsigned int count = 0;
-  bmsh3d_ptr_node* curr = (bmsh3d_ptr_node*) head; // casting away const!
-  for (; curr != NULL; curr = curr->next()) {
-    ptrs.insert (curr->ptr());
-    count++;
+  bmsh3d_ptr_node const* curr = head;
+  for (; curr != NULL; ++count, curr = curr->next()) {
+    ptrs.insert(curr->ptr());
   }
-  ///assert (count == ptrs.size());
+#ifdef DEBUG
+  assert(count == ptrs.size());
+#endif
+  return count;
+}
+
+//: return size of the list.
+//  DEPRECATED!
+inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<void*>& ptrs)
+{
+  unsigned int count = 0;
+  bmsh3d_ptr_node const* curr = head;
+  for (; curr != NULL; ++count, curr = curr->next()) {
+    ptrs.insert((void*)curr->ptr()); // casting away const!
+    // TODO: FIX THIS BY USING THE OTHER get_all_ptrs() METHOD IN CALLER
+  }
+#ifdef DEBUG
+  assert(count == ptrs.size());
+#endif
   return count;
 }
 
 inline unsigned int count_all_ptrs (const bmsh3d_ptr_node* head)
 {
   unsigned int count = 0;
-  bmsh3d_ptr_node* curr = (bmsh3d_ptr_node*) head; // casting away const!
-  for (; curr != NULL; curr = curr->next())
-    count++;
+  bmsh3d_ptr_node const* curr = head;
+  for (; curr != NULL; ++count, curr = curr->next()) ;
   return count;
 }
 
@@ -86,7 +99,7 @@ inline unsigned int clear_ptr_list (bmsh3d_ptr_node*& head)
 
 inline bool is_in_ptr_list (const bmsh3d_ptr_node* head, const void* input)
 {
-  bmsh3d_ptr_node* curr = (bmsh3d_ptr_node*) head; // casting away const!
+  bmsh3d_ptr_node const* curr = head;
   for (; curr != NULL; curr = curr->next()) {
     if (curr->ptr() == input)
       return true;

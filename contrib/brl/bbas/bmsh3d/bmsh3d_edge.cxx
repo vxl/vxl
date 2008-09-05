@@ -327,7 +327,7 @@ void bmsh3d_edge::_disconnect_HE (bmsh3d_halfedge* inputHE)
     halfedge_ = NULL;
     return;
   }
-  bmsh3d_halfedge* prev_pair = inputHE->get_prev ();
+  bmsh3d_halfedge* prev_pair = (bmsh3d_halfedge*)inputHE->get_prev (); // casting away const!
   bmsh3d_halfedge* next_pair = inputHE->pair ();
 
   //if the one to be disconnected is the one the edge pointing to,
