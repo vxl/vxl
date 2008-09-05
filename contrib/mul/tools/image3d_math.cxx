@@ -18,6 +18,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vsl/vsl_deque_io.txx>
+#include <vsl/vsl_stream.h>
 #include <vnl/vnl_math.h>
 #include <vul/vul_ios_state.h>
 #include <vul/vul_string.h>
