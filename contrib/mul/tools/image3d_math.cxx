@@ -17,7 +17,6 @@
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vsl/vsl_stream.h>
 #include <vsl/vsl_deque_io.txx>
 #include <vnl/vnl_math.h>
 #include <vul/vul_ios_state.h>
@@ -363,7 +362,6 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
   vcl_string o1(s[0].as_string());
   vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
   const vil3d_image_view<float>& o2_image = o2.image();;
-  
 
   vcl_ofstream output(o1.c_str());
 
@@ -677,9 +675,9 @@ class operations
 {
  private:
   //: Syntax sugar to allow
-  class function_type_t:public vcl_vector<operand::operand_type_t>
+  class function_type_t: public vcl_vector<operand::operand_type_t>
   {
-  public:
+   public:
     function_type_t& operator << (operand::operand_type_t t)
     {
       this->push_back(t);
@@ -836,7 +834,7 @@ class operations
 
     for (unsigned i=0; i<n; ++i)
     {
-      vcl_string name = singleton_.names_[i].substr(2,-1);
+      vcl_string name = singleton_.names_[i].substr(2);
       ss << vul_string_upcase(name) << ":  " <<
         singleton_.help_desc_[i] << "\n    usage: " <<
         singleton_.help_input_[i] << ' ' << singleton_.names_[i];
