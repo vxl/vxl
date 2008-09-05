@@ -11,14 +11,13 @@
 #include <vnl/vnl_double_3.h>
 
 
-
 // The Main Function
 int main(int argc, char** argv)
 {
-  vul_arg<int>     a_num_cameras("-ncam", "number of cameras", 30);
-  vul_arg<int>     a_num_points("-npt", "number of points", 30);
-  vul_arg<double>  a_frac_miss("-miss", "fraction of missing correspondences", 0.1);
-  vul_arg<bool>    a_no_gradient("-no_grad", "use numeric differencing instead of gradients", false);
+  vul_arg<int>    a_num_cameras("-ncam", "number of cameras", 30);
+  vul_arg<int>    a_num_points("-npt", "number of points", 30);
+  vul_arg<double> a_frac_miss("-miss", "fraction of missing correspondences", 0.1);
+  vul_arg<bool>   a_no_gradient("-no_grad", "use numeric differencing instead of gradients", false);
   vul_arg_parse(argc, argv);
 
   const double max_p_err = 1.0; // maximum image error to introduce (pixels)
@@ -28,7 +27,7 @@ int main(int argc, char** argv)
   vnl_random rnd(seed);
 
   vcl_vector<vgl_point_3d<double> > world;
-  for(int i=0; i<a_num_cameras(); ++i)
+  for (int i=0; i<a_num_cameras(); ++i)
     world.push_back(vgl_point_3d<double>(rnd.drand32(-1,1), rnd.drand32(-1,1), rnd.drand32(-1,1)));
 
   // our known internal calibration
@@ -36,12 +35,12 @@ int main(int argc, char** argv)
   vgl_rotation_3d<double> I; // no rotation initially
 
   vcl_vector<vpgl_perspective_camera<double> > cameras;
-  for(int i=0; i<a_num_points(); ++i)
+  for (int i=0; i<a_num_points(); ++i)
   {
     vnl_double_3 p;
-    do{
+    do {
       p = vnl_double_3(rnd.drand32(-1,1),rnd.drand32(-1,1),rnd.drand32(-1,1));
-    } while( p.magnitude() <= 1.0 );
+    } while ( p.magnitude() <= 1.0 );
     p.normalize();
     p *= 10.0;
     vgl_homg_point_3d<double> c(p[0], p[1], p[2]);
@@ -52,8 +51,8 @@ int main(int argc, char** argv)
 
   // project all points in all images
   vcl_vector<vgl_point_2d<double> > image_points;
-  for (unsigned int i=0; i<cameras.size(); ++i){
-    for (unsigned int j=0; j<world.size(); ++j){
+  for (unsigned int i=0; i<cameras.size(); ++i) {
+    for (unsigned int j=0; j<world.size(); ++j) {
       image_points.push_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
     }
   }
@@ -61,7 +60,7 @@ int main(int argc, char** argv)
 
   // project each point adding uniform noise in a [-max_p_err/2, max_p_err/2] pixel window
   vcl_vector<vgl_point_2d<double> > noisy_image_points(image_points);
-  for (unsigned int i=0; i<noisy_image_points.size(); ++i){
+  for (unsigned int i=0; i<noisy_image_points.size(); ++i) {
     vgl_vector_2d<double> noise(rnd.drand32()-0.5, rnd.drand32()-0.5);
     noisy_image_points[i] += max_p_err * noise;
   }
@@ -80,17 +79,16 @@ int main(int argc, char** argv)
   // make the mask (using all the points)
   vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
 
-
-  unsigned int num_missing = vcl_floor(a_frac_miss()*cameras.size()*world.size());
-  if(a_frac_miss() >= 1.0 )
+  unsigned int num_missing = (unsigned int)vcl_floor(a_frac_miss()*cameras.size()*world.size());
+  if (a_frac_miss() >= 1.0 )
     num_missing = cameras.size()*world.size();
 
   vcl_cout << "removing "<<num_missing<<" random correspondences"<<vcl_endl;
-  for(unsigned int i=0; i<num_missing;)
+  for (unsigned int i=0; i<num_missing; /* */)
   {
     int c = rnd.lrand32(cameras.size()-1);
     int w = rnd.lrand32(world.size()-1);
-    if(mask[c][w]){
+    if (mask[c][w]) {
       mask[c][w] = false;
       ++i;
     }
@@ -99,8 +97,8 @@ int main(int argc, char** argv)
   // create a subset of projections based on the mask
   vnl_crs_index crs(mask);
   vcl_vector<vgl_point_2d<double> > subset_image_points(crs.num_non_zero());
-  for (int i=0; i<crs.num_rows(); ++i){
-    for (int j=0; j<crs.num_cols(); ++j){
+  for (int i=0; i<crs.num_rows(); ++i) {
+    for (int j=0; j<crs.num_cols(); ++j) {
       int k = crs(i,j);
       if (k >= 0)
         subset_image_points[k] = noisy_image_points[i*crs.num_cols() + j];
