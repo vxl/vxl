@@ -55,16 +55,16 @@ enum cubetest_t
 ///////////////////////////////////////////////
 static int minimum5(int a, int b, int c, int d, int e)
 {
-    if (a<=b && a<=c && a<=d && a<=e )
-        return a;
-    else if (b<=c && b<=d && b<=e )
-        return b;
-    else if (c<=d && c<=e )
-        return c;
-    else if (d<=e )
-        return d;
-    else
-        return e;
+  if (a<=b && a<=c && a<=d && a<=e )
+    return a;
+  else if (b<=c && b<=d && b<=e )
+    return b;
+  else if (c<=d && c<=e )
+    return c;
+  else if (d<=e )
+    return d;
+  else
+    return e;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -225,21 +225,21 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
 ////////////////////////////////
 int main(int argc, char ** argv)
 {
-  vul_arg<char *> colorimagefilename( "-c", "Color image filenames (only for pipe)", 0);
-  vul_arg<char *> imagefilename( "-i", "Thresholded images", "/home/crossge/images/dino/full/thresh.%03d.pgm");
-  vul_arg<char *> pmatrixfilename( "-p", "PMatrix basename", "/home/crossge/images/dino/full/viff.%03d.sa.P");
-  vul_arg<char *> outputfilename( "-o", "Piped output filename", 0);
-  vul_arg<char *> outputvrml( "-v", "Output VRML filename", "/tmp/out.wrl");
-  vul_arg<int>    iterations( "-s", "Number of iterations", 5);
-  vul_arg<int>    startiteration( "-start", "Starting iteration", 0);
-  vul_arg<double> fiddlefactor( "-fiddle", "Fiddle factor for cube radii", 1.5);
-  vul_arg<char *> voxmapfilename( "-vf", "Voxmap filename", 0);
+  vul_arg<const char*> colorimagefilename( "-c", "Color image filenames (only for pipe)", 0);
+  vul_arg<const char*> imagefilename( "-i", "Thresholded images", "/home/crossge/images/dino/full/thresh.%03d.pgm");
+  vul_arg<const char*> pmatrixfilename( "-p", "PMatrix basename", "/home/crossge/images/dino/full/viff.%03d.sa.P");
+  vul_arg<const char*> outputfilename( "-o", "Piped output filename", 0);
+  vul_arg<const char*> outputvrml( "-v", "Output VRML filename", "/tmp/out.wrl");
+  vul_arg<int>         iterations( "-s", "Number of iterations", 5);
+  vul_arg<int>         startiteration( "-start", "Starting iteration", 0);
+  vul_arg<double>      fiddlefactor( "-fiddle", "Fiddle factor for cube radii", 1.5);
+  vul_arg<const char*> voxmapfilename( "-vf", "Voxmap filename", 0);
 
-  vul_arg<double> sx( "-sx", "Starting x position" , -0.0044); // was: -0.0011
-  vul_arg<double> sy( "-sy", "Starting y position" , -0.0136); // was: -0.0226
-  vul_arg<double> sz( "-sz", "Starting z position" ,  0.5764); // was: 0.5607
+  vul_arg<double>      sx( "-sx", "Starting x position" , -0.0044); // was: -0.0011
+  vul_arg<double>      sy( "-sy", "Starting y position" , -0.0136); // was: -0.0226
+  vul_arg<double>      sz( "-sz", "Starting z position" ,  0.5764); // was: 0.5607
 
-  vul_arg<double> ss( "-ss", "Starting size" , 0.2); // was: 0.4
+  vul_arg<double>      ss( "-ss", "Starting size" , 0.2); // was: 0.4
 
   vul_arg<vcl_list<int> > imagenumbersarg( "-n", "Image numbers");
 
@@ -252,10 +252,10 @@ int main(int argc, char ** argv)
 
   vcl_ofstream *fout= NULL;
 
-  if (( char *)( outputfilename()))
+  if ((const char *)outputfilename())
   {
     vcl_cerr << "Opening pipe...";
-    fout= new vcl_ofstream( outputfilename());
+    fout= new vcl_ofstream(outputfilename());
     vcl_cerr << " done.\n";
   }
   else
@@ -274,11 +274,11 @@ int main(int argc, char ** argv)
     vcl_cerr << "Loading image : " << *it << vcl_endl;
 
     // load all images and pmatrices
-    vil1_image image= vil1_load( vul_sprintf(( char *) imagefilename(), *it));
+    vil1_image image= vil1_load( vul_sprintf((const char *)imagefilename(), *it));
     imagestore[*it]= new vil1_memory_image_of<vxl_byte>( image);
     assert( *imagestore[*it]);
 
-    vcl_ifstream pmatrixin( vul_sprintf(( char *) pmatrixfilename(), *it));
+    vcl_ifstream pmatrixin( vul_sprintf((const char *)pmatrixfilename(), *it));
     assert( pmatrixin.good());
     pmatrixstore[*it]= new PMatrix;
     pmatrixstore[*it]->read_ascii( pmatrixin);
@@ -360,7 +360,7 @@ int main(int argc, char ** argv)
       {
         if (colorimagefilename())
         {
-          (*fout) << 'i' << vul_sprintf( ( char *) colorimagefilename(), *it) << "\nu\n";
+          (*fout) << 'i' << vul_sprintf( (const char*) colorimagefilename(), *it) << "\nu\n";
         }
       }
 
@@ -508,7 +508,7 @@ int main(int argc, char ** argv)
   ///////////////////////////////////////////////////////////////////
   // save to a voxmap file if necessary
 
-  if ((char *) voxmapfilename())
+  if ((const char *)voxmapfilename())
   {
     int size= 1<<(int(iterations())-1);
     vbl_bit_array_3d v( size, size, size, false);
@@ -533,7 +533,7 @@ int main(int argc, char ** argv)
             v.flip( x,y,z);
     }
 
-    vcl_ofstream fout(( char *) voxmapfilename());
+    vcl_ofstream fout((const char *)voxmapfilename());
     fout << double(ss()) << ' ' << double(sx()) << ' ' << double(sy()) << ' ' << double(sz()) << vcl_endl
          << size << vcl_endl;
 
@@ -772,7 +772,7 @@ int main(int argc, char ** argv)
 
   ///////////////////////////////////////////////////////////////////////////
 
-  vcl_ofstream vfout(( char *) outputvrml());
+  vcl_ofstream vfout((const char *)outputvrml());
   assert( vfout.good());
 
   vfout << "#VRML V1.0 ascii\n\nSeparator {\nCoordinate3 { point [\n";
