@@ -4,6 +4,7 @@
 
 #include <vcl_cstdio.h>
 #include <vcl_cmath.h>
+#include <vcl_climits.h>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_copy.h>
