@@ -7,6 +7,11 @@
 // \author Matt Leotta
 // \date   20 Jan 2006
 //
+// \verbatim
+//  Modifications
+//   10 Jul.2008 - Antonio Garrido - Added convertions for RGB_24(P),MONO8 and YUYV_422
+// \endvarbatim
+//
 //-----------------------------------------------------------------------------
 
 #include "vidl2_convert.h"
@@ -202,6 +207,165 @@ struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_MONO_8>
   }
 };
 
+
+// RGB_24 to YUYV_422
+VCL_DEFINE_SPECIALIZATION
+struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_YUYV_422>
+{
+  enum { defined = true };
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
+    const vxl_byte* rgb = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    vxl_byte* yuyv = reinterpret_cast<vxl_byte*>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for (unsigned int c=0; c<num_half_pix; ++c){
+      const vxl_byte& r1 = *(rgb++);
+      const vxl_byte& g1 = *(rgb++);
+      const vxl_byte& b1 = *(rgb++);
+      const vxl_byte& r2 = *(rgb++);
+      const vxl_byte& g2 = *(rgb++);
+      const vxl_byte& b2 = *(rgb++);
+      vxl_byte y1,u1,v1,y2,u2,v2;
+      vidl2_color_convert_rgb2yuv(r1,g1,b1,y1,u1,v1);
+      vidl2_color_convert_rgb2yuv(r2,g2,b2,y2,u2,v2);
+      *(yuyv++) = y1;
+      *(yuyv++) = (u1+u2)/2;
+      *(yuyv++) = y2;
+      *(yuyv++) = (v1+v2)/2;
+    }
+    return true;
+  }
+};
+
+
+// YUYV_422 to RGB_24
+VCL_DEFINE_SPECIALIZATION
+struct convert<VIDL2_PIXEL_FORMAT_YUYV_422, VIDL2_PIXEL_FORMAT_RGB_24>
+{
+  enum { defined = true };
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
+    const vxl_byte* yuyv = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    vxl_byte* rgb = reinterpret_cast<vxl_byte*>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for (unsigned int c=0; c<num_half_pix; ++c){
+      const vxl_byte& y1 = *(yuyv++);
+      const vxl_byte& u1 = *(yuyv++);
+      const vxl_byte& y2 = *(yuyv++);
+      const vxl_byte& v1 = *(yuyv++);
+      vxl_byte r,g,b;
+      vidl2_color_convert_yuv2rgb(y1,u1,v1,r,g,b);
+      *(rgb++) = r;
+      *(rgb++) = g;
+      *(rgb++) = b;
+      vidl2_color_convert_yuv2rgb(y2,u1,v1,r,g,b);
+      *(rgb++) = r;
+      *(rgb++) = g;
+      *(rgb++) = b;
+    }
+    return true;
+  }
+};
+
+
+// RGB_24P to YUYV_422
+VCL_DEFINE_SPECIALIZATION
+struct convert<VIDL2_PIXEL_FORMAT_RGB_24P, VIDL2_PIXEL_FORMAT_YUYV_422>
+{
+  enum { defined = true };
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24P);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
+    const vxl_byte* red = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    const vxl_byte* green= red+in_frame.ni() * in_frame.nj();
+    const vxl_byte* blue= blue+in_frame.ni() * in_frame.nj();
+    vxl_byte* yuyv = reinterpret_cast<vxl_byte*>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for (unsigned int c=0; c<num_half_pix; ++c){
+      const vxl_byte& r1 = *(red++);
+      const vxl_byte& g1 = *(green++);
+      const vxl_byte& b1 = *(blue++);
+      const vxl_byte& r2 = *(red++);
+      const vxl_byte& g2 = *(green++);
+      const vxl_byte& b2 = *(blue++);
+      vxl_byte y1,u1,v1,y2,u2,v2;
+      vidl2_color_convert_rgb2yuv(r1,g1,b1,y1,u1,v1);
+      vidl2_color_convert_rgb2yuv(r2,g2,b2,y2,u2,v2);
+      *(yuyv++) = y1;
+      *(yuyv++) = (u1+u2)/2;
+      *(yuyv++) = y2;
+      *(yuyv++) = (v1+v2)/2;
+    }
+    return true;
+  }
+};
+
+// YUYV_422 to RGB_24P
+VCL_DEFINE_SPECIALIZATION
+struct convert<VIDL2_PIXEL_FORMAT_YUYV_422, VIDL2_PIXEL_FORMAT_RGB_24P>
+{
+  enum { defined = true };
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24P);
+    const vxl_byte* yuyv = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    vxl_byte* red = reinterpret_cast<vxl_byte*>(out_frame.data());
+    vxl_byte* green = red+out_frame.ni()*out_frame.nj();
+    vxl_byte* blue = green+out_frame.ni()*out_frame.nj();
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for (unsigned int c=0; c<num_half_pix; ++c){
+      const vxl_byte& y1 = *(yuyv++);
+      const vxl_byte& u1 = *(yuyv++);
+      const vxl_byte& y2 = *(yuyv++);
+      const vxl_byte& v1 = *(yuyv++);
+      vxl_byte r,g,b;
+      vidl2_color_convert_yuv2rgb(y1,u1,v1,r,g,b);
+      *(red++) = r;
+      *(green++) = g;
+      *(blue++) = b;
+      vidl2_color_convert_yuv2rgb(y2,u1,v1,r,g,b);
+      *(red++) = r;
+      *(green++) = g;
+      *(blue++) = b;
+    }
+    return true;
+  }
+};
+
+// YUYV_422 to MONO_8
+VCL_DEFINE_SPECIALIZATION
+struct convert<VIDL2_PIXEL_FORMAT_YUYV_422, VIDL2_PIXEL_FORMAT_MONO_8>
+{
+  enum { defined = true };
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_MONO_8);
+    const vxl_byte* yuyv = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    vxl_byte* mono = reinterpret_cast<vxl_byte*>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for (unsigned int c=0; c<num_half_pix; ++c){
+      const vxl_byte& y1 = *(yuyv++);
+      ++yuyv;
+      const vxl_byte& y2 = *(yuyv++);
+      ++yuyv;
+      *(mono++) = y1;
+      *(mono++) = y2;
+    }
+    return true;
+  }
+};
 
 
 // End of pixel conversion specializations
