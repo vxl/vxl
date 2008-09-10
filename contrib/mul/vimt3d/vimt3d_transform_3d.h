@@ -17,9 +17,9 @@
 // In order of complexity the transform can be
 // - Identity     x->x, y->y, z->z
 // - Translation  x->x + tx, y->y + ty, z->z + tz
-// - ZoomOnly     (Scaling, followed by translation) x->sx.x + tx, etc.
 // - RigidBody    (Rotation, followed by translation)
 // - Similarity   (Isotropic scaling, followed by rotation, then translation)
+// - ZoomOnly     (Anisotropic scaling, followed by translation). This is a common special case of affine.
 // - Affine
 //
 // One useful special case of Affine involves anisotropic scaling, followed
@@ -50,7 +50,7 @@ class vimt3d_transform_3d
   //: Defines form of transformation
   enum Form {Identity,
              Translation,
-             ZoomOnly,   //!< Scaling, followed by translation
+             ZoomOnly,   //!< Anisotropic scaling, followed by translation
              RigidBody,  //!< Rotation, followed by translation
              Similarity, //!< Isotropic scaling, followed by rotation, then translation
              Affine};
@@ -346,6 +346,16 @@ void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b);
 
 //: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b);
+
+
+//: Test whether a 3D transform is zoom-only or lesser, i.e. there may
+// be translation and (anisotropic) scaling but no rotation. 
+// \note This tests only for a commonly-occurring special case; there may 
+// be other zoom-only transforms that are not detected.
+// \param zero_tol Used for testing whether elements are zero or not.
+bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
+                                   const double zero_tol=1e-9);
+
 
 //=======================================================================
 

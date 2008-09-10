@@ -16,7 +16,6 @@
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_sequence.h>
 
-const double tol=1e-6;
 
 //=======================================================================
 
@@ -477,6 +476,8 @@ void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
   form_=Affine;
 
 #ifndef NDEBUG
+  const double tol=1e-6;
+
   // Get normalized vectors
   vgl_vector_3d<double> uh = normalized(u);
   vgl_vector_3d<double> vh = normalized(v);
@@ -983,5 +984,36 @@ vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b)
   b.print_summary(os);
   vsl_indent_dec(os);
   return os;
+}
+
+//========================================================================
+// Test whether a 3D transform is zoom-only or lesser, i.e. there may
+// be translation and (anisotropic) scaling but no rotation. 
+// This tests only for a commonly-occurring special case; there may 
+// be other zoom-only transforms that are not detected.
+//========================================================================
+bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
+                                   const double zero_tol/*=1e-9*/)
+{
+  // Check whether the top-left 3x3 submatrix part of the transform is
+  // diagonal with strictly-positive elements. Such cases have zero rotation
+  // and positive (possibly anisotropic) scaling.
+  vnl_matrix<double> M = transf.matrix().extract(3,3,0,0);
+  
+  // Are any diagonal elements zero or negative?
+  for (unsigned i=0; i<3; ++i)
+    if (M(i,i)<=zero_tol) return false;
+
+  // Are any off-diagonal elements non-zero?
+  bool zero_others = true;
+  for (unsigned j=0; j<3; ++j)
+  {
+    for (unsigned i=0; i<3; ++i)
+    {
+      if (i!=j && vcl_fabs(M(i,j))>=zero_tol) return false;
+    }
+  }
+
+  return true;
 }
 

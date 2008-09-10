@@ -15,6 +15,59 @@
 #define LEAVE_IMAGES_BEHIND 0
 #endif
 
+
+
+static bool test_is_zoom_only()
+{
+  double tx=1.0, ty=2.0, tz=3.0;
+  double rx=0.1, ry=0.2, rz=0.3;
+  double sx=0.9, sy=1.0, sz=1.1;
+
+  // identity is zoom_only
+  vimt3d_transform_3d I;
+  I.set_identity();
+  if (!vimt3d_transform_is_zoom_only(I)) return false;
+
+  // translation is zoom_only
+  vimt3d_transform_3d T;
+  T.set_translation(tx, ty, tz);
+  if (!vimt3d_transform_is_zoom_only(T)) return false;
+
+  // rigid_body is NOT zoom_only
+  vimt3d_transform_3d R;
+  R.set_rigid_body(rx, ry, rz, tx, ty, tz);
+  if (vimt3d_transform_is_zoom_only(R)) return false;
+
+  // similarity is NOT zoom_only
+  vimt3d_transform_3d S;
+  S.set_similarity(sx, rx, ry, rz, tx, ty, tz);
+  if (vimt3d_transform_is_zoom_only(S)) return false;
+
+  // zoom_only (iso) is zoom_only
+  vimt3d_transform_3d Z1;
+  Z1.set_zoom_only(sx, tx, ty, tz);
+  if (!vimt3d_transform_is_zoom_only(Z1)) return false;
+
+  // zoom_only (aniso) is zoom_only
+  vimt3d_transform_3d Z2;
+  Z2.set_zoom_only(sx, sy, sz, tx, ty, tz);
+  if (!vimt3d_transform_is_zoom_only(Z2)) return false;
+
+  // Test certain compositions that are zoom-only
+  if (!vimt3d_transform_is_zoom_only(I*T)) return false;
+  if (!vimt3d_transform_is_zoom_only(T*Z1)) return false;
+  if (!vimt3d_transform_is_zoom_only(Z1*Z2)) return false;
+
+  // Test certain compositions that are NOT zoom-only
+  if (vimt3d_transform_is_zoom_only(R*Z1)) return false;
+  if (vimt3d_transform_is_zoom_only(S*Z2)) return false;
+  if (vimt3d_transform_is_zoom_only(R*S)) return false;
+
+  // All tests passed
+  return true;
+}
+
+
 static void test_product(const vimt3d_transform_3d& t0, const vimt3d_transform_3d& t1)
 {
   vimt3d_transform_3d t01 = t0*t1;
@@ -318,6 +371,9 @@ static void test_transform_3d()
   trans0_in.params(v0_in);
   TEST("Binary IO for form", trans0.form(), trans0_in.form());
   TEST_NEAR("Binary IO for params", (v0-v0_in).magnitude(),0.0,1e-6);
+
+  // --- Test the function vimt3d_is_transform_zoom_only()
+  TEST("Test function vimt3d_is_transform_zoom_only()...", test_is_zoom_only(), true);
 }
 
 TESTMAIN(test_transform_3d);
