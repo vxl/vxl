@@ -156,6 +156,42 @@ static void test_proj_camera()
   vgl_point_2d<double> pi2d(0,0), pt2d(-1,0);
   p3d = triangulate_3d_point(Pi, pi2d, Pt, pt2d);
   TEST_NEAR("test triangulate_3d", p3d.z(), 10, 1.0e-6);
+
+  P1.set_matrix( random_matrix );
+  vcl_vector<vgl_point_3d<double> > pts;
+  pts.push_back(vgl_point_3d<double>(29,-3, 8));
+  pts.push_back(vgl_point_3d<double>(-0.2,4.1,1.0));
+  vcl_vector<vnl_matrix_fixed<double,3,2> > Jac = image_jacobians(P1,pts);
+  double eps = 1e-6;
+  bool valid = true;
+  for(unsigned int i=0; i<pts.size(); ++i)
+  {
+    vgl_point_3d<double> p = pts[i];
+    vgl_point_3d<double> pdx(p.x()+eps, p.y(), p.z());
+    vgl_point_3d<double> pdy(p.x(), p.y()+eps, p.z());
+    vgl_point_3d<double> pdz(p.x(), p.y(), p.z()+eps);
+
+    vgl_point_2d<double> pi = P1.project(p);
+    vgl_point_2d<double> pidx = P1.project(pdx);
+    vgl_point_2d<double> pidy = P1.project(pdy);
+    vgl_point_2d<double> pidz = P1.project(pdz);
+
+    vnl_matrix_fixed<double,3,2> J_diff;
+    J_diff(0,0) = (pidx.x() - pi.x())/eps;
+    J_diff(0,1) = (pidx.y() - pi.y())/eps;
+    J_diff(1,0) = (pidy.x() - pi.x())/eps;
+    J_diff(1,1) = (pidy.y() - pi.y())/eps;
+    J_diff(2,0) = (pidz.x() - pi.x())/eps;
+    J_diff(2,1) = (pidz.y() - pi.y())/eps;
+
+    double err = (J_diff - Jac[i]).array_inf_norm();
+    if(err > eps){
+      vcl_cerr << "Jacobian\n"<<J_diff<<"\nshould be\n"<<Jac[i]<<vcl_endl;
+      valid = false;
+      break;
+    }
+  }
+  TEST("test image Jacobians", valid, true);
 }
 
 

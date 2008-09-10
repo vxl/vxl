@@ -353,6 +353,62 @@ vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
 }
 
 
+//: Compute the image projection Jacobians at each point
+//  The returned matrices map a differential change in 3D
+//  to a differential change in the 2D image at each specified 3D point
+template <class T>
+vcl_vector<vnl_matrix_fixed<T,3,2> >
+image_jacobians(const vpgl_proj_camera<T>& camera,
+                const vcl_vector<vgl_point_3d<T> >& pts)
+{
+  const vnl_matrix_fixed<T,3,4>& P = camera.get_matrix();
+  vnl_vector_fixed<T,4> denom = P.get_row(2);
+
+  vnl_matrix_fixed<T,3,4> Du;
+  Du(0,0) = Du(1,1) = Du(2,2) = 0.0;
+  Du(0,1) = P(0,0)*P(2,1) - P(0,1)*P(2,0);
+  Du(0,2) = P(0,0)*P(2,2) - P(0,2)*P(2,0);
+  Du(1,2) = P(0,1)*P(2,2) - P(0,2)*P(2,1);
+  Du(0,3) = P(0,0)*P(2,3) - P(0,3)*P(2,0);
+  Du(1,3) = P(0,1)*P(2,3) - P(0,3)*P(2,1);
+  Du(2,3) = P(0,2)*P(2,3) - P(0,3)*P(2,2);
+  Du(1,0) = -Du(0,1);
+  Du(2,0) = -Du(0,2);
+  Du(2,1) = -Du(1,2);
+
+  vnl_matrix_fixed<T,3,4> Dv;
+  Dv(0,0) = Dv(1,1) = Dv(2,2) = 0.0;
+  Dv(0,1) = P(1,0)*P(2,1) - P(1,1)*P(2,0);
+  Dv(0,2) = P(1,0)*P(2,2) - P(1,2)*P(2,0);
+  Dv(1,2) = P(1,1)*P(2,2) - P(1,2)*P(2,1);
+  Dv(0,3) = P(1,0)*P(2,3) - P(1,3)*P(2,0);
+  Dv(1,3) = P(1,1)*P(2,3) - P(1,3)*P(2,1);
+  Dv(2,3) = P(1,2)*P(2,3) - P(1,3)*P(2,2);
+  Dv(1,0) = -Dv(0,1);
+  Dv(2,0) = -Dv(0,2);
+  Dv(2,1) = -Dv(1,2);
+
+
+  const unsigned int num_pts = pts.size();
+  vcl_vector<vnl_matrix_fixed<T,3,2> > img_jac(num_pts);
+
+  for(unsigned int i=0; i<num_pts; ++i)
+  {
+    const vgl_point_3d<T>& pt = pts[i];
+    vnl_matrix_fixed<double,3,2>& J = img_jac[i];
+    vnl_vector_fixed<T,4>  hpt(pt.x(),pt.y(),pt.z(),1.0);
+
+    double d = dot_product(denom,hpt);
+    d *= d;
+    J.set_column(0,Du*hpt);
+    J.set_column(1,Dv*hpt);
+    J /= d;
+  }
+
+  return img_jac;
+}
+
+
 // Code for easy instantiation.
 #undef vpgl_PROJ_CAMERA_INSTANTIATE
 #define vpgl_PROJ_CAMERA_INSTANTIATE(T) \
@@ -368,6 +424,9 @@ template vgl_point_3d<T > triangulate_3d_point(const vpgl_proj_camera<T >& c1, \
                                                const vgl_point_2d<T >& x1, \
                                                const vpgl_proj_camera<T >& c2, \
                                                const vgl_point_2d<T >& x2); \
+template vcl_vector<vnl_matrix_fixed<T,3,2> > \
+         image_jacobians(const vpgl_proj_camera<T >& camera, \
+                         const vcl_vector<vgl_point_3d<T > >& pts); \
 template void vsl_add_to_binary_loader(vpgl_proj_camera<T > const& b); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_proj_camera<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vpgl_proj_camera<T >&)
