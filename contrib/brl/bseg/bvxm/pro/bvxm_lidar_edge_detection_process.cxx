@@ -75,7 +75,6 @@ bool bvxm_lidar_edge_detection_process::execute()
   vil_image_view<float> image_first_return = *(vil_convert_cast(float(), image_first_return_base));
   vil_image_view<float> image_second_return = *(vil_convert_cast(float(), image_second_return_base));
 
-  // todo : check if this is given in meters
   float threshold_edge_difference;
   if (!parameters()->get_value("threshold_edge_difference", threshold_edge_difference)) {
     vcl_cout << "problems in retrieving parameters\n";
