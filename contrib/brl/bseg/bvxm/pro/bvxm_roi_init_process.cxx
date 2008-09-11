@@ -32,11 +32,12 @@ bvxm_roi_init_process::bvxm_roi_init_process()
   //input_types_[i++] = "unsigned";     // voxel world spec
 
   //output
-  output_data_.resize(2,brdb_value_sptr(0));
-  output_types_.resize(2);
+  output_data_.resize(3,brdb_value_sptr(0));
+  output_types_.resize(3);
   int j=0;
   output_types_[j++]= "vpgl_camera_double_sptr";   // unadjusted local rational camera
   output_types_[j++]= "vil_image_view_base_sptr";  // image ROI
+  output_types_[j++]= "float";  // uncertainty
 
   if (!parameters()->add( "Uncertainty error" , "error" , (float) 10.0 ))
     vcl_cerr << "ERROR: Adding parameters in bvxm_roi_init_process\n";
@@ -99,6 +100,12 @@ bool bvxm_roi_init_process::execute()
   brdb_value_sptr output1 =
     new brdb_value_t<vil_image_view_base_sptr>(img_ptr);
   output_data_[1] = output1;
+
+  // store uncertainty
+  brdb_value_sptr output2 =
+    new brdb_value_t<float>(uncertainty);
+  output_data_[2] = output2;
+
   return true;
 }
 
