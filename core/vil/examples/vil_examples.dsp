@@ -24,6 +24,9 @@ SOURCE=.\example5.cxx
 SOURCE=.\example6.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\example_rgb.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\file_example1.cxx
 # End Source File
 # Begin Source File
