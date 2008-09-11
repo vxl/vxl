@@ -18,6 +18,7 @@
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
+#include <bil/algo/bil_edt.h>
 
 #include "bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
@@ -296,4 +297,28 @@ vil_image_view<vxl_byte> bvxm_util::detect_edges(vil_image_view<vxl_byte> img,
   }
 
   return img_edge;
+}
+
+void bvxm_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt){
+  vil_image_view<vxl_byte> edge_image_negated(inp_image);
+  vil_math_scale_and_offset_values(edge_image_negated,-1.0,255);
+
+  unsigned ni = edge_image_negated.ni();
+  unsigned nj = edge_image_negated.nj();
+
+  vil_image_view<vxl_uint_32> curr_image_edt(ni,nj,1);
+  for(unsigned i=0; i<ni; i++){
+    for(unsigned j=0; j<nj; j++){
+      curr_image_edt(i,j) = edge_image_negated(i,j);
+    }
+  }
+
+  bil_edt_maurer(curr_image_edt);
+
+  out_edt.set_size(ni,nj,1);
+  for(unsigned i=0; i<ni; i++){
+    for(unsigned j=0; j<nj; j++){
+      out_edt(i,j) = vcl_sqrt((float)curr_image_edt(i,j));
+    }
+  }
 }

@@ -17,6 +17,9 @@
 //   09/03/2008 - Ibrahim Eden - Added the method 
 //                               static vil_image_view<vxl_byte> detect_edges ...
 //
+//   09/11/2008 - Ibrahim Eden - Added the method 
+//                               static void edge_distance_transform ...
+//
 // \endverbatim
 
 #include <vcl_string.h>
@@ -128,6 +131,8 @@ class bvxm_util
   static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
   
   static vil_image_view<vxl_byte> detect_edges(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth, bool automatic_threshold, bool junctionp, bool aggressive_junction_closure);
+
+  static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
 
  protected:
 
