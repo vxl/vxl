@@ -31,6 +31,10 @@ VCL_INSTANTIATE_INLINE(vil_rgb<double > operator*(double b, const vil_rgb<T >& a
 // must do << separately for byte specialization
 #undef VIL_RGB_INSTANTIATE_LS
 #define VIL_RGB_INSTANTIATE_LS(T) \
-VCL_INSTANTIATE_INLINE(vcl_ostream& operator<<(vcl_ostream&, const vil_rgb<T >& ))
+VCL_DEFINE_SPECIALIZATION \
+vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<unsigned char> const& rgb) \
+{ \
+return s<< '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']'; \
+}
 
 #endif // vil_rgb_txx_

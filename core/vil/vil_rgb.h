@@ -145,13 +145,15 @@ vil_rgb_call(macro)
 
 #undef vil_rgb_call
 
-
 template <class T>
 inline
 vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<T> const& rgb)
 {
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }
+
+VCL_DEFINE_SPECIALIZATION
+vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<unsigned char> const& rgb);
 
 
 // ** Arithmetic operators
