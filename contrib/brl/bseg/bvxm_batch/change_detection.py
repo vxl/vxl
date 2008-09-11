@@ -67,35 +67,39 @@ for i in range(0,len(image_fnames),1):
   if statuscode:
     cropped_cam_id = bvxm_batch.commit_output(0);
     cropped_image_id = bvxm_batch.commit_output(1);  
-
-    # RPC camera correction 
-    bvxm_batch.init_process("bvxmGenerateEdgeMapProcess");
-    bvxm_batch.set_input_from_db(0,cropped_image_id);
-    bvxm_batch.set_params_process(python_path + "edge_map_params.xml");
-    bvxm_batch.run_process();
-    cropped_edge_image_id = bvxm_batch.commit_output(0);
-      
-    bvxm_batch.init_process("bvxmRpcRegistrationProcess");
-    bvxm_batch.set_input_from_db(0,voxel_world_id);
-    bvxm_batch.set_input_from_db(1,cropped_cam_id);
-    bvxm_batch.set_input_from_db(2,cropped_edge_image_id);
-    if i<num_train:
-      bvxm_batch.set_input_bool(3,0);
-    else:
-      bvxm_batch.set_input_bool(3,1);
-    bvxm_batch.set_input_bool(4,0);
-    bvxm_batch.set_params_process(python_path + "rpc_registration_parameters.xml");
-    bvxm_batch.run_process();
-    cam_id = bvxm_batch.commit_output(0);
-    voxel_image_id = bvxm_batch.commit_output(1);
-
+    uncertainty_id = bvxm_batch.commit_output(2);  
 
     print("Saving Image");
     bvxm_batch.init_process("SaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,cropped_image_id);
     bvxm_batch.set_input_string(1,"./ini"+str(i)+".png");
     bvxm_batch.run_process();
+
+    bvxm_batch.init_process("bvxmRpcRegistrationProcess");
+    bvxm_batch.set_input_from_db(0,voxel_world_id);
+    bvxm_batch.set_input_from_db(1,cropped_cam_id);
+    bvxm_batch.set_input_from_db(2,cropped_image_id);
+    if i<num_train:
+      bvxm_batch.set_input_bool(3,0);
+    else:
+      bvxm_batch.set_input_bool(3,1);
+    bvxm_batch.set_input_from_db(4,uncertainty_id);
+    bvxm_batch.set_input_unsigned(5,0);
+    bvxm_batch.set_params_process("bvxmRpcRegistrationProcess.xml");
+    bvxm_batch.run_process();
+    corrected_cam_id = bvxm_batch.commit_output(0);
+    edge_image_id = bvxm_batch.commit_output(1);
+    expected_edge_image_id = bvxm_batch.commit_output(2);
     
+    bvxm_batch.init_process("SaveImageViewProcess");
+    bvxm_batch.set_input_from_db(0,edge_image_id);
+    bvxm_batch.set_input_string(1,str(i)+".edge_image.jpg");
+    bvxm_batch.run_process();
+
+    bvxm_batch.init_process("SaveImageViewProcess");
+    bvxm_batch.set_input_from_db(0,expected_edge_image_id);
+    bvxm_batch.set_input_string(1,str(i)+".expected_edge_image.jpg");
+    bvxm_batch.run_process();    
     
     map_type="10bins_1d_radial";
     print("Illumination Index");
