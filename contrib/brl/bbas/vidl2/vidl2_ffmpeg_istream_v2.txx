@@ -178,7 +178,8 @@ open(const vcl_string& filename)
   is_->num_frames_ = 0;
   while(advance())
     ++is_->num_frames_;
-  seek_frame(0);
+
+  av_seek_frame( is_->fmt_cxt_, is_->vid_index_, 0, AVSEEK_FLAG_BACKWARD );
 
   return true;
 }
@@ -221,7 +222,7 @@ bool
 vidl2_ffmpeg_istream::
 is_valid() const
 {
-  return is_open();
+  return is_open() && is_->frame_->data[0] != 0;
 }
 
 
@@ -249,8 +250,8 @@ vidl2_ffmpeg_istream::
 frame_number() const
 {
   // Quick return if the stream isn't open.
-  if ( !is_open() ) {
-    return 0;
+  if ( !is_valid() ) {
+    return static_cast<unsigned int>(-1);
   }
 
   return ((is_->last_dts - is_->start_time)
