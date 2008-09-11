@@ -60,14 +60,13 @@ vidl2_player_manager::vidl2_player_manager()
     width_(640),
     height_(480),
     istream_(NULL),
+    ostream_(NULL),
     win_(0)
 {
 }
 
 vidl2_player_manager::~vidl2_player_manager()
 {
-  delete istream_;
-  delete ostream_;
 }
 
 
@@ -82,8 +81,6 @@ bool vidl2_player_manager::handle(const vgui_event &e)
 //: clean up before the program terminates
 void vidl2_player_manager::quit()
 {
-  delete istream_;
-  delete ostream_;
   vcl_exit(1);
 }
 
@@ -97,21 +94,16 @@ void vidl2_player_manager::open_istream()
   if (!try_open)
     return;
 
-  delete istream_;
-  istream_ = try_open;
+  istream_.reset(try_open);
 
-  istream_->advance();
-  if (istream_->is_valid())
+  if (istream_->is_open())
   {
-    vidl2_frame_sptr frame = istream_->current_frame();
-    if (frame) {
-      height_ = frame->nj();
-      width_ = frame->ni();
-      if (win_)
-        win_->reshape(width_+10, height_+60);
+    height_ = istream_->height();
+    width_ = istream_->width();
+    if (win_)
+      win_->reshape(width_+10, height_+60);
 
-      this->redraw();
-    }
+    this->redraw();
   }
 }
 
@@ -121,7 +113,7 @@ void vidl2_player_manager::open_istream()
 //-----------------------------------------------------------------------------
 void vidl2_player_manager::close_istream()
 {
-  if (istream_)
+  if (istream_.get())
     istream_->close();
 
   this->redraw();
@@ -137,8 +129,7 @@ void vidl2_player_manager::open_ostream()
   if (!try_open)
     return;
 
-  delete ostream_;
-  ostream_ = try_open;
+  ostream_.reset(try_open);
 }
 
 
@@ -147,7 +138,7 @@ void vidl2_player_manager::open_ostream()
 //-----------------------------------------------------------------------------
 void vidl2_player_manager::close_ostream()
 {
-  if (ostream_)
+  if (ostream_.get())
     ostream_->close();
 }
 
@@ -157,12 +148,12 @@ void vidl2_player_manager::close_ostream()
 //-----------------------------------------------------------------------------
 void vidl2_player_manager::pipe_streams()
 {
-  if (!istream_ || !istream_->is_open()) {
+  if (!istream_.get() || !istream_->is_open()) {
     vgui_error_dialog("Input stream not open");
     return;
   }
 
-  if (!ostream_) {
+  if (!ostream_.get()) {
     vgui_error_dialog("Output stream not open");
     return;
   }
@@ -181,12 +172,16 @@ void vidl2_player_manager::pipe_streams()
 
   vidl2_frame_sptr frame;
   if (num_frames < 0)
-    while (bool(frame = istream_->read_frame()) &&
-           ostream_->write_frame(frame) );
+    while (bool(frame = istream_->current_frame()) &&
+           ostream_->write_frame(frame) )
+      if(!istream_->advance())
+        break;
   else
     for (int i=0; i<num_frames &&
-         bool(frame = istream_->read_frame()) &&
-         ostream_->write_frame(frame); ++i);
+         bool(frame = istream_->current_frame()) &&
+         ostream_->write_frame(frame); ++i)
+      if(!istream_->advance())
+        break;
   ostream_->close();
 
   if (istream_->is_seekable())
@@ -196,12 +191,12 @@ void vidl2_player_manager::pipe_streams()
 
 void vidl2_player_manager::redraw()
 {
-  if (istream_) {
+  if (istream_.get()) {
     unsigned int frame_num = istream_->frame_number();
     if (frame_num == unsigned(-1))
       vgui::out << "invalid frame\n";
     else
-      vgui::out << "frame["<< frame_num <<"]";
+      vgui::out << "frame "<< frame_num+1 ;
 
     int num_frames = istream_->num_frames();
     if(num_frames >=0)
@@ -239,7 +234,7 @@ void vidl2_player_manager::play_video()
 {
   if (play_video_)
     return;
-  if (!istream_) {
+  if (!istream_.get()) {
     vcl_cout << "No movie has been loaded\n";
     return;
   }
@@ -269,7 +264,7 @@ void vidl2_player_manager::play_video()
 void vidl2_player_manager::stop_video()
 {
   play_video_ = false;
-  if (istream_ && istream_->is_seekable()) {
+  if (istream_.get() && istream_->is_seekable()) {
     istream_->seek_frame(0);
     this->redraw();
   }
@@ -285,7 +280,7 @@ void vidl2_player_manager::pause_video()
 // and prompt for the frame number to jump to.
 void vidl2_player_manager::go_to_frame()
 {
-  if (!istream_)
+  if (!istream_.get())
     return;
   if (!istream_->is_seekable()) {
     vcl_cerr << "This stream does not support seeking\n";
@@ -308,7 +303,7 @@ void vidl2_player_manager::go_to_frame()
 //If the video is not playing go to the next frame
 void vidl2_player_manager::next_frame()
 {
-  if (play_video_ || !istream_)
+  if (play_video_ || !istream_.get())
     return;
   if (istream_->advance()) {
     this->redraw();
@@ -318,7 +313,7 @@ void vidl2_player_manager::next_frame()
 //If the video is not playing go to the previous frame
 void vidl2_player_manager::prev_frame()
 {
-  if (play_video_ || !istream_)
+  if (play_video_ || !istream_.get())
     return;
   int prev_frame = istream_->frame_number() - 1;
   if (prev_frame >= 0) {

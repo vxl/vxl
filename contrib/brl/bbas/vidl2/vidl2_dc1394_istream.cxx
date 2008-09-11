@@ -109,6 +109,9 @@ struct vidl2_dc1394_istream::pimpl
     max_speed_(DC1394_ISO_SPEED_400),
     b_mode_(false),
     pixel_format_(VIDL2_PIXEL_FORMAT_UNKNOWN),
+    width_(0),
+    height_(0),
+    framerate_(0.0),
     cur_frame_(NULL),
     dc1394frame_(NULL),
     cur_frame_valid_(false)
@@ -126,6 +129,12 @@ struct vidl2_dc1394_istream::pimpl
   bool b_mode_;
 
   vidl2_pixel_format pixel_format_;
+
+  unsigned int width_;
+
+  unsigned int height_;
+
+  double framerate_;
 
   //: The last successfully decoded frame.
   mutable vidl2_frame_sptr cur_frame_;
@@ -275,7 +284,8 @@ open(unsigned int num_dma_buffers,
 
 
   is_->pixel_format_ = vidl2_iidc1394_params::pixel_format(params.video_mode_);
-
+  vidl2_iidc1394_params::resolution(params.video_mode_,is_->width_,is_->height_);
+  is_->framerate_ = vidl2_iidc1394_params::frame_rate_val(params.frame_rate_);
 
   // turn on the camera power
   dc1394switch_t pwr;
@@ -321,6 +331,10 @@ close()
     is_->camera_info_ = NULL;
   }
   is_->vid_index_ = unsigned(-1);
+  is_->pixel_format_ = VIDL2_PIXEL_FORMAT_UNKNOWN;
+  is_->width_ = 0;
+  is_->height_ = 0;
+  is_->framerate_ = 0.0;
 }
 
 
@@ -444,7 +458,7 @@ bool
 vidl2_dc1394_istream::
 is_valid() const
 {
-  return is_open();
+  return is_open() && bool(is_->dc1394frame_);
 }
 
 
@@ -473,6 +487,42 @@ vidl2_dc1394_istream::
 frame_number() const
 {
   return is_->vid_index_;
+}
+
+
+//: Return the width of each frame
+unsigned int
+vidl2_dc1394_istream::
+width() const
+{
+  return is_->width_;
+}
+
+
+//: Return the height of each frame
+unsigned int 
+vidl2_dc1394_istream::
+height() const
+{
+  return is_->height_;
+}
+
+
+//: Return the pixel format
+vidl2_pixel_format 
+vidl2_dc1394_istream::
+format() const
+{
+  return is_->pixel_format_;
+}
+
+
+//: Return the frame rate (0.0 if unspecified)
+double 
+vidl2_dc1394_istream::
+frame_rate() const
+{
+  return is_->framerate_;
 }
 
 

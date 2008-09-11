@@ -251,6 +251,83 @@ frame_number() const
 }
 
 
+//: Return the width of each frame
+unsigned int
+vidl2_ffmpeg_istream
+::width() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return 0;
+  }
+#if LIBAVFORMAT_BUILD <= 4628
+  AVCodecContext* enc = &is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+#else
+  AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+#endif
+  return enc->width;
+}
+
+
+//: Return the height of each frame
+unsigned int 
+vidl2_ffmpeg_istream
+::height() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return 0;
+  }
+#if LIBAVFORMAT_BUILD <= 4628
+  AVCodecContext* enc = &is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+#else
+  AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+#endif
+  return enc->height;
+}
+
+
+//: Return the pixel format
+vidl2_pixel_format 
+vidl2_ffmpeg_istream
+::format() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return VIDL2_PIXEL_FORMAT_UNKNOWN;
+  }
+#if LIBAVFORMAT_BUILD <= 4628
+  AVCodecContext* enc = &is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+#else
+  AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+#endif
+  vidl2_pixel_format fmt = vidl2_pixel_format_from_ffmpeg(enc->pix_fmt);
+  if (fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
+    return VIDL2_PIXEL_FORMAT_RGB_24;
+  return fmt;
+}
+
+
+//: Return the frame rate (0.0 if unspecified)
+double 
+vidl2_ffmpeg_istream
+::frame_rate() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return 0.0;
+  }
+#if LIBAVFORMAT_BUILD <= 4623
+  return static_cast<double>(is_->vid_str_->r_frame_rate)
+         / is_->vid_str_->r_frame_rate_base
+         / AV_TIME_BASE;
+#else
+  return static_cast<double>(is_->vid_str_->time_base.num)/is_->vid_str_->time_base.den
+         * static_cast<double>(is_->vid_str_->r_frame_rate.num) / is_->vid_str_->r_frame_rate.den;
+#endif
+}
+
+
 //: Advance to the next frame (but don't acquire an image)
 bool
 vidl2_ffmpeg_istream::

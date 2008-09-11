@@ -72,6 +72,18 @@ class vidl2_dc1394_istream
   //: Return the current frame number
   virtual unsigned int frame_number() const;
 
+  //: Return the width of each frame
+  virtual unsigned int width() const;
+
+  //: Return the height of each frame
+  virtual unsigned int height() const;
+
+  //: Return the pixel format
+  virtual vidl2_pixel_format format() const;
+
+  //: Return the frame rate (FPS, 0.0 if unspecified)
+  virtual double frame_rate() const;
+
   //: Advance to the next frame (but don't acquire an image)
   virtual bool advance();
 

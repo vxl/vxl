@@ -76,6 +76,19 @@ class vidl2_dshow_file_istream : public vidl2_istream
   //: Return the current frame number.
   virtual unsigned int frame_number() const { return frame_index_; }
 
+  //: Return the width of each frame
+  virtual unsigned int width() const { return buffer_width_; }
+
+  //: Return the height of each frame
+  virtual unsigned int height() const { return buffer_height_; }
+
+  //: Return the pixel format
+  virtual vidl2_pixel_format format() const { return buffer_pixel_format_; }
+
+  //: Return the frame rate (FPS, 0.0 if unspecified)
+  // TODO return a valid framerate
+  virtual double frame_rate() const { return 0.0; }
+
   //: Close the stream.
   virtual void close();
 

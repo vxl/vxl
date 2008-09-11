@@ -251,3 +251,39 @@ vidl2_frame_sptr vidl2_v4l_istream::read_frame()
         return current_frame();
     return NULL;
 }
+
+
+//: Return the width of each frame
+unsigned int vidl2_v4l_istream::width() const
+{
+  if(!is_open())
+    return 0;
+  return cur_frame_->ni();
+}
+
+
+//: Return the height of each frame
+unsigned int vidl2_v4l_istream::height() const
+{
+  if(!is_open())
+    return 0;
+  return cur_frame_->nj();
+}
+
+
+//: Return the pixel format
+vidl2_pixel_format vidl2_v4l_istream::format() const
+{
+  if(!is_open())
+    return VIDL2_PIXEL_FORMAT_UNKNOWN;
+  return cur_frame_->pixel_format();
+}
+
+
+//: Return the frame rate (FPS, 0.0 if unspecified)
+double vidl2_v4l_istream::frame_rate() const
+{
+  // TODO return a frame rate here if v4l can be
+  // configured for a constant frame rate
+  return 0.0;
+}

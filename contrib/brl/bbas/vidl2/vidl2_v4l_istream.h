@@ -74,6 +74,18 @@ class vidl2_v4l_istream:public vidl2_istream
     //  returns -1 for non-seekable streams
     virtual int num_frames() const { return -1; }
 
+    //: Return the width of each frame
+    virtual unsigned int width() const;
+
+    //: Return the height of each frame
+    virtual unsigned int height() const;
+
+    //: Return the pixel format
+    virtual vidl2_pixel_format format() const;
+
+    //: Return the frame rate (FPS, 0.0 if unspecified)
+    virtual double frame_rate() const;
+
     //: Return the current frame number
     virtual unsigned int frame_number() const{return frame_number_;};
 

@@ -36,6 +36,7 @@ struct vidl2_ffmpeg_istream::pimpl
     last_dts( 0 ),
     frame_( NULL ),
     num_frames_( 0 ),
+    cur_frame_( NULL ),
     sws_context_( NULL ),
     cur_frame_( NULL ),
     deinterlace_( false ),
@@ -179,8 +180,6 @@ open(const vcl_string& filename)
     ++is_->num_frames_;
   seek_frame(0);
 
-  advance();
-
   return true;
 }
 
@@ -259,6 +258,67 @@ frame_number() const
       * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
           / is_->vid_str_->time_base.den
       - is_->frame_number_offset_;
+}
+
+
+//: Return the width of each frame
+unsigned int
+vidl2_ffmpeg_istream
+::width() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return 0;
+  }
+
+  return is_->fmt_cxt_->streams[is_->vid_index_]->codec->width;
+}
+
+
+//: Return the height of each frame
+unsigned int 
+vidl2_ffmpeg_istream
+::height() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return 0;
+  }
+
+  return is_->fmt_cxt_->streams[is_->vid_index_]->codec->height;
+}
+
+
+//: Return the pixel format
+vidl2_pixel_format 
+vidl2_ffmpeg_istream
+::format() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return VIDL2_PIXEL_FORMAT_UNKNOWN;
+  }
+
+  AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+  vidl2_pixel_format fmt = vidl2_pixel_format_from_ffmpeg(enc->pix_fmt);
+  if (fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
+    return VIDL2_PIXEL_FORMAT_RGB_24;
+  return fmt;
+}
+
+
+//: Return the frame rate (0.0 if unspecified)
+double 
+vidl2_ffmpeg_istream
+::frame_rate() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return 0.0;
+  }
+
+  return static_cast<double>(is_->vid_str_->time_base.num)/is_->vid_str_->time_base.den
+         * static_cast<double>(is_->vid_str_->r_frame_rate.num) / is_->vid_str_->r_frame_rate.den;
 }
 
 

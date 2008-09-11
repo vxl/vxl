@@ -12,7 +12,7 @@
 // \date 19 Dec 2005
 
 #include "vidl2_frame_sptr.h"
-
+#include "vidl2_pixel_format.h"
 
 //: A base class for input video streams
 class vidl2_istream
@@ -38,6 +38,18 @@ class vidl2_istream
 
   //: Return the current frame number
   virtual unsigned int frame_number() const = 0;
+
+  //: Return the width of each frame
+  virtual unsigned int width() const = 0;
+
+  //: Return the height of each frame
+  virtual unsigned int height() const = 0;
+
+  //: Return the pixel format
+  virtual vidl2_pixel_format format() const = 0;
+
+  //: Return the frame rate (FPS, 0.0 if unspecified)
+  virtual double frame_rate() const = 0;
 
   //: Close the stream
   virtual void close() = 0;

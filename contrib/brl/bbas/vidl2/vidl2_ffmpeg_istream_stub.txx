@@ -83,6 +83,44 @@ vidl2_ffmpeg_istream
   return 0;
 }
 
+
+//: Return the width of each frame
+unsigned int
+vidl2_ffmpeg_istream
+::width() const
+{
+  return 0;
+}
+
+
+//: Return the height of each frame
+unsigned int 
+vidl2_ffmpeg_istream
+::height() const
+{
+  return 0;
+}
+
+
+//: Return the pixel format
+vidl2_pixel_format 
+vidl2_ffmpeg_istream
+::format() const
+{
+  return VIDL2_PIXEL_FORMAT_UNKNOWN;
+}
+
+
+//: Return the frame rate (0.0 if unspecified)
+double 
+vidl2_ffmpeg_istream
+::frame_rate() const
+{
+  return 0.0;
+}
+
+
+
 bool
 vidl2_ffmpeg_istream
 ::advance()

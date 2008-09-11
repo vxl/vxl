@@ -25,17 +25,35 @@
 // \note the initial frame index is invalid until advance() is called
 static const unsigned int INIT_INDEX = unsigned(-1);
 
+namespace{
+
+//: Predict the 
+vidl2_pixel_format predict_format()
+{
+}
+
+}
+
 
 //: Constructor
 vidl2_image_list_istream::
 vidl2_image_list_istream()
-  : index_(INIT_INDEX), current_frame_(NULL) {}
+  : index_(INIT_INDEX),
+    ni_(0), nj_(0),
+    format_(VIDL2_PIXEL_FORMAT_UNKNOWN),
+    current_frame_(NULL) {}
 
 
 //: Constructor
 vidl2_image_list_istream::
 vidl2_image_list_istream(const vcl_string& glob)
-  : index_(INIT_INDEX), current_frame_(NULL) { open(glob); }
+  : index_(INIT_INDEX),
+    ni_(0), nj_(0),
+    format_(VIDL2_PIXEL_FORMAT_UNKNOWN),
+    current_frame_(NULL)
+{
+  open(glob);
+}
 
 
 //: Open a new stream using a file glob (see vul_file_iterator)
@@ -85,8 +103,20 @@ open(const vcl_vector<vcl_string>& paths)
   // test each file to ensure it exists and is a supported image format
   for (vcl_vector<vcl_string>::const_iterator i = paths.begin(); i!=paths.end(); ++i)
   {
-    if (vil_load_image_resource(i->c_str()))
+    vil_image_resource_sptr img = vil_load_image_resource(i->c_str());
+    if (img)
+    {
+      if(ni_ == 0 || nj_ == 0)
+      {
+        ni_ = img->ni();
+        nj_ = img->nj();
+        // convert the first frame to get the pixel format
+        format_ = vidl2_convert_to_frame(img->get_view())->pixel_format();
+      }
+      else if(ni_ != img->ni() || nj_ != img->nj())
+        continue;
       image_paths_.push_back(*i);
+    }
   }
   index_ = INIT_INDEX;
   current_frame_ = NULL;
@@ -102,6 +132,9 @@ close()
   image_paths_.clear();
   index_ = INIT_INDEX;
   current_frame_ = NULL;
+  ni_ = 0;
+  nj_ = 0;
+  format_ = VIDL2_PIXEL_FORMAT_UNKNOWN;
 }
 
 

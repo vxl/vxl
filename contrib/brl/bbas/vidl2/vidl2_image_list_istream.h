@@ -70,6 +70,17 @@ class vidl2_image_list_istream
   //: Return the current frame number
   virtual unsigned int frame_number() const { return index_; }
 
+  //: Return the width of each frame
+  virtual unsigned int width() const { return ni_; }
+
+  //: Return the height of each frame
+  virtual unsigned int height() const { return nj_; }
+
+  //: Return the pixel format
+  virtual vidl2_pixel_format format() const { return format_; }
+
+  //: Return the frame rate (0.0 if unspecified)
+  virtual double frame_rate() const { return 0.0; }
 
   //: Advance to the next frame (but do not open the next image)
   virtual bool advance();
@@ -93,6 +104,13 @@ class vidl2_image_list_istream
 
   //: The current index
   unsigned int index_;
+
+  //: The image width
+  unsigned int ni_;
+  //: The image height
+  unsigned int nj_;
+  //: The pixel format
+  vidl2_pixel_format format_;
 
   //: The current frame (cached)
   vidl2_frame_sptr current_frame_;

@@ -9,6 +9,7 @@
 //
 //----------------------------------------------------------------------------
 
+#include <vcl_memory.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
@@ -93,8 +94,8 @@ class vidl2_player_manager : public vgui_wrapper_tableau
   float time_interval_;
   unsigned width_;
   unsigned height_;
-  vidl2_istream* istream_;
-  vidl2_ostream* ostream_;
+  vcl_auto_ptr<vidl2_istream> istream_;
+  vcl_auto_ptr<vidl2_ostream> ostream_;
   vgui_window* win_;
   vgui_viewer2D_tableau_sptr v2D_;
   vgui_image_tableau_sptr itab_;
