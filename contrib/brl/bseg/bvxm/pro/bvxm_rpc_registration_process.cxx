@@ -6,7 +6,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 
-#include <bil/algo/bil_cedt.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
@@ -20,71 +19,108 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
   //input[3]: The flag indicating whether to correct offsets of input image (offsets are corrected if true)
   //input[4]: Scale of the image
 
-  input_data_.resize(5,brdb_value_sptr(0));
-  input_types_.resize(5);
+  input_data_.resize(6,brdb_value_sptr(0));
+  input_types_.resize(6);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
   input_types_[3] = "bool";
-  input_types_[4] = "unsigned";
+  input_types_[4] = "float";
+  input_types_[5] = "unsigned";
 
   // process has 2 outputs:
   // output[0]: The optimized camera
-  // output[1]: Expected Voxel Image
-  output_data_.resize(2,brdb_value_sptr(0));
-  output_types_.resize(2);
+  // output[1]: Edge image
+  // output[2]: Expected voxel image
+  output_data_.resize(3,brdb_value_sptr(0));
+  output_types_.resize(3);
   output_types_[0] = "vpgl_camera_double_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
+  output_types_[2] = "vil_image_view_base_sptr";
 
   // adding parameters
-  parameters()->add("gaussian sigma for the edge distance map", "cedt_image_gaussian_sigma", 2.0);
-  parameters()->add("maximum expected error in the rpc image offset", "offset_search_size", 20);
+  parameters()->add("noise_multiplier", "noise_multiplier", 1.5);
+  parameters()->add("smooth", "smooth", 1.5);
+  parameters()->add("automatic_threshold", "automatic_threshold", false);
+  parameters()->add("junctionp", "junctionp", false);
+  parameters()->add("aggressive_junction_closure", "aggressive_junction_closure", false);
+  parameters()->add("edt_gaussian_sigma", "edt_gaussian_sigma", 2.0);
 }
 
 bool bvxm_rpc_registration_process::execute()
 {
   // Sanity check
-  if (!this->verify_inputs())
-    return false;
-
-  // get the inputs
-  // voxel world
-  brdb_value_t<bvxm_voxel_world_sptr>* input0 = static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[0].ptr());
-  // camera
-  brdb_value_t<vpgl_camera_double_sptr>* input1 =  static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[1].ptr());
-  // edge image
-  brdb_value_t<vil_image_view_base_sptr>* input2 = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
-  // boolean parameter specifyi
-  brdb_value_t<bool>* input3 = static_cast<brdb_value_t<bool>* >(input_data_[3].ptr());
-  brdb_value_t<unsigned>* input4 = static_cast<brdb_value_t<unsigned>* >(input_data_[4].ptr());
-
-  bvxm_voxel_world_sptr vox_world = input0->value();
-
-  vpgl_camera_double_sptr camera_inp = input1->value();
-
-  vil_image_view_base_sptr edge_image_sptr = input2->value();
-  bool rpc_correction_flag = input3->value();
-  unsigned scale = input4->value();
-
-  vil_image_view<vxl_byte> edge_image(edge_image_sptr);
-
-  // get parameters
-  double cedt_image_gaussian_sigma=0.0;
-  int offset_search_size=0;
-  if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
-      !parameters()->get_value("offset_search_size", offset_search_size)) {
-    vcl_cout << "problems in retrieving parameters\n";
+  if (!this->verify_inputs()){
+    vcl_cout << "problem(s) in inputs: please see brl/bseg/bvxm_batch/change_detection.py for correct usage\n";
     return false;
   }
 
-  int ni = edge_image.ni();
-  int nj = edge_image.nj();
+  // get the inputs
+  brdb_value_t<bvxm_voxel_world_sptr>* input0 = static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[0].ptr());
+  brdb_value_t<vpgl_camera_double_sptr>* input1 =  static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[1].ptr());
+  brdb_value_t<vil_image_view_base_sptr>* input2 = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
+  brdb_value_t<bool>* input3 = static_cast<brdb_value_t<bool>* >(input_data_[3].ptr());
+  brdb_value_t<float>* input4 = static_cast<brdb_value_t<float>* >(input_data_[4].ptr());
+  brdb_value_t<unsigned>* input5 = static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
+
+  bvxm_voxel_world_sptr vox_world = input0->value();
+  vpgl_camera_double_sptr camera_inp = input1->value();
+  vil_image_view_base_sptr image_sptr = input2->value();
+  bool rpc_correction_flag = input3->value();
+  float uncertainty = input4->value();
+  unsigned scale = input5->value();
+
+  // get parameters
+  // adding parameters
+  double noise_multiplier, smooth, edt_gaussian_sigma;
+  bool automatic_threshold, junctionp, aggressive_junction_closure;
+  if(
+    !parameters()->get_value("noise_multiplier", noise_multiplier) ||
+    !parameters()->get_value("smooth", smooth) ||
+    !parameters()->get_value("automatic_threshold", automatic_threshold) ||
+    !parameters()->get_value("junctionp", junctionp) ||
+    !parameters()->get_value("aggressive_junction_closure", aggressive_junction_closure) ||
+    !parameters()->get_value("edt_gaussian_sigma", edt_gaussian_sigma)){
+    vcl_cout << "problem(s) in parameters: please see brl/bseg/bvxm_batch/multiscale/rpc_registration_parameters.xml for correct xml formatting\n";
+    return false;
+  }
+
+  // estimate the offset search size in the image space
+  vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
+  vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
+  vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
+
+  for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
+    vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
+    vgl_point_3d<double> curr_pt;
+    if(camera_inp->type_name()=="vpgl_local_rational_camera"){
+      curr_pt.set(curr_corner.x(),curr_corner.y(),curr_corner.z());
+    }
+    else if(camera_inp->type_name()=="vpgl_rational_camera"){
+      double lon, lat, gz;
+      vox_world->get_params()->lvcs()->local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
+                          bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+      curr_pt.set(lon, lat, gz);
+    }
+    
+    double curr_u,curr_v;
+    camera_inp->project(curr_pt.x(),curr_pt.y(),curr_pt.z(),curr_u,curr_v);
+    vgl_point_2d<double> p2d_uncertainty(curr_u,curr_v);
+    roi_uncertainty->add(p2d_uncertainty);
+  }
+
+  int offset_search_size = vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty->width(),roi_uncertainty->height()));
+  vcl_cout << "Offset search size is: " << offset_search_size << "\n";
+
+  vil_image_view<vxl_byte> image(image_sptr);
+  int ni = image.ni();
+  int nj = image.nj();
 
   double max_prob = 0.0;
   int max_u = 0, max_v = 0;
 
-  vil_image_view<vxl_byte> expected_edge_image_output;
-  expected_edge_image_output.set_size(ni,nj);
+  vil_image_view<vxl_byte> edge_image_output(ni,nj,1);
+  vil_image_view<vxl_byte> expected_edge_image_output(ni,nj,1);
   expected_edge_image_output.fill(0);
 
   // part 1: correction
@@ -103,15 +139,27 @@ bool bvxm_rpc_registration_process::execute()
     vox_world->expected_edge_image(camera_metadata_inp, expected_edge_image_sptr, scale);
     vil_image_view<float> expected_edge_image(expected_edge_image_sptr);
 
+    float eei_min = vcl_numeric_limits<float>::max();
+    float eei_max = vcl_numeric_limits<float>::min();
+
     // setting the output edge image for viewing purposes
     for (int i=0; i<ni; i++) {
       for (int j=0; j<nj; j++) {
-        expected_edge_image_output(i,j) = (vxl_byte)(256.0*expected_edge_image(i,j));
+        eei_min = vnl_math_min(eei_min,expected_edge_image(i,j));
+        eei_max = vnl_math_max(eei_max,expected_edge_image(i,j));
+      }
+    }
+    float division_factor = vnl_math_max((eei_max-eei_min),0.000001f);  // to prevent division by 0
+    for (int i=0; i<ni; i++) {
+      for (int j=0; j<nj; j++) {
+        expected_edge_image_output(i,j) = (int)(255.0*(expected_edge_image(i,j)-eei_min)/division_factor);
       }
     }
 
-    vcl_cout << "Estimating image offsets:" << vcl_endl;
+    vil_image_view<vxl_byte> edge_image = bvxm_util::detect_edges(image,noise_multiplier,smooth,automatic_threshold,junctionp,aggressive_junction_closure);
+    edge_image_output.deep_copy(edge_image);
 
+    vcl_cout << "Estimating image offsets:" << vcl_endl;
     // this a two level search algorithm
     // the first level search for the optimal offset parameters in a large scale depending on the input offset search size
     // the second level search for the optimal offset parameters in a small scale
@@ -131,7 +179,7 @@ bool bvxm_rpc_registration_process::execute()
           // find the total probability of the edge image given the expected edge image
           for (int m=offset_search_size; m<ni-offset_search_size; m++) {
             for (int n=offset_search_size; n<nj-offset_search_size; n++) {
-              if (edge_image(m,n)==255) {
+              if (edge_image_output(m,n)==255) {
                 prob += expected_edge_image(m-u,n-v);
               }
             }
@@ -200,35 +248,33 @@ bool bvxm_rpc_registration_process::execute()
   // "rpc_correction_flag" parameter to 0 (false).
 
   if (!rpc_correction_flag) {
-    vil_image_view<vxl_byte> edge_image_negated(edge_image);
-    vil_math_scale_and_offset_values(edge_image_negated,-1.0,255);
-
-    // generates the edge distance transform
-    bil_cedt bil_cedt_operator(edge_image_negated);
-    bil_cedt_operator.compute_cedt();
-    vil_image_view<float> cedt_image = bil_cedt_operator.cedtimg();
-    cedt_image = bvxm_util::multiply_image_with_gaussian_kernel(cedt_image,cedt_image_gaussian_sigma);
 
     unsigned max_scale=vox_world->get_params()->max_scale();
     for (unsigned curr_scale = scale;curr_scale < max_scale;curr_scale++)
     {
       bool result;
-      if (curr_scale!=scale)
-      {
-        vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-        cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
-        vpgl_camera_double_sptr new_camera_out=bvxm_util::downsample_camera( camera_out, curr_scale);
-        bvxm_image_metadata camera_metadata_out(cedt_image_sptr,new_camera_out);
-        result=vox_world->update_edges(camera_metadata_out,curr_scale);
-      }
-      else
-      {
-        vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-        bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_out);
-        result=vox_world->update_edges(camera_metadata_out,curr_scale);
-      }
 
-      // updates the edge probabilities in the voxel world
+      vil_image_view<vxl_byte> curr_image;
+      vpgl_camera_double_sptr curr_camera;
+      if (curr_scale!=scale){
+        curr_image = *bvxm_util::downsample_image_by_two(&image);
+        curr_camera = bvxm_util::downsample_camera(camera_out,curr_scale);
+      }
+      else{
+        curr_image.deep_copy(image);
+        curr_camera = camera_out;
+      }
+      vil_image_view<vxl_byte> edge_image = bvxm_util::detect_edges(curr_image,noise_multiplier,smooth,automatic_threshold,junctionp,aggressive_junction_closure);
+      if (curr_scale==scale){
+        edge_image_output.deep_copy(edge_image);
+      }
+      vil_image_view<float> cedt_image;
+      bvxm_util::edge_distance_transform(edge_image,cedt_image);
+      cedt_image = bvxm_util::multiply_image_with_gaussian_kernel(cedt_image,edt_gaussian_sigma);
+      vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
+      
+      bvxm_image_metadata camera_metadata_out(cedt_image_sptr,curr_camera);
+      result=vox_world->update_edges(camera_metadata_out,curr_scale);
 
       if (!result){
         vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage\n";
@@ -243,9 +289,13 @@ bool bvxm_rpc_registration_process::execute()
   brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(camera_out);
   output_data_[0] = output0;
 
-  // update the expected edge image and store
-  brdb_value_sptr output1 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(expected_edge_image_output));
+  // update the edge image and store
+  brdb_value_sptr output1 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(edge_image_output));
   output_data_[1] = output1;
+
+  // update the expected edge image and store
+  brdb_value_sptr output2 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(expected_edge_image_output));
+  output_data_[2] = output2;
 
   return true;
 }
