@@ -169,6 +169,8 @@ void vidl2_player_manager::pipe_streams()
     return;
 
   unsigned int initial_frame = istream_->frame_number();
+  if(initial_frame == static_cast<unsigned int>(-1))
+    istream_->advance();
 
   vidl2_frame_sptr frame;
   if (num_frames < 0)
@@ -196,13 +198,14 @@ void vidl2_player_manager::redraw()
     if (frame_num == unsigned(-1))
       vgui::out << "invalid frame\n";
     else
+    {
       vgui::out << "frame "<< frame_num+1 ;
-
-    int num_frames = istream_->num_frames();
-    if(num_frames >=0)
-      vgui::out << " of "<<num_frames<<"\n";
-    else
-      vgui::out << "\n";
+      int num_frames = istream_->num_frames();
+      if(num_frames >=0)
+        vgui::out << " of "<<num_frames<<"\n";
+      else
+        vgui::out << "\n";
+    }
 
     vidl2_frame_sptr frame = istream_->current_frame();
     if(!frame)
