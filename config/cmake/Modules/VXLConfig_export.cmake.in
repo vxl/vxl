@@ -41,10 +41,15 @@ SET(VXL_LIBRARY_DIR "@CMAKE_INSTALL_PREFIX@/lib")
 # Clients projects should not use the Find*.cmake files in this directory.
 SET(VXL_CMAKE_DIR "@CMAKE_INSTALL_PREFIX@/share/vxl/cmake")
 
-# VXL Configuration options.
+# VXL Configuration options. You don't have to build with the same options as VXL, but it often helps.
 SET(VXL_BUILD_SHARED_LIBS "@BUILD_SHARED_LIBS@")
 SET(VXL_BUILD_TESTS "@BUILD_TESTS@")
 SET(VXL_BUILD_EXAMPLES "@BUILD_EXAMPLES@")
+SET(VXL_EXTRA_CMAKE_CXX_FLAGS "@VXL_EXTRA_CMAKE_CXX_FLAGS@")
+SET(VXL_EXTRA_CMAKE_C_FLAGS "@VXL_EXTRA_CMAKE_C_FLAGS@")
+SET(VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS "@VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS@")
+SET(VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS "@VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS@")
+SET(VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS "@VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS@")
 
 # VXL has many parts that are optional, depending on selections made
 # when building.  The stanzas below give a consistent (though
