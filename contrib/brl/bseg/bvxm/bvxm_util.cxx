@@ -19,6 +19,8 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <bil/algo/bil_edt.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 
 #include "bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
@@ -321,4 +323,32 @@ void bvxm_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil
       out_edt(i,j) = vcl_sqrt((float)curr_image_edt(i,j));
     }
   }
+}
+
+int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera){
+  // estimate the offset search size in the image space
+  vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
+  vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
+  vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
+
+  for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
+    vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
+    vgl_point_3d<double> curr_pt;
+    if(camera->type_name()=="vpgl_local_rational_camera"){
+      curr_pt.set(curr_corner.x(),curr_corner.y(),curr_corner.z());
+    }
+    else if(camera->type_name()=="vpgl_rational_camera"){
+      double lon, lat, gz;
+      lvcs->local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
+                          bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+      curr_pt.set(lon, lat, gz);
+    }
+    
+    double curr_u,curr_v;
+    camera->project(curr_pt.x(),curr_pt.y(),curr_pt.z(),curr_u,curr_v);
+    vgl_point_2d<double> p2d_uncertainty(curr_u,curr_v);
+    roi_uncertainty->add(p2d_uncertainty);
+  }
+
+  return vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty->width(),roi_uncertainty->height()));
 }
