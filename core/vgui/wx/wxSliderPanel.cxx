@@ -41,7 +41,8 @@ const char wxSliderPanel::enter[] = "";
 
 //: Constructor - Default
 wxSliderPanel::wxSliderPanel()
-: base_id_(10100)
+: base_id_(10100),
+  send_messages_(true)
 {
   Init();
 }
@@ -54,6 +55,7 @@ wxSliderPanel::wxSliderPanel(wxWindow* parent,
                              const wxSize& size,
                              long style,
                              const wxString& name)
+  : send_messages_(true)
 {
   Init();
   Create(parent, id, base_id, pos, size, style, name);
@@ -204,11 +206,14 @@ void wxSliderPanel::OnSliderChange( wxScrollEvent& event )
     return;
   }
 
-  vgui_message m;
-  m.from = this;
-  m.user = wxSliderPanel::enter;
-  m.data = &idx;
-  notify(m);
+  if(send_messages_)
+  {
+    vgui_message m;
+    m.from = this;
+    m.user = wxSliderPanel::enter;
+    m.data = &idx;
+    notify(m);
+  }
 }
 
 
@@ -228,11 +233,14 @@ void wxSliderPanel::OnChangeText( wxCommandEvent& event )
   slider->SetValue(spos);
   event.Skip();
 
-  vgui_message m;
-  m.from = this;
-  m.user = wxSliderPanel::update;
-  m.data = &idx;
-  notify(m);
+  if(send_messages_)
+  {
+    vgui_message m;
+    m.from = this;
+    m.user = wxSliderPanel::update;
+    m.data = &idx;
+    notify(m);
+  }
 }
 
 
@@ -247,28 +255,37 @@ void wxSliderPanel::OnEnterText( wxCommandEvent& event )
     return;
   }
 
-  vgui_message m;
-  m.from = this;
-  m.user = wxSliderPanel::enter;
-  m.data = &idx;
-  notify(m);
+  if(send_messages_)
+  {
+    vgui_message m;
+    m.from = this;
+    m.user = wxSliderPanel::enter;
+    m.data = &idx;
+    notify(m);
+  }
 }
 
 
 //: Update the data
-void wxSliderPanel::update_data(vcl_vector<double>& data)
+void wxSliderPanel::update_data(vcl_vector<double>& data,
+                                bool send_messages)
 {
   for (unsigned int i=0; i<data.size() && i<vals_.size(); ++i)
   {
-    update_data(i,data[i]);
+    update_data(i,data[i],send_messages);
   }
 }
 
 //: Update a single value
-void wxSliderPanel::update_data(unsigned int i, double val)
+void wxSliderPanel::update_data(unsigned int i, double val,
+                                bool send_messages)
 {
   vals_[i] = val;
   int id = base_id_+2*i+1; // id of text control
   wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(FindWindowById(id));
+
+  // optionally disable sending messages about this update
+  send_messages_ = send_messages;
   text->SetValue(wxString::Format(wxT("%g"),val));
+  send_messages_ = true;
 }

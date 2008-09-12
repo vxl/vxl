@@ -74,9 +74,11 @@ class wxSliderPanel: public wxScrolledWindow, public vgui_observable
   const vcl_vector<double>& data() const { return vals_; }
 
   //: Update the data
-  void update_data(vcl_vector<double>& data);
+  void update_data(vcl_vector<double>& data,
+                   bool send_messages = true);
   //: Update the data
-  void update_data(unsigned int i, double val);
+  void update_data(unsigned int i, double val,
+                   bool send_messages = true);
 
   //: Return the number of sliders
   unsigned int size() const { return vals_.size(); }
@@ -98,6 +100,9 @@ class wxSliderPanel: public wxScrolledWindow, public vgui_observable
   vcl_vector<double> vals_;
   vcl_vector<double> min_vals_;
   vcl_vector<double> max_vals_;
+
+  //: used to disable sending of message
+  bool send_messages_;
 };
 
 
