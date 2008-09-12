@@ -25,15 +25,6 @@
 // \note the initial frame index is invalid until advance() is called
 static const unsigned int INIT_INDEX = unsigned(-1);
 
-namespace{
-
-//: Predict the 
-vidl2_pixel_format predict_format()
-{
-}
-
-}
-
 
 //: Constructor
 vidl2_image_list_istream::
