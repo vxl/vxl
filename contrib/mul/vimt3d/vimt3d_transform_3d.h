@@ -19,7 +19,7 @@
 // - Translation  x->x + tx, y->y + ty, z->z + tz
 // - RigidBody    (Rotation, followed by translation)
 // - Similarity   (Isotropic scaling, followed by rotation, then translation)
-// - ZoomOnly     (Anisotropic scaling, followed by translation). This is a common special case of affine.
+// - ZoomOnly     (Anisotropic scaling, followed by translation)
 // - Affine
 //
 // One useful special case of Affine involves anisotropic scaling, followed
@@ -259,11 +259,9 @@ class vimt3d_transform_3d
                                     dp.z()*zz_);
 //   case RigidBody, Similarity, Affine :
      default : // Don't worry that the returned value is independent of p --- this is correct.
-      return vgl_vector_3d<double> (
-        xx_*(dp.x()*xx_+dp.y()*xy_+dp.z()*xz_),
-        yy_*(dp.x()*yx_+dp.y()*yy_+dp.z()*yz_),
-        zz_*(dp.x()*zx_+dp.y()*zy_+dp.z()*zz_)
-        );
+      return vgl_vector_3d<double> (dp.x()*xx_+dp.y()*xy_+dp.z()*xz_,
+                                    dp.x()*yx_+dp.y()*yy_+dp.z()*yz_,
+                                    dp.x()*zx_+dp.y()*zy_+dp.z()*zz_);
     }
   }
 

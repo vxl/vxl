@@ -16,7 +16,70 @@
 #endif
 
 
+//=========================================================================
+// For a given transform T, check that delta(p, q-p) == T(q)-T(p)
+//=========================================================================
+static bool delta_equiv(const vimt3d_transform_3d& T, 
+                        const vgl_point_3d<double>& p,
+                        const vgl_point_3d<double>& q)
+{
+  vgl_vector_3d<double> dp = T.delta(p, q-p);
+  vgl_vector_3d<double> pq = T(q)-T(p);
+  double dl = (dp-pq).length();
+  bool equiv = (dl<1e-12);
+#ifndef NDEBUG  
+  if (!equiv)
+  {
+    vcl_cerr << "dp: " << dp << "\n";
+    vcl_cerr << "pq: " << pq << "\n";
+    vcl_cerr << "dl: " << dl << "\n";
+  }
+#endif
+  return equiv;
+}
 
+
+//=========================================================================
+// Test the function delta() for various transforms
+//=========================================================================
+static bool test_delta()
+{
+  double tx=1.0, ty=2.0, tz=3.0;
+  double rx=0.1, ry=0.2, rz=0.3;
+  double sx=0.9, sy=1.0, sz=1.1;
+
+  vgl_point_3d<double> p(0,0,0);
+  vgl_point_3d<double> q(1,1,1);
+  vgl_vector_3d<double> dp(1,1,1);
+
+  // rigid_body
+  vimt3d_transform_3d R;
+  R.set_rigid_body(rx, ry, rz, tx, ty, tz);
+  if (!delta_equiv(R, p, q)) return false;
+
+  // similarity
+  vimt3d_transform_3d S;
+  S.set_similarity(sx, rx, ry, rz, tx, ty, tz);
+  if (!delta_equiv(S, p, q)) return false;
+
+  // zoom_only (iso)
+  vimt3d_transform_3d Z1;
+  Z1.set_zoom_only(sx, tx, ty, tz);
+  if (!delta_equiv(Z1, p, q)) return false;
+
+  // zoom_only (aniso)
+  vimt3d_transform_3d Z2;
+  Z2.set_zoom_only(sx, sy, sz, tx, ty, tz);
+  if (!delta_equiv(Z2, p, q)) return false;
+
+  // All tests passed
+  return true;
+}
+
+
+//=========================================================================
+// Test the function vimt3d_transform_is_zoom_only() for various transforms
+//=========================================================================
 static bool test_is_zoom_only()
 {
   double tx=1.0, ty=2.0, tz=3.0;
@@ -68,6 +131,8 @@ static bool test_is_zoom_only()
 }
 
 
+//=========================================================================
+//=========================================================================
 static void test_product(const vimt3d_transform_3d& t0, const vimt3d_transform_3d& t1)
 {
   vimt3d_transform_3d t01 = t0*t1;
@@ -77,6 +142,9 @@ static void test_product(const vimt3d_transform_3d& t0, const vimt3d_transform_3
   TEST_NEAR("Testing product",vgl_distance(q1,q2),0.0,1e-6);
 }
 
+
+//=========================================================================
+//=========================================================================
 static void test_products(const vimt3d_transform_3d& trans1)
 {
   vimt3d_transform_3d trans0;
@@ -373,7 +441,13 @@ static void test_transform_3d()
   TEST_NEAR("Binary IO for params", (v0-v0_in).magnitude(),0.0,1e-6);
 
   // --- Test the function vimt3d_is_transform_zoom_only()
-  TEST("Test function vimt3d_is_transform_zoom_only()...", test_is_zoom_only(), true);
+  vcl_cout << "\n== Testing vimt3d_is_transform_zoom_only() ==\n";
+  TEST("Test vimt3d_is_transform_zoom_only()", test_is_zoom_only(), true);
+
+  // --- Test the function delta()
+  vcl_cout << "\n== Testing delta() ==\n";
+  TEST("Test delta()", test_delta(), true);
+
 }
 
 TESTMAIN(test_transform_3d);
