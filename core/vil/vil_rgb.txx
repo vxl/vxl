@@ -32,7 +32,7 @@ VCL_INSTANTIATE_INLINE(vil_rgb<double > operator*(double b, const vil_rgb<T >& a
 #undef VIL_RGB_INSTANTIATE_LS
 #define VIL_RGB_INSTANTIATE_LS(T) \
 VCL_DEFINE_SPECIALIZATION \
-vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<unsigned char> const& rgb) \
+vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<T > const& rgb) \
 { \
 return s<< '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']'; \
 }
