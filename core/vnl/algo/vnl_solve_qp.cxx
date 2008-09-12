@@ -35,11 +35,11 @@ bool vnl_solve_qp_with_equality_constraints(const vnl_matrix<double>& H,
                                             vnl_vector<double>& x)
 {
   // Test inputs
-  unsigned n=H.rows();   // Number of unknowns
+  // unsigned n=H.rows();   // Number of unknowns
   unsigned nc=A.rows();  // Number of equality constraints
-  assert(H.cols()==n);
-  assert(g.size()==n);
-  assert(A.cols()==n);
+  assert(H.cols()==H.rows());
+  assert(g.size()==H.rows());
+  assert(A.cols()==H.rows());
   assert(b.size()==nc);
 
   vnl_matrix<double> H_inv;
@@ -79,9 +79,9 @@ bool vnl_solve_qp_zero_sum(const vnl_matrix<double>& H,
                            vnl_vector<double>& x)
 {
   // Test inputs
-  unsigned n=H.rows();   // Number of unknowns
-  assert(H.cols()==n);
-  assert(g.size()==n);
+  // unsigned n=H.rows();   // Number of unknowns
+  assert(H.cols()==H.rows());
+  assert(g.size()==H.rows());
 
   vnl_matrix<double> H_inv;
   vnl_cholesky Hchol(H,vnl_cholesky::estimate_condition);
@@ -292,11 +292,11 @@ bool vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double>& H,
 {
   // Test inputs
   unsigned n=H.rows();   // Number of unknowns
-  unsigned nc=A.rows();  // Number of equality constraints
+  //unsigned nc=A.rows();  // Number of equality constraints
   assert(H.cols()==n);
   assert(g.size()==n);
   assert(A.cols()==n);
-  assert(b.size()==nc);
+  assert(b.size()==A.rows());
 
   if (vnl_vector_ssd(A*x,b)>con_tol)
   {
