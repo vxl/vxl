@@ -17,7 +17,8 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
   //input[1]: The current camera
   //input[2]: The current edge image
   //input[3]: The flag indicating whether to correct offsets of input image (offsets are corrected if true)
-  //input[4]: Scale of the image
+  //input[4]: Uncertainty in meters
+  //input[5]: Scale of the image
 
   input_data_.resize(6,brdb_value_sptr(0));
   input_types_.resize(6);
@@ -71,7 +72,6 @@ bool bvxm_rpc_registration_process::execute()
   unsigned scale = input5->value();
 
   // get parameters
-  // adding parameters
   double noise_multiplier, smooth, edt_gaussian_sigma;
   bool automatic_threshold, junctionp, aggressive_junction_closure;
   if(
@@ -85,31 +85,7 @@ bool bvxm_rpc_registration_process::execute()
     return false;
   }
 
-  // estimate the offset search size in the image space
-  vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
-  vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
-  vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
-
-  for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
-    vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
-    vgl_point_3d<double> curr_pt;
-    if(camera_inp->type_name()=="vpgl_local_rational_camera"){
-      curr_pt.set(curr_corner.x(),curr_corner.y(),curr_corner.z());
-    }
-    else if(camera_inp->type_name()=="vpgl_rational_camera"){
-      double lon, lat, gz;
-      vox_world->get_params()->lvcs()->local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
-                          bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
-      curr_pt.set(lon, lat, gz);
-    }
-    
-    double curr_u,curr_v;
-    camera_inp->project(curr_pt.x(),curr_pt.y(),curr_pt.z(),curr_u,curr_v);
-    vgl_point_2d<double> p2d_uncertainty(curr_u,curr_v);
-    roi_uncertainty->add(p2d_uncertainty);
-  }
-
-  int offset_search_size = vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty->width(),roi_uncertainty->height()));
+  int offset_search_size = bvxm_util::convert_uncertainty_from_meters_to_pixels(uncertainty, vox_world->get_params()->lvcs(), camera_inp);
   vcl_cout << "Offset search size is: " << offset_search_size << "\n";
 
   vil_image_view<vxl_byte> image(image_sptr);
