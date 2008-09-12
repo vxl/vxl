@@ -3,6 +3,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bil)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
@@ -55,7 +56,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 ADD_LIBRARY( bvxm ${bvxm_sources})
 
 
-TARGET_LINK_LIBRARIES( bvxm bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vul vbl vsl bgeo brip sdet)
+TARGET_LINK_LIBRARIES( bvxm bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vul vbl vsl bgeo brip sdet bil_algo)
 
 SUBDIRS( io )
 SUBDIRS( pro )
