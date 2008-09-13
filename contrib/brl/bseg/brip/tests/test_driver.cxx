@@ -9,7 +9,8 @@ DECLARE( test_lucas_kanade );
 DECLARE( test_Horn_Schunck );
 DECLARE( test_quadtree );
 DECLARE( test_max_scale_response );
-
+DECLARE( test_mask );
+DECLARE( test_label_equivalence );
 void
 register_tests()
 {
@@ -22,6 +23,8 @@ register_tests()
   REGISTER( test_Horn_Schunck );
   REGISTER( test_quadtree );
   REGISTER( test_max_scale_response );
+  REGISTER( test_mask );
+  REGISTER( test_label_equivalence );
 }
 
 DEFINE_MAIN;

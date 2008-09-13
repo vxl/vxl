@@ -11,8 +11,9 @@ ADD_EXECUTABLE( brip_test_all
   test_Horn_Schunck.cxx
   test_quadtree.cxx
   test_max_scale_response.cxx
+  test_mask.cxx
+  test_label_equivalence.cxx
 )
-
 TARGET_LINK_LIBRARIES( brip_test_all brip vgl_algo vgl vnl_algo vnl vil vil1 testlib)
 
 ADD_TEST( brip_test_histogram    ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_histogram )
@@ -24,5 +25,6 @@ ADD_TEST( brip_test_lucas_kanade      ${EXECUTABLE_OUTPUT_PATH}/brip_test_all te
 ADD_TEST( brip_test_Horn_Schunck      ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_Horn_Schunck )
 ADD_TEST( brip_test_quadtree      ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_quadtree )
 ADD_TEST( brip_test_max_scale_response      ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_max_scale_response )
+ADD_TEST( brip_test_mask      ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_mask )
 ADD_EXECUTABLE( brip_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brip_test_include brip )

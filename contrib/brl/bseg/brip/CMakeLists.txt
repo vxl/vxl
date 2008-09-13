@@ -19,6 +19,9 @@ SET(brip_sources
    brip_quadtree_node.h      brip_quadtree_node_base_sptr.h
    brip_max_scale_response.h brip_max_scale_response.txx
    brip_quadtree_utils.h     brip_quadtree_utils.txx
+   brip_rect_mask.h          brip_rect_mask.cxx
+   brip_line_generator.h     brip_line_generator.cxx
+   brip_label_equivalence.h  brip_label_equivalence.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 

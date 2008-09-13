@@ -637,6 +637,24 @@ void brip_vil_float_ops::gradient_3x3(vil_image_view<float> const& input,
 #endif
 }
 
+void brip_vil_float_ops::gradient_mag_3x3(vil_image_view<float> const& input,
+                                          vil_image_view<float>& mag)
+{
+  unsigned w = input.ni(), h = input.nj();
+  float scale = 1.0f/6.0f;
+  for (unsigned y = 1; y<h-1; y++)
+    for (unsigned x = 1; x<w-1; x++)
+    {
+      float gx = input(x+1,y-1)+input(x+1,y)+ input(x+1,y-1)
+        -input(x-1,y-1) -input(x-1,y) -input(x-1,y-1);
+      float gy = input(x+1,y+1)+input(x,y+1)+ input(x-1,y+1)
+        -input(x+1,y-1) -input(x,y-1) -input(x-1,y-1);
+      mag(x,y) = scale*vcl_sqrt(gx*gx+gy*gy);
+    }
+  brip_vil_float_ops::fill_x_border(mag, 1, 0.0f);
+  brip_vil_float_ops::fill_y_border(mag, 1, 0.0f);
+}
+
 //----------------------------------------------------------------
 //: Compute the Hessian of the input, use a 3x3 mask
 // \verbatim
@@ -1780,6 +1798,17 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
     vil_math_value_range<float>(temp, vmin, vmax);
     return brip_vil_float_ops::convert_to_byte(temp, vmin, vmax);
   }
+if (image.nplanes()==1 &&image.pixel_format()==VIL_PIXEL_FORMAT_BOOL)
+  {
+    vil_image_view<bool> temp = image.get_view();
+	unsigned nj = temp.nj(), ni = temp.ni();
+	vil_image_view<unsigned char> out(ni, nj);
+	out.fill(0);
+    for(unsigned j = 0; j<nj; ++j)
+		for(unsigned i = 0; i<ni; ++i)
+			if(temp(i,j)) out(i,j) = 255;
+	return out;
+  }
 
   //Here we assume that the image is an unsigned char
   //In this case we should just return it.
@@ -1809,6 +1838,24 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
       for (unsigned x = 0; x<width; x++)
         grey_image(x,y) = color_image(x,y).grey();
     return grey_image;
+  }
+  if (image.nplanes()==3&&image.pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
+  {
+    vil_image_view<float> color_image = image.get_view();
+    unsigned width = color_image.ni(), height = color_image.nj();
+    // the output image
+    vil_image_view<float> grey_image_f;
+    grey_image_f.set_size(width, height);
+    for (unsigned y = 0; y<height; y++)
+		for (unsigned x = 0; x<width; x++){
+		  float v = 0;
+			for(unsigned p = 0; p<3; ++p)
+			  v += color_image(x,y,p);
+		   grey_image_f(x,y) = v/3.0f;
+		}
+    float vmin=0, vmax=255;
+    vil_math_value_range<float>(grey_image_f, vmin, vmax);
+    return brip_vil_float_ops::convert_to_byte(grey_image_f, vmin, vmax);
   }
   //If we get here then the input is not a type we handle so return a null view
   return vil_image_view<unsigned char>();

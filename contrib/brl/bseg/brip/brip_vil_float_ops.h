@@ -99,6 +99,9 @@ class brip_vil_float_ops
                            vil_image_view<float>& grad_x,
                            vil_image_view<float>& grad_y);
 
+  static void gradient_mag_3x3(vil_image_view<float> const& input,
+                               vil_image_view<float>& mag);
+
   static void hessian_3x3(vil_image_view<float> const& input,
                           vil_image_view<float>& Ixx,
                           vil_image_view<float>& Ixy,
@@ -168,6 +171,7 @@ class brip_vil_float_ops
                                 const float alpha_coef=10000.0f,
                                 const int no_of_iterations=5);
 
+  
   //: fills a border of width w on left and right of image with value
   static void fill_x_border(vil_image_view<float>& image, unsigned w, float value);
 
