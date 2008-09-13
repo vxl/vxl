@@ -1,4 +1,6 @@
 #include <brip/brip_label_equivalence.h>
+//:
+// \file
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
 
@@ -7,25 +9,25 @@ void brip_label_equivalence::add_label_pair(unsigned la, unsigned lb)
 {
   vcl_pair<vcl_set<unsigned>::iterator, bool> result;
   result = forward_pairs_[la].insert(lb);
-  if(result.second)
-    if(la>max_label_)
+  if (result.second)
+    if (la>max_label_)
       max_label_ = la;
   result =  reverse_pairs_[lb].insert(la);
-  if(result.second)
-    if(la>max_label_)
+  if (result.second)
+    if (la>max_label_)
       max_label_ = lb;
 }
-//: find all the individual lables and determine the largest label
+//: find all the individual labels and determine the largest label
 vcl_set<unsigned> brip_label_equivalence::labels() const
 {
-   vcl_set<unsigned> labs;
+  vcl_set<unsigned> labs;
   vcl_map<unsigned, vcl_set<unsigned> >::const_iterator mit =
     forward_pairs_.begin();
-  for(; mit != forward_pairs_.end(); ++mit){
-	  labs.insert((*mit).first);
+  for (; mit != forward_pairs_.end(); ++mit) {
+    labs.insert((*mit).first);
   }
   mit = reverse_pairs_.begin();
-  for(; mit != reverse_pairs_.end(); ++mit){
+  for (; mit != reverse_pairs_.end(); ++mit) {
     labs.insert((*mit).first);
   }
   return labs;
@@ -58,7 +60,7 @@ merge_equivalence(vcl_map<unsigned int, vcl_set<unsigned int> >& tab,
     equivalence_sets_[cur_label] = vcl_set<unsigned>();
   }
 
-   for (vcl_set<unsigned>::iterator lit = labels.begin();
+  for (vcl_set<unsigned>::iterator lit = labels.begin();
        lit != labels.end(); ++lit)
     equivalence_sets_[cur_label].insert(*lit);
   return true;
@@ -70,7 +72,6 @@ merge_equivalence(vcl_map<unsigned int, vcl_set<unsigned int> >& tab,
 //  not in the set, labels.
 bool brip_label_equivalence::get_next_label(vcl_set<unsigned> const& labels,
                                             unsigned int& label)
-                                              
 {
   //If the set labels is null then
   //just return the next larger label (if less than max_region_label_)
@@ -87,10 +88,10 @@ bool brip_label_equivalence::get_next_label(vcl_set<unsigned> const& labels,
   for (unsigned int i = tmp; i<=max_label_; i++)
   {
     vcl_set<unsigned>::const_iterator sit=labels.find(i);
-	if(sit==labels.end()){
+    if (sit==labels.end()){
       label = i;
-    return true;
-	}
+      return true;
+    }
   }
   return false;
 }
@@ -98,8 +99,8 @@ bool brip_label_equivalence::get_next_label(vcl_set<unsigned> const& labels,
 
 void brip_label_equivalence::transitive_closure()
 {
-  vcl_set<unsigned>& labs = this->labels();
-  if(labs.size()<=1)
+  vcl_set<unsigned> labs = this->labels();
+  if (labs.size()<=1)
     return;
   unsigned cur_label = *(labs.begin());
 
@@ -109,7 +110,7 @@ void brip_label_equivalence::transitive_closure()
   {
     bool merging = true;
     unsigned i = cur_label;
-    vcl_set<unsigned> cur_set; 
+    vcl_set<unsigned> cur_set;
     int len = 0;
     int old_len;
     while (merging)
@@ -123,11 +124,11 @@ void brip_label_equivalence::transitive_closure()
       if (find_forward)
       {
         sit = forward_pairs_.find(i);
-        if(sit!=forward_pairs_.end())
+        if (sit!=forward_pairs_.end())
           forward_pairs_.erase(sit);
       }
 #if 0
-      if(find_forward)
+      if (find_forward)
         vcl_cout << "merged forward pairs on label " << i << '\n' << vcl_flush;
 #endif
       //find label equivalence in the reverse map
@@ -136,11 +137,11 @@ void brip_label_equivalence::transitive_closure()
       if (find_reverse)
       {
         sit = reverse_pairs_.find(i);
-        if(sit!=reverse_pairs_.end())
+        if (sit!=reverse_pairs_.end())
           reverse_pairs_.erase(sit);
       }
 #if 0
-      if(find_reverse)
+      if (find_reverse)
         vcl_cout << "merged reverse pairs on label " << i << '\n' << vcl_flush;
 #endif
       //At this point we may have established or added to the equivalence set
@@ -162,15 +163,15 @@ void brip_label_equivalence::transitive_closure()
 
       if (len > old_len)  i = cur_label;
       // Limit the size of an equivalence class
-      if(len > 200)
-        {
-          merging = false;
-          continue;
-        }
+      if (len > 200)
+      {
+        merging = false;
+        continue;
+      }
       //Get the next larger label from cur_set
       //so that we can insert its equivalent labels
-      for(vcl_set<unsigned>::iterator cit = cur_set.begin();
-          (cit != cur_set.end())&&!merging; ++cit)
+      for (vcl_set<unsigned>::iterator cit = cur_set.begin();
+           cit != cur_set.end() && !merging; ++cit)
         if (*cit>i)
         {
           i = *cit;
@@ -183,11 +184,8 @@ void brip_label_equivalence::transitive_closure()
     //next equivalence class
     if (!get_next_label(cur_set, cur_label)) return;
 #if 0
-    vcl_cout << "Getting next label to seed equivalence " 
+    vcl_cout << "Getting next label to seed equivalence "
              << cur_label << '\n' << vcl_flush;
 #endif
   }
-
 }
-
-
