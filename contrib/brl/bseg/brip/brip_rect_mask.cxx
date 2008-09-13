@@ -1,15 +1,12 @@
 #include <brip/brip_rect_mask.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_box_2d.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
+
 //
-//        0 0 - 0 0 
-//        0 - + - 0 
-//        - + + + - 
-//        0 - + - 0 
-//        0 0 - 0 0 
+//        0 0 - 0 0
+//        0 - + - 0
+//        - + + + -
+//        0 - + - 0
+//        0 0 - 0 0
 //
 //
 static int cr1_5x5 [] =
@@ -22,11 +19,11 @@ static int cr1_5x5 [] =
   };
 
 //
-//        0 - - - 0 
-//        - + + + - 
-//        - + + + - 
-//        - + + + - 
-//        0 - - - 0 
+//        0 - - - 0
+//        - + + + -
+//        - + + + -
+//        - + + + -
+//        0 - - - 0
 //
 //
 static int s1_5x5 [] =
@@ -38,9 +35,9 @@ static int s1_5x5 [] =
     0,-1,-1,-1, 0,
   };
 
-//        0 - - - 0 
-//        - + + + - 
-//        0 - - - 0 
+//        0 - - - 0
+//        - + + + -
+//        0 - - - 0
 //
 //
 static int r10a0_3x5 [] =
@@ -50,11 +47,11 @@ static int r10a0_3x5 [] =
     0,-1,-1,-1, 0
   };
 //
-//        0 0 0 - 0 
-//        0 0 - + - 
-//        0 - + - 0 
-//        - + - 0 0 
-//        0 - 0 0 0 
+//        0 0 0 - 0
+//        0 0 - + -
+//        0 - + - 0
+//        - + - 0 0
+//        0 - 0 0 0
 //
 //
 static int r10a45_5x5 [] =
@@ -207,7 +204,7 @@ static int r32a22_7x9 [] =
     0,-1,-1,-1,-1,-1,0,0,0
   };
 
-//                     
+//
 //     0 0 0 0 0 - 0 0 0
 //     0 0 0 0 - + - 0 0
 //     0 0 0 - + + + - 0
@@ -233,11 +230,11 @@ static int r32a45_9x9 [] =
 
 //
 //
-//  0 - - - - - - - - - - - 0 
-//  - + + + + + + + + + + + - 
-//  - + + + + + + + + + + + - 
-//  - + + + + + + + + + + + - 
-//  - - - - - - - - - - - - 0 
+//  0 - - - - - - - - - - - 0
+//  - + + + + + + + + + + + -
+//  - + + + + + + + + + + + -
+//  - + + + + + + + + + + + -
+//  - - - - - - - - - - - - 0
 //
 static int r51a0_5x13[] =
   {
@@ -249,14 +246,14 @@ static int r51a0_5x13[] =
   };
 //
 //  0 0 0 0 0 0 0 0 0 - - - 0
-//  0 0 0 0 0 0 0 0 - + + + - 
-//  0 0 0 0 0 - - - + + + + - 
-//  0 0 0 - - + + + + + + + - 
+//  0 0 0 0 0 0 0 0 - + + + -
+//  0 0 0 0 0 - - - + + + + -
+//  0 0 0 - - + + + + + + + -
 //  0 - - + + + + + + + - - 0
-//  - + + + + + + + - - 0 0 0 
+//  - + + + + + + + - - 0 0 0
 //  - + + + + - - - 0 0 0 0 0
 //  - + + + - 0 0 0 0 0 0 0 0
-//  0 - - - 0 0 0 0 0 0 0 0 0 
+//  0 - - - 0 0 0 0 0 0 0 0 0
 //
 
 static int r51a22_9x13[] =
@@ -271,17 +268,17 @@ static int r51a22_9x13[] =
     -1,1,1,1,-1,0,0,0,0,0,0,0,0,
     0,-1,-1,-1,0,0,0,0,0,0,0,0,0
   };
-//   0 0 0 0 0 0 0 0 - - 0 
-//   0 0 0 0 0 0 0 - + + - 
-//   0 0 0 0 0 0 - + + + - 
-//   0 0 0 0 0 - + + + - 0 
-//   0 0 0 0 - + + + - 0 0 
-//   0 0 0 - + + + - 0 0 0 
-//   0 0 - + + + - 0 0 0 0 
-//   0 - + + + - 0 0 0 0 0 
-//   - + + + - 0 0 0 0 0 0 
-//   - + + - 0 0 0 0 0 0 0 
-//   0 - - 0 0 0 0 0 0 0 0 
+//   0 0 0 0 0 0 0 0 - - 0
+//   0 0 0 0 0 0 0 - + + -
+//   0 0 0 0 0 0 - + + + -
+//   0 0 0 0 0 - + + + - 0
+//   0 0 0 0 - + + + - 0 0
+//   0 0 0 - + + + - 0 0 0
+//   0 0 - + + + - 0 0 0 0
+//   0 - + + + - 0 0 0 0 0
+//   - + + + - 0 0 0 0 0 0
+//   - + + - 0 0 0 0 0 0 0
+//   0 - - 0 0 0 0 0 0 0 0
 static int r51a45_11x11[] =
   {
     0,0,0,0,0,0,0,0,-1,-1,0,
@@ -298,13 +295,13 @@ static int r51a45_11x11[] =
   };
 
 //
-//  - - - - - - - - - - - - - 
-//  - + + + + + + + + + + + - 
-//  - + + + + + + + + + + + - 
-//  - + + + + + + + + + + + - 
-//  - + + + + + + + + + + + - 
-//  - + + + + + + + + + + + - 
-//  - - - - - - - - - - - - - 
+//  - - - - - - - - - - - - -
+//  - + + + + + + + + + + + -
+//  - + + + + + + + + + + + -
+//  - + + + + + + + + + + + -
+//  - + + + + + + + + + + + -
+//  - + + + + + + + + + + + -
+//  - - - - - - - - - - - - -
 //
 static int r52a0_7x13[] =
   {
@@ -319,14 +316,14 @@ static int r52a0_7x13[] =
 
 //
 //  0 0 0 0 0 0 0 0 - - - - 0
-//  0 0 0 0 0 - - + + + + + - 
-//  0 0 0 0 - + + + + + + + - 
-//  0 0 0 - + + + + + + + - - 
+//  0 0 0 0 0 - - + + + + + -
+//  0 0 0 0 - + + + + + + + -
+//  0 0 0 - + + + + + + + - -
 //  0 - - + + + + + + + - - 0
-//  - - + + + + + + + - 0 0 0 
+//  - - + + + + + + + - 0 0 0
 //  - + + + + + + + - 0 0 0 0
 //  - + + + + + - - 0 0 0 0 0
-//  0 - - - - 0 0 0 0 0 0 0 0 
+//  0 - - - - 0 0 0 0 0 0 0 0
 //
 
 static int r52a22_9x13[] =
@@ -343,7 +340,7 @@ static int r52a22_9x13[] =
   };
 
 
-//  0 0 0 0 0 0 0 0 0 - 0 0 0 
+//  0 0 0 0 0 0 0 0 0 - 0 0 0
 //  0 0 0 0 0 0 0 0 - + - 0 0
 //  0 0 0 0 0 0 0 - + + + - 0
 //  0 0 0 0 0 0 - + + + + + -
@@ -373,17 +370,17 @@ static int r52a45_13x13[] =
    0,0,0,-1,0,0,0,0,0,0,0,0,0
   };
 
-//  0 0 0 0 0 0 0 0 0 0 0 
-//  0 0 0 0 0 0 - - - - 0 
-//  0 0 0 0 0 - + + + + - 
-//  0 0 0 0 - + + + + + - 
-//  0 0 0 - + + + + + + - 
-//  0 0 - + + + + + + + - 
-//  0 0 - + + + + + + - 0 
-//  0 - + + + + + + - 0 0 
-//  0 - + + + + + + - 0 0 
-//  0 0 - + + + + - 0 0 0 
-//  0 0 0 - - - - 0 0 0 0 
+//  0 0 0 0 0 0 0 0 0 0 0
+//  0 0 0 0 0 0 - - - - 0
+//  0 0 0 0 0 - + + + + -
+//  0 0 0 0 - + + + + + -
+//  0 0 0 - + + + + + + -
+//  0 0 - + + + + + + + -
+//  0 0 - + + + + + + - 0
+//  0 - + + + + + + - 0 0
+//  0 - + + + + + + - 0 0
+//  0 0 - + + + + - 0 0 0
+//  0 0 0 - - - - 0 0 0 0
 
 static int b0_11x11[] =
   {
@@ -399,14 +396,14 @@ static int b0_11x11[] =
     0,0,0,-1,-1,-1,-1,0,0,0,0
   };
 
-//    0 0 0 0 0 0 0 0 0 
-//    0 - - - - - 0 0 0 
+//    0 0 0 0 0 0 0 0 0
+//    0 - - - - - 0 0 0
 //    - + + + + + - 0 0
-//    - + + + + + - 0 0 
+//    - + + + + + - 0 0
 //    - + + + + + + - 0
-//    0 - + + + + - 0 0 
+//    0 - + + + + - 0 0
 //    0 0 - + + + + - 0
-//    0 0 0 - + + + - 0 
+//    0 0 0 - + + + - 0
 //    0 0 0 0 - - - 0 0
 static int b1_9x9[] =
   {
@@ -420,17 +417,17 @@ static int b1_9x9[] =
     0,0,0,-1,1,1,1,-1,0,
     0,0,0,0,-1,-1,-1,0,0
   };
-//  0 0 0 0 0 0 0 0 0 0 0 
-//  0 0 0 0 - - - - - - 0 
+//  0 0 0 0 0 0 0 0 0 0 0
+//  0 0 0 0 - - - - - - 0
 //  0 0 0 - + + + + + + -
 //  0 0 0 - + + + + + + -
 //  0 0 - + + + + + + - 0
-//  0 0 - + + + + + + - 0 
-//  0 - + + + + + + - 0 0 
-//  0 - + + + + + + - 0 0 
-//  - + + + + + + - 0 0 0 
-//  - + + + + + + - 0 0 0 
-//  0 - - - - - - 0 0 0 0 
+//  0 0 - + + + + + + - 0
+//  0 - + + + + + + - 0 0
+//  0 - + + + + + + - 0 0
+//  - + + + + + + - 0 0 0
+//  - + + + + + + - 0 0 0
+//  0 - - - - - - 0 0 0 0
 
 static int b0s_11x11[] =
   {
@@ -447,14 +444,14 @@ static int b0s_11x11[] =
     0,-1,-1,-1,-1,-1,-1,0,0,0,0
   };
 
-//    0 0 0 0 0 0 0 0 0 
-//    0 - - - - - 0 0 0 
+//    0 0 0 0 0 0 0 0 0
+//    0 - - - - - 0 0 0
 //    - + + + + + - 0 0
-//    - + + + + + - 0 0 
+//    - + + + + + - 0 0
 //    - + + + + + + - 0
-//    0 - + + + + + + - 
+//    0 - + + + + + + -
 //    0 0 - + + + + + -
-//    0 0 - + + + + + - 
+//    0 0 - + + + + + -
 //    0 0 - - - - - - 0
 static int b1s_9x9[] =
   {
@@ -469,11 +466,11 @@ static int b1s_9x9[] =
     0,0,-1,-1,-1,-1,-1,0,0
   };
 // ====================   Corners ===========================
-//    - - - - - 
-//    - + + + + 
-//    - + + + 0 
-//    - + + 0 0 
-//    - + 0 0 0 
+//    - - - - -
+//    - + + + +
+//    - + + + 0
+//    - + + 0 0
+//    - + 0 0 0
 static int c4_90_0_5x5[] =
   {
     -1,-1,-1,-1,-1,
@@ -483,11 +480,11 @@ static int c4_90_0_5x5[] =
     -1,1,0,0,0
   };
 
-//   0 0 0 0 - - - 
-//   0 0 0 - - - - 
-//   0 0 - + + + + 
-//   0 - + + + + 0 
-//   - + + + + 0 0 
+//   0 0 0 0 - - -
+//   0 0 0 - - - -
+//   0 0 - + + + +
+//   0 - + + + + 0
+//   - + + + + 0 0
 static int c4_45_0_5x7[] =
   {
     0,0,0,0,-1,-1,-1,
@@ -497,11 +494,11 @@ static int c4_45_0_5x7[] =
     -1,1,1,1,1,0,0
   };
 
-//    0 0 0 0 0 0 0 
-//    0 0 0 - 0 0 0 
-//    0 0 - + - 0 0 
-//    0 - + + + - 0 
-//    - + + + + + - 
+//    0 0 0 0 0 0 0
+//    0 0 0 - 0 0 0
+//    0 0 - + - 0 0
+//    0 - + + + - 0
+//    - + + + + + -
 
 static int c4_45_45_5x7[] =
   {
@@ -513,9 +510,9 @@ static int c4_45_45_5x7[] =
   };
 
 //=======================   edges =========================
-//       - - - - - 
-//       - - - - -  
-//       + + + + +  
+//       - - - - -
+//       - - - - -
+//       + + + + +
 //       + + + + +
 //       + + + + +
 static int e5a0_5x5[] =
@@ -526,12 +523,12 @@ static int e5a0_5x5[] =
     1,1,1,1,1,
     1,1,1,1,1
   };
-    
-//   0 0 - - - 
-//   - - - - - 
-//   - - + + + 
-//   + + + + + 
-//   + + + 0 0 
+
+//   0 0 - - -
+//   - - - - -
+//   - - + + +
+//   + + + + +
+//   + + + 0 0
 
 static int e5a22_5x5[] =
   {
@@ -542,11 +539,11 @@ static int e5a22_5x5[] =
     1,1,1,0,0
   };
 
-//  0 - - - + 
-//  - - - + + 
-//  - - + + + 
-//  - + + + 0 
-//  + + + 0 0 
+//  0 - - - +
+//  - - - + +
+//  - - + + +
+//  - + + + 0
+//  + + + 0 0
 
 static int e5a45_5x5[] =
   {
@@ -571,50 +568,55 @@ static int e11a0_5x11[] =
     1,1,1,1,1,1,1,1,1,1,1,
     1,1,1,1,1,1,1,1,1,1,1
   };
+
 vnl_matrix<int> reflect_about_vert(vnl_matrix<int> const& m)
 {
   unsigned nc = m.cols(), nr = m.rows();
   vnl_matrix<int> ref(nr, nc);
   int rc = (nc-1)/2;
-  for(unsigned r = 0; r<nr; ++r)
-    for(int c = -rc; c<=rc; ++c)
+  for (unsigned r = 0; r<nr; ++r)
+    for (int c = -rc; c<=rc; ++c)
       ref[r][rc+c] = m[r][rc-c];
   return ref;
 }
+
 #if 0
 vnl_matrix<int> reflect_about_vert_even(vnl_matrix<int> const& m)
 {
   unsigned nc = m.cols(), nr = m.rows();
   vnl_matrix<int> ref(nr, nc);
   int rc = nc/2;
-  for(unsigned r = 0; r<nr; ++r)
-    for(int c = -rc; c<=rc; ++c)
+  for (unsigned r = 0; r<nr; ++r)
+    for (int c = -rc; c<=rc; ++c)
       ref[r][rc+c] = m[r][rc-c];
   return ref;
 }
 #endif
+
 vnl_matrix<int> reflect_about_horz(vnl_matrix<int> const& m)
 {
   unsigned nc = m.cols(), nr = m.rows();
   vnl_matrix<int> ref(nr, nc);
   int rr = (nr-1)/2;
-  for(unsigned c = 0; c<nc; ++c)
-    for(int r = -rr; r<=rr; ++r)
+  for (unsigned c = 0; c<nc; ++c)
+    for (int r = -rr; r<=rr; ++r)
       ref[rr+r][c] = m[rr-r][c];
   return ref;
 }
+
 #if 0
 vnl_matrix<int> reflect_about_horz_even(vnl_matrix<int> const& m)
 {
   unsigned nc = m.cols(), nr = m.rows();
   vnl_matrix<int> ref(nr, nc);
   int rr = nr-1/2;
-  for(unsigned c = 0; c<nc; ++c)
-    for(int r = -rr; r<=rr; ++r)
+  for (unsigned c = 0; c<nc; ++c)
+    for (int r = -rr; r<=rr; ++r)
       ref[rr+r][c] = m[rr-r][c];
   return ref;
 }
 #endif
+
 brip_rect_mask::brip_rect_mask(mask_id mid)
 {
   switch (mid)
@@ -699,11 +701,11 @@ brip_rect_mask::brip_rect_mask(mask_id mid)
     }
 
     case r51: {
-      vnl_matrix<int> r51a0(r51a0_5x13, 5, 13),  r51a22(r51a22_9x13, 9, 13), 
+      vnl_matrix<int> r51a0(r51a0_5x13, 5, 13),  r51a22(r51a22_9x13, 9, 13),
         r51a45(r51a45_11x11, 11, 11);
       masks_[a0] =    r51a0;
       masks_[a22] =   r51a22;
-      masks_[a45] =   r51a45; 
+      masks_[a45] =   r51a45;
       masks_[a67]  =  r51a22.transpose();
       masks_[a90]  =  r51a0.transpose();
       masks_[a112] =  reflect_about_vert(r51a22.transpose());
@@ -712,11 +714,11 @@ brip_rect_mask::brip_rect_mask(mask_id mid)
       break;
     }
     case r52: {
-      vnl_matrix<int> r52a0(r52a0_7x13, 7, 13),  r52a22(r51a22_9x13, 9, 13), 
+      vnl_matrix<int> r52a0(r52a0_7x13, 7, 13),  r52a22(r51a22_9x13, 9, 13),
         r52a45(r52a45_13x13, 13, 13);
       masks_[a0] =    r52a0;
       masks_[a22] =   r52a22;
-      masks_[a45] =   r52a45; 
+      masks_[a45] =   r52a45;
       masks_[a67]  =  r52a22.transpose();
       masks_[a90]  =  r52a0.transpose();
       masks_[a112] =  reflect_about_vert(r52a22.transpose());
@@ -754,7 +756,7 @@ brip_rect_mask::brip_rect_mask(mask_id mid)
     case e5:{
       vnl_matrix<int> e5a0(e5a0_5x5, 5, 5), e5a45(e5a45_5x5, 5, 5);
       masks_[a0] =    e5a0;
-      masks_[a45] =   e5a45; 
+      masks_[a45] =   e5a45;
       masks_[a90]  =  e5a0.transpose();
       masks_[a135]  =  reflect_about_horz(e5a45);
       masks_[a180]  =  reflect_about_horz(e5a0);
@@ -775,31 +777,31 @@ brip_rect_mask::brip_rect_mask(mask_id mid)
     default:
       vcl_cout << "specified mask does not exist\n";
     };
-  
 }
+
 bool brip_rect_mask::
 find_ait(ang_id aid,
          vcl_map<ang_id, vnl_matrix<int> >::const_iterator& ait) const
 {
   ait = masks_.find(aid);
-  if(ait == masks_.end())
+  if (ait == masks_.end())
     return false;
   return true;
 }
-  
+
 brip_rect_mask::ang_id brip_rect_mask::angle_id(unsigned angle_index) const
 {
   vcl_map<ang_id, vnl_matrix<int> >::const_iterator ait = masks_.begin();
-  for(unsigned i = 0; i<angle_index; ++i)
+  for (unsigned i = 0; i<angle_index; ++i)
     ++ait;
   return (*ait).first;
 }
 
 bool brip_rect_mask::set_angle_id(ang_id aid)
 {
-  vcl_map<ang_id, vnl_matrix<int> >::iterator ait;
+  vcl_map<ang_id, vnl_matrix<int> >::const_iterator ait;
   bool found = find_ait(aid, ait);
-  if(!found){
+  if (!found){
     ru_ = 0; rv_ = 0;
     return false;
   }
@@ -814,27 +816,25 @@ vcl_ostream& operator<<(vcl_ostream& s, brip_rect_mask const& msk)
   s << "masks\n";
   brip_rect_mask& msk_nc = const_cast<brip_rect_mask&>(msk);
   unsigned nangles = msk.n_angles();
-  for(unsigned a = 0; a<nangles; ++a){
+  for (unsigned a = 0; a<nangles; ++a){
     brip_rect_mask::ang_id aid = msk.angle_id(a);
-	msk_nc.set_angle_id(aid);
+    msk_nc.set_angle_id(aid);
     unsigned ni =msk_nc.ni(), nj = msk_nc.nj();
     int ri = (ni-1)/2, rj = (nj-1)/2;
-    for(int jr = -rj; jr<=rj ; ++jr){
-      for(int ir = -ri; ir<= ri; ++ir)
-        {
-          int m = msk_nc(ir,jr);
-          if(m >0)
-            s << '+' << ' ';
-          else if(m<0)
-            s << '-' << ' ';
-          else
-            s << '0' << ' ';
-        }
+    for (int jr = -rj; jr<=rj ; ++jr){
+      for (int ir = -ri; ir<= ri; ++ir)
+      {
+        int m = msk_nc(ir,jr);
+        if (m >0)
+          s << '+' << ' ';
+        else if (m<0)
+          s << '-' << ' ';
+        else
+          s << '0' << ' ';
+      }
       s << '\n';
     }
     s<< '\n';
   }
-	return s;
+  return s;
 }
-
-  
