@@ -33,7 +33,6 @@ bbgm_measure_process::bbgm_measure_process()
   input_types_[2]= "vcl_string"; //what to measure
   input_types_[3]= "float"; // measure tolerance
 
-  
 
   //output
   output_data_.resize(1, brdb_value_sptr(0));
@@ -53,7 +52,7 @@ bool
 bbgm_measure_process::execute()
 {
   // Sanity check
-  if (!this->verify_inputs()){
+  if (!this->verify_inputs()) {
     vcl_cerr << "In bbgm_measure_process::execute() -"
              << " invalid inputs\n";
     return false;
@@ -64,7 +63,7 @@ bbgm_measure_process::execute()
   brdb_value_t<bbgm_image_sptr>* input0 =
     static_cast<brdb_value_t<bbgm_image_sptr>* >(input_data_[0].ptr());
   bbgm_image_sptr bgm = input0->value();
-  if (!bgm){
+  if (!bgm) {
     vcl_cerr << "In bbgm_measure_process::execute() -"
              << " null distribution image\n";
     return false;
@@ -73,7 +72,7 @@ bbgm_measure_process::execute()
   brdb_value_t<vil_image_view_base_sptr>* input1 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
   vil_image_view_base_sptr img_ptr = input1->value();
-  if (!img_ptr){
+  if (!img_ptr) {
     vcl_cerr << "In bbgm_measure_process::execute() -"
              << " null measurement input image\n";
     return false;
@@ -95,7 +94,7 @@ bbgm_measure_process::execute()
   float tolerance = input3->value();
 
   vil_image_view<float> result;
-  if(np ==1){
+  if (np ==1) {
     typedef bsta_gauss_f1 bsta_gauss1_t;
     typedef bsta_num_obs<bsta_gauss1_t> gauss_type1;
     typedef bsta_mixture<gauss_type1> mix_gauss_type1;
@@ -103,44 +102,48 @@ bbgm_measure_process::execute()
     bbgm_image_of<obs_mix_gauss_type1> *model =
       static_cast<bbgm_image_of<obs_mix_gauss_type1>*>(bgm.ptr());
 
-    if (attr=="probability"){
+    if (attr=="probability") {
       bsta_probability_functor<mix_gauss_type1> functor_;
       measure(*model, image, result, functor_, tolerance);
     }
-    else if (attr=="prob_background"){
+#ifdef MEASURE_BKGROUND
+    else if (attr=="prob_background") {
       bsta_prob_density_functor<mix_gauss_type1> functor_;
       measure_bkground(*model, image, result, functor_, tolerance);
     }
-    else{
+#endif // MEASURE_BKGROUND
+    else {
       vcl_cout << "In bbgm_measure_process::execute() -"
                << " measurement not available\n";
       return false;
     }
   }
-  if(np ==3)
-    {
-      typedef bsta_gauss_if3 bsta_gauss3_t;
-      typedef bsta_gauss3_t::vector_type vector3_;
-      typedef bsta_num_obs<bsta_gauss3_t> gauss_type3;
-      typedef bsta_mixture<gauss_type3> mix_gauss_type3;
-      typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;
-      bbgm_image_of<obs_mix_gauss_type3> *model =
-        static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
+  if (np ==3)
+  {
+    typedef bsta_gauss_if3 bsta_gauss3_t;
+    typedef bsta_gauss3_t::vector_type vector3_;
+    typedef bsta_num_obs<bsta_gauss3_t> gauss_type3;
+    typedef bsta_mixture<gauss_type3> mix_gauss_type3;
+    typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;
+    bbgm_image_of<obs_mix_gauss_type3> *model =
+      static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
 
-      if (attr=="probability"){
-        bsta_probability_functor<mix_gauss_type3> functor_;
-        measure(*model, image, result, functor_, tolerance);
-      }
-      else if (attr=="prob_background"){
-        bsta_prob_density_functor<mix_gauss_type3> functor_;
-        measure_bkground(*model, image, result, functor_, tolerance);
-      }
-      else{
-        vcl_cout << "In bbgm_measure_process::execute() -"
-                 << " measurement not available\n";
-        return false;
-      }
+    if (attr=="probability") {
+      bsta_probability_functor<mix_gauss_type3> functor_;
+      measure(*model, image, result, functor_, tolerance);
     }
+#ifdef MEASURE_BKGROUND
+    else if (attr=="prob_background") {
+      bsta_prob_density_functor<mix_gauss_type3> functor_;
+      measure_bkground(*model, image, result, functor_, tolerance);
+    }
+#endif // MEASURE_BKGROUND
+    else {
+      vcl_cout << "In bbgm_measure_process::execute() -"
+               << " measurement not available\n";
+      return false;
+    }
+  }
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(result));
   output_data_[0] = output0;
