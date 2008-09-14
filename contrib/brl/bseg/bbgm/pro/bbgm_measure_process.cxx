@@ -21,7 +21,7 @@
 #include <vil/vil_math.h>
 #include <bsta/bsta_histogram.h>
 #include <bbgm/bbgm_measure.h>
-
+#include <brip/brip_vil_float_ops.h>
 //: Constructor
 bbgm_measure_process::bbgm_measure_process()
 {
@@ -29,9 +29,11 @@ bbgm_measure_process::bbgm_measure_process()
   input_data_.resize(4,brdb_value_sptr(0));
   input_types_.resize(4);
   input_types_[0]= "bbgm_image_sptr"; //background image
-  input_types_[1]= "vil_image_view_base_sptr"; //background image
+  input_types_[1]= "vil_image_view_base_sptr"; //test image
   input_types_[2]= "vcl_string"; //what to measure
   input_types_[3]= "float"; // measure tolerance
+
+  
 
   //output
   output_data_.resize(1, brdb_value_sptr(0));
@@ -56,11 +58,6 @@ bbgm_measure_process::execute()
              << " invalid inputs\n";
     return false;
   }
-  typedef bsta_gauss_if3 bsta_gauss_t;
-  typedef bsta_gauss_t::vector_type vector_;
-  typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
-  typedef bsta_mixture<gauss_type> mix_gauss_type;
-  typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
 
   // Retrieve background image
 
@@ -72,8 +69,6 @@ bbgm_measure_process::execute()
              << " null distribution image\n";
     return false;
   }
-  bbgm_image_of<obs_mix_gauss_type> *model =
-    static_cast<bbgm_image_of<obs_mix_gauss_type>*>(bgm.ptr());
 
   brdb_value_t<vil_image_view_base_sptr>* input1 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
@@ -87,28 +82,65 @@ bbgm_measure_process::execute()
   if (img_ptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(image,1.0/255.0);
 
+  unsigned np = image.nplanes();
+
   //Retrieve attribute to measure, e.g. probability
   brdb_value_t<vcl_string>* input2 =
     static_cast<brdb_value_t<vcl_string>* >(input_data_[2].ptr());
   vcl_string attr = input2->value();
 
-  //Retrieve component index
+  //Retrieve measure tolerance
   brdb_value_t<float>* input3 =
     static_cast<brdb_value_t<float>* >(input_data_[3].ptr());
   float tolerance = input3->value();
 
-
   vil_image_view<float> result;
-  if (attr=="probability"){
-    bsta_probability_functor<mix_gauss_type> functor_;
-    measure(*model, image, result, functor_, tolerance);
-  }
-  else{
-    vcl_cout << "In bbgm_measure_process::execute() -"
-             << " measurement not available\n";
-    return false;
-  }
+  if(np ==1){
+    typedef bsta_gauss_f1 bsta_gauss1_t;
+    typedef bsta_num_obs<bsta_gauss1_t> gauss_type1;
+    typedef bsta_mixture<gauss_type1> mix_gauss_type1;
+    typedef bsta_num_obs<mix_gauss_type1> obs_mix_gauss_type1;
+    bbgm_image_of<obs_mix_gauss_type1> *model =
+      static_cast<bbgm_image_of<obs_mix_gauss_type1>*>(bgm.ptr());
 
+    if (attr=="probability"){
+      bsta_probability_functor<mix_gauss_type1> functor_;
+      measure(*model, image, result, functor_, tolerance);
+    }
+    else if (attr=="prob_background"){
+      bsta_prob_density_functor<mix_gauss_type1> functor_;
+      measure_bkground(*model, image, result, functor_, tolerance);
+    }
+    else{
+      vcl_cout << "In bbgm_measure_process::execute() -"
+               << " measurement not available\n";
+      return false;
+    }
+  }
+  if(np ==3)
+    {
+      typedef bsta_gauss_if3 bsta_gauss3_t;
+      typedef bsta_gauss3_t::vector_type vector3_;
+      typedef bsta_num_obs<bsta_gauss3_t> gauss_type3;
+      typedef bsta_mixture<gauss_type3> mix_gauss_type3;
+      typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;
+      bbgm_image_of<obs_mix_gauss_type3> *model =
+        static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
+
+      if (attr=="probability"){
+        bsta_probability_functor<mix_gauss_type3> functor_;
+        measure(*model, image, result, functor_, tolerance);
+      }
+      else if (attr=="prob_background"){
+        bsta_prob_density_functor<mix_gauss_type3> functor_;
+        measure_bkground(*model, image, result, functor_, tolerance);
+      }
+      else{
+        vcl_cout << "In bbgm_measure_process::execute() -"
+                 << " measurement not available\n";
+        return false;
+      }
+    }
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(result));
   output_data_[0] = output0;

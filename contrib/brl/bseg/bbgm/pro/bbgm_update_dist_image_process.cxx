@@ -33,8 +33,6 @@ bbgm_update_dist_image_process::bbgm_update_dist_image_process()
   input_types_[5]= "float"; //g_thresh
   input_types_[6]= "float"; //min_stdev
 
-  //initialize the image to null
-  input_data_[0]=new brdb_value_t<bbgm_image_sptr>(0);
   //output
   output_data_.resize(1, brdb_value_sptr(0));
   output_types_.resize(1);
@@ -47,6 +45,11 @@ bbgm_update_dist_image_process::~bbgm_update_dist_image_process()
 {
 }
 
+bool bbgm_update_dist_image_process::init()
+{
+  input_data_[0]=new brdb_value_t<bbgm_image_sptr>(0);
+  return true;
+}
 
 //: Execute the process
 bool
@@ -101,33 +104,25 @@ bbgm_update_dist_image_process::execute()
 
   unsigned ni = img.ni();
   unsigned nj = img.nj();
+  unsigned np = img.nplanes();
 
-  typedef bsta_gauss_if3 bsta_gauss_t;
-  typedef bsta_gauss_t::vector_type vector_;
-#if 0
-  typedef bsta_num_obs<bsta_gauss_t> gauss_type;
-  typedef bsta_mixture<gauss_type> mix_gauss_type;
-#endif
-    typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
-    typedef bsta_mixture<gauss_type> mix_gauss_type;
-    typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
-
+  if(np ==1){
+  typedef bsta_gauss_f1 bsta_gauss1_t;
+  typedef bsta_num_obs<bsta_gauss1_t> gauss_type1;
+  typedef bsta_mixture<gauss_type1> mix_gauss_type1;
+  typedef bsta_num_obs<mix_gauss_type1> obs_mix_gauss_type1;
   // get the templated mixture model
   bbgm_image_sptr model_sptr;
   if (!bgm) {
-    model_sptr = new bbgm_image_of<obs_mix_gauss_type>(ni,nj, obs_mix_gauss_type());
+    model_sptr = new bbgm_image_of<obs_mix_gauss_type1>(ni,nj, obs_mix_gauss_type1());
   }
   else model_sptr = bgm;
-  bbgm_image_of<obs_mix_gauss_type> *model =
-    static_cast<bbgm_image_of<obs_mix_gauss_type>*>(model_sptr.ptr());
+  bbgm_image_of<obs_mix_gauss_type1> *model =
+    static_cast<bbgm_image_of<obs_mix_gauss_type1>*>(model_sptr.ptr());
 
-  bsta_gauss_t init_gauss(vector_(0.0f), vector_(initial_variance) );
-
-#if 0
-  bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
-                                                    max_components);
-#endif
-  bsta_mg_grimson_window_updater<mix_gauss_type> updater( init_gauss,
+  bsta_gauss1_t init_gauss(0, initial_variance);
+  
+  bsta_mg_grimson_window_updater<mix_gauss_type1> updater(init_gauss,
                                                           max_components,
                                                           g_thresh,
                                                           min_stdev,
@@ -137,7 +132,40 @@ bbgm_update_dist_image_process::execute()
 
   brdb_value_sptr output0 = new brdb_value_t<bbgm_image_sptr>(model);
   output_data_[0] = output0;
-
   return true;
+  }
+  if(np ==3)
+    {
+  typedef bsta_gauss_if3 bsta_gauss3_t;
+  typedef bsta_gauss3_t::vector_type vector3_;
+  typedef bsta_num_obs<bsta_gauss3_t> gauss_type3;
+  typedef bsta_mixture<gauss_type3> mix_gauss_type3;
+  typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;
+  // get the templated mixture model
+  bbgm_image_sptr model_sptr;
+  if (!bgm) {
+    model_sptr = new bbgm_image_of<obs_mix_gauss_type3>(ni,nj, obs_mix_gauss_type3());
+  }
+  else model_sptr = bgm;
+  bbgm_image_of<obs_mix_gauss_type3> *model =
+    static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(model_sptr.ptr());
+
+  vector3_ mean, var;
+  mean.fill(0.0f); var.fill(initial_variance);
+  bsta_gauss3_t init_gauss(mean, var);
+  
+  bsta_mg_grimson_window_updater<mix_gauss_type3> updater( init_gauss,
+                                                          max_components,
+                                                          g_thresh,
+                                                          min_stdev,
+                                                          window_size);
+
+  update(*model,img,updater);
+
+  brdb_value_sptr output0 = new brdb_value_t<bbgm_image_sptr>(model);
+  output_data_[0] = output0;
+  return true;
+  }
+  return false;
 }
 

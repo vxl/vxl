@@ -29,9 +29,9 @@ class bbgm_update_dist_image_process : public bprb_process
   //: Clone the process
   virtual bbgm_update_dist_image_process* clone() const {return new bbgm_update_dist_image_process(*this);}
 
-  vcl_string name(){return "UpdateDistImageStreamProcess";}
+  vcl_string name(){return "UpdateDistImageProcess";}
 
-  bool init(){return true;}
+  bool init();
   bool execute();
   bool finish(){return true;}
 };
