@@ -46,7 +46,7 @@ else
     $DIRS = "$V/vcl $V/core $V/contrib $V/v3p/Qv";
   }
   elsif (-d 'vcl' && -d 'core' && -d 'contrib') {
-    $DIRS = "vcl core contrib v3p/Qv";
+    $V = '.'; $DIRS = "vcl core contrib v3p/Qv";
   }
   else
   {
@@ -54,7 +54,7 @@ else
     exit 0;
   }
   $FILES = `find $DIRS -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print`;
-  @FILES = grep { ! m!/b3p/expatp*/! } split /\s+/, $FILES;
+  @FILES = grep { ! m!/b3p/(shapelib|expatp*)/! } split /\s+/, $FILES;
 }
 
 # In what follows, $f is the name of the file, $file is the file content, and $file_s is a comment-stripped version of $file.
@@ -191,7 +191,7 @@ foreach $f (@FILES)
     $found_iostream = 1 if ($j =~ m!^vcl_((i|o|io|f)stream|iosfwd|streambuf)\.h! || $j eq 'vsl/vsl_binary_io.h');
     &msg(1, "invalid #include <$j>")
       unless ($j =~ m!\.(h|H|hxx|hpp|txx)$! ||
-              $f =~ m!/vcl/|/cmake/config/! ||
+              $f =~ m!\bvcl/|\bcmake/config/! ||
               $j eq 'std/complext.cc');
     next unless ($j =~ m!\.h$!i);
     next if ($f =~ m!(v.l)/tests/(\1_)?test_(includes?|all)\.cxx$! && $j =~ m!^$1(/algo)?/$1_!);
@@ -204,11 +204,11 @@ foreach $f (@FILES)
     next if ($f =~ m!doc/vxl_doc_rules\.h!);
     &msg(1, "has multiple occurrence of \#include <$j>")
       if ($j eq $jj &&
-          $f !~ m!/vcl/vcl_(cstddef|climits|new|sys/time)\.h$! &&
-          $f !~ m!/vcl/tests/test_stlfwd\.cxx$! &&
-          $f !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
-          $f !~ m!/v.l/io/tests/golden_test_v.l_io\.cxx$! &&
-          $f !~ m!/vnl/vnl_sse.h$! &&
+          $f !~ m!\bvcl/vcl_(cstddef|climits|new|sys/time)\.h$! &&
+          $f !~ m!\bvcl/tests/test_stlfwd\.cxx$! &&
+          $f !~ m!\bcmake/config/vxl_platform_tests\.cxx$! &&
+          $f !~ m!\bv.l/io/tests/golden_test_v.l_io\.cxx$! &&
+          $f !~ m!\bvnl/vnl_sse.h$! &&
          "$f-$j" !~ m!\bv3p/netlib/triangle\.c\-math\.h$! &&
          "$f-$j" !~ m!\bv3p/png/tests/pngtest\.c\-time\.h$! &&
          "$f-$j" !~ m!\bbgui3d_file_io\.cxx-Inventor/! &&
@@ -241,7 +241,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vcl_cctype.h') { $i='(vcl_|)(isalnum|isdigit|isprint|isupper|tolower|isalpha|isgraph|ispunct|isxdigit|toupper|iscntrl|islower|isspace)'; }
     elsif ($j eq 'vcl_cerrno.h') { $i='errno|EBUSY|EEXIST'; }
     elsif ($j eq 'vcl_cfloat.h') { $i='FLT_MAX|DBL_MAX|MAXFLOAT|MAXDOUBLE'; }
-    elsif ($j eq 'vcl_climits.h') { $i='CHAR_BIT|CLK_TCK|[US]CHAR_(MIN|MAX)'; }
+    elsif ($j eq 'vcl_climits.h') { $i='CHAR_BIT|CLK_TCK|[US]?(INT|CHAR)_(MIN|MAX)'; }
     elsif ($j eq 'vcl_cmath.h') { $i='vcl_(abs|acos|asin|atan|atan2|ceil|cos|cosh|exp|fabs|floor|fmod|frexp|ldexp|log|log10|modf|pow|sin|sinh|sqrt|tan|tanh)|hypot|HUGE_VAL'; }
     elsif ($j eq 'vcl_complex.h') { $i='vcl_(complex|real|imag|abs|arg|norm|conj|polar|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)'; }
     elsif ($j eq 'vcl_complex.h' && $f =~ m!/tests/test_cmath\.cxx$!) { $i=''; }
@@ -309,6 +309,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vsl/vsl_complex_io.h') { $i='VNL_IO_[A-Z]+_INSTANTIATE.vcl_complex|vsl_b_(read|write)'; }
     elsif ($j eq 'vsl/vsl_indent.h') { $i.='(|_inc|_dec|_set_tab|_tab|_clear|_clear_all_data)'; }
     elsif ($j eq 'vsl/vsl_quick_file.h') { $i.='_(load|save)'; }
+    elsif ($j eq 'vsl/vsl_stream.h') { $i.='_summary(|_t)'; }
     # VGL
     elsif ($j eq 'vgl/vgl_clip.h') { $i.='(|_type|_line[a-z_]+)'; }
     elsif ($j eq 'vgl/vgl_convex.h') { $i.='(_hull)'; }
@@ -577,7 +578,7 @@ foreach $f (@FILES)
               ($f =~ m!\bcore/testlib/testlib_main\.cxx$! && $t eq "math") ||
               ($f =~ m!\bcore/vnl/vnl_sample\.cxx$! && $t eq "stdlib") ||
               ($f =~ m!\bcore/vpl/os_unix/vpl\.cxx$! && $t eq "stdlib") ||
-              ($f =~ m!/cmake/config/vxl_platform_tests\.cxx$!) ||
+              ($f =~ m!\bcmake/config/vxl_platform_tests\.cxx$!) ||
               ($f =~ m!\bvidl2/vidl2_v4l_istream\.h$! && $t eq "errno") ||
               ($f =~ m!\bcore/vul/vul_temp_filename\.cxx$! && $t eq "stdio") ||
               ($f =~ m!\bcore/vul/vul_redirector\.cxx$! && $t eq "stddef"));
@@ -966,7 +967,7 @@ foreach $f (@FILES)
     if ($cpp_file && $file_s =~ m!\b$wd\s*(\s*)\(!)
     {
       &msg(1, "$wd$1() must be vcl_$wd()")
-        unless ($f =~ m!/cmake/config/vxl_platform_tests\.cxx$! ||
+        unless ($f =~ m!\bcmake/config/vxl_platform_tests\.cxx$! ||
                 $f =~ m!/bwm_tableau_mgr\.(cxx|h)$! ||
                 $f =~ m!/bwm_menu\.h$!);
     }
@@ -997,7 +998,7 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bbvxm_lidar_processor\.cxx\.(min|max)$! &&
           "$f.$wd" !~ m!\bvidl2_pixel_format\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\balgo/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$! &&
-          "$f"     !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
+          "$f"     !~ m!\bcmake/config/vxl_platform_tests\.cxx$! &&
           $file_s =~ m![^.\005\006]\b$wd(\s*)\(! ); # \005 is :: and \006 is ->
   }
   foreach $wd (qw(cin cout cerr clog endl ends flush ios istream ostream fstream ifstream ofstream strstream ostrstream streambuf streamoff streamsize fpos streampos stringstream))
@@ -1005,7 +1006,7 @@ foreach $f (@FILES)
     &msg(1, "$wd must be vcl_$wd")
       if ($cpp_file && $f !~ m!\bvcl/Templates/stream-instances\.cxx$! &&
           $f !~ m!\bvcl/tests/test_driver\.cxx$! &&
-          $f !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
+          $f !~ m!\bcmake/config/vxl_platform_tests\.cxx$! &&
           $file_s =~ m![^ .]\s*\b$wd\b\s*[^ (]! );
   }
   foreach $wd (qw(basefield floatfield adjustfield fmtflags seekdir))
