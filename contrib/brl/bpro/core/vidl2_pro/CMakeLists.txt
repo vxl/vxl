@@ -9,6 +9,7 @@ SET(vidl2_pro_sources
     vidl2_io_ostream.h vidl2_io_ostream.cxx
     vidl2_open_istream_process.cxx vidl2_open_istream_process.h 
     vidl2_open_ostream_process.cxx vidl2_open_ostream_process.h 
+    vidl2_pro_utils.h      vidl2_pro_utils.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vidl2_pro_sources)
