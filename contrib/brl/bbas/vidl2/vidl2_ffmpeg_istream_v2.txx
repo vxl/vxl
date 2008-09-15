@@ -36,7 +36,6 @@ struct vidl2_ffmpeg_istream::pimpl
     last_dts( 0 ),
     frame_( NULL ),
     num_frames_( 0 ),
-    cur_frame_( NULL ),
     sws_context_( NULL ),
     cur_frame_( NULL ),
     deinterlace_( false ),
