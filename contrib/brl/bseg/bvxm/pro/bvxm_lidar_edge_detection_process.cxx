@@ -94,14 +94,14 @@ bool bvxm_lidar_edge_detection_process::execute()
   for (unsigned i=0; i<ni; i++){
     for (unsigned j=0; j<nj; j++){
       float curr_difference = image_first_return(i,j)-image_second_return(i,j);
+      float curr_hm = image_first_return(i,j)/(threshold_edge_difference+image_first_return(i,j));
       lidar_edges_prob(i,j) = curr_difference/(threshold_edge_difference+curr_difference);
+      lidar_height(i,j) = curr_hm*lidar_edges_prob(i,j);
       if (curr_difference>0.0f){
         lidar_edges(i,j) = 1.0f;
-        lidar_height(i,j) = image_first_return(i,j);
       }
       else{
         lidar_edges(i,j) = 0.0f;
-        lidar_height(i,j) = 0.0f;
       }
     }
   }
