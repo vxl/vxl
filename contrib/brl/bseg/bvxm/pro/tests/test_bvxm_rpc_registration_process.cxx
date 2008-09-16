@@ -57,18 +57,21 @@ MAIN( test_bvxm_rpc_registration_process )
   brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(camera);
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(img);
   brdb_value_sptr v3 = new brdb_value_t<bool>(true);
-  brdb_value_sptr v4 = new brdb_value_t<unsigned>(0);
+  brdb_value_sptr v4 = new brdb_value_t<float>(20.0);
+  brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
 
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
   good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
   good = good && bprb_batch_process_manager::instance()->set_input(4, v4);
+  good = good && bprb_batch_process_manager::instance()->set_input(5, v5);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
-  unsigned id_cam, id_img;
+  unsigned id_cam, id_edge_img, id_expected_edge_img;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_cam);
-  good = good && bprb_batch_process_manager::instance()->commit_output(1, id_img);
+  good = good && bprb_batch_process_manager::instance()->commit_output(1, id_edge_img);
+  good = good && bprb_batch_process_manager::instance()->commit_output(2, id_expected_edge_img);
   TEST("run bvxm_rpc_registration_process", good ,true);
 
   // check if the results are in DB
@@ -91,26 +94,47 @@ MAIN( test_bvxm_rpc_registration_process )
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value.ptr());
   vpgl_camera_double_sptr cam = result->value();
 
-
-  brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
-  if (S_img->size()!=1) {
+  brdb_query_aptr Q_edge_img = brdb_query_comp_new("id", brdb_query::EQ, id_edge_img);
+  brdb_selection_sptr S_edge_img = DATABASE->select("vil_image_view_base_sptr_data", Q_edge_img);
+  if (S_edge_img->size()!=1) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
-  brdb_value_sptr value_img;
-  if (!S_img->get_value(vcl_string("value"), value_img)) {
+  brdb_value_sptr value_edge_img;
+  if (!S_edge_img->get_value(vcl_string("value"), value_edge_img)) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  non_null = (value_img != 0);
+  non_null = (value_edge_img != 0);
   TEST("image output non-null", non_null ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result_img =
-    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
-  vil_image_view_base_sptr img_out = result_img->value();
-  bool saved = vil_save(*img_out, "voxel_image.tif");
+  brdb_value_t<vil_image_view_base_sptr>* result_edge_img =
+    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_edge_img.ptr());
+  vil_image_view_base_sptr edge_img_out = result_edge_img->value();
+  bool saved = vil_save(*edge_img_out, "edge_image.tif");
+  TEST("image saved", saved ,true);
+
+
+  brdb_query_aptr Q_expected_edge_img = brdb_query_comp_new("id", brdb_query::EQ, id_expected_edge_img);
+  brdb_selection_sptr S_expected_edge_img = DATABASE->select("vil_image_view_base_sptr_data", Q_expected_edge_img);
+  if (S_expected_edge_img->size()!=1) {
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+             << " no selections\n";
+  }
+
+  brdb_value_sptr value_expected_edge_img;
+  if (!S_expected_edge_img->get_value(vcl_string("value"), value_expected_edge_img)) {
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+             << " didn't get value\n";
+  }
+  non_null = (value_expected_edge_img != 0);
+  TEST("image output non-null", non_null ,true);
+
+  brdb_value_t<vil_image_view_base_sptr>* result_expected_edge_img =
+    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_expected_edge_img.ptr());
+  vil_image_view_base_sptr expected_edge_img_out = result_expected_edge_img->value();
+  bool saved = vil_save(*expected_edge_img_out, "expected_edge_image.tif");
   TEST("image saved", saved ,true);
 
   SUMMARY();
