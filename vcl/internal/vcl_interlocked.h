@@ -26,9 +26,16 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 
+// for the problematic Visual Studio 6
+#if defined(_WIN32) || defined(WIN32) 
+#  if _MSC_VER < 1300 
+#    define VCL_INTERLOCKED_VC6  
+#  endif
+#endif
+
 // 
 // Do we need this?
-#if defined( __BORLANDC__ )
+#if defined( __BORLANDC__ ) || defined( VCL_INTERLOCKED_VC6 )
 
 # include <windows.h>
 
