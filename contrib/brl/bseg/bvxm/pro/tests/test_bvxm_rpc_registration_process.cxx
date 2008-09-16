@@ -57,7 +57,7 @@ MAIN( test_bvxm_rpc_registration_process )
   brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(camera);
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(img);
   brdb_value_sptr v3 = new brdb_value_t<bool>(true);
-  brdb_value_sptr v4 = new brdb_value_t<float>(20.0);
+  brdb_value_sptr v4 = new brdb_value_t<float>(10.0);
   brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
 
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
@@ -134,7 +134,7 @@ MAIN( test_bvxm_rpc_registration_process )
   brdb_value_t<vil_image_view_base_sptr>* result_expected_edge_img =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_expected_edge_img.ptr());
   vil_image_view_base_sptr expected_edge_img_out = result_expected_edge_img->value();
-  bool saved = vil_save(*expected_edge_img_out, "expected_edge_image.tif");
+  saved = vil_save(*expected_edge_img_out, "expected_edge_image.tif");
   TEST("image saved", saved ,true);
 
   SUMMARY();
