@@ -1,6 +1,5 @@
 #ifndef vidl2_pro_utils_h_
 #define vidl2_pro_utils_h_
-
 //:
 // \file
 // \brief Utilites to support image/video I/0
@@ -9,10 +8,11 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
-//
+
 #include <vcl_string.h>
-#include <vil/vil_image_resource_sptr.h>
+
 class vidl2_pro_utils
 {
  public:
@@ -23,6 +23,5 @@ class vidl2_pro_utils
                                         unsigned index,
                                         vcl_string const& format = "tiff");
 };
-
 
 #endif
