@@ -4,24 +4,23 @@
 #include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vul/vul_file.h>
-#include <vil/vil_load.h>
 
 bool vidl2_pro_utils::create_directory(vcl_string const& dir, bool force)
 {
-  if(vul_file::exists(dir)&&!vul_file::is_directory(dir)){
+  if (vul_file::exists(dir)&&!vul_file::is_directory(dir)){
     vcl_cerr << "In vidl2_pro_utils::create_directory() -"
-             << " path exists but is not a directory\n" << dir 
+             << " path exists but is not a directory\n" << dir
              << vcl_endl;
     return false;
   }
-  
-  if(!vul_file::exists(dir)&&force)
-    if(!vul_file::make_directory(dir)){
+
+  if (!vul_file::exists(dir)&&force)
+    if (!vul_file::make_directory(dir)){
       vcl_cerr << "In  vidl2_pro_utils::create_directory() -"
                << " could not make directory\n" << dir << vcl_endl;
       return false;
     }
-  if(!vul_file::exists(dir)){
+  if (!vul_file::exists(dir)){
       vcl_cerr << "In  vidl2_pro_utils::create_directory() -"
                << " directory doesn't exist after all attempts\n" << dir << vcl_endl;
       return false;
