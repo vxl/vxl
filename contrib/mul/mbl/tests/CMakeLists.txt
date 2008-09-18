@@ -7,6 +7,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_parse_block.cxx
   test_parse_sequence.cxx
   test_parse_tuple.cxx
+  test_parse_int_list.cxx
   test_lda.cxx
   test_file_data_wrapper.cxx
   test_selected_data_wrapper.cxx
@@ -61,6 +62,7 @@ ADD_TEST( mbl_test_jarque_bera ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_jarqu
 ADD_TEST( mbl_test_parse_block ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_parse_block )
 ADD_TEST( mbl_test_parse_sequence ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_parse_sequence )
 ADD_TEST( mbl_test_parse_tuple ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_parse_tuple )
+ADD_TEST( mbl_test_parse_int_list ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_parse_int_list )
 ADD_TEST( mbl_test_lda ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_lda )
 ADD_TEST( mbl_test_file_data_wrapper ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_file_data_wrapper )
 ADD_TEST( mbl_test_selected_data_wrapper ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_selected_data_wrapper )

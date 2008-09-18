@@ -2,7 +2,7 @@
 #define mbl_exception_h_
 //:
 // \file
-// \brief Exceptions thrown by mbl, and amechanism for turning them off.
+// \brief Exceptions thrown by mbl, and a mechanism for turning them off.
 // \author Ian Scott.
 
 #include <vcl_string.h>
