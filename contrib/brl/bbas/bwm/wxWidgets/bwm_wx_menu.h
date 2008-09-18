@@ -1,5 +1,5 @@
-#ifndef bwm_menu_h_
-#define bwm_menu_h_
+#ifndef bwm_wx_menu_h_
+#define bwm_wx_menu_h_
 
 #include "bwm_tableau_mgr.h"
 #include "bwm_site_mgr.h"
@@ -25,7 +25,7 @@ class bwm_menu
   static void save_site() { bwm_site_mgr::instance()->save_site();}
   static void load_video_site()
     {bwm_site_mgr::instance()->load_video_site();}
-  static void save_video_site() 
+  static void save_video_site()
     { bwm_site_mgr::instance()->save_video_site();}
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
   static void load_shape_file() { bwm_world::instance()->load_shape_file(); }
