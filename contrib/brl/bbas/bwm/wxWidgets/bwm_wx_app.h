@@ -1,4 +1,4 @@
-// This is bwm/bwm_wx_app.h
+// This is brl/bbas/bwm/wxWidgets/bwm_wx_app.h
 #ifndef bwm_wx_app_h_
 #define bwm_wx_app_h_
 //=========================================================================
@@ -28,7 +28,7 @@ class bwm_wx_app : public wxApp
 
   //: Destructor.
   virtual ~bwm_wx_app() {}
-  
+
   //: Called on app initialization.
   virtual bool OnInit();
 

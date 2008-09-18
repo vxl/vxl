@@ -1,5 +1,6 @@
-// This is core/vgui/examples/wx_example/bwm_wx_app.cxx
+// This is brl/bbas/bwm/wxWidgets/bwm_wx_app.cxx
 //=========================================================================
+#include "bwm_wx_app.h"
 //:
 // \file
 // \brief  wxWidgets main application class.
@@ -7,7 +8,6 @@
 // See bwm_wx_app.h for details.
 //=========================================================================
 
-#include "bwm_wx_app.h"
 #include "bwm_wx_frame.h"
 
 #include <vgui/wx/vgui_wx.h>

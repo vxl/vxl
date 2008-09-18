@@ -1,5 +1,6 @@
-// This is core/vgui/examples/wx_example/bwm_wx_frame.cxx
+// This is brl/bbas/bwm/wxWidgets/bwm_wx_frame.cxx
 //=========================================================================
+#include "bwm_wx_frame.h"
 //:
 // \file
 // \brief  wxWidgets main frame class.
@@ -7,7 +8,6 @@
 // See bwm_wx_frame.h for details.
 //=========================================================================
 
-#include "bwm_wx_frame.h"
 #include <bwm/bwm_menu.h>
 #include <bwm/bwm_macros.h>
 #include <bwm/bwm_world.h>
@@ -83,12 +83,12 @@ bwm_wx_frame::bwm_wx_frame(wxWindow* parent,
   menu_bar->Append(site_menu, wxT("&Site"));
   menu_bar->Append(corresp_menu, wxT("&Correspondence"));
   menu_bar->Append(help_menu, wxT("&Help"));
-  
+
   SetMenuBar(menu_bar);
 
   CreateStatusBar(1);
   SetStatusText(wxT("Welcome to CrossCut!"));
-  
+
   SetToolBar(wxXmlResource::Get()->LoadToolBar(this, wxT("crosscut_toolbar")));
 
   canvas_ = new vgui_wx_adaptor(this);
@@ -205,14 +205,17 @@ void bwm_wx_frame::on_vertex_mode(wxCommandEvent& event)
 {
   tab_mgr->set_draw_mode_vertex();
 }
+
 void bwm_wx_frame::on_edge_mode(wxCommandEvent& event)
 {
   tab_mgr->set_draw_mode_edge();
 }
+
 void bwm_wx_frame::on_face_mode(wxCommandEvent& event)
 {
   tab_mgr->set_draw_mode_face();
 }
+
 void bwm_wx_frame::on_mesh_mode(wxCommandEvent& event)
 {
   tab_mgr->set_draw_mode_mesh();
@@ -222,12 +225,12 @@ void bwm_wx_frame::on_load_shp(wxCommandEvent& event)
 {
   bwm_world::instance()->load_shape_file();
 }
-  
+
 void bwm_wx_frame::on_save_ply(wxCommandEvent& event)
 {
   bwm_world::instance()->save_ply();
 }
-  
+
 void bwm_wx_frame::on_save_gml(wxCommandEvent& event)
 {
   bwm_world::instance()->save_gml();
@@ -242,7 +245,7 @@ void bwm_wx_frame::on_save_kmlcollada(wxCommandEvent& event)
 {
   bwm_world::instance()->save_kml_collada();
 }
-  
+
 void bwm_wx_frame::on_save_x3d(wxCommandEvent& event)
 {
   bwm_world::instance()->save_x3d();
@@ -268,7 +271,6 @@ void bwm_wx_frame::on_rec_corr(wxCommandEvent& event)
   bwm_observer_mgr::instance()->collect_corr();
 }
 
-  
 void bwm_wx_frame::on_save_corr(wxCommandEvent& event)
 {
   bwm_observer_mgr::instance()->save_corr_XML();
@@ -283,7 +285,9 @@ void bwm_wx_frame::on_delete_all_corr(wxCommandEvent& event)
 {
   bwm_observer_mgr::instance()->delete_all_corr();
 }
-/*void bwm_wx_frame::on_create_circle(wxCommandEvent& event)
+
+#if 0
+void bwm_wx_frame::on_create_circle(wxCommandEvent& event)
 {
   vgui_tableau_sptr t = tab_mgr->active_tableau();
   vgui_tableau_sptr tab = t->get_child(0);
@@ -291,4 +295,5 @@ void bwm_wx_frame::on_delete_all_corr(wxCommandEvent& event)
     bwm_tableau_rat_cam* cam_tab = static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
     cam_tab->create_circular_polygon();
   }
-}*/
+}
+#endif // 0

@@ -1,4 +1,4 @@
-// This is core/vgui/examples/wx_example/bwm_wx_frame.h
+// This is brl/bbas/bwm/wxWidgets/bwm_wx_frame.h
 #ifndef bwm_wx_frame_h_
 #define bwm_wx_frame_h_
 //=========================================================================
@@ -31,7 +31,7 @@ enum
     Menu_Create_Site,
     Menu_Save_Site,
     Menu_Load_ImgTab,
-    Menu_Load_CamTab, 
+    Menu_Load_CamTab,
     Menu_Load_VidTab,
     Menu_Load_VidSite,
     Menu_Save_VidSite,
@@ -41,12 +41,12 @@ enum
     Menu_Save_kml,
     Menu_Save_kmlcollada,
     Menu_Save_x3d,
-    Menu_Corr_Start, 
-    Menu_Corr_Stop, 
+    Menu_Corr_Start,
+    Menu_Corr_Stop,
     Menu_Corr_Mode,
-    Menu_Corr_Record, 
-    Menu_Corr_Save, 
-    Menu_Corr_Delete, 
+    Menu_Corr_Record,
+    Menu_Corr_Save,
+    Menu_Corr_Delete,
     Menu_Corr_Delete_all
 };
 
@@ -56,7 +56,7 @@ class bwm_wx_frame : public wxFrame
   DECLARE_CLASS(bwm_wx_frame)
   DECLARE_EVENT_TABLE()
 
-public:
+ public:
   //: Constructor - default.
   bwm_wx_frame(wxWindow* parent,
                      wxWindowID id,
@@ -103,12 +103,11 @@ public:
   void on_delete_corr(wxCommandEvent& event);
   void on_delete_all_corr(wxCommandEvent& event);
 
-private:
+ private:
   vgui_wx_adaptor*  canvas_;
   bwm_tableau_mgr* tab_mgr;
   bwm_site_mgr* site_mgr;
   bool InitToolbar(wxToolBar* toolBar);
-  
 };
 
 #endif // bwm_wx_frame_h_
