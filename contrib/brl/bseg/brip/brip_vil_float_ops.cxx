@@ -1798,16 +1798,16 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
     vil_math_value_range<float>(temp, vmin, vmax);
     return brip_vil_float_ops::convert_to_byte(temp, vmin, vmax);
   }
-if (image.nplanes()==1 &&image.pixel_format()==VIL_PIXEL_FORMAT_BOOL)
+  if (image.nplanes()==1 &&image.pixel_format()==VIL_PIXEL_FORMAT_BOOL)
   {
     vil_image_view<bool> temp = image.get_view();
-	unsigned nj = temp.nj(), ni = temp.ni();
-	vil_image_view<unsigned char> out(ni, nj);
-	out.fill(0);
-    for(unsigned j = 0; j<nj; ++j)
-		for(unsigned i = 0; i<ni; ++i)
-			if(temp(i,j)) out(i,j) = 255;
-	return out;
+    unsigned nj = temp.nj(), ni = temp.ni();
+    vil_image_view<unsigned char> out(ni, nj);
+    out.fill(0);
+    for (unsigned j = 0; j<nj; ++j)
+      for (unsigned i = 0; i<ni; ++i)
+        if (temp(i,j)) out(i,j) = 255;
+    return out;
   }
 
   //Here we assume that the image is an unsigned char
@@ -1847,12 +1847,12 @@ if (image.nplanes()==1 &&image.pixel_format()==VIL_PIXEL_FORMAT_BOOL)
     vil_image_view<float> grey_image_f;
     grey_image_f.set_size(width, height);
     for (unsigned y = 0; y<height; y++)
-		for (unsigned x = 0; x<width; x++){
-		  float v = 0;
-			for(unsigned p = 0; p<3; ++p)
-			  v += color_image(x,y,p);
-		   grey_image_f(x,y) = v/3.0f;
-		}
+      for (unsigned x = 0; x<width; x++) {
+        float v = 0;
+        for (unsigned p = 0; p<3; ++p)
+          v += color_image(x,y,p);
+        grey_image_f(x,y) = v/3.0f;
+      }
     float vmin=0, vmax=255;
     vil_math_value_range<float>(grey_image_f, vmin, vmax);
     return brip_vil_float_ops::convert_to_byte(grey_image_f, vmin, vmax);
