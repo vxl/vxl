@@ -9,7 +9,6 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-
 bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 {
   // process takes 5 inputs:
@@ -233,7 +232,9 @@ bool bvxm_rpc_registration_process::execute()
       vil_image_view<vxl_byte> curr_image;
       vpgl_camera_double_sptr curr_camera;
       if (curr_scale!=scale){
-        curr_image = *bvxm_util::downsample_image_by_two(&image);
+        image_sptr = bvxm_util::downsample_image_by_two(image_sptr);
+        vil_image_view<vxl_byte> temp_image = static_cast<vil_image_view<vxl_byte>*>(image_sptr.ptr());
+        curr_image.deep_copy(temp_image);
         curr_camera = bvxm_util::downsample_camera(camera_out,curr_scale);
       }
       else{
