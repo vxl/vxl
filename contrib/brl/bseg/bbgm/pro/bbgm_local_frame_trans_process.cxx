@@ -21,7 +21,6 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-#include <vil/vil_save.h>
 #include <vidl2/vidl2_image_list_istream.h>
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_convert.h>
@@ -40,7 +39,7 @@ bbgm_local_frame_trans_process::bbgm_local_frame_trans_process()
   input_types_[5]= "double"; // min_eigenvalue
   input_types_[6]= "double"; // max_condition_number
   input_types_[7]= "double"; // max_pixel_shift
-  
+
   output_data_.resize(1, brdb_value_sptr(0));
   output_types_.resize(1);
   output_types_[0]="vil_image_view_base_sptr";//transformed frame
@@ -82,14 +81,12 @@ bbgm_local_frame_trans_process::execute()
   typedef bsta_num_obs<bsta_gauss3_t> gauss_type3;
   typedef bsta_mixture<gauss_type3> mix_gauss_type3;
   typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;
- 
+
   if (!bgm) {
     return false;
   }
   bbgm_image_of<obs_mix_gauss_type3> *model =
     static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
-
-
 
   //Retrieve input frame
   brdb_value_t<vil_image_view_base_sptr>* input1 =
@@ -102,28 +99,28 @@ bbgm_local_frame_trans_process::execute()
   brdb_value_t<vil_image_view_base_sptr>* input2 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
   temp =  input2->value();
-  if(temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
+  if (temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
     return false;
   vil_image_view<float> gauss_smooth = *vil_convert_cast(float(), temp);
 
   brdb_value_t<vil_image_view_base_sptr>* input3 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[3].ptr());
   temp =input3->value();
-  if(temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
+  if (temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
     return false;
   vil_image_view<float> Ix = *vil_convert_cast(float(), temp);
 
   brdb_value_t<vil_image_view_base_sptr>* input4 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[4].ptr());
   temp =  input4->value();
-  if(temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
+  if (temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
     return false;
   vil_image_view<float> Iy = *vil_convert_cast(float(), temp);
 
   unsigned ni = frame.ni(), nj = frame.nj(), np = frame.nplanes();
-  if(np!=3)
+  if (np!=3)
     return false;
- 
+
   // copy the frame into the output translated frame
   // pixels are modified only if translation computation is valid
   vil_image_view<float>* trans_frame = new vil_image_view<float>(frame);
@@ -144,66 +141,66 @@ bbgm_local_frame_trans_process::execute()
   float n_translate = 0;
   double du = 0, dv = 0;
   //compute translation on a 5x5 window
-  for(int j = 2; j<static_cast<int>(nj-2); ++j){
-    for(int i = 2; i<static_cast<int>(ni-2); ++i)
-      {
-        total += 1.0f;
-        double A = 0, B = 0, C= 0, D = 0, E = 0;
-        bool trans = true;
-        //run over 5x5 neigborhood about i,j
-        for(int jn = -2; jn<=2; ++jn)
-          for(int in = -2; in<=2; ++in){
-            //retrieve distribution
-            obs_mix_gauss_type3 mog = (*model)(i+in, j+jn);              
-            bsta_gauss3_t gc = mog.distribution(0);
-            vector3_ mean = gc.mean();
-            vector3_ var = gc.covar();
-            //sum over bands
-            for(unsigned p = 0; p<3; ++p)
-              {
-                double i0 = gauss_smooth(i+in, j+jn, p);
-                double  ix = Ix(i+in, j+jn, p);
-                double iy = Iy(i+in, j+jn, p);
-                double rvar = 1.0/var[p];
-                A += ix*(i0-mean[p])*rvar;
-                B += ix*ix*rvar;
-                C += ix*iy*rvar;
-                D += iy*(i0-mean[p])*rvar;
-                E += iy*iy*rvar;
-              }
-          }
-        //solve for local translation
-        // first get eigenvalues to check for singularities
-        double la, lb;
-        eigenvalues(B, C, E, la, lb);
-        if(vcl_fabs(la)< min_eigenvalue || vcl_fabs(lb)< min_eigenvalue)
-          trans = false;
-        if(vcl_fabs(la/lb)>max_condition_number)
-          trans = false;
-        if(trans)
+  for (int j = 2; j<static_cast<int>(nj-2); ++j){
+    for (int i = 2; i<static_cast<int>(ni-2); ++i)
+    {
+      total += 1.0f;
+      double A = 0, B = 0, C= 0, D = 0, E = 0;
+      bool trans = true;
+      //run over 5x5 neigborhood about i,j
+      for (int jn = -2; jn<=2; ++jn)
+        for (int in = -2; in<=2; ++in) {
+          //retrieve distribution
+          obs_mix_gauss_type3 mog = (*model)(i+in, j+jn);
+          bsta_gauss3_t gc = mog.distribution(0);
+          vector3_ mean = gc.mean();
+          vector3_ var = gc.covar();
+          //sum over bands
+          for (unsigned p = 0; p<3; ++p)
           {
-            //solve for translation
-            double rdet = 1.0/(B*E - C*C);
-            double inv00 = E*rdet, inv01 = -C*rdet;
-            double inv10 = -C*rdet, inv11 = B*rdet;
-            double tu = -(A*inv00 + D*inv01);
-            double tv = -(A*inv10 + D*inv11);
-            if(vcl_fabs(tu)<max_translation && vcl_fabs(tv)<max_translation){
-              n_translate += 1.0f;
-              du += vcl_fabs(tu);
-              dv += vcl_fabs(tv);
-              for(unsigned p = 0; p<3; ++p){
-                double itrans = gauss_smooth(i,j,p)+
-                  tu*Ix(i,j,p)+tv*Iy(i,j,p);
-                (*trans_frame)(i,j,p) = static_cast<float>(itrans);
-              }
-            }
+            double i0 = gauss_smooth(i+in, j+jn, p);
+            double ix = Ix(i+in, j+jn, p);
+            double iy = Iy(i+in, j+jn, p);
+            double rvar = 1.0/var[p];
+            A += ix*(i0-mean[p])*rvar;
+            B += ix*ix*rvar;
+            C += ix*iy*rvar;
+            D += iy*(i0-mean[p])*rvar;
+            E += iy*iy*rvar;
           }
+        }
+      //solve for local translation
+      // first get eigenvalues to check for singularities
+      double la, lb;
+      eigenvalues(B, C, E, la, lb);
+      if (vcl_fabs(la)< min_eigenvalue || vcl_fabs(lb)< min_eigenvalue)
+        trans = false;
+      if (vcl_fabs(la/lb)>max_condition_number)
+        trans = false;
+      if (trans)
+      {
+        //solve for translation
+        double rdet = 1.0/(B*E - C*C);
+        double inv00 = E*rdet, inv01 = -C*rdet;
+        double inv10 = -C*rdet, inv11 = B*rdet;
+        double tu = -(A*inv00 + D*inv01);
+        double tv = -(A*inv10 + D*inv11);
+        if (vcl_fabs(tu)<max_translation && vcl_fabs(tv)<max_translation){
+          n_translate += 1.0f;
+          du += vcl_fabs(tu);
+          dv += vcl_fabs(tv);
+          for (unsigned p = 0; p<3; ++p){
+            double itrans = gauss_smooth(i,j,p)+
+              tu*Ix(i,j,p)+tv*Iy(i,j,p);
+            (*trans_frame)(i,j,p) = static_cast<float>(itrans);
+          }
+        }
       }
+    }
     vcl_cout << '.';
   }
-  vcl_cout << "\nFraction translated " << n_translate/total 
-           << " with <tu> = " << du/n_translate 
+  vcl_cout << "\nFraction translated " << n_translate/total
+           << " with <tu> = " << du/n_translate
            << "and <tv> = " << dv/n_translate << '\n' << vcl_flush;
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(trans_frame);
   output_data_[0] = output0;
