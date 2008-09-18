@@ -27,10 +27,10 @@ class brip_label_equivalence
   //:carry out full propagation of label equivalence
   void transitive_closure();
 
-  //:the full set of lables
+  //:the full set of labels
   vcl_set<unsigned> labels() const;
 
-  //:the set of lables equivalent to a given label
+  //:the set of labels equivalent to a given label
   vcl_map<unsigned, vcl_set<unsigned> >& equivalence_sets()
     { return equivalence_sets_;}
 
@@ -45,6 +45,5 @@ class brip_label_equivalence
   vcl_map<unsigned, vcl_set<unsigned> > reverse_pairs_;
   vcl_map<unsigned, vcl_set<unsigned> > equivalence_sets_;
 };
-
 
 #endif // brip_label_equivalence_h_
