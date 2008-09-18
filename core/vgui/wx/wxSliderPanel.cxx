@@ -14,7 +14,6 @@
 #include <wx/wx.h>
 #endif
 
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vgui/vgui_message.h>
 
@@ -206,7 +205,7 @@ void wxSliderPanel::OnSliderChange( wxScrollEvent& event )
     return;
   }
 
-  if(send_messages_)
+  if (send_messages_)
   {
     vgui_message m;
     m.from = this;
@@ -233,7 +232,7 @@ void wxSliderPanel::OnChangeText( wxCommandEvent& event )
   slider->SetValue(spos);
   event.Skip();
 
-  if(send_messages_)
+  if (send_messages_)
   {
     vgui_message m;
     m.from = this;
@@ -255,7 +254,7 @@ void wxSliderPanel::OnEnterText( wxCommandEvent& event )
     return;
   }
 
-  if(send_messages_)
+  if (send_messages_)
   {
     vgui_message m;
     m.from = this;
