@@ -233,7 +233,7 @@ bool bvxm_rpc_registration_process::execute()
       vpgl_camera_double_sptr curr_camera;
       if (curr_scale!=scale){
         image_sptr = bvxm_util::downsample_image_by_two(image_sptr);
-        vil_image_view<vxl_byte> temp_image = static_cast<vil_image_view<vxl_byte>*>(image_sptr.ptr());
+        vil_image_view<vxl_byte> temp_image(image_sptr);
         curr_image.deep_copy(temp_image);
         curr_camera = bvxm_util::downsample_camera(camera_out,curr_scale);
       }
