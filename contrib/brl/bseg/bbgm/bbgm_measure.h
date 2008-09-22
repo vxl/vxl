@@ -28,34 +28,33 @@ void measure(bbgm_image_of<dist_>& dimg,
              const measure_functor_& measure,
              typename dist_::math_type delta)
 {
-    typedef typename dist_::vector_type vector_;
-    typedef typename dist_::math_type T;
+  typedef typename dist_::vector_type vector_;
+  typedef typename dist_::math_type T;
 
-    const unsigned ni = dimg.ni();
-    const unsigned nj = dimg.nj();
-    const unsigned d_np = dist_::dimension;
+  const unsigned ni = dimg.ni();
+  const unsigned nj = dimg.nj();
+  const unsigned d_np = dist_::dimension;
 
-    assert(image.ni() == ni);
-    assert(image.nj() == nj);
-    assert(image.nplanes() == d_np);
+  assert(image.ni() == ni);
+  assert(image.nj() == nj);
+  assert(image.nplanes() == d_np);
 
-    result.set_size(ni,nj,1);
+  result.set_size(ni,nj,1);
 
-    const vcl_ptrdiff_t pstep = image.planestep();
+  const vcl_ptrdiff_t pstep = image.planestep();
 
-    vector_ sample;
-    vector_ del(delta);
-    typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
-    for ( unsigned j=0; j<nj; ++j)
-      for ( unsigned i=0; i<ni; ++i, ++itr){
-        vector_ sample;
-        const T* iptr = &image(i,j);
-        bbgm_planes_to_sample<T, vector_, d_np>::apply(iptr, sample, pstep);
-        T temp_val;
-        vector_ r_min = sample-del, r_max = sample+del;
-        measure(*itr, r_min, r_max, temp_val);
-        result(i,j) = temp_val;
-      }
+  vector_ del(delta);
+  typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
+  for ( unsigned j=0; j<nj; ++j)
+    for ( unsigned i=0; i<ni; ++i, ++itr) {
+      vector_ sample;
+      const T* iptr = &image(i,j);
+      bbgm_planes_to_sample<T, vector_, d_np>::apply(iptr, sample, pstep);
+      T temp_val;
+      vector_ r_min = sample-del, r_max = sample+del;
+      measure(*itr, r_min, r_max, temp_val);
+      result(i,j) = temp_val;
+    }
 }
 
 #endif // bbgm_measure_h_
