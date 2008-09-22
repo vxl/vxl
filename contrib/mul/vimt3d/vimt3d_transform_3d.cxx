@@ -673,20 +673,20 @@ vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transfo
     else
     {
       if (R.form() == vimt3d_transform_3d::Affine ||
-        L.form() == vimt3d_transform_3d::Affine)
-        T.form_ = vimt3d_transform_3d::Affine;
+          L.form() == vimt3d_transform_3d::Affine)
+          T.form_ = vimt3d_transform_3d::Affine;
       else
       if (R.form() == vimt3d_transform_3d::Similarity ||
-        L.form() == vimt3d_transform_3d::Similarity)
-        T.form_ = vimt3d_transform_3d::Similarity;
+          L.form() == vimt3d_transform_3d::Similarity)
+          T.form_ = vimt3d_transform_3d::Similarity;
       else
       if (R.form() == vimt3d_transform_3d::RigidBody ||
-        L.form() == vimt3d_transform_3d::RigidBody)
+          L.form() == vimt3d_transform_3d::RigidBody)
       {
         if (R.form() == vimt3d_transform_3d::ZoomOnly)
         {
           if (R.xx_ == R.yy_ &&
-            R.xx_ == R.zz_)
+              R.xx_ == R.zz_)
             T.form_ = vimt3d_transform_3d::Similarity;
           else
             T.form_ = vimt3d_transform_3d::Affine;
@@ -695,7 +695,7 @@ vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transfo
         if (L.form() == vimt3d_transform_3d::ZoomOnly)
         {
           if (L.xx_ == L.yy_ &&
-            L.xx_ == L.zz_)
+              L.xx_ == L.zz_)
             T.form_ = vimt3d_transform_3d::Similarity;
           else
             T.form_ = vimt3d_transform_3d::Affine;
@@ -705,8 +705,8 @@ vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transfo
       }
       else
       if (R.form() == vimt3d_transform_3d::ZoomOnly ||
-        L.form() == vimt3d_transform_3d::ZoomOnly)
-        T.form_ = vimt3d_transform_3d::ZoomOnly;
+          L.form() == vimt3d_transform_3d::ZoomOnly)
+          T.form_ = vimt3d_transform_3d::ZoomOnly;
       else
         T.form_ = vimt3d_transform_3d::Translation;
     }
@@ -878,7 +878,8 @@ void vimt3d_transform_3d::config(vcl_istream& is)
   {
     vcl_string s_str = props.get_optional_property("s");
     if (!s_str.empty())
-      this->set_zoom_only( vul_string_atof(s_str),
+      this->set_zoom_only(
+        vul_string_atof(s_str),
         vul_string_atof(props.get_optional_property("t_x")),
         vul_string_atof(props.get_optional_property("t_y")),
         vul_string_atof(props.get_optional_property("t_z")) );
@@ -988,8 +989,8 @@ vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b)
 
 //========================================================================
 // Test whether a 3D transform is zoom-only or lesser, i.e. there may
-// be translation and (anisotropic) scaling but no rotation. 
-// This tests only for a commonly-occurring special case; there may 
+// be translation and (anisotropic) scaling but no rotation.
+// This tests only for a commonly-occurring special case; there may
 // be other zoom-only transforms that are not detected.
 //========================================================================
 bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
@@ -999,13 +1000,12 @@ bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
   // diagonal with strictly-positive elements. Such cases have zero rotation
   // and positive (possibly anisotropic) scaling.
   vnl_matrix<double> M = transf.matrix().extract(3,3,0,0);
-  
+
   // Are any diagonal elements zero or negative?
   for (unsigned i=0; i<3; ++i)
     if (M(i,i)<=zero_tol) return false;
 
   // Are any off-diagonal elements non-zero?
-  bool zero_others = true;
   for (unsigned j=0; j<3; ++j)
   {
     for (unsigned i=0; i<3; ++i)
