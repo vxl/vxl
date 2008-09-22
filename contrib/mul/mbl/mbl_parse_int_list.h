@@ -15,7 +15,7 @@
 
 //: Read a list of integers from a stream.
 // This integer list should be space-separated.
-// Lists of the form "{ 1 2 5 : 10 }" a la matlab are accepted. Note that "a - b"
+// Lists of the form "{ 1 2 5 : 10 }" a la matlab are accepted. Note that "a : b"
 // will include b rather than following normal C++ convention.
 // Failed parsing will cause an exception to be thrown, and the stream's fail bit to be set
 //
