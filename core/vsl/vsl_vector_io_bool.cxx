@@ -56,15 +56,15 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<bool>& v)
 VCL_DEFINE_SPECIALIZATION
 void vsl_print_summary(vcl_ostream& os, const vcl_vector<bool> &v)
 {
-  os << "Vector length: " << v.size() << vcl_endl;
+  os << "Vector length: " << v.size() << '\n';
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
     os << ' ' << i << ": ";
     vsl_print_summary(os, v[i]);
-    os << vcl_endl;
+    os << '\n';
   }
   if (v.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ..." << '\n';
 }
 
 

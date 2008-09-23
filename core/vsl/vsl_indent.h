@@ -57,7 +57,7 @@
 // public:
 //  void print(vcl_ostream& os) const
 //  {
-//    os<<vsl_indent(os)<<fred_<<vcl_endl;
+//    os<<vsl_indent(os)<<fred_<<'\n';
 //    os<<vsl_indent(os)<<"Jim's other data"; }
 //  };
 //

@@ -39,14 +39,14 @@ inline bool vsl_quick_file_load(T &data,
       {
         bfs.close();
         if (errorStream)
-          *errorStream << "Successfully loaded: " << path << vcl_endl;
+          *errorStream << "Successfully loaded: " << path << '\n';
         return true;
       }
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to load: "<< path <<vcl_endl;
+    *errorStream << "Unable to load: "<< path <<'\n';
   return false;
 }
 
@@ -65,13 +65,13 @@ inline bool vsl_quick_file_save(const T &data,
     {
       bfs.close();
       if (errorStream)
-        *errorStream << "Successfully saved: "<< path <<vcl_endl;
+        *errorStream << "Successfully saved: "<< path <<'\n';
       return true;
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to save: " << path << vcl_endl;
+    *errorStream << "Unable to save: " << path << '\n';
   return false;
 }
 
@@ -97,7 +97,7 @@ inline bool vsl_quick_file_load(T &data1,
       {
         bfs.close();
         if (errorStream)
-          *errorStream << "Successfully loaded: " << path << vcl_endl;
+          *errorStream << "Successfully loaded: " << path << '\n';
         return true;
       }
     }
@@ -105,7 +105,7 @@ inline bool vsl_quick_file_load(T &data1,
   reason = errno;
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to load: "<< path <<vcl_endl;
+    *errorStream << "Unable to load: "<< path <<'\n';
   return false;
 }
 
@@ -125,13 +125,13 @@ inline bool vsl_quick_file_save(const T &data1,
     {
       bfs.close();
       if (errorStream)
-        *errorStream << "Successfully saved: "<< path <<vcl_endl;
+        *errorStream << "Successfully saved: "<< path <<'\n';
       return true;
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to save: " << path << vcl_endl;
+    *errorStream << "Unable to save: " << path << '\n';
   return false;
 }
 
@@ -157,14 +157,14 @@ inline bool vsl_quick_file_load(T &data1,
       {
         bfs.close();
         if (errorStream)
-          *errorStream << "Successfully loaded: " << path << vcl_endl;
+          *errorStream << "Successfully loaded: " << path << '\n';
         return true;
       }
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to load: "<< path <<vcl_endl;
+    *errorStream << "Unable to load: "<< path <<'\n';
   return false;
 }
 
@@ -185,13 +185,13 @@ inline bool vsl_quick_file_save(const T &data1,
     {
       bfs.close();
       if (errorStream)
-        *errorStream << "Successfully saved: "<< path <<vcl_endl;
+        *errorStream << "Successfully saved: "<< path <<'\n';
       return true;
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to save: " << path << vcl_endl;
+    *errorStream << "Unable to save: " << path << '\n';
   return false;
 }
 
@@ -218,14 +218,14 @@ inline bool vsl_quick_file_load(T &data1,
       {
         bfs.close();
         if (errorStream)
-          *errorStream << "Successfully loaded: " << path << vcl_endl;
+          *errorStream << "Successfully loaded: " << path << '\n';
         return true;
       }
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to load: "<< path <<vcl_endl;
+    *errorStream << "Unable to load: "<< path <<'\n';
   return false;
 }
 
@@ -247,13 +247,13 @@ inline bool vsl_quick_file_save(const T &data1, const S &data2,
     {
       bfs.close();
       if (errorStream)
-        *errorStream << "Successfully saved: "<< path <<vcl_endl;
+        *errorStream << "Successfully saved: "<< path <<'\n';
       return true;
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to save: " << path << vcl_endl;
+    *errorStream << "Unable to save: " << path << '\n';
   return false;
 }
 
@@ -281,14 +281,14 @@ inline bool vsl_quick_file_load(T &data1,
       {
         bfs.close();
         if (errorStream)
-          *errorStream << "Successfully loaded: " << path << vcl_endl;
+          *errorStream << "Successfully loaded: " << path << '\n';
         return true;
       }
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to load: "<< path <<vcl_endl;
+    *errorStream << "Unable to load: "<< path <<'\n';
   return false;
 }
 
@@ -311,13 +311,13 @@ inline bool vsl_quick_file_save(const T &data1, const S &data2, const U &data3,
     {
       bfs.close();
       if (errorStream)
-        *errorStream << "Successfully saved: "<< path <<vcl_endl;
+        *errorStream << "Successfully saved: "<< path <<'\n';
       return true;
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to save: " << path << vcl_endl;
+    *errorStream << "Unable to save: " << path << '\n';
   return false;
 }
 
@@ -347,14 +347,14 @@ inline bool vsl_quick_file_load(T &data1, S &data2, U &data3,
       {
         bfs.close();
         if (errorStream)
-          *errorStream << "Successfully loaded: " << path << vcl_endl;
+          *errorStream << "Successfully loaded: " << path << '\n';
         return true;
       }
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to load: "<< path <<vcl_endl;
+    *errorStream << "Unable to load: "<< path <<'\n';
   return false;
 }
 
@@ -378,13 +378,13 @@ inline bool vsl_quick_file_save(const T &data1, const S &data2, const U &data3,
     {
       bfs.close();
       if (errorStream)
-        *errorStream << "Successfully saved: "<< path <<vcl_endl;
+        *errorStream << "Successfully saved: "<< path <<'\n';
       return true;
     }
   }
   bfs.close();
   if (errorStream)
-    *errorStream << "Unable to save: " << path << vcl_endl;
+    *errorStream << "Unable to save: " << path << '\n';
   return false;
 }
 #endif // vsl_quick_file_h_

@@ -56,14 +56,14 @@ void vsl_b_read(vsl_b_istream& is, vcl_set<T>& v)
 template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_set<T> &v)
 {
-  os << "Set length: " << v.size() << vcl_endl;
+  os << "Set length: " << v.size() << '\n';
   unsigned i =0;
   for (typename vcl_set<T>::const_iterator iter = v.begin();
        iter != v.end() && i<5; ++iter,++i)
   {
     os << ' ' << i << ": ";
     vsl_print_summary(os, *iter);
-    os << vcl_endl;
+    os << '\n';
   }
   if (v.size() > 5)
     os << " ...\n";

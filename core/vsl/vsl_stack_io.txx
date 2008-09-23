@@ -75,7 +75,7 @@ template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
 {
   vcl_stack<T> tmp_stack = v;
-  os << "Stack length: " << v.size() << vcl_endl;
+  os << "Stack length: " << v.size() << '\n';
 
   unsigned stack_size = v.size();
   for (unsigned i=0; i<stack_size && i<5; i++)
@@ -83,7 +83,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
     os << ' ' << i << ": ";
     vsl_print_summary(os, tmp_stack.top());
     tmp_stack.pop();
-    os << vcl_endl;
+    os << '\n';
   }
   if (stack_size > 5)
     os << " ...\n";

@@ -55,12 +55,12 @@ void vsl_b_read(vsl_b_istream& is, vcl_deque<T>& v)
 template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_deque<T> &v)
 {
-  os << "Deque length: " << v.size() << vcl_endl;
+  os << "Deque length: " << v.size() << '\n';
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
     os << ' ' << i << ": ";
     vsl_print_summary(os,v[i]);
-    os << vcl_endl;
+    os << '\n';
   }
   if (v.size() > 5)
     os << " ...\n";

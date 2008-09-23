@@ -60,13 +60,13 @@ template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
 {
   unsigned i=0;
-  os << "List length: " << v.size() << vcl_endl;
+  os << "List length: " << v.size() << '\n';
   for (typename vcl_list<T>::const_iterator iter = v.begin();
        iter != v.end() && i<5; ++iter,++i)
   {
     os << ' ' << i << ": ";
     vsl_print_summary(os, *iter);
-    os << vcl_endl;
+    os << '\n';
   }
   if (v.size() > 5)
     os << " ...\n";

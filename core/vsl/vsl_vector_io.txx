@@ -82,13 +82,13 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
 {
-  os << vsl_indent() << "Vector length: " << v.size() << vcl_endl;
+  os << vsl_indent() << "Vector length: " << v.size() << '\n';
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
     os << vsl_indent() << ' ' << i << ": ";
     vsl_indent_inc(os);
     vsl_print_summary(os, v[i]);
-    os << vcl_endl;
+    os << '\n';
     vsl_indent_dec(os);
   }
   if (v.size() > 5)

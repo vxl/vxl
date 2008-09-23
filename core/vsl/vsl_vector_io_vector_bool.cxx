@@ -85,7 +85,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_vector<vcl_vector<bool> >& v)
     os << '\n';
   }
   if (n > 5) os << " ...";
-  os << vcl_endl << vcl_endl;
+  os << "\n\n";
 }
 
 
