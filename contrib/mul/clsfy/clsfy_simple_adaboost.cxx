@@ -192,12 +192,11 @@ void clsfy_simple_adaboost::print_summary(vcl_ostream& os) const
 {
   int n = alphas_.size();
   assert( alphas_.size() == index_.size() );
-  os<<vcl_endl;
   for (int i=0;i<n;++i)
   {
     os<<" Alpha: "<<alphas_[i]
       <<" Index: "<<index_[i]
-      <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
+      <<" Classifier: "<<classifier_1d_[i]<<'\n';
   }
 }
 

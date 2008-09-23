@@ -245,7 +245,7 @@ mbl_data_collector_base* mbl_file_data_collector<T>::clone() const
 template <class T>
 void mbl_file_data_collector<T>::print_summary(vcl_ostream& os) const
 {
-  os<<"Data saved to: "<<path_<<vcl_endl;
+  os<<"Data saved to: "<<path_<<'\n';
 }
 
 template <class T>

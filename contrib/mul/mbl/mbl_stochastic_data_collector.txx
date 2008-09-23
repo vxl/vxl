@@ -171,7 +171,7 @@ template <class T>
 void mbl_stochastic_data_collector<T>::print_summary(vcl_ostream& os) const
 {
   os << "number stored: " << samples_.size()
-     << ", number presented: " << nPresented_ << vcl_endl;
+     << ", number presented: " << nPresented_ << '\n';
 }
 
 //=======================================================================

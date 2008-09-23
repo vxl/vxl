@@ -221,17 +221,16 @@ vcl_string mfpf_dp_snake::is_a() const
 //: Print class to os
 void mfpf_dp_snake::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
   vsl_indent_inc(os);
 
   os<<vsl_indent()<<"n_points: "<<pts_.size()
-    <<vsl_indent()<<"finder: "<<finder_<<vcl_endl;
+    <<vsl_indent()<<"finder: "<<finder_<<'\n';
   vgl_point_2d<double> c = cog();
   os<<vsl_indent()<<" CoG: ("<<c.x()<<','<<c.y();
 
   double r_mean,r_sd;
   radius_stats(r_mean,r_sd);
-  os<<") mean radius: "<<r_mean<<" SD: "<<r_sd<<vcl_endl;
+  os<<") mean radius: "<<r_mean<<" SD: "<<r_sd<<'\n';
   vsl_indent_dec(os);
 }
 

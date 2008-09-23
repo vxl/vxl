@@ -80,8 +80,8 @@ vimt_image* vimt3d_image_3d_of<T>::deep_clone() const
 template<class T>
 void vimt3d_image_3d_of<T>::print_summary(vcl_ostream& os) const
 {
-  os<<vsl_indent() << "Transform: "<<world2im_
-    <<vsl_indent() << image_<<vcl_endl;
+  os << vsl_indent() << "Transform: " << world2im_ << " Image: " 
+    << image_ << '\n';
 }
 
 

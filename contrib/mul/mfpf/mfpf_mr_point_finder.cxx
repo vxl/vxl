@@ -242,15 +242,15 @@ vcl_string mfpf_mr_point_finder::is_a() const
 //: Print class to os
 void mfpf_mr_point_finder::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
+  os<<'\n';
   unsigned n=finders_.size();
-  os<<vsl_indent()<<"n_finders: "<<n<<vcl_endl;
+  os<<vsl_indent()<<"n_finders: "<<n<<'\n';
   vsl_indent_inc(os);
   for (unsigned i=0;i<n;i++)
   {
     os<<vsl_indent()<<i<<") ";
     vsl_indent_inc(os);
-    os<<finders_[i]<<vcl_endl;
+    os<<finders_[i]<<'\n';
     vsl_indent_dec(os);
   }
   vsl_indent_dec(os);

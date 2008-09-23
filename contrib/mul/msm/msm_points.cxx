@@ -177,13 +177,13 @@ bool msm_points::write_text_file(const vcl_string& path) const
 
   unsigned n = size();
   const double* v = v_.data_block();
-  afs << "version: 1\nn_points: " << n << "\n{" << vcl_endl;
+  afs << "version: 1\nn_points: " << n << "\n{" << '\n';
   for (unsigned i=0;i<n;++i)
   {
     // Write out elements of point on a single line
-    afs << v[2*i] << ' ' << v[2*i+1] << vcl_endl;
+    afs << v[2*i] << ' ' << v[2*i+1] << '\n';
   }
-  afs << '}' << vcl_endl;
+  afs << '}' << '\n';
 
   afs.close();
 

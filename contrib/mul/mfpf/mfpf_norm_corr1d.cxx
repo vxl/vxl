@@ -187,7 +187,7 @@ mfpf_point_finder* mfpf_norm_corr1d::clone() const
 void mfpf_norm_corr1d::print_summary(vcl_ostream& os) const
 {
   os << "{ size: [" << ilo_ << ',' << ihi_ << ']'
-     << " Kernel: " << kernel_ << vcl_endl;
+     << " Kernel: " << kernel_ << '\n';
   mfpf_point_finder::print_summary(os);
   os << '}';
 }

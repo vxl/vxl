@@ -410,7 +410,7 @@ void mbl_table::write(vcl_ostream& os) const
   {
     os << column_headers_[c] << delimiter_;
   }
-  os << vcl_endl;
+  os << '\n';
 
   // Write data rows
   for (unsigned r=0; r<nrows; ++r)
@@ -419,7 +419,7 @@ void mbl_table::write(vcl_ostream& os) const
     {
       os << columns_[c][r] << delimiter_;
     }
-    os << vcl_endl;
+    os << '\n';
   }
 }
 //========================================================================

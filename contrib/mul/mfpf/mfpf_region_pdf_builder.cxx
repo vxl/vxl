@@ -418,17 +418,17 @@ void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
 {
   os << "{ size: " << roi_ni_ << 'x' << roi_nj_
      << " n_pixels: " << n_pixels_
-     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
+     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<'\n';
   vsl_indent_inc(os);
-  if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
-  else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
+  if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
+  else                 os<<vsl_indent()<<"norm: linear"<<'\n';
   os <<vsl_indent()<< "pdf_builder: ";
-  if (pdf_builder_.ptr()==0) os << '-'<<vcl_endl;
-  else                       os << pdf_builder_<<vcl_endl;
-  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl
+  if (pdf_builder_.ptr()==0) os << '-'<<'\n';
+  else                       os << pdf_builder_<<'\n';
+  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<'\n'
      <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
-  os <<vcl_endl;
+  os <<'\n';
   vsl_indent_dec(os);
   os <<vsl_indent()<< '}';
 }
@@ -445,7 +445,7 @@ void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const
     for (unsigned i=0;i<im.ni();++i)
       if (im(i,j)==0) os<<' ';
       else            os<<'X';
-    os<<vcl_endl;
+    os<<'\n';
   }
 }
 

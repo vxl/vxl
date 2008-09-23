@@ -78,7 +78,7 @@ void mipa_ms_block_normaliser::print_summary(vcl_ostream& os) const
     os<<"mipa_ms_block_normaliser:\n"
       <<"\tnscales:\t"<<nscales_
       <<"\tinclude_overall_histogram:\t"<<include_overall_histogram_
-      <<vcl_endl;
+      <<'\n';
     mipa_block_normaliser::print_summary(os);
 }
 

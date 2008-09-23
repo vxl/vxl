@@ -171,9 +171,9 @@ clsfy_classifier_base* clsfy_rbf_svm::clone() const
 void clsfy_rbf_svm::print_summary(vcl_ostream& os) const
 {
   os << vsl_indent() << "bias=" << bias_ << "  sigma=" << rbf_width();
-  os << "  nSupportVectors=" << n_support_vectors() << vcl_endl;
+  os << "  nSupportVectors=" << n_support_vectors() << '\n';
   os << vsl_indent() <<"  Starting targets are  " << upper_target_;
-  os << ", " << lower_target_ << vcl_endl;
+  os << ", " << lower_target_ << '\n';
 }
 
 //=======================================================================

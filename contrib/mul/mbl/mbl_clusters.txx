@@ -379,7 +379,7 @@ void mbl_clusters<T,D>::print_cluster_sets(vcl_ostream& os) const
     os << i << ") ";
     for (unsigned j=0;j<index_[i].size();++j)
       os<<index_[i][j] << ' ';
-    os<<vcl_endl;
+    os<<'\n';
   }
 }
 

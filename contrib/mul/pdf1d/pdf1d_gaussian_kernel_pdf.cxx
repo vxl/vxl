@@ -178,7 +178,7 @@ pdf1d_pdf* pdf1d_gaussian_kernel_pdf::clone() const
 void pdf1d_gaussian_kernel_pdf::print_summary(vcl_ostream& os) const
 {
   pdf1d_pdf::print_summary(os);
-  os << vcl_endl;
+  os << '\n';
 }
 
 //=======================================================================

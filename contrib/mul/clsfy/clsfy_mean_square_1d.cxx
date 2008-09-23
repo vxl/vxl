@@ -82,7 +82,7 @@ bool clsfy_mean_square_1d::is_class(vcl_string const& s) const
 // required if data is present in this class
 void clsfy_mean_square_1d::print_summary(vcl_ostream& os) const
 {
-  os << "mean: " << mean_ << "   threshold: "<<threshold_<<vcl_endl;
+  os << "mean: " << mean_ << "   threshold: "<<threshold_<<'\n';
 }
 
 //=======================================================================

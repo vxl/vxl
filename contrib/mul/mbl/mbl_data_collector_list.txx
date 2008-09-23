@@ -91,7 +91,7 @@ mbl_data_collector_base* mbl_data_collector_list<T>::clone() const
 template <class T>
 void mbl_data_collector_list<T>::print_summary(vcl_ostream& os) const
 {
-  os<<"Number stored: "<<data_.size()<<vcl_endl;
+  os<<"Number stored: "<<data_.size()<<'\n';
 }
 
 template <class T>

@@ -97,7 +97,7 @@ void mipa_block_normaliser::print_summary(vcl_ostream& os) const
       <<"\tnA_\t"<<nA_
       <<"\tnc_per_block_\t"<<nc_per_block_
       <<'\n'
-      <<"Block normaliser summary is:"<<vcl_endl;
+      <<"Block normaliser summary is:"<<'\n';
     normaliser_->print_summary(os);
 }
 

@@ -569,10 +569,9 @@ vpdfl_builder_base* vpdfl_mixture_builder::clone() const
 
 void vpdfl_mixture_builder::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
-  if (weights_fixed_) os<<vsl_indent()<<"Weights fixed"<<vcl_endl;
-  else                os<<vsl_indent()<<"Weights may vary"<<vcl_endl;
-  os<<vsl_indent()<<"Max iterations: "<<max_its_<<vcl_endl;
+  if (weights_fixed_) os<<vsl_indent()<<"Weights fixed"<<'\n';
+  else                os<<vsl_indent()<<"Weights may vary"<<'\n';
+  os<<vsl_indent()<<"Max iterations: "<<max_its_<<'\n';
   for (unsigned int i=0;i<builder_.size();++i)
   {
     os<<vsl_indent()<<"Builder "<<i<<": ";

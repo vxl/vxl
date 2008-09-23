@@ -136,10 +136,10 @@ void mbl_wt_histogram::print_summary(vcl_ostream& os) const
   else
   {
     os << n_obs_ << " observations.\n"
-       << "    < "<<xlo_<<"   "<<wt_below_<<vcl_endl;
+       << "    < "<<xlo_<<"   "<<wt_below_<<'\n';
     for (int i=0;i<n;++i)
-      os<<"  ["<<xlo_+i*dx_<<','<<xlo_+(i+1)*dx_<<")  "<<wt_sum_[i]<<vcl_endl;
-    os << "   >= "<<xlo_+n*dx_<<"   "<<wt_above_<<vcl_endl;
+      os<<"  ["<<xlo_+i*dx_<<','<<xlo_+(i+1)*dx_<<")  "<<wt_sum_[i]<<'\n';
+    os << "   >= "<<xlo_+n*dx_<<"   "<<wt_above_<<'\n';
   }
 }
 
@@ -155,7 +155,7 @@ bool mbl_wt_histogram::write_probabilities(const char* path)
   if (!ofs) return false;
   for (int i=0;i<n;++i)
   {
-    ofs<<xlo_+(i+0.5)*dx_<<"  "<<double(wt_sum_[i])/total_wt_<<vcl_endl;
+    ofs<<xlo_+(i+0.5)*dx_<<"  "<<double(wt_sum_[i])/total_wt_<<'\n';
   }
   ofs.close();
   return true;

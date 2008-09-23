@@ -155,7 +155,7 @@ mfpf_point_finder_builder* mfpf_norm_corr1d_builder::clone() const
 
 void mfpf_norm_corr1d_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ size: [" << ilo_ << ',' << ihi_ << ']' <<vcl_endl;
+  os << "{ size: [" << ilo_ << ',' << ihi_ << ']' <<'\n';
   mfpf_point_finder_builder::print_summary(os);
   os << " }";
 }

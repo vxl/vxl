@@ -121,7 +121,6 @@ short vpdfl_kernel_pdf::version_no() const
 
 void vpdfl_kernel_pdf::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl << vsl_indent();
   vpdfl_pdf_base::print_summary(os);
 }
 

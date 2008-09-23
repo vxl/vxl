@@ -354,25 +354,25 @@ mfpf_point_finder_builder* mfpf_hog_box_finder_builder::clone() const
 
 void mfpf_hog_box_finder_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ "<<vcl_endl;
+  os << "{ "<<'\n';
   vsl_indent_inc(os);
   os << vsl_indent()<<"size: " << ni_ << 'x' << nj_
      << " nc: " << nc_ <<" nA_bins: "<<nA_bins_
-     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
-  if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<vcl_endl;
-  else          os<<vsl_indent()<<"Angle range: 0-180"<<vcl_endl;
-  vcl_cout<<"The HOG's normaliser is:"<<vcl_endl;
+     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<'\n';
+  if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<'\n';
+  else          os<<vsl_indent()<<"Angle range: 0-180"<<'\n';
+  vcl_cout<<"The HOG's normaliser is:"<<'\n';
   normaliser_->print_summary(os);
-  //if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
-  //else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
+  //if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
+  //else                 os<<vsl_indent()<<"norm: linear"<<'\n';
   os <<vsl_indent()<< "cost_builder: ";
-  if (cost_builder_.ptr()==0) os << '-'<<vcl_endl;
-  else                       os << cost_builder_<<vcl_endl;
-  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl
+  if (cost_builder_.ptr()==0) os << '-'<<'\n';
+  else                       os << cost_builder_<<'\n';
+  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<'\n'
      <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
-  os <<vcl_endl
-     <<vsl_indent()<<"overlap_f: "<<overlap_f_<<vcl_endl;
+  os <<'\n'
+     <<vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';
   vsl_indent_dec(os);
   os <<vsl_indent()<< '}';
 }

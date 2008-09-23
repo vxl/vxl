@@ -443,7 +443,7 @@ void pdf1d_mixture_builder::print_summary(vcl_ostream& os) const
     os<<'\n'<<vsl_indent()<<"Builder "<<i<<": ";
     vsl_print_summary(os, builder_[i]);
   }
-  os<<vcl_endl;
+  os<<'\n';
 }
 
 //=======================================================================

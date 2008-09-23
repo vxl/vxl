@@ -385,19 +385,19 @@ bool mbl_lda::is_class(vcl_string const& s) const
 void mbl_lda::print_summary(vcl_ostream& os) const
 {
   int n_classes= n_samples_.size();
-  os << "n_classes= "<<n_classes<<vcl_endl;
+  os << "n_classes= "<<n_classes<<'\n';
   for (int i=0; i<n_classes; ++i)
   {
-    vcl_cout<<"n_samples_["<<i<<"]= "<<n_samples_[i]<<vcl_endl
-            <<"mean_["<<i<<"]= "<<mean_[i]<<vcl_endl
-            <<"d_mean_["<<i<<"]= "<<d_mean_[i]<<vcl_endl;
+    vcl_cout<<"n_samples_["<<i<<"]= "<<n_samples_[i]<<'\n'
+            <<"mean_["<<i<<"]= "<<mean_[i]<<'\n'
+            <<"d_mean_["<<i<<"]= "<<d_mean_[i]<<'\n';
   }
 
-  os << "withinS_= "<<withinS_<<vcl_endl
-     << "betweenS_= "<<betweenS_<<vcl_endl
-     << "basis_= "<<basis_<<vcl_endl
-     << "evals_= "<<evals_<<vcl_endl
-     << "d_m_mean_= "<<d_m_mean_<<vcl_endl;
+  os << "withinS_= "<<withinS_<<'\n'
+     << "betweenS_= "<<betweenS_<<'\n'
+     << "basis_= "<<basis_<<'\n'
+     << "evals_= "<<evals_<<'\n'
+     << "d_m_mean_= "<<d_m_mean_<<'\n';
 }
 
 //=======================================================================

@@ -36,7 +36,7 @@ mipa_vector_normaliser* mipa_l2norm_vector_normaliser::clone() const
 //: Print class to os
 void mipa_l2norm_vector_normaliser::print_summary(vcl_ostream& os) const
 {
-    os<<is_a()<<vcl_endl;
+    os<<is_a()<<'\n';
 }
 
 const static short version_no = 1;

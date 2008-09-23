@@ -204,7 +204,7 @@ bool mbl_rbf_network::is_class(vcl_string const& s) const
 void mbl_rbf_network::print_summary(vcl_ostream& os) const
 {
   os << "Built with "<<x_.size()<<" examples.";
-  //  os << x_ << vcl_endl << W_ << vcl_endl << s2_<< vcl_endl;
+  //  os << x_ << '\n' << W_ << '\n' << s2_<< '\n';
 }
 
 //=======================================================================

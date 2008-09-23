@@ -209,13 +209,13 @@ void clsfy_direct_boost::print_summary(vcl_ostream& os) const
 {
   int n = wts_.size();
   assert( wts_.size() == index_.size() );
-  os<<vcl_endl;
+  os<<'\n';
   for (int i=0;i<n;++i)
   {
     os<<" Weights: "<<wts_[i]
       <<" Index: "<<index_[i]
       <<" Total Threshold: "<<threshes_[i]
-      <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
+      <<" Classifier: "<<classifier_1d_[i]<<'\n';
   }
 }
 

@@ -347,8 +347,8 @@ void mcal_general_ca::print_summary(vcl_ostream& os) const
 {
   vsl_indent_inc(os);
   os<<"{\n"
-    <<vsl_indent()<<"initial_ca: "<<initial_ca_<<vcl_endl
-    <<vsl_indent()<<"basis_cost: "<<basis_cost_<<vcl_endl
+    <<vsl_indent()<<"initial_ca: "<<initial_ca_<<'\n'
+    <<vsl_indent()<<"basis_cost: "<<basis_cost_<<'\n'
     <<vsl_indent()<<"} ";
   vsl_indent_dec(os);
 }

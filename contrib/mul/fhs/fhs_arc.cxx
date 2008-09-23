@@ -39,9 +39,9 @@ vcl_ostream& operator<<(vcl_ostream& os, const fhs_arc& a)
 //: Print set
 vcl_ostream& operator<<(vcl_ostream& os, const vcl_vector<fhs_arc>& arc)
 {
-  os<<arc.size()<<" arcs:"<<vcl_endl;
+  os<<arc.size()<<" arcs:"<<'\n';
   for (unsigned i=0;i<arc.size();++i)
-    os<<i<<") "<<arc[i]<<vcl_endl;
+    os<<i<<") "<<arc[i]<<'\n';
   return os;
 }
 
@@ -94,8 +94,8 @@ bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
   for (unsigned i=0;i<arc0.size();++i)
     if (arc0[i].i()>=n || arc0[i].j()>=n)
     {
-      vcl_cerr<<"Arc index outside range [0,"<<n-1<<']'<<vcl_endl
-              <<"Arc = "<<arc0[i]<<vcl_endl;
+      vcl_cerr<<"Arc index outside range [0,"<<n-1<<']'<<'\n'
+              <<"Arc = "<<arc0[i]<<'\n';
       return false;
     }
 

@@ -9,6 +9,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_indent.h>
 #include <vimt/vimt_image.h>
 
 //=======================================================================
@@ -149,20 +150,20 @@ void vimt_image_pyramid::set_widths(double base_pixel_width,
 
 void vimt_image_pyramid::print_summary(vcl_ostream& os) const
 {
-    os<<"Levels: "<<image_.size()<<vcl_endl;
+    os<< vsl_indent() << "Levels: "<<image_.size()<<'\n';
     for (unsigned int i=0;i<image_.size();++i)
-        os<<"Image at level "<<i<<" : "<<image_[i]<<vcl_endl;
+        os << vsl_indent() << "Image at level "<<i<<" : "<<image_[i]<<'\n';
 }
 
 //: Print whole of each image to os
 void vimt_image_pyramid::print_all(vcl_ostream& os) const
 {
-    os<<"Levels: "<<image_.size()<<vcl_endl;
+    os<<"Levels: "<<image_.size()<<'\n';
     for (unsigned int i=0;i<image_.size();++i)
     {
         os<<"Image at level "<<i<<" : ";
         image_[i]->print_all(os);
-        os<<vcl_endl;
+        os<<'\n';
     }
 }
 

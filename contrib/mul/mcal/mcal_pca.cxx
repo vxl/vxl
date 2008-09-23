@@ -472,12 +472,12 @@ mcal_component_analyzer* mcal_pca::clone() const
 
 void mcal_pca::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl
-    <<vsl_indent()<<"min_modes: "<<min_modes_<<vcl_endl
-    <<vsl_indent()<<"max_modes: "<<max_modes_<<vcl_endl
-    <<vsl_indent()<<"var_prop: "<<var_prop_<<vcl_endl
-    <<vsl_indent()<<"max_d_in_memory: "<<max_d_in_memory_<<vcl_endl
-    <<vsl_indent()<<"use_chunks: "<<use_chunks_<<vcl_endl;
+  os<<'\n'
+    <<vsl_indent()<<"min_modes: "<<min_modes_<<'\n'
+    <<vsl_indent()<<"max_modes: "<<max_modes_<<'\n'
+    <<vsl_indent()<<"var_prop: "<<var_prop_<<'\n'
+    <<vsl_indent()<<"max_d_in_memory: "<<max_d_in_memory_<<'\n'
+    <<vsl_indent()<<"use_chunks: "<<use_chunks_<<'\n';
 }
 
 //=======================================================================

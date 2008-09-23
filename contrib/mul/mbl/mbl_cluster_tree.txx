@@ -213,7 +213,7 @@ void mbl_cluster_tree<T,D>::print_tree(vcl_ostream& os) const
       p=parent_[L][p];
       os << " - "<<p;
     }
-    os<<vcl_endl;
+    os<<'\n';
   }
 }
 
@@ -224,7 +224,7 @@ void mbl_cluster_tree<T,D>::print_summary(vcl_ostream& os) const
   for (unsigned i=0;i<cluster_.size();++i)
   {
     os << "Level "<<i<<") max_r: "<<cluster_[i].max_r()
-       << " n_clusters: "<<cluster_[i].p().size()<<vcl_endl;
+       << " n_clusters: "<<cluster_[i].p().size()<<'\n';
   }
 }
 

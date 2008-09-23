@@ -54,7 +54,7 @@ clsfy_classifier_base* clsfy_random_classifier::clone() const
 void clsfy_random_classifier::print_summary(vcl_ostream& os) const
 {
   os << "Prior probs = "; vsl_print_summary(os, probs_);
-  os << ", confidence = " << confidence_<<vcl_endl;
+  os << ", confidence = " << confidence_<<'\n';
 }
 
 //=======================================================================

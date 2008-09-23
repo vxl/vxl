@@ -394,11 +394,11 @@ static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
 void vpdfl_gaussian::print_summary(vcl_ostream& os) const
 {
   vpdfl_pdf_base::print_summary(os);
-  os << vcl_endl;
+  os << '\n';
   if (n_dims()!=1)
   {
     os<<vsl_indent()<<"Eigenvectors: "; vsl_print_summary(os, eigenvecs() );
-    os<<vsl_indent()<<"log_k: "<< log_k_ <<vcl_endl;
+    os<<vsl_indent()<<"log_k: "<< log_k_ << '\n';
 //  os<<vsl_indent()<<"Covariance: "; ShowStartMat(os, covariance() );
   }
 }

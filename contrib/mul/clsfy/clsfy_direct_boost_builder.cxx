@@ -167,7 +167,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   else
   {
     vcl_cout<<"Maximum number of classifiers to be found by Adaboost ="
-            <<max_n_clfrs_<<vcl_endl;
+            <<max_n_clfrs_<<'\n';
   }
 
   if ( weak_builder_ == 0 )
@@ -181,7 +181,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   else
   {
     vcl_cout<<"Weak learner used by AdaBoost ="
-            <<weak_builder_->is_a()<<vcl_endl;
+            <<weak_builder_->is_a()<<'\n';
   }
 
   if ( bs_ < 0 )
@@ -193,7 +193,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   }
   else
   {
-    vcl_cout<<"Batch size when sorting data =" <<bs_<<vcl_endl;
+    vcl_cout<<"Batch size when sorting data =" <<bs_<<'\n';
   }
 
 

@@ -117,7 +117,7 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
             {
                 vcl_string msg("Graph inconsistency in mmn_lbp_solver::operator()\n");
                 vcl_ostringstream os;
-                os <<"Source node is "<<inode<<" but arc to alleged neighbour joins nodes "<<v1<<"\t to "<<v2<<vcl_endl;
+                os <<"Source node is "<<inode<<" but arc to alleged neighbour joins nodes "<<v1<<"\t to "<<v2<<'\n';
                 msg+= os.str();
                 vcl_cerr<<msg<<vcl_endl;
                 throw mbl_exception_abort(msg);

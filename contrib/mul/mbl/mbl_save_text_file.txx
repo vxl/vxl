@@ -22,10 +22,10 @@ bool mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
     return false;
   }
 
-  //ofs<<v.size()<<vcl_endl;
+  //ofs<<v.size()<<'\n';
   for (unsigned i=0;i<v.size();++i)
   {
-    ofs<<v[i]<<vcl_endl;
+    ofs<<v[i]<<'\n';
   }
   ofs.close();
   return true;

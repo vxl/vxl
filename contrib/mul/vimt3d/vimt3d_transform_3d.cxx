@@ -758,7 +758,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
     // which might not be same as rotations specified by set command
     // cos euler angles not unique
     o << "Similarity\n"
-      << vsl_indent()<< "scale factor = " << p(0) << vcl_endl
+      << vsl_indent()<< "scale factor = " << p(0) << '\n'
       << vsl_indent()<< "angles = " << p(1) << ',' << p(2) << ',' << p(3) << '\n'
       << vsl_indent()<< "translation = (" << p(4) << ',' << p(5) << ',' << p(6) << ")\n";
     break; }

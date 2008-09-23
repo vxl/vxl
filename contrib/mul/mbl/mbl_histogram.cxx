@@ -139,10 +139,10 @@ void mbl_histogram::print_summary(vcl_ostream& os) const
   else
   {
     os << n_obs_ << " observations.\n"
-       << "    < "<<bins_[0]<<"   "<<n_below_<<vcl_endl;
+       << "    < "<<bins_[0]<<"   "<<n_below_<<'\n';
     for (int i=0;i<n;++i)
-      os<<"  ["<<bins_[i]<<','<<bins_[i+1]<<")  "<<freq_[i]<<vcl_endl;
-    os << "   >= "<<bins_[n]<<"   "<<n_above_<<vcl_endl;
+      os<<"  ["<<bins_[i]<<','<<bins_[i+1]<<")  "<<freq_[i]<<'\n';
+    os << "   >= "<<bins_[n]<<"   "<<n_above_<<'\n';
   }
 }
 
@@ -158,7 +158,7 @@ bool mbl_histogram::write_probabilities(const char* path)
   if (!ofs) return false;
   for (int i=0;i<n_bins();++i)
   {
-    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(freq_[i])/n_obs_<<vcl_endl;
+    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(freq_[i])/n_obs_<<'\n';
   }
   ofs.close();
   return true;

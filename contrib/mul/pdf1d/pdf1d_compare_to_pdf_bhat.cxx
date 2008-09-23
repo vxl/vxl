@@ -190,7 +190,7 @@ pdf1d_compare_to_pdf* pdf1d_compare_to_pdf_bhat::clone() const
 
 void pdf1d_compare_to_pdf_bhat::print_summary(vcl_ostream& os) const
 {
-  os << "Builder: "<<builder_<<vcl_endl;
+  os << "Builder: "<<builder_<<'\n';
 }
 
 //=======================================================================

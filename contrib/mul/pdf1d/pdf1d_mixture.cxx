@@ -186,13 +186,13 @@ pdf1d_pdf* pdf1d_mixture::clone() const
 
 void pdf1d_mixture::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl<<vsl_indent();
+  os<<'\n'<<vsl_indent();
   pdf1d_pdf::print_summary(os);
-  os<<vcl_endl;
+  os<<'\n';
   for (unsigned int i=0;i<component_.size();++i)
   {
-    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<vcl_endl
-      <<vsl_indent()<<"PDF: " << component_[i]<<vcl_endl;
+    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<'\n'
+      <<vsl_indent()<<"PDF: " << component_[i]<<'\n';
   }
 }
 
