@@ -22,7 +22,7 @@ static mbl_logger& logger()
 //: Create a transform from the properties of image resource.
 // The transform will be from world co-ordinates in metres to image co-ordinates (or mm if requested).
 void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
-                           const vimt3d_transform_3d& trans, bool use_millimetres)
+                           const vimt3d_transform_3d& trans, bool use_millimetres /*=false*/)
 {
   if (dynamic_cast<vimt3d_vil3d_v3i_image *>(ir.ptr()))
   {
@@ -35,6 +35,7 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
     double tz =  trans.matrix()(2,3);
 
     vimt3d_transform_3d tr;
+    const double units_scaling = use_millimetres ? 1000.0 : 1.0;
     tr.set_zoom_only (1000.0*vox_per_mm.x(),
                       1000.0*vox_per_mm.y(),
                       1000.0*vox_per_mm.z(), tx,ty,tz );
