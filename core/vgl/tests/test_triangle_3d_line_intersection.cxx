@@ -4,10 +4,22 @@
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_line_segment_3d.h>
 
 
+const double tol=1e-9;
+
+
+//========================================================================
+// Test vgl_triangle_3d_test_inside() function
+//========================================================================
 static void test_point_inside()
 {
+  vcl_cout << "\n"
+           << "*******************************************\n"
+           << " Testing vgl_triangle_3d_test_inside       \n"
+           << "*******************************************\n";
+
   // Define a triangle - arbitrary choice
   vgl_point_3d<double>  p1(2,1,-1), p2(1,-2,0), p3(-1,2,2);
   vgl_vector_3d<double> v1(2,1,-1), v2(1,-2,0), v3(-1,2,2);
@@ -69,17 +81,45 @@ static void test_point_inside()
     q = o + a1*v1 + a2*v2 + a3*v3 + vgl_vector_3d<double>(0, 0, 2);
     TEST("Off-plane point outside?", vgl_triangle_3d_test_inside(q, p1, p2, p3), false);
   }
-
 }
 
 
-void test_triangle_3d_line_intersection()
+//========================================================================
+// Test vgl_triangle_3d_line_intersection() function
+//========================================================================
+static void test_line_intersection()
 {
-  vcl_cout << "*******************************************\n"
-           << " Testing vgl_triangle_3d_line_intersection \n"
-           << "*******************************************\n\n";
+    vcl_cout << "\n"
+             << "*******************************************\n"
+             << " Testing vgl_triangle_3d_line_intersection \n"
+             << "*******************************************\n";
 
-  test_point_inside();
+  // Define a triangle - arbitrary choice
+  vgl_point_3d<double>  p1(2,1,-1), p2(1,-2,0), p3(-1,2,2);
+  vgl_vector_3d<double> v1(2,1,-1), v2(1,-2,0), v3(-1,2,2);
+  vgl_point_3d<double> o(0,0,0);
+
+  // Define a line - arbitrary choice
+  vgl_point_3d<double> centroid = o + v1/3.0 + v2/3.0 + v3/3.0;
+  vgl_line_segment_3d<double> lineseg(o, o+2*(centroid-o));
+
+  vgl_point_3d<double> q; // intersection point - should be centroid
+  TEST("line intersects?", (Skew==vgl_triangle_3d_line_intersection(lineseg, p1, p2, p3, q)), true);
+  TEST("intersection point correct?", (q-centroid).length()<tol, true);
 }
 
+
+//========================================================================
+// Main testing function
+//========================================================================
+void test_triangle_3d_line_intersection()
+{  
+  test_point_inside();
+  test_line_intersection();
+}
+
+
+//========================================================================
+// Define main()
+//========================================================================
 TESTMAIN(test_triangle_3d_line_intersection);
