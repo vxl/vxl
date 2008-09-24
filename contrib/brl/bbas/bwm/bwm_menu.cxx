@@ -18,6 +18,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   MENU_LOAD_TABLEAU("Load LIDAR Tableau...", "bwm_tableau_lidar", load_menu);
 
   load_menu.add("Remove Selected Tableau..." , remove_tableau);
+  load_menu.add("Zoom to Fit..." , zoom_to_fit);
   load_menu.add("Exit..." , exit);
   top_menu.add("SITE   ", load_menu);
 

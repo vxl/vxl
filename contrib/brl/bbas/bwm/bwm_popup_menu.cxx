@@ -28,7 +28,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   bwm_tableau_img* img_tab = static_cast<bwm_tableau_img* > (tab_.as_pointer());
   submenu.add("Polygon..",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_polygon),
-    vgui_key('p'),  vgui_modifier(vgui_SHIFT) );
+    vgui_key('g'),  vgui_modifier(vgui_SHIFT) );
   submenu.separator();
 
   submenu.add("PolyLine..",
@@ -48,7 +48,24 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   submenu.add("Point..",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_point),
     vgui_key('t'), vgui_modifier(vgui_SHIFT) );
+  submenu.separator();
 
+  submenu.add("Copy..",
+    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::copy),
+    vgui_key('c'), vgui_modifier(vgui_SHIFT) );
+  submenu.separator();
+
+  submenu.add("Paste..",
+    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::paste),
+    vgui_key('p'), vgui_modifier(vgui_SHIFT) );
+  submenu.separator();
+
+  vgui_menu poly_draw_menu;
+  poly_draw_menu.add("Polygon...", new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::set_poly_mode));
+  poly_draw_menu.add("Vertex...", new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::set_vertex_mode));
+  submenu.separator();
+
+  submenu.add("Set Draw Mode", poly_draw_menu);
   submenu.separator();
 
   submenu.add( "Save 2D Spatial Objects (binary)",
@@ -96,10 +113,13 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     mask_menu.add( "Init Mask",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
 
-    mask_menu.add( "Add Region to Mask(selected poly)",
+    mask_menu.add( "Add Regions to Mask(selected polygons)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
 
-    mask_menu.add( "Remove Region from Mask(selected poly)",
+    mask_menu.add( "Add 'Don't Care' Regions to Mask(selected polygons)",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_dontcare_poly_to_mask));
+
+    mask_menu.add( "Remove Regions from Mask(selected polygons)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
 
     mask_menu.add( "Create Mask Image(bool)",

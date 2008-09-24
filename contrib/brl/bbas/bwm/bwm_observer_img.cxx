@@ -36,7 +36,7 @@ bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_strin
   show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
   moving_v_(0), moving_vertex_(false), moving_polygon_(false),
   in_jog_mode_(false), row_(0), col_(0), lock_vgui_status_(false),
-  vgui_status_on_(false)
+  vgui_status_on_(false), draw_mode_(0)
 {
 // LOAD IMAGE
 
@@ -154,6 +154,32 @@ bwm_observer_img::~bwm_observer_img()
   this->clear_reg_segmentation();
 }
 
+void bwm_observer_img::set_draw_mode(unsigned int mode)
+{
+  // if mode changed from the last time
+  if (mode != draw_mode_) {
+    draw_mode_ = mode;
+    bool selectable = true;
+
+    if (mode == 1) // vertex mode
+      selectable = false;
+
+    // polygons are mapped to soview ID, make them unselectable
+    for(vcl_map<unsigned, bgui_vsol_soview2D*>::iterator it = obj_list.begin();
+      it != obj_list.end(); it++) {
+        //vgui_soview* p = vgui_soview::id_to_object(it->first);
+        it->second->set_selectable(selectable);
+    }
+    // vector of vertices are mapped soview ID for each polygon
+    for(vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > >::iterator it=vert_list.begin();
+      it != vert_list.end(); it++) {
+        vcl_vector<bwm_soview2D_vertex* > v_list = it->second;
+        for (unsigned i=0; i<v_list.size(); i++)
+          v_list[i]->set_selectable(!selectable);
+    }
+  }
+}
+
 void bwm_observer_img::create_box(vsol_box_2d_sptr box)
 {
   vsol_polygon_2d_sptr pbox = bsol_algs::poly_from_box(box);
@@ -169,11 +195,15 @@ void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
   this->set_foreground(1,1,0);
   bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly2d);
   obj_list[polygon->get_id()] = polygon;
+  if (draw_mode_ == 1)
+    polygon->set_selectable(false);
 
   vcl_vector<bwm_soview2D_vertex*> verts;
   this->set_foreground(0,1,0);
   for (unsigned i = 0; i<nverts; ++i) {
     bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],0.5f, polygon, i);
+    if (draw_mode_ == 0)
+      vertex->set_selectable(false);
     this->add(vertex);
     verts.push_back(vertex);
   }
@@ -202,6 +232,61 @@ void bwm_observer_img::create_point(vsol_point_2d_sptr p)
 {
   bgui_vsol_soview2D_point* point = this->add_vsol_point_2d(p);
   obj_list[point->get_id()] = point;
+}
+
+//: save the polygon to paste later, always stores the last selected
+void bwm_observer_img::copy()
+{
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  if (select_list.size() > 1) {
+    vcl_cerr << "Please select only one object to copy" << vcl_endl;
+    return;
+  }
+  copy_obj_ = (vgui_soview2D*) select_list[0];
+}
+
+void bwm_observer_img::paste(float x, float y)
+{
+  if (!copy_obj_) {
+    vcl_cerr << "No object is selected to paste, COPY first" << vcl_endl;
+    return;
+  }
+
+  float cx, cy;
+  if (copy_obj_->type_name().compare(POLYGON_TYPE) == 0) {
+    bgui_vsol_soview2D_polygon* obj = (bgui_vsol_soview2D_polygon*) copy_obj_;
+    obj->get_centroid(&cx, &cy);
+    vsol_polygon_2d_sptr p = obj->sptr();
+  
+    // translate it
+    unsigned int n = p->size();
+    vcl_vector<vsol_point_2d_sptr> vertices;
+
+    for (unsigned int i=0; i<n;i++)
+      vertices.push_back(new vsol_point_2d(p->vertex(i)->x() + (x-cx), p->vertex(i)->y() + (y-cy)));
+
+    vsol_polygon_2d_sptr new_p = new vsol_polygon_2d(vertices);
+    create_polygon(new_p);
+    post_redraw();
+    
+  }
+  else if (copy_obj_->type_name().compare(POLYLINE_TYPE) == 0) {
+    bgui_vsol_soview2D_polyline* obj = (bgui_vsol_soview2D_polyline*) copy_obj_;
+    obj->get_centroid(&cx, &cy);
+    vsol_polyline_2d_sptr l = obj->sptr();
+    // translate it
+    unsigned int n = l->size();
+    vcl_vector<vsol_point_2d_sptr> vertices;
+
+    for (unsigned int i=0; i<n;i++)
+      vertices.push_back(new vsol_point_2d(l->vertex(i)->x() + (x-cx), l->vertex(i)->y() + (y-cy)));
+
+    vsol_polyline_2d_sptr new_p = new vsol_polyline_2d(vertices);
+    create_polyline(new_p);
+    post_redraw();
+  }
+
+  this->deselect_all();
 }
 
 bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
@@ -708,7 +793,7 @@ void bwm_observer_img::zoom_to_fit()
   viewer_->token.offsetY = h/2.0-cy*r;
 
   viewer_->post_redraw();
-
+  viewer_->post_redraw(); 
 #if 0 //debug printouts
   vcl_cout << "sx = " << sx << "  sy = " << sy << '\n'
            << "bb.w " << w << " bb.h " << h << '\n'
@@ -767,20 +852,49 @@ void bwm_observer_img::init_mask()
 void bwm_observer_img::add_poly_to_mask()
 {
   bgui_vsol_soview2D_polygon* p=0;
-  // get the selected polyline or polygon
-  if (p = (bgui_vsol_soview2D_polygon*) get_selected_object(POLYGON_TYPE))
-  {
+
+  // get the selected polygon
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE); 
+  for (unsigned i=0; i<polys.size(); i++) {
+    p = (bgui_vsol_soview2D_polygon*) polys[i];
     vsol_polygon_2d_sptr poly = p->sptr();
     if (!poly)
-      return;
-    mask_polys_.push_back(poly);
-    return;
+      continue;
+    mask_polys_[polys[i]->get_id()] = poly;
+  }
+}
+
+void bwm_observer_img::add_dontcare_poly_to_mask()
+{
+  bgui_vsol_soview2D_polygon* p=0;
+
+  // get the selected polygon
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE); 
+  for (unsigned i=0; i<polys.size(); i++) {
+    p = (bgui_vsol_soview2D_polygon*) polys[i];
+    vsol_polygon_2d_sptr poly = p->sptr();
+    if (!poly)
+      continue;
+    mask_dontcare_polys_[polys[i]->get_id()] = poly;
   }
 }
 
 void bwm_observer_img::remove_poly_from_mask()
 {
-  //not implemented yet
+  bgui_vsol_soview2D_polygon* p=0;
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE); 
+  for (unsigned i=0; i<polys.size(); i++) {
+    p = (bgui_vsol_soview2D_polygon*) polys[i];
+    vcl_map<unsigned int, vsol_polygon_2d_sptr>::iterator poly;
+    // search the change and don't care polygons for deletion
+    poly = mask_polys_.find(p->get_id());
+    if (poly != mask_polys_.end())
+      mask_polys_.erase(poly->first);
+
+    poly = mask_dontcare_polys_.find(p->get_id());
+    if (poly != mask_dontcare_polys_.end())
+      mask_dontcare_polys_.erase(poly->first);
+  }
 }
 
 void bwm_observer_img::create_mask()
@@ -790,12 +904,14 @@ void bwm_observer_img::create_mask()
   // the image size
   unsigned ni = img_tab_->get_image_resource()->ni();
   unsigned nj = img_tab_->get_image_resource()->nj();
-  vil_image_view<bool>* mask = new vil_image_view<bool>(ni, nj);
-  mask->fill(false);
-  for (vcl_vector<vsol_polygon_2d_sptr>::iterator pit = mask_polys_.begin();
+  vil_image_view<unsigned int>* mask = new vil_image_view<unsigned int>(ni, nj);
+  mask->fill(0);
+
+  // fill the change areas
+  for (vcl_map<unsigned int, vsol_polygon_2d_sptr>::iterator pit = mask_polys_.begin();
        pit != mask_polys_.end(); ++pit)
   {
-    vgl_polygon<double> v_poly =  bsol_algs::vgl_from_poly(*pit);
+    vgl_polygon<double> v_poly =  bsol_algs::vgl_from_poly(pit->second);
     vgl_polygon_scan_iterator<double> psi(v_poly, false);
     for (psi.reset(); psi.next();){
       int y = psi.scany();
@@ -803,7 +919,24 @@ void bwm_observer_img::create_mask()
       {
         unsigned u = static_cast<unsigned>(x);
         unsigned v = static_cast<unsigned>(y);
-        (*mask)(u,v) = true;
+        (*mask)(u,v) = 255;
+      }
+    }
+  }
+
+  // fill the don't care areas
+  for (vcl_map<unsigned int, vsol_polygon_2d_sptr>::iterator pit = mask_dontcare_polys_.begin();
+       pit != mask_dontcare_polys_.end(); ++pit)
+  {
+    vgl_polygon<double> v_poly =  bsol_algs::vgl_from_poly(pit->second);
+    vgl_polygon_scan_iterator<double> psi(v_poly, false);
+    for (psi.reset(); psi.next();){
+      int y = psi.scany();
+      for (int x = psi.startx(); x<=psi.endx(); ++x)
+      {
+        unsigned u = static_cast<unsigned>(x);
+        unsigned v = static_cast<unsigned>(y);
+        (*mask)(u,v) = 125;
       }
     }
   }

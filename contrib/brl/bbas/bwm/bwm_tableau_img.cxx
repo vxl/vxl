@@ -109,6 +109,18 @@ void bwm_tableau_img::create_pointset()
   this->post_redraw();
 }
 
+void bwm_tableau_img::copy()
+{
+  my_observer_->copy();
+}
+
+void bwm_tableau_img::paste()
+{
+  float x, y;
+  this->pick_point(&x, &y);
+  my_observer_->paste(x, y);
+}
+
 void bwm_tableau_img::deselect_all()
 {
   my_observer_->deselect_all();
@@ -273,10 +285,17 @@ void bwm_tableau_img::init_mask()
 {
   my_observer_->init_mask();
 }
+
 void bwm_tableau_img::add_poly_to_mask()
 {
   my_observer_->add_poly_to_mask();
 }
+
+void bwm_tableau_img::add_dontcare_poly_to_mask()
+{
+  my_observer_->add_dontcare_poly_to_mask();
+}
+
 void bwm_tableau_img::remove_poly_from_mask()
 {
   my_observer_->remove_poly_from_mask();

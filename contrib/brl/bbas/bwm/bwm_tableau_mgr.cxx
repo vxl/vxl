@@ -6,6 +6,7 @@
 #include "bwm_corr_sptr.h"
 #include "bwm_load_commands.h"
 #include "bwm_tableau_rat_cam.h"
+#include "bwm_tableau_img.h"
 
 #include "algo/bwm_algo.h"
 #include "algo/bwm_utils.h"
@@ -65,10 +66,9 @@ bwm_tableau_mgr::~bwm_tableau_mgr()
 {
 }
 
-void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)//vgui_tableau_sptr tab, vcl_string name)
+void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)
 {
   //create only if registered
-  //bwm_command comm;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tab->type_name());
   if (iter == tab_types_.end()) {
     vcl_cerr << "Tableau type is not registered, not creating!\n";
@@ -161,58 +161,13 @@ void bwm_tableau_mgr::remove_tableau()
   grid_->layout_grid2();
 }
 
-#if 0
-//: Calculate the range parameters for the input image
-vgui_range_map_params_sptr bwm_tableau_mgr::
-range_params(vil_image_resource_sptr const& image)
+vgui_tableau_sptr bwm_tableau_mgr::active_tableau()
 {
-  float gamma = 1.0;
-  bool invert = false;
-  bool gl_map = false;
-  bool cache = true;
-
-  //Check if the image is blocked
-  vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
-  if (bir){
-    gl_map = true;
-    //cache = true;
-    vcl_cout << "image is blocked.\n";
-  }else {
-    vcl_cout << "image is not blocked.\n";
-  }
-
-  //Check if the image is a pyramid
-  bool pyr = image->get_property(vil_property_pyramid, 0);
-  if (pyr){
-    gl_map = true;
-    //cache = true;
-    vcl_cout << "image is a pyramid.\n";
-  }else {
-    vcl_cout << "image is not a pyramid\n.";
-  }
-  //Get max min parameters
-
-  double min=0, max=0;
-  unsigned n_components = image->nplanes();
-  vgui_range_map_params_sptr rmps;
-  if (n_components == 1)
-  {
-    bgui_image_utils iu(image);
-    iu.range(min, max);
-    rmps= new vgui_range_map_params(min, max, gamma, invert,
-                                    gl_map, cache);
-  }
-  else if (n_components == 3)
-  {
-    min = 0; max = 255;//for now - ultimately need to compute color histogram
-    rmps = new vgui_range_map_params(min, max, min, max, min, max,
-                                     gamma, gamma, gamma, invert,
-                                     gl_map, cache);
-  }
-  return rmps;
+  unsigned col_pos, row_pos;
+  grid_->get_last_selected_position(&col_pos, &row_pos);
+  vgui_tableau_sptr tab = grid_->get_tableau_at(col_pos, row_pos);
+  return tab;
 }
-#endif
-
 
 //: manages creating new tableaux on the grid.
 // Decides on the layout of the grid based on the number of current tableaux.
@@ -294,5 +249,15 @@ void bwm_tableau_mgr::set_observer_draw_mode(int mode)
   for (unsigned i=0; i<obs.size(); i++)
   {
     obs[i]->set_draw_mode((bwm_observer::BWM_DRAW_MODE)mode);
+  }
+}
+
+void bwm_tableau_mgr::zoom_to_fit()
+{
+  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  while (iter != tableaus_.end()) {
+    bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (iter->second.as_pointer());
+    tab->zoom_to_fit();
+    iter++;
   }
 }

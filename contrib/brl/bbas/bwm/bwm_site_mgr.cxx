@@ -92,16 +92,16 @@ void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.line_break();
   site_dialog.dir("DIRECTORY:", ext, site_dir);
   site_dialog.line_break();
-  site_dialog.dir("Pyramid exe path:", ext, pyr_exe_dir);
+  site_dialog.file("Pyramid exe path:", ext, pyr_exe_dir);
   site_dialog.line_break();
-  site_dialog.line_break();
+  //site_dialog.line_break();
   site_dialog.set_modal(true);
 
   // add a bunch of images
   site_dialog.message("Please Choose the Images for this site:");
   site_dialog.line_break();
   for (unsigned i=0; i<files.size(); i++) {
-    site_dialog.dir("Image Path:", ext, files[i]);
+    site_dialog.file("Image Path:", ext, files[i]);
     site_dialog.checkbox("Do Pyramid?", pyr_v[i]);
     site_dialog.field("Levels:", pyr_levels[i]);
     site_dialog.checkbox("Is Active?", act_v[i]);
@@ -124,6 +124,7 @@ void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.field("Lat:", lat);
   site_dialog.field("Lon:", lon);
   site_dialog.field("Elev:", elev);
+  site_dialog.line_break();
   site_dialog.set_ok_button("CREATE");
 }
 
@@ -134,10 +135,10 @@ void bwm_site_mgr::create_site()
 
   vcl_string site_name, site_dir, pyr_exe_path;
 
-  int num_images = 5;
+  int num_images = 3;
   vcl_vector<vcl_string> files(num_images);
-  bool pyr[5] = {false, false, false, false, false};
-  bool act[5] = {true, true, true, true, true};
+  bool pyr[3] = {false, false, false};
+  bool act[3] = {true, true, true};
   vcl_vector<vcl_string> levels(num_images, "7");
 
   int num_objs = 3;
@@ -252,7 +253,7 @@ void bwm_site_mgr::edit_site()
   vcl_vector<vcl_string> cam;
   vcl_string ext;
 
-  site_edit_dialog.dir("Pyramid Exe Path:", ext, site->pyr_exe_path_);
+  site_edit_dialog.file("Pyramid Exe Path:", ext, site->pyr_exe_path_);
   site_edit_dialog.line_break();
 
   // first place the existing tableaux on the dialog
@@ -302,7 +303,7 @@ void bwm_site_mgr::edit_site()
   site_edit_dialog.line_break();
   for (unsigned i=0; i<files.size(); i++) {
     vcl_string ext;
-    site_edit_dialog.dir("Image Path:", ext, files[i]);
+    site_edit_dialog.file("Image Path:", ext, files[i]);
     site_edit_dialog.checkbox("Do Pyramid?", pyr[i]);
     site_edit_dialog.field("Levels:", levels[i]);
     site_edit_dialog.checkbox("Is Active?", act[i]);
@@ -354,7 +355,7 @@ void bwm_site_mgr::edit_site()
   site_edit_dialog.field("Elev:", elev);
 
   site_edit_dialog.line_break();
-  site_edit_dialog.set_ok_button("Edit");
+  site_edit_dialog.set_ok_button("EDIT");
   if (!site_edit_dialog.ask()) {
     return;
   } else {
@@ -779,12 +780,12 @@ void bwm_site_mgr::save_video_site()
 
 void bwm_site_mgr::load_img_tableau()
 {
-  vgui_dialog_extensions params ("Image Tableau");
+  vgui_dialog/*_extensions*/ params ("Image Tableau");
   vcl_string ext, name, img_file, empty="";
   params.field("Tableau Name", name);
-  params.line_break();
-  params.dir("Image...", ext, img_file);
-  params.line_break();
+ // params.line_break();
+  params.file("Image...", ext, img_file);
+  //params.line_break();
   params.set_modal(true);
   if (!params.ask())
     return;

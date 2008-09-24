@@ -43,7 +43,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
     show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
     moving_v_(0), moving_vertex_(false), moving_polygon_(false),
     in_jog_mode_(false), row_(0), col_(0), mask_(0), lock_vgui_status_(false),
-    vgui_status_on_(false){  }
+    vgui_status_on_(false), draw_mode_(0) {  }
 
   virtual ~bwm_observer_img();
 
@@ -66,6 +66,10 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void create_polyline(vsol_polyline_2d_sptr);
 
   void create_point(vsol_point_2d_sptr);
+
+  void copy();
+
+  void paste(float x, float y);
 
   bool get_selected_box(bgui_vsol_soview2D_polygon* &box);
 
@@ -90,8 +94,6 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void recover_edges();
 
   void recover_lines();
-
-  void jim_obs_process() { vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
   //:moves to a specified position
   void move_to_point(float x, float y);
@@ -119,6 +121,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   void init_mask();
   void add_poly_to_mask();
+  void add_dontcare_poly_to_mask();
   void remove_poly_from_mask();
   void create_mask();
   vil_image_view_base_sptr mask(){return mask_;}
@@ -136,6 +139,9 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //: returns a list of all the existing spatial objects
   vcl_vector<vsol_spatial_object_2d_sptr> get_spatial_objects_2d();
 
+  //: set the draw mode to either polygon or vertex
+  void set_draw_mode(unsigned int mode);
+
  protected:
   //:flags to indicate vgui status displays by observers
 
@@ -146,6 +152,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //  so image pixel values should be blocked
   bool vgui_status_on_;
 
+  unsigned draw_mode_;
+
   bwm_observer_img(){};
 
   bgui_image_tableau_sptr img_tab_;
@@ -154,7 +162,11 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   vil_image_view_base_sptr mask_;
 
-  vcl_vector<vsol_polygon_2d_sptr> mask_polys_;
+  //: change areas, mapped to the soviewID for easy deletion
+  vcl_map<unsigned int, vsol_polygon_2d_sptr> mask_polys_;
+
+  //: don't care areas
+  vcl_map<unsigned int, vsol_polygon_2d_sptr> mask_dontcare_polys_;
 
   bool show_image_path_;
 
@@ -176,6 +188,10 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   bwm_soview2D_vertex* moving_v_;
   bool moving_vertex_, moving_polygon_;
   bool in_jog_mode_;
+
+  //: polygon selected to copy
+  vgui_soview2D* copy_obj_;
+
   void delete_polygon(vgui_soview* obj);
   void delete_vertex(vgui_soview* vertex);
 

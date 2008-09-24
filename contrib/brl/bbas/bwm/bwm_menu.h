@@ -28,6 +28,7 @@ class bwm_menu
   static void save_video_site() 
     { bwm_site_mgr::instance()->save_video_site();}
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
+  static void zoom_to_fit() {bwm_tableau_mgr::instance()->zoom_to_fit();}
   static void load_shape_file() { bwm_world::instance()->load_shape_file(); }
   static void save_ply() { bwm_world::instance()->save_ply(); }
   static void save_gml() { bwm_world::instance()->save_gml(); }
@@ -36,6 +37,7 @@ class bwm_menu
   static void save_x3d() { bwm_world::instance()->save_x3d(); }
   static void exit() {bwm_tableau_mgr::instance()->exit(); }
   static void load_video_tableau(){bwm_site_mgr::instance()->load_video_tableau(); }
+
 };
 
 #endif

@@ -38,7 +38,8 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   virtual void create_polyline();
   virtual void create_point();
   virtual void create_pointset();
-
+  virtual void copy();
+  virtual void paste();
   //************* IMAGE Processing Methods
 
   //: Draws the hostogram on a graph (if the image is greyscale)
@@ -76,6 +77,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   //: mask operations
   void init_mask();
   void add_poly_to_mask();
+  void add_dontcare_poly_to_mask();
   void remove_poly_from_mask();
   void create_mask();
   void save_mask();
@@ -86,6 +88,8 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   //: internal detail
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { my_observer_->set_viewer(viewer); }
 
+  void set_poly_mode() { my_observer_->set_draw_mode(0); }
+  void set_vertex_mode() { my_observer_->set_draw_mode(1); }
   
  protected:
   void lock();

@@ -54,10 +54,14 @@ class bwm_tableau_mgr
 
   void redraw() { grid_->post_redraw(); }
 
+  vgui_tableau_sptr active_tableau();
+
   void set_draw_mode_vertex();
   void set_draw_mode_edge();
   void set_draw_mode_face();
   void set_draw_mode_mesh();
+  
+  void zoom_to_fit();
 
  private:
 
