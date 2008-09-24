@@ -28,6 +28,7 @@ DECLARE( test_fit_plane_3d );
 DECLARE( test_intersection );
 DECLARE( test_rotation_3d );
 DECLARE( test_triangle_3d );
+DECLARE( test_triangle_3d_line_intersection );
 
 void
 register_tests()
@@ -60,6 +61,7 @@ register_tests()
   REGISTER( test_intersection );
   REGISTER( test_rotation_3d );
   REGISTER( test_triangle_3d );
+  REGISTER( test_triangle_3d_line_intersection );
 }
 
 DEFINE_MAIN;
