@@ -725,13 +725,13 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
   switch (form_)
   {
    case Identity:
-    o << "Identity";
+    o << "Identity\n";
     break;
 
    case Translation: {
     vnl_vector<double> p(3);
     params(p);
-    o << "Translation (" << p(0) << ',' << p(1) << ',' << p(2) << ')';
+    o << "Translation (" << p(0) << ',' << p(1) << ',' << p(2) << ")\n";
     break; }
 
    case ZoomOnly: {

@@ -70,7 +70,7 @@ void vsl_b_read(vsl_b_istream& bfs, vimt_image& b)
 
 vcl_ostream& operator<<(vcl_ostream& os,const vimt_image& b)
 {
-    os << b.is_a() << ": ";
+    os << b.is_a() << ":\n";
     vsl_indent_inc(os);
     b.print_summary(os);
     vsl_indent_dec(os);
