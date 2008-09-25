@@ -904,7 +904,7 @@ void bwm_observer_img::create_mask()
   // the image size
   unsigned ni = img_tab_->get_image_resource()->ni();
   unsigned nj = img_tab_->get_image_resource()->nj();
-  vil_image_view<unsigned int>* mask = new vil_image_view<unsigned int>(ni, nj);
+  vil_image_view<unsigned char>* mask = new vil_image_view<unsigned char>(ni, nj);
   mask->fill(0);
 
   // fill the change areas
