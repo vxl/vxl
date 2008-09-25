@@ -98,6 +98,9 @@ class vnl_nonlinear_minimizer
   // Each iteration may have comprised several function evaluations.
   int get_num_iterations() const { return num_iterations_; }
 
+  //:Whether the error reduced in the last minimization
+  bool obj_value_reduced() { return failure_code_>0 && end_error_ < start_error_; }
+
   //:Return the covariance of the estimate at the end.
   virtual vnl_matrix<double> const& get_covariance();
 
@@ -117,7 +120,7 @@ class vnl_nonlinear_minimizer
     CONVERGED_XTOL              = 2,
     CONVERGED_XFTOL             = 3,
     CONVERGED_GTOL              = 4,
-    FAILED_TOO_MANY_ITERATIONS  = 5,
+    TOO_MANY_ITERATIONS         = 5,
     FAILED_FTOL_TOO_SMALL       = 6,
     FAILED_XTOL_TOO_SMALL       = 7,
     FAILED_GTOL_TOO_SMALL       = 8,

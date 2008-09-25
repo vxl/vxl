@@ -383,7 +383,7 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
   case CONVERGED_GTOL:
     s << (whoami ": converged via gtol\n");
     break;
-  case FAILED_TOO_MANY_ITERATIONS:
+  case TOO_MANY_ITERATIONS:
     s << (whoami ": too many iterations\n");
     break;
   case FAILED_FTOL_TOO_SMALL:

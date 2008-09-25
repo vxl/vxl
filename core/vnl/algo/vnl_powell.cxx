@@ -102,7 +102,7 @@ vnl_powell::minimize(vnl_vector<double>& p)
     }
 
     if (num_iterations_ == unsigned(maxfev))
-      return FAILED_TOO_MANY_ITERATIONS;
+      return TOO_MANY_ITERATIONS;
 
     for (int j=0;j<n;++j)
     {
@@ -136,5 +136,5 @@ vnl_powell::minimize(vnl_vector<double>& p)
     if (this->report_iter())
       return FAILED_USER_REQUEST;
   }
-  return FAILED_TOO_MANY_ITERATIONS;
+  return TOO_MANY_ITERATIONS;
 }

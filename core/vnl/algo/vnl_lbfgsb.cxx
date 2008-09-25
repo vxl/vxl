@@ -180,7 +180,7 @@ bool vnl_lbfgsb::minimize(vnl_vector<double>& x)
 
     if (this->num_evaluations_ > this->get_max_function_evals())
     {
-      this->failure_code_ = FAILED_TOO_MANY_ITERATIONS;
+      this->failure_code_ = TOO_MANY_ITERATIONS;
       ok = false;
       break;
     }
