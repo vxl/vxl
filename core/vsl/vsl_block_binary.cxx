@@ -106,14 +106,16 @@ void vsl_block_binary_read_float_impl(vsl_b_istream &is, T* begin, vcl_size_t ne
 }
 
 /////////////////////////////////////////////////////////////////////////
+#include <crtdbg.h>
 
 //: Write a block of signed ints to a vsl_b_ostream
 template <class T>
 void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems)
 {
+
   vsl_b_write(os, true); // Error check that this is a specialised version
 
-  const vcl_size_t wanted = sizeof(T) * nelems;
+  const vcl_size_t wanted = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(T)) * nelems;
   vsl_block_t block = allocate_up_to(wanted  );
 
   if (block.size == wanted)

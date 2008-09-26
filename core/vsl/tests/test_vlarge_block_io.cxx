@@ -15,15 +15,16 @@ void free_blocks(vcl_vector<void *> &blocks)
     vcl_free(blocks[i]);
 }
 
+// scale should be 0 or 1.
 template <class T>
-void test_vlarge_block(void * block, vcl_size_t s, T /*dummy*/)
+void test_vlarge_block(void * block, vcl_size_t s, T scale)
 {
   // fill one of the blocks with large numbers.
   T * const numbers = static_cast<T *>(block);
   vcl_size_t n = s / sizeof(T);
 
   for (vcl_size_t i=0; i<n; ++i)
-    numbers[i] = static_cast<T>(vcl_numeric_limits<T>::max() - i) ;
+    numbers[i] = static_cast<T>(vcl_numeric_limits<T>::max() - i * scale) ;
 
   vsl_b_ofstream bfs_out("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Created vsl_vlarge_block_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -136,6 +137,9 @@ void test_vlarge_block_io()
   test_vlarge_block(blocks.back(), s, (int) 0);
   test_vlarge_block(blocks.back(), s-1, (int) 0);
   test_vlarge_block(blocks.back(), s-1019, (int) 0);
+  test_vlarge_block(blocks.back(), s, (int) 1);
+  test_vlarge_block(blocks.back(), s-1, (int) 1);
+  test_vlarge_block(blocks.back(), s-1019, (int) 1);
   test_vlarge_block(blocks.back(), s, (unsigned long) 0);
   test_vlarge_block(blocks.back(), s, (char) 0);
   test_vlarge_block(blocks.back(), s, (short) 0);
