@@ -10,6 +10,8 @@
 #include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vul/vul_reg_exp.h>
 
 //: Test if the summaries of two objects are the same.
 // Both objects \a a and \a b must be the same class, and have
@@ -17,7 +19,7 @@
 // \param exceptions is an optional, 0 terminated, list of c-strings.
 //
 // Any pair of lines from the two summaries that don't match
-// each other, but do contain one of the exceptions strings will
+// each other, but do match one of the exception regular expressions will
 // be ignored.
 // \code
 //  base_class_wibble *base_ptr, *base_ptr2;
@@ -37,11 +39,18 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
   vcl_string sa, sb;
   vsl_print_summary(ssa, a);
   vsl_print_summary(ssb, b);
+  vcl_vector<vul_reg_exp> exceptions_re;
+  while (exceptions && *exceptions)
+  {
+    exceptions_re.push_back(vul_reg_exp(*exceptions));
+    exceptions++;
+  }
+
   while (!ssa.eof() || !ssb.eof())
   {
     vcl_getline(ssa, sa);
     vcl_getline(ssb, sb);
-    if (sa != sb && exceptions == 0)
+    if (sa != sb && exceptions_re.empty())
     {
       vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;
       return false;
@@ -49,9 +58,15 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
     else if (sa != sb)
     {
       bool exception_found = false;
-      for (const char **it = exceptions; *it!=0; ++it)
-        if (sa.find(*it)!=vcl_string::npos && sb.find(*it)!=vcl_string::npos)
+//      for (const char **it = exceptions; *it!=0; ++it)
+//        if (sa.find(*it)!=vcl_string::npos && sb.find(*it)!=vcl_string::npos)
+      for (vcl_vector<vul_reg_exp>::iterator it=exceptions_re.begin(), end=exceptions_re.end();
+        it != end; ++it)
+        if (it->find(sa) && it->find(sb))
+        {
           exception_found = true;
+          break;
+        }
       if (!exception_found)
       {
         vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;

@@ -6,14 +6,15 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
+#include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_test.h>
 #include <testlib/testlib_test.h>
 
 void test_test()
 {
-  vcl_cout << "******************\n"
-           << " Testing mbl_test\n"
-           << "******************\n";
+  vcl_cout << "***********************************\n"
+           << " Testing mbl_test_save_measurement\n"
+           << "***********************************\n";
 
   vpl_unlink((vul_file::get_cwd()+"/mul/mbl/mbl_test_save_measurement.txt").c_str());
   vpl_rmdir((vul_file::get_cwd()+"/mul/mbl").c_str());
@@ -56,6 +57,35 @@ void test_test()
   TEST("Saved value 1 correctly", v, 5.0);
   data >> ds >> ts >> bs >> v;
   TEST("Saved value 2 correctly", v, 10.0);
+
+  vcl_cout << "**************************************\n"
+           << " Testing mbl_test_summaries_are_equal\n"
+           << "**************************************\n";
+
+  vcl_string A(
+    "Some random data\n"
+    "A 4\n"
+    "B 3\n"
+    "C 2\n"
+    "AB 3\n");
+  vcl_string B(
+    "Some random data\n"
+    "A 4\n"
+    "B 3\n"
+    "C 2\n"
+    "AB 3\n");
+
+  TEST("Simple case +ve", mbl_test_summaries_are_equal(A, B), true);
+  TEST("Simple case +ve", mbl_test_summaries_are_equal(A + "D 1", B + "D 2"), false);
+
+  TEST("Simple case +ve", mbl_test_summaries_are_equal(A, B), true);
+  const char * ignore1[]={"D", 0 };
+  TEST("Exclusions case +ve", mbl_test_summaries_are_equal(A + "D 1", B + "D 2", ignore1), true);
+  const char * ignore2[]={"^ *D", 0 };
+  TEST("RE Exclusions case +ve", mbl_test_summaries_are_equal(A + "D 1", B + "D 2", ignore2), true);
+  TEST("RE Exclusions case -ne", mbl_test_summaries_are_equal(A + "AD 1", B + "AD 2", ignore2), false);
+
+
 }
 
 TESTMAIN(test_test);
