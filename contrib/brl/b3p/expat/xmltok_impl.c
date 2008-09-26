@@ -1,11 +1,13 @@
-/* Copyright (c) 1998, 1999 Thai Open Source Software Center Ltd
-   See the file COPYING for copying permission.
+/*
+Copyright (c) 1998, 1999 Thai Open Source Software Center Ltd
+See the file COPYING for copying permission.
 */
 
 #ifndef IS_INVALID_CHAR
 #define IS_INVALID_CHAR(enc, ptr, n) (0)
 #endif
 
+#ifndef INVALID_LEAD_CASE
 #define INVALID_LEAD_CASE(n, ptr, nextTokPtr) \
     case BT_LEAD ## n: \
       if (end - ptr < n) \
@@ -16,6 +18,7 @@
       } \
       ptr += n; \
       break;
+#endif
 
 #define INVALID_CASES(ptr, nextTokPtr) \
   INVALID_LEAD_CASE(2, ptr, nextTokPtr) \
@@ -86,9 +89,9 @@
 
 /* ptr points to character following "<!-" */
 
-static int PTRCALL
-PREFIX(scanComment)(const ENCODING *enc, const char *ptr,
-                    const char *end, const char **nextTokPtr)
+static
+int PREFIX(scanComment)(const ENCODING *enc, const char *ptr, const char *end,
+                        const char **nextTokPtr)
 {
   if (ptr != end) {
     if (!CHAR_MATCHES(enc, ptr, ASCII_MINUS)) {
@@ -124,9 +127,9 @@ PREFIX(scanComment)(const ENCODING *enc, const char *ptr,
 
 /* ptr points to character following "<!" */
 
-static int PTRCALL
-PREFIX(scanDecl)(const ENCODING *enc, const char *ptr,
-                 const char *end, const char **nextTokPtr)
+static
+int PREFIX(scanDecl)(const ENCODING *enc, const char *ptr, const char *end,
+                     const char **nextTokPtr)
 {
   if (ptr == end)
     return XML_TOK_PARTIAL;
@@ -171,11 +174,11 @@ PREFIX(scanDecl)(const ENCODING *enc, const char *ptr,
   return XML_TOK_PARTIAL;
 }
 
-static int PTRCALL
-PREFIX(checkPiTarget)(const ENCODING *enc, const char *ptr,
-                      const char *end, int *tokPtr)
+static
+int PREFIX(checkPiTarget)(const ENCODING *enc, const char *ptr, const char *end, int *tokPtr)
 {
   int upper = 0;
+  cmExpatUnused(enc);
   *tokPtr = XML_TOK_PI;
   if (end - ptr != MINBPC(enc)*3)
     return 1;
@@ -216,9 +219,9 @@ PREFIX(checkPiTarget)(const ENCODING *enc, const char *ptr,
 
 /* ptr points to character following "<?" */
 
-static int PTRCALL
-PREFIX(scanPi)(const ENCODING *enc, const char *ptr,
-               const char *end, const char **nextTokPtr)
+static
+int PREFIX(scanPi)(const ENCODING *enc, const char *ptr, const char *end,
+                   const char **nextTokPtr)
 {
   int tok;
   const char *target = ptr;
@@ -278,13 +281,14 @@ PREFIX(scanPi)(const ENCODING *enc, const char *ptr,
   return XML_TOK_PARTIAL;
 }
 
-static int PTRCALL
-PREFIX(scanCdataSection)(const ENCODING *enc, const char *ptr,
-                         const char *end, const char **nextTokPtr)
+
+static
+int PREFIX(scanCdataSection)(const ENCODING *enc, const char *ptr, const char *end,
+                             const char **nextTokPtr)
 {
-  static const char CDATA_LSQB[] = { ASCII_C, ASCII_D, ASCII_A,
-                                     ASCII_T, ASCII_A, ASCII_LSQB };
+  static const char CDATA_LSQB[] = { ASCII_C, ASCII_D, ASCII_A, ASCII_T, ASCII_A, ASCII_LSQB };
   int i;
+  cmExpatUnused(enc);
   /* CDATA[ */
   if (end - ptr < 6 * MINBPC(enc))
     return XML_TOK_PARTIAL;
@@ -298,9 +302,9 @@ PREFIX(scanCdataSection)(const ENCODING *enc, const char *ptr,
   return XML_TOK_CDATA_SECT_OPEN;
 }
 
-static int PTRCALL
-PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr,
-                        const char *end, const char **nextTokPtr)
+static
+int PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr, const char *end,
+                            const char **nextTokPtr)
 {
   if (ptr == end)
     return XML_TOK_NONE;
@@ -376,9 +380,9 @@ PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr,
 
 /* ptr points to character following "</" */
 
-static int PTRCALL
-PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr,
-                   const char *end, const char **nextTokPtr)
+static
+int PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr, const char *end,
+                       const char **nextTokPtr)
 {
   if (ptr == end)
     return XML_TOK_PARTIAL;
@@ -407,8 +411,7 @@ PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr,
       return XML_TOK_PARTIAL;
 #ifdef XML_NS
     case BT_COLON:
-      /* no need to check qname syntax here,
-         since end-tag must match exactly */
+      /* no need to check qname syntax here, since end-tag must match exactly */
       ptr += MINBPC(enc);
       break;
 #endif
@@ -425,9 +428,9 @@ PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr,
 
 /* ptr points to character following "&#X" */
 
-static int PTRCALL
-PREFIX(scanHexCharRef)(const ENCODING *enc, const char *ptr,
-                       const char *end, const char **nextTokPtr)
+static
+int PREFIX(scanHexCharRef)(const ENCODING *enc, const char *ptr, const char *end,
+                           const char **nextTokPtr)
 {
   if (ptr != end) {
     switch (BYTE_TYPE(enc, ptr)) {
@@ -457,9 +460,9 @@ PREFIX(scanHexCharRef)(const ENCODING *enc, const char *ptr,
 
 /* ptr points to character following "&#" */
 
-static int PTRCALL
-PREFIX(scanCharRef)(const ENCODING *enc, const char *ptr,
-                    const char *end, const char **nextTokPtr)
+static
+int PREFIX(scanCharRef)(const ENCODING *enc, const char *ptr, const char *end,
+                        const char **nextTokPtr)
 {
   if (ptr != end) {
     if (CHAR_MATCHES(enc, ptr, ASCII_x))
@@ -489,9 +492,9 @@ PREFIX(scanCharRef)(const ENCODING *enc, const char *ptr,
 
 /* ptr points to character following "&" */
 
-static int PTRCALL
-PREFIX(scanRef)(const ENCODING *enc, const char *ptr, const char *end,
-                const char **nextTokPtr)
+static
+int PREFIX(scanRef)(const ENCODING *enc, const char *ptr, const char *end,
+                    const char **nextTokPtr)
 {
   if (ptr == end)
     return XML_TOK_PARTIAL;
@@ -519,9 +522,9 @@ PREFIX(scanRef)(const ENCODING *enc, const char *ptr, const char *end,
 
 /* ptr points to character following first character of attribute name */
 
-static int PTRCALL
-PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
-                 const char **nextTokPtr)
+static
+int PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
+                     const char **nextTokPtr)
 {
 #ifdef XML_NS
   int hadColon = 0;
@@ -575,6 +578,7 @@ PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
         hadColon = 0;
 #endif
         for (;;) {
+          
           ptr += MINBPC(enc);
           if (ptr == end)
             return XML_TOK_PARTIAL;
@@ -678,9 +682,9 @@ PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
 
 /* ptr points to character following "<" */
 
-static int PTRCALL
-PREFIX(scanLt)(const ENCODING *enc, const char *ptr, const char *end,
-               const char **nextTokPtr)
+static
+int PREFIX(scanLt)(const ENCODING *enc, const char *ptr, const char *end,
+                   const char **nextTokPtr)
 {
 #ifdef XML_NS
   int hadColon;
@@ -696,8 +700,7 @@ PREFIX(scanLt)(const ENCODING *enc, const char *ptr, const char *end,
     case BT_MINUS:
       return PREFIX(scanComment)(enc, ptr + MINBPC(enc), end, nextTokPtr);
     case BT_LSQB:
-      return PREFIX(scanCdataSection)(enc, ptr + MINBPC(enc),
-                                      end, nextTokPtr);
+      return PREFIX(scanCdataSection)(enc, ptr + MINBPC(enc), end, nextTokPtr);
     }
     *nextTokPtr = ptr;
     return XML_TOK_INVALID;
@@ -778,9 +781,9 @@ PREFIX(scanLt)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_PARTIAL;
 }
 
-static int PTRCALL
-PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
-                   const char **nextTokPtr)
+static
+int PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
+                       const char **nextTokPtr)
 {
   if (ptr == end)
     return XML_TOK_NONE;
@@ -877,9 +880,9 @@ PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
 
 /* ptr points to character following "%" */
 
-static int PTRCALL
-PREFIX(scanPercent)(const ENCODING *enc, const char *ptr, const char *end,
-                    const char **nextTokPtr)
+static
+int PREFIX(scanPercent)(const ENCODING *enc, const char *ptr, const char *end,
+                        const char **nextTokPtr)
 {
   if (ptr == end)
     return XML_TOK_PARTIAL;
@@ -906,9 +909,9 @@ PREFIX(scanPercent)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_PARTIAL;
 }
 
-static int PTRCALL
-PREFIX(scanPoundName)(const ENCODING *enc, const char *ptr, const char *end,
-                      const char **nextTokPtr)
+static
+int PREFIX(scanPoundName)(const ENCODING *enc, const char *ptr, const char *end,
+                          const char **nextTokPtr)
 {
   if (ptr == end)
     return XML_TOK_PARTIAL;
@@ -933,10 +936,10 @@ PREFIX(scanPoundName)(const ENCODING *enc, const char *ptr, const char *end,
   return -XML_TOK_POUND_NAME;
 }
 
-static int PTRCALL
-PREFIX(scanLit)(int open, const ENCODING *enc,
-                const char *ptr, const char *end,
-                const char **nextTokPtr)
+static
+int PREFIX(scanLit)(int open, const ENCODING *enc,
+                    const char *ptr, const char *end,
+                    const char **nextTokPtr)
 {
   while (ptr != end) {
     int t = BYTE_TYPE(enc, ptr);
@@ -965,9 +968,9 @@ PREFIX(scanLit)(int open, const ENCODING *enc,
   return XML_TOK_PARTIAL;
 }
 
-static int PTRCALL
-PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
-                  const char **nextTokPtr)
+static
+int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
+                      const char **nextTokPtr)
 {
   int tok;
   if (ptr == end)
@@ -1009,11 +1012,8 @@ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
       return XML_TOK_INVALID;
     }
   case BT_CR:
-    if (ptr + MINBPC(enc) == end) {
-      *nextTokPtr = end;
-      /* indicate that this might be part of a CR/LF pair */
+    if (ptr + MINBPC(enc) == end)
       return -XML_TOK_PROLOG_S;
-    }
     /* fall through */
   case BT_S: case BT_LF:
     for (;;) {
@@ -1196,9 +1196,9 @@ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
   return -tok;
 }
 
-static int PTRCALL
-PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr,
-                          const char *end, const char **nextTokPtr)
+static
+int PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr, const char *end,
+                              const char **nextTokPtr)
 {
   const char *start;
   if (ptr == end)
@@ -1254,9 +1254,9 @@ PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr,
   return XML_TOK_DATA_CHARS;
 }
 
-static int PTRCALL
-PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr,
-                       const char *end, const char **nextTokPtr)
+static
+int PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr, const char *end,
+                           const char **nextTokPtr)
 {
   const char *start;
   if (ptr == end)
@@ -1311,9 +1311,9 @@ PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr,
 
 #ifdef XML_DTD
 
-static int PTRCALL
-PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr,
-                         const char *end, const char **nextTokPtr)
+static
+int PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr, const char *end,
+                             const char **nextTokPtr)
 {
   int level = 0;
   if (MINBPC(enc) > 1) {
@@ -1364,9 +1364,9 @@ PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr,
 
 #endif /* XML_DTD */
 
-static int PTRCALL
-PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
-                   const char **badPtr)
+static
+int PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
+                       const char **badPtr)
 {
   ptr += MINBPC(enc);
   end -= MINBPC(enc);
@@ -1419,14 +1419,13 @@ PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
   return 1;
 }
 
-/* This must only be called for a well-formed start-tag or empty
-   element tag.  Returns the number of attributes.  Pointers to the
-   first attsMax attributes are stored in atts.
-*/
+/* This must only be called for a well-formed start-tag or empty element tag.
+Returns the number of attributes.  Pointers to the first attsMax attributes 
+are stored in atts. */
 
-static int PTRCALL
-PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
-                int attsMax, ATTRIBUTE *atts)
+static
+int PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
+                    int attsMax, ATTRIBUTE *atts)
 {
   enum { other, inName, inValue } state = inName;
   int nAtts = 0;
@@ -1517,16 +1516,15 @@ PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
   /* not reached */
 }
 
-static int PTRFASTCALL
-PREFIX(charRefNumber)(const ENCODING *enc, const char *ptr)
+static
+int PREFIX(charRefNumber)(const ENCODING *enc, const char *ptr)
 {
   int result = 0;
+  cmExpatUnused(enc);
   /* skip &# */
   ptr += 2*MINBPC(enc);
   if (CHAR_MATCHES(enc, ptr, ASCII_x)) {
-    for (ptr += MINBPC(enc);
-         !CHAR_MATCHES(enc, ptr, ASCII_SEMI);
-         ptr += MINBPC(enc)) {
+    for (ptr += MINBPC(enc); !CHAR_MATCHES(enc, ptr, ASCII_SEMI); ptr += MINBPC(enc)) {
       int c = BYTE_TO_ASCII(enc, ptr);
       switch (c) {
       case ASCII_0: case ASCII_1: case ASCII_2: case ASCII_3: case ASCII_4:
@@ -1534,13 +1532,11 @@ PREFIX(charRefNumber)(const ENCODING *enc, const char *ptr)
         result <<= 4;
         result |= (c - ASCII_0);
         break;
-      case ASCII_A: case ASCII_B: case ASCII_C:
-      case ASCII_D: case ASCII_E: case ASCII_F:
+      case ASCII_A: case ASCII_B: case ASCII_C: case ASCII_D: case ASCII_E: case ASCII_F:
         result <<= 4;
         result += 10 + (c - ASCII_A);
         break;
-      case ASCII_a: case ASCII_b: case ASCII_c:
-      case ASCII_d: case ASCII_e: case ASCII_f:
+      case ASCII_a: case ASCII_b: case ASCII_c: case ASCII_d: case ASCII_e: case ASCII_f:
         result <<= 4;
         result += 10 + (c - ASCII_a);
         break;
@@ -1561,10 +1557,10 @@ PREFIX(charRefNumber)(const ENCODING *enc, const char *ptr)
   return checkCharRefNumber(result);
 }
 
-static int PTRCALL
-PREFIX(predefinedEntityName)(const ENCODING *enc, const char *ptr,
-                             const char *end)
+static
+int PREFIX(predefinedEntityName)(const ENCODING *enc, const char *ptr, const char *end)
 {
+  cmExpatUnused(enc);
   switch ((end - ptr)/MINBPC(enc)) {
   case 2:
     if (CHAR_MATCHES(enc, ptr + MINBPC(enc), ASCII_t)) {
@@ -1615,8 +1611,8 @@ PREFIX(predefinedEntityName)(const ENCODING *enc, const char *ptr,
   return 0;
 }
 
-static int PTRCALL
-PREFIX(sameName)(const ENCODING *enc, const char *ptr1, const char *ptr2)
+static
+int PREFIX(sameName)(const ENCODING *enc, const char *ptr1, const char *ptr2)
 {
   for (;;) {
     switch (BYTE_TYPE(enc, ptr1)) {
@@ -1679,10 +1675,11 @@ PREFIX(sameName)(const ENCODING *enc, const char *ptr1, const char *ptr2)
   /* not reached */
 }
 
-static int PTRCALL
-PREFIX(nameMatchesAscii)(const ENCODING *enc, const char *ptr1,
-                         const char *end1, const char *ptr2)
+static
+int PREFIX(nameMatchesAscii)(const ENCODING *enc, const char *ptr1,
+                             const char *end1, const char *ptr2)
 {
+  cmExpatUnused(enc);
   for (; *ptr2; ptr1 += MINBPC(enc), ptr2++) {
     if (ptr1 == end1)
       return 0;
@@ -1692,8 +1689,8 @@ PREFIX(nameMatchesAscii)(const ENCODING *enc, const char *ptr1,
   return ptr1 == end1;
 }
 
-static int PTRFASTCALL
-PREFIX(nameLength)(const ENCODING *enc, const char *ptr)
+static
+int PREFIX(nameLength)(const ENCODING *enc, const char *ptr)
 {
   const char *start = ptr;
   for (;;) {
@@ -1719,8 +1716,8 @@ PREFIX(nameLength)(const ENCODING *enc, const char *ptr)
   }
 }
 
-static const char * PTRFASTCALL
-PREFIX(skipS)(const ENCODING *enc, const char *ptr)
+static
+const char *PREFIX(skipS)(const ENCODING *enc, const char *ptr)
 {
   for (;;) {
     switch (BYTE_TYPE(enc, ptr)) {
@@ -1735,11 +1732,11 @@ PREFIX(skipS)(const ENCODING *enc, const char *ptr)
   }
 }
 
-static void PTRCALL
-PREFIX(updatePosition)(const ENCODING *enc,
-                       const char *ptr,
-                       const char *end,
-                       POSITION *pos)
+static
+void PREFIX(updatePosition)(const ENCODING *enc,
+                            const char *ptr,
+                            const char *end,
+                            POSITION *pos)
 {
   while (ptr != end) {
     switch (BYTE_TYPE(enc, ptr)) {
@@ -1776,4 +1773,3 @@ PREFIX(updatePosition)(const ENCODING *enc,
 #undef CHECK_NAME_CASES
 #undef CHECK_NMSTRT_CASE
 #undef CHECK_NMSTRT_CASES
-

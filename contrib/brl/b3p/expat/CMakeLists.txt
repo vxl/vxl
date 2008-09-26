@@ -1,32 +1,38 @@
-#This is brl/b3p/expat
+PROJECT(CMEXPAT)
+INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-PROJECT( expat C )
-
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-
-IF(NOT VXL_USING_NATIVE_EXPAT)
-
-IF (WIN32)
-  ADD_DEFINITIONS( -DXML_STATIC )
-  ADD_DEFINITIONS( -DCOMPILED_FROM_DSP )
-ENDIF (WIN32)
-
-#set the COMPILED_FROM_DSP definition
-
-
-SET(expat_sources
-    ascii.h              asciitab.h
-    expat.h              iasciitab.h
-    internal.h           latin1tab.h
-    macconfig.h          nametab.h
-    utf8tab.h            winconfig.h
-    xmlparse.c xmlrole.c xmlrole.h
-    xmltok.c xmltok.h    xmltok_impl.h
+SET(expat_SRCS
+  xmlparse.c
+  xmltok.c        xmltok.h
+  xmlrole.c       xmlrole.h
+  xmltok_impl.h
+  expat.h
+  ascii.h              
+  asciitab.h
+  iasciitab.h
+  nametab.h
 )
 
-ADD_LIBRARY(expat ${expat_sources})
-INSTALL_TARGETS(/lib expat)
+INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+TEST_BIG_ENDIAN(CMEXPAT_BIGENDIAN)
 
+INCLUDE_DIRECTORIES(
+  "${CMEXPAT_BINARY_DIR}/.."
+  )
 
-ENDIF(NOT VXL_USING_NATIVE_EXPAT)
+IF(WIN32)
+  IF(NOT BUILD_SHARED_LIBS)
+    SET (CM_EXPAT_STATIC 1)
+  ENDIF(NOT BUILD_SHARED_LIBS)
+ENDIF(WIN32)
 
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatConfig.h.in
+               ${CMEXPAT_BINARY_DIR}/expatConfig.h)
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatDllConfig.h.in
+               ${CMEXPAT_BINARY_DIR}/expatDllConfig.h)
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/.NoDartCoverage
+               ${CMEXPAT_BINARY_DIR}/.NoDartCoverage)
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/cm_expat_mangle.h
+               ${CMEXPAT_BINARY_DIR}/cm_expat_mangle.h)
+
+ADD_LIBRARY(expat ${expat_SRCS})
