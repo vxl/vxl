@@ -106,8 +106,6 @@ void vsl_block_binary_read_float_impl(vsl_b_istream &is, T* begin, vcl_size_t ne
 }
 
 /////////////////////////////////////////////////////////////////////////
-#include <crtdbg.h>
-
 //: Write a block of signed ints to a vsl_b_ostream
 template <class T>
 void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems)
