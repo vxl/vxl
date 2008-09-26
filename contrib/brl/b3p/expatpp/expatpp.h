@@ -161,7 +161,7 @@ protected:
 /// \name overrideables to customise behaviour, must call parent
 //@{
   virtual void ReleaseParser();
-  virtual void ResetParser();
+  //virtual void ResetParser();
   virtual void SetupHandlers();
 //@}
 

@@ -57,7 +57,7 @@ expatpp::SetupHandlers()
   ::XML_SetDoctypeDeclHandler(mParser, startDoctypeDeclCallback, endDoctypeDeclCallback);
   ::XML_SetElementDeclHandler(mParser, elementDeclCallback);
   ::XML_SetEntityDeclHandler(mParser, entityDeclCallback);
-  ::XML_SetSkippedEntityHandler(mParser, skippedEntityCallback);
+  //::XML_SetSkippedEntityHandler(mParser, skippedEntityCallback);
   ::XML_SetXmlDeclHandler(mParser, xmlDeclCallback);
 #endif
 }
@@ -90,7 +90,7 @@ expatpp::ReleaseParser()
 
   \todo pass in encoding to XML_ParserReset when we support encodings
 */
-void
+/*void
 expatpp::ResetParser()
 {
 #ifdef EXPATPP_COMPATIBLE_EXPAT12
@@ -102,7 +102,7 @@ expatpp::ResetParser()
     mHaveParsed = false;
   }
 #endif
-}
+}*/
 
 
 /**
@@ -111,7 +111,7 @@ expatpp::ResetParser()
 XML_Status
 expatpp::parseFile(FILE* inFile)
 {
-  ResetParser();
+ // ResetParser();
 
   char buf[BUFSIZ];
   int done;
@@ -134,7 +134,7 @@ XML_Status
 expatpp::XML_Parse(const char *s, int len, int isFinal)
 {
   mHaveParsed = true;
-  const XML_Status retStatus = ::XML_Parse(mParser, s, len, isFinal);
+  const XML_Status retStatus = (const XML_Status) ::XML_Parse(mParser, s, len, isFinal);
   if (isFinal)
     CheckFinalStatus(retStatus);
   return retStatus;
@@ -177,7 +177,7 @@ expatpp::XML_GetCurrentColumnNumber()
 XML_Status
 expatpp::parseString(const char* inString)
 {
-  ResetParser();
+//  ResetParser();
   const int inLen = strlen(inString);
   return XML_Parse(inString, inLen, 1);
 }
