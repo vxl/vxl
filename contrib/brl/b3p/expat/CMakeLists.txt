@@ -6,7 +6,6 @@ SET(expat_SRCS
   xmltok.c        xmltok.h
   xmlrole.c       xmlrole.h
   xmltok_impl.h
-  expat.h
   ascii.h              
   asciitab.h
   iasciitab.h
@@ -26,13 +25,16 @@ IF(WIN32)
   ENDIF(NOT BUILD_SHARED_LIBS)
 ENDIF(WIN32)
 
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatConfig.h.in
-               ${CMEXPAT_BINARY_DIR}/expatConfig.h)
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatDllConfig.h.in
-               ${CMEXPAT_BINARY_DIR}/expatDllConfig.h)
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/.NoDartCoverage
-               ${CMEXPAT_BINARY_DIR}/.NoDartCoverage)
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/cm_expat_mangle.h
-               ${CMEXPAT_BINARY_DIR}/cm_expat_mangle.h)
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatConfig.h.in ${CMEXPAT_SOURCE_DIR}/expatConfig.h)
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatConfig.h.in ${CMEXPAT_BINARY_DIR}/expatConfig.h)
+
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatDllConfig.h.in ${CMEXPAT_BINARY_DIR}/expatDllConfig.h)
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatDllConfig.h.in ${CMEXPAT_SOURCE_DIR}/expatDllConfig.h)
+
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/.NoDartCoverage ${CMEXPAT_BINARY_DIR}/.NoDartCove
+rage)
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/cm_expat_mangle.h ${CMEXPAT_BINARY_DIR}/cm_expat_mangle.h)
+
+CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expat.h ${CMEXPAT_BINARY_DIR}/expat.h)
 
 ADD_LIBRARY(expat ${expat_SRCS})

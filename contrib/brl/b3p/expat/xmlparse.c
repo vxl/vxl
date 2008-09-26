@@ -669,6 +669,46 @@ XML_ParserCreate_MM(const XML_Char *encodingName,
   return parser;
 }  /* End XML_ParserCreate_MM */
 
+/* moves list of bindings to freeBindingList */
+/*static void FASTCALL
+moveToFreeBindingList(XML_Parser parser, BINDING *bindings)
+{
+ while (bindings) {
+    BINDING *b = bindings;
+    bindings = bindings->nextTagBinding;
+    b->nextTagBinding = freeBindingList;
+    freeBindingList = b;
+   }
+ }
+
+ XML_Bool
+ XML_ParserReset(XML_Parser parser, const XML_Char *encodingName)
+ {
+   TAG *tStk;
+   if (parentParser)
+    return XML_FALSE;
+  ///* move tagStack to freeTagList 
+  tStk = tagStack;
+  while (tStk) {
+    TAG *tag = tStk;
+    tStk = tStk->parent;
+    tag->parent = freeTagList;
+    moveToFreeBindingList(parser, tag->bindings);
+    tag->bindings = NULL;
+    freeTagList = tag;
+  }
+  moveToFreeBindingList(parser, inheritedBindings);
+  if (unknownEncodingMem)
+    FREE(unknownEncodingMem);
+   if (unknownEncodingRelease)
+    unknownEncodingRelease(unknownEncodingData);
+    poolClear(&tempPool);
+    poolClear(&temp2Pool);
+    parserInit(parser, encodingName);
+    dtdReset(_dtd, &parser->m_mem);
+    return setContext(parser, implicitContext);
+ }
+*/
 int XML_SetEncoding(XML_Parser parser, const XML_Char *encodingName)
 {
   if (!encodingName)
@@ -1019,6 +1059,12 @@ void XML_SetExternalEntityRefHandlerArg(XML_Parser parser, void *arg)
   else
     externalEntityRefHandlerArg = parser;
 }
+
+/*void XML_SetSkippedEntityHandler(XML_Parser parser,
+                          XML_SkippedEntityHandler handler)
+{
+  skippedEntityHandler = handler;
+}*/
 
 void XML_SetUnknownEncodingHandler(XML_Parser parser,
                                    XML_UnknownEncodingHandler handler,
