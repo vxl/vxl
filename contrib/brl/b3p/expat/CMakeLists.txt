@@ -1,7 +1,11 @@
-PROJECT(CMEXPAT)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+PROJECT(expat C)
+#INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-SET(expat_SRCS
+INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+IF(NOT VXL_USING_NATIVE_EXPAT)
+
+SET(expat_sources
+  expat.h
   xmlparse.c
   xmltok.c        xmltok.h
   xmlrole.c       xmlrole.h
@@ -13,10 +17,10 @@ SET(expat_SRCS
 )
 
 INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
-TEST_BIG_ENDIAN(CMEXPAT_BIGENDIAN)
+TEST_BIG_ENDIAN(expat_BIGENDIAN)
 
 INCLUDE_DIRECTORIES(
-  "${CMEXPAT_BINARY_DIR}/.."
+  "${expat_BINARY_DIR}/.."
   )
 
 IF(WIN32)
@@ -25,16 +29,19 @@ IF(WIN32)
   ENDIF(NOT BUILD_SHARED_LIBS)
 ENDIF(WIN32)
 
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatConfig.h.in ${CMEXPAT_SOURCE_DIR}/expatConfig.h)
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatConfig.h.in ${CMEXPAT_BINARY_DIR}/expatConfig.h)
+CONFIGURE_FILE(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_SOURCE_DIR}/expatConfig.h)
+#CONFIGURE_FILE(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h)
 
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatDllConfig.h.in ${CMEXPAT_BINARY_DIR}/expatDllConfig.h)
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expatDllConfig.h.in ${CMEXPAT_SOURCE_DIR}/expatDllConfig.h)
+#CONFIGURE_FILE(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h)
+CONFIGURE_FILE(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_SOURCE_DIR}/expatDllConfig.h)
 
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/.NoDartCoverage ${CMEXPAT_BINARY_DIR}/.NoDartCoverage)
+CONFIGURE_FILE(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
 
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/cm_expat_mangle.h ${CMEXPAT_BINARY_DIR}/cm_expat_mangle.h)
+#CONFIGURE_FILE(${expat_SOURCE_DIR}/cm_expat_mangle.h ${expat_BINARY_DIR}/cm_expat_mangle.h)
 
-CONFIGURE_FILE(${CMEXPAT_SOURCE_DIR}/expat.h ${CMEXPAT_BINARY_DIR}/expat.h)
+#CONFIGURE_FILE(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
 
-ADD_LIBRARY(expat ${expat_SRCS})
+ADD_LIBRARY(expat ${expat_sources})
+INSTALL_TARGETS(/lib expat)
+
+ENDIF(NOT VXL_USING_NATIVE_EXPAT)
