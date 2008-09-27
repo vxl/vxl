@@ -18,6 +18,7 @@ SET(vil_pro_sources
     vil_combine_grey_images_process.h         vil_combine_grey_images_process.cxx
     vil_load_from_ascii_process.h             vil_load_from_ascii_process.cxx
 
+    vil_stretch_image_process.h               vil_stretch_image_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)
