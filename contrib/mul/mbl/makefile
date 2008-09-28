@@ -82,6 +82,7 @@ MANPAGE_SOURCES += mbl_parse_tuple.h
 MANPAGE_SOURCES += mbl_progress_callback.h
 MANPAGE_SOURCES += mbl_load_text_file.txx
 MANPAGE_SOURCES += mbl_save_text_file.txx
+MANPAGE_SOURCES += mbl_parse_int_list.h
 
 MANPAGE_SOURCES += mbl_config.h.in
 
