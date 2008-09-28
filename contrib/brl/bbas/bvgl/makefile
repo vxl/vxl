@@ -6,6 +6,10 @@ VERSION := 1.0
 
 SOURCES += bvgl_articulated_poly.cxx
 MANPAGE_SOURCES += bvgl_articulated_poly_sptr.h
+SOURCES += bvgl_change_obj.cxx
+MANPAGE_SOURCES += bvgl_change_obj_sptr.h
+SOURCES += bvgl_changes.cxx
+MANPAGE_SOURCES += bvgl_changes_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

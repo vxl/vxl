@@ -33,6 +33,7 @@ TESTS += test_fit_plane_3d.cxx
 TESTS += test_intersection.cxx
 TESTS += test_rotation_3d.cxx
 TESTS += test_triangle_3d.cxx
+TESTS += test_triangle_3d_line_intersection.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

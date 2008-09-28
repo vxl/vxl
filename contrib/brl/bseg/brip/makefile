@@ -20,6 +20,9 @@ MANPAGE_SOURCES += brip_max_scale_response.txx
 MANPAGE_SOURCES += brip_quadtree_node.h
 MANPAGE_SOURCES += brip_quadtree_node_base_sptr.h
 MANPAGE_SOURCES += brip_quadtree_utils.txx
+SOURCES += brip_label_equivalence.cxx
+SOURCES += brip_line_generator.cxx
+SOURCES += brip_rect_mask.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -55,6 +55,7 @@ TESTS += test_dyn_prog.cxx
 TESTS += test_parse_tuple.cxx
 TESTS += test_progress.cxx
 TESTS += test_text_file.cxx
+TESTS += test_parse_int_list.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

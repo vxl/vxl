@@ -31,7 +31,7 @@ SOURCES += tif_error.c
 SOURCES += tif_extension.c
 SOURCES += tif_fax3.c
 SOURCES += tif_fax3sm.c
-SOURCES += fax3sm_winnt.c
+#SOURCES += fax3sm_winnt.c
 SOURCES += tif_getimage.c
 SOURCES += tif_jpeg.c
 SOURCES += tif_flush.c
@@ -56,11 +56,15 @@ SOURCES += tif_zip.c
 MANPAGE_SOURCES += port.h
 MANPAGE_SOURCES += t4.h
 MANPAGE_SOURCES += tiffcomp.h
+MANPAGE_SOURCES += tiffconf.h.in
 MANPAGE_SOURCES += tiffconf.h
+MANPAGE_SOURCES += tif_config.h
 MANPAGE_SOURCES += tiffio.h
 MANPAGE_SOURCES += tiffiop.h
 MANPAGE_SOURCES += tiffvers.h
 MANPAGE_SOURCES += uvcode.h
+
+SOURCES += tif_stream.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
