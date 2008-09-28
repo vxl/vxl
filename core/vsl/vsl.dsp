@@ -230,6 +230,9 @@ SOURCE=.\Templates/vsl_vector_io+vcl_pair+int.float--.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+unsigned--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+long-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

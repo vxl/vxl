@@ -127,7 +127,7 @@ SOURCE=.\Templates/brdb_value_t+int-.cxx
 SOURCE=.\Templates/brdb_value_t+long-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+unsigned-.cxx
+SOURCE=.\Templates/brdb_value_t+uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+vcl_string-.cxx

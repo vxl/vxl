@@ -96,7 +96,19 @@ LIB32=link.exe -lib
 SOURCE=.\bvgl_articulated_poly.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvgl_change_obj.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_changes.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvgl_articulated_poly-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvgl_change_obj-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvgl_changes-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -106,6 +118,18 @@ SOURCE=.\bvgl_articulated_poly.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvgl_articulated_poly_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_change_obj.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_change_obj_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_changes.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_changes_sptr.h
 # End Source File
 # End Group
 # End Target
