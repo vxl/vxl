@@ -1,5 +1,6 @@
 // This is mul/mbl/tests/test_parse_int_list.cxx
 #include <vcl_iostream.h>
+#include <vcl_iterator.h>
 #include <vcl_sstream.h>
 #include <vcl_vector.h>
 
@@ -9,13 +10,11 @@
 #include <testlib/testlib_test.h>
 
 
-
 void test_parse_int_list()
 {
   vcl_cout << "\n****************************\n"
            <<   " Testing mbl_parse_int_list\n"
            <<   "****************************\n";
-
 
   {
     vcl_cout << "\nCase 1\n";
@@ -140,11 +139,8 @@ void test_parse_int_list()
     TEST("Case 12: \" -1 : -1 \"", v.size()==1 && v[0]==-1 && !ss.fail(), true);
   }
 
-
-
   vcl_cout << "\n\n";
 }
-
 
 
 TESTMAIN(test_parse_int_list);
