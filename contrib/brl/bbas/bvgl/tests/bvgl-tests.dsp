@@ -251,6 +251,9 @@ SOURCE=.\test_articulated_poly.cxx
 # Begin Source File
 SOURCE=.\test_misc.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_bvgl_changes.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

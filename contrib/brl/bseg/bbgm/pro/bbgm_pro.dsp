@@ -113,6 +113,9 @@ SOURCE=.\bbgm_update_dist_image_process.cxx
 # Begin Source File
 SOURCE=.\bbgm_update_dist_image_stream_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bbgm_local_frame_trans_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -133,6 +136,9 @@ SOURCE=.\bbgm_update_dist_image_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bbgm_update_dist_image_stream_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_local_frame_trans_process.h
 # End Source File
 # End Group
 # End Target

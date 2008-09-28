@@ -89,7 +89,7 @@ LIB32=link.exe -lib
 # Name "tiff - Win32 Release"
 # Name "tiff - Win32 Debug"
 # Begin Group "Source Files"
-# PROP Default_Filter "c"
+# PROP Default_Filter "c cxx"
 # Begin Source File
 SOURCE=.\fax3sm_winnt.c
 # End Source File
@@ -201,6 +201,9 @@ SOURCE=.\tif_write.c
 # Begin Source File
 SOURCE=.\tif_zip.c
 # End Source File
+# Begin Source File
+SOURCE=.\tif_stream.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
@@ -239,6 +242,12 @@ SOURCE=.\tiffvers.h
 # End Source File
 # Begin Source File
 SOURCE=.\uvcode.h
+# End Source File
+# Begin Source File
+SOURCE=.\tif_config.h
+# End Source File
+# Begin Source File
+SOURCE=.\tiffconf.h.in
 # End Source File
 # End Group
 # End Target

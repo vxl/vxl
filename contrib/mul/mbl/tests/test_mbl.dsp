@@ -269,6 +269,9 @@ SOURCE=.\test_progress.cxx
 SOURCE=.\test_text_file.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_parse_int_list.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

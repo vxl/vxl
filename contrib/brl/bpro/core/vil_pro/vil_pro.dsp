@@ -122,6 +122,15 @@ SOURCE=.\vil_combine_grey_images_process.cxx
 # Begin Source File
 SOURCE=.\vil_load_from_ascii_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_gaussian_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_gradient_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_stretch_image_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -154,6 +163,15 @@ SOURCE=.\vil_combine_grey_images_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_load_from_ascii_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_gaussian_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_gradient_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_stretch_image_process.h
 # End Source File
 # End Group
 # End Target

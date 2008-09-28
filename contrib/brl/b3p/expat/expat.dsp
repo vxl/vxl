@@ -118,22 +118,13 @@ SOURCE=.\expat.h
 SOURCE=.\iasciitab.h
 # End Source File
 # Begin Source File
-SOURCE=.\internal.h
-# End Source File
-# Begin Source File
 SOURCE=.\latin1tab.h
-# End Source File
-# Begin Source File
-SOURCE=.\macconfig.h
 # End Source File
 # Begin Source File
 SOURCE=.\nametab.h
 # End Source File
 # Begin Source File
 SOURCE=.\utf8tab.h
-# End Source File
-# Begin Source File
-SOURCE=.\winconfig.h
 # End Source File
 # Begin Source File
 SOURCE=.\xmlrole.h
@@ -143,6 +134,15 @@ SOURCE=.\xmltok.h
 # End Source File
 # Begin Source File
 SOURCE=.\xmltok_impl.h
+# End Source File
+# Begin Source File
+SOURCE=.\cm_expat_mangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\expatConfig.h.in
+# End Source File
+# Begin Source File
+SOURCE=.\expatDllConfig.h.in
 # End Source File
 # End Group
 # End Target
