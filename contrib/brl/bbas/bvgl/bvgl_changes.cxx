@@ -18,15 +18,15 @@ void bvgl_changes::add_obj(bvgl_change_obj_sptr obj)
   objs_.push_back(obj);
 }
 
-/*void bvgl_changes::xml_read()
+#if 0
+void bvgl_changes::xml_read()
 {
-
 }
 
 void bvgl_changes::xml_write()
 {
-
-}*/
+}
+#endif // 0
 
 //: Return IO version number;
 unsigned char
@@ -36,7 +36,7 @@ bvgl_changes::version(  ) const
 }
 
 //: binary IO write
-void bvgl_changes::b_write(vsl_b_ostream& os) 
+void bvgl_changes::b_write(vsl_b_ostream& os)
 {
   // first write the version number;
   unsigned char ver = version();
@@ -47,36 +47,33 @@ void bvgl_changes::b_write(vsl_b_ostream& os)
   for (unsigned i = 0; i < objs_.size(); i++) {
     objs_[i]->b_write(os);
   }
-
 }
 
 
 //: binary IO read
-void bvgl_changes::b_read(vsl_b_istream& is) 
+void bvgl_changes::b_read(vsl_b_istream& is)
 {
   // first read the version number;
   unsigned char ver;
   vsl_b_read(is, ver);
 
-  switch(ver) 
+  switch (ver)
   {
-  case 1: 
+   case 1:
     {
       vsl_b_read(is, img_name_);
       unsigned size;
       vsl_b_read(is, size);
-      for (unsigned i = 0; i < size; i++) {
+      for (unsigned i = 0; i < size; ++i) {
         bvgl_change_obj o;
         o.b_read(is);
         objs_.push_back(new bvgl_change_obj(o));
       }
       break;
     }
-  default: 
-    {
-      vcl_cout << "In bvgl_changes::b_read() -- Unrecognized version number\n";
-      break;
-    }
+   default:
+    vcl_cout << "In bvgl_changes::b_read() -- Unrecognized version number " << ver << vcl_endl;
+    break;
   }
 
   return;

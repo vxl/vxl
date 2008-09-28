@@ -13,10 +13,6 @@
 
 #include <bgui/bgui_image_utils.h>
 
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_property.h>
-
-
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
 
