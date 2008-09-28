@@ -7,9 +7,7 @@
 // \date  7-Aug-2007
 // \brief Load a int_list of PODs/objects from a config file.
 
-#include <vcl_algorithm.h>
 #include <vcl_istream.h>
-#include <vcl_iterator.h>
 #include <vcl_cctype.h>
 #include <mbl/mbl_exception.h>
 
@@ -45,7 +43,6 @@ inline void mbl_parse_int_list(vcl_istream &afs, ITER insert_iter, T)
 
   while (true)
   {
-    
     char c;
     afs >> vcl_ws >> c;
     if (afs.eof() || (c =='}' && openbrace))
@@ -87,7 +84,7 @@ inline void mbl_parse_int_list(vcl_istream &afs, ITER insert_iter, T)
       afs.clear();
       return;
     }
-    else if (!afs) 
+    else if (!afs)
     {
       mbl_exception_warning(mbl_exception_parse_error(
         "mbl_parse_int_list: non-integer detected") );
@@ -108,16 +105,15 @@ inline void mbl_parse_int_list(vcl_istream &afs, ITER insert_iter, T)
     }
     else
     {
-
       T last;
       afs >> vcl_ws >> last;
-      if (afs.eof()) 
+      if (afs.eof())
       {
         mbl_exception_warning(mbl_exception_parse_error(
           "mbl_parse_int_list: unexpected EOF") );
         return;
       }
-      if (!afs) 
+      if (!afs)
       {
         mbl_exception_warning(mbl_exception_parse_error(
           "mbl_parse_int_list: Unknown stream error") );
@@ -133,7 +129,6 @@ inline void mbl_parse_int_list(vcl_istream &afs, ITER insert_iter, T)
       }
       while (current <= last)
         *insert_iter++ = current++;
-
     }
   }
 }

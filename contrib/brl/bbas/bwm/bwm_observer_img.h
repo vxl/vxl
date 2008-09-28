@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
 

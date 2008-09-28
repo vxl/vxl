@@ -4,13 +4,9 @@
 // \file
 
 #include "vil_math_functors.h"
-#include <vil/vil_convert.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_transform.h>
-#include <vil/vil_math.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_convert.h>
 
 //: Constructor
 vil_stretch_image_process::vil_stretch_image_process()
@@ -59,10 +55,10 @@ vil_stretch_image_process::execute()
 
   // retrieve float image
   vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
-  vil_image_view<float>fimg = *fimage;
+  vil_image_view<float> fimg = *fimage;
 
-    vil_image_view<vxl_byte>* temp = new vil_image_view<vxl_byte>;
-    vil_convert_stretch_range_limited(fimg, *temp, min_limit, max_limit);
+  vil_image_view<vxl_byte>* temp = new vil_image_view<vxl_byte>;
+  vil_convert_stretch_range_limited(fimg, *temp, min_limit, max_limit);
 
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(temp);
   output_data_[0] = output0;
