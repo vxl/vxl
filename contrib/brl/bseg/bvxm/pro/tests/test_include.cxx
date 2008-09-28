@@ -10,6 +10,7 @@
 #include <bvxm/pro/bvxm_gen_synthetic_world_process.h>
 #include <bvxm/pro/bvxm_heightmap_process.h>
 #include <bvxm/pro/bvxm_illum_index_process.h>
+#include <bvxm/pro/bvxm_lidar_edge_detection_process.h>
 #include <bvxm/pro/bvxm_lidar_init_process.h>
 #include <bvxm/pro/bvxm_normalize_image_process.h>
 #include <bvxm/pro/bvxm_ocp_compare_process.h>
@@ -20,10 +21,12 @@
 #include <bvxm/pro/bvxm_render_expected_image_process.h>
 #include <bvxm/pro/bvxm_render_virtual_view_process.h>
 #include <bvxm/pro/bvxm_roi_init_process.h>
+#include <bvxm/pro/bvxm_rpc_prob_registration_process.h>
 #include <bvxm/pro/bvxm_rpc_registration_process.h>
 #include <bvxm/pro/bvxm_save_edges_raw_process.h>
 #include <bvxm/pro/bvxm_save_occupancy_raw_process.h>
 #include <bvxm/pro/bvxm_save_occupancy_vff_process.h>
+#include <bvxm/pro/bvxm_update_edges_lidar_process.h>
 #include <bvxm/pro/bvxm_update_process.h>
 #include <bvxm/pro/bvxm_update_lidar_process.h>
 

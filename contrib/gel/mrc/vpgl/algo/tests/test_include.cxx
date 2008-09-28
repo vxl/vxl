@@ -14,6 +14,7 @@
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
 #include <vpgl/algo/vpgl_lens_warp_mapper.h>
 #include <vpgl/algo/vpgl_list.h>
+#include <vpgl/algo/vpgl_nitf_camera_coverage.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_project.h>

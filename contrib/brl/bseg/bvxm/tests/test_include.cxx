@@ -3,6 +3,7 @@
 #include <bvxm/bvxm_lidar_processor.h>
 #include <bvxm/bvxm_memory_chunk.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
+#include <bvxm/bvxm_mog_mc_processor.h>
 #include <bvxm/bvxm_mog_rgb_processor.h>
 #include <bvxm/bvxm_util.h>
 #include <bvxm/bvxm_voxel_grid.h>

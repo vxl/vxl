@@ -16,6 +16,7 @@
 #include <vil3d/algo/vil3d_grad_3x3x3.h>
 #include <vil3d/algo/vil3d_histogram.h>
 #include <vil3d/algo/vil3d_histogram_equalise.h>
+#include <vil3d/algo/vil3d_locally_z_normalise.h>
 #include <vil3d/algo/vil3d_make_distance_filter.h>
 #include <vil3d/algo/vil3d_make_edt_filter.h>
 #include <vil3d/algo/vil3d_max_product_filter.h>

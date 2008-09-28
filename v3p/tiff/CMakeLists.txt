@@ -15,11 +15,13 @@ INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
 
 IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
-  
+
 SET( tiff_sources
 # Header files
   tiff.h
+  tiffcomp.h
   tiffconf.h
+  tiffconf.h.in
   tif_config.h
   tiffio.h
   tiffvers.h
@@ -29,7 +31,8 @@ SET( tiff_sources
   tiffiop.h
   uvcode.h
   tif_fax3.h
-  
+  port.h
+
 # source files
   tif_aux.c
   tif_close.c
@@ -43,7 +46,7 @@ SET( tiff_sources
   tif_dumpmode.c
   tif_error.c
   tif_extension.c
-  tif_fax3.c  
+  tif_fax3.c
   tif_fax3sm.c
   tif_flush.c
   tif_getimage.c
@@ -66,12 +69,12 @@ SET( tiff_sources
   tif_version.c
   tif_warning.c
   tif_write.c
-  tif_zip.c       
+  tif_zip.c
 )
 
 IF(UNIX)
   SET( tiff_sources ${tiff_sources}
-    tif_unix.c 
+    tif_unix.c
   )
 ELSE(UNIX)
   ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
