@@ -5,11 +5,12 @@ IF(wxWidgets_FOUND)
   
   INCLUDE( ${wxWidgets_USE_FILE} )
   #INCLUDE_DIRECTORIES(${wxWidgets_INCLUDE_DIRS})
-	
+
   # Simple example not using the Document/View architecture.
   SET(bwm_wx_example_sources
     bwm_wx_app.h     bwm_wx_app.cxx
     bwm_wx_frame.h   bwm_wx_frame.cxx
+    bwm_wx_menu.h
   )
   
   CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/crosscut.xrc ${CMAKE_CURRENT_BINARY_DIR}/crosscut.xrc COPYONLY )
