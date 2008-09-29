@@ -3,18 +3,17 @@
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
 
 SET(vidl2_pro_sources
-    vidl2_io_istream.h vidl2_io_istream.cxx
-    vidl2_io_ostream.h vidl2_io_ostream.cxx
-    vidl2_open_istream_process.cxx vidl2_open_istream_process.h 
-    vidl2_open_ostream_process.cxx vidl2_open_ostream_process.h 
-    vidl2_pro_utils.h      vidl2_pro_utils.cxx
+    vidl2_io_istream.h             vidl2_io_istream.cxx
+    vidl2_io_ostream.h             vidl2_io_ostream.cxx
+    vidl2_open_istream_process.h   vidl2_open_istream_process.cxx
+    vidl2_open_ostream_process.h   vidl2_open_ostream_process.cxx
+    vidl2_pro_utils.h              vidl2_pro_utils.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vidl2_pro_sources)
 
 ADD_LIBRARY(vidl2_pro ${vidl2_pro_sources})
 TARGET_LINK_LIBRARIES(vidl2_pro bprb brdb vidl2 vsl)
-
-

@@ -3,6 +3,7 @@
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
 SET( vpgl_pro_sources
@@ -19,4 +20,3 @@ AUX_SOURCE_DIRECTORY(Templates vpgl_pro_sources)
 
 ADD_LIBRARY(vpgl_pro ${vpgl_pro_sources})
 TARGET_LINK_LIBRARIES(vpgl_pro bprb brdb vpgl_io vpgl vpgl_algo vnl vil)
-
