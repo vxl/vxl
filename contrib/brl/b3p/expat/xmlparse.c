@@ -532,8 +532,8 @@ XML_Parser XML_ParserCreateNS(const XML_Char *encodingName, XML_Char nsSep)
 XML_Parser
 XML_ParserCreate_MM(const XML_Char *encodingName,
                     const XML_Memory_Handling_Suite *memsuite,
-                    const XML_Char *nameSep) {
-  
+                    const XML_Char *nameSep)
+{
   XML_Parser parser;
   static
   const XML_Char implicitContext[] = {
@@ -669,25 +669,26 @@ XML_ParserCreate_MM(const XML_Char *encodingName,
   return parser;
 }  /* End XML_ParserCreate_MM */
 
+#if 0
 /* moves list of bindings to freeBindingList */
-/*static void FASTCALL
+static void FASTCALL
 moveToFreeBindingList(XML_Parser parser, BINDING *bindings)
 {
- while (bindings) {
+  while (bindings) {
     BINDING *b = bindings;
     bindings = bindings->nextTagBinding;
     b->nextTagBinding = freeBindingList;
     freeBindingList = b;
-   }
- }
+  }
+}
 
- XML_Bool
- XML_ParserReset(XML_Parser parser, const XML_Char *encodingName)
- {
-   TAG *tStk;
-   if (parentParser)
+XML_Bool
+XML_ParserReset(XML_Parser parser, const XML_Char *encodingName)
+{
+  TAG *tStk;
+  if (parentParser)
     return XML_FALSE;
-  ///* move tagStack to freeTagList 
+  /* move tagStack to freeTagList */
   tStk = tagStack;
   while (tStk) {
     TAG *tag = tStk;
@@ -700,15 +701,16 @@ moveToFreeBindingList(XML_Parser parser, BINDING *bindings)
   moveToFreeBindingList(parser, inheritedBindings);
   if (unknownEncodingMem)
     FREE(unknownEncodingMem);
-   if (unknownEncodingRelease)
+  if (unknownEncodingRelease)
     unknownEncodingRelease(unknownEncodingData);
-    poolClear(&tempPool);
-    poolClear(&temp2Pool);
-    parserInit(parser, encodingName);
-    dtdReset(_dtd, &parser->m_mem);
-    return setContext(parser, implicitContext);
- }
-*/
+  poolClear(&tempPool);
+  poolClear(&temp2Pool);
+  parserInit(parser, encodingName);
+  dtdReset(_dtd, &parser->m_mem);
+  return setContext(parser, implicitContext);
+}
+#endif /* 0 */
+
 int XML_SetEncoding(XML_Parser parser, const XML_Char *encodingName)
 {
   if (!encodingName)
@@ -1358,7 +1360,8 @@ XML_ExpatVersion(void) {
 }
 
 XML_Expat_Version
-XML_ExpatVersionInfo(void) {
+XML_ExpatVersionInfo(void)
+{
   XML_Expat_Version version;
 
   version.major = XML_MAJOR_VERSION;
@@ -1429,23 +1432,24 @@ enum XML_Error externalEntityInitProcessor3(XML_Parser parser,
 {
   const char *next;
   int tok = XmlContentTok(encoding, start, end, &next);
-  switch (tok) {
-  case XML_TOK_XML_DECL:
+  switch (tok)
+  {
+   case XML_TOK_XML_DECL:
     {
       enum XML_Error result = processXmlDecl(parser, 1, start, next);
       if (result != XML_ERROR_NONE)
         return result;
       start = next;
+      break;
     }
-    break;
-  case XML_TOK_PARTIAL:
+   case XML_TOK_PARTIAL:
     if (endPtr) {
       *endPtr = start;
       return XML_ERROR_NONE;
     }
     eventPtr = start;
     return XML_ERROR_UNCLOSED_TOKEN;
-  case XML_TOK_PARTIAL_CHAR:
+   case XML_TOK_PARTIAL_CHAR:
     if (endPtr) {
       *endPtr = start;
       return XML_ERROR_NONE;
@@ -1810,7 +1814,7 @@ doContent(XML_Parser parser,
         if (startCdataSectionHandler)
           startCdataSectionHandler(handlerArg);
 #if 0
-        /* Suppose you doing a transformation on a document that involves
+        /* Suppose you're doing a transformation on a document that involves
            changing only the character data.  You set up a defaultHandler
            and a characterDataHandler.  The defaultHandler simply copies
            characters through.  The characterDataHandler does the transformation
@@ -2698,7 +2702,7 @@ doProlog(XML_Parser parser,
                                         entity->base,
                                         entity->systemId,
                                         entity->publicId))
-           return XML_ERROR_EXTERNAL_ENTITY_HANDLING;
+            return XML_ERROR_EXTERNAL_ENTITY_HANDLING;
         }
 #endif /* XML_DTD */
         if (!dtd.complete
@@ -3192,7 +3196,7 @@ doProlog(XML_Parser parser,
         dtd.in_eldecl = 0;
       }
       break;
-      
+
     case XML_ROLE_CONTENT_PCDATA:
       if (dtd.in_eldecl) {
         dtd.scaffold[dtd.scaffIndex[dtd.scaffLevel - 1]].type = XML_CTYPE_MIXED;
@@ -3696,7 +3700,7 @@ reportComment(XML_Parser parser, const ENCODING *enc, const char *start, const c
   }
   data = poolStoreString(&tempPool,
                          enc,
-                         start + enc->minBytesPerChar * 4, 
+                         start + enc->minBytesPerChar * 4,
                          end - enc->minBytesPerChar * 3);
   if (!data)
     return 0;
@@ -3792,7 +3796,6 @@ static int setElementTypePrefix(XML_Parser parser, ELEMENT_TYPE *elementType)
       else
         poolDiscard(&dtd.pool);
       elementType->prefix = prefix;
-
     }
   }
   return 1;
@@ -4005,7 +4008,7 @@ void normalizePublicId(XML_Char *publicId)
 
 static int dtdInit(DTD *p, XML_Parser parser)
 {
-  XML_Memory_Handling_Suite *ms = &((Parser *) parser)->m_mem; 
+  XML_Memory_Handling_Suite *ms = &((Parser *) parser)->m_mem;
   poolInit(&(p->pool), ms);
   hashTableInit(&(p->generalEntities), ms);
   hashTableInit(&(p->elementTypes), ms);
@@ -4458,7 +4461,6 @@ static const XML_Char *poolCopyStringN(STRING_POOL *pool, const XML_Char *s, int
   for (; n > 0; --n, s++) {
     if (!poolAppendChar(pool, *s))
       return 0;
-
   }
   s = pool->start;
   poolFinish(pool);
@@ -4472,7 +4474,7 @@ const XML_Char *poolAppendString(STRING_POOL *pool, const XML_Char *s)
     if (!poolAppendChar(pool, *s))
       return 0;
     s++;
-  } 
+  }
   return pool->start;
 }  /* End poolAppendString */
 
@@ -4573,7 +4575,7 @@ nextScaffoldPart(XML_Parser parser)
   }
   next = dtd.scaffCount++;
   me = &dtd.scaffold[next];
-  if (dtd.scaffLevel) { 
+  if (dtd.scaffLevel) {
     CONTENT_SCAFFOLD *parent = &dtd.scaffold[dtd.scaffIndex[dtd.scaffLevel - 1]];
     if (parent->lastchild) {
       dtd.scaffold[parent->lastchild].nextsib = next;
@@ -4631,7 +4633,7 @@ build_model (XML_Parser parser)
   XML_Content *cpos;
   char * str;
   int allocsize = dtd.scaffCount * sizeof(XML_Content) + dtd.contentStringLen;
-  
+
   ret = MALLOC(allocsize);
   if (! ret)
     return 0;
