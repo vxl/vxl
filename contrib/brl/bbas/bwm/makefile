@@ -66,7 +66,7 @@ include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-SUBDIRS += tests exe
+SUBDIRS += tests exe wxWidgets
 endif
 
 ######################################
