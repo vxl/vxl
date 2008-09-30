@@ -113,20 +113,26 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     mask_menu.add( "Init Mask",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
 
+    mask_menu.add( "Set Change Type",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::set_change_type));
+
     mask_menu.add( "Add Regions to Mask(selected polygons)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
-
-    mask_menu.add( "Add 'Don't Care' Regions to Mask(selected polygons)",
-      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_dontcare_poly_to_mask));
 
     mask_menu.add( "Remove Regions from Mask(selected polygons)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
 
-    mask_menu.add( "Create Mask Image(bool)",
-      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
+    //mask_menu.add( "Create Mask Image(bool)",
+    //  new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
 
-    mask_menu.add( "Save Mask Image(bool)",
+    mask_menu.add( "Save Mask Image",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_mask));
+
+    mask_menu.add( "Save Changes(Binary)",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_changes_binary));
+
+    mask_menu.add( "Load Changes(Binary)",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::load_changes_binary));
     image_submenu.add("Mask Ops", mask_menu);
   }
   //image_submenu.separator();

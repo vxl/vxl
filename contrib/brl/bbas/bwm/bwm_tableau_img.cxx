@@ -291,16 +291,16 @@ void bwm_tableau_img::add_poly_to_mask()
   my_observer_->add_poly_to_mask();
 }
 
-void bwm_tableau_img::add_dontcare_poly_to_mask()
+/*void bwm_tableau_img::add_dontcare_poly_to_mask()
 {
   my_observer_->add_dontcare_poly_to_mask();
-}
+}*/
 
 void bwm_tableau_img::remove_poly_from_mask()
 {
   my_observer_->remove_poly_from_mask();
 }
-void bwm_tableau_img::create_mask()
+/*void bwm_tableau_img::create_mask()
 {
   my_observer_->create_mask();
-}
+}*/

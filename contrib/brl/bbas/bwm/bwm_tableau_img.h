@@ -76,11 +76,12 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   
   //: mask operations
   void init_mask();
+  void set_change_type() { my_observer_->set_change_type(); }
   void add_poly_to_mask();
-  void add_dontcare_poly_to_mask();
   void remove_poly_from_mask();
-  void create_mask();
   void save_mask();
+  void save_changes_binary(){ my_observer_->save_changes_binary();}
+  void load_changes_binary(){ my_observer_->load_changes_binary();}
 
   //: utilities
   void save_spatial_objects_2d();
@@ -88,8 +89,8 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   //: internal detail
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { my_observer_->set_viewer(viewer); }
 
-  void set_poly_mode() { my_observer_->set_draw_mode(0); }
-  void set_vertex_mode() { my_observer_->set_draw_mode(1); }
+  void set_poly_mode() { my_observer_->set_draw_mode((bwm_observer_img::MODE_2D_POLY)); }
+  void set_vertex_mode() { my_observer_->set_draw_mode((bwm_observer_img::MODE_2D_VERTEX)); }
   
  protected:
   void lock();

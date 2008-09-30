@@ -166,7 +166,7 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void set_draw_mode(BWM_DRAW_MODE mode) {mode_=mode; update_all();}
   void set_mesh_mode() { mode_ = bwm_observer_vgui::MODE_MESH; update_all();}
-  void set_face_mode() { mode_ = bwm_observer_vgui::MODE_FACE; update_all();}
+  void set_face_mode() { mode_ = bwm_observer_vgui::MODE_POLY; update_all();}
   void set_edge_mode() { mode_ = bwm_observer_vgui::MODE_EDGE; update_all();}
   void set_vertex_mode() { mode_ = bwm_observer_vgui::MODE_VERTEX; update_all();}
 

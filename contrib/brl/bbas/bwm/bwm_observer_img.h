@@ -23,6 +23,11 @@
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
+#include <bvgl/bvgl_change_obj.h>
+#include <bvgl/bvgl_change_obj_sptr.h>
+#include <bvgl/bvgl_changes.h>
+#include <bvgl/bvgl_changes_sptr.h>
+
 #define VERTEX_TYPE "bwm_soview2D_vertex"
 #define POLYLINE_TYPE "bgui_vsol_soview2D_polyline"
 #define POLYGON_TYPE "bgui_vsol_soview2D_polygon"
@@ -31,6 +36,8 @@
 class bwm_observer_img : public bgui_vsol2D_tableau
 {
  public:
+
+  enum BWM_2D_DRAW_MODE {MODE_2D_POLY, MODE_2D_EDGE, MODE_2D_VERTEX, MODE_2D_UNDEF};
 
   typedef bgui_vsol2D_tableau base;
 
@@ -42,7 +49,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
     show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
     moving_v_(0), moving_vertex_(false), moving_polygon_(false),
     in_jog_mode_(false), row_(0), col_(0), mask_(0), lock_vgui_status_(false),
-    vgui_status_on_(false), draw_mode_(0) {  }
+    vgui_status_on_(false), draw_mode_(MODE_2D_POLY), change_type_("change") {  }
 
   virtual ~bwm_observer_img();
 
@@ -58,13 +65,13 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   virtual vcl_string type_name() const { return "bwm_observer_img"; }
 
-  void create_box(vsol_box_2d_sptr);
+  unsigned create_box(vsol_box_2d_sptr);
 
-  void create_polygon(vsol_polygon_2d_sptr);
+  unsigned create_polygon(vsol_polygon_2d_sptr);
 
-  void create_polyline(vsol_polyline_2d_sptr);
+  unsigned create_polyline(vsol_polyline_2d_sptr);
 
-  void create_point(vsol_point_2d_sptr);
+  unsigned create_point(vsol_point_2d_sptr);
 
   void copy();
 
@@ -119,11 +126,15 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   vcl_string image_path(){return img_tab_->file_name();}
 
   void init_mask();
+  //: sets the change type for ground truth areas
+  void set_change_type();
   void add_poly_to_mask();
-  void add_dontcare_poly_to_mask();
+  //void add_dontcare_poly_to_mask();
   void remove_poly_from_mask();
-  void create_mask();
-  vil_image_view_base_sptr mask(){return mask_;}
+  //void create_mask();
+  vil_image_view_base_sptr mask();
+  bool save_changes_binary();
+  bool load_changes_binary();
 
   //: lock/unlock the status display
   void lock_vgui_status(bool lock){lock_vgui_status_ = lock;}
@@ -139,7 +150,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   vcl_vector<vsol_spatial_object_2d_sptr> get_spatial_objects_2d();
 
   //: set the draw mode to either polygon or vertex
-  void set_draw_mode(unsigned int mode);
+  void set_draw_mode(BWM_2D_DRAW_MODE mode);
 
  protected:
   //:flags to indicate vgui status displays by observers
@@ -151,7 +162,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //  so image pixel values should be blocked
   bool vgui_status_on_;
 
-  unsigned draw_mode_;
+  enum BWM_2D_DRAW_MODE draw_mode_;
 
   bwm_observer_img(){};
 
@@ -162,10 +173,13 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   vil_image_view_base_sptr mask_;
 
   //: change areas, mapped to the soviewID for easy deletion
-  vcl_map<unsigned int, vsol_polygon_2d_sptr> mask_polys_;
+  vcl_map<unsigned int, bvgl_change_obj_sptr> change_polys_;
 
-  //: don't care areas
-  vcl_map<unsigned int, vsol_polygon_2d_sptr> mask_dontcare_polys_;
+  //: ground truth areas
+  bvgl_changes_sptr ground_truth_;
+
+  //: the current ground truth change type
+  vcl_string change_type_;
 
   bool show_image_path_;
 

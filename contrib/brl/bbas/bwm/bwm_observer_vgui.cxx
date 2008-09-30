@@ -59,7 +59,7 @@ bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
   select_style_->line_width = 5.0;
 
   // initial mode is FACE
-  mode_= MODE_FACE;
+  mode_= MODE_POLY;
 }
 
 bool bwm_observer_vgui::handle(const vgui_event& e)
@@ -170,7 +170,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
     else if (observable->obj_type() == bwm_observable_mesh::BWM_MESH_TERRAIN)
       style = terrain_style_;
 
-    if (mode_ == MODE_FACE) {
+    if (mode_ == MODE_POLY) {
       vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
 
       vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();

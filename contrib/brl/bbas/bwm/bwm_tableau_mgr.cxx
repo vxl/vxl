@@ -230,7 +230,7 @@ void bwm_tableau_mgr::set_draw_mode_edge()
 
 void bwm_tableau_mgr::set_draw_mode_face()
 {
-  this->set_observer_draw_mode(bwm_observer::MODE_FACE);
+  this->set_observer_draw_mode(bwm_observer::MODE_POLY);
 }
 
 void bwm_tableau_mgr::set_draw_mode_mesh()

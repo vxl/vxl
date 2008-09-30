@@ -96,7 +96,7 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io bmsh3d bmsh3d_algo bgeo expatpp bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl vpgl vpgl_algo vpgl_file_formats)
+TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io bmsh3d bmsh3d_algo bgeo expatpp bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl vpgl vpgl_algo vpgl_file_formats bvgl)
 
 SUBDIRS(exe)
 SUBDIRS(algo)

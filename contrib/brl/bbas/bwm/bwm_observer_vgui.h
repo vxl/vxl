@@ -121,7 +121,6 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   vcl_vector<vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > > corr_;
 
   //: objects are kept as a triple (bwm_observable *, face_id, bgui_vsol_soview2D_polygon*)
-  //vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > > objects_;
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D* > > objects_;
 
   //: vertices are kept as a pair (bwm_observable *, vector<bwm_soview2D_vertex*> )
