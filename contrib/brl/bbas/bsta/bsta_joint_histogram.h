@@ -49,6 +49,8 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
       counts_[r][c]=cnt;
   }
 
+  void print_to_vrml(vcl_ostream& os) const;
+
  private:
   void compute_volume() const; // mutable const
   mutable bool volume_valid_;
