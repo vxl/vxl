@@ -13,7 +13,8 @@
 #define bvgl_changes_h_
 
 #include <vbl/vbl_ref_count.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
+
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include "bvgl_change_obj_sptr.h"
@@ -23,7 +24,11 @@ class bvgl_changes : public vbl_ref_count
  public:
   bvgl_changes() {}
 
+  ~bvgl_changes() {}
+
   unsigned size() { return objs_.size(); }
+
+  bvgl_change_obj_sptr obj(unsigned int i);
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);
@@ -36,9 +41,12 @@ class bvgl_changes : public vbl_ref_count
   //void xml_read();
   //void xml_write();
 
-  vil_image_view<vxl_byte> create_mask_from_objs();
-  void add_obj(bvgl_change_obj_sptr obj);
+  vil_image_view_base_sptr create_mask_from_objs(unsigned ni, unsigned nj);
 
+  void add_obj(bvgl_change_obj_sptr obj);
+  void remove_obj(bvgl_change_obj_sptr obj);
+
+private:
   vcl_vector<bvgl_change_obj_sptr> objs_;
   vcl_string img_name_;
 };

@@ -4,18 +4,55 @@
 
 #include "bvgl_changes.h"
 #include "bvgl_change_obj.h"
+#include <vil/vil_image_view.h>
+#include <vgl/vgl_polygon_scan_iterator.h>
 
-//TODO: implement this!
-vil_image_view<vxl_byte> bvgl_changes::create_mask_from_objs()
+vil_image_view_base_sptr
+bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj)
 {
-  vil_image_view<vxl_byte> img;
+  vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj);
+  mask->fill(0);
 
-  return img;
+  //index through the polygons and create the boolean mask image
+  for (unsigned i=0; i<objs_.size(); i++)
+  {
+
+    vgl_polygon<double> v_poly =  objs_[i]->poly();
+    vgl_polygon_scan_iterator<double> psi(v_poly, false);
+    for (psi.reset(); psi.next();){
+      int y = psi.scany();
+      for (int x = psi.startx(); x<=psi.endx(); ++x)
+      {
+        unsigned u = static_cast<unsigned>(x);
+        unsigned v = static_cast<unsigned>(y);
+        if (objs_[i]->type().compare("change")==0)
+          (*mask)(u,v) = 255;
+        else  // don't care areas
+          (*mask)(u,v) = 125;
+      }
+    }
+  }
+
+  return mask;
 }
 
 void bvgl_changes::add_obj(bvgl_change_obj_sptr obj)
 {
   objs_.push_back(obj);
+}
+
+void bvgl_changes::remove_obj(bvgl_change_obj_sptr obj)
+{
+  vcl_vector<bvgl_change_obj_sptr>::iterator iter = objs_.begin();
+  while (iter!=objs_.end()) {
+    if (*iter == obj) {
+      objs_.erase(iter);
+      vcl_cout << "DELETED!" << vcl_endl;
+      return;
+    }
+    iter++;
+  }
+  vcl_cout << "Object is no FOUND!" << vcl_endl;
 }
 
 #if 0
@@ -77,4 +114,12 @@ void bvgl_changes::b_read(vsl_b_istream& is)
   }
 
   return;
+}
+
+bvgl_change_obj_sptr 
+bvgl_changes::obj(unsigned int i) 
+{ 
+  if (i<size()) 
+    return objs_[i]; 
+  return 0;
 }

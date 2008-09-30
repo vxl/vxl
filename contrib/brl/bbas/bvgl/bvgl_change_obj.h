@@ -16,6 +16,7 @@
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 
 class bvgl_change_obj: public vbl_ref_count
 {
@@ -24,6 +25,7 @@ class bvgl_change_obj: public vbl_ref_count
   bvgl_change_obj(vgl_polygon<double>& poly, vcl_string cls) : poly_(poly), class_(cls) {}
   bvgl_change_obj(const bvgl_change_obj& other);
   bvgl_change_obj() {}
+  ~bvgl_change_obj() {}
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);
@@ -34,9 +36,12 @@ class bvgl_change_obj: public vbl_ref_count
   //: Return IO version number;
   unsigned char version() const;
 
+  vgl_polygon<double> poly() {return poly_; }
+
+  vcl_string type() { return class_; }
   //void xml_read();
   //void xml_write();
-
+private:
   vcl_string class_;
   vgl_polygon<double> poly_;
 };

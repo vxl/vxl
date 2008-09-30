@@ -4,6 +4,8 @@
 
 #include "bvgl_change_obj.h"
 #include <vgl/io/vgl_io_polygon.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_point_2d.h>
 
 bvgl_change_obj::bvgl_change_obj(const bvgl_change_obj& other)
 {
