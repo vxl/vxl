@@ -139,6 +139,62 @@ void bsta_joint_histogram<T>::print(vcl_ostream& os) const
         os << "p[" << a << "][" << b << "]=" << p(a,b) << '\n';
 }
 
+template <class T>
+void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
+{
+  // we need to scale the display, find magnitude of largest value
+  T max = (T)0;
+  for (unsigned int a = 0; a<nbins_; a++)
+    for (unsigned int b = 0; b<nbins_; b++)
+      if (p(a,b) > max)
+        max = p(a,b);
+        
+  os << "#VRML V2.0 utf8\n";
+  os << "Group { children [\n";
+  
+  for (unsigned int a = 0; a<nbins_; a++) {
+    for (unsigned int b = 0; b<nbins_; b++) {
+      if (p(a,b) > 0) {
+        float height = float((p(a,b)/max)*nbins_);
+        os << "Transform {\n";
+        os << "  translation " << a << " " << b << " " << height << vcl_endl;
+        os << "  children Shape {\n";
+        os << "    geometry Sphere { radius 0.2 }\n";
+        os << "    appearance DEF A1 Appearance {";
+        os << "      material Material {\n";
+        os << "        diffuseColor 1 0 0\n";
+        os << "        emissiveColor .3 0 0\n";
+        os << "      }\n";
+        os << "    }\n";
+        os << "  }\n";
+        os << "}\n";
+        os << "Transform { \n";
+        os << "  translation " << a << " " << b << " " << height/2.0 << "\n";
+        os << "  rotation 1 0 0 " << vnl_math::pi/2.0 << " \n";
+        os << "  children Shape { \n";
+        os << "    appearance USE A1 \n"; 
+        os << "    geometry Cylinder { radius 0.05 height " << height << " }\n";
+        os << "  }\n";
+        os << "}\n";
+      }
+    }
+  }
+  
+  os << "Transform {\n";
+  os << "  translation " << (nbins_-1)/2.0f << " " << (nbins_-1)/2.0f << " 0\n";
+  os << "  children Shape {\n";
+  os << "    geometry Box { size " << nbins_-1 << " " << nbins_-1 << " 0.3 } \n";
+  os << "    appearance Appearance { \n";
+  os << "      material Material { diffuseColor 0.8 0.8 0.8 } \n";
+  os << "    } \n";
+  os << "  } \n";
+  os << "}\n";
+  
+  os << "Background { skyColor 1 1 1 }\n";
+  os << "NavigationInfo { type \"EXAMINE\" }\n";
+  os << "] }\n";
+}
+
 #undef BSTA_JOINT_HISTOGRAM_INSTANTIATE
 #define BSTA_JOINT_HISTOGRAM_INSTANTIATE(T) \
 template class bsta_joint_histogram<T >
