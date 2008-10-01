@@ -25,10 +25,10 @@ static void test_bvgl_changes()
   c->add_obj(o2);
 
   TEST("Test bvgl changes ", c->size(), 3);
-  TEST("Test bvgl changes ", c->objs_[0]->class_, "vehicle");
-  TEST_NEAR("Test bvgl changes ", c->objs_[0]->poly_[0][0].x(), 0.0, 0.001);
-  TEST_NEAR("Test bvgl changes ", c->objs_[0]->poly_[0][0].y(), 0.0, 0.001);
-  TEST_NEAR("Test bvgl changes ", c->objs_[0]->poly_[0][1].x(), 5.0, 0.001);
+  TEST("Test bvgl changes ", c->obj(0)->type(), "vehicle");
+  TEST_NEAR("Test bvgl changes ", c->obj(0)->poly()[0][0].x(), 0.0, 0.001);
+  TEST_NEAR("Test bvgl changes ", c->obj(0)->poly()[0][0].y(), 0.0, 0.001);
+  TEST_NEAR("Test bvgl changes ", c->obj(0)->poly()[0][1].x(), 5.0, 0.001);
 
   vsl_b_ofstream os("./out.bin");
   c->b_write(os);
@@ -40,16 +40,16 @@ static void test_bvgl_changes()
   is.close();
 
   TEST("Test bvgl changes ", c2->size(), 3);
-  TEST("Test bvgl changes ", c2->objs_[0]->class_, "vehicle");
-  TEST_NEAR("Test bvgl changes ", c2->objs_[0]->poly_[0][0].x(), 0.0, 0.001);
-  TEST_NEAR("Test bvgl changes ", c2->objs_[0]->poly_[0][0].y(), 0.0, 0.001);
-  TEST_NEAR("Test bvgl changes ", c2->objs_[0]->poly_[0][1].x(), 5.0, 0.001);
+  TEST("Test bvgl changes ", c2->obj(0)->type(), "vehicle");
+  TEST_NEAR("Test bvgl changes ", c2->obj(0)->poly()[0][0].x(), 0.0, 0.001);
+  TEST_NEAR("Test bvgl changes ", c2->obj(0)->poly()[0][0].y(), 0.0, 0.001);
+  TEST_NEAR("Test bvgl changes ", c2->obj(0)->poly()[0][1].x(), 5.0, 0.001);
 
-  TEST("Test bvgl changes ", c2->objs_[1]->class_, "car");
-  TEST("Test bvgl changes ", c2->objs_[2]->class_, "dummy");
-  TEST_NEAR("Test bvgl changes ", c2->objs_[2]->poly_[0][0].x(), 0.0, 0.001);
-  TEST_NEAR("Test bvgl changes ", c2->objs_[2]->poly_[0][0].y(), 0.0, 0.001);
-  TEST_NEAR("Test bvgl changes ", c2->objs_[2]->poly_[0][1].x(), 5.0, 0.001);
+  TEST("Test bvgl changes ", c2->obj(1)->type(), "car");
+  TEST("Test bvgl changes ", c2->obj(2)->type(), "dummy");
+  TEST_NEAR("Test bvgl changes ", c2->obj(2)->poly()[0][0].x(), 0.0, 0.001);
+  TEST_NEAR("Test bvgl changes ", c2->obj(2)->poly()[0][0].y(), 0.0, 0.001);
+  TEST_NEAR("Test bvgl changes ", c2->obj(2)->poly()[0][1].x(), 5.0, 0.001);
 }
 
 TESTMAIN( test_bvgl_changes );
