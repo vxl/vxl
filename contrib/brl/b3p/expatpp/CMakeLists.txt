@@ -4,7 +4,10 @@
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF (EXPAT_FOUND)
 
+IF (NOT VXL_USING_NATIVE_EXPAT)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expat )
+ENDIF (NOT VXL_USING_NATIVE_EXPAT)
+
 SET(expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
 
 ADD_LIBRARY(expatpp ${expatpp_sources})
