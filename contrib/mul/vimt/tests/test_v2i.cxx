@@ -4,7 +4,7 @@
 #include <vnl/vnl_matrix.h> // for frobenius_norm()
 #include <vul/vul_temp_filename.h>
 #include <mbl/mbl_stl.h>
-#include <vimt/vimt_load_transform.h>
+#include <vimt/vimt_load.h>
 #include <testlib/testlib_test.h>
 #include <vsl/vsl_quick_file.h>
 #include <vil/vil_save.h>

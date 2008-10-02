@@ -1,10 +1,10 @@
-// This is mul/vimt/vimt_load_transform.cxx
+// This is mul/vimt/vimt_load.cxx
 
 //:
 // \file
 // \author Martin Roberts
 
-#include "vimt_load_transform.h"
+#include "vimt_load.h"
 #include <vil/vil_property.h>
 
 // Create a transform from the properties of image resource.

@@ -17,7 +17,7 @@
 #include <vimt/vimt_image.h>
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vimt/vimt_image_pyramid.h>
-#include <vimt/vimt_load_transform.h>
+#include <vimt/vimt_load.h>
 #include <vimt/vimt_resample_bilin.h>
 #include <vimt/vimt_sample_grid_bilin.h>
 #include <vimt/vimt_sample_grid_bicub.h>
