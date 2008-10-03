@@ -16,7 +16,6 @@
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
 
 class bvgl_change_obj: public vbl_ref_count
 {
