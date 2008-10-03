@@ -43,8 +43,8 @@ vcl_string vul_expand_path_internal(vcl_string path)
       bool again = false;
       for (unsigned int i=0; i<bits.size(); ++i)
       {
-        // remove repeated /
-        if (i+1<bits.size() && bits[i] == "/" && bits[i+1] == "/") {
+        // remove repeated / unless it is initial '//' as used in windows UNC names
+        if (i>0 && i+1<bits.size() && bits[i] == "/" && bits[i+1] == "/") {
           bits.erase(bits.begin() + i);
           again = true;
         }
