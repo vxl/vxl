@@ -102,7 +102,7 @@ class vbl_bounding_box_base
   }
 
   //:  inside test for arbitrary dimension
-  inline bool inside(T const* point) {
+  inline bool inside(T const* point) const {
     if (!initialized_) return false;
     for ( int i=0; i<dimension(); ++i )
       if ( point[i] < min_[i] || max_[i] < point[i] )
