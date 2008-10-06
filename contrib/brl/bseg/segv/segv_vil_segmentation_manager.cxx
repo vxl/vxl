@@ -38,7 +38,7 @@
 #include <sdet/sdet_fit_conics.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_grid_finder.h>
-#include <sdet/sdet_read_mser_regions.h>
+//#include <sdet/sdet_read_mser_regions.h>
 #include <sdet/sdet_vrml_display.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
@@ -1667,7 +1667,9 @@ void segv_vil_segmentation_manager::mser_conics()
   if(!istr.is_open())
     return;
   vcl_vector<vsol_conic_2d_sptr> conics;
+#if 0 //check in later
   sdet_read_mser_regions::read_mser_conics(istr, conics);
+#endif
   if(!conics.size())
     return;
   this->draw_conics(conics);
