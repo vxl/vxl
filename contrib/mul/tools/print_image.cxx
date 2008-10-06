@@ -21,7 +21,24 @@
 #include <vimt3d/vimt3d_add_all_loaders.h>
 
 
-static unsigned try_3d_image(const char * filename, float unit_scaling)
+//: Load the image data and determine the intensity range
+static void get_intensity_range_2d(const vil_image_resource_sptr& ir, double& min, double& max)
+{
+  vil_image_view<double> iv_double = vil_convert_cast(double(), ir->get_view());
+  vil_math_value_range(iv_double, min, max);
+}
+
+
+//: Load the image data and determine the intensity range
+static void get_intensity_range_3d(const vil3d_image_resource_sptr& ir, double& min, double& max)
+{
+  vil3d_image_view<double> iv_double = vil3d_convert_cast(double(), ir->get_view());
+  vil3d_math_value_range(iv_double, min, max);
+}
+
+
+//: Try to load a 3D image
+static unsigned try_3d_image(const char * filename, float unit_scaling, bool range)
 {
   try
   {
@@ -53,6 +70,14 @@ static unsigned try_3d_image(const char * filename, float unit_scaling)
              << "world bounds: [" << world_min_point.x() << ',' << world_min_point.y() << ',' << world_min_point.z() << "] -> ["
              << world_max_point.x() << ',' << world_max_point.y() << ',' << world_max_point.z() << "]\n"
              << "voxel_type: " << ir->pixel_format() << '\n';
+    
+    if (range)
+    {
+      double min,max;
+      get_intensity_range_3d(ir, min, max);
+      vcl_cout << "intensity range: " << min << " to " << max << "\n";
+    }
+
     return 0;
   }
   catch (vcl_exception &e)
@@ -63,12 +88,14 @@ static unsigned try_3d_image(const char * filename, float unit_scaling)
 }
 
 
-static unsigned try_2d_image(const char * filename, float unit_scaling)
+//: Try to load a 2D image
+static unsigned try_2d_image(const char * filename, float unit_scaling, bool range)
 {
   try
   {
     vil_image_resource_sptr ir = vil_load_image_resource(filename);
     if (!ir) return 1;
+    
     vimt_transform_2d w2i = vimt_load_transform(ir, unit_scaling);
     vgl_vector_2d<double> pixel = w2i.inverse().delta(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1,1));
     vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes\n"
@@ -78,6 +105,14 @@ static unsigned try_2d_image(const char * filename, float unit_scaling)
              << " in units of " << 1.0/unit_scaling << "m\n"
              << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << " pixels\n"
              << "pixel_type: " << ir->pixel_format() << '\n';
+
+    if (range)
+    {
+      double min,max;
+      get_intensity_range_2d(ir, min, max);
+      vcl_cout << "intensity range: " << min << " to " << max << "\n";
+    }
+    
     return 0;
   }
   catch (vcl_exception &e)
@@ -86,6 +121,8 @@ static unsigned try_2d_image(const char * filename, float unit_scaling)
     return 1;
   }
 }
+
+
 //========================================================================
 // Actual main function
 //========================================================================
@@ -97,12 +134,13 @@ int main2(int argc, char*argv[])
   // Parse the program arguments
   vul_arg<vcl_string> img_src(0, "input image filename");
   vul_arg<float> unit_scaling("-s", "Unit scaling (1000 for mm)", 1000);
+  vul_arg<bool> range("-r", "Determine intensity range", false);
   vul_arg_parse(argc, argv);
 
-  if (try_3d_image(img_src().c_str(), unit_scaling()) == 0)
+  if (try_3d_image(img_src().c_str(), unit_scaling(), range()) == 0)
     return 0;
 
-  return try_2d_image(img_src().c_str(), unit_scaling());
+  return try_2d_image(img_src().c_str(), unit_scaling(), range());
 }
 
 
@@ -127,7 +165,6 @@ int main(int argc, char*argv[])
     vcl_cout << "caught unknown exception " << vcl_endl;
     return 3;
   }
-
 
   return 0;
 }
