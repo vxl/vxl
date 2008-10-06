@@ -9,6 +9,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 #include <vil3d/vil3d_image_view.h>
+#include <vil/vil_convert.h>
 
 //: Compute trilinear interpolation at (x,y,z), no bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
@@ -42,7 +43,10 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
   double i22 = (double)row12[xstep]+(double)(row22[xstep]-row12[xstep])*normy;
   double iz2 = i12+(i22-i12)*normx;
 
-  return iz1+(iz2-iz1)*normz;
+  T rv;
+  vil_convert_round_pixel<double, T> rounder;
+  rounder(iz1+(iz2-iz1)*normz, rv);
+  return rv;
 }
 
 

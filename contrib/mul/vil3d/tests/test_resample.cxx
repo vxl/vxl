@@ -84,6 +84,54 @@ static void test_resample_trilinear()
   TEST("Voxel values correct", all_voxs_correct, true);
 }
 
+
+//==================================================================================
+static void test_resample_trilinear_edge_extend()
+{
+  vcl_cout << "**********************************************\n"
+           << " Testing vil3d_resample_trilinear_edge_extend\n"
+           << "**********************************************\n";
+
+  unsigned sni=3;
+  unsigned snj=3;
+  unsigned snk=3;
+  vil3d_image_view<int> src(sni, snj, snk);
+  for (unsigned i=0; i<sni; ++i)
+    for (unsigned j=0; j<snj; ++j)
+      for (unsigned k=0; k<snk; ++k)
+        src(i,j,k) = 10*k + 100*j + 1000*i;
+
+  vil3d_image_view<int> dst;
+  vil3d_resample_trilinear_edge_extend(src, dst,
+    0.0, 0.0, 0.0,
+    0.5, 0.0, 0.0,
+    0.0, 0.5, 0.0,
+    0.0, 0.0, 0.5,
+    5, 5, 6);
+
+
+  unsigned dni = dst.ni();
+  unsigned dnj = dst.nj();
+  unsigned dnk = dst.nk();
+
+
+  // Testing
+  vil3d_print_all(vcl_cout, src);
+  vil3d_print_all(vcl_cout, dst);
+  ///
+
+
+  bool all_voxs_correct = true;
+  for (unsigned i=0; i+1<dni; ++i)
+    for (unsigned j=0; j+1<dnj; ++j)
+      for (unsigned k=0; k+1<dnk; ++k)
+        all_voxs_correct = all_voxs_correct &&
+        ((k < 5 && dst(i,j,k)==int(5*k + 50*j + 500*i)) ||
+        (k == 5 && dst(i,j,k)==int(5*4 + 50*j + 500*i)) );
+
+  TEST("Voxel values correct", all_voxs_correct, true);
+}
+
 //==================================================================================
 static void test_resample_trilinear_scale_2()
 {
@@ -129,6 +177,7 @@ static void test_resample()
 {
   test_resample_simple();
   test_resample_trilinear();
+  test_resample_trilinear_edge_extend();
   test_resample_trilinear_scale_2();
 }
 
