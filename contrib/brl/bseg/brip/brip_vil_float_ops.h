@@ -112,6 +112,15 @@ class brip_vil_float_ops
             vil_image_view<float> const& Ixy,
             vil_image_view<float> const& Iyy);
 
+
+  //: Find ansiotropic intensity extrema. Theta is in degrees
+  static vil_image_view<float> extrema(vil_image_view<float> const& input,
+                                       float lambda0, float lambda1,
+                                       float theta, bool bright = true,
+                                       bool output_response_mask = true);
+
+
+
   //: IxIx.transpose gradient matrix elements for a NxN region(N = 2n+1)
   static void grad_matrix_NxN(vil_image_view<float> const& input, unsigned n,
                               vil_image_view<float>& IxIx,
@@ -456,6 +465,12 @@ class brip_vil_float_ops
 
   //: negate an image returning the same pixel type (only greyscale)
   static vil_image_resource_sptr negate(vil_image_resource_sptr const& imgr);
+
+  //: Color order operator, output an index based on RGB intensity order
+  static vil_image_view<unsigned char> 
+    color_order(vil_image_view<float> const& color_image, float eq_tol);
+
+
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value
@@ -489,6 +504,7 @@ static void double_resolution_1d(const float* input, const unsigned n_input,
   static float gaussian_blocking_filter(float dir_fx, float dir_fy,
                                         float f0, float radius,
                                         float fx, float fy);
+
 #if 0 // TODO ?
   //: converting IHS to RGB
   static void
