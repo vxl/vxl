@@ -54,6 +54,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void intensity_profile();
   void intensity_histogram();
   void display_images_as_color();
+  void image_as_vrml_points();
 
   //: image transformation
   void flip_image_lr();
@@ -71,7 +72,8 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void entropy();
   void minfo();
   void max_trace_scale();
-
+  void color_order();
+  void extrema();
   //: segmentation
   void threshold_image();
   void harris_corners();
@@ -81,7 +83,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void fit_conics();
   void fit_overlay_conics();
   void regions();
-
+  void mser_conics();
   // ############### New method to project 3D points ##################
   void project_points();
   // ##################################################################

@@ -11,8 +11,9 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // sprintf
-// not used? #include <vcl_fstream.h>
+#include <vcl_fstream.h>
 #include <vbl/vbl_array_2d.h>
+#include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
@@ -37,6 +38,8 @@
 #include <sdet/sdet_fit_conics.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_grid_finder.h>
+#include <sdet/sdet_read_mser_regions.h>
+#include <sdet/sdet_vrml_display.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_tableau.h>
@@ -66,6 +69,7 @@
 #include <brip/brip_para_cvrg_params.h>
 #include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
+#include <brip/brip_max_scale_response.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_vehicle_finder_params.h>
@@ -120,7 +124,7 @@ void segv_vil_segmentation_manager::init()
 vgui_range_map_params_sptr segv_vil_segmentation_manager::
 range_params(vil_image_resource_sptr const& image)
 {
-  float gamma = 1.0;
+  double gamma = 1.0;
   bool invert = false;
   bool gl_map = false;
   bool cache = true;
@@ -136,12 +140,13 @@ range_params(vil_image_resource_sptr const& image)
   { gl_map = true; cache = true;}
 
   bgui_image_utils iu(image);
-  iu.set_percent_limit(0.005);
+  iu.set_percent_limit(0.001);
 
   vgui_range_map_params_sptr rmps;
   if (iu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
     return rmps;
-
+  if(iu.default_range_map(rmps, gamma, invert, gl_map, cache))
+    return rmps;
   return 0;
 }
 
@@ -1564,11 +1569,11 @@ void segv_vil_segmentation_manager::flip_image_lr()
 
 void segv_vil_segmentation_manager::max_trace_scale()
 {
-  static float min_scale = 1.0f, max_scale = 20.0f, sinc = 1.0f;
+  static double scale_ratio = vnl_math::sqrt2;
+  static double max_scale = 16.0f;
   vgui_dialog scale_dialog("Max Trace Scale");
-  scale_dialog.field("Minimum Scale", min_scale);
+  scale_dialog.field("Scale Ratio", scale_ratio);
   scale_dialog.field("Maximum Scale", max_scale);
-  scale_dialog.field("Scale Increment", sinc);
   if (!scale_dialog.ask())
     return;
 
@@ -1580,9 +1585,37 @@ void segv_vil_segmentation_manager::max_trace_scale()
   }
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> scale_image;
-  scale_image =
-    brip_vil_float_ops::max_scale_trace(fimg, min_scale, max_scale, sinc);
+  brip_max_scale_response<float> msr(fimg, scale_ratio, max_scale);
+  scale_image = msr.scale_base();
   this->add_image(vil_new_image_resource_of_view(scale_image));
+}
+
+void segv_vil_segmentation_manager::color_order()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout<< "In segv_vil_segmentation_manager::color order - no image\n";
+    return;
+  }
+  static float equal_tol = 0.1f;
+  vgui_dialog order_dialog("Color Order");
+  order_dialog.field("Equal Tol", equal_tol);
+  if (!order_dialog.ask())
+    return;
+
+  vil_image_view_base_sptr vb = img->get_view();
+
+  //retains the image as color
+  vil_image_view<float> fimg = *vil_convert_cast(float(), vb);
+  //scale to 0,1 so tolerance is meaningful
+  if (vb->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+    vil_math_scale_values(fimg,1.0/255.0);
+
+  vil_image_view<unsigned char> order_codes = 
+    brip_vil_float_ops::color_order(fimg, equal_tol);
+
+  this->add_image(vil_new_image_resource_of_view(order_codes));
 }
 
 void segv_vil_segmentation_manager::create_polygon()
@@ -1620,4 +1653,106 @@ void segv_vil_segmentation_manager::clear_mask()
 void segv_vil_segmentation_manager::save_mask()
 {
   mask_.clear();
+}
+
+void segv_vil_segmentation_manager::mser_conics()
+{
+  vgui_dialog mser_dialog("Fit overlay Conics");
+  static vcl_string conic_filename = "";
+  static vcl_string ext = "*.*";
+  mser_dialog.file("MSER Conic Filename:", ext, conic_filename);
+  if (!mser_dialog.ask())
+    return;
+  vcl_ifstream istr(conic_filename.c_str());
+  if(!istr.is_open())
+    return;
+  vcl_vector<vsol_conic_2d_sptr> conics;
+  sdet_read_mser_regions::read_mser_conics(istr, conics);
+  if(!conics.size())
+    return;
+  this->draw_conics(conics);
+}
+
+void segv_vil_segmentation_manager::image_as_vrml_points()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout<< "In segv_vil_segmentation_manager::image_as_vrml_points - no image\n";
+    return;
+  }
+  vgui_dialog vrml_dialog("VRML Intensity Display");
+  static vcl_string vrml_filename = "";
+  static vcl_string ext = "*.*";
+  vrml_dialog.file("VRML Filename:", ext, vrml_filename);
+  if (!vrml_dialog.ask())
+    return;
+  vcl_ofstream ostr(vrml_filename.c_str());
+  if(!ostr.is_open())
+    return;
+  vil_image_view<float> fimg = 
+    brip_vil_float_ops::convert_to_float(img);
+  sdet_vrml_display::write_vrml_header(ostr);
+  sdet_vrml_display::write_vrml_height_map(ostr, fimg); 
+}
+void segv_vil_segmentation_manager::extrema()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout<< "In segv_vil_segmentation_manager::extrema - no image\n";
+    return;
+  }
+  static float lambda0 = 1.0f;
+  static float lambda1 = 1.0f;
+  static float theta = 0.0f;
+  static bool bright = true;
+  static bool color_overlay = true;
+  static bool output_mask = true;
+  vgui_dialog extrema_dialog("Detect Extrema");
+  extrema_dialog.field("lambda0",lambda0);
+  extrema_dialog.field("lambda1",lambda1);
+  extrema_dialog.field("theta",theta);
+  extrema_dialog.checkbox("Bright Extrema?(check)",bright);
+  extrema_dialog.checkbox("ColorOverlay?(check)",color_overlay);
+  extrema_dialog.checkbox("Response And Mask?(check)",output_mask);
+  if (!extrema_dialog.ask())
+    return;
+  vil_image_view<float> fimg = 
+    brip_vil_float_ops::convert_to_float(img);
+  vil_image_view<float> extr = 
+    brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright,
+                                output_mask);
+  unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();
+  if(!output_mask&&!color_overlay){
+    if(np!=1)
+      return;
+    vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
+    this->add_image(resc);
+    return;
+  }
+  if(!output_mask&&color_overlay){
+    if(np!=1)
+      return;
+    vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
+    vil_image_view<vil_rgb<vxl_byte> > rgb =   
+      brip_vil_float_ops::combine_color_planes(img, resc, img);
+    this->add_image(vil_new_image_resource_of_view(rgb));
+  }
+  if(output_mask&&color_overlay){
+     if(np!=2)
+      return;
+    vil_image_view<float> res(ni, nj), mask(ni, nj);
+    for(unsigned j = 0; j<nj; ++j)
+      for(unsigned i = 0; i<ni; ++i)
+        {
+          res(i,j) = extr(i,j,0);
+          mask(i,j) = extr(i,j,1);
+        }
+    vil_image_resource_sptr res_resc = vil_new_image_resource_of_view(res);
+    vil_image_resource_sptr msk_resc = vil_new_image_resource_of_view(mask);
+    vil_image_view<vil_rgb<vxl_byte> > rgb =   
+      brip_vil_float_ops::combine_color_planes(img, res_resc, msk_resc);
+    this->add_image(vil_new_image_resource_of_view(rgb));
+  }
 }

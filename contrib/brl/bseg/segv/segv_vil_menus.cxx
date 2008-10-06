@@ -85,6 +85,12 @@ void segv_vil_menus::fit_overlay_conics_callback()
   segv_vil_segmentation_manager::instance()->fit_overlay_conics();
 }
 
+void segv_vil_menus::mser_conics_callback()
+{
+  segv_vil_segmentation_manager::instance()->mser_conics();
+}
+
+
 void segv_vil_menus::regions_callback()
 {
   segv_vil_segmentation_manager::instance()->regions();
@@ -140,6 +146,11 @@ void segv_vil_menus::negate_image_callback()
   segv_vil_segmentation_manager::instance()->negate_image();
 }
 
+void segv_vil_menus::extrema_callback()
+{
+  segv_vil_segmentation_manager::instance()->extrema();
+}
+
 void segv_vil_menus::entropy_callback()
 {
   segv_vil_segmentation_manager::instance()->entropy();
@@ -153,6 +164,11 @@ void segv_vil_menus::minfo_callback()
 void segv_vil_menus::max_trace_scale_callback()
 {
   segv_vil_segmentation_manager::instance()->max_trace_scale();
+}
+
+void segv_vil_menus::color_order_callback()
+{
+  segv_vil_segmentation_manager::instance()->color_order();
 }
 
 void segv_vil_menus::inline_viewer_callback()
@@ -175,6 +191,12 @@ void segv_vil_menus::project_points_callback()
 {
   segv_vil_segmentation_manager::instance()->project_points();
 }
+
+void segv_vil_menus::image_as_vrml_points_callback()
+{
+  segv_vil_segmentation_manager::instance()->image_as_vrml_points();
+}
+
 
 //segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
@@ -205,6 +227,8 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Flip Image (LR)", flip_image_lr_callback);
   menuview.add("Images as Color", display_images_as_color_callback);
   menuview.add("Project Points RPC", project_points_callback);
+  menuview.add("Image as VRML Points", image_as_vrml_points_callback);
+
   //edit menu entries
 
   menuedit.add("Threshold", threshold_image_callback);
@@ -213,6 +237,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("Conic Segments", fit_conics_callback);
   menuedit.add("Overlay Conic Segments", fit_overlay_conics_callback);
+  menuedit.add("MSER Conic Regions", mser_conics_callback);
   menuedit.add("Edgel Regions", regions_callback);
   menuedit.add("Non-Maximal Suppression", nonmaximal_suppression_callback);
 
@@ -225,6 +250,8 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Entropy", entropy_callback);
   menuops.add("Mutal Information", minfo_callback);
   menuops.add("Max Trace Scale",  max_trace_scale_callback);
+  menuops.add("Color Order",  color_order_callback);
+  menuops.add("Extrema", extrema_callback);
 
   //Top level menu layout
   menubar.add( "File", menufile);

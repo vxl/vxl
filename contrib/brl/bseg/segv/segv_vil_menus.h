@@ -54,6 +54,10 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void inline_viewer_callback();
   SEGV_VIL_DLL_DATA static void intensity_profile_callback();
   SEGV_VIL_DLL_DATA static void intensity_histogram_callback();
+  SEGV_VIL_DLL_DATA static void color_order_callback();
+  SEGV_VIL_DLL_DATA static void mser_conics_callback();
+  SEGV_VIL_DLL_DATA static void image_as_vrml_points_callback();
+  SEGV_VIL_DLL_DATA static void extrema_callback();
   //JIM METHOD
   SEGV_VIL_DLL_DATA static void project_points_callback();
   //--JIM METHOD
