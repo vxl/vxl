@@ -439,8 +439,8 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
   png_byte** rows = p_->get_rows();
   if (!rows) return 0;
 
-  int bit_depth = png_get_bit_depth(p_->png_ptr,p_->info_ptr);
-  int bytes_per_pixel = bit_depth * p_->channels / 8;
+  int bit_depth = ((bits_per_component_ + 7)/8)*8;
+  int bytes_per_pixel = (bit_depth * p_->channels + 7) / 8;
   int bytes_per_row_dst = nx*nplanes() * vil_pixel_format_sizeof_components(format_);
 
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ny*bytes_per_row_dst, format_);
