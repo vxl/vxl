@@ -14,7 +14,7 @@
 #include <mbl/mbl_log.h>
 #include <vil/vil_load.h>
 #include <vimt/vimt_transform_2d.h>
-#include <vimt/vimt_load_transform.h>
+#include <vimt/vimt_load.h>
 #include <vimt/vimt_add_all_binary_loaders.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_transform_3d.h>
@@ -135,12 +135,31 @@ int main2(int argc, char*argv[])
   vul_arg<vcl_string> img_src(0, "input image filename");
   vul_arg<float> unit_scaling("-s", "Unit scaling (1000 for mm)", 1000);
   vul_arg<bool> range("-r", "Determine intensity range", false);
+  vul_arg<bool> only_3d("-3", "Only try to load 3d image", false);
+  vul_arg<bool> only_2d("-2", "Only try to load 2d image", false);
   vul_arg_parse(argc, argv);
 
-  if (try_3d_image(img_src().c_str(), unit_scaling(), range()) == 0)
-    return 0;
 
-  return try_2d_image(img_src().c_str(), unit_scaling(), range());
+  if (only_3d() && only_2d())
+  {
+    vul_arg_display_usage_and_exit("Can't have both \"-2\" and \"-3\"\n");
+    return 1;
+  }
+  else if (only_3d())
+  {
+    return try_3d_image(img_src().c_str(), unit_scaling(), range());
+  }
+  else if (only_2d())
+  {
+    return try_2d_image(img_src().c_str(), unit_scaling(), range());
+  }
+  else
+  {
+    if (try_3d_image(img_src().c_str(), unit_scaling(), range()) == 0)
+      return 0;
+
+    return try_2d_image(img_src().c_str(), unit_scaling(), range());
+  }
 }
 
 
