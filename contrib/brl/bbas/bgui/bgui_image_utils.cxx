@@ -46,13 +46,16 @@ void bgui_image_utils::set_image(vil_image_resource_sptr const& image)
 }
 
 
-void bgui_image_utils::range(double& min_value, double& max_value,
+bool bgui_image_utils::range(double& min_value, double& max_value,
                              unsigned plane)
 {
   if (!hist_valid_)
-    this->construct_histogram();
+    if(!this->construct_histogram())
+      return false;
+        
   min_value = this->compute_lower_bound(plane);
   max_value = this->compute_upper_bound(plane);
+  return true;
 }
 
 // fill the histogram by randomly sampling pixels from the image
@@ -79,7 +82,8 @@ bool bgui_image_utils::init_histogram_from_data()
   if (!bir)
     bir = vil_new_blocked_image_facade(image);
 
-  this->set_data_by_random_blocks(min_blocks_, bir, scan_fraction_);
+  if(!this->set_data_by_random_blocks(min_blocks_, bir, scan_fraction_))
+    return false;
 
   unsigned np = image_->nplanes();
 
@@ -143,13 +147,13 @@ bool bgui_image_utils::init_histogram_from_data()
 
 //Determine the pixel format of the view and cast to appropriate type
 //Upcount the histogram with values from the view.
-void bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
+bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
                                           double fraction)
 {
   if (!view)
   {
     vcl_cout << "set histogram failed in bgui_image_utils\n";
-    return;
+    return false;
   }
   vil_pixel_format type = view->pixel_format();
   unsigned fni = static_cast<unsigned>(view->ni()*fraction);
@@ -167,7 +171,7 @@ void bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
           double val = static_cast<double>(v(i,j,p));
           data_[p].push_back(val);
         }
-    return;
+    return true;
    }
    case  VIL_PIXEL_FORMAT_UINT_16:
    {
@@ -179,14 +183,15 @@ void bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
           double val = static_cast<double>(v(i,j,p));
           data_[p].push_back(val);
         }
-    return;
+    return true;
    }
    default:
-    vcl_cout << "Format not supported by bgui_image_utils\n";
+     vcl_cout << "Format not supported for histogram construction by bgui_image_utils\n";
   }
+  return false;
 }
 
-void bgui_image_utils::
+bool bgui_image_utils::
 set_data_by_random_blocks(const unsigned total_num_blocks,
                           vil_blocked_image_resource_sptr const& bir,
                           double fraction)
@@ -196,8 +201,10 @@ set_data_by_random_blocks(const unsigned total_num_blocks,
   {
     unsigned bi = static_cast<unsigned>((nbi-1)*(vcl_rand()/(RAND_MAX+1.0)));
     unsigned bj = static_cast<unsigned>((nbj-1)*(vcl_rand()/(RAND_MAX+1.0)));
-    this->set_data_from_view(bir->get_block(bi, bj), fraction);
+    if(!this->set_data_from_view(bir->get_block(bi, bj), fraction))
+      return false;
   }
+ return true;
 }
 
 bool bgui_image_utils::construct_histogram()
@@ -319,7 +326,9 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   return g;
 }
 
-bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp)
+bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp,
+                                         double gamma, bool invert, 
+                                         bool gl_map, bool cache)
 {
   if (!image_) return false;
   //Allow only grey scale for now
@@ -327,13 +336,13 @@ bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp)
   if (!(nc == 1 || nc == 3 || nc == 4))
     return false; //all available formats
   //default values
-  double gamma = 1.0;
-  bool invert = false;
-  bool gl_map = true;
-  bool cache = true;
   static double minv = 0, maxv = 1500; //typical for uint_16
   if (image_->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
     maxv = 255;
+  if (image_->pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
+    maxv = 1.0;
+  if (image_->pixel_format()==VIL_PIXEL_FORMAT_DOUBLE)
+    maxv = 1.0;
   switch (nc)
   {
     case 1:
@@ -368,7 +377,8 @@ bool bgui_image_utils::range_map_from_hist(float gamma, bool invert,
   vcl_vector<double> minr(np, 0.0), maxr(np, 0.0);
 
   for (unsigned p = 0; p<np; ++p)
-    this->range(minr[p], maxr[p], p);
+    if(!this->range(minr[p], maxr[p], p))
+      return false;
 
   if (np == 1)
   {

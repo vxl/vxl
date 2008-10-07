@@ -38,13 +38,15 @@ class bgui_image_utils
   void set_min_blocks(unsigned min_blocks){min_blocks_ = min_blocks;}
   void set_scan_fraction(double scan_fraction){scan_fraction_ = scan_fraction;}
 
-  void range(double& min_value, double& max_value, unsigned plane = 0);
+  bool range(double& min_value, double& max_value, unsigned plane = 0);
   bsta_histogram<double> histogram(unsigned plane = 0)
   { if (!hist_valid_)this->construct_histogram(); return hist_[plane]; }
   bgui_graph_tableau_sptr hist_graph();
 
   //: Default range map based on default max min values
-  bool default_range_map(vgui_range_map_params_sptr& rmp);
+  bool default_range_map(vgui_range_map_params_sptr& rmp,
+                         double gamma = 1.0, bool invert = false, 
+                         bool gl_map = false, bool cache=true);
 
   //: Range map computed from the image histogram
   bool range_map_from_hist(float gamma, bool invert,
@@ -56,10 +58,10 @@ class bgui_image_utils
 
   bool init_histogram_from_data();
 
-  void set_data_from_view(vil_image_view_base_sptr const& view,
+  bool set_data_from_view(vil_image_view_base_sptr const& view,
                           double fraction = 1.0);
 
-  void set_data_by_random_blocks(const unsigned total_num_blocks,
+  bool set_data_by_random_blocks(const unsigned total_num_blocks,
                                  vil_blocked_image_resource_sptr const& bir,
                                  double fraction = 1.0);
   bool construct_histogram();
