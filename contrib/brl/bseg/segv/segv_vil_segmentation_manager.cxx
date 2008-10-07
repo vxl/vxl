@@ -39,7 +39,7 @@
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_grid_finder.h>
 //#include <sdet/sdet_read_mser_regions.h>
-#include <sdet/sdet_vrml_display.h>
+//#include <sdet/sdet_vrml_display.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_tableau.h>
@@ -1694,8 +1694,10 @@ void segv_vil_segmentation_manager::image_as_vrml_points()
     return;
   vil_image_view<float> fimg = 
     brip_vil_float_ops::convert_to_float(img);
+#if 0
   sdet_vrml_display::write_vrml_header(ostr);
   sdet_vrml_display::write_vrml_height_map(ostr, fimg); 
+#endif
 }
 void segv_vil_segmentation_manager::extrema()
 {
