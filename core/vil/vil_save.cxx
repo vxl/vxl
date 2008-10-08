@@ -89,7 +89,7 @@ char const *vil_save_guess_file_format(char const* filename)
   else {
     // translate common extensions into known file formats.
     if (false) { }
-#define macro(ext, fmt) else if (!vcl_strcmp(dot, "." #ext)) file_format = #fmt
+#define macro(ext, fmt) else if (!vcl_stricmp(dot, "." #ext)) file_format = #fmt
     macro(tiff, tiff);
     macro(tif, tiff);
     macro(png, png);
