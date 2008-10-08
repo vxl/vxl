@@ -185,7 +185,7 @@ vil_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
     {
        if ((imagedata=(char*)malloc((size_t)image_data_size_bytes)) == NULL)
        {
-         fprintf(stderr,"vil_viff_createimage: Not enough memory for image data!\n");
+         fprintf(stderr,"vil_viff_createimage: Not enough memory for image data of %u bytes!\n", image_data_size_bytes);
          return 0;
        }
     }
