@@ -12,7 +12,9 @@
 
 #include "vil_save.h"
 
+#include <vcl_cctype.h>
 #include <vcl_cstring.h>
+#include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 
@@ -87,9 +89,12 @@ char const *vil_save_guess_file_format(char const* filename)
     file_format = "pnm";
   }
   else {
+    vcl_string ext_lower_case(dot);  // make a copy to convert the extension to lower case
+    for(unsigned int i=0; i<ext_lower_case.size(); ++i)
+      ext_lower_case[i] = vcl_toupper(ext_lower_case[i]);
     // translate common extensions into known file formats.
     if (false) { }
-#define macro(ext, fmt) else if (!vcl_stricmp(dot, "." #ext)) file_format = #fmt
+#define macro(ext, fmt) else if ( ext_lower_case == "." #ext ) file_format = #fmt
     macro(tiff, tiff);
     macro(tif, tiff);
     macro(png, png);
