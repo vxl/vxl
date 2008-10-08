@@ -5,7 +5,6 @@ INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(NOT VXL_USING_NATIVE_EXPAT)
 
 SET(expat_sources
-  expat.h
   xmlparse.c
   xmltok.c        xmltok.h
   xmlrole.c       xmlrole.h
@@ -16,7 +15,6 @@ SET(expat_sources
   nametab.h
   latin1tab.h
   utf8tab.h
-  cm_expat_mangle.h
 )
 
 INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
@@ -32,17 +30,10 @@ IF(WIN32)
   ENDIF(NOT BUILD_SHARED_LIBS)
 ENDIF(WIN32)
 
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_SOURCE_DIR}/expatConfig.h)
-#CONFIGURE_FILE(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h)
-
-#CONFIGURE_FILE(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h)
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_SOURCE_DIR}/expatDllConfig.h)
-
+CONFIGURE_FILE(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h)
+CONFIGURE_FILE(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h)
 CONFIGURE_FILE(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
-
-#CONFIGURE_FILE(${expat_SOURCE_DIR}/cm_expat_mangle.h ${expat_BINARY_DIR}/cm_expat_mangle.h)
-
-#CONFIGURE_FILE(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
+CONFIGURE_FILE(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
 
 ADD_LIBRARY(expat ${expat_sources})
 INSTALL_TARGETS(/lib expat)
