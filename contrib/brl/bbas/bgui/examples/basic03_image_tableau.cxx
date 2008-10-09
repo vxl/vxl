@@ -15,9 +15,13 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_range_map.h>
 #include <vgui/vgui_shell_tableau.h>
+#include <vgui/vgui_clear_tableau.h>
+
 //global pointer to the rubberband tableau
 static vgui_easy2D_tableau_sptr easy = 0;
 static vgui_image_tableau_sptr itab = 0;
+static vgui_shell_tableau_sptr shell = 0;  
+
 //the meunu callback functions
 static void range_mapping()
 {
@@ -46,12 +50,31 @@ static void range_mapping()
   }
 }
 
+static void background_color()
+{
+  static float r = 0, g =0, b = 0, a = 0; 
+
+  vgui_dialog dialog("background color");
+  dialog.field("Red", r);
+  dialog.field("Green", g);
+  dialog.field("Blue", b);
+  dialog.field("Alpha", a);
+  
+
+  if(dialog.ask())
+  {
+    shell->get_clear()->set_colour(r, g, b, a);
+    shell->post_redraw();
+  }
+}
+
 
 // Create the edit menu
 vgui_menu create_menus()
 {
   vgui_menu view;
   view.add("Range Mapping",range_mapping,(vgui_key)'r',vgui_CTRL);
+  view.add("Background", background_color, (vgui_key)'b', vgui_CTRL);
   vgui_menu bar;
   bar.add("View",view);
   return bar;
@@ -73,7 +96,7 @@ int main(int argc, char ** argv)
 
   easy = vgui_easy2D_tableau_new(itab);
   vgui_viewer2D_tableau_new viewer(easy);
-  vgui_shell_tableau_new shell(viewer);
+  shell = vgui_shell_tableau_new(viewer);
 
   // Create and run the window
   return vgui::run(shell, 512, 512, create_menus());
