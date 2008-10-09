@@ -813,7 +813,7 @@ foreach $f (@FILES)
                     | togg[^l]\S*
                     | toler[^a]\S*
                     | tran[a-prt-z]\S*
-                    | transf[^_23eiou\s]\S*
+                    | transf[a-df-hj-np-z]\S*
                     | traver[^s]\S*
                     | unec\S+
                     | utilitit[^iy]
