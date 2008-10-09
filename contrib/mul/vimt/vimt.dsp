@@ -114,10 +114,10 @@ SOURCE=.\vimt_add_all_binary_loaders.cxx
 SOURCE=.\vimt_image_2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vimt_load_transform.cxx
+SOURCE=.\vimt_vil_v2i.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vimt_vil_v2i.cxx
+SOURCE=.\vimt_load.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
@@ -297,9 +297,6 @@ SOURCE=.\vimt_dog_pyramid_builder_2d.h
 SOURCE=.\vimt_dog_pyramid_builder_2d.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vimt_load_transform.h
-# End Source File
-# Begin Source File
 SOURCE=.\vimt_sample_grid_bicub.h
 # End Source File
 # Begin Source File
@@ -310,6 +307,9 @@ SOURCE=.\vimt_vil_v2i.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_convert.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_load.h
 # End Source File
 # End Group
 # End Target
