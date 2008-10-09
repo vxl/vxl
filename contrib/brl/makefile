@@ -13,6 +13,9 @@ SUBDIRS += bmvl
 # standalone executables
 SUBDIRS += bexe
 
+# process libraries
+SUBDIRS += bpro
+
 # 3rd party libraries
 SUBDIRS += b3p
  
