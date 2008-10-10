@@ -22,7 +22,7 @@
 #ifdef EXPATPP_COMPATIBLE_EXPAT12 // earlier versions of expat up to v1.2 
   #include <xmlparse.h>
 #else
-  #include <expat/expat.h>  // since some version of expat moved to SourceForge
+  #include "expat.h"  // since some version of expat moved to SourceForge
 #endif
 #include <stdio.h>
 #include <assert.h>

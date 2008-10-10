@@ -11,7 +11,7 @@ const char* cm_expat_GetXMLRole_RCSId()
   return RCSId;
 }
 
-#include <expat/expatConfig.h>
+#include "expatConfig.h"
 
 #include "xmlrole.h"
 #include "ascii.h"

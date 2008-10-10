@@ -15,13 +15,14 @@ SET(expat_sources
   nametab.h
   latin1tab.h
   utf8tab.h
+  expat.h
 )
 
 INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
 TEST_BIG_ENDIAN(expat_BIGENDIAN)
 
 INCLUDE_DIRECTORIES(
-  "${expat_BINARY_DIR}/.."
+  "${expat_BINARY_DIR}"
   )
 
 IF(WIN32)

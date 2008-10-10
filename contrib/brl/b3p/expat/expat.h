@@ -9,7 +9,7 @@ See the file COPYING for copying permission.
 
 #include <stdlib.h>
 
-#include <expat/expatDllConfig.h>
+#include "expatDllConfig.h"
 
 #if defined(_WIN32) && !defined(CM_EXPAT_STATIC)
 #  if defined(cmexpat_EXPORTS)
