@@ -16,7 +16,7 @@
 //: Create a view which is a cropped version of src.
 // Doesn't modify underlying data. O(1).
 // \relates vil_image_view
-// \return an n_i x n_j window of im with offset (x0,y0)
+// \return an n_i x n_j window of im with offset (i0,j0)
 template<class T>
 inline vil_image_view<T> vil_crop(const vil_image_view<T> &im, unsigned i0,
                                   unsigned n_i, unsigned j0, unsigned n_j)
