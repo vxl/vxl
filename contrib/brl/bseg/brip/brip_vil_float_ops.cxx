@@ -3456,44 +3456,44 @@ vcl_vector<float> brip_vil_float_ops::scan_region(vil_image_resource_sptr img,
 //    /         \
 //  R  - > < = -  B
 //
-// Thus, there are three graph edges with each of three possible labels or 
-// 9 possible order codes. An easy coding scheme is to use the top 6 bits of 
+// Thus, there are three graph edges with each of three possible labels or
+// 9 possible order codes. An easy coding scheme is to use the top 6 bits of
 // the byte output pixel. The relationship is encoded as states of bit pairs
 // Color relations  R*G  R*B  G*B    * indicates > < = (1,2,3)
 // Bit indices      7,6  5,4  3,2
-//  
+//
 vil_image_view<unsigned char> brip_vil_float_ops::
 color_order(vil_image_view<float> const& color_image, float eq_tol)
 {
   unsigned ni = color_image.ni(), nj = color_image.nj();
   unsigned np = color_image.nplanes();
   vil_image_view<unsigned char> temp;
-  if(np!=3)
+  if (np!=3)
     return temp;//improper call
   temp.set_size(ni, nj);
   unsigned char rg_eq=192, rg_lt=128, rg_gt=64;
   unsigned char rb_eq=48, rb_lt=32, rb_gt=16;
   unsigned char gb_eq=12, gb_lt=8, gb_gt=4;
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i){
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i){
       float r=color_image(i,j,0), g=color_image(i,j,1), b=color_image(i,j,2);
       unsigned char rg, rb, gb;
       //rg code
-      if(vcl_fabs(r-g)<eq_tol)
+      if (vcl_fabs(r-g)<eq_tol)
         rg = rg_eq;
-      else if(r<g)
+      else if (r<g)
         rg = rg_lt;
       else rg = rg_gt;
       //rb code
-      if(vcl_fabs(r-b)<eq_tol)
+      if (vcl_fabs(r-b)<eq_tol)
         rb = rb_eq;
-      else if(r<b)
+      else if (r<b)
         rb = rb_lt;
       else rb = rb_gt;
       //gb code
-      if(vcl_fabs(g-b)<eq_tol)
+      if (vcl_fabs(g-b)<eq_tol)
         gb = gb_eq;
-      else if(g<b)
+      else if (g<b)
         gb = gb_lt;
       else gb = gb_gt;
       unsigned char v = rg|rb|gb;// bitwise or
@@ -3501,26 +3501,29 @@ color_order(vil_image_view<float> const& color_image, float eq_tol)
     }
   return temp;
 }
-static double zs(double x) 
-{ if(vcl_fabs(x)<0.0001) return 0;
+
+static double zs(double x)
+{ if (vcl_fabs(x)<0.0001) return 0;
   return x;
 }
+
 static int rd(double x)
 {
-  if(x<0)
+  if (x<0)
     return static_cast<int>(x-0.5);
   return static_cast<int>(x+0.5);
 }
-vil_image_view<float> 
+
+vil_image_view<float>
 brip_vil_float_ops::extrema(vil_image_view<float> const& input,
                             float lambda0, float lambda1, float theta,
                             bool bright, bool output_response_mask)
 {
   //convert theta to radians
-  double theta_rad = theta*vnl_math::pi/180.0; 
+  double theta_rad = theta*vnl_math::pi/180.0;
   double s0 = lambda0, s1 = lambda1;
   double s0sq = 1.0/(s0*s0);
-  //get the two gaussian kernels 
+  //get the two gaussian kernels
   unsigned ra0, ra1;
   double* ker0, *ker1;
   brip_1d_gaussian_kernel(s0, 0.02, ra0, ker0);
@@ -3531,32 +3534,32 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   vbl_array_2d<double> coef(nrows ,ncols);//2nd x derivative kernel
   vbl_array_2d<double> ga(nrows ,ncols);//gaussian kernel
   double gmax = 0;
-  for(int j = -r1; j<=r1; j++)
-    for(int i = -r0; i<=r0; i++){
+  for (int j = -r1; j<=r1; j++)
+    for (int i = -r0; i<=r0; i++){
       double g = ker0[i+r0]*ker1[j+r1];
       ga[j+r1][i+r0] = g;
-      if(g>gmax)
+      if (g>gmax)
         gmax = g;
       double cf = ((i*i*s0sq)-1.0)*g;
       coef[j+r1][i+r0]=cf;
     }
   gmax *= 0.05;
   //remove small residual offsets in each row
-	for(unsigned j=0; j<nrows; ++j){
-	  double sum = 0;
-    for(unsigned i=0; i<ncols; ++i)
+  for (unsigned j=0; j<nrows; ++j){
+    double sum = 0;
+    for (unsigned i=0; i<ncols; ++i)
         sum += coef[j][i];//should be zero
-    //distribute over all coeficients
+    //distribute over all coefficients
     double del = sum/ncols;
-    for(unsigned i=0; i<ncols; ++i)
-      coef[j][i] -= del;	
+    for (unsigned i=0; i<ncols; ++i)
+      coef[j][i] -= del;
   }
-  
+
 //define the size of the rotated 2-d operator
   double c = vcl_cos(theta_rad), s = vcl_sin(theta_rad);
   int ri = static_cast<int>(vcl_fabs(r0*c+r1*s) +0.5);
   int rj = static_cast<int>(vcl_fabs(r0*s+r1*c) +0.5);
-  if(s<0){
+  if (s<0){
     ri = static_cast<int>(vcl_fabs(r0*c-r1*s) +0.5);
     rj = static_cast<int>(vcl_fabs(r0*s-r1*c) +0.5);
   }
@@ -3566,97 +3569,93 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   vbl_array_2d<bool> rot_msk(nrows_rot ,ncols_rot);
   rot_coef.fill(0.0);
   rot_msk.fill(false);
-  for(int j = -rj; j<=rj; j++)
-    for(int i = -ri; i<=ri; i++){
+  for (int j = -rj; j<=rj; j++)
+    for (int i = -ri; i<=ri; i++){
       //i and j are in rotated coordinate system
       //find coordinates in original system
       int iorig = rd(c*i + s*j);
       int jorig = rd(c*j - s*i);
       //clip to insure coordinates are in bounds
-      if(iorig<-r0) iorig = -r0;
-      if(iorig>r0) iorig = r0;
-      if(jorig<-r1) jorig = -r1;
-      if(jorig>r1) jorig = r1;
+      if (iorig<-r0) iorig = -r0;
+      if (iorig>r0) iorig = r0;
+      if (jorig<-r1) jorig = -r1;
+      if (jorig>r1) jorig = r1;
       double v = coef[jorig+r1][iorig+r0];
       double g = ga[jorig+r1][iorig+r0];
-      rot_coef[j+rj][i+ri]=v;      
-      if(g>gmax)
-        rot_msk[j+rj][i+ri]=true;  
+      rot_coef[j+rj][i+ri]=v;
+      if (g>gmax)
+        rot_msk[j+rj][i+ri]=true;
     }
-#if 0	
-  vcl_cout << "\ngauss =";
-  vcl_cout << "{";
-  for(unsigned j = 0; j<nrows; ++j){
-    vcl_cout << "{";
-    for(unsigned i = 0; i<ncols-1; ++i)
+#if 0
+  vcl_cout << "\ngauss ={";
+  for (unsigned j = 0; j<nrows; ++j){
+    vcl_cout << '{';
+    for (unsigned i = 0; i<ncols-1; ++i)
       vcl_cout << zs(coef[j][i]) << ',';
-    if(j != nrows-1)
+    if (j != nrows-1)
       vcl_cout << zs(coef[j][ncols-1]) << "},";
     else
-      vcl_cout << zs(coef[j][ncols-1]) << "}";
-        }
+      vcl_cout << zs(coef[j][ncols-1]) << '}';
+  }
 
-  vcl_cout << "};\n";
-  vcl_cout << "\nmask =";
-  vcl_cout << "{";
-  for(unsigned j = 0; j<nrows_rot; ++j){
-    vcl_cout << "{";
-    for(unsigned i = 0; i<ncols_rot-1; ++i)
+  vcl_cout << "};\n\nmask ={";
+  for (unsigned j = 0; j<nrows_rot; ++j){
+    vcl_cout << '{';
+    for (unsigned i = 0; i<ncols_rot-1; ++i)
       vcl_cout << rot_msk[j][i] << ',';
-    if(j != nrows_rot-1)
+    if (j != nrows_rot-1)
       vcl_cout << rot_msk[j][ncols_rot-1] << "},";
     else
-      vcl_cout << rot_msk[j][ncols_rot-1] << "}";
-        }
+      vcl_cout << rot_msk[j][ncols_rot-1] << '}';
+  }
   vcl_cout << "};" << vcl_flush;
 #endif
   //compute response image
   unsigned ni = input.ni(), nj = input.nj();
   vil_image_view<float> temp(ni, nj);
   temp.fill(0.0f);
-  for(unsigned j = rj; j<(nj-rj); j++)
-    for(unsigned i = ri; i<(ni-ri); i++){
+  for (unsigned j = rj; j<(nj-rj); j++)
+    for (unsigned i = ri; i<(ni-ri); i++){
       double sum = 0;
-      for(int jj=-rj; jj<=rj; ++jj)
-        for(int ii=-ri; ii<=ri; ++ii)
+      for (int jj=-rj; jj<=rj; ++jj)
+        for (int ii=-ri; ii<=ri; ++ii)
           sum += rot_coef[jj+rj][ii+ri]*input(i+ii, j+jj);
 
-	  if(bright){ // coeficents are negative at center
-        if(sum<0) temp(i,j) = static_cast<float>(-sum);
-	  } else { 
-        if(sum>0) temp(i,j) = static_cast<float>(sum);
-	  }
-      
-    }
-  //non-max supression
-  vil_image_view<float> res(temp);
-  for(unsigned j = rj; j<(nj-rj); j++)
-    for(unsigned i = ri; i<(ni-ri); i++)
-      {
-	    float cv = temp(i,j);
-        for(int jj=-rj; jj<=rj; ++jj)
-          for(int ii=-ri; ii<=ri; ++ii)
-			  if((ii==0&&jj==0)||!rot_msk[jj+rj][ii+ri])
-				  continue;
-			  else if(temp(i+ii, j+jj)>cv)
-               res(i,j)=0.0f;
+      if (bright){ // coefficients are negative at center
+        if (sum<0) temp(i,j) = static_cast<float>(-sum);
+      } else {
+        if (sum>0) temp(i,j) = static_cast<float>(sum);
       }
-  if(!output_response_mask)
+    }
+  //non-max suppression
+  vil_image_view<float> res(temp);
+  for (unsigned j = rj; j<(nj-rj); j++)
+    for (unsigned i = ri; i<(ni-ri); i++)
+    {
+      float cv = temp(i,j);
+      for (int jj=-rj; jj<=rj; ++jj)
+        for (int ii=-ri; ii<=ri; ++ii)
+          if ((ii==0&&jj==0)||!rot_msk[jj+rj][ii+ri])
+            continue;
+          else if (temp(i+ii, j+jj)>cv)
+            res(i,j)=0.0f;
+    }
+  if (!output_response_mask)
     return res;
   vil_image_view<float> res_msk(ni, nj, 2);//response plane and mask plane
   res_msk.fill(0.0f);
   // create a mask plane to combine with the localized response
-  for(unsigned j = rj; j<(nj-rj); j++)
-    for(unsigned i = ri; i<(ni-ri); i++)
-      {
-        float rv = res(i,j);
-        res_msk(i,j,0)=rv;
-        if(!rv)
-          continue;
-        for(int jj=-rj; jj<=rj; ++jj)
-          for(int ii=-ri; ii<=ri; ++ii)
-            if(rot_msk[jj+rj][ii+ri])
-              res_msk(i+ii,j+jj,1) = rv;
-      }
+  for (unsigned j = rj; j<(nj-rj); j++)
+    for (unsigned i = ri; i<(ni-ri); i++)
+    {
+      float rv = res(i,j);
+      res_msk(i,j,0)=rv;
+      if (!rv)
+        continue;
+      for (int jj=-rj; jj<=rj; ++jj)
+        for (int ii=-ri; ii<=ri; ++ii)
+          if (rot_msk[jj+rj][ii+ri])
+            res_msk(i+ii,j+jj,1) = rv;
+    }
   return res_msk;
 }
