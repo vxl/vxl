@@ -63,11 +63,6 @@ vil_save_image_view_process::execute()
     vil_image_view<vxl_byte> img_b(img->ni(), img->nj(), img->nplanes());
     vil_convert_stretch_range_limited(img_f, img_b, 0.0f, max);
     result = vil_save(img_b, image_filename.c_str());
-    float mean;
-    vil_math_mean(mean, img_f, 0);
-    vcl_cout << "In vil_save_image_view_process::execute() -- input float image mean: " << mean  << vcl_endl;
-    vil_convert_stretch_range_limited(img_f, img_b, 0.0f, mean);
-    result = vil_save(img_b, (image_filename+"_wrt_mean.png").c_str());
   } else {
     result = vil_save(*img,image_filename.c_str());
   }
