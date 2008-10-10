@@ -13,4 +13,7 @@ SUBDIRS(bppy)
 # Brown core processing
 SUBDIRS(core)
 
+# Brown bvgl processes
+SUBDIRS(bvgl_pro)
+
 ENDIF(EXPAT_FOUND)

@@ -57,10 +57,12 @@ vil_map_image_process::execute()
   vil_image_view<float>fimg = *fimage;
   // apply the functor
   if (functor == "log"){
+    vcl_cout << "in log\n";
     vil_math_log_functor lg;
     vil_transform(fimg, lg);
   }
   else if (functor == "not") {
+    vcl_cout << "in not\n";
     vil_math_not_functor nt;
     vil_transform(fimg, nt);
   }
