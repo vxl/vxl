@@ -37,13 +37,8 @@
 #include <bwm/bwm_observable_textured_mesh.h>
 #include <bwm/bwm_observable_textured_mesh_sptr.h>
 #include <bwm/bwm_observer.h>
-#include <bwm/bwm_observer_coin3d.h>
-#include <bwm/bwm_observer_proj2d.h>
-#include <bwm/bwm_observer_proj2d_simple.h>
 #include <bwm/bwm_observer_cam.h>
-#include <bwm/bwm_observer_cam_proj.h>
 #include <bwm/bwm_observer_img.h>
-#include <bwm/bwm_observer_lidar.h>
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_observer_proj_cam.h>
 #include <bwm/bwm_observer_rat_cam.h>
@@ -55,13 +50,10 @@
 #include <bwm/bwm_site_mgr.h>
 #include <bwm/bwm_tableau.h>
 #include <bwm/bwm_tableau_cam.h>
-#include <bwm/bwm_tableau_coin3d.h>
 #include <bwm/bwm_tableau_factory.h>
 #include <bwm/bwm_tableau_img.h>
-#include <bwm/bwm_tableau_lidar.h>
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_tableau_proj_cam.h>
-#include <bwm/bwm_tableau_proj2d.h>
 #include <bwm/bwm_tableau_rat_cam.h>
 #include <bwm/bwm_tableau_sptr.h>
 #include <bwm/bwm_tableau_text.h>
