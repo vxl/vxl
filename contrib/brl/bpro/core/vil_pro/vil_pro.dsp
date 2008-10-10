@@ -131,6 +131,12 @@ SOURCE=.\vil_gradient_process.cxx
 # Begin Source File
 SOURCE=.\vil_stretch_image_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_load_image_view_binary_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_save_image_view_binary_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -172,6 +178,12 @@ SOURCE=.\vil_gradient_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_stretch_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_load_image_view_binary_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_save_image_view_binary_process.h
 # End Source File
 # End Group
 # End Target

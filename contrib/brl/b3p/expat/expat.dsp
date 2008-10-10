@@ -139,6 +139,9 @@ SOURCE=.\xmltok_impl.h
 SOURCE=.\cm_expat_mangle.h
 # End Source File
 # Begin Source File
+SOURCE=.\expatConfig.h
+# End Source File
+# Begin Source File
 SOURCE=.\expatConfig.h.in
 # End Source File
 # Begin Source File

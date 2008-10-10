@@ -9,6 +9,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_move_proj_plane.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_delaunay.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

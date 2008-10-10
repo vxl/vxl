@@ -177,25 +177,10 @@ SOURCE=.\bwm_observer.h
 SOURCE=.\bwm_observer_cam.h
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_observer_cam_proj.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_observer_coin3d.h
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_observer_img.h
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_observer_lidar.h
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_observer_mgr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_observer_proj2d.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_observer_proj2d_simple.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_observer_proj_cam.h
@@ -225,9 +210,6 @@ SOURCE=.\bwm_tableau.h
 SOURCE=.\bwm_tableau_cam.h
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_tableau_coin3d.h
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_tableau_img.h
 # End Source File
 # Begin Source File
@@ -235,9 +217,6 @@ SOURCE=.\bwm_tableau_lidar.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_tableau_mgr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_tableau_proj2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_tableau_proj_cam.h
