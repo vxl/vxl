@@ -4,8 +4,6 @@
 // \file
 
 #include "bwm_io_structs.h"
-//#include "bwm_corr_sptr.h"
-//#include "bwm_corr.h"
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
@@ -37,14 +35,6 @@ class bwm_site : public vbl_ref_count
            vsol_point_3d_sptr lvcs);
 
   void tableaus(vcl_vector<bwm_io_tab_config* > &tableaus) { tableaus = tableaus_; }
-
-#if 0
-  void correspondences(vcl_vector<bwm_corr_sptr> &corr) { corr = corresp_; }
-
-  vcl_vector<vsol_point_3d> corresp_world_pts() { return corresp_world_pts_; }
-
-  vcl_string corresp_mode() { return corr_mode_; }
-#endif // 0
 
   void objects(vcl_vector<vcl_pair<vcl_string, vcl_string> > &obj) {obj = objects_; }
 
