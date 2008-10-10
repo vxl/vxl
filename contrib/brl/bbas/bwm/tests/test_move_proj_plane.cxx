@@ -8,7 +8,7 @@
 #include <testlib/testlib_test.h>
 
 #include <bwm/algo/bwm_plane_fitting_lsf.h>
-#include <bwm/bwm_observer_cam_proj.h>
+#include <bwm/bwm_observer_proj_cam.h>
 
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vpgl/vpgl_proj_camera.h>
@@ -37,7 +37,7 @@ void test_move_proj_plane()
   vgl_homg_plane_3d<double> plane2(0,0,1,50);
   vpgl_proj_camera<double> master_cam = read_projective_camera("C:\\test_images\\Jeep\\jcp1_042799_0930.txt");
   vsol_point_2d_sptr master_img_pt = new vsol_point_2d(100, 100);
-  bwm_observer_cam_proj master_obs;
+  bwm_observer_proj_cam master_obs(0);
   master_obs.set_camera(&master_cam, "");
 #if 0
   vpgl_proj_camera<double> second_cam = read_projective_camera("C:\\test_images\\Jeep\\jcp4_042799_1030.txt");
