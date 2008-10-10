@@ -53,19 +53,7 @@ vil_save_image_view_process::execute()
 
   vcl_string image_filename = input1->value();
 
-  bool result = false;
-  if (img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-    //convert the image into byte by casting
-    float min, max;
-    vil_image_view<float> img_f(img);
-    vil_math_value_range(img_f, min, max);
-    vcl_cout << "In vil_save_image_view_process::execute() -- input float image min: " << min  << " max: " << max << vcl_endl;
-    vil_image_view<vxl_byte> img_b(img->ni(), img->nj(), img->nplanes());
-    vil_convert_stretch_range_limited(img_f, img_b, 0.0f, max);
-    result = vil_save(img_b, image_filename.c_str());
-  } else {
-    result = vil_save(*img,image_filename.c_str());
-  }
+  bool result = vil_save(*img,image_filename.c_str());
 
   if ( !result ) {
     vcl_cerr << "Failed to save image to" << image_filename << vcl_endl;
