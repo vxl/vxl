@@ -43,9 +43,6 @@ SET(bwm_sources
    bwm_tableau_cam.cxx              bwm_tableau_cam.h
    bwm_tableau_rat_cam.cxx          bwm_tableau_rat_cam.h
    bwm_tableau_proj_cam.cxx         bwm_tableau_proj_cam.h
-                                    bwm_tableau_coin3d.h
-                                    bwm_tableau_proj2d.h
-                                    bwm_tableau_lidar.h
    bwm_tableau_text.cxx             bwm_tableau_text.h
    bwm_tableau_img.cxx              bwm_tableau_img.h
    bwm_tableau_video.cxx            bwm_tableau_video.h
@@ -62,11 +59,6 @@ SET(bwm_sources
    bwm_observer_img.cxx             bwm_observer_img.h
    bwm_observer_vgui.cxx            bwm_observer_vgui.h
    bwm_observer_cam.cxx             bwm_observer_cam.h
-                                    bwm_observer_cam_proj.h
-                                    bwm_observer_coin3d.h
-                                    bwm_observer_lidar.h
-                                    bwm_observer_proj2d.h
-                                    bwm_observer_proj2d_simple.h
    bwm_observer_proj_cam.cxx        bwm_observer_proj_cam.h
    bwm_observer_rat_cam.cxx         bwm_observer_rat_cam.h
    bwm_observer_video.cxx           bwm_observer_video.h
