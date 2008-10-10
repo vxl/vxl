@@ -43,10 +43,7 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
   double i22 = (double)row12[xstep]+(double)(row22[xstep]-row12[xstep])*normy;
   double iz2 = i12+(i22-i12)*normx;
 
-  T rv;
-  vil_convert_round_pixel<double, T> rounder;
-  rounder(iz1+(iz2-iz1)*normz, rv);
-  return rv;
+  return iz1+(iz2-iz1)*normz;
 }
 
 

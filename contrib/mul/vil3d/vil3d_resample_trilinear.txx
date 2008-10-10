@@ -89,6 +89,9 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           <<z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3<<vcl_endl;
 #endif
 
+  vil_convert_round_pixel<double, T> round;
+
+
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
   const unsigned nk = src_image.nk();
@@ -106,6 +109,8 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
   const vcl_ptrdiff_t d_pstep = dest_image.planestep();
   T* d_plane0 = dest_image.origin_ptr();
 
+
+
   if (all_in_image)
   {
     if (np==1)
@@ -121,8 +126,7 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            *dpt = (T) vil3d_trilin_interp_raw(x, y, z, plane0,
-                                               istep, jstep, kstep);
+            round(vil3d_trilin_interp_raw(x, y, z, plane0,istep, jstep, kstep), *dpt);
         }
       }
     }
@@ -141,8 +145,8 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              dpt[p*d_pstep] = (T) vil3d_trilin_interp_raw(x, y, z,
-                                          plane0+p*pstep, istep, jstep, kstep);
+              round(vil3d_trilin_interp_raw(x, y, z, plane0+p*pstep, istep, jstep, kstep),
+                dpt[p*d_pstep]);
           }
         }
       }
@@ -164,8 +168,8 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            *dpt = (T) vil3d_trilin_interp_safe_extend(x, y, z,
-                              plane0, ni, nj, nk, istep, jstep, kstep);
+            round(vil3d_trilin_interp_safe_extend(x, y, z, plane0, ni, nj, nk, istep, jstep, kstep),
+              *dpt );
         }
       }
     }
@@ -184,8 +188,8 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              dpt[p*d_pstep] = (T) vil3d_trilin_interp_safe_extend(x, y, z,
-                              plane0+p*pstep, ni, nj, nk, istep, jstep, kstep);
+              round(vil3d_trilin_interp_safe_extend(x, y, z, plane0+p*pstep, ni, nj, nk, istep, jstep, kstep),
+                dpt[p*d_pstep] );
           }
         }
       }
@@ -256,6 +260,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           <<"z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3="
           <<z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3<<vcl_endl;
 #endif
+  vil_convert_round_pixel<double, T> round;
 
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
@@ -289,8 +294,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            *dpt = (T) vil3d_trilin_interp_raw(x, y, z, plane0,
-                                               istep, jstep, kstep);
+            round(vil3d_trilin_interp_raw(x, y, z, plane0, istep, jstep, kstep), *dpt);
         }
       }
     }
@@ -309,8 +313,8 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              dpt[p*d_pstep] = (T) vil3d_trilin_interp_raw(x, y, z,
-                                          plane0+p*pstep, istep, jstep, kstep);
+              round(vil3d_trilin_interp_raw(x, y, z, plane0+p*pstep, istep, jstep, kstep),
+                dpt[p*d_pstep]);
           }
         }
       }
@@ -332,8 +336,8 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            *dpt = (T) vil3d_trilin_interp_safe(x, y, z,
-                              plane0, ni, nj, nk, istep, jstep, kstep);
+            round(vil3d_trilin_interp_safe(x, y, z, plane0, ni, nj, nk, istep, jstep, kstep),
+              *dpt);
         }
       }
     }
@@ -352,8 +356,8 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              dpt[p*d_pstep] = (T) vil3d_trilin_interp_safe(x, y, z,
-                              plane0+p*pstep, ni, nj, nk, istep, jstep, kstep);
+              round(vil3d_trilin_interp_safe(x, y, z, plane0+p*pstep, ni, nj, nk, istep, jstep, kstep),
+                dpt[p*d_pstep]);
           }
         }
       }

@@ -122,9 +122,9 @@ static void test_resample_trilinear_edge_extend()
 
 
   bool all_voxs_correct = true;
-  for (unsigned i=0; i+1<dni; ++i)
-    for (unsigned j=0; j+1<dnj; ++j)
-      for (unsigned k=0; k+1<dnk; ++k)
+  for (unsigned i=0; i<dni; ++i)
+    for (unsigned j=0; j<dnj; ++j)
+      for (unsigned k=0; k<dnk; ++k)
         all_voxs_correct = all_voxs_correct &&
         ((k < 5 && dst(i,j,k)==int(5*k + 50*j + 500*i)) ||
         (k == 5 && dst(i,j,k)==int(5*4 + 50*j + 500*i)) );
