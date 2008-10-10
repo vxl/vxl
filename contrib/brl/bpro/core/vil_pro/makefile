@@ -16,6 +16,8 @@ SOURCES += vil_load_from_ascii_process.cxx
 SOURCES += vil_gaussian_process.cxx
 SOURCES += vil_gradient_process.cxx
 SOURCES += vil_stretch_image_process.cxx
+SOURCES += vil_load_image_view_binary_process.cxx
+SOURCES += vil_save_image_view_binary_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
