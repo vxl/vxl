@@ -35,7 +35,7 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
     double tz =  trans.matrix()(2,3);
 
     vimt3d_transform_3d tr;
-    const double units_scaling = use_millimetres ? 1000.0 : 1.0;
+    //const double units_scaling = use_millimetres ? 1000.0 : 1.0;
     tr.set_zoom_only (1000.0*vox_per_mm.x(),
                       1000.0*vox_per_mm.y(),
                       1000.0*vox_per_mm.z(), tx,ty,tz );
