@@ -1,7 +1,6 @@
 //:
 // \file
 
-
 #include "bvgl_changes.h"
 #include "bvgl_change_obj.h"
 #include <vil/vil_image_view.h>
@@ -16,7 +15,6 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj)
   //index through the polygons and create the boolean mask image
   for (unsigned i=0; i<objs_.size(); i++)
   {
-
     vgl_polygon<double> v_poly =  objs_[i]->poly();
     vgl_polygon_scan_iterator<double> psi(v_poly, false);
     for (psi.reset(); psi.next();){
@@ -116,10 +114,10 @@ void bvgl_changes::b_read(vsl_b_istream& is)
   return;
 }
 
-bvgl_change_obj_sptr 
-bvgl_changes::obj(unsigned int i) 
-{ 
-  if (i<size()) 
-    return objs_[i]; 
+bvgl_change_obj_sptr
+bvgl_changes::obj(unsigned int i)
+{
+  if (i<size())
+    return objs_[i];
   return 0;
 }
