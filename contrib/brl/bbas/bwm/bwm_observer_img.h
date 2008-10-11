@@ -23,9 +23,7 @@
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
-#include <bvgl/bvgl_change_obj.h>
 #include <bvgl/bvgl_change_obj_sptr.h>
-#include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
 
 #define VERTEX_TYPE "bwm_soview2D_vertex"
