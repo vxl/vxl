@@ -107,7 +107,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   bwm_observer_vgui() { show_vertices_ = true; }
 
-  enum BWM_DRAW_MODE mode_; 
+  enum BWM_DRAW_MODE mode_;
 
   vgui_style_sptr mesh_style_;
   vgui_style_sptr vertex_style_;
@@ -139,8 +139,10 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   void print_selected_vertex();
 
+#if 0
   //: makes the polygon a little smaller to prevent the face edges overlapping
-  //vsol_polygon_2d_sptr shrink_face(vsol_polygon_2d_sptr poly);
+  vsol_polygon_2d_sptr shrink_face(vsol_polygon_2d_sptr poly);
+#endif
 
   void draw_mesh(bwm_observable_sptr observable,
                  vcl_map<unsigned, bgui_vsol_soview2D* > &poly_list,
@@ -148,10 +150,10 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
                  vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
 
   void draw_vertices(bwm_observable_sptr observable,
-                   vcl_map<unsigned, bgui_vsol_soview2D* > list,
-                   bool selectable,              
-                   vcl_vector<bwm_soview2D_vertex*> &vertx_list,
-                   vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
+                     vcl_map<unsigned, bgui_vsol_soview2D* > list,
+                     bool selectable,
+                     vcl_vector<bwm_soview2D_vertex*> &vertx_list,
+                     vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
 };
 
-#endif
+#endif // bwm_observer_vgui_h
