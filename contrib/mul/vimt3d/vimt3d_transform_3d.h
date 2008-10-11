@@ -335,7 +335,6 @@ class vimt3d_transform_3d
 vimt3d_transform_3d operator*(const vimt3d_transform_3d& L,
                               const vimt3d_transform_3d& R);
 
-
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const vimt3d_transform_3d& b);
 
@@ -345,15 +344,13 @@ void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b);
 //: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b);
 
-
-//: Test whether a 3D transform is zoom-only or lesser, i.e. there may
-// be translation and (anisotropic) scaling but no rotation. 
-// \note This tests only for a commonly-occurring special case; there may 
+//: Test whether a 3D transform is zoom-only or lesser.
+// i.e. there may be translation and (anisotropic) scaling but no rotation.
+// \note This tests only for a commonly-occurring special case; there may
 // be other zoom-only transforms that are not detected.
 // \param zero_tol Used for testing whether elements are zero or not.
 bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
                                    const double zero_tol=1e-9);
-
 
 //=======================================================================
 
