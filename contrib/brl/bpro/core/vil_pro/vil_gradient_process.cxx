@@ -62,18 +62,21 @@ vil_gradient_process::execute()
 
     // vil_sobel_3x3(temp, gx, gy);
     float scale = 1.0f/6.0f;
-    for (int j = 0; j<static_cast<int>(nj); ++j)
-      for (int i = 0; i<static_cast<int>(ni); ++i) {
-        if (i==0||j ==0||i==(ni-1)||j ==(nj-1)){
+    for (unsigned int j = 0; j<nj; ++j)
+      for (unsigned int i = 0; i<ni; ++i) {
+        // boundary: make sure to never access i-1 or j-1 when i==0 or j==0,
+        //           nor access i+1 or j+1 when i==ni-1 or j==nj-1:
+        if (i==0||j==0||i+1==ni||j+1==nj){
           Ix(i,j,p) = 0.0f; Iy(i,j,p) = 0.0f; mag(i,j,p) = 0.0f;
           continue;
         }
+        // at this point, unsigned i-1, i+1, j-1, and j+1 may be used safely:
 
-        float gx = temp(i+1,j-1)+temp(i+1,j)+ temp(i+1,j-1)
-          -temp(i-1,j-1) -temp(i-1,j) -temp(i-1,j-1);
+        float gx = temp(i+1,j-1) +temp(i+1,j) +temp(i+1,j-1)
+                  -temp(i-1,j-1) -temp(i-1,j) -temp(i-1,j-1);
 
-        float gy = temp(i+1,j+1)+temp(i,j+1)+ temp(i-1,j+1)
-          -temp(i+1,j-1) -temp(i,j-1) -temp(i-1,j-1);
+        float gy = temp(i+1,j+1) +temp(i,j+1) +temp(i-1,j+1)
+                  -temp(i+1,j-1) -temp(i,j-1) -temp(i-1,j-1);
 
         Ix(i,j,p) = gx*scale;
         Iy(i,j,p) = gy*scale;
