@@ -53,7 +53,7 @@ void vul_get_timestamp(int &secs, int &msecs)
   struct _timeb real;
   _ftime(&real);
 
-  secs = real.time;
+  secs = static_cast<int>(real.time);
   msecs = real.millitm;
 }
 #endif
