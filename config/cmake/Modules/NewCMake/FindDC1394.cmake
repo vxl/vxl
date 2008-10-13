@@ -12,7 +12,7 @@ FIND_PATH( DC1394_INCLUDE_DIR dc1394/control.h
   /usr/local/include
 )
 
-FIND_LIBRARY( DC1394_LIBRARY dc1394
+FIND_LIBRARY( DC1394_LIBRARIES dc1394
   /usr/lib64
   /usr/lib
   /usr/local/lib
@@ -21,15 +21,19 @@ FIND_LIBRARY( DC1394_LIBRARY dc1394
 
 SET( DC1394_FOUND "NO" )
 IF(DC1394_INCLUDE_DIR)
-  IF(DC1394_LIBRARY)
-    SET( DC1394_LIBRARIES
-      ${DC1394_LIBRARY}
-    )
+  IF(DC1394_LIBRARIES)
     SET( DC1394_FOUND "YES" )
 
 #The following deprecated settings are for backwards compatibility with CMake1.4
     SET (DC1394_INCLUDE_PATH ${DC1394_INCLUDE_DIR})
 
-  ENDIF(DC1394_LIBRARY)
+  ENDIF(DC1394_LIBRARIES)
 ENDIF(DC1394_INCLUDE_DIR)
+
+# Find Apple Framework dependencies
+IF(APPLE AND DC1394_FOUND)
+  SET(DC1394_LIBRARIES ${DC1394_LIBRARIES} 
+                       "-framework CoreFoundation" 
+                       "-framework IOKit" )
+ENDIF(APPLE AND DC1394_FOUND)
 
