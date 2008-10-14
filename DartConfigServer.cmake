@@ -67,4 +67,5 @@ SET (EXPECTED_BUILDS "\\
   {imorphics.com Linux-2.6.22_gcc-4.1.2_Debug} \\
   {lems.brown.edu Linux-2.6_gcc-4.2.3_-Wall} \\
   {lems.brown.edu Linux-2.6.18_gcc-4.1.2} \\
+  {lems.brown.edu Mac_OS_X-10.5.5_unix_make} \\
 ")
