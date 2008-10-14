@@ -34,3 +34,7 @@ SUBDIRS(bvxm)
 
 #voxel world modeling batch
 SUBDIRS(bvxm_batch)
+
+# Lidar modeling (segmentation and meshing)
+SUBDIRS(bmdl)
+
