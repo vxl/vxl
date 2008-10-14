@@ -8,6 +8,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_distance.h>
+#include <vil/vil_bilin_interp.h>
 
 
 //: find the next trace point and direction
@@ -182,18 +183,14 @@ void bmdl_mesh::simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundarie
 
 
 //: construct a mesh out of data and labels
-void bmdl_mesh::mesh_lidar(const vil_image_view<double>& first_return,
-                           const vil_image_view<double>& last_return,
+void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
                            const vil_image_view<unsigned int>& labels,
                            const vil_image_view<double>& heights,
-                           double ground,
+                           const vil_image_view<double>& ground,
                            imesh_mesh& mesh)
 {
-  unsigned ni = first_return.ni();
-  unsigned nj = first_return.nj();
-  
-  vcl_vector<vgl_polygon<double> > boundaries = trace_boundaries(labels);
-  simplify_boundaries(boundaries);
+  unsigned ni = labels.ni();
+  unsigned nj = labels.nj();
   
   // recover the vector of building heights
   vcl_vector<double> bld_heights(boundaries.size());
@@ -205,13 +202,6 @@ void bmdl_mesh::mesh_lidar(const vil_image_view<double>& first_return,
   imesh_vertex_array<3> *verts = new imesh_vertex_array<3>;
   imesh_face_array *faces = new imesh_face_array;
   
-  // create the ground plane
-  verts->push_back(imesh_vertex<3>(0,0,ground));
-  verts->push_back(imesh_vertex<3>(0,nj,ground));
-  verts->push_back(imesh_vertex<3>(ni,nj,ground));
-  verts->push_back(imesh_vertex<3>(ni,0,ground));
-  faces->push_back(imesh_quad(0,1,2,3));
-  
   // create the buildings
   for(unsigned int b=0; b<boundaries.size(); ++b){
     if(boundaries[b].num_sheets() == 0)
@@ -221,7 +211,8 @@ void bmdl_mesh::mesh_lidar(const vil_image_view<double>& first_return,
     vcl_vector< unsigned int > roof;
     for(unsigned i=0; i<pts.size(); ++i){
       const vgl_point_2d<double>& pt = pts[i];
-      verts->push_back(imesh_vertex<3>(pt.x(),pt.y(),ground));
+      double g = vil_bilin_interp_safe_extend(ground, pt.x(), pt.y());
+      verts->push_back(imesh_vertex<3>(pt.x(),pt.y(), g));
       verts->push_back(imesh_vertex<3>(pt.x(),pt.y(),bld_heights[b]));
       unsigned int bi = first_pt + 2*i;
       faces->push_back(imesh_quad(bi+1,bi,bi+2,bi+3));

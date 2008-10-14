@@ -37,12 +37,11 @@ public:
   static void simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundaries );
   
   //: construct a mesh out of data and labels
-  static void mesh_lidar(const vil_image_view<double>& first_return,
-                         const vil_image_view<double>& last_return,
+  static void mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
                          const vil_image_view<unsigned int>& labels,
                          const vil_image_view<double>& heights,
-                               double ground,
-                               imesh_mesh& mesh);
+                         const vil_image_view<double>& ground,
+                         imesh_mesh& mesh);
 
 };
 
