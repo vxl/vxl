@@ -308,6 +308,22 @@ void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
   s.push_front(operand(result));
 }
 
+//: Find the difference between voxels of two images
+void diff__image_3d_of_float__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+
+  vimt3d_image_3d_of<float> result;
+  vil3d_math_image_difference(o1.image(), o2.image(), result.image());
+  result.world2im() = o1.world2im();
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
 //: Resample one image so that it looks like another.
 void resample__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
@@ -737,6 +753,9 @@ class operations
     add_operation("--copy", &copy__image_3d_of_float,
       function_type_t() << operand::e_image_3d_of_float,
       "image", "image image", "Duplicate image onto stack");
+    add_operation("--diff", &diff__image_3d_of_float__image_3d_of_float,
+      function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
+      "im_A im_B", "im_A-B", "Subtract corresponding voxels of im_B from im_A");
     add_operation("--help", &help,
       no_operands,
       "", "", "Display help");
