@@ -32,11 +32,11 @@ public:
 #endif
 
   //: classify each pixel as Ground (0), Vegitation (1), or Building (2)
-  // also return the ground height and a vector by reference with the height of each building
+  // also return the ground height and a cleaned up image of heights
   static double label_lidar(const vil_image_view<double>& first_return,
                             const vil_image_view<double>& last_return,
                                   vil_image_view<unsigned int>& labels,
-                                  vcl_vector<double>& bld_heights);
+                                  vil_image_view<double>& heights);
 
   //: find the ground value as the most common point
   // estimate the standard deviation in the ground by locally fitting a gaussian

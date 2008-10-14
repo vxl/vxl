@@ -101,14 +101,20 @@ bool bmdl_mesh::trace_boundary(vcl_vector<vgl_point_2d<double> >& pts,
 
 //: trace the boundaries of the building labels into polygons
 vcl_vector<vgl_polygon<double> > 
-bmdl_mesh::trace_boundaries(const vil_image_view<unsigned int>& labels, 
-                            unsigned int num_labels)
+bmdl_mesh::trace_boundaries(const vil_image_view<unsigned int>& labels)
 {
+  int ni = labels.ni();
+  int nj = labels.nj();
+  // find the largest label
+  unsigned int num_labels = 0;
+  for(int j=0; j<nj; ++j)
+    for(int i=0; i<ni; ++i)
+      if(labels(i,j) > num_labels)
+        num_labels = labels(i,j);
+  
   vcl_vector<vgl_polygon<double> > boundaries(num_labels,vgl_polygon<double>(0));
   for(unsigned i=0; i<num_labels; ++i)
     boundaries[i].clear();
-  int ni = labels.ni();
-  int nj = labels.nj();
   vil_image_view<bool> visited(ni,nj);
   visited.fill(false);
   
@@ -179,19 +185,27 @@ void bmdl_mesh::simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundarie
 void bmdl_mesh::mesh_lidar(const vil_image_view<double>& first_return,
                            const vil_image_view<double>& last_return,
                            const vil_image_view<unsigned int>& labels,
-                           const vcl_vector<double>& bld_heights,
+                           const vil_image_view<double>& heights,
                            double ground,
                            imesh_mesh& mesh)
 {
-  vcl_vector<vgl_polygon<double> > boundaries = trace_boundaries(labels,bld_heights.size());
+  unsigned ni = first_return.ni();
+  unsigned nj = first_return.nj();
+  
+  vcl_vector<vgl_polygon<double> > boundaries = trace_boundaries(labels);
   simplify_boundaries(boundaries);
+  
+  // recover the vector of building heights
+  vcl_vector<double> bld_heights(boundaries.size());
+  for(int j=0; j<nj; ++j)
+    for(int i=0; i<ni; ++i)
+      if(labels(i,j) > 1)
+        bld_heights[labels(i,j)-2] = heights(i,j);
   
   imesh_vertex_array<3> *verts = new imesh_vertex_array<3>;
   imesh_face_array *faces = new imesh_face_array;
   
   // create the ground plane
-  unsigned ni = first_return.ni();
-  unsigned nj = first_return.nj();
   verts->push_back(imesh_vertex<3>(0,0,ground));
   verts->push_back(imesh_vertex<3>(0,nj,ground));
   verts->push_back(imesh_vertex<3>(ni,nj,ground));

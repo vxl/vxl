@@ -34,7 +34,7 @@ namespace {
                  double minv, double maxv)
   {
     assert(maxv > minv);
-    unsigned int num_bins = bins.size();
+    int num_bins = bins.size();
     assert(num_bins > 0);
     double binsize = (maxv-minv)/num_bins;
 
@@ -59,7 +59,7 @@ namespace {
 
     //find peak
     unsigned int peakv = 0;
-    int peaki = 0;
+    unsigned int peaki = 0;
     for(unsigned int i=0; i<num_bins; ++i){
       if(hist[i] > peakv){
         peakv = hist[i];
@@ -70,7 +70,7 @@ namespace {
 
     // fit a parabola to estimate the range of the peak
     double pp = (peaki+1 < num_bins)?hist[peaki+1]:0;
-    double pm = (peaki-1 >= 0)?hist[peaki-1]:0;
+    double pm = (peaki >= 1)?hist[peaki-1]:0;
     double ro;
     double shift = interpolate_parabola(pm,peakv,pp,ro);
     ro *= 3;
@@ -100,10 +100,10 @@ namespace {
 //: fill infinite values with the median of its 8 neighborhood
 void bmdl_classify::median_fill(vil_image_view<double>& image)
 {
-  unsigned ni = image.ni();
-  unsigned nj = image.nj();
-  for(unsigned int i=0; i<ni; ++i){
-    for(unsigned int j=0; j<nj; ++j){
+  int ni = image.ni();
+  int nj = image.nj();
+  for(int i=0; i<ni; ++i){
+    for(int j=0; j<nj; ++j){
       if(!vnl_math_isfinite(image(i,j)))
       {
         vcl_vector<double> v;
@@ -229,11 +229,11 @@ generate_lidar_images(const vcl_string& glob,
 
 
 //: classify each pixel as Ground (0), Vegitation (1), or Building (2)
-// also return the ground height and a vector by reference with the height of each building
+// also return the ground height and a cleaned up image of heights
 double bmdl_classify::label_lidar(const vil_image_view<double>& first_return,
                                   const vil_image_view<double>& last_return,
                                   vil_image_view<unsigned int>& labels,
-                                  vcl_vector<double>& bld_heights)
+                                  vil_image_view<double>& heights)
 {
   unsigned int ni = first_return.ni();
   unsigned int nj = first_return.nj();
@@ -241,6 +241,7 @@ double bmdl_classify::label_lidar(const vil_image_view<double>& first_return,
   assert(last_return.nj() == nj);
 
   labels.set_size(ni,nj);
+  heights.set_size(ni,nj);
 
   // find the range of finite values in the last returns
   double minv = vcl_numeric_limits<double>::infinity();
@@ -309,7 +310,7 @@ double bmdl_classify::label_lidar(const vil_image_view<double>& first_return,
     }
   }
 
-  bld_heights.clear();
+  vcl_vector<double> bld_heights;
   vcl_vector<unsigned int> sizes;
   cluster_buildings(first_return, last_return,stdev*stdev,labels, bld_heights, sizes);
   while(expand_buildings(first_return, last_return,stdev*stdev,labels, bld_heights, sizes));
@@ -326,11 +327,18 @@ double bmdl_classify::label_lidar(const vil_image_view<double>& first_return,
   }
   for(unsigned int i=0; i<ni; ++i){
     for(unsigned int j=0; j<nj; ++j){
-      labels(i,j) = idx_map[labels(i,j)-2];
+      if(labels(i,j) > 1){
+        labels(i,j) = idx_map[labels(i,j)-2];
+        heights(i,j) = new_bld_heights[labels(i,j)-2];
+      }
+      else if (labels(i,j) == 1)
+        heights(i,j) = first_return(i,j);
+      else
+        heights(i,j) = ground;
     }
   }
-  bld_heights.swap(new_bld_heights);
-  vcl_cout << "final size = "<<bld_heights.size() << vcl_endl;
+
+  vcl_cout << "final size = "<<new_bld_heights.size() << vcl_endl;
   
   return ground;
 }

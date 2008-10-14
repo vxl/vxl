@@ -31,7 +31,7 @@ public:
   
   //: trace the boundaries of the building labels into polygons
   static vcl_vector<vgl_polygon<double> > 
-      trace_boundaries(const vil_image_view<unsigned int>& labels, unsigned int num_labels);
+      trace_boundaries(const vil_image_view<unsigned int>& labels);
   
   //: simplify the boundaries by fitting lines
   static void simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundaries );
@@ -40,7 +40,7 @@ public:
   static void mesh_lidar(const vil_image_view<double>& first_return,
                          const vil_image_view<double>& last_return,
                          const vil_image_view<unsigned int>& labels,
-                         const vcl_vector<double>& bld_heights,
+                         const vil_image_view<double>& heights,
                                double ground,
                                imesh_mesh& mesh);
 
