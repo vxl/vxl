@@ -110,7 +110,7 @@ bool imesh_read_uv2(vcl_istream& is, imesh_mesh& mesh)
    if(num_verts != mesh.num_verts() && num_verts != mesh.num_edges()*2)
      return false;
 
-   for(unsigned int v=0; v<num_verts; ++v){
+   for(unsigned int i=0; i<num_verts; ++i){
       double u,v;
       is >> u >> v;
       uv.push_back(vgl_point_2d<double>(u,v));
