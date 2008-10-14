@@ -50,8 +50,12 @@ SUBDIRS(brdb)
 #Brown Imaging Library
 SUBDIRS(bil)
 
+#Indexed Mesh Library
+SUBDIRS(imesh)
+
 OPTION( BUILD_CONTRIB_VIDL2 "Build Experimental Video Streaming Library" YES )
 IF(BUILD_CONTRIB_VIDL2)
 # Video Library (rewrite)
 SUBDIRS(vidl2)
 ENDIF(BUILD_CONTRIB_VIDL2)
+

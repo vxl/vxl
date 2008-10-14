@@ -140,6 +140,7 @@ contrib/brl/bbas bugl   bugl_   build contrib/gel/vdgl core/vnl core/vgl core/vb
 contrib/brl/bbas btol   btol_   build contrib/brl/bbas/bsol contrib/gel/vtol core/vbl
 contrib/brl/bbas bxml   bxml_   build contrib/brl/bbas/bdgl core/vbl
 contrib/brl/bbas bsta   bsta_   build core/vnl/algo core/vbl
+contrib/brl/bbas imesh  imesh_  build core/vgl core/vul
 contrib/brl/bbas vidl2  vidl2_  build contrib/brl/bbas/vidl2 core/vil core/vul
 contrib/brl/bbas bgui   bgui_   build contrib/brl/bbas/btol core/vgui
 contrib/brl/bbas bgui3d bgui3d_ build core/vgui contrib/gel/mrc/vpgl core/vnl/algo
