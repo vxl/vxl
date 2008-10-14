@@ -88,6 +88,7 @@ bool bmdl_classify_process::execute()
     new brdb_value_t<vil_image_view_base_sptr>(height_img);
   output_data_[2] = output2;
 
+  return true;
 }
 
 bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
@@ -107,11 +108,12 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
   
   if ((lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) && 
     (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)) {
-    vil_image_view<double> first_return = lidar_first->get_view();
-    vil_image_view<double> last_return = lidar_last->get_view();
+    vil_image_view<double> *first_return = (vil_image_view<double>*) lidar_first->get_view().as_pointer();
+    vil_image_view<double> *last_return = (vil_image_view<double>*) lidar_last->get_view().as_pointer();
     label_img = new vil_image_view<unsigned int>();
     height_img = new vil_image_view<double>();
-    bmdl_classify::label_lidar(first_return, last_return, (vil_image_view<unsigned int>)label_img, height_img);
+    bmdl_classify::label_lidar(*first_return, *last_return, 
+      (vil_image_view<unsigned int>)*label_img, (vil_image_view<double>)*height_img);
 
   } else {
     vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE!\n";
