@@ -1,0 +1,39 @@
+# contrib/brl/bseg/bmdl_batch/CMakeLists.txt
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
+IF( PYTHON_FOUND )
+  INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+  IF( EXPAT_FOUND )
+    INCLUDE_DIRECTORIES( ${PYTHON_INCLUDE_PATH} )
+    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
+    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
+
+    INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
+    INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+    INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+    INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bmdl )
+  
+     SET(bmdl_batch_sources
+       batch_bmdl.h batch_bmdl.cxx
+       reg_bmdl.cxx
+     )
+ 
+
+    ADD_LIBRARY(bmdl_batch SHARED ${bmdl_batch_sources})
+
+    #library has to have different name depending on debug or release version.
+
+    SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES OUTPUT_NAME bmdl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+
+    TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bmdl bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro) 
+  
+    IF (PYTHON_DEBUG_LIBRARIES)
+      TARGET_LINK_LIBRARIES( bmdl_batch debug ${PYTHON_DEBUG_LIBRARY})
+    ENDIF(PYTHON_DEBUG_LIBRARIES )
+
+    IF(PYTHON_LIBRARIES)
+      TARGET_LINK_LIBRARIES( bmdl_batch optimized ${PYTHON_LIBRARY})
+    ENDIF(PYTHON_LIBRARIES)
+  ENDIF( EXPAT_FOUND ) 
+ENDIF( PYTHON_FOUND )
