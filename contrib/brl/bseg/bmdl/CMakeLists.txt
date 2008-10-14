@@ -15,5 +15,6 @@ ADD_LIBRARY(bmdl  ${bmdl_sources})
 
 TARGET_LINK_LIBRARIES(bmdl vil_algo imesh)
 
-
+#process lib
+SUBDIRS(pro)
 
