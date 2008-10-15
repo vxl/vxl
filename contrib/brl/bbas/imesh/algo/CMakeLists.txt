@@ -12,22 +12,12 @@ SET( imesh_algo_sources
   imesh_pca.cxx                imesh_pca.h
   imesh_project.cxx            imesh_project.h
   imesh_detect.cxx             imesh_detect.h
-  imesh_kd_tree.cxx            imesh_kd_tree.h
+  imesh_kd_tree.cxx            imesh_kd_tree.h      imesh_kd_tree.txx
                                imesh_render.h
 
   imesh_imls_surface.cxx       imesh_imls_surface.h
 )
 
-
 ADD_LIBRARY( imesh_algo ${imesh_algo_sources} )
 
 TARGET_LINK_LIBRARIES( imesh_algo imesh vgl_algo vpgl vil)
-
-IF( BUILD_TESTING )
-#  SUBDIRS(tests)
-ENDIF( BUILD_TESTING )
-
-
-
-
-
