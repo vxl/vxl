@@ -25,6 +25,18 @@ SUBDIRS += segv
 # segmentation application executables
 SUBDIRS += sbin
 
+# background modeling
+SUBDIRS += bbgm
+
+#voxel world modeling
+SUBDIRS += bvxm
+
+#voxel world modeling batch
+SUBDIRS += bvxm_batch
+
+# Lidar modeling (segmentation and meshing)
+SUBDIRS += bmdl
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
