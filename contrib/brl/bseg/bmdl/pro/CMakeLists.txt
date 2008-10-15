@@ -14,6 +14,7 @@ IF(EXPAT_FOUND)
   SET(bmdl_pro_sources
 
     bmdl_classify_process.h               bmdl_classify_process.cxx
+    bmdl_trace_boundaries_process.h       bmdl_trace_boundaries_process.cxx
   )
 
   AUX_SOURCE_DIRECTORY(Templates bmdl_pro_sources)
