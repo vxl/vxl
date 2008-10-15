@@ -2,14 +2,7 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
 #include <vcl_cstring.h>
-
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vsol/vsol_box_2d.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
@@ -99,23 +92,23 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
   // the file should be a at least a tiff (better, geotiff)
   vcl_cout << "File FORMAT=" << lidar_first->file_format();
 
-  if (vcl_strcmp(lidar_first->file_format(), "tiff") != 0 && 
-    vcl_strcmp(lidar_last->file_format(),"tiff") != 0) {
+  if (vcl_strcmp(lidar_first->file_format(), "tiff") != 0 &&
+      vcl_strcmp(lidar_last->file_format(),"tiff") != 0) {
     vcl_cout << "bmdl_classify_process::classify -- The lidar images should be a TIFF!\n";
     return false;
   }
-  
-  
-  if ((lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) && 
-    (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)) {
+
+  if ((lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) &&
+      (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)) {
     vil_image_view<double> *first_return = (vil_image_view<double>*) lidar_first->get_view().as_pointer();
     vil_image_view<double> *last_return = (vil_image_view<double>*) lidar_last->get_view().as_pointer();
     label_img = new vil_image_view<unsigned int>();
     height_img = new vil_image_view<double>();
-    bmdl_classify::label_lidar(*first_return, *last_return, 
-      (vil_image_view<unsigned int>)*label_img, (vil_image_view<double>)*height_img);
-
-  } else {
+    bmdl_classify::label_lidar(*first_return, *last_return,
+                               (vil_image_view<unsigned int>&)(*label_img),
+                               (vil_image_view<double>&)(*height_img));
+  }
+  else {
     vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE!\n";
     return false;
   }
