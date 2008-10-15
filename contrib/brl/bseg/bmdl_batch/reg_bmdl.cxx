@@ -15,8 +15,12 @@
 // datatypes
 #include <vcl_string.h>
 #include <vil/vil_image_view_base.h>
-#include <bvxm/bvxm_voxel_world.h>
 #include <vpgl/vpgl_camera.h>
+
+// bmdl files
+#include <bmdl/pro/bmdl_classify_process.h>
+#include <bmdl/pro/bmdl_trace_boundaries_process.h>
+#include <bmdl/pro/bmdl_generate_mesh_process.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -30,6 +34,10 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(vpgl_load_proj_camera_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_load_perspective_camera_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_save_perspective_camera_process, bprb_batch_process_manager);
+
+  REG_PROCESS(bmdl_classify_process, bprb_batch_process_manager);
+  REG_PROCESS(bmdl_trace_boundaries_process, bprb_batch_process_manager);
+  REG_PROCESS(bmdl_generate_mesh_process, bprb_batch_process_manager);
 
   Py_INCREF(Py_None);
   return Py_None;
