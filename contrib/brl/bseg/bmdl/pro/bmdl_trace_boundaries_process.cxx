@@ -54,10 +54,13 @@ bool bmdl_trace_boundaries_process::execute()
     static_cast<brdb_value_t< vcl_string>* >(input_data_[1].ptr());
   vcl_string fpath = input1->value();
 
+  trace_boundaries(img, fpath);
+
   return true;
 }
 
-bool bmdl_trace_boundaries_process::trace_bundaries(vil_image_view_base_sptr label_img, vcl_string fpath)
+bool bmdl_trace_boundaries_process::trace_boundaries(vil_image_view_base_sptr label_img, 
+                                                    vcl_string fpath)
 {
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_UINT_32) {
     vcl_cout << "bmdl_trace_boundaries_process::the Label Image pixel format" << label_img->pixel_format() << " undefined" << vcl_endl;
