@@ -15,6 +15,7 @@ IF(EXPAT_FOUND)
 
     bmdl_classify_process.h               bmdl_classify_process.cxx
     bmdl_trace_boundaries_process.h       bmdl_trace_boundaries_process.cxx
+    bmdl_generate_mesh_process.h          bmdl_generate_mesh_process.cxx
   )
 
   AUX_SOURCE_DIRECTORY(Templates bmdl_pro_sources)
