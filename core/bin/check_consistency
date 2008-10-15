@@ -483,6 +483,7 @@ foreach $f (@FILES)
     elsif ($j =~ m'bdgl/bdgl_curve_(tracker|matcher|matching|tracking|clustering)\.h$') { $i.='(|_params)'; }
     elsif ($j eq 'bdgl/bdgl_tracker_curve.h') { $i.='|match_data|[sg]et_best_match_(prev|next)\(\)'; }
     elsif ($j eq 'bdgl/utils.h') { $i='fixAngleMPiPi|fixAngleZTPi|angleDiff'; }
+    elsif ($j eq 'bvgl/bvgl_change_obj.h') { $i.='|vbl_smart_ptr\.txx'; }
     # GEVD
     elsif ($j eq 'gevd/gevd_pixel.h') { $i='(byte|char|short|float|ptr)Pixel'; }
     # MBL
@@ -511,6 +512,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vimt/algo/vimt_find_troughs.h') { $i='vimt_(is_trough_3x3|find_(image|world)_troughs_3x3)'; }
     elsif ($j eq 'vimt/vimt_resample_bilin.h') { $i.='(|_smoothing|_edge_extend)'; }
     elsif ($j eq 'vimt/vimt_vil_v2i.h') { $i.='(_image|_format)'; }
+    elsif ($j eq 'vimt/vimt_load.h') { $i.='(|_transform)'; }
     elsif ($j eq 'vimt3d/vimt3d_image_3d.h') { $i.='|vimt3d_centre_image_at_origin|world_bounding_box'; }
     elsif ($j eq 'vimt3d/vimt3d_load.h') { $i.='(|_transform)'; }
     elsif ($j eq 'vimt3d/vimt3d_resample_trilinear.h') { $i.='(|_scale_2)'; }
@@ -830,6 +832,7 @@ foreach $f (@FILES)
                     | wrapi\S*
                     | writted
                     | yei\S*
+                    | [a-z]*([a-z])\1\1[a-z]*\b
                     )!ix
         && $1 ne 'valush' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
 
