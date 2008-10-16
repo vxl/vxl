@@ -19,12 +19,13 @@ IF( PYTHON_FOUND )
        reg_bmdl.cxx
      )
  
+    ADD_LIBRARY(bmdl_batch MODULE ${bmdl_batch_sources})
 
-    ADD_LIBRARY(bmdl_batch SHARED ${bmdl_batch_sources})
-
-    #library has to have different name depending on debug or release version.
-
-    SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES OUTPUT_NAME bmdl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+    IF(WIN32)
+      #library has to have different name depending on debug or release version.
+      SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES OUTPUT_NAME bmdl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+    ENDIF(WIN32)
+    SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES PREFIX "")
 
     TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bmdl bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro) 
   
