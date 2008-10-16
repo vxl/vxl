@@ -1,7 +1,7 @@
 #ifndef bvgl_changes_sptr_h
 #define bvgl_changes_sptr_h
 
-class bvgl_changes;
+#include "bvgl_changes.h"
 
 #include <vbl/vbl_smart_ptr.h>
 

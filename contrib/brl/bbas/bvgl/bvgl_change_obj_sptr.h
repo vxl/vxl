@@ -1,7 +1,7 @@
 #ifndef bvgl_change_obj_sptr_h
 #define bvgl_change_obj_sptr_h
 
-class bvgl_change_obj;
+#include "bvgl_change_obj.h"
 
 #include <vbl/vbl_smart_ptr.h>
 
