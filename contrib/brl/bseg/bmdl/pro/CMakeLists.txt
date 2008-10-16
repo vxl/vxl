@@ -24,7 +24,7 @@ IF(EXPAT_FOUND)
 
   TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb bil_algo sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil vil_io vil_pro vnl vnl_io bgeo vgl vgl_algo brip brdb)
 
-  #IF( BUILD_TESTING )
-  #  SUBDIRS(tests)
-  #ENDIF( BUILD_TESTING )
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
 ENDIF(EXPAT_FOUND)

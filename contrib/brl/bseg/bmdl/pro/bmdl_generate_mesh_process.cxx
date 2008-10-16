@@ -100,19 +100,19 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
     vcl_cout << "bmdl_generate_mesh_process::the Label Image pixel format" << label_img->pixel_format() << " undefined" << vcl_endl;
     return false;
   }
-  vil_image_view<unsigned int>* labels = static_cast<vil_image_view<unsigned int>* > (label_img.as_pointer());
+  vil_image_view<vxl_uint_32> labels(label_img);
 
   if (height_img->pixel_format() != VIL_PIXEL_FORMAT_DOUBLE) {
     vcl_cout << "bmdl_generate_mesh_process::the Height Image pixel format" << height_img->pixel_format() << " undefined" << vcl_endl;
     return false;
   }
-  vil_image_view<double>* heights = static_cast<vil_image_view<double>* > (height_img.as_pointer());
+  vil_image_view<double> heights(height_img);
 
   if (ground_img->pixel_format() != VIL_PIXEL_FORMAT_DOUBLE) {
     vcl_cout << "bmdl_generate_mesh_process::the Ground Image pixel format" << ground_img->pixel_format() << " undefined" << vcl_endl;
     return false;
   }
-  vil_image_view<double>* ground = static_cast<vil_image_view<double>* > (ground_img.as_pointer());
+  vil_image_view<double> ground(ground_img);
 
   // read polygons
   vsl_b_ifstream os(fpath_poly);
@@ -128,9 +128,8 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
   }
 
   imesh_mesh mesh;
-  bmdl_mesh::mesh_lidar(boundaries , *labels, *heights, *ground, mesh);
-  vcl_ofstream fs(fpath_mesh.c_str());
-  imesh_write_ply2(fs, mesh);
+  bmdl_mesh::mesh_lidar(boundaries , labels, heights, ground, mesh);
+  imesh_write_ply2(fpath_mesh, mesh);
   return true;
 }
 

@@ -6,8 +6,10 @@
 // \brief A class for clipping and image based on a 3D bounding box.
 //        -  Input:
 //             - File path for polygons (binary format)
+//             - label image "vil_image_view_base_sptr"
 //             - height image "vil_image_view_base_sptr"
-//             - File path for polygons (binary format)
+//             - ground image "vil_image_view_base_sptr"
+//             - File path for output meshes (binary format)
 //
 //        -  Output:
 //             - 5

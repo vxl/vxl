@@ -20,8 +20,8 @@
 bmdl_trace_boundaries_process::bmdl_trace_boundaries_process()
 {
   //this process takes 1 input:
-  input_data_.resize(1, brdb_value_sptr(0));
-  input_types_.resize(1);
+  input_data_.resize(2, brdb_value_sptr(0));
+  input_types_.resize(2);
 
   int i=0;
   input_types_[i++] = "vil_image_view_base_sptr";   // label image
