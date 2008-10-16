@@ -129,7 +129,7 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
 
   imesh_mesh mesh;
   bmdl_mesh::mesh_lidar(boundaries , labels, heights, ground, mesh);
-  imesh_write_ply2(fpath_mesh, mesh);
+  imesh_write_obj(fpath_mesh, mesh);
   return true;
 }
 
