@@ -8,6 +8,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
+#include <vil/vil_convert.h>
 
 #include <bprb/bprb_parameters.h>
 
@@ -31,8 +32,6 @@ bmdl_classify_process::bmdl_classify_process()
   output_types_[j++]= "vil_image_view_base_sptr";  // label image
   output_types_[j++]= "vil_image_view_base_sptr";  // height image
 
-  //if (!parameters()->add( "Upper bound for Lidar differences", "mask_thresh", 10.0f ))
-   // vcl_cout << "ERROR: Adding parameters in bmdl_classify_process\n";
 }
 
 bool bmdl_classify_process::execute()
@@ -98,20 +97,32 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
     return false;
   }
 
-  if ((lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) &&
-      (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)) {
+  vil_image_view<double> first_return, last_return;
+  // convert the images to double pixel type
+  if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
+    vil_convert_cast(vil_image_view<float>(lidar_first->get_view()), first_return);
+  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
     vil_image_view<double> first_return = lidar_first->get_view();
-    vil_image_view<double> last_return =  lidar_last->get_view();
-    label_img = new vil_image_view<unsigned int>();
-    height_img = new vil_image_view<double>();
-    bmdl_classify::label_lidar(first_return, last_return,
-                               (vil_image_view<unsigned int>&)(*label_img),
-                               (vil_image_view<double>&)(*height_img));
-  }
   else {
-    vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE!\n";
+    vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
     return false;
   }
+
+  if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
+    vil_convert_cast(vil_image_view<float>(lidar_last->get_view()), last_return);
+  else if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) 
+    vil_image_view<double> last_return =  lidar_last->get_view();
+  else {
+    vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
+    return false;
+  }
+
+  label_img = new vil_image_view<unsigned int>();
+  height_img = new vil_image_view<double>();
+  bmdl_classify::label_lidar(first_return, last_return,
+                             (vil_image_view<unsigned int>&)(*label_img),
+                             (vil_image_view<double>&)(*height_img));
+    
 
   return true;
 }
