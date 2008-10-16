@@ -38,3 +38,6 @@ SUBDIRS(bvxm_batch)
 # Lidar modeling (segmentation and meshing)
 SUBDIRS(bmdl)
 
+# Lidar modeling batch
+SUBDIRS(bmdl_batch)
+
