@@ -243,12 +243,13 @@ public:
 
   vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k, unsigned scale=0);
 
-protected:
-
   void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
                              unsigned grid_k,
                              vgl_h_matrix_2d<double> &H_plane_to_image,
                              vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx=0);
+
+  protected:
+
 #if 0
   //: appearance model voxel storage
   vcl_map<bvxm_voxel_type, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
