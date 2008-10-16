@@ -95,11 +95,23 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\bmdl_classify_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bmdl_generate_mesh_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmdl_trace_boundaries_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\bmdl_classify_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmdl_generate_mesh_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmdl_trace_boundaries_process.h
 # End Source File
 # End Group
 # End Target
