@@ -11,9 +11,8 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-#include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 
 bool get_image(unsigned int id, vil_image_view_base_sptr& image)
 {

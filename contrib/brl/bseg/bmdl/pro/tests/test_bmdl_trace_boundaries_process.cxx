@@ -2,7 +2,6 @@
 #include "../bmdl_trace_boundaries_process.h"
 
 #include <vcl_string.h>
-#include <vcl_iostream.h>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>
@@ -15,9 +14,6 @@
 #include <bprb/bprb_macros.h>
 
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
-
-#include <vul/vul_file.h>
 
 MAIN( test_bmdl_trace_boundaries_process )
 {
