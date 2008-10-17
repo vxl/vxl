@@ -13,7 +13,7 @@ SET( bmdl_sources
 
 ADD_LIBRARY(bmdl  ${bmdl_sources})
 
-TARGET_LINK_LIBRARIES(bmdl vil_algo imesh)
+TARGET_LINK_LIBRARIES(bmdl vil_algo imesh vgl vgl_algo)
 
 #process lib
 SUBDIRS(pro)

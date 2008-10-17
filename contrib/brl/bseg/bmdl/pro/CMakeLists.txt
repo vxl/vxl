@@ -9,7 +9,6 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
   SET(bmdl_pro_sources
-
     bmdl_classify_process.h               bmdl_classify_process.cxx
     bmdl_trace_boundaries_process.h       bmdl_trace_boundaries_process.cxx
     bmdl_generate_mesh_process.h          bmdl_generate_mesh_process.cxx
@@ -19,7 +18,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb vil bgeo)
+  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb vil bgeo vgl vgl_io)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
