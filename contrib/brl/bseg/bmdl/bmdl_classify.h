@@ -46,7 +46,7 @@ public:
 
   static void cluster_buildings(const vil_image_view<double>& first_return,
                                 const vil_image_view<double>& last_return,
-                                      double init_var,
+                                      double zthresh,
                                       vil_image_view<unsigned int>& labels,
                                       vcl_vector<double>& means,
                                       vcl_vector<unsigned int>& sizes);
@@ -55,7 +55,7 @@ public:
   // return true if any changes are made
   static bool expand_buildings(const vil_image_view<double>& first_return,
                                const vil_image_view<double>& last_return,
-                                     double init_var,
+                                     double zthresh,
                                      vil_image_view<unsigned int>& labels,
                                      vcl_vector<double>& means,
                                      vcl_vector<unsigned int>& sizes);

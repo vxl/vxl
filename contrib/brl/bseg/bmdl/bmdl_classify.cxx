@@ -11,8 +11,11 @@
 
 #include <vnl/vnl_math.h>
 
+#include <vil/vil_crop.h>
 #include <vil/algo/vil_binary_opening.h>
 #include <vil/algo/vil_binary_closing.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_point_2d.h>
 
 namespace {
   //: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
@@ -57,10 +60,12 @@ namespace {
     vcl_vector<unsigned int> hist(100,0);
     histogram(data,hist,minv,maxv);
 
+    vcl_cout << "histogram"<<vcl_endl;
     //find peak
     unsigned int peakv = 0;
     unsigned int peaki = 0;
     for(unsigned int i=0; i<num_bins; ++i){
+      vcl_cout << hist[i]<<vcl_endl;
       if(hist[i] > peakv){
         peakv = hist[i];
         peaki = i;
@@ -88,6 +93,7 @@ namespace {
         stdev += data[i]*data[i];
       }
     }
+    vcl_cout << "gaussian count = " << count << vcl_endl;
     mean /= count;
     stdev /= count;
     stdev -= mean*mean;
@@ -252,6 +258,8 @@ double bmdl_classify::label_lidar(const vil_image_view<double>& first_return,
   // assuming a constant height ground
   double gnd_stdev = 0.0;
   double ground = find_ground(last_return,minv,maxv, gnd_stdev);
+  
+  vcl_cout << "ground mean = "<< ground << " stdev = "<< gnd_stdev << vcl_endl;
 
   // expand the range with the first returns
   bmdl_classify::range(first_return,minv,maxv);
@@ -293,12 +301,6 @@ double bmdl_classify::label_lidar(const vil_image_view<double>& first_return,
     }
   }
 
-  vil_structuring_element se;
-  se.set_to_disk(1.5);
-  //vil_binary_opening(veg_image, veg_image, se);
-  //vil_binary_closing(bld_image, bld_image, se);
-
-
   for(unsigned int i=0; i<ni; ++i){
     for(unsigned int j=0; j<nj; ++j){
       if(bld_image(i,j))
@@ -309,11 +311,12 @@ double bmdl_classify::label_lidar(const vil_image_view<double>& first_return,
         labels(i,j) = 0;
     }
   }
+    
 
   vcl_vector<double> bld_heights;
   vcl_vector<unsigned int> sizes;
-  cluster_buildings(first_return, last_return,stdev*stdev,labels, bld_heights, sizes);
-  while(expand_buildings(first_return, last_return,stdev*stdev,labels, bld_heights, sizes));
+  cluster_buildings(first_return, last_return, 0.5/*3*stdev*/,labels, bld_heights, sizes);  
+  while(expand_buildings(first_return, last_return,0.5/*stdev*/,labels, bld_heights, sizes));
   vcl_vector<bool> valid = close_buildings(labels, bld_heights.size());
   
   vcl_vector<double> new_bld_heights;
@@ -370,7 +373,7 @@ double bmdl_classify::find_ground(const vil_image_view<double>& image,
 
 void bmdl_classify::cluster_buildings(const vil_image_view<double>& first_return,
                                       const vil_image_view<double>& last_return,
-                                      double init_var,
+                                      double zthresh,
                                       vil_image_view<unsigned int>& labels,
                                       vcl_vector<double>& means,
                                       vcl_vector<unsigned int>& sizes)
@@ -378,6 +381,8 @@ void bmdl_classify::cluster_buildings(const vil_image_view<double>& first_return
   unsigned int ni=first_return.ni();
   unsigned int nj=last_return.nj();
 
+  // square threshold to compare against squared distances
+  zthresh *= zthresh;
 
   vcl_vector<unsigned int> count;
   vcl_vector<unsigned int> merge_map;
@@ -400,7 +405,8 @@ void bmdl_classify::cluster_buildings(const vil_image_view<double>& first_return
     while(idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     double val = last_return(i,0);
-    if(idx>=0 && vnl_math_sqr(val-mean[idx])<3*init_var){
+    double last_val = last_return(i-1,0);
+    if(idx>=0 && vnl_math_sqr(val-last_val/*mean[idx]*/)<zthresh){
       labels(i,0) = idx+3;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
@@ -421,7 +427,8 @@ void bmdl_classify::cluster_buildings(const vil_image_view<double>& first_return
     while(idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     double val = last_return(0,j);
-    if(idx>=0 && vnl_math_sqr(val-mean[idx])<3*init_var){
+    double last_val = last_return(0,j-1);
+    if(idx>=0 && vnl_math_sqr(val-last_val/*mean[idx]*/)<zthresh){
       labels(0,j) = idx+3;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
@@ -440,15 +447,16 @@ void bmdl_classify::cluster_buildings(const vil_image_view<double>& first_return
         continue;
 
       double val = last_return(i,j);
+      double last_val1 = last_return(i-1,j), last_val2 = last_return(i,j-1);
       int idx1 = labels(i-1,j)-3, idx2 = labels(i,j-1)-3;
       while(idx1>=0 && merge_map[idx1] != idx1 )
         idx1 = merge_map[idx1];
       while(idx2>=0 && merge_map[idx2] != idx2 )
         idx2 = merge_map[idx2];
       int idx = -1;
-      if(idx1>=0 && vnl_math_sqr(val-mean[idx1])<3*init_var)
+      if(idx1>=0 && vnl_math_sqr(val-last_val1/*mean[idx1]*/)<zthresh)
         idx = idx1;
-      if(idx2>=0 && vnl_math_sqr(val-mean[idx2])<3*init_var)
+      if(idx2>=0 && vnl_math_sqr(val-last_val2/*mean[idx2]*/)<zthresh)
       {
         if(idx == -1)
           idx = idx2;
@@ -501,7 +509,7 @@ void bmdl_classify::cluster_buildings(const vil_image_view<double>& first_return
     unique_map[unique[i].second] = i;
     means[i] = unique[i].first;
     sizes[i] = count[unique[i].second];
-    vcl_cout << i<<" mean "<<means[i]<<vcl_endl;
+    //vcl_cout << i<<" mean "<<means[i]<<vcl_endl;
   }
   for(unsigned int i=0; i<unique_map.size(); ++i)
     if(merge_map[i] != i)
@@ -518,7 +526,7 @@ void bmdl_classify::cluster_buildings(const vil_image_view<double>& first_return
 
 bool bmdl_classify::expand_buildings(const vil_image_view<double>& first_return,
                                      const vil_image_view<double>& last_return,
-                                     double var,
+                                     double zthresh,
                                      vil_image_view<unsigned int>& labels,
                                      vcl_vector<double>& means,
                                      vcl_vector<unsigned int>& sizes)
@@ -526,6 +534,8 @@ bool bmdl_classify::expand_buildings(const vil_image_view<double>& first_return,
   bool changed = false;
   unsigned int ni=first_return.ni();
   unsigned int nj=last_return.nj();
+  
+  zthresh *= zthresh;
 
   vcl_vector<unsigned int> merge_map(means.size());
   for(unsigned int i=0; i<merge_map.size(); ++i)
@@ -533,47 +543,56 @@ bool bmdl_classify::expand_buildings(const vil_image_view<double>& first_return,
 
   for(unsigned int i=0; i<ni; ++i){
     for(unsigned int j=0; j<nj; ++j){
+      // only expand into non buildings
       if(labels(i,j) != 1)
         continue;
+      
+      // collect all adjacent building labels
       vcl_set<int> n;
       if(i>0 && labels(i-1,j) > 1){
         unsigned int idx = labels(i-1,j)-2;
         while(merge_map[idx] != idx) idx = merge_map[idx];
-        n.insert(idx);
+        if( vnl_math_sqr(first_return(i,j) - first_return(i-1,j)) < zthresh ||
+            vnl_math_sqr(last_return(i,j) - last_return(i-1,j)) < zthresh )
+          n.insert(idx);
       }
       if(j>0 && labels(i,j-1) > 1){
         unsigned int idx = labels(i,j-1)-2;
         while(merge_map[idx] != idx) idx = merge_map[idx];
-        n.insert(idx);
+        if( vnl_math_sqr(first_return(i,j) - first_return(i,j-1)) < zthresh ||
+            vnl_math_sqr(last_return(i,j) - last_return(i,j-1)) < zthresh )
+          n.insert(idx);
       }
       if(i<ni-1 && labels(i+1,j) > 1){
         unsigned int idx = labels(i+1,j)-2;
         while(merge_map[idx] != idx) idx = merge_map[idx];
-        n.insert(idx);
+        if( vnl_math_sqr(first_return(i,j) - first_return(i+1,j)) < zthresh ||
+           vnl_math_sqr(last_return(i,j) - last_return(i+1,j)) < zthresh )
+          n.insert(idx);
       }
       if(j<nj-1 && labels(i,j+1) > 1){
         unsigned int idx = labels(i,j+1)-2;
         while(merge_map[idx] != idx) idx = merge_map[idx];
-        n.insert(idx);
+        if( vnl_math_sqr(first_return(i,j) - first_return(i,j+1)) < zthresh ||
+           vnl_math_sqr(last_return(i,j) - last_return(i,j+1)) < zthresh )
+          n.insert(idx);
       }
       if(n.empty())
         continue;
+      
       for(vcl_set<int>::iterator itr=n.begin(); itr!=n.end(); ++itr){ 
-        if(vnl_math_sqr(first_return(i,j) - means[*itr]) < 3*var ||
-           vnl_math_sqr(last_return(i,j) - means[*itr]) < 3*var){
-          // test for merge
-          if(labels(i,j) > 1 && vnl_math_sqr(means[labels(i,j)-2]-means[*itr]) < 3*var){
-            unsigned int other = labels(i,j)-2;
-            means[other] = (means[other]*sizes[other] + means[*itr]*sizes[*itr])
-                          /(sizes[other]+sizes[*itr]);
-            sizes[other] += sizes[*itr];
-            sizes[*itr] = 0;
-            merge_map[*itr] = other;
-          }
-          else{
-            labels(i,j) = *itr+2;
-            changed = true;
-          }
+        // test for merge
+        if(labels(i,j) > 1){
+          unsigned int other = labels(i,j)-2;
+          means[other] = (means[other]*sizes[other] + means[*itr]*sizes[*itr])
+                        /(sizes[other]+sizes[*itr]);
+          sizes[other] += sizes[*itr];
+          sizes[*itr] = 0;
+          merge_map[*itr] = other;
+        }
+        else{
+          labels(i,j) = *itr+2;
+          changed = true;
         }
       }
     }
@@ -592,7 +611,7 @@ bool bmdl_classify::expand_buildings(const vil_image_view<double>& first_return,
       merge_map[i] = i2 = merge_map[i2];
   }
   vcl_sort(unique.begin(), unique.end());
-  vcl_cout << "num unique = "<<unique.size() << vcl_endl;
+  //vcl_cout << "num unique = "<<unique.size() << vcl_endl;
 
   vcl_vector<double> new_means(unique.size(),0.0);
   vcl_vector<unsigned int> new_sizes(unique.size(),0);
@@ -624,31 +643,79 @@ vcl_vector<bool>
 bmdl_classify::close_buildings(vil_image_view<unsigned int>& labels,
                                unsigned int num_labels)
 {
-  vcl_vector<bool> valid(num_labels,false);
   unsigned int ni=labels.ni();
   unsigned int nj=labels.nj();
   vil_image_view<unsigned int> new_labels(ni,nj);
+  vcl_vector<vgl_box_2d<int> > building_bounds(num_labels);
+  
+  // transfer vegetation labels to the output
+  // and build a bounding box around each building
   for(unsigned int j=0; j<nj; ++j){
     for(unsigned int i=0; i<ni; ++i){
-      new_labels(i,j) = (labels(i,j)>0)?1:0;
+      new_labels(i,j) = (labels(i,j)==1)?1:0;
+      building_bounds[labels(i,j)-2].add(vgl_point_2d<int>(i,j));
     }
   }
+  
+  // find the maximum of all building sizes
+  unsigned int bni=0, bnj=0;
+  for(unsigned int l=0; l<num_labels; ++l){
+    unsigned int w = building_bounds[l].width()+1;
+    unsigned int h = building_bounds[l].height()+1;
+    if(w > bni) bni = w;
+    if(h > bnj) bnj = h;
+  }
+  
+  vcl_cout << "max bounds = " << bni<<", "<<bnj<<vcl_endl;
+  bni += 4;
+  bnj += 4;
+  vil_image_view<bool> full_mask(bni,bnj);
+  vil_image_view<bool> full_work(bni,bnj);
 
   vil_structuring_element se;
   se.set_to_disk(1.5);
-  vil_image_view<bool> mask(ni,nj);
+  vcl_vector<bool> valid(num_labels,false);
   for(unsigned l=0; l<num_labels; ++l){
-    for(unsigned int j=0; j<nj; ++j){
-      for(unsigned int i=0; i<ni; ++i){
-        mask(i,j) = labels(i,j)-2 == l;
+    const vgl_box_2d<int>& bbox = building_bounds[l];
+    // skip buildings that vanish with a binary dilate
+    if(bbox.width()==0 || bbox.height()==0)
+      continue;
+    
+    //vcl_cout << "closing "<<l<<" of "<<num_labels<<vcl_endl;
+    //vcl_cout << "  from "<<building_bounds[l].min_point()<<" to "<<building_bounds[l].max_point()<<vcl_endl;
+    
+    int min_x=bbox.min_x()-2, min_y=bbox.min_y()-2;
+    if(min_x < 0) min_x = 0;
+    if(min_y < 0) min_y = 0;
+    int max_x=bbox.max_x()+2, max_y=bbox.max_y()+2;
+    if(max_x >= ni) max_x = ni-1;
+    if(max_y >= nj) max_y = nj-1;
+    
+    unsigned lni = max_x - min_x + 1;
+    unsigned lnj = max_y - min_y + 1;
+    
+    // create cropped views of the working image space
+    vil_image_view<bool> mask(lni,lnj);// = vil_crop(full_mask,0,lni,0,lnj); 
+    vil_image_view<bool> work(lni,lnj);// = vil_crop(full_work,0,lni,0,lnj);
+    
+    // copy data into a binary mask
+    for(unsigned int j=0; j<lnj; ++j){
+      for(unsigned int i=0; i<lni; ++i){
+        mask(i,j) = labels(min_x+i,min_y+j)-2 == l;
       }
     }
-    vil_binary_closing(mask,mask,se);
-    vil_binary_opening(mask,mask,se);
-    for(unsigned int j=0; j<nj; ++j){
-      for(unsigned int i=0; i<ni; ++i){
+    // binary closing
+    vil_binary_dilate(mask,work,se);
+    vil_binary_erode(work,mask,se);
+    // binary opening
+    vil_binary_erode(mask,work,se);
+    vil_binary_dilate(work,mask,se);
+    
+    // copy mask back to labels
+    for(unsigned int j=0; j<lnj; ++j){
+      for(unsigned int i=0; i<lni; ++i){
         if(mask(i,j)){
-          new_labels(i,j) = l+2;
+          new_labels(min_x+i,min_y+j) = l+2;
           valid[l] = true;
         }
       }
