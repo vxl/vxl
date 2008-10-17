@@ -48,7 +48,6 @@ MANPAGE_SOURCES += bwm_observable.h
 MANPAGE_SOURCES += bwm_observable_sptr.h
 MANPAGE_SOURCES += bwm_process_commands.h
 MANPAGE_SOURCES += bwm_tableau.h
-MANPAGE_SOURCES += bwm_tableau_lidar.h
 SOURCES += process/bwm_process.cxx
 SOURCES += process/bwm_site_process.cxx
 
