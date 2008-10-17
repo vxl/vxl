@@ -99,23 +99,13 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
 
   vil_image_view<double> first_return, last_return;
   // convert the images to double pixel type
-  if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
-    vil_convert_cast(vil_image_view<float>(lidar_first->get_view()), first_return);
-  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
-    vil_image_view<double> first_return = lidar_first->get_view();
-  else {
+  first_return = vil_convert_cast(double(),lidar_first->get_view());
+  last_return = vil_convert_cast(double(),lidar_last->get_view());
+  if(!first_return || !last_return){
     vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
     return false;
   }
-
-  if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
-    vil_convert_cast(vil_image_view<float>(lidar_last->get_view()), last_return);
-  else if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) 
-    vil_image_view<double> last_return =  lidar_last->get_view();
-  else {
-    vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
-    return false;
-  }
+  
 
   label_img = new vil_image_view<unsigned int>();
   height_img = new vil_image_view<double>();
