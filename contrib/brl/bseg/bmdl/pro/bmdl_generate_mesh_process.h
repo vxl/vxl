@@ -14,7 +14,7 @@
 //        -  Output:
 //             - 5
 //        -  Params:
-//             
+//
 //
 // \author  Gamze D. Tunali
 // \date    10/14/2008
@@ -24,11 +24,9 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_image_resource_sptr.h>
 
 class bmdl_generate_mesh_process : public bprb_process
 {
@@ -54,8 +52,8 @@ class bmdl_generate_mesh_process : public bprb_process
 
  private:
 
-   bool generate_mesh(vcl_string fpath_poly, vil_image_view_base_sptr label_img, 
-     vil_image_view_base_sptr height_img, vil_image_view_base_sptr ground_img, 
+   bool generate_mesh(vcl_string fpath_poly, vil_image_view_base_sptr label_img,
+                      vil_image_view_base_sptr height_img, vil_image_view_base_sptr ground_img,
      vcl_string fpath_mesh);
 };
 

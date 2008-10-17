@@ -13,7 +13,7 @@
 //             - height image "vil_image_view_base_sptr"
 //
 //        -  Params:
-//             
+//
 //
 // \author  Gamze D. Tunali
 // \date    10/14/2008
@@ -23,7 +23,6 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>

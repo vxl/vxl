@@ -11,7 +11,6 @@
 //        -  Output:
 //
 //        -  Params:
-//             
 //
 // \author  Gamze D. Tunali
 // \date    10/14/2008
@@ -21,11 +20,9 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_image_resource_sptr.h>
 
 class bmdl_trace_boundaries_process : public bprb_process
 {
