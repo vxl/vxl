@@ -89,7 +89,7 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
                                          vil_image_view_base_sptr& height_img)
 {
   // the file should be a at least a tiff (better, geotiff)
-  vcl_cout << "File FORMAT=" << lidar_first->file_format();
+  //vcl_cout << "File FORMAT=" << lidar_first->file_format() << vcl_endl;
 
   if (vcl_strcmp(lidar_first->file_format(), "tiff") != 0 &&
       vcl_strcmp(lidar_last->file_format(),"tiff") != 0) {
@@ -98,10 +98,22 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
   }
 
   vil_image_view<double> first_return, last_return;
+
   // convert the images to double pixel type
-  first_return = vil_convert_cast(double(),lidar_first->get_view());
-  last_return = vil_convert_cast(double(),lidar_last->get_view());
-  if(!first_return || !last_return){
+  if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
+    vil_convert_cast(vil_image_view<float>(lidar_first->get_view()), first_return);
+  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
+    first_return = lidar_first->get_view();
+  else {
+    vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
+    return false;
+  }
+
+  if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
+    vil_convert_cast(vil_image_view<float>(lidar_last->get_view()), last_return);
+  else if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) 
+    last_return =  lidar_last->get_view();
+  else {
     vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
     return false;
   }
