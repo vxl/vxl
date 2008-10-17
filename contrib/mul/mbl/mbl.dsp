@@ -611,6 +611,9 @@ SOURCE=.\mbl_save_text_file.txx
 # Begin Source File
 SOURCE=.\mbl_progress_time.h
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_int_list.h
+# End Source File
 # End Group
 # End Target
 # End Project
