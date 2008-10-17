@@ -18,8 +18,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 
-#include <vul/vul_file.h>
-
 MAIN( test_bmdl_generate_mesh_process )
 {
   REG_PROCESS(bmdl_generate_mesh_process, bprb_batch_process_manager);

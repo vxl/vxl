@@ -14,7 +14,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
-#include <vul/vul_file.h>
 
 bool get_image(unsigned int id, vil_image_view_base_sptr& image)
 {

@@ -18,4 +18,4 @@ ADD_TEST( bmdl_trace_boundaries_process ${EXECUTABLE_OUTPUT_PATH}/bmdl_pro_test_
 ADD_TEST( bmdl_generate_mesh_process    ${EXECUTABLE_OUTPUT_PATH}/bmdl_pro_test_all test_bmdl_generate_mesh_process )
 
 ADD_EXECUTABLE( bmdl_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bmdl_pro_test_include bmdl_pro )
+TARGET_LINK_LIBRARIES( bmdl_pro_test_include bmdl_pro bprb brdb vil vgl vgl_io)
