@@ -247,6 +247,27 @@ get_pixel_info_from_image(const int x, const int y,
       return;
     }
     return; }
+    case  VIL_PIXEL_FORMAT_UINT_32: {
+      if (n_p==1)
+      {
+        vil_image_view<vxl_uint_32> v = r->get_view(x,1,y,1);
+        if (!v)
+          vcl_sprintf(msg, "Pixel Not Available");
+        else
+          vcl_sprintf(msg, "(%d, %d)   (uint32) %d", x, y, v(0,0));
+        return;
+      }
+      else if (n_p==3)
+      {
+        vil_image_view<vil_rgb<vxl_uint_32> > v = r->get_view(x,1,y,1);
+        if (!v)
+          vcl_sprintf(msg, "Pixel Not Available");
+        else
+          vcl_sprintf(msg, "(%d, %d)   (uint32)[ R=%d,G=%d,B=%d]", x, y,
+                      v(0,0).R(), v(0,0).G(),v(0,0).B() );
+        return;
+      }
+    return; }
    case  VIL_PIXEL_FORMAT_FLOAT: {
     vil_image_view<float> v = r->get_view(x,1,y,1);
     if (!v)
@@ -274,7 +295,7 @@ get_pixel_info_from_image(const int x, const int y,
     if (!v)
       vcl_sprintf(msg, "Pixel Not Available");
     else
-      vcl_sprintf(msg, "(%d, %d)   (ubyte)[ R=%d,G=%d,B=%d]", x, y,
+      vcl_sprintf(msg, "(%d, %d)   (uint16)[ R=%d,G=%d,B=%d]", x, y,
                   v(0,0).R(), v(0,0).G(),v(0,0).B() );
     return; }
 #if 0
