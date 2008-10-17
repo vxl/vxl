@@ -2,8 +2,6 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
-#include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
 #include <vgl/vgl_polygon.h>
@@ -25,7 +23,7 @@ bmdl_generate_mesh_process::bmdl_generate_mesh_process()
   input_types_.resize(5);
 
   int i=0;
-  input_types_[i++] = "vcl_string";                 // file path (bin) for the polygons to be read  
+  input_types_[i++] = "vcl_string";                 // file path (bin) for the polygons to be read
   input_types_[i++] = "vil_image_view_base_sptr";   // label image
   input_types_[i++] = "vil_image_view_base_sptr";   // height image
   input_types_[i++] = "vil_image_view_base_sptr";   // ground image
@@ -34,7 +32,6 @@ bmdl_generate_mesh_process::bmdl_generate_mesh_process()
   //output
   output_data_.resize(0,brdb_value_sptr(0));
   output_types_.resize(0);
-
 }
 
 bool bmdl_generate_mesh_process::execute()
@@ -87,10 +84,10 @@ bool bmdl_generate_mesh_process::execute()
   return true;
 }
 
-bool 
+bool
 bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
-                                          vil_image_view_base_sptr label_img, 
-                                          vil_image_view_base_sptr height_img, 
+                                          vil_image_view_base_sptr label_img,
+                                          vil_image_view_base_sptr height_img,
                                           vil_image_view_base_sptr ground_img,
                                           vcl_string fpath_mesh)
 {

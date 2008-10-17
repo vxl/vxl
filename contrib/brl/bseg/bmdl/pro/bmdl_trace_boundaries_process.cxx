@@ -2,17 +2,11 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
-#include <vcl_cstring.h>
-
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>
-
-#include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 
 #include <bprb/bprb_parameters.h>
-
 #include <bmdl/bmdl_mesh.h>
 
 bmdl_trace_boundaries_process::bmdl_trace_boundaries_process()
@@ -23,12 +17,11 @@ bmdl_trace_boundaries_process::bmdl_trace_boundaries_process()
 
   int i=0;
   input_types_[i++] = "vil_image_view_base_sptr";   // label image
-  input_types_[i++] = "vcl_string";                 // file path for the polygons to be saved  
+  input_types_[i++] = "vcl_string";                 // file path for the polygons to be saved
 
   //output
   output_data_.resize(0,brdb_value_sptr(0));
   output_types_.resize(0);
-
 }
 
 bool bmdl_trace_boundaries_process::execute()
@@ -57,7 +50,7 @@ bool bmdl_trace_boundaries_process::execute()
   return true;
 }
 
-bool bmdl_trace_boundaries_process::trace_boundaries(vil_image_view_base_sptr label_img, 
+bool bmdl_trace_boundaries_process::trace_boundaries(vil_image_view_base_sptr label_img,
                                                     vcl_string fpath)
 {
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_UINT_32) {
