@@ -9,9 +9,7 @@
 #include <vgl/io/vgl_io_polygon.h>
 
 #include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
 
 #include <bprb/bprb_parameters.h>
 
