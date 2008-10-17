@@ -1,0 +1,61 @@
+#include <testlib/testlib_test.h>
+#include "../bmdl_trace_boundaries_process.h"
+
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+
+#include <vgl/vgl_polygon.h>
+#include <vgl/io/vgl_io_polygon.h>
+
+#include <brdb/brdb_value.h>
+#include <brdb/brdb_selection.h>
+
+#include <bprb/bprb_batch_process_manager.h>
+#include <bprb/bprb_parameters.h>
+#include <bprb/bprb_macros.h>
+
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
+
+#include <vul/vul_file.h>
+
+MAIN( test_bmdl_trace_boundaries_process )
+{
+  REG_PROCESS(bmdl_trace_boundaries_process, bprb_batch_process_manager);
+  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE(vil_image_view_base_sptr);
+
+  //create vil_image_view_base_sptr
+  vcl_string label_img_path = "label.tif";
+  vil_image_view_base_sptr label = vil_load(label_img_path.c_str());
+
+  vcl_string polygons_path = "polygons.bin";
+
+  brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(label);
+  brdb_value_sptr v1 = new brdb_value_t<vcl_string>(polygons_path);
+
+  bool good = bprb_batch_process_manager::instance()->init_process("bmdlTraceBoundariesProcess");
+  good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
+  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
+  good = good && bprb_batch_process_manager::instance()->run_process();
+
+  TEST("run trace boundaries process", good ,true);
+
+  // check the polygons size
+  // read polygons
+  vsl_b_ifstream os(polygons_path);
+  unsigned char ver; //version();
+  vsl_b_read(os, ver);
+  unsigned int size;
+  vsl_b_read(os, size);
+  vgl_polygon<double> polygon;
+  vcl_vector<vgl_polygon<double> > boundaries;
+  for (unsigned i = 0; i < size; i++) {
+    vsl_b_read(os, polygon);
+    boundaries.push_back(polygon);
+  }
+
+  good = (boundaries.size()>0);
+  TEST("polygons are read successfuly", good ,true);
+  SUMMARY();
+}
