@@ -622,15 +622,21 @@ bool trace_texture(const imesh_mesh& mesh,
     // if the last point was close enough to the end
     if(duv.sqr_length() <eps2)
       return true;
-
+    
     // if the end point is inside the triangle then we are done
     if(nbary.x() > 0 && nbary.y() > 0 && 1.0-nbary.x()-nbary.y()>0){
       idxs.push_back(heidx<<2); // this is a face point
       isect_bary.push_back(nbary);
       return true;
     }
-
-
+    else if((nbary.x()==0.0 && nbary.y()>0 && nbary.y()<1) ||
+            (nbary.y()==0.0 && nbary.x()>0 && nbary.x()<1) ||
+            (nbary.x()+nbary.y()==1.0 && nbary.x()>0 && nbary.y()>0)){
+      idxs.push_back((heidx<<2) + 1); // this is an edge point
+      isect_bary.push_back(nbary);
+      return true;
+    }
+    
     // intersect the line with the with the current triangle
     unsigned char s = imesh_triangle_intersect(bary.x(),bary.y(),duv.x(),duv.y(), eps);
     typedef imesh_half_edge_set::f_const_iterator fitr;
