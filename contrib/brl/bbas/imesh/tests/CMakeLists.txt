@@ -1,6 +1,9 @@
 # brl/bbas/imesh/tests/CMakeLists.txt
 # Tests for imesh library
 
+# The following include path is needed for imesh/algo:
+INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+
 ADD_EXECUTABLE( imesh_test_all
   test_driver.cxx
   test_share.cxx          test_share.h
