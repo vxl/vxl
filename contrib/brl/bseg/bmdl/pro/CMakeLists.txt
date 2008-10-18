@@ -18,7 +18,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb vil bgeo vgl vgl_io)
+  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb vil vil_io bgeo vgl vgl_io)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
