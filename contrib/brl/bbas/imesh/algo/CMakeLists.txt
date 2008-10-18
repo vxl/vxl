@@ -3,8 +3,6 @@
 
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
-INCLUDE_DIRECTORIES( ${VXL_GEL_INCLUDE_DIR}/mrc )
-
 SET( imesh_algo_sources
   imesh_transform.cxx          imesh_transform.h
   imesh_intersect.cxx          imesh_intersect.h
