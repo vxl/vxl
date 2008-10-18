@@ -116,11 +116,11 @@ void test_vector_normalisers1()
             for (unsigned j=0;j<snj;++j)
             {
                 if (i==j) //diagonal
-                    srcBlock(i,j) = 500+50.0*rng.normal();
+                    srcBlock(i,j) = 500.0f+50.0f*float(rng.normal());
                 if (i%8==2) //vertical lines
-                    srcBlock(i,j) = 200+20.0*rng.normal();
+                    srcBlock(i,j) = 200.0f+20.0f*float(rng.normal());
                 if (j%4==3) //horiz lines
-                    srcBlock(i,j) = 50+10.0*rng.normal();
+                    srcBlock(i,j) = 50.0f+10.0f*float(rng.normal());
             }
         }
 
