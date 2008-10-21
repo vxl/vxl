@@ -5,6 +5,8 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(btol_sources
+    dll.h
+
     btol_edge_algs.cxx     btol_edge_algs.h
     btol_vertex_algs.cxx   btol_vertex_algs.h
     btol_face_algs.cxx     btol_face_algs.h

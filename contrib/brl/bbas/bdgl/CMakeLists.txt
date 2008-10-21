@@ -5,6 +5,8 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(bdgl_sources
+    dll.h
+
     bdgl_curve_algs.cxx   bdgl_curve_algs.h
     bdgl_region_algs.cxx   bdgl_region_algs.h
     bdgl_curve_region.cxx bdgl_curve_region.h

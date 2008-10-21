@@ -170,6 +170,7 @@ SET(vgui_sources
   vgui_statusbar.h
 
   # extra header files
+  dll.h
   vgui_gl.h
   vgui_glu.h
   vgui_glx.h

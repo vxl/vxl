@@ -8,6 +8,8 @@ IF( MPEG2_FOUND )
 ENDIF( MPEG2_FOUND )
 
 SET(vidl_vil1_sources
+  dll.h
+
   vidl_vil1_vob_frame_index.cxx    vidl_vil1_vob_frame_index.h
   vidl_vil1_file_sequence.cxx      vidl_vil1_file_sequence.h
   vidl_vil1_codec.h                vidl_vil1_codec_sptr.h

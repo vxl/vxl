@@ -3,6 +3,8 @@
 
 
 SET(bwm_video_sources
+   dll.h
+
    bwm_video_cam_istream.cxx     bwm_video_cam_istream.h   bwm_video_cam_istream_sptr.h
    bwm_video_cam_ostream.cxx     bwm_video_cam_ostream.h   bwm_video_cam_ostream_sptr.h
    bwm_video_corr.cxx            bwm_video_corr.h          bwm_video_corr_sptr.h

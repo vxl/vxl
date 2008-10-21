@@ -29,6 +29,8 @@ IF(NETLIB_FOUND)
   INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
 
   SET( vnl_algo_sources
+    dll.h
+
     vnl_algo_fwd.h
     vnl_netlib.h
 

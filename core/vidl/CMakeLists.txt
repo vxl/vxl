@@ -14,6 +14,8 @@ IF( FFMPEG_FOUND )
 ENDIF( FFMPEG_FOUND )
 
 SET(vidl_sources
+  dll.h
+
   vidl_vob_frame_index.cxx    vidl_vob_frame_index.h
   vidl_file_sequence.cxx      vidl_file_sequence.h
   vidl_codec.cxx vidl_codec.h vidl_codec_sptr.h

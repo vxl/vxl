@@ -15,6 +15,8 @@ IF(BUILD_RPL) # bmvv_f_manager.cxx needs rpl/rrel
 
  # sources that depend on xerces and vgui  being present
  SET(bmvv_sources
+    dll.h
+
     #bmvv_multiview_manager.cxx     bmvv_multiview_manager.h
     #bmvv_tomography_manager.cxx    bmvv_tomography_manager.h  # used btom library
      bmvv_recon_manager.cxx         bmvv_recon_manager.h
