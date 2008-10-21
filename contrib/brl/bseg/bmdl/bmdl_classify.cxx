@@ -656,7 +656,8 @@ bmdl_classify::close_buildings(vil_image_view<unsigned int>& labels,
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       new_labels(i,j) = (labels(i,j)==1)?1:0;
-      building_bounds[labels(i,j)-2].add(vgl_point_2d<int>(i,j));
+      if(labels(i,j)>1)
+	building_bounds[labels(i,j)-2].add(vgl_point_2d<int>(i,j));
     }
   }
 
