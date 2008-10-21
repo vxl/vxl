@@ -35,7 +35,9 @@ ELSE(EXPAT_FOUND)
 
     SET( EXPAT_FOUND "YES" )
     SET( EXPAT_LIBRARIES expat )  
-    SET( EXPAT_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat)
+    SET( EXPAT_LIBRARY expat )  
+    SET( EXPAT_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
+    SET( EXPAT_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
     SET( EXPAT_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expat)
         
   ENDIF(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
