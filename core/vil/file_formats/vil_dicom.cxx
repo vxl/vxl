@@ -987,7 +987,7 @@ read_pixels_into_buffer(DcmPixelData* pixels,
 #ifdef MIXED_ENDIAN
     void* in_begin = reinterpret_cast<void*>(temp1);
 #else
-    void* in_begin = pixel_data->getData();
+    void* in_begin = const_cast<void*>(pixel_data->getData());
 #endif //MIXED_ENDIAN
     float* out_begin = static_cast<float*>( out_buf->data() );
 
