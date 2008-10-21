@@ -117,6 +117,16 @@ class imesh_mesh
 
     //: Set the texture coordinates
     void set_tex_coords(const vcl_vector<vgl_point_2d<double> >& tc);
+  
+    //: Return a vector indicating which faces have texture
+    const vcl_vector<bool>& valid_tex_faces() const { return valid_tex_faces_; }
+  
+    //: Set the vector indicating which faces have texture
+    void set_valid_tex_faces(const vcl_vector<bool>& valid);
+  
+    //: Label all faces with positive (counter clockwise orientation) area as valid
+    //  this requirement refers to the texture map coordinates
+    void label_ccw_tex_faces_valid();
 
     //: Map a barycentric coordinate (u,v) on triangle \param tri into texture space
     vgl_point_2d<double> texture_map(unsigned int tri,
@@ -128,7 +138,11 @@ class imesh_mesh
     vcl_auto_ptr<imesh_face_array_base> faces_;
     imesh_half_edge_set half_edges_;
 
+    //: vector of texture coordinates
     vcl_vector<vgl_point_2d<double> > tex_coords_;
+    //: indicate which faces have texture data
+    vcl_vector<bool> valid_tex_faces_; 
+    //: the type of texture coordinates
     tex_coord_type tex_coord_status_;
 };
 

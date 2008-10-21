@@ -5,6 +5,8 @@
 
 
 #include "imesh_mesh.h"
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_area.h>
 
 #include <vcl_iostream.h>
 
@@ -200,6 +202,45 @@ vgl_point_2d<double> imesh_mesh::texture_map(unsigned int tri,
     tex += v*vgl_vector_2d<double>(tex_coords_[v3].x(),tex_coords_[v3].y());
   }
   return tex;
+}
+
+
+//: Set the vector indicating which faces have texture
+void imesh_mesh::set_valid_tex_faces(const vcl_vector<bool>& valid)
+{
+  if(valid.size() == this->num_faces() && has_tex_coords())
+    valid_tex_faces_ = valid;
+}
+
+
+//: Label all faces with positive (counter clockwise orientation) area as valid
+//  this requirement refers to the texture map coordinates
+void imesh_mesh::label_ccw_tex_faces_valid()
+{  
+  switch(tex_coord_status_)
+  {
+    case TEX_COORD_ON_VERT:
+    {
+      valid_tex_faces_.resize(this->num_faces());
+      vgl_polygon<double> face(1);
+      imesh_face_array_base& faces = this->faces();
+      for(unsigned int f=0; f<num_faces(); ++f)
+      {
+        const unsigned int num_v = faces.num_verts(f);
+        for(unsigned int i=0; i<num_v; ++i){
+          face.push_back(tex_coords_[faces(f,i)]);
+        }
+        valid_tex_faces_[f] = vgl_area_signed(face) > 0;
+      }
+      break;
+    }
+    case TEX_COORD_ON_CORNER:
+      vcl_cerr << "imesh_mesh::label_ccw_tex_faces_valid()"
+               << " not implemented for TEX_COORD_ON_CORNER"<<vcl_endl;
+      break;
+    default:
+      break;
+  }
 }
 
 
