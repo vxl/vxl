@@ -15,10 +15,25 @@
 imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
   : imesh_mesh(meshes[0]), mean_verts_(this->vertices().clone())
 {
+  vnl_matrix<double> M = compute_mean(meshes);
+  vnl_svd<double> A(M);
+
+  std_devs_ = A.W().diagonal();
+  pc_ = A.U().transpose();
+
+  params_.set_size(std_devs_.size());
+  params_.fill(0.0);
+}
+
+
+//: compute and set the mean return the deviations matrix
+vnl_matrix<double> 
+imesh_pca_mesh::compute_mean(const vcl_vector<imesh_mesh>& meshes)
+{
   const unsigned num_training = meshes.size();
   vnl_matrix<double> M(this->num_verts()*3,num_training);
   vnl_vector<double> mean(this->num_verts()*3,0.0);
-
+  
   for(unsigned int i=0; i<num_training; ++i)
   {
     assert(meshes[i].num_verts() == this->num_verts());
@@ -32,9 +47,9 @@ imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
       mean[3*v+2] += verts[v][2];
     }
   }
-
+  
   mean /= num_training;
-
+  
   for(unsigned int i=0; i<num_training; ++i)
   {
     M.set_column(i,M.get_column(i) - mean);
@@ -46,14 +61,8 @@ imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
       verts[v][2] = mverts[v][2] = mean[3*v+2];
     }
   }
-
-  vnl_svd<double> A(M);
-
-  std_devs_ = A.W().diagonal();
-  pc_ = A.U().transpose();
-
-  params_.set_size(std_devs_.size());
-  params_.fill(0.0);
+  
+  return M;
 }
 
 
@@ -77,6 +86,14 @@ imesh_pca_mesh::imesh_pca_mesh(const imesh_pca_mesh& other)
     params_(other.params_)
 {
 }
+
+
+//: Construct from a mesh with no variation
+imesh_pca_mesh::imesh_pca_mesh(const imesh_mesh& mesh)
+  : imesh_mesh(mesh), mean_verts_(this->vertices().clone())
+{
+}
+
 
 
 //: Initialize the PCA data (assuming mesh data is already set)

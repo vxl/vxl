@@ -662,6 +662,12 @@ bool trace_texture(const imesh_mesh& mesh,
 
       if(fidx == imesh_invalid_idx)
         return false;
+      if(!mesh.valid_tex_faces().empty() && 
+         !mesh.valid_tex_faces()[fidx])
+      {
+        vcl_cout << "found invalid face"<<vcl_endl;
+        return false;
+      }
 
       // map the barycentric coordinates into those of the adjacent triangle
       fi = he.face_begin(fidx);
@@ -744,10 +750,11 @@ bool trace_texture(const imesh_mesh& mesh,
     else
     {
       vcl_cout << "invalid intersection" << vcl_endl;
-      exit(-1);
+      unsigned char s = imesh_triangle_intersect(bary.x(),bary.y(),duv.x(),duv.y(), eps);
+      return false;
     }
   }
-  return imesh_invalid_idx;
+  return false;
 }
 
 }
@@ -803,7 +810,8 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   for(unsigned int j=(i+1)%pts_2d.size(); j!=i; j=(j+1)%pts_2d.size() )
   {
     bool valid = trace_texture(mesh,pts_2d[j],idxs,pts_uv);
-    assert(valid);
+    if(!valid)
+      return true; // curve is clipped so exit here
   }
   // connect back to the first point, but remove the duplicated first point
   bool valid = trace_texture(mesh,pts_2d[i],idxs,pts_uv);

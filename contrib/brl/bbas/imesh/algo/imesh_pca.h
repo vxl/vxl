@@ -87,8 +87,12 @@ class imesh_pca_mesh : public imesh_mesh
       assert(dynamic_cast<imesh_vertex_array<d>*>(mean_verts_.get()));
       return static_cast<imesh_vertex_array<d>&>(*mean_verts_);
     }
-
-  private:
+  
+  protected:
+    //: compute and set the mean return the deviations matrix 
+    vnl_matrix<double> compute_mean(const vcl_vector<imesh_mesh>& meshes);
+    //: Construct from a mesh with no variation
+    imesh_pca_mesh(const imesh_mesh& mesh);
 
     vnl_vector<double> std_devs_;
     vnl_matrix<double> pc_;
