@@ -141,9 +141,10 @@ contrib/brl/bbas btol   btol_   build contrib/brl/bbas/bsol contrib/gel/vtol cor
 contrib/brl/bbas bxml   bxml_   build contrib/brl/bbas/bdgl core/vbl
 contrib/brl/bbas bsta   bsta_   build core/vnl/algo core/vbl
 contrib/brl/bbas imesh  imesh_  build core/vgl core/vul
-contrib/brl/bbas vidl2  vidl2_  build contrib/brl/bbas/vidl2 core/vil core/vul
+contrib/brl/bbas vidl2  vidl2_  build core/vil core/vul
 contrib/brl/bbas bgui   bgui_   build contrib/brl/bbas/btol core/vgui
 contrib/brl/bbas bgui3d bgui3d_ build core/vgui contrib/gel/mrc/vpgl core/vnl/algo
+contrib/brl/bseg bmdl   bmdl_   build contrib/brl/bbas/imesh core/vil
 contrib/brl/bseg brip   brip_   build contrib/brl/bbas/bsol core/vil1 core/vil core/vbl
 contrib/brl/bseg sdet   sdet_   build contrib/brl/bseg/brip contrib/brl/bbas/btol core/vil1
 contrib/brl/bseg vpro   vpro_   build contrib/brl/bseg/sdet core/vidl_vil1
