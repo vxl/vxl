@@ -3646,7 +3646,8 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
       for (int jj=-rj; jj<=rj; ++jj)
         for (int ii=-ri; ii<=ri; ++ii)
           if (mask[jj+rj][ii+ri])
-            res_mask(i+ii,j+jj,1) = rv;
+            if(rv>res_mask(i+ii,j+jj,1))
+              res_mask(i+ii,j+jj,1) = rv;
     }
   return res_mask;
 }
