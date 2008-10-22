@@ -662,12 +662,10 @@ bool trace_texture(const imesh_mesh& mesh,
 
       if(fidx == imesh_invalid_idx)
         return false;
+      // check if the next triangle is out of bounds
       if(!mesh.valid_tex_faces().empty() && 
          !mesh.valid_tex_faces()[fidx])
-      {
-        vcl_cout << "found invalid face"<<vcl_endl;
         return false;
-      }
 
       // map the barycentric coordinates into those of the adjacent triangle
       fi = he.face_begin(fidx);
@@ -727,6 +725,10 @@ bool trace_texture(const imesh_mesh& mesh,
 
       if(fidx == imesh_invalid_idx)
         return false;
+      // check if the next triangle is out of bounds
+      if(!mesh.valid_tex_faces().empty() && 
+         !mesh.valid_tex_faces()[fidx])
+        return false;
 
       // map the barycentric coordinates into those of the next triangle
       unsigned vidx = fi->vert_index();
@@ -778,6 +780,7 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   bool clipped = false;
   pts_uv.clear();
   idxs.clear();
+  const unsigned int npts = pts_2d.size();
   const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
   assert(mesh.faces().regularity() == 3);
   const imesh_regular_face_array<3>& tris =
@@ -789,7 +792,7 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   unsigned int i=0;
   int idx;
   vgl_point_2d<double> pt_uv;
-  for(; i<pts_2d.size(); ++i)
+  for(; i<npts; ++i)
   {
     const vgl_point_2d<double>& pt = pts_2d[i];
     if(pt.x() >= 0.0 && pt.x() <= 1.0 && pt.y() >= 0.0 && pt.y() <= 1.0)
@@ -800,21 +803,48 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
     }
     clipped = true;
   }
-  if(i==pts_2d.size())
+  if(i==npts)
     return false;
 
   idxs.push_back(he.face_begin(idx)->half_edge_index()<<2);
   pts_uv.push_back(pt_uv);
 
   // trace the rest of the polygon
-  for(unsigned int j=(i+1)%pts_2d.size(); j!=i; j=(j+1)%pts_2d.size() )
+  bool valid = true;
+  for(unsigned int j=(i+1)%npts; j!=i; j=(j+1)%npts )
   {
-    bool valid = trace_texture(mesh,pts_2d[j],idxs,pts_uv);
+    valid = trace_texture(mesh,pts_2d[j],idxs,pts_uv);
     if(!valid)
-      return true; // curve is clipped so exit here
+      break; // curve is clipped so exit here
   }
+  // if the curve was clipped, try tracing in reverse to get the rest
+  if(!valid)
+  {
+    vcl_vector<vgl_point_2d<double> > rev_pts_uv(1,pts_uv.front());
+    vcl_vector<unsigned long> rev_idxs(1,idxs.front());
+    const unsigned int step = npts-1;
+    for(unsigned int j=(i+step)%npts; j!=i; j=(j+step)%npts )
+    {
+      valid = trace_texture(mesh,pts_2d[j],rev_idxs,rev_pts_uv);
+      if(!valid)
+        break; // curve is clipped so exit here
+    }
+    vcl_reverse(rev_pts_uv.begin(),rev_pts_uv.end());
+    vcl_reverse(rev_idxs.begin(),rev_idxs.end());
+    unsigned int num_new_pts = rev_pts_uv.size();
+    rev_pts_uv.resize(rev_pts_uv.size()+pts_uv.size()-1);
+    vcl_copy(pts_uv.begin()+1, pts_uv.end(), rev_pts_uv.begin()+num_new_pts);
+    rev_idxs.resize(rev_idxs.size()+idxs.size()-1);
+    vcl_copy(idxs.begin()+1, idxs.end(), rev_idxs.begin()+num_new_pts);
+    
+    idxs.swap(rev_idxs);
+    pts_uv.swap(rev_pts_uv);
+                
+    return true; // return true to indicate clipping
+  }
+  
   // connect back to the first point, but remove the duplicated first point
-  bool valid = trace_texture(mesh,pts_2d[i],idxs,pts_uv);
+  valid = trace_texture(mesh,pts_2d[i],idxs,pts_uv);
   assert(valid);
   idxs.pop_back();
   pts_uv.pop_back();
