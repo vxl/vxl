@@ -189,7 +189,7 @@ void bmdl_classify<T>::segment()
   // ground threshold (3 standard deviations from bare earth)
   T gthresh = 3.0*hgt_stdev_;
   // vegetation threshold (3 standard deviation from difference in returns)
-  T vthresh = 3.0*vcl_sqrt(2)*hgt_stdev_;
+  T vthresh = 3.0*vcl_sqrt(2.0)*hgt_stdev_;
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       // test for ground
