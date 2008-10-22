@@ -97,6 +97,8 @@ bool bmdl_classify_process::classify(const vil_image_view<T>& lidar_first,
   classifier.label_lidar();
   label_img = classifier.labels();
   height_img = classifier.heights();
+  
+  return true;
 }
 
 
@@ -122,9 +124,9 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
     if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
     {
       height_img = new vil_image_view<float>();
-      classify<float>(lidar_first->get_view(), lidar_last->get_view(),
-                      (vil_image_view<unsigned int>&)(*label_img),
-                      (vil_image_view<float>&)(*height_img));
+      return classify<float>(lidar_first->get_view(), lidar_last->get_view(),
+                             (vil_image_view<unsigned int>&)(*label_img),
+                             (vil_image_view<float>&)(*height_img));
     }
     else
     {
@@ -139,9 +141,9 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
     if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
     {
       height_img = new vil_image_view<double>();
-      classify<double>(lidar_first->get_view(), lidar_last->get_view(),
-                      (vil_image_view<unsigned int>&)(*label_img),
-                      (vil_image_view<double>&)(*height_img));
+      return classify<double>(lidar_first->get_view(), lidar_last->get_view(),
+                              (vil_image_view<unsigned int>&)(*label_img),
+                              (vil_image_view<double>&)(*height_img));
     }
     else
     {
@@ -151,7 +153,7 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
   }
     
 
-  return true;
+  return false;
 }
 
 
