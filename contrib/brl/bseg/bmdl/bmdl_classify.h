@@ -13,55 +13,113 @@
 #include <vil/vil_image_view.h>
 //#include <vgl/vgl_box_2d.h>
 
+template <class T>
 class bmdl_classify {
 public:
-  //: fill infinite values with the median of its 8 neighborhood
-  static void median_fill(vil_image_view<double>& image);
+  //: Constructor 
+  // \param height_noise_stdev is the standard deviation in lidar height
+  //  This parameter can be set manually or estimated
+  bmdl_classify(T height_noise_stdev = 0.01);
+  
+  //: Set the first and last return images
+  void set_lidar_data(const vil_image_view<T>& first_return,
+                      const vil_image_view<T>& last_return);
+  
+  //: Set the bare earth image
+  void set_bare_earth(const vil_image_view<T>& bare_earth);
+  
+  //: Estimate a constant bare earth model
+  // This function returns the constant height 
+  // and also uses it to fill the bare earth image
+  T estimate_bare_earth();
+  
+  //: Estimate the standard deviation in height due to noise
+  // returns the estimate and stores it internally for later use
+  T estimate_height_noise_stdev();
+  
+  //: Manually specify the standard deviation in lidar height from noise
+  void set_height_noise_stdev(T stdev) { hgt_stdev_ = stdev; } 
+  
+  //: Access the bare earth image
+  const vil_image_view<T>& bare_earth() const {return bare_earth_;}
+  
+  //: Classify each pixel as Ground (0), Vegitation (1), or Building (>=2)
+  // Each building is given an index sequentially starting with 2 
+  // and sorted by mean height.
+  // \note This is the main function you should call, it runs all the steps
+  void label_lidar();
+  
+  //: Perform an initial segementation at each pixel using thresholds
+  // classify each pixel as Ground (0), Vegitation (1), or Building (2)
+  // results are stored in the labels image
+  void segment();
+  
+  //: Cluster pixels on buildings into groups of adjacent pixels
+  // with similar heights.  Assign a new label to each groups.
+  // returns building mean heights and pixel counts by reference
+  void cluster_buildings(vcl_vector<T>& means,
+                         vcl_vector<unsigned int>& sizes);
+  
+  //: Refine the building regions
+  void refine_buildings(vcl_vector<T>& means,
+                        vcl_vector<unsigned int>& sizes);
+  
+  //: Access the resulting label image
+  vil_image_view<unsigned int> labels() const { return labels_; }
+  
+  //: Access the resulting height image
+  vil_image_view<T> heights() const { return heights_; }
 
+  
+private:
+  
+  //: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
+  //  \returns the peak value by reference in \p y_peak
+  //  \returns the peak location offset from the x of \p y_0
+  T interpolate_parabola(T y_1, T y_0, T y_2, T& root_offset) const;
+  
+  //: Compute a histogram of the data
+  // Does not reset the initial bin values to zero
+  void histogram(const vcl_vector<T>& data, vcl_vector<unsigned int>& bins,
+                 T minv, T maxv) const;
+  
+  //: Find the maximum peak in the data and fit a gaussian to it
+  // Search in the range \a minv to \a maxv
+  void fit_gaussian_to_peak(const vcl_vector<T>& data, T minv, T maxv,
+                            T& mean, T& stdev) const;
+  
   //: expand the range (minv, maxv) with the data in \a image
   // only finite values count
-  static void range(const vil_image_view<double>& image,
-                          double& minv, double& maxv);
-
-#if 0
-  //: read one or more FLIMAP ASCII files and build a pair of LIDAR images (like Buckeye format)
-  static void generate_lidar_images(const vcl_string& glob, const vgl_box_2d<double>& bbox,
-                                          vil_image_view<double>& return1,
-                                          vil_image_view<double>& return2,
-                                          vil_image_view<vxl_byte>& rgb_img);
-#endif
-
-  //: classify each pixel as Ground (0), Vegitation (1), or Building (2)
-  // also return the ground height and a cleaned up image of heights
-  static double label_lidar(const vil_image_view<double>& first_return,
-                            const vil_image_view<double>& last_return,
-                                  vil_image_view<unsigned int>& labels,
-                                  vil_image_view<double>& heights);
-
-  //: find the ground value as the most common point
-  // estimate the standard deviation in the ground by locally fitting a gaussian
-  static double find_ground(const vil_image_view<double>& image,
-                            double minv, double maxv,
-                            double& gnd_stdev);
-
-  static void cluster_buildings(const vil_image_view<double>& first_return,
-                                const vil_image_view<double>& last_return,
-                                      double zthresh,
-                                      vil_image_view<unsigned int>& labels,
-                                      vcl_vector<double>& means,
-                                      vcl_vector<unsigned int>& sizes);
-
+  void range(const vil_image_view<T>& image,
+             T& minv, T& maxv) const;
+  
   //: Search for nearby pixel that can be added to each building
   // return true if any changes are made
-  static bool expand_buildings(const vil_image_view<double>& first_return,
-                               const vil_image_view<double>& last_return,
-                                     double zthresh,
-                                     vil_image_view<unsigned int>& labels,
-                                     vcl_vector<double>& means,
-                                     vcl_vector<unsigned int>& sizes);
-
-  static vcl_vector<bool> close_buildings(vil_image_view<unsigned int>& labels,
-                                          unsigned int num_labels);
+  bool expand_buildings(vcl_vector<T>& means,
+                        vcl_vector<unsigned int>& sizes);
+  
+  //: Morphological clean up on each building independently
+  vcl_vector<bool> close_buildings(unsigned int num_labels);
+  
+  
+  //: first return image
+  vil_image_view<T> first_return_;
+  //: last return image
+  vil_image_view<T> last_return_;
+  //: bare earth estimate image
+  vil_image_view<T> bare_earth_;
+  
+  //: The estimated standard deviation of noise in height
+  T hgt_stdev_;
+  //: The range spanned by the first returns
+  T first_min_, first_max_;
+  //: The range spanned by the last returns
+  T last_min_, last_max_;
+  
+  //: computed segmentation labels
+  vil_image_view<unsigned int> labels_;
+  //: clean up height estimates for use in meshing
+  vil_image_view<T> heights_;
 };
 
 #endif // bmdl_classify_h_

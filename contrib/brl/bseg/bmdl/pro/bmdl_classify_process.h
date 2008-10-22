@@ -27,6 +27,7 @@
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_sptr.h>
+#include <vil/vil_image_view.h>
 
 class bmdl_classify_process : public bprb_process
 {
@@ -52,10 +53,16 @@ class bmdl_classify_process : public bprb_process
 
  private:
 
-   bool classify(vil_image_resource_sptr lidar_first,
-                 vil_image_resource_sptr lidar_last,
-                 vil_image_view_base_sptr& label_img,
-                 vil_image_view_base_sptr& height_img);
+  bool classify(vil_image_resource_sptr lidar_first,
+                vil_image_resource_sptr lidar_last,
+                vil_image_view_base_sptr& label_img,
+                vil_image_view_base_sptr& height_img);
+  
+  template <class T>
+  bool classify(const vil_image_view<T>& lidar_first,
+                const vil_image_view<T>& lidar_last,
+                vil_image_view<unsigned int>& label_img,
+                vil_image_view<T>& height_img);
 };
 
 #endif // bmdl_classify_process_h_

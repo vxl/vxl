@@ -83,6 +83,23 @@ bool bmdl_classify_process::execute()
   return true;
 }
 
+
+template <class T>
+bool bmdl_classify_process::classify(const vil_image_view<T>& lidar_first,
+                                     const vil_image_view<T>& lidar_last,
+                                     vil_image_view<unsigned int>& label_img,
+                                     vil_image_view<T>& height_img)
+{
+  bmdl_classify<T> classifier;
+  classifier.set_lidar_data(lidar_first,lidar_last);
+  classifier.estimate_bare_earth();
+  classifier.estimate_height_noise_stdev();
+  classifier.label_lidar();
+  label_img = classifier.labels();
+  height_img = classifier.heights();
+}
+
+
 bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
                                          vil_image_resource_sptr lidar_last,
                                          vil_image_view_base_sptr& label_img,
@@ -96,36 +113,47 @@ bool bmdl_classify_process::classify(vil_image_resource_sptr lidar_first,
     vcl_cout << "bmdl_classify_process::classify -- The lidar images should be a TIFF!\n";
     return false;
   }
-
-  vil_image_view<double> first_return, last_return;
-
-  // convert the images to double pixel type
+  
+  label_img = new vil_image_view<unsigned int>();
+  
+  // use the float version
   if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
-    vil_convert_cast(vil_image_view<float>(lidar_first->get_view()), first_return);
-  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
-    first_return = lidar_first->get_view();
-  else {
-    vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
-    return false;
-  }
-
-  if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
-    vil_convert_cast(vil_image_view<float>(lidar_last->get_view()), last_return);
-  else if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) 
-    last_return =  lidar_last->get_view();
-  else {
-    vcl_cout << "bmdl_classify_process::classify -- The Image Pixel Type is not DOUBLE or FLOAT!\n";
-    return false;
+  {
+    if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
+    {
+      height_img = new vil_image_view<float>();
+      classify<float>(lidar_first->get_view(), lidar_last->get_view(),
+                      (vil_image_view<unsigned int>&)(*label_img),
+                      (vil_image_view<float>&)(*height_img));
+    }
+    else
+    {
+      vcl_cout << "input images have different bit depths" << vcl_endl;
+      return false;
+    }
   }
   
-
-  label_img = new vil_image_view<unsigned int>();
-  height_img = new vil_image_view<double>();
-  bmdl_classify::label_lidar(first_return, last_return,
-                             (vil_image_view<unsigned int>&)(*label_img),
-                             (vil_image_view<double>&)(*height_img));
+  // use the double version
+  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) 
+  {
+    if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
+    {
+      height_img = new vil_image_view<double>();
+      classify<double>(lidar_first->get_view(), lidar_last->get_view(),
+                      (vil_image_view<unsigned int>&)(*label_img),
+                      (vil_image_view<double>&)(*height_img));
+    }
+    else
+    {
+      vcl_cout << "input images have different bit depths" << vcl_endl;
+      return false;
+    }
+  }
     
 
   return true;
 }
+
+
+
 
