@@ -40,8 +40,21 @@ public:
   //: Manually specify the standard deviation in lidar height from noise
   void set_height_noise_stdev(T stdev) { hgt_stdev_ = stdev; } 
   
+  //: Access the first returns image
+  const vil_image_view<T>& first_return() const {return first_return_;}
+  //: Access the last returns image
+  const vil_image_view<T>& last_return() const {return last_return_;}
   //: Access the bare earth image
   const vil_image_view<T>& bare_earth() const {return bare_earth_;}
+  
+  //: Access the minimum height in the first return image
+  T first_min() const {return first_min_;}
+  //: Access the maximum height in the first return image
+  T first_max() const {return first_max_;}
+  //: Access the minimum height in the last return image
+  T last_min() const {return last_min_;}
+  //: Access the maximum height in the last return image
+  T last_max() const {return last_max_;}
   
   //: Classify each pixel as Ground (0), Vegitation (1), or Building (>=2)
   // Each building is given an index sequentially starting with 2 
