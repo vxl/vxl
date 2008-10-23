@@ -93,7 +93,10 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bmdl_classify.cxx
+SOURCE=.\Templates/bmdl_classify+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bmdl_classify+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bmdl_mesh.cxx
@@ -101,6 +104,9 @@ SOURCE=.\bmdl_mesh.cxx
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\bmdl_classify.txx
+# End Source File
 # Begin Source File
 SOURCE=.\bmdl_classify.h
 # End Source File
