@@ -22,6 +22,7 @@ MANPAGE_SOURCES += bsta_detector_gaussian.h
 MANPAGE_SOURCES += bsta_detector_mixture.h
 MANPAGE_SOURCES += bsta_distribution.h
 MANPAGE_SOURCES += bsta_gauss_f1.h
+MANPAGE_SOURCES += bsta_gauss_f2.h
 MANPAGE_SOURCES += bsta_gauss_fd3.h
 MANPAGE_SOURCES += bsta_gauss_ff3.h
 MANPAGE_SOURCES += bsta_gauss_id3.h

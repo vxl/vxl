@@ -3,6 +3,8 @@ USES += contrib/brl contrib/brl/bbas core
 LIBRARY := video
 VERSION := 1.0
 
+MANPAGE_SOURCES += dll.h
+
 SOURCES += bwm_video_cam_istream.cxx
 MANPAGE_SOURCES += bwm_video_cam_istream_sptr.h
 SOURCES += bwm_video_cam_ostream.cxx

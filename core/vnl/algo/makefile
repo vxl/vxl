@@ -4,6 +4,8 @@ VERSION := 1.0
 IMMEDIATE_LIBS := -lvnl -lnetlib
 DEFINES += -DBUILDING_VNL_ALGO_DLL
 
+MANPAGE_SOURCES += dll.h
+
 # Most of vnl_algo is simply a wrapper around netlib.
 # Direct netlib dependencies are:
 # vnl_chi_squared                  dchscdf_

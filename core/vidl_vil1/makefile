@@ -13,6 +13,8 @@ LIBRARY := vidl_vil1
 VERSION := 1.0
 DEFINES += -DBUILDING_VIDL_DLL
 
+MANPAGE_SOURCES += dll.h
+
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################

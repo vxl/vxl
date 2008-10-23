@@ -4,6 +4,8 @@ LIBRARY := btol
 VERSION := 1.0
 DEFINES += -DBUILDING_BTOL_DLL
 
+MANPAGE_SOURCES += dll.h
+
 SOURCES += btol_edge_algs.cxx
 SOURCES += btol_vertex_algs.cxx
 SOURCES += btol_face_algs.cxx

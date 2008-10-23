@@ -5,6 +5,8 @@ LIBRARY := bmvv
 VERSION := 1.0
 DEFINES += -DBUILDING_BMVV_DLL
 
+MANPAGE_SOURCES += dll.h
+
 #SOURCES += bmvv_multiview_manager.cxx
 #SOURCES += bmvv_tomography_manager.cxx
 SOURCES += bmvv_recon_manager.cxx

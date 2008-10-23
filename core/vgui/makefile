@@ -14,6 +14,8 @@ include ${VXLROOT}/config/top-params.mk
 # This is where configure will put vgui/vgui_config.h
 INCDIRS += $(RELOBJDIR)/include
 
+MANPAGE_SOURCES += dll.h
+
 # basic classes
 MANPAGE_SOURCES += vgui_config.h.in
 SOURCES += vgui.cxx

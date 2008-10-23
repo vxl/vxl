@@ -4,6 +4,8 @@ LIBRARY := bdgl
 VERSION := 1.0
 DEFINES += -DBUILDING_BDGL_DLL
 
+MANPAGE_SOURCES += dll.h
+
 SOURCES += bdgl_curve_algs.cxx
 SOURCES += bdgl_curve_region.cxx
 SOURCES += bdgl_region_algs.cxx

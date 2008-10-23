@@ -4,6 +4,8 @@ LIBRARY := bsol
 VERSION := 1.0
 DEFINES += -DBUILDING_BSOL_DLL
 
+MANPAGE_SOURCES += dll.h
+
 SOURCES += bsol_algs.cxx
 SOURCES += bsol_distance_histogram.cxx
 SOURCES += bsol_point_index_2d.cxx
