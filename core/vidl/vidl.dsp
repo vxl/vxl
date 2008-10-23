@@ -152,6 +152,9 @@ SOURCE=.\vidl_frame_resource.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\vidl_win_avicodec.h
 # End Source File
 # Begin Source File

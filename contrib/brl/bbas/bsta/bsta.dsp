@@ -138,6 +138,9 @@ SOURCE=.\Templates/bsta_gaussian_sphere+double.3-.cxx
 SOURCE=.\Templates/bsta_gaussian_sphere+float.1-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bsta_gaussian_sphere+float.2-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bsta_gaussian_sphere+float.3-.cxx
 # End Source File
 # Begin Source File
@@ -268,6 +271,9 @@ SOURCE=.\bsta_joint_histogram_base.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_joint_histogram_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_f2.h
 # End Source File
 # End Group
 # End Target

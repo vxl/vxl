@@ -126,6 +126,9 @@ SOURCE=.\Templates/vbl_smart_ptr+bsol_intrinsic_curve_3d-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\bsol_hough_line_index.h
 # End Source File
 # Begin Source File

@@ -213,9 +213,6 @@ SOURCE=.\bwm_tableau_cam.h
 SOURCE=.\bwm_tableau_img.h
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_tableau_lidar.h
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_tableau_mgr.h
 # End Source File
 # Begin Source File

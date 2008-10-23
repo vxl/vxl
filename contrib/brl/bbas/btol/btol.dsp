@@ -105,6 +105,9 @@ SOURCE=.\btol_vertex_algs.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\btol_edge_algs.h
 # End Source File
 # Begin Source File

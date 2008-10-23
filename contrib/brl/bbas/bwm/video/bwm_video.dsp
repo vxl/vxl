@@ -33,6 +33,9 @@ SOURCE=.\bwm_video_site_io.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\bwm_video_cam_istream.h
 # End Source File
 # Begin Source File

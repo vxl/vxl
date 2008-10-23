@@ -114,6 +114,9 @@ SOURCE=.\bmvv_f_menus.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\bmvv_recon_manager.h
 # End Source File
 # Begin Source File

@@ -303,6 +303,9 @@ SOURCE=.\Templates/vnl_svd_economy+vcl_complex+float--.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_adjugate.h
 # End Source File
 # Begin Source File

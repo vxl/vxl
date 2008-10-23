@@ -648,6 +648,9 @@ SOURCE=.\vgui_range_map_params.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\internals/trackball.h
 # End Source File
 # Begin Source File

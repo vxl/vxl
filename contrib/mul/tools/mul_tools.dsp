@@ -258,6 +258,9 @@ SOURCE=.\print_image.cxx
 # Begin Source File
 SOURCE=.\image3d_math.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\index_sort.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

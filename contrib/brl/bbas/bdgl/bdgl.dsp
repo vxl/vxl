@@ -105,6 +105,9 @@ SOURCE=.\bdgl_region_algs.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\bdgl_curve_algs.h
 # End Source File
 # Begin Source File
