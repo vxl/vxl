@@ -122,6 +122,11 @@ void test_bsta_histogram()
   TEST_NEAR("joint_histogram binary io", jerror, 0.0, 0.001);
   vpl_unlink("./temp.bin");
 
+  //: test vrml
+  vcl_ofstream jos_vrml("./temp.wrl");
+  jh.print_to_vrml(jos_vrml);
+  jos_vrml.close();
+
   //Test smart pointer
   bsta_histogram_sptr hptr = new bsta_histogram<double>(10.0, 10);
   bsta_histogram<double>* dcast = dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
