@@ -16,6 +16,7 @@ SET(expat_sources
   latin1tab.h
   utf8tab.h
   expat.h
+  cm_expat_mangle.h
 )
 
 INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)

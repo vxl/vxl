@@ -21,6 +21,7 @@
 #include <bsta/bsta_detector_mixture.h>
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_f2.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
