@@ -1,20 +1,18 @@
 // This is brl/bbas/imesh/algo/imesh_imls_surface.cxx
-
+#include "imesh_imls_surface.h"
 //:
 // \file
 
-
-#include "imesh_imls_surface.h"
 #include <imesh/imesh_operations.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <imesh/algo/imesh_kd_tree.txx>
 #include <vcl_cmath.h>
 #include <vcl_limits.h>
+#include <vcl_cassert.h>
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3.h>
-
 
 
 //: Constructor
@@ -25,20 +23,20 @@ imesh_imls_surface::imesh_imls_surface(const imesh_mesh& mesh, double eps, doubl
     eps2_(eps*eps), lambda_(lambda), iso_level_(0.0), bounded_(enforce_bounded)
 {
   const imesh_vertex_array<3>& v = mesh.vertices<3>();
-  
-  for(unsigned int i=0; i<v.size(); ++i)
+
+  for (unsigned int i=0; i<v.size(); ++i)
     verts_[i] = vgl_point_3d<double>(v[i]);
 
-  if(mesh.faces().regularity() != 3)
+  if (mesh.faces().regularity() != 3)
     triangles_ = imesh_triangulate(mesh.faces());
   else
     triangles_.reset(static_cast<imesh_regular_face_array<3>*>
                          (mesh.faces().clone()));
 
-  if(bounded_){
+  if (bounded_) {
     // build enclosure
     vgl_box_3d<double> box;
-    for(unsigned int i=0; i<verts_.size(); ++i){
+    for (unsigned int i=0; i<verts_.size(); ++i) {
       box.add(verts_[i]);
     }
     box.expand_about_centroid(1);
@@ -67,7 +65,7 @@ imesh_imls_surface::imesh_imls_surface(const imesh_mesh& mesh, double eps, doubl
   }
 
   vcl_vector<vgl_box_3d<double> > boxes(triangles_->size());
-  for( unsigned int i=0; i<boxes.size(); ++i ){
+  for ( unsigned int i=0; i<boxes.size(); ++i ) {
     const imesh_regular_face<3>& tri = (*triangles_)[i];
     boxes[i].add(verts_[tri[0]]);
     boxes[i].add(verts_[tri[1]]);
@@ -117,7 +115,7 @@ imesh_imls_surface::imesh_imls_surface(const imesh_imls_surface& other)
 void imesh_imls_surface::compute_iso_level()
 {
   double mean = 0.0;
-  for(unsigned int i=0; i<verts_.size(); ++i)
+  for (unsigned int i=0; i<verts_.size(); ++i)
     mean += (*this)(verts_[i]);
   iso_level_ = mean / verts_.size();
 }
@@ -133,26 +131,26 @@ void imesh_imls_surface::compute_enclosing_phi()
   const unsigned int num_verts = bounded_ ?
                                  verts_.size() :
                                  verts_.size() - 8;
-  for(unsigned int i=0; i<num_verts; ++i){
+  for (unsigned int i=0; i<num_verts; ++i) {
     double val = (*this)(verts_[i]);
     mean += val;
-    if(val > 0)
+    if (val > 0)
       outside.push_back(pair_id(i,val));
   }
   iso_level_ = mean / verts_.size();
 
-  for(double s=1.0; !outside.empty(); s*=2){
+  for (double s=1.0; !outside.empty(); s*=2) {
     vcl_cout << outside.size() << " outside" << vcl_endl;
-    for(vcl_vector<pair_id>::const_iterator i=outside.begin();
-        i!=outside.end(); ++i){
+    for (vcl_vector<pair_id>::const_iterator i=outside.begin();
+        i!=outside.end(); ++i) {
       phi_[i->first] -= s*i->second;
     }
     compute_unweighed_rec(kd_tree_);
     vcl_vector<pair_id> next_outside;
-    for(vcl_vector<pair_id>::const_iterator i=outside.begin();
-        i!=outside.end(); ++i){
+    for (vcl_vector<pair_id>::const_iterator i=outside.begin();
+        i!=outside.end(); ++i) {
       double val = (*this)(verts_[i->first]);
-      if(val > vcl_abs(vcl_numeric_limits<double>::epsilon()*phi_[i->first])){
+      if (val > vcl_abs(vcl_numeric_limits<double>::epsilon()*phi_[i->first])) {
         next_outside.push_back(pair_id(i->first,val));
       }
     }
@@ -167,7 +165,7 @@ compute_centroids_rec(const vcl_auto_ptr<imesh_kd_tree_node>& node,
                       const vcl_set<unsigned int>& no_normal_faces)
 {
   const unsigned int& i = node->index_;
-  if(node->is_leaf()){
+  if (node->is_leaf()) {
     const imesh_regular_face<3>& tri = (*triangles_)[i];
     const vgl_point_3d<double>& v0 = verts_[tri[0]];
     const vgl_point_3d<double>& v1 = verts_[tri[1]];
@@ -177,7 +175,7 @@ compute_centroids_rec(const vcl_auto_ptr<imesh_kd_tree_node>& node,
     normal_len_[i] = n.length();
     area_[i] = normal_len_[i];
     centroid_[i] = centre(v0,v1,v2);
-    if(no_normal_faces.find(i) != no_normal_faces.end()){
+    if (no_normal_faces.find(i) != no_normal_faces.end()) {
       n = vgl_vector_3d<double>(0,0,0);
       normal_len_[i] = 0.0;
     }
@@ -210,12 +208,12 @@ void imesh_imls_surface::
 compute_unweighed_rec(const vcl_auto_ptr<imesh_kd_tree_node>& node)
 {
   const unsigned int& i = node->index_;
-  if(node->is_leaf()){
+  if (node->is_leaf()) {
     const imesh_regular_face<3>& tri = (*triangles_)[i];
     unweighted_[i] = (phi_[tri[0]]
-                     + phi_[tri[1]]
-                     + phi_[tri[2]])/3.0 * area_[i];
-                     //- dot_product(normals_[i],centroid_[i]-vgl_point_3d<double>(0,0,0));
+                    + phi_[tri[1]]
+                    + phi_[tri[2]])/3.0 * area_[i];
+          //- dot_product(normals_[i],centroid_[i]-vgl_point_3d<double>(0,0,0));
     return;
   }
 
@@ -242,7 +240,7 @@ void imesh_imls_surface::set_epsilon(double eps)
   iso_level_ = 0.0;
 
   // reset the phi values at each vertex
-  for(unsigned i=0; i<phi_.size(); ++i)
+  for (unsigned i=0; i<phi_.size(); ++i)
     phi_[i] = 0.0;
 
   compute_unweighed_rec(kd_tree_);
@@ -254,36 +252,35 @@ void imesh_imls_surface::set_epsilon(double eps)
 namespace {
 class tri_dist_func
 {
-  public:
-    tri_dist_func(const vcl_vector<vgl_point_3d<double> >& v,
-                  const imesh_regular_face_array<3>& t)
-    : verts(v), tris(t), closest_index(static_cast<unsigned int>(-1)),
-      closest_dist(vcl_numeric_limits<double>::infinity()) {}
-    const vcl_vector<vgl_point_3d<double> >& verts;
-    const imesh_regular_face_array<3>& tris;
-    unsigned int closest_index;
-    double closest_dist, closest_u, closest_v;
+ public:
+  tri_dist_func(const vcl_vector<vgl_point_3d<double> >& v,
+                const imesh_regular_face_array<3>& t)
+  : verts(v), tris(t), closest_index(static_cast<unsigned int>(-1)),
+    closest_dist(vcl_numeric_limits<double>::infinity()) {}
+  const vcl_vector<vgl_point_3d<double> >& verts;
+  const imesh_regular_face_array<3>& tris;
+  unsigned int closest_index;
+  double closest_dist, closest_u, closest_v;
 
-    double operator () (const vgl_point_3d<double>& pt, unsigned int i)
-    {
-      const imesh_regular_face<3>& tri = tris[i];
-      double dist,u,v;
-      unsigned char s =
-          imesh_triangle_closest_point(pt, verts[tri[0]],
-                                       verts[tri[1]], verts[tri[2]],
-                                       dist, u, v);
-      if(dist < closest_dist){
-        closest_dist = dist;
-        closest_index = i;
-        closest_u = u;
-        closest_v = v;
-      }
-      return dist;
+  double operator () (const vgl_point_3d<double>& pt, unsigned int i)
+  {
+    const imesh_regular_face<3>& tri = tris[i];
+    double dist,u,v;
+    unsigned char s =
+        imesh_triangle_closest_point(pt, verts[tri[0]],
+                                     verts[tri[1]], verts[tri[2]],
+                                     dist, u, v);
+    if (dist < closest_dist) {
+      closest_dist = dist;
+      closest_index = i;
+      closest_u = u;
+      closest_v = v;
     }
+    return dist;
+  }
 };
-
+// end of namespace
 }
-
 
 
 //: evaluate the implicit surface at a point
@@ -298,7 +295,7 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
   // compute the (negative) maximum error of integration
   // stored negative so that the max error is first when sorted by <
   vcl_vector<imesh_kd_tree_queue_entry>::iterator itr = remain.begin();
-  for(; itr != remain.end(); ++itr){
+  for (; itr != remain.end(); ++itr) {
     double min = w2(itr->val_);
     double max = w2(imesh_max_sq_dist(p,itr->node_->inner_box_));
     itr->val_ = (max - min)*area_[itr->node_->index_];
@@ -306,12 +303,12 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
   vcl_make_heap( remain.begin(), remain.end() );
 
   vcl_pop_heap( remain.begin(), remain.end() );
-  while(!remain.empty() && -remain.back().val_ > lambda_*sum)
+  while (!remain.empty() && -remain.back().val_ > lambda_*sum)
   {
     imesh_kd_tree_node* current = remain.back().node_;
     remain.pop_back();
 
-    if(current->is_leaf())
+    if (current->is_leaf())
     {
       unsigned int i = current->index_;
       const imesh_regular_face<3>& tri = (*triangles_)[i];
@@ -327,7 +324,7 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
       assert(!vnl_math_isnan(I.x()) && !vnl_math_isnan(I.y()));
 
       sum_phi += I.x();
-      if(normal_len_[i]>0.0)
+      if (normal_len_[i]>0.0)
         sum_phi += dot_product(normals_[i],p-verts_[i1]) * I.y() / normal_len_[i];
       sum += I.y();
     }
@@ -345,12 +342,12 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
                                                  current->right_.get()));
       vcl_push_heap(remain.begin(), remain.end());
     }
-    if(!remain.empty())
+    if (!remain.empty())
       vcl_pop_heap( remain.begin(), remain.end() );
   }
 
   // approximate the contribution from the remain nodes
-  for(itr = remain.begin(); itr != remain.end(); ++itr){
+  for (itr = remain.begin(); itr != remain.end(); ++itr) {
     // Use approximation assuming the weight is constant
     unsigned int i = itr->node_->index_;
     vgl_vector_3d<double> v(p-centroid_[i]);
@@ -378,7 +375,7 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
   // compute the (negative) maximum error of integration
   // stored negative so that the max error is first when sorted by <
   vcl_vector<imesh_kd_tree_queue_entry>::iterator itr = remain.begin();
-  for(; itr != remain.end(); ++itr){
+  for (; itr != remain.end(); ++itr) {
     double min = w2(itr->val_);
     double max = w2(imesh_max_sq_dist(p,itr->node_->inner_box_));
     itr->val_ = (max - min)*area_[itr->node_->index_];
@@ -386,12 +383,12 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
   vcl_make_heap( remain.begin(), remain.end() );
 
   vcl_pop_heap( remain.begin(), remain.end() );
-  while(!remain.empty() && -remain.back().val_ > lambda_*sums.I)
+  while (!remain.empty() && -remain.back().val_ > lambda_*sums.I)
   {
     imesh_kd_tree_node* current = remain.back().node_;
     remain.pop_back();
 
-    if(current->is_leaf())
+    if (current->is_leaf())
     {
       unsigned int i = current->index_;
       const imesh_regular_face<3>& tri = (*triangles_)[i];
@@ -412,7 +409,7 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
       sums.dI += Id.dI;
       sums.dI_phi += Id.dI_phi;
       // terms involving the normal constraints
-      if(normal_len_[i]>0.0){
+      if (normal_len_[i]>0.0) {
         const vgl_vector_3d<double>& n = normals_[i];
         double plane_dist = dot_product(n,p-verts_[i1])/normal_len_[i];
         sums.I_phi += plane_dist*Id.I;
@@ -433,12 +430,12 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
                                                  current->right_.get()));
       vcl_push_heap(remain.begin(), remain.end());
     }
-    if(!remain.empty())
+    if (!remain.empty())
       vcl_pop_heap( remain.begin(), remain.end() );
   }
 
   // approximate the contribution from the remain nodes
-  for(itr = remain.begin(); itr != remain.end(); ++itr){
+  for (itr = remain.begin(); itr != remain.end(); ++itr) {
     // Use approximation assuming the weight is constant
     unsigned int i = itr->node_->index_;
     vgl_vector_3d<double> v(p-centroid_[i]);
@@ -508,7 +505,7 @@ imesh_imls_surface::line_integrals(double k1, double k2, double& I1, double& Ix)
 
 
 //: integrals of f(x)dx and x*f(x)dx over [0,1] where f(x)= 1/((x+k1)^2 + k2)^2
-//  also compute the integrals when f(x)=1/((x+k1)^2 + k2)^3 (for use in deriviatives)
+//  Also compute the integrals when f(x)=1/((x+k1)^2 + k2)^3 (for use in deriviatives)
 //
 // Beta = atan( k1/sqrt(k2) ) - atan( (k1+1)/sqrt(k2) )
 // I1 = -Beta * 1/(2*k2^(3/2))  + (k2 - k1*(k1+1)) / (2*k2*(k1^2+k2)*((k1+1)^2+k2))
@@ -553,7 +550,6 @@ imesh_imls_surface::line_integrals(double k1, double k2,
   dI1 += (5*k2*k2_2 - (k1*k1_p1-3)*k2_2 - k1*k1_p1*(9*k1*k1_p1+5)*k2 - k1_2*t3 )*ddenom;
   dIx += t2*((3*k1_p1+1)*k2_2 + k1_p1*(6*k1_2+3*k1+2)*k2 + k1*t3)*ddenom;
   dIx2 -= t2*t2*(k2_2 + k1_p1*(4*k1-1)*k2 + t3)*ddenom;
-
 }
 
 
@@ -613,7 +609,7 @@ imesh_imls_surface::split_triangle_quadrature(const vgl_point_3d<double>& x,
 {
   vgl_point_3d<double> pp(p1), pn(p2);
   double vp(v1), vn(v2);
-  if((pp-x).length() > (pn-x).length()){
+  if ((pp-x).length() > (pn-x).length()) {
     // swap so that pp is closest to x
     pp = p2; pn = p1;
     vp = v2; vn = v1;
@@ -633,7 +629,7 @@ imesh_imls_surface::split_triangle_quadrature(const vgl_point_3d<double>& x,
   // compute height (divided by 2*sqrt(t1))
   // early exit if triangle flat
   double height = t4/t1 - t2*t2/(t1*t1);
-  if(!(height > 0.0))
+  if (!(height > 0.0))
     return vgl_vector_2d<double>(0,0);
   height = vcl_sqrt(height)/2.0;
 
@@ -647,7 +643,7 @@ imesh_imls_surface::split_triangle_quadrature(const vgl_point_3d<double>& x,
   double u = alpha;
   double last_li1 = 0.0, last_li2 = 0.0;
   // integrate using the trapezoid rule with non-uniform sampling
-  for(; u>0.01; u*=alpha){
+  for (; u>0.01; u*=alpha) {
     sum1 += last_li1;
     sum2 += last_li2;
     u_1 = 1.0-u;
@@ -682,7 +678,7 @@ imesh_imls_surface::split_triangle_quadrature(const vgl_point_3d<double>& x,
 
 
 //: area integral of the squared weight function times a linearly interpolated value
-//: also computes vector term used in the derivative
+//  Also computes vector term used in the derivative
 //  \a m is the point closest point on the triangle to sample point \a x
 //  \a p0 and \a p1 are the other vertices
 //  call triangle_quadrature to first split an arbitrary triangle
@@ -697,7 +693,7 @@ split_triangle_quadrature_with_deriv(const vgl_point_3d<double>& x,
 {
   vgl_point_3d<double> pp(p1), pn(p2);
   double vp(v1), vn(v2);
-  if((pp-x).length() > (pn-x).length()){
+  if ((pp-x).length() > (pn-x).length()) {
     // swap so that pp is closest to x
     pp = p2; pn = p1;
     vp = v2; vn = v1;
@@ -717,7 +713,7 @@ split_triangle_quadrature_with_deriv(const vgl_point_3d<double>& x,
   // compute height (divided by 2*sqrt(t1))
   // early exit if triangle flat
   double height = t4/t1 - t2*t2/(t1*t1);
-  if(!(height > 0.0))
+  if (!(height > 0.0))
     return integral_data();
   height = vcl_sqrt(height)/2.0;
 
@@ -731,7 +727,7 @@ split_triangle_quadrature_with_deriv(const vgl_point_3d<double>& x,
   double u = alpha;
   // integrate using the trapezoid rule with non-uniform sampling
   const double lower_bound = 0.01;//((t6<t4)?(t6/t4):1.0) * 0.01;
-  for(; u>lower_bound; u*=alpha){
+  for (; u>lower_bound; u*=alpha) {
     i_data += last_i_data;
     u_1 = 1.0-u;
     denom = 1.0/(u_1*u_1*t1);
@@ -793,7 +789,7 @@ imesh_imls_surface::triangle_quadrature(F quad_func,
 {
   double dist,u,v;
   unsigned char flag = imesh_triangle_closest_point(x,p0,p1,p2,n,dist,u,v);
-  switch(flag){
+  switch (flag) {
     case 1:
       return quad_func(x,p0,p1,p2,v0,v1,v2,eps);
     case 2:
@@ -864,10 +860,10 @@ vgl_point_3d<double> bisect(const imesh_imls_surface& f,
   vgl_vector_3d<double> dp;
   double val = f.deriv(pm,dp);
   val /= dp.length();
-  for(unsigned int i=0; i<num_itr; ++i){
+  for (unsigned int i=0; i<num_itr; ++i) {
     if (vcl_abs(val) < feps)
       return pm;
-    else if(val > 0.0)
+    else if (val > 0.0)
       pp = pm;
     else
       pn = pm;
@@ -879,9 +875,8 @@ vgl_point_3d<double> bisect(const imesh_imls_surface& f,
 }
 
 
-//: Move the point \a p along the gradient direction until reaching
-//  a zero crossing of \a f (within \a eps).
-//  Return true if successful 
+//: Move the point \a p along the gradient direction until reaching a zero crossing of \a f (within \a eps).
+//  Return true if successful
 bool snap_to_surface(const imesh_imls_surface& f,
                      vgl_point_3d<double>& p,
                      double step, double eps)
@@ -891,7 +886,7 @@ bool snap_to_surface(const imesh_imls_surface& f,
   double val1 = f.deriv(p1,dp);
   double dl = dp.length();
   val1 /= dl;
-  if(vcl_abs(val1) < eps)
+  if (vcl_abs(val1) < eps)
     return true;
 
   vgl_point_3d<double> p2 = p1 - (step*val1/dl)*dp;
@@ -899,22 +894,22 @@ bool snap_to_surface(const imesh_imls_surface& f,
   double val2 = f.deriv(p2,dp);
   val2 /= dl;
   unsigned int i=0;
-  for(; i<100 && val1*val2 > 0.0; ++i){
+  for (; i<100 && val1*val2 > 0.0; ++i) {
     p1 = p2;
     val1 = val2;
     p2 -= (step*val2/dl)*dp;
     val2 = f.deriv(p2,dp);
     dl = dp.length();
     val2 /= dl;
-    if(vcl_abs(val2) < eps){
+    if (vcl_abs(val2) < eps) {
       p = p2;
       return true;
     }
   }
-  if(i >= 100)
+  if (i >= 100)
     return false;
 
-  if(val1 > 0.0)
+  if (val1 > 0.0)
     p = bisect(f,p1,p2,eps);
   else
     p = bisect(f,p2,p1,eps);
@@ -950,12 +945,12 @@ vgl_vector_3d<double> dfunc(const vgl_vector_3d<double>& n,
                             (2/len*(n_dot_dp/len - 1)*(nn - (n_dot_dp/sqr_len)*ndp)) );
   return vgl_vector_3d<double>(df[0],df[1],df[2]);
 }
-
+// end of namespace
 }
 
 //: Move the point \a p to minimize (f^2 + (n*f' - 1)^2)/f'*f'
 //  a zero crossing of \a f (within \a eps).
-//  Return true if successful 
+//  Return true if successful
 bool snap_to_surface_with_normal(const imesh_imls_surface& f,
                                  vgl_point_3d<double>& p,
                                  vgl_vector_3d<double> n,
@@ -967,22 +962,22 @@ bool snap_to_surface_with_normal(const imesh_imls_surface& f,
   vnl_double_3x3 ddp;
   double val = f.deriv2(p1, dp, ddp);
   double f1 = func(n,val,dp);
-  if(f1 < eps)
+  if (f1 < eps)
     return true;
 
   vgl_vector_3d<double> df = dfunc(n,val,dp,ddp);
   double dl = df.sqr_length();
   unsigned int i=0;
-  for(; i<1000; ++i){
+  for (; i<1000; ++i) {
     vgl_point_3d<double> p2 = p1 - (step*f1/dl)*df;
     val = f.deriv2(p2,dp,ddp);
     double f2 = func(n,val,dp);
     //vcl_cout << i<<" f: "<<f2<<" step: "<< step<<vcl_endl;
-    if( f2 > f1){
+    if ( f2 > f1) {
       step /= 2;
       continue;
     }
-    if(f2 < eps || step < eps){
+    if (f2 < eps || step < eps) {
       p = p2;
       return true;
     }
@@ -992,7 +987,7 @@ bool snap_to_surface_with_normal(const imesh_imls_surface& f,
     dl = df.sqr_length();
     step *= 2;
   }
-  if(i >= 100)
+  if (i >= 100)
     return true;
 
   p = p1;
@@ -1000,9 +995,8 @@ bool snap_to_surface_with_normal(const imesh_imls_surface& f,
 }
 
 
-//: Move the point \a p along direction \a dir until reaching
-//  a zero crossing of \a f (within \a eps).
-//  Return true if successful 
+//: Move the point \a p along direction \a dir until reaching a zero crossing of \a f (within \a eps).
+//  Return true if successful
 bool snap_to_surface(const imesh_imls_surface& f,
                      vgl_vector_3d<double> dir,
                      vgl_point_3d<double>& p,
@@ -1015,7 +1009,7 @@ bool snap_to_surface(const imesh_imls_surface& f,
   dp = dir * dot_product(dp,dir);
   double dl = dp.length();
   val1 /= dl;
-  if(vcl_abs(val1) < eps)
+  if (vcl_abs(val1) < eps)
     return true;
 
   vgl_point_3d<double> p2 = p1 - (step*val1/dl)*dp;
@@ -1023,7 +1017,7 @@ bool snap_to_surface(const imesh_imls_surface& f,
   double val2 = f.deriv(p2,dp);
   val2 /= dl;
   unsigned int i=0;
-  for(; i<100 && val1*val2 > 0.0; ++i){
+  for (; i<100 && val1*val2 > 0.0; ++i) {
     p1 = p2;
     val1 = val2;
     p2 -= (step*val2/dl)*dp;
@@ -1031,15 +1025,15 @@ bool snap_to_surface(const imesh_imls_surface& f,
     dp = dir * dot_product(dp,dir);
     dl = dp.length();
     val2 /= dl;
-    if(vcl_abs(val2) < eps){
+    if (vcl_abs(val2) < eps) {
       p = p2;
       return true;
     }
   }
-  if(i >= 100)
+  if (i >= 100)
     return false;
 
-  if(val1 > 0.0)
+  if (val1 > 0.0)
     p = bisect(f,p1,p2,eps);
   else
     p = bisect(f,p2,p1,eps);

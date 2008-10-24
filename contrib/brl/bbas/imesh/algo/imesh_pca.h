@@ -1,7 +1,6 @@
 // This is brl/bbas/imesh/algo/imesh_pca.h
 #ifndef imesh_pca_h_
 #define imesh_pca_h_
-
 //:
 // \file
 // \brief Mesh PCA parameterization
@@ -10,101 +9,102 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 
 #include <imesh/imesh_mesh.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vpgl/vpgl_proj_camera.h>
 
 
-
 //: Principal Component Analysis on a set of mesh vertices
 class imesh_pca_mesh : public imesh_mesh
 {
-  public:
-    //: Default Constructor
-    imesh_pca_mesh() {}
+ public:
+  //: Default Constructor
+  imesh_pca_mesh() {}
 
-    //: Constructor from a vector of meshes with the same topology
-    imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes);
+  //: Constructor from a vector of meshes with the same topology
+  imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes);
 
-    //: Constructor from a mesh, mean, standard deviations, and PC matrix
-    imesh_pca_mesh(const imesh_mesh& mesh,
-                   const vnl_vector<double>& mean,
-                   const vnl_vector<double>& std_devs,
-                   const vnl_matrix<double>& pc);
+  //: Constructor from a mesh, mean, standard deviations, and PC matrix
+  imesh_pca_mesh(const imesh_mesh& mesh,
+                 const vnl_vector<double>& mean,
+                 const vnl_vector<double>& std_devs,
+                 const vnl_matrix<double>& pc);
 
-    //: Copy Constructor
-    imesh_pca_mesh(const imesh_pca_mesh& other);
+  //: Copy Constructor
+  imesh_pca_mesh(const imesh_pca_mesh& other);
 
-    //: Initialize the PCA data (assuming mesh data is already set)
-    //  use this to add PCA data after a mesh has be loaded from a file
-    void init(const vnl_vector<double>& mean,
-              const vnl_vector<double>& std_devs,
-              const vnl_matrix<double>& pc);
+  //: Initialize the PCA data (assuming mesh data is already set)
+  //  Use this to add PCA data after a mesh has be loaded from a file
+  void init(const vnl_vector<double>& mean,
+            const vnl_vector<double>& std_devs,
+            const vnl_matrix<double>& pc);
 
-    //: Set the pca parameters
-    void set_params(const vnl_vector<double>& p);
+  //: Set the pca parameters
+  void set_params(const vnl_vector<double>& p);
 
-    //: Set an individual pca parameter
-    // This is done by incremental difference, errors may accumulate
-    // over many calls.
-    void set_param(unsigned int i, double param);
+  //: Set an individual pca parameter
+  // This is done by incremental difference, errors may accumulate
+  // over many calls.
+  void set_param(unsigned int i, double param);
 
-    //: Access the params
-    const vnl_vector<double>& params() const {return params_;}
+  //: Access the params
+  const vnl_vector<double>& params() const {return params_;}
 
-    //: Access the principal components
-    const vnl_matrix<double>& principal_comps() const {return pc_; }
+  //: Access the principal components
+  const vnl_matrix<double>& principal_comps() const {return pc_; }
 
-    //: Access the standard deviations
-    const vnl_vector<double>& std_devs() const {return std_devs_;}
+  //: Access the standard deviations
+  const vnl_vector<double>& std_devs() const {return std_devs_;}
 
-    //: Reset all the PCA parameters to zero
-    //  returning to the mean mesh
-    void set_mean();
+  //: Reset all the PCA parameters to zero
+  //  Returning to the mean mesh
+  void set_mean();
 
-    //: Project mesh vertices into the PCA parameter space
-    vnl_vector<double> project(const imesh_vertex_array_base& verts) const;
+  //: Project mesh vertices into the PCA parameter space
+  vnl_vector<double> project(const imesh_vertex_array_base& verts) const;
 
-    //: Access the vector of mean vertices
-    const imesh_vertex_array_base& mean_vertices() const { return *mean_verts_; }
-    imesh_vertex_array_base& mean_vertices() { return *mean_verts_; }
+  //: Access the vector of mean vertices
+  const imesh_vertex_array_base& mean_vertices() const { return *mean_verts_; }
+  imesh_vertex_array_base& mean_vertices() { return *mean_verts_; }
 
-    //: Access the vector of mean vertices cast to a dimension
-    template <unsigned int d>
-    const imesh_vertex_array<d>& mean_vertices() const
-    {
-      assert(dynamic_cast<imesh_vertex_array<d>*>(mean_verts_.get()));
-      return static_cast<const imesh_vertex_array<d>&>(*mean_verts_);
-    }
-    template <unsigned int d>
-    imesh_vertex_array<d>& mean_vertices()
-    {
-      assert(dynamic_cast<imesh_vertex_array<d>*>(mean_verts_.get()));
-      return static_cast<imesh_vertex_array<d>&>(*mean_verts_);
-    }
-  
-  protected:
-    //: compute and set the mean return the deviations matrix 
-    vnl_matrix<double> compute_mean(const vcl_vector<imesh_mesh>& meshes);
-    //: Construct from a mesh with no variation
-    imesh_pca_mesh(const imesh_mesh& mesh);
+  //: Access the vector of mean vertices cast to a dimension
+  template <unsigned int d>
+  const imesh_vertex_array<d>& mean_vertices() const
+  {
+    assert(dynamic_cast<imesh_vertex_array<d>*>(mean_verts_.get()));
+    return static_cast<const imesh_vertex_array<d>&>(*mean_verts_);
+  }
+  template <unsigned int d>
+  imesh_vertex_array<d>& mean_vertices()
+  {
+    assert(dynamic_cast<imesh_vertex_array<d>*>(mean_verts_.get()));
+    return static_cast<imesh_vertex_array<d>&>(*mean_verts_);
+  }
 
-    vnl_vector<double> std_devs_;
-    vnl_matrix<double> pc_;
-    vcl_auto_ptr<imesh_vertex_array_base> mean_verts_;
+ protected:
+  //: compute and set the mean return the deviations matrix
+  vnl_matrix<double> compute_mean(const vcl_vector<imesh_mesh>& meshes);
+  //: Construct from a mesh with no variation
+  imesh_pca_mesh(const imesh_mesh& mesh);
 
-    vnl_vector<double> params_;
+  vnl_vector<double> std_devs_;
+  vnl_matrix<double> pc_;
+  vcl_auto_ptr<imesh_vertex_array_base> mean_verts_;
+
+  vnl_vector<double> params_;
 };
 
 
-//: Compute the image Jacobians at each vertex for PCA parameters
-//  in the result: matrix n, row i is the image space derivative
-//  at vertex n with respect the the ith pca parameter
+//: Compute the image Jacobians at each vertex for PCA parameters in the result:
+//  matrix n, row i is the image space derivative
+//  at vertex n with respect to the ith pca parameter
 vcl_vector<vnl_matrix<double> >
 imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
                           const imesh_pca_mesh& mesh);

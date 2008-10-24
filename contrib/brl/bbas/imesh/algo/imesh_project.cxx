@@ -1,10 +1,9 @@
 // This is brl/bbas/imesh/algo/imesh_project.cxx
-
+#include "imesh_project.h"
 //:
 // \file
 
 
-#include "imesh_project.h"
 #include <imesh/imesh_operations.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <vgl/vgl_point_2d.h>
@@ -15,14 +14,12 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_intersection.h>
-#include <vgl/vgl_intersection.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
 #include <vcl_cmath.h>
-
-
+#include <vcl_cassert.h>
 
 
 void
@@ -31,7 +28,7 @@ imesh_project_verts(const imesh_vertex_array<3>& verts3d,
                           vcl_vector<vgl_point_2d<double> >& verts2d)
 {
   verts2d.resize(verts3d.size());
-  for(unsigned int i=0; i<verts3d.size(); ++i)
+  for (unsigned int i=0; i<verts3d.size(); ++i)
     verts2d[i] = camera.project(verts3d[i]);
 }
 
@@ -41,7 +38,7 @@ imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
                           vcl_vector<vgl_point_2d<double> >& verts2d)
 {
   verts2d.resize(verts3d.size());
-  for(unsigned int i=0; i<verts3d.size(); ++i)
+  for (unsigned int i=0; i<verts3d.size(); ++i)
     verts2d[i] = camera.project(verts3d[i]);
 }
 
@@ -54,7 +51,7 @@ imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
 {
   verts2d.resize(verts3d.size());
   depths.resize(verts3d.size());
-  for(unsigned int i=0; i<verts3d.size(); ++i){
+  for (unsigned int i=0; i<verts3d.size(); ++i) {
     vgl_homg_point_2d<double> pt = camera.project(verts3d[i]);
     verts2d[i] = pt;
     depths[i] = pt.w();
@@ -70,7 +67,7 @@ imesh_project_verts(const imesh_vertex_array<3>& verts3d,
 {
   verts2d.resize(verts3d.size());
   depths.resize(verts3d.size());
-  for(unsigned int i=0; i<verts3d.size(); ++i){
+  for (unsigned int i=0; i<verts3d.size(); ++i) {
     vgl_homg_point_2d<double> pt = camera.project(verts3d[i]);
     verts2d[i] = pt;
     depths[i] = pt.w();
@@ -84,7 +81,7 @@ imesh_distort_verts(const vcl_vector<vgl_point_2d<double> >& in_verts,
                           vcl_vector<vgl_point_2d<double> >& out_verts)
 {
   out_verts.resize(in_verts.size());
-  for(unsigned int i=0; i<in_verts.size(); ++i)
+  for (unsigned int i=0; i<in_verts.size(); ++i)
     out_verts[i] = lens.undistort(vgl_homg_point_2d<double>(in_verts[i]));
 }
 
@@ -99,16 +96,16 @@ void imesh_render_triangle(const vgl_point_2d<double>& v1,
   tsi.a.x = v1.x();  tsi.a.y = v1.y();
   tsi.b.x = v2.x();  tsi.b.y = v2.y();
   tsi.c.x = v3.x();  tsi.c.y = v3.y();
-  for(tsi.reset(); tsi.next(); ){
+  for (tsi.reset(); tsi.next(); ) {
     int y = tsi.scany();
-    if(y<0 || y>=int(image.nj())) continue;
+    if (y<0 || y>=int(image.nj())) continue;
     int min_x = tsi.startx();
     int max_x = tsi.endx();
-    if(min_x >= (int)image.ni() || max_x < 0)
+    if (min_x >= (int)image.ni() || max_x < 0)
       continue;
-    if(min_x < 0) min_x = 0;
-    if(max_x >= (int)image.ni()) max_x = image.ni()-1;
-    for (int x = min_x; x <= max_x; ++x){
+    if (min_x < 0) min_x = 0;
+    if (max_x >= (int)image.ni()) max_x = image.ni()-1;
+    for (int x = min_x; x <= max_x; ++x) {
       image(x,y) = true;
     }
   }
@@ -132,19 +129,19 @@ void imesh_render_triangle_interp(const vgl_point_2d<double>& v1,
   double A = -n.x()/n.z();
   double B = -n.y()/n.z();
   double C = (v1.x()*n.x() + v1.y()*n.y() + i1*n.z())/n.z();
-  for(tsi.reset(); tsi.next(); ){
+  for (tsi.reset(); tsi.next(); ) {
     int y = tsi.scany();
-    if(y<0 || y>=int(image.nj())) continue;
+    if (y<0 || y>=int(image.nj())) continue;
     int min_x = tsi.startx();
     int max_x = tsi.endx();
-    if(min_x >= (int)image.ni() || max_x < 0)
+    if (min_x >= (int)image.ni() || max_x < 0)
       continue;
-    if(min_x < 0) min_x = 0;
-    if(max_x >= (int)image.ni()) max_x = image.ni()-1;
+    if (min_x < 0) min_x = 0;
+    if (max_x >= (int)image.ni()) max_x = image.ni()-1;
     double new_i = B*y+C;
-    for (int x = min_x; x <= max_x; ++x){
+    for (int x = min_x; x <= max_x; ++x) {
       double depth = new_i + A*x;
-      if(depth < image(x,y))
+      if (depth < image(x,y))
         image(x,y) = depth;
     }
   }
@@ -156,7 +153,7 @@ imesh_render_triangles(const imesh_regular_face_array<3>& tris,
                        const vcl_vector<vgl_point_2d<double> >& img_verts,
                              vil_image_view<bool>& image)
 {
-  for(unsigned i=0; i<tris.size(); ++i){
+  for (unsigned i=0; i<tris.size(); ++i) {
     imesh_render_triangle(img_verts[tris(i,0)],
                            img_verts[tris(i,1)],
                            img_verts[tris(i,2)],
@@ -173,7 +170,7 @@ imesh_render_faces(const imesh_mesh& mesh,
   const imesh_face_array_base& faces = mesh.faces();
   vcl_auto_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tris;
-  if(faces.regularity() != 3){
+  if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);
     tris = tri_data.get();
   }
@@ -190,7 +187,7 @@ imesh_render_triangles_interp(const imesh_regular_face_array<3>& tris,
                               const vcl_vector<double>& vals,
                                     vil_image_view<double>& image)
 {
-  for(unsigned i=0; i<tris.size(); ++i){
+  for (unsigned i=0; i<tris.size(); ++i) {
     const imesh_regular_face<3>& tri = tris[i];
     imesh_render_triangle_interp(img_verts[tri[0]],
                                   img_verts[tri[1]],
@@ -211,7 +208,7 @@ imesh_render_faces_interp(const imesh_mesh& mesh,
   const imesh_face_array_base& faces = mesh.faces();
   vcl_auto_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tris;
-  if(faces.regularity() != 3){
+  if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);
     tris = tri_data.get();
   }
@@ -223,7 +220,7 @@ imesh_render_faces_interp(const imesh_mesh& mesh,
 
 
 //: project the mesh onto the image plane using the camera and lens distortion
-//  set each pixel of the image to true if the mesh project onto it
+//  Set each pixel of the image to true if the mesh project onto it
 void imesh_project(const imesh_mesh& mesh,
                    const vpgl_proj_camera<double>& camera,
                    const vpgl_lens_distortion<double>& lens,
@@ -239,7 +236,6 @@ void imesh_project(const imesh_mesh& mesh,
 }
 
 
-
 //: project the front-facing triangles of the mesh onto the image plane
 //  using the camera and lens distortion
 //  set each pixel of the image to true if the mesh project onto it
@@ -253,7 +249,7 @@ void imesh_project(const imesh_mesh& mesh,
   const imesh_face_array_base& faces = mesh.faces();
   vcl_auto_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tri_ptr;
-  if(faces.regularity() != 3){
+  if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);
     tri_ptr = tri_data.get();
   }
@@ -267,24 +263,24 @@ void imesh_project(const imesh_mesh& mesh,
   imesh_project_verts(verts3d, camera, verts2d);
   imesh_distort_verts(verts2d, lens, verts2d);
 
-  if(bbox){
+  if (bbox) {
     bbox->set_min_x(0);  bbox->set_min_y(0);
     bbox->set_max_x(image.ni()-1);  bbox->set_max_y(image.nj()-1);
     imesh_projection_bounds(verts2d,*bbox);
   }
 
   vgl_homg_point_3d<double> c(camera.camera_center());
-  if(c.w() < 0.0)
+  if (c.w() < 0.0)
     c.rescale_w(-c.w());
 
   typedef vcl_vector<vgl_vector_3d<double> >::const_iterator itr_n;
   itr_n n = normals.begin();
-  for(unsigned int i=0; i<tris.size(); ++i, ++n){
+  for (unsigned int i=0; i<tris.size(); ++i, ++n) {
     const vgl_point_3d<double>& v1 = verts3d[tris(i,0)];
     vgl_vector_3d<double> d(c.x()-v1.x()*c.w(),
                             c.y()-v1.y()*c.w(),
                             c.z()-v1.z()*c.w());
-    if(dot_product(*n,d) < 0.0)
+    if (dot_product(*n,d) < 0.0)
       continue;
     imesh_render_triangle(verts2d[tris(i,0)],
                            verts2d[tris(i,1)],
@@ -295,7 +291,7 @@ void imesh_project(const imesh_mesh& mesh,
 
 
 //: project the mesh onto the image plane using the camera
-//  set each pixel of the image to true if the mesh project onto it
+//  Set each pixel of the image to true if the mesh project onto it
 void imesh_project(const imesh_mesh& mesh,
                    const vpgl_proj_camera<double>& camera,
                          vil_image_view<bool>& image)
@@ -308,7 +304,7 @@ void imesh_project(const imesh_mesh& mesh,
 
 
 //: project the mesh onto the image plane using the camera
-//  set each pixel of the image to the depth to the mesh
+//  Set each pixel of the image to the depth to the mesh
 void imesh_project_depth(const imesh_mesh& mesh,
                          const vpgl_proj_camera<double>& camera,
                                vil_image_view<double>& image)
@@ -323,7 +319,7 @@ void imesh_project_depth(const imesh_mesh& mesh,
 
 
 //: Compute the bounds of the projection of a set of image points
-// the returned bounds are the intersection of the input bounds
+// The returned bounds are the intersection of the input bounds
 // and the bounding box of the points
 void imesh_projection_bounds(const vcl_vector<vgl_point_2d<double> >& img_pts,
                                    vgl_box_2d<unsigned int>& bbox)
@@ -333,7 +329,7 @@ void imesh_projection_bounds(const vcl_vector<vgl_point_2d<double> >& img_pts,
 
   int i0 = bbox.max_x(), i1 = bbox.min_x(),
       j0 = bbox.max_y(), j1 = bbox.min_y();
-  for(itr_p p = img_pts.begin(); p != img_pts.end(); ++p){
+  for (itr_p p = img_pts.begin(); p != img_pts.end(); ++p) {
     double x = p->x(), y = p->y();
     int v = static_cast<int>(vcl_ceil(x))-1;
     if (v < i0) i0 = v;
@@ -353,7 +349,7 @@ void imesh_projection_bounds(const vcl_vector<vgl_point_2d<double> >& img_pts,
 
 
 //: back project an image point onto the mesh using the camera
-//  return true if the ray intersects the mesh
+//  Return true if the ray intersects the mesh
 int imesh_project_onto_mesh(const imesh_mesh& mesh,
                             const vcl_vector<vgl_vector_3d<double> >& normals,
                             const vcl_vector<vgl_point_2d<double> >& verts2d,
@@ -382,20 +378,20 @@ int imesh_project_onto_mesh(const imesh_mesh& mesh,
   itr_n n = normals.begin();
   double depth = vcl_numeric_limits<double>::infinity();
   int i = 0;
-  for(itr_t itr = tris.begin(); itr != tris.end(); ++itr, ++n, ++i){
-    if(dot_product(*n,d) > 0.0)
+  for (itr_t itr = tris.begin(); itr != tris.end(); ++itr, ++n, ++i) {
+    if (dot_product(*n,d) > 0.0)
       continue;
     const vgl_point_2d<double>& a = verts2d[(*itr)[0]];
     const vgl_point_2d<double>& b = verts2d[(*itr)[1]];
     const vgl_point_2d<double>& c = verts2d[(*itr)[2]];
-    if(vgl_triangle_test_inside<double>(a.x(), a.y(), b.x(), b.y(), 
-                                        c.x(), c.y(), pt_2d.x(), pt_2d.y())){
+    if (vgl_triangle_test_inside<double>(a.x(), a.y(), b.x(), b.y(),
+                                        c.x(), c.y(), pt_2d.x(), pt_2d.y())) {
       vgl_plane_3d<double> tri(verts3d[(*itr)[0]],
                                verts3d[(*itr)[1]],
                                verts3d[(*itr)[2]]);
       vgl_point_3d<double> pt3 = vgl_intersection(ray, tri);
       double dist = vgl_distance(pt3,center);
-      if(dist < depth){
+      if (dist < depth) {
         depth = dist;
         pt_3d = pt3;
         tri_idx = i;
@@ -407,7 +403,7 @@ int imesh_project_onto_mesh(const imesh_mesh& mesh,
 
 
 //: back project image points onto the mesh using the camera
-//  returns a vector of all valid 3d points and indices to corresponding 2d points
+//  Returns a vector of all valid 3d points and indices to corresponding 2d points
 void imesh_project_onto_mesh(const imesh_mesh& mesh,
                              const vcl_vector<vgl_vector_3d<double> >& normals,
                              const vpgl_perspective_camera<double>& camera,
@@ -420,9 +416,9 @@ void imesh_project_onto_mesh(const imesh_mesh& mesh,
   imesh_project_verts(mesh.vertices<3>(), camera, verts2d);
 
   vgl_point_3d<double> pt_3d;
-  for(unsigned int i=0; i<pts_2d.size(); ++i)
+  for (unsigned int i=0; i<pts_2d.size(); ++i)
   {
-    if(imesh_project_onto_mesh(mesh, normals, verts2d, camera, pts_2d[i], pt_3d)){
+    if (imesh_project_onto_mesh(mesh, normals, verts2d, camera, pts_2d[i], pt_3d)) {
       pts_3d.push_back(pt_3d);
       idx_2d.push_back(i);
     }
@@ -444,10 +440,10 @@ xy_to_barycentric(const vgl_point_2d<double>& pt_xy,
   vgl_vector_2d<double> v1n(-v1.y(), v1.x());
   vgl_vector_2d<double> v2n(v2.y(), -v2.x());
   double s = 1.0/(v2.y()*v1.x() - v2.x()*v1.y());
-  pt_bary.y() = s * dot_product(v1n,vp); 
+  pt_bary.y() = s * dot_product(v1n,vp);
   pt_bary.x() = s * dot_product(v2n,vp);
 }
-  
+
 void
 barycentric_to_xy(const vgl_point_2d<double>& pt_bary,
                   const vgl_point_2d<double>& a,
@@ -459,12 +455,12 @@ barycentric_to_xy(const vgl_point_2d<double>& pt_bary,
   pt_xy.x() = z*a.x() + pt_bary.x()*b.x() + pt_bary.y()*c.x();
   pt_xy.y() = z*a.y() + pt_bary.x()*b.y() + pt_bary.y()*c.y();
 }
-  
+
 };
 
 
 //: back project an image point onto the mesh using the camera
-//  the resulting point is in barycentric coordinates for the returned triangle
+//  The resulting point is in barycentric coordinates for the returned triangle
 //  returns the index of the itersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
                                         const vcl_vector<vgl_vector_3d<double> >& normals,
@@ -481,28 +477,28 @@ int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
 
   int tri_idx = imesh_project_onto_mesh(mesh, normals, verts2d, camera, pt_img, pt_3d);
-  if(tri_idx >= 0){
+  if (tri_idx >= 0) {
     const imesh_regular_face<3>& tri = tris[tri_idx];
     const vgl_point_2d<double>& a = verts2d[tri[0]];
     const vgl_point_2d<double>& b = verts2d[tri[1]];
     const vgl_point_2d<double>& c = verts2d[tri[2]];
-    xy_to_barycentric(pt_img,a,b,c,pt_bary);    
+    xy_to_barycentric(pt_img,a,b,c,pt_bary);
   }
 
   return tri_idx;
 }
 
 //: back project an image point onto the mesh using the camera
-//  then project from the mesh into normalized texture coordinate (UV)
+//  Then project from the mesh into normalized texture coordinate (UV)
 //  Assumes the mesh has both normals and texture coordinates
-//  returns the index of the itersected triangle, or -1 for no intersection
+//  \returns the index of the itersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
                                     const vcl_vector<vgl_point_2d<double> >& verts2d,
                                     const vpgl_perspective_camera<double>& camera,
                                     const vgl_point_2d<double>& pt_img,
                                           vgl_point_2d<double>& pt_uv)
 {
-  if(!mesh.faces().has_normals() || !mesh.has_tex_coords())
+  if (!mesh.faces().has_normals() || !mesh.has_tex_coords())
     return -1;
 
   // get mesh faces as triangles
@@ -514,10 +510,10 @@ int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
 
   vgl_point_2d<double> pt_bary;
   int tri_idx = imesh_project_onto_mesh_barycentric(mesh, tris.normals(),
-                                                     verts2d, camera, 
+                                                     verts2d, camera,
                                                      pt_img, pt_bary);
   unsigned int i1, i2, i3;
-  if(mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT){
+  if (mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT) {
     const imesh_regular_face<3>& tri = tris[tri_idx];
     i1 = tri[0];
     i2 = tri[1];
@@ -530,7 +526,7 @@ int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
     i2 = (++fi)->edge_index();
     i3 = (++fi)->edge_index();
   }
-  if(tri_idx >= 0){
+  if (tri_idx >= 0) {
     const imesh_regular_face<3>& tri = tris[tri_idx];
     const vgl_point_2d<double>& a = tex_coords[i1];
     const vgl_point_2d<double>& b = tex_coords[i2];
@@ -543,7 +539,7 @@ int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
 
 
 //: project a texture point onto a mesh face index with barycentric coordinates
-//  returns the index of the itersected triangle, or -1 for no intersection
+//  \returns the index of the itersected triangle, or -1 for no intersection
 int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
                                          const vgl_point_2d<double>& pt_2d,
                                                vgl_point_2d<double>& pt_uv)
@@ -554,24 +550,24 @@ int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   typedef imesh_regular_face_array<3>::const_iterator itr_t;
 
-  if(!mesh.has_tex_coords())
+  if (!mesh.has_tex_coords())
     return imesh_invalid_idx;
 
   const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
 
-  if(mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT)
+  if (mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT)
   {
     int i = 0;
-    for(itr_t itr = tris.begin(); itr != tris.end(); ++itr, ++i){
+    for (itr_t itr = tris.begin(); itr != tris.end(); ++itr, ++i) {
       const vgl_point_2d<double>& a = tc[(*itr)[0]];
       const vgl_point_2d<double>& b = tc[(*itr)[1]];
       const vgl_point_2d<double>& c = tc[(*itr)[2]];
       double dsc = vgl_triangle_test_discriminant(a.x(),a.y(),b.x(),b.y(),c.x(),c.y());
-      if(dsc <= 0.0) continue;
+      if (dsc <= 0.0) continue;
       xy_to_barycentric(pt_2d,a,b,c,pt_uv);
-      if(pt_uv.x() < 0.0) continue;
-      if(pt_uv.y() < 0.0) continue;
-      if(pt_uv.x()+pt_uv.y() >1.0) continue;
+      if (pt_uv.x() < 0.0) continue;
+      if (pt_uv.y() < 0.0) continue;
+      if (pt_uv.x()+pt_uv.y() >1.0) continue;
 
       return i;
     }
@@ -610,7 +606,7 @@ bool trace_texture(const imesh_mesh& mesh,
   unsigned char type = tidx & 3;
   unsigned long heidx = tidx>>2;
 
-  for(;;)
+  for (;;)
   {
     unsigned int fidx = he[heidx].face_index();
     const vgl_point_2d<double>& a = tc[tris[fidx][0]];
@@ -621,49 +617,49 @@ bool trace_texture(const imesh_mesh& mesh,
     // compute the line direction in the current barycentric coordinates
     vgl_vector_2d<double> duv(bary-nbary);
     // if the last point was close enough to the end
-    if(duv.sqr_length() <eps2)
+    if (duv.sqr_length() <eps2)
       return true;
-    
+
     // if the end point is inside the triangle then we are done
-    if(nbary.x() > 0 && nbary.y() > 0 && 1.0-nbary.x()-nbary.y()>0){
+    if (nbary.x() > 0 && nbary.y() > 0 && 1.0-nbary.x()-nbary.y()>0) {
       idxs.push_back(heidx<<2); // this is a face point
       isect_bary.push_back(nbary);
       return true;
     }
-    else if((nbary.x()==0.0 && nbary.y()>0 && nbary.y()<1) ||
+    else if ((nbary.x()==0.0 && nbary.y()>0 && nbary.y()<1) ||
             (nbary.y()==0.0 && nbary.x()>0 && nbary.x()<1) ||
-            (nbary.x()+nbary.y()==1.0 && nbary.x()>0 && nbary.y()>0)){
+            (nbary.x()+nbary.y()==1.0 && nbary.x()>0 && nbary.y()>0)) {
       idxs.push_back((heidx<<2) + 1); // this is an edge point
       isect_bary.push_back(nbary);
       return true;
     }
-    
+
     // intersect the line with the with the current triangle
     unsigned char s = imesh_triangle_intersect(bary.x(),bary.y(),duv.x(),duv.y(), eps);
     typedef imesh_half_edge_set::f_const_iterator fitr;
     fitr fi = he.face_begin(fidx);
     assert(fi->face_index() == fidx);
-    if(s == 3 || s == 5 || s == 6) // intersects with an edge
+    if (s == 3 || s == 5 || s == 6) // intersects with an edge
     {
       double t = 1 - bary.x();
-      if(s==6){
+      if (s==6) {
         ++fi;
         t = bary.x();
       }
-      if(s==5){
+      if (s==5) {
         ++fi;
         ++fi;
         t = bary.y();
       }
-      
+
 
       // switch to the triangle on the other side of the edge
       heidx = fi->pair_index();
       fidx = he[heidx].face_index();
 
       // check if the next triangle is out of bounds
-      if(fidx == imesh_invalid_idx || 
-         (!mesh.valid_tex_faces().empty() && 
+      if (fidx == imesh_invalid_idx ||
+         (!mesh.valid_tex_faces().empty() &&
           !mesh.valid_tex_faces()[fidx]) )
       {
         // add the boundary point and exit
@@ -675,9 +671,9 @@ bool trace_texture(const imesh_mesh& mesh,
       // map the barycentric coordinates into those of the adjacent triangle
       fi = he.face_begin(fidx);
       unsigned char s2 = 0;
-      for(; fi->half_edge_index() != heidx && s2<4; ++s2, ++fi);
+      for (; fi->half_edge_index() != heidx && s2<4; ++s2, ++fi);
       bary.set(0,0);
-      switch(s2)
+      switch (s2)
       {
         case 0: bary.x() = t; break;
         case 1: bary.x() = 1-t; bary.y()=t; break;
@@ -691,12 +687,12 @@ bool trace_texture(const imesh_mesh& mesh,
       isect_bary.push_back(bary);
 
     }
-    else if(s == 1 || s == 2 || s == 4) // intersects with a vertex
+    else if (s == 1 || s == 2 || s == 4) // intersects with a vertex
     {
-      if(s==2){
+      if (s==2) {
         ++fi;
       }
-      if(s==4){
+      if (s==4) {
         ++fi;
         ++fi;
       }
@@ -712,14 +708,14 @@ bool trace_texture(const imesh_mesh& mesh,
       ++vi;
       double max_ang = -2*vnl_math::pi;
       unsigned long max_heidx = 0;
-      for(; vi!=vend; ++vi){
+      for (; vi!=vend; ++vi) {
         vgl_vector_2d<double> d(tc[he[vi->pair_index()].vert_index()]
                                 - tc[vi->vert_index()]);
         // rotate to compute angle relative to dir
         double ang = vcl_atan2(d.y()*dir.x()-d.x()*dir.y(),
                                d.x()*dir.x()+d.y()*dir.y());
-        if(ang > 0) ang -= 2*vnl_math::pi;
-        if(ang > max_ang){
+        if (ang > 0) ang -= 2*vnl_math::pi;
+        if (ang > max_ang) {
           max_ang = ang;
           max_heidx = vi->half_edge_index();
         }
@@ -729,8 +725,8 @@ bool trace_texture(const imesh_mesh& mesh,
       fidx = he[heidx].face_index();
 
       // check if the next triangle is out of bounds
-      if(fidx == imesh_invalid_idx || 
-         (!mesh.valid_tex_faces().empty() && 
+      if (fidx == imesh_invalid_idx ||
+         (!mesh.valid_tex_faces().empty() &&
           !mesh.valid_tex_faces()[fidx]) )
       {
         // add the boundary point and exit
@@ -743,9 +739,9 @@ bool trace_texture(const imesh_mesh& mesh,
       unsigned vidx = fi->vert_index();
       fi = he.face_begin(fidx);
       unsigned char s2 = 0;
-      for(; fi->vert_index() != vidx && s2<4; ++s2, ++fi);
+      for (; fi->vert_index() != vidx && s2<4; ++s2, ++fi);
       bary.set(0,0);
-      switch(s2)
+      switch (s2)
       {
         case 0: break;
         case 1: bary.x() = 1; break;
@@ -767,7 +763,7 @@ bool trace_texture(const imesh_mesh& mesh,
   }
   return false;
 }
-
+// end of namespace
 }
 #endif
 
@@ -806,18 +802,18 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   unsigned int i=0;
   int idx;
   vgl_point_2d<double> pt_uv;
-  for(; i<npts; ++i)
+  for (; i<npts; ++i)
   {
     const vgl_point_2d<double>& pt = pts_2d[i];
-    if(pt.x() >= 0.0 && pt.x() <= 1.0 && pt.y() >= 0.0 && pt.y() <= 1.0)
+    if (pt.x() >= 0.0 && pt.x() <= 1.0 && pt.y() >= 0.0 && pt.y() <= 1.0)
     {
       idx = imesh_project_texture_to_barycentric(mesh,pt,pt_uv);
-      if(idx != imesh_invalid_idx)
+      if (idx != imesh_invalid_idx)
         break;
     }
     clipped = true;
   }
-  if(i==npts)
+  if (i==npts)
     return false;
 
   idxs.push_back(he.face_begin(idx)->half_edge_index()<<2);
@@ -827,38 +823,38 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   // trace the rest of the polygon
   bool valid = true;
   int num_found = 0;
-  for(unsigned int j=(i+1)%npts; j!=i; j=(j+1)%npts, ++num_found )
+  for (unsigned int j=(i+1)%npts; j!=i; j=(j+1)%npts, ++num_found )
   {
     valid = trace_texture(mesh,pts_2d[j],idxs,pts_uv);
-    if(!valid)
+    if (!valid)
       break; // curve is clipped so exit here
     map_back[j] = idxs.size()-1;
   }
   // if the curve was clipped, try tracing in reverse to get the rest
-  if(!valid)
+  if (!valid)
   {
     vcl_vector<vgl_point_2d<double> > rev_pts_uv(1,pts_uv.front());
     vcl_vector<unsigned long> rev_idxs(1,idxs.front());
     vcl_vector<int> rev_map_back(pts_2d.size(),-1);
     rev_map_back[i]=0;
     const unsigned int step = npts-1;
-    for(unsigned int j=(i+step)%npts; j!=i; j=(j+step)%npts )
+    for (unsigned int j=(i+step)%npts; j!=i; j=(j+step)%npts )
     {
       valid = trace_texture(mesh,pts_2d[j],rev_idxs,rev_pts_uv);
-      if(!valid)
+      if (!valid)
         break; // curve is clipped so exit here
       rev_map_back[j] = rev_idxs.size()-1;
     }
-    
+
     // reverse the reverse searching arrays and append the original search
-    for(unsigned int j=0; j<npts; ++j)
+    for (unsigned int j=0; j<npts; ++j)
     {
-      if(map_back[j] >=0)
+      if (map_back[j] >=0)
         map_back[j] += rev_idxs.size()-1;
-      else if(rev_map_back[j] >= 0)
+      else if (rev_map_back[j] >= 0)
         map_back[j] = rev_idxs.size()-1 - rev_map_back[j];
     }
-    
+
     vcl_reverse(rev_pts_uv.begin(),rev_pts_uv.end());
     vcl_reverse(rev_idxs.begin(),rev_idxs.end());
     unsigned int num_new_pts = rev_pts_uv.size();
@@ -866,19 +862,19 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
     vcl_copy(pts_uv.begin()+1, pts_uv.end(), rev_pts_uv.begin()+num_new_pts);
     rev_idxs.resize(rev_idxs.size()+idxs.size()-1);
     vcl_copy(idxs.begin()+1, idxs.end(), rev_idxs.begin()+num_new_pts);
-    
+
 
     idxs.swap(rev_idxs);
     pts_uv.swap(rev_pts_uv);
-                
+
     return true; // return true to indicate clipping
   }
-  
+
   // connect back to the first point, but remove the duplicated first point
   valid = trace_texture(mesh,pts_2d[i],idxs,pts_uv);
-  if(!valid)
+  if (!valid)
     return true;
-  
+
   idxs.pop_back();
   pts_uv.pop_back();
 
@@ -911,7 +907,7 @@ imesh_project_texture_to_3d_map(const imesh_mesh& mesh, unsigned int tidx)
     M1(1,0) = -v1.y()*s;  M1(1,1) = v1.x()*s;    M1(1,2) = -a.y()*s;
     M1(2,0) = 0.0;        M1(2,1) = 0.0;         M1(2,2) = 1.0;
   }
-  
+
   vnl_matrix_fixed<double,3,3> M2;
   {
     const imesh_vertex<3>& a = verts[tri[0]];
@@ -923,8 +919,8 @@ imesh_project_texture_to_3d_map(const imesh_mesh& mesh, unsigned int tidx)
     M2(1,0) = v1.y();   M2(1,1) = v2.y();   M2(1,2) = a[1];
     M2(2,0) = v1.z();   M2(2,1) = v2.z();   M2(2,2) = a[2];
   }
-  
-  
+
+
   return M2*M1;
 }
 

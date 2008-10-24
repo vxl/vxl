@@ -1,7 +1,6 @@
 // This is brl/bbas/imesh/algo/imesh_kd_tree.txx
 #ifndef imesh_kd_tree_txx_
 #define imesh_kd_tree_txx_
-
 //:
 // \file
 // \brief A KD-Tree template code
@@ -10,18 +9,18 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include "imesh_kd_tree.h"
 
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
-#include <vcl_iostream.h>
-
+#include <vcl_cassert.h>
 
 
 //: returns the index of the closest leaf node
-// the functor \a dist computes the distance between a point and leaf index
+// The functor \a dist computes the distance between a point and leaf index
 // \param dists (if specified) returns a vector of all explored nodes
 //        and the closest square distance found so far
 template <class F>
@@ -41,7 +40,7 @@ imesh_closest_index(const vgl_point_3d<double>& query,
   double closest_dist2 = vcl_numeric_limits<double>::infinity();
   unsigned int closest_ind = 0;
 
-  if(dists)
+  if (dists)
     dists->clear();
 
 
@@ -50,28 +49,28 @@ imesh_closest_index(const vgl_point_3d<double>& query,
   vcl_vector<imesh_kd_tree_queue_entry>::iterator back = leaf_queue.end();
   --back;
   bool break_early = true;
-  while(back->val_ < closest_dist2)
+  while (back->val_ < closest_dist2)
   {
     double new_dist2 = dist(query,back->node_->index_);
     new_dist2 *= new_dist2;
-    if(dists)
+    if (dists)
       dists->push_back(imesh_kd_tree_queue_entry(new_dist2,back->node_));
-    if(new_dist2 < closest_dist2){
+    if (new_dist2 < closest_dist2) {
       closest_dist2 = new_dist2;
       closest_ind = back->node_->index_;
     }
-    if(leaf_queue.begin() == back){
+    if (leaf_queue.begin() == back) {
       break_early = false;
       break;
     }
     vcl_pop_heap( leaf_queue.begin(), back );
     --back;
   }
-  // add the unexplored leaves 
-  if(dists && break_early){
+  // add the unexplored leaves
+  if (dists && break_early) {
     ++back;
     vcl_vector<imesh_kd_tree_queue_entry>::iterator itr = leaf_queue.begin();
-    for(; itr != back; ++itr)
+    for (; itr != back; ++itr)
       dists->push_back(*itr);
   }
   assert(!dists || dists->size() == leaf_queue.size());
@@ -79,18 +78,18 @@ imesh_closest_index(const vgl_point_3d<double>& query,
 
   // check for other closer internal nodes
   vcl_pop_heap( internal_queue.begin(), internal_queue.end() );
-  while(!internal_queue.empty() && internal_queue.back().val_ < closest_dist2)
+  while (!internal_queue.empty() && internal_queue.back().val_ < closest_dist2)
   {
     imesh_kd_tree_node* current = internal_queue.back().node_;
     internal_queue.pop_back();
 
-    if(current->is_leaf())
+    if (current->is_leaf())
     {
       double new_dist2 = dist(query,current->index_);
       new_dist2 *= new_dist2;
-      if(dists)
+      if (dists)
         dists->push_back(imesh_kd_tree_queue_entry(new_dist2,current));
-      if(new_dist2 < closest_dist2){
+      if (new_dist2 < closest_dist2) {
         closest_dist2 = new_dist2;
         closest_ind = current->index_;
       }
@@ -98,30 +97,30 @@ imesh_closest_index(const vgl_point_3d<double>& query,
     else
     {
       double left_dist2 = imesh_min_sq_dist(query,current->left_->inner_box_);
-      if(left_dist2 < closest_dist2){
+      if (left_dist2 < closest_dist2) {
         internal_queue.push_back(imesh_kd_tree_queue_entry(left_dist2,
                                                            current->left_.get()));
         vcl_push_heap(internal_queue.begin(), internal_queue.end());
       }
-      else if(dists)
+      else if (dists)
         dists->push_back(imesh_kd_tree_queue_entry(left_dist2,current->left_.get()));
 
       double right_dist2 = imesh_min_sq_dist(query,current->right_->inner_box_);
-      if(right_dist2 < closest_dist2){
+      if (right_dist2 < closest_dist2) {
         internal_queue.push_back(imesh_kd_tree_queue_entry(right_dist2,
                                                            current->right_.get()));
         vcl_push_heap(internal_queue.begin(), internal_queue.end());
       }
-      else if(dists)
+      else if (dists)
         dists->push_back(imesh_kd_tree_queue_entry(right_dist2,current->right_.get()));
     }
 
-    if(!internal_queue.empty())
+    if (!internal_queue.empty())
       vcl_pop_heap( internal_queue.begin(), internal_queue.end() );
   }
-  if(dists){
+  if (dists) {
     vcl_vector<imesh_kd_tree_queue_entry>::iterator itr = internal_queue.begin();
-    for(; itr != internal_queue.end(); ++itr)
+    for (; itr != internal_queue.end(); ++itr)
       dists->push_back(*itr);
   }
 

@@ -1,17 +1,15 @@
 // This is brl/bbas/imesh/algo/imesh_operations.cxx
-
+#include "imesh_operations.h"
 //:
 // \file
 
-
-#include "imesh_operations.h"
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vcl_cassert.h>
 
 
-
-//: Compute the dual mesh using vertex normals to compute dual vertices 
+//: Compute the dual mesh using vertex normals to compute dual vertices
 imesh_mesh dual_mesh_with_normals(const imesh_mesh& mesh,
                                   const imesh_vertex_array_base& old_verts,
                                   double tau)
@@ -26,13 +24,13 @@ imesh_mesh dual_mesh_with_normals(const imesh_mesh& mesh,
   vcl_auto_ptr<imesh_face_array> new_faces(new imesh_face_array);
   vcl_auto_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
 
-  for(unsigned int i=0; i<num_verts; ++i)
+  for (unsigned int i=0; i<num_verts; ++i)
   {
     typedef imesh_half_edge_set::v_const_iterator vitr;
     vcl_vector<unsigned int> face;
     vitr end = half_edges.vertex_begin(i), v = end;
     face.push_back(v->face_index());
-    for(++v; v != end; ++v)
+    for (++v; v != end; ++v)
     {
       face.push_back(v->face_index());
     }
@@ -41,14 +39,14 @@ imesh_mesh dual_mesh_with_normals(const imesh_mesh& mesh,
   new_faces->set_normals(mesh.vertices().normals());
 
 
-  for(unsigned int i=0; i<num_faces; ++i)
+  for (unsigned int i=0; i<num_faces; ++i)
   {
     const unsigned int num_planes = mesh.faces().num_verts(i);
     vgl_point_3d<double> p0(init_verts[i]);
     vgl_vector_3d<double> v0(p0.x(), p0.y(), p0.z());
     vnl_matrix<double> A(num_planes, 3);
     vnl_vector<double> b(num_planes);
-    for(unsigned int j=0; j<num_planes; ++j)
+    for (unsigned int j=0; j<num_planes; ++j)
     {
       unsigned int v = mesh.faces()(i,j);
       vgl_point_3d<double> c(mesh.vertices<3>()[v]);

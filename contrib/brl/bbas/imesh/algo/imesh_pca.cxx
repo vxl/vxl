@@ -1,15 +1,14 @@
 // This is brl/bbas/imesh/algo/imesh_pca.cxx
-
+#include "imesh_pca.h"
 //:
 // \file
 
 
-#include "imesh_pca.h"
 #include <imesh/imesh_fileio.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_double_4.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_fstream.h>
+#include <vcl_cassert.h>
 
 
 imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
@@ -27,18 +26,18 @@ imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
 
 
 //: compute and set the mean return the deviations matrix
-vnl_matrix<double> 
+vnl_matrix<double>
 imesh_pca_mesh::compute_mean(const vcl_vector<imesh_mesh>& meshes)
 {
   const unsigned num_training = meshes.size();
   vnl_matrix<double> M(this->num_verts()*3,num_training);
   vnl_vector<double> mean(this->num_verts()*3,0.0);
-  
-  for(unsigned int i=0; i<num_training; ++i)
+
+  for (unsigned int i=0; i<num_training; ++i)
   {
     assert(meshes[i].num_verts() == this->num_verts());
     const imesh_vertex_array<3>& verts = meshes[i].vertices<3>();
-    for(unsigned v=0; v<verts.size(); ++v){
+    for (unsigned v=0; v<verts.size(); ++v) {
       M(3*v,i) = verts[v][0];
       M(3*v+1,i) = verts[v][1];
       M(3*v+2,i) = verts[v][2];
@@ -47,21 +46,21 @@ imesh_pca_mesh::compute_mean(const vcl_vector<imesh_mesh>& meshes)
       mean[3*v+2] += verts[v][2];
     }
   }
-  
+
   mean /= num_training;
-  
-  for(unsigned int i=0; i<num_training; ++i)
+
+  for (unsigned int i=0; i<num_training; ++i)
   {
     M.set_column(i,M.get_column(i) - mean);
     imesh_vertex_array<3>& verts = this->vertices<3>();
     imesh_vertex_array<3>& mverts = this->mean_vertices<3>();
-    for(unsigned v=0; v<verts.size(); ++v){
+    for (unsigned v=0; v<verts.size(); ++v) {
       verts[v][0] = mverts[v][0] = mean[3*v];
       verts[v][1] = mverts[v][1] = mean[3*v+1];
       verts[v][2] = mverts[v][2] = mean[3*v+2];
     }
   }
-  
+
   return M;
 }
 
@@ -95,9 +94,8 @@ imesh_pca_mesh::imesh_pca_mesh(const imesh_mesh& mesh)
 }
 
 
-
 //: Initialize the PCA data (assuming mesh data is already set)
-//  use this to add PCA data after a mesh has be loaded from a file
+//  Use this to add PCA data after a mesh has be loaded from a file
 void imesh_pca_mesh::init(const vnl_vector<double>& mean,
                           const vnl_vector<double>& std_devs,
                           const vnl_matrix<double>& pc)
@@ -111,7 +109,7 @@ void imesh_pca_mesh::init(const vnl_vector<double>& mean,
   assert(std_devs.size() == pc.rows());
 
   imesh_vertex_array<3>& mverts = this->mean_vertices<3>();
-  for(unsigned int i=0; i<mverts.size(); ++i)
+  for (unsigned int i=0; i<mverts.size(); ++i)
   {
     mverts[i] = imesh_vertex<3>(mean[3*i],mean[3*i+1],mean[3*i+2]);
   }
@@ -124,19 +122,19 @@ void imesh_pca_mesh::set_params(const vnl_vector<double>& p)
 {
   assert(params_.size() >= p.size());
   unsigned int i=0;
-  for(; i<p.size(); ++i)
+  for (; i<p.size(); ++i)
     params_[i] = p[i];
   // fill the rest with zeros
-  for(; i<params_.size(); ++i)
+  for (; i<params_.size(); ++i)
     params_[i] = 0.0;
 
   imesh_vertex_array<3>& verts = this->vertices<3>();
   const imesh_vertex_array<3>& mverts = this->mean_vertices<3>();
-  for(unsigned i=0; i<verts.size(); ++i){
+  for (unsigned i=0; i<verts.size(); ++i) {
     imesh_vertex<3>& v = verts[i];
     const imesh_vertex<3>& mv = mverts[i];
     v = mv;
-    for(unsigned j=0; j<p.size(); ++j){
+    for (unsigned j=0; j<p.size(); ++j) {
       v[0] += pc_(j,3*i)  *params_[j];
       v[1] += pc_(j,3*i+1)*params_[j];
       v[2] += pc_(j,3*i+2)*params_[j];
@@ -153,7 +151,7 @@ void imesh_pca_mesh::set_param(unsigned int idx, double param)
   params_[idx] = param;
 
   imesh_vertex_array<3>& verts = this->vertices<3>();
-  for(unsigned i=0; i<verts.size(); ++i){
+  for (unsigned i=0; i<verts.size(); ++i) {
     imesh_vertex<3>& v = verts[i];
     v[0] += pc_(idx,3*i)  *diff;
     v[1] += pc_(idx,3*i+1)*diff;
@@ -163,14 +161,14 @@ void imesh_pca_mesh::set_param(unsigned int idx, double param)
 
 
 //: Reset all the PCA parameters to zero
-//  returning to the mean mesh
+//  Returning to the mean mesh
 void imesh_pca_mesh::set_mean()
 {
   params_.fill(0.0);
 
   imesh_vertex_array<3>& verts = this->vertices<3>();
   const imesh_vertex_array<3>& mverts = this->mean_vertices<3>();
-  for(unsigned v=0; v<verts.size(); ++v){
+  for (unsigned v=0; v<verts.size(); ++v) {
     verts[v] = mverts[v];
   }
 }
@@ -188,7 +186,7 @@ imesh_pca_mesh::project(const imesh_vertex_array_base& vertices) const
 
   const unsigned int num_verts = this->num_verts();
   vnl_vector<double> vals(3*num_verts);
-  for(unsigned int i=0; i<num_verts; ++i)
+  for (unsigned int i=0; i<num_verts; ++i)
   {
     const imesh_vertex<3>& mv = mverts[i];
     const imesh_vertex<3>& v = verts[i];
@@ -205,9 +203,9 @@ imesh_pca_mesh::project(const imesh_vertex_array_base& vertices) const
 // External functions
 
 
-//: Compute the image Jacobians at each vertex for PCA parameters
-//  in the result: matrix n, row i is the image space derivative
-//  at vertex n with respect the the ith pca parameter
+//: Compute the image Jacobians at each vertex for PCA parameters in the result:
+//  matrix n, row i is the image space derivative
+//  at vertex n with respect to the ith pca parameter
 vcl_vector<vnl_matrix<double> >
 imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
                           const imesh_pca_mesh& mesh)
@@ -216,7 +214,7 @@ imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
   const unsigned int num_verts = mesh.num_verts();
   vcl_vector<vgl_point_3d<double> > pts(num_verts);
-  for(unsigned int i=0; i<num_verts; ++i)
+  for (unsigned int i=0; i<num_verts; ++i)
     pts[i] = verts[i];
 
   // compute the Jacobians at each point
@@ -225,7 +223,7 @@ imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
   // map the image Jacobians into PCA Jacobians
   const vnl_matrix<double>& pc = mesh.principal_comps();
   vcl_vector<vnl_matrix<double> > img_jac(num_verts);
-  for(unsigned int i=0; i<num_verts; ++i)
+  for (unsigned int i=0; i<num_verts; ++i)
   {
     vnl_matrix<double> dir_3d(pc.rows(),3);
     pc.extract(dir_3d,0,3*i);
@@ -257,45 +255,45 @@ bool imesh_read_pca(const vcl_string& pca_file,
                           vnl_matrix<double>& pc)
 {
   vcl_ifstream ifs(pca_file.c_str());
-  if(!ifs.is_open())
+  if (!ifs.is_open())
     return false;
 
   vcl_vector<double> data;
-  if(ifs.peek() == '#'){
+  if (ifs.peek() == '#') {
     vcl_string s;
     ifs >> s;
-    if(s == "#mag"){
+    if (s == "#mag") {
       vcl_string line;
       vcl_getline(ifs,line);
       vcl_stringstream ss(line);
       double val;
-      while(ss >> val){
+      while (ss >> val) {
         data.push_back(val);
       }
       std_devs.set_size(data.size());
-      for(unsigned i=0; i<std_devs.size(); ++i)
+      for (unsigned i=0; i<std_devs.size(); ++i)
         std_devs[i] = data[i];
     }
   }
   vcl_string line;
   data.clear();
   vcl_vector<vcl_vector<double> > data_M;
-  while(vcl_getline(ifs,line).good()){
+  while (vcl_getline(ifs,line).good()) {
     vcl_stringstream ss(line);
     double val;
     ss >> val;
     data.push_back(val);
     vcl_vector<double> row;
-    while(ss >> val){
+    while (ss >> val) {
       row.push_back(val);
     }
     data_M.push_back(row);
   }
   mean.set_size(data.size());
   pc.set_size(data_M[0].size(),mean.size());
-  for(unsigned i=0; i<mean.size(); ++i){
+  for (unsigned i=0; i<mean.size(); ++i) {
     mean[i] = data[i];
-    for(unsigned j=0; j<pc.rows(); ++j){
+    for (unsigned j=0; j<pc.rows(); ++j) {
       pc(j,i) = data_M[i][j];
     }
   }
@@ -314,7 +312,7 @@ void imesh_write_pca(const vcl_string& mesh_file,
   const imesh_vertex_array<3>& mverts = pmesh.mean_vertices<3>();
   const unsigned int num_data = pc.columns();
   vnl_vector<double> mean(num_data);
-  for(unsigned int i=0; i<num_data; ++i)
+  for (unsigned int i=0; i<num_data; ++i)
     mean[i] = mverts[i/3][i%3];
 
   vcl_auto_ptr<imesh_vertex_array_base> verts(mverts.clone());
@@ -336,12 +334,12 @@ bool imesh_write_pca(const vcl_string& filename,
   const unsigned int num_data = mean.size();
   vcl_ofstream ofs(filename.c_str());
   ofs << "#mag";
-  for(unsigned int i=0; i<num_comps; ++i)
+  for (unsigned int i=0; i<num_comps; ++i)
     ofs << ' ' << svals[i];
   ofs << '\n';
-  for(unsigned int j=0; j<num_data; ++j){
+  for (unsigned int j=0; j<num_data; ++j) {
     ofs << mean[j];
-    for(unsigned int i=0; i<num_comps; ++i)
+    for (unsigned int i=0; i<num_comps; ++i)
       ofs << ' ' << vars(i,j);
     ofs << '\n';
   }
@@ -349,5 +347,3 @@ bool imesh_write_pca(const vcl_string& filename,
   ofs.close();
   return true;
 }
-
-
