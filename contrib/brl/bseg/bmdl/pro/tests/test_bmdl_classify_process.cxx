@@ -11,6 +11,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
+#include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view_base.h>
 
