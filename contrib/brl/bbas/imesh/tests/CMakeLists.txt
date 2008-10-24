@@ -8,6 +8,7 @@ ADD_EXECUTABLE( imesh_test_all
   test_driver.cxx
   test_share.cxx          test_share.h
   test_intersect.cxx
+  test_detect.cxx
   test_kd_tree.cxx
   test_imls_surface.cxx
 )
@@ -15,6 +16,7 @@ ADD_EXECUTABLE( imesh_test_all
 TARGET_LINK_LIBRARIES( imesh_test_all imesh imesh_algo testlib )
 
 ADD_TEST( imesh_test_intersect            imesh_test_all test_intersect )
+ADD_TEST( imesh_test_detect               imesh_test_all test_detect )
 ADD_TEST( imesh_test_kd_tree              imesh_test_all test_kd_tree )
 ADD_TEST( imesh_test_imls_surface         imesh_test_all test_imls_surface )
 

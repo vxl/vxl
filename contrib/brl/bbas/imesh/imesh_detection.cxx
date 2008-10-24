@@ -198,7 +198,7 @@ vcl_vector<vcl_set<unsigned int> >
 imesh_detect_connected_components(const imesh_half_edge_set& he)
 {
   vcl_vector<vcl_set<unsigned int> > components;
-  vcl_vector<bool> visited(he.num_verts(),false);
+  vcl_vector<bool> visited(he.num_faces(),false);
   for(unsigned int i=0; i<visited.size(); ++i)
   {
     if(visited[i]) continue;
