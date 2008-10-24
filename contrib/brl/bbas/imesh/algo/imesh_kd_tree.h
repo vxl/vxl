@@ -1,7 +1,6 @@
 // This is brl/bbas/imesh/algo/imesh_kd_tree.h
 #ifndef imesh_kd_tree_h_
 #define imesh_kd_tree_h_
-
 //:
 // \file
 // \brief A KD-Tree for mesh faces
@@ -38,7 +37,7 @@ struct imesh_kd_tree_node
       index_(static_cast<unsigned int>(-1)),
       left_(left), right_(right) {}
 
-  //: Constuctor for leaf node
+  //: Constructor for leaf node
   imesh_kd_tree_node( const vgl_box_3d<double>& outer_box,
                       const vgl_box_3d<double>& inner_box,
                       unsigned int index )
@@ -62,12 +61,12 @@ struct imesh_kd_tree_node
   //: Inner bounding box
   vgl_box_3d<double> inner_box_;
   //: index into original data vector (at leaf nodes)
-  // additional indices are assigned to internal nodes 
+  //  Additional indices are assigned to internal nodes
   unsigned int index_;
   //: Left child
   vcl_auto_ptr<imesh_kd_tree_node> left_;
   //: Right child
-  vcl_auto_ptr<imesh_kd_tree_node>  right_;
+  vcl_auto_ptr<imesh_kd_tree_node> right_;
 };
 
 
@@ -94,33 +93,33 @@ imesh_build_kd_tree(const imesh_mesh& mesh)
 //  In the most common case this value is a distance measure
 class imesh_kd_tree_queue_entry
 {
-  public:
-    //: Constructor
-    imesh_kd_tree_queue_entry() {}
-    //: Constructor
-    imesh_kd_tree_queue_entry( double val, imesh_kd_tree_node* node )
-      : val_(val), node_(node) {}
+ public:
+  //: Constructor
+  imesh_kd_tree_queue_entry() {}
+  //: Constructor
+  imesh_kd_tree_queue_entry( double val, imesh_kd_tree_node* node )
+    : val_(val), node_(node) {}
 
-    //: Used in sorting by distance
-    bool operator< ( const imesh_kd_tree_queue_entry& right ) const
-    { return right.val_ < this->val_; }
+  //: Used in sorting by distance
+  bool operator< ( const imesh_kd_tree_queue_entry& right ) const
+  { return right.val_ < this->val_; }
 
-    //: The value
-    double val_;
-    //: pointer to the node
-    imesh_kd_tree_node* node_;
+  //: The value
+  double val_;
+  //: pointer to the node
+  imesh_kd_tree_node* node_;
 };
 
 //: compute the closest point on the mesh using the kd-tree
-// returns the index of the closest triangle
-// \param dists (if specified) returns a vector of all explored nodes
+//  \returns the index of the closest triangle
+//  \param dists (if specified) returns a vector of all explored nodes
 //        and the closest square distance found so far
 unsigned int
 imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
                             const imesh_mesh& mesh,
                             const vcl_auto_ptr<imesh_kd_tree_node>& root,
-                                  vgl_point_3d<double>& cp,
-                                  vcl_vector<imesh_kd_tree_queue_entry>* dists = 0);
+                            vgl_point_3d<double>& cp,
+                            vcl_vector<imesh_kd_tree_queue_entry>* dists = 0);
 
 
 //: Traverse the tree looking for leaf nodes that contain the query
@@ -131,8 +130,6 @@ void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
                             const vcl_auto_ptr<imesh_kd_tree_node>& root,
                             vcl_vector<imesh_kd_tree_queue_entry>& internal,
                             vcl_vector<imesh_kd_tree_queue_entry>& leaf);
-
-
 
 
 #endif // imesh_kd_tree_h_
