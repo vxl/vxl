@@ -443,8 +443,9 @@ xy_to_barycentric(const vgl_point_2d<double>& pt_xy,
   vgl_vector_2d<double> v1(b-a), v2(c-a), vp(pt_xy-a);
   vgl_vector_2d<double> v1n(-v1.y(), v1.x());
   vgl_vector_2d<double> v2n(v2.y(), -v2.x());
-  pt_bary.y() = dot_product(v1n,vp)/dot_product(v1n,v2); 
-  pt_bary.x() = dot_product(v2n,vp)/dot_product(v2n,v1);
+  double s = 1.0/(v2.y()*v1.x() - v2.x()*v1.y());
+  pt_bary.y() = s * dot_product(v1n,vp); 
+  pt_bary.x() = s * dot_product(v2n,vp);
 }
   
 void
@@ -884,6 +885,47 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   assert(pts_uv.size() == idxs.size());
 
   return clipped;
+}
+
+
+//: compute the matrix that maps texture points to 3-d for a given triangle index
+// (u,v,1) maps into 3-d (x,y,z)
+vnl_matrix_fixed<double,3,3>
+imesh_project_texture_to_3d_map(const imesh_mesh& mesh, unsigned int tidx)
+{
+  assert(mesh.has_tex_coords());
+  const imesh_regular_face_array<3>& triangles =
+      static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
+  const imesh_regular_face<3>& tri = triangles[tidx];
+  const vcl_vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
+  const imesh_vertex_array<3>& verts = mesh.vertices<3>();
+
+  vnl_matrix_fixed<double,3,3> M1;
+  {
+    const vgl_point_2d<double>& a = tex[tri[0]];
+    const vgl_point_2d<double>& b = tex[tri[1]];
+    const vgl_point_2d<double>& c = tex[tri[2]];
+    vgl_vector_2d<double> v1(b-a), v2(c-a);
+    double s = 1.0 / (v2.y()*v1.x() - v2.x()*v1.y());
+    M1(0,0) = v2.y()*s;   M1(0,1) = -v2.x()*s;   M1(0,2) = -a.x()*s;
+    M1(1,0) = -v1.y()*s;  M1(1,1) = v1.x()*s;    M1(1,2) = -a.y()*s;
+    M1(2,0) = 0.0;        M1(2,1) = 0.0;         M1(2,2) = 1.0;
+  }
+  
+  vnl_matrix_fixed<double,3,3> M2;
+  {
+    const imesh_vertex<3>& a = verts[tri[0]];
+    const imesh_vertex<3>& b = verts[tri[1]];
+    const imesh_vertex<3>& c = verts[tri[2]];
+    vgl_vector_3d<double> v1(b[0]-a[0],b[1]-a[1],b[2]-a[2]),
+                          v2(c[0]-a[0],c[1]-a[1],c[2]-a[2]);
+    M2(0,0) = v1.x();   M2(0,1) = v2.x();   M2(0,2) = a[0];
+    M2(1,0) = v1.y();   M2(1,1) = v2.y();   M2(1,2) = a[1];
+    M2(2,0) = v1.z();   M2(2,1) = v2.z();   M2(2,2) = a[2];
+  }
+  
+  
+  return M2*M1;
 }
 
 

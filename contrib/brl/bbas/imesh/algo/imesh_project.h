@@ -144,6 +144,11 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
                                                 vcl_vector<unsigned long>& idxs,
                                                 vcl_vector<int>& map_back);
 
+//: compute the matrix that maps texture points to 3-d for a given triangle index
+// (x,y,1) maps into 3-d (X,Y,Z)
+vnl_matrix_fixed<double,3,3>
+imesh_project_texture_to_3d_map(const imesh_mesh& mesh, unsigned int tidx);
+
 
 //: project barycentric coordinates with an index to texture space
 //  \param idx is the face index
