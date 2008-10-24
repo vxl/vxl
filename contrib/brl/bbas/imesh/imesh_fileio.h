@@ -51,5 +51,7 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh);
 //: Write a mesh to a wavefront OBJ file
 void imesh_write_obj(const vcl_string& filename, const imesh_mesh& mesh);
 
+//: Write a mesh into a kml file
+void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh);
 
 #endif // imesh_fileio_h_

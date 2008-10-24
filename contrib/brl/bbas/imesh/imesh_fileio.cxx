@@ -305,3 +305,46 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
     os << '\n';
   }
 }
+
+void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
+{
+  const imesh_face_array_base& faces = mesh.faces();
+  const imesh_vertex_array_base& verts = mesh.vertices();
+
+  if (faces.size() <= 1) {
+      // single mesh face is probably ground plane, which we do not want to render
+      return;
+  }
+  
+  for(unsigned int f=0; f<faces.size(); ++f){
+    // originally it was id=buildingX_faceY, but we have to pass a mesh number
+    os << "      <Polygon id=\"building_face" << f << "\">" << vcl_endl;
+    os << "        <extrude>0</extrude>" << vcl_endl;
+    os << "        <tessellate>0</tessellate>" << vcl_endl;
+    os << "        <altitudeMode>relativeToGround</altitudeMode>" << vcl_endl;
+    os << "        <outerBoundaryIs>" << vcl_endl;
+    os << "          <LinearRing>" << vcl_endl;
+    os << "            <coordinates>" << vcl_endl;
+    
+    for(unsigned int v=0; v<faces.num_verts(f); ++v) {
+      unsigned int idx = faces(f,v);
+      double x = verts(idx, 0);
+      double y = verts(idx, 1);
+      double z = verts(idx, 2);
+      os << "             " << x  << ", " << y << ", " << z << vcl_endl;
+    }
+
+    //Now print the first vertex again to close the polygon
+    unsigned int idx = faces(f,0);
+    double x = verts(idx, 0);
+    double y = verts(idx, 1);
+    double z = verts(idx, 2);
+    os << "             " << x  << ", " << y << ", " << z << vcl_endl;
+
+    os << "            </coordinates>" << vcl_endl;
+    os << "          </LinearRing>" << vcl_endl;
+    os << "        </outerBoundaryIs>" << vcl_endl;
+    os << "      </Polygon>" << vcl_endl;
+  }
+
+}
