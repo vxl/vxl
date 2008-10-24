@@ -32,7 +32,7 @@ class brdb_query
   virtual brdb_query_aptr complement() const = 0;
 
   //: query comparison type enum
-  typedef enum comp_type {
+  enum comp_type {
     NONE = 0, // take none of the values (logical inverse of ALL)
     ALL  = 1, // take all values, resgard compared value
     EQ   = 2, // ==
