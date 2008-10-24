@@ -96,10 +96,10 @@ LIB32=link.exe -lib
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_imls_surface.cxx
+SOURCE=.\test_share.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_imls_surface.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_intersect.cxx
@@ -108,7 +108,10 @@ SOURCE=.\test_intersect.cxx
 SOURCE=.\test_kd_tree.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_share.cxx
+SOURCE=.\test_detect.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
