@@ -1,10 +1,8 @@
 // This is brl/bbas/imesh/imesh_fileio.cxx
-
+#include "imesh_fileio.h"
 //:
 // \file
 
-
-#include "imesh_fileio.h"
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vcl_limits.h>
@@ -15,9 +13,9 @@
 bool imesh_read(const vcl_string& filename, imesh_mesh& mesh)
 {
   vcl_string ext = vul_file::extension(filename);
-  if(ext == ".ply2")
+  if (ext == ".ply2")
     return imesh_read_ply2(filename,mesh);
-  else if(ext == ".obj")
+  else if (ext == ".obj")
     return imesh_read_obj(filename,mesh);
 
   return false;
@@ -41,16 +39,16 @@ bool imesh_read_ply2(vcl_istream& is, imesh_mesh& mesh)
   is >> num_verts >> num_faces;
   vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
   vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
-  for(unsigned int v=0; v<num_verts; ++v){
+  for (unsigned int v=0; v<num_verts; ++v) {
     imesh_vertex<3>& vert = (*verts)[v];
     is >> vert[0] >> vert[1] >> vert[2];
   }
-  for(unsigned int f=0; f<num_faces; ++f){
+  for (unsigned int f=0; f<num_faces; ++f) {
     vcl_vector<unsigned int>& face = (*faces)[f];
     unsigned int cnt;
     is >> cnt;
     face.resize(cnt,0);
-    for(unsigned int v=0; v<cnt; ++v)
+    for (unsigned int v=0; v<cnt; ++v)
       is >> face[v];
   }
 
@@ -74,21 +72,20 @@ void imesh_write_ply2(vcl_ostream& os, const imesh_mesh& mesh)
 {
   os << mesh.num_verts() <<'\n'<< mesh.num_faces() <<'\n';
   const imesh_vertex_array_base& verts = mesh.vertices();
-  for(unsigned int v=0; v<verts.size(); ++v){
+  for (unsigned int v=0; v<verts.size(); ++v) {
     os << verts(v,0) << ' '
        << verts(v,1) << ' '
        << verts(v,2) << '\n';
   }
 
   const imesh_face_array_base& faces = mesh.faces();
-  for(unsigned int f=0; f<faces.size(); ++f){
+  for (unsigned int f=0; f<faces.size(); ++f) {
     os << faces.num_verts(f);
-    for(unsigned int v=0; v<faces.num_verts(f); ++v)
+    for (unsigned int v=0; v<faces.num_verts(f); ++v)
       os << ' ' << faces(f,v);
     os << '\n';
   }
 }
-
 
 
 //: Read texture coordinates from a UV2 file
@@ -107,10 +104,10 @@ bool imesh_read_uv2(vcl_istream& is, imesh_mesh& mesh)
    vcl_vector<vgl_point_2d<double> > uv;
    unsigned int num_verts, num_faces;
    is >> num_verts >> num_faces;
-   if(num_verts != mesh.num_verts() && num_verts != mesh.num_edges()*2)
+   if (num_verts != mesh.num_verts() && num_verts != mesh.num_edges()*2)
      return false;
 
-   for(unsigned int i=0; i<num_verts; ++i){
+   for (unsigned int i=0; i<num_verts; ++i) {
       double u,v;
       is >> u >> v;
       uv.push_back(vgl_point_2d<double>(u,v));
@@ -118,7 +115,6 @@ bool imesh_read_uv2(vcl_istream& is, imesh_mesh& mesh)
    mesh.set_tex_coords(uv);
    return true;
 }
-
 
 
 //: Read a mesh from a wavefront OBJ file
@@ -141,12 +137,12 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
   vcl_vector<vgl_point_2d<double> > tex;
   vcl_string last_group = "ungrouped";
   char c;
-  while(is >> c){
-    switch(c){
+  while (is >> c) {
+    switch (c) {
       case 'v': // read a vertex
       {
         char c2 = is.peek();
-        switch(c2){
+        switch (c2) {
           case 'n': // read a normal
           {
             is.ignore();
@@ -181,20 +177,20 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
         vcl_vector<unsigned int> vi, ti, ni;
         unsigned int v;
         vcl_stringstream ss(line);
-        while(ss >> v){
+        while (ss >> v) {
           vi.push_back(v-1);
-          if(ss.peek() == '/'){
+          if (ss.peek() == '/') {
             ss.ignore();
-            if(ss.peek() != '/'){
+            if (ss.peek() != '/') {
               ss >> v;
               ti.push_back(v-1);
             }
-            if(ss.peek() != '/'){
-              vcl_cerr << "improperly formed face line in OBJ: "<<line<<vcl_endl;
+            if (ss.peek() != '/') {
+              vcl_cerr << "improperly formed face line in OBJ: "<<line<<'\n';
               return false;
             }
             ss.ignore();
-            if(ss.peek() >= '0' && ss.peek() <= '9'){
+            if (ss.peek() >= '0' && ss.peek() <= '9') {
               ss >> v;
               ni.push_back(v-1);
             }
@@ -217,10 +213,10 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
   }
 
   // make the last group
-  if(faces->has_groups())
+  if (faces->has_groups())
     faces->make_group(last_group);
 
-  if(normals.size() == verts->size())
+  if (normals.size() == verts->size())
     verts->set_normals(normals);
 
   mesh.set_vertices(vcl_auto_ptr<imesh_vertex_array_base>(verts));
@@ -245,15 +241,15 @@ void imesh_write_obj(const vcl_string& filename, const imesh_mesh& mesh)
 void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
 {
   const imesh_vertex_array_base& verts = mesh.vertices();
-  for(unsigned int v=0; v<verts.size(); ++v){
+  for (unsigned int v=0; v<verts.size(); ++v) {
     os << "v "
        << verts(v,0) << ' '
        << verts(v,2) << ' '
        << -verts(v,1) << '\n';
   }
 
-  if(verts.has_normals()){
-    for(unsigned int n=0; n<verts.size(); ++n){
+  if (verts.has_normals()) {
+    for (unsigned int n=0; n<verts.size(); ++n) {
       const vgl_vector_3d<double>& v = verts.normal(n);
       os << "vn "
         << v.x() << ' '
@@ -262,9 +258,9 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
     }
   }
 
-  if(mesh.has_tex_coords()){
+  if (mesh.has_tex_coords()) {
     const vcl_vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
-    for(unsigned int t=0; t<tex.size(); ++t){
+    for (unsigned int t=0; t<tex.size(); ++t) {
       os << "vt " << tex[t].x() << ' ' << tex[t].y() << " 0.0\n";
     }
   }
@@ -274,31 +270,31 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
 
   bool write_extra = mesh.has_tex_coords() || verts.has_normals();
 
-  if(!groups.empty())
+  if (!groups.empty())
     os << "g " << groups[0].first << '\n';
   unsigned int g=0;
   unsigned int e=0;
-  for(unsigned int f=0; f<faces.size(); ++f){
-    while(g < groups.size() && groups[g].second <= f){
+  for (unsigned int f=0; f<faces.size(); ++f) {
+    while (g < groups.size() && groups[g].second <= f) {
       ++g;
-      if(g < groups.size())
+      if (g < groups.size())
         os << "g " << groups[g].first << '\n';
-      else{
+      else {
         os << "g ungrouped\n";
       }
     }
     os << 'f';
-    for(unsigned int v=0; v<faces.num_verts(f); ++v){
+    for (unsigned int v=0; v<faces.num_verts(f); ++v) {
       os << ' ' << faces(f,v)+1;
-      if(write_extra){
+      if (write_extra) {
         os << '/';
-        if(mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_CORNER){
+        if (mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_CORNER) {
           os << ++e;
         }
-        if(mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT)
+        if (mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT)
           os << faces(f,v)+1;
         os << '/';
-        if(verts.has_normals())
+        if (verts.has_normals())
           os << faces(f,v)+1;
       }
     }
@@ -315,18 +311,18 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
       // single mesh face is probably ground plane, which we do not want to render
       return;
   }
-  
-  for(unsigned int f=0; f<faces.size(); ++f){
+
+  for (unsigned int f=0; f<faces.size(); ++f) {
     // originally it was id=buildingX_faceY, but we have to pass a mesh number
-    os << "      <Polygon id=\"building_face" << f << "\">" << vcl_endl;
-    os << "        <extrude>0</extrude>" << vcl_endl;
-    os << "        <tessellate>0</tessellate>" << vcl_endl;
-    os << "        <altitudeMode>relativeToGround</altitudeMode>" << vcl_endl;
-    os << "        <outerBoundaryIs>" << vcl_endl;
-    os << "          <LinearRing>" << vcl_endl;
-    os << "            <coordinates>" << vcl_endl;
-    
-    for(unsigned int v=0; v<faces.num_verts(f); ++v) {
+    os << "      <Polygon id=\"building_face" << f << "\">\n"
+       << "        <extrude>0</extrude>\n"
+       << "        <tessellate>0</tessellate>\n"
+       << "        <altitudeMode>relativeToGround</altitudeMode>\n"
+       << "        <outerBoundaryIs>\n"
+       << "          <LinearRing>\n"
+       << "            <coordinates>" << vcl_endl;
+
+    for (unsigned int v=0; v<faces.num_verts(f); ++v) {
       unsigned int idx = faces(f,v);
       double x = verts(idx, 0);
       double y = verts(idx, 1);
@@ -339,12 +335,10 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
     double x = verts(idx, 0);
     double y = verts(idx, 1);
     double z = verts(idx, 2);
-    os << "             " << x  << ", " << y << ", " << z << vcl_endl;
-
-    os << "            </coordinates>" << vcl_endl;
-    os << "          </LinearRing>" << vcl_endl;
-    os << "        </outerBoundaryIs>" << vcl_endl;
-    os << "      </Polygon>" << vcl_endl;
+    os << "             " << x  << ", " << y << ", " << z << vcl_endl
+       << "            </coordinates>\n";
+       << "          </LinearRing>\n"
+       << "        </outerBoundaryIs>\n"
+       << "      </Polygon>" << vcl_endl;
   }
-
 }
