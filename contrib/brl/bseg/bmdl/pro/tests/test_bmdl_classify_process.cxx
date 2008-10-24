@@ -48,11 +48,11 @@ MAIN( test_bmdl_classify_process )
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
-  vcl_string first_return = "first_ret.tif";
-  vcl_string last_return = "last_ret.tif";
+  vil_image_view_base_sptr first_return = vil_load("first_ret.tif");
+  vil_image_view_base_sptr last_return = vil_load("last_ret.tif");
 
-  brdb_value_sptr v0 = new brdb_value_t<vcl_string>(first_return);
-  brdb_value_sptr v1 = new brdb_value_t<vcl_string>(last_return);
+  brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(first_return);
+  brdb_value_sptr v1 = new brdb_value_t<vil_image_view_base_sptr>(last_return);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bmdlClassifyProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
