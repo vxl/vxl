@@ -1,12 +1,12 @@
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <vcl_limits.h>
-#include <vcl_iostream.h>
 #include <vgl/vgl_triangle_3d.h>
 
 
-namespace{
-//: treat a point like a vector for fast dot products
+namespace {
+
+// treat a point like a vector for fast dot products
 double dot_product(const vgl_point_3d<double>& p, const vgl_vector_3d<double>& v)
 {
   return p.x()*v.x() + p.y()*v.y() + p.z()*v.z();
@@ -25,7 +25,6 @@ vgl_point_3d<double> operator + (const vgl_point_3d<double>& p1, const vgl_point
 };
 
 
-
 MAIN( test_intersect )
 {
   START ("Mesh Intersection");
@@ -40,7 +39,7 @@ MAIN( test_intersect )
     double dist = vcl_numeric_limits<double>::infinity();
     double dist2 = dist;
     double u1,v1,u2,v2;
-    
+
     bool hit1 = imesh_intersect_triangle(p,d,a,b,c,n,dist,u1,v1);
     bool hit2 = imesh_intersect_triangle_min_dist(p,d,a,b,c,n,dist2,u2,v2);
 
@@ -48,7 +47,7 @@ MAIN( test_intersect )
     vgl_point_3d<double> r1 = p+dist*d;
     vgl_point_3d<double> r2 = (1-u1-v1)*a + u1*b + v1*c;
 
-    TEST("intersection occured", hit1 , true);
+    TEST("intersection occurred", hit1 , true);
     TEST_NEAR("barycentric coords", (r2-r1).length(), 0.0, 1e-14);
 
     vcl_cout << "diff: " << r2 - r1 << vcl_endl;
@@ -117,6 +116,6 @@ MAIN( test_intersect )
     TEST_NEAR("Edge ac location", ( imesh_triangle_closest_point(p7,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p7,a,b,c)).length(), 0.0,  1e-14);
   }
-  
+
   SUMMARY();
 }
