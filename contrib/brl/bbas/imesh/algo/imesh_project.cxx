@@ -660,12 +660,16 @@ bool trace_texture(const imesh_mesh& mesh,
       heidx = fi->pair_index();
       fidx = he[heidx].face_index();
 
-      if(fidx == imesh_invalid_idx)
-        return false;
       // check if the next triangle is out of bounds
-      if(!mesh.valid_tex_faces().empty() && 
-         !mesh.valid_tex_faces()[fidx])
+      if(fidx == imesh_invalid_idx || 
+         (!mesh.valid_tex_faces().empty() && 
+          !mesh.valid_tex_faces()[fidx]) )
+      {
+        // add the boundary point and exit
+        idxs.push_back((fi->half_edge_index()<<2) + 1); // this is an edge point
+        isect_bary.push_back(bary);
         return false;
+      }
 
       // map the barycentric coordinates into those of the adjacent triangle
       fi = he.face_begin(fidx);
@@ -723,12 +727,16 @@ bool trace_texture(const imesh_mesh& mesh,
       heidx = max_heidx;
       fidx = he[heidx].face_index();
 
-      if(fidx == imesh_invalid_idx)
-        return false;
       // check if the next triangle is out of bounds
-      if(!mesh.valid_tex_faces().empty() && 
-         !mesh.valid_tex_faces()[fidx])
+      if(fidx == imesh_invalid_idx || 
+         (!mesh.valid_tex_faces().empty() && 
+          !mesh.valid_tex_faces()[fidx]) )
+      {
+        // add the boundary point and exit
+        idxs.push_back((fi->half_edge_index()<<2) + 2); // this is an edge point
+        isect_bary.push_back(bary);
         return false;
+      }
 
       // map the barycentric coordinates into those of the next triangle
       unsigned vidx = fi->vert_index();
@@ -763,24 +771,29 @@ bool trace_texture(const imesh_mesh& mesh,
 #endif
 
 //: project a texture polygon into barycentric coordinates
-//  returns true if the polygon is not clipped by the mesh texture
-//  returns the vector of barycentric points by reference
-//  returns a vector of coded half edge indices
+//  \returns true if the polygon is not clipped by the mesh texture
+//  \returns the vector of barycentric points by reference
+//  \returns a vector of coded half edge indices
 //  the half edge indices are scaled by a factor of 4
 //  the last two bits indicate the intersection type:
 //  - 0 for face
 //  - 1 for edge
 //  - 2 for vertex
 //  barycentric coordinate refer to the adjacent triangle
+//  \returns a mapping from each original point into barycentric points.
+//  if an original point is not mapped the value is -1
 bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
                                           const vcl_vector<vgl_point_2d<double> >& pts_2d,
                                                 vcl_vector<vgl_point_2d<double> >& pts_uv,
-                                                vcl_vector<unsigned long>& idxs)
+                                                vcl_vector<unsigned long>& idxs,
+                                                vcl_vector<int>& map_back)
 {
   bool clipped = false;
+  const unsigned int npts = pts_2d.size();
   pts_uv.clear();
   idxs.clear();
-  const unsigned int npts = pts_2d.size();
+  map_back.clear();
+  map_back.resize(npts,-1);
   const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
   assert(mesh.faces().regularity() == 3);
   const imesh_regular_face_array<3>& tris =
@@ -808,27 +821,43 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
 
   idxs.push_back(he.face_begin(idx)->half_edge_index()<<2);
   pts_uv.push_back(pt_uv);
+  map_back[i] = 0;
 
   // trace the rest of the polygon
   bool valid = true;
-  for(unsigned int j=(i+1)%npts; j!=i; j=(j+1)%npts )
+  int num_found = 0;
+  for(unsigned int j=(i+1)%npts; j!=i; j=(j+1)%npts, ++num_found )
   {
     valid = trace_texture(mesh,pts_2d[j],idxs,pts_uv);
     if(!valid)
       break; // curve is clipped so exit here
+    map_back[j] = idxs.size()-1;
   }
   // if the curve was clipped, try tracing in reverse to get the rest
   if(!valid)
   {
     vcl_vector<vgl_point_2d<double> > rev_pts_uv(1,pts_uv.front());
     vcl_vector<unsigned long> rev_idxs(1,idxs.front());
+    vcl_vector<int> rev_map_back(pts_2d.size(),-1);
+    rev_map_back[i]=0;
     const unsigned int step = npts-1;
     for(unsigned int j=(i+step)%npts; j!=i; j=(j+step)%npts )
     {
       valid = trace_texture(mesh,pts_2d[j],rev_idxs,rev_pts_uv);
       if(!valid)
         break; // curve is clipped so exit here
+      rev_map_back[j] = rev_idxs.size()-1;
     }
+    
+    // reverse the reverse searching arrays and append the original search
+    for(unsigned int j=0; j<npts; ++j)
+    {
+      if(map_back[j] >=0)
+        map_back[j] += rev_idxs.size()-1;
+      else if(rev_map_back[j] >= 0)
+        map_back[j] = rev_idxs.size()-1 - rev_map_back[j];
+    }
+    
     vcl_reverse(rev_pts_uv.begin(),rev_pts_uv.end());
     vcl_reverse(rev_idxs.begin(),rev_idxs.end());
     unsigned int num_new_pts = rev_pts_uv.size();
@@ -837,6 +866,7 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
     rev_idxs.resize(rev_idxs.size()+idxs.size()-1);
     vcl_copy(idxs.begin()+1, idxs.end(), rev_idxs.begin()+num_new_pts);
     
+
     idxs.swap(rev_idxs);
     pts_uv.swap(rev_pts_uv);
                 
@@ -845,7 +875,9 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   
   // connect back to the first point, but remove the duplicated first point
   valid = trace_texture(mesh,pts_2d[i],idxs,pts_uv);
-  assert(valid);
+  if(!valid)
+    return true;
+  
   idxs.pop_back();
   pts_uv.pop_back();
 

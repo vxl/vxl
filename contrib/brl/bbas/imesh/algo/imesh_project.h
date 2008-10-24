@@ -127,14 +127,22 @@ int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
 
 
 //: project a texture polygon into barycentric coordinates
-//  returns true if the polygon is not clipped by the mesh texture
-//  returns the vector of barycentric points by reference
-//  returns a vector of face or half edge indices (half edges are indicated by a negative)
-//  for half edge indices, barycentric coordinate refer to the adjacent triangle
+//  \returns true if the polygon is not clipped by the mesh texture
+//  \returns the vector of barycentric points by reference
+//  \returns a vector of coded half edge indices
+//  the half edge indices are scaled by a factor of 4
+//  the last two bits indicate the intersection type:
+//  - 0 for face
+//  - 1 for edge
+//  - 2 for vertex
+//  barycentric coordinate refer to the adjacent triangle
+//  \returns a mapping from each original point into barycentric points.
+//  if an original point is not mapped the value is -1
 bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
                                           const vcl_vector<vgl_point_2d<double> >& pts_2d,
                                                 vcl_vector<vgl_point_2d<double> >& pts_uv,
-                                                vcl_vector<unsigned long>& idxs);
+                                                vcl_vector<unsigned long>& idxs,
+                                                vcl_vector<int>& map_back);
 
 
 //: project barycentric coordinates with an index to texture space
