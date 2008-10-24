@@ -229,7 +229,9 @@ imesh_detect_connected_faces(const imesh_half_edge_set& he, unsigned int face)
     imesh_half_edge_set::f_const_iterator fi = he.face_begin(f);
     imesh_half_edge_set::f_const_iterator end = fi;
     do{
-      stack.push_back(he[fi->pair_index()].face_index());
+      unsigned int nf = he[fi->pair_index()].face_index();
+      if(nf != imesh_invalid_idx)
+        stack.push_back(nf);
       ++fi;
     }while(fi != end);
   }
