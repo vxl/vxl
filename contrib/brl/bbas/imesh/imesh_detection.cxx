@@ -191,3 +191,48 @@ imesh_detect_contours(const imesh_mesh& mesh, const vgl_point_3d<double>& pt)
   }
   return is_contour;
 }
+
+
+//: Segment the faces into groups of connected components 
+vcl_vector<vcl_set<unsigned int> >
+imesh_detect_connected_components(const imesh_half_edge_set& he)
+{
+  vcl_vector<vcl_set<unsigned int> > components;
+  vcl_vector<bool> visited(he.num_verts(),false);
+  for(unsigned int i=0; i<visited.size(); ++i)
+  {
+    if(visited[i]) continue;
+    components.push_back(imesh_detect_connected_faces(he,i));
+    for(vcl_set<unsigned int>::const_iterator itr=components.back().begin();
+        itr != components.back().end(); ++itr)
+      visited[*itr] = true;
+  }
+  return components;
+}
+
+
+//: Compute the set of all faces in the same connected component as \a face 
+vcl_set<unsigned int>
+imesh_detect_connected_faces(const imesh_half_edge_set& he, unsigned int face)
+{
+  vcl_set<unsigned int> component;
+  vcl_vector<unsigned int > stack(1,face);
+  
+  while(!stack.empty())
+  {
+    unsigned int f = stack.back();
+    stack.pop_back();
+    if(component.find(f) != component.end())
+      continue;
+    
+    component.insert(f);
+    imesh_half_edge_set::f_const_iterator fi = he.face_begin(f);
+    imesh_half_edge_set::f_const_iterator end = fi;
+    do{
+      stack.push_back(he[fi->pair_index()].face_index());
+      ++fi;
+    }while(fi != end);
+  }
+  
+  return component;
+}

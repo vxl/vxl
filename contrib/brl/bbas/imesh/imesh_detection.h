@@ -52,6 +52,14 @@ vcl_vector<bool>
 imesh_detect_contours(const imesh_mesh& mesh, const vgl_point_3d<double>& pt);
 
 
+//: Segment the faces into groups of connected components 
+vcl_vector<vcl_set<unsigned int> >
+imesh_detect_connected_components(const imesh_half_edge_set& he);
+
+//: Compute the set of all faces in the same connected component as \a face 
+vcl_set<unsigned int>
+imesh_detect_connected_faces(const imesh_half_edge_set& he, unsigned int face);
+
 
 
 #endif // imesh_detection_h_
