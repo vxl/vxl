@@ -31,9 +31,6 @@
 #include <vul/vul_file.h>
 #include <bgui/bgui_image_utils.h>
 
-#include <bvgl/bvgl_change_obj.h>
-#include <bvgl/bvgl_changes.h>
-
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, vcl_string image_path, bool display_image_path)
 : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
   show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
@@ -859,16 +856,24 @@ void bwm_observer_img::init_mask()
 
 void bwm_observer_img::set_change_type()
 {
-  int type = 0;
+  unsigned int type = 0;
   vgui_dialog type_dialog("Change Type");
-  type_dialog.choice("Change Type", "change", "don't care", type);
+  vcl_vector<vcl_string> choices;
+  choices.push_back("change");
+  choices.push_back("don't care");
+  choices.push_back("vehicle");
+  choices.push_back("building");
+  choices.push_back("shadow");
+  choices.push_back("sewage");
+  type_dialog.choice("Change Type", choices, type);
   if (!type_dialog.ask())
     return;
 
-  if (type == 0)
-    change_type_ = "change";
-  else
-    change_type_ = "don't care";
+  if (type > choices.size()) {
+    vcl_cerr << "bwm_observer_img::set_change_type -- Invalid choice" << vcl_endl;
+    return;
+  }
+  change_type_ = choices[type];
 }
 
 void bwm_observer_img::add_poly_to_mask()
