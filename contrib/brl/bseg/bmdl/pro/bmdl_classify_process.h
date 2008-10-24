@@ -3,13 +3,13 @@
 #define bmdl_classify_process_h_
 //:
 // \file
-// \brief A class for clipping and image based on a 3D bounding box.
+// \brief A class for classifying pixels using 2 lidar images.
 //        -  Input:
-//             - First return path (string)
-//             - Last return path (string)
+//             - First return "vil_image_view_base_sptr"
+//             - Last return  "vil_image_view_base_sptr"
 //
 //        -  Output:
-//             - label image "vil_image_view_base_sptr"
+//             - label image  "vil_image_view_base_sptr"
 //             - height image "vil_image_view_base_sptr"
 //
 //        -  Params:
@@ -53,16 +53,18 @@ class bmdl_classify_process : public bprb_process
 
  private:
 
-  bool classify(vil_image_resource_sptr lidar_first,
-                vil_image_resource_sptr lidar_last,
-                vil_image_view_base_sptr& label_img,
-                vil_image_view_base_sptr& height_img);
-  
+   bool classify(vil_image_view_base_sptr lidar_first,
+                 vil_image_view_base_sptr lidar_last,
+                 vil_image_view_base_sptr& label_img,
+                 vil_image_view_base_sptr& height_img,
+                 vil_image_view_base_sptr& ground_img);
+
   template <class T>
   bool classify(const vil_image_view<T>& lidar_first,
                 const vil_image_view<T>& lidar_last,
                 vil_image_view<unsigned int>& label_img,
-                vil_image_view<T>& height_img);
+                vil_image_view<T>& height_img,
+                vil_image_view<T>& ground_img);
 };
 
 #endif // bmdl_classify_process_h_

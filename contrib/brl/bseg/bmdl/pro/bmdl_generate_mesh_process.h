@@ -5,14 +5,15 @@
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
 //        -  Input:
-//             - File path for polygons (binary format)
+//             - file path for polygons (binary format)
 //             - label image "vil_image_view_base_sptr"
 //             - height image "vil_image_view_base_sptr"
 //             - ground image "vil_image_view_base_sptr"
-//             - File path for output meshes (binary format)
+//             - file path for output meshes (binary format)
+//             - lidar Camera "vil_camera_double_sptr"
 //
 //        -  Output:
-//             - 5
+//             - 
 //        -  Params:
 //
 //
@@ -27,6 +28,9 @@
 
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
+#include <vpgl/vpgl_lidar_camera.h>
+
+#include <imesh/imesh_mesh.h>
 
 class bmdl_generate_mesh_process : public bprb_process
 {
@@ -53,8 +57,14 @@ class bmdl_generate_mesh_process : public bprb_process
  private:
 
    bool generate_mesh(vcl_string fpath_poly, vil_image_view_base_sptr label_img,
-                      vil_image_view_base_sptr height_img, vil_image_view_base_sptr ground_img,
-     vcl_string fpath_mesh);
+                      vil_image_view_base_sptr height_img, 
+                      vil_image_view_base_sptr ground_img,
+                      vcl_string fpath_mesh, 
+                      vpgl_lidar_camera* const lidar_cam);
+
+   void update_mesh_coord(imesh_mesh& imesh, vpgl_lidar_camera* cam);
+
+   void generate_kml(vcl_string& kml_filename, imesh_mesh& mesh, vpgl_lidar_camera* lidar_cam);
 };
 
 #endif // bmdl_generate_mesh_process_h_
