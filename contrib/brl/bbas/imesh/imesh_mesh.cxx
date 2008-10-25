@@ -1,15 +1,12 @@
 // This is brl/bbas/imesh/imesh_mesh.cxx
-
+#include "imesh_mesh.h"
 //:
 // \file
 
-
-#include "imesh_mesh.h"
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_area.h>
 
 #include <vcl_iostream.h>
-
 
 //: Copy Constructor
 imesh_mesh::imesh_mesh(const imesh_mesh& other)
@@ -23,7 +20,7 @@ imesh_mesh::imesh_mesh(const imesh_mesh& other)
 
 
 //: Merge the data from another mesh into this one
-// duplicates are not removed
+//  Duplicates are not removed
 void imesh_mesh::merge(const imesh_mesh& other)
 {
   const unsigned num_v = this->num_verts();
@@ -31,13 +28,13 @@ void imesh_mesh::merge(const imesh_mesh& other)
   faces_ = imesh_merge(*this->faces_,*other.faces_,verts_->size());
   verts_->append(*other.verts_);
 
-  if(this->has_tex_coords() == TEX_COORD_NONE)
+  if (this->has_tex_coords() == TEX_COORD_NONE)
   {
     vcl_vector<vgl_point_2d<double> > tex;
-    if(other.has_tex_coords() == TEX_COORD_ON_VERT){
+    if (other.has_tex_coords() == TEX_COORD_ON_VERT) {
       tex = vcl_vector<vgl_point_2d<double> >(num_v, vgl_point_2d<double>(0,0));
     }
-    else if(other.has_tex_coords() == TEX_COORD_ON_CORNER){
+    else if (other.has_tex_coords() == TEX_COORD_ON_CORNER) {
       tex = vcl_vector<vgl_point_2d<double> >(2*num_e, vgl_point_2d<double>(0,0));
     }
 
@@ -51,7 +48,7 @@ void imesh_mesh::merge(const imesh_mesh& other)
                              other.tex_coords().end());
   }
 
-  if(this->has_half_edges() && other.has_half_edges())
+  if (this->has_half_edges() && other.has_half_edges())
     this->build_edge_graph();
   else
     this->half_edges_.clear();
@@ -61,9 +58,9 @@ void imesh_mesh::merge(const imesh_mesh& other)
 //: Set the texture coordinates
 void imesh_mesh::set_tex_coords(const vcl_vector<vgl_point_2d<double> >& tc)
 {
-  if(tc.size() == this->num_verts())
+  if (tc.size() == this->num_verts())
     tex_coord_status_ = TEX_COORD_ON_VERT;
-  else if(tc.size() == 2*this->num_edges())
+  else if (tc.size() == 2*this->num_edges())
     tex_coord_status_ = TEX_COORD_ON_CORNER;
   else
     tex_coord_status_ = TEX_COORD_NONE;
@@ -77,9 +74,9 @@ void imesh_mesh::build_edge_graph()
 {
   const imesh_face_array_base& faces = this->faces();
   vcl_vector<vcl_vector<unsigned int> > face_list(faces.size());
-  for(unsigned int f=0; f<faces.size(); ++f){
+  for (unsigned int f=0; f<faces.size(); ++f) {
     face_list[f].resize(faces.num_verts(f));
-    for(unsigned int v=0; v<faces.num_verts(f); ++v)
+    for (unsigned int v=0; v<faces.num_verts(f); ++v)
       face_list[f][v] =  faces(f,v);
   }
 
@@ -90,7 +87,7 @@ void imesh_mesh::build_edge_graph()
 //: Compute vertex normals
 void imesh_mesh::compute_vertex_normals()
 {
-  if(!this->has_half_edges())
+  if (!this->has_half_edges())
     this->build_edge_graph();
 
   const imesh_half_edge_set& half_edges = this->half_edges();
@@ -100,9 +97,9 @@ void imesh_mesh::compute_vertex_normals()
                                              vgl_vector_3d<double>(0,0,0));
   vcl_vector<unsigned int> f_count(this->num_verts(),0);
 
-  for(unsigned int he=0; he < half_edges.size(); ++he){
+  for (unsigned int he=0; he < half_edges.size(); ++he) {
     imesh_half_edge_set::f_const_iterator fi(he,half_edges);
-    if(fi->is_boundary())
+    if (fi->is_boundary())
       continue;
     unsigned int vp = fi->vert_index();
     unsigned int v = (++fi)->vert_index();
@@ -111,11 +108,11 @@ void imesh_mesh::compute_vertex_normals()
     ++f_count[v];
   }
 
-  for(unsigned v=0; v<verts.size(); ++v)
+  for (unsigned v=0; v<verts.size(); ++v)
   {
     normals[v] /= f_count[v];
     normalize(normals[v]);
-    if(normals[v].length() < 0.5)
+    if (normals[v].length() < 0.5)
       vcl_cout << "normal "<<v<<" is "<<normals[v] <<vcl_endl;
   }
 
@@ -126,10 +123,10 @@ void imesh_mesh::compute_vertex_normals()
 //: Compute vertex normals using face normals
 void imesh_mesh::compute_vertex_normals_from_faces()
 {
-  if(!this->has_half_edges())
+  if (!this->has_half_edges())
     this->build_edge_graph();
 
-  if(!this->faces_->has_normals())
+  if (!this->faces_->has_normals())
     this->compute_face_normals();
 
   const vcl_vector<vgl_vector_3d<double> >& fnormals = faces_->normals();
@@ -141,20 +138,20 @@ void imesh_mesh::compute_vertex_normals_from_faces()
                                              vgl_vector_3d<double>(0,0,0));
   vcl_vector<unsigned int> f_count(this->num_verts(),0);
 
-  for(unsigned int he=0; he < half_edges.size(); ++he){
+  for (unsigned int he=0; he < half_edges.size(); ++he) {
     const imesh_half_edge& half_edge = half_edges[he];
-    if(half_edge.is_boundary())
+    if (half_edge.is_boundary())
       continue;
     unsigned int v = half_edge.vert_index();
     normals[v] += normalized(fnormals[half_edge.face_index()]);
     ++f_count[v];
   }
 
-  for(unsigned v=0; v<verts.size(); ++v)
+  for (unsigned v=0; v<verts.size(); ++v)
   {
     normals[v] /= f_count[v];
     normalize(normals[v]);
-    if(normals[v].length() < 0.5)
+    if (normals[v].length() < 0.5)
       vcl_cout << "normal "<<v<<" is "<<normals[v] <<vcl_endl;
   }
 
@@ -171,15 +168,15 @@ void imesh_mesh::compute_face_normals(bool norm)
   vcl_vector<vgl_vector_3d<double> > normals(this->num_faces(),
                                              vgl_vector_3d<double>(0,0,0));
 
-  for(unsigned int i=0; i<faces.size(); ++i){
+  for (unsigned int i=0; i<faces.size(); ++i) {
     const unsigned int num_v = faces.num_verts(i);
     vgl_vector_3d<double>& n = normals[i];
-    for(unsigned int j=2; j<num_v; ++j){
+    for (unsigned int j=2; j<num_v; ++j) {
       n += imesh_tri_normal(verts[faces(i,0)],
                             verts[faces(i,j-1)],
                             verts[faces(i,j)]);
     }
-    if(norm)
+    if (norm)
       normalize(n);
   }
 
@@ -192,7 +189,7 @@ vgl_point_2d<double> imesh_mesh::texture_map(unsigned int tri,
                                              double u, double v) const
 {
   vgl_point_2d<double> tex(0,0);
-  if(this->tex_coord_status_ == TEX_COORD_ON_VERT)
+  if (this->tex_coord_status_ == TEX_COORD_ON_VERT)
   {
     unsigned int v1 = (*faces_)(tri,0);
     unsigned int v2 = (*faces_)(tri,1);
@@ -208,26 +205,26 @@ vgl_point_2d<double> imesh_mesh::texture_map(unsigned int tri,
 //: Set the vector indicating which faces have texture
 void imesh_mesh::set_valid_tex_faces(const vcl_vector<bool>& valid)
 {
-  if(valid.size() == this->num_faces() && has_tex_coords())
+  if (valid.size() == this->num_faces() && has_tex_coords())
     valid_tex_faces_ = valid;
 }
 
 
 //: Label all faces with positive (counter clockwise orientation) area as valid
-//  this requirement refers to the texture map coordinates
+//  This requirement refers to the texture map coordinates
 void imesh_mesh::label_ccw_tex_faces_valid()
-{  
-  switch(tex_coord_status_)
+{
+  switch (tex_coord_status_)
   {
     case TEX_COORD_ON_VERT:
     {
       valid_tex_faces_.resize(this->num_faces());
       vgl_polygon<double> face(1);
       imesh_face_array_base& faces = this->faces();
-      for(unsigned int f=0; f<num_faces(); ++f)
+      for (unsigned int f=0; f<num_faces(); ++f)
       {
         const unsigned int num_v = faces.num_verts(f);
-        for(unsigned int i=0; i<num_v; ++i){
+        for (unsigned int i=0; i<num_v; ++i) {
           face.push_back(tex_coords_[faces(f,i)]);
         }
         valid_tex_faces_[f] = vgl_area_signed(face) > 0;
@@ -236,7 +233,7 @@ void imesh_mesh::label_ccw_tex_faces_valid()
     }
     case TEX_COORD_ON_CORNER:
       vcl_cerr << "imesh_mesh::label_ccw_tex_faces_valid()"
-               << " not implemented for TEX_COORD_ON_CORNER"<<vcl_endl;
+               << " not implemented for TEX_COORD_ON_CORNER\n";
       break;
     default:
       break;

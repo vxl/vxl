@@ -3,7 +3,6 @@
 //:
 // \file
 
-
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
 
@@ -13,8 +12,7 @@
 
 namespace {
 
-//: compute barycentric coordinates (u,v) assuming that
-// p is in the plane of triangle (a,b,c)
+//: compute barycentric coordinates (u,v) assuming that \a p is in the plane of triangle (a,b,c)
 void compute_barycentric(const vgl_point_3d<double>& p,
                          const vgl_point_3d<double>& a,
                          const vgl_point_3d<double>& b,
@@ -43,8 +41,8 @@ bool imesh_intersect_triangle(const vgl_point_3d<double>& p,
                               const vgl_point_3d<double>& a,
                               const vgl_point_3d<double>& b,
                               const vgl_point_3d<double>& c,
-                                    double& dist,
-                                    double& u, double& v)
+                              double& dist,
+                              double& u, double& v)
 {
   vgl_vector_3d<double> n(cross_product(b-a,c-a));
   return imesh_intersect_triangle(p,d,a,b,c,n,dist,u,v);
@@ -53,7 +51,7 @@ bool imesh_intersect_triangle(const vgl_point_3d<double>& p,
 
 //: Intersect the ray from point p with direction d and the triangle defined by a,b,c
 //  The un-normalized normal vector (b-a)x(c-a) is precomputed and also passed in
-//  returns true if intersection occurs
+//  \returns true if intersection occurs
 //  \param dist is the distance to the triangle (returned by reference)
 //  \param u and \param v are the barycentric coordinates of the intersection
 bool imesh_intersect_triangle(const vgl_point_3d<double>& p,
@@ -62,8 +60,8 @@ bool imesh_intersect_triangle(const vgl_point_3d<double>& p,
                               const vgl_point_3d<double>& b,
                               const vgl_point_3d<double>& c,
                               const vgl_vector_3d<double>& n,
-                                    double& dist,
-                                    double& u, double& v)
+                              double& dist,
+                              double& u, double& v)
 {
   double denom = -dot_product(d,n);
   if (denom <= 0) // back facing triangles
@@ -102,8 +100,8 @@ bool imesh_intersect_triangle_min_dist(const vgl_point_3d<double>& p,
                                        const vgl_point_3d<double>& b,
                                        const vgl_point_3d<double>& c,
                                        const vgl_vector_3d<double>& n,
-                                             double& dist,
-                                             double& u, double& v)
+                                       double& dist,
+                                       double& u, double& v)
 {
   double denom = -dot_product(d,n);
   if (denom <= 0) // back facing triangles
@@ -189,8 +187,8 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
                              const vgl_point_3d<double>& b,
                              const vgl_point_3d<double>& c,
                              const vgl_vector_3d<double>& n,
-                                   double& dist,
-                                   double& u, double& v)
+                             double& dist,
+                             double& u, double& v)
 {
   double denom = 1.0/dot_product(n,n);
 
@@ -218,7 +216,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
     else if (p_v >= 1.0) {
       state = 4;
     }
-    else{
+    else {
       u = 0.0; v = p_v;
       dist = ((1-v)*ap + v*cp).length();
       return 5;
@@ -232,7 +230,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
     else if (p_u >= 1.0) {
       state = 2;
     }
-    else{
+    else {
       u = p_u; v = 0.0;
       dist = ((1-u)*ap + u*bp).length();
       return 3;
@@ -248,7 +246,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
     else if (p_u <= eps) {
       state = 4;
     }
-    else{
+    else {
       u=p_u; v=p_v;
       dist = (u*bp + v*cp).length();
       return 6;
@@ -287,8 +285,8 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
                              const vgl_point_3d<double>& a,
                              const vgl_point_3d<double>& b,
                              const vgl_point_3d<double>& c,
-                                   double& dist,
-                                   double& u, double& v)
+                             double& dist,
+                             double& u, double& v)
 {
   vgl_vector_3d<double> n(cross_product(b-a,c-a));
   return imesh_triangle_closest_point(p,a,b,c,n,dist,u,v);
@@ -302,7 +300,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
                              const vgl_point_3d<double>& a,
                              const vgl_point_3d<double>& b,
                              const vgl_point_3d<double>& c,
-                                   double& dist)
+                             double& dist)
 {
   double u,v;
   unsigned char i = imesh_triangle_closest_point(p,a,b,c,dist,u,v);
@@ -366,7 +364,7 @@ imesh_triangle_intersect(const vgl_point_2d<double>& p,
                          const vgl_point_2d<double>& a,
                          const vgl_point_2d<double>& b,
                          const vgl_point_2d<double>& c,
-                               double& u, double& v)
+                         double& u, double& v)
 {
   vgl_vector_2d<double> v1(b-a), v2(c-a), vp(p-a);
   vgl_vector_2d<double> v1n(v1.y(), -v1.x());

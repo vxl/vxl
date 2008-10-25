@@ -1,18 +1,14 @@
 // This is brl/bbas/imesh/algo/imesh_kd_tree.cxx
-
+#include "imesh_kd_tree.h"
+#include "imesh_kd_tree.txx"
 //:
 // \file
 
 
-#include "imesh_kd_tree.h"
-#include "imesh_kd_tree.txx"
 #include <imesh/algo/imesh_intersect.h>
-#include <vgl/vgl_distance.h>
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
 #include <vcl_cmath.h>
-
-#include <vcl_iostream.h>
 
 
 //: The minimum square distance between \a p and any point in \a b
@@ -21,29 +17,29 @@ double imesh_min_sq_dist(const vgl_point_3d<double>& p,
 {
   double sum_sq = 0;
 
-  if(p.x() < b.min_x()){
+  if (p.x() < b.min_x()) {
     double dist = b.min_x() - p.x();
     sum_sq += dist * dist;
   }
-  else if (p.x() > b.max_x()){
+  else if (p.x() > b.max_x()) {
     double dist = b.max_x() - p.x();
     sum_sq += dist*dist;
   }
 
-  if(p.y() < b.min_y()){
+  if (p.y() < b.min_y()) {
     double dist = b.min_y() - p.y();
     sum_sq += dist * dist;
   }
-  else if (p.y() > b.max_y()){
+  else if (p.y() > b.max_y()) {
     double dist = b.max_y() - p.y();
     sum_sq += dist*dist;
   }
 
-  if(p.z() < b.min_z()){
+  if (p.z() < b.min_z()) {
     double dist = b.min_z() - p.z();
     sum_sq += dist * dist;
   }
-  else if (p.z() > b.max_z()){
+  else if (p.z() > b.max_z()) {
     double dist = b.max_z() - p.z();
     sum_sq += dist*dist;
   }
@@ -63,43 +59,42 @@ double imesh_max_sq_dist(const vgl_point_3d<double>& p,
 }
 
 
-
 namespace {
 
 //: Functor for sorting boxes by increasing X centroid
 class less_box_centroid_x
 {
-  public:
-    less_box_centroid_x(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
-    const vcl_vector<vgl_box_3d<double> >& boxes;
-    bool operator () (unsigned int i1, unsigned int i2) const
-    {
-      return boxes[i1].centroid_x() < boxes[i2].centroid_x();
-    }
+ public:
+  less_box_centroid_x(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  const vcl_vector<vgl_box_3d<double> >& boxes;
+  bool operator () (unsigned int i1, unsigned int i2) const
+  {
+    return boxes[i1].centroid_x() < boxes[i2].centroid_x();
+  }
 };
 
 //: Functor for sorting boxes by increasing X centroid
 class less_box_centroid_y
 {
-  public:
-    less_box_centroid_y(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
-    const vcl_vector<vgl_box_3d<double> >& boxes;
-    bool operator () (unsigned int i1, unsigned int i2) const
-    {
-      return boxes[i1].centroid_y() < boxes[i2].centroid_y();
-    }
-};
+ public:
+  less_box_centroid_y(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  const vcl_vector<vgl_box_3d<double> >& boxes;
+  bool operator () (unsigned int i1, unsigned int i2) const
+  {
+    return boxes[i1].centroid_y() < boxes[i2].centroid_y();
+  }
+}
 
 //: Functor for sorting boxes by increasing X centroid
 class less_box_centroid_z
 {
-  public:
-    less_box_centroid_z(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
-    const vcl_vector<vgl_box_3d<double> >& boxes;
-    bool operator () (unsigned int i1, unsigned int i2) const
-    {
-      return boxes[i1].centroid_z() < boxes[i2].centroid_z();
-    }
+ public:
+  less_box_centroid_z(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  const vcl_vector<vgl_box_3d<double> >& boxes;
+  bool operator () (unsigned int i1, unsigned int i2) const
+  {
+    return boxes[i1].centroid_z() < boxes[i2].centroid_z();
+  }
 };
 
 bool
@@ -110,7 +105,7 @@ best_split(const vcl_vector<vgl_box_3d<double> >& boxes,
   const unsigned int ind_size = indices.size();
   vcl_vector<double> volume_seq;
   vgl_box_3d<double> box(boxes[indices[0]]);
-  for(unsigned int i=1; i<ind_size; ++i)
+  for (unsigned int i=1; i<ind_size; ++i)
   {
     volume_seq.push_back(box.volume());
     box.add(boxes[indices[i]]);
@@ -118,14 +113,14 @@ best_split(const vcl_vector<vgl_box_3d<double> >& boxes,
   box = boxes[indices[ind_size-1]];
   bool found_min = false;
   double best_ratio_factor = 1.0;
-  for(unsigned int i=ind_size-1; i>0;)
+  for (unsigned int i=ind_size-1; i>0;)
   {
     double volume = box.volume();
     box.add(boxes[indices[--i]]);
     volume += volume_seq[i];
-    if(volume <= min_volume){
+    if (volume <= min_volume) {
       double ratio_factor =  vcl_abs(0.5 - double(i+1)/ind_size);
-      if( ratio_factor < 0.25 && ratio_factor < best_ratio_factor){
+      if ( ratio_factor < 0.25 && ratio_factor < best_ratio_factor) {
         min_volume = volume;
         split_ind = i+1;
         found_min = true;
@@ -135,7 +130,7 @@ best_split(const vcl_vector<vgl_box_3d<double> >& boxes,
   }
   return found_min;
 }
-
+// end of namespace
 };
 
 
@@ -147,7 +142,7 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
                         const vcl_vector< unsigned int >& indices)
 {
   // If only one triangle is left, create and return a leaf node.
-  if(indices.size() == 1){
+  if (indices.size() == 1) {
     return vcl_auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node( outer_box,
                                                                     inner_box,
                                                                     indices[0] ));
@@ -161,11 +156,11 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
   double min_volume = vcl_numeric_limits<double>::infinity();
   unsigned int split_ind=0;
   int dim = -1;
-  if(best_split(boxes,sorted[0],min_volume,split_ind))
+  if (best_split(boxes,sorted[0],min_volume,split_ind))
     dim = 0;
-  if(best_split(boxes,sorted[1],min_volume,split_ind))
+  if (best_split(boxes,sorted[1],min_volume,split_ind))
     dim = 1;
-  if(best_split(boxes,sorted[2],min_volume,split_ind))
+  if (best_split(boxes,sorted[2],min_volume,split_ind))
     dim = 2;
 
   // split the sorted indices
@@ -177,17 +172,17 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
   // compute the left and right inner and outer boxes
   vgl_box_3d<double> left_inner_box, right_inner_box;
   typedef vcl_vector<unsigned int>::const_iterator index_iterator;
-  for( index_iterator itr=left_indices.begin(); itr!=left_indices.end(); ++itr )
+  for ( index_iterator itr=left_indices.begin(); itr!=left_indices.end(); ++itr )
     left_inner_box.add(boxes[*itr]);
-  for( index_iterator itr=right_indices.begin(); itr!=right_indices.end(); ++itr )
+  for ( index_iterator itr=right_indices.begin(); itr!=right_indices.end(); ++itr )
     right_inner_box.add(boxes[*itr]);
   vgl_box_3d<double> left_outer_box(outer_box), right_outer_box(outer_box);
-  switch(dim)
+  switch (dim)
   {
     case 0:
       left_outer_box.set_max_x(left_inner_box.max_x());
       right_outer_box.set_min_x(right_inner_box.min_x());
-      if(left_outer_box.max_x() < right_outer_box.min_x()){
+      if (left_outer_box.max_x() < right_outer_box.min_x()) {
         double mean = (left_outer_box.max_x() + right_outer_box.min_x())/2.0;
         left_outer_box.set_max_x(mean);
         right_outer_box.set_min_x(mean);
@@ -196,7 +191,7 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
     case 1:
       left_outer_box.set_max_y(left_inner_box.max_y());
       right_outer_box.set_min_y(right_inner_box.min_y());
-      if(left_outer_box.max_y() < right_outer_box.min_y()){
+      if (left_outer_box.max_y() < right_outer_box.min_y()) {
         double mean = (left_outer_box.max_y() + right_outer_box.min_y())/2.0;
         left_outer_box.set_max_y(mean);
         right_outer_box.set_min_y(mean);
@@ -205,7 +200,7 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
     case 2:
       left_outer_box.set_max_z(left_inner_box.max_z());
       right_outer_box.set_min_z(right_inner_box.min_z());
-      if(left_outer_box.max_z() < right_outer_box.min_z()){
+      if (left_outer_box.max_z() < right_outer_box.min_z()) {
         double mean = (left_outer_box.max_z() + right_outer_box.min_z())/2.0;
         left_outer_box.set_max_z(mean);
         right_outer_box.set_min_z(mean);
@@ -218,7 +213,6 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
       left_child(imesh_build_kd_tree_rec(boxes,left_outer_box,left_inner_box,left_indices));
   vcl_auto_ptr<imesh_kd_tree_node>
       right_child(imesh_build_kd_tree_rec(boxes,right_outer_box,right_inner_box,right_indices));
-
 
   return vcl_auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node(outer_box,
                                                                  inner_box,
@@ -238,11 +232,12 @@ imesh_build_kd_tree(const vcl_vector<vgl_box_3d<double> >& boxes)
 
   // create the vector of ids
   vcl_vector< unsigned int > indices( boxes.size() );
-  for( unsigned int i=0; i<indices.size(); ++i ) indices[ i ] = i;
+  for ( unsigned int i=0; i<indices.size(); ++i)
+    indices[i] = i;
 
   // make the inner box
   vgl_box_3d<double> inner_box;
-  for( unsigned int i=0; i<boxes.size(); ++i ){
+  for ( unsigned int i=0; i<boxes.size(); ++i ) {
     inner_box.add(boxes[i]);
   }
 
@@ -253,15 +248,15 @@ imesh_build_kd_tree(const vcl_vector<vgl_box_3d<double> >& boxes)
   // reverse breadth first (root gets last index)
   vcl_vector<imesh_kd_tree_node*> internal_nodes;
   internal_nodes.push_back(root.get());
-  for(unsigned int c=0; c<internal_nodes.size(); ++c){
-    if(!internal_nodes[c]->left_->is_leaf())
+  for (unsigned int c=0; c<internal_nodes.size(); ++c) {
+    if (!internal_nodes[c]->left_->is_leaf())
       internal_nodes.push_back(internal_nodes[c]->left_.get());
-    if(!internal_nodes[c]->right_->is_leaf())
+    if (!internal_nodes[c]->right_->is_leaf())
       internal_nodes.push_back(internal_nodes[c]->right_.get());
   }
   typedef vcl_vector<imesh_kd_tree_node*>::const_reverse_iterator critr;
   unsigned int index = boxes.size();
-  for(critr itr = internal_nodes.rbegin(); itr != critr(internal_nodes.rend()); ++itr)
+  for (critr itr = internal_nodes.rbegin(); itr != critr(internal_nodes.rend()); ++itr)
     (*itr)->index_ = index++;
 
   return root;
@@ -275,8 +270,8 @@ imesh_build_kd_tree(const imesh_vertex_array<3>& verts,
 {
   // build face bounding boxes
   vcl_vector<vgl_box_3d<double> > boxes(faces.size());
-  for( unsigned int i=0; i<boxes.size(); ++i ){
-    for( unsigned int j=0; j<faces.num_verts(i); ++j){
+  for ( unsigned int i=0; i<boxes.size(); ++i ) {
+    for ( unsigned int j=0; j<faces.num_verts(i); ++j) {
       boxes[i].add(verts[faces(i,j)]);
     }
   }
@@ -289,57 +284,58 @@ imesh_build_kd_tree(const imesh_vertex_array<3>& verts,
 namespace {
 class tri_dist_func
 {
-  public:
-    tri_dist_func(const imesh_vertex_array<3>& v,
-                  const imesh_regular_face_array<3>& t)
-    : verts(v), tris(t), closest_index(static_cast<unsigned int>(-1)),
-      closest_dist(vcl_numeric_limits<double>::infinity()) {}
-    const imesh_vertex_array<3>& verts;
-    const imesh_regular_face_array<3>& tris;
-    unsigned int closest_index;
-    double closest_dist, closest_u, closest_v;
+ public:
+  tri_dist_func(const imesh_vertex_array<3>& v,
+                const imesh_regular_face_array<3>& t)
+  : verts(v), tris(t), closest_index(static_cast<unsigned int>(-1)),
+    closest_dist(vcl_numeric_limits<double>::infinity()) {}
+  const imesh_vertex_array<3>& verts;
+  const imesh_regular_face_array<3>& tris;
+  unsigned int closest_index;
+  double closest_dist, closest_u, closest_v;
 
-    vgl_point_3d<double> closest_point() const
-    {
-      const imesh_regular_face<3>& tri = tris[closest_index];
-      const double& u = closest_u;
-      const double& v = closest_v;
-      double t = 1.0-u-v;
-      const imesh_vertex<3>& p0 = verts[tri[0]];
-      const imesh_vertex<3>& p1 = verts[tri[1]];
-      const imesh_vertex<3>& p2 = verts[tri[2]];
-      return vgl_point_3d<double>(t*p0[0] + u*p1[0] + v*p2[0],
-                                  t*p0[1] + u*p1[1] + v*p2[1],
-                                  t*p0[2] + u*p1[2] + v*p2[2]);
-    }
+  vgl_point_3d<double> closest_point() const
+  {
+    const imesh_regular_face<3>& tri = tris[closest_index];
+    const double& u = closest_u;
+    const double& v = closest_v;
+    double t = 1.0-u-v;
+    const imesh_vertex<3>& p0 = verts[tri[0]];
+    const imesh_vertex<3>& p1 = verts[tri[1]];
+    const imesh_vertex<3>& p2 = verts[tri[2]];
+    return vgl_point_3d<double>(t*p0[0] + u*p1[0] + v*p2[0],
+                                t*p0[1] + u*p1[1] + v*p2[1],
+                                t*p0[2] + u*p1[2] + v*p2[2]);
+  }
 
-    double operator () (const vgl_point_3d<double>& pt, unsigned int i)
-    {
-      const imesh_regular_face<3>& tri = tris[i];
-      double dist,u,v;
-      unsigned char s =
-          imesh_triangle_closest_point(pt, verts[tri[0]],
-                                       verts[tri[1]], verts[tri[2]],
-                                       dist, u, v);
-      if(dist < closest_dist){
-        closest_dist = dist;
-        closest_index = i;
-        closest_u = u;
-        closest_v = v;
-      }
-      return dist;
+  double operator () (const vgl_point_3d<double>& pt, unsigned int i)
+  {
+    const imesh_regular_face<3>& tri = tris[i];
+    double dist,u,v;
+    unsigned char s =
+        imesh_triangle_closest_point(pt, verts[tri[0]],
+                                     verts[tri[1]], verts[tri[2]],
+                                     dist, u, v);
+    if (dist < closest_dist) {
+      closest_dist = dist;
+      closest_index = i;
+      closest_u = u;
+      closest_v = v;
     }
+    return dist;
+  }
 };
+// end of namespace
 }
 
 //: compute the closest point on the mesh using the kd-tree
-// returns the index of the closest triangle
+//  \returns the index of the closest triangle
 unsigned int
 imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
                             const imesh_mesh& mesh,
                             const vcl_auto_ptr<imesh_kd_tree_node>& root,
-                                  vgl_point_3d<double>& cp,
-                                  vcl_vector<imesh_kd_tree_queue_entry>* dists)
+                            vgl_point_3d<double>& cp,
+                            vcl_vector<imesh_kd_tree_queue_entry>* dists)
 {
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
   const imesh_regular_face_array<3>& faces = static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
@@ -364,28 +360,28 @@ void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
   to_examine.push_back(root.get());
   internal.clear();
   leaf.clear();
-  for(unsigned int i=0; i<to_examine.size(); ++i){
+  for (unsigned int i=0; i<to_examine.size(); ++i) {
     imesh_kd_tree_node* current = to_examine[i];
-    if(current->is_leaf()){
+    if (current->is_leaf()) {
       leaf.push_back(imesh_kd_tree_queue_entry(
-                         imesh_min_sq_dist(query,current->inner_box_),
-                         current) );
+                     imesh_min_sq_dist(query,current->inner_box_),
+                     current) );
       continue;
     }
 
-    if(imesh_min_sq_dist(query,current->left_->outer_box_) <=0)
+    if (imesh_min_sq_dist(query,current->left_->outer_box_) <=0)
       to_examine.push_back(current->left_.get());
     else
       internal.push_back(imesh_kd_tree_queue_entry(
-                             imesh_min_sq_dist(query,current->left_->inner_box_),
-                             current->left_.get()));
+                         imesh_min_sq_dist(query,current->left_->inner_box_),
+                         current->left_.get()));
 
-    if(imesh_min_sq_dist(query,current->right_->outer_box_) <=0)
+    if (imesh_min_sq_dist(query,current->right_->outer_box_) <=0)
       to_examine.push_back(current->right_.get());
     else
       internal.push_back(imesh_kd_tree_queue_entry(
-                             imesh_min_sq_dist(query,current->right_->inner_box_),
-                             current->right_.get()));
+                         imesh_min_sq_dist(query,current->right_->inner_box_),
+                         current->right_.get()));
   }
 }
 

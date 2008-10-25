@@ -5,7 +5,7 @@
 // \file
 // \brief Mesh PCA parameterization
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 6/26/08
+// \date June 26, 2008
 //
 // \verbatim
 //  Modifications
@@ -103,7 +103,7 @@ class imesh_pca_mesh : public imesh_mesh
 
 
 //: Compute the image Jacobians at each vertex for PCA parameters in the result:
-//  matrix n, row i is the image space derivative
+//  Matrix n, row i is the image space derivative
 //  at vertex n with respect to the ith pca parameter
 vcl_vector<vnl_matrix<double> >
 imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
@@ -116,9 +116,9 @@ imesh_pca_mesh imesh_read_pca(const vcl_string& mean_file,
 
 //: Read a PCA file
 bool imesh_read_pca(const vcl_string& pca_file,
-                          vnl_vector<double>& mean,
-                          vnl_vector<double>& std_devs,
-                          vnl_matrix<double>& pc);
+                    vnl_vector<double>& mean,
+                    vnl_vector<double>& std_devs,
+                    vnl_matrix<double>& pc);
 
 //: Write the mean mesh and PCA file
 void imesh_write_pca(const vcl_string& mesh_file,

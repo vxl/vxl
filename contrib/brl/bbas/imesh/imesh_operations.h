@@ -1,15 +1,15 @@
 // This is brl/bbas/imesh/imesh_operations.h
 #ifndef imesh_operations_h_
 #define imesh_operations_h_
-
 //:
 // \file
 // \brief Operations on meshes
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 5/5/08
+// \date May 5, 2008
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 
@@ -32,15 +32,15 @@ imesh_triangulate(imesh_mesh& mesh);
 
 
 //: Subdivide faces into quadrilaterals (in place)
-//  add a vertex at the center of each edge
-//  and a vertex at the center of each face
+//  Add a vertex at the center of each edge
+//  And a vertex at the center of each face
 void
 imesh_quad_subdivide(imesh_mesh& mesh);
 
 //: Subdivide faces into quadrilaterals (in place)
-//  add a vertex at the center of each edge
-//  and a vertex at the center of each face
-//  only subdivide the selected faces
+//  Add a vertex at the center of each edge
+//  And a vertex at the center of each face
+//  Only subdivide the selected faces
 void
 imesh_quad_subdivide(imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces);
 
@@ -56,7 +56,6 @@ void imesh_flip_faces( imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces)
 
 //: Compute the dual mesh using face centroids for vertices
 imesh_mesh dual_mesh(const imesh_mesh& mesh);
-
 
 
 #endif // imesh_operations_h_

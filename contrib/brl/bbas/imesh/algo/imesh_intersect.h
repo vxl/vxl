@@ -1,15 +1,15 @@
 // This is brl/bbas/imesh/algo/imesh_intersect.h
 #ifndef imesh_intersect_h_
 #define imesh_intersect_h_
-
 //:
 // \file
 // \brief Functions for mesh intersections
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 5/9/08
+// \date May 9, 2008
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 
@@ -19,7 +19,7 @@
 
 
 //: Intersect the ray from point p with direction d and the triangle defined by a,b,c
-//  returns true if intersection occurs
+//  \returns true if intersection occurs
 //  \param dist is the distance to the triangle (returned by reference)
 //  \param u and \param v are the barycentric coordinates of the intersection
 //  Barycentric coordinates are u and v such that (1-u-v)*a + u*b + v*c = p+dist*d
@@ -28,13 +28,13 @@ bool imesh_intersect_triangle(const vgl_point_3d<double>& p,
                               const vgl_point_3d<double>& a,
                               const vgl_point_3d<double>& b,
                               const vgl_point_3d<double>& c,
-                                    double& dist,
-                                    double& u, double& v);
+                              double& dist,
+                              double& u, double& v);
 
 
 //: Intersect the ray from point p with direction d and the triangle defined by a,b,c
-//  the un-normalized normal vector (b-a)x(c-a) is precomputed and also passed in
-//  returns true if intersection occurs
+//  The un-normalized normal vector (b-a)x(c-a) is precomputed and also passed in
+//  \returns true if intersection occurs
 //  \param dist is the distance to the triangle (returned by reference)
 //  \param u and \param v are the barycentric coordinates of the intersection
 bool imesh_intersect_triangle(const vgl_point_3d<double>& p,
@@ -43,13 +43,13 @@ bool imesh_intersect_triangle(const vgl_point_3d<double>& p,
                               const vgl_point_3d<double>& b,
                               const vgl_point_3d<double>& c,
                               const vgl_vector_3d<double>& n,
-                                    double& dist,
-                                    double& u, double& v);
+                              double& dist,
+                              double& u, double& v);
 
 
 //: Intersect the ray from point p with direction d and the triangle defined by a,b,c
-//  the un-normalized normal vector (b-a)x(c-a) is precomputed and also passed in
-//  returns true if intersection occurs and the new dist is less than the old distance (but > 0)
+//  The un-normalized normal vector (b-a)x(c-a) is precomputed and also passed in
+//  \returns true if intersection occurs and the new dist is less than the old distance (but > 0)
 //  \param dist is the distance to the triangle (returned by reference)
 //  \param u and \param v are the barycentric coordinates of the intersection
 bool imesh_intersect_triangle_min_dist(const vgl_point_3d<double>& p,
@@ -58,11 +58,11 @@ bool imesh_intersect_triangle_min_dist(const vgl_point_3d<double>& p,
                                        const vgl_point_3d<double>& b,
                                        const vgl_point_3d<double>& c,
                                        const vgl_vector_3d<double>& n,
-                                             double& dist,
-                                             double& u, double& v);
+                                       double& dist,
+                                       double& u, double& v);
 
 //: Intersect the ray from point p with direction d and the triangulated mesh
-//  returns the face index of the closest intersecting triangle
+//  \returns the face index of the closest intersecting triangle
 //  \param dist is the distance to the triangle (returned by reference)
 //  \param u and \param v (optional) are the barycentric coordinates of the intersection
 int imesh_intersect_min_dist(const vgl_point_3d<double>& p,
@@ -71,9 +71,9 @@ int imesh_intersect_min_dist(const vgl_point_3d<double>& p,
                              double& dist, double* u=0, double* v=0);
 
 
-//: Find the closest point on the triangle a,b,c to point p 
-//  the un-normalized normal vector (b-a)x(c-a) is precomputed and also passed in
-//  returns a code indicating that the closest point:
+//: Find the closest point on the triangle a,b,c to point p
+//  The un-normalized normal vector (b-a)x(c-a) is precomputed and also passed in
+//  \returns a code indicating that the closest point:
 //  - 0 does not exist (should not occur)
 //  - 1 is \a a
 //  - 2 is \a b
@@ -90,12 +90,12 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
                              const vgl_point_3d<double>& b,
                              const vgl_point_3d<double>& c,
                              const vgl_vector_3d<double>& n,
-                                   double& dist,
-                                   double& u, double& v);
+                             double& dist,
+                             double& u, double& v);
 
 
-//: Find the closest point on the triangle a,b,c to point p 
-//  returns a code same as other version of this function
+//: Find the closest point on the triangle a,b,c to point p
+//  \returns a code same as other version of this function
 //  \param dist is the distance to the triangle (returned by reference)
 //  \param u and \param v are the barycentric coordinates of the closest point
 unsigned char
@@ -103,8 +103,8 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
                              const vgl_point_3d<double>& a,
                              const vgl_point_3d<double>& b,
                              const vgl_point_3d<double>& c,
-                                   double& dist,
-                                   double& u, double& v);
+                             double& dist,
+                             double& u, double& v);
 
 
 //: Find the closest point on the triangle a,b,c to point p
@@ -114,11 +114,11 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
                              const vgl_point_3d<double>& a,
                              const vgl_point_3d<double>& b,
                              const vgl_point_3d<double>& c,
-                                   double& dist);
+                             double& dist);
 
 
 //: Find the closest point on the triangulated mesh to point p
-//  returns the face index of the closest triangle (one of them if on an edge or vertex)
+//  \returns the face index of the closest triangle (one of them if on an edge or vertex)
 //  \param cp is the closest point on the mesh (returned by reference)
 //  \param u and \param v (optional) are the barycentric coordinates of the closest point
 int imesh_closest_point(const vgl_point_3d<double>& p,
@@ -128,7 +128,7 @@ int imesh_closest_point(const vgl_point_3d<double>& p,
 
 
 //: Find the closest intersection point from p along d with triangle a,b,c
-//  returns a code indicating that the intersection point:
+//  \returns a code indicating that the intersection point:
 //  - 0 does not exist
 //  - 1 is \a a
 //  - 2 is \a b
@@ -144,12 +144,12 @@ imesh_triangle_intersect(const vgl_point_2d<double>& p,
                          const vgl_point_2d<double>& a,
                          const vgl_point_2d<double>& b,
                          const vgl_point_2d<double>& c,
-                               double& u, double& v);
+                         double& u, double& v);
 
 
-//: Find the closest intersection point in barycentric coordinates
-//  along the vector (du,dv) in barycentric coordinates
-//  returns a code indicating that the intersection point:
+//: Find the closest intersection point along the vector (du,dv)
+//  Both the vector (du,dv) and the intersection point are in barycentric coordinates
+//  \returns a code indicating that the intersection point:
 //  - 0 does not exist
 //  - 1 is at corner (0,0)
 //  - 2 is at corner (1,0)
