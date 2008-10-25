@@ -3,8 +3,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bil)
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta)
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 
@@ -36,7 +35,6 @@ SET(bvxm_sources
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
     bvxm_util.h                     bvxm_util.cxx
-
 )
 
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
