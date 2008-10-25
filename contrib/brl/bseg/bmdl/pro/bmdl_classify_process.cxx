@@ -2,10 +2,6 @@
 //:
 // \file
 
-#include <vcl_cstring.h>
-
-#include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 
@@ -100,7 +96,7 @@ bool bmdl_classify_process::classify(const vil_image_view<T>& lidar_first,
   classifier.label_lidar();
   label_img = classifier.labels();
   height_img = classifier.heights();
-  
+
   return true;
 }
 
@@ -111,11 +107,10 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
                                      vil_image_view_base_sptr& height_img,
                                      vil_image_view_base_sptr& ground_img)
 {
-  
   label_img = new vil_image_view<unsigned int>();
-  
+
   // use the float version
-  if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) 
+  if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
   {
     if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
     {
@@ -132,9 +127,9 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
       return false;
     }
   }
-  
+
   // use the double version
-  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) 
+  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
   {
     if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
     {
@@ -151,11 +146,7 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
       return false;
     }
   }
-    
 
   return false;
 }
-
-
-
 
