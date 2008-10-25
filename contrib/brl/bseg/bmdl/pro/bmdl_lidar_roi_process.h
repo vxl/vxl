@@ -31,7 +31,7 @@
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_sptr.h>
-#include <vpgl/vpgl_lidar_camera.h>
+#include <bvxm/bvxm_lidar_camera.h>
 
 class bmdl_lidar_roi_process : public bprb_process
 {
@@ -63,13 +63,12 @@ class bmdl_lidar_roi_process : public bprb_process
                   float max_lat, float max_lon,
                   vil_image_view_base_sptr& first_roi,
                   vil_image_view_base_sptr& last_roi,
-                  vpgl_lidar_camera*& lvcs);
+                  bvxm_lidar_camera*& lvcs);
 
   //: projects the box on the image by taking the union of all the projected corners
   bool comp_trans_matrix(double sx1, double sy1, double sz1,
                          vcl_vector<vcl_vector<double> > tiepoints,
                          vnl_matrix<double>& trans_matrix);
-
 };
 
 #endif // bmdl_lidar_roi_process_h_

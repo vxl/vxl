@@ -93,12 +93,12 @@ bool bmdl_generate_mesh_process::execute()
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[5].ptr());
   vpgl_camera_double_sptr camera = input5->value();
 
-  if (camera->type_name().compare("vpgl_lidar_camera") != 0) {
+  if (camera->type_name().compare("bvxm_lidar_camera") != 0) {
     vcl_cout << "bmdl_classify_process -- Camera input should be type of lidar!\n";
     return false;
   }
 
-  vpgl_lidar_camera* lidar_cam = static_cast<vpgl_lidar_camera*>(camera.ptr());
+  bvxm_lidar_camera* lidar_cam = static_cast<bvxm_lidar_camera*>(camera.ptr());
 
   generate_mesh(file_poly, label_img, height_img, ground_img, file_mesh, lidar_cam);
 
@@ -111,7 +111,7 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
                                           vil_image_view_base_sptr height_img,
                                           vil_image_view_base_sptr ground_img,
                                           vcl_string fpath_mesh,
-                                          vpgl_lidar_camera* const lidar_cam)
+                                          bvxm_lidar_camera* const lidar_cam)
 {
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_UINT_32) {
     vcl_cout << "bmdl_generate_mesh_process::the Label Image pixel format" << label_img->pixel_format() << " undefined" << vcl_endl;
@@ -162,7 +162,7 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
 }
 
 void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh,
-                                                   vpgl_lidar_camera* cam)
+                                                   bvxm_lidar_camera* cam)
 {
   imesh_vertex_array<3>& vertices = imesh.vertices<3>();
 
@@ -181,7 +181,7 @@ void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh,
 
 void bmdl_generate_mesh_process::generate_kml(vcl_string& kml_filename,
                                               imesh_mesh& mesh,
-                                              vpgl_lidar_camera* lidar_cam)
+                                              bvxm_lidar_camera* lidar_cam)
 {
   vcl_ofstream os(kml_filename.c_str());
 

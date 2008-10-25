@@ -103,7 +103,7 @@ bool bmdl_lidar_roi_process::execute()
   }
 
   vil_image_view_base_sptr first_roi=0, last_roi=0;
-  vpgl_lidar_camera* lidar_cam =0;
+  bvxm_lidar_camera* lidar_cam =0;
   if (!lidar_roi(first_ret, last_ret, min_lat, min_lon, max_lat, max_lon, first_roi, last_roi, lidar_cam)) {
     vcl_cout << "bmdl_lidar_roi_process -- The process has failed!\n";
     return false;
@@ -138,7 +138,7 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
                                        float max_lat, float max_lon,
                                        vil_image_view_base_sptr& first_roi,
                                        vil_image_view_base_sptr& last_roi,
-                                       vpgl_lidar_camera*& camera)
+                                       bvxm_lidar_camera*& camera)
 {
   // the file should be a at least a tiff (better, geotiff)
   if (vcl_strcmp(lidar_first->file_format(), "tiff") != 0 &&
@@ -205,7 +205,7 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
-      vpgl_lidar_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
+      bvxm_lidar_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
     } else {
       vcl_cout << "bmdl_lidar_roi_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
@@ -213,7 +213,7 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
 
     // create the camera
 
-    camera = new vpgl_lidar_camera(trans_matrix, lvcs, tiepoints);
+    camera = new bvxm_lidar_camera(trans_matrix, lvcs, tiepoints);
     if (is_utm)
       camera->set_utm(utm_zone, h);
 
