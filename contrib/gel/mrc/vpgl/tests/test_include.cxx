@@ -13,6 +13,7 @@
 #include <vpgl/vpgl_radial_distortion.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_reg_fundamental_matrix.h>
+#include <vpgl/vpgl_lidar_camera.h>
 
 #include <vpgl/io/vpgl_io_camera.h>
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
