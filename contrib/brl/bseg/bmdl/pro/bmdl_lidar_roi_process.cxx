@@ -3,6 +3,7 @@
 // \file
 
 #include <vcl_cstring.h>
+#include <vcl_cassert.h>
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
@@ -13,8 +14,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
-#include <vil/vil_convert.h>
 #include <vil/file_formats/vil_tiff.h>
 
 #include <bprb/bprb_parameters.h>
@@ -49,7 +48,7 @@ bmdl_lidar_roi_process::bmdl_lidar_roi_process()
   int i=0;
   input_types_[i++] = "vcl_string";      // first ret. image path (geotiff)
   input_types_[i++] = "vcl_string";      // last ret. image path (geotiff)
-  input_types_[i++] = "float";           // min_lat "float"                      
+  input_types_[i++] = "float";           // min_lat "float"
   input_types_[i++] = "float";           // min_lon "float"
   input_types_[i++] = "float";           // max_lat "float"
   input_types_[i++] = "float";           // max_lon "float"
@@ -61,7 +60,6 @@ bmdl_lidar_roi_process::bmdl_lidar_roi_process()
   output_types_[j++]= "vil_image_view_base_sptr";  // first return roi
   output_types_[j++]= "vil_image_view_base_sptr";  // last return roi
   output_types_[j++]= "vpgl_camera_double_sptr";   // lvcs
-
 }
 
 bool bmdl_lidar_roi_process::execute()
@@ -136,7 +134,7 @@ bool bmdl_lidar_roi_process::execute()
 
 bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
                                        vil_image_resource_sptr lidar_last,
-                                       float min_lat, float min_lon, 
+                                       float min_lat, float min_lon,
                                        float max_lat, float max_lon,
                                        vil_image_view_base_sptr& first_roi,
                                        vil_image_view_base_sptr& last_roi,
@@ -214,7 +212,7 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
     }
 
     // create the camera
-    
+
     camera = new vpgl_lidar_camera(trans_matrix, lvcs, tiepoints);
     if (is_utm)
       camera->set_utm(utm_zone, h);
@@ -249,9 +247,9 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
                                           (unsigned int)bb->height());
 
     last_roi = tiff_last->get_copy_view((unsigned int)bb->get_min_x(),
-                                          (unsigned int)bb->width(),
-                                          (unsigned int)bb->get_min_y(),
-                                          (unsigned int)bb->height());
+                                        (unsigned int)bb->width(),
+                                        (unsigned int)bb->get_min_y(),
+                                        (unsigned int)bb->height());
 
     //add the translation to the camera
     camera->translate(bb->get_min_x(), bb->get_min_y());

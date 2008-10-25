@@ -6,8 +6,7 @@
 // \brief Classify each pixel in lidar images
 //
 // \author Matt Leotta
-// \date 10/14/2008
-//      
+// \date Oct. 14, 2008
 
 #include "bmdl_classify.h"
 #include <vcl_limits.h>
@@ -15,21 +14,22 @@
 #include <vcl_algorithm.h>
 #include <vcl_utility.h>
 #include <vcl_set.h>
+#include <vcl_cassert.h>
 
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 
-//: Constructor 
+//: Constructor
 // \param height_noise_stdev is the standard deviation in lidar height
 //  This parameter can be set manually or estimated
 template <class T>
 bmdl_classify<T>::bmdl_classify(T height_noise_stdev)
 : hgt_stdev_(height_noise_stdev),
-  first_min_( vcl_numeric_limits<T>::infinity()), 
+  first_min_( vcl_numeric_limits<T>::infinity()),
   first_max_(-vcl_numeric_limits<T>::infinity()),
-  last_min_( vcl_numeric_limits<T>::infinity()), 
+  last_min_( vcl_numeric_limits<T>::infinity()),
   last_max_(-vcl_numeric_limits<T>::infinity())
 {
 }
@@ -44,13 +44,13 @@ void bmdl_classify<T>::set_lidar_data(const vil_image_view<T>& first_return,
   assert(first_return.nj() == last_return.nj());
   first_return_ = first_return;
   last_return_ = last_return;
-  
+
   // find the range of finite values in the images
   bmdl_classify::range(first_return_,first_min_,first_max_);
   bmdl_classify::range(last_return_,last_min_,last_max_);
 }
 
-  
+
 //: Set the bare earth image
 template <class T>
 void bmdl_classify<T>::set_bare_earth(const vil_image_view<T>& bare_earth)
@@ -62,7 +62,7 @@ void bmdl_classify<T>::set_bare_earth(const vil_image_view<T>& bare_earth)
 
 
 //: Estimate a constant bare earth model
-// This function returns the constant height 
+// This function returns the constant height
 // and also uses it to fill the bare earth image
 template <class T>
 T bmdl_classify<T>::estimate_bare_earth()
@@ -82,7 +82,7 @@ T bmdl_classify<T>::estimate_bare_earth()
   T mean = 0.0;
   T gnd_stdev = 0.0;
   fit_gaussian_to_peak(data,last_min_,last_max_,mean,gnd_stdev);
-  
+
   bare_earth_.set_size(ni,nj);
   bare_earth_.fill(mean);
 
@@ -91,7 +91,7 @@ T bmdl_classify<T>::estimate_bare_earth()
 
 
 //: Estimate the standard deviation in height due to noise
-// returns the estimate and stores it internally for later use
+//  Returns the estimate and stores it internally for later use
 template <class T>
 T bmdl_classify<T>::estimate_height_noise_stdev()
 {
@@ -126,7 +126,7 @@ T bmdl_classify<T>::estimate_height_noise_stdev()
 
 
 //: Classify each pixel as Ground (0), Vegitation (1), or Building (>=2)
-// Each building is given an index sequentially starting with 2 
+// Each building is given an index sequentially starting with 2
 // and sorted by mean height.
 template <class T>
 void bmdl_classify<T>::label_lidar()
@@ -143,15 +143,15 @@ void bmdl_classify<T>::label_lidar()
 
   // 1. First segment the image into ground, buildings, and vegetation
   segment();
-  
+
   // 2. Cluster the pixels for buildings and apply unique labels
   vcl_vector<T> bld_heights;
   vcl_vector<unsigned int> sizes;
   cluster_buildings(bld_heights, sizes);
-  
+
   // 3. Refine building regions with various morphological operations
   refine_buildings(bld_heights, sizes);
- 
+
   // 4. Determine the heights to use for meshing
   heights_.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
@@ -168,8 +168,8 @@ void bmdl_classify<T>::label_lidar()
 
 
 //: Perform an initial segementation at each pixel using thresholds
-// classify each pixel as Ground (0), Vegitation (1), or Building (2)
-// results are stored in the labels image
+//  Classify each pixel as Ground (0), Vegitation (1), or Building (2)
+//  Results are stored in the labels image
 template <class T>
 void bmdl_classify<T>::segment()
 {
@@ -193,7 +193,7 @@ void bmdl_classify<T>::segment()
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       // test for ground
-      if (!vnl_math_isfinite(first_return_(i,j)) || 
+      if (!vnl_math_isfinite(first_return_(i,j)) ||
           first_return_(i,j) - bare_earth_(i,j) < gthresh)
         labels_(i,j) = 0;
       // test for vegetation
@@ -207,9 +207,9 @@ void bmdl_classify<T>::segment()
 }
 
 
-//: Cluster pixels on building into groups of adjacent pixels
-// with similar heights.  Assign a new label to each groups.
-// returns building mean heights and pixel counts by reference
+//: Cluster pixels on building into groups of adjacent pixels with similar heights.
+//  Assign a new label to each groups.
+//  Returns building mean heights and pixel counts by reference
 template <class T>
 void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
                                          vcl_vector<unsigned int>& sizes)
@@ -384,7 +384,7 @@ void bmdl_classify<T>::refine_buildings(vcl_vector<T>& means,
   assert(labels_.ni() == ni);
   assert(labels_.nj() == nj);
   assert(hgt_stdev_ > 0.0);
-  
+
   while (expand_buildings(means, sizes)) ;
   vcl_vector<bool> valid = close_buildings(means.size());
 
@@ -398,11 +398,11 @@ void bmdl_classify<T>::refine_buildings(vcl_vector<T>& means,
     }
   }
   means.swap(new_means);
-  
+
   // relabel buildings with reduced label set
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      if (labels_(i,j) > 1) 
+      if (labels_(i,j) > 1)
         labels_(i,j) = idx_map[labels_(i,j)-2];
     }
   }
@@ -451,7 +451,7 @@ void bmdl_classify<T>::histogram(const vcl_vector<T>& data, vcl_vector<unsigned 
 // Search in the range \a minv to \a maxv
 template <class T>
 void bmdl_classify<T>::fit_gaussian_to_peak(const vcl_vector<T>& data, T minv, T maxv,
-                          T& mean, T& stdev) const
+                                            T& mean, T& stdev) const
 {
   unsigned int num_bins = 100;
   T binsize = (maxv-minv)/num_bins;
@@ -488,7 +488,7 @@ void bmdl_classify<T>::fit_gaussian_to_peak(const vcl_vector<T>& data, T minv, T
       stdev += data[i]*data[i];
     }
   }
-  
+
   mean /= count;
   stdev /= count;
   stdev -= mean*mean;
@@ -517,7 +517,7 @@ void bmdl_classify<T>::range(const vil_image_view<T>& image,
 
 
 //: Search for nearby pixel that can be added to each building
-// return true if any changes are made
+//  Return true if any changes are made
 template <class T>
 bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
                                         vcl_vector<unsigned int>& sizes)
@@ -531,7 +531,6 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
   vcl_vector<unsigned int> merge_map(means.size());
   for (unsigned int i=0; i<merge_map.size(); ++i)
     merge_map[i] = i;
-
 
   for (unsigned int j=0; j<nj; ++j)
   {
@@ -635,7 +634,7 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
 
 //: Morphological clean up on each building independently
 template <class T>
-vcl_vector<bool> 
+vcl_vector<bool>
 bmdl_classify<T>::close_buildings(unsigned int num_labels)
 {
   unsigned int ni=labels_.ni();
@@ -648,8 +647,8 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       new_labels(i,j) = (labels_(i,j)==1)?1:0;
-      if(labels_(i,j)>1)
-	building_bounds[labels_(i,j)-2].add(vgl_point_2d<int>(i,j));
+      if (labels_(i,j)>1)
+        building_bounds[labels_(i,j)-2].add(vgl_point_2d<int>(i,j));
     }
   }
 
@@ -722,11 +721,10 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
 }
 
 
-
 //------------------------------------------------------------------------------
 
 #define BMDL_CLASSIFY_INSTANTIATE(T) \
-template class bmdl_classify<T >; 
+template class bmdl_classify<T >
 
 
 #endif // bmdl_classify_txx_
