@@ -4,6 +4,7 @@
 # bprb depends on expat and bmdl_prodepends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
