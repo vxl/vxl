@@ -1,8 +1,6 @@
 #include "test_share.h"
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_transform.h>
-#include <vcl_iostream.h>
-
 
 void make_cube(imesh_mesh& cube)
 {
@@ -27,7 +25,5 @@ void make_cube(imesh_mesh& cube)
   faces->push_back(imesh_quad(7,6,5,4));
   vcl_auto_ptr<imesh_face_array_base> f(faces);
   cube.set_faces(f);
-  
 }
-
 
