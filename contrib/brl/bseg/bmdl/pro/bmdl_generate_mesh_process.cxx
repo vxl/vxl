@@ -37,7 +37,7 @@ bmdl_generate_mesh_process::bmdl_generate_mesh_process()
   input_types_[i++] = "vil_image_view_base_sptr";   // height image
   input_types_[i++] = "vil_image_view_base_sptr";   // ground image
   input_types_[i++] = "vcl_string";                 // file path (ply2) for the meshes
-  input_types_[i++] = "vpgl_camera_double_sptr";     // lidar camera 
+  input_types_[i++] = "vpgl_camera_double_sptr";     // lidar camera
 
   //output
   output_data_.resize(0,brdb_value_sptr(0));
@@ -138,7 +138,7 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
     vcl_cout << "bmdl_generate_mesh_process::the Ground Image pixel format" << ground_img->pixel_format() << " undefined" << vcl_endl;
     return false;
   }
-  
+
 
   // read polygons
   vsl_b_ifstream os(fpath_poly);
@@ -161,11 +161,11 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
   return true;
 }
 
-void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh, 
+void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh,
                                                    vpgl_lidar_camera* cam)
 {
   imesh_vertex_array<3>& vertices = imesh.vertices<3>();
-  
+
   for (unsigned v=0; v<vertices.size(); v++) {
     double x = vertices(v,0);
     double y = vertices(v,1);
@@ -179,21 +179,21 @@ void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh,
   }
 }
 
-void bmdl_generate_mesh_process::generate_kml(vcl_string& kml_filename, 
+void bmdl_generate_mesh_process::generate_kml(vcl_string& kml_filename,
                                               imesh_mesh& mesh,
                                               vpgl_lidar_camera* lidar_cam)
 {
   vcl_ofstream os(kml_filename.c_str());
 
-  os << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-  os << "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n";
-  os << "<Document>\n";
-  os << "  <name>" << vul_file::strip_directory(kml_filename.c_str()) << "</name>\n";
-  os << "  <open>1</open>\n";
-  os << "  <Placemark>\n";
-  //os << "    <name>" << model_name.c_str() << "</name>\n";
-  os << "    <visibility>1</visibility>\n";
-  os << "    <MultiGeometry>\n";
+  os << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+     << "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n"
+     << "<Document>\n"
+     << "  <name>" << vul_file::strip_directory(kml_filename.c_str()) << "</name>\n"
+     << "  <open>1</open>\n"
+     << "  <Placemark>\n"
+  // << "    <name>" << model_name.c_str() << "</name>\n"
+     << "    <visibility>1</visibility>\n"
+     << "    <MultiGeometry>\n";
 
   // write each building into kml
   if (!mesh.has_half_edges())
@@ -208,10 +208,10 @@ void bmdl_generate_mesh_process::generate_kml(vcl_string& kml_filename,
     imesh_write_kml(os, building);
   }
 
-  os << "    </MultiGeometry>\n";
-  os << "  </Placemark>\n";
-  os << "</Document>\n";
-  os << "</kml>\n";
+  os << "    </MultiGeometry>\n"
+     << "  </Placemark>\n"
+     << "</Document>\n"
+     << "</kml>\n";
 
   os.close();
   imesh_write_obj("meshes.obj", mesh);
