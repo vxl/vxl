@@ -16,7 +16,7 @@
 //
 //
 // \author  Gamze D. Tunali
-// \date    10/14/2008
+// \date    Oct. 14, 2008
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -26,7 +26,6 @@
 
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_view.h>
 
 class bmdl_classify_process : public bprb_process
