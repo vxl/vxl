@@ -4,7 +4,8 @@
 //:
 // \file
 
-
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_point_3d.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
@@ -64,33 +65,33 @@ namespace {
 //: Functor for sorting boxes by increasing X centroid
 class less_box_centroid_x
 {
+  vcl_vector<vgl_box_3d<double> > boxes;
  public:
   less_box_centroid_x(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
-  const vcl_vector<vgl_box_3d<double> >& boxes;
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_x() < boxes[i2].centroid_x();
   }
 };
 
-//: Functor for sorting boxes by increasing X centroid
+//: Functor for sorting boxes by increasing Y centroid
 class less_box_centroid_y
 {
+  vcl_vector<vgl_box_3d<double> > boxes;
  public:
   less_box_centroid_y(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
-  const vcl_vector<vgl_box_3d<double> >& boxes;
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_y() < boxes[i2].centroid_y();
   }
-}
+};
 
-//: Functor for sorting boxes by increasing X centroid
+//: Functor for sorting boxes by increasing Z centroid
 class less_box_centroid_z
 {
+  vcl_vector<vgl_box_3d<double> > boxes;
  public:
   less_box_centroid_z(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
-  const vcl_vector<vgl_box_3d<double> >& boxes;
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_z() < boxes[i2].centroid_z();
@@ -312,7 +313,7 @@ class tri_dist_func
   {
     const imesh_regular_face<3>& tri = tris[i];
     double dist,u,v;
-    unsigned char s =
+    /* unsigned char s = */
         imesh_triangle_closest_point(pt, verts[tri[0]],
                                      verts[tri[1]], verts[tri[2]],
                                      dist, u, v);
