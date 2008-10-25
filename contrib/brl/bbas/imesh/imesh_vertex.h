@@ -1,49 +1,46 @@
 // This is brl/bbas/imesh/imesh_vertex.h
 #ifndef imesh_vertex_h_
 #define imesh_vertex_h_
-
 //:
 // \file
 // \brief A mesh vertex
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 5/5/08
+// \date May 5, 2008
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <vxl_config.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_2d.h>
-
+#include <vgl/vgl_vector_3d.h>
 
 #define imesh_invalid_idx (static_cast<unsigned int>(-1))
-
 
 
 //: A mesh face with a fixed number of vertices
 template <unsigned d>
 class imesh_vertex
 {
-  public:
-    //: Default Constructor
-    imesh_vertex() { for(unsigned i=0; i<d; ++i) coords_[i]=0.0; }
+ public:
+  //: Default Constructor
+  imesh_vertex() { for (unsigned i=0; i<d; ++i) coords_[i]=0.0; }
 
-    //: Constructor from a vector
-    imesh_vertex(const vcl_vector<double>& coords)
-    {assert(coords.size()==d); for(unsigned i=0; i<d; ++i) coords_[i]=coords[i];}
+  //: Constructor from a vector
+  imesh_vertex(const vcl_vector<double>& coords)
+  {assert(coords.size()==d); for (unsigned i=0; i<d; ++i) coords_[i]=coords[i];}
 
-    //: return the dimension of the vertex
-    unsigned int dim() const { return d; }
+  //: return the dimension of the vertex
+  unsigned int dim() const { return d; }
 
-    //: Accessor
-    double operator[] (unsigned int i) const { return coords_[i]; }
-    double& operator[] (unsigned int i) { return coords_[i]; }
+  //: Accessor
+  double operator[] (unsigned int i) const { return coords_[i]; }
+  double& operator[] (unsigned int i) { return coords_[i]; }
 
-  protected:
-    double coords_[d];
+ protected:
+  double coords_[d];
 };
 
 
@@ -51,43 +48,43 @@ class imesh_vertex
 VCL_DEFINE_SPECIALIZATION
 class imesh_vertex<2>
 {
-  public:
-    //: Default Constructor
-    imesh_vertex() { coords_[0]=0.0; coords_[1]=0.0;}
+ public:
+  //: Default Constructor
+  imesh_vertex() { coords_[0]=0.0; coords_[1]=0.0;}
 
-    //: Constructor (from 2 doubles)
-    imesh_vertex(double x, double y)
-    {
-      coords_[0] = x;
-      coords_[1] = y;
-    }
+  //: Constructor (from 2 doubles)
+  imesh_vertex(double x, double y)
+  {
+    coords_[0] = x;
+    coords_[1] = y;
+  }
 
-    //: Constructor (from vgl point)
-    imesh_vertex(const vgl_point_2d<double>& pt)
-    {
-      coords_[0] = pt.x();
-      coords_[1] = pt.y();
-    }
+  //: Constructor (from vgl point)
+  imesh_vertex(const vgl_point_2d<double>& pt)
+  {
+    coords_[0] = pt.x();
+    coords_[1] = pt.y();
+  }
 
-    //: convert to a vgl point
-    operator vgl_point_2d<double>() const
-    {
-      return vgl_point_2d<double>(coords_[0],coords_[1]);
-    }
+  //: convert to a vgl point
+  operator vgl_point_2d<double>() const
+  {
+    return vgl_point_2d<double>(coords_[0],coords_[1]);
+  }
 
-    //: Constructor from a vector
-    imesh_vertex(const vcl_vector<double>& coords)
-    {assert(coords.size()==2); coords_[0]=coords[0]; coords_[1]=coords[1];}
+  //: Constructor from a vector
+  imesh_vertex(const vcl_vector<double>& coords)
+  {assert(coords.size()==2); coords_[0]=coords[0]; coords_[1]=coords[1];}
 
-    //: return the dimension of the vertex
-    unsigned int dim() const { return 2; }
+  //: return the dimension of the vertex
+  unsigned int dim() const { return 2; }
 
-    //: Accessor
-    double operator[] (unsigned int i) const { return coords_[i]; }
-    double& operator[] (unsigned int i) { return coords_[i]; }
+  //: Accessor
+  double operator[] (unsigned int i) const { return coords_[i]; }
+  double& operator[] (unsigned int i) { return coords_[i]; }
 
-  protected:
-    double coords_[2];
+ protected:
+  double coords_[2];
 };
 
 
@@ -95,99 +92,97 @@ class imesh_vertex<2>
 VCL_DEFINE_SPECIALIZATION
 class imesh_vertex<3>
 {
-  public:
-    //: Default Constructor
-    imesh_vertex() {coords_[0]=0.0; coords_[1]=0.0; coords_[2]=0.0; }
+ public:
+  //: Default Constructor
+  imesh_vertex() {coords_[0]=0.0; coords_[1]=0.0; coords_[2]=0.0; }
 
-    //: Constructor (from 2 doubles)
-    imesh_vertex(double x, double y, double z)
-    {
-      coords_[0] = x;
-      coords_[1] = y;
-      coords_[2] = z;
-    }
+  //: Constructor (from 2 doubles)
+  imesh_vertex(double x, double y, double z)
+  {
+    coords_[0] = x;
+    coords_[1] = y;
+    coords_[2] = z;
+  }
 
-    //: Constructor (from vgl point)
-    imesh_vertex(const vgl_point_3d<double>& pt)
-    {
-      coords_[0] = pt.x();
-      coords_[1] = pt.y();
-      coords_[2] = pt.z();
-    }
+  //: Constructor (from vgl point)
+  imesh_vertex(const vgl_point_3d<double>& pt)
+  {
+    coords_[0] = pt.x();
+    coords_[1] = pt.y();
+    coords_[2] = pt.z();
+  }
 
-    //: Constructor from a vector
-    imesh_vertex(const vcl_vector<double>& coords)
-    {
-      assert(coords.size()==3);
-      coords_[0]=coords[0];
-      coords_[1]=coords[1];
-      coords_[2]=coords[2];
-    }
+  //: Constructor from a vector
+  imesh_vertex(const vcl_vector<double>& coords)
+  {
+    assert(coords.size()==3);
+    coords_[0]=coords[0];
+    coords_[1]=coords[1];
+    coords_[2]=coords[2];
+  }
 
-    //: convert to a vgl point
-    operator vgl_point_3d<double>() const
-    {
-      return vgl_point_3d<double>(coords_[0],coords_[1],coords_[2]);
-    }
+  //: convert to a vgl point
+  operator vgl_point_3d<double>() const
+  {
+    return vgl_point_3d<double>(coords_[0],coords_[1],coords_[2]);
+  }
 
-    //: return the dimension of the vertex
-    unsigned int dim() const { return 3; }
+  //: return the dimension of the vertex
+  unsigned int dim() const { return 3; }
 
-    //: Accessor
-    double operator[] (unsigned int i) const { return coords_[i]; }
-    double& operator[] (unsigned int i) { return coords_[i]; }
+  //: Accessor
+  double operator[] (unsigned int i) const { return coords_[i]; }
+  double& operator[] (unsigned int i) { return coords_[i]; }
 
-  protected:
-    double coords_[3];
+ protected:
+  double coords_[3];
 };
-
-
 
 
 //: Abstract base class for a collection of vertices
 class imesh_vertex_array_base
 {
-  public:
-    //: Destructor
-    virtual ~imesh_vertex_array_base() {}
-  
-    //: returns the number of vertices
-    virtual unsigned int size() const = 0;
+ public:
+  //: Destructor
+  virtual ~imesh_vertex_array_base() {}
 
-    //: returns the dimension of the vertices
-    virtual unsigned int dim() const = 0;
+  //: returns the number of vertices
+  virtual unsigned int size() const = 0;
 
-    //: Access a vertex coordinate by vertex index and coordinate index
-    virtual double operator() (unsigned int v, unsigned int i) const = 0;
+  //: returns the dimension of the vertices
+  virtual unsigned int dim() const = 0;
 
-    //: Produce a clone of this object (dynamic copy)
-    virtual imesh_vertex_array_base* clone() const = 0;
+  //: Access a vertex coordinate by vertex index and coordinate index
+  virtual double operator() (unsigned int v, unsigned int i) const = 0;
 
-    //: Append these vertices (assuming the same type)
-    virtual void append(const imesh_vertex_array_base& verts)
-    {
-      if(this->has_normals() && verts.has_normals())
-        normals_.insert(normals_.end(), verts.normals_.begin(), verts.normals_.end());
-      else
-        normals_.clear();
-    }
+  //: Produce a clone of this object (dynamic copy)
+  virtual imesh_vertex_array_base* clone() const = 0;
 
-    //: Return true if the vertices have normals
-    bool has_normals() const { return !normals_.empty(); }
+  //: Append these vertices (assuming the same type)
+  virtual void append(const imesh_vertex_array_base& verts)
+  {
+    if (this->has_normals() && verts.has_normals())
+      normals_.insert(normals_.end(), verts.normals_.begin(), verts.normals_.end());
+    else
+      normals_.clear();
+  }
 
-    //: Set the vertex normals
-    void set_normals(const vcl_vector<vgl_vector_3d<double> >& n)
-    { assert(n.size() == this->size()); normals_ = n; }
+  //: Return true if the vertices have normals
+  bool has_normals() const { return !normals_.empty(); }
 
-    //: Access a vertex normal
-    vgl_vector_3d<double>& normal(unsigned int v) { return normals_[v]; }
-    const vgl_vector_3d<double>& normal(unsigned int v) const { return normals_[v]; }
+  //: Set the vertex normals
+  void set_normals(const vcl_vector<vgl_vector_3d<double> >& n)
+  { assert(n.size() == this->size()); normals_ = n; }
 
-    //: Access the normals
-    const vcl_vector<vgl_vector_3d<double> >& normals() const { return normals_; }
+  //: Access a vertex normal
+  vgl_vector_3d<double>& normal(unsigned int v) { return normals_[v]; }
+  const vgl_vector_3d<double>& normal(unsigned int v) const { return normals_[v]; }
 
-  protected:
-    vcl_vector<vgl_vector_3d<double> > normals_;
+  //: Access the normals
+  const vcl_vector<vgl_vector_3d<double> >& normals() const { return normals_; }
+
+ protected:
+  vcl_vector<vgl_vector_3d<double> > normals_;
 };
 
 
@@ -195,71 +190,67 @@ class imesh_vertex_array_base
 template <unsigned int d>
 class imesh_vertex_array : public imesh_vertex_array_base
 {
-  public:
-    //: Default Constructor
-    imesh_vertex_array<d>() {}
+  vcl_vector<imesh_vertex<d> > verts_;
 
-    //: Constructor (from size)
-    imesh_vertex_array<d>(unsigned int size)
-    : verts_(size) {}
+ public:
+  //: Default Constructor
+  imesh_vertex_array<d>() {}
 
-    //: Constructor (from vector)
-    imesh_vertex_array<d>(const vcl_vector<imesh_vertex<d> >& verts)
-    : verts_(verts) {}
+  //: Constructor (from size)
+  imesh_vertex_array<d>(unsigned int size)
+  : verts_(size) {}
 
-    //: Produce a clone of this object (dynamic copy)
-    virtual imesh_vertex_array_base* clone() const
-    {
-      return new imesh_vertex_array<d>(*this);
-    }
+  //: Constructor (from vector)
+  imesh_vertex_array<d>(const vcl_vector<imesh_vertex<d> >& verts)
+  : verts_(verts) {}
 
-    //: returns the number of vertices
-    virtual unsigned int size() const { return verts_.size(); }
+  //: Produce a clone of this object (dynamic copy)
+  virtual imesh_vertex_array_base* clone() const
+  {
+    return new imesh_vertex_array<d>(*this);
+  }
 
-    //: returns the dimension of the vertices
-    virtual unsigned int dim() const { return d; }
+  //: returns the number of vertices
+  virtual unsigned int size() const { return verts_.size(); }
 
-    //: Access a vertex coordinate by vertex index and coordinate index
-    virtual double operator() (unsigned int v, unsigned int i) const { return verts_[v][i]; }
+  //: returns the dimension of the vertices
+  virtual unsigned int dim() const { return d; }
 
-    //: Append these vertices (assuming the same type)
-    virtual void append(const imesh_vertex_array_base& verts)
-    {
-      assert(verts.dim() == d);
-      const imesh_vertex_array<d>& v = static_cast<const imesh_vertex_array<d>&>(verts);
-      verts_.insert(verts_.end(), v.verts_.begin(), v.verts_.end());
-      imesh_vertex_array_base::append(verts);
-    }
+  //: Access a vertex coordinate by vertex index and coordinate index
+  virtual double operator() (unsigned int v, unsigned int i) const { return verts_[v][i]; }
 
-    //: Add a vertex the the array
-    void push_back(const imesh_vertex<d>& v) { verts_.push_back(v); }
+  //: Append these vertices (assuming the same type)
+  virtual void append(const imesh_vertex_array_base& verts)
+  {
+    assert(verts.dim() == d);
+    const imesh_vertex_array<d>& v = static_cast<const imesh_vertex_array<d>&>(verts);
+    verts_.insert(verts_.end(), v.verts_.begin(), v.verts_.end());
+    imesh_vertex_array_base::append(verts);
+  }
 
-    //: Access a vertex
-    imesh_vertex<d>& operator[] (unsigned int v) { return verts_[v]; }
-    const imesh_vertex<d>& operator[] (unsigned int v) const { return verts_[v]; }
+  //: Add a vertex the the array
+  void push_back(const imesh_vertex<d>& v) { verts_.push_back(v); }
 
-    //=====================================================
-    // Vertex Iterators
-    typedef typename vcl_vector<imesh_vertex<d> >::iterator iterator;
-    typedef typename vcl_vector<imesh_vertex<d> >::const_iterator const_iterator;
+  //: Access a vertex
+  imesh_vertex<d>& operator[] (unsigned int v) { return verts_[v]; }
+  const imesh_vertex<d>& operator[] (unsigned int v) const { return verts_[v]; }
 
-    iterator begin() { return verts_.begin(); }
-    const_iterator begin() const { return verts_.begin(); }
+  //=====================================================
+  // Vertex Iterators
+  typedef typename vcl_vector<imesh_vertex<d> >::iterator iterator;
+  typedef typename vcl_vector<imesh_vertex<d> >::const_iterator const_iterator;
 
-    iterator end() { return verts_.end(); }
-    const_iterator end() const { return verts_.end(); }
+  iterator begin() { return verts_.begin(); }
+  const_iterator begin() const { return verts_.begin(); }
 
-
-  private:
-    vcl_vector<imesh_vertex<d> > verts_;
+  iterator end() { return verts_.end(); }
+  const_iterator end() const { return verts_.end(); }
 };
-
 
 
 //: compute the vector normal to the plane defined by 3 vertices
 vgl_vector_3d<double> imesh_tri_normal(const imesh_vertex<3>& a,
                                        const imesh_vertex<3>& b,
                                        const imesh_vertex<3>& c);
-
 
 #endif // imesh_vertex_h_
