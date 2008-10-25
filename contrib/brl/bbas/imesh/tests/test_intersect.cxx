@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <vcl_limits.h>
+#include <vcl_iostream.h>
 #include <vgl/vgl_triangle_3d.h>
 
 
@@ -21,7 +22,7 @@ vgl_point_3d<double> operator + (const vgl_point_3d<double>& p1, const vgl_point
 {
   return vgl_point_3d<double>(p1.x()+p2.x(), p1.y()+p2.y(), p1.z()+p2.z());
 }
-
+// end of namespace
 };
 
 
