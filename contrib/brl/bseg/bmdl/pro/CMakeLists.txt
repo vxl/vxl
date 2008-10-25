@@ -6,9 +6,6 @@ INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
   INCLUDE_DIRECTORIES( ${vxl_SOURCE_DIR}/v3p/tiff )
   INCLUDE_DIRECTORIES( ${vxl_SOURCE_DIR}/v3p/geotiff )
   SET(bmdl_pro_sources
@@ -22,8 +19,8 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb brdb vil vil_io bgeo vgl vgl_io vpgl
-  vpgl_pro bvxm bgeo vsol brip)
+  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb brdb vil vil_io bgeo vgl vgl_io
+                        bvxm bgeo vsol brip)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
