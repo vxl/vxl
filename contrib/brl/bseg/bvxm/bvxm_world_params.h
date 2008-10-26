@@ -27,8 +27,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vgl/io/vgl_io_vector_3d.h>
 #include <vgl/io/vgl_io_point_3d.h>
-#include <bgeo/bgeo_lvcs.h>
-#include <bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 
 class bvxm_world_params : public vbl_ref_count
 {

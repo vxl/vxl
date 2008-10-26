@@ -7,7 +7,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_inverse.h>
 
-#include <bgeo/bgeo_utm.h>
+#include <vpgl/bgeo/bgeo_utm.h>
 
 bvxm_lidar_camera::bvxm_lidar_camera()
 {

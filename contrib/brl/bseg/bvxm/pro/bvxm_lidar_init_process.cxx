@@ -19,7 +19,7 @@
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/file_formats/vil_geotiff_header.h>
 
-#include <bgeo/bgeo_utm.h>
+#include <vpgl/bgeo/bgeo_utm.h>
 #include <brip/brip_roi.h>
 
 #include <bprb/bprb_parameters.h>

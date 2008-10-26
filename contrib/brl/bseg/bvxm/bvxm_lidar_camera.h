@@ -4,7 +4,7 @@
 // \file
 
 #include <vcl_iosfwd.h>
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vpgl/vpgl_camera.h>
 #include <vnl/vnl_matrix.h>
 

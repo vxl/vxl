@@ -18,8 +18,8 @@
 
 #include <bprb/bprb_parameters.h>
 
-#include <bgeo/bgeo_utm.h>
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_utm.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <brip/brip_roi.h>
 
 template<class T>

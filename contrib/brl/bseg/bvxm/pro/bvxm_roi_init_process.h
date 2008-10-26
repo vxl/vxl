@@ -24,7 +24,7 @@
 
 #include <vcl_string.h>
 
-#include <bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #if 0

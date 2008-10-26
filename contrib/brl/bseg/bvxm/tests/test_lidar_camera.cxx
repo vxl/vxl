@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 
 #include "../bvxm_world_params.h"
 #include "../bvxm_lidar_camera.h"

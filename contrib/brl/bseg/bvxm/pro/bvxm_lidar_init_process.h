@@ -28,7 +28,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
-#include <bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vil/vil_image_view_base.h>

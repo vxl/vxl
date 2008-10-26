@@ -20,8 +20,8 @@
 #include <imesh/imesh_detection.h>
 #include <imesh/imesh_operations.h>
 
-#include <bgeo/bgeo_lvcs_sptr.h>
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 #include <vul/vul_file.h>
 
