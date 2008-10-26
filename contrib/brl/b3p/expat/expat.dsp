@@ -145,6 +145,9 @@ SOURCE=.\expatConfig.h
 SOURCE=.\expatConfig.h.in
 # End Source File
 # Begin Source File
+SOURCE=.\expatDllConfig.h
+# End Source File
+# Begin Source File
 SOURCE=.\expatDllConfig.h.in
 # End Source File
 # End Group
