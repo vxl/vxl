@@ -335,8 +335,8 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
     double x = verts(idx, 0);
     double y = verts(idx, 1);
     double z = verts(idx, 2);
-    os << "             " << x  << ", " << y << ", " << z << vcl_endl
-       << "            </coordinates>\n"
+    os << "             " << x  << ", " << y << ", " << z << vcl_endl;
+    os << "            </coordinates>\n"
        << "          </LinearRing>\n"
        << "        </outerBoundaryIs>\n"
        << "      </Polygon>" << vcl_endl;
