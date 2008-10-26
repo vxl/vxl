@@ -8,8 +8,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_inverse.h>
 
-#include "bgeo/bgeo_lvcs.h"
-#include "bgeo/bgeo_utm.h"
+#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_utm.h>
 
 vpgl_geo_camera::vpgl_geo_camera()
 {
