@@ -15,7 +15,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
-#include <bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 #include <vnl/vnl_matrix.h>
 
 #include "vpgl_camera.h"
