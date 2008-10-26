@@ -31,7 +31,8 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   //northing=0 is North, 1 is east
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
 
-  void set_lvcs(bgeo_lvcs_sptr lvcs) {lvcs_ = lvcs;}
+  void set_lvcs(bgeo_lvcs_sptr lvcs) { lvcs_ = lvcs; }
+  bgeo_lvcs_sptr lvcs() { return lvcs_; }
 
   void set_img_dims(int x, int y) {img_u_ = new int(x), img_v_ = new int(y);}
 
