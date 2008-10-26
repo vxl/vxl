@@ -25,7 +25,7 @@ double approx_deriv(const imesh_imls_surface& f,
 
 MAIN( test_imls_surface )
 {
-  START ("IMLS Surface Interpolation");
+  START("IMLS Surface Interpolation");
 
   double I1,Ix;
   double k1 = 1.5, k2 = 4.0;
@@ -37,17 +37,17 @@ MAIN( test_imls_surface )
   double quad_I1 = 0.0, quad_Ix = 0.0;
   double quad_dI1 = 0.0, quad_dIx = 0.0, quad_dIx2 = 0.0;
   double step = 0.00001;
-  for(double x=step/2.0; x<1.0; x+=step){
-    double x_pk1 = x+k1;
+  for (double i=step/2.0; i<1.0; i+=step) {
+    double x_pk1 = i+k1;
     double x_pk1_2 = x_pk1*x_pk1;
     double x_pk1_2_pk2 = x_pk1_2 + k2;
     double x_pk1_2_pk2_2 = x_pk1_2_pk2 * x_pk1_2_pk2;
     double x_pk1_2_pk2_3 = x_pk1_2_pk2_2 * x_pk1_2_pk2;
     quad_I1 += 1.0 / x_pk1_2_pk2_2;
-    quad_Ix += x / x_pk1_2_pk2_2;
+    quad_Ix += i / x_pk1_2_pk2_2;
     quad_dI1 += 1.0 / x_pk1_2_pk2_3;
-    quad_dIx += x / x_pk1_2_pk2_3;
-    quad_dIx2 += x*x / x_pk1_2_pk2_3;
+    quad_dIx += i / x_pk1_2_pk2_3;
+    quad_dIx2 += i*i / x_pk1_2_pk2_3;
   }
   quad_I1 *= step;
   quad_Ix *= step;
@@ -68,7 +68,7 @@ MAIN( test_imls_surface )
 
   vgl_vector_3d<double> diff(p1-p0);
   double quad_li = 0.0;
-  for(double i=step/2.0; i<1.0; i+=step){
+  for (double i=step/2.0; i<1.0; i+=step) {
     vgl_point_3d<double> p = p0 + i*diff;
     double val = v0 + i*(v1-v0);
 
@@ -100,13 +100,12 @@ MAIN( test_imls_surface )
   vgl_vector_3d<double> n = normalized(cross_product(p1-p0,p2-p0));
   x -= .90*dot_product(n,x-p0)*n;
 
-
   double alpha = 2.0/3.0;
   double u=alpha;
   double last_li = 0.0;
   double sum = 0.0;
   vgl_vector_3d<double> sum_dx(0,0,0), last_dx(0,0,0);
-  for(; u>0.01; u*=alpha){
+  for (; u>0.01; u*=alpha) {
     vgl_point_3d<double> p0i((1-u)*p0.x() + u*p2.x(),(1-u)*p0.y() + u*p2.y(),(1-u)*p0.z() + u*p2.z());
     vgl_point_3d<double> p1i((1-u)*p1.x() + u*p2.x(),(1-u)*p1.y() + u*p2.y(),(1-u)*p1.z() + u*p2.z());
     double v0i = (1-u)*v0 + u*v2;
@@ -127,10 +126,9 @@ MAIN( test_imls_surface )
 
   sum *= cross_product(p2-p0,p1-p0).length() / (p1-p0).length();
   sum_dx *= cross_product(p2-p0,p1-p0).length() / (p1-p0).length();
-  
-  vcl_cout << "integral 1 = "<<sum << vcl_endl;
-  vcl_cout << "integral 1 dx = "<<sum_dx << vcl_endl;
 
+  vcl_cout << "integral 1 = "<<sum << vcl_endl
+           << "integral 1 dx = "<<sum_dx << vcl_endl;
 
   vgl_vector_2d<double> ii = imesh_imls_surface::split_triangle_quadrature(x,p0,p1,p2,v0,v1,v2,eps2);
   vcl_cout << "integral 2 = "<<ii.x()<<vcl_endl;
@@ -152,27 +150,26 @@ MAIN( test_imls_surface )
                                                       x,p0,p1,p2,n,v0,v1,v2,eps2);
     vcl_cout << "integral 3 = "<<data<<vcl_endl;
   }
-  
+
   {
     typedef imesh_imls_surface::integral_data T;
     typedef T (*F) (const vgl_point_3d<double>&, const vgl_point_3d<double>&,
                     const vgl_point_3d<double>&, const vgl_point_3d<double>&,
                     double, double, double, double);
-    T data = imesh_imls_surface::triangle_quadrature<T,F>(imesh_imls_surface::
-                                                      split_triangle_quadrature_with_deriv,
-                                                      x,p0,p1,p2,n,v0,v1,v2,eps2);
-    vcl_cout << "integral 3a = "<<data.I << " "<<data.I_phi
-             << " "<<data.dI<<" "<<data.dI_phi<<vcl_endl;
+    T data = imesh_imls_surface::triangle_quadrature<T,F>
+                   (imesh_imls_surface::split_triangle_quadrature_with_deriv,
+                    x,p0,p1,p2,n,v0,v1,v2,eps2);
+    vcl_cout << "integral 3a = "<< data.I << ' ' << data.I_phi
+             << ' ' <<data.dI << ' ' << data.dI_phi << vcl_endl;
   }
-
 
   {
     unsigned int num_samps = 1000;
     double sum = 0.0;
     vgl_vector_3d<double> sum_dx(0,0,0);
-    for(unsigned i=0; i<num_samps; ++i){
+    for (unsigned i=0; i<num_samps; ++i) {
       double u = (i+0.5)/num_samps;
-      for(unsigned j=0; j<num_samps-i; ++j){
+      for (unsigned j=0; j<num_samps-i; ++j) {
         double v = (j+0.5)/num_samps;
         double t = 1.0-u-v;
         vgl_point_3d<double> p(t*p0.x() + u*p1.x() + v*p2.x(),
@@ -180,11 +177,11 @@ MAIN( test_imls_surface )
                                t*p0.z() + u*p1.z() + v*p2.z());
         double val = t*v0 + u*v1 + v*v2;
         double w = 1.0/((p-x).sqr_length()+eps2);
-        if(i+j+1 == num_samps){
+        if (i+j+1 == num_samps) {
           sum += val*w*w/2.0;
           sum_dx += 4*(p-x)*val*w*w*w/2.0;
         }
-        else{
+        else {
           sum += val*w*w;
           sum_dx += 4*(p-x)*val*w*w*w;
         }
@@ -194,25 +191,22 @@ MAIN( test_imls_surface )
     sum *= cross_product(p1-p0, p2-p0).length();
     sum_dx /= num_samps * num_samps;
     sum_dx *= cross_product(p1-p0, p2-p0).length();
-    vcl_cout << "true integral = " << sum << vcl_endl;
-    vcl_cout << "true integral of dx = " << sum_dx << vcl_endl;
-    vcl_cout << "area = " << cross_product(p1-p0, p2-p0).length()/2.0 << vcl_endl;
+    vcl_cout << "true integral = " << sum << vcl_endl
+             << "true integral of dx = " << sum_dx << vcl_endl
+             << "area = " << cross_product(p1-p0, p2-p0).length()/2.0 << vcl_endl;
   }
 
-
   {
-
     imesh_mesh cube;
     make_cube(cube);
     imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,0,.785398));
     imesh_quad_subdivide(cube);
     imesh_quad_subdivide(cube);
     vcl_set<unsigned int> no_normals;
-    for(unsigned int i=32; i<64; i+=2){
+    for (unsigned int i=32; i<64; i+=2) {
       no_normals.insert(i);
     }
     imesh_imls_surface f(cube,.1,.1,true,no_normals);
-
 
     //imesh_write_obj("cube.obj",cube);
 
@@ -224,17 +218,16 @@ MAIN( test_imls_surface )
     TEST_NEAR("Function derivative",(dp-dp2).length(),0.0,1e-5);
 
 #if 0
-
     vnl_matrix<double> M(200,200);
-    for(int i=0; i<200; ++i){
+    for (int i=0; i<200; ++i) {
       vcl_cout << "row "<< i<<vcl_endl;
-      for(int j=0; j<200; ++j){
+      for (int j=0; j<200; ++j) {
         M(i,j) = f(double(i-100)/50.0, double(j-100)/50.0, 0.25);
       }
     }
     vnl_matlab_filewrite mfw("slice.mat");
     mfw.write(M,"M");
-#endif 
+#endif
   }
   SUMMARY();
 }
