@@ -204,8 +204,10 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
     if (gtif->gtif_trans_matrix(trans_matrix_values)){
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
+#if 0 // *** temporarily commented out -- bvxm_lidar_camera::comp_trans_matrix() does not exist! (PVr)
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       bvxm_lidar_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
+#endif // *** line to be removed when bvxm_lidar_camera::comp_trans_matrix() exists
     } else {
       vcl_cout << "bmdl_lidar_roi_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
