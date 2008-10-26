@@ -20,6 +20,7 @@ MANPAGE_SOURCES += vpgl_affine_fundamental_matrix.txx
 MANPAGE_SOURCES += vpgl_essential_matrix.txx
 MANPAGE_SOURCES += vpgl_comp_rational_camera.txx
 MANPAGE_SOURCES += vpgl_local_rational_camera.txx
+SOURCES += vpgl_geo_camera.cxx
 
 #MANPAGE_SOURCES += vpgl_basic_camera_sptr.h
 #MANPAGE_SOURCES += vpgl_matrix_camera_sptr.h
