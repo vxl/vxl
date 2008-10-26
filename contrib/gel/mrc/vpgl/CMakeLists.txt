@@ -19,7 +19,7 @@ SET( vpgl_sources
   vpgl_rational_camera.h           vpgl_rational_camera.txx
   vpgl_comp_rational_camera.h      vpgl_comp_rational_camera.txx
   vpgl_local_rational_camera.h     vpgl_local_rational_camera.txx
-  vpgl_lidar_camera.h              vpgl_lidar_camera.cxx
+  vpgl_geo_camera.h                vpgl_geo_camera.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)
