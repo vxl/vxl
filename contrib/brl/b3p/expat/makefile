@@ -16,9 +16,8 @@ MANPAGE_SOURCES += utf8tab.h
 MANPAGE_SOURCES += xmltok_impl.h
 MANPAGE_SOURCES += cm_expat_mangle.h
 
-MANPAGE_SOURCES += expatConfig.h.in
-MANPAGE_SOURCES += expatConfig.h
-MANPAGE_SOURCES += expatDllConfig.h.in
+MANPAGE_SOURCES += expatConfig.h.in expatConfig.h
+MANPAGE_SOURCES += expatDllConfig.h.in expatDllConfig.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
