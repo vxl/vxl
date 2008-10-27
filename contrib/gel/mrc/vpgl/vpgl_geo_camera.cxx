@@ -4,6 +4,7 @@
 // \file
 
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_inverse.h>
@@ -33,7 +34,7 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
 
 //: transforms a given 3d world point to image plane
 void vpgl_geo_camera::project(const double x, const double y, const double z,
-                                double& u, double& v) const
+                              double& u, double& v) const
 {
   vnl_vector<double> vec(4), res(4);
   double lat, lon, gz;
@@ -68,7 +69,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
 
 //: backprojects an image point into local coordinates (based on lvcs_)
 void vpgl_geo_camera::backproject(const double u, const double v,
-                                    double& x, double& y, double& z)
+                                  double& x, double& y, double& z)
 {
   vnl_vector<double> vec(4), res(4);
   vec[0] = tiepoints_[0][3] + u;
@@ -99,7 +100,7 @@ void vpgl_geo_camera::translate(double tx, double ty)
 }
 
 void vpgl_geo_camera::img_to_wgs(const unsigned i, const unsigned j,
-                                   double& lon, double& lat)
+                                 double& lon, double& lat)
 {
   vnl_vector<double> v(4), res(4);
   v[0] = tiepoints_[0][3] + i;
@@ -114,10 +115,8 @@ void vpgl_geo_camera::img_to_wgs(const unsigned i, const unsigned j,
 
 bool vpgl_geo_camera::operator==(vpgl_geo_camera const& rhs) const
 {
-  if ((this->trans_matrix_ == rhs.trans_matrix_) && (*(this->lvcs_) == *(rhs.lvcs_)))
-    return true;
-  else
-    return false;
+  return this->trans_matrix_ == rhs.trans_matrix_
+      && *(this->lvcs_)      == *(rhs.lvcs_)
 }
 
 //: Write vpgl_perspective_camera to stream
@@ -162,8 +161,8 @@ vcl_istream&  operator>>(vcl_istream& s,
 }
 
 bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,//vil_geotiff_header* gtif,
-                                                vcl_vector<vcl_vector<double> > tiepoints,
-                                                vnl_matrix<double>& trans_matrix)
+                                        vcl_vector<vcl_vector<double> > tiepoints,
+                                        vnl_matrix<double>& trans_matrix)
 {
   double sx, sy, sz;
 
@@ -245,7 +244,7 @@ void vpgl_geo_camera::b_read(vsl_b_istream &is)
   vsl_b_read(is,is_utm);
   vsl_b_read(is,utm_zone_);
   vsl_b_read(is,northing_);
- 
+
   return;
 }
 
@@ -274,11 +273,15 @@ void vpgl_geo_camera::b_write(vsl_b_ostream &os) const
   vsl_b_write(os,northing_);
   return;
 }
+
 vnl_matrix<double> trans_matrix_;           // 4x4 matrix
-  //: lvcs of world parameters
-  bgeo_lvcs_sptr lvcs_;
-  //: set of 6 values, normally 1 set
-  vcl_vector<vcl_vector<double> > tiepoints_; 
-  bool is_utm;
-  int utm_zone_;
-  int northing_; //0 North, 1
+
+//: lvcs of world parameters
+bgeo_lvcs_sptr lvcs_;
+
+//: set of 6 values, normally 1 set
+vcl_vector<vcl_vector<double> > tiepoints_;
+
+bool is_utm;
+int utm_zone_;
+int northing_; //0 North, 1
