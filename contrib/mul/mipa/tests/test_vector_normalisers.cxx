@@ -134,16 +134,16 @@ void test_vector_normalisers1()
         //Now reproduce 4x4 tiling of histo_im (i.e. lots of equivalent normalisation blocks)
         //Fill in next block
         unsigned nblocks=16/ncPerBlock;
-        vil_image_view<float > histo_im4x4(16,16,1,histo_im.nplanes());
+        vil_image_view<float> histo_im4x4(16,16,1,histo_im.nplanes());
         for (unsigned iblock=0;iblock<nblocks;++iblock)
         {
             unsigned ioffset=ncPerBlock*iblock;
             for (unsigned jblock=0;jblock<nblocks;++jblock)
             {
                 unsigned joffset=ncPerBlock*jblock;
-                double k=1.0;
+                float k=1.0f;
                 if (iblock>0 && jblock>0)
-                    k=double(32*iblock)+double(2*jblock); //scale-up factor
+                    k=32.0f*iblock+2.0f*jblock; //scale-up factor
                 for (unsigned i=0;i<ncPerBlock;++i)
                 {
                     for (unsigned j=0;j<ncPerBlock;++j)
