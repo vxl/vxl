@@ -28,7 +28,7 @@
 
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
-#include <bvxm/bvxm_lidar_camera.h>
+#include <vpgl/algo/vpgl_geo_camera.h>
 
 #include <imesh/imesh_mesh.h>
 
@@ -60,11 +60,11 @@ class bmdl_generate_mesh_process : public bprb_process
                      vil_image_view_base_sptr height_img,
                      vil_image_view_base_sptr ground_img,
                      vcl_string fpath_mesh,
-                     bvxm_lidar_camera* const lidar_cam);
+                     vpgl_geo_camera* const lidar_cam);
 
-  void update_mesh_coord(imesh_mesh& imesh, bvxm_lidar_camera* cam);
+  void update_mesh_coord(imesh_mesh& imesh, vpgl_geo_camera* cam);
 
-  void generate_kml(vcl_string& kml_filename, imesh_mesh& mesh, bvxm_lidar_camera* lidar_cam);
+  void generate_kml(vcl_string& kml_filename, imesh_mesh& mesh, vpgl_geo_camera* lidar_cam);
 };
 
 #endif // bmdl_generate_mesh_process_h_
