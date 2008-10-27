@@ -97,7 +97,7 @@ bool bmdl_classify_process::classify(const vil_image_view<T>& lidar_first,
   bmdl_classify<T> classifier;
   classifier.set_lidar_data(lidar_first,lidar_last);
   classifier.set_bare_earth(ground);
-  classifier.estimate_height_noise_stdev();
+  //classifier.estimate_height_noise_stdev();
   classifier.label_lidar();
   label_img = classifier.labels();
   height_img = classifier.heights();

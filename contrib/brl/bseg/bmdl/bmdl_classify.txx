@@ -25,9 +25,10 @@
 // \param height_noise_stdev is the standard deviation in lidar height
 //  This parameter can be set manually or estimated
 template <class T>
-bmdl_classify<T>::bmdl_classify(T height_noise_stdev)
+bmdl_classify<T>::bmdl_classify(T height_noise_stdev, unsigned int area_threshold)
 : hgt_stdev_(height_noise_stdev),
-  first_min_( vcl_numeric_limits<T>::infinity()),
+  area_threshold_(area_threshold),
+  first_min_( vcl_numeric_limits<T>::infinity()), 
   first_max_(-vcl_numeric_limits<T>::infinity()),
   last_min_( vcl_numeric_limits<T>::infinity()),
   last_max_(-vcl_numeric_limits<T>::infinity())
@@ -116,6 +117,9 @@ T bmdl_classify<T>::estimate_height_noise_stdev()
   vcl_sort(diff.begin(),diff.end());
   // discard top 5% of points for robustness
   T max_diff = diff[int(diff.size()*.95)];
+  
+  if(max_diff == 0.0)
+    vcl_cout << "Warning: first and last return images are identical" << vcl_endl;
 
   T mean = 0.0;
   fit_gaussian_to_peak(diff,0,max_diff,mean,hgt_stdev_);
@@ -145,19 +149,20 @@ void bmdl_classify<T>::label_lidar()
   segment();
 
   // 2. Cluster the pixels for buildings and apply unique labels
-  vcl_vector<T> bld_heights;
-  vcl_vector<unsigned int> sizes;
-  cluster_buildings(bld_heights, sizes);
+  cluster_buildings();
+  
+  // 3. Remove buildings that are two small in area
+  threshold_building_area();
+  
+  // 4. Refine building regions with various morphological operations
+  refine_buildings();
 
-  // 3. Refine building regions with various morphological operations
-  refine_buildings(bld_heights, sizes);
-
-  // 4. Determine the heights to use for meshing
+  // 5. Determine the heights to use for meshing
   heights_.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       if (labels_(i,j) > 1)
-        heights_(i,j) = bld_heights[labels_(i,j)-2];
+        heights_(i,j) = building_mean_hgt_[labels_(i,j)-2];
       else if (labels_(i,j) == 1)
         heights_(i,j) = first_return_(i,j);
       else
@@ -189,7 +194,7 @@ void bmdl_classify<T>::segment()
   // ground threshold (3 standard deviations from bare earth)
   T gthresh = 3.0*hgt_stdev_;
   // vegetation threshold (3 standard deviation from difference in returns)
-  T vthresh = 3.0*vcl_sqrt(2.0)*hgt_stdev_;
+  T vthresh = 1.0 + 3.0*vcl_sqrt(2.0)*hgt_stdev_;
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       // test for ground
@@ -211,8 +216,7 @@ void bmdl_classify<T>::segment()
 //  Assign a new label to each groups.
 //  Returns building mean heights and pixel counts by reference
 template <class T>
-void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
-                                         vcl_vector<unsigned int>& sizes)
+void bmdl_classify<T>::cluster_buildings()
 {
   unsigned int ni=first_return_.ni();
   unsigned int nj=first_return_.nj();
@@ -223,9 +227,12 @@ void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
   assert(labels_.ni() == ni);
   assert(labels_.nj() == nj);
   assert(hgt_stdev_ > 0.0);
+  
+  building_mean_hgt_.clear();
+  building_area_.clear();
 
   // square threshold to compare against squared distances
-  T zthresh = 0.25;
+  T zthresh = 0.01;
 
   vcl_vector<unsigned int> count;
   vcl_vector<unsigned int> merge_map;
@@ -248,8 +255,8 @@ void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
     while (idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     T val = last_return_(i,0);
-    T last_val = last_return_(i-1,0);
-    if (idx>=0 && vnl_math_sqr(val-last_val/*mean[idx]*/)<zthresh) {
+    T last_val = mean[idx]; //last_return_(i-1,0);
+    if (idx>=0 && vnl_math_sqr(val-last_val)<zthresh) {
       labels_(i,0) = idx+3;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
@@ -270,8 +277,8 @@ void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
     while (idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     T val = last_return_(0,j);
-    T last_val = last_return_(0,j-1);
-    if (idx>=0 && vnl_math_sqr(val-last_val/*mean[idx]*/)<zthresh) {
+    T last_val = mean[idx]; //last_return_(0,j-1);
+    if (idx>=0 && vnl_math_sqr(val-last_val)<zthresh) {
       labels_(0,j) = idx+3;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
@@ -293,18 +300,17 @@ void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
         continue;
 
       T val = last_return_(i,j);
-      T last_val1 = last_return_(i-1,j), last_val2 = last_return_(i,j-1);
       int idx1 = labels_(i-1,j)-3, idx2 = labels_(i,j-1)-3;
       while (idx1>=0 && merge_map[idx1] != idx1 )
         idx1 = merge_map[idx1];
       while (idx2>=0 && merge_map[idx2] != idx2 )
         idx2 = merge_map[idx2];
       int idx = -1;
-      if (idx1>=0 && vnl_math_sqr(val-last_val1/*mean[idx1]*/)<zthresh)
+      if (idx1>=0 && vnl_math_sqr(val-mean[idx1]/*last_return_(i-1,j)*/)<zthresh)
         idx = idx1;
-      if (idx2>=0 && vnl_math_sqr(val-last_val2/*mean[idx2]*/)<zthresh)
+      if (idx2>=0 && vnl_math_sqr(val-mean[idx2]/*last_return_(i,j-1)*/)<zthresh)
       {
-        if (idx == -1)
+        if (idx == -1 || idx1 == idx2)
           idx = idx2;
         else {
           labels_(i,j) = idx1+3;
@@ -346,16 +352,14 @@ void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
   }
   vcl_sort(unique.begin(), unique.end());
 
-  vcl_cout << "num unique = "<<unique.size() << vcl_endl;
-  means.resize(unique.size(),0.0);
-  sizes.resize(unique.size(),0);
+  building_mean_hgt_.resize(unique.size(),0.0);
+  building_area_.resize(unique.size(),0);
 
   vcl_vector<unsigned int> unique_map(merge_map.size(),0);
   for (unsigned int i=0; i<unique.size(); ++i) {
     unique_map[unique[i].second] = i;
-    means[i] = unique[i].first;
-    sizes[i] = count[unique[i].second];
-    //vcl_cout << i<<" mean "<<means[i]<<vcl_endl;
+    building_mean_hgt_[i] = unique[i].first;
+    building_area_[i] = count[unique[i].second];
   }
   for (unsigned int i=0; i<unique_map.size(); ++i)
     if (merge_map[i] != i)
@@ -367,13 +371,51 @@ void bmdl_classify<T>::cluster_buildings(vcl_vector<T>& means,
         labels_(i,j) = unique_map[labels_(i,j)-3]+2;
     }
   }
+  
+  vcl_cout << "After clustering there are "
+           <<building_area_.size()<<" buildings" << vcl_endl;
+}
+
+
+//: Threshold buildings by area
+// All buildings with area (in pixels) less than the threshold
+// are removed and replace with a vegetation label
+template <class T>
+void bmdl_classify<T>::threshold_building_area()
+{
+  vcl_vector<T> new_means;
+  vcl_vector<unsigned int> new_areas;
+  vcl_vector<unsigned int> label_map(building_area_.size(),1);
+
+  for(unsigned int i=0; i<building_area_.size(); ++i){
+    if(building_area_[i] >= area_threshold_)
+    {
+      label_map[i] = new_areas.size()+2;
+      new_means.push_back(building_mean_hgt_[i]);
+      new_areas.push_back(building_area_[i]);
+    }
+  }
+  
+  // update label image with new labels
+  unsigned int ni = labels_.ni();
+  unsigned int nj = labels_.nj();
+  for (unsigned int j=0; j<nj; ++j) {
+    for (unsigned int i=0; i<ni; ++i) {
+      if (labels_(i,j)>2)
+        labels_(i,j) = label_map[labels_(i,j)-2];
+    }
+  }
+  building_area_.swap(new_areas);
+  building_mean_hgt_.swap(new_means);
+  
+  vcl_cout << "After thresholding by area there are "
+           <<building_area_.size()<<" buildings" << vcl_endl;
 }
 
 
 //: Refine the building regions
 template <class T>
-void bmdl_classify<T>::refine_buildings(vcl_vector<T>& means,
-                                        vcl_vector<unsigned int>& sizes)
+void bmdl_classify<T>::refine_buildings()
 {
   unsigned int ni=first_return_.ni();
   unsigned int nj=first_return_.nj();
@@ -385,19 +427,24 @@ void bmdl_classify<T>::refine_buildings(vcl_vector<T>& means,
   assert(labels_.nj() == nj);
   assert(hgt_stdev_ > 0.0);
 
-  while (expand_buildings(means, sizes)) ;
-  vcl_vector<bool> valid = close_buildings(means.size());
+  expand_buildings(building_mean_hgt_, building_area_);
+  
+  //while (expand_buildings(building_mean_hgt_, building_area_)) ;
+
+#if 0
+  vcl_vector<bool> valid = close_buildings(building_mean_hgt_.size());
 
   vcl_vector<T> new_means;
-  vcl_vector<unsigned int> idx_map(means.size(),0);
+  vcl_vector<unsigned int> idx_map(building_mean_hgt_.size(),0);
   unsigned cnt = 1;
   for (unsigned int i=0; i<valid.size(); ++i) {
     if (valid[i]) {
-      new_means.push_back(means[i]);
+      new_means.push_back(building_mean_hgt_[i]);
       idx_map[i] = ++cnt;
     }
   }
-  means.swap(new_means);
+  building_mean_hgt_.swap(new_means);
+  
 
   // relabel buildings with reduced label set
   for (unsigned int j=0; j<nj; ++j) {
@@ -406,6 +453,7 @@ void bmdl_classify<T>::refine_buildings(vcl_vector<T>& means,
         labels_(i,j) = idx_map[labels_(i,j)-2];
     }
   }
+#endif
 }
 
 
@@ -526,7 +574,7 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
   unsigned int ni=first_return_.ni();
   unsigned int nj=last_return_.nj();
 
-  T zthresh = 0.25;
+  T zthresh = 0.01;
 
   vcl_vector<unsigned int> merge_map(means.size());
   for (unsigned int i=0; i<merge_map.size(); ++i)
@@ -647,8 +695,8 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       new_labels(i,j) = (labels_(i,j)==1)?1:0;
-      if (labels_(i,j)>1)
-        building_bounds[labels_(i,j)-2].add(vgl_point_2d<int>(i,j));
+      if(labels_(i,j)>1)
+	      building_bounds[labels_(i,j)-2].add(vgl_point_2d<int>(i,j));
     }
   }
 
@@ -668,7 +716,7 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
   vil_image_view<bool> full_work(bni,bnj);
 
   vil_structuring_element se;
-  se.set_to_disk(1.5);
+  se.set_to_disk(1);
   vcl_vector<bool> valid(num_labels,false);
   for (unsigned l=0; l<num_labels; ++l) {
     const vgl_box_2d<int>& bbox = building_bounds[l];

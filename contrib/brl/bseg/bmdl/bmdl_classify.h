@@ -16,10 +16,11 @@ template <class T>
 class bmdl_classify
 {
  public:
-  //: Constructor
-  //  \param height_noise_stdev is the standard deviation in lidar height
-  //  This parameter can be set manually or estimated
-  bmdl_classify(T height_noise_stdev = 0.01);
+  //: Constructor 
+  // \param height_noise_stdev is the standard deviation in lidar height
+  //        This parameter can be set manually or estimated
+  // \param area_threshold is the minimum area allowed for buildings
+  bmdl_classify(T height_noise_stdev = 0.01, unsigned int area_threshold = 6);
 
   //: Set the first and last return images
   void set_lidar_data(const vil_image_view<T>& first_return,
@@ -38,8 +39,10 @@ class bmdl_classify
   T estimate_height_noise_stdev();
 
   //: Manually specify the standard deviation in lidar height from noise
-  void set_height_noise_stdev(T stdev) { hgt_stdev_ = stdev; }
-
+  void set_height_noise_stdev(T stdev) { hgt_stdev_ = stdev; } 
+  //: Manually specify the building area threshold
+  void set_area_threshold(unsigned int area) { area_threshold_ = area; } 
+  
   //: Access the first returns image
   const vil_image_view<T>& first_return() const {return first_return_;}
 
@@ -68,22 +71,30 @@ class bmdl_classify
   // Classify each pixel as Ground (0), Vegitation (1), or Building (2)
   // Results are stored in the labels image
   void segment();
-
+  
   //: Cluster pixels on buildings into groups of adjacent pixels with similar heights.
   //  Assign a new label to each groups.
   //  Returns building mean heights and pixel counts by reference
-  void cluster_buildings(vcl_vector<T>& means,
-                         vcl_vector<unsigned int>& sizes);
+  void cluster_buildings();
+  
+  //: Threshold buildings by area.
+  // All buildings with area (in pixels) less than the threshold
+  // are removed and replace with a vegetation label.
+  void threshold_building_area();
+  
 
   //: Refine the building regions
-  void refine_buildings(vcl_vector<T>& means,
-                        vcl_vector<unsigned int>& sizes);
+  void refine_buildings();
 
   //: Access the resulting label image
-  vil_image_view<unsigned int> labels() const { return labels_; }
+  const vil_image_view<unsigned int>& labels() const { return labels_; }
 
   //: Access the resulting height image
-  vil_image_view<T> heights() const { return heights_; }
+  const vil_image_view<T>& heights() const { return heights_; }
+  //: Access the mean building heights
+  const vcl_vector<T>& mean_heights() const { return building_mean_hgt_; }
+  //: Access the building areas in pixels
+  const vcl_vector<unsigned int>& building_area() const { return building_area_; }
 
  private:
 
@@ -124,11 +135,18 @@ class bmdl_classify
 
   //: The estimated standard deviation of noise in height
   T hgt_stdev_;
+  //: A threshold on the minimum building area
+  unsigned int area_threshold_;
   //: The range spanned by the first returns
   T first_min_, first_max_;
   //: The range spanned by the last returns
   T last_min_, last_max_;
-
+  
+  //: The mean height of each building
+  vcl_vector<T> building_mean_hgt_;
+  //: The area in pixels of each building
+  vcl_vector<unsigned int> building_area_;
+  
   //: computed segmentation labels
   vil_image_view<unsigned int> labels_;
   //: clean up height estimates for use in meshing
