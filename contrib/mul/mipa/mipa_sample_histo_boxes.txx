@@ -110,8 +110,8 @@ void mipa_sample_histo_boxes_3L_inv(vil_image_view<srcT>& h_im,
       for (unsigned a=0;a<nA;++a,++v,++h)
       {
         // Copy elements from vector into 2 x 2 block
-        h[0]=v[0];     h[dh1]=v[dv1];
-        h[dh2]=v[dv2]; h[dh3]=v[dv3];
+        h[0  ]=srcT(v[0]);   h[dh1]=srcT(v[dv1]);
+        h[dh2]=srcT(v[dv2]); h[dh3]=srcT(v[dv3]);
       }
     }
   }
