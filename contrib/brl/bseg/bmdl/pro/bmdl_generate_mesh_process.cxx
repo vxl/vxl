@@ -171,11 +171,13 @@ void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh,
     double y = vertices(v,1);
     double z = vertices(v,2);
     bgeo_lvcs_sptr lvcs = cam->lvcs();
-    double lon, lat, gz;
-    lvcs->local_to_global(x,y,z,lvcs->get_cs_name(),lon,lat,gz);
+    double lon, lat;
+    cam->img_to_wgs(x, y,lon,lat);
+    //lvcs->set_transform(0,0,-3.14/2);
+    //lvcs->local_to_global(x,y,z,lvcs->get_cs_name(),lon,lat,gz);
     vertices[v][0] = lon;
     vertices[v][1] = lat;
-    vertices[v][2] = gz;
+    vertices[v][2] = z;
   }
 }
 
