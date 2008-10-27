@@ -24,7 +24,7 @@ SET( vpgl_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)
 
 ADD_LIBRARY(vpgl ${vpgl_sources})
-TARGET_LINK_LIBRARIES( vpgl vnl vnl_algo vnl_io vgl vgl_algo vgl_io vsl)
+TARGET_LINK_LIBRARIES( vpgl vnl vnl_algo vnl_io vgl vgl_algo vgl_io vsl bgeo)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
