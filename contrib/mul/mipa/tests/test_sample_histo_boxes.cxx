@@ -24,15 +24,15 @@ float sum_over_box(const vil_image_view<float>& im,
   return sum;
 }
 
-void mipa_print_h_vec(const vnl_vector<double>& v, 
-                    unsigned ni, unsigned nj, unsigned nb)
+void mipa_print_h_vec(const vnl_vector<double>& v,
+                      unsigned ni, unsigned nj, unsigned nb)
 {
   unsigned c=0;
   for (unsigned j=0;j<2*nj;++j)
   {
     for (unsigned i=0;i<2*ni;++i)
     {
-      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<" ";
+      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<' ';
       vcl_cout<<"  ";
     }
     vcl_cout<<vcl_endl;
@@ -41,20 +41,20 @@ void mipa_print_h_vec(const vnl_vector<double>& v,
   {
     for (unsigned i=0;i<ni;++i)
     {
-      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<" ";
+      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<' ';
       vcl_cout<<"  ";
     }
     vcl_cout<<vcl_endl;
-
   }
-  for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<" ";
+  for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<' ';
   vcl_cout<<vcl_endl;
 }
+
 void test_sample_histo_boxes()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "*********************************\n"
            << " Testing mipa_sample_histo_boxes\n"
-           << "***********************\n";
+           << "*********************************\n";
 
   // Create histogram image
   unsigned nb=2;
@@ -66,7 +66,7 @@ void test_sample_histo_boxes()
   for (unsigned j=0;j<nj;++j)
     for (unsigned i=0;i<ni;++i)
       for (unsigned k=0;k<nb;++k)
-        histo(i,j,k)=10*i+100*j+k;
+        histo(i,j,k)=10.0f*i+100.0f*j+k;
 
   vcl_cout<<"Test at (0,0):"<<vcl_endl;
 
