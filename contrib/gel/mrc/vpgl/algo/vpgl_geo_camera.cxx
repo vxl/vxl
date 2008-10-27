@@ -22,7 +22,7 @@ vpgl_geo_camera::vpgl_geo_camera()
   tiepoints_[0].resize(6,0);
 
   is_utm = false;
- // img_u_ = img_v_ = 0;
+  tx_ = ty_ = 0;
 }
 
 vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
@@ -30,6 +30,8 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
   this->trans_matrix_ = rhs.trans_matrix_;
   this->lvcs_ = new bgeo_lvcs(*(rhs.lvcs_));
   this->tiepoints_ = rhs.tiepoints_;
+  this->tx_ = rhs.tx_;
+  this->ty_ = rhs.ty_;
 }
 
 //: transforms a given 3d world point to image plane
@@ -97,14 +99,16 @@ void vpgl_geo_camera::translate(double tx, double ty)
 {
   trans_matrix_[0][3] += tx;
   trans_matrix_[1][3] -= ty;
+  tx_ = tx;
+  ty_ = ty;
 }
 
 void vpgl_geo_camera::img_to_wgs(const unsigned i, const unsigned j,
                                  double& lon, double& lat)
 {
   vnl_vector<double> v(4), res(4);
-  v[0] = tiepoints_[0][3] + i;
-  v[1] = tiepoints_[0][4] - j;
+  v[0] = tiepoints_[0][3] + i + tx_;
+  v[1] = tiepoints_[0][4] - j - ty_;
   v[2] = 0;
   v[3] = 1;
   //find the UTM values

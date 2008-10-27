@@ -31,7 +31,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
                     bgeo_lvcs_sptr lvcs,
                     vcl_vector<vcl_vector<double> > tiepoints)
     : trans_matrix_(trans_matrix), lvcs_(lvcs), 
-    tiepoints_(tiepoints), is_utm(false) {}
+    tiepoints_(tiepoints), is_utm(false), tx_(0), ty_(0) {}
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);
@@ -86,10 +86,12 @@ class vpgl_geo_camera : public vpgl_camera<double>
   friend vcl_istream&  operator>>(vcl_istream& s, vpgl_geo_camera& p);
   
   void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
-
+  
  private:
 
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
+  // translation if image is cropped 
+  double tx_, ty_;
   //: lvcs of world parameters
   bgeo_lvcs_sptr lvcs_;
   //: set of 6 values, normally 1 set
@@ -97,7 +99,6 @@ class vpgl_geo_camera : public vpgl_camera<double>
   bool is_utm;
   int utm_zone_;
   int northing_; //0 North, 1 South
-  
 };
 
 #endif // vpgl_geo_camera
