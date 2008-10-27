@@ -115,8 +115,8 @@ void vpgl_geo_camera::img_to_wgs(const unsigned i, const unsigned j,
 
 bool vpgl_geo_camera::operator==(vpgl_geo_camera const& rhs) const
 {
-  return this->trans_matrix_ == rhs.trans_matrix_
-      && *(this->lvcs_)      == *(rhs.lvcs_)
+  return (this->trans_matrix_ == rhs.trans_matrix_) && 
+         (*(this->lvcs_) == *(rhs.lvcs_));
 }
 
 //: Write vpgl_perspective_camera to stream

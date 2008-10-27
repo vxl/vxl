@@ -18,7 +18,7 @@
 #include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 #include <vnl/vnl_matrix.h>
 
-#include "vpgl_camera.h"
+#include <vpgl/vpgl_camera.h>
 #include <vsl/vsl_binary_io.h>
 
 class vpgl_geo_camera : public vpgl_camera<double>

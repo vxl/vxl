@@ -19,13 +19,12 @@ SET( vpgl_sources
   vpgl_rational_camera.h           vpgl_rational_camera.txx
   vpgl_comp_rational_camera.h      vpgl_comp_rational_camera.txx
   vpgl_local_rational_camera.h     vpgl_local_rational_camera.txx
-  vpgl_geo_camera.h                vpgl_geo_camera.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)
 
 ADD_LIBRARY(vpgl ${vpgl_sources})
-TARGET_LINK_LIBRARIES( vpgl vnl vnl_algo vnl_io vgl vgl_algo vgl_io vsl bgeo)
+TARGET_LINK_LIBRARIES( vpgl vnl vnl_algo vnl_io vgl vgl_algo vgl_io vsl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
