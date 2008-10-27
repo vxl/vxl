@@ -210,6 +210,9 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
     if (boundaries[b].num_sheets() == 0)
       continue;
     const vcl_vector<vgl_point_2d<double> >& pts = boundaries[b][0];
+    if(pts.size()<3)
+      continue;
+    
     unsigned int first_pt = verts->size();
     vcl_vector< unsigned int > roof;
     for (unsigned i=0; i<pts.size(); ++i) {
