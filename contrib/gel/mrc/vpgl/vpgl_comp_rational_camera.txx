@@ -71,7 +71,7 @@ vpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
 template <class T>
 vpgl_comp_rational_camera<T>::vpgl_comp_rational_camera(vcl_string cam_path)
 {
-  vpgl_rational_camera<T> rcam(cam_path);
+  vpgl_rational_camera<T> *rcam = read_rational_camera<T >(cam_path);
 
   vcl_ifstream file_inp;
   file_inp.open(cam_path.c_str());
@@ -95,7 +95,7 @@ vpgl_comp_rational_camera<T>::vpgl_comp_rational_camera(vcl_string cam_path)
     vcl_cout << "error: not a composite rational camera file\n";
     return;
   }
-  *this = vpgl_comp_rational_camera<T>(M, rcam);
+  *this = vpgl_comp_rational_camera<T>(M, *rcam);
 }
 
 template <class T>
@@ -144,11 +144,11 @@ vgl_point_2d<T> vpgl_comp_rational_camera<T>::project(vgl_point_3d<T> world_poin
 template <class T>
 void vpgl_comp_rational_camera<T>::print(vcl_ostream& s) const
 {
-  vpgl_scale_offset<T> sox = scale_offsets_[X_INDX];
-  vpgl_scale_offset<T> soy = scale_offsets_[Y_INDX];
-  vpgl_scale_offset<T> soz = scale_offsets_[Z_INDX];
-  vpgl_scale_offset<T> sou = scale_offsets_[U_INDX];
-  vpgl_scale_offset<T> sov = scale_offsets_[V_INDX];
+  vpgl_scale_offset<T> sox = this->scale_offsets()[this->X_INDX];
+  vpgl_scale_offset<T> soy = this->scale_offsets()[this->Y_INDX];
+  vpgl_scale_offset<T> soz = this->scale_offsets()[this->Z_INDX];
+  vpgl_scale_offset<T> sou = this->scale_offsets()[this->U_INDX];
+  vpgl_scale_offset<T> sov = this->scale_offsets()[this->V_INDX];
 
   s << "vpgl_comp_rational_camera:\n"
     << "------------------------\n"
@@ -165,92 +165,92 @@ void vpgl_comp_rational_camera<T>::print(vcl_ostream& s) const
     << "  vscale = " << sov.scale() << "\n\n"
 
     << "U Numerator\n"
-    << "[0] " << rational_coeffs_[0][0]
-    << " [1] " << rational_coeffs_[0][1]
-    << " [2] " << rational_coeffs_[0][2]
-    << " [3] " << rational_coeffs_[0][3] <<'\n'
-    << "[4] " << rational_coeffs_[0][4]
-    << " [5] " << rational_coeffs_[0][5]
-    << " [6] " << rational_coeffs_[0][6]
-    << " [7] " << rational_coeffs_[0][7] <<'\n'
-    << "[8] "  << rational_coeffs_[0][8]
-    << " [9] " << rational_coeffs_[0][9]
-    << " [10] " << rational_coeffs_[0][10]
-    << " [11] " << rational_coeffs_[0][11] <<'\n'
-    << "[12] " << rational_coeffs_[0][12]
-    << " [13] " << rational_coeffs_[0][13]
-    << " [14] " << rational_coeffs_[0][14]
-    << " [15] "  << rational_coeffs_[0][15] <<'\n'
-    << "[16] " << rational_coeffs_[0][16]
-    << " [17] " << rational_coeffs_[0][17]
-    << " [18] " << rational_coeffs_[0][18]
-    << " [19] " << rational_coeffs_[0][19] <<"\n\n"
+    << "[0] " << this->coefficient_matrix()[0][0]
+    << " [1] " << this->coefficient_matrix()[0][1]
+    << " [2] " << this->coefficient_matrix()[0][2]
+    << " [3] " << this->coefficient_matrix()[0][3] <<'\n'
+    << "[4] " << this->coefficient_matrix()[0][4]
+    << " [5] " << this->coefficient_matrix()[0][5]
+    << " [6] " << this->coefficient_matrix()[0][6]
+    << " [7] " << this->coefficient_matrix()[0][7] <<'\n'
+    << "[8] "  << this->coefficient_matrix()[0][8]
+    << " [9] " << this->coefficient_matrix()[0][9]
+    << " [10] " << this->coefficient_matrix()[0][10]
+    << " [11] " << this->coefficient_matrix()[0][11] <<'\n'
+    << "[12] " << this->coefficient_matrix()[0][12]
+    << " [13] " << this->coefficient_matrix()[0][13]
+    << " [14] " << this->coefficient_matrix()[0][14]
+    << " [15] "  << this->coefficient_matrix()[0][15] <<'\n'
+    << "[16] " << this->coefficient_matrix()[0][16]
+    << " [17] " << this->coefficient_matrix()[0][17]
+    << " [18] " << this->coefficient_matrix()[0][18]
+    << " [19] " << this->coefficient_matrix()[0][19] <<"\n\n"
 
     << "U Denominator\n"
-    << "[0] " << rational_coeffs_[1][0]
-    << " [1] " << rational_coeffs_[1][1]
-    << " [2] " << rational_coeffs_[1][2]
-    << " [3] " << rational_coeffs_[1][3] <<'\n'
-    << "[4] " << rational_coeffs_[1][4]
-    << " [5] " << rational_coeffs_[1][5]
-    << " [6] " << rational_coeffs_[1][6]
-    << " [7] " << rational_coeffs_[1][7]  <<'\n'
-    << "[8] " << rational_coeffs_[1][8]
-    << " [9] " << rational_coeffs_[1][9]
-    << " [10] " << rational_coeffs_[1][10]
-    << " [11] " << rational_coeffs_[1][11] <<'\n'
-    << "[12] " << rational_coeffs_[1][12]
-    << " [13] " << rational_coeffs_[1][13]
-    << " [14] " << rational_coeffs_[1][14]
-    << " [15] " << rational_coeffs_[1][15] <<'\n'
-    << "[16] " << rational_coeffs_[1][16]
-    << " [17] " << rational_coeffs_[1][17]
-    << " [18] " << rational_coeffs_[1][18]
-    << " [19] " << rational_coeffs_[1][19] <<"\n\n"
+    << "[0] " << this->coefficient_matrix()[1][0]
+    << " [1] " << this->coefficient_matrix()[1][1]
+    << " [2] " << this->coefficient_matrix()[1][2]
+    << " [3] " << this->coefficient_matrix()[1][3] <<'\n'
+    << "[4] " << this->coefficient_matrix()[1][4]
+    << " [5] " << this->coefficient_matrix()[1][5]
+    << " [6] " << this->coefficient_matrix()[1][6]
+    << " [7] " << this->coefficient_matrix()[1][7]  <<'\n'
+    << "[8] " << this->coefficient_matrix()[1][8]
+    << " [9] " << this->coefficient_matrix()[1][9]
+    << " [10] " << this->coefficient_matrix()[1][10]
+    << " [11] " << this->coefficient_matrix()[1][11] <<'\n'
+    << "[12] " << this->coefficient_matrix()[1][12]
+    << " [13] " << this->coefficient_matrix()[1][13]
+    << " [14] " << this->coefficient_matrix()[1][14]
+    << " [15] " << this->coefficient_matrix()[1][15] <<'\n'
+    << "[16] " << this->coefficient_matrix()[1][16]
+    << " [17] " << this->coefficient_matrix()[1][17]
+    << " [18] " << this->coefficient_matrix()[1][18]
+    << " [19] " << this->coefficient_matrix()[1][19] <<"\n\n"
 
     << "V Numerator\n"
-    << "[0] " << rational_coeffs_[2][0]
-    << " [1] " << rational_coeffs_[2][1]
-    << " [2] " << rational_coeffs_[2][2]
-    << " [3] " << rational_coeffs_[2][3]<<'\n'
-    << "[4] " << rational_coeffs_[2][4]
-    << " [5] " << rational_coeffs_[2][5]
-    << " [6] " << rational_coeffs_[2][6]
-    << " [7] " << rational_coeffs_[2][7] <<'\n'
-    << "[8] " << rational_coeffs_[2][8]
-    << " [9] " << rational_coeffs_[2][9]
-    << " [10] " << rational_coeffs_[2][10]
-    << " [11] " << rational_coeffs_[2][11] <<'\n'
-    << "[12] " << rational_coeffs_[2][12]
-    << " [13] " << rational_coeffs_[2][13]
-    << " [14] " << rational_coeffs_[2][14]
-    << " [15] " << rational_coeffs_[2][15]<<'\n'
-    << "[16] " << rational_coeffs_[2][16]
-    << " [17] " << rational_coeffs_[2][17]
-    << " [18] " << rational_coeffs_[2][18]
-    << " [19] " << rational_coeffs_[2][19] <<"\n\n"
+    << "[0] " << this->coefficient_matrix()[2][0]
+    << " [1] " << this->coefficient_matrix()[2][1]
+    << " [2] " << this->coefficient_matrix()[2][2]
+    << " [3] " << this->coefficient_matrix()[2][3]<<'\n'
+    << "[4] " << this->coefficient_matrix()[2][4]
+    << " [5] " << this->coefficient_matrix()[2][5]
+    << " [6] " << this->coefficient_matrix()[2][6]
+    << " [7] " << this->coefficient_matrix()[2][7] <<'\n'
+    << "[8] " << this->coefficient_matrix()[2][8]
+    << " [9] " << this->coefficient_matrix()[2][9]
+    << " [10] " << this->coefficient_matrix()[2][10]
+    << " [11] " << this->coefficient_matrix()[2][11] <<'\n'
+    << "[12] " << this->coefficient_matrix()[2][12]
+    << " [13] " << this->coefficient_matrix()[2][13]
+    << " [14] " << this->coefficient_matrix()[2][14]
+    << " [15] " << this->coefficient_matrix()[2][15]<<'\n'
+    << "[16] " << this->coefficient_matrix()[2][16]
+    << " [17] " << this->coefficient_matrix()[2][17]
+    << " [18] " << this->coefficient_matrix()[2][18]
+    << " [19] " << this->coefficient_matrix()[2][19] <<"\n\n"
 
     << "V Denominator\n"
-    << "[0] " << rational_coeffs_[3][0]
-    << " [1] " << rational_coeffs_[3][1]
-    << " [2] " << rational_coeffs_[3][2]
-    << " [3] " << rational_coeffs_[3][3]<<'\n'
-    << "[4] " << rational_coeffs_[3][4]
-    << " [5] " << rational_coeffs_[3][5]
-    << " [6] " << rational_coeffs_[3][6]
-    << " [7] " << rational_coeffs_[3][7] <<'\n'
-    << "[8] " << rational_coeffs_[3][8]
-    << " [9] " << rational_coeffs_[3][9]
-    << " [10] " << rational_coeffs_[3][10]
-    << " [11] " << rational_coeffs_[3][11] <<'\n'
-    << "[12] " << rational_coeffs_[3][12]
-    << " [13] " << rational_coeffs_[3][13]
-    << " [14] " << rational_coeffs_[3][14]
-    << " [15] " << rational_coeffs_[3][15]<<'\n'
-    << "[16] " << rational_coeffs_[3][16]
-    << " [17] " << rational_coeffs_[3][17]
-    << " [18] " << rational_coeffs_[3][18]
-    << " [19] " << rational_coeffs_[3][19] <<'\n'
+    << "[0] " << this->coefficient_matrix()[3][0]
+    << " [1] " << this->coefficient_matrix()[3][1]
+    << " [2] " << this->coefficient_matrix()[3][2]
+    << " [3] " << this->coefficient_matrix()[3][3]<<'\n'
+    << "[4] " << this->coefficient_matrix()[3][4]
+    << " [5] " << this->coefficient_matrix()[3][5]
+    << " [6] " << this->coefficient_matrix()[3][6]
+    << " [7] " << this->coefficient_matrix()[3][7] <<'\n'
+    << "[8] " << this->coefficient_matrix()[3][8]
+    << " [9] " << this->coefficient_matrix()[3][9]
+    << " [10] " << this->coefficient_matrix()[3][10]
+    << " [11] " << this->coefficient_matrix()[3][11] <<'\n'
+    << "[12] " << this->coefficient_matrix()[3][12]
+    << " [13] " << this->coefficient_matrix()[3][13]
+    << " [14] " << this->coefficient_matrix()[3][14]
+    << " [15] " << this->coefficient_matrix()[3][15]<<'\n'
+    << "[16] " << this->coefficient_matrix()[3][16]
+    << " [17] " << this->coefficient_matrix()[3][17]
+    << " [18] " << this->coefficient_matrix()[3][18]
+    << " [19] " << this->coefficient_matrix()[3][19] <<'\n'
     << "\nAffine Matrix\n"
     << matrix_ << '\n'
     <<"------------------------------------------------\n\n";
@@ -294,38 +294,38 @@ bool vpgl_comp_rational_camera<T>::save(vcl_string cam_path)
            << "SpecId = \"RPC00B\";\n"
            << "BEGIN_GROUP = IMAGE\n"
            << "\n\n"  // skip errBias and errRand fields
-           << "  lineOffset = " << offset(V_INDX) << '\n'
-           << "  sampOffset = " << offset(U_INDX) << '\n'
-           << "  latOffset = " << offset(Y_INDX) << '\n'
-           << "  longOffset = " << offset(X_INDX) << '\n'
-           << "  heightOffset = " << offset(Z_INDX) << '\n'
-           << "  lineScale = " << scale(V_INDX) << '\n'
-           << "  sampScale = " << scale(U_INDX) << '\n'
-           << "  latScale = " << scale(Y_INDX) << '\n'
-           << "  longScale = " << scale(X_INDX) << '\n'
-           << "  heightScale = " << scale(Z_INDX) << '\n';
+           << "  lineOffset = " << this->offset(this->V_INDX) << '\n'
+           << "  sampOffset = " << this->offset(this->U_INDX) << '\n'
+           << "  latOffset = " << this->offset(this->Y_INDX) << '\n'
+           << "  longOffset = " << this->offset(this->X_INDX) << '\n'
+           << "  heightOffset = " << this->offset(this->Z_INDX) << '\n'
+           << "  lineScale = " << this->scale(this->V_INDX) << '\n'
+           << "  sampScale = " << this->scale(this->U_INDX) << '\n'
+           << "  latScale = " << this->scale(this->Y_INDX) << '\n'
+           << "  longScale = " << this->scale(this->X_INDX) << '\n'
+           << "  heightScale = " << this->scale(this->Z_INDX) << '\n';
   vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[NEU_V][map[i]];
+    file_out << "\n    " << coeffs[this->NEU_V][map[i]];
     if (i < 19)
       file_out << ',';
   }
   file_out << ");\n  lineDenCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[DEN_V][map[i]];
+    file_out << "\n    " << coeffs[this->DEN_V][map[i]];
     if (i < 19)
       file_out << ',';
   }
   file_out << ");\n  sampNumCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[NEU_U][map[i]];
+    file_out << "\n    " << coeffs[this->NEU_U][map[i]];
     if (i < 19)
       file_out << ',';
   }
   file_out << ");\n  sampDenCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[DEN_U][map[i]];
+    file_out << "\n    " << coeffs[this->DEN_U][map[i]];
     if (i < 19)
       file_out << ',';
   }
