@@ -7,6 +7,7 @@
 //        -  Input:
 //             - First return path "string"
 //             - Last return path "string"
+//             - ground image "string"
 //             - min_lat "float"
 //             - min_lon "float"
 //             - max_lat "float"
@@ -59,16 +60,23 @@ class bmdl_lidar_roi_process : public bprb_process
 
    bool lidar_roi(vil_image_resource_sptr lidar_first,
                   vil_image_resource_sptr lidar_last,
+                  vil_image_resource_sptr ground,
                   float min_lat, float min_lon, 
                   float max_lat, float max_lon,
                   vil_image_view_base_sptr& first_roi,
                   vil_image_view_base_sptr& last_roi,
+                  vil_image_view_base_sptr& ground_roi,
                   vpgl_geo_camera*& lvcs);
 
   //: projects the box on the image by taking the union of all the projected corners
   bool comp_trans_matrix(double sx1, double sy1, double sz1,
                          vcl_vector<vcl_vector<double> > tiepoints,
                          vnl_matrix<double>& trans_matrix);
+
+  bool compute_ground(vil_image_resource_sptr ground,
+                      vil_image_view_base_sptr first_roi,
+                      vil_image_view_base_sptr last_roi,
+                      vil_image_view_base_sptr& ground_roi);
 };
 
 #endif // bmdl_lidar_roi_process_h_
