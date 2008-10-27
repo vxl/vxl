@@ -55,17 +55,16 @@ IF(TIFF_FOUND)
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
     file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
   ) 
-  IF(VXL_FORCE_V3P_TIFF)
-    INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
-    IF(GEOTIFF_FOUND)
-      #ADD_DEFINITIONS( -DHAS_GEOTIFF )
-      SET (HAS_GEOTIFF 1 )
-      INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR}) 
-      SET( vil_sources ${vil_sources}
-        file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
-      )
-    ENDIF(GEOTIFF_FOUND)
-  ENDIF(VXL_FORCE_V3P_TIFF)
+
+  INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+  IF(GEOTIFF_FOUND)
+    #ADD_DEFINITIONS( -DHAS_GEOTIFF )
+    SET (HAS_GEOTIFF 1 )
+    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR}) 
+    SET( vil_sources ${vil_sources}
+      file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
+    )
+  ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindDCMTK.cmake)
