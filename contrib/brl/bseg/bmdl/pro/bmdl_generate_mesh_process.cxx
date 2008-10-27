@@ -61,7 +61,7 @@ bool bmdl_generate_mesh_process::execute()
   vil_image_view_base_sptr label_img = input1->value();
 
   if (!label_img) {
-    vcl_cout << "bmdl_classify_process -- Label image is not set!\n";
+    vcl_cout << "bmdl_generate_mesh_process -- Label image is not set!\n";
     return false;
   }
 
@@ -71,7 +71,7 @@ bool bmdl_generate_mesh_process::execute()
   vil_image_view_base_sptr height_img = input2->value();
 
   if (!height_img) {
-    vcl_cout << "bmdl_classify_process -- Label image is not set!\n";
+    vcl_cout << "bmdl_generate_mesh_process -- Label image is not set!\n";
     return false;
   }
 
@@ -81,7 +81,7 @@ bool bmdl_generate_mesh_process::execute()
   vil_image_view_base_sptr ground_img = input3->value();
 
   if (!ground_img) {
-    vcl_cout << "bmdl_classify_process -- Label image is not set!\n";
+    vcl_cout << "bmdl_generate_mesh_process -- Label image is not set!\n";
     return false;
   }
 
@@ -93,8 +93,8 @@ bool bmdl_generate_mesh_process::execute()
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[5].ptr());
   vpgl_camera_double_sptr camera = input5->value();
 
-  if (camera->type_name().compare("vpgl_algo_camera") != 0) {
-    vcl_cout << "bmdl_classify_process -- Camera input should be type of lidar!\n";
+  if (camera->type_name().compare("vpgl_geo_camera") != 0) {
+    vcl_cout << "bmdl_generate_mesh_process -- Camera input should be type of lidar!\n";
     return false;
   }
 
