@@ -84,6 +84,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   //: Read camera  from stream
   friend vcl_istream&  operator>>(vcl_istream& s, vpgl_geo_camera& p);
+  
+  void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
 
  private:
 
@@ -95,7 +97,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   bool is_utm;
   int utm_zone_;
   int northing_; //0 North, 1 South
-  void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
+  
 };
 
 #endif // vpgl_geo_camera
