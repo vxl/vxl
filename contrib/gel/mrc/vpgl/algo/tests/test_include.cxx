@@ -22,5 +22,6 @@
 #include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #include <vpgl/algo/vpgl_vsol_lens_warp.h>
+#include <vpgl/algo/vpgl_geo_camera.h>
 
 int main() { return 0; }
