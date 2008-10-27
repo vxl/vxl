@@ -28,7 +28,7 @@ IF( PYTHON_FOUND )
     ENDIF(WIN32)
     SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES PREFIX "")
 
-    TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bmdl bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro) 
+    TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro) 
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( bmdl_batch debug ${PYTHON_DEBUG_LIBRARY})
