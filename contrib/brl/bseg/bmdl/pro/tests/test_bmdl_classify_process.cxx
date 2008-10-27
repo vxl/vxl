@@ -51,13 +51,16 @@ MAIN( test_bmdl_classify_process )
 
   vil_image_view_base_sptr first_return = vil_load("first_ret.tif");
   vil_image_view_base_sptr last_return = vil_load("last_ret.tif");
+  vil_image_view_base_sptr ground = vil_load("ground.tif");
 
   brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(first_return);
   brdb_value_sptr v1 = new brdb_value_t<vil_image_view_base_sptr>(last_return);
+  brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(ground);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bmdlClassifyProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
+  good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned int label_img_id, height_img_id;
