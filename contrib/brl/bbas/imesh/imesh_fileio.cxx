@@ -312,12 +312,13 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
       return;
   }
 
+  os.precision(12);
   for (unsigned int f=0; f<faces.size(); ++f) {
     // originally it was id=buildingX_faceY, but we have to pass a mesh number
     os << "      <Polygon id=\"building_face" << f << "\">\n"
        << "        <extrude>0</extrude>\n"
        << "        <tessellate>0</tessellate>\n"
-       << "        <altitudeMode>relativeToGround</altitudeMode>\n"
+       << "        <altitudeMode>absolute</altitudeMode>\n"
        << "        <outerBoundaryIs>\n"
        << "          <LinearRing>\n"
        << "            <coordinates>" << vcl_endl;
