@@ -33,7 +33,7 @@ int main2(int argc, char*argv[])
   // Parse the program arguments
   vul_arg<vcl_string> in_file(0, "input filename (contains whitespace-separated scalar numeric values");
   vul_arg<vcl_string> out_file("-o", "output filename (contains zero-based indices into input list.", "");
-  vul_arg<bool> reverse("-r", "Sort into descending order", false);
+  vul_arg<bool> reverse("-r", "Sort into descending order (default is ascending order)", false);
   vul_arg_parse(argc, argv);
 
   // Log the program arguments
