@@ -224,10 +224,10 @@ imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
   vcl_vector<vnl_matrix<double> > img_jac(num_verts);
   for (unsigned int i=0; i<num_verts; ++i)
   {
-    vnl_matrix<double> dir_3d(3,pc.rows());
-    pc.extract(dir_3d,3*i,0);
+    vnl_matrix<double> dir_3d(pc.rows(),3);
+    pc.extract(dir_3d,0,3*i);
 
-    img_jac[i] = J[i]*dir_3d;
+    img_jac[i] = J[i]*dir_3d.transpose();
   }
 
   return img_jac;
