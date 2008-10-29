@@ -161,7 +161,7 @@ static void test_proj_camera()
   vcl_vector<vgl_point_3d<double> > pts;
   pts.push_back(vgl_point_3d<double>(29,-3, 8));
   pts.push_back(vgl_point_3d<double>(-0.2,4.1,1.0));
-  vcl_vector<vnl_matrix_fixed<double,3,2> > Jac = image_jacobians(P1,pts);
+  vcl_vector<vnl_matrix_fixed<double,2,3> > Jac = image_jacobians(P1,pts);
   double eps = 1e-6;
   bool valid = true;
   for(unsigned int i=0; i<pts.size(); ++i)
@@ -176,13 +176,13 @@ static void test_proj_camera()
     vgl_point_2d<double> pidy = P1.project(pdy);
     vgl_point_2d<double> pidz = P1.project(pdz);
 
-    vnl_matrix_fixed<double,3,2> J_diff;
+    vnl_matrix_fixed<double,2,3> J_diff;
     J_diff(0,0) = (pidx.x() - pi.x())/eps;
-    J_diff(0,1) = (pidx.y() - pi.y())/eps;
-    J_diff(1,0) = (pidy.x() - pi.x())/eps;
+    J_diff(1,0) = (pidx.y() - pi.y())/eps;
+    J_diff(0,1) = (pidy.x() - pi.x())/eps;
     J_diff(1,1) = (pidy.y() - pi.y())/eps;
-    J_diff(2,0) = (pidz.x() - pi.x())/eps;
-    J_diff(2,1) = (pidz.y() - pi.y())/eps;
+    J_diff(0,2) = (pidz.x() - pi.x())/eps;
+    J_diff(1,2) = (pidz.y() - pi.y())/eps;
 
     double err = (J_diff - Jac[i]).array_inf_norm();
     if(err > eps){

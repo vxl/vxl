@@ -217,17 +217,17 @@ imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
     pts[i] = verts[i];
 
   // compute the Jacobians at each point
-  vcl_vector<vnl_matrix_fixed<double,3,2> > J = image_jacobians(camera,pts);
+  vcl_vector<vnl_matrix_fixed<double,2,3> > J = image_jacobians(camera,pts);
 
   // map the image Jacobians into PCA Jacobians
   const vnl_matrix<double>& pc = mesh.principal_comps();
   vcl_vector<vnl_matrix<double> > img_jac(num_verts);
   for (unsigned int i=0; i<num_verts; ++i)
   {
-    vnl_matrix<double> dir_3d(pc.rows(),3);
-    pc.extract(dir_3d,0,3*i);
+    vnl_matrix<double> dir_3d(3,pc.rows());
+    pc.extract(dir_3d,3*i,0);
 
-    img_jac[i] = dir_3d*J[i];
+    img_jac[i] = J[i]*dir_3d;
   }
 
   return img_jac;

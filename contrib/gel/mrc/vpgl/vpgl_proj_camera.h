@@ -244,7 +244,7 @@ vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
 //  The returned matrices map a differential change in 3D
 //  to a differential change in the 2D image at each specified 3D point
 template <class T>
-vcl_vector<vnl_matrix_fixed<T,3,2> >
+vcl_vector<vnl_matrix_fixed<T,2,3> >
 image_jacobians(const vpgl_proj_camera<T>& camera,
                 const vcl_vector<vgl_point_3d<T> >& pts);
 
