@@ -35,19 +35,30 @@ int main2(int argc, char*argv[])
   bool use_millimeters=false;
   unsigned i0=0, j0=0, k0=0;
   unsigned ni=10, nj=10, nk=10;
+  double fx0=0, fy0=0, fz0=0;
+  double fx1=1, fy1=1, fz1=1;
 
   // Parse the program arguments
   vul_arg<vcl_string> img_src(0, "input image filename");
   vul_arg<vcl_string> img_dst(0, "output image filename");
   vul_arg<vcl_vector<unsigned> > bbi("-bbi", "bounding box (image coords: i0,j0,k0,i1,j1,k1) of crop region");
+  vul_arg<vcl_vector<double> > bbf("-bbf", "bounding box (image fraction e.g. 0.2,0.2,0.2,0.75,0.75,0.75) of crop region");
   vul_arg_parse(argc, argv);
 
   // Log the program arguments
-  MBL_LOG(NOTICE, logger(), "crop_image_3d: ");
-  MBL_LOG(NOTICE, logger(), "  img_src: " << img_src());
-  MBL_LOG(NOTICE, logger(), "  img_dst: " << img_dst());
+  MBL_LOG(INFO, logger(), "crop_image_3d: ");
+  MBL_LOG(INFO, logger(), "  img_src: " << img_src());
+  MBL_LOG(INFO, logger(), "  img_dst: " << img_dst());
   if (bbi.set())
-    MBL_LOG(NOTICE, logger(), "  bbi: " << bbi.print_value(logger().log(mbl_logger::NOTICE)));
+    MBL_LOG(INFO, logger(), "  bbi: " << bbi.print_value(logger().log(mbl_logger::NOTICE)));
+  if (bbf.set())
+    MBL_LOG(INFO, logger(), "  bbf: " << bbf.print_value(logger().log(mbl_logger::NOTICE)));
+
+  if (bbi.set() && bbf.set())
+  {
+    vcl_cerr << "ERROR: do not specify both -bbi and -bbf options together" << vcl_endl;
+    return 1;
+  }
 
   // Validate the bbi argument - should be 6 unsigneds, specifying
   // lower corner (i0,j0,k0) and upper corner (i1,j1,k1) of included voxels
@@ -55,20 +66,37 @@ int main2(int argc, char*argv[])
   {
     if (bbi().size() != 6)
     {
-      MBL_LOG(ERR, logger(), "bbi argument should contain exactly 6 unsigneds");
       vcl_cerr << "ERROR: bbi argument should contain exactly 6 unsigneds\n";
       return 1;
     }
 
     if (bbi()[0] >= bbi()[3] || bbi()[1] >= bbi()[4] || bbi()[2] >= bbi()[5])
     {
-      MBL_LOG(ERR, logger(), "bbi argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth");
       vcl_cerr << "ERROR: bbi argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth\n";
       return 1;
     }
 
     i0 = bbi()[0]; j0 = bbi()[1]; k0 = bbi()[2];
     ni = bbi()[3]-i0+1; nj = bbi()[4]-j0+1; nk = bbi()[5]-k0+1;
+  }
+  
+  // Validate the bbf argument - should be 6 doubles, specifying
+  // lower corner fraction (fx0,fy0,fz0) and upper corner (fx1,fy1,fz1) of included voxels
+  if (bbf.set())
+  {
+    if (bbf().size() != 6)
+    {
+      vcl_cerr << "ERROR: bbf argument should contain exactly 6 floats\n";
+      return 1;
+    }
+
+    if (bbf()[0] >= bbf()[3] || bbf()[1] >= bbf()[4] || bbf()[2] >= bbf()[5])
+    {
+      vcl_cerr << "ERROR: bbf argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth within [0,1]\n";
+      return 1;
+    }
+    fx0 = bbf()[0]; fy0 = bbf()[1]; fz0 = bbf()[2];    
+    fx1 = bbf()[3]; fy1 = bbf()[4]; fz1 = bbf()[5];
   }
 
   // Determine the output filetype
@@ -81,7 +109,6 @@ int main2(int argc, char*argv[])
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(img_src().c_str());
   if (!ir)
   {
-    MBL_LOG(ERR, logger(), "Failed to load input image resource");
     vcl_cerr << "ERROR: Failed to load input image resource\n";
     return 1;
   }
@@ -95,25 +122,31 @@ int main2(int argc, char*argv[])
 
   vimt3d_transform_3d tr = vimt3d_load_transform(ir, use_millimeters);
   MBL_LOG(INFO, logger(), "Loaded input image transform");
+  
+  if (bbf.set())
+  {
+    // Convert image fraction values to voxel numbers 
+    // Round lower bounds down
+    i0 = static_cast<unsigned>(vcl_floor((ir->ni()-1)*fx0));
+    j0 = static_cast<unsigned>(vcl_floor((ir->nj()-1)*fy0));
+    k0 = static_cast<unsigned>(vcl_floor((ir->nk()-1)*fz0));
+    // Round upper bounds up
+    unsigned i1 = static_cast<unsigned>(vcl_ceil((ir->ni()-1)*fx1));
+    unsigned j1 = static_cast<unsigned>(vcl_ceil((ir->nj()-1)*fy1));
+    unsigned k1 = static_cast<unsigned>(vcl_ceil((ir->nk()-1)*fz1));
+    ni = i1 - i0 + 1;
+    nj = j1 - j0 + 1;
+    nk = k1 - k0 + 1;
+  }
+
   if (logger().level()>=mbl_logger::DEBUG)
   {
     vgl_point_3d<double> img_orig_wc = tr.inverse()(vgl_point_3d<double>(0,0,0));
     MBL_LOG(DEBUG, logger(), "Image origin in world coords: " << img_orig_wc);
   }
 
-#if 0
-  vil3d_image_resource_sptr ir2 = vil3d_crop(ir, i0, ni, j0, nj, k0, nk);
-  vimt3d_transform_3d tr2; // NEED TO SET THIS CORRECTLY HERE...see vimt3d_crop()
-#endif // 0
-
-#if 0
-  // Need to check that crop bbox is within bounds of input image
-  vil3d_image_view_base_sptr ivbp = ir->get_view(); // ==> use ivbp->ni() etc.
-#endif // 0
-
   if (i0 >= ir->ni() || j0 >= ir->nj() || k0 > ir->nk())
   {
-    MBL_LOG(ERR, logger(), "Crop region bbox lower corner is outside input image.");
     vcl_cerr << "ERROR: Crop region bbox lower corner is outside input image.\n";
     return 2;
   }
@@ -136,10 +169,10 @@ int main2(int argc, char*argv[])
     nk = ir->nk()-k0;
   }
 
-
+  // Get a view of the cropped region
   vil3d_image_view_base_sptr ivbp = ir->get_copy_view(i0, ni, j0, nj, k0, nk);
 
-
+  // Create output image resource
   vil3d_image_resource_sptr ir2 = vil3d_new_image_resource(
     img_dst().c_str(), ni, nj, nk, ivbp->nplanes(), ivbp->pixel_format(), filetype.c_str());
   if (!ir2)
@@ -150,18 +183,19 @@ int main2(int argc, char*argv[])
   }
   MBL_LOG(INFO, logger(), "Created output image_resource");
 
-  // NEED TO MODIFY TRANSFORM HERE...see vimt3d_crop()
+  // Modify transform to account for the implicit translation
   vimt3d_transform_3d transl;
   transl.set_translation(-double(i0), -double(j0), -double(k0));
   tr = transl*tr;
-  //
   dynamic_cast<vimt3d_vil3d_v3i_image &>(*ir2).set_world2im(tr);
+  
   if (logger().level()>=mbl_logger::DEBUG)
   {
     vgl_point_3d<double> img_orig_wc = tr.inverse()(vgl_point_3d<double>(0,0,0));
     MBL_LOG(DEBUG, logger(), "Image origin in world coords: " << img_orig_wc);
   }
 
+  // Write the image to file
   bool succ = ir2->put_view(*ivbp);
   if (!succ)
   {
