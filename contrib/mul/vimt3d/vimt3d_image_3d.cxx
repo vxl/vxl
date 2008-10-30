@@ -64,3 +64,17 @@ void vimt3d_centre_image_at_origin(vimt3d_image_3d& image)
   w2i.set_origin(w2i(c));
 }
 
+// Calculate the voxel dimensions from the image transform
+// NEEDS A TEST PROGRAM
+vgl_vector_3d<double> vimt3d_voxel_size_from_transform(const vimt3d_image_3d& image)
+{
+  const vimt3d_transform_3d& i2w = image.world2im().inverse();
+  vgl_point_3d<double> p(0,0,0);
+  vgl_vector_3d<double> i(1,0,0);
+  vgl_vector_3d<double> j(0,1,0);
+  vgl_vector_3d<double> k(0,0,1);
+  double dx = i2w.delta(p, i).length();
+  double dy = i2w.delta(p, j).length();
+  double dz = i2w.delta(p, k).length();
+  return vgl_vector_3d<double>(dx, dy, dz);
+}

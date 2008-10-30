@@ -74,4 +74,8 @@ vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img);
 void vimt3d_centre_image_at_origin(vimt3d_image_3d& image);
 
 
+//: Calculate the voxel dimensions from the image transform
+vgl_vector_3d<double> vimt3d_voxel_size_from_transform(const vimt3d_image_3d& image);
+
+
 #endif // vimt3d_image_3d_h_
