@@ -14,6 +14,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_utility.h>
 #include <vcl_set.h>
+#include <vcl_map.h>
 #include <vcl_cassert.h>
 
 #include <vil/algo/vil_binary_dilate.h>
@@ -151,8 +152,20 @@ void bmdl_classify<T>::label_lidar()
   // 2. Cluster the pixels for buildings and apply unique labels
   cluster_buildings();
   
-  // 3. Remove buildings that are two small in area
+  // 3. Merge similar sections
+  while(greedy_merge());
+  
+  // 4. Remove holes
+  while(dilate_buildings(5));
+  
+  // 5. Remove buildings that are two small in area
   threshold_building_area();
+  
+  // 6. Remove holes
+  while(dilate_buildings(5));
+  
+  // 7. Merge similar sections
+  while(greedy_merge());
   
   // 4. Refine building regions with various morphological operations
   refine_buildings();
@@ -233,6 +246,8 @@ void bmdl_classify<T>::cluster_buildings()
 
   // square threshold to compare against squared distances
   T zthresh = 0.01;
+  
+
 
   vcl_vector<unsigned int> count;
   vcl_vector<unsigned int> merge_map;
@@ -255,8 +270,7 @@ void bmdl_classify<T>::cluster_buildings()
     while (idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     T val = last_return_(i,0);
-    T last_val = mean[idx]; //last_return_(i-1,0);
-    if (idx>=0 && vnl_math_sqr(val-last_val)<zthresh) {
+    if (idx>=0 && vnl_math_sqr(val-mean[idx]/*last_return_(i-1,0)*/)<zthresh) {
       labels_(i,0) = idx+3;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
@@ -277,8 +291,7 @@ void bmdl_classify<T>::cluster_buildings()
     while (idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     T val = last_return_(0,j);
-    T last_val = mean[idx]; //last_return_(0,j-1);
-    if (idx>=0 && vnl_math_sqr(val-last_val)<zthresh) {
+    if (idx>=0 && vnl_math_sqr(val-mean[idx]/*last_return_(0,j-1)*/)<zthresh) {
       labels_(0,j) = idx+3;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
@@ -460,6 +473,99 @@ void bmdl_classify<T>::refine_buildings()
 //=========================================================
 // Private helper functions
 
+
+// Merge map helper class
+//=======================
+
+//: Constructor
+template <class T>
+bmdl_classify<T>::merge_map::merge_map(bmdl_classify<T>* c)
+: classifier_(c)
+{
+  assert(c);
+  idx_map_.resize(classifier_->building_mean_hgt_.size());
+  for (unsigned int i=0; i<idx_map_.size(); ++i)
+    idx_map_[i] = i;
+}
+    
+//: Destructor - simplify merge map and apply to classifier
+template <class T>
+bmdl_classify<T>::merge_map::~merge_map()
+{
+  vcl_vector<T>& mean = classifier_->building_mean_hgt_;
+  vcl_vector<unsigned int>& count = classifier_->building_area_;
+  
+  // simplify merge map
+  vcl_vector<vcl_pair<T,int> > unique;
+  for (unsigned int i=0; i<idx_map_.size(); ++i)
+  {
+    if (idx_map_[i] == i) {
+      unique.push_back(vcl_pair<T,int>(mean[i],i));
+      continue;
+    }
+    unsigned int i2 = i;
+    while (idx_map_[i2] != i2 )
+      idx_map_[i] = i2 = idx_map_[i2];
+  }
+  vcl_sort(unique.begin(), unique.end());
+  
+  
+  vcl_vector<T> new_mean(unique.size(),0.0);
+  vcl_vector<unsigned int> new_count(unique.size(),0);
+  
+  vcl_vector<unsigned int> unique_map(idx_map_.size(),0);
+  for (unsigned int i=0; i<unique.size(); ++i) {
+    unique_map[unique[i].second] = i;
+    new_mean[i] = unique[i].first;
+    new_count[i] = count[unique[i].second];
+  }
+  for (unsigned int i=0; i<unique_map.size(); ++i)
+    if (idx_map_[i] != i)
+      unique_map[i] = unique_map[idx_map_[i]];
+  
+  vil_image_view<unsigned int>& labels = classifier_->labels_;
+  unsigned int ni = labels.ni();
+  unsigned int nj = labels.nj();
+  for (unsigned int j=0; j<nj; ++j) {
+    for (unsigned int i=0; i<ni; ++i) {
+      if (labels(i,j)>=2)
+        labels(i,j) = unique_map[labels(i,j)-2]+2;
+    }
+  }
+  mean.swap(new_mean);
+  count.swap(new_count);
+}
+
+//: translate old index to temporary merged index
+template <class T>
+unsigned int 
+bmdl_classify<T>::merge_map::translate(unsigned int idx) const
+{
+  while (idx_map_[idx] != idx) idx = idx_map_[idx];
+  return idx;
+}
+
+//: merge two indices
+template <class T>
+void bmdl_classify<T>::merge_map::merge(unsigned int idx1, unsigned int idx2)
+{
+  idx1 = translate(idx1);
+  idx2 = translate(idx2);
+  if(idx1 == idx2)
+    return;
+  
+  vcl_vector<T>& mean = classifier_->building_mean_hgt_;
+  vcl_vector<unsigned int>& count = classifier_->building_area_;
+  
+  mean[idx1] = (mean[idx1]*count[idx1] + mean[idx2]*count[idx2])
+               /(count[idx1]+count[idx2]);
+  count[idx1] += count[idx2];
+  count[idx2] = 0;
+  idx_map_[idx2] = idx1;
+}
+
+//=======================
+
 //: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
 //  \returns the peak value by reference in \p y_peak
 //  \returns the peak location offset from the x of \p y_0
@@ -575,10 +681,8 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
   unsigned int nj=last_return_.nj();
 
   T zthresh = 0.01;
-
-  vcl_vector<unsigned int> merge_map(means.size());
-  for (unsigned int i=0; i<merge_map.size(); ++i)
-    merge_map[i] = i;
+  
+  merge_map merge(this);
 
   for (unsigned int j=0; j<nj; ++j)
   {
@@ -591,29 +695,25 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
       // collect all adjacent building labels
       vcl_set<int> n;
       if (i>0 && labels_(i-1,j) > 1) {
-        unsigned int idx = labels_(i-1,j)-2;
-        while (merge_map[idx] != idx) idx = merge_map[idx];
+        unsigned int idx = merge.translate(labels_(i-1,j)-2);
         if (vnl_math_sqr(first_return_(i,j) - first_return_(i-1,j)) < zthresh ||
             vnl_math_sqr(last_return_(i,j) - last_return_(i-1,j)) < zthresh )
           n.insert(idx);
       }
       if (j>0 && labels_(i,j-1) > 1) {
-        unsigned int idx = labels_(i,j-1)-2;
-        while (merge_map[idx] != idx) idx = merge_map[idx];
+        unsigned int idx = merge.translate(labels_(i,j-1)-2);
         if (vnl_math_sqr(first_return_(i,j) - first_return_(i,j-1)) < zthresh ||
             vnl_math_sqr(last_return_(i,j) - last_return_(i,j-1)) < zthresh )
           n.insert(idx);
       }
       if (i<ni-1 && labels_(i+1,j) > 1) {
-        unsigned int idx = labels_(i+1,j)-2;
-        while (merge_map[idx] != idx) idx = merge_map[idx];
+        unsigned int idx = merge.translate(labels_(i+1,j)-2);
         if (vnl_math_sqr(first_return_(i,j) - first_return_(i+1,j)) < zthresh ||
             vnl_math_sqr(last_return_(i,j) - last_return_(i+1,j)) < zthresh )
           n.insert(idx);
       }
       if (j<nj-1 && labels_(i,j+1) > 1) {
-        unsigned int idx = labels_(i,j+1)-2;
-        while (merge_map[idx] != idx) idx = merge_map[idx];
+        unsigned int idx = merge.translate(labels_(i,j+1)-2);
         if (vnl_math_sqr(first_return_(i,j) - first_return_(i,j+1)) < zthresh ||
             vnl_math_sqr(last_return_(i,j) - last_return_(i,j+1)) < zthresh )
           n.insert(idx);
@@ -625,11 +725,7 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
         // test for merge
         if (labels_(i,j) > 1) {
           unsigned int other = labels_(i,j)-2;
-          means[other] = (means[other]*sizes[other] + means[*itr]*sizes[*itr])
-                        /(sizes[other]+sizes[*itr]);
-          sizes[other] += sizes[*itr];
-          sizes[*itr] = 0;
-          merge_map[*itr] = other;
+          merge.merge(other,*itr);
         }
         else {
           labels_(i,j) = *itr+2;
@@ -639,44 +735,125 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
     }
   }
 
-  // simplify merge map
-  vcl_vector<vcl_pair<T,int> > unique;
-  for (unsigned int i=0; i<merge_map.size(); ++i)
-  {
-    if (merge_map[i] == i) {
-      unique.push_back(vcl_pair<T,int>(means[i],i));
-      continue;
-    }
-    unsigned int i2 = i;
-    while (merge_map[i2] != i2 )
-      merge_map[i] = i2 = merge_map[i2];
-  }
-  vcl_sort(unique.begin(), unique.end());
-  //vcl_cout << "num unique = "<<unique.size() << vcl_endl;
-
-  vcl_vector<T> new_means(unique.size(),0.0);
-  vcl_vector<unsigned int> new_sizes(unique.size(),0);
-
-  vcl_vector<unsigned int> unique_map(merge_map.size(),0);
-  for (unsigned int i=0; i<unique.size(); ++i) {
-    unique_map[unique[i].second] = i;
-    new_means[i] = unique[i].first;
-    new_sizes[i] = sizes[unique[i].second];
-  }
-  for (unsigned int i=0; i<unique_map.size(); ++i)
-    if (merge_map[i] != i)
-      unique_map[i] = unique_map[merge_map[i]];
-
-  for (unsigned int j=0; j<nj; ++j) {
-    for (unsigned int i=0; i<ni; ++i) {
-      if (labels_(i,j)>1)
-        labels_(i,j) = unique_map[labels_(i,j)-2]+2;
-    }
-  }
-
-  means.swap(new_means);
-  sizes.swap(new_sizes);
   return changed;
+}
+
+
+//: Dilate buildings into unclaimed (vegetation) pixel
+//  only claim a vegetation pixel if surrounded by 
+//  \a num pixels from the same building
+template <class T>
+bool bmdl_classify<T>::dilate_buildings(unsigned int num)
+{
+  bool changed = false;
+  unsigned int ni=first_return_.ni()-1;
+  unsigned int nj=last_return_.nj()-1;  
+
+  for (unsigned int j=1; j<nj; ++j)
+  {
+    for (unsigned int i=1; i<ni; ++i)
+    {
+      // only expand into non-buildings
+      if (labels_(i,j) != 1)
+        continue;
+      
+      // collect all adjacent building labels
+      vcl_map<int,unsigned int> n;
+      int offset_x[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+      int offset_y[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+      unsigned total = 0;
+      for(unsigned int k=0; k<8; ++k)
+      {
+        int idx = labels_(i+offset_x[k], j+offset_y[k])-2;
+        if (idx<0) continue; 
+        ++total;
+        vcl_map<int,unsigned int>::iterator itr = n.find(idx);
+        if(itr == n.end())
+          n.insert(vcl_pair<int,unsigned int>(idx,1));
+        else
+          ++(itr->second);
+      }
+
+      if (n.empty())
+        continue;
+      
+      if(total < num)
+        continue;
+      
+      unsigned int max = 0;
+      for (vcl_map<int,unsigned>::iterator itr=n.begin(); itr!=n.end(); ++itr) 
+      {
+        if (itr->second > max) {
+          max = itr->second;
+          if(labels_(i,j) >= 2)
+            --building_area_[labels_(i,j)-2];
+          labels_(i,j) = itr->first+2;
+          ++building_area_[itr->first];
+          changed = true;
+        }
+      }
+    }
+  }  
+
+  return changed;
+}
+
+
+//: Greedy merging of adjacent buildings
+template <class T>
+bool bmdl_classify<T>::greedy_merge()
+{
+  unsigned int ni=labels_.ni();
+  unsigned int nj=labels_.nj();
+  // map of number of pixels adjacent between two buildings 
+  typedef vcl_pair<unsigned int,unsigned int> upair;
+  vcl_set<upair> adjacent;
+  
+  T zthresh = 0.1;
+  
+  for (unsigned int j=0; j<nj; ++j) {
+    for (unsigned int i=1; i<ni; ++i) {
+      unsigned int l1 = labels_(i,j);  
+      unsigned int l2 = labels_(i-1,j);
+      if(l1<2 || l2<2 || l1==l2) continue;
+      if(l1>l2) vcl_swap(l1,l2);
+      adjacent.insert(upair(l1-2,l2-2));
+    }
+  }
+  
+  for (unsigned int j=1; j<nj; ++j) {
+    for (unsigned int i=0; i<ni; ++i) {
+      unsigned int l1 = labels_(i,j);  
+      unsigned int l2 = labels_(i,j-1);
+      if(l1<2 || l2<2 || l1==l2) continue;
+      if(l1>l2) vcl_swap(l1,l2);
+      adjacent.insert(upair(l1-2,l2-2));
+    }
+  }
+  
+  vcl_vector<upair> to_merge;
+  for(vcl_set<upair>::iterator itr=adjacent.begin(); 
+      itr!=adjacent.end(); ++itr)
+  {
+    unsigned int idx1 = itr->first;
+    unsigned int idx2 = itr->second;
+    if(vcl_abs(building_mean_hgt_[idx1] - building_mean_hgt_[idx2]) < zthresh)
+      to_merge.push_back(*itr);
+  }
+  
+  if(to_merge.empty())
+    return false;
+  
+  merge_map merge(this);
+  
+  for(unsigned int i=0; i<to_merge.size(); ++i)
+  {
+    unsigned int idx1 = merge.translate(to_merge[i].first);
+    unsigned int idx2 = merge.translate(to_merge[i].second);
+    merge.merge(idx1,idx2);
+  }
+  
+  return true;
 }
 
 
@@ -766,6 +943,27 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
   }
   labels_ = new_labels;
   return valid;
+}
+
+
+//: Group building pixel by height into bins of size \a binsize
+template <class T>
+void bmdl_classify<T>::bin_heights(T binsize)
+{
+  unsigned int ni=first_return_.ni();
+  unsigned int nj=first_return_.nj();
+  
+  for (unsigned int j=0; j<nj; ++j)
+  {
+    for (unsigned int i=0; i<ni; ++i)
+    {
+      if(labels_(i,j) < 2)
+        continue;
+      int bin = static_cast<int>(first_return_(i,j) - first_min_)/binsize;
+      labels_(i,j) = bin+2;
+    }
+  }
+  
 }
 
 

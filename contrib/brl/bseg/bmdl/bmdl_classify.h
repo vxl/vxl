@@ -82,6 +82,14 @@ class bmdl_classify
   // are removed and replace with a vegetation label.
   void threshold_building_area();
   
+  //: Dilate buildings into unclaimed (vegetation) pixel
+  //  only claim a vegetation pixel if surrounded by 
+  //  \a num pixels from the same building
+  bool dilate_buildings(unsigned int num=6);
+  
+  //: Greedy merging of adjacent buildings
+  bool greedy_merge();
+  
 
   //: Refine the building regions
   void refine_buildings();
@@ -97,6 +105,24 @@ class bmdl_classify
   const vcl_vector<unsigned int>& building_area() const { return building_area_; }
 
  private:
+  //: A helper class to manage merging of buildings
+  class merge_map
+  {
+  public:
+    //: Constructor
+    merge_map(bmdl_classify<T>* c);
+    //: Destructor - simplify merge map and apply to classifier
+    ~merge_map();
+    //: translate old index to temporary merged index 
+    unsigned int translate(unsigned int idx) const;
+    //: merge two indices
+    void merge(unsigned int idx1, unsigned int idx2);
+  private:
+    bmdl_classify<T>* classifier_;
+    vcl_vector<unsigned int> idx_map_;
+  };
+  
+  friend class merge_map;
 
   //: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
   //  \returns the peak value by reference in \p y_peak
@@ -122,6 +148,10 @@ class bmdl_classify
   //  Return true if any changes are made
   bool expand_buildings(vcl_vector<T>& means,
                         vcl_vector<unsigned int>& sizes);
+  
+  //: Group building pixel by height into bins of size \a binsize
+  void bin_heights(T binsize = 0.5);
+
 
   //: Morphological clean up on each building independently
   vcl_vector<bool> close_buildings(unsigned int num_labels);
