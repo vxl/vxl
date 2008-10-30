@@ -113,6 +113,9 @@ class brip_vil_float_ops
             vil_image_view<float> const& Iyy);
 
 
+  //: Find ansiotropic intensity extrema mask. Theta is in degrees
+  static vbl_array_2d<bool> extrema_mask(float lambda0, float lambda1, float theta);
+
   //: Find ansiotropic intensity extrema. Theta is in degrees
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
@@ -145,6 +148,12 @@ class brip_vil_float_ops
                                                float min_scale,
                                                float max_scale,
                                                float scale_inc);
+  //: exactly same as max_scale_trace, only return the image with actual trace values
+  //  at max scales instead of the image with max scale values
+  static vil_image_view<float> max_scale_trace_value(vil_image_view<float> input,
+                                                      float min_scale,
+                                                      float max_scale,
+                                                      float scale_inc);
 
   //: computes Lucas-Kanade optical flow on a 2n+1 neighborhood
   static void Lucas_KanadeMotion(vil_image_view<float>& current_frame,

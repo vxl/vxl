@@ -19,6 +19,11 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_transpose.h>
+
+#include <vil/vil_convert.h>
+#include <vil/vil_save.h>
+#include <vil/vil_new.h>
+
 #include <vil/vil_math.h>
 #include <vil/vil_pixel_traits.h>
 #include <vil/algo/vil_convolve_1d.h>
@@ -897,6 +902,139 @@ max_scale_trace(vil_image_view<float> input,
   }
   return sc;
 }
+
+//: exactly same as max_scale_trace, only return the image with actual trace values
+//  at max scales instead of the image with max scale values
+vil_image_view<float> brip_vil_float_ops::
+max_scale_trace_value(vil_image_view<float> input,
+                       float min_scale, float max_scale, float scale_inc)
+{
+  unsigned ni = input.ni(), nj = input.nj();
+  vil_image_view<float> tr_max, sc;
+  tr_max.set_size(ni, nj);
+  tr_max.fill(0.0f);
+  sc.set_size(ni, nj);
+  sc.fill(min_scale);
+  for (float s = min_scale; s<=max_scale; s+=scale_inc)
+  {
+    vil_image_view<float> smooth = brip_vil_float_ops::gaussian(input, s);
+    unsigned N = static_cast<unsigned>(2.0f*s);
+    vil_image_view<float> tr =
+      brip_vil_float_ops::trace_grad_matrix_NxN(smooth, N);
+    for (unsigned r = 0; r<nj; ++r)
+      for (unsigned c = 0; c<ni; ++c)
+      {
+        float trv = s*s*tr(c,r);
+        if (trv>tr_max(c,r))
+        {
+          tr_max(c,r) = trv;
+          sc(c,r) = s;
+        }
+      }
+  }
+  // mask the region where integration region extends outside the image borders
+  unsigned N = static_cast<unsigned>(5.0f*max_scale);
+  unsigned njmax = nj-N;
+  unsigned nimax = ni-N;
+  for (unsigned r = 0; r<nj; ++r) 
+    for (unsigned c = 0; c<ni; ++c)
+    {
+      if (r <= N || r >= njmax || c <= N || c >= nimax)
+        tr_max(c,r) = 0.0f;
+    }
+
+  // normalize the trace values
+  float min_b,max_b;
+  vil_math_value_range(tr_max,min_b,max_b);
+  vcl_cout << "in trace max image min value: " << min_b << " max value: " << max_b << vcl_endl;
+  
+  vil_image_view<double> tr_normalized, tr_stretched;
+  vil_convert_stretch_range(tr_max, tr_normalized, 0.0f, 1.0f);
+  vil_convert_stretch_range(tr_max, tr_stretched, 0.0f, 255.0f);
+  vil_image_view<float> tr_cast;
+  vil_convert_cast(tr_stretched, tr_cast);
+  vil_image_view<vxl_byte> tr_cast_byte;
+  vil_convert_cast(tr_stretched, tr_cast_byte);
+  vil_save_image_resource(vil_new_image_resource_of_view(tr_cast_byte), "D:\\projects\\vehicle_rec_on_models\\trace_image.png");
+
+/*
+  // investigate illumination invariance
+  vil_image_view<float> modified_input = input;
+  vil_image_view<float> const_image(ni, nj);
+  const_image.fill(3.0f);
+  for (unsigned r = 0; r<nj; ++r) 
+    for (unsigned c = 0; c<ni; ++c)
+    {
+      if (modified_input(c,r) < 120 || modified_input(c,r) > 95) = modified_input(c,r)*const_image(c,r);
+    }
+
+  vil_image_view<vxl_byte> mod_cast;
+  vil_convert_cast(modified_input, mod_cast);
+  vil_save_image_resource(vil_new_image_resource_of_view(mod_cast), "D:\\projects\\vehicle_rec_on_models\\modified_image.png");
+
+  vil_image_view<float> tr_max2, sc2;
+  tr_max2.set_size(ni, nj);
+  tr_max2.fill(0.0f);
+  sc2.set_size(ni, nj);
+  sc2.fill(min_scale);
+  for (float s = min_scale; s<=max_scale; s+=scale_inc)
+  {
+    vil_image_view<float> smooth = brip_vil_float_ops::gaussian(modified_input, s);
+    unsigned N = static_cast<unsigned>(2.0f*s);
+    vil_image_view<float> tr =
+      brip_vil_float_ops::trace_grad_matrix_NxN(smooth, N);
+    for (unsigned r = 0; r<nj; ++r)
+      for (unsigned c = 0; c<ni; ++c)
+      {
+        float trv = s*s*tr(c,r);
+        if (trv>tr_max2(c,r))
+        {
+          tr_max2(c,r) = trv;
+          sc2(c,r) = s;
+        }
+      }
+  }
+  // mask the region where integration region extends outside the image borders
+  for (unsigned r = 0; r<nj; ++r) 
+    for (unsigned c = 0; c<ni; ++c)
+    {
+      if (r <= N || r >= njmax || c <= N || c >= nimax)
+        tr_max2(c,r) = 0.0f;
+    }
+
+  vil_math_value_range(tr_max2,min_b,max_b);
+  vcl_cout << "in trace max2 image min value: " << min_b << " max value: " << max_b << vcl_endl;
+  
+  // normalize
+  vil_image_view<double> tr_normalized2;
+  vil_convert_stretch_range(tr_max2, tr_normalized2, 0.0f, 1.0f);
+  
+  vil_image_view<double> difference_image = tr_normalized;
+  for (unsigned r = 0; r<nj; ++r) 
+    for (unsigned c = 0; c<ni; ++c)
+    {
+     difference_image(c,r) = vcl_abs(difference_image(c,r) - tr_normalized2(c,r));
+    }
+  double min_bd, max_bd;
+  vil_math_value_range(difference_image,min_bd,max_bd);
+  vcl_cout << "in difference image of normalized trace images min value: " << min_bd << " max value: " << max_bd << vcl_endl;
+  vil_image_view<vxl_byte> dif_cast;
+  vil_convert_cast(difference_image, dif_cast);
+  vil_save_image_resource(vil_new_image_resource_of_view(dif_cast), "D:\\projects\\vehicle_rec_on_models\\difference_image.png");
+  
+  vil_image_view<double> tr_stretched2;
+  vil_convert_stretch_range(tr_max2, tr_stretched2, 0.0f, 255.0f);
+  vil_image_view<float> tr_cast2;
+  vil_convert_cast(tr_stretched2, tr_cast2);
+  vil_image_view<vxl_byte> tr_cast2_byte;
+  vil_convert_cast(tr_stretched2, tr_cast2_byte);
+  vil_save_image_resource(vil_new_image_resource_of_view(tr_cast2_byte), "D:\\projects\\vehicle_rec_on_models\\trace_image2.png");
+
+  return tr_cast2;
+  */
+  return tr_cast;
+}
+
 
 //---------------------------------------------------------------------
 // Lucas-Kanade motion vectors:  Solve for the motion vectors over a
@@ -3516,6 +3654,55 @@ static double brip_vil_rot_gauss(double x, double y,
   return static_cast<double>(vcl_exp(-0.5*(ax*ax + ay*ay)));
 }
 
+vbl_array_2d<bool>
+brip_vil_float_ops::extrema_mask(float lambda0, float lambda1, float theta) {
+  
+  //convert theta to radians
+  double theta_rad = theta*vnl_math::pi/180.0;
+  double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
+  double s0 = lambda0, s1 = lambda1;
+
+  double s1sq = 1.0/(s1*s1);
+  //determine the size of the array
+  double max_v = brip_vil_rot_gauss(0, 0, s0, s1, 0);
+  double cutoff = max_v*0.01; // 1% tails removed
+  bool reached_cutoff = false;
+  unsigned ru = 0;
+  for (; !reached_cutoff; ++ru)
+    reached_cutoff = brip_vil_rot_gauss(ru, 0, s0, s1, 0)<cutoff;
+  reached_cutoff = false;
+  unsigned rv = 0;
+  for (; !reached_cutoff; ++rv)
+    reached_cutoff = brip_vil_rot_gauss(0, rv, s0, s1, 0)<cutoff;
+
+  //rotate to get bounds
+  int ri = static_cast<int>(vcl_fabs(ru*c+rv*s) +0.5);
+  int rj = static_cast<int>(vcl_fabs(ru*s+rv*c) +0.5);
+  if (s<0){
+    ri = static_cast<int>(vcl_fabs(ru*c-rv*s) +0.5);
+    rj = static_cast<int>(vcl_fabs(ru*s-rv*c) +0.5);
+  }
+
+  unsigned ncols = 2*ri +1, nrows = 2*rj+1;
+  vbl_array_2d<double> coef(nrows, ncols);
+  vbl_array_2d<bool> mask(nrows,ncols);
+  double residual = 0.0, total  = 0.0;
+  for (int ry = -rj; ry<=rj; ++ry)
+    for (int rx = -ri; rx<=ri; ++rx)
+    {
+      double g = brip_vil_rot_gauss(rx, ry, s0, s1, theta);
+      mask[ry+rj][rx+ri] = g>=cutoff;
+      double temp = (-s*rx + c*ry);
+      temp = temp*temp*s1sq;
+      double v = (temp -1)*g;
+      coef[ry+rj][rx+ri] = v;
+      residual+=v;
+      total += vcl_fabs(v);
+    }
+
+  return mask;
+}
+
 
 vil_image_view<float>
 brip_vil_float_ops::extrema(vil_image_view<float> const& input,
@@ -3523,7 +3710,6 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
                             bool bright, bool output_response_mask)
 {
   //convert theta to radians
-
   double theta_rad = theta*vnl_math::pi/180.0;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
   double s0 = lambda0, s1 = lambda1;
