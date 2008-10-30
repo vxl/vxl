@@ -205,7 +205,7 @@ void bmdl_classify<T>::segment()
   labels_.set_size(ni,nj);
 
   // ground threshold (3 standard deviations from bare earth)
-  T gthresh = 3.0*hgt_stdev_;
+  T gthresh = 2.0; //3.0*hgt_stdev_;
   // vegetation threshold (3 standard deviation from difference in returns)
   T vthresh = 1.0 + 3.0*vcl_sqrt(2.0)*hgt_stdev_;
   for (unsigned int j=0; j<nj; ++j) {
@@ -247,10 +247,11 @@ void bmdl_classify<T>::cluster_buildings()
   // square threshold to compare against squared distances
   T zthresh = 0.01;
   
-
-
-  vcl_vector<unsigned int> count;
+  // bin building heights 
+  vil_image_view<unsigned int> bin_img = bin_heights(0.5);
+  
   vcl_vector<unsigned int> merge_map;
+  vcl_vector<unsigned int> count;
   vcl_vector<T> mean;
 
   // handle first pixel
@@ -259,19 +260,19 @@ void bmdl_classify<T>::cluster_buildings()
     count.push_back(1);
     merge_map.push_back(merge_map.size());
     mean.push_back(last_return_(0,0));
-    labels_(0,0) = count.size()+2;
+    labels_(0,0) = count.size()+1;
   }
   // handle first row
   for (unsigned int i=1; i<ni; ++i) {
     if (labels_(i,0)!=2)
       continue;
 
-    int idx = labels_(i-1,0)-3;
+    int idx = labels_(i-1,0)-2;
     while (idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     T val = last_return_(i,0);
-    if (idx>=0 && vnl_math_sqr(val-mean[idx]/*last_return_(i-1,0)*/)<zthresh) {
-      labels_(i,0) = idx+3;
+    if (idx>=0 && bin_img(i-1,0) == bin_img(i,0)) {
+      labels_(i,0) = idx+2;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
     }
@@ -279,7 +280,7 @@ void bmdl_classify<T>::cluster_buildings()
       count.push_back(1);
       merge_map.push_back(merge_map.size());
       mean.push_back(val);
-      labels_(i,0) = count.size()+2;
+      labels_(i,0) = count.size()+1;
     }
   }
   // handle first column
@@ -287,12 +288,12 @@ void bmdl_classify<T>::cluster_buildings()
     if (labels_(0,j)!=2)
       continue;
 
-    int idx = labels_(0,j-1)-3;
+    int idx = labels_(0,j-1)-2;
     while (idx>=0 && merge_map[idx] != idx )
       idx = merge_map[idx];
     T val = last_return_(0,j);
-    if (idx>=0 && vnl_math_sqr(val-mean[idx]/*last_return_(0,j-1)*/)<zthresh) {
-      labels_(0,j) = idx+3;
+    if (idx>=0 && bin_img(0,j-1) == bin_img(0,j)) {
+      labels_(0,j) = idx+2;
       mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
       ++count[idx];
     }
@@ -300,7 +301,7 @@ void bmdl_classify<T>::cluster_buildings()
       count.push_back(1);
       merge_map.push_back(merge_map.size());
       mean.push_back(val);
-      labels_(0,j) = count.size()+2;
+      labels_(0,j) = count.size()+1;
     }
   }
 
@@ -313,20 +314,20 @@ void bmdl_classify<T>::cluster_buildings()
         continue;
 
       T val = last_return_(i,j);
-      int idx1 = labels_(i-1,j)-3, idx2 = labels_(i,j-1)-3;
+      int idx1 = labels_(i-1,j)-2, idx2 = labels_(i,j-1)-2;
       while (idx1>=0 && merge_map[idx1] != idx1 )
         idx1 = merge_map[idx1];
       while (idx2>=0 && merge_map[idx2] != idx2 )
         idx2 = merge_map[idx2];
       int idx = -1;
-      if (idx1>=0 && vnl_math_sqr(val-mean[idx1]/*last_return_(i-1,j)*/)<zthresh)
+      if (idx1>=0 && (bin_img(i-1,j) == bin_img(i,j)) )
         idx = idx1;
-      if (idx2>=0 && vnl_math_sqr(val-mean[idx2]/*last_return_(i,j-1)*/)<zthresh)
+      if (idx2>=0 && (bin_img(i,j-1) == bin_img(i,j)) )
       {
         if (idx == -1 || idx1 == idx2)
           idx = idx2;
         else {
-          labels_(i,j) = idx1+3;
+          labels_(i,j) = idx1+2;
           mean[idx1] = (mean[idx1]*count[idx1] + mean[idx2]*count[idx2] + val)
                       /(count[idx1]+count[idx2]+1);
           count[idx1] += count[idx2]+1;
@@ -337,7 +338,7 @@ void bmdl_classify<T>::cluster_buildings()
       }
 
       if (idx >= 0 ) {
-        labels_(i,j) = idx+3;
+        labels_(i,j) = idx+2;
         mean[idx] = (mean[idx]*count[idx] + val)/(count[idx]+1);
         ++count[idx];
       }
@@ -345,7 +346,7 @@ void bmdl_classify<T>::cluster_buildings()
         count.push_back(1);
         merge_map.push_back(merge_map.size());
         mean.push_back(val);
-        labels_(i,j) = count.size()+2;
+        labels_(i,j) = count.size()+1;
       }
     }
   }
@@ -381,7 +382,7 @@ void bmdl_classify<T>::cluster_buildings()
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       if (labels_(i,j)>2)
-        labels_(i,j) = unique_map[labels_(i,j)-3]+2;
+        labels_(i,j) = unique_map[labels_(i,j)-2]+2;
     }
   }
   
@@ -809,7 +810,7 @@ bool bmdl_classify<T>::greedy_merge()
   typedef vcl_pair<unsigned int,unsigned int> upair;
   vcl_set<upair> adjacent;
   
-  T zthresh = 0.1;
+  T zthresh = 0.5;
   
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=1; i<ni; ++i) {
@@ -948,22 +949,27 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
 
 //: Group building pixel by height into bins of size \a binsize
 template <class T>
-void bmdl_classify<T>::bin_heights(T binsize)
+vil_image_view<unsigned int> bmdl_classify<T>::bin_heights(T binsize)
 {
-  unsigned int ni=first_return_.ni();
-  unsigned int nj=first_return_.nj();
+  unsigned int ni=last_return_.ni();
+  unsigned int nj=last_return_.nj();
+  
+  vil_image_view<unsigned int> bin_img(ni,nj);
   
   for (unsigned int j=0; j<nj; ++j)
   {
     for (unsigned int i=0; i<ni; ++i)
     {
       if(labels_(i,j) < 2)
+      {
+        bin_img(i,j) = labels_(i,j);
         continue;
-      int bin = static_cast<int>(first_return_(i,j) - first_min_)/binsize;
-      labels_(i,j) = bin+2;
+      }
+      int bin = static_cast<int>(last_return_(i,j) - last_min_)/binsize;
+      bin_img(i,j) = bin+2;
     }
   }
-  
+  return bin_img;
 }
 
 

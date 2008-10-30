@@ -150,7 +150,7 @@ class bmdl_classify
                         vcl_vector<unsigned int>& sizes);
   
   //: Group building pixel by height into bins of size \a binsize
-  void bin_heights(T binsize = 0.5);
+  vil_image_view<unsigned int> bin_heights(T binsize = 0.5);
 
 
   //: Morphological clean up on each building independently
