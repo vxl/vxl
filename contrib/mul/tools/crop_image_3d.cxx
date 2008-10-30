@@ -150,19 +150,19 @@ int main2(int argc, char*argv[])
     vcl_cerr << "ERROR: Crop region bbox lower corner is outside input image.\n";
     return 2;
   }
-  if (i0+ni >= ir->ni())
+  if (i0+ni > ir->ni())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner i was outside input image; truncating to fit.");
     vcl_cerr << "WARNING: Crop region bbox upper corner i was outside input image; truncating to fit.\n";
     ni = ir->ni()-i0;
   }
-  if (j0+nj >= ir->nj())
+  if (j0+nj > ir->nj())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner j was outside input image; truncating to fit.");
     vcl_cerr << "WARNING: Crop region bbox upper corner j was outside input image; truncating to fit.\n";
     nj = ir->nj()-j0;
   }
-  if (k0+nk >= ir->nk())
+  if (k0+nk > ir->nk())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner k was outside input image; truncating to fit.");
     vcl_cerr << "WARNING: Crop region bbox upper corner k was outside input image; truncating to fit.\n";
