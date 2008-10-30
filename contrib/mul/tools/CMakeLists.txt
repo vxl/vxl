@@ -20,3 +20,6 @@ TARGET_LINK_LIBRARIES(image3d_math vimt3d mbl)
 
 ADD_EXECUTABLE( index_sort index_sort.cxx )
 TARGET_LINK_LIBRARIES(index_sort mbl)
+
+ADD_EXECUTABLE( multiplane_image multiplane_image.cxx )
+TARGET_LINK_LIBRARIES(multiplane_image vimt3d mbl)
