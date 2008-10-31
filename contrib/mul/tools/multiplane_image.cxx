@@ -57,7 +57,9 @@ int main2(int argc, char*argv[])
   vul_arg<vcl_string> img1(0, "input image1 filename");
   vul_arg<vcl_string> img2(0, "input image2 filename");
   vul_arg<vcl_string> img_out(0, "output image filename");
-  vul_arg<bool> use_mm("-mm", "Use mm", true);
+  vul_arg<bool> use_mm("-mm", "Image transform in millimetres (default=metres)", false);
+  vul_arg<float> s1("-s1", "Scaling factor to multiply voxels in image1", 1.0f);
+  vul_arg<float> s2("-s2", "Scaling factor to multiply voxels in image2", 1.0f);
   vul_arg_parse(argc, argv);
    
   // Load first image
@@ -76,6 +78,7 @@ int main2(int argc, char*argv[])
   MBL_LOG(INFO, logger(), "nk: " << nk);
   MBL_LOG(INFO, logger(), "np: " << np1);
   MBL_LOG(INFO, logger(), "pixfmt: " << fmt);
+  MBL_LOG(INFO, logger(), "scaling: " << s1());
 
   // Second image must have the same dimensions, transform and pixel type
   vil3d_image_resource_sptr ir2 = 0;
@@ -93,7 +96,8 @@ int main2(int argc, char*argv[])
   MBL_LOG(INFO, logger(), "nk: " << nk2);
   MBL_LOG(INFO, logger(), "np: " << np2);
   MBL_LOG(INFO, logger(), "pixfmt: " << fmt2);
-  
+  MBL_LOG(INFO, logger(), "scaling: " << s2());
+
   if (!(w2i2==w2i) || ni2!=ni || nj2!=nj || nk2!=nk || fmt2!=fmt)
   {
     vcl_cerr << "ERROR: input images must have same dimensions, transform and pixel type" << vcl_endl;
@@ -124,12 +128,11 @@ int main2(int argc, char*argv[])
       {
         for (unsigned i=0; i<ni; ++i)
         {
-          img.image()(i,j,k,pp) = imgview(i,j,k,p);
+          img.image()(i,j,k,pp) = s1() * imgview(i,j,k,p);
         }
       }
     }
   }
-  vcl_cout << "Copied image pixel data from image 1" << vcl_endl;
 
   // Copy image2 data
   imgview = ir2->get_view();
@@ -142,16 +145,15 @@ int main2(int argc, char*argv[])
       {
         for (unsigned i=0; i<ni2; ++i)
         {
-          img.image()(i,j,k,pp) = imgview(i,j,k,p);
+          img.image()(i,j,k,pp) = s2() * imgview(i,j,k,p);
         }
       }
     }
   }
-  vcl_cout << "Copied image pixel data from image 2" << vcl_endl;
 
   // Write the combined image to disk
   vimt3d_save(img_out(), img, use_mm());
-  MBL_LOG(INFO, logger(), "Wrote combined image to file: " << img_out());
+  vcl_cout << "Wrote combined image to file: " << img_out() << vcl_endl;
 
   return 0;
 }
