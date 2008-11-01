@@ -4,12 +4,8 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
 #include <core/vil_pro/vil_io_image_view_base.h>
 
 //: Constructor

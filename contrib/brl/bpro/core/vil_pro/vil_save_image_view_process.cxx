@@ -8,8 +8,6 @@
 #include <vcl_string.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
 
 //: Constructor
 vil_save_image_view_process::vil_save_image_view_process()
