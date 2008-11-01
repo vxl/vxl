@@ -672,7 +672,7 @@ bool trace_texture(const imesh_mesh& mesh,
       fi = he.face_begin(fidx);
       unsigned char s2 = 0;
       for (; fi->half_edge_index() != heidx && s2<4; ++s2, ++fi)
-	;
+        ;
       bary.set(0,0);
       switch (s2)
       {
@@ -740,7 +740,7 @@ bool trace_texture(const imesh_mesh& mesh,
       fi = he.face_begin(fidx);
       unsigned char s2 = 0;
       for (; fi->vert_index() != vidx && s2<4; ++s2, ++fi)
-	;
+        ;
       bary.set(0,0);
       switch (s2)
       {
