@@ -4,14 +4,10 @@
 //  \brief Combine 2 images into a single image with multiple planes
 
 #include <vcl_exception.h>
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 #include <mbl/mbl_log.h>
-#include <vil/vil_load.h>
-#include <vimt/vimt_add_all_binary_loaders.h>
+#include <vil/vil_pixel_format.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_transform_3d.h>
@@ -30,15 +26,15 @@ static mbl_logger& logger()
 
 //========================================================================
 //========================================================================
-static bool load_image_resource_info(const vcl_string& filename, 
+static bool load_image_resource_info(const vcl_string& filename,
                                      const bool use_mm,
                                      vil3d_image_resource_sptr& ir,
                                      vimt3d_transform_3d& w2i)
 {
   ir = vil3d_load_image_resource(filename.c_str());
-  if (!ir) 
+  if (!ir)
   {
-    vcl_cerr << "ERROR: failed to load image resource for " << filename << vcl_endl;
+    vcl_cerr << "ERROR: failed to load image resource for " << filename << '\n';
     return false;
   }
   w2i = vimt3d_load_transform(ir, use_mm);
@@ -61,7 +57,7 @@ int main2(int argc, char*argv[])
   vul_arg<float> s1("-s1", "Scaling factor to multiply voxels in image1", 1.0f);
   vul_arg<float> s2("-s2", "Scaling factor to multiply voxels in image2", 1.0f);
   vul_arg_parse(argc, argv);
-   
+
   // Load first image
   vil3d_image_resource_sptr ir1 = 0;
   vimt3d_transform_3d w2i;
@@ -100,7 +96,7 @@ int main2(int argc, char*argv[])
 
   if (!(w2i2==w2i) || ni2!=ni || nj2!=nj || nk2!=nk || fmt2!=fmt)
   {
-    vcl_cerr << "ERROR: input images must have same dimensions, transform and pixel type" << vcl_endl;
+    vcl_cerr << "ERROR: input images must have same dimensions, transform and pixel type" << '\n';
     return 2;
   }
 
