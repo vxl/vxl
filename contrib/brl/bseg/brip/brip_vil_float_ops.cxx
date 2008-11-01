@@ -27,7 +27,6 @@
 #include <vil/vil_math.h>
 #include <vil/vil_pixel_traits.h>
 #include <vil/algo/vil_convolve_1d.h>
-#include <vil/vil_new.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -903,11 +902,10 @@ max_scale_trace(vil_image_view<float> input,
   return sc;
 }
 
-//: exactly same as max_scale_trace, only return the image with actual trace values
-//  at max scales instead of the image with max scale values
+//: exactly same as max_scale_trace, only return the image with actual trace values at max scales instead of the image with max scale values
 vil_image_view<float> brip_vil_float_ops::
 max_scale_trace_value(vil_image_view<float> input,
-                       float min_scale, float max_scale, float scale_inc)
+                      float min_scale, float max_scale, float scale_inc)
 {
   unsigned ni = input.ni(), nj = input.nj();
   vil_image_view<float> tr_max, sc;
@@ -936,7 +934,7 @@ max_scale_trace_value(vil_image_view<float> input,
   unsigned N = static_cast<unsigned>(5.0f*max_scale);
   unsigned njmax = nj-N;
   unsigned nimax = ni-N;
-  for (unsigned r = 0; r<nj; ++r) 
+  for (unsigned r = 0; r<nj; ++r)
     for (unsigned c = 0; c<ni; ++c)
     {
       if (r <= N || r >= njmax || c <= N || c >= nimax)
@@ -947,7 +945,7 @@ max_scale_trace_value(vil_image_view<float> input,
   float min_b,max_b;
   vil_math_value_range(tr_max,min_b,max_b);
   vcl_cout << "in trace max image min value: " << min_b << " max value: " << max_b << vcl_endl;
-  
+
   vil_image_view<double> tr_normalized, tr_stretched;
   vil_convert_stretch_range(tr_max, tr_normalized, 0.0f, 1.0f);
   vil_convert_stretch_range(tr_max, tr_stretched, 0.0f, 255.0f);
@@ -957,12 +955,12 @@ max_scale_trace_value(vil_image_view<float> input,
   vil_convert_cast(tr_stretched, tr_cast_byte);
   vil_save_image_resource(vil_new_image_resource_of_view(tr_cast_byte), "D:\\projects\\vehicle_rec_on_models\\trace_image.png");
 
-/*
+#if 0 // commented out
   // investigate illumination invariance
   vil_image_view<float> modified_input = input;
   vil_image_view<float> const_image(ni, nj);
   const_image.fill(3.0f);
-  for (unsigned r = 0; r<nj; ++r) 
+  for (unsigned r = 0; r<nj; ++r)
     for (unsigned c = 0; c<ni; ++c)
     {
       if (modified_input(c,r) < 120 || modified_input(c,r) > 95) = modified_input(c,r)*const_image(c,r);
@@ -995,7 +993,7 @@ max_scale_trace_value(vil_image_view<float> input,
       }
   }
   // mask the region where integration region extends outside the image borders
-  for (unsigned r = 0; r<nj; ++r) 
+  for (unsigned r = 0; r<nj; ++r)
     for (unsigned c = 0; c<ni; ++c)
     {
       if (r <= N || r >= njmax || c <= N || c >= nimax)
@@ -1004,13 +1002,13 @@ max_scale_trace_value(vil_image_view<float> input,
 
   vil_math_value_range(tr_max2,min_b,max_b);
   vcl_cout << "in trace max2 image min value: " << min_b << " max value: " << max_b << vcl_endl;
-  
+
   // normalize
   vil_image_view<double> tr_normalized2;
   vil_convert_stretch_range(tr_max2, tr_normalized2, 0.0f, 1.0f);
-  
+
   vil_image_view<double> difference_image = tr_normalized;
-  for (unsigned r = 0; r<nj; ++r) 
+  for (unsigned r = 0; r<nj; ++r)
     for (unsigned c = 0; c<ni; ++c)
     {
      difference_image(c,r) = vcl_abs(difference_image(c,r) - tr_normalized2(c,r));
@@ -1021,7 +1019,7 @@ max_scale_trace_value(vil_image_view<float> input,
   vil_image_view<vxl_byte> dif_cast;
   vil_convert_cast(difference_image, dif_cast);
   vil_save_image_resource(vil_new_image_resource_of_view(dif_cast), "D:\\projects\\vehicle_rec_on_models\\difference_image.png");
-  
+
   vil_image_view<double> tr_stretched2;
   vil_convert_stretch_range(tr_max2, tr_stretched2, 0.0f, 255.0f);
   vil_image_view<float> tr_cast2;
@@ -1031,8 +1029,9 @@ max_scale_trace_value(vil_image_view<float> input,
   vil_save_image_resource(vil_new_image_resource_of_view(tr_cast2_byte), "D:\\projects\\vehicle_rec_on_models\\trace_image2.png");
 
   return tr_cast2;
-  */
+#else // 0
   return tr_cast;
+#endif // 0
 }
 
 
@@ -3655,8 +3654,8 @@ static double brip_vil_rot_gauss(double x, double y,
 }
 
 vbl_array_2d<bool>
-brip_vil_float_ops::extrema_mask(float lambda0, float lambda1, float theta) {
-  
+brip_vil_float_ops::extrema_mask(float lambda0, float lambda1, float theta)
+{
   //convert theta to radians
   double theta_rad = theta*vnl_math::pi/180.0;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
@@ -3832,7 +3831,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
       for (int jj=-rj; jj<=rj; ++jj)
         for (int ii=-ri; ii<=ri; ++ii)
           if (mask[jj+rj][ii+ri])
-            if(rv>res_mask(i+ii,j+jj,1))
+            if (rv>res_mask(i+ii,j+jj,1))
               res_mask(i+ii,j+jj,1) = rv;
     }
   return res_mask;
