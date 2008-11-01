@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_geo_camera.cxx
+// This is gel/mrc/vpgl/algo/vpgl_geo_camera.cxx
 #include "vpgl_geo_camera.h"
 //:
 // \file
@@ -119,7 +119,7 @@ void vpgl_geo_camera::img_to_wgs(const unsigned i, const unsigned j,
 
 bool vpgl_geo_camera::operator==(vpgl_geo_camera const& rhs) const
 {
-  return (this->trans_matrix_ == rhs.trans_matrix_) && 
+  return (this->trans_matrix_ == rhs.trans_matrix_) &&
          (*(this->lvcs_) == *(rhs.lvcs_));
 }
 
