@@ -145,9 +145,9 @@ class brip_vil_float_ops
                                                float scale_inc);
   //: exactly same as max_scale_trace, only return the image with actual trace values at max scales instead of the image with max scale values
   static vil_image_view<float> max_scale_trace_value(vil_image_view<float> input,
-                                                      float min_scale,
-                                                      float max_scale,
-                                                      float scale_inc);
+                                                     float min_scale,
+                                                     float max_scale,
+                                                     float scale_inc);
 
   //: computes Lucas-Kanade optical flow on a 2n+1 neighborhood
   static void Lucas_KanadeMotion(vil_image_view<float>& current_frame,
