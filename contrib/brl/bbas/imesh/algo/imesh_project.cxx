@@ -527,7 +527,6 @@ int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
     i3 = (++fi)->edge_index();
   }
   if (tri_idx >= 0) {
-    const imesh_regular_face<3>& tri = tris[tri_idx];
     const vgl_point_2d<double>& a = tex_coords[i1];
     const vgl_point_2d<double>& b = tex_coords[i2];
     const vgl_point_2d<double>& c = tex_coords[i3];
@@ -603,8 +602,8 @@ bool trace_texture(const imesh_mesh& mesh,
   vgl_point_2d<double> bary = isect_bary.back();
 
   // split into intersection type and half edge index
-  unsigned char type = tidx & 3;
-  unsigned long heidx = tidx>>2;
+  unsigned long  heidx = tidx>>2;
+  //unsigned char type = tidx & 3;
 
   for (;;)
   {
@@ -758,11 +757,10 @@ bool trace_texture(const imesh_mesh& mesh,
     else
     {
       vcl_cout << "invalid intersection" << vcl_endl;
-      unsigned char s = imesh_triangle_intersect(bary.x(),bary.y(),duv.x(),duv.y(), eps);
       return false;
     }
   }
-  return false;
+  return false; // will never be reached! -- just avoids a compiler warning
 }
 // end of namespace
 }
@@ -792,18 +790,15 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   idxs.clear();
   map_back.clear();
   map_back.resize(npts,-1);
-  const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
   assert(mesh.faces().regularity() == 3);
-  const imesh_regular_face_array<3>& tris =
-      static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   assert(mesh.has_half_edges());
   const imesh_half_edge_set& he = mesh.half_edges();
 
   // find a starting point
-  unsigned int i=0;
-  int idx;
+  unsigned int i;
+  unsigned int idx=0;
   vgl_point_2d<double> pt_uv;
-  for (; i<npts; ++i)
+  for (i=0; i<npts; ++i)
   {
     const vgl_point_2d<double>& pt = pts_2d[i];
     if (pt.x() >= 0.0 && pt.x() <= 1.0 && pt.y() >= 0.0 && pt.y() <= 1.0)
@@ -814,7 +809,7 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
     }
     clipped = true;
   }
-  if (i==npts)
+  if (i==npts) // includes the case npts==0; in which case idx would be uninitialized
     return false;
 
   idxs.push_back(he.face_begin(idx)->half_edge_index()<<2);
