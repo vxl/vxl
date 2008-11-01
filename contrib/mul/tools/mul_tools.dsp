@@ -261,6 +261,9 @@ SOURCE=.\image3d_math.cxx
 # Begin Source File
 SOURCE=.\index_sort.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\multiplane_image.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

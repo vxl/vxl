@@ -332,6 +332,9 @@ SOURCE=.\mbl_progress_hierarchy.cxx
 # Begin Source File
 SOURCE=.\mbl_progress_time.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_sample_stats_1d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -613,6 +616,9 @@ SOURCE=.\mbl_progress_time.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_parse_int_list.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_sample_stats_1d.h
 # End Source File
 # End Group
 # End Target

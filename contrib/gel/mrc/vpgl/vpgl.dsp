@@ -93,9 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\vpgl_geo_camera.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vpgl_affine_camera+double-.cxx
 # End Source File
 # Begin Source File
@@ -244,9 +241,6 @@ SOURCE=.\vpgl_local_rational_camera.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_local_rational_camera.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_geo_camera.h
 # End Source File
 # End Group
 # End Target
