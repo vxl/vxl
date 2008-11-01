@@ -69,12 +69,10 @@ class brip_vil_float_ops
     half_resolution(vil_image_view<float> const& input,
                     float filter_coef=0.359375f);
 
-
   //: interpolates the input using the Bert-Adelson algorithm
   static vil_image_view<float>
     double_resolution(vil_image_view<float> const& input,
                       float filter_coef=0.6f);
-
 
   //: subtracts image_1 from image_2
   static vil_image_view<float>
@@ -112,7 +110,6 @@ class brip_vil_float_ops
             vil_image_view<float> const& Ixy,
             vil_image_view<float> const& Iyy);
 
-
   //: Find ansiotropic intensity extrema mask. Theta is in degrees
   static vbl_array_2d<bool> extrema_mask(float lambda0, float lambda1, float theta);
 
@@ -121,8 +118,6 @@ class brip_vil_float_ops
                                        float lambda0, float lambda1,
                                        float theta, bool bright = true,
                                        bool output_response_mask = true);
-
-
 
   //: IxIx.transpose gradient matrix elements for a NxN region(N = 2n+1)
   static void grad_matrix_NxN(vil_image_view<float> const& input, unsigned n,
@@ -148,8 +143,7 @@ class brip_vil_float_ops
                                                float min_scale,
                                                float max_scale,
                                                float scale_inc);
-  //: exactly same as max_scale_trace, only return the image with actual trace values
-  //  at max scales instead of the image with max scale values
+  //: exactly same as max_scale_trace, only return the image with actual trace values at max scales instead of the image with max scale values
   static vil_image_view<float> max_scale_trace_value(vil_image_view<float> input,
                                                       float min_scale,
                                                       float max_scale,
@@ -180,7 +174,6 @@ class brip_vil_float_ops
                             float& vx,
                             float& vy);
 
-
   //: computes optical flow using Horn & Schunck's method
   static int Horn_SchunckMotion(vil_image_view<float> const & current_frame,
                                 vil_image_view<float> const& previous_frame,
@@ -189,10 +182,8 @@ class brip_vil_float_ops
                                 const float alpha_coef=10000.0f,
                                 const int no_of_iterations=5);
 
-  
   //: fills a border of width w on left and right of image with value
   static void fill_x_border(vil_image_view<float>& image, unsigned w, float value);
-
 
   //: fills a border of width h on top and bottom of image with value
   static void fill_y_border(vil_image_view<float>& image, unsigned h, float value);
@@ -271,19 +262,18 @@ class brip_vil_float_ops
                        vil_image_view<vil_rgb<vxl_byte> >& image);
 
   //: Create a color image from multiple view channels
-  // all views have to have the same array dimensions
+  // All views have to have the same array dimensions
   static vil_image_view<vil_rgb<vxl_byte> >
     combine_color_planes(vil_image_view<unsigned char> const& R,
                          vil_image_view<unsigned char> const& G,
                          vil_image_view<unsigned char> const& B);
 
   //: Create a unsigned char color image from multiple resource channels
-  // images do not have to be the same size arraysp
+  // Images do not have to be the same size arraysp
   static vil_image_view<vil_rgb<vxl_byte> >
    combine_color_planes(vil_image_resource_sptr const& R,
                         vil_image_resource_sptr const& G,
                         vil_image_resource_sptr const& B);
-
 
   //: converts a generic image to greyscale (RGB<unsigned char>)
   static vil_image_view<unsigned char>
@@ -476,9 +466,8 @@ class brip_vil_float_ops
   static vil_image_resource_sptr negate(vil_image_resource_sptr const& imgr);
 
   //: Color order operator, output an index based on RGB intensity order
-  static vil_image_view<unsigned char> 
+  static vil_image_view<unsigned char>
     color_order(vil_image_view<float> const& color_image, float eq_tol);
-
 
  private:
 
@@ -495,9 +484,9 @@ class brip_vil_float_ops
                                  float k0, float k1, float k2, float* output);
 
   //: interpolate a 1-d array using the Bert-Adelson algorithm
-static void double_resolution_1d(const float* input, const unsigned n_input,
-                                 const float k0, const float k1, const float k2,
-                                 float* output);
+  static void double_resolution_1d(const float* input, const unsigned n_input,
+                                   const float k0, const float k1, const float k2,
+                                   float* output);
 
   //: One dimensional fft
   static bool fft_1d(int dir, int m, double* x, double* y);
@@ -522,7 +511,6 @@ static void double_resolution_1d(const float* input, const unsigned n_input,
                        vil_image_view<float> const& S,
                        vil_image_view<vil_rgb<vxl_byte> >& image);
 #endif // 0
-
 
   //: Default constructor is private
   brip_vil_float_ops() {}

@@ -10,13 +10,12 @@
 
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
-//#include <vgl/vgl_box_2d.h>
 
 template <class T>
 class bmdl_classify
 {
  public:
-  //: Constructor 
+  //: Constructor
   // \param height_noise_stdev is the standard deviation in lidar height
   //        This parameter can be set manually or estimated
   // \param area_threshold is the minimum area allowed for buildings
@@ -39,10 +38,10 @@ class bmdl_classify
   T estimate_height_noise_stdev();
 
   //: Manually specify the standard deviation in lidar height from noise
-  void set_height_noise_stdev(T stdev) { hgt_stdev_ = stdev; } 
+  void set_height_noise_stdev(T stdev) { hgt_stdev_ = stdev; }
   //: Manually specify the building area threshold
-  void set_area_threshold(unsigned int area) { area_threshold_ = area; } 
-  
+  void set_area_threshold(unsigned int area) { area_threshold_ = area; }
+
   //: Access the first returns image
   const vil_image_view<T>& first_return() const {return first_return_;}
 
@@ -71,25 +70,24 @@ class bmdl_classify
   // Classify each pixel as Ground (0), Vegitation (1), or Building (2)
   // Results are stored in the labels image
   void segment();
-  
+
   //: Cluster pixels on buildings into groups of adjacent pixels with similar heights.
   //  Assign a new label to each groups.
   //  Returns building mean heights and pixel counts by reference
   void cluster_buildings();
-  
+
   //: Threshold buildings by area.
   // All buildings with area (in pixels) less than the threshold
   // are removed and replace with a vegetation label.
   void threshold_building_area();
-  
+
   //: Dilate buildings into unclaimed (vegetation) pixel
-  //  only claim a vegetation pixel if surrounded by 
+  //  Only claim a vegetation pixel if surrounded by
   //  \a num pixels from the same building
   bool dilate_buildings(unsigned int num=6);
-  
+
   //: Greedy merging of adjacent buildings
   bool greedy_merge();
-  
 
   //: Refine the building regions
   void refine_buildings();
@@ -108,20 +106,20 @@ class bmdl_classify
   //: A helper class to manage merging of buildings
   class merge_map
   {
-  public:
+   public:
     //: Constructor
     merge_map(bmdl_classify<T>* c);
     //: Destructor - simplify merge map and apply to classifier
     ~merge_map();
-    //: translate old index to temporary merged index 
+    //: translate old index to temporary merged index
     unsigned int translate(unsigned int idx) const;
     //: merge two indices
     void merge(unsigned int idx1, unsigned int idx2);
-  private:
+   private:
     bmdl_classify<T>* classifier_;
     vcl_vector<unsigned int> idx_map_;
   };
-  
+
   friend class merge_map;
 
   //: Parabolic interpolation of 3 points \p y_0, \p y_1, \p y_2
@@ -139,7 +137,7 @@ class bmdl_classify
   void fit_gaussian_to_peak(const vcl_vector<T>& data, T minv, T maxv,
                             T& mean, T& stdev) const;
 
-  //: expand the range (minv, maxv) with the data in \a image
+  //: Expand the range (minv, maxv) with the data in \a image
   // Only finite values count
   void range(const vil_image_view<T>& image,
              T& minv, T& maxv) const;
@@ -148,7 +146,7 @@ class bmdl_classify
   //  Return true if any changes are made
   bool expand_buildings(vcl_vector<T>& means,
                         vcl_vector<unsigned int>& sizes);
-  
+
   //: Group building pixel by height into bins of size \a binsize
   vil_image_view<unsigned int> bin_heights(T binsize = 0.5);
 
@@ -171,12 +169,12 @@ class bmdl_classify
   T first_min_, first_max_;
   //: The range spanned by the last returns
   T last_min_, last_max_;
-  
+
   //: The mean height of each building
   vcl_vector<T> building_mean_hgt_;
   //: The area in pixels of each building
   vcl_vector<unsigned int> building_area_;
-  
+
   //: computed segmentation labels
   vil_image_view<unsigned int> labels_;
   //: clean up height estimates for use in meshing
