@@ -1,9 +1,10 @@
 #include <mbl/mbl_sample_stats_1d.h>
+//:
+// \file
 #include <vsl/vsl_vector_io.h>
 #include <vcl_cmath.h>
 #include <vcl_limits.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_math.h>
 
 
 // ============================================================
@@ -108,8 +109,6 @@ double mbl_sample_stats_1d::median() const
 
       ret = *index_it;
     }
-
-
   }
   else // crazy value if  no samples
   {
@@ -134,7 +133,6 @@ double mbl_sample_stats_1d::nth_percentile(int n) const
     vcl_nth_element(tmp.begin(),index_it,tmp.end(),vcl_less<double>());
 
     ret = *index_it;
-
   }
   else // crazy value if no samples
   {
@@ -163,11 +161,9 @@ double mbl_sample_stats_1d::variance() const
     {
       v /= n_samples();
     }
-
   }
 
   return v;
-
 }
 
 
@@ -327,15 +323,14 @@ void mbl_sample_stats_1d::b_read(vsl_b_istream& bfs)
 
   switch (file_version_no)
   {
-
-  case 1:
+   case 1:
     vsl_b_read(bfs,samples_);
     vsl_b_read(bfs,stats_1d_);
     vsl_b_read(bfs,use_mvue_);
     break;
-  default :
-    vcl_cerr << "I/O ERROR: mbl_sample_stats_1d::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< file_version_no << "\n";
+   default :
+    vcl_cerr << "I/O ERROR: mbl_sample_stats_1d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< file_version_no << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -351,9 +346,9 @@ void mbl_sample_stats_1d::print_summary(vcl_ostream& os) const
   else
   {
     os << "mean: "<< mean()
-      << " use MVUE: "<< use_mvue_
-      << " sd: "<< sd()
-      << " ["<<stats_1d_.min()<<","<<stats_1d_.max()<<"] N:"<<n_samples();
+       << " use MVUE: "<< use_mvue_
+       << " sd: "<< sd()
+       << " ["<<stats_1d_.min()<<','<<stats_1d_.max()<<"] N:"<<n_samples();
   }
 }
 
