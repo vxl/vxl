@@ -8,6 +8,7 @@ MINI_PROG_SOURCES += crop_image_3d.cxx
 MINI_PROG_SOURCES += print_image.cxx
 MINI_PROG_SOURCES += image3d_math.cxx
 MINI_PROG_SOURCES += index_sort.cxx
+MINI_PROG_SOURCES += multiplane_image.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

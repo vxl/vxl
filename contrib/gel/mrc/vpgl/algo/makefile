@@ -27,13 +27,14 @@ SOURCES += vpgl_rational_geo_adjust.cxx
 SOURCES += vpgl_ray.cxx
 SOURCES += vpgl_ray_intersect.cxx
 SOURCES += vpgl_nitf_camera_coverage.cxx
+SOURCES += vpgl_geo_camera.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-SUBDIRS += tests
+SUBDIRS += tests examples
 endif
 
 ######################################
