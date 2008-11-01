@@ -249,7 +249,8 @@ void bmdl_classify<T>::cluster_buildings()
   building_area_.clear();
 
   // square threshold to compare against squared distances
-  T zthresh = 0.01;
+  T zthresh = T(0.01);
+  assert(zthresh > 0); // make sure that T is not an integral type
 
   // bin building heights
   vil_image_view<unsigned int> bin_img = bin_heights(0.5);
@@ -685,7 +686,8 @@ bool bmdl_classify<T>::expand_buildings(vcl_vector<T>& means,
   unsigned int ni=first_return_.ni();
   unsigned int nj=last_return_.nj();
 
-  T zthresh = 0.01;
+  T zthresh = T(0.01);
+  assert(zthresh > 0); // make sure that T is not an integral type
 
   merge_map merge(this);
 
@@ -814,7 +816,8 @@ bool bmdl_classify<T>::greedy_merge()
   typedef vcl_pair<unsigned int,unsigned int> upair;
   vcl_set<upair> adjacent;
 
-  T zthresh = 0.5;
+  T zthresh = T(0.5);
+  assert(zthresh > 0); // make sure that T is not an integral type
 
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=1; i<ni; ++i) {
@@ -915,8 +918,8 @@ bmdl_classify<T>::close_buildings(unsigned int num_labels)
     if (min_x < 0) min_x = 0;
     if (min_y < 0) min_y = 0;
     int max_x=bbox.max_x()+2, max_y=bbox.max_y()+2;
-    if (max_x >= ni) max_x = ni-1;
-    if (max_y >= nj) max_y = nj-1;
+    if (max_x >= int(ni)) max_x = ni-1;
+    if (max_y >= int(nj)) max_y = nj-1;
 
     unsigned lni = max_x - min_x + 1;
     unsigned lnj = max_y - min_y + 1;
@@ -971,7 +974,7 @@ vil_image_view<unsigned int> bmdl_classify<T>::bin_heights(T binsize)
         bin_img(i,j) = labels_(i,j);
         continue;
       }
-      int bin = static_cast<int>(last_return_(i,j) - last_min_)/binsize;
+      int bin = static_cast<int>((last_return_(i,j) - last_min_)/binsize);
       bin_img(i,j) = bin+2;
     }
   }
