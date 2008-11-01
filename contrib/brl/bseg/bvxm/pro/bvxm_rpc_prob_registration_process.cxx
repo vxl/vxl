@@ -90,8 +90,8 @@ bool bvxm_rpc_prob_registration_process::execute()
   double cedt_image_gaussian_sigma;
   int offset_search_size;
   if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
-    !parameters()->get_value("offset_search_size", offset_search_size)
-    )
+      !parameters()->get_value("offset_search_size", offset_search_size)
+     )
   {
     vcl_cout << "problems in retrieving parameters\n";
     return false;
@@ -166,7 +166,7 @@ bool bvxm_rpc_prob_registration_process::execute()
 
   vcl_cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << vcl_endl;
 
-  float nlx,nly,nlz;
+  float nlx=0.f,nly=0.f,nlz=0.f;
   if (rpc_shift_3d_flag)
   {
     vpgl_local_rational_camera<double> *cam_input_temp = dynamic_cast<vpgl_local_rational_camera<double>*>(camera_inp.ptr());
@@ -273,7 +273,7 @@ bool bvxm_rpc_prob_registration_process::execute()
     for (unsigned curr_scale = scale;curr_scale < max_scale;curr_scale++)
     {
       bool result;
-      if(curr_scale!=scale)
+      if (curr_scale!=scale)
       {
         vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
         cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
@@ -290,8 +290,8 @@ bool bvxm_rpc_prob_registration_process::execute()
 
       // updates the edge probabilities in the voxel world
 
-      if(!result){
-        vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage" << vcl_endl;
+      if (!result) {
+        vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage\n";
         return false;
       }
     }
