@@ -9,7 +9,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vil/vil_convert.h>
 
 //: Compute trilinear interpolation at (x,y,z), no bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
@@ -52,8 +51,8 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
 //  If (x,y,z) is outside interpolatable image region, zero is returned.
 template<class T>
 inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* data,
-                     unsigned nx, unsigned ny, unsigned nz,
-                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                       unsigned nx, unsigned ny, unsigned nz,
+                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   if (x<0) return 0.0;
   if (y<0) return 0.0;
@@ -75,7 +74,7 @@ inline double vil3d_trilin_interp_safe(const vil3d_image_view<T>& image,
   return vil3d_trilin_interp_safe(x,y,z,&image(0,0,0,p),
                                   image.ni(),image.nj(),image.nk(),
                                   image.istep(),image.jstep(),image.kstep());
-} 
+}
 
 //: Compute trilinear interpolation at (x,y), with bound checks
 //  Image is nx * ny * nz array of Ts. x,y element is data[nx*y+x]
@@ -84,8 +83,8 @@ inline double vil3d_trilin_interp_safe(const vil3d_image_view<T>& image,
 //  The safe interpolatable region is [0,nx)*[0,ny)*[0,nz].
 template<class T>
 inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* data,
-                     unsigned nx, unsigned ny, unsigned nz,
-                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                         unsigned nx, unsigned ny, unsigned nz,
+                                         vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   assert(x>=0);
   assert(y>=0);
@@ -102,8 +101,8 @@ inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* 
 //  The safe interpolatable region is [0,nx)*[0,ny).
 template<class T>
 inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, const T* data,
-                     unsigned nx, unsigned ny, unsigned nz,
-                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                              unsigned nx, unsigned ny, unsigned nz,
+                                              vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   if (x<0) x= 0.0;
   if (y<0) y= 0.0;
