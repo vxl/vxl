@@ -91,6 +91,9 @@ bool bvxm_roi_init_process::execute()
     return false;
   }
 
+  if (img_ptr->ni() == 0 || img_ptr->nj() == 0)
+    return false;
+
   // update the camera and store
   brdb_value_sptr output0 =
     new brdb_value_t<vpgl_camera_double_sptr >(new vpgl_local_rational_camera<double> (local_camera));
