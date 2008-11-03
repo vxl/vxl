@@ -154,6 +154,11 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   bb->add_point(roi_box->max_x(), roi_box->max_y());
   bb = broi.clip_to_image_bounds(bb);
 
+  if (bb->width() <= 0 || bb->height() <= 0) {
+    vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+    return false;
+  }
+
   vil_image_view_base_sptr roi =
     nitf->get_copy_view((unsigned int)bb->get_min_x(),
                         (unsigned int)bb->width(),
