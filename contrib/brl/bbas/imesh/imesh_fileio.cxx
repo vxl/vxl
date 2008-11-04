@@ -347,11 +347,17 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
 
 void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
 {
-  
-  const imesh_face_array_base& faces = mesh.faces();
-  const imesh_vertex_array_base& verts = mesh.vertices();
-  int nverts = verts.size();
-  int nfaces = faces.size();
+  // get mesh faces as triangles
+  if(mesh.faces().regularity() != 3)
+  {
+    vcl_cerr << "ERROR! only triangle meshes are supported.\n";
+    return;
+  }
+  const imesh_regular_face_array<3>& tris =
+      static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
+  const imesh_vertex_array<3>& verts = mesh.vertices<3>();
+  const int nverts = verts.size();
+  const int nfaces = tris.size();
 
   vcl_string geometry_id = "geometry";
   vcl_string geometry_position_id = "geometry_position";
@@ -360,29 +366,61 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
   vcl_string geometry_uv_array_id = "geometry_uv_array";
   vcl_string geometry_vertex_id = "geometry_vertex";
   vcl_string geometry_normal_id = "geometry_normal";
-
-  os <<"    <geometry id=\"" << geometry_id.c_str() << "\" name=\"" << geometry_id.c_str() << "\">\n";
+  
+  // Write the COLLADA XML
+  os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+  os << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n";
+  
+  os << "  <asset>\n";
+  os << "    <contributor>\n";
+  os << "      <authoring_tool>VXL imesh library</authoring_tool>\n";
+  os << "    </contributor>\n";
+  // When we figure out how to get a date string we can write this
+  // os << "    <created>2008-04-08T13:07:52-08:00</created>\n"; 
+  // os << "    <modified>2008-04-08T13:07:52-08:00</modified>\n"; 
+  os << "    <unit name=\"meters\" meter=\"1\"/>\n";
+  os << "    <up_axis>Z_UP</up_axis>\n";
+  os << "  </asset>\n";
+  
+  // Write materials.  Use a single grey material
+  os << "  <library_materials>" << vcl_endl;
+  os << "    <material id=\"GreyID\" name=\"Grey\">"<< vcl_endl;
+  os << "       <instance_effect url=\"#Grey-effect\"/>"<< vcl_endl;
+  os << "    </material>"<< vcl_endl;
+  os << "  </library_materials>"<< vcl_endl;
+  
+  os << "  <library_effects>"<< vcl_endl;
+  os << "    <effect id=\"Grey-effect\" name=\"Grey-effect\">\n";
+  os << "      <profile_COMMON>\n";
+  os << "         <technique sid=\"COMMON\">\n";
+  os << "            <phong>\n";
+  os << "              <diffuse>\n";
+  os << "                 <color>1.000000 1.000000 1.000000 1</color>\n";
+  os << "              </diffuse>\n";
+  os << "            </phong>\n";
+  os << "         </technique>\n";
+  os << "         <extra>\n";
+  os << "         <technique profile=\"GOOGLEEARTH\">\n";
+  os << "           <double_sided>1</double_sided>\n";
+  os << "         </technique>\n";
+  os << "         </extra>\n";
+  os << "      </profile_COMMON>\n";
+  os << "    </effect>\n";
+  os << "  </library_effects>\n";
+  
+  // write geometry
+  os << "  <library_geometries>\n";
+  os <<"    <geometry id=\"" << geometry_id << "\" name=\"" << geometry_id << "\">\n";
   os <<"      <mesh>\n";
-  os <<"        <source id=\"" << geometry_position_id.c_str() << "\">\n";
-  os <<"        <float_array id=\"" << geometry_position_array_id.c_str() << "\" count=\"" << nverts*3 << "\">\n";
+  os <<"        <source id=\"" << geometry_position_id << "\">\n";
+  os <<"        <float_array id=\"" << geometry_position_array_id << "\" count=\"" << nverts*3 << "\">\n";
 
-  // map vertex ID's to indices.
-  vcl_map<int,int> vert_indices;
-  int vert_idx = 0;
-  for (unsigned int f=0; f<faces.size(); ++f) {
-    for (unsigned int v=0; v<faces.num_verts(f); ++v, vert_idx++) {
-      unsigned int idx = faces(f,v);
-      vert_indices[idx] = vert_idx;
-      double x = verts(idx, 0);
-      double y = verts(idx, 1);
-      double z = verts(idx, 2);
-      os << x << " " << y << " " << z << " ";
-    }
-  }
+  for(unsigned int v=0; v<nverts; ++v)
+    os << "          "<< verts[v][0] << " " << verts[v][1] << " " << verts[v][2] << "\n";
 
   os <<"\n        </float_array>\n";
   os <<"        <technique_common>\n";
-  os <<"          <accessor source=\"#" << geometry_position_array_id.c_str() << "\" count=\"" << nverts << "\" stride=\"3\">\n";
+  os <<"          <accessor source=\"#" << geometry_position_array_id << "\" count=\"" << nverts << "\" stride=\"3\">\n";
   os <<"            <param name=\"X\" type=\"float\"/>\n";
   os <<"            <param name=\"Y\" type=\"float\"/>\n";
   os <<"            <param name=\"Z\" type=\"float\"/>\n";
@@ -391,15 +429,15 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
   os <<"      </source>\n";
   os <<"      <source id=\"" << "geometry_normal" << "\">\n";
 
-  os <<"        <float_array id=\"" << "geometry_normal_array" << "\" count=\"" << faces.size()*3 << "\">";
-  for (unsigned int f=0; f<faces.size(); ++f) {
-    vgl_vector_3d<double> n = faces.normal(f);
-    os << n.x() << " " << n.y() << " " << n.z() << " "; 
+  os <<"        <float_array id=\"" << "geometry_normal_array" << "\" count=\"" << nfaces*3 << "\">\n";
+  for (unsigned int f=0; f<nfaces; ++f) {
+    const vgl_vector_3d<double>& n = tris.normal(f);
+    os << "          " << n.x() << " " << n.y() << " " << n.z() << "\n"; 
   }
 
   os <<"\n        </float_array>\n";
   os <<"        <technique_common>\n";
-  os <<"          <accessor source=\"#" << "geometry_normal_array" << "\" count=\"" << faces.size() << "\" stride=\"3\">\n";
+  os <<"          <accessor source=\"#" << "geometry_normal_array" << "\" count=\"" << nfaces << "\" stride=\"3\">\n";
   os <<"            <param name=\"X\" type=\"float\"/>\n";
   os <<"            <param name=\"Y\" type=\"float\"/>\n";
   os <<"            <param name=\"Z\" type=\"float\"/>\n";
@@ -407,26 +445,45 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
   os <<"        </technique_common>\n";
   os <<"      </source>\n";
 
-  os <<"      <vertices id=\"" <<geometry_vertex_id.c_str() << "\">\n";
-  os <<"        <input semantic=\"POSITION\" source=\"#" << geometry_position_id.c_str() << "\"/>\n";
+  os <<"      <vertices id=\"" <<geometry_vertex_id << "\">\n";
+  os <<"        <input semantic=\"POSITION\" source=\"#" << geometry_position_id << "\"/>\n";
   os <<"      </vertices>\n";
   os <<"      <triangles material=\"Grey\" count=\"" << nfaces << "\">\n";
-  os <<"        <input semantic=\"VERTEX\" source=\"#" << geometry_vertex_id.c_str() <<  "\" offset=\"0\"/>\n";
+  os <<"        <input semantic=\"VERTEX\" source=\"#" << geometry_vertex_id <<  "\" offset=\"0\"/>\n";
   os <<"        <input semantic=\"NORMAL\" source=\"#" << "geometry_normal" <<  "\" offset=\"1\"/>\n";
 
-  os <<"        <p>";
+  os <<"        <p>\n";
 
-  for (unsigned int f=0; f<faces.size(); ++f) {
-    if (faces.num_verts(f) != 3) {
-      vcl_cerr << "ERROR! only triangle meshes are supported. Face has "<<faces.num_verts(f)<<" vertices.\n";
-    }
-    for (unsigned j=0; j< 3; j++) {
-      unsigned int idx = faces(f,j);
-      os << idx << " " << f << " ";
-    }
+  for (unsigned int f=0; f<nfaces; ++f) {
+    os << "          " 
+       << tris[f][0] << " " << f <<"  "
+       << tris[f][1] << " " << f <<"  " 
+       << tris[f][2] << " " << f <<"\n";
   }
-  os << "</p>\n";
+  os << "        </p>\n";
   os << "      </triangles>\n";
   os << "    </mesh>\n";
   os << "  </geometry>\n";
+  os << "  </library_geometries>\n";
+  
+  // write the scene
+  os << "  <library_visual_scenes>\n";
+  os << "    <visual_scene id=\"vis_scene\">\n";
+  os << "      <node id=\"Model\" name=\"Model\">\n";
+  os << "        <node id=\"mesh\" name=\"mesh\">\n";
+  os << "          <instance_geometry url=\"#geometry\">\n";
+  os << "            <bind_material>\n";
+  os << "              <technique_common>\n";
+  os << "                <instance_material symbol=\"Grey\" target=\"#GreyID\"/>\n";
+  os << "              </technique_common>\n";
+  os << "            </bind_material>\n";
+  os << "          </instance_geometry>\n";
+  os << "        </node>";
+  os << "      </node>";
+  os << "    </visual_scene>\n";
+  os << "  </library_visual_scenes>\n";
+  os << "  <scene>\n";
+  os << "    <instance_visual_scene url=\"#vis_scene\"/>\n";
+  os << "  </scene>\n";
+  os << "</COLLADA>\n";
 }
