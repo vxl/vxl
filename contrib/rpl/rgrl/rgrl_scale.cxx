@@ -2,6 +2,10 @@
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
+// \verbatim
+// Modifications
+//      Nov 2008 J Becker: Modified read so that one can easily read in a vector of scales.
+// \endverbatim
 
 #include "rgrl_scale.h"
 
@@ -102,13 +106,16 @@ bool
 rgrl_scale::
 read( vcl_istream& is )
 {
+  vcl_streampos pos;
   static const vcl_string white_chars = " \t\r";
   vcl_string tag;
-  
+  has_geometric_scale_ = false;
+  has_signature_inv_covar_ = false;
+
   // continue when stream does not reach the end 
   // and when the scales are not all read
   while( is && !is.eof() && (!has_geometric_scale_ || !has_signature_inv_covar_))  {
-    
+    pos = is.tellg();
     vcl_getline( is, tag );
     
     if( tag.empty() || tag.find_first_not_of( white_chars ) == vcl_string::npos )
@@ -116,53 +123,59 @@ read( vcl_istream& is )
     
     // geometric scale
     if( tag.find("GEOMETRIC_SCALE") != vcl_string::npos ) {
-      
-      // get scale type
-      vcl_string type_str;
-      vcl_getline( is, type_str );
-      if( type_str.find("PRIOR") != vcl_string::npos ) 
-        geo_scale_type_ = prior;
-      else if( type_str.find("ESTIMATE") != vcl_string::npos ) 
-        geo_scale_type_ = estimate;
-      else {  // cannot handle
-        WarningMacro( "Cannot parse this line for geometric scale type: " << type_str << vcl_endl );
-        return false;
+      if ( !has_geometric_scale_ && !has_signature_inv_covar_ ) {
+        // get scale type
+        vcl_string type_str;
+        vcl_getline( is, type_str );
+        if( type_str.find("PRIOR") != vcl_string::npos ) 
+          geo_scale_type_ = prior;
+        else if( type_str.find("ESTIMATE") != vcl_string::npos ) 
+          geo_scale_type_ = estimate;
+        else {  // cannot handle
+          WarningMacro( "Cannot parse this line for geometric scale type: " << type_str << vcl_endl );
+          return false;
+        }
+        
+        // get scale
+        is >> geometric_scale_;
+        if( !is ) {
+          WarningMacro( "Cannot parse geometric scale." << vcl_endl );
+          return false;
+        }
+        
+        // set flag
+        has_geometric_scale_ = true;
+      } else {
+        is.seekg( pos );
+        return true;
       }
-      
-      // get scale
-      is >> geometric_scale_;
-      if( !is ) {
-        WarningMacro( "Cannot parse geometric scale." << vcl_endl );
-        return false;
-      }
-      
-      // set flag
-      has_geometric_scale_ = true;
-    
     } else if ( tag.find("SIGNATURE_INV_COVARIANCE") != vcl_string::npos ) {
-      
-      // signature covariance
-      int nrow = -1;
-      int ncol = -1;
-      
-      // get number of rows and cols
-      is >> nrow >> ncol;
-      if( !is || nrow<=0 || ncol<=0 ) {
-        WarningMacro( "Cannot parse the number of rows and columns." << vcl_endl );
-        return false;
-      }
-      
-      signature_inv_covar_.set_size( nrow, ncol );
-      is >> signature_inv_covar_;
+      if( !has_signature_inv_covar_ ) {
+        // signature covariance
+        int nrow = -1;
+        int ncol = -1;
+        
+        // get number of rows and cols
+        is >> nrow >> ncol;
+        if( !is || nrow<=0 || ncol<=0 ) {
+          WarningMacro( "Cannot parse the number of rows and columns." << vcl_endl );
+          return false;
+        }
+        
+        signature_inv_covar_.set_size( nrow, ncol );
+        is >> signature_inv_covar_;
 
-      if( !is ) {
-        WarningMacro( "Cannot parse signature covariance" << vcl_endl );
-        return false;
+        if( !is ) {
+          WarningMacro( "Cannot parse signature covariance" << vcl_endl );
+          return false;
+        }
+        
+        // set the flag
+        has_signature_inv_covar_ = true;
+      } else {
+        is.seekg( pos );
+        return true;
       }
-      
-      // set the flag
-      has_signature_inv_covar_ = true;
-      
     } else {// cannot handle
       WarningMacro( "Cannot parse this line for tags: " << tag << vcl_endl );
       return false;
