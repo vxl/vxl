@@ -22,7 +22,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb brdb vil vil_io vpgl_algo vgl_io
+  TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb brdb vil vil_io vpgl_file_formats vgl_io
                         bgeo vsol brip vpgl_pro)
 
   IF( BUILD_TESTING )
