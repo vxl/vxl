@@ -232,18 +232,18 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
 
   imesh_half_edge_set he = mesh.half_edges();
 
-  vcl_vector<imesh_mesh*> buildings;
+  vcl_vector<imesh_mesh> buildings;
   // guess at ground height = lowest vertex
   double minz = 1e6;
   vcl_vector<vcl_set<unsigned int> > cc = imesh_detect_connected_components(he);
 
   for (unsigned i=0; i<cc.size(); i++) {
     vcl_set<unsigned int> sel_faces = cc[i];
-    imesh_mesh building = imesh_submesh_from_faces(mesh, sel_faces);
-    imesh_triangulate(building);
-    buildings.push_back(new imesh_mesh(building));
-    const imesh_face_array_base& faces = building.faces();
-    const imesh_vertex_array_base& verts = building.vertices();
+    buildings.push_back(imesh_submesh_from_faces(mesh, sel_faces));
+    imesh_triangulate(buildings.back());
+    buildings.back().compute_face_normals();
+    const imesh_face_array_base& faces = buildings.back().faces();
+    const imesh_vertex_array_base& verts = buildings.back().vertices();
 
     for (unsigned int f=0; f<faces.size(); ++f) {
       for (unsigned int v=0; v<faces.num_verts(f); ++v) {
@@ -272,91 +272,30 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
   unsigned min_faces = 3;
       
   for (unsigned idx=0; idx<buildings.size(); idx++) {
-    imesh_mesh* building = buildings[idx];
+    const imesh_mesh& building = buildings[idx];
 
-    if ( building->num_faces() <  min_faces)
+    if ( building.num_faces() <  min_faces)
       // single mesh face is probably ground plane, which we do not want to render
       continue;
 
-    building->compute_face_normals();
     vcl_stringstream ss;
     ss << "structure_" << idx;
     vcl_string kml_fname = kmz_dir + "/" + ss.str() + ".kml";
     vcl_string dae_fname = kmz_dir + "/" + ss.str() + ".dae";
+    
     vcl_ofstream os (dae_fname.data());
-    
-    os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-    os << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n";
-    
-    os << "  <asset>\n";
-    os << "    <contributor>\n";
-    os << "      <authoring_tool> Brown University World Modeler </authoring_tool>\n";
-    os << "    </contributor>\n";
-    os << "    <created>2008-04-08T13:07:52-08:00</created>\n"; 
-    os << "    <modified>2008-04-08T13:07:52-08:00</modified>\n"; 
-    os << "    <unit name=\"meters\" meter=\"1\"/>\n";
-    os << "    <up_axis>Z_UP</up_axis>\n";
-    os << "  </asset>\n";
-
-    os << "  <library_materials>" << vcl_endl;
-    os << "    <material id=\"GreyID\" name=\"Grey\">"<< vcl_endl;
-    os << "       <instance_effect url=\"#Grey-effect\"/>"<< vcl_endl;
-    os << "    </material>"<< vcl_endl;
-    os << "  </library_materials>"<< vcl_endl;
-   
-    os << "  <library_effects>"<< vcl_endl;
-    os << "    <effect id=\"Grey-effect\" name=\"Grey-effect\">\n";
-    os << "      <profile_COMMON>\n";
-    os << "         <technique sid=\"COMMON\">\n";
-    os << "            <phong>\n";
-    os << "              <diffuse>\n";
-    os << "                 <color>1.000000 1.000000 1.000000 1</color>\n";
-    os << "              </diffuse>\n";
-    os << "            </phong>\n";
-    os << "         </technique>\n";
-    os << "         <extra>\n";
-    os << "         <technique profile=\"GOOGLEEARTH\">\n";
-    os << "           <double_sided>1</double_sided>\n";
-    os << "         </technique>\n";
-    os << "         </extra>\n";
-    os << "      </profile_COMMON>\n";
-    os << "    </effect>\n";
-    os << "  </library_effects>\n";
-
-    os << "  <library_geometries>\n";
-    imesh_write_kml_collada(os, *building);
-    os << "  </library_geometries>\n";
-
-    os << "  <library_visual_scenes>\n";
-    os << "    <visual_scene id=\"vis_scene\">\n";
-    os << "      <node id=\"Model\" name=\"Model\">\n";
-    os << "        <node id=\"mesh\" name=\"mesh\">\n";
-    os << "          <instance_geometry url=\"#geometry\">\n";
-    os << "            <bind_material>\n";
-    os << "              <technique_common>\n";
-    os << "                <instance_material symbol=\"Grey\" target=\"#GreyID\"/>\n";
-    os << "              </technique_common>\n";
-    os << "            </bind_material>\n";
-    os << "          </instance_geometry>\n";
-    os << "        </node>";
-    os << "      </node>";
-    os << "    </visual_scene>\n";
-    os << "  </library_visual_scenes>\n";
-    os << "  <scene>\n";
-    os << "    <instance_visual_scene url=\"#vis_scene\"/>\n";
-    os << "  </scene>\n";
-    os << "</COLLADA>\n";
-
+    imesh_write_kml_collada(os, building);
     os.close();
 
+    
     vcl_ofstream oskml(kml_fname.data());
 
     oskml << "<?xml version='1.0' encoding='UTF-8'?>\n";
     oskml << "<kml xmlns='http://earth.google.com/kml/2.1'>\n";
     oskml << "<Folder>\n";
     oskml << "  <name>" << ss.str() << "</name>\n";
-    oskml << "  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">CrossCut</a>]]></description>\n";
-    oskml << "  <DocumentSource>Brown University World Modeler</DocumentSource>\n";
+    oskml << "  <description><![CDATA[Created with <a href=\"http://sourceforge.vxl.net\">VXL</a>]]></description>\n";
+    oskml << "  <DocumentSource>Brown University imesh library</DocumentSource>\n";
     oskml << "  <visibility>1</visibility>\n";
     oskml << "  <LookAt>\n";
     oskml << "    <heading>0</heading>\n";
@@ -406,6 +345,4 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     oskml.close();
   }
 
-  for (unsigned idx=0; idx<buildings.size(); idx++) 
-    delete buildings[idx];
 }
