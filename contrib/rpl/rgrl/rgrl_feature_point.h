@@ -4,6 +4,10 @@
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
+// \verbatim
+// Modifications
+//      Nov 2008 J Becker: Added a clone function.
+// \endverbatim
 
 #include "rgrl_feature.h"
 #include <vcl_iosfwd.h>
@@ -52,7 +56,11 @@ class rgrl_feature_point
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_point, rgrl_feature );
 
+  //: make a clone copy
+  virtual rgrl_feature_sptr clone() const;
+
  protected:
+  friend class rgrl_feature_reader;
   //:
   // Create an uninitialized feature with enough space to store a dim
   // dimensional feature.

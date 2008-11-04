@@ -5,7 +5,10 @@
 // \brief Class to represent a N-d face edge element.  It has 1 normal direction and N-1 tangent directions.
 // \author Chuck Stewart
 // \date 16 Sep 2003
-
+// \verbatim
+// Modifications
+//      Nov 2008 J Becker: Added a clone function.
+// \endverbatim
 #include <rgrl/rgrl_feature_face_pt.h>
 #include <rgrl/rgrl_feature_region.h>
 // not used? #include <vcl_vector.h>
@@ -40,6 +43,10 @@ class rgrl_feature_face_region : public rgrl_feature_face_pt, public rgrl_featur
   virtual void generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio );
 
   unsigned int num_constraints() const;
+
+  //: make a clone copy
+  virtual rgrl_feature_sptr clone() const;
+
  private:
 
   //: Create an uninitialized face_region of dimension dim

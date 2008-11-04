@@ -58,6 +58,9 @@ vnl_matrix<double> const&
 rgrl_feature_point::
 error_projector() const
 {
+  if(scale_ == 0){
+    WarningMacro( "The scale is zero." );
+  }
   if ( !err_proj_.size() )
   {
     const unsigned m = location_.size();
@@ -73,6 +76,9 @@ vnl_matrix<double> const&
 rgrl_feature_point::
 error_projector_sqrt() const
 {
+  if(scale_ == 0){
+    WarningMacro( "The scale is zero." );
+  }
   if ( !err_proj_sqrt_.size() )
   {
     const unsigned m = location_.size();
@@ -240,4 +246,11 @@ read( vcl_istream& is, bool skip_tag )
     return false;   // cannot read scale
 
   return true;
+}
+
+rgrl_feature_sptr
+rgrl_feature_point::
+clone() const
+{
+  return new rgrl_feature_point(*this);
 }

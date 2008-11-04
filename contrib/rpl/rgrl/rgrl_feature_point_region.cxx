@@ -88,3 +88,10 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
 
   pixel_coordinates_cached_ = true;
 }
+
+rgrl_feature_sptr
+rgrl_feature_point_region::
+clone() const
+{
+  return new rgrl_feature_point_region(*this);
+}

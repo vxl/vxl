@@ -5,6 +5,10 @@
 // \brief Base class for feature in generalized registration library
 // \author Chuck Stewart
 // \date 12 Nov 2002
+// \verbatim
+// Modifications
+//      Nov 2008 J Becker: Added a clone function.
+// \endverbatim
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
@@ -33,7 +37,9 @@ class rgrl_feature
   rgrl_feature( vnl_vector<double> const& loc, double scale = 1.0 )
   : location_( loc ), 
     scale_( scale )
-  { }
+  {
+    assert(scale_ > 0); 
+  }
   
   //:
   virtual ~rgrl_feature() { };
@@ -60,7 +66,7 @@ class rgrl_feature
 
   //: Set the scale level at which this feature is detected
   void set_scale( double scale )
-  { scale_ = scale; }
+  {     scale_ = scale;     assert(scale_ > 0); }
 
   //: read in feature
   virtual
@@ -150,9 +156,13 @@ class rgrl_feature
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature, rgrl_object );
 
+  //: make a clone copy
+  virtual rgrl_feature_sptr clone() const=0;
+
  protected:
-  friend rgrl_feature_sptr
-         rgrl_feature_reader( vcl_istream& is );
+//   friend rgrl_feature_sptr
+//          rgrl_feature_reader( vcl_istream& is );
+  friend class rgrl_feature_reader;
 
   vnl_vector<double> location_;
   double             scale_;

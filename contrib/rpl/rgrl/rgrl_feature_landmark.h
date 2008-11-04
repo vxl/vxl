@@ -5,6 +5,10 @@
 // \brief Derived class to represent a feature that is a landmark point - a branching or cross-over of vascular.
 // \author Chuck Stewart
 // \date 12 Nov 2002
+// \verbatim
+// Modifications
+//      Nov 2008 J Becker: Added a clone function.
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
@@ -55,7 +59,11 @@ class rgrl_feature_landmark
   //
   double absolute_signature_weight( rgrl_feature_sptr other ) const;
 
+  //: make a clone copy
+  virtual rgrl_feature_sptr clone() const;
+
  protected:
+  friend class rgrl_feature_reader;
   rgrl_feature_landmark( rgrl_feature_landmark const& other );
 
   //: uninitialized constructor

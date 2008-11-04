@@ -30,6 +30,9 @@ vnl_matrix<double> const&
 rgrl_feature_face_pt ::
 error_projector() const
 {
+  if(scale_ == 0){
+    WarningMacro( "The scale is zero." );
+  }
   if( !err_proj_.size() ) {
     err_proj_ = outer_product( normal_, normal_ ) ;
     err_proj_ /= vnl_math_sqr( scale_ );
@@ -42,6 +45,9 @@ vnl_matrix<double> const&
 rgrl_feature_face_pt ::
 error_projector_sqrt() const
 {
+  if(scale_ == 0){
+    WarningMacro( "The scale is zero." );
+  }
   if( !err_proj_sqrt_.size() ) {
     err_proj_sqrt_ = outer_product( normal_, normal_ ) ;
     err_proj_sqrt_ /= scale_;
@@ -279,4 +285,11 @@ read( vcl_istream& is, bool skip_tag )
   subspace_cached_ = false;
 
   return true;
+}
+
+rgrl_feature_sptr
+rgrl_feature_face_pt::
+clone() const
+{
+  return new rgrl_feature_face_pt(*this);
 }

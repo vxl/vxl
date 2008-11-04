@@ -210,3 +210,10 @@ read( vcl_istream& is, bool skip_tag )
 
   return true;
 }
+
+rgrl_feature_sptr
+rgrl_feature_landmark::
+clone() const
+{
+  return new rgrl_feature_landmark(*this);
+}

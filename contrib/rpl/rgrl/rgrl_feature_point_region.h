@@ -4,6 +4,10 @@
 // \file
 // \author Gehua yang
 // \date   Oct 2004
+// \verbatim
+// Modifications
+//      Nov 2008 J Becker: Added a clone function.
+// \endverbatim
 
 #include <rgrl/rgrl_feature_region.h>
 #include <rgrl/rgrl_feature_point.h>
@@ -30,6 +34,9 @@ class rgrl_feature_point_region
   //: get pixels coordinates within the region
   virtual void 
   generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio );
+
+  //: make a clone copy
+  virtual rgrl_feature_sptr clone() const;
 
 private:
   //:

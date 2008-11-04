@@ -249,3 +249,10 @@ read( vcl_istream& is, bool skip_tag )
   
   return true;
 }
+
+rgrl_feature_sptr
+rgrl_feature_trace_pt::
+clone() const
+{
+  return new rgrl_feature_trace_pt(*this);
+}

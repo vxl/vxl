@@ -10,6 +10,7 @@
 // \verbatim
 // Modifications
 // 17 Oct 2006  GY:  put in signature error vector
+// Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
 #include <rgrl/rgrl_feature.h>
@@ -61,7 +62,11 @@ class rgrl_feature_face_pt
   //:  the dimensions of the signature error vector.
   virtual unsigned signature_error_dimension( const vcl_type_info& other_feature_type ) const;
 
+  //: make a clone copy
+  virtual rgrl_feature_sptr clone() const;
+
  protected:
+  friend class rgrl_feature_reader;
   //:
   // Create an uninitialized face_pt of dimension dim
   //

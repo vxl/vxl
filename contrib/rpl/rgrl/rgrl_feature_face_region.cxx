@@ -167,6 +167,12 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
   pixel_coordinates_cached_ = true;
 }
 
+rgrl_feature_sptr
+rgrl_feature_face_region::clone() const
+{
+  return new rgrl_feature_face_region(*this);
+}
+
 #if 0 // Keep this for mapping --- move to different code
 
 void

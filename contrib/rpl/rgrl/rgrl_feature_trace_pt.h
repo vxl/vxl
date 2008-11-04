@@ -84,11 +84,15 @@ class rgrl_feature_trace_pt
   //:  Compute the signature weight between two features.
   virtual double absolute_signature_weight( rgrl_feature_sptr other ) const;
 
+  //: make a clone copy
+  virtual rgrl_feature_sptr clone() const;
+
   //  Chuck's note:  I am beginning to wonder if we are trying to do
   //  too much here.  Perhaps we should be make a subclass for the
   //  region-based estimator.
 
  protected:
+  friend class rgrl_feature_reader;
   //:
   // Create an uninitialized feature with enough space to store a dim
   // dimensional feature. The error projection matrix is initialized
