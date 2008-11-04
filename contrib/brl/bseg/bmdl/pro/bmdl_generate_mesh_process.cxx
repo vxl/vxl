@@ -284,7 +284,7 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     vcl_string kml_fname = kmz_dir + "/" + ss.str() + ".kml";
     vcl_string dae_fname = kmz_dir + "/" + ss.str() + ".dae";
     vcl_ofstream os (dae_fname.data());
-    generate_kml(kmz_dir + "/" + ss.str()+ "xx.kml", *building, lidar_cam);
+    
     os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
     os << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n";
     
