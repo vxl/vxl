@@ -4,6 +4,10 @@
 // \brief  Represents a set of matches.
 // \author Amitha Perera
 // \date 14 Nov 2002
+// \verbatim
+// Modifications
+//      Nov 2008 J Becker: Change to use the new feature reader.
+// \endverbatim
 
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_transformation.h>
@@ -422,10 +426,10 @@ read( vcl_istream& is )
   for( int i=0; i<from_size; ++i ) {
     
     // from feature
-    from = rgrl_feature_reader( is );
+    from = rgrl_feature_reader::read( is );
       
     // mapped feature
-    mapped = rgrl_feature_reader( is );
+    mapped = rgrl_feature_reader::read( is );
     if( !is || !from || !mapped ) {
       vcl_cerr << "Error(" << __FILE__ <<"): cannot read from feature" << vcl_endl;
       return false;
