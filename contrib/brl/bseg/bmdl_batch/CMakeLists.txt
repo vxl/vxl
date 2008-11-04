@@ -14,6 +14,9 @@ IF( PYTHON_FOUND )
     INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl/bgeo )
     INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bmdl )
+    
+    INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} ) 
+    INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} ) 
   
      SET(bmdl_batch_sources
        batch_bmdl.h batch_bmdl.cxx
