@@ -9,8 +9,8 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-  INCLUDE_DIRECTORIES( ${vxl_SOURCE_DIR}/v3p/tiff )
-  INCLUDE_DIRECTORIES( ${vxl_SOURCE_DIR}/v3p/geotiff )
+  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} ) 
+  INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} ) 
   SET(bmdl_pro_sources
     bmdl_classify_process.h               bmdl_classify_process.cxx
     bmdl_trace_boundaries_process.h       bmdl_trace_boundaries_process.cxx
