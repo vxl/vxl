@@ -3,6 +3,11 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <brdb/brdb_value.h>
 #include <vcl_iostream.h>
+
+#include <brdb/brdb_query.h>
+#include <brdb/brdb_selection.h>
+#include <brdb/brdb_database_manager.h>
+
 static PyObject *
 init_process(PyObject *self, PyObject *args)
 {
@@ -110,6 +115,78 @@ set_input_double(PyObject *self, PyObject *args)
   bool result = 
     bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
+}
+
+//: ozge added the following to access the process outputs while running experiments using Python
+static PyObject *
+get_input_float(PyObject *self, PyObject *args)
+{
+  unsigned id;
+  float value;
+  if (!PyArg_ParseTuple(args, "i:get_input_float", &id))
+    return NULL;
+   
+  vcl_string relation_name = "float_data";
+
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+ 
+  if (selec->size()!=1) {
+    vcl_cout << "in get_input_float() - no relation with type" << relation_name << " id: " << id << "\n";
+    return Py_BuildValue("f",-1.0);
+  }
+
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_input_float() didn't get value\n";
+    return Py_BuildValue("f",-1.0);
+  }
+
+  if (!brdb_value) {
+    vcl_cout << "in get_input_float() - null value\n";
+      return Py_BuildValue("f",-1.0);
+  }
+  brdb_value_t<float>* result_out = static_cast<brdb_value_t<float>* >(brdb_value.ptr());
+  value = result_out->value();
+  
+  return Py_BuildValue("f", value);
+}
+
+//: ozge added the following to access the process outputs while running experiments using Python
+static PyObject *
+get_input_unsigned(PyObject *self, PyObject *args)
+{
+  unsigned id;
+  unsigned value;
+  if (!PyArg_ParseTuple(args, "i:get_input_unsigned", &id))
+    return NULL;
+   
+  vcl_string relation_name = "unsigned_data";
+
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+ 
+  if (selec->size()!=1) {
+    vcl_cout << "in get_input_unsigned() - no relation with type" << relation_name << " id: " << id << "\n";
+    return Py_BuildValue("b",1000);
+  }
+
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_input_unsigned() didn't get value\n";
+    return Py_BuildValue("b",1000);
+  }
+
+  if (!brdb_value) {
+    vcl_cout << "in get_input_unsigned() - null value\n";
+      return Py_BuildValue("b",1000);
+  }
+  brdb_value_t<unsigned>* result_out = static_cast<brdb_value_t<unsigned>* >(brdb_value.ptr());
+  value = result_out->value();
+  
+  return Py_BuildValue("b", value);
 }
 
 static PyObject *
@@ -232,6 +309,10 @@ static PyMethodDef batch_methods[] = {
   "set_input_(i,f) set input i on current process to a float value"},
   {"set_input_double", set_input_double, METH_VARARGS,
   "set_input_(i,d) set input i on current process to a double value"},
+  {"get_input_float", get_input_float, METH_VARARGS,
+  "get_input_(i) return value of output i in the database"},
+  {"get_input_unsigned", get_input_unsigned, METH_VARARGS,
+  "get_input_(i) return value of output i in the database"},
   {"process_init", process_init, METH_VARARGS,
   "process_init() initialize the current process state before execution"},
   {"run_process", run_process, METH_VARARGS,
