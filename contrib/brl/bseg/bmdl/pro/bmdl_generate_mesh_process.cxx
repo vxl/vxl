@@ -3,6 +3,8 @@
 // \file
 
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>
@@ -155,8 +157,7 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
 
   imesh_mesh mesh;
   bmdl_mesh::mesh_lidar(boundaries , labels, heights, ground, mesh);
-
-  generate_kml(fpath_mesh, mesh, lidar_cam);
+  generate_kml_collada(fpath_mesh, mesh, lidar_cam);
 
   return true;
 }
@@ -165,19 +166,16 @@ void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh,
                                                    vpgl_geo_camera* cam)
 {
   imesh_vertex_array<3>& vertices = imesh.vertices<3>();
-
   for (unsigned v=0; v<vertices.size(); v++) {
     double x = vertices(v,0);
     double y = vertices(v,1);
     double z = vertices(v,2);
     bgeo_lvcs_sptr lvcs = cam->lvcs();
-    double lon, lat;
-    cam->img_to_wgs(x, y,lon,lat);
-    //lvcs->set_transform(0,0,-3.14/2);
-    //lvcs->local_to_global(x,y,z,lvcs->get_cs_name(),lon,lat,gz);
+    double lon, lat, elev;
+    cam->img_to_wgs(x, y, z, lon,lat, elev);
     vertices[v][0] = lon;
     vertices[v][1] = lat;
-    vertices[v][2] = z;
+    vertices[v][2] = elev;
   }
 }
 
@@ -217,4 +215,197 @@ void bmdl_generate_mesh_process::generate_kml(vcl_string& kml_filename,
 
   os.close();
   imesh_write_obj("meshes.obj", mesh);
+}
+
+void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
+                                                      imesh_mesh& mesh,
+                                                      vpgl_geo_camera* lidar_cam)
+{
+
+  double origin_lat = 0,origin_lon = 0, origin_elev = 0;
+  double lox, loy,theta;
+  lidar_cam->lvcs()->get_origin(origin_lat,origin_lon,origin_elev);
+  lidar_cam->lvcs()->get_transform(lox, loy,theta);
+  // write each building into kml
+  if (!mesh.has_half_edges())
+    mesh.build_edge_graph();
+
+  imesh_half_edge_set he = mesh.half_edges();
+
+  vcl_vector<imesh_mesh*> buildings;
+  // guess at ground height = lowest vertex
+  double minz = 1e6;
+  vcl_vector<vcl_set<unsigned int> > cc = imesh_detect_connected_components(he);
+
+  for (unsigned i=0; i<cc.size(); i++) {
+    vcl_set<unsigned int> sel_faces = cc[i];
+    imesh_mesh building = imesh_submesh_from_faces(mesh, sel_faces);
+    imesh_triangulate(building);
+    buildings.push_back(new imesh_mesh(building));
+    const imesh_face_array_base& faces = building.faces();
+    const imesh_vertex_array_base& verts = building.vertices();
+
+    for (unsigned int f=0; f<faces.size(); ++f) {
+      for (unsigned int v=0; v<faces.num_verts(f); ++v) {
+        unsigned int idx = faces(f,v);
+        double vz = verts(idx, 2);
+        if (vz < minz)
+          minz = vz;
+      }
+    }
+  }
+
+  double ground_height = minz;
+  vcl_string model_name;
+
+  if (kmz_dir == "") {
+    vcl_cerr << "Error: no filename selected.\n";
+    return;
+  }
+
+  if (!vul_file::is_directory(kmz_dir)) {
+    vcl_cerr << "Error: Select a directory name.\n";
+    return;
+  }
+
+  int nobjects = 0;
+  unsigned min_faces = 3;
+      
+  for (unsigned idx=0; idx<buildings.size(); idx++) {
+    imesh_mesh* building = buildings[idx];
+
+    if ( building->num_faces() <  min_faces)
+      // single mesh face is probably ground plane, which we do not want to render
+      continue;
+
+    building->compute_face_normals();
+    vcl_stringstream ss;
+    ss << "structure_" << idx;
+    vcl_string kml_fname = kmz_dir + "/" + ss.str() + ".kml";
+    vcl_string dae_fname = kmz_dir + "/" + ss.str() + ".dae";
+    vcl_ofstream os (dae_fname.data());
+    generate_kml(kmz_dir + "/" + ss.str()+ "xx.kml", *building, lidar_cam);
+    os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+    os << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n";
+    
+    os << "  <asset>\n";
+    os << "    <contributor>\n";
+    os << "      <authoring_tool> Brown University World Modeler </authoring_tool>\n";
+    os << "    </contributor>\n";
+    os << "    <created>2008-04-08T13:07:52-08:00</created>\n"; 
+    os << "    <modified>2008-04-08T13:07:52-08:00</modified>\n"; 
+    os << "    <unit name=\"meters\" meter=\"1\"/>\n";
+    os << "    <up_axis>Z_UP</up_axis>\n";
+    os << "  </asset>\n";
+
+    os << "  <library_materials>" << vcl_endl;
+    os << "    <material id=\"GreyID\" name=\"Grey\">"<< vcl_endl;
+    os << "       <instance_effect url=\"#Grey-effect\"/>"<< vcl_endl;
+    os << "    </material>"<< vcl_endl;
+    os << "  </library_materials>"<< vcl_endl;
+   
+    os << "  <library_effects>"<< vcl_endl;
+    os << "    <effect id=\"Grey-effect\" name=\"Grey-effect\">\n";
+    os << "      <profile_COMMON>\n";
+    os << "         <technique sid=\"COMMON\">\n";
+    os << "            <phong>\n";
+    os << "              <diffuse>\n";
+    os << "                 <color>1.000000 1.000000 1.000000 1</color>\n";
+    os << "              </diffuse>\n";
+    os << "            </phong>\n";
+    os << "         </technique>\n";
+    os << "         <extra>\n";
+    os << "         <technique profile=\"GOOGLEEARTH\">\n";
+    os << "           <double_sided>1</double_sided>\n";
+    os << "         </technique>\n";
+    os << "         </extra>\n";
+    os << "      </profile_COMMON>\n";
+    os << "    </effect>\n";
+    os << "  </library_effects>\n";
+
+    os << "  <library_geometries>\n";
+    imesh_write_kml_collada(os, *building);
+    os << "  </library_geometries>\n";
+
+    os << "  <library_visual_scenes>\n";
+    os << "    <visual_scene id=\"vis_scene\">\n";
+    os << "      <node id=\"Model\" name=\"Model\">\n";
+    os << "        <node id=\"mesh\" name=\"mesh\">\n";
+    os << "          <instance_geometry url=\"#geometry\">\n";
+    os << "            <bind_material>\n";
+    os << "              <technique_common>\n";
+    os << "                <instance_material symbol=\"Grey\" target=\"#GreyID\"/>\n";
+    os << "              </technique_common>\n";
+    os << "            </bind_material>\n";
+    os << "          </instance_geometry>\n";
+    os << "        </node>";
+    os << "      </node>";
+    os << "    </visual_scene>\n";
+    os << "  </library_visual_scenes>\n";
+    os << "  <scene>\n";
+    os << "    <instance_visual_scene url=\"#vis_scene\"/>\n";
+    os << "  </scene>\n";
+    os << "</COLLADA>\n";
+
+    os.close();
+
+    vcl_ofstream oskml(kml_fname.data());
+
+    oskml << "<?xml version='1.0' encoding='UTF-8'?>\n";
+    oskml << "<kml xmlns='http://earth.google.com/kml/2.1'>\n";
+    oskml << "<Folder>\n";
+    oskml << "  <name>" << ss.str() << "</name>\n";
+    oskml << "  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">CrossCut</a>]]></description>\n";
+    oskml << "  <DocumentSource>Brown University World Modeler</DocumentSource>\n";
+    oskml << "  <visibility>1</visibility>\n";
+    oskml << "  <LookAt>\n";
+    oskml << "    <heading>0</heading>\n";
+    oskml << "    <tilt>45</tilt>\n";
+    oskml << "    <longitude>" << origin_lon << "</longitude>\n";
+    oskml << "    <latitude>" << origin_lat << "</latitude>\n";
+    oskml << "    <range>200</range>\n";
+    oskml << "    <altitude>" << 0.0f << "</altitude>\n";
+    oskml << "    <altitudeMode>absolute</altitudeMode>\n";//absolute
+    oskml << "  </LookAt>\n";
+    oskml << "  <Folder>\n";
+    oskml << "    <name>Tour</name>\n";
+    oskml << "    <Placemark>\n";
+    oskml << "      <name>Camera</name>\n";
+    oskml << "      <visibility>1</visibility>\n";
+    oskml << "    </Placemark>\n";
+    oskml << "  </Folder>\n";
+    oskml << "  <Placemark>\n";
+    oskml << "    <name>Model</name>\n";
+    oskml << "    <description><![CDATA[]]></description>\n";
+    oskml << "    <Style id='default'>\n";
+    oskml << "    </Style>\n";
+    oskml << "    <Model>\n";
+    oskml << "      <altitudeMode>absolute</altitudeMode>\n";
+    oskml << "      <Location>\n";
+    oskml << "        <longitude>" << origin_lon  << "</longitude>\n";
+    oskml << "        <latitude>" << origin_lat  << "</latitude>\n";
+    oskml << "        <altitude>" << origin_elev - ground_height << "</altitude>\n"; 
+    oskml << "      </Location>\n";
+    oskml << "      <Orientation>\n";
+    oskml << "        <heading>" << lox << "</heading>\n";
+    oskml << "        <tilt>" << loy << "</tilt>\n";
+    oskml << "        <roll>" << theta << "</roll>\n";
+    oskml << "      </Orientation>\n";
+    oskml << "      <Scale>\n";
+    oskml << "        <x>1.0</x>\n";
+    oskml << "        <y>-1.0</y>\n";  // y axis is in the opposite direction
+    oskml << "        <z>1.0</z>\n";
+    oskml << "      </Scale>\n";
+    oskml << "      <Link>\n";
+    oskml << "        <href>" << vul_file::strip_directory(dae_fname) << "</href>\n";
+    oskml << "      </Link>\n";
+    oskml << "    </Model>\n";
+    oskml << "  </Placemark>\n";
+    oskml << "</Folder>\n";
+    oskml << "</kml>\n";
+    oskml.close();
+  }
+
+  for (unsigned idx=0; idx<buildings.size(); idx++) 
+    delete buildings[idx];
 }
