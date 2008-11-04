@@ -54,4 +54,7 @@ void imesh_write_obj(const vcl_string& filename, const imesh_mesh& mesh);
 //: Write a mesh into a kml file
 void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh);
 
+//: Write a mesh into a kml collada file
+void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh);
+                             
 #endif // imesh_fileio_h_
