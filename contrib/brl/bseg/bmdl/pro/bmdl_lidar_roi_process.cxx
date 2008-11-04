@@ -163,76 +163,12 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
     return false;
   }
 
- // vil_image_view<double> first_return, last_return;
-
 #if HAS_GEOTIFF
   vil_tiff_image* tiff_first = static_cast<vil_tiff_image*> (lidar_first.ptr());
   vil_tiff_image* tiff_last  = static_cast<vil_tiff_image*> (lidar_last.ptr());
 
-  // check if the tiff file is geotiff
-  if (!tiff_first->is_GEOTIFF()) {
-    vcl_cout << "bmdl_lidar_roi_process::lidar_init -- The image should be a GEOTIFF!\n";
-    return false;
-  }
-
-  vil_geotiff_header* gtif = tiff_first->get_geotiff_header();
-  int utm_zone;
-  vil_geotiff_header::GTIF_HEMISPH h;
-
-  // convert given tiepoint to world coordinates (lat, long)
-  // based on the model defined in GEOTIFF
-
-  // is this a PCS_WGS84_UTM?
-  bool is_utm = false;
-  if (gtif->PCS_WGS84_UTM_zone(utm_zone, h))
-  {
-    vcl_vector<vcl_vector<double> > tiepoints;
-    gtif->gtif_tiepoints(tiepoints);
-    bool south_flag = false;
-    if (h == 1)
-      south_flag = true;
-    is_utm = true;
-    // transform each tiepoint
-    bgeo_utm utm;
-    double lat, lon, elev ;
-    bgeo_lvcs_sptr lvcs;
-    for (unsigned i=0; i< tiepoints.size(); i++) {
-      vcl_vector<double> tiepoint = tiepoints[i];
-      assert (tiepoint.size() == 6);
-      double I = tiepoint[0];
-      double J = tiepoint[1];
-      double K = tiepoint[2];
-      double X = tiepoint[3];
-      double Y = tiepoint[4];
-      double Z = tiepoint[5];
-
-      utm.transform(utm_zone, X, Y, Z, lat, lon, elev, south_flag );
-      lvcs = new bgeo_lvcs(lat,lon,elev);
-      //scale_ = 1;
-      // now, we have a mapping (I,J,K)->(X,Y,Z)
-    }
-
-    // create a transformation matrix
-    // if there is a transormation matrix in GEOTIFF, use that
-    vnl_matrix<double> trans_matrix;
-    double* trans_matrix_values;
-    double sx1, sy1, sz1;
-    if (gtif->gtif_trans_matrix(trans_matrix_values)){
-      vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
-      trans_matrix.copy_in(trans_matrix_values);
-    } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
-      vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
-    } else {
-      vcl_cout << "bmdl_lidar_roi_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
-      return false;
-    }
-
-    // create the camera
-
-    camera = new vpgl_geo_camera(trans_matrix, lvcs, tiepoints);
-    if (is_utm)
-      camera->set_utm(utm_zone, h);
-
+  if (vpgl_geo_camera::init_geo_camera(tiff_first, camera)) {
+  
     // backproject the 3D world coordinates on the image
     vgl_box_2d<double> roi_box;
     vgl_point_3d<double> min_pos(min_lon, min_lat, 0);
@@ -244,7 +180,7 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
       double y = corners[i].y();
       double z = corners[i].z();
       double lx, ly, lz;
-      lvcs->global_to_local(x, y, z, bgeo_lvcs::wgs84, lx, ly, lz);
+      camera->lvcs()->global_to_local(x, y, z, bgeo_lvcs::wgs84, lx, ly, lz);
       double u,v;
       camera->project(lx,ly,lz,u,v);
       vgl_point_2d<double> p(u,v);
@@ -278,7 +214,17 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
     }
 
     //add the translation to the camera
-    camera->translate(bb->get_min_x(), bb->get_min_y());
+    double ox = bb->get_min_x();
+    double oy = bb->get_min_y();
+    double elev = 0;
+    if (ground_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+      vil_image_view<float> ground_view(ground_roi);
+      elev = ground_view(0,0);
+    } else if (ground_roi->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+      vil_image_view<double> ground_view(ground_roi);
+      elev = ground_view(0,0);
+    }
+    camera->translate(ox, oy, elev);
 
     if (!first_roi) {
       vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- clipping box is out of image boundaries\n";

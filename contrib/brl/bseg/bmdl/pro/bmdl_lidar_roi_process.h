@@ -32,7 +32,7 @@
 #include <bprb/bprb_process.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_sptr.h>
-#include <vpgl/algo/vpgl_geo_camera.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 
 class bmdl_lidar_roi_process : public bprb_process
 {
