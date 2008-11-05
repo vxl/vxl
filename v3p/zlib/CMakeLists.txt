@@ -32,9 +32,6 @@ SET( zlib_sources
   minizip/zip.h        minizip/zip.c
   minizip/unzip.c      minizip/unzip.h      
   minizip/mztools.c    minizip/mztools.h
-  
-  minizip/minizip.c
-  minizip/miniunz.c
 )
 
 IF(WIN32)
