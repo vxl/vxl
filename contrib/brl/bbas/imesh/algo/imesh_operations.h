@@ -23,4 +23,10 @@ imesh_mesh dual_mesh_with_normals(const imesh_mesh& mesh,
                                   double tau = 1e-2);
 
 
+//: Triangulate the faces of the mesh (in place) 
+//  Uses mesh geometry to handle noncovex faces 
+void
+imesh_triangulate_nonconvex(imesh_mesh& mesh);
+
+
 #endif // imesh_algo_operations_h_
