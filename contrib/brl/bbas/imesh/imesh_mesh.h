@@ -36,6 +36,8 @@ class imesh_mesh
   //: Copy Constructor
   imesh_mesh(const imesh_mesh& other);
 
+  imesh_mesh& operator=(imesh_mesh const& other); 
+
   //: Return the number of vertices
   unsigned int num_verts() const {return verts_->size();}
 
