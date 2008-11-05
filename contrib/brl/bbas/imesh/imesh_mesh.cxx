@@ -18,15 +18,17 @@ imesh_mesh::imesh_mesh(const imesh_mesh& other)
 {
 }
 
+
 imesh_mesh& imesh_mesh::operator=(imesh_mesh const& other) 
 { 
-  verts_ = other.verts_.get();
-  faces_ = other.faces_.get();
+  verts_ = vcl_auto_ptr<imesh_vertex_array_base>(other.verts_->clone());
+  faces_ = vcl_auto_ptr<imesh_face_array_base>(other.faces_->clone());
   half_edges_ = other.half_edges_;
   tex_coords_ = other.tex_coords_;
   tex_coord_status_ = other.tex_coord_status_;
   return *this;
 }
+
 
 //: Merge the data from another mesh into this one
 //  Duplicates are not removed
