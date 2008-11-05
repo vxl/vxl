@@ -6,6 +6,7 @@ SET (HAS_GEOTIFF 0)
 INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 IF(ZLIB_FOUND)
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/minizip )
   SET (HAS_ZLIB 1)
 ENDIF(ZLIB_FOUND)
 
@@ -38,10 +39,10 @@ IF(EXPAT_FOUND)
       ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
       TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb brdb vil vil_io vpgl_file_formats vgl_io
-                            bgeo vsol brip vpgl_pro)
+                            bgeo vsol brip vpgl_pro vpl)
                             
       IF(ZLIB_FOUND)
-         TARGET_LINK_LIBRARIES( bmdl_pro ${ZLIB_LIBRARIES} ) 
+         TARGET_LINK_LIBRARIES( bmdl_pro minizip ) 
       ENDIF(ZLIB_FOUND)
          
       IF( BUILD_TESTING )
