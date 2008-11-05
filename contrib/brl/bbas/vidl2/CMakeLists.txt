@@ -6,6 +6,7 @@ INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDC1394.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
 FIND_FILE (VIDEODEV_FOUND videodev.h /usr/include/linux/)
+FIND_FILE (VIDEODEV2_FOUND videodev2.h /usr/include/linux/)
 
 CONFIGURE_FILE( ${vidl2_SOURCE_DIR}/vidl2_config.h.in
                 ${vidl2_BINARY_DIR}/vidl2_config.h )
@@ -114,6 +115,15 @@ IF(VIDEODEV_FOUND)
        vidl2_v4l_istream.h vidl2_v4l_istream.cxx
    )
 ENDIF(VIDEODEV_FOUND)
+
+IF(VIDEODEV2_FOUND)
+   SET(vidl2_sources ${vidl2_sources}
+       vidl2_v4l2_devices.h vidl2_v4l2_devices.cxx
+       vidl2_v4l2_device.h vidl2_v4l2_device.cxx
+       v4l2_pixel_format.h v4l2_pixel_format.cxx
+       vidl2_v4l2_istream.h vidl2_v4l2_istream.cxx
+   )
+ENDIF(VIDEODEV2_FOUND)
 
 
 AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
