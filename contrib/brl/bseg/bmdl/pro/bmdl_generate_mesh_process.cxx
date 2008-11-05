@@ -5,6 +5,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_ctime.h>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>
@@ -26,6 +27,12 @@
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
 #include <vul/vul_file.h>
+
+//#if HAS_ZLIB
+//#include <minizip/zip.h>
+//#endif
+
+#define WRITEBUFFERSIZE (16384)
 
 bmdl_generate_mesh_process::bmdl_generate_mesh_process()
 {
@@ -273,7 +280,6 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
       
   for (unsigned idx=0; idx<buildings.size(); idx++) {
     const imesh_mesh& building = buildings[idx];
-
     if ( building.num_faces() <  min_faces)
       // single mesh face is probably ground plane, which we do not want to render
       continue;
@@ -282,14 +288,16 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     ss << "structure_" << idx;
     vcl_string kml_fname = kmz_dir + "/" + ss.str() + ".kml";
     vcl_string dae_fname = kmz_dir + "/" + ss.str() + ".dae";
-    
+
+    vcl_string zip_fname = kmz_dir + "/" + ss.str() + ".kmz";
+    zipFile zipf = zipOpen(zip_fname.c_str(), APPEND_STATUS_CREATE);
+
     vcl_ofstream os (dae_fname.data());
     imesh_write_kml_collada(os, building);
     os.close();
+    zip_kmz(zipf, dae_fname.c_str());
 
-    
     vcl_ofstream oskml(kml_fname.data());
-
     oskml << "<?xml version='1.0' encoding='UTF-8'?>\n";
     oskml << "<kml xmlns='http://earth.google.com/kml/2.1'>\n";
     oskml << "<Folder>\n";
@@ -343,6 +351,121 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     oskml << "</Folder>\n";
     oskml << "</kml>\n";
     oskml.close();
+    
+    zipf = zipOpen(zip_fname.c_str(), APPEND_STATUS_ADDINZIP);
+    zip_kmz(zipf, kml_fname.c_str());
   }
 
+  //for (unsigned idx=0; idx<buildings.size(); idx++) 
+  //  delete buildings[idx];
+}
+
+int bmdl_generate_mesh_process::zip_kmz(zipFile& zf, const char* filenameinzip)
+{
+    FILE * fin;
+    int size_read;
+    zip_fileinfo zi;
+    unsigned long crcFile=0;
+    int size_buf=0;
+    void* buf=NULL;
+
+    zi.tmz_date.tm_sec = zi.tmz_date.tm_min = zi.tmz_date.tm_hour =
+    zi.tmz_date.tm_mday = zi.tmz_date.tm_mon = zi.tmz_date.tm_year = 0;
+    zi.dosDate = 0;
+    zi.internal_fa = 0;
+    zi.external_fa = 0;
+
+    // Get time in seconds since Jan 1 1970
+    vcl_time_t time_secs;
+    vcl_time(&time_secs);
+
+    // Convert time to struct tm form
+    struct vcl_tm *time;
+    time = vcl_localtime(&time_secs);
+    
+    zi.tmz_date.tm_sec  = time->tm_sec;
+    zi.tmz_date.tm_min  = time->tm_min;
+    zi.tmz_date.tm_hour = time->tm_hour;
+    zi.tmz_date.tm_mday = time->tm_mday;
+    zi.tmz_date.tm_mon  = time->tm_mon ;
+    zi.tmz_date.tm_year = time->tm_year;
+    //filetime(filenameinzip,&zi.tmz_date,&zi.dosDate);
+
+    int err = 0;
+    int opt_compress_level=Z_DEFAULT_COMPRESSION;
+    err = zipOpenNewFileInZip(zf,filenameinzip,&zi,
+                     NULL,0,NULL,0,NULL,
+                     (opt_compress_level != 0) ? Z_DEFLATED : 0,
+                     opt_compress_level);
+
+
+    /*err = zipOpenNewFileInZip3(zf,filenameinzip,&zi,
+                     NULL,0,NULL,0,NULL ,
+                     (opt_compress_level != 0) ? Z_DEFLATED : 0,
+                     opt_compress_level,0,
+                     -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY,
+                     password,crcFile);*/
+
+    if (err != ZIP_OK)
+        printf("error in opening %s in zipfile\n",filenameinzip);
+    else
+    {
+        
+        fin = fopen(filenameinzip,"rb");
+        if (fin==NULL)
+        {
+            err=ZIP_ERRNO;
+            printf("error in opening %s for reading\n",filenameinzip);
+        }
+    }
+
+    if (err == ZIP_OK)
+        do
+        {
+            err = ZIP_OK;
+            size_buf = WRITEBUFFERSIZE;
+            buf = (void*)malloc(size_buf);
+            if (buf==NULL)
+            {
+              printf("Error allocating memory\n");
+              return ZIP_INTERNALERROR;
+            }
+
+            size_read = (int)fread(buf,1,size_buf,fin);
+            if (size_read < size_buf)
+                if (feof(fin)==0)
+            {
+                printf("error in reading %s\n",filenameinzip);
+                err = ZIP_ERRNO;
+            }
+
+            if (size_read>0)
+            {
+                err = zipWriteInFileInZip (zf,buf,size_read);
+                if (err<0)
+                {
+                    printf("error in writing %s in the zipfile\n",
+                                     filenameinzip);
+                }
+
+            }
+        } while ((err == ZIP_OK) && (size_read>0));
+
+    if (fin)
+        fclose(fin);
+
+    if (err<0)
+        err=ZIP_ERRNO;
+    else
+    {
+        err = zipCloseFileInZip(zf);
+        if (err!=ZIP_OK)
+            printf("error in closing %s in the zipfile\n",
+                        filenameinzip);
+    }
+
+    int errclose = zipClose(zf,NULL);
+    if (errclose != ZIP_OK)
+      printf("error in closing zipfile \n");
+  return ZIP_OK;
 }
