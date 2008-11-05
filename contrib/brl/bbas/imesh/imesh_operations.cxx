@@ -403,6 +403,16 @@ imesh_submesh_from_faces(const imesh_mesh& mesh, const vcl_set<unsigned int>& se
 }
 
 
+//: Flip the orientation of all mesh faces
+void imesh_flip_faces( imesh_mesh& mesh )
+{
+  for (unsigned int f=0; f<mesh.num_faces(); ++f)
+  {
+    mesh.faces().flip_orientation(f);
+  }
+}
+
+
 //: Flip the orientation of the selected faces
 void imesh_flip_faces( imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces)
 {
