@@ -185,6 +185,8 @@ void bmdl_mesh::simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundarie
 
 
 //: construct a mesh out of data and labels
+// The coordinate system is flipped over the x-axis to make it right handed
+// i.e. (x,y) -> (x,-y)
 void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
                            const vil_image_view<unsigned int>& labels,
                            const vil_image_view<double>& heights,
@@ -217,8 +219,8 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
     for (unsigned i=0; i<pts.size(); ++i) {
       const vgl_point_2d<double>& pt = pts[i];
       double g = vil_bilin_interp_safe_extend(ground, pt.x(), pt.y());
-      verts->push_back(imesh_vertex<3>(pt.x(),pt.y(), g));
-      verts->push_back(imesh_vertex<3>(pt.x(),pt.y(),bld_heights[b]));
+      verts->push_back(imesh_vertex<3>(pt.x(),-pt.y(), g));
+      verts->push_back(imesh_vertex<3>(pt.x(),-pt.y(),bld_heights[b]));
       unsigned int bi = first_pt + 2*i;
       faces->push_back(imesh_quad(bi+1,bi,bi+2,bi+3));
       roof.push_back(bi+1);

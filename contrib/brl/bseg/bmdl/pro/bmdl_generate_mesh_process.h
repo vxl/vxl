@@ -65,6 +65,16 @@ class bmdl_generate_mesh_process : public bprb_process
                      vpgl_geo_camera* const lidar_cam);
 
   void update_mesh_coord(imesh_mesh& imesh, vpgl_geo_camera* cam);
+  
+  //: Write the KML file for wrapping a COLLADA mesh
+  // \a lookat and \a location are (long,lat,alt) vectors
+  // \a orientation is a (heading,tilt,roll) vector
+  void write_kml_collada_wrapper(vcl_ostream& os, 
+                                 const vcl_string& object_name,
+                                 const vgl_point_3d<double>& lookat,
+                                 const vgl_point_3d<double>& location,
+                                 const vgl_point_3d<double>& orientation,
+                                 const vcl_string& filename);
 
   void generate_kml(vcl_string& kml_filename, imesh_mesh& mesh, vpgl_geo_camera* lidar_cam);
   

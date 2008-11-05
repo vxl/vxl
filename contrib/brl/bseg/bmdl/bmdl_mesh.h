@@ -37,6 +37,8 @@ public:
   static void simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundaries );
   
   //: construct a mesh out of data and labels
+  // The coordinate system is flipped over the x-axis to make it right handed
+  // i.e. (x,y) -> (x,-y)
   static void mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
                          const vil_image_view<unsigned int>& labels,
                          const vil_image_view<double>& heights,
