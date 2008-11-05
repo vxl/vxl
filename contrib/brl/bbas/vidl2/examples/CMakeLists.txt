@@ -36,6 +36,13 @@ IF ( VIDEODEV_FOUND )
 ENDIF ( VIDEODEV_FOUND )
 
 
+
+IF ( VIDEODEV2_FOUND )
+   ADD_EXECUTABLE (vidl2_v4l2_example  vidl2_v4l2_live_example.cxx)
+   TARGET_LINK_LIBRARIES(vidl2_v4l2_example vidl2)
+ENDIF ( VIDEODEV2_FOUND )
+
+
 ADD_EXECUTABLE( vidl2_transcode_video
   vidl2_transcode_video.cxx
 )
