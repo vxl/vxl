@@ -95,8 +95,7 @@ bool bmdl_mesh::trace_boundary(vcl_vector<vgl_point_2d<double> >& pts,
     next_trace_point(i,j,dir,p,value,ni1,nj1,istep,jstep);
   }
   while (i!=i0 || j!=j0 || dir!=2);
-
-
+  
   return true;
 }
 
@@ -173,7 +172,7 @@ void bmdl_mesh::simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundarie
           pts.push_back(sit->point1());
         pts.push_back(sit->point2());
       }
-      if (pts.size() > 3 && vgl_distance(pts.back(),pts.front()) &&
+      if (pts.size() > 3 && vgl_distance(pts.back(),pts.front())<1.0 &&
          vgl_intersection(vgl_line_2d<double>(pts[pts.size()-2], pts.back()),
                           vgl_line_2d<double>(pts[0],pts[1]),
                           isect)) {
