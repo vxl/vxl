@@ -50,9 +50,9 @@ int main2(int argc, char*argv[])
   MBL_LOG(INFO, logger(), "  img_src: " << img_src());
   MBL_LOG(INFO, logger(), "  img_dst: " << img_dst());
   if (bbi.set())
-    MBL_LOG(INFO, logger(), "  bbi: " << bbi.print_value(logger().log(mbl_logger::NOTICE)));
+    MBL_LOG(INFO, logger(), "  bbi: " << bbi.print_value(logger().log(mbl_logger::INFO)));
   if (bbf.set())
-    MBL_LOG(INFO, logger(), "  bbf: " << bbf.print_value(logger().log(mbl_logger::NOTICE)));
+    MBL_LOG(INFO, logger(), "  bbf: " << bbf.print_value(logger().log(mbl_logger::INFO)));
 
   if (bbi.set() && bbf.set())
   {
