@@ -6,7 +6,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-#include <vcl_cstdio.h>
 
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_3d.h>
@@ -224,29 +223,25 @@ void bwm_world::save_gml()
     return;
   }
 
-  FILE* fp;
-  if ((fp = vcl_fopen(gml_filename.c_str(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open xml file %s to write.\n", gml_filename.c_str());
-    return;
-  }
+  vcl_ofstream os(gml_filename.c_str());
 
-  vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n");
-  vcl_fprintf (fp, "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n");
-  vcl_fprintf (fp, "<gml:description>%s</gml:description>\n",model_name.c_str());
-  vcl_fprintf (fp, "<gml:name>%s</gml:name>\n",model_name.c_str());
+  os << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n";
+  os << "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n";
+  os << "<gml:description>" << model_name.c_str() << "</gml:description>\n";
+  os << "<gml:name>" << model_name.c_str() << "</gml:name>\n";
 
   int obj_count = 0;
   for (unsigned idx=0; idx<objects_.size(); idx++) {
     bwm_observable_sptr obj = objects_[idx];
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
-      tm_obj->save_gml(fp, obj_count, &lvcs_);
-      vcl_fprintf (fp, "   </Building>");
-      vcl_fprintf (fp, "  </cityObjectMember>");
+      tm_obj->save_gml(os, obj_count, &lvcs_);
+      os << "   </Building>";
+      os << "  </cityObjectMember>";
     }
   }
-  vcl_fprintf (fp, " </CityModel>");
-  vcl_fclose (fp);
+  os << " </CityModel>";
+  os.close();
 }
 
 void bwm_world::save_kml()
@@ -278,37 +273,33 @@ void bwm_world::save_kml()
     return;
   }
 
-  FILE* fp;
-  if ((fp = vcl_fopen(kml_filename.c_str(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open xml file %s to write.\n", kml_filename.c_str());
-    return;
-  }
+  vcl_ofstream os(kml_filename.c_str());
 
-  vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-  vcl_fprintf (fp, "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n");
-  vcl_fprintf (fp, "<Document>\n");
-  vcl_fprintf (fp, "  <name>%s</name>\n",vul_file::strip_directory(kml_filename.c_str()));
-  vcl_fprintf (fp, "  <open>1</open>\n");
-  vcl_fprintf (fp, "  <Placemark>\n");
-  vcl_fprintf (fp, "    <name>%s</name>\n",model_name.c_str());
-  vcl_fprintf (fp, "    <visibility>1</visibility>\n");
+  os << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+  os << "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n";
+  os << "<Document>\n";
+  os << "  <name>" << vul_file::strip_directory(kml_filename.c_str()) << "</name>\n";
+  os << "  <open>1</open>\n";
+  os << "  <Placemark>\n";
+  os << "    <name>" << model_name.c_str() << "</name>\n";
+  os << "    <visibility>1</visibility>\n";
 
-  vcl_fprintf (fp, "    <MultiGeometry>\n");
+  os << "    <MultiGeometry>\n";
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
     bwm_observable_sptr obj = objects_[idx];
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
-      tm_obj->save_kml(fp, idx, &lvcs, ground_height, x_offset, y_offset);
+      tm_obj->save_kml(os, idx, &lvcs, ground_height, x_offset, y_offset);
     }
   }
 
-  vcl_fprintf(fp, "    </MultiGeometry>\n");
-  vcl_fprintf(fp, "  </Placemark>\n");
-  vcl_fprintf(fp, "</Document>\n");
-  vcl_fprintf(fp, "</kml>\n");
+  os << "    </MultiGeometry>\n";
+  os << "  </Placemark>\n";
+  os << "</Document>\n";
+  os << "</kml>\n";
 
-  vcl_fclose (fp);
+  os.close();
 }
 
 void bwm_world::save_x3d()
@@ -331,31 +322,27 @@ void bwm_world::save_x3d()
     return;
   }
 
-  FILE* fp;
-  if ((fp = vcl_fopen(x3d_filename.c_str(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open x3d file %s to write.\n", x3d_filename.c_str());
-    return;
-  }
+  vcl_ofstream os(x3d_filename.c_str());
 
-  vcl_fprintf(fp, "#VRML V2.0 utf8\n");
-  vcl_fprintf(fp, "PROFILE Immersive\n\n");
+  os << "#VRML V2.0 utf8\n";
+  os << "PROFILE Immersive\n\n";
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
     bwm_observable_sptr obj = objects_[idx];
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*> (obj.as_pointer());
-      tm_obj->save_x3d(fp, &lvcs);
-      vcl_fprintf(fp, "      ]\n\n");
-      vcl_fprintf(fp, "      solid TRUE\n");
-      vcl_fprintf(fp, "      convex FALSE\n");
-      vcl_fprintf(fp, "      creaseAngle 0\n");
-      vcl_fprintf(fp, "    }\n");
-      vcl_fprintf(fp, "  }\n");
-      vcl_fprintf(fp, "}\n\n\n");
+      tm_obj->save_x3d(os, &lvcs);
+      os << "      ]\n\n";
+      os << "      solid TRUE\n";
+      os << "      convex FALSE\n";
+      os << "      creaseAngle 0\n";
+      os << "    }\n";
+      os << "  }\n";
+      os << "}\n\n\n";
     }
   }
 
-  vcl_fclose(fp);
+  os.close();
   return;
 }
 
@@ -407,11 +394,7 @@ void bwm_world::save_kml_collada()
   vcl_ostringstream dae_fname;
   dae_fname << kmz_dir << "/models/mesh.dae";
 
-  FILE* dae_fp;
-  if ((dae_fp = vcl_fopen(dae_fname.str().data(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open .dae file %s to write.\n", dae_fname.str().data());
-    return;
-  }
+  vcl_ofstream os (dae_fname.str().data());
 
   vcl_vector<vcl_string> image_names;
   vcl_vector<vcl_string> image_fnames;
@@ -502,82 +485,82 @@ void bwm_world::save_kml_collada()
     }
   }
 
-  vcl_fprintf(dae_fp,"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-  vcl_fprintf(dae_fp,"<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n");
+  os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+  os << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n";
 
-  vcl_fprintf(dae_fp,"  <asset>\n");
-  vcl_fprintf(dae_fp,"    <contributor>\n");
-  vcl_fprintf(dae_fp,"      <authoring_tool> Brown University World Modeler </authoring_tool>\n");
-  vcl_fprintf(dae_fp,"    </contributor>\n");
-  vcl_fprintf(dae_fp,"    <unit name=\"meters\" meter=\"1\"/>\n");
-  vcl_fprintf(dae_fp,"    <up_axis>Z_UP</up_axis>\n");
-  vcl_fprintf(dae_fp,"  </asset>\n");
+  os << "  <asset>\n";
+  os << "    <contributor>\n";
+  os << "      <authoring_tool> Brown University World Modeler </authoring_tool>\n";
+  os << "    </contributor>\n";
+  os << "    <unit name=\"meters\" meter=\"1\"/>\n";
+  os << "    <up_axis>Z_UP</up_axis>\n";
+  os << "  </asset>\n";
 
-  vcl_fprintf(dae_fp,"  <library_images>\n");
+  os << "  <library_images>\n";
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"    <image id=\"%s\" name=\"%s\">\n",image_names[i].c_str(),image_names[i].c_str());
-    vcl_fprintf(dae_fp,"      <init_from>%s</init_from>\n",image_fnames[i].c_str());
-    vcl_fprintf(dae_fp,"    </image>\n");
+    os << "    <image id=\"" << image_names[i].c_str() << "\" name=\"" << image_names[i].c_str() << "\">\n";
+    os << "      <init_from>" << image_fnames[i].c_str() << "</init_from>\n";
+    os << "    </image>\n";
   }
-  vcl_fprintf(dae_fp,"  </library_images>\n");
+  os << "  </library_images>\n";
 
-  vcl_fprintf(dae_fp,"  <library_materials>\n");
+  os << "  <library_materials>\n";
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"    <material id=\"%s\" name=\"%s\">\n",material_ids[i].c_str(),material_names[i].c_str());
-    vcl_fprintf(dae_fp,"      <instance_effect url=\"#%s\"/>\n",effect_ids[i].c_str());
-    vcl_fprintf(dae_fp,"    </material>\n");
+    os << "    <material id=\"" << material_ids[i].c_str() << "\" name=\"" << material_names[i].c_str() << "\">\n";
+    os << "      <instance_effect url=\"#" << effect_ids[i].c_str() << "\"/>\n";
+    os << "    </material>\n";
   }
-  vcl_fprintf(dae_fp,"  </library_materials>\n");
+  os << "  </library_materials>\n";
 
-  vcl_fprintf(dae_fp,"  <library_effects>\n");
+  os << "  <library_effects>\n";
   for (int i=0; i<nobjects; i++)
   {
-    vcl_fprintf(dae_fp,"    <effect id=\"%s\" name=\"%s\">\n",effect_ids[i].c_str(),effect_ids[i].c_str());
-    vcl_fprintf(dae_fp,"      <profile_COMMON>\n");
-    vcl_fprintf(dae_fp,"        <newparam sid=\"%s\">\n",surface_ids[i].c_str());
-    vcl_fprintf(dae_fp,"          <surface type=\"2D\">\n");
-    vcl_fprintf(dae_fp,"            <init_from>%s</init_from>\n",image_names[i].c_str());
-    vcl_fprintf(dae_fp,"          </surface>\n");
-    vcl_fprintf(dae_fp,"        </newparam>\n");
-    vcl_fprintf(dae_fp,"        <newparam sid=\"%s\">\n",image_sampler_ids[i].c_str());
-    vcl_fprintf(dae_fp,"          <sampler2D>\n");
-    vcl_fprintf(dae_fp,"            <source>%s</source>\n",surface_ids[i].c_str());
-    vcl_fprintf(dae_fp,"          </sampler2D>\n");
-    vcl_fprintf(dae_fp,"        </newparam>\n");
-    vcl_fprintf(dae_fp,"        <technique sid=\"COMMON\">\n");
-    vcl_fprintf(dae_fp,"          <phong>\n");
-    vcl_fprintf(dae_fp,"            <emission>\n");
-    vcl_fprintf(dae_fp,"              <color>0.0 0.0 0.0 1</color>\n");
-    vcl_fprintf(dae_fp,"            </emission>\n");
-    vcl_fprintf(dae_fp,"            <ambient>\n");
-    vcl_fprintf(dae_fp,"              <color>0.0 0.0 0.0 1</color>\n");
-    vcl_fprintf(dae_fp,"            </ambient>\n");
-    vcl_fprintf(dae_fp,"            <diffuse>\n");
-    vcl_fprintf(dae_fp,"              <texture texture=\"%s\" texcoord=\"UVSET0\"/>\n",image_sampler_ids[i].c_str());
-    vcl_fprintf(dae_fp,"            </diffuse>\n");
-    vcl_fprintf(dae_fp,"            <specular>\n");
-    vcl_fprintf(dae_fp,"              <color>0.33 0.33 0.33 1</color>\n");
-    vcl_fprintf(dae_fp,"            </specular>\n");
-    vcl_fprintf(dae_fp,"            <shininess>\n");
-    vcl_fprintf(dae_fp,"              <float>20.0</float>\n");
-    vcl_fprintf(dae_fp,"            </shininess>\n");
-    vcl_fprintf(dae_fp,"            <reflectivity>\n");
-    vcl_fprintf(dae_fp,"              <float>0.1</float>\n");
-    vcl_fprintf(dae_fp,"            </reflectivity>\n");
-    vcl_fprintf(dae_fp,"            <transparent>\n");
-    vcl_fprintf(dae_fp,"              <color>1 1 1 1</color>\n");
-    vcl_fprintf(dae_fp,"            </transparent>\n");
-    vcl_fprintf(dae_fp,"            <transparency>\n");
-    vcl_fprintf(dae_fp,"              <float>0.0</float>\n");
-    vcl_fprintf(dae_fp,"            </transparency>\n");
-    vcl_fprintf(dae_fp,"          </phong>\n");
-    vcl_fprintf(dae_fp,"        </technique>\n");
-    vcl_fprintf(dae_fp,"      </profile_COMMON>\n");
-    vcl_fprintf(dae_fp,"    </effect>\n");
+    os << "    <effect id=\"" << effect_ids[i].c_str() << "\" name=\"" << effect_ids[i].c_str() << "\">\n";
+    os << "      <profile_COMMON>\n";
+    os << "        <newparam sid=\"" << surface_ids[i].c_str() << "\">\n";
+    os << "          <surface type=\"2D\">\n";
+    os << "            <init_from>" << image_names[i].c_str() << "</init_from>\n";
+    os << "          </surface>\n";
+    os << "        </newparam>\n";
+    os << "        <newparam sid=\"" << image_sampler_ids[i].c_str() << "\">\n";
+    os << "          <sampler2D>\n";
+    os << "            <source>" << surface_ids[i].c_str() << "</source>\n";
+    os << "          </sampler2D>\n";
+    os << "        </newparam>\n";
+    os << "        <technique sid=\"COMMON\">\n";
+    os << "          <phong>\n";
+    os << "            <emission>\n";
+    os << "              <color>0.0 0.0 0.0 1</color>\n";
+    os << "            </emission>\n";
+    os << "            <ambient>\n";
+    os << "              <color>0.0 0.0 0.0 1</color>\n";
+    os << "            </ambient>\n";
+    os << "            <diffuse>\n";
+    os << "              <texture texture=\"" << image_sampler_ids[i].c_str() << "\" texcoord=\"UVSET0\"/>\n";
+    os << "            </diffuse>\n";
+    os << "            <specular>\n";
+    os << "              <color>0.33 0.33 0.33 1</color>\n";
+    os << "            </specular>\n";
+    os << "            <shininess>\n";
+    os << "              <float>20.0</float>\n";
+    os << "            </shininess>\n";
+    os << "            <reflectivity>\n";
+    os << "              <float>0.1</float>\n";
+    os << "            </reflectivity>\n";
+    os << "            <transparent>\n";
+    os << "              <color>1 1 1 1</color>\n";
+    os << "            </transparent>\n";
+    os << "            <transparency>\n";
+    os << "              <float>0.0</float>\n";
+    os << "            </transparency>\n";
+    os << "          </phong>\n";
+    os << "        </technique>\n";
+    os << "      </profile_COMMON>\n";
+    os << "    </effect>\n";
   }
-  vcl_fprintf(dae_fp,"  </library_effects>\n");
+  os << "  </library_effects>\n";
 
-  vcl_fprintf(dae_fp,"  <library_geometries>\n");
+  os << "  <library_geometries>\n";
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
     bwm_observable_sptr obj = objects_[idx];
@@ -590,7 +573,7 @@ void bwm_world::save_kml_collada()
 
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
-      tm_obj->save_kml_collada(dae_fp, &lvcs, geometry_ids[idx],
+      tm_obj->save_kml_collada(os, &lvcs, geometry_ids[idx],
                                geometry_position_ids[idx],
                                geometry_position_array_ids[idx],
                                geometry_uv_ids[idx],
@@ -599,125 +582,117 @@ void bwm_world::save_kml_collada()
                                material_names[idx]);
     }
 
-    vcl_fprintf(dae_fp,"</p>\n");
-    vcl_fprintf(dae_fp,"      </triangles>\n");
-    vcl_fprintf(dae_fp,"    </mesh>\n");
-    vcl_fprintf(dae_fp,"  </geometry>\n");
+    os << "</p>\n";
+    os << "      </triangles>\n";
+    os << "    </mesh>\n";
+    os << "  </geometry>\n";
     idx++;
   }
 
-  vcl_fprintf(dae_fp,"</library_geometries>\n");
-  vcl_fprintf(dae_fp,"<library_nodes>\n");
+  os << "</library_geometries>\n";
+  os << "<library_nodes>\n";
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"  <node id=\"Component_%d\" name=\"Component_%d\">\n",i,i);
-    vcl_fprintf(dae_fp,"    <node id=\"%s\" name=\"%s\">\n",mesh_ids[i].c_str(),mesh_ids[i].c_str());
-    vcl_fprintf(dae_fp,"      <instance_geometry url=\"#%s\">\n",geometry_ids[i].c_str());
-    vcl_fprintf(dae_fp,"        <bind_material>\n");
-    vcl_fprintf(dae_fp,"          <technique_common>\n");
-    vcl_fprintf(dae_fp,"            <instance_material symbol=\"%s\" target=\"#%s\">\n",material_names[i].c_str(),material_ids[i].c_str());
-    vcl_fprintf(dae_fp,"              <bind_vertex_input semantic=\"UVSET0\" input_semantic=\"TEXCOORD\" input_set=\"0\"/>\n");
-    vcl_fprintf(dae_fp,"            </instance_material>\n");
-    vcl_fprintf(dae_fp,"          </technique_common>\n");
-    vcl_fprintf(dae_fp,"        </bind_material>\n");
-    vcl_fprintf(dae_fp,"      </instance_geometry>\n");
-    vcl_fprintf(dae_fp,"    </node>\n");
-    vcl_fprintf(dae_fp,"  </node>\n");
+    os << "  <node id=\"Component_" << i << "\" name=\"Component_" << i << "\">\n";
+    os << "    <node id=\"" << mesh_ids[i].c_str() << "\" name=\"" << mesh_ids[i].c_str() << "\">\n";
+    os << "      <instance_geometry url=\"#" << geometry_ids[i].c_str() << "\">\n";
+    os << "        <bind_material>\n";
+    os << "          <technique_common>\n";
+    os << "            <instance_material symbol=\"" <<material_names[i].c_str() << "\" target=\"#" << material_ids[i].c_str()<< "\">\n";
+    os << "              <bind_vertex_input semantic=\"UVSET0\" input_semantic=\"TEXCOORD\" input_set=\"0\"/>\n";
+    os << "            </instance_material>\n";
+    os << "          </technique_common>\n";
+    os << "        </bind_material>\n";
+    os << "      </instance_geometry>\n";
+    os << "    </node>\n";
+    os << "  </node>\n";
   }
-  vcl_fprintf(dae_fp,"</library_nodes>\n");
+  os << "</library_nodes>\n";
 
-  vcl_fprintf(dae_fp,"<library_visual_scenes>\n");
-  vcl_fprintf(dae_fp,"  <visual_scene id=\"WorldModelerScene\" name=\"WorldModelerScene\">\n");
-  vcl_fprintf(dae_fp,"    <node id=\"Model\" name=\"Model\">\n");
+  os << "<library_visual_scenes>\n";
+  os << "  <visual_scene id=\"WorldModelerScene\" name=\"WorldModelerScene\">\n";
+  os << "    <node id=\"Model\" name=\"Model\">\n";
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"      <node id=\"Component_%d_1\" name=\"Component_%d_1\">\n",i,i);
-    vcl_fprintf(dae_fp,"        <instance_node url=\"#Component_%d\"/>\n",i);
-    vcl_fprintf(dae_fp,"      </node>\n");
+    os << "      <node id=\"Component_" << i << "_1\" name=\"Component_" << i << "_1\">\n";
+    os << "        <instance_node url=\"#Component_" << i << "\"/>\n";
+    os << "      </node>\n";
   }
-  vcl_fprintf(dae_fp,"    </node>\n");
-  vcl_fprintf(dae_fp,"  </visual_scene>\n");
-  vcl_fprintf(dae_fp,"</library_visual_scenes>\n");
+  os << "    </node>\n";
+  os << "  </visual_scene>\n";
+  os << "</library_visual_scenes>\n";
 
-  vcl_fprintf(dae_fp,"<scene>\n");
-  vcl_fprintf(dae_fp,"  <instance_visual_scene url=\"#WorldModelerScene\"/>\n");
-  vcl_fprintf(dae_fp,"</scene>\n");
-  vcl_fprintf(dae_fp,"</COLLADA>\n");
+  os << "<scene>\n";
+  os << "  <instance_visual_scene url=\"#WorldModelerScene\"/>\n";
+  os << "</scene>\n";
+  os << "</COLLADA>\n";
 
-  vcl_fclose(dae_fp);
+  os.close();
 
   vcl_ostringstream textures_fname;
   textures_fname << kmz_dir << "/textures.txt";
 
-  FILE* tex_fp;
-  if ((tex_fp = vcl_fopen(textures_fname.str().data(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open .dae file %s to write.\n", textures_fname.str().data());
-    return;
-  }
+  vcl_ofstream ost(textures_fname.str().data());
 
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(tex_fp,"<%s> <%s>\n",image_fnames[i].c_str(),image_fnames[i].c_str());
+    ost << "<" << image_fnames[i].c_str() << "> <" << image_fnames[i].c_str() << ">\n";
   }
-  vcl_fclose(tex_fp);
 
   vcl_ostringstream kml_fname;
   kml_fname << kmz_dir << "/doc.kml";
-  FILE* kml_fp;
-  if ((kml_fp = vcl_fopen(kml_fname.str().data(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open .kml file %s to write.\n", kml_fname.str().data());
-    return;
-  }
+  
+  vcl_ofstream oskml(kml_fname.str().data());
 
-  vcl_fprintf(kml_fp,"<?xml version='1.0' encoding='UTF-8'?>\n");
-  vcl_fprintf(kml_fp,"<kml xmlns='http://earth.google.com/kml/2.1'>\n");
-  vcl_fprintf(kml_fp,"<Folder>\n");
-  vcl_fprintf(kml_fp,"  <name>%s</name>\n",model_name.c_str());
-  vcl_fprintf(kml_fp,"  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">CrossCut</a>]]></description>\n");
-  vcl_fprintf(kml_fp,"  <DocumentSource>CrossCut 1.0</DocumentSource>\n");
-  vcl_fprintf(kml_fp,"  <visibility>1</visibility>\n");
-  vcl_fprintf(kml_fp,"  <LookAt>\n");
-  vcl_fprintf(kml_fp,"    <heading>0</heading>\n");
-  vcl_fprintf(kml_fp,"    <tilt>45</tilt>\n");
-  vcl_fprintf(kml_fp,"    <longitude>%f</longitude>\n",origin_lon);
-  vcl_fprintf(kml_fp,"    <latitude>%f</latitude>\n",origin_lat);
-  vcl_fprintf(kml_fp,"    <range>200</range>\n");
-  vcl_fprintf(kml_fp,"    <altitude>%f</altitude>\n",0.0f);
-  vcl_fprintf(kml_fp,"  </LookAt>\n");
-  vcl_fprintf(kml_fp,"  <Folder>\n");
-  vcl_fprintf(kml_fp,"    <name>Tour</name>\n");
-  vcl_fprintf(kml_fp,"    <Placemark>\n");
-  vcl_fprintf(kml_fp,"      <name>Camera</name>\n");
-  vcl_fprintf(kml_fp,"      <visibility>1</visibility>\n");
-  vcl_fprintf(kml_fp,"    </Placemark>\n");
-  vcl_fprintf(kml_fp,"  </Folder>\n");
-  vcl_fprintf(kml_fp,"  <Placemark>\n");
-  vcl_fprintf(kml_fp,"    <name>Model</name>\n");
-  vcl_fprintf(kml_fp,"    <description><![CDATA[]]></description>\n");
-  vcl_fprintf(kml_fp,"    <Style id='default'>\n");
-  vcl_fprintf(kml_fp,"    </Style>\n");
-  vcl_fprintf(kml_fp,"    <Model>\n");
-  vcl_fprintf(kml_fp,"      <altitudeMode>relativeToGround</altitudeMode>\n");
-  vcl_fprintf(kml_fp,"      <Location>\n");
-  vcl_fprintf(kml_fp,"        <longitude>%f</longitude>\n",origin_lon + lon_offset);
-  vcl_fprintf(kml_fp,"        <latitude>%f</latitude>\n",origin_lat + lat_offset);
-  vcl_fprintf(kml_fp,"        <altitude>%f</altitude>\n",origin_elev - ground_height);
-  vcl_fprintf(kml_fp,"      </Location>\n");
-  vcl_fprintf(kml_fp,"      <Orientation>\n");
-  vcl_fprintf(kml_fp,"        <heading>0</heading>\n");
-  vcl_fprintf(kml_fp,"        <tilt>0</tilt>\n");
-  vcl_fprintf(kml_fp,"        <roll>0</roll>\n");
-  vcl_fprintf(kml_fp,"      </Orientation>\n");
-  vcl_fprintf(kml_fp,"      <Scale>\n");
-  vcl_fprintf(kml_fp,"        <x>1.0</x>\n");
-  vcl_fprintf(kml_fp,"        <y>1.0</y>\n");
-  vcl_fprintf(kml_fp,"        <z>1.0</z>\n");
-  vcl_fprintf(kml_fp,"      </Scale>\n");
-  vcl_fprintf(kml_fp,"      <Link>\n");
-  vcl_fprintf(kml_fp,"        <href>models/mesh.dae</href>\n");
-  vcl_fprintf(kml_fp,"      </Link>\n");
-  vcl_fprintf(kml_fp,"    </Model>\n");
-  vcl_fprintf(kml_fp,"  </Placemark>\n");
-  vcl_fprintf(kml_fp,"</Folder>\n");
-  vcl_fprintf(kml_fp,"</kml>\n");
-  vcl_fclose(kml_fp);
+  oskml << "<?xml version='1.0' encoding='UTF-8'?>\n";
+  oskml << "<kml xmlns='http://earth.google.com/kml/2.1'>\n";
+  oskml << "<Folder>\n";
+  oskml << "  <name>" << model_name.c_str() << "</name>\n";
+  oskml << "  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">CrossCut</a>]]></description>\n";
+  oskml << "  <DocumentSource>CrossCut 1.0</DocumentSource>\n";
+  oskml << "  <visibility>1</visibility>\n";
+  oskml << "  <LookAt>\n";
+  oskml << "    <heading>0</heading>\n";
+  oskml << "    <tilt>45</tilt>\n";
+  oskml << "    <longitude>" << origin_lon << "</longitude>\n";
+  oskml << "    <latitude>" << origin_lat << "</latitude>\n";
+  oskml << "    <range>200</range>\n";
+  oskml << "    <altitude>" << 0.0f << "</altitude>\n";
+  oskml << "  </LookAt>\n";
+  oskml << "  <Folder>\n";
+  oskml << "    <name>Tour</name>\n";
+  oskml << "    <Placemark>\n";
+  oskml << "      <name>Camera</name>\n";
+  oskml << "      <visibility>1</visibility>\n";
+  oskml << "    </Placemark>\n";
+  oskml << "  </Folder>\n";
+  oskml << "  <Placemark>\n";
+  oskml << "    <name>Model</name>\n";
+  oskml << "    <description><![CDATA[]]></description>\n";
+  oskml << "    <Style id='default'>\n";
+  oskml << "    </Style>\n";
+  oskml << "    <Model>\n";
+  oskml << "      <altitudeMode>relativeToGround</altitudeMode>\n";
+  oskml << "      <Location>\n";
+  oskml << "        <longitude>" << origin_lon + lon_offset << "</longitude>\n";
+  oskml << "        <latitude>" << origin_lat + lat_offset << "</latitude>\n";
+  oskml << "        <altitude>" << origin_elev - ground_height << "</altitude>\n";
+  oskml << "      </Location>\n";
+  oskml << "      <Orientation>\n";
+  oskml << "        <heading>0</heading>\n";
+  oskml << "        <tilt>0</tilt>\n";
+  oskml << "        <roll>0</roll>\n";
+  oskml << "      </Orientation>\n";
+  oskml << "      <Scale>\n";
+  oskml << "        <x>1.0</x>\n";
+  oskml << "        <y>1.0</y>\n";
+  oskml << "        <z>1.0</z>\n";
+  oskml << "      </Scale>\n";
+  oskml << "      <Link>\n";
+  oskml << "        <href>models/mesh.dae</href>\n";
+  oskml << "      </Link>\n";
+  oskml << "    </Model>\n";
+  oskml << "  </Placemark>\n";
+  oskml << "</Folder>\n";
+  oskml << "</kml>\n";
+
 }
 
 void bwm_world::clear()
