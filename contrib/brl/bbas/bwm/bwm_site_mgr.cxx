@@ -620,10 +620,9 @@ void bwm_site_mgr::save_site()
   for (unsigned i=0; i<active_tableaus_.size(); i++) {
     if (active_tableaus_[i]->type_name.compare("CameraTableau") == 0) {
       vcl_string new_cam_path = bwm_tableau_mgr::instance()->save_camera(active_tableaus_[i]->name);
-      if (new_cam_path.size() > 0) {
-        bwm_io_tab_config_cam* t  = static_cast<bwm_io_tab_config_cam*> (active_tableaus_[i]);
-        t->cam_path = new_cam_path;
-      }
+      bwm_io_tab_config_cam* t  = static_cast<bwm_io_tab_config_cam*> (active_tableaus_[i]);
+      t->cam_path = new_cam_path;
+
     }
     site->tableaus_.push_back(active_tableaus_[i]->clone());
   }
