@@ -42,6 +42,8 @@ class bwm_tableau_mgr
 
   vcl_string save_camera(vcl_string tab_name);
 
+  void save_cameras();
+
   void remove_tableau();
 
   void exit();

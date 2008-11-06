@@ -41,7 +41,7 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
 
   // saves the camera with a new version number and returns the path
   vcl_string save_camera();
-
+  void save_adj_camera() { save_camera();}
   // ******************** LVCS Menu
 
   void load_lvcs();

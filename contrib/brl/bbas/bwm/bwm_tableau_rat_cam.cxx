@@ -79,6 +79,8 @@ vcl_string bwm_tableau_rat_cam::save_camera()
     new_cam_path += "_v" + str + vul_file::extension(cam_path);
     my_observer_->camera().save(new_cam_path);
     return new_cam_path;
+  } else {
+    vcl_cout << "bwm_tableau_rat_cam::save_camera -- Camera has not changed, not saving!" << vcl_endl;
+    return "";
   }
-  return "";
 }

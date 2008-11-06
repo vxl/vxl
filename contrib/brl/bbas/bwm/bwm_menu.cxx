@@ -19,6 +19,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
 
   load_menu.add("Remove Selected Tableau..." , remove_tableau);
   load_menu.add("Zoom to Fit..." , zoom_to_fit);
+  load_menu.add("Save adjusted cameras..." , save_cameras);
   load_menu.add("Exit..." , exit);
   top_menu.add("SITE   ", load_menu);
 

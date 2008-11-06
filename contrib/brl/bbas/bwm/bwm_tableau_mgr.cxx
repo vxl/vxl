@@ -121,6 +121,15 @@ vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
   return "";
 }
 
+void bwm_tableau_mgr::save_cameras()
+{
+  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  while (iter != tableaus_.end()) {
+    save_camera(iter->first);
+    iter++;
+  }
+}
+
 void bwm_tableau_mgr::add_corresp(vcl_string tab_name, bwm_corr_sptr corr, double X, double Y)
 {
   vgui_tableau_sptr tab = this->find_tableau(tab_name);

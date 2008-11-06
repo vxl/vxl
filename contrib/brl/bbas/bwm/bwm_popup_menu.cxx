@@ -238,6 +238,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
       mesh_submenu.add( "Center on Geographic Position",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::center_pos));
+
+      mesh_submenu.separator();
+      mesh_submenu.add( "Save Adjusted Camera",
+        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
+        &bwm_tableau_rat_cam::save_adj_camera));
     }
     mesh_submenu.separator();
     mesh_submenu.add( "Toggle GeoPosition Display",
