@@ -32,7 +32,10 @@
 
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_box_3d.h>
+
+#if (HAS_ZLIB)
 #include <minizip/zip.h>
+#endif
 
 class bmdl_generate_mesh_process : public bprb_process
 {
@@ -79,8 +82,10 @@ class bmdl_generate_mesh_process : public bprb_process
   void generate_kml(vcl_string& kml_filename, imesh_mesh& mesh, vpgl_geo_camera* lidar_cam);
   
   void generate_kml_collada(vcl_string& kmz_dir, imesh_mesh& mesh, vpgl_geo_camera* lidar_cam);
-   
+
+#if (HAS_ZLIB)
   int zip_kmz(zipFile& zf, const char* filenameinzip);
+#endif
 };
 
 #endif // bmdl_generate_mesh_process_h_

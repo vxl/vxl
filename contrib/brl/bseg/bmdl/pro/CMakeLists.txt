@@ -1,13 +1,11 @@
 # This is contrib/brl/bseg/bmdl/pro/CMakeLists.txt
 # bmdl's Process Library
 
-SET (HAS_ZLIB 0)
-SET (HAS_GEOTIFF 0)
 INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 IF(ZLIB_FOUND)
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p )
-  SET (HAS_ZLIB 1)
+  ADD_DEFINITIONS(-DHAS_ZLIB=1)
 ENDIF(ZLIB_FOUND)
 
 # bprb depends on expat and bmdl_prodepends on bprb primarily
@@ -17,7 +15,6 @@ IF(EXPAT_FOUND)
   IF(TIFF_FOUND)
     INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
     IF(GEOTIFF_FOUND)
-      SET (HAS_GEOTIFF 1)
       INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
       INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
       INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
