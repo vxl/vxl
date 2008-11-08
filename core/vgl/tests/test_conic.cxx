@@ -119,6 +119,9 @@ static void test_conic()
   TEST("conic is circle", c.real_type(), "real circle");
   vnl_vector_fixed<double,6> v = vgl_homg_operators_2d<double>::get_vector(c);
   TEST("get_vector", v[0]==1&&v[1]==0&&v[2]==1&&v[3]==-2&&v[4]==-4&&v[5]==4, true);
+  TEST_NEAR("curvature at (1,1)", c.curvature_at(vgl_point_2d<double>(1,1)), 1.0, 1e-6);
+  TEST_NEAR("curvature at (2,2)", c.curvature_at(vgl_point_2d<double>(2,2)), 1.0, 1e-6);
+
   cc = vgl_conic<double>(1,0,1,-2,-4,4); // idem, by equation
   vcl_cout << "By equation: " << cc << '\n';
   TEST("circle equality", c, cc);
@@ -551,6 +554,7 @@ static void test_conic()
   TEST("!contains (0,1)", c.contains(npt), false);
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count from other point = 0", lines.size(), 0);
+  TEST_NEAR("curvature is zero", c.curvature_at(vgl_point_2d<double>(5.0,-8.0)), 0.0, 1e-6);
 
   // Intersections
   c = vgl_conic<double>(centre, 3,3, 0.0); // circle

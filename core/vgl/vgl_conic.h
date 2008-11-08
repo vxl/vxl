@@ -26,6 +26,7 @@
 //   Peter Vanroose, 30 aug 2001 complete rewrite of most of the code
 //   Peter Vanroose, 31 aug 2001 added extensive testing + fixed some bugs
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   Ricardo Fabbri, 08 nov 2008 added curvature_at() method.
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -238,6 +239,9 @@ class vgl_conic
   // When two intersecting or parallel lines, returns their intersection point.
   // In all cases this is the polar point of the line at infinity.
   vgl_homg_point_2d<T> centre() const { return polar_point(vgl_homg_line_2d<T>(0,0,1)); }
+
+  //: Returns the curvature of the conic at point p, assuming p is on the conic.
+  double curvature_at(vgl_point_2d<T> const& p) const;
 
   //: Converts the coefficients to a geometric description of an ellipse. 
   //  Returns false if the conic is not an ellipse. Double is appropriate

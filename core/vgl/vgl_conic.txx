@@ -28,6 +28,7 @@ static const char *vgl_conic_name[] =
   "coincident lines"
 };
 
+
 //--------------------------------------------------------------
 //: Returns the type name of the conic.
 
@@ -345,6 +346,36 @@ vgl_homg_point_2d<T> vgl_conic<T>::polar_point(vgl_homg_line_2d<T> const& l) con
     else
       return vgl_homg_point_2d<T>(b_*e_-c_*d_*2, b_*d_-a_*e_*2, a_*c_*4-b_*b_);
 }
+
+//: Returns the curvature of the conic at point p, assuming p is on the conic.
+template <class T>
+double vgl_conic<T>::curvature_at(vgl_point_2d<T> const& p) const
+{
+  // Shorthands
+  const T &a_xx = a_;
+  const T &a_xy = b_;
+  const T &a_yy = c_;
+  const T &a_xw = d_;
+  const T &a_yw = e_;
+
+  const T x = p.x();
+  const T y = p.y();
+
+  double f_x  = 2*a_xx + a_xy*y + a_xw;
+  double f_y  = 2*a_yy + a_xy*x + a_yw;
+  double f_xy = a_xy;
+  double f_xx = 2*a_xx;
+  double f_yy = 2*a_yy;
+
+  double f_x_2 = f_x*f_x;
+  double f_y_2 = f_y*f_y;
+  double denom = f_x_2 + f_y_2;
+  denom = vcl_sqrt(denom*denom*denom);
+
+  // Divergent of the unit normal grad f/|grad f|
+  return (f_xx*f_y_2 - 2*f_x*f_y*f_xy + f_yy*f_x_2) / denom;
+}
+
 
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2=0>" to stream
 template <class T>
