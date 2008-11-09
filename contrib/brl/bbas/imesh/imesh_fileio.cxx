@@ -6,7 +6,6 @@
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vcl_limits.h>
-#include <vcl_map.h>
 #include <vul/vul_file.h>
 
 
@@ -138,12 +137,15 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
   vcl_vector<vgl_point_2d<double> > tex;
   vcl_string last_group = "ungrouped";
   char c;
-  while (is >> c) {
-    switch (c) {
+  while (is >> c)
+  {
+    switch (c)
+    {
       case 'v': // read a vertex
       {
         char c2 = is.peek();
-        switch (c2) {
+        switch (c2)
+        {
           case 'n': // read a normal
           {
             is.ignore();
@@ -253,9 +255,9 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
     for (unsigned int n=0; n<verts.size(); ++n) {
       const vgl_vector_3d<double>& v = verts.normal(n);
       os << "vn "
-        << v.x() << ' '
-        << v.z() << ' '
-        << -v.y() << '\n';
+         << v.x() << ' '
+         << v.z() << ' '
+         << -v.y() << '\n';
     }
   }
 
@@ -275,7 +277,8 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
     os << "g " << groups[0].first << '\n';
   unsigned int g=0;
   unsigned int e=0;
-  for (unsigned int f=0; f<faces.size(); ++f) {
+  for (unsigned int f=0; f<faces.size(); ++f)
+  {
     while (g < groups.size() && groups[g].second <= f) {
       ++g;
       if (g < groups.size())
@@ -314,7 +317,8 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
   }
 
   os.precision(12);
-  for (unsigned int f=0; f<faces.size(); ++f) {
+  for (unsigned int f=0; f<faces.size(); ++f)
+  {
     // originally it was id=buildingX_faceY, but we have to pass a mesh number
     os << "      <Polygon id=\"building_face" << f << "\">\n"
        << "        <extrude>0</extrude>\n"
@@ -337,8 +341,8 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
     double x = verts(idx, 0);
     double y = verts(idx, 1);
     double z = verts(idx, 2);
-    os << "             " << x  << ", " << y << ", " << z << vcl_endl;
-    os << "            </coordinates>\n"
+    os << "             " << x  << ", " << y << ", " << z << vcl_endl
+       << "            </coordinates>\n"
        << "          </LinearRing>\n"
        << "        </outerBoundaryIs>\n"
        << "      </Polygon>" << vcl_endl;
@@ -348,7 +352,7 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
 void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
 {
   // get mesh faces as triangles
-  if(mesh.faces().regularity() != 3)
+  if (mesh.faces().regularity() != 3)
   {
     vcl_cerr << "ERROR! only triangle meshes are supported.\n";
     return;
@@ -366,124 +370,124 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
   vcl_string geometry_uv_array_id = "geometry_uv_array";
   vcl_string geometry_vertex_id = "geometry_vertex";
   vcl_string geometry_normal_id = "geometry_normal";
-  
+
   // Write the COLLADA XML
-  os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-  os << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n";
-  
-  os << "  <asset>\n";
-  os << "    <contributor>\n";
-  os << "      <authoring_tool>VXL imesh library</authoring_tool>\n";
-  os << "    </contributor>\n";
+  os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+     << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n"
+
+     << "  <asset>\n"
+     << "    <contributor>\n"
+     << "      <authoring_tool>VXL imesh library</authoring_tool>\n"
+     << "    </contributor>\n";
   // When we figure out how to get a date string we can write this
-  // os << "    <created>2008-04-08T13:07:52-08:00</created>\n"; 
-  // os << "    <modified>2008-04-08T13:07:52-08:00</modified>\n"; 
-  os << "    <unit name=\"meters\" meter=\"1\"/>\n";
-  os << "    <up_axis>Z_UP</up_axis>\n";
-  os << "  </asset>\n";
-  
+  // os << "    <created>2008-04-08T13:07:52-08:00</created>\n";
+  // os << "    <modified>2008-04-08T13:07:52-08:00</modified>\n";
+  os << "    <unit name=\"meters\" meter=\"1\"/>\n"
+     << "    <up_axis>Z_UP</up_axis>\n"
+     << "  </asset>\n";
+
   // Write materials.  Use a single grey material
-  os << "  <library_materials>" << vcl_endl;
-  os << "    <material id=\"GreyID\" name=\"Grey\">"<< vcl_endl;
-  os << "       <instance_effect url=\"#Grey-effect\"/>"<< vcl_endl;
-  os << "    </material>"<< vcl_endl;
-  os << "  </library_materials>"<< vcl_endl;
-  
-  os << "  <library_effects>"<< vcl_endl;
-  os << "    <effect id=\"Grey-effect\" name=\"Grey-effect\">\n";
-  os << "      <profile_COMMON>\n";
-  os << "         <technique sid=\"COMMON\">\n";
-  os << "            <phong>\n";
-  os << "              <diffuse>\n";
-  os << "                 <color>1.000000 1.000000 1.000000 1</color>\n";
-  os << "              </diffuse>\n";
-  os << "            </phong>\n";
-  os << "         </technique>\n";
-  os << "         <extra>\n";
-  os << "         <technique profile=\"GOOGLEEARTH\">\n";
-  os << "           <double_sided>1</double_sided>\n";
-  os << "         </technique>\n";
-  os << "         </extra>\n";
-  os << "      </profile_COMMON>\n";
-  os << "    </effect>\n";
-  os << "  </library_effects>\n";
-  
+  os << "  <library_materials>" << vcl_endl
+     << "    <material id=\"GreyID\" name=\"Grey\">"<< vcl_endl
+     << "       <instance_effect url=\"#Grey-effect\"/>"<< vcl_endl
+     << "    </material>"<< vcl_endl
+     << "  </library_materials>"<< vcl_endl
+
+     << "  <library_effects>"<< vcl_endl
+     << "    <effect id=\"Grey-effect\" name=\"Grey-effect\">\n"
+     << "      <profile_COMMON>\n"
+     << "         <technique sid=\"COMMON\">\n"
+     << "            <phong>\n"
+     << "              <diffuse>\n"
+     << "                 <color>1.000000 1.000000 1.000000 1</color>\n"
+     << "              </diffuse>\n"
+     << "            </phong>\n"
+     << "         </technique>\n"
+     << "         <extra>\n"
+     << "         <technique profile=\"GOOGLEEARTH\">\n"
+     << "           <double_sided>1</double_sided>\n"
+     << "         </technique>\n"
+     << "         </extra>\n"
+     << "      </profile_COMMON>\n"
+     << "    </effect>\n"
+     << "  </library_effects>\n";
+
   // write geometry
-  os << "  <library_geometries>\n";
-  os <<"    <geometry id=\"" << geometry_id << "\" name=\"" << geometry_id << "\">\n";
-  os <<"      <mesh>\n";
-  os <<"        <source id=\"" << geometry_position_id << "\">\n";
-  os <<"        <float_array id=\"" << geometry_position_array_id << "\" count=\"" << nverts*3 << "\">\n";
+  os << "  <library_geometries>\n"
+     <<"    <geometry id=\"" << geometry_id << "\" name=\"" << geometry_id << "\">\n"
+     <<"      <mesh>\n"
+     <<"        <source id=\"" << geometry_position_id << "\">\n"
+     <<"        <float_array id=\"" << geometry_position_array_id << "\" count=\"" << nverts*3 << "\">\n";
 
-  for(unsigned int v=0; v<nverts; ++v)
-    os << "          "<< verts[v][0] << " " << verts[v][1] << " " << verts[v][2] << "\n";
+  for (unsigned int v=0; v<nverts; ++v)
+    os << "          "<< verts[v][0] << ' ' << verts[v][1] << ' ' << verts[v][2] << '\n';
 
-  os <<"\n        </float_array>\n";
-  os <<"        <technique_common>\n";
-  os <<"          <accessor source=\"#" << geometry_position_array_id << "\" count=\"" << nverts << "\" stride=\"3\">\n";
-  os <<"            <param name=\"X\" type=\"float\"/>\n";
-  os <<"            <param name=\"Y\" type=\"float\"/>\n";
-  os <<"            <param name=\"Z\" type=\"float\"/>\n";
-  os <<"          </accessor>\n";
-  os <<"        </technique_common>\n";
-  os <<"      </source>\n";
-  os <<"      <source id=\"" << "geometry_normal" << "\">\n";
+  os <<"\n        </float_array>\n"
+     <<"        <technique_common>\n"
+     <<"          <accessor source=\"#" << geometry_position_array_id << "\" count=\"" << nverts << "\" stride=\"3\">\n"
+     <<"            <param name=\"X\" type=\"float\"/>\n"
+     <<"            <param name=\"Y\" type=\"float\"/>\n"
+     <<"            <param name=\"Z\" type=\"float\"/>\n"
+     <<"          </accessor>\n"
+     <<"        </technique_common>\n"
+     <<"      </source>\n"
+     <<"      <source id=\"" << "geometry_normal" << "\">\n"
 
-  os <<"        <float_array id=\"" << "geometry_normal_array" << "\" count=\"" << nfaces*3 << "\">\n";
+     <<"        <float_array id=\"" << "geometry_normal_array" << "\" count=\"" << nfaces*3 << "\">\n";
   for (unsigned int f=0; f<nfaces; ++f) {
     const vgl_vector_3d<double>& n = tris.normal(f);
-    os << "          " << n.x() << " " << n.y() << " " << n.z() << "\n"; 
+    os << "          " << n.x() << ' ' << n.y() << ' ' << n.z() << '\n';
   }
 
-  os <<"\n        </float_array>\n";
-  os <<"        <technique_common>\n";
-  os <<"          <accessor source=\"#" << "geometry_normal_array" << "\" count=\"" << nfaces << "\" stride=\"3\">\n";
-  os <<"            <param name=\"X\" type=\"float\"/>\n";
-  os <<"            <param name=\"Y\" type=\"float\"/>\n";
-  os <<"            <param name=\"Z\" type=\"float\"/>\n";
-  os <<"          </accessor>\n";
-  os <<"        </technique_common>\n";
-  os <<"      </source>\n";
+  os <<"\n        </float_array>\n"
+     <<"        <technique_common>\n"
+     <<"          <accessor source=\"#" << "geometry_normal_array" << "\" count=\"" << nfaces << "\" stride=\"3\">\n"
+     <<"            <param name=\"X\" type=\"float\"/>\n"
+     <<"            <param name=\"Y\" type=\"float\"/>\n"
+     <<"            <param name=\"Z\" type=\"float\"/>\n"
+     <<"          </accessor>\n"
+     <<"        </technique_common>\n"
+     <<"      </source>\n"
 
-  os <<"      <vertices id=\"" <<geometry_vertex_id << "\">\n";
-  os <<"        <input semantic=\"POSITION\" source=\"#" << geometry_position_id << "\"/>\n";
-  os <<"      </vertices>\n";
-  os <<"      <triangles material=\"Grey\" count=\"" << nfaces << "\">\n";
-  os <<"        <input semantic=\"VERTEX\" source=\"#" << geometry_vertex_id <<  "\" offset=\"0\"/>\n";
-  os <<"        <input semantic=\"NORMAL\" source=\"#" << "geometry_normal" <<  "\" offset=\"1\"/>\n";
+     <<"      <vertices id=\"" <<geometry_vertex_id << "\">\n"
+     <<"        <input semantic=\"POSITION\" source=\"#" << geometry_position_id << "\"/>\n"
+     <<"      </vertices>\n"
+     <<"      <triangles material=\"Grey\" count=\"" << nfaces << "\">\n"
+     <<"        <input semantic=\"VERTEX\" source=\"#" << geometry_vertex_id <<  "\" offset=\"0\"/>\n"
+     <<"        <input semantic=\"NORMAL\" source=\"#" << "geometry_normal" <<  "\" offset=\"1\"/>\n"
 
-  os <<"        <p>\n";
+     <<"        <p>\n";
 
   for (unsigned int f=0; f<nfaces; ++f) {
-    os << "          " 
-       << tris[f][0] << " " << f <<"  "
-       << tris[f][1] << " " << f <<"  " 
-       << tris[f][2] << " " << f <<"\n";
+    os << "          "
+       << tris[f][0] << ' ' << f <<"  "
+       << tris[f][1] << ' ' << f <<"  "
+       << tris[f][2] << ' ' << f <<'\n';
   }
-  os << "        </p>\n";
-  os << "      </triangles>\n";
-  os << "    </mesh>\n";
-  os << "  </geometry>\n";
-  os << "  </library_geometries>\n";
-  
+  os << "        </p>\n"
+     << "      </triangles>\n"
+     << "    </mesh>\n"
+     << "  </geometry>\n"
+     << "  </library_geometries>\n";
+
   // write the scene
-  os << "  <library_visual_scenes>\n";
-  os << "    <visual_scene id=\"vis_scene\">\n";
-  os << "      <node id=\"Model\" name=\"Model\">\n";
-  os << "        <node id=\"mesh\" name=\"mesh\">\n";
-  os << "          <instance_geometry url=\"#geometry\">\n";
-  os << "            <bind_material>\n";
-  os << "              <technique_common>\n";
-  os << "                <instance_material symbol=\"Grey\" target=\"#GreyID\"/>\n";
-  os << "              </technique_common>\n";
-  os << "            </bind_material>\n";
-  os << "          </instance_geometry>\n";
-  os << "        </node>";
-  os << "      </node>";
-  os << "    </visual_scene>\n";
-  os << "  </library_visual_scenes>\n";
-  os << "  <scene>\n";
-  os << "    <instance_visual_scene url=\"#vis_scene\"/>\n";
-  os << "  </scene>\n";
-  os << "</COLLADA>\n";
+  os << "  <library_visual_scenes>\n"
+     << "    <visual_scene id=\"vis_scene\">\n"
+     << "      <node id=\"Model\" name=\"Model\">\n"
+     << "        <node id=\"mesh\" name=\"mesh\">\n"
+     << "          <instance_geometry url=\"#geometry\">\n"
+     << "            <bind_material>\n"
+     << "              <technique_common>\n"
+     << "                <instance_material symbol=\"Grey\" target=\"#GreyID\"/>\n"
+     << "              </technique_common>\n"
+     << "            </bind_material>\n"
+     << "          </instance_geometry>\n"
+     << "        </node>"
+     << "      </node>"
+     << "    </visual_scene>\n"
+     << "  </library_visual_scenes>\n"
+     << "  <scene>\n"
+     << "    <instance_visual_scene url=\"#vis_scene\"/>\n"
+     << "  </scene>\n"
+     << "</COLLADA>\n";
 }
