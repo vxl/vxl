@@ -95,11 +95,17 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\vpgl_nitf_rational_camera.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vpgl_geo_camera.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vpgl_nitf_rational_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_geo_camera.h
 # End Source File
 # End Group
 # End Target

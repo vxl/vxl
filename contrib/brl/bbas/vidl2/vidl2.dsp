@@ -159,6 +159,18 @@ SOURCE=.\vidl2_v4l_params.cxx
 SOURCE=.\vidl2_istream_image_resource.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\v4l2_pixel_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_device.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_devices.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_istream.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
 # End Source File
 # Begin Source File
@@ -274,6 +286,21 @@ SOURCE=.\vidl2_ffmpeg_ostream_v1.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_ffmpeg_ostream_v2.txx
+# End Source File
+# Begin Source File
+SOURCE=.\v4l2_pixel_format.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_device.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_device_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_devices.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_istream.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_config.h.in
