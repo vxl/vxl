@@ -3,7 +3,6 @@
 // \file
 
 #include <vcl_cstring.h>
-#include <vcl_cassert.h>
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
@@ -167,8 +166,8 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
   vil_tiff_image* tiff_first = static_cast<vil_tiff_image*> (lidar_first.ptr());
   vil_tiff_image* tiff_last  = static_cast<vil_tiff_image*> (lidar_last.ptr());
 
-  if (vpgl_geo_camera::init_geo_camera(tiff_first, camera)) {
-  
+  if (vpgl_geo_camera::init_geo_camera(tiff_first, camera))
+  {
     // backproject the 3D world coordinates on the image
     vgl_box_2d<double> roi_box;
     vgl_point_3d<double> min_pos(min_lon, min_lat, 0);
@@ -232,8 +231,8 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
     }
   }
   else {
-      vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
-      return false;
+    vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
+    return false;
   }
 
   return true;
