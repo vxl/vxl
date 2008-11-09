@@ -198,10 +198,13 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
 
   // recover the vector of building heights
   vcl_vector<double> bld_heights(boundaries.size());
-  for (int j=0; j<nj; ++j)
-    for (int i=0; i<ni; ++i)
-      if (labels(i,j) > 1)
+  for (int j=0; j<nj; ++j){
+    for (int i=0; i<ni; ++i){
+      if (labels(i,j) > 1){
         bld_heights[labels(i,j)-2] = heights(i,j);
+      }
+    }
+  }
 
   imesh_vertex_array<3> *verts = new imesh_vertex_array<3>;
   imesh_face_array *faces = new imesh_face_array;
