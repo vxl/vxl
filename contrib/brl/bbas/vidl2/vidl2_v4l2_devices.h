@@ -12,8 +12,6 @@
 //\endverbatim
 
 #include <vcl_vector.h>
-#include <vcl_string.h>
-#include <cassert>
 #include "vidl2_v4l2_device.h"
 #include "vidl2_v4l2_device_sptr.h"
 
@@ -27,19 +25,19 @@
 // create a vidl2_v4l2_device directly from the file name. However, it is better to
 // look for the device in this singleton using directly de card name.
 // \see vidl2_v4l2_device
-class vidl2_v4l2_devices{
-    vcl_vector<vidl2_v4l2_device_sptr> vecdev;
-    vidl2_v4l2_devices();
-    void load_devices(const char *name);
-  public:
-    //: Instance
-    static vidl2_v4l2_devices& all();
+class vidl2_v4l2_devices
+{
+  vcl_vector<vidl2_v4l2_device_sptr> vecdev;
+  vidl2_v4l2_devices();
+  void load_devices(const char *name);
+ public:
+  //: Instance
+  static vidl2_v4l2_devices& all();
 
-    //: Return number of detected devices in the system
-    int size() const { return vecdev.size(); }
-    //: Return device i (0..size()-1)
-    vidl2_v4l2_device& device(unsigned int i) {return *vecdev[i];}
+  //: Return number of detected devices in the system
+  int size() const { return vecdev.size(); }
+  //: Return device i (0..size()-1)
+  vidl2_v4l2_device& device(unsigned int i) {return *vecdev[i];}
 };
-
 
 #endif // vidl2_v4l2_devices_h_
