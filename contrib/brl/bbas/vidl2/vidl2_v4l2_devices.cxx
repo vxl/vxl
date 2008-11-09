@@ -1,4 +1,5 @@
 // This is brl/bbas/vidl2/vidl2_v4l2_devices.cxx
+#include "vidl2_v4l2_devices.h"
 //:
 // \file
 //
@@ -19,11 +20,11 @@ extern "C" { // revisar los .h
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include "vidl2_pixel_format.h"
-#include "vidl2_v4l2_devices.h"
 
 
 // ----------------- local functions ---------------
-namespace {
+namespace
+{
   inline bool is_directory(const char *dir)
   {
     struct stat s;
