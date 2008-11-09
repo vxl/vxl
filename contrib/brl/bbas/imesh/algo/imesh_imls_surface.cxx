@@ -31,9 +31,10 @@ imesh_imls_surface::imesh_imls_surface(const imesh_mesh& mesh, double eps, doubl
     triangles_ = imesh_triangulate(mesh.faces());
   else
     triangles_.reset(static_cast<imesh_regular_face_array<3>*>
-                         (mesh.faces().clone()));
+                     (mesh.faces().clone()));
 
-  if (bounded_) {
+  if (bounded_)
+  {
     // build enclosure
     vgl_box_3d<double> box;
     for (unsigned int i=0; i<verts_.size(); ++i) {
@@ -142,13 +143,13 @@ void imesh_imls_surface::compute_enclosing_phi()
   for (double s=1.0; !outside.empty(); s*=2) {
     vcl_cout << outside.size() << " outside" << vcl_endl;
     for (vcl_vector<pair_id>::const_iterator i=outside.begin();
-        i!=outside.end(); ++i) {
+         i!=outside.end(); ++i) {
       phi_[i->first] -= s*i->second;
     }
     compute_unweighed_rec(kd_tree_);
     vcl_vector<pair_id> next_outside;
     for (vcl_vector<pair_id>::const_iterator i=outside.begin();
-        i!=outside.end(); ++i) {
+         i!=outside.end(); ++i) {
       double val = (*this)(verts_[i->first]);
       if (val > vcl_abs(vcl_numeric_limits<double>::epsilon()*phi_[i->first])) {
         next_outside.push_back(pair_id(i->first,val));
@@ -318,9 +319,9 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
                                           const vgl_point_3d<double>&, const vgl_point_3d<double>&,
                                           double, double, double, double);
       vgl_vector_2d<double> I = triangle_quadrature<T,F>(split_triangle_quadrature,
-                                                        p,verts_[i1],verts_[i2],verts_[i3],
-                                                        normals_[i]*2.0,
-                                                        phi_[i1],phi_[i2],phi_[i3],eps2_);
+                                                         p,verts_[i1],verts_[i2],verts_[i3],
+                                                         normals_[i]*2.0,
+                                                         phi_[i1],phi_[i2],phi_[i3],eps2_);
       assert(!vnl_math_isnan(I.x()) && !vnl_math_isnan(I.y()));
 
       sum_phi += I.x();
@@ -553,8 +554,8 @@ imesh_imls_surface::line_integrals(double k1, double k2,
 }
 
 
-//: line integral of the squared weight function times a linear value
-//  on the line from p0 to p1 (value at p0 is v0 and at p1 is v1)
+//: line integral of the squared weight function times a linear value on the line from p0 to p1
+//  (value at p0 is v0 and at p1 is v1)
 //  \a eps2 is epsilon^2
 double
 imesh_imls_surface::line_integral(const vgl_point_3d<double>& x,
@@ -742,7 +743,7 @@ split_triangle_quadrature_with_deriv(const vgl_point_3d<double>& x,
     vgl_vector_3d<double> d_c(d3+u*d2), d_x(d1*u_1);
     last_i_data.dI = (d_c*dI1 + d_x*dIx)*denom;
     last_i_data.dI_phi = ( d_c*(phi_c*dI1 + phi_x*dIx)
-                          + d_x*(phi_c*dIx + phi_x*dIx2) ) * denom;
+                         + d_x*(phi_c*dIx + phi_x*dIx2) ) * denom;
 
     denom *= u / u_1;
     last_i_data *= denom;
@@ -789,7 +790,8 @@ imesh_imls_surface::triangle_quadrature(F quad_func,
 {
   double dist,u,v;
   unsigned char flag = imesh_triangle_closest_point(x,p0,p1,p2,n,dist,u,v);
-  switch (flag) {
+  switch (flag)
+  {
     case 1:
       return quad_func(x,p0,p1,p2,v0,v1,v2,eps);
     case 2:
@@ -842,9 +844,8 @@ imesh_imls_surface::triangle_quadrature(F quad_func,
 //=============================================================================
 // External functions
 
-//: find the zero crossing point by bisection
-//  between positive point \a pp and negative point \a pn
-//  stops searching when the ||pp-pn|| < xeps or |f(pm)| < feps
+//: find the zero crossing point by bisection between positive point \a pp and negative point \a pn
+//  Stops searching when $||pp-pn|| < xeps$ or $|f(pm)| < feps$
 vgl_point_3d<double> bisect(const imesh_imls_surface& f,
                             vgl_point_3d<double> pp,
                             vgl_point_3d<double> pn,
@@ -948,8 +949,7 @@ vgl_vector_3d<double> dfunc(const vgl_vector_3d<double>& n,
 // end of namespace
 }
 
-//: Move the point \a p to minimize (f^2 + (n*f' - 1)^2)/f'*f'
-//  a zero crossing of \a f (within \a eps).
+//: Move the point \a p to minimize $(f^2 + (n*f' - 1)^2)/f'*f'$ a zero crossing of \a f (within \a eps).
 //  Return true if successful
 bool snap_to_surface_with_normal(const imesh_imls_surface& f,
                                  vgl_point_3d<double>& p,
