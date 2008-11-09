@@ -1,6 +1,5 @@
 #ifndef mbl_sample_stats_1d_h_
 #define mbl_sample_stats_1d_h_
-
 //:
 // \file
 // \brief Provides simple statistics on a 1D variable and stores the samples
@@ -16,8 +15,11 @@
 //: Provides simple statistics on a 1D variable and stores the samples
 class mbl_sample_stats_1d
 {
+  vcl_vector<double> samples_;
+  mbl_stats_1d stats_1d_;
+  bool use_mvue_;
 
-public:
+ public:
 
   //! Default ctor
   mbl_sample_stats_1d();
@@ -58,7 +60,7 @@ public:
   // Always check number of samples first
   double median() const;
 
-  //: The last value within the n_th percentile of the distribution 
+  //: The last value within the n_th percentile of the distribution
   // Take care. if there are no samples, this method returns maxmimum double (a very large number)
   // Always check number of samples first
   double nth_percentile(int n) const;
@@ -105,7 +107,7 @@ public:
 
   //: Print all data.
   // \param delim Separate each value with this character/string.
-  void print_all(vcl_ostream& os, 
+  void print_all(vcl_ostream& os,
     const vcl_string& delim="\n") const;
 
   //: Version number for I/O
@@ -118,12 +120,6 @@ public:
 
   friend
     mbl_sample_stats_1d operator+(const mbl_sample_stats_1d& s1, const mbl_sample_stats_1d& s2);
-
-private:
-
-  vcl_vector<double> samples_;
-  mbl_stats_1d stats_1d_;
-  bool use_mvue_;
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -165,4 +161,4 @@ void vsl_print_summary(vcl_ostream& os,const mbl_sample_stats_1d& stats);
 //: Print all data
 void vsl_print_all(vcl_ostream& os, const mbl_sample_stats_1d& stats);
 
-#endif
+#endif // mbl_sample_stats_1d_h_
