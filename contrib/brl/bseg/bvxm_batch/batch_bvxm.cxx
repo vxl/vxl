@@ -16,8 +16,7 @@ init_process(PyObject *self, PyObject *args)
     return NULL;
   vcl_string n(name);
   vcl_cout << n << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->init_process(n);
+  bool result = bprb_batch_process_manager::instance()->init_process(n);
   return Py_BuildValue("b", result);
 }
 
@@ -30,8 +29,7 @@ set_input_bool(PyObject *self, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<bool>(value);
   vcl_cout << "input[" << input << "](bool): " << value << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input(input, v);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
 
@@ -44,8 +42,7 @@ set_input_string(PyObject *self, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<vcl_string>(value);
   vcl_cout << "input[" << input << "](string): " << value << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input(input, v);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
 
@@ -58,10 +55,10 @@ set_input_int(PyObject *self, PyObject *args)
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<int>(ivalue);
   vcl_cout << "input[" << input << "](int): " << ivalue << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input(input, iv);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
+
 static PyObject *
 set_input_unsigned(PyObject *self, PyObject *args)
 {
@@ -71,10 +68,10 @@ set_input_unsigned(PyObject *self, PyObject *args)
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<unsigned>(ivalue);
   vcl_cout << "input[" << input << "](unsigned): " << ivalue << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input(input, iv);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
+
 static PyObject *
 set_input_long(PyObject *self, PyObject *args)
 {
@@ -84,8 +81,7 @@ set_input_long(PyObject *self, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<long>(value);
   vcl_cout << "input[" << input << "](long): " << value << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input(input, v);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
 
@@ -98,8 +94,7 @@ set_input_float(PyObject *self, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<float>(value);
   vcl_cout << "input[" << input << "](float): " << value << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input(input, v);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
 
@@ -112,12 +107,11 @@ set_input_double(PyObject *self, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<double>(value);
   vcl_cout << "input[" << input << "](double): " << value << '\n';
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input(input, v);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
 
-//: ozge added the following to access the process outputs while running experiments using Python
+// ozge added the following to access the process outputs while running experiments using Python
 static PyObject *
 get_input_float(PyObject *self, PyObject *args)
 {
@@ -125,15 +119,15 @@ get_input_float(PyObject *self, PyObject *args)
   float value;
   if (!PyArg_ParseTuple(args, "i:get_input_float", &id))
     return NULL;
-   
+
   vcl_string relation_name = "float_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
- 
+
   if (selec->size()!=1) {
-    vcl_cout << "in get_input_float() - no relation with type" << relation_name << " id: " << id << "\n";
+    vcl_cout << "in get_input_float() - no relation with type" << relation_name << " id: " << id << vcl_endl;
     return Py_BuildValue("f",-1.0);
   }
 
@@ -149,11 +143,11 @@ get_input_float(PyObject *self, PyObject *args)
   }
   brdb_value_t<float>* result_out = static_cast<brdb_value_t<float>* >(brdb_value.ptr());
   value = result_out->value();
-  
+
   return Py_BuildValue("f", value);
 }
 
-//: ozge added the following to access the process outputs while running experiments using Python
+// ozge added the following to access the process outputs while running experiments using Python
 static PyObject *
 get_input_unsigned(PyObject *self, PyObject *args)
 {
@@ -161,15 +155,15 @@ get_input_unsigned(PyObject *self, PyObject *args)
   unsigned value;
   if (!PyArg_ParseTuple(args, "i:get_input_unsigned", &id))
     return NULL;
-   
+
   vcl_string relation_name = "unsigned_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
- 
+
   if (selec->size()!=1) {
-    vcl_cout << "in get_input_unsigned() - no relation with type" << relation_name << " id: " << id << "\n";
+    vcl_cout << "in get_input_unsigned() - no relation with type" << relation_name << " id: " << id << vcl_endl;
     return Py_BuildValue("b",1000);
   }
 
@@ -185,7 +179,7 @@ get_input_unsigned(PyObject *self, PyObject *args)
   }
   brdb_value_t<unsigned>* result_out = static_cast<brdb_value_t<unsigned>* >(brdb_value.ptr());
   value = result_out->value();
-  
+
   return Py_BuildValue("b", value);
 }
 
@@ -199,7 +193,7 @@ process_print_default_params(PyObject *self, PyObject *args)
 
   vcl_string n(name);
   vcl_string f(value);
-  
+
   bool result = bprb_batch_process_manager::instance()->print_default_params(n, f);
   return Py_BuildValue("b", result);
 }
@@ -219,7 +213,7 @@ set_params_process(PyObject *self, PyObject *args)
     return NULL;
 
   vcl_string f(value);
-  
+
   bool result = bprb_batch_process_manager::instance()->set_params(f);
   return Py_BuildValue("b", result);
 }
@@ -238,9 +232,8 @@ commit_output(PyObject *self, PyObject *args)
   unsigned output;
   if (!PyArg_ParseTuple(args, "i:commit_output", &output))
     return NULL;
-  bool result = 
-    bprb_batch_process_manager::instance()->commit_output(output,id);
-  if(!result)
+  bool result = bprb_batch_process_manager::instance()->commit_output(output,id);
+  if (!result)
     return Py_BuildValue("i", -1);
   return Py_BuildValue("i", id);
 }
@@ -252,8 +245,7 @@ set_input_from_db(PyObject *self, PyObject *args)
   unsigned id;
   if (!PyArg_ParseTuple(args, "ii:set_input_from_db", &input, &id))
     return NULL;
-  bool result = 
-    bprb_batch_process_manager::instance()->set_input_from_db(input,id);
+  bool result = bprb_batch_process_manager::instance()->set_input_from_db(input,id);
 
   return Py_BuildValue("b", result);
 }
@@ -264,27 +256,29 @@ remove_data(PyObject *self, PyObject *args)
   unsigned id;
   if (!PyArg_ParseTuple(args, "i:set_input_from_db", &id))
     return NULL;
-  bool result = 
-    bprb_batch_process_manager::instance()->remove_data(id);
+  bool result = bprb_batch_process_manager::instance()->remove_data(id);
 
   return Py_BuildValue("b", result);
 }
 
 static PyObject *
-print_db(PyObject *self, PyObject *args){
+print_db(PyObject *self, PyObject *args)
+{
   bprb_batch_process_manager::instance()->print_db();
   Py_INCREF(Py_None);
   return Py_None;
 }
 
 static PyObject *
-clear(PyObject *self, PyObject *args){
+clear(PyObject *self, PyObject *args)
+{
   bprb_batch_process_manager::instance()->clear();
   Py_INCREF(Py_None);
   return Py_None;
 }
 
-static PyMethodDef batch_methods[] = {
+static PyMethodDef batch_methods[] = 
+{
   {"register_processes", register_processes, METH_VARARGS,
   "register_processes() create instances of each defined process"},
   {"register_datatypes", register_datatypes, METH_VARARGS,
@@ -293,7 +287,7 @@ static PyMethodDef batch_methods[] = {
   "init_process(s) create a new process instance by name"},
   {"process_print_default_params", process_print_default_params, METH_VARARGS,
   "process_print_default_params(s,s) print the default values of the process by name"},
-  {"set_params_process", set_params_process, METH_VARARGS, 
+  {"set_params_process", set_params_process, METH_VARARGS,
   "set_params_process(s) set the parameter values of the current process from the XML file"},
   {"set_input_bool", set_input_bool, METH_VARARGS,
   "set_input_(i,b) set input i on current process to a bool value"},
@@ -328,7 +322,6 @@ static PyMethodDef batch_methods[] = {
   {NULL, NULL},
   {NULL, NULL}
 };
-
 
 
 PyMODINIT_FUNC
