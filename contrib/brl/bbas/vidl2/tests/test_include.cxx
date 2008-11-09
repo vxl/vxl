@@ -1,3 +1,4 @@
+#include <vidl2/v4l2_pixel_format.h>
 #include <vidl2/vidl2_color.h>
 #include <vidl2/vidl2_convert.h>
 #include <vidl2/vidl2_exception.h>
@@ -13,6 +14,10 @@
 #include <vidl2/vidl2_ostream_sptr.h>
 #include <vidl2/vidl2_image_list_ostream.h>
 #include <vidl2/vidl2_iidc1394_params.h>
+#include <vidl2/vidl2_v4l2_device.h>
+#include <vidl2/vidl2_v4l2_device_sptr.h>
+#include <vidl2/vidl2_v4l2_devices.h>
+#include <vidl2/vidl2_v4l2_istream.h>
 #if VIDL2_HAS_FFMPEG
 #include <vidl2/vidl2_ffmpeg_init.h>
 #include <vidl2/vidl2_ffmpeg_istream.h>
