@@ -119,8 +119,8 @@ ENDIF(VIDEODEV_FOUND)
 IF(VIDEODEV2_FOUND)
    SET(vidl2_sources ${vidl2_sources}
        vidl2_v4l2_devices.h vidl2_v4l2_devices.cxx
-       vidl2_v4l2_device.h vidl2_v4l2_device.cxx
-       v4l2_pixel_format.h v4l2_pixel_format.cxx
+       vidl2_v4l2_device.h  vidl2_v4l2_device.cxx  vidl2_v4l2_device_sptr.h
+       v4l2_pixel_format.h  v4l2_pixel_format.cxx
        vidl2_v4l2_istream.h vidl2_v4l2_istream.cxx
    )
 ENDIF(VIDEODEV2_FOUND)
