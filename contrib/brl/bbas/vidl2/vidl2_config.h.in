@@ -54,4 +54,12 @@
 #endif
 #undef VIDEODEV_FOUND
 
+#cmakedefine VIDEODEV2_FOUND
+#ifdef VIDEODEV2_FOUND
+#define VIDL2_HAS_VIDEODEV2 1
+#else
+#define VIDL2_HAS_VIDEODEV2 0
+#endif
+#undef VIDEODEV2_FOUND
+
 #endif // vidl2_config_h_

@@ -14,10 +14,12 @@
 #include <vidl2/vidl2_ostream_sptr.h>
 #include <vidl2/vidl2_image_list_ostream.h>
 #include <vidl2/vidl2_iidc1394_params.h>
+#if VIDL2_HAS_VIDEODEV2
 #include <vidl2/vidl2_v4l2_device.h>
 #include <vidl2/vidl2_v4l2_device_sptr.h>
 #include <vidl2/vidl2_v4l2_devices.h>
 #include <vidl2/vidl2_v4l2_istream.h>
+#endif
 #if VIDL2_HAS_FFMPEG
 #include <vidl2/vidl2_ffmpeg_init.h>
 #include <vidl2/vidl2_ffmpeg_istream.h>
