@@ -361,8 +361,8 @@ double vgl_conic<T>::curvature_at(vgl_point_2d<T> const& p) const
   const T x = p.x();
   const T y = p.y();
 
-  double f_x  = 2*a_xx + a_xy*y + a_xw;
-  double f_y  = 2*a_yy + a_xy*x + a_yw;
+  double f_x  = 2*a_xx*x + a_xy*y + a_xw;
+  double f_y  = 2*a_yy*y + a_xy*x + a_yw;
   double f_xy = a_xy;
   double f_xx = 2*a_xx;
   double f_yy = 2*a_yy;
