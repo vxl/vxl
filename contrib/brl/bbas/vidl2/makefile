@@ -48,6 +48,12 @@ MANPAGE_SOURCES += vidl2_ffmpeg_ostream_stub.txx
 MANPAGE_SOURCES += vidl2_ffmpeg_ostream_v1.txx
 MANPAGE_SOURCES += vidl2_ffmpeg_ostream_v2.txx
 
+SOURCES += v4l2_pixel_format.cxx
+SOURCES += vidl2_v4l2_device.cxx
+SOURCES += vidl2_v4l2_devices.cxx
+SOURCES += vidl2_v4l2_istream.cxx
+MANPAGE_SOURCES += vidl2_v4l2_device_sptr.h
+
 # vgui add-on library
 SUBDIRS += gui
 
