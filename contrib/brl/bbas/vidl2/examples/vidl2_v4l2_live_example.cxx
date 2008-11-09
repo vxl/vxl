@@ -11,12 +11,10 @@
 
 int select_device(vidl2_v4l2_devices& devs)
 {
-  vcl_cout << "Looking for devices..." << vcl_endl;
-
-  vcl_cout << "Numbers of found devices: " << devs.size() << vcl_endl;
+  vcl_cout << "Looking for devices..." << vcl_endl
+           << "Numbers of found devices: " << devs.size() << vcl_endl;
   for (int i=0; i< devs.size(); ++i) {
-     vcl_cout << "DEVICE  " << i << ": " <<vcl_endl;
-     vcl_cout <<  devs.device(i);
+    vcl_cout << "DEVICE  " << i << ":\n" << devs.device(i);
   }
 
   int dnum=-1; // device selected
@@ -24,14 +22,15 @@ int select_device(vidl2_v4l2_devices& devs)
   if (devs.size()==0)
     vcl_cout << "No devices." << vcl_endl;
   else if (devs.size()==1) {
-         dnum=0;
-      }
-      else {
-        do{
-          vcl_cout << "Select Device Number: ";
-          vcl_cin >> dnum;
-        }while (dnum<0 || dnum>=devs.size());
-      }
+    dnum=0;
+  }
+  else {
+    do {
+      vcl_cout << "Select Device Number: ";
+      vcl_cin >> dnum;
+    }
+    while (dnum<0 || dnum>=devs.size());
+  }
   return dnum;
 }
 
@@ -52,44 +51,44 @@ void change_width_height(vidl2_v4l2_device& dev)
 }
 
 // return if success
-bool configure_input(vidl2_v4l2_device& dev)  
+bool configure_input(vidl2_v4l2_device& dev)
 {
   int inum=-1;
-   if (dev.ninputs()==1)
-      inum= 0;
-   else 
-     do {
-       vcl_cout << "Select Input Number: ";
-       vcl_cin >> inum;
-     }while (inum<0 || inum>=dev.ninputs());
-   if (!dev.set_input(inum))  {
-     vcl_cerr << "Input " << inum << " not set" << vcl_endl;
-     return false;
-   }
-   else {
-      vcl_cout << "Input: " << dev.input(inum).name() << " selected." << vcl_endl;
-      if (! dev.format_is_set()) {
-         vcl_cout << "A default format has not been set." << vcl_endl;
-         if (dev.set_v4l2_format(V4L2_PIX_FMT_YUV420,640,480)) { // for example
-           vcl_cout << "  V4L2_PIX_FMT_YUV420 format is possible." << vcl_endl;
-         }
-         return false;
-      }
-      if(!dev) {
-        vcl_cerr <<"Error in device: " <<dev.get_error() << vcl_endl;
-        return false;
-      }
-      else  {
-        change_width_height(dev);
-        return true;
-      }
+  if (dev.ninputs()==1)
+    inum= 0;
+  else
+    do {
+      vcl_cout << "Select Input Number: ";
+      vcl_cin >> inum;
     }
+    while (inum<0 || inum>=dev.ninputs());
+  if (!dev.set_input(inum))  {
+    vcl_cerr << "Input " << inum << " not set\n";
+    return false;
+  }
+  else {
+    vcl_cout << "Input: " << dev.input(inum).name() << " selected." << vcl_endl;
+    if (! dev.format_is_set()) {
+      vcl_cout << "A default format has not been set." << vcl_endl;
+      if (dev.set_v4l2_format(V4L2_PIX_FMT_YUV420,640,480)) { // for example
+        vcl_cout << "  V4L2_PIX_FMT_YUV420 format is possible." << vcl_endl;
+      }
+      return false;
+    }
+    if (!dev) {
+      vcl_cerr <<"Error in device: " <<dev.get_error() << vcl_endl;
+      return false;
+    }
+    else {
+      change_width_height(dev);
+      return true;
+    }
+  }
 }
 
 
-void save_frames(vidl2_v4l2_device& dev) 
+void save_frames(vidl2_v4l2_device& dev)
 {
-
   vidl2_v4l2_istream test(dev );
 
   //dev.start_capturing();
@@ -101,14 +100,14 @@ void save_frames(vidl2_v4l2_device& dev)
     vcl_cout << "Grabbing " << i << " frames in directory ./dump" << vcl_endl;
     while ( --i && test.advance())
     {
-       vcl_cout << "Grabbing: " <<i<<"(frame number: " << test.frame_number() << ")"<<vcl_endl;
-       vcl_cout << "  Device frame number: " << dev.sequence() << vcl_endl;
-       if (!test_out.write_frame(test.current_frame()))
-           vcl_cerr << "Couldn't write frame\n";
+      vcl_cout << "Grabbing: " <<i<<"(frame number: " << test.frame_number() << ')'<<vcl_endl;
+      vcl_cout << "  Device frame number: " << dev.sequence() << vcl_endl;
+      if (!test_out.write_frame(test.current_frame()))
+        vcl_cerr << "Couldn't write frame\n";
     }
     timer.print(vcl_cout);
   }
-  else { 
+  else {
     vcl_cerr << "Couldn't use stream" << vcl_endl;
     if (!dev)
       vcl_cerr <<"Error in device: " <<dev.get_error() << vcl_endl;
@@ -125,14 +124,16 @@ int main()
   if (dnum>=0) {
     vidl2_v4l2_device& selected= devs.device(dnum);
     if (configure_input(selected))
-    save_frames(selected); 
+    save_frames(selected);
   }
-  /*else {
+#if 0
+  else {
     vcl_string name;
     vcl_cout << "Select device name: ";
     vcl_cin >> name;
     vidl2_v4l2_device dev(name.c_str());
     if (dev)
       save_frames(dev);
-  }*/
+  }
+#endif // 0
 }
