@@ -120,7 +120,7 @@ open(const vcl_string& filename)
 
   // Find a video stream. Use the first one we find.
   is_->vid_index_ = -1;
-  for ( int i = 0; i < is_->fmt_cxt_->nb_streams; ++i ) {
+  for ( unsigned int i = 0; i < is_->fmt_cxt_->nb_streams; ++i ) {
 #if LIBAVFORMAT_BUILD <= 4628
     AVCodecContext *enc = &is_->fmt_cxt_->streams[i]->codec;
 #else
@@ -156,14 +156,14 @@ open(const vcl_string& filename)
   is_->frame_ = avcodec_alloc_frame();
 
   is_->num_frames_ = 0;
-  while(advance())
+  while (advance())
     ++is_->num_frames_;
 
   // newer releases of ffmpeg may require a 4th argument to av_seek_frame
 #if LIBAVFORMAT_BUILD <= 4616
-  int seek = av_seek_frame( is_->fmt_cxt_, is_->vid_index_, 0 );
+  av_seek_frame( is_->fmt_cxt_, is_->vid_index_, 0 );
 #else
-  int seek = av_seek_frame( is_->fmt_cxt_, is_->vid_index_, 0, AVSEEK_FLAG_BACKWARD );
+  av_seek_frame( is_->fmt_cxt_, is_->vid_index_, 0, AVSEEK_FLAG_BACKWARD );
 #endif
 
   return true;
@@ -246,12 +246,12 @@ frame_number() const
 
   return ((is_->last_dts - is_->vid_str_->start_time)
 #if LIBAVFORMAT_BUILD <= 4623
-      * is_->vid_str_->r_frame_rate / is_->vid_str_->r_frame_rate_base
-      + AV_TIME_BASE/2) / AV_TIME_BASE
+          * is_->vid_str_->r_frame_rate / is_->vid_str_->r_frame_rate_base
+          + AV_TIME_BASE/2) / AV_TIME_BASE
 #else
-      * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
-      * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
-          / is_->vid_str_->time_base.den
+          * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
+          * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
+         / is_->vid_str_->time_base.den
 #endif
       - is_->frame_number_offset_;
 }
@@ -276,7 +276,7 @@ vidl2_ffmpeg_istream
 
 
 //: Return the height of each frame
-unsigned int 
+unsigned int
 vidl2_ffmpeg_istream
 ::height() const
 {
@@ -294,7 +294,7 @@ vidl2_ffmpeg_istream
 
 
 //: Return the pixel format
-vidl2_pixel_format 
+vidl2_pixel_format
 vidl2_ffmpeg_istream
 ::format() const
 {
@@ -315,7 +315,7 @@ vidl2_ffmpeg_istream
 
 
 //: Return the frame rate (0.0 if unspecified)
-double 
+double
 vidl2_ffmpeg_istream
 ::frame_rate() const
 {
@@ -353,7 +353,8 @@ advance()
   AVPacket pkt;
   int got_picture = 0;
 
-  while ( got_picture == 0 ) {
+  while ( got_picture == 0 )
+  {
     if ( av_read_frame( is_->fmt_cxt_, &pkt ) < 0 ) {
       break;
     }
@@ -364,9 +365,9 @@ advance()
     {
       if ( codec->codec_id == CODEC_ID_RAWVIDEO ) {
         avpicture_fill( (AVPicture*)is_->frame_, pkt.data,
-                         codec->pix_fmt,
-                         codec->width,
-                         codec->height );
+                        codec->pix_fmt,
+                        codec->width,
+                        codec->height );
         is_->frame_->pict_type = FF_I_TYPE;
         got_picture = 1;
       } else {
@@ -466,10 +467,10 @@ vidl2_ffmpeg_istream::current_frame()
       AVPicture test_frame;
       avpicture_fill(&test_frame, is_->frame_->data[0], enc->pix_fmt, width, height);
       if (test_frame.data[1] == is_->frame_->data[1] &&
-         test_frame.data[2] == is_->frame_->data[2] &&
-         test_frame.linesize[0] == is_->frame_->linesize[0] &&
-         test_frame.linesize[1] == is_->frame_->linesize[1] &&
-         test_frame.linesize[2] == is_->frame_->linesize[2] )
+          test_frame.data[2] == is_->frame_->data[2] &&
+          test_frame.linesize[0] == is_->frame_->linesize[0] &&
+          test_frame.linesize[1] == is_->frame_->linesize[1] &&
+          test_frame.linesize[2] == is_->frame_->linesize[2] )
       {
         is_->cur_frame_ = new vidl2_shared_frame(is_->frame_->data[0], width, height, fmt);
       }
