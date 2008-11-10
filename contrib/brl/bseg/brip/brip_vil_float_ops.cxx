@@ -3652,9 +3652,10 @@ static double brip_vil_rot_gauss(double x, double y,
   double ax = (c*x + s*y)/sigma_x, ay = (-s*x + c*y)/sigma_y;
   return static_cast<double>(vcl_exp(-0.5*(ax*ax + ay*ay)));
 }
-
-vbl_array_2d<bool>
-brip_vil_float_ops::extrema_mask(float lambda0, float lambda1, float theta)
+void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
+                                             float theta,
+                                             vbl_array_2d<float>& kernel,
+                                             vbl_array_2d<bool>& mask)
 {
   //convert theta to radians
   double theta_rad = theta*vnl_math::pi/180.0;
@@ -3684,59 +3685,7 @@ brip_vil_float_ops::extrema_mask(float lambda0, float lambda1, float theta)
 
   unsigned ncols = 2*ri +1, nrows = 2*rj+1;
   vbl_array_2d<double> coef(nrows, ncols);
-  vbl_array_2d<bool> mask(nrows,ncols);
-  double residual = 0.0, total  = 0.0;
-  for (int ry = -rj; ry<=rj; ++ry)
-    for (int rx = -ri; rx<=ri; ++rx)
-    {
-      double g = brip_vil_rot_gauss(rx, ry, s0, s1, theta);
-      mask[ry+rj][rx+ri] = g>=cutoff;
-      double temp = (-s*rx + c*ry);
-      temp = temp*temp*s1sq;
-      double v = (temp -1)*g;
-      coef[ry+rj][rx+ri] = v;
-      residual+=v;
-      total += vcl_fabs(v);
-    }
-
-  return mask;
-}
-
-
-vil_image_view<float>
-brip_vil_float_ops::extrema(vil_image_view<float> const& input,
-                            float lambda0, float lambda1, float theta,
-                            bool bright, bool output_response_mask)
-{
-  //convert theta to radians
-  double theta_rad = theta*vnl_math::pi/180.0;
-  double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
-  double s0 = lambda0, s1 = lambda1;
-
-  double s1sq = 1.0/(s1*s1);
-  //determine the size of the array
-  double max_v = brip_vil_rot_gauss(0, 0, s0, s1, 0);
-  double cutoff = max_v*0.01; // 1% tails removed
-  bool reached_cutoff = false;
-  unsigned ru = 0;
-  for (; !reached_cutoff; ++ru)
-    reached_cutoff = brip_vil_rot_gauss(ru, 0, s0, s1, 0)<cutoff;
-  reached_cutoff = false;
-  unsigned rv = 0;
-  for (; !reached_cutoff; ++rv)
-    reached_cutoff = brip_vil_rot_gauss(0, rv, s0, s1, 0)<cutoff;
-
-  //rotate to get bounds
-  int ri = static_cast<int>(vcl_fabs(ru*c+rv*s) +0.5);
-  int rj = static_cast<int>(vcl_fabs(ru*s+rv*c) +0.5);
-  if (s<0){
-    ri = static_cast<int>(vcl_fabs(ru*c-rv*s) +0.5);
-    rj = static_cast<int>(vcl_fabs(ru*s-rv*c) +0.5);
-  }
-
-  unsigned ncols = 2*ri +1, nrows = 2*rj+1;
-  vbl_array_2d<double> coef(nrows, ncols);
-  vbl_array_2d<bool> mask(nrows,ncols);
+  mask.resize(nrows,ncols);
   double residual = 0.0, total  = 0.0;
   for (int ry = -rj; ry<=rj; ++ry)
     for (int rx = -ri; rx<=ri; ++rx)
@@ -3753,6 +3702,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   double cor = 0.0;
   if (total)
     cor = -residual/total;
+  kernel.resize(nrows, ncols);
   //correct any residual offset in coefficients
   //distribute proportionally to coefficient magnitude
   for (unsigned j = 0; j<nrows; ++j)
@@ -3760,7 +3710,63 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
     {
       double v = vcl_fabs(coef[j][i]);
       coef[j][i]+=v*cor;
+	  kernel[j][i]=static_cast<float>(coef[j][i]);
     }
+}  
+
+// Compute the standard deviation of an operator response
+// given the image intensity standard deviation at each pixel
+vil_image_view<float> brip_vil_float_ops::
+std_dev_operator(vil_image_view<float> const& sd_image,
+                 vbl_array_2d<float> const& kernel)
+{
+  unsigned ni = sd_image.ni(), nj = sd_image.nj();
+  unsigned nrows = kernel.rows(), ncols = kernel.cols();
+  int rrad = (nrows-1)/2, crad = (ncols-1)/2;
+  float sd_min, sd_max;
+  vil_math_value_range(sd_image, sd_min, sd_max);
+
+  vil_image_view<float> res(ni, nj);
+  res.fill(sd_max);
+
+  vbl_array_2d<float>ksq(nrows, ncols);
+  for(unsigned r = 0; r<nrows; ++r)
+    for(unsigned c = 0; c<ncols; ++c)
+      ksq[r][c] = kernel[r][c]*kernel[r][c];
+
+  for(int j = rrad; j<static_cast<int>(nj-rrad); ++j)
+    for(int i = crad; i<static_cast<int>(ni-crad); ++i)
+      {
+        float sum = 0;
+        for(int jj = -rrad; jj<=rrad; ++jj)
+          for(int ii = -crad; ii<=crad; ++ii){
+            float sd_sq = sd_image(i+ii, j+jj);
+            sd_sq *= sd_sq;
+            sum += sd_sq*ksq[jj+rrad][ii+crad];
+          }
+        res(i,j) = vcl_sqrt(sum);
+      }
+  return res;
+}
+
+vil_image_view<float>
+brip_vil_float_ops::extrema(vil_image_view<float> const& input,
+                            float lambda0, float lambda1, float theta,
+                            bool bright, bool output_response_mask)
+{
+  vbl_array_2d<float> fa;
+  vbl_array_2d<bool> mask;
+  brip_vil_float_ops::extrema_kernel_mask(lambda0, lambda1, theta,
+                                          fa, mask);
+  unsigned nrows = fa.rows(), ncols = fa.cols();
+  int rj = (nrows-1)/2, ri = (ncols-1)/2;
+  vbl_array_2d<double> coef(nrows,ncols);
+  double max_v = brip_vil_rot_gauss(0, 0, lambda0, lambda1, 0);
+  double cutoff = static_cast<float>(max_v*0.01); // 1% tails removed
+  for(unsigned r = 0; r<nrows; ++r)
+	  for(unsigned c = 0; c<nrows; ++c)
+      coef[r][c]=fa[r][c];
+
 #if 0
   vcl_cout << "\ngauss ={";
   for (unsigned j = 0; j<nrows; ++j){

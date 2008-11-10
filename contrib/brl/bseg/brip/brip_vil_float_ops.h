@@ -110,9 +110,14 @@ class brip_vil_float_ops
             vil_image_view<float> const& Ixy,
             vil_image_view<float> const& Iyy);
 
-  //: Find ansiotropic intensity extrema mask. Theta is in degrees
-  static vbl_array_2d<bool> extrema_mask(float lambda0, float lambda1, float theta);
+  static void extrema_kernel_mask(float lambda0, float lambda1, float theta,
+                                  vbl_array_2d<float>& kernel, 
+                                  vbl_array_2d<bool>& mask);
 
+  //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
+  static  vil_image_view<float> 
+    std_dev_operator(vil_image_view<float> const& sd_image,
+                     vbl_array_2d<float> const& kernel);
   //: Find ansiotropic intensity extrema. Theta is in degrees
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
