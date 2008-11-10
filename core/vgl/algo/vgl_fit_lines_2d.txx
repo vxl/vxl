@@ -44,6 +44,7 @@ void vgl_fit_lines_2d<T>::clear()
 {
   curve_.clear();
   segs_.clear();
+  curve_indices_.clear();
 }
 
 template <class T>
@@ -54,6 +55,8 @@ void vgl_fit_lines_2d<T>::output(unsigned int start_index, unsigned int end_inde
 #ifdef DEBUG
   vcl_cout << "output " << line << '\n';
 #endif
+  for(unsigned i=start_index; i<end_index; ++i)
+    curve_indices_[i] = segs_.size();
   segs_.push_back(line);
 }
 
@@ -67,6 +70,9 @@ bool vgl_fit_lines_2d<T>::fit()
                << "number of points < min_length " << min_length_ << '\n';
     return false;
   }
+  // each point initially belongs to no curve
+  curve_indices_.clear();
+  curve_indices_.resize(curve_.size(), -1);
   //A helper to hold points and do the linear regression
   vgl_line_2d_regression<T> reg;
   // Start at the beginning of the curve with

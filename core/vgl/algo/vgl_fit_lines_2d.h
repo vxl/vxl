@@ -33,6 +33,7 @@ class vgl_fit_lines_2d
   bool verbose_;
   vcl_vector<vgl_point_2d<T> > curve_;
   vcl_vector<vgl_line_segment_2d<T> > segs_;
+  vcl_vector<int> curve_indices_;
   unsigned int min_length_;
   T tol_;
  public:
@@ -65,6 +66,9 @@ class vgl_fit_lines_2d
   // Data Access---------------------------------------------------------------
   vcl_vector<vgl_point_2d<T> >& get_points(){return curve_;}
   vcl_vector<vgl_line_segment_2d<T> >& get_line_segs(){return segs_;}
+  //: This vector provides an index mapping each curve point to the line it belongs to
+  //  an index of -1 indicates the curve point was not used in any line estimate
+  vcl_vector<int>& get_indices() {return curve_indices_;}
  protected:
   //:output a line that fits from start to end
   void output(unsigned int start_index, unsigned int end_index);
