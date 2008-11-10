@@ -30,8 +30,17 @@ public:
                              unsigned int i, unsigned int j);
   
   //: trace the boundaries of the building labels into polygons
+  // if \a dropped_clipped is true then buildings clipped by the image boundaries are not traced
   static vcl_vector<vgl_polygon<double> > 
-      trace_boundaries(const vil_image_view<unsigned int>& labels);
+      trace_boundaries(const vil_image_view<unsigned int>& labels, bool drop_clipped = true);
+  
+  //: test if a boundary is clipped by the image of size \a ni by \a nj
+  static bool is_clipped(const vcl_vector<vgl_point_2d<double> >& poly, 
+                         unsigned ni, unsigned nj);
+  
+  //: simplify a polygon by fitting lines
+  // \a tol is the tolerence for line fitting
+  static void simplify_polygon( vcl_vector<vgl_point_2d<double> >& polygon, double tol);
   
   //: simplify the boundaries by fitting lines
   static void simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundaries );
