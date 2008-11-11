@@ -3764,7 +3764,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   double max_v = brip_vil_rot_gauss(0, 0, lambda0, lambda1, 0);
   double cutoff = static_cast<float>(max_v*0.01); // 1% tails removed
   for(unsigned r = 0; r<nrows; ++r)
-	  for(unsigned c = 0; c<nrows; ++c)
+	  for(unsigned c = 0; c<ncols; ++c)
       coef[r][c]=fa[r][c];
 
 #if 0
