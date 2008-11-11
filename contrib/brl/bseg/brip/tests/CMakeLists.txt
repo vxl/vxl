@@ -13,6 +13,7 @@ ADD_EXECUTABLE( brip_test_all
   test_max_scale_response.cxx
   test_mask.cxx
   test_label_equivalence.cxx
+  test_extrema.cxx
 )
 TARGET_LINK_LIBRARIES( brip_test_all brip vgl_algo vgl vnl_algo vnl vil vil1 testlib)
 
@@ -27,6 +28,7 @@ ADD_TEST( brip_test_quadtree           ${EXECUTABLE_OUTPUT_PATH}/brip_test_all t
 ADD_TEST( brip_test_max_scale_response ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_max_scale_response )
 ADD_TEST( brip_test_mask               ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_mask )
 ADD_TEST(test_label_equivalence        ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_label_equivalence )
+ADD_TEST(test_label_extrema        ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_extema )
 
 ADD_EXECUTABLE( brip_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brip_test_include brip )

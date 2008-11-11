@@ -3649,14 +3649,28 @@ static double brip_vil_rot_gauss(double x, double y,
 {
   double theta_rad = theta*vnl_math::pi/180.0;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
-  double ax = (c*x + s*y)/sigma_x, ay = (-s*x + c*y)/sigma_y;
-  return static_cast<double>(vcl_exp(-0.5*(ax*ax + ay*ay)));
+  double sxr = 1.0/sigma_x, syr = 1.0/sigma_y;
+  double ax = (c*x + s*y)*sxr, ay = (-s*x + c*y)*syr;
+  double ret = vcl_exp(-0.5*(ax*ax + ay*ay));
+  return (ret*sxr*syr/(2.0*vnl_math::pi));
 }
 void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
                                              float theta,
                                              vbl_array_2d<float>& kernel,
                                              vbl_array_2d<bool>& mask)
 {
+  // revert theta to the range [-90, 90]
+  if(theta>=0.0f)
+    if(theta>90.0f&&theta<=270.0f)
+      theta -= 180.0f;
+    else if(theta>270.0f&&theta<=360.0f)
+      theta -= 360.0f;
+  if(theta<0.0f)
+    if(theta<-90.0f&&theta>=-270.0f)
+      theta += 180.0f;
+    else if(theta<-270.0f&&theta>=-360.0f)
+      theta += 360.0f;
+
   //convert theta to radians
   double theta_rad = theta*vnl_math::pi/180.0;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
