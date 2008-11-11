@@ -1,90 +1,84 @@
 #include "bwm_observable_textured_mesh.h"
 
-#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
 #include <vul/vul_file.h>
 #include <vgl/vgl_point_2d.h>
 
-void bwm_observable_textured_mesh::save_gml(FILE* fp, int obj_count, bgeo_lvcs* lvcs)
+void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, bgeo_lvcs* lvcs)
 {
   if (lvcs) {
       //bmsh3d_textured_mesh_mc* mesh = static_cast<bmsh3d_textured_mesh_mc*>(object_);
-      vcl_fprintf (fp, "<cityObjectMember>\n");
-      vcl_fprintf (fp, "<Building>\n");
-      vcl_fprintf (fp, "<gml:description>Building #%d</gml:description>\n",obj_count);
-      vcl_fprintf (fp, "<gml:name>Building #%d</gml:name>\n",obj_count);
+      os << "<cityObjectMember>\n";
+      os << "<Building>\n";
+      os << "<gml:description>Building #" << obj_count << "</gml:description>\n";
+      os << "<gml:name>Building #" << obj_count << "</gml:name>\n";
 
       vcl_map<int, bmsh3d_face*>::iterator fit;
       for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
         bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
 
-        vcl_fprintf (fp, "<boundedBy>");
-        vcl_fprintf (fp, "<WallSurface>");
-        vcl_fprintf (fp, "<lod4MultiSurface><gml:MultiSurface>\n");
-        vcl_fprintf (fp, "<gml:surfaceMember>");
-        vcl_fprintf (fp, "<TexturedSurface orientation=\"+\">");
-        vcl_fprintf (fp, "<gml:baseSurface>");
-        vcl_fprintf (fp, "<gml:Polygon>");
-        vcl_fprintf (fp, "<gml:exterior>");
-        vcl_fprintf (fp, "<gml:LinearRing>\n");
+        os << "<boundedBy>";
+        os << "<WallSurface>";
+        os << "<lod4MultiSurface><gml:MultiSurface>\n";
+        os << "<gml:surfaceMember>";
+        os << "<TexturedSurface orientation=\"+\">";
+        os << "<gml:baseSurface>";
+        os << "<gml:Polygon>";
+        os << "<gml:exterior>";
+        os << "<gml:LinearRing>\n";
 
         for (unsigned j=0; j<face->vertices().size(); j++) {
           bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(j);
            double x,y,z;
             lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-            vcl_fprintf (fp, "<gml:pos srsDimension=\"3\">");
-            vcl_fprintf (fp, "%.16f ", x);
-            vcl_fprintf (fp, "%.16f ", y);
-            vcl_fprintf (fp, "%.16f ", z);
-            vcl_fprintf (fp, "</gml:pos>\n");
+            os << "<gml:pos srsDimension=\"3\">";
+            os << x << " " << y << " " << z;
+            os << "</gml:pos>\n";
         }
 
         //Now print the first vertex again to close the polygon
         bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(0);
         double x,y,z;
         lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-        vcl_fprintf (fp, "<gml:pos srsDimension=\"3\">");
-        vcl_fprintf (fp, "%.16f ", x);
-        vcl_fprintf (fp, "%.16f ", y);
-        vcl_fprintf (fp, "%.16f ", z);
-        vcl_fprintf (fp, "</gml:pos>\n");
+        os << "<gml:pos srsDimension=\"3\">";
+        os << x << " " << y << " " << z;
+        os << "</gml:pos>\n";
 
-        vcl_fprintf (fp, "</gml:LinearRing>");
-        vcl_fprintf (fp, "</gml:exterior>");
-        vcl_fprintf (fp, "</gml:Polygon>");
-        vcl_fprintf (fp, "</gml:baseSurface>");
+        os << "</gml:LinearRing>";
+        os << "</gml:exterior>";
+        os << "</gml:Polygon>";
+        os << "</gml:baseSurface>";
 
         // texture
-        vcl_fprintf(fp, "<appearance><SimpleTexture>\n");
-        vcl_fprintf(fp, "<textureMap>%s</textureMap>\n",vul_file::strip_directory(face->tex_map_uri().c_str()));
-        vcl_fprintf(fp, "<textureCoordinates>");
+        os << "<appearance><SimpleTexture>\n";
+        os << "<textureMap>" << vul_file::strip_directory(face->tex_map_uri().c_str()) << "</textureMap>\n";
+        os << "<textureCoordinates>";
         for (unsigned j=0; j<face->vertices().size(); j++) {
           v = (bmsh3d_vertex*) face->vertices(j);
           //bmsh3d_textured_vertex_3d* tv = (bmsh3d_textured_vertex_3d*) face->vertices(j);
           vgl_point_2d<double> pt_tex = face->tex_coords(v->id());
-          vcl_fprintf (fp, "%.8f ", pt_tex.x());
-          vcl_fprintf (fp, "%.8f ", pt_tex.y());
+          os << pt_tex.x() << " " << pt_tex.y() << " ";
         }
 
         //Now print the first vertex again to close the polygon
         v = (bmsh3d_vertex*) face->vertices(0);
         vgl_point_2d<double> pt_tex = face->tex_coords(v->id());
-        vcl_fprintf (fp, "%.8f ", pt_tex.x());
-        vcl_fprintf (fp, "%.8f ", pt_tex.y());
+        os << pt_tex.x() << " " << pt_tex.y() << " ";
 
-        vcl_fprintf(fp,"</textureCoordinates>\n");
-        vcl_fprintf(fp,"<textureType>specific</textureType>\n");
-        vcl_fprintf(fp,"</SimpleTexture></appearance>\n");
+        os <<"</textureCoordinates>\n";
+        os <<"<textureType>specific</textureType>\n";
+        os <<"</SimpleTexture></appearance>\n";
 
-        vcl_fprintf (fp, "</TexturedSurface>\n");
-        vcl_fprintf (fp, "</gml:surfaceMember>");
-        vcl_fprintf (fp, "</gml:MultiSurface></lod4MultiSurface>");
-        vcl_fprintf (fp, "</WallSurface>");
-        vcl_fprintf (fp, "</boundedBy>\n");
+        os << "</TexturedSurface>\n";
+        os << "</gml:surfaceMember>";
+        os << "</gml:MultiSurface></lod4MultiSurface>";
+        os << "</WallSurface>";
+        os << "</boundedBy>\n";
       }
   }
 }
 
-void bwm_observable_textured_mesh::save_kml(FILE* fp, int obj_count, bgeo_lvcs* lvcs,
+void bwm_observable_textured_mesh::save_kml(vcl_ostream& os, int obj_count, bgeo_lvcs* lvcs,
                                             double ground_height, double x_offset, double y_offset )
 {
   if (lvcs) {
@@ -103,37 +97,37 @@ void bwm_observable_textured_mesh::save_kml(FILE* fp, int obj_count, bgeo_lvcs* 
     for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
       bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
 
-        vcl_fprintf(fp, "      <Polygon id=\"building%d_face%d\">\n",obj_count,poly_count);
-        vcl_fprintf(fp, "        <extrude>0</extrude>\n");
-        vcl_fprintf(fp, "        <tessellate>0</tessellate>\n");
-        vcl_fprintf(fp, "        <altitudeMode>relativeToGround</altitudeMode>\n");
-        vcl_fprintf(fp, "        <outerBoundaryIs>\n");
-        vcl_fprintf(fp, "          <LinearRing>\n");
-        vcl_fprintf(fp, "            <coordinates>\n");
+        os << "      <Polygon id=\"building" << obj_count << "_face" << poly_count << "\">\n";
+        os << "        <extrude>0</extrude>\n";
+        os << "        <tessellate>0</tessellate>\n";
+        os << "        <altitudeMode>relativeToGround</altitudeMode>\n";
+        os << "        <outerBoundaryIs>\n";
+        os << "          <LinearRing>\n";
+        os << "            <coordinates>\n";
 
         for (unsigned j=0; j<face->vertices().size(); j++) {
          bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(j);
-          vcl_fprintf (fp, "             %.16f, ", v->pt().x()+x_offset);
-         vcl_fprintf (fp, "%.16f, ", v->pt().y()+y_offset);
-         vcl_fprintf (fp, "%.16f\n", v->pt().z() - ground_height);
+          os << "             " << v->pt().x()+x_offset << ", ";
+         os << v->pt().y()+y_offset << ", ";
+         os << v->pt().z() - ground_height << "\n";
         }
 
         //Now print the first vertex again to close the polygon
         bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(0);
-        vcl_fprintf (fp, "             %.16f, ", v->pt().x()+x_offset);
-        vcl_fprintf (fp, "%.16f, ", v->pt().y()+y_offset);
-        vcl_fprintf (fp, "%.16f\n", v->pt().z() - ground_height);
+        os << "             " << v->pt().x()+x_offset << ", ";
+        os << v->pt().y()+y_offset << ", ";
+        os << v->pt().z() - ground_height << "\n";
 
-        vcl_fprintf(fp, "            </coordinates>\n");
-        vcl_fprintf(fp, "          </LinearRing>\n");
-        vcl_fprintf(fp, "        </outerBoundaryIs>\n");
-        vcl_fprintf(fp, "      </Polygon>\n");
+        os << "            </coordinates>\n";
+        os << "          </LinearRing>\n";
+        os << "        </outerBoundaryIs>\n";
+        os << "      </Polygon>\n";
     }
   }
 }
 
 
-void bwm_observable_textured_mesh::save_kml_collada(FILE* dae_fp, bgeo_lvcs* lvcs,
+void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, bgeo_lvcs* lvcs,
                                                     vcl_string geometry_id,
                                                     vcl_string geometry_position_id,
                                                     vcl_string geometry_position_array_id,
@@ -145,10 +139,10 @@ void bwm_observable_textured_mesh::save_kml_collada(FILE* dae_fp, bgeo_lvcs* lvc
   int nverts = num_vertices();
   int nfaces = num_faces();
 
-  vcl_fprintf(dae_fp,"    <geometry id=\"%s\" name=\"%s\">\n",geometry_id.c_str(),geometry_id.c_str());
-  vcl_fprintf(dae_fp,"      <mesh>\n");
-  vcl_fprintf(dae_fp,"        <source id=\"%s\">\n",geometry_position_id.c_str());
-  vcl_fprintf(dae_fp,"        <float_array id=\"%s\" count=\"%d\">\n"          ,geometry_position_array_id.c_str(),nverts*3);
+  os <<"    <geometry id=\"" << geometry_id.c_str() << "\" name=\"" << geometry_id.c_str() << "\">\n";
+  os <<"      <mesh>\n";
+  os <<"        <source id=\"" << geometry_position_id.c_str() << "\">\n";
+  os <<"        <float_array id=\"" << geometry_position_array_id.c_str() << "\" count=\"" << nverts*3 << "\">\n";
 
   // map vertex ID's to indices.
   vcl_map<int,int> vert_indices;
@@ -161,19 +155,19 @@ void bwm_observable_textured_mesh::save_kml_collada(FILE* dae_fp, bgeo_lvcs* lvc
     vert_indices[v->id()] = vert_idx;
     double x,y,z;
     lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-    vcl_fprintf(dae_fp,"%f %f %f ",x,y,z);
+    os << x << " " << y << " " << z << " ";
   }
 
-  vcl_fprintf(dae_fp,"\n        </float_array>\n");
-  vcl_fprintf(dae_fp,"        <technique_common>\n");
-  vcl_fprintf(dae_fp,"          <accessor source=\"#%s\" count=\"%d\" stride=\"3\">\n",geometry_position_array_id.c_str(),nverts);
-  vcl_fprintf(dae_fp,"            <param name=\"X\" type=\"float\"/>\n");
-  vcl_fprintf(dae_fp,"            <param name=\"Y\" type=\"float\"/>\n");
-  vcl_fprintf(dae_fp,"            <param name=\"Z\" type=\"float\"/>\n");
-  vcl_fprintf(dae_fp,"          </accessor>\n");
-  vcl_fprintf(dae_fp,"        </technique_common>\n");
-  vcl_fprintf(dae_fp,"      </source>\n");
-  vcl_fprintf(dae_fp,"      <source id=\"%s\">\n",geometry_uv_id.c_str());
+  os <<"\n        </float_array>\n";
+  os <<"        <technique_common>\n";
+  os <<"          <accessor source=\"#" << geometry_position_array_id.c_str() << "\" count=\"" << nverts << "\" stride=\"3\">\n";
+  os <<"            <param name=\"X\" type=\"float\"/>\n";
+  os <<"            <param name=\"Y\" type=\"float\"/>\n";
+  os <<"            <param name=\"Z\" type=\"float\"/>\n";
+  os <<"          </accessor>\n";
+  os <<"        </technique_common>\n";
+  os <<"      </source>\n";
+  os <<"      <source id=\"" << geometry_uv_id.c_str() << "\">\n";
 
   // determine total number of corners in mesh
   int ncorners = 0;
@@ -183,35 +177,35 @@ void bwm_observable_textured_mesh::save_kml_collada(FILE* dae_fp, bgeo_lvcs* lvc
     ncorners += face->vertices().size();
   }
 
-  vcl_fprintf(dae_fp,"        <float_array id=\"%s\" count=\"%d\">\n"          ,geometry_uv_array_id.c_str(),ncorners*2);
+  os <<"        <float_array id=\"" << geometry_uv_array_id.c_str() << "\" count=\"" << ncorners*2 << "\">\n";
   for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
     bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
     for (unsigned j=0; j<face->vertices().size(); j++) {
       bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(j);
       vgl_point_2d<double> pt = face->tex_coords(v->id());
-      vcl_fprintf(dae_fp,"%f %f ",pt.x(),pt.y());
+      os << pt.x() << " " << pt.y() << " ";
       }
   }
 
-  vcl_fprintf(dae_fp,"\n        </float_array>\n");
-  vcl_fprintf(dae_fp,"        <technique_common>\n");
-  vcl_fprintf(dae_fp,"          <accessor source=\"#%s\" count=\"%d\" stride=\"2\">\n",geometry_uv_array_id.c_str(),ncorners);
-  vcl_fprintf(dae_fp,"            <param name=\"S\" type=\"float\"/>\n");
-  vcl_fprintf(dae_fp,"            <param name=\"T\" type=\"float\"/>\n");
-  vcl_fprintf(dae_fp,"          </accessor>\n");
-  vcl_fprintf(dae_fp,"        </technique_common>\n");
-  vcl_fprintf(dae_fp,"      </source>\n");
+  os <<"\n        </float_array>\n";
+  os <<"        <technique_common>\n";
+  os <<"          <accessor source=\"#" << geometry_uv_array_id.c_str() << "\" count=\"" << ncorners << "\" stride=\"2\">\n";
+  os <<"            <param name=\"S\" type=\"float\"/>\n";
+  os <<"            <param name=\"T\" type=\"float\"/>\n";
+  os <<"          </accessor>\n";
+  os <<"        </technique_common>\n";
+  os <<"      </source>\n";
 
-  vcl_fprintf(dae_fp,"      <vertices id=\"%s\">\n",geometry_vertex_id.c_str());
-  vcl_fprintf(dae_fp,"        <input semantic=\"POSITION\" source=\"#%s\"/>\n",geometry_position_id.c_str());
-  vcl_fprintf(dae_fp,"      </vertices>\n");
-  vcl_fprintf(dae_fp,"      <triangles material=\"%s\" count=\"%d\">\n",material_name.c_str(),nfaces);
-  vcl_fprintf(dae_fp,"        <input semantic=\"VERTEX\" source=\"#%s\" offset=\"0\"/>\n",geometry_vertex_id.c_str());
-  vcl_fprintf(dae_fp,"        <input semantic=\"TEXCOORD\" source=\"#%s\" offset=\"1\" set=\"0\"/>\n",geometry_uv_id.c_str());
+  os <<"      <vertices id=\"" << geometry_vertex_id.c_str() << "\">\n";
+  os <<"        <input semantic=\"POSITION\" source=\"#" << geometry_position_id.c_str() << "\"/>\n";
+  os <<"      </vertices>\n";
+  os <<"      <triangles material=\"" << material_name.c_str() << "\" count=\"" << nfaces << "\">\n";
+  os <<"        <input semantic=\"VERTEX\" source=\"#" << geometry_vertex_id.c_str() <<  "\" offset=\"0\"/>\n";
+  os <<"        <input semantic=\"TEXCOORD\" source=\"#" << geometry_uv_id.c_str() << "\" offset=\"1\" set=\"0\"/>\n";
 
 
   int tex_idx = 0;
-  vcl_fprintf(dae_fp,"        <p>");
+  os <<"        <p>";
   for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
     bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
 
@@ -221,31 +215,31 @@ void bwm_observable_textured_mesh::save_kml_collada(FILE* dae_fp, bgeo_lvcs* lvc
 
    for (unsigned j=0; j< 3; j++) {
       bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(j);
-      vcl_fprintf(dae_fp,"%d %d ",vert_indices[v->id()],tex_idx++);
+      os << vert_indices[v->id()] << " " << tex_idx << " ";
    }
   }
 }
 
-void bwm_observable_textured_mesh::save_x3d(FILE* fp, bgeo_lvcs* lvcs)
+void bwm_observable_textured_mesh::save_x3d(vcl_ostream &os, bgeo_lvcs* lvcs)
 {
   if (!lvcs)
     return;
 
-  if (fp) {
+  if (!os.bad()) {
     vcl_string texmap_url = tex_map_uri();
 
-    vcl_fprintf(fp, "Transform {\n");
-    vcl_fprintf(fp, "  children\n");
-    vcl_fprintf(fp, "  Shape {\n");
-    vcl_fprintf(fp, "    appearance Appearance {\n");
-    vcl_fprintf(fp, "      material Material{}\n");
-    vcl_fprintf(fp, "      texture ImageTexture {\n");
-    vcl_fprintf(fp, "        url \"%s\"\n",texmap_url.c_str());
-    vcl_fprintf(fp, "      }\n");
-    vcl_fprintf(fp, "    }\n");
-    vcl_fprintf(fp, "    geometry IndexedFaceSet {\n");
-    vcl_fprintf(fp, "      coord Coordinate {\n");
-    vcl_fprintf(fp, "        point [\n");
+    os << "Transform {\n";
+    os << "  children\n";
+    os << "  Shape {\n";
+    os << "    appearance Appearance {\n";
+    os << "      material Material{}\n";
+    os << "      texture ImageTexture {\n";
+    os << "        url \"" << texmap_url.c_str() << "\"\n";
+    os << "      }\n";
+    os << "    }\n";
+    os << "    geometry IndexedFaceSet {\n";
+    os << "      coord Coordinate {\n";
+    os << "        point [\n";
 
     // map vertex ID's to indices.
     vcl_map<int,int> vert_indices;
@@ -257,47 +251,47 @@ void bwm_observable_textured_mesh::save_x3d(FILE* fp, bgeo_lvcs* lvcs)
       vert_indices[v->id()] = idx;
       double x,y,z;
       lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-      vcl_fprintf(fp,"       %0.8f %0.8f %0.8f,\n",x,y,z);
+      os <<"       " << x << " " << y << " " << z << ",\n";
     }
-    vcl_fprintf(fp, "        ]\n");
-    vcl_fprintf(fp, "      }\n");
-    vcl_fprintf(fp, "      coordIndex[\n");
+    os << "        ]\n";
+    os << "      }\n";
+    os << "      coordIndex[\n";
 
     vcl_map<int, bmsh3d_face*>::iterator fit;
     for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
       bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
-      vcl_fprintf(fp, "             ");
+      os << "             ";
       for (unsigned j=0; j<face->vertices().size(); j++) {
         bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(j);
-        vcl_fprintf( fp, "%d ",vert_indices[v->id()]);
+        os << vert_indices[v->id()] << " ";
       }
-      vcl_fprintf(fp, "-1,\n");
+      os << "-1,\n";
     }
-    vcl_fprintf(fp, "      ]\n\n");
+    os << "      ]\n\n";
 
-    vcl_fprintf(fp, "      texCoord TextureCoordinate {\n");
-    vcl_fprintf(fp, "        point [\n");
+    os << "      texCoord TextureCoordinate {\n";
+    os << "        point [\n";
 
     for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
       bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
       for (unsigned j=0; j<face->vertices().size(); j++) {
         bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(j);
         vgl_point_2d<double> pt = face->tex_coords(v->id());
-        vcl_fprintf(fp, "           %0.8f %0.8f,\n",pt.x(),pt.y());
+        os << "           " << pt.x() << " " << pt.y() << ",\n";
       }
     }
-    vcl_fprintf(fp, "        ]\n");
-    vcl_fprintf(fp, "      }\n\n");
+    os << "        ]\n";
+    os << "      }\n\n";
 
-    vcl_fprintf(fp, "      texCoordIndex[\n");
+    os << "      texCoordIndex[\n";
     int tex_coord_idx = 0;
     for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
       bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
-      vcl_fprintf(fp, "                ");
+      os << "                ";
       for (unsigned j=0; j < face->vertices().size(); j++) {
-        vcl_fprintf(fp, "%d ",tex_coord_idx++);
+        os << tex_coord_idx++ << " ";
       }
-      vcl_fprintf(fp, "-1,\n");
+      os << "-1,\n";
     }
   }
 }
