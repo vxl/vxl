@@ -267,10 +267,10 @@ class tri_dist_func
   {
     const imesh_regular_face<3>& tri = tris[i];
     double dist,u,v;
-    unsigned char s =
-        imesh_triangle_closest_point(pt, verts[tri[0]],
-                                     verts[tri[1]], verts[tri[2]],
-                                     dist, u, v);
+    /* unsigned char s = */
+    imesh_triangle_closest_point(pt,
+                                 verts[tri[0]], verts[tri[1]], verts[tri[2]],
+                                 dist, u, v);
     if (dist < closest_dist) {
       closest_dist = dist;
       closest_index = i;
@@ -291,7 +291,8 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
 
   vcl_vector<imesh_kd_tree_queue_entry> remain;
   tri_dist_func dist(verts_,*triangles_);
-  unsigned int ind = imesh_closest_index<tri_dist_func&>(p,kd_tree_,dist,&remain);
+  /* unsigned int ind = */
+  imesh_closest_index<tri_dist_func&>(p,kd_tree_,dist,&remain);
 
   // compute the (negative) maximum error of integration
   // stored negative so that the max error is first when sorted by <
@@ -371,7 +372,8 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
 
   vcl_vector<imesh_kd_tree_queue_entry> remain;
   tri_dist_func dist(verts_,*triangles_);
-  unsigned int ind = imesh_closest_index<tri_dist_func&>(p,kd_tree_,dist,&remain);
+  /* unsigned int ind = */
+  imesh_closest_index<tri_dist_func&>(p,kd_tree_,dist,&remain);
 
   // compute the (negative) maximum error of integration
   // stored negative so that the max error is first when sorted by <
@@ -967,8 +969,8 @@ bool snap_to_surface_with_normal(const imesh_imls_surface& f,
 
   vgl_vector_3d<double> df = dfunc(n,val,dp,ddp);
   double dl = df.sqr_length();
-  unsigned int i=0;
-  for (; i<1000; ++i) {
+  unsigned int i;
+  for (i=0; i<1000; ++i) {
     vgl_point_3d<double> p2 = p1 - (step*f1/dl)*df;
     val = f.deriv2(p2,dp,ddp);
     double f2 = func(n,val,dp);
