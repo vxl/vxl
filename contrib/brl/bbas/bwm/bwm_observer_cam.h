@@ -59,6 +59,8 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bool camera_adjusted() { return cam_adjusted_; }
 
+  void set_camera_adjusted(bool status) { cam_adjusted_ = status; }
+
   void set_proj_plane(vgl_plane_3d<double> proj_plane)
   { proj_plane_ = proj_plane; }
 

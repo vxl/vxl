@@ -14,7 +14,6 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
 #include <vgui/vgui.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -559,7 +558,7 @@ void bwm_observer_cam::triangulate_meshes()
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D*> >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
-    vcl_printf("triangulating mesh %d\n", obj_count);
+    vcl_cout << "triangulating mesh " << obj_count << vcl_endl;
     bwm_observable_sptr obj = it->first;
     if (obj->type_name().compare("bwm_observable_mesh") == 0) {
       bwm_observable_mesh_sptr mesh = static_cast<bwm_observable_mesh*> (obj.as_pointer());
