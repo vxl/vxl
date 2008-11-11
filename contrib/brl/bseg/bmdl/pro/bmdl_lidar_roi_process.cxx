@@ -43,8 +43,8 @@ bmdl_lidar_roi_process::bmdl_lidar_roi_process()
 {
   //this process takes 2 input:
   //the file paths of the first return and second return
-  input_data_.resize(7, brdb_value_sptr(0));
-  input_types_.resize(7);
+  input_data_.resize(8, brdb_value_sptr(0));
+  input_types_.resize(8);
 
   int i=0;
   input_types_[i++] = "vcl_string";      // first ret. image path (geotiff)
@@ -54,6 +54,7 @@ bmdl_lidar_roi_process::bmdl_lidar_roi_process()
   input_types_[i++] = "float";           // min_lon "float"
   input_types_[i++] = "float";           // max_lat "float"
   input_types_[i++] = "float";           // max_lon "float"
+  input_types_[i++] = "unsigned";       // the type of the coordinates, geo(0) or image plane(1)
 
   //output
   output_data_.resize(4,brdb_value_sptr(0));
@@ -94,6 +95,9 @@ bool bmdl_lidar_roi_process::execute()
   brdb_value_t<float>* input6 = static_cast<brdb_value_t<float>* >(input_data_[6].ptr());
   float max_lon = input6->value();
 
+  brdb_value_t<unsigned>* input7 = static_cast<brdb_value_t<unsigned>* >(input_data_[7].ptr());
+  unsigned type = input7->value();
+
   // check first return's validity
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
   if (!first_ret) {
@@ -116,7 +120,7 @@ bool bmdl_lidar_roi_process::execute()
 
   vil_image_view_base_sptr first_roi=0, last_roi=0, ground_roi;
   vpgl_geo_camera* lidar_cam =0;
-  if (!lidar_roi(first_ret, last_ret, ground_img,
+  if (!lidar_roi(type, first_ret, last_ret, ground_img,
     min_lat, min_lon, max_lat, max_lon, first_roi, last_roi, ground_roi, lidar_cam)) {
     vcl_cout << "bmdl_lidar_roi_process -- The process has failed!\n";
     return false;
@@ -145,7 +149,8 @@ bool bmdl_lidar_roi_process::execute()
   return true;
 }
 
-bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
+bool bmdl_lidar_roi_process::lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
+                                       vil_image_resource_sptr lidar_first,
                                        vil_image_resource_sptr lidar_last,
                                        vil_image_resource_sptr ground,
                                        float min_lat, float min_lon,
@@ -168,22 +173,36 @@ bool bmdl_lidar_roi_process::lidar_roi(vil_image_resource_sptr lidar_first,
 
   if (vpgl_geo_camera::init_geo_camera(tiff_first, camera))
   {
-    // backproject the 3D world coordinates on the image
+      
     vgl_box_2d<double> roi_box;
-    vgl_point_3d<double> min_pos(min_lon, min_lat, 0);
-    vgl_point_3d<double> max_pos(max_lon, max_lat, 30);
-    vgl_box_3d<double> world(min_pos, max_pos);
-    vcl_vector<vgl_point_3d<double> > corners = corners_of_box_3d<double>(world);
-    for (unsigned i=0; i<corners.size(); i++) {
-      double x = corners[i].x();
-      double y = corners[i].y();
-      double z = corners[i].z();
-      double lx, ly, lz;
-      camera->lvcs()->global_to_local(x, y, z, bgeo_lvcs::wgs84, lx, ly, lz);
-      double u,v;
-      camera->project(lx,ly,lz,u,v);
-      vgl_point_2d<double> p(u,v);
-      roi_box.add(p);
+
+    if (type == 0) {    // geographic coordinates
+      // backproject the 3D world coordinates on the image
+      vgl_point_3d<double> min_pos(min_lon, min_lat, 0);
+      vgl_point_3d<double> max_pos(max_lon, max_lat, 30);
+      vgl_box_3d<double> world(min_pos, max_pos);
+      vcl_vector<vgl_point_3d<double> > corners = corners_of_box_3d<double>(world);
+      for (unsigned i=0; i<corners.size(); i++) {
+        double x = corners[i].x();
+        double y = corners[i].y();
+        double z = corners[i].z();
+        double lx, ly, lz;
+        camera->lvcs()->global_to_local(x, y, z, bgeo_lvcs::wgs84, lx, ly, lz);
+        double u,v;
+        camera->project(lx,ly,lz,u,v);
+        ///////////////////////
+        /*double u1,v1,u2,v2, elev;
+        camera->img_to_wgs(0,0,0, u1, v1, elev);
+        vcl_cout << u1 << "   " << v1 << "   " << elev << vcl_endl;
+        camera->img_to_wgs(tiff_first->ni(),tiff_first->ni(),0, u2, v2, elev);
+        vcl_cout << u2 << "   " << v2 << "   " << elev << vcl_endl;*/
+        ///////////////////////
+        vgl_point_2d<double> p(u,v);
+        roi_box.add(p);
+      }
+    } else if (type == 1) {  
+      roi_box.add(vgl_point_2d<double> (min_lon, min_lat));
+      roi_box.add(vgl_point_2d<double> (max_lon, max_lat));
     }
 
     brip_roi broi(tiff_first->ni(), tiff_first->nj());

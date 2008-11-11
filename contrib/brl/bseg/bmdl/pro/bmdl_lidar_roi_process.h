@@ -12,6 +12,7 @@
 //             - min_lon "float"
 //             - max_lat "float"
 //             - max_lon "float"
+//             - coord type "unsigned  //0 for geo coordinates, 1 for image coord
 //        -  Output:
 //             - first return roi "vil_image_view_base_sptr"
 //             - last return roi  "vil_image_view_base_sptr"
@@ -58,7 +59,8 @@ class bmdl_lidar_roi_process : public bprb_process
 
  private:
 
-   bool lidar_roi(vil_image_resource_sptr lidar_first,
+   bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
+                  vil_image_resource_sptr lidar_first,
                   vil_image_resource_sptr lidar_last,
                   vil_image_resource_sptr ground,
                   float min_lat, float min_lon, 
