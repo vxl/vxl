@@ -14,6 +14,7 @@
 
 #include <sys/stat.h>
 #include <vcl_cstring.h>
+#include <vcl_cctype.h>
 #include <vcl_cstdlib.h>
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -61,11 +62,26 @@ bool vul_file::is_directory(char const* fn)
   return stat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+bool vul_file::is_drive(char const* fn)
+{
+  // a drive string looks like "c:", "z:"
+  if( strlen(fn)==2 && fn[1]==':' && isalpha(fn[0]) ) 
+    return true;
+  else
+    return false;
+}
+#endif
+
 //: Make a writable directory, including any necessary parents.
 // Returns true if successful, or if the directory alredy exists.
 bool vul_file::make_directory_path(char const* filename)
 {
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+  if (is_directory(filename) || is_drive(filename)) return true;
+#else
   if (is_directory(filename)) return true;
+#endif
   if (!make_directory_path(dirname(filename))) return false;
   return make_directory(filename);
 }

@@ -54,6 +54,14 @@ struct vul_file
     return is_directory(filename.c_str());
   }
 
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+  //: Return true iff filename is a drive, e.g., "c:" or "Z:".
+  static bool is_drive(char const* filename);
+  static bool is_drive(const vcl_string& filename) {
+    return is_drive(filename.c_str());
+  }
+#endif
+
   //: Expand any leading ~ escapes in filename
   static vcl_string expand_tilde(char const* filename);
   static vcl_string expand_tilde(vcl_string const& filename) {
