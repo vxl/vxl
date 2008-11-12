@@ -11,6 +11,7 @@
 #include <vcl_string.h>
 #include <vcl_exception.h>
 #include <vcl_map.h>
+#include <vcl_typeinfo.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
 #include <vul/vul_sprintf.h>
