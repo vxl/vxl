@@ -25,7 +25,7 @@ class vidl2_v4l2_control
   protected:
     int fd;
     struct v4l2_queryctrl ctrl_;
-    vidl2_v4l2_control(const v4l2_queryctrl& ctr, int f): ctrl_(ctr), fd(f) {}
+    vidl2_v4l2_control(const v4l2_queryctrl& ctr, int f):  fd(f), ctrl_(ctr) {}
     void set_value(int v) const;
     int get_value() const;
   public:
@@ -95,12 +95,12 @@ class vidl2_v4l2_control_menu: public vidl2_v4l2_control
     vidl2_v4l2_control_menu(const v4l2_queryctrl& ctr, int f);
     //: Number of items
     // \return number of entries in the menu
-    int n_items() const { return items.size();}
+    unsigned int n_items() const { return items.size();}
     //: Item i
     // \return string assigned to item i
     vcl_string get(unsigned int i) const { return items[i]; }
     //: Select item i
-    void set(unsigned int i) const { if (i>=0 && i<n_items()) set_value((int) i); }
+    void set(unsigned int i) const { if (i<n_items()) set_value((int) i); }
     //: Get the value of the control 
     // \return index in the menu
     unsigned int get() const { return (unsigned int) get_value(); }
