@@ -22,6 +22,7 @@
 #include <bmdl/pro/bmdl_trace_boundaries_process.h>
 #include <bmdl/pro/bmdl_generate_mesh_process.h>
 #include <bmdl/pro/bmdl_lidar_roi_process.h>
+#include <bmdl/pro/bmdl_modeling_process.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -40,6 +41,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bmdl_trace_boundaries_process, bprb_batch_process_manager);
   REG_PROCESS(bmdl_generate_mesh_process, bprb_batch_process_manager);
   REG_PROCESS(bmdl_lidar_roi_process, bprb_batch_process_manager);
+  REG_PROCESS(bmdl_modeling_process, bprb_batch_process_manager);
   Py_INCREF(Py_None);
   return Py_None;
 }
