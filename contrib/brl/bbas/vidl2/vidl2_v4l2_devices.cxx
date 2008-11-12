@@ -72,7 +72,7 @@ void vidl2_v4l2_devices::load_devices(const char *dirname)
   char filename[200];
   if (dp != NULL)
   {
-    while (ep = readdir(dp)) {
+    while ((ep = readdir(dp))) {
       vcl_strcpy(filename,dirname);
       vcl_strcat(filename,"/");
       vcl_strcat(filename,ep->d_name);
