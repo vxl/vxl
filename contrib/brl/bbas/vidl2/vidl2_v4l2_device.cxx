@@ -38,7 +38,7 @@ namespace {
 
 void vidl2_v4l2_device::update_controls()
 {
-  for (int i=0;i<controls_.size();++i) delete controls_[i]; 
+  for (unsigned int i=0;i<controls_.size();++i) delete controls_[i]; 
   controls_.clear();
 
   struct v4l2_queryctrl ctrl;
@@ -103,7 +103,7 @@ vidl2_v4l2_device::~vidl2_v4l2_device()
       uninit_mmap();
     close();
   }
-  for (int i=0;i<controls_.size();++i) delete controls_[i]; 
+  for (unsigned int i=0;i<controls_.size();++i) delete controls_[i]; 
 }
 
 void vidl2_v4l2_device::reset()
@@ -169,10 +169,6 @@ bool vidl2_v4l2_device::open()
 bool vidl2_v4l2_device::initialize_device()
 {
   struct v4l2_capability cap;
-  struct v4l2_cropcap cropcap;
-  struct v4l2_crop crop;
-  struct v4l2_format fmt;
-  unsigned int min;
 
   if (-1 == xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
     vcl_ostringstream f;
@@ -481,6 +477,7 @@ bool vidl2_v4l2_device::uninit_mmap ()
   vcl_free (buffers);
   buffers= NULL;
   n_buffers=0;
+  return true;
 }
 
 bool vidl2_v4l2_device::close()
@@ -547,5 +544,6 @@ operator << (vcl_ostream &os, const vidl2_v4l2_device & dev)
   os << "      Current input: " << dev.current_input() << vcl_endl
      << "      Current format: " << v4l2_to_vidl2(dev.get_v4l2_format())
      << " width: "<< dev.get_width()<< " height: " << dev.get_height() << vcl_endl;
+  return os;
 }
 
