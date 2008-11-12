@@ -14,6 +14,7 @@ DECLARE( test_k_means );
 DECLARE( test_matrix_products );
 DECLARE( test_matxvec );
 DECLARE( test_stats_1d );
+DECLARE( test_sample_stats_1d );
 DECLARE( test_stats_nd );
 DECLARE( test_sum_1d );
 DECLARE( test_gamma );
@@ -68,6 +69,7 @@ register_tests()
   REGISTER( test_matrix_products );
   REGISTER( test_matxvec );
   REGISTER( test_stats_1d );
+  REGISTER( test_sample_stats_1d );
   REGISTER( test_stats_nd );
   REGISTER( test_sum_1d );
   REGISTER( test_gamma );

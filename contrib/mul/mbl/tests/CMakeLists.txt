@@ -17,6 +17,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_matrix_products.cxx
   test_matxvec.cxx
   test_stats_1d.cxx
+  test_sample_stats_1d.cxx
   test_stats_nd.cxx
   test_sum_1d.cxx
   test_gamma.cxx
@@ -72,6 +73,7 @@ ADD_TEST( mbl_test_k_means ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_k_means )
 ADD_TEST( mbl_test_matrix_products ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_matrix_products )
 ADD_TEST( mbl_test_matxvec ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_matxvec )
 ADD_TEST( mbl_test_stats_1d ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_stats_1d )
+ADD_TEST( mbl_test_sample_stats_1d ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_sample_stats_1d )
 ADD_TEST( mbl_test_stats_nd ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_stats_nd )
 ADD_TEST( mbl_test_sum_1d ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_sum_1d )
 ADD_TEST( mbl_test_gamma ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_gamma )

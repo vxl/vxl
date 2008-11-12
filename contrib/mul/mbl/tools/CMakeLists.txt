@@ -3,3 +3,4 @@
 LINK_LIBRARIES( mbl )
 
 ADD_EXECUTABLE( mbl_print_log_properties print_log_properties.cxx )
+ADD_EXECUTABLE( mbl_sample_stats sample_stats.cxx)
