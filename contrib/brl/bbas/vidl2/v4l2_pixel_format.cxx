@@ -5,20 +5,16 @@
 // \author Antonio Garrido
 // \verbatim
 //  Modifications
-//     15 Apr 2009 Created (A. Garrido)
+//     15 Apr 2008 Created (A. Garrido)
 //\endverbatim
 
 #include "v4l2_pixel_format.h"
-
 
 extern "C" {
 #include <asm/types.h>          /* for videodev2.h */
 #include <sys/time.h>
 #include <linux/videodev2.h>
 };
-
-
-
 
 // TO DO: Comparison between videl2_pixel_format.h and
 // http://v4l2spec.bytesex.org/spec-single/v4l2.html#AEN4850 !!!

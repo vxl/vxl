@@ -8,7 +8,7 @@
 // \author Antonio Garrido
 // \verbatim
 //  Modifications
-//     4 Jul 2009 Created (A. Garrido)
+//     4 Jul 2008 Created (A. Garrido)
 //\endverbatim
 
 
