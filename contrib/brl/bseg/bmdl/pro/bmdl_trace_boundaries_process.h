@@ -45,10 +45,8 @@ class bmdl_trace_boundaries_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
-
- private:
-
-   bool trace_boundaries(vil_image_view_base_sptr label_img, vcl_string fpath);
+   
+  bool trace_boundaries(vil_image_view_base_sptr label_img, vcl_string fpath);
 };
 
 #endif // bmdl_trace_boundaries_process_h_

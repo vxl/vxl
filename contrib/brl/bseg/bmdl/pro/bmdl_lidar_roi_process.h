@@ -39,7 +39,7 @@ class bmdl_lidar_roi_process : public bprb_process
 {
  public:
 
-   bmdl_lidar_roi_process();
+  bmdl_lidar_roi_process();
 
   //: Copy Constructor (no local data)
   bmdl_lidar_roi_process(const bmdl_lidar_roi_process& other)
@@ -57,9 +57,7 @@ class bmdl_lidar_roi_process : public bprb_process
   bool execute();
   bool finish(){return true;}
 
- private:
-
-   bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
+  bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
                   vil_image_resource_sptr lidar_first,
                   vil_image_resource_sptr lidar_last,
                   vil_image_resource_sptr ground,
@@ -69,6 +67,7 @@ class bmdl_lidar_roi_process : public bprb_process
                   vil_image_view_base_sptr& last_roi,
                   vil_image_view_base_sptr& ground_roi,
                   vpgl_geo_camera*& lvcs);
+private:
 
   //: projects the box on the image by taking the union of all the projected corners
   bool comp_trans_matrix(double sx1, double sy1, double sz1,

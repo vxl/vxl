@@ -53,7 +53,7 @@ bmdl_generate_mesh_process::bmdl_generate_mesh_process()
   input_types_[i++] = "vpgl_camera_double_sptr";     // lidar camera
 
   //output
-  output_data_.resize(0,brdb_value_sptr(0));
+  output_data_.resize(0);
   output_types_.resize(0);
 }
 
@@ -112,8 +112,8 @@ bool bmdl_generate_mesh_process::execute()
   }
 
   vpgl_geo_camera* lidar_cam = static_cast<vpgl_geo_camera*>(camera.ptr());
-
-  generate_mesh(file_poly, label_img, height_img, ground_img, file_mesh, lidar_cam);
+  unsigned num_of_buildings=0;
+  generate_mesh(file_poly, label_img, height_img, ground_img, file_mesh, lidar_cam, num_of_buildings);
 
   return true;
 }
@@ -124,7 +124,8 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
                                           vil_image_view_base_sptr height_img,
                                           vil_image_view_base_sptr ground_img,
                                           vcl_string fpath_mesh,
-                                          vpgl_geo_camera* const lidar_cam)
+                                          vpgl_geo_camera* const lidar_cam,
+                                          unsigned& num_of_buildings)
 {
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_UINT_32) {
     vcl_cout << "bmdl_generate_mesh_process::the Label Image pixel format" << label_img->pixel_format() << " undefined" << vcl_endl;
@@ -168,8 +169,8 @@ bmdl_generate_mesh_process::generate_mesh(vcl_string fpath_poly,
 
   imesh_mesh mesh;
   bmdl_mesh::mesh_lidar(boundaries , labels, heights, ground, mesh);
-  generate_kml_collada(fpath_mesh, mesh, lidar_cam);
-
+  generate_kml_collada(fpath_mesh, mesh, lidar_cam, num_of_buildings);
+  //generate_kml(fpath_mesh, mesh, lidar_cam);
   return true;
 }
 
@@ -298,7 +299,8 @@ write_kml_collada_wrapper(vcl_ostream& os,
 
 void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
                                                       imesh_mesh& mesh,
-                                                      vpgl_geo_camera* lidar_cam)
+                                                      vpgl_geo_camera* lidar_cam,
+                                                      unsigned& num_of_buildings)
 {
   if (kmz_dir == "") {
     vcl_cerr << "Error: no filename selected.\n";
@@ -349,7 +351,7 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     lidar_cam->img_to_wgs(meanx, -meany, minz, lon,lat, elev);
 
     vcl_stringstream ss;
-    ss << "structure_" << i;
+    ss << "structure_" << i+num_of_buildings;
     vcl_string kml_fname = ss.str() + ".kml";
     vcl_string dae_fname = ss.str() + ".dae";
 
@@ -364,7 +366,7 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     write_kml_collada_wrapper(oskml,ss.str(),lookat,location,orientation,
                               vul_file::strip_directory(dae_fname));
     oskml.close();
-
+    
 #if (HAS_ZLIB)
     vcl_string zip_fname = ss.str() + ".kmz";
     zipFile zipf = zipOpen(zip_fname.c_str(), APPEND_STATUS_CREATE);
@@ -375,6 +377,7 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     vpl_unlink(dae_fname.c_str());
 #endif
   }
+  num_of_buildings += cc.size();
 }
 
 #if (HAS_ZLIB)
@@ -471,7 +474,7 @@ int bmdl_generate_mesh_process::zip_kmz(zipFile& zf, const char* filenameinzip)
     vcl_printf("error in closing zipfile\n");
     return 0;
   }
-
+  free(buf);
   return ZIP_OK;
 }
 #endif

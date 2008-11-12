@@ -26,6 +26,7 @@ IF(EXPAT_FOUND)
         bmdl_trace_boundaries_process.h       bmdl_trace_boundaries_process.cxx
         bmdl_generate_mesh_process.h          bmdl_generate_mesh_process.cxx
         bmdl_lidar_roi_process.h              bmdl_lidar_roi_process.cxx
+        bmdl_modeling_process.h               bmdl_modeling_process.cxx
       )
 
 

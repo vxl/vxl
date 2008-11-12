@@ -33,6 +33,7 @@
 
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_point_3d.h>
+#include <vpl/vpl.h>
 
 #if (HAS_ZLIB)
 #include <minizip/zip.h>
@@ -60,14 +61,12 @@ class bmdl_generate_mesh_process : public bprb_process
   bool execute();
   bool finish(){return true;}
 
- private:
-
   bool generate_mesh(vcl_string fpath_poly, vil_image_view_base_sptr label_img,
                      vil_image_view_base_sptr height_img,
                      vil_image_view_base_sptr ground_img,
                      vcl_string fpath_mesh,
-                     vpgl_geo_camera* const lidar_cam);
-
+                     vpgl_geo_camera* const lidar_cam, unsigned& num_of_buildings);
+ private:
   void update_mesh_coord(imesh_mesh& imesh, vpgl_geo_camera* cam);
 
   //: Write the KML file for wrapping a COLLADA mesh
@@ -82,7 +81,7 @@ class bmdl_generate_mesh_process : public bprb_process
 
   void generate_kml(vcl_string& kml_filename, imesh_mesh& mesh, vpgl_geo_camera* lidar_cam);
 
-  void generate_kml_collada(vcl_string& kmz_dir, imesh_mesh& mesh, vpgl_geo_camera* lidar_cam);
+  void generate_kml_collada(vcl_string& kmz_dir, imesh_mesh& mesh, vpgl_geo_camera* lidar_cam, unsigned& num_of_buildings);
 
 #if (HAS_ZLIB)
   int zip_kmz(zipFile& zf, const char* filenameinzip);
