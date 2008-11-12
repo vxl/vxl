@@ -8,7 +8,7 @@
 // \author Antonio Garrido
 // \verbatim
 //  Modifications
-//     30 Apr 2009 Created (A. Garrido)
+//     30 Apr 2008 Created (A. Garrido)
 //\endverbatim
 
 #include "vidl2_istream.h"
