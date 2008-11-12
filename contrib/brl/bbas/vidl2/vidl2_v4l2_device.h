@@ -163,11 +163,44 @@ class vidl2_v4l2_device
   vidl2_v4l2_control * get_control_id(int id) const 
     { for (int i=0;i<n_controls();++i) { if (controls_[i]->id()==id) return controls_[i]; } return 0;}
 
+  //: Get control from driver id
+  // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
+  // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_INTEGER
   vidl2_v4l2_control_integer * get_control_integer_id( int id) const
     { 
       vidl2_v4l2_control *pc= get_control_id(id);
       return pc?(pc->type()==V4L2_CTRL_TYPE_INTEGER? 
                      dynamic_cast<vidl2_v4l2_control_integer *>(pc):0 ):0;
+    }
+
+  //: Get control from driver id
+  // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
+  // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_MENU
+  vidl2_v4l2_control_menu * get_control_menu_id( int id) const
+    { 
+      vidl2_v4l2_control *pc= get_control_id(id);
+      return pc?(pc->type()==V4L2_CTRL_TYPE_MENU? 
+                     dynamic_cast<vidl2_v4l2_control_menu *>(pc):0 ):0;
+    }
+
+  //: Get control from driver id
+  // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
+  // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_BOOLEAN
+  vidl2_v4l2_control_boolean * get_control_boolean_id( int id) const
+    { 
+      vidl2_v4l2_control *pc= get_control_id(id);
+      return pc?(pc->type()==V4L2_CTRL_TYPE_BOOLEAN? 
+                     dynamic_cast<vidl2_v4l2_control_boolean *>(pc):0 ):0;
+    }
+
+  //: Get control from driver id
+  // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
+  // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_BUTTON
+  vidl2_v4l2_control_button * get_control_button_id( int id) const
+    { 
+      vidl2_v4l2_control *pc= get_control_id(id);
+      return pc?(pc->type()==V4L2_CTRL_TYPE_BUTTON? 
+                     dynamic_cast<vidl2_v4l2_control_button *>(pc):0 ):0;
     }
 
 
