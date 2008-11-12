@@ -11,6 +11,7 @@
 //   15 Apr 2009 Created (A. Garrido)
 //\endverbatim
 
+#include "vidl2_v4l2_control.h"
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
@@ -23,12 +24,12 @@ extern "C" {
 
 //: A class for handle a video device input
 // This class is not finished. I am thinking about adding controls, that is, a number of user-settable controls such as brightness, saturation and so on. but different devices will have different controls available. So, I am thinking about new classes...
-// FIXME - add controls
 class vidl2_v4l2_input
 {
   struct v4l2_input input_;
- public:
   vidl2_v4l2_input (const struct v4l2_input& inp) { input_=inp; }
+  friend class vidl2_v4l2_device;
+ public:
   //: Return name of input
   vcl_string name() const { return vcl_string((const char*) input_.name); }
   //: Return if the input uses a tuner (RF modulator)
@@ -67,6 +68,8 @@ class vidl2_v4l2_device
   mutable vcl_string last_error;
   bool capturing; // see start_capturing
   vcl_vector<vidl2_v4l2_input> inputs_;
+  vcl_vector<vidl2_v4l2_control *> controls_;
+  void update_controls(); // must be called after input change
 
   bool open(); // return true if successful
   bool initialize_device(); //  return true if successful
@@ -99,7 +102,7 @@ class vidl2_v4l2_device
   //: Friendly name of the device.
   vcl_string card_name() const { return card_name_; }
   //: Number of inputs in device
-  int ninputs() const { return inputs_.size(); }
+  int n_inputs() const { return inputs_.size(); }
   //: Inputs been used (0 to ninputs-1)
   // if equal to ninputs, indicates unknown
   // \see ninputs
@@ -141,6 +144,34 @@ class vidl2_v4l2_device
   // \note You can use this function to know the height selected by driver after calling set_v4l2_format
   // \see set_v4l2_format
   int get_height() const { return fmt.fmt.pix.height; }
+
+  // ----------------- Methods associated to controls -------------------
+
+  //: Get number of controls
+  // \return the number of detected controls (control not disabled and not inactive). 
+  int n_controls() const { return controls_.size(); }
+  //: Get control
+  // The user must downcast the pointer -depending on type- to use all funcionality.
+  // \param i indicates the control to be extracted, from 0 to n_controls-1
+  // \return pointer to control
+  // \see n_controls
+  vidl2_v4l2_control * get_control(int i) const { return controls_[i]; }
+  //: Get control from driver id
+  // The user must downcast the pointer -depending on type- to use all funcionality.
+  // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
+  // \return pointer to control or 0 if does not exist
+  vidl2_v4l2_control * get_control_id(int id) const 
+    { for (int i=0;i<n_controls();++i) { if (controls_[i]->id()==id) return controls_[i]; } return 0;}
+
+  vidl2_v4l2_control_integer * get_control_integer_id( int id) const
+    { 
+      vidl2_v4l2_control *pc= get_control_id(id);
+      return pc?(pc->type()==V4L2_CTRL_TYPE_INTEGER? 
+                     dynamic_cast<vidl2_v4l2_control_integer *>(pc):0 ):0;
+    }
+
+
+  // ----------------- End methods associated to controls -------------------
 
   //: Start capturing
   // \return if successful

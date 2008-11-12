@@ -37,6 +37,32 @@ namespace {
 // --------------- end local functions -------------------
 
 
+void vidl2_v4l2_device::update_controls()
+{
+  for (int i=0;i<controls_.size();++i) delete controls_[i]; 
+  controls_.clear();
+
+  struct v4l2_queryctrl ctrl;
+  for (int indice = V4L2_CID_BASE;indice < V4L2_CID_LASTP1;indice++) {
+    ctrl.id= indice;
+    if (0 == ioctl (fd, VIDIOC_QUERYCTRL, &ctrl)) { // error ignored
+        vidl2_v4l2_control *pc= vidl2_v4l2_control::new_control(ctrl, fd);
+        if (pc) controls_.push_back(pc);
+    }
+  }
+
+  for (int indice = V4L2_CID_PRIVATE_BASE;;indice++) {
+    ctrl.id= indice;
+    if (0 == ioctl (fd, VIDIOC_QUERYCTRL, &ctrl)) {// error ignored
+      vidl2_v4l2_control *pc= vidl2_v4l2_control::new_control(ctrl, fd);
+      if (pc) controls_.push_back(pc);
+    } else  break;
+  }
+}
+
+
+
+
 vidl2_v4l2_device::vidl2_v4l2_device(const char *file)
 {
   pre_nbuffers= 4;
@@ -72,6 +98,7 @@ vidl2_v4l2_device::vidl2_v4l2_device(const char *file)
   // fmt.fmt.pix.height =0;
 
   try_formats();
+  update_controls();
 }
 
 vidl2_v4l2_device::~vidl2_v4l2_device()
@@ -83,6 +110,7 @@ vidl2_v4l2_device::~vidl2_v4l2_device()
       uninit_mmap();
     close();
   }
+  for (int i=0;i<controls_.size();++i) delete controls_[i]; 
 }
 
 void vidl2_v4l2_device::reset()
@@ -106,8 +134,9 @@ void vidl2_v4l2_device::reset()
   }
 
   try_formats();
-
   // inputs already updated
+  update_controls();
+
 }
 
 
@@ -473,14 +502,14 @@ bool vidl2_v4l2_device::close()
 int vidl2_v4l2_device::current_input() const
 {
   if (!is_open())
-    return ninputs();
+    return n_inputs();
 
-  if (ninputs()==0) return 0;
+  if (n_inputs()==0) return 0;
 
   int index;
   if (-1==xioctl(fd,VIDIOC_G_INPUT,&index)) {
     last_error= "error getting current input (VIDIOC_G_INPUT)";
-    return ninputs();
+    return n_inputs();
   }
   return index;
 }
@@ -489,7 +518,7 @@ bool vidl2_v4l2_device::set_input(int i)
 {
   if (current_input()==i)
     return true;
-  if (!is_open() || i<0 || i>=ninputs())
+  if (!is_open() || i<0 || i>=n_inputs())
     return false;
 
     if (capturing)
@@ -503,6 +532,7 @@ bool vidl2_v4l2_device::set_input(int i)
   // fmt.fmt.pix.width = 0; // format unknown
   //fmt.fmt.pix.height =0;
   try_formats();
+  update_controls();
 
   return true;
 }
@@ -512,8 +542,8 @@ vcl_ostream &
 operator << (vcl_ostream &os, const vidl2_v4l2_device & dev)
 {
   os << dev.device_file() << " -> " <<  dev.card_name()<< vcl_endl
-     << "  " << dev.ninputs() << " inputs:"<< vcl_endl;
-  for (int j=0;j<dev.ninputs();++j){
+     << "  " << dev.n_inputs() << " inputs:"<< vcl_endl;
+  for (int j=0;j<dev.n_inputs();++j){
     os << "    " <<  j << ": " << dev.input(j).name();
     if (dev.input(j).is_tuner())
       os << " is tuner" << vcl_endl;
