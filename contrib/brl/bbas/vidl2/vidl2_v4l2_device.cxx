@@ -36,7 +36,6 @@ namespace {
 }
 // --------------- end local functions -------------------
 
-
 void vidl2_v4l2_device::update_controls()
 {
   for (int i=0;i<controls_.size();++i) delete controls_[i]; 
@@ -60,9 +59,6 @@ void vidl2_v4l2_device::update_controls()
   }
 }
 
-
-
-
 vidl2_v4l2_device::vidl2_v4l2_device(const char *file)
 {
   pre_nbuffers= 4;
@@ -85,7 +81,6 @@ vidl2_v4l2_device::vidl2_v4l2_device(const char *file)
   }
 
   // Now we should consider all possibilities
-
   struct v4l2_input inp;
 
   //vcl_cerr << "Looking for inputs..." << fd << vcl_endl;
@@ -93,10 +88,8 @@ vidl2_v4l2_device::vidl2_v4l2_device(const char *file)
     //vcl_cerr << "Inserting input...\n";
     inputs_.push_back(vidl2_v4l2_input(inp));
   }
-
   // fmt.fmt.pix.width = 0;
   // fmt.fmt.pix.height =0;
-
   try_formats();
   update_controls();
 }
@@ -136,9 +129,10 @@ void vidl2_v4l2_device::reset()
   try_formats();
   // inputs already updated
   update_controls();
-
+  for (int i=0;i<n_controls();++i)
+    get_control(i)->reset();
+  // Set default values?
 }
-
 
 bool vidl2_v4l2_device::open()
 {
