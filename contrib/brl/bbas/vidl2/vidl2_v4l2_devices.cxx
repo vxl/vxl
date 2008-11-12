@@ -82,7 +82,7 @@ void vidl2_v4l2_devices::load_devices(const char *dirname)
         //vcl_cerr<< filename << "  is video device\n";
         vidl2_v4l2_device_sptr aux= new vidl2_v4l2_device(filename);
         //vecdev.push_back(aux);
-        if (aux->ninputs()>0) vecdev.push_back(aux);
+        if (aux->n_inputs()>0) vecdev.push_back(aux);
         else vcl_cerr << "No inputs in device " << filename << vcl_endl;
       }
       //else puts("  is not video device");
