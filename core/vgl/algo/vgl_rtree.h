@@ -93,13 +93,13 @@ class vgl_rtree_node
   node *add(V const &v);
 
   // remove ith vertex from node.
-  void erase(int i);
+  void erase(unsigned int i);
 
  private:
   friend class vgl_rtree_iterator_base<V, B, C>;
 
   // the following methods are not used by the vgl_rtree.
-  int find_index_in_parent() const;
+  unsigned int find_index_in_parent() const;
   void compute_bounds();
   void update_total_vts(int diff);
   void update_total_chs(int diff);
@@ -116,7 +116,7 @@ class vgl_rtree_iterator_base
  public:
   typedef vgl_rtree_node<V, B, C> node;
   node *current;
-  int i;
+  unsigned int i;
 
   vgl_rtree_iterator_base(node *root) : current(root), i(0) { }
   vgl_rtree_iterator_base() : current(0), i(0) { }
@@ -230,9 +230,9 @@ class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C>
 //   void  C::init  (B &, V const &);
 //   void  C::update(B &, V const &);
 //   void  C::update(B &, B const &);
-//   bool  C::meet  (B const &, V const &) const;
-//   bool  C::meet  (B const &, B const &) const;
-//   float C::volume(B const &) const;
+//   bool  C::meet  (B const &, V const &);
+//   bool  C::meet  (B const &, B const &);
+//   float C::volume(B const &);
 // \endcode
 //
 // The volume() method is used by the rtree to make decisions

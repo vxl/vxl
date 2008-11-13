@@ -33,7 +33,7 @@ template <class V, class B, class C>
 vgl_rtree_node<V, B, C>::~vgl_rtree_node()
 {
   parent = 0;
-  for (unsigned i=0; i<local_chs; ++i)
+  for (unsigned int i=0; i<local_chs; ++i)
     delete chs[i];
 }
 
@@ -83,7 +83,7 @@ bool vgl_rtree_node<V, B, C>::find(B const &b, V const &v, node **n_out, int *i_
 {
   if (C::meet(b, bounds)) {
     // check if it is one of the vertices in this node.
-    for (unsigned i=0; i<local_vts; ++i) {
+    for (unsigned int i=0; i<local_vts; ++i) {
       if (vts[i] == v) {
         *n_out = const_cast<node*>(this);
         *i_out = i;
@@ -91,7 +91,7 @@ bool vgl_rtree_node<V, B, C>::find(B const &b, V const &v, node **n_out, int *i_
       }
     }
     // if not, try the child nodes.
-    for (unsigned i=0; i<local_chs; ++i)
+    for (unsigned int i=0; i<local_chs; ++i)
       if (chs[i]->find(b, v, n_out, i_out))
         return true;
     return false;
@@ -140,14 +140,14 @@ vgl_rtree_node<V, B, C> *vgl_rtree_node<V, B, C>::add(V const &v)
 #if 0
   // get the smallest subtree :
   child = chs[0];
-  for (unsigned i=0; i<local_chs; ++i)
+  for (unsigned int i=0; i<local_chs; ++i)
     if (chs[i]->total_vts < child->total_vts)
       child = chs[i];
 #else
   { // get the subtree which needs the least enlargement :
     float cost = 0;
     int best = -1;
-    for (unsigned i=0; i<local_chs; ++i) {
+    for (unsigned int i=0; i<local_chs; ++i) {
       B tmp(chs[i]->bounds);
       C::update(tmp, v);
       float dd = C::volume(tmp) - C::volume(chs[i]->bounds);
@@ -165,9 +165,9 @@ vgl_rtree_node<V, B, C> *vgl_rtree_node<V, B, C>::add(V const &v)
 
 // remove the ith element from the node.
 template <class V, class B, class C>
-void vgl_rtree_node<V, B, C>::erase(int i)
+void vgl_rtree_node<V, B, C>::erase(unsigned int i)
 {
-  assert(0<=i && i<local_vts);
+  assert(i<local_vts);
 
   if (total_vts > 1) { // there are other vertices.
 
@@ -203,11 +203,11 @@ void vgl_rtree_node<V, B, C>::erase(int i)
       node *p = n->parent;
 
       // find out what index n has in p :
-      int j = n->find_index_in_parent();
+      unsigned int j = n->find_index_in_parent();
       assert(n == p->chs[j]);
 
       // update the node counts in p :
-      p->update_total_chs(- n->total_chs);
+      p->update_total_chs(- (int)n->total_chs);
       -- p->local_chs;
 
       // move top child down to position j.
@@ -227,14 +227,14 @@ void vgl_rtree_node<V, B, C>::erase(int i)
 //--------------------------------------------------------------------------------
 
 template <class V, class B, class C>
-int vgl_rtree_node<V, B, C>::find_index_in_parent() const
+unsigned int vgl_rtree_node<V, B, C>::find_index_in_parent() const
 {
   assert(parent);
-  for (int i=0; i<parent->local_chs; ++i)
+  for (unsigned int i=0; i<parent->local_chs; ++i)
     if (parent->chs[i] == this)
       return i;
   assert(!"this not found in parent");
-  return -1;
+  return (unsigned int)(-1);
 }
 
 // recompute the bounds of this node, using the vertices on
@@ -244,14 +244,14 @@ void vgl_rtree_node<V, B, C>::compute_bounds()
 {
   if (local_vts>0) {
     C::init(bounds, vts[0]);
-    for (unsigned i=1; i<local_vts; ++i)
+    for (unsigned int i=1; i<local_vts; ++i)
       C::update(bounds, vts[i]);
     for (unsigned i=0; i<local_chs; ++i)
       C::update(bounds, chs[i]->bounds );
   }
   else if (local_chs>0) {
     bounds = chs[0]->bounds;
-    for (unsigned i=1; i<local_chs; ++i)
+    for (unsigned int i=1; i<local_chs; ++i)
       C::update(bounds, chs[i]->bounds );
   }
   else {
@@ -268,12 +268,12 @@ template <class V, class B, class C>
 void vgl_rtree_node<V, B, C>::get(B const &region, vcl_vector<V> &vs) const
 {
   // get vertices from this node :
-  for (unsigned i=0; i<local_vts; ++i)
+  for (unsigned int i=0; i<local_vts; ++i)
     if (C::meet(region, vts[i] ))
       vs.push_back(vts[i]);
 
   // get vertices from children :
-  for (unsigned i=0; i<local_chs; ++i)
+  for (unsigned int i=0; i<local_chs; ++i)
     if (C::meet(region, chs[i]->bounds ))
       chs[i]->get(region, vs);
 }
@@ -283,12 +283,12 @@ template <class V, class B, class C>
 void vgl_rtree_node<V, B, C>::get(vgl_rtree_probe<V, B, C> const &region, vcl_vector<V> &vs) const
 {
   // get vertices from this node :
-  for (unsigned i=0; i<local_vts; ++i)
+  for (unsigned int i=0; i<local_vts; ++i)
     if (region.meets( vts[i] ))
       vs.push_back(vts[i]);
 
   // get vertices from children :
-  for (unsigned i=0; i<local_chs; ++i)
+  for (unsigned int i=0; i<local_chs; ++i)
     if (region.meets( chs[i]->bounds ))
       chs[i]->get(region, vs);
 }
@@ -298,10 +298,10 @@ void vgl_rtree_node<V, B, C>::get_all(vcl_vector<V> &vs) const
 {
   vs.reserve(vs.size() + total_vts);
 
-  for (unsigned i=0; i<local_vts; ++i)
+  for (unsigned int i=0; i<local_vts; ++i)
     vs.push_back(vts[i]);
 
-  for (unsigned i=0; i<local_chs; ++i)
+  for (unsigned int i=0; i<local_chs; ++i)
     chs[i]->get_all(vs);
 }
 
@@ -314,7 +314,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp()
   if (!current)
     return;
 
-  ++i;
+  ++i; // class member!
   if (i < current->local_vts)
     return;
 
@@ -326,7 +326,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp()
   }
 
   // backtrack :
-  int j;
+  unsigned int j;
   node *n;
   node *p;
  again:
