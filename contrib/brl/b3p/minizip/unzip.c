@@ -43,7 +43,6 @@ woven in by Terry Thorsen 1/2003.
 
 #ifdef STDC
 #  include <stddef.h>
-#  include <string.h>
 #  include <stdlib.h>
 #endif
 #ifdef NO_ERRNO_H
@@ -83,8 +82,6 @@ woven in by Terry Thorsen 1/2003.
 
 #define SIZECENTRALDIRITEM (0x2e)
 #define SIZEZIPLOCALHEADER (0x1e)
-
-
 
 
 const char unz_copyright[] =
@@ -295,11 +292,11 @@ local int strcmpcasenosensitive_internal (fileName1,fileName2)
 
 /*
    Compare two filename (fileName1,fileName2).
-   If iCaseSenisivity = 1, comparision is case sensitivity (like strcmp)
-   If iCaseSenisivity = 2, comparision is not case sensitivity (like strcmpi
-                                                                or strcasecmp)
-   If iCaseSenisivity = 0, case sensitivity is defaut of your operating system
-        (like 1 on Unix, 2 on Windows)
+   If iCaseSenisivity = 1, comparison is case sensitive (like strcmp)
+   If iCaseSenisivity = 2, comparison is not case sensitive (like strcmpi
+                                                             or strcasecmp)
+   If iCaseSenisivity = 0, case sensitivity is default of your operating system
+                           (like 1 on Unix, 2 on Windows)
 
 */
 extern int ZEXPORT unzStringFileNameCompare (fileName1,fileName2,iCaseSensitivity)
@@ -733,7 +730,6 @@ local int unzlocal_GetCurrentFileInfoInternal (file,
 
     return err;
 }
-
 
 
 /*
@@ -1174,7 +1170,7 @@ extern int ZEXPORT unzOpenCurrentFile3 (file, method, level, raw, password)
                      s->pfile_in_zip_read->byte_before_the_zipfile,
                   SEEK_SET)!=0)
             return UNZ_INTERNALERROR;
-        if(ZREAD(s->z_filefunc, s->filestream,source, 12)<12)
+        if (ZREAD(s->z_filefunc, s->filestream,source, 12)<12)
             return UNZ_INTERNALERROR;
 
         for (i = 0; i<12; i++)
@@ -1284,10 +1280,10 @@ extern int ZEXPORT unzReadCurrentFile  (file, buf, len)
 
 
 #            ifndef NOUNCRYPT
-            if(s->encrypted)
+            if (s->encrypted)
             {
                 uInt i;
-                for(i=0;i<uReadThis;i++)
+                for (i=0;i<uReadThis;i++)
                   pfile_in_zip_read_info->read_buffer[i] =
                       zdecode(s->keys,s->pcrc_32_tab,
                               pfile_in_zip_read_info->read_buffer[i]);
@@ -1420,7 +1416,6 @@ extern int ZEXPORT unzeof (file)
     else
         return 0;
 }
-
 
 
 /*

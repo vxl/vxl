@@ -19,7 +19,6 @@
 
 #ifdef STDC
 #  include <stddef.h>
-#  include <string.h>
 #  include <stdlib.h>
 #endif
 #ifdef NO_ERRNO_H
@@ -152,7 +151,6 @@ typedef struct
 } zip_internal;
 
 
-
 #ifndef NOCRYPT
 #define INCLUDECRYPTINGCODE_IFCRYPTALLOWED
 #include "crypt.h"
@@ -252,7 +250,6 @@ local int add_data_in_datablock(ll,buf,len)
 }
 
 
-
 /****************************************************************************/
 
 #ifndef NO_ADDFILEINEXISTINGZIP
@@ -277,12 +274,12 @@ local int ziplocal_putValue (pzlib_filefunc_def, filestream, x, nbByte)
         x >>= 8;
     }
     if (x != 0)
-      {     /* data overflow - hack for ZIP64 (X Roche) */
-      for (n = 0; n < nbByte; n++)
+    {   /* data overflow - hack for ZIP64 (X Roche) */
+        for (n = 0; n < nbByte; n++)
         {
-          buf[n] = 0xff;
+            buf[n] = 0xff;
         }
-      }
+    }
 
     if (ZWRITE(*pzlib_filefunc_def,filestream,buf,nbByte)!=(uLong)nbByte)
         return ZIP_ERRNO;
@@ -993,7 +990,7 @@ extern int ZEXPORT zipWriteInFileInZip (file, buf, len)
         }
 
 
-        if(err != ZIP_OK)
+        if (err != ZIP_OK)
             break;
 
         if ((zi->ci.method == Z_DEFLATED) && (!zi->ci.raw))
