@@ -33,9 +33,8 @@
 
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_point_3d.h>
-#include <vpl/vpl.h>
 
-#if (HAS_ZLIB)
+#if HAS_ZLIB
 #include <minizip/zip.h>
 #endif
 
