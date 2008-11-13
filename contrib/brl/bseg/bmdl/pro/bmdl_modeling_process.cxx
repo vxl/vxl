@@ -5,18 +5,10 @@
 #include "bmdl_classify_process.h"
 #include "bmdl_trace_boundaries_process.h"
 #include "bmdl_generate_mesh_process.h"
-#include <vcl_cstring.h>
-
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vsol/vsol_box_2d.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
-//#include <vil/file_formats/vil_tiff.h>
+#include <vil/vil_image_view_base_sptr.h>
 
 #include <bprb/bprb_parameters.h>
 
@@ -36,17 +28,16 @@ bmdl_modeling_process::bmdl_modeling_process()
   input_types_[i++] = "vcl_string";      // last ret. image path (geotiff)
   input_types_[i++] = "vcl_string";      // ground image (tiff)
   input_types_[i++] = "vcl_string";      // output directory
-  input_types_[i++] = "unsigned";           // tile x dimension 
-  input_types_[i++] = "unsigned";           // tile y dimension 
-  input_types_[i++] = "unsigned";           // tile x overlapping 
-  input_types_[i++] = "unsigned";           // tile y overlapping 
+  input_types_[i++] = "unsigned";           // tile x dimension
+  input_types_[i++] = "unsigned";           // tile y dimension
+  input_types_[i++] = "unsigned";           // tile x overlapping
+  input_types_[i++] = "unsigned";           // tile y overlapping
 
   //output
   output_data_.resize(0,brdb_value_sptr(0));
   output_types_.resize(0);
   int j=0;
   //output_types_[j++]= "vil_image_view_base_sptr";  // first return roi
-
 }
 
 bool bmdl_modeling_process::execute()
@@ -103,7 +94,7 @@ bool bmdl_modeling_process::execute()
 
   vil_image_view_base_sptr first_roi=0, last_roi=0, ground_roi;
   vpgl_geo_camera* lidar_cam =0;
-  if (!modeling(first_ret, last_ret, ground_img, output_path, 
+  if (!modeling(first_ret, last_ret, ground_img, output_path,
     x_dim, y_dim, x_over, y_over)) {
     vcl_cout << "bmdl_modeling_process -- The process has failed!\n";
     return false;
@@ -127,26 +118,27 @@ bool bmdl_modeling_process::modeling(vil_image_resource_sptr lidar_first,
   vpgl_geo_camera* geo_cam=0;
   unsigned num_of_buildings=0;
 
-  // process each tile 
+  // process each tile
   unsigned j_orig=0;
   while (j_orig < lidar_first->nj()) {
     unsigned i_orig=0;
     while (i_orig < lidar_first->ni()) {
-      vcl_cout << "-------->Processing (" << i_orig << "," << j_orig << ")" << vcl_endl;
+      vcl_cout << "-------->Processing (" << i_orig << ',' << j_orig << ')' << vcl_endl;
       bmdl_lidar_roi_process lidar_roi_process;
       lidar_roi_process.lidar_roi(1, lidar_first, lidar_last, ground,
-         i_orig, j_orig, i_orig+x_dim, j_orig+y_dim, first_roi, last_roi, ground_roi, geo_cam);
+                                  i_orig, j_orig, i_orig+x_dim, j_orig+y_dim,
+                                  first_roi, last_roi, ground_roi, geo_cam);
 
       bmdl_classify_process classify_process;
       classify_process.classify(first_roi, last_roi, ground_roi, label_img, height_img);
-      
+
       vcl_string poly_path = output_path + "//polygons.bin";
       bmdl_trace_boundaries_process trace_boundaries_process;
       trace_boundaries_process.trace_boundaries(label_img, poly_path);
 
       bmdl_generate_mesh_process mesh_process;
-      mesh_process.generate_mesh(poly_path, label_img, height_img, 
-        ground_roi, output_path, geo_cam, num_of_buildings);
+      mesh_process.generate_mesh(poly_path, label_img, height_img,
+                                 ground_roi, output_path, geo_cam, num_of_buildings);
       vpl_unlink(poly_path.c_str());
       i_orig += x_dim - x_overlap;
     }
