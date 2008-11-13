@@ -8,22 +8,25 @@
 #include <vcl_iostream.h>
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
+#include <bprb/bprb_parameters.h>
 
 //: Constructor
 bvgl_generate_mask_process::bvgl_generate_mask_process()
 {
-  //input
-  input_data_.resize(3,brdb_value_sptr(0));
-  input_types_.resize(3);
+  //input  
+  input_data_.resize(2,brdb_value_sptr(0));
+  input_types_.resize(2);
   input_types_[0]= "vcl_string"; //name of the binary file to read bvgl_changes object
-  input_types_[1]= "unsigned"; // ni for output image
-  input_types_[2]= "unsigned"; // nj for output image
-
+  input_types_[1]= "vcl_string"; //type of change
+ 
   //output
   output_data_.resize(2, brdb_value_sptr(0));
   output_types_.resize(2);
   output_types_[0]= "vil_image_view_base_sptr"; // vxl_byte mask (with don't care areas)
   output_types_[1]= "vil_image_view_base_sptr"; // bool mask (with changes true and other areas false)
+
+  parameters()->add("ni", "ni", (unsigned)1000);  // ni and nj should match exactly to the size of image used to generate binary bvgl_changes object
+  parameters()->add("nj", "nj", (unsigned)1000);  //   so ni and nj should probably be different for each test image
 }
 
 
@@ -47,21 +50,21 @@ bvgl_generate_mask_process::execute()
     static_cast<brdb_value_t<vcl_string>* >(input_data_[0].ptr());
   vcl_string file_name = input0->value();
 
-  brdb_value_t<unsigned>* input1 =
-    static_cast<brdb_value_t<unsigned>* >(input_data_[1].ptr());
-  unsigned ni = input1->value();
+  brdb_value_t<vcl_string>* input1 = 
+    static_cast<brdb_value_t<vcl_string>* >(input_data_[1].ptr());
+  vcl_string change_type = input1->value();
 
-  brdb_value_t<unsigned>* input2 =
-    static_cast<brdb_value_t<unsigned>* >(input_data_[2].ptr());
-  unsigned nj = input2->value();
-
+  unsigned ni, nj; 
+  parameters()->get_value("ni", ni);
+  parameters()->get_value("nj", nj);
+  
   //: read the object
   vsl_b_ifstream bif(file_name);
   bvgl_changes_sptr objs = new bvgl_changes();
   objs->b_read(bif);
   bif.close();
 
-  vil_image_view_base_sptr out = objs->create_mask_from_objs(ni, nj);
+  vil_image_view_base_sptr out = objs->create_mask_from_objs(ni, nj, change_type);
 
   vil_image_view<vxl_byte> out_view(out);
   vil_image_view<bool> out_b(ni, nj, 1);
