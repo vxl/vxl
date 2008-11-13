@@ -95,13 +95,13 @@ bool bmdl_mesh::trace_boundary(vcl_vector<vgl_point_2d<double> >& pts,
     next_trace_point(i,j,dir,p,value,ni1,nj1,istep,jstep);
   }
   while (i!=i0 || j!=j0 || dir!=2);
-  
+
   return true;
 }
 
 
 //: trace the boundaries of the building labels into polygons
-// if \a dropped_clipped is true then buildings clipped by the image boundaries are not traced
+// If \a dropped_clipped is true then buildings clipped by the image boundaries are not traced
 vcl_vector<vgl_polygon<double> >
 bmdl_mesh::trace_boundaries(const vil_image_view<unsigned int>& labels,
                             bool drop_clipped)
@@ -130,9 +130,9 @@ bmdl_mesh::trace_boundaries(const vil_image_view<unsigned int>& labels,
         vgl_polygon<double>& poly = boundaries[l-2];
         vcl_vector<vgl_point_2d<double> > sheet;
 
-        // trace the boundary and keep it only if it is not clipped 
+        // trace the boundary and keep it only if it is not clipped
         // (or we don't care about clipping)
-        if (trace_boundary(sheet,l,labels,visited,i,j) && 
+        if (trace_boundary(sheet,l,labels,visited,i,j) &&
             (!drop_clipped || !is_clipped(sheet,ni,nj)))
           poly.push_back(sheet);
       }
@@ -143,25 +143,25 @@ bmdl_mesh::trace_boundaries(const vil_image_view<unsigned int>& labels,
 }
 
 //: test if a boundary is clipped by the image of size \a ni by \a nj
-bool bmdl_mesh::is_clipped(const vcl_vector<vgl_point_2d<double> >& poly, 
+bool bmdl_mesh::is_clipped(const vcl_vector<vgl_point_2d<double> >& poly,
                            unsigned ni, unsigned nj)
 {
   // the maximum pixels are ni-1 and nj-1
   --ni;
   --nj;
-  for(unsigned int i=0; i<poly.size(); ++i)
+  for (unsigned int i=0; i<poly.size(); ++i)
   {
-    if(poly[i].x() < 0.0 || poly[i].y() < 0.0 ||
-       poly[i].x() > ni || poly[i].y() > nj)
+    if (poly[i].x() < 0.0 || poly[i].y() < 0.0 ||
+        poly[i].x() > ni || poly[i].y() > nj)
       return true;
   }
-  
+
   return false;
 }
 
 
 //: simplify a polygon by fitting lines
-// \a tol is the tolerence for line fitting
+// \a tol is the tolerance for line fitting
 void bmdl_mesh::simplify_polygon( vcl_vector<vgl_point_2d<double> >& pts, double tol )
 {
   vgl_fit_lines_2d<double> line_fitter(3,tol);
@@ -173,9 +173,9 @@ void bmdl_mesh::simplify_polygon( vcl_vector<vgl_point_2d<double> >& pts, double
   const vcl_vector<int>& indices = line_fitter.get_indices();
   vcl_vector<vgl_point_2d<double> > new_pts;
   vgl_point_2d<double> isect;
-  for( int i=0; i< indices.size(); )
+  for ( int i=0; i< indices.size(); )
   {
-    if(indices[i] < 0)
+    if (indices[i] < 0)
     {
       new_pts.push_back(pts[i++]);
       continue;
@@ -194,8 +194,9 @@ void bmdl_mesh::simplify_polygon( vcl_vector<vgl_point_2d<double> >& pts, double
       new_pts.push_back(seg.point1());
     new_pts.push_back(seg.point2());
     // skip to the next point not part of this line
-    for(int curr_seg_idx = indices[i]; 
-        i<indices.size() && indices[i] == curr_seg_idx; ++i);
+    for (int curr_seg_idx = indices[i];
+         i<indices.size() && indices[i] == curr_seg_idx; ++i)
+      ;
   }
   if (new_pts.size() > 3 && vgl_distance(new_pts.back(),new_pts.front())<1.0 &&
       angle(vgl_vector_2d<double>(new_pts.back()-new_pts[new_pts.size()-2]),
@@ -226,7 +227,7 @@ void bmdl_mesh::simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundarie
         new_pts.push_back(vgl_point_2d<double>((pts[p1].x()+pts[p2].x())/2, (pts[p1].y()+pts[p2].y())/2));
       }
       pts.swap(new_pts);
-      
+
       simplify_polygon(pts,0.01);
       simplify_polygon(pts,0.5);
     }
@@ -264,9 +265,9 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
     if (boundaries[b].num_sheets() == 0)
       continue;
     const vcl_vector<vgl_point_2d<double> >& pts = boundaries[b][0];
-    if(pts.size()<3)
+    if (pts.size()<3)
       continue;
-    
+
     unsigned int first_pt = verts->size();
     vcl_vector< unsigned int > roof;
     for (unsigned i=0; i<pts.size(); ++i) {
