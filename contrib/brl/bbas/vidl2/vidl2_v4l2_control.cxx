@@ -20,7 +20,11 @@ extern "C" {
 vidl2_v4l2_control * vidl2_v4l2_control::new_control(const v4l2_queryctrl& ctr, int f)
 {
 
-  if ( (ctr.flags & V4L2_CTRL_FLAG_DISABLED) || (ctr.flags & V4L2_CTRL_FLAG_INACTIVE))
+  if ( (ctr.flags & V4L2_CTRL_FLAG_DISABLED)
+#ifdef V4L2_CTRL_FLAG_INACTIVE
+       || (ctr.flags & V4L2_CTRL_FLAG_INACTIVE)
+#endif
+     )
     return 0; 
   switch (ctr.type) { 
     case V4L2_CTRL_TYPE_INTEGER:
@@ -99,7 +103,7 @@ vidl2_v4l2_control_menu::vidl2_v4l2_control_menu(const v4l2_queryctrl& ctr, int 
   struct v4l2_querymenu menu;
   vcl_memset(&menu, 0, sizeof (menu));
   menu.id= ctrl_.id;
-  for (menu.index = 0; menu.index <= ctrl_.maximum;menu.index++) {
+  for (menu.index = 0; (int) menu.index <= ctrl_.maximum;menu.index++) {
                 if (0 == ioctl (fd, VIDIOC_QUERYMENU, &menu)) {
                         items.push_back((char *)menu.name);
                 } else {

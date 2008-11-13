@@ -47,9 +47,23 @@ class vidl2_v4l2_control
     // \return ID (for example, V4L2_CID_BRIGHTNESS corresponds to brightness)
     int id() const { return ctrl_.id; }
     //: Control is read only
-    bool read_only() const { return ctrl_.flags & V4L2_CTRL_FLAG_READ_ONLY; }
+    bool read_only() const 
+    { 
+#ifdef V4L2_CTRL_FLAG_READ_ONLY
+      return ctrl_.flags & V4L2_CTRL_FLAG_READ_ONLY; 
+#else
+      return false;    
+#endif
+    }
     //: Control can change value of other controls
-    bool affect_other_controls() const { return ctrl_.flags & V4L2_CTRL_FLAG_UPDATE; }
+    bool affect_other_controls() const
+    { 
+#ifdef V4L2_CTRL_FLAG_UPDATE
+      return ctrl_.flags & V4L2_CTRL_FLAG_UPDATE;
+#else
+      return false;
+#endif
+     }
     //: Reset control
     // \note no-op fot button controls
     virtual void reset() const {}
