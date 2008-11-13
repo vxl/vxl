@@ -56,6 +56,7 @@ TESTS += test_parse_tuple.cxx
 TESTS += test_progress.cxx
 TESTS += test_text_file.cxx
 TESTS += test_parse_int_list.cxx
+TESTS += test_sample_stats_1d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
