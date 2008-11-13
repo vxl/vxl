@@ -186,6 +186,9 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\print_log_properties.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\sample_stats.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

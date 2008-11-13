@@ -171,6 +171,9 @@ SOURCE=.\vidl2_v4l2_devices.cxx
 SOURCE=.\vidl2_v4l2_istream.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_v4l2_control.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
 # End Source File
 # Begin Source File
@@ -178,6 +181,9 @@ SOURCE=.\Templates/vil_smart_ptr+vidl2_istream-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_ostream-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vidl2_v4l2_device-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -301,6 +307,9 @@ SOURCE=.\vidl2_v4l2_devices.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_v4l2_istream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l2_control.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_config.h.in

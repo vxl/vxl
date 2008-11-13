@@ -248,6 +248,9 @@ SOURCE=.\test_label_equivalence.cxx
 SOURCE=.\test_mask.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_extrema.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

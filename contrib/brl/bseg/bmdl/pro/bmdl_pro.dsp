@@ -105,6 +105,9 @@ SOURCE=.\bmdl_trace_boundaries_process.cxx
 SOURCE=.\bmdl_lidar_roi_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bmdl_modeling_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -124,6 +127,9 @@ SOURCE=.\bmdl_trace_boundaries_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmdl_lidar_roi_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmdl_modeling_process.h
 # End Source File
 # End Group
 # End Target
