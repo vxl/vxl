@@ -5,7 +5,6 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 #include <vcl_iterator.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
@@ -13,7 +12,6 @@
 #include <vcl_map.h>
 #include <vcl_typeinfo.h>
 #include <vul/vul_arg.h>
-#include <vul/vul_string.h>
 #include <vul/vul_sprintf.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_exception.h>
@@ -120,12 +118,12 @@ int main2(int argc, char *argv[])
   // Write a line of column headers unless suppressed
   if (!nohead())
   {
-    if (ofs && ofs->good()) *ofs << "#" << sep();
+    if (ofs && ofs->good()) *ofs << '#' << sep();
     for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
     {
       if (ofs && ofs->good()) *ofs << it->first << sep();
     }
-    if (ofs && ofs->good()) *ofs << "\n";
+    if (ofs && ofs->good()) *ofs << '\n';
   }
 
   // Write statistics in a single line
@@ -136,7 +134,7 @@ int main2(int argc, char *argv[])
     if (ofs && ofs->good()) *ofs << it->second << sep();
   }
   if (ofs && ofs->good()) *ofs << vcl_endl;
-  
+
   // Close file
   if (ofs) ofs->close();
 
