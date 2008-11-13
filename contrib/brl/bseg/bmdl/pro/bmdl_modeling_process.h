@@ -14,7 +14,7 @@
 //             - tile x overlapping "unsigned"
 //             - tile y overlapping "unsigned"
 //        -  Output:
-//             - 
+//             -
 //
 //        -  Params:
 //
@@ -29,7 +29,6 @@
 #include <vcl_string.h>
 
 #include <bprb/bprb_process.h>
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
@@ -56,13 +55,13 @@ class bmdl_modeling_process : public bprb_process
   bool finish(){return true;}
 
  private:
-  
+
    bool modeling(vil_image_resource_sptr lidar_first,
-            vil_image_resource_sptr lidar_last,
-            vil_image_resource_sptr ground,
-            vcl_string output_path,
-            unsigned x_dim, unsigned y_dim,
-            unsigned x_overlap, unsigned y_overlap);
+                 vil_image_resource_sptr lidar_last,
+                 vil_image_resource_sptr ground,
+                 vcl_string output_path,
+                 unsigned x_dim, unsigned y_dim,
+                 unsigned x_overlap, unsigned y_overlap);
 };
 
 #endif // bmdl_modeling_process_h_
