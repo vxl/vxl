@@ -5,10 +5,10 @@
 
 #include "bwm_observable_mesh.h"
 
-#include <vgui/vgui_message.h>
-
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <bmsh3d/bmsh3d_textured_face_mc.h>
+
+#include <vcl_iosfwd.h>
 
 class bwm_observable_textured_mesh : public bwm_observable_mesh
 {
@@ -33,13 +33,13 @@ class bwm_observable_textured_mesh : public bwm_observable_mesh
                 double ground_height, double x_offset, double y_offset );
 
   void save_kml_collada(vcl_ostream &os, bgeo_lvcs* lvcs,
-    vcl_string geometry_id,
-    vcl_string geometry_position_id,
-    vcl_string geometry_position_array_id,
-    vcl_string geometry_uv_id,
-    vcl_string geometry_uv_array_id,
-    vcl_string geometry_vertex_id,
-    vcl_string material_name);
+                        vcl_string geometry_id,
+                        vcl_string geometry_position_id,
+                        vcl_string geometry_position_array_id,
+                        vcl_string geometry_uv_id,
+                        vcl_string geometry_uv_array_id,
+                        vcl_string geometry_vertex_id,
+                        vcl_string material_name);
 
   void save_x3d(vcl_ostream &os, bgeo_lvcs* lvcs);
 
