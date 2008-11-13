@@ -173,10 +173,10 @@ bool bmdl_lidar_roi_process::lidar_roi(unsigned type,  //0 for geo coordinates, 
 
   if (vpgl_geo_camera::init_geo_camera(tiff_first, camera))
   {
-      
     vgl_box_2d<double> roi_box;
 
-    if (type == 0) {    // geographic coordinates
+    if (type == 0)    // geographic coordinates
+    {
       // backproject the 3D world coordinates on the image
       vgl_point_3d<double> min_pos(min_lon, min_lat, 0);
       vgl_point_3d<double> max_pos(max_lon, max_lat, 30);
@@ -190,17 +190,20 @@ bool bmdl_lidar_roi_process::lidar_roi(unsigned type,  //0 for geo coordinates, 
         camera->lvcs()->global_to_local(x, y, z, bgeo_lvcs::wgs84, lx, ly, lz);
         double u,v;
         camera->project(lx,ly,lz,u,v);
+#if 0
         ///////////////////////
-        /*double u1,v1,u2,v2, elev;
+        double u1,v1,u2,v2, elev;
         camera->img_to_wgs(0,0,0, u1, v1, elev);
         vcl_cout << u1 << "   " << v1 << "   " << elev << vcl_endl;
         camera->img_to_wgs(tiff_first->ni(),tiff_first->ni(),0, u2, v2, elev);
-        vcl_cout << u2 << "   " << v2 << "   " << elev << vcl_endl;*/
+        vcl_cout << u2 << "   " << v2 << "   " << elev << vcl_endl;
         ///////////////////////
+#endif // 0
         vgl_point_2d<double> p(u,v);
         roi_box.add(p);
       }
-    } else if (type == 1) {  
+    }
+    else if (type == 1) {
       roi_box.add(vgl_point_2d<double> (min_lon, min_lat));
       roi_box.add(vgl_point_2d<double> (max_lon, max_lat));
     }
