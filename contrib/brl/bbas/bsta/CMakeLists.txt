@@ -21,6 +21,7 @@ SET(bsta_sources
   bsta_gaussian_full.txx         bsta_gaussian_full.h
   bsta_gaussian_indep.txx        bsta_gaussian_indep.h
   bsta_gaussian_sphere.txx       bsta_gaussian_sphere.h
+#  bsta_parzen_sphere.txx         bsta_parzen_sphere.h
   bsta_gauss_f1.h
   bsta_gauss_f2.h
   bsta_gauss_sf3.h               bsta_gauss_sd3.h
@@ -33,7 +34,7 @@ SET(bsta_sources
   bsta_attributes.h
   bsta_detector_gaussian.h
   bsta_detector_mixture.h
-
+  bsta_weibull.h   bsta_weibull.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_sources)
