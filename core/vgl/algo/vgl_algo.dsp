@@ -176,6 +176,9 @@ SOURCE=.\Templates/vgl_algo_intersection+double-.cxx
 SOURCE=.\Templates/vgl_algo_intersection+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_rtree+vgl_point_2d+double-.vgl_box_2d+double-.dummy-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File
