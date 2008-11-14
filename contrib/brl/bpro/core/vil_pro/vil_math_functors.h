@@ -34,5 +34,13 @@ class vil_math_log_not_functor
   double operator()(double x)     const { return x<1.0?vcl_log(1.0-x):0.0; }
 };
 
+//: Functor class to compute (x+y) for prob maps (max value is 1.0f)
+class vil_math_add_functor
+{
+ public:
+  float operator()(float x, float y)       const { return (x+y)<1.0f?(x+y):1.0f; }
+  double operator()(double x, double y)     const { return (x+y)<1.0?(x+y):1.0; }
+};
+
 
 #endif
