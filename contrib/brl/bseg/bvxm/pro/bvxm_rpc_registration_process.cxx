@@ -245,12 +245,12 @@ bool bvxm_rpc_registration_process::execute()
       if (curr_scale==scale){
         edge_image_output.deep_copy(edge_image);
       }
-      vil_image_view<float> cedt_image;
-      bvxm_util::edge_distance_transform(edge_image,cedt_image);
-      cedt_image = bvxm_util::multiply_image_with_gaussian_kernel(cedt_image,edt_gaussian_sigma);
-      vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
+      vil_image_view<float> edt_image;
+      bvxm_util::edge_distance_transform(edge_image,edt_image);
+      edt_image = bvxm_util::multiply_image_with_gaussian_kernel(edt_image,edt_gaussian_sigma);
+      vil_image_view_base_sptr edt_image_sptr = new vil_image_view<float>(edt_image);
       
-      bvxm_image_metadata camera_metadata_out(cedt_image_sptr,curr_camera);
+      bvxm_image_metadata camera_metadata_out(edt_image_sptr,curr_camera);
       result=vox_world->update_edges(camera_metadata_out,curr_scale);
 
       if (!result){
