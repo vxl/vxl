@@ -19,6 +19,7 @@
 #include <vidl2/vidl2_v4l2_device_sptr.h>
 #include <vidl2/vidl2_v4l2_devices.h>
 #include <vidl2/vidl2_v4l2_istream.h>
+#include <vidl2/vidl2_v4l2_control.h>
 #endif
 #if VIDL2_HAS_FFMPEG
 #include <vidl2/vidl2_ffmpeg_init.h>
