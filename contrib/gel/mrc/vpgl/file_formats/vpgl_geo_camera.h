@@ -32,8 +32,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
                   bgeo_lvcs_sptr lvcs,
                   vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), lvcs_(lvcs),
-    tiepoints_(tiepoints), is_utm(false), tx_(0), ty_(0) {}
+    : trans_matrix_(trans_matrix), tx_(0), ty_(0), lvcs_(lvcs),
+      tiepoints_(tiepoints), is_utm(false) {}
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);
