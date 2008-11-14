@@ -6,7 +6,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 
-#include <bil/algo/bil_cedt.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
 bvxm_create_local_rpc_process::bvxm_create_local_rpc_process()
