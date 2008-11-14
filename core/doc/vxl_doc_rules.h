@@ -29,7 +29,7 @@
 // \file
 // \brief give a brief description of the file.
 // \author Whoever, (erehwon)
-// \date 01/01/01
+// \date January 1, 2001
 // \author Someone else
 //   Possibly multiple lines.  Don't forget to end the \author, \date and
 //   \brief sections with an empty line (i.e., just //).
