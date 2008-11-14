@@ -403,7 +403,6 @@ int bmdl_generate_mesh_process::zip_kmz(zipFile& zf, const char* filenameinzip)
   // Convert time to struct tm form
   struct vcl_tm *time;
   time = vcl_localtime(&time_secs);
-
   zi.tmz_date.tm_sec  = time->tm_sec;
   zi.tmz_date.tm_min  = time->tm_min;
   zi.tmz_date.tm_hour = time->tm_hour;
@@ -434,15 +433,15 @@ int bmdl_generate_mesh_process::zip_kmz(zipFile& zf, const char* filenameinzip)
     }
   }
 
+  size_buf = WRITEBUFFERSIZE;
+  buf = (void*)malloc(size_buf);
+  if (buf==NULL) {
+    vcl_printf("Error allocating memory\n");
+    return ZIP_INTERNALERROR;
+  }
+
   do {
     err = ZIP_OK;
-    size_buf = WRITEBUFFERSIZE;
-    buf = (void*)malloc(size_buf);
-    if (buf==NULL) {
-      vcl_printf("Error allocating memory\n");
-      return ZIP_INTERNALERROR;
-    }
-
     size_read = (int)vcl_fread(buf,1,size_buf,fin);
     if (size_read < size_buf)
       if (feof(fin)==0) {
@@ -458,7 +457,8 @@ int bmdl_generate_mesh_process::zip_kmz(zipFile& zf, const char* filenameinzip)
     }
   } while ((err == ZIP_OK) && (size_read>0));
 
-  vcl_fclose(fin);
+  if (fin)
+    fclose(fin);
 
   if (err<0)
     err=ZIP_ERRNO;
