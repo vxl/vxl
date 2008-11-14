@@ -8,7 +8,7 @@
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_image_view_base_sptr.h>
+#include <vil/vil_image_view_base.h>
 
 #include <bprb/bprb_parameters.h>
 
