@@ -82,16 +82,16 @@ class vgl_bbox_2d : public vgl_box_2d<Type>
 
   //: Construct using two corner points
   vgl_bbox_2d(Type const min_position[2],
-              Type const max_position[2]) : vgl_box_2d(min_position[2],
+              Type const max_position[2]) : vgl_box_2d<Type>(min_position[2],
                                                        max_position[2]){}
 
   //: Construct using two corner points
   vgl_bbox_2d(vgl_point_2d<Type> const& min_pos,
-              vgl_point_2d<Type> const& max_pos): vgl_box_2d(min_pos, max_pos){}
+              vgl_point_2d<Type> const& max_pos): vgl_box_2d<Type>(min_pos, max_pos){}
 
   //: Construct using ranges in \a x (first two args) and \a y (last two)
   vgl_bbox_2d(Type xmin, Type xmax, Type ymin, Type ymax): 
-    vgl_box_2d(xmin, xmax, ymin, ymax){}
+    vgl_box_2d<Type>(xmin, xmax, ymin, ymax){}
 
   //: Equality test
   inline bool operator==(vgl_bbox_2d<Type> const& b) const {
