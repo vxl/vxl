@@ -1,0 +1,28 @@
+// This is basic/bgrl2/tests/test_graph.h
+#ifndef test_graph_h_
+#define test_graph_h_
+//:
+// \file
+// \brief Test code for using the templatized graph class
+// \author Amir Tamrakar
+// \date 06/18/05
+//
+
+#include <bgrl2/bgrl2_graph.h>
+
+#include "test_edge.h"
+#include "test_node.h"
+
+//class test_node;
+//class test_edge;
+
+//: a test graph class subclasssed from bgrl2_graph
+class test_graph : public bgrl2_graph<test_node, test_edge>
+{
+public:
+  test_graph() : bgrl2_graph<test_node, test_edge>() {}
+  ~test_graph(){}
+
+};
+
+#endif //test_graph_h_

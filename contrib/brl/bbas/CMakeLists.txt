@@ -31,6 +31,8 @@ SUBDIRS(bnl)
 
 # Brown Graph Library
 SUBDIRS(bgrl)
+# Brown Templated Graph Library
+SUBDIRS(bgrl2)
 
 # Brown statistics library
 SUBDIRS(bsta)
