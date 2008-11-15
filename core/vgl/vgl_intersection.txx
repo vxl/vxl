@@ -10,7 +10,7 @@
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-
+#include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -454,10 +454,13 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
   //check if any poly vertices are inside the box
   unsigned ns = poly.num_sheets();
   bool hit = false;
-  for( unsigned s = 0; s<ns&&!hit; ++s)
-    for(vcl_vector<vgl_point_2d<T> >::const_iterator vit = poly[s].begin();
-        vit != poly[s].end()&&!hit; ++vit)
-      hit = b.contains((*vit).x(), (*vit).y());
+  for( unsigned s = 0; s<ns&&!hit; ++s){
+    unsigned n = poly[s].size();
+    for(unsigned i = 0; i<n&&!hit; ++i){
+      vgl_point_2d<T> p = poly[s][i];
+      hit = b.contains(p.x(), p.y());
+    }
+  }
   if(hit) return true;
   //check if any box vertices are inside the polygon
   T minx = b.min_x(), maxx = b.max_x();
