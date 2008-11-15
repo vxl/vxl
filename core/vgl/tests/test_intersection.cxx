@@ -6,6 +6,8 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -120,7 +122,53 @@ static void test_lines_intersect_in_tol()
   
 }
 
-
+static void test_box_poly_intersection()
+{ 
+  vcl_cout<<"Testing intersection of box and polygon."<<vcl_endl;
+  //test polygon probe
+  //a rectangle at 45 degrees (oriented box)
+  vgl_point_2d<float> pr0(0.3f, 0.7f), pr1(0.7f, 0.3f), pr2(0.5f, 0.9f),
+    pr3(0.9f, 0.5f);
+  vgl_polygon<float> poly(1);
+  poly.push_back(pr0); poly.push_back(pr1); 
+  poly.push_back(pr2); poly.push_back(pr3);
+  //Case I: box entirely inside polygon
+  vgl_point_2d<float> bp0(0.6f, 0.6f), bp1(0.65f, 0.65f);
+  vgl_box_2d<float> b1;
+  b1.add(bp0); b1.add(bp1);
+  bool good = vgl_intersection<float>(b1, poly);
+  //Case II: poly entirely inside box
+  vgl_point_2d<float> bp2(0.0f, 0.0f), bp3(1.0f, 1.0f);
+  vgl_box_2d<float> b2;
+  b2.add(bp2); b2.add(bp3);
+  good = good && vgl_intersection<float>(b2, poly);
+  //Case III: poly and box touch at a vertex
+  vgl_point_2d<float> bp4(0.5f, 0.5f);
+  vgl_box_2d<float> b3;
+  b3.add(bp2); b3.add(bp4);
+  good = good && vgl_intersection<float>(b3, poly);
+  //Case IV: poly vertex and box touch on a box edge
+  vgl_point_2d<float> bp5(0.5f, 0.1f), bp6(0.9f, 0.3f);
+  vgl_box_2d<float> b4;
+  b4.add(bp5); b4.add(bp6);
+  good = good && vgl_intersection<float>(b4, poly);
+  //Case V: only poly edges intersect box
+  vgl_box_2d<float> b5;
+  b5.add(bp4); b5.add(bp3);
+  vgl_point_2d<float> pr4(0.6f, 0.1f), pr5(0.7f, 0.1f), pr6(0.65f, 0.9f);
+  vgl_polygon<float> poly2(1);
+  poly2.push_back(pr4);   poly2.push_back(pr5);   poly2.push_back(pr6);
+  good = good && vgl_intersection<float>(b5, poly2);
+  //Case VI: no intersection
+  vgl_box_2d<float> b6;
+  b6.add(pr4); b6.add(bp2);
+  good = good && !vgl_intersection<float>(b6, poly);
+  //Case VII: box with a single point
+  vgl_point_2d<float> ps(1.0f,0.0f);
+  vgl_box_2d<float> b7;
+  b7.add(ps);
+  good = good && !vgl_intersection<float>(b7, poly);
+}
 void test_intersection()
 {
   vcl_cout << "**************************\n"
@@ -130,6 +178,7 @@ void test_intersection()
   test_three_planes();
   test_lines_intersection();
   test_lines_intersect_in_tol();
+  test_box_poly_intersection();
 }
 
 TESTMAIN(test_intersection);

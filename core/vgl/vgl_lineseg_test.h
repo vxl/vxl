@@ -13,6 +13,7 @@
 
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_point_2d.h>
 
 // The old signature vgl_lineseg_test() was incorrectly documented. Its
 // meaning was the same as the new vgl_lineseg_test_line(). Only you can
@@ -42,6 +43,31 @@ inline bool vgl_lineseg_test_line(vgl_line_2d<T> const& l1,
                                l1_p2.x(),l1_p2.y(),
                                l2.point1().x(),l2.point1().y(),
                                l2.point2().x(),l2.point2().y());
+}
+
+//: true if the point lies on the line segment and is between the endpoints
+template <class T>
+inline bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
+                                   vgl_line_segment_2d<T> const& lseg)
+{
+  vgl_point_2d<T> p1 = lseg.point1();
+  vgl_point_2d<T> p2 = lseg.point2();
+  T x1 = p1.x(), y1 = p1.y();
+  T x2 = p2.x(), y2 = p2.y();
+  T x3 = p.x(), y3 = p.y();
+  // compute distances
+  T d1p = (x3-x1)*(x3-x1) + (y3-y1)*(y3-y1);
+  T d2p = (x3-x2)*(x3-x2) + (y3-y2)*(y3-y2);
+  T d12 = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+  T sum = d1p + d2p;
+  //diff should be positive
+  T diff;
+  if(sum<=d12) diff = d12-sum;
+  else diff = sum-d12;
+  T tol = vgl_tolerance<T>::position;
+  if(diff>tol*tol)
+    return false;
+  return true;
 }
 
 //: return true if the two linesegments meet.

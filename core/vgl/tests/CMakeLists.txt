@@ -32,6 +32,7 @@ ADD_EXECUTABLE( vgl_test_all
   test_rotation_3d.cxx
   test_triangle_3d.cxx
   test_triangle_3d_line_intersection.cxx
+  test_rtree.cxx
 )
 TARGET_LINK_LIBRARIES( vgl_test_all vgl_algo vgl testlib )
 
@@ -64,6 +65,7 @@ ADD_TEST( vgl_test_intersection                   ${EXECUTABLE_OUTPUT_PATH}/vgl_
 ADD_TEST( vgl_test_rotation_3d                    ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_rotation_3d)
 ADD_TEST( vgl_test_triangle_3d                    ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_triangle_3d)
 ADD_TEST( vgl_test_triangle_3d_line_intersection  ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_triangle_3d_line_intersection)
+ADD_TEST( vgl_test_rtree  ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_rtree)
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 

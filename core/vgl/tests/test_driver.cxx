@@ -29,7 +29,7 @@ DECLARE( test_intersection );
 DECLARE( test_rotation_3d );
 DECLARE( test_triangle_3d );
 DECLARE( test_triangle_3d_line_intersection );
-
+DECLARE( test_rtree );
 void
 register_tests()
 {
@@ -62,6 +62,7 @@ register_tests()
   REGISTER( test_rotation_3d );
   REGISTER( test_triangle_3d );
   REGISTER( test_triangle_3d_line_intersection );
+  REGISTER( test_rtree );
 }
 
 DEFINE_MAIN;

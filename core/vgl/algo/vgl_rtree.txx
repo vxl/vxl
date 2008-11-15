@@ -208,6 +208,7 @@ void vgl_rtree_node<V, B, C>::erase(unsigned int i)
 
       // update the node counts in p :
       p->update_total_chs(- (int)n->total_chs);
+
       -- p->local_chs;
 
       // move top child down to position j.
@@ -342,7 +343,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp()
   j = n->find_index_in_parent();
 
   ++j;
-  if (j<p->local_chs) {
+  if (j<int(p->local_chs)) {
     // go to next child of p
     current = p->chs[j];
     i = 0;

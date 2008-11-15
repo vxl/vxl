@@ -27,6 +27,12 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
                       vgl_point_2d<Type>& p0,
                       vgl_point_2d<Type>& p1);
 
+//: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.
+template <class Type>
+unsigned vgl_intersection(const vgl_box_2d<Type>& box,
+                          const vgl_line_segment_2d<Type>& line,
+                          vgl_point_2d<Type>& p0,
+                          vgl_point_2d<Type>& p1);
 
 //: Return the intersection point of two concurrent lines
 // \relates vgl_line_3d_2_points
@@ -72,6 +78,13 @@ bool vgl_intersection(vgl_point_2d<T> const& p1,
                       vgl_point_2d<T> const& q1,
                       vgl_point_2d<T> const& q2,
                       double tol = 1e-6);
+
+//: Return true if the box and polygon regions intersect, regions include boundaries
+
+template <class T>
+bool vgl_intersection(const vgl_box_2d<T>& b, const vgl_polygon<T>& poly);
+
+
 
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"

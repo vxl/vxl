@@ -14,12 +14,15 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_tolerance.h>
+#include <vgl/vgl_lineseg_test.h>
 
 inline bool vgl_near_zero(double x) { return x < 1e-8 && x > -1e-8; }
 inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
@@ -205,6 +208,30 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
     }
   }
   return false;
+}
+//: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.
+template <class Type>
+unsigned vgl_intersection(const vgl_box_2d<Type>& box,
+                          const vgl_line_segment_2d<Type>& line_seg,
+                          vgl_point_2d<Type>& p0,
+                          vgl_point_2d<Type>& p1)
+{
+  vgl_line_2d<Type> line(line_seg.a(), line_seg.b(), line_seg.c());
+  vgl_point_2d<Type> pi0, pi1;
+  //if no intersection just return
+  if(!vgl_intersection<Type>(box, line, pi0, pi1))
+    return 0;
+  unsigned nint = 0;
+  // check if intersection points are interior to the line segment
+  if(vgl_lineseg_test_point<Type>(pi0, line_seg)){
+    p0 = pi0;
+    nint++;
+  }
+  if(vgl_lineseg_test_point<Type>(pi1, line_seg)){
+    p1 = pi1;
+    nint++;
+  }
+  return nint;
 }
 
 //: Return the intersection point of two concurrent lines
@@ -419,6 +446,46 @@ bool vgl_intersection(vgl_point_2d<T> const& p1,
     return true;
 }
 
+template <class T>
+bool vgl_intersection(const vgl_box_2d<T>& b,
+                      const vgl_polygon<T>& poly)
+{
+  // easy checks first
+  //check if any poly vertices are inside the box
+  unsigned ns = poly.num_sheets();
+  bool hit = false;
+  for( unsigned s = 0; s<ns&&!hit; ++s)
+    for(vcl_vector<vgl_point_2d<T> >::const_iterator vit = poly[s].begin();
+        vit != poly[s].end()&&!hit; ++vit)
+      hit = b.contains((*vit).x(), (*vit).y());
+  if(hit) return true;
+  //check if any box vertices are inside the polygon
+  T minx = b.min_x(), maxx = b.max_x();
+  T miny = b.min_y(), maxy = b.max_y();
+  hit = poly.contains(minx, miny) || poly.contains(maxx, maxy) ||
+    poly.contains(minx, maxy) || poly.contains(maxx, miny);
+  if(hit) return true;
+  //check if any polygon edges intersect the box
+  for( unsigned s = 0; s<ns&&!hit; ++s)
+    {
+      unsigned n = poly[s].size();
+      vgl_point_2d<T> ia, ib;
+      vgl_point_2d<T> last = poly[s][0];
+      for(unsigned i = 1; i<n&&!hit; ++i)
+        {
+          vgl_point_2d<T> p = poly[s][i];
+          vgl_line_segment_2d<T> l(last, p);
+          hit = vgl_intersection<T>(b, l, ia, ib)>0;
+          last = p;
+        }
+      if(!hit){
+        vgl_point_2d<T> start = poly[s][0];
+        vgl_line_segment_2d<T> ll(last, start);
+        hit = vgl_intersection<T>(b,ll, ia, ib)>0;
+      }
+    }
+  return hit;
+}
 
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
@@ -427,9 +494,10 @@ template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
 template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
+template unsigned vgl_intersection(const vgl_box_2d<T>& , const vgl_line_segment_2d<T>& , vgl_point_2d<T>& , vgl_point_2d<T>& ); \
 template bool vgl_intersection(const vgl_line_2d<T >&, const vgl_line_2d<T >&, vgl_point_2d<T >&); \
-template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double)
-
+template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
+template bool vgl_intersection(vgl_box_2d<T > const&, vgl_polygon<T > const&)
 //: Instantiate only functions suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \

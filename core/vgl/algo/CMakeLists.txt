@@ -31,6 +31,7 @@ SET( vgl_algo_sources
   vgl_fit_plane_3d.txx                 vgl_fit_plane_3d.h
   vgl_intersection.txx                 vgl_intersection.h
                                        vgl_rotation_3d.h
+                                       vgl_rtree_c.h
 )
 AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
 
