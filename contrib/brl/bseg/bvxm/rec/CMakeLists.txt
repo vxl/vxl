@@ -31,7 +31,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_rec_sources)
 
 ADD_LIBRARY(bvxm_rec ${bvxm_rec_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_rec bsta_algo bgrl2 bsta bvgl vil brip)
+TARGET_LINK_LIBRARIES(bvxm_rec bvxm bsta_algo bgrl2 bsta bvgl vil brip)
 
 SUBDIRS( pro )
 
