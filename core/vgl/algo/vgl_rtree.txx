@@ -343,7 +343,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp()
   j = n->find_index_in_parent();
 
   ++j;
-  if (j<int(p->local_chs)) {
+  if (j<p->local_chs) {
     // go to next child of p
     current = p->chs[j];
     i = 0;
