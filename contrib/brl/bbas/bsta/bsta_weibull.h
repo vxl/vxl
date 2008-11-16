@@ -6,7 +6,7 @@
 // \brief A Weibull distribution
 // \author Joseph L. Mundy
 // \date November 8, 2008
-//  The three-parameter, shifted,  Weibull distribution has the 
+//  The three-parameter, shifted,  Weibull distribution has the
 // form
 //                                           _    _ k
 //                                          | x-mu |
@@ -15,17 +15,17 @@
 //  p(x;lamba, k, mu)= ------ |------|    e  -     -
 //                     lambda |lambda|
 //                             -     -
-// where lambda is called the scale parameter, k is the shape parameter and 
+// where lambda is called the scale parameter, k is the shape parameter and
 // mu is the location parameter.
 // \verbatim
 //  Modifications
 //   (none yet)
 // \endverbatim
 
-
 #include "bsta_distribution.h"
 #include <vnl/vnl_gamma.h>
-
+#include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 
 // A Weibull distribution does not have a natural, unique extension to
 // multi-dimensional variables. However, various approaches do exist
@@ -44,7 +44,7 @@ class bsta_weibull : public bsta_distribution<T,1>
 
   //: three parameter form (the "shifted" Weibull)
   bsta_weibull(vector_ const& lambda, vector_ const& k, vector_ const& mu);
-  
+
   //: destructor
   ~bsta_weibull(){}
 
@@ -59,31 +59,31 @@ class bsta_weibull : public bsta_distribution<T,1>
 
   //: The mean of the distribution, for 1-d the vector_ is typedefed to T
   vector_ mean() const
-    {
-      double dk = static_cast<double>(k_);
-      assert(dk>0);
-      double la = static_cast<double>(lambda_);
-      assert(la>0);
-      double m = static_cast<double>(mu_);
-      return static_cast<vector_>(m+la*vnl_gamma(1.0+1/dk));
-    }
+  {
+    double dk = static_cast<double>(k_);
+    assert(dk>0);
+    double la = static_cast<double>(lambda_);
+    assert(la>0);
+    double m = static_cast<double>(mu_);
+    return static_cast<vector_>(m+la*vnl_gamma(1.0+1/dk));
+  }
 
   //: The variance of the distribution
   covar_type_ var() const
-    {
-      double dk = static_cast<double>(k_);
-      assert(dk>0);
-      double la = static_cast<double>(lambda_);
-      assert(la>0);
-      double m = vnl_gamma(1.0+1/dk);
-      double v = vnl_gamma(1.0+2/dk);
-      double ret = la*la*(v-m*m);
-      return static_cast<vector_>(ret);
-    }
+  {
+    double dk = static_cast<double>(k_);
+    assert(dk>0);
+    double la = static_cast<double>(lambda_);
+    assert(la>0);
+    double m = vnl_gamma(1.0+1/dk);
+    double v = vnl_gamma(1.0+2/dk);
+    double ret = la*la*(v-m*m);
+    return static_cast<vector_>(ret);
+  }
   //: The co_variance of the distribution same as variance for 1-d case
   covar_type_ covar() const
     {return this->var();}
-  
+
   //: The probability density at this sample
   T prob_density(const vector_& pt) const;
 
@@ -91,7 +91,7 @@ class bsta_weibull : public bsta_distribution<T,1>
   T probability(const vector_& min_pt,
                 const vector_& max_pt) const;
  protected:
-  vector_ lambda_; 
+  vector_ lambda_;
   vector_ mu_;
   vector_ k_;
 };

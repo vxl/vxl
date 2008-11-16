@@ -15,10 +15,12 @@
 #include <bsta/bsta_weibull.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_brent_minimizer.h>
+#include <vcl_cassert.h>
+
 class bsta_weibull_cost_function : public vnl_cost_function
 {
  public:
-   //! Default constructor   
+   //! Default constructor
   bsta_weibull_cost_function(): vnl_cost_function(1),
     mean_(1), std_dev_(1){}
 
@@ -50,7 +52,7 @@ class bsta_weibull_cost_function : public vnl_cost_function
 template <class T>
 class bsta_fit_weibull
 {
-  public:
+ public:
   bsta_fit_weibull() : wcf_(0), residual_(T(0)){}
   bsta_fit_weibull(bsta_weibull_cost_function* wcf) : wcf_(wcf), residual_(T(0)){}
 
@@ -59,42 +61,40 @@ class bsta_fit_weibull
 
   //:provides an initial guess for k
   void init(T& k)
-    {
-      if(!wcf_) return;
-      double m = wcf_->mean();
-      double sd = wcf_->std_dev();
-      if(!sd) return;
-      double ki = 1.0 + 1.21*((m/sd)-1.0);
-      assert(ki>0);
-      k = static_cast<T>(ki);
-    }
+  {
+    if (!wcf_) return;
+    double m = wcf_->mean();
+    double sd = wcf_->std_dev();
+    if (!sd) return;
+    double ki = 1.0 + 1.21*((m/sd)-1.0);
+    assert(ki>0);
+    k = static_cast<T>(ki);
+  }
 
   //:solves for k that matches the sample mean and variance ratio
   void solve(T& k)
-    {
-      double kinit = static_cast<double>(k);
-      vnl_brent_minimizer bmin(*wcf_);
-      double kmin = bmin.minimize_given_bounds(1,kinit,10.0*kinit);
-      double res = bmin.f_at_last_minimum();
-      k = static_cast<T>(kmin);
-      residual_ = static_cast<T>(res);
-    }
+  {
+    double kinit = static_cast<double>(k);
+    vnl_brent_minimizer bmin(*wcf_);
+    double kmin = bmin.minimize_given_bounds(1,kinit,10.0*kinit);
+    double res = bmin.f_at_last_minimum();
+    k = static_cast<T>(kmin);
+    residual_ = static_cast<T>(res);
+  }
   //: the residual after solving
   T residual(){return residual_;}
 
   //: the Weibull scale parameter
   T lambda(T const& k)
-    {
-      if(wcf_)
-        return static_cast<T>(wcf_->lambda(k));
-      return T(0);
-    }
-  
-private:
+  {
+    if (wcf_)
+      return static_cast<T>(wcf_->lambda(k));
+    return T(0);
+  }
+
+ private:
   bsta_weibull_cost_function* wcf_;
   T residual_;
 };
-
-
 
 #endif // bsta_fit_weibull_h_

@@ -1,14 +1,12 @@
+#include "bvxm_bg_pair_density.h"
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date 10/01/08
 //
 //
-
-#include "bvxm_bg_pair_density.h"
 #include <bvxm_voxel_slab.h>
-
-//#include <bvxm_voxel_world.h>
+#include <vcl_cassert.h>
 
 double bvxm_bg_pair_density::operator()(const double y0, const double y1)
 {
@@ -27,7 +25,7 @@ double bvxm_bg_pair_density::operator()(const rgb_obs_datatype y0, const rgb_obs
   return p0*p1;
 }
 
-vil_image_view<float> 
+vil_image_view<float>
 bvxm_bg_pair_density::prob_density(vil_image_view<grey_obs_datatype>& obs)
 {
   unsigned ni = obs.ni();
@@ -47,7 +45,7 @@ bvxm_bg_pair_density::prob_density(vil_image_view<grey_obs_datatype>& obs)
   return map;
 }
 
-vil_image_view<float> 
+vil_image_view<float>
 bvxm_bg_pair_density::prob_density_non_pair(vil_image_view<grey_obs_datatype>& obs)
 {
   unsigned ni = obs.ni();
@@ -84,15 +82,15 @@ bool bvxm_bg_pair_density::generate_mixture_image()
     bvxm_voxel_slab<rgb_obs_datatype> exp_img = apm_processor.expected_color(*mog_image_ptr);
     mix_exp_img = new vil_image_view<vxl_byte>(ni_, nj_, 3);
     bvxm_util::slab_to_img(exp_img, mix_exp_img);
-    
-    if (verbose) {  
+
+    if (verbose) {
       vil_save(*mix_exp_img, "./mixture_expected_img.png");
     }
 
     rgb_mog_image_ = *mog_image_ptr;
-
-  } else if (voxel_type_ == "apm_mog_grey") {
-
+  }
+  else if (voxel_type_ == "apm_mog_grey")
+  {
     world_->mixture_of_gaussians_image<APM_MOG_GREY>(observation, mog_image_sptr, bin_);
     bvxm_voxel_slab<grey_mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<grey_mog_type>*>(mog_image_sptr.ptr());
 
@@ -100,7 +98,7 @@ bool bvxm_bg_pair_density::generate_mixture_image()
     bvxm_voxel_slab<float> exp_img = apm_processor.expected_color(*mog_image_ptr);
     mix_exp_img = new vil_image_view<vxl_byte>(ni_, nj_, 1);
     bvxm_util::slab_to_img(exp_img, mix_exp_img);
-      
+
     if (verbose) {
       vil_save(*mix_exp_img, "./mixture_expected_img.png");
     }
@@ -118,7 +116,6 @@ bool bvxm_bg_pair_density::generate_mixture_image()
       vil_convert_stretch_range_limited(outf, outf_b, 0.0f, 4.0f);
       vil_save(outf_b, "./mixture_expected_img_likelihood_map.png");
     }
-
   }
   else {
     vcl_cout << "In bvxm_normalize_image_process::execute() -- input appearance model: " << voxel_type_ << " is not supported\n";
@@ -138,7 +135,7 @@ bvxm_bg_pair_density::generate_appearance_likelihood_map(vil_image_view<vxl_byte
   // create metadata:
   vil_image_view_base_sptr img_sptr = new vil_image_view<vxl_byte>(img);
   bvxm_image_metadata observation(img_sptr,cam_);  // image is only required to get ni and nj
- 
+
   bool result;
   if (voxel_type_ == "apm_mog_grey")
     result = world_->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_,scale_);
@@ -146,11 +143,11 @@ bvxm_bg_pair_density::generate_appearance_likelihood_map(vil_image_view<vxl_byte
     result = world_->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_,scale_);
   else
     result = false;
-  
+
   return result;
 }
 
-vil_image_view<float> 
+vil_image_view<float>
 bvxm_bg_pair_density::prob_density_from_likelihood_map(vil_image_view<vxl_byte>& img)
 {
   unsigned ni = img.ni();
@@ -158,7 +155,7 @@ bvxm_bg_pair_density::prob_density_from_likelihood_map(vil_image_view<vxl_byte>&
 
   vil_image_view<float> prob_map(ni, nj,1);
   generate_appearance_likelihood_map(img, prob_map);
-  
+
   vil_image_view<float> map(ni, nj);
   map.fill(0.0f);
   for (unsigned i = 0; i < ni; i++) {
@@ -172,12 +169,12 @@ bvxm_bg_pair_density::prob_density_from_likelihood_map(vil_image_view<vxl_byte>&
   return map;
 }
 
-vil_image_view<float> 
+vil_image_view<float>
 bvxm_bg_pair_density::prob_density_from_likelihood_map(vil_image_view<vxl_byte>& img, vil_image_view<float>& prob_density)
 {
   unsigned ni = img.ni();
   unsigned nj = img.nj();
-  
+
   vil_image_view<float> map(ni, nj);
   map.fill(0.0f);
   for (unsigned i = 0; i < ni; i++) {
@@ -192,11 +189,11 @@ bvxm_bg_pair_density::prob_density_from_likelihood_map(vil_image_view<vxl_byte>&
 }
 
 //: initialize a bg map using the given change map
-bool 
+bool
 bvxm_bg_pair_density::initialize_bg_map(vil_image_view<float>& prob_density, vil_image_view<float>& map, float high_prior, float top_percentile)
 {
   //: compute prior_const such that p(x in bg|y) ~ 1 when p(y|x in bg) is high
-  // use the top 10% percentile value to determine when p(y|x in bg) is high
+  //  Use the top 10% percentile value to determine when p(y|x in bg) is high
   float val;
   vil_math_value_range_percentile(prob_density, double(1.0-top_percentile), val);
 #if 1
@@ -207,10 +204,10 @@ bvxm_bg_pair_density::initialize_bg_map(vil_image_view<float>& prob_density, vil
 #endif
 
   //: set p(x in bg|y) = 0.9 when p(y|x in bg) is high, i.e. when p(y|x in bg) = val
-  //float prior_const = 0.9f/(val-0.9f*val+0.9f);
   float prior_const = high_prior/(val-high_prior*val+high_prior);
+  //float prior_const = 0.9f/(val-0.9f*val+0.9f);
 
-  //: now generate the map
+  // now generate the map
   map.fill(0.0f);
   for (unsigned i = 0; i < map.ni(); i++) {
     for (unsigned j = 0; j < map.nj(); j++) {
@@ -224,6 +221,4 @@ bvxm_bg_pair_density::initialize_bg_map(vil_image_view<float>& prob_density, vil
 
   return true;
 }
-
-
 

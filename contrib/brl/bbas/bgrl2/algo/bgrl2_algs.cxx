@@ -1,13 +1,15 @@
-// This is contrib/brl/bbas/bgrl2/algo/bgrl2_algs.cxx
-
+// This is brl/bbas/bgrl2/algo/bgrl2_algs.cxx
 #include "bgrl2_algs.h"
+//:
+// \file
 #include <bgrl2/bgrl2_vertex.h>
 #include <bgrl2/bgrl2_edge.h>
+#include <vcl_cassert.h>
 
 //: return the euler tour of the graph starting from the given edge and in the direction towards the given node
 //  (the given node should be either source or target of the given node)
 //  ALG:
-//  starting from the "next edge" of the given node wrt the given edge, add the next edges of successor nodes as a chain 
+//  starting from the "next edge" of the given node wrt the given edge, add the next edges of successor nodes as a chain
 //  stop when the initial edge is re-encountered
 template <class G, class E, class V>
 void euler_tour(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n, vcl_vector<vbl_smart_ptr<E> >& edges)
@@ -16,7 +18,7 @@ void euler_tour(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n, vcl_
   vbl_smart_ptr<V> current_node = n;
 
   assert(current_edge->source() == current_node || current_edge->target() == current_node);
-  
+
   do {
     edges.push_back(current_edge);
     current_edge = g->cyclic_adj_succ(current_edge, current_node);
@@ -45,8 +47,8 @@ int depth_no_loop(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n)
   if (current_node->degree() == 1 && start_edge)  // base condition
     return 0;
 
-  int max_depth = 0; 
- 
+  int max_depth = 0;
+
   //: if start_edge is zero we're at the root of the graph, start with the first child
   if (!start_edge) {
     start_edge = g->first_in_edge(current_node);
@@ -70,13 +72,13 @@ int depth_no_loop(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n)
     if (!current_edge)
       return -100000000;
   } while (start_edge != current_edge);
- 
+
   return max_depth + 1;
 }
 
 #undef DBGRL_EULER_TOUR_INSTANTIATE
-#define DBGRL_EULER_TOUR_INSTANTIATE( G, E, V ) template void euler_tour(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n, vcl_vector<vbl_smart_ptr<E> >& edges)
+#define DBGRL_EULER_TOUR_INSTANTIATE( G, E, V ) template void euler_tour(vbl_smart_ptr<G > g, vbl_smart_ptr<E > e, vbl_smart_ptr<V > n, vcl_vector<vbl_smart_ptr<E > >& edges)
 
 #undef DBGRL_DEPTH_NO_LOOP_INSTANTIATE
-#define DBGRL_DEPTH_NO_LOOP_INSTANTIATE( G, E, V ) template int depth_no_loop(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n)
+#define DBGRL_DEPTH_NO_LOOP_INSTANTIATE( G, E, V ) template int depth_no_loop(vbl_smart_ptr<G > g, vbl_smart_ptr<E > e, vbl_smart_ptr<V > n)
 
