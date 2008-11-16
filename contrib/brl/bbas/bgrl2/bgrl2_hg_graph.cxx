@@ -6,6 +6,7 @@
 // date:   Apr 04, 2005
 
 #include <vcl_cassert.h>
+#include <vcl_utility.h>
 
 ////////////////////////////////////////////////////////////////////
 // ===== Internal Low-level Graph operation (without handling connectivity) =====
