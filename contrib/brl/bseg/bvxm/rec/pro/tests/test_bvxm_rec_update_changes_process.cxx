@@ -274,7 +274,7 @@ bvxm_voxel_slab_base_sptr create_mog_image2_using_grey_processor(vcl_string mode
   params->set_params(model_dir, corner, num_voxels, voxel_length);
   vox_world = new bvxm_voxel_world(params);
 
-  bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0,0);
   bvxm_voxel_grid<float> *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
   // fill in grid with zeros to start
   ocp_grid->initialize_data(0.0f);
