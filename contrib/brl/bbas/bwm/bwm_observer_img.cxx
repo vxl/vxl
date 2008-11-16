@@ -963,7 +963,7 @@ void bwm_observer_img::create_mask()
 
 vil_image_view_base_sptr bwm_observer_img::mask()
 {
-  return ground_truth_->create_mask_from_objs(img_tab_->get_image_resource()->ni(), img_tab_->get_image_resource()->nj());
+  return ground_truth_->create_mask_from_objs(img_tab_->get_image_resource()->ni(), img_tab_->get_image_resource()->nj(), "change");
 }
 
 bool bwm_observer_img::save_changes_binary()
