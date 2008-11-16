@@ -69,7 +69,7 @@ public:
   virtual bool remove_vertex (bgrl2_hg_vertex* vertex);
   ///virtual bool remove_vertex (int id);
   virtual bool remove_edge (bgrl2_hg_edge* edge);
-  virtual bool remove_edge (int id);
+  //virtual bool remove_edge (int id);
   virtual bool remove_hyperedge (bgrl2_hg_hyperedge* hyperedge);
   ///virtual bool remove_hyperedge (int id);
 
