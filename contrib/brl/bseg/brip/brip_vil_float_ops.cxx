@@ -3658,7 +3658,7 @@ static double brip_vil_rot_gauss(double x, double y,
 void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
                                              float theta,
                                              vbl_array_2d<float>& kernel,
-                                             vbl_array_2d<bool>& mask)
+                                             vbl_array_2d<bool>& mask, float cutoff_percentage)
 {
   // revert theta to the range [-90, 90]
   if (theta>=0.0f)
@@ -3680,7 +3680,7 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
   double s1sq = 1.0/(s1*s1);
   //determine the size of the array
   double max_v = brip_vil_rot_gauss(0, 0, s0, s1, 0);
-  double cutoff = max_v*0.01; // 1% tails removed
+  double cutoff = max_v*cutoff_percentage; // if 0.01 then 1% tails removed
   bool reached_cutoff = false;
   unsigned ru = 0;
   for (; !reached_cutoff; ++ru)

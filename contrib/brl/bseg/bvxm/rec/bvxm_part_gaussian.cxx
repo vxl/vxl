@@ -15,7 +15,7 @@
 #include <brip/brip_vil_float_ops.h>
 
 //strength_threshold in [0,1] - min strength to declare the part as detected
-bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float strength_threshold, unsigned type, vcl_vector<bvxm_part_instance_sptr>& parts)
+bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<bvxm_part_instance_sptr>& parts)
 {
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, true);
@@ -63,6 +63,7 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
     {
       if (strength_map(i,j) > strength_threshold) {
         bvxm_part_gaussian_sptr dp = new bvxm_part_gaussian((float)i, (float)j, strength_map(i,j), lambda0, lambda1, theta, bright, type);
+        dp->cutoff_percentage_ = cutoff_percentage;
         parts.push_back(dp->cast_to_instance());
       }
       
@@ -136,7 +137,7 @@ bool bvxm_part_gaussian::mark_receptive_field(vil_image_view<float>& img, float 
 {
   vbl_array_2d<bool> mask;
   vbl_array_2d<float> kernel;
-  brip_vil_float_ops::extrema_kernel_mask(lambda0_, lambda1_, theta_, kernel, mask);
+  brip_vil_float_ops::extrema_kernel_mask(lambda0_, lambda1_, theta_, kernel, mask, cutoff_percentage_);
 
   unsigned nrows = mask.rows();
   unsigned ncols = mask.cols();

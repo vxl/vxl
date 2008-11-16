@@ -29,7 +29,8 @@ class bvxm_part_gaussian : public bvxm_part_instance {
 
 public:
 
-  bvxm_part_gaussian(float x, float y, float strength, float lambda0, float lambda1, float theta, bool bright, unsigned type) : bvxm_part_instance(0, type, bvxm_part_instance_kind::GAUSSIAN, x, y, strength), lambda0_(lambda0), lambda1_(lambda1), theta_(theta), bright_(bright) {};
+  bvxm_part_gaussian(float x, float y, float strength, float lambda0, float lambda1, float theta, bool bright, unsigned type) : bvxm_part_instance(0, type, bvxm_part_instance_kind::GAUSSIAN, x, y, strength), 
+    lambda0_(lambda0), lambda1_(lambda1), theta_(theta), bright_(bright), cutoff_percentage_(0.01f) {};
 
   virtual bool mark_receptive_field(vil_image_view<vxl_byte>& img, unsigned plane);
   virtual bool mark_center(vil_image_view<vxl_byte>& img, unsigned plane);
@@ -50,11 +51,14 @@ public:
   float lambda1_;
   float theta_;    // orientation angle (in degrees)
   bool bright_;
+
+  //: parameter to define how big a receptive field will be marked, default is 0.01 so 1% of the tails of the gaussian is cut off 
+  float cutoff_percentage_;
   
 };
 
 //strength_threshold in [0,1] - min strength to declare the part as detected
 //: extracts only one type of primitive and adds to the part vector
-bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float strength_threshold, unsigned type, vcl_vector<bvxm_part_instance_sptr>& parts);
+bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<bvxm_part_instance_sptr>& parts);
 
 #endif  // bvxm_part_gaussian_h_

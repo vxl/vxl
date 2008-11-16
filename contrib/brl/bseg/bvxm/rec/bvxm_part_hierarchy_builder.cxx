@@ -193,6 +193,7 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_0()
   //: create a dummy instance from each and add to h
   bvxm_part_gaussian_sptr pi_0_0 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, true, 0);
   bvxm_part_gaussian_sptr pi_0_1 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, false, 1);
+  pi_0_1->cutoff_percentage_ = 0.5f;
   h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
   h->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
 
@@ -258,6 +259,7 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_1()
   //: create a dummy instance from each and add to h
   bvxm_part_gaussian_sptr pi_0_0 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, true, 0);
   bvxm_part_gaussian_sptr pi_0_1 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 1.0f, 0.5f, 45.0f, false, 1);
+  pi_0_1->cutoff_percentage_ = 0.5f;
   //bvxm_part_gaussian_sptr pi_0_1 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, 45.0f, false, 1);
   h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
   h->add_dummy_primitive_instance(pi_0_1->cast_to_instance());

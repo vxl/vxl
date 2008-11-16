@@ -37,7 +37,7 @@ static void test_bvxm_parts()
   bool bright = false;
 
   vcl_vector<bvxm_part_instance_sptr> parts_0_0;
-  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 0, parts_0_0), true);
+  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.01f, 0.1f, 0, parts_0_0), true);
   TEST_NEAR("testing bvxm parts ", parts_0_0.size(), 25, 0.0001);
 
   vil_image_view<vxl_byte> out_image(ni, nj, 3);
@@ -54,7 +54,7 @@ static void test_bvxm_parts()
 
   theta = 90.0f;
   vcl_vector<bvxm_part_instance_sptr> parts_0_1;
-  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 1, parts_0_1), true);
+  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.01f, 0.1f, 1, parts_0_1), true);
   TEST_NEAR("testing bvxm parts ", parts_0_1.size(), 36, 0.0001);
   vil_image_view<vxl_byte> out_image2(ni, nj, 3);
   out_image2.fill(0);
@@ -66,10 +66,10 @@ static void test_bvxm_parts()
 
   vcl_vector<bvxm_part_instance_sptr> parts;
   theta = 45.0f;
-  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 2, parts), true);
+  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.01f, 0.1f, 2, parts), true);
 
   theta = 135.0f;
-  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 3, parts), true);
+  TEST("testing bvxm parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.01f, 0.1f, 3, parts), true);
 
   //: construct a hierarchy by hand starting from the primitives, construct one to recognize 8
   bvxm_part_hierarchy_sptr h_8 = new bvxm_part_hierarchy();

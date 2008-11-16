@@ -112,7 +112,7 @@ class brip_vil_float_ops
 
   static void extrema_kernel_mask(float lambda0, float lambda1, float theta,
                                   vbl_array_2d<float>& kernel, 
-                                  vbl_array_2d<bool>& mask);
+                                  vbl_array_2d<bool>& mask, float cutoff_percentage = 0.01f);
 
   //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
   static  vil_image_view<float> 
