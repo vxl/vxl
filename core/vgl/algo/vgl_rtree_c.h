@@ -95,10 +95,11 @@ class vgl_bbox_2d : public vgl_box_2d<Type>
 
   //: Equality test
   inline bool operator==(vgl_bbox_2d<Type> const& b) const {
+    vgl_box_2d<Type> const& p = static_cast<vgl_box_2d<Type> const&>(b);
     // All empty boxes are equal:
-    if (b.is_empty()) return is_empty();
-    return  min_x() == b.min_x() && min_y() == b.min_y()
-         && max_x() == b.max_x() && max_y() == b.max_y();
+    if (p.is_empty()) return is_empty();
+    return  min_x() == p.min_x() && min_y() == p.min_y()
+         && max_x() == p.max_x() && max_y() == p.max_y();
   }
 
 };
