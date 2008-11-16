@@ -53,6 +53,22 @@
 //#include <bvxm/multiscale/bvxm_multi_scale_voxel_world.h>
 //#include <bvxm/pro/multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h>
 
+// recognition 
+#include <bvxm/rec/pro/bvxm_rec_update_changes_process.h>
+#include <bvxm/rec/pro/bvxm_rec_density_to_prob_map_process.h>
+#include <bvxm/rec/pro/bvxm_prob_map_roc_compute_process.h>
+#include <bvxm/rec/pro/bvxm_prob_map_threshold_process.h>
+#include <bvxm/rec/pro/bvxm_rec_structure_process.h>
+#include <bvxm/rec/pro/bvxm_prob_map_supress_process.h>
+#include <bvxm/rec/pro/bvxm_prob_map_area_process.h>
+#include <bvxm/rec/pro/bvxm_rec_update_changes_wrt_area_process.h>
+
+#include <bvgl_pro/bvgl_generate_mask_process.h>
+#include <vil_pro/vil_load_image_view_binary_process.h>
+#include <vil_pro/vil_save_image_view_binary_process.h>
+#include <vil_pro/vil_map_image_process.h>
+#include <vil_pro/vil_map_image_binary_process.h>
+
 // datatypes
 #include <vcl_string.h>
 #include <vil/vil_image_view_base.h>
@@ -109,6 +125,23 @@ register_processes(PyObject *self, PyObject *args)
   //REG_PROCESS(bvxm_update_multiscale_process, bprb_batch_process_manager);
   //REG_PROCESS(bvxm_detect_multiscale_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_compare_3d_voxels_process, bprb_batch_process_manager);
+
+  // recognition
+  REG_PROCESS(bvxm_rec_update_changes_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_prob_map_roc_compute_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_rec_density_to_prob_map_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_rec_structure_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_prob_map_threshold_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_prob_map_supress_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_prob_map_area_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_rec_update_changes_wrt_area_process, bprb_batch_process_manager);
+
+  REG_PROCESS(vil_map_image_process, bprb_batch_process_manager);
+  REG_PROCESS(vil_map_image_binary_process, bprb_batch_process_manager);
+  REG_PROCESS(bvgl_generate_mask_process, bprb_batch_process_manager);
+  REG_PROCESS(vil_load_image_view_binary_process, bprb_batch_process_manager);
+  REG_PROCESS(vil_save_image_view_binary_process, bprb_batch_process_manager);  
+
 
   Py_INCREF(Py_None);
   return Py_None;
