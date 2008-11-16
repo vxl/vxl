@@ -8,18 +8,19 @@
 // \date November 14, 2008
 // \verbatim
 //  Modifications
-//  None
+//   <None yet>
 // \endverbatim
 //
-// vgl_rtree stores elements of type V with regions described by 
+// vgl_rtree stores elements of type V with regions described by
 // bounds type B. The C helper class implements the bounding predicates
 // between V and B. Thus V and B remain independent of each other.
 //
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
-#include <vgl/algo/vgl_rtree.h>
+//#include <vgl/algo/vgl_rtree.h> // No need to be included here!
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
+
 //: vgl_rtree Class C for V=vgl_point_2d<T>, B = vgl_box_2d<T>
 template <class T>
 class vgl_rtree_point_box_2d
@@ -34,74 +35,67 @@ class vgl_rtree_point_box_2d
   typedef T t_type;
   // Operations------
   static void  init  (vgl_box_2d<T>& b, vgl_point_2d<T> const& p)
-    {  b = vgl_box_2d<T>();  b.add(p);}
+  { b = vgl_box_2d<T>();  b.add(p); }
 
   static void  update(vgl_box_2d<T>& b, vgl_point_2d<T> const& p)
-    {  b.add(p);}
+  { b.add(p); }
 
   static void  update(vgl_box_2d<T>& b0, vgl_box_2d<T> const &b1)
-    {  b0.add(b1.min_point());  b0.add(b1.max_point());}
+  { b0.add(b1.min_point());  b0.add(b1.max_point()); }
 
   static bool  meet(vgl_box_2d<T> const& b, vgl_point_2d<T> const& p)
-    {  return b.contains(p);}
+  { return b.contains(p); }
 
-  static bool  meet(vgl_box_2d<T> const& b0, vgl_box_2d<T> const& b1){
+  static bool  meet(vgl_box_2d<T> const& b0, vgl_box_2d<T> const& b1) {
     bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
     bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
-    return (resultf||resultr);
+    return resultf||resultr;
   }
 
   static float volume(vgl_box_2d<T> const& b)
-    { return static_cast<float>(b.area());}
+  { return static_cast<float>(b.area()); }
 
   // point meets for a polygon, used by generic rtree probe
   static bool meets(vgl_point_2d<T> const& v, vgl_polygon<T> poly)
-    {
-      return poly.contains(v);
-    }
+  { return poly.contains(v); }
 
   // box meets for a polygon, used by generic rtree probe
   static bool meets(vgl_box_2d<T> const& b, vgl_polygon<T> poly)
-    {
-      return vgl_intersection<T>(b, poly);
-    }
-
+  { return vgl_intersection<T>(b, poly); }
 };
 
 
-
 //: vgl_rtree Class C for V=vgl_box_2d<T>, B = vgl_rbox_2d<T>
-// need to distinguish bounds type from stored element type,
-// so create minimal subclass of vgl_box_2d
+//  Need to distinguish bounds type from stored element type,
+//  so create minimal subclass of vgl_box_2d
 template <class Type>
 class vgl_bbox_2d : public vgl_box_2d<Type>
 {
  public:
   //: Default constructor (creates empty box)
-	 vgl_bbox_2d(){}
+  vgl_bbox_2d() {}
 
   //: Construct using two corner points
   vgl_bbox_2d(Type const min_position[2],
-              Type const max_position[2]) : vgl_box_2d<Type>(min_position[2],
-                                                       max_position[2]){}
+              Type const max_position[2])
+  : vgl_box_2d<Type>(min_position[2], max_position[2]) {}
 
   //: Construct using two corner points
   vgl_bbox_2d(vgl_point_2d<Type> const& min_pos,
-              vgl_point_2d<Type> const& max_pos): vgl_box_2d<Type>(min_pos, max_pos){}
+              vgl_point_2d<Type> const& max_pos)
+  : vgl_box_2d<Type>(min_pos, max_pos) {}
 
   //: Construct using ranges in \a x (first two args) and \a y (last two)
-  vgl_bbox_2d(Type xmin, Type xmax, Type ymin, Type ymax): 
-    vgl_box_2d<Type>(xmin, xmax, ymin, ymax){}
+  vgl_bbox_2d(Type xmin, Type xmax, Type ymin, Type ymax)
+  : vgl_box_2d<Type>(xmin, xmax, ymin, ymax) {}
 
   //: Equality test
   inline bool operator==(vgl_bbox_2d<Type> const& b) const {
-    vgl_box_2d<Type> const& p = static_cast<vgl_box_2d<Type> const&>(b);
     // All empty boxes are equal:
-    if (p.is_empty()) return is_empty();
-    return  min_x() == p.min_x() && min_y() == p.min_y()
-         && max_x() == p.max_x() && max_y() == p.max_y();
+    if (b.is_empty()) return this->is_empty();
+    return  this->min_x() == b.min_x() && this->min_y() == b.min_y()
+         && this->max_x() == b.max_x() && this->max_y() == b.max_y();
   }
-
 };
 
 template <class T>
@@ -117,53 +111,50 @@ class vgl_rtree_box_box_2d
   typedef T t_type;
   // Operations------
   static void  init  (vgl_bbox_2d<T>& b, vgl_box_2d<T> const& v)
-    {  b = vgl_bbox_2d<T>();  b.add(v.min_point()); b.add(v.max_point());}
+  { b = vgl_bbox_2d<T>();  b.add(v.min_point()); b.add(v.max_point()); }
 
   static void  update(vgl_bbox_2d<T>& b, vgl_box_2d<T> const& v)
-    {  b.add(v.min_point()); b.add(v.max_point());}
+  { b.add(v.min_point()); b.add(v.max_point()); }
 
   static void  update(vgl_bbox_2d<T>& b0, vgl_bbox_2d<T> const &b1)
-    {  b0.add(b1.min_point());  b0.add(b1.max_point());}
+  { b0.add(b1.min_point());  b0.add(b1.max_point()); }
 
-  static bool  meet(vgl_bbox_2d<T> const& b0, vgl_box_2d<T> const& v){
+  static bool  meet(vgl_bbox_2d<T> const& b0, vgl_box_2d<T> const& v) {
     bool resultf =(b0.contains(v.min_point()) || b0.contains(v.max_point()));
     bool resultr =(v.contains(b0.min_point()) || v.contains(b0.max_point()));
-    return (resultf||resultr);
+    return resultf||resultr;
   }
 
-  static bool  meet(vgl_bbox_2d<T> const& b0, vgl_bbox_2d<T> const& b1){
+  static bool  meet(vgl_bbox_2d<T> const& b0, vgl_bbox_2d<T> const& b1) {
     bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
     bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
-    return (resultf||resultr);
+    return resultf||resultr;
   }
 
   static float volume(vgl_box_2d<T> const& b)
-    { return static_cast<float>(b.area());}
+  { return static_cast<float>(b.area()); }
 
   // box_2d meets for a polygon, used by generic rtree probe
   static bool meets(vgl_box_2d<T> const& b, vgl_polygon<T> poly)
-    {
-      return vgl_rtree_point_box_2d<T>::meets(b, poly);
-    }
+  { return vgl_rtree_point_box_2d<T>::meets(b, poly); }
 
-  static bool meets(vgl_bbox_2d<T> const& b, vgl_polygon<T> poly)
-    {
-      vgl_box_2d<T> const& bb = static_cast<vgl_box_2d<T> const&>(b);
-      return vgl_rtree_point_box_2d<T>::meets(b, poly);
-    }
+  static bool meets(vgl_bbox_2d<T> const& b, vgl_polygon<T> poly) {
+    vgl_box_2d<T> const& bb = static_cast<vgl_box_2d<T> const&>(b);
+    return vgl_rtree_point_box_2d<T>::meets(b, poly);
+  }
 };
 
 template <class V, class B, class C>
 class vgl_rtree_polygon_probe : public vgl_rtree_probe<V, B, C>
 {
   typedef typename C::t_type T;
-	vgl_polygon<T> poly_;
+  vgl_polygon<T> poly_;
  public:
-  vgl_rtree_polygon_probe(vgl_polygon<T> const& poly): poly_(poly){}
+  vgl_rtree_polygon_probe(vgl_polygon<T> const& poly): poly_(poly) {}
 
   //: return true if the probe "meets" the given object.
-  virtual bool meets(V const &v) const {return C::meets(v, poly_);}
-  virtual bool meets(B const &b) const {return C::meets(b, poly_);}
+  virtual bool meets(V const &v) const {return C::meets(v, poly_); }
+  virtual bool meets(B const &b) const {return C::meets(b, poly_); }
 };
 
 #endif // vgl_rtree_c_h_
