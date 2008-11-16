@@ -138,10 +138,8 @@ class vgl_rtree_box_box_2d
   static bool meets(vgl_box_2d<T> const& b, vgl_polygon<T> poly)
   { return vgl_rtree_point_box_2d<T>::meets(b, poly); }
 
-  static bool meets(vgl_bbox_2d<T> const& b, vgl_polygon<T> poly) {
-    vgl_box_2d<T> const& bb = static_cast<vgl_box_2d<T> const&>(b);
-    return vgl_rtree_point_box_2d<T>::meets(b, poly);
-  }
+  static bool meets(vgl_bbox_2d<T> const& b, vgl_polygon<T> poly)
+  { return vgl_rtree_point_box_2d<T>::meets(b, poly); }
 };
 
 template <class V, class B, class C>
