@@ -1,20 +1,17 @@
 //:
 // \file
-// \brief bvxm background pair model 
+// \brief bvxm background pair model
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date 10/01/08
-//      
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
 
-
-#if !defined(_bvxm_bg_pair_density_H)
-#define _bvxm_bg_pair_density_H
+#ifndef bvxm_bg_pair_density_H_
+#define bvxm_bg_pair_density_H_
 
 #include "bvxm_pair_density.h"
 
@@ -28,23 +25,24 @@
 
 class bvxm_bg_pair_density : public bvxm_pair_density
 {
-
-protected:
+ protected:
   typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype rgb_mog_type;
   typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype rgb_obs_datatype;
 
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype grey_mog_type;
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype grey_obs_datatype;
 
-public:
-  bvxm_bg_pair_density(bvxm_voxel_world_sptr w, vpgl_camera_double_sptr cam, 
-    vcl_string voxel_type, unsigned bin, unsigned scale, unsigned ni, unsigned nj) : bvxm_pair_density(), world_(w), cam_(cam), 
-    voxel_type_(voxel_type), bin_(bin), scale_(scale), ni_(ni), nj_(nj), verbose(false), i_(0), j_(0) {}
+ public:
+  bvxm_bg_pair_density(bvxm_voxel_world_sptr w, vpgl_camera_double_sptr cam,
+                       vcl_string voxel_type, unsigned bin, unsigned scale,
+                       unsigned ni, unsigned nj)
+  : bvxm_pair_density(), verbose(false), world_(w), cam_(cam), voxel_type_(voxel_type),
+    bin_(bin), scale_(scale), ni_(ni), nj_(nj), i_(0), j_(0) {}
 
-  //: if an existing density map will be used there is no need to generate mixture of gaussians image, hence no need for 
-  //  world, camera etc.
-  bvxm_bg_pair_density(unsigned ni, unsigned nj) : bvxm_pair_density(), world_(0), cam_(0), 
-    voxel_type_(""), bin_(0), scale_(0), ni_(ni), nj_(nj), verbose(false), i_(0), j_(0) {}
+  //: if an existing density map will be used there is no need to generate mixture of gaussians image, hence no need for world, camera etc.
+  bvxm_bg_pair_density(unsigned ni, unsigned nj)
+  : bvxm_pair_density(), verbose(false), world_(0), cam_(0), voxel_type_(""),
+    bin_(0), scale_(0), ni_(ni), nj_(nj), i_(0), j_(0) {}
 
   //: generates a mixture of gaussians image of the current world using the given camera as done in bvxm_normalize_image_process
   bool generate_mixture_image();
@@ -69,7 +67,7 @@ public:
 
   bool verbose;
 
-private:
+ private:
   bvxm_voxel_world_sptr world_;
   vpgl_camera_double_sptr cam_;
   vcl_string voxel_type_;
@@ -85,7 +83,6 @@ private:
   bvxm_voxel_slab_base_sptr mog_image_sptr;
   bvxm_voxel_slab<rgb_mog_type> rgb_mog_image_;
   bvxm_voxel_slab<grey_mog_type> grey_mog_image_;
-
 };
 
-#endif  //_bvxm_bg_pair_density_H
+#endif // bvxm_bg_pair_density_H_
