@@ -33,6 +33,7 @@ class bvxm_bg_pair_density : public bvxm_pair_density
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype grey_obs_datatype;
 
  public:
+  virtual ~bvxm_bg_pair_density() {}
   bvxm_bg_pair_density(bvxm_voxel_world_sptr w, vpgl_camera_double_sptr cam,
                        vcl_string voxel_type, unsigned bin, unsigned scale,
                        unsigned ni, unsigned nj)
