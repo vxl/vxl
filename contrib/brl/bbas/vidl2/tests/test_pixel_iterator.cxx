@@ -3,6 +3,7 @@
 #include <vcl_iostream.h>
 #include <vcl_memory.h>
 #include <vidl2/vidl2_frame.h>
+#include <vidl2/vidl2_frame_sptr.h>
 #include <vidl2/vidl2_pixel_iterator.h>
 #include <vidl2/vidl2_pixel_iterator.txx>
 
