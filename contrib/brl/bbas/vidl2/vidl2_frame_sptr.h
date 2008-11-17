@@ -12,8 +12,6 @@
 #include <vil/vil_smart_ptr.txx>
 #include <vidl2/vidl2_frame.h>
 
-class vidl2_frame;
-
 //: A smart pointer to a video frame
 typedef vil_smart_ptr<vidl2_frame> vidl2_frame_sptr;
 
