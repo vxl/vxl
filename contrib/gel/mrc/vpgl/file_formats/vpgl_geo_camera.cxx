@@ -172,9 +172,9 @@ void vpgl_geo_camera::translate(double tx, double ty, double z)
   trans_matrix_[0][3] += tx;
   trans_matrix_[1][3] -= ty;
   double lon, lat, elev;
-  img_to_wgs(tx, ty, z, lon, lat, elev);
-  vcl_cout << *lvcs_ << vcl_endl;
-  vcl_cout << "setting origin to " << lon << " " << lat << " " << elev << vcl_endl;
+  img_to_wgs((unsigned int)tx, (unsigned int)ty, (unsigned int)z, lon, lat, elev);
+  vcl_cout << *lvcs_ << vcl_endl
+           << "setting origin to " << lon << ' ' << lat << ' ' << elev << vcl_endl;
   lvcs_->set_origin(lon, lat, elev);
   tx_ = tx;
   ty_ = ty;
@@ -195,8 +195,8 @@ void vpgl_geo_camera::img_to_wgs(const unsigned i, const unsigned j, const unsig
 
 bool vpgl_geo_camera::operator==(vpgl_geo_camera const& rhs) const
 {
-  return (this->trans_matrix_ == rhs.trans_matrix_) && 
-         (*(this->lvcs_) == *(rhs.lvcs_));
+  return this->trans_matrix_ == rhs.trans_matrix_ &&
+         *(this->lvcs_) == *(rhs.lvcs_);
 }
 
 //: Write vpgl_perspective_camera to stream
@@ -354,5 +354,3 @@ void vpgl_geo_camera::b_write(vsl_b_ostream &os) const
   return;
 }
 
-
- 
