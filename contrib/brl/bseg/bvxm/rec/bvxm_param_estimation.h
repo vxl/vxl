@@ -4,17 +4,15 @@
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date 10/01/08
-//      
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
 
 
-#if !defined(_bvxm_param_estimation_H)
-#define _bvxm_param_estimation_H
+#ifndef bvxm_param_estimation_H_
+#define bvxm_param_estimation_H_
 
 #include <vcl_vector.h>
 #include <vcl_utility.h>
@@ -36,7 +34,7 @@ struct fg_pair_density_est : public vnl_least_squares_function
   { }
 
   void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
-    double out = 0;
+    //double out = 0;
     bvxm_fg_pair_density fd;
     fd.set_sigma(x[0]);
     for (unsigned i = 0; i < pairs_.size(); i++) {
@@ -45,7 +43,7 @@ struct fg_pair_density_est : public vnl_least_squares_function
       //y[i] = vcl_abs(fd.gradient_of_log(pairs_[i].first, pairs_[i].second));
       y[i] = fd.negative_log(pairs_[i].first, pairs_[i].second);
     }
-    
+
     //y[0] = vcl_abs(out);
     //y[1] = vcl_abs(0.1-x[0]);
   }
@@ -60,7 +58,6 @@ struct fg_pair_density_est : public vnl_least_squares_function
   }
 
   vcl_vector<vcl_pair<float, float> > pairs_;
-
 };
 
 class fg_pair_density_est_amoeba : public vnl_cost_function
@@ -85,7 +82,7 @@ class fg_pair_density_est_amoeba : public vnl_cost_function
 
 class bvxm_param_estimation
 {
-public:
+ public:
 
   //: estimate the initial value as the real variation in the data
   static double estimate_fg_pair_density_initial_sigma(vcl_vector<vcl_pair<float, float> >& pairs);
@@ -97,7 +94,6 @@ public:
   static double estimate_fg_pair_density_sigma_amoeba(vcl_vector<vcl_pair<float, float> >& pairs, double initial_sigma);
 
   static bool create_fg_pairs(vil_image_resource_sptr img, bvgl_changes_sptr c, vcl_vector<vcl_pair<float, float> >& pairs, bool print_histogram = false, vcl_string out_name = "");
-
 };
 
-#endif  //_bvxm_param_estimation_H
+#endif // bvxm_param_estimation_H_

@@ -3681,7 +3681,6 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
   //determine the size of the array
   double max_v = brip_vil_rot_gauss(0, 0, s0, s1, 0);
   double cutoff = max_v*cutoff_percentage; // if 0.01 then 1% tails removed
-  bool reached_cutoff = false;
   unsigned ru = 0;
   while (brip_vil_rot_gauss(ru, 0, s0, s1, 0) >= cutoff)
     ++ru;
@@ -3775,12 +3774,12 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   unsigned nrows = fa.rows(), ncols = fa.cols();
   int rj = (nrows-1)/2, ri = (ncols-1)/2;
   vbl_array_2d<double> coef(nrows,ncols);
-  double max_v = brip_vil_rot_gauss(0, 0, lambda0, lambda1, 0);
   for (unsigned r = 0; r<nrows; ++r)
     for (unsigned c = 0; c<ncols; ++c)
       coef[r][c]=fa[r][c];
 
 #if 0
+  // (unused) double max_v = brip_vil_rot_gauss(0, 0, lambda0, lambda1, 0);
   // (unused) double cutoff=static_cast<float>(max_v*0.01); // 1% tails removed
   vcl_cout << "\ngauss ={";
   for (unsigned j = 0; j<nrows; ++j){

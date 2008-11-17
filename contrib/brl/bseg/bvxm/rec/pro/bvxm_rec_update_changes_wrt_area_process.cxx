@@ -14,8 +14,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_util.h>
-#include <vil/vil_new.h>
-#include <brip/brip_vil_float_ops.h>
 #include <vul/vul_timer.h>
 
 #include <rec/bvxm_bg_pair_density.h>
@@ -31,7 +29,7 @@ bvxm_rec_update_changes_wrt_area_process::bvxm_rec_update_changes_wrt_area_proce
   //input_types_[0] = "vil_image_view_base_sptr";
   input_types_[0] = "vil_image_view_base_sptr";      // input prob map p(x in B) (float map with values in [0,1]
   input_types_[1] = "vil_image_view_base_sptr";      // input area map/glitch map
-  
+
   //output
   output_data_.resize(2,brdb_value_sptr(0));
   output_types_.resize(2);
@@ -61,21 +59,18 @@ bool bvxm_rec_update_changes_wrt_area_process::execute()
   vil_image_view_base_sptr glitch_map_v = input1->value();
   vil_image_view<float> glitch_map(glitch_map_v);
 
-  unsigned ni = bg_map.ni();
-  unsigned nj = bg_map.nj();
-
   vul_timer t2;
   t2.mark();
 
   bvxm_bayesian_propagation bp(bg_map);
-  float lambda1, k1; // to construct P(Ad | Gb), values based on stats collected from data      
+  float lambda1, k1; // to construct P(Ad | Gb), values based on stats collected from data
   parameters()->get_value("lambda1", lambda1);
   parameters()->get_value("k1", k1);
   float lambda2, k2; // to construct P(Ad | not Gb), values based on stats collected from data
   parameters()->get_value("lambda2", lambda2);
   parameters()->get_value("k2", k2);
   bp.run_area(glitch_map, lambda1, k1, lambda2, k2);
-  
+
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(bp.bg_map_);
   brdb_value_sptr output = new brdb_value_t<vil_image_view_base_sptr>(out_map_sptr);
   output_data_[0] = output;
