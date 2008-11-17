@@ -7,6 +7,7 @@
 #include <vil_pro/vil_load_from_ascii_process.h>
 #include <vil_pro/vil_load_image_view_binary_process.h>
 #include <vil_pro/vil_load_image_view_process.h>
+#include <vil_pro/vil_map_image_binary_process.h>
 #include <vil_pro/vil_map_image_process.h>
 #include <vil_pro/vil_math_functors.h>
 #include <vil_pro/vil_rgbi_to_grey_process.h>

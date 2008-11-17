@@ -71,6 +71,7 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_rtree.h>
+#include <vgl/algo/vgl_rtree_c.h>
 
 #include <vgl/xio/vgl_xio_box_3d.h>
 #include <vgl/xio/vgl_xio_point_2d.h>
