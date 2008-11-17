@@ -179,6 +179,12 @@ SOURCE=.\Templates/vgl_algo_intersection+float-.cxx
 SOURCE=.\Templates/vgl_rtree+vgl_point_2d+double-.vgl_box_2d+double-.dummy-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_rtree+box_box_2d+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_rtree+point_box_2d+float--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File
@@ -345,6 +351,9 @@ SOURCE=.\vgl_rotation_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_rtree_c.h
 # End Source File
 # End Group
 # End Target
