@@ -123,8 +123,8 @@ open()
 #endif
 
   if ( vcl_strcmp(file_oformat->name, "mp4") != 0 ||
-      vcl_strcmp(file_oformat->name, "mov") != 0 ||
-      vcl_strcmp(file_oformat->name, "3gp") != 0 )
+       vcl_strcmp(file_oformat->name, "mov") != 0 ||
+       vcl_strcmp(file_oformat->name, "3gp") != 0 )
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
   switch ( params_.encoder_ )
@@ -467,7 +467,7 @@ close()
 
     if ( os_->fmt_cxt_->nb_streams > 0 ) {
       if ( os_->codec_opened_ ) {
-        for ( int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
+        for ( unsigned int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
 #if LIBAVFORMAT_BUILD <= 4628
           AVCodecContext* codec = &os_->fmt_cxt_->streams[i]->codec;
 #else
@@ -480,7 +480,7 @@ close()
         }
       }
       os_->codec_opened_ = false;
-      for ( int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
+      for ( unsigned int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
         av_free( os_->fmt_cxt_->streams[i] );
       }
     }
@@ -519,7 +519,7 @@ write_frame(const vidl2_frame_sptr& frame)
 #endif
 
   if ( unsigned( codec->width ) != frame->ni() ||
-      unsigned( codec->height ) != frame->nj() ) {
+       unsigned( codec->height ) != frame->nj() ) {
     vcl_cerr << "ffmpeg: Input image has wrong size. Expecting ("
              << codec->width << 'x' << codec->height << "), got ("
              << frame->ni() << 'x' << frame->nj() << ")\n";
@@ -539,7 +539,7 @@ write_frame(const vidl2_frame_sptr& frame)
   if ( codec->pix_fmt == fmt )
   {
     avpicture_fill((AVPicture*)&out_frame, (uint8_t*) frame->data(),
-                    fmt, frame->ni(), frame->nj());
+                   fmt, frame->ni(), frame->nj());
   }
   else
   {
@@ -559,7 +559,7 @@ write_frame(const vidl2_frame_sptr& frame)
       }
     }
     avpicture_fill((AVPicture*)&out_frame, (uint8_t*) temp_frame->data(),
-                    codec->pix_fmt, frame->ni(), frame->nj());
+                   codec->pix_fmt, frame->ni(), frame->nj());
   }
 
   AVPacket pkt;
