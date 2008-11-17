@@ -121,7 +121,7 @@ class vidl2_v4l2_device
   // \param height can be changed by drivers to the closest possible value
   // \return if successful
   // \see format_is_set
-  bool set_v4l2_format(int fourcode, int width, int height);
+  bool set_v4l2_format(unsigned int fourcode, int width, int height);
 
   //: Return if the format is set.
   // Normally, a format is automatically selected of user call set_v4l2_format. User can use this function to know if a format is selected before calling start_capturing.
@@ -129,11 +129,11 @@ class vidl2_v4l2_device
   bool format_is_set() const { return fmt.fmt.pix.width!=0; }
 
   //: Get pixel format of type of compression
-  // \return the four character code which is being used by driver(see v4l2 specification and vidl2_pixel_format.h)
+  // \return the four character code which is being used by driver(see v4l2 specification and vidl2_pixel_format.h) or 0 if not set
   // \see set_v4l2_format
-  int  get_v4l2_format() const {
+  unsigned int  get_v4l2_format() const {
                return (fmt.fmt.pix.width!=0)?
-                      fmt.fmt.pix.pixelformat:-1;
+                      fmt.fmt.pix.pixelformat:0 ;
      }
 
   //: Return Image width in pixels.

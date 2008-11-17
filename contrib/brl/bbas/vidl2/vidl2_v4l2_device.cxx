@@ -234,7 +234,7 @@ bool vidl2_v4l2_device::try_formats()
 
 
 // Width and height could be changed by driver
-bool vidl2_v4l2_device::set_v4l2_format(int fourcode, int width, int height)
+bool vidl2_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int height)
 {
   fmt.fmt.pix.width = 0;
   fmt.fmt.pix.height= 0;
