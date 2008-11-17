@@ -3683,17 +3683,16 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
   double cutoff = max_v*cutoff_percentage; // if 0.01 then 1% tails removed
   bool reached_cutoff = false;
   unsigned ru = 0;
-  for (; !reached_cutoff; ++ru)
-    reached_cutoff = brip_vil_rot_gauss(ru, 0, s0, s1, 0)<cutoff;
-  reached_cutoff = false;
+  while (brip_vil_rot_gauss(ru, 0, s0, s1, 0) >= cutoff)
+    ++ru;
   unsigned rv = 0;
-  for (; !reached_cutoff; ++rv)
-    reached_cutoff = brip_vil_rot_gauss(0, rv, s0, s1, 0)<cutoff;
+  while (brip_vil_rot_gauss(0, rv, s0, s1, 0) >= cutoff)
+    ++rv;
 
   //rotate to get bounds
   int ri = static_cast<int>(vcl_fabs(ru*c+rv*s) +0.5);
   int rj = static_cast<int>(vcl_fabs(ru*s+rv*c) +0.5);
-  if (s<0){
+  if (s<0) {
     ri = static_cast<int>(vcl_fabs(ru*c-rv*s) +0.5);
     rj = static_cast<int>(vcl_fabs(ru*s-rv*c) +0.5);
   }
@@ -3777,12 +3776,12 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   int rj = (nrows-1)/2, ri = (ncols-1)/2;
   vbl_array_2d<double> coef(nrows,ncols);
   double max_v = brip_vil_rot_gauss(0, 0, lambda0, lambda1, 0);
-  double cutoff = static_cast<float>(max_v*0.01); // 1% tails removed
   for (unsigned r = 0; r<nrows; ++r)
     for (unsigned c = 0; c<ncols; ++c)
       coef[r][c]=fa[r][c];
 
 #if 0
+  // (unused) double cutoff=static_cast<float>(max_v*0.01); // 1% tails removed
   vcl_cout << "\ngauss ={";
   for (unsigned j = 0; j<nrows; ++j){
     vcl_cout << '{';
