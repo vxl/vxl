@@ -32,14 +32,6 @@
 #include <bsta/bsta_otsu_threshold.h>
 #include <bsta/bsta_weibull.h>
 
-#include <bsta/algo/bsta_adaptive_updater.h>
-#include <bsta/algo/bsta_bayes_functor.h>
-#include <bsta/algo/bsta_gaussian_stats.h>
-#include <bsta/algo/bsta_gaussian_updater.h>
-#include <bsta/algo/bsta_mixture_functors.h>
-#include <bsta/algo/bsta_truth_updater.h>
-#include <bsta/algo/bsta_fit_weibull.h>
-
 #include <bsta/io/bsta_io_attributes.h>
 #include <bsta/io/bsta_io_gaussian_full.h>
 #include <bsta/io/bsta_io_gaussian_indep.h>
