@@ -204,8 +204,8 @@ bool bmdl_lidar_roi_process::lidar_roi(unsigned type,  //0 for geo coordinates, 
       }
     }
     else if (type == 1) {
-      roi_box.add(vgl_point_2d<double> (min_lon, min_lat));
-      roi_box.add(vgl_point_2d<double> (max_lon, max_lat));
+      roi_box.add(vgl_point_2d<double> (min_lat, min_lon));
+      roi_box.add(vgl_point_2d<double> (max_lat, max_lon));
     }
 
     brip_roi broi(tiff_first->ni(), tiff_first->nj());
@@ -214,6 +214,8 @@ bool bmdl_lidar_roi_process::lidar_roi(unsigned type,  //0 for geo coordinates, 
     bb->add_point(roi_box.max_x(), roi_box.max_y());
 
     bb = broi.clip_to_image_bounds(bb);
+    //vcl_cout << "Cut out area------>" << vcl_endl;
+    //vcl_cout << *bb << vcl_endl;
     first_roi = tiff_first->get_copy_view((unsigned int)bb->get_min_x(),
                                           (unsigned int)bb->width(),
                                           (unsigned int)bb->get_min_y(),
