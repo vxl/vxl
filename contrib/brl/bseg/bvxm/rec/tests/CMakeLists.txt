@@ -14,7 +14,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digits_small.TIF    ${CMAKE_CURRENT_B
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/normalized0_cropped.tif    ${CMAKE_CURRENT_BINARY_DIR}/normalized0_cropped.tif COPYONLY )
 
 ADD_TEST( bvxm_test_densities     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_bvxm_densities )
-ADD_TEST( bvxm_test_param_estimation     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_bvxm_param_estimation )
+ADD_TEST( bvxm_test_param_estimation     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_param_estimation )
 ADD_TEST( bvxm_test_parts     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_bvxm_parts )
 ADD_TEST( bvxm_test_hierarchy_builder     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_bvxm_hierarchy_builder )
 
