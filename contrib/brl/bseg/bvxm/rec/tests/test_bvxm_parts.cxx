@@ -92,7 +92,7 @@ static void test_bvxm_parts()
 
   // create an edge to the second part of p_1_0
   bvxm_hierarchy_edge_sptr e_1_0_to_second = new bvxm_hierarchy_edge(p_1_0, p_0_1);     //  p_1_0
-  p_1_0->add_outgoing_edge(e_1_0_to_second);    //                                             / \
+  p_1_0->add_outgoing_edge(e_1_0_to_second);    //                                             / \.
                                                //                                             p_0_1
   p_0_1->add_incoming_edge(e_1_0_to_second);
   // train this edge with two samples
