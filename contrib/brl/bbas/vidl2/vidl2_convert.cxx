@@ -82,10 +82,10 @@ bool convert_generic(const vidl2_frame& in_frame,
 {
   // create pixel iterators for each frame
   vcl_auto_ptr<vidl2_pixel_iterator> in_pitr(vidl2_make_pixel_iterator(in_frame));
-  if(!in_pitr.get())
+  if (!in_pitr.get())
     return false;
   vcl_auto_ptr<vidl2_pixel_iterator> out_pitr(vidl2_make_pixel_iterator(out_frame));
-  if(!out_pitr.get())
+  if (!out_pitr.get())
     return false;
 
   vidl2_pixel_iterator& in_itr = *in_pitr;
@@ -98,7 +98,7 @@ bool convert_generic(const vidl2_frame& in_frame,
   vidl2_color_conv_fptr color_conv =
       vidl2_color_converter_func( in_t.color,  in_t.bits_per_pixel,
                                   out_t.color, out_t.bits_per_pixel);
-  if(!color_conv)
+  if (!color_conv)
     return false;
 
   const unsigned int num_pix = in_frame.ni() * in_frame.nj();
@@ -286,7 +286,7 @@ struct convert<VIDL2_PIXEL_FORMAT_RGB_24P, VIDL2_PIXEL_FORMAT_YUYV_422>
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
     const vxl_byte* red = reinterpret_cast<const vxl_byte*>(in_frame.data());
     const vxl_byte* green= red+in_frame.ni() * in_frame.nj();
-    const vxl_byte* blue= blue+in_frame.ni() * in_frame.nj();
+    const vxl_byte* blue= green+in_frame.ni() * in_frame.nj();
     vxl_byte* yuyv = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
     for (unsigned int c=0; c<num_half_pix; ++c){
@@ -517,21 +517,21 @@ vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
 // the closest vidl2_pixel_format
 vidl2_frame_sptr vidl2_convert_to_frame(const vil_image_view_base_sptr& image)
 {
-  if(!image)
+  if (!image)
     return NULL;
 
   // try to wrap the image memory in a frame
   vidl2_frame_sptr frame = new vidl2_memory_chunk_frame(*image);
-  if(frame->pixel_format() != VIDL2_PIXEL_FORMAT_UNKNOWN)
+  if (frame->pixel_format() != VIDL2_PIXEL_FORMAT_UNKNOWN)
     return frame;
 
   // if the image could not be wrapped convert it
   unsigned ni = image->ni(), nj = image->nj(), np = image->nplanes();
 
   // special case for 16 bit images
-  if(image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+  if (image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
   {
-    if(np != 1)
+    if (np != 1)
       return NULL;
     vil_image_view<vxl_uint_16> img(ni,nj);
     img.deep_copy(vil_image_view<vxl_uint_16>(*image));
@@ -540,28 +540,27 @@ vidl2_frame_sptr vidl2_convert_to_frame(const vil_image_view_base_sptr& image)
   }
 
   vidl2_pixel_format format = VIDL2_PIXEL_FORMAT_UNKNOWN;
-  if(np == 1)
+  if (np == 1)
     format = VIDL2_PIXEL_FORMAT_MONO_8;
-  else if(np == 3)
+  else if (np == 3)
     format = VIDL2_PIXEL_FORMAT_RGB_24P;
-  else if(np == 4)
+  else if (np == 4)
     format = VIDL2_PIXEL_FORMAT_RGBA_32P;
   else
     return NULL;
 
   vil_image_view<vxl_byte> img;
-  if(image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     img.deep_copy(vil_image_view<vxl_byte>(*image));
   else
   {
     vil_image_view_base_sptr bimage = vil_convert_cast(vxl_byte(),image);
-    if(!bimage)
+    if (!bimage)
       return NULL;
     img = *bimage;
   }
   return new vidl2_memory_chunk_frame(ni, nj, format,
                                       img.memory_chunk());
-
 }
 
 
@@ -577,7 +576,7 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
     return false;
 
   vidl2_pixel_color in_color = vidl2_pixel_format_color(frame.pixel_format());
-  if(require_color == VIDL2_PIXEL_COLOR_UNKNOWN)
+  if (require_color == VIDL2_PIXEL_COLOR_UNKNOWN)
     require_color = in_color;
 
   unsigned ni = frame.ni(), nj = frame.nj();
@@ -587,10 +586,10 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
   image.set_size(ni,nj,np);
 
   // special case for MONO_16
-  if(frame.pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
+  if (frame.pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
     vil_image_view<vxl_uint_16> wrapper(static_cast<const vxl_uint_16*>(frame.data()),
                                         ni,nj,1,1,ni,ni*nj);
-    if(image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16){
+    if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16){
       vil_image_view<vxl_uint_16>& img = static_cast<vil_image_view<vxl_uint_16>&>(image);
       img.deep_copy(vil_image_view<vxl_uint_16>(wrapper));
       return true;
@@ -623,15 +622,13 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
     return true;
   }
 
-
-
   vidl2_pixel_format default_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
-  if(image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<vxl_byte>& img = static_cast<vil_image_view<vxl_byte>&>(image);
     bool interleaved = (img.planestep() == 1);
 
-    switch(require_color){
+    switch (require_color) {
       case VIDL2_PIXEL_COLOR_MONO:
         default_format = VIDL2_PIXEL_FORMAT_MONO_8; break;
       case VIDL2_PIXEL_COLOR_RGB:
@@ -648,17 +645,16 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
     }
   }
 
-
   vidl2_frame_sptr out_frame = new vidl2_memory_chunk_frame(image,default_format);
   // if the image can be wrapped as a frame
-  if(out_frame->pixel_format() != VIDL2_PIXEL_FORMAT_UNKNOWN){
+  if (out_frame->pixel_format() != VIDL2_PIXEL_FORMAT_UNKNOWN){
     vidl2_convert_frame(frame, *out_frame);
     return true;
   }
 
   // use an intermediate format
   vidl2_pixel_format out_fmt;
-  switch(in_color){
+  switch (in_color) {
     case VIDL2_PIXEL_COLOR_MONO:
       out_fmt = VIDL2_PIXEL_FORMAT_MONO_8; break;
     case VIDL2_PIXEL_COLOR_RGB:
@@ -711,14 +707,14 @@ vidl2_convert_wrap_in_view(const vidl2_frame& frame)
 {
   vidl2_pixel_format format = frame.pixel_format();
   vidl2_pixel_traits pt =  vidl2_pixel_format_traits(format);
-  if( pt.chroma_shift_x != 0 || pt.chroma_shift_y != 0 ||
-      pt.bits_per_pixel % pt.num_channels != 0)
+  if ( pt.chroma_shift_x != 0 || pt.chroma_shift_y != 0 ||
+       pt.bits_per_pixel % pt.num_channels != 0)
     return NULL;
 
   unsigned ni = frame.ni(), nj = frame.nj();
   unsigned np = pt.num_channels;
   vcl_ptrdiff_t i_step, j_step, p_step;
-  switch(pt.arrangement){
+  switch (pt.arrangement) {
     case VIDL2_PIXEL_ARRANGE_SINGLE:
       i_step = np;
       j_step = np*ni;
@@ -735,21 +731,21 @@ vidl2_convert_wrap_in_view(const vidl2_frame& frame)
   }
   vcl_ptrdiff_t top_left_offset = 0;
 
-  if(format == VIDL2_PIXEL_FORMAT_BGR_24){
+  if (format == VIDL2_PIXEL_FORMAT_BGR_24){
     top_left_offset = 3;
     p_step = -1;
   }
 
   // Create a view of a memory chunk frame
-  if( const vidl2_memory_chunk_frame* cf =
-      dynamic_cast<const vidl2_memory_chunk_frame*>(&frame) )
+  if ( const vidl2_memory_chunk_frame* cf =
+       dynamic_cast<const vidl2_memory_chunk_frame*>(&frame) )
   {
     vil_memory_chunk_sptr chunk = cf->memory_chunk();
-    if(format == VIDL2_PIXEL_FORMAT_MONO_16){
+    if (format == VIDL2_PIXEL_FORMAT_MONO_16){
       const vxl_uint_16* top_left = static_cast<const vxl_uint_16*>(cf->data()) + top_left_offset;
       return new vil_image_view<vxl_uint_16>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     }
-    else if(format == VIDL2_PIXEL_FORMAT_MONO_1){
+    else if (format == VIDL2_PIXEL_FORMAT_MONO_1){
       const bool* top_left = static_cast<const bool*>(cf->data()) + top_left_offset;
       return new vil_image_view<bool>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     }
@@ -758,11 +754,11 @@ vidl2_convert_wrap_in_view(const vidl2_frame& frame)
   }
 
   // Create a view of a frame (without ownership of the data)
-  if(format == VIDL2_PIXEL_FORMAT_MONO_16){
+  if (format == VIDL2_PIXEL_FORMAT_MONO_16){
     const vxl_uint_16* top_left = static_cast<const vxl_uint_16*>(frame.data()) + top_left_offset;
     return new vil_image_view<vxl_uint_16>(top_left, ni,nj,np, i_step,j_step,p_step);
   }
-  else if(format == VIDL2_PIXEL_FORMAT_MONO_1){
+  else if (format == VIDL2_PIXEL_FORMAT_MONO_1){
     const bool* top_left = static_cast<const bool*>(frame.data()) + top_left_offset;
     return new vil_image_view<bool>(top_left, ni,nj,np, i_step,j_step,p_step);
   }
