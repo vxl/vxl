@@ -182,12 +182,30 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
     if (P3D_(2,i)>0)
     {
       // Flip sign of z elements
-      vcl_cout<<"flipping z coords!"<<vcl_endl;
-      for (unsigned j=0;j<np;++j) P3D_(2,j)*=-1;
-      for (unsigned j=0;j<2*nf;++j) P_(j,2)*=-1;
+      flip_z_coords();
       break;
     }
   }
+}
+
+//: Flip z coords
+// may need to do this to fix z coord ambiguity
+void m23d_ortho_rigid_builder::flip_z_coords()
+{
+  vcl_cout<<"flipping z coords!"<<vcl_endl;
+  
+  unsigned np = P3D_.cols();
+  for (unsigned j=0;j<np;++j) 
+  {
+    P3D_(2,j)*=-1;
+  }
+  
+  unsigned nf = P_.rows();
+  for (unsigned j=0;j<nf;++j) 
+  {
+    P_(j,2)*=-1;
+  }
+  
 }
 
 //: find matrix Q using constraints on matrix P which must contain orthonormal projects in each (2*3) submatrix for each frame old method

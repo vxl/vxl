@@ -113,6 +113,11 @@ class m23d_ortho_rigid_builder
 
   //: Get back 3d pts rotated and shifted for each frame
   void recon_shapes(vcl_vector< vcl_vector< vgl_point_3d<double> > >& pt_vec_list ) const;
+  
+  //: Flip z coords
+  // may need to do this to fix z coord ambiguity
+  void flip_z_coords();
+  
 };
 
 #endif // m2d3_ortho_rigid_builder_h_
