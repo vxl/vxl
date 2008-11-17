@@ -80,7 +80,7 @@ bool bmdl_mesh::trace_boundary(vcl_vector<vgl_point_2d<double> >& pts,
   // first direction
   int dir = 2;
 
-  int i0=i, j0=j;
+  unsigned int i0=i, j0=j;
   unsigned int ni1=ni-1, nj1=nj-1;
 
   do {
@@ -173,7 +173,7 @@ void bmdl_mesh::simplify_polygon( vcl_vector<vgl_point_2d<double> >& pts, double
   const vcl_vector<int>& indices = line_fitter.get_indices();
   vcl_vector<vgl_point_2d<double> > new_pts;
   vgl_point_2d<double> isect;
-  for ( int i=0; i< indices.size(); )
+  for ( unsigned int i=0; i< indices.size(); )
   {
     if (indices[i] < 0)
     {
@@ -249,8 +249,8 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
 
   // recover the vector of building heights
   vcl_vector<double> bld_heights(boundaries.size());
-  for (int j=0; j<nj; ++j){
-    for (int i=0; i<ni; ++i){
+  for (unsigned int j=0; j<nj; ++j){
+    for (unsigned int i=0; i<ni; ++i){
       if (labels(i,j) > 1){
         bld_heights[labels(i,j)-2] = heights(i,j);
       }
