@@ -142,9 +142,13 @@ static void test_bvxm_parts()
   // check helper methods
   //p_1_0->compute_activation_radius();
   float mean_angle = e_1_0_to_second->mean_angle();
+  TEST("mean_angle", mean_angle, mean_angle);
   float mean_dist = e_1_0_to_second->mean_dist();
+  TEST("mean_dist", mean_dist, mean_dist);
   float var_angle = e_1_0_to_second->var_angle();
+  TEST("var_angle", var_angle, var_angle);
   float var_dist = e_1_0_to_second->var_dist();
+  TEST("var_dist", var_dist, var_dist);
 
   // create a prob map of the instantiation of the hierarchy in a given image
   vil_image_view<float> map(ni, nj, 1);  // the second plane will hold the types of the primitives
