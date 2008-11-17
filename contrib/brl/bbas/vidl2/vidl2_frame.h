@@ -18,7 +18,6 @@
 //  To work with a frame as an image use vidl2_convert_to_view
 
 #include "vidl2_pixel_format.h"
-#include "vidl2_frame_sptr.h"
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view_base.h>
 
