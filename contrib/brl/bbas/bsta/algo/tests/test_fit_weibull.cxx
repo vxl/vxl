@@ -1,13 +1,10 @@
 #include <testlib/testlib_test.h>
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <vcl_string.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
 
 template <class T>
 void test_fit_weibull_type(T epsilon, const vcl_string& type_name)
 {
-  
   T sample_mean = T(0.404), sample_std_dev = T(0.33);
   bsta_weibull_cost_function wcf(sample_mean, sample_std_dev);
   bsta_fit_weibull<T> fw(&wcf);
@@ -15,6 +12,7 @@ void test_fit_weibull_type(T epsilon, const vcl_string& type_name)
   fw.init(k);
   fw.solve(k);
   T residual = fw.residual();
+  TEST("residual", residual, residual);
   T lambda = fw.lambda(k);
 
   TEST_NEAR(("shape param k <"+type_name+">").c_str(),
