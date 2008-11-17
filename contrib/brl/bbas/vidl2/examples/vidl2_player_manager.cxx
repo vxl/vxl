@@ -14,6 +14,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_convert.h>
@@ -169,20 +170,20 @@ void vidl2_player_manager::pipe_streams()
     return;
 
   unsigned int initial_frame = istream_->frame_number();
-  if(initial_frame == static_cast<unsigned int>(-1))
+  if (initial_frame == static_cast<unsigned int>(-1))
     istream_->advance();
 
   vidl2_frame_sptr frame;
   if (num_frames < 0)
     while (bool(frame = istream_->current_frame()) &&
            ostream_->write_frame(frame) )
-      if(!istream_->advance())
+      if (!istream_->advance())
         break;
   else
     for (int i=0; i<num_frames &&
          bool(frame = istream_->current_frame()) &&
          ostream_->write_frame(frame); ++i)
-      if(!istream_->advance())
+      if (!istream_->advance())
         break;
   ostream_->close();
 
@@ -201,23 +202,23 @@ void vidl2_player_manager::redraw()
     {
       vgui::out << "frame "<< frame_num+1 ;
       int num_frames = istream_->num_frames();
-      if(num_frames >=0)
-        vgui::out << " of "<<num_frames<<"\n";
+      if (num_frames >=0)
+        vgui::out << " of "<<num_frames<< vcl_endl;
       else
-        vgui::out << "\n";
+        vgui::out << vcl_endl;
     }
 
     vidl2_frame_sptr frame = istream_->current_frame();
-    if(!frame)
+    if (!frame)
       itab_->set_image_resource(NULL);
-    else if(frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
+    else if (frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
       static vil_image_view<vxl_uint_16> img;
       if (vidl2_convert_to_view(*frame,img))
         itab_->set_image_view(img);
       else
         itab_->set_image_resource(NULL);
     }
-    else{
+    else {
       static vil_image_view<vxl_byte> img;
       if (vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
         itab_->set_image_view(img);
