@@ -190,7 +190,7 @@ static void test_bvxm_parts()
   ins = h_8->exists(p_1_0, parts_0_1[1], map, type_map, 0.1f); // p will be its central part and map will tell if all the other parts exist
   if (ins != 0)
     parts_1_0.push_back(ins);
-  TEST(???);
+  TEST(***);
   parts_1_0.clear();
 #endif // 0
 
