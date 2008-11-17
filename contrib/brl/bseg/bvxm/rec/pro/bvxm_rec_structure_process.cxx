@@ -63,6 +63,8 @@ bool bvxm_rec_structure_process::execute()
     case 0: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_0(); } break;
     case 1: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_1(); } break;
     case 2: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_2(); } break;
+    case 3: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_3(); } break;
+    case 4: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_4(); } break;
     default: { vcl_cout << "In bvxm_rec_structure_process::execute() -- Unrecognized detector type!!\n"; return false; }
   }
   
@@ -78,7 +80,7 @@ bool bvxm_rec_structure_process::execute()
     if (!gp)
       return false;
 
-    if (!extract_gaussian_primitives(img, gp->lambda0_, gp->lambda1_, gp->theta_, gp->bright_, gp->cutoff_percentage_, 0.01f, gp->type_, parts_0))
+    if (!extract_gaussian_primitives(img, gp->lambda0_, gp->lambda1_, gp->theta_, gp->bright_, gp->cutoff_percentage_, gp->detection_threshold_, gp->type_, parts_0))
       return false;
 
     vcl_cout << "extracted " << parts_0.size()-prev_size << " primitive parts of type: " << d_ins[i]->type_ << vcl_endl;
@@ -89,7 +91,7 @@ bool bvxm_rec_structure_process::execute()
   vcl_vector<bvxm_part_instance_sptr> parts_upper_most(parts_0);
   for (unsigned l = 1; l <= highest; l++) {
     vcl_vector<bvxm_part_instance_sptr> parts_current;
-    h->extract_upper_layer(parts_upper_most, ni, nj, 0.01f, parts_current);
+    h->extract_upper_layer(parts_upper_most, ni, nj, parts_current);
     vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << "\n";
     parts_upper_most.clear();
     parts_upper_most = parts_current;

@@ -187,8 +187,7 @@ bvxm_part_instance_sptr bvxm_part_hierarchy::exists(bvxm_part_base_sptr upper_p,
 
 //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
 void bvxm_part_hierarchy::extract_upper_layer(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, 
-                                               unsigned ni, unsigned nj,
-                                               float detection_threshold, 
+                                               unsigned ni, unsigned nj, 
                                                vcl_vector<bvxm_part_instance_sptr>& extracted_upper_parts)
 {
   vil_image_view<float> map(ni, nj, 1);  // the second plane will hold the types of the primitives
@@ -217,10 +216,10 @@ void bvxm_part_hierarchy::extract_upper_layer(vcl_vector<bvxm_part_instance_sptr
         bvxm_part_base_sptr hp_upper = (*eit)->source();
 
         // now check for the existence of other primitives wrt to the central part and initiate an instance of it if so
-        bvxm_part_instance_sptr hp_upper_instance = exists(hp_upper, p, map, type_map, part_map, detection_threshold); // p will be its central part and map will tell if all the other parts exist
+        bvxm_part_instance_sptr hp_upper_instance = exists(hp_upper, p, map, type_map, part_map, hp_upper->detection_threshold_); // p will be its central part and map will tell if all the other parts exist
         if (!hp_upper_instance)
           continue;
-        if (hp_upper_instance->strength_ > detection_threshold)
+        if (hp_upper_instance->strength_ > hp_upper->detection_threshold_)
           extracted_upper_parts.push_back(hp_upper_instance);
       }
     }

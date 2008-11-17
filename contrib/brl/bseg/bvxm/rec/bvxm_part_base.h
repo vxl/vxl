@@ -30,7 +30,7 @@ class bvxm_part_gaussian;
 class bvxm_part_base : public bgrl2_vertex<bvxm_hierarchy_edge> {
 public:
 
-  bvxm_part_base(unsigned layer, unsigned type) : bgrl2_vertex<bvxm_hierarchy_edge>(), layer_(layer), type_(type), activation_radius_(0.0f) {}
+  bvxm_part_base(unsigned layer, unsigned type) : bgrl2_vertex<bvxm_hierarchy_edge>(), layer_(layer), type_(type), activation_radius_(0.0f), detection_threshold_(0.01f) {}
 
   //: we assume that the part that is added first as the outgoing part is the central part
   bvxm_part_base_sptr central_part();
@@ -49,7 +49,8 @@ public:
   unsigned type_;
 
   float activation_radius_;
- 
+  float detection_threshold_;
+
 };
 
 class bvxm_part_instance_kind

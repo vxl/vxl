@@ -331,8 +331,8 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_1()
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample2, d2, a2);
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample3, d3, a3);
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample4, d4, a4);
-  e_1_0_to_second->set_min_stand_dev_dist(10.0f); // 10 pixels
-  e_1_0_to_second->set_min_stand_dev_angle(10.0f); // 10 degrees
+  e_1_0_to_third->set_min_stand_dev_dist(10.0f); // 10 pixels
+  e_1_0_to_third->set_min_stand_dev_angle(10.0f); // 10 degrees
   e_1_0_to_third->update_dist_model(d1);
   e_1_0_to_third->update_dist_model(d2);
   e_1_0_to_third->update_dist_model(d3);
@@ -463,6 +463,161 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_2()
   return h;
 
 }
+
+// building 1
+bvxm_part_hierarchy_sptr
+bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_3()
+{
+  bvxm_part_hierarchy_sptr h = new bvxm_part_hierarchy();
+
+  //: LAYER 0: two primitives: 
+  bvxm_part_base_sptr p_0_0 = new bvxm_part_base(0, 0);  // (lambda0=5.0,lambda1=2.5,theta=-40,bright=true)
+  h->add_vertex(p_0_0);
+  bvxm_part_base_sptr p_0_1 = new bvxm_part_base(0, 1);  // (lambda0=2.0,lambda1=1.0,theta=45,bright=false)
+  h->add_vertex(p_0_1);
+  bvxm_part_base_sptr p_0_2 = new bvxm_part_base(0, 2);  // (lambda0=14.0,lambda1=4.0,theta=-40,bright=true)
+  h->add_vertex(p_0_2);
+  //: create a dummy instance from each and add to h
+  bvxm_part_gaussian_sptr pi_0_0 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 5.0f, 2.5f, -40.0f, true, 0);
+  bvxm_part_gaussian_sptr pi_0_1 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, 45.0f, false, 1);
+  bvxm_part_gaussian_sptr pi_0_2 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 14.0f, 4.0f, -40.0f, true, 2);
+  pi_0_1->cutoff_percentage_ = 0.5f;
+  pi_0_0->detection_threshold_ = 0.001f;
+  pi_0_1->detection_threshold_ = 0.001f;
+  pi_0_2->detection_threshold_ = 0.001f;
+  h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
+  h->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
+  h->add_dummy_primitive_instance(pi_0_2->cast_to_instance());
+
+  //: LAYER 1: only one layer 1 part
+  bvxm_part_base_sptr p_1_0 = new bvxm_part_base(1, 0);  
+  h->add_vertex(p_1_0);
+  p_1_0->detection_threshold_ = 0.001f;
+  //: the first child becomes the central part, create an edge to the central part
+  bvxm_hierarchy_edge_sptr e_1_0_to_central = new bvxm_hierarchy_edge(p_1_0, p_0_2);
+  p_1_0->add_outgoing_edge(e_1_0_to_central);
+  p_0_2->add_incoming_edge(e_1_0_to_central);
+  h->add_edge_no_check(e_1_0_to_central);
+
+  //: create an edge to the second part of p_1_0
+  bvxm_hierarchy_edge_sptr e_1_0_to_second = new bvxm_hierarchy_edge(p_1_0, p_0_0);     
+  p_1_0->add_outgoing_edge(e_1_0_to_second);        
+  p_0_0->add_incoming_edge(e_1_0_to_second);
+  
+  vnl_vector_fixed<float,2> c_0_0_1(331.0f,787.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_0_2(312.0f,804.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_0_3(297.0f,816.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_1_1(284.0f,835.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_2_1(307.0f,811.0f); // center measured from the image
+
+  //: train this edge 
+  vnl_vector_fixed<float,2> sample1 = c_0_0_1 - c_0_2_1; // center difference measured from the image
+  //: calculate angle and dists 
+  float a1, d1;
+  e_1_0_to_second->calculate_dist_angle(pi_0_2->cast_to_instance(), sample1, d1, a1);
+  e_1_0_to_second->set_min_stand_dev_dist(2.0f);
+  e_1_0_to_second->set_min_stand_dev_angle(2.0f); 
+  e_1_0_to_second->update_dist_model(d1);
+  e_1_0_to_second->update_angle_model(a1);
+  h->add_edge_no_check(e_1_0_to_second);
+
+  //: create an edge to the third part of p_1_0
+  bvxm_hierarchy_edge_sptr e_1_0_to_third = new bvxm_hierarchy_edge(p_1_0, p_0_1);     
+  p_1_0->add_outgoing_edge(e_1_0_to_third);        
+  p_0_1->add_incoming_edge(e_1_0_to_third);
+  
+  //: train this edge 
+  sample1 = c_0_1_1 - c_0_2_1; // center difference measured from the image
+  //: calculate angle and dists for these two samples
+  e_1_0_to_third->calculate_dist_angle(pi_0_2->cast_to_instance(), sample1, d1, a1);
+  e_1_0_to_third->set_min_stand_dev_dist(1.0f); 
+  e_1_0_to_third->set_min_stand_dev_angle(2.0f); 
+  e_1_0_to_third->update_dist_model(d1);
+  e_1_0_to_third->update_angle_model(a1);
+  h->add_edge_no_check(e_1_0_to_third);
+
+  return h;
+}
+
+
+// building 2
+bvxm_part_hierarchy_sptr 
+bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_4()
+{
+  bvxm_part_hierarchy_sptr h = new bvxm_part_hierarchy();
+
+  //: LAYER 0: two primitives: 
+  bvxm_part_base_sptr p_0_0 = new bvxm_part_base(0, 0);  // (lambda0=4.0,lambda1=2.0,theta=-40,bright=true)
+  h->add_vertex(p_0_0);
+  bvxm_part_base_sptr p_0_1 = new bvxm_part_base(0, 1);  // (lambda0=10.0,lambda1=2.0,theta=-35,bright=true)
+  h->add_vertex(p_0_1);
+  bvxm_part_base_sptr p_0_2 = new bvxm_part_base(0, 2);  // (lambda0=2.0,lambda1=1.0,theta=45,bright=false)
+  h->add_vertex(p_0_2);
+  
+  //: create a dummy instance from each and add to h
+  bvxm_part_gaussian_sptr pi_0_0 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 4.0f, 2.0f, -40.0f, true, 0);
+  bvxm_part_gaussian_sptr pi_0_1 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 10.0f, 2.0f, -35.0f, true, 1);
+  bvxm_part_gaussian_sptr pi_0_2 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, 45.0f, false, 2);
+  pi_0_0->cutoff_percentage_ = 0.5f;
+  pi_0_2->cutoff_percentage_ = 0.5f;
+  pi_0_0->detection_threshold_ = 0.01f;
+  pi_0_1->detection_threshold_ = 0.01f;
+  pi_0_2->detection_threshold_ = 0.00001f;
+  h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
+  h->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
+  h->add_dummy_primitive_instance(pi_0_2->cast_to_instance());
+
+  //: LAYER 1: only one layer 1 part
+  bvxm_part_base_sptr p_1_0 = new bvxm_part_base(1, 0);  
+  h->add_vertex(p_1_0);
+  p_1_0->detection_threshold_ = 0.0000001f;
+  //: the first child becomes the central part, create an edge to the central part
+  bvxm_hierarchy_edge_sptr e_1_0_to_central = new bvxm_hierarchy_edge(p_1_0, p_0_1);
+  p_1_0->add_outgoing_edge(e_1_0_to_central); 
+  p_0_1->add_incoming_edge(e_1_0_to_central);
+  h->add_edge_no_check(e_1_0_to_central);
+
+  //: create an edge to the second part of p_1_0
+  bvxm_hierarchy_edge_sptr e_1_0_to_second = new bvxm_hierarchy_edge(p_1_0, p_0_0);     
+  p_1_0->add_outgoing_edge(e_1_0_to_second);        
+  p_0_0->add_incoming_edge(e_1_0_to_second);
+  
+  vnl_vector_fixed<float,2> c_0_0_1(34.0f,516.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_0_2(17.0f,529.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_2_1(9.0f,535.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_1_1(34.0f,517.0f); // center measured from the image
+
+  //: train this edge 
+  vnl_vector_fixed<float,2> sample1 = c_0_0_2 - c_0_1_1; // center difference measured from the image
+  //: calculate angle and dists 
+  float a1, d1;
+  e_1_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample1, d1, a1);
+  e_1_0_to_second->set_min_stand_dev_dist(1.0f);
+  e_1_0_to_second->set_min_stand_dev_angle(2.0f); 
+  e_1_0_to_second->update_dist_model(d1);
+  e_1_0_to_second->update_angle_model(a1);
+  h->add_edge_no_check(e_1_0_to_second);
+
+  //: create an edge to the third part of p_1_0
+  bvxm_hierarchy_edge_sptr e_1_0_to_t = new bvxm_hierarchy_edge(p_1_0, p_0_2);     
+  p_1_0->add_outgoing_edge(e_1_0_to_t);        
+  p_0_2->add_incoming_edge(e_1_0_to_t);
+
+  //: train this edge 
+  sample1 = c_0_2_1 - c_0_1_1; // center difference measured from the image
+  //: calculate angle and dists 
+  e_1_0_to_t->calculate_dist_angle(pi_0_1->cast_to_instance(), sample1, d1, a1);
+  e_1_0_to_t->set_min_stand_dev_dist(1.0f);
+  e_1_0_to_t->set_min_stand_dev_angle(2.0f); 
+  e_1_0_to_t->update_dist_model(d1);
+  e_1_0_to_t->update_angle_model(a1);
+  h->add_edge_no_check(e_1_0_to_t);
+
+  return h;
+}
+  
+
+
 
 
 

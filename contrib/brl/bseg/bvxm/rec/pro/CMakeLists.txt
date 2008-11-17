@@ -17,6 +17,7 @@ SET(bvxm_rec_pro_sources
     bvxm_prob_map_supress_process.h         bvxm_prob_map_supress_process.cxx
     bvxm_prob_map_area_process.h         bvxm_prob_map_area_process.cxx
     bvxm_rec_update_changes_wrt_area_process.h  bvxm_rec_update_changes_wrt_area_process.cxx
+    bvxm_change_area_process.h         bvxm_change_area_process.cxx
 )
 
 ADD_LIBRARY(bvxm_rec_pro ${bvxm_rec_pro_sources})
