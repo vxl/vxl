@@ -18,6 +18,7 @@
 #include <rec/bvxm_part_hierarchy_sptr.h>
 #include <rec/bvxm_part_base_sptr.h>
 #include <vil/vil_image_resource_sptr.h>
+#include <vcl_vector.h>
 
 class bvxm_part_hierarchy_builder
 {
