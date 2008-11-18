@@ -11,10 +11,10 @@
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
 
+#include "bgrl2_edge.h"
+
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-
-#include <bgrl2/bgrl2_edge.h>
 
 class bgrl2_hg_vertex;
 class bgrl2_hg_hyperedge;
