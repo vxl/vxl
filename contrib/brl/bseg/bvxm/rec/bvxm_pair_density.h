@@ -1,26 +1,22 @@
+#ifndef DBVXM_PAIR_DENSITY_H_
+#define DBVXM_PAIR_DENSITY_H_
 //:
 // \file
 // \brief Base class for prob density of an intensity pair
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date 10/01/08
-//      
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
-
-
-#if !defined(_DBVXM_PAIR_DENSITY_H)
-#define _DBVXM_PAIR_DENSITY_H
 
 #include <vil/vil_image_view.h>
 
 class bvxm_pair_density
 {
-public:
+ public:
 
   bvxm_pair_density() : sigma_(0.1) {}
 
@@ -30,8 +26,8 @@ public:
 
   virtual vil_image_view<float> prob_density(vil_image_view<float>& obs);
 
-protected:
+ protected:
   double sigma_;
 };
 
-#endif  //_DBVXM_PAIR_DENSITY_H
+#endif // DBVXM_PAIR_DENSITY_H_

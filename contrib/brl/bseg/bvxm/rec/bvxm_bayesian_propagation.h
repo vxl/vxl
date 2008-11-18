@@ -1,24 +1,16 @@
+#ifndef bvxm_bayesian_propagation_H_
+#define bvxm_bayesian_propagation_H_
 //:
 // \file
 // \brief bvxm Bayesian propagation algorithm to update probability maps using prior probability distributions on appearance
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
-//      
+// \date Oct. 01, 2008
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
-
-
-#if !defined(_bvxm_bayesian_propagation_H)
-#define _bvxm_bayesian_propagation_H
-
-#include <vcl_vector.h>
-#include <vcl_utility.h>
-#include <vcl_string.h>
 
 #include <vil/vil_image_view.h>
 
@@ -29,7 +21,7 @@
 
 class bvxm_bayesian_propagation
 {
-public:
+ public:
   bvxm_bayesian_propagation(vil_image_view<vxl_byte>& inp, vil_image_view<float>& prob_density) : img_view_(inp), prob_density_(prob_density) { convert_img(); }
 
   //: constructor for area updates
@@ -51,7 +43,7 @@ public:
 
   bool run_area(vil_image_view<float>& area_map, float lambda1, float k1, float lambda2, float k2);
 
-protected: 
+ protected:
   void convert_img() {
     ni_ = img_view_.ni();
     nj_ = img_view_.nj();
@@ -59,7 +51,7 @@ protected:
     vil_convert_stretch_range_limited(img_view_, img_, (vxl_byte)0, (vxl_byte)255, 0.0f, 1.0f);
   }
 
-public:
+ public:
 
   unsigned ni_;
   unsigned nj_;
@@ -68,24 +60,23 @@ public:
   vil_image_view<float> prob_density_;
 
   vil_image_view<float> bg_map_;  // foreground map is always inverse of this map, i.e. fg(i,j) = 1-bg_map(i,j)
-
 };
 
 class bvxm_area_density
 {
-public:
+ public:
   bvxm_area_density(float lambda1, float k1, float lambda2, float k2) : back_model_(lambda1, k1), fore_model_(lambda2, k2)  {}
 
   float back_density(float val);
   float fore_density(float val);
-protected:
-  
+ protected:
+
   // P(A_d | G_b)  // distribution of Area difference given a foreground glitch on a background
-  bsta_weibull<float> back_model_;          
-  
+  bsta_weibull<float> back_model_;
+
   // P(A_d | ~G_b)  // distribution of Area difference given not a foreground glitch on a background
   bsta_weibull<float> fore_model_;          // weibul distribution becomes exponential when k = 1.0f
 };
 
 
-#endif  //_bvxm_bayesian_propagation_H
+#endif // bvxm_bayesian_propagation_H_
