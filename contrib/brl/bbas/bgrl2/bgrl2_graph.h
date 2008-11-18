@@ -1,12 +1,11 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_graph.h
+// This is brl/bbas/bgrl2/bgrl2_graph.h
 #ifndef bgrl2_graph_h_
 #define bgrl2_graph_h_
-
 //:
 // \file
 // \brief A templated generic graph class
 // \author Amir Tamrakar
-// \date 02/30/05
+// \date Feb. 30, 2005
 //
 // This is a templatized generic graph class that works with
 // vertex and edge classes subclassed from bgrl2_vertex and bgrl2_edge
@@ -17,7 +16,8 @@
 //
 // IMPORTANT WARNING to users of this graph class to work with DIRECTED graphs:
 //                   e.g. you have the following graph with times of creation of the edges
-//                        as noted by the numbers 
+//                        as noted by the numbers
+// \verbatim
 //                                 2
 //                                 ^
 //                                 |
@@ -25,6 +25,7 @@
 //                                 |
 //                                 v
 //                                 4
+// \endverbatim
 //                   Ideally, cyclic_adj_succ(1,A) should return 2
 //                   however, in this implementation it returns 3 (the next in_edge)
 //                   (When this class is used for shock_graphs because of special properties
@@ -35,13 +36,12 @@
 //                   This should be noted and corrected or undirected graph operations
 //                   should never be used on directed graphs where the example case can occur
 //
-//
 // \verbatim
 //  Modifications
 //  Amir Tamrakar 02/30/05    I wanted to develop this graph class into
 //                            a standardized graph like the one defined in LEDA.
 //                            (Look at http://www.algorithmic-solutions.info/leda_manual/graph.html )
-//                            for more detailed descriptions. 
+//                            for more detailed descriptions.
 //                            So far, I have implemented the more urgent functions only.
 //
 //  Amir Tamrakar 06/20/05    Modified it (finally) to use smart pointer vertex and edge
@@ -51,11 +51,9 @@
 //
 //  Ozge Can Ozcanli 10/06/06 Added version number and binary io functions
 //  Ozge C. Ozcanli 11/15/08  Moved up to vxl, minor fixes
-//
 // \endverbatim
 
 #include <vcl_list.h>
-#include <vcl_map.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
@@ -85,9 +83,9 @@ class bgrl2_graph : public vbl_ref_count
   //-------------------------------------------------------------------
   // Standard Graph functions
   //-------------------------------------------------------------------
-  
+
   //: Return true if the graph contains a cycle
-  //  This method can go to dbgl_algo
+  //  This method can go to bgrl2/algo
   bool has_cycle();
 
   //-------------------------------------------------------------------
@@ -114,11 +112,11 @@ class bgrl2_graph : public vbl_ref_count
   bool add_edge_no_check(E_sptr e);
 
   //: Add an edge between \p v1 and \p v2
-  //  This function will instantiate an edge and 
+  //  This function will instantiate an edge and
   //  add the links from the nodes to the edges
   //  if not already there.
   E_sptr add_edge(V_sptr v1, V_sptr v2);
-  
+
   //: Remove an edge
   // \retval true if the edge was deleted
   // \retval false if the edge was not found in the graph
@@ -130,7 +128,7 @@ class bgrl2_graph : public vbl_ref_count
   bool remove_edge(V_sptr v1, V_sptr v2 );
 
   //: delete all the vertices
-  void  del_all_vertices(); 
+  void  del_all_vertices();
 
   //: delete all the edges
   void  del_all_edges();
@@ -148,16 +146,16 @@ class bgrl2_graph : public vbl_ref_count
   // Access operations
   //-------------------------------------------------------------------
 
-  //: returns the number of nodes in G. 
-  int number_of_vertices() const { return vertices_.size(); } 
+  //: returns the number of nodes in G.
+  int number_of_vertices() const { return vertices_.size(); }
 
-  //: returns the number of edges in G.  
+  //: returns the number of edges in G.
   int number_of_edges() const { return edges_.size(); }
 
   //: returns the list V of all nodes of G
-  const vcl_list<V_sptr>& all_nodes() { return vertices_; } 
+  const vcl_list<V_sptr>& all_nodes() { return vertices_; }
 
-  //:  returns the list E of all edges of the shock graph.  
+  //:  returns the list E of all edges of the shock graph.
   const vcl_list<E_sptr>& all_edges() { return edges_; }
 
   //: Returns an iterator to the beginning of the set of vertices
@@ -171,31 +169,31 @@ class bgrl2_graph : public vbl_ref_count
 
   //: Returns an iterator to the end of the set of edges
   edge_iterator  edges_end() { return edges_.end(); }
-  
+
   //-------------------------------------------------------------------
   // Directed graph operations
   //-------------------------------------------------------------------
-  
-  E_sptr adj_succ(E_sptr e); ///<  returns the successor of edge e in the adjacency list of vertex source(e) (nil if it does not exist). 
-  E_sptr adj_pred(E_sptr e); ///<  returns the predecessor of edge e in the adjacency list of vertex source(e) (nil if it does not exist). 
-  E_sptr cyclic_adj_succ(E_sptr e); ///<  returns the cyclic successor of edge e in the adjacency list of vertex source(e). 
-  E_sptr cyclic_adj_pred(E_sptr e); ///<  returns the cyclic predecessor of edge e in the adjacency list of vertex source(e). 
-  E_sptr first_in_edge(V_sptr v); ///<  returns the first edge of in_edges(v) (nil if this list is empty). 
-  E_sptr last_in_edge(V_sptr v); ///<  returns the last edge of in_edges(v) (nil if this list is empty). 
-  E_sptr first_out_edge(V_sptr v); ///<  returns the first edge of out_edges(v) (nil if this list is empty). 
-  E_sptr last_out_edge(V_sptr v); ///<  returns the last edge of out_edges(v) (nil if this list is empty). 
-  E_sptr in_succ(E_sptr e); ///<  returns the successor of edge e in in_edges(target(e)) (nil if it does not exist). 
-  E_sptr in_pred(E_sptr e); ///<  returns the predecessor of edge e in in_edges(target(e)) (nil if it does not exist). 
-  E_sptr cyclic_in_succ(E_sptr e); ///<  returns the cyclic successor of edge e in in_edges(target(e)) (nil if it does not exist). 
-  E_sptr cyclic_in_pred(E_sptr e); ///<  returns the cyclic predecessor of edge e in in_edges(target(e)) (nil if it does not exist). 
-  
+
+  E_sptr adj_succ(E_sptr e); ///<  returns the successor of edge e in the adjacency list of vertex source(e) (nil if it does not exist).
+  E_sptr adj_pred(E_sptr e); ///<  returns the predecessor of edge e in the adjacency list of vertex source(e) (nil if it does not exist).
+  E_sptr cyclic_adj_succ(E_sptr e); ///<  returns the cyclic successor of edge e in the adjacency list of vertex source(e).
+  E_sptr cyclic_adj_pred(E_sptr e); ///<  returns the cyclic predecessor of edge e in the adjacency list of vertex source(e).
+  E_sptr first_in_edge(V_sptr v); ///<  returns the first edge of in_edges(v) (nil if this list is empty).
+  E_sptr last_in_edge(V_sptr v); ///<  returns the last edge of in_edges(v) (nil if this list is empty).
+  E_sptr first_out_edge(V_sptr v); ///<  returns the first edge of out_edges(v) (nil if this list is empty).
+  E_sptr last_out_edge(V_sptr v); ///<  returns the last edge of out_edges(v) (nil if this list is empty).
+  E_sptr in_succ(E_sptr e); ///<  returns the successor of edge e in in_edges(target(e)) (nil if it does not exist).
+  E_sptr in_pred(E_sptr e); ///<  returns the predecessor of edge e in in_edges(target(e)) (nil if it does not exist).
+  E_sptr cyclic_in_succ(E_sptr e); ///<  returns the cyclic successor of edge e in in_edges(target(e)) (nil if it does not exist).
+  E_sptr cyclic_in_pred(E_sptr e); ///<  returns the cyclic predecessor of edge e in in_edges(target(e)) (nil if it does not exist).
+
   //-------------------------------------------------------------------
-  // Undirected graph operations   
+  // Undirected graph operations
   //-------------------------------------------------------------------
 
 // IMPORTANT WARNING to users of this graph class to work with DIRECTED graphs:
 //                   e.g. you have the following graph with times of creation of the edges
-//                        as noted by the numbers 
+//                        as noted by the numbers
 //                                 2
 //                                 ^
 //                                 |
@@ -213,11 +211,11 @@ class bgrl2_graph : public vbl_ref_count
 //                   This should be noted and corrected or undirected graph operations
 //                   should never be used on directed graphs where the example case can occur
 
-  E_sptr first_adj_edge(V_sptr v); ///<  returns the first edge in the adjacency list of v (nil if this list is empty). 
-  E_sptr last_adj_edge(V_sptr v); ///<  returns the last edge in the adjacency list of v (nil if this list is empty). 
+  E_sptr first_adj_edge(V_sptr v); ///<  returns the first edge in the adjacency list of v (nil if this list is empty).
+  E_sptr last_adj_edge(V_sptr v); ///<  returns the last edge in the adjacency list of v (nil if this list is empty).
   E_sptr adj_succ(E_sptr e, V_sptr v); ///<  returns the successor of edge e in the adjacency list of v.
   E_sptr adj_pred(E_sptr e, V_sptr v);///<  returns the predecessor of edge e in the adjacency list of v.
-  E_sptr cyclic_adj_succ(E_sptr e, V_sptr v); ///<  returns the cyclic successor of edge e in the adjacency list of v. 
+  E_sptr cyclic_adj_succ(E_sptr e, V_sptr v); ///<  returns the cyclic successor of edge e in the adjacency list of v.
   E_sptr cyclic_adj_pred(E_sptr e, V_sptr v); ///<  returns the cyclic predecessor of edge e in the adjacency list of v.
 
   //-------------------------------------------------------------------
@@ -226,7 +224,8 @@ class bgrl2_graph : public vbl_ref_count
 
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
-/*
+
+#if 0 // these I/O methods commented out
   //: Return IO version number;
   short version() const;
 
@@ -235,7 +234,8 @@ class bgrl2_graph : public vbl_ref_count
 
   //: Binary load self from stream.
   void b_read(vsl_b_istream &is);
-*/
+#endif // 0
+
  protected:
 
   //: The list of vertices
@@ -243,7 +243,6 @@ class bgrl2_graph : public vbl_ref_count
 
   //: The list of edges
   vcl_list<E_sptr> edges_;
-
 };
 
 #endif // bgrl2_graph_h_
