@@ -1,4 +1,6 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_hg_hyperedge.h
+// This is brl/bbas/bgrl2/bgrl2_hg_hyperedge.h
+#ifndef bgrl2_hg_hyperedge_h_
+#define bgrl2_hg_hyperedge_h_
 //:
 // \file
 // \author Ming-Ching Chang
@@ -9,9 +11,6 @@
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
 
-#ifndef _bgrl2_hg_hyperedge_h_
-#define _bgrl2_hg_hyperedge_h_
-
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
@@ -20,13 +19,13 @@ class bgrl2_hg_edge;
 
 class bgrl2_hg_hyperedge
 {
-protected:
+ protected:
   int id_;
-  //: e1=(v1, v2), e2=(v2, v3), ..., en=(vn, v1) 
+  //: e1=(v1, v2), e2=(v2, v3), ..., en=(vn, v1)
   vcl_vector<bgrl2_hg_edge*>    connecting_edges_;
   vcl_vector<bgrl2_hg_vertex*>  connecting_vertices_;
 
-public:
+ public:
   const int id() const {
     return id_;
   }
@@ -93,4 +92,4 @@ public:
   }
 };
 
-#endif
+#endif // bgrl2_hg_hyperedge_h_

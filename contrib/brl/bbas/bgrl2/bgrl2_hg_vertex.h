@@ -1,4 +1,6 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_hg_vertex.h
+// This is brl/bbas/bgrl2/bgrl2_hg_vertex.h
+#ifndef bgrl2_hg_vertex_h_
+#define bgrl2_hg_vertex_h_
 //:
 // \file
 // \author Ming-Ching Chang
@@ -8,9 +10,6 @@
 //  Modifications
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
-
-#ifndef _bgrl2_hg_vertex_h_
-#define _bgrl2_hg_vertex_h_
 
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
@@ -22,12 +21,12 @@ class bgrl2_hg_hyperedge;
 
 class bgrl2_hg_vertex //: public bgrl2_vertex
 {
-protected:
+ protected:
   int id_;
   vcl_vector<bgrl2_hg_edge*>      connecting_edges_;
   vcl_vector<bgrl2_hg_hyperedge*> connecting_hyperedges_;
 
-public:
+ public:
   const int id() const {
     return id_;
   }
@@ -85,7 +84,7 @@ public:
   }
 
   //: ====== Constructor/Destructor and other functions ======
-  bgrl2_hg_vertex () //: bgrl2_vertex () 
+  bgrl2_hg_vertex () //: bgrl2_vertex ()
   {
   }
 
@@ -94,4 +93,4 @@ public:
   }
 };
 
-#endif
+#endif // bgrl2_hg_vertex_h_
