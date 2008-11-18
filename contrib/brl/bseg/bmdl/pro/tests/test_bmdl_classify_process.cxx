@@ -61,6 +61,7 @@ MAIN( test_bmdl_classify_process )
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
+  good = good && bprb_batch_process_manager::instance()->set_params("classify_params.xml");
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned int label_img_id, height_img_id;
