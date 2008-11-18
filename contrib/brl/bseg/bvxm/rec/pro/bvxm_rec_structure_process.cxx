@@ -60,11 +60,11 @@ bool bvxm_rec_structure_process::execute()
 
   bvxm_part_hierarchy_sptr h;
   switch (d_id) {
-    case 0: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_0(); } break;
-    case 1: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_1(); } break;
-    case 2: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_2(); } break;
-    case 3: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_3(); } break;
-    case 4: { h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_4(); } break;
+    case 0: { h = bvxm_part_hierarchy_builder::construct_detector_roi1_0(); } break;
+    case 1: { h = bvxm_part_hierarchy_builder::construct_detector_roi1_1(); } break;
+    case 2: { h = bvxm_part_hierarchy_builder::construct_detector_roi1_2(); } break;
+    case 3: { h = bvxm_part_hierarchy_builder::construct_detector_roi1_3(); } break;
+    case 4: { h = bvxm_part_hierarchy_builder::construct_detector_roi1_4(); } break;
     default: { vcl_cout << "In bvxm_rec_structure_process::execute() -- Unrecognized detector type!!\n"; return false; }
   }
   

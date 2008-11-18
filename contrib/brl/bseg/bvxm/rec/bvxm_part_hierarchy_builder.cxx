@@ -181,7 +181,7 @@ bvxm_part_hierarchy_sptr bvxm_part_hierarchy_builder::construct_vehicle_detector
 //: construct a hierarchy manually for ROI 1
 //: detector for short vehicles
 bvxm_part_hierarchy_sptr 
-bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_0()
+bvxm_part_hierarchy_builder::construct_detector_roi1_0()
 {
   bvxm_part_hierarchy_sptr h = new bvxm_part_hierarchy();
 
@@ -247,7 +247,7 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_0()
 //: construct a hierarchy manually for ROI 1
 //: detector for longer vehicles
 bvxm_part_hierarchy_sptr 
-bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_1()
+bvxm_part_hierarchy_builder::construct_detector_roi1_1()
 {
   bvxm_part_hierarchy_sptr h = new bvxm_part_hierarchy();
 
@@ -348,7 +348,7 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_1()
 
 // recognize sides of roads, good to remove artifacts from change map
 bvxm_part_hierarchy_sptr 
-bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_2()
+bvxm_part_hierarchy_builder::construct_detector_roi1_2()
 {
   bvxm_part_hierarchy_sptr h = new bvxm_part_hierarchy();
 
@@ -466,7 +466,7 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_2()
 
 // building 1
 bvxm_part_hierarchy_sptr
-bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_3()
+bvxm_part_hierarchy_builder::construct_detector_roi1_3()
 {
   bvxm_part_hierarchy_sptr h = new bvxm_part_hierarchy();
 
@@ -542,7 +542,7 @@ bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_3()
 
 // building 2
 bvxm_part_hierarchy_sptr 
-bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_4()
+bvxm_part_hierarchy_builder::construct_detector_roi1_4()
 {
   bvxm_part_hierarchy_sptr h = new bvxm_part_hierarchy();
 

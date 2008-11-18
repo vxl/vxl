@@ -31,12 +31,12 @@ public:
 
   //: construct a hierarchy manually
   static bvxm_part_hierarchy_sptr construct_vehicle_detector();
-  static bvxm_part_hierarchy_sptr construct_vehicle_detector_roi1_0();
-  static bvxm_part_hierarchy_sptr construct_vehicle_detector_roi1_1();
-  static bvxm_part_hierarchy_sptr construct_vehicle_detector_roi1_2(); // recognize sides of roads, good to remove artifacts from change map
+  static bvxm_part_hierarchy_sptr construct_detector_roi1_0();
+  static bvxm_part_hierarchy_sptr construct_detector_roi1_1();
+  static bvxm_part_hierarchy_sptr construct_detector_roi1_2(); // recognize sides of roads, good to remove artifacts from change map
 
-  static bvxm_part_hierarchy_sptr construct_vehicle_detector_roi1_3(); // building 1
-  static bvxm_part_hierarchy_sptr construct_vehicle_detector_roi1_4(); // building 2
+  static bvxm_part_hierarchy_sptr construct_detector_roi1_3(); // building 1
+  static bvxm_part_hierarchy_sptr construct_detector_roi1_4(); // building 2
   
 
 };
