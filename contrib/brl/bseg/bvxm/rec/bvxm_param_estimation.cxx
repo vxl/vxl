@@ -3,16 +3,13 @@
 // \brief bvxm recognition utilities
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
-//      
+// \date Oct. 01, 2008
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
 
-#include <vcl_iostream.h>
 #include "bvxm_param_estimation.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_amoeba.h>
@@ -23,9 +20,10 @@
 #include <bvgl/bvgl_change_obj.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
+#include <vcl_iostream.h>
 
 //: estimate the initial value as the real variation in the data
-double 
+double
 bvxm_param_estimation::estimate_fg_pair_density_initial_sigma(vcl_vector<vcl_pair<float, float> >& pairs)
 {
   //: first find the mean dif
@@ -49,30 +47,30 @@ bvxm_param_estimation::estimate_fg_pair_density_initial_sigma(vcl_vector<vcl_pai
 
 
 //: we always assume that the intensities are scaled to [0,1] range, so we get a vector of float pairs
-//  use Levenberg-Marquardt
-double 
+//  Uses Levenberg-Marquardt
+double
 bvxm_param_estimation::estimate_fg_pair_density_sigma(vcl_vector<vcl_pair<float, float> >& pairs, double initial_sigma)
 {
   fg_pair_density_est f(pairs);
   vnl_levenberg_marquardt lm(f);
   vnl_vector<double> x(1);   // init can be far off
   x[0] = initial_sigma;
-  
+
   //lm.set_x_tolerance(0.00000001);
   //lm.set_f_tolerance(0.00000001);
   //lm.set_g_tolerance(0.00000001);
 
   //lm.minimize_without_gradient(x);
   lm.minimize_using_gradient(x);
-  
+
   lm.diagnose_outcome(vcl_cout);
-  
+
   vcl_cout << "x = " << x << vcl_endl;
 
   return x[0];
 }
 
-double 
+double
 bvxm_param_estimation::estimate_fg_pair_density_sigma_amoeba(vcl_vector<vcl_pair<float, float> >& pairs, double initial_sigma)
 {
   fg_pair_density_est_amoeba f(pairs);
@@ -88,10 +86,10 @@ bvxm_param_estimation::estimate_fg_pair_density_sigma_amoeba(vcl_vector<vcl_pair
   return x[0];
 }
 
-bool 
-bvxm_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes_sptr c, 
-                                        vcl_vector<vcl_pair<float, float> >& pairs,
-                                        bool print_histogram, vcl_string out_name)
+bool
+bvxm_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes_sptr c,
+                                       vcl_vector<vcl_pair<float, float> >& pairs,
+                                       bool print_histogram, vcl_string out_name)
 {
   unsigned ni = img->ni();
   unsigned nj = img->nj();
@@ -103,7 +101,7 @@ bvxm_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes
   }
 
   vil_image_view<float> inp_img(ni, nj, 1);
-  
+
   if (img->nplanes() != 1) {
     vcl_cout << "In bvxm_param_estimation::create_fg_pairs() -- input view is not grey scale!\n";
     return false;
@@ -120,7 +118,7 @@ bvxm_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes
       bvgl_changes_sptr dummy_c = new bvgl_changes();
       dummy_c->add_obj(c->obj(i));
       vil_image_view<vxl_byte> mask(dummy_c->create_mask_from_objs_all_types(ni, nj));
-      
+
       //vcl_stringstream ss; ss << i;
       //vil_save(mask, ("./mask_saved_" + ss.str() + ".png").c_str());
 
@@ -137,7 +135,6 @@ bvxm_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes
           }
         }
       }
-
     }
   }
 
