@@ -134,7 +134,7 @@ T bmdl_classify<T>::estimate_height_noise_stdev()
 // Each building is given an index sequentially starting with 2
 // and sorted by mean height.
 template <class T>
-void bmdl_classify<T>::label_lidar()
+void bmdl_classify<T>::label_lidar(T gthresh)
 {
   unsigned int ni = first_return_.ni();
   unsigned int nj = first_return_.nj();
@@ -147,7 +147,7 @@ void bmdl_classify<T>::label_lidar()
   assert(hgt_stdev_ > 0.0);
 
   // 1. First segment the image into ground, buildings, and vegetation
-  segment();
+  segment(gthresh);
 
   // 2. Cluster the pixels for buildings and apply unique labels
   cluster_buildings();
@@ -193,7 +193,7 @@ void bmdl_classify<T>::label_lidar()
 //  Classify each pixel as Ground (0), Vegitation (1), or Building (2)
 //  Results are stored in the labels image
 template <class T>
-void bmdl_classify<T>::segment()
+void bmdl_classify<T>::segment(T gthresh)
 {
   unsigned int ni = first_return_.ni();
   unsigned int nj = first_return_.nj();
@@ -209,7 +209,9 @@ void bmdl_classify<T>::segment()
   labels_.set_size(ni,nj);
 
   // ground threshold (3 standard deviations from bare earth)
+#if 0  // this is now a parameter
   T gthresh = 2.0; //3.0*hgt_stdev_;
+#endif
   // vegetation threshold (3 standard deviation from difference in returns)
   T vthresh = 1.0 + 3.0*vcl_sqrt(2.0)*hgt_stdev_;
   for (unsigned int j=0; j<nj; ++j) {

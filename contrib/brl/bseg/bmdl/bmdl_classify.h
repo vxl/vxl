@@ -64,12 +64,12 @@ class bmdl_classify
   // Each building is given an index sequentially starting with 2
   // and sorted by mean height.
   // \note This is the main function you should call, it runs all the steps
-  void label_lidar();
+  void label_lidar(T gthresh);
 
   //: Perform an initial segementation at each pixel using thresholds
   // Classify each pixel as Ground (0), Vegitation (1), or Building (2)
   // Results are stored in the labels image
-  void segment();
+  void segment(T gthresh);
 
   //: Cluster pixels on buildings into groups of adjacent pixels with similar heights.
   //  Assign a new label to each groups.
