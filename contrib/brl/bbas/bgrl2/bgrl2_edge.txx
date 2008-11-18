@@ -1,13 +1,12 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_edge.txx
+// This is brl/bbas/bgrl2/bgrl2_edge.txx
 #ifndef bgrl2_edge_txx_
 #define bgrl2_edge_txx_
-
 //:
 // \file
 
 #include <bgrl2/bgrl2_edge.h>
 
-//: Returns target(edge) if v = source(edge) and source(edge) otherwise. 
+//: Returns target(edge) if v = source(edge) and source(edge) otherwise.
 template <class V>
 typename bgrl2_edge<V>::V_sptr bgrl2_edge<V>::opposite(V_sptr v)
 {
@@ -39,6 +38,6 @@ void bgrl2_edge<V>::print_summary( vcl_ostream& os ) const
 }
 
 #define BGRL2_EDGE_INSTANTIATE(E) \
-template class bgrl2_edge<E>
+template class bgrl2_edge<E >
 
 #endif // bgrl2_edge_txx_

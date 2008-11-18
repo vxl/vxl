@@ -10,7 +10,6 @@
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -219,15 +218,15 @@ unsigned vgl_intersection(const vgl_box_2d<Type>& box,
   vgl_line_2d<Type> line(line_seg.a(), line_seg.b(), line_seg.c());
   vgl_point_2d<Type> pi0, pi1;
   //if no intersection just return
-  if(!vgl_intersection<Type>(box, line, pi0, pi1))
+  if (!vgl_intersection<Type>(box, line, pi0, pi1))
     return 0;
   unsigned nint = 0;
   // check if intersection points are interior to the line segment
-  if(vgl_lineseg_test_point<Type>(pi0, line_seg)){
+  if (vgl_lineseg_test_point<Type>(pi0, line_seg)){
     p0 = pi0;
     nint++;
   }
-  if(vgl_lineseg_test_point<Type>(pi1, line_seg)){
+  if (vgl_lineseg_test_point<Type>(pi1, line_seg)){
     p1 = pi1;
     nint++;
   }
@@ -454,39 +453,39 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
   //check if any poly vertices are inside the box
   unsigned ns = poly.num_sheets();
   bool hit = false;
-  for( unsigned s = 0; s<ns&&!hit; ++s){
+  for ( unsigned s = 0; s<ns&&!hit; ++s){
     unsigned n = poly[s].size();
-    for(unsigned i = 0; i<n&&!hit; ++i){
+    for (unsigned i = 0; i<n&&!hit; ++i){
       vgl_point_2d<T> p = poly[s][i];
       hit = b.contains(p.x(), p.y());
     }
   }
-  if(hit) return true;
+  if (hit) return true;
   //check if any box vertices are inside the polygon
   T minx = b.min_x(), maxx = b.max_x();
   T miny = b.min_y(), maxy = b.max_y();
   hit = poly.contains(minx, miny) || poly.contains(maxx, maxy) ||
     poly.contains(minx, maxy) || poly.contains(maxx, miny);
-  if(hit) return true;
+  if (hit) return true;
   //check if any polygon edges intersect the box
-  for( unsigned s = 0; s<ns&&!hit; ++s)
+  for (unsigned s = 0; s<ns&&!hit; ++s)
+  {
+    unsigned n = poly[s].size();
+    vgl_point_2d<T> ia, ib;
+    vgl_point_2d<T> last = poly[s][0];
+    for (unsigned i = 1; i<n&&!hit; ++i)
     {
-      unsigned n = poly[s].size();
-      vgl_point_2d<T> ia, ib;
-      vgl_point_2d<T> last = poly[s][0];
-      for(unsigned i = 1; i<n&&!hit; ++i)
-        {
-          vgl_point_2d<T> p = poly[s][i];
-          vgl_line_segment_2d<T> l(last, p);
-          hit = vgl_intersection<T>(b, l, ia, ib)>0;
-          last = p;
-        }
-      if(!hit){
-        vgl_point_2d<T> start = poly[s][0];
-        vgl_line_segment_2d<T> ll(last, start);
-        hit = vgl_intersection<T>(b,ll, ia, ib)>0;
-      }
+      vgl_point_2d<T> p = poly[s][i];
+      vgl_line_segment_2d<T> l(last, p);
+      hit = vgl_intersection<T>(b, l, ia, ib)>0;
+      last = p;
     }
+    if (!hit) {
+      vgl_point_2d<T> start = poly[s][0];
+      vgl_line_segment_2d<T> ll(last, start);
+      hit = vgl_intersection<T>(b,ll, ia, ib)>0;
+    }
+  }
   return hit;
 }
 
@@ -497,10 +496,11 @@ template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
 template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
-template unsigned vgl_intersection(const vgl_box_2d<T>& , const vgl_line_segment_2d<T>& , vgl_point_2d<T>& , vgl_point_2d<T>& ); \
+template unsigned vgl_intersection(const vgl_box_2d<T >& , const vgl_line_segment_2d<T >& , vgl_point_2d<T >& , vgl_point_2d<T >& ); \
 template bool vgl_intersection(const vgl_line_2d<T >&, const vgl_line_2d<T >&, vgl_point_2d<T >&); \
 template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
 template bool vgl_intersection(vgl_box_2d<T > const&, vgl_polygon<T > const&)
+
 //: Instantiate only functions suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \

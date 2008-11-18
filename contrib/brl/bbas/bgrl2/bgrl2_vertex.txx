@@ -1,7 +1,6 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_vertex.txx
+// This is brl/bbas/bgrl2/bgrl2_vertex.txx
 #ifndef bgrl2_vertex_txx_
 #define bgrl2_vertex_txx_
-
 //:
 // \file
 
@@ -17,7 +16,7 @@ bool bgrl2_vertex<E>::del_edge(E_sptr e)
     if ((*itr) == e){
       //edge found
       in_edges_.erase(itr);
-      return true; 
+      return true;
     }
   }
 
@@ -27,11 +26,11 @@ bool bgrl2_vertex<E>::del_edge(E_sptr e)
     if ((*itr) == e){
       //edge found
       out_edges_.erase(itr);
-      return true; 
+      return true;
     }
   }
 
-  //edge not found 
+  //edge not found
   return false;
 }
 
@@ -45,10 +44,10 @@ bool bgrl2_vertex<E>::del_in_edge(E_sptr e)
     if ((*itr) == e){
       //edge found
       in_edges_.erase(itr);
-      return true; 
+      return true;
     }
   }
-  //edge not found 
+  //edge not found
   return false;
 }
 
@@ -62,10 +61,10 @@ bool bgrl2_vertex<E>::del_out_edge(E_sptr e)
     if ((*itr) == e){
       //edge found
       out_edges_.erase(itr);
-      return true; 
+      return true;
     }
   }
-  //edge not found 
+  //edge not found
   return false;
 }
 
@@ -83,7 +82,7 @@ void bgrl2_vertex<E>::del_all_in_edges()
 {
   //remove connections from all the in_edges to the node
   for ( edge_iterator itr = in_edges_.begin();
-        itr != in_edges_.end(); ++itr )    
+        itr != in_edges_.end(); ++itr )
     (*itr)->set_source(0);
 
   in_edges_.clear();
@@ -95,7 +94,7 @@ void bgrl2_vertex<E>::del_all_out_edges()
 {
   //remove connections from all the out_edges to the node
   for ( edge_iterator itr = out_edges_.begin();
-        itr != out_edges_.end(); ++itr )    
+        itr != out_edges_.end(); ++itr )
     (*itr)->set_source(0);
 
   out_edges_.clear();
@@ -105,11 +104,10 @@ void bgrl2_vertex<E>::del_all_out_edges()
 template <class E>
 void bgrl2_vertex<E>::print_summary( vcl_ostream& os ) const
 {
-  os << "[" << this->degree() << "]" << vcl_endl;
+  os << '[' << this->degree() << ']' << vcl_endl;
 }
 
 #define BGRL2_VERTEX_INSTANTIATE(E) \
-template class bgrl2_vertex<E>
+template class bgrl2_vertex<E >
 
 #endif // bgrl2_vertex_txx_
-
