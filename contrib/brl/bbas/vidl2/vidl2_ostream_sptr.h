@@ -9,7 +9,6 @@
 // \date 23 Mar 2007
 
 #include <vil/vil_smart_ptr.h>
-#include <vil/vil_smart_ptr.txx>
 #include <vidl2/vidl2_ostream.h>
 
 //: A smart pointer to an output stream
