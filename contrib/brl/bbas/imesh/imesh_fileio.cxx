@@ -360,8 +360,8 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
   const imesh_regular_face_array<3>& tris =
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
-  const int nverts = verts.size();
-  const int nfaces = tris.size();
+  const unsigned int nverts = verts.size();
+  const unsigned int nfaces = tris.size();
 
   vcl_string geometry_id = "geometry";
   vcl_string geometry_position_id = "geometry_position";

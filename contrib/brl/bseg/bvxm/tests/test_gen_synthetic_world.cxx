@@ -678,8 +678,8 @@ static void test_gen_synthetic_world()
                                  vgl_point_3d<double> (nx, ny, nz));
 
   unsigned max_scale=2;
-  float min_ocp_prob = 0.001;
-  float max_ocp_prob = 0.999;
+  float min_ocp_prob = 0.001f;
+  float max_ocp_prob = 0.999f;
 
   bvxm_world_params_sptr world_params = new bvxm_world_params();
   world_params->set_params("./test_gen_synthetic_world",

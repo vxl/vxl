@@ -629,10 +629,10 @@ void bmdl_classify<T>::fit_gaussian_to_peak(const vcl_vector<T>& data, T minv, T
   }
 
   // fit a parabola to estimate the range of the peak
-  T pp = (peaki+1 < num_bins)?hist[peaki+1]:0;
-  T pm = (peaki >= 1)?hist[peaki-1]:0;
+  unsigned int pp = (peaki+1 < num_bins)?hist[peaki+1]:0;
+  unsigned int pm = (peaki >= 1)        ?hist[peaki-1]:0;
   T ro;
-  T shift = interpolate_parabola(pm,peakv,pp,ro);
+  T shift = interpolate_parabola(T(pm),T(peakv),T(pp),ro);
   ro *= 3;
   maxv = (peaki+shift+ro)*binsize+minv;
   minv = (peaki+shift-ro)*binsize+minv;

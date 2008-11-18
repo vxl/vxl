@@ -6,7 +6,8 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_ctime.h>
-#include <vcl_cstdio.h>
+#include <vcl_cstdio.h> // for std::fclose()
+#include <vcl_cassert.h>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>
@@ -179,12 +180,12 @@ void bmdl_generate_mesh_process::update_mesh_coord(imesh_mesh& imesh,
 {
   imesh_vertex_array<3>& vertices = imesh.vertices<3>();
   for (unsigned v=0; v<vertices.size(); v++) {
-    double x = vertices(v,0);
-    double y = vertices(v,1);
-    double z = vertices(v,2);
+    unsigned int x = (unsigned int)vertices(v,0); // explicit cast from double
+    unsigned int y = (unsigned int)vertices(v,1);
+    unsigned int z = (unsigned int)vertices(v,2);
     bgeo_lvcs_sptr lvcs = cam->lvcs();
     double lon, lat, elev;
-    cam->img_to_wgs(x, y, z, lon,lat, elev);
+    cam->img_to_wgs(x, y, z, lon, lat, elev);
     vertices[v][0] = lon;
     vertices[v][1] = lat;
     vertices[v][2] = elev;
@@ -348,7 +349,8 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     meany /= verts.size();
 
     double lon, lat, elev;
-    lidar_cam->img_to_wgs(meanx, -meany, minz, lon,lat, elev);
+    assert(meanx >= 0 && meany <= 0 && minz >= 0);
+    lidar_cam->img_to_wgs((unsigned int)meanx, (unsigned int)(-meany), (unsigned int)minz, lon, lat, elev);
 
     vcl_stringstream ss;
     ss << "structure_" << i+num_of_buildings;
@@ -366,7 +368,7 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     write_kml_collada_wrapper(oskml,ss.str(),lookat,location,orientation,
                               vul_file::strip_directory(dae_fname));
     oskml.close();
-    
+
 #if (HAS_ZLIB)
     vcl_string zip_fname = ss.str() + ".kmz";
     zipFile zipf = zipOpen(zip_fname.c_str(), APPEND_STATUS_CREATE);
@@ -458,7 +460,7 @@ int bmdl_generate_mesh_process::zip_kmz(zipFile& zf, const char* filenameinzip)
   } while ((err == ZIP_OK) && (size_read>0));
 
   if (fin)
-    fclose(fin);
+    vcl_fclose(fin);
 
   if (err<0)
     err=ZIP_ERRNO;

@@ -440,7 +440,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     bvxm_voxel_slab<float> PL(frame_backproj.nx(), frame_backproj.ny(), frame_backproj.nz());
     PL.fill(0.0);
     vil_image_view_base_sptr lidar = metadata.img;
-    vnl_vector_fixed<float,3> sigmas(.5, .5, 0.0009);
+    vnl_vector_fixed<float,3> sigmas(.5f, .5f, 0.0009f);
     vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx,scale);
 
     for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++) {
