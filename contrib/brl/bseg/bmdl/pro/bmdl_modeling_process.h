@@ -61,7 +61,8 @@ class bmdl_modeling_process : public bprb_process
                  vil_image_resource_sptr ground,
                  vcl_string output_path,
                  unsigned x_dim, unsigned y_dim,
-                 unsigned x_overlap, unsigned y_overlap);
+                 unsigned x_overlap, unsigned y_overlap,
+                 float gthresh);
 };
 
 #endif // bmdl_modeling_process_h_

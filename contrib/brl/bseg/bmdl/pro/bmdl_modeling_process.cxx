@@ -37,8 +37,9 @@ bmdl_modeling_process::bmdl_modeling_process()
   //output
   output_data_.resize(0,brdb_value_sptr(0));
   output_types_.resize(0);
-  int j=0;
-  //output_types_[j++]= "vil_image_view_base_sptr";  // first return roi
+
+  if (!parameters()->add( "Ground Threshold" , "gthresh" , (float) 2.0 ))
+    vcl_cerr << "ERROR: Adding parameters in bmdl_modeling_process\n";
 }
 
 bool bmdl_modeling_process::execute()
@@ -73,6 +74,12 @@ bool bmdl_modeling_process::execute()
   brdb_value_t<unsigned>* input7 = static_cast<brdb_value_t<unsigned>* >(input_data_[7].ptr());
   unsigned y_over = input7->value();
 
+  float gthresh=0.0;
+  if (!parameters()->get_value("gthresh", gthresh)) {
+    vcl_cout << "bmdl_modeling_process -- has problem getting the parameter!\n";
+    return false;
+  }
+
   // check first return's validity
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
   if (!first_ret) {
@@ -96,7 +103,7 @@ bool bmdl_modeling_process::execute()
   vil_image_view_base_sptr first_roi=0, last_roi=0, ground_roi;
   vpgl_geo_camera* lidar_cam =0;
   if (!modeling(first_ret, last_ret, ground_img, output_path,
-    x_dim, y_dim, x_over, y_over)) {
+    x_dim, y_dim, x_over, y_over, gthresh)) {
     vcl_cout << "bmdl_modeling_process -- The process has failed!\n";
     return false;
   }
@@ -109,7 +116,8 @@ bool bmdl_modeling_process::modeling(vil_image_resource_sptr lidar_first,
                                      vil_image_resource_sptr ground,
                                      vcl_string output_path,
                                      unsigned x_dim, unsigned y_dim,
-                                     unsigned x_overlap, unsigned y_overlap )
+                                     unsigned x_overlap, unsigned y_overlap, 
+                                     float gthresh)
 {
   vil_image_view_base_sptr first_roi;
   vil_image_view_base_sptr last_roi;
@@ -131,7 +139,7 @@ bool bmdl_modeling_process::modeling(vil_image_resource_sptr lidar_first,
                                   first_roi, last_roi, ground_roi, geo_cam);
 
       bmdl_classify_process classify_process;
-      classify_process.classify(first_roi, last_roi, ground_roi, label_img, height_img);
+      classify_process.classify(first_roi, last_roi, ground_roi, label_img, height_img, gthresh);
 
       vcl_string poly_path = output_path + "//polygons.bin";
       bmdl_trace_boundaries_process trace_boundaries_process;
