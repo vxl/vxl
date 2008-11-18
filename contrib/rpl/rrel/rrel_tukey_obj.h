@@ -6,6 +6,7 @@
 // \brief Beaton-Tukey loss function.
 
 #include <rrel/rrel_m_est_obj.h>
+#include <vnl/vnl_math.h>
 
 //: Beaton-Tukey biweight.
 //  The cost function for the Beaton-Tukey biweight is
@@ -84,8 +85,32 @@ class rrel_tukey_obj : public rrel_m_est_obj
   virtual double wgt( double r, double s ) const
     { return rrel_m_est_obj::wgt(r, s); }
 
+  //: Fast version of the wgt(u) computation.
+  inline double wgt_fast( double u ) const;
+
+  //: Fast version of the rho(u) computation.
+  inline double rho_fast( double u ) const;
+
  private:
   double B_;
 };
+
+inline double
+rrel_tukey_obj::rho_fast( double u ) const
+{
+  if ( u < -B_ || u > B_ )
+    return 1.0;
+  else
+    return 1.0 - vnl_math_cube(1.0 - vnl_math_sqr(u/B_));
+}
+
+inline double
+rrel_tukey_obj::wgt_fast( double u ) const
+{
+  if ( u < -B_ || u > B_ )
+    return 0.0;
+  else
+    return vnl_math_sqr(1.0 - vnl_math_sqr(u/B_));
+}
 
 #endif // rrel_tukey_obj_h_

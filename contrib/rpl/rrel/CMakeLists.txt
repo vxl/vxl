@@ -1,6 +1,7 @@
 # rpl/rrel/CMakeLists.txt
 
 SET(rrel_sources
+                                rrel_fwd.h
  rrel_mlesac_obj.cxx            rrel_mlesac_obj.h
  rrel_ransac_obj.cxx            rrel_ransac_obj.h
  rrel_lms_obj.cxx               rrel_lms_obj.h

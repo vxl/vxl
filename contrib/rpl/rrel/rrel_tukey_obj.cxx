@@ -21,17 +21,11 @@ rrel_tukey_obj::~rrel_tukey_obj()
 double
 rrel_tukey_obj::rho( double u ) const
 {
-  if ( u < -B_ || u > B_ )
-    return 1.0;
-  else
-    return 1.0 - cube(1.0 - sqr(u/B_));
+  return rho_fast(u);
 }
 
 double
 rrel_tukey_obj::wgt( double u ) const
 {
-  if ( u < -B_ || u > B_ )
-    return 0.0;
-  else
-    return sqr(1.0 - sqr(u/B_));
+  return wgt_fast(u);
 }

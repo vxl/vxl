@@ -80,9 +80,30 @@ class rrel_trunc_quad_obj : public rrel_m_est_obj
   virtual double wgt( double r, double s ) const
     { return rrel_m_est_obj::wgt(r, s); }
 
+  //: Fast version of the wgt(u) computation.
+  inline double wgt_fast( double u ) const;
+
+  //: Fast version of the rho(u) computation.
+  inline double rho_fast( double u ) const;
+
+
  private:
   //: Squared threshold.
   double T_sqr_;
 };
+
+
+inline double
+rrel_trunc_quad_obj::rho_fast( double u ) const
+{
+  double u_sqr = u*u;
+  return ( u_sqr < T_sqr_ ) ? u_sqr : T_sqr_;
+}
+
+inline double
+rrel_trunc_quad_obj::wgt_fast( double u ) const
+{
+  return ( u*u < T_sqr_ ) ? 1 : 0.0;
+}
 
 #endif // rrel_trunc_quad_obj_h_

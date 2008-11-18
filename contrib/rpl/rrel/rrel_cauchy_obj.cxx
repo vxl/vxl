@@ -22,11 +22,11 @@ rrel_cauchy_obj::~rrel_cauchy_obj()
 double
 rrel_cauchy_obj::rho( double u ) const
 {
-  return 0.5 * vcl_log( 1 + sqr( u/C_ ) );
+  return rho_fast(u);
 }
 
 double
 rrel_cauchy_obj::wgt( double u ) const
 {
-  return 1.0 / ( 1 + sqr(u/C_) );
+  return wgt_fast(u);
 }

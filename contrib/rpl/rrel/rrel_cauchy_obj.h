@@ -7,6 +7,7 @@
 // Cauchy loss function.
 
 #include <rrel/rrel_m_est_obj.h>
+#include <vnl/vnl_math.h>
 
 //: Cauchy robust loss function.
 //  The objective function for the Cauchy M-estimator is
@@ -75,8 +76,27 @@ class rrel_cauchy_obj : public rrel_m_est_obj
   virtual double wgt( double r, double s ) const
     { return rrel_m_est_obj::wgt(r, s); }
 
+  //: Fast version of the wgt(u) computation.
+  inline double wgt_fast( double u ) const;
+
+  //: Fast version of the rho(u) computation.
+  inline double rho_fast( double u ) const;
+
+
  private:
   double C_;
 };
+
+inline double
+rrel_cauchy_obj::rho_fast( double u ) const
+{
+  return 0.5 * vcl_log( 1 + vnl_math_sqr( u/C_ ) );
+}
+
+inline double
+rrel_cauchy_obj::wgt_fast( double u ) const
+{
+  return 1.0 / ( 1 + vnl_math_sqr(u/C_) );
+}
 
 #endif // rrel_cauchy_obj_h_
