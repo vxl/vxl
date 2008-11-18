@@ -54,14 +54,16 @@ class bmdl_classify_process : public bprb_process
                  vil_image_view_base_sptr lidar_last,
                  vil_image_view_base_sptr ground,
                  vil_image_view_base_sptr& label_img,
-                 vil_image_view_base_sptr& height_img);
+                 vil_image_view_base_sptr& height_img, 
+                 float thresh);
 private:
   template <class T>
   bool classify(const vil_image_view<T>& lidar_first,
                 const vil_image_view<T>& lidar_last,
                 const vil_image_view<T>& ground,
                 vil_image_view<unsigned int>& label_img,
-                vil_image_view<T>& height_img);
+                vil_image_view<T>& height_img, 
+                T thresh);
 };
 
 #endif // bmdl_classify_process_h_

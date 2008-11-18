@@ -27,6 +27,9 @@ bmdl_classify_process::bmdl_classify_process()
   int j=0;
   output_types_[j++]= "vil_image_view_base_sptr";  // label image
   output_types_[j++]= "vil_image_view_base_sptr";  // height image
+
+  if (!parameters()->add( "Ground Threshold" , "gthresh" , (float) 2.0 ))
+    vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";
 }
 
 bool bmdl_classify_process::execute()
@@ -67,8 +70,14 @@ bool bmdl_classify_process::execute()
     return false;
   }
 
+  float gthresh=0.0;
+  if (!parameters()->get_value("gthresh", gthresh)) {
+    vcl_cout << "bmdl_classify_process -- has problem getting the parameter!\n";
+    return false;
+  }
+
   vil_image_view_base_sptr label_img=0, height_img=0;
-  if (!classify(first_ret, last_ret, ground, label_img, height_img)) {
+  if (!classify(first_ret, last_ret, ground, label_img, height_img, gthresh)) {
     vcl_cout << "bmdl_classify_process -- The process has failed!\n";
     return false;
   }
@@ -92,13 +101,14 @@ bool bmdl_classify_process::classify(const vil_image_view<T>& lidar_first,
                                      const vil_image_view<T>& lidar_last,
                                      const vil_image_view<T>& ground,
                                      vil_image_view<unsigned int>& label_img,
-                                     vil_image_view<T>& height_img)
+                                     vil_image_view<T>& height_img,
+                                     T thresh)
 {
   bmdl_classify<T> classifier;
   classifier.set_lidar_data(lidar_first,lidar_last);
   classifier.set_bare_earth(ground);
   //classifier.estimate_height_noise_stdev();
-  classifier.label_lidar();
+  classifier.label_lidar(thresh);
   label_img = classifier.labels();
   height_img = classifier.heights();
   return true;
@@ -109,7 +119,8 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
                                      vil_image_view_base_sptr lidar_last,
                                      vil_image_view_base_sptr ground,
                                      vil_image_view_base_sptr& label_img,
-                                     vil_image_view_base_sptr& height_img)
+                                     vil_image_view_base_sptr& height_img,
+                                     float thresh)
 {
   label_img = new vil_image_view<unsigned int>();
 
@@ -122,7 +133,7 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
         height_img = new vil_image_view<float>();
         return classify<float>(lidar_first, lidar_last, ground,
                                (vil_image_view<unsigned int>&)(*label_img),
-                               (vil_image_view<float>&)(*height_img));
+                               (vil_image_view<float>&)(*height_img), thresh);
       }
     }
     else
@@ -141,7 +152,7 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
         height_img = new vil_image_view<double>();
         return classify<double>(lidar_first, lidar_last, ground,
                                 (vil_image_view<unsigned int>&)(*label_img),
-                                (vil_image_view<double>&)(*height_img));
+                                (vil_image_view<double>&)(*height_img), (double) thresh);
       }
     }
     else
