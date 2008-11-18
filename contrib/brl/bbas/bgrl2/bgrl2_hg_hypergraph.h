@@ -1,6 +1,6 @@
 // This is brl/bbas/bgrl2/bgrl2_hg_hypergraph.h
-#ifndef dbhg_hypergraph_h_
-#define dbhg_hypergraph_h_
+#ifndef bgrl2_hypergraph_h_
+#define bgrl2_hypergraph_h_
 //:
 // \file
 // \author Ming-Ching Chang
@@ -88,4 +88,4 @@ class bgrl2_hg_hypergraph : public bgrl2_hg_graph
   virtual ~bgrl2_hg_hypergraph() {}
 };
 
-#endif
+#endif // bgrl2_hypergraph_h_

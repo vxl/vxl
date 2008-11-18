@@ -1,4 +1,6 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_hg_edge.h
+// This is brl/bbas/bgrl2/bgrl2_hg_edge.h
+#ifndef bgrl2_hg_edge_h_
+#define bgrl2_hg_edge_h_
 //:
 // \file
 // \author Ming-Ching Chang
@@ -9,35 +11,33 @@
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
 
-#ifndef _bgrl2_hg_edge_h_
-#define _bgrl2_hg_edge_h_
-
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
 #include <bgrl2/bgrl2_edge.h>
 
-class dbhg_hg_vertex;
-class dbhg_hg_hyperedge;
+class bgrl2_hg_vertex;
+class bgrl2_hg_hyperedge;
 
-class bgrl2_hg_edge //: public bgrl2_edge
+class bgrl2_hg_edge // : public bgrl2_edge
 {
-protected:
+ protected:
   int id_;
-  //: connecting_vertices_[0] is the starting vertex, 
-  //  connecting_vertices_[1] is the ending vertex.
+  //: connecting_vertices_[0] is the starting vertex, [1] the ending vertex.
   bgrl2_hg_vertex*                connecting_vertices_[2];
 
   vcl_vector<bgrl2_hg_hyperedge*> connecting_hyperedges_;
 
-public:
+ public:
   const int id() const {
     return id_;
   }
   void set_id (int id) {
     id_ = id;
   }
-  //: ====== Graph connectivity query functions ======
+
+  // ====== Graph connectivity query functions ======
+
   bgrl2_hg_vertex* connecting_vertices (int i) {
     return connecting_vertices_[i];
   }
@@ -56,9 +56,9 @@ public:
     }
   }
   const bool is_self_loop () const {
-    return (connecting_vertices_[0] == connecting_vertices_[1]);
+    return connecting_vertices_[0] == connecting_vertices_[1];
   }
-  
+
   bgrl2_hg_hyperedge* connecting_hyperedges (unsigned int i) {
     assert (i<connecting_hyperedges_.size());
     return connecting_hyperedges_[i];
@@ -67,7 +67,8 @@ public:
     return connecting_hyperedges_;
   }
 
-  //: ====== Graph connectivity modification functions ======
+  // ====== Graph connectivity modification functions ======
+
   void connect_vertex (int i, bgrl2_hg_vertex* vertex) {
     assert (i==0 || i==1);
     connecting_vertices_[i] = vertex;
@@ -76,7 +77,7 @@ public:
     assert (i==0 || i==1);
     connecting_vertices_[i] = NULL;
   }
-  
+
   void connect_hyperedge (bgrl2_hg_hyperedge* hyperedge) {
     connecting_hyperedges_.push_back (hyperedge);
   }
@@ -93,8 +94,9 @@ public:
     return false;
   }
 
-  //: ====== Constructor/Destructor and other functions ======
-  bgrl2_hg_edge () //: bgrl2_edge () 
+  // ====== Constructor/Destructor and other functions ======
+
+  bgrl2_hg_edge ()
   {
     connecting_vertices_[0] = NULL;
     connecting_vertices_[1] = NULL;
@@ -103,7 +105,6 @@ public:
   ~bgrl2_hg_edge ()
   {
   }
-
 };
 
-#endif
+#endif // bgrl2_hg_edge_h_
