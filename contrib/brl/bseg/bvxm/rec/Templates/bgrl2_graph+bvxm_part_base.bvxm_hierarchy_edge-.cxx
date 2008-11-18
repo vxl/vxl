@@ -4,4 +4,3 @@
 #include <rec/bvxm_hierarchy_edge.h>
 
 BGRL2_GRAPH_INSTANTIATE(bvxm_part_base, bvxm_hierarchy_edge);
-
