@@ -4,12 +4,8 @@
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_convert.h>
 #include <vil/io/vil_io_image_view.h>
-#include <brip/brip_vil_float_ops.h>
-
 #include <vil/vil_new.h>
-#include <vil/vil_save.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vul/vul_timer.h>
 
@@ -67,15 +63,15 @@ bool bvxm_rec_structure_process::execute()
     case 4: { h = bvxm_part_hierarchy_builder::construct_detector_roi1_4(); } break;
     default: { vcl_cout << "In bvxm_rec_structure_process::execute() -- Unrecognized detector type!!\n"; return false; }
   }
-  
-  //: now extract instances of primitive part types in h
+
+  // now extract instances of primitive part types in h
   vcl_vector<bvxm_part_instance_sptr> parts_0;
   vcl_vector<bvxm_part_instance_sptr>& d_ins = h->get_dummy_primitive_instances();
   unsigned prev_size = parts_0.size();
   for (unsigned i = 0; i < d_ins.size(); i++) {
-    if (d_ins[i]->kind_ != bvxm_part_instance_kind::GAUSSIAN) 
+    if (d_ins[i]->kind_ != bvxm_part_instance_kind::GAUSSIAN)
       return false;
-    
+
     bvxm_part_gaussian_sptr gp = d_ins[i]->cast_to_gaussian();
     if (!gp)
       return false;
@@ -92,17 +88,17 @@ bool bvxm_rec_structure_process::execute()
   for (unsigned l = 1; l <= highest; l++) {
     vcl_vector<bvxm_part_instance_sptr> parts_current;
     h->extract_upper_layer(parts_upper_most, ni, nj, parts_current);
-    vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << "\n";
+    vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << '\n';
     parts_upper_most.clear();
     parts_upper_most = parts_current;
   }
 
   vil_image_view<float> output_map_float(ni, nj);
   bvxm_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);
-  
+
   vil_image_view<vxl_byte> output_img(ni, nj, 3);
   bvxm_part_hierarchy::generate_output_img(parts_upper_most, orig_img, output_img);
-  
+
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(output_map_float);
   brdb_value_sptr output = new brdb_value_t<vil_image_view_base_sptr>(out_map_sptr);
   output_data_[0] = output;

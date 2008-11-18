@@ -4,8 +4,8 @@
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_convert.h>
 #include <vil/io/vil_io_image_view.h>
+#include <vil/vil_convert.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_camera.h>
 
@@ -14,8 +14,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_util.h>
-#include <vil/vil_new.h>
-#include <brip/brip_vil_float_ops.h>
 #include <vul/vul_timer.h>
 
 #include <rec/bvxm_bg_pair_density.h>
@@ -63,7 +61,7 @@ bool bvxm_rec_update_changes_process::execute()
   unsigned n = input2->value();  // number of passes
 
   brdb_value_t<float>* input3 = static_cast<brdb_value_t<float>* >(input_data_[3].ptr());
-  float sigma = input3->value();  // 
+  float sigma = input3->value();  //
 
   unsigned ni = change_map_f.ni();
   unsigned nj = change_map_f.nj();
@@ -85,10 +83,10 @@ bool bvxm_rec_update_changes_process::execute()
   fgbgp.set_sigma(sigma);
   vcl_cout << "\t update process running with sigma: " << sigma << vcl_endl;
 
-  bvxm_bayesian_propagation bp(orig_img, change_map_f); 
+  bvxm_bayesian_propagation bp(orig_img, change_map_f);
   bp.initialize_bg_map(); // just turning change_map_f (a density map) into a probability map with values in [0,1]
   bp.run_using_prob_density_as_bgp(fgp, fgbgp, n);
-  
+
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(bp.bg_map_);
   brdb_value_sptr output = new brdb_value_t<vil_image_view_base_sptr>(out_map_sptr);
   output_data_[0] = output;

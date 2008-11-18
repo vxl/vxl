@@ -6,12 +6,8 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_convert.h>
 #include <vil/io/vil_io_image_view.h>
-#include <brip/brip_vil_float_ops.h>
-
-#include <vil/vil_new.h>
 #include <vil/vil_save.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vul/vul_timer.h>
 
 #include <rec/bvxm_part_hierarchy_builder.h>
 #include <rec/bvxm_part_hierarchy.h>
@@ -23,8 +19,8 @@ bvxm_prob_map_supress_process::bvxm_prob_map_supress_process()
   //inputs
   input_data_.resize(2,brdb_value_sptr(0));
   input_types_.resize(2);
-  input_types_[0] = "vil_image_view_base_sptr";      // input map (density or prob map (i.e. values in [0,1]) to be corrected with respect to supressor map
-  input_types_[1] = "vil_image_view_base_sptr";      // supressor map (another prob map)
+  input_types_[0] = "vil_image_view_base_sptr";      // input map (density or prob map (i.e. values in [0,1]) to be corrected with respect to suppressor map
+  input_types_[1] = "vil_image_view_base_sptr";      // suppressor map (another prob map)
 
   //output
   output_data_.resize(2,brdb_value_sptr(0));
@@ -73,7 +69,7 @@ bool bvxm_prob_map_supress_process::execute()
   vil_save(dummy_byte, "./input_map_inverse.png");
 
   vil_math_value_range(sup_map, min, max);
-  
+
   float min2, max2;
   vil_image_view<float> prod(ni, nj), prod_scaled(ni, nj);
   vil_math_image_product(dummy2, sup_map, prod);
@@ -92,7 +88,7 @@ bool bvxm_prob_map_supress_process::execute()
   vil_math_image_product(dummy2, dummy4, output_map);
   //vil_math_value_range(output_map, min, max);
   //vcl_cout << "\t output map float value range after multiplication, min: " << min << " max: " << max << vcl_endl;
-  
+
   vil_convert_stretch_range_limited(output_map, dummy_byte, 0.0f, max);
   vil_save(dummy_byte, "./output_map_mult.png");
 
