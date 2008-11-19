@@ -101,6 +101,10 @@ class mfpf_mr_point_finder
                     vcl_vector<double>& fits,
                     int prune_level=-1);
 
+  //: Save an image summarising each model in the hierachy
+  //  Saves images to basepath_L0.png, basepath_L1.png ...
+  void save_images_of_models(const vcl_string& basepath) const;
+
   //: Version number for I/O
   short version_no() const;
 

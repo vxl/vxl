@@ -548,7 +548,7 @@ void mfpf_point_finder::refine_match(const vimt_image_2d_of<float>& image,
 //  For instance, creates an image of the mean template used for
 //  search.
 //  Default implementation does nothing - returns an empty image.
-void mfpf_point_finder::get_image_of_model(vil_image_view<vxl_byte>& image)
+void mfpf_point_finder::get_image_of_model(vil_image_view<vxl_byte>& image) const
 {
   // Return empty image.
   image.set_size(0,0);

@@ -316,7 +316,7 @@ void mfpf_norm_corr2d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
 }
 
 //: Return an image of the kernel
-void mfpf_norm_corr2d::get_image_of_model(vil_image_view<vxl_byte>& image)
+void mfpf_norm_corr2d::get_image_of_model(vil_image_view<vxl_byte>& image) const
 {
   vil_convert_stretch_range(kernel_,image);
 }

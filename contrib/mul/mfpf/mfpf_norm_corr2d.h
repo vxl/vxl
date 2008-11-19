@@ -99,7 +99,7 @@ class mfpf_norm_corr2d : public mfpf_point_finder
   virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
 
   //: Return an image of the kernel
-  virtual void get_image_of_model(vil_image_view<vxl_byte>& image);
+  virtual void get_image_of_model(vil_image_view<vxl_byte>& image) const;
 
   //: Version number for I/O
   short version_no() const;

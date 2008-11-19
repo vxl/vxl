@@ -7,9 +7,11 @@
 #include <mfpf/mfpf_prune_overlaps.h>
 
 #include <vimt/vimt_image_pyramid.h>
+#include <vil/vil_save.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_sstream.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -219,6 +221,24 @@ void mfpf_mr_point_finder::multi_search_and_prune(
     }
   }
 }
+
+//: Save an image summarising each model in the hierachy
+//  Saves images to basepath_L0.png, basepath_L1.png ...
+void mfpf_mr_point_finder::save_images_of_models(const vcl_string& basepath) const
+{
+  for (unsigned L=0;L<size();++L)
+  {
+    vcl_stringstream s;
+    s<<basepath<<"_L"<<L<<".png";
+    vil_image_view<vxl_byte> image;
+    finder(L).get_image_of_model(image);
+    if (vil_save(image,s.str().c_str()))
+      vcl_cout<<"Saved image to "<<s.str()<<vcl_endl;
+    else
+      vcl_cout<<"Failed to save image to "<<s.str()<<vcl_endl;
+  }
+}
+
 
 //=======================================================================
 // Method: version_no

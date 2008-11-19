@@ -39,6 +39,9 @@ class mfpf_ssd_vec_cost : public mfpf_vec_cost
   //: Evaluate weighted sum of absolute difference from mean
   virtual double evaluate(const vnl_vector<double>& v);
 
+  //: Return the mean
+  virtual void get_average(vnl_vector<double>& v) const;
+
   //: Version number for I/O
   short version_no() const;
 

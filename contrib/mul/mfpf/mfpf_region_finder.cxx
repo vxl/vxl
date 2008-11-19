@@ -17,6 +17,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
+#include <vnl/vnl_vector_ref.h>
 
 //=======================================================================
 // Dflt ctor
@@ -314,6 +315,28 @@ void mfpf_region_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) con
   pts[6]=vgl_point_2d<double>(roi_ni_,roi_nj_)-r;
 }
 
+//: Return an image of the region of interest
+void mfpf_region_finder::get_image_of_model(vil_image_view<vxl_byte>& image) const
+{
+  vnl_vector<double> mean;
+  cost().get_average(mean);
+
+  assert(mean.size()>=n_pixels_);
+
+  // Just copy first plane
+  vnl_vector_ref<double> mean1(n_pixels_,mean.data_block());
+  double min1=mean1.min_value();
+  double max1=mean1.max_value();
+  double s =255/(max1-min1);
+  image.set_size(roi_ni_,roi_nj_);
+  image.fill(0);
+  unsigned q=0;
+  for (unsigned k=0;k<roi_.size();++k)
+  {
+    for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
+      image(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+  }
+}
 
 //=======================================================================
 // Method: is_a

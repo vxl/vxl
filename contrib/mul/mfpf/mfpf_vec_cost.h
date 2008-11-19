@@ -26,6 +26,11 @@ class mfpf_vec_cost
   //: Evaluate function given vector
   virtual double evaluate(const vnl_vector<double>& v)=0;
 
+  //: Return a vector which is the most likely expected vector
+  //  ie return the mean for a statistical model.
+  //  Used when displaying results
+  virtual void get_average(vnl_vector<double>& v) const=0;
+
   //: Version number for I/O
   short version_no() const;
 

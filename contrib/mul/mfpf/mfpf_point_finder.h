@@ -230,7 +230,7 @@ class mfpf_point_finder
   //  For instance, creates an image of the mean template used for
   //  search.
   //  Default implementation does nothing - returns an empty image.
-  virtual void get_image_of_model(vil_image_view<vxl_byte>& image);
+  virtual void get_image_of_model(vil_image_view<vxl_byte>& image) const;
 
   //: Version number for I/O
   short version_no() const;

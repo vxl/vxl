@@ -48,6 +48,11 @@ double mfpf_sad_vec_cost::evaluate(const vnl_vector<double>& v)
   return sum;
 }
 
+//: Return the mean
+void mfpf_sad_vec_cost::get_average(vnl_vector<double>& v) const
+{
+  v=mean_;
+}
 
 //=======================================================================
 // Method: version_no
