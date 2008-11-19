@@ -336,7 +336,9 @@ vidl2_v4l2_istream* vidl2_gui_param_dialog::v4l2_istream()
     return NULL;
   }
   return i_stream;
-
+#else // VIDL2_HAS_VIDEODEV2
+  vgui_error_dialog("v4l2 support not compiled in");
+  return NULL;
 #endif // VIDL2_HAS_VIDEODEV2
 }
 
