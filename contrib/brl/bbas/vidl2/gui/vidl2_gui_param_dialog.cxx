@@ -25,13 +25,16 @@
 #include <vidl2/vidl2_dc1394_istream.h>
 #endif
 
-
-
+#if VIDL2_HAS_VIDEODEV2
+#include <vidl2/vidl2_v4l2_devices.h>
+#include <vidl2/vidl2_v4l2_istream.h>
+//#include <vidl2/v4l2_pixel_format.h>
+#endif
 
 //: Use vgui dialogs to prompt the user for parameters and open an istream
 vidl2_istream* vidl2_gui_open_istream_dialog()
 {
-  enum stream_type {IMAGE_LIST, FFMPEG, DC1394};
+  enum stream_type {IMAGE_LIST, FFMPEG, DC1394, V4L2};
   vgui_dialog dlg("Select an Input Stream Type");
 
   vcl_vector<vcl_string> choices;
@@ -42,6 +45,9 @@ vidl2_istream* vidl2_gui_open_istream_dialog()
 #endif
 #if VIDL2_HAS_DC1394
   choices.push_back( "dc1394" ); choice_codes.push_back(DC1394);
+#endif
+#if VIDL2_HAS_VIDEODEV2
+  choices.push_back( "Video for Linux 2" ); choice_codes.push_back(V4L2);
 #endif
 
   static int idx = 0;
@@ -60,6 +66,10 @@ vidl2_istream* vidl2_gui_open_istream_dialog()
 #if VIDL2_HAS_DC1394
     case DC1394:
       return vidl2_gui_param_dialog::dc1394_istream();
+#endif
+#if VIDL2_HAS_VIDEODEV2
+    case V4L2:
+      return vidl2_gui_param_dialog::v4l2_istream();
 #endif
     default:
       break;
@@ -255,7 +265,80 @@ vidl2_ffmpeg_ostream* vidl2_gui_param_dialog::ffmpeg_ostream()
 #endif // VIDL2_HAS_FFMPEG
 }
 
+//-----------------------------------------------------------------------------
+//: Use vgui dialogs to open a v4l2 istream
+//-----------------------------------------------------------------------------
+vidl2_v4l2_istream* vidl2_gui_param_dialog::v4l2_istream()
+{
+#if VIDL2_HAS_VIDEODEV2
+  vidl2_v4l2_devices& devs= vidl2_v4l2_devices::all();  // simpler name
 
+  // Select Device
+  int device_id=0;
+  if (devs.size()==0) {
+    vgui_error_dialog("No video devices found");
+    return NULL;  
+  }
+  else if (devs.size() > 1){
+    vgui_dialog dlg("Select a video device");
+    vcl_vector<vcl_string> video_names;
+    for (unsigned int i=0; i<devs.size(); ++i){
+      vcl_stringstream ss;
+      ss << devs(i).card_name() 
+         << " (" << devs(i).device_file() << ")";
+      video_names.push_back(ss.str());
+    }
+    dlg.choice("Device",video_names,device_id);
+    if (!dlg.ask())
+      return NULL;
+  }
+  // Select Input
+  int input_id=0;
+  if (devs(device_id).n_inputs()>1) {
+    vgui_dialog dlg("Select input");
+    vcl_vector<vcl_string> input_names;
+    for (unsigned int i=0; i<devs(device_id).n_inputs(); ++i){
+      input_names.push_back(devs(device_id).card_name()+"->"+
+                            devs(device_id).input(i).name());
+    }
+    dlg.choice("Input",input_names,input_id);
+    if (!dlg.ask())
+      return NULL;
+  }
+  // Selecting input
+  if (!devs(device_id).set_input(input_id))  {
+    vgui_error_dialog("Input not set");
+    return NULL;
+  }
+  // Has a valid format been detected?
+  if (!devs(device_id).format_is_set())  {
+    vgui_error_dialog("A valid format has not been detected");
+    return NULL;
+  }
+  // Set width and height
+  if (!devs(device_id).set_v4l2_format(
+                                 devs(device_id).get_v4l2_format(),
+                                 640,480)) { // could w,h be changed?
+    vgui_error_dialog("Size 640x480 not possible");
+    return NULL;
+  }
+  // checking if device is ok for capturing
+  if (!devs(device_id)) {
+    vgui_error_dialog(("Error in device: "+
+                       devs(device_id).get_error()).c_str());
+    return NULL;
+  }
+
+  vidl2_v4l2_istream* i_stream = new vidl2_v4l2_istream(devs(device_id));
+  if (!i_stream->is_valid()) {
+    vgui_error_dialog("Failed to create input stream");
+    delete i_stream;
+    return NULL;
+  }
+  return i_stream;
+
+#endif // VIDL2_HAS_VIDEODEV2
+}
 
 //-----------------------------------------------------------------------------
 //: Use vgui dialogs to open a dc1394 istream

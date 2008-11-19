@@ -27,6 +27,7 @@ class vidl2_image_list_ostream;
 class vidl2_ffmpeg_istream;
 class vidl2_ffmpeg_ostream;
 class vidl2_dc1394_istream;
+class vidl2_v4l2_istream;
 
 
 //: Use vgui dialogs to prompt the user for parameters and open an istream
@@ -57,6 +58,9 @@ struct vidl2_gui_param_dialog
 
   //: Use vgui dialogs to open a dc1394 istream
   static vidl2_dc1394_istream* dc1394_istream();
+
+  //: Use vgui dialogs to open a v4l2 istream
+  static vidl2_v4l2_istream* v4l2_istream();
 
   static bool update_iidc1394_params(vcl_vector<vidl2_iidc1394_params::
                                                 feature_options>& features);
