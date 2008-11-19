@@ -184,6 +184,14 @@ void mfpf_mr_point_finder_builder::add_example(
     const vimt_image_2d_of<float>& image
       = static_cast<const vimt_image_2d_of<float>&>(image_pyr(im_L));
 
+    if (image.image().size()==0)
+    {
+      vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n";
+      vcl_cerr<<"This is required for level "<<L<<" of the mfpf model."<<vcl_endl;
+      vcl_cerr<<"Check range for which pyramid is defined."<<vcl_endl;
+      abort();
+    }
+
     builder(L).add_example(image,p,u);
   }
 }

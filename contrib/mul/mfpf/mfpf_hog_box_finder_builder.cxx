@@ -53,6 +53,8 @@ void mfpf_hog_box_finder_builder::set_defaults()
   step_size_=1.0;
   search_ni_=5;
   search_nj_=5;
+  nA_=0;
+  dA_=0.0;
 
   nA_bins_=8;
   full360_=true;

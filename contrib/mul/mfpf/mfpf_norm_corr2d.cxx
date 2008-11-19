@@ -16,6 +16,8 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
+#include <vil/vil_convert.h>
+
 //=======================================================================
 // Dflt ctor
 //=======================================================================
@@ -66,6 +68,7 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k,
   // Normalise so that kernel_ has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
   ss-=(mean*mean*ni*nj);
+  assert(ss>1e-6);  // If near zero, flat region - can't use correlation
   double s=1.0;
   if (ss>0) s = vcl_sqrt(1.0/ss);
   vil_math_scale_and_offset_values(kernel_,s,-s*mean);
@@ -312,6 +315,12 @@ void mfpf_norm_corr2d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
   pts[6]=vgl_point_2d<double>(roi_ni,roi_nj)-r;
 }
 
+//: Return an image of the kernel
+void mfpf_norm_corr2d::get_image_of_model(vil_image_view<vxl_byte>& image)
+{
+  vil_convert_stretch_range(kernel_,image);
+}
+
 //=======================================================================
 // Method: is_a
 //=======================================================================
@@ -335,6 +344,7 @@ void mfpf_norm_corr2d::print_summary(vcl_ostream& os) const
 {
   os<<"{  size: "<<kernel_.ni()<<" x "<<kernel_.nj();
   mfpf_point_finder::print_summary(os);
+  os<<" overlap_f: "<<overlap_f_;
   os<<" }";
 }
 

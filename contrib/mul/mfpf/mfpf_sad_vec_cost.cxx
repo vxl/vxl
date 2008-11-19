@@ -33,6 +33,8 @@ void mfpf_sad_vec_cost::set(const vnl_vector<double>& mean,
   assert(mean.size()==wts.size());
   mean_=mean;
   wts_ =wts;
+vcl_cout<<"mfpf_sad_vec_cost::set : "<<*this<<vcl_endl;
+if (wts.sum()>9999) abort();
 }
 
 //: Evaluate weighted sum of absolute difference from mean

@@ -20,6 +20,9 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
+#include <vil/vil_save.h>
+#include <vil/vil_convert.h>
+
 //=======================================================================
 // Dflt ctor
 //=======================================================================
@@ -104,6 +107,11 @@ static void normalize(vil_image_view<double>& im)
 
   assert(!vnl_math_isnan(sum));
 
+  if (ss<1e-6) 
+  {
+    vcl_cerr<<"Warning: Almost flat region in mfpf_norm_corr2d_builder"<<vcl_endl;
+    vcl_cerr<<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
+  }
 
   // Normalise so that im has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
@@ -118,6 +126,8 @@ void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& im
                                                const vgl_point_2d<double>& p,
                                                const vgl_vector_2d<double>& u)
 {
+  assert(image.image().size()>0);
+
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
 

@@ -98,6 +98,9 @@ class mfpf_norm_corr2d : public mfpf_point_finder
   //  Used for display purposes.
   virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
 
+  //: Return an image of the kernel
+  virtual void get_image_of_model(vil_image_view<vxl_byte>& image);
+
   //: Version number for I/O
   short version_no() const;
 

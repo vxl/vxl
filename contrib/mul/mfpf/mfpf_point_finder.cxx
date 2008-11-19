@@ -544,6 +544,17 @@ void mfpf_point_finder::refine_match(const vimt_image_2d_of<float>& image,
   cost_fn.get_pose(v,p,u);
 }
 
+//: Create an image summarising the average model (where possible)
+//  For instance, creates an image of the mean template used for
+//  search.
+//  Default implementation does nothing - returns an empty image.
+void mfpf_point_finder::get_image_of_model(vil_image_view<vxl_byte>& image)
+{
+  // Return empty image.
+  image.set_size(0,0);
+}
+
+
 //: Return true if modelled regions at pose1 and pose2 overlap
 bool mfpf_point_finder::overlap(const mfpf_pose& pose1,
                                 const mfpf_pose& pose2) const

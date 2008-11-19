@@ -13,6 +13,7 @@
 #include <vgl/vgl_vector_2d.h>
 
 #include <mfpf/mfpf_pose.h>
+#include <vxl_config.h>  // For vxl_byte
 
 //: Base for classes which locate feature points
 //  The object will be set up by an
@@ -224,6 +225,12 @@ class mfpf_point_finder
   //  Used for display purposes.  Join the points with an open
   //  contour to get a representation.
   virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const=0;
+
+  //: Create an image summarising the average model (where possible)
+  //  For instance, creates an image of the mean template used for
+  //  search.
+  //  Default implementation does nothing - returns an empty image.
+  virtual void get_image_of_model(vil_image_view<vxl_byte>& image);
 
   //: Version number for I/O
   short version_no() const;
