@@ -35,7 +35,7 @@ static void test_bvxm_hierarchy_builder()
 
   vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
 
-  bvxm_part_hierarchy_sptr h = bvxm_part_hierarchy_builder::construct_vehicle_detector_roi1_0();
+  bvxm_part_hierarchy_sptr h = bvxm_part_hierarchy_builder::construct_detector_roi1_0();
   TEST("test hierarchy", !h, false);
   vcl_cout << "constructed: " << h->number_of_vertices() << " vertices in the vehicle detector for roi1\n"
            << "constructed: " << h->number_of_edges() << " edges in the vehicle detector for roi1\n";
