@@ -490,7 +490,7 @@ bool vidl2_v4l2_device::close()
   return true;
 }
 
-int vidl2_v4l2_device::current_input() const
+unsigned int vidl2_v4l2_device::current_input() const
 {
   if (!is_open())
     return n_inputs();
@@ -505,11 +505,11 @@ int vidl2_v4l2_device::current_input() const
   return index;
 }
 
-bool vidl2_v4l2_device::set_input(int i)
+bool vidl2_v4l2_device::set_input(unsigned int i)
 {
   if (current_input()==i)
     return true;
-  if (!is_open() || i<0 || i>=n_inputs())
+  if (!is_open() || i>=n_inputs())
     return false;
 
     if (capturing)
@@ -534,7 +534,7 @@ operator << (vcl_ostream &os, const vidl2_v4l2_device & dev)
 {
   os << dev.device_file() << " -> " <<  dev.card_name()<< vcl_endl
      << "  " << dev.n_inputs() << " inputs:"<< vcl_endl;
-  for (int j=0;j<dev.n_inputs();++j){
+  for (unsigned int j=0;j<dev.n_inputs();++j){
     os << "    " <<  j << ": " << dev.input(j).name();
     if (dev.input(j).is_tuner())
       os << " is tuner" << vcl_endl;

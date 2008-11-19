@@ -35,9 +35,12 @@ class vidl2_v4l2_devices
   static vidl2_v4l2_devices& all();
 
   //: Return number of detected devices in the system
-  int size() const { return vecdev.size(); }
-  //: Return device i (0..size()-1)
-  vidl2_v4l2_device& device(unsigned int i) {return *vecdev[i];}
+  unsigned int size() const { return vecdev.size(); }
+  // Return device i (0..size()-1)
+  //vidl2_v4l2_device& device(unsigned int i) {return *vecdev[i];}
+  //: Return device i (0..size()-1) 
+  vidl2_v4l2_device& operator()(unsigned int i) {return *vecdev[i];}
+
 };
 
 #endif // vidl2_v4l2_devices_h_

@@ -14,9 +14,9 @@ int select_device(vidl2_v4l2_devices& devs)
   vcl_cout << "Looking for devices..." << vcl_endl;
   vcl_cout << "Numbers of found devices: " << devs.size() << vcl_endl;
 
-  for (int i=0; i< devs.size(); ++i) {
+  for (unsigned int i=0; i< devs.size(); ++i) {
     vcl_cout << "DEVICE  " << i << ": " <<vcl_endl;
-    vcl_cout <<  devs.device(i);
+    vcl_cout <<  devs(i);
   }
 
   int dnum=-1; // device selected
@@ -30,7 +30,7 @@ int select_device(vidl2_v4l2_devices& devs)
         do{
           vcl_cout << "Select Device Number: ";
           vcl_cin >> dnum;
-        }while (dnum<0 || dnum>=devs.size());
+        }while (dnum<0 || dnum>=(int) devs.size());
       }
   return dnum;
 }
@@ -61,7 +61,7 @@ bool configure_input(vidl2_v4l2_device& dev)
      do {
        vcl_cout << "Select Input Number: ";
        vcl_cin >> inum;
-     }while (inum<0 || inum>=dev.n_inputs());
+     }while (inum<0 || inum>=(int)dev.n_inputs());
    if (!dev.set_input(inum))  {
      vcl_cerr << "Input " << inum << " not set" << vcl_endl;
      return false;
@@ -125,11 +125,10 @@ int main()
   int dnum=select_device(devs);;
 
   if (dnum>=0) {
-    vidl2_v4l2_device& selected= devs.device(dnum);
-    if (configure_input(selected)) {
-      for (int i=0;i<selected.n_controls(); ++i)
-        vcl_cout << i << "->" << selected.get_control(i)->description() << vcl_endl;
-      save_frames(selected); 
+    if (configure_input(devs(dnum))) {
+      for (int i=0;i<devs(dnum).n_controls(); ++i)
+        vcl_cout << i << "->" << devs(dnum).get_control(i)->description() << vcl_endl;
+      save_frames(devs(dnum)); 
     }
   }
 #if 0

@@ -102,17 +102,17 @@ class vidl2_v4l2_device
   //: Friendly name of the device.
   vcl_string card_name() const { return card_name_; }
   //: Number of inputs in device
-  int n_inputs() const { return inputs_.size(); }
+  unsigned int n_inputs() const { return inputs_.size(); }
   //: Inputs been used (0 to ninputs-1)
   // if equal to ninputs, indicates unknown
   // \see ninputs
-  int current_input() const;
+  unsigned int current_input() const;
   //: Return input number i (0 .. ninputs-1)
   const vidl2_v4l2_input& input(int i) const { return inputs_.at(i);}
 
   //: Select input i
   // \return if successful
-  bool set_input(int i);
+  bool set_input(unsigned int i);
 
   //: Select a new format.
   // Device try automatically different formats (\see try_formats()). Then this function could be ignored if you don't mind the format. Usually, user wants a concrete pixel format or, simply, change width and height.
@@ -133,7 +133,7 @@ class vidl2_v4l2_device
   // \see set_v4l2_format
   unsigned int  get_v4l2_format() const {
                return (fmt.fmt.pix.width!=0)?
-                      fmt.fmt.pix.pixelformat:0 ;
+                      fmt.fmt.pix.pixelformat:0;
      }
 
   //: Return Image width in pixels.
