@@ -275,7 +275,7 @@ void bmdl_classify<T>::cluster_buildings()
       continue;
 
     int idx = labels_(i-1,0)-2;
-    while (idx>=0 && merge_map[idx] != idx )
+    while (idx>=0 && merge_map[idx] != (unsigned int)idx )
       idx = merge_map[idx];
     T val = last_return_(i,0);
     if (idx>=0 && bin_img(i-1,0) == bin_img(i,0)) {
@@ -296,7 +296,7 @@ void bmdl_classify<T>::cluster_buildings()
       continue;
 
     int idx = labels_(0,j-1)-2;
-    while (idx>=0 && merge_map[idx] != idx )
+    while (idx>=0 && merge_map[idx] != (unsigned int)idx )
       idx = merge_map[idx];
     T val = last_return_(0,j);
     if (idx>=0 && bin_img(0,j-1) == bin_img(0,j)) {
@@ -322,9 +322,9 @@ void bmdl_classify<T>::cluster_buildings()
 
       T val = last_return_(i,j);
       int idx1 = labels_(i-1,j)-2, idx2 = labels_(i,j-1)-2;
-      while (idx1>=0 && merge_map[idx1] != idx1 )
+      while (idx1>=0 && merge_map[idx1] != (unsigned int)idx1 )
         idx1 = merge_map[idx1];
-      while (idx2>=0 && merge_map[idx2] != idx2 )
+      while (idx2>=0 && merge_map[idx2] != (unsigned int)idx2 )
         idx2 = merge_map[idx2];
       int idx = -1;
       if (idx1>=0 && (bin_img(i-1,j) == bin_img(i,j)) )
