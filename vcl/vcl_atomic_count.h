@@ -108,9 +108,10 @@ typedef long int vcl_atomic_count;
 
 #  include "internal/vcl_atomic_count_gcc.h"
 
-#elif defined(BOOST_HAS_PTHREADS)
+// When building OSX universal binary, it could use pthread implementation. 
+#elif defined(BOOST_HAS_PTHREADS) || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
 
-#  include "internal/atomic_count_pthreads.h"
+#  include "internal/vcl_atomic_count_pthreads.h"
 
 #else
 
