@@ -73,7 +73,8 @@ void mbl_test_save_measurement( const vcl_string &measurement_path, double value
   vcl_ofstream file(path.c_str(), vcl_ios_app | vcl_ios_out);
 
   if (!file)
-    vcl_cerr << "ERROR: mbl_test_save_measurement: Unable to open file " << path.c_str() << vcl_endl;
+    vcl_cerr << "ERROR: mbl_test_save_measurement: Unable to open file " << path.c_str() <<
+      "ERRNO: " << errno << vcl_endl;
   else
     file << timestamp() << ' ' << MBL_CONFIG_BUILD_NAME << ' ' << value << vcl_endl;
 }
