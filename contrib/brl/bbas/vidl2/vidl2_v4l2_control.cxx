@@ -46,6 +46,8 @@ vidl2_v4l2_control * vidl2_v4l2_control::new_control(const v4l2_queryctrl& ctr, 
     case V4L2_CTRL_TYPE_BUTTON:
       return new vidl2_v4l2_control_button(ctr,f);
       break;
+    default:
+      break;
   }
 
   return 0;
