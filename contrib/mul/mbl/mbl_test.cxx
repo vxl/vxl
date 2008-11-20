@@ -4,6 +4,7 @@
 // \author iscott
 // \date  Aug 2005
 
+#include <vcl_cerrno.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_ctime.h>
