@@ -124,6 +124,38 @@ static void test_convert_stretch_range()
   TEST("b_image(5,5)",b_image(5,5),vxl_byte( (5.55-5.0)*255/0.99 ) );
 }
 
+static void test_convert_stretch_range_limited()
+{
+  vcl_cout<<"testing test_convert_stretch_range_limited(src,dest):\n";
+  vil_image_view<float> f_image(10, 10);
+  for (unsigned j=0; j<f_image.nj(); ++j)
+    for (unsigned i=0; i<f_image.ni(); ++i) f_image(i,j)=0.1f*i + 0.01f*j + 5.f;
+  //float min_f, max_f;
+  //vil_math_value_range(f_image, min_f, max_f );
+  //vcl_cout << "Min f value: " << min_f << "\n";
+  //vcl_cout << "Max f value: " << max_f << "\n";
+  //vil_print_all(vcl_cout, f_image) ;
+
+  float slo=5.2f, shi=5.8f;
+  vxl_byte dlo=50, dhi=200;
+  vil_image_view<vxl_byte> b_image;
+  vil_convert_stretch_range_limited(f_image, b_image, slo, shi, dlo, dhi);
+  TEST("Width", b_image.ni(), f_image.ni());
+  TEST("Height", b_image.nj(), f_image.nj());
+  vxl_byte min_b, max_b;
+  vil_math_value_range(b_image, min_b, max_b);
+  TEST("Min. value", min_b, dlo);
+  TEST("Max. value", max_b, dhi);
+  //vil_print_all(vcl_cout, b_image) ;
+
+  float f55 = f_image(5,5);
+  vxl_byte b55 = dlo + vxl_byte((f55-slo)*(dhi-dlo)/(shi-slo) + 0.5);
+  //vcl_cout << "f55= " << f55 << "\n";
+  //vcl_cout << "b55= " << (int)b55 << "\n";
+  //vcl_cout << "b_image(5,5)" << (int)b_image(5,5) << "\n";
+  TEST("b_image(5,5)", b_image(5,5), b55);
+}
+
 static void test_convert_to_n_planes()
 {
   const unsigned n=10;
@@ -242,6 +274,7 @@ static void test_convert(int argc, char* argv[])
   test_convert_to_n_planes();
   test_convert1(argc>1 ? argv[1] : "file_read_data");
   test_convert_stretch_range();
+  test_convert_stretch_range_limited();
   test_convert_diff_types(argc>1 ? argv[1] : "file_read_data");
   test_simple_pixel_conversions();
 }
