@@ -19,7 +19,9 @@ class bmdl_classify
   // \param height_noise_stdev is the standard deviation in lidar height
   //        This parameter can be set manually or estimated
   // \param area_threshold is the minimum area allowed for buildings
-  bmdl_classify(T height_noise_stdev = 0.01, unsigned int area_threshold = 6);
+  // \param height_resolution is the height difference below which buildings are merged
+  bmdl_classify(T height_noise_stdev = 0.01, unsigned int area_threshold = 6,
+                T height_resolution = 0.5);
 
   //: Set the first and last return images
   void set_lidar_data(const vil_image_view<T>& first_return,
@@ -165,6 +167,8 @@ class bmdl_classify
   T hgt_stdev_;
   //: A threshold on the minimum building area
   unsigned int area_threshold_;
+  //: The minimum height difference that does not merge
+  T height_resolution_;
   //: The range spanned by the first returns
   T first_min_, first_max_;
   //: The range spanned by the last returns

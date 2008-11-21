@@ -25,10 +25,15 @@
 //: Constructor
 // \param height_noise_stdev is the standard deviation in lidar height
 //  This parameter can be set manually or estimated
+// \param area_threshold is the minimum area allowed for buildings
+// \param height_resolution is the height difference below which buildings are merged
 template <class T>
-bmdl_classify<T>::bmdl_classify(T height_noise_stdev, unsigned int area_threshold)
+bmdl_classify<T>::bmdl_classify(T height_noise_stdev, 
+                                unsigned int area_threshold, 
+                                T height_resolution)
 : hgt_stdev_(height_noise_stdev),
   area_threshold_(area_threshold),
+  height_resolution_(height_resolution),
   first_min_( vcl_numeric_limits<T>::infinity()),
   first_max_(-vcl_numeric_limits<T>::infinity()),
   last_min_( vcl_numeric_limits<T>::infinity()),
@@ -250,12 +255,8 @@ void bmdl_classify<T>::cluster_buildings()
   building_mean_hgt_.clear();
   building_area_.clear();
 
-  // square threshold to compare against squared distances
-  T zthresh = T(0.01);
-  assert(zthresh > 0); // make sure that T is not an integral type
-
   // bin building heights
-  vil_image_view<unsigned int> bin_img = bin_heights(0.5);
+  vil_image_view<unsigned int> bin_img = bin_heights(height_resolution_);
 
   vcl_vector<unsigned int> merge_map;
   vcl_vector<unsigned int> count;
@@ -818,9 +819,6 @@ bool bmdl_classify<T>::greedy_merge()
   typedef vcl_pair<unsigned int,unsigned int> upair;
   vcl_set<upair> adjacent;
 
-  T zthresh = T(0.5);
-  assert(zthresh > 0); // make sure that T is not an integral type
-
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=1; i<ni; ++i) {
       unsigned int l1 = labels_(i,j);
@@ -847,7 +845,7 @@ bool bmdl_classify<T>::greedy_merge()
   {
     unsigned int idx1 = itr->first;
     unsigned int idx2 = itr->second;
-    if (vcl_abs(building_mean_hgt_[idx1] - building_mean_hgt_[idx2]) < zthresh)
+    if (vcl_abs(building_mean_hgt_[idx1] - building_mean_hgt_[idx2]) < height_resolution_)
       to_merge.push_back(*itr);
   }
 
