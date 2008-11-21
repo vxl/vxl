@@ -7,6 +7,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 
 #include <vnl/io/vnl_io_vector.h>
 
