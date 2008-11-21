@@ -126,6 +126,8 @@ open()
       vcl_strcmp(file_oformat->name, "mov") != 0 ||
       vcl_strcmp(file_oformat->name, "3gp") != 0 )
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
+  
+  video_enc->codec_type = CODEC_TYPE_VIDEO;
 
   switch ( params_.encoder_ )
   {
