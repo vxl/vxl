@@ -6,7 +6,9 @@ INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 IF( HAS_VGUI )
 
 SET(vidl2_gui_sources
-    vidl2_gui_param_dialog.cxx      vidl2_gui_param_dialog.h
+    vidl2_gui_param_dialog.cxx   vidl2_gui_param_dialog.h
+    
+    vidl2_capture_tableau.cxx    vidl2_capture_tableau.h     vidl2_capture_tableau_sptr.h
 )
 
 ADD_LIBRARY(vidl2_gui ${vidl2_gui_sources})
