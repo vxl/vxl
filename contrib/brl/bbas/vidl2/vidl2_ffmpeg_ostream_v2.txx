@@ -17,6 +17,7 @@
 #include "vidl2_frame.h"
 #include "vidl2_convert.h"
 #include <vcl_cstring.h>
+#include <vcl_climits.h>
 #include <vil/vil_memory_chunk.h>
 
 extern "C" {
