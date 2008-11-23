@@ -5,7 +5,7 @@
 // \brief Base class for prob density of an intensity pair
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
+// \date Oct. 01, 2008
 //
 // \verbatim
 //  Modifications
