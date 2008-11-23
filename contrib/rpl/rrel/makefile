@@ -3,6 +3,8 @@ USES += contrib/rpl core
 LIBRARY := rrel
 VERSION := 1.0
 
+MANPAGE_SOURCES += rrel_fwd.h
+
 SOURCES += rrel_cauchy_obj.cxx
 SOURCES += rrel_estimation_problem.cxx
 SOURCES += rrel_homography2d_est.cxx
