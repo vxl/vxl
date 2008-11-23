@@ -46,5 +46,7 @@
 #endif // 0
 
 #include <vidl2/gui/vidl2_gui_param_dialog.h>
+#include <vidl2/gui/vidl2_capture_tableau.h>
+#include <vidl2/gui/vidl2_capture_tableau_sptr.h>
 
 int main() { return 0; }

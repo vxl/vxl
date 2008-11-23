@@ -1,3 +1,5 @@
+#include <rrel/rrel_fwd.h>
+
 #include <rrel/rrel_affine_est.h>
 #include <rrel/rrel_cauchy_obj.h>
 #include <rrel/rrel_estimation_problem.h>
