@@ -63,9 +63,6 @@ bool bvxm_rec_update_changes_process::execute()
   brdb_value_t<float>* input3 = static_cast<brdb_value_t<float>* >(input_data_[3].ptr());
   float sigma = input3->value();  //
 
-  unsigned ni = change_map_f.ni();
-  unsigned nj = change_map_f.nj();
-
   vul_timer t2;
   t2.mark();
 
