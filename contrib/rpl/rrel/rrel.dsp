@@ -257,6 +257,9 @@ SOURCE=.\rrel_wgted_ran_sam_search.h
 # Begin Source File
 SOURCE=.\rrel_quad_est.h
 # End Source File
+# Begin Source File
+SOURCE=.\rrel_fwd.h
+# End Source File
 # End Group
 # End Target
 # End Project

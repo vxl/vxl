@@ -153,10 +153,10 @@ SOURCE=.\Templates/vbl_smart_ptr+bsta_joint_histogram_base-.cxx
 SOURCE=.\Templates/bsta_gaussian_indep+float.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_weibull+double.1-.cxx
+SOURCE=.\Templates/bsta_weibull+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_weibull+float.1-.cxx
+SOURCE=.\Templates/bsta_weibull+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_gauss.cxx

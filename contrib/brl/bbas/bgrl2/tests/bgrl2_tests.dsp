@@ -181,7 +181,7 @@ SOURCE=.\graph_test.cxx
 SOURCE=.\Templates/bgrl2_edge+test_node-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bgrl2_graph+test_node_test_edge-.cxx
+SOURCE=.\Templates/bgrl2_graph+test_node.test_edge-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bgrl2_vertex+test_edge-.cxx

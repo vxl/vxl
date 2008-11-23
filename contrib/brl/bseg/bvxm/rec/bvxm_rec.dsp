@@ -126,15 +126,6 @@ SOURCE=.\bvxm_part_hierarchy.cxx
 SOURCE=.\bvxm_part_hierarchy_builder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/dbgrl_edge+bvxm_part_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/dbgrl_graph+bvxm_part_base-bvxm_hierarchy_edge-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/dbgrl_vertex+bvxm_hierarchy_edge.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_hierarchy_edge-.cxx
 # End Source File
 # Begin Source File
@@ -145,6 +136,18 @@ SOURCE=.\Templates/vbl_smart_ptr+bvxm_part_gaussian-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_part_hierarchy-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bgrl2_edge+bvxm_part_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bgrl2_edge+bvxm_part_instance-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bgrl2_graph+bvxm_part_base.bvxm_hierarchy_edge-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bgrl2_vertex+bvxm_hierarchy_edge-.cxx
 # End Source File
 # Begin Source File
 # End Group
