@@ -12,7 +12,7 @@ extern "C" {
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-#include <errno.h>
+#include <vcl_cerrno.h>
 #include <fcntl.h>
 };
 
@@ -38,7 +38,7 @@ namespace {
 
 void vidl2_v4l2_device::update_controls()
 {
-  for (unsigned int i=0;i<controls_.size();++i) delete controls_[i]; 
+  for (unsigned int i=0;i<controls_.size();++i) delete controls_[i];
   controls_.clear();
 
   struct v4l2_queryctrl ctrl;
@@ -103,7 +103,7 @@ vidl2_v4l2_device::~vidl2_v4l2_device()
       uninit_mmap();
     close();
   }
-  for (unsigned int i=0;i<controls_.size();++i) delete controls_[i]; 
+  for (unsigned int i=0;i<controls_.size();++i) delete controls_[i];
 }
 
 void vidl2_v4l2_device::reset()
