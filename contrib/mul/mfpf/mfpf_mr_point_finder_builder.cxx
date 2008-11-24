@@ -13,6 +13,7 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -186,10 +187,10 @@ void mfpf_mr_point_finder_builder::add_example(
 
     if (image.image().size()==0)
     {
-      vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n";
-      vcl_cerr<<"This is required for level "<<L<<" of the mfpf model."<<vcl_endl;
-      vcl_cerr<<"Check range for which pyramid is defined."<<vcl_endl;
-      abort();
+      vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
+              <<"This is required for level "<<L<<" of the mfpf model.\n"
+              <<"Check range for which pyramid is defined.\n";
+      vcl_abort();
     }
 
     builder(L).add_example(image,p,u);
