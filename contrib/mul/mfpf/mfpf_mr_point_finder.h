@@ -96,12 +96,12 @@ class mfpf_mr_point_finder
   //  pruning at the coarsest level (size()-1).
   //  Final responses may be further improved with refine_match().
   void multi_search_and_prune(const vimt_image_pyramid& im_pyr,
-                    const mfpf_pose& pose0,
-                    vcl_vector<mfpf_pose>& poses,
-                    vcl_vector<double>& fits,
-                    int prune_level=-1);
+                              const mfpf_pose& pose0,
+                              vcl_vector<mfpf_pose>& poses,
+                              vcl_vector<double>& fits,
+                              int prune_level=-1);
 
-  //: Save an image summarising each model in the hierachy
+  //: Save an image summarising each model in the hierarchy
   //  Saves images to basepath_L0.png, basepath_L1.png ...
   void save_images_of_models(const vcl_string& basepath) const;
 

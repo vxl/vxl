@@ -193,7 +193,7 @@ void mfpf_mr_point_finder::multi_search_and_prune(
 
   if (poses.size()==0)
   {
-    vcl_cerr<<"Warning: No poses returned by mfpf_point_finder"<<vcl_endl;
+    vcl_cerr<<"Warning: No poses returned by mfpf_point_finder\n";
     // Perform search to find single good point
     vgl_point_2d<double> new_p;
     double f = finder(L0).search_one_pose(image,pose0.p(),pose0.u(),new_p);
@@ -222,7 +222,7 @@ void mfpf_mr_point_finder::multi_search_and_prune(
   }
 }
 
-//: Save an image summarising each model in the hierachy
+//: Save an image summarising each model in the hierarchy
 //  Saves images to basepath_L0.png, basepath_L1.png ...
 void mfpf_mr_point_finder::save_images_of_models(const vcl_string& basepath) const
 {
