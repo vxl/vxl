@@ -33,6 +33,9 @@ vgui_glut_impl::~vgui_glut_impl()
 
 //--------------------------------------------------------------------------------
 
+// See vgui/vgui_text_put.cxx
+extern bool glut_was_initialized;
+
 void vgui_glut_impl::init(int &argc, char **argv)
 {
 #ifdef DEBUG
@@ -40,7 +43,10 @@ void vgui_glut_impl::init(int &argc, char **argv)
   for (unsigned i=0; i<argc; ++i)
     vcl_cerr << i << ' ' << (void*)argv[i] << ' ' << argv[i] << vcl_endl;
 #endif
-  glutInit(&argc, argv);
+  if( ! glut_was_initialized ) {
+    glut_was_initialized = true;
+    glutInit( &argc, argv );
+  }
 }
 
 vcl_string vgui_glut_impl::name() const

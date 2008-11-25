@@ -15,8 +15,20 @@
 
 #if defined(HAS_GLUT) && defined(VGUI_USE_GLUT)
 #include <vgui/vgui_glut.h>
+
+// This ugliness is used to make sure we don't try to initialize GLUT
+// multiple times if glut is used as the toolkit too.
+bool glut_was_initialized = false;
+
 void vgui_text_put(char const *str, unsigned size)
 {
+  if( ! glut_was_initialized ) {
+    glut_was_initialized = true;
+    int argc = 0;
+    char* argv[1] = { NULL };
+    glutInit( &argc, argv );
+  }
+
   if (size > 17) {
     for (unsigned k=0; str[k]; ++k)
       glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[k]);
