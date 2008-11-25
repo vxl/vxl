@@ -1,8 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
-#include <vul/vul_file.h>
 
 #include <rec/bvxm_fg_pair_density.h>
 #include <rec/bvxm_fg_bg_pair_density.h>
@@ -37,12 +33,6 @@ static void test_bvxm_densities()
   vil_image_view<vxl_byte> map_b(map.ni(), map.nj());
   vil_convert_stretch_range_limited(map, map_b, 0.0f, maxv);
   vil_save(map_b, "./map_out.png");
-
 }
 
 TESTMAIN( test_bvxm_densities );
-
-
-
-
-

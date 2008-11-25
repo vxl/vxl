@@ -1,4 +1,4 @@
-// This is contrib/bvxm/rec/pro/bvxm_rec_structure_process.h
+// This is brl/bseg/bvxm/rec/pro/bvxm_rec_structure_process.h
 #ifndef bvxm_rec_structure_process_h_
 #define bvxm_rec_structure_process_h_
 //:
@@ -6,19 +6,15 @@
 // \brief A class to find instances of various structures, objects (e.g. vehicles) according to a part hierarchy constructed a priori
 //
 // \author Ozge Can Ozcanli
-// \date 10/28/2008
+// \date Oct 28, 2008
 //
 // \verbatim
-// Modifications 
-//
-//
+//  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_algorithm.h>
 #include <bprb/bprb_process.h>
-
-#include <vil/vil_image_view.h>
 
 class bvxm_rec_structure_process : public bprb_process
 {

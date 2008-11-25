@@ -1,8 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcl_cmath.h>
-#include <vul/vul_file.h>
 
 #include <rec/bvxm_param_estimation.h>
 
@@ -51,12 +49,6 @@ static void test_param_estimation()
 
   //TEST_NEAR("testing param estimation ", bvxm_param_estimation::estimate_fg_pair_density_sigma(pairs, init_sigma), 0.22, 0.001);
   TEST_NEAR("testing param estimation ", bvxm_param_estimation::estimate_fg_pair_density_sigma_amoeba(pairs, init_sigma), 0.22, 0.1);
-
 }
 
 TESTMAIN( test_param_estimation );
-
-
-
-
-

@@ -1,20 +1,13 @@
-// This is brl/bseg/bbgm/pro/bvxm_change_area_process.cxx
+// This is brl/bseg/bvxm/rec/pro/bvxm_change_area_process.cxx
 #include "bvxm_change_area_process.h"
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
 #include <brdb/brdb_value.h>
-#include <vbl/io/vbl_io_smart_ptr.h>
-#include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_list.h>
 #include <vil/vil_convert.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
 #include <brip/brip_vil_float_ops.h>
 #include <core/vidl2_pro/vidl2_pro_utils.h>
 
@@ -28,7 +21,7 @@ bvxm_change_area_process::bvxm_change_area_process()
   input_types_[0]= "vil_image_view_base_sptr"; //input probability frame
   input_types_[1]= "vil_image_view_base_sptr"; //input probability frame's mask
 
-  //output 
+  //output
   output_data_.resize(2, brdb_value_sptr(0));
   output_types_.resize(2);
   output_types_[0] = "float";  // expected area
@@ -64,14 +57,14 @@ bvxm_change_area_process::execute()
 
   float sum = 0.0f;
   float count = 0.0f;
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
-      {
-        if (input_mask(i,j)) {
-          sum += map(i,j);
-          count += 1.0f;
-        }
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
+    {
+      if (input_mask(i,j)) {
+        sum += map(i,j);
+        count += 1.0f;
       }
+    }
 
   brdb_value_sptr output0 = new brdb_value_t<float>(sum);
   output_data_[0] = output0;
@@ -82,4 +75,3 @@ bvxm_change_area_process::execute()
   return true;
 }
 
-  

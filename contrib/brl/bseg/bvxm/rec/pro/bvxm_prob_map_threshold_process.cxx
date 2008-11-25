@@ -1,20 +1,13 @@
-// This is brl/bseg/bbgm/pro/bvxm_prob_map_threshold_process.cxx
+// This is brl/bseg/bvxm/rec/pro/bvxm_prob_map_threshold_process.cxx
 #include "bvxm_prob_map_threshold_process.h"
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
 #include <brdb/brdb_value.h>
-#include <vbl/io/vbl_io_smart_ptr.h>
-#include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_list.h>
 #include <vil/vil_convert.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
 #include <brip/brip_vil_float_ops.h>
 #include <core/vidl2_pro/vidl2_pro_utils.h>
 
@@ -72,24 +65,24 @@ bvxm_prob_map_threshold_process::execute()
   out.fill(0);
 
   int count = 0;
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
-      {
-        if (input_mask(i,j)) {
-          out(i,j,0)=input_img(i,j);
-          out(i,j,1)=input_img(i,j);
-          out(i,j,2)=input_img(i,j);
-          if(frame(i,j)<=thres) {
-            out(i,j,0) = 255;
-            count++;
-          }
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
+    {
+      if (input_mask(i,j)) {
+        out(i,j,0)=input_img(i,j);
+        out(i,j,1)=input_img(i,j);
+        out(i,j,2)=input_img(i,j);
+        if (frame(i,j)<=thres) {
+          out(i,j,0) = 255;
+          count++;
         }
       }
+    }
 
-  vcl_cout << "----------------------------------\n";
-  vcl_cout << "\tthres: " << thres << "\n";
-  vcl_cout << "\tnumber of CHANGE PIXELS: " << count << " out of " << ni*nj << " pixels: %" << ((float)count/(ni*nj))*100.0f << vcl_endl;
-  vcl_cout << "----------------------------------\n";
+  vcl_cout << "----------------------------------\n"
+           << "\tthres: " << thres << '\n'
+           << "\tnumber of CHANGE PIXELS: " << count << " out of " << ni*nj << " pixels: %" << ((float)count/(ni*nj))*100.0f << vcl_endl
+           << "----------------------------------\n";
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(out));
   output_data_[0] = output0;
@@ -97,4 +90,3 @@ bvxm_prob_map_threshold_process::execute()
   return true;
 }
 
-  

@@ -1,4 +1,4 @@
-// This is contrib/bvxm/rec/pro/bvxm_rec_density_to_prob_map_process.h
+// This is brl/bseg/bvxm/rec/pro/bvxm_rec_density_to_prob_map_process.h
 #ifndef bvxm_rec_density_to_prob_map_process_h_
 #define bvxm_rec_density_to_prob_map_process_h_
 //:
@@ -8,19 +8,15 @@
 //  CAUTION: Input image is assumed to have type float (not necessarily with values in [0,1])
 //
 // \author Ozge Can Ozcanli
-// \date 09/10/2008
+// \date Sep 10, 2008
 //
 // \verbatim
-// Modifications 
-//
-//
+//  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_algorithm.h>
 #include <bprb/bprb_process.h>
-
-#include <vil/vil_image_view.h>
 
 class bvxm_rec_density_to_prob_map_process : public bprb_process
 {

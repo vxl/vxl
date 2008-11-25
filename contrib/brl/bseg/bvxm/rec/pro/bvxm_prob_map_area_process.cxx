@@ -1,20 +1,14 @@
-// This is brl/bseg/bbgm/pro/bvxm_prob_map_area_process.cxx
+// This is brl/bseg/bvxm/rec/pro/bvxm_prob_map_area_process.cxx
 #include "bvxm_prob_map_area_process.h"
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
 #include <brdb/brdb_value.h>
-#include <vbl/io/vbl_io_smart_ptr.h>
-#include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_list.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-#include <vil/vil_save.h>
 #include <brip/brip_vil_float_ops.h>
 #include <core/vidl2_pro/vidl2_pro_utils.h>
 
@@ -28,7 +22,7 @@ bvxm_prob_map_area_process::bvxm_prob_map_area_process()
   input_types_[0]= "vil_image_view_base_sptr"; //input probability frame
   input_types_[1]= "vil_image_view_base_sptr"; //input probability frame's mask
 
-  //output 
+  //output
   output_data_.resize(6, brdb_value_sptr(0));
   output_types_.resize(6);
   output_types_[0] = "vil_image_view_base_sptr";
@@ -78,43 +72,42 @@ bvxm_prob_map_area_process::execute()
       neighborhood.push_back(vcl_pair<int, int>(l,m));
   neighborhood.pop_back(); // pop the last one to have equal number of pixels in the center and in the surround
 
-  for(unsigned j = 3; j<nj-3; ++j)
-    for(unsigned i = 3; i<ni-3; ++i)
-      {
-        if (input_mask(i,j)) {
-          float sum = 0.0f;
-          bool all_inside = true;
-          float prod_back = 1.0f; float prod_fore = 1.0f;
-          for (unsigned t = 0; t < neighborhood.size(); t++) {
-            int ii = i+neighborhood[t].first;
-            int jj = j+neighborhood[t].second;
-            if (ii >= 0 && jj >= 0 && ii < (int)ni && jj < (int)nj) { 
-              if (!input_mask(ii, jj)) {
-                all_inside = false;
-                break;
-              }
-              sum += map(ii,jj);
-              prod_back *= (1.0f-map(ii, jj));
-              prod_fore *= map(ii, jj);
+  for (unsigned j = 3; j<nj-3; ++j)
+    for (unsigned i = 3; i<ni-3; ++i)
+    {
+      if (input_mask(i,j)) {
+        float sum = 0.0f;
+        bool all_inside = true;
+        float prod_back = 1.0f; float prod_fore = 1.0f;
+        for (unsigned t = 0; t < neighborhood.size(); t++) {
+          int ii = i+neighborhood[t].first;
+          int jj = j+neighborhood[t].second;
+          if (ii >= 0 && jj >= 0 && ii < (int)ni && jj < (int)nj) {
+            if (!input_mask(ii, jj)) {
+              all_inside = false;
+              break;
             }
+            sum += map(ii,jj);
+            prod_back *= (1.0f-map(ii, jj));
+            prod_fore *= map(ii, jj);
           }
-          if (all_inside) {
-            out(i,j) = sum;
-            g_b(i,j) = prod_fore;
-            g_bb(i,j) = prod_back;
-            g_ff(i,j) = prod_fore;
-            g_fb(i,j) = prod_back;
-          }
-
+        }
+        if (all_inside) {
+          out(i,j) = sum;
+          g_b(i,j) = prod_fore;
+          g_bb(i,j) = prod_back;
+          g_ff(i,j) = prod_fore;
+          g_fb(i,j) = prod_back;
         }
       }
+    }
 
   vil_image_view<vxl_byte> out_byte(ni, nj, 1);
   float min, max;
   vil_math_value_range(out, min, max);
   vcl_cout << "\t area map min: " << min << " max: " << max << vcl_endl;
   vil_convert_stretch_range_limited(out, out_byte, 0.0f, max);
-  
+
   //vil_image_view<float> dummy(ni, nj, 1), dummy2(ni, nj, 1);
   //dummy.fill(max);
   //vil_math_image_difference(dummy, out, dummy2);
@@ -140,35 +133,35 @@ bvxm_prob_map_area_process::execute()
   for (int m = -(ns+1); m < (ns+2); m++)
     neighborhood_outer.push_back(vcl_pair<int, int>((ns+1),m));
 
-  for(unsigned j = 3; j<nj-3; ++j)
-    for(unsigned i = 3; i<ni-3; ++i)
-      {
-        if (input_mask(i,j)) {
-          float sum = 0.0f;
-          bool all_inside = true;
-          float prod_back = 1.0f; float prod_fore = 1.0f;
-          for (unsigned t = 0; t < neighborhood_outer.size(); t++) {
-            int ii = i+neighborhood_outer[t].first;
-            int jj = j+neighborhood_outer[t].second;
-            if (ii >= 0 && jj >= 0 && ii < (int)ni && jj < (int)nj) {
-              if (!input_mask(ii, jj)) {
-                all_inside = false;
-                break;
-              }
-              sum += map(ii,jj);
-              prod_back *= (1.0f-map(ii, jj));
-              prod_fore *= map(ii, jj);
+  for (unsigned j = 3; j<nj-3; ++j)
+    for (unsigned i = 3; i<ni-3; ++i)
+    {
+      if (input_mask(i,j)) {
+        float sum = 0.0f;
+        bool all_inside = true;
+        float prod_back = 1.0f; float prod_fore = 1.0f;
+        for (unsigned t = 0; t < neighborhood_outer.size(); t++) {
+          int ii = i+neighborhood_outer[t].first;
+          int jj = j+neighborhood_outer[t].second;
+          if (ii >= 0 && jj >= 0 && ii < (int)ni && jj < (int)nj) {
+            if (!input_mask(ii, jj)) {
+              all_inside = false;
+              break;
             }
-          }
-          if (all_inside) {
-            out2(i,j) = (float)vcl_abs(sum-out(i,j));
-            g_b(i,j) = g_b(i,j)*prod_back;
-            g_bb(i,j) = g_bb(i,j)*prod_back;
-            g_ff(i,j) = g_ff(i,j)*prod_fore;
-            g_fb(i,j) = g_fb(i,j)*prod_fore;
+            sum += map(ii,jj);
+            prod_back *= (1.0f-map(ii, jj));
+            prod_fore *= map(ii, jj);
           }
         }
+        if (all_inside) {
+          out2(i,j) = (float)vcl_abs(sum-out(i,j));
+          g_b(i,j) = g_b(i,j)*prod_back;
+          g_bb(i,j) = g_bb(i,j)*prod_back;
+          g_ff(i,j) = g_ff(i,j)*prod_fore;
+          g_fb(i,j) = g_fb(i,j)*prod_fore;
+        }
       }
+    }
 
   brdb_value_sptr output2 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(out2));
   output_data_[2] = output2;
@@ -177,13 +170,13 @@ bvxm_prob_map_area_process::execute()
   vcl_cout << "\t glitch map min: " << min << " max: " << max << vcl_endl;
   vil_image_view<vxl_byte> out_byte2(ni, nj, 1);
   vil_convert_stretch_range_limited(out2, out_byte2, 0.0f, max);
-  
+
   brdb_value_sptr output3 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(out_byte2));
   output_data_[3] = output3;
 
-  //: normalize the g_b map 
-  for(unsigned j = 3; j<nj-3; ++j) {
-    for(unsigned i = 3; i<ni-3; ++i) {
+  //: normalize the g_b map
+  for (unsigned j = 3; j<nj-3; ++j) {
+    for (unsigned i = 3; i<ni-3; ++i) {
       if (g_bb(i,j) <= 0)  // if not on a valid pixel continue;
         continue;
       g_b(i,j) = g_b(i,j)/(g_bb(i,j) + g_ff(i,j) + g_fb(i,j) + g_b(i,j));
@@ -203,4 +196,3 @@ bvxm_prob_map_area_process::execute()
   return true;
 }
 
-  

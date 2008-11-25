@@ -1,25 +1,20 @@
-// This is contrib/bvxm/rec/pro/bvxm_rec_update_changes_wrt_area_process.h
+// This is brl/bseg/bvxm/rec/pro/bvxm_rec_update_changes_wrt_area_process.h
 #ifndef bvxm_rec_update_changes_wrt_area_process_h_
 #define bvxm_rec_update_changes_wrt_area_process_h_
 //:
 // \file
 // \brief A class to update a change map iteratively based on background and foreground models of expected area maps
 //
-//
 // \author Ozge Can Ozcanli
-// \date 04/10/2008
+// \date Apr 10, 2008
 //
 // \verbatim
-// Modifications 
-//
-//
+//  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_algorithm.h>
 #include <bprb/bprb_process.h>
-
-#include <vil/vil_image_view.h>
 
 class bvxm_rec_update_changes_wrt_area_process : public bprb_process
 {

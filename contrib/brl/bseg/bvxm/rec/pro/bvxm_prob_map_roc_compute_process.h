@@ -1,26 +1,22 @@
-// This is contrib/bvxm/pro/bvxm_prob_map_roc_compute_process.h
+// This is brl/bseg/bvxm/rec/pro/bvxm_prob_map_roc_compute_process.h
 #ifndef bvxm_prob_map_roc_compute_process_h_
 #define bvxm_prob_map_roc_compute_process_h_
 //:
 // \file
-// \brief A class to generate TPR and FPR for a given prob map and 
+// \brief A class to generate TPR and FPR for a given prob map and
 //
 //  CAUTION: Input image is assumed to be a probability map, i.e. have type float with values in [0,1]
 //
 // \author Ozge Can Ozcanli adapted from Joseph Mundy's bbgm_roc_compute_process
-// \date 09/10/2008
+// \date Sep 10, 2008
 //
 // \verbatim
-// Modifications 
-//
-//
+//  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_algorithm.h>
 #include <bprb/bprb_process.h>
-
-#include <vil/vil_image_view.h>
 
 class bvxm_prob_map_roc_compute_process : public bprb_process
 {
