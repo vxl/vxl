@@ -318,7 +318,7 @@ void test_non_existant_dir()
 {
   vcl_cout << "Testing non-existent directory" << vcl_endl;
   vul_file_iterator f("/some/directory/that/does/not/exist/*.blah");
-  TEST( "Iterator is empty", f, false );
+  TEST( "Iterator is empty", bool(f), false );
 }
 
 
