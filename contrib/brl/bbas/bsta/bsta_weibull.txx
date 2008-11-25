@@ -6,7 +6,6 @@
 
 #include "bsta_weibull.h"
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
 #include <vcl_cmath.h>
 
 
@@ -23,8 +22,8 @@ bsta_weibull<T>::bsta_weibull(vector_ const& lambda, vector_ const& k):
 
 template <class T>
 bsta_weibull<T>::bsta_weibull(vector_ const& lambda, vector_ const& k,
-                                     vector_ const& mu): lambda_(lambda),
-                                                         mu_(mu), k_(k)
+                              vector_ const& mu)
+: lambda_(lambda), mu_(mu), k_(k)
 {}
 
 template <class T>
@@ -45,7 +44,7 @@ T bsta_weibull<T>::prob_density(const vector_& pt) const
 
 template <class T>
 T bsta_weibull<T>::probability(const vector_& min_pt,
-                                 const vector_& max_pt) const
+                               const vector_& max_pt) const
 {
   double dk = static_cast<double>(k_);
   assert(dk>0);
