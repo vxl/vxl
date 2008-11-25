@@ -9,6 +9,12 @@
 // \brief Powell minimizer.
 // \author awf@robots.ox.ac.uk
 // \date   05 Dec 00
+//
+// \verbatim
+//  Modifications
+//   31 Oct 2008 - Hans Johnson - fixed errors caused by uninitialized var bx;
+//                 (U. Iowa)      use vnl_brent_minimizer instead of vnl_brent
+// \endverbatim
 
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
