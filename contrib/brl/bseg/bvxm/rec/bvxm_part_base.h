@@ -1,4 +1,4 @@
-// This is contrib/bvxm/rec/bvxm_part_base.h
+// This is brl/bseg/bvxm/rec/bvxm_part_base.h
 #ifndef bvxm_part_base_h_
 #define bvxm_part_base_h_
 //:
@@ -6,14 +6,12 @@
 // \brief base class for composable parts
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
-//      
+// \date Oct 16, 2008
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//  <none yet>
 // \endverbatim
-//
-//
 
 #include <bgrl2/bgrl2_vertex.h>
 
@@ -27,8 +25,9 @@
 class bvxm_hierarchy_edge;
 class bvxm_part_gaussian;
 
-class bvxm_part_base : public bgrl2_vertex<bvxm_hierarchy_edge> {
-public:
+class bvxm_part_base : public bgrl2_vertex<bvxm_hierarchy_edge>
+{
+ public:
 
   bvxm_part_base(unsigned layer, unsigned type) : bgrl2_vertex<bvxm_hierarchy_edge>(), layer_(layer), type_(type), activation_radius_(0.0f), detection_threshold_(0.01f) {}
 
@@ -50,23 +49,23 @@ public:
 
   float activation_radius_;
   float detection_threshold_;
-
 };
 
 class bvxm_part_instance_kind
 {
-public:
+ public:
   enum possible_kinds {
     GAUSSIAN,   // only GAUSSIAN is implemented for now in bvxm_part_gaussian
-    EDGE,  
+    EDGE,
     COMPOSED,   // the instance could be a composition if not primitive
   };
 };
 
-class bvxm_part_instance : public bvxm_part_base {
-public:
+class bvxm_part_instance : public bvxm_part_base
+{
+ public:
 
-  bvxm_part_instance(unsigned layer, unsigned type, unsigned kind, float x, float y, float strength) : bvxm_part_base(layer, type), 
+  bvxm_part_instance(unsigned layer, unsigned type, unsigned kind, float x, float y, float strength) : bvxm_part_base(layer, type),
     x_(x), y_(y), strength_(strength), kind_(kind) {}
 
   virtual bvxm_part_gaussian* cast_to_gaussian(void);
