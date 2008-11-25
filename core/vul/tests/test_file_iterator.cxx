@@ -313,6 +313,16 @@ void test_file_iterator()
 #endif
 }
 
+static
+void test_non_existant_dir()
+{
+  vcl_cout << "Testing non-existent directory" << vcl_endl;
+  vul_file_iterator f("/some/directory/that/does/not/exist/*.blah");
+  TEST( "Iterator is empty", f, false );
+}
+
+
+
 
 //TESTMAIN(test_file_iterator);
 int test_file_iterator(int, char*[])
@@ -320,6 +330,7 @@ int test_file_iterator(int, char*[])
   testlib_test_start("test_file_iterator");
 
   test_file_iterator();
+  test_non_existant_dir();
 
   return testlib_test_summary();
 }

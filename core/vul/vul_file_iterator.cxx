@@ -169,7 +169,11 @@ struct vul_file_iterator_data
   }
 
   void next() {
-    assert(dir_handle_ != 0);
+    // if dir_handle_ is NULL, then the directory probably doesn't
+    // exist.
+    if(dir_handle_ == 0) {
+      return;
+    }
     do
     {
       de_ = readdir(dir_handle_);
