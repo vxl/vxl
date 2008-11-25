@@ -11,6 +11,7 @@
 #include "vidl2_capture_tableau.h"
 #include <vil/vil_image_view.h>
 #include <vgui/vgui_utils.h>
+#include <vgui/vgui_gl.h>
 #include <vidl2/vidl2_convert.h>
 #include <vidl2/gui/vidl2_gui_param_dialog.h>
 
@@ -41,6 +42,12 @@ bool vidl2_capture_tableau::handle( vgui_event const &e)
       vil_image_view<vxl_byte> image = vgui_utils::colour_buffer_to_view();
       vil_image_view_base_sptr img_sptr = new vil_image_view<vxl_byte>(image);
       ostream_->write_frame(vidl2_convert_to_frame(img_sptr));
+    }
+    if(e.type == vgui_RESHAPE)
+    {
+      GLint vp[4]; // x,y,w,h
+      glGetIntegerv(GL_VIEWPORT, vp);
+      vcl_cout << "window size = "<< vp[2] << ", "<<vp[3]<<vcl_endl;
     }
   }
   return handled;
