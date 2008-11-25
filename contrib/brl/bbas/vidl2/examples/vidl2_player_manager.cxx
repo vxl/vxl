@@ -14,7 +14,6 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
 
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_convert.h>
