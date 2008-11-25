@@ -127,8 +127,11 @@ vcl_string vul_expand_path_internal(vcl_string path)
   // expand ./ or just .
   if ((path.size()>=2 && path[0] == '.' && path[1] == '/') || path == ".") {
     char cwd[4096];
-    getcwd(cwd, sizeof cwd);
-    path = vcl_string(cwd) + vcl_string(path.c_str() + 1);
+    if( getcwd(cwd, sizeof cwd) == NULL ) {
+      path = "<error: current working directory path > 4096 characters>";
+    } else {
+      path = vcl_string(cwd) + path.substr(1);
+    }
   }
 
   { // main processing and reduction goes here.
