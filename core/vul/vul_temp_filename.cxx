@@ -28,7 +28,7 @@
     bool is_okay( const vcl_string& name )
     {
       bool okay = true;
-      int fd = open( name.c_str(), O_CREAT|O_EXCL );
+      int fd = open( name.c_str(), O_CREAT|O_EXCL, 0600 );
       if ( fd == -1 ) {
         okay = false;
       } else {
