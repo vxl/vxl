@@ -11,7 +11,6 @@
 #include "vidl2_v4l2_control.h"
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h>
 
 extern "C" {
 #include <sys/ioctl.h>
@@ -19,14 +18,13 @@ extern "C" {
 
 vidl2_v4l2_control * vidl2_v4l2_control::new_control(const v4l2_queryctrl& ctr, int f)
 {
-
   if ( (ctr.flags & V4L2_CTRL_FLAG_DISABLED)
 #ifdef V4L2_CTRL_FLAG_INACTIVE
        || (ctr.flags & V4L2_CTRL_FLAG_INACTIVE)
 #endif
      )
-    return 0; 
-  switch (ctr.type) { 
+    return 0;
+  switch (ctr.type) {
     case V4L2_CTRL_TYPE_INTEGER:
       return new vidl2_v4l2_control_integer(ctr,f);
       break;
@@ -93,14 +91,14 @@ vcl_string vidl2_v4l2_control_integer::description() const
 {
   char cad[256];
   snprintf(cad,256,"Control \"%s\": integer (min: %d, max: %d, step: %d, default: %d)",
-                  (const char *) ctrl_.name, minimum(), maximum(), step(), default_value());
+           (const char *) ctrl_.name, minimum(), maximum(), step(), default_value());
   return cad;
 }
 
 // ----------------- Control menu ---------------
 
 vidl2_v4l2_control_menu::vidl2_v4l2_control_menu(const v4l2_queryctrl& ctr, int f):
-                                                                vidl2_v4l2_control(ctr,f) 
+                                                                vidl2_v4l2_control(ctr,f)
 {
   struct v4l2_querymenu menu;
   vcl_memset(&menu, 0, sizeof (menu));
@@ -109,9 +107,9 @@ vidl2_v4l2_control_menu::vidl2_v4l2_control_menu(const v4l2_queryctrl& ctr, int 
                 if (0 == ioctl (fd, VIDIOC_QUERYMENU, &menu)) {
                         items.push_back((char *)menu.name);
                 } else {
-                        vcl_cerr << "VIDIOC_QUERYMENU" << vcl_endl;
+                        vcl_cerr << "VIDIOC_QUERYMENU\n";
                         items.clear(); // control menu is not added to the list
-                        return; 
+                        return;
                 }
         }
 }
@@ -120,7 +118,7 @@ vcl_string vidl2_v4l2_control_menu::description() const
 {
   char cad[256];
   snprintf(cad,256,"Control \"%s\": menu (%d items, default: %d)",
-                  (const char *) ctrl_.name, n_items(), default_value());
+           (const char *) ctrl_.name, n_items(), default_value());
   return cad;
 }
 
