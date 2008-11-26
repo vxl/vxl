@@ -62,7 +62,7 @@ class bmdl_modeling_process : public bprb_process
                  vcl_string output_path,
                  unsigned x_dim, unsigned y_dim,
                  unsigned x_overlap, unsigned y_overlap,
-                 float gthresh);
+                 float gthresh, float athresh, float hres);
 };
 
 #endif // bmdl_modeling_process_h_
