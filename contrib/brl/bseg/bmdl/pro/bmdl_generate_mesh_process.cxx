@@ -349,7 +349,7 @@ void bmdl_generate_mesh_process::generate_kml_collada(vcl_string& kmz_dir,
     meany /= verts.size();
 
     double lon, lat, elev;
-    assert(meanx >= 0 && meany <= 0 && minz >= 0);
+    //assert(meanx >= 0 && meany <= 0 && minz >= 0);
     lidar_cam->img_to_wgs((unsigned int)meanx, (unsigned int)(-meany), (unsigned int)minz, lon, lat, elev);
 
     vcl_stringstream ss;
