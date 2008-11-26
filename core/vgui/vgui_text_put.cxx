@@ -25,7 +25,7 @@ void vgui_text_put(char const *str, unsigned size)
   if( ! glut_was_initialized ) {
     glut_was_initialized = true;
     int argc = 0;
-    char* argv[1] = { NULL };
+    char* argv[1] = { 0 };
     glutInit( &argc, argv );
   }
 
