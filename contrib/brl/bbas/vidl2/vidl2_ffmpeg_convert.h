@@ -15,8 +15,13 @@
 #include "vidl2_frame_sptr.h"
 #include "vidl2_pixel_format.h"
 
+#include <vidl2/vidl2_config.h>
 extern "C" {
+#if FFMPEG_IN_SEVERAL_DIRECTORIES
+#include <libavcodec/avcodec.h>
+#else
 #include <ffmpeg/avcodec.h>
+#endif
 }
     
 //: Convert the pixel format of a frame using FFMPEG
