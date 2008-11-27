@@ -11,7 +11,7 @@ ENDIF( MPEG2_FOUND )
 IF( FFMPEG_FOUND )
   INCLUDE_DIRECTORIES(${FFMPEG_INCLUDE_DIR})
   ADD_DEFINITIONS(-DHAS_FFMPEG)
-# some versons of FFMPEG require this definition before including
+# some versions of FFMPEG require this definition before including
 # the headers for C++ compatibility
   ADD_DEFINITIONS(-D__STDC_CONSTANT_MACROS )
 ENDIF( FFMPEG_FOUND )
