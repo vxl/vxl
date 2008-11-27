@@ -9,14 +9,24 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vidl2_ffmpeg_ostream_params.h"
-
 #include <vidl2/vidl2_config.h>
+
+#if VIDL2_HAS_FFMPEG
+// some versions of FFMPEG require this definition before including 
+// the headers for C++ compatibility
+#define __STDC_CONSTANT_MACROS
+#endif // VIDL2_HAS_FFMPEG
+
+#include "vidl2_ffmpeg_ostream_params.h"
 
 #if VIDL2_HAS_FFMPEG
 
 extern "C" {
+#if FFMPEG_IN_SEVERAL_DIRECTORIES
+#include <libavformat/avformat.h>
+#else
 #include <ffmpeg/avformat.h>
+#endif
 }
 
 //-----------------------------------------------------------------------------
