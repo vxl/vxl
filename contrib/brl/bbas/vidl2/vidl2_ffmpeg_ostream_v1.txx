@@ -17,7 +17,11 @@
 #include <vil/vil_memory_chunk.h>
 
 extern "C" {
+#if FFMPEG_IN_SEVERAL_DIRECTORIES
+#include <libavformat/avformat.h>
+#else
 #include <ffmpeg/avformat.h>
+#endif
 }
 
 //-----------------------------------------------------------------------------

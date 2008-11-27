@@ -13,7 +13,11 @@ extern "C" {
 // some versions of FFMPEG require this definition before including 
 // the headers for C++ compatibility
 #define __STDC_CONSTANT_MACROS
+#if FFMPEG_IN_SEVERAL_DIRECTORIES
+#include <libavcodec/avcodec.h>
+#else
 #include <ffmpeg/avcodec.h>
+#endif
 }
 
 #if LIBAVCODEC_BUILD < ((51<<16)+(49<<8)+0)  // ver 51.49.0
