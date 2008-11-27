@@ -12,9 +12,13 @@
 // \endverbatim
 
 extern "C" {
-#define __STDC_CONSTANT_MACROS
+#ifdef  HAS_FFMPEG_SEVERAL
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#else
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
+#endif
 }
 
 #include <vidl/vidl_codec.h>
