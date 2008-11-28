@@ -633,11 +633,16 @@ void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
   ni_ = n_i;
   nj_ = n_j;
   nplanes_ = n_planes;
-  if (istep_==0) istep_ = 1;
+  // When the image view was in interleaved mode before entering this function, 
+  // check whether the new number of planes is the same as the istep_. 
+  // If the two agree, remain in the interleaved mode, which is desired by the constructor.
+  // Otherwise, make istep_=1 and thus no longer interleaved. 
+  if (istep_==0 || istep_!= n_planes) istep_ = 1;
   jstep_ = n_i*istep_;
   planestep_ = istep_==1 ? n_i*n_j : 1;
 
   top_left_ = reinterpret_cast<T*>(ptr_->data());
+  assert( (istep_==1 && planestep_==n_i*n_j) || (planestep_==1 && istep_==n_planes) );
 }
 
 

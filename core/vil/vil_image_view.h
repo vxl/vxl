@@ -223,7 +223,7 @@ class vil_image_view : public vil_image_view_base
 
   //: Make empty.
   // Disconnects view from underlying data.
-  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=0; }
+  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=0; istep_=jstep_=planestep_=0; }
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
