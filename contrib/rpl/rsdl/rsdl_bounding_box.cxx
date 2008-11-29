@@ -8,10 +8,8 @@ rsdl_bounding_box::rsdl_bounding_box( const rsdl_point& min_point,
   : min_point_(min_point), max_point_(max_point)
 {
   unsigned int Nc = min_point_.num_cartesian();
-  unsigned int Na = min_point_.num_angular();
-
   assert( max_point_.num_cartesian() == Nc );
-  assert( max_point_.num_angular() == Na );
+  assert( max_point_.num_angular() == min_point_.num_angular() );
 
   for ( unsigned int i=0; i<Nc; ++i )
     if ( min_point_.cartesian(i) > max_point_.cartesian(i) ) {
