@@ -93,6 +93,12 @@ bool vil_jpeg_image::get_property(char const * /*tag*/, void * /*prop*/) const
   return false;
 }
 
+void vil_jpeg_image::set_quality(int quality)
+{
+  if( jc )
+    jc->set_quality(quality);
+}
+
 vil_jpeg_image::vil_jpeg_image(vil_stream *s,
                                unsigned nx,
                                unsigned ny,

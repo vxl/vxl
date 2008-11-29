@@ -43,6 +43,7 @@ class vil_jpeg_decompressor;
 //: generic_image implementation for JPEG files
 class vil_jpeg_image : public vil_image_resource
 {
+ public:
   vil_jpeg_image(vil_stream *is);
   vil_jpeg_image (vil_stream* is, unsigned ni,
                   unsigned nj, unsigned nplanes, vil_pixel_format format);
@@ -68,6 +69,9 @@ class vil_jpeg_image : public vil_image_resource
 
   bool get_property(char const *tag, void *prop = 0) const;
 
+  //: set the quality for compression
+  void set_quality(int quality);
+  
  private:
   vil_jpeg_compressor   *jc;
   vil_jpeg_decompressor *jd;
