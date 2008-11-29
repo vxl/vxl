@@ -7,13 +7,13 @@
 
 // Constructor
 vidl_ffmpeg_codec::vidl_ffmpeg_codec()
- : fmt_cxt_( NULL ),
-   vid_index_( -1 ),
-   vid_str_( NULL ),
-   last_dts( 0 ),
-   frame_( NULL ),
-   deinterlace_( false ),
-   frame_number_offset_( 0 )
+: fmt_cxt_( NULL ),
+  vid_index_( -1 ),
+  vid_str_( NULL ),
+  last_dts( 0 ),
+  frame_( NULL ),
+  deinterlace_( false ),
+  frame_number_offset_( 0 )
 {
   initialize();
 }
@@ -136,7 +136,7 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
 
   // Find a video stream. Use the first one we find.
   vid_index_ = -1;
-  for ( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
+  for ( unsigned int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
 #if LIBAVFORMAT_BUILD <= 4628
     AVCodecContext *enc = &fmt_cxt_->streams[i]->codec;
 #else
@@ -256,7 +256,7 @@ vidl_ffmpeg_codec::cur_frame() const
     AVPicture out_pict;
     out_pict.data[0] = cur_img_.top_left_ptr();
     out_pict.linesize[0] = cur_img_.ni() * 3;
-    if ( img_convert( &out_pict, PIX_FMT_RGB24,
+    if ( img_convert(&out_pict, PIX_FMT_RGB24,
                      (AVPicture*)frame_, enc->pix_fmt,
                      width, height ) == -1 ) {
       cur_img_ = 0;
