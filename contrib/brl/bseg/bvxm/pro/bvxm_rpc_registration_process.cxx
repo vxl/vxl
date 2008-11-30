@@ -71,21 +71,20 @@ bool bvxm_rpc_registration_process::execute()
   unsigned scale = input5->value();
 
   // get parameters
-  double noise_multiplier, smooth, edt_gaussian_sigma;
-  bool automatic_threshold, junctionp, aggressive_junction_closure;
-  if(
-    !parameters()->get_value("noise_multiplier", noise_multiplier) ||
-    !parameters()->get_value("smooth", smooth) ||
-    !parameters()->get_value("automatic_threshold", automatic_threshold) ||
-    !parameters()->get_value("junctionp", junctionp) ||
-    !parameters()->get_value("aggressive_junction_closure", aggressive_junction_closure) ||
-    !parameters()->get_value("edt_gaussian_sigma", edt_gaussian_sigma)){
+  double noise_multiplier=false, smooth=false, edt_gaussian_sigma=false; // dummy initialisations, to avoid compiler warnings
+  bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
+  if (!parameters()->get_value("noise_multiplier", noise_multiplier) ||
+      !parameters()->get_value("smooth", smooth) ||
+      !parameters()->get_value("automatic_threshold", automatic_threshold) ||
+      !parameters()->get_value("junctionp", junctionp) ||
+      !parameters()->get_value("aggressive_junction_closure", aggressive_junction_closure) ||
+      !parameters()->get_value("edt_gaussian_sigma", edt_gaussian_sigma)){
     vcl_cout << "problem(s) in parameters: please see brl/bseg/bvxm_batch/multiscale/rpc_registration_parameters.xml for correct xml formatting\n";
     return false;
   }
 
   int offset_search_size = bvxm_util::convert_uncertainty_from_meters_to_pixels(uncertainty, vox_world->get_params()->lvcs(), camera_inp);
-  vcl_cout << "Offset search size is: " << offset_search_size << "\n";
+  vcl_cout << "Offset search size is: " << offset_search_size << vcl_endl;
 
   vil_image_view<vxl_byte> image(image_sptr);
   int ni = image.ni();
@@ -173,9 +172,8 @@ bool bvxm_rpc_registration_process::execute()
       offset_upper_limit_v = max_v+offset_step_size;;
       offset_step_size = 1;
     }
-    vcl_cout << vcl_endl;
 
-    vcl_cout << "Estimated changes in offsets (u,v)=(" << max_u << ',' << max_v << ')' << vcl_endl;
+    vcl_cout << "\nEstimated changes in offsets (u,v)=(" << max_u << ',' << max_v << ')' << vcl_endl;
   }
 
   // correct the output for (local) rational camera using the estimated offset pair (max_u,max_v)
@@ -249,7 +247,7 @@ bool bvxm_rpc_registration_process::execute()
       bvxm_util::edge_distance_transform(edge_image,edt_image);
       edt_image = bvxm_util::multiply_image_with_gaussian_kernel(edt_image,edt_gaussian_sigma);
       vil_image_view_base_sptr edt_image_sptr = new vil_image_view<float>(edt_image);
-      
+
       bvxm_image_metadata camera_metadata_out(edt_image_sptr,curr_camera);
       result=vox_world->update_edges(camera_metadata_out,curr_scale);
 
