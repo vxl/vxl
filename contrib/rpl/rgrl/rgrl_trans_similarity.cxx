@@ -1,12 +1,11 @@
 #include "rgrl_trans_similarity.h"
-#include <vnl/vnl_fastops.h>
-
 //:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
 
 #include <vcl_cassert.h>
+#include <vnl/vnl_fastops.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rgrl/rgrl_util.h>
 
@@ -99,10 +98,9 @@ vnl_matrix<double>
 rgrl_trans_similarity::
 transfer_error_covar( vnl_vector<double> const& p  ) const
 {
-  unsigned const m = A_.rows();
-
   assert ( is_covar_set() );
-  assert ( p.size() == m && m == 2); //only deal with 2D for now
+  assert ( p.size() == 2);  // only deal with 2D for now
+  assert ( A_.rows() == 2); // only deal with 2D for now
 
   vnl_matrix<double> temp( 2, 4, 0.0 );
   temp(0,0) = p[0]-from_centre_[0];
@@ -171,7 +169,7 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_ + from_centre_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_similarity::
 inverse_transform( ) const
 {
@@ -204,8 +202,8 @@ scale_by( double scale ) const
 {
   rgrl_transformation_sptr xform
     = new rgrl_trans_similarity( A_, trans_ * scale,
-                                covar_, from_centre_ * scale,
-                                vnl_vector<double>(from_centre_.size(), 0.0) );
+                                 covar_, from_centre_ * scale,
+                                 vnl_vector<double>(from_centre_.size(), 0.0) );
   xform->set_scaling_factors( this->scaling_factors() );
   return xform;
 }
@@ -257,7 +255,7 @@ read( vcl_istream& is )
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_similarity::
 clone() const
 {
