@@ -194,11 +194,11 @@ bvxm_bg_pair_density::initialize_bg_map(vil_image_view<float>& prob_density, vil
 {
   //: compute prior_const such that p(x in bg|y) ~ 1 when p(y|x in bg) is high
   //  Use the top 10% percentile value to determine when p(y|x in bg) is high
-  float val;
+  float val = -1e99f; // dummy initialisation, to avoid compiler warning
   vil_math_value_range_percentile(prob_density, double(1.0-top_percentile), val);
 #if 1
   vcl_cout << "1-" << top_percentile << "= " << 1-top_percentile << " percentile value of prob density is: " << val << vcl_endl;
-  float min, max;
+  float min = -1e99, max = -1e99;
   vil_math_value_range(prob_density, min, max);
   vcl_cout << "same prob density min is: " << min << " max is: " << max << vcl_endl;
 #endif
