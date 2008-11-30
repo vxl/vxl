@@ -261,7 +261,7 @@ bgui3d_viewer_tableau::camera() const
            ( new vpgl_perspective_camera<double>(K,c,R) );
     }
    case ORTHOGONAL: {
-    SoOrthographicCamera* cam = (SoOrthographicCamera*)scene_camera_;
+    //SoOrthographicCamera* cam = (SoOrthographicCamera*)scene_camera_;
     //double h = cam->height.getValue();
     vcl_cerr << "WARNING: not implemented yet\n";
     return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
