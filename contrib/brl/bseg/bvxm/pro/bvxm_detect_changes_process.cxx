@@ -47,7 +47,6 @@ bvxm_detect_changes_process::bvxm_detect_changes_process()
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1]= "vil_image_view_base_sptr";
   output_types_[2]= "vil_image_view_base_sptr";
-
 }
 
 
@@ -89,7 +88,7 @@ bool bvxm_detect_changes_process::execute()
   vil_image_view<float> prob_map(img->ni(),img->nj(),1);
   vil_image_view<bool> mask(img->ni(),img->nj(),1);
 
-  bool result;
+  bool result = true;
 
   if (voxel_type == "apm_mog_grey")
     result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index,scale_index);
@@ -97,33 +96,31 @@ bool bvxm_detect_changes_process::execute()
     result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index,scale_index);
   else if (voxel_type == "apm_mog_mc_2_3")
   {
-    
     if (observation.img->nplanes()!= 2)
-      {
-        vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
-          << observation.img->nplanes()<< " planes" << vcl_endl;
-        return false;
-      }
+    {
+      vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
+               << observation.img->nplanes()<< " planes\n";
+      return false;
+    }
     result = world->pixel_probability_density<APM_MOG_MC_2_3>(observation,prob_map, mask, bin_index,scale_index);
-
   }
   else if (voxel_type == "apm_mog_mc_3_3")
     result = world->pixel_probability_density<APM_MOG_MC_3_3>(observation,prob_map, mask, bin_index,scale_index);
   else if (voxel_type == "apm_mog_mc_4_3")
   {
     if (observation.img->nplanes()!= 4)
-      {
-        vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
-          << observation.img->nplanes()<< " planes" << vcl_endl;
-        return false;
-      }
+    {
+      vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
+               << observation.img->nplanes()<< " planes\n";
+      return false;
+    }
     result = world->pixel_probability_density<APM_MOG_MC_4_3>(observation,prob_map, mask, bin_index,scale_index);
   }
-  else 
-    vcl_cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appereance model" << vcl_endl;
+  else
+    vcl_cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appereance model\n";
 
-  if(!result){
-    vcl_cerr << "Error bvxm_detect_changes_process: failed to detect changes" << vcl_endl;
+  if (!result) {
+    vcl_cerr << "Error bvxm_detect_changes_process: failed to detect changes\n";
     return false;
   }
   // TODO: filtering / thresholding if necessary (Thom?)
@@ -139,11 +136,11 @@ bool bvxm_detect_changes_process::execute()
   vil_threshold_above<float>(prob_map, binary_img, threshold_value);
 
   //store output
-  brdb_value_sptr output0 = 
+  brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
   output_data_[0] = output0;
 
-  brdb_value_sptr output1 = 
+  brdb_value_sptr output1 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
   output_data_[1] = output1;
 
