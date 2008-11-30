@@ -87,8 +87,8 @@ bool bvxm_rpc_prob_registration_process::execute()
   unsigned scale = input6->value();
 
   // get parameters
-  double cedt_image_gaussian_sigma;
-  int offset_search_size;
+  double cedt_image_gaussian_sigma=1.0;
+  int offset_search_size=0;            // two dummy initialisations, to avoid compiler warnings
   if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
       !parameters()->get_value("offset_search_size", offset_search_size)
      )
