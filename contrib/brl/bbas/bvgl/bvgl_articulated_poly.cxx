@@ -151,13 +151,12 @@ double bvgl_articulated_poly::
 lie_distance(bvgl_articulated_poly const& apa,
              bvgl_articulated_poly const& apb)
 {
+  assert(apa.size()==apb.size());
   unsigned na = apa.size();
-  unsigned nb = apb.size();
-  assert(na==nb);
   double d = 0;//distance
   //note that there is no effect of the angle of the last joint
   //The weight is N-(joint+1)
-  for (unsigned i =0; i<na-1; ++i)
+  for (unsigned i =0; i+1<na; ++i)
   {
     vgl_h_matrix_2d<double> Ta = apa.joint_transform(i);
     vgl_h_matrix_2d<double> Tb = apb.joint_transform(i);
@@ -192,7 +191,7 @@ projection(bvgl_articulated_poly_sptr const& target,
   //copy the target
   unsigned n = target->size();
   vcl_vector<double> links(n-1);
-  for (unsigned i = 0; i<n-1; ++i)
+  for (unsigned i = 0; i+1<n; ++i)
     links[i]=target->link_length(i);
   //search for the projection.
   bvgl_articulated_poly_sptr manifold = new bvgl_articulated_poly(n, links);
