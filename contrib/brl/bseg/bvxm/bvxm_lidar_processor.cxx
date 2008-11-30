@@ -80,7 +80,7 @@ float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
   float p = 1.0f;
   for ( int ni = min_i; ni < max_i; ni++ ) {
     for ( int nj = min_j; nj < max_j; nj++ ) {
-      float d = -255f; // dummy initialisation, to avoid compiler warning
+      float d = -255.f; // dummy initialisation, to avoid compiler warning
       if (lidar->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
         if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(lidar.ptr()))
           d = (*img_view)(ni, nj);
