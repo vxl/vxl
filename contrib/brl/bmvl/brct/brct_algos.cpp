@@ -178,9 +178,9 @@ vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc,
 
   double maxd = -100;
   int N = ec->size();
-  vgl_point_2d<double> pmax;
+  vgl_point_2d<double> pmax(1e99, 1e99); // dummy initialisation, to avoid compiler warning
 
-  for (int i=0; i<N; i++)
+  for (int i=0; i<N; ++i)
   {
     vgl_point_2d<double> p = (*ec)[i].get_pt();
     double d = pt.prob_at(p);
