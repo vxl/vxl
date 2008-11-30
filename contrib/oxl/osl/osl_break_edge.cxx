@@ -16,15 +16,13 @@ void osl_break_edge(osl_edge const *in,
                     vcl_vector<unsigned> const &where,
                     vcl_list<osl_edge*> *broken)
 {
-  assert(in!=0);
+  assert(broken);
+  assert(in);
   float const *x = in->GetX();
   float const *y = in->GetY();
-  unsigned n = in->size();
-
-  assert(broken!=0);
   assert(!where.empty());
   assert(where.front() == 0);
-  assert(where.back() == n-1);
+  assert(where.back()+1 == in->size());
 
   // make array of vertices, one for each break.
   vcl_vector<osl_vertex*> verts;
