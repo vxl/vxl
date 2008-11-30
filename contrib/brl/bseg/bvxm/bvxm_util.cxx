@@ -218,7 +218,8 @@ vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sp
   }
 }
 
-vil_image_view<float> bvxm_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma){
+vil_image_view<float> bvxm_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
+{
   vil_image_view<float> ret_img(img.ni(),img.nj(),1);
 
   vnl_gaussian_kernel_1d gaussian(gaussian_sigma);
@@ -232,14 +233,14 @@ vil_image_view<float> bvxm_util::multiply_image_with_gaussian_kernel(vil_image_v
   return ret_img;
 }
 
-vil_image_view<vxl_byte> bvxm_util::detect_edges(vil_image_view<vxl_byte> img, 
-                                                 double noise_multiplier, 
-                                                 double smooth, 
-                                                 bool automatic_threshold, 
-                                                 bool junctionp, 
+vil_image_view<vxl_byte> bvxm_util::detect_edges(vil_image_view<vxl_byte> img,
+                                                 double noise_multiplier,
+                                                 double smooth,
+                                                 bool automatic_threshold,
+                                                 bool junctionp,
                                                  bool aggressive_junction_closure)
 {
-  if( img.nplanes() >= 3 ) 
+  if ( img.nplanes() >= 3 )
   {
     vil_image_view<vxl_byte> img_rgb;
     img_rgb.deep_copy(img);
@@ -301,7 +302,8 @@ vil_image_view<vxl_byte> bvxm_util::detect_edges(vil_image_view<vxl_byte> img,
   return img_edge;
 }
 
-void bvxm_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt){
+void bvxm_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
+{
   vil_image_view<vxl_byte> edge_image_negated(inp_image);
   vil_math_scale_and_offset_values(edge_image_negated,-1.0,255);
 
@@ -309,8 +311,8 @@ void bvxm_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil
   unsigned nj = edge_image_negated.nj();
 
   vil_image_view<vxl_uint_32> curr_image_edt(ni,nj,1);
-  for(unsigned i=0; i<ni; i++){
-    for(unsigned j=0; j<nj; j++){
+  for (unsigned i=0; i<ni; i++) {
+    for (unsigned j=0; j<nj; j++) {
       curr_image_edt(i,j) = edge_image_negated(i,j);
     }
   }
@@ -318,14 +320,15 @@ void bvxm_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil
   bil_edt_maurer(curr_image_edt);
 
   out_edt.set_size(ni,nj,1);
-  for(unsigned i=0; i<ni; i++){
-    for(unsigned j=0; j<nj; j++){
+  for (unsigned i=0; i<ni; i++) {
+    for (unsigned j=0; j<nj; j++) {
       out_edt(i,j) = vcl_sqrt((float)curr_image_edt(i,j));
     }
   }
 }
 
-int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera){
+int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera)
+{
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
   vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
@@ -334,16 +337,18 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo
   for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
     vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
     vgl_point_3d<double> curr_pt;
-    if(camera->type_name()=="vpgl_local_rational_camera"){
+    if (camera->type_name()=="vpgl_local_rational_camera") {
       curr_pt.set(curr_corner.x(),curr_corner.y(),curr_corner.z());
     }
-    else if(camera->type_name()=="vpgl_rational_camera"){
+    else if (camera->type_name()=="vpgl_rational_camera") {
       double lon, lat, gz;
       lvcs->local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
                           bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
       curr_pt.set(lon, lat, gz);
     }
-    
+    else // dummy initialisation, to avoid compiler warning
+      curr_pt.set(-1e99, -1e99, -1.0);
+
     double curr_u,curr_v;
     camera->project(curr_pt.x(),curr_pt.y(),curr_pt.z(),curr_u,curr_v);
     vgl_point_2d<double> p2d_uncertainty(curr_u,curr_v);
