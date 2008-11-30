@@ -640,16 +640,17 @@ bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale)
   bvxm_voxel_grid<float>* ocp_grid =
     dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0,scale).ptr());
 
-  vxl_uint_32 nx = ocp_grid->grid_size().x();
-  vxl_uint_32 ny = ocp_grid->grid_size().y();
-  vxl_uint_32 nz = ocp_grid->grid_size().z();
-
-  float divisor= vcl_pow(2.0f,-(float)scale);
+#if 0 // "std" implementation
+  float divisor = vcl_pow(0.5f,scale);
+#else // inlined implementation
+  float divisor = 1.f;
+  while (scale > 0) divisor *= 0.5f, --scale;
+#endif
   // iterate through slabs
-  unsigned i = 60, j=60, k=nz;
+  unsigned i=60, j=60, k=ocp_grid->grid_size().z();
   bvxm_voxel_grid<float>::iterator ocp_slab_it = ocp_grid->begin();
   for (ocp_slab_it = ocp_grid->begin(); ocp_slab_it != ocp_grid->end(); ++ocp_slab_it ) {
-    k--;
+    --k;
     float ocp = (*ocp_slab_it)(unsigned(vcl_floor(i*divisor)),unsigned(vcl_floor(j*divisor)),0);
     vcl_cout << "z=" << k << "  " << ocp << vcl_endl;
     for (unsigned b=0; b<boxes.size(); b++) {
@@ -705,9 +706,10 @@ static void test_gen_synthetic_world()
 
   bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_1,0).as_pointer());
-
+#if 0 // unused variable????  - FIXME
   bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_2,0).as_pointer());
+#endif
   vgl_vector_3d<unsigned> s_grid_size=world_params->num_voxels(0);
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
     ("test_gen_synthetic_world/intensity.vox",s_grid_size);
