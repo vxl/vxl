@@ -187,13 +187,14 @@ local void init_linkedlist(ll)
     ll->first_block = ll->last_block = NULL;
 }
 
+#if 0 /* unused local function */
 local void free_linkedlist(ll)
     linkedlist_data* ll;
 {
     free_datablock(ll->first_block);
     ll->first_block = ll->last_block = NULL;
 }
-
+#endif
 
 local int add_data_in_datablock(ll,buf,len)
     linkedlist_data* ll;
@@ -370,7 +371,7 @@ local int ziplocal_getShort (pzlib_filefunc_def,filestream,pX)
     uLong *pX;
 {
     uLong x ;
-    int i;
+    int i=0;
     int err;
 
     err = ziplocal_getByte(pzlib_filefunc_def,filestream,&i);
@@ -398,7 +399,7 @@ local int ziplocal_getLong (pzlib_filefunc_def,filestream,pX)
     uLong *pX;
 {
     uLong x ;
-    int i;
+    int i=0;
     int err;
 
     err = ziplocal_getByte(pzlib_filefunc_def,filestream,&i);
@@ -998,7 +999,6 @@ extern int ZEXPORT zipWriteInFileInZip (file, buf, len)
             uLong uTotalOutBefore = zi->ci.stream.total_out;
             err=deflate(&zi->ci.stream,  Z_NO_FLUSH);
             zi->ci.pos_in_buffered_data += (uInt)(zi->ci.stream.total_out - uTotalOutBefore) ;
-
         }
         else
         {
