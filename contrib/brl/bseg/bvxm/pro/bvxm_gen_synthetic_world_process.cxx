@@ -447,7 +447,7 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
 
   vgl_box_3d<double> box=boxes[0], top_box=boxes[1];
 
-  bool rand1, rand2;  float app_val;
+  bool rand1=false, rand2=false; float app_val=-1.0f; // dummy initialisations, to avoid compiler warning
   parameters()->get_value("rand1", rand1);
   parameters()->get_value("rand2", rand2);
   parameters()->get_value("appval", app_val);
@@ -585,12 +585,8 @@ bvxm_gen_synthetic_world_process::test_reconstructed_ocp(bvxm_voxel_world_sptr r
   bvxm_voxel_grid<float>* ocp_grid =
     dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0, scale).ptr());
 
-  vxl_uint_32 nx = ocp_grid->grid_size().x();
-  vxl_uint_32 ny = ocp_grid->grid_size().y();
-  vxl_uint_32 nz = ocp_grid->grid_size().z();
-
   // iterate through slabs
-  unsigned i = 60, j=60, k=nz;
+  unsigned i=60, j=60, k=ocp_grid->grid_size().z();
   bvxm_voxel_grid<float>::iterator ocp_slab_it = ocp_grid->begin();
   for (ocp_slab_it = ocp_grid->begin(); ocp_slab_it != ocp_grid->end(); ++ocp_slab_it ) {
     k--;
@@ -616,24 +612,25 @@ bool bvxm_gen_synthetic_world_process::execute()
 
   vul_file::make_directory("./test_gen_cameras");
 
-  unsigned nx, ny, nz;
+  unsigned nx=0, ny=0, nz=0; // dummy initialisations, to avoid compiler warning
   parameters()->get_value("nx", nx);
   parameters()->get_value("ny", ny);
   parameters()->get_value("nz", nz);
 
-  unsigned minx, miny, minz, dimx, dimy, dimz;
+  unsigned minx=0, miny=0, minz=0; // dummy initialisations, to avoid compiler warning
   parameters()->get_value("minx", minx);
   parameters()->get_value("miny", miny);
   parameters()->get_value("minz", minz);
 
+  unsigned dimx=0, dimy=0, dimz=0; // dummy initialisations, to avoid compiler warning
   parameters()->get_value("dimx", dimx);
   parameters()->get_value("dimy", dimy);
   parameters()->get_value("dimz", dimz);
 
-  bool gen_image_outs;
+  bool gen_image_outs=false; // dummy initialisation, to avoid compiler warning
   parameters()->get_value("genImages", gen_image_outs);
 
-  bool gen2_box;
+  bool gen2_box=false; // dummy initialisation, to avoid compiler warning
   parameters()->get_value("gen2", gen2_box);
 
   vgl_vector_3d<unsigned> grid_size(nx,ny,nz);
@@ -649,19 +646,20 @@ bool bvxm_gen_synthetic_world_process::execute()
   world->set_params(world_params);
   world->clean_grids();
 
-  unsigned int bin_num_1 = 0,bin_num_2 = 10;
   unsigned scale=0;
 
   //create an mog grid for appearance model and use appearence model processor update to properly initialize it
   bvxm_voxel_grid<float>* ocp_grid = static_cast<bvxm_voxel_grid<float>* >
     (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
 
+  unsigned int bin_num_1 = 0;
   bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_1,scale).as_pointer());
-
+#if 0 // unused ???? - FIXME
+  unsigned int bin_num_2 = 10;
   bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_2,scale).as_pointer());
-
+#endif // 0
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
     (model_dir + "intensity.vox",grid_size);
 
@@ -727,7 +725,7 @@ bool bvxm_gen_synthetic_world_process::test()
 {
   execute();
 
-  unsigned nx, ny, nz;
+  unsigned nx=0, ny=0, nz=0; // dummy initialisations, to avoid compiler warning
   parameters()->get_value("nx", nx);
   parameters()->get_value("ny", ny);
   parameters()->get_value("nz", nz);
@@ -752,7 +750,7 @@ bool bvxm_gen_synthetic_world_process::test()
 
   recon_world->set_params(recon_world_params);
   recon_world->clean_grids();
-  
+
   unsigned int bin_num_1 = 0, bin_num_2 = 10;
   unsigned scale=0;
   recon_world->get_grid<APM_MOG_GREY>(bin_num_1,scale);
