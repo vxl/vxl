@@ -1,5 +1,4 @@
 /******************************************************************************
- * Id
  *
  * Project:  Shapelib
  * Purpose:  Implementation of quadtree building and searching functions.
@@ -13,7 +12,7 @@
  * option is discussed in more detail in shapelib.html.
  *
  * --
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -33,7 +32,6 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: shptree.c
  * Revision 1.9  2003/01/28 15:53:41  warmerda
  * Avoid build warnings.
  *
@@ -63,9 +61,6 @@
  *
  */
 
-static char rcsid[] = 
-  "Id";
-
 #include "shapefil.h"
 
 #include <math.h>
@@ -87,7 +82,7 @@ static char rcsid[] =
 /*      up the tree.                                                    */
 /* -------------------------------------------------------------------- */
 
-#define SHP_SPLIT_RATIO	0.55
+#define SHP_SPLIT_RATIO 0.55
 
 /************************************************************************/
 /*                             SfRealloc()                              */
@@ -97,7 +92,6 @@ static char rcsid[] =
 /************************************************************************/
 
 static void * SfRealloc( void * pMem, int nNewSize )
-
 {
     if( pMem == NULL )
         return( (void *) malloc(nNewSize) );
@@ -113,9 +107,8 @@ static void * SfRealloc( void * pMem, int nNewSize )
 
 static SHPTreeNode *SHPTreeNodeCreate( double * padfBoundsMin,
                                        double * padfBoundsMax )
-
 {
-    SHPTreeNode	*psTreeNode;
+    SHPTreeNode *psTreeNode;
 
     psTreeNode = (SHPTreeNode *) malloc(sizeof(SHPTreeNode));
 
@@ -142,9 +135,8 @@ static SHPTreeNode *SHPTreeNodeCreate( double * padfBoundsMin,
 SHPTree SHPAPI_CALL1(*)
 SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
                double *padfBoundsMin, double *padfBoundsMax )
-
 {
-    SHPTree	*psTree;
+    SHPTree *psTree;
 
     if( padfBoundsMin == NULL && hSHP == NULL )
         return NULL;
@@ -164,8 +156,8 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
 /* -------------------------------------------------------------------- */
     if( psTree->nMaxDepth == 0 && hSHP != NULL )
     {
-        int	nMaxNodeCount = 1;
-        int	nShapeCount;
+        int nMaxNodeCount = 1;
+        int nShapeCount;
 
         SHPGetInfo( hSHP, &nShapeCount, NULL, NULL, NULL );
         while( nMaxNodeCount*4 < nShapeCount )
@@ -188,7 +180,7 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
     if( padfBoundsMin == NULL )
     {
         SHPGetInfo( hSHP, NULL, NULL,
-                    psTree->psRoot->adfBoundsMin, 
+                    psTree->psRoot->adfBoundsMin,
                     psTree->psRoot->adfBoundsMax );
     }
 
@@ -197,19 +189,19 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
 /* -------------------------------------------------------------------- */
     if( hSHP != NULL )
     {
-        int	iShape, nShapeCount;
-        
+        int iShape, nShapeCount;
+
         SHPGetInfo( hSHP, &nShapeCount, NULL, NULL, NULL );
 
         for( iShape = 0; iShape < nShapeCount; iShape++ )
         {
-            SHPObject	*psShape;
-            
+            SHPObject *psShape;
+
             psShape = SHPReadObject( hSHP, iShape );
             SHPTreeAddShapeId( psTree, psShape );
             SHPDestroyObject( psShape );
         }
-    }        
+    }
 
     return psTree;
 }
@@ -219,16 +211,15 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
 /************************************************************************/
 
 static void SHPDestroyTreeNode( SHPTreeNode * psTreeNode )
-
 {
-    int		i;
-    
+    int  i;
+
     for( i = 0; i < psTreeNode->nSubNodes; i++ )
     {
         if( psTreeNode->apsSubNode[i] != NULL )
             SHPDestroyTreeNode( psTreeNode->apsSubNode[i] );
     }
-    
+
     if( psTreeNode->panShapeIds != NULL )
         free( psTreeNode->panShapeIds );
 
@@ -252,7 +243,6 @@ static void SHPDestroyTreeNode( SHPTreeNode * psTreeNode )
 
 void SHPAPI_CALL
 SHPDestroyTree( SHPTree * psTree )
-
 {
     SHPDestroyTreeNode( psTree->psRoot );
     free( psTree );
@@ -268,15 +258,14 @@ int SHPAPI_CALL
 SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
                        double * padfBox2Min, double * padfBox2Max,
                        int nDimension )
-
 {
-    int		iDim;
+    int  iDim;
 
     for( iDim = 0; iDim < nDimension; iDim++ )
     {
         if( padfBox2Max[iDim] < padfBox1Min[iDim] )
             return FALSE;
-        
+
         if( padfBox1Max[iDim] < padfBox2Min[iDim] )
             return FALSE;
     }
@@ -292,23 +281,22 @@ SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
 
 static int SHPCheckObjectContained( SHPObject * psObject, int nDimension,
                            double * padfBoundsMin, double * padfBoundsMax )
-
 {
     if( psObject->dfXMin < padfBoundsMin[0]
         || psObject->dfXMax > padfBoundsMax[0] )
         return FALSE;
-    
+
     if( psObject->dfYMin < padfBoundsMin[1]
         || psObject->dfYMax > padfBoundsMax[1] )
         return FALSE;
 
     if( nDimension == 2 )
         return TRUE;
-    
+
     if( psObject->dfZMin < padfBoundsMin[2]
         || psObject->dfZMax < padfBoundsMax[2] )
         return FALSE;
-        
+
     if( nDimension == 3 )
         return TRUE;
 
@@ -330,7 +318,6 @@ void SHPAPI_CALL
 SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
                     double *padfBoundsMin1, double * padfBoundsMax1,
                     double *padfBoundsMin2, double * padfBoundsMax2 )
-
 {
 /* -------------------------------------------------------------------- */
 /*      The output bounds will be very similar to the input bounds,     */
@@ -340,14 +327,14 @@ SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
     memcpy( padfBoundsMax1, padfBoundsMaxIn, sizeof(double) * 4 );
     memcpy( padfBoundsMin2, padfBoundsMinIn, sizeof(double) * 4 );
     memcpy( padfBoundsMax2, padfBoundsMaxIn, sizeof(double) * 4 );
-    
+
 /* -------------------------------------------------------------------- */
 /*      Split in X direction.                                           */
 /* -------------------------------------------------------------------- */
     if( (padfBoundsMaxIn[0] - padfBoundsMinIn[0])
-        			> (padfBoundsMaxIn[1] - padfBoundsMinIn[1]) )
+      > (padfBoundsMaxIn[1] - padfBoundsMinIn[1]) )
     {
-        double	dfRange = padfBoundsMaxIn[0] - padfBoundsMinIn[0];
+        double dfRange = padfBoundsMaxIn[0] - padfBoundsMinIn[0];
 
         padfBoundsMax1[0] = padfBoundsMinIn[0] + dfRange * SHP_SPLIT_RATIO;
         padfBoundsMin2[0] = padfBoundsMaxIn[0] - dfRange * SHP_SPLIT_RATIO;
@@ -358,7 +345,7 @@ SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
 /* -------------------------------------------------------------------- */
     else
     {
-        double	dfRange = padfBoundsMaxIn[1] - padfBoundsMinIn[1];
+        double dfRange = padfBoundsMaxIn[1] - padfBoundsMinIn[1];
 
         padfBoundsMax1[1] = padfBoundsMinIn[1] + dfRange * SHP_SPLIT_RATIO;
         padfBoundsMin2[1] = padfBoundsMaxIn[1] - dfRange * SHP_SPLIT_RATIO;
@@ -372,10 +359,9 @@ SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
 static int
 SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
                        int nMaxDepth, int nDimension )
-
 {
-    int		i;
-    
+    int  i;
+
 /* -------------------------------------------------------------------- */
 /*      If there are subnodes, then consider wiether this object        */
 /*      will fit in them.                                               */
@@ -402,12 +388,12 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
 #if MAX_SUBNODE == 4
     else if( nMaxDepth > 1 && psTreeNode->nSubNodes == 0 )
     {
-        double	adfBoundsMinH1[4], adfBoundsMaxH1[4];
-        double	adfBoundsMinH2[4], adfBoundsMaxH2[4];
-        double	adfBoundsMin1[4], adfBoundsMax1[4];
-        double	adfBoundsMin2[4], adfBoundsMax2[4];
-        double	adfBoundsMin3[4], adfBoundsMax3[4];
-        double	adfBoundsMin4[4], adfBoundsMax4[4];
+        double adfBoundsMinH1[4], adfBoundsMaxH1[4];
+        double adfBoundsMinH2[4], adfBoundsMaxH2[4];
+        double adfBoundsMin1[4], adfBoundsMax1[4];
+        double adfBoundsMin2[4], adfBoundsMax2[4];
+        double adfBoundsMin3[4], adfBoundsMax3[4];
+        double adfBoundsMin4[4], adfBoundsMax4[4];
 
         SHPTreeSplitBounds( psTreeNode->adfBoundsMin,
                             psTreeNode->adfBoundsMax,
@@ -455,8 +441,8 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
 #if MAX_SUBNODE == 2
     else if( nMaxDepth > 1 && psTreeNode->nSubNodes == 0 )
     {
-        double	adfBoundsMin1[4], adfBoundsMax1[4];
-        double	adfBoundsMin2[4], adfBoundsMax2[4];
+        double adfBoundsMin1[4], adfBoundsMax1[4];
+        double adfBoundsMin2[4], adfBoundsMax2[4];
 
         SHPTreeSplitBounds( psTreeNode->adfBoundsMin, psTreeNode->adfBoundsMax,
                             adfBoundsMin1, adfBoundsMax1,
@@ -519,7 +505,6 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
 
 int SHPAPI_CALL
 SHPTreeAddShapeId( SHPTree * psTree, SHPObject * psObject )
-
 {
     return( SHPTreeNodeAddShapeId( psTree->psRoot, psObject,
                                    psTree->nMaxDepth, psTree->nDimension ) );
@@ -537,10 +522,9 @@ SHPTreeCollectShapeIds( SHPTree *hTree, SHPTreeNode * psTreeNode,
                         double * padfBoundsMin, double * padfBoundsMax,
                         int * pnShapeCount, int * pnMaxShapes,
                         int ** ppanShapeList )
-
 {
-    int		i;
-    
+    int  i;
+
 /* -------------------------------------------------------------------- */
 /*      Does this node overlap the area of interest at all?  If not,    */
 /*      return without adding to the list at all.                       */
@@ -569,7 +553,7 @@ SHPTreeCollectShapeIds( SHPTree *hTree, SHPTreeNode * psTreeNode,
     {
         (*ppanShapeList)[(*pnShapeCount)++] = psTreeNode->panShapeIds[i];
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      Recurse to subnodes if they exist.                              */
 /* -------------------------------------------------------------------- */
@@ -604,9 +588,8 @@ int SHPAPI_CALL1(*)
 SHPTreeFindLikelyShapes( SHPTree * hTree,
                          double * padfBoundsMin, double * padfBoundsMax,
                          int * pnShapeCount )
-
 {
-    int	*panShapeList=NULL, nMaxShapes = 0;
+    int *panShapeList=NULL, nMaxShapes = 0;
 
 /* -------------------------------------------------------------------- */
 /*      Perform the search by recursive descent.                        */
@@ -635,9 +618,8 @@ SHPTreeFindLikelyShapes( SHPTree * hTree,
 /************************************************************************/
 
 static int SHPTreeNodeTrim( SHPTreeNode * psTreeNode )
-
 {
-    int		i;
+    int  i;
 
 /* -------------------------------------------------------------------- */
 /*      Trim subtrees, and free subnodes that come back empty.          */
@@ -672,7 +654,6 @@ static int SHPTreeNodeTrim( SHPTreeNode * psTreeNode )
 
 void SHPAPI_CALL
 SHPTreeTrimExtraNodes( SHPTree * hTree )
-
 {
     SHPTreeNodeTrim( hTree->psRoot );
 }
