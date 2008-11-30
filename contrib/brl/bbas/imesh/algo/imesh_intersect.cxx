@@ -303,7 +303,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
                              double& dist)
 {
   double u,v;
-  unsigned char i = imesh_triangle_closest_point(p,a,b,c,dist,u,v);
+  imesh_triangle_closest_point(p,a,b,c,dist,u,v);
   double t = 1-u-v;
   return vgl_point_3d<double>(t*a.x() + u*b.x() + v*c.x(),
                               t*a.y() + u*b.y() + v*c.y(),
