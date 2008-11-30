@@ -52,7 +52,7 @@ bvxm_part_hierarchy::generate_output_map(vcl_vector<bvxm_part_instance_sptr>& ex
 {
   map.fill(0.0f);
 
-  float max = -1e99f;
+  float max = -1e63f;
   for (unsigned i = 0; i < extracted_parts.size(); ++i) {
     if (extracted_parts[i]->strength_ > max)
       max = extracted_parts[i]->strength_;
