@@ -37,7 +37,7 @@
 
 #include <vcl_cmath.h>
 #include "dll.h"
-#include <vxl_config.h> // for VXL_C_MATH_HAS_LROUND
+#include <vxl_config.h>
 
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
@@ -140,51 +140,221 @@ bool vnl_math_isfinite(long double);
 template <class T> bool vnl_math_isfinite(T);
 #endif
 
-// rnd (rounding; 0.5 rounds up)
-#if VXL_C_MATH_HAS_LROUND
-// Use C99 functions, which GCC implements as an intrinsic
-// Or in simpler terms - is at least 3 times faster.
-inline int vnl_math_rnd(float  x) { return lroundf(x); }
-inline int vnl_math_rnd(double x) { return lround(x); }
-#elif defined (VCL_VC) && !defined(__GCCXML__) && !defined(_WIN64)
-// Use assembly inline function from
-// http://mega-nerd.com/FPcast/
-//
 
- // Win32 doesn't seem to have these functions.
- // Therefore implement inline versions of these functions here.
-//  NB But Win64 does not support the non-standard _asm 
- __inline int
- vnl_math_rnd (double flt)
- { int intgr;
-  _asm
-  { fld flt
-   fistp intgr
-   } ;
-  return intgr ;
- }
+// rnd  -- round towards nearest integer
+//         halfway cases such as 0.5 may either be rounded to 0 or 1
+#ifdef VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
 
- __inline int
- vnl_math_rnd (float flt)
- { int intgr;
-  _asm
-  { fld flt
-   fistp intgr
-   } ;
-  return intgr;
- }
-#else
-inline int vnl_math_rnd(float  x) { return x>=0.f?int(x + .5f):int(x - .5f); }
-inline int vnl_math_rnd(double x) { return x>=0.0?int(x + 0.5):int(x - 0.5); }
+// This include all the SSE2 implementations below.
+# if !VXL_HAS_EMMINTRIN_H
+#   error "Required file emmintrin.h for SSE2 not found"
+# else
+#   include <emmintrin.h> // sse 2 intrinsics
+# endif
+
+
+// Be careful: half integer values are rounded to nearest even integer,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_rnd(float  x) {
+   return _mm_cvtss_si32(_mm_set_ss(x));
+}
+// Be careful: half integer values are rounded to nearest even integer,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_rnd(double  x) {
+   return _mm_cvtsd_si32(_mm_set_sd(x));
+}
+#elif defined(__GNUC__) // Fast implementation
+// Be careful: half integer values are rounded to nearest even integer,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_rnd(float  x) {
+#ifdef VNL_CHECK_FPU_ROUNDING_MODE
+  assert(fegetround()==FE_TONEAREST);
+#endif
+  int r;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r;
+}
+// Be careful: half integer values are rounded to nearest even integer,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_rnd(double  x) {
+#ifdef VNL_CHECK_FPU_ROUNDING_MODE
+  assert(fegetround()==FE_TONEAREST);
+#endif
+  int r;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r;
+}
+#elif defined (VCL_VC) && !defined(_WIN64) // Fast implementation
+// Be careful: half integer values are rounded to nearest even integer,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_rnd(float  x) {
+  int r;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r;
+}
+// Be careful: half integer values are rounded to nearest even integer,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_rnd(double  x) {
+  int r;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r;
+}
+#else // Vanilla implementation
+inline int vnl_math_rnd(float  x) { return x>=0.f?static_cast<int>(x + .5f):static_cast<int>(x - .5f); }
+inline int vnl_math_rnd(double x) { return x>=0.0?static_cast<int>(x + 0.5):static_cast<int>(x - 0.5); }
 #endif
 
+
 // floor -- round towards minus infinity
+#ifdef VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_floor(float  x) {
+   return _mm_cvtss_si32(_mm_set_ss(2*x-.5f))>>1;
+}
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_floor(double  x) {
+   return _mm_cvtsd_si32(_mm_set_sd(2*x-.5))>>1;
+}
+#elif defined(__GNUC__) // Fast implementation
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_floor(float  x) {
+#ifdef VNL_CHECK_FPU_ROUNDING_MODE
+  assert(fegetround()==FE_TONEAREST);
+#endif
+  int r;
+  x = 2*x-.5;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r>>1;
+}
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_floor(double  x) {
+#ifdef VNL_CHECK_FPU_ROUNDING_MODE
+  assert(fegetround()==FE_TONEAREST);
+#endif
+  int r;
+  x = 2*x-.5;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r>>1;
+}
+#elif defined (VCL_VC) && !defined(_WIN64) // Fast implementation
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_floor(float  x) {
+  int r;
+  x = 2*x-.5;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r>>1;
+}
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_floor(double  x) {
+  int r;
+  x = 2*x-.5;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r>>1;
+}
+#else // Vanilla implementation
 inline int vnl_math_floor(float  x) { return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f)); }
 inline int vnl_math_floor(double x) { return static_cast<int>(x>=0.0?x:(x==static_cast<int>(x)?x:x-1.0)); }
+#endif
+
 
 // ceil -- round towards plus infinity
+#ifdef VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_ceil(float  x) {
+   return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
+}
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_ceil(double  x) {
+   return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
+}
+#elif defined(__GNUC__) // Fast implementation
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_ceil(float  x) {
+#ifdef VNL_CHECK_FPU_ROUNDING_MODE
+  assert(fegetround()==FE_TONEAREST);
+#endif
+  int r;
+  x = -.5-2*x;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return -(r>>1);
+}
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_ceil(double  x) {
+#ifdef VNL_CHECK_FPU_ROUNDING_MODE
+  assert(fegetround()==FE_TONEAREST);
+#endif
+  int r;
+  x = -.5-2*x;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return -(r>>1);
+}
+#elif defined (VCL_VC) && !defined(_WIN64) // Fast implementation
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_ceil(float  x) {
+  int r;
+  x = -.5-2*x;
+  __asm {
+    fld x
+    fistp r
+  }
+  return -(r>>1);
+}
+// Be careful: argument absolue value must be less than INT_MAX/2,
+// we also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restaured to the default one).
+inline int vnl_math_ceil(double  x) {
+  int r;
+  x = -.5-2*x;
+  __asm {
+    fld x
+    fistp r
+  }
+  return -(r>>1);
+}
+#else // Vanilla implementation
 inline int vnl_math_ceil(float  x) { return static_cast<int>(x<0.f?x:(x==static_cast<int>(x)?x:x+1.f)); }
 inline int vnl_math_ceil(double x) { return static_cast<int>(x<0.0?x:(x==static_cast<int>(x)?x:x+1.0)); }
+#endif
 
 // abs
 inline bool           vnl_math_abs(bool x)          { return x; }

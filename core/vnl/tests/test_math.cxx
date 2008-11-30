@@ -78,12 +78,29 @@ void test_math()
   testlib_test_assert("rnd(-8.5001f) == -9", vnl_math_rnd(-8.5001f) == -9);
   testlib_test_assert("rnd(8.4999)  == 8", vnl_math_rnd(8.4999) ==  8);
   testlib_test_assert("rnd(8.4999f) == 8", vnl_math_rnd(8.4999f) == 8);
-  testlib_test_assert("rnd(8.50)  == 8/9", vnl_math_rnd(8.50)/2 ==  4);
   vcl_cout << "vnl_math_rnd(8.50) == " << vnl_math_rnd(8.50) << vcl_endl;
+  testlib_test_assert("rnd(8.50)  == 8/9", vnl_math_rnd(8.50)/2 ==  4);
   testlib_test_assert("rnd(8.50f) == 8/9", vnl_math_rnd(8.50f)/2 == 4);
   vcl_cout << "vnl_math_rnd(8.5001) == " << vnl_math_rnd(8.5001) << vcl_endl;
   testlib_test_assert("rnd(8.5001)  == 9", vnl_math_rnd(8.5001) ==  9);
   testlib_test_assert("rnd(8.5001f) == 9", vnl_math_rnd(8.5001f) == 9);
+
+  testlib_test_assert("rnd(-9.4999)  == -9", vnl_math_rnd(-9.4999) ==  -9);
+  testlib_test_assert("rnd(-9.4999f) == -9", vnl_math_rnd(-9.4999f) == -9);
+  vcl_cout << "vnl_math_rnd(-9.50) == " << vnl_math_rnd(-9.50) << vcl_endl;
+  testlib_test_assert("rnd(-9.50)  == -9/10", (vnl_math_rnd(-9.50)+1)/2 ==  -4);
+  testlib_test_assert("rnd(-9.50f) == -9/10", (vnl_math_rnd(-9.50f)+1)/2 == -4);
+  vcl_cout << "vnl_math_rnd(-9.5001) == " << vnl_math_rnd(-9.5001) << vcl_endl;
+  testlib_test_assert("rnd(-9.5001)  == -10", vnl_math_rnd(-9.5001) ==  -10);
+  testlib_test_assert("rnd(-9.5001f) == -10", vnl_math_rnd(-9.5001f) == -10);
+  testlib_test_assert("rnd(9.4999)  == 9", vnl_math_rnd(9.4999) ==  9);
+  testlib_test_assert("rnd(9.4999f) == 9", vnl_math_rnd(9.4999f) == 9);
+  vcl_cout << "vnl_math_rnd(9.50) == " << vnl_math_rnd(9.50) << vcl_endl;
+  testlib_test_assert("rnd(9.50)  == 9/10", (vnl_math_rnd(9.50)-1)/2 ==  4);
+  testlib_test_assert("rnd(9.50f) == 9/10", (vnl_math_rnd(9.50f)-1)/2 == 4);
+  vcl_cout << "vnl_math_rnd(9.5001) == " << vnl_math_rnd(9.5001) << vcl_endl;
+  testlib_test_assert("rnd(9.5001)  == 10", vnl_math_rnd(9.5001) ==  10);
+  testlib_test_assert("rnd(9.5001f) == 10", vnl_math_rnd(9.5001f) == 10);
 
   testlib_test_assert("floor(8.0)  == 8", vnl_math_floor(8.0) == 8);
   testlib_test_assert("floor(8.0f) == 8", vnl_math_floor(8.0f) == 8);
@@ -98,6 +115,19 @@ void test_math()
   testlib_test_assert("floor(-8.0001)  == -9", vnl_math_floor(-8.0001) ==  -9);
   testlib_test_assert("floor(-8.0001f) == -9", vnl_math_floor(-8.0001f) == -9);
 
+  testlib_test_assert("floor(9.0)  == 9", vnl_math_floor(9.0) == 9);
+  testlib_test_assert("floor(9.0f) == 9", vnl_math_floor(9.0f) == 9);
+  testlib_test_assert("floor(9.9999)  == 9", vnl_math_floor(9.9999) ==  9);
+  testlib_test_assert("floor(9.9999f) == 9", vnl_math_floor(9.9999f) == 9);
+  testlib_test_assert("floor(9.0001)  == 9", vnl_math_floor(9.0001) ==  9);
+  testlib_test_assert("floor(9.0001f) == 9", vnl_math_floor(9.0001f) == 9);
+  testlib_test_assert("floor(-9.0)  == -9", vnl_math_floor(-9.0) == -9);
+  testlib_test_assert("floor(-9.0f) == -9", vnl_math_floor(-9.0f) == -9);
+  testlib_test_assert("floor(-9.9999)  == -10", vnl_math_floor(-9.9999) ==  -10);
+  testlib_test_assert("floor(-9.9999f) == -10", vnl_math_floor(-9.9999f) == -10);
+  testlib_test_assert("floor(-9.0001)  == -10", vnl_math_floor(-9.0001) ==  -10);
+  testlib_test_assert("floor(-9.0001f) == -10", vnl_math_floor(-9.0001f) == -10);
+
   testlib_test_assert("ceil(8.0)  == 8", vnl_math_ceil(8.0) == 8);
   testlib_test_assert("ceil(8.0f) == 8", vnl_math_ceil(8.0f) == 8);
   testlib_test_assert("ceil(8.9999)  == 9", vnl_math_ceil(8.9999) ==  9);
@@ -110,6 +140,19 @@ void test_math()
   testlib_test_assert("ceil(-8.9999f) == -8", vnl_math_ceil(-8.9999f) == -8);
   testlib_test_assert("ceil(-8.0001)  == -8", vnl_math_ceil(-8.0001) ==  -8);
   testlib_test_assert("ceil(-8.0001f) == -8", vnl_math_ceil(-8.0001f) == -8);
+
+  testlib_test_assert("ceil(9.0)  == 9", vnl_math_ceil(9.0) == 9);
+  testlib_test_assert("ceil(9.0f) == 9", vnl_math_ceil(9.0f) == 9);
+  testlib_test_assert("ceil(9.9999)  == 10", vnl_math_ceil(9.9999) ==  10);
+  testlib_test_assert("ceil(9.9999f) == 10", vnl_math_ceil(9.9999f) == 10);
+  testlib_test_assert("ceil(9.0001)  == 10", vnl_math_ceil(9.0001) ==  10);
+  testlib_test_assert("ceil(9.0001f) == 10", vnl_math_ceil(9.0001f) == 10);
+  testlib_test_assert("ceil(-9.0)  == -9", vnl_math_ceil(-9.0) == -9);
+  testlib_test_assert("ceil(-9.0f) == -9", vnl_math_ceil(-9.0f) == -9);
+  testlib_test_assert("ceil(-9.9999)  == -9", vnl_math_ceil(-9.9999) ==  -9);
+  testlib_test_assert("ceil(-9.9999f) == -9", vnl_math_ceil(-9.9999f) == -9);
+  testlib_test_assert("ceil(-9.0001)  == -9", vnl_math_ceil(-9.0001) ==  -9);
+  testlib_test_assert("ceil(-9.0001f) == -9", vnl_math_ceil(-9.0001f) == -9);
 
   testlib_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
   testlib_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));

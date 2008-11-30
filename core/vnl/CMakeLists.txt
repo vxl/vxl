@@ -17,6 +17,12 @@ OPTION(VNL_CONFIG_THREAD_SAFE
     "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant). Currently broken. For use by VNL developers only." OFF)
 #ENDIF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
 
+IF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
+  OPTION(VNL_CONFIG_ENABLE_SSE2_ROUNDING
+    "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)." ON)
+ENDIF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
+
+
 MARK_AS_ADVANCED(
   VNL_CONFIG_CHECK_BOUNDS
   VNL_CONFIG_LEGACY_METHODS
