@@ -77,9 +77,10 @@ float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
   int max_i = (int) vcl_ceil(lidar_roi.max_x()); if ( max_i >= (int)lidar->ni() ) max_i = lidar->ni()-1;
   int max_j = (int) vcl_ceil(lidar_roi.max_y()); if ( max_j >= (int)lidar->nj() ) max_j = lidar->nj()-1;
 
-  float p = 1.0f, d;
+  float p = 1.0f;
   for ( int ni = min_i; ni < max_i; ni++ ) {
     for ( int nj = min_j; nj < max_j; nj++ ) {
+      float d = -255f; // dummy initialisation, to avoid compiler warning
       if (lidar->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
         if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(lidar.ptr()))
           d = (*img_view)(ni, nj);
