@@ -63,12 +63,12 @@ bool bvxm_rec_update_changes_wrt_area_process::execute()
   t2.mark();
 
   bvxm_bayesian_propagation bp(bg_map);
-  float lambda1, k1; // to construct P(Ad | Gb), values based on stats collected from data
-  parameters()->get_value("lambda1", lambda1);
-  parameters()->get_value("k1", k1);
-  float lambda2, k2; // to construct P(Ad | not Gb), values based on stats collected from data
-  parameters()->get_value("lambda2", lambda2);
-  parameters()->get_value("k2", k2);
+  // to construct P(Ad | Gb), values based on stats collected from data
+  float lambda1=-1.f; parameters()->get_value("lambda1", lambda1);
+  float k1=-1.f;      parameters()->get_value("k1", k1);
+  // to construct P(Ad | not Gb), values based on stats collected from data
+  float lambda2=-1.f; parameters()->get_value("lambda2", lambda2);
+  float k2=-1.f;      parameters()->get_value("k2", k2);
   bp.run_area(glitch_map, lambda1, k1, lambda2, k2);
 
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(bp.bg_map_);
