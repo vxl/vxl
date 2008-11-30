@@ -1064,7 +1064,7 @@ static void timerCallback (void *data, SoSensor* sensor)
 
   int counter = timer_num_counter - N_DELAY;
 
-  int show_iter = int(counter / total_iters) % 2 == 0;
+  // int show_iter = int(counter / total_iters) % 2 == 0;
 
   int reset_iter = (counter-total_iters) % N_RESET_ITER == N_RESET_ITER-1;
     //int(counter / total_iters) % N_RESET_ITER == N_RESET_ITER-1;
@@ -1108,7 +1108,7 @@ SoSeparator* draw_M_bnd_faces_anim (bmsh3d_mesh* M, const int nF_batch)
     bmsh3d_face* F = (*it).second;
     faces.push_back (F);
 
-    if (i % nF_batch == nF_batch-1) {
+    if ((i+1) % nF_batch == 0) {
       draw_faces_in_switch (animRoot, faces);
       faces.clear();
       frame++;
