@@ -4,14 +4,12 @@
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
-
 #include <bprb/bprb_parameters.h>
-
 #include <bmdl/bmdl_classify.h>
 
 #define PARAM_GROUND_THRESH "ground_threshold"
-#define PARAM_AREA_THRESH "area_threshold"
-#define PARAM_HEIGHT_RES "height_resolution"
+#define PARAM_AREA_THRESH   "area_threshold"
+#define PARAM_HEIGHT_RES    "height_resolution"
 
 bmdl_classify_process::bmdl_classify_process()
 {
@@ -81,15 +79,13 @@ bool bmdl_classify_process::execute()
   }
 
   // read the parameters
-  float gthresh=0.0, athresh, hres;
+  float gthresh=0.0f, athresh=0.0f, hres=0.0f; // dummy initialisation, to avoid compiler warning
   if (!parameters()->get_value(PARAM_GROUND_THRESH, gthresh) ||
-    !parameters()->get_value(PARAM_AREA_THRESH, athresh) ||
-    !parameters()->get_value(PARAM_HEIGHT_RES, hres)) {
-    vcl_cout << "bmdl_classify_process -- has problem getting the parameter!\n";
+      !parameters()->get_value(PARAM_AREA_THRESH, athresh) ||
+      !parameters()->get_value(PARAM_HEIGHT_RES, hres)) {
+    vcl_cout << "bmdl_classify_process -- problem getting the parameters!\n";
     return false;
   }
-
-
 
   vil_image_view_base_sptr label_img=0, height_img=0;
   if (!classify(first_ret, last_ret, ground, label_img, height_img, gthresh, athresh, hres)) {
@@ -167,7 +163,7 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
         height_img = new vil_image_view<double>();
         return classify<double>(lidar_first, lidar_last, ground,
                                 (vil_image_view<unsigned int>&)(*label_img),
-                                (vil_image_view<double>&)(*height_img), 
+                                (vil_image_view<double>&)(*height_img),
                                 (double) gthresh, (double) athresh, (double) hres);
       }
     }
