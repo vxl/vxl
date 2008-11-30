@@ -3,22 +3,21 @@
 //:
 // \file
 
-
 #include <vil/vil_image_view.h>
 #include <vcl_iostream.h>
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
 #include <bprb/bprb_parameters.h>
 
-//: Constructor
+// Constructor
 bvgl_generate_mask_process::bvgl_generate_mask_process()
 {
-  //input  
+  //input
   input_data_.resize(2,brdb_value_sptr(0));
   input_types_.resize(2);
   input_types_[0]= "vcl_string"; //name of the binary file to read bvgl_changes object
   input_types_[1]= "vcl_string"; //type of change
- 
+
   //output
   output_data_.resize(2, brdb_value_sptr(0));
   output_types_.resize(2);
@@ -30,13 +29,13 @@ bvgl_generate_mask_process::bvgl_generate_mask_process()
 }
 
 
-//: Destructor
+// Destructor
 bvgl_generate_mask_process::~bvgl_generate_mask_process()
 {
 }
 
 
-//: Execute the process
+// Execute the process
 bool
 bvgl_generate_mask_process::execute()
 {
@@ -50,15 +49,15 @@ bvgl_generate_mask_process::execute()
     static_cast<brdb_value_t<vcl_string>* >(input_data_[0].ptr());
   vcl_string file_name = input0->value();
 
-  brdb_value_t<vcl_string>* input1 = 
+  brdb_value_t<vcl_string>* input1 =
     static_cast<brdb_value_t<vcl_string>* >(input_data_[1].ptr());
   vcl_string change_type = input1->value();
 
-  unsigned ni, nj; 
+  unsigned ni=0, nj=0; // dummy initialisation, to avoid compiler warning
   parameters()->get_value("ni", ni);
   parameters()->get_value("nj", nj);
-  
-  //: read the object
+
+  // read the object
   vsl_b_ifstream bif(file_name);
   bvgl_changes_sptr objs = new bvgl_changes();
   objs->b_read(bif);
