@@ -250,7 +250,6 @@ imesh_quad_subdivide(imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces)
       merge_idx.push_back(new_e_vert);
     }
   }
-  const unsigned int num_e_verts = merge_idx.size();
   // face indices
   for (vcl_set<unsigned int>::const_iterator fi = sel_faces.begin();
        fi != sel_faces.end(); ++fi) {
@@ -300,7 +299,8 @@ imesh_quad_subdivide(imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces)
   int group = -1;
   if (faces.has_groups())
     group = 0;
-  for (unsigned int f=0; f<num_f; ++f) {
+  for (unsigned int f=0; f<num_f; ++f)
+  {
     map_itr i = face_map.find(f);
     if (i == face_map.end()){ // don't subdivide face
       face_itr fei = half_edges.face_begin(f);
