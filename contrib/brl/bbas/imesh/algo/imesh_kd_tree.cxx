@@ -289,7 +289,8 @@ class tri_dist_func
   tri_dist_func(const imesh_vertex_array<3>& v,
                 const imesh_regular_face_array<3>& t)
   : verts(v), tris(t), closest_index(static_cast<unsigned int>(-1)),
-    closest_dist(vcl_numeric_limits<double>::infinity()) {}
+    closest_dist(vcl_numeric_limits<double>::infinity()),
+    closest_u(0), closest_v(0) {}
   const imesh_vertex_array<3>& verts;
   const imesh_regular_face_array<3>& tris;
   unsigned int closest_index;
@@ -354,12 +355,12 @@ imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
 void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
                             const vcl_auto_ptr<imesh_kd_tree_node>& root,
                             vcl_vector<imesh_kd_tree_queue_entry>& leaf,
-                            vcl_vector<imesh_kd_tree_queue_entry>& internal)
+                            vcl_vector<imesh_kd_tree_queue_entry>& internal_node)
 {
   // find the root leaves containing the query point
   vcl_vector<imesh_kd_tree_node*> to_examine;
   to_examine.push_back(root.get());
-  internal.clear();
+  internal_node.clear();
   leaf.clear();
   for (unsigned int i=0; i<to_examine.size(); ++i) {
     imesh_kd_tree_node* current = to_examine[i];
@@ -373,16 +374,16 @@ void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
     if (imesh_min_sq_dist(query,current->left_->outer_box_) <=0)
       to_examine.push_back(current->left_.get());
     else
-      internal.push_back(imesh_kd_tree_queue_entry(
-                         imesh_min_sq_dist(query,current->left_->inner_box_),
-                         current->left_.get()));
+      internal_node.push_back(imesh_kd_tree_queue_entry(
+                              imesh_min_sq_dist(query,current->left_->inner_box_),
+                              current->left_.get()));
 
     if (imesh_min_sq_dist(query,current->right_->outer_box_) <=0)
       to_examine.push_back(current->right_.get());
     else
-      internal.push_back(imesh_kd_tree_queue_entry(
-                         imesh_min_sq_dist(query,current->right_->inner_box_),
-                         current->right_.get()));
+      internal_node.push_back(imesh_kd_tree_queue_entry(
+                              imesh_min_sq_dist(query,current->right_->inner_box_),
+                              current->right_.get()));
   }
 }
 
