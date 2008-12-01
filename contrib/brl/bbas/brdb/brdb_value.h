@@ -37,6 +37,9 @@ class brdb_value : public vbl_ref_count
   //: Destructor
   virtual ~brdb_value() {}
 
+#if 0
+  // The conversion operator causes problems with the ICC compiler
+  // Maybe it is not needed?
   //: Conversion operator
   template< class T >
   operator T () const
@@ -45,6 +48,7 @@ class brdb_value : public vbl_ref_count
     assert(type_val);
     return type_val->value();
   }
+#endif
 
   //: Assignment operator
   template< class T >
