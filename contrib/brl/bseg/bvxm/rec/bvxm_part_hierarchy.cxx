@@ -52,7 +52,7 @@ bvxm_part_hierarchy::generate_output_map(vcl_vector<bvxm_part_instance_sptr>& ex
 {
   map.fill(0.0f);
 
-  float max = -1e63f;
+  float max = -1e38f; // min float
   for (unsigned i = 0; i < extracted_parts.size(); ++i) {
     if (extracted_parts[i]->strength_ > max)
       max = extracted_parts[i]->strength_;
@@ -67,8 +67,8 @@ bvxm_part_hierarchy::generate_output_map(vcl_vector<bvxm_part_instance_sptr>& ex
 //: output_img needs to have 3 planes
 void
 bvxm_part_hierarchy::generate_output_img(vcl_vector<bvxm_part_instance_sptr>& extracted_parts,
-                                          vil_image_view<vxl_byte>& input_img,
-                                          vil_image_view<vxl_byte>& output_img)
+                                         vil_image_view<vxl_byte>& input_img,
+                                         vil_image_view<vxl_byte>& output_img)
 {
   unsigned ni = input_img.ni();
   unsigned nj = input_img.nj();
@@ -106,11 +106,11 @@ unsigned bvxm_part_hierarchy::highest_layer_id()
 // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
 // map is the activation map of the parts at the layer of central_p
 bvxm_part_instance_sptr bvxm_part_hierarchy::exists(bvxm_part_base_sptr upper_p,
-                                                      bvxm_part_instance_sptr central_p,
-                                                      vil_image_view<float>& map,
-                                                      vil_image_view<unsigned>& type_map,
-                                                      vcl_vector<vcl_vector<bvxm_part_instance_sptr> >& part_map,
-                                                      float det_threshold)
+                                                    bvxm_part_instance_sptr central_p,
+                                                    vil_image_view<float>& map,
+                                                    vil_image_view<unsigned>& type_map,
+                                                    vcl_vector<vcl_vector<bvxm_part_instance_sptr> >& part_map,
+                                                    float det_threshold)
 {
   unsigned ni = map.ni();
   unsigned nj = map.nj();
@@ -180,8 +180,8 @@ bvxm_part_instance_sptr bvxm_part_hierarchy::exists(bvxm_part_base_sptr upper_p,
 
 //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
 void bvxm_part_hierarchy::extract_upper_layer(vcl_vector<bvxm_part_instance_sptr>& extracted_parts,
-                                               unsigned ni, unsigned nj,
-                                               vcl_vector<bvxm_part_instance_sptr>& extracted_upper_parts)
+                                              unsigned ni, unsigned nj,
+                                              vcl_vector<bvxm_part_instance_sptr>& extracted_upper_parts)
 {
   vil_image_view<float> map(ni, nj, 1);  // the second plane will hold the types of the primitives
   vil_image_view<unsigned> type_map(ni, nj, 1);  // the second plane will hold the types of the primitives
