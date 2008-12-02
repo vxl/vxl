@@ -14,6 +14,7 @@
 #include <bprb/bprb_parameters.h>
 
 #define PARAM_GROUND_THRESH "ground_threshold"
+#define PARAM_VEG_THRESH    "vegetation_threshold"
 #define PARAM_AREA_THRESH   "area_threshold"
 #define PARAM_HEIGHT_RES    "height_resolution"
 
@@ -39,8 +40,11 @@ bmdl_modeling_process::bmdl_modeling_process()
   output_types_.resize(0);
 
   if (!parameters()->add( "Ground Threshold" , PARAM_GROUND_THRESH , 2.0f ))
+    vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";  
+  
+  if (!parameters()->add( "Vegetation Threshold" , PARAM_VEG_THRESH , 1.0f ))
     vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";
-
+  
   if (!parameters()->add( "Area Threshold" , PARAM_AREA_THRESH , 6.0f ))
     vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";
 
@@ -80,8 +84,9 @@ bool bmdl_modeling_process::execute()
   brdb_value_t<unsigned>* input7 = static_cast<brdb_value_t<unsigned>* >(input_data_[7].ptr());
   unsigned y_over = input7->value();
 
-  float gthresh=0.0f, athresh=0.0f, hres=0.0f; // dummy initialisation, to avoid compiler warning
+  float gthresh=0.0f, vthresh=0.0f, athresh=0.0f, hres=0.0f; // dummy initialisation, to avoid compiler warning
   if (!parameters()->get_value(PARAM_GROUND_THRESH, gthresh) ||
+      !parameters()->get_value(PARAM_VEG_THRESH, vthresh) ||
       !parameters()->get_value(PARAM_AREA_THRESH, athresh) ||
       !parameters()->get_value(PARAM_HEIGHT_RES, hres)) {
     vcl_cout << "bmdl_modeling_process -- problem getting the parameters!\n";
@@ -110,7 +115,7 @@ bool bmdl_modeling_process::execute()
 
   vil_image_view_base_sptr first_roi=0, last_roi=0, ground_roi;
   if (!modeling(first_ret, last_ret, ground_img, output_path,
-    x_dim, y_dim, x_over, y_over, gthresh, athresh, hres)) {
+    x_dim, y_dim, x_over, y_over, gthresh, vthresh, athresh, hres)) {
     vcl_cout << "bmdl_modeling_process -- The process has failed!\n";
     return false;
   }
@@ -124,7 +129,7 @@ bool bmdl_modeling_process::modeling(vil_image_resource_sptr lidar_first,
                                      vcl_string output_path,
                                      unsigned x_dim, unsigned y_dim,
                                      unsigned x_overlap, unsigned y_overlap,
-                                     float gthresh, float athresh, float hres)
+                                     float gthresh, float vthresh, float athresh, float hres)
 {
   vil_image_view_base_sptr first_roi;
   vil_image_view_base_sptr last_roi;
@@ -146,7 +151,7 @@ bool bmdl_modeling_process::modeling(vil_image_resource_sptr lidar_first,
                                   first_roi, last_roi, ground_roi, geo_cam);
 
       bmdl_classify_process classify_process;
-      classify_process.classify(first_roi, last_roi, ground_roi, label_img, height_img, gthresh, athresh, hres);
+      classify_process.classify(first_roi, last_roi, ground_roi, label_img, height_img, gthresh, vthresh, athresh, hres);
 
       vcl_string poly_path = output_path + "//polygons.bin";
       bmdl_trace_boundaries_process trace_boundaries_process;

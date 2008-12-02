@@ -8,6 +8,7 @@
 #include <bmdl/bmdl_classify.h>
 
 #define PARAM_GROUND_THRESH "ground_threshold"
+#define PARAM_VEG_THRESH    "vegetation_threshold"
 #define PARAM_AREA_THRESH   "area_threshold"
 #define PARAM_HEIGHT_RES    "height_resolution"
 
@@ -31,6 +32,9 @@ bmdl_classify_process::bmdl_classify_process()
   output_types_[j++]= "vil_image_view_base_sptr";  // height image
 
   if (!parameters()->add( "Ground Threshold" , PARAM_GROUND_THRESH , (float) 2.0 ))
+    vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";
+  
+  if (!parameters()->add( "Vegetation Threshold" , PARAM_VEG_THRESH , (float) 1.0 ))
     vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";
 
   if (!parameters()->add( "Area Threshold" , PARAM_AREA_THRESH , (float) 6.0 ))
@@ -79,8 +83,9 @@ bool bmdl_classify_process::execute()
   }
 
   // read the parameters
-  float gthresh=0.0f, athresh=0.0f, hres=0.0f; // dummy initialisation, to avoid compiler warning
+  float gthresh=0.0f, vthresh = 0.0f, athresh=0.0f, hres=0.0f; // dummy initialisation, to avoid compiler warning
   if (!parameters()->get_value(PARAM_GROUND_THRESH, gthresh) ||
+      !parameters()->get_value(PARAM_VEG_THRESH, vthresh) ||
       !parameters()->get_value(PARAM_AREA_THRESH, athresh) ||
       !parameters()->get_value(PARAM_HEIGHT_RES, hres)) {
     vcl_cout << "bmdl_classify_process -- problem getting the parameters!\n";
@@ -88,7 +93,7 @@ bool bmdl_classify_process::execute()
   }
 
   vil_image_view_base_sptr label_img=0, height_img=0;
-  if (!classify(first_ret, last_ret, ground, label_img, height_img, gthresh, athresh, hres)) {
+  if (!classify(first_ret, last_ret, ground, label_img, height_img, gthresh, vthresh, athresh, hres)) {
     vcl_cout << "bmdl_classify_process -- The process has failed!\n";
     return false;
   }
@@ -113,13 +118,12 @@ bool bmdl_classify_process::classify(const vil_image_view<T>& lidar_first,
                                      const vil_image_view<T>& ground,
                                      vil_image_view<unsigned int>& label_img,
                                      vil_image_view<T>& height_img,
-                                     T gthresh, T athresh, T hres)
+                                     T gthresh, T vthresh, T athresh, T hres)
 {
-  double height_noise_stdev = 0.01;
-  bmdl_classify<T> classifier(height_noise_stdev, athresh, hres);
+  bmdl_classify<T> classifier(athresh, hres, gthresh, vthresh);
   classifier.set_lidar_data(lidar_first,lidar_last);
   classifier.set_bare_earth(ground);
-  classifier.label_lidar(gthresh);
+  classifier.label_lidar();
   label_img = classifier.labels();
   height_img = classifier.heights();
   return true;
@@ -131,7 +135,7 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
                                      vil_image_view_base_sptr ground,
                                      vil_image_view_base_sptr& label_img,
                                      vil_image_view_base_sptr& height_img,
-                                     float gthresh, float athresh, float hres)
+                                     float gthresh, float vthresh, float athresh, float hres)
 {
   label_img = new vil_image_view<unsigned int>();
 
@@ -144,7 +148,7 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
         height_img = new vil_image_view<float>();
         return classify<float>(lidar_first, lidar_last, ground,
                                (vil_image_view<unsigned int>&)(*label_img),
-                               (vil_image_view<float>&)(*height_img), gthresh, athresh, hres);
+                               (vil_image_view<float>&)(*height_img), gthresh, vthresh, athresh, hres);
       }
     }
     else
@@ -164,7 +168,7 @@ bool bmdl_classify_process::classify(vil_image_view_base_sptr lidar_first,
         return classify<double>(lidar_first, lidar_last, ground,
                                 (vil_image_view<unsigned int>&)(*label_img),
                                 (vil_image_view<double>&)(*height_img),
-                                (double) gthresh, (double) athresh, (double) hres);
+                                (double) gthresh, (double) vthresh, (double) athresh, (double) hres);
       }
     }
     else

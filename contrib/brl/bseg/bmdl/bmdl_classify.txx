@@ -27,13 +27,18 @@
 //  This parameter can be set manually or estimated
 // \param area_threshold is the minimum area allowed for buildings
 // \param height_resolution is the height difference below which buildings are merged
+// \param gnd_threshold is the minimum height above the ground considered for buildings
+// \param veg_threshold is the minimum distance between first and last returns for vegetation
 template <class T>
-bmdl_classify<T>::bmdl_classify(T height_noise_stdev, 
-                                unsigned int area_threshold, 
-                                T height_resolution)
-: hgt_stdev_(height_noise_stdev),
+bmdl_classify<T>::bmdl_classify(unsigned int area_threshold, 
+                                T height_resolution,
+                                T gnd_threshold,
+                                T veg_threshold)
+: hgt_stdev_(0.01),
   area_threshold_(area_threshold),
   height_resolution_(height_resolution),
+  gnd_threshold_(gnd_threshold),
+  veg_threshold_(veg_threshold),
   first_min_( vcl_numeric_limits<T>::infinity()),
   first_max_(-vcl_numeric_limits<T>::infinity()),
   last_min_( vcl_numeric_limits<T>::infinity()),
@@ -139,7 +144,7 @@ T bmdl_classify<T>::estimate_height_noise_stdev()
 // Each building is given an index sequentially starting with 2
 // and sorted by mean height.
 template <class T>
-void bmdl_classify<T>::label_lidar(T gthresh)
+void bmdl_classify<T>::label_lidar()
 {
   unsigned int ni = first_return_.ni();
   unsigned int nj = first_return_.nj();
@@ -152,7 +157,7 @@ void bmdl_classify<T>::label_lidar(T gthresh)
   assert(hgt_stdev_ > 0.0);
 
   // 1. First segment the image into ground, buildings, and vegetation
-  segment(gthresh);
+  segment();
 
   // 2. Cluster the pixels for buildings and apply unique labels
   cluster_buildings();
@@ -198,7 +203,7 @@ void bmdl_classify<T>::label_lidar(T gthresh)
 //  Classify each pixel as Ground (0), Vegitation (1), or Building (2)
 //  Results are stored in the labels image
 template <class T>
-void bmdl_classify<T>::segment(T gthresh)
+void bmdl_classify<T>::segment()
 {
   unsigned int ni = first_return_.ni();
   unsigned int nj = first_return_.nj();
@@ -213,20 +218,14 @@ void bmdl_classify<T>::segment(T gthresh)
   // resize the outputs
   labels_.set_size(ni,nj);
 
-  // ground threshold (3 standard deviations from bare earth)
-#if 0  // this is now a parameter
-  T gthresh = 2.0; //3.0*hgt_stdev_;
-#endif
-  // vegetation threshold (3 standard deviation from difference in returns)
-  T vthresh = 1.0 + 3.0*vcl_sqrt(2.0)*hgt_stdev_;
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       // test for ground
       if (!vnl_math_isfinite(first_return_(i,j)) ||
-          first_return_(i,j) - bare_earth_(i,j) < gthresh)
+          first_return_(i,j) - bare_earth_(i,j) < gnd_threshold_)
         labels_(i,j) = 0;
       // test for vegetation
-      else if ((first_return_(i,j) - last_return_(i,j)) > vthresh)
+      else if ((first_return_(i,j) - last_return_(i,j)) > veg_threshold_)
         labels_(i,j) = 1;
       // otherwise building
       else

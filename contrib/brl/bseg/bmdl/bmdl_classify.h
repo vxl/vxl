@@ -20,8 +20,12 @@ class bmdl_classify
   //        This parameter can be set manually or estimated
   // \param area_threshold is the minimum area allowed for buildings
   // \param height_resolution is the height difference below which buildings are merged
-  bmdl_classify(T height_noise_stdev = 0.01, unsigned int area_threshold = 6,
-                T height_resolution = 0.5);
+  // \param gnd_threshold is the minimum height above the ground considered for buildings and vegetation
+  // \param veg_threshold is the minimum distance between first and last returns for vegetation
+  bmdl_classify(unsigned int area_threshold = 6,
+                T height_resolution = 0.5, 
+                T gnd_threshold = 2.0, 
+                T veg_threshold_ = 1.0);
 
   //: Set the first and last return images
   void set_lidar_data(const vil_image_view<T>& first_return,
@@ -40,9 +44,14 @@ class bmdl_classify
   T estimate_height_noise_stdev();
 
   //: Manually specify the standard deviation in lidar height from noise
+  // \note This parameter is not currently used.  Use ground and vegetation thresholds instead.
   void set_height_noise_stdev(T stdev) { hgt_stdev_ = stdev; }
-  //: Manually specify the building area threshold
+  //: Specify the building area threshold
   void set_area_threshold(unsigned int area) { area_threshold_ = area; }
+  //: Specify the ground threshold
+  void set_ground_threshold(T gnd_threshold) { gnd_threshold_ = gnd_threshold; }
+  //: Specify the vegetation threshold
+  void set_vegetation_threshold(T veg_threshold) { veg_threshold_ = veg_threshold; }
 
   //: Access the first returns image
   const vil_image_view<T>& first_return() const {return first_return_;}
@@ -66,12 +75,12 @@ class bmdl_classify
   // Each building is given an index sequentially starting with 2
   // and sorted by mean height.
   // \note This is the main function you should call, it runs all the steps
-  void label_lidar(T gthresh);
+  void label_lidar();
 
   //: Perform an initial segementation at each pixel using thresholds
   // Classify each pixel as Ground (0), Vegitation (1), or Building (2)
   // Results are stored in the labels image
-  void segment(T gthresh);
+  void segment();
 
   //: Cluster pixels on buildings into groups of adjacent pixels with similar heights.
   //  Assign a new label to each groups.
@@ -169,6 +178,10 @@ class bmdl_classify
   unsigned int area_threshold_;
   //: The minimum height difference that does not merge
   T height_resolution_;
+  //: The minimum height above the ground for buildings
+  T gnd_threshold_;
+  //: The minimum distance between first and last returns for vegetation
+  T veg_threshold_;
   //: The range spanned by the first returns
   T first_min_, first_max_;
   //: The range spanned by the last returns
