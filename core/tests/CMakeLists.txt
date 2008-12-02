@@ -1,5 +1,8 @@
 # This is core/tests/CMakeLists.txt
 
+# The tests here are general vxl configuration tests, and should not
+# depend on any libraries other than vcl and testlib.
+
 # header to tell test_build_info values of vxl_BUILD_DIR, BUILD_NAME,
 # and SITE from CMake
 CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in

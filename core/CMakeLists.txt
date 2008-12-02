@@ -13,6 +13,11 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core ${global_sources})
 # common test executable
 SUBDIRS(testlib)
 
+# Tests that check and output the vxl configuration
+IF( BUILD_TESTING )
+  SUBDIRS( tests )
+ENDIF( BUILD_TESTING )
+
 
 IF (BUILD_CORE_UTILITIES)
   # POSIX layer
@@ -85,10 +90,6 @@ IF (BUILD_CORE_ALL)
   IF(BUILD_EXAMPLES)
     SUBDIRS(examples)
   ENDIF(BUILD_EXAMPLES)
-
-  IF( BUILD_TESTING )
-    SUBDIRS( tests )
-  ENDIF( BUILD_TESTING )
 ENDIF (BUILD_CORE_ALL)
 
 # video
