@@ -143,7 +143,7 @@ template <class T> bool vnl_math_isfinite(T);
 
 // rnd  -- round towards nearest integer
 //         halfway cases such as 0.5 may either be rounded to 0 or 1
-#ifdef VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
+#if VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
 
 // This include all the SSE2 implementations below.
 # if !VXL_HAS_EMMINTRIN_H
@@ -218,7 +218,7 @@ inline int vnl_math_rnd(double x) { return x>=0.0?static_cast<int>(x + 0.5):stat
 
 
 // floor -- round towards minus infinity
-#ifdef VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
+#if VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
@@ -288,7 +288,7 @@ inline int vnl_math_floor(double x) { return static_cast<int>(x>=0.0?x:(x==stati
 
 
 // ceil -- round towards plus infinity
-#ifdef VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
+#if VNL_CONFIG_ENABLE_SSE2_ROUNDING // Fast implementation
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).

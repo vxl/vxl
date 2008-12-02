@@ -22,9 +22,9 @@ MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
 # to update cached results. Whenever you make a change that makes it
 # necessary for cached values to be updated, increment the serial
 # number. The format follows a DNS-style numbering: the current date
-# followed by a modification time within the day.
+# followed by a modification count within the day.
 #
-SET( VXL_CONFIG_SERIAL_CURRENT "2008-08-29-001" )
+SET( VXL_CONFIG_SERIAL_CURRENT "2008-12-02-001" )
 
 IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
@@ -213,6 +213,29 @@ ENDIF(VCL_INCLUDE_CXX_0X)
 
 
 
+# check for hardware support for sse2 with the current compiler flags
+PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VXL_HAS_SSE2_HARDWARE_SUPPORT)
+
+# if no support right now, see if the support exists if some flags
+# are added.  This can be used to give the user some useful info.
+IF(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
+  IF(CMAKE_COMPILER_IS_GNUCXX)
+    SET(VXL_SSE_TEST_FLAG_BACKUP ${CMAKE_REQUIRED_FLAGS})
+    SET(CMAKE_REQUIRED_FLAGS " -msse2 ${VXL_SSE_TEST_FLAG_BACKUP} ")
+    PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE)
+    SET( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP
+      "The current compiler flags do not allow the SSE2 instructions to be used. "
+      "It looks like if you add the flag\n"
+      "  -msse2\n"
+      "you will be able to use the SSE2 instructions. If you make this change "
+      "and still see this message, you may need to set\n"
+      "  VXL_UPDATE_CONFIGURATION\n"
+      "to ON."
+      CACHE INTERNAL "help string for how to enable SSE2 support" )
+    SET(CMAKE_REQUIRED_FLAGS ${VXL_SSE_TEST_FLAG_BACKUP})
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+ENDIF(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
+
 
 #
 # Check for aligned dynamic memory allocation support, useful for sse
@@ -224,16 +247,7 @@ IF(VXL_HAS_EMMINTRIN_H)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_ALIGNED_MALLOC)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_MINGW_ALIGNED_MALLOC)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_POSIX_MEMALIGN)
-  
-  # check for hardware support for sse2
-  IF(CMAKE_COMPILER_IS_GNUCXX)
-  	SET(VXL_SSE_TEST_FLAG_BACKUP ${CMAKE_REQUIRED_FLAGS})
-  	SET(CMAKE_REQUIRED_FLAGS " -msse2 ${VXL_SSE_TEST_FLAG_BACKUP} ")
-  	PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VXL_HAS_SSE2_HARDWARE_SUPPORT)
-  	SET(CMAKE_REQUIRED_FLAGS ${VXL_SSE_TEST_FLAG_BACKUP})
-  ELSE(CMAKE_COMPILER_IS_GNUCXX)
-  	PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VXL_HAS_SSE2_HARDWARE_SUPPORT)
-  ENDIF(CMAKE_COMPILER_IS_GNUCXX) 
+
 ELSE(VXL_HAS_EMMINTRIN_H)
   SET( VXL_HAS_MM_MALLOC 0 )
   SET( VXL_HAS_ALIGNED_MALLOC 0 )
