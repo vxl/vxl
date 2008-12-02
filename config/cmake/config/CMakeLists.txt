@@ -225,12 +225,9 @@ IF(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
     PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE)
     SET( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP
       "The current compiler flags do not allow the SSE2 instructions to be used. "
-      "It looks like if you add the flag\n"
-      "  -msse2\n"
-      "you will be able to use the SSE2 instructions. If you make this change "
-      "and still see this message, you may need to set\n"
-      "  VXL_UPDATE_CONFIGURATION\n"
-      "to ON."
+      "It looks like if you add the flag '-msse2' you will be able to use the "
+      "SSE2 instructions. If you make this change and still see this message, "
+      " you may need to set VXL_UPDATE_CONFIGURATION to ON."
       CACHE INTERNAL "help string for how to enable SSE2 support" )
     SET(CMAKE_REQUIRED_FLAGS ${VXL_SSE_TEST_FLAG_BACKUP})
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
