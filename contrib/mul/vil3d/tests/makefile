@@ -12,6 +12,7 @@ TESTS += test_gauss_reduce.cxx
 TESTS += test_image_view.cxx
 TESTS += test_sample_profile_trilin.cxx
 TESTS += test_trilin_interp.cxx
+TESTS += test_tricub_interp.cxx
 TESTS += test_algo_threshold.cxx
 TESTS += test_algo_binary_dilate.cxx
 TESTS += test_algo_binary_erode.cxx

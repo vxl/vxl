@@ -12,8 +12,10 @@ MANPAGE_SOURCES += vil3d_print.h
 MANPAGE_SOURCES += vil3d_sample_profile_trilin.txx
 MANPAGE_SOURCES += vil3d_resample_simple.txx
 MANPAGE_SOURCES += vil3d_resample_trilinear.txx
+MANPAGE_SOURCES += vil3d_resample_tricubic.txx
 MANPAGE_SOURCES += vil3d_slice.h
 MANPAGE_SOURCES += vil3d_trilin_interp.h
+MANPAGE_SOURCES += vil3d_tricub_interp.txx
 MANPAGE_SOURCES += vil3d_switch_axes.h
 MANPAGE_SOURCES += vil3d_math.h
 SOURCES += vil3d_file_format.cxx
@@ -39,7 +41,7 @@ MANPAGE_SOURCES += vil3d_reflect.h
 MANPAGE_SOURCES += vil3d_decimate.h
 MANPAGE_SOURCES += vil3d_scan_image.h
 
-SUBDIRS += algo io
+SUBDIRS += algo io tools
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
