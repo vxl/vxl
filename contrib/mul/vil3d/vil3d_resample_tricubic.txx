@@ -1,7 +1,7 @@
 #ifndef vil3d_resample_tricubic_txx_
 #define vil3d_resample_tricubic_txx_
 //:
-// \file mul/vil3d/vil3d_resample_tricubic.txx
+// \file
 // \brief Resample a 3D image by a tricubic method
 // \author Gwenael Guillard
 
@@ -34,12 +34,12 @@ inline bool vil3d_grid_corner_in_image(double x0, double y0, double z0,
 //  Points outside interpolatable region return zero.
 template <class S, class T>
 void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
-                              vil3d_image_view<T>& dest_image,
-                              double x0, double y0, double z0,
-                              double dx1, double dy1, double dz1,
-                              double dx2, double dy2, double dz2,
-                              double dx3, double dy3, double dz3,
-                              int n1, int n2, int n3)
+                             vil3d_image_view<T>& dest_image,
+                             double x0, double y0, double z0,
+                             double dx1, double dy1, double dz1,
+                             double dx2, double dy2, double dz2,
+                             double dx3, double dy3, double dz3,
+                             int n1, int n2, int n3)
 {
   bool all_in_image =
     vil3d_grid_corner_in_image(x0,
@@ -259,9 +259,8 @@ void vil3d_resample_tricubic_edge_extend(const vil3d_image_view<S>& src_image,
   const vcl_ptrdiff_t d_pstep = dest_image.planestep();
   T* d_plane0 = dest_image.origin_ptr();
 
-  if( all_in_image )
+  if ( all_in_image )
   {
-
     if (np==1)
     {
       double xk=x0, yk=y0, zk=z0;
@@ -495,7 +494,6 @@ void vil3d_resample_tricubic_edge_trilin_extend(const vil3d_image_view<S>& src_i
 }
 
 
-
 //  Resample image to a specified dimensions (n1 * n2 * n3)
 template <class S, class T>
 void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
@@ -530,12 +528,12 @@ void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
 
 #define VIL3D_RESAMPLE_TRICUBIC_INSTANTIATE( S, T ) \
 template void vil3d_resample_tricubic(const vil3d_image_view< S >& src_image, \
-                                       vil3d_image_view< T >& dest_image, \
-                                       double x0, double y0, double z0, \
-                                       double dx1, double dy1, double dz1, \
-                                       double dx2, double dy2, double dz2, \
-                                       double dx3, double dy3, double dz3, \
-                                       int n1, int n2, int n3); \
+                                      vil3d_image_view< T >& dest_image, \
+                                      double x0, double y0, double z0, \
+                                      double dx1, double dy1, double dz1, \
+                                      double dx2, double dy2, double dz2, \
+                                      double dx3, double dy3, double dz3, \
+                                      int n1, int n2, int n3); \
 template void vil3d_resample_tricubic_edge_extend(const vil3d_image_view< S >& src_image, \
                                                   vil3d_image_view< T >& dest_image, \
                                                   double x0, double y0, double z0, \
