@@ -50,9 +50,6 @@ inline void vimt3d_resample_trilinear(
   const vgl_vector_3d<double>& w,
   int n1, int n2, int n3)
 {
-  // Only implemented for transformations up to Affine
-//   assert(src_image.world2im().form()!=vimt3d_transform_3d::Projective);
-
   const vimt3d_transform_3d& s_w2i = src_image.world2im();
   vgl_point_3d<double> im_p = s_w2i(p);
   vgl_vector_3d<double> im_u = s_w2i.delta(p, u);
@@ -104,7 +101,7 @@ inline void vimt3d_resample_trilin_edge_extend(
     im_p.x(),im_p.y(),im_p.z(), im_u.x(),im_u.y(),im_u.z(),
     im_v.x(),im_v.y(),im_v.z(), im_w.x(),im_w.y(),im_w.z(), ni,nj,nk);
 
-  // Point (i,j) in dest corresponds to p+i.u+j.v,
+  // Point (i,j,k) in dest corresponds to p+i.u+j.v+k.w,
   // an affine transformation for image to world
   vimt3d_transform_3d d_i2w;
   d_i2w.set_affine(p,u,v,w);
@@ -113,7 +110,7 @@ inline void vimt3d_resample_trilin_edge_extend(
 
 
 //: Resample an image using appropriate smoothing if the resolution changes significantly.
-//  dest_image(i,j,K,p) is sampled from the src_image at
+//  dest_image(i,j,k,p) is sampled from the src_image at
 //  p+i.u+j.v+k.w, where i=[0..ni-1], j=[0..nj-1], k=[0..nk-1] in world co-ordinates.
 //
 //  dest_image resized to (ni,nj,nk,src_image.nplanes())
