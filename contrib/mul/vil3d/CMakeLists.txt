@@ -29,6 +29,8 @@ SET(vil3d_sources
     vil3d_decimate.h
     vil3d_reflect.h
     vil3d_scan_image.h
+    vil3d_resample_tricubic.h        vil3d_resample_tricubic.txx
+    vil3d_tricub_interp.h            vil3d_tricub_interp.txx
 
     file_formats/vil3d_gipl_format.h     file_formats/vil3d_gipl_format.cxx
     file_formats/vil3d_dicom.h           file_formats/vil3d_dicom.cxx
@@ -39,7 +41,7 @@ SET(vil3d_sources
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
 
 ADD_LIBRARY(vil3d ${vil3d_sources})
-TARGET_LINK_LIBRARIES( vil3d vil vul vsl vcl )
+TARGET_LINK_LIBRARIES( vil3d vil vul vsl vcl vnl )
 
 INSTALL_TARGETS(/lib vil3d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d ${vil3d_sources})
