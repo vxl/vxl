@@ -46,12 +46,14 @@
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_reflect.h>
 #include <vil3d/vil3d_resample_simple.h>
+#include <vil3d/vil3d_resample_tricubic.h>
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_scan_image.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_switch_axes.h>
+#include <vil3d/vil3d_tricub_interp.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vil3d/vil3d_transform.h>
 
