@@ -398,7 +398,7 @@ macro( vil_rgba<double> , vil_rgba<double> )
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
-const { d = (out)(v+0.5); }
+const { d = (out)(v > 0.0 ? v + 0.5 : v - 0.5); }
 macro( float , vxl_byte )
 macro( double , vxl_byte )
 macro( float , vxl_sbyte )
@@ -815,7 +815,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #endif // DOXYGEN_SHOULD_SKIP_THIS
   default:
     vil_exception_warning(vil_exception_unsupported_pixel_format(
-      src->pixel_format(), "vil_convert_round") );    
+      src->pixel_format(), "vil_convert_round") );
     dest=0;
   }
   return dest;
