@@ -5,27 +5,27 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Namespace with standard math functions
+// \file
+// \brief Namespace with standard math functions
 //
-//    The vnl_math namespace provides a standard set of the simple mathematical
-//    functions (min, max, sqr, sgn, rnd, abs), and some predefined constants
-//    such as pi and e, which are not defined by the ANSI C++ standard.
+//  The vnl_math namespace provides a standard set of the simple mathematical
+//  functions (min, max, sqr, sgn, rnd, abs), and some predefined constants
+//  such as pi and e, which are not defined by the ANSI C++ standard.
 //
-//    There are complex versions defined in vnl_complex.h
+//  There are complex versions defined in vnl_complex.h
 //
-//    That's right, M_PI is nonstandard!
+//  That's right, M_PI is nonstandard!
 //
-//    Aside from e, pi and their associates the class also defines eps,
-//    the IEEE double machine precision.  This is the smallest number
-//    eps such that 1+eps != 1.
+//  Aside from e, pi and their associates the class also defines eps,
+//  the IEEE double machine precision.  This is the smallest number
+//  eps such that 1+eps != 1.
 //
-//    The operations are overloaded for int, float and double arguments,
-//    which in combination with inlining can make them  more efficient than
-//    their counterparts in the standard C library.
+//  The operations are overloaded for int, float and double arguments,
+//  which in combination with inlining can make them  more efficient than
+//  their counterparts in the standard C library.
 //
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   July 13, 1996
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   July 13, 1996
 //
 // \verbatim
 //  Modifications
@@ -38,6 +38,9 @@
 #include <vcl_cmath.h>
 #include "dll.h"
 #include <vxl_config.h>
+#ifdef VNL_CHECK_FPU_ROUNDING_MODE
+#include <vcl_cassert.h>
+#endif
 
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
@@ -156,20 +159,23 @@ template <class T> bool vnl_math_isfinite(T);
 // Be careful: half integer values are rounded to nearest even integer,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_rnd(float  x) {
+inline int vnl_math_rnd(float  x)
+{
    return _mm_cvtss_si32(_mm_set_ss(x));
 }
 // Be careful: half integer values are rounded to nearest even integer,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_rnd(double  x) {
+inline int vnl_math_rnd(double  x)
+{
    return _mm_cvtsd_si32(_mm_set_sd(x));
 }
 #elif defined(__GNUC__) // Fast implementation
 // Be careful: half integer values are rounded to nearest even integer,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_rnd(float  x) {
+inline int vnl_math_rnd(float  x)
+{
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
   assert(fegetround()==FE_TONEAREST);
 #endif
@@ -180,7 +186,8 @@ inline int vnl_math_rnd(float  x) {
 // Be careful: half integer values are rounded to nearest even integer,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_rnd(double  x) {
+inline int vnl_math_rnd(double  x)
+{
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
   assert(fegetround()==FE_TONEAREST);
 #endif
@@ -192,7 +199,8 @@ inline int vnl_math_rnd(double  x) {
 // Be careful: half integer values are rounded to nearest even integer,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_rnd(float  x) {
+inline int vnl_math_rnd(float  x)
+{
   int r;
   __asm {
     fld x
@@ -203,7 +211,8 @@ inline int vnl_math_rnd(float  x) {
 // Be careful: half integer values are rounded to nearest even integer,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_rnd(double  x) {
+inline int vnl_math_rnd(double  x)
+{
   int r;
   __asm {
     fld x
@@ -222,20 +231,23 @@ inline int vnl_math_rnd(double x) { return x>=0.0?static_cast<int>(x + 0.5):stat
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_floor(float  x) {
+inline int vnl_math_floor(float  x)
+{
    return _mm_cvtss_si32(_mm_set_ss(2*x-.5f))>>1;
 }
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_floor(double  x) {
+inline int vnl_math_floor(double  x)
+{
    return _mm_cvtsd_si32(_mm_set_sd(2*x-.5))>>1;
 }
 #elif defined(__GNUC__) // Fast implementation
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_floor(float  x) {
+inline int vnl_math_floor(float  x)
+{
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
   assert(fegetround()==FE_TONEAREST);
 #endif
@@ -247,7 +259,8 @@ inline int vnl_math_floor(float  x) {
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_floor(double  x) {
+inline int vnl_math_floor(double  x)
+{
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
   assert(fegetround()==FE_TONEAREST);
 #endif
@@ -260,7 +273,8 @@ inline int vnl_math_floor(double  x) {
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_floor(float  x) {
+inline int vnl_math_floor(float  x)
+{
   int r;
   x = static_cast<float>(2*x-.5);
   __asm {
@@ -272,7 +286,8 @@ inline int vnl_math_floor(float  x) {
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_floor(double  x) {
+inline int vnl_math_floor(double  x)
+{
   int r;
   x = 2*x-.5;
   __asm {
@@ -292,20 +307,23 @@ inline int vnl_math_floor(double x) { return static_cast<int>(x>=0.0?x:(x==stati
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_ceil(float  x) {
+inline int vnl_math_ceil(float  x)
+{
    return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
 }
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_ceil(double  x) {
+inline int vnl_math_ceil(double  x)
+{
    return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
 }
 #elif defined(__GNUC__) // Fast implementation
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_ceil(float  x) {
+inline int vnl_math_ceil(float  x)
+{
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
   assert(fegetround()==FE_TONEAREST);
 #endif
@@ -317,7 +335,8 @@ inline int vnl_math_ceil(float  x) {
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_ceil(double  x) {
+inline int vnl_math_ceil(double  x)
+{
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
   assert(fegetround()==FE_TONEAREST);
 #endif
@@ -330,7 +349,8 @@ inline int vnl_math_ceil(double  x) {
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_ceil(float  x) {
+inline int vnl_math_ceil(float  x)
+{
   int r;
   x = static_cast<float>(-.5-2*x);
   __asm {
@@ -342,7 +362,8 @@ inline int vnl_math_ceil(float  x) {
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
-inline int vnl_math_ceil(double  x) {
+inline int vnl_math_ceil(double  x)
+{
   int r;
   x = -.5-2*x;
   __asm {
