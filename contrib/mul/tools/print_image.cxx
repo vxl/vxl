@@ -36,6 +36,20 @@ static void get_intensity_range_3d(const vil3d_image_resource_sptr& ir, double& 
   vil3d_math_value_range(iv_double, min, max);
 }
 
+//: Calculate voxel size from transform of any form
+// Copied from vimt3d_image_3d.cxx
+static vgl_vector_3d<double> voxel_size_from_transform(const vimt3d_transform_3d& w2i)
+{
+  const vimt3d_transform_3d& i2w = w2i.inverse();
+  vgl_point_3d<double> p(0,0,0);
+  vgl_vector_3d<double> i(1,0,0);
+  vgl_vector_3d<double> j(0,1,0);
+  vgl_vector_3d<double> k(0,0,1);
+  double dx = i2w.delta(p, i).length();
+  double dy = i2w.delta(p, j).length();
+  double dz = i2w.delta(p, k).length();
+  return vgl_vector_3d<double>(dx, dy, dz);
+}
 
 //: Try to load a 3D image
 static unsigned try_3d_image(const char * filename, float unit_scaling, bool range)
@@ -57,8 +71,7 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
       vcl_exit(3);
     }
 
-    vgl_vector_3d<double> voxel = w2i.inverse().delta(vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1,1,1));
-
+    vgl_vector_3d<double> voxel = voxel_size_from_transform(w2i);    
     vgl_point_3d<double> world_min_point = w2i.inverse().origin();
     vgl_point_3d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999, ir->nk()+0.999);
     vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
@@ -69,7 +82,8 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
              << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << 'x' << w2i.origin().z() << " voxels\n"
              << "world bounds: [" << world_min_point.x() << ',' << world_min_point.y() << ',' << world_min_point.z() << "] -> ["
              << world_max_point.x() << ',' << world_max_point.y() << ',' << world_max_point.z() << "]\n"
-             << "voxel_type: " << ir->pixel_format() << '\n';
+             << "voxel_type: " << ir->pixel_format() << '\n'
+             << "transform: " << w2i;
     
     if (range)
     {
