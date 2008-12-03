@@ -398,7 +398,7 @@ macro( vil_rgba<double> , vil_rgba<double> )
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
-const { d = (out)(v > 0.0 ? v + 0.5 : v - 0.5); }
+const { d = (out)(v > 0.0 ? v+ 0.5 : v - 0.5); }
 macro( float , vxl_byte )
 macro( double , vxl_byte )
 macro( float , vxl_sbyte )
