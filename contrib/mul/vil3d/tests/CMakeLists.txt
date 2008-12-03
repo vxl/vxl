@@ -18,7 +18,8 @@ ADD_EXECUTABLE( vil3d_test_all
   test_resample.cxx
   test_analyze_format.cxx
   test_reflect.cxx
-  
+  test_tricub_interp.cxx
+
   test_algo_threshold.cxx
   test_algo_structuring_element.cxx
   test_algo_binary_dilate.cxx
@@ -56,6 +57,7 @@ ADD_TEST( vil3d_test_from_image_2d            ${EXECUTABLE_OUTPUT_PATH}/vil3d_te
 ADD_TEST( vil3d_test_resample                 ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_resample )
 ADD_TEST( vil3d_test_analyze_format           ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_analyze_format ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data/analyze)
 ADD_TEST( vil3d_test_reflect                  ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_reflect )
+ADD_TEST( vil3d_test_tricub_interp            ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_tricub_interp )
 
 ADD_TEST( vil3d_test_algo_threshold                   ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_threshold )
 ADD_TEST( vil3d_test_algo_structuring_element         ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_structuring_element )
