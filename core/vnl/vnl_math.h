@@ -262,7 +262,7 @@ inline int vnl_math_floor(double  x) {
 // one (or at least that it is always restaured to the default one).
 inline int vnl_math_floor(float  x) {
   int r;
-  x = 2*x-.5;
+  x = static_cast<float>(2*x-.5);
   __asm {
     fld x
     fistp r
@@ -332,7 +332,7 @@ inline int vnl_math_ceil(double  x) {
 // one (or at least that it is always restaured to the default one).
 inline int vnl_math_ceil(float  x) {
   int r;
-  x = -.5-2*x;
+  x = static_cast<float>(-.5-2*x);
   __asm {
     fld x
     fistp r
