@@ -252,7 +252,7 @@ inline int vnl_math_floor(float  x)
   assert(fegetround()==FE_TONEAREST);
 #endif
   int r;
-  x = 2*x-.5;
+  x = 2*x-.5f;
   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
   return r>>1;
 }
@@ -276,7 +276,7 @@ inline int vnl_math_floor(double  x)
 inline int vnl_math_floor(float  x)
 {
   int r;
-  x = static_cast<float>(2*x-.5);
+  x = 2*x-.5f;
   __asm {
     fld x
     fistp r
@@ -328,7 +328,7 @@ inline int vnl_math_ceil(float  x)
   assert(fegetround()==FE_TONEAREST);
 #endif
   int r;
-  x = -.5-2*x;
+  x = -.5f-2*x;
   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
   return -(r>>1);
 }
@@ -352,7 +352,7 @@ inline int vnl_math_ceil(double  x)
 inline int vnl_math_ceil(float  x)
 {
   int r;
-  x = static_cast<float>(-.5-2*x);
+  x = -.5f-2*x;
   __asm {
     fld x
     fistp r
