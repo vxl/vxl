@@ -196,12 +196,15 @@ bvxm_part_hierarchy_builder::construct_detector_roi1_0()
   bvxm_part_gaussian_sptr pi_0_0 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, true, 0);
   bvxm_part_gaussian_sptr pi_0_1 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, false, 1);
   pi_0_1->cutoff_percentage_ = 0.5f;
+  pi_0_0->detection_threshold_ = 0.0001f;
+  pi_0_1->detection_threshold_ = 0.0001f;
   h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
   h->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
 
   //: LAYER 1: only one layer 1 part
   bvxm_part_base_sptr p_1_0 = new bvxm_part_base(1, 0);
   h->add_vertex(p_1_0);
+  p_1_0->detection_threshold_ = 0.00001f;
   //: the first child becomes the central part, create an edge to the central part
   bvxm_hierarchy_edge_sptr e_1_0_to_central = new bvxm_hierarchy_edge(p_1_0, p_0_0);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
@@ -220,6 +223,8 @@ bvxm_part_hierarchy_builder::construct_detector_roi1_0()
   float a1, a2, d1, d2;
   e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample1, d1, a1);
   e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample2, d2, a2);
+  e_1_0_to_second->set_min_stand_dev_angle(30.0f);
+  e_1_0_to_second->set_min_stand_dev_dist(3.0f);
   e_1_0_to_second->update_dist_model(d1);
   e_1_0_to_second->update_dist_model(d2);
   e_1_0_to_second->update_angle_model(a1);
@@ -237,6 +242,8 @@ bvxm_part_hierarchy_builder::construct_detector_roi1_0()
   //: calculate angle and dists for these two samples
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample3, d1, a1);
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample4, d2, a2);
+  e_1_0_to_third->set_min_stand_dev_angle(30.0f);
+  e_1_0_to_third->set_min_stand_dev_dist(3.0f);
   e_1_0_to_third->update_dist_model(d1);
   e_1_0_to_third->update_dist_model(d2);
   e_1_0_to_third->update_angle_model(a1);
@@ -614,4 +621,78 @@ bvxm_part_hierarchy_builder::construct_detector_roi1_4()
 
   return h;
 }
+
+// recognize digit 8
+bvxm_part_hierarchy_sptr 
+bvxm_part_hierarchy_builder::construct_eight_detector() {  
+
+// construct a hierarchy by hand starting from the primitives, construct one to recognize 8
+  bvxm_part_hierarchy_sptr h_8 = new bvxm_part_hierarchy();
+
+  //  a hierarchy tells us what types of parts are there at each level in an abstract way (they are not instantiated)
+
+  // LAYER 0: only one primitive: a vertical bar (lambda0=2.0,lambda1=1.0,theta=0.0,bright=false)
+  bvxm_part_base_sptr p_0_1 = new bvxm_part_base(0, 1);
+  h_8->add_vertex(p_0_1);
+  // create a dummy instance and add to h
+  bvxm_part_gaussian_sptr pi_0_1 = new bvxm_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, 90.0f, false, 1);
+  h_8->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
+
+  // LAYER 1: only one layer 1 part: 2 vertical bars side by side
+  bvxm_part_base_sptr p_1_0 = new bvxm_part_base(1, 0);
+  h_8->add_vertex(p_1_0);
+  // the first child becomes the central part, create an edge to the central part
+  bvxm_hierarchy_edge_sptr e_1_0_to_central = new bvxm_hierarchy_edge(p_1_0, p_0_1);
+  p_1_0->add_outgoing_edge(e_1_0_to_central);
+  p_0_1->add_incoming_edge(e_1_0_to_central);
+  h_8->add_edge_no_check(e_1_0_to_central);
+
+  // create an edge to the second part of p_1_0
+  bvxm_hierarchy_edge_sptr e_1_0_to_second = new bvxm_hierarchy_edge(p_1_0, p_0_1);     //  p_1_0
+  p_1_0->add_outgoing_edge(e_1_0_to_second);    //                                             / \.
+                                               //                                             p_0_1
+  p_0_1->add_incoming_edge(e_1_0_to_second);
+  // train this edge with two samples
+  vnl_vector_fixed<float,2> sample1(5.0f,0.0f); // measured from the 8 sample
+  vnl_vector_fixed<float,2> sample2(9.0f,0.0f); // measured from the 8 sample
+  float a1, a2, d1, d2;
+  e_1_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample1, d1, a1);
+  e_1_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample2, d2, a2);
+  vcl_cout << "p_1_0 edge to second part training d1: " << d1 << " angle: " << (a1/vnl_math::pi)*180.0f << " degrees\n"
+           << "p_1_0 edge to second part training d2: " << d2 << " angle: " << (a2/vnl_math::pi)*180.0f << " degrees\n";
+  e_1_0_to_second->update_dist_model(d1);
+  e_1_0_to_second->update_dist_model(d2);
+  e_1_0_to_second->update_angle_model(a1);
+  e_1_0_to_second->update_angle_model(a2);
+
+  h_8->add_edge_no_check(e_1_0_to_second);
+
+  // LAYER 2: only 1 layer 2 part: two layer 1 parts on top of each other
+  bvxm_part_base_sptr p_2_0 = new bvxm_part_base(2, 0);
+  h_8->add_vertex(p_2_0);
+  // create an edge to the central part
+  bvxm_hierarchy_edge_sptr e_2_0_to_central = new bvxm_hierarchy_edge(p_2_0, p_1_0);
+  p_2_0->add_outgoing_edge(e_2_0_to_central);
+  p_1_0->add_incoming_edge(e_2_0_to_central);
+  h_8->add_edge_no_check(e_2_0_to_central);
+
+  // create an edge to the second part
+  bvxm_hierarchy_edge_sptr e_2_0_to_second = new bvxm_hierarchy_edge(p_2_0, p_1_0);
+  p_2_0->add_outgoing_edge(e_2_0_to_second);
+  p_1_0->add_incoming_edge(e_2_0_to_second);
+  h_8->add_edge(e_2_0_to_second);
+  vnl_vector_fixed<float,2> sample3(-1.0f,8.0f); // measured from the 8 sample
+  e_2_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample3, d1, a1); // using pi_0_1 as it is still the center of p_1_0
+  vcl_cout << "p_2_0 edge to second part training d: " << d1 << " angle: " << (a1/vnl_math::pi)*180.0f << " degrees\n";
+  e_2_0_to_second->update_dist_model(d1);
+  e_2_0_to_second->update_angle_model(a1);
+
+  h_8->add_edge_no_check(e_2_0_to_second);
+
+  return h_8;
+}
+
+  
+
+
 

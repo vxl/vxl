@@ -10,6 +10,7 @@
 #include <vul/vul_timer.h>
 
 #include <rec/bvxm_part_hierarchy_builder.h>
+#include <rec/bvxm_part_hierarchy_detector.h>
 #include <rec/bvxm_part_hierarchy.h>
 #include <rec/bvxm_part_gaussian_sptr.h>
 #include <rec/bvxm_part_gaussian.h>
@@ -17,10 +18,12 @@
 bvxm_rec_structure_process::bvxm_rec_structure_process()
 {
   //inputs
-  input_data_.resize(2,brdb_value_sptr(0));
-  input_types_.resize(2);
+  input_data_.resize(3,brdb_value_sptr(0));
+  input_types_.resize(3);
   input_types_[0] = "vil_image_view_base_sptr";      // input orig view
   input_types_[1] = "unsigned";      // detector id for the type of structure to be recognized
+  input_types_[2] = "float";      // angle to rotate detector for the type of structure to be recognized
+                                  // should be passed zero if the original orientation of the detector will be used
 
   //output
   output_data_.resize(2,brdb_value_sptr(0));
@@ -54,6 +57,9 @@ bool bvxm_rec_structure_process::execute()
   brdb_value_t<unsigned>* input1 = static_cast<brdb_value_t<unsigned>* >(input_data_[1].ptr());
   unsigned d_id = input1->value();
 
+  brdb_value_t<float>* input2 = static_cast<brdb_value_t<float>* >(input_data_[2].ptr());
+  float angle = input2->value();
+
   bvxm_part_hierarchy_sptr h;
   switch (d_id) {
     case 0: { h = bvxm_part_hierarchy_builder::construct_detector_roi1_0(); } break;
@@ -64,7 +70,8 @@ bool bvxm_rec_structure_process::execute()
     default: { vcl_cout << "In bvxm_rec_structure_process::execute() -- Unrecognized detector type!!\n"; return false; }
   }
 
-  // now extract instances of primitive part types in h
+#if 0 // before detector class
+  //: now extract instances of primitive part types in h
   vcl_vector<bvxm_part_instance_sptr> parts_0;
   vcl_vector<bvxm_part_instance_sptr>& d_ins = h->get_dummy_primitive_instances();
   unsigned prev_size = parts_0.size();
@@ -92,6 +99,11 @@ bool bvxm_rec_structure_process::execute()
     parts_upper_most.clear();
     parts_upper_most = parts_current;
   }
+#endif
+
+  bvxm_part_hierarchy_detector hd(h);
+  hd.detect(img, angle);
+  vcl_vector<bvxm_part_instance_sptr>& parts_upper_most = hd.get_parts(h->highest_layer_id());
 
   vil_image_view<float> output_map_float(ni, nj);
   bvxm_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);

@@ -31,6 +31,10 @@ class bvxm_part_gaussian : public bvxm_part_instance
   : bvxm_part_instance(0, type, bvxm_part_instance_kind::GAUSSIAN, x, y, strength),
     lambda0_(lambda0), lambda1_(lambda1), theta_(theta), bright_(bright), cutoff_percentage_(0.01f) {}
 
+  //: the following constructor should only be used during parsing
+  bvxm_part_gaussian() : bvxm_part_instance(0, 0, bvxm_part_instance_kind::GAUSSIAN, 0.0f, 0.0f, 0.0f),
+    lambda0_(0), lambda1_(0), theta_(0), bright_(true), cutoff_percentage_(0.0f) {};
+
   virtual bool mark_receptive_field(vil_image_view<vxl_byte>& img, unsigned plane);
   virtual bool mark_center(vil_image_view<vxl_byte>& img, unsigned plane);
   virtual bool mark_receptive_field(vil_image_view<float>& img, float val);
@@ -46,7 +50,10 @@ class bvxm_part_gaussian : public bvxm_part_instance
 
   virtual bvxm_part_gaussian* cast_to_gaussian(void);
 
-  float lambda0_;  // axis
+  virtual bxml_data_sptr xml_element();
+  virtual bool xml_parse_element(bxml_data_sptr data);
+
+  float lambda0_;  // axis 
   float lambda1_;
   float theta_;    // orientation angle (in degrees)
   bool bright_;

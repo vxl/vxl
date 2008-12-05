@@ -6,6 +6,7 @@ ADD_EXECUTABLE( bvxm_rec_test_all
   test_param_estimation.cxx
   test_bvxm_parts.cxx
   test_bvxm_hierarchy_builder.cxx
+  test_bvxm_hierarchy_detector.cxx
 )
 
 TARGET_LINK_LIBRARIES( bvxm_rec_test_all bvxm_rec testlib vcl vbl vpgl )
@@ -17,6 +18,7 @@ ADD_TEST( bvxm_test_densities     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all te
 ADD_TEST( bvxm_test_param_estimation     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_param_estimation )
 ADD_TEST( bvxm_test_parts     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_bvxm_parts )
 ADD_TEST( bvxm_test_hierarchy_builder     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_bvxm_hierarchy_builder )
+ADD_TEST( bvxm_test_hierarchy_detector     ${EXECUTABLE_OUTPUT_PATH}/bvxm_rec_test_all test_bvxm_hierarchy_detector )
 
 ADD_EXECUTABLE( bvxm_rec_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvxm_rec_test_include bvxm_rec )

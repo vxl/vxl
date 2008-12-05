@@ -11,6 +11,9 @@
 #include <vil/algo/vil_threshold.h>
 #include <vil/vil_new.h>
 #include <brip/brip_vil_float_ops.h>
+#include <vnl/vnl_math.h>
+
+#include <bxml/bxml_find.h>
 #include <vcl_cmath.h>
 
 //strength_threshold in [0,1] - min strength to declare the part as detected
@@ -181,7 +184,65 @@ vnl_vector_fixed<float,2>
 bvxm_part_gaussian::direction_vector(void)  // return a unit vector that gives direction of this instance in the image
 {
   vnl_vector_fixed<float,2> v;
-  v(0) = vcl_cos(theta_);
-  v(1) = vcl_sin(theta_);
+  double theta_rad = theta_*vnl_math::pi/180.0;
+  v(0) = (float)cos(theta_rad);
+  v(1) = (float)sin(theta_rad);
   return v;
 }
+
+
+bxml_data_sptr bvxm_part_gaussian::xml_element()
+{
+  bxml_data_sptr data_super = bvxm_part_instance::xml_element();
+  
+  bxml_element* data = new bxml_element("gaussian");
+  
+  data->set_attribute("lambda0",lambda0_);
+  data->set_attribute("lambda1",lambda1_);
+  data->set_attribute("theta",theta_);
+  if (bright_)
+    data->set_attribute("bright",1);
+  else
+    data->set_attribute("bright",0);
+  
+  data->set_attribute("cutoff_perc", cutoff_percentage_);
+
+  data->append_text("\n ");
+  data->append_data(data_super);
+  data->append_text("\n ");
+  //((bxml_element*)data_super.ptr())->append_data(data);
+  //((bxml_element*)data_super.ptr())->append_text("\n ");
+
+  return data;
+}
+
+bool bvxm_part_gaussian::xml_parse_element(bxml_data_sptr data)
+{
+  bxml_element query("gaussian");
+  bxml_data_sptr g_root = bxml_find_by_name(data, query);
+
+  if (!g_root)
+    return false;
+
+  if (g_root->type() == bxml_data::ELEMENT) {
+    bool found = (((bxml_element*)g_root.ptr())->get_attribute("lambda0", lambda0_) &&
+                  ((bxml_element*)g_root.ptr())->get_attribute("lambda1", lambda1_) &&
+                  ((bxml_element*)g_root.ptr())->get_attribute("theta", theta_) &&
+                  ((bxml_element*)g_root.ptr())->get_attribute("cutoff_perc", cutoff_percentage_));
+    
+    int bright_int;
+    found = found && ((bxml_element*)g_root.ptr())->get_attribute("bright", bright_int);
+    
+    if (!found)
+      return false;
+
+    bright_ = bright_int == 0 ? false : true;
+
+    return bvxm_part_instance::xml_parse_element(g_root);
+  } else
+    return false;
+
+  return true;
+}
+
+

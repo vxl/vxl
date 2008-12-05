@@ -38,6 +38,11 @@ class bvxm_part_hierarchy_builder
 
   static bvxm_part_hierarchy_sptr construct_detector_roi1_3(); // building 1
   static bvxm_part_hierarchy_sptr construct_detector_roi1_4(); // building 2
+
+  //: for debugging purposes
+  static bvxm_part_hierarchy_sptr construct_eight_detector(); // recognize digit 8
+  
+
 };
 
 #endif // bvxm_part_hierarchy_builder_h_

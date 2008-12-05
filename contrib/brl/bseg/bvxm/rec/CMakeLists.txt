@@ -25,13 +25,14 @@ SET(bvxm_rec_sources
     bvxm_hierarchy_edge.h    bvxm_hierarchy_edge.cxx
     bvxm_hierarchy_edge_sptr.h
     bvxm_part_hierarchy_builder.h    bvxm_part_hierarchy_builder.cxx
+    bvxm_part_hierarchy_detector.h    bvxm_part_hierarchy_detector.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_rec_sources)
 
 ADD_LIBRARY(bvxm_rec ${bvxm_rec_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_rec bvxm bsta_algo bgrl2 bsta bvgl vil brip)
+TARGET_LINK_LIBRARIES(bvxm_rec bvxm bsta_algo bgrl2 bsta bvgl bxml vil brip vgl_algo)
 
 SUBDIRS( pro )
 

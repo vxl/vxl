@@ -19,6 +19,8 @@
 #include <rec/bvxm_part_base_sptr.h>
 #include <bgrl2/bgrl2_edge.h>
 #include <bsta/bsta_gauss_f1.h>
+#include <vgl/vgl_box_2d.h>
+#include <bxml/bxml_document.h>
 
 class bvxm_hierarchy_edge : public bgrl2_edge<bvxm_part_base>
 {
@@ -28,6 +30,9 @@ class bvxm_hierarchy_edge : public bgrl2_edge<bvxm_part_base>
   //  If no relative spatial arrangement model then this is an edge to the central part in the previous layer.
   //  Default is the central
   bvxm_hierarchy_edge(bvxm_part_base_sptr v1, bvxm_part_base_sptr v2) : bgrl2_edge<bvxm_part_base>(v1, v2), to_central_(true), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {};
+
+  //: this constructor should only be used during parsing
+  bvxm_hierarchy_edge() : bgrl2_edge<bvxm_part_base>(), to_central_(true), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {};
 
   //: if the model is updated then the to_central flag is made false since the edge becomes a non-central edge
   void update_dist_model(const float dist);
@@ -51,7 +56,12 @@ class bvxm_hierarchy_edge : public bgrl2_edge<bvxm_part_base>
   void set_min_stand_dev_dist(float d) { min_stad_dev_dist_ = d; }
   void set_min_stand_dev_angle(float a) { min_stad_dev_angle_ = a; }
 
- protected:
+  vgl_box_2d<float> get_probe_box(bvxm_part_instance_sptr central_p);
+
+  virtual bxml_data_sptr xml_element();
+  virtual bool xml_parse_element(bxml_data_sptr data);
+
+protected:
   bool to_central_;
 
 #if 0

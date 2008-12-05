@@ -46,6 +46,9 @@ class bvxm_part_hierarchy : public bgrl2_graph<bvxm_part_base , bvxm_hierarchy_e
 
   unsigned highest_layer_id();
 
+  void write_xml(vcl_ostream& os);
+  bool read_xml(vcl_istream& is);
+
   //: a map to store dummy instances of primitive parts, so that they could be extracted properly for a constructed hierarchy
   vcl_vector<bvxm_part_instance_sptr> dummy_primitive_instances_;
 };

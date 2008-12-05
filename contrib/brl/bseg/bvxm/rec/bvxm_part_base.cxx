@@ -8,6 +8,8 @@
 #include <rec/bvxm_part_base.h>
 #include <rec/bvxm_hierarchy_edge.h>
 
+#include <bxml/bxml_find.h>
+
 //: we assume that the part that is added first as the outgoing part is the central part
 bvxm_part_base_sptr 
 bvxm_part_base::central_part() 
@@ -32,6 +34,32 @@ bool bvxm_part_base::mark_receptive_field(vil_image_view<vxl_byte>& img, unsigne
 bool bvxm_part_base::mark_center(vil_image_view<vxl_byte>& img, unsigned plane)
 {
   return true;
+}
+
+bxml_data_sptr bvxm_part_base::xml_element()
+{
+  bxml_element* data = new bxml_element("base");
+  data->set_attribute("layer",layer_);
+  data->set_attribute("type",type_);
+  data->set_attribute("det_thres",detection_threshold_);
+  data->append_text("\n ");
+  return data;
+}
+
+bool bvxm_part_base::xml_parse_element(bxml_data_sptr data)
+{
+  bxml_element query("base");
+  bxml_data_sptr base_root = bxml_find_by_name(data, query);
+  
+  if (!base_root)
+    return false;
+
+  if (base_root->type() == bxml_data::ELEMENT) {
+    return (((bxml_element*)base_root.ptr())->get_attribute("layer", layer_) &&
+            ((bxml_element*)base_root.ptr())->get_attribute("type", type_) &&
+            ((bxml_element*)base_root.ptr())->get_attribute("det_thres", detection_threshold_));
+  } else
+    return false;
 }
 
 bvxm_part_base* bvxm_part_base::cast_to_base(void)
@@ -107,6 +135,47 @@ bvxm_part_instance::direction_vector(void)  // return a unit vector that gives d
   v(2) = 0.0f;
   return v;
 }
+
+
+bxml_data_sptr bvxm_part_instance::xml_element()
+{
+  bxml_data_sptr data_super = bvxm_part_base::xml_element();
+  
+  bxml_element* data = new bxml_element("instance");
+  data->set_attribute("kind",kind_);
+  data->set_attribute("x",x_);
+  data->set_attribute("y",y_);
+  data->set_attribute("strength",strength_);
+  data->append_text("\n ");
+  data->append_data(data_super);
+  data->append_text("\n ");
+
+  return data;
+}
+
+bool bvxm_part_instance::xml_parse_element(bxml_data_sptr data)
+{
+  bxml_element query("instance");
+  bxml_data_sptr ins_root = bxml_find_by_name(data, query);
+  
+  if (!ins_root)
+    return false;
+
+  if (ins_root->type() == bxml_data::ELEMENT) {
+    bool found = (((bxml_element*)ins_root.ptr())->get_attribute("kind", kind_) &&
+                  ((bxml_element*)ins_root.ptr())->get_attribute("x", x_) &&
+                  ((bxml_element*)ins_root.ptr())->get_attribute("y", y_) &&
+                  ((bxml_element*)ins_root.ptr())->get_attribute("strength", strength_));
+    if (!found)
+      return false;
+
+    return bvxm_part_base::xml_parse_element(ins_root);
+  } else
+    return false;
+}
+
+
+
 
 
 

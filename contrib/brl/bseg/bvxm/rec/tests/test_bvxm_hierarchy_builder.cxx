@@ -23,6 +23,7 @@
 static void test_bvxm_hierarchy_builder()
 {
   vcl_string file = "normalized0_cropped.tif";
+  //vcl_string file = "digits_small.TIF";
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
 
@@ -30,12 +31,12 @@ static void test_bvxm_hierarchy_builder()
     return;
 
   unsigned ni = img->ni(); unsigned nj = img->nj();
-  if (ni != 523 || nj != 460)
-    return;
-
+  
   vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
 
   bvxm_part_hierarchy_sptr h = bvxm_part_hierarchy_builder::construct_detector_roi1_0();
+  //bvxm_part_hierarchy_sptr h = bvxm_part_hierarchy_builder::construct_eight_detector();
+
   TEST("test hierarchy", !h, false);
   vcl_cout << "constructed: " << h->number_of_vertices() << " vertices in the vehicle detector for roi1\n"
            << "constructed: " << h->number_of_edges() << " edges in the vehicle detector for roi1\n";
@@ -52,6 +53,13 @@ static void test_bvxm_hierarchy_builder()
   }
 
   vcl_cout << "\textracted " << parts_prims.size() << " primitives\n";
+  unsigned ii = 0;
+  for (unsigned i = 0; i < parts_prims.size(); i++) {
+    if (parts_prims[i]->x_ == 391 && parts_prims[i]->y_ == 196) {
+      ii = i;
+      break;
+    }
+  }
 
   unsigned highest = h->highest_layer_id();
   vcl_vector<bvxm_part_instance_sptr> parts_upper_most(parts_prims);

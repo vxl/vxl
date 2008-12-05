@@ -7,8 +7,14 @@
 
 #include <rec/bvxm_part_hierarchy.h>
 #include <rec/bvxm_part_base.h>
+#include <rec/bvxm_part_gaussian_sptr.h>
+#include <rec/bvxm_part_gaussian.h>
 
 #include <vil/vil_image_view.h>
+
+#include <bxml/bxml_read.h>
+#include <bxml/bxml_write.h>
+#include <bxml/bxml_find.h>
 
 //: generate a map from the activated parts
 void bvxm_part_hierarchy::generate_map(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, vil_image_view<unsigned>& type_map)
@@ -219,3 +225,165 @@ void bvxm_part_hierarchy::extract_upper_layer(vcl_vector<bvxm_part_instance_sptr
     }
   }
 }
+
+//: CAUTION: assumes that central part is added prior to other children of a parent part hence its edge is added to the hierarchy before other parts
+//: reader adds the edges of each vertex in the order read from the xml file
+void bvxm_part_hierarchy::write_xml(vcl_ostream& os)
+{
+  bxml_document doc;
+  bxml_element * root = new bxml_element("hierarchy");
+  doc.set_root_element(root);
+  root->append_text("\n");
+
+  bxml_element * prims = new bxml_element("primitive_instances");
+  prims->append_text("\n");
+  root->append_data(prims);
+  root->append_text("\n");
+  for (unsigned i=0; i<dummy_primitive_instances_.size(); ++i) {
+    bxml_data_sptr ins = dummy_primitive_instances_[i]->xml_element();
+    prims->append_text("  ");
+    prims->append_data(ins);
+    prims->append_text("\n");
+  }
+
+  bxml_element *vertices = new bxml_element("vertices");
+  vertices->append_text("\n");
+  root->append_data(vertices);
+  root->append_text("\n");
+
+  vcl_map<bvxm_part_base_sptr, unsigned> vert_map;
+  unsigned id = 0;
+  for (vertex_iterator it = this->vertices_begin(); it != this->vertices_end(); it++) {
+    bxml_data_sptr v = (*it)->xml_element();
+    vertices->append_text("  ");
+    vertices->append_data(v);
+    vertices->append_text("\n");
+    vert_map[(*it)] = id;
+    id++;
+  }
+
+  bxml_element *edges = new bxml_element("edges");
+  edges->append_text("\n");
+  root->append_data(edges);
+  root->append_text("\n");
+  
+  for (edge_iterator it = this->edges_begin(); it != this->edges_end(); it++) {
+    bxml_data_sptr e = (*it)->xml_element();
+    edges->append_text("  ");
+    edges->append_data(e);
+    edges->append_text("\n");
+    
+    bxml_element *e_con = new bxml_element("connectivity");
+    e_con->set_attribute("source", vert_map[(*it)->source()]);
+    e_con->set_attribute("target", vert_map[(*it)->target()]);
+    e_con->append_text("\n");
+    ((bxml_element*)e.ptr())->append_data(e_con);
+    ((bxml_element*)e.ptr())->append_text("\n");
+  }
+  
+  bxml_write(os,doc);
+}
+
+bool bvxm_part_hierarchy::read_xml(vcl_istream& is)
+{
+  bxml_document doc = bxml_read(is);
+  bxml_element query("hierarchy");
+
+  bxml_data_sptr hierarchy_root = bxml_find_by_name(doc.root_element(), query);
+  
+  if (!hierarchy_root) {
+    vcl_cout << "bvxm_part_hierarchy::read_xml() - could not find the main node with name hierarchy!\n";
+    return false;
+  }
+
+  bxml_element query2("primitive_instances");
+  bxml_data_sptr prims_root = bxml_find_by_name(hierarchy_root, query2);
+  
+  if (!prims_root || prims_root->type() != bxml_data::ELEMENT) {
+    vcl_cout << "bvxm_part_hierarchy::read_xml() - could not find the primitive instances node!\n";
+    return false;
+  }
+
+  bxml_element* pe = (bxml_element*)prims_root.ptr();
+  for (bxml_element::const_data_iterator it = pe->data_begin(); it != pe->data_end(); it++) {
+    if ((*it)->type() != bxml_data::ELEMENT)
+      continue;
+    
+    bvxm_part_instance_sptr ins = new bvxm_part_instance();
+    if (!ins->xml_parse_element(*it))
+      return false;
+
+    switch (ins->kind_) {
+      case bvxm_part_instance_kind::GAUSSIAN : 
+        { 
+          bvxm_part_gaussian_sptr g_p = new bvxm_part_gaussian();
+          g_p->xml_parse_element(*it);
+          dummy_primitive_instances_.push_back(g_p->cast_to_instance());
+          break;
+        } 
+      default: { 
+        vcl_cout << "bvxm_part_hierarchy::read_xml() - primitive part kind: " << ins->kind_ << " not recognized by the parser!\n";
+        return false;
+               }
+    }
+  }
+
+  bxml_element query3("vertices");
+  bxml_data_sptr vert_root = bxml_find_by_name(hierarchy_root, query3);
+  if (!vert_root || vert_root->type() != bxml_data::ELEMENT) {
+    vcl_cout << "bvxm_part_hierarchy::read_xml() - could not find the vertices node!\n";
+    return false;
+  }
+
+  vcl_map<unsigned, bvxm_part_base_sptr> vert_map;
+  unsigned id = 0;
+  pe = (bxml_element*)vert_root.ptr();
+  for (bxml_element::const_data_iterator it = pe->data_begin(); it != pe->data_end(); it++) {
+    if ((*it)->type() != bxml_data::ELEMENT)
+      continue;
+
+    bvxm_part_base_sptr p = new bvxm_part_base();
+    if (!p->xml_parse_element(*it))
+      return false;
+
+    vert_map[id] = p;
+    this->add_vertex(p);
+    id++;
+  }
+
+  bxml_element query4("edges");
+  bxml_data_sptr e_root = bxml_find_by_name(hierarchy_root, query4);
+  if (!e_root || e_root->type() != bxml_data::ELEMENT) {
+    vcl_cout << "bvxm_part_hierarchy::read_xml() - could not find the edges node!\n";
+    return false;
+  }
+
+  pe = (bxml_element*)e_root.ptr();
+  for (bxml_element::const_data_iterator it = pe->data_begin(); it != pe->data_end(); it++) {
+    if ((*it)->type() != bxml_data::ELEMENT)
+      continue;
+
+    bvxm_hierarchy_edge_sptr e = new bvxm_hierarchy_edge();
+    if (!e->xml_parse_element(*it))
+      return false;
+
+    bxml_element query("connectivity");
+    bxml_data_sptr r = bxml_find_by_name((*it), query);
+    if (!r || r->type() != bxml_data::ELEMENT) {
+      vcl_cout << "bvxm_part_hierarchy::read_xml() - could not find the edge node: connectivity!\n";
+      return false;
+    }
+
+    unsigned source_id, target_id;
+    ((bxml_element*)(r.ptr()))->get_attribute("source", source_id);
+    ((bxml_element*)(r.ptr()))->get_attribute("target", target_id);
+    e->set_source(vert_map[source_id]);
+    e->set_target(vert_map[target_id]);
+    this->add_edge_no_check(e);
+  }
+
+  return true;
+}
+
+
+
