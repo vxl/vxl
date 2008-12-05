@@ -129,7 +129,10 @@ bool vil_tiff_header::read_header()
   read_short_tag(tif_,TIFFTAG_COMPRESSION, compression);
   read_string(tif_,TIFFTAG_COPYRIGHT, copyright);
   read_string(tif_,TIFFTAG_DATETIME,date_time);
-  read_short_tag(tif_,TIFFTAG_EXTRASAMPLES, extra_samples);
+  vxl_uint_16* sample_info=0;
+  TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
+  if (extra_samples.val > 0)
+    extra_samples.valid = true;
   read_short_tag(tif_,TIFFTAG_FILLORDER, fill_order);
   vxl_uint_16* gc=0;
   TIFFGetField(tif_,TIFFTAG_GRAYRESPONSECURVE, &gc);
@@ -219,7 +222,7 @@ bool vil_tiff_header::read_header()
   }
 #endif
   return this->compute_pixel_format();
-  //  int success = TIFFReadDirectory(tif_);
+  // int success = TIFFReadDirectory(tif_);
 }
 
 // the number of separate sample planes defined by the tiff file
