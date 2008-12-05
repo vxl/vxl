@@ -211,6 +211,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.init_process("bvxmRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
       bvxm_batch.set_input_unsigned(1,2);
+      bvxm_batch.set_input_float(2,0.0);  # rotation angle passed as zero, original orientation of detector is used
       bvxm_batch.run_process();
       out_road_prob_map_id = bvxm_batch.commit_output(0);
       out_road_img_id = bvxm_batch.commit_output(1);
@@ -225,6 +226,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.init_process("bvxmRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
       bvxm_batch.set_input_unsigned(1,0);
+      bvxm_batch.set_input_float(2,0.0);
       bvxm_batch.run_process();
       out_vehicle_prob_map_id0 = bvxm_batch.commit_output(0);
       out_vehicle_img_id0 = bvxm_batch.commit_output(1);
@@ -240,6 +242,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.init_process("bvxmRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
       bvxm_batch.set_input_unsigned(1,1);
+      bvxm_batch.set_input_float(2,0.0);
       bvxm_batch.run_process();
       out_vehicle_prob_map_id1 = bvxm_batch.commit_output(0);
       out_vehicle_img_id1 = bvxm_batch.commit_output(1);
@@ -269,6 +272,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.init_process("bvxmRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
       bvxm_batch.set_input_unsigned(1,3);
+      bvxm_batch.set_input_float(2,0.0);
       bvxm_batch.run_process();
       out_b_prob_map_id = bvxm_batch.commit_output(0);
       out_b_img_id = bvxm_batch.commit_output(1);
@@ -283,6 +287,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.init_process("bvxmRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
       bvxm_batch.set_input_unsigned(1,4);
+      bvxm_batch.set_input_float(2,0.0);
       bvxm_batch.run_process();
       out_b_prob_map_id1 = bvxm_batch.commit_output(0);
       out_b_img_id1 = bvxm_batch.commit_output(1);
