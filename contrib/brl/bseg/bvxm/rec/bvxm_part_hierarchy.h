@@ -20,6 +20,7 @@
 #include <rec/bvxm_hierarchy_edge_sptr.h>
 
 #include <vil/vil_image_view.h>
+#include <vcl_iostream.h>
 
 class bvxm_part_hierarchy : public bgrl2_graph<bvxm_part_base , bvxm_hierarchy_edge>
 {

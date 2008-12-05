@@ -15,6 +15,7 @@
 
 #include <bxml/bxml_find.h>
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 //strength_threshold in [0,1] - min strength to declare the part as detected
 bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<bvxm_part_instance_sptr>& parts)
@@ -185,8 +186,8 @@ bvxm_part_gaussian::direction_vector(void)  // return a unit vector that gives d
 {
   vnl_vector_fixed<float,2> v;
   double theta_rad = theta_*vnl_math::pi/180.0;
-  v(0) = (float)cos(theta_rad);
-  v(1) = (float)sin(theta_rad);
+  v(0) = (float)vcl_cos(theta_rad);
+  v(1) = (float)vcl_sin(theta_rad);
   return v;
 }
 
@@ -194,9 +195,9 @@ bvxm_part_gaussian::direction_vector(void)  // return a unit vector that gives d
 bxml_data_sptr bvxm_part_gaussian::xml_element()
 {
   bxml_data_sptr data_super = bvxm_part_instance::xml_element();
-  
+
   bxml_element* data = new bxml_element("gaussian");
-  
+
   data->set_attribute("lambda0",lambda0_);
   data->set_attribute("lambda1",lambda1_);
   data->set_attribute("theta",theta_);
@@ -204,7 +205,7 @@ bxml_data_sptr bvxm_part_gaussian::xml_element()
     data->set_attribute("bright",1);
   else
     data->set_attribute("bright",0);
-  
+
   data->set_attribute("cutoff_perc", cutoff_percentage_);
 
   data->append_text("\n ");
@@ -229,10 +230,10 @@ bool bvxm_part_gaussian::xml_parse_element(bxml_data_sptr data)
                   ((bxml_element*)g_root.ptr())->get_attribute("lambda1", lambda1_) &&
                   ((bxml_element*)g_root.ptr())->get_attribute("theta", theta_) &&
                   ((bxml_element*)g_root.ptr())->get_attribute("cutoff_perc", cutoff_percentage_));
-    
+
     int bright_int;
     found = found && ((bxml_element*)g_root.ptr())->get_attribute("bright", bright_int);
-    
+
     if (!found)
       return false;
 
@@ -244,5 +245,4 @@ bool bvxm_part_gaussian::xml_parse_element(bxml_data_sptr data)
 
   return true;
 }
-
 
