@@ -5,6 +5,7 @@
 
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_fit_lines_2d.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_distance.h>
@@ -160,6 +161,170 @@ bool bmdl_mesh::is_clipped(const vcl_vector<vgl_point_2d<double> >& poly,
 }
 
 
+namespace
+{
+  // return a reference to the edge bin corresponding the edge between p1 and p2
+  unsigned int& get_edge_bin(vil_image_view<unsigned int>& edge_bins, 
+                             const vgl_point_2d<double>& p1,
+                             const vgl_point_2d<double>& p2)
+  {
+    unsigned int *binp = 0;
+    if(vcl_abs(p2.x() - p1.x()) < 0.5)
+    {
+      binp = &edge_bins(static_cast<unsigned int>(p1.x()+1.0),
+                        static_cast<unsigned int>((p1.y()+p2.y())/2.0+0.5), 0);
+    }
+    else
+    {
+      binp = &edge_bins(static_cast<unsigned int>((p1.x()+p2.x())/2.0+0.5),
+                        static_cast<unsigned int>(p1.y()+1.0), 1);
+    }
+    return *binp;
+  }
+}
+
+//: extract shared boundary edges from the polygon boundarys
+unsigned int bmdl_mesh::link_boundary_edges(const vil_image_view<unsigned int>& labels, 
+                                            const vcl_vector<vgl_polygon<double> >& polygons,
+                                            vcl_vector<bmdl_edge>& edges,
+                                            vcl_vector<bmdl_region>& regions)
+{
+  unsigned int ni = labels.ni();
+  unsigned int nj = labels.nj();
+  vil_image_view<unsigned int> edge_labels(ni+1, nj+1, 2);
+  edge_labels.fill(0);
+  
+  unsigned int joint_count = 0;
+  unsigned int last_joint = static_cast<unsigned int>(-1);
+  
+  regions.resize(polygons.size());
+  for (unsigned int i=0; i<polygons.size(); ++i)
+  {
+    const vgl_polygon<double>& poly = polygons[i];
+    if(poly.num_sheets() < 1)
+      continue;
+    // determine which sheets are holes (CW vs CCW orientation)
+    unsigned int num_cw=0, num_ccw=0;
+    vcl_vector<bool> is_hole(poly.num_sheets(),false);
+    for (unsigned int j=0; j<poly.num_sheets(); ++j)
+    {
+      double area = vgl_area_signed(vgl_polygon<double>(poly[j]));
+      is_hole[j] = (area > 0.0);
+      if(is_hole[j])  
+        ++num_ccw;
+      else            
+        ++num_cw;
+    }
+    // expect to find exactly 1 CW sheet
+    if(num_cw == 0)
+      continue;
+    if(num_cw > 1)
+    {
+      vcl_cout << "Ignoring polygon with multiple connected components" << vcl_endl;
+      continue;
+    }
+    bmdl_region& region = regions[i];
+    if(num_ccw > 0)
+      region.hole_edge_idxs.resize(num_ccw);
+    unsigned int hole_count = 0;
+    for (unsigned int j=0; j<poly.num_sheets(); ++j)
+    { 
+      const vcl_vector<vgl_point_2d<double> >& pts = poly[j];
+      vcl_vector<unsigned int>& edge_idxs = (!is_hole[j]) ? 
+                                            region.edge_idxs :
+                                            region.hole_edge_idxs[hole_count++];
+      for (unsigned int k1=pts.size()-1,k2=0; k2<pts.size(); k1=k2++)
+      {
+        vgl_vector_2d<double> v(pts[k2]-pts[k1]);
+        vgl_point_2d<double> p = pts[k1] + 0.5*v;
+        p += vgl_vector_2d<double>(-0.5*v.y(), 0.5*v.x());
+        int x = static_cast<int>(p.x()+0.5);
+        int y = static_cast<int>(p.y()+0.5);
+        unsigned l = 0;
+        if(x >= 0 && x < ni && y >=0 && y < nj)
+        {
+          l = labels(x,y);
+          if(l > 0)
+            l -= 1;
+        }
+
+        // find the bin for storing indices of edges already created
+        unsigned int& bin = get_edge_bin(edge_labels,pts[k1],pts[k2]);
+           
+        if(bin > 0) // the label already exists
+        {
+          if(edge_idxs.empty() || edge_idxs.back() != bin-1)
+          {
+            // correct last joint if just created
+            if(!edge_idxs.empty() && edges[edge_idxs.back()].building1 == i+1)
+            {
+              edges[edge_idxs.back()].joint2 = edges[bin-1].joint2;
+              --joint_count;
+            }
+            edge_idxs.push_back(bin-1);
+            assert(edges[edge_idxs.back()].building1 == l);
+            assert(edges[edge_idxs.back()].building2 == i+1);
+            last_joint = edges[edge_idxs.back()].joint1;
+          }
+        }
+        else // create and build a new edge
+        {
+          if(edge_idxs.empty() || edges[edge_idxs.back()].building2 != l)
+          {
+            // start a new edge
+            edge_idxs.push_back(edges.size());
+            edges.push_back(bmdl_edge(i+1,l));
+            edges.back().pts.push_back(pts[k1]);
+            edges.back().joint1 = last_joint;
+            edges.back().joint2 = joint_count++;
+            last_joint = edges.back().joint2;
+          }
+          edges[edge_idxs.back()].pts.push_back(pts[k2]);
+          bin = edge_idxs.back()+1;
+        }
+      }
+      // handle special cases at the starting point
+      if(edge_idxs.size() > 1)
+      {
+        // A region may touch the same previously create edge at beginning and end 
+        if(edge_idxs.front() == edge_idxs.back() && 
+           edges[edge_idxs.front()].building2 == i+1)
+        {
+          edge_idxs.pop_back();
+        }
+        // Created edges at beginning and end may touch the same region (merge them)
+        else if(edges[edge_idxs.front()].building2 == edges[edge_idxs.back()].building2 &&
+                edges[edge_idxs.front()].building2 != i+1)
+        {
+          vcl_vector<vgl_point_2d<double> >& pts1 = edges[edge_idxs.front()].pts;
+          vcl_vector<vgl_point_2d<double> >& pts2 = edges[edge_idxs.back()].pts;
+          // relabel bins 
+          for(unsigned int k=1; k<pts2.size(); ++k)
+          {
+            unsigned int& bin = get_edge_bin(edge_labels,pts2[k-1],pts2[k]);
+            bin = edge_idxs.front()+1;
+          }
+          assert((pts1.front() - pts2.back()).length() < 1e-6);
+          pts2.insert(pts2.end(),pts1.begin()+1,pts1.end());
+          pts1.swap(pts2);
+          assert(edge_idxs.back()+1 == edges.size());
+          last_joint = edges[edge_idxs.back()].joint1;
+          edge_idxs.pop_back();
+          edges.pop_back();
+          --joint_count;
+        }
+      }
+      // fix starting joint by completing the cycle
+      if(edges[edge_idxs.front()].building1 == i+1)
+      {
+        edges[edge_idxs.front()].joint1 = last_joint;
+      }
+    }
+  }
+  return joint_count;
+}
+
+
 //: simplify a polygon by fitting lines
 // \a tol is the tolerance for line fitting
 void bmdl_mesh::simplify_polygon( vcl_vector<vgl_point_2d<double> >& pts, double tol )
@@ -235,6 +400,81 @@ void bmdl_mesh::simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundarie
 }
 
 
+//: simplify an edge by fitting lines
+// \a tol is the tolerance for line fitting
+void bmdl_mesh::simplify_edge( vcl_vector<vgl_point_2d<double> >& pts, double tol )
+{
+  vgl_fit_lines_2d<double> line_fitter(3,tol);
+  line_fitter.add_curve(pts);
+  line_fitter.fit();
+  const vcl_vector<vgl_line_segment_2d<double> >& segs = line_fitter.get_line_segs();
+  const vcl_vector<int>& indices = line_fitter.get_indices();
+  vcl_vector<vgl_point_2d<double> > new_pts;
+  // the first point must be retained
+  new_pts.push_back(pts.front());
+  vgl_point_2d<double> isect;
+  for ( unsigned int i=0; i< indices.size(); )
+  {
+    if (indices[i] < 0)
+    {
+      if(i==0 || i==indices.size()-1)
+        ++i;
+      else
+        new_pts.push_back(pts[i++]);
+      continue;
+    }
+    const vgl_line_segment_2d<double>& seg = segs[indices[i]];
+    // fix very short segments that trim corners
+    if (new_pts.size() > 1 && vgl_distance(new_pts.back(),seg.point1())< 1.0 &&
+        angle(vgl_vector_2d<double>(new_pts.back()-new_pts[new_pts.size()-2]),
+              vgl_vector_2d<double>(seg.point1()-seg.point2())) > 0.5) {
+      vgl_intersection(vgl_line_2d<double>(new_pts[new_pts.size()-2], new_pts.back()),
+                       vgl_line_2d<double>(seg.point1(),seg.point2()),
+                       isect);
+      new_pts.back() = isect;
+    }
+    // avoid duplicating the first point
+    else if(i>0 || (seg.point1()-pts.front()).length()>0.5)
+      new_pts.push_back(seg.point1());
+    
+    // skip to the next point not part of this line
+    for (int curr_seg_idx = indices[i];
+         i<indices.size() && indices[i] == curr_seg_idx; ++i)
+      ;
+    
+    // avoid duplicating the last point
+    if(i<indices.size() || (seg.point2()-pts.back()).length()>0.5)
+      new_pts.push_back(seg.point2());
+  }
+  // the last point must be retained
+  new_pts.push_back(pts.back());
+  pts.swap(new_pts);
+}
+
+
+//: simplify the linked edges by fitting lines
+void bmdl_mesh::simplify_edges( vcl_vector<bmdl_edge>& edges )
+{
+  for(unsigned int i=0; i<edges.size(); ++i)
+  {
+    vcl_vector<vgl_point_2d<double> >& pts = edges[i].pts;
+    
+    // shift point to the edge centers (diagonals line up better this way)
+    vcl_vector<vgl_point_2d<double> > new_pts;
+    new_pts.push_back(pts.front());
+    for (unsigned j=1; j<pts.size(); ++j) {
+      new_pts.push_back(vgl_point_2d<double>((pts[j-1].x()+pts[j].x())/2, 
+                                             (pts[j-1].y()+pts[j].y())/2));
+    }
+    new_pts.push_back(pts.back());
+    pts.swap(new_pts);
+    
+    simplify_edge(pts, 0.01);
+    simplify_edge(pts, 0.5);
+  }
+}
+
+
 //: construct a mesh out of data and labels
 // The coordinate system is flipped over the x-axis to make it right handed
 // i.e. (x,y) -> (x,-y)
@@ -287,6 +527,240 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<vgl_polygon<double> >& boundaries,
     faces->push_back(roof);
   }
 
+  vcl_auto_ptr<imesh_vertex_array_base> vb(verts);
+  vcl_auto_ptr<imesh_face_array_base> fb(faces);
+  mesh.set_vertices(vb);
+  mesh.set_faces(fb);
+}
+
+
+namespace{
+  unsigned int add_joint_vertex(imesh_vertex_array<3>& verts,
+                                vcl_vector<unsigned int>& vert_stack, 
+                                const imesh_vertex<3>& v)
+  {      
+    bool found = false;
+    vcl_vector<unsigned int>::iterator i=vert_stack.begin();
+    for(; i!=vert_stack.end() && verts[*i][2] <= v[2]; ++i)
+    {
+      if(verts[*i][2] == v[2])
+      {
+        found = true;
+        break;
+      }
+    }
+    if(found)
+      return *i;
+
+    unsigned int bi = verts.size();
+    verts.push_back(v);
+    vert_stack.insert(i,bi);
+    return bi;
+  }
+  
+  inline vcl_vector<unsigned int>::const_iterator
+  find_by_height(const vcl_vector<unsigned int>& idxs, 
+                 const imesh_vertex_array<3>& verts,
+                 double height)
+  {
+    for(vcl_vector<unsigned int>::const_iterator i=idxs.begin(); i!=idxs.end(); ++i)
+      if(verts[*i][2] == height)
+        return i;
+    return idxs.end();
+  }
+}
+
+//: construct a mesh out of data and labels using linked edges
+// The coordinate system is flipped over the x-axis to make it right handed
+// i.e. (x,y) -> (x,-y)
+void bmdl_mesh::mesh_lidar(const vcl_vector<bmdl_edge>& edges,
+                           const vcl_vector<bmdl_region>& regions,
+                           unsigned int num_joints,
+                           const vil_image_view<unsigned int>& labels,
+                           const vil_image_view<double>& heights,
+                           const vil_image_view<double>& ground,
+                           imesh_mesh& mesh)
+{
+  unsigned ni = labels.ni();
+  unsigned nj = labels.nj();
+  
+  // recover the vector of building heights
+  vcl_vector<double> bld_heights(regions.size());
+  for (unsigned int j=0; j<nj; ++j){
+    for (unsigned int i=0; i<ni; ++i){
+      if (labels(i,j) > 1){
+        bld_heights[labels(i,j)-2] = heights(i,j);
+      }
+    }
+  }
+  
+  // store the indices of vertices connected below each edge point
+  vcl_vector<vcl_vector<unsigned int> > edge_to_mesh(edges.size());
+  vcl_vector<vcl_vector<unsigned int> > joint_vert_stack(num_joints);
+  
+  imesh_vertex_array<3> *verts = new imesh_vertex_array<3>;
+  imesh_face_array *faces = new imesh_face_array;
+  
+  // precompute a mesh vertices located at joints
+  for(unsigned int e=0; e<edges.size(); ++e)
+  {
+    const bmdl_edge& edge = edges[e];
+    const vgl_point_2d<double>& pt1 = edge.pts.front();
+    const vgl_point_2d<double>& pt2 = edge.pts.back();
+    vcl_vector<unsigned int>& jvs1 = joint_vert_stack[edge.joint1];
+    vcl_vector<unsigned int>& jvs2 = joint_vert_stack[edge.joint2];
+    
+    bool b1_gnd = edge.building1 == 0 || regions[edge.building1-1].edge_idxs.empty();
+    bool b2_gnd = edge.building2 == 0 || regions[edge.building2-1].edge_idxs.empty();
+    // building 1 on ground
+    if(b1_gnd || b2_gnd)
+    {
+      double g1 = vil_bilin_interp_safe_extend(ground, pt1.x(), pt1.y());
+      add_joint_vertex(*verts, jvs1, imesh_vertex<3>(pt1.x(),-pt1.y(), g1));
+      double g2 = vil_bilin_interp_safe_extend(ground, pt2.x(), pt2.y());
+      add_joint_vertex(*verts, jvs2, imesh_vertex<3>(pt2.x(),-pt2.y(), g2));
+    }
+    if(!b1_gnd)
+    {
+      double h = bld_heights[edge.building1-1];
+      add_joint_vertex(*verts, jvs1, imesh_vertex<3>(pt1.x(),-pt1.y(),h));
+      add_joint_vertex(*verts, jvs2, imesh_vertex<3>(pt2.x(),-pt2.y(),h));
+    }
+    if(!b2_gnd)
+    {
+      double h = bld_heights[edge.building2-1];
+      add_joint_vertex(*verts, jvs1, imesh_vertex<3>(pt1.x(),-pt1.y(),h));
+      add_joint_vertex(*verts, jvs2, imesh_vertex<3>(pt2.x(),-pt2.y(),h));
+    }
+  }
+  
+
+  // create the buildings
+  for (unsigned int b=0; b<regions.size(); ++b) {
+    if (regions[b].edge_idxs.empty())
+      continue;
+    vcl_vector< unsigned int > roof;
+    for(unsigned int e=0; e<regions[b].edge_idxs.size(); ++e)
+    {
+      const bmdl_edge& edge = edges[regions[b].edge_idxs[e]];
+      vcl_vector<unsigned int> e2m = edge_to_mesh[regions[b].edge_idxs[e]];
+      vcl_vector<vgl_point_2d<double> > pts = edge.pts;
+      unsigned int other = 0;
+      unsigned int j1 = edge.joint1;
+      unsigned int j2 = edge.joint2;
+      if(edge.building1 == b+1)
+      {
+        other = edge.building2;
+      }
+      else if(edge.building2 == b+1)
+      {
+        other = edge.building1;
+        vcl_reverse(pts.begin(), pts.end());
+        vcl_reverse(e2m.begin(), e2m.end());
+        vcl_swap(j1,j2);
+      }
+      else
+        vcl_cout << "mismatch "<<b+1<<", "<<edge.building1<<", "<<edge.building2<<vcl_endl;
+      
+      
+      const vcl_vector<unsigned int>& jvs1 = joint_vert_stack[j1];
+      const vcl_vector<unsigned int>& jvs2 = joint_vert_stack[j2];
+      
+      // is this edge attached to the ground?
+      bool on_ground = other == 0 || regions[other-1].edge_idxs.empty();
+      
+      typedef vcl_vector<unsigned int>::const_iterator vfitr;
+      typedef vcl_vector<unsigned int>::const_reverse_iterator vritr;
+      
+      vfitr i1beg = jvs1.begin(); // first vertex is on ground
+      vfitr i1end = find_by_height(jvs1, *verts, bld_heights[b]);
+      vfitr i2beg = jvs2.begin(); // first vertex is on ground
+      vfitr i2end = find_by_height(jvs2, *verts, bld_heights[b]);
+      assert(i1end != jvs1.end());
+      assert(i2end != jvs2.end());
+      if(!on_ground)
+      {
+        i1beg = find_by_height(jvs1, *verts, bld_heights[other-1]);
+        i2beg = find_by_height(jvs2, *verts, bld_heights[other-1]);
+        assert(i1beg != jvs1.end());
+        assert(i2beg != jvs2.end());
+        if(bld_heights[other-1] > bld_heights[b])
+        {
+          vcl_swap(i1beg, i1end);
+          vcl_swap(i2beg, i2end);
+        }
+      }
+      
+      if(!on_ground && edge.building1 == b+1) // don't create side faces yet
+      {
+        // create the base vertices for later faces and attach the current roof
+        vcl_vector<unsigned int>& e2m_set = edge_to_mesh[regions[b].edge_idxs[e]];
+        roof.push_back(*i1beg);
+        for (unsigned int i=1; i<pts.size()-1; ++i) {
+          const vgl_point_2d<double>& pt = pts[i];
+          unsigned int bi = verts->size();
+          verts->push_back(imesh_vertex<3>(pt.x(),-pt.y(),bld_heights[b]));
+          roof.push_back(bi);
+          e2m_set.push_back(bi);
+        }
+        continue;
+      }
+      
+      vcl_vector<unsigned int> face;
+      // start the next face
+      roof.push_back(*i1end);
+      ++i1end;
+      face.insert(face.end(), vritr(i1end), vritr(i1beg));
+  
+      if(on_ground) // attach to the ground
+      {        
+        // add all faces in the middle
+        for (unsigned int i=1; i<pts.size()-1; ++i) {
+          const vgl_point_2d<double>& pt = pts[i];
+          double g = vil_bilin_interp_safe_extend(ground, pt.x(), pt.y());
+          unsigned int bi = verts->size();
+          verts->push_back(imesh_vertex<3>(pt.x(),-pt.y(), g));
+          verts->push_back(imesh_vertex<3>(pt.x(),-pt.y(),bld_heights[b]));
+          roof.push_back(bi+1);
+          // finish last face
+          face.push_back(bi);
+          face.push_back(bi+1);
+          faces->push_back(face);
+          // start the next face
+          face.clear();
+          face.push_back(bi+1);
+          face.push_back(bi);
+        }
+      }
+      else // attach to previous level
+      {
+        if(e2m.empty() && pts.size() > 2)
+          continue;
+        for (unsigned int i=1; i<pts.size()-1; ++i) {
+          const vgl_point_2d<double>& pt = pts[i];
+          unsigned int bi = verts->size();
+          verts->push_back(imesh_vertex<3>(pt.x(),-pt.y(),bld_heights[b]));
+          roof.push_back(bi);
+          // finish last face
+          face.push_back(e2m[i-1]);
+          face.push_back(bi);
+          faces->push_back(face);
+          // start the next face
+          face.clear();
+          face.push_back(bi);
+          face.push_back(e2m[i-1]);
+        }
+      }      
+      // finish the last face
+      ++i2end;
+      face.insert(face.end(), i2beg, i2end);
+      faces->push_back(face);
+      face.clear();
+    }
+    if(roof.size() > 2)
+      faces->push_back(roof);
+  }
+  
   vcl_auto_ptr<imesh_vertex_array_base> vb(verts);
   vcl_auto_ptr<imesh_face_array_base> fb(faces);
   mesh.set_vertices(vb);

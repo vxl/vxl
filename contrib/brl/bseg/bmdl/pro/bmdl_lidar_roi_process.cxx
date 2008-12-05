@@ -214,8 +214,10 @@ bool bmdl_lidar_roi_process::lidar_roi(unsigned type,  //0 for geo coordinates, 
     bb->add_point(roi_box.max_x(), roi_box.max_y());
 
     bb = broi.clip_to_image_bounds(bb);
-    //vcl_cout << "Cut out area------>" << vcl_endl;
-    //vcl_cout << *bb << vcl_endl;
+
+    vcl_cout << "Cut out area------>" << vcl_endl;
+    vcl_cout << *bb << vcl_endl;
+
     first_roi = tiff_first->get_copy_view((unsigned int)bb->get_min_x(),
                                           (unsigned int)bb->width(),
                                           (unsigned int)bb->get_min_y(),

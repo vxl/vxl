@@ -61,7 +61,6 @@ bool bmdl_trace_boundaries_process::trace_boundaries(vil_image_view_base_sptr la
   vil_image_view<unsigned int>* img = static_cast<vil_image_view<unsigned int>* > (label_img.as_pointer());
   vcl_vector<vgl_polygon<double> > polygons =
     bmdl_mesh::trace_boundaries(*img);
-  bmdl_mesh::simplify_boundaries(polygons);
 
   // save polygons
   vsl_b_ofstream os(fpath);
