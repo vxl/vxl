@@ -6,7 +6,7 @@
 // \brief Construct a 3-d mesh from classified lidar images
 //
 // \author Matt Leotta
-// \date 10/14/2008
+// \date Oct 14, 2008
 
 #include <vcl_cstddef.h>
 
@@ -15,9 +15,9 @@
 
 struct bmdl_edge
 {
-  bmdl_edge(unsigned int b1, unsigned int b2) 
+  bmdl_edge(unsigned int b1, unsigned int b2)
   : building1(b1), building2(b2) {}
-  
+
   unsigned int building1;
   unsigned int building2;
   unsigned int joint1;
@@ -53,14 +53,14 @@ class bmdl_mesh
   // If \a dropped_clipped is true then buildings clipped by the image boundaries are not traced
   static vcl_vector<vgl_polygon<double> >
       trace_boundaries(const vil_image_view<unsigned int>& labels, bool drop_clipped = true);
-  
-  //: extract shared boundary edges from the polygon boundarys
-  // returns the number of joints linking the edges
-  static unsigned int link_boundary_edges(const vil_image_view<unsigned int>& labels, 
+
+  //: extract shared boundary edges from the polygon boundaries
+  // \returns the number of joints linking the edges
+  static unsigned int link_boundary_edges(const vil_image_view<unsigned int>& labels,
                                           const vcl_vector<vgl_polygon<double> >& polygons,
                                           vcl_vector<bmdl_edge>& edges,
                                           vcl_vector<bmdl_region>& regions);
-  
+
 
   //: test if a boundary is clipped by the image of size \a ni by \a nj
   static bool is_clipped(const vcl_vector<vgl_point_2d<double> >& poly,
@@ -72,11 +72,11 @@ class bmdl_mesh
 
   //: simplify the boundaries by fitting lines
   static void simplify_boundaries( vcl_vector<vgl_polygon<double> >& boundaries );
-  
+
   //: simplify an edge by fitting lines
   // \a tol is the tolerance for line fitting
   static void simplify_edge( vcl_vector<vgl_point_2d<double> >& pts, double tol );
-  
+
   //: simplify the linked edges by fitting lines
   static void simplify_edges( vcl_vector<bmdl_edge>& edges );
 
@@ -88,7 +88,7 @@ class bmdl_mesh
                          const vil_image_view<double>& heights,
                          const vil_image_view<double>& ground,
                          imesh_mesh& mesh);
-  
+
   //: construct a mesh out of data and labels using linked edges
   // The coordinate system is flipped over the x-axis to make it right handed
   // i.e. (x,y) -> (x,-y)
