@@ -181,10 +181,10 @@ void bmdl_classify<T>::label_lidar()
   while (greedy_merge())
     ;
 
-  // 4. Refine building regions with various morphological operations
+  // 8. Refine building regions with various morphological operations
   refine_buildings();
 
-  // 5. Determine the heights to use for meshing
+  // 9. Determine the heights to use for meshing
   heights_.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
