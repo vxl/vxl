@@ -18,6 +18,7 @@ MANPAGE_SOURCES += bvxm_part_gaussian_sptr.h
 SOURCES += bvxm_part_hierarchy.cxx
 SOURCES += bvxm_part_hierarchy_builder.cxx
 MANPAGE_SOURCES += bvxm_part_hierarchy_sptr.h
+SOURCES += bvxm_part_hierarchy_detector.cxx
 
 SUBDIRS += pro
 
