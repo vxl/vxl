@@ -140,6 +140,10 @@ get_pixel_info_from_image(const int x, const int y,
                     v(0,0,0), v(0,0,1), v(0,0,2) );
       return;
     }
+	else if (n_p==4){    
+      vcl_sprintf(msg, "(%d, %d) Pixel type not Available", x, y);
+      return;
+    }
     return; }
    case  VIL_PIXEL_FORMAT_SBYTE: {
     if (n_p==1)
@@ -159,6 +163,10 @@ get_pixel_info_from_image(const int x, const int y,
       else
         vcl_sprintf(msg, "(%d, %d)   (sbyte)[ R=%d,G=%d,B=%d]", x, y,
                     v(0,0).R(), v(0,0).G(),v(0,0).B() );
+      return;
+    }
+	else if (n_p==4){    
+      vcl_sprintf(msg, "(%d, %d) Pixel type not Available", x, y);
       return;
     }
     return; }
