@@ -54,7 +54,7 @@ else
     exit 0;
   }
   $FILES = `find $DIRS -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print`;
-  @FILES = grep { ! m!/b3p/(shapelib|expatp*)/! } split /\s+/, $FILES;
+  @FILES = grep { ! m!/b3p/(minizip|shapelib|expatp*)/! } split /\s+/, $FILES;
 }
 
 # In what follows, $f is the name of the file, $file is the file content, and $file_s is a comment-stripped version of $file.
@@ -234,6 +234,8 @@ foreach $f (@FILES)
     $ii = $i;
     $i =~ s!^([vb]gui.*)!$1\(\|_sptr\|_new\)!;
     $i =~ s!^(v(so|to|dg|cs)l.*)!$1\(\|_sptr\)! unless ($f =~ m!\.h$!);
+    # CURRENTLY NOT YET WELL TESTED, HENCE IGNORED:
+    next if ($j =~ m!^(vsl/|vidl_vil1/|vidl/|vgui/|bgui/|vsol/|vtol/|vdgl/|v.l/io/|rgrl/|rsdl/|rrel/)!);
     # VCL
     if ($j eq 'vcl_algorithm.h') { $i='vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|stable_partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)'; }
     elsif ($j eq 'vxl_config.h') { $i='VXL_\w+|vxl_([su]?(int|ieee)_(8|16|32|64)|s?byte)'; }
@@ -311,15 +313,17 @@ foreach $f (@FILES)
     elsif ($j eq 'vsl/vsl_quick_file.h') { $i.='_(load|save)'; }
     elsif ($j eq 'vsl/vsl_stream.h') { $i.='_summary(|_t)'; }
     # VGL
+    elsif ($j eq 'vgl/vgl_area.h') { $i.='(|_enforce_orientation|_signed)|vgl_centroid'; }
     elsif ($j eq 'vgl/vgl_clip.h') { $i.='(|_type|_line[a-z_]+)'; }
     elsif ($j eq 'vgl/vgl_convex.h') { $i.='(_hull)'; }
     elsif ($j eq 'vgl/vgl_closest_point.h') { $i.='(|s|_origin|_to_linesegment|_to_(|non_)closed_polygon)'; }
     elsif ($j eq 'vgl/vgl_distance.h') { $i.='(|_origin|(|2)_to_linesegment|_to_(|non_)closed_polygon)'; }
-    elsif ($j eq 'vgl/vgl_lineseg_test.h') { $i.='(_line|_lineseg)'; }
+    elsif ($j eq 'vgl/vgl_lineseg_test.h') { $i.='(_point|_line|_lineseg)'; }
     elsif ($j eq 'vgl/vgl_triangle_test.h') { $i.='_(discriminant|inside)'; }
     elsif ($j eq 'vgl/vgl_triangle_3d.h') { $i.='_([a-z]+_intersection|distance|coplanar|area|aspect_ratio|coincident_edges|test_inside(|_simple)|(shortest|longest)_side|closest_point)'; }
     elsif ($j eq 'vgl/algo/vgl_homg_operators_2d.h') { $i.='|vnl_double_3x3[^\000]*vgl_homg_point_2d|cond_matrix . x'; }
     elsif ($j eq 'vgl/algo/vgl_homg_operators_3d.h') { $i.='|vnl_double_4x4[^\000]*vgl_homg_point_3d|p_matrix_ \* X'; }
+    elsif ($j eq 'vgl/algo/vgl_rtree_c.h') { $i='vgl_rtree_point_box_2d|vgl_rtree_box_box_2d|vgl_bbox_2d|vgl_rtree_polygon_probe'; }
     elsif ($j eq 'vgl/xio/vgl_xio_point_2d.h') { $i='x_write'; }
     # VIL & VIL1
     elsif ($j =~ m'vil1/vil1_\d+bit\.h$') { $i.='(|_(read|write)_(big|little)_endian)'; }
@@ -558,6 +562,7 @@ foreach $f (@FILES)
               $f =~ m!/$ii\.! ||
               $f eq 'vxl_copyright.h' ||
               $f eq 'vxl_version.h' ||
+              $f.$j =~ m!vxl_echo\.cxx(vxl_version|vxl_copyright)\.h! ||
               $f =~ m!\btests/test_include\.cxx$!);
   }
   &msg(1, "should have \#include <vcl_cassert.h>")
@@ -630,7 +635,7 @@ foreach $f (@FILES)
                     | alement
                     | alife
                     | anj\b
-                    | appi\S+
+                    | appi\w+
                     | arang\S+
                     | arbitar\S+
                     | aready
@@ -834,7 +839,7 @@ foreach $f (@FILES)
                     | yei\S*
                     | [a-z]*([a-z])\1\1[a-z]*\b
                     )!ix
-        && $1 ne 'valush' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
+        && $1 ne 'valush' && $1 ne 'appicon' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'ssss' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
 
 # 9. spurious #pragma interface or #pragma implementation
   &msg(1, "contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE")
@@ -972,7 +977,7 @@ foreach $f (@FILES)
       &msg(1, "$wd$1() must be vcl_$wd()")
         unless ($f =~ m!\bcmake/config/vxl_platform_tests\.cxx$! ||
                 $f =~ m!/bwm_tableau_mgr\.(cxx|h)$! ||
-                $f =~ m!/bwm_menu\.h$!);
+                $f =~ m!/bwm(_wx)?_menu\.h$!);
     }
   }
 
@@ -1087,7 +1092,7 @@ foreach $f (@FILES)
   foreach $wd (qw(size_t ptrdiff_t clock_t time_t))
   {
     &msg(1, "$wd must be vcl_$wd")
-      if ($cpp_file && $file_s =~ m!\b$wd\b!);
+      if ($cpp_file && $file_s =~ m!\b$wd\b! && $f !~ m!\bvnl/vnl_numeric_traits\.h$!);
   }
   foreach $wd (qw(iterator_traits back_insert_iterator front_insert_iterator insert_iterator input_iterator_tag output_iterator_tag forward_iterator_tag bidirectional_iterator_tag random_access_iterator_tag))
   {

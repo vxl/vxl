@@ -33,7 +33,7 @@ else {
     print STDERR "VXLROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc|v3p/netlib)$! } sort split ' ', $DIRS;
+  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$! } sort split ' ', $DIRS;
 }
 
 foreach $dir (@DIRS)
@@ -94,7 +94,7 @@ foreach $dir (@DIRS)
   }
 
   # verify #includes in test_include.cxx
-  if (-f "$dir/test_include.cxx" && $dir =~ m!^/!)
+  if (-f "$dir/test_include.cxx")
   {
     @updir_files = ();
     if (opendir(UPDIR,"$dir/..")) {
@@ -108,7 +108,7 @@ foreach $dir (@DIRS)
         closedir(UPDIR);
       }
     }
-    $prefix=$dir; $prefix =~ s![^/]*$!!; $prefix =~ s!^.*/(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
+    $prefix=$dir; $prefix =~ s![^/]*$!!; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
     @updir_files = sort
                    grep { !m/\bdll\.h$/ }
                    grep { !m/vidl_(win|avifile)_avicodec/ }
@@ -169,6 +169,7 @@ foreach $dir (@DIRS)
     next unless open(FILE, "$dir/$fx");
     $f .= " $dir/$fx";
     $start = '';
+    binmode FILE;
     while (<FILE>)
     {
       print STDOUT "Line of $dir/$fx does not end in <CR><LF>\n" unless m/\r$/;
