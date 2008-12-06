@@ -9,12 +9,13 @@ DECLARE( test_trilin_interp );
 DECLARE( test_sample_profile_trilin );
 DECLARE( test_gauss_reduce );
 DECLARE( test_switch_axes );
+DECLARE( test_image_resource );
 DECLARE( test_convert );
 DECLARE( test_from_image_2d );
 DECLARE( test_resample );
 DECLARE( test_analyze_format );
 DECLARE( test_reflect );
-DECLARE( test_image_resource );
+DECLARE( test_tricub_interp );
 
 DECLARE( test_algo_threshold );
 DECLARE( test_algo_structuring_element );
@@ -54,6 +55,7 @@ register_tests()
   REGISTER( test_resample );
   REGISTER( test_analyze_format );
   REGISTER( test_reflect );
+  REGISTER( test_tricub_interp );
 
   REGISTER( test_algo_threshold );
   REGISTER( test_algo_structuring_element );
