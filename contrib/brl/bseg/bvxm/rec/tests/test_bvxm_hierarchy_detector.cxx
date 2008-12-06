@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_vector.h>
 
 #include <rec/bvxm_part_base.h>
