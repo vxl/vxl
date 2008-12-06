@@ -227,6 +227,9 @@ SOURCE=.\test_bvxm_parts.cxx
 SOURCE=.\test_param_estimation.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bvxm_hierarchy_detector.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

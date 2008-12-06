@@ -126,6 +126,9 @@ SOURCE=.\bvxm_part_hierarchy.cxx
 SOURCE=.\bvxm_part_hierarchy_builder.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_part_hierarchy_detector.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_hierarchy_edge-.cxx
 # End Source File
 # Begin Source File
@@ -150,11 +153,11 @@ SOURCE=.\Templates/bgrl2_graph+bvxm_part_base.bvxm_hierarchy_edge-.cxx
 SOURCE=.\Templates/bgrl2_vertex+bvxm_hierarchy_edge-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_rtree+bvxm_part_instance+vgl_polygon_2d+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
-# Begin Source File
-# End Source File
 # Begin Source File
 SOURCE=.\bvxm_bayesian_propagation.h
 # End Source File
@@ -199,6 +202,9 @@ SOURCE=.\bvxm_part_hierarchy_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_part_hierarchy_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_part_hierarchy_detector.h
 # End Source File
 # End Group
 # End Target
