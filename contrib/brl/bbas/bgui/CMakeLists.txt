@@ -31,7 +31,7 @@ IF(HAS_VGUI)
  INSTALL_TARGETS(/lib bgui)
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgui ${bgui_sources})
 
- TARGET_LINK_LIBRARIES(bgui bsta vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vbl vcl)
+ TARGET_LINK_LIBRARIES(bgui bmrf bsta vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vbl vcl)
 
  IF(BUILD_EXAMPLES)
    SUBDIRS(examples)
