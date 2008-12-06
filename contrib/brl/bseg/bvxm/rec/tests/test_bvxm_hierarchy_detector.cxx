@@ -24,6 +24,8 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_quaternion.h>
+#include <vnl/vnl_float_2.h>
+#include <vnl/vnl_float_3.h>
 
 static void test_bvxm_hierarchy_detector()
 {
@@ -33,11 +35,11 @@ static void test_bvxm_hierarchy_detector()
   // insert  points
   //vgl_point_2d<float> p0(0.0f, 0.1f), p1(1.0f,0.0f),
     //p2(1.0f, 1.0f), p3(0.5f, 0.5f), p4(0.65f, 0.65f);
-  bvxm_part_instance_sptr p0i = new bvxm_part_instance(0, 0, 1, 0.0f, 0.0f, 0.1f);
-  bvxm_part_instance_sptr p1i = new bvxm_part_instance(0, 0, 1, 1.0f, 0.0f, 0.1f);
-  bvxm_part_instance_sptr p2i = new bvxm_part_instance(0, 0, 1, 1.0f, 1.0f, 0.1f);
-  bvxm_part_instance_sptr p3i = new bvxm_part_instance(0, 0, 1, 0.5f, 0.5f, 0.1f);
-  bvxm_part_instance_sptr p4i = new bvxm_part_instance(0, 0, 1, 0.65f, 0.65f, 0.1f);
+  bvxm_part_instance_sptr p0i=new bvxm_part_instance(0, 0, 1, 0.0f, 0.0f, 0.1f);
+  bvxm_part_instance_sptr p1i=new bvxm_part_instance(0, 0, 1, 1.0f, 0.0f, 0.1f);
+  bvxm_part_instance_sptr p2i=new bvxm_part_instance(0, 0, 1, 1.0f, 1.0f, 0.1f);
+  bvxm_part_instance_sptr p3i=new bvxm_part_instance(0, 0, 1, 0.5f, 0.5f, 0.1f);
+  bvxm_part_instance_sptr p4i=new bvxm_part_instance(0, 0, 1, 0.65f,0.65f,0.1f);
   trc.add(p0i);   trc.add(p1i);   trc.add(p2i);   trc.add(p3i); trc.add(p4i);
 
   // test contains method
@@ -150,14 +152,10 @@ static void test_bvxm_hierarchy_detector()
   vgl_box_2d<float> bb2;
   pb0.set(383, 189); pb1.set(389, 194);
   vgl_point_2d<float> pb2(393, 198);//, pb3(370, 150), pb4(400,200);
-  bb2.add(pb0);
-  bb2.add(pb1);
-  bb2.add(pb2); //bb2.add(pb3);
-  //bb2.add(pb3);
-  //bb2.add(pb4);
-  bool dummy = bb2.contains(pb1);
-  bool dummy1 = bb2.contains(pb0);
-  bool dummy2 = bb2.contains(pb2);
+  bb2.add(pb0); bb2.add(pb1); bb2.add(pb2); // bb2.add(pb3); bb2.add(pb4);
+  /* bool dummy0 = */ bb2.contains(pb1);
+  /* bool dummy1 = */ bb2.contains(pb0);
+  /* bool dummy2 = */ bb2.contains(pb2);
   //pb0.set(393, 198);
   //bb2.add(pb0);
   found.clear();
@@ -188,18 +186,18 @@ static void test_bvxm_hierarchy_detector()
   vil_save(output_img, "./img_output_receptive_field_highest_detector.png");
 
   //test rotation with a quaternion
-  //vnl_vector_fixed<float, 2> v = pp->direction_vector();  // get orientation vector of central part: pi
-  vnl_vector_fixed<float,2> v = parts_prims[0]->direction_vector();
+  //vnl_float_2 v = pp->direction_vector(); // get orientation vector of central part: pi
+  vnl_float_2 v = parts_prims[0]->direction_vector();
   vcl_cout << " parts prims theta: " << parts_prims[0]->cast_to_gaussian()->theta_ << vcl_endl
            << " direction vector 0: " << v[0] << " 1: " << v[1] << vcl_endl;
 
   // define a rotation about z axis (in the image plane)
-  vnl_quaternion<float> q(0.0f, 0.0f, float(vnl_math::pi/2.0));
+  vnl_quaternion<float> q(0.0f, 0.0f, float(vnl_math::pi_over_2));
 
-  vnl_vector_fixed<float,3> v3d(v[0], v[1], 0.0f);
-  vnl_vector_fixed<float,3> out = q.rotate(v3d);
+  vnl_float_3 v3d(v[0], v[1], 0.0f);
+  vnl_float_3 out = q.rotate(v3d);
   vcl_cout << " direction vector after rotation by 90 degrees 0: " << out[0] << " 1: " << out[1] << " 2: " << out[2] << vcl_endl;
-  vnl_vector_fixed<float,3> out_dist = out*5.0f;
+  vnl_float_3 out_dist = out*5.0f;
   vcl_cout << " direction vector after scaling by 5: " << out_dist[0] << " 1: " << out_dist[1] << vcl_endl;
 }
 
