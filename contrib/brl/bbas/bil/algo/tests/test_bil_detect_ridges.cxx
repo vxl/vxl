@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_cmath.h>
+#include <vcl_string.h>
+#include <vcl_cassert.h>
 
 #include <bil/algo/bil_detect_ridges.h>
 
@@ -43,7 +45,9 @@ static int test_bil_detect_ridges(int argc, char** argv )
 {
   START ("2D Ridge Detection");
 
-  vil_image_resource_sptr res = vil_load_image_resource("c.20.tif");
+  assert(argc > 1);
+  vil_image_resource_sptr res = vil_load_image_resource((vcl_string(argv[1]) + "/c.20.tif").c_str());
+  TEST("File loading", !res, false);
   vil_image_view<vxl_uint_16> view_uint16 = res->get_view();
   vil_image_view<float> view_float;
 
@@ -54,9 +58,11 @@ static int test_bil_detect_ridges(int argc, char** argv )
   vil_image_view<float> ey;
   vil_image_view<float> lambda;
 
-
   {
     bil_detect_ridges( view_float, 1.5f, 0.7f, rho, ex, ey, lambda);
+    TEST("rho", rho(1,1), 0);
+    TEST("ey",  ey(1,1),  1);
+    TEST("lambda", lambda(1,1), 0);
     vil_image_view<vxl_byte> ridge_byte;
     vil_convert_stretch_range(rho,ridge_byte);
     vil_save(ridge_byte,"other_ridgetest0.tif");
@@ -127,10 +133,6 @@ static int test_bil_detect_ridges(int argc, char** argv )
     vil_convert_stretch_range(rho_dot_lambda,rho_dot_lambda_uint);
     vil_save(rho_dot_lambda_uint,"ridgetest4.tif");
   }
-
-  SUMMARY();
 }
 
 TESTMAIN_ARGS(test_bil_detect_ridges);
-
-
