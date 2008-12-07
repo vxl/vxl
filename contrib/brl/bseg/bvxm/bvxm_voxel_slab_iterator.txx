@@ -154,6 +154,7 @@ bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator--
 }
 
 #define BVXM_VOXEL_SLAB_ITERATOR_INSTANTIATE(T) \
+template class bvxm_voxel_slab_iterator_base<T >; \
 template class bvxm_voxel_slab_iterator<T >; \
 template class bvxm_voxel_slab_const_iterator<T >
 
