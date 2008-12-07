@@ -41,7 +41,7 @@ class vil_math_abs_functor
   double operator()(double x)     const { return vcl_fabs(x); }
 };
 
-static int test_bil_detect_ridges(int argc, char** argv )
+static void test_bil_detect_ridges(int argc, char** argv )
 {
   START ("2D Ridge Detection");
 
