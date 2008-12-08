@@ -4,6 +4,7 @@
 #include <brip/brip_vil_float_ops.h>
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 
 static void test_extrema()
 {
@@ -60,6 +61,116 @@ static void test_extrema()
   float r45d = resd(16,16,0), m45d = resd(13,16, 1);
   TEST_NEAR("dark response", r45d, 0.42070714, 1e-06);
   TEST_NEAR("dark response", m45d, 0.42070714, 1e-06);
+
+  // test inscribed rectangle in response ellipse
+  lambda0 = 3.0f;
+  float u_rect, v_rect;
+  brip_vil_float_ops::max_inscribed_rect(lambda0, lambda1, 45.0f, u_rect, v_rect);
+  TEST_NEAR("Inscribed rectangle +45", u_rect, 2.1162584f, 0.1f);
+
+  brip_vil_float_ops::max_inscribed_rect(lambda0, lambda1, -45.0f, u_rect, v_rect);
+  TEST_NEAR("Inscribed rectangle -45", u_rect, 2.1162584f, 0.1f);
+
+  brip_vil_float_ops::max_inscribed_rect(lambda0, lambda1, 90.0f, u_rect, v_rect);
+  TEST_NEAR("Inscribed rectangle 90", u_rect, 1.9781584f, 0.1f);
+
+  //test fast extrema 
+  lambda0 = 3.0f;
+  lambda1 = 1.5f;
+  im.fill(0.0f);
+  im(16,16) = 1.0f;
+  vcl_cout << "lambda0 = " << lambda0 << "  lambda1 = " << lambda1 << '\n';
+  vcl_cout.precision(3);
+
+  vcl_cout << " 2:1 theta = 0\n";
+  vil_image_view<float> res = 
+    brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, 0.0f);
+  float max = 0;
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  float rf = max; max = 0;
+  vcl_cout << " 2:1 theta = 0, non-decomposed\n";
+  res = brip_vil_float_ops::extrema(im, lambda0, lambda1, 0.0f);
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  float rc = max; max = 0;
+  TEST_NEAR("O degrees fast vs. composed", rf, rc, 0.01);
+
+  vcl_cout << " 2:1 theta = 90\n";
+  res = brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, 90.0f);
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  rf = max; max =0;
+  vcl_cout << " 2:1 theta = 90 non-decomposed\n";
+  res = brip_vil_float_ops::extrema(im, lambda0, lambda1, 90.0f);
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  rc = max; max = 0;
+  TEST_NEAR("9O degrees fast vs. composed", rf, rc, 0.01);
+
+  vcl_cout << " 2:1 theta = 45\n";
+  res = brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, 45.0f);
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  rf = max; max = 0;
+  vcl_cout << " 2:1 theta = 45 non-decomposed\n";
+  res = brip_vil_float_ops::extrema(im, lambda0, lambda1, 45.0f);
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  rc = max; max = 0;
+  TEST_NEAR("45 degrees fast vs. composed", rf, rc, 0.05);
+  vcl_cout << " 2:1 theta = -45\n";
+  res = brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, -45.0f);
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  rf = max; max = 0;
+  vcl_cout << " 2:1 theta = -45 non-decomposed\n";
+  res = brip_vil_float_ops::extrema(im, lambda0, lambda1, -45.0f);
+  for(unsigned j = 14; j<18; ++j){
+    for(unsigned i = 13; i<19; ++i){
+      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      if(res(i,j)>max) max = res(i,j);
+    }
+    vcl_cout << '\n';
+  }
+  rc = max;
+  TEST_NEAR("-45 degrees fast vs. composed", rf, rc, 0.01);
 }
+ 
 
 TESTMAIN(test_extrema);

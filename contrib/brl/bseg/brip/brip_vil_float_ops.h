@@ -112,7 +112,9 @@ class brip_vil_float_ops
 
   static void extrema_kernel_mask(float lambda0, float lambda1, float theta,
                                   vbl_array_2d<float>& kernel, 
-                                  vbl_array_2d<bool>& mask, float cutoff_percentage = 0.01f);
+                                  vbl_array_2d<bool>& mask,
+                                  float cutoff_percentage = 0.01f);
+
 
   //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
   static  vil_image_view<float> 
@@ -123,6 +125,17 @@ class brip_vil_float_ops
                                        float lambda0, float lambda1,
                                        float theta, bool bright = true,
                                        bool output_response_mask = true);
+
+  //: compute the inscribed rectangle in an ellipse with largest (1+h)(1+w). Needed for fast non-maximal suppression. Theta is in degrees.
+  static void max_inscribed_rect(float lambda0, float lambda1, float theta,
+                               float& u_rect, float& v_rect);
+
+//: Find intensity extrema using kernel decomposition. Theta is in degrees. Image rotation is applied then separated u, v kernels produce the response.
+  static vil_image_view<float> fast_extrema(vil_image_view<float> const& input,
+                                            float lambda0, float lambda1,
+                                            float theta, bool bright = true,
+                                            bool output_response_mask = true,
+                                            float cutoff_percentage = 0.01f);
 
   //: IxIx.transpose gradient matrix elements for a NxN region(N = 2n+1)
   static void grad_matrix_NxN(vil_image_view<float> const& input, unsigned n,
@@ -517,6 +530,9 @@ class brip_vil_float_ops
                        vil_image_view<vil_rgb<vxl_byte> >& image);
 #endif // 0
 
+  //: u-coordinate of an ellipse defined by lambda0, lambda1 and theta, vs. phi
+  static float elu(float phi, float lamda0, float lambda1, float theta);
+  static float elv(float phi, float lamda0, float lambda1, float theta);
   //: Default constructor is private
   brip_vil_float_ops() {}
 };

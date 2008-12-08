@@ -2685,13 +2685,9 @@ brip_vil_float_ops::rotate(vil_image_view<float> const& input,
   //convert to radians
   double deg_to_rad = vnl_math::pi/180.0;
   double rang = deg_to_rad*ang;
-  double c = vcl_cos(rang), s = vcl_sin(rang);
-  vnl_matrix_fixed<double,3, 3> M;
-  //counter clockwise rotation about the image origin (0, 0)
-  M[0][0]= c;   M[0][1]= -s;  M[0][2]= 0;
-  M[1][0]= s;   M[1][1]= c;   M[1][2]= 0;
-  M[2][0]= 0;   M[2][1]= 0;   M[2][2]= 1;
-  vgl_h_matrix_2d<double> H(M);
+  vgl_h_matrix_2d<double> H;
+  H.set_identity();
+  H.set_rotation(rang);
   vil_image_view<float> temp;
   //The transform is adjusted to map the full input domain onto
   //the output image.
@@ -3655,28 +3651,32 @@ static double brip_vil_rot_gauss(double x, double y,
   return ret*sxr*syr/(2.0*vnl_math::pi);
 }
 
+//revert angle to the range [-90, 90]
+static float revert_angle(float angle)
+{
+  if (angle>=0.0f)
+    if (angle>90.0f&&angle<=270.0f)
+      angle -= 180.0f;
+    else if (angle>270.0f&&angle<=360.0f)
+      angle -= 360.0f;
+  if (angle<0.0f)
+    if (angle<-90.0f&&angle>=-270.0f)
+      angle += 180.0f;
+    else if (angle<-270.0f&&angle>=-360.0f)
+      angle += 360.0f;
+  return angle;
+}
 void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
                                              float theta,
                                              vbl_array_2d<float>& kernel,
                                              vbl_array_2d<bool>& mask, float cutoff_percentage)
 {
-  // revert theta to the range [-90, 90]
-  if (theta>=0.0f)
-    if (theta>90.0f&&theta<=270.0f)
-      theta -= 180.0f;
-    else if (theta>270.0f&&theta<=360.0f)
-      theta -= 360.0f;
-  if (theta<0.0f)
-    if (theta<-90.0f&&theta>=-270.0f)
-      theta += 180.0f;
-    else if (theta<-270.0f&&theta>=-360.0f)
-      theta += 360.0f;
 
+  theta = revert_angle(theta);//in range [-90, 90] 
   //convert theta to radians
   double theta_rad = theta*vnl_math::pi/180.0;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
   double s0 = lambda0, s1 = lambda1;
-
   double s1sq = 1.0/(s1*s1);
   //determine the size of the array
   double max_v = brip_vil_rot_gauss(0, 0, s0, s1, 0);
@@ -3707,7 +3707,7 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
       mask[ry+rj][rx+ri] = g>=cutoff;
       double temp = (-s*rx + c*ry);
       temp = temp*temp*s1sq;
-      double v = (temp -1)*g;
+      double v = (temp -1)*g*s1sq;
       coef[ry+rj][rx+ri] = v;
       residual+=v;
       total += vcl_fabs(v);
@@ -3791,6 +3791,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
     else
       vcl_cout << zs(coef[j][ncols-1]) << '}';
   }
+
   vcl_cout << "};\n\nmask ={";
   for (unsigned j = 0; j<nrows; ++j){
     vcl_cout << '{';
@@ -3844,6 +3845,289 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
     for (unsigned i = ri; i<(ni-ri); i++)
     {
       float rv = res(i,j);
+      res_mask(i,j,0)=rv;
+      if (!rv)
+        continue;
+      for (int jj=-rj; jj<=rj; ++jj)
+        for (int ii=-ri; ii<=ri; ++ii)
+          if (mask[jj+rj][ii+ri])
+            if (rv>res_mask(i+ii,j+jj,1))
+              res_mask(i+ii,j+jj,1) = rv;
+    }
+  return res_mask;
+}
+//: theta and phi are in radians
+float brip_vil_float_ops::elu(float phi, float lamda0,
+                              float lambda1, float theta)
+{
+  double sp = vcl_sin(phi), cp = vcl_cos(phi);
+  double st = vcl_sin(theta), ct = vcl_cos(theta);
+  double temp = 3.0*lamda0*cp*ct-3.0*lambda1*sp*st;
+  return static_cast<float>(temp);
+}
+//: theta and phi are in radians
+float brip_vil_float_ops::elv(float phi, float lamda0,
+                              float lambda1, float theta)
+{
+  double sp = vcl_sin(phi), cp = vcl_cos(phi);
+  double st = vcl_sin(theta), ct = vcl_cos(theta);
+  double temp = 3.0*lamda0*st*cp + 3.0*lambda1*sp*ct;
+  return static_cast<float>(temp);
+}
+//: theta and phi are in radians
+void brip_vil_float_ops::
+max_inscribed_rect(float lambda0, float lambda1, float theta,
+                   float& u_rect, float& v_rect)
+{
+  float sign = -1.0f;
+  if(theta<0) sign = 1.0f;
+  float th_rad = static_cast<float>(theta*vnl_math::pi/180.0);  
+  float maxa = 0.0f, max_phi = 0.0f;
+  for(float phi = -3.14159f; phi<=3.14159f; phi+=0.01f)
+    {
+      float a = (1.0f+brip_vil_float_ops::elu(phi, lambda0, lambda1, th_rad));
+      a *= (1.0f+ sign*brip_vil_float_ops::elv(phi, lambda0, lambda1, th_rad));
+      if(a>maxa)
+        {
+          maxa = a;
+          max_phi = phi;
+        }
+    }
+  u_rect = brip_vil_float_ops::elu(max_phi, lambda0, lambda1, th_rad);
+  v_rect = brip_vil_float_ops::elv(max_phi, lambda0, lambda1, th_rad);
+  v_rect = vcl_fabs(v_rect);
+}
+
+static void eu(float lambda0, float cutoff_per, vcl_vector<float>& kernel)
+{
+  kernel.clear();
+  double l_sqi = 1/(lambda0*lambda0);
+  double norm = 1/vcl_sqrt(2.0*vnl_math::pi);
+  norm /= lambda0;
+  int r = static_cast<int>(vcl_sqrt((-2.0*vcl_log(cutoff_per))/l_sqi)+0.5);
+  for(int i = -r; i<=r; ++i)
+    {
+      double k = vcl_exp(-0.5*i*i*l_sqi);
+      k*=norm;
+      kernel.push_back(static_cast<float>(k));
+    }
+}
+
+static void ev(float lambda1, float cutoff_per, vcl_vector<float>& kernel)
+{
+  kernel.clear();
+  double l1_sqi = 1/(lambda1*lambda1);
+  int r = static_cast<int>(vcl_sqrt((-2.0*vcl_log(cutoff_per))/l1_sqi)+0.5);
+  double norm = l1_sqi/lambda1;
+  norm /= vcl_sqrt(2.0*vnl_math::pi);
+  for(int i = -r; i<=r; ++i)
+    {
+      double s = i*i*l1_sqi;
+      double k = vcl_exp(-0.5*s);
+      k *= norm*(s-1.0);
+      kernel.push_back(static_cast<float>(k));
+    }
+}
+static vil_image_view<float> convolve_u(vil_image_view<float> const& image,
+                                        vcl_vector<float> const& kernel,
+                                        bool initialize = true)
+{
+  int nk = kernel.size();
+  if(nk<3)
+    return image;
+  int ni = image.ni(), nj = image.nj();
+  int ru = (nk-1)/2;
+  vil_image_view<float> Iu(ni, nj);
+  if(initialize) Iu.fill(0.0f);
+  for(int j = 0; j<nj; ++j)
+    for(int i = ru; i<ni-ru; ++i){
+      float sum = 0.0f;
+      for(int k = -ru; k<=ru; ++k)
+        {
+          float v = image(i+k, j);
+          sum += kernel[k+ru]*v;
+        }
+      Iu(i,j) = sum;
+    }
+  return Iu;
+}
+
+static vil_image_view<float> convolve_v(vil_image_view<float> const& image,
+                                        vcl_vector<float> const& kernel,
+                                        bool initialize = true)
+{
+  int nk = kernel.size();
+  if(nk<3)
+    return image;
+  int ni = image.ni(), nj = image.nj();
+  int rv = (nk-1)/2;
+  vil_image_view<float> Iv(ni, nj);
+  if(initialize) Iv.fill(0.0f);
+  for(int j = rv; j<nj-rv; ++j)
+    for(int i = 0; i<ni; ++i){
+      float sum = 0.0f;
+      for(int k = -rv; k<=rv; ++k)
+        {
+          float v = image(i, j+k);
+          sum += kernel[k+rv]*v;
+        }
+      Iv(i,j) = sum;
+    }
+  return Iv;
+} 
+// this function tracks the image origin during rotation
+// the calculations are the same as used in the homography method.
+static void rotation_offset(int ni, int nj, float theta_deg, 
+                            int i, int j, int& ti, int& tj)
+{
+  ti= 0; tj = 0;
+  double deg_to_rad = vnl_math::pi/180.0;
+  double rang = deg_to_rad*theta_deg;
+  vgl_h_matrix_2d<double> H;
+  H.set_identity();
+  H.set_rotation(rang);
+  vsol_box_2d_sptr input_roi;
+  vsol_polygon_2d_sptr input_poly, output_poly;
+  input_roi = new vsol_box_2d();
+  input_roi->add_point(0, 0);
+  input_roi->add_point(ni, nj);
+  input_poly = bsol_algs::poly_from_box(input_roi);
+  if (!bsol_algs::homography(input_poly, H, output_poly))
+    return;
+  vsol_box_2d_sptr temp = output_poly->get_bounding_box();
+    vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();
+    vnl_matrix_fixed<double,3, 3> t, tMt;
+    t[0][0]=1;  t[0][1]=0; t[0][2]=-temp->get_min_x();
+    t[1][0]=0;  t[1][1]=1; t[1][2]=-temp->get_min_y();
+    t[2][0]=0;  t[2][1]=0; t[2][2]=1;
+    tMt = t*Mt;
+    vnl_vector_fixed<double, 3> org, torg;
+    org[0]=i; org[1]=j; org[2]=1.0;
+    torg = tMt*org;
+    ti = static_cast<int>(torg[0]);
+    tj = static_cast<int>(torg[1]);
+}
+
+vil_image_view<float> brip_vil_float_ops::
+fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
+             float theta, bool bright, bool output_response_mask,
+             float cutoff)
+{
+
+  // the kernels for u and v
+  vcl_vector<float> euk, evk;
+  eu(lambda0, cutoff, euk);
+  ev(lambda1, cutoff, evk);
+  int nku = euk.size(), ru = (nku-1)/2;
+  int nkv = evk.size(), rv = (nkv-1)/2;
+  vil_image_view<float> pre_res;
+  int tuf=0, tvf=0, tui=0, tvi=0;
+  vil_image_view<float> rot = input;
+  bool ang90 = theta==90.0f||theta == 270.0f||
+    theta ==-90.0f||theta == -270.0f;
+  // rotate the image to the specified angle (minus due to flipped v axis)
+  if(theta!=0&&!ang90)
+    rot = brip_vil_float_ops::rotate(input, -theta);
+  if(!ang90){
+  // convolve kernel across rows
+  vil_image_view<float> rotu = convolve_u(rot, euk);
+  // then convolve along columns
+  vil_image_view<float> rotuv = convolve_v(rotu, evk);
+  // rotate back
+  if(theta!=0)
+    {
+      pre_res = brip_vil_float_ops::rotate(rotuv, +theta);
+      // there is a border around the image to contain the rotated version 
+      // which should be removed.
+      rotation_offset(input.ni(), input.nj(), -theta, 0, 0, tuf, tvf);
+      rotation_offset(rotuv.ni(), rotuv.nj(), +theta, tuf, tvf, tui, tvi);
+    } else pre_res = rotuv;
+  }else{
+    //convolve along columns
+    vil_image_view<float> rotv = convolve_v(rot, euk);
+    //convolve across rows
+    vil_image_view<float> rotvu = convolve_u(rotv, evk);
+    pre_res = rotvu;
+  }
+  int ni = input.ni(), nj = input.nj();  
+  vil_image_view<float> res(ni, nj);
+  res.fill(0.0f);
+  for(int j = 0; j<nj; ++j)
+    for(int i = 0; i<ni; ++i)
+      {
+        float v = pre_res(i + tui, j+ tvi);
+        if (bright){ // coefficients are negative at center
+          if (v<0) res(i,j) = -v;
+        }
+        else {
+          if (v>0) res(i,j) = v;
+        }
+      }
+
+  //
+  // the second derivative convolution is complete
+  // non-maximal suppression  
+  // determine the inscribed rect in the response mask with max area
+  float u_rect, v_rect;
+  brip_vil_float_ops::max_inscribed_rect(lambda0,lambda1,theta,u_rect,v_rect);
+  int ni_rect = static_cast<int>(u_rect);
+  int nj_rect = static_cast<int>(v_rect);
+  vil_image_view<float> res_sup(ni, nj);
+  res_sup.fill(0.0f);
+  for( int i= ni_rect; i< ni-ni_rect; i+= ni_rect+1 )
+    for( int j = nj_rect; j < nj-nj_rect; j += nj_rect+1 ) {
+      int ci= i, cj = j;
+      bool find_response = false;
+      for( int di= 0; di<= ni_rect; di++ )
+        for( int dj = 0; dj <= nj_rect; dj++ )
+          {
+            float v = res(ci,cj);
+            float dv = res(i+di,j+dj);
+            if(v==0.0f&&dv==0.0f) continue;
+            find_response = true;
+            if( v < dv )
+              {
+                ci= i+di;
+                cj = j+dj;
+              }
+          }
+      if(!find_response)
+        continue;
+      res_sup(ci,cj) = res(ci,cj);
+    }
+  
+	// determine the outside bounding box
+  vbl_array_2d<float> kern;
+  vbl_array_2d<bool> mask;
+  brip_vil_float_ops::extrema_kernel_mask(lambda0, lambda1, theta, kern, mask);
+  int ri = (kern.cols()-1)/2, rj = (kern.rows()-1)/2;
+  // go through the array again and search about each retained
+  // local maximum using the outside bounding box
+  // there will be at most one non-zero response to test in the inscribed rect
+  for (int j = rj; j<(nj-rj); j++)
+    for (int i = ri; i<(ni-ri); i++)
+    {
+      float v = res_sup(i,j);
+      if(v==0.0f) continue;
+      for (int jj=-rj; jj<=rj; ++jj)
+        for (int ii=-ri; ii<=ri; ++ii)
+          if(!mask[rj+jj][ri+ii])//suppress just inside mask region
+            continue;
+          else if (res_sup(i+ii, j+jj)<v)
+            res_sup(i+ii,j+jj)=0.0f;
+    }
+  
+
+  if (!output_response_mask)
+    return res_sup;
+
+  vil_image_view<float> res_mask(ni, nj, 2);//response plane and mask plane
+  res_mask.fill(0.0f);
+  // create a mask plane to combine with the localized response
+  for (int j = rj; j<(nj-rj); j++)
+    for (int i = ri; i<(ni-ri); i++)
+    {
+      float rv = res_sup(i,j);
       res_mask(i,j,0)=rv;
       if (!rv)
         continue;
