@@ -12,6 +12,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // sprintf
 #include <vcl_fstream.h>
+#include <vul/vul_timer.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
@@ -1713,6 +1714,7 @@ void segv_vil_segmentation_manager::extrema()
   static bool bright = true;
   static bool color_overlay = true;
   static bool output_mask = true;
+  static bool fast = true;
   vgui_dialog extrema_dialog("Detect Extrema");
   extrema_dialog.field("lambda0",lambda0);
   extrema_dialog.field("lambda1",lambda1);
@@ -1720,13 +1722,21 @@ void segv_vil_segmentation_manager::extrema()
   extrema_dialog.checkbox("Bright Extrema?(check)",bright);
   extrema_dialog.checkbox("ColorOverlay?(check)",color_overlay);
   extrema_dialog.checkbox("Response And Mask?(check)",output_mask);
+  extrema_dialog.checkbox("Fast Alg.(check)", fast);
   if (!extrema_dialog.ask())
     return;
+  vul_timer t;
   vil_image_view<float> fimg = 
     brip_vil_float_ops::convert_to_float(img);
-  vil_image_view<float> extr = 
-    brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright,
-                                output_mask);
+  vil_image_view<float> extr; 
+  if(fast)
+	  extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright,
+                                      output_mask);
+  else
+    extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright,
+                                 output_mask);
+
+  vcl_cout << "Extrema computation time " << t.real() << " msec\n";
   unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();
   if(!output_mask&&!color_overlay){
     if(np!=1)
@@ -1743,7 +1753,7 @@ void segv_vil_segmentation_manager::extrema()
       brip_vil_float_ops::combine_color_planes(img, resc, img);
     this->add_image(vil_new_image_resource_of_view(rgb));
   }
-  if(output_mask&&color_overlay){
+  if(output_mask){
      if(np!=2)
       return;
     vil_image_view<float> res(ni, nj), mask(ni, nj);
@@ -1753,10 +1763,17 @@ void segv_vil_segmentation_manager::extrema()
           res(i,j) = extr(i,j,0);
           mask(i,j) = extr(i,j,1);
         }
-    vil_image_resource_sptr res_resc = vil_new_image_resource_of_view(res);
-    vil_image_resource_sptr msk_resc = vil_new_image_resource_of_view(mask);
-    vil_image_view<vil_rgb<vxl_byte> > rgb =   
-      brip_vil_float_ops::combine_color_planes(img, res_resc, msk_resc);
-    this->add_image(vil_new_image_resource_of_view(rgb));
+    if(color_overlay){
+      vil_image_resource_sptr res_resc = vil_new_image_resource_of_view(res);
+      vil_image_resource_sptr msk_resc = vil_new_image_resource_of_view(mask);
+      vil_image_view<vil_rgb<vxl_byte> > rgb =   
+        brip_vil_float_ops::combine_color_planes(img, res_resc, msk_resc);
+      this->add_image(vil_new_image_resource_of_view(rgb));
+    }
+    if(output_mask&&!color_overlay)
+      {
+        this->add_image(vil_new_image_resource_of_view(res));
+        this->add_image(vil_new_image_resource_of_view(mask));
+      }
   }
 }
