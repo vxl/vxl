@@ -61,8 +61,11 @@
 #include <bvxm/rec/pro/bvxm_rec_structure_process.h>
 #include <bvxm/rec/pro/bvxm_prob_map_supress_process.h>
 #include <bvxm/rec/pro/bvxm_prob_map_area_process.h>
-#include <bvxm/rec/pro/bvxm_rec_update_changes_wrt_area_process.h>
+//#include <bvxm/rec/pro/bvxm_rec_update_changes_wrt_area_process.h>
 #include <bvxm/rec/pro/bvxm_change_area_process.h>
+#include <bvxm/rec/pro/bvxm_rec_bayesian_update_process.h>
+#include <bvxm/rec/pro/bvxm_rec_glitch_process.h>
+#include <bvxm/rec/pro/bvxm_rec_glitch_overlay_process.h>
 
 #include <bvgl_pro/bvgl_generate_mask_process.h>
 #include <vil_pro/vil_load_image_view_binary_process.h>
@@ -135,8 +138,11 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_prob_map_threshold_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_prob_map_supress_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_prob_map_area_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_rec_update_changes_wrt_area_process, bprb_batch_process_manager);
+  //REG_PROCESS(bvxm_rec_update_changes_wrt_area_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_change_area_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_rec_bayesian_update_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_rec_glitch_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_rec_glitch_overlay_process, bprb_batch_process_manager);
 
   REG_PROCESS(vil_map_image_process, bprb_batch_process_manager);
   REG_PROCESS(vil_map_image_binary_process, bprb_batch_process_manager);
