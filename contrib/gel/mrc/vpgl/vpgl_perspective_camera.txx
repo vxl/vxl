@@ -377,6 +377,7 @@ b_read(vsl_b_istream &is)
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
+  this->recompute_matrix();
 }
 
 //-------------------------------
