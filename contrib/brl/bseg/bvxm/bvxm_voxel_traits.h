@@ -74,7 +74,7 @@ class bvxm_voxel_traits<OCCUPANCY>
 
   static inline vcl_string filename_prefix(){ return "ocp"; }
   static inline bool is_multibin() { return false; }
-  static inline voxel_datatype initial_val() { return 0.01f; }
+  static inline voxel_datatype initial_val() { return 0.005f; }
 };
 
 

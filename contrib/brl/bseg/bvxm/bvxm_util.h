@@ -67,6 +67,11 @@ class bvxm_util
                             vcl_vector<vnl_double_3x3> &Rs,
                             vcl_vector<vnl_double_3x1> &Ts);
 
+  static void logical_and(bvxm_voxel_slab<bool> const& s1, 
+                          bvxm_voxel_slab<bool> const& s2, 
+                          bvxm_voxel_slab<bool> &result);
+
+
   template<class T>
   static void warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
                                  vgl_h_matrix_2d<double> invH,
@@ -683,6 +688,7 @@ void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const
 }
 
 
+
 template<class T>
 void bvxm_util::multiply_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &product)
 {
@@ -707,7 +713,7 @@ void bvxm_util::threshold_slab_above(bvxm_voxel_slab<T> const& slab, T const& th
 {
   // check sizes
   if ( (mask.nx() != slab.nx()) || (mask.ny() != slab.ny()) ) {
-    vcl_cerr << "error: sizes of slabs to multiply do not match.\n";
+    vcl_cerr << "error: sizes of input and output slabs do not match.\n";
     return;
   }
 

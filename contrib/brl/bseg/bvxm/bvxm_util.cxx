@@ -218,6 +218,24 @@ vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sp
   }
 }
 
+void bvxm_util::logical_and(bvxm_voxel_slab<bool> const& s1, bvxm_voxel_slab<bool> const& s2, bvxm_voxel_slab<bool> &result)
+{
+  // check sizes
+  if ( (result.nx() != s1.nx()) || (result.nx() != s2.nx()) ||
+       (result.ny() != s1.ny()) || (result.ny() != s2.ny()) ||
+       (result.nz() != s1.nz()) || (result.nz() != s2.nz()) ) {
+    vcl_cerr << "error: sizes of slabs to AND do not match.\n";
+    return;
+  }
+
+  bvxm_voxel_slab<bool>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
+  bvxm_voxel_slab<bool>::iterator result_it = result.begin();
+  for (; result_it != result.end(); ++s1_it, ++s2_it, ++result_it) {
+    *result_it = *s1_it && *s2_it;
+  }
+  return;
+}
+
 vil_image_view<float> bvxm_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
 {
   vil_image_view<float> ret_img(img.ni(),img.nj(),1);
