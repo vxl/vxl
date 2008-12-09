@@ -164,11 +164,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vpgl_perspective_camera<Type> const& p)
 
 //: Read vpgl_perspective_camera  from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_perspective_camera<Type>& p)
-{
-  //not yet implemented - FIXME
-  return s;
-}
+vcl_istream&  operator>>(vcl_istream& s, vpgl_perspective_camera<Type>& p);
 
 
 //: Decompose camera into parameter blocks.

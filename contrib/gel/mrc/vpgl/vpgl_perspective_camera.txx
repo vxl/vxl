@@ -332,15 +332,32 @@ template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s,
                          vpgl_perspective_camera<Type> const& p)
 {
-  vnl_double_3x3 k = p.get_calibration().get_matrix();
-  vnl_double_3x4 m = p.get_matrix();
-  vnl_double_3x3 kinv = vnl_inverse(k);
+  vnl_matrix_fixed<Type, 3, 3> k = p.get_calibration().get_matrix();
+  vgl_rotation_3d<Type> rot = p.get_rotation();
+  vnl_matrix_fixed<Type, 3, 3> Rm = rot.as_matrix();
+  vgl_point_3d<Type> c(p.get_camera_center());
+  s << k << '\n';
+  s << Rm << '\n';
+  s << c.x() << ' ' << c.y() << ' ' << c.z() << '\n';
+  return s ;
+}
 
-  s << "perspective:\nK\n" << k
-    << "\nR\n" << p.get_rotation()
-    << "\nC " << p.get_camera_center() << '\n'
-    << "\nP\n" << m << vcl_endl;
-
+//: Read camera from stream
+template <class Type>
+vcl_istream&  operator >>(vcl_istream& s,
+                         vpgl_perspective_camera<Type>& p)
+{
+  vnl_matrix_fixed<Type, 3, 3> k, Rm;
+  Type cx, cy, cz;
+  s >> k;
+  s >> Rm;
+  s >> cx >> cy >> cz;
+  vpgl_calibration_matrix<Type> K(k);
+  vgl_rotation_3d<Type> rot(Rm);
+  vgl_point_3d<Type> c(cx, cy, cz);
+  p.set_calibration(K);
+  p.set_rotation(rot);
+  p.set_camera_center(c);
   return s ;
 }
 
@@ -435,6 +452,7 @@ template vpgl_perspective_camera<T > vpgl_align_up( \
   const vpgl_perspective_camera<T >& p0, const vpgl_perspective_camera<T >& p1 ); \
 template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T >* &p); \
 template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T > * p); \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&)
+template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vpgl_perspective_camera<T >&)
 
 #endif // vpgl_perspective_camera_txx_
