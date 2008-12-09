@@ -839,7 +839,7 @@ void bwm_site_mgr::load_cam_tableau()
   params.line_break();
   params.dir("Image...", ext, img_file);
   params.line_break();
-  params.choice("Camera Type", "rational", "projective", camera_type);
+  params.choice("Camera Type", "rational", "projective", "perspective ", camera_type);
   params.line_break();
   params.file("Camera...", ext, cam_file);
   params.line_break();
@@ -854,10 +854,26 @@ void bwm_site_mgr::load_cam_tableau()
   }
 
   vcl_string cam_str;
-  if (camera_type == 0)
-    cam_str = "rational";
-  else
-    cam_str = "projective";
+  switch(camera_type)
+    {
+    case 0:
+      {
+        cam_str = "rational";
+        break;
+      }
+    case 1:
+      {
+        cam_str = "projective";
+        break;
+      }
+    case 2:
+      {
+        cam_str = "perspective";
+        break;
+      }
+    default:
+      cam_str = "unknown";
+    }
 
   bwm_io_tab_config_cam* cam = new bwm_io_tab_config_cam(name, true, img_file, cam_file, cam_str);
   active_tableaus_.push_back(cam);

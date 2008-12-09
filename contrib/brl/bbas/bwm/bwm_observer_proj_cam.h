@@ -19,6 +19,7 @@ class bwm_observer_proj_cam : public bwm_observer_cam
                         vcl_string name,
                         vcl_string& image_path,
                         vcl_string& cam_path,
+                        vcl_string& sub_type,
                         bool display_image_path);
 
   // set the initial projection plane to z=0
@@ -28,6 +29,7 @@ class bwm_observer_proj_cam : public bwm_observer_cam
   virtual ~bwm_observer_proj_cam(){}
 
   virtual vcl_string type_name() const { return "bwm_observer_proj_cam"; }
+  void set_subtype(vcl_string const& subtype){subtype_ = subtype;}
 
   void set_camera(vpgl_proj_camera<double> *camera, vcl_string cam_path)
   { bwm_observer_cam::set_camera(camera, cam_path);}
@@ -43,6 +45,8 @@ class bwm_observer_proj_cam : public bwm_observer_cam
   vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path);
 
   vcl_ostream& print_camera(vcl_ostream& s);
+ protected:
+  vcl_string subtype_;
 };
 
 #endif // bwm_observer_proj_cam_h_
