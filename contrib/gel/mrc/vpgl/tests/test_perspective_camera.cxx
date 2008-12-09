@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vpl/vpl.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_fwd.h>
@@ -128,6 +130,32 @@ static void test_perspective_camera()
     }
     TEST( "testing finite backprojection:", all_succeeded, true );
   }
+  // test stream operators
+  vnl_matrix_fixed<double, 3, 3> k, Rm;
+  vgl_point_3d<double> c(-25.3302, -31.0114, 1030.63);
+  k[0][0] = 2200;   k[0][1] = 0;      k[0][2] = 640;
+  k[1][0] = 0;      k[1][1] = 2200;   k[1][2] = 360;
+  k[2][0] = 0;      k[2][1] = 0;      k[2][2] = 1;
+  
+  Rm[0][0] =  0.739671;   Rm[0][1] = -0.654561;      Rm[0][2] =  0.156323;
+  Rm[1][0] = -0.201219;   Rm[1][1] = -0.436776;      Rm[1][2] = -0.876777;
+  Rm[2][0] =  0.642182;   Rm[2][1] =  0.617071;      Rm[2][2] = -0.45478;
+  
+  vgl_rotation_3d<double> rot(Rm);
+  vpgl_calibration_matrix<double> Ko(k);
+  vpgl_perspective_camera<double> Po;
+  Po.set_camera_center(c);
+  Po.set_rotation(rot);
+  Po.set_calibration(Ko);
+  vcl_string cam_path = "cam_path";
+  vcl_ofstream os(cam_path.c_str());
+  os << Po;
+  os.close();
+  vcl_ifstream is(cam_path.c_str());
+  vpgl_perspective_camera<double> Pin;
+  is >> Pin;
+  TEST("Test stream operators", Pin == Po, true);
+  vpl_unlink(cam_path.c_str());
 }
 
 TESTMAIN(test_perspective_camera);
