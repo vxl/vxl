@@ -26,6 +26,7 @@ SET(bvxm_rec_sources
     bvxm_hierarchy_edge_sptr.h
     bvxm_part_hierarchy_builder.h    bvxm_part_hierarchy_builder.cxx
     bvxm_part_hierarchy_detector.h    bvxm_part_hierarchy_detector.cxx
+    bvxm_glitch.h    bvxm_glitch.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_rec_sources)
