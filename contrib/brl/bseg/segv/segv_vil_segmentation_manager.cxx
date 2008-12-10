@@ -146,7 +146,7 @@ range_params(vil_image_resource_sptr const& image)
   vgui_range_map_params_sptr rmps;
   if (iu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
     return rmps;
-  if(iu.default_range_map(rmps, gamma, invert, gl_map, cache))
+  if (iu.default_range_map(rmps, gamma, invert, gl_map, cache))
     return rmps;
   return 0;
 }
@@ -1613,7 +1613,7 @@ void segv_vil_segmentation_manager::color_order()
   if (vb->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(fimg,1.0/255.0);
 
-  vil_image_view<unsigned char> order_codes = 
+  vil_image_view<unsigned char> order_codes =
     brip_vil_float_ops::color_order(fimg, equal_tol);
 
   this->add_image(vil_new_image_resource_of_view(order_codes));
@@ -1665,13 +1665,13 @@ void segv_vil_segmentation_manager::mser_conics()
   if (!mser_dialog.ask())
     return;
   vcl_ifstream istr(conic_filename.c_str());
-  if(!istr.is_open())
+  if (!istr.is_open())
     return;
   vcl_vector<vsol_conic_2d_sptr> conics;
 #if 0 //check in later
   sdet_read_mser_regions::read_mser_conics(istr, conics);
 #endif
-  if(!conics.size())
+  if (!conics.size())
     return;
   this->draw_conics(conics);
 }
@@ -1691,15 +1691,16 @@ void segv_vil_segmentation_manager::image_as_vrml_points()
   if (!vrml_dialog.ask())
     return;
   vcl_ofstream ostr(vrml_filename.c_str());
-  if(!ostr.is_open())
+  if (!ostr.is_open())
     return;
-  vil_image_view<float> fimg = 
+  vil_image_view<float> fimg =
     brip_vil_float_ops::convert_to_float(img);
 #if 0
   sdet_vrml_display::write_vrml_header(ostr);
-  sdet_vrml_display::write_vrml_height_map(ostr, fimg); 
+  sdet_vrml_display::write_vrml_height_map(ostr, fimg);
 #endif
 }
+
 void segv_vil_segmentation_manager::extrema()
 {
   vil_image_resource_sptr img = selected_image();
@@ -1726,54 +1727,55 @@ void segv_vil_segmentation_manager::extrema()
   if (!extrema_dialog.ask())
     return;
   vul_timer t;
-  vil_image_view<float> fimg = 
+  vil_image_view<float> fimg =
     brip_vil_float_ops::convert_to_float(img);
-  vil_image_view<float> extr; 
-  if(fast)
-	  extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright,
-                                      output_mask);
+  vil_image_view<float> extr;
+  if (fast)
+    extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright,
+                                            output_mask);
   else
     extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright,
                                  output_mask);
 
   vcl_cout << "Extrema computation time " << t.real() << " msec\n";
   unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();
-  if(!output_mask&&!color_overlay){
-    if(np!=1)
+  if (!output_mask&&!color_overlay){
+    if (np!=1)
       return;
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
     this->add_image(resc);
     return;
   }
-  if(!output_mask&&color_overlay){
-    if(np!=1)
+  if (!output_mask&&color_overlay){
+    if (np!=1)
       return;
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
-    vil_image_view<vil_rgb<vxl_byte> > rgb =   
+    vil_image_view<vil_rgb<vxl_byte> > rgb =
       brip_vil_float_ops::combine_color_planes(img, resc, img);
     this->add_image(vil_new_image_resource_of_view(rgb));
   }
-  if(output_mask){
-     if(np!=2)
+  if (output_mask)
+  {
+    if (np!=2)
       return;
     vil_image_view<float> res(ni, nj), mask(ni, nj);
-    for(unsigned j = 0; j<nj; ++j)
-      for(unsigned i = 0; i<ni; ++i)
-        {
-          res(i,j) = extr(i,j,0);
-          mask(i,j) = extr(i,j,1);
-        }
-    if(color_overlay){
+    for (unsigned j = 0; j<nj; ++j)
+      for (unsigned i = 0; i<ni; ++i)
+      {
+        res(i,j) = extr(i,j,0);
+        mask(i,j) = extr(i,j,1);
+      }
+    if (color_overlay){
       vil_image_resource_sptr res_resc = vil_new_image_resource_of_view(res);
       vil_image_resource_sptr msk_resc = vil_new_image_resource_of_view(mask);
-      vil_image_view<vil_rgb<vxl_byte> > rgb =   
+      vil_image_view<vil_rgb<vxl_byte> > rgb =
         brip_vil_float_ops::combine_color_planes(img, res_resc, msk_resc);
       this->add_image(vil_new_image_resource_of_view(rgb));
     }
-    if(output_mask&&!color_overlay)
-      {
-        this->add_image(vil_new_image_resource_of_view(res));
-        this->add_image(vil_new_image_resource_of_view(mask));
-      }
+    if (output_mask&&!color_overlay)
+    {
+     this->add_image(vil_new_image_resource_of_view(res));
+      this->add_image(vil_new_image_resource_of_view(mask));
+    }
   }
 }

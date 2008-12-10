@@ -24,10 +24,10 @@
 //--------------------------------------------------------------------------------
 
 bgui_image_tableau::bgui_image_tableau()
-  { 
-    handle_motion_ = true; locked_ = false; show_path_=false;
-    tt_ = new vgui_text_tableau();
-  }
+{
+  handle_motion_ = true; locked_ = false; show_path_=false;
+  tt_ = new vgui_text_tableau();
+}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_resource_sptr const & img,
                                        vgui_range_map_params_sptr const& rmp)
@@ -140,7 +140,7 @@ get_pixel_info_from_image(const int x, const int y,
                     v(0,0,0), v(0,0,1), v(0,0,2) );
       return;
     }
-	else if (n_p==4){    
+    else if (n_p==4){
       vcl_sprintf(msg, "(%d, %d) Pixel type not Available", x, y);
       return;
     }
@@ -165,7 +165,7 @@ get_pixel_info_from_image(const int x, const int y,
                     v(0,0).R(), v(0,0).G(),v(0,0).B() );
       return;
     }
-	else if (n_p==4){    
+    else if (n_p==4) {
       vcl_sprintf(msg, "(%d, %d) Pixel type not Available", x, y);
       return;
     }
@@ -191,45 +191,36 @@ get_pixel_info_from_image(const int x, const int y,
     }
     else if (n_p==4)
     {
-
       vil_image_view<vil_rgba<vxl_uint_16> > v = r->get_view(x,1,y,1);
-      if (!v){
+      if (!v) {
         vcl_sprintf(msg, "Pixel Not Available");
         return;
-      }else{        
+      }
+      else
+      {
         int band_map = 0;
-        if(rmp_)
+        if (rmp_)
           band_map = rmp_->band_map_;
-        switch(band_map){
-        case vgui_range_map_params::RGB_m :
-          {
+        switch (band_map) {
+          case vgui_range_map_params::RGB_m :
             vcl_sprintf(msg, "(%d, %d)   (RGB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
                         x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
             break;
-          }
-        case vgui_range_map_params::XRG_m :
-          {
+          case vgui_range_map_params::XRG_m :
             vcl_sprintf(msg, "(%d, %d)   (IRG:uint16)[ R=%d,G=%d,B=%d,I=%d]",
                         x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
             break;
-          }
-        case vgui_range_map_params::RXB_m :
-          {
+          case vgui_range_map_params::RXB_m :
             vcl_sprintf(msg, "(%d, %d)   (RIB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
                         x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
             break;
-          }
-        case vgui_range_map_params::RGX_m :
-          {
+          case vgui_range_map_params::RGX_m :
             vcl_sprintf(msg, "(%d, %d)   (RGI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
                         x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
             break;
-          }
-        default:
-          {
+          default:
             vcl_sprintf(msg, "Pixel Not Available");
             return;
-          }
         }
       }
     }
@@ -342,7 +333,7 @@ get_pixel_value(const unsigned c, const unsigned r)
   unsigned n_p = rs->nplanes();
   vil_pixel_format type = rs->pixel_format();
   switch (type )
-    {
+  {
     case VIL_PIXEL_FORMAT_BOOL: {
       vil_image_view<bool> v = rs->get_view();
       if (!v)
@@ -351,7 +342,6 @@ get_pixel_value(const unsigned c, const unsigned r)
         return static_cast<double>(v(0,0));
     }
     case  VIL_PIXEL_FORMAT_BYTE: {
-
       vil_image_view<vxl_byte> v = rs->get_view(c,1,r,1);
       if (!v)
         return 0;
@@ -422,7 +412,7 @@ get_pixel_value(const unsigned c, const unsigned r)
     }
     default:
       return 0;
-    }
+   }
 }
 
 //: get the pixel value as color
@@ -435,20 +425,19 @@ vcl_vector<double> bgui_image_tableau::get_color_pixel_value(const unsigned c, c
     return vcl_vector<double>(0);
   unsigned n_p = rs->nplanes();
   vcl_vector<double> val(n_p, 0.0);
-  if(n_p==1)
-    {
-      val[0]=this->get_pixel_value(c, r);
-      return val;
-    }
+  if (n_p==1)
+  {
+    val[0]=this->get_pixel_value(c, r);
+    return val;
+  }
   vil_pixel_format type = rs->pixel_format();
   switch (type )
-    {
+  {
     case  VIL_PIXEL_FORMAT_BYTE: {
-
       vil_image_view<vxl_byte> v = rs->get_view(c,1,r,1);
       if (!v)
         return val;
-      for(unsigned p = 0; p<n_p; ++p)
+      for (unsigned p = 0; p<n_p; ++p)
         val[p]=static_cast<double>(v(0,0,p));
       return val;
     }
@@ -456,14 +445,15 @@ vcl_vector<double> bgui_image_tableau::get_color_pixel_value(const unsigned c, c
       vil_image_view<vxl_uint_16> v = rs->get_view(c,1,r,1);
       if (!v)
         return val;
-      for(unsigned p = 0; p<n_p; ++p)
+      for (unsigned p = 0; p<n_p; ++p)
         val[p]=static_cast<double>(v(0,0,p));
       return val;
     }
     default:
       return val;
-    }
+  }
 }
+
 void bgui_image_tableau::image_line(const float col_start,
                                     const float row_start,
                                     const float col_end,
@@ -502,7 +492,8 @@ void bgui_image_tableau::image_line(const float col_start,
     vals.push_back(get_pixel_value(c, r));
   }
 }
-  //: Extract a line of pixel values return color if available
+
+//: Extract a line of pixel values return color if available
 void bgui_image_tableau::image_line(const float col_start,
                   const float row_start,
                   const float col_end,
@@ -528,7 +519,7 @@ void bgui_image_tableau::image_line(const float col_start,
   vcl_vector<double> cv = get_color_pixel_value(c, r);
   unsigned n_bands = cv.size();
   vals.resize(n_bands);
-  for(unsigned i = 0; i<n_bands; ++i)
+  for (unsigned i = 0; i<n_bands; ++i)
     vals[i].push_back(cv[i]);
 
   //extract the pixel values along the line
@@ -543,7 +534,7 @@ void bgui_image_tableau::image_line(const float col_start,
     r = static_cast<unsigned>(ypos);
     line_pos.push_back(spos);
     cv = get_color_pixel_value(c, r);
-    for(unsigned i = 0; i<n_bands; ++i)
+    for (unsigned i = 0; i<n_bands; ++i)
       vals[i].push_back(cv[i]);
   }
 }
@@ -558,7 +549,7 @@ bool bgui_image_tableau::handle(vgui_event const &e)
   if (e.type == vgui_DRAW)
   {
     base::handle(e);
-    if(tt_) tt_->handle(e);
+    if (tt_) tt_->handle(e);
     return true;
   }
 
@@ -584,13 +575,13 @@ bool bgui_image_tableau::handle(vgui_event const &e)
     this->get_pixel_info_from_image(intx, inty,e, msg);
 
     // gets a snapshot of the viewport so that it restores it back after vgui::out
-    // this is needed, because vgui::out changes viewport, and image tableau 
+    // this is needed, because vgui::out changes viewport, and image tableau
     // gets confused
     bgui_image_tableau_vp_sc_snapshot snap;
 
     // Display on status bar:
     if (!locked_) {
-      if(show_path_)
+      if (show_path_)
         vgui::out << msg << "  " << this->file_name() << vcl_endl;
       else
         vgui::out << msg << vcl_endl;
