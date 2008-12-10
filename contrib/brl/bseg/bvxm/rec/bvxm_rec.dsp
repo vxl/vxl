@@ -129,6 +129,9 @@ SOURCE=.\bvxm_part_hierarchy_builder.cxx
 SOURCE=.\bvxm_part_hierarchy_detector.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_glitch.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_hierarchy_edge-.cxx
 # End Source File
 # Begin Source File
@@ -205,6 +208,9 @@ SOURCE=.\bvxm_part_hierarchy_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_part_hierarchy_detector.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_glitch.h
 # End Source File
 # End Group
 # End Target

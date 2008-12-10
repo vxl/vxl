@@ -189,6 +189,24 @@ SOURCE=.\Templates/vil3d_resample_trilinear+uint_16.uint_16-.cxx
 SOURCE=.\Templates/vil3d_tricub_interp_raw+uint-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil3d_resample_tricubic+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_tricub_interp+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_tricub_interp+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_tricub_interp+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_tricub_interp_raw+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_resample_tricubic+uint_32.uint_32-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil3d_memory_image.cxx
 # End Source File
 # Begin Source File

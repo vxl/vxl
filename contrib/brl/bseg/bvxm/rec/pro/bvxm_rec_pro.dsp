@@ -117,7 +117,13 @@ SOURCE=.\bvxm_rec_structure_process.cxx
 SOURCE=.\bvxm_rec_update_changes_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_rec_update_changes_wrt_area_process.cxx
+SOURCE=.\bvxm_rec_bayesian_update_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_rec_glitch_overlay_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_rec_glitch_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -147,7 +153,13 @@ SOURCE=.\bvxm_rec_structure_process.h
 SOURCE=.\bvxm_rec_update_changes_process.h
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_rec_update_changes_wrt_area_process.h
+SOURCE=.\bvxm_rec_bayesian_update_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_rec_glitch_overlay_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_rec_glitch_process.h
 # End Source File
 # End Group
 # End Target
