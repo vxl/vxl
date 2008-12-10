@@ -155,14 +155,14 @@ void kalman_filter::init_state_3d_estimation()
 
         vgl_line_2d<double> lr(FM.image2_epipolar_line(p1));
 
-        // get rid of any matching candidate point whose gradient is far away original gradient
+        // get rid of any matching candidate point whose gradient is far away from original gradient
         // getting the intersection point
-        vgl_point_2d<double> p2;
+        vgl_point_2d<double> p2(1e99, 1e99); // dummy initialisation, to avoid compiler warning
         vcl_vector<vgl_point_2d<double> > pts;
         bdgl_curve_algs::intersect_line(dc1, lr, pts);
 
         // find the correspoinding point
-        double dist = 1e10; // big number
+        double dist = 1e99; // big number
         bool flag = false;
         for (unsigned int j=0; j<pts.size(); j++)
         {
