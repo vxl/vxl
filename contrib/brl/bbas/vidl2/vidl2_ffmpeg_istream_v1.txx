@@ -13,6 +13,7 @@
 #include "vidl2_frame.h"
 #include "vidl2_ffmpeg_convert.h"
 
+#include <vcl_cstring.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 
@@ -62,6 +63,10 @@ struct vidl2_ffmpeg_istream::pimpl
 
   //: A contiguous memory buffer to store the current image data
   vil_memory_chunk_sptr contig_memory_;
+
+  //: A contiguous memory buffer to frame data for raw video, because
+  // there is no decoder to hold it for us.
+  vil_memory_chunk_sptr raw_video_memory_;
 
   //: The last successfully decoded frame.
   mutable vidl2_frame_sptr cur_frame_;
@@ -369,7 +374,14 @@ advance()
     if (pkt.stream_index==is_->vid_index_)
     {
       if ( codec->codec_id == CODEC_ID_RAWVIDEO ) {
-        avpicture_fill( (AVPicture*)is_->frame_, pkt.data,
+        if (!is_->contig_memory_)
+          is_->raw_video_memory_ = new vil_memory_chunk(pkt.size, VIL_PIXEL_FORMAT_BYTE);
+        else
+          is_->raw_video_memory_->set_size(pkt.size, VIL_PIXEL_FORMAT_BYTE);
+        vcl_memcpy(is_->raw_video_memory_->data(), pkt.data, pkt.size);
+
+        avpicture_fill( (AVPicture*)is_->frame_,
+                        reinterpret_cast<uint8_t*>(is_->raw_video_memory_->data()),
                         codec->pix_fmt,
                         codec->width,
                         codec->height );
