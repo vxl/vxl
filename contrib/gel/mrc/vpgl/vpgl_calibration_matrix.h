@@ -19,6 +19,8 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vsl/vsl_binary_io.h>
+#include <vgl/vgl_point_2d.h>
+
 // not used? #include <vcl_iostream.h>
 
 //:  A class representing the "K" matrix of a perspective camera matrix as described in
