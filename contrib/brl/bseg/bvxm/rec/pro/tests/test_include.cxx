@@ -6,6 +6,8 @@
 #include <bvxm/rec/pro/bvxm_rec_density_to_prob_map_process.h>
 #include <bvxm/rec/pro/bvxm_rec_structure_process.h>
 #include <bvxm/rec/pro/bvxm_rec_update_changes_process.h>
-#include <bvxm/rec/pro/bvxm_rec_update_changes_wrt_area_process.h>
+#include <bvxm/rec/pro/bvxm_rec_glitch_process.h>
+#include <bvxm/rec/pro/bvxm_rec_glitch_overlay_process.h>
+#include <bvxm/rec/pro/bvxm_rec_bayesian_update_process.h>
 
 int main() { return 0; }
