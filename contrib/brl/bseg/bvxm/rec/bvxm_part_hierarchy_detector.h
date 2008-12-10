@@ -1,4 +1,4 @@
-// This is contrib/bvxm/rec/bvxm_part_hierarchy_detector.h
+// This is brl/bseg/bvxm/rec/bvxm_part_hierarchy_detector.h
 #ifndef bvxm_part_hierarchy_detector_h_
 #define bvxm_part_hierarchy_detector_h_
 //:
@@ -6,14 +6,12 @@
 // \brief class to detect instances of a hiearachy of composable parts in images
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
-//      
+// \date Oct 16, 2008
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
 
 #include <rec/bvxm_part_hierarchy.h>
 #include <rec/bvxm_part_hierarchy_sptr.h>
@@ -35,7 +33,7 @@
 //   float C::volume(B const &);
 // \endcode
 template <class T>
-class rtree_bvxm_instance_box_2d 
+class rtree_bvxm_instance_box_2d
 {
   // only static methods
   rtree_bvxm_instance_box_2d();
@@ -66,12 +64,12 @@ class rtree_bvxm_instance_box_2d
     vgl_point_2d<T> b1max = b1.max_point();
     vgl_point_2d<T> max_of_mins(b0min.x() > b1min.x() ? b0min.x() : b1min.x(), b0min.y() > b1min.y() ? b0min.y() : b1min.y());
     vgl_point_2d<T> min_of_maxs(b0min.x() < b1min.x() ? b0min.x() : b1min.x(), b0min.y() < b1min.y() ? b0min.y() : b1min.y());
-    
+
     return ( b0.contains(b1min) || b0.contains(b1max) ||
              b1.contains(b0min) || b1.contains(b0max) ||
-           ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) && 
+           ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) &&
              (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) ) );
-    
+
     //bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
     //bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
     //return resultf||resultr;
@@ -95,19 +93,20 @@ typedef rtree_bvxm_instance_box_2d<float> C_type; // the helper class
 typedef vgl_rtree<V_type, B_type, C_type> Rtree_type;
 typedef vgl_rtree_polygon_probe<V_type, B_type, C_type> Probe_type;
 
-class bvxm_part_hierarchy_detector {
-public:
+class bvxm_part_hierarchy_detector
+{
+ public:
 
   bvxm_part_hierarchy_detector(bvxm_part_hierarchy_sptr h) : h_(h) {}
   ~bvxm_part_hierarchy_detector();
-
-  //static void generate_map(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, vil_image_view<unsigned>& type_map);
-  //static void generate_map(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vcl_vector<vcl_vector<bvxm_part_instance_sptr> >& map);
+#if 0
+  static void generate_map(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, vil_image_view<unsigned>& type_map);
+  static void generate_map(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vcl_vector<vcl_vector<bvxm_part_instance_sptr> >& map);
   //: generate a float map with normalized strengths and receptive fields marked
-  //static void generate_output_map(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
+  static void generate_output_map(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
   //: output_img needs to have 3 planes
-  //static void generate_output_img(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vil_image_view<vxl_byte>& input_img, vil_image_view<vxl_byte>& output_img);
-
+  static void generate_output_img(vcl_vector<bvxm_part_instance_sptr>& extracted_parts, vil_image_view<vxl_byte>& input_img, vil_image_view<vxl_byte>& output_img);
+#endif
   // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
   bvxm_part_instance_sptr exists(bvxm_part_base_sptr upper_p, bvxm_part_instance_sptr central_p, unsigned ni, unsigned nj, Rtree_type* lower_rtree, float det_threshold);
 
@@ -124,7 +123,7 @@ public:
   vcl_vector<bvxm_part_instance_sptr>& get_parts(unsigned layer) { return map_instance_[layer]; }
   Rtree_type* get_tree(unsigned layer) { return map_rtree_[layer]; }
 
-public:
+ public:
   bvxm_part_hierarchy_sptr h_;
 
   //: map each layer to a vector of instances of it
@@ -132,7 +131,6 @@ public:
 
   //: map each layer to an rtree of its instances
   vcl_map<unsigned, Rtree_type*> map_rtree_;
-
 };
 
 
