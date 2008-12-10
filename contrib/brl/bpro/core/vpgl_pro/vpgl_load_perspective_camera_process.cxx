@@ -63,19 +63,10 @@ vpgl_load_perspective_camera_process::execute()
     vcl_cerr << "Failed to open file " << camera_filename << vcl_endl;
     return false;
   }
-  vnl_matrix_fixed<double,3,3> K_matrix;
-  vnl_matrix_fixed<double,3,3> R_matrix;
-  vnl_vector_fixed<double,3> T_vector;
-  ifs >> K_matrix;
-  ifs >> R_matrix;
-  ifs >> T_vector;
 
-  vpgl_calibration_matrix<double> K(K_matrix);
-  vgl_rotation_3d<double> rot(R_matrix);
-  vnl_vector_fixed<double,3> center_v = -R_matrix.transpose()*T_vector;
-  vgl_point_3d<double> camera_center(center_v[0],center_v[1],center_v[2]);
+  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
 
-   vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(K,camera_center,rot);
+  ifs >> *cam;
 
   brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 

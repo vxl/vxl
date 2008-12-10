@@ -75,13 +75,7 @@ vpgl_save_perspective_camera_process::execute()
     vcl_cerr << "Failed to open file " << camera_filename << vcl_endl;
     return false;
   }
-  ofs << cam->get_calibration().get_matrix() << vcl_endl;
-  vnl_matrix_fixed<double,3,3> R = cam->get_rotation().as_matrix();
-  ofs << R << vcl_endl;
-  vgl_point_3d<double> c = cam->get_camera_center();
-  vnl_vector_fixed<double,3> T = -R*vnl_vector_fixed<double,3>(c.x(),c.y(),c.z());
-  ofs << T << vcl_endl;
-
+  ofs << *cam;
   ofs.close();
 
   return true;
