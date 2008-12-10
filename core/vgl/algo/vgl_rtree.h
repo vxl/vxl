@@ -95,6 +95,8 @@ class vgl_rtree_node
   // remove ith vertex from node.
   void erase(unsigned int i);
 
+  void print() const;
+
  private:
   friend class vgl_rtree_iterator_base<V, B, C>;
 
@@ -343,6 +345,10 @@ class vgl_rtree
   // for internal use only.
   typedef vgl_rtree_node<V, B, C> node;
   node *secret_get_root() const { return root; } // for debugging purposes.
+
+  void print() const {
+    root->print();
+  }
 
  private:
   node *root;

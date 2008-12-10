@@ -5,6 +5,7 @@
 */
 #include "vgl_rtree.h"
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 #ifdef DEBUG
 #include <vcl_iostream.h>
@@ -99,6 +100,19 @@ bool vgl_rtree_node<V, B, C>::find(B const &b, V const &v, node **n_out, int *i_
   //
   else
     return false;
+}
+
+template <class V, class B, class C>
+void vgl_rtree_node<V, B, C>::print() const
+{
+  vcl_cout << "node bounds: ";
+  bounds.print(vcl_cout);
+  vcl_cout << vcl_endl << "--------";
+  for (unsigned int i=0; i<local_chs; ++i) {
+    vcl_cout << "\n\t";
+    chs[i]->print();
+  }
+  vcl_cout << "------------" << vcl_endl;
 }
 
 //--------------------------------------------------------------------------------
@@ -268,15 +282,20 @@ void vgl_rtree_node<V, B, C>::compute_bounds()
 template <class V, class B, class C>
 void vgl_rtree_node<V, B, C>::get(B const &region, vcl_vector<V> &vs) const
 {
+  //vcl_cout << " In get: " << region << vcl_endl;
   // get vertices from this node :
   for (unsigned int i=0; i<local_vts; ++i)
-    if (C::meet(region, vts[i] ))
+    if (C::meet(region, vts[i] )) {
+      //vcl_cout << " pushed " << vts[i] << vcl_endl;
       vs.push_back(vts[i]);
+      }
 
   // get vertices from children :
   for (unsigned int i=0; i<local_chs; ++i)
-    if (C::meet(region, chs[i]->bounds ))
+    if (C::meet(region, chs[i]->bounds )) {
+      //vcl_cout << "--- region of child: " << i << " :" << chs[i]->bounds << " met search region----\n";
       chs[i]->get(region, vs);
+      }
 }
 
 // calls only itself.

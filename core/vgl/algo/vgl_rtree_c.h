@@ -47,9 +47,20 @@ class vgl_rtree_point_box_2d
   { return b.contains(p); }
 
   static bool  meet(vgl_box_2d<T> const& b0, vgl_box_2d<T> const& b1) {
-    bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
-    bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
-    return resultf||resultr;
+    vgl_point_2d<T> b0min = b0.min_point();
+    vgl_point_2d<T> b1min = b1.min_point();
+    vgl_point_2d<T> b0max = b0.max_point();
+    vgl_point_2d<T> b1max = b1.max_point();
+    vgl_point_2d<T> max_of_mins(b0min.x() > b1min.x() ? b0min.x() : b1min.x(), b0min.y() > b1min.y() ? b0min.y() : b1min.y());
+    vgl_point_2d<T> min_of_maxs(b0min.x() < b1min.x() ? b0min.x() : b1min.x(), b0min.y() < b1min.y() ? b0min.y() : b1min.y());
+    
+    return ( b0.contains(b1min) || b0.contains(b1max) ||
+             b1.contains(b0min) || b1.contains(b0max) ||
+           ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) && 
+             (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) ) );
+    //bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
+    //bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
+    //return resultf||resultr;
   }
 
   static float volume(vgl_box_2d<T> const& b)
