@@ -336,9 +336,11 @@ vcl_ostream&  operator<<(vcl_ostream& s,
   vgl_rotation_3d<Type> rot = p.get_rotation();
   vnl_matrix_fixed<Type, 3, 3> Rm = rot.as_matrix();
   vgl_point_3d<Type> c(p.get_camera_center());
+  vnl_vector_fixed<Type, 3> Tv = -Rm * vnl_vector_fixed<Type,3>(c.x(),c.y(),c.z());
+
   s << k << '\n';
   s << Rm << '\n';
-  s << c.x() << ' ' << c.y() << ' ' << c.z() << '\n';
+  s << Tv << '\n';
   return s ;
 }
 
@@ -348,13 +350,14 @@ vcl_istream&  operator >>(vcl_istream& s,
                          vpgl_perspective_camera<Type>& p)
 {
   vnl_matrix_fixed<Type, 3, 3> k, Rm;
-  Type cx, cy, cz;
+  vnl_vector_fixed<Type, 3> Tv;
   s >> k;
   s >> Rm;
-  s >> cx >> cy >> cz;
+  s >> Tv;
   vpgl_calibration_matrix<Type> K(k);
   vgl_rotation_3d<Type> rot(Rm);
-  vgl_point_3d<Type> c(cx, cy, cz);
+  vnl_vector_fixed<Type, 3> cv = -Rm.transpose() * Tv;
+  vgl_point_3d<Type> c(cv[0], cv[1], cv[2]);
   p.set_calibration(K);
   p.set_rotation(rot);
   p.set_camera_center(c);
