@@ -24,9 +24,10 @@ bvxm_prob_map_threshold_process::bvxm_prob_map_threshold_process()
   input_types_[3]= "float"; //threshold
 
   //output - no outputs as yet
-  output_data_.resize(1, brdb_value_sptr(0));
-  output_types_.resize(1);
-  output_types_[0] = "vil_image_view_base_sptr";
+  output_data_.resize(2, brdb_value_sptr(0));
+  output_types_.resize(2);
+  output_types_[0] = "vil_image_view_base_sptr";   // output a thresholded image where red channel is binarized wrt given threshold
+  output_types_[1] = "vil_image_view_base_sptr";   // output a thresholded image where red channel is mapped wrt prob
 }
 
 //: Execute the process
@@ -63,6 +64,9 @@ bvxm_prob_map_threshold_process::execute()
 
   vil_image_view<vxl_byte> out(ni, nj, 3);
   out.fill(0);
+  vil_image_view<vxl_byte> out2(ni, nj, 3);
+  out2.fill(0);
+
 
   int count = 0;
   for (unsigned j = 0; j<nj; ++j)
@@ -72,8 +76,14 @@ bvxm_prob_map_threshold_process::execute()
         out(i,j,0)=input_img(i,j);
         out(i,j,1)=input_img(i,j);
         out(i,j,2)=input_img(i,j);
+        
+        out2(i,j,0)=input_img(i,j);
+        out2(i,j,1)=input_img(i,j);
+        out2(i,j,2)=input_img(i,j);
+        
         if (frame(i,j)<=thres) {
           out(i,j,0) = 255;
+          out2(i,j,0) = (vxl_byte)(255*vcl_exp((vcl_log(0.01)/(thres-1))*(frame(i,j)-1)));
           count++;
         }
       }
@@ -86,6 +96,10 @@ bvxm_prob_map_threshold_process::execute()
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(out));
   output_data_[0] = output0;
+
+  brdb_value_sptr output1 =
+    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(out2));
+  output_data_[1] = output1;
 
   return true;
 }
