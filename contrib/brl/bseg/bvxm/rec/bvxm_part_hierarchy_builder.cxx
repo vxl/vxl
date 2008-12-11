@@ -303,6 +303,7 @@ bvxm_part_hierarchy_builder::construct_detector_roi1_1()
   vnl_vector_fixed<float,2> p2c4(418.0f,778.0f); //
 
   //: train this edge
+  //: subtract central part's center (p_0_0) from this part's center (p_0_1)
   vnl_vector_fixed<float,2> sample1 = c1 - p1c1; // center difference measured from the image
   vnl_vector_fixed<float,2> sample2 = c2 - p1c2; // a second center difference
   vnl_vector_fixed<float,2> sample3 = c3 - p1c3; //
@@ -331,6 +332,7 @@ bvxm_part_hierarchy_builder::construct_detector_roi1_1()
   p_0_1->add_incoming_edge(e_1_0_to_third);
 
   //: train this edge
+  //: subtract central part's center (p_0_0) from this part's center (p_0_1)
   sample1 = c1 - p2c1; // center difference measured from the image
   sample2 = c2 - p2c2; // a second center difference
   sample3 = c3 - p2c3; //

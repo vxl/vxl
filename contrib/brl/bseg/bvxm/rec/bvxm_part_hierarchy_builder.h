@@ -7,6 +7,9 @@
 //
 // Includes tools to learn co-occurrence statistics or manual construction of hierarchies for specific purposes
 //
+// Note: higher layer parts are positioned wrt to a coordinate system origined at the center of the central part
+//       so during training, create samples by subtracting other parts' centers from central part's center after measuring from the image
+//
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date Oct. 16, 2008
 //
