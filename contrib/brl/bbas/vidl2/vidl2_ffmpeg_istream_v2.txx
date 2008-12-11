@@ -41,7 +41,7 @@ struct vidl2_ffmpeg_istream::pimpl
     vid_str_( NULL ),
     last_dts( 0 ),
     frame_( NULL ),
-    num_frames_( 0 ),
+    num_frames_( -2 ), // sentinel value to indicate not yet computed
     sws_context_( NULL ),
     cur_frame_( NULL ),
     deinterlace_( false ),
@@ -180,10 +180,6 @@ open(const vcl_string& filename)
     is_->frame_number_offset_ = 1;
   }
 
-  is_->num_frames_ = 0;
-  while(advance())
-    ++is_->num_frames_;
-
   av_seek_frame( is_->fmt_cxt_, is_->vid_index_, 0, AVSEEK_FLAG_BACKWARD );
 
   return true;
@@ -199,7 +195,7 @@ close()
     av_freep( &is_->frame_ );
   }
 
-  is_->num_frames_ = 0;
+  is_->num_frames_ = -2;
   is_->contig_memory_ = 0;
   is_->vid_index_ = -1;
   if ( is_->vid_str_ ) {
@@ -245,6 +241,23 @@ is_seekable() const
 int
 vidl2_ffmpeg_istream::num_frames() const
 {
+  // to get an accurate frame count, quickly run through the entire
+  // video.  We'll only do this if the user hasn't read any frames,
+  // because we have no guarantee that we can successfully seek back
+  // to anywhere but the beginning.  There is logic in advance() to
+  // ensure this.
+  vidl2_ffmpeg_istream* mutable_this = const_cast<vidl2_ffmpeg_istream*>(this);
+  if( mutable_this->is_->num_frames_ == -2 ) {
+    mutable_this->is_->num_frames_ = 0;
+    while (mutable_this->advance()) {
+      ++mutable_this->is_->num_frames_;
+    }
+    av_seek_frame( mutable_this->is_->fmt_cxt_,
+                   mutable_this->is_->vid_index_,
+                   0,
+                   AVSEEK_FLAG_BACKWARD );
+  }
+
   return is_->num_frames_;
 }
 
@@ -336,6 +349,13 @@ advance()
   // Quick return if the file isn't open.
   if ( !is_open() ) {
     return false;
+  }
+
+  // See the comment in num_frames().  This is to make sure that once
+  // we start reading frames, we'll never try to march to the end to
+  // figure out how many frames there are.
+  if( is_->num_frames_ == -2 ) {
+    is_->num_frames_ = -1;
   }
 
   AVCodecContext* codec = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
