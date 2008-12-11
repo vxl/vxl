@@ -24,8 +24,9 @@ bvxm_prob_map_roc_compute_process::bvxm_prob_map_roc_compute_process()
   input_types_[3]= "vcl_string"; //output file name
 
   //output - no outputs as yet
-  output_data_.resize(0, brdb_value_sptr(0));
-  output_types_.resize(0);
+  output_data_.resize(1, brdb_value_sptr(0));
+  output_types_.resize(1);
+  output_types_[0] = "float";  // return the threshold at the best operating point
 }
 
 //: Execute the process
@@ -103,6 +104,19 @@ bvxm_prob_map_roc_compute_process::execute()
     tpr.push_back(fore_true_pos_frac);
     //vcl_cout << fore_false_pos_frac << ' ' << fore_true_pos_frac << vcl_endl;
   }
+
+  double best_dist = 10000000000.0;
+  unsigned best_id = 0;
+  for (unsigned ip = 0; ip < N; ip++) {
+    double dist = fpr[ip]*fpr[ip]+(1-tpr[ip])*(1-tpr[ip]);
+    if (dist < best_dist) {
+      best_id = ip;
+      best_dist = dist;
+    }
+  }
+
+  brdb_value_sptr output0 = new brdb_value_t<float>(pa[best_id]);
+  output_data_[0] = output0;
 
   vcl_ofstream of(out_file.c_str());
   of << "# bvxm_prob_map_roc_compute_process\n#line 1: threshold values\n#line 2: FPR values for thresholds\n#line 3: TPR values\n";
