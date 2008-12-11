@@ -63,11 +63,14 @@ vil_binary_image_op_process::execute()
   //test for operation
   if(operation=="product")
     vil_math_image_product(view_a, view_b, result);
-  else{
+  else  if(operation=="max")
+    vil_math_image_max(view_a, view_b, result);
+  else
+    {
     vcl_cerr << "In vil_binary_image_op_process::execute() -"
             << " unknown binary operation\n";
     return false;
-  }
+    }
   brdb_value_sptr output0 = 
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(result));
   output_data_[0] = output0;

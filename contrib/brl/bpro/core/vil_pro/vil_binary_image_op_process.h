@@ -28,7 +28,7 @@ class vil_binary_image_op_process : public bprb_process
   //: Clone the process
   virtual vil_binary_image_op_process* clone() const {return new vil_binary_image_op_process(*this);}
 
-  vcl_string name(){return "ImageProductProcess";}
+  vcl_string name(){return "ImageBinaryOpProcess";}
 
   bool init(){return true;}
   bool execute();
