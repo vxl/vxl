@@ -151,7 +151,7 @@ bxml_data_sptr bvxm_hierarchy_edge::xml_element()
   return data;
 }
 
-bool  bvxm_hierarchy_edge::xml_parse_element(bxml_data_sptr data)
+bool bvxm_hierarchy_edge::xml_parse_element(bxml_data_sptr data)
 {
   bxml_element query("edge");
   bxml_data_sptr base_root = bxml_find_by_name(data, query);
@@ -175,6 +175,7 @@ bool  bvxm_hierarchy_edge::xml_parse_element(bxml_data_sptr data)
     angle_model_.set_mean(angle_mean);
     angle_model_.set_var(angle_var);
 
+    return true;
   } else
     return false;
 }
