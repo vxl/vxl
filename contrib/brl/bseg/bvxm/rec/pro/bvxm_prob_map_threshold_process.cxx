@@ -83,7 +83,8 @@ bvxm_prob_map_threshold_process::execute()
         
         if (frame(i,j)<=thres) {
           out(i,j,0) = 255;
-          out2(i,j,0) = (vxl_byte)(255*vcl_exp((vcl_log(0.01)/(thres-1))*(frame(i,j)-1)));
+          float c = 1-frame(i,j);
+          out2(i,j,0) = (vxl_byte)(255*vcl_exp((vcl_log(0.01)/(thres-1))*(c-1)));
           count++;
         }
       }
