@@ -89,7 +89,7 @@ class vgl_rotation_3d
       *this = vgl_rotation_3d<T>(na, nb);
     }
 
-                           
+                         
   // Conversions:--------------------------------------
 
   //: Output unit quaternion.
@@ -150,6 +150,9 @@ class vgl_rotation_3d
 
   //: The inverse rotation
   vgl_rotation_3d<T> inverse() const { return vgl_rotation_3d<T>(q_.conjugate()); }
+  //:the transpose or congugate of the rotation
+  vgl_rotation_3d<T> transpose() const
+    {return this->inverse();}
 
   //: Composition of two rotations.
   vgl_rotation_3d<T> operator*( const vgl_rotation_3d<T>& first_rotation ) const
