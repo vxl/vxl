@@ -62,6 +62,13 @@ static void test_inverse(const vgl_rotation_3d<double>& rot)
   TEST_NEAR("Inverse rotation", diff, 0.0, epsilon);
 }
 
+// Test that the transpose or conjugate rotation works as expected
+static void test_transpose(const vgl_rotation_3d<double>& rot)
+{
+  vgl_rotation_3d<double> I = rot * rot.transpose();
+  double diff = (I.as_quaternion()-vgl_rotation_3d<double>().as_quaternion()).magnitude();
+  TEST_NEAR("transpose or conjugate rotation", diff, 0.0, epsilon);
+}
 
 // Test application of rotation to other vgl objects
 static void test_application(const vgl_rotation_3d<double>& rot)
@@ -127,6 +134,7 @@ void test_rotation_3d()
   vgl_rotation_3d<double> rot_id;
   test_conversions(rot_id);
   test_inverse(rot_id);
+  test_transpose(rot_id);
   test_application(rot_id);
 
   vcl_cout << "\n2. Rotation about the x axis over 90 degrees.\n";
@@ -134,6 +142,7 @@ void test_rotation_3d()
   vgl_rotation_3d<double> rot_x90(1.57079632679489661923, 0.0, 0.0);
   test_conversions(rot_x90);
   test_inverse(rot_x90);
+  test_transpose(rot_x90);
   test_application(rot_x90);
 
   vnl_random rnd;
@@ -141,6 +150,7 @@ void test_rotation_3d()
   vcl_cout << "\n3. Random rotation: " << rot_rand.as_quaternion() << vcl_endl;
   test_conversions(rot_rand);
   test_inverse(rot_rand);
+  test_transpose(rot_rand);
   test_application(rot_rand);
   //test constructor from two vectors
   vnl_double_3 ap(0.707107, 0.0, 0.707107), b(0.0, 0.0, 1.0);
