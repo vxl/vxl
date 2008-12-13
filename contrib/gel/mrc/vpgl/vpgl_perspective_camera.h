@@ -64,6 +64,12 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
                            const vgl_point_3d<T>& camera_center,
                            const vgl_rotation_3d<T>& R );
 
+  //: Main constructor based on K[R|t] 
+  vpgl_perspective_camera( const vpgl_calibration_matrix<T>& K,
+                           const vgl_rotation_3d<T>& R,
+                           const vgl_vector_3d<T>& t);
+
+
   //: Copy constructor
   vpgl_perspective_camera( const vpgl_perspective_camera& cam );
 
@@ -89,9 +95,11 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   //: Setters and getters.
   void set_calibration( const vpgl_calibration_matrix<T>& K );
   void set_camera_center( const vgl_point_3d<T>& camera_center );
+  void set_translation(const vgl_vector_3d<T>& t);
   void set_rotation( const vgl_rotation_3d<T>& R );
   const vpgl_calibration_matrix<T>& get_calibration() const{ return K_; }
   const vgl_point_3d<T>& get_camera_center() const { return camera_center_; }
+  vgl_vector_3d<T> get_translation() const;
   const vgl_rotation_3d<T>& get_rotation() const{ return R_; }
 
   //: Rotate the camera about its center such that it looks at the given point

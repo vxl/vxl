@@ -45,6 +45,18 @@ vpgl_perspective_camera<T>::vpgl_perspective_camera(
 
 //-------------------------------------------
 template <class T>
+vpgl_perspective_camera<T>::vpgl_perspective_camera(
+  const vpgl_calibration_matrix<T>& K,
+  const vgl_rotation_3d<T>& R,
+  const vgl_vector_3d<T>& t) :
+  K_( K ),  R_( R )
+{
+  this->set_translation(t);
+  recompute_matrix();
+}
+
+//-------------------------------------------
+template <class T>
 vpgl_perspective_camera<T>::vpgl_perspective_camera( const vpgl_perspective_camera& that)
   : vpgl_proj_camera<T>(that),
   K_(that.K_),
@@ -128,6 +140,15 @@ void vpgl_perspective_camera<T>::set_camera_center(
   recompute_matrix();
 }
 
+//-------------------------------------------
+template <class T>
+void vpgl_perspective_camera<T>::set_translation(const vgl_vector_3d<T>& t)
+{
+  vgl_rotation_3d<T> Rt = R_.transpose(); 
+  vgl_vector_3d<T> cv = -(Rt * t);
+  camera_center_.set(cv.x(), cv.y(), cv.z());
+  recompute_matrix();
+}
 
 //-------------------------------------------
 template <class T>
@@ -137,9 +158,17 @@ void vpgl_perspective_camera<T>::set_rotation( const vgl_rotation_3d<T>& R )
   recompute_matrix();
 }
 
+//-------------------------------------------
+template <class T>
+vgl_vector_3d<T> vpgl_perspective_camera<T>::get_translation() const
+{
+  vgl_vector_3d<T> c(camera_center_.x(), camera_center_.y(),camera_center_.z());
+  vgl_vector_3d<T> temp = R_*c;
+  return -temp;
+}
 
 //: Rotate the camera about its center such that it looks at the given point
-//  The camera should also be rotated about its principle axis such that
+//  The camera should also be rotated about its principal axis such that
 //  the vertical image direction is closest to \p up in the world
 template <class T>
 void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
@@ -335,12 +364,10 @@ vcl_ostream&  operator<<(vcl_ostream& s,
   vnl_matrix_fixed<Type, 3, 3> k = p.get_calibration().get_matrix();
   vgl_rotation_3d<Type> rot = p.get_rotation();
   vnl_matrix_fixed<Type, 3, 3> Rm = rot.as_matrix();
-  vgl_point_3d<Type> c(p.get_camera_center());
-  vnl_vector_fixed<Type, 3> Tv = -Rm * vnl_vector_fixed<Type,3>(c.x(),c.y(),c.z());
-
+  vgl_vector_3d<Type> t = p.get_translation();
   s << k << '\n';
   s << Rm << '\n';
-  s << Tv << '\n';
+  s << t.x() << ' ' << t.y() << ' ' << t.z() << '\n';
   return s ;
 }
 
@@ -350,17 +377,16 @@ vcl_istream&  operator >>(vcl_istream& s,
                          vpgl_perspective_camera<Type>& p)
 {
   vnl_matrix_fixed<Type, 3, 3> k, Rm;
-  vnl_vector_fixed<Type, 3> Tv;
+  vnl_vector_fixed<Type, 3> tv;
   s >> k;
   s >> Rm;
-  s >> Tv;
+  s >> tv;
   vpgl_calibration_matrix<Type> K(k);
   vgl_rotation_3d<Type> rot(Rm);
-  vnl_vector_fixed<Type, 3> cv = -Rm.transpose() * Tv;
-  vgl_point_3d<Type> c(cv[0], cv[1], cv[2]);
+  vgl_vector_3d<Type> t(tv[0], tv[1], tv[2]);
   p.set_calibration(K);
   p.set_rotation(rot);
-  p.set_camera_center(c);
+  p.set_translation(t);
   return s ;
 }
 
