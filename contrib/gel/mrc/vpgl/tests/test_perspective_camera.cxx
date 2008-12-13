@@ -15,7 +15,27 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
-
+static bool cams_near_equal(vpgl_perspective_camera<double> const& c1, 
+                            vpgl_perspective_camera<double> const& c2,
+                            double tolerance)
+{ 
+  vpgl_calibration_matrix<double> K1= c1.get_calibration(),
+    K2 = c2.get_calibration();
+  vgl_rotation_3d<double> R1 = c1.get_rotation(), R2 = c2.get_rotation();
+  vgl_point_3d<double> cc1 = c1.get_camera_center(), 
+    cc2 = c2.get_camera_center();
+  vnl_matrix_fixed<double, 3,3> Km1 = K1.get_matrix(), Km2 = K2.get_matrix();
+  vnl_matrix_fixed<double, 3,3> Rm1 = R1.as_matrix(), Rm2 = R2.as_matrix();
+  for(unsigned r = 0; r<3; ++r)
+    for(unsigned c = 0; c<3; ++c){
+      if(vcl_fabs(Km1[r][c]-Km2[r][c])>tolerance) return false;
+      if(vcl_fabs(Rm1[r][c]-Rm2[r][c])>tolerance) return false;
+    }
+  if(vcl_fabs(cc1.x()-cc2.x())>tolerance) return false;
+  if(vcl_fabs(cc1.y()-cc2.y())>tolerance) return false;
+  if(vcl_fabs(cc1.z()-cc2.z())>tolerance) return false;
+  return true;
+}
 static void test_perspective_camera()
 {
     //Construct the camera
@@ -154,8 +174,24 @@ static void test_perspective_camera()
   vcl_ifstream is(cam_path.c_str());
   vpgl_perspective_camera<double> Pin;
   is >> Pin;
-  TEST("Test stream operators", Pin == Po, true);
+  bool eql = cams_near_equal(Pin, Po, 0.01);
+  TEST("Test stream operators", eql, true);
   vpl_unlink(cam_path.c_str());
+  // test constructors and methods using translation
+  vnl_vector_fixed<double, 3> cv(-25.3302, -31.0114, 1030.63), tv;
+  tv = -(Rm*cv);
+  vgl_vector_3d<double> t(tv[0], tv[1], tv[2]);
+  vpgl_perspective_camera<double> Ptc(Ko, rot, t);
+  eql = cams_near_equal(Po, Ptc, 0.01);
+  TEST("translation constructor", eql, true);
+  vpgl_perspective_camera<double> Pts(Po);
+  Pts.set_translation(t);
+  eql = cams_near_equal(Po, Pts, 0.01);
+  TEST("set translation ", eql, true);
+  vgl_vector_3d<double> tg = Po.get_translation();
+  Pin.set_translation(tg);
+  eql = cams_near_equal(Po, Pin, 0.01);
+  TEST("get translation ", eql, true);
 }
 
 TESTMAIN(test_perspective_camera);
