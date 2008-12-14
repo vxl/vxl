@@ -12,163 +12,117 @@ exec perl -w -x $0 ${1+"$@"}
 #
 # Command line argument(s): list of directories to check (default: all)
 
-while (defined($ARGV[0]) && $ARGV[0] =~ m/^-/) {
-  $_ = shift @ARGV;
-  printf STDERR "Unrecognised command line option $_ ignored\n";
+use strict;
+
+while (@ARGV && substr($ARGV[0],0,1) eq '-') {
+  printf STDERR "Unrecognised command line option " . (shift @ARGV) . " ignored\n";
 }
 
-if (defined($ARGV[0])) {
+my @DIRS;
+if (@ARGV) {
   @DIRS = @ARGV;
 }
 else {
-  $V = $ENV{VXLROOT};
-  if (defined($V)) {
-    $DIRS = `find $V/vcl $V/core $V/contrib $V/v3p -type d -print`;
+  my $V = $ENV{VXLROOT};
+  if (defined $V && -d "$V/vcl" && -d "$V/core" && -d "$V/contrib") {
+    chomp (@DIRS = `find $V/vcl $V/core $V/contrib $V/v3p -type d -print`);
   }
   elsif (-d 'vcl' && -d 'core' && -d 'contrib') {
-    $DIRS = `find vcl core contrib v3p -type d -print`;
+    chomp(@DIRS = `find vcl core contrib v3p -type d -print`);
   }
   else
   {
-    print STDERR "VXLROOT is not defined, and no command line arguments were given\n";
+    print STDERR "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib\n";
     exit 0;
   }
-  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$! } sort split ' ', $DIRS;
+  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$ !x } @DIRS;
 }
 
-foreach $dir (@DIRS)
+foreach my $dir (@DIRS)
 {
   # make that the embedding directory, if this is not a directory name:
-  $dir =~ s!/[^/]+$!! unless -d $dir;
+  $dir =~ s!/[^/]+$ !!x unless -d $dir;
   # remove possible slash at end of directory name:
-  $dir =~ s![\\/]+$!!;
-  # temporarily skip this directory -- it gives useless messages:
-  next if ($dir =~ m!bmvl/brct/tests$!);
+  $dir =~ s![\\/]+$ !!x;
   # Now read directory content and open relevant files (like CMakeLists.txt, makefile and *.dsp)
-  next unless opendir(TMP,$dir);
-  @tmp_list = readdir(TMP);
+  next unless opendir TMP,$dir;
+  my @file_list = grep {! m/^(\..*|CVS)$/} readdir(TMP);
   closedir(TMP);
-  if ($dir =~ m/\bvcl$/) {
-    foreach $sd ( ('vcl_sys','iso','generic','gcc','egcs','gcc-295','gcc-libstdcxx-v3','sgi','sunpro','win32-vc60','win32-vc70','emulation','borland55','borland56','mwerks','stlport') ) {
-      opendir(TMP,"$dir/$sd");
-      push @tmp_list, map { "$sd/$_" } readdir(TMP);
-      closedir(TMP);
-    }
-  }
-  elsif ($dir =~ m/\bvil?$/) {
-    opendir(TMP,"$dir/file_formats");
-    push @tmp_list, map { "file_formats/$_" } readdir(TMP);
-    closedir(TMP);
-  }
-  elsif ($dir =~ m/\bvgl$/) {
-    opendir(TMP,"$dir/internals");
-    push @tmp_list, map { "internals/$_" } readdir(TMP);
-    closedir(TMP);
-  }
-  elsif ($dir =~ m/\bvipl$/) {
-    foreach $sd ( ('filter','section','accessors','vipl_with_section','vipl_with_vbl_array_2d','vipl_with_vnl_matrix','vipl_with_section/accessors','vipl_with_vbl_array_2d/accessors','vipl_with_vnl_matrix/accessors') ) {
-      opendir(TMP,"$dir/$sd");
-      push @tmp_list, map { "$sd/$_" } readdir(TMP);
-      closedir(TMP);
-    }
-  }
-  elsif ($dir =~ m/\bvepl2$/) {
-    foreach $sd ( ('accessors','section') ) {
-      opendir(TMP,"$dir/$sd");
-      push @tmp_list, map { "$sd/$_" } readdir(TMP);
-      closedir(TMP);
-    }
-  }
-  elsif ($dir =~ m/\bvgui$/) {
-    opendir(TMP,"$dir/internals");
-    push @tmp_list, map { "internals/$_" } readdir(TMP);
-    closedir(TMP);
-    opendir(TMP,"$dir/vrml");
-    push @tmp_list, map { "vrml/$_" } readdir(TMP);
-    closedir(TMP);
-  }
-  elsif ($dir =~ m/\bosl$/) {
-    opendir(TMP,"$dir/internals");
-    push @tmp_list, map { "internals/$_" } readdir(TMP);
+  my @sd = ();
+  if    ($dir =~ m/\bvcl$/)   { @sd = qw(vcl_sys iso generic gcc egcs gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 emulation borland55 borland56 mwerks stlport internal); }
+  elsif ($dir =~ m/\bvil1?$/) { @sd = qw(file_formats); }
+  elsif ($dir =~ m/\bvgl$/)   { @sd = qw(internals); }
+  elsif ($dir =~ m/\bvipl$/)  { @sd = qw(filter section accessors vipl_with_section vipl_with_vbl_array_2d vipl_with_vnl_matrix vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors); }
+  elsif ($dir =~ m/\bvepl2$/) { @sd = qw(accessors section); }
+  elsif ($dir =~ m/\bvgui$/)  { @sd = qw(internals vrml impl/qt impl/qt4 impl/wx impl/gtk impl/gtk2 impl/mfc impl/glut); }
+  elsif ($dir =~ m/\bvil3d$/) { @sd = qw(file_formats); }
+  elsif ($dir =~ m/\bosl$/)   { @sd = qw(internals); }
+  elsif ($dir =~ m/\bbwm$/)   { @sd = qw(process); }
+  elsif ($dir =~ m/\bbvxm\/pro$/) { @sd = qw(multiscale_pro); }
+  foreach my $sd (@sd) {
+    opendir TMP,"$dir/$sd";
+    push @file_list, map { "$sd/$_" } grep {! m/^(\..*|CVS)$/} readdir(TMP);
     closedir(TMP);
   }
 
   # verify #includes in test_include.cxx
   if (-f "$dir/test_include.cxx")
   {
-    @updir_files = ();
-    if (opendir(UPDIR,"$dir/..")) {
-      push @updir_files, readdir(UPDIR);
+    my %updir_files = ();
+    my %inc_files = ();
+    my $prefix=$dir; $prefix =~ s![^/]*$ !!x; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
+    if (opendir UPDIR,"$dir/..") {
+      foreach (grep {m/\.h$/} readdir(UPDIR)) { ++ $updir_files{$prefix.$_} unless (m/\bdll\.h$/); } # || m/vidl_(win|avifile)_avicodec/
       closedir(UPDIR);
     }
-    foreach $subdir (qw(algo io file_formats gui pro vis xio))
+    foreach my $subdir (qw(algo io file_formats gui pro xio))
     {
-      if (! -d "$dir/../$subdir/tests" && opendir(UPDIR,"$dir/../$subdir")) {
-        push @updir_files, map { "$subdir/$_" } readdir(UPDIR);
+      if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
+        foreach (grep {m/\.h$/} readdir(UPDIR)) { ++ $updir_files{"$prefix$subdir/$_"}; }
         closedir(UPDIR);
       }
     }
-    $prefix=$dir; $prefix =~ s![^/]*$!!; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
-    @updir_files = sort
-                   grep { !m/\bdll\.h$/ }
-                   grep { !m/vidl_(win|avifile)_avicodec/ }
-                   grep {  m/\.h$/ }
-                   map  { "$prefix$_" } @updir_files;
-    push @updir_files, '~END';
     open(FILE, "$dir/test_include.cxx");
     while (<FILE>) {
-      push @inc_files, $1 if (m/^\s*\#\s*include\s*\<(\S+)\>\s*$/);
+      ++ $inc_files{$1} if (m/^\s*\#\s*include\s*\<(\S+)\>\s*$/);
     }
     close(FILE);
-    @inc_files = sort(@inc_files); push @inc_files, '~END';
-    $updir_files=""; $inc_files="";
-    while (@inc_files || @updir_files)
+    foreach my $s (keys %inc_files)
     {
-      unless ($updir_files eq '~END') {
-        $updir_files = $s = shift @updir_files;
+      if ($inc_files{$s} > 1) {
+        print STDOUT "multiple occurrence of #include<$s> in $dir/test_include.cxx\n";
       }
-      unless ($inc_files eq '~END') {
-        $s = shift @inc_files;
-        while ($s eq $inc_files) {
-          print STDOUT "multiple occurrence of #include<$s> in $dir/test_include.cxx\n";
-          $s = shift @inc_files;
-        }
-        $inc_files = $s;
+      delete $inc_files{$s};
+      unless (exists $updir_files{$s})
+      {
+        print STDOUT "#include <$s>\tmust be removed from $dir/test_include.cxx\n"
+          unless ($s eq 'vxl_config.h' || $s eq 'vgui/vgui_config.h' || $s eq 'vcl_compiler.h');
       }
-      last if ($updir_files eq '~END' && $inc_files eq '~END');
-      while ($inc_files lt $updir_files) {
-        print STDOUT "#include <$inc_files>\tmust be removed from $dir/test_include.cxx\n"
-          unless ($inc_files eq 'vxl_config.h' || $inc_files eq 'vgui/vgui_config.h' || $inc_files eq 'vcl_compiler.h');
-        $inc_files = shift @inc_files;
-      }
-      last if ($updir_files eq '~END' && $inc_files eq '~END');
-      while ($updir_files lt $inc_files) {
-        print STDOUT "#include <$updir_files>\tis missing from $dir/test_include.cxx\n";
-        $updir_files = shift @updir_files;
-      }
+      delete $updir_files{$s};
+    }
+    foreach my $s (keys %updir_files) # should already be empty by now!
+    {
+      print STDOUT "#include <$s>\tis missing from $dir/test_include.cxx\n";
+      delete $updir_files{$s};
     }
   }
 
-  @hfiles = ();
-  foreach $fx (@tmp_list)
+  my %hfiles = (); # full list of existing *.h, *.h.in and *.txx files
+  foreach my $fx (grep {m/\.(h|txx)(\.in)?$/} @file_list)
   {
-    next unless ($fx =~ m/\.(h|txx)(\.in)?$/);
-    next if ($dir =~ m!\bvcl/generic$!);
-    next if ($fx =~ m/^(dll|resource|stdafx)\.h$/i);
-    next if ($dir =~ m/\bvcl$/ && $fx =~ m!^emulation/(.*-stlconf|stlcomp)\.h$!);
-    next if ($dir =~ m/\bvcl$/ && $fx =~ m/^vcl_where_root_dir\.h$/);
+    next if ($dir =~ m!\bvcl/generic$ !x);
+    next if ($fx  =~ m/\b(Resource|StdAfx)\.h$/i);
     next if ($dir =~ m/\bvbl$/ && $fx =~ m/^vbl_(basic_relation|br_default|br_impl|hash_map)\.(h|txx)$/);
-    push @hfiles, $fx;
+    ++ $hfiles{$fx};
   }
-  @source = ();
-  @hsource = ();
-  $f = '';
-  foreach $fx (@tmp_list)
+  my %source = ();
+  my %hsource = ();
+  my $f = '';
+  foreach my $fx (grep {m/\.dsp$/} @file_list)
   {
-    next unless ($fx =~ m/\.dsp$/);
     next unless open(FILE, "$dir/$fx");
     $f .= " $dir/$fx";
-    $start = '';
+    my $start = '';
     binmode FILE;
     while (<FILE>)
     {
@@ -178,117 +132,120 @@ foreach $dir (@DIRS)
       $start = '' if (m/^\# End Group/);
       next if (! $start);
       if (m/^SOURCE=\"?\.\\([^\s\"]+)/) {
-        $file = $1;
-        $file =~ s!\\!/!g;
-        push @source, $file
+        my $file = $1; $file =~ s!\\!/!g;
+        ++ $source{$file}
           unless ($file eq 'CMakeLists.txt' || $start != 1);
-        push @hsource, $file
+        ++ $hsource{$file}
           unless ($file eq 'CMakeLists.txt' || $start != 2);
       }
     }
     close FILE;
   }
-  if ($dir =~ m!/mul/mvl2$!) {
-    push @source, 'mvl2_video_to_avi_linux.cxx', 'mvl2_video_from_avi_linux.cxx';
-    push @hsource, 'mvl2_video_to_avi_linux.h', 'mvl2_video_from_avi_linux.h';
+  if ($dir =~ m!/mul/mvl2$ !x) {
+    ++ $source{'mvl2_video_to_avi_linux.cxx'}; ++ $source{'mvl2_video_from_avi_linux.cxx'};
+    ++ $hsource{'mvl2_video_to_avi_linux.h'}; ++ $hsource{'mvl2_video_from_avi_linux.h'};
   }
   $f =~ s/^ //;
 
-  $makef = $dir . '/makefile';
-  @sources = ();
-  @tests = ();
-  @subdirs = ();
-  $testmain = '';
+  my $makef = $dir . '/makefile';
+  my %sources = ();
+  my %tests = ();
+  my %subdirs = ();
+  my %subdirs2 = ();
+  my %hsources = ();
+  my $testmain = '';
   if (open(MAKEFILE, $makef)) {
-    @hsources = ();
-    @aux_sources = ('Templates');
+    my @aux_sources = ('Templates');
     while (<MAKEFILE>)
     {
       s/\$\(wildcard (.*)\)/$1/g; s/\#.*//; s/\$\(.+?\)//s;
       if (m/^\s*TESTMAIN\s*\:?\=\s*(\S+)/) {
-        @sources = ($1);
         $testmain = $1;
       }
       while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/$1=/) {
-        @tests = ($2) if ($1 eq 'TESTS');
-        $file = $2;
+        ++ $tests{$2} if ($1 eq 'TESTS');
+        my $file = $2;
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
-        @sources = ($file);
-        push @hsources, $file if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/ && -f "$dir/$file");
+        ++ $sources{$file};
+        ++ $hsources{$file} if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/ && -f "$dir/$file");
       }
       while (s/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/$1=/) {
-        $file = $2;
+        my $file = $2;
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
-        push @hsources, $file;
-        push @hsources, $file if ($file =~ s/\.txx$/.h/ && -f "$dir/$file");
+        ++ $hsources{$file};
+        ++ $hsources{$file} if ($file =~ s/\.txx$/.h/ && -f "$dir/$file" && ! exists $hsources{$file});
       }
       while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/$1+=/)
       {
-        $file = $2;
-        push @tests, $file if ($1 eq 'TESTS');
+        my $file = $2;
+        ++ $tests{$file} if ($1 eq 'TESTS');
         if ($file eq '${MOCSOURCES}') {
-          @tmp_list = @sources;
-          push @sources, grep { s/\.cxx$/_mocced.cxx/ && -f "$dir/$_" } @tmp_list;
+###--     foreach (grep { s/\.cxx$/_mocced.cxx/ && -f "$dir/$_" } keys %sources) { ++ $sources{$_}; }
         }
         else {
           print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
-          push @sources, $file;
+          ++ $sources{$file};
           if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/) {
-            push @hsources, $file if (-f "$dir/$file" && grep(m/^$file$/, @hsources) == 0);
-          } # I.e.: .h files which are not explicitly present in makefile are added only once.
+            ++ $hsources{$file} if (-f "$dir/$file" && ! exists $hsources{$file});
+            # I.e.: add .h files which are not explicitly present in makefile
+          }
         }
       }
-      while (s/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/$1+=/) {
-        $file = $2;
+      while (s/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/$1+=/)
+      {
+        my $file = $2;
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
-        push @hsources, $file;
+        ++ $hsources{$file};
         if ($file =~ s/\.txx$/.h/) {
-          push @hsources, $file if (-f "$dir/$file" && grep(m/^$file$/, @hsources) == 0);
-        } # I.e.: .h files which are not explicitly present in makefile are added only once.
+          ++ $hsources{$file} if (-f "$dir/$file" && ! exists $hsources{$file});
+          # I.e.: add .h files which are not explicitly present in makefile
+        }
       }
-      @subdirs = split(/\s+/,$1) if (m/^\s*SUBDIRS\s*\:?\=\s*(.+)/);
-      push @subdirs, split(/\s+/,$1) if (m/^\s*SUBDIRS\s*\+\=\s*(.+)/);
+      %subdirs = () if (m/^\s*SUBDIRS\s*\:?\=/);
+      ++ $subdirs{$2} while (s/^\s*(SUBDIRS)\s*\+?\:?\=\s*(\S+)/$1+=/);
       @aux_sources = split(/\s+/,$1) if (m/^\s*AUX_SOURCE_DIRECTORY\s*\:?\=\s*(.+)/);
       push @aux_sources, split(/\s+/,$1) if (m/^\s*AUX_SOURCE_DIRECTORY\s*\+\=\s*(.+)/);
     }
     close MAKEFILE;
     # add Templates to sources, if asked
-    foreach $subd (@aux_sources) {
-      if (opendir(TMPL,"$dir/$subd")) {
-        push @sources, map { "$subd/$_" } grep {$_ ne '.' && $_ ne '..' && $_ ne 'CVS' && $_ ne '.NoDartCoverage'} readdir(TMPL);
+    foreach my $subd (@aux_sources) {
+      if (opendir TMPL,"$dir/$subd") {
+        foreach (map { "$subd/$_" } grep {! m/^(\..*|CVS)$/} readdir(TMPL)) { ++ $sources{$_}; }
         closedir(TMPL);
       }
     }
   }
 
-  $cmakef = $dir . '/CMakeLists.txt';
-  $cmakefile = '';
-  @source_files = ();
-  @test_files = ();
-  @hsource_files = ();
-  @subdirs2 = ();
+  my $cmakef = $dir . '/CMakeLists.txt';
+  my $cmakefile = '';
+  my %source_files = ();
+  my %test_files = ();
+  my %hsource_files = ();
+  my %names = qw(MAKECOMMAND make CMAKE_CURRENT_SOURCE_DIR $dir DIRECTSHOW_ESF_INCLUDE_DIR _);
   if (open(CMAKEFILE, $cmakef)) {
     $cmakefile = join '',<CMAKEFILE>;
     close CMAKEFILE;
-    %names = qw(MAKECOMMAND make CMAKE_CURRENT_SOURCE_DIR $dir);
   }
-  $moc_files = '';
   # "Exceptions": special cases, to avoid unnecessary warnings:
-  $cmakefile =~ s/\n#(ADD_LIBRARY\(bsta_io\s+\$\{bsta_io_sources\}\))/\n$1/;
+  $cmakefile =~ s/\#\s*(ADD_LIBRARY\(\s*bsta_io\s+\$\{)/$1/;            # i.e.: remove "#" in bsta/io
+  $cmakefile =~ s/\#\s*(fax3sm_winnt\.c)/$1/;                           # i.e.: remove "#" in v3p/tiff
+  $cmakefile =~ s/\#\s*(ADD_TEST\s*\(\s*vil1_test_save_load_image)/$1/; # i.e.: remove "#" in vil1/tests
+  $cmakefile =~ s/(ADD_LIBRARY\(bmdl_batch\s+)MODULE\s+/$1/;            # i.e.: remove "MODULE" in bmdl_batch
 
   # General manipulations of the CMakeLists.txt content:
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
   $cmakefile =~ s!\$\{EXECUTABLE_OUTPUT_PATH\}/!!g;
+  my $moc_files = '';
   if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+(.+?)\)//s) {
     $moc_files = $2;
-    push @source_files, map {s/\.h$/_mocced.cxx/; $_} split(/\s+/, $3);
+###-- foreach (map {s/\.h$/_mocced.cxx/; $_} split(/\s+/, $3)) { ++ $source_files{$_}; }
   }
   $cmakefile =~ s/\$\{$moc_files\}//g;
   while ($cmakefile =~ s/\bSET\s*\(\s*(\S+)\s*(.*?)\)//s)
   {
-    $n = $1; # $n is typically of the form ..._sources or ..._SOURCES
-    $l = $2; # the list of files constituting the definition of $n.
-    next if $n =~ m/_(PREFIX|FLAGS|LIBRARIES|PATH|SOURCE_DIR|INCLUDE_DIR)$/;
+    my $n = $1; # $n is typically of the form ..._sources or ..._SOURCES
+    my $l = $2; # the list of files constituting the definition of $n.
+    next if $n =~ m/_(PREFIX|FLAGS|LIBRARIES|PATH|SOURCE_DIR|BINARY_DIR|INCLUDE_DIR)$/;
     next if $n =~ m/^[a-z0-9]+_test_include_sources$/;
     next if $n =~ m/^\${/;
     foreach ($l =~ m/\$\{(.*?)\}/g) { print STDOUT "$_ is an undefined variable in $cmakef\n" unless (defined $names{$_}); }
@@ -296,34 +253,31 @@ foreach $dir (@DIRS)
       my $a = $1;
       my $b = $names{$a};
       unless (defined $b) { $b=''; print STDERR "$a is an undefined variable in $cmakef\n"; }
-      if ($a eq 'QT_SRCS_DIR' && $b =~ m!impl/qt$!) { my $c = "${b}4"; $l =~ s/\$\{$a\}(\S*)/$b$1 $c$1/g; }
+      if ($a eq 'QT_SRCS_DIR' && $b =~ m!impl/qt$ !x) { my $c = "${b}4"; $l =~ s/\$\{$a\}(\S*)/$b$1 $c$1/g; }
       else { $l =~ s/\$\{$a\}/$b/g; }
     }
     # %names is a global hash list, first filled in here
     $names{$n} = $l;
-#   $cmakefile =~ s/\$\{$n\}/$l/g;
   }
   while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+(\S+)\s*\)//s)
   {
-    $g = $1; $n = $2;
-    if (opendir(TMPL,"$dir/$g")) {
-      $names{$n} .= join '',map { " $g/$_" } grep {$_ ne '.' && $_ ne '..' && $_ ne 'CVS' && $_ ne '.NoDartCoverage'} readdir(TMPL);
+    my ($g, $n) = ($1, $2);
+    if (opendir TMPL,"$dir/$g") {
+      $names{$n} .= join '',map { " $g/$_" } grep {! m/^(\..*|CVS)$/} readdir(TMPL);
       closedir(TMPL);
     }
   }
   # now replace all variables by their content:
-  foreach $n (keys %names) {
-    $cmakefile =~ s/\$\{$n\}/$names{$n}/g;
-  }
+  foreach my $n (keys %names) { $cmakefile =~ s/\$\{$n\}/$names{$n}/g; }
 
   while ($cmakefile =~ s/\bGENERATE_TEST_DRIVER\s*\(\s*\S+\s+(\S+)(.*?)\)//s)
   {
-    $n = $1;
+    my $n = $1;
+    # move "TEST" entries from %source_files to %test_files:
     $cmakefile .= "ADD_EXECUTABLE(x test_driver.cxx $names{$n})\n";
-    foreach (split /\s+/, $names{$n}) {
-      $g = $_;
-      $cmakefile .= "ADD_TEST(x x $_)\n" if s/\.cxx$//;
-      @source_files = grep { !/^$g$/ } @source_files;
+    foreach my $g (split /\s+/, $names{$n}) {
+      $cmakefile .= "ADD_TEST(x x $g)\n" if ($g =~ s/\.cxx$//);
+      foreach (grep { m/^$g$/ } keys %source_files) { delete $source_files{$_}; }
     }
   }
   while ($cmakefile =~ s/\bGENERATE_TEST_INCLUDE\s*\(.*?\)//s)
@@ -336,37 +290,39 @@ foreach $dir (@DIRS)
   while ($cmakefile =~ s/\bIF\s*\(\s*(NOT.*?)\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
   while ($cmakefile =~ s/\bIF\s*\(\s*(.*?)\).*?ELSE\s*\(\s*\1\s*\)(.*?)ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
 
+  # remove "WIN32" or "WIN32 MACOSX_BUNDLE" options from ADD_EXECUTABLE()":
+  $cmakefile =~ s/\b(ADD_EXECUTABLE\s*\(\s*\S+)\s+WIN32\s+(MACOSX_BUNDLE\s+)?([^)]+\))/$1 $3/g;
+
   while ($cmakefile =~ s/\bADD_LIBRARY\s*\(\s*\S+\s+(.*?)\)//s)
   {
-    $g = $1; # list of file names
+    my $g = $1; # list of file names
     $g =~ s/^SHARED\s+//; # ignore optional keyword "SHARED", if present
     foreach (split /\s+/, $g) {
       if (m/^\s*$/) { next; }
-      elsif (-f "$dir/$_" && m/\.(h(\.in)?|txx)$/) { push @hsource_files, $_; }
-      elsif (-f "$dir/$_")                         { push @source_files, $_; }
-      elsif (-f "$dir/$_.cxx") { printf "Should replace $_ by $_.cxx in $cmakef\n"; push @source_files, "$_.cxx"; }
-      elsif (-f "$dir/$_.c")   { printf "Should replace $_ by $_.c in $cmakef\n"; push @source_files, "$_.c"; }
-      elsif (-f "$dir/$_.cc")  { printf "Should replace $_ by $_.cc in $cmakef\n"; push @source_files, "$_.cc"; }
-      elsif (-f "$dir/$_.C")   { printf "Should replace $_ by $_.C in $cmakef\n"; push @source_files, "$_.C"; }
-      elsif (-f "$dir/$_.cpp") { printf "Should replace $_ by $_.cpp in $cmakef\n"; push @source_files, "$_.cpp"; }
+      elsif (-f "$dir/$_" && m/\.(h(\.in)?|txx)$/) { ++ $hsource_files{$_}; }
+      elsif (-f "$dir/$_")                         { ++ $source_files{$_}; }
+      elsif (-f "$dir/$_.cxx") { printf "Should replace $_ by $_.cxx in $cmakef\n"; ++ $source_files{"$_.cxx"}; }
+      elsif (-f "$dir/$_.c")   { printf "Should replace $_ by $_.c in $cmakef\n";   ++ $source_files{"$_.c"}; }
+      elsif (-f "$dir/$_.cc")  { printf "Should replace $_ by $_.cc in $cmakef\n";  ++ $source_files{"$_.cc"}; }
+      elsif (-f "$dir/$_.C")   { printf "Should replace $_ by $_.C in $cmakef\n";   ++ $source_files{"$_.C"}; }
+      elsif (-f "$dir/$_.cpp") { printf "Should replace $_ by $_.cpp in $cmakef\n"; ++ $source_files{"$_.cpp"}; }
       else                     { printf "No source file $_.* found in $dir\n"; }
-      push @hsource_files, $1 if (m/^(.*\.h)\.in$/ && -f "$dir/$1"); # generated .h file
+      ++ $hsource_files{$1} if (m/^(.*\.h)\.in$/ && -f "$dir/$1" && ! exists $hsource_files{$1}); # generated .h file
     }
   }
   while ($cmakefile =~ s/\bINSTALL_NOBASE_HEADER_FILES\s*\(\s*\S+\s+(.*?)\)//s)
   {
-    $g = $1; # list of file names
-    foreach $x (split /\s+/, $g) {
-      if ($x =~ m/^\s*$/) { next; }
-      elsif (! -f "$dir/$x") { print STDOUT "file $x listed in INSTALL_NOBASE_HEADER_FILES does not exist\n"; }
-      elsif ($x =~ m/\.(h|txx)$/) { push @hsource_files, $x unless grep { $_ eq $x } @hsource_files; }
+    my $g = $1; # list of file names
+    foreach my $x (grep {! m/^\s*$/} split /\s+/, $g) {
+      if (! -f "$dir/$x") { print STDOUT "file $x listed in INSTALL_NOBASE_HEADER_FILES does not exist\n"; }
+      elsif ($x =~ m/\.(h|txx|in)$/) { ++ $hsource_files{$x} unless (exists $hsource_files{$x}); }
     }
   }
   while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//)
   {
-    $name = $1; $_ = $2; s/\$\{(\S+)\}/$1/g;
+    my $name = $1; $_ = $2; s/\$\{(\S+)\}/$1/g;
     if (m/^\s*\S+_sources$/) {
-      $names{$name} = $source_files[0] if (defined($source_files[0]));
+      $names{$name} = join '',keys %source_files if (%source_files);
       next;
     }
     $names{$name} = $_;
@@ -374,261 +330,238 @@ foreach $dir (@DIRS)
     foreach (split /\s+/) {
       next if ($_ eq '');
       if (m/_sources$/) {
-        $names{$name} = $source_files[0] if (defined($source_files[0]));
+        $names{$name} = join '',keys %source_files if (%source_files);
         next;
       }
-      if (m/\.(h(\.in)?|txx)$/) { push @hsource_files, $_; }
-      elsif (-f "$dir/$_")      { push @source_files, $_; }
-      elsif (-f "$dir/$_.cxx")  { printf "Should replace $_ by $_.cxx in $cmakef\n"; push @source_files, "$_.cxx"; }
-      elsif (-f "$dir/$_.c")    { printf "Should replace $_ by $_.c in $cmakef\n"; push @source_files, "$_.c"; }
-      elsif (-f "$dir/$_.cc")   { printf "Should replace $_ by $_.cc in $cmakef\n"; push @source_files, "$_.cc"; }
-      elsif (-f "$dir/$_.C")    { printf "Should replace $_ by $_.C in $cmakef\n"; push @source_files, "$_.C"; }
-      elsif (-f "$dir/$_.cpp")  { printf "Should replace $_ by $_.cpp in $cmakef\n"; push @source_files, "$_.cpp"; }
-      else                      { printf "No source file $_.* found in $dir\n" unless ($_ eq 'WIN32'); }
-      push @hsource_files, $1 if (m/^(.*\.h)\.in$/ && -f "$dir/$1");
+      if (m/\.(h(\.in)?|txx)$/) { ++ $hsource_files{$_}; }
+      elsif (-f "$dir/$_")      { ++ $source_files{$_}; }
+      elsif (-f "$dir/$_.cxx")  { printf "Should replace $_ by $_.cxx in $cmakef\n"; ++ $source_files{"$_.cxx"}; }
+      elsif (-f "$dir/$_.c")    { printf "Should replace $_ by $_.c in $cmakef\n";   ++ $source_files{"$_.c"}; }
+      elsif (-f "$dir/$_.cc")   { printf "Should replace $_ by $_.cc in $cmakef\n";  ++ $source_files{"$_.cc"}; }
+      elsif (-f "$dir/$_.C")    { printf "Should replace $_ by $_.C in $cmakef\n";   ++ $source_files{"$_.C"}; }
+      elsif (-f "$dir/$_.cpp")  { printf "Should replace $_ by $_.cpp in $cmakef\n"; ++ $source_files{"$_.cpp"}; }
+      else                      { printf "No source file $_.* found in $dir\n"; }
+      ++ $hsource_files{$1} if (m/^(.*\.h)\.in$/ && -f "$dir/$1");
     }
   }
   while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*(([^\s()]+)?)((\s+[^()]+)?)\s*\)//s)
   {
-    $name = $1; $tstname = $2;
+    my $name = $1; my $tstname = $2;
     if (! exists ($names{$name}) ) {
       print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
       next;
     }
-    @tmpl_list = grep { m/\.(cxx|c|cc|C|cpp)$/ } split /\s+/, $names{$name};
-    push @test_files, @tmpl_list unless ($testmain);
-    push @test_files, "$tstname.cxx" if ($testmain && $tstname ne '' && -f "$dir/$tstname.cxx");
+    unless ($testmain) {
+      foreach (grep { m/\.(cxx|c|cc|C|cpp)$/ } split /\s+/, $names{$name}) { ++ $test_files{$_}; }
+    }
+    else {
+      ++ $test_files{"$tstname.cxx"} if ($tstname ne '' && -f "$dir/$tstname.cxx");
+    }
   }
-  while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*(.+?)\)//s)
-  {
-    @tmpl_list = split /\s+/, $1;
-    push @subdirs2, @tmpl_list;
-  }
+  ++ $subdirs2{$1}
+    while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^\s\)]+)/SUBDIRS(/);
 
   next unless ($f || -f $makef || -f $cmakef);
   $f = "$dir/*.dsp" unless ($f);
   print STDOUT "File $makef does not exist\n" unless (-f $makef);
-  print STDOUT "File $cmakef does not exist\n" unless (-f $cmakef || $cmakef =~ m!/doc/book/CMakeLists\.txt$!);
+  print STDOUT "File $cmakef does not exist\n" unless (-f $cmakef || $cmakef =~ m!/doc/book/CMakeLists\.txt$ !x);
 
-  @source = sort(@source); push @source, '~END';
-  @sources = sort(@sources); push @sources, '~END';
-  @source_files = sort(@source_files); push @source_files, '~END';
-  @hsource = sort(@hsource); push @hsource, '~END';
-  @hsources = sort(@hsources); push @hsources, '~END';
-  @hsource_files = sort(@hsource_files); push @hsource_files, '~END';
-  @hfiles = sort(@hfiles); push @hfiles, '~END';
-  @tests = sort(@tests); push @tests, '~END';
-  @test_files = sort(@test_files); push @test_files, '~END';
-  next if ("@source" eq "@sources" && "@source" eq "@source_files" && "@tests" eq "@test_files"
-        && "@hsource" eq "@hsources" && "@hsource" eq "@hsource_files" && "@hsource" eq "@hfiles");
+# ======= Here starts the comparison of the file lists ===========
 
-  $source=""; $sources=""; $source_files="";
-  # Note that shift removes the *first* element from the list, so we run through
-  # the lists in alphabetical order.
-  # Hence '~END' is popped off last, and is also alphabetically last.
-
-  # compare file lists
-  while (@source || @sources || @source_files)
+  # === compare file lists (%source, %sources, %source_files) ===
+  foreach my $s (keys %source_files)
   {
-    unless ($source eq '~END') {
-      $s = shift @source;
-      while ($s eq $source) {
-        print STDOUT "multiple occurrence of $s in $f\n"
-          unless ($s =~ m!^Templates/! || $s =~ m/^test_driver\.cxx$/);
-        $s = shift @source;
-      }
-      $source = $s;
+    if ($source_files{$s} > 1) {
+      print STDOUT "multiple occurrence of $s in $cmakef\n"
+        unless ($s eq 'impl/glut/menu_hack_none.cxx' || $s eq 'my_pyramid.cxx');
     }
-    unless ($sources eq '~END') {
-      $s = shift @sources;
-      while ($s eq $sources) {
-        print STDOUT "multiple occurrence of $s in $makef\n";
-        $s = shift @sources;
-      }
-      $sources = $s;
-    }
-    unless ($source_files eq '~END') {
-      $s = shift @source_files;
-      while ($s eq $source_files) {
-        print STDOUT "multiple occurrence of $s in $cmakef\n"
-          unless ($s eq 'my_pyramid.cxx' || $s eq 'impl/glut/menu_hack_none.cxx');
-        $s = shift @source_files;
-      }
-      $source_files = $s;
-    }
-    last if ($source eq '~END' && $sources eq '~END' && $source_files eq '~END');
-    next if ($source eq $sources && $source eq $source_files);
-    while ($source lt $sources) {
-      if (-f "$dir/$source") { print STDOUT "SOURCES += $source\tis missing from $makef\n"; }
-      else                   { print STDOUT "SOURCE=.\\$source\tmust be removed from $f\n"; }
-      $source = shift @source;
-    }
-    last if ($source eq '~END' && $sources eq '~END' && $source_files eq '~END');
-    next if ($source eq $sources && $source eq $source_files);
-    while ($source_files lt $sources) {
-      if (-f "$dir/$source_files") { print STDOUT "SOURCES += $source_files\tis missing from $makef\n"; }
-      elsif ($source_files !~ m/_mocced\.cxx$/) { $source_files =~ s/\.(cxx|c|C|cpp)$//; print STDOUT "SOURCES($source_files)\tmust be removed from $cmakef\n"; }
-      $source_files = shift @source_files;
-    }
-    last if ($source eq '~END' && $sources eq '~END' && $source_files eq '~END');
-    next if ($source eq $sources && $source eq $source_files);
-    while ($sources lt $source || $sources lt $source_files) {
-      if (-f "$dir/$sources") {
-        if ($sources lt $source) {
-          print STDOUT "SOURCE=.\\$sources\tis missing from $f\n"
-            unless ($sources eq 'tif_unix.c' ||
-                    $sources eq 'menu_hack_X11.cxx' ||
-                    $sources eq 'internals/vgui_accelerate_x11.cxx');
-        }
-        print STDOUT " $sources\tis missing from SOURCE_FILES in $cmakef\n"
-          if ($sources lt $source_files && $sources !~ m/_mocced\.cxx$/);
-      } else {
-        print STDOUT "SOURCES += $sources\tmust be removed from $makef\n"
-          unless ($sources eq '${MOCSOURCES}');
-      }
-      $source       = shift @source       if ($sources eq $source);
-      $source_files = shift @source_files if ($sources eq $source_files);
-      $sources      = shift @sources;
-    }
-  }
-
-  # compare "tests" files in makefile and CMakeLists.txt
-  $tests=""; $test_files="";
-
-  while (@tests || @test_files)
-  {
-    unless ($tests eq '~END') {
-      $s = shift @tests;
-      while ($s eq $tests) {
-        print STDOUT "multiple occurrence of TESTS += $s in $makef\n";
-        $s = shift @tests;
-      }
-      $tests = $s;
-    }
-    unless ($test_files eq '~END') {
-      $s = ''; $s = shift @test_files while ($s eq '');
-      while ($s eq $test_files) {
-        print STDOUT "multiple occurrence of ADD_TEST($s) in $cmakef\n";
-        $s = shift @test_files;
-      }
-      $test_files = $s;
-    }
-    last if ($tests eq '~END' && $test_files eq '~END');
-    next if ($tests eq $test_files);
-    while ($test_files lt $tests)
+    delete $source_files{$s};
+    unless (exists $sources{$s})
     {
-      if (-f "$dir/$test_files") {
-        print STDOUT "TESTS += $test_files\tis missing from $makef\n"
-          unless ($test_files eq 'my_pyramid.cxx' || $test_files eq 'my_top_level.cxx');
-      } else {
-        print STDOUT "ADD_TEST($test_files)\tmust be removed from $cmakef\n";
-      }
-      $test_files = shift @test_files;
+      if (-f "$dir/$s") { print STDOUT "SOURCES += $s\tis missing from $makef\n"; }
+      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
     }
-    last if ($tests eq '~END' && $test_files eq '~END');
-    next if ($tests eq $test_files);
-    while ($tests lt $test_files) {
-      if (-f "$dir/$tests") { print STDOUT "ADD_TEST($tests)\tis missing from $cmakef\n"; }
-      else                  { print STDOUT "TESTS += $tests\tmust be removed from $makef\n"; }
-      $test_files = shift @test_files if ($tests eq $test_files);
-      $tests      = shift @tests;
+    elsif ($sources{$s} > 1) {
+      print STDOUT "multiple occurrence of SOURCES += $s in $makef\n";
     }
+    delete $sources{$s};
+    unless (exists $source{$s})
+    {
+      if (-f "$dir/$s") { print STDOUT "SOURCE=.\\$s\tis missing from $f\n"
+                            unless ($s eq 'tif_unix.c' ||
+                                    $s eq 'menu_hack_X11.cxx' ||
+                                    $s eq 'internals/vgui_accelerate_x11.cxx'); }
+      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+###--                       unless ($s =~ m/_mocced\.cxx$/); }
+    }
+    elsif ($source{$s} > 1) {
+      print STDOUT "multiple occurrence of $s in $f\n";
+    }
+    delete $source{$s};
   }
+  # at this point, %source_files has been emptied.
 
-  # compare header file lists
-  $hsource=""; $hsources=""; $hsource_files=""; $hfiles="";
-
-  while (@hsource || @hsources || @hsource_files || @hfiles)
+  foreach my $s (keys %sources) # should be empty by now!
   {
-    unless ($hsource eq '~END') {
-      $s = shift @hsource;
-      while ($s eq $hsource) {
-        print STDOUT "multiple occurrence of $s in $f\n"
-          unless ($s =~ m!^Templates/! || $s =~ m/^test_driver\.h$/);
-        $s = shift @hsource;
-      }
-      $hsource = $s;
+    if ($sources{$s} > 1) {
+      print STDOUT "multiple occurrence of SOURCES += $s in $makef\n";
     }
-    unless ($hsources eq '~END') {
-      $s = shift @hsources;
-      while ($s eq $hsources) {
-        print STDOUT "multiple occurrence of $s in $makef\n";
-        $s = shift @hsources;
-      }
-      $hsources = $s;
-    }
-    unless ($hsource_files eq '~END') {
-      $s = shift @hsource_files;
-      while ($s eq $hsource_files) {
-        print STDOUT "multiple occurrence of $s in $cmakef\n"
-          unless ($s =~ m/\b(Fl_(blender|movie|twowin)_ui|vidl_avicodec|my_pyramid)\.h$/ ||
-                  $s eq 'my_pyramid_functions.txx');
-        $s = shift @hsource_files;
-      }
-      $hsource_files = $s;
-    }
-    unless ($hfiles eq '~END') {
-      $hfiles = shift @hfiles;
-    }
-    last if ($hsource eq '~END' && $hsources eq '~END' && $hsource_files eq '~END' && $hfiles eq '~END');
-    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
-    while ($hsource lt $hsources) {
-      if (-f "$dir/$hsource") { print STDOUT "MANPAGE_SOURCES += $hsource\tis missing from $makef\n"; }
-      else                    { print STDOUT "SOURCE=.\\$hsource\tmust be removed from $f\n"; }
-      $hsource = shift @hsource;
-    }
-    last if ($hsource eq '~END' && $hsources eq '~END' && $hsource_files eq '~END' && $hfiles eq '~END');
-    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
-    while ($hsource_files lt $hsources) {
-      if (-f "$dir/$hsource_files") { print STDOUT "MANPAGE_SOURCES += $hsource_files\tis missing from $makef\n"; }
-      else                          { print STDOUT "SOURCES($hsource_files)\tmust be removed from $cmakef\n"; }
-      $hsource_files = shift @hsource_files;
-    }
-    last if ($hsource eq '~END' && $hsources eq '~END' && $hsource_files eq '~END' && $hfiles eq '~END');
-    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
-    while ($hfiles lt $hsources) {
-      print STDOUT "MANPAGE_SOURCES += $hfiles\tis missing from $makef\n";
-      $hfiles = shift @hfiles;
-    }
-    last if ($hsource eq '~END' && $hsources eq '~END' && $hsource_files eq '~END' && $hfiles eq '~END');
-    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
-    while ($hsources lt $hsource || $hsources lt $hsource_files || $hsources lt $hfiles) {
-      if (-f "$dir/$hsources") {
-        print STDOUT "SOURCE=.\\$hsources\tis missing from $f (header files)\n"
-          if ($hsources lt $hsource);
-        print STDOUT " $hsources\tis missing from SOURCE_FILES in $cmakef\n"
-          if ($hsources lt $hsource_files);
-      } else {
-        print STDOUT "MANPAGE_SOURCES += $hsources\tmust be removed from $makef\n";
-      }
-      $hsource       = shift @hsource       if ($hsources eq $hsource);
-      $hsource_files = shift @hsource_files if ($hsources eq $hsource_files);
-      $hfiles        = shift @hfiles        if ($hsources eq $hfiles);
-      $hsources      = shift @hsources;
-    }
+    delete $sources{$s};
+    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef\n"; }
+###--                          unless ($s =~ m/_mocced\.cxx$/);
+    else                   { print STDOUT "SOURCES += $s\tmust be removed from $makef\n"; }
+###--                          unless ($s eq '${MOCSOURCES}');
   }
+  # at this point, %sources has been emptied.
 
-  # compare SUBDIRS lists
-  @subdirs  = sort(@subdirs);  push @subdirs, '~END';
-  @subdirs2 = sort(@subdirs2); push @subdirs2, '~END';
-  $subdirs=''; $subdirs2='';
-  while (@subdirs || @subdirs2)
+  foreach my $s (keys %source) # should be empty by now!
   {
-    $subdirs  = shift @subdirs  unless ($subdirs eq '~END');
-    $subdirs2 = shift @subdirs2 unless ($subdirs2 eq '~END');
-    last if ($subdirs eq '~END' && $subdirs2 eq '~END');
-    next if ($subdirs eq $subdirs2);
-    while ($subdirs lt $subdirs2) {
-      if (-d "$dir/$subdirs") { print STDOUT "SUBDIRS($subdirs)\tis missing from $cmakef\n"; }
-      else                    { print STDOUT "SUBDIRS += $subdirs\tmust be removed from $makef\n"; }
-      $subdirs = shift @subdirs;
+    if ($source{$s} > 1) {
+      print STDOUT "multiple occurrence of SOURCE=.\\$s in $f\n";
     }
-    last if ($subdirs eq '~END' && $subdirs2 eq '~END');
-    next if ($subdirs eq $subdirs2);
-    while ($subdirs2 lt $subdirs) {
-      if (-d "$dir/$subdirs2") { print STDOUT "SUBDIRS += $subdirs2\tis missing from $makef\n"; }
-      else                     { print STDOUT "SUBDIRS($subdirs2)\tmust be removed from $cmakef\n"; }
-      $subdirs2 = shift @subdirs2;
-    }
+    delete $source{$s};
+    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef and from $makef\n"; }
+    else              { print STDOUT "SOURCE=.\\$s\tmust be removed from $f\n"; }
   }
+  # at this point, %source has been emptied.
+
+  # === compare "tests" file lists (%tests, %test_files) ===
+  foreach my $s (keys %test_files)
+  {
+    if ($test_files{$s} > 1) {
+      print STDOUT "multiple occurrence of ADD_TEST($s) in $cmakef\n";
+    }
+    delete $test_files{$s};
+    unless (exists $tests{$s})
+    {
+      if (-f "$dir/$s") { print STDOUT "TESTS += $s\tis missing from $makef\n"; }
+      else              { print STDOUT "ADD_TEST($s)\tmust be removed from $cmakef\n"; }
+    }
+    elsif ($tests{$s} > 1) {
+      print STDOUT "multiple occurrence of TESTS += $s in $makef\n";
+    }
+    delete $tests{$s};
+  }
+  # at this point, %test_files has been emptied.
+
+  foreach my $s (keys %tests) # should be empty by now!
+  {
+    if ($tests{$s} > 1) {
+      print STDOUT "multiple occurrence of TESTS += $s in $makef\n";
+    }
+    delete $tests{$s};
+    if (-f "$dir/$s") { print STDOUT "ADD_TEST($s)\tis missing from $cmakef\n"; }
+    else              { print STDOUT "TESTS += $s\tmust be removed from $makef\n"; }
+  }
+  # at this point, %tests has been emptied.
+
+  # === compare header file lists (%hsource, %hsources, %hsource_files, %hfiles) ===
+  foreach my $s (keys %hsource_files)
+  {
+    if ($hsource_files{$s} > 1) {
+      print STDOUT "multiple occurrence of $s in $cmakef\n"
+        unless ($s eq 'vidl_avicodec.h' || $s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/
+             || $s eq 'my_pyramid.h' || $s eq 'my_pyramid_functions.txx');
+    }
+    delete $hsource_files{$s};
+    unless (exists $hsources{$s})
+    {
+      if (-f "$dir/$s") { print STDOUT "MANPAGE_SOURCES += $s\tis missing from $makef\n"; }
+      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+    }
+    elsif ($hsources{$s} > 1) {
+      print STDOUT "multiple occurrence of MANPAGE_SOURCES += $s in $makef\n";
+    }
+    delete $hsources{$s};
+    unless (exists $hfiles{$s})
+    {
+      if (-f "$dir/$s") { print STDOUT "$s\tis missing from filelist in $0 for $dir\n"; }
+      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+    }
+    delete $hfiles{$s};
+    unless (exists $hsource{$s})
+    {
+      if (-f "$dir/$s") { print STDOUT "SOURCE=.\\$s\tis missing from $f (header files)\n"; }
+      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+    }
+    elsif ($hsource{$s} > 1) {
+      print STDOUT "multiple occurrence of $s in $f\n";
+    }
+    delete $hsource{$s};
+  }
+  # at this point, %hsource_files has been emptied.
+
+  foreach my $s (keys %hfiles) # should be empty by now!
+  {
+    delete $hfiles{$s};
+    unless (exists $hsources{$s})
+    {
+      print STDOUT "MANPAGE_SOURCES += $s\tis missing from $makef\n";
+    }
+    elsif ($hsources{$s} > 1) {
+      print STDOUT "multiple occurrence of MANPAGE_SOURCES += $s in $makef\n";
+    }
+    delete $hsources{$s};
+    unless (exists $hsource{$s})
+    {
+      print STDOUT "SOURCE=.\\$s\tis missing from $f (header files)\n";
+    }
+    elsif ($hsource{$s} > 1) {
+      print STDOUT "multiple occurrence of SOURCE=.\\$s in $f\n";
+    }
+    delete $hsource{$s};
+  }
+  # at this point, %hfiles has been emptied.
+
+  foreach my $s (keys %hsources) # should be empty by now!
+  {
+    if ($hsources{$s} > 1) {
+      print STDOUT "multiple occurrence of MANPAGE_SOURCES += $s in $makef\n";
+    }
+    delete $hsources{$s};
+    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef\n"; }
+    else              { print STDOUT "MANPAGE_SOURCES += $s\tmust be removed from $makef\n"; }
+  }
+  # at this point, %hsources has been emptied.
+
+  foreach my $s (keys %hsource) # should be empty by now!
+  {
+    if ($hsource{$s} > 1) {
+      print STDOUT "multiple occurrence of SOURCE=.\\$s in $f\n";
+    }
+    delete $hsource{$s};
+    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef and from $makef\n"; }
+    else              { print STDOUT "SOURCE=.\\$s\tmust be removed from $f\n"; }
+  }
+  # at this point, %hsource has been emptied.
+
+  # === compare SUBDIRS lists (%subdirs, %subdirs2) ===
+  foreach my $s (keys %subdirs2)
+  {
+    if ($subdirs2{$s} > 1) {
+      print STDOUT "multiple occurrence of SUBDIRS($s) in $cmakef\n";
+    }
+    delete $subdirs2{$s};
+    unless (exists $subdirs{$s})
+    {
+      if (-d "$dir/$s") { print STDOUT "SUBDIRS += $s\tis missing from $makef\n"; }
+      else              { print STDOUT "SUBDIRS($s)\tmust be removed from $cmakef\n"; }
+    }
+    elsif ($subdirs{$s} > 1) {
+      print STDOUT "multiple occurrence of SUBDIRS += $s in $makef\n";
+    }
+    delete $subdirs{$s};
+  }
+  # at this point, %subdirs2 has been emptied.
+
+  foreach my $s (keys %subdirs) # should be empty by now!
+  {
+    if ($subdirs{$s} > 1) {
+      print STDOUT "multiple occurrence of SUBDIRS += $s in $makef\n";
+    }
+    delete $subdirs{$s};
+    if (-d "$dir/$s") { print STDOUT "SUBDIRS($s)\tis missing from $cmakef\n"; }
+    else              { print STDOUT "SUBDIRS += $s\tmust be removed from $makef\n"; }
+  }
+  # at this point, %subdirs has been emptied.
 }
