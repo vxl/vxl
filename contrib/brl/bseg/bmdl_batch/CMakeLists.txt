@@ -16,7 +16,7 @@ IF( PYTHON_FOUND )
         INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
         INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
         INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-
+        
         INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
         INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
         INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
@@ -26,9 +26,8 @@ IF( PYTHON_FOUND )
         INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} ) 
     
         SET(bmdl_batch_sources
-         batch_bmdl.h batch_bmdl.cxx
-         reg_bmdl.cxx
-       )
+          reg_bmdl.cxx          reg_bmdl.h
+        )
      
         ADD_LIBRARY(bmdl_batch MODULE ${bmdl_batch_sources})
 
@@ -38,7 +37,7 @@ IF( PYTHON_FOUND )
         ENDIF(WIN32)
         SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES PREFIX "")
 
-        TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro) 
+        TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bpro_batch bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro) 
       
         IF (PYTHON_DEBUG_LIBRARIES)
           TARGET_LINK_LIBRARIES( bmdl_batch debug ${PYTHON_DEBUG_LIBRARY})
