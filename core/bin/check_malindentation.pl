@@ -1,4 +1,8 @@
+#! /bin/sh
+exec perl -n -w -x $0 ${1+"$@"}
 #! perl -n
+#line 5
+
 if (eof) { close ARGV; $in_paren=$in_cout=''; }
 next if (m/^#/ || m/^\s*$/);
 s+\\.+X+g;
