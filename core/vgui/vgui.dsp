@@ -501,18 +501,6 @@ SOURCE=.\impl/qt/vgui_qt_tag.cxx
 SOURCE=.\impl/qt/vgui_qt_window.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\impl/qt/vgui_qt_adaptor_mocced.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/qt/vgui_qt_dialog_impl_mocced.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/qt/vgui_qt_menu_mocced.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/qt/vgui_qt_statusbar_mocced.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\impl/qt4/vgui_qt.cxx
 # End Source File
 # Begin Source File
@@ -532,18 +520,6 @@ SOURCE=.\impl/qt4/vgui_qt_tag.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/qt4/vgui_qt_window.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/qt4/vgui_qt_adaptor_mocced.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/qt4/vgui_qt_dialog_impl_mocced.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/qt4/vgui_qt_menu_mocced.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\impl/qt4/vgui_qt_statusbar_mocced.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_parent_child_link.cxx

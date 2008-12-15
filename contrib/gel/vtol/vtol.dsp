@@ -203,30 +203,6 @@ SOURCE=.\Templates/vtol_list_functions+vtol_vertex~-.cxx
 # Begin Source File
 SOURCE=.\Templates/vtol_list_functions+vtol_zero_chain~-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_block~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_edge~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_face~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_one_chain~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_topology_object_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_two_chain~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_vertex~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vtol_list_functions+vtol_zero_chain~-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

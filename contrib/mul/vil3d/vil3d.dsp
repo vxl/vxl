@@ -267,6 +267,9 @@ SOURCE=.\vil3d_trilin_interp.h
 SOURCE=.\vil3d_crop.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_clamp.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil3d_switch_axes.h
 # End Source File
 # Begin Source File

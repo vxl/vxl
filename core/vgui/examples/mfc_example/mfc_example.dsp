@@ -275,9 +275,6 @@ LINK32=link.exe
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
-SOURCE=.\StdAfx.cpp
-# End Source File
-# Begin Source File
 SOURCE=.\example_mfc.cpp
 # End Source File
 # Begin Source File
@@ -294,9 +291,6 @@ SOURCE=.\example_mfcView.cpp
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\MainFrm.h
-# End Source File
-# Begin Source File
-SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
 SOURCE=.\example_mfc.h

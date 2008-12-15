@@ -260,6 +260,9 @@ SOURCE=.\brct_test_synthetic_data.cxx
 # Begin Source File
 SOURCE=.\brct_test_compute_P.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\generate_S3.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

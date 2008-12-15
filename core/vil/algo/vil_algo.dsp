@@ -252,9 +252,6 @@ SOURCE=.\Templates/vil_gauss_filter+uint_16.uint_16-.cxx
 SOURCE=.\Templates/vil_threshold+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_gauss_filter+uint_16.uint_16-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil_gauss_reduce+double-.cxx
 # End Source File
 # Begin Source File
