@@ -1,8 +1,9 @@
 #ifdef HAS_AVI
 #include <vidl/vidl_avicodec.h>
-#include <vidl/vidl_avifile_avicodec.h>
-# if defined(VCL_WIN32) && !defined(__CYGWIN__)
+# if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__MINGW32__)
 #include <vidl/vidl_win_avicodec.h>
+# else
+#include <vidl/vidl_avifile_avicodec.h>
 # endif
 #endif
 #include <vidl/vidl_clip.h>
