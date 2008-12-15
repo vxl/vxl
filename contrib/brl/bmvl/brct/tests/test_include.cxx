@@ -1,5 +1,6 @@
 #include <bmvl/brct/brct_plane_sweeper_params.h>
 #include <bmvl/brct/brct_volume_processor_params.h>
+#include <bmvl/brct/brct_corr_sptr.h>
 
 #include <bmvl/brct/brct_algos.h>
 #include <bmvl/brct/brct_corr.h>
