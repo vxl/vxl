@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${OUL_INCLUDE_DIR} )
 
 SET(oul_sources oul_copyright.h)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul ${oul_sources})
 
 SUBDIRS(ouel ouml)
 IF(CMAKE_SYSTEM MATCHES "Linux*")
