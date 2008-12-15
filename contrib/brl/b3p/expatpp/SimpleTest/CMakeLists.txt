@@ -6,7 +6,6 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/expatpp/src_pp )
 
 SET(test_sources
     SimpleTest.cpp     
-    StdAfx.cpp  StdAfx.h
 )
 
  ADD_EXECUTABLE(simpletest ${test_sources})
