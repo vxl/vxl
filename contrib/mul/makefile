@@ -15,23 +15,7 @@ SUBDIRS += clsfy
 # New vil
 SUBDIRS += vimt ipts vil3d vimt3d
 
-# video
-SUBDIRS += mvl2
-
-# tools
-SUBDIRS += tools
-
-# fhs
-SUBDIRS += fhs
-
-# mcal
-SUBDIRS += mcal
-
-# msm
-SUBDIRS += msm
-
-# mipa
-SUBDIRS += mipa
+SUBDIRS += mvl2 tools fhs mcal msm mipa m23d mmn mfpf
 
 ################################
 include ${VXLROOT}/config/top.mk

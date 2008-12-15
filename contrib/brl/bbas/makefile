@@ -31,8 +31,11 @@ SUBDIRS += bugl
 # additions to vnl
 SUBDIRS += bnl
 
-# Brown Graph Library
+# Brown graph library
 SUBDIRS += bgrl
+
+# Brown templated graph library
+SUBDIRS += bgrl2
 
 # Brown statistics library
 SUBDIRS += bsta
@@ -40,14 +43,23 @@ SUBDIRS += bsta
 # Brown dynamic programming library
 SUBDIRS += bdpg
 
-#3D mesh library 
+# 3D mesh library 
 SUBDIRS += bmsh3d
 
-#3D modeling library
+# 3D modeling library
 SUBDIRS += bwm
 
-# Video Library (rewrite)
+# in-memory relational database
+SUBDIRS += brdb
+
+# Brown imaging library
+SUBDIRS += bil
+
+# video library (rewrite)
 SUBDIRS += vidl2
+
+# indexed mesh library
+SUBDIRS += imesh
 
 ################################
 include ${VXLROOT}/config/top.mk

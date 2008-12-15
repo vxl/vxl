@@ -31,7 +31,9 @@ SOURCES += tif_error.c
 SOURCES += tif_extension.c
 SOURCES += tif_fax3.c
 SOURCES += tif_fax3sm.c
-#SOURCES += fax3sm_winnt.c
+ifdef WINNT
+SOURCES += fax3sm_winnt.c
+endif
 SOURCES += tif_getimage.c
 SOURCES += tif_jpeg.c
 SOURCES += tif_flush.c

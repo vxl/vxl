@@ -11,6 +11,8 @@ SOURCES += brct_menus.cxx
 IULIBS += -lbrct_test
 MINI_PROG_SOURCES += test_brct_kalman.cxx
 
+MINI_PROG_SOURCES += generate_S3.cxx
+
 TESTMAIN := test_driver.cxx
 TESTS += brct_test_synthetic_data.cxx
 TESTS += brct_test_compute_P.cxx

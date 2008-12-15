@@ -12,6 +12,14 @@ SOURCES += bmsh3d_vis_utils.cxx
 SOURCES += bmsh3d_vis_vertex.cxx
 endif
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

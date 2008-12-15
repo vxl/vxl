@@ -33,6 +33,7 @@ SOURCES += file_formats/vil3d_analyze_format.cxx
 SOURCES += file_formats/vil3d_gen_synthetic.cxx
 
 SOURCES += vil3d_crop.cxx
+MANPAGE_SOURCES += vil3d_clamp.h
 SOURCES += vil3d_copy.cxx
 MANPAGE_SOURCES += vil3d_copy.txx
 SOURCES += vil3d_save.cxx
