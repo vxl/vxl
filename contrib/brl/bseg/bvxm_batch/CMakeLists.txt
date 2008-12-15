@@ -13,6 +13,7 @@ IF( PYTHON_FOUND )
     INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
     INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
+    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
   
      SET(bvxm_batch_sources
        batch_bvxm.h batch_bvxm.cxx
@@ -26,7 +27,7 @@ IF( PYTHON_FOUND )
 
     SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES OUTPUT_NAME bvxm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
 
-    TARGET_LINK_LIBRARIES(bvxm_batch bprb brdb vbl bvxm bvxm_pro bvxm_io bvxm_rec_pro vpgl_io vpgl_pro bvgl_pro vil_io vil_pro)
+    TARGET_LINK_LIBRARIES(bvxm_batch bprb brdb vbl bvxm bvxm_pro bvxm_io brec_pro vpgl_io vpgl_pro bvgl_pro vil_io vil_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( bvxm_batch debug ${PYTHON_DEBUG_LIBRARY})

@@ -158,7 +158,7 @@ for i in range(0,len(image_fnames),1):
       mask_img_id = bvxm_batch.commit_output(0);
     
     print("Convert density to prob map");
-    bvxm_batch.init_process("bvxmDensityToProbMapProcess");
+    bvxm_batch.init_process("brecDensityToProbMapProcess");
     bvxm_batch.set_params_process("./density_to_prob_map_params.xml");
     bvxm_batch.set_input_from_db(0,out_img_id);
     bvxm_batch.run_process();
@@ -166,7 +166,7 @@ for i in range(0,len(image_fnames),1):
 
     for j in range(j_size):
       print("Threshold prob map");
-      bvxm_batch.init_process("bvxmProbMapThresholdProcess");
+      bvxm_batch.init_process("brecProbMapThresholdProcess");
       bvxm_batch.set_input_from_db(0,prob_map_id);
       bvxm_batch.set_input_from_db(1,mask_img_id);
       bvxm_batch.set_input_from_db(2,cropped_image_id);
@@ -199,7 +199,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.run_process();
    
     print("Run the ROC process");
-    bvxm_batch.init_process("bvxmProbMapROCProcess");
+    bvxm_batch.init_process("brecProbMapROCProcess");
     bvxm_batch.set_input_from_db(0,prob_map_id);
     bvxm_batch.set_input_from_db(1,mask_img_id);
     bvxm_batch.set_input_from_db(2,gt_mask_id);
@@ -209,7 +209,7 @@ for i in range(0,len(image_fnames),1):
     npasses = 1;
     sigma = 0.05;
     print("Updating change map");
-    bvxm_batch.init_process("bvxmUpdateChangesProcess");
+    bvxm_batch.init_process("brecUpdateChangesProcess");
     bvxm_batch.set_input_from_db(0,out_img_id);
     bvxm_batch.set_input_from_db(1,curr_image_id);
     bvxm_batch.set_input_unsigned(2,npasses);
@@ -225,7 +225,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.run_process();
 
     print("Run the ROC process");
-    bvxm_batch.init_process("bvxmProbMapROCProcess");
+    bvxm_batch.init_process("brecProbMapROCProcess");
     bvxm_batch.set_input_from_db(0,out_updated_img_id);
     bvxm_batch.set_input_from_db(1,mask_img_id);
     bvxm_batch.set_input_from_db(2,gt_mask_id);
