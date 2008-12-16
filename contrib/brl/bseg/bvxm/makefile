@@ -24,7 +24,7 @@ MANPAGE_SOURCES += bvxm_voxel_storage_disk_cached.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_mem.txx
 MANPAGE_SOURCES += bvxm_mog_mc_processor.txx
 
-SUBDIRS += io pro rec
+SUBDIRS += io pro
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

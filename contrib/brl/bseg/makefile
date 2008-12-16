@@ -40,6 +40,9 @@ SUBDIRS += bmdl
 # Lidar modeling batch
 SUBDIRS += bmdl_batch
 
+# recognition library - uses background models of bbgm and/or bvxm
+SUBDIRS += brec
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
