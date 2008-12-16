@@ -1,4 +1,4 @@
-// This is contrib/brec/brec_part_hierarchy_detector.h
+// This is contrib/brl/bseg/brec/brec_part_hierarchy_detector.h
 #ifndef brec_part_hierarchy_detector_h_
 #define brec_part_hierarchy_detector_h_
 //:
@@ -93,18 +93,12 @@ typedef rtree_brec_instance_box_2d<float> C_type; // the helper class
 typedef vgl_rtree<V_type, B_type, C_type> Rtree_type;
 typedef vgl_rtree_polygon_probe<V_type, B_type, C_type> Probe_type;
 
-class brec_part_hierarchy_detector {
+class brec_part_hierarchy_detector 
+{
 public:
 
   brec_part_hierarchy_detector(brec_part_hierarchy_sptr h) : h_(h) {}
   ~brec_part_hierarchy_detector();
-
-  //static void generate_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, vil_image_view<unsigned>& type_map);
-  //static void generate_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vcl_vector<vcl_vector<brec_part_instance_sptr> >& map);
-  //: generate a float map with normalized strengths and receptive fields marked
-  //static void generate_output_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
-  //: output_img needs to have 3 planes
-  //static void generate_output_img(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<vxl_byte>& input_img, vil_image_view<vxl_byte>& output_img);
 
   // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
   brec_part_instance_sptr exists(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, unsigned ni, unsigned nj, Rtree_type* lower_rtree, float det_threshold);

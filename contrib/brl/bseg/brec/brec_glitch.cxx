@@ -104,26 +104,6 @@ void brec_glitch::extend_prob_to_square_region(int c_size, vil_image_view<float>
 
 }
   
-/*
-//: output_img needs to have 3 planes
-void
-brec_glitch::generate_output_img(vcl_vector<brec_part_instance_sptr>& extracted_parts,
-                                         vil_image_view<vxl_byte>& input_img,
-                                         vil_image_view<vxl_byte>& output_img)
-{
-  unsigned ni = input_img.ni();
-  unsigned nj = input_img.nj();
-  output_img.fill(0);
 
-  vil_image_view<float> map(ni, nj);
-  generate_output_map(extracted_parts, map);
-  for (unsigned i = 0; i < ni; i++)
-    for (unsigned j = 0; j < nj; j++) {
-      output_img(i,j,0) = input_img(i,j);
-      output_img(i,j,1) = input_img(i,j);
-      output_img(i,j,2) = (vxl_byte)(map(i,j)*255);
-    }
-}
-*/
 
 
