@@ -6,7 +6,7 @@
 // \brief class to represent a hiearachy of composable parts for recognition
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct 16, 2008
+// \date 10/16/08
 //
 // \verbatim
 //  Modifications

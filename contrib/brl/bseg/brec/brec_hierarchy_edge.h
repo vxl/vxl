@@ -8,7 +8,7 @@
 // The relative occurrence information of the parts will be stored in the edge
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct. 16, 2008
+// \date 10/16/08
 //
 // \verbatim
 //  Modifications

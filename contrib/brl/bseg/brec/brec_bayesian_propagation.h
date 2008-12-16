@@ -5,7 +5,7 @@
 // \brief brec Bayesian propagation algorithm to update probability maps using prior probability distributions on appearance
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct. 01, 2008
+// \date 10/01/08
 //
 // \verbatim
 //  Modifications

@@ -1,11 +1,11 @@
-#ifndef brec_FG_BG_PAIR_DENSITY_H_
-#define brec_FG_BG_PAIR_DENSITY_H_
+#ifndef brec_fg_bg_pair_density_h_
+#define brec_fg_bg_pair_density_h_
 //:
 // \file
 // \brief brec recognition utilities
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct. 01, 2008
+// \date 10/01/08
 //
 // \verbatim
 //  Modifications
@@ -22,4 +22,4 @@ class brec_fg_bg_pair_density : public brec_pair_density
   virtual double operator()(const double y0, const double y1);
 };
 
-#endif // brec_FG_BG_PAIR_DENSITY_H_
+#endif // brec_fg_bg_pair_density_

@@ -9,11 +9,9 @@
 // \date 10/16/08
 //      
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
 
 #include "brec_part_hierarchy.h"
 #include "brec_part_hierarchy_sptr.h"

@@ -11,7 +11,7 @@
 //       so during training, create samples by subtracting other parts' centers from central part's center after measuring from the image
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct. 16, 2008
+// \date 10/16/08
 //
 // \verbatim
 //  Modifications

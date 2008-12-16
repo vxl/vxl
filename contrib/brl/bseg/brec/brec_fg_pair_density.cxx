@@ -3,7 +3,7 @@
 // \brief brec recognition utilities
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct. 01, 2008
+// \date 10/01/08
 //
 // \verbatim
 //  Modifications

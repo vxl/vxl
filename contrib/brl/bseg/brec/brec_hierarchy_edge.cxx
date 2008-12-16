@@ -1,7 +1,7 @@
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct. 16, 2008
+// \date 10/16/08
 
 #include "brec_hierarchy_edge.h"
 #include <bsta/algo/bsta_gaussian_updater.h>

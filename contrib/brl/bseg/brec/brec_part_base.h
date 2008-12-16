@@ -6,7 +6,7 @@
 // \brief base class for composable parts
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Oct 16, 2008
+// \date 10/16/08
 //
 // \verbatim
 //  Modifications

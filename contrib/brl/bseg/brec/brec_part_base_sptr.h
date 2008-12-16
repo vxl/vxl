@@ -5,7 +5,7 @@
 // \file
 // \brief Smart pointer to a brec_part_base
 // \author Ozge Can Ozcanli, (ozge@lems.brown.edu)
-// \date Oct 16, 2008
+// \date 10/16/08
 //
 
 #include <vbl/vbl_smart_ptr.h>

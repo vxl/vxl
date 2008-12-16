@@ -6,7 +6,7 @@
 // \brief class to represent a center-surround geometry to be detected as a foreground pattern
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date Dec 09, 2008
+// \date 12/09/08
 //
 // \verbatim
 //  Modifications
