@@ -47,6 +47,23 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
                       vgl_line_segment_3d<T> const& l2,
                       vgl_point_3d<T>& i_pnt);
 
+//: Return the intersection point of segments of a concurrent line and line segment pair.
+// \relates vgl_line_segment_3d
+template <class T>
+bool vgl_intersection(vgl_line_3d_2_points<T> const& l1,
+                      vgl_line_segment_3d<T> const& l2,
+                      vgl_point_3d<T>& i_pnt);
+
+//: Return the intersection point of segments of a concurrent line and line segment pair.
+// \relates vgl_line_segment_3d
+template <class T> inline
+bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
+                      vgl_line_3d_2_points<T> const& l2,
+                      vgl_point_3d<T>& i_pnt)
+{
+  return vgl_intersection(l2, l1, i_pnt);
+}
+
 //: Return the intersection point of two lines. Return false if lines are parallel
 // \relates vgl_line_segment_3d
 template <class T>

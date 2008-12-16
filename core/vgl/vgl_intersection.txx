@@ -270,6 +270,22 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
   return vgl_near_zero(l1_len - l1_idist) && vgl_near_zero(l2_len - l2_idist);
 }
 
+//: Return the intersection point of segments of two concurrent lines
+// \relates vgl_line_segment_3d
+template <class T>
+bool vgl_intersection(vgl_line_3d_2_points<T> const& l1,
+                      vgl_line_segment_3d<T> const& l2,
+                      vgl_point_3d<T>& i_pnt)
+{
+  i_pnt = vgl_intersection(l1,
+                           vgl_line_3d_2_points<T>(l2.point1(),l2.point2()));
+
+  double l2_len =   length(l2.point1() - l2.point2());
+  double l2_idist = length(l2.point1() - i_pnt) + length(l2.point2() - i_pnt);
+
+  return vgl_near_zero(l2_len - l2_idist);
+}
+
 //: Return the intersection point of a line and a plane.
 // \relates vgl_line_3d_2_points
 // \relates vgl_plane_3d
@@ -493,6 +509,7 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
 template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
+template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
 template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
