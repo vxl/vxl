@@ -5,10 +5,10 @@
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_line_3d_2_points.h>
 #include <vnl/vnl_math.h>
 
-
-const double tol=1e-9;
+static const double tol=1e-9;
 
 
 //========================================================================
@@ -84,7 +84,6 @@ static void test_point_inside()
   }
 }
 
-
 //========================================================================
 // Test vgl_triangle_3d_line_intersection() function
 //========================================================================
@@ -112,16 +111,16 @@ static void test_line_intersection()
     bool outside_fail = false, inside_fail = false;
     const double rad = vnl_math::pi / 180.0;
     vgl_point_3d<double> i_pnt;
-    for (double e=1e-6; e<0.02; e *= vcl_sqrt(10.0)) // height above/below triangle edge p1-p2
+    for (double e=1e-12; e<0.0002; e *= 9.0) // height above/below triangle edge p1-p2
     {
       vgl_point_3d<double>  l1_in(1001,900,1000 - e), l2_in(1001,1100,1000 - e);
       vgl_point_3d<double>  l1_out(1001,900,1000 + e), l2_out(1001,1100,1000 + e);
-      vgl_line_segment_3d<double> l_in(l1_in, l2_in), l_out(l1_out, l2_out);
+      vgl_line_3d_2_points<double> l_in(l1_in, l2_in), l_out(l1_out, l2_out);
       for (double a=-89.9; a<89.95; a+=0.1) // angle of triangle normal w.r.t to l1-l2
       {
         // Define a triangle that wobbles about p1-p2
         vgl_point_3d<double>  p1(1000,1000,1000), p2(1002,1000,1000),
-          p3(1001, 1000+(10*vcl_sin(a*rad)), 1000-(10*vcl_cos(a*rad)));
+          p3(1001, 1000+(20*vcl_sin(a*rad)), 1000-(20*vcl_cos(a*rad)));
         vgl_triangle_3d_intersection_t in_result1 = vgl_triangle_3d_line_intersection(l_in, p1, p2, p3, i_pnt);
         vgl_triangle_3d_intersection_t in_result2 = vgl_triangle_3d_line_intersection(l_in, p1, p3, p2, i_pnt);
         vgl_triangle_3d_intersection_t in_result3 = vgl_triangle_3d_line_intersection(l_in, p3, p1, p2, i_pnt);

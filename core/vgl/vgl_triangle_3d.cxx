@@ -73,7 +73,7 @@ vcl_vector<vcl_pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
 
   return coinc_edges;
 }
-
+#pragma optimize ("", off)
 //=======================================================================
 //: Check if the given point is inside the triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
@@ -170,7 +170,7 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
 
   return true;
 }
-
+#pragma optimize ("", on)
 //=======================================================================
 //: Check if point \a i_pnt is inside the triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
@@ -192,17 +192,48 @@ bool vgl_triangle_3d_test_inside_simple(const vgl_point_3d<double>& i_pnt,
   return test_val < sqrteps;
 }
 
+//! Are D and E on opposite sides of the plane that touches A, B, C
+//! \returns Co
+static vgl_triangle_3d_intersection_t same_side(
+  const vgl_point_3d<double>& A,
+  const vgl_point_3d<double>& B,
+  const vgl_point_3d<double>& C,
+  const vgl_point_3d<double>& D,
+  const vgl_point_3d<double>& E)
+{
+  vgl_vector_3d<double> b = B - A;
+  vgl_vector_3d<double> c = C - A;
+
+  vgl_vector_3d<double> n = cross_product(b, c);
+
+  vgl_vector_3d<double> d = D - A;
+  double d_dot = dot_product(d, n);
+  vgl_vector_3d<double> e = E - A;
+  double e_dot = dot_product(e, n);
+
+  if (vcl_abs(d_dot) < vcl_numeric_limits<double>::epsilon() *
+    vcl_max(vcl_numeric_limits<double>::denorm_min(),
+      vcl_sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) ) * 1.0e3 )
+    return Coplanar;
+
+  if (d_dot * e_dot > 0)
+    return Skew;
+  else
+    return None;
+}
+
+
 //=======================================================================
-//: Compute the intersection point between the line segment and triangle
+//: Compute the intersection point between the line and triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
 //  \return intersection type
 vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
-  const vgl_line_segment_3d<double>& line,
+  const vgl_line_3d_2_points<double>& line,
   const vgl_point_3d<double>& p1,
   const vgl_point_3d<double>& p2,
   const vgl_point_3d<double>& p3,
   vgl_point_3d<double>& i_pnt,
-  bool ignore_coplanar /*= false*/)
+  bool ignore_coplanar/*=false*/)
 {
   vgl_point_3d<double> line_p1 = line.point1();
   vgl_point_3d<double> line_p2 = line.point2();
@@ -216,11 +247,107 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
     return None;
   }
 
-  // Check that the line isn't actually an edge of the triangle
-  if ((line_p1==p1 && line_p2==p2) || (line_p1==p2 && line_p2==p1) ||
-      (line_p1==p2 && line_p2==p3) || (line_p1==p3 && line_p2==p2) ||
-      (line_p1==p3 && line_p2==p1) || (line_p1==p1 && line_p2==p3))
+  if (collinear(p1,p2,p3))
+  { //the triangle is degenerate - it's points are collinear
+    if (p1==p2&&p2==p3&&p1==p3)
+    { //all its vertices are the same
+      return ignore_coplanar ? None : Coplanar;
+    }
+
+    if ( !ignore_coplanar && (
+        ( p1!=p2 && concurrent(vgl_line_3d_2_points<double>(p1,p2), line) &&
+          vgl_intersection(line,vgl_line_segment_3d<double>(p1,p2),i_pnt) ) ||
+        ( p2!=p3 && concurrent(vgl_line_3d_2_points<double>(p2,p3), line) &&
+          vgl_intersection(line,vgl_line_segment_3d<double>(p2,p3),i_pnt) ) ||
+        ( p1!=p3 && concurrent(vgl_line_3d_2_points<double>(p1,p3), line) &&
+          vgl_intersection(line,vgl_line_segment_3d<double>(p1,p3),i_pnt) ) ) )
+    {
+      return Coplanar;
+    }
+
+    return None;
+  }
+
+  vgl_triangle_3d_intersection_t rv;
+
+  rv = same_side(line.point1(), p1, p2, p3, line.point2());
+  if (rv == None) return None;
+
+  rv = same_side(line.point1(), p2, p3, p1, line.point2());
+  if (rv == None) return None;
+
+  rv = same_side(line.point1(), p3, p1, p2, line.point2());
+  if (rv == None) return None;
+
+  if (rv == Coplanar)
   {
+    if (ignore_coplanar)
+      return None;
+    //coplanar line - uncommon case
+
+    //check each triangle edge.
+    //behaviour is to return the first found intersetion point
+    vgl_line_segment_3d<double> edge1(p1,p2);
+
+    vgl_point_3d<double> test_pt;
+    if (concurrent(vgl_line_3d_2_points<double>(p1,p2),line) &&
+        vgl_intersection(edge1,line,test_pt))
+    {
+      i_pnt = test_pt;
+      return Coplanar;
+    }
+    vgl_line_segment_3d<double> edge2(p1,p3);
+    if (concurrent(vgl_line_3d_2_points<double>(p1,p3),line) &&
+        vgl_intersection(edge2,line,test_pt))
+    {
+      i_pnt = test_pt;
+      return Coplanar;
+    }
+    vgl_line_segment_3d<double> edge3(p2,p3);
+    if (concurrent(vgl_line_3d_2_points<double>(p2,p3),line) &&
+        vgl_intersection(edge3,line,test_pt))
+    {
+      i_pnt = test_pt;
+      return Coplanar;
+    }
+
+    //special case of line completely contained within the triangle
+    if (vgl_triangle_3d_test_inside(line_p1, p1, p2, p3))
+    {
+      i_pnt.set(vgl_nan, vgl_nan, vgl_nan);
+      return Coplanar;
+    }
+
+    return None;
+  }
+
+  i_pnt = vgl_intersection(line,
+    vgl_plane_3d<double>(p1, p2, p3) );
+  return Skew;
+
+}
+
+//=======================================================================
+//: Compute the intersection point between the line segment and triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+//  \return intersection type
+vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
+  const vgl_line_segment_3d<double>& line,
+  const vgl_point_3d<double>& p1,
+  const vgl_point_3d<double>& p2,
+  const vgl_point_3d<double>& p3,
+  vgl_point_3d<double>& i_pnt,
+  bool ignore_coplanar/*=false*/)
+{
+  vgl_point_3d<double> line_p1 = line.point1();
+  vgl_point_3d<double> line_p2 = line.point2();
+
+  // perform some degeneracy checks on the line and triangle
+  if (line_p1 == line_p2)
+  { //the line is degnerate - it has zero length
+    if (!ignore_coplanar && vgl_triangle_3d_test_inside(line_p1,p1,p2,p3))
+      return Coplanar;
+
     return None;
   }
 
@@ -233,9 +360,12 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
 
     vgl_line_3d_2_points<double> i_line(line_p1,line_p2);
     if ( !ignore_coplanar && (
-        ( p1!=p2 && concurrent(vgl_line_3d_2_points<double>(p1,p2), i_line) && vgl_intersection(line,vgl_line_segment_3d<double>(p1,p2),i_pnt) ) ||
-        ( p2!=p3 && concurrent(vgl_line_3d_2_points<double>(p2,p3), i_line) && vgl_intersection(line,vgl_line_segment_3d<double>(p2,p3),i_pnt) ) ||
-        ( p1!=p3 && concurrent(vgl_line_3d_2_points<double>(p1,p3), i_line) && vgl_intersection(line,vgl_line_segment_3d<double>(p1,p3),i_pnt) ) ) )
+        ( p1!=p2 && concurrent(vgl_line_3d_2_points<double>(p1,p2), i_line) &&
+          vgl_intersection(line,vgl_line_segment_3d<double>(p1,p2),i_pnt) ) ||
+        ( p2!=p3 && concurrent(vgl_line_3d_2_points<double>(p2,p3), i_line) &&
+          vgl_intersection(line,vgl_line_segment_3d<double>(p2,p3),i_pnt) ) ||
+        ( p1!=p3 && concurrent(vgl_line_3d_2_points<double>(p1,p3), i_line) &&
+          vgl_intersection(line,vgl_line_segment_3d<double>(p1,p3),i_pnt) ) ) )
     {
       return Coplanar;
     }
@@ -243,76 +373,67 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
     return None;
   }
 
-  //get triangle plane
-  //vgl_plane_3d<double> plane(normalized(cross_product(p2-p1,p3-p1)),p1);
-  vgl_plane_3d<double> plane(p1,p2,p3);
+  vgl_triangle_3d_intersection_t rv;
 
-  //check for parallel/coplanarity
-  vgl_vector_3d<double> dir = line_p2-line_p1;
-  double denom = plane.a()*(dir.x()) +
-                 plane.b()*(dir.y()) +
-                 plane.c()*(dir.z());
-  if (vcl_fabs(denom) < sqrteps)
+  rv = same_side(line.point1(), p1, p2, p3, line.point2());
+  if (rv == None) return None;
+
+  rv = same_side(line.point1(), p2, p3, p1, line.point2());
+  if (rv == None) return None;
+
+  rv = same_side(line.point1(), p3, p1, p2, line.point2());
+  if (rv == None) return None;
+
+  if (rv == Coplanar)
   {
-    if (!ignore_coplanar && vgl_distance(line_p1, plane) < sqrteps )
-    { //coplanar line - uncommon case
-
-      //check each triangle edge.
-      //behaviour is to return the first found intersetion point
-      vgl_line_3d_2_points<double> i_line(line_p1,line_p2);
-      vgl_line_segment_3d<double> edge1(p1,p2);
-
-      vgl_point_3d<double> test_pt;
-      if (concurrent(vgl_line_3d_2_points<double>(p1,p2),i_line) &&
-          vgl_intersection(edge1,line,test_pt))
-      {
-        i_pnt = test_pt;
-        return Coplanar;
-      }
-      vgl_line_segment_3d<double> edge2(p1,p3);
-      if (concurrent(vgl_line_3d_2_points<double>(p1,p3),i_line) &&
-          vgl_intersection(edge2,line,test_pt))
-      {
-        i_pnt = test_pt;
-        return Coplanar;
-      }
-      vgl_line_segment_3d<double> edge3(p2,p3);
-      if (concurrent(vgl_line_3d_2_points<double>(p2,p3),i_line) &&
-          vgl_intersection(edge3,line,test_pt))
-      {
-        i_pnt = test_pt;
-        return Coplanar;
-      }
-
-      //special case of line completely contained within the triangle
-      if (vgl_triangle_3d_test_inside(line_p1, p1, p2, p3))
-      {
-        i_pnt.set(vgl_nan, vgl_nan, vgl_nan);
-        return Coplanar;
-      }
-
+    if (ignore_coplanar)
       return None;
+    //coplanar line - uncommon case
+
+    //check each triangle edge.
+    //behaviour is to return the first found intersetion point
+    vgl_line_3d_2_points<double> i_line(line_p1,line_p2);
+    vgl_line_segment_3d<double> edge1(p1,p2);
+
+    vgl_point_3d<double> test_pt;
+    if (concurrent(vgl_line_3d_2_points<double>(p1,p2),i_line) &&
+        vgl_intersection(edge1,line,test_pt))
+    {
+      i_pnt = test_pt;
+      return Coplanar;
+    }
+    vgl_line_segment_3d<double> edge2(p1,p3);
+    if (concurrent(vgl_line_3d_2_points<double>(p1,p3),i_line) &&
+        vgl_intersection(edge2,line,test_pt))
+    {
+      i_pnt = test_pt;
+      return Coplanar;
+    }
+    vgl_line_segment_3d<double> edge3(p2,p3);
+    if (concurrent(vgl_line_3d_2_points<double>(p2,p3),i_line) &&
+        vgl_intersection(edge3,line,test_pt))
+    {
+      i_pnt = test_pt;
+      return Coplanar;
     }
 
-    //coplanar ignored OR
-    //parallel line - no intersection
+    //special case of line completely contained within the triangle
+    if (vgl_triangle_3d_test_inside(line_p1, p1, p2, p3))
+    {
+      i_pnt.set(vgl_nan, vgl_nan, vgl_nan);
+      return Coplanar;
+    }
+
     return None;
   }
 
-  //find point of intersection of line with triangle plane
-  double numer = -(plane.a()*line_p1.x() +
-                   plane.b()*line_p1.y() +
-                   plane.c()*line_p1.z() +
-                   plane.d());
-  dir *= numer/denom;
-  i_pnt = line_p1 + dir;
+  if (same_side(p1, p2, p3, line_p1, line_p2) == Skew)
+    return None;
 
-  //check if intersection point is actually on the line segment
-  //and point inside triangle
-  if (line.contains(i_pnt) && vgl_triangle_3d_test_inside(i_pnt, p1, p2, p3))
-    return Skew;
+  i_pnt = vgl_intersection(vgl_line_3d_2_points<double>(line_p1, line_p2),
+    vgl_plane_3d<double>(p1, p2, p3) );
+  return Skew;
 
-  return None;
 }
 
 //=======================================================================
