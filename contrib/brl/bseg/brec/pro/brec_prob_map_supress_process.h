@@ -9,7 +9,7 @@
 // Output of this process is: P(X in B and X not in V)
 //
 // \author Ozge Can Ozcanli
-// \date Oct. 28, 2008
+// \date 10/28/08
 //
 // \verbatim
 //  Modifications

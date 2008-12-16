@@ -8,7 +8,7 @@
 //  CAUTION: Input image is assumed to be a probability map, i.e. have type float with values in [0,1]
 //
 // \author Ozge Can Ozcanli
-// \date Nov 06, 2008
+// \date 11/06/08
 //
 // \verbatim
 //  Modifications

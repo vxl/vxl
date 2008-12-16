@@ -6,7 +6,7 @@
 // \brief A class to find expected area at each pixel for a given prob map
 //
 // \author Ozge Can Ozcanli
-// \date Nov 06, 2008
+// \date 11/06/08
 //
 // \verbatim
 //  Modifications

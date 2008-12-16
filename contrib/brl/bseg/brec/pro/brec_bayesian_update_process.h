@@ -11,7 +11,7 @@
 //                      return glitch detection map
 //          
 // \author Ozge Can Ozcanli
-// \date Apr 10, 2008
+// \date 10/01/08
 //
 // \verbatim
 //  Modifications

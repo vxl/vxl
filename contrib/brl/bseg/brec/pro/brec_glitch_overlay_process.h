@@ -6,7 +6,7 @@
 // \brief A class to generate a new probability map that extends glitch detection probability over to its effective region
 //
 // \author Ozge Can Ozcanli
-// \date Dec 09, 2008
+// \date 12/09/08
 //
 // \verbatim
 //  Modifications

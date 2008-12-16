@@ -8,7 +8,7 @@
 //  CAUTION: Input image is assumed to be a probability map, i.e. have type float with values in [0,1]
 //
 // \author Ozge Can Ozcanli adapted from Joseph Mundy's bbgm_roc_compute_process
-// \date Sep 10, 2008
+// \date 09/10/08
 //
 // \verbatim
 //  Modifications

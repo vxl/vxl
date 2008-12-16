@@ -6,7 +6,7 @@
 // \brief A class to find instances of various structures, objects (e.g. vehicles) according to a part hierarchy constructed a priori
 //
 // \author Ozge Can Ozcanli
-// \date Oct 28, 2008
+// \date 10/28/08
 //
 // \verbatim
 //  Modifications

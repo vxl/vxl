@@ -8,7 +8,7 @@
 //  CAUTION: Input image is assumed to have type float (not necessarily with values in [0,1])
 //
 // \author Ozge Can Ozcanli
-// \date Sep 10, 2008
+// \date 09/01/08
 //
 // \verbatim
 //  Modifications

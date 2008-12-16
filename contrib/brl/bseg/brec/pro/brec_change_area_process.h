@@ -6,7 +6,7 @@
 // \brief A class to find expected area over the whole image for a given prob map
 //
 // \author Ozge Can Ozcanli
-// \date Nov 06, 2008
+// \date 10/01/08
 //
 // \verbatim
 //  Modifications
