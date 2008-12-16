@@ -57,7 +57,6 @@ TARGET_LINK_LIBRARIES( bvxm bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_a
 
 SUBDIRS( io )
 SUBDIRS( pro )
-SUBDIRS( rec )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
