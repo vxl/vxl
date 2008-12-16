@@ -93,16 +93,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\batch_bmdl.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\reg_bmdl.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\batch_bmdl.h
+SOURCE=.\reg_bmdl.h
 # End Source File
 # End Group
 # End Target
