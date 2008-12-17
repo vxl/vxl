@@ -75,10 +75,15 @@ imesh_half_edge_set::build_from_ifs(const vcl_vector<vcl_vector<unsigned int> >&
       vert_to_he_[he.vert_index()] = i;
     if (he.next_index() != imesh_invalid_idx)
       continue;
-    v_iterator vi(i,*this);
-    while (vi.pair().face_index() != imesh_invalid_idx)
-      ++vi;
-    he.next_ = vi.pair().half_edge_index();
+    unsigned int next_b = half_edges_[i].pair_index();
+    while(half_edges_[next_b].face_index() != imesh_invalid_idx)
+    {
+      f_iterator fi(next_b,*this);
+      while (fi->next_index() != next_b)
+        ++fi;
+      next_b = fi->pair_index();
+    }
+    he.next_ = next_b;
   }
 }
 
