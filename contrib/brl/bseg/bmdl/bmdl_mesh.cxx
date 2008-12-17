@@ -11,6 +11,7 @@
 #include <vgl/vgl_distance.h>
 #include <vil/vil_bilin_interp.h>
 #include <vcl_cassert.h>
+#include <vcl_map.h>
 
 //: find the next trace point and direction
 bool bmdl_mesh::next_trace_point(unsigned int& i, unsigned int& j, int& dir,
@@ -286,9 +287,9 @@ unsigned int bmdl_mesh::link_boundary_edges(const vil_image_view<unsigned int>& 
       // handle special cases at the starting point
       if(edge_idxs.size() > 1)
       {
-        // A region may touch the same previously create edge at beginning and end 
+        // A region may touch the same previously created edge at beginning and end 
         if(edge_idxs.front() == edge_idxs.back() && 
-           edges[edge_idxs.front()].building2 == i+1)
+           edges[edge_idxs.front()].building2 == i+1) 
         {
           edge_idxs.pop_back();
         }
@@ -312,6 +313,15 @@ unsigned int bmdl_mesh::link_boundary_edges(const vil_image_view<unsigned int>& 
           edge_idxs.pop_back();
           edges.pop_back();
           --joint_count;
+        }
+        // correct last joint if just created and the first edge was preexisting
+        else if (edges[edge_idxs.back()].building1 == i+1 &&
+                 edges[edge_idxs.front()].building2 == i+1 &&
+                 edges[edge_idxs.back()].joint2 != edges[edge_idxs.front()].joint2 )
+        {
+          edges[edge_idxs.back()].joint2 = edges[edge_idxs.front()].joint2;
+          --joint_count;
+          --last_joint;
         }
       }
       // fix starting joint by completing the cycle
@@ -586,13 +596,39 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<bmdl_edge>& edges,
   
   // recover the vector of building heights
   vcl_vector<double> bld_heights(regions.size());
-  for (unsigned int j=0; j<nj; ++j){
-    for (unsigned int i=0; i<ni; ++i){
+  for (unsigned int j=0; j<nj; ++j)
+  {
+    for (unsigned int i=0; i<ni; ++i)
+    {
       if (labels(i,j) > 1){
         bld_heights[labels(i,j)-2] = heights(i,j);
       }
     }
   }
+  
+  vcl_vector<vcl_vector<unsigned int> > face_list(regions.size());
+  for(unsigned int i = 0; i<regions.size(); ++i)
+  {
+    const vcl_vector<unsigned int>& edge_idxs = regions[i].edge_idxs;
+    for(unsigned int j = 0; j<edge_idxs.size(); ++j)
+    {
+      if(edges[edge_idxs[j]].building1 == i+1)
+      {
+        face_list[i].push_back(edges[edge_idxs[j]].joint1);      
+        // insert two psuedo edge points for disambiguation
+        face_list[i].push_back(num_joints + 2*edge_idxs[j]);
+        face_list[i].push_back(num_joints + 2*edge_idxs[j] + 1);
+      }
+      else
+      {
+        face_list[i].push_back(edges[edge_idxs[j]].joint2);
+        // insert two psuedo edge points for disambiguation
+        face_list[i].push_back(num_joints + 2*edge_idxs[j] + 1);
+        face_list[i].push_back(num_joints + 2*edge_idxs[j]);
+      }
+    }
+  }
+  imesh_half_edge_set he2d(face_list);
   
   // store the indices of vertices connected below each edge point
   vcl_vector<vcl_vector<unsigned int> > edge_to_mesh(edges.size());
@@ -634,6 +670,71 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<bmdl_edge>& edges,
     }
   }
   
+  typedef vcl_pair<unsigned int, unsigned int> uint_pair;
+  vcl_map<uint_pair, vcl_vector<unsigned int> > revised_stack;
+  // find non-manifold corner junctions
+  for(unsigned int i=0; i<joint_vert_stack.size(); ++i){
+    // get the 4 adjacent faces (if there are 4)
+    imesh_half_edge_set::v_const_iterator e1 = he2d.vertex_begin(i), ei = e1;
+    imesh_half_edge_set::v_const_iterator invalid_e(imesh_invalid_idx,he2d);
+    if(ei == invalid_e)
+      continue;
+    int f1 = static_cast<int>(ei->face_index());
+    if (e1 == ++ei)
+      continue;
+    int f2 = static_cast<int>(ei->face_index());
+    if (e1 == ++ei)
+      continue;
+    int f3 = static_cast<int>(ei->face_index());
+    if (e1 == ++ei)
+      continue;
+    int f4 = static_cast<int>(ei->face_index());
+    assert(e1 == ++ei);
+    
+    // look for double peaks
+    if((f1 > f2 && f1 > f4 && f3 > f2 && f3 > f4) ||
+       (f2 > f1 && f2 > f3 && f4 > f1 && f4 > f3) )
+    {
+      if(f1 > f2) // shift
+      {
+        int tmp = f1;
+        f1 = f2;
+        f2 = f3;
+        f3 = f4;
+        f4 = tmp;
+      }
+      
+      // split the old stack
+      const vcl_vector<unsigned int>& jvs = joint_vert_stack[i];
+      
+      double h1 = (f1<0)?(*verts)[jvs.front()][2]:bld_heights[f1];
+      double h2 = bld_heights[f2];
+      double h3 = (f3<0)?(*verts)[jvs.front()][2]:bld_heights[f3];
+      vcl_vector<unsigned int> new_stack1;
+      for(unsigned int k=0; k<jvs.size(); ++k)
+      {
+        double z = (*verts)[jvs[k]][2];
+        if(z == h1 || z == h2 || z == h3)
+          new_stack1.push_back(jvs[k]);
+      }
+      revised_stack[uint_pair(f2,i)] = new_stack1;
+      
+      h1 = (f3<0)?(*verts)[jvs.front()][2]:bld_heights[f3];
+      h2 = bld_heights[f4];
+      h3 = (f1<0)?(*verts)[jvs.front()][2]:bld_heights[f1];
+      vcl_vector<unsigned int> new_stack2;
+      for(unsigned int k=0; k<jvs.size(); ++k)
+      {
+        double z = (*verts)[jvs[k]][2];
+        if(z == h1 || z == h2 || z == h3)
+          new_stack2.push_back(jvs[k]);
+      }
+      revised_stack[uint_pair(f4,i)] = new_stack2;
+      
+    }
+    
+  }
+  
 
   // create the buildings
   for (unsigned int b=0; b<regions.size(); ++b) {
@@ -662,9 +763,16 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<bmdl_edge>& edges,
       else
         vcl_cout << "mismatch "<<b+1<<", "<<edge.building1<<", "<<edge.building2<<vcl_endl;
       
-      
-      const vcl_vector<unsigned int>& jvs1 = joint_vert_stack[j1];
-      const vcl_vector<unsigned int>& jvs2 = joint_vert_stack[j2];
+      // if this has been marked as a non-manifold corner then a revised stack exists
+      // otherwise use the original vertex stack
+      vcl_map<uint_pair, vcl_vector<unsigned int> >::const_iterator rvs1 = revised_stack.find(uint_pair(b,j1));
+      vcl_map<uint_pair, vcl_vector<unsigned int> >::const_iterator rvs2 = revised_stack.find(uint_pair(b,j2));
+      const vcl_vector<unsigned int>& jvs1 = (rvs1==revised_stack.end()) 
+                                             ? joint_vert_stack[j1]
+                                             : rvs1->second;
+      const vcl_vector<unsigned int>& jvs2 = (rvs2==revised_stack.end()) 
+                                              ? joint_vert_stack[j2]
+                                              : rvs2->second;
       
       // is this edge attached to the ground?
       bool on_ground = other == 0 || regions[other-1].edge_idxs.empty();
