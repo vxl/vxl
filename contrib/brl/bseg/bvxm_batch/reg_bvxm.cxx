@@ -80,6 +80,7 @@
 #include <bbgm/pro/bbgm_update_dist_image_stream_process.h>
 #include <bbgm/pro/bbgm_display_dist_image_process.h>
 #include <bbgm/pro/bbgm_measure_process.h>
+#include <bbgm/bbgm_image_of.h>
 
 // vidl2
 #include <core/vil_pro/vil_load_image_view_process.h>
@@ -91,13 +92,15 @@
 #endif
 #include <core/vidl2_pro/vidl2_get_frame_istream_process.h>
 #include <core/vidl2_pro/vidl2_open_ostream_process.h>
+#include <vidl2/vidl2_istream_sptr.h>
+#include <vidl2/vidl2_ostream_sptr.h>
 
 // datatypes
 #include <vcl_string.h>
 #include <vil/vil_image_view_base.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <vpgl/vpgl_camera.h>
-#include <bbgm/bbgm_image_of.h>
+
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -207,6 +210,8 @@ register_datatypes(PyObject *self, PyObject *args)
   REGISTER_DATATYPE( bvxm_voxel_world_sptr );
   //REGISTER_DATATYPE( bvxm_multi_scale_voxel_world_sptr );
   REGISTER_DATATYPE( bbgm_image_sptr );
+  REGISTER_DATATYPE(vidl2_istream_sptr);
+  REGISTER_DATATYPE(vidl2_ostream_sptr);
 
   Py_INCREF(Py_None);
   return Py_None;
