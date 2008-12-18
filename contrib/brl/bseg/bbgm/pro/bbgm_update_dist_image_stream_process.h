@@ -30,7 +30,7 @@ class bbgm_update_dist_image_stream_process : public bprb_process
   //: Clone the process
   virtual bbgm_update_dist_image_stream_process* clone() const {return new bbgm_update_dist_image_stream_process(*this);}
 
-  vcl_string name(){return "UpdateDistImageProcess";}
+  vcl_string name(){return "UpdateDistImageStreamProcess";}
 
   bool init();
   bool execute();

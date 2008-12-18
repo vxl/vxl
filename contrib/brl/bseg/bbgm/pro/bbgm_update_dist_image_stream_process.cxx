@@ -26,8 +26,8 @@ bbgm_update_dist_image_stream_process::bbgm_update_dist_image_stream_process():
   istream_(0), ni_(0), nj_(0)
 {
   //input
-  input_data_.resize(7,brdb_value_sptr(0));
-  input_types_.resize(7);
+  input_data_.resize(9,brdb_value_sptr(0));
+  input_types_.resize(9);
   input_types_[0]= "bbgm_image_sptr";
   input_types_[1]= "vidl2_istream_sptr";
   input_types_[2]= "int"; //max_components
@@ -35,6 +35,8 @@ bbgm_update_dist_image_stream_process::bbgm_update_dist_image_stream_process():
   input_types_[4]= "float"; //initial_variance
   input_types_[5]= "float"; //g_thresh
   input_types_[6]= "float"; //min_stdev
+  input_types_[7]= "int"; // start frame number
+  input_types_[8]= "int"; // end frame number
 
   //initialize the image to null
   input_data_[0]=new brdb_value_t<bbgm_image_sptr>(0);
@@ -71,6 +73,8 @@ bbgm_update_dist_image_stream_process::init()
     return false;
   }
   ni_ = f->ni(); nj_ = f->nj();
+  vcl_cout << " initialized, stream frame size: " << ni_ << ", " << nj_ << ", stream at frame # " << istream_->frame_number() << vcl_endl;
+  vcl_cout.flush();
   return true;
 }
 
@@ -116,6 +120,16 @@ bbgm_update_dist_image_stream_process::execute()
     static_cast<brdb_value_t<float>* >(input_data_[6].ptr());
   float min_stdev = input6->value();
 
+  //Retrieve start frame number
+  brdb_value_t<int>* input7 = static_cast<brdb_value_t<int>* >(input_data_[7].ptr());
+  int start_frame = input7->value();
+
+  //Retrieve end frame number
+  brdb_value_t<int>* input8 = static_cast<brdb_value_t<int>* >(input_data_[8].ptr());
+  int end_frame = input8->value();
+
+  vcl_cout << " will start at frame # " << start_frame << " will end at frame # " << end_frame << vcl_endl;
+
   typedef bsta_gauss_if3 bsta_gauss_t;
   typedef bsta_gauss_t::vector_type vector_;
   typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
@@ -126,6 +140,9 @@ bbgm_update_dist_image_stream_process::execute()
   bbgm_image_sptr model_sptr;
   if (!bgm) {
     model_sptr = new bbgm_image_of<obs_mix_gauss_type>(ni_, nj_, obs_mix_gauss_type());
+    vcl_cout << " Initialized the bbgm image\n";
+    vcl_cout.flush();
+
   }
   else model_sptr = bgm;
   bbgm_image_of<obs_mix_gauss_type> *model =
@@ -144,22 +161,26 @@ bbgm_update_dist_image_stream_process::execute()
                                                           window_size);
 
 
-  while (istream_->advance()) {
+  while (istream_->advance() && (int)(istream_->frame_number()) <= end_frame) {
     // get frame from stream
-    vidl2_frame_sptr f = istream_->current_frame();
-    vil_image_view_base_sptr fb = vidl2_convert_wrap_in_view(*f);
-    if (!fb)
-      return false;
-    vil_image_view<float> frame = *vil_convert_cast(float(), fb);
-    if (fb->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
-      vil_math_scale_values(frame,1.0/255.0);
+    if ((int)(istream_->frame_number()) >= start_frame) {
+      vidl2_frame_sptr f = istream_->current_frame();
+      vil_image_view_base_sptr fb = vidl2_convert_wrap_in_view(*f);
+      if (!fb)
+        return false;
+      vil_image_view<float> frame = *vil_convert_cast(float(), fb);
+      if (fb->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+        vil_math_scale_values(frame,1.0/255.0);
 
-    update(*model,frame,updater);
-    vcl_cout << "updated frame # "<< istream_->frame_number()
-             << " format " << fb->pixel_format() << " nplanes "
-             << fb->nplanes()<< '\n';
+      update(*model,frame,updater);
+      vcl_cout << "updated frame # "<< istream_->frame_number()
+               << " format " << fb->pixel_format() << " nplanes "
+               << fb->nplanes()<< '\n';
+      vcl_cout.flush();
+    }
   }
-  brdb_value_sptr output0 = new brdb_value_t<bbgm_image_sptr>(model);
+
+  brdb_value_sptr output0 = new brdb_value_t<bbgm_image_sptr>(model_sptr);
   output_data_[0] = output0;
 
   return true;
