@@ -53,7 +53,7 @@
 //#include <bvxm/multiscale/bvxm_multi_scale_voxel_world.h>
 //#include <bvxm/pro/multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h>
 
-// recognition 
+// recognition
 #include <brec/pro/brec_update_changes_process.h>
 #include <brec/pro/brec_density_to_prob_map_process.h>
 #include <brec/pro/brec_prob_map_roc_compute_process.h>
@@ -80,7 +80,7 @@
 #include <bbgm/pro/bbgm_update_dist_image_stream_process.h>
 #include <bbgm/pro/bbgm_display_dist_image_process.h>
 #include <bbgm/pro/bbgm_measure_process.h>
-#include <bbgm/bbgm_image_of.h>
+#include <bbgm/bbgm_image_sptr.h>
 
 // vidl2
 #include <core/vil_pro/vil_load_image_view_process.h>
@@ -173,7 +173,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(vil_map_image_binary_process, bprb_batch_process_manager);
   REG_PROCESS(bvgl_generate_mask_process, bprb_batch_process_manager);
   REG_PROCESS(vil_load_image_view_binary_process, bprb_batch_process_manager);
-  REG_PROCESS(vil_save_image_view_binary_process, bprb_batch_process_manager);  
+  REG_PROCESS(vil_save_image_view_binary_process, bprb_batch_process_manager);
 
   // bbgm
   REG_PROCESS(bbgm_load_image_of_process, bprb_batch_process_manager);
