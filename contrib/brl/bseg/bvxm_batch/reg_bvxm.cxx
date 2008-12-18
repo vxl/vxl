@@ -65,7 +65,7 @@
 #include <brec/pro/brec_bayesian_update_process.h>
 #include <brec/pro/brec_glitch_process.h>
 #include <brec/pro/brec_glitch_overlay_process.h>
-#include <brec/pro/brec_create_mog_image_process.h>
+//#include <brec/pro/brec_create_mog_image_process.h>
 
 #include <bvgl_pro/bvgl_generate_mask_process.h>
 #include <vil_pro/vil_load_image_view_binary_process.h>
@@ -167,7 +167,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(brec_bayesian_update_process, bprb_batch_process_manager);
   REG_PROCESS(brec_glitch_process, bprb_batch_process_manager);
   REG_PROCESS(brec_glitch_overlay_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_create_mog_image_process, bprb_batch_process_manager);
+  //REG_PROCESS(brec_create_mog_image_process, bprb_batch_process_manager);
 
   REG_PROCESS(vil_map_image_process, bprb_batch_process_manager);
   REG_PROCESS(vil_map_image_binary_process, bprb_batch_process_manager);
