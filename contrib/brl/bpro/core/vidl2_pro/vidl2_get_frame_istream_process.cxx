@@ -72,7 +72,6 @@ vidl2_get_frame_istream_process::execute()
   vil_image_view_base_sptr fb = vidl2_convert_wrap_in_view(*f);
   if (!fb)
     return false;
-    
 
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(fb);
   output_data_[0] = output0;

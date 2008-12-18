@@ -19,6 +19,7 @@ SET(vidl2_pro_sources
     vidl2_open_ostream_process.h   vidl2_open_ostream_process.cxx
     vidl2_pro_utils.h              vidl2_pro_utils.cxx
     vidl2_get_frame_istream_process.h   vidl2_get_frame_istream_process.cxx
+    vidl2_close_istream_process.h   vidl2_close_istream_process.cxx
 )
 
 IF(DIRECTSHOW_FOUND)
