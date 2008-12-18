@@ -16,21 +16,21 @@
 bool
 bbgm_mean_viewer::probe(const bbgm_image_sptr& dimg) const
 {
-  if(!dimg)
+  if (!dimg)
     return false;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }\
   {\
     typedef DIST T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }
   macro(bsta_num_obs<bsta_gauss_f1>);
   macro(bsta_num_obs<bsta_gauss_if3>);
@@ -45,13 +45,13 @@ bbgm_mean_viewer::probe(const bbgm_image_sptr& dimg) const
 unsigned int
 bbgm_mean_viewer::max_components(const bbgm_image_sptr& dimg) const
 {
-  if(!dimg)
+  if (!dimg)
     return 0;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
       bsta_mixture_size_functor<T> func;\
       vil_image_view<unsigned int> count;\
       unsigned int fail_val = 0;\
@@ -62,8 +62,8 @@ bbgm_mean_viewer::max_components(const bbgm_image_sptr& dimg) const
     }\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
       return 3;\
     }\
   }
@@ -80,13 +80,13 @@ bbgm_mean_viewer::max_components(const bbgm_image_sptr& dimg) const
 bool bbgm_mean_viewer::apply(const bbgm_image_sptr& dimg,
                               vil_image_view<double>& image) const
 {
-  if(!dimg)
+  if (!dimg)
     return false;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       typedef bsta_mean_functor<DIST > func_T;\
       func_T m_func;\
@@ -96,8 +96,8 @@ bool bbgm_mean_viewer::apply(const bbgm_image_sptr& dimg,
     }\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       typedef bsta_mean_functor<DIST > func_T;\
       func_T m_func;\
@@ -108,7 +108,7 @@ bool bbgm_mean_viewer::apply(const bbgm_image_sptr& dimg,
   }\
   {\
     typedef DIST T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       bsta_mean_functor<T> func;\
       bbgm_apply(*d, func, image, fail_val_);\
@@ -129,21 +129,21 @@ bool bbgm_mean_viewer::apply(const bbgm_image_sptr& dimg,
 bool
 bbgm_variance_viewer::probe(const bbgm_image_sptr& dimg) const
 {
-  if(!dimg)
+  if (!dimg)
     return false;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }\
   {\
     typedef DIST T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }
   macro(bsta_num_obs<bsta_gauss_f1>);
   macro(bsta_num_obs<bsta_gauss_if3>);
@@ -158,13 +158,13 @@ bbgm_variance_viewer::probe(const bbgm_image_sptr& dimg) const
 unsigned int
 bbgm_variance_viewer::max_components(const bbgm_image_sptr& dimg) const
 {
-  if(!dimg)
+  if (!dimg)
     return 0;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
       bsta_mixture_size_functor<T> func;\
       vil_image_view<unsigned int> count;\
       unsigned int fail_val = 0;\
@@ -175,8 +175,8 @@ bbgm_variance_viewer::max_components(const bbgm_image_sptr& dimg) const
     }\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
       return 3;\
     }\
   }
@@ -192,13 +192,13 @@ bbgm_variance_viewer::max_components(const bbgm_image_sptr& dimg) const
 bool bbgm_variance_viewer::apply(const bbgm_image_sptr& dimg,
                                   vil_image_view<double>& image) const
 {
-  if(!dimg)
+  if (!dimg)
     return false;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       typedef bsta_diag_covar_functor<DIST > func_T;\
       func_T m_func;\
@@ -209,7 +209,7 @@ bool bbgm_variance_viewer::apply(const bbgm_image_sptr& dimg,
   }\
   {\
     typedef DIST T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       bsta_diag_covar_functor<T> func;\
       bbgm_apply(*d, func, image, fail_val_);\
@@ -222,7 +222,7 @@ bool bbgm_variance_viewer::apply(const bbgm_image_sptr& dimg,
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       typedef bsta_var_functor<DIST > func_T;\
       func_T m_func;\
@@ -232,8 +232,8 @@ bool bbgm_variance_viewer::apply(const bbgm_image_sptr& dimg,
     }\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       typedef bsta_var_functor<DIST > func_T;\
       func_T m_func;\
@@ -244,7 +244,7 @@ bool bbgm_variance_viewer::apply(const bbgm_image_sptr& dimg,
   }\
   {\
     typedef DIST T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       bsta_var_functor<T> func;\
       bbgm_apply(*d, func, image, fail_val_);\
@@ -264,17 +264,17 @@ bool bbgm_variance_viewer::apply(const bbgm_image_sptr& dimg,
 bool
 bbgm_weight_viewer::probe(const bbgm_image_sptr& dimg) const
 {
-  if(!dimg)
+  if (!dimg)
     return false;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
   }
   macro(bsta_num_obs<bsta_gauss_f1>);
   macro(bsta_num_obs<bsta_gauss_if3>);
@@ -289,13 +289,13 @@ bbgm_weight_viewer::probe(const bbgm_image_sptr& dimg) const
 unsigned int
 bbgm_weight_viewer::max_components(const bbgm_image_sptr& dimg) const
 {
-  if(!dimg)
+  if (!dimg)
     return 0;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
       bsta_mixture_size_functor<T> func;\
       vil_image_view<unsigned int> count;\
       unsigned int fail_val = 0;\
@@ -306,8 +306,8 @@ bbgm_weight_viewer::max_components(const bbgm_image_sptr& dimg) const
     }\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3> > T;\
+    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
       return 3;\
     }\
   }
@@ -323,13 +323,13 @@ bbgm_weight_viewer::max_components(const bbgm_image_sptr& dimg) const
 bool bbgm_weight_viewer::apply(const bbgm_image_sptr& dimg,
                                 vil_image_view<double>& image) const
 {
-  if(!dimg)
+  if (!dimg)
     return false;
 
 #define macro(DIST)\
   {\
     typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       bsta_weight_functor<T > func(this->active_component_);\
       bbgm_apply(*d, func, image, fail_val_);\
@@ -337,8 +337,8 @@ bool bbgm_weight_viewer::apply(const bbgm_image_sptr& dimg,
     }\
   }\
   {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3 > > T;\
-    if(const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
+    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
+    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
     {\
       bsta_weight_functor<T > func(this->active_component_);\
       bbgm_apply(*d, func, image, fail_val_);\
