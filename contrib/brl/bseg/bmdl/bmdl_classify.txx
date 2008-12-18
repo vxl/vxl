@@ -388,7 +388,7 @@ void bmdl_classify<T>::cluster_buildings()
 
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      if (labels_(i,j)>2)
+      if (labels_(i,j)>=2)
         labels_(i,j) = unique_map[labels_(i,j)-2]+2;
     }
   }
@@ -422,7 +422,7 @@ void bmdl_classify<T>::threshold_building_area()
   unsigned int nj = labels_.nj();
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
-      if (labels_(i,j)>2)
+      if (labels_(i,j)>=2)
         labels_(i,j) = label_map[labels_(i,j)-2];
     }
   }
@@ -768,8 +768,8 @@ bool bmdl_classify<T>::dilate_buildings(unsigned int num)
 
       // collect all adjacent building labels
       vcl_map<int,unsigned int> n;
-      int offset_x[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-      int offset_y[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+      int offset_x[] = {-1, 0, 0, 1,-1, 1, 1,-1};
+      int offset_y[] = { 0,-1, 1, 0,-1,-1, 1, 1};
       unsigned total = 0;
       for (unsigned int k=0; k<8; ++k)
       {
@@ -777,7 +777,7 @@ bool bmdl_classify<T>::dilate_buildings(unsigned int num)
         if (idx<0) continue;
         ++total;
         vcl_map<int,unsigned int>::iterator itr = n.find(idx);
-        if (itr == n.end())
+        if (itr == n.end() && k < 4) // only consider 4-con neighbors
           n.insert(vcl_pair<int,unsigned int>(idx,1));
         else
           ++(itr->second);
@@ -794,8 +794,6 @@ bool bmdl_classify<T>::dilate_buildings(unsigned int num)
       {
         if (itr->second > max) {
           max = itr->second;
-          if (labels_(i,j) >= 2)
-            --building_area_[labels_(i,j)-2];
           labels_(i,j) = itr->first+2;
           ++building_area_[itr->first];
           changed = true;
