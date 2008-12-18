@@ -78,6 +78,17 @@ template <class T>
 vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
                                  vgl_plane_3d<T> const& plane);
 
+
+
+//: Return the intersection point of a line and a plane.
+// \relates vgl_line_segment_3d
+// \relates vgl_plane_3d
+template <class T>
+bool vgl_intersection(vgl_line_segment_3d<T> const& line,
+                      vgl_plane_3d<T> const& plane,
+                      vgl_point_3d<T> & i_pt);
+
+
 //: Return the intersection point of three planes.
 // \relates vgl_plane_3d
 template <class T>

@@ -211,12 +211,12 @@ static vgl_triangle_3d_intersection_t same_side(
   vgl_vector_3d<double> e = E - A;
   double e_dot = dot_product(e, n);
 
-  if (vcl_abs(d_dot) < vcl_numeric_limits<double>::epsilon() *
-    vcl_max(vcl_numeric_limits<double>::denorm_min(),
-      vcl_sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) ) * 1.0e3 )
+  if (vcl_abs(d_dot) < vcl_sqrt(vcl_numeric_limits<double>::epsilon()) *
+    vcl_max(1.0e-100, vcl_max(vcl_sqrt(A.x()*A.x()+A.y()*A.y()+A.z()*A.z()),
+      vcl_sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) ) ) )
     return Coplanar;
 
-  if (d_dot * e_dot > 0)
+  if (d_dot * e_dot >= 0)
     return Skew;
   else
     return None;
@@ -235,6 +235,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   vgl_point_3d<double>& i_pnt,
   bool ignore_coplanar/*=false*/)
 {
+
   vgl_point_3d<double> line_p1 = line.point1();
   vgl_point_3d<double> line_p2 = line.point2();
 
@@ -326,7 +327,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   return Skew;
 
 }
-
 //=======================================================================
 //: Compute the intersection point between the line segment and triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
@@ -373,18 +373,18 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
     return None;
   }
 
-  vgl_triangle_3d_intersection_t rv;
 
-  rv = same_side(line.point1(), p1, p2, p3, line.point2());
-  if (rv == None) return None;
 
-  rv = same_side(line.point1(), p2, p3, p1, line.point2());
-  if (rv == None) return None;
+  vgl_triangle_3d_intersection_t rv1 = same_side(line.point1(), p1, p2, p3, line.point2());
+  if (rv1 == None) return None;
 
-  rv = same_side(line.point1(), p3, p1, p2, line.point2());
-  if (rv == None) return None;
+  vgl_triangle_3d_intersection_t rv2 = same_side(line.point1(), p2, p3, p1, line.point2());
+  if (rv2 == None) return None;
 
-  if (rv == Coplanar)
+  vgl_triangle_3d_intersection_t rv3 = same_side(line.point1(), p3, p1, p2, line.point2());
+  if (rv3 == None) return None;
+
+  if (rv1 == Coplanar || rv2 == Coplanar || rv3==Coplanar)
   {
     if (ignore_coplanar)
       return None;
@@ -433,7 +433,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   i_pnt = vgl_intersection(vgl_line_3d_2_points<double>(line_p1, line_p2),
     vgl_plane_3d<double>(p1, p2, p3) );
   return Skew;
-
 }
 
 //=======================================================================
@@ -719,8 +718,9 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
     if ( isect1 || isect2 || isect3 )
     {
-      i_line.set( isect1 ? i_pnt1 : isect2 ? i_pnt2 : i_pnt3,
-                  isect1 && isect2 ? i_pnt2 : (isect1 || isect2) && isect3 ? i_pnt3 : isect1 ? i_pnt1 : isect2 ? i_pnt2 : i_pnt3 );
+      i_line.set( isect1 ? i_pnt1 : (isect2 ? i_pnt2 : i_pnt3),
+                  isect1 && isect2 ? i_pnt2 : (isect1 || isect2) && isect3 ? i_pnt3 :
+                    (isect1 ? i_pnt1 : (isect2 ? i_pnt2 : i_pnt3)) );
       return Coplanar;
     }
 

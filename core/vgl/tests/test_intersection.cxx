@@ -11,25 +11,58 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_line_segment_3d.h>
 
 
 static void test_plane_intersection()
 {
   vgl_plane_3d<double> pl1(vgl_vector_3d<double>(10,10,10), vgl_point_3d<double>(10,0,-10));
   vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(1,4,1),vgl_point_3d<double>(-1,-4,-1));
-  vgl_point_3d<double> pt1 = vgl_intersection(l1,pl1);
+  vgl_point_3d<double> pt1 = vgl_intersection(l1, pl1);
   TEST_NEAR("vgl_intersection(l1,pl1) = O", vgl_distance(pt1, vgl_point_3d<double>(0,0,0)), 0.0, 1e-8);
 
   vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0,0,0),vgl_point_3d<double>(10,0,-10));
-  vgl_point_3d<double> pt2 = vgl_intersection(l2,pl1);
+  vgl_point_3d<double> pt2 = vgl_intersection(l2, pl1);
 
   const double inf = vcl_numeric_limits<double>::infinity();
   TEST("vgl_intersection(l2,pl1) = (inf,inf,inf)", pt2,
        vgl_point_3d<double>(inf, inf, inf));
 
   vgl_line_3d_2_points<double> l3(vgl_point_3d<double>(0,10,0),vgl_point_3d<double>(10,10,-10));
-  vgl_point_3d<double> pt3 = vgl_intersection(l3,pl1);
+  vgl_point_3d<double> pt3 = vgl_intersection(l3, pl1);
   TEST("vgl_intersection(l2,p1) = (inf,0,0)", pt3, vgl_point_3d<double>(inf, 0, 0));
+
+  vgl_line_segment_3d<double> l4(vgl_point_3d<double>(1,4,1),vgl_point_3d<double>(-1,-4,-1));
+  vgl_point_3d<double> pt4;
+  bool rv4 = vgl_intersection(l4, pl1, pt4);
+  TEST("Found intersection(l4,pl1)", rv4, true);
+  TEST_NEAR("vgl_intersection(l4,pl1) = O", vgl_distance(pt4, vgl_point_3d<double>(0,0,0)), 0.0, 1e-8);
+
+  vgl_line_segment_3d<double> l5(vgl_point_3d<double>(0,0,0),vgl_point_3d<double>(10,0,-10));
+  vgl_point_3d<double> pt5;
+  bool rv5 = vgl_intersection(l5, pl1, pt5);
+
+  TEST("Found intersection(l5,pl1)", rv5, true);
+  TEST("vgl_intersection(l5,pl1) = (inf,inf,inf)", pt5,
+       vgl_point_3d<double>(inf, inf, inf));
+
+  vgl_line_segment_3d<double> l6(vgl_point_3d<double>(0,10,0),vgl_point_3d<double>(10,10,-10));
+  vgl_point_3d<double> pt6;
+  bool rv6 = vgl_intersection(l6, pl1, pt6);
+  TEST("Found no intersection(l6,pl1)", rv6, false);
+
+  vgl_line_segment_3d<double> l7(vgl_point_3d<double>(1,4,1),vgl_point_3d<double>(0,0,0));
+  vgl_point_3d<double> pt7;
+  bool rv7 = vgl_intersection(l7, pl1, pt7);
+  TEST("Found intersection(l7,pl1)", rv7, true);
+  TEST_NEAR("vgl_intersection(l4,pl1) = O", vgl_distance(pt7, vgl_point_3d<double>(0,0,0)), 0.0, 1e-8);
+
+
+  vgl_line_segment_3d<double> l8(vgl_point_3d<double>(1,4,1),vgl_point_3d<double>(1e-5,1e-5,1e-5));
+  vgl_point_3d<double> pt8;
+  bool rv8 = vgl_intersection(l8, pl1, pt8);
+  TEST("Found no intersection(l8,pl1)", rv8, false);
+
 }
 
 static void test_three_planes()

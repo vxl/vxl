@@ -326,6 +326,53 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
   return pt;
 }
 
+//: Return the intersection point of a line and a plane.
+// \relates vgl_line_segment_3d
+// \relates vgl_plane_3d
+template <class T>
+bool vgl_intersection(vgl_line_segment_3d<T> const& line,
+                      vgl_plane_3d<T> const& plane,
+                      vgl_point_3d<T> & i_pt)
+{
+  
+  vgl_vector_3d<T> dir = line.direction();
+
+
+  // The calculation of both denom and numerator are both very dodgy numerically, especially if
+  // denom or numerator is small compared to the summands. It would be good to find a more
+  // numerically stable solution. IMS.
+  const double tol = vcl_numeric_limits<T>::epsilon() * 10e3;
+  
+  double denom = plane.a()*(dir.x()) +
+                 plane.b()*(dir.y()) +
+                 plane.c()*(dir.z());
+
+  if (vcl_abs(denom) < tol)
+  {
+    const T inf = vcl_numeric_limits<T>::infinity();
+    // Line is either parallel or coplanar
+    // If the distance from a line endpoint to the plane is zero, coplanar
+    if (vgl_distance(line.point1(), plane)!=0.0)
+      return false;
+
+    i_pt.set(inf,inf,inf);
+    return true;
+  }
+  
+  double numer = -(plane.a()*line.point1().x() +
+                   plane.b()*line.point1().y() +
+                   plane.c()*line.point1().z() +
+                   plane.d());
+
+  double t = numer/denom; // 0<t<1 between two points
+  if (t < 0 || t > 1.0) return false;
+
+  i_pt = line.point1() + t * dir;
+
+  return true;
+}
+
+
 template <class T>
 bool vgl_intersection( const vgl_line_2d<T> &line0,
                        const vgl_line_2d<T> &line1,
@@ -511,6 +558,7 @@ template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_l
 template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
+template bool vgl_intersection(vgl_line_segment_3d<T> const&, vgl_plane_3d<T> const&, vgl_point_3d<T> &); \
 template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
 template unsigned vgl_intersection(const vgl_box_2d<T >& , const vgl_line_segment_2d<T >& , vgl_point_2d<T >& , vgl_point_2d<T >& ); \
