@@ -8,6 +8,8 @@
 #include <brdb/brdb_selection.h>
 #include <brdb/brdb_database_manager.h>
 
+#include <bbgm/bbgm_image_sptr.h>
+
 static PyObject *
 init_process(PyObject *self, PyObject *args)
 {
@@ -184,6 +186,20 @@ get_input_unsigned(PyObject *self, PyObject *args)
 }
 
 static PyObject *
+set_input_zero_bbgm_sptr(PyObject *self, PyObject *args)
+{
+  int input;
+  if (!PyArg_ParseTuple(args, "i:set_input_zero_bbgm_sptr", &input))
+    return NULL;
+  bbgm_image_sptr dummy;
+  brdb_value_sptr iv = new brdb_value_t<bbgm_image_sptr>(dummy);
+  vcl_cout << "input[" << input << "](bbgm_image_sptr): " << dummy << '\n';
+  bool result =
+    bprb_batch_process_manager::instance()->set_input(input, iv);
+  return Py_BuildValue("b", result);
+}
+
+static PyObject *
 process_print_default_params(PyObject *self, PyObject *args)
 {
   const char* name;
@@ -307,6 +323,8 @@ static PyMethodDef batch_methods[] =
   "get_input_(i) return value of output i in the database"},
   {"get_input_unsigned", get_input_unsigned, METH_VARARGS,
   "get_input_(i) return value of output i in the database"},
+  {"set_input_zero_bbgm_sptr", set_input_zero_bbgm_sptr, METH_VARARGS,
+   "set_input_zero_bbgm_sptr(i) set input i on current process to a zero sptr"},
   {"process_init", process_init, METH_VARARGS,
   "process_init() initialize the current process state before execution"},
   {"run_process", run_process, METH_VARARGS,

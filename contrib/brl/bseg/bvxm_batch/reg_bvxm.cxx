@@ -65,6 +65,7 @@
 #include <brec/pro/brec_bayesian_update_process.h>
 #include <brec/pro/brec_glitch_process.h>
 #include <brec/pro/brec_glitch_overlay_process.h>
+#include <brec/pro/brec_create_mog_image_process.h>
 
 #include <bvgl_pro/bvgl_generate_mask_process.h>
 #include <vil_pro/vil_load_image_view_binary_process.h>
@@ -72,11 +73,31 @@
 #include <vil_pro/vil_map_image_process.h>
 #include <vil_pro/vil_map_image_binary_process.h>
 
+// bbgm
+#include <bbgm/pro/bbgm_load_image_of_process.h>
+#include <bbgm/pro/bbgm_save_image_of_process.h>
+#include <bbgm/pro/bbgm_update_dist_image_process.h>
+#include <bbgm/pro/bbgm_update_dist_image_stream_process.h>
+#include <bbgm/pro/bbgm_display_dist_image_process.h>
+#include <bbgm/pro/bbgm_measure_process.h>
+
+// vidl2
+#include <core/vil_pro/vil_load_image_view_process.h>
+#include <core/vil_pro/vil_save_image_view_process.h>
+#include <core/vidl2_pro/vidl2_open_istream_process.h>
+//#define HAS_DIRECTSHOW
+#ifdef HAS_DIRECTSHOW
+#include <core/vidl2_pro/vidl2_open_dshow_istream_process.h>
+#endif
+#include <core/vidl2_pro/vidl2_get_frame_istream_process.h>
+#include <core/vidl2_pro/vidl2_open_ostream_process.h>
+
 // datatypes
 #include <vcl_string.h>
 #include <vil/vil_image_view_base.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <vpgl/vpgl_camera.h>
+#include <bbgm/bbgm_image_of.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -142,6 +163,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(brec_bayesian_update_process, bprb_batch_process_manager);
   REG_PROCESS(brec_glitch_process, bprb_batch_process_manager);
   REG_PROCESS(brec_glitch_overlay_process, bprb_batch_process_manager);
+  REG_PROCESS(brec_create_mog_image_process, bprb_batch_process_manager);
 
   REG_PROCESS(vil_map_image_process, bprb_batch_process_manager);
   REG_PROCESS(vil_map_image_binary_process, bprb_batch_process_manager);
@@ -149,6 +171,21 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(vil_load_image_view_binary_process, bprb_batch_process_manager);
   REG_PROCESS(vil_save_image_view_binary_process, bprb_batch_process_manager);  
 
+  // bbgm
+  REG_PROCESS(bbgm_load_image_of_process, bprb_batch_process_manager);
+  REG_PROCESS(bbgm_save_image_of_process, bprb_batch_process_manager);
+  REG_PROCESS(bbgm_update_dist_image_process, bprb_batch_process_manager);
+  REG_PROCESS(bbgm_update_dist_image_stream_process, bprb_batch_process_manager);
+  REG_PROCESS(bbgm_display_dist_image_process, bprb_batch_process_manager);
+  REG_PROCESS(bbgm_measure_process, bprb_batch_process_manager);
+
+  // vidl2
+  REG_PROCESS(vidl2_open_istream_process, bprb_batch_process_manager);
+  REG_PROCESS(vidl2_open_ostream_process, bprb_batch_process_manager);
+  REG_PROCESS(vidl2_get_frame_istream_process, bprb_batch_process_manager);
+#ifdef HAS_DIRECTSHOW
+  REG_PROCESS(vidl2_open_dshow_istream_process, bprb_batch_process_manager);
+#endif
 
   Py_INCREF(Py_None);
   return Py_None;
@@ -169,6 +206,7 @@ register_datatypes(PyObject *self, PyObject *args)
   REGISTER_DATATYPE( vpgl_camera_double_sptr );
   REGISTER_DATATYPE( bvxm_voxel_world_sptr );
   //REGISTER_DATATYPE( bvxm_multi_scale_voxel_world_sptr );
+  REGISTER_DATATYPE( bbgm_image_sptr );
 
   Py_INCREF(Py_None);
   return Py_None;
