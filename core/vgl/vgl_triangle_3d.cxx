@@ -73,7 +73,7 @@ vcl_vector<vcl_pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
 
   return coinc_edges;
 }
-#pragma optimize ("", off)
+
 //=======================================================================
 //: Check if the given point is inside the triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
@@ -170,7 +170,7 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
 
   return true;
 }
-#pragma optimize ("", on)
+
 //=======================================================================
 //: Check if point \a i_pnt is inside the triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
