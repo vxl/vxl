@@ -86,6 +86,7 @@
 #include <core/vil_pro/vil_load_image_view_process.h>
 #include <core/vil_pro/vil_save_image_view_process.h>
 #include <core/vidl2_pro/vidl2_open_istream_process.h>
+#include <core/vidl2_pro/vidl2_close_istream_process.h>
 //#define HAS_DIRECTSHOW
 #ifdef HAS_DIRECTSHOW
 #include <core/vidl2_pro/vidl2_open_dshow_istream_process.h>
@@ -184,6 +185,7 @@ register_processes(PyObject *self, PyObject *args)
 
   // vidl2
   REG_PROCESS(vidl2_open_istream_process, bprb_batch_process_manager);
+  REG_PROCESS(vidl2_close_istream_process, bprb_batch_process_manager);
   REG_PROCESS(vidl2_open_ostream_process, bprb_batch_process_manager);
   REG_PROCESS(vidl2_get_frame_istream_process, bprb_batch_process_manager);
 #ifdef HAS_DIRECTSHOW
