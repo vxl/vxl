@@ -33,7 +33,7 @@ bmdl_classify_process::bmdl_classify_process()
 
   if (!parameters()->add( "Ground Threshold" , PARAM_GROUND_THRESH , (float) 2.0 ))
     vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";
-  
+
   if (!parameters()->add( "Vegetation Threshold" , PARAM_VEG_THRESH , (float) 1.0 ))
     vcl_cerr << "ERROR: Adding parameters in bmdl_classify_process\n";
 
@@ -120,7 +120,7 @@ bool bmdl_classify_process::classify(const vil_image_view<T>& lidar_first,
                                      vil_image_view<T>& height_img,
                                      T gthresh, T vthresh, T athresh, T hres)
 {
-  bmdl_classify<T> classifier(athresh, hres, gthresh, vthresh);
+  bmdl_classify<T> classifier((unsigned int)athresh, hres, gthresh, vthresh);
   classifier.set_lidar_data(lidar_first,lidar_last);
   classifier.set_bare_earth(ground);
   classifier.label_lidar();
