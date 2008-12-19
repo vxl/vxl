@@ -8,7 +8,6 @@
 #include <vcl_iostream.h>
 
 #ifdef DEBUG
-#include <vcl_iostream.h>
 #define trace(str) { vcl_cerr << str << vcl_endl; }
 #else
 #define trace(str)
@@ -107,7 +106,7 @@ void vgl_rtree_node<V, B, C>::print() const
 {
   vcl_cout << "node bounds: ";
   bounds.print(vcl_cout);
-  vcl_cout << vcl_endl << "--------";
+  vcl_cout << "\n--------";
   for (unsigned int i=0; i<local_chs; ++i) {
     vcl_cout << "\n\t";
     chs[i]->print();
