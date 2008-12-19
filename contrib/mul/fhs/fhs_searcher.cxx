@@ -101,7 +101,7 @@ void fhs_searcher::combine_responses(unsigned im_index,
         const float *c_pix = c_row;
         float * s_pix = s_row;
 
-        if (cj<0 || cj>=(cnj-1))  // Whole row is illegal
+        if (cj<0 || (unsigned int)cj+1>=cnj)  // Whole row is illegal
         {
           for (unsigned i=0;i<ni;++i, s_pix+=s_istep)
             *s_pix += 9999;  // Illegal if off the image
@@ -110,7 +110,7 @@ void fhs_searcher::combine_responses(unsigned im_index,
         {
           for (unsigned i=0;i<ni;++i,++ci,c_pix+=c_istep, s_pix+=s_istep)
           {
-            if (ci<0 ||ci>=(cni-1))
+            if (ci<0 || (unsigned int)ci+1>=cni)
               *s_pix += 9999;  // Illegal if off the image
             else
               *s_pix += *c_pix;
@@ -126,11 +126,11 @@ void fhs_searcher::combine_responses(unsigned im_index,
           // Compute point in target image (in image co-ords)
           vgl_point_2d<double> p = c_w2i(i2w(i,j)+dp);
 
-          if (p.x()<0 || p.y()<0 || p.x()>=(cni-1) || p.y()>=(cnj-1))
-            sum_image(i,j) += 9999;  // Illegal if off the image
+          if (p.x()<0 || p.y()<0 || p.x()+1>=cni || p.y()+1>=cnj)
+            sum_image(i,j) += 9999f;  // Illegal if off the image
           else
-            sum_image(i,j) += vil_bilin_interp_unsafe(p.x(),p.y(),
-                                                      c_data,c_istep,c_jstep);
+            sum_image(i,j) += (float)vil_bilin_interp_unsafe(p.x(),p.y(),
+                                                             c_data,c_istep,c_jstep);
         }
     }
   }

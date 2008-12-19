@@ -165,7 +165,7 @@ bool fhs_load_points(const vcl_string& path,
     else if (label=="{")
     {
       pts.resize(n);
-      for (unsigned i=0;i<n;++i)
+      for (int i=0;i<n;++i)
       {
         double x,y;
         ifs>>x>>y;
@@ -364,10 +364,10 @@ int main( int argc, char* argv[] )
   // Check arc ends are all valid points
   for (unsigned i=0;i<pairs.size();++i)
   {
-    if (pairs[i].first<0 || pairs[i].first>=ref_pts.size())
-      { vcl_cerr<<"Invalid point index "<<pairs[i].first<<vcl_endl; return 5; }
-    if (pairs[i].second<0 || pairs[i].second>=ref_pts.size())
-      { vcl_cerr<<"Invalid point index "<<pairs[i].second<<vcl_endl; return 5; }
+    if (pairs[i].first<0 || (unsigned int)(pairs[i].first)>=ref_pts.size())
+    { vcl_cerr<<"Invalid point index "<<pairs[i].first<<vcl_endl; return 5; }
+    if (pairs[i].second<0 || (unsigned int)(pairs[i].second)>=ref_pts.size())
+    { vcl_cerr<<"Invalid point index "<<pairs[i].second<<vcl_endl; return 5; }
   }
 
   // ====================================================================
