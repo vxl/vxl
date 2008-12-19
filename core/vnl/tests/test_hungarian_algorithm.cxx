@@ -16,11 +16,11 @@ void check_solution( vcl_vector<unsigned> const& assign,
   TEST( "  assignment vector size", assign.size(), N );
   bool okay = true;
   vcl_cout << "  assignment:\n";
-  for( unsigned i = 0; i < N; ++i ) {
-    if( assign[i] != unsigned(-1) || solution[i] != unsigned(-1) ) {
+  for ( unsigned i = 0; i < N; ++i ) {
+    if ( assign[i] != unsigned(-1) || solution[i] != unsigned(-1) ) {
       vcl_cout << "    " << i << " -> " << assign[i]
                << " (expected " << solution[i] << ")\n";
-      if( assign[i] != solution[i] ) {
+      if ( assign[i] != solution[i] ) {
         vcl_cout << "        (mismatch)\n";
         okay = false;
       }
@@ -35,18 +35,18 @@ vcl_vector<unsigned> make_up_solution( unsigned const M, unsigned const N )
 {
   // True solution
   vcl_vector<unsigned> true_assn( M );
-  for( unsigned i = 0; i < M; ++i ) {
+  for ( unsigned i = 0; i < M; ++i ) {
     bool okay;
     do {
       true_assn[i] = randgen.lrand32( N );
       okay = true;
-      for( unsigned j = 0; j < i; ++j ) {
-        if( true_assn[j] == true_assn[i] ) {
+      for ( unsigned j = 0; j < i; ++j ) {
+        if ( true_assn[j] == true_assn[i] ) {
           okay = false;
           break;
         }
       }
-    } while( ! okay );
+    } while ( ! okay );
   }
 
   return true_assn;
@@ -54,32 +54,32 @@ vcl_vector<unsigned> make_up_solution( unsigned const M, unsigned const N )
 
 static void test_skewed_problem( unsigned const M, unsigned const N )
 {
-
-  vcl_cout << "Creating " << M << "x" << N << " matrix" << vcl_endl;
+  vcl_cout << "Creating " << M << 'x' << N << " matrix" << vcl_endl;
   vnl_matrix<double> cost( M, N );
   double low = vcl_min(M,N) + 5.0;
-  for( unsigned i = 0; i < M; ++i ) {
-    for( unsigned j = 0; j < N; ++j ) {
+  for ( unsigned i = 0; i < M; ++i ) {
+    for ( unsigned j = 0; j < N; ++j ) {
       cost(i,j) = randgen.drand32( low, 100000.0 );
     }
   }
 
   vcl_vector<unsigned> true_assn;
-  if( M < N ) {
+  if ( M < N ) {
     true_assn = make_up_solution( M, N );
-    for( unsigned i = 0; i < M; ++i ) {
+    for ( unsigned i = 0; i < M; ++i ) {
       cost(i, true_assn[i]) = i;
     }
-  } else {
+  }
+  else {
     vcl_vector<unsigned> transposed_assn = make_up_solution( N, M );
     true_assn.resize( M, unsigned(-1) );
-    for( unsigned j = 0; j < N; ++j ) {
+    for ( unsigned j = 0; j < N; ++j ) {
       true_assn[ transposed_assn[j] ] = j;
       cost(transposed_assn[j],j) = j;
     }
   }
 
-  vcl_cout << "Costs computed for " << M << "x" << N << " matrix" << vcl_endl;
+  vcl_cout << "Costs computed for " << M << 'x' << N << " matrix" << vcl_endl;
 
   vcl_vector<unsigned> assn = vnl_hungarian_algorithm( cost );
 
@@ -91,7 +91,7 @@ static
 void run_test( vnl_matrix<double> const& cost, unsigned solution[] )
 {
   {
-    vcl_cout << "Test " << cost.rows() << "x" << cost.cols()
+    vcl_cout << "Test " << cost.rows() << 'x' << cost.cols()
              << " matrix" << vcl_endl;
     vcl_vector<unsigned> assign = vnl_hungarian_algorithm( cost );
     check_solution( assign, solution, cost.rows() );
@@ -103,8 +103,8 @@ void run_test( vnl_matrix<double> const& cost, unsigned solution[] )
     vcl_vector<unsigned> assign = vnl_hungarian_algorithm( costT );
 
     vcl_vector<unsigned> solutionT( costT.rows(), unsigned(-1) );
-    for( unsigned i = 0; i < cost.rows(); ++i ) {
-      if( solution[i] != unsigned(-1) ) {
+    for ( unsigned i = 0; i < cost.rows(); ++i ) {
+      if ( solution[i] != unsigned(-1) ) {
         solutionT[ solution[i] ] = i;
       }
     }
@@ -187,7 +187,7 @@ static void test_hungarian_algorithm( int, char*[] )
                               { 3.0, 0.5, 0.1 } };
 
     vnl_matrix<double> cost( &cost_val[0][0], 5, 3 );
-    unsigned solution[] = { 1, -1, 0, -1, 2 };
+    unsigned solution[] = { 1, unsigned(-1), 0, unsigned(-1), 2 };
     run_test( cost, solution );
   }
 
@@ -202,7 +202,7 @@ static void test_hungarian_algorithm( int, char*[] )
                               { 3.0, 0.5, 0.1 } };
 
     vnl_matrix<double> cost( &cost_val[0][0], 5, 3 );
-    unsigned solution[] = { 1, -1, 0, -1, 2 };
+    unsigned solution[] = { 1, unsigned(-1), 0, unsigned(-1), 2 };
     run_test( cost, solution );
   }
 
@@ -215,7 +215,7 @@ static void test_hungarian_algorithm( int, char*[] )
                               { 3.0, 0.5, 0.1 } };
 
     vnl_matrix<double> cost( &cost_val[0][0], 5, 3 );
-    unsigned solution[] = { 1, -1, 0, -1, 2 };
+    unsigned solution[] = { 1, unsigned(-1), 0, unsigned(-1), 2 };
     run_test( cost, solution );
   }
 
@@ -228,7 +228,6 @@ static void test_hungarian_algorithm( int, char*[] )
     test_skewed_problem( 2, 50000 );
     test_skewed_problem( 50000, 2 );
   }
-
 }
 
 TESTMAIN_ARGS( test_hungarian_algorithm )
