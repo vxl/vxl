@@ -119,8 +119,7 @@ bool vil_geotiff_header::geounits (geounits_t& units)
 bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //hemisph is O for N, 1 for S
 {
   modeltype_t type;
-  gtif_modeltype(type);
-  if (type == ModelTypeProjected)
+  if (gtif_modeltype(type) && type == ModelTypeProjected)
   {
     void *value;
     int size;
