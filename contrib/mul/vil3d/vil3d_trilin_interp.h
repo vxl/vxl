@@ -48,32 +48,35 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
 
 //: Compute trilinear interpolation at (x,y,z), with bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
-//  If (x,y,z) is outside interpolatable image region, zero is returned.
+//  If (x,y,z) is outside interpolatable image region, returns zero or \a outval
 template<class T>
 inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* data,
                                        unsigned nx, unsigned ny, unsigned nz,
-                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep,
+                                       T outval=0)
 {
-  if (x<0) return 0.0;
-  if (y<0) return 0.0;
-  if (z<0) return 0.0;
-  if (x>=nx-1) return 0.0;
-  if (y>=ny-1) return 0.0;
-  if (z>=nz-1) return 0.0;
+  if (x<0) return outval;
+  if (y<0) return outval;
+  if (z<0) return outval;
+  if (x>=nx-1) return outval;
+  if (y>=ny-1) return outval;
+  if (z>=nz-1) return outval;
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
 //: Compute trilinear interpolation at (x,y,z,p), with bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
-//  If (x,y,z) is outside interpolatable image region, zero is returned.
+//  If (x,y,z) is outside interpolatable image region, returns zero or \a outval
 template<class T>
 inline double vil3d_trilin_interp_safe(const vil3d_image_view<T>& image,
                                        double x, double y, double z,
-                                       unsigned p=0)
+                                       unsigned p=0,
+                                       T outval=0)
 {
   return vil3d_trilin_interp_safe(x,y,z,&image(0,0,0,p),
                                   image.ni(),image.nj(),image.nk(),
-                                  image.istep(),image.jstep(),image.kstep());
+                                  image.istep(),image.jstep(),image.kstep(),
+                                  outval);
 }
 
 //: Compute trilinear interpolation at (x,y), with bound checks

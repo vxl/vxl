@@ -32,7 +32,7 @@ inline bool vil3d_grid_corner_in_image(double x0, double y0, double z0,
 //  (x0+i.dx1+j.dx2+k.dx3, y0+i.dy1+j.dy2+k.dy3, z0+i.dz1+j.dz2+k.dz3),
 //  where i=[0..n1-1], j=[0..n2-1], k=[0..n3-1]
 //  dest_image resized to (n1,n2,n3,src_image.nplanes())
-//  Points outside image return zero.
+//  Points outside image return value of nearest pixel.
 template <class S, class T>
 void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
                                           vil3d_image_view<T>& dest_image,
@@ -204,7 +204,7 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
 //  (x0+i.dx1+j.dx2+k.dx3, y0+i.dy1+j.dy2+k.dy3, z0+i.dz1+j.dz2+k.dz3),
 //  where i=[0..n1-1], j=[0..n2-1], k=[0..n3-1]
 //  dest_image resized to (n1,n2,n3,src_image.nplanes())
-//  Points outside image return zero.
+//  Points outside image return zero or \a outval
 template <class S, class T>
 void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
                               vil3d_image_view<T>& dest_image,
@@ -212,7 +212,8 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
                               double dx1, double dy1, double dz1,
                               double dx2, double dy2, double dz2,
                               double dx3, double dy3, double dz3,
-                              int n1, int n2, int n3)
+                              int n1, int n2, int n3,
+                              T outval/*=0*/)
 {
   bool all_in_image =
     vil3d_grid_corner_in_image(x0,
@@ -336,7 +337,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            round(vil3d_trilin_interp_safe(x, y, z, plane0, ni, nj, nk, istep, jstep, kstep),
+            round(vil3d_trilin_interp_safe(x, y, z, plane0, ni, nj, nk, istep, jstep, kstep, outval),
               *dpt);
         }
       }
@@ -356,7 +357,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              round(vil3d_trilin_interp_safe(x, y, z, plane0+p*pstep, ni, nj, nk, istep, jstep, kstep),
+              round(vil3d_trilin_interp_safe(x, y, z, plane0+p*pstep, ni, nj, nk, istep, jstep, kstep, outval),
                 dpt[p*d_pstep]);
           }
         }
@@ -603,7 +604,8 @@ template void vil3d_resample_trilinear(const vil3d_image_view< S >& src_image, \
                                        double dx1, double dy1, double dz1, \
                                        double dx2, double dy2, double dz2, \
                                        double dx3, double dy3, double dz3, \
-                                       int n1, int n2, int n3); \
+                                       int n1, int n2, int n3, \
+                                       T outval); \
 template void vil3d_resample_trilinear_edge_extend(const vil3d_image_view< S >& src_image, \
                                                    vil3d_image_view< T >& dest_image, \
                                                    double x0, double y0, double z0, \

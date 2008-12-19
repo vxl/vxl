@@ -39,7 +39,7 @@ void vimt3d_resample_trilinear_scale_2(
 //
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
-//  Points outside image return zero.
+//  Points outside image return zero or \a outval
 template <class sType, class dType>
 inline void vimt3d_resample_trilinear(
   const vimt3d_image_3d_of<sType>& src_image,
@@ -48,7 +48,8 @@ inline void vimt3d_resample_trilinear(
   const vgl_vector_3d<double>& u,
   const vgl_vector_3d<double>& v,
   const vgl_vector_3d<double>& w,
-  int n1, int n2, int n3)
+  int n1, int n2, int n3,
+  dType outval=0)
 {
   const vimt3d_transform_3d& s_w2i = src_image.world2im();
   vgl_point_3d<double> im_p = s_w2i(p);
@@ -61,7 +62,8 @@ inline void vimt3d_resample_trilinear(
                            im_u.x(), im_u.y(), im_u.z(),
                            im_v.x(), im_v.y(), im_v.z(),
                            im_w.x(), im_w.y(), im_w.z(),
-                           n1, n2, n3);
+                           n1, n2, n3,
+                           outval);
 
   // Point (i,j,k) in dest corresponds to p+i.u+j.v+k.w,
   // an affine transformation for image to world
