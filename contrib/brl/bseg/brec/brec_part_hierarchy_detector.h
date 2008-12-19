@@ -6,8 +6,8 @@
 // \brief class to detect instances of a hiearachy of composable parts in images
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
-//      
+// \date Oct 16, 2008
+//
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -33,7 +33,7 @@
 //   float C::volume(B const &);
 // \endcode
 template <class T>
-class rtree_brec_instance_box_2d 
+class rtree_brec_instance_box_2d
 {
   // only static methods
   rtree_brec_instance_box_2d();
@@ -64,12 +64,12 @@ class rtree_brec_instance_box_2d
     vgl_point_2d<T> b1max = b1.max_point();
     vgl_point_2d<T> max_of_mins(b0min.x() > b1min.x() ? b0min.x() : b1min.x(), b0min.y() > b1min.y() ? b0min.y() : b1min.y());
     vgl_point_2d<T> min_of_maxs(b0min.x() < b1min.x() ? b0min.x() : b1min.x(), b0min.y() < b1min.y() ? b0min.y() : b1min.y());
-    
-    return ( b0.contains(b1min) || b0.contains(b1max) ||
-             b1.contains(b0min) || b1.contains(b0max) ||
-           ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) && 
-             (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) ) );
-    
+
+    return b0.contains(b1min) || b0.contains(b1max) ||
+           b1.contains(b0min) || b1.contains(b0max) ||
+           ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) &&
+             (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) );
+
     //bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
     //bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
     //return resultf||resultr;
@@ -95,12 +95,12 @@ typedef vgl_rtree_polygon_probe<V_type, B_type, C_type> Probe_type;
 
 class brec_part_hierarchy_detector 
 {
-public:
+ public:
 
   brec_part_hierarchy_detector(brec_part_hierarchy_sptr h) : h_(h) {}
   ~brec_part_hierarchy_detector();
 
-  // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
+  //: check for existency of upper_p with central_p as its central part and map will tell if all the other parts exist
   brec_part_instance_sptr exists(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, unsigned ni, unsigned nj, Rtree_type* lower_rtree, float det_threshold);
 
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
@@ -116,7 +116,7 @@ public:
   vcl_vector<brec_part_instance_sptr>& get_parts(unsigned layer) { return map_instance_[layer]; }
   Rtree_type* get_tree(unsigned layer) { return map_rtree_[layer]; }
 
-public:
+ protected:
   brec_part_hierarchy_sptr h_;
 
   //: map each layer to a vector of instances of it
@@ -124,8 +124,6 @@ public:
 
   //: map each layer to an rtree of its instances
   vcl_map<unsigned, Rtree_type*> map_rtree_;
-
 };
-
 
 #endif  //brec_part_hierarchy_detector_h_
