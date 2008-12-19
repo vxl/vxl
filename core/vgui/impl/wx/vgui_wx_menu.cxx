@@ -63,8 +63,6 @@ wxMenuBar* vgui_wx_menu::create_wx_menubar(const vgui_menu& menu)
   // ***** do i need to reset the item_count_?
   for (unsigned int i = 0; i < menu.size(); i++)
   {
-    const int menu_id = MENU_ID_OFFSET + ++item_count_;
-
     if (menu[i].is_separator())
     {
       assert(false);
