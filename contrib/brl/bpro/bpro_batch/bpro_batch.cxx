@@ -10,11 +10,14 @@
 #include <brdb/brdb_database_manager.h>
 
 
-PyMethodDef batch_methods[] = {
- /* {"register_processes", register_processes, METH_VARARGS,
+PyMethodDef batch_methods[] =
+{
+#if 0
+  {"register_processes", register_processes, METH_VARARGS,
   "register_processes() create instances of each defined process"},
   {"register_datatypes", register_datatypes, METH_VARARGS,
-  "register_datatypes() insert tables in the database for each type"},*/
+  "register_datatypes() insert tables in the database for each type"},
+#endif // 0
   {"init_process", init_process, METH_VARARGS,
   "init_process(s) create a new process instance by name"},
   {"process_print_default_params", process_print_default_params, METH_VARARGS,
@@ -52,7 +55,8 @@ PyMethodDef batch_methods[] = {
   {"print_db", print_db, METH_VARARGS, "print_db() print the database"},
   {"clear", clear, METH_VARARGS, "clear() clear the database tables"},
   {NULL, NULL},
-  {NULL, NULL}};
+  {NULL, NULL}
+};
 
 PyObject *init_process(PyObject *self, PyObject *args)
 {
