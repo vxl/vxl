@@ -10,7 +10,7 @@
 #include <vil/vil_convert.h>
 
 
-//: Constructor
+// Default Constructor
 brec_prob_map_threshold_process::brec_prob_map_threshold_process()
 {
   //input
@@ -74,17 +74,17 @@ brec_prob_map_threshold_process::execute()
         out(i,j,0)=input_img(i,j);
         out(i,j,1)=input_img(i,j);
         out(i,j,2)=input_img(i,j);
-        
+
         out2(i,j,0)=input_img(i,j);
         out2(i,j,1)=input_img(i,j);
         out2(i,j,2)=input_img(i,j);
-        
+
         if (frame(i,j)<=thres) {
           out(i,j,0) = 255;
           float change = 1-frame(i,j); // invert input map
-          //: assuming that change is in [0,1] where 0 is no change and 1 is change
-          //  we set red channel so that: on the threshold value it becomes 255*0.01
-          //  and it increases exponentially till 1 when it becomes 255
+          // assuming that change is in [0,1] where 0 is no change and 1 is change
+          // we set red channel so that: on the threshold value it becomes 255*0.01
+          // and it increases exponentially till 1 when it becomes 255
           out2(i,j,0) = (vxl_byte)(255*vcl_exp((vcl_log(0.01)/(thres-1))*(change-1)));
           count++;
         }

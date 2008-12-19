@@ -71,7 +71,7 @@ bool brec_recognize_structure_process::execute()
   }
 
 #if 0 // before detector class
-  //: now extract instances of primitive part types in h
+  // now extract instances of primitive part types in h
   vcl_vector<bvxm_part_instance_sptr> parts_0;
   vcl_vector<bvxm_part_instance_sptr>& d_ins = h->get_dummy_primitive_instances();
   unsigned prev_size = parts_0.size();

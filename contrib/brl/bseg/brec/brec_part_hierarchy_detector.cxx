@@ -1,11 +1,10 @@
+// This is brl/bseg/brec/brec_part_hierarchy_detector.cxx
+#include "brec_part_hierarchy_detector.h"
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
-//
-//
+// \date Oct 16, 2008
 
-#include "brec_part_hierarchy_detector.h"
 #include "brec_part_base.h"
 #include "brec_part_gaussian.h"
 #include "brec_part_hierarchy.h"
@@ -34,7 +33,7 @@ brec_part_hierarchy_detector::~brec_part_hierarchy_detector()
 
 bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
 {
-  //: start from the primitives
+  // start from the primitives
   vcl_vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
   vcl_vector<brec_part_instance_sptr> parts_prims;
   for (unsigned i = 0; i < dumm_ins.size(); i++) {
@@ -49,7 +48,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
 
   map_instance_[0] = parts_prims;
 
-  //: create an rtree
+  // create an rtree
   Rtree_type *tr = new Rtree_type();
   map_rtree_.insert(vcl_pair<unsigned, Rtree_type*> (0, tr));
   for (unsigned i = 0; i < parts_prims.size(); i++) {
@@ -61,12 +60,12 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
   Rtree_type *rtree_upper_most = tr;
   for (unsigned l = 1; l <= highest; l++) {
     vcl_vector<brec_part_instance_sptr> parts_current;
-   
+
     extract_upper_layer(parts_upper_most, img->ni(), img->nj(), rtree_upper_most, parts_current);
     vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << vcl_endl;
-    
+
     map_instance_[l] = parts_current;
-    
+
     Rtree_type *rtree_current = new Rtree_type();
     map_rtree_.insert(vcl_pair<unsigned, Rtree_type*> (l, rtree_current));
 
@@ -87,8 +86,9 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
 }
 
 //: extracts instances of each layer in the given image, by rotating the detector with the given amount
-bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float angle) {
-  //: start from the primitives
+bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float angle)
+{
+  // start from the primitives
   vcl_vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
   vcl_vector<brec_part_instance_sptr> parts_prims;
   for (unsigned i = 0; i < dumm_ins.size(); i++) {
@@ -103,7 +103,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
 
   map_instance_[0] = parts_prims;
 
-  //: create an rtree
+  // create an rtree
   Rtree_type *tr = new Rtree_type();
   map_rtree_.insert(vcl_pair<unsigned, Rtree_type*> (0, tr));
   for (unsigned i = 0; i < parts_prims.size(); i++) {
@@ -115,12 +115,12 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
   Rtree_type *rtree_upper_most = tr;
   for (unsigned l = 1; l <= highest; l++) {
     vcl_vector<brec_part_instance_sptr> parts_current;
-   
+
     extract_upper_layer(parts_upper_most, img->ni(), img->nj(), rtree_upper_most, parts_current);
     vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << vcl_endl;
-    
+
     map_instance_[l] = parts_current;
-    
+
     Rtree_type *rtree_current = new Rtree_type();
     map_rtree_.insert(vcl_pair<unsigned, Rtree_type*> (l, rtree_current));
 
@@ -142,24 +142,23 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
 
 
 // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
-brec_part_instance_sptr 
-brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p, 
+brec_part_instance_sptr
+brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
                                      brec_part_instance_sptr central_p, unsigned ni, unsigned nj,
-                                     Rtree_type* lower_rtree, 
+                                     Rtree_type* lower_rtree,
                                      float det_threshold)
 {
-  
-  //: first check if types and layers of central_p instance matches with upper_p's info
+  // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
     vcl_cout << "central_p instance passed is not compatible with the upper layer part passes\n";
     return 0;
   }
 
-  brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f); 
+  brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
   brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base());
   pi->add_outgoing_edge(e1);
 
-  //: now for each other part of upper_p, check whether they exist in the map
+  // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
   brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
@@ -168,11 +167,11 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
     vgl_box_2d<float> probe = (*eit)->get_probe_box(central_p);
     vcl_vector<brec_part_instance_sptr> found;
     lower_rtree->get(probe, found);
-    
+
     float best_fit = 0.0f;
     float best_fit_str = 1.0f;
     brec_part_instance_sptr best_part;
-    for (unsigned i = 0; i < found.size(); i++) {    
+    for (unsigned i = 0; i < found.size(); i++) {
       if (found[i]->strength_ > det_threshold && found[i]->type_ == (*eit)->target()->type_) {
         vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
         float dist, angle;
@@ -195,11 +194,10 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
       brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base());
       pi->add_outgoing_edge(e2);
     }
-
   }
   strength *= central_p->strength_;
 
-  //: if all of them have been detected then declare existence at the central parts location
+  // if all of them have been detected then declare existence at the central parts location
   pi->strength_ = strength;
 
   return pi;
@@ -207,24 +205,23 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
 
 
 //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
-void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, unsigned ni, unsigned nj, 
+void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, unsigned ni, unsigned nj,
                                                        Rtree_type* extracted_parts_rtree,
                                                        vcl_vector<brec_part_instance_sptr>& extracted_upper_parts)
 {
-  
-  //: for each detected part, check for the existence of each upper layer part that uses it as a central part
+  // for each detected part, check for the existence of each upper layer part that uses it as a central part
   for (unsigned i = 0; i < extracted_parts.size(); i++) {
     brec_part_instance_sptr p = extracted_parts[i];
-    //: find this type in the primitive layer of the hierarchy
+    // find this type in the primitive layer of the hierarchy
     brec_part_base_sptr hp = h_->get_node(p->layer_, p->type_);
     if (!hp)
       continue;
-    
+
     if (i == 1402) {
-      vcl_cout << " here \n";
+      vcl_cout << " here\n";
     }
-    //: find the all the upper layer parts that use hp as a central part
-    //  check the incoming edges of hp
+    // find the all the upper layer parts that use hp as a central part
+    // check the incoming edges of hp
     for (brec_part_hierarchy::edge_iterator eit = hp->in_edges_begin(); eit != hp->in_edges_end(); eit++) {
       if (hp == (*eit)->source()->central_part()) {
         brec_part_base_sptr hp_upper = (*eit)->source();
