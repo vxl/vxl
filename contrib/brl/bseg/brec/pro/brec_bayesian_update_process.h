@@ -3,13 +3,14 @@
 #define brec_bayesian_update_process_h_
 //:
 // \file
-// \brief A class to apply bayesian rule to find posterior probability of an entity given a measurement map based on background and foreground models of the given entity
-//                      e.g. given a map P(Entity) and a measurement map: M.
-//                      and given models: P(Measurement | Entity) and P(Measurement | not Entity)
-//                      return P(Entity | Measurement)
-//        for instance: given expected area difference map (measurement) for "foreground glitches on background" (entity)
-//                      return glitch detection map
-//          
+// \brief A class to apply Bayesian rule to find posterior probability of an entity given a measurement map based on background and foreground models of the given entity
+//
+// e.g. given a map P(Entity) and a measurement map: M.
+// and given models: P(Measurement | Entity) and P(Measurement | not Entity)
+// return P(Entity | Measurement)
+// for instance: given expected area difference map (measurement) for "foreground glitches on background" (entity)
+//               return glitch detection map
+//
 // \author Ozge Can Ozcanli
 // \date 10/01/08
 //
