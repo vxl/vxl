@@ -14,7 +14,7 @@ SUBDIRS(vpro)
 # tracking
 SUBDIRS(strk)
 
-# This library is deprecated
+# Markov Random Fields - This library is deprecated
 #SUBDIRS(bmrf)
 
 # misc
