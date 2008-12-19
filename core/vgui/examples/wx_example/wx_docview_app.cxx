@@ -18,8 +18,8 @@
 IMPLEMENT_APP(wx_docview_app)
 
 wx_docview_app::wx_docview_app(void)
-  : frame_(0)
-  , doc_manager_(0)
+  : doc_manager_(0)
+  , frame_(0)
 {
 }
 
