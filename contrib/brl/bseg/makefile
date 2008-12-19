@@ -13,7 +13,7 @@ SUBDIRS += vpro
 # tracking
 SUBDIRS += strk
 
-# markov random fields
+# markov random fields - This library is deprecated
 #SUBDIRS += bmrf
 
 # misc
