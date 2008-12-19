@@ -18,19 +18,20 @@ double vil3d_tricub_interp_raw(double x, double y, double z, const T* data,
 
 //: Compute tricubic interpolation at (x,y,z), with bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
-//  If (x,y,z) is outside interpolatable image region, zero is returned.
+//  If (x,y,z) is outside interpolatable image region, returns zero or \a outval
 //  The safe interpolatable region is [1,nx-3]*[1,ny-3]*[1,nz-3].
 template<class T>
 inline double vil3d_tricub_interp_safe(double x, double y, double z, const T* data,
-                                     int nx, int ny, int nz,
-                                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                       int nx, int ny, int nz,
+                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep,
+                                       T outval=0)
 {
-    if (x<1) return 0.0;
-    if (y<1) return 0.0;
-    if (z<1) return 0.0;
-    if (x>nx-3) return 0.0;
-    if (y>ny-3) return 0.0;
-    if (z>nz-3) return 0.0;
+    if (x<1) return static_cast<double>(outval);
+    if (y<1) return static_cast<double>(outval);
+    if (z<1) return static_cast<double>(outval);
+    if (x>nx-3) return static_cast<double>(outval);
+    if (y>ny-3) return static_cast<double>(outval);
+    if (z>nz-3) return static_cast<double>(outval);
     return vil3d_tricub_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
@@ -40,9 +41,9 @@ inline double vil3d_tricub_interp_safe(double x, double y, double z, const T* da
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [1,nx-2]*[1,ny-2]*[1,nz-2].
 template<class T>
-inline double vil3d_tricub_interp(double x, double y, double z, const T* data,
-                                  int nx, int ny, int nz,
-                                  vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+inline double vil3d_tricub_interp_assert(double x, double y, double z, const T* data,
+                                         int nx, int ny, int nz,
+                                         vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
     assert (x>=1);
     assert (y>=1);

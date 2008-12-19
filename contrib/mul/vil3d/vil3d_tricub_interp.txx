@@ -8,12 +8,6 @@
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
-// vil3d_bilin_interp.h defines only inline functions, but some of the
-// corresponding vil3d_tricub_interp functions are a little big to be
-// inline.  Plus, on one platform, msvc 6.0 with /O2 optimization
-// compiled the vil3d_tricub_interp functions without a peep but gave
-// incorrect numerical results when these functions were inline and
-// defined in vil3d_tricub_interp.h.
 
 namespace
 {

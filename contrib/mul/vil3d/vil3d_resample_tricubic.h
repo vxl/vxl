@@ -13,7 +13,7 @@
 //  (x0+i.dx1+j.dx2+k.dx3, y0+i.dy1+j.dy2+k.dy3, z0+i.dz1+j.dz2+k.dz3),
 //  where i=[0..n1-1], j=[0..n2-1], k=[0..n3-1].
 //  dest_image resized to (n1,n2,n3,src_image.nplanes())
-//  Points outside interpolatable region return zero.
+//  Points outside interpolatable region return zero or \a outval
 template <class S, class T>
 void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
                              vil3d_image_view<T>& dest_image,
@@ -21,7 +21,8 @@ void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
                              double dx1, double dy1, double dz1,
                              double dx2, double dy2, double dz2,
                              double dx3, double dy3, double dz3,
-                             int n1, int n2, int n3);
+                             int n1, int n2, int n3,
+                             T outval=0);
 
 
 //: Sample grid of points in one image and place in another, using tricubic interpolation and edge extension.
