@@ -187,7 +187,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   // the pixel format written into pixel_format.
   //
   vil_memory_chunk_sptr pixel_buf;
-  vil_pixel_format pixel_format;
+  vil_pixel_format pixel_format = VIL_PIXEL_FORMAT_UNKNOWN;
 
   // First, read in the bytes and interpret them appropriately
   //
