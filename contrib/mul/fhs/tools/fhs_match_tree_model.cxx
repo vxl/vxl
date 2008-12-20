@@ -2,20 +2,20 @@
 // \file
 // \author Tim Cootes
 // \brief Program using F&H method to locate matches on a pair of images given tree on one
-
+//
 // Example parameter file:
-#if 0
-  image1_path: HandImages/Hand_1.jpg
-  image2_path: HandImages/Hand_9.jpg
-  points_path: hand_b.pts
-  arcs_path: hand_b.arcs
-  output_image1_path: output1.png
-  output_image2_path: output_b9.png
-  L_lo: 2
-  L_hi: 2
-  half_width: 7
-  response_scale: 0.5
-#endif // 0
+// \verbatim
+//  image1_path: HandImages/Hand_1.jpg
+//  image2_path: HandImages/Hand_9.jpg
+//  points_path: hand_b.pts
+//  arcs_path: hand_b.arcs
+//  output_image1_path: output1.png
+//  output_image2_path: output_b9.png
+//  L_lo: 2
+//  L_hi: 2
+//  half_width: 7
+//  response_scale: 0.5
+// \endverbatim
 
 #include <vul/vul_arg.h>
 #include <vimt/vimt_image_2d_of.h>
@@ -428,7 +428,7 @@ int main( int argc, char* argv[] )
     // Ideally would crop a region around expected position
     vimt_normalised_correlation_2d(cropped_im,feature_response[i],
                                    patch[i],patch_ref[i],float());
-    if (im_level[i]!=params.L_lo)
+    if (int(im_level[i])!=params.L_lo)
     {
       // Resample the feature response at resolution of image params.L_lo
       vimt_image_2d_of<float> fr;
