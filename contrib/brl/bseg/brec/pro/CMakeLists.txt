@@ -22,6 +22,7 @@ SET(brec_pro_sources
     brec_glitch_process.h  brec_glitch_process.cxx
     brec_glitch_overlay_process.h  brec_glitch_overlay_process.cxx
     brec_save_mog_image_process.h         brec_save_mog_image_process.cxx
+    brec_create_mog_image_process.h       brec_create_mog_image_process.cxx
 )
 
 ADD_LIBRARY(brec_pro ${brec_pro_sources})
