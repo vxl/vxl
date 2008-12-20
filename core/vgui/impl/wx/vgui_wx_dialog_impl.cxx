@@ -1,4 +1,5 @@
 // This is core/vgui/impl/wx/vgui_wx_dialog_impl.cxx
+#include "vgui_wx_dialog_impl.h"
 //=========================================================================
 //:
 // \file
@@ -7,7 +8,6 @@
 // See vgui_wx_dialog_impl.h for details.
 //=========================================================================
 
-#include "vgui_wx_dialog_impl.h"
 #include "vgui_wx_adaptor.h"
 
 #include <vgui/vgui_color_text.h>
@@ -82,7 +82,7 @@ namespace
       color.Set(int(red_value(vcl_string(text.mb_str()))   * 255.0),
                 int(green_value(vcl_string(text.mb_str())) * 255.0),
                 int(blue_value(vcl_string(text.mb_str()))  * 255.0));
-      vcl_cout << "current color: "<<int(color.Red())<<" "<<int(color.Green())<<" "<<int(color.Blue())<<vcl_endl;
+      vcl_cout << "current color: "<<int(color.Red())<<' '<<int(color.Green())<<' '<<int(color.Blue())<<vcl_endl;
       wxColourData cdata;
       cdata.SetColour(color);
 
@@ -91,8 +91,8 @@ namespace
       if (color_dialog.ShowModal() == wxID_OK)
       {
         color = color_dialog.GetColourData().GetColour();
-        
-        vcl_cout << "new color: "<<int(color.Red())<<" "<<int(color.Green())<<" "<<int(color.Blue())<<vcl_endl;
+
+        vcl_cout << "new color: "<<int(color.Red())<<' '<<int(color.Green())<<' '<<int(color.Blue())<<vcl_endl;
         vcl_stringstream sstr;
         //text.Clear();
         sstr << color.Red() / 255.0 << ' '
@@ -469,6 +469,8 @@ int vgui_wx_dialog_impl::probe_for_max_label_width(void)
      case choice_elem:
       temp.SetLabel(wxString(e->field->label.c_str(),wxConvUTF8));
       max_width = vcl_max(max_width, temp.GetSize().GetX());
+      break;
+     default: // do nothing
       break;
     }
   }
