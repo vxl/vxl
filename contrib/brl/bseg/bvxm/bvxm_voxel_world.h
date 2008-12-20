@@ -58,6 +58,9 @@
 //
 //   Ibrahim Eden - 08/01/2008 - added the method: update_edges_lidar
 //
+//   Ozge C. Ozcanli - 12/15/2008 - added the method:
+//           bool mog_image_with_random_order_sampling(bvxm_image_metadata const& camera, unsigned n_samples, bvxm_voxel_slab_base_sptr& mog_image,unsigned bin_index, unsigned scale_idx)
+//
 // \endverbatim
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +68,7 @@
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_set.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_point_3d.h>
@@ -96,7 +100,7 @@
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_gauss_filter.h>
 
-
+#include <bsta/bsta_sampler.h>
 
 class bvxm_voxel_world: public vbl_ref_count
 {
@@ -171,6 +175,15 @@ public:
   bool mixture_of_gaussians_image(bvxm_image_metadata const& camera,
                                   bvxm_voxel_slab_base_sptr& mog_image,
                                   unsigned bin_index = 0, unsigned scale_idx=0);
+
+  //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
+  //  generate samples from each voxel's distribution along the ray of a pixel to train a new mog at the pixel
+  //  use a random ordering to select the voxels based on their visibility probabilities to avoid ordering problem
+  template<bvxm_voxel_type APM_T>
+  bool mog_image_with_random_order_sampling(bvxm_image_metadata const& camera, unsigned n_samples,
+                                            bvxm_voxel_slab_base_sptr& mog_image,
+                                            unsigned bin_index = 0, unsigned scale_idx=0);
+
 
   //: generate the mixture of gaussians slab from the specified viewpoint
   //  Uses the most probable modes of the distributions at each voxel along the ray.
@@ -1235,6 +1248,189 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
   return true;
 }
 
+//: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
+//  generate samples from each voxel's distribution along the ray of a pixel to train a new mog at the pixel
+//  use a random ordering to select the voxels based on their visibility probabilities to avoid ordering problem
+//  n_samples is the number fo samples to be generated per ray
+template<bvxm_voxel_type APM_T>
+bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata const& observation, unsigned n_samples,
+                                                            bvxm_voxel_slab_base_sptr& mog_image, 
+                                                            unsigned bin_index, unsigned scale_idx)
+{
+  // datatype for current appearance model
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype; // datatype for current appearance model
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;   // datatype of the pixels that the processor operates on.
+  typedef typename bvxm_voxel_traits<APM_T>::obs_mathtype obs_mathtype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+
+  // extract global parameters
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
+    H_plane_to_img.push_back(Hp2i);
+    H_img_to_plane.push_back(Hi2p);
+  }
+
+  // allocate some images
+  bvxm_voxel_slab<apm_datatype> mog_slab(observation.img->ni(),observation.img->nj(),1);
+  bvxm_voxel_slab<apm_datatype> slice_img(observation.img->ni(), observation.img->nj(),1);
+  bvxm_voxel_slab<float> slice_ocp_img(observation.img->ni(),observation.img->nj(),1);
+  bvxm_voxel_slab<float> visX_accum(observation.img->ni(), observation.img->nj(),1);
+  vcl_vector<bvxm_voxel_slab_base_sptr > visX;
+
+  visX_accum.fill(1.0f);
+  mog_slab.fill(bvxm_voxel_traits<APM_T>::initial_val());
+
+  // get ocuppancy probability grid
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
+  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+
+  //get appereance model grid
+  bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
+  bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
+
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it)
+  {
+    // warp slice_probability to image plane
+    bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], slice_ocp_img);
+
+    typename bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_ocp_img.begin();
+    bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin();
+
+    bvxm_voxel_slab_base_sptr v = new bvxm_voxel_slab<float>(observation.img->ni(), observation.img->nj(),1);
+    ((bvxm_voxel_slab<float>*)v.ptr())->fill(1.0f);
+    bvxm_voxel_slab<float>::iterator v_it = ((bvxm_voxel_slab<float>*)v.ptr())->begin();
+    for (; v_it != ((bvxm_voxel_slab<float>*)v.ptr())->end(); ++PX_it, ++visX_it, ++v_it) {
+      *v_it *= *PX_it * *visX_it;
+      *visX_it *= (1.0f - *PX_it);  // update visX for next level
+    }
+
+    visX.push_back(v);
+  }
+
+  //: create {sample, prob} vector for each column (ray)
+  vcl_vector<float> prob_vec;
+  vcl_vector<vcl_vector<float> > tmp2(observation.img->nj(), prob_vec);
+  vcl_vector<vcl_vector<vcl_vector<float> > > column_probs(observation.img->ni(), tmp2);
+  tmp2.clear();
+
+  //: normalize visX
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z)
+  {
+    bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin();
+    bvxm_voxel_slab<float>* v = (bvxm_voxel_slab<float>*)visX[z].ptr();
+    
+    bvxm_voxel_slab<float>::iterator v_it = v->begin();
+    for (; v_it != v->end(); ++visX_it, ++v_it) {
+      float norm = (1.0f - *visX_it);
+      if (norm > 0.0f)
+        *v_it /= norm;
+    }
+
+    for (unsigned i = 0; i < observation.img->ni(); i++) {
+      for (unsigned j = 0; j < observation.img->nj(); j++) {
+        column_probs[i][j].push_back((*v)(i,j));
+      }
+    }
+  }
+
+  //: create {sample, prob} vector for each column (ray)
+  vcl_vector<unsigned> s_vec;
+  vcl_vector<vcl_vector<unsigned> > tmp3(observation.img->nj(), s_vec);
+  vcl_vector<vcl_vector<vcl_vector<unsigned> > > column_samples(observation.img->ni(), tmp3);
+  tmp3.clear();
+
+  vcl_vector<unsigned> col_ids;
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z)
+    col_ids.push_back(z);
+
+  //: now sample from each column (ray)
+  unsigned cnt = 0;
+  for (unsigned i = 0; i < observation.img->ni(); i++) {
+    for (unsigned j = 0; j < observation.img->nj(); j++) {
+      if (bsta_sampler<unsigned>::sample(col_ids, column_probs[i][j], n_samples, column_samples[i][j]))
+        cnt++;
+    }
+  }
+
+  vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0\n";
+  vcl_cout.flush();
+
+  //: release column_probs
+  for (unsigned i = 0; i < observation.img->ni(); i++) 
+    for (unsigned j = 0; j < observation.img->nj(); j++) 
+      column_probs[i][j].clear();
+  for (unsigned i = 0; i < observation.img->ni(); i++) 
+    column_probs[i].clear();
+  column_probs.clear();
+
+  vcl_vector<bvxm_voxel_slab_base_sptr > samples, weights;
+  for (unsigned k = 0; k < n_samples; k++) {
+    bvxm_voxel_slab_base_sptr v = new bvxm_voxel_slab<obs_datatype>(observation.img->ni(), observation.img->nj(),1);
+    obs_datatype e;
+    ((bvxm_voxel_slab<obs_datatype>*)v.ptr())->fill(e);
+    samples.push_back(v);
+
+    bvxm_voxel_slab_base_sptr w = new bvxm_voxel_slab<float> (observation.img->ni(), observation.img->nj(),1);
+    ((bvxm_voxel_slab<float>*)w.ptr())->fill(0.0f);
+    weights.push_back(w);
+  }
+
+ typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
+ for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++apm_slab_it)
+  {
+    vcl_cout << "."; vcl_cout.flush();
+    
+    apm_datatype init;
+    slice_img.fill(init);
+    bvxm_util::warp_slab_nearest_neighbor(*apm_slab_it, H_img_to_plane[z], slice_img);
+
+    for (unsigned k = 0; k < n_samples; k++) {
+      bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
+      bvxm_voxel_slab<float>* w = (bvxm_voxel_slab<float>*)(weights[k].ptr());
+      //: now fill in the samples for z from this slab
+      for (unsigned i = 0; i < observation.img->ni(); i++) {
+        for (unsigned j = 0; j < observation.img->nj(); j++) {
+          if (column_samples[i][j].size() != 0 && column_samples[i][j][k] == z) {
+            if (slice_img(i,j).num_components() != 0) {
+              (*obs_samples)(i,j) = slice_img(i,j).sample();
+              (*w)(i,j) = 1.0f;  // make the weight non-zero for the column, even if there is only 1 sample
+            }
+          }
+        }
+      }
+    }
+  }
+
+ vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0\n";
+ vcl_cout.flush();
+
+ //: now create the mixture image from the samples
+ for (unsigned k = 0; k < n_samples; k++) {
+   bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
+   bvxm_voxel_slab<float>* w = (bvxm_voxel_slab<float>*)(weights[k].ptr());
+   if (!apm_processor.update(mog_slab, *obs_samples, *w)) {  
+      vcl_cout << "In mog_image_with_random_order_sampling() -- problems in appearance update\n";
+      return false;
+   }
+ }
+ 
+ mog_image = new bvxm_voxel_slab<apm_datatype>(mog_slab);
+ 
+ return true;
+}
+
+
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
                                     const vpgl_camera_double_sptr virtual_camera,
@@ -1558,6 +1754,16 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   }
   return true;
 }
+
+class bvxm_mog_image_creation_methods {
+public:
+  enum mog_creation_methods {
+    MOST_PROBABLE_MODE,   // use the mean value of most probable mode of the mixture at each voxel along the ray to update a mog image (Thom Pollard's original algo)
+    EXPECTED_VALUE,       // use the expected value of the mixture at each voxel along the ray to update a mog image
+    SAMPLING,   // randomly sample voxels wrt to visibility probabilities and sample from their mixtures to update a mog image
+  };
+};
+
 
 #endif // bvxm_voxel_world_h_
 
