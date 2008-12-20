@@ -127,7 +127,7 @@ void fhs_searcher::combine_responses(unsigned im_index,
           vgl_point_2d<double> p = c_w2i(i2w(i,j)+dp);
 
           if (p.x()<0 || p.y()<0 || p.x()+1>=cni || p.y()+1>=cnj)
-            sum_image(i,j) += 9999f;  // Illegal if off the image
+            sum_image(i,j) += 9999.0f;  // Illegal if off the image
           else
             sum_image(i,j) += (float)vil_bilin_interp_unsafe(p.x(),p.y(),
                                                              c_data,c_istep,c_jstep);
