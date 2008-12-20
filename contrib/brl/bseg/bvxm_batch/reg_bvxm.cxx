@@ -87,7 +87,6 @@
 #include <core/vil_pro/vil_save_image_view_process.h>
 #include <core/vidl2_pro/vidl2_open_istream_process.h>
 #include <core/vidl2_pro/vidl2_close_istream_process.h>
-//#define HAS_DIRECTSHOW
 #ifdef HAS_DIRECTSHOW
 #include <core/vidl2_pro/vidl2_open_dshow_istream_process.h>
 #endif
