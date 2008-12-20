@@ -129,7 +129,7 @@ SOURCE=.\brec_fg_bg_pair_density.cxx
 SOURCE=.\Templates/bgrl2_vertex+brec_hierarchy_edge-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgl_rtree+brec_part_instance+vgl_polygon_2d+float--.cxx
+SOURCE=.\Templates/vgl_rtree+brec_part_instance_sptr.vgl_box_2d+float-.rtree_brec_instance_box_2d+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brec_part_hierarchy-.cxx
