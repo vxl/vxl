@@ -331,7 +331,7 @@ int main( int argc, char* argv[] )
     // Ideally would crop a region around expected position
     vimt_normalised_correlation_2d(cropped_im,feature_response[i],
                                    patch[i],patch_ref[i],float());
-    if (im_level[i]!=level_lo())
+    if (im_level[i]!=(unsigned int)level_lo())
     {
       // Resample the feature response at resolution of image level_lo()
       vimt_image_2d_of<float> fr;
