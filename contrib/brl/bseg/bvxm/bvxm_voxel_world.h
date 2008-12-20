@@ -100,8 +100,6 @@
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_gauss_filter.h>
 
-#include <bsta/bsta_sampler.h>
-
 class bvxm_voxel_world: public vbl_ref_count
 {
 public:
