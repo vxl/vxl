@@ -801,10 +801,10 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
   }
 
   // And find the intersection point closest to the given location:
-  vgl_homg_point_2d<T> p = candidates.front();
-  T dist = vgl_homg<T>::infinity;
   typename vcl_list<vgl_homg_point_2d<T> >::iterator it = candidates.begin();
-  for (; it != candidates.end(); ++it) {
+  vgl_homg_point_2d<T> p = (*it);
+  T dist = vgl_homg_operators_2d<T>::distance_squared(*it,pt);
+  for (++it; it != candidates.end(); ++it) {
     if ((*it).w() == 0) continue;
     T d = vgl_homg_operators_2d<T>::distance_squared(*it,pt);
     if (d < dist) { p = (*it); dist = d; }
