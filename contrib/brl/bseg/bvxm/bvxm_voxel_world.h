@@ -5,7 +5,7 @@
 // \file
 // \brief A representation of the world using voxel grids of occupancy probability and an appearance model.
 // \author Daniel Crispell (dec@lems.brown.edu)
-// \date 1/22/2008
+// \date January 22, 2008
 //
 // The world has the ability to store voxel grids of any type defined in bvxm_voxel_traits.h.
 // These grids are accessable through the get_grid() method.
@@ -60,7 +60,6 @@
 //
 //   Ozge C. Ozcanli - 12/15/2008 - added the method:
 //           bool mog_image_with_random_order_sampling(bvxm_image_metadata const& camera, unsigned n_samples, bvxm_voxel_slab_base_sptr& mog_image,unsigned bin_index, unsigned scale_idx)
-//
 // \endverbatim
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +101,7 @@
 
 class bvxm_voxel_world: public vbl_ref_count
 {
-public:
+ public:
 
   //: default constructor
   bvxm_voxel_world() {}
@@ -130,10 +129,10 @@ public:
   bool update_lidar(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask, unsigned scale_idx=0);
 
   //: update voxel grid edge probabilities with data from LIDAR/camera pair
-  bool update_edges_lidar(vil_image_view_base_sptr& lidar_height, 
+  bool update_edges_lidar(vil_image_view_base_sptr& lidar_height,
                           vil_image_view_base_sptr& lidar_edges,
                           vil_image_view_base_sptr& lidar_edges_prob,
-                          vpgl_camera_double_sptr& camera, 
+                          vpgl_camera_double_sptr& camera,
                           unsigned scale_idx=0);
 
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.
@@ -259,7 +258,7 @@ public:
                              vgl_h_matrix_2d<double> &H_plane_to_image,
                              vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx=0);
 
-  protected:
+ protected:
 
 #if 0
   //: appearance model voxel storage
@@ -272,7 +271,7 @@ public:
   //: the world parameters
   bvxm_world_params_sptr params_;
 
-private:
+ private:
 
   template <bvxm_voxel_type APM_T>
   bool update_impl(bvxm_image_metadata const& metadata,
@@ -1045,8 +1044,8 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
   bvxm_voxel_slab<float>::const_iterator visX_accum_it = visX_accum.begin();
 
-  for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it, ++visX_accum_it) {
-
+  for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it, ++visX_accum_it)
+  {
     //avoid division by zero, the values in this region shouldn't matter size it
     //belongs to voxels outside the mask
     float visX_a = *visX_accum_it;
@@ -1252,7 +1251,7 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
 //  n_samples is the number fo samples to be generated per ray
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata const& observation, unsigned n_samples,
-                                                            bvxm_voxel_slab_base_sptr& mog_image, 
+                                                            bvxm_voxel_slab_base_sptr& mog_image,
                                                             unsigned bin_index, unsigned scale_idx)
 {
   // datatype for current appearance model
@@ -1327,7 +1326,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   {
     bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin();
     bvxm_voxel_slab<float>* v = (bvxm_voxel_slab<float>*)visX[z].ptr();
-    
+
     bvxm_voxel_slab<float>::iterator v_it = v->begin();
     for (; v_it != v->end(); ++visX_it, ++v_it) {
       float norm = (1.0f - *visX_it);
@@ -1363,14 +1362,14 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     }
   }
 
-  vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0\n";
-  vcl_cout.flush();
+  vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
+           << vcl_endl;
 
   //: release column_probs
-  for (unsigned i = 0; i < observation.img->ni(); i++) 
-    for (unsigned j = 0; j < observation.img->nj(); j++) 
+  for (unsigned i = 0; i < observation.img->ni(); i++)
+    for (unsigned j = 0; j < observation.img->nj(); j++)
       column_probs[i][j].clear();
-  for (unsigned i = 0; i < observation.img->ni(); i++) 
+  for (unsigned i = 0; i < observation.img->ni(); i++)
     column_probs[i].clear();
   column_probs.clear();
 
@@ -1386,11 +1385,11 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     weights.push_back(w);
   }
 
- typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
- for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++apm_slab_it)
+  typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++apm_slab_it)
   {
-    vcl_cout << "."; vcl_cout.flush();
-    
+    vcl_cout << '.' << vcl_flush;
+
     apm_datatype init;
     slice_img.fill(init);
 #ifdef BVXM_HAS_WRAP_SLAB_NN //FIXME: remove this line when this method is available
@@ -1405,7 +1404,9 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
         for (unsigned j = 0; j < observation.img->nj(); j++) {
           if (column_samples[i][j].size() != 0 && column_samples[i][j][k] == z) {
             if (slice_img(i,j).num_components() != 0) {
+#ifdef BSTA_NUM_OBS_HAS_SAMPLE //FIXME: remove this line when sample() available
               (*obs_samples)(i,j) = slice_img(i,j).sample();
+#endif
               (*w)(i,j) = 1.0f;  // make the weight non-zero for the column, even if there is only 1 sample
             }
           }
@@ -1414,21 +1415,21 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     }
   }
 
- vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0\n";
- vcl_cout.flush();
+ vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
+          << vcl_endl;
 
  //: now create the mixture image from the samples
  for (unsigned k = 0; k < n_samples; k++) {
    bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
    bvxm_voxel_slab<float>* w = (bvxm_voxel_slab<float>*)(weights[k].ptr());
-   if (!apm_processor.update(mog_slab, *obs_samples, *w)) {  
+   if (!apm_processor.update(mog_slab, *obs_samples, *w)) {
       vcl_cout << "In mog_image_with_random_order_sampling() -- problems in appearance update\n";
       return false;
    }
  }
- 
+
  mog_image = new bvxm_voxel_slab<apm_datatype>(mog_slab);
- 
+
  return true;
 }
 
@@ -1593,7 +1594,6 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_image_view<unsigned> &heightmap, unsigned bin_index, unsigned scale_index)
 {
-
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
@@ -1692,7 +1692,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   vil_image_view_base_sptr heightmap_rough_img_sptr = heightmap_rough_img;
   bvxm_util::slab_to_img(heightmap_rough,heightmap_rough_img_sptr);
 
-  // first, median filter heightmap 
+  // first, median filter heightmap
   vil_image_view<float> heightmap_med_img(heightmap.ni(),heightmap.nj());
   vcl_vector<int> strel_vec;
   for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
@@ -1757,8 +1757,9 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   return true;
 }
 
-class bvxm_mog_image_creation_methods {
-public:
+class bvxm_mog_image_creation_methods
+{
+ public:
   enum mog_creation_methods {
     MOST_PROBABLE_MODE,   // use the mean value of most probable mode of the mixture at each voxel along the ray to update a mog image (Thom Pollard's original algo)
     EXPECTED_VALUE,       // use the expected value of the mixture at each voxel along the ray to update a mog image
@@ -1766,6 +1767,4 @@ public:
   };
 };
 
-
 #endif // bvxm_voxel_world_h_
-
