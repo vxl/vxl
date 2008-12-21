@@ -1393,7 +1393,9 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     
     apm_datatype init;
     slice_img.fill(init);
+#ifdef BVXM_HAS_WRAP_SLAB_NN //FIXME: remove this line when this method is available
     bvxm_util::warp_slab_nearest_neighbor(*apm_slab_it, H_img_to_plane[z], slice_img);
+#endif
 
     for (unsigned k = 0; k < n_samples; k++) {
       bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
