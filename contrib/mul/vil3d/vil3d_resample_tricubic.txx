@@ -26,7 +26,7 @@ inline bool vil3d_grid_corner_in_image(double x0, double y0, double z0,
 }
 
 
-//  Sample grid of points in one image and place in another, using tricubic interpolation.
+//: Sample grid of points in one image and place in another, using tricubic interpolation.
 //  dest_image(i,j,k,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2+k.dx3, y0+i.dy1+j.dy2+k.dy3, z0+i.dz1+j.dz2+k.dz3),
 //  where i=[0..n1-1], j=[0..n2-1], k=[0..n3-1]
@@ -194,7 +194,7 @@ void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
   }
 }
 
-//  Sample grid of points in one image and place in another, using tricubic interpolation.
+//: Sample grid of points in one image and place in another, using tricubic interpolation.
 //  dest_image(i,j,k,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2+k.dx3, y0+i.dy1+j.dy2+k.dy3, z0+i.dz1+j.dz2+k.dz3),
 //  where i=[0..n1-1], j=[0..n2-1], k=[0..n3-1]
@@ -497,7 +497,7 @@ void vil3d_resample_tricubic_edge_trilin_extend(const vil3d_image_view<S>& src_i
 }
 
 
-//  Resample image to a specified dimensions (n1 * n2 * n3)
+//: Resample image to a specified dimensions (n1 * n2 * n3)
 template <class S, class T>
 void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
                              vil3d_image_view<T>& dest_image,
@@ -561,12 +561,14 @@ template void vil3d_resample_tricubic_edge_trilin_extend(const vil3d_image_view<
 template void vil3d_resample_tricubic(const vil3d_image_view< S >& src_image, \
                                       vil3d_image_view< T >& dest_image, \
                                       int n1, int n2, int n3)
-// template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image, \
-//                                        vil3d_image_view< T >& dst_image, \
-//                                        const double dx, \
-//                                        const double dy, \
-//                                        const double dz); \
-// template void vil3d_resample_trilinear_scale_2(const vil3d_image_view< T >& src_image, \
-//                                                vil3d_image_view< T >& dst_image)
+#if 0
+template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image, \
+                                       vil3d_image_view< T >& dst_image, \
+                                       const double dx, \
+                                       const double dy, \
+                                       const double dz); \
+template void vil3d_resample_trilinear_scale_2(const vil3d_image_view< T >& src_image, \
+                                               vil3d_image_view< T >& dst_image)
+#endif
 
 #endif // vil3d_resample_tricubic_txx_
