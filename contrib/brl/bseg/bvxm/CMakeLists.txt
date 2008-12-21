@@ -31,7 +31,7 @@ SET(bvxm_sources
     bvxm_voxel_grid_base.h
     bvxm_voxel_grid.h               bvxm_voxel_grid.txx
     bvxm_voxel_traits.h
-    bvxm_voxel_world.h              bvxm_voxel_world.cxx
+#   bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
     bvxm_util.h                     bvxm_util.cxx
 )
