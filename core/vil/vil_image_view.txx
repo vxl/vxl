@@ -642,7 +642,7 @@ void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
   planestep_ = istep_==1 ? n_i*n_j : 1;
 
   top_left_ = reinterpret_cast<T*>(ptr_->data());
-  assert( (istep_==1 && planestep_==n_i*n_j) || (planestep_==1 && istep_==n_planes) );
+  assert( (istep_==1 && (int)planestep_==int(n_i*n_j)) || (planestep_==1 && (int)istep_==(int)n_planes) );
 }
 
 
