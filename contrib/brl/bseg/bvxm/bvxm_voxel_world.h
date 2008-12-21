@@ -1352,6 +1352,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z)
     col_ids.push_back(z);
 
+#ifdef HAS_BSTA_SAMPLER //FIXME: remove this line when bsta_sampler is available
   //: now sample from each column (ray)
   unsigned cnt = 0;
   for (unsigned i = 0; i < observation.img->ni(); i++) {
@@ -1360,6 +1361,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
         cnt++;
     }
   }
+#endif
 
   vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0\n";
   vcl_cout.flush();
