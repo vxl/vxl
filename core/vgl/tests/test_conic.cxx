@@ -389,11 +389,14 @@ static void test_conic()
   l = vgl_homg_line_2d<double>(3,4,0); // line parallel to the symmetry axis
   pts = vgl_homg_operators_2d<double>::intersection(c,l);
   TEST("intersection count = 2", pts.size(), 2);
-  TEST_NEAR("first point is centre", pts.front(), vgl_homg_point_2d<double>(4,-3,0), 1e-6);
-  TEST_NEAR("second point", pts.back(), vgl_homg_point_2d<double>(388,-291,300), 1e-6);
-  // or interchanged
-  if (pts.front().w() != 0) // debugging output
-    vcl_cout << "   first  point: " << pts.front() << "\n   second point: " << pts.back() << '\n';
+  if (pts.front().w() == 0) {
+    TEST_NEAR("first point is centre", pts.front(), vgl_homg_point_2d<double>(4,-3,0), 1e-6);
+    TEST_NEAR("second point", pts.back(), vgl_homg_point_2d<double>(388,-291,300), 1e-6);
+  }
+  else { // or interchanged
+    TEST_NEAR("second point is centre", pts.back(), vgl_homg_point_2d<double>(4,-3,0), 1e-6);
+    TEST_NEAR("first point", pts.front(), vgl_homg_point_2d<double>(388,-291,300), 1e-6);
+  }
 
   // 6. Test imaginary circle
   vcl_cout << "\n\t=== test imaginary circle ===\n";
