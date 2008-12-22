@@ -520,7 +520,6 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
         idx = merge_map[idx];
       if(count[idx] <= min_size){
         labels_(i,j) = 1;
-        vcl_cout << "filled "<<i<<", "<<j<<vcl_endl;
       }
     }
   }
