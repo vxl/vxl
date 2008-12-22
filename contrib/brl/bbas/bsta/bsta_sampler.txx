@@ -12,7 +12,7 @@ class first_less {
 public:
 bool
 operator()( const vcl_pair<float,unsigned>& left,
-            const vcl_pair<float,unsigned>& right )
+            const vcl_pair<float,unsigned>& right ) const
 {
   return left.first < right.first;
 } 
