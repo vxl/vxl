@@ -86,6 +86,10 @@ class bmdl_classify
   //  Assign a new label to each groups.
   //  Returns building mean heights and pixel counts by reference
   void cluster_buildings();
+  
+  //: Replace small holes in buildings from ground to vegetation (unclaimed) labels
+  // holes are switch if area is less than \a min_size
+  void fill_ground_holes(unsigned int min_size);
 
   //: Threshold buildings by area.
   // All buildings with area (in pixels) less than the threshold

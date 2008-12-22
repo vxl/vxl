@@ -165,6 +165,9 @@ void bmdl_classify<T>::label_lidar()
   // 3. Merge similar sections
   while (greedy_merge())
     ;
+  
+  // Replace small holes in buildings from ground to vegetation labels
+  fill_ground_holes(5);
 
   // 4. Remove holes
   while (dilate_buildings(5))
@@ -395,6 +398,133 @@ void bmdl_classify<T>::cluster_buildings()
 
   vcl_cout << "After clustering there are "
            <<building_area_.size()<<" buildings" << vcl_endl;
+}
+
+
+//: Replace small holes in buildings from ground to vegetation labels
+// holes are switch if area is less than \a min_size
+template <class T>
+void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
+{
+  unsigned int ni = labels_.ni();
+  unsigned int nj = labels_.nj();
+  
+  vil_image_view<unsigned int> labels(ni,nj);
+  for (unsigned int j=0; j<nj; ++j) {
+    for (unsigned int i=0; i<ni; ++i) {
+      if (labels_(i,j)>0)
+        labels(i,j) = 0;
+      else
+        labels(i,j) = 1;
+    }
+  }
+  
+  
+  vcl_vector<unsigned int> merge_map;
+  vcl_vector<unsigned int> count;
+  
+  // handle first pixel
+  if (labels(0,0) > 0)
+  {
+    count.push_back(1);
+    merge_map.push_back(merge_map.size());
+    labels(0,0) = count.size()+1;
+  }
+  // handle first row
+  for (unsigned int i=1; i<ni; ++i) {
+    if (labels(i,0)!=1)
+      continue;
+    
+    int idx = labels(i-1,0)-1;
+    while (idx>=0 && merge_map[idx] != (unsigned int)idx )
+      idx = merge_map[idx];
+    if (idx>=0) {
+      labels(i,0) = idx+1;
+      ++count[idx];
+    }
+    else{
+      count.push_back(1);
+      merge_map.push_back(merge_map.size());
+      labels(i,0) = count.size();
+    }
+  }
+  // handle first column
+  for (unsigned int j=1; j<nj; ++j) {
+    if (labels(0,j)!=1)
+      continue;
+    
+    int idx = labels(0,j-1)-1;
+    while (idx>=0 && merge_map[idx] != (unsigned int)idx )
+      idx = merge_map[idx];
+    if (idx>=0) {
+      labels(0,j) = idx+1;
+      ++count[idx];
+    }
+    else {
+      count.push_back(1);
+      merge_map.push_back(merge_map.size());
+      labels(0,j) = count.size();
+    }
+  }
+  
+  // handle the rest of the image
+  for (unsigned int j=1; j<nj; ++j)
+  {
+    for (unsigned int i=1; i<ni; ++i)
+    {
+      if (labels(i,j)!=1)
+        continue;
+      
+      int idx1 = labels(i-1,j)-1, idx2 = labels(i,j-1)-1;
+      while (idx1>=0 && merge_map[idx1] != (unsigned int)idx1 )
+        idx1 = merge_map[idx1];
+      while (idx2>=0 && merge_map[idx2] != (unsigned int)idx2 )
+        idx2 = merge_map[idx2];
+      int idx = -1;
+      if (idx1>=0)
+        idx = idx1;
+      if (idx2>=0)
+      {
+        if (idx == -1 || idx1 == idx2)
+          idx = idx2;
+        else {
+          labels(i,j) = idx1+1;
+          count[idx1] += count[idx2]+1;
+          count[idx2] = 0;
+          merge_map[idx2] = idx1;
+          continue;
+        }
+      }
+      
+      if (idx >= 0 ) {
+        labels(i,j) = idx+1;
+        ++count[idx];
+      }
+      else {
+        count.push_back(1);
+        merge_map.push_back(merge_map.size());
+        labels(i,j) = count.size();
+      }
+    }
+  }
+  vcl_cout << "num ground labels = "<<count.size() << vcl_endl;
+  
+  // update the original labels
+  for (unsigned int j=0; j<nj; ++j) {
+    for (unsigned int i=0; i<ni; ++i) {
+      if (labels(i,j)==0)
+        continue;
+      
+      int idx = labels(i,j)-1;
+      while (idx>=0 && merge_map[idx] != (unsigned int)idx )
+        idx = merge_map[idx];
+      if(count[idx] <= min_size){
+        labels_(i,j) = 1;
+        vcl_cout << "filled "<<i<<", "<<j<<vcl_endl;
+      }
+    }
+  }
+  
 }
 
 
