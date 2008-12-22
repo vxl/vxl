@@ -26,6 +26,7 @@ brec_create_mog_image_process::brec_create_mog_image_process()
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1]= "bbgm_image_sptr";  // output mog image as a voxel world with one slab
 
+
   //parameters()->add("use most probable mode to create mog", "most_prob", true);   // otherwise uses expected values of the mixtures at voxels along the path of the rays 
   parameters()->add("method to use to create a mog image", "mog_method", (unsigned)bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE);   // otherwise uses expected values of the mixtures at voxels along the path of the rays 
   parameters()->add("number of samples if using random sampling as mog_method", "n_samples", (unsigned)10);  
