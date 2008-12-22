@@ -10,6 +10,7 @@ bool bbgm_loader::registered_ = false;
 
 void bbgm_loader::register_loaders(){
   if(registered_) return;
+
   typedef bsta_num_obs<bsta_gauss_f1> sph_gauss_type;
   typedef bsta_num_obs<bsta_mixture<sph_gauss_type> > sph_mix_gauss_type;
   vsl_add_to_binary_loader(bbgm_image_of<sph_mix_gauss_type>());
@@ -24,5 +25,10 @@ void bbgm_loader::register_loaders(){
   typedef bsta_num_obs<bsta_mixture<gauss_type> > mix_gauss_type;
   bbgm_image_of<mix_gauss_type> bi;
   vsl_add_to_binary_loader(bi);
+
+  typedef bsta_num_obs<bsta_mixture_fixed<sph_gauss_type, 3> > sph_mix_gauss_type_fixed;
+  bbgm_image_of<sph_mix_gauss_type_fixed> bifs;
+  vsl_add_to_binary_loader(bifs);
+
   registered_ = true;
 }
