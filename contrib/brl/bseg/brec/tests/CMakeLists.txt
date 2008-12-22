@@ -12,8 +12,8 @@ ADD_EXECUTABLE( brec_test_all
 
 TARGET_LINK_LIBRARIES( brec_test_all brec testlib vcl vbl vpgl )
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digits_small.TIF    ${CMAKE_CURRENT_BINARY_DIR}/digits_small.TIF COPYONLY )
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/normalized0_cropped.tif    ${CMAKE_CURRENT_BINARY_DIR}/normalized0_cropped.tif COPYONLY )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digits_small.png    ${CMAKE_CURRENT_BINARY_DIR}/digits_small.png COPYONLY )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/normalized0_cropped.png    ${CMAKE_CURRENT_BINARY_DIR}/normalized0_cropped.png COPYONLY )
 
 ADD_TEST( brec_test_densities     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_brec_densities )
 ADD_TEST( brec_test_param_estimation     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_param_estimation )

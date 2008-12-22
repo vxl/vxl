@@ -57,9 +57,9 @@ static void test_brec_hierarchy_detector()
   //test iterator
   vcl_cout << "Traversing point_box rtree, num nodes = "<< trc.nodes()<< '\n';
 
-  vcl_string file = "normalized0_cropped.tif";
+  vcl_string file = "normalized0_cropped.png";
   //vcl_string file = "normalized0_cropped_rot_30.tif";
-  //vcl_string file = "digits_small.TIF";
+  //vcl_string file = "digits_small.png";
   //vcl_string file = "normalized1.png";
   //vcl_string file = "normalized1_crop2.png";
 

@@ -1,6 +1,5 @@
 .git*            export-ignore
 
-*.TIF           -crlf
 *.bat           -crlf
 *.bmp           -crlf
 *.dsptemplate   -crlf

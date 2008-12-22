@@ -22,7 +22,7 @@
 
 static void test_brec_parts()
 {
-  vcl_string file = "digits_small.TIF";
+  vcl_string file = "digits_small.png";
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
 
   unsigned ni = img->ni();

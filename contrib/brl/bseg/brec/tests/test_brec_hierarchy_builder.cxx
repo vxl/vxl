@@ -22,8 +22,8 @@
 
 static void test_brec_hierarchy_builder()
 {
-  vcl_string file = "normalized0_cropped.tif";
-  //vcl_string file = "digits_small.TIF";
+  vcl_string file = "normalized0_cropped.png";
+  //vcl_string file = "digits_small.png";
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
 
