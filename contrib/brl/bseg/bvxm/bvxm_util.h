@@ -23,6 +23,9 @@
 //   09/12/2008 - Ibrahim Eden - Added the method 
 //                               static int convert_uncertainty_from_meters_to_pixels ...
 //
+//   12/12/2008 - Ozge C. Ozcanli - Added the method
+//                                  static void warp_slab_nearest_neighbor ...
+                                
 // \endverbatim
 
 #include <vcl_string.h>
@@ -76,6 +79,11 @@ class bvxm_util
   static void warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
                                  vgl_h_matrix_2d<double> invH,
                                  bvxm_voxel_slab<T> &slab_out);
+
+  template<class T>
+  static void warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
+                                         vgl_h_matrix_2d<double> invH,
+                                         bvxm_voxel_slab<T> &slab_out);
 
   template<class T, unsigned N>
   static bool img_to_slab(vil_image_view_base_sptr image,
@@ -236,6 +244,47 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
               // pixel is good
               (*out_it) += slab_in_smooth(xvals[i],yvals[i],z)*weights[i];
           }
+        }
+      } //x
+    } // y
+  } // z
+  return;
+}
+
+template<class T>
+void bvxm_util::warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
+                                           vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out)
+{
+  vnl_matrix_fixed<double,3,3> Hd = invH.get_matrix();
+  vnl_matrix_fixed<float,3,3> H;
+  // convert H to a float matrix
+  vnl_matrix_fixed<float,3,3>::iterator Hit = H.begin();
+  vnl_matrix_fixed<double,3,3>::iterator Hdit = Hd.begin();
+  for (; Hit != H.end(); ++Hit, ++Hdit)
+    *Hit = (float)(*Hdit);
+
+  //slab_out.fill(T(0.0)); // this should work whether T is a vector_fixed or a scalar
+
+  typename bvxm_voxel_slab<T>::iterator out_it = slab_out.begin();
+
+  // if z > 1, it would be more efficient to put the z loop as the inner-most.
+  // z will probably be 1 most of the time though, so leave it here for now.
+  for (unsigned z=0; z<slab_out.nz(); ++z)
+  {
+    for (unsigned y=0; y<slab_out.ny(); ++y)
+    {
+      for (unsigned x=0; x<slab_out.nx(); ++x, ++out_it)
+      {
+        vnl_vector_fixed<float,3> pix_in_homg = H*vnl_vector_fixed<float,3>((float)x,(float)y,1.0f);
+        // normalize homogeneous coordinate
+        float pix_in_x = pix_in_homg[0] / pix_in_homg[2];
+        float pix_in_y = pix_in_homg[1] / pix_in_homg[2];
+        // cast to the nearest integer value
+        int x0 = (int)vcl_floor(pix_in_x+0.5f);
+        int y0 = (int)vcl_floor(pix_in_y+0.5f);
+        if (x0 >= 0 && y0 >= 0 && x0 < (int)slab_in.nx() && y0 < (int)slab_in.ny()) {
+          // pixel is good
+          (*out_it) = slab_in(x0,y0,z);
         }
       } //x
     } // y

@@ -58,6 +58,8 @@ public:
    bvxm_voxel_slab<obs_datatype> expected_color( bvxm_voxel_slab<mix_gauss_type> const& appear);
    bvxm_voxel_slab<obs_datatype> most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear);
 
+   bvxm_voxel_slab<obs_datatype> sample(bvxm_voxel_slab<mix_gauss_type > const& appear);
+
 };
 
 #endif // bvxm_mog_rgb_processor_h_

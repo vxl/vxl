@@ -9,6 +9,7 @@
 #include "../bvxm_world_params.h"
 #include "../bvxm_mog_grey_processor.h"
 #include <vil/vil_math.h>
+#include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -115,7 +116,7 @@ unsigned scale=0;
   vox_world->expected_image<APM_MOG_GREY>(meta1,img1,mask);
 
   // debug: write out images
-  //vil_save(*img1,"./expected1.png");
+  vil_save(*img1,"./expected1.png");
 
   bvxm_image_metadata meta2(img1,cam1);
 
@@ -130,7 +131,7 @@ unsigned scale=0;
 
   vil_image_view_base_sptr expected_img = new vil_image_view<vxl_byte>(640,480,1);
   bvxm_util::slab_to_img(prob, expected_img);
-  //vil_save(*expected_img,"./expected2.png");
+  vil_save(*expected_img,"./expected2.png");
 
   // we want the two expected images to be exactly the same
   vil_image_view<float> im_dif;
@@ -141,6 +142,42 @@ unsigned scale=0;
   vil_math_sum(sum, im_dif, 0);
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 5.0);  // imgs look exactly the same but there is dif of 4
 
+  bvxm_voxel_slab_base_sptr mog_image2;
+  TEST("testing mixture of gaussian image creation with samplling", vox_world->mog_image_with_random_order_sampling<APM_MOG_GREY>(meta2, 10, mog_image2, 0), true);
+  TEST("testing mixture of gaussian image creation with sampling", !mog_image2, false);
+
+  mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image2.ptr());
+  TEST("testing mixture of gaussian image creation with sampling", !mog_image_ptr, false);
+
+  bvxm_voxel_slab<float> prob2 = apm_processor.expected_color(*mog_image_ptr);
+
+  vil_image_view_base_sptr expected_img2 = new vil_image_view<vxl_byte>(640,480,1);
+  bvxm_util::slab_to_img(prob2, expected_img2);
+  vil_save(*expected_img2,"./expected3.png");
+
+
+#if 0
+  //: create an existing voxel world
+  bvxm_world_params_sptr params3 = new bvxm_world_params();
+  bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
+  params3->set_params("D:\\projects\\change\\plasticville\\world_dir", 
+    vgl_point_3d<float> (-10.0f, -10.0f, -5.0f), 
+    vgl_vector_3d<unsigned int> (400, 400, 80), 0.27f, lvcs, 0.001f, 0.99f, 1);
+  bvxm_voxel_world_sptr vox_world2 = new bvxm_voxel_world;
+  vox_world2->set_params(params3);
+  //: load a test image and camera
+  vcl_string image_fname = "D:/projects/change/plasticville/outseq/DSCN0521.jpg";
+  vcl_string camera_fname = "D:/projects/change/plasticville/outseq_cams/frame_00.txt";
+  vil_image_view_base_sptr img3 = vil_load(image_fname.c_str());
+    // read projection matrix from the file.
+  vcl_ifstream ifs(camera_fname.c_str());
+  vnl_matrix_fixed<double,3,4> projection_matrix; ifs >> projection_matrix;
+  vbl_smart_ptr<vpgl_camera<double> > procam3 = new vpgl_proj_camera<double>(projection_matrix);
+  bvxm_image_metadata meta3(img3,procam3);
+
+  bvxm_voxel_slab_base_sptr mog_image2;
+  TEST("testing mixture of gaussian image with sampling", vox_world2->mog_image_with_random_order_sampling<APM_MOG_GREY>(meta3, 5, mog_image2, 0, 0), true);
+#endif
   return;
 }
 

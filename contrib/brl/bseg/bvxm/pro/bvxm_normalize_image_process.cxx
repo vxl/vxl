@@ -28,7 +28,9 @@ bvxm_normalize_image_process::bvxm_normalize_image_process()
   output_types_[1]= "float";  // output a
   output_types_[2]= "float";  // output b
 
-  parameters()->add("use most probable mode to create mog", "most_prob", true);   // otherwise uses expected values of the mixtures at voxels along the path of the rays 
+  //parameters()->add("use most probable mode to create mog", "most_prob", true);   // otherwise uses expected values of the mixtures at voxels along the path of the rays 
+  parameters()->add("method to use to create a mog image", "mog_method", (unsigned)bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE);   // otherwise uses expected values of the mixtures at voxels along the path of the rays 
+  parameters()->add("number of samples if using random sampling as mog_method", "n_samples", (unsigned)10);  
   parameters()->add("start value for a", "a_start", 0.6f);
   parameters()->add("increment for a", "a_inc", 0.05f);
   parameters()->add("end value for a", "a_end", 1.8f);

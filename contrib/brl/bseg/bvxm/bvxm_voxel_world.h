@@ -99,6 +99,8 @@
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_gauss_filter.h>
 
+#include <bsta/bsta_sampler.h>
+
 class bvxm_voxel_world: public vbl_ref_count
 {
  public:
@@ -1355,9 +1357,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   unsigned cnt = 0;
   for (unsigned i = 0; i < observation.img->ni(); ++i) {
     for (unsigned j = 0; j < observation.img->nj(); ++j) {
-#ifdef HAS_BSTA_SAMPLER //FIXME: remove this line when bsta_sampler is available
       if (bsta_sampler<unsigned>::sample(col_ids, column_probs[i][j], n_samples, column_samples[i][j]))
-#endif
         ++cnt;
     }
   }
@@ -1392,9 +1392,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
 
     apm_datatype init;
     slice_img.fill(init);
-#ifdef BVXM_HAS_WRAP_SLAB_NN //FIXME: remove this line when this method is available
     bvxm_util::warp_slab_nearest_neighbor(*apm_slab_it, H_img_to_plane[z], slice_img);
-#endif
 
     for (unsigned k = 0; k < n_samples; k++) {
       bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
@@ -1404,9 +1402,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
         for (unsigned j = 0; j < observation.img->nj(); j++) {
           if (column_samples[i][j].size() != 0 && column_samples[i][j][k] == z) {
             if (slice_img(i,j).num_components() != 0) {
-#ifdef BSTA_NUM_OBS_HAS_SAMPLE //FIXME: remove this line when sample() available
               (*obs_samples)(i,j) = slice_img(i,j).sample();
-#endif
               (*w)(i,j) = 1.0f;  // make the weight non-zero for the column, even if there is only 1 sample
             }
           }

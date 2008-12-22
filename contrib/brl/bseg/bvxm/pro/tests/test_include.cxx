@@ -29,5 +29,6 @@
 #include <bvxm/pro/bvxm_update_edges_lidar_process.h>
 #include <bvxm/pro/bvxm_update_process.h>
 #include <bvxm/pro/bvxm_update_lidar_process.h>
+#include <bvxm/pro/bvxm_create_mog_image_process.h>
 
 int main() { return 0; }

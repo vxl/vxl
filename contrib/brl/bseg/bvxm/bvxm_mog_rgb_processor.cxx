@@ -145,3 +145,21 @@ bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::mo
   return color;
 }
 
+bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::sample(bvxm_voxel_slab<mix_gauss_type > const& appear)
+{
+  //the output
+   bvxm_voxel_slab<obs_datatype> color(appear.nx(),appear.ny(),appear.nz());
+
+   //the iterator
+   bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it;
+   bvxm_voxel_slab<obs_datatype>::iterator ec_it = color.begin();
+
+  for (appear_it = appear.begin(); appear_it!= appear.end();++appear_it, ++ec_it)
+  {
+    if ((*appear_it).num_components() > 0) {
+      (*ec_it) = (*appear_it).sample();
+    }
+  }
+
+  return color;
+}

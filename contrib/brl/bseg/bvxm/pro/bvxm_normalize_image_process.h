@@ -15,6 +15,9 @@
 //                    norm_parameters<bvxm_voxel_type APM_T>.
 //                  - Added support for multichannel appereance model processor,
 //                  - Removed support for rgb_mog_processor
+//
+//   Ozge C Ozcanli - 12/1208 - added a third option to create mixture of gaussians (mog) image by sampling from the mixtures along the ray
+// 
 // \endverbatim
 
 #include <vcl_string.h>
@@ -49,6 +52,8 @@ public:
   bool init() { return true; }
   bool execute();
   bool finish() { return true; }
+
+  
 
 protected:
 
@@ -133,8 +138,10 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   bvxm_image_metadata observation(input_img,camera);
 
   // get parameters
-  bool most_prob = true;
-  parameters()->get_value("most_prob", most_prob);   // otherwise uses expected image
+  //bool most_prob = true;
+  //parameters()->get_value("most_prob", most_prob);   // otherwise uses expected image
+  unsigned mog_creation_method = (unsigned)bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE; // default is most_probable_mode
+  parameters()->get_value("mog_method", mog_creation_method);
 
   float a_start=0, a_end=0, a_inc=0;
   parameters()->get_value("a_start", a_start);
@@ -147,10 +154,16 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   parameters()->get_value("b_end", b_end);
 
   if (verbose) {
-    if (most_prob) 
-      vcl_cout << "using most probable modes' colors to create mog image ";
-    else 
-      vcl_cout << "using expected colors to create mog image ";
+    switch (mog_creation_method) { 
+      case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE: 
+        { vcl_cout << "using most probable modes' colors to create mog image "; } break;
+      case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
+        { vcl_cout << "using expected colors to create mog image "; } break;
+      case bvxm_mog_image_creation_methods::SAMPLING:
+        { vcl_cout << "using random sampling to create mog image "; } break;
+      default:
+        { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
+    }
 
     vcl_cout << "normalization parameters to be used in this run:\n"
       << "a_start: " << a_start << " a_end: " << a_end << " a_inc: " << a_inc << vcl_endl
@@ -180,10 +193,24 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
 
-  if (most_prob) {
-    world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); 
-  } else {
-    world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index);
+  bool done = false;
+  switch (mog_creation_method) { 
+    case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE: 
+      { done = world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
+    case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
+      { done = world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
+    case bvxm_mog_image_creation_methods::SAMPLING:
+      { unsigned n_samples;
+        parameters()->get_value("n_samples", n_samples);  
+        done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples, mog_image, bin_index, scale_index); 
+      } break;
+    default:
+      { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
+  }
+
+  if (!done) {
+    vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - problems in creating mixture of gaussian image!\n";
+    return false;
   }
 
   bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>* >(mog_image.ptr());
