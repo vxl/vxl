@@ -202,12 +202,12 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
   vector_ sample(void) const {
     //: first normalize the weights (this is const methods so we cannot call the class-method normalize_weights()
     T sum = 0;
-    for (unsigned i=0; i<num_components_; ++i)
+    for (unsigned i=0; i<num_components(); ++i)
       sum += components_[i].weight;
     
     vcl_vector<float> ps;
     vcl_vector<unsigned> ids;
-    for (unsigned i=0; i<num_components_; ++i) {
+    for (unsigned i=0; i<num_components(); ++i) {
       float w;
       if (sum > 0)
         w = float(components_[i].weight/sum);
