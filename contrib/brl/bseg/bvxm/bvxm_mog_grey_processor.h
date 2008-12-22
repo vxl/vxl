@@ -59,8 +59,9 @@ class  bvxm_mog_grey_processor
 
   bvxm_voxel_slab<float> expected_color( bvxm_voxel_slab<mix_gauss_type> const& appear);
   bvxm_voxel_slab<float> most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear);
-
+#if 0
   bvxm_voxel_slab<float> sample(bvxm_voxel_slab<mix_gauss_type > const& appear);
+#endif
 
   // bin number is always 0 for the simple mixture of gaussian case
   virtual unsigned int get_light_bin(unsigned int num_light_bins, const vnl_vector<float>& light) {return 0;}

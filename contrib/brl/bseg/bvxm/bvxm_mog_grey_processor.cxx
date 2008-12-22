@@ -139,6 +139,7 @@ bvxm_voxel_slab<float> bvxm_mog_grey_processor::most_probable_mode_color(bvxm_vo
   return color;
 }
 
+#if 0
 bvxm_voxel_slab<float> bvxm_mog_grey_processor::sample(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {
   //the output
@@ -157,3 +158,4 @@ bvxm_voxel_slab<float> bvxm_mog_grey_processor::sample(bvxm_voxel_slab<mix_gauss
 
   return color;
 }
+#endif
