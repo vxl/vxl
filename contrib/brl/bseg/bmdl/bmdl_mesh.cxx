@@ -436,8 +436,9 @@ void bmdl_mesh::simplify_edge( vcl_vector<vgl_point_2d<double> >& pts, double to
     {
       if(i==0 || i==indices.size()-1)
         ++i;
-      else
+      else if (new_pts.empty() || new_pts.back() != pts[i])
         new_pts.push_back(pts[i++]);
+            
       continue;
     }
     const vgl_line_segment_2d<double>& seg = segs[indices[i]];
@@ -454,6 +455,10 @@ void bmdl_mesh::simplify_edge( vcl_vector<vgl_point_2d<double> >& pts, double to
     else if(i>0 || (seg.point1()-pts.front()).length()>0.5)
       new_pts.push_back(seg.point1());
     
+    // remove duplicate points
+    if(new_pts.size()>1 && new_pts.back() == new_pts[new_pts.size()-2])
+      new_pts.pop_back();
+    
     // skip to the next point not part of this line
     for (int curr_seg_idx = indices[i];
          i<indices.size() && indices[i] == curr_seg_idx; ++i)
@@ -462,6 +467,9 @@ void bmdl_mesh::simplify_edge( vcl_vector<vgl_point_2d<double> >& pts, double to
     // avoid duplicating the last point
     if(i<indices.size() || (seg.point2()-pts.back()).length()>0.5)
       new_pts.push_back(seg.point2());
+    
+    if(new_pts.size()>1 && new_pts.back() == new_pts[new_pts.size()-2])
+      new_pts.pop_back();
   }
   // the last point must be retained
   new_pts.push_back(pts.back());
