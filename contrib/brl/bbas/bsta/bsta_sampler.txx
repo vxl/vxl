@@ -35,6 +35,7 @@ bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p, unsig
     accum_p.insert(vcl_pair<float, unsigned>(accum, i));
   }
   float last_val = (*(accum_p.rbegin())).first;
+  unsigned last_id = (*(accum_p.rbegin())).second;
   float dif = last_val-1.0f;
   float abs_dif = dif < 0 ? -dif : dif;
   if (abs_dif > 0.1f)
@@ -43,9 +44,13 @@ bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p, unsig
   vnl_random rand;
   for (unsigned i = 0; i < cnt; i++) {
     float r = (float)(rand.drand32());
-    vcl_pair<float, unsigned> search_key(r, 0);
-    unsigned r_id = (*(accum_p.upper_bound(search_key))).second;
-    out.push_back(samples[r_id]);
+    if (r >= last_val) {
+      out.push_back(samples[last_id]);
+    } else {
+      vcl_pair<float, unsigned> search_key(r, 0);
+      unsigned r_id = (*(accum_p.upper_bound(search_key))).second;
+      out.push_back(samples[r_id]);
+    }
   }
   
   return true;
