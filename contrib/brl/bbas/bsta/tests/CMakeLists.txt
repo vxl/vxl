@@ -12,6 +12,7 @@ ADD_EXECUTABLE( bsta_test_all
   test_otsu_threshold.cxx
 #  test_parzen_sphere.cxx
   test_weibull.cxx
+  test_sampler.cxx
 )
 
 TARGET_LINK_LIBRARIES( bsta_test_all bsta vpl vsl vbl vbl_io testlib)
@@ -25,6 +26,7 @@ ADD_TEST( bsta_test_mixture                 ${EXECUTABLE_OUTPUT_PATH}/bsta_test_
 ADD_TEST( bsta_test_histogram               ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_bsta_histogram )
 ADD_TEST( bsta_test_k_medoid                ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_k_medoid )
 ADD_TEST( bsta_test_otsu_threshold          ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_otsu_threshold )
+ADD_TEST( bsta_test_sampler      ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_sampler )
 
 ADD_EXECUTABLE( bsta_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bsta_test_include bsta )

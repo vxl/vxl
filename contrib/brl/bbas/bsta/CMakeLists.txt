@@ -14,7 +14,6 @@ SET(bsta_sources
  bsta_int_histogram_1d.cxx  bsta_int_histogram_1d.h
  bsta_int_histogram_2d.cxx  bsta_int_histogram_2d.h
 
-
   bsta_distribution.h
 
   bsta_gaussian.h
@@ -35,6 +34,7 @@ SET(bsta_sources
   bsta_detector_gaussian.h
   bsta_detector_mixture.h
   bsta_weibull.h   bsta_weibull.txx
+  bsta_sampler.h   bsta_sampler.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_sources)

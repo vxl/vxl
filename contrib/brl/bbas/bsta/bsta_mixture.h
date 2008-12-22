@@ -18,6 +18,7 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
+#include "bsta_sampler.h"
 
 //: A mixture of distributions
 template <class dist_>
@@ -194,6 +195,34 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
   template <class comp_type_>
   void sort(comp_type_ comp, unsigned int idx)
   { vcl_sort(components_.begin(), components_.begin()+idx+1, sort_adaptor<comp_type_>(comp)); }
+
+  //: sample from the mixture
+  //  randomly selects a component wrt normalized component weights, then for now returns the mean of the selected component
+  //  TODO: write a method to sample from the distribution and use it instead of the mean
+  vector_ sample(void) const {
+    //: first normalize the weights (this is const methods so we cannot call the class-method normalize_weights()
+    T sum = 0;
+    for (unsigned i=0; i<num_components_; ++i)
+      sum += components_[i].weight;
+    
+    vcl_vector<float> ps;
+    vcl_vector<unsigned> ids;
+    for (unsigned i=0; i<num_components_; ++i) {
+      float w;
+      if (sum > 0)
+        w = float(components_[i].weight/sum);
+      else
+        w = float(components_[i].weight);
+      ps.push_back(w);
+      ids.push_back(i);
+    }
+    vcl_vector<unsigned> out;
+    bsta_sampler<unsigned>::sample(ids, ps, 1, out);
+    assert(out.size() == 1);
+    
+    return components_[out[0]].distribution.mean();
+  }
+
 };
 
 template <class dist_>
