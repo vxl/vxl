@@ -79,6 +79,11 @@ class bmdl_mesh
 
   //: simplify the linked edges by fitting lines
   static void simplify_edges( vcl_vector<bmdl_edge>& edges );
+  
+  //: Subtract a hole from an existing face in a mesh
+  static void roof_subtract_hole(const imesh_vertex_array<3>& verts,
+                                 vcl_vector<unsigned int>& face, 
+                                 const vcl_vector<unsigned int>& hole);
 
   //: construct a mesh out of data and labels
   // The coordinate system is flipped over the x-axis to make it right handed
