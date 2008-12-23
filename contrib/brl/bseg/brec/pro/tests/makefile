@@ -4,6 +4,7 @@ include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_brec_update_changes_process.cxx
+TESTS += test_brec_create_mog_image_process.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

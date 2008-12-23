@@ -39,6 +39,7 @@ MANPAGE_SOURCES += bsta_gaussian_sphere.txx
 MANPAGE_SOURCES += bsta_mixture.h
 MANPAGE_SOURCES += bsta_mixture_fixed.h
 MANPAGE_SOURCES += bsta_weibull.txx
+MANPAGE_SOURCES += bsta_sampler.txx
 
 SUBDIRS += algo io
 
