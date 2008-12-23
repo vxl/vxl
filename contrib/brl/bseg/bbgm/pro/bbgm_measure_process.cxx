@@ -75,7 +75,7 @@ bbgm_measure_process::execute()
   }
   vcl_string image_type = bgm->is_a();
   //for now just check for parzen_sphere in the string
-  unsigned str_indx = image_type.find("parzen_sphere");  
+  int str_indx = image_type.find("parzen_sphere");
   bool parzen = str_indx != vcl_string::npos;
   brdb_value_t<vil_image_view_base_sptr>* input1 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
@@ -138,26 +138,26 @@ bbgm_measure_process::execute()
     typedef parzen_f3_t::vector_type pvtype_;
 #endif
     if (attr=="probability") {
-      if(!parzen){
+      if (!parzen) {
         bbgm_image_of<obs_mix_gauss_type3> *model =
           static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
         bsta_probability_functor<mix_gauss_type3> functor_;
         measure(*model, image, result, functor_, tolerance);
-	  }
-	}
-     
+      }
+    }
+
 #ifdef MEASURE_BKGROUND
     else if (attr=="prob_background") {
-      if(!parzen){
+      if (!parzen) {
         bbgm_image_of<obs_mix_gauss_type3> *model =
           static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
         bsta_prob_density_functor<mix_gauss_type3> functor_;
         measure_bkground(*model, image, result, functor_, tolerance);
-	  }
-	}
-      
+      }
+    }
+
 #endif // MEASURE_BKGROUND
-	else {
+    else {
       vcl_cout << "In bbgm_measure_process::execute() -"
                << " measurement not available\n";
       return false;
