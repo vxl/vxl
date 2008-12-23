@@ -31,6 +31,7 @@
 #include <bsta/bsta_k_medoid.h>
 #include <bsta/bsta_otsu_threshold.h>
 #include <bsta/bsta_weibull.h>
+#include <bsta/bsta_sampler.h>
 
 #include <bsta/io/bsta_io_attributes.h>
 #include <bsta/io/bsta_io_gaussian_full.h>

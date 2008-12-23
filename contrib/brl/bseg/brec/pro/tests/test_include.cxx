@@ -1,5 +1,6 @@
 #include <brec/pro/brec_bayesian_update_process.h>
 #include <brec/pro/brec_change_area_process.h>
+#include <brec/pro/brec_create_mog_image_process.h>
 #include <brec/pro/brec_density_to_prob_map_process.h>
 #include <brec/pro/brec_glitch_process.h>
 #include <brec/pro/brec_glitch_overlay_process.h>
