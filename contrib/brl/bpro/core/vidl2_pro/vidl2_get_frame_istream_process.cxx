@@ -16,7 +16,7 @@ vidl2_get_frame_istream_process::vidl2_get_frame_istream_process()
   input_data_.resize(2,brdb_value_sptr(0));
   input_types_.resize(2);
   input_types_[0]="vidl2_istream_sptr";
-  input_types_[1]="int";   // frame number to seek 
+  input_types_[1]="int";   // frame number to seek
 
   //output
   output_data_.resize(1,brdb_value_sptr(0));
@@ -44,31 +44,31 @@ vidl2_get_frame_istream_process::execute()
   brdb_value_t<vidl2_istream_sptr>* input0 =
     static_cast<brdb_value_t<vidl2_istream_sptr>* >(input_data_[0].ptr());
 
-  vidl2_istream_sptr istream = input0->value();
+  vidl2_istream_sptr i_stream = input0->value();
 
-  if (!istream->is_open()){
+  if (!i_stream->is_open()){
     vcl_cerr << "In vidl2_get_frame_istream_process::execute()"
-             << " - input stream is not open" << vcl_endl;
+             << " - input stream is not open\n";
     return false;
   }
 
   //Retrieve frame number
   brdb_value_t<int>* input1 = static_cast<brdb_value_t<int>* >(input_data_[1].ptr());
-  int f_n = input1->value();
+  unsigned int f_n = input1->value();
 
-  if (istream->frame_number() != f_n) {
-    if (!istream->seek_frame(f_n)) { // seeking does not work
-      while (istream->advance()) {
-        if (istream->frame_number() == f_n)
+  if (i_stream->frame_number() != f_n) {
+    if (!i_stream->seek_frame(f_n)) { // seeking does not work
+      while (i_stream->advance()) {
+        if (i_stream->frame_number() == f_n)
           break;
       }
     }
   }
 
-  vcl_cout << "retrieving frame #: " << istream->frame_number() << vcl_endl;
+  vcl_cout << "retrieving frame #: " << i_stream->frame_number() << vcl_endl;
   vcl_cout.flush();
 
-  vidl2_frame_sptr f = istream->current_frame();
+  vidl2_frame_sptr f = i_stream->current_frame();
   vil_image_view_base_sptr fb = vidl2_convert_wrap_in_view(*f);
   if (!fb)
     return false;
