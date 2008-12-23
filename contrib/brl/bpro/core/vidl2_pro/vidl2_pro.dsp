@@ -113,6 +113,15 @@ SOURCE=.\vidl2_open_ostream_process.cxx
 # Begin Source File
 SOURCE=.\vidl2_pro_utils.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vidl2_close_istream_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_get_frame_istream_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_open_dshow_istream_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -130,6 +139,15 @@ SOURCE=.\vidl2_open_ostream_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_pro_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_close_istream_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_get_frame_istream_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_open_dshow_istream_process.h
 # End Source File
 # End Group
 # End Target

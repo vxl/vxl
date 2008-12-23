@@ -159,6 +159,9 @@ SOURCE=.\Templates/bsta_weibull+double-.cxx
 SOURCE=.\Templates/bsta_weibull+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bsta_sampler+unsigned---.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bsta_gauss.cxx
 # End Source File
 # Begin Source File
@@ -286,6 +289,12 @@ SOURCE=.\bsta_weibull.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_weibull.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_sampler.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_sampler.txx
 # End Source File
 # End Group
 # End Target

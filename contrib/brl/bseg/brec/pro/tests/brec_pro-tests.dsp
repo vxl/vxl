@@ -99,6 +99,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_brec_update_changes_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_brec_create_mog_image_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
