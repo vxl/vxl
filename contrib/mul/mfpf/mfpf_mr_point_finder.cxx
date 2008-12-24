@@ -53,7 +53,9 @@ unsigned mfpf_mr_point_finder::image_level(
   double rel_size0 = model_pixel_size/im_pyr.base_pixel_width();
 
   double log_step = vcl_log(im_pyr.scale_step());
-  int level = vnl_math_rnd(vcl_log(rel_size0)/log_step);
+
+  // Round level down, to work with slightly higher res. image.
+  int level = int(vcl_log(rel_size0)/log_step); 
   if (level<im_pyr.lo()) return im_pyr.lo();
   if (level>im_pyr.hi()) return im_pyr.hi();
   return level;
