@@ -66,10 +66,7 @@ bool vul_file::is_directory(char const* fn)
 bool vul_file::is_drive(char const* fn)
 {
   // a drive string looks like "c:", "z:"
-  if( strlen(fn)==2 && fn[1]==':' && isalpha(fn[0]) ) 
-    return true;
-  else
-    return false;
+  return vcl_isalpha(fn[0]) && fn[1]==':' && fn[2]=='\0';
 }
 #endif
 
