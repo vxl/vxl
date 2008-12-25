@@ -5,9 +5,9 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include "../bvxm_voxel_world.h"
-#include "../bvxm_world_params.h"
-#include "../bvxm_mog_grey_processor.h"
+#include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_world_params.h>
+#include <bvxm/bvxm_mog_grey_processor.h>
 #include <vil/vil_math.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
@@ -157,19 +157,20 @@ unsigned scale=0;
 
 
 #if 0
-  //: create an existing voxel world
+  // create an existing voxel world
   bvxm_world_params_sptr params3 = new bvxm_world_params();
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
-  params3->set_params("D:\\projects\\change\\plasticville\\world_dir", 
-    vgl_point_3d<float> (-10.0f, -10.0f, -5.0f), 
-    vgl_vector_3d<unsigned int> (400, 400, 80), 0.27f, lvcs, 0.001f, 0.99f, 1);
+  params3->set_params("D:\\projects\\change\\plasticville\\world_dir",
+                      vgl_point_3d<float> (-10.0f, -10.0f, -5.0f),
+                      vgl_vector_3d<unsigned int> (400, 400, 80),
+                      0.27f, lvcs, 0.001f, 0.99f, 1);
   bvxm_voxel_world_sptr vox_world2 = new bvxm_voxel_world;
   vox_world2->set_params(params3);
-  //: load a test image and camera
+  // load a test image and camera
   vcl_string image_fname = "D:/projects/change/plasticville/outseq/DSCN0521.jpg";
   vcl_string camera_fname = "D:/projects/change/plasticville/outseq_cams/frame_00.txt";
   vil_image_view_base_sptr img3 = vil_load(image_fname.c_str());
-    // read projection matrix from the file.
+  // read projection matrix from the file.
   vcl_ifstream ifs(camera_fname.c_str());
   vnl_matrix_fixed<double,3,4> projection_matrix; ifs >> projection_matrix;
   vbl_smart_ptr<vpgl_camera<double> > procam3 = new vpgl_proj_camera<double>(projection_matrix);
