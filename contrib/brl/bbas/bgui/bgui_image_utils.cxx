@@ -55,6 +55,8 @@ bool bgui_image_utils::range(double& min_value, double& max_value,
         
   min_value = this->compute_lower_bound(plane);
   max_value = this->compute_upper_bound(plane);
+  if(min_value>=max_value)
+    return false;
   return true;
 }
 
