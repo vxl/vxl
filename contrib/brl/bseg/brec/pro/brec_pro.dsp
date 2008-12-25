@@ -128,6 +128,9 @@ SOURCE=.\brec_update_changes_process.cxx
 # Begin Source File
 SOURCE=.\brec_save_mog_image_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\brec_create_mog_image_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -166,6 +169,9 @@ SOURCE=.\brec_glitch_overlay_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\brec_prob_map_area_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\brec_create_mog_image_process.h
 # End Source File
 # End Group
 # End Target
