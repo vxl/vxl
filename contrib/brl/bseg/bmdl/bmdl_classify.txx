@@ -34,15 +34,15 @@ bmdl_classify<T>::bmdl_classify(unsigned int area_threshold,
                                 T height_resolution,
                                 T gnd_threshold,
                                 T veg_threshold)
-: hgt_stdev_(0.01),
+: hgt_stdev_(T(0.01)),
   area_threshold_(area_threshold),
   height_resolution_(height_resolution),
   gnd_threshold_(gnd_threshold),
   veg_threshold_(veg_threshold),
   first_min_( vcl_numeric_limits<T>::infinity()),
   first_max_(-vcl_numeric_limits<T>::infinity()),
-  last_min_( vcl_numeric_limits<T>::infinity()),
-  last_max_(-vcl_numeric_limits<T>::infinity())
+  last_min_ ( vcl_numeric_limits<T>::infinity()),
+  last_max_ (-vcl_numeric_limits<T>::infinity())
 {
 }
 
