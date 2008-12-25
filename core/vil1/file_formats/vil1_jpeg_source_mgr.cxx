@@ -196,6 +196,7 @@ vil1_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil1_stream *vs)
     vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
     assert(src != 0);
     assert(src->stream == vs);
+    if (!src) return;
   }
 
   cinfo->src->bytes_in_buffer = 0; // forces fill_input_buffer on first read
