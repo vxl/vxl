@@ -232,9 +232,9 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     bb = broi.clip_to_image_bounds(bb);
     if ((bb->width() > 0) && (bb->height() > 0)) {
       roi = tiff_img->get_copy_view((unsigned int)bb->get_min_x(),
-                                  (unsigned int)bb->width(),
-                                  (unsigned int)bb->get_min_y(),
-                                  (unsigned int)bb->height());
+                                    (unsigned int)bb->width(),
+                                    (unsigned int)bb->get_min_y(),
+                                    (unsigned int)bb->height());
       //add the translation to the camera
       camera->translate(bb->get_min_x(), bb->get_min_y());
     }
