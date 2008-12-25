@@ -45,7 +45,7 @@ bvxm_lidar_init_process::bvxm_lidar_init_process()
   output_types_[j++]= "vil_image_view_base_sptr";  // second ret image ROI
   output_types_[j++]= "vil_image_view_base_sptr";  // mask
 
-  if (!parameters()->add( "Upper bound for Lidar differences", "mask_thresh", 10.0f ))
+  if (!parameters()->add("Upper bound for Lidar differences", "mask_thresh", 10.0f))
     vcl_cout << "ERROR: Adding parameters in bvxm_lidar_init_process\n";
 }
 
@@ -162,31 +162,26 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
   // based on the model defined in GEOTIFF
 
   // is this a PCS_WGS84_UTM?
-  bool is_utm = false;
-  if (gtif->PCS_WGS84_UTM_zone(utm_zone, h))
+  bool is_utm = gtif->PCS_WGS84_UTM_zone(utm_zone, h);
+  if (is_utm)
   {
     vcl_vector<vcl_vector<double> > tiepoints;
     gtif->gtif_tiepoints(tiepoints);
-    bool south_flag = false;
-    if (h == 1)
-      south_flag = true;
-    is_utm = true;
+    bool south_flag = (h == 1);
     // transform each tiepoint
-    bgeo_utm utm;
-    double lat, lon, elev ;
-    for (unsigned i=0; i< tiepoints.size(); i++) {
-      vcl_vector<double> tiepoint = tiepoints[i];
-      assert (tiepoint.size() == 6);
-      double I = tiepoint[0];
-      double J = tiepoint[1];
-      double K = tiepoint[2];
-      double X = tiepoint[3];
-      double Y = tiepoint[4];
-      double Z = tiepoint[5];
+    for (unsigned i=0; i< tiepoints.size(); ++i) {
+      assert (tiepoints[i].size() == 6);
+      double X = tiepoints[i][3];
+      double Y = tiepoints[i][4];
+      double Z = tiepoints[i][5];
 
-      utm.transform(utm_zone, X, Y, Z, lat, lon, elev, south_flag );
-      //scale_ = 1;
+      double I /*lat*/, J /*lon*/, K /*elev*/ ;
+      bgeo_utm utm;
+      utm.transform(utm_zone, X, Y, Z, I, J, K, south_flag);
       // now, we have a mapping (I,J,K)->(X,Y,Z)
+      tiepoints[i][0] = I;
+      tiepoints[i][1] = J;
+      tiepoints[i][2] = K;
     }
 
     // create a transformation matrix
@@ -197,9 +192,11 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     if (gtif->gtif_trans_matrix(trans_matrix_values)){
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
-    } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
+    }
+    else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
-    } else {
+    }
+    else {
       vcl_cout << "bvxm_lidar_init_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
     }
@@ -240,7 +237,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
                                   (unsigned int)bb->height());
       //add the translation to the camera
       camera->translate(bb->get_min_x(), bb->get_min_y());
-    } 
+    }
 
     if (!roi) {
       vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
@@ -332,7 +329,8 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
   if (!roi_second || !cam_second) {
     view->fill(0);
     mask = view;
-  } else {
+  }
+  else {
     assert(roi_first->ni() == roi_second->ni());
     assert(roi_first->nj() == roi_second->nj());
 
