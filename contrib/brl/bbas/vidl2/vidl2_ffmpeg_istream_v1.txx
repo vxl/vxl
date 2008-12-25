@@ -52,7 +52,6 @@ struct vidl2_ffmpeg_istream::pimpl
   int64_t last_dts;
 
   //: The last successfully read frame.
-  //
   // If frame_->data[0] is not NULL, then the frame corresponds to
   // the codec state, so that codec.width and so on apply to the
   // frame data.
@@ -64,8 +63,7 @@ struct vidl2_ffmpeg_istream::pimpl
   //: A contiguous memory buffer to store the current image data
   vil_memory_chunk_sptr contig_memory_;
 
-  //: A contiguous memory buffer to frame data for raw video, because
-  // there is no decoder to hold it for us.
+  //: A contiguous memory buffer to frame data for raw video, because there is no decoder to hold it for us.
   vil_memory_chunk_sptr raw_video_memory_;
 
   //: The last successfully decoded frame.
@@ -232,7 +230,7 @@ is_seekable() const
 
 
 //: Return the number of frames if known
-//  returns -1 for non-seekable streams
+// \returns -1 for non-seekable streams
 int
 vidl2_ffmpeg_istream::num_frames() const
 {
@@ -242,7 +240,7 @@ vidl2_ffmpeg_istream::num_frames() const
   // to anywhere but the beginning.  There is logic in advance() to
   // ensure this.
   vidl2_ffmpeg_istream* mutable_this = const_cast<vidl2_ffmpeg_istream*>(this);
-  if( mutable_this->is_->num_frames_ == -2 ) {
+  if ( mutable_this->is_->num_frames_ == -2 ) {
     mutable_this->is_->num_frames_ = 0;
     while (mutable_this->advance()) {
       ++mutable_this->is_->num_frames_;
@@ -376,7 +374,7 @@ advance()
   // See the comment in num_frames().  This is to make sure that once
   // we start reading frames, we'll never try to march to the end to
   // figure out how many frames there are.
-  if( is_->num_frames_ == -2 ) {
+  if ( is_->num_frames_ == -2 ) {
     is_->num_frames_ = -1;
   }
 
