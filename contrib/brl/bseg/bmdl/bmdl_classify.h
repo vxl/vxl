@@ -23,8 +23,8 @@ class bmdl_classify
   // \param gnd_threshold is the minimum height above the ground considered for buildings and vegetation
   // \param veg_threshold is the minimum distance between first and last returns for vegetation
   bmdl_classify(unsigned int area_threshold = 6,
-                T height_resolution = 0.5, 
-                T gnd_threshold = 2.0, 
+                T height_resolution = 0.5,
+                T gnd_threshold = 2.0,
                 T veg_threshold_ = 1.0);
 
   //: Set the first and last return images
@@ -71,14 +71,14 @@ class bmdl_classify
   //: Access the maximum height in the last return image
   T last_max() const {return last_max_;}
 
-  //: Classify each pixel as Ground (0), Vegitation (1), or Building (>=2)
+  //: Classify each pixel as Ground (0), Vegetation (1), or Building (>=2)
   // Each building is given an index sequentially starting with 2
   // and sorted by mean height.
   // \note This is the main function you should call, it runs all the steps
   void label_lidar();
 
   //: Perform an initial segementation at each pixel using thresholds
-  // Classify each pixel as Ground (0), Vegitation (1), or Building (2)
+  // Classify each pixel as Ground (0), Vegetation (1), or Building (2)
   // Results are stored in the labels image
   void segment();
 
@@ -86,9 +86,9 @@ class bmdl_classify
   //  Assign a new label to each groups.
   //  Returns building mean heights and pixel counts by reference
   void cluster_buildings();
-  
+
   //: Replace small holes in buildings from ground to vegetation (unclaimed) labels
-  // holes are switch if area is less than \a min_size
+  // Holes are switch if area is less than \a min_size
   void fill_ground_holes(unsigned int min_size);
 
   //: Threshold buildings by area.

@@ -30,7 +30,7 @@
 // \param gnd_threshold is the minimum height above the ground considered for buildings
 // \param veg_threshold is the minimum distance between first and last returns for vegetation
 template <class T>
-bmdl_classify<T>::bmdl_classify(unsigned int area_threshold, 
+bmdl_classify<T>::bmdl_classify(unsigned int area_threshold,
                                 T height_resolution,
                                 T gnd_threshold,
                                 T veg_threshold)
@@ -140,7 +140,7 @@ T bmdl_classify<T>::estimate_height_noise_stdev()
 }
 
 
-//: Classify each pixel as Ground (0), Vegitation (1), or Building (>=2)
+//: Classify each pixel as Ground (0), Vegetation (1), or Building (>=2)
 // Each building is given an index sequentially starting with 2
 // and sorted by mean height.
 template <class T>
@@ -165,7 +165,7 @@ void bmdl_classify<T>::label_lidar()
   // 3. Merge similar sections
   while (greedy_merge())
     ;
-  
+
   // Replace small holes in buildings from ground to vegetation labels
   fill_ground_holes(5);
 
@@ -203,7 +203,7 @@ void bmdl_classify<T>::label_lidar()
 
 
 //: Perform an initial segementation at each pixel using thresholds
-//  Classify each pixel as Ground (0), Vegitation (1), or Building (2)
+//  Classify each pixel as Ground (0), Vegetation (1), or Building (2)
 //  Results are stored in the labels image
 template <class T>
 void bmdl_classify<T>::segment()
@@ -402,13 +402,13 @@ void bmdl_classify<T>::cluster_buildings()
 
 
 //: Replace small holes in buildings from ground to vegetation labels
-// holes are switch if area is less than \a min_size
+// Holes are switch if area is less than \a min_size
 template <class T>
 void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
 {
   unsigned int ni = labels_.ni();
   unsigned int nj = labels_.nj();
-  
+
   vil_image_view<unsigned int> labels(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
@@ -418,11 +418,10 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
         labels(i,j) = 1;
     }
   }
-  
-  
+
   vcl_vector<unsigned int> merge_map;
   vcl_vector<unsigned int> count;
-  
+
   // handle first pixel
   if (labels(0,0) > 0)
   {
@@ -434,7 +433,7 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
   for (unsigned int i=1; i<ni; ++i) {
     if (labels(i,0)!=1)
       continue;
-    
+
     int idx = labels(i-1,0)-1;
     while (idx>=0 && merge_map[idx] != (unsigned int)idx )
       idx = merge_map[idx];
@@ -452,7 +451,7 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
   for (unsigned int j=1; j<nj; ++j) {
     if (labels(0,j)!=1)
       continue;
-    
+
     int idx = labels(0,j-1)-1;
     while (idx>=0 && merge_map[idx] != (unsigned int)idx )
       idx = merge_map[idx];
@@ -466,7 +465,7 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
       labels(0,j) = count.size();
     }
   }
-  
+
   // handle the rest of the image
   for (unsigned int j=1; j<nj; ++j)
   {
@@ -474,7 +473,7 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
     {
       if (labels(i,j)!=1)
         continue;
-      
+
       int idx1 = labels(i-1,j)-1, idx2 = labels(i,j-1)-1;
       while (idx1>=0 && merge_map[idx1] != (unsigned int)idx1 )
         idx1 = merge_map[idx1];
@@ -495,7 +494,7 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
           continue;
         }
       }
-      
+
       if (idx >= 0 ) {
         labels(i,j) = idx+1;
         ++count[idx];
@@ -508,22 +507,21 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
     }
   }
   vcl_cout << "num ground labels = "<<count.size() << vcl_endl;
-  
+
   // update the original labels
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
       if (labels(i,j)==0)
         continue;
-      
+
       int idx = labels(i,j)-1;
       while (idx>=0 && merge_map[idx] != (unsigned int)idx )
         idx = merge_map[idx];
-      if(count[idx] <= min_size){
+      if (count[idx] <= min_size){
         labels_(i,j) = 1;
       }
     }
   }
-  
 }
 
 
@@ -595,7 +593,6 @@ void bmdl_classify<T>::refine_buildings()
   }
   building_mean_hgt_.swap(new_means);
 
-
   // relabel buildings with reduced label set
   for (unsigned int j=0; j<nj; ++j) {
     for (unsigned int i=0; i<ni; ++i) {
@@ -603,7 +600,7 @@ void bmdl_classify<T>::refine_buildings()
         labels_(i,j) = idx_map[labels_(i,j)-2];
     }
   }
-#endif
+#endif // 0
 }
 
 
@@ -645,7 +642,6 @@ bmdl_classify<T>::merge_map::~merge_map()
       idx_map_[i] = i2 = idx_map_[i2];
   }
   vcl_sort(unique.begin(), unique.end());
-
 
   vcl_vector<T> new_mean(unique.size(),0.0);
   vcl_vector<unsigned int> new_count(unique.size(),0);
