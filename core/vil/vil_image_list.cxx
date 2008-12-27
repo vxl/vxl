@@ -17,7 +17,7 @@
 #  define S_IFDIR 0040000
 # endif
 #endif
-
+static bool il_verbose = false;
 bool vil_image_list::vil_is_directory(char const* fn)
 {
   struct stat fs;
@@ -119,7 +119,7 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
   for (vcl_vector<vcl_string>::iterator fit = fs.begin();
        fit != fs.end(); ++fit)
   {
-    vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str());
+    vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str(), il_verbose);
     if (resc)
       temp.push_back(resc);
   }
@@ -133,7 +133,7 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::blocked_resources()
   for (vcl_vector<vcl_string>::iterator fit = fs.begin();
        fit != fs.end(); ++fit)
   {
-    vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str());
+    vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str(), il_verbose);
     vil_image_resource_sptr bir = blocked_image_resource(resc).ptr();
     if (bir)
       temp.push_back(bir);
@@ -149,7 +149,7 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::pyramids()
        fit != fs.end(); ++fit)
   {
     vil_pyramid_image_resource_sptr pyr =
-      vil_load_pyramid_resource((*fit).c_str());
+      vil_load_pyramid_resource((*fit).c_str(), il_verbose);
     if (pyr)
       temp.push_back(pyr.ptr());
   }
