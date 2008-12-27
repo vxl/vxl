@@ -65,6 +65,8 @@ vil_binary_image_op_process::execute()
     vil_math_image_product(view_a, view_b, result);
   else  if(operation=="max")
     vil_math_image_max(view_a, view_b, result);
+  else  if(operation=="sum")
+    vil_math_image_sum(view_a, view_b, result);
   else
     {
     vcl_cerr << "In vil_binary_image_op_process::execute() -"

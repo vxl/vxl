@@ -18,11 +18,12 @@ SET(vil_pro_sources
     vil_convert_to_n_planes_process.h   vil_convert_to_n_planes_process.cxx
     vil_combine_grey_images_process.h   vil_combine_grey_images_process.cxx
     vil_load_from_ascii_process.h       vil_load_from_ascii_process.cxx
-
     vil_stretch_image_process.h         vil_stretch_image_process.cxx
+    vil_image_pair_process.h            vil_image_pair_process.cxx
     vil_load_image_view_binary_process.h       vil_load_image_view_binary_process.cxx
     vil_save_image_view_binary_process.h       vil_save_image_view_binary_process.cxx
     vil_map_image_binary_process.h             vil_map_image_binary_process.cxx
+
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)

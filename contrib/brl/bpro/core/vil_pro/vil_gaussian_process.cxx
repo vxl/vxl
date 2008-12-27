@@ -16,7 +16,7 @@ vil_gaussian_process::vil_gaussian_process()
   input_data_.resize(2,brdb_value_sptr(0));
   input_types_.resize(2);
   input_types_[0]="vil_image_view_base_sptr"; // input image
-  input_types_[1]="double"; // gaussian standard deviation
+  input_types_[1]="float"; // gaussian standard deviation
 
   //output
   output_data_.resize(1,brdb_value_sptr(0));
@@ -45,10 +45,10 @@ vil_gaussian_process::execute()
   vil_image_view_base_sptr input_image = input0->value();
 
   //Gaussian standard deviation
-  brdb_value_t<double>* input1 =
-    static_cast<brdb_value_t<double>* >(input_data_[1].ptr());
-  double sigma = input1->value();
-
+  brdb_value_t<float>* input1 =
+    static_cast<brdb_value_t<float>* >(input_data_[1].ptr());
+  float sigma = input1->value();
+  unsigned half_width = static_cast<unsigned>(3.0f*sigma);
   // convert input image to float
   vil_image_view<float> fimage = *vil_convert_cast(float(), input_image);
   if (input_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
@@ -64,7 +64,7 @@ vil_gaussian_process::execute()
       for (unsigned i = 0; i<ni; ++i)
         temp(i,j)=static_cast<float>(fimage(i,j,p));
 
-    vil_gauss_filter_2d(temp, g, sigma, 3);
+    vil_gauss_filter_2d(temp, g, sigma, half_width);
     for (unsigned j = 0; j<nj; ++j)
       for (unsigned i = 0; i<ni; ++i)
         G(i,j,p) = g(i,j);
