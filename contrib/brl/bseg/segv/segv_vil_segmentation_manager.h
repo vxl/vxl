@@ -96,7 +96,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void convert_to_grey();
   void clear_mask();
   void add_poly_to_mask();
-
+  void load_image_nomenu(vcl_string const& path);
  //:drawing
   void create_polygon();
   //: access to the window

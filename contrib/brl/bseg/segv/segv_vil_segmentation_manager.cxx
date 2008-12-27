@@ -568,7 +568,34 @@ void segv_vil_segmentation_manager::load_image()
   else
     this->add_image(image, rmps);
 }
+void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
+{
+  bool pyrm = false;
+  vil_image_resource_sptr image;
+  vil_pyramid_image_resource_sptr pyr =
+      vil_load_pyramid_resource(path.c_str());
+  if (pyr)
+  {
+    image = pyr.ptr();
+    pyrm = true;
+  }
 
+  if (!image)
+    image = vil_load_image_resource(path.c_str());
+
+  if (!image)
+    return;
+
+  vgui_range_map_params_sptr rmps = range_params(image);
+
+  if (first_)
+  {
+    this->set_selected_grid_image(image, rmps);
+    first_ = false;
+  }
+  else
+    this->add_image(image, rmps);
+}
 void segv_vil_segmentation_manager::save_image()
 {
   vgui_dialog file_dialog("Save Image");
