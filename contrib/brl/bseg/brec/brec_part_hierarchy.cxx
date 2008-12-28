@@ -1,8 +1,7 @@
 //:
 // \file
-// \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
-//
+// \author Ozge C. Ozcanli (ozge at lems dot brown dot edu)
+// \date Oct. 16, 2008
 //
 
 #include "brec_part_hierarchy.h"
@@ -121,7 +120,7 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
   unsigned ni = map.ni();
   unsigned nj = map.nj();
 
-  //: first check if types and layers of central_p instance matches with upper_p's info
+  // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
     vcl_cout << "central_p instance passed is not compatible with the upper layer part passes\n";
     return 0;
@@ -131,7 +130,7 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
   brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base());
   pi->add_outgoing_edge(e1);
 
-  //: now for each other part of upper_p, check whether they exist in the map
+  // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
   edge_iterator eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
@@ -178,7 +177,7 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
   }
   strength *= central_p->strength_;
 
-  //: if all of them have been detected then declare existence at the central parts location
+  // if all of them have been detected then declare existence at the central parts location
   pi->strength_ = strength;
 
   return pi;
@@ -197,20 +196,20 @@ void brec_part_hierarchy::extract_upper_layer(vcl_vector<brec_part_instance_sptr
   vcl_vector<vcl_vector<brec_part_instance_sptr> > part_map(ni, dummy);
   generate_map(extracted_parts, part_map);
 
-  //: we'll generate a list of instantiations for each part in the upper parts of the hierarchy
+  // we'll generate a list of instantiations for each part in the upper parts of the hierarchy
   //vcl_map<vcl_pair<unsigned, unsigned>, vcl_vector<brec_part_instance_sptr> > instantiations;
 
-  //: for each detected part, check for the existence of each upper layer part that uses it as a central part
+  // for each detected part, check for the existence of each upper layer part that uses it as a central part
   for (unsigned i = 0; i < extracted_parts.size(); i++)
   {
     brec_part_instance_sptr p = extracted_parts[i];
-    //: find this type in the primitive layer of the hierarchy
+    // find this type in the primitive layer of the hierarchy
     brec_part_base_sptr hp = this->get_node(p->layer_, p->type_);
     if (!hp)
       continue;
 
-    //: find the all the upper layer parts that use hp as a central part
-    //  check the incoming edges of hp
+    // find the all the upper layer parts that use hp as a central part
+    // check the incoming edges of hp
     for (edge_iterator eit = hp->in_edges_begin(); eit != hp->in_edges_end(); eit++) {
       if (hp == (*eit)->source()->central_part()) {
         brec_part_base_sptr hp_upper = (*eit)->source();
@@ -226,8 +225,8 @@ void brec_part_hierarchy::extract_upper_layer(vcl_vector<brec_part_instance_sptr
   }
 }
 
-//: CAUTION: assumes that central part is added prior to other children of a parent part hence its edge is added to the hierarchy before other parts
 //: reader adds the edges of each vertex in the order read from the xml file
+//  CAUTION: assumes that central part is added prior to other children of a parent part hence its edge is added to the hierarchy before other parts
 void brec_part_hierarchy::write_xml(vcl_ostream& os)
 {
   bxml_document doc;
@@ -266,13 +265,13 @@ void brec_part_hierarchy::write_xml(vcl_ostream& os)
   edges->append_text("\n");
   root->append_data(edges);
   root->append_text("\n");
-  
+
   for (edge_iterator it = this->edges_begin(); it != this->edges_end(); it++) {
     bxml_data_sptr e = (*it)->xml_element();
     edges->append_text("  ");
     edges->append_data(e);
     edges->append_text("\n");
-    
+
     bxml_element *e_con = new bxml_element("connectivity");
     e_con->set_attribute("source", vert_map[(*it)->source()]);
     e_con->set_attribute("target", vert_map[(*it)->target()]);
@@ -280,7 +279,7 @@ void brec_part_hierarchy::write_xml(vcl_ostream& os)
     ((bxml_element*)e.ptr())->append_data(e_con);
     ((bxml_element*)e.ptr())->append_text("\n");
   }
-  
+
   bxml_write(os,doc);
 }
 
@@ -290,7 +289,7 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
   bxml_element query("hierarchy");
 
   bxml_data_sptr hierarchy_root = bxml_find_by_name(doc.root_element(), query);
-  
+
   if (!hierarchy_root) {
     vcl_cout << "brec_part_hierarchy::read_xml() - could not find the main node with name hierarchy!\n";
     return false;
@@ -298,7 +297,7 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
 
   bxml_element query2("primitive_instances");
   bxml_data_sptr prims_root = bxml_find_by_name(hierarchy_root, query2);
-  
+
   if (!prims_root || prims_root->type() != bxml_data::ELEMENT) {
     vcl_cout << "brec_part_hierarchy::read_xml() - could not find the primitive instances node!\n";
     return false;
@@ -308,23 +307,23 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
   for (bxml_element::const_data_iterator it = pe->data_begin(); it != pe->data_end(); it++) {
     if ((*it)->type() != bxml_data::ELEMENT)
       continue;
-    
+
     brec_part_instance_sptr ins = new brec_part_instance();
     if (!ins->xml_parse_element(*it))
       return false;
 
     switch (ins->kind_) {
-      case brec_part_instance_kind::GAUSSIAN : 
-        { 
-          brec_part_gaussian_sptr g_p = new brec_part_gaussian();
-          g_p->xml_parse_element(*it);
-          dummy_primitive_instances_.push_back(g_p->cast_to_instance());
-          break;
-        } 
-      default: { 
+      case brec_part_instance_kind::GAUSSIAN :
+      {
+        brec_part_gaussian_sptr g_p = new brec_part_gaussian();
+        g_p->xml_parse_element(*it);
+        dummy_primitive_instances_.push_back(g_p->cast_to_instance());
+        break;
+      }
+      default: {
         vcl_cout << "brec_part_hierarchy::read_xml() - primitive part kind: " << ins->kind_ << " not recognized by the parser!\n";
         return false;
-               }
+      }
     }
   }
 
@@ -384,6 +383,3 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
 
   return true;
 }
-
-
-
