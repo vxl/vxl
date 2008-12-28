@@ -34,7 +34,7 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
   this->ty_ = rhs.ty_;
 }
 
-bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img, 
+bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
                                       vpgl_geo_camera*& camera)
 {
   // check if the tiff file is geotiff
@@ -65,17 +65,19 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
     double lat, lon, elev ;
     bgeo_lvcs_sptr lvcs;
     for (unsigned i=0; i< tiepoints.size(); i++) {
-      vcl_vector<double> tiepoint = tiepoints[i];
-      assert (tiepoint.size() == 6);
-      double I = tiepoint[0];
-      double J = tiepoint[1];
-      double K = tiepoint[2];
-      double X = tiepoint[3];
-      double Y = tiepoint[4];
-      double Z = tiepoint[5];
+      assert (tiepoints[i].size() == 6);
+      double I = tiepoints[i][0]; // lat
+      double J = tiepoints[i][1]; // lon
+      double K = tiepoints[i][2]; // elev
+      double X = tiepoints[i][3];
+      double Y = tiepoints[i][4];
+      double Z = tiepoints[i][5];
 
-      utm.transform(utm_zone, X, Y, Z, lat, lon, elev, south_flag );
-      lvcs = new bgeo_lvcs(lat,lon,elev);
+      utm.transform(utm_zone, X, Y, Z, I, J, K, south_flag );
+      lvcs = new bgeo_lvcs(I,J,K); // FIXME - overwrites the previously created one!
+      tiepoints[i][0] = I; // lat
+      tiepoints[i][1] = J; // lon
+      tiepoints[i][2] = K; // elev
       //scale_ = 1;
       // now, we have a mapping (I,J,K)->(X,Y,Z)
     }
@@ -249,14 +251,13 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,//vil
   // use tiepoints and scale values to create a transformation matrix
   // for now use the first tiepoint if there are more than one
   assert (tiepoints.size() > 0);
-  vcl_vector<double> tiepoint = tiepoints[0];
-  assert (tiepoint.size() == 6);
-  double I = tiepoint[0];
-  double J = tiepoint[1];
-  double K = tiepoint[2];
-  double X = tiepoint[3];
-  double Y = tiepoint[4];
-  double Z = tiepoint[5];
+  assert (tiepoints[0].size() == 6);
+  double I = tiepoints[0][0];
+  double J = tiepoints[0][1];
+  double K = tiepoints[0][2];
+  double X = tiepoints[0][3];
+  double Y = tiepoints[0][4];
+  double Z = tiepoints[0][5];
 
   // Define a transformation matrix as follows:
   //
