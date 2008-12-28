@@ -49,6 +49,7 @@ template<class T>
 class DiPixelRepresentationTemplate
 {
  public:
+    virtual ~DiPixelRepresentationTemplate() {}
 
     /** check whether template type T is signed or not
      *
@@ -151,4 +152,4 @@ inline int DiPixelRepresentationTemplate<Sint32>::isSigned() const
 }
 
 
-#endif
+#endif // __DIPXREPT_H
