@@ -6,6 +6,5 @@
 #include <bsta/io/bsta_io_gaussian_indep.h>
 
 typedef bsta_num_obs<bsta_gaussian_indep<float,4> > gauss_type;
-typedef bsta_num_obs<bsta_mixture_fixed<gauss_type, 3> > mix_gauss_type;
+typedef bsta_num_obs<bsta_mixture_fixed<gauss_type,3> > mix_gauss_type;
 BBGM_IMAGE_INSTANTIATE(mix_gauss_type);
-
