@@ -38,16 +38,15 @@ vidl2_close_istream_process::execute()
   //Retrieve filename from input
   brdb_value_t<vidl2_istream_sptr>* input0 = static_cast<brdb_value_t<vidl2_istream_sptr>* >(input_data_[0].ptr());
 
-  vidl2_istream_sptr istream = input0->value();
+  vidl2_istream_sptr i_stream = input0->value();
 
-  if (!istream->is_open()){
+  if (!i_stream->is_open()) {
     vcl_cerr << "In vidl2_close_istream_process::execute()"
-             << " - is already not open" << vcl_endl;
+             << " - is already closed\n";
     return false;
   }
 
-  istream->close();
-
+  i_stream->close();
   return true;
 }
 
