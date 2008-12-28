@@ -905,7 +905,8 @@ foreach $f (@FILES)
     $file_ =~ s!^.*/(config|vcl|v3p|core|contrib)/!$1/!;
     $file_ =~ s!^contrib/!!; $file_ =~ s!/CORE/!/core/!;
     &msg(1, "has // This is $filename, should be $file_")
-      unless ("$filename" eq "$file_");
+      unless ("$filename" eq "$file_" ||
+              ("$filename" eq "contrib/$file_" && !$printed));
   }
 
 # 12. Constant pi written as 3.1415...
@@ -957,7 +958,9 @@ foreach $f (@FILES)
     $class =~ s!(vgl_intersection)_box\<!$1\<!g;
     $class =~ s!\005!+-!g; $class =~ tr/<,*>/+.~-/; # \005 is ::
     $class_q = $class; $class_q =~ s!([.+~-])!\\$1!g;
-    $class =~ s!unsigned!u!g; $class =~ s!signed!s!g; $class =~ s!longd!long_d!g;
+    $class =~ s!unsigned(int|short|long|char)!u$1!g;$class =~ s!unsigned!uint!g;
+    $class =~ s!signed(int|short|long|char)!s$1!g;  $class =~ s!signed!sint!g;
+    $class =~ s!longd!long_d!g;
     $class =~ s!vxl_(s?byte|u?int)!$1!g;
     $class =~ s!^brdb_value\+(.*)\.\003\-!brdb_value_t+$1-!;
     $class =~ s!^bbgm_image\+!bbgm_image_of+!;
