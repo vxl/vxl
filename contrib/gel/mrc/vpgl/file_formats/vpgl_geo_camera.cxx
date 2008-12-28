@@ -62,7 +62,6 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
     is_utm = true;
     // transform each tiepoint
     bgeo_utm utm;
-    double lat, lon, elev ;
     bgeo_lvcs_sptr lvcs;
     for (unsigned i=0; i< tiepoints.size(); i++) {
       assert (tiepoints[i].size() == 6);
