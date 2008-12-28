@@ -56,11 +56,11 @@ SET(vipl_sources
 )
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
-
-AUX_SOURCE_DIRECTORY(Templates vipl_sources)
-AUX_SOURCE_DIRECTORY(vipl_with_vbl_array_2d/Templates vipl_sources)
-AUX_SOURCE_DIRECTORY(vipl_with_vnl_matrix/Templates vipl_sources)
-AUX_SOURCE_DIRECTORY(vipl_with_section/Templates vipl_sources)
+# [only when INSTANTIATE_TEMPLATES not defined:]
+# AUX_SOURCE_DIRECTORY(Templates vipl_sources)
+# AUX_SOURCE_DIRECTORY(vipl_with_vbl_array_2d/Templates vipl_sources)
+# AUX_SOURCE_DIRECTORY(vipl_with_vnl_matrix/Templates vipl_sources)
+# AUX_SOURCE_DIRECTORY(vipl_with_section/Templates vipl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
  SET_SOURCE_FILES_PROPERTIES(

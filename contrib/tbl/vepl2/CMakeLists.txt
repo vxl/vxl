@@ -26,7 +26,9 @@ SET(vepl2_sources
  section/vipl_filterable_section_container_generator_vil_image_view_base.txx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vepl2_sources)
+ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+# [only when INSTANTIATE_TEMPLATES not defined:]
+# AUX_SOURCE_DIRECTORY(Templates vepl2_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(vepl2_gaussian_convolution.cxx PROPERTIES COMPILE_FLAGS -O0)
@@ -42,8 +44,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(Templates/vepl2_convert+short-.cxx PROPERTIES COMPILE_FLAGS -O1)
   SET_SOURCE_FILES_PROPERTIES(Templates/vepl2_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 
 ADD_LIBRARY(vepl2 ${vepl2_sources})
 INSTALL_TARGETS(/lib vepl2)
