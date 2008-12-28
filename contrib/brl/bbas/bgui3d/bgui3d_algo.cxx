@@ -8,9 +8,9 @@
 //: decompose the camera into internal and external params
 bool
 bgui3d_decompose_camera( const vnl_double_3x4& camera,
-                               vnl_double_3x3& internal,
-                               vnl_double_3x3& rotation,
-                               vnl_double_3&   translation )
+                         vnl_double_3x3& internal_calibration,
+                         vnl_double_3x3& rotation,
+                         vnl_double_3&   translation )
 {
   // camera = [H t]
   //
@@ -46,7 +46,7 @@ bgui3d_decompose_camera( const vnl_double_3x4& camera,
 
   for (int i = 0; i < 3; ++i)
     for (int j = 0; j < 3; ++j) {
-      internal(j,i) = diag[i] * R(2-i,2-j);
+      internal_calibration(j,i) = diag[i] * R(2-i,2-j);
       rotation(j,i) = diag[j] * Q(2-i,2-j);
     }
 
@@ -55,9 +55,9 @@ bgui3d_decompose_camera( const vnl_double_3x4& camera,
   for (int i = 0; i < 3; ++i)
     t[i] = camera(i,3);
 
-  t[2] /= internal(2,2);
-  t[1] = (t[1] - internal(1,2)*t[2])/internal(1,1);
-  t[0] = (t[0] - internal(0,1)*t[1] - internal(0,2)*t[2])/internal(0,0);
+  t[2] /= internal_calibration(2,2);
+  t[1] = (t[1] - internal_calibration(1,2)*t[2])/internal_calibration(1,1);
+  t[0] = (t[0] - internal_calibration(0,1)*t[1] - internal_calibration(0,2)*t[2])/internal_calibration(0,0);
 
   translation = t;
 
@@ -65,15 +65,15 @@ bgui3d_decompose_camera( const vnl_double_3x4& camera,
   vnl_double_3x4 Po;
   Po.update(rotation);
   Po.set_column(3,translation);
-  if (((internal * Po - camera).fro_norm() > 1e-4) ||
-      (internal(0,0) < 0) ||
-      (internal(1,1) < 0) ||
-      (internal(2,2) < 0)) {
+  if (((internal_calibration * Po - camera).fro_norm() > 1e-4) ||
+      (internal_calibration(0,0) < 0) ||
+      (internal_calibration(1,1) < 0) ||
+      (internal_calibration(2,2) < 0)) {
     return false;
   }
 
   // Scale the internal calibration matrix such that the bottom right is 1
-  internal /= internal(2,2);
+  internal_calibration /= internal_calibration(2,2);
 
   return true;
 }
