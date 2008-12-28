@@ -44,10 +44,9 @@ vidl2_open_dshow_istream_process::execute()
 
   vcl_string istream_filename = input0->value();
 
-  vidl2_dshow_file_istream *istream= new vidl2_dshow_file_istream(istream_filename);
-  vidl2_istream_sptr out_istream = istream;
+  vidl2_istream_sptr out_istream=new vidl2_dshow_file_istream(istream_filename);
 
-  if (!out_istream->is_open()){
+  if (!out_istream->is_open()) {
     vcl_cerr << "In vidl2_open_dshow_istream_process::execute()"
              << " - could not open" << istream_filename << vcl_endl;
     return false;
