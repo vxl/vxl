@@ -32,7 +32,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
   bsta_parzen_sphere(): bandwidth_(T(1)),
     bandwidth_adapted_(false) {}// no samples
 
-  bsta_parzen_sphere(sample_vector const& samples, T bandwidth = T(1)) :
+  bsta_parzen_sphere(bsta_parzen<T,n>::sample_vector const& samples, T bandwidth = T(1)) :
     bsta_parzen<T,n>(samples), bandwidth_(bandwidth),
     bandwidth_adapted_(false){}
 
@@ -47,20 +47,20 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
     {bandwidth_adapted_=bandwidth_adapted;}
 
   //: The mean of the distribution
-  virtual vector_ mean() const{
-    vector_ sum(T(0));
-    sample_vector::const_iterator sit = samples_.begin();
-    for(;sit != samples_.end(); ++sit)
+  virtual bsta_parzen<T,n>::vector_ mean() const{
+    bsta_parzen<T,n>::vector_ sum(T(0));
+    bsta_parzen<T,n>::sample_vector::const_iterator sit = samples_.begin();
+    for (; sit != samples_.end(); ++sit)
       sum += (*sit);
     sum /= static_cast<T>(samples_.size());
     return sum;
   }
   //: The probability density at sample pt
-  virtual T prob_density(const vector_& pt) const;
+  virtual T prob_density(const bsta_parzen<T,n>::vector_& pt) const;
 
   //: The probability density integrated over a box (returns a probability)
-  virtual T probability(const vector_& min_pt,
-                        const vector_& max_pt) const;
+  virtual T probability(const bsta_parzen<T,n>::vector_& min_pt,
+                        const bsta_parzen<T,n>::vector_& max_pt) const;
 
  protected:
   T bandwidth_;
