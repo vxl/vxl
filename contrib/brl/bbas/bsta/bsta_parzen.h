@@ -19,7 +19,6 @@
 
 #include "bsta_distribution.h"
 #include <vnl/vnl_math.h>
-//#include <vcl_set.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 //: forward declare vnl_vector_fixed
@@ -61,12 +60,12 @@ template <class T, unsigned n>
 class bsta_parzen : public bsta_distribution<T,n>
 {
   typedef typename bsta_distribution<T,n>::vector_type vector_;
-
+  typedef vcl_vector<vector_> sample_vector;
  public:
   
   bsta_parzen(){}
 
-  bsta_parzen(vcl_vector<vector_> const& samples):
+  bsta_parzen(sample_vector const& samples):
   samples_(samples){}
 
 
@@ -78,16 +77,16 @@ class bsta_parzen : public bsta_distribution<T,n>
     {samples_.push_back(sample);}
 
   //: Insert a vector of samples
-  void insert_samples(const vcl_vector<vector_> & samples)
-   {for(vcl_vector<vector_>::const_iterator sit = samples.begin();
+  void insert_samples(const sample_vector & samples)
+   {for(sample_vector::const_iterator sit = samples.begin();
         sit != samples.end(); ++sit) samples_.push_back(*sit);}
 
-  vcl_vector<vector_> samples() const 
+  sample_vector samples() const 
     {	return samples_;}
 
   vector_ sample(unsigned index) const 
     {if(index>=samples_.size())
-      {vector_ v; v.fill(T(0)); return v;}
+      {vector_ v;  return T(0)*v;}
     return samples_[index];
     }
 
@@ -104,16 +103,16 @@ class bsta_parzen : public bsta_distribution<T,n>
   unsigned size() const {return samples_.size();}
 
   //: The probability density at sample pt
-  virtual T prob_density(const vnl_vector_fixed<T,n>& pt) const = 0;
+  virtual T prob_density(const vector_& pt) const = 0;
 
   //: The probability density integrated over a box (returns a probability)
-  virtual T probability(const vnl_vector_fixed<T,n>& min_pt,
-                        const vnl_vector_fixed<T,n>& max_pt) const = 0;
+  virtual T probability(const vector_& min_pt,
+                        const vector_& max_pt) const = 0;
 
  protected:
 
   //: The samples
-  vcl_vector<vector_> samples_;
+  sample_vector samples_;
 };
 
 #endif // bsta_parzen_h_

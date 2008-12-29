@@ -29,12 +29,12 @@ template <class T, unsigned n>
 class bsta_parzen_sphere : public bsta_parzen<T,n>
 {
   typedef typename bsta_distribution<T,n>::vector_type vector_;
-
+  typedef vcl_vector<vector_> sample_vector;
  public:
   bsta_parzen_sphere(): bandwidth_(T(1)),
     bandwidth_adapted_(false) {}// no samples
 
-  bsta_parzen_sphere(vcl_vector<vector_> const& samples, T bandwidth = T(1)) :
+  bsta_parzen_sphere(sample_vector const& samples, T bandwidth = T(1)) :
     bsta_parzen<T,n>(samples), bandwidth_(bandwidth),
     bandwidth_adapted_(false){}
 
@@ -50,8 +50,8 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
 
   //: The mean of the distribution
   virtual vector_ mean() const{
-    vector_ sum; sum.fill(T(0));
-    vcl_vector<vector_>::const_iterator sit = samples_.begin();
+    vector_ sum; sum*=T(0);
+    sample_vector::const_iterator sit = samples_.begin();
     for(;sit != samples_.end(); ++sit)
       sum += (*sit);
     sum /= static_cast<T>(samples_.size());
