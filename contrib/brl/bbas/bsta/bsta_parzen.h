@@ -61,6 +61,12 @@ class bsta_parzen : public bsta_distribution<T,n>
 {
   typedef typename bsta_distribution<T,n>::vector_type vector_;
   typedef vcl_vector<vector_> sample_vector;
+  typedef typename sample_vector::const_iterator sv_const_it;
+
+ protected:
+  //: The samples
+  sample_vector samples_;
+
  public:
   
   bsta_parzen(){}
@@ -78,7 +84,7 @@ class bsta_parzen : public bsta_distribution<T,n>
 
   //: Insert a vector of samples
   void insert_samples(const sample_vector & samples)
-   {for(sample_vector::const_iterator sit = samples.begin();
+   {for(sv_const_it sit = samples.begin();
         sit != samples.end(); ++sit) samples_.push_back(*sit);}
 
   sample_vector samples() const 
@@ -109,10 +115,6 @@ class bsta_parzen : public bsta_distribution<T,n>
   virtual T probability(const vector_& min_pt,
                         const vector_& max_pt) const = 0;
 
- protected:
-
-  //: The samples
-  sample_vector samples_;
 };
 
 #endif // bsta_parzen_h_
