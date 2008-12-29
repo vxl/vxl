@@ -16,7 +16,6 @@
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
 
-
 #include "bsta_distribution.h"
 #include <vnl/vnl_math.h>
 #include <vcl_vector.h>
@@ -27,28 +26,28 @@ template<class T, unsigned n> class vnl_vector_fixed;
 //: forward declare parzen
 template<class T, unsigned n> class bsta_parzen;
 
-//: functor for sorting samples in descending order of likelyhood
+//: functor for sorting samples in descending order of likelihood
 template<class T, unsigned n>
 class vless
 {
-public:
+ public:
   vless():parz_ptr_(0){}
   vless(bsta_parzen<T, n>* parz_ptr): parz_ptr_(parz_ptr){}
   bool operator()(vnl_vector_fixed<T,n> const& va,
                   vnl_vector_fixed<T,n> const& vb) const
-    { 
-      if(!parz_ptr_) return false;
-	  if(!parz_ptr_->size()) return false;
+  {
+    if (!parz_ptr_) return false;
+      if (!parz_ptr_->size()) return false;
     T pda = parz_ptr_->prob_density(va);
     T pdb = parz_ptr_->prob_density(vb);
     return pdb < pda; // descending order
-    }
+  }
   bool operator()(T const& va, T const& vb) const
-    { 
-      if(!parz_ptr_) return false;
-      bool comp = parz_ptr_->prob_density(vb)<parz_ptr_->prob_density(va);
-      return comp;
-    }
+  {
+    if (!parz_ptr_) return false;
+    bool comp = parz_ptr_->prob_density(vb)<parz_ptr_->prob_density(va);
+    return comp;
+  }
  private:
   //:pointer to the parzen distribtion for computing probability density
   bsta_parzen<T, n>* parz_ptr_;
@@ -70,38 +69,39 @@ class bsta_parzen : public bsta_distribution<T,n>
 
  public:
  
-  bsta_parzen(){}
+  bsta_parzen() {}
 
   bsta_parzen(sample_vector const& samples):
-  samples_(samples){}
-
+  samples_(samples) {}
 
   //: The mean of the distribution
   virtual vector_ mean() const = 0;
 
   //: Insert a new sample into the distribution
   void insert_sample(const vector_& sample)
-    {samples_.push_back(sample);}
+  { samples_.push_back(sample); }
 
   //: Insert a vector of samples
   void insert_samples(const sample_vector & samples)
-   {for(sv_const_it sit = samples.begin();
-        sit != samples.end(); ++sit) samples_.push_back(*sit);}
+  { for (sv_const_it sit = samples.begin();
+         sit != samples.end(); ++sit)
+      samples_.push_back(*sit);
+  }
 
   sample_vector samples() const 
-    {	return samples_;}
+  { return samples_; }
 
   vector_ sample(unsigned index) const 
-    {if(index>=samples_.size())
-      {vector_ v;  return T(0)*v;}
+  { if (index>=samples_.size())
+    { vector_ v;  return T(0)*v; }
     return samples_[index];
-    }
+  }
 
   bool remove_sample(unsigned index)
-    {if(index>=samples_.size())return false; 
-    samples_.erase(samples_.begin()+index); return true;
-    }
-
+  { if (index>=samples_.size()) return false; 
+    samples_.erase(samples_.begin()+index);
+    return true;
+  }
 
   //: clear the sample set
   void clear() { samples_.clear();}
@@ -115,7 +115,6 @@ class bsta_parzen : public bsta_distribution<T,n>
   //: The probability density integrated over a box (returns a probability)
   virtual T probability(const vector_& min_pt,
                         const vector_& max_pt) const = 0;
-
 };
 
 #endif // bsta_parzen_h_

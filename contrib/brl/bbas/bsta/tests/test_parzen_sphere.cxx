@@ -21,27 +21,25 @@ void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
   bsta_parzen_sphere<T,3> parzen;
   parzen.set_bandwidth(bandwidth);
   parzen.insert_samples(samples);
-  TEST(("n_samples <"+type_name+">").c_str(),
-	  parzen.size(), 2);
+  TEST(("n_samples <"+type_name+">").c_str(), parzen.size(), 2);
 
   vnl_vector_fixed<T,3> mean(T(1.5), T(2.5), T(3.5));
   TEST(("mean <"+type_name+">").c_str(), parzen.mean(), mean);
 
   T prob_den = T(0.11333876);
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
-             parzen.prob_density(mean), prob_den, epsilon);
+            parzen.prob_density(mean), prob_den, epsilon);
 
   T prob = T(0.10870197904);
   TEST_NEAR(("probability  <"+type_name+">").c_str(),
-             parzen.probability(s0, s1), prob, epsilon);
+            parzen.probability(s0, s1), prob, epsilon);
 
   vcl_vector<T> ssamps;
   ssamps.push_back(1.0);   ssamps.push_back(2.0);   ssamps.push_back(3.0);
   bsta_parzen_sphere<T,1> sparzen;
   sparzen.set_bandwidth(bandwidth);
   sparzen.insert_samples(ssamps);
-  TEST(("n_samples_scalar <"+type_name+">").c_str(),
-	  sparzen.size(), 3);
+  TEST(("n_samples_scalar <"+type_name+">").c_str(), sparzen.size(), 3);
   T smean = 2.0;
   TEST(("mean_scalar <"+type_name+">").c_str(), sparzen.mean(), smean);
 
