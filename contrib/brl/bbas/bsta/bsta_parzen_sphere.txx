@@ -7,9 +7,11 @@
 #include "bsta_parzen_sphere.h"
 #include "bsta_gaussian_sphere.h"
 #include <vcl_cassert.h>
+
+
 //: The probability density at sample pt
 template <class T, unsigned int n>
-T bsta_parzen_sphere<T,n>::prob_density(const vnl_vector_fixed<T,n>& pt) const
+T bsta_parzen_sphere<T,n>::prob_density(const vnl_vector_fixed<T, n>& pt) const
 {
   unsigned size = samples_.size();
   if(!size) return T(0);
@@ -19,7 +21,7 @@ T bsta_parzen_sphere<T,n>::prob_density(const vnl_vector_fixed<T,n>& pt) const
   null.fill(T(0));
   T var = bandwidth_*bandwidth_;
   bsta_gaussian_sphere<T,n> gs(null, var);
-  for(vcl_vector<vector_>::const_iterator sit = samples_.begin();
+  for(sv_const_it sit = samples_.begin();
       sit != samples_.end(); ++sit)
     {
       vector_ s = *sit;
@@ -29,10 +31,11 @@ T bsta_parzen_sphere<T,n>::prob_density(const vnl_vector_fixed<T,n>& pt) const
   density/=nsamp;
   return density;
 }
+
 //: The probability density integrated over a box (returns a probability)
 template <class T, unsigned int n>
-T bsta_parzen_sphere<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
-                                       const vnl_vector_fixed<T,n>& max_pt) const
+T bsta_parzen_sphere<T,n>::probability(const vnl_vector_fixed<T, n>& min_pt,
+                                       const vnl_vector_fixed<T, n>& max_pt) const
 {
   unsigned size = samples_.size();
   if(!size) return static_cast<T>(0);
@@ -42,7 +45,7 @@ T bsta_parzen_sphere<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
   null.fill(T(0));
   T var = bandwidth_*bandwidth_;
   bsta_gaussian_sphere<T,n> gs(null, var);
-  for(vcl_vector<vector_>::const_iterator sit = samples_.begin();
+  for(sv_const_it sit = samples_.begin();
       sit != samples_.end(); ++sit)
     {
       vector_ s = *sit;

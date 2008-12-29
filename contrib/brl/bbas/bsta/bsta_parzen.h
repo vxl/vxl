@@ -59,6 +59,7 @@ public:
 template <class T, unsigned n>
 class bsta_parzen : public bsta_distribution<T,n>
 {
+ public:
   typedef typename bsta_distribution<T,n>::vector_type vector_;
   typedef vcl_vector<vector_> sample_vector;
   typedef typename sample_vector::const_iterator sv_const_it;
@@ -68,7 +69,7 @@ class bsta_parzen : public bsta_distribution<T,n>
   sample_vector samples_;
 
  public:
-  
+ 
   bsta_parzen(){}
 
   bsta_parzen(sample_vector const& samples):

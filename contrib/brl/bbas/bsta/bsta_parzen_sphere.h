@@ -28,8 +28,6 @@
 template <class T, unsigned n>
 class bsta_parzen_sphere : public bsta_parzen<T,n>
 {
-  typedef typename bsta_distribution<T,n>::vector_type vector_;
-  typedef vcl_vector<vector_> sample_vector;
  public:
   bsta_parzen_sphere(): bandwidth_(T(1)),
     bandwidth_adapted_(false) {}// no samples
