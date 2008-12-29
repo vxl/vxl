@@ -6,16 +6,15 @@
 // \brief A class for a grey-scale-mixture-of-gaussian processor
 //
 // \author Isabel Restrepo
-// \date 01/14/2008
+// \date Jan. 14, 2008
 // \verbatim
 //  Modifications
 //   02/11/2008  DEC  Changed prob() to prob_density(), added prob_range
 //   04/17/2008  Ozge C. Ozcanli added most_probable_mode_color() method
 //   12/10/2008  Ozge C. Ozcanli added sample() method
+//   Added the get_light_bin() virtual function which is useful in multiple mixture of gaussian case
+//   to return the appropriate bin number from the lighting direction
 // \endverbatim
-
-//Added the get_light_bin() virtual function which is useful in multiple mixture of gaussian case
-//to return the appropriate bin number from the lighting direction
 
 #include "bvxm_voxel_slab.h"
 
@@ -44,7 +43,8 @@ class  bvxm_mog_grey_processor
   typedef float obs_datatype;
   typedef float obs_mathtype;
 
-  bvxm_mog_grey_processor(){};
+  bvxm_mog_grey_processor() {}
+  virtual ~bvxm_mog_grey_processor() {}
 
   bvxm_voxel_slab<float>  prob_density(bvxm_voxel_slab<mix_gauss_type> const& appear,
                                        bvxm_voxel_slab<float> const& obs);
