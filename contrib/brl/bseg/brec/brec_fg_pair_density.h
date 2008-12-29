@@ -1,15 +1,15 @@
-#ifndef brec_FG_PAIR_DENSITY_H_
-#define brec_FG_PAIR_DENSITY_H_
+#ifndef brec_fg_pair_density_h_
+#define brec_fg_pair_density_h_
 //:
 // \file
 // \brief brec recognition utilities
 //
-// \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
+// \author Ozge C Ozcanli (ozge at lems dot brown dot edu)
+// \date Oct. 01, 2008
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   2008-12-29 Peter Vanroose - added explicit virtual destructor
 // \endverbatim
 
 #include "brec_pair_density.h"
@@ -19,6 +19,7 @@ class brec_fg_pair_density : public brec_pair_density
 {
  public:
   brec_fg_pair_density() : brec_pair_density() {}
+  virtual ~brec_fg_pair_density() {}
 
   virtual double operator()(const double y0, const double y1);
   double negative_log(const double y0, const double y1);
@@ -26,4 +27,4 @@ class brec_fg_pair_density : public brec_pair_density
   double gradient_of_negative_log(const double y0, const double y1);
 };
 
-#endif // brec_FG_PAIR_DENSITY_H_
+#endif // brec_fg_pair_density_h_
