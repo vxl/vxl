@@ -11,14 +11,13 @@
 
 //: The probability density at sample pt
 template <class T, unsigned int n>
-T bsta_parzen_sphere<T,n>::prob_density(const vnl_vector_fixed<T, n>& pt) const
+T bsta_parzen_sphere<T,n>::prob_density(const vector_& pt) const
 {
   unsigned size = samples_.size();
   if(!size) return T(0);
   T nsamp = static_cast<T>(size);
   T density = static_cast<T>(0);
-  vector_ null;
-  null.fill(T(0));
+  vector_ null(T(0));// works even if vector_ is equivalent to T, i.e. n =1
   T var = bandwidth_*bandwidth_;
   bsta_gaussian_sphere<T,n> gs(null, var);
   for(sv_const_it sit = samples_.begin();
@@ -34,15 +33,14 @@ T bsta_parzen_sphere<T,n>::prob_density(const vnl_vector_fixed<T, n>& pt) const
 
 //: The probability density integrated over a box (returns a probability)
 template <class T, unsigned int n>
-T bsta_parzen_sphere<T,n>::probability(const vnl_vector_fixed<T, n>& min_pt,
-                                       const vnl_vector_fixed<T, n>& max_pt) const
+T bsta_parzen_sphere<T,n>::probability(const vector_& min_pt,
+                                       const vector_& max_pt) const
 {
   unsigned size = samples_.size();
   if(!size) return static_cast<T>(0);
   T nsamp = static_cast<T>(size);
   T prob = static_cast<T>(0);
-  vector_ null;
-  null.fill(T(0));
+  vector_ null(T(0));// works even if vector_ is equivalent to T, i.e. n =1
   T var = bandwidth_*bandwidth_;
   bsta_gaussian_sphere<T,n> gs(null, var);
   for(sv_const_it sit = samples_.begin();

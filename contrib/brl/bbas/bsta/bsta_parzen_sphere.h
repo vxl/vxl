@@ -48,7 +48,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
 
   //: The mean of the distribution
   virtual vector_ mean() const{
-    vector_ sum; sum*=T(0);
+    vector_ sum(T(0));
     sample_vector::const_iterator sit = samples_.begin();
     for(;sit != samples_.end(); ++sit)
       sum += (*sit);
@@ -56,11 +56,11 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
     return sum;
   }
   //: The probability density at sample pt
-  virtual T prob_density(const vnl_vector_fixed<T,n>& pt) const;
+  virtual T prob_density(const vector_& pt) const;
 
   //: The probability density integrated over a box (returns a probability)
-  virtual T probability(const vnl_vector_fixed<T,n>& min_pt,
-                        const vnl_vector_fixed<T,n>& max_pt) const;
+  virtual T probability(const vector_& min_pt,
+                        const vector_& max_pt) const;
 
  protected:
   T bandwidth_;

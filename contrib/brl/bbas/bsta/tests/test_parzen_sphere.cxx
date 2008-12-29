@@ -9,10 +9,9 @@
 template <class T>
 void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
 {
-  bsta_parzen_sphere<T,3> df_parzen;
-
-  TEST(("dimension <"+type_name+">").c_str(),
-        (bsta_parzen_sphere<T,3>::dimension), 3);
+  bool good = bsta_parzen_sphere<T,3>::dimension == 3;
+  good = good && bsta_parzen_sphere<T,1>::dimension == 1;
+  TEST(("dimension <"+type_name+">").c_str(),good, true);
 
   vnl_vector_fixed<T,3> s0(T(1.0), T(2.0), T(3.0));
   vnl_vector_fixed<T,3> s1(T(2.0), T(3.0), T(4.0));
@@ -35,6 +34,25 @@ void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
   T prob = T(0.10870197904);
   TEST_NEAR(("probability  <"+type_name+">").c_str(),
              parzen.probability(s0, s1), prob, epsilon);
+
+  vcl_vector<T> ssamps;
+  ssamps.push_back(1.0);   ssamps.push_back(2.0);   ssamps.push_back(3.0);
+  bsta_parzen_sphere<T,1> sparzen;
+  sparzen.set_bandwidth(bandwidth);
+  sparzen.insert_samples(ssamps);
+  TEST(("n_samples_scalar <"+type_name+">").c_str(),
+	  sparzen.size(), 3);
+  T smean = 2.0;
+  TEST(("mean_scalar <"+type_name+">").c_str(), sparzen.mean(), smean);
+
+  T sprob_den = T(0.3379494756185392);
+  TEST_NEAR(("sprob_den <"+type_name+">").c_str(), sparzen.prob_density(smean),
+            sprob_den, epsilon);
+
+  T sprobability = T(0.33243340131224675);
+  TEST_NEAR(("sprobability <"+type_name+">").c_str(),
+            sparzen.probability(smean-bandwidth, smean +bandwidth),
+            sprobability, epsilon);
 }
 
 
