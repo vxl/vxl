@@ -40,5 +40,6 @@
 #include <bsta/io/bsta_io_histogram.h>
 #include <bsta/io/bsta_io_mixture.h>
 #include <bsta/io/bsta_io_mixture_fixed.h>
+#include <bsta/io/bsta_io_parzen_sphere.h>
 
 int main() { return 0; }
