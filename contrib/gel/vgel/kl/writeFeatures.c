@@ -228,8 +228,7 @@ static void _printHeader(
   if (fp != stderr)  {
     fprintf(fp, "Feel free to place comments here.\n\n\n");
     fprintf(fp, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-    fprintf(fp, warning_line);
-    fprintf(fp, "\n");
+    fprintf(fp, "%s\n", warning_line);
   }
   fprintf(fp, "------------------------------\n");
   switch (id)  {
