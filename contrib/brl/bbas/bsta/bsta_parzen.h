@@ -68,11 +68,12 @@ class bsta_parzen : public bsta_distribution<T,n>
   sample_vector samples_;
 
  public:
- 
-  bsta_parzen() {}
 
-  bsta_parzen(sample_vector const& samples):
-  samples_(samples) {}
+  bsta_parzen() {}
+  virtual ~bsta_parzen() {}
+
+  bsta_parzen(sample_vector const& samples)
+  : samples_(samples) {}
 
   //: The mean of the distribution
   virtual vector_ mean() const = 0;
@@ -88,26 +89,26 @@ class bsta_parzen : public bsta_distribution<T,n>
       samples_.push_back(*sit);
   }
 
-  sample_vector samples() const 
+  sample_vector samples() const
   { return samples_; }
 
-  vector_ sample(unsigned index) const 
+  vector_ sample(unsigned index) const
   { if (index>=samples_.size())
     { vector_ v;  return T(0)*v; }
     return samples_[index];
   }
 
   bool remove_sample(unsigned index)
-  { if (index>=samples_.size()) return false; 
+  { if (index>=samples_.size()) return false;
     samples_.erase(samples_.begin()+index);
     return true;
   }
 
   //: clear the sample set
-  void clear() { samples_.clear();}
+  void clear() { samples_.clear(); }
 
   //: number of samples
-  unsigned size() const {return samples_.size();}
+  unsigned size() const { return samples_.size(); }
 
   //: The probability density at sample pt
   virtual T prob_density(const vector_& pt) const = 0;
