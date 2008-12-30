@@ -40,6 +40,8 @@ MANPAGE_SOURCES += bsta_mixture.h
 MANPAGE_SOURCES += bsta_mixture_fixed.h
 MANPAGE_SOURCES += bsta_weibull.txx
 MANPAGE_SOURCES += bsta_sampler.txx
+MANPAGE_SOURCES += bsta_parzen_sphere.txx
+MANPAGE_SOURCES += bsta_parzen.h
 
 SUBDIRS += algo io
 

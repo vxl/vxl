@@ -10,6 +10,7 @@ MANPAGE_SOURCES += bsta_io_gaussian_sphere.h
 MANPAGE_SOURCES += bsta_io_mixture.h
 MANPAGE_SOURCES += bsta_io_mixture_fixed.h
 MANPAGE_SOURCES += bsta_io_histogram.h
+MANPAGE_SOURCES += bsta_io_parzen_sphere.h
 
 ################################
 include ${VXLROOT}/config/top.mk
