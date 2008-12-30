@@ -202,6 +202,9 @@ SOURCE=.\test_weibull.cxx
 SOURCE=.\test_sampler.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_parzen_sphere.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

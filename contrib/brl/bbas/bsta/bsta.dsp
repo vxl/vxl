@@ -159,7 +159,13 @@ SOURCE=.\Templates/bsta_weibull+double-.cxx
 SOURCE=.\Templates/bsta_weibull+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_sampler+unsigned---.cxx
+SOURCE=.\Templates/bsta_sampler+uint---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_parzen_sphere+float.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_parzen_sphere+float.3-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_gauss.cxx
@@ -295,6 +301,15 @@ SOURCE=.\bsta_sampler.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_sampler.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen_sphere.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen_sphere.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen.h
 # End Source File
 # End Group
 # End Target

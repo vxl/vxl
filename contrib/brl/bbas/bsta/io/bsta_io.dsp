@@ -111,6 +111,9 @@ SOURCE=.\bsta_io_mixture_fixed.h
 # Begin Source File
 SOURCE=.\bsta_io_histogram.h
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_io_parzen_sphere.h
+# End Source File
 # End Group
 # End Target
 # End Project
