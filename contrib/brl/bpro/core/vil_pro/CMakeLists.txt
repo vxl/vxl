@@ -23,7 +23,7 @@ SET(vil_pro_sources
     vil_load_image_view_binary_process.h       vil_load_image_view_binary_process.cxx
     vil_save_image_view_binary_process.h       vil_save_image_view_binary_process.cxx
     vil_map_image_binary_process.h             vil_map_image_binary_process.cxx
-
+    vil_crop_image_process.h             vil_crop_image_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)

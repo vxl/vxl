@@ -70,7 +70,7 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 }
 
 //: Binary load image view base from stream.
-void vsl_b_read(vsl_b_istream & is, vil_image_view_base_sptr &view_base)
+void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 {
   if (!is) return;
 
