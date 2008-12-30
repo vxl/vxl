@@ -25,7 +25,7 @@
 static bool debug = false;
 //vcl_string orig_color; // For when color chooser is cancelled.
 CString TempsNewClass;
-BEGIN_MESSAGE_MAP(vgui_mfc_dialog_impl, CWnd)
+BEGIN_MESSAGE_MAP(vgui_mfc_dialog_impl, CDialog)
         ON_COMMAND(IDOK,OnOk)
         ON_COMMAND(IDCANCEL,OnCancel)
         ON_WM_CLOSE()
@@ -36,7 +36,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------------------------------------
 //: Constructor
 vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
-  : CWnd(),vgui_dialog_impl(name)
+  : CDialog(),vgui_dialog_impl(name)
 {
   // Set some default parameters
   count_fbsr = 0;

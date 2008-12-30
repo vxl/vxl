@@ -41,7 +41,7 @@ class CFont;
 //
 //  Creates a dialog box in MFC.
 //  Based on vgui_gtk_dialog_impl.
-class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl
+class vgui_mfc_dialog_impl : public CDialog,public vgui_dialog_impl
 {
  public:
   vgui_mfc_dialog_impl(const char* name);
