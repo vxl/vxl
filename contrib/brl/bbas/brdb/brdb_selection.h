@@ -2,15 +2,14 @@
 #define brdb_selection_h_
 //:
 // \file
-// \a selection which is the immediate result of a selction operation
+// \a selection which is the immediate result of a selection operation
 // \author Yong Zhao
 // \date Tue Mar 23, 2007
 //
 // \verbatim
 //  Modifications
-//    May 3, 2007   Matt Leotta   Updated to use the query as a binary tree
+//   May 3, 2007   Matt Leotta   Updated to use the query as a binary tree
 // \endverbatim
-
 
 
 #include <vcl_vector.h>
@@ -192,4 +191,4 @@ inline brdb_selection_sptr operator ~ (const brdb_selection_sptr& rhs)
   return rhs->selection_not();
 }
 
-#endif  //brdb_selection_h_
+#endif // brdb_selection_h_
