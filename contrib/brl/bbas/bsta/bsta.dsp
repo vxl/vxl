@@ -311,6 +311,12 @@ SOURCE=.\bsta_parzen_sphere.h
 # Begin Source File
 SOURCE=.\bsta_parzen.h
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen_sf1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen_sf3.h
+# End Source File
 # End Group
 # End Target
 # End Project

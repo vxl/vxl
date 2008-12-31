@@ -149,6 +149,9 @@ SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bs
 # Begin Source File
 SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bbgm_image_of+bsta_parzen_sphere+float.3--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
