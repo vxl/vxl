@@ -75,7 +75,7 @@ operator() ( parzen_dist_& pdist,
     pdist.set_bandwidth_adapted(true);
   }
   T min_dist = vnl_numeric_traits<T>::maxval;
-  unsigned closest_index;
+  unsigned closest_index = 0; // initialise to avoid compiler warning
   for (unsigned i = 0; i<n; ++i)
   {
     vector_ s = pdist.sample(i);
