@@ -18,14 +18,15 @@
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
-#ifdef DEBUG
 #include <vcl_iostream.h>
-#endif
 #include <bprb/bprb_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view.h>
+#ifdef DEBUG
+#include <vil/vil_save.h>
+#endif
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <bbgm/bbgm_image_sptr.h>
@@ -39,7 +40,7 @@ class brec_create_mog_image_process : public bprb_process
   //: Copy Constructor (no local data)
   brec_create_mog_image_process(const brec_create_mog_image_process& other): bprb_process(*static_cast<const bprb_process*>(&other)) {}
 
-  ~brec_create_mog_image_process() {}
+  virtual ~brec_create_mog_image_process() {}
 
   //: Clone the process
   virtual brec_create_mog_image_process* clone() const { return new brec_create_mog_image_process(*this); }
@@ -55,10 +56,10 @@ class brec_create_mog_image_process : public bprb_process
   //:This local function calculates and retrieves optimal normalization parameters
   template <bvxm_voxel_type APM_T>
   bool create_mog(vpgl_camera_double_sptr const &camera,
-    bvxm_voxel_world_sptr const &world,
-    unsigned const bin_index,
-    unsigned const scale_index,
-    bool verbose);
+                  bvxm_voxel_world_sptr const &world,
+                  unsigned const bin_index,
+                  unsigned const scale_index,
+                  bool verbose);
 
   //:This local function calculates and retrieves optimal normalization parameters
   template <bvxm_voxel_type APM_T>
@@ -93,13 +94,13 @@ bool brec_create_mog_image_process::create_mog(vpgl_camera_double_sptr const &ca
   if (verbose) {
     switch (mog_creation_method) {
       case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE:
-        { vcl_cout << "using most probable modes' colors to create mog image "; } break;
+      { vcl_cout << "using most probable modes' colors to create mog image "; } break;
       case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
-        { vcl_cout << "using expected colors to create mog image "; } break;
+      { vcl_cout << "using expected colors to create mog image "; } break;
       case bvxm_mog_image_creation_methods::SAMPLING:
-        { vcl_cout << "using random sampling to create mog image "; } break;
+      { vcl_cout << "using random sampling to create mog image "; } break;
       default:
-        { vcl_cout << "In brec_create_mog_image_process::create_mog() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
+      { vcl_cout << "In brec_create_mog_image_process::create_mog() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
     }
   }
 
@@ -111,16 +112,17 @@ bool brec_create_mog_image_process::create_mog(vpgl_camera_double_sptr const &ca
   bool done = false;
   switch (mog_creation_method) {
     case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE:
-      { done = world->mog_most_probable_image<APM_T>(observation, mog_image_, bin_index,scale_index); } break;
+      done = world->mog_most_probable_image<APM_T>(observation, mog_image_, bin_index,scale_index); break;
     case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
-      { done = world->mixture_of_gaussians_image<APM_T>(observation, mog_image_, bin_index,scale_index); } break;
+      done = world->mixture_of_gaussians_image<APM_T>(observation, mog_image_, bin_index,scale_index); break;
     case bvxm_mog_image_creation_methods::SAMPLING:
-      { unsigned n_samples;
-        parameters()->get_value("n_samples", n_samples);
-        done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples, mog_image_, bin_index, scale_index);
-      } break;
+    { unsigned n_samples = 0;
+      parameters()->get_value("n_samples", n_samples);
+      done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples, mog_image_, bin_index, scale_index);
+    } break;
     default:
-      { vcl_cout << "In brec_create_mog_image_process::create_mog() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
+      vcl_cout << "In brec_create_mog_image_process::create_mog() - unrecognized option: " << mog_creation_method << " to create mog image\n";
+      return false;
   }
 
   if (!done) {
@@ -135,7 +137,9 @@ bool brec_create_mog_image_process::create_mog(vpgl_camera_double_sptr const &ca
   bvxm_voxel_slab<obs_datatype> exp_img = apm_processor.expected_color(*mog_image_ptr);
   out_img_ = new vil_image_view<vxl_byte>(ni_, nj_, nplanes_);
   bvxm_util::slab_to_img(exp_img, out_img_);
-  //vil_save(*temp_img, "./mixture_expected_img.png");
+#ifdef DEBUG
+  vil_save(*temp_img, "./mixture_expected_img.png");
+#endif
 
   return true;
 }
@@ -153,10 +157,9 @@ bool brec_create_mog_image_process::create_bbgm_image(bool verbose)
   typename bvxm_voxel_slab<mog_type>::const_iterator iter = mog_image_ptr->begin();
 
   for ( ; iter != mog_image_ptr->end(); iter++, ++model_it)
-    (*model_it) = (*iter);
+    *model_it = *iter;
 
   return true;
 }
-
 
 #endif // brec_create_mog_image_process_h_
