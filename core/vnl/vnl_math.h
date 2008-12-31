@@ -42,6 +42,15 @@
 #include <vcl_cassert.h>
 #endif
 
+// Figure out when the fast implementation can be used
+// Turn on fast impl when using GCC on Intel-based machines with the following exception:
+//   PPC with Mac OS X
+#if defined(__GNUC__) && (!defined(__APPLE__)  || !defined(__ppc__) )  
+#  define GCC_USE_FAST_IMPL 1
+#else
+#  define GCC_USE_FAST_IMPL 0
+#endif
+
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
 double   vnl_huge_val(double);
@@ -170,7 +179,7 @@ inline int vnl_math_rnd(double  x)
 {
    return _mm_cvtsd_si32(_mm_set_sd(x));
 }
-#elif defined(__GNUC__) // Fast implementation
+#elif GCC_USE_FAST_IMPL // Fast implementation
 // Be careful: half integer values are rounded to nearest even integer,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
@@ -242,7 +251,7 @@ inline int vnl_math_floor(double  x)
 {
    return _mm_cvtsd_si32(_mm_set_sd(2*x-.5))>>1;
 }
-#elif defined(__GNUC__) // Fast implementation
+#elif GCC_USE_FAST_IMPL // Fast implementation
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
@@ -318,7 +327,7 @@ inline int vnl_math_ceil(double  x)
 {
    return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
 }
-#elif defined(__GNUC__) // Fast implementation
+#elif GCC_USE_FAST_IMPL // Fast implementation
 // Be careful: argument absolue value must be less than INT_MAX/2,
 // we also assume that the rounding mode is not changed from the default
 // one (or at least that it is always restaured to the default one).
