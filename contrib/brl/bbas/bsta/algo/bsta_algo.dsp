@@ -126,6 +126,12 @@ SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_ga
 # Begin Source File
 SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_parzen_updater+bsta_parzen_sphere+float.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_parzen_sphere+float.3--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -155,6 +161,12 @@ SOURCE=.\bsta_truth_updater.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_fit_weibull.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen_updater.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen_updater.h
 # End Source File
 # End Group
 # End Target

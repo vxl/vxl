@@ -140,6 +140,12 @@ SOURCE=.\vil_save_image_view_binary_process.cxx
 # Begin Source File
 SOURCE=.\vil_map_image_binary_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_image_pair_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_crop_image_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -190,6 +196,12 @@ SOURCE=.\vil_save_image_view_binary_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_map_image_binary_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_image_pair_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_crop_image_process.h
 # End Source File
 # End Group
 # End Target

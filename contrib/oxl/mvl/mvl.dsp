@@ -303,30 +303,6 @@ SOURCE=.\Templates/vbl_sparse_array_1d+PairMatchSetCorner~-.cxx
 SOURCE=.\Templates/vbl_sparse_array_1d+PairMatchSetLineSeg~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_2d+FMatrix~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_2d+HMatrix2D~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_2d+HMatrix3D-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_2d+PairMatchSetCorner~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_2d+PairMatchSetLineSeg~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_3d+TriTensor~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_3d+TripleMatchSetCorner~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_sparse_array_3d+TripleMatchSetLineSeg~-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\TriTensor.cxx
 # End Source File
 # Begin Source File

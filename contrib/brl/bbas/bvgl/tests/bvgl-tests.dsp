@@ -246,12 +246,6 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_articulated_poly.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_misc.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_bvgl_changes.cxx
 # End Source File
 # End Group

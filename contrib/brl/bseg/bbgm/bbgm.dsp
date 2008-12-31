@@ -144,7 +144,7 @@ SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_indep+float.3---.cxx
 SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_sphere+float.1---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
