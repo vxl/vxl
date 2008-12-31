@@ -97,14 +97,9 @@ operator() ( parzen_dist_& pdist,
 }
 
 
-
-
-
-
-
 #define BSTA_PARZEN_UPDATER_INSTANTIATE(T) \
-template class bsta_parzen_updater<T >; 
-
+template class bsta_parzen_updater<T >; \
+template class bsta_parzen_adapt_bw_updater<T >
 
 
 #endif // bsta_parzen_updater_txx_
