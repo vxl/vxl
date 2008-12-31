@@ -8,7 +8,7 @@ SET( bsta_algo_sources
    bsta_bayes_functor.h
    bsta_adaptive_updater.txx  bsta_adaptive_updater.h
    bsta_truth_updater.txx     bsta_truth_updater.h
-#   bsta_parzen_updater.txx    bsta_parzen_updater.h
+   bsta_parzen_updater.txx    bsta_parzen_updater.h
    bsta_fit_weibull.cxx       bsta_fit_weibull.h
 )
 
