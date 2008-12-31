@@ -26,6 +26,8 @@
 #include <bsta/bsta_histogram.h>
 #include <bbgm/bbgm_measure.h>
 #include <brip/brip_vil_float_ops.h>
+#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_string.h> // for std::string::npos
 
 //: Constructor
 bbgm_measure_process::bbgm_measure_process()
@@ -75,7 +77,7 @@ bbgm_measure_process::execute()
   }
   vcl_string image_type = bgm->is_a();
   //for now just check for parzen_sphere in the string
-  int str_indx = image_type.find("parzen_sphere");
+  vcl_size_t str_indx = image_type.find("parzen_sphere");
   bool parzen = str_indx != vcl_string::npos;
   brdb_value_t<vil_image_view_base_sptr>* input1 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
@@ -145,7 +147,6 @@ bbgm_measure_process::execute()
         measure(*model, image, result, functor_, tolerance);
       }
     }
-
 #ifdef MEASURE_BKGROUND
     else if (attr=="prob_background") {
       if (!parzen) {
@@ -155,7 +156,6 @@ bbgm_measure_process::execute()
         measure_bkground(*model, image, result, functor_, tolerance);
       }
     }
-
 #endif // MEASURE_BKGROUND
     else {
       vcl_cout << "In bbgm_measure_process::execute() -"
