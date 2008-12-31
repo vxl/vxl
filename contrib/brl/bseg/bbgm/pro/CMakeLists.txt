@@ -17,6 +17,8 @@ SET(bbgm_pro_sources
     bbgm_display_dist_image_process.cxx
     bbgm_measure_process.h            bbgm_measure_process.cxx
     bbgm_local_frame_trans_process.h  bbgm_local_frame_trans_process.cxx
+    bbgm_update_parzen_dist_image_process.h
+    bbgm_update_parzen_dist_image_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bbgm_pro_sources)

@@ -3,6 +3,7 @@
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_mixture_fixed.h>
 
@@ -25,6 +26,10 @@ void bbgm_loader::register_loaders(){
   typedef bsta_num_obs<bsta_mixture<gauss_type> > mix_gauss_type;
   bbgm_image_of<mix_gauss_type> bi;
   vsl_add_to_binary_loader(bi);
+
+  typedef bsta_parzen_sphere<float, 3> parsen_f3_t;
+  bbgm_image_of<parsen_f3_t> bip;
+  vsl_add_to_binary_loader(bip);
 
   typedef bsta_num_obs<bsta_mixture_fixed<sph_gauss_type, 3> > sph_mix_gauss_type_fixed;
   bbgm_image_of<sph_mix_gauss_type_fixed> bifs;
