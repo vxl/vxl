@@ -7,7 +7,7 @@
 //  CAUTION: Input image is assumed to have type vxl_byte
 //
 // \author Ozge Can Ozcanli
-// \date 02/13/2008
+// \date Feb. 13, 2008
 // \verbatim
 //  Modifications
 //   Ozge C Ozcanli - 03/25/08 - fixed a compiler warning as suggested by Daniel Lyddy
@@ -16,8 +16,7 @@
 //                  - Added support for multichannel appereance model processor,
 //                  - Removed support for rgb_mog_processor
 //
-//   Ozge C Ozcanli - 12/1208 - added a third option to create mixture of gaussians (mog) image by sampling from the mixtures along the ray
-// 
+//   Ozge C Ozcanli - 12/12/08 - added a third option to create mixture of gaussians (mog) image by sampling from the mixtures along the ray
 // \endverbatim
 
 #include <vcl_string.h>
@@ -35,14 +34,13 @@
 
 class bvxm_normalize_image_process : public bprb_process
 {
-public:
-
+ public:
   bvxm_normalize_image_process();
 
   //: Copy Constructor (no local data)
   bvxm_normalize_image_process(const bvxm_normalize_image_process& other): bprb_process(*static_cast<const bprb_process*>(&other)) {}
 
-  ~bvxm_normalize_image_process() {}
+  virtual ~bvxm_normalize_image_process() {}
 
   //: Clone the process
   virtual bvxm_normalize_image_process* clone() const { return new bvxm_normalize_image_process(*this); }
@@ -53,24 +51,21 @@ public:
   bool execute();
   bool finish() { return true; }
 
-  
-
-protected:
+ protected:
 
   //:This local function calculates and retrieves optimal normalization parameters
-  template <bvxm_voxel_type APM_T> 
-  bool norm_parameters(vil_image_view_base_sptr const &input_img,
-    vil_image_view<float>*  &input_img_float_streched,
-    vpgl_camera_double_sptr const &camera,
-    bvxm_voxel_world_sptr const &world,
-    unsigned const bin_index,
-    unsigned const scale_index,
-    bool verbose,
-    float &a, float &b);
+  template <bvxm_voxel_type APM_T>
+  bool norm_parameters(vil_image_view_base_sptr const& input_img,
+                       vil_image_view<float>*& input_img_float_streched,
+                       vpgl_camera_double_sptr const& camera,
+                       bvxm_voxel_world_sptr const& world,
+                       unsigned bin_index,
+                       unsigned scale_index,
+                       bool verbose,
+                       float& a, float& b);
   unsigned ni_;
   unsigned nj_;
   unsigned nplanes_;
-
 };
 
 //: Float specialized function to normalize and image given a,b where new_I = a*I +b;
@@ -87,18 +82,16 @@ inline bool normalize_image(const vil_image_view<float>& in_view, vil_image_view
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i)
       {
-        float p = (float)(a*in_view(i,j,k) + b);
-
+        float p = a*in_view(i,j,k) + b;
         // Proposed fix
-        float min_value = (float) 0;
-        out_img(i, j, k) = vcl_min(vcl_max(min_value, p), max_value);
+        out_img(i, j, k) = vcl_min(vcl_max(0.f, p), max_value);
       }
 
-      return true;
+  return true;
 }
 
 //: Byte specialized function to normalize and image given a,b where new_I = a*I +b;
-inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_view<vxl_byte>& out_img, float a, float b, unsigned char max_value)
+inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_view<vxl_byte>& out_img, float a, float b, vxl_byte max_value = 255)
 {
   unsigned ni = in_view.ni();
   unsigned nj = in_view.nj();
@@ -112,25 +105,23 @@ inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_v
       for (unsigned i=0;i<ni;++i)
       {
         int p = (int)vcl_floor(a*in_view(i,j,k) + b);
-        if ( !(p >= 0) ) out_img(i, j, k)  = 0;
-        else if ( p > 255 ) out_img(i, j, k)  = 255;
-        else out_img(i, j, k)  = p;
+        out_img(i, j, k) = (vxl_byte)vcl_min(vcl_max(0, p), (int)max_value);
       }
 #ifdef DEBUG
-      vcl_cerr << "entered byte case..................\n";
+  vcl_cerr << "entered byte case..................\n";
 #endif
-      return true;
+  return true;
 }
 
 template <bvxm_voxel_type APM_T>
-bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr const &input_img,
-                                                   vil_image_view<float>* &input_img_float_stretched,
-                                                   vpgl_camera_double_sptr const &camera,
-                                                   bvxm_voxel_world_sptr const &world,
-                                                   unsigned const bin_index,
-                                                   unsigned const scale_index,
+bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr const& input_img,
+                                                   vil_image_view<float>*& input_img_float_stretched,
+                                                   vpgl_camera_double_sptr const& camera,
+                                                   bvxm_voxel_world_sptr const& world,
+                                                   unsigned bin_index,
+                                                   unsigned scale_index,
                                                    bool verbose,
-                                                   float &a, float &b)
+                                                   float& a, float& b)
 {
   //1)Set up the data
 
@@ -143,31 +134,31 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   unsigned mog_creation_method = (unsigned)bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE; // default is most_probable_mode
   parameters()->get_value("mog_method", mog_creation_method);
 
-  float a_start=0, a_end=0, a_inc=0;
+  float a_start=0.f, a_end=0.f, a_inc=0.f;
   parameters()->get_value("a_start", a_start);
   parameters()->get_value("a_inc", a_inc);
   parameters()->get_value("a_end", a_end);
 
-  float b_start=0, b_end=0, b_ratio=0;
+  float b_start=0.f, b_end=0.f, b_ratio=0.f;
   parameters()->get_value("b_start", b_start);
   parameters()->get_value("b_ratio", b_ratio);
   parameters()->get_value("b_end", b_end);
 
   if (verbose) {
-    switch (mog_creation_method) { 
-      case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE: 
-        { vcl_cout << "using most probable modes' colors to create mog image "; } break;
+    switch (mog_creation_method) {
+      case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE:
+      { vcl_cout << "using most probable modes' colors to create mog image "; } break;
       case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
-        { vcl_cout << "using expected colors to create mog image "; } break;
+      { vcl_cout << "using expected colors to create mog image "; } break;
       case bvxm_mog_image_creation_methods::SAMPLING:
-        { vcl_cout << "using random sampling to create mog image "; } break;
+      { vcl_cout << "using random sampling to create mog image "; } break;
       default:
-        { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
+      { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
     }
 
     vcl_cout << "normalization parameters to be used in this run:\n"
-      << "a_start: " << a_start << " a_end: " << a_end << " a_inc: " << a_inc << vcl_endl
-      << "b_start: " << b_start << " b_end: " << b_end << " b_ratio: " << b_ratio << vcl_endl;
+             << "a_start: " << a_start << " a_end: " << a_end << " a_inc: " << a_inc << vcl_endl
+             << "b_start: " << b_start << " b_end: " << b_end << " b_ratio: " << b_ratio << vcl_endl;
   }
 
   // CAUTION: Assumption: Input image is of type vxl_byte
@@ -177,35 +168,35 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
   }
 
   vil_image_view<vxl_byte>* input_img_ptr = new vil_image_view<vxl_byte>(input_img);
-  vil_convert_stretch_range_limited<vxl_byte>(*input_img_ptr, *input_img_float_stretched, 0, 255, 0.0f, 1.0f);
+  vil_convert_stretch_range_limited<vxl_byte>(*input_img_ptr, *input_img_float_stretched, 0, 255, 0.f, 1.f);
 
   // use the weight slab below to calculate total probability
   bvxm_voxel_slab<float> weights(ni_, nj_, 1);
-  weights.fill(1.0f/(ni_ * nj_));
+  weights.fill(1.f/(ni_ * nj_));
 
   //2) get probability mixtures of all pixels in image
   bvxm_voxel_slab_base_sptr mog_image;
 
-  a = 1.0f; 
-  b = 0.0f;
-  float best_prob = 0.0;
+  a = 1.f;
+  b = 0.f;
+  float best_prob = 0.f;
 
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
 
   bool done = false;
-  switch (mog_creation_method) { 
-    case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE: 
-      { done = world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
+  switch (mog_creation_method) {
+    case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE:
+    { done = world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
     case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
-      { done = world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
+    { done = world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
     case bvxm_mog_image_creation_methods::SAMPLING:
-      { unsigned n_samples;
-        parameters()->get_value("n_samples", n_samples);  
-        done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples, mog_image, bin_index, scale_index); 
-      } break;
+    { unsigned n_samples = 0;
+      parameters()->get_value("n_samples", n_samples);
+      done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples, mog_image, bin_index, scale_index);
+    } break;
     default:
-      { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
+    { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method << " to create mog image\n"; return false; }
   }
 
   if (!done) {
@@ -223,15 +214,17 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
     vil_save(*temp_img, "./mixture_expected_img.png");
   }
 
-
   //3) optimize two parameters for the input image so that it is the maximally probable image seen wrt mog_image
-  for ( float sa = a_start; sa <= a_end; sa+=a_inc ){
-    float sb_best = 0.0f;
+  for ( float sa = a_start; sa <= a_end; sa+=a_inc )
+  {
+    float sb_best = 0.f;
     bool tried_zero = false;
-    for ( float sb_inc = b_start; sb_inc > b_end; sb_inc *= b_ratio ) {
-      float sb_best_prob = 0.0;
-      for ( float sb = sb_best-2*sb_inc; sb <= sb_best+2.01*sb_inc; sb+= sb_inc ) {
-        if (sb == 0.0f) {
+    for ( float sb_inc = b_start; sb_inc > b_end; sb_inc *= b_ratio )
+    {
+      float sb_best_prob = 0.f;
+      for ( float sb = sb_best-2.f*sb_inc; sb <= sb_best+2.01f*sb_inc; sb+= sb_inc )
+      {
+        if (sb == 0.f) {
           if (tried_zero)
             continue;
           else
@@ -239,7 +232,7 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
         }
 
         vil_image_view<float>* nimg = new vil_image_view<float>( ni_, nj_, nplanes_ );
-        normalize_image(*input_img_float_stretched, *nimg, sa, sb, 1.0f);
+        normalize_image(*input_img_float_stretched, *nimg, sa, sb, 1.f);
         vil_image_view_base_sptr nimg_sptr = nimg;
 
         // convert image to a voxel_slab
@@ -267,7 +260,7 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
     }
     //vcl_cerr << '\n';
   }
-  if (verbose) 
+  if (verbose)
   {
     vcl_ofstream file;
     file.open("./normalization_parameters.txt", vcl_ofstream::app);
@@ -276,7 +269,5 @@ bool bvxm_normalize_image_process::norm_parameters(vil_image_view_base_sptr cons
 
   return true;
 }
-
-
 
 #endif // bvxm_normalize_image_process_h_
