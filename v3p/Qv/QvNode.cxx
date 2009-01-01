@@ -119,8 +119,7 @@ QvNode::setName(const QvName &newName)
     if (newName.getLength() > 0 &&
         !QvName::isNodeNameStartChar(str[0])) isBad = TRUE;
 
-    int i;
-    for (i = 1; i < newName.getLength() && !isBad; i++) {
+    for (vcl_size_t i = 1; i < newName.getLength() && !isBad; ++i) {
         isBad = !QvName::isNodeNameChar(str[i]);
     }
 
@@ -130,7 +129,7 @@ QvNode::setName(const QvName &newName)
         if (!QvName::isNodeNameStartChar(str[0])) {
             goodString += "_";
         }
-        for (i = 0; i < newName.getLength(); i++) {
+        for (vcl_size_t i = 0; i < newName.getLength(); i++) {
             char temp[2];
             temp[0] = str[i]; temp[1] = '\0';
             if (!QvName::isNodeNameChar(str[i]))
