@@ -9,7 +9,7 @@
 
 #include "bsta_parzen_sphere.h"
 
-typedef bsta_parzen_sphere<float,3> bsta_parzen_sf1;
+typedef bsta_parzen_sphere<float,1> bsta_parzen_sf1;
 
 
 #endif // bsta_parzen_sf1_h_

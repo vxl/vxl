@@ -59,8 +59,8 @@ template <class T, unsigned n>
 class bsta_parzen : public bsta_distribution<T,n>
 {
  public:
-  typedef typename bsta_distribution<T,n>::vector_type vector_;
-  typedef vcl_vector<vector_> sample_vector;
+  typedef typename bsta_distribution<T,n>::vector_type vect_t;
+  typedef vcl_vector<vect_t > sample_vector;
   typedef typename sample_vector::const_iterator sv_const_it;
 
  protected:
@@ -76,10 +76,10 @@ class bsta_parzen : public bsta_distribution<T,n>
   : samples_(samples) {}
 
   //: The mean of the distribution
-  virtual vector_ mean() const = 0;
+  virtual vect_t mean() const = 0;
 
   //: Insert a new sample into the distribution
-  void insert_sample(const vector_& sample)
+  void insert_sample(const vect_t& sample)
   { samples_.push_back(sample); }
 
   //: Insert a vector of samples
@@ -92,9 +92,9 @@ class bsta_parzen : public bsta_distribution<T,n>
   sample_vector samples() const
   { return samples_; }
 
-  vector_ sample(unsigned index) const
+  vect_t sample(unsigned index) const
   { if (index>=samples_.size())
-    { vector_ v;  return T(0)*v; }
+    { vect_t v;  return T(0)*v; }
     return samples_[index];
   }
 
@@ -111,11 +111,11 @@ class bsta_parzen : public bsta_distribution<T,n>
   unsigned size() const { return samples_.size(); }
 
   //: The probability density at sample pt
-  virtual T prob_density(const vector_& pt) const = 0;
+  virtual T prob_density(const vect_t& pt) const = 0;
 
   //: The probability density integrated over a box (returns a probability)
-  virtual T probability(const vector_& min_pt,
-                        const vector_& max_pt) const = 0;
+  virtual T probability(const vect_t& min_pt,
+                        const vect_t& max_pt) const = 0;
 };
 
 #endif // bsta_parzen_h_
