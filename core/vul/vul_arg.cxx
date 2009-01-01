@@ -199,7 +199,7 @@ void vul_arg_info_list::display_help( char const*progname)
 
   // Find longest option, type name, or default
   vcl_size_t maxl_option  = vcl_max(vcl_size_t(8), help_.size()); // Length of "REQUIRED" or help option
-  int maxl_type    = 4; // Length of "Type", minimum "bool"
+  vcl_size_t maxl_type = 4; // Length of "Type", minimum "bool"
   //  int maxl_default = 0;
   for (unsigned int i=0; i< args_.size(); i++)
     if (!args_[i]->help_.empty()) {
