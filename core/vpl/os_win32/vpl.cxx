@@ -9,7 +9,7 @@
 char *
 vpl_getcwd( char *buf, vcl_size_t buf_size )
 {
-  return _getcwd( buf, buf_size );
+  return _getcwd( buf, (int)buf_size );
 }
 
 int
@@ -63,7 +63,7 @@ vpl_usleep( unsigned int t )
   return 0;
 }
 
-unsigned 
+unsigned
 vpl_getpid( )
 {
 #if defined(VCL_BORLAND)
