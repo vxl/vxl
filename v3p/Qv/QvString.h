@@ -3,15 +3,17 @@
 
 #include "QvBasic.h"
 #include <vcl_cstring.h>
+#include <vcl_cstddef.h>
 
-class QvString {
-  public:
+class QvString
+{
+ public:
     QvString()                   { string = staticStorage; string[0] = '\0'; }
     QvString(const char *str)    { string = staticStorage; *this = str; }
     QvString(const QvString &str) {string = staticStorage; *this = str.string;}
     ~QvString();
     u_long              hash()          { return QvString::hash(string); }
-    int                 getLength() const       { return vcl_strlen(string); }
+    vcl_size_t          getLength() const       { return vcl_strlen(string); }
     void                makeEmpty(QvBool freeOld = TRUE);
     const char *        getString() const       { return string; }
     QvString &          operator =(const char *str);
@@ -34,7 +36,7 @@ class QvString {
                                     const QvString &str2)
         { return (str1 != str2.string); }
     static u_long       hash(const char *s);
-  private:
+ private:
     char                *string;
     int                 storageSize;
 #define QV_STRING_STATIC_STORAGE_SIZE           32
@@ -44,7 +46,8 @@ class QvString {
 
 struct QvNameChunk;  /* mpichler, 19950616 */
 
-class QvNameEntry {
+class QvNameEntry
+{
  public:
     QvBool              isEmpty() const   { return (string[0] == '\0'); }
     QvBool              isEqual(const char *s) const
@@ -64,8 +67,9 @@ class QvNameEntry {
 friend class QvName;
 };
 
-class QvName {
-  public:
+class QvName
+{
+ public:
     QvName();
     QvName(const char *s)               { entry = QvNameEntry::insert(s); }
     QvName(const QvString &s)   { entry = QvNameEntry::insert(s.getString()); }
@@ -73,7 +77,7 @@ class QvName {
     QvName(const QvName &n)                     { entry = n.entry; }
     ~QvName()                                   {}
     const char          *getString() const      { return entry->string; }
-    int                 getLength() const   { return vcl_strlen(entry->string); }
+    vcl_size_t          getLength() const   { return vcl_strlen(entry->string); }
     static QvBool       isIdentStartChar(char c);
     static QvBool       isIdentChar(char c);
     static QvBool       isNodeNameStartChar(char c);
@@ -93,7 +97,7 @@ class QvName {
 
     friend bool         operator !=(const QvName &n1, const QvName &n2)
         { return n1.entry != n2.entry; }
-  private:
+ private:
     const QvNameEntry   *entry;
 };
 
