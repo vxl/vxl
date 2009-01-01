@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_parzen_sphere.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vcl_string.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
@@ -26,6 +27,14 @@ void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
   vnl_vector_fixed<T,3> mean(T(1.5), T(2.5), T(3.5));
   TEST(("mean <"+type_name+">").c_str(), parzen.mean(), mean);
 
+  //test covariance
+  vnl_matrix_fixed<T, 3, 3> covar = parzen.covar();
+  vnl_matrix_fixed<T, 3, 3> cact(T(0.25));
+  cact[0][0]=T(0.5); cact[1][1]=T(0.5); cact[2][2]=T(0.5);
+  T er = (covar - cact).frobenius_norm();
+  TEST_NEAR(("covariance matrix <"+type_name+">").c_str(),
+            er, T(0), epsilon);
+
   T prob_den = T(0.11333876);
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
             parzen.prob_density(mean), prob_den, epsilon);
@@ -51,6 +60,9 @@ void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
   TEST_NEAR(("sprobability <"+type_name+">").c_str(),
             sparzen.probability(smean-bandwidth, smean +bandwidth),
             sprobability, epsilon);
+  T var = sparzen.covar();
+  TEST_NEAR(("variance <"+type_name+">").c_str(),
+            var, T(0.9166666666666607), epsilon);
 }
 
 
