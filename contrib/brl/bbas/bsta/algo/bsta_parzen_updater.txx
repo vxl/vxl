@@ -10,6 +10,7 @@ template <class parzen_dist_>
 void bsta_parzen_updater<parzen_dist_>::
 operator() ( parzen_dist_& pdist, const typename bsta_parzen_updater<parzen_dist_>::vector_& sample) const
 {
+#if 0 // needs to be restructured in light of scalar samples
   typedef typename parzen_dist_::math_type T;
   unsigned n = pdist.size();
   T min_dist = vnl_numeric_traits<T>::maxval;
@@ -30,6 +31,7 @@ operator() ( parzen_dist_& pdist, const typename bsta_parzen_updater<parzen_dist
   if (n==max_samples_) // replace closest parzen sample with new sample
     pdist.remove_sample(closest_index);
   pdist.insert_sample(sample);
+#endif
 }
 
 template <class parzen_dist_>
@@ -37,6 +39,7 @@ void bsta_parzen_adapt_bw_updater<parzen_dist_>::
 operator() ( parzen_dist_& pdist,
              const typename bsta_parzen_adapt_bw_updater<parzen_dist_>::vector_& sample) const
 {
+#if 0 // needs to be restructured in light of scalar samples
   typedef typename parzen_dist_::math_type T;
   if (pdist.bandwidth_adapted())
     return;//don't update after bandwidth is set
@@ -92,6 +95,7 @@ operator() ( parzen_dist_& pdist,
   if (n==max_samples_)//replace closest parzen sample with new sample
     pdist.remove_sample(closest_index);
   pdist.insert_sample(sample);
+#endif
 }
 
 
