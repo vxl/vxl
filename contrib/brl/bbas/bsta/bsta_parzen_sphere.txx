@@ -17,8 +17,10 @@ namespace {
   typename bsta_distribution<T,n>::vector_type 
   compute_mean(vcl_vector<typename bsta_distribution<T,n>::vector_type > const& samples)
   {
-    typename bsta_distribution<T,n>::vector_type sum(T(0));
-    vcl_vector<typename bsta_distribution<T,n>::vector_type >::const_iterator sit = samples.begin();
+    typedef typename bsta_distribution<T,n>::vector_type vect_t;
+    typedef typename vcl_vector<vect_t >::const_iterator sit_t; 
+    vect_t sum(T(0));
+    sit_t sit = samples.begin();
     T nsamp = static_cast<T>(samples.size());
     for(; sit != samples.end(); ++sit)
       sum += (*sit);
