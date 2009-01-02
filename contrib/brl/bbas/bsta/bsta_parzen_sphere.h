@@ -56,7 +56,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
     {bandwidth_adapted_=bandwidth_adapted;}
 
   //: The mean of the distribution (just the sample mean)
-  virtual vect_t mean() const;
+  virtual typename bsta_distribution<T,n>::vector_type mean() const;
 
   //: The covariance of the distribution (the sample covariance + bandwidth*I)
   covar_type covar() const;

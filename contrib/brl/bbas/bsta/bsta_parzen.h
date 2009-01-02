@@ -76,7 +76,7 @@ class bsta_parzen : public bsta_distribution<T,n>
   : samples_(samples) {}
 
   //: The mean of the distribution
-  virtual vect_t mean() const = 0;
+  virtual typename bsta_distribution<T,n>::vector_type mean() const = 0;
 
   //: Insert a new sample into the distribution
   void insert_sample(const vect_t& sample)
