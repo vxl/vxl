@@ -94,7 +94,7 @@ class bsta_parzen : public bsta_distribution<T,n>
 
   vect_t sample(unsigned index) const
   { if (index>=samples_.size())
-    { vect_t v;  return T(0)*v; }
+    { vect_t v(T(0));  return v; }
     return samples_[index];
   }
 
