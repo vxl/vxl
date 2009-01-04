@@ -532,7 +532,7 @@ void segv_vil_segmentation_manager::load_image()
   bool pyrm = false;
   vil_image_resource_sptr image;
   vil_pyramid_image_resource_sptr pyr =
-      vil_load_pyramid_resource(image_filename.c_str());
+      vil_load_pyramid_resource(image_filename.c_str(), false);
   if (pyr)
   {
     image = pyr.ptr();
@@ -540,10 +540,12 @@ void segv_vil_segmentation_manager::load_image()
   }
 
   if (!image)
-    image = vil_load_image_resource(image_filename.c_str());
+    image = vil_load_image_resource(image_filename.c_str(), false);
 
-  if (!image)
+  if (!image){
+    vcl_cout << "Failed to load image path " << image_filename << '\n';
     return;
+  }
 
   if (greyscale&&!pyrm)
   {
@@ -573,7 +575,7 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
   bool pyrm = false;
   vil_image_resource_sptr image;
   vil_pyramid_image_resource_sptr pyr =
-      vil_load_pyramid_resource(path.c_str());
+      vil_load_pyramid_resource(path.c_str(), false);
   if (pyr)
   {
     image = pyr.ptr();
@@ -581,10 +583,12 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
   }
 
   if (!image)
-    image = vil_load_image_resource(path.c_str());
+    image = vil_load_image_resource(path.c_str(), false);
 
-  if (!image)
+  if (!image){
+    vcl_cout << "Failed to load image path " << path << '\n';
     return;
+  }
 
   vgui_range_map_params_sptr rmps = range_params(image);
 
