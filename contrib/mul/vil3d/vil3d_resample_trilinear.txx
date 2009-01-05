@@ -88,9 +88,9 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           <<"z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3="
           <<z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3<<vcl_endl;
 #endif
-
-  vil_convert_round_pixel<double, T> round;
-
+  vil_convert_round_pixel<double, T> cast_and_possibly_round;
+  // Rounds only if T is int, unsigned or kind of. Doesn't round if T
+  // is float, double or kind of.
 
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
@@ -109,8 +109,6 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
   const vcl_ptrdiff_t d_pstep = dest_image.planestep();
   T* d_plane0 = dest_image.origin_ptr();
 
-
-
   if (all_in_image)
   {
     if (np==1)
@@ -126,7 +124,10 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            round(vil3d_trilin_interp_raw(x, y, z, plane0,istep, jstep, kstep), *dpt);
+            cast_and_possibly_round( vil3d_trilin_interp_raw( x, y, z,
+                                                              plane0,
+                                                              istep, jstep, kstep ),
+                                    *dpt);
         }
       }
     }
@@ -145,8 +146,10 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              round(vil3d_trilin_interp_raw(x, y, z, plane0+p*pstep, istep, jstep, kstep),
-                dpt[p*d_pstep]);
+              cast_and_possibly_round( vil3d_trilin_interp_raw( x, y, z,
+                                                                plane0+p*pstep,
+                                                                istep, jstep, kstep),
+                                       dpt[p*d_pstep]);
           }
         }
       }
@@ -168,8 +171,11 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            round(vil3d_trilin_interp_safe_extend(x, y, z, plane0, ni, nj, nk, istep, jstep, kstep),
-              *dpt );
+            cast_and_possibly_round( vil3d_trilin_interp_safe_extend( x, y, z,
+                                                                      plane0,
+                                                                      ni, nj, nk,
+                                                                      istep, jstep, kstep),
+                                     *dpt );
         }
       }
     }
@@ -188,8 +194,11 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              round(vil3d_trilin_interp_safe_extend(x, y, z, plane0+p*pstep, ni, nj, nk, istep, jstep, kstep),
-                dpt[p*d_pstep] );
+              cast_and_possibly_round( vil3d_trilin_interp_safe_extend( x, y, z,
+                                                                        plane0+p*pstep,
+                                                                        ni, nj, nk,
+                                                                        istep, jstep, kstep),
+                                       dpt[p*d_pstep] );
           }
         }
       }
@@ -261,7 +270,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           <<"z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3="
           <<z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3<<vcl_endl;
 #endif
-  vil_convert_round_pixel<double, T> round;
+  vil_convert_round_pixel<double, T> cast_and_possibly_round;
 
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
@@ -295,7 +304,10 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            round(vil3d_trilin_interp_raw(x, y, z, plane0, istep, jstep, kstep), *dpt);
+            cast_and_possibly_round( vil3d_trilin_interp_raw( x, y, z,
+                                                              plane0,
+                                                              istep, jstep, kstep),
+                                     *dpt);
         }
       }
     }
@@ -314,8 +326,10 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              round(vil3d_trilin_interp_raw(x, y, z, plane0+p*pstep, istep, jstep, kstep),
-                dpt[p*d_pstep]);
+              cast_and_possibly_round( vil3d_trilin_interp_raw( x, y, z,
+                                                                plane0+p*pstep,
+                                                                istep, jstep, kstep),
+                                       dpt[p*d_pstep]);
           }
         }
       }
@@ -337,8 +351,11 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           double x=xj, y=yj, z=zj;  // Start of j-th row
           T *dpt = row;
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
-            round(vil3d_trilin_interp_safe(x, y, z, plane0, ni, nj, nk, istep, jstep, kstep, outval),
-              *dpt);
+            cast_and_possibly_round( vil3d_trilin_interp_safe( x, y, z,
+                                                               plane0,
+                                                               ni, nj, nk,
+                                                               istep, jstep, kstep),
+                                     *dpt);
         }
       }
     }
@@ -357,8 +374,11 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
           for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
           {
             for (unsigned int p=0; p<np; ++p)
-              round(vil3d_trilin_interp_safe(x, y, z, plane0+p*pstep, ni, nj, nk, istep, jstep, kstep, outval),
-                dpt[p*d_pstep]);
+              cast_and_possibly_round( vil3d_trilin_interp_safe( x, y, z,
+                                                                 plane0+p*pstep,
+                                                                 ni, nj, nk,
+                                                                 istep, jstep, kstep),
+                                       dpt[p*d_pstep]);
           }
         }
       }
@@ -429,7 +449,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
   T* d_plane = dst_image.origin_ptr();
 
   // Use this to convert from double to T with appropriate rounding
-  vil_convert_round_pixel<double, T> cr;
+  vil_convert_round_pixel<double, T> cast_and_possibly_round;
 
   // Loop over all voxels in the destination image
   // and sample from the corresponding point in the source image
@@ -445,19 +465,19 @@ void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<static_cast<unsigned>(dni-dx); ++i, d_pix+=d_istep)
         {
-          cr(vil3d_trilin_interp_raw(i/dx, j/dy, k/dz,
-                                     s_plane,
-                                     s_istep, s_jstep, s_kstep),
-             *d_pix);
+          cast_and_possibly_round( vil3d_trilin_interp_raw( i/dx, j/dy, k/dz,
+                                                            s_plane,
+                                                            s_istep, s_jstep, s_kstep),
+                                   *d_pix);
         }
         // Process the pixels near the upper i boundary - safe_extend interpolation
         for (unsigned i=static_cast<unsigned>(dni-dx); i<dni; ++i, d_pix+=d_istep)
         {
-          cr(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
-                                             s_plane,
-                                             sni, snj, snk,
-                                             s_istep, s_jstep, s_kstep),
-             *d_pix);
+          cast_and_possibly_round( vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
+                                                                   s_plane,
+                                                                   sni, snj, snk,
+                                                                   s_istep, s_jstep, s_kstep),
+                                   *d_pix);
         }
       }
 
@@ -467,11 +487,11 @@ void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
         {
-          cr(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
-                                             s_plane,
-                                             sni, snj, snk,
-                                             s_istep, s_jstep, s_kstep),
-             *d_pix);
+          cast_and_possibly_round( vil3d_trilin_interp_safe_extend( i/dx, j/dy, k/dz,
+                                                                    s_plane,
+                                                                    sni, snj, snk,
+                                                                    s_istep, s_jstep, s_kstep),
+                                   *d_pix);
         }
       }
     }
@@ -485,11 +505,11 @@ void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
         {
-          cr(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
-                                             s_plane,
-                                             sni, snj, snk,
-                                             s_istep, s_jstep, s_kstep),
-             *d_pix);
+          cast_and_possibly_round( vil3d_trilin_interp_safe_extend( i/dx, j/dy, k/dz,
+                                                                    s_plane,
+                                                                    sni, snj, snk,
+                                                                    s_istep, s_jstep, s_kstep),
+                                   *d_pix);
         }
       }
     }
