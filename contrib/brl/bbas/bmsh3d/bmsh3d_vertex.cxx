@@ -172,54 +172,50 @@ const bmsh3d_edge* bmsh3d_vertex::find_unvisited_E_() const
 
 void bmsh3d_vertex::getInfo(vcl_ostringstream& ostrm)
 {
-  char s[1024];
-
-  bmsh3d_vertex* this_ = this;
-
-  vcl_sprintf(s, "\n==============================\n"); ostrm<<s;
-  vcl_sprintf(s, "bmsh3d_vertex id: %d (%.12f, %.12f, %.12f)\n", id_,
-               this_->pt().x(), this_->pt().y(), this_->pt().z()); ostrm<<s;
-
-  vcl_sprintf(s, "  topology type: "); ostrm<<s;
+  ostrm << "\n==============================\nbmsh3d_vertex id: " << id_
+        << " (" << this->pt().x()
+        << ", " << this->pt().y()
+        << ", " << this->pt().z()
+        << ")\n  topology type: ";
   VTOPO_TYPE type = detect_vtopo_type();
   switch (type) {
-   case BOGUS_VTOPO_TYPE:        vcl_sprintf(s, "BOGUS_VTOPO_TYPE"); ostrm<<s; break;
-   case VTOPO_ISOLATED:          vcl_sprintf(s, "VTOPO_ISOLATED"); ostrm<<s; break;
-   case VTOPO_EDGE_ONLY:         vcl_sprintf(s, "VTOPO_EDGE_ONLY"); ostrm<<s; break;
-   case VTOPO_EDGE_JUNCTION:     vcl_sprintf(s, "VTOPO_EDGE_JUNCTION"); ostrm<<s; break;
-   case VTOPO_2_MANIFOLD:        vcl_sprintf(s, "VTOPO_2_MANIFOLD"); ostrm<<s; break;
-   case VTOPO_2_MANIFOLD_1RING:  vcl_sprintf(s, "VTOPO_2_MANIFOLD_1RING"); ostrm<<s; break;
-   case VTOPO_NON_MANIFOLD:      vcl_sprintf(s, "VTOPO_NON_MANIFOLD"); ostrm<<s; break;
-   case VTOPO_NON_MANIFOLD_1RING:vcl_sprintf(s, "VTOPO_NON_MANIFOLD_1RING"); ostrm<<s; break;
+   case BOGUS_VTOPO_TYPE:        ostrm << "BOGUS_VTOPO_TYPE"; break;
+   case VTOPO_ISOLATED:          ostrm << "VTOPO_ISOLATED"; break;
+   case VTOPO_EDGE_ONLY:         ostrm << "VTOPO_EDGE_ONLY"; break;
+   case VTOPO_EDGE_JUNCTION:     ostrm << "VTOPO_EDGE_JUNCTION"; break;
+   case VTOPO_2_MANIFOLD:        ostrm << "VTOPO_2_MANIFOLD"; break;
+   case VTOPO_2_MANIFOLD_1RING:  ostrm << "VTOPO_2_MANIFOLD_1RING"; break;
+   case VTOPO_NON_MANIFOLD:      ostrm << "VTOPO_NON_MANIFOLD"; break;
+   case VTOPO_NON_MANIFOLD_1RING:ostrm << "VTOPO_NON_MANIFOLD_1RING"; break;
   }
 
   //: the incident edges
   vcl_set<void*> incident_Es;
   get_incident_Es(incident_Es);
-  vcl_sprintf(s, "\n %u incident edges (unordered): ", incident_Es.size()); ostrm<<s;
+  ostrm << "\n " << incident_Es.size() << " incident edges (unordered): ";
   vcl_set<void*>::iterator it = incident_Es.begin();
   for (; it != incident_Es.end(); it++) {
     bmsh3d_edge* E = (bmsh3d_edge*)(*it);
-    vcl_sprintf(s, "%d ", E->id()); ostrm<<s;
+    ostrm << E->id() << ' ';
   }
 
   //: the ordered incident faces (for 2-manifold mesh)
   vcl_vector<const bmsh3d_halfedge*> ordered_halfedges;
   m2_get_ordered_HEs(ordered_halfedges);
 
-  vcl_sprintf(s, "\n (2-manifold) %d ordered incident faces: ", ordered_halfedges.size()); ostrm<<s;
+  ostrm << "\n (2-manifold) " << ordered_halfedges.size() << " ordered incident faces: ";
   for (unsigned int i=0; i<ordered_halfedges.size(); i++) {
     const bmsh3d_halfedge* HE = ordered_halfedges[i];
-    vcl_sprintf(s, "%d ", ((bmsh3d_face*)HE->face())->id()); ostrm<<s;
+    ostrm << ((bmsh3d_face*)HE->face())->id() << ' ';
   }
 
-  vcl_sprintf(s, "\n (2-manifold) %d ordered incident edges: ", ordered_halfedges.size()); ostrm<<s;
+  ostrm << "\n (2-manifold) " << ordered_halfedges.size() << " ordered incident edges: ";
   for (unsigned int i=0; i<ordered_halfedges.size(); i++) {
     const bmsh3d_halfedge* HE = ordered_halfedges[i];
-    vcl_sprintf(s, "%d ", HE->edge()->id()); ostrm<<s;
+    ostrm << HE->edge()->id() << ' ';
   }
 
-  vcl_sprintf(s, "\n"); ostrm<<s;
+  ostrm << vcl_endl;
 }
 
 const bmsh3d_halfedge* bmsh3d_vertex::get_1st_bnd_HE() const
