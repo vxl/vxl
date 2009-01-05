@@ -6,7 +6,7 @@ PROJECT(vgui_wx)
 # that use a vgui_wx_adaptor, NOT for vgui applications that are
 # rendered using wxWidgets as a Toolkit.
 
-FIND_PACKAGE(wxWidgets COMPONENTS base core gl xrc)
+FIND_PACKAGE(wxWidgets COMPONENTS base core gl adv html xml xrc)
 IF(wxWidgets_FOUND)
   INCLUDE( ${wxWidgets_USE_FILE} )
 
