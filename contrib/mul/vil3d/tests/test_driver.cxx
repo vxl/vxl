@@ -15,6 +15,7 @@ DECLARE( test_from_image_2d );
 DECLARE( test_resample );
 DECLARE( test_analyze_format );
 DECLARE( test_reflect );
+DECLARE( test_image_resource );
 DECLARE( test_tricub_interp );
 
 DECLARE( test_algo_threshold );
