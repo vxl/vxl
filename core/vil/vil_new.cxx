@@ -297,6 +297,7 @@ vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&
    macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
    macro(VIL_PIXEL_FORMAT_FLOAT , float )
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_BOOL , bool )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
    default: /* do nothing */;
