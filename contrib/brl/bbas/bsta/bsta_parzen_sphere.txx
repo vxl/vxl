@@ -5,6 +5,7 @@
 // \file
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_numeric_traits.h>
 #include "bsta_parzen_sphere.h"
 #include "bsta_gaussian_sphere.h"
 #include <vcl_cassert.h>
@@ -197,6 +198,50 @@ probability(typename bsta_distribution<T,1>::vector_type const& min_pt,
                                   bandwidth_*bandwidth_);
 }
 
+// general case for distance and idex of nearest sample
+template <class T, unsigned int n>
+T bsta_parzen_sphere<T,n>::nearest_sample(const typename bsta_distribution<T,n>::vector_type& pt, unsigned & index) const
+{
+  typedef typename bsta_distribution<T,n>::vector_type vect_t;
+  typedef typename bsta_parzen<T,n>::sv_const_it sit_t;
+  T min_dist = vnl_numeric_traits<T>::maxval;
+  unsigned count = 0; index = 0;
+  for (sit_t sit = bsta_parzen<T,n>::samples_.begin();
+       sit != bsta_parzen<T,n>::samples_.end(); ++sit, ++count)
+    {
+      vect_t s = *sit;
+      vect_t dif = s-pt;
+      T d = dif.magnitude();
+      if(d<min_dist){
+        index = count;
+        min_dist = d;
+      }
+    }
+  return min_dist;
+}
+
+// distance to nearest sample, specialized to scalar case
+template <class T >
+T bsta_parzen_sphere<T,1>::nearest_sample(const typename bsta_distribution<T,1>::vector_type & pt, unsigned& index) const
+{
+  typedef typename bsta_distribution<T,1>::vector_type vect_t;
+  typedef typename bsta_parzen<T,1>::sv_const_it sit_t;
+  T min_dist = vnl_numeric_traits<T>::maxval;
+  unsigned count = 0; index = 0;
+  for (sit_t sit = bsta_parzen<T,1>::samples_.begin();
+       sit != bsta_parzen<T,1>::samples_.end(); ++sit, ++count)
+    {
+      vect_t s = *sit;
+      vect_t dif = s-pt;
+      T d = dif;
+      if(d<0) d=-d;
+      if(d<min_dist){
+        index = count;
+        min_dist = d;
+      }
+    }
+  return min_dist;
+}
 
 #define BSTA_PARZEN_SPHERE_INSTANTIATE(T,n) \
 template class bsta_parzen_sphere<T,n >;

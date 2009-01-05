@@ -75,9 +75,6 @@ class bsta_parzen : public bsta_distribution<T,n>
   bsta_parzen(sample_vector const& samples)
   : samples_(samples) {}
 
-  //: The mean of the distribution
-  virtual typename bsta_distribution<T,n>::vector_type mean() const = 0;
-
   //: Insert a new sample into the distribution
   void insert_sample(const vect_t& sample)
   { samples_.push_back(sample); }
@@ -94,7 +91,7 @@ class bsta_parzen : public bsta_distribution<T,n>
 
   vect_t sample(unsigned index) const
   { if (index>=samples_.size())
-    { vect_t v(T(0));  return v; }
+    { vect_t v(T(0)); return v; }
     return samples_[index];
   }
 
@@ -110,12 +107,6 @@ class bsta_parzen : public bsta_distribution<T,n>
   //: number of samples
   unsigned size() const { return samples_.size(); }
 
-  //: The probability density at sample pt
-  virtual T prob_density(const vect_t& pt) const = 0;
-
-  //: The probability density integrated over a box (returns a probability)
-  virtual T probability(const vect_t& min_pt,
-                        const vect_t& max_pt) const = 0;
 };
 
 #endif // bsta_parzen_h_

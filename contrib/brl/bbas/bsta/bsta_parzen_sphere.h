@@ -35,7 +35,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
   //: the covariance type
   typedef vnl_matrix_fixed<T,n,n> covar_type;
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
-
+  typedef typename bsta_distribution<T,n>::math_type math_t;
   bsta_parzen_sphere(): bandwidth_(T(1)),
     bandwidth_adapted_(false) {}// no samples
 
@@ -43,7 +43,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
     bsta_parzen<T,n>(samples), bandwidth_(bandwidth),
     bandwidth_adapted_(false){}
 
-  virtual ~bsta_parzen_sphere() {}
+  ~bsta_parzen_sphere() {}
 
   //: kernel bandwidth
   T bandwidth() const {return bandwidth_;}
@@ -56,17 +56,20 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
     {bandwidth_adapted_=bandwidth_adapted;}
 
   //: The mean of the distribution (just the sample mean)
-  virtual typename bsta_distribution<T,n>::vector_type mean() const;
+  typename bsta_distribution<T,n>::vector_type mean() const;
 
   //: The covariance of the distribution (the sample covariance + bandwidth*I)
   covar_type covar() const;
 
   //: The probability density at sample pt
-  virtual T prob_density(vect_t const& pt) const;
+  T prob_density(vect_t const& pt) const;
 
   //: The probability density integrated over a box (returns a probability)
-  virtual T probability(vect_t const& min_pt,
+  T probability(vect_t const& min_pt,
                         vect_t const& max_pt) const;
+
+  //: The distance and index of the nearest sample
+  T nearest_sample(const vect_t& pt, unsigned & index) const;
 
  protected:
   T bandwidth_;
@@ -81,7 +84,9 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
   //actually a scalar
   typedef typename bsta_distribution<T,1>::vector_type vect_t;
   //: the covariance type
-  typedef T covar_type;
+  typedef typename T covar_type;
+  //: for convenence in defining functors
+  typedef typename T math_t;
 
   bsta_parzen_sphere(): bandwidth_(T(1)),
     bandwidth_adapted_(false) {}// no samples
@@ -90,7 +95,7 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
                      T bandwidth = T(1)): bsta_parzen<T,1>(samples),
     bandwidth_(bandwidth), bandwidth_adapted_(false){}
 
-  virtual ~bsta_parzen_sphere() {}
+  ~bsta_parzen_sphere() {}
 
   //: kernel bandwidth
   T bandwidth() const {return bandwidth_;}
@@ -103,18 +108,20 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
     {bandwidth_adapted_=bandwidth_adapted;}
 
   //: The mean of the distribution (just the sample mean)
-  virtual typename bsta_distribution<T,1>::vector_type mean() const;
+  typename bsta_distribution<T,1>::vector_type mean() const;
 
   //: The covariance of the distribution (the sample covariance + bandwidth*I)
   covar_type covar() const;
 
   //: The probability density at sample pt
-  virtual T prob_density(vect_t const& pt) const;
+  T prob_density(vect_t const& pt) const;
 
   //: The probability density integrated over a box (returns a probability)
-  virtual T probability(vect_t const& min_pt,
-                        vect_t const& max_pt) const;
+  T probability(vect_t const& min_pt,
+                vect_t const& max_pt) const;
 
+  //: the distance and index of the nearest sample
+  T nearest_sample(const vect_t& pt, unsigned & index) const;
  protected:
   T bandwidth_;
   bool bandwidth_adapted_;
