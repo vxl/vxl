@@ -17,7 +17,7 @@
 
 #include <vcl_sstream.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
 
 #include "bmsh3d_edge.h"
 #include "bmsh3d_face.h"
