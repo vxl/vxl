@@ -27,11 +27,13 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 # basic services package
 SUBDIRS(bbas)
 
-# segmentation package
-SUBDIRS(bseg)
+IF( BUILD_GEL )
+  # segmentation package
+  SUBDIRS(bseg)
 
-# video view library
-SUBDIRS(vvid)
+  # video view library
+  SUBDIRS(vvid)
+ENDIF( BUILD_GEL )
 
 # multiview library
 SUBDIRS(bmvl)

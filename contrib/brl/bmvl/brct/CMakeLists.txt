@@ -2,7 +2,6 @@
 
 # 3D reconstruction from multiple views library
 
-IF( BUILD_GEL )
 IF( BUILD_OXL )
 IF( BUILD_RPL )
 
@@ -41,4 +40,3 @@ ENDIF(BUILD_TESTING)
 
 ENDIF( BUILD_RPL )
 ENDIF( BUILD_OXL )
-ENDIF( BUILD_GEL )

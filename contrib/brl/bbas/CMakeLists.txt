@@ -2,26 +2,8 @@
 # main package for basic operations common to all libraries
 # All libraries are mutually independent, except for bxml <-- bdgl
 
-# spatial object algorithms
-SUBDIRS(bsol)
-
-# topology algorithms
-SUBDIRS(btol)
-
-# digital library algorithms
-SUBDIRS(bdgl)
-
 # xml<->vxl conversion 
 SUBDIRS(bxml)
-
-# basic vgui classes
-SUBDIRS(bgui)
-
-# coin3D incorporated vgui classes
-SUBDIRS(bgui3d)
-
-# staged vgl development area
-SUBDIRS(bvgl)
 
 # uncertainty geometry library
 SUBDIRS(bugl)
@@ -43,17 +25,37 @@ SUBDIRS(bdpg)
 #3D mesh library 
 SUBDIRS(bmsh3d)
 
-#3D modeling library
-SUBDIRS(bwm)
-
 #In memory relational database
 SUBDIRS(brdb)
 
 #Brown Imaging Library
 SUBDIRS(bil)
 
-#Indexed Mesh Library
-SUBDIRS(imesh)
+IF( BUILD_GEL )
+  # spatial object algorithms
+  SUBDIRS(bsol)
+
+  # topology algorithms
+  SUBDIRS(btol)
+
+  # digital library algorithms
+  SUBDIRS(bdgl)
+
+  # basic vgui classes
+  SUBDIRS(bgui)
+
+  # coin3D incorporated vgui classes
+  SUBDIRS(bgui3d)
+
+  # staged vgl development area
+  SUBDIRS(bvgl)
+
+  #3D modeling library
+  SUBDIRS(bwm)
+
+  #Indexed Mesh Library
+  SUBDIRS(imesh)
+ENDIF( BUILD_GEL )
 
 OPTION( BUILD_CONTRIB_VIDL2 "Build Experimental Video Streaming Library" YES )
 IF(BUILD_CONTRIB_VIDL2)

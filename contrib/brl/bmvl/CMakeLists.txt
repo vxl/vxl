@@ -8,11 +8,14 @@ INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 # camera calibration
 SUBDIRS(bcal)
 
-# 3-d reconstruction 
-SUBDIRS(brct)
+IF( BUILD_GEL )
+  # 3-d reconstruction
+  SUBDIRS(brct)
 
-# 3-d tomography
-SUBDIRS(btom)
+  # 3-d tomography
+  SUBDIRS(btom)
 
-# multi-view gui stuff , xerces is required to read stuff in from Tjr
-SUBDIRS(bmvv)
+  # multi-view gui stuff , xerces is required to read stuff in from Tjr
+  SUBDIRS(bmvv)
+ENDIF( BUILD_GEL )
+
