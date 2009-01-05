@@ -83,10 +83,6 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
  public:
   //actually a scalar
   typedef typename bsta_distribution<T,1>::vector_type vect_t;
-  //: the covariance type
-  typedef typename T covar_type;
-  //: for convenence in defining functors
-  typedef typename T math_t;
 
   bsta_parzen_sphere(): bandwidth_(T(1)),
     bandwidth_adapted_(false) {}// no samples
@@ -111,7 +107,7 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
   typename bsta_distribution<T,1>::vector_type mean() const;
 
   //: The covariance of the distribution (the sample covariance + bandwidth*I)
-  covar_type covar() const;
+  T covar() const;
 
   //: The probability density at sample pt
   T prob_density(vect_t const& pt) const;

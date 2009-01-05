@@ -135,17 +135,15 @@ typename bsta_parzen_sphere<T,n>::covar_type bsta_parzen_sphere<T,n>::covar() co
 // the covariance matrix for a Parzen distribution
 // specialization for 1-d case
 template <class T >
-typename bsta_parzen_sphere<T,1>::covar_type bsta_parzen_sphere<T,1>::
-covar() const
+T bsta_parzen_sphere<T,1>::covar() const
 {
   typedef typename bsta_parzen<T,1>::vect_t v_type;
   typedef typename bsta_parzen<T,1>::sv_const_it sit_t;
-  typedef typename bsta_parzen_sphere<T,1>::covar_type cov_t;
   unsigned size = bsta_parzen<T,1>::samples_.size();
   if(!size)
-    return cov_t(0);
+    return T(0);
   //compute the sample covariance matrix
-  cov_t scovar(0);
+  T scovar(0);
   for (sit_t sit = bsta_parzen<T,1>::samples_.begin();
        sit != bsta_parzen<T,1>::samples_.end(); ++sit)
     {
