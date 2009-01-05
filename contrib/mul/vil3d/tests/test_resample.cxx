@@ -3,7 +3,9 @@
 #include <vcl_iostream.h>
 #include <vil3d/vil3d_resample_simple.h>
 #include <vil3d/vil3d_resample_trilinear.h>
+#include <vil3d/vil3d_resample_tricubic.h>
 #include <vil3d/vil3d_print.h>
+#include <vxl_config.h>
 
 
 //==================================================================================
@@ -45,6 +47,45 @@ static void test_resample_simple()
   TEST("All voxel values correct", all_voxs_correct, true);
 }
 
+static void test_resample_tricubic()
+{
+  vcl_cout << "*******************************\n"
+           << " Testing vil3d_resample_tricubic\n"
+           << "*******************************\n";
+
+  unsigned sni=6;
+  unsigned snj=6;
+  unsigned snk=6;
+  vil3d_image_view<vxl_uint_32> src(sni, snj, snk);
+  for (int i=0; i<sni; ++i)
+    for (int j=0; j<snj; ++j)
+      for (int k=0; k<snk; ++k)
+        src(i,j,k) = 10*k + 100*j + 1000*i;
+
+  vil3d_image_view<vxl_uint_32> dst;
+  vil3d_resample_tricubic_edge_trilin_extend(src, dst, 11, 11, 11);
+  unsigned dni = dst.ni();
+  unsigned dnj = dst.nj();
+  unsigned dnk = dst.nk();
+
+  // Testing
+  vcl_cout << "src image:" << vcl_endl;
+  vil3d_print_all(vcl_cout, src);
+  vcl_cout << "dst image:" << vcl_endl;
+  vil3d_print_all(vcl_cout, dst);
+  ///
+
+  bool all_voxs_correct = true;
+  for (int k=0; k<dnk; ++k)
+    for (int j=0; j<dnj; ++j)
+      for (int i=0; i<dni; ++i)
+      {
+        all_voxs_correct = all_voxs_correct && ( (int)(10*k + 100*j + 1000*i)==2*dst(i,j,k));
+      }
+
+
+  TEST("All voxel values correct", all_voxs_correct, true);
+}
 
 //==================================================================================
 static void test_resample_trilinear()
@@ -179,6 +220,7 @@ static void test_resample()
   test_resample_trilinear();
   test_resample_trilinear_edge_extend();
   test_resample_trilinear_scale_2();
+  test_resample_tricubic();
 }
 
 
