@@ -224,6 +224,9 @@ SOURCE=.\vimt3d_resample_trilinear.h
 # Begin Source File
 SOURCE=.\vimt3d_save.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_resample_tricubic.h
+# End Source File
 # End Group
 # End Target
 # End Project
