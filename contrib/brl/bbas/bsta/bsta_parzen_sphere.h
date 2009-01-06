@@ -56,7 +56,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
     {bandwidth_adapted_=bandwidth_adapted;}
 
   //: The mean of the distribution (just the sample mean)
-  typename bsta_distribution<T,n>::vector_type mean() const;
+  vnl_vector_fixed<T,n> mean() const;
 
   //: The covariance of the distribution (the sample covariance + bandwidth*I)
   covar_type covar() const;
@@ -104,7 +104,7 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
     {bandwidth_adapted_=bandwidth_adapted;}
 
   //: The mean of the distribution (just the sample mean)
-  typename bsta_distribution<T,1>::vector_type mean() const;
+  T mean() const;
 
   //: The covariance of the distribution (the sample covariance + bandwidth*I)
   T covar() const;

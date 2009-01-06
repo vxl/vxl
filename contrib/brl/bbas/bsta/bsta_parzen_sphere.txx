@@ -78,16 +78,14 @@ T compute_probability(typename bsta_distribution<T,n>::vector_type const& min_pt
 }; // end namespace
 // general case
 template <class T, unsigned int n>
-typename bsta_distribution<T,n>::vector_type 
-bsta_parzen_sphere<T,n>::mean() const
+vnl_vector_fixed<T,n> bsta_parzen_sphere<T,n>::mean() const
 {
   return compute_mean<T,n>(bsta_parzen<T,n>::samples_);
 }
 
 // for scalar samples
 template <class T >
-typename bsta_distribution<T,1>::vector_type 
-bsta_parzen_sphere<T,1>::mean() const
+T bsta_parzen_sphere<T,1>::mean() const
 {
   return compute_mean<T,1>(bsta_parzen<T,1>::samples_);
 }
