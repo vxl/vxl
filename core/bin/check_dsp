@@ -231,6 +231,7 @@ foreach my $dir (@DIRS)
   $cmakefile =~ s/\#\s*(fax3sm_winnt\.c)/$1/;                           # i.e.: remove "#" in v3p/tiff
   $cmakefile =~ s/\#\s*(ADD_TEST\s*\(\s*vil1_test_save_load_image)/$1/; # i.e.: remove "#" in vil1/tests
   $cmakefile =~ s/(ADD_LIBRARY\(bmdl_batch\s+)MODULE\s+/$1/;            # i.e.: remove "MODULE" in bmdl_batch
+  $cmakefile =~ s/\# (AUX_SOURCE_DIRECTORY)/$1/g if ($dir =~ m!\btbl/v.pl!); # add back Templates subdirs in tbl
 
   # General manipulations of the CMakeLists.txt content:
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
