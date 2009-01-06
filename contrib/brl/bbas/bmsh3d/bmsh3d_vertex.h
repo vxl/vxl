@@ -274,6 +274,6 @@ bmsh3d_face* get_non_manifold_1ring_extra_Fs(bmsh3d_vertex* V);
 
 bool is_F_V_incidence(bmsh3d_vertex* V, const bmsh3d_vertex* V1, const bmsh3d_vertex* V2);
 
-bmsh3d_edge* V_find_other_E(const bmsh3d_vertex* V, const bmsh3d_edge* inputE);
+const bmsh3d_edge* V_find_other_E(const bmsh3d_vertex* V, const bmsh3d_edge* inputE);
 
 #endif // bmsh3d_vertex_h_

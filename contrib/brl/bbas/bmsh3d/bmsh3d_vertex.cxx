@@ -58,13 +58,13 @@ int bmsh3d_vertex::get_incident_Fs(vcl_set<bmsh3d_face*>& face_set)
 VTOPO_TYPE bmsh3d_vertex::detect_vtopo_type() const
 {
   //1) If there is no incident edge, return VTOPO_ISOLATED.
-  if (has_incident_Es() == false)
+  if (! has_incident_Es())
     return VTOPO_ISOLATED;
 
   //2) Reset all incident edges to be unvisited.
   unsigned int countE = 0;
   for (bmsh3d_ptr_node* cur = E_list_; cur != NULL; cur = cur->next()) {
-    bmsh3d_edge* E = (bmsh3d_edge*) cur->ptr();
+    const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     E->set_i_visited(0);
     countE++;
   }
@@ -128,7 +128,7 @@ unsigned int bmsh3d_vertex::check_2_manifold_(const bmsh3d_edge* startE,
                                               VTOPO_TYPE& cond) const
 {
   unsigned int nE = 0;
-  bmsh3d_edge* E = (bmsh3d_edge*) startE;
+  const bmsh3d_edge* E = (const bmsh3d_edge*) startE;
   bmsh3d_halfedge* startHE = E->halfedge();
   if (startHE == NULL) {
     cond = VTOPO_EDGE_ONLY;
@@ -164,7 +164,7 @@ const bmsh3d_edge* bmsh3d_vertex::find_unvisited_E_() const
 {
   for (bmsh3d_ptr_node* cur = E_list_; cur != NULL; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
-    if (E->b_visited() == false)
+    if (! E->b_visited())
       return E;
   }
   return NULL;
@@ -311,9 +311,9 @@ bmsh3d_edge* E_sharing_2V(const bmsh3d_vertex* V1,
                           const bmsh3d_vertex* V2)
 {
   for (bmsh3d_ptr_node* cur = V1->E_list(); cur != NULL; cur = cur->next()) {
-    bmsh3d_edge* E = (bmsh3d_edge*) cur->ptr();
+    const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (E->is_V_incident(V2))
-      return E;
+      return (bmsh3d_edge*)E; // casting away const!!!
   }
   return NULL;
 }
@@ -340,8 +340,8 @@ bmsh3d_face* get_non_manifold_1ring_extra_Fs(bmsh3d_vertex* V)
   //Reset all incident edges to be unvisited.
   const bmsh3d_edge* firstE = V->get_1st_incident_E();
   for (bmsh3d_ptr_node* cur = V->E_list(); cur != NULL; cur = cur->next()) {
-    bmsh3d_edge* E = (bmsh3d_edge*) cur->ptr();
-    if (E->b_visited() == false)
+    const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
+    if (! E->b_visited())
       E->set_i_visited(0);
   }
 
@@ -369,7 +369,7 @@ bool is_F_V_incidence(bmsh3d_vertex* V, const bmsh3d_vertex* V1, const bmsh3d_ve
 {
   assert(V != V1);
   assert(V != V2);
-  if (V->has_incident_Es() == false)
+  if (! V->has_incident_Es())
     return false; //if V has no incident edges or faces, no problem.
 
   //Go through V's incident edges and check if any one is (V, V1) or (V, V2).
@@ -381,10 +381,10 @@ bool is_F_V_incidence(bmsh3d_vertex* V, const bmsh3d_vertex* V1, const bmsh3d_ve
   return true;
 }
 
-bmsh3d_edge* V_find_other_E(const bmsh3d_vertex* V, const bmsh3d_edge* inputE)
+const bmsh3d_edge* V_find_other_E(const bmsh3d_vertex* V, const bmsh3d_edge* inputE)
 {
   for (bmsh3d_ptr_node* cur = V->E_list(); cur != NULL; cur = cur->next()) {
-    bmsh3d_edge* E = (bmsh3d_edge*) cur->ptr();
+    const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (E == inputE)
       continue;
     assert(E);
