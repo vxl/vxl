@@ -18,13 +18,14 @@ static void test_voxel_world_mog_image()
 {
   START("bvxm_voxel_world_mog_image test");
 
-  vcl_string model_dir("./test_world_dir");
-  if (vul_file::exists(model_dir)) {
-    vcl_string command = "rm -rf " + model_dir;
-    system(command.c_str());
+  vcl_string model_dir("test_world_dir");
+  if (vul_file::is_directory(model_dir))
+    vul_file::delete_file_glob(model_dir+"/*");
+  else {
+    if (vul_file::exists(model_dir))
+      vul_file::delete_file_glob(model_dir);
+    vul_file::make_directory(model_dir);
   }
-
-  vul_file::make_directory(model_dir);
 
   unsigned nx = 200;
   unsigned ny = 200;
@@ -32,7 +33,8 @@ static void test_voxel_world_mog_image()
   vgl_point_3d<float> corner(0,0,0);
   vgl_vector_3d<unsigned> num_voxels(nx,ny,nz);
   float voxel_length = 1.0f;
-unsigned scale=0;
+  unsigned scale=0;
+
   // create a synthetic world
   bvxm_world_params_sptr params = new bvxm_world_params();
   params->set_params(model_dir, corner, num_voxels, voxel_length);
@@ -97,7 +99,7 @@ unsigned scale=0;
     apm_processor.update(*apm_it, plane_img, ones);
   }
 
- // now create a couple of cameras and generate the expected images
+  // now create a couple of cameras and generate the expected images
   vnl_matrix_fixed<double,3,3> K(0.0);
   double f = 550.0;
   double offx = 320.0;
