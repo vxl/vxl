@@ -8,8 +8,8 @@
 #include <vxl_config.h>
 
 
-//==================================================================================
-//==================================================================================
+//==============================================================================
+//==============================================================================
 static void test_resample_simple()
 {
   vcl_cout << "*******************************\n"
@@ -57,9 +57,9 @@ static void test_resample_tricubic()
   unsigned snj=6;
   unsigned snk=6;
   vil3d_image_view<vxl_uint_32> src(sni, snj, snk);
-  for (int i=0; i<sni; ++i)
-    for (int j=0; j<snj; ++j)
-      for (int k=0; k<snk; ++k)
+  for (unsigned int i=0; i<sni; ++i)
+    for (unsigned int j=0; j<snj; ++j)
+      for (unsigned int k=0; k<snk; ++k)
         src(i,j,k) = 10*k + 100*j + 1000*i;
 
   vil3d_image_view<vxl_uint_32> dst;
@@ -76,18 +76,17 @@ static void test_resample_tricubic()
   ///
 
   bool all_voxs_correct = true;
-  for (int k=0; k<dnk; ++k)
-    for (int j=0; j<dnj; ++j)
-      for (int i=0; i<dni; ++i)
+  for (unsigned int k=0; k<dnk; ++k)
+    for (unsigned int j=0; j<dnj; ++j)
+      for (unsigned int i=0; i<dni; ++i)
       {
-        all_voxs_correct = all_voxs_correct && ( (int)(10*k + 100*j + 1000*i)==2*dst(i,j,k));
+        all_voxs_correct = all_voxs_correct && 10*k+100*j+1000*i==2*dst(i,j,k);
       }
-
 
   TEST("All voxel values correct", all_voxs_correct, true);
 }
 
-//==================================================================================
+//==============================================================================
 static void test_resample_trilinear()
 {
   vcl_cout << "**********************************\n"
@@ -109,12 +108,10 @@ static void test_resample_trilinear()
   unsigned dnj = dst.nj();
   unsigned dnk = dst.nk();
 
-
   // Testing
   vil3d_print_all(vcl_cout, src);
   vil3d_print_all(vcl_cout, dst);
   ///
-
 
   bool all_voxs_correct = true;
   for (unsigned i=0; i+1<dni; ++i)
@@ -126,7 +123,7 @@ static void test_resample_trilinear()
 }
 
 
-//==================================================================================
+//==============================================================================
 static void test_resample_trilinear_edge_extend()
 {
   vcl_cout << "**********************************************\n"
@@ -144,23 +141,20 @@ static void test_resample_trilinear_edge_extend()
 
   vil3d_image_view<int> dst;
   vil3d_resample_trilinear_edge_extend(src, dst,
-    0.0, 0.0, 0.0,
-    0.5, 0.0, 0.0,
-    0.0, 0.5, 0.0,
-    0.0, 0.0, 0.5,
-    5, 5, 6);
-
+                                       0.0, 0.0, 0.0,
+                                       0.5, 0.0, 0.0,
+                                       0.0, 0.5, 0.0,
+                                       0.0, 0.0, 0.5,
+                                       5, 5, 6);
 
   unsigned dni = dst.ni();
   unsigned dnj = dst.nj();
   unsigned dnk = dst.nk();
 
-
   // Testing
   vil3d_print_all(vcl_cout, src);
   vil3d_print_all(vcl_cout, dst);
   ///
-
 
   bool all_voxs_correct = true;
   for (unsigned i=0; i<dni; ++i)
@@ -173,7 +167,7 @@ static void test_resample_trilinear_edge_extend()
   TEST("Voxel values correct", all_voxs_correct, true);
 }
 
-//==================================================================================
+//==============================================================================
 static void test_resample_trilinear_scale_2()
 {
   vcl_cout << "******************************************\n"
@@ -195,12 +189,10 @@ static void test_resample_trilinear_scale_2()
   unsigned dnj = dst.nj();
   unsigned dnk = dst.nk();
 
-
   // Testing
   vil3d_print_all(vcl_cout, src);
   vil3d_print_all(vcl_cout, dst);
   ///
-
 
   bool all_voxs_correct = true;
   for (unsigned i=0; i<dni; ++i)
@@ -212,8 +204,8 @@ static void test_resample_trilinear_scale_2()
 }
 
 
-//==================================================================================
-//==================================================================================
+//==============================================================================
+//==============================================================================
 static void test_resample()
 {
   test_resample_simple();
@@ -224,6 +216,6 @@ static void test_resample()
 }
 
 
-//==================================================================================
-//==================================================================================
+//==============================================================================
+//==============================================================================
 TESTMAIN(test_resample);
