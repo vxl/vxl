@@ -230,11 +230,18 @@ MAIN( test_bvxm_normalize_image_process )
   vnl_float_3 a = *(image_slab_rgb.begin());
 
   //: create a GREY mog image from a known world
-  vcl_string command = "rm -rf ./test_world_dir";
-  system(command.c_str());
+  vcl_string model_dir("test_world_dir");
+  if (vul_file::is_directory(model_dir))
+    vul_file::delete_file_glob(model_dir+"/*");
+  else {
+    if (vul_file::exists(model_dir))
+      vul_file::delete_file_glob(model_dir);
+    vul_file::make_directory(model_dir);
+  }
+
   vil_image_view_base_sptr expected_image = new vil_image_view<unsigned char>(640,480);
   bvxm_voxel_world_sptr vox_world;
-  bvxm_voxel_slab_base_sptr mog_image = create_mog_image_using_grey_processor("./test_world_dir", vox_world, expected_image);
+  bvxm_voxel_slab_base_sptr mog_image = create_mog_image_using_grey_processor(model_dir.c_str(), vox_world, expected_image);
   TEST("testing world creation", vox_world->get_params()->num_voxels().z(), 4);
   TEST("testing mixture of gaussian image creation", !mog_image, false);
   bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
