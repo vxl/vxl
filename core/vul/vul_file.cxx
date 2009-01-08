@@ -6,7 +6,12 @@
 // \file
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   02 Nov 98
+// \date   02 Nov 1998
+//
+// \verbatim
+//  Modifications
+//   08 Jan 2009  Peter Vanroose- simplified "delete_file_glob()" implementation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -71,7 +76,8 @@ bool vul_file::is_drive(char const* fn)
 #endif
 
 //: Make a writable directory, including any necessary parents.
-// Returns true if successful, or if the directory alredy exists.
+// Returns true if successful, or if the directory already exists.
+// Implemented by calling itself recursively on the parent directory.
 bool vul_file::make_directory_path(char const* filename)
 {
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -198,14 +204,13 @@ static unsigned replace(char from, char to, vcl_string &s)
 // E.g. \c delete_file_glob("*"); will delete all the files in the
 // current directory on most operating systems.
 // Takes Posix path separators i.e. '/'
-bool vul_file::delete_file_glob(char const* file_glob)
+bool vul_file::delete_file_glob(vcl_string const& file_glob)
 {
-  vcl_string command = file_glob;
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
+  vcl_string command = "del " + file_glob;
   replace('/', '\\', command);
-  command = "del " + command;
 #else
-  command = "rm " + command;
+  vcl_string command = "/bin/rm -f " + file_glob;
 #endif
   return vcl_system(command.c_str())==0;
 }

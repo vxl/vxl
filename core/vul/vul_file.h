@@ -110,7 +110,9 @@ struct vul_file
   // E.g. \c delete_file_glob("*"); will delete all the files in the
   // current directory on most operating systems.
   // \return true if successful.
-  static bool delete_file_glob(char const* file_glob);
+  static bool delete_file_glob(vcl_string const& file_glob);
+  static bool delete_file_glob(char const* file_glob)
+  { return delete_file_glob(vcl_string(file_glob)); }
 };
 
 inline bool vul_file_exists(char const *f) { return vul_file::exists(f); }
