@@ -30,13 +30,12 @@ static void test_math_value_range()
   }
 
   // Check the min/max values
-  int min;
-  int max;
+  int min, max;
   vil_math_value_range(img, min, max);
   TEST("vil_math_value_range(): min", min==1, true);
   TEST("vil_math_value_range(): max", max==100, true);
 
-  int val;
+  int val = 0; // initialised to avoid compiler warning
 
   // Test a likely pair of percentiles
   vil_math_value_range_percentile(img, 0.05, val);
