@@ -1,6 +1,7 @@
 // This is core/vul/tests/test_vul_file.cxx
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
+#include <vcl_fstream.h>
 #include <testlib/testlib_test.h>
 
 
@@ -28,14 +29,21 @@ void test_vul_file()
   vpl_rmdir((rootdir+"/test_make_dir_path/a").c_str());
   vpl_rmdir((rootdir+"/test_make_dir_path").c_str());
 
-  TEST("Directory doesn't exist", vul_file::is_directory(rootdir+"/test_make_dir_path"), false);
+  TEST("Directory doesn't exist", vul_file::exists(rootdir+"/test_make_dir_path"), false);
   TEST("make_directory_path", vul_file::make_directory_path(rootdir+"/test_make_dir_path/a/b"), true);
   TEST("Directory does exist", vul_file::is_directory(rootdir+"/test_make_dir_path/a/b"), true);
 
   vpl_rmdir((rootdir+"/test_make_dir_path/a/b").c_str());
+  {
+    vcl_ofstream x((rootdir+"/test_make_dir_path/a/b").c_str()); x << ' ';
+  }
+  TEST("File exists ...", vul_file::exists(rootdir+"/test_make_dir_path/a/b"), true);
+  TEST("... but isn't a directory", vul_file::is_directory(rootdir+"/test_make_dir_path/a/b"), false);
+
+  vpl_unlink((rootdir+"/test_make_dir_path/a/b").c_str());
   vpl_rmdir((rootdir+"/test_make_dir_path/a").c_str());
   vpl_rmdir((rootdir+"/test_make_dir_path").c_str());
-  TEST("Directory doesn't exist", vul_file::is_directory(rootdir+"/test_make_dir_path"), false);
+  TEST("Directory doesn't exist", vul_file::exists(rootdir+"/test_make_dir_path"), false);
 
 }
 
