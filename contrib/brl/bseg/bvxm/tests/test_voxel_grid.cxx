@@ -16,8 +16,8 @@ static void test_voxel_grid()
   START("bvxm_voxel_grid test");
 
   // we need temporary disk storage for this test.
-  vcl_string storage_fname("./bvxm_voxel_grid_test_temp.vox");
-  vcl_string storage_cached_fname("./bvxm_voxel_grid_cached_test_temp.vox");
+  vcl_string storage_fname("bvxm_voxel_grid_test_temp.vox");
+  vcl_string storage_cached_fname("bvxm_voxel_grid_cached_test_temp.vox");
   // remove file if exists from previous test.
   if (vul_file::exists(storage_fname.c_str())) {
     vul_file::delete_file_glob(storage_fname.c_str());
@@ -51,7 +51,7 @@ static void test_voxel_grid()
     TEST(test_name.c_str(),nobs,0);
 
     // fill with test data
-    float init_val = 0.5;
+    float init_val = 0.5f;
     grid->initialize_data(init_val);
     bool init_check = true;
     bool write_read_check = true;
@@ -70,7 +70,7 @@ static void test_voxel_grid()
     vcl_cout << "read/write: ";
     bvxm_voxel_grid<float>::iterator slab_it;
     for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
-      vcl_cout << ".";
+      vcl_cout << '.';
       bvxm_voxel_slab<float>::iterator vit;
       for (vit = slab_it->begin(); vit != slab_it->end(); vit++, count++) {
         if (*vit != init_val) {
@@ -96,7 +96,7 @@ static void test_voxel_grid()
     vcl_cout << "read: ";
     bvxm_voxel_grid<float>::const_iterator slab_it_const;
     for (slab_it_const = grid->begin(); slab_it_const != grid->end(); ++slab_it_const) {
-      vcl_cout << ".";
+      vcl_cout << '.';
       bvxm_voxel_slab<float>::const_iterator vit;
       for (vit = slab_it_const->begin(); vit != slab_it_const->end(); vit++, count++) {
         if (*vit != static_cast<float>(count)) {
@@ -120,7 +120,6 @@ static void test_voxel_grid()
   vul_file::delete_file_glob(storage_fname.c_str());
   return;
 }
-
 
 
 TESTMAIN( test_voxel_grid );

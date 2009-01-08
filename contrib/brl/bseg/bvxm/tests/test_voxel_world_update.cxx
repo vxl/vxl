@@ -15,12 +15,18 @@ static void test_voxel_world_update()
 {
   START("bvxm_voxel_world_update test");
 
-  vcl_string model_dir("./test_world_dir");
-  vul_file::make_directory(model_dir);
+  vcl_string model_dir("test_world_dir");
+  if (vul_file::is_directory(model_dir))
+    vul_file::delete_file_glob(model_dir+"/*");
+  else {
+    if (vul_file::exists(model_dir))
+      vul_file::delete_file_glob(model_dir);
+    vul_file::make_directory(model_dir);
+  }
 
-  vgl_point_3d<float> grid_corner(0,0,0);
+  vgl_point_3d<float> grid_corner(0.f,0.f,0.f);
   vgl_vector_3d<unsigned> grid_size(300,300,120);
-  float vox_len = 0.5;
+  float vox_len = 0.5f;
 #if 0
   bvxm_world_params::appearance_model_type apm_type = bvxm_world_params::mog_grey;
 #endif
@@ -41,7 +47,7 @@ static void test_voxel_world_update()
   world.clean_grids();
 
   //creating a synthetic projective camera
-  vnl_matrix_fixed<double,3,4> camera_matrix ;
+  vnl_matrix_fixed<double,3,4> camera_matrix;
   camera_matrix.put(0,0,1);
   camera_matrix.put(0,1,0);
   camera_matrix.put(0,2,0);
@@ -75,8 +81,6 @@ static void test_voxel_world_update()
 
   //world.update<APM_MOG_RGB> (observation, prob_map, mask, 10);
   //world.update<APM_MOG_RGB> (observation, prob_map, mask, 15);
-
-  return;
 }
 
 TESTMAIN( test_voxel_world_update );

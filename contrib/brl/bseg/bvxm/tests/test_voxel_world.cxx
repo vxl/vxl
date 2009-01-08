@@ -17,12 +17,18 @@ static void test_voxel_world()
 {
   START("bvxm_voxel_world test");
 
-  vcl_string model_dir("./test_world_dir");
-  vul_file::make_directory(model_dir);
+  vcl_string model_dir("test_world_dir");
+  if (vul_file::is_directory(model_dir))
+    vul_file::delete_file_glob(model_dir+"/*");
+  else {
+    if (vul_file::exists(model_dir))
+      vul_file::delete_file_glob(model_dir);
+    vul_file::make_directory(model_dir);
+  }
 
-  vgl_point_3d<float> grid_corner(2170.0, -1480.0, -30.0);
+  vgl_point_3d<float> grid_corner(2170.0f, -1480.0f, -30.0f);
   vgl_vector_3d<unsigned> grid_size(300,300,120);
-  float vox_len = 0.5;
+  float vox_len = 0.5f;
 
  //bvxm_world_params::appearance_model_type apm_type = bvxm_world_params::mog_grey;
   // setup global parameters
@@ -39,7 +45,6 @@ static void test_voxel_world()
 
   // initialize the data
   bvxm_mog_grey_processor::apm_datatype init_apm;
-
 
 
 #if 0

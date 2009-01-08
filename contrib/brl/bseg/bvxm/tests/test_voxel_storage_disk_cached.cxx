@@ -15,6 +15,8 @@ static void test_voxel_storage_disk_cached()
 
   // we need temporary disk storage for this test.
   vcl_string storage_fname("bvxm_voxel_storage_cached_test_temp.vox");
+  if (vul_file::exists(storage_fname)) // accidentally left from an earlier run
+    vul_file::delete_file_glob(storage_fname);
   vgl_vector_3d<unsigned> grid_size(300,300,120);
 
   bool init_check = true;
@@ -26,15 +28,14 @@ static void test_voxel_storage_disk_cached()
     bvxm_voxel_storage_disk_cached<float> storage(storage_fname,grid_size,max_cache_size);
 
     // fill with test data
-    float init_val = 0.5;
+    float init_val = 0.5f;
     storage.initialize_data(init_val);
-
 
     // read in each slice, check that init_val was set, and fill with new value
     unsigned count = 0;
     vcl_cout << "read/write: ";
     for (unsigned i=0; i < storage.nz(); i++) {
-      vcl_cout << ".";
+      vcl_cout << '.';
       bvxm_voxel_slab<float> slab = storage.get_slab(i,1);
       bvxm_voxel_slab<float>::iterator vit;
       for (vit = slab.begin(); vit != slab.end(); vit++, count++) {
@@ -62,7 +63,7 @@ static void test_voxel_storage_disk_cached()
     unsigned count = 0;
     vcl_cout << "read: ";
     for (unsigned i=0; i < storage.nz(); i++) {
-      vcl_cout << ".";
+      vcl_cout << '.';
       bvxm_voxel_slab<float> slab = storage.get_slab(i,1);
       bvxm_voxel_slab<float>::iterator vit;
       for (vit = slab.begin(); vit != slab.end(); vit++, count++) {
@@ -82,7 +83,6 @@ static void test_voxel_storage_disk_cached()
   vul_file::delete_file_glob(storage_fname.c_str());
   return;
 }
-
 
 
 TESTMAIN( test_voxel_storage_disk_cached );

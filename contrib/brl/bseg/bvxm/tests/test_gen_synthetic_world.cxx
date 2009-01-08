@@ -341,7 +341,7 @@ bool gen_images(vgl_vector_3d<unsigned> grid_size,
     update_status = processor.update(*apm_slab_it, *obs_it, *weight);
   }
 
-  vcl_string path = "./test_gen_synthetic_world/test_img";
+  vcl_string path = "test_gen_synthetic_world/test_img";
   for (unsigned i=0; i<cameras.size(); i++) {
     vil_image_view_base_sptr img_arg;
     vil_image_view<float>* mask = new vil_image_view<float>(IMAGE_U, IMAGE_V);
@@ -385,7 +385,7 @@ bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size
       }
   }
 
-  vcl_string path = "./test_gen_synthetic_world/test_lidar";
+  vcl_string path = "test_gen_synthetic_world/test_lidar";
   vcl_stringstream s;
   s << path << ".tif";
   vil_save(lidar, s.str().c_str());
@@ -484,7 +484,7 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
                           bvxm_voxel_grid<float>* intensity_grid)
 {
   // fill with test data
-  float init_val = 0.00;//0.01;
+  float init_val = 0.00f;//0.01f;
   ocp_grid->initialize_data(init_val);
   intensity_grid->initialize_data(init_val);
 
@@ -577,7 +577,7 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
           }
 #if 0
           // generate a random intensity
-          float r = (rand() % 256)/255.0;    // float face_intens[6] = {0.3, 0.45, 0.6, 0.75, 0.85, 1.0};
+          float r = (rand() % 256)/255.0f;   // float face_intens[6] = {0.3f, 0.45f, 0.6f, 0.75f, 0.85f, 1.0f};
           if (face1 != -1)
             (*intensity_slab_it)(i,j,0) = r; // face_intens[face1];
           else
@@ -600,7 +600,7 @@ void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
                            bvxm_voxel_grid<float>* intensity_grid)
 {
   // fill with test data
-  float init_val = 0.0;
+  float init_val = 0.0f;
   ocp_grid->initialize_data(init_val);
   intensity_grid->initialize_data(init_val);
 
@@ -666,13 +666,32 @@ static void test_gen_synthetic_world()
   START("test_gen_synthetic_world test");
 
   // create the directory under build to put the intermediate files and the generated images
-  vcl_string model_dir("./test_gen_synthetic_world");
-  vul_file::make_directory(model_dir);
+  vcl_string model_dir("test_gen_synthetic_world");
+  if (vul_file::is_directory(model_dir))
+    vul_file::delete_file_glob(model_dir+"/*");
+  else {
+    if (vul_file::exists(model_dir))
+      vul_file::delete_file_glob(model_dir);
+    vul_file::make_directory(model_dir);
+  }
 
-  vcl_string recon_model_dir("./recon_world");
-  vul_file::make_directory(recon_model_dir);
+  vcl_string recon_model_dir("recon_world");
+  if (vul_file::is_directory(recon_model_dir))
+    vul_file::delete_file_glob(recon_model_dir+"/*");
+  else {
+    if (vul_file::exists(recon_model_dir))
+      vul_file::delete_file_glob(recon_model_dir);
+    vul_file::make_directory(recon_model_dir);
+  }
 
-  vul_file::make_directory("./test_gen_cameras");
+  vcl_string test_gen_cameras("test_gen_cameras");
+  if (vul_file::is_directory(test_gen_cameras))
+    vul_file::delete_file_glob(test_gen_cameras+"/*");
+  else {
+    if (vul_file::exists(test_gen_cameras))
+      vul_file::delete_file_glob(test_gen_cameras);
+    vul_file::make_directory(test_gen_cameras);
+  }
 
   vgl_vector_3d<unsigned> grid_size(nx,ny,nz);
   vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
@@ -683,8 +702,8 @@ static void test_gen_synthetic_world()
   float max_ocp_prob = 0.999f;
 
   bvxm_world_params_sptr world_params = new bvxm_world_params();
-  world_params->set_params("./test_gen_synthetic_world",
-                           vgl_point_3d<float> (0,0,0),
+  world_params->set_params(model_dir.c_str(),
+                           vgl_point_3d<float> (0.f,0.f,0.f),
                            vgl_vector_3d<unsigned int>(nx, ny, nz),
                            vox_length,bgeo_lvcs_sptr(0),min_ocp_prob,max_ocp_prob,max_scale);
   bvxm_voxel_world_sptr world = new bvxm_voxel_world();
@@ -695,7 +714,7 @@ static void test_gen_synthetic_world()
   bvxm_voxel_world_sptr recon_world = new bvxm_voxel_world();
 
   bvxm_world_params_sptr recon_world_params = new bvxm_world_params();
-  recon_world_params->set_params("./recon_world",vgl_point_3d<float> (0,0,0),
+  recon_world_params->set_params(recon_model_dir.c_str(),vgl_point_3d<float> (0.f,0.f,0.f),
                                  vgl_vector_3d<unsigned int>(nx, ny, nz), vox_length,bgeo_lvcs_sptr(0),min_ocp_prob,max_ocp_prob, max_scale);
   recon_world->set_params(recon_world_params);
   recon_world->clean_grids();
@@ -712,7 +731,7 @@ static void test_gen_synthetic_world()
 #endif
   vgl_vector_3d<unsigned> s_grid_size=world_params->num_voxels(0);
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
-    ("test_gen_synthetic_world/intensity.vox",s_grid_size);
+    ((model_dir+"/intensity.vox").c_str(),s_grid_size);
 
   gen_voxel_world_2box(s_grid_size, voxel_world, ocp_grid, intensity_grid);
   vcl_vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
@@ -727,7 +746,7 @@ static void test_gen_synthetic_world()
 
 
   vcl_stringstream of;
-  of<<"./test_gen_synthetic_world/ocp"<<0<<".raw";
+  of<<"test_gen_synthetic_world/ocp"<<0<<".raw";
   vcl_string ocp_raw_filename=of.str();
   world->save_occupancy_raw(ocp_raw_filename, 0);
   for (unsigned scale=0;scale<max_scale;scale++)
@@ -741,7 +760,7 @@ static void test_gen_synthetic_world()
   for (unsigned scale=0;scale<max_scale;scale++)
   {
     vcl_stringstream of1;
-    of1<<"./recon_world/ocp"<<scale<<".raw";
+    of1<<recon_model_dir<<"/ocp"<<scale<<".raw";
     vcl_string rec_filename=of1.str();
     recon_world->save_occupancy_raw(rec_filename, scale);
 
