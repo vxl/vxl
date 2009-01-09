@@ -96,13 +96,13 @@ bool convert_generic(const vidl2_frame& in_frame,
 
   // find the color conversion function
   vidl2_color_conv_fptr color_conv =
-      vidl2_color_converter_func( in_t.color,  in_t.bits_per_pixel,
-                                  out_t.color, out_t.bits_per_pixel);
+      vidl2_color_converter_func( in_t.color,  *in_t.type,
+                                  out_t.color, *out_t.type);
   if (!color_conv)
     return false;
 
   const unsigned int num_pix = in_frame.ni() * in_frame.nj();
-  vxl_byte in_pixel[4], out_pixel[4]; // assume pixels are no more than 4 bytes
+  vxl_byte in_pixel[in_t.bits_per_pixel/8], out_pixel[out_t.bits_per_pixel/8]; // assume pixels are no more than 4 bytes
   for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
     in_itr.get_data(in_pixel);
     color_conv(in_pixel, out_pixel);
@@ -748,9 +748,15 @@ vidl2_convert_wrap_in_view(const vidl2_frame& frame)
     else if (format == VIDL2_PIXEL_FORMAT_MONO_1){
       const bool* top_left = static_cast<const bool*>(cf->data()) + top_left_offset;
       return new vil_image_view<bool>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
+    }else if (format == VIDL2_PIXEL_FORMAT_MONO_F32 ||
+              format == VIDL2_PIXEL_FORMAT_RGB_F32 ||
+              format == VIDL2_PIXEL_FORMAT_RGB_F32P){
+      const vxl_ieee_32* top_left = static_cast<const vxl_ieee_32*>(cf->data()) + top_left_offset;
+      return new vil_image_view<float>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
+    } else {
+      const vxl_byte* top_left = static_cast<const vxl_byte*>(cf->data()) + top_left_offset;
+      return new vil_image_view<vxl_byte>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     }
-    const vxl_byte* top_left = static_cast<const vxl_byte*>(cf->data()) + top_left_offset;
-    return new vil_image_view<vxl_byte>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
   }
 
   // Create a view of a frame (without ownership of the data)

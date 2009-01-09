@@ -80,7 +80,21 @@ vidl2_memory_chunk_frame(const vil_image_view_base& image,
       else
         format_ = VIDL2_PIXEL_FORMAT_RGBA_32P;
     }
-  }
+  } else if ( image.pixel_format() == VIL_PIXEL_FORMAT_FLOAT )
+    {
+      vil_image_view<vxl_ieee_32> img = image;
+      if(!img.is_contiguous())
+        return;
+      memory_ = img.memory_chunk();
+      if( img.nplanes()==1 )
+        format_ = VIDL2_PIXEL_FORMAT_MONO_F32;
+      else if( img.nplanes()==3 ){
+        if (img.planestep() == 1)
+          format_ = VIDL2_PIXEL_FORMAT_RGB_F32;
+        else
+          format_ = VIDL2_PIXEL_FORMAT_RGB_F32P;
+      }
+    }
 
   if(fmt != VIDL2_PIXEL_FORMAT_UNKNOWN &&
      fmt != format_)

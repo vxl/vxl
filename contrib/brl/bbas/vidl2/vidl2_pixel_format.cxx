@@ -39,6 +39,7 @@ struct check_types
   {
     if (f == pix_type){
       t.name           = vidl2_pixel_traits_of<pix_type>::name();
+      t.type           = &typeid(typename vidl2_pixel_traits_of<pix_type>::type);
       t.bits_per_pixel = vidl2_pixel_traits_of<pix_type>::bits_per_pixel;
       t.num_channels   = vidl2_pixel_traits_of<pix_type>::num_channels;
       t.color          = vidl2_pixel_traits_of<pix_type>::color();
@@ -68,6 +69,7 @@ struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>
   void traits(vidl2_pixel_format f, vidl2_pixel_traits& t)
   {
     t.name           = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::name();
+    t.type           = &typeid(vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::type);
     t.bits_per_pixel = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel;
     t.num_channels   = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::num_channels;
     t.color          = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::color();

@@ -14,6 +14,110 @@
 
 #include "vidl2_pixel_format.h"
 #include <vcl_cstring.h>
+#include <vcl_typeinfo.h>
+
+
+//-----------------------------------------------------------------------------
+// Monochromatic type converstions
+//-----------------------------------------------------------------------------
+
+
+inline void vidl2_type_convert(const vxl_byte& in, bool& out)
+{
+  out = (in & 0x80) > 0; // threshold
+}
+
+inline void vidl2_type_convert(const vxl_uint_16& in, bool& out)
+{
+  out = (in & 0x8000) > 0; // threshold
+}
+
+inline void vidl2_type_convert(const bool& in, vxl_byte& out)
+{
+  out = in?0xFF:0x00;
+}
+
+inline void vidl2_type_convert(const bool& in, vxl_uint_16& out)
+{
+  out = in?0xFFFF:0x0000;
+}
+
+inline void vidl2_type_convert(const vxl_byte& in, vxl_uint_16& out)
+{
+  out = in<<8;
+}
+
+inline void vidl2_type_convert(const vxl_uint_16& in, vxl_byte& out)
+{
+  out = in>>8;
+}
+
+inline void vidl2_type_convert(const vxl_byte& in, vxl_ieee_32& out)
+{
+  out = static_cast<vxl_ieee_32>(in)/0xFF;
+}
+
+inline void vidl2_type_convert(const vxl_uint_16& in, vxl_ieee_32& out)
+{
+  out = static_cast<vxl_ieee_32>(in)/0xFFFF;
+}
+
+inline void vidl2_type_convert(const bool& in, vxl_ieee_32& out)
+{
+  out = in?1:0;
+}
+
+inline void vidl2_type_convert(const vxl_ieee_32& in, vxl_byte& out)
+{
+  out = static_cast<vxl_byte>(in*255);
+}
+
+inline void vidl2_type_convert(const vxl_ieee_32& in, vxl_uint_16& out)
+{
+  out = static_cast<vxl_uint_16>(in*65535);
+}
+
+inline void vidl2_type_convert(const vxl_ieee_32& in, bool& out)
+{
+  out = in > 0.5; // threshold
+}
+
+inline void vidl2_type_convert(const vxl_byte& in, vxl_ieee_64& out)
+{
+  out = static_cast<vxl_ieee_64>(in)/255.0;
+}
+
+inline void vidl2_type_convert(const vxl_uint_16& in, vxl_ieee_64& out)
+{
+  out = static_cast<vxl_ieee_64>(in)/0xFFFF;
+}
+
+inline void vidl2_type_convert(const bool& in, vxl_ieee_64& out)
+{
+  out = in?1:0;
+}
+
+inline void vidl2_type_convert(const vxl_ieee_64& in, vxl_byte& out)
+{
+  out = static_cast<vxl_byte>(in*255);
+}
+
+inline void vidl2_type_convert(const vxl_ieee_64& in, vxl_uint_16& out)
+{
+  out = static_cast<vxl_uint_16>(in*65535);
+}
+
+inline void vidl2_type_convert(const vxl_ieee_64& in, bool& out)
+{
+  out = in > 0.5; // threshold
+}
+
+template <class inT, class outT>
+inline void vidl2_type_convert(const inT& in, outT& out)
+{
+  out = static_cast<outT>(in);
+}
+
 
 //-----------------------------------------------------------------------------
 // Color space conversions
@@ -22,8 +126,18 @@
 
 // ITU-R BT.601 (formerly CCIR 601) standard conversion
 template <class outT>
+inline void vidl2_color_convert_yuv2rgb( double  y, double  u, double  v,
+                                         double& r, double& g, double& b )
+{
+  r = y + 1.1402 * v;
+  g = y - 0.34413628620102 * u - 0.71413628620102 * v;
+  b = y + 1.772 * u;
+}
+
+
+// ITU-R BT.601 (formerly CCIR 601) standard conversion
 inline void vidl2_color_convert_yuv2rgb( vxl_byte y, vxl_byte u, vxl_byte v,
-                                            outT& r,    outT& g,    outT& b )
+                                         double&  r, double&  g, double&  b )
 {
   double dy = y/255.0;       // 0.0 to 1.0
   double du = (u-128)/255.0; //-0.5 to 0.5
@@ -36,7 +150,6 @@ inline void vidl2_color_convert_yuv2rgb( vxl_byte y, vxl_byte u, vxl_byte v,
 
 //: faster integer-based conversion from YUV to RGB
 // Based on conversion used in libdc1394
-VCL_DEFINE_SPECIALIZATION
 inline void vidl2_color_convert_yuv2rgb( vxl_byte  y, vxl_byte  u, vxl_byte  v,
                                          vxl_byte& r, vxl_byte& g, vxl_byte& b )
 {
@@ -54,22 +167,30 @@ inline void vidl2_color_convert_yuv2rgb( vxl_byte  y, vxl_byte  u, vxl_byte  v,
 
 
 // ITU-R BT.601 (formerly CCIR 601) standard conversion
-template <class outT>
-inline void vidl2_color_convert_rgb2yuv( vxl_byte r, vxl_byte g, vxl_byte b,
-                                            outT& y,    outT& u,    outT& v )
+inline void vidl2_color_convert_rgb2yuv( double r,  double g,  double b,
+                                         double& y, double& u, double& v )
 {
-  double dr = r/255.0; // 0.0 to 1.0
-  double dg = g/255.0; // 0.0 to 1.0
-  double db = b/255.0; // 0.0 to 1.0
-  y = 0.299*dr + 0.587*dg + 0.114*db;
-  u = (db-y)/1.772;
-  v = (dr-y)/1.402;
+  y = 0.299*r + 0.587*g + 0.114*b;
+  u = (b-y)/1.772;
+  v = (r-y)/1.402;
+}
+
+
+// ITU-R BT.601 (formerly CCIR 601) standard conversion
+inline void vidl2_color_convert_rgb2yuv( double r, double g, double b,
+                                         vxl_byte& y, vxl_byte& u, vxl_byte& v )
+{
+  double dy = 0.299*r + 0.587*g + 0.114*b;
+  double du = (b-dy)/1.772;
+  double dv = (r-dy)/1.402;
+  vidl2_type_convert(dy,y);
+  vidl2_type_convert(du+0.5,y);
+  vidl2_type_convert(dv+0.5,y);
 }
 
 
 //: faster integer-based conversion from RGB to YUV
 // Based on conversion used in libdc1394
-VCL_DEFINE_SPECIALIZATION
 inline void vidl2_color_convert_rgb2yuv( vxl_byte  r, vxl_byte  g, vxl_byte  b,
                                          vxl_byte& y, vxl_byte& u, vxl_byte& v )
 {
@@ -98,72 +219,12 @@ typedef void (*vidl2_color_conv_fptr)(const vxl_byte* in, vxl_byte* out);
 // may actually reinterpret the data as other types (i.e. bool* or
 // vxl_uint_16*) via reinterpret_cast
 vidl2_color_conv_fptr
-vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
-                            vidl2_pixel_color out_C, unsigned out_bpp);
+vidl2_color_converter_func( vidl2_pixel_color in_C, const vcl_type_info& in_type,
+                            vidl2_pixel_color out_C, const vcl_type_info& out_type);
 
 
 template <vidl2_pixel_color in_C, vidl2_pixel_color out_C>
 struct vidl2_color_converter;
-
-VCL_DEFINE_SPECIALIZATION
-struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_RGB>
-{
-  static inline void convert(const vxl_byte in[3], vxl_byte out[3])
-  {
-    out[0] = in[0];
-    out[1] = in[1];
-    out[2] = in[2];
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_RGBA>
-{
-  static inline void convert(const vxl_byte in[4], vxl_byte out[4])
-  {
-    out[0] = in[0];
-    out[1] = in[1];
-    out[2] = in[2];
-    out[3] = in[3];
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_RGB>
-{
-  static inline void convert(const vxl_byte in[4], vxl_byte out[3])
-  {
-    out[0] = in[0];
-    out[1] = in[1];
-    out[2] = in[2];
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION
-struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_RGBA>
-{
-  static inline void convert(const vxl_byte in[3], vxl_byte out[4])
-  {
-    out[0] = in[0];
-    out[1] = in[1];
-    out[2] = in[2];
-    out[3] = 0xFF;
-  }
-};
-
-VCL_DEFINE_SPECIALIZATION
-struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,VIDL2_PIXEL_COLOR_YUV>
-{
-  static inline void convert(const vxl_byte in[3], vxl_byte out[3])
-  {
-    out[0] = in[0];
-    out[1] = in[1];
-    out[2] = in[2];
-  }
-};
 
 
 VCL_DEFINE_SPECIALIZATION
@@ -174,35 +235,109 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>
   {
     out[0] = in[0];
   }
-
-  static inline void convert(const vxl_byte in[1], bool out[1])
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[1], outT out[1])
   {
-    out[0] = (in[0]&0x80) > 0; // threshold
+    vidl2_type_convert(*in, *out);
   }
+};
 
-  static inline void convert(const vxl_uint_16 in[1], bool out[1])
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_RGB>
+{
+  template <class T>
+  static inline void convert(const T in[3], T out[3])
   {
-    out[0] = (in[0]&0x8000) > 0; // threshold
+    vcl_memcpy(out, in, sizeof(T)*3);
   }
-
-  static inline void convert(const bool in[1], vxl_byte out[1])
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[3], outT out[3])
   {
-    out[0] = in[0]?0xFF:0x00;
+    vidl2_type_convert(*in, *out);
+    vidl2_type_convert(*++in, *++out);
+    vidl2_type_convert(*++in, *++out);
   }
+};
 
-  static inline void convert(const bool in[1], vxl_uint_16 out[1])
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_RGBA>
+{
+  template <class T>
+  static inline void convert(const T in[4], T out[4])
   {
-    out[0] = in[0]?0xFFFF:0x0000;
+    vcl_memcpy(out, in, sizeof(T)*4);
   }
-
-  static inline void convert(const vxl_byte in[1], vxl_uint_16 out[1])
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[4], outT out[4])
   {
-    out[0] = in[0]<<8;
+    vidl2_type_convert(*in, *out);
+    vidl2_type_convert(*++in, *++out);
+    vidl2_type_convert(*++in, *++out);
+    vidl2_type_convert(*++in, *++out);
   }
+};
 
-  static inline void convert(const vxl_uint_16 in[1], vxl_byte out[1])
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_RGB>
+{
+  template <class T>
+  static inline void convert(const T in[4], T out[3])
   {
-    out[0] = in[0]>>8;
+    vcl_memcpy(out, in, sizeof(T)*3);
+  }
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[4], outT out[3])
+  {
+    vidl2_type_convert(*in, *out);
+    vidl2_type_convert(*++in, *++out);
+    vidl2_type_convert(*++in, *++out);
+  }
+};
+
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_RGBA>
+{
+  template <class T>
+  static inline void convert(const T in[3], T out[4])
+  {
+    vcl_memcpy(out, in, sizeof(T)*3);
+    out[3] = vidl2_pixel_limits<T>::max();
+  }
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[3], outT out[4])
+  {
+    vidl2_type_convert(*in, *out);
+    vidl2_type_convert(*++in, *++out);
+    vidl2_type_convert(*++in, *++out);
+    out[3] = vidl2_pixel_limits<outT>::max();
+  }
+};
+
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,VIDL2_PIXEL_COLOR_YUV>
+{
+  template <class T>
+  static inline void convert(const T in[3], T out[3])
+  {
+    vcl_memcpy(out, in, sizeof(T)*3);
+  }
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[3], outT out[3])
+  {
+    vidl2_type_convert(*in, *out);
+    vidl2_type_convert(*++in, *++out);
+    vidl2_type_convert(*++in, *++out);
   }
 };
 
@@ -210,8 +345,32 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>
 VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_YUV>
 {
-  template <class outT>
-  static inline void convert(const vxl_byte in[3], outT out[3])
+  template <class inT, class outT>
+  static inline void convert(const inT in[3], outT out[3])
+  {
+    // use double as intermediate type
+    double r,g,b, y,u,v;
+    vidl2_type_convert(in[0],r);
+    vidl2_type_convert(in[1],b);
+    vidl2_type_convert(in[2],g);
+    vidl2_color_convert_rgb2yuv(r,g,b,y,u,v);
+    vidl2_type_convert(y,out[0]);
+    vidl2_type_convert(u,out[1]);
+    vidl2_type_convert(v,out[2]);
+  }
+  
+  template <class inT>
+  static inline void convert(const inT in[3], vxl_byte out[3])
+  {
+    double r,g,b;
+    vidl2_type_convert(in[0],r);
+    vidl2_type_convert(in[1],b);
+    vidl2_type_convert(in[2],g);
+    vidl2_color_convert_rgb2yuv(r,g,b,
+                                out[0],out[1],out[2]);
+  }
+  
+  static inline void convert(const vxl_byte in[3], vxl_byte out[3])
   {
     vidl2_color_convert_rgb2yuv(in[0],in[1],in[2],
                                 out[0],out[1],out[2]);
@@ -234,8 +393,32 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_YUV>
 VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,VIDL2_PIXEL_COLOR_RGB>
 {
+  template <class inT, class outT>
+  static inline void convert(const inT in[3], outT out[3])
+  {
+    // use double as intermediate type
+    double r,g,b, y,u,v;
+    vidl2_type_convert(in[0],y);
+    vidl2_type_convert(in[1],u);
+    vidl2_type_convert(in[2],v);
+    vidl2_color_convert_yuv2rgb(y,u,v,r,g,b);
+    vidl2_type_convert(r,out[0]);
+    vidl2_type_convert(g,out[1]);
+    vidl2_type_convert(b,out[2]);
+  }
+  
   template <class outT>
   static inline void convert(const vxl_byte in[3], outT out[3])
+  {
+    double r,g,b;
+    vidl2_color_convert_yuv2rgb(in[0],in[1],in[2],
+                                r,g,b);
+    vidl2_type_convert(r,out[0]);
+    vidl2_type_convert(g,out[1]);
+    vidl2_type_convert(b,out[2]);
+  }
+  
+  static inline void convert(const vxl_byte in[3], vxl_byte out[3])
   {
     vidl2_color_convert_yuv2rgb(in[0],in[1],in[2],
                                 out[0],out[1],out[2]);
@@ -260,10 +443,17 @@ VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,VIDL2_PIXEL_COLOR_MONO>
 {
   template <class T>
-  static inline void convert(const vxl_byte in[3], T out[1])
+  static inline void convert(const T in[3], T out[1])
   {
     // The Y channel is the greyscale value
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert(in,out);
+    out[0] = in[0];
+  }
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[3], outT out[1])
+  {
+    // The Y channel is the greyscale value
+    vidl2_type_convert(*in,*out);
   }
 };
 
@@ -272,47 +462,78 @@ VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_YUV>
 {
   template <class T>
-  static inline void convert(const T in[1], vxl_byte out[3])
+  static inline void convert(const T in[1], T out[3])
   {
     // The Y channel is the greyscale value
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert(in,out);
-    out[1] = 128;
-    out[2] = 128;
+    out[0] = in[0];
+    out[1] = vidl2_pixel_limits<T>::chroma_zero();
+    out[2] = vidl2_pixel_limits<T>::chroma_zero();
+  }
+  
+  template <class inT, class outT>
+  static inline void convert(const inT in[1], outT out[3])
+  {
+    // The Y channel is the greyscale value
+    vidl2_type_convert(*in,*out);
+    out[1] = vidl2_pixel_limits<outT>::chroma_zero();
+    out[2] = vidl2_pixel_limits<outT>::chroma_zero();
   }
 };
 
 VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_MONO>
 {
-  template <class T>
-  static inline void convert(const vxl_byte in[3], T out[1])
+  template <class inT, class outT>
+  static inline void convert(const inT in[3], outT out[1])
   {
-    //: FIXME this is probably wrong
-    vxl_byte grey = (306*in[0] + 601*in[1] + 117*in[2]) >> 10;
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert(&grey,out);
+    // use double as intermediate type
+    double r,g,b;
+    vidl2_type_convert(in[0],r);
+    vidl2_type_convert(in[1],b);
+    vidl2_type_convert(in[2],g);
+    double y = 0.299*r + 0.587*g + 0.114*b;
+    vidl2_type_convert(y,*out);
+  }
+  
+  // fast approximation for bytes
+  static inline void convert(const vxl_byte in[3], vxl_byte out[1])
+  {
+    //: FIXME verify that this works!
+    out[0] = (306*in[0] + 601*in[1] + 117*in[2]) >> 10;
   }
 };
 
 VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_MONO>
-{
-  template <class T>
-  static inline void convert(const vxl_byte in[4], T out[1])
+{  
+  template <class inT, class outT>
+  static inline void convert(const inT in[4], outT out[1])
   {
-    //: FIXME this is probably wrong
-    vxl_byte grey = (306*in[0] + 601*in[1] + 117*in[2]) >> 10;
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert(&grey,out);
+    // use double as intermediate type
+    double r,g,b;
+    vidl2_type_convert(in[0],r);
+    vidl2_type_convert(in[1],b);
+    vidl2_type_convert(in[2],g);
+    double y = 0.299*r + 0.587*g + 0.114*b;
+    vidl2_type_convert(y,*out);
+  }
+  
+  // fast approximation for bytes
+  static inline void convert(const vxl_byte in[4], vxl_byte out[1])
+  {
+    //: FIXME verify that this works!
+    out[0] = (306*in[0] + 601*in[1] + 117*in[2]) >> 10;
   }
 };
 
 VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_RGB>
 {
-  template <class T>
-  static inline void convert(const T in[1], vxl_byte out[3])
+  template <class inT, class outT>
+  static inline void convert(const inT in[1], outT out[3])
   {
     // Set all channels to the same value
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert(in,out);
+    vidl2_type_convert(*in,*out);
     out[2] = out[1] = out[0];
   }
 };
@@ -320,13 +541,13 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_RGB>
 VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_RGBA>
 {
-  template <class T>
-  static inline void convert(const T in[1], vxl_byte out[4])
+  template <class inT, class outT>
+  static inline void convert(const inT in[1], outT out[4])
   {
     // Set all channels to the same value
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert(in,out);
+    vidl2_type_convert(*in,*out);
     out[2] = out[1] = out[0];
-    out[3] = 0xFF;
+    out[3] = vidl2_pixel_limits<outT>::max();
   }
 };
 

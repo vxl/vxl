@@ -27,28 +27,29 @@ static void test_color()
   // correct function pointers
   {
     bool same_func = true;
-    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGB, 24,
-                                                          VIDL2_PIXEL_COLOR_RGBA, 32);
-    same_func = cf == &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,
-                                             VIDL2_PIXEL_COLOR_RGBA>::convert;
+    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGB, typeid(vxl_byte),
+                                                          VIDL2_PIXEL_COLOR_RGBA, typeid(vxl_byte));
+    vidl2_color_conv_fptr cft = &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,
+                                                       VIDL2_PIXEL_COLOR_RGBA>::convert;
+    same_func = cf == cft;
     TEST("vidl2_color_converter_func: RGB to RGBA", same_func, true);
 
-    cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_YUV, 24,
-                                    VIDL2_PIXEL_COLOR_RGB, 24);
+    cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_YUV, typeid(vxl_byte),
+                                    VIDL2_PIXEL_COLOR_RGB, typeid(vxl_byte));
     vidl2_color_conv_fptr cf2 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,
                                                        VIDL2_PIXEL_COLOR_RGB>::convert;
                                                        same_func = cf == cf2;
     TEST("vidl2_color_converter_func: YUV to RGB", same_func, true);
 
-    cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_MONO, 1,
-                                    VIDL2_PIXEL_COLOR_RGB, 24);
+    cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_MONO, typeid(bool),
+                                    VIDL2_PIXEL_COLOR_RGB, typeid(vxl_byte));
     vidl2_color_conv_fptr_1_8 cf_1_8 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,
                                                               VIDL2_PIXEL_COLOR_RGB>::convert;
     same_func = cf == reinterpret_cast<vidl2_color_conv_fptr>(cf_1_8);
     TEST("vidl2_color_converter_func: MONO_1 to RGB",same_func, true);
 
-    cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_MONO, 16,
-                                    VIDL2_PIXEL_COLOR_MONO, 1);
+    cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_MONO, typeid(vxl_uint_16),
+                                    VIDL2_PIXEL_COLOR_MONO, typeid(bool));
     vidl2_color_conv_fptr_16_1 cf_16_1 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,
                                                                 VIDL2_PIXEL_COLOR_MONO>::convert;
     same_func = cf == reinterpret_cast<vidl2_color_conv_fptr>(cf_16_1);
@@ -56,8 +57,8 @@ static void test_color()
   }
 
   {
-    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGB, 24,
-                                                          VIDL2_PIXEL_COLOR_RGBA, 32);
+    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGB, typeid(vxl_byte),
+                                                          VIDL2_PIXEL_COLOR_RGBA, typeid(vxl_byte));
     assert(cf);
 
     vxl_byte in[] = { 254, 131, 1 };
@@ -70,8 +71,8 @@ static void test_color()
   }
 
   {
-    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGBA, 32,
-                                                          VIDL2_PIXEL_COLOR_YUV, 24);
+    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGBA, typeid(vxl_byte),
+                                                          VIDL2_PIXEL_COLOR_YUV, typeid(vxl_byte));
     assert(cf);
 
     vxl_byte rgb[] = { 128, 200, 95, 128 };
@@ -83,8 +84,8 @@ static void test_color()
   }
 
   {
-    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGB, 24,
-                                                          VIDL2_PIXEL_COLOR_MONO, 16);
+    vidl2_color_conv_fptr cf = vidl2_color_converter_func(VIDL2_PIXEL_COLOR_RGB, typeid(vxl_byte),
+                                                          VIDL2_PIXEL_COLOR_MONO, typeid(vxl_uint_16));
     assert(cf);
 
     vxl_byte in[] = { 128, 200, 95 };

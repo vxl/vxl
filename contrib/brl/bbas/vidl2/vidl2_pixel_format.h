@@ -44,6 +44,7 @@
 #include <vcl_string.h>
 #include <vcl_cstddef.h>
 #include <vcl_iosfwd.h>
+#include <vcl_typeinfo.h>
 #include <vxl_config.h>
 
 //: Describes the format of pixel encoding in a video frame buffer
@@ -73,9 +74,11 @@ enum vidl2_pixel_format
   VIDL2_PIXEL_FORMAT_MONO_1,
   VIDL2_PIXEL_FORMAT_MONO_8,
   VIDL2_PIXEL_FORMAT_MONO_16,
+  VIDL2_PIXEL_FORMAT_MONO_F32,
+  VIDL2_PIXEL_FORMAT_RGB_F32,
+  VIDL2_PIXEL_FORMAT_RGB_F32P,
 
   // Add values here
-
   VIDL2_PIXEL_FORMAT_ENUM_END
 };
 
@@ -121,6 +124,7 @@ enum vidl2_pixel_arrangement
 struct vidl2_pixel_traits
 {
   vcl_string name;
+  const vcl_type_info* type;
   unsigned bits_per_pixel;
   unsigned num_channels;
   vidl2_pixel_color color;
@@ -139,6 +143,8 @@ struct vidl2_pixel_traits
 // ***** End: temporary hack to avoid conflict *****
 
 //: Define limits on the minimum and maximum pixel values
+//  also define chroma_zero as the U and V value to represent
+//  gray (no color) in YUV encoding  
 template <class T>
 struct vidl2_pixel_limits;
 
@@ -147,6 +153,7 @@ struct vidl2_pixel_limits<vxl_byte>
 {
   static inline vxl_byte min() {return 0x00;}
   static inline vxl_byte max() {return 0xFF;}
+  static inline vxl_byte chroma_zero() {return 0x80;}
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -154,6 +161,8 @@ struct vidl2_pixel_limits<bool>
 {
   static inline bool min() {return false;}
   static inline bool max() {return true;}
+  // chroma zero is not well defined, YUV can't be boolean
+  static inline vxl_byte chroma_zero() {return false;}
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -161,13 +170,15 @@ struct vidl2_pixel_limits<vxl_uint_16>
 {
   static inline vxl_uint_16 min() {return 0x0000;}
   static inline vxl_uint_16 max() {return 0xFFFF;}
+  static inline vxl_byte chroma_zero() {return 0x8000;}
 };
 
 VCL_DEFINE_SPECIALIZATION
-    struct vidl2_pixel_limits<float>
+struct vidl2_pixel_limits<float>
 {
   static inline float min() {return 0.0f;}
   static inline float max() {return 1.0f;}
+  static inline vxl_byte chroma_zero() {return 0.0f;}
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -175,6 +186,7 @@ struct vidl2_pixel_limits<double>
 {
   static inline double min() {return 0.0;}
   static inline double max() {return 1.0;}
+  static inline vxl_byte chroma_zero() {return 0.0f;}
 };
 
 
@@ -222,32 +234,35 @@ struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##FMT> \
   enum { chroma_shift_y = YCS };\
 }
 
-//            format    name        type         bpp  color    arrange  xcs  ycs
-//            ------    ---------   ----         ---  -------  -------  ---  ---
-vidl2_pt_mac( UNKNOWN,  "unknown",  void,        0,   UNKNOWN, UNKNOWN, 0,   0  );
+//            format    name             type         bpp  color    arrange  xcs  ycs
+//            ------    ---------        ----         ---  -------  -------  ---  ---
+vidl2_pt_mac( UNKNOWN,  "unknown",       void,        0,   UNKNOWN, UNKNOWN, 0,   0  );
 
-vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,    24,  RGB,     PLANAR,  0,   0  );
-vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  RGBA,    SINGLE,  0,   0  );
-vidl2_pt_mac( RGBA_32P, "RGBA 32P", vxl_byte,    32,  RGBA,    PLANAR,  0,   0  );
-vidl2_pt_mac( RGB_565,  "RGB 565",  vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_24,   "RGB 24",        vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_24P,  "RGB 24P",       vxl_byte,    24,  RGB,     PLANAR,  0,   0  );
+vidl2_pt_mac( BGR_24,   "BGR 24",        vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32,  "RGBA 32",       vxl_byte,    32,  RGBA,    SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32P, "RGBA 32P",      vxl_byte,    32,  RGBA,    PLANAR,  0,   0  );
+vidl2_pt_mac( RGB_565,  "RGB 565",       vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_555,  "RGB 555",       vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
 
-vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  YUV,     PLANAR,  0,   0  );
-vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  YUV,     PLANAR,  1,   0  );
-vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
-vidl2_pt_mac( YVU_420P, "YVU 420P", vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
-vidl2_pt_mac( YUV_411P, "YUV 411P", vxl_byte,    12,  YUV,     PLANAR,  2,   0  );
-vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  YUV,     PLANAR,  2,   1  );
-vidl2_pt_mac( UYV_444,  "UYV 444",  vxl_byte,    24,  YUV,     SINGLE,  0,   0  );
-vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,    16,  YUV,     PACKED,  1,   0  );
-vidl2_pt_mac( UYVY_422, "UYVY 422", vxl_byte,    16,  YUV,     PACKED,  1,   0  );
-vidl2_pt_mac( UYVY_411, "UYVY 411", vxl_byte,    12,  YUV,     PACKED,  2,   0  );
+vidl2_pt_mac( YUV_444P, "YUV 444P",      vxl_byte,    24,  YUV,     PLANAR,  0,   0  );
+vidl2_pt_mac( YUV_422P, "YUV 422P",      vxl_byte,    16,  YUV,     PLANAR,  1,   0  );
+vidl2_pt_mac( YUV_420P, "YUV 420P",      vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
+vidl2_pt_mac( YVU_420P, "YVU 420P",      vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
+vidl2_pt_mac( YUV_411P, "YUV 411P",      vxl_byte,    12,  YUV,     PLANAR,  2,   0  );
+vidl2_pt_mac( YUV_410P, "YUV 410P",      vxl_byte,    10,  YUV,     PLANAR,  2,   1  );
+vidl2_pt_mac( UYV_444,  "UYV 444",       vxl_byte,    24,  YUV,     SINGLE,  0,   0  );
+vidl2_pt_mac( YUYV_422, "YUYV 422",      vxl_byte,    16,  YUV,     PACKED,  1,   0  );
+vidl2_pt_mac( UYVY_422, "UYVY 422",      vxl_byte,    16,  YUV,     PACKED,  1,   0  );
+vidl2_pt_mac( UYVY_411, "UYVY 411",      vxl_byte,    12,  YUV,     PACKED,  2,   0  );
 
-vidl2_pt_mac( MONO_1,   "Mono 1",   bool,        1,   MONO,    SINGLE,  0,   0  );
-vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,    8,   MONO,    SINGLE,  0,   0  );
-vidl2_pt_mac( MONO_16,  "Mono 16",  vxl_uint_16, 16,  MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_1,   "Mono 1",        bool,        1,   MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_8,   "Mono 8",        vxl_byte,    8,   MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_16,  "Mono 16",       vxl_uint_16, 16,  MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_F32, "Mono float 32", vxl_ieee_32, 32,  MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_F32,  "RGB float 32",  vxl_ieee_32, 96,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_F32P, "RGB float 32P", vxl_ieee_32, 96,  RGB,     PLANAR,  0,   0  );
 
 #undef vidl2_pt_mac
 
@@ -299,6 +314,13 @@ vidl2_pixel_color_num_channels(vidl2_pixel_color c);
 vidl2_pixel_traits
 vidl2_pixel_format_traits(vidl2_pixel_format f);
 
+
+//: Return the typeid of the pixel format datatype
+inline const vcl_type_info&
+vidl2_pixel_format_typeid(vidl2_pixel_format f)
+{
+  return *vidl2_pixel_format_traits(f).type;
+}
 
 //: Return the effective number of bits per image pixel in pixel format f
 inline unsigned
