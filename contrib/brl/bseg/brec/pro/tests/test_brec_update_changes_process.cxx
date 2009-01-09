@@ -2,7 +2,7 @@
 // \file
 // \brief  Tests for change map update process
 // \author Ozge C. Ozcanli
-// \date   10/03/2008
+// \date   Oct 03, 2008
 //
 #include <testlib/testlib_test.h>
 #include "../brec_update_changes_process.h"
@@ -60,7 +60,7 @@ void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, uns
       else {
         plane_img(i,j) = 0.4f;
       }
-      //plane_img(i,j) = plane_img(i,j) + ((0.2f*i)/(float)nx + (0.2f*j)/(float)ny);
+      //plane_img(i,j) = plane_img(i,j) + 0.2f*i/nx + 0.2f*j/ny;
     }
   }
 }
@@ -190,7 +190,7 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
   unsigned nx = 200;
   unsigned ny = 200;
   unsigned nz = 4;
-  vgl_point_3d<float> corner(0,0,0);
+  vgl_point_3d<float> corner(0.f,0.f,0.f);
   vgl_vector_3d<unsigned> num_voxels(nx,ny,nz);
   float voxel_length = 1.0f;
 
@@ -267,7 +267,7 @@ bvxm_voxel_slab_base_sptr create_mog_image2_using_grey_processor(vcl_string mode
   unsigned nx = 40;
   unsigned ny = 40;
   unsigned nz = 4;
-  vgl_point_3d<float> corner(0,0,0);
+  vgl_point_3d<float> corner(0.f,0.f,0.f);
   vgl_vector_3d<unsigned> num_voxels(nx,ny,nz);
   float voxel_length = 1.0f;
 
@@ -349,24 +349,32 @@ MAIN( test_brec_update_changes_process )
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
   bprb_parameters_sptr params = new bprb_parameters();
-  params->add("size world x", "nx", (unsigned)100);
-  params->add("size world y", "ny", (unsigned)100);
-  params->add("size world z", "nz", (unsigned)50);
-  params->add("box min x", "minx", (unsigned)10);
-  params->add("box min y", "miny", (unsigned)10);
-  params->add("box min z", "minz", (unsigned)10);
-  params->add("box dim x", "dimx", (unsigned)40);
-  params->add("box dim y", "dimy", (unsigned)40);
-  params->add("box dim z", "dimz", (unsigned)20);
+  params->add("size world x", "nx", 100U);
+  params->add("size world y", "ny", 100U);
+  params->add("size world z", "nz", 50U);
+  params->add("box min x", "minx", 10U);
+  params->add("box min y", "miny", 10U);
+  params->add("box min z", "minz", 10U);
+  params->add("box dim x", "dimx", 40U);
+  params->add("box dim y", "dimy", 40U);
+  params->add("box dim z", "dimz", 20U);
   params->add("generate 2 boxes", "gen2", true);
   params->add("generate images", "genImages", true);
   params->add("random texture on box1", "rand1", true);
   params->add("random texture on box2", "rand2", false);
   params->add("fixed appearance val", "appval", 0.7f);
+  vcl_string world_dir("test_syn_world");
+  params->add("world_dir", "worlddir", world_dir);
 
-  params->add("world_dir", "worlddir", vcl_string("./test_syn_world"));
-  vcl_string command = "rm -rf ./test_syn_world";
-  system(command.c_str());
+  // create an empty directory, or empty the directory if it exists
+  if (vul_file::is_directory(world_dir))
+    vul_file::delete_file_glob(world_dir+"/*");
+  else {
+    if (vul_file::exists(world_dir))
+      vul_file::delete_file_glob(world_dir);
+    vul_file::make_directory(world_dir);
+  }
+
   good = good && bprb_batch_process_manager::instance()->set_params(params);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
@@ -436,7 +444,7 @@ MAIN( test_brec_update_changes_process )
 
 #if 0
   vil_image_view<vxl_byte> exp_img_overlayed_v(exp_img_overlayed);
-  bool saved = vil_save(exp_img_overlayed_v, "./expected_output.png");
+  bool saved = vil_save(exp_img_overlayed_v, "expected_output.png");
   TEST("saved", saved, true);
 #endif // 0
 
@@ -444,7 +452,7 @@ MAIN( test_brec_update_changes_process )
   // inits
   brdb_value_sptr v6 = new brdb_value_t<vil_image_view_base_sptr>(out_change_map);
   brdb_value_sptr v7 = new brdb_value_t<float>(0.2f);
-  brdb_value_sptr v8 = new brdb_value_t<unsigned>(1);
+  brdb_value_sptr v8 = new brdb_value_t<unsigned>(1U);
   good = bprb_batch_process_manager::instance()->init_process("brecUpdateChangesProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v6);
@@ -462,9 +470,9 @@ MAIN( test_brec_update_changes_process )
   bprb_parameters_sptr det_params = new bprb_parameters();
   det_params->add("ni for output image", "ni", (int)ni);
   det_params->add("nj for output image", "nj", (int)nj);
-  det_params->add("x interval", "x_int", (unsigned)26);
-  det_params->add("y interval", "y_int", (unsigned)26);
-  det_params->add("z interval", "z_int", (unsigned)30);
+  det_params->add("x interval", "x_int", 26U);
+  det_params->add("y interval", "y_int", 26U);
+  det_params->add("z interval", "z_int", 30U);
   det_params->add("angle intervals for rotational search (in degrees)", "angle_int", 20.0f);
   det_params->add("verbose", "verbose", true);
 

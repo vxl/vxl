@@ -2,7 +2,7 @@
 // \file
 // \brief  Tests for change map update process
 // \author Ozge C. Ozcanli
-// \date   10/03/2008
+// \date   Oct 03, 2008
 //
 #include <testlib/testlib_test.h>
 #include "../brec_update_changes_process.h"
@@ -76,24 +76,32 @@ MAIN( test_brec_create_mog_image_process )
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
   bprb_parameters_sptr params = new bprb_parameters();
-  params->add("size world x", "nx", (unsigned)100);
-  params->add("size world y", "ny", (unsigned)100);
-  params->add("size world z", "nz", (unsigned)50);
-  params->add("box min x", "minx", (unsigned)10);
-  params->add("box min y", "miny", (unsigned)10);
-  params->add("box min z", "minz", (unsigned)10);
-  params->add("box dim x", "dimx", (unsigned)40);
-  params->add("box dim y", "dimy", (unsigned)40);
-  params->add("box dim z", "dimz", (unsigned)20);
+  params->add("size world x", "nx", 100U);
+  params->add("size world y", "ny", 100U);
+  params->add("size world z", "nz", 50U);
+  params->add("box min x", "minx", 10U);
+  params->add("box min y", "miny", 10U);
+  params->add("box min z", "minz", 10U);
+  params->add("box dim x", "dimx", 40U);
+  params->add("box dim y", "dimy", 40U);
+  params->add("box dim z", "dimz", 20U);
   params->add("generate 2 boxes", "gen2", true);
   params->add("generate images", "genImages", true);
   params->add("random texture on box1", "rand1", true);
   params->add("random texture on box2", "rand2", false);
   params->add("fixed appearance val", "appval", 0.7f);
+  vcl_string world_dir("test_syn_world");
+  params->add("world_dir", "worlddir", world_dir);
 
-  params->add("world_dir", "worlddir", vcl_string("./test_syn_world"));
-  vcl_string command = "rm -rf ./test_syn_world";
-  system(command.c_str());
+  // create an empty directory, or empty the directory if it exists
+  if (vul_file::is_directory(world_dir))
+    vul_file::delete_file_glob(world_dir+"/*");
+  else {
+    if (vul_file::exists(world_dir))
+      vul_file::delete_file_glob(world_dir);
+    vul_file::make_directory(world_dir);
+  }
+
   good = good && bprb_batch_process_manager::instance()->set_params(params);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
@@ -126,18 +134,18 @@ MAIN( test_brec_create_mog_image_process )
   brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(cam1);
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(vox_world);
   brdb_value_sptr v3 = new brdb_value_t<vcl_string>("apm_mog_grey");
-  brdb_value_sptr v4 = new brdb_value_t<unsigned>(0); // bin id
-  brdb_value_sptr v5 = new brdb_value_t<unsigned>(0); // scale id
+  brdb_value_sptr v4 = new brdb_value_t<unsigned>(0U); // bin id
+  brdb_value_sptr v5 = new brdb_value_t<unsigned>(0U); // scale id
 
   // run the create mog image process
   // inits
   good = bprb_batch_process_manager::instance()->init_process("brecCreateMOGImageProcess");
   bprb_parameters_sptr params2 = new bprb_parameters();
-  params2->add("method to use to create a mog image", "mog_method", (unsigned)bvxm_mog_image_creation_methods::SAMPLING);   // otherwise uses expected values of the mixtures at voxels along the path of the rays 
-  params2->add("number of samples if using random sampling as mog_method", "n_samples", (unsigned)10);  
+  params2->add("method to use to create a mog image", "mog_method", (unsigned)bvxm_mog_image_creation_methods::SAMPLING);   // otherwise uses expected values of the mixtures at voxels along the path of the rays
+  params2->add("number of samples if using random sampling as mog_method", "n_samples", 10U);
   params2->add("ni for output mog", "ni", ni);  // should be set according to each test image
   params2->add("nj for output mog", "nj", nj);
-  params2->add("nplanes for output expected view of output mog", "nplanes", (unsigned)1);
+  params2->add("nplanes for output expected view of output mog", "nplanes", 1U);
   params2->add("verbose", "verbose", false);
   good = good && bprb_batch_process_manager::instance()->set_params(params2);
   good = good && bprb_batch_process_manager::instance()->set_input(0, v1);
@@ -162,7 +170,7 @@ MAIN( test_brec_create_mog_image_process )
 
 #if 1
   vil_image_view<vxl_byte> exp_img_v(out_exp_img);
-  bool saved = vil_save(exp_img_v, "./expected_image_of_mog.png");
+  bool saved = vil_save(exp_img_v, "expected_image_of_mog.png");
   TEST("saved", saved, true);
 #endif // 0
 
@@ -180,7 +188,7 @@ MAIN( test_brec_create_mog_image_process )
   TEST("run create mog image process - mog image ptr", !out_mog_img , false);
 
   //: save the output mog image
-  brdb_value_sptr v6 = new brdb_value_t<vcl_string>("./out_mog.bin");
+  brdb_value_sptr v6 = new brdb_value_t<vcl_string>("out_mog.bin");
   brdb_value_sptr v7 = new brdb_value_t<bbgm_image_sptr>(out_mog_img);
   good = bprb_batch_process_manager::instance()->init_process("SaveImageOfProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v6);
@@ -208,7 +216,7 @@ MAIN( test_brec_create_mog_image_process )
 
   #if 1
     vil_image_view<vxl_byte> mean_img_v(result->value());
-    vcl_string name = "./mean_image_of_mog_component_" + ss.str() + ".png";
+    vcl_string name = "mean_image_of_mog_component_" + ss.str() + ".png";
     saved = vil_save(mean_img_v, name.c_str());
     TEST("saved", saved, true);
   #endif // 0
@@ -230,14 +238,11 @@ MAIN( test_brec_create_mog_image_process )
 
   #if 1
     vil_image_view<vxl_byte> var_img_v(result->value());
-    name = "./variance_image_of_mog_component_" + ss.str() + ".png";
+    name = "variance_image_of_mog_component_" + ss.str() + ".png";
     saved = vil_save(var_img_v, name.c_str());
     TEST("saved", saved, true);
   #endif // 0
-  
   }
 
   SUMMARY();
 }
-
-
