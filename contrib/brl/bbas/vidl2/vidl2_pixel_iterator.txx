@@ -109,7 +109,7 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
     // The following should be a static asserts
     assert(vidl2_pixel_traits_of<FMT>::arrangement() == VIDL2_PIXEL_ARRANGE_PLANAR);
 
-    const unsigned size = frame.ni()*frame.nj()*sizeof(typename vidl2_pixel_traits_of<FMT>::type);
+    const unsigned size = frame.ni()*frame.nj();
 
     ptr_[0] = (cmp_type*)frame.data();
     for (unsigned int i=1; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i){
