@@ -143,8 +143,8 @@ struct vidl2_pixel_traits
 // ***** End: temporary hack to avoid conflict *****
 
 //: Define limits on the minimum and maximum pixel values
-//  also define chroma_zero as the U and V value to represent
-//  gray (no color) in YUV encoding  
+// Also define \a chroma_zero as the U and V value to represent
+// gray (no color) in YUV encoding
 template <class T>
 struct vidl2_pixel_limits;
 

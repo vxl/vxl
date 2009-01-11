@@ -18,7 +18,7 @@ struct func_ptr
 {
   typedef void (*type)(const T1* in, T2* out);
 };
-  
+
 
 // Assign an index to each of the pixel data types
 template <class T>
@@ -35,7 +35,7 @@ vidl2_type_index_mac(bool, 1);
 vidl2_type_index_mac(vxl_uint_16, 2);
 vidl2_type_index_mac(vxl_ieee_32, 3);
 vidl2_type_index_mac(vxl_ieee_64, 4);
-  
+
 #undef vidl2_type_index_mac
 
 //: Generates an entry into the table of color conversions functions
@@ -46,7 +46,7 @@ struct table_entry_init
 {
   static inline void set_entry(vidl2_color_conv_fptr& table_entry)
   {
-    if(!table_entry){
+    if (!table_entry) {
       fptr_T fp = &vidl2_color_converter<in_color,out_color>::convert;
       table_entry = reinterpret_cast<vidl2_color_conv_fptr>(fp);
     }
@@ -98,10 +98,10 @@ struct table_init<0>
     fptr>::set_entry(table[in_color][out_color][in_type_num][out_type_num]);
   }
 };
-  
+
 
 //: Recursive template metaprogram to generate type table entries for each pixel data type
-// all pixel formats are scanned, some data types will be initialized multiple times
+//  All pixel formats are scanned, some data types will be initialized multiple times
 template <int Fmt>
 struct type_table_init
 {
@@ -112,8 +112,8 @@ struct type_table_init
     type_table_init<Fmt-1>::populate(type_table);
   }
 };
-  
-  
+
+
 //: The base case
 VCL_DEFINE_SPECIALIZATION
 struct type_table_init<0>
@@ -128,51 +128,49 @@ struct type_table_init<0>
 
 //: A table of all conversion functions
 class converter
+{
+ public:
+  //: Constructor - generate the table
+  converter()
   {
-  public:
-    //: Constructor - generate the table
-    converter()
-    {
-      // generate the table of function pointers
-      table_init<VIDL2_PIXEL_FORMAT_ENUM_END*VIDL2_PIXEL_FORMAT_ENUM_END-1>::populate(table);
-      type_table_init<VIDL2_PIXEL_FORMAT_ENUM_END-1>::populate(type_table);
-      for(unsigned int i=0; i<num_types; ++i){
-        if(type_table[i])
-          vcl_cout << "type "<<i<<" is "<<type_table[i]->name() << vcl_endl;
-      }
+    // generate the table of function pointers
+    table_init<VIDL2_PIXEL_FORMAT_ENUM_END*VIDL2_PIXEL_FORMAT_ENUM_END-1>::populate(table);
+    type_table_init<VIDL2_PIXEL_FORMAT_ENUM_END-1>::populate(type_table);
+    for (unsigned int i=0; i<num_types; ++i){
+      if (type_table[i])
+        vcl_cout << "type "<<i<<" is "<<type_table[i]->name() << vcl_endl;
     }
-    
-    //: Apply the conversion
-    vidl2_color_conv_fptr operator()(vidl2_pixel_color in_C, const vcl_type_info& in_type,
-                                     vidl2_pixel_color out_C, const vcl_type_info& out_type) const
+  }
+
+  //: Apply the conversion
+  vidl2_color_conv_fptr operator()(vidl2_pixel_color in_C, const vcl_type_info& in_type,
+                                   vidl2_pixel_color out_C, const vcl_type_info& out_type) const
+  {
+    unsigned int in_idx = type_index(in_type);
+    unsigned int out_idx = type_index(out_type);
+    return table[in_C][out_C][in_idx][out_idx];
+  }
+
+  unsigned int type_index(const vcl_type_info& t) const
+  {
+    for (unsigned int i=0; i<num_types; ++i)
     {
-      unsigned int in_idx = type_index(in_type);
-      unsigned int out_idx = type_index(out_type);
-      return table[in_C][out_C][in_idx][out_idx];
+      if ( type_table[i] && t == *type_table[i] )
+        return i;
     }
-    
-    unsigned int type_index(const vcl_type_info& t) const
-    {
-      for(unsigned int i=0; i<num_types; ++i)
-      {
-        if( type_table[i] && t == *type_table[i] )
-          return i;
-      }
-      vcl_cerr << "error: unregistered pixel data type - "<<t.name()<<vcl_endl;
-      return -1;
-    }
-  private:
-    //: Table of color conversion functions
-    vidl2_color_conv_fptr table[VIDL2_PIXEL_COLOR_ENUM_END][VIDL2_PIXEL_COLOR_ENUM_END][num_types][num_types];
-    const vcl_type_info* type_table[num_types];
-    
-  };
+    vcl_cerr << "error: unregistered pixel data type - "<<t.name()<<vcl_endl;
+    return -1;
+  }
+ private:
+  //: Table of color conversion functions
+  vidl2_color_conv_fptr table[VIDL2_PIXEL_COLOR_ENUM_END][VIDL2_PIXEL_COLOR_ENUM_END][num_types][num_types];
+  const vcl_type_info* type_table[num_types];
+};
 
 //: Instantiate a global conversion function table
 converter conversion_table;
 
-}
-
+} // namespace
 
 
 //: Returns a color conversion function based on runtime values
