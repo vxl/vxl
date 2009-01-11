@@ -102,7 +102,8 @@ bool convert_generic(const vidl2_frame& in_frame,
     return false;
 
   const unsigned int num_pix = in_frame.ni() * in_frame.nj();
-  vxl_byte in_pixel[in_t.bits_per_pixel/8], out_pixel[out_t.bits_per_pixel/8]; // assume pixels are no more than 4 bytes
+  // assume pixels are no more than 32 bytes (that's 4 doubles)
+  vxl_byte in_pixel[32], out_pixel[32]; 
   for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
     in_itr.get_data(in_pixel);
     color_conv(in_pixel, out_pixel);
