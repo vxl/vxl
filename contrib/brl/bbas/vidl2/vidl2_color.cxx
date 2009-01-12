@@ -159,7 +159,7 @@ class converter
         return i;
     }
     vcl_cerr << "error: unregistered pixel data type - "<<t.name()<<vcl_endl;
-    return -1;
+    return static_cast<unsigned int>(-1);
   }
  private:
   //: Table of color conversion functions
