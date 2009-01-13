@@ -31,6 +31,8 @@
 #include <bsta/bsta_k_medoid.h>
 #include <bsta/bsta_otsu_threshold.h>
 #include <bsta/bsta_parzen.h>
+#include <bsta/bsta_parzen_sf3.h>
+#include <bsta/bsta_parzen_sf1.h>
 #include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_sampler.h>
 #include <bsta/bsta_weibull.h>

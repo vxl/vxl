@@ -6,6 +6,7 @@
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vimt3d/vimt3d_load.h>
+#include <vimt3d/vimt3d_resample_tricubic.h>
 #include <vimt3d/vimt3d_resample_trilinear.h>
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
 #include <vimt3d/vimt3d_sample_profile_trilin.h>
