@@ -22,7 +22,9 @@ static void test_platform_computations()
       for(unsigned i = 0; i<100; ++i)
         if(rnums[i]>t)
           c++;
+#if 0
       vcl_cout << c << ' ';
+#endif
       if(c!=counts[k]){
         vcl_cout << "count[" << k << "]= " << c << " should be " 
                  << counts[k] << '\n';
@@ -40,7 +42,9 @@ static void test_platform_computations()
       for(unsigned i = 0; i<100; ++i)
         if(static_cast<float>(rnums[i])>tf)
           c++;
+#if 0
       vcl_cout << c << ' ';
+#endif
       if(c!=counts[k]){
         vcl_cout << "count[" << k << "]= " << c << " should be " 
                  << counts[k] << '\n';
