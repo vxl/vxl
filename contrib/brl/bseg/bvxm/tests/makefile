@@ -14,6 +14,7 @@ TESTS += test_voxel_world_update.cxx
 TESTS += test_lidar_camera.cxx
 TESTS += test_lidar_processor.cxx
 TESTS += test_voxel_storage_disk_cached.cxx
+TESTS += test_platform_computations.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
