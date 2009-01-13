@@ -3,7 +3,7 @@
 #define bsta_parzen_updater_h_
 //:
 // \file
-// \brief Parzen updaters 
+// \brief Parzen updaters
 // \author Joseph L. Mundy
 // \date October 13, 2008
 //
@@ -17,7 +17,6 @@
 //
 // Do not remove the following statement
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
-//
 
 #include <bsta/bsta_parzen_sphere.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -25,53 +24,49 @@
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 
-//: A parzen window (kernel) updater. If a new sample is within
-// tol of the existing samples then don't insert. Otherwise if the 
-// max number of samples is reached, replace the nearest sample.
+//: A parzen window (kernel) updater.
+// If a new sample is within tol of the existing samples then don't insert.
+// Otherwise if max number of samples is reached, replace the nearest sample.
 template <class parzen_dist_>
 class bsta_parzen_updater
 {
+  T tol_;
+  unsigned max_samples_;
  public:
   typedef typename parzen_dist_::math_type T;
   typedef typename parzen_dist_::vector_type vector_;
   enum { data_dimension = parzen_dist_::dimension };
-  //: Constructor
-  bsta_parzen_updater(T tol, unsigned max_samples): tol_(tol), 
-    max_samples_(max_samples){}
+  // Constructor
+  bsta_parzen_updater(T tol, unsigned max_samples)
+  : tol_(tol), max_samples_(max_samples) {}
 
   //: The update functor
-  void operator() ( parzen_dist_& pdist, const vector_& sample) const;
-
- private:
-  T tol_;
-  unsigned max_samples_;
+  void operator() (parzen_dist_& pdist, const vector_& sample) const;
 };
 
-//: A parzen window (kernel) updater. If a new sample is within
-// tol of the existing samples then don't insert. Otherwise if the 
-// maximum number of samples has been reached, then compute a new
+//: A parzen window (kernel) updater.
+// If a new sample is within tol of the existing samples then don't insert.
+// Otherwise if maximum number of samples has been reached, then compute a new
 // bandwidth estimate based on the most probable fraction of the existing
-// samples. 
+// samples.
 template <class parzen_dist_>
 class bsta_parzen_adapt_bw_updater
 {
+  T tol_;
+  unsigned max_samples_;
+  T frac_background_;
  public:
   typedef typename parzen_dist_::math_type T;
   typedef typename parzen_dist_::vector_type vector_;
   enum { data_dimension = parzen_dist_::dimension };
-  //: Constructor
+  // Constructor
   bsta_parzen_adapt_bw_updater(T tol, unsigned max_samples,
-                      T frac_backgnd = T(1)):
-    tol_(tol), max_samples_(max_samples),
-    frac_background_(frac_backgnd){}
+                               T frac_backgnd = T(1))
+  : tol_(tol), max_samples_(max_samples),
+    frac_background_(frac_backgnd) {}
 
   //: The update functor
-  void operator() ( parzen_dist_& pdist, const vector_& sample) const;
-
- private:
-  T tol_;
-  unsigned max_samples_;
-  T frac_background_;
+  void operator() (parzen_dist_& pdist, const vector_& sample) const;
 };
 
 #endif // bsta_parzen_updater_h_
