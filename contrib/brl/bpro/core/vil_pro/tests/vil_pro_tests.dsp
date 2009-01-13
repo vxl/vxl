@@ -246,6 +246,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_vil_convert_to_n_planes_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_vil_crop_image_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

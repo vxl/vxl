@@ -248,6 +248,9 @@ SOURCE=.\test_lidar_processor.cxx
 SOURCE=.\test_voxel_storage_disk_cached.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_platform_computations.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
