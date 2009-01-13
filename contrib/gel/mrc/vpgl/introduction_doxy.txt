@@ -8,6 +8,6 @@
 * lens distortions (vpgl_lens_distortion).
 *
 * This library is based on vgl and primarily manipulates vgl objects.  However, vnl is also
-* as needed.  The add-on library vpgl_algo contains functions to estimate parameters of vpgl 
+* needed.  The add-on library vpgl_algo contains functions to estimate parameters of vpgl
 * objects.
 */
