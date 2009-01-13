@@ -124,7 +124,8 @@ class brip_vil_float_ops
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
                                        float theta, bool bright = true,
-                                       bool output_response_mask = true);
+                                       bool output_response_mask = true,
+                                       bool unclipped_response = false);
 
   //: compute the inscribed rectangle in an ellipse with largest (1+h)(1+w). Needed for fast non-maximal suppression. Theta is in degrees.
   static void max_inscribed_rect(float lambda0, float lambda1, float theta,
@@ -135,6 +136,7 @@ class brip_vil_float_ops
                                             float lambda0, float lambda1,
                                             float theta, bool bright = true,
                                             bool output_response_mask = true,
+                                            bool unclipped_response = false,
                                             float cutoff_percentage = 0.01f);
 
   //: IxIx.transpose gradient matrix elements for a NxN region(N = 2n+1)

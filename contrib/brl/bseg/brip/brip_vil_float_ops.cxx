@@ -3765,7 +3765,8 @@ std_dev_operator(vil_image_view<float> const& sd_image,
 vil_image_view<float>
 brip_vil_float_ops::extrema(vil_image_view<float> const& input,
                             float lambda0, float lambda1, float theta,
-                            bool bright, bool output_response_mask)
+                            bool bright, bool output_response_mask,
+                            bool unclipped_response)
 {
   vbl_array_2d<float> fa;
   vbl_array_2d<bool> mask;
@@ -3807,7 +3808,8 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   //compute response image
   unsigned ni = input.ni(), nj = input.nj();
   vil_image_view<float> temp(ni, nj);
-  temp.fill(0.0f);
+  vil_image_view<float> temp2(ni, nj);
+  temp.fill(0.0f); temp2.fill(0.0f);
   for (unsigned j = rj; j<(nj-rj); j++)
     for (unsigned i = ri; i<(ni-ri); i++){
       double sum = 0;
@@ -3815,6 +3817,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
         for (int ii=-ri; ii<=ri; ++ii)
           if (mask[jj+rj][ii+ri])
             sum += coef[jj+rj][ii+ri]*input(i+ii, j+jj);
+      temp2(i,j) = static_cast<float>(sum);
       if (bright){ // coefficients are negative at center
         if (sum<0) temp(i,j) = static_cast<float>(-sum);
       }
@@ -3836,16 +3839,27 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
           else if (temp(i+ii, j+jj)>cv)
             res(i,j)=0.0f;
     }
-  if (!output_response_mask)
+  if (!output_response_mask&&!unclipped_response)
     return res;
-  vil_image_view<float> res_mask(ni, nj, 2);//response plane and mask plane
+  unsigned np = 2;
+  if(output_response_mask&&unclipped_response)
+    np = 3;
+  //response plane and mask plane and/or unclipped response
+  vil_image_view<float> res_mask(ni, nj, np);
   res_mask.fill(0.0f);
-  // create a mask plane to combine with the localized response
+  // always copy response to plane 0
   for (unsigned j = rj; j<(nj-rj); j++)
     for (unsigned i = ri; i<(ni-ri); i++)
     {
       float rv = res(i,j);
       res_mask(i,j,0)=rv;
+    }
+  // copy mask plane to plane 1 (or not)
+  if(output_response_mask){
+  for (unsigned j = rj; j<(nj-rj); j++)
+    for (unsigned i = ri; i<(ni-ri); i++)
+    {
+      float rv = res(i,j);
       if (!rv)
         continue;
       for (int jj=-rj; jj<=rj; ++jj)
@@ -3854,7 +3868,17 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
             if (rv>res_mask(i+ii,j+jj,1))
               res_mask(i+ii,j+jj,1) = rv;
     }
+  }
+  // copy unclipped response to plane 1 if no mask plane, otherwise plane 2
+  if (unclipped_response){
+    unsigned p = np-1;
+    for (unsigned j = rj; j<(nj-rj); j++)
+      for (unsigned i = ri; i<(ni-ri); i++)
+        res_mask(i,j,p) = temp2(i,j);
+  }
+
   return res_mask;
+
 }
 
 //: theta and phi are in radians
@@ -4015,7 +4039,7 @@ static void rotation_offset(int ni, int nj, float theta_deg,
 
 vil_image_view<float> brip_vil_float_ops::
 fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
-             float theta, bool bright, bool output_response_mask,
+             float theta, bool bright, bool output_response_mask, bool unclipped_response,
              float cutoff)
 {
   // the kernels for u and v
@@ -4056,6 +4080,8 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
   int ni = input.ni(), nj = input.nj();
   vil_image_view<float> res(ni, nj);
   res.fill(0.0f);
+  vil_image_view<float> temp2(ni, nj);
+  temp2.fill(0.0f);
   for (int j = 0; j<nj; ++j)
     for (int i = 0; i<ni; ++i)
     {
@@ -4066,6 +4092,7 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
       else {
         if (v>0) res(i,j) = v;
       }
+      temp2(i,j) = v;
     }
 
   //
@@ -4121,17 +4148,27 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
             res_sup(i+ii,j+jj)=0.0f;
     }
 
-  if (!output_response_mask)
+  if (!output_response_mask&&!unclipped_response)
     return res_sup;
-
-  vil_image_view<float> res_mask(ni, nj, 2);//response plane and mask plane
+  unsigned np = 2;
+  if(output_response_mask&&unclipped_response)
+    np = 3;
+  //response plane and mask plane and/or unclipped response
+  vil_image_view<float> res_mask(ni, nj, np);
   res_mask.fill(0.0f);
-  // create a mask plane to combine with the localized response
+  // always copy response to plane 0
   for (int j = rj; j<(nj-rj); j++)
     for (int i = ri; i<(ni-ri); i++)
     {
       float rv = res_sup(i,j);
       res_mask(i,j,0)=rv;
+    }
+  // copy mask plane to plane 1 (or not)
+  if(output_response_mask){
+  for (int j = rj; j<(nj-rj); j++)
+    for (int i = ri; i<(ni-ri); i++)
+    {
+      float rv = res_sup(i,j);
       if (!rv)
         continue;
       for (int jj=-rj; jj<=rj; ++jj)
@@ -4140,5 +4177,13 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
             if (rv>res_mask(i+ii,j+jj,1))
               res_mask(i+ii,j+jj,1) = rv;
     }
+  }
+  // copy unclipped response to plane 1 if no mask plane, otherwise plane 2
+  if (unclipped_response){
+    unsigned p = np-1;
+    for (int j = rj; j<(nj-rj); j++)
+      for (int i = ri; i<(ni-ri); i++)
+        res_mask(i,j,p) = temp2(i,j);
+  }
   return res_mask;
 }
