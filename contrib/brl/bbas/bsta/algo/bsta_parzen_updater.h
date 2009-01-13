@@ -30,8 +30,6 @@
 template <class parzen_dist_>
 class bsta_parzen_updater
 {
-  T tol_;
-  unsigned max_samples_;
  public:
   typedef typename parzen_dist_::math_type T;
   typedef typename parzen_dist_::vector_type vector_;
@@ -42,6 +40,9 @@ class bsta_parzen_updater
 
   //: The update functor
   void operator() (parzen_dist_& pdist, const vector_& sample) const;
+ private:
+  T tol_;
+  unsigned max_samples_;
 };
 
 //: A parzen window (kernel) updater.
@@ -52,9 +53,6 @@ class bsta_parzen_updater
 template <class parzen_dist_>
 class bsta_parzen_adapt_bw_updater
 {
-  T tol_;
-  unsigned max_samples_;
-  T frac_background_;
  public:
   typedef typename parzen_dist_::math_type T;
   typedef typename parzen_dist_::vector_type vector_;
@@ -67,6 +65,10 @@ class bsta_parzen_adapt_bw_updater
 
   //: The update functor
   void operator() (parzen_dist_& pdist, const vector_& sample) const;
+ private:
+  T tol_;
+  unsigned max_samples_;
+  T frac_background_;
 };
 
 #endif // bsta_parzen_updater_h_
