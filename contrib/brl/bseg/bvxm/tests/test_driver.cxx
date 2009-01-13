@@ -11,6 +11,7 @@ DECLARE( test_voxel_world_update );
 DECLARE( test_voxel_world_mog_image );
 DECLARE( test_gen_synthetic_world );
 DECLARE( test_lidar_camera );
+DECLARE( test_platform_computations );
 
 void register_tests()
 {
@@ -23,6 +24,7 @@ void register_tests()
   REGISTER( test_voxel_world );
   REGISTER( test_voxel_world_update );
   REGISTER( test_voxel_world_mog_image );
+  REGISTER( test_platform_computations );
   REGISTER( test_gen_synthetic_world );
   REGISTER( test_lidar_camera );
 }
