@@ -1,7 +1,6 @@
 // This is brl/bbas/brdb/brdb_value.h
 #ifndef brdb_value_h_
 #define brdb_value_h_
-
 //:
 // \file
 // \brief The database value class
@@ -10,12 +9,9 @@
 //
 // \verbatim
 //  Modifications
+//   Apr 4, 2007 - Yong Zhao
+//   Make it work with the whole database initially based on Matt's sketch.
 // \endverbatim
-
-//
-// updated by Yong Zhao
-// Apr 4th, 2007
-// Make it work with the whole database initially based on Matt's sketch.
 
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_string.h>
@@ -33,16 +29,14 @@ template< class T > class brdb_value_t;
 class brdb_value : public vbl_ref_count
 {
  public:
-  
+
   //: Destructor
   virtual ~brdb_value() {}
 
-#if 0
-  // The conversion operator causes problems with the ICC compiler
-  // Maybe it is not needed?
+#if 0 // The conversion operator causes problems with the ICC compiler; Maybe it is not needed?
   //: Conversion operator
   template< class T >
-  operator T () const
+  operator T() const
   {
     const brdb_value_t<T>* type_val = dynamic_cast<const brdb_value_t<T>*>(this);
     assert(type_val);
@@ -71,7 +65,7 @@ class brdb_value : public vbl_ref_count
 
   //: Test for inequality (less than) under polymorphism
   virtual bool lt(const brdb_value& other) const = 0;
- 
+
   //: Assign the value of /p other to this if the types are the same
   virtual bool assign(const brdb_value& other) = 0;
 
@@ -88,19 +82,16 @@ class brdb_value : public vbl_ref_count
 
   friend struct registrar;
 
-
   //---------------------------------------------------------------------------
   // Binary I/O functions
 
-
   //: binary io read value only
-  // handles only the value (without version or type info)
+  //  Handles only the value (without version or type info)
   virtual void b_read_value(vsl_b_istream& is) = 0;
 
   //: binary io write value only
-  // handles only the value (without version or type info)
+  //  Handles only the value (without version or type info)
   virtual void b_write_value(vsl_b_ostream& os) const = 0;
-
 
  protected:
   //: Constructor
@@ -108,12 +99,10 @@ class brdb_value : public vbl_ref_count
   //: Copy Constructor
   brdb_value(const brdb_value&) {}
 
- private:  
+ private:
   //: Return a reference to the global registry of database value classes
   static vcl_map<vcl_string, const brdb_value*> & mut_registry();
-
 };
-
 
 //: Equals operator
 inline bool operator == (const brdb_value& lhs,
@@ -162,9 +151,6 @@ inline bool operator >= (const brdb_value& lhs,
   return !lhs.lt(rhs);
 }
 
-
-
-
 //: A templated database value class
 template< class T >
 class brdb_value_t : public brdb_value
@@ -172,7 +158,7 @@ class brdb_value_t : public brdb_value
  public:
   //: Default Constructor
   brdb_value_t<T>() {}
-   
+
   //: Constructor
   explicit brdb_value_t<T>(const T& value)
    : value_(value) {}
@@ -197,12 +183,11 @@ class brdb_value_t : public brdb_value
   //: Return the string identifying this class
   virtual void print() const { vcl_cout << value_ << "   ";}
 
-
   //: Return the value
   T value() const { return value_; }
-  
+
   //: Conversion operator
-  operator T () const { return value_; }
+  operator T() const { return value_; }
 
   //: Assignment operator
   brdb_value_t<T>& operator = (const T& rhs) { value_ = rhs; return *this; }
@@ -212,13 +197,12 @@ class brdb_value_t : public brdb_value
   //---------------------------------------------------------------------------
   // Binary I/O functions
 
-
   //: binary io read value only
-  // handles only the value (without version or type info)
+  //  Handles only the value (without version or type info)
   virtual void b_read_value(vsl_b_istream& is);
 
   //: binary io write value only
-  // handles only the value (without version or type info)
+  //  Handles only the value (without version or type info)
   virtual void b_write_value(vsl_b_ostream& os) const;
 
  private:
@@ -227,7 +211,6 @@ class brdb_value_t : public brdb_value
 
   //: The type identifier string for this class
   const static vcl_string type_string_;
-
 };
 
 template< class T >
@@ -295,21 +278,21 @@ inline bool operator <= (const brdb_value_t<T>& lhs,
 
 template< class T >
 inline bool operator < (const brdb_value_t<T>& lhs,
-                         const brdb_value_t<T>& rhs)
+                        const brdb_value_t<T>& rhs)
 {
   return lhs.value() < rhs.value();
 }
 
 template< class T >
 inline bool operator < (const T& lhs,
-                         const brdb_value_t<T>& rhs)
+                        const brdb_value_t<T>& rhs)
 {
   return lhs < rhs.value();
 }
 
 template< class T >
 inline bool operator < (const brdb_value_t<T>& lhs,
-                         const T& rhs)
+                        const T& rhs)
 {
   return lhs.value() < rhs;
 }
@@ -337,25 +320,23 @@ inline bool operator >= (const brdb_value_t<T>& lhs,
 
 template< class T >
 inline bool operator > (const brdb_value_t<T>& lhs,
-                         const brdb_value_t<T>& rhs)
+                        const brdb_value_t<T>& rhs)
 {
   return lhs.value() > rhs.value();
 }
 
 template< class T >
 inline bool operator > (const T& lhs,
-                         const brdb_value_t<T>& rhs)
+                        const brdb_value_t<T>& rhs)
 {
   return lhs > rhs.value();
 }
 
 template< class T >
 inline bool operator > (const brdb_value_t<T>& lhs,
-                         const T& rhs)
+                        const T& rhs)
 {
   return lhs.value() > rhs;
 }
-
-
 
 #endif // brdb_value_h_
