@@ -367,11 +367,12 @@ MAIN( test_brec_update_changes_process )
   params->add("world_dir", "worlddir", world_dir);
 
   // create an empty directory, or empty the directory if it exists
+  vcl_string delete_str = world_dir+"/*.vox";
   if (vul_file::is_directory(world_dir))
-    vul_file::delete_file_glob(world_dir+"/*");
+    vul_file::delete_file_glob(delete_str.c_str());
   else {
     if (vul_file::exists(world_dir))
-      vul_file::delete_file_glob(world_dir);
+      vul_file::delete_file_glob(world_dir.c_str());
     vul_file::make_directory(world_dir);
   }
 

@@ -94,11 +94,12 @@ MAIN( test_brec_create_mog_image_process )
   params->add("world_dir", "worlddir", world_dir);
 
   // create an empty directory, or empty the directory if it exists
+  vcl_string delete_str = world_dir+"/*.vox";
   if (vul_file::is_directory(world_dir))
-    vul_file::delete_file_glob(world_dir+"/*");
+    vul_file::delete_file_glob(delete_str.c_str());
   else {
     if (vul_file::exists(world_dir))
-      vul_file::delete_file_glob(world_dir);
+      vul_file::delete_file_glob(world_dir.c_str());
     vul_file::make_directory(world_dir);
   }
 
@@ -201,10 +202,12 @@ MAIN( test_brec_create_mog_image_process )
     //: display the output mog image
     brdb_value_sptr v8 = new brdb_value_t<vcl_string>("mean");
     brdb_value_sptr v9 = new brdb_value_t<int>(component);  // the component to display
+    brdb_value_sptr v11 = new brdb_value_t<bool>(true);  // scale result to a byte image
     good = bprb_batch_process_manager::instance()->init_process("DisplayDistImageProcess");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v7);
     good = good && bprb_batch_process_manager::instance()->set_input(1, v8);
     good = good && bprb_batch_process_manager::instance()->set_input(2, v9);
+    good = good && bprb_batch_process_manager::instance()->set_input(3, v11);
     good = good && bprb_batch_process_manager::instance()->run_process();
     TEST("display mog image process", good , true);
 
@@ -223,10 +226,12 @@ MAIN( test_brec_create_mog_image_process )
 
     //: display the output mog image's std deviation
     brdb_value_sptr v10 = new brdb_value_t<vcl_string>("variance");
+    
     good = bprb_batch_process_manager::instance()->init_process("DisplayDistImageProcess");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v7);
     good = good && bprb_batch_process_manager::instance()->set_input(1, v10);
     good = good && bprb_batch_process_manager::instance()->set_input(2, v9);
+    good = good && bprb_batch_process_manager::instance()->set_input(3, v11);
     good = good && bprb_batch_process_manager::instance()->run_process();
     TEST("display mog image process", good , true);
 
