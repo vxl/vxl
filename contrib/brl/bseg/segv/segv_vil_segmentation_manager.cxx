@@ -1745,15 +1745,16 @@ void segv_vil_segmentation_manager::extrema()
   static float theta = 0.0f;
   static bool bright = true;
   static bool color_overlay = true;
-  static bool output_mask = true;
   static bool fast = true;
+  static int choice = 1;
   vgui_dialog extrema_dialog("Detect Extrema");
   extrema_dialog.field("lambda0",lambda0);
   extrema_dialog.field("lambda1",lambda1);
   extrema_dialog.field("theta",theta);
   extrema_dialog.checkbox("Bright Extrema?(check)",bright);
   extrema_dialog.checkbox("ColorOverlay?(check)",color_overlay);
-  extrema_dialog.checkbox("Response And Mask?(check)",output_mask);
+  extrema_dialog.choice("Display Mode", "Point Response Only",
+                        "Point & Mask", "Point & Unclipped", choice);
   extrema_dialog.checkbox("Fast Alg.(check)", fast);
   if (!extrema_dialog.ask())
     return;
@@ -1761,23 +1762,26 @@ void segv_vil_segmentation_manager::extrema()
   vil_image_view<float> fimg =
     brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr;
+  bool output_mask = false, output_unclipped = false;
+  if(choice ==1) output_mask = true;
+  if(choice == 2) output_unclipped = true;
   if (fast)
     extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright,
-                                            output_mask);
+                                            output_mask, output_unclipped);
   else
     extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright,
-                                 output_mask);
+                                 output_mask, output_unclipped);
 
   vcl_cout << "Extrema computation time " << t.real() << " msec\n";
   unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();
-  if (!output_mask&&!color_overlay){
+  if (choice==0&&!color_overlay){
     if (np!=1)
       return;
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
     this->add_image(resc);
     return;
   }
-  if (!output_mask&&color_overlay){
+  if (choice==0&&color_overlay){
     if (np!=1)
       return;
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
@@ -1785,7 +1789,7 @@ void segv_vil_segmentation_manager::extrema()
       brip_vil_float_ops::combine_color_planes(img, resc, img);
     this->add_image(vil_new_image_resource_of_view(rgb));
   }
-  if (output_mask)
+  if (choice>0)
   {
     if (np!=2)
       return;
