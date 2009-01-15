@@ -6,6 +6,7 @@ DECLARE( test_lbp_solver );
 DECLARE( test_order_cost );
 DECLARE( test_csp_solver );
 DECLARE( test_diffusion_solver );
+DECLARE( test_make_tri_tree );
 
 void register_tests()
 {
@@ -15,6 +16,7 @@ void register_tests()
   REGISTER( test_order_cost );
   REGISTER( test_csp_solver );
   REGISTER( test_diffusion_solver );
+  REGISTER( test_make_tri_tree );
 }
 
 DEFINE_MAIN;

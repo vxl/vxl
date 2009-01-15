@@ -66,10 +66,13 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   {
     // Find nearest neighbour of v0
     double min_d=9e9;
-    unsigned best_i=0;
+    unsigned best_i=n+1;
     for (unsigned i=0;i<n;++i)
-      if (i!=v0 && D(v0,i)<min_d)
-      { best_i=i; min_d=D(v0,i); }
+      if (i!=v0)
+      {
+         if (best_i>n || D(v0,i)<min_d)
+         { best_i=i; min_d=D(v0,i); }
+      }
     arc = mmn_arc(v0,best_i);
   }
   else
@@ -100,10 +103,13 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   {
     // Search for node with lowest distance to an arc end
     double min_d=9e9;
-    unsigned best_i=0;
+    unsigned best_i=n+1;
     for (unsigned i=0;i<n;++i)
-      if (node_free[i] && best_d[i]<min_d)
-        {min_d=best_d[i]; best_i=i; }
+      if (node_free[i])
+      {
+        if (best_i>n || best_d[i]<min_d)
+        { min_d=best_d[i]; best_i=i; }
+      }
 
     arc = arcs[best_arc[best_i]];
     // Record arcs from node best_i to ends of arc best_arcs[best_i]
@@ -160,10 +166,13 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   {
     // Find nearest neighbour of v0
     double min_d=9e9;
-    unsigned best_i=0;
+    unsigned best_i=n+1;
     for (unsigned i=0;i<n;++i)
-      if (i!=v0 && D(v0,i)<min_d)
-      { best_i=i; min_d=D(v0,i); }
+      if (i!=v0)
+      {
+         if (best_i>n || D(v0,i)<min_d)
+         { best_i=i; min_d=D(v0,i); }
+      }
     arc = mmn_arc(v0,best_i);
   }
   else
@@ -197,10 +206,13 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   {
     // Search for node with lowest distance to an arc end
     double min_d=9e9;
-    unsigned best_i=0;
+    unsigned best_i=n+1;
     for (unsigned i=0;i<n;++i)
-      if (node_free[i] && best_d[i]<min_d)
-        {min_d=best_d[i]; best_i=i; }
+      if (node_free[i])
+      {
+        if (best_i>n || best_d[i]<min_d)
+        { min_d=best_d[i]; best_i=i; }
+      }
 
     arc = arcs[best_arc[best_i]];
     // Record arcs from node best_i to ends of arc best_arcs[best_i]
