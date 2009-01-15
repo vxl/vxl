@@ -18,9 +18,11 @@ vil_load_image_view_process::vil_load_image_view_process()
   input_types_[0]="vcl_string";
 
   //output
-  output_data_.resize(1,brdb_value_sptr(0));
-  output_types_.resize(1);
+  output_data_.resize(3,brdb_value_sptr(0));
+  output_types_.resize(3);
   output_types_[0]= "vil_image_view_base_sptr";
+  output_types_[1]= "unsigned";   // ni of the image
+  output_types_[2]= "unsigned";   // nj of the image
 }
 
 
@@ -51,9 +53,12 @@ vil_load_image_view_process::execute()
   }
 
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(loaded_image);
+  brdb_value_sptr output1 = new brdb_value_t<unsigned>(loaded_image->ni());
+  brdb_value_sptr output2 = new brdb_value_t<unsigned>(loaded_image->nj());
 
   output_data_[0] = output0;
-
+  output_data_[1] = output1;
+  output_data_[2] = output2;
   return true;
 }
 
