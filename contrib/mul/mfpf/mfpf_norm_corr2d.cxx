@@ -319,9 +319,9 @@ void mfpf_norm_corr2d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
 void mfpf_norm_corr2d::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const
 {
   vil_convert_stretch_range(kernel_,image.image());
-  vimt_transform_2d im2ref;
-  im2ref.set_zoom_only(step_size_,ref_x_,ref_y_);
-  image.set_world2im(im2ref.inverse());
+  vimt_transform_2d ref2im;
+  ref2im.set_zoom_only(1.0/step_size_,ref_x_,ref_y_);
+  image.set_world2im(ref2im);
 }
 
 //=======================================================================

@@ -336,9 +336,9 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
     for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
       image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
   }
-  vimt_transform_2d im2ref;
-  im2ref.set_zoom_only(step_size_,ref_x_,ref_y_);
-  image.set_world2im(im2ref.inverse());
+  vimt_transform_2d ref2im;
+  ref2im.set_zoom_only(1.0/step_size_,ref_x_,ref_y_);
+  image.set_world2im(ref2im);
 }
 
 //=======================================================================
