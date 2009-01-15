@@ -316,9 +316,12 @@ void mfpf_norm_corr2d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
 }
 
 //: Return an image of the kernel
-void mfpf_norm_corr2d::get_image_of_model(vil_image_view<vxl_byte>& image) const
+void mfpf_norm_corr2d::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const
 {
-  vil_convert_stretch_range(kernel_,image);
+  vil_convert_stretch_range(kernel_,image.image());
+  vimt_transform_2d im2ref;
+  im2ref.set_zoom_only(step_size_,ref_x_,ref_y_);
+  image.set_world2im(im2ref.inverse());
 }
 
 //=======================================================================

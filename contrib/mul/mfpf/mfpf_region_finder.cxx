@@ -316,7 +316,7 @@ void mfpf_region_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) con
 }
 
 //: Return an image of the region of interest
-void mfpf_region_finder::get_image_of_model(vil_image_view<vxl_byte>& image) const
+void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const
 {
   vnl_vector<double> mean;
   cost().get_average(mean);
@@ -328,14 +328,17 @@ void mfpf_region_finder::get_image_of_model(vil_image_view<vxl_byte>& image) con
   double min1=mean1.min_value();
   double max1=mean1.max_value();
   double s =255/(max1-min1);
-  image.set_size(roi_ni_,roi_nj_);
-  image.fill(0);
+  image.image().set_size(roi_ni_,roi_nj_);
+  image.image().fill(0);
   unsigned q=0;
   for (unsigned k=0;k<roi_.size();++k)
   {
     for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
-      image(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+      image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
   }
+  vimt_transform_2d im2ref;
+  im2ref.set_zoom_only(step_size_,ref_x_,ref_y_);
+  image.set_world2im(im2ref.inverse());
 }
 
 //=======================================================================

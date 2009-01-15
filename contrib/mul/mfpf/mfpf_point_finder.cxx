@@ -548,10 +548,10 @@ void mfpf_point_finder::refine_match(const vimt_image_2d_of<float>& image,
 //  For instance, creates an image of the mean template used for
 //  search.
 //  Default implementation does nothing - returns an empty image.
-void mfpf_point_finder::get_image_of_model(vil_image_view<vxl_byte>& image) const
+void mfpf_point_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const
 {
   // Return empty image.
-  image.set_size(0,0);
+  image.image().set_size(0,0);
 }
 
 
@@ -561,6 +561,35 @@ bool mfpf_point_finder::overlap(const mfpf_pose& pose1,
 {
   return false;
 }
+
+//: Computes the aligned bounding box for feature with given pose
+//  On exit box_pose.p() gives the centre, corners are given by
+//  box_pose(+/-0.5*wi, +/-0.5*wj).
+void mfpf_point_finder::aligned_bounding_box(const mfpf_pose& pose,
+                                    mfpf_pose& box_pose,
+                                    double& wi, double& wj)
+{
+  // Compute the bounding box of the outline (in ref frame)
+  vcl_vector<vgl_point_2d<double> > pts;
+  get_outline(pts);
+  double xlo=pts[0].x(), xhi=xlo;
+  double ylo=pts[0].y(), yhi=ylo;
+  for (unsigned i=1;i<pts.size();++i)
+  {
+    if (pts[i].x()<xlo) xlo=pts[i].x();
+    else if (pts[i].x()>xhi) xhi=pts[i].x();
+    if (pts[i].y()<ylo) ylo=pts[i].y();
+    else if (pts[i].y()>yhi) yhi=pts[i].y();
+  }
+  // Mapping required to transform a box centred on the origin to 
+  // given bounding box, then scaling by model scale step
+  mfpf_pose trans(0.5*(xlo+xhi),0.5*(ylo+yhi),step_size(),0);
+  box_pose = pose*trans;
+
+  wi=xhi-xlo;
+  wj=yhi-ylo;
+}
+
 
 
 //: Return true if base class parameters are the same in pf

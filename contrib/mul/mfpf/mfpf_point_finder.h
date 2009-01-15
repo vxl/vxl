@@ -226,11 +226,19 @@ class mfpf_point_finder
   //  contour to get a representation.
   virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const=0;
 
+  //: Computes the aligned bounding box for feature with given pose
+  //  On exit box_pose.p() gives the centre, corners are given by
+  //  box_pose(+/-0.5*wi, +/-0.5*wj).
+  virtual void aligned_bounding_box(const mfpf_pose& pose,
+                                    mfpf_pose& box_pose,
+                                    double& wi, double& wj);
+
   //: Create an image summarising the average model (where possible)
   //  For instance, creates an image of the mean template used for
-  //  search.
+  //  search. image.world2im() gives mapping from reference frame
+  //  into raw image co-ords (including the step size).
   //  Default implementation does nothing - returns an empty image.
-  virtual void get_image_of_model(vil_image_view<vxl_byte>& image) const;
+  virtual void get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const;
 
   //: Version number for I/O
   short version_no() const;

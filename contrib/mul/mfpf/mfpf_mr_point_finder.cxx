@@ -232,9 +232,9 @@ void mfpf_mr_point_finder::save_images_of_models(const vcl_string& basepath) con
   {
     vcl_stringstream s;
     s<<basepath<<"_L"<<L<<".png";
-    vil_image_view<vxl_byte> image;
+    vimt_image_2d_of<vxl_byte> image;
     finder(L).get_image_of_model(image);
-    if (vil_save(image,s.str().c_str()))
+    if (vil_save(image.image(),s.str().c_str()))
       vcl_cout<<"Saved image to "<<s.str()<<vcl_endl;
     else
       vcl_cout<<"Failed to save image to "<<s.str()<<vcl_endl;
