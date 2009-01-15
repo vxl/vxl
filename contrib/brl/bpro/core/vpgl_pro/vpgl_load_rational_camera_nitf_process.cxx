@@ -24,14 +24,6 @@ vpgl_load_rational_camera_nitf_process::vpgl_load_rational_camera_nitf_process()
   output_data_.resize(1,brdb_value_sptr(0));
   output_types_.resize(1);
   output_types_[0]= "vpgl_camera_double_sptr";
-
-  //parameters
-#if 0
-  if ( !parameters()->add( "Image file <filename...>" , "-image_filename" , bprb_filepath("","*") ))
-  {
-    vcl_cerr << "ERROR: Adding parameters in " __FILE__ << vcl_endl;
-  }
-#endif // 0
 }
 
 

@@ -14,6 +14,7 @@ SET( vpgl_pro_sources
   vpgl_save_perspective_camera_process.h   vpgl_save_perspective_camera_process.cxx
   vpgl_save_rational_camera_process.h      vpgl_save_rational_camera_process.cxx
   vpgl_nitf_camera_coverage_process.h      vpgl_nitf_camera_coverage_process.cxx
+  vpgl_register.h                          vpgl_register.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_pro_sources)
