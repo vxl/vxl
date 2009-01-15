@@ -40,6 +40,13 @@ inline vcl_ostream& operator<<(vcl_ostream& os, const mmn_arc& t)
   return os<<"{"<<t.v1<<","<<t.v2<<"}";
 }
 
+inline vcl_ostream& operator<<(vcl_ostream& os, 
+                               const vcl_vector<mmn_arc>& arcs)
+{
+  for (unsigned i=0;i<arcs.size();++i) os<<arcs[i];
+  return os;
+}
+
 inline void vsl_b_write(vsl_b_ostream& bfs, const mmn_arc& t)
 {
   vsl_b_write(bfs,t.v1);
