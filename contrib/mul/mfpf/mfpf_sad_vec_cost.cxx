@@ -34,7 +34,11 @@ void mfpf_sad_vec_cost::set(const vnl_vector<double>& mean,
   assert(mean.size()==wts.size());
   mean_=mean;
   wts_ =wts;
-if (wts.mean()>9999) vcl_abort();
+  if (wts.mean()>9999)
+  {
+    vcl_cerr<<"Mean weights excessive: "<<wts.mean()<<vcl_endl;
+    vcl_abort();
+  }
 }
 
 //: Evaluate weighted sum of absolute difference from mean

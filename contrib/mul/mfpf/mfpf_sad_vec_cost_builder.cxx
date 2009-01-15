@@ -115,7 +115,8 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
     stats.obs(nc.evaluate(data_[i]));
 
   // Tweak the weights so that the SD of this will be unity
-  wts/=stats.sd();
+  if (stats.sd()>1e-6)
+    wts/=stats.sd();
 
   nc.set(mean,wts);
 
