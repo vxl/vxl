@@ -43,7 +43,8 @@ MAIN( test_update_dist_image )
   p1->set_input(4 , new brdb_value_t<float>(0.1f));//initial variance
   p1->set_input(5 , new brdb_value_t<float>(3.0f));//g_thresh
   p1->set_input(6 , new brdb_value_t<float>(0.02f));//min standard deviation
-  bool good = p1->execute();
+  bool good = p1->init();
+  good = good && p1->execute();
   TEST("update distribution image process", good, true);
   SUMMARY();
 }
