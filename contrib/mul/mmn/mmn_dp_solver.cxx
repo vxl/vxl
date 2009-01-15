@@ -46,6 +46,13 @@ void mmn_dp_solver::process_dep1(const mmn_dependancy& dep)
   }
   else
   {
+    if (p.rows()!=nc1.size())
+    {
+      vcl_cerr<<"p.rows()="<<p.rows()<<"p.cols()="<<p.cols()
+              <<" nc0.size()="<<nc0.size()
+              <<" nc1.size()="<<nc1.size()<<vcl_endl;
+      vcl_cerr<<"dep: "<<dep<<vcl_endl;
+    }
     assert(p.rows()==nc1.size());
     assert(p.cols()==nc0.size());
   }
