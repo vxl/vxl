@@ -44,11 +44,16 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: set primitive data type input on current process
   bool set_input(unsigned i, brdb_value_sptr const& input);
 
+  bool set_input_from_db(unsigned i, unsigned id, vcl_string type);
+
   //: set input from the database
   bool set_input_from_db(unsigned i, unsigned id);
 
   //: put the output into the database
   bool commit_output(unsigned i, unsigned& id);
+
+  //: put the output into the database
+  bool commit_output(unsigned i, unsigned& id, vcl_string& type);
 
   //: put the output into the database
   bool commit_all_outputs(vcl_vector<unsigned>& ids);

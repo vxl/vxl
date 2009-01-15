@@ -95,6 +95,44 @@ set_input(unsigned i, brdb_value_sptr const& input)
 
 //: set input from the database
 bool bprb_batch_process_manager::set_input_from_db(unsigned i,
+                                                   unsigned id,
+                                                   vcl_string type)
+{
+  if (!current_process_)
+    return false;
+
+  // construct the name of the relation
+  vcl_string relation_name = type + "_data";
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  if (selec->size()!=1) {
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+             << " no selections\n";
+    return false;
+  }
+  brdb_value_sptr value;
+  if (!selec->get_value(vcl_string("value"), value)) {
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+             << " didn't get value\n";
+    return false;
+  }
+  if (!value) {
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+             << " null value\n";
+    return false;
+  }
+  if (!current_process_->set_input(i, value)){
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+             << " can't set input on process\n";
+    return false;
+  }
+  return true;
+}
+
+//: set input from the database
+bool bprb_batch_process_manager::set_input_from_db(unsigned i,
                                                    unsigned id)
 {
   if (!current_process_)
@@ -134,9 +172,16 @@ bool bprb_batch_process_manager::set_input_from_db(unsigned i,
 //: put the output into the database
 bool bprb_batch_process_manager::commit_output(unsigned i, unsigned& id)
 {
+  vcl_string type;
+  return commit_output(i, id, type);
+}
+
+//: put the output into the database
+bool bprb_batch_process_manager::commit_output(unsigned i, unsigned& id, vcl_string &type)
+{
   if (!current_process_)
     return false;
-  vcl_string type = current_process_->output_type(i);
+  /*vcl_string */type = current_process_->output_type(i);
   // construct the name of the relation
   vcl_string relation_name = type + "_data";
   // construct the tuple
@@ -166,7 +211,8 @@ bool bprb_batch_process_manager::commit_all_outputs(vcl_vector<unsigned>& ids)
   ids.clear();
   for (unsigned i = 0; i<current_process_->n_outputs(); ++i){
     unsigned id;
-    if (!this->commit_output(i, id))
+    vcl_string type;
+    if (!this->commit_output(i, id, type))
       return false;
     else
       ids.push_back(id);

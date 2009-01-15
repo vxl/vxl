@@ -310,10 +310,10 @@ class bprb_parameters : public vbl_ref_count
   //: Print all parameters to \p os
   void print_all(vcl_ostream& os) const;
 
- private:
+ //private:
   //: Add parameter helper function
   bool add( bprb_param* param );
-
+private:
   template<class T>
   bool get_param( const vcl_string& name,
                   bprb_param_type<T> * &param) const

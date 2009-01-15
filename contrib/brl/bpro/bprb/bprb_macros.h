@@ -22,6 +22,9 @@
 #define REG_PROCESS(proc, T) \
   T ::register_process( bprb_process_sptr( new proc() ) )
 
+#define REG_PROCESS_FUNC(proc, T, func, nm) \
+  T ::register_process( bprb_process_sptr( new proc(func, nm) ) )
+
 #define REGISTER_DATATYPE(T) \
   vcl_string s##T = #T; \
   s##T += "_data"; \

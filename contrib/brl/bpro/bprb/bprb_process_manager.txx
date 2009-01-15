@@ -103,8 +103,6 @@ bprb_process_manager<T>::register_process( const bprb_process_sptr& sptr )
   vcl_cout << "Registered " << nm << '\n';
   }
 }
-
-
 #undef BPRB_PROCESS_MANAGER_INSTANTIATE
 #define BPRB_PROCESS_MANAGER_INSTANTIATE(T) \
 template <class T > T* bprb_process_manager<T >::instance_ = 0; \

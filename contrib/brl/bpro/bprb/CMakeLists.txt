@@ -7,6 +7,7 @@ SET(bprb_sources
    bprb_parameters.cxx             bprb_parameters.h            bprb_parameters_sptr.h
    bprb_parameters.txx
    bprb_process.cxx                bprb_process.h               bprb_process_sptr.h
+   bprb_process_ext.cxx            bprb_process_ext.h  
    bprb_process_manager.txx        bprb_process_manager.h
    bprb_batch_process_manager.cxx  bprb_batch_process_manager.h
    bprb_null_process.cxx           bprb_null_process.h

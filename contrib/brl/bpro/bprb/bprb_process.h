@@ -99,10 +99,10 @@ class bprb_process : public vbl_ref_count
   vcl_string output_type(unsigned i) const;
 
   //: Set all the inputs at once
-  bool set_input_data(vcl_vector<brdb_value_sptr> const& inputs);
+  virtual bool set_input_data(vcl_vector<brdb_value_sptr> const& inputs);
 
   //: set a particular input
-  bool set_input(unsigned i, brdb_value_sptr const& value);
+  virtual bool set_input(unsigned i, brdb_value_sptr const& value);
 
   //: get all outputs at once
   vcl_vector<brdb_value_sptr>& output_data(){return output_data_;}

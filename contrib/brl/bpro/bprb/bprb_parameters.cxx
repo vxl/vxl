@@ -107,22 +107,33 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
     }
   }
 
-  // iterate over each parameter, and set the ones found
-  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
-        it != param_list_.end();
-        it++ ) {
-    vcl_string name = (*it)->name();
-    bxml_element query(name);
-    // look for the attribute in the tree under root element
-    bxml_element* param = static_cast<bxml_element*> (bxml_find_by_name(root, query).as_pointer());
-    if (param) {
-      vcl_string value = param->attribute("value");
-      vcl_string type = param->attribute("type");
-      vcl_string desc = param->attribute("desc");
-      (*it)->parse_value_str(value);
-      // TODO : set the type and description in the params, they are not settable
+  // iterate over he elements and find out their types
+  bxml_element* h_elm = static_cast<bxml_element*>(root.ptr());
+  for (bxml_element::const_data_iterator i = h_elm->data_begin(); i != h_elm->data_end();  ++i) {
+    bxml_data_sptr elm = *i;
+    if (elm->type() == bxml_data::ELEMENT) {
+      bxml_element* param = static_cast<bxml_element*> (elm.as_pointer());
+      if (param) {
+        vcl_string value = param->attribute("value");
+        vcl_string type = param->attribute("type");
+        vcl_string desc = param->attribute("desc");
+        bprb_param* p;
+        if (!type.compare("float")) {
+          p =  new bprb_param_type<float>(param->name(), desc, 0);
+        } else if (!type.compare("unsigned")) {
+          p =  new bprb_param_type<unsigned>(param->name(), desc, 0);
+        } else if (!type.compare("int")) {
+          p =  new bprb_param_type<int>(param->name(), desc, 0);
+        } else if (!type.compare("string")) {
+          p =  new bprb_param_type<vcl_string>(param->name(), desc, "");
+        }
+        p->parse_value_str(value);
+        param_list_.push_back(p);
+        name_param_map_[p->name()] = p;
+      }
     }
   }
+
   return true;
 }
 
