@@ -35,7 +35,7 @@ bool bprb_process_ext::set_input(unsigned i, brdb_value_sptr const& value)
     vcl_cout << "bprb_process_ext::set_input() - null value\n";
     return false;
   }
-  
+
   input_data_.push_back(value);
   return true;
 }
