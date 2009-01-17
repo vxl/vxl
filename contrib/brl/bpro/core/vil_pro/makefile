@@ -21,6 +21,7 @@ SOURCES += vil_save_image_view_binary_process.cxx
 SOURCES += vil_map_image_binary_process.cxx
 SOURCES += vil_image_pair_process.cxx
 SOURCES += vil_crop_image_process.cxx
+SOURCES += vil_register.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
