@@ -159,7 +159,7 @@ SOURCE=.\Templates/bsta_weibull+double-.cxx
 SOURCE=.\Templates/bsta_weibull+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_sampler+uint---.cxx
+SOURCE=.\Templates/bsta_sampler+uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bsta_parzen_sphere+float.1-.cxx

@@ -114,6 +114,9 @@ SOURCE=.\vpgl_save_rational_camera_process.cxx
 SOURCE=.\vpgl_nitf_camera_coverage_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_register.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+vpgl_camera+double---.cxx
 # End Source File
 # End Group
@@ -139,6 +142,9 @@ SOURCE=.\vpgl_save_rational_camera_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_nitf_camera_coverage_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_register.h
 # End Source File
 # End Group
 # End Target

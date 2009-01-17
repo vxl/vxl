@@ -93,9 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil_io_image_view_base.cxx
 # End Source File
 # Begin Source File
@@ -145,6 +142,12 @@ SOURCE=.\vil_image_pair_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_crop_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -202,6 +205,9 @@ SOURCE=.\vil_image_pair_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_crop_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_register.h
 # End Source File
 # End Group
 # End Target

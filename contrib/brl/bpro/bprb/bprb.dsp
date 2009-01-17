@@ -103,6 +103,9 @@ SOURCE=.\bprb_batch_process_manager.cxx
 SOURCE=.\bprb_null_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bprb_process_ext.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bprb_parameters+bool-.cxx
 # End Source File
 # Begin Source File
@@ -167,6 +170,9 @@ SOURCE=.\bprb_process_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\bprb_process_manager.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bprb_process_ext.h
 # End Source File
 # End Group
 # End Target
