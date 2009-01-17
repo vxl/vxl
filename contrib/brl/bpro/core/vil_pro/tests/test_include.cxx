@@ -12,6 +12,7 @@
 #include <vil_pro/vil_map_image_binary_process.h>
 #include <vil_pro/vil_map_image_process.h>
 #include <vil_pro/vil_math_functors.h>
+#include <vil_pro/vil_register.h>
 #include <vil_pro/vil_rgbi_to_grey_process.h>
 #include <vil_pro/vil_save_image_view_binary_process.h>
 #include <vil_pro/vil_save_image_view_process.h>
