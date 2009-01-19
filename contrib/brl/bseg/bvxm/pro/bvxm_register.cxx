@@ -42,7 +42,6 @@
 void bvxm_register::register_datatype()
 {
   REGISTER_DATATYPE( bvxm_voxel_world_sptr );
-  REGISTER_DATATYPE( bvxm_multi_scale_voxel_world_sptr );
 }
 
 void bvxm_register::register_process()
