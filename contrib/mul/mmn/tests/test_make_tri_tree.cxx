@@ -35,13 +35,12 @@ void test_make_tri_tree_a()
   TEST("N.arcs",arcs.size(),3);
 
   vcl_cout<<arcs<<vcl_endl;
-
 }
 
 void test_make_tri_tree_b()
 {
   vcl_cout<<"==== test mmn_make_tri_tree (line) ====="<<vcl_endl;
-  unsigned n=4;  
+  int n=4;
   vnl_matrix<double> D(n,n);
   for (int i=0;i<n;++i)
     for (int j=0;j<n;++j) D(i,j)=(i-j)*(i-j);
