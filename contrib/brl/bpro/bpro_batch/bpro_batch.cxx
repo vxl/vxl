@@ -3,6 +3,7 @@
 #include <vcl_iostream.h>
 
 #include <bprb/bprb_batch_process_manager.h>
+#include <bprb/bprb_macros.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_query.h>
@@ -310,4 +311,15 @@ clear(PyObject *self, PyObject *args)
   return Py_None;
 }
 
+void 
+register_basic_datatypes()
+{
+  REGISTER_DATATYPE(bool);
+  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE(int);
+  REGISTER_DATATYPE(unsigned);
+  REGISTER_DATATYPE(long);
+  REGISTER_DATATYPE(float);
+  REGISTER_DATATYPE(double);
+}
 
