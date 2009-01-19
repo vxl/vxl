@@ -93,12 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+vidl2_istream_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+vidl2_ostream_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vidl2_io_istream.cxx
 # End Source File
 # Begin Source File
@@ -121,6 +115,15 @@ SOURCE=.\vidl2_get_frame_istream_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_open_dshow_istream_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+vidl2_istream_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+vidl2_ostream_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -148,6 +151,9 @@ SOURCE=.\vidl2_get_frame_istream_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_open_dshow_istream_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_register.h
 # End Source File
 # End Group
 # End Target

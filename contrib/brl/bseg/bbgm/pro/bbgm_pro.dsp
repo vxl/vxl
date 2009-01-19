@@ -93,9 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+bbgm_image_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bbgm_display_dist_image_process.cxx
 # End Source File
 # Begin Source File
@@ -118,6 +115,12 @@ SOURCE=.\bbgm_local_frame_trans_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bbgm_update_parzen_dist_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bbgm_image_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -145,6 +148,9 @@ SOURCE=.\bbgm_local_frame_trans_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bbgm_update_parzen_dist_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_register.h
 # End Source File
 # End Group
 # End Target

@@ -183,9 +183,6 @@ SOURCE=.\multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 SOURCE=.\multiscale_pro/bvxm_detect_scale_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_rpc_prob_registration_process.cxx
 # End Source File
 # Begin Source File
@@ -193,6 +190,12 @@ SOURCE=.\bvxm_update_edges_lidar_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_lidar_edge_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -295,6 +298,9 @@ SOURCE=.\bvxm_update_edges_lidar_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_lidar_edge_detection_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_register.h
 # End Source File
 # End Group
 # End Target
