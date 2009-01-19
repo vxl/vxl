@@ -9,6 +9,7 @@
 #include <vpgl/vpgl_camera.h>
 
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 
 void vpgl_register::register_datatype()
@@ -27,3 +28,4 @@ void vpgl_register::register_process()
   REG_PROCESS(vpgl_save_perspective_camera_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_save_rational_camera_process, bprb_batch_process_manager);
 }
+
