@@ -5,8 +5,11 @@
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/dbil/algo )
+#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/shapelib)
+#INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
 
@@ -42,7 +45,7 @@ SET(bvxm_pro_sources
     bvxm_roc_process.h                      bvxm_roc_process.cxx
     bvxm_update_edges_lidar_process.h       bvxm_update_edges_lidar_process.cxx
     bvxm_lidar_edge_detection_process.h     bvxm_lidar_edge_detection_process.cxx
-
+    bvxm_register.h                         bvxm_register.cxx
     # multiscale
     multiscale_pro/bvxm_detect_scale_process.h                    multiscale_pro/bvxm_detect_scale_process.cxx
     multiscale_pro/bvxm_compare_3d_voxels_process.h               multiscale_pro/bvxm_compare_3d_voxels_process.cxx
@@ -52,7 +55,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bvxm bvxm_io bprb bil_algo sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil vil_io vil_pro vnl vnl_io bgeo vgl vgl_algo brip brdb)
+TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bprb bil_algo sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil vil_io vil_pro vnl vnl_io bgeo vgl vgl_algo brip brdb)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
