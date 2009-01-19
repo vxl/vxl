@@ -11,6 +11,7 @@ SOURCES += vidl2_pro_utils.cxx
 SOURCES += vidl2_close_istream_process.cxx
 SOURCES += vidl2_get_frame_istream_process.cxx
 SOURCES += vidl2_open_dshow_istream_process.cxx
+SOURCES += vidl2_register.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

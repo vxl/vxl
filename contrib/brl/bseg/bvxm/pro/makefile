@@ -34,6 +34,7 @@ SOURCES += bvxm_pmap_ratio_process.cxx
 SOURCES += bvxm_rpc_prob_registration_process.cxx
 SOURCES += bvxm_update_edges_lidar_process.cxx
 SOURCES += bvxm_lidar_edge_detection_process.cxx
+SOURCES += bvxm_register.cxx
 
 SOURCES += multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 SOURCES += multiscale_pro/bvxm_detect_scale_process.cxx

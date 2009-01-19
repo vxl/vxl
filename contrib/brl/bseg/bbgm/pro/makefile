@@ -11,6 +11,7 @@ SOURCES += bbgm_update_dist_image_process.cxx
 SOURCES += bbgm_update_dist_image_stream_process.cxx
 SOURCES += bbgm_local_frame_trans_process.cxx
 SOURCES += bbgm_update_parzen_dist_image_process.cxx
+SOURCES += bbgm_register.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
