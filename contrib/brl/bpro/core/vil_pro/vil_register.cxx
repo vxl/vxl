@@ -16,6 +16,7 @@
 #include "vil_stretch_image_process.h"
 
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 
 #include <vil/vil_image_view_base.h>
@@ -43,3 +44,4 @@ void vil_register::register_process()
   REG_PROCESS(vil_save_image_view_process, bprb_batch_process_manager);
   REG_PROCESS(vil_stretch_image_process, bprb_batch_process_manager);
 }
+
