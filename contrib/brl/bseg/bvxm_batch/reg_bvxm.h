@@ -1,5 +1,5 @@
-#ifndef reg_bmdl_h_
-#define reg_bmdl_h_
+#ifndef reg_bvxm_h_
+#define reg_bvxm_h_
 
 #include <bpro/bpro_batch/bpro_batch.h>
 
