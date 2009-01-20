@@ -1,7 +1,7 @@
 #include "vidl2_register.h"
 
-#include "vidl2_open_istream_process.h" 
-#include "vidl2_open_ostream_process.h"  
+#include "vidl2_open_istream_process.h"
+#include "vidl2_open_ostream_process.h"
 #include "vidl2_get_frame_istream_process.h"
 #include "vidl2_close_istream_process.h"
 #include <vidl2/vidl2_istream_sptr.h>
@@ -19,7 +19,7 @@ void vidl2_register::register_datatype()
 
 void vidl2_register::register_process()
 {
-  REG_PROCESS(vidl2_open_istream_process, bprb_batch_process_manager); 
+  REG_PROCESS(vidl2_open_istream_process, bprb_batch_process_manager);
   REG_PROCESS(vidl2_open_ostream_process, bprb_batch_process_manager);
   REG_PROCESS(vidl2_get_frame_istream_process, bprb_batch_process_manager);
   REG_PROCESS(vidl2_close_istream_process, bprb_batch_process_manager);

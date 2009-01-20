@@ -50,17 +50,17 @@ initbvxm_batch(void)
   reg_pro.ml_meth = register_processes;
   reg_pro.ml_doc = "register_processes() create instances of each defined process";
   reg_pro.ml_flags = METH_VARARGS;
-  
+
 
   PyMethodDef reg_data;
   reg_data.ml_name = "register_datatypes";
   reg_data.ml_meth = register_datatypes;
   reg_data.ml_doc = "register_datatypes() insert tables in the database for each type";
   reg_data.ml_flags = METH_VARARGS;
-  
+
   bvxm_batch_methods[0]=reg_pro;
   bvxm_batch_methods[1]=reg_data;
-  
+
   for (unsigned i=0; i<METHOD_NUM; i++) {
     bvxm_batch_methods[i+2]=batch_methods[i];
   }

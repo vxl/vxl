@@ -46,7 +46,7 @@ void bvxm_register::register_datatype()
 
 void bvxm_register::register_process()
 {
-  REG_PROCESS(bvxm_create_voxel_world_process, bprb_batch_process_manager); 
+  REG_PROCESS(bvxm_create_voxel_world_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_detect_changes_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_generate_edge_map_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_render_virtual_view_process,bprb_batch_process_manager);
@@ -79,5 +79,4 @@ void bvxm_register::register_process()
   REG_PROCESS(bvxm_lidar_edge_detection_process,bprb_batch_process_manager);
   REG_PROCESS(bvxm_detect_scale_process,bprb_batch_process_manager);
   REG_PROCESS(bvxm_compare_3d_voxels_process,bprb_batch_process_manager);
-
 }
