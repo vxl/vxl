@@ -104,6 +104,9 @@ SOURCE=.\reg_bvxm.cxx
 # Begin Source File
 SOURCE=.\batch_bvxm.h
 # End Source File
+# Begin Source File
+SOURCE=.\reg_bvxm.h
+# End Source File
 # End Group
 # End Target
 # End Project
