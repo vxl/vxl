@@ -41,10 +41,14 @@ class bprb_func_process: public bprb_process_ext
   vcl_string name() { return name_; }
 
   template <class T>
-  T get_input(unsigned i);
+  T get_input(unsigned i)
+  { brdb_value_t<T>* input = static_cast<brdb_value_t<T>* >(input_data_[i].ptr());
+    T val = input->value();
+    return val;
+  }
 
   //: Execute the process
-  bool execute();
+  bool execute() { return fpt_(*this); }
 
   //: Perform any initialization required by the process
   bool init(){ if (fpt_init_) return fpt_init_(*this); else return false;}
