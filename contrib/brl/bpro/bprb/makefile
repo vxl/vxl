@@ -13,7 +13,7 @@ SOURCES += bprb_null_process.cxx
 MANPAGE_SOURCES += bprb_macros.h
 MANPAGE_SOURCES += bprb_process_manager.txx
 SOURCES += bprb_process_ext.cxx
-SOURCES += bprb_func_process.cxx
+MANPAGE_SOURCES += bprb_func_process.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
