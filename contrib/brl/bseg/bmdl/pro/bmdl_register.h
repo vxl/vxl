@@ -8,4 +8,4 @@ class bmdl_register
   static void register_process();
 };
 
-#endif // bmdl_register_h_
+#endif

@@ -1,6 +1,5 @@
 #include <testlib/testlib_test.h>
 #include "../bmdl_processes.h"
-//#include "../bmdl_classify_process.h"
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
