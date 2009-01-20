@@ -6,10 +6,10 @@
 // \file
 // \brief The bmdl process class
 //
-//  A specialized process class for bpro library. This method receives 
-//  a seperate function pointer for init, execute and finish method to 
-//  execute 
-//  
+//  A specialized process class for bpro library. This method receives
+//  a seperate function pointer for init, execute and finish method to
+//  execute
+//
 // \author
 //   Gamze D. Tunali
 //
@@ -22,11 +22,11 @@
 
 class bprb_func_process: public bprb_process_ext
 {
-public:
+ public:
   bprb_func_process(){};
 
-  //bprb_func_process(bool(*fpt)(vcl_vector<brdb_value_sptr>, vcl_vector<brdb_value_sptr>&), const char* name) 
-  bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name) 
+  //bprb_func_process(bool(*fpt)(vcl_vector<brdb_value_sptr>, vcl_vector<brdb_value_sptr>&), const char* name)
+  bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name)
     :fpt_(fpt), fpt_init_(0), fpt_finish_(0), name_(name)
   {}
 
@@ -52,12 +52,11 @@ public:
   //: Perform any clean up or final computation
   bool finish(){ if (fpt_finish_) return fpt_finish_(*this); else return false;}
 
-
-private:
+ private:
   bool (*fpt_)(bprb_func_process&);        // pointer to execute method
   bool (*fpt_init_)(bprb_func_process&);   // pointer to init method
   bool (*fpt_finish_)(bprb_func_process&); // pointer to finish method
   vcl_string name_;
 };
 
-#endif
+#endif // bprb_func_process_h_
