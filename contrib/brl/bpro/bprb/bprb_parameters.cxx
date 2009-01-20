@@ -128,6 +128,8 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
           p =  new bprb_param_type<vcl_string>(param->name(), desc, "");
         } else if (!type.compare("bool")) {
           p =  new bprb_param_type<bool>(param->name(), desc, false);
+        } else if (!type.compare("double")) {
+          p =  new bprb_param_type<double>(param->name(), desc, false);
         }
         p->parse_value_str(value);
         param_list_.push_back(p);
