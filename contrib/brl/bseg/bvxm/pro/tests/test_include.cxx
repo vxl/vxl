@@ -17,9 +17,10 @@
 #include <bvxm/pro/bvxm_ocp_hist_process.h>
 #include <bvxm/pro/bvxm_pmap_hist_process.h>
 #include <bvxm/pro/bvxm_pmap_ratio_process.h>
-#include <bvxm/pro/bvxm_roc_process.h>
+#include <bvxm/pro/bvxm_register.h>
 #include <bvxm/pro/bvxm_render_expected_image_process.h>
 #include <bvxm/pro/bvxm_render_virtual_view_process.h>
+#include <bvxm/pro/bvxm_roc_process.h>
 #include <bvxm/pro/bvxm_roi_init_process.h>
 #include <bvxm/pro/bvxm_rpc_prob_registration_process.h>
 #include <bvxm/pro/bvxm_rpc_registration_process.h>
@@ -27,7 +28,7 @@
 #include <bvxm/pro/bvxm_save_occupancy_raw_process.h>
 #include <bvxm/pro/bvxm_save_occupancy_vff_process.h>
 #include <bvxm/pro/bvxm_update_edges_lidar_process.h>
-#include <bvxm/pro/bvxm_update_process.h>
 #include <bvxm/pro/bvxm_update_lidar_process.h>
+#include <bvxm/pro/bvxm_update_process.h>
 
 int main() { return 0; }

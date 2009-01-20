@@ -16,9 +16,9 @@ IF( PYTHON_FOUND )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
   
      SET(bvxm_batch_sources
-       reg_bvxm.h reg_bvxm.cxx
+       reg_bvxm.h   reg_bvxm.cxx
+       batch_bvxm.h batch_bvxm.cxx
      )
- 
 
     ADD_LIBRARY(bvxm_batch SHARED ${bvxm_batch_sources})
 
