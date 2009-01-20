@@ -7,6 +7,8 @@ SOURCES += bmdl_generate_mesh_process.cxx
 SOURCES += bmdl_trace_boundaries_process.cxx
 SOURCES += bmdl_lidar_roi_process.cxx
 SOURCES += bmdl_modeling_process.cxx
+MANPAGE_SOURCES += bmdl_register.h
+MANPAGE_SOURCES += bmdl_processes.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
