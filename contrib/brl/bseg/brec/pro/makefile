@@ -15,6 +15,7 @@ SOURCES += brec_prob_map_area_process.cxx
 SOURCES += brec_update_changes_process.cxx
 SOURCES += brec_save_mog_image_process.cxx
 SOURCES += brec_create_mog_image_process.cxx
+SOURCES += brec_register.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
