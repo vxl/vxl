@@ -117,7 +117,7 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
         vcl_string value = param->attribute("value");
         vcl_string type = param->attribute("type");
         vcl_string desc = param->attribute("desc");
-        bprb_param* p;
+        bprb_param* p=0;
         if (!type.compare("float")) {
           p =  new bprb_param_type<float>(param->name(), desc, 0);
         } else if (!type.compare("unsigned")) {
@@ -126,6 +126,8 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
           p =  new bprb_param_type<int>(param->name(), desc, 0);
         } else if (!type.compare("string")) {
           p =  new bprb_param_type<vcl_string>(param->name(), desc, "");
+        } else if (!type.compare("bool")) {
+          p =  new bprb_param_type<bool>(param->name(), desc, false);
         }
         p->parse_value_str(value);
         param_list_.push_back(p);
