@@ -39,9 +39,6 @@
 #define WRITEBUFFERSIZE (16384)
 
 
-
-
-
 void update_mesh_coord(imesh_mesh& imesh, vpgl_geo_camera* cam)
 {
   imesh_vertex_array<3>& vertices = imesh.vertices<3>();
@@ -346,7 +343,6 @@ void generate_kml_collada(vcl_string& kmz_dir,
 }
 
 
-
 bool generate_mesh(vcl_string fpath_poly,
                    vil_image_view_base_sptr label_img,
                    vil_image_view_base_sptr height_img,
@@ -381,7 +377,6 @@ bool generate_mesh(vcl_string fpath_poly,
     return false;
   }
 
-
   // read polygons
   vsl_b_ifstream os(fpath_poly);
   unsigned char ver; //version();
@@ -394,16 +389,16 @@ bool generate_mesh(vcl_string fpath_poly,
     vsl_b_read(os, polygon);
     boundaries.push_back(polygon);
   }
-  
+
   vcl_vector<bmdl_edge> edges;
   vcl_vector<bmdl_region> regions;
-  unsigned int num_joints = bmdl_mesh::link_boundary_edges(labels, boundaries, 
+  unsigned int num_joints = bmdl_mesh::link_boundary_edges(labels, boundaries,
                                                            edges, regions);
   bmdl_mesh::simplify_edges(edges);
   imesh_mesh mesh;
-  bmdl_mesh::mesh_lidar(edges, regions, num_joints, labels, 
+  bmdl_mesh::mesh_lidar(edges, regions, num_joints, labels,
                         heights, ground, mesh);
-  
+
   generate_kml_collada(fpath_mesh, mesh, lidar_cam, num_of_buildings);
   return true;
 }
@@ -412,7 +407,7 @@ bool bmdl_generate_mesh_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 6) {
     vcl_cout << "lidar_roi_process: The input number should be 8" << vcl_endl;
-    return false; 
+    return false;
   }
 
   unsigned int i=0;
