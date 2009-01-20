@@ -13,6 +13,8 @@ TARGET_LINK_LIBRARIES( bmdl_pro_test_all testlib bmdl_pro bmdl vcl vbl bprb brdb
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/first_ret.tif ${CMAKE_CURRENT_BINARY_DIR}/first_ret.tif COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/last_ret.tif  ${CMAKE_CURRENT_BINARY_DIR}/last_ret.tif  COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/ground.tif    ${CMAKE_CURRENT_BINARY_DIR}/ground.tif    COPYONLY )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/height.tif ${CMAKE_CURRENT_BINARY_DIR}/height.tif COPYONLY )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/label.tif  ${CMAKE_CURRENT_BINARY_DIR}/label.tif  COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/classify_params.xml    ${CMAKE_CURRENT_BINARY_DIR}/classify_params.xml    COPYONLY )
 
 ADD_TEST( bmdl_classify_process         ${EXECUTABLE_OUTPUT_PATH}/bmdl_pro_test_all test_bmdl_classify_process )

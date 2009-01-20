@@ -1,8 +1,6 @@
 # This is brl/seg/bmdl/CMakeLists.txt
- 
-#INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 
+ADD_DEFINITIONS(-DDEBUG_MEMORY=1)
 
 SET( bmdl_sources
   bmdl_classify.txx    bmdl_classify.h   

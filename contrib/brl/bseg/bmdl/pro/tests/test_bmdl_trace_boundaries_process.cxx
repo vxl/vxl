@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
-#include "../bmdl_trace_boundaries_process.h"
+#include "../bmdl_processes.h"
+//#include "../bmdl_trace_boundaries_process.h"
 
 #include <vcl_string.h>
 
@@ -10,6 +11,7 @@
 #include <brdb/brdb_selection.h>
 
 #include <bprb/bprb_batch_process_manager.h>
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
@@ -17,7 +19,7 @@
 
 MAIN( test_bmdl_trace_boundaries_process )
 {
-  REG_PROCESS(bmdl_trace_boundaries_process, bprb_batch_process_manager);
+  REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_trace_boundaries_process, "bmdlTraceBoundariesProcess");
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
