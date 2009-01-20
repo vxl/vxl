@@ -106,9 +106,6 @@ SOURCE=.\bprb_null_process.cxx
 SOURCE=.\bprb_process_ext.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bprb_func_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bprb_parameters+bool-.cxx
 # End Source File
 # Begin Source File
