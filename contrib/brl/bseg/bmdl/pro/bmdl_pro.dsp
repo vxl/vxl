@@ -113,6 +113,18 @@ SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+imesh_mesh-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bmdl_classify_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bmdl_trace_boundaries_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bmdl_generate_mesh_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bmdl_lidar_roi_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -130,6 +142,12 @@ SOURCE=.\bmdl_lidar_roi_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmdl_modeling_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmdl_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmdl_processes.h
 # End Source File
 # End Group
 # End Target
