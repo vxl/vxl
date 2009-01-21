@@ -427,7 +427,7 @@ void bmdl_classify<T>::fill_ground_holes(unsigned int min_size)
   {
     count.push_back(1);
     merge_map.push_back(merge_map.size());
-    labels(0,0) = count.size()+1;
+    labels(0,0) = count.size();
   }
   // handle first row
   for (unsigned int i=1; i<ni; ++i) {
