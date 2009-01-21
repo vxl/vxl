@@ -22,8 +22,11 @@ IF( PYTHON_FOUND )
     ADD_LIBRARY(bvxm_batch SHARED ${bvxm_batch_sources})
 
     #library has to have different name depending on debug or release version.
+    IF(WIN32)
+      SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES OUTPUT_NAME bvxm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+    ENDIF(WIN32)
+    SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES PREFIX "")
 
-    SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES OUTPUT_NAME bvxm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
 
     TARGET_LINK_LIBRARIES(bvxm_batch bprb brdb bpro_batch vbl bvxm bvxm_pro bvxm_io brec_pro vpgl_io vpgl_pro bvgl_pro vil_io vil_pro vidl2_pro bbgm_pro)
   
