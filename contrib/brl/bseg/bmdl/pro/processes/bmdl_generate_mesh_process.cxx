@@ -406,7 +406,7 @@ bool generate_mesh(vcl_string fpath_poly,
 bool bmdl_generate_mesh_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 6) {
-    vcl_cout << "lidar_roi_process: The input number should be 8" << vcl_endl;
+    vcl_cout << "lidar_roi_process: The input number should be 6" << vcl_endl;
     return false;
   }
 
@@ -416,7 +416,7 @@ bool bmdl_generate_mesh_process(bprb_func_process& pro)
   vil_image_view_base_sptr height_img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr ground_img = pro.get_input<vil_image_view_base_sptr>(i++);
   vcl_string file_mesh = pro.get_input<vcl_string>(i++);
-  vpgl_camera_double_sptr camera;// = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
 
   if (!label_img) {
     vcl_cout << "bmdl_generate_mesh_process -- Label image is not set!\n";

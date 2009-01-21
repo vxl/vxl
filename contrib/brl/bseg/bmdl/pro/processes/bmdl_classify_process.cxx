@@ -133,10 +133,11 @@ bool bmdl_classify_process(bprb_func_process& pro)
     return false;
   }
 
-  vcl_vector<vcl_string> output_types_(4);
+  vcl_vector<vcl_string> output_types_(2);
   int j=0;
   output_types_[j++]= "vil_image_view_base_sptr";  // label image
   output_types_[j++]= "vil_image_view_base_sptr";  // height image
+  pro.set_output_types(output_types_);
 
   j=0;
   // store image output (labels)
