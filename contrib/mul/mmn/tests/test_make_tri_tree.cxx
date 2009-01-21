@@ -48,7 +48,7 @@ void test_make_tri_tree_b()
   vcl_vector<mmn_arc> arcs;
 
   mmn_make_tri_tree(D,arcs);
-  TEST("N.arcs",arcs.size(),n*2-3);
+  TEST("N.arcs",arcs.size(),(unsigned int)(n*2-3));
 
   vcl_cout<<arcs<<vcl_endl;
   TEST("Arc 0",arcs[0],mmn_arc(0,1));
