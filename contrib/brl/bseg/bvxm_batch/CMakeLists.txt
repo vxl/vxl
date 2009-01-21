@@ -17,7 +17,6 @@ IF( PYTHON_FOUND )
   
      SET(bvxm_batch_sources
        reg_bvxm.h   reg_bvxm.cxx
-       batch_bvxm.h batch_bvxm.cxx
      )
 
     ADD_LIBRARY(bvxm_batch SHARED ${bvxm_batch_sources})
