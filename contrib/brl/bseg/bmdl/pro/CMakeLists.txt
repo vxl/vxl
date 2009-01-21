@@ -22,15 +22,14 @@ IF(EXPAT_FOUND)
       INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
       
       SET(bmdl_pro_sources
-        bmdl_classify_process.h               bmdl_classify_process.cxx
-        bmdl_trace_boundaries_process.h       bmdl_trace_boundaries_process.cxx
-        bmdl_generate_mesh_process.h          bmdl_generate_mesh_process.cxx
-        bmdl_lidar_roi_process.h              bmdl_lidar_roi_process.cxx
-        bmdl_modeling_process.h               bmdl_modeling_process.cxx
+        bmdl_processes.h
+        bmdl_register.h                        bmdl_register.cxx 
       )
 
 
       AUX_SOURCE_DIRECTORY(Templates bmdl_pro_sources)
+
+      AUX_SOURCE_DIRECTORY(processes bmdl_pro_sources)
 
       ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
