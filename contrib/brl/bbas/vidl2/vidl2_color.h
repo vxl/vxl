@@ -64,7 +64,7 @@ inline void vidl2_type_convert(const vxl_uint_16& in, vxl_ieee_32& out)
 
 inline void vidl2_type_convert(const bool& in, vxl_ieee_32& out)
 {
-  out = in?1:0;
+  out = static_cast<vxl_ieee_32>(in?1:0);
 }
 
 inline void vidl2_type_convert(const vxl_ieee_32& in, vxl_byte& out)
