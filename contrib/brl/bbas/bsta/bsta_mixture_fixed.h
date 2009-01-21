@@ -164,6 +164,18 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
     return prob;
   }
 
+  //The expected value of the mixture
+  // \note assumes weights have been normalized
+  vector_ expected_value()
+  {
+    vector_ expected_value(T(0));
+    for (unsigned i=0; i<num_components_; ++i)
+      expected_value += components_[i].weight
+      * components_[i].distribution.mean();
+    return expected_value;
+    
+  }
+
   //: Normalize the weights of the components to add to 1.
   void normalize_weights() 
   {
