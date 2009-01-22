@@ -195,6 +195,9 @@ SOURCE=.\bvxm_lidar_edge_detection_process.cxx
 SOURCE=.\bvxm_register.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_change_detection_display_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # End Group
@@ -301,6 +304,9 @@ SOURCE=.\bvxm_lidar_edge_detection_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_processes.h
 # End Source File
 # End Group
 # End Target
