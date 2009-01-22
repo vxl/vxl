@@ -1,9 +1,10 @@
-#include "bvxm_change_detection_display_process.h"
 //:
 // \file
+#include <bprb/bprb_func_process.h>
+#include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
-#include <bprb/bprb_parameters.h>
+
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -44,26 +45,26 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   //check imput's validity
   i = 0;
    if (!img0) {
-     vcl_cout << pro.name <<" :--  Input " << i++ << " is not valid!\n";
+     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (!img1) {
-    vcl_cout << pro.name <<" :--  Input " << i++ << " is not valid!\n";
+    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (!img2) {
-    vcl_cout << pro.name <<" :--  Input " << i++ << " is not valid!\n";
+    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (img0->pixel_format()!=7){
-    vcl_cout << pro.name <<" :--  Input " << 0 << " wrong pixel-format!\n";
+    vcl_cout << pro.name() <<" :--  Input " << 0 << " wrong pixel-format!\n";
     return false;
   }
   if (img1->pixel_format()!=9){
-    vcl_cout << pro.name <<" :--  Input " << 1 << " wrong pixel-format!\n";
+    vcl_cout << pro.name() <<" :--  Input " << 1 << " wrong pixel-format!\n";
     return false;
   }
 
@@ -79,10 +80,10 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   vil_image_view<unsigned char> output_image1( image_width, image_height, 1 );
 
   //read the parameters
-  float prob_thresh = .50f;
+  float prob_thresh = .5f;
   float prob_image_scale = .7f;
-  parameters()->get_value(PARAM_PROB_THRESH,prob_thresh);
-  parameters()->get_value(PARAM_PROB_IMAGE_SCALE,prob_image_scale);
+  pro.parameters()->get_value(PARAM_PROB_THRESH,prob_thresh);
+  pro.parameters()->get_value(PARAM_PROB_IMAGE_SCALE,prob_image_scale);
 
   //obtain max probability
   float max_prob = 0.0f;
@@ -142,26 +143,13 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   j = 0;
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image0));
-  pro.set_(j++, output0);
+  pro.set_output(j++, output0);
 
     brdb_value_sptr output1 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image1));
-  pro.set_(j++, output1);
+  pro.set_output(j++, output1);
   return true;
 
-
-
-  //output
-  output_data_.resize(2,brdb_value_sptr(0));
-  output_types_.resize(2);
-  //: red changes image
-  output_types_[0]= "vil_image_view_base_sptr";
-  //: probability image in ragen 0-255
-  output_types_[1]= "vil_image_view_base_sptr";
-
-
-  parameters()->add("Probability Threshold for detection", "prob_thresh", 0.5f);
-  parameters()->add("Probability Image Scale", "prob_image_scale", 0.5f);
 }
 
 
