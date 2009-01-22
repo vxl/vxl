@@ -39,6 +39,9 @@ SOURCES += bvxm_register.cxx
 SOURCES += multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 SOURCES += multiscale_pro/bvxm_detect_scale_process.cxx
 
+MANPAGE_SOURCES += bvxm_processes.h
+SOURCES += processes/bvxm_change_detection_display_process.cxx
+
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################
