@@ -3,7 +3,7 @@
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -14,16 +14,16 @@
 CFG=bmdl_pro - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "bmdl_pro.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "bmdl_pro.mak" CFG="vil2 - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "bmdl_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "bmdl_pro - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -93,19 +93,19 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bmdl_classify_process.cxx
+SOURCE=.\processes/bmdl_classify_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmdl_generate_mesh_process.cxx
+SOURCE=.\processes/bmdl_generate_mesh_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmdl_trace_boundaries_process.cxx
+SOURCE=.\processes/bmdl_trace_boundaries_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmdl_lidar_roi_process.cxx
+SOURCE=.\processes/bmdl_lidar_roi_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmdl_modeling_process.cxx
+SOURCE=.\bmdl_register.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
@@ -113,36 +113,9 @@ SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+imesh_mesh-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/bmdl_classify_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bmdl_trace_boundaries_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bmdl_generate_mesh_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bmdl_lidar_roi_process.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\bmdl_classify_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bmdl_generate_mesh_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bmdl_trace_boundaries_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bmdl_lidar_roi_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bmdl_modeling_process.h
-# End Source File
 # Begin Source File
 SOURCE=.\bmdl_register.h
 # End Source File
