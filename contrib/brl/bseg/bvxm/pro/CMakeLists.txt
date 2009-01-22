@@ -52,6 +52,7 @@ SET(bvxm_pro_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
+AUX_SOURCE_DIRECTORY(processes bvxm_pro_sources)
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
