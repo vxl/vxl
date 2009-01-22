@@ -26,7 +26,7 @@ void test_gauss_indep_update()
   float min_stddev = 0.02f;
   float g_thresh = 2.5; 
   typename bsta_gaussian_indep<T,n>::covar_type init_covar(init_variance);
-  bsta_gaussian_indep<T,n> init_gauss(gauss_type::vector_type(0.0f),init_covar);
+  bsta_gaussian_indep<T,n> init_gauss(typename gauss_type::vector_type(0.0f),init_covar);
 
   bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss,n,g_thresh,min_stddev);
 
@@ -34,17 +34,17 @@ void test_gauss_indep_update()
 
   //Create the model, the observation and the weight
   mix_gauss_type model;
-  gauss_type::vector_type obs(0.3f);
+  typename gauss_type::vector_type obs(0.3f);
   float weight = 0.01f;
   
   updater(model, obs, weight);
-  obs = gauss_type::vector_type(0.8f);
+  obs = typename gauss_type::vector_type(0.8f);
   updater(model, obs, weight);
-  obs =gauss_type::vector_type(0.81f);
+  obs = typename gauss_type::vector_type(0.81f);
   updater(model, obs, weight);
 
   //Test most probable value:
-  gauss_type::vector_type most_probable_val(T(0));
+ typename gauss_type::vector_type most_probable_val(T(0));
   if(model.num_components() > 0)
     if (model.weight(0) > 0.0f)
       most_probable_val = model.distribution(0).mean();
@@ -58,8 +58,8 @@ void test_gauss_indep_update()
 
   //Test expected value:
   float total_weight= 0;
-  gauss_type::vector_type v(T(0));
-  gauss_type::vector_type expected_val(T(0));
+  typename gauss_type::vector_type v(T(0));
+  typename gauss_type::vector_type expected_val(T(0));
 
   expected_val = model.expected_value();
 
