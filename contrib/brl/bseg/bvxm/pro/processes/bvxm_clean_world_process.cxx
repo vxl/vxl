@@ -15,7 +15,7 @@ bool bvxm_clean_world_process(bprb_func_process& pro)
   // process takes 1 input:
   //input[0]: The voxel world
   unsigned n_inputs_ = 1;
-  if (pro.n_inputs<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
     return false;
