@@ -231,7 +231,7 @@ class mfpf_point_finder
   //  box_pose(+/-0.5*wi, +/-0.5*wj).
   virtual void aligned_bounding_box(const mfpf_pose& pose,
                                     mfpf_pose& box_pose,
-                                    double& wi, double& wj);
+                                    double& wi, double& wj) const;
 
   //: Create an image summarising the average model (where possible)
   //  For instance, creates an image of the mean template used for

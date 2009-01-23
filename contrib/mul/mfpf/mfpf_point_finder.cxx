@@ -567,7 +567,7 @@ bool mfpf_point_finder::overlap(const mfpf_pose& pose1,
 //  box_pose(+/-0.5*wi, +/-0.5*wj).
 void mfpf_point_finder::aligned_bounding_box(const mfpf_pose& pose,
                                     mfpf_pose& box_pose,
-                                    double& wi, double& wj)
+                                    double& wi, double& wj) const
 {
   // Compute the bounding box of the outline (in ref frame)
   vcl_vector<vgl_point_2d<double> > pts;
