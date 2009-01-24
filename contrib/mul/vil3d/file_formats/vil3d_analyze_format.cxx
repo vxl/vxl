@@ -113,7 +113,7 @@ bool vil3d_analyze_header::write_file(const vcl_string& path) const
 
   if (key.sizeof_hdr != OptionalSize)
   {
-    vcl_cerr << "vil3d_analyze_header::write_file: Header file is not the correct size.";
+    vcl_cerr << "vil3d_analyze_header::write_file: Header file is not the correct size.\n";
     return false;
   }
   else
@@ -219,7 +219,7 @@ bool vil3d_analyze_header::read_file(const vcl_string& path)
   if (key.sizeof_hdr != ObligatorySize &&
       key.sizeof_hdr != OptionalSize)
   {
-    vcl_cerr << "vil3d_analyze_header::load: Header file is not the correct size.";
+    vcl_cerr << "vil3d_analyze_header::load: Header file is not the correct size.\n";
     return false;
   }
   else
@@ -283,14 +283,14 @@ bool vil3d_analyze_header::read_file(const vcl_string& path)
         bfs.read((char *)&history.descrip[i],
                  sizeof(history.descrip[i]));
         swapBytes((char *)&history.descrip[i],
-                sizeof(history.descrip[i]));
+                  sizeof(history.descrip[i]));
       }
       for (int i=0; i<24; ++i)
       {
         bfs.read((char *)&history.aux_file[i],
                  sizeof(history.aux_file[i]));
         swapBytes((char *)&history.aux_file[i],
-                sizeof(history.aux_file[i]));
+                  sizeof(history.aux_file[i]));
       }
       bfs.read((char *)&history.orient, sizeof(history.orient));
       swapBytes((char *)&history.orient, sizeof(history.orient));
@@ -299,49 +299,49 @@ bool vil3d_analyze_header::read_file(const vcl_string& path)
         bfs.read((char *)&history.originator[i],
                  sizeof(history.originator[i]));
         swapBytes((char *)&history.originator[i],
-                sizeof(history.originator[i]));
+                  sizeof(history.originator[i]));
       }
       for (int i=0; i<10; ++i)
       {
         bfs.read((char *)&history.generated[i],
                  sizeof(history.generated[i]));
         swapBytes((char *)&history.generated[i],
-                sizeof(history.generated[i]));
+                  sizeof(history.generated[i]));
       }
       for (int i=0; i<10; ++i)
       {
         bfs.read((char *)&history.scannum[i],
                  sizeof(history.scannum[i]));
         swapBytes((char *)&history.scannum[i],
-                sizeof(history.scannum[i]));
+                  sizeof(history.scannum[i]));
       }
       for (int i=0; i<10; ++i)
       {
         bfs.read((char *)&history.patient_id[i],
                  sizeof(history.patient_id[i]));
         swapBytes((char *)&history.patient_id[i],
-               sizeof(history.patient_id[i]));
+                  sizeof(history.patient_id[i]));
       }
       for (int i=0; i<10; ++i)
       {
         bfs.read((char *)&history.exp_date[i],
                  sizeof(history.exp_date[i]));
         swapBytes((char *)&history.exp_date[i],
-                sizeof(history.exp_date[i]));
+                  sizeof(history.exp_date[i]));
       }
       for (int i=0; i<10; ++i)
       {
         bfs.read((char *)&history.exp_time[i],
                  sizeof(history.exp_time[i]));
         swapBytes((char *)&history.exp_time[i],
-                sizeof(history.exp_time[i]));
+                  sizeof(history.exp_time[i]));
       }
       for (int i=0; i<3; ++i)
       {
         bfs.read((char *)&history.hist_un0[i],
                  sizeof(history.hist_un0[i]));
         swapBytes((char *)&history.hist_un0[i],
-                sizeof(history.hist_un0[i]));
+                  sizeof(history.hist_un0[i]));
       }
 
       bfs.read((char *)&history.views,sizeof(history.views));
@@ -414,19 +414,20 @@ enum vil_pixel_format vil3d_analyze_header::pixel_format() const
 {
   switch (dim.datatype)
   {
-    case 2  : return VIL_PIXEL_FORMAT_BYTE; break;
-    case 4  : return VIL_PIXEL_FORMAT_INT_16; break;
-    case 8  : return VIL_PIXEL_FORMAT_INT_32; break;
-    case 16 : return VIL_PIXEL_FORMAT_FLOAT; break;
-    case 64 : return VIL_PIXEL_FORMAT_DOUBLE; break;
+    case 2  : return VIL_PIXEL_FORMAT_BYTE;
+    case 4  : return VIL_PIXEL_FORMAT_INT_16;
+    case 8  : return VIL_PIXEL_FORMAT_INT_32;
+    case 16 : return VIL_PIXEL_FORMAT_FLOAT;
+    case 64 : return VIL_PIXEL_FORMAT_DOUBLE;
     default : return VIL_PIXEL_FORMAT_UNKNOWN;
   }
+  return VIL_PIXEL_FORMAT_UNKNOWN; // dummy return, to avoid compiler warning
 }
 
 //: Print out some parts of header
 void vil3d_analyze_header::print_summary(vcl_ostream& os) const
 {
-  os<<"vil3d_analyze_header:"<<vcl_endl;
+  os<<"vil3d_analyze_header:\n";
   vsl_indent_inc(os);
   os<<vsl_indent()<<"Size: "<<dim.dim[1]<<" x "<<dim.dim[2]<<" x "<<dim.dim[3]
     <<"  Voxel widths: ("<<dim.pixdim[1]<<" x "<<dim.pixdim[2]<<" x "<<dim.pixdim[3]
@@ -649,7 +650,7 @@ bool vil3d_analyze_image::get_property(char const *key, void * value) const
 
 //: Set the contents of the volume.
 bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
-                unsigned i0=0, unsigned j0=0, unsigned k0=0)
+                                   unsigned i0=0, unsigned j0=0, unsigned k0=0)
 {
   if (!view_fits(view, i0, j0, k0))
   {
