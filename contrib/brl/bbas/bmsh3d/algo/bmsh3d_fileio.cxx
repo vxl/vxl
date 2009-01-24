@@ -22,6 +22,7 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vul/vul_file.h>
+#include <vul/vul_string.h>
 #include <vgl/vgl_point_3d.h>
 
 //#include <rply/rply.h>
