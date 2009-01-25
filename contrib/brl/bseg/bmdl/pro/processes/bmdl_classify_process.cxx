@@ -16,13 +16,13 @@ template vil_image_view_base_sptr bprb_func_process::get_input(unsigned);
 
 template <class T>
 bool classify(const vil_image_view<T>& lidar_first,
-                                     const vil_image_view<T>& lidar_last,
-                                     const vil_image_view<T>& ground,
-                                     vil_image_view<unsigned int>& label_img,
-                                     vil_image_view<T>& height_img,
-                                     T gthresh, T vthresh, T athresh, T hres)
+              const vil_image_view<T>& lidar_last,
+              const vil_image_view<T>& ground,
+              vil_image_view<unsigned int>& label_img,
+              vil_image_view<T>& height_img,
+              T gthresh, T vthresh, T athresh, T hres)
 {
-  bmdl_classify<T> classifier(athresh, hres, gthresh, vthresh);
+  bmdl_classify<T> classifier((unsigned)(athresh+0.5), hres, gthresh, vthresh);
   classifier.set_lidar_data(lidar_first,lidar_last);
   classifier.set_bare_earth(ground);
   classifier.label_lidar();
@@ -33,11 +33,11 @@ bool classify(const vil_image_view<T>& lidar_first,
 
 
 bool classify(vil_image_view_base_sptr lidar_first,
-                                     vil_image_view_base_sptr lidar_last,
-                                     vil_image_view_base_sptr ground,
-                                     vil_image_view_base_sptr& label_img,
-                                     vil_image_view_base_sptr& height_img,
-                                     float gthresh, float vthresh, float athresh, float hres)
+              vil_image_view_base_sptr lidar_last,
+              vil_image_view_base_sptr ground,
+              vil_image_view_base_sptr& label_img,
+              vil_image_view_base_sptr& height_img,
+              float gthresh, float vthresh, float athresh, float hres)
 {
   label_img = new vil_image_view<unsigned int>();
 
@@ -87,7 +87,7 @@ bool bmdl_classify_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 3) {
     vcl_cout << "lidar_roi_process: The input number should be 3" << vcl_endl;
-    return false; 
+    return false;
   }
 
   // get the inputs:
@@ -95,7 +95,7 @@ bool bmdl_classify_process(bprb_func_process& pro)
   vil_image_view_base_sptr first_ret = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr last_ret = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr ground = pro.get_input<vil_image_view_base_sptr>(i++);
-  
+
   //pro.set_input_types
   // check first return's validity
   if (!first_ret) {
