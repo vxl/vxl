@@ -6,10 +6,10 @@
 
 #include <vcl_string.h>
 
-//This test wast first written to verify whether the basic functionality of 
-//bsta_mixtures is consistent accross plataforms. It is only tested for gaussian
-//3-modal, floating point mixtures in 2, 3, and 4 dimensions. More cases can be 
-//added when needed.
+// This test wast first written to verify whether the basic functionality of
+// bsta_mixtures is consistent accross plataforms.
+// It is only tested for gaussian 3-modal, floating point mixtures in 2, 3,
+// and 4 dimensions. More cases can be added when needed.
 
 //Test the update of independent gauusian distributions
 template <class T, unsigned n>
@@ -24,7 +24,7 @@ void test_gauss_indep_update()
   //Initialize the updater
   float init_variance = 0.008f;
   float min_stddev = 0.02f;
-  float g_thresh = 2.5; 
+  float g_thresh = 2.5;
   typename bsta_gaussian_indep<T,n>::covar_type init_covar(init_variance);
   bsta_gaussian_indep<T,n> init_gauss(typename gauss_type::vector_type(0.0f),init_covar);
 
@@ -36,7 +36,7 @@ void test_gauss_indep_update()
   mix_gauss_type model;
   typename gauss_type::vector_type obs(0.3f);
   float weight = 0.01f;
-  
+
   updater(model, obs, weight);
   obs = typename gauss_type::vector_type(0.8f);
   updater(model, obs, weight);
@@ -45,7 +45,7 @@ void test_gauss_indep_update()
 
   //Test most probable value:
  typename gauss_type::vector_type most_probable_val(T(0));
-  if(model.num_components() > 0)
+  if (model.num_components() > 0)
     if (model.weight(0) > 0.0f)
       most_probable_val = model.distribution(0).mean();
 
@@ -53,23 +53,19 @@ void test_gauss_indep_update()
   {
     T mp_v = most_probable_val[i];
     TEST_NEAR("most_probable", mp_v , T(0.8), T(0.01));
-
   }
 
   //Test expected value:
-  float total_weight= 0;
   typename gauss_type::vector_type v(T(0));
   typename gauss_type::vector_type expected_val(T(0));
 
   expected_val = model.expected_value();
 
-   for (unsigned i = 0 ; i<n; i++)
+  for (unsigned i = 0 ; i<n; i++)
   {
     T e_v = expected_val[i];
     TEST_NEAR("expected_value", e_v , T(0.63), T(0.01));
-    
   }
-
 }
 
 
@@ -84,11 +80,10 @@ MAIN( test_gaussian_model)
            << " float, 3-dimensional, 3-modal\n"
            << "-----------------------------------" <<vcl_endl;
   test_gauss_indep_update<float,3>();
-   vcl_cout << "-----------------------------------\n"
+  vcl_cout << "-----------------------------------\n"
            << " float, 4-dimensional, 3-modal\n"
            << "-----------------------------------" <<vcl_endl;
-   test_gauss_indep_update<float,4>();
+  test_gauss_indep_update<float,4>();
   SUMMARY();
 }
-
 
