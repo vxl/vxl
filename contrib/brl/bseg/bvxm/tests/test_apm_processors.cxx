@@ -122,8 +122,8 @@ void test_mog_mc_processor()
   bool result = true;
 
   vcl_cout << "Initializing slabs " << vcl_endl; 
-  bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim,modes>::obs_datatype> obs(10,10,1);
-  obs.fill(typename bvxm_mog_mc_processor<dim,modes>::obs_datatype(0.3f));
+  bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim,modes>::obs_datatype> obs1(10,10,1);
+  obs1.fill(typename bvxm_mog_mc_processor<dim,modes>::obs_datatype(0.3f));
   
   bvxm_voxel_slab<float> weight(10,10,1);
   weight.fill(0.01f);
@@ -132,12 +132,16 @@ void test_mog_mc_processor()
   appear.fill(mix_gauss_type());
   
    // test the  update, expected_color and most_probable_mode_color methods
-  vcl_cout << "Updating model " << vcl_endl; 
-  result = result & processor.update(appear, obs, weight);
-  obs.fill(typename bvxm_mog_mc_processor<dim,modes>::obs_datatype(0.8f));
-  result = result & processor.update(appear, obs, weight);
-  obs.fill(typename bvxm_mog_mc_processor<dim,modes>::obs_datatype(0.81f));
-  result = result & processor.update(appear, obs, weight);
+  vcl_cout << "Updating model observation 1" << vcl_endl; 
+  result = result & processor.update(appear, obs1, weight);
+  bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim,modes>::obs_datatype> obs2(10,10,1);
+  obs2.fill(typename bvxm_mog_mc_processor<dim,modes>::obs_datatype(0.8f));
+  vcl_cout << "Updating model observation 2" << vcl_endl; 
+  result = result & processor.update(appear, obs2, weight);
+  bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim,modes>::obs_datatype> obs3(10,10,1);
+  obs3.fill(typename bvxm_mog_mc_processor<dim,modes>::obs_datatype(0.81f));
+  vcl_cout << "Updating model observation 3" << vcl_endl; 
+  result = result & processor.update(appear, obs3, weight);
   TEST("processor.update()", result, true);
 
   bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim,modes>::obs_datatype> mp_slab = processor.most_probable_mode_color(appear);
