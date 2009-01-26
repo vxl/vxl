@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 //This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display.cxx
 // :
 // \file
