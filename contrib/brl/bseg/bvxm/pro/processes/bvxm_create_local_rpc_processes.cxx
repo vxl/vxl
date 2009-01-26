@@ -20,7 +20,7 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //input[0]: The voxel world
   //input[1]: The current camera
   unsigned n_inputs_ = 2;
-  if(pro.n_inputs<n_inputs_)
+  if(pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
     return false; 
@@ -30,7 +30,7 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //voxel world
   unsigned i = 0;
   bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vpgl_camera_double sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
   
   //check input's validity
   i = 0;

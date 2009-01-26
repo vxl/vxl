@@ -1,6 +1,3 @@
-#include "bvxm_compare_rpc_process.h"
-//:
-// \file
 //:
 // \file
 #include <bprb/bprb_func_process.h>
@@ -9,6 +6,9 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <bprb/bprb_process.h>
+#include <vpgl/vpgl_local_rational_camera.h>
 
 //: Execute the process
 bool
@@ -20,7 +20,7 @@ bvxm_compare_rpc_process(bprb_func_process& pro)
   //input[2]: please complete
  
   unsigned n_inputs_ = 3;
-  if(pro.n_inputs<n_inputs_)
+  if(pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
     return false; 

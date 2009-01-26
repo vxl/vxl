@@ -4,7 +4,7 @@
 // \file
 #include <bprb/bprb_func_process.h>
 
-#include "bvxm_normalize_image_process.h"
+#include "../bvxm_normalize_image_process.h"
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
@@ -33,9 +33,9 @@ bool bvxm_create_normalized_image_process(bprb_func_process& pro)
   
   //get inputs:
   unsigned i=0;
-  vil_image_view_base_sptr input_img = bpro.get_input<vil_image_view_base_sptr>(i++);
-  float a = get_input<float>(i++);
-  float b = get_input<float>(i++);
+  vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
+  float a = pro.get_input<float>(i++);
+  float b = pro.get_input<float>(i++);
   
     //check imput's validity
   i = 0;
