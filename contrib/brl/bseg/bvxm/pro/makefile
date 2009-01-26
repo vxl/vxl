@@ -42,6 +42,9 @@ SOURCES += multiscale_pro/bvxm_detect_scale_process.cxx
 MANPAGE_SOURCES += bvxm_processes.h
 SOURCES += processes/bvxm_change_detection_display_process.cxx
 SOURCES += processes/bvxm_clean_world_process.cxx
+SOURCES += processes/bvxm_compare_rpc_process.cxx
+SOURCES += processes/bvxm_create_normalized_image_process.cxx
+SOURCES += processes/bvxm_create_local_rpc_processes.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
