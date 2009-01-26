@@ -1,5 +1,5 @@
 #! /bin/sh
-exec perl -w -x $0 ${1+"$@"}
+exec perl -l012 -w -x $0 ${1+"$@"}
 #!perl
 #line 5
 
@@ -11,11 +11,14 @@ exec perl -w -x $0 ${1+"$@"}
 # test_include.cxx, verify that it contains all .h files from the parent dir.
 #
 # Command line argument(s): list of directories to check (default: all)
+# Command line switch: -s: generate output in the form of a shell script
 
 use strict;
 
+my $shell = '';
 while (@ARGV && substr($ARGV[0],0,1) eq '-') {
-  printf STDERR "Unrecognised command line option " . (shift @ARGV) . " ignored\n";
+  if ($ARGV[0] eq '-s') { $shell = 1; shift @ARGV; }
+  else { print STDERR "Unrecognised command line option " . (shift @ARGV) . " ignored"; }
 }
 
 my @DIRS;
@@ -32,7 +35,7 @@ else {
   }
   else
   {
-    print STDERR "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib\n";
+    print STDERR "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib";
     exit 0;
   }
   @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$ !x } @DIRS;
@@ -89,20 +92,19 @@ foreach my $dir (@DIRS)
     close(FILE);
     foreach my $s (keys %inc_files)
     {
-      if ($inc_files{$s} > 1) {
-        print STDOUT "multiple occurrence of #include<$s> in $dir/test_include.cxx\n";
-      }
+      &duplicate_message("#include <$s>", "$dir/test_include.cxx\n", '// !!')
+        if ($inc_files{$s} > 1);
       delete $inc_files{$s};
       unless (exists $updir_files{$s})
       {
-        print STDOUT "#include <$s>\tmust be removed from $dir/test_include.cxx\n"
+        &removing_message("#include <$s>", "$dir/test_include.cxx\n", '// !!')
           unless ($s eq 'vxl_config.h' || $s eq 'vgui/vgui_config.h' || $s eq 'vcl_compiler.h');
       }
       delete $updir_files{$s};
     }
     foreach my $s (keys %updir_files) # should already be empty by now!
     {
-      print STDOUT "#include <$s>\tis missing from $dir/test_include.cxx\n";
+      &missing_message("#include <$s>", "$dir/test_include.cxx");
       delete $updir_files{$s};
     }
   }
@@ -126,7 +128,8 @@ foreach my $dir (@DIRS)
     binmode FILE;
     while (<FILE>)
     {
-      print STDOUT "Line of $dir/$fx does not end in <CR><LF>\n" unless m/\r$/;
+      print $shell ? '# ' : '' . "Line of $dir/$fx does not end in <CR><LF>"
+        unless m/\r$/;
       $start = 1  if (m/^\# Begin Group \"Source Files\"/);
       $start = 2  if (m/^\# Begin Group \"Header Files\"/);
       $start = '' if (m/^\# End Group/);
@@ -165,13 +168,15 @@ foreach my $dir (@DIRS)
       while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/$1=/) {
         ++ $tests{$2} if ($1 eq 'TESTS');
         my $file = $2;
-        print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
+        print $shell ? '# ' : '' . "$file\tspecified in $makef does not exist"
+          unless (-f "$dir/$file");
         ++ $sources{$file};
         ++ $hsources{$file} if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/ && -f "$dir/$file");
       }
       while (s/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/$1=/) {
         my $file = $2;
-        print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
+        print $shell ? '# ' : '' . "$file\tspecified in $makef does not exist"
+          unless (-f "$dir/$file");
         ++ $hsources{$file};
         ++ $hsources{$file} if ($file =~ s/\.txx$/.h/ && -f "$dir/$file" && ! exists $hsources{$file});
       }
@@ -183,7 +188,8 @@ foreach my $dir (@DIRS)
 ###--     foreach (grep { s/\.cxx$/_mocced.cxx/ && -f "$dir/$_" } keys %sources) { ++ $sources{$_}; }
         }
         else {
-          print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
+          print $shell ? '# ' : '' . "$file\tspecified in $makef does not exist"
+            unless (-f "$dir/$file");
           ++ $sources{$file};
           if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/) {
             ++ $hsources{$file} if (-f "$dir/$file" && ! exists $hsources{$file});
@@ -194,7 +200,8 @@ foreach my $dir (@DIRS)
       while (s/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/$1+=/)
       {
         my $file = $2;
-        print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
+        print $shell ? '# ' : '' . "$file\tspecified in $makef does not exist"
+          unless (-f "$dir/$file");
         ++ $hsources{$file};
         if ($file =~ s/\.txx$/.h/) {
           ++ $hsources{$file} if (-f "$dir/$file" && ! exists $hsources{$file});
@@ -249,11 +256,11 @@ foreach my $dir (@DIRS)
     next if $n =~ m/_(PREFIX|FLAGS|LIBRARIES|PATH|SOURCE_DIR|BINARY_DIR|INCLUDE_DIR)$/;
     next if $n =~ m/^[a-z0-9]+_test_include_sources$/;
     next if $n =~ m/^\${/;
-    foreach ($l =~ m/\$\{(.*?)\}/g) { print STDOUT "$_ is an undefined variable in $cmakef\n" unless (defined $names{$_}); }
+    foreach ($l =~ m/\$\{(.*?)\}/g) { print $shell ? '# ' : '' . "$_ is an undefined variable in $cmakef" unless (defined $names{$_}); }
     while ($l =~ m/\$\{(.*?)\}/) {
       my $a = $1;
       my $b = $names{$a};
-      unless (defined $b) { $b=''; print STDERR "$a is an undefined variable in $cmakef\n"; }
+      unless (defined $b) { $b=''; print STDERR "$a is an undefined variable in $cmakef"; }
       if ($a eq 'QT_SRCS_DIR' && $b =~ m!impl/qt$ !x) { my $c = "${b}4"; $l =~ s/\$\{$a\}(\S*)/$b$1 $c$1/g; }
       else { $l =~ s/\$\{$a\}/$b/g; }
     }
@@ -302,12 +309,12 @@ foreach my $dir (@DIRS)
       if (m/^\s*$/) { next; }
       elsif (-f "$dir/$_" && m/\.(h(\.in)?|txx)$/) { ++ $hsource_files{$_}; }
       elsif (-f "$dir/$_")                         { ++ $source_files{$_}; }
-      elsif (-f "$dir/$_.cxx") { printf "Should replace $_ by $_.cxx in $cmakef\n"; ++ $source_files{"$_.cxx"}; }
-      elsif (-f "$dir/$_.c")   { printf "Should replace $_ by $_.c in $cmakef\n";   ++ $source_files{"$_.c"}; }
-      elsif (-f "$dir/$_.cc")  { printf "Should replace $_ by $_.cc in $cmakef\n";  ++ $source_files{"$_.cc"}; }
-      elsif (-f "$dir/$_.C")   { printf "Should replace $_ by $_.C in $cmakef\n";   ++ $source_files{"$_.C"}; }
-      elsif (-f "$dir/$_.cpp") { printf "Should replace $_ by $_.cpp in $cmakef\n"; ++ $source_files{"$_.cpp"}; }
-      else                     { printf "No source file $_.* found in $dir\n"; }
+      elsif (-f "$dir/$_.cxx") { print "Should replace $_ by $_.cxx in $cmakef"; ++ $source_files{"$_.cxx"}; }
+      elsif (-f "$dir/$_.c")   { print "Should replace $_ by $_.c in $cmakef";   ++ $source_files{"$_.c"}; }
+      elsif (-f "$dir/$_.cc")  { print "Should replace $_ by $_.cc in $cmakef";  ++ $source_files{"$_.cc"}; }
+      elsif (-f "$dir/$_.C")   { print "Should replace $_ by $_.C in $cmakef";   ++ $source_files{"$_.C"}; }
+      elsif (-f "$dir/$_.cpp") { print "Should replace $_ by $_.cpp in $cmakef"; ++ $source_files{"$_.cpp"}; }
+      else                     { print "No source file $_.* found in $dir"; }
       ++ $hsource_files{$1} if (m/^(.*\.h)\.in$/ && -f "$dir/$1" && ! exists $hsource_files{$1}); # generated .h file
     }
   }
@@ -315,7 +322,7 @@ foreach my $dir (@DIRS)
   {
     my $g = $1; # list of file names
     foreach my $x (grep {! m/^\s*$/} split /\s+/, $g) {
-      if (! -f "$dir/$x") { print STDOUT "file $x listed in INSTALL_NOBASE_HEADER_FILES does not exist\n"; }
+      if (! -f "$dir/$x") { print $shell ? '# ' : '' . "file $x listed in INSTALL_NOBASE_HEADER_FILES does not exist"; }
       elsif ($x =~ m/\.(h|txx|in)$/) { ++ $hsource_files{$x} unless (exists $hsource_files{$x}); }
     }
   }
@@ -336,12 +343,12 @@ foreach my $dir (@DIRS)
       }
       if (m/\.(h(\.in)?|txx)$/) { ++ $hsource_files{$_}; }
       elsif (-f "$dir/$_")      { ++ $source_files{$_}; }
-      elsif (-f "$dir/$_.cxx")  { printf "Should replace $_ by $_.cxx in $cmakef\n"; ++ $source_files{"$_.cxx"}; }
-      elsif (-f "$dir/$_.c")    { printf "Should replace $_ by $_.c in $cmakef\n";   ++ $source_files{"$_.c"}; }
-      elsif (-f "$dir/$_.cc")   { printf "Should replace $_ by $_.cc in $cmakef\n";  ++ $source_files{"$_.cc"}; }
-      elsif (-f "$dir/$_.C")    { printf "Should replace $_ by $_.C in $cmakef\n";   ++ $source_files{"$_.C"}; }
-      elsif (-f "$dir/$_.cpp")  { printf "Should replace $_ by $_.cpp in $cmakef\n"; ++ $source_files{"$_.cpp"}; }
-      else                      { printf "No source file $_.* found in $dir\n"; }
+      elsif (-f "$dir/$_.cxx")  { print "Should replace $_ by $_.cxx in $cmakef"; ++ $source_files{"$_.cxx"}; }
+      elsif (-f "$dir/$_.c")    { print "Should replace $_ by $_.c in $cmakef";   ++ $source_files{"$_.c"}; }
+      elsif (-f "$dir/$_.cc")   { print "Should replace $_ by $_.cc in $cmakef";  ++ $source_files{"$_.cc"}; }
+      elsif (-f "$dir/$_.C")    { print "Should replace $_ by $_.C in $cmakef";   ++ $source_files{"$_.C"}; }
+      elsif (-f "$dir/$_.cpp")  { print "Should replace $_ by $_.cpp in $cmakef"; ++ $source_files{"$_.cpp"}; }
+      else                      { print "No source file $_.* found in $dir"; }
       ++ $hsource_files{$1} if (m/^(.*\.h)\.in$/ && -f "$dir/$1");
     }
   }
@@ -349,7 +356,7 @@ foreach my $dir (@DIRS)
   {
     my $name = $1; my $tstname = $2;
     if (! exists ($names{$name}) ) {
-      print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
+      print $shell ? '# ' : '' . "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef";
       next;
     }
     unless ($testmain) {
@@ -364,8 +371,8 @@ foreach my $dir (@DIRS)
 
   next unless ($f || -f $makef || -f $cmakef);
   $f = "$dir/*.dsp" unless ($f);
-  print STDOUT "File $makef does not exist\n" unless (-f $makef);
-  print STDOUT "File $cmakef does not exist\n" unless (-f $cmakef || $cmakef =~ m!/doc/book/CMakeLists\.txt$ !x);
+  print $shell ? '# ' : '' . "File $makef does not exist" unless (-f $makef);
+  print $shell ? '# ' : '' . "File $cmakef does not exist" unless (-f $cmakef || $cmakef =~ m!/doc/book/CMakeLists\.txt$ !x);
 
 # ======= Here starts the comparison of the file lists ===========
 
@@ -373,30 +380,30 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %source_files)
   {
     if ($source_files{$s} > 1) {
-      print STDOUT "multiple occurrence of $s in $cmakef\n"
+      &duplicate_message($s, $cmakef, '# !!')
         unless ($s eq 'impl/glut/menu_hack_none.cxx' || $s eq 'my_pyramid.cxx');
     }
     delete $source_files{$s};
     unless (exists $sources{$s})
     {
-      if (-f "$dir/$s") { print STDOUT "SOURCES += $s\tis missing from $makef\n"; }
-      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+      if (-f "$dir/$s") { &missing_message("SOURCES += $s", $makef); }
+      else              { &removing_message($s, $cmakef, '# !!'); }
     }
     elsif ($sources{$s} > 1) {
-      print STDOUT "multiple occurrence of SOURCES += $s in $makef\n";
+      &duplicate_message("SOURCES += $s", $makef, '# !!');
     }
     delete $sources{$s};
     unless (exists $source{$s})
     {
-      if (-f "$dir/$s") { print STDOUT "SOURCE=.\\$s\tis missing from $f\n"
+      if (-f "$dir/$s") { &missing_message("SOURCE=.\\$s", $f)
                             unless ($s eq 'tif_unix.c' ||
                                     $s eq 'menu_hack_X11.cxx' ||
                                     $s eq 'internals/vgui_accelerate_x11.cxx'); }
-      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+      else              { &removing_message($s, $cmakef, '# !!'); }
 ###--                       unless ($s =~ m/_mocced\.cxx$/); }
     }
     elsif ($source{$s} > 1) {
-      print STDOUT "multiple occurrence of $s in $f\n";
+      &duplicate_message($s, $f, '!!');
     }
     delete $source{$s};
   }
@@ -405,12 +412,12 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %sources) # should be empty by now!
   {
     if ($sources{$s} > 1) {
-      print STDOUT "multiple occurrence of SOURCES += $s in $makef\n";
+      &duplicate_message("SOURCES += $s", $makef, '# !!');
     }
     delete $sources{$s};
-    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef\n"; }
+    if (-f "$dir/$s") { &missing_message($s, $cmakef); }
 ###--                          unless ($s =~ m/_mocced\.cxx$/);
-    else                   { print STDOUT "SOURCES += $s\tmust be removed from $makef\n"; }
+    else              { &removing_message("SOURCES += $s", $makef, '# !!'); }
 ###--                          unless ($s eq '${MOCSOURCES}');
   }
   # at this point, %sources has been emptied.
@@ -418,11 +425,11 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %source) # should be empty by now!
   {
     if ($source{$s} > 1) {
-      print STDOUT "multiple occurrence of SOURCE=.\\$s in $f\n";
+      &duplicate_message("SOURCE=.\\$s", $f, '!!');
     }
     delete $source{$s};
-    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef and from $makef\n"; }
-    else              { print STDOUT "SOURCE=.\\$s\tmust be removed from $f\n"; }
+    if (-f "$dir/$s") { &missing_message($s, $cmakef); &missing_message("SOURCES += $s", $makef); }
+    else              { &removing_message("SOURCE=.\\$s", $f, '!!'); }
   }
   # at this point, %source has been emptied.
 
@@ -430,16 +437,16 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %test_files)
   {
     if ($test_files{$s} > 1) {
-      print STDOUT "multiple occurrence of ADD_TEST($s) in $cmakef\n";
+      &duplicate_message("ADD_TEST($s)", $cmakef, '# !!');
     }
     delete $test_files{$s};
     unless (exists $tests{$s})
     {
-      if (-f "$dir/$s") { print STDOUT "TESTS += $s\tis missing from $makef\n"; }
-      else              { print STDOUT "ADD_TEST($s)\tmust be removed from $cmakef\n"; }
+      if (-f "$dir/$s") { &missing_message("TESTS += $s", $makef); }
+      else              { &removing_message("ADD_TEST($s)", $cmakef, '# !!'); }
     }
     elsif ($tests{$s} > 1) {
-      print STDOUT "multiple occurrence of TESTS += $s in $makef\n";
+      &duplicate_message("TESTS += $s", $makef, '# !!');
     }
     delete $tests{$s};
   }
@@ -448,11 +455,11 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %tests) # should be empty by now!
   {
     if ($tests{$s} > 1) {
-      print STDOUT "multiple occurrence of TESTS += $s in $makef\n";
+      &duplicate_message("TESTS += $s", $makef, '# !!');
     }
     delete $tests{$s};
-    if (-f "$dir/$s") { print STDOUT "ADD_TEST($s)\tis missing from $cmakef\n"; }
-    else              { print STDOUT "TESTS += $s\tmust be removed from $makef\n"; }
+    if (-f "$dir/$s") { &missing_message("ADD_TEST($s)", $cmakef); }
+    else              { &removing_message("TESTS += $s", $makef, '# !!'); }
   }
   # at this point, %tests has been emptied.
 
@@ -460,33 +467,33 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %hsource_files)
   {
     if ($hsource_files{$s} > 1) {
-      print STDOUT "multiple occurrence of $s in $cmakef\n"
+      &duplicate_message($s, $cmakef, '# !!')
         unless ($s eq 'vidl_avicodec.h' || $s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/
              || $s eq 'my_pyramid.h' || $s eq 'my_pyramid_functions.txx');
     }
     delete $hsource_files{$s};
     unless (exists $hsources{$s})
     {
-      if (-f "$dir/$s") { print STDOUT "MANPAGE_SOURCES += $s\tis missing from $makef\n"; }
-      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+      if (-f "$dir/$s") { &missing_message("MANPAGE_SOURCES += $s", $makef); }
+      else              { &removing_message("$s", $cmakef, '# !!'); }
     }
     elsif ($hsources{$s} > 1) {
-      print STDOUT "multiple occurrence of MANPAGE_SOURCES += $s in $makef\n";
+      &duplicate_message("MANPAGE_SOURCES += $s", $makef, '# !!');
     }
     delete $hsources{$s};
     unless (exists $hfiles{$s})
     {
-      if (-f "$dir/$s") { print STDOUT "$s\tis missing from filelist in $0 for $dir\n"; }
-      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+      if (-f "$dir/$s") { print "$s\tis missing from filelist in $0 for $dir" unless ($shell); }
+      else              { &removing_message("$s", $cmakef, '# !!'); }
     }
     delete $hfiles{$s};
     unless (exists $hsource{$s})
     {
-      if (-f "$dir/$s") { print STDOUT "SOURCE=.\\$s\tis missing from $f (header files)\n"; }
-      else              { print STDOUT "$s\tmust be removed from $cmakef\n"; }
+      if (-f "$dir/$s") { &missing_message("SOURCE=.\\$s", $f); }
+      else              { &removing_message("$s", $cmakef, '# !!'); }
     }
     elsif ($hsource{$s} > 1) {
-      print STDOUT "multiple occurrence of $s in $f\n";
+      &duplicate_message("SOURCE=.\\$s", $f, '!!');
     }
     delete $hsource{$s};
   }
@@ -497,18 +504,18 @@ foreach my $dir (@DIRS)
     delete $hfiles{$s};
     unless (exists $hsources{$s})
     {
-      print STDOUT "MANPAGE_SOURCES += $s\tis missing from $makef\n";
+      &missing_message("MANPAGE_SOURCES += $s", $makef);
     }
     elsif ($hsources{$s} > 1) {
-      print STDOUT "multiple occurrence of MANPAGE_SOURCES += $s in $makef\n";
+      &duplicate_message("MANPAGE_SOURCES += $s", $makef, '# !!');
     }
     delete $hsources{$s};
     unless (exists $hsource{$s})
     {
-      print STDOUT "SOURCE=.\\$s\tis missing from $f (header files)\n";
+      &missing_message("SOURCE=.\\$s", $f)
     }
     elsif ($hsource{$s} > 1) {
-      print STDOUT "multiple occurrence of SOURCE=.\\$s in $f\n";
+      &duplicate_message("SOURCE=.\\$s", $f, '!!');
     }
     delete $hsource{$s};
   }
@@ -517,22 +524,22 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %hsources) # should be empty by now!
   {
     if ($hsources{$s} > 1) {
-      print STDOUT "multiple occurrence of MANPAGE_SOURCES += $s in $makef\n";
+      &duplicate_message("MANPAGE_SOURCES += $s", $makef, '# !!');
     }
     delete $hsources{$s};
-    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef\n"; }
-    else              { print STDOUT "MANPAGE_SOURCES += $s\tmust be removed from $makef\n"; }
+    if (-f "$dir/$s") { &missing_message($s, $cmakef); }
+    else              { &removing_message("MANPAGE_SOURCES += $s", $makef, '# !!'); }
   }
   # at this point, %hsources has been emptied.
 
   foreach my $s (keys %hsource) # should be empty by now!
   {
     if ($hsource{$s} > 1) {
-      print STDOUT "multiple occurrence of SOURCE=.\\$s in $f\n";
+      &duplicate_message("SOURCE=.\\$s", $f, '!!');
     }
     delete $hsource{$s};
-    if (-f "$dir/$s") { print STDOUT "$s\tis missing from $cmakef and from $makef\n"; }
-    else              { print STDOUT "SOURCE=.\\$s\tmust be removed from $f\n"; }
+    if (-f "$dir/$s") { &missing_message($s, $cmakef); &missing_message("SOURCES += $s", $makef); }
+    else              { &removing_message("SOURCE=.\\$s", $f, '!!'); }
   }
   # at this point, %hsource has been emptied.
 
@@ -540,16 +547,16 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %subdirs2)
   {
     if ($subdirs2{$s} > 1) {
-      print STDOUT "multiple occurrence of SUBDIRS($s) in $cmakef\n";
+      &duplicate_message("SUBDIRS($s)", $cmakef, '# !!')
     }
     delete $subdirs2{$s};
     unless (exists $subdirs{$s})
     {
-      if (-d "$dir/$s") { print STDOUT "SUBDIRS += $s\tis missing from $makef\n"; }
-      else              { print STDOUT "SUBDIRS($s)\tmust be removed from $cmakef\n"; }
+      if (-d "$dir/$s") { &missing_message("SUBDIRS += $s", $makef); }
+      else              { &removing_message("SUBDIRS($s)", $cmakef, '# !!'); }
     }
     elsif ($subdirs{$s} > 1) {
-      print STDOUT "multiple occurrence of SUBDIRS += $s in $makef\n";
+      &duplicate_message("SUBDIRS += $s", $makef, '# !!');
     }
     delete $subdirs{$s};
   }
@@ -558,11 +565,36 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %subdirs) # should be empty by now!
   {
     if ($subdirs{$s} > 1) {
-      print STDOUT "multiple occurrence of SUBDIRS += $s in $makef\n";
+      &duplicate_message("SUBDIRS += $s", $makef, '# !!');
     }
     delete $subdirs{$s};
-    if (-d "$dir/$s") { print STDOUT "SUBDIRS($s)\tis missing from $cmakef\n"; }
-    else              { print STDOUT "SUBDIRS += $s\tmust be removed from $makef\n"; }
+    if (-d "$dir/$s") { &missing_message("SUBDIRS($s)", $cmakef); }
+    else              { &removing_message("SUBDIRS += $s", $makef, '# !!'); }
   }
   # at this point, %subdirs has been emptied.
+}
+
+sub missing_message
+{
+  my ($txt, $file) = @_;
+  my $dsp = ($file =~ m/\.dsp$/) ? 1 : '';
+  if ($shell && $dsp) { print "echo '# Begin Source File\r' >> $file\necho '$txt\r' >> $file\necho '# End Source File\r' >> $file"; }
+  elsif ($shell) { print "echo '$txt' >> $file"; }
+  else { print "$txt\tis missing from $file"; }
+}
+
+sub removing_message
+{
+  my ($txt, $file, $comment) = @_;
+  my $eoln = ($file =~ m/\.dsp$/) ? "\r" : '';
+  if ($shell) { print "echo '$comment remove $txt$eoln' >> $file"; }
+  else { print "$txt\tmust be removed from $file"; }
+}
+
+sub duplicate_message
+{
+  my ($txt, $file, $comment) = @_;
+  my $eoln = ($file =~ m/\.dsp$/) ? "\r" : '';
+  if ($shell) { print "echo '$comment remove duplicate $txt$eoln' >> $file"; }
+  else { print "$txt\t(duplicate) must be removed from $file"; }
 }
