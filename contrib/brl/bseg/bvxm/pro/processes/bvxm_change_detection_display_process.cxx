@@ -1,4 +1,15 @@
-//:
+
+
+
+
+
+
+
+
+
+
+//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display.cxx
+// :
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
