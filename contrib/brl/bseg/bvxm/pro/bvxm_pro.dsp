@@ -201,6 +201,15 @@ SOURCE=.\processes/bvxm_change_detection_display_process.cxx
 SOURCE=.\processes/bvxm_clean_world_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_compare_rpc_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_normalized_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_local_rpc_processes.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # End Group
