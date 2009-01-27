@@ -269,19 +269,33 @@ PyObject *commit_output(PyObject *self, PyObject *args)
   unsigned output;
   if (!PyArg_ParseTuple(args, "i:commit_output", &output))
     return NULL;
-  bool result = bprb_batch_process_manager::instance()->commit_output(output,id);
+  vcl_string type;
+  bool result = bprb_batch_process_manager::instance()->commit_output(output,id, type);
   if (!result)
     return Py_BuildValue("i", -1);
-  return Py_BuildValue("i", id);
+  return Py_BuildValue("is", id, type.c_str());
 }
 
 PyObject *set_input_from_db(PyObject *self, PyObject *args)
 {
   unsigned input;
-  unsigned id;
-  if (!PyArg_ParseTuple(args, "ii:set_input_from_db", &input, &id))
+  int id=0;
+  char* type="";
+  bool result = false;
+  PyObject* obj, *type_obj, *id_obj;
+  if (!PyArg_ParseTuple(args, "iO:set_input_from_db", &input, &obj))
     return NULL;
-  bool result = bprb_batch_process_manager::instance()->set_input_from_db(input,id);
+
+  if (PyObject_HasAttrString(obj, "type") && PyObject_HasAttrString(obj, "id")) {
+	type_obj = PyObject_GetAttrString(obj,"type"); 
+    id_obj = PyObject_GetAttrString(obj,"id");
+
+	if (PyInt_Check(id_obj) && PyString_Check(type_obj)) {
+      id = PyInt_AsLong(id_obj);
+      type = PyString_AsString(type_obj);
+      result = bprb_batch_process_manager::instance()->set_input_from_db(input, id, type);
+	}
+  } 
 
   return Py_BuildValue("b", result);
 }
