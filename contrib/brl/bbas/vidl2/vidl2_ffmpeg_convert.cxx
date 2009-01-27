@@ -19,6 +19,12 @@
 #define PIX_FMT_NONE PixelFormat(-1)
 #endif
 
+#if LIBAVCODEC_BUILD >= ((52<<16)+(11<<8)+0)  // after ver 52.11.0
+extern "C" {
+#include <libswscale/swscale.h>
+}
+#endif
+
 
 //--------------------------------------------------------------------------------
 
@@ -62,9 +68,20 @@ bool vidl2_ffmpeg_convert(const vidl2_frame_sptr& in_frame,
   vcl_memset( &out_pic, 0, sizeof(out_pic) );
   avpicture_fill(&out_pic, (uint8_t*) out_frame->data(), out_fmt, ni, nj);
 
-
+#if LIBAVCODEC_BUILD < ((52<<16)+(11<<8)+0)  // after ver 52.11.0
   if ( img_convert( &out_pic, out_fmt, &in_pic, in_fmt, ni, nj ) < 0 )
     return false;
+#else
+  SwsContext* ctx = sws_getContext( ni, nj, in_fmt,
+                                    ni, nj, out_fmt,
+                                    SWS_BILINEAR,
+                                    NULL, NULL, NULL );
+  sws_scale( ctx,
+             in_pic.data, in_pic.linesize,
+             0, nj,
+             out_pic.data, out_pic.linesize );
+  sws_freeContext( ctx );
+#endif
 
   return true;
 }
