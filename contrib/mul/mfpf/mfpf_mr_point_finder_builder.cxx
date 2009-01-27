@@ -13,7 +13,7 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cstdlib.h> // for std::abort()
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -30,7 +30,7 @@ mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder()
 //: Copy ctor
 mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder(const mfpf_mr_point_finder_builder& b)
 {
- *this=b;
+  *this=b;
 }
 
 //: Copy operator
@@ -167,7 +167,7 @@ unsigned mfpf_mr_point_finder_builder::image_level(
 
 // Find non-empty image in pyramid closest to given level
 static unsigned nearest_valid_level(const vimt_image_pyramid& im_pyr,
-                             unsigned level)
+                                    unsigned level)
 {
   int L0=int(level);
   int bestL=0;
@@ -209,8 +209,8 @@ void mfpf_mr_point_finder_builder::add_example(
       im_L=nearest_valid_level(image_pyr,im_L);
       if (image_pyr(im_L).image_size()[0]==0)
       {
-         vcl_cerr<<"No image pyramid levels set up.\n";
-         abort();
+        vcl_cerr<<"No image pyramid levels set up.\n";
+        vcl_abort();
       }
     }
 
