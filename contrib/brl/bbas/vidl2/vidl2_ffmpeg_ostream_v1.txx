@@ -344,7 +344,7 @@ open()
   video_enc->qcompress = params_.video_qcomp_;
 
   // delete when the stream is closed
-  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length()];
+  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length()+1];
   vcl_strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str());
   video_enc->rc_eq = os_->video_rc_eq_;
 
