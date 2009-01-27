@@ -7,11 +7,6 @@ IF(EXPAT_FOUND)
 # Basic process classes
 SUBDIRS(bprb)
 
-IF( BUILD_GEL )
-  # Python wrappers
-  SUBDIRS(bppy)
-ENDIF( BUILD_GEL )
-
 # Brown core processing
 SUBDIRS(core)
 
