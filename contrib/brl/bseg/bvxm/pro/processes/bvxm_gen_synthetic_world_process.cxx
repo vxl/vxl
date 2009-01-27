@@ -64,7 +64,7 @@ const double camera_dist= 200;
 //size of the world
 //unsigned nx=100, ny=100, nz=50;
 const float vox_length = 1.0f;
-vcl_vector<vgl_box_3d<double> > boxes;
+static vcl_vector<vgl_box_3d<double> > boxes;
 typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype apm_datatype;
 
 // returns a face number if a point is on the surface of a box [0,1,2,3,4,5],

@@ -23,7 +23,7 @@ const double camera_dist= 200;
 //size of the world
 //unsigned nx=100, ny=100, nz=50;
 const float vox_length = 1.0f;
-vcl_vector<vgl_box_3d<double> > boxes;
+static vcl_vector<vgl_box_3d<double> > boxes;
 
 
 bvxm_gen_synthetic_world_process::bvxm_gen_synthetic_world_process()
