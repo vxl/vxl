@@ -1,6 +1,6 @@
-// This is brl/bbas/vidl2/vidl2_ffmpeg_ostream_v2.txx
-#ifndef vidl2_ffmpeg_ostream_v2_txx_
-#define vidl2_ffmpeg_ostream_v2_txx_
+// This is brl/bbas/vidl2/vidl2_ffmpeg_ostream_v3.txx
+#ifndef vidl2_ffmpeg_ostream_v3_txx_
+#define vidl2_ffmpeg_ostream_v3_txx_
 #include "vidl2_ffmpeg_ostream.h"
 //:
 // \file
@@ -127,11 +127,11 @@ open()
 
   AVCodecContext *video_enc = st->codec;
 
-  if ( vcl_strcmp(file_oformat->name, "mp4") != 0 ||
+  if (vcl_strcmp(file_oformat->name, "mp4") != 0 ||
       vcl_strcmp(file_oformat->name, "mov") != 0 ||
       vcl_strcmp(file_oformat->name, "3gp") != 0 )
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
-  
+
   video_enc->codec_type = CODEC_TYPE_VIDEO;
 
   switch ( params_.encoder_ )
@@ -475,7 +475,7 @@ bool
 vidl2_ffmpeg_ostream::
 write_frame(const vidl2_frame_sptr& frame)
 {
-  if (!is_open()){
+  if (!is_open()) {
     // resize to the first frame
     params_.size(frame->ni(),frame->nj());
     open();
@@ -483,8 +483,8 @@ write_frame(const vidl2_frame_sptr& frame)
 
   AVCodecContext* codec = os_->fmt_cxt_->streams[0]->codec;
 
-  if ( unsigned( codec->width ) != frame->ni() ||
-      unsigned( codec->height ) != frame->nj() ) {
+  if (unsigned( codec->width ) != frame->ni() ||
+      unsigned( codec->height) != frame->nj() ) {
     vcl_cerr << "ffmpeg: Input image has wrong size. Expecting ("
              << codec->width << 'x' << codec->height << "), got ("
              << frame->ni() << 'x' << frame->nj() << ")\n";
@@ -504,7 +504,7 @@ write_frame(const vidl2_frame_sptr& frame)
   if ( codec->pix_fmt == fmt )
   {
     avpicture_fill((AVPicture*)&out_frame, (uint8_t*) frame->data(),
-                    fmt, frame->ni(), frame->nj());
+                   fmt, frame->ni(), frame->nj());
   }
   else
   {
@@ -524,7 +524,7 @@ write_frame(const vidl2_frame_sptr& frame)
       }
     }
     avpicture_fill((AVPicture*)&out_frame, (uint8_t*) temp_frame->data(),
-                    codec->pix_fmt, frame->ni(), frame->nj());
+                   codec->pix_fmt, frame->ni(), frame->nj());
   }
 
   AVPacket pkt;
@@ -545,7 +545,8 @@ write_frame(const vidl2_frame_sptr& frame)
       pkt.flags |= PKT_FLAG_KEY;
     }
     av_interleaved_write_frame( os_->fmt_cxt_, &pkt );
-  } else {
+  }
+  else {
     return false;
   }
 
@@ -553,4 +554,4 @@ write_frame(const vidl2_frame_sptr& frame)
   return true;
 }
 
-#endif // vidl2_ffmpeg_ostream_v2_txx_
+#endif // vidl2_ffmpeg_ostream_v3_txx_
