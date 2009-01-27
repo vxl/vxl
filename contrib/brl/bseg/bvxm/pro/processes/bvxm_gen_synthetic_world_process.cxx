@@ -1,6 +1,4 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_voxel_world_process.cxx
-//:
-// \file
+//This is brl/bseg/bvxm/pro/processes/bvxm_gen_synthetic_world_process.cxx
 // Note:This process should probably be cleaned up since it doesn't fit well the new process architecture
 
 #include <bprb/bprb_func_process.h>
@@ -116,9 +114,9 @@ int in_box(vgl_box_3d<double> box, vgl_point_3d<double> v)
 
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
-                            double x_scale, double y_scale,
-                            vgl_point_3d<double>& camera_center,
-                            vpgl_perspective_camera<double>& cam)
+                           double x_scale, double y_scale,
+                           vgl_point_3d<double>& camera_center,
+                           vpgl_perspective_camera<double>& cam)
 {
   vpgl_calibration_matrix<double> K(focal_length,pp, x_scale, y_scale);
   cam.set_calibration(K);
@@ -202,7 +200,7 @@ generate_cameras_z(vgl_box_3d<double>& world)
       bb.add(vgl_point_2d<double> (u,v));
 #ifdef DEBUG
       vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-              << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
+               << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
 #endif
     }
     vcl_cout << bb << vcl_endl;
@@ -252,7 +250,7 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& wor
       bb.add(vgl_point_2d<double> (u,v));
 //#ifdef DEBUG
       vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-              << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
+               << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
 //#endif
     }
 //#ifdef DEBUG
@@ -641,13 +639,13 @@ static
 
 bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
 {
-  //set the global process 
+  //set the global process
   pro_ = pro;
   // this process take no inputs
-  
+
   // create the directory under build to put the intermediate files and the generated images
   //vcl_string model_dir("./test_gen_synthetic_world");
-  vcl_string model_dir; 
+  vcl_string model_dir;
   pro_.parameters()->get_value(PARAM_WORLD_DIR, model_dir);
   vul_file::make_directory(model_dir);
 
@@ -726,10 +724,10 @@ bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
   unsigned j = 0;
   vcl_vector<vcl_string> output_types_(1);
   output_types_[j++] = "bvxm_voxel_world_sptr";
-  
+
   j=0;
   pro_.set_output(j++, new brdb_value_t<bvxm_voxel_world_sptr>(world));
-  
+
   return true;
 }
 
@@ -746,8 +744,8 @@ bool test()
   bvxm_world_params_sptr world_params = new bvxm_world_params();
   world_params->set_params(model_dir,
                            vgl_point_3d<float> (0,0,0),
-                               vgl_vector_3d<unsigned int>(nx, ny, nz),
-                                   vox_length);
+                           vgl_vector_3d<unsigned int>(nx, ny, nz),
+                           vox_length);
   bvxm_voxel_world_sptr world = new bvxm_voxel_world();
   world->set_params(world_params);
   world->clean_grids();

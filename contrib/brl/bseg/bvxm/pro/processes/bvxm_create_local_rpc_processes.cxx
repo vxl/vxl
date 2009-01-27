@@ -1,8 +1,5 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_processes.cxx
 
-
-//:
-// \file
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -20,33 +17,33 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //input[0]: The voxel world
   //input[1]: The current camera
   unsigned n_inputs_ = 2;
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
-    return false; 
+    return false;
   }
-  
+
   //get inputs:
   //voxel world
   unsigned i = 0;
   bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
-  
+
   //check input's validity
   i = 0;
   if (!vox_world) {
     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
-  
+
   if (!camera_inp) {
     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
-  
+
   vpgl_rational_camera<double> *cam_inp;
   if (!(cam_inp = dynamic_cast<vpgl_rational_camera<double>*>(camera_inp.ptr()))) {
-    vcl_cerr << "error: process expects camera to be a vpgl_rational_camera." << vcl_endl;
+    vcl_cerr << "error: process expects camera to be a vpgl_rational_camera.\n";
     return false;
   }
 
@@ -57,7 +54,7 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //Set and Store outputs
   int j = 0;
   vcl_vector<vcl_string> output_types_(1);
-  //: updated camera
+  // updated camera
   output_types_[j++] = "vpgl_camera_double_sptr";
   brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(new vpgl_local_rational_camera<double>(cam_out));
   pro.set_output(j++, output0);

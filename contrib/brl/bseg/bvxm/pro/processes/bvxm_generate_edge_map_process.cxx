@@ -1,4 +1,4 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_voxel_world_process.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_generate_edge_map_process.cxx
 //:
 // \file
 
@@ -20,8 +20,9 @@
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 
-//define parameters here
-//:parameter specifying weather to use lines instead of edges
+// === define parameters here ===
+
+//:parameter specifying whether to use lines instead of edges
 #define PARAM_USE_LINES "use_lines"
 //:gaussian sigma for the edge detection process
 #define PARAM_GAUSSIAN_SIGMA "edge_detection_gaussian_sigma"
@@ -34,10 +35,10 @@ bool bvxm_generate_edge_map_process(bprb_func_process& pro)
 {
   //inputs
   unsigned n_inputs_ = 1;
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
   // get inputs
@@ -45,7 +46,7 @@ bool bvxm_generate_edge_map_process(bprb_func_process& pro)
   unsigned i = 0;
   vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
 
-   //check inputs validity
+  //check input validity
   if (!input_image_sptr) {
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
@@ -175,11 +176,11 @@ bool bvxm_generate_edge_map_process(bprb_func_process& pro)
   }
 
   // return the output edge image
-  unsigned j = 0; 
+  unsigned j = 0;
   vcl_vector<vcl_string> output_types_(1);
   output_types_[j++] = "vil_image_view_base_sptr";
   pro.set_output_types(output_types_);
-  
+
   j=0;
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(edge_image));
   pro.set_output(j++,output0);

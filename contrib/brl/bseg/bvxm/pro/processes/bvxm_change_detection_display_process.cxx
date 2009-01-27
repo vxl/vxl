@@ -1,6 +1,5 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display.cxx
-// :
-// \file
+//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.cxx
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -27,14 +26,14 @@
 
 bool bvxm_change_detection_display_process(bprb_func_process& pro)
 {
- //inputs
-  //:input 0: original image
-  //:input 1: probability image
-  //:input 2: mask image
-  if(pro.n_inputs()<3)
-    {
+  //inputs
+  //input 0: original image
+  //input 1: probability image
+  //input 2: mask image
+  if (pro.n_inputs()<3)
+  {
     vcl_cout << "bvxm_change_detection_display_process: The input number should be 3" << vcl_endl;
-    return false; 
+    return false;
   }
 
   //get inputs:
@@ -45,8 +44,8 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
 
   //check imput's validity
   i = 0;
-   if (!img0) {
-     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+  if (!img0) {
+    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
@@ -90,15 +89,15 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   float max_prob = 0.0f;
   for ( unsigned int i = 0; i < image_width; i++ ) {
     for ( unsigned int j = 0; j < image_height; j++ ) {
-       if(prob_image(i , j) > max_prob)
-          max_prob = prob_image(i,j);
+      if (prob_image(i , j) > max_prob)
+        max_prob = prob_image(i,j);
     }
   }
 
   //map to 0-255 range
     for ( unsigned int i = 0; i < image_width; i++ ) {
     for ( unsigned int j = 0; j < image_height; j++ ) {
-       prob_img_byte(i,j) = (unsigned)vcl_floor((prob_image(i,j)/max_prob) * 255.0f);
+      prob_img_byte(i,j) = (unsigned)vcl_floor((prob_image(i,j)/max_prob) * 255.0f);
     }
   }
 
@@ -122,7 +121,7 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
       output_image0(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
 
       if (mask_image(i,j)) {
-       original_prob_byte = prob_img_byte(i,j);
+        original_prob_byte = prob_img_byte(i,j);
         if ( original_prob_byte > 255)
           original_prob_byte = 255;
       }
@@ -135,9 +134,9 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   //Set and Store outputs
   int j =0;
   vcl_vector<vcl_string> output_types_(2);
-  //: red changes image
+  // red changes image
   output_types_[j++]= "vil_image_view_base_sptr";
-  //: probability image in ragen 0-255
+  // probability image in ragen 0-255
   output_types_[j++]= "vil_image_view_base_sptr";
   pro.set_output_types(output_types_);
 
@@ -150,7 +149,5 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image1));
   pro.set_output(j++, output1);
   return true;
-
 }
-
 

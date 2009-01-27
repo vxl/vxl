@@ -1,6 +1,4 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_voxel_world_process.cxx
-//:
-// \file
+//This is brl/bseg/bvxm/pro/processes/bvxm_detect_changes_process.cxx
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
@@ -32,12 +30,12 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   //input[4]: The bin index to be updated
   //input[5]: The image scale index  detected
   unsigned n_inputs_ = 6;
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
-  
+
   //get the inputs
   unsigned i = 0;
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -46,7 +44,7 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   vcl_string voxel_type = pro.get_input<vcl_string>(i++);
   unsigned bin_index = pro.get_input<unsigned>(i++);
   unsigned scale_index = pro.get_input<unsigned>(i++);
-  
+
   //check inputs validity
   if (!img) {
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
@@ -60,7 +58,7 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :--  Input 2 is not valid!\n";
     return false;
   }
-  
+
   //create metadata:
   bvxm_image_metadata observation(img,camera);
 
@@ -125,8 +123,8 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   //the binary image
   output_types_[j++] = "vil_image_view_base_sptr";
   pro.set_output_types(output_types_);
-  
-  j = 0;  
+
+  j = 0;
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
   pro.set_output(j++, output0);

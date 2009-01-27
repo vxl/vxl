@@ -1,7 +1,5 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_create_normalized_image_process.cxx
 
-//:
-// \file
 #include <bprb/bprb_func_process.h>
 
 #include "../bvxm_normalize_image_process.h"
@@ -22,30 +20,30 @@
 bool bvxm_create_normalized_image_process(bprb_func_process& pro)
 {
   //inputs
-  //:input 0: image
-  //:input 1: a-> scale
-  //:input 2: b-> offset
-  if(pro.n_inputs()<3)
+  //input 0: image
+  //input 1: a-> scale
+  //input 2: b-> offset
+  if (pro.n_inputs()<3)
   {
     vcl_cout << pro.name()<< "The number of inputs should be 3" << vcl_endl;
-    return false; 
+    return false;
   }
-  
+
   //get inputs:
   unsigned i=0;
   vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
   float a = pro.get_input<float>(i++);
   float b = pro.get_input<float>(i++);
-  
+
     //check imput's validity
   i = 0;
   if (!input_img) {
     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
-  
-  
-  //: CAUTION: Assumption: Input image is of type vxl_byte
+
+
+  // CAUTION: Assumption: Input image is of type vxl_byte
   if (input_img->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
     vcl_cout << "In bvxm_create_normalized_image_process::execute() -- Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
     return false;
@@ -65,7 +63,7 @@ bool bvxm_create_normalized_image_process(bprb_func_process& pro)
   //normalized image
   output_types_[j++] = "vil_image_view_base_sptr";
   pro.set_output_types(output_types_);
-  
+
   j = 0;
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(out_image));
   pro.set_output(j++, output0);
