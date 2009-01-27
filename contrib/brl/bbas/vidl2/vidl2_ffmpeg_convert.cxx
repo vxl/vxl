@@ -19,7 +19,7 @@
 #define PIX_FMT_NONE PixelFormat(-1)
 #endif
 
-#if LIBAVCODEC_BUILD >= ((52<<16)+(11<<8)+0)  // after ver 52.11.0
+#if LIBAVCODEC_BUILD >= ((52<<16)+(10<<8)+0)  // after ver 52.10.0
 extern "C" {
 #include <libswscale/swscale.h>
 }
@@ -68,7 +68,7 @@ bool vidl2_ffmpeg_convert(const vidl2_frame_sptr& in_frame,
   vcl_memset( &out_pic, 0, sizeof(out_pic) );
   avpicture_fill(&out_pic, (uint8_t*) out_frame->data(), out_fmt, ni, nj);
 
-#if LIBAVCODEC_BUILD < ((52<<16)+(11<<8)+0)  // after ver 52.11.0
+#if LIBAVCODEC_BUILD < ((52<<16)+(10<<8)+0)  // before ver 52.10.0
   if ( img_convert( &out_pic, out_fmt, &in_pic, in_fmt, ni, nj ) < 0 )
     return false;
 #else
@@ -108,10 +108,8 @@ vidl2_pixel_format_from_ffmpeg(PixelFormat ffmpeg_pix_fmt)
     case PIX_FMT_MONOWHITE: return VIDL2_PIXEL_FORMAT_MONO_1;
     case PIX_FMT_MONOBLACK: return VIDL2_PIXEL_FORMAT_MONO_1;
 // Some libffmpeg distribs (notably Mandriva's) don't include these two:
-#ifdef PIX_FMT_UYVY422
+#if LIBAVCODEC_BUILD >= ((52<<16)+(10<<8)+0)  // after ver 52.10.0
     case PIX_FMT_UYVY422:   return VIDL2_PIXEL_FORMAT_UYVY_422;
-#endif
-#ifdef PIX_FMT_UYVY411
     case PIX_FMT_UYVY411:   return VIDL2_PIXEL_FORMAT_UYVY_411;
 #endif
     default: break;
@@ -138,10 +136,8 @@ vidl2_pixel_format_to_ffmpeg(vidl2_pixel_format vidl2_pix_fmt)
     case VIDL2_PIXEL_FORMAT_YUV_411P: return PIX_FMT_YUV411P;
     case VIDL2_PIXEL_FORMAT_YUV_410P: return PIX_FMT_YUV410P;
 // Some libffmpeg distribs (notably Mandriva's) don't include these two:
-#ifdef PIX_FMT_UYVY422
+#if LIBAVCODEC_BUILD >= ((52<<16)+(10<<8)+0)  // after ver 52.10.0
     case VIDL2_PIXEL_FORMAT_UYVY_422: return PIX_FMT_UYVY422;
-#endif
-#ifdef PIX_FMT_UYVY411
     case VIDL2_PIXEL_FORMAT_UYVY_411: return PIX_FMT_UYVY411;
 #endif
     case VIDL2_PIXEL_FORMAT_MONO_1:   return PIX_FMT_MONOBLACK;
