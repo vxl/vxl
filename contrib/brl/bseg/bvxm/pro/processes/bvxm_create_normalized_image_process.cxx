@@ -35,7 +35,7 @@ bool bvxm_create_normalized_image_process(bprb_func_process& pro)
   float a = pro.get_input<float>(i++);
   float b = pro.get_input<float>(i++);
 
-    //check imput's validity
+    //check input's validity
   i = 0;
   if (!input_img) {
     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";

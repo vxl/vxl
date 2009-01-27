@@ -21,14 +21,14 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   //input[0]: The observation to detect changes
   //input[1]: The camera of the observation
   //input[2]: The voxel world
-  //input[3]: The apperance model type, the supported strings are:
+  //input[3]: The appearance model type, the supported strings are:
   //          -apm_mog_grey
   //          -apm_mog_rgb
   //          -apm_mog_mc_2_3
   //          -apm_mog_mc_3_3
   //          -apm_mog_mc_4_3
   //input[4]: The bin index to be updated
-  //input[5]: The image scale index  detected
+  //input[5]: The image scale index detected
   unsigned n_inputs_ = 6;
   if (pro.n_inputs()<n_inputs_)
   {
@@ -45,7 +45,7 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   unsigned bin_index = pro.get_input<unsigned>(i++);
   unsigned scale_index = pro.get_input<unsigned>(i++);
 
-  //check inputs validity
+  //check input validity
   if (!img) {
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;

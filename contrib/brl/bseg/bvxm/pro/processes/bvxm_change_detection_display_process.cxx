@@ -136,7 +136,7 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(2);
   // red changes image
   output_types_[j++]= "vil_image_view_base_sptr";
-  // probability image in ragen 0-255
+  // probability image in range 0-255
   output_types_[j++]= "vil_image_view_base_sptr";
   pro.set_output_types(output_types_);
 

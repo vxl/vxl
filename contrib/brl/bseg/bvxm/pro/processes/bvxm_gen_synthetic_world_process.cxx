@@ -641,7 +641,7 @@ bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
 {
   //set the global process
   pro_ = pro;
-  // this process take no inputs
+  // this process takes no inputs
 
   // create the directory under build to put the intermediate files and the generated images
   //vcl_string model_dir("./test_gen_synthetic_world");
@@ -690,7 +690,7 @@ bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
 
   unsigned scale=0;
 
-  //create an mog grid for appearance model and use appearence model processor update to properly initialize it
+  //create a mog grid for appearance model and use appearance model processor update to properly initialize it
   bvxm_voxel_grid<float>* ocp_grid = static_cast<bvxm_voxel_grid<float>* >
     (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
 
