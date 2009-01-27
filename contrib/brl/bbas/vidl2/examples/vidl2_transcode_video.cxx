@@ -24,16 +24,22 @@ int main( int argc, char** argv )
     return EXIT_FAILURE;
   }
 
+
+  vidl2_ffmpeg_ostream_params params;
+  params.ni_=istr.width();
+  params.nj_=istr.height();
+
   vidl2_ffmpeg_ostream ostr;
+  ostr.set_params( params );
   ostr.set_filename( output_filename() );
   if ( ! ostr.open() )
   {
-    vcl_cerr << "Couldn't open " << input_filename() << " for writing\n";
+    vcl_cerr << "Couldn't open " << output_filename() << " for writing\n";
     return EXIT_FAILURE;
   }
 
   unsigned count = 0;
-  do
+  while ( istr.advance() )
   {
     if ( ! ostr.write_frame( istr.current_frame() ) )
     {
@@ -41,9 +47,8 @@ int main( int argc, char** argv )
     }
     ++count;
     vcl_cout << "Processed frame " << istr.frame_number()
-             << " (count=" << count << vcl_endl;
+             << " (count=" << count << ")" << vcl_endl;
   }
-  while ( istr.advance() ) ;
 
   return EXIT_SUCCESS;
 }
