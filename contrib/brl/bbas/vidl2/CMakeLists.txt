@@ -71,6 +71,9 @@ IF( FFMPEG_FOUND )
   SET(vidl2_sources ${vidl2_sources}
       vidl2_ffmpeg_init.h             vidl2_ffmpeg_init.cxx
       vidl2_ffmpeg_convert.h          vidl2_ffmpeg_convert.cxx
+      vidl2_ffmpeg_istream_v1.txx     vidl2_ffmpeg_ostream_v1.txx
+      vidl2_ffmpeg_istream_v2.txx     vidl2_ffmpeg_ostream_v2.txx
+                                      vidl2_ffmpeg_ostream_v3.txx
   )
 # Stub implementation, when ffmeg is not available
 ELSE( FFMPEG_FOUND )
@@ -79,14 +82,6 @@ ELSE( FFMPEG_FOUND )
       vidl2_ffmpeg_ostream_stub.txx
   )
 ENDIF( FFMPEG_FOUND )
-
-# Earlier implementations
-IF( FALSE )
-  SET(vidl2_sources ${vidl2_sources}
-      vidl2_ffmpeg_istream_v1.txx     vidl2_ffmpeg_ostream_v1.txx
-      vidl2_ffmpeg_istream_v2.txx     vidl2_ffmpeg_ostream_v2.txx
-  )
-ENDIF( FALSE )
 
 IF( DC1394_FOUND )
   SET(vidl2_sources ${vidl2_sources}
