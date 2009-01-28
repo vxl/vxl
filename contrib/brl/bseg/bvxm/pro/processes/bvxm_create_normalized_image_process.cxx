@@ -1,4 +1,15 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_normalized_image_process.cxx
+//:
+// \file
+// \brief // A class to create a contrast normalized image using the input gain and offset values
+//
+// \author Ozge Can Ozcanli
+// \date 02/17/08
+// \verbatim
+//
+// \Modifications
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+// \endverbatim
 
 #include <bprb/bprb_func_process.h>
 
@@ -34,11 +45,10 @@ bool bvxm_create_normalized_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
   float a = pro.get_input<float>(i++);
   float b = pro.get_input<float>(i++);
-
-    //check input's validity
-  i = 0;
+    
+  //check input's validity
   if (!input_img) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    vcl_cout << pro.name() <<" :--  Input0  is not valid!\n";
     return false;
   }
 

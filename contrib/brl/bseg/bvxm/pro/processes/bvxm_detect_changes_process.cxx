@@ -1,4 +1,15 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_detect_changes_process.cxx
+//:
+// \file
+// \brief A class for detecting changes using a voxel world .
+//
+// \author Daniel Crispell
+// \date 02/10/2008
+// \verbatim
+//  Modifications
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+// \endverbatim
+
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
@@ -7,7 +18,7 @@
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_math.h>
-#include <vil/algo/vil_threshold.h>
+#include <vil/algo/vil_threshold.h>//   <none yet>//   <none yet>
 
 #include <vpgl/vpgl_camera.h>
 

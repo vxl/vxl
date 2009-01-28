@@ -1,5 +1,25 @@
+// This is brl/bseg/bvxm/pro//processes/bvxm_compare_rpc_process.h
 //:
 // \file
+// \brief A class for clipping and image based on a 3D bounding box.
+//        -  Input:
+//             - Image path (string)
+//             - bvxm_voxel_world_sptr
+//
+//        -  Output:
+//             - modified rational camera "vpgl_camera_double_sptr"
+//             - clipped image area (NITF) "vil_image_view_base_sptr"
+//
+//        -  Params:
+//             -geographic uncertainty (error) in meters
+//
+// \author  Gamze D. Tunali
+// \date    02/19/2008
+// \verbatim
+//  Modifications
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+// \endverbatim
+
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>

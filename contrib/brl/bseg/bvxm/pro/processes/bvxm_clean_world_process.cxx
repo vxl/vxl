@@ -1,7 +1,15 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_clean_world_process.cxx
-
 //:
 // \file
+// \brief A process that deletes all voxel storage files in the world directory. use with caution!
+//
+// \author Daniel Crispell
+// \date 03/09/2008
+// \verbatim
+//  Modifications
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+// \endverbatim
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 

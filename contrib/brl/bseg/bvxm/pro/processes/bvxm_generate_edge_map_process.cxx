@@ -1,6 +1,14 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_generate_edge_map_process.cxx
 //:
 // \file
+// \brief A process that takes a grayscale image and returns the corresponding edge map
+//
+// \author Ibrahim Eden
+// \date 03/05/2008
+// \verbatim
+//  Modifications
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+// \endverbatim
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>

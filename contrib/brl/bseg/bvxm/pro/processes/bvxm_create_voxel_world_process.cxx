@@ -1,6 +1,24 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_voxel_world_process.cxx
 //:
 // \file
+// \brief A process for creating a new bvxm_voxel_world from scratch
+// \author Daniel Crispell
+// \date 02/06/2008
+//
+// \verbatim
+//  Modifications
+//    Ozge C Ozcanli  02/19/2008  removed input string and modified to read input directory 
+//                                path as a parameter from an XML  should be modified
+//                                to read all the parameters from the same XML file
+//   
+//    Gamze Tunali    02/24/2008  added the parameter list to the process. 
+//                                It receives all the world parameters as process 
+//                                parameters now
+//
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes. 
+// \endverbatim
+
+
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>

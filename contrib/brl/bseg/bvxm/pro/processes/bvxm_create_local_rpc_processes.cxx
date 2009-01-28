@@ -1,4 +1,15 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_processes.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.cxx
+//:
+// \file
+// \brief // A process that takes a world model and rational camera and returns a local rational camera
+//
+// \author Ibrahim Eden
+// \date 03/14/08
+// \verbatim
+//
+// \Modifications
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+// \endverbatim
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
