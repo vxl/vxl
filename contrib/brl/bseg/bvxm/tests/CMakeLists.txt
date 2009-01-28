@@ -14,7 +14,7 @@ ADD_EXECUTABLE( bvxm_test_all
   test_platform_computations.cxx
 )
 
-TARGET_LINK_LIBRARIES( bvxm_test_all bvxm testlib vcl vbl vpgl bsta bsta_algo)
+TARGET_LINK_LIBRARIES( bvxm_test_all bvxm testlib vcl vbl vpgl bsta bsta_algo vpl)
 
 ADD_TEST( bvxm_test_voxel_storage_mem         ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_storage_mem )
 ADD_TEST( bvxm_test_voxel_storage_disk        ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_storage_disk )
