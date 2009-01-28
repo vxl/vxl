@@ -25,9 +25,13 @@ class bprb_func_process: public bprb_process_ext
  public:
   bprb_func_process(){};
 
-  //bprb_func_process(bool(*fpt)(vcl_vector<brdb_value_sptr>, vcl_vector<brdb_value_sptr>&), const char* name)
   bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name)
     :fpt_(fpt), fpt_init_(0), fpt_finish_(0), name_(name)
+  {}
+
+  bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name, 
+	  bool(*init)(bprb_func_process&), bool(*finish)(bprb_func_process&))
+    :fpt_(fpt), fpt_init_(init), fpt_finish_(finish), name_(name)
   {}
 
   ~bprb_func_process(){}
