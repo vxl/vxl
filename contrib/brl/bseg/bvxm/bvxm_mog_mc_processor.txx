@@ -77,8 +77,7 @@ bool bvxm_mog_mc_processor<dim, modes>::update( bvxm_voxel_slab<apm_datatype> &a
   bsta_gaussian_indep<float,dim> init_gauss(obs_datatype(0.0f),init_covar);
 
   // the updater
-  //bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss);
-  bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss,this->n_gaussian_modes_,g_thresh,min_stddev);
+  bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss,modes,g_thresh,min_stddev);
 
   //check dimensions match
   assert(appear.nx() == obs.nx());
