@@ -28,6 +28,13 @@ bool bprb_process_ext::set_output(unsigned i, brdb_value_sptr val)
   return true;
 }
 
+bool bprb_process_ext::set_input_types(vcl_vector<vcl_string> const& types)
+{
+  input_types_ = types;
+  input_data_.resize(types.size());
+  return true;
+}
+
 //: set a particular input, resize array if necessary
 bool bprb_process_ext::set_input(unsigned i, brdb_value_sptr const& value)
 {

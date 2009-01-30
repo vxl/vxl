@@ -32,6 +32,8 @@ class bprb_process_ext : public bprb_process
   //: Clone the process
   virtual bprb_process_ext* clone() const = 0;
 
+  bool set_input_types(vcl_vector<vcl_string> const& types);
+
   bool set_input(unsigned i, brdb_value_sptr const& value);
 
   bool set_input_data(vcl_vector<brdb_value_sptr> const& inputs);
