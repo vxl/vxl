@@ -23,6 +23,7 @@
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h> // exit()
 #include <vcl_cmath.h>   // floor()
@@ -539,6 +540,46 @@ VDS int parse(vul_arg<int>* argmt, char ** argv)
 }
 
 template class vul_arg<int>;
+
+//: int64
+#ifdef VXL_HAS_INT_64
+VDS void settype(vul_arg<vxl_int_64> &argmt) { argmt.type_ = "integer64"; }
+
+VDS void print_value(vcl_ostream  &s, vul_arg<vxl_int_64> const &argmt)
+{ s << argmt(); }
+
+VDS int parse(vul_arg<vxl_int_64>* argmt, char ** argv)
+{
+  if ( !argv ||  !argv[0] )
+  {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected integer, none is provided.\n";
+    return -1;
+  }
+
+  // Ensure only digits are present allowing for the special case of an l or L suffix
+  int len = vcl_strlen(argv[0]);
+  for(int i=0; i<len; ++i)
+  {
+    char tmp = argv[0][i];
+    if(tmp < '0' || tmp > '9' || // Make sure the number only contains valid digits
+       ((tmp == 'l' || tmp == 'L') && i != len-1) || // Or the trailing l or L suffix
+       (tmp=='-' && i != 0 && len <= 2)) // Or a leading minus sign
+    {
+      vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse \"" << *argv << "\" as int64\n";
+      return -1;
+    }
+  }
+
+  vcl_stringstream ss;
+  ss << argv[0];
+  ss >> argmt->value_;
+
+  return 1;
+}
+
+template class vul_arg<vxl_int_64>;
+#endif
 
 //: unsigned
 VDS void settype(vul_arg<unsigned> &argmt) { argmt.type_ = "integer"; }

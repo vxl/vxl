@@ -20,6 +20,7 @@
 #include <vcl_string.h>
 #include <vcl_list.h>
 #include <vcl_iosfwd.h>
+#include <vxl_config.h>
 
 //: forward declare all classes and their helper functions.
 class vul_arg_info_list;
@@ -229,6 +230,10 @@ declare_specialization(vcl_vector<int>);
 declare_specialization(vcl_vector<unsigned>);
 declare_specialization(vcl_vector<double>);
 declare_specialization(vcl_string);
+
+#ifdef VXL_HAS_INT_64
+declare_specialization(vxl_int_64);
+#endif
 
 #undef declare_specialization
 #endif // VCL_KAI
