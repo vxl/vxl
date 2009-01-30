@@ -53,6 +53,8 @@ PyMethodDef batch_methods[] =
   "set_input_from_db(i, i) set input i of the current process to db id value"},
   {"remove_data", remove_data, METH_VARARGS,
   "remove_data(i) remove data with id from db"},
+  {"remove_data_obj", remove_data_obj, METH_VARARGS,
+  "remove_data_obj(i) remove data with obj.id from db"},
   {"print_db", print_db, METH_VARARGS, "print_db() print the database"},
   {"clear", clear, METH_VARARGS, "clear() clear the database tables"},
   {NULL, NULL},
@@ -287,14 +289,14 @@ PyObject *set_input_from_db(PyObject *self, PyObject *args)
     return NULL;
 
   if (PyObject_HasAttrString(obj, "type") && PyObject_HasAttrString(obj, "id")) {
-	type_obj = PyObject_GetAttrString(obj,"type"); 
+	  type_obj = PyObject_GetAttrString(obj,"type"); 
     id_obj = PyObject_GetAttrString(obj,"id");
 
-	if (PyInt_Check(id_obj) && PyString_Check(type_obj)) {
+	  if (PyInt_Check(id_obj) && PyString_Check(type_obj)) {
       id = PyInt_AsLong(id_obj);
       type = PyString_AsString(type_obj);
       result = bprb_batch_process_manager::instance()->set_input_from_db(input, id, type);
-	}
+    }
   } 
 
   return Py_BuildValue("b", result);
@@ -307,6 +309,24 @@ PyObject *remove_data(PyObject *self, PyObject *args)
     return NULL;
   bool result = bprb_batch_process_manager::instance()->remove_data(id);
 
+  return Py_BuildValue("b", result);
+}
+
+PyObject *remove_data_obj(PyObject *self, PyObject *args)
+{
+  unsigned id;
+  PyObject* obj, *id_obj;
+  if (!PyArg_ParseTuple(args, "O:set_input_from_db", &obj))
+    return NULL;
+
+  bool result = false;
+  if (PyObject_HasAttrString(obj, "id")) {
+    id_obj = PyObject_GetAttrString(obj,"id");
+	  if (PyInt_Check(id_obj)) {
+      id = PyInt_AsLong(id_obj);
+      result = bprb_batch_process_manager::instance()->remove_data(id);
+    }
+  }
   return Py_BuildValue("b", result);
 }
 

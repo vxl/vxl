@@ -19,7 +19,7 @@ typedef struct {
   char* type;
 } dbvalue;
 
-const int METHOD_NUM = 23;
+const int METHOD_NUM = 24;
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);
 static PyObject *set_input_string(PyObject *self, PyObject *args);
@@ -37,6 +37,7 @@ static PyObject *run_process(PyObject *self, PyObject *args);
 static PyObject *commit_output(PyObject *self, PyObject *args);
 static PyObject *set_input_from_db(PyObject* self, PyObject *args);
 static PyObject *remove_data(PyObject *self, PyObject *args);
+static PyObject *remove_data_obj(PyObject *self, PyObject *args);
 static PyObject *print_db(PyObject *self, PyObject *args);
 static PyObject *clear(PyObject *self, PyObject *args);
 void register_basic_datatypes();
