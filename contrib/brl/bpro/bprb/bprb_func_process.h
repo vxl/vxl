@@ -36,7 +36,7 @@ class bprb_func_process: public bprb_process_ext
 
   ~bprb_func_process(){}
 
-  bprb_func_process* clone() const { return new bprb_func_process(fpt_, name_.c_str()); }
+  bprb_func_process* clone() const { return new bprb_func_process(fpt_, name_.c_str(),fpt_init_, fpt_finish_); }
 
   void set_init_func(bool(*fpt)(bprb_func_process&)) { fpt_init_ = fpt; }
 

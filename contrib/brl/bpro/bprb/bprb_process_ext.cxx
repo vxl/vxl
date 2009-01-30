@@ -28,7 +28,7 @@ bool bprb_process_ext::set_output(unsigned i, brdb_value_sptr val)
   return true;
 }
 
-//: set a particular input
+//: set a particular input, resize array if necessary
 bool bprb_process_ext::set_input(unsigned i, brdb_value_sptr const& value)
 {
   if (!value){
@@ -36,7 +36,9 @@ bool bprb_process_ext::set_input(unsigned i, brdb_value_sptr const& value)
     return false;
   }
 
-  input_data_.push_back(value);
+  if(input_data_.size()<=i)
+    input_data_.resize(i+1);
+  input_data_[i]=value;
   return true;
 }
 

@@ -137,7 +137,7 @@ bool bprb_batch_process_manager::set_input_from_db(unsigned i,
 {
   if (!current_process_)
     return false;
-  vcl_string type = current_process_->input_type(i);
+ vcl_string type = current_process_->input_type(i);
   // construct the name of the relation
   vcl_string relation_name = type + "_data";
 
@@ -145,7 +145,7 @@ bool bprb_batch_process_manager::set_input_from_db(unsigned i,
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
-  if (selec->size()!=1) {
+  if (!selec||selec->size()!=1) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
     return false;
