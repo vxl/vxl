@@ -36,7 +36,7 @@ bool bmdl_trace_boundaries_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "lidar_roi_process: The input number should be 8" << vcl_endl;
+    vcl_cout << "lidar_roi_process: The input number should be 2" << vcl_endl;
     return false; 
   }
 
@@ -54,3 +54,10 @@ bool bmdl_trace_boundaries_process(bprb_func_process& pro)
   return true;
 }
 
+bool bmdl_trace_boundaries_process_init(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vcl_string");
+  return pro.set_input_types(input_types);
+}

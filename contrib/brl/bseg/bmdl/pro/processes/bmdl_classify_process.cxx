@@ -132,22 +132,27 @@ bool bmdl_classify_process(bprb_func_process& pro)
     vcl_cout << "bmdl_classify_process -- The process has failed!\n";
     return false;
   }
-
-  vcl_vector<vcl_string> output_types_(2);
-  int j=0;
-  output_types_[j++]= "vil_image_view_base_sptr";  // label image
-  output_types_[j++]= "vil_image_view_base_sptr";  // height image
-  pro.set_output_types(output_types_);
-
-  j=0;
-  // store image output (labels)
-  brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(label_img);
-  pro.set_output(j++, output0);
-
-  // store image output (height)
-  brdb_value_sptr output1 = new brdb_value_t<vil_image_view_base_sptr>(height_img);
-  pro.set_output(j++, output1);
-
+  i=0;
+  pro.set_output_val<vil_image_view_base_sptr>(i, label_img);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, height_img);
   return true;
 }
 
+bool bmdl_classify_process_init(bprb_func_process& pro)
+{
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr"); 
+  input_types.push_back("vil_image_view_base_sptr"); 
+  input_types.push_back("vil_image_view_base_sptr"); 
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr");  // label image
+  output_types.push_back("vil_image_view_base_sptr");  // height image
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+
+  return true;
+}

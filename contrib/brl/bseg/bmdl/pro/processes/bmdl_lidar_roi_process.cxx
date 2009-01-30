@@ -232,31 +232,44 @@ bool bmdl_lidar_roi_process(bprb_func_process& pro)
     return false;
   }
 
-  vcl_vector<vcl_string> output_types_(4);
-  int j=0;
-  output_types_[j++]= "vil_image_view_base_sptr";  // first return roi
-  output_types_[j++]= "vil_image_view_base_sptr";  // last return roi
-  output_types_[j++]= "vil_image_view_base_sptr";  // ground roi
-  output_types_[j++]= "vpgl_camera_double_sptr";   // lvcs
-  pro.set_output_types(output_types_);
-
-  j=0;
+  unsigned j=0;
   // store image output (first return roi)
-  brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(first_roi);
-  pro.set_output(j++,output0);
+  pro.set_output_val<vil_image_view_base_sptr>(j++, first_roi);
 
   // store image output (last return roi)
-  brdb_value_sptr output1 = new brdb_value_t<vil_image_view_base_sptr>(last_roi);
-  pro.set_output(j++,output1);
+  pro.set_output_val<vil_image_view_base_sptr>(j++,last_roi);
 
   // store image output (ground roi)
-  brdb_value_sptr output2 = new brdb_value_t<vil_image_view_base_sptr>(ground_roi);
-  pro.set_output(j++,output2);
+  pro.set_output_val<vil_image_view_base_sptr>(j++,ground_roi);
 
   // store the camera (camera of first return is sufficient)
-  brdb_value_sptr output3 = new brdb_value_t<vpgl_camera_double_sptr >(lidar_cam);
-  pro.set_output(j++,output3);
+  pro.set_output_val<vpgl_camera_double_sptr >(j++, lidar_cam);
 
   return true;
 }
 
+bool bmdl_lidar_roi_process_init(bprb_func_process& pro)
+{
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string");
+  input_types.push_back("vcl_string");
+  input_types.push_back("vcl_string");
+  input_types.push_back("float");
+  input_types.push_back("float");
+  input_types.push_back("float");
+  input_types.push_back("float");
+  input_types.push_back("unsigned");
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr"); // label image
+  output_types.push_back("vil_image_view_base_sptr"); // height image
+  output_types.push_back("vil_image_view_base_sptr"); // ground roi
+  output_types.push_back("vpgl_camera_double_sptr");  // lvcs
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+
+  return true;
+}
