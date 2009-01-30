@@ -13,7 +13,7 @@
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <expatpplib.h>
-
+#include <vul/vul_file.h>
 // anonymous namespace
 namespace {
 
@@ -119,6 +119,8 @@ void bxml_expat_parser::xmlDecl( const XML_Char *version,
 //: Read the entire contents of \p filepath into an XML document class
 bxml_document bxml_read(const vcl_string& filepath)
 {
+  if (!vul_file::exists(filepath))
+    vcl_cerr<< "In bxml_read: " << vul_file::get_cwd() << filepath << " does not exist" <<vcl_endl;
   vcl_ifstream file(filepath.c_str());
   return bxml_read(file);
 }

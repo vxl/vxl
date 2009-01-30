@@ -18,7 +18,7 @@ AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
 ADD_LIBRARY(bxml ${bxml_sources})
 
-TARGET_LINK_LIBRARIES( bxml expatpp vbl )
+TARGET_LINK_LIBRARIES( bxml expatpp vbl vul)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
