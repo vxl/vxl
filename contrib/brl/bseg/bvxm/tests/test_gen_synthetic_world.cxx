@@ -4,6 +4,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vul/vul_file.h>
+#include <vpl/vpl.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
@@ -668,31 +669,27 @@ static void test_gen_synthetic_world()
   // create the directory under build to put the intermediate files and the generated images
   vcl_string model_dir("test_gen_synthetic_world");
   if (vul_file::is_directory(model_dir))
-    vul_file::delete_file_glob(model_dir+"/*");
-  else {
-    if (vul_file::exists(model_dir))
-      vul_file::delete_file_glob(model_dir);
-    vul_file::make_directory(model_dir);
-  }
+    vpl_rmdir(model_dir.c_str());
+  else if (vul_file::exists(model_dir))
+      vpl_unlink(model_dir.c_str());
+  vul_file::make_directory(model_dir);
+  
 
   vcl_string recon_model_dir("recon_world");
   if (vul_file::is_directory(recon_model_dir))
-    vul_file::delete_file_glob(recon_model_dir+"/*");
-  else {
-    if (vul_file::exists(recon_model_dir))
-      vul_file::delete_file_glob(recon_model_dir);
-    vul_file::make_directory(recon_model_dir);
-  }
+    vpl_rmdir(recon_model_dir.c_str());
+  else if (vul_file::exists(recon_model_dir))
+      vpl_unlink(recon_model_dir.c_str());
+  vul_file::make_directory(recon_model_dir);
+
 
   vcl_string test_gen_cameras("test_gen_cameras");
   if (vul_file::is_directory(test_gen_cameras))
-    vul_file::delete_file_glob(test_gen_cameras+"/*");
-  else {
-    if (vul_file::exists(test_gen_cameras))
-      vul_file::delete_file_glob(test_gen_cameras);
-    vul_file::make_directory(test_gen_cameras);
-  }
-
+    vpl_rmdir(test_gen_cameras.c_str());
+  else if (vul_file::exists(test_gen_cameras))
+    vpl_unlink(test_gen_cameras.c_str());
+  vul_file::make_directory(test_gen_cameras);
+ 
   vgl_vector_3d<unsigned> grid_size(nx,ny,nz);
   vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
                                  vgl_point_3d<double> (nx, ny, nz));

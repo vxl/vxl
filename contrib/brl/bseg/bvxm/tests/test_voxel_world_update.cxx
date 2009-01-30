@@ -27,9 +27,6 @@ static void test_voxel_world_update()
   vgl_point_3d<float> grid_corner(0.f,0.f,0.f);
   vgl_vector_3d<unsigned> grid_size(300,300,120);
   float vox_len = 0.5f;
-#if 0
-  bvxm_world_params::appearance_model_type apm_type = bvxm_world_params::mog_grey;
-#endif
 
   // create the world
   bvxm_voxel_world  world;
@@ -66,7 +63,6 @@ static void test_voxel_world_update()
 
   //create a synthetic image
   vil_image_view_base_sptr view_sptr = new vil_image_view<vxl_byte>(50,100,1,1);
-  // img_view.fill((vxl_byte)1);
 
   //create metadata:
   bvxm_image_metadata observation(view_sptr,camera);
@@ -76,11 +72,12 @@ static void test_voxel_world_update()
 
   //testing the update on mog_grey,mg_rgb and also with different bin numbers
   vil_image_view<bool> mask(view_sptr->ni(),view_sptr->nj(),1);
-  world.update<APM_MOG_GREY>(observation, prob_map, mask, 0);
-  world.update<APM_MOG_GREY>(observation, prob_map, mask, 2);
+  bool result  = world.update<APM_MOG_GREY>(observation, prob_map, mask, 0);
+  result = result  && world.update<APM_MOG_GREY>(observation, prob_map, mask, 2);
 
-  //world.update<APM_MOG_RGB> (observation, prob_map, mask, 10);
-  //world.update<APM_MOG_RGB> (observation, prob_map, mask, 15);
+  TEST("world update", result, true);
+
+  //TO DO: check update for other processors
 }
 
 TESTMAIN( test_voxel_world_update );

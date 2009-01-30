@@ -12,6 +12,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpl/vpl.h>
 
 
 static void test_voxel_world_mog_image()
@@ -20,12 +21,11 @@ static void test_voxel_world_mog_image()
 
   vcl_string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
-    vul_file::delete_file_glob(model_dir+"/*");
-  else {
-    if (vul_file::exists(model_dir))
-      vul_file::delete_file_glob(model_dir);
-    vul_file::make_directory(model_dir);
-  }
+    vpl_rmdir(model_dir.c_str());
+  else if (vul_file::exists(model_dir))
+      vpl_unlink(model_dir.c_str());
+  vul_file::make_directory(model_dir);
+  
 
   unsigned nx = 200;
   unsigned ny = 200;
