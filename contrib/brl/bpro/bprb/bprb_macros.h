@@ -35,7 +35,7 @@
  T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, 0) ) ) 
 
 #define REG_PROCESS_FUNC_CONS_INIT_FIN(proc, T, func, nm) \
- T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, func##finish) ) ) 
+ T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, func##_finish) ) ) 
 
 #define REGISTER_DATATYPE(T) \
   vcl_string s##T = #T; \
