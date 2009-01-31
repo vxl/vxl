@@ -29,16 +29,19 @@ SUBDIRS(sbin)
 # background modeling
 SUBDIRS(bbgm)
 
+# background modeling python interface
+SUBDIRS(bbgm_batch)
+
 #voxel world modeling
 SUBDIRS(bvxm)
 
-#voxel world modeling batch
+#voxel world modeling python interface
 SUBDIRS(bvxm_batch)
 
 # Lidar modeling (segmentation and meshing)
 SUBDIRS(bmdl)
 
-# Lidar modeling batch
+# Lidar modeling python interface
 SUBDIRS(bmdl_batch)
 
 # recognition library - uses background models of bbgm and/or bvxm
