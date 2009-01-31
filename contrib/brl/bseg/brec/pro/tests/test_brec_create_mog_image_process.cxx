@@ -17,7 +17,7 @@
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
-
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_parameters_sptr.h>
