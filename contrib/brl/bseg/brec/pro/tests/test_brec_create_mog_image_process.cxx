@@ -34,9 +34,9 @@
 
 #include <brec/brec_bg_pair_density.h>
 #include <brec/pro/brec_create_mog_image_process.h>
-#include <bbgm/pro/bbgm_save_image_of_process.h>
-#include <bbgm/pro/bbgm_display_dist_image_process.h>
-
+//#include <bbgm/pro/bbgm_save_image_of_process.h>
+//#include <bbgm/pro/bbgm_display_dist_image_process.h>
+#include <bbgm/pro/bbgm_processes.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 
@@ -63,8 +63,8 @@ MAIN( test_brec_create_mog_image_process )
   // call bvxmGenSyntheticWorldProcess process to generate a synthetic world with two boxes
   REG_PROCESS(bvxm_gen_synthetic_world_process, bprb_batch_process_manager);
   REG_PROCESS(brec_create_mog_image_process, bprb_batch_process_manager);
-  REG_PROCESS(bbgm_save_image_of_process, bprb_batch_process_manager);
-  REG_PROCESS(bbgm_display_dist_image_process, bprb_batch_process_manager);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_display_dist_image_process, "bbgmDisplayDistImageProcess");
 
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
@@ -191,7 +191,7 @@ MAIN( test_brec_create_mog_image_process )
   //: save the output mog image
   brdb_value_sptr v6 = new brdb_value_t<vcl_string>("out_mog.bin");
   brdb_value_sptr v7 = new brdb_value_t<bbgm_image_sptr>(out_mog_img);
-  good = bprb_batch_process_manager::instance()->init_process("SaveImageOfProcess");
+  good = bprb_batch_process_manager::instance()->init_process("bbgmSaveImageOfProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v6);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v7);
   good = good && bprb_batch_process_manager::instance()->run_process();
@@ -203,7 +203,7 @@ MAIN( test_brec_create_mog_image_process )
     brdb_value_sptr v8 = new brdb_value_t<vcl_string>("mean");
     brdb_value_sptr v9 = new brdb_value_t<int>(component);  // the component to display
     brdb_value_sptr v11 = new brdb_value_t<bool>(true);  // scale result to a byte image
-    good = bprb_batch_process_manager::instance()->init_process("DisplayDistImageProcess");
+    good = bprb_batch_process_manager::instance()->init_process("bbgmDisplayDistImageProcess");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v7);
     good = good && bprb_batch_process_manager::instance()->set_input(1, v8);
     good = good && bprb_batch_process_manager::instance()->set_input(2, v9);
@@ -227,7 +227,7 @@ MAIN( test_brec_create_mog_image_process )
     //: display the output mog image's std deviation
     brdb_value_sptr v10 = new brdb_value_t<vcl_string>("variance");
     
-    good = bprb_batch_process_manager::instance()->init_process("DisplayDistImageProcess");
+    good = bprb_batch_process_manager::instance()->init_process("bbgmDisplayDistImageProcess");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v7);
     good = good && bprb_batch_process_manager::instance()->set_input(1, v10);
     good = good && bprb_batch_process_manager::instance()->set_input(2, v9);
