@@ -11,11 +11,11 @@
 #include <bsta/bsta_gaussian_indep.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_random.h>
-#include <bbgm/bbgm_loader.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_value_sptr.h>
 #include <core/vil_pro/vil_load_image_view_process.h>
 #include <bbgm/pro/bbgm_processes.h>
+#include <bbgm/pro/bbgm_register.h>
 
 void init_random_image(vil_image_view<float>& img)
 {
@@ -28,8 +28,10 @@ void init_random_image(vil_image_view<float>& img)
 
 MAIN( test_update_dist_image )
 {
-#if 0 //fix up later
-  bbgm_loader::register_loaders();
+  REGISTER_DATATYPE( vil_image_view_base_sptr );
+  REGISTER_DATATYPE( bbgm_image_sptr );
+  REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, bbgm_update_dist_image_process, "bbgmUpdateDistImageProcess");
+
   const unsigned int ni = 640, nj = 480;
   vil_image_view<float>* ip = new vil_image_view<float>(ni,nj,3);
   init_random_image(*ip);
@@ -37,17 +39,15 @@ MAIN( test_update_dist_image )
   brdb_value_sptr image_view_value =
     new brdb_value_t<vil_image_view_base_sptr>(ip);
 
-  bprb_process_sptr p1 = new bbgm_update_dist_image_process();
-  p1->set_input(1, image_view_value);
-  p1->set_input(2 , new brdb_value_t<int>(3));//number of mixture components
-  p1->set_input(3 , new brdb_value_t<int>(300));//window size
-  p1->set_input(4 , new brdb_value_t<float>(0.1f));//initial variance
-  p1->set_input(5 , new brdb_value_t<float>(3.0f));//g_thresh
-  p1->set_input(6 , new brdb_value_t<float>(0.02f));//min standard deviation
-  bool good = p1->init();
+  bprb_process_sptr p1 = bprb_batch_process_manager::instance()->get_process_by_name("bbgmUpdateDistImageProcess");
+  bool good = p1->set_input(1, image_view_value);
+  good = good && p1->set_input(2 , new brdb_value_t<int>(3));//number of mixture components
+  good = good && p1->set_input(3 , new brdb_value_t<int>(300));//window size
+  good = good && p1->set_input(4 , new brdb_value_t<float>(0.1f));//initial variance
+  good = good && p1->set_input(5 , new brdb_value_t<float>(3.0f));//g_thresh
+  good = good && p1->set_input(6 , new brdb_value_t<float>(0.02f));//min standard deviation
+  good = good && p1->init();
   good = good && p1->execute();
-  #endif
-  bool good = true;
   TEST("update distribution image process", good, true);
   SUMMARY();
 }

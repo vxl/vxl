@@ -13,11 +13,17 @@
 
 #include <bbgm/bbgm_update.h>
 #include <bbgm/bbgm_loader.h>
+#include <bbgm/pro/bbgm_processes.h>
+#include <bbgm/pro/bbgm_register.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_random.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_value_sptr.h>
+#include <bprb/bprb_func_process.h>
+#include <bprb/bprb_process_sptr.h>
+#include <bprb/bprb_batch_process_manager.h>
+#include <bprb/bprb_macros.h>
 
 namespace
 {
@@ -44,9 +50,8 @@ namespace
 };
 
 void test_io_function_2(void) {
-#if 0
+
   vcl_cout << "Starting test_io2\n";
-  bbgm_loader::register_loaders();
   const float window_size = 50.0;
   const unsigned int max_components = 3;
   const float init_var = 0.01f;
@@ -76,16 +81,16 @@ void test_io_function_2(void) {
   vcl_string source = mp->is_a();
   vcl_cout << "Starting save/read bbgm_image_sptr\n"
            << "Saving an image_of with type " << source << '\n';
-  bprb_process_sptr lm = new bbgm_load_image_of_process();
-  bprb_process_sptr sm = new bbgm_save_image_of_process();
+  bprb_process_sptr save_p= bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
   brdb_value_sptr mv = new brdb_value_t<bbgm_image_sptr>(mp);
   brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
-  sm->set_input(0, pv);
-  sm->set_input(1, mv);
-  bool good = sm->execute();
-  lm->set_input(0, pv);
-  good = good&&lm->execute();
-  brdb_value_sptr iv = lm->output(0);
+  bool good = save_p->set_input(0, pv);
+  good = good && save_p->set_input(1, mv);
+  good = good &&  save_p->execute();
+  bprb_process_sptr load_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmLoadImageOfProcess");
+  good = good&& load_p->set_input(0, pv);
+  good = good &&  load_p->execute();
+  brdb_value_sptr iv = load_p->output(0);
   if (!iv) good = false;
   vcl_string test;
   if (good){
@@ -97,12 +102,14 @@ void test_io_function_2(void) {
   good = good && source==test;
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");
-#endif
 }
 
 MAIN( test_io )
 {
-#if 0
+  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE( bbgm_image_sptr );
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_load_image_of_process, "bbgmLoadImageOfProcess");
   vcl_cout << "Starting test_io\n";
   bbgm_loader::register_loaders();
   const float window_size = 50.0;
@@ -137,16 +144,16 @@ MAIN( test_io )
   vcl_string source = mp->is_a();
   vcl_cout << "Starting save/read bbgm_image_sptr\n"
            << "Saving an image_of with type " << source << '\n';
-  bprb_process_sptr lm = new bbgm_load_image_of_process();
-  bprb_process_sptr sm = new bbgm_save_image_of_process();
+ bprb_process_sptr save_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
+ bprb_process_sptr load_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmLoadImageOfProcess");
   brdb_value_sptr mv = new brdb_value_t<bbgm_image_sptr>(mp);
   brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
-  sm->set_input(0, pv);
-  sm->set_input(1, mv);
-  bool good = sm->execute();
-  lm->set_input(0, pv);
-  good = good&&lm->execute();
-  brdb_value_sptr iv = lm->output(0);
+  bool good = save_p->set_input(0, pv);
+  good = good && save_p->set_input(1, mv);
+  good = good && save_p->execute();
+  good = good && load_p->set_input(0, pv);
+  good = good && load_p->execute();
+  brdb_value_sptr iv = load_p->output(0);
   if (!iv) good = false;
   vcl_string test;
   if (good){
@@ -158,11 +165,7 @@ MAIN( test_io )
   good = good && source==test;
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");
-
   test_io_function_2();
-#endif
-  bool good = true;
-  TEST("test save and load image_of", good, true);
   SUMMARY();
 }
 
