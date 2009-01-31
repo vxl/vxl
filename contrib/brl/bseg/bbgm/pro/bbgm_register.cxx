@@ -1,9 +1,6 @@
 #include "bbgm_register.h"
 #include "bbgm_processes.h"
-#include "bbgm_measure_process.h"
-#include "bbgm_local_frame_trans_process.h"
 #include <bbgm/bbgm_image_sptr.h>
-
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
