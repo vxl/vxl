@@ -26,7 +26,16 @@
   T ::register_process( bprb_process_sptr( new proc(func, nm) ) )
 
 #define REG_PROCESS_FUNC_INIT_FINALIZE(proc, T, func, nm, init, fin) \
-  T ::register_process( bprb_process_sptr( new proc(func, nm, init, fin) ) )
+  T ::register_process( bprb_process_sptr( new proc(func, nm, 0, init, fin) ) )
+
+#define REG_PROCESS_FUNC_CONS(proc, T, func, nm) \
+ T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, 0, 0) ) ) 
+
+#define REG_PROCESS_FUNC_CONS_INIT(proc, T, func, nm) \
+ T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, 0) ) ) 
+
+#define REG_PROCESS_FUNC_CONS_INIT_FIN(proc, T, func, nm) \
+ T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, func##fin) ) ) 
 
 #define REGISTER_DATATYPE(T) \
   vcl_string s##T = #T; \
@@ -41,5 +50,23 @@
   brdb_relation_sptr r_##T  = new brdb_relation(r_##T##_names,r_##T##_types); \
   DATABASE->add_relation(s##T, r_##T); \
   }
+
+#define DECLARE_FUNC(func) \
+bool func(bprb_func_process& pro)
+
+#define DECLARE_FUNC_CONS(func) \
+bool func(bprb_func_process& pro); \
+bool func##_cons(bprb_func_process& pro)
+
+#define DECLARE_FUNC_CONS_INIT(func) \
+bool func(bprb_func_process& pro); \
+bool func##_cons(bprb_func_process& pro); \
+bool func##_init(bprb_func_process& pro)
+
+#define DECLARE_FUNC_CONS_INIT_FIN(func) \
+bool func(bprb_func_process& pro); \
+bool func##_cons(bprb_func_process& pro); \
+bool func##_init(bprb_func_process& pro); \
+bool func##_fin(bprb_func_process& pro)
 
 #endif // bprb_macros_h_
