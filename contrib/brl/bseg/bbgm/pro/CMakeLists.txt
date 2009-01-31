@@ -8,21 +8,12 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 SET(bbgm_pro_sources
-    bbgm_load_image_of_process.h      bbgm_load_image_of_process.cxx 
-    bbgm_save_image_of_process.h      bbgm_save_image_of_process.cxx 
-    bbgm_update_dist_image_process.h  bbgm_update_dist_image_process.cxx
-    bbgm_update_dist_image_stream_process.h
-    bbgm_update_dist_image_stream_process.cxx
-    bbgm_display_dist_image_process.h
-    bbgm_display_dist_image_process.cxx
-    bbgm_measure_process.h            bbgm_measure_process.cxx
-    bbgm_local_frame_trans_process.h  bbgm_local_frame_trans_process.cxx
-    bbgm_update_parzen_dist_image_process.h
-    bbgm_update_parzen_dist_image_process.cxx
     bbgm_register.h                   bbgm_register.cxx
+    bbgm_processes.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bbgm_pro_sources)
+AUX_SOURCE_DIRECTORY(processes bbgm_pro_sources)
 
 ADD_LIBRARY(bbgm_pro ${bbgm_pro_sources})
 TARGET_LINK_LIBRARIES(bbgm_pro bbgm bprb brdb bsta_algo bsta brip vidl2 vil vil_pro vsl)
