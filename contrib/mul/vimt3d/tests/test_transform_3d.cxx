@@ -8,6 +8,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
+#include <mbl/mbl_test.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <testlib/testlib_test.h>
 
@@ -250,21 +251,28 @@ static void test_composition_and_construction(
 //=========================================================================
 static void test_the_transform(vimt3d_transform_3d& t)
 {
-   vimt3d_transform_3d t_inv = t.inverse();
-   vgl_point_3d<double> p0(5,7,0);
-   vgl_point_3d<double> p1 = t(p0);
-   TEST_NEAR("Inverse correct",vgl_distance(t_inv(p1),p0),0.0,1e-6);
+  vimt3d_transform_3d t_inv = t.inverse();
+  vgl_point_3d<double> p0(5,7,0);
+  vgl_point_3d<double> p1 = t(p0);
+  TEST_NEAR("Inverse correct",vgl_distance(t_inv(p1),p0),0.0,1e-6);
 
-   vnl_matrix<double> I = t.matrix() * t_inv.matrix();
-   vnl_matrix<double> I0(4,4);
-   I0.fill(0);
-   I0.fill_diagonal(1);
+  vnl_matrix<double> I = t.matrix() * t_inv.matrix();
+  vnl_matrix<double> I0(4,4);
+  I0.fill(0);
+  I0.fill_diagonal(1);
 
-   TEST_NEAR("matrix() correct",(I-I0).absolute_value_max(),0.0,1e-6);
+  TEST_NEAR("matrix() correct",(I-I0).absolute_value_max(),0.0,1e-6);
 
-   test_products(t);
+  test_products(t);
 
-   test_composition_and_construction(t.form());
+  vnl_vector<double> p;
+  t.params(p);
+  vimt3d_transform_3d t2;
+  t2.set(p, t.form());
+
+  TEST("params and set work correctly", mbl_test_summaries_are_equal(t, t2), true);
+
+  test_composition_and_construction(t.form());
 }
 
 
@@ -396,7 +404,9 @@ static void test_transform_3d()
   TEST("Test z basis vec", (vec_z0- vec_z0_test).length()< 1e-6, true);
 
   vcl_cout<<"\n== Testing Affine ==\n";
-  trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);
+  trans0.set_affine(-0.2, 0.3,4,2,1,4,5,0.1,-0.21);
+  test_the_transform(trans0);
+  trans0.set_affine(0.2,-0.3,-4, 0,0,0, 5,0.1,-0.21);
   test_the_transform(trans0);
   test_affine_puvw();
 

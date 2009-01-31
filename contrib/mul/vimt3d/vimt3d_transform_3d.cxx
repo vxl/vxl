@@ -47,10 +47,26 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
 {
   //nb in affine case will probablay have to store s_x, s_y, s_z etc somewhere else!
   //also won't work properly in rigid body case either!
+  double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
 
-  phi_x = vcl_atan2(-yz_,zz_);
-  phi_y = vcl_atan2(-xz_*vcl_cos(phi_x),zz_);
-  phi_z=vcl_atan2(-xy_,xx_);
+  double xlen = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
+  double ylen = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_);
+  double zlen = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_);
+
+
+  double xx3 = xx_ / xlen;
+  double yx3 = yx_ / xlen;
+  double zx3 = zx_ / xlen;
+  double xy3 = xy_ / ylen;
+  double yy3 = yy_ / ylen;
+  double zy3 = zy_ / ylen;
+  double xz3 = xz_ / zlen;
+  double yz3 = yz_ / zlen;
+  double zz3 = zz_ / zlen;
+
+  phi_x = vcl_atan2(-yz3,zz3);
+  phi_y = vcl_atan2(-xz3*vcl_cos(phi_x),zz3);
+  phi_z=vcl_atan2(-xy3,xx3);
 
   // nb the equation for phi_z doesn't work in affine case
   // because sy and sx aren't necessarily the same
@@ -59,7 +75,7 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   // ie assuming similarity transform here
   // assume s is always positive
   // to recover original angle
-  double s= vcl_fabs( xz_/ (-1*vcl_sin(phi_y) ) );
+  double s= vcl_fabs( xz3/ (-1*vcl_sin(phi_y) ) );
 #ifdef DEBUG
   vcl_cout<<"s= "<<s<<vcl_endl;
 #endif
@@ -67,7 +83,7 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   // the angles may be wrong by +-vnl_math::pi - we can
   // only tell by checking against the signs
   // of the original entries in the rotation matrix
-  if (vcl_fabs(vcl_sin(phi_y)*s + xz_) > 1e-6)
+  if (vcl_fabs(vcl_sin(phi_y)*s + xz3) > 1e-6)
   {
     if (phi_y > 0)
       phi_y -= vnl_math::pi;
@@ -78,8 +94,8 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
 
   const double cos_y = vcl_cos(phi_y);
 
-  if (vcl_fabs(vcl_sin(phi_x)*cos_y*s + yz_) > 1e-6 ||
-      vcl_fabs(vcl_cos(phi_x)*cos_y*s - zz_) > 1e-6)
+  if (vcl_fabs(vcl_sin(phi_x)*cos_y*s + yz3) > 1e-6 ||
+      vcl_fabs(vcl_cos(phi_x)*cos_y*s - zz3) > 1e-6)
   {
     if (phi_x > 0)
       phi_x -= vnl_math::pi;
@@ -87,8 +103,8 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
       phi_x += vnl_math::pi;
   }
 
-  if (vcl_fabs(vcl_cos(phi_z)*cos_y*s - xx_) > 1e-6 ||
-      vcl_fabs(vcl_sin(phi_z)*cos_y*s + xy_) > 1e-6)
+  if (vcl_fabs(vcl_cos(phi_z)*cos_y*s - xx3) > 1e-6 ||
+      vcl_fabs(vcl_sin(phi_z)*cos_y*s + xy3) > 1e-6)
   {
     if (phi_z > 0)
       phi_z -= vnl_math::pi;
@@ -157,16 +173,20 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
     break;
    case (Affine):     // not sure this is right - kds
                       // I'm sure it's not correct -dac
-    if (v.size()!=9) v.set_size(9);
-    // computation of angles doesn't work unless
-    // sx, sy, sz are all the same!
-    angles(v[3],v[4],v[5]);
-    // try to compute scaling factors
-    v[0]= xx_/ ( vcl_cos( v[4] ) *vcl_cos( v[5] ) );
-    v[1]= yz_/( -1*vcl_sin(v[3])*vcl_cos(v[4]) );
-    v[2]= zz_/( vcl_cos(v[3])*vcl_cos(v[4]) );
-    v[6]=xt_; v[7]=yt_; v[8]=zt_;
-    break;
+    {
+      v.set_size(9);
+      // computation of angles doesn't work unless
+      // sx, sy, sz are all the same!
+
+      angles(v[3],v[4],v[5]);
+      // try to compute scaling factors
+      double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
+      v[0]=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
+      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_);
+      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_);
+      v[6]=xt_; v[7]=yt_; v[8]=zt_;
+      break;
+    }
    default:
     vcl_cerr << "vimt3d_transform_3d::params() Unexpected form: "
              << int(form_)<<vcl_endl;
@@ -174,6 +194,60 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
   }
 }
 
+
+//=======================================================================
+#if 0
+void vimt3d_transform_3d::simplify()
+{
+  switch (form_)
+  {
+  case RigidBody:
+    angles(rx, ry, rz);
+    if (rx!=0 || ry!=0 || rz!=0)
+      return;
+    this->set_translation(xt_, yt_, zt_);
+  case ZoomOnly:
+    if (xx_!=1.0 || yy_!=1.0 || zz_!=1.0)
+      return;
+    set_translation(xt_, yt_, zt_);
+  case Translation:
+    if (xt_==0 && yt_==0 && zt_==0)
+      set_identity();
+    return;
+  case Identity:
+    return;  
+    break;
+   case (Similarity): // not sure this is right - kds
+                      // I think it's fixed now -dac
+    if (v.size()!=7) v.set_size(7);
+    angles(v[1],v[2],v[3]);
+    // compute scaling factor
+    v[0]= xx_/ ( vcl_cos( v[2] ) *vcl_cos( v[3] ) );
+    v[4]=xt_; v[5]=yt_; v[6]=zt_;
+    break;
+   case (Affine):     // not sure this is right - kds
+                      // I'm sure it's not correct -dac
+    {
+      v.set_size(9);
+      // computation of angles doesn't work unless
+      // sx, sy, sz are all the same!
+
+      angles(v[3],v[4],v[5]);
+      // try to compute scaling factors
+      double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
+      v[0]=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
+      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_);
+      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_);
+      v[6]=xt_; v[7]=yt_; v[8]=zt_;
+      break;
+    }
+   default:
+    vcl_cerr << "vimt3d_transform_3d::params() Unexpected form: "
+             << int(form_)<<vcl_endl;
+    vcl_abort();
+  }
+}
+#endif
 //=======================================================================
 
 void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const

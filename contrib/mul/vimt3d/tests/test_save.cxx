@@ -9,14 +9,6 @@
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <testlib/testlib_test.h>
 
-namespace
-{
-  // Stream output operator for class reference
-  void vsl_print_summary(vcl_ostream& os,const vimt3d_transform_3d& b)
-  {
-    os << b;
-  }
-}
 
 static void test_save(int argc, char* argv[])
 {

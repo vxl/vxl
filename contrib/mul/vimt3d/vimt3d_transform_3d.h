@@ -344,6 +344,12 @@ void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b);
 //: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b);
 
+//: Stream output operator for class reference
+inline void vsl_print_summary(vcl_ostream& afs, const vimt3d_transform_3d& b)
+{
+  b.print_summary(afs);
+}
+
 //: Test whether a 3D transform is zoom-only or lesser.
 // i.e. there may be translation and (anisotropic) scaling but no rotation.
 // \note This tests only for a commonly-occurring special case; there may
