@@ -160,8 +160,9 @@ MAIN( test_io )
   vpl_unlink("./background.md");
 
   test_io_function_2();
-
-  SUMMARY();
 #endif
+  bool good = true;
+  TEST("test save and load image_of", good, true);
+  SUMMARY();
 }
 
