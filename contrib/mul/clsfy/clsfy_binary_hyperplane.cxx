@@ -5,8 +5,8 @@
 // \file
 // \brief Implement a binary linear classifier
 // \author Ian Scott
-// \date 2000/05/26
-
+// \date 2000-05-26
+//
 //=======================================================================
 
 #include <vcl_string.h>
@@ -67,6 +67,7 @@ bool clsfy_binary_hyperplane::is_class(vcl_string const& s) const
 
 //=======================================================================
 
+//:
 // required if data is present in this class
 void clsfy_binary_hyperplane::print_summary(vcl_ostream& os) const
 {
@@ -106,7 +107,7 @@ void clsfy_binary_hyperplane::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << "\n";
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

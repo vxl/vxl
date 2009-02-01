@@ -2,7 +2,7 @@
 //:
 // \file
 
-//************* mask using a binary 3D image ********************
+//: ************* mask using a binary 3D image ********************
 rgrl_mask_3d_image::
 rgrl_mask_3d_image( const vil3d_image_view< vxl_byte > & in_mask,
                     int org_x, int org_y, int org_z )

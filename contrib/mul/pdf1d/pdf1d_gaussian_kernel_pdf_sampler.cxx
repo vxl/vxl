@@ -4,7 +4,7 @@
 // \file
 // \brief Implements sampling for a gaussian_kernel_pdf model pdf sampler
 // \author Tim Cootes and Ian Scott
-
+//
 //=======================================================================
 
 #include <vcl_string.h>
@@ -32,7 +32,7 @@ const pdf1d_gaussian_kernel_pdf& pdf1d_gaussian_kernel_pdf_sampler::gaussian_ker
 
 // ====================================================================
 
-// For generating plausible examples:
+//: For generating plausible examples
 double pdf1d_gaussian_kernel_pdf_sampler::sample()
 {
   const pdf1d_gaussian_kernel_pdf& kpdf = gaussian_kernel_pdf();
@@ -86,7 +86,7 @@ void pdf1d_gaussian_kernel_pdf_sampler::regular_samples(vnl_vector<double>& x)
 
 //=======================================================================
 
-  //: Reseeds the static random number generator (one per derived class)
+//: Reseeds the static random number generator (one per derived class)
 void pdf1d_gaussian_kernel_pdf_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);

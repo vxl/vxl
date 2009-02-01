@@ -4,7 +4,7 @@
 // \file
 // \brief Implements sampling for a mixture model pdf sampler
 // \author Tim Cootes and Ian Scott
-
+//
 //=======================================================================
 
 #include "pdf1d_sampler.h"
@@ -85,7 +85,7 @@ void pdf1d_mixture_sampler::set_model(const pdf1d_pdf& m)
 
 // ====================================================================
 
-// For generating plausible examples:
+//: For generating plausible examples
 double pdf1d_mixture_sampler::sample()
 {
   const pdf1d_mixture& mix = mixture();
@@ -106,7 +106,7 @@ double pdf1d_mixture_sampler::sample()
 
 //=======================================================================
 
-  //: Reseeds the static random number generator (one per derived class)
+//: Reseeds the static random number generator (one per derived class)
 void pdf1d_mixture_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);

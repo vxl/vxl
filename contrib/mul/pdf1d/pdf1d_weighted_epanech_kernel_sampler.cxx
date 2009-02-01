@@ -4,7 +4,7 @@
 // \file
 // \brief Implements sampling for a weighted Epanechnikov kernel PDF
 // \author Ian Scott
-
+//
 //=======================================================================
 
 #include <vcl_string.h>
@@ -37,7 +37,7 @@ const pdf1d_weighted_epanech_kernel_pdf& pdf1d_weighted_epanech_kernel_sampler::
 
 // ====================================================================
 
-// For generating plausible examples:
+//: For generating plausible examples
 double pdf1d_weighted_epanech_kernel_sampler::sample()
 {
 // Need to deal with weights.
@@ -128,7 +128,7 @@ void pdf1d_weighted_epanech_kernel_sampler::regular_samples(vnl_vector<double>& 
 
 //=======================================================================
 
-  //: Reseeds the static random number generator (one per derived class)
+//: Reseeds the static random number generator (one per derived class)
 void pdf1d_weighted_epanech_kernel_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);

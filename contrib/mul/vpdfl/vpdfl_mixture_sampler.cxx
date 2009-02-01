@@ -15,7 +15,7 @@
 // \verbatim
 //    IMS   Converted to VXL 12 May 2000
 // \endverbatim
-
+//
 //=======================================================================
 
 #include <vcl_string.h>
@@ -95,7 +95,7 @@ void vpdfl_mixture_sampler::set_model(const vpdfl_pdf_base& m)
 
 // ====================================================================
 
-  // For generating plausible examples:
+//: For generating plausible examples
 void vpdfl_mixture_sampler::sample(vnl_vector<double>& x)
 {
   const vpdfl_mixture& mix = mixture();
@@ -116,7 +116,7 @@ void vpdfl_mixture_sampler::sample(vnl_vector<double>& x)
 
 //=======================================================================
 
-  //: Reseeds the static random number generator (one per derived class)
+//: Reseeds the static random number generator (one per derived class)
 void vpdfl_mixture_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);

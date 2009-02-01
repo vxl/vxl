@@ -4,7 +4,7 @@
 // \file
 // \brief Simplest possible 1D classifier: A single thresholding function
 // \author Tim Cootes
-
+//
 //=======================================================================
 
 #include <vcl_string.h>
@@ -77,6 +77,7 @@ bool clsfy_binary_threshold_1d::is_class(vcl_string const& s) const
 
 //=======================================================================
 
+//:
 // required if data is present in this class
 void clsfy_binary_threshold_1d::print_summary(vcl_ostream& os) const
 {
