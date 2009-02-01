@@ -1,6 +1,5 @@
 #ifndef vcl_atomic_count_gcc_h_
 #define vcl_atomic_count_gcc_h_
-
 //:
 // \file
 // \brief thread/SMP safe reference counter
@@ -9,7 +8,6 @@
 //  Modifications
 //   Gehua Yang (DualAlign) - 28 Aug. 2008 - first port from Boost 1.36.0
 // \endverbatim
-
 //
 //  boost/detail/atomic_count_gcc.hpp
 //
@@ -38,7 +36,7 @@ using __gnu_cxx::__exchange_and_add;
 
 class vcl_atomic_count
 {
-public:
+ public:
 
     explicit vcl_atomic_count(long v) : value_(v) {}
 
@@ -57,7 +55,7 @@ public:
         return __exchange_and_add(&value_, 0);
     }
 
-private:
+ private:
 
     vcl_atomic_count(vcl_atomic_count const &);
     vcl_atomic_count & operator=(vcl_atomic_count const &);

@@ -5,7 +5,7 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   21 May 99
 //-----------------------------------------------------------------------------
-
+//
 // test args:
 //  ~/images/HannoverDino/ppm/viff.%03d.ppm -n 3
 // /awf/images/handrail.avi -g /tmp/tcm/problem.out/camsolve
@@ -52,16 +52,19 @@
 #include <oxp/ImageSequenceName.h>
 #include <oxp/GXFileVisitor.h>
 
-// extern void gl_draw_conic(double cx, double cy, double rx, double ry, double theta);
+#if 0
+extern void gl_draw_conic(double cx, double cy, double rx, double ry, double theta);
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 
-// Overlay mgmt
-int nlayers = 1;
+//: Overlay mgmt
 int layers[] = {
   GLUT_NORMAL,
   GLUT_OVERLAY,
 };
+
+int nlayers = 1;
 int ovl_transparent = 0;
 int ovl_opaque = 1;
 int ovl_display_list = 1;
@@ -152,7 +155,8 @@ void init()
   glDepthRange(-0.1,1.0);
 }
 
-struct GXFileVisitor_OpenGL : public GXFileVisitor {
+struct GXFileVisitor_OpenGL : public GXFileVisitor
+{
   virtual bool point(char const* type, float x, float y) {
     if (*type == 'p') {
         glBegin(GL_POINTS);
@@ -359,6 +363,7 @@ void reshape(int w, int h)
 }
 
 bool first_display = true;
+
 void display()
 {
   // idle might be called before 1st display
@@ -390,7 +395,8 @@ void idle()
   glutPostRedisplay();
 }
 
-void setidle(bool on) {
+void setidle(bool on)
+{
   if (on)
     glutIdleFunc(idle);
   else
@@ -399,7 +405,8 @@ void setidle(bool on) {
 
 /////////////////////////////////////////////////////////////////////////////
 
-struct CB {
+struct CB
+{
   virtual ~CB () {}
 
   //: Return true if this event is interesting.
@@ -462,7 +469,8 @@ void motion_callback(int x, int y)
 // -----------------------------------------------------------------------------
 // Shuttle event handler
 
-struct ShuttleCB : public CB {
+struct ShuttleCB : public CB
+{
   int down_frame;
   double scale_factor;
 
@@ -505,7 +513,8 @@ struct ShuttleCB : public CB {
 
 // -----------------------------------------------------------------------------
 // Zoom event handler
-struct ZoomCB : public CB {
+struct ZoomCB : public CB
+{
   double down_pixel_zoom;
   double down_pixel_zoom_tx;
   double down_pixel_zoom_ty;
@@ -532,7 +541,9 @@ struct ZoomCB : public CB {
       glutShowOverlay();
     glutSetCursor(GLUT_CURSOR_CROSSHAIR);
   }
-  void motion(int x, int y) {
+
+  void motion(int x, int y)
+  {
     if (down_button == GLUT_LEFT_BUTTON) {
       int width = 100;
       double factor = double(y - down_y) / width;
@@ -556,27 +567,28 @@ struct ZoomCB : public CB {
     glutPostRedisplay();
 
     if (have_overlay) {
-    // Swishy graphics
-    int x0 = down_x;
-    int y0 = down_y;
-    glNewList(ovl_display_list, GL_COMPILE);
-    glIndexi(ovl_opaque);
-    glBegin(GL_LINES);
-    glVertex2f(x0,y0);
-    glVertex2f(x,y);
-    glEnd();
-    glBegin(GL_LINE_LOOP);
-    double boxw = pixel_zoom / 2;
-    glVertex2f(x0-boxw,y0-boxw);
-    glVertex2f(x0+boxw,y0-boxw);
-    glVertex2f(x0+boxw,y0+boxw);
-    glVertex2f(x0-boxw,y0+boxw);
-    glEnd();
-    glEndList();
+      // Swishy graphics
+      int x0 = down_x;
+      int y0 = down_y;
+      glNewList(ovl_display_list, GL_COMPILE);
+      glIndexi(ovl_opaque);
+      glBegin(GL_LINES);
+      glVertex2f(x0,y0);
+      glVertex2f(x,y);
+      glEnd();
+      glBegin(GL_LINE_LOOP);
+      double boxw = pixel_zoom / 2;
+      glVertex2f(x0-boxw,y0-boxw);
+      glVertex2f(x0+boxw,y0-boxw);
+      glVertex2f(x0+boxw,y0+boxw);
+      glVertex2f(x0-boxw,y0+boxw);
+      glEnd();
+      glEndList();
 
-    glutPostOverlayRedisplay();
+      glutPostOverlayRedisplay();
+    }
   }
-  }
+
   void up(int, int) {
     glutSetCursor(GLUT_CURSOR_INHERIT);
     if (have_overlay) glutHideOverlay();
@@ -585,7 +597,8 @@ struct ZoomCB : public CB {
 
 // -----------------------------------------------------------------------------
 // Draw cb
-struct DrawCB : public CB {
+struct DrawCB : public CB
+{
   bool want(int button, int modifiers, int x, int y) {
     return modifiers == 0 && button == GLUT_MIDDLE_BUTTON;
   }
@@ -611,23 +624,25 @@ struct DrawCB : public CB {
     glutShowOverlay();
   }
 
-  void motion(int x, int y) {
+  void motion(int x, int y)
+  {
     glNewList(ovl_display_list, GL_COMPILE);
     glIndexi(ovl_opaque);
-    switch (mode) {
-    case line:
+    switch (mode)
+    {
+     case line:
       glBegin(GL_LINES);
       glVertex2f(down_x, down_y);
       glVertex2f(x, y);
       glEnd();
       break;
-    case line2way:
+     case line2way:
       glBegin(GL_LINES);
       glVertex2f(x, y);
       glVertex2f(2 * down_x - x, 2 * down_y - y);
       glEnd();
       break;
-    case infline: {
+     case infline: {
       double dx = x - down_x;
       double dy = y - down_y;
       double dirx = -dy * 100;
@@ -637,16 +652,16 @@ struct DrawCB : public CB {
       glVertex2f(x - dirx, y - diry);
       glEnd();
       break;
-    }
-    case conic: {
+     }
+     case conic: {
 #if 0
       double dx = x - down_x;
       double dy = y - down_y;
       gl_draw_conic(down_x, down_y, dx, dy, 0);
 #endif
       break;
-    }
-    case box:
+     }
+     case box:
       glBegin(GL_LINE_LOOP);
       glVertex2f(down_x, down_y);
       glVertex2f(x, down_y);
@@ -654,7 +669,7 @@ struct DrawCB : public CB {
       glVertex2f(down_x, y);
       glEnd();
       break;
-    case circle: {
+     case circle: {
       double dx = x - down_x;
       double dy = y - down_y;
       double r= vcl_sqrt(dx*dx + dy*dy);
@@ -668,8 +683,8 @@ struct DrawCB : public CB {
       }
       glEnd();
       break;
-    }
-    default:
+     }
+     default:
       break;
     }
 
@@ -692,60 +707,54 @@ struct DrawCB : public CB {
 
 void keyboard(unsigned char key, int x, int y)
 {
-  switch (key) {
-  case ' ': {
+  switch (key)
+  {
+   case ' ': {
     playing = !playing;
     setidle(playing);
     break;
-  }
-  case 'r': {
+   }
+   case 'r': {
     glDeleteLists(0, num_frames);
     break;
-  }
-
-  case 'a': {
+   }
+   case 'a': {
      dir = -dir;
      break;
-  }
-
-  case 'c': {
+   }
+   case 'c': {
     pixel_zoom = 1.0;
     pixel_zoom_tx = 0;
     pixel_zoom_ty = TEXTHEIGHT;
     break;
-  }
-
-  case ',': {
+   }
+   case ',': {
      frame -= dir;
      break;
-  }
-  case '.': {
+   }
+   case '.': {
      frame += dir;
     break;
-  }
-
-  case '<': {
+   }
+   case '<': {
     frame -= 100;
     break;
-  }
-  case '>': {
+   }
+   case '>': {
     frame += 100;
     break;
-  }
-
-
-  case '[': {
+   }
+   case '[': {
      frame = 0;
      break;
-  }
-  case ']': {
+   }
+   case ']': {
      frame = num_frames-1;
      break;
-  }
-
-  case 'q': {
+   }
+   case 'q': {
     vcl_exit(0);
-  }
+   }
   }
   frame = frame % num_frames;
   if (frame<0) frame+=num_frames;
@@ -817,8 +826,9 @@ int main(int argc, char ** argv)
   down_cbs.push_back(&zoom_cb);
 
   DrawCB draw_cb;
-  // wait till we know about overlays
-  // down_cbs.push_back(&draw_cb);
+#if 0 // wait till we know about overlays
+  down_cbs.push_back(&draw_cb);
+#endif
 
   // Copy args to globals
   int step = a_step();

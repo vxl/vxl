@@ -9,13 +9,9 @@
 //
 // \verbatim
 //  Modifications
+//   updated by Yong Zhao, Apr 4th, 2007
+//    Make it work with the whole database initially based on Matt's sketch.
 // \endverbatim
-
-//
-// updated by Yong Zhao
-// Apr 4th, 2007
-// Make it work with the whole database initially based on Matt's sketch.
-
 
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
@@ -50,7 +46,7 @@ class brdb_tuple : public vbl_ref_count
   //: Constructor for a 3-tuple
   template< class T1, class T2, class T3 >
   brdb_tuple(const T1& value1, const T2& value2,
-                 const T3& value3                  ) : values_(3)
+             const T3& value3                  ) : values_(3)
   {
     values_[0] = new brdb_value_t<T1>(value1);
     values_[1] = new brdb_value_t<T2>(value2);
@@ -60,7 +56,7 @@ class brdb_tuple : public vbl_ref_count
   //: Constructor for a 4-tuple
   template< class T1, class T2, class T3, class T4 >
   brdb_tuple(const T1& value1, const T2& value2,
-                 const T3& value3, const T4& value4) : values_(4)
+             const T3& value3, const T4& value4) : values_(4)
   {
     values_[0] = new brdb_value_t<T1>(value1);
     values_[1] = new brdb_value_t<T2>(value2);
@@ -71,8 +67,8 @@ class brdb_tuple : public vbl_ref_count
   //: Constructor for a 5-tuple
   template< class T1, class T2, class T3, class T4, class T5 >
   brdb_tuple(const T1& value1, const T2& value2,
-                 const T3& value3, const T4& value4,
-                 const T5& value5                  ) : values_(5)
+             const T3& value3, const T4& value4,
+             const T5& value5                  ) : values_(5)
   {
     values_[0] = new brdb_value_t<T1>(value1);
     values_[1] = new brdb_value_t<T2>(value2);
@@ -84,8 +80,8 @@ class brdb_tuple : public vbl_ref_count
   //: Constructor for a 6-tuple
   template< class T1, class T2, class T3, class T4, class T5, class T6 >
   brdb_tuple(const T1& value1, const T2& value2,
-                 const T3& value3, const T4& value4,
-                 const T5& value5, const T6& value6) : values_(6)
+             const T3& value3, const T4& value4,
+             const T5& value5, const T6& value6) : values_(6)
   {
     values_[0] = new brdb_value_t<T1>(value1);
     values_[1] = new brdb_value_t<T2>(value2);
@@ -150,8 +146,9 @@ class brdb_tuple : public vbl_ref_count
   template<class T>
   bool set( unsigned int index , const T& value )
   {
-    return this->set_value(index, static_cast<const brdb_value&>
-                                  (brdb_value_t<T>(value))    );
+    return this->set_value(index,
+                           static_cast<const brdb_value&>
+                           (brdb_value_t<T>(value))      );
   }
 
 
@@ -208,7 +205,6 @@ class brdb_tuple : public vbl_ref_count
  private:
   //: The values of the attributes
   vcl_vector<brdb_value_sptr> values_;
-
 };
 
 

@@ -11,21 +11,20 @@
 //   07 Mar.2008 - Ozge C. Ozcanli - Added support for VIL_PIXEL_FORMAT_RGB_FLOAT and VIL_PIXEL_FORMAT_FLOAT to the img_to_slab method
 //                                   Assumes the float image is already scaled to [0,1] range
 //
-//   08/20/2008 - Ibrahim Eden - Added the method 
+//   08/20/2008 - Ibrahim Eden - Added the method
 //                               static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
 //
-//   09/03/2008 - Ibrahim Eden - Added the method 
+//   09/03/2008 - Ibrahim Eden - Added the method
 //                               static vil_image_view<vxl_byte> detect_edges ...
 //
-//   09/11/2008 - Ibrahim Eden - Added the method 
+//   09/11/2008 - Ibrahim Eden - Added the method
 //                               static void edge_distance_transform ...
 //
-//   09/12/2008 - Ibrahim Eden - Added the method 
+//   09/12/2008 - Ibrahim Eden - Added the method
 //                               static int convert_uncertainty_from_meters_to_pixels ...
 //
 //   12/12/2008 - Ozge C. Ozcanli - Added the method
 //                                  static void warp_slab_nearest_neighbor ...
-                                
 // \endverbatim
 
 #include <vcl_string.h>
@@ -59,7 +58,6 @@ class bvxm_util
 {
  public:
 
-
   static bool read_cameras(const vcl_string filename,
                            vcl_vector<vnl_double_3x3> &Ks,
                            vcl_vector<vnl_double_3x3> &Rs,
@@ -70,10 +68,9 @@ class bvxm_util
                             vcl_vector<vnl_double_3x3> &Rs,
                             vcl_vector<vnl_double_3x1> &Ts);
 
-  static void logical_and(bvxm_voxel_slab<bool> const& s1, 
-                          bvxm_voxel_slab<bool> const& s2, 
+  static void logical_and(bvxm_voxel_slab<bool> const& s1,
+                          bvxm_voxel_slab<bool> const& s2,
                           bvxm_voxel_slab<bool> &result);
-
 
   template<class T>
   static void warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
@@ -143,9 +140,9 @@ class bvxm_util
   static vpgl_camera_double_sptr downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale);
 
   static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
-  
+
   static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
-  
+
   static vil_image_view<vxl_byte> detect_edges(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth, bool automatic_threshold, bool junctionp, bool aggressive_junction_closure);
 
   static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
@@ -291,7 +288,6 @@ void bvxm_util::warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
   } // z
   return;
 }
-
 
 //: img_to_slab for a multi-band (eg color) image.
 //  if input image is a float image, assumes that it is already scaled to [0,1] range
@@ -651,7 +647,6 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab,
   return true;
 }
 
-
 template<class T>
 bool bvxm_util::slab_to_img(bvxm_voxel_slab<T> const& slab, vil_image_view_base_sptr image)
 {
@@ -736,8 +731,6 @@ void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const
   return;
 }
 
-
-
 template<class T>
 void bvxm_util::multiply_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &product)
 {
@@ -773,7 +766,6 @@ void bvxm_util::threshold_slab_above(bvxm_voxel_slab<T> const& slab, T const& th
   }
   return;
 }
-
 
 template<class T>
 void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy)

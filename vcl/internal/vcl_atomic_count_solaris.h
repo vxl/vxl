@@ -1,6 +1,5 @@
 #ifndef vcl_atomic_count_solaris_h_
 #define vcl_atomic_count_solaris_h_
-
 //:
 // \file
 // \brief thread/SMP safe reference counter
@@ -9,7 +8,6 @@
 //  Modifications
 //   Gehua Yang (DualAlign) - 28 Aug. 2008 - first port from Boost 1.36.0
 // \endverbatim
-
 //
 //  boost/detail/atomic_count_solaris.hpp
 //   based on: boost/detail/atomic_count_win32.hpp
@@ -26,7 +24,7 @@
 
 class vcl_atomic_count
 {
-public:
+ public:
 
     explicit vcl_atomic_count( uint32_t v ): value_( v )
     {
@@ -47,7 +45,7 @@ public:
         return static_cast<uint32_t const volatile &>( value_ );
     }
 
-private:
+ private:
 
     vcl_atomic_count( vcl_atomic_count const & );
     vcl_atomic_count & operator=( vcl_atomic_count const & );

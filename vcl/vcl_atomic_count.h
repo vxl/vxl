@@ -6,7 +6,6 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
-
 //:
 // \file
 // \brief thread/SMP safe reference counter
@@ -15,8 +14,6 @@
 //  Modifications
 //   Gehua Yang (DualAlign) - 28 Aug. 2008 - first port from Boost 1.36.0
 // \endverbatim
-
-
 //
 //  boost/detail/atomic_count.hpp - thread/SMP safe reference counter
 //
@@ -72,13 +69,13 @@
 //    Given:
 //
 //    - a mutable shared object OBJ;
-//    - two threads THREAD1 and THREAD2 each holding 
+//    - two threads THREAD1 and THREAD2 each holding
 //      a private smart_ptr object pointing to that OBJ.
 //
 //    t1: THREAD1 updates OBJ (thread-safe via some synchronization)
 //      and a few cycles later (after "unlock") destroys smart_ptr;
 //
-//    t2: THREAD2 destroys smart_ptr WITHOUT doing any synchronization 
+//    t2: THREAD2 destroys smart_ptr WITHOUT doing any synchronization
 //      with respect to shared mutable object OBJ; OBJ destructors
 //      are called driven by smart_ptr interface...
 //
@@ -89,7 +86,6 @@ typedef long int vcl_atomic_count;
 
 // I do not know when a pthread version is required
 //#elif defined(BOOST_AC_USE_PTHREADS)
-
 //#  include <boost/detail/atomic_count_pthreads.hpp>
 
 #elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
@@ -108,7 +104,7 @@ typedef long int vcl_atomic_count;
 
 #  include "internal/vcl_atomic_count_gcc.h"
 
-// When building OSX universal binary, it could use pthread implementation. 
+// When building OSX universal binary, it could use pthread implementation.
 #elif defined(BOOST_HAS_PTHREADS) || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
 
 #  include "internal/vcl_atomic_count_pthreads.h"

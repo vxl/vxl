@@ -10,11 +10,11 @@
 //
 //  A camera that projects 3-d world points according to ratios of
 //  cubic polynomials. That is,
-
+// \verbatim
 //           neu_u(X,Y,Z)      neu_v(X,Y,Z)
 //       u = ------------  v = ------------
 //           den_u(X,Y,Z)      den_v(X,Y,X)
-//
+// \endverbatim
 //  where u is the image column index and v is the image row index.
 //
 //  neu_u(X,Y,Z),den_u(X,Y,Z), neu_v(X,Y,Z), den_v(X,Y,Z) are
@@ -147,7 +147,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
   //  See Prototype pattern
   virtual vpgl_rational_camera<T>* clone(void) const;
 
-        // Mutators/Accessors
+        // --- Mutators/Accessors ---
 
   //: set rational polynomial coefficients
   void set_coefficients(vcl_vector<vcl_vector<T> > const& rational_coeffs);
@@ -179,7 +179,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
   vpgl_scale_offset<T> scl_off(const coor_index coor_index) const
     {return scale_offsets_[coor_index];}
 
-        // Often useful for adjusting the camera
+        // --- Often useful for adjusting the camera ---
 
   //:set u-v translation offset
   void set_image_offset(const T u_off, const T v_off)
@@ -201,12 +201,12 @@ class vpgl_rational_camera : public vpgl_camera<T>
   //: The generic camera interface. u represents image column, v image row.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
 
-        // Interface for vnl
+        // --- Interface for vnl ---
 
   //: Project a world point onto the image
   virtual vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
 
-        // Interface for vgl
+        // --- Interface for vgl ---
 
   //: Project a world point onto the image
   virtual vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
@@ -216,7 +216,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
 
   virtual bool save(vcl_string cam_path);
 
-  // binary IO
+        // --- binary IO ---
 
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;
@@ -244,16 +244,15 @@ vcl_istream& operator>>(vcl_istream& is, vpgl_rational_camera<T>& p);
 
 //: Creates a rational camera from a file
 // \relates vpgl_rational_camera
-template <class T> 
+template <class T>
 vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path);
 
 //: Creates a rational camera from a stream
 // \relates vpgl_rational_camera
-template <class T> 
+template <class T>
 vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr);
 
 #define VPGL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_rational_camera.txx first"
 
 
 #endif // vpgl_rational_camera_h_
-

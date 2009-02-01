@@ -6,7 +6,7 @@
 //
 // It's much better to determine the compiler automatically here than to depend
 // on command-line flags being set.
-
+//
 // Be careful when modifying this file. In general, you need to make
 // sure that exactly one of the preprocessor flags is defined. For
 // example, if the compiler is GCC 3.4.2, then VCL_GCC should be
@@ -247,7 +247,7 @@
 # define VCL_SUNPRO_ALLOCATOR_HACK(T) T // FIXME
 #endif
 
-//-------------------- template instantiation
+   //-------------------- template instantiation ------------------------------
 
 // if the compiler doesn't understand "export", we just leave it out.
 // gcc and SunPro 5.0 understand it, but they ignore it noisily.
@@ -270,7 +270,7 @@
 # define IUEi_STL_INLINE inline
 #endif
 
-//--------------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
 
 // work-around to deal with some cases where some compilers (and the standard)
 // requires an explicit typename qualifier. MSVC6.0 on the other had cannot cope
@@ -295,7 +295,7 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 // fix to instantiate template functions
 #define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl
 
-// -------------------- handy macros
+   // -------------------- handy macros ---------------------------------------
 
 //: VCL_COMMA
 //

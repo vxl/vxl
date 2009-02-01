@@ -6,7 +6,6 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
-
 //:
 // \file
 // \brief thread/SMP safe reference counter
@@ -15,7 +14,6 @@
 //  Modifications
 //   Gehua Yang (DualAlign) - 28 Aug. 2008 - first port from Boost 1.36.0
 // \endverbatim
-
 //
 //  boost/detail/interlocked.hpp
 //
@@ -24,16 +22,16 @@
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
-//
+ //
 
 // for the problematic Visual Studio 6
-#if defined(_WIN32) || defined(WIN32) 
-#  if _MSC_VER < 1300 
-#    define VCL_INTERLOCKED_VC6  
+#if defined(_WIN32) || defined(WIN32)
+#  if _MSC_VER < 1300
+#    define VCL_INTERLOCKED_VC6
 #  endif
 #endif
 
-// 
+//
 // Do we need this?
 #if defined( __BORLANDC__ ) || defined( VCL_INTERLOCKED_VC6 )
 
@@ -63,7 +61,7 @@
 # define BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
 # define BOOST_INTERLOCKED_EXCHANGE InterlockedExchange
 # define BOOST_INTERLOCKED_EXCHANGE_ADD InterlockedExchangeAdd
-  
+
 # define BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER(dest,exchange,compare) \
     ((void*)BOOST_INTERLOCKED_COMPARE_EXCHANGE((long*)(dest),(long)(exchange),(long)(compare)))
 # define BOOST_INTERLOCKED_EXCHANGE_POINTER(dest,exchange) \

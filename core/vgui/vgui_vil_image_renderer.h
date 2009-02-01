@@ -37,7 +37,7 @@ class vgui_section_buffer;
 //  The image is rendered by extracting appropriate views from the resource
 //  There are different modes of rendering based on flags set on the
 //  vgui_range_map_params range mapping class. The states are:
-
+//
 //  1) rmp == null - a buffer is created for the entire image and
 //     the buffer supplies glPixels to the display. Range map tables
 //     are used where appropriate. No pyramid image support

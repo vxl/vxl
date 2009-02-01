@@ -53,7 +53,7 @@
 //: The type of the property dictionary
 class mbl_read_props_type : public vcl_map<vcl_string, vcl_string >
 {
-public:
+ public:
 
   //: Return the contents for a given property prop.
   // prop is removed from the property list.
@@ -99,7 +99,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs);
 // If there is a brace after the first string following the label,
 // the following text up to matching
 // braces is included in the property value.
-
+//
 // Differs from mbl_read_props(afs) in that all whitespace is treated
 // as a separator.  Thus it treats the single line "a: a b: b" as
 // containing two separate label-value pairs.
@@ -134,7 +134,7 @@ inline void mbl_read_props_look_for_unused_props(
   const mbl_read_props_type &props)
 {
   mbl_read_props_look_for_unused_props(function_name, props,
-    mbl_read_props_type());
+                                       mbl_read_props_type());
 }
 
 

@@ -6,7 +6,6 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
-
 //:
 // \file
 // \brief thread/SMP safe reference counter
@@ -15,7 +14,6 @@
 //  Modifications
 //   Gehua Yang (DualAlign) - 28 Aug. 2008 - first port from Boost 1.36.0
 // \endverbatim
-
 //
 //  boost/detail/atomic_count_win32.hpp
 //
@@ -30,7 +28,7 @@
 
 class vcl_atomic_count
 {
-public:
+ public:
 
     explicit vcl_atomic_count( long v ): value_( v )
     {
@@ -51,7 +49,7 @@ public:
         return static_cast<long const volatile &>( value_ );
     }
 
-private:
+ private:
 
     vcl_atomic_count( vcl_atomic_count const & );
     vcl_atomic_count & operator=( vcl_atomic_count const & );

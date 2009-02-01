@@ -8,8 +8,7 @@
 // \date   August 7, 2008
 //
 
-
-// include impl stuff so the user doesn't have to
+//: include impl stuff so the user doesn't have to
 #include <vgui/impl/wx/vgui_wx_adaptor.h>
 #include <vgui/impl/wx/vgui_wx_statusbar.h>
 

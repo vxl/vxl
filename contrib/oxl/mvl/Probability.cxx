@@ -23,7 +23,7 @@
 // Watch this routine, if the given points are not dispersed
 // uniformly enough across the given distribution then the routine will
 // not exit, rather keep searching for the requested number of subsamples.
-
+//
 // Fixed => RESCALE ALL THE POINTS TO FIT -1,1(x) -1,1(y)
 // IT IS SUPPOSED THAT THE CENTER OF THE POINTS IS (0,0)
 

@@ -44,7 +44,6 @@
 // pixel-typed image, they all return a vil3d_image_view_base_sptr,
 // so that the functions can be strung along
 //
-
 // Note that these vil3d_convert_..( vil3d_image_view_base_sptr ) functions
 // are provided as a convenience for users of vil3d_load and
 // vil3d_image_resource::get_view(). Their existence should not suggest
@@ -52,7 +51,7 @@
 // nor that it is a good idea to write a functions that
 // take or return a vil3d_image_view_base_sptr. If you need a
 // pixel-type-agnostic image container then use a vil3d_image_resource_sptr
-
+//
 // It may be a good idea to provide vil3d_image_resource_sptr based
 // vil3d_converts as well.
 

@@ -8,10 +8,10 @@
 // Some of these are not templated because
 // - Each type tends to need a slightly different implementation
 // - Let's not have too many templates.
-
-//Amended by Martin Roberts 15th Sep 2005
-//Au contraire, let's have a generic template implementation after all
-//The previous specific types one plane functions become template specialisations
+//
+// Amended by Martin Roberts 15th Sep 2005
+// Au contraire, let's have a generic template implementation after all
+// The previous specific types one plane functions become template specialisations
 
 #include <vil/vil_image_view.h>
 #include <vxl_config.h> // for vxl_byte
@@ -40,7 +40,6 @@ void vil_gauss_reduce_2_3(const vil_image_view<T>& src_im,
 template<class T>
 void vil_gauss_reduce_121(const vil_image_view<T>& src,
                           vil_image_view<T>& dest);
-
 
 class vil_gauss_reduce_params
 {
@@ -105,7 +104,6 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src_im,
                               vil_image_view<T>& workb,
                               const vil_gauss_reduce_params& params);
 
-
 //: Smooth and subsample src_im by an arbitrary factor to produce dest_im
 // \relates vil_image_view
 template <class T>
@@ -116,7 +114,6 @@ inline void vil_gauss_reduce_general(const vil_image_view<T>& src_im,
   vil_image_view<T> tempA, tempB;
   vil_gauss_reduce_general(src_im, dest_im, tempA, tempB, params);
 }
-
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -150,7 +147,6 @@ void vil_gauss_reduce_1plane(const vxl_byte* src_im,
                              vxl_byte* dest_im,
                              vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
-
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(nx+1)/2-1][0,ny-1] elements of dest
@@ -166,7 +162,6 @@ void vil_gauss_reduce_1plane(const float* src_im,
                              vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                              float* dest_im,
                              vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
-
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -190,8 +185,6 @@ void vil_gauss_reduce_1plane(const double* src_im,
                              vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                              double* dest_im,
                              vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
-
-
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -250,8 +243,6 @@ void vil_gauss_reduce_121_1plane(const double* src_im,
                                  vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                                  double* dest_im,
                                  vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
-
-
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples

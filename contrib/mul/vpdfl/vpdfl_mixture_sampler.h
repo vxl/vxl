@@ -1,15 +1,11 @@
 #ifndef vpdfl_mixture_sampler_h_
 #define vpdfl_mixture_sampler_h_
 //=======================================================================
+//:
+//  \file
 //
 //    Copyright: (C) 2000 Victoria University of Manchester
 //
-//=======================================================================
-
-
-//:
-//  \file
-
 //=======================================================================
 
 #include <vpdfl/vpdfl_sampler_base.h>

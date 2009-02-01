@@ -9,6 +9,10 @@
 // \author Tim Cootes
 // \brief A wrapper to provide access to sets of objects
 
+#include <vsl/vsl_binary_io.h>
+#include <mbl/mbl_data_wrapper.h>
+#include <vcl_string.h>
+
 //: Base class for objects which can return a set of objects, one at a time
 //  This is an iterator-like object.  However, unlike STL, generality is
 //  obtained by deriving from the class rather than providing a similar
@@ -35,10 +39,6 @@
 //  Note: It should be fairly simple to provide an iterator type object
 //  which steps through the examples in a standard STL way by using this class.
 
-#include <vsl/vsl_binary_io.h>
-#include <mbl/mbl_data_wrapper.h>
-#include <vcl_string.h>
-
 template<class T>
 class mbl_file_data_wrapper : public mbl_data_wrapper<T>
 {
@@ -57,9 +57,11 @@ class mbl_file_data_wrapper : public mbl_data_wrapper<T>
   // size of data
     unsigned long size_;
 
-  public:
+ public:
+#if 0
   //: Default constructor
-  //mbl_file_data_wrapper();
+  mbl_file_data_wrapper();
+#endif
 
   // constructors
   mbl_file_data_wrapper(const vcl_string path);

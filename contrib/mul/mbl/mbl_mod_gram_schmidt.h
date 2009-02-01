@@ -5,15 +5,16 @@
 // \file
 // \brief Orthoganalise a basis using modified Gram-Schmidt (and normalise)
 // \author Martin Roberts
-
-//Note Modified Gram-Schmidt is more numericdally stable than the classical version
-//The partially constructed transformed jth vector is used in the successive projections rather than the untransformed
+//
+// Note: Modified Gram-Schmidt is more numerically stable than the classical version
+// The partially constructed transformed jth vector is used in the successive projections rather than the untransformed
 
 #include <vnl/vnl_matrix.h>
 
 //=======================================================================
-//: Orthoganalise a basis using modified Gram-Schmidt
+//: Orthogonalise a basis using modified Gram-Schmidt
 // Transform basis {vk} to orthonormal basis {ek} with k in range 1..N
+// \code
 // for j = 1 to N
 //     ej = vj
 //     for k = 1 to j-1
@@ -21,11 +22,11 @@
 //     end
 //     ej = ej/|ej|
 //  end
+// \endcode
 
 //: Convert input basis {v} to orthonormal basis {e}
 // Each basis vector is a column of v, and likewise the orthonormal bases are returned as columns of e
 void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
                           vnl_matrix<double>& e);
-#endif
 
-
+#endif // mbl_mod_gram_schmidt_h_

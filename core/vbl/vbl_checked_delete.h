@@ -1,11 +1,9 @@
 #ifndef vbl_checked_delete_h_
 #define vbl_checked_delete_h_
-
 //:
 // \file
 // \author Amitha Perera
 // Checked delete function lifted from BOOST.
-
 //
 //  boost/checked_delete.hpp
 //

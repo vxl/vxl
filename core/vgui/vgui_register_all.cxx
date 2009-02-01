@@ -28,7 +28,7 @@
 //
 // Note that vgui::select() and vgui::init() will automatically
 // invoke vgui_tag_call() so it is unnecessary to do so here.
-
+//
 // This used to be vgui_linker_hack.h. Since it is impossible portably
 // to do the link-time checking of toolkit implementations, I've
 // changed things to a compile time check. Thus, this function is

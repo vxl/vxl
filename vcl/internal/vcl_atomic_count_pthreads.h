@@ -1,6 +1,5 @@
 #ifndef vcl_atomic_count_pthreads_h_
 #define vcl_atomic_count_pthreads_h_
-
 //:
 // \file
 // \brief thread/SMP safe reference counter
@@ -9,8 +8,6 @@
 //  Modifications
 //   Gehua Yang (DualAlign) - 28 Aug. 2008 - first port from Boost 1.36.0
 // \endverbatim
-
-
 //
 //  boost/detail/atomic_count_pthreads.hpp
 //
@@ -33,7 +30,7 @@
 
 class vcl_atomic_count
 {
-private:
+ private:
 
     class scoped_lock
     {
@@ -54,7 +51,7 @@ private:
         pthread_mutex_t & m_;
     };
 
-public:
+ public:
 
     explicit vcl_atomic_count(long v): value_(v)
     {
@@ -84,7 +81,7 @@ public:
         return value_;
     }
 
-private:
+ private:
 
     vcl_atomic_count(vcl_atomic_count const &);
     vcl_atomic_count & operator=(vcl_atomic_count const &);
