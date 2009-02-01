@@ -22,9 +22,11 @@ template <typename T> class vil_image_view;
 //-------------------------------------------------------------------------
 class vgui_font_textured : public vgui_font
 {
-public:
-  //: Constructor - default.
-  //vgui_font_textured();
+ public:
+#if 0
+  // Default constructor
+  vgui_font_textured();
+#endif
 
   //: Constructor - from a font file (BMF font file only, for now).
   vgui_font_textured(const vcl_string& font_file);
@@ -35,11 +37,14 @@ public:
   //: Draw a string of font symbols.
   virtual void draw(const vcl_string& str, unsigned int size) const;
 
-//protected:
+#if 0
+ protected:
+#endif
+
   //: Destructor.
   virtual ~vgui_font_textured();
 
-private:
+ private:
   //: Type to store symbol location in texture.
   struct texture_coord
   {
