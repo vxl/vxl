@@ -53,13 +53,8 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   double ylen = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_);
   double zlen = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_);
 
-
   double xx3 = xx_ / xlen;
-  double yx3 = yx_ / xlen;
-  double zx3 = zx_ / xlen;
   double xy3 = xy_ / ylen;
-  double yy3 = yy_ / ylen;
-  double zy3 = zy_ / ylen;
   double xz3 = xz_ / zlen;
   double yz3 = yz_ / zlen;
   double zz3 = zz_ / zlen;
@@ -196,27 +191,26 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
 
 
 //=======================================================================
-#if 0
+#if 0 // incorrect things going on ...
 void vimt3d_transform_3d::simplify()
 {
   switch (form_)
   {
-  case RigidBody:
+   case RigidBody:
     angles(rx, ry, rz);
     if (rx!=0 || ry!=0 || rz!=0)
       return;
     this->set_translation(xt_, yt_, zt_);
-  case ZoomOnly:
+   case ZoomOnly:
     if (xx_!=1.0 || yy_!=1.0 || zz_!=1.0)
       return;
     set_translation(xt_, yt_, zt_);
-  case Translation:
+   case Translation:
     if (xt_==0 && yt_==0 && zt_==0)
       set_identity();
     return;
-  case Identity:
-    return;  
-    break;
+   case Identity:
+    return;
    case (Similarity): // not sure this is right - kds
                       // I think it's fixed now -dac
     if (v.size()!=7) v.set_size(7);
@@ -243,7 +237,7 @@ void vimt3d_transform_3d::simplify()
     }
    default:
     vcl_cerr << "vimt3d_transform_3d::params() Unexpected form: "
-             << int(form_)<<vcl_endl;
+             << int(form_)<< '\n';
     vcl_abort();
   }
 }
