@@ -15,9 +15,6 @@
 //   23 April 2001 IMS - Ported to VXL
 // \endverbatim
 
-
-//=======================================================================
-// inclusions
 #include "vpdfl_gaussian_sampler.h"
 
 

@@ -6,9 +6,6 @@
 // \brief Smoothes images.
 // \author Ian Scott
 
-//=======================================================================
-// inclusions
-
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_convolve_1d.h>

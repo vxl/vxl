@@ -13,10 +13,6 @@
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
-//=======================================================================
-// inclusions
-//=======================================================================
-
 #include "vpdfl_gaussian_builder.h"
 
 #include <vcl_cstdlib.h>
@@ -131,9 +127,9 @@ void vpdfl_gaussian_builder::updateCovar(vnl_matrix<double>& S,
     }
   }
 }
-  //=======================================================================
+//=======================================================================
 
-    //: Build model from mean and covariance
+//: Build model from mean and covariance
 void vpdfl_gaussian_builder::buildFromCovar(vpdfl_gaussian& g,
                                             const vnl_vector<double>& mean,
                                             const vnl_matrix<double>& S) const
@@ -391,7 +387,6 @@ void vpdfl_gaussian_builder::config_from_stream(vcl_istream & is)
   {
     throw mbl_exception_parse_error(e.what());
   }
-
 }
 
 

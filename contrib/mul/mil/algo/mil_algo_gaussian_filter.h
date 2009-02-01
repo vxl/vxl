@@ -2,15 +2,11 @@
 #ifndef mil_algo_gaussian_filter_h_
 #define mil_algo_gaussian_filter_h_
 //:
-//  \file
-//  \brief Smoothes images.
-//  \author Ian Scott
-
-//=======================================================================
-// inclusions
+// \file
+// \brief Smoothes images.
+// \author Ian Scott
 
 #include <mil/mil_image_2d_of.h>
-
 
 //: Smoothes images.
 
