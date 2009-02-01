@@ -42,7 +42,7 @@ class vgl_region_scan_iterator
   //  endx() should be larger than startx(), unless the scan line is empty
   virtual int  endx() const =0;
 
-  // Utility functions
+          // --- Utility functions ---
 
   //: Number of image points (= integer grid points) inside the region
   inline int count()

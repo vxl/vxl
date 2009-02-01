@@ -97,7 +97,7 @@ struct tif_ref_cnt
   TIFF* tif(){return tif_;}
   void ref(){cnt_++;}
   void unref(){
-    if (--cnt_<=0) 
+    if (--cnt_<=0)
     {
       TIFFClose(tif_);
       delete this;
@@ -131,7 +131,7 @@ struct tif_smart_ptr
   //: Inverse bool
   bool operator!() const
   {
-    return (tptr_ != (tif_ref_cnt*)0)? false : true; 
+    return (tptr_ != (tif_ref_cnt*)0)? false : true;
   }
 
   //: Convenient get TIFF* for header construction; assumes temporary use
@@ -166,7 +166,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   bool is_GEOTIFF() { return h_->is_GEOTIFF(); }
 #endif
 
-  //Block interface
+           // --- Block interface ---
 
   //: Block size in columns (must be a multiple of 16)
   virtual unsigned size_block_i() const;
@@ -362,7 +362,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   // Only file images have a format, others return 0
   virtual char const* file_format() const { return "ptif"; }
 
-  //:Methods particular to pyramid resource
+         // --- Methods particular to pyramid resource ---
 
   //: number of pyramid levels
   virtual unsigned nlevels() const { return levels_.size(); }

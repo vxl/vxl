@@ -146,7 +146,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   // Only file images have a format, others return 0
   virtual char const* file_format() const { return "pryl"; }
 
-  //:Methods particular to pyramid resource
+        // --- Methods particular to pyramid resource ---
 
   //: number of levels in the pyramid
   virtual unsigned nlevels() const {return levels_.size();}
@@ -193,7 +193,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   // no default constructor;
   vil_pyramid_image_list();
 
-  //    --- utility functions ---
+           //    --- utility functions ---
 
   //:normalize the scale factors so that the base image scale = 1.0
   void normalize_scales();
@@ -207,7 +207,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   //:find the nearest level to the image size
   float find_next_level(vil_image_resource_sptr const& image);
 
-  //    ---  members ---
+          //    ---  members ---
 
   vcl_string directory_;
 
