@@ -3,8 +3,6 @@
 #endif
 
 #include "mbl_progress_composite.h"
-//:
-// \file
 
 //=======================================================================
 mbl_progress_composite::mbl_progress_composite()

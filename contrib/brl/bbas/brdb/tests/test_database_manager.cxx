@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-//:
-// \file
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
@@ -17,7 +15,7 @@ MAIN( test_database_manager )
   START ("DB database manager");
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: creating values, tuples and relations
+  // example: creating values, tuples and relations
   ////////////////////////////////////////////////////////////////////////////
 
   vcl_vector<vcl_string> r1_names(3);
@@ -98,7 +96,7 @@ MAIN( test_database_manager )
   brdb_relation_sptr r3 = new brdb_relation(r3_names, r3_tuples, r3_types);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: creating database using relations
+  // example: creating database using relations
   ////////////////////////////////////////////////////////////////////////////
 
   vcl_vector<brdb_relation_sptr> test_relations;
@@ -115,7 +113,7 @@ MAIN( test_database_manager )
   test_db->print();
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: instance database_manager
+  // example: instance database_manager
   ////////////////////////////////////////////////////////////////////////////
   //  brdb_database_manager::instance(test_db);
   brdb_database_manager::instance();
@@ -189,7 +187,7 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->print_database();
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: join two relations from database
+  // example: join two relations from database
   ////////////////////////////////////////////////////////////////////////////
   brdb_relation_sptr join1;
   brdb_database_manager::instance()->join("name_gender", "age", join1);
@@ -203,7 +201,7 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->print_database();
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: join two user relations
+  // example: join two user relations
   ////////////////////////////////////////////////////////////////////////////
   brdb_relation_sptr join3;
   brdb_database_manager::instance()->join(join1, join2, join3);
@@ -213,7 +211,7 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->print_database();
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: join one database relation and one user relations
+  // example: join one database relation and one user relations
   ////////////////////////////////////////////////////////////////////////////
   brdb_relation_sptr join4;
   brdb_database_manager::instance()->join("age", join2, join4);
@@ -221,9 +219,8 @@ MAIN( test_database_manager )
   TEST("join one database relation and one user relation", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: doing selecting on database relations;
+  // example: doing selecting on database relations;
   ////////////////////////////////////////////////////////////////////////////
-
   // define a query
   brdb_query_sptr q1 = new brdb_query("name_gender", "ID", BT, 115);
   brdb_selection_sptr s1;
@@ -242,7 +239,7 @@ MAIN( test_database_manager )
   TEST("select in database relation", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: automatic update feature of the selection
+  // example: automatic update feature of the selection
   ////////////////////////////////////////////////////////////////////////////
   brdb_query_sptr q1a = new brdb_query("name_gender", "ID", EQ, 102);
   brdb_selection_sptr s1a;
@@ -263,7 +260,7 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->print_database();
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: doing selecting on user relations;
+  // example: doing selecting on user relations;
   ////////////////////////////////////////////////////////////////////////////
   // define a query
   r2->print();
@@ -277,9 +274,8 @@ MAIN( test_database_manager )
   TEST("select in user relation", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: doing selecting on user selections;
+  // example: doing selecting on user selections;
   ////////////////////////////////////////////////////////////////////////////
-
   // define a query
   r1->print();
   brdb_query_sptr q4 = new brdb_query(r1, "ID", BT, 105);
@@ -298,7 +294,7 @@ MAIN( test_database_manager )
   TEST("select in user selections", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: getting tuple from database
+  // example: getting tuple from database
   ////////////////////////////////////////////////////////////////////////////
   // define a query
   brdb_query_sptr q6 = new brdb_query("name_gender", "ID", EQ, 114);
@@ -324,7 +320,7 @@ MAIN( test_database_manager )
   }
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: update tuple/values in database
+  // example: update tuple/values in database
   ////////////////////////////////////////////////////////////////////////////
   // define a query
   brdb_query_sptr q7 = new brdb_query("name_gender", "ID", EQ, 104);
@@ -341,7 +337,7 @@ MAIN( test_database_manager )
   TEST("update tuple/values", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: get sql view
+  // example: get sql view
   ////////////////////////////////////////////////////////////////////////////
   brdb_query_sptr q8 = new brdb_query("name_gender", "ID", BEQ, 104);
   brdb_selection_sptr s8;
@@ -354,7 +350,7 @@ MAIN( test_database_manager )
   TEST("get_sqlview()", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: selection and/or/xor
+  // example: selection and/or/xor
   ////////////////////////////////////////////////////////////////////////////
   brdb_query_sptr q9 = new brdb_query("age", "ID", LEQ, 125);
   brdb_selection_sptr s9;
@@ -405,14 +401,14 @@ MAIN( test_database_manager )
   TEST("selection_not()", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: database ordering
+  // example: database ordering
   ////////////////////////////////////////////////////////////////////////////
   brdb_database_manager::instance()->order_by_name("age", "ID", false);
   brdb_database_manager::instance()->print_database();
   TEST("order_by_name()", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
-  //: example: query by index
+  // example: query by index
   ////////////////////////////////////////////////////////////////////////////
   brdb_database_manager::instance()->print_database();
   brdb_query_sptr q15 = new brdb_query("age", 0);
