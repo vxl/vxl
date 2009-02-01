@@ -40,9 +40,9 @@ vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box)
 }
 
 bool compute_ground(vil_image_resource_sptr ground,
-                                            vil_image_view_base_sptr first_roi,
-                                            vil_image_view_base_sptr last_roi,
-                                            vil_image_view_base_sptr& ground_roi)
+                    vil_image_view_base_sptr first_roi,
+                    vil_image_view_base_sptr last_roi,
+                    vil_image_view_base_sptr& ground_roi)
 {
   if (ground == 0)
   {
@@ -78,15 +78,15 @@ bool compute_ground(vil_image_resource_sptr ground,
 
 
 bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
-                                       vil_image_resource_sptr lidar_first,
-                                       vil_image_resource_sptr lidar_last,
-                                       vil_image_resource_sptr ground,
-                                       float min_lat, float min_lon,
-                                       float max_lat, float max_lon,
-                                       vil_image_view_base_sptr& first_roi,
-                                       vil_image_view_base_sptr& last_roi,
-                                       vil_image_view_base_sptr& ground_roi,
-                                       vpgl_geo_camera*& camera)
+               vil_image_resource_sptr lidar_first,
+               vil_image_resource_sptr lidar_last,
+               vil_image_resource_sptr ground,
+               float min_lat, float min_lon,
+               float max_lat, float max_lon,
+               vil_image_view_base_sptr& first_roi,
+               vil_image_view_base_sptr& last_roi,
+               vil_image_view_base_sptr& ground_roi,
+               vpgl_geo_camera*& camera)
 {
   // the file should be a at least a tiff (better, geotiff)
   if (vcl_strcmp(lidar_first->file_format(), "tiff") != 0 &&
@@ -191,7 +191,7 @@ bool bmdl_lidar_roi_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 8) {
     vcl_cout << "lidar_roi_process: The input number should be 8" << vcl_endl;
-    return false; 
+    return false;
   }
 
   unsigned int i=0;

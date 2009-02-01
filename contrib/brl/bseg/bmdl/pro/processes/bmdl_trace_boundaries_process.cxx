@@ -30,14 +30,12 @@ bool trace_boundaries(vil_image_view_base_sptr label_img, vcl_string fpath)
   return true;
 }
 
-
-
 bool bmdl_trace_boundaries_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
     vcl_cout << "lidar_roi_process: The input number should be 2" << vcl_endl;
-    return false; 
+    return false;
   }
 
   unsigned int i=0;

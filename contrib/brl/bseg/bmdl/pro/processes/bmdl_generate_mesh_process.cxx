@@ -205,7 +205,7 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
     return 0;
   } else {
     fin = vcl_fopen(filenameinzip,"rb");
-    if (fin==NULL){
+    if (fin==NULL) {
         err=ZIP_ERRNO;
         vcl_printf("error in opening %s for reading\n",filenameinzip);
         return 0;
@@ -259,9 +259,9 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
 #endif
 
 void generate_kml_collada(vcl_string& kmz_dir,
-                                                      imesh_mesh& mesh,
-                                                      vpgl_geo_camera* lidar_cam,
-                                                      unsigned& num_of_buildings)
+                          imesh_mesh& mesh,
+                          vpgl_geo_camera* lidar_cam,
+                          unsigned& num_of_buildings)
 {
   if (kmz_dir == "") {
     vcl_cerr << "Error: no filename selected.\n";
@@ -299,7 +299,7 @@ void generate_kml_collada(vcl_string& kmz_dir,
     double meanx = 0.0, meany = 0.0;
     const imesh_vertex_array<3>& verts = building.vertices<3>();
     for (unsigned int v=0; v<verts.size(); ++v) {
-      if (verts[v][2] < minz){
+      if (verts[v][2] < minz) {
         minz = verts[v][2];
       }
       meanx += verts[v][0];
@@ -447,8 +447,8 @@ bool bmdl_generate_mesh_process_init(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("vil_image_view_base_sptr"); 
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vcl_string");
   input_types.push_back("vpgl_camera_double_sptr");
