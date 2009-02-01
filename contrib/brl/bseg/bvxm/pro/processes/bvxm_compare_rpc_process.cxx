@@ -1,4 +1,5 @@
-// This is brl/bseg/bvxm/pro//processes/bvxm_compare_rpc_process.h
+// This is brl/bseg/bvxm/pro/processes/bvxm_compare_rpc_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
@@ -14,13 +15,12 @@
 //             -geographic uncertainty (error) in meters
 //
 // \author  Gamze D. Tunali
-// \date    02/19/2008
+// \date    Feb 19, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_string.h>
@@ -34,24 +34,24 @@
 bool
 bvxm_compare_rpc_process(bprb_func_process& pro)
 {
- // process takes 3 inputs and 0 outputs: 
+ // process takes 3 inputs and 0 outputs:
   //input[0]: please complete
   //input[1]: please complete
   //input[2]: please complete
- 
+
   unsigned n_inputs_ = 3;
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
-    return false; 
+    return false;
   }
-  
+
   //get the inputs
   unsigned i = 0;
   vpgl_camera_double_sptr cam0 =pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_camera_double_sptr cam1 =pro.get_input<vpgl_camera_double_sptr>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
-  
+
   //check input's validity
   i = 0;
   if (!cam0) {

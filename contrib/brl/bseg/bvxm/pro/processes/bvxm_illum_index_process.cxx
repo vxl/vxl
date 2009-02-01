@@ -1,15 +1,16 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_proces.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for illum_index process of a voxel world .
 //
 // \author Isabel Restrepo
-// \date 02/20/2008
+// \date Feb 20, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
-#include <bprb/bprb_func_process.h>
+
 #include <brdb/brdb_value.h>
 
 #include <vil/vil_image_resource.h>
@@ -106,10 +107,10 @@ bool bvxm_illum_index_proces(bprb_func_process& pro)
   // 3: Number of "longitudinal" regions
   // 4: local vertical coordinates system : To be added
   unsigned n_inputs_ = 5;
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
     //get the inputs
@@ -151,7 +152,7 @@ bool bvxm_illum_index_proces(bprb_func_process& pro)
 
   bool success = hdr->get_sun_params(sun_el, sun_az);
 
-  if (!success){
+  if (!success) {
     vcl_cerr << "error bvxm_illum_index_process: failed to obtain illumination angles from nitf image\n";
     return false;
   }
@@ -165,11 +166,10 @@ bool bvxm_illum_index_proces(bprb_func_process& pro)
   unsigned j = 0;
   output_types_[j++]= "unsigned";
   pro.set_output_types(output_types_);
-  
+
   j=0;
   pro.set_output(j++,new brdb_value_t<unsigned>(bin_idx));
 
   return true;
 }
-
 

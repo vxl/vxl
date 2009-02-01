@@ -1,8 +1,7 @@
-// This is brl/bseg/bbgm/pro/bbgm_load_image_of_process.cxx
-
+// This is brl/bseg/bbgm/pro/processes/bbgm_load_image_of_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-#include <bprb/bprb_func_process.h>
 #include <vcl_iostream.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
@@ -24,7 +23,7 @@ bool bbgm_load_image_of_process_cons(bprb_func_process& pro)
 bool bbgm_load_image_of_process(bprb_func_process& pro)
 {
   // Sanity check
-  if(!pro.verify_inputs()){
+  if (!pro.verify_inputs()) {
     vcl_cerr << "In bbgm_load_image_of_process::execute - invalid inputs\n";
     return false;
   }
@@ -32,13 +31,13 @@ bool bbgm_load_image_of_process(bprb_func_process& pro)
   vcl_string binary_filename = pro.get_input<vcl_string>(0);
 
   vsl_b_ifstream istr(binary_filename);
-  if(!istr){
-    vcl_cerr << "Failed to load background image from " 
+  if (!istr) {
+    vcl_cerr << "Failed to load background image from "
              << binary_filename << vcl_endl;
     return false;
   }
   //register different distributions for image content
-  //the registration will only be done once since new instances of 
+  //the registration will only be done once since new instances of
   //the process are cloned  - maybe later make a separate registration step
   bbgm_loader::register_loaders();
   vsl_b_istream& bis = static_cast<vsl_b_istream&>(istr);
@@ -49,7 +48,4 @@ bool bbgm_load_image_of_process(bprb_func_process& pro)
   pro.set_output(0, output0);
   return true;
 }
-
-
-
 

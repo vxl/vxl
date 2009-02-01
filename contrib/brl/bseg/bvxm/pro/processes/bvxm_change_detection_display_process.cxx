@@ -1,4 +1,5 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief process to threshold the changes for foreground detection.
@@ -8,7 +9,6 @@
 //   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
@@ -67,11 +67,11 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
     return false;
   }
 
-  if (img0->pixel_format()!=7){
+  if (img0->pixel_format()!=7) {
     vcl_cout << pro.name() <<" :--  Input " << 0 << " wrong pixel-format!\n";
     return false;
   }
-  if (img1->pixel_format()!=9){
+  if (img1->pixel_format()!=9) {
     vcl_cout << pro.name() <<" :--  Input " << 1 << " wrong pixel-format!\n";
     return false;
   }
