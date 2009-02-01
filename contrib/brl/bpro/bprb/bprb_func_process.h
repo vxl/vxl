@@ -19,23 +19,24 @@
 // \endverbatim
 //------------------------------------------------------------------------------
 #include <bprb/bprb_process_ext.h>
+#include <vcl_iostream.h>
 
 class bprb_func_process: public bprb_process_ext
 {
  public:
-  bprb_func_process(){};
+  bprb_func_process() {}
 
   bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name)
-    :fpt_(fpt), fpt_cons_(0), fpt_init_(0), fpt_finish_(0), name_(name)
-    {}
+  : fpt_(fpt), fpt_cons_(0), fpt_init_(0), fpt_finish_(0), name_(name)
+  {}
 
-  bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name, 
+  bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name,
                     bool(*cons)(bprb_func_process&),
                     bool(*init)(bprb_func_process&),
-                    bool(*finish)(bprb_func_process&)) :
-    fpt_(fpt), fpt_cons_(cons), fpt_init_(init),
+                    bool(*finish)(bprb_func_process&))
+  : fpt_(fpt), fpt_cons_(cons), fpt_init_(init),
     fpt_finish_(finish), name_(name)
-    { if (fpt_cons_) fpt_cons_(*this); }
+  { if (fpt_cons_) fpt_cons_(*this); }
 
   ~bprb_func_process() {}
 
@@ -48,34 +49,34 @@ class bprb_func_process: public bprb_process_ext
   vcl_string name() { return name_; }
 
   template <class T>
-    T get_input(unsigned i)
-    { 
-      if (input_types_.size()>i) {
-        if (!(input_data_[i]->is_a()==input_types_[i])) {
-          return 0;
-          vcl_cout << "Wrong INPUT TYPE!" << vcl_endl;
-        }
+  T get_input(unsigned i)
+  {
+    if (input_types_.size()>i) {
+      if (!(input_data_[i]->is_a()==input_types_[i])) {
+        vcl_cerr << "Wrong INPUT TYPE!\n";
+        return 0;
       }
-      brdb_value_t<T>* input = static_cast<brdb_value_t<T>* >(input_data_[i].ptr());
-      T val = input->value();
-      return val;
     }
+    brdb_value_t<T>* input = static_cast<brdb_value_t<T>* >(input_data_[i].ptr());
+    T val = input->value();
+    return val;
+  }
 
   template <class T>
-    void set_output_val(unsigned int i, T data)
-    { 
-      brdb_value_sptr output = new brdb_value_t<T>(data);
-      set_output(i, output);
-    }
+  void set_output_val(unsigned int i, T data)
+  {
+    brdb_value_sptr output = new brdb_value_t<T>(data);
+    set_output(i, output);
+  }
 
   //: Execute the process
   bool execute() { return fpt_(*this); }
 
   //: Perform any initialization required by the process
-  bool init(){ if (fpt_init_) return fpt_init_(*this); else return false;}
+  bool init() { if (fpt_init_) return fpt_init_(*this); else return false; }
 
   //: Perform any clean up or final computation
-  bool finish(){ if (fpt_finish_) return fpt_finish_(*this); else return false;}
+  bool finish() { if (fpt_finish_) return fpt_finish_(*this); else return false; }
 
  private:
   bool (*fpt_)(bprb_func_process&);        // pointer to execute method
