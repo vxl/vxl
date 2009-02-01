@@ -312,6 +312,9 @@ SOURCE=.\vidl2_v4l2_istream.h
 SOURCE=.\vidl2_v4l2_control.h
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_ffmpeg_ostream_v3.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vidl2_config.h.in
 # End Source File
 # End Group
