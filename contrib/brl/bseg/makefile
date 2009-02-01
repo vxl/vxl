@@ -28,6 +28,9 @@ SUBDIRS += sbin
 # background modeling
 SUBDIRS += bbgm
 
+# background modeling python interface
+SUBDIRS += bbgm_batch
+
 #voxel world modeling
 SUBDIRS += bvxm
 

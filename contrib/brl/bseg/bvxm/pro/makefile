@@ -45,6 +45,18 @@ SOURCES += processes/bvxm_clean_world_process.cxx
 SOURCES += processes/bvxm_compare_rpc_process.cxx
 SOURCES += processes/bvxm_create_normalized_image_process.cxx
 SOURCES += processes/bvxm_create_local_rpc_processes.cxx
+SOURCES += processes/bvxm_create_voxel_world_process.cxx
+SOURCES += processes/bvxm_detect_changes_process.cxx
+SOURCES += processes/bvxm_gen_synthetic_world_process.cxx
+SOURCES += processes/bvxm_generate_edge_map_process.cxx
+SOURCES += processes/bvxm_heightmap_process.cxx
+SOURCES += processes/bvxm_illum_index_process.cxx
+SOURCES += processes/bvxm_lidar_edge_detection_process.cxx
+SOURCES += processes/bvxm_lidar_init_process.cxx
+SOURCES += processes/bvxm_normalize_image_process.cxx
+SOURCES += processes/bvxm_ocp_compare_process.cxx
+SOURCES += processes/bvxm_ocp_hist_process.cxx
+SOURCES += processes/bvxm_pmap_hist_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
