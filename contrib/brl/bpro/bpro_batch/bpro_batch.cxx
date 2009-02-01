@@ -289,15 +289,15 @@ PyObject *set_input_from_db(PyObject *self, PyObject *args)
     return NULL;
 
   if (PyObject_HasAttrString(obj, "type") && PyObject_HasAttrString(obj, "id")) {
-	  type_obj = PyObject_GetAttrString(obj,"type"); 
+    type_obj = PyObject_GetAttrString(obj,"type");
     id_obj = PyObject_GetAttrString(obj,"id");
 
-	  if (PyInt_Check(id_obj) && PyString_Check(type_obj)) {
+    if (PyInt_Check(id_obj) && PyString_Check(type_obj)) {
       id = PyInt_AsLong(id_obj);
       type = PyString_AsString(type_obj);
       result = bprb_batch_process_manager::instance()->set_input_from_db(input, id, type);
     }
-  } 
+  }
 
   return Py_BuildValue("b", result);
 }
@@ -322,7 +322,7 @@ PyObject *remove_data_obj(PyObject *self, PyObject *args)
   bool result = false;
   if (PyObject_HasAttrString(obj, "id")) {
     id_obj = PyObject_GetAttrString(obj,"id");
-	  if (PyInt_Check(id_obj)) {
+    if (PyInt_Check(id_obj)) {
       id = PyInt_AsLong(id_obj);
       result = bprb_batch_process_manager::instance()->remove_data(id);
     }
@@ -345,7 +345,7 @@ clear(PyObject *self, PyObject *args)
   return Py_None;
 }
 
-void 
+void
 register_basic_datatypes()
 {
   REGISTER_DATATYPE(bool);
