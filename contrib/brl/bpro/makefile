@@ -5,9 +5,6 @@ ifdef HAS_EXPAT
 # Basic process classes
 SUBDIRS += bprb
 
-# Python wrappers
-SUBDIRS += bppy
-
 # Brown core processing
 SUBDIRS += core
 
