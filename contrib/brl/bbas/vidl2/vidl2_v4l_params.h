@@ -15,7 +15,6 @@
 // http://www.linuxtv.org/downloads/video4linux/API/V4L1_API.html
 
 
-// not used? #include <vcl_string.h>
 #include "vidl2_pixel_format.h"
 #include <linux/videodev.h>
 

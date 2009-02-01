@@ -13,7 +13,6 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-// not used? #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 #include <brct/brct_corr.h>
 
@@ -27,7 +26,7 @@ class brct_plane_corr : public brct_corr
   int plane(){return plane_;}
   int index(){return index_;}
 
-  //:Mutators
+              // --- Mutators ---
 
   //: Utility functions
   friend vcl_ostream&  operator<<(vcl_ostream& s, brct_plane_corr const& c);

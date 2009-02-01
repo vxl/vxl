@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_textured_mesh_mc.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_textured_mesh_mc_h_
-#define _bmsh3d_textured_mesh_mc_h_
+#ifndef bmsh3d_textured_mesh_mc_h_
+#define bmsh3d_textured_mesh_mc_h_
 //:
 // \file
 // \brief multiple connected (mc) mesh for representing textured mesh faces with internal holes or curves.
@@ -15,9 +15,6 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-
-//#include <vcl_map.h>
-//#include <vcl_utility.h>
 
 #include "bmsh3d_mesh.h"
 #include "bmsh3d_mesh_mc.h"
@@ -40,5 +37,4 @@ class bmsh3d_textured_mesh_mc : public bmsh3d_mesh_mc
 };
 
 
-#endif
-
+#endif // bmsh3d_textured_mesh_mc_h_

@@ -6,8 +6,6 @@
 // \date 040312
 //  Ming: General 3D Utilities
 
-//#include <vcl_climits.h>
-//#include <vcl_cfloat.h>
 #include <vcl_sstream.h>
 
 #include "bmsh3d_fuzzy_boolean.h"
@@ -21,9 +19,9 @@
 //    5: very verbose for debugging.
 #define bmsh3d_DEBUG   1
 
-// ####################################################################
-//    THE GUI ELEMENT (THAT SUPPORT CLICK-N-GETINFO)
-// ####################################################################
+  // ####################################################################
+  //    THE GUI ELEMENT (THAT SUPPORT CLICK-N-GETINFO)
+  // ####################################################################
 
 //: visualization element: contains one void* pointer to the visualization object
 class vispt_elm
@@ -82,5 +80,4 @@ typedef enum
 
 //##################################################################
 
-#endif
-
+#endif // bmsh3d_utils_h_

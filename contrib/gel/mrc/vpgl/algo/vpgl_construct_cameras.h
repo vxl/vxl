@@ -7,17 +7,16 @@
 // \author Vishal Jain, (vj@lems.brown.edu)
 // \date 08/31/04
 //
-// The first camera is assumed to be identity with supplied calibration matrix. 
+// The first camera is assumed to be identity with supplied calibration matrix.
 // The second camera's center is unique up to a scale.
 //
 // \verbatim
 //  Modifications
 //   9/01/2006  Thomas Pollard  Converted to vpgl, changed image origin to be UL corner.
-//   3/04/2007  J.L. Mundy This implementation is now deprecated, use 
+//   3/04/2007  J.L. Mundy This implementation is now deprecated, use
 //   camera extraction defined on vpgl_essential_matrix.
 // \endverbatim
 
-// not used? #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_point_3d.h>
@@ -55,9 +54,9 @@ class vpgl_construct_cameras
 
     // Lifted from brct_algos, since don't want to link vsol.
     vgl_point_3d<double> triangulate_3d_point(
-      const vgl_point_2d<double>& x1, 
+      const vgl_point_2d<double>& x1,
       const vnl_double_3x4& P1,
-      const vgl_point_2d<double>& x2, 
+      const vgl_point_2d<double>& x2,
       const vnl_double_3x4& P2 );
 
     //: set of points

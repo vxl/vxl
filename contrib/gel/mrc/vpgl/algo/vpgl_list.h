@@ -15,7 +15,6 @@
 //
 // \endverbatim
 
-// not used? #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
 template <class T>

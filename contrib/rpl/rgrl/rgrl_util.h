@@ -5,10 +5,6 @@
 // \author Charlene Tsai / Chuck Stewart / Gehua Yang
 // \date   Sep 2003
 
-//#include "rgrl_mask.h"
-//#include "rgrl_transformation.h"
-//#include "rgrl_set_of.h"
-//#include "rgrl_convergence_tester.h"
 #include <rgrl/rgrl_transformation_sptr.h>
 #include <rgrl/rgrl_weighter_sptr.h>
 #include <rgrl/rgrl_scale_sptr.h>
@@ -25,7 +21,7 @@ class rgrl_match_set;
 
 //: Estimate the maximum overlap region/volumn based on the curr_xform
 rgrl_mask_box
-rgrl_util_estimate_global_region( 
+rgrl_util_estimate_global_region(
           rgrl_mask_sptr      const&   from_image_roi,
           rgrl_mask_sptr      const&   to_image_roi,
           rgrl_mask_box       const&   current_region,
@@ -36,7 +32,7 @@ rgrl_util_estimate_global_region(
 //: Estimate the maximum overlap region/volumn based on the inverse xfrom
 //  The inverse xform transforms points on Fixed image coordinate to Moving image
 rgrl_mask_box
-rgrl_util_estimate_global_region_with_inverse_xform( 
+rgrl_util_estimate_global_region_with_inverse_xform(
           rgrl_mask_sptr      const&   from_image_roi,
           rgrl_mask_sptr      const&   to_image_roi,
           rgrl_mask_box       const&   current_region,
@@ -52,12 +48,12 @@ double
 rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets );
 
 //: Estimate the change between the spreads of the from_feature_set and mapped_feature_set
-bool 
+bool
 rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
                                      vnl_vector<double>& factors );
 
 //: Estimate the change between the spreads of the from_feature_set and mapped_feature_set
-bool 
+bool
 rgrl_util_geometric_scaling_factors( rgrl_match_set const& current_match_set,
                                      vnl_vector<double>& factors );
 
@@ -73,10 +69,10 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
 
 //: A simplified version of irls w/o scale re-estimation.
 //  This takes single match set
-//  The \a fast_remapping indicates whether to re-map the features (false), 
-//  or to re-map only the locations (true). This save the computations 
-//  on re-mapping scales, orientations.  However, the result may be 
-//  inaccurate due to out-of-date signature weights. 
+//  The \a fast_remapping indicates whether to re-map the features (false),
+//  or to re-map only the locations (true). This save the computations
+//  on re-mapping scales, orientations.  However, the result may be
+//  inaccurate due to out-of-date signature weights.
 bool
 rgrl_util_irls( rgrl_match_set_sptr              match_set,
                 rgrl_scale_sptr                  scale,
@@ -89,10 +85,10 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
 
 //: A simplified version of irls w/o scale re-estimation.
 //  This takes multiple match sets
-//  The \a fast_remapping indicates whether to re-map the features (false), 
-//  or to re-map only the locations (true). This save the computations 
-//  on re-mapping scales, orientations.  However, the result may be 
-//  inaccurate due to out-of-date signature weights. 
+//  The \a fast_remapping indicates whether to re-map the features (false),
+//  or to re-map only the locations (true). This save the computations
+//  on re-mapping scales, orientations.  However, the result may be
+//  inaccurate due to out-of-date signature weights.
 bool
 rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_set_of<rgrl_scale_sptr>     const& scales,
