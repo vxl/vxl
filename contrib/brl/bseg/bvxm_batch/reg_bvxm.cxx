@@ -11,7 +11,6 @@
 #include <bbgm/pro/bbgm_register.h>
 #include <core/vidl2_pro/vidl2_register.h>
 
-
 PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
@@ -61,7 +60,7 @@ initbvxm_batch(void)
   bvxm_batch_methods[0]=reg_pro;
   bvxm_batch_methods[1]=reg_data;
 
-  for (unsigned i=0; i<METHOD_NUM; i++) {
+  for (int i=0; i<METHOD_NUM; ++i) {
     bvxm_batch_methods[i+2]=batch_methods[i];
   }
 
