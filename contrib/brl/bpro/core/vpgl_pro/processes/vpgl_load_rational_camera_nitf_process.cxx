@@ -1,9 +1,8 @@
-// This is brl/bpro/core/vpgl_pro/vpgl_load_rational_camera_nitf_process.cxx
-#include "vpgl_load_rational_camera_nitf_process.h"
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_load_rational_camera_nitf_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -12,40 +11,36 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 
-//: Constructor
-vpgl_load_rational_camera_nitf_process::vpgl_load_rational_camera_nitf_process()
+//: initialization
+bool vpgl_load_rational_camera_nitf_process_cons(bprb_func_process& pro)
 {
   //this process takes one input: the filename
-  input_data_.resize(1,brdb_value_sptr(0));
-  input_types_.resize(1);
-  input_types_[0]= "vcl_string";
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vcl_string"); 
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
 
-  //output
-  output_data_.resize(1,brdb_value_sptr(0));
-  output_types_.resize(1);
-  output_types_[0]= "vpgl_camera_double_sptr";
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vpgl_camera_double_sptr");  // label image
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+  
+  return true;
 }
 
-
-//: Destructor
-vpgl_load_rational_camera_nitf_process::~vpgl_load_rational_camera_nitf_process()
-{
-}
 
 
 //: Execute the process
-bool
-vpgl_load_rational_camera_nitf_process::execute()
+bool vpgl_load_rational_camera_nitf_process(bprb_func_process& pro)
 {
-  // Sanity check
-    if (!this->verify_inputs())
+  if (pro.n_inputs()< 1) {
+    vcl_cout << "lvpgl_load_rational_camera_process: The input number should be 1" << vcl_endl;
     return false;
+  }
 
-  // Retrieve filename from input
-  brdb_value_t<vcl_string>* input0 =
-    static_cast<brdb_value_t<vcl_string>* >(input_data_[0].ptr());
-
-  vcl_string nitf_image_path = input0->value();
+  // get the inputs
+  vcl_string nitf_image_path = pro.get_input<vcl_string>(0);
 
   vil_image_resource_sptr image =
         vil_load_image_resource(nitf_image_path.c_str());
@@ -75,9 +70,7 @@ vpgl_load_rational_camera_nitf_process::execute()
     return false;
   }
 
-  brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(ratcam);
-
-  output_data_[0] = output0;
+  pro.set_output_val<vpgl_camera_double_sptr>(0, ratcam);
 
   return true;
 }
