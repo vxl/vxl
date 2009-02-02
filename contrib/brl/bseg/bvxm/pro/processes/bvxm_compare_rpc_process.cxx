@@ -1,11 +1,11 @@
-// This is brl/bseg/bvxm/pro/processes/bvxm_compare_rpc_process.cxx
-#include <bprb/bprb_func_process.h>
+// This is brl/bseg/bvxm/pro//processes/bvxm_compare_rpc_process.h
 //:
 // \file
-// \brief A class for clipping and image based on a 3D bounding box.
+// \brief A proces for comparing rational cameras.
 //        -  Input:
-//             - Image path (string)
-//             - bvxm_voxel_world_sptr
+//             - Rational Camera 1
+//             - Rational Camera 2
+//             - Path
 //
 //        -  Output:
 //             - modified rational camera "vpgl_camera_double_sptr"
@@ -14,13 +14,14 @@
 //        -  Params:
 //             -geographic uncertainty (error) in meters
 //
-// \author  Gamze D. Tunali
-// \date    Feb 19, 2008
+// \author  Ibrahim? -Please remove hard coded paths and complete input/ouput description
+// \date    02/19/2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_string.h>
@@ -30,28 +31,51 @@
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-//: Execute the process
-bool
-bvxm_compare_rpc_process(bprb_func_process& pro)
+//: global variables
+namespace bvxm_compare_rpc_process_globals
 {
- // process takes 3 inputs and 0 outputs:
-  //input[0]: please complete
-  //input[1]: please complete
-  //input[2]: please complete
-
+  // process takes 3 inputs and 0 outputs: 
   unsigned n_inputs_ = 3;
-  if (pro.n_inputs()<n_inputs_)
+  unsigned n_outputs_ = 0;
+}
+
+//:sets input and output types for  bvxm_compare_rpc_process
+bool bvxm_compare_rpc_process_init(bprb_func_process& pro)
+{
+
+  //set input types
+  using namespace bvxm_compare_rpc_process_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+
+  int i=0;
+  input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
+  input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
+  input_types_[i++] = "vcl_string";
+  if(!pro.set_input_types(input_types_))
+    return false;
+    
+  //no outputs
+  return true;
+  
+}
+//: Execute the process
+bool bvxm_compare_rpc_process(bprb_func_process& pro)
+{
+  using namespace bvxm_compare_rpc_process_globals;
+  
+  //check number of inputs.
+  if(pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
-    return false;
+    return false; 
   }
-
+  
   //get the inputs
   unsigned i = 0;
   vpgl_camera_double_sptr cam0 =pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_camera_double_sptr cam1 =pro.get_input<vpgl_camera_double_sptr>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
-
+  
   //check input's validity
   i = 0;
   if (!cam0) {

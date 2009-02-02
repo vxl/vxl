@@ -46,31 +46,147 @@
 #include <vpgl/bgeo/bgeo_utm.h>
 #include <brip/brip_roi.h>
 
-//define parameters here
-#define PARAM_MASK_THRESH "mask_thresh"
+//: global variables/functions
+namespace bvxm_lidar_init_process_globals
+{
+  const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 4;
+  
+  //parameters identifying strings
+  const vcl_string param_mask_thresh_ = "mask_thresh";
+  
+  //helper functions
+  bool lidar_init(vil_image_resource_sptr lidar,
+                  bvxm_world_params_sptr params,
+                  vil_image_view_base_sptr& roi,
+                  bvxm_lidar_camera*& camera);
 
-//declare helper functions
-bool lidar_init(vil_image_resource_sptr lidar,
-                bvxm_world_params_sptr params,
-                vil_image_view_base_sptr& roi,
-                bvxm_lidar_camera*& camera);
+  bool comp_trans_matrix(double sx1, double sy1, double sz1,
+                         vcl_vector<vcl_vector<double> > tiepoints,
+                         vnl_matrix<double>& trans_matrix);
 
-bool comp_trans_matrix(double sx1, double sy1, double sz1,
-                       vcl_vector<vcl_vector<double> > tiepoints,
-                       vnl_matrix<double>& trans_matrix);
+  bool gen_mask(vil_image_view_base_sptr roi_first,
+                bvxm_lidar_camera* cam_first,
+                vil_image_view_base_sptr roi_second,
+                bvxm_lidar_camera* cam_second,
+                vil_image_view_base_sptr& mask,
+                double thresh);
 
-bool gen_mask(vil_image_view_base_sptr roi_first,
-              bvxm_lidar_camera* cam_first,
-              vil_image_view_base_sptr roi_second,
-              bvxm_lidar_camera* cam_second,
-              vil_image_view_base_sptr& mask,
-              double thresh);
+  
+  
+}
+
+//: set input and output types
+bool bvxm_lidar_init_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_lidar_init_process_globals;
+  
+
+  //this process takes 3 input:
+  //the filename of the image, the camera and the voxel world
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  int i=0;
+  input_types_[i++] = "vcl_string";             // first ret. image path (geotiff)
+  input_types_[i++] = "vcl_string";             // second ret. image path (geotiff)
+  input_types_[i++] = "bvxm_voxel_world_sptr";  // rational camera
+  if(!pro.set_input_types(input_types_))
+    return false;
+  
+    // output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  unsigned j =0;
+  output_types_[j++]= "vpgl_camera_double_sptr";   // lidar local camera
+  output_types_[j++]= "vil_image_view_base_sptr";  // first ret image ROI
+  output_types_[j++]= "vil_image_view_base_sptr";  // second ret image ROI
+  output_types_[j++]= "vil_image_view_base_sptr";  // mask
+  if(!pro.set_output_types(output_types_))
+    return false;
+  
+  
+  return true;
+
+}
 
 
-bool lidar_init(vil_image_resource_sptr lidar,
-                bvxm_world_params_sptr params,
-                vil_image_view_base_sptr& roi,
-                bvxm_lidar_camera*& camera)
+bool bvxm_lidar_init_process(bprb_func_process& pro)
+{
+
+  using namespace bvxm_lidar_init_process_globals;
+  
+  if(pro.n_inputs()<n_inputs_)
+  {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    return false; 
+  }
+
+  // get the inputs:
+  // image
+  unsigned i = 0;
+  vcl_string first = pro.get_input<vcl_string>(i++);
+  vcl_string second = pro.get_input<vcl_string>(i++);
+  //voxel_world
+  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  //get parameters:
+  // threshold (meters)
+  float thresh=10.0f;
+  pro.parameters()->get_value(param_mask_thresh_, thresh);
+  
+  bvxm_world_params_sptr world_params = voxel_world->get_params();
+  vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
+  if (!first_ret) {
+    vcl_cout << "bvxm_lidar_init_process -- First return image path is not valid!\n";
+    return false;
+  }
+
+  // second return may be null, in that case only first return will be considered
+  vil_image_resource_sptr second_ret = vil_load_image_resource(second.c_str());
+
+  bgeo_lvcs_sptr lvcs = world_params->lvcs();
+  if (!lvcs) {
+    vcl_cout << "bvxm_lidar_init_process -- LVCS is not set!\n";
+    return false;
+  }
+
+  vil_image_view_base_sptr roi_first=0, roi_second=0;
+  bvxm_lidar_camera *cam_first=0, *cam_second=0;
+
+  if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
+    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
+    return false;
+  }
+
+  if (second_ret) {
+    if (!lidar_init(second_ret, world_params, roi_second, cam_second)) {
+      vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
+      return false;
+    }
+  }
+
+  vil_image_view_base_sptr mask=0;
+  if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
+    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
+    return false;
+  }
+  
+  unsigned j = 0;
+  // store the camera (camera of first return is sufficient)
+  pro.set_output_val<vpgl_camera_double_sptr >(j++, cam_first);
+   // store image output (first return roi)
+  pro.set_output_val<vil_image_view_base_sptr>(j++,roi_first);
+  // store image output (second return roi)
+  pro.set_output_val<vil_image_view_base_sptr>(j++,roi_second);
+  // store the mask
+  pro.set_output_val<vil_image_view_base_sptr>(j++,mask);
+
+  return true;
+}
+
+
+
+bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
+                                                  bvxm_world_params_sptr params,
+                                                  vil_image_view_base_sptr& roi,
+                                                  bvxm_lidar_camera*& camera)
 {
   // the file should be a geotiff
   vcl_cout << "FORMAT=" << lidar->file_format();
@@ -190,9 +306,9 @@ bool lidar_init(vil_image_resource_sptr lidar,
 #endif // HAS_GEOTIFF
 }
 
-bool comp_trans_matrix(double sx1, double sy1, double sz1,//vil_geotiff_header* gtif,
-    vcl_vector<vcl_vector<double> > tiepoints,
-    vnl_matrix<double>& trans_matrix)
+bool bvxm_lidar_init_process_globals::comp_trans_matrix(double sx1, double sy1, double sz1,//vil_geotiff_header* gtif,
+                                                        vcl_vector<vcl_vector<double> > tiepoints,
+                                                        vnl_matrix<double>& trans_matrix)
 {
   double sx, sy, sz;
 
@@ -240,12 +356,12 @@ bool comp_trans_matrix(double sx1, double sy1, double sz1,//vil_geotiff_header* 
   return true;
 }
 
-bool gen_mask(vil_image_view_base_sptr roi_first,
-                                       bvxm_lidar_camera* cam_first,
-                                       vil_image_view_base_sptr roi_second,
-                                       bvxm_lidar_camera* cam_second,
-                                       vil_image_view_base_sptr& mask,
-                                       double thresh)
+bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_first,
+                                                bvxm_lidar_camera* cam_first,
+                                                vil_image_view_base_sptr roi_second,
+                                                bvxm_lidar_camera* cam_second,
+                                                vil_image_view_base_sptr& mask,
+                                                double thresh)
 {
   // compare the cameras, if the second one existed
   if (!cam_first) {
@@ -286,86 +402,4 @@ bool gen_mask(vil_image_view_base_sptr roi_first,
   return true;
 }
 
-
-bool bvxm_lidar_init_process(bprb_func_process& pro)
-{
-  //this process takes 3 input:
-  //the filename of the image, the camera and the voxel world
-  unsigned n_inputs_ = 3;
-  if(pro.n_inputs()<n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
-  }
-
-  // get the inputs:
-  // image
-  unsigned i = 0;
-  vcl_string first = pro.get_input<vcl_string>(i++);
-  vcl_string second = pro.get_input<vcl_string>(i++);
-  //voxel_world
-  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  //get parameters:
-  // threshold (meters)
-  float thresh=10.0f;
-  pro.parameters()->get_value(PARAM_MASK_THRESH, thresh);
-  
-  bvxm_world_params_sptr world_params = voxel_world->get_params();
-  vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
-  if (!first_ret) {
-    vcl_cout << "bvxm_lidar_init_process -- First return image path is not valid!\n";
-    return false;
-  }
-
-  // second return may be null, in that case only first return will be considered
-  vil_image_resource_sptr second_ret = vil_load_image_resource(second.c_str());
-
-  bgeo_lvcs_sptr lvcs = world_params->lvcs();
-  if (!lvcs) {
-    vcl_cout << "bvxm_lidar_init_process -- LVCS is not set!\n";
-    return false;
-  }
-
-  vil_image_view_base_sptr roi_first=0, roi_second=0;
-  bvxm_lidar_camera *cam_first=0, *cam_second=0;
-
-  if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
-    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
-    return false;
-  }
-
-  if (second_ret) {
-    if (!lidar_init(second_ret, world_params, roi_second, cam_second)) {
-      vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
-      return false;
-    }
-  }
-
-  vil_image_view_base_sptr mask=0;
-  if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
-    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
-    return false;
-  }
-  
-  // output
-  vcl_vector<vcl_string> output_types_(4);
-  unsigned j =0;
-  output_types_[j++]= "vpgl_camera_double_sptr";   // lidar local camera
-  output_types_[j++]= "vil_image_view_base_sptr";  // first ret image ROI
-  output_types_[j++]= "vil_image_view_base_sptr";  // second ret image ROI
-  output_types_[j++]= "vil_image_view_base_sptr";  // mask
-  pro.set_output_types(output_types_);
-
-  j = 0;
-  // store the camera (camera of first return is sufficient)
-  pro.set_output(j++, new brdb_value_t<vpgl_camera_double_sptr >(cam_first));
-   // store image output (first return roi)
-  pro.set_output(j++,new brdb_value_t<vil_image_view_base_sptr>(roi_first));
-  // store image output (second return roi)
-  pro.set_output(j++,new brdb_value_t<vil_image_view_base_sptr>(roi_second));
-  // store the mask
-  pro.set_output(j++,new brdb_value_t<vil_image_view_base_sptr>(mask));
-
-  return true;
-}
 

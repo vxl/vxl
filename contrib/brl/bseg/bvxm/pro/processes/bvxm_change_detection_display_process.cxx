@@ -1,14 +1,21 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.cxx
-#include <bprb/bprb_func_process.h>
+//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display.cxx
 //:
 // \file
 // \brief process to threshold the changes for foreground detection.
+//        Inputs
+//            0: original image
+//            1: probability image
+//            2: mask image
+//        Outputs
+//            0:red changes image
+//            1:probability image in range 0-255
 //
 // \verbatim
 //  Modifications
 //   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
@@ -28,16 +35,53 @@
 
 #include <vcl_cmath.h>
 
-//DEFINE PARAMETERS
-#define PARAM_PROB_THRESH "prob_thresh"
-#define PARAM_PROB_IMAGE_SCALE "prob_image_scale"
+//:global variables
+namespace bvxm_change_detection_display_process_globals
+{
+  const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 2;
+  //The parameters strings
+  const vcl_string param_prob_thresh_ = "prob_thresh";
+  const vcl_string param_prob_image_scale_ = "prob_image_scale";
+}
 
+//:sets input and output types for  bvxm_change_detection_display_process
+bool bvxm_change_detection_display_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_change_detection_display_process_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  unsigned i = 0;
+  //: original image
+  input_types_[i++] = "vil_image_view_base_sptr";
+  //: probability image
+  input_types_[i++] = "vil_image_view_base_sptr";
+  //: mask image
+  input_types_[i++] = "vil_image_view_base_sptr";
+  
+  if(!pro.set_input_types(input_types_))
+    return false;
+ 
+  unsigned j = 0;
+  //output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  // red changes image
+  output_types_[j++]= "vil_image_view_base_sptr";
+  // probability image in range 0-255
+  output_types_[j++]= "vil_image_view_base_sptr";
+  
+  if (!pro.set_output_types(output_types_))
+    return false;
+  
+  return true;
+}
+
+//: process to threshold the changes for foreground detection.
 bool bvxm_change_detection_display_process(bprb_func_process& pro)
 {
-  //inputs
-  //input 0: original image
-  //input 1: probability image
-  //input 2: mask image
+  using namespace bvxm_change_detection_display_process_globals;
+  
+  //Check number of inputs
   if (pro.n_inputs()<3)
   {
     vcl_cout << "bvxm_change_detection_display_process: The input number should be 3" << vcl_endl;
@@ -67,11 +111,11 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
     return false;
   }
 
-  if (img0->pixel_format()!=7) {
+  if (img0->pixel_format()!=7){
     vcl_cout << pro.name() <<" :--  Input " << 0 << " wrong pixel-format!\n";
     return false;
   }
-  if (img1->pixel_format()!=9) {
+  if (img1->pixel_format()!=9){
     vcl_cout << pro.name() <<" :--  Input " << 1 << " wrong pixel-format!\n";
     return false;
   }
@@ -90,8 +134,8 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   //read the parameters
   float prob_thresh = .5f;
   float prob_image_scale = .7f;
-  pro.parameters()->get_value(PARAM_PROB_THRESH,prob_thresh);
-  pro.parameters()->get_value(PARAM_PROB_IMAGE_SCALE,prob_image_scale);
+  pro.parameters()->get_value(param_prob_thresh_,prob_thresh);
+  pro.parameters()->get_value(param_prob_image_scale_,prob_image_scale);
 
   //obtain max probability
   float max_prob = 0.0f;
@@ -141,21 +185,8 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
 
   //Set and Store outputs
   int j =0;
-  vcl_vector<vcl_string> output_types_(2);
-  // red changes image
-  output_types_[j++]= "vil_image_view_base_sptr";
-  // probability image in range 0-255
-  output_types_[j++]= "vil_image_view_base_sptr";
-  pro.set_output_types(output_types_);
-
-  j = 0;
-  brdb_value_sptr output0 =
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image0));
-  pro.set_output(j++, output0);
-
-    brdb_value_sptr output1 =
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image1));
-  pro.set_output(j++, output1);
+  pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<unsigned char>(output_image0));
+  pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<unsigned char>(output_image1));
   return true;
 }
 

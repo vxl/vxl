@@ -1,6 +1,5 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_normalize_image_process.cxx
-#include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A class for contrast normalization of images using a voxel world.
 //  CAUTION: Input image is assumed to have type vxl_byte
@@ -9,15 +8,17 @@
 // \date Feb. 13, 2008
 // \verbatim
 //  Modifications
-//   Ozge C Ozcanli - Mar 25, 2008 - fixed a compiler warning as suggested by Daniel Lyddy
-//   Isabel Restrepo- Aug 22, 2008 - Moved most of calculations to template function
+//   Ozge C Ozcanli - 03/25/08 - fixed a compiler warning as suggested by Daniel Lyddy
+//   Isabel Restrepo- 08/22/08 - Moved most of calculations to template function
 //                    norm_parameters<bvxm_voxel_type APM_T>.
 //                  - Added support for multichannel appereance model processor,
 //                  - Removed support for rgb_mog_processor
-//   Ozge C Ozcanli - Dec 12, 2008 - added a third option to create mixture of gaussians (mog) image by sampling from the mixtures along the ray
-//   Isabel Restrepo- Jan 27, 2009 - converted process-class to functions which is the new design for processes.
+//
+//   Ozge C Ozcanli - 12/12/08 - added a third option to create mixture of gaussians (mog) image by sampling from the mixtures along the ray
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
@@ -38,40 +39,217 @@
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_camera.h>
 
+//global variables/functions for bvxm_normalize_image_process_globals
+namespace bvxm_normalize_image_process_globals
+{
+  const unsigned n_inputs_ = 6;
+  const unsigned n_outputs_ = 3;
+  
+  //Set the strings that identify parameters
+  //specify whether to use most probable mode or expected value
+  const vcl_string param_mog_method_ = "mog_method";
+  //number of samples if using random sampling as mog_method
+  const vcl_string param_nsamples_ = "n_samples";
+  //normalized image = a*(original_image) +b;
+  const vcl_string param_a_start_= "a_start";
+  const vcl_string param_a_inc_ = "a_inc";
+  const vcl_string param_a_end_ = "a_end";
+  const vcl_string param_b_start_ = "b_start";
+  const vcl_string param_b_end_ = "b_end";
+  const vcl_string param_b_ratio_ = "b_ration";
+  const vcl_string param_verbose_ = "verbose";
+  
+  //initialize variables that hold paramerters.  
+  unsigned mog_creation_method_ = bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE;
+  unsigned n_samples_ = 10;
+  float a_start_ = 0.6f;
+  float a_inc_ = 0.05f;
+  float a_end_ = 1.8f;
+  float b_start_ = 100.0f/255.0f;
+  float b_end_ = 5.0f/255.0f;
+  float b_ratio_ = 0.5f;
+  bool verbose_ = false;
 
-//define parameters here
-//:Specify whether to use most probable mode or expected value
-#define PARAM_MOG_METHOD "mog_method"
-//:number of samples if using random sampling as mog_method
-#define PARAM_NSAMPLES "n_samples"
-//: Normalized image = a*(original_image) +b;
-#define PARAM_A_START "a_start"
-#define PARAM_A_INC "a_inc"
-#define PARAM_A_END "a_end"
-#define PARAM_B_START "b_start"
-#define PARAM_B_END "b_end"
-#define PARAM_B_RATIO "b_ration"
-#define PARAM_VERBOSE "verbose"
+  //other gloabal variables
+  unsigned ni_= 0;
+  unsigned nj_= 0;
+  unsigned nplanes_= 0;
+  
+  //this processes functions
+  
+  //: Float specialized function to normalize and image given a,b where new_I = a*I +b;
+  bool normalize_image(const vil_image_view<float>& in_view,
+                                      vil_image_view<float>& out_img,
+                                      float a, float b, float max_value);
+  
+  
+  //: Byte specialized function to normalize and image given a,b where new_I = a*I +b;
+  bool normalize_image(const vil_image_view<vxl_byte>& in_view,
+                       vil_image_view<vxl_byte>& out_img,
+                        float a, float b, vxl_byte max_value = 255);
+  
+  
+  template <bvxm_voxel_type APM_T>
+  bool norm_parameters(vil_image_view_base_sptr const& input_img,vil_image_view<float>*& input_img_float_stretched,
+                       vpgl_camera_double_sptr const& camera, bvxm_voxel_world_sptr const& world,
+                       unsigned bin_index, unsigned scale_index, float& a, float& b);
 
-//declare paramerter global. they are use across functions
-unsigned mog_creation_method_ = bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE;
-unsigned n_samples_ = 10;
-float a_start_ = 0.6f;
-float a_inc_ = 0.05f;
-float a_end_ = 1.8f;
-float b_start_ = 100.0f/255.0f;
-float b_end_ = 5.0f/255.0f;
-float b_ratio_ = 0.5f;
-bool verbose_ = false;
+  
+  
+}
 
-//other gloabal variables
-unsigned ni_= 0;
-unsigned nj_= 0;
-unsigned nplanes_= 0;
+//:sets input and output types for bvxm_create_normalized_image_process
+bool bvxm_normalize_image_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_normalize_image_process_globals;
+  //inputs
+  //0: The unnormalized image
+  //1: The camera
+  //2: The voxel world
+  //3: The appereance model type
+  //4: The illumination bin index
+  //5: The scale
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";
+  input_types_[1] = "vpgl_camera_double_sptr";
+  input_types_[2] = "bvxm_voxel_world_sptr";
+  input_types_[3] = "vcl_string"; 
+  input_types_[4] = "unsigned";  
+  input_types_[5] = "unsigned"; 
+  if(!pro.set_input_types(input_types_))
+    return false;
+  
+  //output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0]= "vil_image_view_base_sptr";
+  output_types_[1]= "float";  // output a
+  output_types_[2]= "float";  // output b
+  if(!pro.set_output_types(output_types_))
+    return false;
+  
+  return true;
+}
 
+bool bvxm_normalize_image_process(bprb_func_process& pro)
+{
+
+  using namespace bvxm_normalize_image_process_globals;
+  
+ //check number of inputs
+  if(pro.n_inputs()<n_inputs_)
+  {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    return false; 
+  }
+  
+  //get the inputs
+  unsigned i = 0;
+  vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
+  vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
+  bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
+  unsigned bin_index = pro.get_input<unsigned>(i++);;
+  unsigned scale_index = pro.get_input<unsigned>(i++);
+  
+  //check inputs validity
+  if (!input_img) {
+    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    return false;
+  }
+  if (!camera) {
+    vcl_cout << pro.name() <<" :--  Input 1  is not valid!\n";
+    return false;
+  }
+  if (!world) {
+    vcl_cout << pro.name() <<" :--  Input 2  is not valid!\n";
+    return false;
+  }
+  
+  //get parameters and overwrite global values
+  pro.parameters()->get_value(param_mog_method_, mog_creation_method_);
+  pro.parameters()->get_value(param_nsamples_, n_samples_);
+  pro.parameters()->get_value(param_a_start_,a_start_);
+  pro.parameters()->get_value(param_a_inc_, a_inc_);
+  pro.parameters()->get_value(param_a_end_, a_end_);
+  pro.parameters()->get_value(param_b_start_, b_start_);
+  pro.parameters()->get_value(param_b_end_,b_end_);
+  pro.parameters()->get_value(param_b_ratio_, b_ratio_);
+
+
+  //set other global variables
+  ni_= input_img->ni();
+  nj_= input_img->nj();
+  nplanes_= input_img->nplanes();
+
+  // if the world is not updated yet, we just return the input image
+  unsigned num_observations = 0;
+  if (voxel_type == "apm_mog_grey") 
+    num_observations = world->num_observations<APM_MOG_GREY>(bin_index,scale_index);
+  else if (voxel_type == "apm_mog_mc_3_3")
+    num_observations = world->num_observations<APM_MOG_MC_3_3>(bin_index,scale_index);
+  else if (voxel_type == "apm_mog_mc_4_3")
+    num_observations = world->num_observations<APM_MOG_MC_4_3>(bin_index,scale_index);
+  else{
+    vcl_cout << "In bvxm_normalize_image_process::execute() -- input appearance model: " << voxel_type << " is not supported\n";
+    return false;
+  }
+
+  if(num_observations == 0)
+  {
+    //return the input img.Thus, a=1, b=0
+    pro.set_output_val<vil_image_view_base_sptr>(0,input_img);
+    pro.set_output_val<float>(1,1.0f); // a
+    pro.set_output_val<float>(2, 0.0f); // b
+    if (verbose_)
+    {
+      vcl_ofstream file;
+      file.open("./normalization_parameters.txt", vcl_ofstream::app);
+      file << 1.0 << ' ' << 0.0 <<'\n';
+      file.close();
+    }
+    return true;
+  }
+
+  vil_image_view<float>*  input_img_float_stretched = new vil_image_view<float>( ni_, nj_, nplanes_ );
+  //calculate a, b parameters
+  float a = 1.0;
+  float b = 0.0;  
+  if (voxel_type == "apm_mog_grey") 
+    norm_parameters<APM_MOG_GREY>(input_img,input_img_float_stretched,camera,world,bin_index,scale_index,a,b);
+  else if (voxel_type == "apm_mog_mc_3_3")
+    norm_parameters<APM_MOG_MC_3_3>(input_img,input_img_float_stretched,camera,world,bin_index,scale_index,a,b);
+  else if (voxel_type == "apm_mog_mc_4_3")
+    norm_parameters<APM_MOG_MC_4_3>(input_img,input_img_float_stretched,camera,world,bin_index,scale_index,a,b);
+  else{
+    vcl_cout << "In bvxm_normalize_image_process::execute() -- input appearance model: " << voxel_type << " is not supported\n";
+    return false;
+  }
+  
+  // Normalize the image with the best a and b.
+  //vil_image_view<vxl_byte> output_img(ni, nj, nplanes);
+  //normalize_image<vxl_byte>(*input_image_sptr, output_img, a, b, 255);
+
+  vil_image_view<float> output_img_float(ni_, nj_, nplanes_);
+  normalize_image(*input_img_float_stretched, output_img_float, a, b, 1.0f);
+
+  vil_image_view<float> output_img_stretched(ni_, nj_, nplanes_);
+  vil_convert_stretch_range_limited<float>(output_img_float, output_img_stretched, 0.0f, 1.0f, 0.0f, 255.0f);
+  vil_image_view<vxl_byte> output_img;
+  vil_convert_cast(output_img_stretched, output_img);
+
+  // return the output img, a,b
+  unsigned j=0;  
+  pro.set_output_val<vil_image_view_base_sptr>(j++,new vil_image_view<vxl_byte>(output_img));
+  pro.set_output_val<float>(j++ ,a);
+  pro.set_output_val<float>(j++, b*255.0f); // switch back to byte
+
+  return true;
+}
 
 //: Float specialized function to normalize and image given a,b where new_I = a*I +b;
-inline bool normalize_image(const vil_image_view<float>& in_view, vil_image_view<float>& out_img, float a, float b, float max_value)
+bool bvxm_normalize_image_process_globals::normalize_image(const vil_image_view<float>& in_view,
+                                                           vil_image_view<float>& out_img,
+                                                           float a, float b, float max_value)
 {
   unsigned ni = in_view.ni();
   unsigned nj = in_view.nj();
@@ -93,7 +271,9 @@ inline bool normalize_image(const vil_image_view<float>& in_view, vil_image_view
 }
 
 //: Byte specialized function to normalize and image given a,b where new_I = a*I +b;
-inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_view<vxl_byte>& out_img, float a, float b, vxl_byte max_value = 255)
+bool bvxm_normalize_image_process_globals::normalize_image(const vil_image_view<vxl_byte>& in_view,
+                                                           vil_image_view<vxl_byte>& out_img,
+                                                           float a, float b, vxl_byte max_value)
 {
   unsigned ni = in_view.ni();
   unsigned nj = in_view.nj();
@@ -116,13 +296,13 @@ inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_v
 }
 
 template <bvxm_voxel_type APM_T>
-    bool norm_parameters(vil_image_view_base_sptr const& input_img,
-                         vil_image_view<float>*& input_img_float_stretched,
-                         vpgl_camera_double_sptr const& camera,
-                         bvxm_voxel_world_sptr const& world,
-                         unsigned bin_index,
-                         unsigned scale_index,
-                         float& a, float& b)
+bool bvxm_normalize_image_process_globals::norm_parameters(vil_image_view_base_sptr const& input_img,
+                                                           vil_image_view<float>*& input_img_float_stretched,
+                                                           vpgl_camera_double_sptr const& camera,
+                                                           bvxm_voxel_world_sptr const& world,
+                                                           unsigned bin_index,
+                                                           unsigned scale_index,
+                                                           float& a, float& b)
 {
   //1)Set up the data
 
@@ -142,8 +322,8 @@ template <bvxm_voxel_type APM_T>
     }
 
     vcl_cout << "normalization parameters to be used in this run:\n"
-             << "a_start: " << a_start_ << " a_end: " << a_end_ << " a_inc: " << a_inc_ << vcl_endl
-             << "b_start: " << b_start_ << " b_end: " << b_end_ << " b_ratio: " << b_ratio_ << vcl_endl;
+        << "a_start: " << a_start_ << " a_end: " << a_end_ << " a_inc: " << a_inc_ << vcl_endl
+        << "b_start: " << b_start_ << " b_end: " << b_end_ << " b_ratio: " << b_ratio_ << vcl_endl;
   }
 
   // CAUTION: Assumption: Input image is of type vxl_byte
@@ -176,7 +356,7 @@ template <bvxm_voxel_type APM_T>
     case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
     { done = world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
     case bvxm_mog_image_creation_methods::SAMPLING:
-    {
+    { 
      done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples_, mog_image, bin_index, scale_index);
     } break;
     default:
@@ -231,24 +411,18 @@ template <bvxm_voxel_type APM_T>
         bvxm_util::multiply_slabs(prob, weights, product);
         float this_prob = bvxm_util::sum_slab(product);
 
-#ifdef DEBUG
-        vcl_cerr << this_prob << ' ';
-#endif
+        //vcl_cerr << this_prob << ' ';
         if ( this_prob < 0 ) {
           vcl_cout << "In bvxm_normalize_image_process::execute() -- prob is negative, Exiting!\n";
           return false;
         }
 
-        if ( this_prob > sb_best_prob ) { sb_best_prob = this_prob; sb_best = sb; }
-        if ( this_prob > best_prob ) { best_prob = this_prob; a = sa; b = sb; }
+        if ( this_prob > sb_best_prob ){ sb_best_prob = this_prob; sb_best = sb; }
+        if ( this_prob > best_prob ){ best_prob = this_prob; a = sa; b = sb; }
       }
-#ifdef DEBUG
-      vcl_cerr << '\n';
-#endif
+      //vcl_cerr << '\n';
     }
-#ifdef DEBUG
-    vcl_cerr << '\n';
-#endif
+    //vcl_cerr << '\n';
   }
   if (verbose_)
   {
@@ -260,132 +434,5 @@ template <bvxm_voxel_type APM_T>
   return true;
 }
 
-bool bvxm_normalize_image_process(bprb_func_process& pro)
-{
-  //inputs
-  //0: The unnormalized image
-  //1: The camera
-  //2: The voxel world
-  //3: The appereance model type
-  //4: The illumination bin index
-  //5: The scale
-  unsigned n_inputs_ = 6;
-  if (pro.n_inputs()<n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
 
-  //set the output types
-  vcl_vector<vcl_string> output_types_(3);
-  unsigned j = 0;
-  output_types_[j++] = "vil_image_view_sptr";
-  output_types_[j++] = "float";
-  output_types_[j++] = "float";
-  pro.set_output_types(output_types_);
-
-  //get the inputs
-  unsigned i = 0;
-  vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
-  unsigned bin_index = pro.get_input<unsigned>(i++);;
-  unsigned scale_index = pro.get_input<unsigned>(i++);
-
-  //check inputs validity
-  if (!input_img) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
-    return false;
-  }
-  if (!camera) {
-    vcl_cout << pro.name() <<" :--  Input 1  is not valid!\n";
-    return false;
-  }
-  if (!world) {
-    vcl_cout << pro.name() <<" :--  Input 2  is not valid!\n";
-    return false;
-  }
-
-  //get parameters and overwrite global values
-  pro.parameters()->get_value(PARAM_MOG_METHOD, mog_creation_method_);
-  pro.parameters()->get_value(PARAM_NSAMPLES, n_samples_);
-  pro.parameters()->get_value(PARAM_A_START,a_start_);
-  pro.parameters()->get_value(PARAM_A_INC, a_inc_);
-  pro.parameters()->get_value(PARAM_A_END, a_end_);
-  pro.parameters()->get_value(PARAM_B_START, b_start_);
-  pro.parameters()->get_value(PARAM_B_END,b_end_);
-  pro.parameters()->get_value(PARAM_B_RATIO, b_ratio_);
-
-
-  //set other global variables
-  ni_= input_img->ni();
-  nj_= input_img->nj();
-  nplanes_= input_img->nplanes();
-
-  // if the world is not updated yet, we just return the input image
-  unsigned num_observations = 0;
-  if (voxel_type == "apm_mog_grey")
-    num_observations = world->num_observations<APM_MOG_GREY>(bin_index,scale_index);
-  else if (voxel_type == "apm_mog_mc_3_3")
-    num_observations = world->num_observations<APM_MOG_MC_3_3>(bin_index,scale_index);
-  else if (voxel_type == "apm_mog_mc_4_3")
-    num_observations = world->num_observations<APM_MOG_MC_4_3>(bin_index,scale_index);
-  else {
-    vcl_cout << "In bvxm_normalize_image_process::execute() -- input appearance model: " << voxel_type << " is not supported\n";
-    return false;
-  }
-
-  if (num_observations == 0)
-  {
-    //return the input img.Thus, a=1, b=0
-    j=0;
-    pro.set_output(j++,new brdb_value_t<vil_image_view_base_sptr>(input_img));
-    pro.set_output(j++,new brdb_value_t<float>(1.0f)); // a
-    pro.set_output(j++, new brdb_value_t<float>(0.0f)); // b
-    if (verbose_)
-    {
-        vcl_ofstream file;
-        file.open("./normalization_parameters.txt", vcl_ofstream::app);
-        file << 1.0 << ' ' << 0.0 <<'\n';
-        file.close();
-    }
-    return true;
- }
-
-  vil_image_view<float>*  input_img_float_stretched = new vil_image_view<float>( ni_, nj_, nplanes_ );
-  //calculate a, b parameters
-  float a = 1.0;
-  float b = 0.0;
-  if (voxel_type == "apm_mog_grey")
-    norm_parameters<APM_MOG_GREY>(input_img,input_img_float_stretched,camera,world,bin_index,scale_index,a,b);
-  else if (voxel_type == "apm_mog_mc_3_3")
-    norm_parameters<APM_MOG_MC_3_3>(input_img,input_img_float_stretched,camera,world,bin_index,scale_index,a,b);
-  else if (voxel_type == "apm_mog_mc_4_3")
-    norm_parameters<APM_MOG_MC_4_3>(input_img,input_img_float_stretched,camera,world,bin_index,scale_index,a,b);
-  else {
-    vcl_cout << "In bvxm_normalize_image_process::execute() -- input appearance model: " << voxel_type << " is not supported\n";
-    return false;
-  }
-
-  // Normalize the image with the best a and b.
-  //vil_image_view<vxl_byte> output_img(ni, nj, nplanes);
-  //normalize_image<vxl_byte>(*input_image_sptr, output_img, a, b, 255);
-
-  vil_image_view<float> output_img_float(ni_, nj_, nplanes_);
-  normalize_image(*input_img_float_stretched, output_img_float, a, b, 1.0f);
-
-  vil_image_view<float> output_img_stretched(ni_, nj_, nplanes_);
-  vil_convert_stretch_range_limited<float>(output_img_float, output_img_stretched, 0.0f, 1.0f, 0.0f, 255.0f);
-  vil_image_view<vxl_byte> output_img;
-  vil_convert_cast(output_img_stretched, output_img);
-
-  // return the output img, a,b
-  j=0;
-  pro.set_output(j++,new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(output_img)));
-  pro.set_output(j++,new brdb_value_t<float>(a));
-  pro.set_output(j++,new brdb_value_t<float>(b*255.0f)); // switch back to byte
-
-  return true;
-}
 

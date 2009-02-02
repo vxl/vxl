@@ -64,40 +64,186 @@
 #define PARAM_RAND2 "rand2"
 #define PARAM_APP_VAL "appval"
 
-//store parameters as global variables to be used across functions
-unsigned nx_=0;
-unsigned ny_=0;
-unsigned nz_=0; 
-unsigned minx_=0;
-unsigned miny_=0;
-unsigned minz_=0;
-unsigned dimx_=0;
-unsigned dimy_=0;
-unsigned dimz_=0;
-bool gen_image_outs_=false;
-bool gen2_box_=false; 
-vcl_string world_dir_ = " ";
-bool rand1_=false;
-bool rand2_=false;
-float app_val_=-1.0f; 
+//:global variables
+namespace bvxm_gen_synthetic_world_process_globals
+{
+  const unsigned n_outputs_ =1;
+  
+  //store parameters as global variables to be used across functions
+  unsigned nx_=100;
+  unsigned ny_=100;
+  unsigned nz_=50; 
+  unsigned minx_=10;
+  unsigned miny_=10;
+  unsigned minz_=10;
+  unsigned dimx_=89;
+  unsigned dimy_=89;
+  unsigned dimz_=33;
+  bool gen_image_outs_=true;
+  bool gen2_box_=true; 
+  vcl_string world_dir_ = " ./world_dir";
+  bool rand1_=true;
+  bool rand2_=true;
+  float app_val_=0.3f; 
 
-//hard-coded values ... should be removed and added as a parameter class
-const int IMAGE_U = 200;
-const int IMAGE_V = 200;
-const double x_scale = 900;
-const double y_scale = 900;
-const double focal_length = 1.;
-const double camera_dist= 200;
+ //hard-coded values ... should be removed and added as a parameter class
+  const int IMAGE_U = 200;
+  const int IMAGE_V = 200;
+  const double x_scale = 900;
+  const double y_scale = 900;
+  const double focal_length = 1.;
+  const double camera_dist= 200;
 
-//size of the world
-//unsigned nx=100, ny=100, nz=50;
-const float vox_length = 1.0f;
-vcl_vector<vgl_box_3d<double> > boxes_vector;
-typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype apm_datatype;
+  //size of the world
+  const float vox_length = 1.0f;
+  vcl_vector<vgl_box_3d<double> > boxes_vector;
+  typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype apm_datatype;
+  
+  //this process functions 
+  int on_box_surface(vgl_box_3d<double> box, vgl_point_3d<double> v);
+  int in_box(vgl_box_3d<double> box, vgl_point_3d<double> v);
+  void generate_persp_camera(double focal_length,
+                             vgl_point_2d<double>& pp,  //principal point
+                             double x_scale, double y_scale,
+                             vgl_point_3d<double>& camera_center,
+                             vpgl_perspective_camera<double>& cam);
+  vpgl_rational_camera<double> perspective_to_rational(vpgl_perspective_camera<double>& cam_pers);
+  vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world);
+  bool gen_images(vgl_vector_3d<unsigned> grid_size,
+                  bvxm_voxel_world_sptr world,
+                  bvxm_voxel_grid<float>* intensity_grid,
+                  bvxm_voxel_grid<float>* ocp_grid,
+                  bvxm_voxel_grid<apm_datatype>* apm_grid,
+                  vcl_vector<vpgl_camera_double_sptr>& cameras,
+                  vcl_vector <vil_image_view_base_sptr>& image_set,
+                  unsigned int bin_num);
+  bool reconstruct_world( bvxm_voxel_world_sptr recon_world,
+                          vcl_vector<vpgl_camera_double_sptr>& cameras,
+                          vcl_vector <vil_image_view_base_sptr>& image_set,
+                          unsigned int bin_num);
+  void gen_texture_map(vgl_box_3d<double> box,
+                       vcl_vector<vcl_vector<float> >& intens_map_bt,
+                       vcl_vector<vcl_vector<float> >& intens_map_side1,
+                       vcl_vector<vcl_vector<float> >& intens_map_side2,
+                       bool gen_rand, float app_val);
+  
+  void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
+                           vgl_box_3d<double> voxel_world,
+                           bvxm_voxel_grid<float>* ocp_grid,
+                           bvxm_voxel_grid<float>* intensity_grid,
+                           unsigned minx, unsigned miny, unsigned minz,
+                           unsigned dimx, unsigned dimy, unsigned dimz,
+                           unsigned nx, unsigned ny, unsigned nz,
+                           bool gen_2box);
+  
+  void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
+                             vgl_box_3d<double> voxel_world,
+                             bvxm_voxel_grid<float>* ocp_grid,
+                             bvxm_voxel_grid<float>* intensity_grid,
+                             unsigned nx, unsigned ny, unsigned nz);
+  
+  bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale);
+  
+  static bool gen_lidar_2box( vgl_vector_3d<unsigned> grid_size,bvxm_voxel_world_sptr world);
+  
+}
+
+//:set input and output types
+bool bvxm_gen_synthetic_world_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_gen_synthetic_world_process_globals;
+  //process has 1 output
+  //output[0] : The voxel_world
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "bvxm_voxel_world_sptr";
+
+}
+
+//:generates a synthetic world
+bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
+{
+  using namespace bvxm_gen_synthetic_world_process_globals;
+  
+  //get all parameters and overwrite gloabal defaults
+  // create the directory under build to put the intermediate files and the generated images
+  //vcl_string world_dir_("./test_gen_synthetic_world");
+  pro.parameters()->get_value(PARAM_WORLD_DIR, world_dir_);
+  vul_file::make_directory(world_dir_);
+
+
+  vcl_string recon_world_dir_("./recon_world");
+  vul_file::make_directory(recon_world_dir_);
+
+  vul_file::make_directory("./test_gen_cameras");
+
+  pro.parameters()->get_value(PARAM_NX, nx_);
+  pro.parameters()->get_value(PARAM_NY, ny_);
+  pro.parameters()->get_value(PARAM_NZ, nz_);
+
+  pro.parameters()->get_value(PARAM_MINX, minx_);
+  pro.parameters()->get_value(PARAM_MINY, miny_);
+  pro.parameters()->get_value(PARAM_MINZ, minz_);
+
+  pro.parameters()->get_value(PARAM_DIMX, dimx_);
+  pro.parameters()->get_value(PARAM_DIMY, dimy_);
+  pro.parameters()->get_value(PARAM_DIMZ, dimz_);
+
+  pro.parameters()->get_value(PARAM_GEN_IMAGES, gen_image_outs_);
+  pro.parameters()->get_value(PARAM_GEN2, gen2_box_);
+
+  vgl_vector_3d<unsigned> grid_size(nx_,ny_,nz_);
+  vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
+                                 vgl_point_3d<double> (nx_, ny_, nz_));
+
+  bvxm_world_params_sptr world_params = new bvxm_world_params();
+  world_params->set_params(world_dir_,
+                           vgl_point_3d<float> (0,0,0),
+                               vgl_vector_3d<unsigned int>(nx_, ny_, nz_),
+                                   vox_length);
+  bvxm_voxel_world_sptr world = new bvxm_voxel_world();
+  world->set_params(world_params);
+  world->clean_grids();
+
+  unsigned scale=0;
+
+  //create a mog grid for appearance model and use appearance model processor update to properly initialize it
+  bvxm_voxel_grid<float>* ocp_grid = static_cast<bvxm_voxel_grid<float>* >
+      (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
+
+  unsigned int bin_num_1 = 0;
+  bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
+      (world->get_grid<APM_MOG_GREY>(bin_num_1,scale).as_pointer());
+#if 0 // unused ???? - FIXME
+  unsigned int bin_num_2 = 10;
+  bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
+  (world->get_grid<APM_MOG_GREY>(bin_num_2,scale).as_pointer());
+#endif // 0
+  bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
+      (world_dir_ + "intensity.vox",grid_size);
+
+  gen_voxel_world_2box(grid_size, voxel_world, ocp_grid, intensity_grid, minx_, miny_, minz_, dimx_, dimy_, dimz_, nx_, ny_, nz_, gen2_box_);
+  vcl_vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
+
+  vcl_vector <vil_image_view_base_sptr> image_set_1,image_set_2;
+
+  if (gen_image_outs_) {
+    // generate images from synthetic world
+    gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
+               cameras, image_set_1, bin_num_1);
+  }
+
+  world->save_occupancy_raw(world_dir_ + "ocp.raw");
+
+  //store output
+  pro.set_output_val<bvxm_voxel_world_sptr>(0,world);
+
+  return true;
+}
+
 
 // returns a face number if a point is on the surface of a box [0,1,2,3,4,5],
 // -1 otherwise (not on the surface case)
-int on_box_surface(vgl_box_3d<double> box, vgl_point_3d<double> v)
+int bvxm_gen_synthetic_world_process_globals::on_box_surface(vgl_box_3d<double> box, vgl_point_3d<double> v)
 {
   // create a box a size smaller
   vgl_box_3d<double> in_box;
@@ -132,7 +278,7 @@ int on_box_surface(vgl_box_3d<double> box, vgl_point_3d<double> v)
   return -1;
 }
 
-int in_box(vgl_box_3d<double> box, vgl_point_3d<double> v)
+int bvxm_gen_synthetic_world_process_globals::in_box(vgl_box_3d<double> box, vgl_point_3d<double> v)
 {
   if (box.contains(v))
     return 1;
@@ -140,7 +286,7 @@ int in_box(vgl_box_3d<double> box, vgl_point_3d<double> v)
     return -1;
 }
 
-void generate_persp_camera(double focal_length,
+void bvxm_gen_synthetic_world_process_globals::generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
                            double x_scale, double y_scale,
                            vgl_point_3d<double>& camera_center,
@@ -151,7 +297,8 @@ void generate_persp_camera(double focal_length,
   cam.set_camera_center(camera_center);
 }
 
-vpgl_rational_camera<double> perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
+vpgl_rational_camera<double> 
+bvxm_gen_synthetic_world_process_globals::perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 {
   vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
   vcl_vector<double> neu_u,den_u,neu_v,den_v;
@@ -237,7 +384,8 @@ generate_cameras_z(vgl_box_3d<double>& world)
 }
 #endif
 
-vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world)
+vcl_vector<vpgl_camera_double_sptr > 
+bvxm_gen_synthetic_world_process_globals::generate_cameras_yz(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
@@ -288,14 +436,14 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& wor
   return rat_cameras;
 }
 
-bool gen_images(vgl_vector_3d<unsigned> grid_size,
-                                            bvxm_voxel_world_sptr world,
-                                            bvxm_voxel_grid<float>* intensity_grid,
-                                            bvxm_voxel_grid<float>* ocp_grid,
-                                            bvxm_voxel_grid<apm_datatype>* apm_grid,
-                                            vcl_vector<vpgl_camera_double_sptr>& cameras,
-                                            vcl_vector <vil_image_view_base_sptr>& image_set,
-                                            unsigned int bin_num)
+bool bvxm_gen_synthetic_world_process_globals::gen_images(vgl_vector_3d<unsigned> grid_size,
+                                                           bvxm_voxel_world_sptr world,
+                                                           bvxm_voxel_grid<float>* intensity_grid,
+                                                           bvxm_voxel_grid<float>* ocp_grid,
+                                                           bvxm_voxel_grid<apm_datatype>* apm_grid,
+                                                           vcl_vector<vpgl_camera_double_sptr>& cameras,
+                                                           vcl_vector <vil_image_view_base_sptr>& image_set,
+                                                           unsigned int bin_num)
 {
   apm_datatype sample;
   apm_grid->initialize_data(sample);
@@ -329,10 +477,10 @@ bool gen_images(vgl_vector_3d<unsigned> grid_size,
   return true;
 }
 
-bool reconstruct_world( bvxm_voxel_world_sptr recon_world,
-                        vcl_vector<vpgl_camera_double_sptr>& cameras,
-                        vcl_vector <vil_image_view_base_sptr>& image_set,
-                        unsigned int bin_num)
+bool bvxm_gen_synthetic_world_process_globals::reconstruct_world( bvxm_voxel_world_sptr recon_world,
+                                                                  vcl_vector<vpgl_camera_double_sptr>& cameras,
+                                                                  vcl_vector <vil_image_view_base_sptr>& image_set,
+                                                                  unsigned int bin_num)
 {
   vcl_string recon_path = "recon_world/test_img";
   vcl_string camera_path = "test_gen_cameras/camera";
@@ -362,11 +510,11 @@ bool reconstruct_world( bvxm_voxel_world_sptr recon_world,
   return true;
 }
 
-void
-gen_texture_map(vgl_box_3d<double> box,
-                                                  vcl_vector<vcl_vector<float> >& intens_map_bt,
-                                                  vcl_vector<vcl_vector<float> >& intens_map_side1,
-                                                  vcl_vector<vcl_vector<float> >& intens_map_side2, bool gen_rand, float app_val)
+void bvxm_gen_synthetic_world_process_globals::gen_texture_map(vgl_box_3d<double> box,
+                                                               vcl_vector<vcl_vector<float> >& intens_map_bt,
+                                                               vcl_vector<vcl_vector<float> >& intens_map_side1,
+                                                               vcl_vector<vcl_vector<float> >& intens_map_side2,
+                                                               bool gen_rand, float app_val)
 {
   // generate intensity maps
   unsigned upw = (unsigned)vcl_ceil(box.width()/8)+1;
@@ -430,15 +578,14 @@ gen_texture_map(vgl_box_3d<double> box,
   }
 }
 
-void
-gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
-                     vgl_box_3d<double> voxel_world,
-                     bvxm_voxel_grid<float>* ocp_grid,
-                     bvxm_voxel_grid<float>* intensity_grid,
-                     unsigned minx, unsigned miny, unsigned minz,
-                     unsigned dimx, unsigned dimy, unsigned dimz,
-                     unsigned nx, unsigned ny, unsigned nz,
-                     bool gen_2box)
+void bvxm_gen_synthetic_world_process_globals::gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
+                                                                    vgl_box_3d<double> voxel_world,
+                                                                    bvxm_voxel_grid<float>* ocp_grid,
+                                                                    bvxm_voxel_grid<float>* intensity_grid,
+                                                                    unsigned minx, unsigned miny, unsigned minz,
+                                                                    unsigned dimx, unsigned dimy, unsigned dimz,
+                                                                    unsigned nx, unsigned ny, unsigned nz,
+                                                                    bool gen_2box)
 {
   boxes_vector.clear();
 
@@ -556,11 +703,11 @@ gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
   vcl_cout << "grid done." << vcl_endl;
 }
 
-void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
-                           vgl_box_3d<double> voxel_world,
-                           bvxm_voxel_grid<float>* ocp_grid,
-                           bvxm_voxel_grid<float>* intensity_grid,
-                           unsigned nx, unsigned ny, unsigned nz)
+void bvxm_gen_synthetic_world_process_globals::gen_voxel_world_plane( vgl_vector_3d<unsigned> grid_size,
+                                                                      vgl_box_3d<double> voxel_world,
+                                                                      bvxm_voxel_grid<float>* ocp_grid,
+                                                                      bvxm_voxel_grid<float>* intensity_grid,
+                                                                      unsigned nx, unsigned ny, unsigned nz)
 {
   // fill with test data
   float init_val = 0.0;
@@ -599,8 +746,7 @@ void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
   vcl_cout << "grid done." << vcl_endl;
 }
 
-bool
-test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale)
+bool bvxm_gen_synthetic_world_process_globals::test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale)
 {
   bvxm_voxel_grid<float>* ocp_grid =
     dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0, scale).ptr());
@@ -620,15 +766,9 @@ test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale)
   return true;
 }
 
-static
-    bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size
-    , bvxm_voxel_world_sptr world
-#if 0
-    , vcl_vector<vpgl_camera_double_sptr>& cameras
-    , vcl_vector <vil_image_view_base_sptr>& image_set
-    , unsigned int bin_num
-#endif
-                      )
+static bool 
+bvxm_gen_synthetic_world_process_globals::gen_lidar_2box( vgl_vector_3d<unsigned> grid_size,
+                                                          bvxm_voxel_world_sptr world)
 {
   vil_image_view<unsigned char> lidar(grid_size.x(), grid_size.y());
   lidar.fill((unsigned char)0);
@@ -658,94 +798,7 @@ static
 }
 
 
-bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
-{
 
-  // this process take no inputs
-  
-  //get all parameters and overwrite gloabal defaults
-  // create the directory under build to put the intermediate files and the generated images
-  //vcl_string world_dir_("./test_gen_synthetic_world");
-  pro.parameters()->get_value(PARAM_WORLD_DIR, world_dir_);
-  vul_file::make_directory(world_dir_);
-
-
-  vcl_string recon_world_dir_("./recon_world");
-  vul_file::make_directory(recon_world_dir_);
-
-  vul_file::make_directory("./test_gen_cameras");
-
-  pro.parameters()->get_value(PARAM_NX, nx_);
-  pro.parameters()->get_value(PARAM_NY, ny_);
-  pro.parameters()->get_value(PARAM_NZ, nz_);
-
-  pro.parameters()->get_value(PARAM_MINX, minx_);
-  pro.parameters()->get_value(PARAM_MINY, miny_);
-  pro.parameters()->get_value(PARAM_MINZ, minz_);
-
-  pro.parameters()->get_value(PARAM_DIMX, dimx_);
-  pro.parameters()->get_value(PARAM_DIMY, dimy_);
-  pro.parameters()->get_value(PARAM_DIMZ, dimz_);
-
-  pro.parameters()->get_value(PARAM_GEN_IMAGES, gen_image_outs_);
-  pro.parameters()->get_value(PARAM_GEN2, gen2_box_);
-
-  vgl_vector_3d<unsigned> grid_size(nx_,ny_,nz_);
-  vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
-                                vgl_point_3d<double> (nx_, ny_, nz_));
-
-  bvxm_world_params_sptr world_params = new bvxm_world_params();
-  world_params->set_params(world_dir_,
-                          vgl_point_3d<float> (0,0,0),
-                          vgl_vector_3d<unsigned int>(nx_, ny_, nz_),
-                          vox_length);
-  bvxm_voxel_world_sptr world = new bvxm_voxel_world();
-  world->set_params(world_params);
-  world->clean_grids();
-
-  unsigned scale=0;
-
-  //create a mog grid for appearance model and use appearance model processor update to properly initialize it
-  bvxm_voxel_grid<float>* ocp_grid = static_cast<bvxm_voxel_grid<float>* >
-    (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
-
-  unsigned int bin_num_1 = 0;
-  bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
-    (world->get_grid<APM_MOG_GREY>(bin_num_1,scale).as_pointer());
-#if 0 // unused ???? - FIXME
-  unsigned int bin_num_2 = 10;
-  bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
-    (world->get_grid<APM_MOG_GREY>(bin_num_2,scale).as_pointer());
-#endif // 0
-  bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
-    (world_dir_ + "intensity.vox",grid_size);
-
-  gen_voxel_world_2box(grid_size, voxel_world, ocp_grid, intensity_grid, minx_, miny_, minz_, dimx_, dimy_, dimz_, nx_, ny_, nz_, gen2_box_);
-  vcl_vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
-
-  vcl_vector <vil_image_view_base_sptr> image_set_1,image_set_2;
-
-  if (gen_image_outs_) {
-    // generate images from synthetic world
-    gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
-              cameras, image_set_1, bin_num_1);
-  }
-
-  world->save_occupancy_raw(world_dir_ + "ocp.raw");
-
-  //store output
-  unsigned j = 0;
-  vcl_vector<vcl_string> output_types_(1);
-  output_types_[j++] = "bvxm_voxel_world_sptr";
-
-  j=0;
-
-  pro.set_output(j++, new brdb_value_t<bvxm_voxel_world_sptr>(world));
-
-  return true;
-}
-
-//Note : This test needs to be moved as a proper test
 // bool test()
 // {
 //   bvxm_gen_synthetic_world_process();

@@ -30,7 +30,87 @@
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
-bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename)
+
+//: globals
+namespace bvxm_ocp_compare_process_gloabals
+{
+  const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 1;
+  
+  //functions
+  bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename);
+  double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n, unsigned scale);
+  
+}
+
+//: set input and output types
+bool bvxm_ocp_compare_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_ocp_compare_process_gloabals;
+  
+  // This process has 2 inputs:
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  int i=0;
+  input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for LIDAR ONLY update
+  input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
+  input_types_[i++] = "unsigned";                 // search neighb. size
+  input_types_[i++] = "unsigned";                 // scale
+  if(!pro.set_input_types(input_types_))
+    return false;
+  
+  // This process has 1 output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0]= "double";  // the sum of ocp prob product
+  if(!pro.set_output_types(output_types_))
+    return false;
+  
+  return true;
+}
+
+
+bool bvxm_ocp_compare_process(bprb_func_process& pro)
+{
+  using namespace bvxm_ocp_compare_process_gloabals;
+  // This process has 2 inputs:
+  //input[0]: The voxel world for LIDAR ONLY update
+  //input[1]: The voxel world for IMAGE ONLY update
+  //input[2]: Search neighbohood size
+  //input[3]: Scale of the voxel world
+  if(pro.n_inputs()<n_inputs_)
+  {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    return false; 
+  }
+
+  // get the inputs:
+  unsigned i = 0;
+  bvxm_voxel_world_sptr voxel_world1 = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  //voxel_world2
+  bvxm_voxel_world_sptr voxel_world2 = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  unsigned n = pro.get_input<unsigned>(i++);
+  //scale 
+  unsigned scale =pro.get_input<unsigned>(i++);
+
+   //check inputs validity
+  if (!voxel_world1) {
+    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    return false;
+  }
+  if (!voxel_world2) {
+    vcl_cout << pro.name() <<" :--  Input 1  is not valid!\n";
+    return false;
+  }
+  
+  double val = compare(voxel_world1, voxel_world2, n,scale);
+
+  //store output
+  pro.set_output_val<double>(0, val);
+
+  return true;
+}
+
+
+bool bvxm_ocp_compare_process_gloabals::save_raw(char *ocp_array, int x, int y, int z, vcl_string filename)
 {
   vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
   if (!ofs.is_open()) {
@@ -57,9 +137,9 @@ bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename)
   return true;
 }
 
-double compare(bvxm_voxel_world_sptr w1,
-               bvxm_voxel_world_sptr w2,
-               unsigned n, unsigned scale)
+double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
+                                                  bvxm_voxel_world_sptr w2,
+                                                  unsigned n, unsigned scale)
 {
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype lidar_datatype;
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
@@ -127,53 +207,5 @@ double compare(bvxm_voxel_world_sptr w1,
       << "k=" << kmax << "  j=" << jmax << "  i=" << imax << "-->" << maxN << vcl_endl;
   save_raw(comp_array,dim,dim,dim,"data_comp.raw");
   return maxN;
-}
-
-bool bvxm_ocp_compare_process(bprb_func_process& pro)
-{
-  // This process has 2 inputs:
-  //input[0]: The voxel world for LIDAR ONLY update
-  //input[1]: The voxel world for IMAGE ONLY update
-  //input[2]: Search neighbohood size
-  //input[3]: Scale of the voxel world
-  unsigned n_inputs_ = 4;
-  if(pro.n_inputs()<n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
-  }
-
-  // get the inputs:
-  unsigned i = 0;
-  bvxm_voxel_world_sptr voxel_world1 = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  //voxel_world2
-  bvxm_voxel_world_sptr voxel_world2 = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  unsigned n = pro.get_input<unsigned>(i++);
-  //scale 
-  unsigned scale =pro.get_input<unsigned>(i++);
-
-   //check inputs validity
-  if (!voxel_world1) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
-    return false;
-  }
-  if (!voxel_world2) {
-    vcl_cout << pro.name() <<" :--  Input 1  is not valid!\n";
-    return false;
-  }
-  
-  double val = compare(voxel_world1, voxel_world2, n,scale);
-
-  //store output
-  vcl_vector<vcl_string> output_types_(1);
-  int j=0;
-  output_types_[j++]= "double";  // the sum of ocp prob product
-  pro.set_output_types(output_types_);
-  
-  j = 0;
-  pro.set_output(j++, new brdb_value_t<double>(val));
-
-
-  return true;
 }
 

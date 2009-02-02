@@ -28,21 +28,50 @@
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 
-// === define parameters here ===
+//: global variables
+namespace bvxm_generate_edge_map_process_globals
+{
+  const unsigned n_inputs_ = 1;
+  const unsigned n_outputs_=1;
+  
+  //set identifying parameter strings
+  //parameter specifying whether to use lines instead of edges
+  const vcl_string param_use_lines_ =  "use_lines";
+  //gaussian sigma for the edge detection process
+  const vcl_string param_gauss_sigma_ = "edge_detection_gaussian_sigma";
+  //:minimum line length for the line detection process
+  const vcl_string param_line_min_length_ = "line_fitting_min_length";
+  //:error tolerance for the line detection process
+  const vcl_string param_line_error_ = "line_fitting_error_tolerance";
 
-//:parameter specifying whether to use lines instead of edges
-#define PARAM_USE_LINES "use_lines"
-//:gaussian sigma for the edge detection process
-#define PARAM_GAUSSIAN_SIGMA "edge_detection_gaussian_sigma"
-//:minimum line length for the line detection process
-#define PARAM_LINE_MIN_LENGTH "line_fitting_min_length"
-//:error tolerance for the line detection process
-#define PARAM_LINE_ERROR "line_fitting_error_tolerance"
+}
 
+//: initialize input and output types
+bool bvxm_generate_edge_map_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_generate_edge_map_process_globals;
+  // process takes 1 input:
+  //input[0]: input grayscale image
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";
+  if(!pro.set_input_types(input_types_))
+    return false;
+
+  // process has 1 output:
+  // output[0]: output edge image
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";
+  if (!pro.set_output_types(output_types_))
+    return false;
+
+  return true;
+}
+
+//: generates the edge map
 bool bvxm_generate_edge_map_process(bprb_func_process& pro)
 {
-  //inputs
-  unsigned n_inputs_ = 1;
+ using namespace bvxm_generate_edge_map_process_globals;
+
   if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
@@ -51,8 +80,7 @@ bool bvxm_generate_edge_map_process(bprb_func_process& pro)
 
   // get inputs
   // image
-  unsigned i = 0;
-  vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(0);
 
   //check input validity
   if (!input_image_sptr) {
@@ -60,12 +88,12 @@ bool bvxm_generate_edge_map_process(bprb_func_process& pro)
     return false;
   }
   // get parameters
-  double edge_detection_gaussian_sigma=0.0,line_fitting_min_length=0.0,line_fitting_error_tolerance=0.0;
+  double edge_detection_gaussian_sigma=2.0,line_fitting_min_length=10.0,line_fitting_error_tolerance=0.2;
   bool use_lines = false;
-  pro.parameters()->get_value(PARAM_USE_LINES, use_lines);
-  pro.parameters()->get_value(PARAM_GAUSSIAN_SIGMA, edge_detection_gaussian_sigma);
-  pro.parameters()->get_value(PARAM_LINE_MIN_LENGTH, line_fitting_min_length);
-  pro.parameters()->get_value(PARAM_LINE_ERROR, line_fitting_error_tolerance);
+  pro.parameters()->get_value(param_use_lines_, use_lines);
+  pro.parameters()->get_value(param_gauss_sigma_, edge_detection_gaussian_sigma);
+  pro.parameters()->get_value(param_line_min_length_, line_fitting_min_length);
+  pro.parameters()->get_value(param_line_error_, line_fitting_error_tolerance);
 
   //locals
   vil_image_view<vxl_byte> input_image(input_image_sptr);
@@ -184,14 +212,7 @@ bool bvxm_generate_edge_map_process(bprb_func_process& pro)
   }
 
   // return the output edge image
-  unsigned j = 0;
-  vcl_vector<vcl_string> output_types_(1);
-  output_types_[j++] = "vil_image_view_base_sptr";
-  pro.set_output_types(output_types_);
-
-  j=0;
-  brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(edge_image));
-  pro.set_output(j++,output0);
+  pro.set_output_val<vil_image_view_base_sptr>(0,new vil_image_view<vxl_byte>(edge_image));
 
   return true;
 }

@@ -26,21 +26,58 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
 
-bool bvxm_detect_changes_process(bprb_func_process& pro)
+//: global variables
+namespace bvxm_detect_changes_process_globals
 {
-  //inputs
+  const unsigned n_inputs_ = 6;
+  const unsigned n_outputs_ = 3; 
+}
+
+//: initialize input and output types
+bool bvxm_detect_changes_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_detect_changes_process_globals;
+  //process takes 6 inputs
   //input[0]: The observation to detect changes
   //input[1]: The camera of the observation
   //input[2]: The voxel world
-  //input[3]: The appearance model type, the supported strings are:
+  //input[3]: The apperance model type, the supported strings are:
   //          -apm_mog_grey
   //          -apm_mog_rgb
   //          -apm_mog_mc_2_3
   //          -apm_mog_mc_3_3
   //          -apm_mog_mc_4_3
   //input[4]: The bin index to be updated
-  //input[5]: The image scale index detected
-  unsigned n_inputs_ = 6;
+  //input[5]: The image scale index  detected
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";
+  input_types_[1] = "vpgl_camera_double_sptr";
+  input_types_[2] = "bvxm_voxel_world_sptr";
+  input_types_[3] = "vcl_string";
+  input_types_[4] = "unsigned";
+  input_types_[5] = "unsigned";
+  if(!pro.set_input_types(input_types_))
+    return false;
+
+  //output has 2 outputs
+  //output[0] : The updated probability map
+  //output[1] : The mask of image pixels used in update
+  //output[2] : Thresholded image: Binary
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0]= "vil_image_view_base_sptr";
+  output_types_[1]= "vil_image_view_base_sptr";
+  output_types_[2]= "vil_image_view_base_sptr";
+  if(!pro.set_output_types(output_types_))
+    return false;
+  
+  return true;
+}
+
+//: detec changes
+bool bvxm_detect_changes_process(bprb_func_process& pro)
+{
+  using namespace bvxm_detect_changes_process_globals;
+  //check number of inputs  
   if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
@@ -112,7 +149,7 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
     vcl_cerr << "Error bvxm_detect_changes_process: failed to detect changes\n";
     return false;
   }
-  // TODO: filtering / thresholding if necessary (Thom?)
+  // TODO: filtering / thresholding iset and f necessary (Thom?)
 
   // the following thresholding is added temporarily in order to produce an
   // image that can be saved threshold the image to make sure that it is binary
@@ -124,29 +161,14 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   vil_image_view<bool> binary_img;
   vil_threshold_above<float>(prob_map, binary_img, threshold_value);
 
-  //set and store output
+  //store output
   unsigned j=0;
-  vcl_vector<vcl_string> output_types_(3);
   //the probability map
-  output_types_[j++] = "vil_image_view_base_sptr";
+  pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<float>(prob_map));
   //the mask
-  output_types_[j++] = "vil_image_view_base_sptr";
+  pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<bool>(mask));
   //the binary image
-  output_types_[j++] = "vil_image_view_base_sptr";
-  pro.set_output_types(output_types_);
-
-  j = 0;
-  brdb_value_sptr output0 =
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
-  pro.set_output(j++, output0);
-
-  brdb_value_sptr output1 =
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
-  pro.set_output(j++,output1);
-
-  brdb_value_sptr output2 =
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(binary_img));
-  pro.set_output(j++,output2);
+  pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<bool>(binary_img));
 
   return true;
 }

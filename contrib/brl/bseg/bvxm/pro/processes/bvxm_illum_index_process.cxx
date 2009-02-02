@@ -1,17 +1,15 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_process.cxx
-#include <bprb/bprb_func_process.h>
+//This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_proces.cxx
 //:
 // \file
 // \brief A class for illum_index process of a voxel world .
 //
 // \author Isabel Restrepo
-// \date Feb 20, 2008
+// \date 02/20/2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
-
-#include <brdb/brdb_value.h>
+#include <bprb/bprb_func_process.h>
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
@@ -20,8 +18,112 @@
 #include <vpgl/vpgl_camera.h>
 #include <vcl_cmath.h>
 
-unsigned bin_index(vcl_string map_type, double sun_el, double sun_az,
-                   unsigned num_lat, unsigned num_long)
+//: global variables
+namespace bvxm_illum_index_proces_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 1;
+  
+  unsigned bin_index(vcl_string map_type, double sun_el, double sun_az,
+                     unsigned num_lat, unsigned num_long);
+}
+
+//: set input and output types
+bool bvxm_illum_index_proces_init(bprb_func_process& pro)
+{
+  using namespace bvxm_illum_index_proces_globals;
+  
+  //inputs
+  // 0: Map type :
+  //        - 10bins_1d_radial
+  //        - eq_area
+  // 1: NITF image path
+  // 2: Number of latitude regions
+  // 3: Number of "longitudinal" regions
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vcl_string";
+  input_types_[1] = "vcl_string";
+  input_types_[2] = "unsigned";
+  input_types_[3] = "unsigned";
+  if(!pro.set_input_types(input_types_))
+    return false;
+
+  //output
+   //0: bin index
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0]= "unsigned";
+  if(!pro.set_output_types(output_types_))
+    return false;
+  
+  return true;
+}
+
+bool bvxm_illum_index_proces(bprb_func_process& pro)
+{
+  using namespace bvxm_illum_index_proces_globals;
+
+  if(pro.n_inputs()<n_inputs_)
+  {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    return false; 
+  }
+
+    //get the inputs
+  unsigned i = 0;
+  vcl_string map_type = pro.get_input<vcl_string>(i++);
+  vcl_string nitf_image_path = pro.get_input<vcl_string>(i++);
+  unsigned num_lat = pro.get_input<unsigned>(i++);
+  unsigned num_long = pro.get_input<unsigned>(i++);
+
+  //read and parse NITF image
+
+  vil_image_resource_sptr image =
+      vil_load_image_resource(nitf_image_path.c_str());
+  if (!image)
+  {
+    vcl_cout << "NITF image load failed in bvxm_illum_index_process\n";
+    return 0;
+  }
+
+  vcl_string format = image->file_format();
+  vcl_string prefix = format.substr(0,4);
+
+  if (prefix != "nitf")
+  {
+    vcl_cout << "source image is not NITF in bvxm_illum_index_process\n";
+    return 0;
+  }
+
+    //cast to an nitf2_image
+  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+
+    //get NITF information
+  vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
+  vil_nitf2_image_subheader* hdr = headers[0];
+
+  double sun_el;
+  double sun_az;
+
+  bool success = hdr->get_sun_params(sun_el, sun_az);
+
+  if (!success){
+    vcl_cerr << "error bvxm_illum_index_process: failed to obtain illumination angles from nitf image\n";
+    return false;
+  }
+
+  unsigned bin_idx =bin_index(map_type, sun_el, sun_az, num_lat, num_long);
+
+  //store bin index
+  pro.set_output_val<unsigned>(0, bin_idx);
+
+  return true;
+}
+
+
+unsigned 
+bvxm_illum_index_proces_globals::bin_index(vcl_string map_type,
+                                            double sun_el, double sun_az,
+                                            unsigned num_lat, unsigned num_long)
 {
   unsigned bin_idx = 0;
   //read and parse XML file
@@ -96,80 +198,5 @@ unsigned bin_index(vcl_string map_type, double sun_el, double sun_az,
 }
 
 
-bool bvxm_illum_index_proces(bprb_func_process& pro)
-{
-  //inputs
-  // 0: Map type :
-  //        - 10bins_1d_radial
-  //        - eq_area
-  // 1: NITF image path
-  // 2: Number of latitude regions
-  // 3: Number of "longitudinal" regions
-  // 4: local vertical coordinates system : To be added
-  unsigned n_inputs_ = 5;
-  if (pro.n_inputs()<n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
 
-    //get the inputs
-  unsigned i = 0;
-  vcl_string map_type = pro.get_input<vcl_string>(i++);
-  vcl_string nitf_image_path = pro.get_input<vcl_string>(i++);
-  unsigned num_lat = pro.get_input<unsigned>(i++);
-  unsigned num_long = pro.get_input<unsigned>(i++);
-
-    //read and parse NITF image
-
-    //open the nitf image
-  vil_image_resource_sptr image =
-      vil_load_image_resource(nitf_image_path.c_str());
-  if (!image)
-  {
-    vcl_cout << "NITF image load failed in bvxm_illum_index_process\n";
-    return 0;
-  }
-
-  vcl_string format = image->file_format();
-  vcl_string prefix = format.substr(0,4);
-
-  if (prefix != "nitf")
-  {
-    vcl_cout << "source image is not NITF in bvxm_illum_index_process\n";
-    return 0;
-  }
-
-    //cast to an nitf2_image
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
-
-    //get NITF information
-  vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
-  vil_nitf2_image_subheader* hdr = headers[0];
-
-  double sun_el;
-  double sun_az;
-
-  bool success = hdr->get_sun_params(sun_el, sun_az);
-
-  if (!success) {
-    vcl_cerr << "error bvxm_illum_index_process: failed to obtain illumination angles from nitf image\n";
-    return false;
-  }
-
-  unsigned bin_idx =bin_index(map_type, sun_el, sun_az, num_lat, num_long);
-
-  //store output
-  //output
-  //0: bin index
-  vcl_vector<vcl_string> output_types_(1);
-  unsigned j = 0;
-  output_types_[j++]= "unsigned";
-  pro.set_output_types(output_types_);
-
-  j=0;
-  pro.set_output(j++,new brdb_value_t<unsigned>(bin_idx));
-
-  return true;
-}
 

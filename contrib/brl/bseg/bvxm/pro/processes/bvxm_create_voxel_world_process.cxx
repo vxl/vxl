@@ -38,65 +38,75 @@
 
 #include <vul/vul_file.h>
 
-//Define parameters here
-#define PARAM_INPUT_DIRECTORY "input_diectory"
-#define PARAM_CORNER_X "corner_x"
-#define PARAM_CORNER_Y "corner_y"
-#define PARAM_CORNER_Z "corner_z"
-#define PARAM_VOXEL_DIM_X "voxel_dim_x"
-#define PARAM_VOXEL_DIM_Y "voxel_dim_y"
-#define PARAM_VOXEL_DIM_Z "voxel_dim_z"
-#define PARAM_VOXEL_LENGTH "voxel_length"
-#define PARAM_LVCS "lvcs"
-#define PARAM_MIN_OCP_PROB "min_ocp_prob"
-#define PARAM_MAX_OCP_PROB "max_ocp_prob"
-#define PARAM_MAX_SCALE "max_scale"
 
-//: Creates a voxel world
-bool bvxm_create_voxel_world_process(bprb_func_process& pro)
+//:global variables
+namespace bvxm_create_voxel_world_process_globals
 {
   //this process takes no inputs
+  const unsigned n_outputs_ = 1; 
+  //Define parameters here
+  const vcl_string param_input_directory_ =  "input_directory";
+  const vcl_string param_corner_x_ = "corner_x";
+  const vcl_string param_corner_y_ = "corner_y";
+  const vcl_string param_corner_z_ = "corner_z";
+  const vcl_string param_voxel_dim_x_ = "voxel_dim_x";
+  const vcl_string param_voxel_dim_y_ = "voxel_dim_y";
+  const vcl_string param_voxel_dim_z_ = "voxel_dim_z";
+  const vcl_string param_voxel_length_ = "voxel_length";
+  const vcl_string param_lvcs_ = "lvcs";
+  const vcl_string param_min_ocp_prob_ = "min_ocp_prob";
+  const vcl_string param_max_ocp_prob_ = "max_ocp_prob";
+  const vcl_string param_max_scale_ = "max_scale";
+}
+
+//:sets input and output types 
+bool bvxm_create_voxel_world_process_init(bprb_func_process& pro)
+{
+  //set output types
+  using namespace bvxm_create_voxel_world_process_globals;
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "bvxm_voxel_world_sptr";
+  if(!pro.set_output_types(output_types_))
+    return false;
+  return true;
   
+}
+
+//:creates a voxel world
+bool bvxm_create_voxel_world_process(bprb_func_process& pro)
+{
+  using namespace bvxm_create_voxel_world_process_globals;
   //define and read in the parameters
   vcl_string vox_dir;
-  pro.parameters()->get_value(PARAM_INPUT_DIRECTORY, vox_dir);
+  pro.parameters()->get_value(param_input_directory_, vox_dir);
   if (!vul_file::is_directory(vox_dir) || !vul_file::exists(vox_dir)) {
-    vcl_cerr << "In bvxm_create_voxel_world_process::execute() -- input directory is not valid!\n";
+    vcl_cerr << "In bvxm_create_voxel_world_process::execute() -- input directory "<< vul_file::get_cwd() << '/' << vox_dir << "is not valid!\n";
     return false;
   }
-  vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: " << vox_dir << vcl_endl;
+  vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: " <<  vul_file::get_cwd() << vox_dir << vcl_endl;
 
   
   float corner_x = 0.0f;
-  pro.parameters()->get_value(PARAM_CORNER_X, corner_x);
+  pro.parameters()->get_value(param_corner_x_, corner_x);
   float corner_y = 0.0f;
-  pro.parameters()->get_value(PARAM_CORNER_Y, corner_y);
+  pro.parameters()->get_value(param_corner_y_, corner_y);
   float corner_z = 0.0f;
-  pro.parameters()->get_value(PARAM_CORNER_Z, corner_z);
+  pro.parameters()->get_value(param_corner_z_, corner_z);
   vgl_point_3d<float> corner(corner_x, corner_y, corner_z);
 
   unsigned int dimx = 10;
-  pro.parameters()->get_value(PARAM_VOXEL_DIM_X, dimx);
+  pro.parameters()->get_value(param_voxel_dim_x_, dimx);
   unsigned int dimy = 10;
-  pro.parameters()->get_value(PARAM_VOXEL_DIM_Y, dimy);
+  pro.parameters()->get_value(param_voxel_dim_y_, dimy);
   unsigned int dimz = 10;
-  pro.parameters()->get_value(PARAM_VOXEL_DIM_Z, dimz);
+  pro.parameters()->get_value(param_voxel_dim_z_, dimz);
   vgl_vector_3d<unsigned int> voxel_dims(dimx, dimy, dimz);
 
   float vox_len = 1.0f;
-  pro.parameters()->get_value(PARAM_VOXEL_LENGTH, vox_len);
-
-#if 0
-  bvxm_world_params::appearance_model_type apm_type;
-  unsigned int type = parameters()->value<unsigned int>("apm_type");
-  if (type < 3) // there are 3 types and values are 0,1 and 2
-    apm_type = (bvxm_world_params::appearance_model_type) type;
-  else
-    apm_type = bvxm_world_params::mog_grey;
-#endif // 0
+  pro.parameters()->get_value(param_voxel_length_, vox_len);
 
   vcl_string lvcs_path;
-  pro.parameters()->get_value(PARAM_LVCS, lvcs_path);
+  pro.parameters()->get_value(param_lvcs_, lvcs_path);
 
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   if (lvcs_path != "") {
@@ -110,12 +120,12 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
   }
 
   float min_ocp_prob = 1e-5f;
-  pro.parameters()->get_value(PARAM_MIN_OCP_PROB, min_ocp_prob);
+  pro.parameters()->get_value(param_min_ocp_prob_, min_ocp_prob);
   float max_ocp_prob = 1- 1e-5f;
-  pro.parameters()->get_value(PARAM_MAX_OCP_PROB, max_ocp_prob);
+  pro.parameters()->get_value(param_max_ocp_prob_, max_ocp_prob);
 
   unsigned int max_scale = 1;
-  pro.parameters()->get_value<unsigned int>(PARAM_MAX_SCALE, max_scale);
+  pro.parameters()->get_value<unsigned int>(param_max_scale_, max_scale);
 
   bvxm_world_params_sptr params = new bvxm_world_params();
   params->set_params(vox_dir, corner, voxel_dims, vox_len, lvcs, min_ocp_prob, max_ocp_prob, max_scale);
@@ -123,17 +133,8 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr vox_world = new bvxm_voxel_world;
   vox_world->set_params(params);
 
-  //Set and store outputs
-  int j = 0;
-  vcl_vector<vcl_string> output_types_(2);
-  output_types_[j++] = "bvxm_voxel_world_sptr";
-  pro.set_output_types(output_types_);
-  
-  j=0;
-  //: output voxel world
-  brdb_value_sptr output0 = new brdb_value_t<bvxm_voxel_world_sptr>(vox_world);
-  
-  pro.set_output(j++, output0);
+  //store output
+  pro.set_output_val<bvxm_voxel_world_sptr>(0, vox_world);
 
   return true;
 }

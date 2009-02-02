@@ -1,17 +1,22 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_processes.cxx
-#include <bprb/bprb_func_process.h>
+//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.cxx
 //:
 // \file
-// \brief A process that takes a world model and rational camera and returns a local rational camera
+// \brief // A process that takes a world model and rational camera and returns a local rational camera
+//           Inputs:
+//              0: The voxel world
+//              1: The current camera
+//           Outputs:
+//              0: The local camera
 //
 // \author Ibrahim Eden
-// \date Mar 14, 2008
-//
+// \date 03/14/08
 // \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
+//
+// \Modifications
+//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
@@ -21,13 +26,36 @@
 
 #include <vpgl/vpgl_local_rational_camera.h>
 
-
-bool bvxm_create_local_rpc_process(bprb_func_process& pro)
+//: global variables
+namespace bvxm_create_local_rpc_process_globals
 {
+  const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 1;
+}
+
+//: initialize input and output types
+bool bvxm_create_local_rpc_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_create_local_rpc_process_globals;
   // process takes 2 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
-  unsigned n_inputs_ = 2;
+  vcl_vector<vcl_string>  input_types_(n_inputs_);
+  input_types_[0] = "bvxm_voxel_world_sptr";
+  input_types_[1] = "vpgl_camera_double_sptr";
+
+  // process has 1 output:
+  // output[0]: The local camera
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  output_types_[0] = "vpgl_camera_double_sptr";
+}
+
+//: process that takes a world model and rational camera and returns a local rational camera
+bool bvxm_create_local_rpc_process(bprb_func_process& pro)
+{
+  using namespace bvxm_create_local_rpc_process_globals;
+
+  //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
@@ -65,10 +93,9 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //Set and Store outputs
   int j = 0;
   vcl_vector<vcl_string> output_types_(1);
+  
   // updated camera
-  output_types_[j++] = "vpgl_camera_double_sptr";
-  brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(new vpgl_local_rational_camera<double>(cam_out));
-  pro.set_output(j++, output0);
+  pro.set_output_val<vpgl_camera_double_sptr>(j++, (new vpgl_local_rational_camera<double>(cam_out)));
 
   return true;
 }

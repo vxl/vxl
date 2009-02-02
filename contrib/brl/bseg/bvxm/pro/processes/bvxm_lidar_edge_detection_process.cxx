@@ -23,14 +23,49 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_convert.h>
 
-//Define parameters here
-#define PARAM_THRESH_DIFF "threshold_edge_difference"
+
+
+//: global variables/functions
+namespace bvxm_lidar_edge_detection_process_globals
+{
+  const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ =3;
+  
+  //set parameter identifying strings
+  const vcl_string param_thresh_diff_ =  "threshold_edge_difference";
+}
+
+//: set input and output types
+bool bvxm_lidar_edge_detection_process_init(bprb_func_process& pro)
+{
+  using namespace bvxm_lidar_edge_detection_process_globals;
+  //this process takes 2 inputs:
+  //the first and second return images
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  unsigned i = 0;
+  input_types_[i++] = "vil_image_view_base_sptr";  // first ret image ROI
+  input_types_[i++] = "vil_image_view_base_sptr";  // second ret image ROI
+  if (!pro.set_input_types(input_types_))
+    return false;
+
+  //output
+  //output
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  unsigned j =0;
+  output_types_[j++]= "vil_image_view_base_sptr";  // lidar height image
+  output_types_[j++]= "vil_image_view_base_sptr";  // lidar edge image
+  output_types_[j++]= "vil_image_view_base_sptr";  // lidar edge probability image
+  if (!pro.set_output_types(output_types_))
+    return false;
+  
+  return true;
+}
 
 bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
 {
-  //this process takes 2 inputs:
-  //the first and second return images
-  unsigned n_inputs_ = 2;
+  using namespace bvxm_lidar_edge_detection_process_globals;
+
+  //check number of inputs
   if(pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
@@ -72,7 +107,7 @@ bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
   
   //read in parameters
   float threshold_edge_difference = 10.0f;
-  if (pro.parameters()->get_value(PARAM_THRESH_DIFF, threshold_edge_difference)) {
+  if (pro.parameters()->get_value(param_thresh_diff_, threshold_edge_difference)) {
     vcl_cout << "problems in retrieving parameters\n";
     return false;
   }
@@ -102,19 +137,13 @@ bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
     }
   }
 
-  //output
-  vcl_vector<vcl_string> output_types_(3);
-  unsigned j =0;
-  output_types_[j++]= "vil_image_view_base_sptr";  // lidar height image
-  output_types_[j++]= "vil_image_view_base_sptr";  // lidar edge image
-  output_types_[j++]= "vil_image_view_base_sptr";  // lidar edge probability image
-  pro.set_output_types(output_types_);
+  unsigned j = 0;
   // store image height
-  pro.set_output(j++, new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(lidar_height)));
+  pro.set_output_val<vil_image_view_base_sptr>(j++,(new vil_image_view<float>(lidar_height)));
   // store image edge
-  pro.set_output(j++, new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(lidar_edges)));
+  pro.set_output_val<vil_image_view_base_sptr>(j++, (new vil_image_view<float>(lidar_edges)));
   // store image edge prob
-  pro.set_output(j++, new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(lidar_edges_prob)));
+  pro.set_output_val<vil_image_view_base_sptr>(j++, (new vil_image_view<float>(lidar_edges_prob)));
 
   return true;
 }
