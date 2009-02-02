@@ -25,7 +25,6 @@ ADD_TEST( bvxm_test_lidar_processor           ${EXECUTABLE_OUTPUT_PATH}/bvxm_tes
 ADD_TEST( bvxm_test_voxel_world               ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_world )
 ADD_TEST( bvxm_test_voxel_world_update        ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_world_update )
 ADD_TEST( bvxm_test_voxel_world_mog_image     ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_world_mog_image )
-ADD_TEST( bvxm_test_gen_synthetic_world       ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_gen_synthetic_world )
 ADD_TEST( bvxm_test_lidar_camera              ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_lidar_camera )
 ADD_TEST( bvxm_test_platform_computations              ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_platform_computations )
 ADD_EXECUTABLE( bvxm_test_include test_include.cxx )
