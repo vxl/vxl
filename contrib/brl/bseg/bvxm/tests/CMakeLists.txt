@@ -9,7 +9,6 @@ ADD_EXECUTABLE( bvxm_test_all
   test_voxel_world.cxx
   test_voxel_world_update.cxx
   test_voxel_world_mog_image.cxx
-  test_gen_synthetic_world.cxx
   test_lidar_camera.cxx
   test_platform_computations.cxx
 )
