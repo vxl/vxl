@@ -25,7 +25,7 @@ static void test_voxel_world_update()
 
 
   vgl_point_3d<float> grid_corner(0.f,0.f,0.f);
-  vgl_vector_3d<unsigned> grid_size(300,300,120);
+  vgl_vector_3d<unsigned> grid_size(5,5,1);
   float vox_len = 0.5f;
 
   // create the world
@@ -62,7 +62,7 @@ static void test_voxel_world_update()
 
 
   //create a synthetic image
-  vil_image_view_base_sptr view_sptr = new vil_image_view<vxl_byte>(50,100,1,1);
+  vil_image_view_base_sptr view_sptr = new vil_image_view<vxl_byte>(5,5,1,1);
 
   //create metadata:
   bvxm_image_metadata observation(view_sptr,camera);
