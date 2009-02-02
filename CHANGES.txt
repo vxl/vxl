@@ -5,6 +5,11 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+**************************
+VXL 1.12.0      - Feb 2009
+**************************
+      - no major changes.
+
 ***************************
 VXL 1.11.0      - July 2008
 ***************************
