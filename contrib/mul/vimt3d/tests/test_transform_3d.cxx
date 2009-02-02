@@ -276,6 +276,13 @@ static void test_the_transform(vimt3d_transform_3d& t)
 }
 
 
+static void test_simplify(const vimt3d_transform_3d& input, const vimt3d_transform_3d& expected)
+{
+  vimt3d_transform_3d copy(input);
+  copy.simplify();
+  TEST("Simplify()", copy, expected);
+}
+
 //=========================================================================
 // Special test for the set_affine(p,u,v,w) method
 //=========================================================================
@@ -331,13 +338,14 @@ static void test_transform_3d()
            << " Testing vimt3d_transform_3d\n"
            << "*****************************\n";
 
-  vimt3d_transform_3d trans0;
+  vimt3d_transform_3d trans0, trans1, trans2;
   vgl_point_3d<double> p0(1,2,0),p1;
 
   trans0.set_identity();
   vcl_cout<<"\n== Testing Identity ==\n";
   TEST_NEAR("Identity transform",vgl_distance(trans0(p0),p0),0.0,1e-8);
   test_the_transform(trans0);
+  test_simplify(trans0, trans0);
 
   vcl_cout<<"\n== Testing Translation ==\n";
   trans0.set_translation(1.2, 3.4,0);
@@ -345,19 +353,55 @@ static void test_transform_3d()
   TEST_NEAR("Translation transform",vgl_distance(trans0(p0),p1),0.0,1e-8);
   test_the_transform(trans0);
 
+  trans1.set_translation(-30, -40, -50);
+  test_simplify(trans1, trans1);
+  trans1.set_translation(0, 0, 0);
+  trans2.set_identity();
+  test_simplify(trans1, trans2);
+
   vcl_cout<<"\n== Testing ZoomOnly ==\n";
   trans0.set_zoom_only(2, 3, 4,0);
   p1 = vgl_point_3d<double>(5,8,0);
   TEST_NEAR("Zoom transform",vgl_distance(trans0(p0),p1),0.0,1e-8);
   test_the_transform(trans0);
 
+  trans1.set_zoom_only(-1.0, 1.0, 1.0, -30, -40, -50);
+  test_simplify(trans1, trans1);
+  trans1.set_zoom_only(1.0, 1.0, 1.0, -30, -40, -50);
+  trans2.set_translation(-30, -40, -50);
+  test_simplify(trans1, trans2);
+  trans1.set_zoom_only(1.0, 1.0, 1.0, 0, 0, 0);
+  trans2.set_identity();
+  test_simplify(trans1, trans2);
+
   vcl_cout<<"\n== Testing RigidBody ==\n";
   trans0.set_rigid_body(1.2,1,5,1,2,3);
   test_the_transform(trans0);
 
+  trans1.set_rigid_body(vnl_math::pi/4.0, vnl_math::pi/6.0, 0, -30, -40, -50);
+  test_simplify(trans1, trans1);
+  trans1.set_rigid_body( 0, 0, 0, -30, -40, -50);
+  trans2.set_translation(-30, -40, -50);
+  test_simplify(trans1, trans2);
+  trans1.set_rigid_body( 0, 0, 0, 0, 0, 0);
+  trans2.set_identity();
+  test_simplify(trans1, trans2);
+
   vcl_cout<<"\n== Testing Similarity ==\n";
   trans0.set_similarity(0.51,2,3,4,0.2,1,-4);
   test_the_transform(trans0);
+
+  trans1.set_similarity(2.0, vnl_math::pi/4.0, vnl_math::pi/6.0, 0, -30, -40, -50);
+  test_simplify(trans1, trans1);
+  trans1.set_similarity(-2.0, 0, 0, 0, -30, -40, -50);
+  trans2.set_zoom_only(-2.0, -2.0, -2.0, -30, -40, -50);
+  test_simplify(trans1, trans2);
+  trans1.set_similarity(1.0, vnl_math::pi/4.0, vnl_math::pi/6.0, 0, -30, -40, -50);
+  trans2.set_rigid_body(vnl_math::pi/4.0, vnl_math::pi/6.0, 0, -30, -40, -50);
+  test_simplify(trans1, trans2);
+  trans1.set_similarity(1.0, 0, 0, 0, -30, -40, -50);
+  trans2.set_translation(-30, -40, -50);
+  test_simplify(trans1, trans2);
 
   vcl_cout<<"\n== Testing Similarity Parameters ==\n";
   double s= 0.51;
@@ -403,12 +447,32 @@ static void test_transform_3d()
   vcl_cout<<"vec_z0_test= "<<vec_z0_test<<vcl_endl;
   TEST("Test z basis vec", (vec_z0- vec_z0_test).length()< 1e-6, true);
 
+
+
   vcl_cout<<"\n== Testing Affine ==\n";
   trans0.set_affine(-0.2, 0.3,4,2,1,4,5,0.1,-0.21);
   test_the_transform(trans0);
   trans0.set_affine(0.2,-0.3,-4, 0,0,0, 5,0.1,-0.21);
   test_the_transform(trans0);
   test_affine_puvw();
+  trans1.set_affine(vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(0, 0, 1.0),
+    vgl_vector_3d<double>(1.0, 0, 0.0), vgl_vector_3d<double>(0, 2.0, 0));
+  test_simplify(trans1, trans1);
+  trans1.set_affine(-1.0, -2.0, -3.0, 0, 0, 0, -30, -40, -50);
+  trans2.set_zoom_only(-1.0, -2.0, -3.0, -30, -40, -50);
+  test_simplify(trans1, trans2);
+  trans1.set_affine(2.0, 2.0, 2.0, vnl_math::pi/4.0, vnl_math::pi/6.0, 0, -30, -40, -50);
+  trans2.set_similarity(2.0, vnl_math::pi/4.0, vnl_math::pi/6.0, 0, -30, -40, -50);
+  test_simplify(trans1, trans2);
+  trans1.set_affine(2.0, 2.0, 3.0, vnl_math::pi/4.0, vnl_math::pi/4.0, 0, -30, -40, -50);
+  test_simplify(trans1, trans1);
+  trans1.set_affine(1.0, 1.0, 1.0, vnl_math::pi/4.0, vnl_math::pi/4.0, 0, -30, -40, -50);
+  trans2.set_rigid_body(vnl_math::pi/4.0, vnl_math::pi/4.0, 0, -30, -40, -50);
+  test_simplify(trans1, trans2);
+  trans1.set_affine(1.0, 1.0, 1.0, 0, 0, 0, 0, 0, 0);
+  trans2.set_identity();
+  test_simplify(trans1, trans2);
+
 
 #if 0
   vcl_cout<<"\n== Testing Affine Parameters ==\n";

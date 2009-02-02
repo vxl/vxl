@@ -311,6 +311,9 @@ class vimt3d_transform_3d
   // but the declared Form (etc RigidBody) need not be equal.
   bool operator==(const vimt3d_transform_3d&) const;
 
+  //: Reduce to the simplest form possible.
+  void simplify(double tol =1e-10);
+
  protected:
 
   double xx_,xy_,xz_,xt_,yx_,yy_,yz_,yt_,zx_, zy_, zz_, zt_, tx_,ty_,tz_,tt_;
@@ -320,6 +323,7 @@ class vimt3d_transform_3d
   // Notice the mutable here - take care if using threads!
   mutable double xx2_,xy2_,xz2_,xt2_,yx2_,yy2_,yz2_,yt2_,zx2_, zy2_, zz2_, zt2_, tx2_,ty2_,tz2_,tt2_;
   mutable bool inv_uptodate_;
+
 
   void calcInverse() const;
   void setCheck(int n1,int n2,const char* str) const;

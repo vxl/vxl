@@ -12,6 +12,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vul/vul_string.h>
+#include <vul/vul_sprintf.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_sequence.h>
@@ -183,65 +184,76 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
       break;
     }
    default:
-    vcl_cerr << "vimt3d_transform_3d::params() Unexpected form: "
-             << int(form_)<<vcl_endl;
-    vcl_abort();
+    mbl_exception_error(mbl_exception_abort(
+      vul_sprintf("vimt3d_transform_3d::params() Unexpected form: %d", form_) ));
   }
 }
 
 
 //=======================================================================
-#if 0 // incorrect things going on ...
-void vimt3d_transform_3d::simplify()
+void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
 {
+  double rx, ry, rz;
+  double sx, sy, sz;
+  double det;
   switch (form_)
   {
-   case RigidBody:
+  case Affine:
+    { // Not really true affine, because shear is forbidden.
+      angles(rx, ry, rz);
+      det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
+      sx = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
+      sy = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math_sgn(det);
+      sz = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math_sgn(det);
+      if (vnl_math_sqr(sx-sy) +  vnl_math_sqr(sx-sz) < tol*tol)
+        this->set_similarity(sx, rx, ry, rz,
+          xt_, yt_, zt_ );
+      else if (rx*rx+ry*ry+rz*rz < tol*tol)
+        this->set_zoom_only(sx, sy, sz,
+          xt_, yt_, zt_);
+      else
+        return;
+      simplify();
+      return;
+    }
+  case Similarity:
     angles(rx, ry, rz);
-    if (rx!=0 || ry!=0 || rz!=0)
+    det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
+    sx=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
+    if (rx*rx+ry*ry+rz*rz < tol*tol)
+      this->set_zoom_only(sx, xt_, yt_, zt_);
+    else if (vnl_math_sqr(sx-1.0) < tol*tol)
+      this->set_rigid_body(rx, ry, rz, xt_, yt_, zt_);
+    else
+      return; 
+    simplify();
+    return;
+
+  case RigidBody:
+    angles(rx, ry, rz);
+    if (rx*rx+ry*ry+rz*rz >= tol*tol)
       return;
     this->set_translation(xt_, yt_, zt_);
-   case ZoomOnly:
-    if (xx_!=1.0 || yy_!=1.0 || zz_!=1.0)
+    simplify();
+    return;
+  case ZoomOnly:
+    if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) || vnl_math_sqr(zz_-1.0) >= tol*tol)
       return;
     set_translation(xt_, yt_, zt_);
-   case Translation:
-    if (xt_==0 && yt_==0 && zt_==0)
+  case Translation:
+    if (xt_*xt_+yt_*yt_+zt_*zt_<tol*tol)
       set_identity();
     return;
-   case Identity:
-    return;
-   case (Similarity): // not sure this is right - kds
-                      // I think it's fixed now -dac
-    if (v.size()!=7) v.set_size(7);
-    angles(v[1],v[2],v[3]);
-    // compute scaling factor
-    v[0]= xx_/ ( vcl_cos( v[2] ) *vcl_cos( v[3] ) );
-    v[4]=xt_; v[5]=yt_; v[6]=zt_;
+  case Identity:
+    return;  
     break;
-   case (Affine):     // not sure this is right - kds
-                      // I'm sure it's not correct -dac
-    {
-      v.set_size(9);
-      // computation of angles doesn't work unless
-      // sx, sy, sz are all the same!
 
-      angles(v[3],v[4],v[5]);
-      // try to compute scaling factors
-      double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
-      v[0]=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
-      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_);
-      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_);
-      v[6]=xt_; v[7]=yt_; v[8]=zt_;
-      break;
-    }
-   default:
-    vcl_cerr << "vimt3d_transform_3d::params() Unexpected form: "
-             << int(form_)<< '\n';
-    vcl_abort();
+  default:
+    mbl_exception_error(mbl_exception_abort(
+      vul_sprintf("vimt3d_transform_3d::simplify() Unexpected form: %d", form_) ));
   }
 }
-#endif
+
 //=======================================================================
 
 void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const
@@ -250,7 +262,7 @@ void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const
   vcl_ostringstream ss;
   ss << "vimt3d_transform_3d::set() " << n1 << " parameters required for "
      << str << ". Passed " << n2;
-  throw mbl_exception_abort(ss.str());
+  mbl_exception_error(mbl_exception_abort(ss.str()));
 }
 
 //=======================================================================
@@ -297,10 +309,8 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
     inv_uptodate_=false;
     break;
    default:
-    vcl_ostringstream ss;
-    ss << "vimt3d_transform_3d::set() Unexpected form: "
-       << int(form);
-    throw mbl_exception_abort(ss.str());
+    mbl_exception_error(mbl_exception_abort(
+      vul_sprintf("vimt3d_transform_3d::set() Unexpected form: %d", form_) ));
   }
 }
 
@@ -371,7 +381,7 @@ void vimt3d_transform_3d::set_translation(double t_x, double t_y, double t_z)
     zt_=t_z;
 
     // Set all other elements to defaults
-    xx_=yy_=yy_=tt_=1;
+    xx_=yy_=zz_=tt_=1;
     xy_=xz_=yx_=yz_=zx_=zy_=0;
     tx_=ty_=tz_=0;
   }
@@ -666,8 +676,8 @@ void vimt3d_transform_3d::calcInverse() const
 
       break; }
    default:
-    vcl_cerr << "vimt3d_transform_3d::calcInverse() : Unrecognised form: " << int(form_) << vcl_endl;
-    vcl_abort();
+    mbl_exception_error(mbl_exception_abort(
+      vul_sprintf("vimt3d_transform_3d::calcInverse() Unexpected form: %d", form_) ));
   }
 
   inv_uptodate_=true;
