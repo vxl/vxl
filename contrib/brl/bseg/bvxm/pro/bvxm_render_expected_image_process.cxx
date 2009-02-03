@@ -53,27 +53,27 @@ bool bvxm_render_expected_image_process::execute()
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[0].ptr());
   vpgl_camera_double_sptr camera = input0->value();
 
-  brdb_value_t<unsigned>* input1 =
+  brdb_value_t<unsigned>* input1 = 
     static_cast<brdb_value_t<unsigned>* >(input_data_[1].ptr());
   unsigned npixels_x = input1->value();
 
-  brdb_value_t<unsigned>* input2 =
+  brdb_value_t<unsigned>* input2 = 
     static_cast<brdb_value_t<unsigned>* >(input_data_[2].ptr());
   unsigned npixels_y = input2->value();
 
-  brdb_value_t<bvxm_voxel_world_sptr>* input3 =
+  brdb_value_t<bvxm_voxel_world_sptr>* input3 = 
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[3].ptr());
   bvxm_voxel_world_sptr world = input3->value();
-
-  brdb_value_t<vcl_string>* input4 =
+  
+  brdb_value_t<vcl_string>* input4 = 
     static_cast<brdb_value_t<vcl_string>* >(input_data_[4].ptr());
   vcl_string voxel_type = input4->value();
 
-  brdb_value_t<unsigned>* input5 =
+  brdb_value_t<unsigned>* input5 = 
     static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
   unsigned bin_index = input5->value();
 
-    brdb_value_t<unsigned>* input6 =
+    brdb_value_t<unsigned>* input6 = 
     static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
   unsigned scale_index = input6->value();
 
@@ -82,38 +82,39 @@ bool bvxm_render_expected_image_process::execute()
   vil_image_view_base_sptr dummy_img = 0;
   bvxm_image_metadata camera_metadata(dummy_img,camera);
   //render image
-  bool result=true;
+  bool result = true;
   vil_image_view_base_sptr expected_img;
   vil_image_view<float> *mask_img = new vil_image_view<float>(npixels_x,npixels_y,1);
+
 
   if (voxel_type == "apm_mog_grey")
   {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_rgb"){
+  else if (voxel_type == "apm_mog_rgb"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
     result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_mc_2_3"){
+  else if (voxel_type == "apm_mog_mc_2_3"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,2);
     result = world->expected_image<APM_MOG_MC_2_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_mc_3_3"){
+  else if (voxel_type == "apm_mog_mc_3_3"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
     result = world->expected_image<APM_MOG_MC_3_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_mc_4_3"){
+  else if (voxel_type == "apm_mog_mc_4_3"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,4);
     result = world->expected_image<APM_MOG_MC_4_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "edges"){
+  else if (voxel_type == "edges"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_edge_image(camera_metadata,expected_img,scale_index);
   }
-  else if (voxel_type == "edges_prob"){
+  else if (voxel_type == "edges_prob"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
-    result = world->expected_edge_prob_image(camera_metadata,expected_img,scale_index);
+    result = world->expected_edge_prob_image(camera_metadata,expected_img,1.0f,scale_index);
   }
   else
     vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appereance model\n";
@@ -124,7 +125,7 @@ bool bvxm_render_expected_image_process::execute()
   output_data_[0] = output0;
 
   vil_image_view_base_sptr mask_sptr = mask_img;
-  brdb_value_sptr output1 =
+  brdb_value_sptr output1 = 
     new brdb_value_t<vil_image_view_base_sptr>(mask_sptr);
   output_data_[1] = output1;
 
