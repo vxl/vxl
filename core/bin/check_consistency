@@ -1,5 +1,5 @@
 #! /bin/sh
-exec perl -w -x $0 ${1+"$@"}
+exec perl -w -l012 -x $0 ${1+"$@"}
 #!perl
 #line 5
 
@@ -32,7 +32,7 @@ while (defined($ARGV[0]) && $ARGV[0] =~ m!^-!)
   if (m/^-f$/) { $full = 1; }
   elsif (m/^-e$/) { $emacs = 1; }
   elsif (m/^-v$/) { $vim = 1; }
-  else { printf STDERR "Unrecognised command line option $_ ignored\n"; }
+  else { print STDERR "Unrecognised command line option $_ ignored"; }
 }
 
 if (defined($ARGV[0]))
@@ -50,7 +50,7 @@ else
   }
   else
   {
-    print STDERR "VXLROOT is not defined, and no command line arguments were given\n";
+    print STDERR "VXLROOT is not defined, and no command line arguments were given";
     exit 0;
   }
   $FILES = `find $DIRS -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print`;
@@ -63,12 +63,12 @@ foreach $f (@FILES)
   $f =~ s!\\!/!g; # directory delimiter
   if (-d $f)
   {
-    print STDERR "File $f is actually a directory\n";
+    print STDERR "File $f is actually a directory";
     next;
   }
   unless (open(FILE, $f))
   {
-    print STDERR "File $f does not exist or cannot be opened for reading\n";
+    print STDERR "File $f does not exist or cannot be opened for reading";
     next;
   }
   $file=<FILE>;
@@ -128,9 +128,10 @@ foreach $f (@FILES)
     if ($printed && $file =~ m!(\s|\\t)\\n\b!);
 
 # 4. Consecutive comment blocks, separated by blank lines
-  if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
+  if ($file =~ m!\n(\s*)//:.*\n(\1//.*\n)*\s*\n\1// *[^:=*-]! &&
+      $f !~ m!\bvcl_config_(compiler|headers)\.h$!)
   {
-    $tmp=$file; $tmp =~ s!\n\s*//:.*\n( *// .*\n)*\s*\n\s*[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
+    $tmp=$file; $tmp =~ s!\n\s*//:.*\n( *//.*\n)*\s*\n\s*[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
     &msg($tmp, "contains comment blocks separated by a blank line; consider joining");
   }
 
@@ -556,7 +557,7 @@ foreach $f (@FILES)
     next if ($j eq 'vsol/vsol_point_2d.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$!);
     next if ($j eq 'vsol/vsol_region_2d.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_face_2d-\.cxx$!);
     # FINALLY PRINT MESSAGE, IF APPLICABLE
-#   print STDERR "\$j=$j\t\$i=$i\t\$ii=$ii\n";
+#   print STDERR "\$j=$j\t\$i=$i\t\$ii=$ii";
     &msg(1, "should not have #include <$j>", 1)
       unless ($fl =~ m!$j\>[^\003]*\b$i\b! ||
               $f =~ m!/$ii\.! ||
@@ -940,6 +941,7 @@ foreach $f (@FILES)
       $f !~ m!core/vnl/algo/Templates/fsm_pack\.cxx$! &&
       $f !~ m!core/vbl/examples/Templates/smartptr-instances\.cxx$! &&
       $f !~ m!core/vnl/Templates/vnl_matrix_fixed_pairwise_ops\.cxx$! &&
+      $f !~ m!bsta/algo/Templates/bsta_parzen_updater.bsta_parzen_sphere.float! &&
       $file_s =~ m!\b(\w*)_INSTANTIATE\s*\((.*)\)!)
   {
     $class=$1; $class =~ tr/A-Z/a-z/; $class="$class<$2>";
@@ -1008,6 +1010,8 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bbsta_histogram\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bbvxm_lidar_processor\.cxx\.(min|max)$! &&
           "$f.$wd" !~ m!\bvidl2_pixel_format\.h\.(min|max)$! &&
+          "$f.$wd" !~ m!\bmbl_sample_stats_1d\.h\.(min|max)$! &&
+          "$f.$wd" !~ m!\bmbl/tools/sample_stats\.cxx\.(min|max)$! &&
           "$f.$wd" !~ m!\balgo/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$! &&
           "$f"     !~ m!\bcmake/config/vxl_platform_tests\.cxx$! &&
           $file_s =~ m![^.\005\006]\b$wd(\s*)\(! ); # \005 is :: and \006 is ->
@@ -1057,11 +1061,13 @@ foreach $f (@FILES)
             $f !~ m!\bbgui3d_algo\.(h|cxx)$! &&
             $f !~ m!\bbgui3d_examiner_tableau\.cxx$! &&
             $f !~ m!\brsdl/(rsdl_kd_tree|tests/test_bins_2d|tests/test_kd_tree)\.cxx$! ) ) &&
+            $f !~ m!\bimesh/algo/imesh_kd_tree\.h$! &&
           $file_s =~ m![^ .>]\s*\b$wd\s*[|),]! );
     &msg(1, "vcl_ios_$wd must be used together with vcl_ios_adjustfield")
       if ($cpp_file &&
           $file_s =~ m!\bvcl_ios_$wd\s*[^ ,]! &&
           $f !~ m!\bvul/tests/test_ios_state\.cxx$! &&
+          $f !~ m!\bmul/mbl/mbl_progress_time\.cxx$! &&
           $file_s !~ m!(vcl_resetiosflags|\.\s*unsetf)\s*\((vcl_ios_(internal|left|right)\s*\|\s*)*vcl_ios_$wd\s*(\|\s*vcl_ios_(internal|left|right)\s*)*\)! );
     &msg(1, "$wd() must be vcl_$wd()")
       if ($cpp_file &&
@@ -1171,8 +1177,8 @@ foreach $f (@FILES)
 sub msg
 {
   my ($linenum,$message,$quiet) = @_;
-  if ($emacs)  { print "$f:$linenum:\t\# $message\n"; }
-  elsif ($vim) { print "vim +$linenum $f\t\# $message\n"; }
-  else         { print "$f\t\# $message\n"; }
+  if ($emacs)  { print "$f:$linenum:\t\# $message"; }
+  elsif ($vim) { print "vim +$linenum $f\t\# $message"; }
+  else         { print "$f\t\# $message"; }
   $printed = 1 unless defined($quiet);
 }
