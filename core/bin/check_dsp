@@ -271,7 +271,7 @@ foreach my $dir (@DIRS)
   {
     my ($g, $n) = ($1, $2);
     if (opendir TMPL,"$dir/$g") {
-      $names{$n} .= join '',map { " $g/$_" } grep {! m/^(\..*|CVS)$/} readdir(TMPL);
+      $names{$n} .= join '',map { " $g/$_" } grep {m/\.cxx$/} readdir(TMPL);
       closedir(TMPL);
     }
   }
@@ -578,8 +578,8 @@ sub missing_message
 {
   my ($txt, $file) = @_;
   my $dsp = ($file =~ m/\.dsp$/) ? 1 : '';
-  if ($shell && $dsp) { print "echo '# Begin Source File\r' >> $file\necho '$txt\r' >> $file\necho '# End Source File\r' >> $file"; }
-  elsif ($shell) { print "echo '$txt' >> $file"; }
+  if ($shell && $dsp) { print "echo '# Begin Source File\r' >>\t$file\necho '$txt\r' >>\t$file\necho '# End Source File\r' >>\t$file"; }
+  elsif ($shell) { print "echo '$txt' >>\t$file"; }
   else { print "$txt\tis missing from $file"; }
 }
 
@@ -587,7 +587,7 @@ sub removing_message
 {
   my ($txt, $file, $comment) = @_;
   my $eoln = ($file =~ m/\.dsp$/) ? "\r" : '';
-  if ($shell) { print "echo '$comment remove $txt$eoln' >> $file"; }
+  if ($shell) { print "echo '$comment remove $txt$eoln' >>\t$file"; }
   else { print "$txt\tmust be removed from $file"; }
 }
 
@@ -595,6 +595,6 @@ sub duplicate_message
 {
   my ($txt, $file, $comment) = @_;
   my $eoln = ($file =~ m/\.dsp$/) ? "\r" : '';
-  if ($shell) { print "echo '$comment remove duplicate $txt$eoln' >> $file"; }
+  if ($shell) { print "echo '$comment remove duplicate $txt$eoln' >>\t$file"; }
   else { print "$txt\t(duplicate) must be removed from $file"; }
 }
