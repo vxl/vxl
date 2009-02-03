@@ -18,7 +18,7 @@ mbl_progress_time::mbl_progress_time(vcl_ostream& os/*=vcl_cout*/)
 : os_(os), ios_state_(os_)
 {
   os_.precision(3);
-  os_.setf(vcl_ios_fixed);
+  os_.setf(vcl_ios_fixed, vcl_ios_floatfield);
 }
 
 
