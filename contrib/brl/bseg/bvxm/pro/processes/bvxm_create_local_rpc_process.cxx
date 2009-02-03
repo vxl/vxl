@@ -1,4 +1,5 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.cxx
+
 //:
 // \file
 // \brief // A process that takes a world model and rational camera and returns a local rational camera
@@ -9,11 +10,11 @@
 //              0: The local camera
 //
 // \author Ibrahim Eden
-// \date 03/14/08
+// \date March 14, 2008
 // \verbatim
 //
 // \Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -48,6 +49,7 @@ bool bvxm_create_local_rpc_process_init(bprb_func_process& pro)
   // output[0]: The local camera
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
+  return true;
 }
 
 //: process that takes a world model and rational camera and returns a local rational camera
@@ -93,7 +95,7 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //Set and Store outputs
   int j = 0;
   vcl_vector<vcl_string> output_types_(1);
-  
+
   // updated camera
   pro.set_output_val<vpgl_camera_double_sptr>(j++, (new vpgl_local_rational_camera<double>(cam_out)));
 
