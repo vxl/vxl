@@ -13,7 +13,7 @@
 #include <vnl/vnl_random.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_value_sptr.h>
-#include <core/vil_pro/vil_load_image_view_process.h>
+#include <bpro/bprb/bprb_process_sptr.h>
 #include <bbgm/pro/bbgm_processes.h>
 #include <bbgm/pro/bbgm_register.h>
 
