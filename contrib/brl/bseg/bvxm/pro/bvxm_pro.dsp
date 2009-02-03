@@ -207,7 +207,52 @@ SOURCE=.\processes/bvxm_compare_rpc_process.cxx
 SOURCE=.\processes/bvxm_create_normalized_image_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_create_local_rpc_processes.cxx
+SOURCE=.\processes/bvxm_render_virtual_view_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_ocp_hist_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_heightmap_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_pmap_ratio_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_lidar_init_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_generate_edge_map_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_illum_index_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_pmap_hist_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_render_expected_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_lidar_edge_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_local_rpc_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_changes_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_ocp_compare_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_voxel_world_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_normalize_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_gen_synthetic_world_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
@@ -319,42 +364,6 @@ SOURCE=.\bvxm_register.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_processes.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_create_voxel_world_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_detect_changes_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_gen_synthetic_world_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_generate_edge_map_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_heightmap_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_illum_index_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_lidar_edge_detection_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_lidar_init_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_normalize_image_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_ocp_compare_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_ocp_hist_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_pmap_hist_process.cxx
 # End Source File
 # End Group
 # End Target
