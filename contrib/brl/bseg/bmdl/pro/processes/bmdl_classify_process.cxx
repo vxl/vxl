@@ -138,7 +138,7 @@ bool bmdl_classify_process(bprb_func_process& pro)
   return true;
 }
 
-bool bmdl_classify_process_init(bprb_func_process& pro)
+bool bmdl_classify_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   vcl_vector<vcl_string> input_types;

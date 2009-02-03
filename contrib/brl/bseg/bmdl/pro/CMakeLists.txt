@@ -23,6 +23,7 @@ IF(EXPAT_FOUND)
       
       SET(bmdl_pro_sources
         bmdl_processes.h
+        bmdl_defs.h
         bmdl_register.h                        bmdl_register.cxx 
       )
 

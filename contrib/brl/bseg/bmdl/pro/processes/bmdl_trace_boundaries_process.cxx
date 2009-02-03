@@ -52,7 +52,7 @@ bool bmdl_trace_boundaries_process(bprb_func_process& pro)
   return true;
 }
 
-bool bmdl_trace_boundaries_process_init(bprb_func_process& pro)
+bool bmdl_trace_boundaries_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");

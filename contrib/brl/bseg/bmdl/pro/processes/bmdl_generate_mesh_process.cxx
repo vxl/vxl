@@ -443,7 +443,7 @@ bool bmdl_generate_mesh_process(bprb_func_process& pro)
   return generate_mesh(file_poly, label_img, height_img, ground_img, file_mesh, lidar_cam, num_of_buildings);
 }
 
-bool bmdl_generate_mesh_process_init(bprb_func_process& pro)
+bool bmdl_generate_mesh_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");
