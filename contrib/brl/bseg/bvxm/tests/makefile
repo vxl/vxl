@@ -4,7 +4,6 @@ include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_apm_processors.cxx
-TESTS += test_gen_synthetic_world.cxx
 TESTS += test_voxel_grid.cxx
 TESTS += test_voxel_storage_disk.cxx
 TESTS += test_voxel_storage_mem.cxx
