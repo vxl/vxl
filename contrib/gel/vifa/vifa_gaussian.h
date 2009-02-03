@@ -15,12 +15,6 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-// From GeneralUtility/Stat/stat_constants.h in TargetJr
-#define  StatEPSILON 1e-8
-#define  EXPLIMIT    37.0
-#define  I_SQRT_2PI  0.39894228040143267794
-
-
 class vifa_gaussian
 {
  protected:

@@ -2,6 +2,11 @@
 //:
 // \file
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
+
+// From GeneralUtility/Stat/stat_constants.h in TargetJr
+#define  StatEPSILON 1e-8
+#define  EXPLIMIT    37.0
 
 float vifa_gaussian::pdf(float  x)
 {
@@ -25,6 +30,6 @@ float vifa_gaussian::norm_dens(float  x)
 {
   // Check to see if the magnitude of x is large enough to
   // warrant clipping the pdf to 0.0
-  return x < -EXPLIMIT || x > EXPLIMIT ? 0.0f :
-                                         float(I_SQRT_2PI * vcl_exp(-0.5 * x * x));
+  return x < -EXPLIMIT ||
+         x > EXPLIMIT ? 0.0f : float(vnl_math::one_over_sqrt2pi * vcl_exp(-0.5*x*x));
 }
