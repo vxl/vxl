@@ -44,7 +44,7 @@ namespace bvxm_ocp_compare_process_gloabals
 }
 
 //: set input and output types
-bool bvxm_ocp_compare_process_init(bprb_func_process& pro)
+bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_ocp_compare_process_gloabals;
   

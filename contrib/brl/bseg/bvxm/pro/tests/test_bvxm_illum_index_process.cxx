@@ -3,10 +3,9 @@
 // \brief  Test for getting a bin numbel from an illumination direction
 // \author Isabel Restrepo
 // \date   02/29/2008
-//
 
 #include <testlib/testlib_test.h>
-#include "../bvxm_illum_index_process.h"
+#include "../processes/bvxm_illum_index_process.cxx"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
@@ -19,6 +18,7 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 
 
 MAIN( test_bvxm_illum_index_process )
@@ -30,7 +30,7 @@ MAIN( test_bvxm_illum_index_process )
 
   // 1. Run process using Process Manager
   {
-    REG_PROCESS(bvxm_illum_index_process, bprb_batch_process_manager);
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_illum_index_process, "bvxmIllumIndexProcess");
     REGISTER_DATATYPE(unsigned);
 
     // set the inputs
@@ -84,63 +84,62 @@ MAIN( test_bvxm_illum_index_process )
     }
   }
 
-  // 2.Check indexing algorithm for a number of choises
+  //2.Check indexing algorithm for a number of choises
   {
-    bvxm_illum_index_process *p1 = new bvxm_illum_index_process();
-
+    using namespace bvxm_illum_index_process_globals;
      unsigned idx;
-     idx = p1->bin_index("eq_area",(180.0/8),0,2,0);
+     idx = bin_index("eq_area",(180.0/8),0,2,0);
        TEST("bin_idx", idx ,0);
 
-     idx = p1->bin_index("eq_area",(180.0/8),90.0,2,0);
+     idx = bin_index("eq_area",(180.0/8),90.0,2,0);
        TEST("bin_idx", idx ,0);
 
-     idx = p1->bin_index("eq_area",(180.0/8),180.0,2,0);
+     idx = bin_index("eq_area",(180.0/8),180.0,2,0);
        TEST("bin_idx", idx ,0);
 
-     idx = p1->bin_index("eq_area",(180.0/8),270.0,2,0);
+     idx = bin_index("eq_area",(180.0/8),270.0,2,0);
        TEST("bin_idx", idx ,0);
 
      //----
 
-     idx = p1->bin_index("eq_area",(90.0),0,2,0);
+     idx = bin_index("eq_area",(90.0),0,2,0);
        TEST("bin_idx", idx ,1);
 
-     idx = p1->bin_index("eq_area",(90.0),90.0,2,0);
+     idx = bin_index("eq_area",(90.0),90.0,2,0);
        TEST("bin_idx", idx ,1);
 
-     idx = p1->bin_index("eq_area",(90.0),180.0,2,0);
+     idx = bin_index("eq_area",(90.0),180.0,2,0);
        TEST("bin_idx", idx ,1);
 
-     idx = p1->bin_index("eq_area",(90.0),270.0,2,0);
-       TEST("bin_idx", idx ,1);
-
-         //----
-
-     idx = p1->bin_index("eq_area",(180.0/8),0,2,2);
-       TEST("bin_idx", idx ,0);
-
-     idx = p1->bin_index("eq_area",(180.0/8),90.0,2,2);
-       TEST("bin_idx", idx ,0);
-
-     idx = p1->bin_index("eq_area",(180.0/8),180.0,2,2);
-       TEST("bin_idx", idx ,1);
-
-     idx = p1->bin_index("eq_area",(180.0/8),270.0,2,2);
+     idx = bin_index("eq_area",(90.0),270.0,2,0);
        TEST("bin_idx", idx ,1);
 
          //----
 
-     idx = p1->bin_index("eq_area",90.0,0,2,2);
+     idx = bin_index("eq_area",(180.0/8),0,2,2);
+       TEST("bin_idx", idx ,0);
+
+     idx = bin_index("eq_area",(180.0/8),90.0,2,2);
+       TEST("bin_idx", idx ,0);
+
+     idx = bin_index("eq_area",(180.0/8),180.0,2,2);
+       TEST("bin_idx", idx ,1);
+
+     idx = bin_index("eq_area",(180.0/8),270.0,2,2);
+       TEST("bin_idx", idx ,1);
+
+         //----
+
+     idx = bin_index("eq_area",90.0,0,2,2);
        TEST("bin_idx", idx ,2);
 
-     idx = p1->bin_index("eq_area",90.0,90.0,2,2);
+     idx = bin_index("eq_area",90.0,90.0,2,2);
        TEST("bin_idx", idx ,2);
 
-     idx = p1->bin_index("eq_area",90.0,180.0,2,2);
+     idx = bin_index("eq_area",90.0,180.0,2,2);
        TEST("bin_idx", idx ,3);
 
-     idx = p1->bin_index("eq_area",90.0,270.0,2,2);
+     idx = bin_index("eq_area",90.0,270.0,2,2);
        TEST("bin_idx", idx ,3);
   }
 

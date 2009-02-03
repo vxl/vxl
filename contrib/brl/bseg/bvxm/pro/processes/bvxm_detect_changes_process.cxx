@@ -34,7 +34,7 @@ namespace bvxm_detect_changes_process_globals
 }
 
 //: initialize input and output types
-bool bvxm_detect_changes_process_init(bprb_func_process& pro)
+bool bvxm_detect_changes_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_detect_changes_process_globals;
   //process takes 6 inputs
@@ -172,4 +172,3 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -5,7 +5,6 @@
 // \date   02/23/2008
 //
 #include <testlib/testlib_test.h>
-#include "../bvxm_create_voxel_world_process.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
@@ -18,6 +17,7 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -26,7 +26,8 @@
 
 MAIN( test_bvxm_create_voxel_world_process )
 {
-  REG_PROCESS(bvxm_create_voxel_world_process, bprb_batch_process_manager);
+  DECLARE_FUNC_CONS(bvxm_create_voxel_world_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
 
   vcl_string test_dir("./create_world_test");

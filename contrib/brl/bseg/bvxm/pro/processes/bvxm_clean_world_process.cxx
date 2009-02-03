@@ -29,13 +29,17 @@ namespace bvxm_clean_world_process_globals
 }
 
 //:sets input and output types for bvxm_clean_world_process
-bool bvxm_clean_world_process_init(bprb_func_process& pro)
-{
+
+bool bvxm_clean_world_process_cons(bprb_func_process& pro)
+{  
   using namespace bvxm_clean_world_process_globals;
   //input[0]: The voxel world
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_.resize(1);
   input_types_[0] = "bvxm_voxel_world_sptr";
+  if(!pro.set_input_types(input_types_))
+    return false;
+  
   return true;
 };
 

@@ -5,9 +5,9 @@
 // \date   03/04/2008
 //
 #include <testlib/testlib_test.h>
-#include "../bvxm_normalize_image_process.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/pro/processes/bvxm_normalization_util.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -18,6 +18,8 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
+
 #include <vil/vil_save.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_float_3.h>
@@ -147,6 +149,16 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
 
 MAIN( test_bvxm_normalize_image_process )
 {
+  DECLARE_FUNC_CONS(bvxm_normalize_image_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_normalize_image_process, "bvxmNormalizeImageProcess");
+  REGISTER_DATATYPE(bvxm_voxel_world_sptr);
+  REGISTER_DATATYPE(vil_image_view_base_sptr);
+  REGISTER_DATATYPE(vpgl_camera_double_sptr);
+  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE(float);
+  REGISTER_DATATYPE(unsigned);
+  
+  
   unsigned ni = 640;
   unsigned nj = 480;
 
@@ -186,7 +198,7 @@ MAIN( test_bvxm_normalize_image_process )
   vil_image_view<float> img1(100, 200, 3), out_img(100, 200, 3), img2(100, 200, 3), im_dif(100, 200, 3);
   img1.fill(10);
   img2.fill(3*10 + 5);
-  normalize_image(img1, out_img, 3, 5, 255);
+  bvxm_normalization_util::normalize_image(img1, out_img, 3, 5, 255);
   vil_math_image_difference(img2, out_img, im_dif);
   float sum = 0;
   vil_math_sum(sum, im_dif, 0);
@@ -199,7 +211,7 @@ MAIN( test_bvxm_normalize_image_process )
   vil_image_view<float> img12(100, 200, 1), out_img2(100, 200, 1), img22(100, 200, 1), im_dif2(100, 200, 1);
   img12.fill(10);
   img22.fill(3*10 + 5);
-  normalize_image(img12, out_img2, 3, 5, 255);
+  bvxm_normalization_util::normalize_image(img12, out_img2, 3, 5, 255);
   vil_math_image_difference(img22, out_img2, im_dif2);
   vil_math_sum(sum, im_dif2, 0);
   TEST_NEAR("image dif 2 should sum to 0", sum, 0.0, 0.01);
@@ -266,17 +278,8 @@ MAIN( test_bvxm_normalize_image_process )
   //float bb = 0.0f;
 
   vil_image_view<unsigned char> expected_i_norm(*expected_image);
-  normalize_image(expected_i, expected_i_norm, aa, bb, 255);
+  bvxm_normalization_util::normalize_image(expected_i, expected_i_norm, aa, bb, 255);
   vil_save(expected_i_norm, "./expected_normed.png");
-
-  //: now test the process
-  REG_PROCESS(bvxm_normalize_image_process, bprb_batch_process_manager);
-  REGISTER_DATATYPE(bvxm_voxel_world_sptr);
-  REGISTER_DATATYPE(vil_image_view_base_sptr);
-  REGISTER_DATATYPE(vpgl_camera_double_sptr);
-  REGISTER_DATATYPE(vcl_string);
-  REGISTER_DATATYPE(float);
-  REGISTER_DATATYPE(unsigned);
 
   //: set the inputs
   vil_image_view_base_sptr expected_i_norm_sptr = new vil_image_view<unsigned char>(expected_i_norm);
@@ -295,7 +298,7 @@ MAIN( test_bvxm_normalize_image_process )
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
   good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
   good = good && bprb_batch_process_manager::instance()->set_input(4, v4);
-good = good && bprb_batch_process_manager::instance()->set_input(5, v5);
+ good = good && bprb_batch_process_manager::instance()->set_input(5, v5);
 
   good = good && bprb_batch_process_manager::instance()->run_process();
 

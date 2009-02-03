@@ -32,7 +32,7 @@ namespace bvxm_render_virtual_view_process_globals
 }
 
 //: set input and output types
-bool bvxm_render_virtual_view_process_init(bprb_func_process& pro)
+bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_render_virtual_view_process_globals;
   // process takes 6 inputs:

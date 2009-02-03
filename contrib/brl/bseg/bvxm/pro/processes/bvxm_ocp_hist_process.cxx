@@ -35,7 +35,7 @@ namespace bvxm_ocp_hist_process_globals
 }
 
 //: set input and output types
-bool bvxm_ocp_hist_process_init(bprb_func_process& pro)
+bool bvxm_ocp_hist_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_ocp_hist_process_globals;
   // This process has 2 inputs:

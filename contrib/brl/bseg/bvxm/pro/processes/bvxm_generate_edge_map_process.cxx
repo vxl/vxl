@@ -47,7 +47,7 @@ namespace bvxm_generate_edge_map_process_globals
 }
 
 //: initialize input and output types
-bool bvxm_generate_edge_map_process_init(bprb_func_process& pro)
+bool bvxm_generate_edge_map_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_generate_edge_map_process_globals;
   // process takes 1 input:

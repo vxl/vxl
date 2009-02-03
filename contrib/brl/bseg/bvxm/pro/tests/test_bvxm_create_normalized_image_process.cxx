@@ -5,10 +5,9 @@
 // \date   03/04/2008
 //
 #include <testlib/testlib_test.h>
-#include "../bvxm_create_normalized_image_process.h"
-#include "../bvxm_normalize_image_process.h"
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/pro/processes/bvxm_normalization_util.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -17,16 +16,19 @@
 #include <brdb/brdb_selection.h>
 
 #include <bprb/bprb_batch_process_manager.h>
-#include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 #include <vil/vil_math.h>
 
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
+//namespace bvxm_normalize_image_process_globals;
 
 MAIN( test_bvxm_create_normalized_image_process )
 {
+  
+   
   unsigned ni = 640;
   unsigned nj = 480;
 
@@ -51,7 +53,7 @@ MAIN( test_bvxm_create_normalized_image_process )
   vil_image_view<vxl_byte> img1(100, 200, 3), out_img(100, 200, 3), img2(100, 200, 3), im_dif(100, 200, 3);
   img1.fill(100);
   img2.fill((vxl_byte)(1.2*100 + 50));
-  normalize_image(img1, out_img, 1.2f, 50.0f, 255);
+  bvxm_normalization_util::normalize_image(img1, out_img, 1.2f, 50.0f, 255);
   vil_math_image_difference(img2, out_img, im_dif);
   float sum = 0;
   vil_math_sum(sum, im_dif, 0);
@@ -61,10 +63,11 @@ MAIN( test_bvxm_create_normalized_image_process )
   vil_math_sum(sum, im_dif, 2);
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 0.01);
 
-  //: now do the same thing via the process
-  REG_PROCESS(bvxm_create_normalized_image_process, bprb_batch_process_manager);
+     //now do the same thing via the process
+  DECLARE_FUNC_CONS(bvxm_create_normalized_image_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_normalized_image_process, "bvxmCreateNormalizedImageProcess");
   REGISTER_DATATYPE(vil_image_view_base_sptr);
-  REGISTER_DATATYPE(float);
+  REGISTER_DATATYPE(float);  
 
   //: set the inputs
   vil_image_view_base_sptr input_img1 = new vil_image_view<vxl_byte>(img1);
@@ -105,7 +108,7 @@ MAIN( test_bvxm_create_normalized_image_process )
   vil_math_sum(sum, im_dif, 2);
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 0.01);
 
-  //
+  
 
   SUMMARY();
 }

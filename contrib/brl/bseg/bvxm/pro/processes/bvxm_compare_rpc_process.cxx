@@ -40,7 +40,7 @@ namespace bvxm_compare_rpc_process_globals
 }
 
 //:sets input and output types for  bvxm_compare_rpc_process
-bool bvxm_compare_rpc_process_init(bprb_func_process& pro)
+bool bvxm_compare_rpc_process_cons(bprb_func_process& pro)
 {
 
   //set input types

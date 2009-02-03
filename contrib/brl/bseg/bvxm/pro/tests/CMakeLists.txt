@@ -1,5 +1,7 @@
 
 INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm )
+INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm/pro)
+INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm/pro/processes)
 
 ADD_EXECUTABLE( bvxm_pro_test_all
   test_driver.cxx

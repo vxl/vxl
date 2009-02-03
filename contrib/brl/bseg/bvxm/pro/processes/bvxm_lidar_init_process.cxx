@@ -77,7 +77,7 @@ namespace bvxm_lidar_init_process_globals
 }
 
 //: set input and output types
-bool bvxm_lidar_init_process_init(bprb_func_process& pro)
+bool bvxm_lidar_init_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_lidar_init_process_globals;
   
@@ -401,5 +401,3 @@ bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_fir
   }
   return true;
 }
-
-

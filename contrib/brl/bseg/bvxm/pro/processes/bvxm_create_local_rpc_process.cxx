@@ -35,7 +35,7 @@ namespace bvxm_create_local_rpc_process_globals
 }
 
 //: initialize input and output types
-bool bvxm_create_local_rpc_process_init(bprb_func_process& pro)
+bool bvxm_create_local_rpc_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_create_local_rpc_process_globals;
   // process takes 2 inputs:
@@ -44,11 +44,18 @@ bool bvxm_create_local_rpc_process_init(bprb_func_process& pro)
   vcl_vector<vcl_string>  input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
+  if (!pro.set_input_types(input_types_))
+    return false;
+      
 
   // process has 1 output:
   // output[0]: The local camera
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
+  
+  if (!pro.set_output_types(output_types_))
+    return false;
+  
   return true;
 }
 

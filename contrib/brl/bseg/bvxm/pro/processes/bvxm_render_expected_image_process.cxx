@@ -27,7 +27,7 @@ namespace bvxm_render_expected_image_process_globals
 }
 
 //: set input and output types
-bool bvxm_render_expected_image_process_init(bprb_func_process& pro)
+bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_render_expected_image_process_globals;
   

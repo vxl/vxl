@@ -46,7 +46,7 @@ namespace bvxm_change_detection_display_process_globals
 }
 
 //:sets input and output types for  bvxm_change_detection_display_process
-bool bvxm_change_detection_display_process_init(bprb_func_process& pro)
+bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_change_detection_display_process_globals;
 
@@ -189,4 +189,3 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<unsigned char>(output_image1));
   return true;
 }
-

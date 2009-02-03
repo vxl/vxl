@@ -149,7 +149,7 @@ namespace bvxm_gen_synthetic_world_process_globals
 }
 
 //:set input and output types
-bool bvxm_gen_synthetic_world_process_init(bprb_func_process& pro)
+bool bvxm_gen_synthetic_world_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_gen_synthetic_world_process_globals;
   //process has 1 output

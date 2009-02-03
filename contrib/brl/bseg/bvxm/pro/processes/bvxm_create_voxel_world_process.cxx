@@ -60,7 +60,7 @@ namespace bvxm_create_voxel_world_process_globals
 }
 
 //:sets input and output types 
-bool bvxm_create_voxel_world_process_init(bprb_func_process& pro)
+bool bvxm_create_voxel_world_process_cons(bprb_func_process& pro)
 {
   //set output types
   using namespace bvxm_create_voxel_world_process_globals;

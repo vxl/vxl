@@ -36,7 +36,7 @@ namespace bvxm_lidar_edge_detection_process_globals
 }
 
 //: set input and output types
-bool bvxm_lidar_edge_detection_process_init(bprb_func_process& pro)
+bool bvxm_lidar_edge_detection_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_lidar_edge_detection_process_globals;
   //this process takes 2 inputs:

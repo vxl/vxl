@@ -5,7 +5,6 @@
 // \date   03/06/2008
 //
 #include <testlib/testlib_test.h>
-#include "../bvxm_generate_edge_map_process.h"
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
@@ -17,6 +16,7 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -24,7 +24,8 @@
 
 MAIN( test_bvxm_generate_edge_map_process )
 {
-  REG_PROCESS(bvxm_generate_edge_map_process, bprb_batch_process_manager);
+  DECLARE_FUNC_CONS(bvxm_generate_edge_map_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_generate_edge_map_process, "bvxmGenerateEdgeMapProcess");
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
   // read the image and generate the input

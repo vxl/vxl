@@ -19,7 +19,7 @@
 #include <vcl_cmath.h>
 
 //: global variables
-namespace bvxm_illum_index_proces_globals
+namespace bvxm_illum_index_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
@@ -29,9 +29,9 @@ namespace bvxm_illum_index_proces_globals
 }
 
 //: set input and output types
-bool bvxm_illum_index_proces_init(bprb_func_process& pro)
+bool bvxm_illum_index_process_cons(bprb_func_process& pro)
 {
-  using namespace bvxm_illum_index_proces_globals;
+  using namespace bvxm_illum_index_process_globals;
   
   //inputs
   // 0: Map type :
@@ -58,9 +58,9 @@ bool bvxm_illum_index_proces_init(bprb_func_process& pro)
   return true;
 }
 
-bool bvxm_illum_index_proces(bprb_func_process& pro)
+bool bvxm_illum_index_process(bprb_func_process& pro)
 {
-  using namespace bvxm_illum_index_proces_globals;
+  using namespace bvxm_illum_index_process_globals;
 
   if(pro.n_inputs()<n_inputs_)
   {
@@ -121,7 +121,7 @@ bool bvxm_illum_index_proces(bprb_func_process& pro)
 
 
 unsigned 
-bvxm_illum_index_proces_globals::bin_index(vcl_string map_type,
+bvxm_illum_index_process_globals::bin_index(vcl_string map_type,
                                             double sun_el, double sun_az,
                                             unsigned num_lat, unsigned num_long)
 {
@@ -196,7 +196,3 @@ bvxm_illum_index_proces_globals::bin_index(vcl_string map_type,
 
   return bin_idx;
 }
-
-
-
-

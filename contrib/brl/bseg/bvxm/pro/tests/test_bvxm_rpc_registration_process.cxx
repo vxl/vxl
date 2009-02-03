@@ -5,7 +5,6 @@
 // \date   03/07/2008
 //
 #include <testlib/testlib_test.h>
-#include <bvxm/pro/bvxm_rpc_registration_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
@@ -17,6 +16,7 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -29,9 +29,12 @@
 
 #include <vul/vul_file.h>
 
+
 MAIN( test_bvxm_rpc_registration_process )
 {
-  REG_PROCESS(bvxm_rpc_registration_process, bprb_batch_process_manager);
+  DECLARE_FUNC_CONS(bvxm_rpc_registration_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_rpc_registration_process,"bvxmRpcRegistrationProcess");
+
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);

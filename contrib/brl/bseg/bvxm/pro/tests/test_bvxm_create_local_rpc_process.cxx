@@ -5,7 +5,7 @@
 // \date   03/14/2008
 //
 #include <testlib/testlib_test.h>
-#include "../bvxm_create_local_rpc_process.h"
+#include <bvxm/pro/processes/bvxm_create_local_rpc_process.cxx>
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
@@ -17,6 +17,7 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
@@ -28,7 +29,9 @@
 
 MAIN( test_bvxm_create_local_rpc_process )
 {
-  REG_PROCESS(bvxm_create_local_rpc_process, bprb_batch_process_manager);
+  DECLARE_FUNC_CONS(bvxm_create_local_rpc_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_local_rpc_process, "bvxmCreateLocalRpcProcess");
+  
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
 
