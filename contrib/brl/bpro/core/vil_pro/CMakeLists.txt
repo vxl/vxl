@@ -7,27 +7,14 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 SET(vil_pro_sources
     vil_io_image_view_base.h            vil_io_image_view_base.cxx
-    vil_load_image_view_process.h       vil_load_image_view_process.cxx
-    vil_save_image_view_process.h       vil_save_image_view_process.cxx
-    vil_map_image_process.h             vil_map_image_process.cxx
     vil_math_functors.h
-    vil_gaussian_process.h              vil_gaussian_process.cxx
-    vil_gradient_process.h              vil_gradient_process.cxx
-    vil_binary_image_op_process.h       vil_binary_image_op_process.cxx
-    vil_rgbi_to_grey_process.h          vil_rgbi_to_grey_process.cxx
-    vil_convert_to_n_planes_process.h   vil_convert_to_n_planes_process.cxx
-    vil_combine_grey_images_process.h   vil_combine_grey_images_process.cxx
-    vil_load_from_ascii_process.h       vil_load_from_ascii_process.cxx
-    vil_stretch_image_process.h         vil_stretch_image_process.cxx
-    vil_image_pair_process.h            vil_image_pair_process.cxx
-    vil_load_image_view_binary_process.h       vil_load_image_view_binary_process.cxx
-    vil_save_image_view_binary_process.h       vil_save_image_view_binary_process.cxx
-    vil_map_image_binary_process.h             vil_map_image_binary_process.cxx
-    vil_crop_image_process.h             vil_crop_image_process.cxx
     vil_register.h                       vil_register.cxx
+    vil_processes.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)
+
+AUX_SOURCE_DIRECTORY(processes vil_pro_sources)
 
 ADD_LIBRARY(vil_pro ${vil_pro_sources})
 
