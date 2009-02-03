@@ -93,25 +93,25 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\vpgl_load_proj_camera_process.cxx
+SOURCE=.\processes/vpgl_load_proj_camera_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_load_rational_camera_process.cxx
+SOURCE=.\processes/vpgl_load_rational_camera_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_load_perspective_camera_process.cxx
+SOURCE=.\processes/vpgl_load_perspective_camera_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_save_perspective_camera_process.cxx
+SOURCE=.\processes/vpgl_save_perspective_camera_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_load_rational_camera_nitf_process.cxx
+SOURCE=.\processes/vpgl_load_rational_camera_nitf_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_save_rational_camera_process.cxx
+SOURCE=.\processes/vpgl_save_rational_camera_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_nitf_camera_coverage_process.cxx
+SOURCE=.\processes/vpgl_nitf_camera_coverage_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_register.cxx
@@ -123,28 +123,10 @@ SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+vpgl_camera+double---.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\vpgl_load_proj_camera_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_load_rational_camera_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_load_perspective_camera_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_save_perspective_camera_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_load_rational_camera_nitf_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_save_rational_camera_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_nitf_camera_coverage_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\vpgl_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_processes.h
 # End Source File
 # End Group
 # End Target

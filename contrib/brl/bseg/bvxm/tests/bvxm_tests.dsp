@@ -218,7 +218,6 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_apm_processors.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_gen_synthetic_world.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_voxel_grid.cxx

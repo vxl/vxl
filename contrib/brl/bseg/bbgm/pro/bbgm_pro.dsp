@@ -126,30 +126,6 @@ SOURCE=.\Templates/brdb_value_t+bbgm_image_sptr-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\processes/bbgm_display_dist_image_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bbgm_load_image_of_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bbgm_measure_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bbgm_save_image_of_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bbgm_update_dist_image_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bbgm_update_dist_image_stream_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bbgm_local_frame_trans_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bbgm_update_parzen_dist_image_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\bbgm_processes.h
 # End Source File
 # Begin Source File
