@@ -13,10 +13,6 @@
 // 23 April 2001 IMS - Ported to VXL
 // \endverbatim
 
-//=======================================================================
-// inclusions
-//=======================================================================
-
 #include "vpdfl_pc_gaussian_builder.h"
 
 #include <vcl_string.h>
@@ -328,8 +324,9 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 // for the dataset. The method may use simplified algorithms if
 // you indicate that the number of samples or noise floor is unknown
 // (by setting the latter parameters to 0.)
-unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& eVals, unsigned /*nSamples*/ /*=0*/,
-  double /*noise*/ /*=0.0*/) const
+unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& eVals,
+                                                     unsigned /*nSamples =0*/,
+                                                     double   /*noise =0.0*/) const
 {
   assert (eVals.size() > 0);
   if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed)
@@ -353,7 +350,7 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   else
   {
     vcl_cerr << "vpdfl_pc_gaussian_builder::decide_partition(): Unexpected partition method: "
-             << (short)partitionMethod_ <<vcl_endl;
+             << (short)partitionMethod_ << '\n';
     vcl_abort();
     return 0;
   }
@@ -379,10 +376,10 @@ void vpdfl_pc_gaussian_builder::config_from_stream(vcl_istream & is)
 
   if (props.find("mode_choice")!=props.end())
   {
-    if (props["mode_choice"]=="fixed") 
+    if (props["mode_choice"]=="fixed")
       partitionMethod_=fixed;
     else
-    if (props["mode_choice"]=="proportionate") 
+    if (props["mode_choice"]=="proportionate")
       partitionMethod_=proportionate;
     else
     {
@@ -422,7 +419,6 @@ void vpdfl_pc_gaussian_builder::config_from_stream(vcl_istream & is)
   {
     throw mbl_exception_parse_error(e.what());
   }
-
 }
 
 
@@ -469,10 +465,10 @@ void vpdfl_pc_gaussian_builder::print_summary(vcl_ostream& os) const
 {
   vpdfl_gaussian_builder::print_summary(os);
   if (partitionMethod_==fixed) os<<" mode_choice: fixed ";
-  if (partitionMethod_==proportionate) 
+  if (partitionMethod_==proportionate)
     os<<" mode_choice: proportionate ";
-  os<<" var_prop: "<<proportionOfVariance_;
-  os<<" n_fixed: "<<fixed_partition_<<' ';
+  os<<" var_prop: "<<proportionOfVariance_
+    <<" n_fixed: "<<fixed_partition_<<' ';
 }
 
 //=======================================================================
@@ -503,7 +499,7 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
   {
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
              << "           Attempted to load object of type "
-             << name <<" into object of type " << is_a() << vcl_endl;
+             << name <<" into object of type " << is_a() << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -529,7 +525,7 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
