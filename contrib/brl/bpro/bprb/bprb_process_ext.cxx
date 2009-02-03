@@ -21,7 +21,9 @@ bool bprb_process_ext::set_output_types(vcl_vector<vcl_string> const& types)
 
 bool bprb_process_ext::set_output(unsigned i, brdb_value_sptr val)
 {
-  if (output_data_.size() < i)
+  // use assert, because the boolean output doesn't seem to be checked
+  assert(output_data_.size() > i);
+  if (output_data_.size() <= i)
     return false;
 
   output_data_[i] = val;
