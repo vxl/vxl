@@ -1,38 +1,23 @@
-#include "brec_register.h"
-#include "brec_update_changes_process.h"
-#include "brec_density_to_prob_map_process.h"
-#include "brec_prob_map_roc_compute_process.h"
-#include "brec_prob_map_threshold_process.h"
-#include "brec_recognize_structure_process.h"
-#include "brec_prob_map_supress_process.h"
-#include "brec_prob_map_area_process.h"
-#include "brec_change_area_process.h"
-#include "brec_bayesian_update_process.h"
-#include "brec_glitch_process.h"
-#include "brec_glitch_overlay_process.h"
-#include "brec_create_mog_image_process.h"
+#include "bmdl_register.h"
 
 #include <bprb/bprb_macros.h>
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
+#include <bprb/bprb_func_process.h>
 
-void brec_register::register_datatype()
+#include "bmdl_processes.h"
+
+void bmdl_register::register_datatype()
 {
 }
 
-void brec_register::register_process()
+void bmdl_register::register_process()
 {
-  REG_PROCESS(brec_update_changes_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_prob_map_roc_compute_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_density_to_prob_map_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_recognize_structure_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_prob_map_threshold_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_prob_map_supress_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_prob_map_area_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_change_area_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_bayesian_update_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_glitch_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_glitch_overlay_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_create_mog_image_process, bprb_batch_process_manager);
+  REG_PROCESS_FUNC_INIT_FINALIZE(bprb_func_process, bprb_batch_process_manager, bmdl_classify_process, 
+    "bmdlClassifyProcess", bmdl_classify_process_init, 0);
+  REG_PROCESS_FUNC_INIT_FINALIZE(bprb_func_process, bprb_batch_process_manager, bmdl_trace_boundaries_process, 
+    "bmdlTraceBoundariesProcess", bmdl_trace_boundaries_process_init, 0);
+  REG_PROCESS_FUNC_INIT_FINALIZE(bprb_func_process, bprb_batch_process_manager, bmdl_generate_mesh_process, 
+    "bmdlGenerateMeshProcess", bmdl_generate_mesh_process_init, 0);
+  REG_PROCESS_FUNC_INIT_FINALIZE(bprb_func_process, bprb_batch_process_manager, bmdl_lidar_roi_process, 
+    "bmdlLidarRoiProcess", bmdl_lidar_roi_process_init, 0);
 }
-

@@ -10,21 +10,13 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
 
 SET(brec_pro_sources
-    brec_update_changes_process.h  brec_update_changes_process.cxx
-    brec_density_to_prob_map_process.h  brec_density_to_prob_map_process.cxx
-    brec_prob_map_roc_compute_process.h         brec_prob_map_roc_compute_process.cxx
-    brec_prob_map_threshold_process.h         brec_prob_map_threshold_process.cxx
-    brec_recognize_structure_process.h  brec_recognize_structure_process.cxx
-    brec_prob_map_supress_process.h         brec_prob_map_supress_process.cxx
-    brec_prob_map_area_process.h         brec_prob_map_area_process.cxx
-    brec_change_area_process.h         brec_change_area_process.cxx
-    brec_bayesian_update_process.h  brec_bayesian_update_process.cxx
-    brec_glitch_process.h  brec_glitch_process.cxx
-    brec_glitch_overlay_process.h  brec_glitch_overlay_process.cxx
-    brec_save_mog_image_process.h         brec_save_mog_image_process.cxx
-    brec_create_mog_image_process.h       brec_create_mog_image_process.cxx
     brec_register.h                       brec_register.cxx
+    brec_processes.h
 )
+
+AUX_SOURCE_DIRECTORY(Templates brec_pro_sources)
+
+AUX_SOURCE_DIRECTORY(processes brec_pro_sources)
 
 ADD_LIBRARY(brec_pro ${brec_pro_sources})
 
