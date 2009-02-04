@@ -5,11 +5,13 @@
 #include <bprb/bprb_func_process.h>
 #include "bvxm_processes.h"
 #include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_voxel_slab_base.h>
 
 
 void bvxm_register::register_datatype()
 {
   REGISTER_DATATYPE( bvxm_voxel_world_sptr );
+  REGISTER_DATATYPE( bvxm_voxel_slab_base_sptr );
 }
 
 void bvxm_register::register_process()
