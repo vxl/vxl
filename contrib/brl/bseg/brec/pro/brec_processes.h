@@ -1,19 +1,36 @@
-#ifndef bmdl_processes_h_
-#define bmdl_processes_h_
+#ifndef brec_processes_h_
+#define brec_processes_h_
 
+#include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-// execute functions
-bool bmdl_lidar_roi_process(bprb_func_process& pro);
-bool bmdl_classify_process(bprb_func_process& pro);
-bool bmdl_generate_mesh_process(bprb_func_process& pro);
-bool bmdl_trace_boundaries_process(bprb_func_process& pro);
+// execute and const functions
+DECLARE_FUNC_CONS(brec_bayesian_update_process);
+DECLARE_FUNC_CONS(brec_change_area_process);
+DECLARE_FUNC_CONS(brec_create_mog_image_process);
+DECLARE_FUNC_CONS(brec_density_to_prob_map_process);
+DECLARE_FUNC_CONS(brec_glitch_overlay_process);
+DECLARE_FUNC_CONS(brec_glitch_process);
+DECLARE_FUNC_CONS(brec_prob_map_area_process);
+DECLARE_FUNC_CONS(brec_prob_map_roc_compute_process);
+DECLARE_FUNC_CONS(brec_prob_map_supress_process);
+DECLARE_FUNC_CONS(brec_prob_map_threshold_process);
+DECLARE_FUNC_CONS(brec_update_changes_process);
+DECLARE_FUNC_CONS(brec_recognize_structure_process);
 
-// init functions
-bool bmdl_lidar_roi_process_init(bprb_func_process& pro);
-bool bmdl_classify_process_init(bprb_func_process& pro);
-bool bmdl_generate_mesh_process_init(bprb_func_process& pro);
-bool bmdl_trace_boundaries_process_init(bprb_func_process& pro);
-//bool bmdl_modeling_process(bprb_func_process& pro);
+#if 0
+DECLARE_FUNC_CONS(brec_recognize_structure2_process);
+DECLARE_FUNC_CONS(brec_construct_bg_op_models_process);
+DECLARE_FUNC_CONS(brec_construct_fg_op_models_process);
+DECLARE_FUNC_CONS(brec_create_hierarchy_process);
+DECLARE_FUNC_CONS(brec_load_hierarchy_process);
+DECLARE_FUNC_CONS(brec_save_hierarchy_process);
 
+DECLARE_FUNC_CONS(brec_learner_layer0_init_process);
+DECLARE_FUNC_CONS(brec_learner_layer0_fit_process);
+DECLARE_FUNC_CONS(brec_learner_layer0_rank_process);
+DECLARE_FUNC_CONS(brec_learner_layer0_update_posterior_stats_process);
+DECLARE_FUNC_CONS(brec_learner_layer0_update_stats_process);
 #endif
+
+#endif  // brec_processes_h_

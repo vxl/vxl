@@ -1,11 +1,11 @@
-#ifndef bmdl_register_h_
-#define bmdl_register_h_
+#ifndef brec_register_h_
+#define brec_register_h_
 
-class bmdl_register
+class brec_register
 {
  public:
   static void register_datatype();
   static void register_process();
 };
 
-#endif
+#endif  // brec_register_h
