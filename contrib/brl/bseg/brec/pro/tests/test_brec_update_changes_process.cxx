@@ -5,7 +5,7 @@
 // \date   Oct 03, 2008
 //
 #include <testlib/testlib_test.h>
-#include "../brec_update_changes_process.h"
+
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/pro/bvxm_gen_synthetic_world_process.h>
@@ -336,10 +336,14 @@ MAIN( test_brec_update_changes_process )
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
-  // call bvxmGenSyntheticWorldProcess process to generate a synthetic world with two boxes
-  REG_PROCESS(bvxm_gen_synthetic_world_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_update_changes_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_detect_changes_process, bprb_batch_process_manager);
+  DECLARE_FUNC_CONS(bvxm_gen_synthetic_world_process);
+  DECLARE_FUNC_CONS(brec_update_changes_process);
+  DECLARE_FUNC_CONS(bvxm_detect_changes_process);
+
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_gen_synthetic_world_process, "bvxmGenSyntheticWorldProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_update_changes_process, "brecUpdateChangesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_changes_process, "bvxmDetectChangesProcess");
+  
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);

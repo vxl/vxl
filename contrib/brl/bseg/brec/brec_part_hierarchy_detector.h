@@ -16,6 +16,8 @@
 #include "brec_part_hierarchy.h"
 #include "brec_part_hierarchy_sptr.h"
 
+#include <vbl/vbl_ref_count.h>
+
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_view.h>
 
@@ -93,7 +95,7 @@ typedef rtree_brec_instance_box_2d<float> C_type; // the helper class
 typedef vgl_rtree<V_type, B_type, C_type> Rtree_type;
 typedef vgl_rtree_polygon_probe<V_type, B_type, C_type> Probe_type;
 
-class brec_part_hierarchy_detector 
+class brec_part_hierarchy_detector : public vbl_ref_count
 {
  public:
 
@@ -103,8 +105,17 @@ class brec_part_hierarchy_detector
   //: check for existency of upper_p with central_p as its central part and map will tell if all the other parts exist
   brec_part_instance_sptr exists(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, unsigned ni, unsigned nj, Rtree_type* lower_rtree, float det_threshold);
 
+  //: check for existency of upper_p with central_p as its central part and map will tell if all the other parts exist
+  //  no thresholding, return a probabilistic score 
+  brec_part_instance_sptr exists(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, Rtree_type* lower_rtree);
+
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
   void extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, unsigned ni, unsigned nj, Rtree_type* extracted_parts_rtree,
+    vcl_vector<brec_part_instance_sptr>& extracted_upper_parts);
+
+  //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
+  //  no thresholding, return a probabilistic score 
+  void extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, Rtree_type* extracted_parts_rtree,
     vcl_vector<brec_part_instance_sptr>& extracted_upper_parts);
 
   //: extracts instances of each layer in the given image
@@ -113,8 +124,17 @@ class brec_part_hierarchy_detector
   //: extracts instances of each layer in the given image, by rotating the detector with the given amount
   bool detect(vil_image_resource_sptr img, float angle);
 
+  //: extracts instances of each layer in the given image, by rotating the detector with the given amount
+  //  assumes that training is complete and a training directory path is set accordingly in h_
+  //  reads response model parameters for each primitive from this training directory
+  bool detect_using_trained_response_models(vil_image_view<float>& img, vil_image_view<float>& prob_img, float angle);
+
+  bool detect_for_training(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask);
+
   vcl_vector<brec_part_instance_sptr>& get_parts(unsigned layer) { return map_instance_[layer]; }
   Rtree_type* get_tree(unsigned layer) { return map_rtree_[layer]; }
+
+  brec_part_hierarchy_sptr get_hierarchy() { return h_; }
 
  protected:
   brec_part_hierarchy_sptr h_;
@@ -125,5 +145,11 @@ class brec_part_hierarchy_detector
   //: map each layer to an rtree of its instances
   vcl_map<unsigned, Rtree_type*> map_rtree_;
 };
+
+//: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_detector as a brdb_value
+void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy_detector const &hl);
+void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy_detector &hl);
+void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy_detector* hl);
+void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_detector* &hl);
 
 #endif  //brec_part_hierarchy_detector_h_

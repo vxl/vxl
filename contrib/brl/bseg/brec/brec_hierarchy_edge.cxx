@@ -11,6 +11,9 @@
 #include <bxml/bxml_find.h>
 #include <vcl_cmath.h>
 
+#include <vnl/vnl_cross_product_matrix.h>
+#include <vnl/vnl_double_3.h>
+
 float
 //brec_hierarchy_edge::prob_density(const vnl_vector_fixed<float,2>& pt)
 brec_hierarchy_edge::prob_density(const float dist, const float angle)
@@ -84,6 +87,21 @@ brec_hierarchy_edge::calculate_dist_angle(brec_part_instance_sptr pi, vnl_vector
   dist = (float)dif_to_center.magnitude();
   vnl_vector_fixed<float, 2> v1_hat = dif_to_center.normalize();
   angle = (float)vcl_acos(dot_product(v, v1_hat));
+
+  //: if angle is ~ 180 degrees return a positive angle
+  if ((vcl_abs(angle-vnl_math::pi) < 0.17) || (angle < 0.17))  // allow for a 10 degree interval around 180 degrees and 0 degree
+    return;
+
+  //: now we want this angle positive or negative, depending on which side of v does v1 lie
+  vnl_double_3 v_3(v[0], v[1], 0.0);
+  vnl_double_3 v1_hat_3(v1_hat[0], v1_hat[1], 0.0);
+
+  vnl_double_3x3 V = vnl_cross_product_matrix(v_3);
+
+  vnl_double_3 v_v1_hat = V*v1_hat_3;
+  if (v_v1_hat[2] < 0)
+    angle = -angle;  // negate the angle
+
   return;
 }
 

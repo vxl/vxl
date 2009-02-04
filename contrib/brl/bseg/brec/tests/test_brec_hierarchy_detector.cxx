@@ -26,6 +26,8 @@
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_float_2.h>
 #include <vnl/vnl_float_3.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_cross_product_matrix.h>
 
 static void test_brec_hierarchy_detector()
 {
@@ -199,6 +201,24 @@ static void test_brec_hierarchy_detector()
   vcl_cout << " direction vector after rotation by 90 degrees 0: " << out[0] << " 1: " << out[1] << " 2: " << out[2] << vcl_endl;
   vnl_float_3 out_dist = out*5.0f;
   vcl_cout << " direction vector after scaling by 5: " << out_dist[0] << " 1: " << out_dist[1] << vcl_endl;
+
+  //: test orientation detection using cross_product
+  vnl_vector_fixed<float, 2> vv(0.7f, -0.7f);
+  vnl_vector_fixed<float, 2> vv1(1.0f, 2.0f);
+  vnl_vector_fixed<float, 2> vv2(-1.0f, -2.0f);
+
+  vnl_vector_fixed<float, 2> vv1_hat = vv1.normalize();
+  vnl_vector_fixed<float, 2> vv2_hat = vv2.normalize();
+
+  vnl_double_3 vv_3(vv[0], vv[1], 0.0);
+  vnl_double_3 vv1_hat_3(vv1_hat[0], vv1_hat[1], 0.0);
+  vnl_double_3 vv2_hat_3(vv2_hat[0], vv2_hat[1], 0.0);
+
+  vnl_double_3x3 VV = vnl_cross_product_matrix(vv_3);
+
+  vnl_double_3 vv_vv1_hat = VV*vv1_hat_3;
+  vnl_double_3 vv_vv2_hat = VV*vv2_hat_3;
+
 }
 
 TESTMAIN( test_brec_hierarchy_detector );

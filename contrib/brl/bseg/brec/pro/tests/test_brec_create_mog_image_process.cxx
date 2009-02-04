@@ -5,18 +5,16 @@
 // \date   Oct 03, 2008
 //
 #include <testlib/testlib_test.h>
-#include "../brec_update_changes_process.h"
+
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
-#include <bvxm/pro/bvxm_gen_synthetic_world_process.h>
-#include <bvxm/pro/bvxm_render_expected_image_process.h>
-#include <bvxm/pro/bvxm_detect_changes_process.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_macros.h>
@@ -33,7 +31,7 @@
 #include <vgl/vgl_box_2d.h>
 
 #include <brec/brec_bg_pair_density.h>
-#include <brec/pro/brec_create_mog_image_process.h>
+
 //#include <bbgm/pro/bbgm_save_image_of_process.h>
 //#include <bbgm/pro/bbgm_display_dist_image_process.h>
 #include <bbgm/pro/bbgm_processes.h>

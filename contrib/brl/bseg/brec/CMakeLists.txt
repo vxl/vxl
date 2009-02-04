@@ -26,14 +26,17 @@ SET(brec_sources
     brec_hierarchy_edge_sptr.h
     brec_part_hierarchy_builder.h    brec_part_hierarchy_builder.cxx
     brec_part_hierarchy_detector.h    brec_part_hierarchy_detector.cxx
+    brec_part_hierarchy_detector_sptr.h
     brec_glitch.h    brec_glitch.cxx
+    brec_part_hierarchy_learner.h    brec_part_hierarchy_learner.cxx
+    brec_part_hierarchy_learner_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates brec_sources)
 
 ADD_LIBRARY(brec ${brec_sources})
 
-TARGET_LINK_LIBRARIES(brec bvxm bsta_algo bgrl2 bsta bvgl bxml vil brip vgl_algo)
+TARGET_LINK_LIBRARIES(brec bvxm bbgm bsta_algo bgrl2 bsta bvgl bxml vil brip vgl_algo)
 
 SUBDIRS( pro )
 

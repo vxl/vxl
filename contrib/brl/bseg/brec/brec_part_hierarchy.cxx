@@ -69,6 +69,46 @@ brec_part_hierarchy::generate_output_map(vcl_vector<brec_part_instance_sptr>& ex
   }
 }
 
+//: generate a float map with strengths and receptive fields marked
+// return the values as they are 
+void
+brec_part_hierarchy::generate_output_map2(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
+{
+  map.fill(0.0f);
+
+  for (unsigned i = 0; i < extracted_parts.size(); ++i) {
+    brec_part_instance_sptr p = extracted_parts[i];
+    p->mark_receptive_field(map, p->strength_);
+  }
+}
+
+//: generate a float map with strengths and receptive fields marked
+// stretch the values to be used for imaging
+void
+brec_part_hierarchy::generate_output_map3(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
+{
+  map.fill(0.0f);
+
+  // find the mean value and stretch the values onto [0, mean];
+  float mean = 0.0f; 
+  /*
+  for (unsigned i = 0; i < extracted_parts.size(); ++i) {
+    brec_part_instance_sptr p = extracted_parts[i];
+    mean += p->strength_;
+  }
+  mean /= extracted_parts.size();
+  */
+  mean = 1.0f-0.99999995f; // we want to see all the detections, this value is the smallest threshold used to create the ROC
+
+  for (unsigned i = 0; i < extracted_parts.size(); ++i) {
+    brec_part_instance_sptr p = extracted_parts[i];
+    if (p->strength_ > mean)
+      p->mark_receptive_field(map, 1.0f);
+    else 
+      p->mark_receptive_field(map, p->strength_/mean);
+  }
+}
+
 //: output_img needs to have 3 planes
 void
 brec_part_hierarchy::generate_output_img(vcl_vector<brec_part_instance_sptr>& extracted_parts,
@@ -233,6 +273,8 @@ void brec_part_hierarchy::write_xml(vcl_ostream& os)
   bxml_element * root = new bxml_element("hierarchy");
   doc.set_root_element(root);
   root->append_text("\n");
+  root->set_attribute("name", name_);
+  root->set_attribute("model_dir", model_dir_);
 
   bxml_element * prims = new bxml_element("primitive_instances");
   prims->append_text("\n");
@@ -295,6 +337,11 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
     return false;
   }
 
+  bxml_element* re = (bxml_element*)hierarchy_root.ptr();
+  re->get_attribute("name", name_);
+  vcl_cout << "reading hierarchy with name: " << name_ << vcl_endl;
+  re->get_attribute("model_dir", model_dir_);
+
   bxml_element query2("primitive_instances");
   bxml_data_sptr prims_root = bxml_find_by_name(hierarchy_root, query2);
 
@@ -304,6 +351,7 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
   }
 
   bxml_element* pe = (bxml_element*)prims_root.ptr();
+  
   for (bxml_element::const_data_iterator it = pe->data_begin(); it != pe->data_end(); it++) {
     if ((*it)->type() != bxml_data::ELEMENT)
       continue;
@@ -378,8 +426,48 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
     ((bxml_element*)(r.ptr()))->get_attribute("target", target_id);
     e->set_source(vert_map[source_id]);
     e->set_target(vert_map[target_id]);
+    vert_map[source_id]->add_outgoing_edge(e);
+    vert_map[target_id]->add_incoming_edge(e);
     this->add_edge_no_check(e);
   }
 
   return true;
 }
+
+//: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
+void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy const &ph)
+{
+  vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  return;
+}
+void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy &ph)
+{
+  vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  return;
+}
+void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy* ph)
+{
+  delete ph;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+  {
+    ph = new brec_part_hierarchy();
+    vsl_b_read(is, *ph);
+  }
+  else
+    ph = 0;
+}
+void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy* &ph)
+{
+  if (ph==0)
+  {
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else
+  {
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    vsl_b_write(os,*ph);
+  }
+}
+

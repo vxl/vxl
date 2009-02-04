@@ -21,6 +21,7 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_binary_io.h>
 
 class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_edge>
 {
@@ -32,6 +33,10 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
   static void generate_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vcl_vector<vcl_vector<brec_part_instance_sptr> >& map);
   //: generate a float map with normalized strengths and receptive fields marked
   static void generate_output_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
+  static void generate_output_map2(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
+  //: stretch the values to be used for imaging
+  static void generate_output_map3(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
+
   //: output_img needs to have 3 planes
   static void generate_output_img(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<vxl_byte>& input_img, vil_image_view<vxl_byte>& output_img);
 
@@ -47,11 +52,30 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
 
   unsigned highest_layer_id();
 
+  //: name will be used to create training directories
+  void set_name(vcl_string name) { name_ = name; }
+  vcl_string name() { return name_; }
+
+  void set_model_dir(vcl_string dir) { model_dir_ = dir; }
+  vcl_string model_dir() { return model_dir_; }
+
   void write_xml(vcl_ostream& os);
   bool read_xml(vcl_istream& is);
 
   //: a map to store dummy instances of primitive parts, so that they could be extracted properly for a constructed hierarchy
   vcl_vector<brec_part_instance_sptr> dummy_primitive_instances_;
+  
+  vcl_string name_;
+  
+  //: after constructing the background and foreground response models for the primitive instances,
+  //  the name of the directory to load these models should be saved in the hierarchy
+  vcl_string model_dir_;
 };
+
+//: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
+void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy const &ph);
+void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy &ph);
+void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy* ph);
+void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy* &ph);
 
 #endif  //brec_part_hierarchy_h_

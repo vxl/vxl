@@ -135,6 +135,7 @@ bool brec_part_hierarchy_builder::construct_layer_candidates(unsigned layer_n, b
 brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_vehicle_detector()
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("roi1_vehicle");
 
   // LAYER 0: two primitives:
   brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=1.0,lambda1=1.0,theta=0,bright=true)
@@ -186,6 +187,8 @@ brec_part_hierarchy_sptr
 brec_part_hierarchy_builder::construct_detector_roi1_0()
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("roi1_vehicle0");
+  h->set_model_dir(".\\hierarchy_output_roi1_vehicle0\\");
 
   // LAYER 0: two primitives:
   brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=2.0,lambda1=1.0,theta=-45,bright=true)
@@ -223,8 +226,10 @@ brec_part_hierarchy_builder::construct_detector_roi1_0()
   float a1, a2, d1, d2;
   e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample1, d1, a1);
   e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample2, d2, a2);
-  e_1_0_to_second->set_min_stand_dev_angle(30.0f);
-  e_1_0_to_second->set_min_stand_dev_dist(3.0f);
+  //e_1_0_to_second->set_min_stand_dev_angle(30.0f);
+  e_1_0_to_second->set_min_stand_dev_angle(10.0f);
+  //e_1_0_to_second->set_min_stand_dev_dist(3.0f);
+  e_1_0_to_second->set_min_stand_dev_dist(1.0f);
   e_1_0_to_second->update_dist_model(d1);
   e_1_0_to_second->update_dist_model(d2);
   e_1_0_to_second->update_angle_model(a1);
@@ -242,8 +247,10 @@ brec_part_hierarchy_builder::construct_detector_roi1_0()
   // calculate angle and dists for these two samples
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample3, d1, a1);
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample4, d2, a2);
-  e_1_0_to_third->set_min_stand_dev_angle(30.0f);
-  e_1_0_to_third->set_min_stand_dev_dist(3.0f);
+  //e_1_0_to_third->set_min_stand_dev_angle(30.0f);
+  e_1_0_to_third->set_min_stand_dev_angle(10.0f);
+  //e_1_0_to_third->set_min_stand_dev_dist(3.0f);
+  e_1_0_to_third->set_min_stand_dev_dist(1.0f);
   e_1_0_to_third->update_dist_model(d1);
   e_1_0_to_third->update_dist_model(d2);
   e_1_0_to_third->update_angle_model(a1);
@@ -259,6 +266,8 @@ brec_part_hierarchy_sptr
 brec_part_hierarchy_builder::construct_detector_roi1_1()
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("roi1_vehicle1");
+  h->set_model_dir(".\\hierarchy_output_roi1_vehicle1\\");
 
   // LAYER 0: two primitives:
   brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=2.0,lambda1=1.0,theta=-45,bright=true)
@@ -314,7 +323,9 @@ brec_part_hierarchy_builder::construct_detector_roi1_1()
   e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample2, d2, a2);
   e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample3, d3, a3);
   e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample4, d4, a4);
-  e_1_0_to_second->set_min_stand_dev_dist(10.0f); // 10 pixels
+  //e_1_0_to_second->set_min_stand_dev_dist(10.0f); // 10 pixels
+  e_1_0_to_second->set_min_stand_dev_dist(1.0f); // 10 pixels
+  //e_1_0_to_second->set_min_stand_dev_angle(10.0f); // 10 degrees
   e_1_0_to_second->set_min_stand_dev_angle(10.0f); // 10 degrees
   e_1_0_to_second->update_dist_model(d1);
   e_1_0_to_second->update_dist_model(d2);
@@ -342,7 +353,9 @@ brec_part_hierarchy_builder::construct_detector_roi1_1()
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample2, d2, a2);
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample3, d3, a3);
   e_1_0_to_third->calculate_dist_angle(pi_0_0->cast_to_instance(), sample4, d4, a4);
-  e_1_0_to_third->set_min_stand_dev_dist(10.0f); // 10 pixels
+  //e_1_0_to_third->set_min_stand_dev_dist(10.0f); // 10 pixels
+  e_1_0_to_third->set_min_stand_dev_dist(1.0f); // 10 pixels
+  //e_1_0_to_third->set_min_stand_dev_angle(10.0f); // 10 degrees
   e_1_0_to_third->set_min_stand_dev_angle(10.0f); // 10 degrees
   e_1_0_to_third->update_dist_model(d1);
   e_1_0_to_third->update_dist_model(d2);
@@ -362,6 +375,7 @@ brec_part_hierarchy_sptr
 brec_part_hierarchy_builder::construct_detector_roi1_2()
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("roi1_road_side");
 
   // LAYER 0: one primitive:
   brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=3.0,lambda1=1.0,theta=-45,bright=true)
@@ -477,6 +491,7 @@ brec_part_hierarchy_sptr
 brec_part_hierarchy_builder::construct_detector_roi1_3()
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("roi1_building3");
 
   // LAYER 0: two primitives:
   brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=5.0,lambda1=2.5,theta=-40,bright=true)
@@ -552,6 +567,7 @@ brec_part_hierarchy_sptr
 brec_part_hierarchy_builder::construct_detector_roi1_4()
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("roi1_building4");
 
   // LAYER 0: two primitives:
   brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=4.0,lambda1=2.0,theta=-40,bright=true)
@@ -629,6 +645,7 @@ brec_part_hierarchy_builder::construct_eight_detector()
 {
   // construct a hierarchy by hand starting from the primitives, construct one to recognize 8
   brec_part_hierarchy_sptr h_8 = new brec_part_hierarchy();
+  h_8->set_name("eight_detector");
 
   //  a hierarchy tells us what types of parts are there at each level in an abstract way (they are not instantiated)
 
@@ -693,3 +710,116 @@ brec_part_hierarchy_builder::construct_eight_detector()
   return h_8;
 }
 
+// a detector with one primitive part only
+brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_test_detector()
+{
+  brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("test_detector");
+
+  //: LAYER 0: one primitive:
+  brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=2.0,lambda1=1.0,theta=-45,bright=true)
+  h->add_vertex(p_0_0);
+  //: create a dummy instance from each and add to h
+  brec_part_gaussian_sptr pi_0_0 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, true, 0);
+  //brec_part_gaussian_sptr pi_0_0 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, false, 0);
+  pi_0_0->detection_threshold_ = 0.0001f;
+  h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
+  
+  return h;
+}
+
+brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_mi_detector()
+{
+  brec_part_hierarchy_sptr h = new brec_part_hierarchy();
+  h->set_name("mi_detector");
+
+  //: LAYER 0: two primitive:
+  brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=2.0,lambda1=2.0,theta=0,bright=false)
+  h->add_vertex(p_0_0);
+  
+  brec_part_base_sptr p_0_1 = new brec_part_base(0, 1);  // (lambda0=5.0,lambda1=1.0,theta=0,bright=false)
+  h->add_vertex(p_0_1);
+  
+  //: create a dummy instance from each and add to h
+  brec_part_gaussian_sptr pi_0_0 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 2.0f, 0.0f, false, 0);
+  brec_part_gaussian_sptr pi_0_1 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 5.0f, 1.0f, 0.0f, false, 1);
+  
+  pi_0_0->detection_threshold_ = 0.6f;
+  pi_0_1->detection_threshold_ = 0.6f;
+  h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
+  h->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
+
+  // LAYER 1: two layer 1 parts
+  brec_part_base_sptr p_1_0 = new brec_part_base(1, 0);
+  h->add_vertex(p_1_0);
+  p_1_0->detection_threshold_ = 0.1f;
+  // the first child becomes the central part, create an edge to the central part
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0);
+  p_1_0->add_outgoing_edge(e_1_0_to_central);
+  p_0_0->add_incoming_edge(e_1_0_to_central);
+  h->add_edge_no_check(e_1_0_to_central);
+
+  // create an edge to the second part of p_1_0
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1);
+  p_1_0->add_outgoing_edge(e_1_0_to_second);
+  p_0_1->add_incoming_edge(e_1_0_to_second);
+
+  vnl_vector_fixed<float,2> c_0_0(59.0f,41.0f); // center measured from the image
+  vnl_vector_fixed<float,2> c_0_1_0(54.0f,15.0f); // center measured from the image
+
+  // train this edge
+  vnl_vector_fixed<float,2> sample1 = c_0_1_0 - c_0_0; // center difference measured from the image
+  
+  c_0_0 = vnl_vector_fixed<float,2>(274.0f,41.0f); // center measured from the image
+  c_0_1_0 = vnl_vector_fixed<float,2>(259.0f,15.0f); // center measured from the image
+  vnl_vector_fixed<float,2> sample2 = c_0_1_0 - c_0_0; // center difference measured from the image
+
+  // calculate angle and dists
+  float a1, d1;
+  e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample1, d1, a1);
+  e_1_0_to_second->set_min_stand_dev_dist(2.0f);
+  e_1_0_to_second->set_min_stand_dev_angle(5.0f);
+  e_1_0_to_second->update_dist_model(d1);
+  e_1_0_to_second->update_angle_model(a1);
+  
+  e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample2, d1, a1);
+  e_1_0_to_second->update_dist_model(d1);
+  e_1_0_to_second->update_angle_model(a1);
+
+  h->add_edge_no_check(e_1_0_to_second);
+
+  // LAYER 1: two layer 1 parts
+  brec_part_base_sptr p_1_1 = new brec_part_base(1, 1);
+  h->add_vertex(p_1_1);
+  p_1_1->detection_threshold_ = 0.5f;
+  // the first child becomes the central part, create an edge to the central part
+  brec_hierarchy_edge_sptr e_1_1_to_central = new brec_hierarchy_edge(p_1_1, p_0_0);
+  p_1_1->add_outgoing_edge(e_1_1_to_central);
+  p_0_0->add_incoming_edge(e_1_1_to_central);
+  h->add_edge_no_check(e_1_1_to_central);
+
+  // create an edge to the second part of p_1_1
+  brec_hierarchy_edge_sptr e_1_1_to_second = new brec_hierarchy_edge(p_1_1, p_0_1);
+  p_1_1->add_outgoing_edge(e_1_1_to_second);
+  p_0_1->add_incoming_edge(e_1_1_to_second);
+
+  c_0_0 = vnl_vector_fixed<float,2>(59.0f,41.0f); // center measured from the image
+  c_0_1_0 = vnl_vector_fixed<float,2>(54.0f,15.0f); // center measured from the image
+
+  // train this edge
+  sample1 = c_0_1_0 - c_0_0; // center difference measured from the image
+  
+  // calculate angle and dists
+  e_1_1_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample1, d1, a1);
+  e_1_1_to_second->set_min_stand_dev_dist(2.0f);
+  e_1_1_to_second->set_min_stand_dev_angle(5.0f);
+  e_1_1_to_second->update_dist_model(d1);
+  e_1_1_to_second->update_angle_model(a1);
+  
+  h->add_edge_no_check(e_1_1_to_second);
+  
+  return h;
+
+}
+
+  
