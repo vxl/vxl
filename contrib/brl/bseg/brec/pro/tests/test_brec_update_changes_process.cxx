@@ -8,9 +8,8 @@
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
-#include <bvxm/pro/bvxm_gen_synthetic_world_process.h>
-#include <bvxm/pro/bvxm_render_expected_image_process.h>
-#include <bvxm/pro/bvxm_detect_changes_process.h>
+#include <bvxm/pro/bvxm_processes.h>
+#include <bvxm/pro/bvxm_register.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -18,6 +17,7 @@
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_parameters_sptr.h>
@@ -33,7 +33,10 @@
 #include <vgl/vgl_box_2d.h>
 
 #include <brec/brec_bg_pair_density.h>
+#include <brec/pro/brec_processes.h>
+#include <brec/pro/brec_register.h>
 
+#if 0
 //: create a synthetic slab to fill layers with
 void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, unsigned ny)
 {
@@ -85,102 +88,8 @@ vpgl_camera_double_sptr create_camera()
   return cam1;
 }
 
-//:
-vpgl_rational_camera<double>
-perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
-{
-  vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
-  vcl_vector<double> neu_u,den_u,neu_v,den_v;
-  double x_scale = 1.0,
-         x_off = 0.0,
-         y_scale = 1.0,
-         y_off = 0.0,
-         z_scale = 1.0,
-         z_off = 0.0,
-         u_scale = 1.0,
-         u_off = 0.0,
-         v_scale = 1.0,
-         v_off = 0.0;
 
-  for (int i=0; i<20; i++) {
-    neu_u.push_back(0.0);
-    neu_v.push_back(0.0);
-    den_u.push_back(0.0);
-    den_v.push_back(0.0);
-  }
 
-  int vector_map[] = {9,15,18,19};
-
-  for (int i=0; i<4; i++) {
-    neu_u[vector_map[i]] = cam_pers_matrix(0,i);
-    neu_v[vector_map[i]] = cam_pers_matrix(1,i);
-    den_u[vector_map[i]] = cam_pers_matrix(2,i);
-    den_v[vector_map[i]] = cam_pers_matrix(2,i);
-  }
-
-  vpgl_rational_camera<double> cam_rat(neu_u,den_u,neu_v,den_v,
-                                       x_scale,x_off,y_scale,y_off,z_scale,z_off,
-                                       u_scale,u_off,v_scale,v_off);
-  return cam_rat;
-}
-
-//:
-vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
-{
-  vgl_point_3d<double> min_pt(vox_world->get_params()->corner().x(),
-                              vox_world->get_params()->corner().y(),
-                              vox_world->get_params()->corner().z());
-  vgl_point_3d<double> max_pt(vox_world->get_params()->corner().x() + vox_world->get_params()->num_voxels().x(),
-                              vox_world->get_params()->corner().y() + vox_world->get_params()->num_voxels().y(),
-                              vox_world->get_params()->corner().z() + vox_world->get_params()->num_voxels().z());
-  vgl_box_3d<double> world(min_pt, max_pt);
-
-  const int IMAGE_U = 200;
-  const int IMAGE_V = 200;
-  const double x_scale = 900;
-  const double y_scale = 900;
-  const double focal_length = 1.;
-  const double camera_dist= 200;
-
-  vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
-
-  vgl_point_3d<double> centroid = world.centroid();
-  vcl_cout << "centroid: " << centroid << vcl_endl;
-  double x,y;
-  double alpha = (vnl_math::pi/8.) * 3;
-  double delta_alpha = vnl_math::pi/40.;
-  alpha += 5*delta_alpha;
-
-  x = camera_dist*vcl_cos(alpha);
-  y = camera_dist*vcl_sin(alpha);
-
-  vgl_point_3d<double> camera_center(x+centroid.x(), y+centroid.y(), 450+centroid.z());
-
-  vpgl_perspective_camera<double> persp_cam;
-
-  //generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
-  vpgl_calibration_matrix<double> K(focal_length, principal_point, x_scale, y_scale);
-  persp_cam.set_calibration(K);
-  persp_cam.set_camera_center(camera_center);
-
-  persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
-  vpgl_camera_double_sptr rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
-
-  vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
-  vgl_box_2d<double> bb;
-  for (unsigned i=0; i<corners.size(); i++) {
-    vgl_point_3d<double> c = corners[i];
-    double u,v, u2, v2;
-    persp_cam.project(c.x(), c.y() ,c.z(), u, v);
-    rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
-    bb.add(vgl_point_2d<double> (u,v));
-    vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-             << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
-  }
-  vcl_cout << bb << vcl_endl;
-
-  return rat_cam;
-}
 
 //:
 bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
@@ -325,6 +234,106 @@ bvxm_voxel_slab_base_sptr create_mog_image2_using_grey_processor(vcl_string mode
   return mog_image;
 }
 
+#endif
+
+//:
+vpgl_rational_camera<double>
+perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
+{
+  vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
+  vcl_vector<double> neu_u,den_u,neu_v,den_v;
+  double x_scale = 1.0,
+         x_off = 0.0,
+         y_scale = 1.0,
+         y_off = 0.0,
+         z_scale = 1.0,
+         z_off = 0.0,
+         u_scale = 1.0,
+         u_off = 0.0,
+         v_scale = 1.0,
+         v_off = 0.0;
+
+  for (int i=0; i<20; i++) {
+    neu_u.push_back(0.0);
+    neu_v.push_back(0.0);
+    den_u.push_back(0.0);
+    den_v.push_back(0.0);
+  }
+
+  int vector_map[] = {9,15,18,19};
+
+  for (int i=0; i<4; i++) {
+    neu_u[vector_map[i]] = cam_pers_matrix(0,i);
+    neu_v[vector_map[i]] = cam_pers_matrix(1,i);
+    den_u[vector_map[i]] = cam_pers_matrix(2,i);
+    den_v[vector_map[i]] = cam_pers_matrix(2,i);
+  }
+
+  vpgl_rational_camera<double> cam_rat(neu_u,den_u,neu_v,den_v,
+                                       x_scale,x_off,y_scale,y_off,z_scale,z_off,
+                                       u_scale,u_off,v_scale,v_off);
+  return cam_rat;
+}
+
+
+//:
+vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
+{
+  vgl_point_3d<double> min_pt(vox_world->get_params()->corner().x(),
+                              vox_world->get_params()->corner().y(),
+                              vox_world->get_params()->corner().z());
+  vgl_point_3d<double> max_pt(vox_world->get_params()->corner().x() + vox_world->get_params()->num_voxels().x(),
+                              vox_world->get_params()->corner().y() + vox_world->get_params()->num_voxels().y(),
+                              vox_world->get_params()->corner().z() + vox_world->get_params()->num_voxels().z());
+  vgl_box_3d<double> world(min_pt, max_pt);
+
+  const int IMAGE_U = 200;
+  const int IMAGE_V = 200;
+  const double x_scale = 900;
+  const double y_scale = 900;
+  const double focal_length = 1.;
+  const double camera_dist= 200;
+
+  vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
+
+  vgl_point_3d<double> centroid = world.centroid();
+  vcl_cout << "centroid: " << centroid << vcl_endl;
+  double x,y;
+  double alpha = (vnl_math::pi/8.) * 3;
+  double delta_alpha = vnl_math::pi/40.;
+  alpha += 5*delta_alpha;
+
+  x = camera_dist*vcl_cos(alpha);
+  y = camera_dist*vcl_sin(alpha);
+
+  vgl_point_3d<double> camera_center(x+centroid.x(), y+centroid.y(), 450+centroid.z());
+
+  vpgl_perspective_camera<double> persp_cam;
+
+  //generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
+  vpgl_calibration_matrix<double> K(focal_length, principal_point, x_scale, y_scale);
+  persp_cam.set_calibration(K);
+  persp_cam.set_camera_center(camera_center);
+
+  persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
+  vpgl_camera_double_sptr rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
+
+  vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
+  vgl_box_2d<double> bb;
+  for (unsigned i=0; i<corners.size(); i++) {
+    vgl_point_3d<double> c = corners[i];
+    double u,v, u2, v2;
+    persp_cam.project(c.x(), c.y() ,c.z(), u, v);
+    rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
+    bb.add(vgl_point_2d<double> (u,v));
+    vcl_cout << "Perspective [" << u << ',' << v << "]\n"
+             << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
+  }
+  vcl_cout << bb << vcl_endl;
+
+  return rat_cam;
+}
+
 MAIN( test_brec_update_changes_process )
 {
   unsigned ni = 200;
@@ -336,9 +345,9 @@ MAIN( test_brec_update_changes_process )
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
-  DECLARE_FUNC_CONS(bvxm_gen_synthetic_world_process);
-  DECLARE_FUNC_CONS(brec_update_changes_process);
-  DECLARE_FUNC_CONS(bvxm_detect_changes_process);
+  //DECLARE_FUNC_CONS(bvxm_gen_synthetic_world_process);
+  //DECLARE_FUNC_CONS(brec_update_changes_process);
+  //DECLARE_FUNC_CONS(bvxm_detect_changes_process);
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_gen_synthetic_world_process, "bvxmGenSyntheticWorldProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_update_changes_process, "brecUpdateChangesProcess");
@@ -471,16 +480,4 @@ MAIN( test_brec_update_changes_process )
   SUMMARY();
 }
 
-#if 0
-  bprb_parameters_sptr det_params = new bprb_parameters();
-  det_params->add("ni for output image", "ni", (int)ni);
-  det_params->add("nj for output image", "nj", (int)nj);
-  det_params->add("x interval", "x_int", 26U);
-  det_params->add("y interval", "y_int", 26U);
-  det_params->add("z interval", "z_int", 30U);
-  det_params->add("angle intervals for rotational search (in degrees)", "angle_int", 20.0f);
-  det_params->add("verbose", "verbose", true);
-
-  good = good && bprb_batch_process_manager::instance()->set_params(det_params);
-#endif // 0
 

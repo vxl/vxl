@@ -31,21 +31,17 @@
 #include <vgl/vgl_box_2d.h>
 
 #include <brec/brec_bg_pair_density.h>
+#include <brec/pro/brec_processes.h>
+#include <brec/pro/brec_register.h>
+
 
 //#include <bbgm/pro/bbgm_save_image_of_process.h>
 //#include <bbgm/pro/bbgm_display_dist_image_process.h>
 #include <bbgm/pro/bbgm_processes.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
-
-//: the following methods are defined in test_brec_update_changes_process.cxx
-void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, unsigned ny);
-vpgl_camera_double_sptr create_camera();
-vpgl_rational_camera<double> perspective_to_rational(vpgl_perspective_camera<double>& cam_pers);
-vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world);
-bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img);
-bvxm_voxel_slab_base_sptr create_mog_image2_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img);
-
+#include <bbgm/bbgm_viewer.h>
+#include <bbgm/bbgm_viewer_sptr.h>
 
 MAIN( test_brec_create_mog_image_process )
 {
@@ -58,121 +54,89 @@ MAIN( test_brec_create_mog_image_process )
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
-  // call bvxmGenSyntheticWorldProcess process to generate a synthetic world with two boxes
-  REG_PROCESS(bvxm_gen_synthetic_world_process, bprb_batch_process_manager);
-  REG_PROCESS(brec_create_mog_image_process, bprb_batch_process_manager);
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_display_dist_image_process, "bbgmDisplayDistImageProcess");
+  // the appearance model processor
+  bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;
 
-  REGISTER_DATATYPE(bvxm_voxel_world_sptr);
-  REGISTER_DATATYPE(vil_image_view_base_sptr);
-  REGISTER_DATATYPE(vpgl_camera_double_sptr);
+  vil_image_view<float> img(100, 100);
+  img.fill(0.8f);
+  vil_image_view_base_sptr img_sptr = new vil_image_view<float>(img);
+
+  // convert image to a voxel_slab
+  bvxm_voxel_slab<obs_datatype> image_slab(img.ni(), img.nj(), 1);
+  if (!bvxm_util::img_to_slab(img_sptr,image_slab)) {
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: APM_MOG_GREY " << vcl_endl;
+    return false;
+  }
+  //: create distribution slab
+  float init_variance = 0.008f;
+  bsta_gauss_f1 this_gauss(0.0f, init_variance);
+  bsta_num_obs<bsta_gauss_f1> tg_o(this_gauss);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> mix_gauss;
+  mix_gauss.insert(tg_o, 0.3f);
+  mix_gauss.insert(tg_o, 0.3f);
+  mix_gauss.insert(tg_o, 0.4f);
+  bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > tg_mg(mix_gauss);
+
+  bvxm_voxel_slab<mog_type> slab(100,100,1);
+  slab.fill(tg_mg);
+
+  bvxm_voxel_slab<float> w(100,100,1);
+  w.fill(1.0f);
+
+  //: update once with the img
+  apm_processor.update(slab, image_slab, w);
+  
+  //DECLARE_FUNC_CONS(brec_create_mog_image_process);
+
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(unsigned);
-  REGISTER_DATATYPE( bbgm_image_sptr );
+  REGISTER_DATATYPE(bbgm_image_sptr);
+  REGISTER_DATATYPE(bvxm_voxel_slab_base_sptr);
 
-  bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
-  bprb_parameters_sptr params = new bprb_parameters();
-  params->add("size world x", "nx", 100U);
-  params->add("size world y", "ny", 100U);
-  params->add("size world z", "nz", 50U);
-  params->add("box min x", "minx", 10U);
-  params->add("box min y", "miny", 10U);
-  params->add("box min z", "minz", 10U);
-  params->add("box dim x", "dimx", 40U);
-  params->add("box dim y", "dimy", 40U);
-  params->add("box dim z", "dimz", 20U);
-  params->add("generate 2 boxes", "gen2", true);
-  params->add("generate images", "genImages", true);
-  params->add("random texture on box1", "rand1", true);
-  params->add("random texture on box2", "rand2", false);
-  params->add("fixed appearance val", "appval", 0.7f);
-  vcl_string world_dir("test_syn_world");
-  params->add("world_dir", "worlddir", world_dir);
-
-  // create an empty directory, or empty the directory if it exists
-  vcl_string delete_str = world_dir+"/*.vox";
-  if (vul_file::is_directory(world_dir))
-    vul_file::delete_file_glob(delete_str.c_str());
-  else {
-    if (vul_file::exists(world_dir))
-      vul_file::delete_file_glob(world_dir.c_str());
-    vul_file::make_directory(world_dir);
-  }
-
-  good = good && bprb_batch_process_manager::instance()->set_params(params);
-  good = good && bprb_batch_process_manager::instance()->run_process();
-
-  unsigned id_world;
-  good = good && bprb_batch_process_manager::instance()->commit_output(0, id_world);
-  TEST("run bvxmGenSyntheticWorldProcess", good ,true);
-
-  brdb_query_aptr Q_w = brdb_query_comp_new("id", brdb_query::EQ, id_world);
-  brdb_selection_sptr S_w = DATABASE->select("bvxm_voxel_world_sptr_data", Q_w);
-  TEST("output world is in db", S_w->size(), 1);
-
-  brdb_value_sptr value_w;
-  TEST("output world is in db", S_w->get_value(vcl_string("value"), value_w), true);
-  TEST("output world is non-null", (value_w != 0) ,true);
-
-  brdb_value_t<bvxm_voxel_world_sptr>* result_w = static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(value_w.ptr());
-  bvxm_voxel_world_sptr vox_world = result_w->value();
-  vox_world->increment_observations<APM_MOG_GREY>(0);
-
-  //vpgl_camera_double_sptr cam1 = create_camera();
-  vpgl_camera_double_sptr cam1 = create_syn_world_camera(vox_world);
-
-  // first run the detect changes process to get the change map
-  vil_image_view<vxl_byte> input_img(ni, nj, 1);
-  input_img.fill(100);
-  vil_image_view_base_sptr input_img_sptr = new vil_image_view<vxl_byte>(input_img);
-
-  // set the inputs
-  brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(input_img_sptr);
-  brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(cam1);
-  brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(vox_world);
-  brdb_value_sptr v3 = new brdb_value_t<vcl_string>("apm_mog_grey");
-  brdb_value_sptr v4 = new brdb_value_t<unsigned>(0U); // bin id
-  brdb_value_sptr v5 = new brdb_value_t<unsigned>(0U); // scale id
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_create_mog_image_process, "brecCreateMOGImageProcess");
+  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
+  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_display_dist_image_process, "bbgmDisplayDistImageProcess");
 
   // run the create mog image process
   // inits
-  good = bprb_batch_process_manager::instance()->init_process("brecCreateMOGImageProcess");
-  bprb_parameters_sptr params2 = new bprb_parameters();
-  params2->add("method to use to create a mog image", "mog_method", (unsigned)bvxm_mog_image_creation_methods::SAMPLING);   // otherwise uses expected values of the mixtures at voxels along the path of the rays
-  params2->add("number of samples if using random sampling as mog_method", "n_samples", 10U);
-  params2->add("ni for output mog", "ni", ni);  // should be set according to each test image
-  params2->add("nj for output mog", "nj", nj);
-  params2->add("nplanes for output expected view of output mog", "nplanes", 1U);
-  params2->add("verbose", "verbose", false);
-  good = good && bprb_batch_process_manager::instance()->set_params(params2);
-  good = good && bprb_batch_process_manager::instance()->set_input(0, v1);
-  good = good && bprb_batch_process_manager::instance()->set_input(1, v2);
-  good = good && bprb_batch_process_manager::instance()->set_input(2, v3);
-  good = good && bprb_batch_process_manager::instance()->set_input(3, v4);
-  good = good && bprb_batch_process_manager::instance()->set_input(4, v5);
+  bvxm_voxel_slab_base_sptr s_ptr = new bvxm_voxel_slab<mog_type>(slab);
+  brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_slab_base_sptr>(s_ptr);
+  brdb_value_sptr v1 = new brdb_value_t<vcl_string>("apm_mog_grey");
+
+  bool good = bprb_batch_process_manager::instance()->init_process("brecCreateMOGImageProcess");
+  good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
+  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned id_img1;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img1);
   TEST("run create mog image process", good ,true);
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img1);
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
+  brdb_selection_sptr S_img = DATABASE->select("bbgm_image_sptr_data", Q_img);
   TEST("output image is in db", S_img->size(), 1);
   brdb_value_sptr value_img;
   TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
   TEST("output image is non-null", (value_img != 0) ,true);
-  brdb_value_t<vil_image_view_base_sptr>* result =
-    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
-  vil_image_view_base_sptr out_exp_img = result->value();
+  brdb_value_t<bbgm_image_sptr>* result = static_cast<brdb_value_t<bbgm_image_sptr>* >(value_img.ptr());
+  bbgm_image_sptr out_exp_img = result->value();
+  TEST("output image is a valid bbgm image", !out_exp_img, false);
 
-#if 1
-  vil_image_view<vxl_byte> exp_img_v(out_exp_img);
-  bool saved = vil_save(exp_img_v, "expected_image_of_mog.png");
-  TEST("saved", saved, true);
-#endif // 0
+  bbgm_viewer_sptr viewer = new bbgm_mean_viewer();
+  
+  TEST("output image is a valid bbgm image", viewer->probe(out_exp_img), true);
+  viewer->set_active_component(0);
+  vil_image_view<double> d_image;
+  TEST("mean image of bbgm image", viewer->apply(out_exp_img, d_image), true);
 
+  vil_image_view<vxl_byte> byte_image;
+  double dmin, dmax;
+  vil_math_value_range(d_image, dmin, dmax);
+  vil_convert_stretch_range_limited(d_image, byte_image, dmin, dmax);
+  vil_save(byte_image, "mean.png");
+ 
+
+#if 0
   unsigned id_mog;
   good = good && bprb_batch_process_manager::instance()->commit_output(1, id_mog);
   TEST("run create mog image process", good ,true);
@@ -246,6 +210,7 @@ MAIN( test_brec_create_mog_image_process )
     TEST("saved", saved, true);
   #endif // 0
   }
+#endif
 
   SUMMARY();
 }
