@@ -30,7 +30,7 @@
 #include <brec/brec_part_gaussian.h>
 
 //: Constructor
-bool brec_recognize_structure_process_const(bprb_func_process& pro)
+bool brec_recognize_structure_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;

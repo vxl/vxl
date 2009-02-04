@@ -21,7 +21,7 @@
 #include <brec/brec_glitch.h>
 
 //: Constructor
-bool brec_glitch_process_const(bprb_func_process& pro)
+bool brec_glitch_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;

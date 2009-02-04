@@ -11,24 +11,35 @@
 
 void brec_register::register_datatype()
 {
-  REGISTER_DATATYPE(brec_part_hierarchy_sptr);
-  REGISTER_DATATYPE(brec_part_hierarchy_learner_sptr);
-  REGISTER_DATATYPE(brec_part_hierarchy_detector_sptr);
+  REGISTER_DATATYPE( brec_part_hierarchy_sptr );
+  REGISTER_DATATYPE( brec_part_hierarchy_learner_sptr );
+  REGISTER_DATATYPE( brec_part_hierarchy_detector_sptr );
 }
 
 void brec_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_bayesian_update_process, "brecBayesianUpdateProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_change_area_process, "brecChangeAreaProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_create_mog_image_process, "brecCreateMOGImageProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_density_to_prob_map_process, "brecDensityToProbMapProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_glitch_overlay_process, "brecGlitchOverlayProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_glitch_process, "brecGlitchProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_prob_map_area_process, "brecProbMapAreaProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_prob_map_roc_compute_process, "brecProbMapROCProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_prob_map_supress_process, "brecProbMapSupressProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_prob_map_threshold_process, "brecProbMapThresholdProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_recognize_structure_process, "brecRecStructureProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_update_changes_process, "brecUpdateChangesProcess");
 
 #if 0

@@ -24,7 +24,7 @@
 #include <vil/vil_save.h>
 
 //: Constructor
-bool brec_prob_map_supress_process_const(bprb_func_process& pro)
+bool brec_prob_map_supress_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;

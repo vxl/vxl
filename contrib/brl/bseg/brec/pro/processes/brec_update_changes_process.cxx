@@ -28,7 +28,7 @@
 #include <brec/brec_bayesian_propagation.h>
 
 //: Constructor
-bool brec_update_changes_process_const(bprb_func_process& pro)
+bool brec_update_changes_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;

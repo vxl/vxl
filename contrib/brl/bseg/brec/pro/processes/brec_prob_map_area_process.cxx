@@ -21,7 +21,7 @@
 #include <brec/brec_glitch.h>
 
 //: Constructor
-bool brec_prob_map_area_process_const(bprb_func_process& pro)
+bool brec_prob_map_area_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;

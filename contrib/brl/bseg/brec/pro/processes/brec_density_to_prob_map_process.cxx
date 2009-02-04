@@ -20,7 +20,7 @@
 #include <brec/brec_bg_pair_density.h>
 
 //: Constructor
-bool brec_density_to_prob_map_process_const(bprb_func_process& pro)
+bool brec_density_to_prob_map_process_cons(bprb_func_process& pro)
 {
    //inputs
   bool ok=false;

@@ -41,7 +41,7 @@ bbgm_image_sptr create_bbgm_image(bvxm_voxel_slab_base_sptr mog_image_)
 }
 
 //:Constructor
-bool brec_create_mog_image_process_const(bprb_func_process& pro)
+bool brec_create_mog_image_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;

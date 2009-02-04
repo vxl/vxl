@@ -22,7 +22,7 @@
 
 
 // Constructor
-bool brec_prob_map_threshold_process_const(bprb_func_process& pro)
+bool brec_prob_map_threshold_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;

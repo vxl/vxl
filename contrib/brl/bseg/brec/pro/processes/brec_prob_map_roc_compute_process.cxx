@@ -22,7 +22,7 @@
 #include <vil/vil_convert.h>
 
 //: Constructor
-bool brec_prob_map_roc_compute_process_const(bprb_func_process& pro)
+bool brec_prob_map_roc_compute_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
