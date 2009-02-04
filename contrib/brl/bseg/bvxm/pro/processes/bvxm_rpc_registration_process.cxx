@@ -53,6 +53,8 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   input_types_[3] = "bool";
   input_types_[4] = "float";
   input_types_[5] = "unsigned";
+  bool ok = pro.set_input_types(input_types_);
+  if (!ok) return false;
 
   // process has 2 outputs:
   // output[0]: The optimized camera
@@ -63,8 +65,8 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   output_types_[j++] = "vpgl_camera_double_sptr";  //optimized camera
   output_types_[j++] = "vil_image_view_base_sptr"; //edge image
   output_types_[j++] = "vil_image_view_base_sptr"; //expected voxel image
-  pro.set_output_types(output_types_);
-
+  ok = pro.set_output_types(output_types_);
+  return ok;
 }
 
 bool bvxm_rpc_registration_process(bprb_func_process& pro)
