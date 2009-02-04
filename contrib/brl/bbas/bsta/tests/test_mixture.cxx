@@ -44,6 +44,59 @@ void test_probability_functor()
   TEST_NEAR("restored covariance", v0+v1, 0.02, 1e-06);
 }
 
+void test_sampling()
+{
+  vcl_cout << "Starting test of sampling\n";
+  const float covar = 0.01f;
+  const float mod_covar = 0.02f;
+  const float sample = 0.25f;
+  typedef bsta_gauss_f1 bsta_gauss_t;
+  typedef bsta_gauss_t::covar_type covar_t;
+  typedef bsta_gauss_t::vector_type vector_t;
+  typedef bsta_mixture<bsta_gauss_t> mix_gauss_type;
+  bsta_gauss_t gauss0(vector_t(0.0f), covar_t(covar) );
+  bsta_gauss_t gauss1(vector_t(0.5f), covar_t(covar) );
+  float mean = 0.0f;
+  vnl_random rng;
+  for (unsigned i = 0; i < 1000; i++) {
+    vector_t s0 = gauss0.sample(rng);
+    vcl_cout << s0 << " ";
+    mean += s0;
+  }
+  mean /= 1000;
+  vcl_cout << "\n";
+
+  mean = 0.0f;
+  for (unsigned i = 0; i < 1000; i++) {
+    vector_t s1 = gauss1.sample(rng);
+    vcl_cout << s1 << " ";
+    mean += s1;
+  }
+  mean /= 1000;
+  vcl_cout << "\n";
+
+  /*
+  mix_gauss_type mix;
+  bool good = mix.insert(gauss0, 0.8f);
+  good = good&& mix.insert(gauss1, 0.2f);
+  bsta_prob_density_addcovar_functor<mix_gauss_type> pd;
+  float probd;
+  good = good && pd(mix, sample, mod_covar, probd);
+  TEST("test mixture", good, true);
+  TEST_NEAR("probability density", probd, 0.81275439, 1e-06);
+  // test the probability functor
+  bsta_probability_addcovar_functor<mix_gauss_type> prb;
+  float prob;
+  float minp = sample - 0.1f, maxp = sample + 0.1f;
+  good = prb(mix, minp, maxp, mod_covar, prob);
+  TEST_NEAR("probability", prob,0.17158404398 , 1e-06);
+  // make sure the covariance is restored
+  float v0 = mix.distribution(0).covar();
+  float v1 = mix.distribution(1).covar();
+  TEST_NEAR("restored covariance", v0+v1, 0.02, 1e-06);
+  */
+}
+
 MAIN( test_mixture )
 {
   START ("mixture");
@@ -52,6 +105,7 @@ MAIN( test_mixture )
   test_mixture_type(double(),"double");
 #endif
   test_probability_functor();
+  test_sampling();
   SUMMARY();
 }
 

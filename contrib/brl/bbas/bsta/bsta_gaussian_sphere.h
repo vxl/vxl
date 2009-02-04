@@ -15,6 +15,7 @@
 
 #include "bsta_gaussian.h"
 #include <vcl_iostream.h>
+#include <vnl/vnl_random.h>
 
 //: A (hyper-)spherical Gaussian distribution
 // Thus, the covariance matrix is the identity times a scalar variance
@@ -70,6 +71,15 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
 
   //: Compute the determinant of the covariance matrix
   T det_covar() const { return det_covar_; }
+
+  //: sample from the distribution
+  vector_ sample(vnl_random& rng) const 
+  {
+    vector_ d = bsta_gaussian<T,n>::mean_;
+    T s = (T)(vcl_sqrt(var_)*rng.normal());
+    d += s;
+    return d; 
+  }
 
  protected:
   //: The variance

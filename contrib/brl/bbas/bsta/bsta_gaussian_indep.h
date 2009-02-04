@@ -16,6 +16,7 @@
 #include "bsta_gaussian.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
+#include <vnl/vnl_random.h>
 
 //: A Gaussian distribution, independent in each dimension
 // Thus, the covariance matrix is diagonal
@@ -24,6 +25,8 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
 {
  public:
   typedef vnl_vector_fixed<T,n> covar_type;
+  typedef typename bsta_gaussian<T,n>::vector_type vector_;
+
   //: Constructor
   bsta_gaussian_indep()
   : bsta_gaussian<T,n>(), diag_covar_(T(0)), det_covar_(T(0)) {}
@@ -71,6 +74,18 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
 
   //: Compute the determinant of the covariance matrix
   T det_covar() const { return det_covar_; }
+
+  //: sample from the distribution
+  vector_ sample(vnl_random& rng) const 
+  {
+    vector_ d = bsta_gaussian<T,n>::mean_;
+    covar_type v = diag_covar_;
+    for (unsigned j = 0; j < n; j++) {
+      v[j] = (T)(vcl_sqrt(v[j])*rng.normal());
+    }
+    vector_ sum = d+v;
+    return sum; 
+  }
 
  protected:
   //: The diagonal covariance matrix stored as a vector

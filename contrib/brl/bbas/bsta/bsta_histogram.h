@@ -133,6 +133,10 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   vcl_istream& read(vcl_istream&);
 
   void print(vcl_ostream& os = vcl_cout) const;
+
+  //: print as a matlab plot command
+  void print_to_m(vcl_ostream& os = vcl_cout) const;
+
  private:
   void compute_area() const; // mutable const
   mutable bool area_valid_;

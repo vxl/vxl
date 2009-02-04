@@ -60,15 +60,18 @@ class bsta_fit_weibull
     {wcf_ = wcf;}
 
   //:provides an initial guess for k
-  void init(T& k)
+  bool init(T& k)
   {
-    if (!wcf_) return;
+    if (!wcf_) return false;
     double m = wcf_->mean();
     double sd = wcf_->std_dev();
-    if (!sd) return;
+    if (!sd) return false;
     double ki = 1.0 + 1.21*((m/sd)-1.0);
-    assert(ki>0);
-    k = static_cast<T>(ki);
+    if (ki>0) {
+      k = static_cast<T>(ki);
+      return true;
+    } else 
+      return false;
   }
 
   //:solves for k that matches the sample mean and variance ratio

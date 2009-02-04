@@ -74,6 +74,18 @@ bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const vector_& pt) const
   return compute_dot<T,n,n>::value(d)/var_;
 }
 
+/*
+//: sample from the distribution
+template <class T, unsigned int n>
+vector_ 
+bsta_gaussian_sphere<T,n>::sample() const 
+{
+  vnl_random rng;
+  vector_ d = bsta_gaussian<T,n>::mean_;
+  T s = (T)(vcl_sqrt(var_)*rng.normal());
+  d *= s;
+  return d; 
+}*/
 
 //: Unrol the compute probability calculation
 //  The general induction step

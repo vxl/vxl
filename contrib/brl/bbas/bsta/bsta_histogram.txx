@@ -320,6 +320,21 @@ void bsta_histogram<T>::print(vcl_ostream& os) const
       os << "p[" << i << "]=" << p(i) << '\n';
 }
 
+//: print as a matlab plot command
+template <class T>
+void bsta_histogram<T>::print_to_m(vcl_ostream& os) const
+{
+  os << "x = [" << min_;
+  for (unsigned int i=1; i<nbins_; i++) 
+    os << ", " << min_ + i*delta_;
+  os << "];\n";
+  os << "y = [" << p((unsigned int)0);
+  for (unsigned int i=1; i<nbins_; i++) 
+    os << ", " << p(i);
+  os << "];\n";
+  os << "bar(x,y,'r')\n";
+}
+
 template <class T>
 vcl_ostream& bsta_histogram<T>::write(vcl_ostream& s) const
 {

@@ -199,7 +199,7 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
   //: sample from the mixture
   //  randomly selects a component wrt normalized component weights, then for now returns the mean of the selected component
   //  TODO: write a method to sample from the distribution and use it instead of the mean
-  vector_ sample(void) const {
+  vector_ sample(vnl_random& rng) const {
     //: first normalize the weights (this is const methods so we cannot call the class-method normalize_weights()
     T sum = 0;
     for (unsigned i=0; i<num_components(); ++i)
@@ -220,7 +220,8 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
     bsta_sampler<unsigned>::sample(ids, ps, 1, out);
     assert(out.size() == 1);
     
-    return components_[out[0]].distribution.mean();
+    return components_[out[0]].distribution.sample(rng);
+    //return components_[out[0]].distribution.mean();
   }
 
 };
