@@ -6,10 +6,6 @@
 #include <vil_pro/vil_register.h>
 #include <vpgl_pro/vpgl_register.h>
 #include <bvxm/pro/bvxm_register.h>
-#include <brec/pro/brec_register.h>
-#include <bvgl_pro/bvgl_generate_mask_process.h>
-#include <bbgm/pro/bbgm_register.h>
-#include <core/vidl2_pro/vidl2_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -17,12 +13,7 @@ register_processes(PyObject *self, PyObject *args)
   vil_register::register_process();
   vpgl_register::register_process();
   bvxm_register::register_process();
-  brec_register::register_process();
-
-  REG_PROCESS(bvgl_generate_mask_process, bprb_batch_process_manager);
-
-  bbgm_register::register_process();
-  vidl2_register::register_process();
+  
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -34,8 +25,6 @@ register_datatypes(PyObject *self, PyObject *args)
   vil_register::register_datatype();
   vpgl_register::register_datatype();
   bvxm_register::register_datatype();
-  bbgm_register::register_datatype();
-  vidl2_register::register_datatype();
 
   Py_INCREF(Py_None);
   return Py_None;
