@@ -6,10 +6,12 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 SET(brip_pro_sources
-    brip_extrema_process.h   brip_extrema_process.cxx
+    brip_processes.h
+    brip_register.h             brip_register.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates brip_pro_sources)
+AUX_SOURCE_DIRECTORY(processes brip_pro_sources)
 
 ADD_LIBRARY(brip_pro ${brip_pro_sources})
 TARGET_LINK_LIBRARIES(brip_pro bprb brdb brip vsl)
