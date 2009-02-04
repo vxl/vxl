@@ -10,7 +10,7 @@
 
 
 //: Constructor
-bool vil_combine_grey_images_process_const(bprb_func_process& pro)
+bool vil_combine_grey_images_process_cons(bprb_func_process& pro)
 {
   //this process takes 1 input:
   // input(0): Filename containing the list of images to combine

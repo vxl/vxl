@@ -8,7 +8,7 @@
 #include <vil/vil_image_view_base.h>
 
 //: Constructor
-bool vil_convert_to_n_planes_process_const(bprb_func_process& pro)
+bool vil_convert_to_n_planes_process_cons(bprb_func_process& pro)
 {
   //this process takes two inputs:
   // input(0): the input image vil_image_view_base_sptr
