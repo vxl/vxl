@@ -25,7 +25,7 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_virtual_view_process, "bvxmRenderVirtualViewProcess");  
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_expected_image_process,"bvxmRenderExpectedImageProcess");  
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_process, "bvxmUpdateProcess");      
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_synth_lidar_data_process, "bvxmCreateSynthLidarDataProcess");  
+  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_synth_lidar_data_process, "bvxmCreateSynthLidarDataProcess");  
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_lidar_process, "bvxmUpdateLidarProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_lidar_edge_detection_process,"bvxmLidarEdgeDetectionProcess");  
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_heightmap_process, "bvxmHeightmaoProcess");  
@@ -49,7 +49,7 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_roc_process,"bvxmRocProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_save_occupancy_vff_process, " bvxmSaveOccupancyVffPprocess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_save_occupancy_raw_process,"bvxmSaveOccupancyRawProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_save_edges_raw_process, "bvxmSaveEdgesRawProcess");
+  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_save_edges_raw_process, "bvxmSaveEdgesRawProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_rpc_prob_registration_process,"bvxmRpcProbResgistrationProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_rpc_registration_process,"bvxmRpcRegistrationProcess");
 
