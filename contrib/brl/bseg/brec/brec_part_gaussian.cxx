@@ -572,7 +572,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
       return false;
     }
 
-    vcl_ifstream ifs(name.c_str());
+    vcl_ifstream ifs(name.c_str(), vcl_ios::in);
     ifs >> k_fore; ifs >> lambda_fore;
     ifs.close();
   }

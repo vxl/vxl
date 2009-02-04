@@ -1,5 +1,19 @@
 // This is brl/bseg/brec/pro/processes/brec_prob_map_supress_process.cxx
 #include <bprb/bprb_func_process.h>
+//:
+// \file
+// \brief A process to suppress a given density/prob map with respect to another map, e.g. to remove vehicle areas from a change map
+//
+// Input map is P(X in B), suppressor is e.g. P(X in V) (x is a vehicles pixel)
+// Output of this process is: P(X in B and X not in V)
+//
+// \author Ozge Can Ozcanli
+// \date 10/28/08
+//
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+// \endverbatim
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>

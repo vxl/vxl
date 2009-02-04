@@ -1,5 +1,21 @@
 // This is brl/bseg/brec/pro/processes/brec_create_mog_image_process.cxx
 #include <bprb/bprb_func_process.h>
+//:
+// \file
+// \brief A process to create a mixture of gaussian image of type bbgm_image_of from a bvxm_voxel_slab which 
+//        should have been created for a voxel world from a given view using the corresponding bvxm process
+//       
+//
+// Summarizes the appearance model of the voxel world and constitutes a view-based background model
+// Outputs the mixture in the bbgm format for binary io with that libraries methods
+//
+// \author Ozge Can Ozcanli
+// \date December 15, 2008
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+// \endverbatim
+
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>

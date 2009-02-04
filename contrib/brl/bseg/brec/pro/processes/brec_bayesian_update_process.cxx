@@ -1,5 +1,22 @@
 // This is brl/bseg/brec/pro/processes/brec_bayesian_update_process.cxx
 #include <bprb/bprb_func_process.h>
+//:
+// \file
+// \brief A class to apply Bayesian rule to find posterior probability of an entity given a measurement map based on background and foreground models of the given entity
+//
+// e.g. given a map P(Entity) and a measurement map: M.
+// and given models: P(Measurement | Entity) and P(Measurement | not Entity)
+// return P(Entity | Measurement)
+// for instance: given expected area difference map (measurement) for "foreground glitches on background" (entity)
+//               return glitch detection map
+//
+// \author Ozge Can Ozcanli
+// \date 10/01/08
+//
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+// \endverbatim
 
 #include <bprb/bprb_parameters.h>
 

@@ -1,5 +1,16 @@
 // This is brl/bseg/brec/pro/processes/brec_recognize_structure_process.cxx
 #include <bprb/bprb_func_process.h>
+//:
+// \file
+// \brief Processes to find instances of various structures, objects (e.g. vehicles) according to a part hierarchy constructed a priori
+//
+// \author Ozge Can Ozcanli
+// \date 10/28/08
+//
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+// \endverbatim
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>

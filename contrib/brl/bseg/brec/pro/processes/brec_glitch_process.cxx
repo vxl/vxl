@@ -2,6 +2,15 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
+// \brief A process to generate a detection map for foreground glitches on background with a given center-surround geometry
+//
+// \author Ozge Can Ozcanli
+// \date Dec 09, 2008
+//
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+// \endverbatim
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>

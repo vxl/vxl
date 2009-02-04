@@ -2,6 +2,17 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
+// \brief A process to generate a thresholded image for a given prob map and threshold value
+//
+//  CAUTION: Input image is assumed to be a probability map, i.e. have type float with values in [0,1]
+//
+// \author Ozge Can Ozcanli
+// \date 11/06/08
+//
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+// \endverbatim
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
