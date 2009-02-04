@@ -139,7 +139,7 @@ bvxm_voxel_slab<float> bvxm_mog_grey_processor::most_probable_mode_color(bvxm_vo
   return color;
 }
 
-#if 0
+
 bvxm_voxel_slab<float> bvxm_mog_grey_processor::sample(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {
   //the output
@@ -149,13 +149,14 @@ bvxm_voxel_slab<float> bvxm_mog_grey_processor::sample(bvxm_voxel_slab<mix_gauss
    bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it;
    bvxm_voxel_slab<float>::iterator ec_it = color.begin();
 
+  vnl_random rng;
   for (appear_it = appear.begin(); appear_it!= appear.end();++appear_it, ++ec_it)
   {
     if ((*appear_it).num_components() > 0) {
-      (*ec_it) = (*appear_it).sample();  
+      (*ec_it) = (*appear_it).sample(rng);  
     }
   }
 
   return color;
 }
-#endif
+

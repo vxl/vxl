@@ -1379,6 +1379,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     column_probs[i].clear();
   column_probs.clear();
 
+  vnl_random rng;
   vcl_vector<bvxm_voxel_slab_base_sptr > samples, weights;
   for (unsigned k = 0; k < n_samples; k++) {
     bvxm_voxel_slab_base_sptr v = new bvxm_voxel_slab<obs_datatype>(observation.img->ni(), observation.img->nj(),1);
@@ -1408,7 +1409,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
         for (unsigned j = 0; j < observation.img->nj(); j++) {
           if (column_samples[i][j].size() != 0 && column_samples[i][j][k] == z) {
             if (slice_img(i,j).num_components() != 0) {
-              (*obs_samples)(i,j) = slice_img(i,j).sample();
+              (*obs_samples)(i,j) = slice_img(i,j).sample(rng);
               (*w)(i,j) = 1.0f;  // make the weight non-zero for the column, even if there is only 1 sample
             }
           }
