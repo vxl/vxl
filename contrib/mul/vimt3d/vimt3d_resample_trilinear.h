@@ -69,7 +69,9 @@ inline void vimt3d_resample_trilinear(
   // an affine transformation for image to world
   vimt3d_transform_3d d_i2w;
   d_i2w.set_affine(p,u,v,w);
+  d_i2w.simplify();
   dest_image.set_world2im(d_i2w.inverse());
+
 }
 
 
@@ -107,6 +109,7 @@ inline void vimt3d_resample_trilin_edge_extend(
   // an affine transformation for image to world
   vimt3d_transform_3d d_i2w;
   d_i2w.set_affine(p,u,v,w);
+  d_i2w.simplify();
   dest_image.set_world2im(d_i2w.inverse());
 }
 
