@@ -6,7 +6,6 @@
 //
 
 #include <testlib/testlib_test.h>
-#include "../vil_convert_to_n_planes_process.h"
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -17,9 +16,11 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
+
 
 //: This function sets up input for the process and returns the output of 
 //  vil_convert_to_n_planes_process
@@ -28,7 +29,7 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img)
   brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(ref_img);
   brdb_value_sptr v1 = new brdb_value_t<unsigned>(3);
 
-  bool good = bprb_batch_process_manager::instance()->init_process("VilConvertToNPlanesProcess");
+  bool good = bprb_batch_process_manager::instance()->init_process("vilConvertToNPlanesProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->run_process();
@@ -61,7 +62,8 @@ MAIN( test_vil_convert_to_n_planes_process )
 {
  
   //Take care of database registration
-  REG_PROCESS(vil_convert_to_n_planes_process, bprb_batch_process_manager);
+  DECLARE_FUNC_CONS(vil_convert_to_n_planes_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_convert_to_n_planes_process, "vilConvertToNPlanesProcess");
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(unsigned);
 

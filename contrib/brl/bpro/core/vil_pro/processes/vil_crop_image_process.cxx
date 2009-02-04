@@ -9,7 +9,7 @@
 #include <vil/vil_new.h>
 
 //: Constructor
-bool vil_crop_image_process_const(bprb_func_process& pro)
+bool vil_crop_image_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   vcl_vector<vcl_string> input_types;
