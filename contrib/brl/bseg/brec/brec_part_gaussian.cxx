@@ -17,6 +17,7 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_gamma.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <bsta/bsta_histogram.h>
