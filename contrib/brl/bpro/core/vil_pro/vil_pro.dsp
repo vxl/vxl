@@ -96,52 +96,52 @@ LIB32=link.exe -lib
 SOURCE=.\vil_io_image_view_base.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_load_image_view_process.cxx
+SOURCE=.\processes/vil_load_image_view_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_save_image_view_process.cxx
+SOURCE=.\processes/vil_save_image_view_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_binary_image_op_process.cxx
+SOURCE=.\processes/vil_binary_image_op_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_map_image_process.cxx
+SOURCE=.\processes/vil_map_image_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_rgbi_to_grey_process.cxx
+SOURCE=.\processes/vil_rgbi_to_grey_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_convert_to_n_planes_process.cxx
+SOURCE=.\processes/vil_convert_to_n_planes_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_combine_grey_images_process.cxx
+SOURCE=.\processes/vil_combine_grey_images_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_load_from_ascii_process.cxx
+SOURCE=.\processes/vil_load_from_ascii_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_gaussian_process.cxx
+SOURCE=.\processes/vil_gaussian_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_gradient_process.cxx
+SOURCE=.\processes/vil_gradient_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_stretch_image_process.cxx
+SOURCE=.\processes/vil_stretch_image_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_load_image_view_binary_process.cxx
+SOURCE=.\processes/vil_load_image_view_binary_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_save_image_view_binary_process.cxx
+SOURCE=.\processes/vil_save_image_view_binary_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_map_image_binary_process.cxx
+SOURCE=.\processes/vil_map_image_binary_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_image_pair_process.cxx
+SOURCE=.\processes/vil_image_pair_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_crop_image_process.cxx
+SOURCE=.\processes/vil_crop_image_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_register.cxx
@@ -156,58 +156,13 @@ SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 SOURCE=.\vil_io_image_view_base.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil_load_image_view_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_save_image_view_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_binary_image_op_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_map_image_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\vil_math_functors.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil_rgbi_to_grey_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_convert_to_n_planes_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_combine_grey_images_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_load_from_ascii_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_gaussian_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_gradient_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_stretch_image_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_load_image_view_binary_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_save_image_view_binary_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_map_image_binary_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_image_pair_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_crop_image_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\vil_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_processes.h
 # End Source File
 # End Group
 # End Target

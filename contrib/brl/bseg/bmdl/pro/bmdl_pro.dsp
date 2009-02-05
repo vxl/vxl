@@ -122,6 +122,9 @@ SOURCE=.\bmdl_register.h
 # Begin Source File
 SOURCE=.\bmdl_processes.h
 # End Source File
+# Begin Source File
+SOURCE=.\bmdl_defs.h
+# End Source File
 # End Group
 # End Target
 # End Project

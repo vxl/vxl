@@ -93,91 +93,73 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\brec_prob_map_threshold_process.cxx
+SOURCE=.\processes/brec_prob_map_threshold_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_change_area_process.cxx
+SOURCE=.\processes/brec_change_area_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_prob_map_roc_compute_process.cxx
+SOURCE=.\processes/brec_prob_map_roc_compute_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_prob_map_supress_process.cxx
+SOURCE=.\processes/brec_prob_map_supress_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_glitch_overlay_process.cxx
+SOURCE=.\processes/brec_glitch_overlay_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_density_to_prob_map_process.cxx
+SOURCE=.\processes/brec_density_to_prob_map_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_recognize_structure_process.cxx
+SOURCE=.\processes/brec_recognize_structure_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_glitch_process.cxx
+SOURCE=.\processes/brec_glitch_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_bayesian_update_process.cxx
+SOURCE=.\processes/brec_bayesian_update_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_prob_map_area_process.cxx
+SOURCE=.\processes/brec_prob_map_area_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_update_changes_process.cxx
+SOURCE=.\processes/brec_update_changes_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_save_mog_image_process.cxx
+SOURCE=.\processes/brec_create_mog_image_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_create_mog_image_process.cxx
+SOURCE=.\processes/brec_construct_op_models_processes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brec_learner_processes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brec_hierarchy_processes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brec_learner_update_processes.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\brec_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+brec_part_hierarchy_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+brec_part_hierarchy_learner_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+brec_part_hierarchy_detector_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\brec_glitch_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_bayesian_update_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_change_area_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_prob_map_supress_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_prob_map_threshold_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_update_changes_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_density_to_prob_map_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_recognize_structure_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_prob_map_roc_compute_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_save_mog_image_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_glitch_overlay_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_prob_map_area_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\brec_create_mog_image_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\brec_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\brec_processes.h
 # End Source File
 # End Group
 # End Target
