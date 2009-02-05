@@ -111,6 +111,12 @@ SOURCE=.\test_brec_hierarchy_detector.cxx
 SOURCE=.\test_brec_densities.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_brec_part_hierarchy_learner.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_brec_hierarchy_detector_w_models.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

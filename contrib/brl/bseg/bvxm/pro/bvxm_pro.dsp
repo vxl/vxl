@@ -93,105 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bvxm_change_detection_display_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_clean_world_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_voxel_world_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_detect_changes_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_generate_edge_map_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_illum_index_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_normalize_image_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_render_expected_image_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_render_virtual_view_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_roi_init_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_rpc_registration_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_save_occupancy_raw_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_save_occupancy_vff_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_update_lidar_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_local_rpc_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_normalized_image_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_synth_lidar_data_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_gen_synthetic_world_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_lidar_init_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_save_edges_raw_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_heightmap_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_compare_rpc_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_ocp_compare_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_ocp_hist_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_roc_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_pmap_hist_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_pmap_ratio_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\multiscale_pro/bvxm_compare_3d_voxels_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\multiscale_pro/bvxm_detect_scale_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_rpc_prob_registration_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_update_edges_lidar_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_lidar_edge_detection_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_register.cxx
 # End Source File
 # Begin Source File
@@ -255,115 +156,61 @@ SOURCE=.\processes/bvxm_normalize_image_process.cxx
 SOURCE=.\processes/bvxm_gen_synthetic_world_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_save_occupancy_raw_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_edges_lidar_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_rpc_registration_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_roc_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_lidar_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_save_occupancy_vff_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_compare_3d_voxels_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_roi_int_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_rpc_prob_registration_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_normalization_util.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_scale_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_save_edges_raw_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvxm_voxel_slab_base_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bvxm_change_detection_display_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_clean_world_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_voxel_world_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_detect_changes_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_generate_edge_map_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_illum_index_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_normalize_image_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_render_expected_image_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_render_virtual_view_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_roi_init_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_rpc_registration_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_save_occupancy_raw_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_save_occupancy_vff_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_update_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_update_lidar_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_local_rpc_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_normalized_image_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_create_synth_lidar_data_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_gen_synthetic_world_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_lidar_init_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_save_edges_raw_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_heightmap_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_compare_rpc_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_ocp_compare_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_ocp_hist_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_roc_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_pmap_hist_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_pmap_ratio_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\multiscale_pro/bvxm_compare_3d_voxels_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\multiscale_pro/bvxm_detect_scale_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_rpc_prob_registration_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_update_edges_lidar_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_lidar_edge_detection_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_register.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_processes.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_normalization_util.h
 # End Source File
 # End Group
 # End Target

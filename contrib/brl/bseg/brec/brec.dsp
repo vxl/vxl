@@ -111,19 +111,37 @@ SOURCE=.\brec_part_hierarchy_detector.cxx
 SOURCE=.\brec_bg_pair_density.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brec_fg_pair_density.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brec_fg_bg_pair_density.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brec_part_base.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brec_bayesian_propagation.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brec_part_gaussian.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brec_pair_density.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brec_param_estimation.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brec_part_hierarchy_learner.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bgrl2_edge+brec_part_instance-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brec_part_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_fg_pair_density.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bgrl2_graph+brec_part_base.brec_hierarchy_edge-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\brec_fg_bg_pair_density.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bgrl2_vertex+brec_hierarchy_edge-.cxx
@@ -138,25 +156,25 @@ SOURCE=.\Templates/vbl_smart_ptr+brec_part_hierarchy-.cxx
 SOURCE=.\Templates/bgrl2_edge+brec_part_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_part_base.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\brec_bayesian_propagation.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brec_part_gaussian-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brec_hierarchy_edge-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_part_gaussian.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+brec_part_hierarchy_detector-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_pair_density.cxx
+SOURCE=.\Templates/vbl_smart_ptr+brec_part_hierarchy_detector-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_param_estimation.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+brec_part_hierarchy_learner-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+brec_part_hierarchy-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brec_part_hierarchy_learner-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -211,6 +229,15 @@ SOURCE=.\brec_part_hierarchy_detector.h
 # End Source File
 # Begin Source File
 SOURCE=.\brec_param_estimation.h
+# End Source File
+# Begin Source File
+SOURCE=.\brec_part_hierarchy_learner.h
+# End Source File
+# Begin Source File
+SOURCE=.\brec_part_hierarchy_learner_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\brec_part_hierarchy_detector_sptr.h
 # End Source File
 # End Group
 # End Target

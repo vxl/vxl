@@ -93,13 +93,19 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\brip_extrema_process.cxx
+SOURCE=.\brip_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brip_extrema_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\brip_extrema_process.h
+SOURCE=.\brip_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_processes.h
 # End Source File
 # End Group
 # End Target
