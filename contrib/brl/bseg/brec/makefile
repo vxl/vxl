@@ -15,10 +15,13 @@ SOURCES += brec_bayesian_propagation.cxx
 SOURCES += brec_part_gaussian.cxx
 SOURCES += brec_pair_density.cxx
 SOURCES += brec_param_estimation.cxx
+SOURCES += brec_part_hierarchy_learner.cxx
 MANPAGE_SOURCES += brec_part_gaussian_sptr.h
 MANPAGE_SOURCES += brec_part_hierarchy_sptr.h
 MANPAGE_SOURCES += brec_part_base_sptr.h
 MANPAGE_SOURCES += brec_hierarchy_edge_sptr.h
+MANPAGE_SOURCES += brec_part_hierarchy_learner_sptr.h
+MANPAGE_SOURCES += brec_part_hierarchy_detector_sptr.h
 
 SUBDIRS += pro
 
