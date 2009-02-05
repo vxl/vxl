@@ -146,6 +146,8 @@ bxml_data_sptr brec_part_instance::xml_element()
   data->set_attribute("x",x_);
   data->set_attribute("y",y_);
   data->set_attribute("strength",strength_);
+  data->set_attribute("rho",rho_);
+  data->set_attribute("cnt",cnt_);
   data->append_text("\n ");
   data->append_data(data_super);
   data->append_text("\n ");
@@ -165,7 +167,10 @@ bool brec_part_instance::xml_parse_element(bxml_data_sptr data)
     bool found = (((bxml_element*)ins_root.ptr())->get_attribute("kind", kind_) &&
                   ((bxml_element*)ins_root.ptr())->get_attribute("x", x_) &&
                   ((bxml_element*)ins_root.ptr())->get_attribute("y", y_) &&
-                  ((bxml_element*)ins_root.ptr())->get_attribute("strength", strength_));
+                  ((bxml_element*)ins_root.ptr())->get_attribute("strength", strength_) &&
+                  ((bxml_element*)ins_root.ptr())->get_attribute("rho", rho_) &&
+                  ((bxml_element*)ins_root.ptr())->get_attribute("cnt", cnt_)
+                 );
     if (!found)
       return false;
 

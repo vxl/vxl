@@ -700,7 +700,7 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
       double neu = pdf;
       double rho = 0.0f;
       if (den > 0.0f)
-        rho = neu/den; // foreground and background posterior ratio
+        rho = vcl_log10(neu/den); // foreground and background posterior ratio
 
       if (rho > 0.0f) {
         cnt_ = cnt_ + 1;
@@ -709,7 +709,6 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
       }
 
     }
-
   //vcl_cout << "after update, instance rho_: " << rho_ << "\n";
   //vcl_cout << "after update, instance cnt_: " << cnt_ << "\n";
   return true;
