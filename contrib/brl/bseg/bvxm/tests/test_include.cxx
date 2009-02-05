@@ -21,5 +21,6 @@
 
 #include <bvxm/io/bvxm_io_voxel_world.h>
 #include <bvxm/io/bvxm_io_world_params.h>
+#include <bvxm/io/bvxm_io_voxel_slab_base.h>
 
 int main() { return 0; }
