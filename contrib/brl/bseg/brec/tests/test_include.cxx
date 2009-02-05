@@ -2,6 +2,8 @@
 #include <brec/brec_part_base_sptr.h>
 #include <brec/brec_part_gaussian_sptr.h>
 #include <brec/brec_part_hierarchy_sptr.h>
+#include <brec/brec_part_hierarchy_detector_sptr.h>
+#include <brec/brec_part_hierarchy_learner_sptr.h>
 
 #include <brec/brec_bayesian_propagation.h>
 #include <brec/brec_bg_pair_density.h>
@@ -16,5 +18,6 @@
 #include <brec/brec_part_hierarchy.h>
 #include <brec/brec_part_hierarchy_builder.h>
 #include <brec/brec_part_hierarchy_detector.h>
+#include <brec/brec_part_hierarchy_learner.h>
 
 int main() { return 0; }
