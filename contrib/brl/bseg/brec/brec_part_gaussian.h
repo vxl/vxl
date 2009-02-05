@@ -6,7 +6,7 @@
 // \brief class to represent primitive parts as non-isotropic gaussian filters oriented in various ways
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
+// \date Oct 16, 2008
 //
 // \verbatim
 //  Modifications
@@ -31,10 +31,10 @@ class brec_part_gaussian : public brec_part_instance
  public:
 
   brec_part_gaussian(float x, float y, float strength, float lambda0, float lambda1, float theta, bool bright, unsigned type);
-  
+
   //: the following constructor should only be used during parsing
   brec_part_gaussian() : brec_part_instance(0, 0, brec_part_instance_kind::GAUSSIAN, 0.0f, 0.0f, 0.0f),
-    lambda0_(0), lambda1_(0), theta_(0), bright_(true), cutoff_percentage_(0.0f), fitted_weibull_(false), lambda_(0.0f), k_(0.0f) {};
+    lambda0_(0), lambda1_(0), theta_(0), bright_(true), cutoff_percentage_(0.0f), lambda_(0.0f), k_(0.0f), fitted_weibull_(false) {};
 
   virtual bool mark_receptive_field(vil_image_view<vxl_byte>& img, unsigned plane);
   virtual bool mark_center(vil_image_view<vxl_byte>& img, unsigned plane);
@@ -54,38 +54,38 @@ class brec_part_gaussian : public brec_part_instance
   virtual bxml_data_sptr xml_element();
   virtual bool xml_parse_element(bxml_data_sptr data);
 
-  //: run the operator on the mean img and use the response to construct a response model for this operator
-  //  the mean img and the std_dev img are float images with values in [0,1] range
-  //  they are supposedly extracted from the background model of the scene 
+  //: run the operator on \p mean_img and use the response to construct a response model for this operator
+  //  The \p mean_img and the \p std_dev_img are float images with values in [0,1] range
+  //  They are supposedly extracted from the background model of the scene
   bool construct_bg_response_model(vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img, vil_image_view<float> &lambda_img, vil_image_view<float> &k_img);
   bool construct_bg_response_model_gauss(vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img, vil_image_view<float> &mu_img, vil_image_view<float> &sigma_img);
 
   //: collect operator responses from the input image's foreground regions to estimate lambda and k for the foreground response model
-  //  the input img and the fg_prob_img (foreground probability image) are float images with values in [0,1] range
-  //  convert_prob_img: set to true if fg_prob_img is indeed the background probability image and it needs to be inverted to get foreground probabilities
+  //  The input img and the \p fg_prob_img (foreground probability image) are float images with values in [0,1] range
+  //  \p convert_prob_img: set to true if \p fg_prob_img is indeed the background probability image and it needs to be inverted to get foreground probabilities
   bool construct_fg_response_model(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask_img, bool convert_prob_img, double &lambda, double &k);
 
   //: collect operator responses from the input image's foreground regions
-  //  the input img and the fg_prob_img (foreground probability image) are float images with values in [0,1] range
-  //  assumes histogram is initialized
+  //  The input \p img and the \p fg_prob_img (foreground probability image) are float images with values in [0,1] range
+  //  Assumes histogram is initialized
   virtual bool update_response_hist(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask_img, bsta_histogram<float>& fg_h);
   //: for gaussian operators we use weibull distribution as the parametric model
   virtual bool fit_distribution_to_response_hist(bsta_histogram<float>& fg_h);
 
-  //: use the background mean and std_dev imgs to construct response model for background and calculate posterior ratio of foreground and background
-  //  assumes that k_ and lambda_ for the foreground response model has already been set
-  virtual bool update_foreground_posterior(vil_image_view<float>& inp, 
-                                           vil_image_view<float>& fg_prob_img, 
-                                           vil_image_view<bool>& mask, 
-                                           vil_image_view<float>& mean_img, 
+  //: use the background \p mean_img and \p std_dev_img to construct response model for background and calculate posterior ratio of foreground and background
+  //  Assumes that \p k_ and \p lambda_ for the foreground response model have already been set
+  virtual bool update_foreground_posterior(vil_image_view<float>& inp,
+                                           vil_image_view<float>& fg_prob_img,
+                                           vil_image_view<bool>& mask,
+                                           vil_image_view<float>& mean_img,
                                            vil_image_view<float>& std_dev_img);
 
-  //: run the operator on the input img rotated by the given angle and save the instances in the input vector
-  //  use the response models saved in the model_dir to set the operator response strength which is equivalent to posterior probability of this pixel's being foreground given the operator response
+  //: run the operator on the input \p img rotated by the given angle and save the instances in the input vector
+  //  Use the response models saved in the \p model_dir to set the operator response strength which is equivalent to posterior probability of this pixel being foreground given the operator response
   //  i.e. p(x in foreground | operator response) = p(operator response | x in foreground) / [p(operator response | x in foreground) + p(operator response | x in background)]
-  //  return all the instances which have a posterior larger than zero (--> no thresholding, return "all" the responses)
-  //  fg_prob_image is the probability of being foreground for each pixel
-  //  pb_zero is the constant required for the background response model (probability of zero response)
+  //  \return all the instances which have a posterior larger than zero (--> no thresholding, return "all" the responses)
+  //  \p fg_prob_img is the probability of being foreground for each pixel
+  //  \p pb_zero is the constant required for the background response model (probability of zero response)
   bool extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float rot_angle, vcl_string model_dir, vcl_vector<brec_part_instance_sptr>& instances);
 
   //: find P(alpha in foreground): the probability that this operator alpha is in foreground
@@ -97,7 +97,7 @@ class brec_part_gaussian : public brec_part_instance
 
   vcl_string string_identifier();
 
-  float lambda0_;  // axis 
+  float lambda0_;  // axis
   float lambda1_;
   float theta_;    // orientation angle (in degrees)
   bool bright_;
@@ -108,12 +108,12 @@ class brec_part_gaussian : public brec_part_instance
   vbl_array_2d<bool> mask_;
   int rj_, ri_;
 
-  float lambda_, k_;  // we fit weibul distribution to gaussian operators's response model
+  float lambda_, k_;  // we fit Weibull distribution to Gaussian operators' response model
   bool fitted_weibull_;
 };
 
-//strength_threshold in [0,1] - min strength to declare the part as detected
 //: extracts only one type of primitive and adds to the part vector
+//  Strength_threshold in [0,1] - min strength to declare the part as detected
 bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<brec_part_instance_sptr>& parts);
 
 
