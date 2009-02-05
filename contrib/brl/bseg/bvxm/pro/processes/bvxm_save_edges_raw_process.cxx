@@ -22,14 +22,24 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
 
-bool bvxm_save_edges_raw_process(bprb_func_process& pro)
+bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
 {
-  // process takes 2 inputs:
+  // process takes 3 inputs:
   //input[0]: The voxel world
   //input[1]: The filename to write to
-  // process has 0 outputs.
+  //input[2]: The scale of the world
+  unsigned n_inputs_ = 3;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "bvxm_voxel_world_sptr";
+  input_types_[1] = "vcl_string";
+  input_types_[2] = "unsigned";
 
-  unsigned n_inputs_ = 2;
+}
+
+bool bvxm_save_edges_raw_process(bprb_func_process& pro)
+{
+
+  unsigned n_inputs_ = 3;
   if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
