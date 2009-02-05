@@ -61,7 +61,7 @@ foreach my $dir (@DIRS)
   elsif ($dir =~ m/\bvil3d$/) { @sd = qw(file_formats); }
   elsif ($dir =~ m/\bosl$/)   { @sd = qw(internals); }
   elsif ($dir =~ m/\bbwm$/)   { @sd = qw(process); }
-  elsif ($dir =~ m/\bbvxm\/pro$/) { @sd = qw(multiscale_pro); }
+  elsif ($dir =~ m/\b(brip_pro|vidl2_pro|vil_pro|vpgl_pro|bbgm\/pro|bmdl\/pro|brec\/pro|bvxm\/pro)$/) { @sd = qw(processes); }
   foreach my $sd (@sd) {
     opendir TMP,"$dir/$sd";
     push @file_list, map { "$sd/$_" } grep {! m/^(\..*|CVS)$/} readdir(TMP);
