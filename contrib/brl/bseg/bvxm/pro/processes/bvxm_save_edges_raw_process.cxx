@@ -33,7 +33,7 @@ bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
-
+  return pro.set_input_types(input_types_);
 }
 
 bool bvxm_save_edges_raw_process(bprb_func_process& pro)
