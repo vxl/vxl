@@ -34,7 +34,7 @@
 //: globals
 namespace bvxm_ocp_compare_process_gloabals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
   
   //functions
@@ -48,7 +48,7 @@ bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_ocp_compare_process_gloabals;
   
-  // This process has 2 inputs:
+  // This process has 4 inputs:
   vcl_vector<vcl_string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for LIDAR ONLY update

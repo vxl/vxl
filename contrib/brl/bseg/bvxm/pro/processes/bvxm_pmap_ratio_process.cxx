@@ -28,7 +28,7 @@
 //: globals variables/functions
 namespace bvxm_pmap_ratio_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 0;
   
   //functions
