@@ -5,21 +5,19 @@
 // \brief Processes to find instances of various structures, objects (e.g. vehicles) according to a part hierarchy constructed a priori
 //
 // \author Ozge Can Ozcanli
-// \date 10/28/08
+// \date Oct 28, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 3, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
-//#include <vil/io/vil_io_image_view.h>
 #include <vil/vil_new.h>
 #include <vil/vil_convert.h>
-//#include <brip/brip_vil_float_ops.h>
 #include <vul/vul_timer.h>
 
 #include <brec/brec_part_hierarchy_builder.h>
@@ -33,21 +31,18 @@
 bool brec_recognize_structure_process_cons(bprb_func_process& pro)
 {
   //inputs
-  bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");      // input orig view
   input_types.push_back("unsigned");      // detector id for the type of structure to be recognized
   input_types.push_back("float");      // angle to rotate detector for the type of structure to be recognized
                                   // should be passed zero if the original orientation of the detector will be used
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
-  //output
-  vcl_vector<vcl_string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");      // output prob map
-  output_types.push_back("vil_image_view_base_sptr");      // output map overlayed on orig view as a byte image
-  ok = pro.set_output_types(output_types);
-  return ok;
+  if (pro.set_input_types(input_types))
+  { //output
+    vcl_vector<vcl_string> output_types;
+    output_types.push_back("vil_image_view_base_sptr"); // output prob map
+    output_types.push_back("vil_image_view_base_sptr"); // output map overlayed on orig view as a byte image
+    return pro.set_output_types(output_types);
+  }
 }
 
 
@@ -60,7 +55,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
   }
 
   //: get input
-  unsigned i = 0; 
+  unsigned i = 0;
   vil_image_view_base_sptr orig_view = pro.get_input<vil_image_view_base_sptr>(i++);
   if (orig_view->pixel_format() != VIL_PIXEL_FORMAT_BYTE)
     return false;
@@ -130,10 +125,10 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(output_map_float);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_map_sptr);
-  
+
   vil_image_view_base_sptr out_map_sptr1 = new vil_image_view<vxl_byte>(output_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr1);
-  
+
   vcl_cout << " whole process took: " << t2.real() / (60*1000.0f) << " mins.\n";
 
   return true;
@@ -143,23 +138,20 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
 bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
 {
   //inputs
-  bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");      // input orig view
-  input_types.push_back("vil_image_view_base_sptr");      // input view's background probability map, float img with values in [0,1] range
+  input_types.push_back("vil_image_view_base_sptr"); // input orig view
+  input_types.push_back("vil_image_view_base_sptr"); // input view's background probability map, float img with values in [0,1] range
   input_types.push_back("brec_part_hierarchy_sptr"); // detector for the type of structure to be recognized (needs to be loaded a priori)
   input_types.push_back("float");      // angle to rotate detector for the type of structure to be recognized
-                                  // should be passed zero if the original orientation of the detector will be used                                
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
-  //output
-  vcl_vector<vcl_string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");      // output prob map
-  output_types.push_back("vil_image_view_base_sptr");      // output map overlayed on orig view as a byte image
-  output_types.push_back("brec_part_hierarchy_detector_sptr");      // output map overlayed on orig view as a byte image
-  ok = pro.set_output_types(output_types);
-  return ok;
+                                  // should be passed zero if the original orientation of the detector will be used
+  if (pro.set_input_types(input_types))
+  { //output
+    vcl_vector<vcl_string> output_types;
+    output_types.push_back("vil_image_view_base_sptr"); // output prob map
+    output_types.push_back("vil_image_view_base_sptr"); // output map overlayed on orig view as a byte image
+    output_types.push_back("brec_part_hierarchy_detector_sptr"); // output map overlayed on orig view as a byte image
+    return pro.set_output_types(output_types);
+  }
 }
 
 
@@ -172,7 +164,7 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
   }
 
   //: get input
-  unsigned i = 0; 
+  unsigned i = 0;
   vil_image_view_base_sptr inp_img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vxl_byte> orig_img(inp_img);
 
@@ -211,12 +203,12 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(output_map_float);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_map_sptr);
-  
+
   vil_image_view_base_sptr out_map_sptr1 = new vil_image_view<vxl_byte>(output_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr1);
-  
+
   pro.set_output_val<brec_part_hierarchy_detector_sptr>(2, hd);
-  
+
   vcl_cout << " whole process took: " << t2.real() / (60*1000.0f) << " mins.\n";
 
   return true;
