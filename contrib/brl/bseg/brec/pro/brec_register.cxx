@@ -42,7 +42,6 @@ void brec_register::register_process()
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_update_changes_process, "brecUpdateChangesProcess");
 
-#if 0
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_construct_bg_op_models_process, "brecConstructBGOPModelsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_construct_fg_op_models_process, "brecConstructFGOPModelsProcess");
   
@@ -54,9 +53,8 @@ void brec_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_init_process, "brecLearnerL0InitProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_fit_process, "brecLearnerL0FitProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_rank_process, "brecLearnerL0RankProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_update_posterior_stats_process, "brecLearnerL0UpdatePosteriorStatsProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_update_stats_process, "brecLearnerL0UpdateProcess");
+  REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_update_posterior_stats_process, "brecLearnerL0UpdatePosteriorStatsProcess");
+  REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_update_stats_process, "brecLearnerL0UpdateProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_load_hierarchy_process, "brecLoadHierarchyProcess");
-#endif
 
 }

@@ -140,7 +140,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
 }
 
 //: Constructor
-bool brec_recognize_structure2_process_const(bprb_func_process& pro)
+bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;

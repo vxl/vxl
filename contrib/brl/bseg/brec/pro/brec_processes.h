@@ -18,7 +18,6 @@ DECLARE_FUNC_CONS(brec_prob_map_threshold_process);
 DECLARE_FUNC_CONS(brec_update_changes_process);
 DECLARE_FUNC_CONS(brec_recognize_structure_process);
 
-#if 0
 DECLARE_FUNC_CONS(brec_recognize_structure2_process);
 DECLARE_FUNC_CONS(brec_construct_bg_op_models_process);
 DECLARE_FUNC_CONS(brec_construct_fg_op_models_process);
@@ -29,8 +28,7 @@ DECLARE_FUNC_CONS(brec_save_hierarchy_process);
 DECLARE_FUNC_CONS(brec_learner_layer0_init_process);
 DECLARE_FUNC_CONS(brec_learner_layer0_fit_process);
 DECLARE_FUNC_CONS(brec_learner_layer0_rank_process);
-DECLARE_FUNC_CONS(brec_learner_layer0_update_posterior_stats_process);
-DECLARE_FUNC_CONS(brec_learner_layer0_update_stats_process);
-#endif
+DECLARE_FUNC_CONS_INIT(brec_learner_layer0_update_posterior_stats_process);
+DECLARE_FUNC_CONS_INIT(brec_learner_layer0_update_stats_process);
 
 #endif  // brec_processes_h_
