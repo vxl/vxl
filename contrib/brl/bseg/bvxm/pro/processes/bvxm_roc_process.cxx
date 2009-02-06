@@ -41,9 +41,9 @@ bool bvxm_roc_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
-  
+
   return true;
 }
 
@@ -51,9 +51,9 @@ bool bvxm_roc_process(bprb_func_process& pro)
 {
   using namespace bvxm_roc_process_globals;
 
-  if( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
   //get the inputs
@@ -177,3 +177,4 @@ bool bvxm_roc_process(bprb_func_process& pro)
   vcl_cerr << '\n';
   return true;
 }
+
