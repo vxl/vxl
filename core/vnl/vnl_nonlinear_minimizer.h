@@ -121,6 +121,7 @@ class vnl_nonlinear_minimizer
     CONVERGED_XFTOL             = 3,
     CONVERGED_GTOL              = 4,
     FAILED_TOO_MANY_ITERATIONS  = 5,
+    TOO_MANY_ITERATIONS         = FAILED_TOO_MANY_ITERATIONS,         // for backward-compatibilty
     FAILED_FTOL_TOO_SMALL       = 6,
     FAILED_XTOL_TOO_SMALL       = 7,
     FAILED_GTOL_TOO_SMALL       = 8,
