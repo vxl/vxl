@@ -8,4 +8,4 @@ class brec_register
   static void register_process();
 };
 
-#endif  // brec_register_h
+#endif  // brec_register_h_
