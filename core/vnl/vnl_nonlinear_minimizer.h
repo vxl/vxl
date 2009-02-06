@@ -120,7 +120,7 @@ class vnl_nonlinear_minimizer
     CONVERGED_XTOL              = 2,
     CONVERGED_XFTOL             = 3,
     CONVERGED_GTOL              = 4,
-    TOO_MANY_ITERATIONS         = 5,
+    FAILED_TOO_MANY_ITERATIONS  = 5,
     FAILED_FTOL_TOO_SMALL       = 6,
     FAILED_XTOL_TOO_SMALL       = 7,
     FAILED_GTOL_TOO_SMALL       = 8,
