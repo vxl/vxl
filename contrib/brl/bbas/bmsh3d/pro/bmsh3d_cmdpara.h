@@ -1,6 +1,6 @@
 // This is brl/bbas/bmsh3d/pro/bmsh3d_cmdpara.h
-#ifndef _bmsh3d_cmdpara_h_
-#define _bmsh3d_cmdpara_h_
+#ifndef bmsh3d_cmdpara_h_
+#define bmsh3d_cmdpara_h_
 //:
 // \file
 // \author Ming-Ching Chang
@@ -19,7 +19,7 @@
 
 //: bmsh3d_cmdproc command-line arguments.
 
-//Mesh File I/O
+        //   --- Mesh File I/O ---
 extern vul_arg<char const*>   bmsh3d_cmd_p3d_file;
 extern vul_arg<char const*>   bmsh3d_cmd_g3d_file;
 extern vul_arg<char const*>   bmsh3d_cmd_xyz_file;
@@ -43,7 +43,7 @@ extern vul_arg<char const*>   bmsh3d_cmd_ply2_file2;
 extern vul_arg<char const*>   bmsh3d_cmd_iv_file2;
 extern vul_arg<char const*>   bmsh3d_cmd_iv_file3;
 
-//IV/VRML parsing
+        //   --- IV/VRML parsing ---
 extern vul_arg<char const*>   bmsh3d_cmd_iv_pfile;
 extern vul_arg<char const*>   bmsh3d_cmd_wrl_pfile;
 
@@ -55,7 +55,7 @@ extern vul_arg<char const*>   bmsh3d_cmd_align_file;
 extern vul_arg<char const*>   bmsh3d_cmd_fix_af;
 extern vul_arg<char const*>   bmsh3d_cmd_align_listfile;
 
-//Output files
+        //   --- Output files ---
 extern vul_arg<int>           bmsh3d_cmd_ofile;
 extern vul_arg<int>           bmsh3d_cmd_fileo;
 extern vul_arg<char const*>   bmsh3d_cmd_p3d_ofile;
@@ -75,7 +75,7 @@ extern vul_arg<char const*>   bmsh3d_cmd_wrl_ofile;
 extern vul_arg<char const*>   bmsh3d_cmd_wrl_ofile2;
 extern vul_arg<char const*>   bmsh3d_cmd_align_ofile;
 
-//Point/Mesh Processing
+        //   --- Point/Mesh Processing ---
 extern vul_arg<int>           bmsh3d_cmd_preproc;
 extern vul_arg<float>         bmsh3d_cmd_ptb;
 extern vul_arg<int>           bmsh3d_cmd_1stoct;
@@ -90,7 +90,7 @@ extern vul_arg<float>         bmsh3d_cmd_gsr;
 extern vul_arg<float>         bmsh3d_cmd_grr;
 extern vul_arg<float>         bmsh3d_cmd_thr;
 
-//General options
+        //   --- General options ---
 extern vul_arg<int>           bmsh3d_cmd_o;
 extern vul_arg<int>           bmsh3d_cmd_gui;
 extern vul_arg<int>           bmsh3d_cmd_verbose;
@@ -98,7 +98,7 @@ extern vul_arg<int>           bmsh3d_cmd_valid;
 extern vul_arg<int>           bmsh3d_cmd_mem;
 extern vul_arg<int>           bmsh3d_cmd_help;
 
-//Processing options
+        //   --- Processing options ---
 extern vul_arg<int>           bmsh3d_cmd_bkt;
 extern vul_arg<int>           bmsh3d_cmd_npbkt;
 extern vul_arg<float>         bmsh3d_cmd_bktbr;
@@ -138,7 +138,7 @@ extern vul_arg<float>         bmsh3d_cmd_len_tiny;
 extern vul_arg<float>         bmsh3d_cmd_percent;
 extern vul_arg<float>         bmsh3d_cmd_percent2;
 
-//Visualization options
+        //   --- Visualization options ---
 extern vul_arg<int>           bmsh3d_cmd_v;
 extern vul_arg<int>           bmsh3d_cmd_bgcol;
 extern vul_arg<bool>          bmsh3d_cmd_shapehints;
@@ -155,10 +155,10 @@ extern vul_arg<int>           bmsh3d_cmd_colorcode;
 extern vul_arg<int>           bmsh3d_cmd_colorcode2;
 extern vul_arg<int>           bmsh3d_cmd_colorcodebnd;
 
-//Shortest path (graph) on mesh.
+        //   --- Shortest path (graph) on mesh. ---
 extern vul_arg<int>           bmsh3d_cmd_shp;
 
-//Geodesic distance transform options
+        //   --- Geodesic distance transform options ---
 extern vul_arg<int>           bmsh3d_cmd_gdt;
 extern vul_arg<int>           bmsh3d_cmd_fmm;
 extern vul_arg<int>           bmsh3d_cmd_ns;
@@ -168,16 +168,15 @@ extern vul_arg<int>           bmsh3d_cmd_e;
 extern vul_arg<int>           bmsh3d_cmd_ntestquery;
 extern vul_arg<int>           bmsh3d_cmd_ntestcontour;
 
-//Generate data file
+        //   --- Generate data file ---
 extern vul_arg<char const*>   bmsh3d_cmd_gen_pgutter;
 extern vul_arg<char const*>   bmsh3d_cmd_gen_box;
 extern vul_arg<char const*>   bmsh3d_cmd_gen_rand_box;
-
 
 //#####################################################################
 
 //: bmsh3d_cmdproc process parameters.
 extern vcl_string             bmsh3d_app_window_title;
-extern bool                   bmsh3d_pro_contiune;
+extern bool                   bmsh3d_pro_continue;
 
-#endif // _bmsh3d_cmdpara_h_
+#endif // bmsh3d_cmdpara_h_
