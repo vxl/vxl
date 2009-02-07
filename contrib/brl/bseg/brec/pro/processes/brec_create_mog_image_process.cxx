@@ -2,9 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A process to create a mixture of gaussian image of type bbgm_image_of from a bvxm_voxel_slab which 
-//        should have been created for a voxel world from a given view using the corresponding bvxm process
-//       
+// \brief A process to create a mixture of gaussian image of type bbgm_image_of from a bvxm_voxel_slab which should have been created for a voxel world from a given view using the corresponding bvxm process
 //
 // Summarizes the appearance model of the voxel world and constitutes a view-based background model
 // Outputs the mixture in the bbgm format for binary io with that libraries methods
@@ -13,7 +11,7 @@
 // \date December 15, 2008
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>
@@ -40,7 +38,7 @@ bbgm_image_sptr create_bbgm_image(bvxm_voxel_slab_base_sptr mog_image_)
   return out_model_img_;
 }
 
-//:Constructor
+//: Constructor
 bool brec_create_mog_image_process_cons(bprb_func_process& pro)
 {
   //inputs
@@ -61,16 +59,16 @@ bool brec_create_mog_image_process_cons(bprb_func_process& pro)
 bool brec_create_mog_image_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 2){
+  if (pro.n_inputs() < 2) {
     vcl_cerr << "brec_create_hierarchy_process - invalid inputs\n";
     return false;
   }
 
-  //: get input
+  // get input
   unsigned i = 0;
   bvxm_voxel_slab_base_sptr v_slab = pro.get_input<bvxm_voxel_slab_base_sptr>(i++);
   vcl_string voxel_type = pro.get_input<vcl_string>(i++);
-  
+
   // turn the bvxm_slab into a bbgm_image_of instance for binary io (i.e. use processes in bbgm_pro)
   bbgm_image_sptr out_img;
   if (voxel_type == "apm_mog_grey")

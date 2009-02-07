@@ -6,7 +6,7 @@
 // \brief class to represent a hiearachy of composable parts for recognition
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
+// \date Oct 16, 2008
 //
 // \verbatim
 //  Modifications
@@ -40,7 +40,7 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
   //: output_img needs to have 3 planes
   static void generate_output_img(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<vxl_byte>& input_img, vil_image_view<vxl_byte>& output_img);
 
-  // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
+  //: check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
   brec_part_instance_sptr exists(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, vil_image_view<float>& map, vil_image_view<unsigned>& type_map, vcl_vector<vcl_vector<brec_part_instance_sptr> >& part_map, float det_threshold);
 
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
@@ -64,15 +64,14 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
 
   //: a map to store dummy instances of primitive parts, so that they could be extracted properly for a constructed hierarchy
   vcl_vector<brec_part_instance_sptr> dummy_primitive_instances_;
-  
+
   vcl_string name_;
-  
-  //: after constructing the background and foreground response models for the primitive instances,
-  //  the name of the directory to load these models should be saved in the hierarchy
+
+  //: after constructing the background and foreground response models for the primitive instances, the name of the directory to load these models should be saved in the hierarchy
   vcl_string model_dir_;
 };
 
-//: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
+// Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
 void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy const &ph);
 void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy &ph);
 void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy* ph);
