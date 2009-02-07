@@ -24,6 +24,9 @@
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <direct.h> // for getcwd, mkdir
+#define getcwd _getcwd // getcwd is now "deprecated" by Visual Studio
+#define chdir  _chdir  // idem
+#define mkdir  _mkdir  // idem
 #else
 #include <unistd.h>
 #endif
