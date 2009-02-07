@@ -1,13 +1,11 @@
 // This is brl/bpro/core/vil_pro/processes/vil_combine_grey_images_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
-//:
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
-
 
 //: Constructor
 bool vil_combine_grey_images_process_cons(bprb_func_process& pro)
@@ -16,7 +14,7 @@ bool vil_combine_grey_images_process_cons(bprb_func_process& pro)
   // input(0): Filename containing the list of images to combine
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -24,7 +22,7 @@ bool vil_combine_grey_images_process_cons(bprb_func_process& pro)
   output_types.push_back("vil_image_view_base_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
+
   return true;
 }
 
@@ -39,54 +37,51 @@ bool get_images(vcl_string file,
   vcl_vector< vcl_vector<unsigned> > sizes;
 
   //Caution: Your file should not have an empty line at the end
-  while(!ifs.eof())
+  while (!ifs.eof())
   {
-      vcl_string image_filename;
-      ifs >> image_filename;
-      if(image_filename.empty())
-        continue;
-      vil_image_view_base_sptr loaded_image = vil_load(image_filename.c_str() );
-      if ( !loaded_image ) {
-        vcl_cerr << "Failed to load image file" << image_filename << vcl_endl;
-        return false;
-      }
-      if ( loaded_image->nplanes() != 1)
-      {
-        vcl_cerr << "Image" << image_filename << "is not gray scale "<< vcl_endl;
-        return false;
-      }
-      grey_imgs.push_back( loaded_image );
-      vcl_vector<unsigned> this_size;
-      this_size.push_back(loaded_image->ni());
-      this_size.push_back(loaded_image->nj());
-      sizes.push_back(this_size);
+     vcl_string image_filename;
+     ifs >> image_filename;
+     if (image_filename.empty())
+       continue;
+     vil_image_view_base_sptr loaded_image = vil_load(image_filename.c_str() );
+     if ( !loaded_image ) {
+       vcl_cerr << "Failed to load image file" << image_filename << '\n';
+       return false;
+     }
+     if ( loaded_image->nplanes() != 1)
+     {
+       vcl_cerr << "Image" << image_filename << "is not gray scale\n";
+       return false;
+     }
+     grey_imgs.push_back( loaded_image );
+     vcl_vector<unsigned> this_size;
+     this_size.push_back(loaded_image->ni());
+     this_size.push_back(loaded_image->nj());
+     sizes.push_back(this_size);
    }
 
   //check that all images have the same size
   for (unsigned i = 1; i < sizes.size(); i++)
   {
-    if ( sizes[i] != sizes[i-1]){
-      vcl_cerr << "Grey-scale images have different sizes" << vcl_endl;
+    if ( sizes[i] != sizes[i-1]) {
+      vcl_cerr << "Grey-scale images have different sizes\n";
       return false;
     }
-
   }
   width = sizes[0][0];
   height = sizes[0][1];
-  
-  
+
   return true;
 }
 
 
 // Combine the grey-scale images.
 bool combine(vcl_vector<vil_image_view_base_sptr>const  &grey_imgs,
-                        vil_image_view_base_sptr &mul_img, 
-                        unsigned width, unsigned height)
+             vil_image_view_base_sptr &mul_img,
+             unsigned width, unsigned height)
 {
-  
   vil_image_view<float> byte_img(width,height,grey_imgs.size());
-    
+
   for (unsigned int p = 0; p < grey_imgs.size(); p++)
   {
     vil_image_view<float> grey_img = static_cast<vil_image_view<float> >(*grey_imgs[p]);
@@ -94,11 +89,10 @@ bool combine(vcl_vector<vil_image_view_base_sptr>const  &grey_imgs,
     for (unsigned i = 0; i < width; i++)
       for (unsigned j = 0; j < height; j++)
         byte_img(i,j,p) = grey_img(i,j);
-
   }
 
   mul_img = new vil_image_view<float>(byte_img);
- 
+
   return true;
 }
 
