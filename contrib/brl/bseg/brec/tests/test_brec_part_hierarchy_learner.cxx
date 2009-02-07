@@ -18,12 +18,11 @@
 
 static void test_brec_part_hierarchy_learner()
 {
-  //vcl_string file = "normalized0_cropped.png";
-  vcl_string file = "test_view_0_cropped.png";
+  vcl_string file = "test_view_0_cropped.png"; // "normalized0_cropped.png";
   vcl_string gt_file = "normalized0_gt_cropped.png";
-  //: load the mask img as well for foreground model construction
+  // load the mask img as well for foreground model construction
   vcl_string mask_file = "test_view_0_mask_cropped.bin";
- 
+
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
   if (!img)
@@ -43,7 +42,7 @@ static void test_brec_part_hierarchy_learner()
   is.close();
   vil_image_view<bool> mask_img(mask_image);
 
-  //: load the gt image
+  // load the gt image
   vil_image_view<float> gt_map = vil_convert_cast(float(), gt_img->get_view());
   vil_math_scale_values(gt_map,1.0/255.0);
   vil_image_view<float> dummy(ni, nj), back_gt_map(ni, nj);
@@ -65,24 +64,24 @@ static void test_brec_part_hierarchy_learner()
 
   vil_image_view<float> inp_img = vil_convert_cast(float(), img->get_view());
   vil_math_scale_values(inp_img,1.0/255.0);
-  
+
   brec_part_hierarchy_learner_sptr collector = new brec_part_hierarchy_learner();
-  //: 4 directions, lambda's start from 1.0 and increase to 2 with increments of 1
+  // 4 directions, lambda's start from 1.0 and increase to 2 with increments of 1
   collector->initialize_layer0_as_gaussians(4, 2.0f, 1.0f);
   TEST("collector created", !collector, false);
   TEST("collector created", collector->stats_layer0().size(), 4*4*2);
 
   vul_timer t;
   t.mark();
-  //: no need to convert prob map when passing gt_map cause vehicles have "high probs" (in background map, vehicles have low probs)
-  //collector->collect_layer0_stats(inp_img, gt_map, mask_img); 
+  // no need to convert prob map when passing gt_map cause vehicles have "high probs" (in background map, vehicles have low probs)
+  //collector->collect_layer0_stats(inp_img, gt_map, mask_img);
   vcl_cout << " update of one image took: " << t.real()/1000 << " seconds " << t.real()/ (60*1000) << " mins.\n";
   //collector->print();
   vcl_string m_file = "out_figure.m";
   collector->print_to_m_file_layer0(m_file);
   collector = 0;
 
-  //: test whether the stats from histogram are computed exactly the same
+  // test whether the stats from histogram are computed exactly the same
   vnl_random rng;
   float probs[100];
   for (unsigned i = 0; i < 100; i++) {
@@ -102,7 +101,7 @@ static void test_brec_part_hierarchy_learner()
 
   vcl_cout << "mean from histogram: " << h.mean() << " variance: " << h.variance() << vcl_endl;
 
-  //: calculate yourself
+  // calculate yourself
   float x_sum = 0.0, xsq_sum = 0.0, p_sum = 0.0;
   for (unsigned i = 0; i < 100; i++) {
     x_sum += probs[i]*numbers[i];

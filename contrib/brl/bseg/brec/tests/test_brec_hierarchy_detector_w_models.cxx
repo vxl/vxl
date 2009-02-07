@@ -32,12 +32,11 @@
 
 static void test_brec_hierarchy_detector_w_models()
 {
-  //vcl_string file = "normalized0_cropped.png";
-  vcl_string file = "test_view_0_cropped.png";
+  vcl_string file = "test_view_0_cropped.png"; // "normalized0_cropped.png";
   vcl_string gt_file = "normalized0_gt_cropped.png";
-  //: load the mask img as well for foreground model construction
+  // load the mask img as well for foreground model construction
   vcl_string mask_file = "test_view_0_mask_cropped.bin";
- 
+
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
   if (!img)
@@ -77,9 +76,8 @@ static void test_brec_hierarchy_detector_w_models()
   is.close();
   vil_image_view<bool> mask_img(mask_image);
 
-
 #if 0
-  //: abuse the gt image as a background probability image
+  // abuse the gt image as a background probability image
   vil_image_view<float> prob_map = vil_convert_cast(float(), gt_img->get_view());
   vil_math_scale_values(prob_map,1.0/255.0);
   vil_image_view<float> dummy(ni, nj), back_prob_map(ni, nj);
@@ -108,7 +106,7 @@ static void test_brec_hierarchy_detector_w_models()
   vil_image_view<float> inp_mean_img(mean_img->get_view());
   vil_image_view<float> inp_sd_img(sd_img->get_view());
 
-  //: collect stats from the images, find the intensity histogram
+  // collect stats from the images, find the intensity histogram
   bsta_histogram<float> hi(0.0f, 1.0f, 255);
   for (unsigned i = 0; i < inp_img.ni(); i++) {
     for (unsigned j = 0; j < inp_img.nj(); j++) {
@@ -123,19 +121,18 @@ static void test_brec_hierarchy_detector_w_models()
         hi2.upcount(inp_mean_img(i,j), 1.0f);
     }
   }
-  vcl_ofstream ofs("./hist.out");
-  ofs << "image intensities:\n";
-  ofs << hi << vcl_endl;
-  ofs << "mean image intensities:\n";
-  ofs << hi2 << vcl_endl;
+  vcl_ofstream ofs("hist.out");
+  ofs << "image intensities:\n"
+      << hi << vcl_endl
+      << "mean image intensities:\n"
+      << hi2 << vcl_endl;
   ofs.close();
 
-  //brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_detector_roi1_0();
-  brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_test_detector();
+  brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_test_detector(); // brec_part_hierarchy_builder::construct_detector_roi1_0();
 
   vcl_cout << "h: # of nodes: " << h->number_of_vertices() << " # of edges: " << h->number_of_edges() << " # of prims: " << h->get_dummy_primitive_instances().size() << vcl_endl;
 
-  //: train the response models
+  // train the response models
   vcl_string model_dir(".\\train_dir\\");
   vul_file::make_directory(model_dir);
   h->set_model_dir(model_dir);
@@ -153,7 +150,7 @@ static void test_brec_hierarchy_detector_w_models()
         vcl_cout << "problems in constructing background model for gaussian primitives!!\n";
         return;
       }
-      //: write the model parameter images 
+      // write the model parameter images
       vcl_string name = model_dir+p->string_identifier()+"_bg_lambda_img.tiff";
       bool result = vil_save(lambda_img,name.c_str());
       if ( !result ) {
@@ -172,7 +169,7 @@ static void test_brec_hierarchy_detector_w_models()
         vcl_cout << "problems in constructing background model for gaussian primitives!!\n";
         return;
       }
-      //: write the model parameter images 
+      // write the model parameter images
       vcl_string name = model_dir+p->string_identifier()+"_bg_mu_img.tiff";
       bool result = vil_save(lambda_img,name.c_str());
       if ( !result ) {
@@ -193,10 +190,10 @@ static void test_brec_hierarchy_detector_w_models()
         vcl_cout << "problems in constructing foreground response model parameters for gaussian primitives!!\n";
         return;
       }
-      //: write the model parameters into a file in the output directory
+      // write the model parameters into a file in the output directory
       name = model_dir+p->string_identifier()+"_fg_params.txt";
       vcl_ofstream of(name.c_str());
-      of << k << " " << lambda << vcl_endl;
+      of << k << ' ' << lambda << vcl_endl;
       of.close();
 #endif
     }
@@ -221,7 +218,7 @@ static void test_brec_hierarchy_detector_w_models()
   vil_save(output_map_byte, "./map_output_receptive_field_layer_0.png");
   brec_part_hierarchy::generate_output_img(parts_prims, input_img, output_img);
   vil_save(output_img, "./img_output_receptive_field_layer_0.png");
-  
+
   unsigned highest = h->highest_layer_id();
   vcl_vector<brec_part_instance_sptr> parts_upper_most = hd.get_parts(highest);
 
@@ -234,7 +231,6 @@ static void test_brec_hierarchy_detector_w_models()
 
   brec_part_hierarchy::generate_output_img(parts_upper_most, input_img, output_img);
   vil_save(output_img, "./img_output_receptive_field_highest_detector.png");
-
 }
 
 TESTMAIN( test_brec_hierarchy_detector_w_models );

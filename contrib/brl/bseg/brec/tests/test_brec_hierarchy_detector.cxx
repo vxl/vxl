@@ -202,7 +202,7 @@ static void test_brec_hierarchy_detector()
   vnl_float_3 out_dist = out*5.0f;
   vcl_cout << " direction vector after scaling by 5: " << out_dist[0] << " 1: " << out_dist[1] << vcl_endl;
 
-  //: test orientation detection using cross_product
+  // test orientation detection using cross_product
   vnl_vector_fixed<float, 2> vv(0.7f, -0.7f);
   vnl_vector_fixed<float, 2> vv1(1.0f, 2.0f);
   vnl_vector_fixed<float, 2> vv2(-1.0f, -2.0f);
@@ -218,7 +218,6 @@ static void test_brec_hierarchy_detector()
 
   vnl_double_3 vv_vv1_hat = VV*vv1_hat_3;
   vnl_double_3 vv_vv2_hat = VV*vv2_hat_3;
-
 }
 
 TESTMAIN( test_brec_hierarchy_detector );
