@@ -2,14 +2,14 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief Processes to create/save/load instances of  part hierarchies. 
+// \brief Processes to create/save/load instances of  part hierarchies.
 //
 // \author Ozge Can Ozcanli
-// \date 12/26/08
+// \date Dec 26, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
 #include <brdb/brdb_value.h>
@@ -18,8 +18,8 @@
 #include <brec/brec_part_hierarchy_builder.h>
 #include <brec/brec_part_hierarchy.h>
 
-// create hierarchy process may use the builder class or create an empty one to be passed to training processes to learn the hierarchy
 //: Constructor
+// create hierarchy process may use the builder class or create an empty one to be passed to training processes to learn the hierarchy
 bool brec_create_hierarchy_process_cons(bprb_func_process& pro)
 {
   //inputs
@@ -42,17 +42,17 @@ bool brec_create_hierarchy_process_cons(bprb_func_process& pro)
 bool brec_create_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 3){
+  if (pro.n_inputs() < 3) {
     vcl_cerr << "brec_create_hierarchy_process - invalid inputs\n";
     return false;
   }
 
-  //: get input
+  // get input
   unsigned i = 0;
   bool create_empty = pro.get_input<bool>(i++);
   unsigned d_id = pro.get_input<unsigned>(i++);
   vcl_string name = pro.get_input<vcl_string>(i++);
-  
+
   brec_part_hierarchy_sptr h;
   if (create_empty) {
     h = new brec_part_hierarchy();
@@ -69,8 +69,8 @@ bool brec_create_hierarchy_process(bprb_func_process& pro)
     }
   }
 
-  pro.set_output_val<brec_part_hierarchy_sptr>(0, h); 
-  
+  pro.set_output_val<brec_part_hierarchy_sptr>(0, h);
+
   return true;
 }
 
@@ -94,7 +94,7 @@ bool brec_load_hierarchy_process_cons(bprb_func_process& pro)
 bool brec_load_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 1){
+  if (pro.n_inputs() < 1) {
     vcl_cerr << " brec_load_hierarchy_process - invalid inputs\n";
     return false;
   }
@@ -122,7 +122,7 @@ bool brec_save_hierarchy_process_cons(bprb_func_process& pro)
   input_types.push_back("vcl_string");      // name of output xml file
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
-  
+
   //output
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
@@ -132,7 +132,7 @@ bool brec_save_hierarchy_process_cons(bprb_func_process& pro)
 bool brec_save_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 2){
+  if (pro.n_inputs() < 2) {
     vcl_cerr << " brec_load_hierarchy_process - invalid inputs\n";
     return false;
   }

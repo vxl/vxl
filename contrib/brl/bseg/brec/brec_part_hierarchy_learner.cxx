@@ -1,7 +1,7 @@
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 01/19/09
+// \date Jan 19, 2009
 
 #include "brec_part_hierarchy_learner.h"
 #include "brec_part_hierarchy_learner_sptr.h"
@@ -14,9 +14,9 @@
 #include <vil/vil_math.h>
 
 void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, float lambda_range, float lambda_inc)
-{  
+{
   n_ = (int)(lambda_range/lambda_inc);
-  //: stats for bright operators
+  // stats for bright operators
   float theta = -90.0f;
   float theta_inc = 180.0f/ndirs;
   bool bright = true;
@@ -26,9 +26,8 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
       for (float lambda1 = 1.0f; lambda1 <= lambda_range; lambda1 += lambda_inc) {
         brec_part_gaussian_sptr p = new brec_part_gaussian(0.0f, 0.0f, 0.0f, lambda0, lambda1, theta, bright, type_cnt);
         type_cnt++;
-        //: create histogram for foreground stats
-        //bsta_histogram<float>* h = new bsta_histogram<float>(-7.0f, 1.0f, 32);
-        bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100);
+        // create histogram for foreground stats
+        bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100); // was (-7.0f, 1.0f, 32);
         vcl_pair<brec_part_instance_sptr, bsta_histogram<float>* > pa(p->cast_to_instance(), h);
         stats_layer0_.push_back(pa);
       }
@@ -39,15 +38,14 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
 
   theta = -90.0f;
   bright = false;
-  //: stats for dark operators
+  // stats for dark operators
   for (int i = 0; i < ndirs; i++) {
     for (float lambda0 = 1.0f; lambda0 <= lambda_range; lambda0 += lambda_inc) {
       for (float lambda1 = 1.0f; lambda1 <= lambda_range; lambda1 += lambda_inc) {
         brec_part_gaussian_sptr p = new brec_part_gaussian(0.0f, 0.0f, 0.0f, lambda0, lambda1, theta, bright, type_cnt);
         type_cnt++;
-        //: create histogram for foreground stats
-        //bsta_histogram<float>* h = new bsta_histogram<float>(-7.0f, 1.0f, 32);
-        bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100);
+        // create histogram for foreground stats
+        bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100); // was (-7.0f, 1.0f, 32);
         vcl_pair<brec_part_instance_sptr, bsta_histogram<float>* > pa(p->cast_to_instance(), h);
         stats_layer0_.push_back(pa);
       }
@@ -56,11 +54,11 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
     theta += theta_inc;
   }
 }
-  
+
 // assumes float img with values in [0,1] range
 void brec_part_hierarchy_learner::layer0_collect_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask)
 {
-  for (unsigned i = 0; i < stats_layer0_.size(); i++) { 
+  for (unsigned i = 0; i < stats_layer0_.size(); i++) {
     brec_part_instance_sptr p = stats_layer0_[i].first;
     bsta_histogram<float> *h = stats_layer0_[i].second;
     p->update_response_hist(inp, fg_prob_img, mask, *h);
@@ -83,10 +81,10 @@ void brec_part_hierarchy_learner::layer0_fit_parametric_dist()
   }
 }
 
-void brec_part_hierarchy_learner::layer0_collect_posterior_stats(vil_image_view<float>& inp, 
-                                                                 vil_image_view<float>& fg_prob_img, 
-                                                                 vil_image_view<bool>& mask, 
-                                                                 vil_image_view<float>& mean_img, 
+void brec_part_hierarchy_learner::layer0_collect_posterior_stats(vil_image_view<float>& inp,
+                                                                 vil_image_view<float>& fg_prob_img,
+                                                                 vil_image_view<bool>& mask,
+                                                                 vil_image_view<float>& mean_img,
                                                                  vil_image_view<float>& std_dev_img)
 {
   for (unsigned i = 0; i < stats_layer0_.size(); i++) {
@@ -94,9 +92,10 @@ void brec_part_hierarchy_learner::layer0_collect_posterior_stats(vil_image_view<
     p->update_foreground_posterior(inp, fg_prob_img, mask, mean_img, std_dev_img);  // the computed params are saved at the instance
   }
 }
-void brec_part_hierarchy_learner::layer0_collect_posterior_stats(vil_image_view<float>& inp, 
+
+void brec_part_hierarchy_learner::layer0_collect_posterior_stats(vil_image_view<float>& inp,
                                                                  vil_image_view<float>& fg_prob_img,
-                                                                 vil_image_view<float>& mean_img, 
+                                                                 vil_image_view<float>& mean_img,
                                                                  vil_image_view<float>& std_dev_img)
 {
   vil_image_view<bool> mask(inp.ni(), inp.nj());
@@ -104,14 +103,14 @@ void brec_part_hierarchy_learner::layer0_collect_posterior_stats(vil_image_view<
   layer0_collect_posterior_stats(inp, fg_prob_img, mask, mean_img, std_dev_img);
 }
 
-bool rho_more(const vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*>& p1, 
+bool rho_more(const vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*>& p1,
               const vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*>& p2)
 {
   return p1.first->rho_ > p2.first->rho_;
 }
 
 //: create a part hierarchy of primitive parts which are added with respect to their average rho_ (posterior ratios)
-//  this will be used to construct layers 1 and above
+//  This will be used to construct layers 1 and above
 brec_part_hierarchy_sptr brec_part_hierarchy_learner::layer0_rank_and_create_hierarchy(int N)
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
@@ -122,7 +121,7 @@ brec_part_hierarchy_sptr brec_part_hierarchy_learner::layer0_rank_and_create_hie
     brec_part_instance_sptr p = stats_layer0_[i].first;
     vcl_cout << "adding layer0 i: " << i << " type: " << p->type_ << " rho_: " << p->rho_ << vcl_endl;
     brec_part_base_sptr p_0 = new brec_part_base(0, p->type_);
-    h->add_vertex(p_0);  
+    h->add_vertex(p_0);
     h->add_dummy_primitive_instance(p);
   }
 
@@ -145,7 +144,7 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
    vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_joint_histogram<float>*> >* vect;
   if (v_it == stats_layer_n_.end()) {
     vect = new vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_joint_histogram<float>*> >;
-    //: for now initialize a pair for only the "first/best" part of layer0 and all the others in the hierarchy
+    // for now initialize a pair for only the "first/best" part of layer0 and all the others in the hierarchy
     // scan through all vertices to get the part that is added first from layer_id-1
     brec_part_base_sptr p_best;
     for (brec_part_hierarchy::vertex_iterator it = h->vertices_begin(); it != h->vertices_end(); it++) {
@@ -178,10 +177,8 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
     vect = v_it->second;
   }
 
-  //: collect stats for 
-
+  // collect stats for ...
   return true;
-
 }
 
 void brec_part_hierarchy_learner::print_layer0()
@@ -193,7 +190,7 @@ void brec_part_hierarchy_learner::print_layer0()
       brec_part_gaussian_sptr p = pi->cast_to_gaussian();
       if (p->bright_)
         vcl_cout << "--- lambda0 " << p->lambda0_ << " --- lambda1 " << p->lambda1_ << " --- theta " << p->theta_ << " --- bright ---\n";
-      else 
+      else
         vcl_cout << "--- lambda0 " << p->lambda0_ << " --- lambda1 " << p->lambda1_ << " --- theta " << p->theta_ << " --- dark ---\n";
     }
     vcl_cout << "----- foreground hist ----------\n";
@@ -206,16 +203,16 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0(vcl_string file_name)
 {
   vcl_ofstream ofs(file_name.c_str());
   ofs << "% dump histograms\n";
-  
+
   for (unsigned i = 0; i < stats_layer0_.size(); i++) {
     brec_part_instance_sptr pi = stats_layer0_[i].first;
     bsta_histogram<float> *h = stats_layer0_[i].second;
-    
-    if (i%(n_*n_) == 0) 
+
+    if (i%(n_*n_) == 0)
       ofs << "figure;\n";
 
     ofs << "subplot(1," << n_*n_ << ", " << (i%(n_*n_))+1 << "), ";
-    
+
     h->print_to_m(ofs);
     if (pi->kind_ == brec_part_instance_kind::GAUSSIAN) {
       ofs << "title('";
@@ -223,10 +220,10 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0(vcl_string file_name)
 
       if (p->bright_)
         ofs << "l0: " << p->lambda0_ << " l1: " << p->lambda1_ << " t: " << p->theta_ << " b foreg');\n";
-      else 
+      else
         ofs << "l0: " << p->lambda0_ << " l1: " << p->lambda1_ << " t: " << p->theta_ << " d foreg');\n";
     }
-    //ofs << "axis([-7.0 1.0 0.0 1.0]);\n"; 
+    //ofs << "axis([-7.0 1.0 0.0 1.0]);\n";
   }
 
   ofs.close();
@@ -236,49 +233,47 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(vcl_string
 {
   vcl_ofstream ofs(file_name.c_str());
   ofs << "% dump histograms of fitted distributions\n";
-  
+
   for (unsigned i = 0; i < stats_layer0_.size(); i++) {
     brec_part_instance_sptr pi = stats_layer0_[i].first;
     bsta_histogram<float> *h = stats_layer0_[i].second;
-    
+
     vcl_vector<float> x;
     for (float val = h->min(); val <= h->max(); val += h->delta()) {
       x.push_back(val);
     }
 
-    if (i%(n_*n_) == 0) 
+    if (i%(n_*n_) == 0)
       ofs << "figure;\n";
 
-    ofs << "subplot(1," << n_*n_ << ", " << (i%(n_*n_))+1 << "), ";
-    
-    ofs << "x = [" << x[0];
-    for (unsigned jj = 1; jj < x.size(); jj++) 
+    ofs << "subplot(1," << n_*n_ << ", " << (i%(n_*n_))+1 << "), "
+        << "x = [" << x[0];
+    for (unsigned jj = 1; jj < x.size(); jj++)
       ofs << ", " << x[jj];
     ofs << "];\n";
 
     if (pi->kind_ == brec_part_instance_kind::GAUSSIAN) {
       brec_part_gaussian_sptr p = pi->cast_to_gaussian();
 
-      if (p->fitted_weibull_) {
-          
+      if (p->fitted_weibull_)
+      {
         bsta_weibull<float> pdfg(p->lambda_, p->k_);
 
         ofs << "y = [" << pdfg.prob_density(x[0]);
-        for (unsigned jj = 1; jj < x.size(); jj++) 
+        for (unsigned jj = 1; jj < x.size(); jj++)
           ofs << ", " << pdfg.prob_density(x[jj]);
-        ofs << "];\n";
-        ofs << "bar(x,y,'r');\n";
-
-        ofs << "title('";
+        ofs << "];\n"
+            << "bar(x,y,'r');\n"
+            << "title('";
         if (p->bright_)
           ofs << "l0: " << p->lambda0_ << " l1: " << p->lambda1_ << " t: " << p->theta_ << " b weibull');\n";
-        else 
+        else
           ofs << "l0: " << p->lambda0_ << " l1: " << p->lambda1_ << " t: " << p->theta_ << " d weibull');\n";
       } else {
         vcl_cout << "WARNING: no fitted foreground response model for this operator! Cannot print to m file.\n";
       }
     }
-    //ofs << "axis([-7.0 1.0 0.0 1.0]);\n"; 
+    //ofs << "axis([-7.0 1.0 0.0 1.0]);\n";
   }
 
   ofs.close();
@@ -290,11 +285,14 @@ void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy_learner const &ph)
   vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
   return;
 }
+
+//: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
 void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy_learner &ph)
 {
   vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
   return;
 }
+
 void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy_learner* ph)
 {
   delete ph;
@@ -308,6 +306,7 @@ void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy_learner* ph)
   else
     ph = 0;
 }
+
 void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_learner* &ph)
 {
   if (ph==0)
@@ -320,6 +319,4 @@ void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_learner* &ph)
     vsl_b_write(os,*ph);
   }
 }
-
-
 

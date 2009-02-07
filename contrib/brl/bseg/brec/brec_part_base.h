@@ -6,11 +6,11 @@
 // \brief base class for composable parts
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
+// \date Oct 16, 2008
 //
 // \verbatim
 //  Modifications
-//  <none yet>
+//   <none yet>
 // \endverbatim
 
 #include <bgrl2/bgrl2_vertex.h>
@@ -89,19 +89,18 @@ class brec_part_instance : public brec_part_base
   virtual vnl_vector_fixed<float,2> direction_vector(void);  // return a unit vector that gives direction of this instance in the image
 
   //: collect operator responses from the input image's foreground regions
-  //  the input img and the fg_prob_img (foreground probability image) are float images with values in [0,1] range
+  //  The input \p img and the \p fg_prob_img (foreground probability image) are float images with values in [0,1] range
   //  assumes histogram is initialized
   //  virtual method needs to be implemented by inheriting classes depending on the nature of the part
   virtual bool update_response_hist(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask_img, bsta_histogram<float>& fg_h) { return false; }
   virtual bool fit_distribution_to_response_hist(bsta_histogram<float>& fg_h) { return false; }
-  
-  //: use the background mean and std_dev imgs to construct response model for background and calculate posterior ratio of foreground and background
-  virtual bool update_foreground_posterior(vil_image_view<float>& inp, 
-                                           vil_image_view<float>& fg_prob_img, 
-                                           vil_image_view<bool>& mask, 
-                                           vil_image_view<float>& mean_img, 
-                                           vil_image_view<float>& std_dev_img) { return false; }
 
+  //: use the background \p mean_img and \p std_dev_img to construct response model for background and calculate posterior ratio of foreground and background
+  virtual bool update_foreground_posterior(vil_image_view<float>& inp,
+                                           vil_image_view<float>& fg_prob_img,
+                                           vil_image_view<bool>& mask,
+                                           vil_image_view<float>& mean_img,
+                                           vil_image_view<float>& std_dev_img) { return false; }
 
   virtual bxml_data_sptr xml_element();
   virtual bool xml_parse_element(bxml_data_sptr data);
