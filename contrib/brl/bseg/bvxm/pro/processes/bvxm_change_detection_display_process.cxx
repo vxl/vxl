@@ -1,25 +1,24 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief process to threshold the changes for foreground detection.
-//        Inputs
-//            0: original image
-//            1: probability image
-//            2: mask image
-//        Outputs
-//            0:red changes image
-//            1:probability image in range 0-255
+//     -  Inputs
+//            * original image
+//            * probability image
+//            * mask image
+//     -  Outputs
+//            * red changes image
+//            * probability image in range 0-255
 //
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
-
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -58,10 +57,10 @@ bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vil_image_view_base_sptr";
   //: mask image
   input_types_[i++] = "vil_image_view_base_sptr";
-  
-  if(!pro.set_input_types(input_types_))
+
+  if (!pro.set_input_types(input_types_))
     return false;
- 
+
   unsigned j = 0;
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -69,10 +68,10 @@ bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
   output_types_[j++]= "vil_image_view_base_sptr";
   // probability image in range 0-255
   output_types_[j++]= "vil_image_view_base_sptr";
-  
+
   if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -80,7 +79,7 @@ bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
 bool bvxm_change_detection_display_process(bprb_func_process& pro)
 {
   using namespace bvxm_change_detection_display_process_globals;
-  
+
   //Check number of inputs
   if (pro.n_inputs()<3)
   {
@@ -111,11 +110,11 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
     return false;
   }
 
-  if (img0->pixel_format()!=7){
+  if (img0->pixel_format()!=7) {
     vcl_cout << pro.name() <<" :--  Input " << 0 << " wrong pixel-format!\n";
     return false;
   }
-  if (img1->pixel_format()!=9){
+  if (img1->pixel_format()!=9) {
     vcl_cout << pro.name() <<" :--  Input " << 1 << " wrong pixel-format!\n";
     return false;
   }

@@ -1,13 +1,14 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_proces.cxx
+//This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_process.cxx
+
 //:
 // \file
 // \brief A class for illum_index process of a voxel world .
 //
 // \author Isabel Restrepo
-// \date 02/20/2008
+// \date Feb 20, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 #include <bprb/bprb_func_process.h>
 
@@ -23,7 +24,7 @@ namespace bvxm_illum_index_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
-  
+
   unsigned bin_index(vcl_string map_type, double sun_el, double sun_az,
                      unsigned num_lat, unsigned num_long);
 }
@@ -32,7 +33,7 @@ namespace bvxm_illum_index_process_globals
 bool bvxm_illum_index_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_illum_index_process_globals;
-  
+
   //inputs
   // 0: Map type :
   //        - 10bins_1d_radial
@@ -45,16 +46,16 @@ bool bvxm_illum_index_process_cons(bprb_func_process& pro)
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   //output
    //0: bin index
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "unsigned";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -62,13 +63,13 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
 {
   using namespace bvxm_illum_index_process_globals;
 
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
-    //get the inputs
+  //get the inputs
   unsigned i = 0;
   vcl_string map_type = pro.get_input<vcl_string>(i++);
   vcl_string nitf_image_path = pro.get_input<vcl_string>(i++);
@@ -106,7 +107,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
 
   bool success = hdr->get_sun_params(sun_el, sun_az);
 
-  if (!success){
+  if (!success) {
     vcl_cerr << "error bvxm_illum_index_process: failed to obtain illumination angles from nitf image\n";
     return false;
   }
@@ -120,7 +121,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
 }
 
 
-unsigned 
+unsigned
 bvxm_illum_index_process_globals::bin_index(vcl_string map_type,
                                             double sun_el, double sun_az,
                                             unsigned num_lat, unsigned num_long)

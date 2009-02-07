@@ -1,13 +1,14 @@
-// This is brl/bseg/bvxm/pro/processes/bvxm_render_expected_image_process.h
+// This is brl/bseg/bvxm/pro/processes/bvxm_render_expected_image_process.cxx
+
 //:
 // \file
 // \brief A process that renders a video frame from a new viewpoint (used for 3-D registration)
 //
 // \author Daniel Crispell
-// \date 02/10/2008
+// \date Feb 10, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -30,7 +31,7 @@ namespace bvxm_render_expected_image_process_globals
 bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_render_expected_image_process_globals;
-  
+
   // process takes 7 inputs:
   //input[0]: The camera to render the expected image from
   //input[1]: number of pixels (x)
@@ -50,7 +51,7 @@ bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string";
   input_types_[i++] = "unsigned";
   input_types_[i++] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   // process has 2 outputs:
@@ -60,23 +61,22 @@ bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
   unsigned j = 0;
   output_types_[j++]= "vil_image_view_base_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
 //: renders the expected image
 bool bvxm_render_expected_image_process(bprb_func_process& pro)
 {
-
   using namespace bvxm_render_expected_image_process_globals;
-  
+
   //check number of inputs
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
   //get the inputs
   unsigned i = 0;
@@ -87,7 +87,7 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
   vcl_string voxel_type = pro.get_input<vcl_string>(i++);
   unsigned bin_index = pro.get_input<unsigned>(i++);
   unsigned scale_index = pro.get_input<unsigned>(i++);
-   
+
   //check input validity
   if (!camera) {
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
@@ -106,33 +106,32 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr expected_img;
   vil_image_view<float> *mask_img = new vil_image_view<float>(npixels_x,npixels_y,1);
 
-  
   if (voxel_type == "apm_mog_grey")
   {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_rgb"){
+  else if (voxel_type == "apm_mog_rgb") {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
     result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_mc_2_3"){
+  else if (voxel_type == "apm_mog_mc_2_3") {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,2);
     result = world->expected_image<APM_MOG_MC_2_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_mc_3_3"){
+  else if (voxel_type == "apm_mog_mc_3_3") {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
     result = world->expected_image<APM_MOG_MC_3_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "apm_mog_mc_4_3"){
+  else if (voxel_type == "apm_mog_mc_4_3") {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,4);
     result = world->expected_image<APM_MOG_MC_4_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "edges"){
+  else if (voxel_type == "edges") {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_edge_image(camera_metadata,expected_img,scale_index);
   }
-  else if (voxel_type == "edges_prob"){
+  else if (voxel_type == "edges_prob") {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_edge_prob_image(camera_metadata,expected_img,scale_index);
   }

@@ -1,4 +1,5 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display.cxx
+// This is brl/bseg/bvxm/pro/processes/bvxm_heightmap_process.cxx
+
 //:
 // \file
 // \brief A class for generating a height map from a given camera viewpoint
@@ -10,10 +11,10 @@
 //             - vil_image_view_base_sptr   generated image
 //
 // \author  Gamze D. Tunali
-// \date    04/17/2008
+// \date    Apr 17, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 #include <bprb/bprb_func_process.h>
 #include <bvxm/bvxm_voxel_world.h>
@@ -29,7 +30,7 @@ namespace bvxm_heightmap_process_globals
 //: set input and output types
 bool bvxm_heightmap_process_cons(bprb_func_process& pro)
 {
-  using namespace bvxm_heightmap_process_globals; 
+  using namespace bvxm_heightmap_process_globals;
   // This process has 4 inputs:
   //input[0]: The camera to render the heightmap from
   //input[1]: number of pixels (x)
@@ -43,28 +44,27 @@ bool bvxm_heightmap_process_cons(bprb_func_process& pro)
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world
   if (!pro.set_input_types(input_types_))
     return false;
-  
+
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   if (!pro.set_output_types(output_types_))
     return false;
-  
-  return true;
 
+  return true;
 }
 
 // generates a height map from a given camera viewpoint
 bool bvxm_heightmap_process(bprb_func_process& pro)
 {
-  using namespace bvxm_heightmap_process_globals; 
-  
-  if(pro.n_inputs()<n_inputs_)
+  using namespace bvxm_heightmap_process_globals;
+
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
-  
+
   // get the inputs:
 
   // camera
@@ -92,9 +92,9 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
   }
 
   vil_image_view<unsigned> *hmap = new vil_image_view<unsigned>(npixels_x, npixels_y, 1);
-  
+
   voxel_world->heightmap(camera,*hmap);
-  
+
   //store output
   pro.set_output_val<vil_image_view_base_sptr>(0, hmap);
 

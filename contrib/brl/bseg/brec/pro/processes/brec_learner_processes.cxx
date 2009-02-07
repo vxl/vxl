@@ -1,15 +1,15 @@
-// This is brl/bseg/brec/pro/processes/brec_learner_process.cxx
+// This is brl/bseg/brec/pro/processes/brec_learner_processes.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief Processes to initialize learner class instances, collect stats and fit parametric distributions
 //
 // \author Ozge Can Ozcanli
-// \date 01/22/09
+// \date Jan 22, 2009
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
 #include <brdb/brdb_value.h>
@@ -41,7 +41,7 @@ bool brec_learner_layer0_init_process_cons(bprb_func_process& pro)
 bool brec_learner_layer0_init_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 3){
+  if (pro.n_inputs() < 3) {
     vcl_cerr << " brec_learner_init_layer0_process - invalid inputs\n";
     return false;
   }
@@ -51,12 +51,12 @@ bool brec_learner_layer0_init_process(bprb_func_process& pro)
   int ndirs = pro.get_input<int>(i++);
   float lambda_range = pro.get_input<float>(i++);
   float lambda_inc = pro.get_input<float>(i++);
-  
+
   brec_part_hierarchy_learner_sptr hl = new brec_part_hierarchy_learner();
   hl->initialize_layer0_as_gaussians(ndirs, lambda_range, lambda_inc);
-  
-  pro.set_output_val<brec_part_hierarchy_learner_sptr>(0, hl); 
-  
+
+  pro.set_output_val<brec_part_hierarchy_learner_sptr>(0, hl);
+
   return true;
 }
 
@@ -95,9 +95,9 @@ bool brec_learner_layer0_fit_process(bprb_func_process& pro)
 
   hl->layer0_fit_parametric_dist();
   hl->print_to_m_file_layer0_fitted_dists(output_name);
-  
+
   pro.set_output_val<brec_part_hierarchy_learner_sptr>(0, hl);
-  
+
   return true;
 }
 
@@ -111,10 +111,10 @@ bool brec_learner_layer0_rank_process_cons(bprb_func_process& pro)
   input_types.push_back("int");  // N: top N layer0 prims are used in the created hierarchy
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
-  
+
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("brec_part_hierarchy_sptr"); 
+  output_types.push_back("brec_part_hierarchy_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -131,10 +131,10 @@ bool brec_learner_layer0_rank_process(bprb_func_process& pro)
   unsigned i = 0;
   brec_part_hierarchy_learner_sptr hl = pro.get_input<brec_part_hierarchy_learner_sptr>(i++);
   int N = pro.get_input<int>(i++);
-  
+
   brec_part_hierarchy_sptr h = hl->layer0_rank_and_create_hierarchy(N);
   pro.set_output_val<brec_part_hierarchy_sptr>(0, h);
-  
+
   return true;
 }
 

@@ -1,15 +1,15 @@
-// This is brl/bseg/brec/pro/processes/brec_learner_update_stats_process.cxx
+// This is brl/bseg/brec/pro/processes/brec_learner_update_processes.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief Processes to update stats of learner instances from training imgs
 //
 // \author Ozge Can Ozcanli
-// \date 01/22/09
+// \date Jan 22, 2009
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
 #include <brdb/brdb_value.h>
@@ -28,11 +28,11 @@ bool brec_learner_layer0_update_stats_process_cons(bprb_func_process& pro)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("brec_part_hierarchy_learner_sptr");      // learner instance
-  input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image 
+  input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image
   input_types.push_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
                                                      // this is the foreground ground-truth mask if available
   input_types.push_back("vil_image_view_base_sptr");      // a bool mask img to designate valid regions in the input image, stats will be collected from the pixels with mask == true
-                                                     // if this pointer is passed as zero, a mask filled with "true" is used (all image is used)  
+                                                     // if this pointer is passed as zero, a mask filled with "true" is used (all image is used)
   input_types.push_back("vcl_string");      // output file to save histograms in matlab .m file format
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -43,11 +43,10 @@ bool brec_learner_layer0_update_stats_process_cons(bprb_func_process& pro)
   return ok;
 }
 
-//: don't set the third input if it needs to be initialized as a mask filled with "true"
-//  just call the init method from python before running the process
+//: don't set the third input if it needs to be initialized as a mask filled with "true", just call the init method from Python before running the process
 bool brec_learner_layer0_update_stats_process_init(bprb_func_process& pro)
 {
-  //: initialize a dummy mask
+  // initialize a dummy mask
   vil_image_view<bool> dummy(10, 10);
   dummy.fill(true);
   vil_image_view_base_sptr m_ptr = new vil_image_view<bool>(dummy);
@@ -58,24 +57,24 @@ bool brec_learner_layer0_update_stats_process_init(bprb_func_process& pro)
 bool brec_learner_layer0_update_stats_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 5){
+  if (pro.n_inputs() < 5) {
     vcl_cerr << "  brec_learner_layer0_update_stats_process - invalid inputs\n";
     return false;
   }
 
-  //: get input
+  // get input
   unsigned i = 0;
   brec_part_hierarchy_learner_sptr hl = pro.get_input<brec_part_hierarchy_learner_sptr>(i++);
-  
+
   vil_image_view_base_sptr inp_img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<float> img = *vil_convert_cast(float(), inp_img);
   if (inp_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(img,1.0/255.0);
 
   vil_image_view_base_sptr inp_prob = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<float> prob = *vil_convert_cast(float(), inp_prob);  
+  vil_image_view<float> prob = *vil_convert_cast(float(), inp_prob);
   if (inp_prob->pixel_format() == VIL_PIXEL_FORMAT_BOOL) {
-    //: just a check to make sure conversion went well
+    // just a check to make sure conversion went well
     float min, max;
     vil_math_value_range(prob, min, max);
     vcl_cout << " input prob map was a byte image, after conversion min value: " << min << " max value: " << max << vcl_endl;
@@ -92,7 +91,7 @@ bool brec_learner_layer0_update_stats_process(bprb_func_process& pro)
     if (inp_mask->pixel_format() != VIL_PIXEL_FORMAT_BOOL) {
       vcl_cout << "In brec_learner_update_stats_process::execute() -- ERROR: input mask image is not of type BOOL!!\n";
       return false;
-    } 
+    }
     mask_img = inp_mask;
   }
 
@@ -100,7 +99,7 @@ bool brec_learner_layer0_update_stats_process(bprb_func_process& pro)
 
   hl->layer0_collect_stats(img, prob, mask_img);
   hl->print_to_m_file_layer0(output_file);
-  
+
   return true;
 }
 
@@ -111,12 +110,12 @@ bool brec_learner_layer0_update_posterior_stats_process_cons(bprb_func_process& 
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("brec_part_hierarchy_learner_sptr");  // learner instance, assumes the foreground response distribution's parameters have already been fit
-  input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image 
+  input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image
   input_types.push_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
                                                      // this is the foreground ground-truth mask if available
   input_types.push_back("vil_image_view_base_sptr");      // a bool mask img to designate valid regions in the input image, stats will be collected from the pixels with mask == true
-                                                     // if this pointer is passed as zero, a mask filled with "true" is used (all image is used)  
- 
+                                                     // if this pointer is passed as zero, a mask filled with "true" is used (all image is used)
+
   input_types.push_back("vil_image_view_base_sptr");      // bg model mean img to construct response models, float img with values in [0,1] range
   input_types.push_back("vil_image_view_base_sptr");      // bg model std dev img to construct response models, float img with values in [0,1] range
   ok = pro.set_input_types(input_types);
@@ -130,7 +129,7 @@ bool brec_learner_layer0_update_posterior_stats_process_cons(bprb_func_process& 
 
 bool brec_learner_layer0_update_posterior_stats_process_init(bprb_func_process& pro)
 {
-  //: initialize a dummy mask
+  // initialize a dummy mask
   vil_image_view<bool> dummy(10, 10);
   dummy.fill(true);
   vil_image_view_base_sptr m_ptr = new vil_image_view<bool>(dummy);
@@ -141,12 +140,12 @@ bool brec_learner_layer0_update_posterior_stats_process_init(bprb_func_process& 
 bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 6){
+  if (pro.n_inputs() < 6) {
     vcl_cerr << "  brec_learner_layer0_update_stats_process - invalid inputs\n";
     return false;
   }
 
-  //: get input
+  // get input
   unsigned i = 0;
   brec_part_hierarchy_learner_sptr hl = pro.get_input<brec_part_hierarchy_learner_sptr>(i++);
 
@@ -158,9 +157,9 @@ bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr inp_prob = pro.get_input<vil_image_view_base_sptr>(i++);
 
-  vil_image_view<float> prob = *vil_convert_cast(float(), inp_prob);  
+  vil_image_view<float> prob = *vil_convert_cast(float(), inp_prob);
   if (inp_prob->pixel_format() == VIL_PIXEL_FORMAT_BOOL) {
-    //: just a check to make sure conversion went well
+    // just a check to make sure conversion went well
     float min, max;
     vil_math_value_range(prob, min, max);
     vcl_cout << " input prob map was a byte image, after conversion min value: " << min << " max value: " << max << vcl_endl;
@@ -178,7 +177,7 @@ bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
     if (inp_mask->pixel_format() != VIL_PIXEL_FORMAT_BOOL) {
       vcl_cout << "In brec_learner_update_posterior_stats_process::execute() -- ERROR: input mask image is not of type BOOL!!\n";
       return false;
-    } 
+    }
     mask_img = inp_mask;
   }
 
@@ -196,9 +195,7 @@ bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
   vil_image_view<float> std_dev_img(inp_std_dev);
 
   hl->layer0_collect_posterior_stats(img, prob, mask_img, mean_img, std_dev_img);
-  
+
   return true;
 }
-
-
 

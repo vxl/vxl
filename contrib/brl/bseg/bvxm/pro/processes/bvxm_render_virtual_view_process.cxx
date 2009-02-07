@@ -1,13 +1,14 @@
-// This is brl/bseg/bvxm/pro/processes/bvxm_render_virtual_view_process.h
+// This is brl/bseg/bvxm/pro/processes/bvxm_render_virtual_view_process.cxx
+
 //:
 // \file
 // \brief A process that renders a video frame from a new viewpoint (used for 3-D registration)
 //
 // \author Daniel Crispell
-// \date 02/10/2008
+// \date Feb 10, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
 // \endverbatim
 
 
@@ -54,7 +55,7 @@ bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string";
   input_types_[i++] = "unsigned";
   input_types_[i++] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   // process has 2 outputs:
@@ -62,10 +63,10 @@ bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro)
   // output[1]: A confidence map, giving probability that each pixel was seen from the original view.
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "vil_image_view_base_sptr";
-  output_types_[1] = "vil_image_view_base_sptr"; 
-  if(!pro.set_output_types(output_types_))
+  output_types_[1] = "vil_image_view_base_sptr";
+  if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -73,14 +74,14 @@ bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro)
 bool bvxm_render_virtual_view_process(bprb_func_process& pro)
 {
   using namespace bvxm_render_virtual_view_process_globals;
-  
+
   //check number of inputs
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
-  
+
   //get the inputs
   unsigned i = 0;
   vil_image_view_base_sptr img_og = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -108,8 +109,7 @@ bool bvxm_render_virtual_view_process(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :--  Input 3  is not valid!\n";
     return false;
   }
-  
-   
+
   //create original image metadata:
   bvxm_image_metadata obs_og(img_og,camera_og);
 
@@ -139,7 +139,7 @@ bool bvxm_render_virtual_view_process(bprb_func_process& pro)
 
   if (voxel_type == "apm_mog_grey")
     result = world->virtual_view<APM_MOG_GREY>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
-  else if (voxel_type == "apm_mog_rgb"){
+  else if (voxel_type == "apm_mog_rgb") {
     if (img_og->nplanes() == 3)
       result = world->virtual_view<APM_MOG_RGB>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
     else {
@@ -181,6 +181,6 @@ bool bvxm_render_virtual_view_process(bprb_func_process& pro)
 
   pro.set_output_val<vil_image_view_base_sptr>(0, virtual_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, vis_prob);
- 
+
   return result;
 }
