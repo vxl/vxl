@@ -177,7 +177,7 @@ SOURCE=.\processes/bvxm_save_occupancy_vff_process.cxx
 SOURCE=.\processes/bvxm_compare_3d_voxels_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_roi_int_process.cxx
+SOURCE=.\processes/bvxm_roi_init_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_rpc_prob_registration_process.cxx
