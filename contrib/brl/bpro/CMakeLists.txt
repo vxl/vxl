@@ -10,9 +10,6 @@ SUBDIRS(bprb)
 # Brown core processing
 SUBDIRS(core)
 
-# Brown bvgl processes
-SUBDIRS(bvgl_pro)
-
 # Brown batch processing (Python)
 SUBDIRS(bpro_batch)
 
