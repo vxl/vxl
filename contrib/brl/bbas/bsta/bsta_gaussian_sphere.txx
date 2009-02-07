@@ -74,18 +74,19 @@ bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const vector_& pt) const
   return compute_dot<T,n,n>::value(d)/var_;
 }
 
-/*
+#if 0
 //: sample from the distribution
 template <class T, unsigned int n>
-vector_ 
-bsta_gaussian_sphere<T,n>::sample() const 
+vector_
+bsta_gaussian_sphere<T,n>::sample() const
 {
   vnl_random rng;
   vector_ d = bsta_gaussian<T,n>::mean_;
   T s = (T)(vcl_sqrt(var_)*rng.normal());
   d *= s;
-  return d; 
-}*/
+  return d;
+}
+#endif // 0
 
 //: Unrol the compute probability calculation
 //  The general induction step
@@ -127,7 +128,7 @@ struct compute_probability_box<T,vector_,n,0>
     double temp = vnl_erf(max_minus_mean[0]*s2);
     temp -= vnl_erf(min_minus_mean[0]*s2);
     return static_cast<T>(0.5*temp);
-  };
+  }
 };
 
 

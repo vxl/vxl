@@ -70,7 +70,7 @@ brec_part_hierarchy::generate_output_map(vcl_vector<brec_part_instance_sptr>& ex
 }
 
 //: generate a float map with strengths and receptive fields marked
-// return the values as they are 
+//  Return the values as they are
 void
 brec_part_hierarchy::generate_output_map2(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
 {
@@ -83,28 +83,28 @@ brec_part_hierarchy::generate_output_map2(vcl_vector<brec_part_instance_sptr>& e
 }
 
 //: generate a float map with strengths and receptive fields marked
-// stretch the values to be used for imaging
+//  Stretch the values to be used for imaging
 void
 brec_part_hierarchy::generate_output_map3(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
 {
   map.fill(0.0f);
 
   // find the mean value and stretch the values onto [0, mean];
-  float mean = 0.0f; 
-  /*
+  float mean = 0.0f;
+#if 0
   for (unsigned i = 0; i < extracted_parts.size(); ++i) {
     brec_part_instance_sptr p = extracted_parts[i];
     mean += p->strength_;
   }
   mean /= extracted_parts.size();
-  */
-  mean = 1.0f-0.99999995f; // we want to see all the detections, this value is the smallest threshold used to create the ROC
+#endif // 0
+  mean = 0.00000005f; // we want to see all the detections, this value is the smallest threshold used to create the ROC
 
   for (unsigned i = 0; i < extracted_parts.size(); ++i) {
     brec_part_instance_sptr p = extracted_parts[i];
     if (p->strength_ > mean)
       p->mark_receptive_field(map, 1.0f);
-    else 
+    else
       p->mark_receptive_field(map, p->strength_/mean);
   }
 }
@@ -351,7 +351,7 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
   }
 
   bxml_element* pe = (bxml_element*)prims_root.ptr();
-  
+
   for (bxml_element::const_data_iterator it = pe->data_begin(); it != pe->data_end(); it++) {
     if ((*it)->type() != bxml_data::ELEMENT)
       continue;
@@ -440,11 +440,13 @@ void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy const &ph)
   vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
+
 void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy &ph)
 {
   vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
+
 void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy* ph)
 {
   delete ph;
@@ -458,6 +460,7 @@ void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy* ph)
   else
     ph = 0;
 }
+
 void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy* &ph)
 {
   if (ph==0)
