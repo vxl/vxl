@@ -84,8 +84,7 @@ void bxml_expat_parser::startElement(const XML_Char* name, const XML_Char** atts
 void bxml_expat_parser::endElement(const XML_Char* name)
 {
   if (stack_.back().ptr()) {
-    bxml_element* element = static_cast<bxml_element*>(stack_.back().ptr());
-    assert(element->name() == vcl_string(name));
+    assert(static_cast<bxml_element*>(stack_.back().ptr())->name() == vcl_string(name));
     complete_.push_back(vcl_pair<bxml_data_sptr,unsigned int>(stack_.back(),stack_.size()-1));
   }
   stack_.pop_back();
@@ -120,7 +119,7 @@ void bxml_expat_parser::xmlDecl( const XML_Char *version,
 bxml_document bxml_read(const vcl_string& filepath)
 {
   if (!vul_file::exists(filepath))
-    vcl_cerr<< "In bxml_read: " << vul_file::get_cwd() << filepath << " does not exist" <<vcl_endl;
+    vcl_cerr<< "In bxml_read: " << vul_file::get_cwd() << filepath << " does not exist\n";
   vcl_ifstream file(filepath.c_str());
   return bxml_read(file);
 }
