@@ -26,4 +26,7 @@ void bbgm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_local_frame_trans_process, "bbgmLocalFrameTransProcess");
 
   REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, bbgm_update_parzen_dist_image_process, "bbgmUpdateParzenDistImageProcess");
+  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_measure_process, "bbgmMeasureProcess");
+  
 }
