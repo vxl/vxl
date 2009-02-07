@@ -34,7 +34,7 @@ SOURCES += processes/bvxm_save_occupancy_vff_process.cxx
 SOURCES += processes/bvxm_update_edges_lidar_process.cxx
 SOURCES += processes/bvxm_update_lidar_process.cxx
 SOURCES += processes/bvxm_update_process.cxx
-SOURCES += processes/bvxm_roi_int_process.cxx
+SOURCES += processes/bvxm_roi_init_process.cxx
 SOURCES += processes/bvxm_normalization_util.cxx
 
 SOURCES += processes/bvxm_compare_3d_voxels_process.cxx # multiscale_pro/bvxm_compare_3d_voxels_process.cxx
