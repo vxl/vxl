@@ -1,4 +1,5 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_roi_init_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
@@ -14,13 +15,12 @@
 //             -geographic uncertainty (error) in meters
 //
 // \author  Gamze D. Tunali
-// \date    02/19/2008
+// \date    Feb 19, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with new bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include "bvxm_voxel_world.h"
 #include "bvxm_world_params.h"
 #include <bvxm/bvxm_util.h>
@@ -47,7 +47,7 @@ namespace bvxm_roi_init_process_globals
 {
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 3;
-  
+
   //functions
   bool roi_init(vcl_string const& image_path,
                 vpgl_rational_camera<double>* camera,
@@ -61,7 +61,6 @@ namespace bvxm_roi_init_process_globals
                                   bgeo_lvcs_sptr lvcs,
                                   vgl_box_3d<double> box,
                                   float r);
-  
 }
 
 //: set input and output types
@@ -75,7 +74,7 @@ bool bvxm_roi_init_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string";                // NITF image path
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
   input_types_[i++] = "bvxm_voxel_world_sptr";     // voxel world spec
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   //output
@@ -84,11 +83,7 @@ bool bvxm_roi_init_process_cons(bprb_func_process& pro)
   output_types_[j++] = "vpgl_camera_double_sptr"; // unadjusted local rational camera
   output_types_[j++] = "vil_image_view_base_sptr";  // image ROI
   output_types_[j++] = "float"; // uncertainty
-  if(!pro.set_output_types(output_types_))
-    return false;
-  
-  return true;
-
+  return pro.set_output_types(output_types_);
 }
 
 
@@ -98,16 +93,15 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
   //static const parameters
   static const vcl_string error = "error";
 
-  if( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
-
 
   // get the inputs:
   unsigned i = 0;
   // image
-  vcl_string image_path = pro.get_input<vcl_string>(i++);  
+  vcl_string image_path = pro.get_input<vcl_string>(i++);
   // camera
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   //voxel_world
@@ -115,7 +109,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
 
   // uncertainity (meters) -- SHOULD BE A PARAM
   float uncertainty=0;
-  if ( !pro.parameters()->get_value(error, uncertainty) ){
+  if ( !pro.parameters()->get_value(error, uncertainty) ) {
       vcl_cout << pro.name() << ": error in retrieving parameters\n";
     return false;
   }
@@ -228,7 +222,6 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
         {
         // we will ignore the most significant 5 bits and less significant 3 bits
           vxl_uint_16 curr_pixel_val = nitf_image_vxl_uint_16(m,n,p);
-
 
           if (bigendian) {
             unsigned char* arr = (unsigned char*) &curr_pixel_val;
