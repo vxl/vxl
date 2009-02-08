@@ -44,7 +44,7 @@ static void test_brec_part_hierarchy_learner()
 
   // load the gt image
   vil_image_view<float> gt_map = vil_convert_cast(float(), gt_img->get_view());
-  vil_math_scale_values(gt_map,1.0/255.0);
+  vil_math_scale_values(gt_map,1.0f/255.0f);
   vil_image_view<float> dummy(ni, nj), back_gt_map(ni, nj);
   dummy.fill(1.0f);
   vil_math_image_difference(dummy, gt_map, back_gt_map);
@@ -63,7 +63,7 @@ static void test_brec_part_hierarchy_learner()
   vil_math_image_difference(dummy, back_prob_map, prob_map);
 
   vil_image_view<float> inp_img = vil_convert_cast(float(), img->get_view());
-  vil_math_scale_values(inp_img,1.0/255.0);
+  vil_math_scale_values(inp_img,1.0f/255.0f);
 
   brec_part_hierarchy_learner_sptr collector = new brec_part_hierarchy_learner();
   // 4 directions, lambda's start from 1.0 and increase to 2 with increments of 1
@@ -85,16 +85,15 @@ static void test_brec_part_hierarchy_learner()
   vnl_random rng;
   float probs[100];
   for (unsigned i = 0; i < 100; i++) {
-    //probs[i] = rng.drand32();
-    probs[i] = 1.0f;
+    probs[i] = 1.0f; // was: float(rng.drand32());
   }
   float numbers[100];
-  float std_dev = 0.1; float mean = 0.5;
+  float std_dev = 0.1f; float mean = 0.5f;
   for (unsigned i = 0; i < 100; i++) {
-    numbers[i] = std_dev*rng.normal() + mean;
+    numbers[i] = std_dev*float(rng.normal()) + mean;
   }
 
-  bsta_histogram<float> h(3.0, 1000);
+  bsta_histogram<float> h(3.0f, 1000);
   for (unsigned i = 0; i < 100; i++) {
     h.upcount(numbers[i], probs[i]);
   }
@@ -102,7 +101,7 @@ static void test_brec_part_hierarchy_learner()
   vcl_cout << "mean from histogram: " << h.mean() << " variance: " << h.variance() << vcl_endl;
 
   // calculate yourself
-  float x_sum = 0.0, xsq_sum = 0.0, p_sum = 0.0;
+  float x_sum = 0.0f, xsq_sum = 0.0f, p_sum = 0.0f;
   for (unsigned i = 0; i < 100; i++) {
     x_sum += probs[i]*numbers[i];
     xsq_sum += probs[i]*numbers[i]*numbers[i];
