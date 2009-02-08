@@ -86,18 +86,26 @@ LIB32=link.exe -lib
 !ENDIF 
 
 # Begin Target
+
 # Name "bvgl_pro - Win32 Release"
 # Name "bvgl_pro - Win32 Debug"
+
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bvgl_generate_mask_process.cxx
+SOURCE=.\bvgl_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvgl_generate_mask_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bvgl_generate_mask_process.h
+SOURCE=.\bvgl_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_processes.h
 # End Source File
 # End Group
 # End Target
