@@ -5,7 +5,7 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
-
+#include <vcl_cassert.h>
 
 bprb_process_ext::bprb_process_ext()
 : bprb_process()
@@ -40,12 +40,12 @@ bool bprb_process_ext::set_input_types(vcl_vector<vcl_string> const& types)
 //: set a particular input, resize array if necessary
 bool bprb_process_ext::set_input(unsigned i, brdb_value_sptr const& value)
 {
-  if (!value){
+  if (!value) {
     vcl_cout << "bprb_process_ext::set_input() - null value\n";
     return false;
   }
 
-  if(input_data_.size()<=i)
+  if (input_data_.size()<=i)
     input_data_.resize(i+1);
   input_data_[i]=value;
   return true;
