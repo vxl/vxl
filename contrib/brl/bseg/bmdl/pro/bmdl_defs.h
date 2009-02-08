@@ -32,4 +32,4 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
                vil_image_view_base_sptr& ground_roi,
                vpgl_geo_camera*& camera);
 
-#endif
+#endif // bmdl_defs_h_

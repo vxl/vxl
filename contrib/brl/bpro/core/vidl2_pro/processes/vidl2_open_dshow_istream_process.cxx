@@ -13,31 +13,28 @@
 bool vidl2_open_dshow_istream_process_cons(bprb_func_process& pro)
 {
   //input
-  bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");   // the path of the stream
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if (! pro.set_input_types(input_types))
+    return false;
 
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("vidl2_ostream_sptr");  
-  ok = pro.set_output_types(output_types);
-  return ok;
+  output_types.push_back("vidl2_ostream_sptr");
+  return pro.set_output_types(output_types);
 }
 
 //: Execute the process
 // NOTE! currently only implemented for image list istream
 bool vidl2_open_dshow_istream_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs()< 1) {
+  if (pro.n_inputs() != 1) {
     vcl_cout << "vidl2_open_dshow_istream_process: The input number should be 1" << vcl_endl;
     return false;
   }
- 
-  unsigned i=0;
+
   //Retrieve filename from input
-  vcl_string istream_filename = pro.get_input<vcl_string>(i++);
+  vcl_string istream_filename = pro.get_input<vcl_string>(0);
 
   vidl2_istream_sptr out_istream=new vidl2_dshow_file_istream(istream_filename);
 
@@ -48,10 +45,11 @@ bool vidl2_open_dshow_istream_process(bprb_func_process& pro)
   }
 
   vcl_cout << "In vidl2_open_dshow_istream_process::execute()"
-           << " - opened the stream with " << out_istream->num_frames() << " frames." << vcl_endl;
+           << " - opened the stream with " << out_istream->num_frames()
+           << " frames." << vcl_endl;
 
   pro.set_output_val<vidl2_ostream_sptr>(0,out_istream);
   return true;
 }
 
-#endif
+#endif // HAS_DIRECTSHOW
