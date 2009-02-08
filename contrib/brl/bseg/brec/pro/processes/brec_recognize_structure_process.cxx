@@ -43,6 +43,8 @@ bool brec_recognize_structure_process_cons(bprb_func_process& pro)
     output_types.push_back("vil_image_view_base_sptr"); // output map overlayed on orig view as a byte image
     return pro.set_output_types(output_types);
   }
+  else
+    return false;
 }
 
 
@@ -152,6 +154,8 @@ bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
     output_types.push_back("brec_part_hierarchy_detector_sptr"); // output map overlayed on orig view as a byte image
     return pro.set_output_types(output_types);
   }
+  else
+    return false;
 }
 
 
