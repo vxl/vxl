@@ -47,13 +47,10 @@ void test_probability_functor()
 void test_sampling()
 {
   vcl_cout << "Starting test of sampling\n";
-  const float covar = 0.01f;
-  const float mod_covar = 0.02f;
-  const float sample = 0.25f;
   typedef bsta_gauss_f1 bsta_gauss_t;
   typedef bsta_gauss_t::covar_type covar_t;
   typedef bsta_gauss_t::vector_type vector_t;
-  typedef bsta_mixture<bsta_gauss_t> mix_gauss_type;
+  const float covar = 0.01f;
   bsta_gauss_t gauss0(vector_t(0.0f), covar_t(covar) );
   bsta_gauss_t gauss1(vector_t(0.5f), covar_t(covar) );
   float mean = 0.0f;
@@ -76,11 +73,14 @@ void test_sampling()
   vcl_cout << vcl_endl;
 
 #if 0
+  typedef bsta_mixture<bsta_gauss_t> mix_gauss_type;
   mix_gauss_type mix;
   bool good = mix.insert(gauss0, 0.8f);
   good = good && mix.insert(gauss1, 0.2f);
   bsta_prob_density_addcovar_functor<mix_gauss_type> pd;
   float probd;
+  const float sample = 0.25f;
+  const float mod_covar = 0.02f;
   good = good && pd(mix, sample, mod_covar, probd);
   TEST("test mixture", good, true);
   TEST_NEAR("probability density", probd, 0.81275439, 1e-6);
