@@ -10,21 +10,19 @@
 #include <vnl/vnl_matrix.h>
 
 //: Constructor
+// this process takes 1 input:
+// * input(0): ascii filename
+// * input(1): image output filename
+//
+// this process has no outputs
+// this process does not save the image because it uses vil_image_view::set_from_memory
+// where the data goes out of scope the image becomes invalid
 bool vil_load_from_ascii_process_cons(bprb_func_process& pro)
 {
-  //this process takes 1 input:
-  // input(0): ascii filename
-  // input(1): image output filename
-  bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
-  input_types.push_back("vcl_string"); 
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
-  //this process has no outputs
-  //this process does not save the image because it uses, vil_image_view::set_from_memory
-  //where the data goes out of scope the image becomes invalid
+  input_types.push_back("vcl_string");
+  input_types.push_back("vcl_string");
+  return pro.set_input_types(input_types);
 }
 
 
