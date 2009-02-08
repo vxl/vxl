@@ -9,6 +9,12 @@ SUBDIRS += vil_pro
 # vidl2 process classes (note it is expected that vidl2 will go to core)
 SUBDIRS += vidl2_pro
 
+# brip process classes 
+SUBDIRS += brip_pro
+
+# vgl and bvgl process classes 
+SUBDIRS += bvgl_pro
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
