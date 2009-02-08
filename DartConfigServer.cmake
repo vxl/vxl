@@ -50,13 +50,13 @@ SET (BUILD_MONITORS "\\
 SET (PROJECT_URL http://vxl.sourceforge.net/)
 SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
-  {mobile FreeBSD-7.0_gcc-3.4.6_-O_shared} \\
+  {mobile FreeBSD-7.1_gcc-3.4.6_-O_shared} \\
   {GE Cygwin_gcc-3.4.4_-O0_static} \\
-  {GE FreeBSD-7.0_gcc-4.2.1_profile_static} \\
-  {GE FreeBSD-7.0_gcc-3.4.6_-O2_shared} \\
-  {GE FreeBSD-7.0_gcc-4.0.4_-O2_shared} \\
-  {GE FreeBSD-7.0_gcc-4.2.4_-O2_shared} \\
-  {GE FreeBSD-7.0_gcc-4.3.2_-O2_shared} \\
+  {GE FreeBSD-7.1_gcc-4.2.1_profile_static} \\
+  {GE FreeBSD-7.1_gcc-3.4.6_-O2_shared} \\
+  {GE FreeBSD-7.1_gcc-4.0.4_-O2_shared} \\
+  {GE FreeBSD-7.1_gcc-4.2.4_-O2_shared} \\
+  {GE FreeBSD-7.1_gcc-4.3.3_-O2_shared} \\
   {GE Linux-2.6.9_icc-9.1-64bit_-O2_shared} \\
   {GE MinGW-3.8_gcc-3.4.4_-O2_static} \\
   {GE Win2k_bcc-5.5.1_Release} \\
