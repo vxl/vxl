@@ -16,20 +16,18 @@ void bvxm_register::register_datatype()
 
 void bvxm_register::register_process()
 {
-  const bool null_func = 0;
-  
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");  
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_changes_process, "bvxmDetectChangesProcess");  
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_change_detection_display_process, "bvxmChangeDetectionDisplayProcess");  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_changes_process, "bvxmDetectChangesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_change_detection_display_process, "bvxmChangeDetectionDisplayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_generate_edge_map_process, "bvxmGenerateEdgeMapProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_virtual_view_process, "bvxmRenderVirtualViewProcess");  
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_expected_image_process,"bvxmRenderExpectedImageProcess");  
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_process, "bvxmUpdateProcess");      
-  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_synth_lidar_data_process, "bvxmCreateSynthLidarDataProcess");  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_virtual_view_process, "bvxmRenderVirtualViewProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_expected_image_process,"bvxmRenderExpectedImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_process, "bvxmUpdateProcess");
+  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_synth_lidar_data_process, "bvxmCreateSynthLidarDataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_lidar_process, "bvxmUpdateLidarProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_lidar_edge_detection_process,"bvxmLidarEdgeDetectionProcess");  
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_heightmap_process, "bvxmHeightmaoProcess");  
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_compare_rpc_process, "bvxmCompareRpcProcess");  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_lidar_edge_detection_process,"bvxmLidarEdgeDetectionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_heightmap_process, "bvxmHeightmaoProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_compare_rpc_process, "bvxmCompareRpcProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_ocp_compare_process, "bvxmOcpCompareProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_ocp_hist_process, "bvxmOcpHistProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_pmap_hist_process, "bvxmPmapHistProcess");
@@ -52,5 +50,4 @@ void bvxm_register::register_process()
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_save_edges_raw_process, "bvxmSaveEdgesRawProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_rpc_prob_registration_process,"bvxmRpcProbResgistrationProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_rpc_registration_process,"bvxmRpcRegistrationProcess");
-
 }
