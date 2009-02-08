@@ -275,26 +275,25 @@ PyObject *commit_output(PyObject *self, PyObject *args)
   bool result = bprb_batch_process_manager::instance()->commit_output(output,id, type);
   if (!result)
     return Py_BuildValue("i", -1);
-  return Py_BuildValue("is", id, type.c_str());
+  else
+    return Py_BuildValue("is", id, type.c_str());
 }
 
 PyObject *set_input_from_db(PyObject *self, PyObject *args)
 {
   unsigned input;
-  int id=0;
-  char* type="";
   bool result = false;
-  PyObject* obj, *type_obj, *id_obj;
+  PyObject* obj;
   if (!PyArg_ParseTuple(args, "iO:set_input_from_db", &input, &obj))
     return NULL;
 
   if (PyObject_HasAttrString(obj, "type") && PyObject_HasAttrString(obj, "id")) {
-    type_obj = PyObject_GetAttrString(obj,"type");
-    id_obj = PyObject_GetAttrString(obj,"id");
+    PyObject* type_obj = PyObject_GetAttrString(obj,"type");
+    PyObject* id_obj = PyObject_GetAttrString(obj,"id");
 
     if (PyInt_Check(id_obj) && PyString_Check(type_obj)) {
-      id = PyInt_AsLong(id_obj);
-      type = PyString_AsString(type_obj);
+      int id = PyInt_AsLong(id_obj);
+      char* type = PyString_AsString(type_obj);
       result = bprb_batch_process_manager::instance()->set_input_from_db(input, id, type);
     }
   }
@@ -314,16 +313,15 @@ PyObject *remove_data(PyObject *self, PyObject *args)
 
 PyObject *remove_data_obj(PyObject *self, PyObject *args)
 {
-  unsigned id;
-  PyObject* obj, *id_obj;
+  PyObject* obj;
   if (!PyArg_ParseTuple(args, "O:set_input_from_db", &obj))
     return NULL;
 
   bool result = false;
   if (PyObject_HasAttrString(obj, "id")) {
-    id_obj = PyObject_GetAttrString(obj,"id");
+    PyObject* id_obj = PyObject_GetAttrString(obj,"id");
     if (PyInt_Check(id_obj)) {
-      id = PyInt_AsLong(id_obj);
+      unsigned id = PyInt_AsLong(id_obj);
       result = bprb_batch_process_manager::instance()->remove_data(id);
     }
   }
