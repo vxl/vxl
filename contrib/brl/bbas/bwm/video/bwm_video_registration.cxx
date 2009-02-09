@@ -2,10 +2,16 @@
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <vcl_cmath.h>
 #include <vul/vul_timer.h>
+#include <vcl_iomanip.h>
+#include <vcl_fstream.h>
+#include <vcl_sstream.h>
+#include <vcl_string.h>
+#include <vul/vul_file.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vpgl/algo/vpgl_camera_homographies.h>
 #include <brip/brip_vil_float_ops.h>
+#include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_convert.h>
 #include <vidl2/vidl2_istream.h>
@@ -126,6 +132,20 @@ convert_to_frame(vcl_vector<vil_image_view<float> >const&  views)
 
   return  new vidl2_memory_chunk_frame(out_view);
 }
+static vgl_h_matrix_2d<double> 
+compute_homography(vgl_h_matrix_2d<double> const& H0,
+                   vnl_matrix_fixed<double, 3, 3> const& t,
+                   vpgl_perspective_camera<double>* cam,
+                   vgl_plane_3d<double> const& world_plane)
+{
+  vgl_h_matrix_2d<double> tem =
+    vpgl_camera_homographies::homography_from_camera(*cam, world_plane);
+  vgl_h_matrix_2d<double> H = H0*tem;
+  vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();
+  vnl_matrix_fixed<double,3,3> Msh;
+  Msh = t*Mt;
+  return vgl_h_matrix_2d<double>(Msh);
+}
 
 bool bwm_video_registration::
 register_image_stream_planar(vidl2_istream_sptr& in_stream,
@@ -168,13 +188,7 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
     vpgl_perspective_camera<double>* cam = cam_istream->current_camera();
     if (!cam)
       return false;
-    vgl_h_matrix_2d<double> tem =
-      vpgl_camera_homographies::homography_from_camera(*cam, world_plane);
-    vgl_h_matrix_2d<double> H = H0*tem;
-    vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();
-    vnl_matrix_fixed<double,3,3> Msh;
-    Msh = t*Mt;
-    vgl_h_matrix_2d<double> Hsh(Msh);
+    vgl_h_matrix_2d<double> Hsh = compute_homography(H0,t,cam, world_plane);
     vcl_vector<vil_image_view<float> > out_vs;
     for (unsigned p = 0; p<float_vs.size(); ++p){
       vil_image_view<float> out_view(out_ni, out_nj);
@@ -194,5 +208,71 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
   }
   while (in_stream->seek_frame(current_frame) &&
          cam_istream->seek_camera(current_frame));
+  return true;
+}
+
+bool bwm_video_registration::
+register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
+                             vgl_plane_3d<double> const& world_plane,
+                             vsol_box_2d_sptr const& bounds,
+                             double world_sample_distance,
+                             vcl_string const& homg_out_dir,
+                             unsigned skip_frames
+                             )
+{
+  if (vul_file::exists(homg_out_dir)&&!vul_file::is_directory(homg_out_dir)){
+    vcl_cerr << "In bwm_video_registration:: -"
+             << " path exists but is not a directory\n" << homg_out_dir
+             << vcl_endl;
+    return false;
+  }
+
+  if (!vul_file::exists(homg_out_dir))
+    if (!vul_file::make_directory(homg_out_dir)){
+      vcl_cerr << "In  vidl2_pro_utils::create_directory() -"
+               << " could not make directory\n" << homg_out_dir << vcl_endl;
+      return false;
+    }
+
+  if (!cam_istream)
+    return false;
+  if (!cam_istream->seek_camera(0))
+    return false;
+  if (!bounds)
+    return false;
+  unsigned current_frame = 0;
+  vpgl_perspective_camera<double>* cam0 = cam_istream->current_camera();
+  vgl_h_matrix_2d<double> H0 =
+    vpgl_camera_homographies::homography_to_camera(*cam0, world_plane);
+  // the size of the output image is defined by the bounds and the
+  // ground sample distance
+  double w = bounds->width(), h = bounds->height();
+  w/=world_sample_distance;    h/=world_sample_distance;
+  unsigned out_ni = static_cast<unsigned>(w);
+  unsigned out_nj = static_cast<unsigned>(h);
+
+  vnl_matrix_fixed<double,3, 3> t;
+  t[0][0]=1;  t[0][1]=0; t[0][2]=-bounds->get_min_x();
+  t[1][0]=0;  t[1][1]=1; t[1][2]=-bounds->get_min_y();
+  t[2][0]=0;  t[2][1]=0; t[2][2]=world_sample_distance;
+  unsigned f = 0;
+  do
+  {
+    vul_timer tim;
+    vpgl_perspective_camera<double>* cam = cam_istream->current_camera();
+    if (!cam)
+      return false;
+    vgl_h_matrix_2d<double> Hsh = compute_homography(H0,t,cam, world_plane);
+
+    vcl_stringstream str;
+    str << vcl_setw(5) << vcl_setfill('0') << current_frame;
+    vcl_string path = homg_out_dir + "\\" + "H" +str.str();
+    vcl_string save_path = path + '.' + "homg";
+    vcl_ofstream os(save_path.c_str());
+    os << Hsh;
+    os.close();
+    current_frame +=skip_frames;
+  }
+  while (cam_istream->seek_camera(current_frame));
   return true;
 }

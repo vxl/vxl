@@ -14,7 +14,8 @@
 static bool planar_reg(vcl_string const& video_input_glob,
                        vcl_string const& camera_input_glob,
                        vcl_string const& video_output_dir,
-                       vcl_string const& world_plane_path)
+                       vcl_string const& world_plane_path,
+                       vcl_string const& homography_path)
 {
   vnl_double_4 pv;
 
@@ -66,14 +67,22 @@ static bool planar_reg(vcl_string const& video_input_glob,
                                                           sample_distance))
     return false;
 
-  if (!bwm_video_registration::register_image_stream_planar(video_istr,
-                                                            cam_istr,
+  if(video_istr)
+    if (!bwm_video_registration::register_image_stream_planar(video_istr,
+                                                              cam_istr,
+                                                              world_plane,
+                                                              bounds,
+                                                              sample_distance,
+                                                              video_ostr))
+      return false;
+
+  if(homography_path != "")
+    if(!bwm_video_registration::register_planar_homographies(cam_istr,
                                                             world_plane,
                                                             bounds,
                                                             sample_distance,
-                                                            video_ostr))
-    return false;
-
+                                                            homography_path))
+      return false;
   return true;
 }
 
@@ -88,10 +97,13 @@ int main(int argc, char** argv)
                                        "video output file directory", "");
   vul_arg<vcl_string> world_plane_path(arglist, "-world_plane",
                                        "world plane (4 element vector)", "");
+  vul_arg<vcl_string> homography_path(arglist, "-homg_dir", "homgraphy dir", "");
+
   arglist.parse(argc, argv, true);
 
   if (!planar_reg(video_input_glob(), camera_input_glob(),
-                  video_output_dir(), world_plane_path()))
+                  video_output_dir(), world_plane_path(),
+                  homography_path()))
     return -1;
   return 0;
 }
