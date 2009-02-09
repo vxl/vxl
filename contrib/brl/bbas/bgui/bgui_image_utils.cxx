@@ -14,7 +14,7 @@
 bgui_image_utils::bgui_image_utils():
   hist_valid_(false), percent_limit_(0.0002), bin_limit_(1000),
   n_skip_upper_bins_(0), n_skip_lower_bins_(1), min_blocks_(50),
-  scan_fraction_(0.1), image_(0)
+  scan_fraction_(0.005), image_(0)
 {
 }
 
@@ -22,7 +22,7 @@ bgui_image_utils::bgui_image_utils(vil_image_resource_sptr const& image):
   hist_valid_(false), percent_limit_(0.0002),
   bin_limit_(1000), n_skip_upper_bins_(0),
   n_skip_lower_bins_(1), min_blocks_(50),
-  scan_fraction_(0.1), image_(image)
+  scan_fraction_(0.005), image_(image)
 {
   if (!image)
     return;
@@ -158,33 +158,39 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
     return false;
   }
   vil_pixel_format type = view->pixel_format();
-  unsigned fni = static_cast<unsigned>(view->ni()*fraction);
-  unsigned fnj = static_cast<unsigned>(view->nj()*fraction);
+  unsigned ni = view->ni(), nj = view->nj();
+  float area_frac = ni*nj*fraction;
   unsigned np = view->nplanes();
   switch (type )
   {
    case  VIL_PIXEL_FORMAT_BYTE:
    {
     vil_image_view<unsigned char> v = view;
-    for (unsigned p = 0; p<np; ++p)
-      for (unsigned j = 0; j<fnj; ++j)
-        for (unsigned i = 0; i<fni; ++i)
+    for (unsigned p = 0; p<np; ++p){
+      float cnt = 0.0f;
+      while(cnt++<area_frac)
         {
+          unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
+          unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
           double val = static_cast<double>(v(i,j,p));
           data_[p].push_back(val);
         }
+    }
     return true;
    }
    case  VIL_PIXEL_FORMAT_UINT_16:
    {
     vil_image_view<unsigned short> v = view;
-    for (unsigned p = 0; p<np; ++p)
-      for (unsigned j = 0; j<fnj; ++j)
-        for (unsigned i = 0; i<fni; ++i)
+    for (unsigned p = 0; p<np; ++p){
+      float cnt = 0.0f;
+      while(cnt++<area_frac)
         {
+          unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
+          unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
           double val = static_cast<double>(v(i,j,p));
           data_[p].push_back(val);
         }
+    }
     return true;
    }
    default:

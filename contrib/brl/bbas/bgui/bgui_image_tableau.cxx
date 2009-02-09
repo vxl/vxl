@@ -271,8 +271,11 @@ get_pixel_info_from_image(const int x, const int y,
     vil_image_view<float> v = r->get_view(x,1,y,1);
     if (!v)
       vcl_sprintf(msg, "Pixel Not Available");
-    else
+    else if (n_p == 1)
       vcl_sprintf(msg, "(%d, %d)   (float) %f", x, y, v(0,0));
+    else if (n_p ==3)
+      vcl_sprintf(msg, "(%d, %d)   (float)[ R=%6.3f,G=%6.3f,B=%6.3f]", x, y, 
+                  v(0,0,0), v(0,0,1), v(0,0,2) );
     return; }
    case  VIL_PIXEL_FORMAT_DOUBLE: {
     vil_image_view<double> v = r->get_view(x,1,y,1);
