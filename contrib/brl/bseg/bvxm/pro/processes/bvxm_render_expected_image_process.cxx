@@ -127,13 +127,13 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,4);
     result = world->expected_image<APM_MOG_MC_4_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "edges") {
+  else if (voxel_type == "edges"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_edge_image(camera_metadata,expected_img,scale_index);
   }
-  else if (voxel_type == "edges_prob") {
+  else if (voxel_type == "edges_prob"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
-    result = world->expected_edge_prob_image(camera_metadata,expected_img,scale_index);
+    result = world->expected_edge_prob_image(camera_metadata,expected_img,1.0f,scale_index);
   }
   else
     vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appereance model\n";
