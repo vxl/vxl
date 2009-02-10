@@ -171,7 +171,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera_inp);
   vil_image_view_base_sptr expected_edge_image_sptr = new vil_image_view<float>(ni,nj,1);
-  vox_world->expected_edge_prob_image(camera_metadata_inp, expected_edge_image_sptr,n_normal,scale);
+  vox_world->expected_edge_image(camera_metadata_inp, expected_edge_image_sptr,n_normal,scale);
   vil_image_view<float> expected_edge_image(expected_edge_image_sptr);
   //float eei_min = vcl_numeric_limits<float>::max();
   //float eei_max = vcl_numeric_limits<float>::min();
@@ -346,7 +346,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
     vil_image_view_base_sptr edt_image_sptr = new vil_image_view<float>(edt_image);
 
     bvxm_image_metadata camera_metadata_out(edt_image_sptr,camera_out);
-    bool result = vox_world->update_edges_prob(camera_metadata_out,0);
+    bool result = vox_world->update_edges(camera_metadata_out,0);
 
     if (!result){
       vcl_cerr << "error bvxm_rpc_registration: failed to update edge image\n";

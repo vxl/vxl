@@ -147,15 +147,13 @@ class bvxm_voxel_world: public vbl_ref_count
                       vil_image_view<float> &mask, unsigned bin_index = 0, unsigned scale_idx=0);
 
   // initialize the voxel grid for edges
-  bool init_edges_prob(unsigned scale_idx=0);
+  bool init_edges(unsigned scale_idx=0);
 
   //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
   bool update_edges(bvxm_image_metadata const& metadata, unsigned scale_idx=0);
-  bool update_edges_prob(bvxm_image_metadata const& metadata, unsigned scale_idx=0);
 
   //: generate the expected edge image from the specified viewpoint. the expected image should be allocated by the caller.
-  bool expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, unsigned scale_idx=0);
-  bool expected_edge_prob_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, float n_normal, unsigned scale_idx=0);
+  bool expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, float n_normal, unsigned scale_idx=0);
 
   //: probability that the observed pixels were _not_ produced by a voxel in the grid.
   // The range determines how much tolerance to allow the (continuous) pixel values in order to convert from a density to a discrete probability.
