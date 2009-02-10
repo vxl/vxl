@@ -27,7 +27,6 @@ DECLARE_FUNC_CONS(bvxm_render_expected_image_process);
 DECLARE_FUNC_CONS(bvxm_render_virtual_view_process);
 DECLARE_FUNC_CONS(bvxm_roc_process);
 DECLARE_FUNC_CONS(bvxm_roi_init_process);
-DECLARE_FUNC_CONS(bvxm_rpc_prob_registration_process);
 DECLARE_FUNC_CONS(bvxm_rpc_registration_process);
 DECLARE_FUNC_CONS(bvxm_save_edges_raw_process);
 DECLARE_FUNC_CONS(bvxm_save_occupancy_raw_process);
