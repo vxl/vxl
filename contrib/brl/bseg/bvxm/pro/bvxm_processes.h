@@ -13,7 +13,7 @@ DECLARE_FUNC_CONS(bvxm_create_synth_lidar_data_process);
 DECLARE_FUNC_CONS(bvxm_create_voxel_world_process);
 DECLARE_FUNC_CONS(bvxm_detect_changes_process);
 DECLARE_FUNC_CONS(bvxm_gen_synthetic_world_process);
-DECLARE_FUNC_CONS(bvxm_generate_edge_map_process);
+DECLARE_FUNC_CONS(bvxm_detect_edges_process);
 DECLARE_FUNC_CONS(bvxm_heightmap_process);
 DECLARE_FUNC_CONS(bvxm_illum_index_process);
 DECLARE_FUNC_CONS(bvxm_lidar_edge_detection_process);

@@ -39,11 +39,6 @@ namespace bvxm_rpc_registration_process_globals
   const unsigned n_outputs_ = 4;
   
   //parameter strings
-  const vcl_string param_noise_multiplier_ =  "noise_multiplier";
-  const vcl_string param_smooth_ =  "smooth";
-  const vcl_string param_automatic_threshold_ =  "automatic_threshold";
-  const vcl_string param_junctionp_ =  "junctionp";
-  const vcl_string param_aggressive_junction_closure_ =  "aggressive_junction_closure";
   const vcl_string param_edt_gaussian_sigma_ =  "edt_gaussian_sigma";
   const vcl_string param_edt_image_mean_scale_ =  "edt_image_mean_scale";
 }
@@ -114,8 +109,8 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   // camera
   vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);    
   // image
-  vil_image_view_base_sptr image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);  
-  vil_image_view<vxl_byte> image(image_sptr);
+  vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);  
+  vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   // boolean parameter specifying the correction state
   bool rpc_correction_flag = pro.get_input<bool>(i++);                                          
@@ -131,14 +126,8 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   unsigned scale = pro.get_input<unsigned>(i++);
 
   // get parameters
-  double noise_multiplier=1.5, smooth=1.5, edt_gaussian_sigma=3.0, edt_image_mean_scale=1.0;
-  bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
+  double edt_gaussian_sigma=3.0, edt_image_mean_scale=1.0;
   
-  pro.parameters()->get_value(param_noise_multiplier_, noise_multiplier);
-  pro.parameters()->get_value(param_smooth_, smooth);
-  pro.parameters()->get_value(param_automatic_threshold_, automatic_threshold);
-  pro.parameters()->get_value(param_junctionp_, junctionp);
-  pro.parameters()->get_value(param_aggressive_junction_closure_, aggressive_junction_closure);
   pro.parameters()->get_value(param_edt_gaussian_sigma_, edt_gaussian_sigma);
   pro.parameters()->get_value(param_edt_image_mean_scale_, edt_image_mean_scale);
 
@@ -153,13 +142,14 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations before the update: " << num_observations << "\n";
 
-  int ni = image.ni();
-  int nj = image.nj();
+  int ni = edge_image.ni();
+  int nj = edge_image.nj();
 
   double best_offset_u = 0.0, best_offset_v = 0.0;
 
   vil_image_view<vxl_byte> edge_image_output(ni,nj,1);
   edge_image_output.fill(0);
+  edge_image_output.deep_copy(edge_image);
 
   // render the expected edge image
   vil_image_view<vxl_byte> expected_edge_image_output(ni,nj,1);
@@ -184,9 +174,6 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
       expected_edge_image_output(i,j) = (int)(255.0*expected_edge_image(i,j));
     }
   }
-
-  vil_image_view<vxl_byte> edge_image = bvxm_util::detect_edges(image,noise_multiplier,smooth,automatic_threshold,junctionp,aggressive_junction_closure);
-  edge_image_output.deep_copy(edge_image);
  
   // part 1: correction
   // this part contains the correction rpc camera parameters using the expected edge image obtained
