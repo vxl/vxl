@@ -148,10 +148,6 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
 
   int offset_search_size = bvxm_util::convert_uncertainty_from_meters_to_pixels(uncertainty, vox_world->get_params()->lvcs(), camera_inp);
 
-  // enforce the restriction (20<=offset_search_size<=100)
-  offset_search_size = vnl_math_max(offset_search_size,20);
-  offset_search_size = vnl_math_min(offset_search_size,100);
-
   vcl_cout << "Offset search size is: " << offset_search_size << "\n";
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
