@@ -542,7 +542,7 @@ VDS int parse(vul_arg<int>* argmt, char ** argv)
 template class vul_arg<int>;
 
 //: int64
-#ifdef VXL_HAS_INT_64
+#if VXL_HAS_INT_64
 VDS void settype(vul_arg<vxl_int_64> &argmt) { argmt.type_ = "integer64"; }
 
 VDS void print_value(vcl_ostream  &s, vul_arg<vxl_int_64> const &argmt)
