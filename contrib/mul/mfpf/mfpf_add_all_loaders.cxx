@@ -21,6 +21,9 @@
 #include <mfpf/mfpf_hog_box_finder.h>
 #include <mfpf/mfpf_hog_box_finder_builder.h>
 
+#include <mfpf/mfpf_region_about_pt.h>
+#include <mfpf/mfpf_region_about_lineseg.h>
+
 #include <vpdfl/vpdfl_add_all_binary_loaders.h>
 
 //: Add all binary loaders and factory objects for mfpf library
@@ -64,5 +67,12 @@ void mfpf_add_all_loaders()
   vsl_add_to_binary_loader(mfpf_sad_vec_cost());
   vsl_add_to_binary_loader(mfpf_ssd_vec_cost_builder());
   vsl_add_to_binary_loader(mfpf_ssd_vec_cost());
+
+  mbl_cloneables_factory<mfpf_region_definer>::add(mfpf_region_about_pt());
+  mbl_cloneables_factory<mfpf_region_definer>::add(mfpf_region_about_lineseg());
+
+  vsl_add_to_binary_loader(mfpf_region_about_pt());
+  vsl_add_to_binary_loader(mfpf_region_about_lineseg());
+
 
 }

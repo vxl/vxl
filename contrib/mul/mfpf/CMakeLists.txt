@@ -49,6 +49,10 @@ SET(mfpf_sources
   mfpf_draw_matches.h            mfpf_draw_matches.cxx
 
   mfpf_dp_snake.h                mfpf_dp_snake.cxx
+
+  mfpf_region_definer.h          mfpf_region_definer.cxx
+  mfpf_region_about_pt.h         mfpf_region_about_pt.cxx
+  mfpf_region_about_lineseg.h    mfpf_region_about_lineseg.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)

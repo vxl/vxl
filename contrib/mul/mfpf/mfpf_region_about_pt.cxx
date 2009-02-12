@@ -1,0 +1,175 @@
+#include "mfpf_region_about_pt.h"
+//:
+// \file
+// \brief Region centred on a single point, pose defined by other pts
+// \author Tim Cootes
+
+#include <vsl/vsl_binary_loader.h>
+#include <vcl_cassert.h>
+#include <vcl_sstream.h>
+
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
+#include <mbl/mbl_stats_1d.h>
+
+#include <vul/vul_string.h>
+
+//=======================================================================
+// Dflt ctor
+//=======================================================================
+
+mfpf_region_about_pt::mfpf_region_about_pt()
+  : i0_(0),i1_(0),i2_(1),rel_wi_(1.0),rel_wj_(1.0),form_("box")
+{
+}
+
+//=======================================================================
+// Destructor
+//=======================================================================
+
+mfpf_region_about_pt::~mfpf_region_about_pt()
+{
+}
+
+//: Defines a region centred on a point
+mfpf_region_form mfpf_region_about_pt::set_up(
+            const vcl_vector<vgl_point_2d<double> >& pts)
+{
+  assert(i0_<pts.size());
+  assert(i1_<pts.size());
+  assert(i2_<pts.size());
+
+  vgl_vector_2d<double> u=pts[i2_]-pts[i1_];
+  double L=u.length();
+  wi_=rel_wi_*L;
+  wj_=rel_wj_*L;
+
+  mfpf_pose pose(pts[i0_],u/L);
+  return mfpf_region_form(pose,form_,wi_,wj_);
+}
+
+//: Defines a region centred on a point
+//  The aspect ratio of the region will be the same as that
+//  from the last call to set_up.
+mfpf_region_form mfpf_region_about_pt::get_region(
+              const vcl_vector<vgl_point_2d<double> >& pts)
+{
+  assert(i0_<pts.size());
+  assert(i1_<pts.size());
+  assert(i2_<pts.size());
+
+  vgl_vector_2d<double> u=pts[i2_]-pts[i1_];
+  double L=u.length();
+
+  // Compute scale of this box relative to the last one called by set_up
+  double rel_scale = (rel_wi_*L)/wi_;
+
+  mfpf_pose pose(pts[i0_],(rel_scale/L)*u);
+  return mfpf_region_form(pose,form_,wi_,wj_);
+}
+
+//=======================================================================
+// Method: set_from_stream
+//=======================================================================
+//: Initialise from a string stream
+bool mfpf_region_about_pt::set_from_stream(vcl_istream &is)
+{
+  // Cycle through stream and produce a map of properties
+  vcl_string s = mbl_parse_block(is);
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  // Extract the properties
+  i0_=vul_string_atoi(props.get_required_property("i0"));
+  i1_=vul_string_atoi(props.get_required_property("i1"));
+  i2_=vul_string_atoi(props.get_required_property("i2"));
+  rel_wi_=vul_string_atof(props.get_required_property("rel_wi"));
+  rel_wj_=vul_string_atof(props.get_required_property("rel_wj"));
+  form_=props.get_optional_property("form","box");
+
+  // Check for unused props
+  mbl_read_props_look_for_unused_props(
+      "mfpf_region_about_pt::set_from_stream", props, mbl_read_props_type());
+  return true;
+}
+
+//=======================================================================
+// Method: version_no
+//=======================================================================
+
+short mfpf_region_about_pt::version_no() const
+{
+  return 1;
+}
+
+//=======================================================================
+// Method: is_a
+//=======================================================================
+
+vcl_string mfpf_region_about_pt::is_a() const
+{
+  return vcl_string("mfpf_region_about_pt");
+}
+
+//: Create a copy on the heap and return base class pointer
+mfpf_region_definer* mfpf_region_about_pt::clone() const
+{
+  return new mfpf_region_about_pt(*this);
+}
+
+//=======================================================================
+// Method: print
+//=======================================================================
+
+void mfpf_region_about_pt::print_summary(vcl_ostream& os) const
+{
+  os<<"{ i0: "<<i0_<<" i1: "<<i1_<<" i2: "<<i2_
+    <<" rel_wi: "<<rel_wi_<<" rel_wj: "<<rel_wj_
+    <<" form: "<<form_<<" } ";
+}
+
+//=======================================================================
+// Method: save
+//=======================================================================
+
+void mfpf_region_about_pt::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs,i0_);
+  vsl_b_write(bfs,i1_);
+  vsl_b_write(bfs,i2_);
+  vsl_b_write(bfs,rel_wi_);
+  vsl_b_write(bfs,rel_wj_);
+  vsl_b_write(bfs,wi_);
+  vsl_b_write(bfs,wj_);
+  vsl_b_write(bfs,form_);
+}
+
+//=======================================================================
+// Method: load
+//=======================================================================
+
+void mfpf_region_about_pt::b_read(vsl_b_istream& bfs)
+{
+  if (!bfs) return;
+  short version;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+    case (1):
+      vsl_b_read(bfs,i0_);
+      vsl_b_read(bfs,i1_);
+      vsl_b_read(bfs,i2_);
+      vsl_b_read(bfs,rel_wi_);
+      vsl_b_read(bfs,rel_wj_);
+      vsl_b_read(bfs,wi_);
+      vsl_b_read(bfs,wj_);
+      vsl_b_read(bfs,form_);
+      break;
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+  }
+}
