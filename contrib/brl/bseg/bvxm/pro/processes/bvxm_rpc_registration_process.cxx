@@ -187,6 +187,11 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
 
   vcl_cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << vcl_endl;
 
+  file_out.clear();
+  file_out.open("offsets.txt",vcl_ofstream::app);
+  file_out << best_offset_u << " " << best_offset_v << "\n";
+  file_out.close();
+
   float nlx=0.f,nly=0.f,nlz=0.f;
   double motion_mult = 0.0;
   if (rpc_shift_3d_flag)
