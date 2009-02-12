@@ -33,6 +33,7 @@ DECLARE_FUNC_CONS(bvxm_save_occupancy_raw_process);
 DECLARE_FUNC_CONS(bvxm_save_occupancy_vff_process);
 DECLARE_FUNC_CONS(bvxm_test_process);
 DECLARE_FUNC_CONS(bvxm_update_edges_lidar_process);
+DECLARE_FUNC_CONS(bvxm_update_edges_process);
 DECLARE_FUNC_CONS(bvxm_update_lidar_process);
 DECLARE_FUNC_CONS(bvxm_update_process);
 DECLARE_FUNC_CONS(bvxm_detect_scale_process);

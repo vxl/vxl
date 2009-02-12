@@ -43,6 +43,7 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_compare_3d_voxels_process,"bvxmCompare3dVoxelsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_scale_process,"bvxmDetectScaleProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_lidar_edge_detection_process,"bvxmLidarEdgeDetectionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_edges_process, "bvxmUpdateEdgesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_edges_lidar_process, "bvxmUpdateEdgesLidarProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_roc_process,"bvxmRocProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_save_occupancy_vff_process, " bvxmSaveOccupancyVffPprocess");
