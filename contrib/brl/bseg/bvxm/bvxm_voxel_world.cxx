@@ -251,7 +251,7 @@ bool bvxm_voxel_world::save_edges_vff(vcl_string filename,unsigned scale)
 }
 
 //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
-bool bvxm_voxel_world::save_edges_raw(vcl_string filename,unsigned scale)
+bool bvxm_voxel_world::save_edges_raw(vcl_string filename, float n_normal, unsigned scale)
 {
   float num_obs = (float)this->num_observations<EDGES>(0,scale);
 
@@ -281,13 +281,15 @@ bool bvxm_voxel_world::save_edges_raw(vcl_string filename,unsigned scale)
   // iterate through slabs and fill in memory array
   char *edges_array = new char[nx*ny*nz];
 
+  int dof = vnl_math_max((int)this->num_observations<EDGES>(0,scale)-1,1);
+
   vcl_cout << "Saving edges to RAW file:" << vcl_endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
   for (unsigned k=0; edges_it != edges_grid->end(); ++edges_it, ++k) {
     vcl_cout << '.';
     for (unsigned i=0; i<(*edges_it).nx(); ++i) {
       for (unsigned j=0; j < (*edges_it).ny(); ++j) {
-        edges_array[i*ny*nz + j*nz + k] = (unsigned char)((*edges_it)(i,j) * 255.0 / num_obs);;
+        edges_array[i*ny*nz + j*nz + k] = (unsigned char)(255.0*bvxm_util::convert_edge_statistics_to_probability((*edges_it)(i,j),n_normal,dof));
       }
     }
   }
@@ -872,13 +874,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
   int dof = vnl_math_max((int)this->num_observations<EDGES>(0,scale)-1,1);
   bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
-    if(((*expected_edge_image_it)-n_normal)>0.0f){
-      double chi_sq_stat = (double)vnl_math_sqr(((*expected_edge_image_it)-n_normal))/n_normal;
-      (*expected_edge_image_it) = (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
-    }
-    else{
-      (*expected_edge_image_it) = 0.0f;
-    }
+    (*expected_edge_image_it) = bvxm_util::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
   }
 
   // convert back to vil_image_view

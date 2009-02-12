@@ -24,15 +24,18 @@
 
 bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
 {
-  // process takes 3 inputs:
+  // process takes 4 inputs:
   //input[0]: The voxel world
   //input[1]: The filename to write to
-  //input[2]: The scale of the world
-  unsigned n_inputs_ = 3;
+  //input[2]: The filename to write to
+  //input[3]: n_normal
+  unsigned n_inputs_ = 4;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
-  input_types_[2] = "unsigned";
+  input_types_[2] = "float";
+  input_types_[3] = "unsigned";
   return pro.set_input_types(input_types_);
 }
 
@@ -45,12 +48,12 @@ bool bvxm_save_edges_raw_process(bprb_func_process& pro)
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
 
   //get the inputs
   unsigned i = 0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   vcl_string filename = pro.get_input<vcl_string>(i++);
+  float n_normal = pro.get_input<float>(i++);
   unsigned scale = pro.get_input<unsigned>(i++);
 
   if ( !world ){
@@ -58,5 +61,5 @@ bool bvxm_save_edges_raw_process(bprb_func_process& pro)
     return false;
   }
 
-  return world->save_edges_raw(filename,scale);
+  return world->save_edges_raw(filename,n_normal,scale);
 }

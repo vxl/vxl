@@ -235,7 +235,7 @@ class bvxm_voxel_world: public vbl_ref_count
   bvxm_voxel_grid_base_sptr get_grid(unsigned bin_index, unsigned scale);
 
   //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
-  bool save_edges_raw(vcl_string filename, unsigned scale_idx=0);
+  bool save_edges_raw(vcl_string filename, float n_normal, unsigned scale_idx=0);
 
   //: save the edge probability grid as a 3-d tiff image
   bool save_edges_vff(vcl_string filename, unsigned scale_idx=0);

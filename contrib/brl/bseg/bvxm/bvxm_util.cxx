@@ -21,6 +21,7 @@
 #include <bil/algo/bil_edt.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vnl/algo/vnl_chi_squared.h>
 
 #include "bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
@@ -374,4 +375,13 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo
   }
 
   return vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty->width(),roi_uncertainty->height()));
+}
+
+float bvxm_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof){
+  float return_value = 0.0f;
+  if((edge_statistic-n_normal)>0.0f){
+    double chi_sq_stat = (double)vnl_math_sqr((edge_statistic-n_normal))/n_normal;
+    return_value = (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
+  }
+  return return_value;
 }

@@ -25,6 +25,9 @@
 //
 //   12/12/2008 - Ozge C. Ozcanli - Added the method
 //                                  static void warp_slab_nearest_neighbor ...
+
+//   02/12/2009 - Ibrahim Eden - Added the method
+//                                  static void convert_edge_statistics_to_probability ...
 // \endverbatim
 
 #include <vcl_string.h>
@@ -148,6 +151,8 @@ class bvxm_util
   static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
 
   static int convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
+
+  static float convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof);
 
  protected:
 
