@@ -21,6 +21,8 @@ DECLARE_FUNC_CONS(vil_load_image_view_binary_process);
 DECLARE_FUNC_CONS(vil_save_image_view_binary_process);
 DECLARE_FUNC_CONS(vil_map_image_binary_process);
 DECLARE_FUNC_CONS(vil_crop_image_process);
+DECLARE_FUNC_CONS(vil_threshold_image_process);
+DECLARE_FUNC_CONS(vil_image_size_process);
 
 
 #endif
