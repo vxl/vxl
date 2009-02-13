@@ -40,6 +40,7 @@ SET(mfpf_sources
   mfpf_feature_vec.h
   mfpf_searcher.h                mfpf_searcher.cxx
   mfpf_prune_overlaps.h          mfpf_prune_overlaps.cxx
+  mfpf_patch_data.h              mfpf_patch_data.cxx
 
   mfpf_mr_point_finder.h         mfpf_mr_point_finder.cxx
   mfpf_mr_point_finder_builder.h mfpf_mr_point_finder_builder.cxx

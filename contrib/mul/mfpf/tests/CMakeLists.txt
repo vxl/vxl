@@ -11,6 +11,7 @@ ADD_EXECUTABLE( mfpf_test_all
   test_pose.cxx
   test_mr_point_finder.cxx
   test_dp_snake.cxx
+  test_patch_data.cxx
   )
 TARGET_LINK_LIBRARIES( mfpf_test_all mfpf mipa testlib )
 
@@ -22,6 +23,7 @@ ADD_TEST( mfpf_test_region_pdf  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_reg
 ADD_TEST( mfpf_test_region_finder  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_region_finder)
 ADD_TEST( mfpf_test_pose        ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_pose)
 ADD_TEST( test_mr_point_finder  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_mr_point_finder)
+ADD_TEST( test_patch_data  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_patch_data)
 
 ADD_TEST( test_dp_snake  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_dp_snake)
 
