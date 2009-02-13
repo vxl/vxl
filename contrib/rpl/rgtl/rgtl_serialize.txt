@@ -1,0 +1,126 @@
+Copyright 2006-2009 Brad King, Chuck Stewart
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file rgtl_license_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt)
+
+The rgtl_serialize_* classes implement a simple serialization
+save/load mechanism.  The interface is a simplified version of the
+Boost.Serialization library documented here:
+
+  http://www.boost.org/libs/serialization/doc/index.html
+
+In order to enable serialization of a class, add a *private*
+"serialize" method template:
+
+  #include <rgtl/rgtl_serialize_access.hxx>
+  class A
+  {
+  public:
+    // ...
+  private:
+    friend class rgtl_serialize_access;
+    template <class Serializer>
+    void serialize(Serializer& sr)
+      {
+      sr & x & y;
+      }
+    int x;
+    short y[2];
+  };
+
+If separate code is needed for saving and loading:
+
+  #include <rgtl/rgtl_serialize_access.hxx>
+  #include <rgtl/rgtl_serialize_split.hxx>
+  class A
+  {
+  public:
+    // ...
+  private:
+    friend class rgtl_serialize_access;
+    template <class Serializer>
+    void serialize(Serializer& sr)
+      {
+      rgtl_serialize_split(sr, *this);
+      }
+    template <class Serializer>
+    void serialize_save(Serializer& sr)
+      {
+      sr << x << y;
+      }
+    template <class Serializer>
+    void serialize_load(Serializer& sr)
+      {
+      sr >> x >> y;
+      }
+    int x;
+    short y[2];
+  };
+
+To handle inheritance:
+
+  #include <rgtl/rgtl_serialize_access.hxx>
+  #include <rgtl/rgtl_serialize_base.hxx>
+  class B: public A
+  {
+  public:
+    // ...
+  private:
+    friend class rgtl_serialize_access;
+    template <class Serializer>
+    void serialize(Serializer& sr)
+      {
+      sr & rgtl_serialize_base<A>(*this);
+      sr & x & y;
+      }
+    int x;
+    short y[2];
+  };
+
+To add serialization non-intrusively:
+
+  struct Entry
+  {
+    int a;
+    int b;
+  };
+
+  template <class Serializer>
+  void rgtl_serialize(Serializer& sr, Entry& self)
+  {
+    sr & self.a;
+    sr & self.b;
+  }
+
+To add serialization non-intrusively with separate code for saving and
+loading:
+
+  #include <rgtl/rgtl_serialize_split.hxx>
+  template <class Serializer>
+  void rgtl_serialize(Serializer& sr, vcl_vector<Entry>& self)
+  {
+    rgtl_serialize_split(sr, self);
+  }
+
+  template <class Serializer>
+  void rgtl_serialize_save(Serializer& sr, vcl_vector<Entry>& self)
+  {
+    vcl_size_t sz = self.size();
+    sr << sz;
+    for(vcl_vector<Entry>::iterator i = self.begin(); i != self.end(); ++i)
+      {
+      sr << *i;
+      }
+  }
+
+  template <class Serializer>
+  void rgtl_serialize_load(Serializer& sr, vcl_vector<Entry>& self)
+  {
+    vcl_size_t sz;
+    sr >> sz;
+    self.resize(sz);
+    for(vcl_vector<Entry>::iterator i = self.begin(); i != self.end(); ++i)
+      {
+      sr >> *i;
+      }
+  }

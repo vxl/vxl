@@ -1,0 +1,78 @@
+/* Copyright 2006-2009 Brad King, Chuck Stewart
+   Distributed under the Boost Software License, Version 1.0.
+   (See accompanying file rgtl_license_1_0.txt or copy at
+   http://www.boost.org/LICENSE_1_0.txt) */
+#include <testlib/testlib_test.h>
+
+#include <rgtl/rgtl_octree_objects.hxx>
+#include <rgtl/rgtl_object_array_points.hxx>
+#include <rgtl/rgtl_octree_cell_bounds.hxx>
+#include <vnl/vnl_random.h>
+#include <vul/vul_timer.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
+
+MAIN( test_octree_objects )
+{
+  START("rgtl_octree_objects");
+
+  // Default bounds are unit cube.
+  rgtl_octree_cell_bounds<3> bounds;
+
+  // Initialize with a fixed seed so test is reproducible.
+  vnl_random mz_random;
+  mz_random.reseed(123456);
+
+  // Setup a timer.
+  vul_timer timer;
+
+  // Generate points in the unit cube.
+  unsigned int const n = 10000;
+  rgtl_object_array_points<3> points(n);
+  for(unsigned int i=0; i < n; ++i)
+    {
+    double x[3];
+    x[0] = mz_random.drand32(0,1);
+    x[1] = mz_random.drand32(0,1);
+    x[2] = mz_random.drand32(0,1);
+    points.set_point(i, x);
+    }
+
+  // Construct the spatial structure.
+  testlib_test_begin("construct");
+  timer.mark();
+  rgtl_octree_objects<3> objects(points, bounds, 5);
+  double ct_ms = timer.user();
+  testlib_test_perform(true);
+
+  // Compute the distance transform in the spatial structure.
+  testlib_test_begin("distance transform (order 4)");
+  timer.mark();
+  bool df_worked = objects.compute_distance_transform(4);
+  double df_ms = timer.user();
+  testlib_test_perform(df_worked);
+
+  // Query the structure.
+  int count;
+  double p[3] = {0.5, 0.5, 0.5};
+  double closest_distances_squared[4];
+  int closest_ids[4];
+
+  testlib_test_begin("query closest");
+  count = objects.query_closest(p, 4, closest_ids,
+                                closest_distances_squared, 0);
+  testlib_test_perform(count == 4);
+
+  double radius = vcl_sqrt(closest_distances_squared[count-1]);
+  vcl_vector<int> sphere_ids;
+  testlib_test_begin("query sphere");
+  count = objects.query_sphere(p, radius, sphere_ids);
+  testlib_test_perform(count == 4);
+
+  vcl_cout << "  octree construction took "
+           << (ct_ms/1000.0) << "s" << vcl_endl;
+  vcl_cout << "  distance transform took "
+           << (df_ms/1000.0) << "s" << vcl_endl;
+
+  SUMMARY();
+}
