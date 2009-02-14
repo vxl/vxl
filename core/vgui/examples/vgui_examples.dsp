@@ -117,6 +117,9 @@ SOURCE=.\example_text_windows.cxx
 # Begin Source File
 SOURCE=.\example_slider.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\click_points.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
