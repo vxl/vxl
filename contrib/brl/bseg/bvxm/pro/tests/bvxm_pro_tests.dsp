@@ -3,32 +3,32 @@
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
+#
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 # bvxm_pro_tests  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  bvxm_pro.lib vil1.lib vil.lib tiff.lib png.lib zlib.lib jpeg.lib vul.lib vnl_algo.lib vnl.lib netlib.lib vbl.lib vcl.lib /STACK:10000000  == libraries linked in 
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  bvxm_pro.lib vil1.lib vil.lib tiff.lib png.lib zlib.lib jpeg.lib vul.lib vnl_algo.lib vnl.lib netlib.lib vbl.lib vcl.lib /STACK:10000000  == libraries linked in
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=bvxm_pro_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "bvxm_pro_tests.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "bvxm_pro_tests.mak" CFG="bvxm_pro_tests - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "bvxm_pro_tests - Win32 MinSizeRel" (based on "Win32 (x86) Application")
 !MESSAGE "bvxm_pro_tests - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "bvxm_pro_tests - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
 !MESSAGE "bvxm_pro_tests - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -63,7 +63,7 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 bvxm_pro.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
@@ -77,7 +77,7 @@ LINK32=link.exe
 # ADD LINK32 netlib.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
+# ADD LINK32 /STACK:10000000
 !ELSEIF  "$(CFG)" == "bvxm_pro_tests - Win32 Debug"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -105,7 +105,7 @@ LINK32=link.exe
 # ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 bvxm_pro.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
@@ -119,7 +119,7 @@ LINK32=link.exe
 # ADD LINK32 netlib.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
+# ADD LINK32 /STACK:10000000
 !ELSEIF  "$(CFG)" == "bvxm_pro_tests - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -145,7 +145,7 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 bvxm_pro.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
@@ -159,7 +159,7 @@ LINK32=link.exe
 # ADD LINK32 netlib.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
+# ADD LINK32 /STACK:10000000
 !ELSEIF  "$(CFG)" == "bvxm_pro_tests - Win32 RelWithDebInfo"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -185,7 +185,7 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 bvxm_pro.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
@@ -199,8 +199,8 @@ LINK32=link.exe
 # ADD LINK32 netlib.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
-!ENDIF 
+# ADD LINK32 /STACK:10000000
+!ENDIF
 
 # Begin Target
 
@@ -219,9 +219,6 @@ SOURCE=.\test_bvxm_change_detection_display_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_bvxm_create_voxel_world_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_bvxm_generate_edge_map_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_bvxm_illum_index_process.cxx
