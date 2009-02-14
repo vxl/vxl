@@ -250,14 +250,37 @@ static void test_homg_point_3d()
   TEST("+=", p2, p1);
 
   p2.set(4,5,2,1);
+  bool b = collinear(p1,p2,p2);
+  TEST("any two points are collinear", b, true);
   p3.set(7,-1,11,1);
-  bool b = collinear(p1,p2,p3);
-  TEST("collinear", b, true);
+  b = collinear(p1,p2,p3);
+  TEST("three collinear points", b, true);
   double r = ratio(p1,p2,p3);
   TEST("ratio", r, 4.0);
   vgl_homg_point_3d<int> m = midpoint(p1,p2,4);
   TEST("midpoint", m, p3);
+  p3.set(2,3,4,1); // "random" point
+  b = collinear(p1,p2,p3);
+  TEST("three arbitrary points are not collinear", b, false);
 
+  b = coplanar(p1,p2,p3,p3); TEST("any three points are coplanar", b, true);
+  vgl_homg_point_3d<int> p4;
+  p4.set(7,12,1,2); // mid point of p1 and p2
+  b = coplanar(p1,p2,p3,p4); TEST("a line and a point are coplanar", b, true);
+  p4.set(1,-2,3,0); // point at infinity of the line p1-p2
+  b = coplanar(p1,p2,p3,p4); TEST("a line and a point are coplanar", b, true);
+  p4.set(9,3,4,1); // "random" point
+  b = coplanar(p1,p2,p3,p4); TEST("four arbitrary points are not coplanar", b, false);
+  p1.set(3,7,-1,0);
+  p2.set(4,5,2,0);
+  p3.set(2,3,4,0);
+  p4.set(9,3,4,0);
+  b = coplanar(p1,p2,p3,p4); TEST("four arbitrary points at infinity are coplanar", b, true);
+  b = collinear(p1,p2,p3); TEST("three arbitrary points at infinity are not collinear", b, false);
+
+  p1.set(3,7,-1,1);
+  p2.set(4,5,2,1);
+  p3.set(7,-1,11,1);
   m = centre(p1,p3); // assignment
   vgl_homg_point_3d<int> cc(5,3,5,1);
   TEST("centre", m, cc);
