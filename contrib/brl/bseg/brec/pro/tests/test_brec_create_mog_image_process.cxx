@@ -34,9 +34,10 @@
 #include <brec/pro/brec_processes.h>
 #include <brec/pro/brec_register.h>
 
-
-//#include <bbgm/pro/bbgm_save_image_of_process.h>
-//#include <bbgm/pro/bbgm_display_dist_image_process.h>
+#ifdef EXTRA_TESTS
+#include <bbgm/pro/bbgm_save_image_of_process.h>
+#include <bbgm/pro/bbgm_display_dist_image_process.h>
+#endif
 #include <bbgm/pro/bbgm_processes.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
@@ -45,9 +46,6 @@
 
 MAIN( test_brec_create_mog_image_process )
 {
-  unsigned ni = 200;
-  unsigned nj = 200;
-
   typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type_rgb;
   typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype_rgb;
 
@@ -64,10 +62,10 @@ MAIN( test_brec_create_mog_image_process )
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(img.ni(), img.nj(), 1);
   if (!bvxm_util::img_to_slab(img_sptr,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: APM_MOG_GREY " << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: APM_MOG_GREY\n";
     return false;
   }
-  //: create distribution slab
+  // create distribution slab
   float init_variance = 0.008f;
   bsta_gauss_f1 this_gauss(0.0f, init_variance);
   bsta_num_obs<bsta_gauss_f1> tg_o(this_gauss);
@@ -83,9 +81,9 @@ MAIN( test_brec_create_mog_image_process )
   bvxm_voxel_slab<float> w(100,100,1);
   w.fill(1.0f);
 
-  //: update once with the img
+  // update once with the img
   apm_processor.update(slab, image_slab, w);
-  
+
   //DECLARE_FUNC_CONS(brec_create_mog_image_process);
 
   REGISTER_DATATYPE(vcl_string);
@@ -95,8 +93,10 @@ MAIN( test_brec_create_mog_image_process )
   REGISTER_DATATYPE(bvxm_voxel_slab_base_sptr);
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_create_mog_image_process, "brecCreateMOGImageProcess");
-  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
-  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_display_dist_image_process, "bbgmDisplayDistImageProcess");
+#ifdef EXTRA_TESTS
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_display_dist_image_process, "bbgmDisplayDistImageProcess");
+#endif
 
   // run the create mog image process
   // inits
@@ -123,7 +123,7 @@ MAIN( test_brec_create_mog_image_process )
   TEST("output image is a valid bbgm image", !out_exp_img, false);
 
   bbgm_viewer_sptr viewer = new bbgm_mean_viewer();
-  
+
   TEST("output image is a valid bbgm image", viewer->probe(out_exp_img), true);
   viewer->set_active_component(0);
   vil_image_view<double> d_image;
@@ -134,7 +134,6 @@ MAIN( test_brec_create_mog_image_process )
   vil_math_value_range(d_image, dmin, dmax);
   vil_convert_stretch_range_limited(d_image, byte_image, dmin, dmax);
   vil_save(byte_image, "mean.png");
- 
 
 #if 0
   unsigned id_mog;
@@ -150,7 +149,7 @@ MAIN( test_brec_create_mog_image_process )
   bbgm_image_sptr out_mog_img = result1->value();
   TEST("run create mog image process - mog image ptr", !out_mog_img , false);
 
-  //: save the output mog image
+  // save the output mog image
   brdb_value_sptr v6 = new brdb_value_t<vcl_string>("out_mog.bin");
   brdb_value_sptr v7 = new brdb_value_t<bbgm_image_sptr>(out_mog_img);
   good = bprb_batch_process_manager::instance()->init_process("bbgmSaveImageOfProcess");
@@ -161,7 +160,7 @@ MAIN( test_brec_create_mog_image_process )
 
   for (int component = 0; component < 3; component++) {
     vcl_stringstream ss; ss << component;
-    //: display the output mog image
+    // display the output mog image
     brdb_value_sptr v8 = new brdb_value_t<vcl_string>("mean");
     brdb_value_sptr v9 = new brdb_value_t<int>(component);  // the component to display
     brdb_value_sptr v11 = new brdb_value_t<bool>(true);  // scale result to a byte image
@@ -186,9 +185,9 @@ MAIN( test_brec_create_mog_image_process )
     TEST("saved", saved, true);
   #endif // 0
 
-    //: display the output mog image's std deviation
+    // display the output mog image's std deviation
     brdb_value_sptr v10 = new brdb_value_t<vcl_string>("variance");
-    
+
     good = bprb_batch_process_manager::instance()->init_process("bbgmDisplayDistImageProcess");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v7);
     good = good && bprb_batch_process_manager::instance()->set_input(1, v10);
