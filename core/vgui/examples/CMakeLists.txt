@@ -34,6 +34,7 @@ ADD_EXECUTABLE( example_sprite example_sprite.cxx )
 TARGET_LINK_LIBRARIES( example_sprite vgui vil vul )
 ADD_EXECUTABLE( example_idle_processing example_idle_processing.cxx )
 ADD_EXECUTABLE( example_slider example_slider.cxx)
+ADD_EXECUTABLE( click_points click_points.cxx)
 
 
 SET(basic_sources
@@ -69,6 +70,8 @@ ENDIF(VGUI_USE_GTK)
 #--------------
 INCLUDE( ${CMAKE_ROOT}/Modules/FindGLUT.cmake )
 IF(GLUT_FOUND)
+ TARGET_LINK_LIBRARIES( aanklikken ${GLUT_LIBRARIES} )
+
  ADD_EXECUTABLE( glut1_raw glut1_raw.cxx )
  TARGET_LINK_LIBRARIES( glut1_raw ${GLUT_LIBRARIES} )
 
