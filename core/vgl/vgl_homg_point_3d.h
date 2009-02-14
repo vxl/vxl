@@ -13,6 +13,7 @@
 //   Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ z_ w_ and inlined constructors
 //   Peter Vanroose - 27 June 2001 - Implemented operator==
 //   Peter Vanroose - 15 July 2002 - Added coplanar()
+//   Guillaume Mersch- 10 Feb 2009 - bug fix in coplanar()
 // \endverbatim
 
 #include <vgl/vgl_point_3d.h>
@@ -165,13 +166,13 @@ bool coplanar(vgl_homg_point_3d<Type> const& p1,
   return ((p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
          +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
          +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z())*p4.w()
-        +((p4.x()*p1.y()-p4.y()*p1.x())*p2.z()
+        -((p4.x()*p1.y()-p4.y()*p1.x())*p2.z()
          +(p2.x()*p4.y()-p2.y()*p4.x())*p1.z()
          +(p1.x()*p2.y()-p1.y()*p2.x())*p4.z())*p3.w()
         +((p3.x()*p4.y()-p3.y()*p4.x())*p1.z()
          +(p1.x()*p3.y()-p1.y()*p3.x())*p4.z()
          +(p4.x()*p1.y()-p4.y()*p1.x())*p3.z())*p2.w()
-        +((p2.x()*p3.y()-p2.y()*p3.x())*p4.z()
+        -((p2.x()*p3.y()-p2.y()*p3.x())*p4.z()
          +(p4.x()*p2.y()-p4.y()*p2.x())*p3.z()
          +(p3.x()*p4.y()-p3.y()*p4.x())*p2.z())*p1.w() == 0;
 }
