@@ -5,7 +5,6 @@ include ${VXLROOT}/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 TESTS += test_bvxm_change_detection_display_process.cxx
 TESTS += test_bvxm_create_voxel_world_process.cxx
-TESTS += test_bvxm_generate_edge_map_process.cxx
 TESTS += test_bvxm_illum_index_process.cxx
 TESTS += test_bvxm_normalize_image_process.cxx
 TESTS += test_bvxm_roi_init_process.cxx
