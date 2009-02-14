@@ -70,7 +70,7 @@ ENDIF(VGUI_USE_GTK)
 #--------------
 INCLUDE( ${CMAKE_ROOT}/Modules/FindGLUT.cmake )
 IF(GLUT_FOUND)
- TARGET_LINK_LIBRARIES( aanklikken ${GLUT_LIBRARIES} )
+ TARGET_LINK_LIBRARIES( click_points ${GLUT_LIBRARIES} )
 
  ADD_EXECUTABLE( glut1_raw glut1_raw.cxx )
  TARGET_LINK_LIBRARIES( glut1_raw ${GLUT_LIBRARIES} )
