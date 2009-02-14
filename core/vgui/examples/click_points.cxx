@@ -19,7 +19,7 @@ struct example_tableau : public vgui_image_tableau
   char ** filenames;
   int nr_files;
   int current_file;
-  example_tableau(char ** f, int n = 1) : vgui_image_tableau(*f), filenames(f), current_file(0), nr_files(n) { }
+  example_tableau(char ** f, int n = 1) : vgui_image_tableau(*f), filenames(f), nr_files(n), current_file(0) { }
 
   ~example_tableau() { }
 
