@@ -92,7 +92,7 @@ get_pixel_info_from_image(const int x, const int y,
   //only implemented for vil image resource and common vil types
   //(I don't like macros)
   vil_image_resource_sptr r = this->get_image_resource();
-  if (!r)
+  if (!r) {
     if (!this->get_image())
     {
       vcl_sprintf(msg, "(%d, %d)   ?", x, y);
@@ -103,6 +103,7 @@ get_pixel_info_from_image(const int x, const int y,
       this->get_pixel_info_from_frame_buffer(x, y, e, msg);
       return;
     }
+  }
   //At this point, we have a vil_image and can proceed with the cases.
   unsigned w = r->ni(), h = r->nj(), n_p = r->nplanes();
   if (x<0||x>=int(w)||y<0||y>=int(h))
@@ -113,14 +114,17 @@ get_pixel_info_from_image(const int x, const int y,
   vil_pixel_format type = r->pixel_format();
   switch (type )
   {
-   case VIL_PIXEL_FORMAT_BOOL: {
+   case VIL_PIXEL_FORMAT_BOOL:
+   {
     vil_image_view<bool> v = r->get_view();
     if (!v)
       vcl_sprintf(msg, "Pixel Not Available");
     else
       vcl_sprintf(msg, "(%d, %d)   (bool) %d", x, y, v(x,y));
-    return; }
-   case  VIL_PIXEL_FORMAT_BYTE: {
+    return;
+   }
+   case  VIL_PIXEL_FORMAT_BYTE:
+   {
     if (n_p==1)
     {
       vil_image_view<vxl_byte> v = r->get_view(x,1,y,1);
@@ -140,12 +144,14 @@ get_pixel_info_from_image(const int x, const int y,
                     v(0,0,0), v(0,0,1), v(0,0,2) );
       return;
     }
-    else if (n_p==4){
+    else if (n_p==4) {
       vcl_sprintf(msg, "(%d, %d) Pixel type not Available", x, y);
       return;
     }
-    return; }
-   case  VIL_PIXEL_FORMAT_SBYTE: {
+    return;
+   }
+   case  VIL_PIXEL_FORMAT_SBYTE:
+   {
     if (n_p==1)
     {
       vil_image_view<vxl_sbyte> v = r->get_view(x,1,y,1);
@@ -169,8 +175,10 @@ get_pixel_info_from_image(const int x, const int y,
       vcl_sprintf(msg, "(%d, %d) Pixel type not Available", x, y);
       return;
     }
-    return; }
-   case  VIL_PIXEL_FORMAT_UINT_16: {
+    return;
+   }
+   case  VIL_PIXEL_FORMAT_UINT_16:
+   {
     if (n_p==1)
     {
       vil_image_view<vxl_uint_16> v = r->get_view(x,1,y,1);
@@ -201,26 +209,27 @@ get_pixel_info_from_image(const int x, const int y,
         int band_map = 0;
         if (rmp_)
           band_map = rmp_->band_map_;
-        switch (band_map) {
-          case vgui_range_map_params::RGB_m :
-            vcl_sprintf(msg, "(%d, %d)   (RGB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
-                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
-            break;
-          case vgui_range_map_params::XRG_m :
-            vcl_sprintf(msg, "(%d, %d)   (IRG:uint16)[ R=%d,G=%d,B=%d,I=%d]",
-                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
-            break;
-          case vgui_range_map_params::RXB_m :
-            vcl_sprintf(msg, "(%d, %d)   (RIB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
-                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
-            break;
-          case vgui_range_map_params::RGX_m :
-            vcl_sprintf(msg, "(%d, %d)   (RGI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
-                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
-            break;
-          default:
-            vcl_sprintf(msg, "Pixel Not Available");
-            return;
+        switch (band_map)
+        {
+         case vgui_range_map_params::RGB_m :
+          vcl_sprintf(msg, "(%d, %d)   (RGB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                      x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+          break;
+         case vgui_range_map_params::XRG_m :
+          vcl_sprintf(msg, "(%d, %d)   (IRG:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                      x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+          break;
+         case vgui_range_map_params::RXB_m :
+          vcl_sprintf(msg, "(%d, %d)   (RIB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                      x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+          break;
+         case vgui_range_map_params::RGX_m :
+          vcl_sprintf(msg, "(%d, %d)   (RGI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                      x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+          break;
+         default:
+          vcl_sprintf(msg, "Pixel Not Available");
+          return;
         }
       }
     }
@@ -274,7 +283,7 @@ get_pixel_info_from_image(const int x, const int y,
     else if (n_p == 1)
       vcl_sprintf(msg, "(%d, %d)   (float) %f", x, y, v(0,0));
     else if (n_p ==3)
-      vcl_sprintf(msg, "(%d, %d)   (float)[ R=%6.3f,G=%6.3f,B=%6.3f]", x, y, 
+      vcl_sprintf(msg, "(%d, %d)   (float)[ R=%6.3f,G=%6.3f,B=%6.3f]", x, y,
                   v(0,0,0), v(0,0,1), v(0,0,2) );
     return; }
    case  VIL_PIXEL_FORMAT_DOUBLE: {
@@ -498,11 +507,11 @@ void bgui_image_tableau::image_line(const float col_start,
 
 //: Extract a line of pixel values return color if available
 void bgui_image_tableau::image_line(const float col_start,
-                  const float row_start,
-                  const float col_end,
-                  const float row_end,
-                  vcl_vector<double>& line_pos,
-                  vcl_vector<vcl_vector<double> >& vals)
+                                    const float row_start,
+                                    const float col_end,
+                                    const float row_end,
+                                    vcl_vector<double>& line_pos,
+                                    vcl_vector<vcl_vector<double> >& vals)
 {
   line_pos.clear();vals.clear();
   //Get the image data

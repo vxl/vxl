@@ -140,10 +140,11 @@ vtol_edge_2d::vtol_edge_2d(double x1, double y1,
 {
   v1_=new vtol_vertex_2d(x1,y1);
   v2_=new vtol_vertex_2d(x2,y2);
-  if (!curve)
+  if (!curve) {
     if (v1_->cast_to_vertex_2d() && v2_->cast_to_vertex_2d())
       curve_=new vsol_line_2d(v1_->cast_to_vertex_2d()->point(),
                               v2_->cast_to_vertex_2d()->point());
+  }
   else
     curve_=curve->clone()->cast_to_curve();
 

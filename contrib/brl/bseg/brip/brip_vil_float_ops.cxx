@@ -53,11 +53,12 @@ static float cross_corr(double area, double si1, double si2,
     sd2 = vcl_sqrt(vcl_fabs(si2i2-area*u2*u2));
   if (!neu)
     return 0.f;
-  if (!sd1||!sd2)
+  if (!sd1||!sd2) {
     if (neu>0)
       return 1.f;
     else
       return -1.f;
+  }
   double den = sd1*sd2;
   return float(neu/den);
 }
@@ -3608,7 +3609,7 @@ color_order(vil_image_view<float> const& color_image, float eq_tol)
   unsigned char rb_eq=48, rb_lt=32, rb_gt=16;
   unsigned char gb_eq=12, gb_lt=8, gb_gt=4;
   for (unsigned j = 0; j<nj; ++j)
-    for (unsigned i = 0; i<ni; ++i){
+    for (unsigned i = 0; i<ni; ++i) {
       float r=color_image(i,j,0), g=color_image(i,j,1), b=color_image(i,j,2);
       unsigned char rg, rb, gb;
       //rg code
@@ -3654,16 +3655,18 @@ static double brip_vil_rot_gauss(double x, double y,
 //revert angle to the range [-90, 90]
 static float revert_angle(float angle)
 {
-  if (angle>=0.0f)
+  if (angle>=0.0f) {
     if (angle>90.0f&&angle<=270.0f)
       angle -= 180.0f;
     else if (angle>270.0f&&angle<=360.0f)
       angle -= 360.0f;
-  if (angle<0.0f)
+  }
+  if (angle<0.0f) {
     if (angle<-90.0f&&angle>=-270.0f)
       angle += 180.0f;
     else if (angle<-270.0f&&angle>=-360.0f)
       angle += 360.0f;
+  }
   return angle;
 }
 
@@ -3752,7 +3755,7 @@ std_dev_operator(vil_image_view<float> const& sd_image,
     {
       float sum = 0;
       for (int jj = -rrad; jj<=rrad; ++jj)
-        for (int ii = -crad; ii<=crad; ++ii){
+        for (int ii = -crad; ii<=crad; ++ii) {
           float sd_sq = sd_image(i+ii, j+jj);
           sd_sq *= sd_sq;
           sum += sd_sq*ksq[jj+rrad][ii+crad];
@@ -3783,7 +3786,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   // (unused) double max_v = brip_vil_rot_gauss(0, 0, lambda0, lambda1, 0);
   // (unused) double cutoff=static_cast<float>(max_v*0.01); // 1% tails removed
   vcl_cout << "\ngauss ={";
-  for (unsigned j = 0; j<nrows; ++j){
+  for (unsigned j = 0; j<nrows; ++j) {
     vcl_cout << '{';
     for (unsigned i = 0; i<ncols-1; ++i)
       vcl_cout << zs(coef[j][i]) << ',';
@@ -3794,7 +3797,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   }
 
   vcl_cout << "};\n\nmask ={";
-  for (unsigned j = 0; j<nrows; ++j){
+  for (unsigned j = 0; j<nrows; ++j) {
     vcl_cout << '{';
     for (unsigned i = 0; i<ncols-1; ++i)
       vcl_cout << mask[j][i] << ',';
@@ -3811,14 +3814,14 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   vil_image_view<float> temp2(ni, nj);
   temp.fill(0.0f); temp2.fill(0.0f);
   for (unsigned j = rj; j<(nj-rj); j++)
-    for (unsigned i = ri; i<(ni-ri); i++){
+    for (unsigned i = ri; i<(ni-ri); i++) {
       double sum = 0;
       for (int jj=-rj; jj<=rj; ++jj)
         for (int ii=-ri; ii<=ri; ++ii)
           if (mask[jj+rj][ii+ri])
             sum += coef[jj+rj][ii+ri]*input(i+ii, j+jj);
       temp2(i,j) = static_cast<float>(sum);
-      if (bright){ // coefficients are negative at center
+      if (bright) { // coefficients are negative at center
         if (sum<0) temp(i,j) = static_cast<float>(-sum);
       }
       else {
@@ -3842,7 +3845,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   if (!output_response_mask&&!unclipped_response)
     return res;
   unsigned np = 2;
-  if(output_response_mask&&unclipped_response)
+  if (output_response_mask&&unclipped_response)
     np = 3;
   //response plane and mask plane and/or unclipped response
   vil_image_view<float> res_mask(ni, nj, np);
@@ -3855,7 +3858,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
       res_mask(i,j,0)=rv;
     }
   // copy mask plane to plane 1 (or not)
-  if(output_response_mask){
+  if (output_response_mask) {
   for (unsigned j = rj; j<(nj-rj); j++)
     for (unsigned i = ri; i<(ni-ri); i++)
     {
@@ -3870,7 +3873,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
     }
   }
   // copy unclipped response to plane 1 if no mask plane, otherwise plane 2
-  if (unclipped_response){
+  if (unclipped_response) {
     unsigned p = np-1;
     for (unsigned j = rj; j<(nj-rj); j++)
       for (unsigned i = ri; i<(ni-ri); i++)
@@ -3878,7 +3881,6 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   }
 
   return res_mask;
-
 }
 
 //: theta and phi are in radians
@@ -3968,7 +3970,7 @@ static vil_image_view<float> convolve_u(vil_image_view<float> const& image,
   vil_image_view<float> Iu(ni, nj);
   if (initialize) Iu.fill(0.0f);
   for (int j = 0; j<nj; ++j)
-    for (int i = ru; i<ni-ru; ++i){
+    for (int i = ru; i<ni-ru; ++i) {
       float sum = 0.0f;
       for (int k = -ru; k<=ru; ++k)
       {
@@ -3992,7 +3994,7 @@ static vil_image_view<float> convolve_v(vil_image_view<float> const& image,
   vil_image_view<float> Iv(ni, nj);
   if (initialize) Iv.fill(0.0f);
   for (int j = rv; j<nj-rv; ++j)
-    for (int i = 0; i<ni; ++i){
+    for (int i = 0; i<ni; ++i) {
       float sum = 0.0f;
       for (int k = -rv; k<=rv; ++k)
       {
@@ -4054,7 +4056,7 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
   // rotate the image to the specified angle (minus due to flipped v axis)
   if (theta!=0&&!ang90)
     rot = brip_vil_float_ops::rotate(input, -theta);
-  if (!ang90){
+  if (!ang90) {
     // convolve kernel across rows
     vil_image_view<float> rotu = convolve_u(rot, euk);
     // then convolve along columns
@@ -4086,7 +4088,7 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
     for (int i = 0; i<ni; ++i)
     {
       float v = pre_res(i + tui, j+ tvi);
-      if (bright){ // coefficients are negative at center
+      if (bright) { // coefficients are negative at center
         if (v<0) res(i,j) = -v;
       }
       else {
@@ -4151,7 +4153,7 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
   if (!output_response_mask&&!unclipped_response)
     return res_sup;
   unsigned np = 2;
-  if(output_response_mask&&unclipped_response)
+  if (output_response_mask&&unclipped_response)
     np = 3;
   //response plane and mask plane and/or unclipped response
   vil_image_view<float> res_mask(ni, nj, np);
@@ -4164,7 +4166,7 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
       res_mask(i,j,0)=rv;
     }
   // copy mask plane to plane 1 (or not)
-  if(output_response_mask){
+  if (output_response_mask) {
   for (int j = rj; j<(nj-rj); j++)
     for (int i = ri; i<(ni-ri); i++)
     {
@@ -4179,7 +4181,7 @@ fast_extrema(vil_image_view<float> const& input, float lambda0, float lambda1,
     }
   }
   // copy unclipped response to plane 1 if no mask plane, otherwise plane 2
-  if (unclipped_response){
+  if (unclipped_response) {
     unsigned p = np-1;
     for (int j = rj; j<(nj-rj); j++)
       for (int i = ri; i<(ni-ri); i++)

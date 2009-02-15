@@ -813,12 +813,13 @@ void vvid_file_manager::compute_info_tracking()
     strk_info_tracker_process* vitp = new strk_info_tracker_process(tp);
     video_process_ = vitp;
     video_process_->add_input_topology_object(to);
-    if (tp.use_background_)
+    if (tp.use_background_) {
       if (!background_model_)
         vcl_cout << "In vvid_file_manager::compute_info_tracking() -"
                  << " no background model\n";
       else
         video_process_->add_input_topology_object(background_model_->cast_to_topology_object());
+    }
     if (output_track)
       if (!vitp->set_track_output_file(track_file))
         return;
@@ -840,14 +841,15 @@ void vvid_file_manager::save_display(int /* frame */)
   if (!save_display_)
     return;
 
-  if(display_frame_skip_)
-    if(skip_counter_>0)
-      {
-        --skip_counter_;
-        return;
-      }
+  if (display_frame_skip_) {
+    if (skip_counter_>0)
+    {
+      --skip_counter_;
+      return;
+    }
     else
       skip_counter_ = display_frame_skip_;
+  }
 
   if (!overlay_pane_)
   {
@@ -857,7 +859,7 @@ void vvid_file_manager::save_display(int /* frame */)
     display_output_frames_.push_back(image);
     return;
   }
-   
+
   vil1_memory_image_of<vil1_rgb<unsigned char> >
     temp = vgui_utils::colour_buffer_to_image();
   for (int i = 0; i<display_frame_repeat_; i++)

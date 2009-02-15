@@ -49,11 +49,12 @@ void mil3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) con
   // the angles may be wrong by +-vnl_math::pi - we can
   // only tell by checking against the signs
   // of the original entries in the rotation matrix
-  if (vcl_fabs(vcl_sin(phi_y) + xz_) > 1e-6)
-  if (phi_y > 0)
-    phi_y=phi_y - vnl_math::pi;
-  else
-    phi_y=phi_y + vnl_math::pi;
+  if (vcl_fabs(vcl_sin(phi_y) + xz_) > 1e-6) {
+    if (phi_y > 0)
+      phi_y=phi_y - vnl_math::pi;
+    else
+      phi_y=phi_y + vnl_math::pi;
+  }
 
   const double cos_y = vcl_cos(phi_y);
 
@@ -443,14 +444,13 @@ vgl_point_3d<double> mil3d_transform_3d::operator()(double x, double y, double z
     return vgl_point_3d<double>(x*xx_+y*xy_+z*xz_+xt_,
                                 x*yx_+y*yy_+z*yz_+yt_,
                                 x*zx_+y*zy_+z*zz_+zt_);
-   case Projective:
-    {
-      double x2 = x*xx_+y*xy_+z*xz_+xt_,
-             y2 = x*yx_+y*yy_+z*yz_+yt_,
-             z2 = x*zx_+y*zy_+z*zz_+zt_,
-             t2 = x*tx_+y*ty_+z*tz_+tt_;
-      return vgl_point_3d<double>(x2/t2,y2/t2,z2/t2);
-    }
+   case Projective: {
+    double x2 = x*xx_+y*xy_+z*xz_+xt_,
+           y2 = x*yx_+y*yy_+z*yz_+yt_,
+           z2 = x*zx_+y*zy_+z*zz_+zt_,
+           t2 = x*tx_+y*ty_+z*tz_+tt_;
+    return vgl_point_3d<double>(x2/t2,y2/t2,z2/t2);
+   }
    case Undefined:
     vcl_cerr<<"mil3d_transform_3d::operator() Unexpected form Undefined\n";
     vcl_abort();

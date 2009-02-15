@@ -599,7 +599,7 @@ void vifa_histogram::RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
   }
   else  //The cyclic case
   {
-    if (init_end!=0)  //Is there a run which crosses the cyclic cut?
+    if (init_end!=0) { //Is there a run which crosses the cyclic cut?
       if (start)
       { //Yes, so define the peak location accordingly
         int peak_location = (start_index + init_end - nbm -1)/2;
@@ -629,6 +629,7 @@ void vifa_histogram::RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
           if (k!=init_location)
             cnts[k] = 0;
       }
+    }
   }
 }
 

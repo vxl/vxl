@@ -42,11 +42,12 @@ vxl_byte vgui_range_map<Type>::
 map_pixel_byte(const Type pix, const Type min, const Type max,
                const float gamma, const long double ratio)
 {
-  if (vil_pixel_traits<Type>::num_bits()==1)
+  if (vil_pixel_traits<Type>::num_bits()==1) {
     if (pix)
       return 255;
     else
       return 0;
+  }
   //the type with largest dynamic range
   long double y = pix;
   y = (y < (long double)min) ?  (long double)min : (y > (long double)max) ? (long double)max : y;
@@ -69,11 +70,12 @@ float vgui_range_map<Type>::
 map_pixel_float(const Type pix, const Type min, const Type max,
                 const float gamma, const long double ratio)
 {
-  if (vil_pixel_traits<Type>::num_bits()==1)
+  if (vil_pixel_traits<Type>::num_bits()==1) {
     if (pix)
       return 1.0f;
     else
       return 0.0f;
+  }
   //the type with largest dynamic range
   long double y = pix;
   y = (y < (long double)min) ?  (long double)min: (y > (long double)max) ? (long double)max : y;

@@ -1763,8 +1763,8 @@ bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
 
 //: Chipping for a general image type
 bool brip_vil1_float_ops::chip(vil1_image const & input,
-          brip_roi_sptr const& roi,
-          vil1_image& chip)
+                               brip_roi_sptr const& roi,
+                               vil1_image& chip)
 {
   if (!input||!roi)
     return false;
@@ -1875,11 +1875,12 @@ static float cross_corr(const double area, const double si1, const double si2,
   double sd1 = vcl_sqrt(si1i1-area*u1*u1), sd2 = vcl_sqrt(si2i2-area*u2*u2);
   if (!neu)
     return 0.f;
-  if (!sd1||!sd2)
+  if (!sd1||!sd2) {
     if (neu>0)
       return 1.f;
     else
       return -1.f;
+  }
   double den = sd1*sd2;
   return float(neu/den);
 }
@@ -2010,7 +2011,7 @@ static bool cross_correlate_row(int radius,
                                 vbl_array_1d<double>& dSI1I2,
                                 float intensity_thresh,
                                 vbl_array_1d<float>& cc
-                                )
+                               )
 {
   //sanity check
   int w = dSI1.size(), wc = cc.size();

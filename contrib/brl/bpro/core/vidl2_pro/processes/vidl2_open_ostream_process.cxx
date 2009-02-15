@@ -22,7 +22,7 @@ bool vidl2_open_ostream_process_cons(bprb_func_process& pro)
 
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("vidl2_ostream_sptr");  
+  output_types.push_back("vidl2_ostream_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -35,7 +35,7 @@ bool vidl2_open_ostream_process(bprb_func_process& pro)
     vcl_cout << "vidl2_open_ostream_process: The input number should be 2" << vcl_endl;
     return false;
   }
- 
+
   unsigned i=0;
   //Retrieve filename from input
   vcl_string ostream_path = pro.get_input<vcl_string>(i++);
@@ -43,10 +43,11 @@ bool vidl2_open_ostream_process(bprb_func_process& pro)
   //Retrieve create directory flag from input
   bool create_directory = pro.get_input<bool>(i++);;
 
-  if (!vul_file::is_directory(ostream_path)){
+  if (!vul_file::is_directory(ostream_path)) {
     //directory not present
     if (create_directory)
-      if (!vul_file::make_directory_path(ostream_path)){
+    {
+      if (!vul_file::make_directory_path(ostream_path)) {
         vcl_cerr << "In vidl2_open_ostream_process::execute() - "
                  << " can't make directory with path " << ostream_path << '\n';
         return false;
@@ -56,11 +57,12 @@ bool vidl2_open_ostream_process(bprb_func_process& pro)
                  << " directory doesn't exist with path " << ostream_path << '\n';
         return false;
       }
+    }
   }
   vidl2_ostream_sptr vostr = new vidl2_image_list_ostream(ostream_path);
   if (!vostr->is_open()){
     vcl_cerr << "In vidl2_open_ostream_process::execute()"
-             << " - could not open" << ostream_path << vcl_endl;
+             << " - could not open" << ostream_path << '\n';
     return false;
   }
 

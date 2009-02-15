@@ -135,7 +135,8 @@ struct pnmscale {
   int current_outrow;
   vil1_image out;
 
-  void init(vil1_image in, vil1_image out) {
+  void init(vil1_image in, vil1_image out)
+  {
     this->in = in;
     this->out = out;
     current_inrow = 0;
@@ -145,7 +146,7 @@ struct pnmscale {
     rows = in.height();
 
     /* Compute all sizes and scales. */
-    if ( newpixels )
+    if ( newpixels ) {
       if ( rows * cols <= newpixels )
       {
         newrows = rows;
@@ -158,12 +159,14 @@ struct pnmscale {
           vcl_sqrt( (float) newpixels / (float) cols / (float) rows );
         specxscale = specyscale = 1;
       }
+    }
 
-    if ( specxysize )
+    if ( specxysize ) {
       if ( (float) newcols / (float) newrows > (float) cols / (float) rows )
         specxsize = 0;
       else
         specysize = 0;
+    }
 
     if ( specxsize )
       xscale = (float) newcols / (float) cols;
@@ -174,7 +177,7 @@ struct pnmscale {
       yscale = (float) newrows / (float) rows;
     else if ( specyscale )
       newrows = int(rows * yscale + 0.999);
-    else
+    else {
       if ( specxsize )
       {
         yscale = xscale;
@@ -185,8 +188,9 @@ struct pnmscale {
         yscale = 1.0;
         newrows = rows;
       }
+    }
 
-    if ( ! ( specxsize || specxscale ) )
+    if ( ! ( specxsize || specxscale ) ) {
       if ( specysize )
       {
         xscale = yscale;
@@ -197,6 +201,7 @@ struct pnmscale {
         xscale = 1.0;
         newcols = cols;
       }
+    }
 
     sxscale = int(xscale * SCALE);
     syscale = int(yscale * SCALE);

@@ -121,7 +121,7 @@ vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
 
   vil_streampos numread = b-a;
   if (b < a) { xerr << "urgh!\n"; return numread; }
-  if (numread != n) xerr << "only read " << numread << vcl_endl;
+  if (numread != n) { xerr << "only read " << numread << vcl_endl; }
   return numread;
 }
 

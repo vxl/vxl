@@ -30,7 +30,7 @@ namespace bvxm_pmap_ratio_process_globals
 {
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 0;
-  
+
   //functions
   bool compute(vcl_string pmap1,vcl_string pmap2, vcl_string path);
 }
@@ -39,19 +39,15 @@ namespace bvxm_pmap_ratio_process_globals
 bool bvxm_pmap_ratio_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_pmap_ratio_process_globals;
-  
+
   // This process has 3 inputs:
   vcl_vector<vcl_string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "vcl_string";    // path to the prob. map image of LIDAR
   input_types_[i++] = "vcl_string";    // path to the prob. map image of NON_LIDAR
   input_types_[i++] = "vcl_string";    // output path
-  
-  if(!pro.set_input_types(input_types_))
-    return false;
-  
-  return true;
 
+  return pro.set_input_types(input_types_);
 }
 
 //: generates a ratio histogram out of occupancy probability grid
@@ -59,12 +55,12 @@ bool bvxm_pmap_ratio_process(bprb_func_process& pro)
 {
   using namespace bvxm_pmap_ratio_process_globals;
 
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
-  
+
   // get the inputs:
   unsigned i = 0;
   vcl_string pmap1 = pro.get_input<vcl_string>(i++);
@@ -86,7 +82,7 @@ bool bvxm_pmap_ratio_process_globals::compute(vcl_string pmap1,vcl_string pmap2,
   float pmax=0.0f;
   for ( unsigned int ni = 0; ni < lidar_img->ni(); ni++ ) {
     for ( unsigned int nj = 0; nj < lidar_img->nj(); nj++ ) {
-      if (lidar_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+      if (lidar_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
         if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(lidar_img.ptr()))
       {
         float p1 = (*img_view)(ni, nj);
@@ -110,6 +106,7 @@ bool bvxm_pmap_ratio_process_globals::compute(vcl_string pmap1,vcl_string pmap2,
         vil_image_view<float> v = *(ratio_img->get_view());
         v(ni,nj) = p;
         }
+      }
     }
   }
   vcl_cout << "Pmax=" << pmax << vcl_endl;

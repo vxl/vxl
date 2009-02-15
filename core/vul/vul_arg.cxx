@@ -309,7 +309,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   my_argv = argv + 1;
   int num_satisfied = 0;
   for (unsigned int i = 0; i < args_.size(); ++i)
-    if (args_[i]->option_.empty())
+    if (args_[i]->option_.empty()) {
       if (*my_argv) {
         done_once[i] = true;
         int advance = args_[i]->parse(my_argv);
@@ -323,6 +323,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
                  << " not supplied\n\n";
         vcl_exit(1);
       }
+    }
 
 
   // 3. Move my_argv down to first unused arg, and reset argc
@@ -559,12 +560,12 @@ VDS int parse(vul_arg<vxl_int_64>* argmt, char ** argv)
 
   // Ensure only digits are present allowing for the special case of an l or L suffix
   int len = vcl_strlen(argv[0]);
-  for(int i=0; i<len; ++i)
+  for (int i=0; i<len; ++i)
   {
     char tmp = argv[0][i];
-    if(tmp < '0' || tmp > '9' || // Make sure the number only contains valid digits
-       ((tmp == 'l' || tmp == 'L') && i != len-1) || // Or the trailing l or L suffix
-       (tmp=='-' && i != 0 && len <= 2)) // Or a leading minus sign
+    if (tmp < '0' || tmp > '9' || // Make sure the number only contains valid digits
+        ((tmp == 'l' || tmp == 'L') && i != len-1) || // Or the trailing l or L suffix
+        (tmp=='-' && i != 0 && len <= 2)) // Or a leading minus sign
     {
       vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse \"" << *argv << "\" as int64\n";
       return -1;
@@ -761,7 +762,7 @@ VDS int parse(vul_arg<vcl_vector<int> >* argmt, char ** argv)
 template class vul_arg<vcl_vector<int> >;
 
 //: vcl_vector<unsigned>
-VDS void settype(vul_arg<vcl_vector<unsigned> > &argmt){argmt.type_="integer list";}
+VDS void settype(vul_arg<vcl_vector<unsigned> > &argmt) { argmt.type_="integer list"; }
 
 VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<unsigned> > const &argmt)
 {

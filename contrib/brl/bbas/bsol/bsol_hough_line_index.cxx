@@ -664,7 +664,7 @@ static void remove_flat_peaks(vcl_vector<int>& angle_hist)
     }
   }
   //Now handle the boundary conditions
-  if (init_end!=0)  //Is there a run which crosses the cyclic cut?
+  if (init_end!=0) { //Is there a run which crosses the cyclic cut?
     if (start)
     {    //Yes, so define the peak location accordingly
       int peak_location = (start_index + init_end - nbm -1)/2;
@@ -694,6 +694,7 @@ static void remove_flat_peaks(vcl_vector<int>& angle_hist)
         if (k!=init_location)
           angle_hist[k] = 0;
     }
+  }
 }
 
 //----------------------------------------------------------

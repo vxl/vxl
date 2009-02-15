@@ -52,8 +52,9 @@ set_image_resource( vil_image_resource_sptr const& image )
   buffer_ = 0;
   valid_buffer_ = false;
   the_image_ = image;
-  if ( the_image_ )
+  if ( the_image_ ) {
     trace << "image : " << the_image_ << vcl_flush;
+  }
 }
 
 
