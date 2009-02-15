@@ -60,7 +60,7 @@ test_feature_point()
 
   testlib_test_begin( "4D point feature" );
   rgrl_feature_sptr pf4d = new rgrl_feature_point( loc4d );
-  testlib_test_perform( pf4d->is_type( rgrl_feature_point::type_id() ) &
+  testlib_test_perform( pf4d->is_type( rgrl_feature_point::type_id() ) &&
                         pf4d->location() == loc4d &&
                         pf4d->error_projector().is_identity() );
 
@@ -253,7 +253,7 @@ test_feature_face()
     vnl_matrix<double> B( 2, 2 );
     B.fill( 0.0 );
     B(0,1) = -1;  B(1,0) = 1;
-    
+
     // mapping tangent is easy:  A*tangent
     vnl_matrix<double> C = vnl_transpose(B)*A*B;
 
@@ -266,10 +266,10 @@ test_feature_face()
     x_nor = nor2d;
     x_nor.normalize();
     x_nor = C*x_nor;
-    
+
     // compute the inverse of outer product,
-    // because it is rank insufficient, 
-    // the inverse has to be done analytically. 
+    // because it is rank insufficient,
+    // the inverse has to be done analytically.
     double eig_val = x_nor.magnitude();
     x_nor.normalize();
     // vnl_matrix<double> outer = outer_product( x_nor, x_nor );
