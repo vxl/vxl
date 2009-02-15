@@ -253,7 +253,7 @@ bool bvxm_voxel_world::save_edges_vff(vcl_string filename,unsigned scale)
 //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
 bool bvxm_voxel_world::save_edges_raw(vcl_string filename, float n_normal, unsigned scale)
 {
-  float num_obs = (float)this->num_observations<EDGES>(0,scale);
+  //(unused)float num_obs = (float)this->num_observations<EDGES>(0,scale);
 
   vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
   if (!ofs.is_open()) {
@@ -724,10 +724,10 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
   return true;
 }
 
-// initialize the voxel grid for edges 
+// initialize the voxel grid for edges
 bool bvxm_voxel_world::init_edges(unsigned scale)
 {
-  if(this->num_observations<EDGES>(0,scale)!=0){
+  if (this->num_observations<EDGES>(0,scale)!=0){
     return false;
   }
 
@@ -765,7 +765,7 @@ bool bvxm_voxel_world::init_edges(unsigned scale)
 // update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
 bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigned scale)
 {
-  if(this->num_observations<EDGES>(0,scale)==0){
+  if (this->num_observations<EDGES>(0,scale)==0){
     this->init_edges(scale);
   }
 
@@ -811,7 +811,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigne
     }
 
     bvxm_util::warp_slab_bilinear(image_image,H_plane_to_img[z],image_voxel);
- 
+
     bvxm_voxel_slab<edges_datatype>::iterator image_voxel_it = image_voxel.begin();
     bvxm_voxel_slab<edges_datatype>::iterator edges_voxel_it_it = (*edges_voxel_it).begin();
 
