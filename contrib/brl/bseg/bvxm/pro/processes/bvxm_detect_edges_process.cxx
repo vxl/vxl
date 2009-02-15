@@ -33,7 +33,7 @@ namespace bvxm_detect_edges_process_globals
 {
   const unsigned n_inputs_ = 1;
   const unsigned n_outputs_=1;
-  
+
   //parameter strings
   const vcl_string param_noise_multiplier_ =  "noise_multiplier";
   const vcl_string param_smooth_ =  "smooth";
@@ -50,7 +50,7 @@ bool bvxm_detect_edges_process_cons(bprb_func_process& pro)
   //input[0]: input grayscale image
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   // process has 1 output:
@@ -87,20 +87,16 @@ bool bvxm_detect_edges_process(bprb_func_process& pro)
   // get parameters
   double noise_multiplier=1.5, smooth=1.5;
   bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
-  
+
   pro.parameters()->get_value(param_noise_multiplier_, noise_multiplier);
   pro.parameters()->get_value(param_smooth_, smooth);
   pro.parameters()->get_value(param_automatic_threshold_, automatic_threshold);
   pro.parameters()->get_value(param_junctionp_, junctionp);
   pro.parameters()->get_value(param_aggressive_junction_closure_, aggressive_junction_closure);
 
-  vcl_cout << noise_multiplier << " " << smooth << " " << automatic_threshold << " " << junctionp << " " << aggressive_junction_closure << "\n";
+  vcl_cout << noise_multiplier << ' ' << smooth << ' ' << automatic_threshold << ' ' << junctionp << ' ' << aggressive_junction_closure << vcl_endl;
 
-  //locals
   vil_image_view<vxl_byte> input_image(input_image_sptr);
-  int ni = input_image.ni();
-  int nj = input_image.nj();
-
   vil_image_view<vxl_byte> edge_image = bvxm_util::detect_edges(input_image,noise_multiplier,smooth,automatic_threshold,junctionp,aggressive_junction_closure);
 
   // return the output edge image

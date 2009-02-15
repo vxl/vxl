@@ -60,7 +60,7 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vil_image_view_base_sptr";
   input_types_[i++] = "float";
   input_types_[i++] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   // process has 1 outputs:
@@ -69,7 +69,7 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "float";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
 
   return true;
@@ -83,17 +83,17 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   //check number of inputs
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
   // get the inputs
   unsigned i = 0;
   // voxel world
-  bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(i++);        
+  bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   // camera
-  vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);    
+  vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
   // image
-  vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);  
+  vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   float n_normal = pro.get_input<float>(i++);
@@ -111,12 +111,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   vcl_ofstream file_out;
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
-  vcl_cout << "Number of observations before the update: " << num_observations << "\n";
-
-  int ni = edge_image.ni();
-  int nj = edge_image.nj();
-
-  double best_offset_u = 0.0, best_offset_v = 0.0;
+  vcl_cout << "Number of observations before the update: " << num_observations << vcl_endl;
 
   // update part work if the input camera parameters are not correct or the online algorithm flag
   // "use_online_algorithm" is set to 1 (true) in the input parameter file
