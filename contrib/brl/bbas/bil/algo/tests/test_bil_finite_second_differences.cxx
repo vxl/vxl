@@ -126,24 +126,24 @@ MAIN( test_bil_finite_second_differences )
   vil_print_all(vcl_cout,dyy);
 
   vcl_cout << "testing diagonal image" << vcl_endl;
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
-      if (i == 0 && j == 0 || i == testim.ni()-1 && j == testim.nj()-1){
+  for (unsigned j = 0 ; j < testim.nj(); ++j) {
+    for (unsigned i = 0 ; i < testim.ni(); ++i) {
+      if ((i==0 && j==0) || (i+1 == testim.ni() && j+1 == testim.nj())) {
         vcl_cout << "corners on diagonal " << vcl_endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,    -1    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,    -1    ,     0.001);
       }
-      else if (i == j){
+      else if (i == j) {
         vcl_cout << "non-corner on diagonal " << vcl_endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,    -2    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,    -2    ,     0.001);
       }
-      else if (i == j + 1 || i == j-1 ){
+      else if (i == j + 1 || i == j-1 ) {
         vcl_cout << "super/sub diagonal " << vcl_endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,     1    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,     1    ,     0.001);
       }
-      else{
+      else {
         vcl_cout << "elsewhere " << vcl_endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,     0    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,     0    ,     0.001);

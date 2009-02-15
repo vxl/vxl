@@ -379,7 +379,7 @@ bil_wshed_2d::process_given_connected_pixel(int pos_x, int pos_y)
           {
             //THIS IS THE MAIN PART
             if (distance_map_(neigh_x, neigh_y) < current_distance_ &&
-                output_img_(neigh_x, neigh_y) > 0 || output_img_(neigh_x, neigh_y) == WSHED)
+                (output_img_(neigh_x, neigh_y) > 0 || output_img_(neigh_x, neigh_y) == WSHED))
             {
               if (output_img_(neigh_x, neigh_y) > 0)
               {

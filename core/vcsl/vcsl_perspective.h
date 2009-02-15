@@ -50,7 +50,7 @@ class vcsl_perspective
   // Virtual function of vcsl_spatial_transformation
   virtual bool is_valid() const
   { return vcsl_spatial_transformation::is_valid() &&
-           (this->duration()==0&&focal_.size()==1 ||
+           ((this->duration()==0&&focal_.size()==1) ||
             this->duration()==focal_.size()); }
 
   //***************************************************************************

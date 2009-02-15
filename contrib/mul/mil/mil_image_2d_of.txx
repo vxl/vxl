@@ -85,7 +85,7 @@ template<class T> mil_image_2d_of<T>::~mil_image_2d_of()
 template<class T>
 void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
-  if (nx==nx_ && ny==ny_  || n_planes()==0) return;
+  if ((nx==nx_ && ny==ny_) || n_planes()==0) return;
 
   release_data();
 

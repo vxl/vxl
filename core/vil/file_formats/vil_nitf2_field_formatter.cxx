@@ -72,7 +72,7 @@ bool vil_nitf2_field_formatter::is_all_blank(const char* cstr)
 bool vil_nitf2_field_formatter::check_sign(const char* cstr, bool show_sign)
 {
  return
-   cstr != 0 &&
-   (!show_sign && cstr[0] != '+' && cstr[0] != '-') ||
-   (show_sign && (cstr[0] == '+' || cstr[0] == '-'));
+   cstr &&
+   ((!show_sign && cstr[0] != '+' && cstr[0] != '-') ||
+    (show_sign && (cstr[0] == '+' || cstr[0] == '-'))  );
 }

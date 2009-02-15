@@ -88,8 +88,8 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         data_->Fit();
         float mean_cost = MyGetCost(data_, 0, dc->size(), dc);
         float ls_cost = (float)data_->GetCost();
-        if (use_square_fit_ && ls_cost < threshold_ ||
-            !use_square_fit_ && mean_cost < threshold_ && angle_ok)
+        if ((use_square_fit_ && ls_cost < threshold_) ||
+            (!use_square_fit_ && mean_cost < threshold_ && angle_ok))
         {
           success = true;
           old_finish_ = 0;

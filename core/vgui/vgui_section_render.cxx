@@ -227,8 +227,8 @@ bool vgui_section_render(void const *pixels,
   assert(y0 <= y1);
 
   assert(!hardware_map||format != GL_LUMINANCE||fLmap);
-  assert(!hardware_map||format != GL_RGB||fRmap&&fGmap&&fBmap);
-  assert(!hardware_map||format != GL_RGBA||fRmap&&fGmap&&fBmap&&fAmap);
+  assert(!hardware_map||format != GL_RGB||(fRmap&&fGmap&&fBmap));
+  assert(!hardware_map||format != GL_RGBA||(fRmap&&fGmap&&fBmap&&fAmap));
   float zoomx=1.0f, zoomy=1.0f;
   unsigned i0=0, j0=0, ni=0, nj=0;
   if (!clamped_viewport(x0, y0, x1, y1, i0, j0, ni, nj, zoomx, zoomy))
@@ -270,8 +270,8 @@ bool vgui_view_render(void const *pixels,
 {
   assert(pixels);
   assert(!hardware_map||format != GL_LUMINANCE||fLmap);
-  assert(!hardware_map||format != GL_RGB||fRmap&&fGmap&&fBmap);
-  assert(!hardware_map||format != GL_RGBA||fRmap&&fGmap&&fBmap&&fAmap);
+  assert(!hardware_map||format != GL_RGB||(fRmap&&fGmap&&fBmap));
+  assert(!hardware_map||format != GL_RGBA||(fRmap&&fGmap&&fBmap&&fAmap));
 
   // Store old transfer characteristics for restoring it in a bit.
   GLint alignment, row_length, table_size, skip_pixels, skip_rows;

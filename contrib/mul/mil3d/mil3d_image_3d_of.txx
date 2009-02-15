@@ -92,7 +92,7 @@ template<class T> mil3d_image_3d_of<T>::~mil3d_image_3d_of()
 template<class T>
 void mil3d_image_3d_of<T>::resize2(int nx, int ny, int nz)
 {
-    if (nx==nx_ && ny==ny_ && nz==nz_ || n_planes()==0) return;
+    if ((nx==nx_ && ny==ny_ && nz==nz_) || n_planes()==0) return;
 
     release_data();
 
@@ -493,7 +493,7 @@ bool mil3d_image_3d_of<T>::deepSlice(Axis axis,int slice_number, mil_image_2d_of
     assert(world2im().isIdentity() || world2im().form()==mil3d_transform_3d::ZoomOnly);
     bool result = true;
     mil_transform_2d t;
-    switch(axis)
+    switch (axis)
     {
         case XAXIS:
             image_slice.resize(ny(),nz());

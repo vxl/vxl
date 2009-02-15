@@ -18,7 +18,7 @@ int test_atomic_count_main(int /*argc*/,char* /*argv*/[])
   ++c; // now c==2
   TEST("Increment is correct", c, 2);
 
-  for(int i=0; i<5;++i) ++c;   
+  for (int i=0; i<5;++i) ++c;
   // now c==7
   TEST("Increment in a loop is correct", c, 7);
 
@@ -31,7 +31,7 @@ int test_atomic_count_main(int /*argc*/,char* /*argv*/[])
   ++c; // now c==5
   TEST("Increment is correct", c, 5);
 
-  for(int i=0; i<4;++i) --c;
+  for (int i=0; i<4;++i) --c;
   // now c==1
   TEST("Decrement in a loop is correct", c, 1);
 
@@ -44,7 +44,6 @@ int test_atomic_count_main(int /*argc*/,char* /*argv*/[])
   vcl_atomic_count d(1);
 
   ++c; ++d; ++d; --c; ++d;   // now c==0 and d==4
-  TEST("Multiple instances act independently", d==4&&c==0, true);
+  TEST("Multiple instances act independently", (d==4&&c==0), true);
   return status;
-
 }
