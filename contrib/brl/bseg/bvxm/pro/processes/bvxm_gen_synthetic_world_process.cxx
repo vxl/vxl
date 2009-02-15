@@ -1,5 +1,5 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_gen_synthetic_world_process.cxx
-
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for generating a synthetic bvxm_voxel_world.
@@ -14,7 +14,6 @@
 // \endverbatim
 
 
-#include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 
 #include <bprb/bprb_parameters.h>
@@ -376,7 +375,7 @@ generate_cameras_z(vgl_box_3d<double>& world)
       bb.add(vgl_point_2d<double> (u,v));
 #ifdef DEBUG
       vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-               << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
+               << "Rational [" << u2 << ',' << v2 << "]\n\n";
 #endif
     }
     vcl_cout << bb << vcl_endl;
@@ -425,14 +424,10 @@ bvxm_gen_synthetic_world_process_globals::generate_cameras_yz(vgl_box_3d<double>
       persp_cam.project(c.x(), c.y() ,c.z(), u, v);
       rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
       bb.add(vgl_point_2d<double> (u,v));
-//#ifdef DEBUG
       vcl_cout << "Perspective [" << u << ',' << v << "]\n"
                << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
-//#endif
     }
-//#ifdef DEBUG
     vcl_cout << bb << vcl_endl;
-//#endif
   }
   return rat_cameras;
 }
@@ -767,9 +762,9 @@ bool bvxm_gen_synthetic_world_process_globals::test_reconstructed_ocp(bvxm_voxel
   return true;
 }
 
-static bool
-bvxm_gen_synthetic_world_process_globals::gen_lidar_2box( vgl_vector_3d<unsigned> grid_size,
-                                                          bvxm_voxel_world_sptr world)
+bool
+bvxm_gen_synthetic_world_process_globals::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
+                                                         bvxm_voxel_world_sptr world)
 {
   vil_image_view<unsigned char> lidar(grid_size.x(), grid_size.y());
   lidar.fill((unsigned char)0);
