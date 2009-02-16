@@ -184,9 +184,6 @@ void vil_colour_space_YPbPr_601_to_RGB(T const YPbPr[3], T RGB[3])
   RGB[0] = vcl_max(T(0.0), vcl_min(T(1.0), (YPbPr[0]                          + T(1.402)    * YPbPr[2])));
   RGB[1] = vcl_max(T(0.0), vcl_min(T(1.0), (YPbPr[0] - T(0.344136) * YPbPr[1] - T(0.714136) * YPbPr[2])));
   RGB[2] = vcl_max(T(0.0), vcl_min(T(1.0), (YPbPr[0] + T(1.772)    * YPbPr[1]                         )));
-  /*vcl_max(T(0.0), vcl_min(T(1.0), RGB[0]) );
-  vcl_max(T(0.0), vcl_min(T(1.0), RGB[1]) );
-  vcl_max(T(0.0), vcl_min(T(1.0), RGB[2]) );*/
 }
 
 /* YCbCr (601) from "digital 8-bit R'G'B'  "
