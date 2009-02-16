@@ -626,7 +626,7 @@ foreach $f (@FILES)
   &msg(1, "contains RCS indication $1")
     if ($file =~ m!(\$RCSfile|\$(Author|Revision|Date): .* \$)!);
   #typos
-  &msg(1, "probably a mistyping: $1")
+  &msg(1, "probably a typo: $1")
     if ($file =~ m!\b(
                       accom[^mp]\S*
                     | accp\S+
@@ -830,6 +830,7 @@ foreach $f (@FILES)
                     | verson
                     | verticies
                     | vertexes
+                    | vitural
                     | vlo\S*
                     | whan
                     | wether
