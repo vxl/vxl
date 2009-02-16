@@ -205,6 +205,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Return the real type of the conic from its coefficients
   //---------------------------------------------------------------------------
   vsol_conic_type real_type() const;
+  vcl_string real_conic_type() const { return static_cast<vgl_conic<double> >(*this).real_type(); }
 
   //---------------------------------------------------------------------------
   //: Is `this' an real ellipse ?
@@ -268,7 +269,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Return ellipse angular position
   //  -   input pt  , a point on the ellipse
   //  -   output angle
-  //  -  
+  //  -
   //  REQUIRE: is_real_ellipse()
   //---------------------------------------------------------------------------
   double ellipse_angular_position(vsol_point_2d_sptr const& pt) const;
