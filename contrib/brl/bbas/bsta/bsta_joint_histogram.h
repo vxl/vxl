@@ -43,6 +43,9 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   T renyi_entropy() const;
   void print(vcl_ostream& os = vcl_cout) const;
 
+  //: The average and variance bin value for row a using counts to compute probs
+  bool avg_and_variance_bin_for_row_a(const unsigned int a, T & avg, T & var) const;
+  
   void set_count(unsigned r, unsigned c, T cnt)
   { if (r<static_cast<unsigned>(counts_.rows())&&
         c<static_cast<unsigned>(counts_.cols()))
@@ -50,6 +53,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   }
 
   void print_to_vrml(vcl_ostream& os) const;
+  void print_to_m(vcl_ostream& os) const;
 
  private:
   void compute_volume() const; // mutable const

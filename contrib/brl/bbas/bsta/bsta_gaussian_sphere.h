@@ -73,13 +73,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
   T det_covar() const { return det_covar_; }
 
   //: sample from the distribution
-  vector_ sample(vnl_random& rng) const 
-  {
-    vector_ d = bsta_gaussian<T,n>::mean_;
-    T s = (T)(vcl_sqrt(var_)*rng.normal());
-    d += s;
-    return d; 
-  }
+  vector_ sample(vnl_random& rng) const; 
 
  protected:
   //: The variance

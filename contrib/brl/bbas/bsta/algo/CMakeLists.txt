@@ -10,6 +10,7 @@ SET( bsta_algo_sources
    bsta_truth_updater.txx     bsta_truth_updater.h
    bsta_parzen_updater.txx    bsta_parzen_updater.h
    bsta_fit_weibull.cxx       bsta_fit_weibull.h
+   bsta_mean_shift.cxx       bsta_mean_shift.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_algo_sources)

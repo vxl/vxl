@@ -74,6 +74,34 @@ T bsta_joint_histogram<T>::p(unsigned int a, unsigned int b) const
     return counts_[a][b]/volume_;
 }
 
+//: The average and variance bin value for row a using counts to compute probs
+//  T avg_and_variance_bin_for_row_a(const unsigned int a) const;
+template <class T>
+bool bsta_joint_histogram<T>::avg_and_variance_bin_for_row_a(const unsigned int a, T & avg, T & var) const
+{
+  if (a >= nbins_)
+    return false;
+    
+  T sum = 0;
+  for (unsigned int b =0; b<nbins_; b++)
+    sum += counts_[a][b];
+    
+  if (sum <= 0)
+    return false;
+  
+  avg = 0;
+  for (unsigned int b =0; b<nbins_; b++)
+    avg += ((b+1)*delta_/2)*(counts_[a][b]/sum);
+  
+  var = 0;
+  for (unsigned int b =0; b<nbins_; b++) {
+    T dif = (b+1)*delta_/2-avg;
+    var += vcl_pow(dif, T(2.0))*(counts_[a][b]/sum);
+  }
+  
+  return true;
+}
+
 template <class T>
 T bsta_joint_histogram<T>::volume() const
 {
@@ -193,6 +221,23 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
   os << "Background { skyColor 1 1 1 }\n";
   os << "NavigationInfo { type \"EXAMINE\" }\n";
   os << "] }\n";
+}
+
+template <class T>
+void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
+{
+  os << "y = zeros(" << nbins_ << ", " << nbins_ << ");\n";
+  for (unsigned int a = 0; a<nbins_; a++) {
+    for (unsigned int b = 0; b<nbins_; b++) {
+      if (p(a,b) > 0) {
+        //os << "y(" << a+1 << ", " << b+1 << ") = " << p(a,b) << "; ";
+        os << "y(" << a+1 << ", " << b+1 << ") = " << counts_[a][b] << "; ";
+      }
+    }
+    //os << "\n";
+  }
+  //os << "\n";
+  os << "bar3(y,'detached');\n";
 }
 
 #undef BSTA_JOINT_HISTOGRAM_INSTANTIATE

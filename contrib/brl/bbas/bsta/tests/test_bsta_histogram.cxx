@@ -12,6 +12,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <bsta/bsta_histogram_sptr.h>
 #include <bsta/bsta_joint_histogram_sptr.h>
+
+#include <bsta/bsta_gauss_f1.h>
+
 static void test_int_hist()
 {
   bsta_int_histogram_1d h1d(50);
@@ -79,6 +82,26 @@ void test_bsta_histogram()
   }
   double jent = jh.entropy();
   vcl_cout << "Uniform Joint Entropy for " << bins*bins << " bins = " << jent  << " bits.\n";
+  vcl_ofstream of("joint_out.out");
+  jh.print_to_m(of);
+  of.close();
+
+  bsta_joint_histogram<double> new_jh(range, bins);
+  for (int a =0; a<bins; a++, va+=delta) {
+    double avg, var;
+    jh.avg_and_variance_bin_for_row_a(a, avg, var);
+    vcl_cout << "avg: " << avg << " var: " << var << vcl_endl;
+
+    bsta_gauss_f1 g(avg, var);
+    for (unsigned b = 0; b < bins; b++) {
+      float b_val = g.prob_density((b+1)*delta);
+      new_jh.upcount((a+1)*delta, 0.0f, (b+1)*delta, b_val);
+    }
+  }
+  vcl_ofstream of2("joint_out_new.out");
+  new_jh.print_to_m(of2);
+  of2.close();
+
 
   TEST_NEAR("test joint histogram uniform distribution entropy", jent, 31.0/4, 1e-9);
   test_int_hist();

@@ -74,20 +74,6 @@ bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const vector_& pt) const
   return compute_dot<T,n,n>::value(d)/var_;
 }
 
-#if 0
-//: sample from the distribution
-template <class T, unsigned int n>
-vector_
-bsta_gaussian_sphere<T,n>::sample() const
-{
-  vnl_random rng;
-  vector_ d = bsta_gaussian<T,n>::mean_;
-  T s = (T)(vcl_sqrt(var_)*rng.normal());
-  d *= s;
-  return d;
-}
-#endif // 0
-
 //: Unrol the compute probability calculation
 //  The general induction step
 template <class T, class vector_, unsigned n, unsigned index>
@@ -171,6 +157,60 @@ bsta_gaussian_sphere<T,n>::compute_det()
 {
   det_covar_ = determinant<T,n,n>::value(var_);
   assert(det_covar_ >= 0);
+}
+
+
+//: Unrol the sampling calculation
+//  The general induction step
+template <class T, class vector_, unsigned n, unsigned index>
+struct var_from_dist
+{
+  static inline vector_ value(const T& var, vnl_random& rng)
+  {
+    T s = (T)(vcl_sqrt(var)*rng.normal());
+    vector_ res(T(0));
+    res[index] = s;
+    res += var_from_dist<T,vector_,n,index-1>::value(var, rng);
+    return res;
+  }
+};
+
+//: base case
+//  This is partial specialization: expect MSVC6 to complain
+template <class T, class vector_, unsigned n>
+struct var_from_dist<T,vector_,n,0>
+{
+  static inline vector_ value(const T& var, vnl_random& rng)
+  {
+    T s = (T)(vcl_sqrt(var)*rng.normal());
+    vector_ res(T(0));
+    res[0] = s;
+    return res;
+  };
+};
+
+
+//: base case
+//  This is partial specialization: expect MSVC6 to complain
+template <class T, class vector_>
+struct var_from_dist<T,vector_,1,0>
+{
+  static inline vector_ value(const T& var, vnl_random& rng)
+  {
+    T s = (T)(vcl_sqrt(var)*rng.normal());
+    vector_ res(s);
+    return res;
+  };
+};
+
+//: sample 
+template <class T, unsigned int n>
+typename bsta_gaussian_sphere<T,n>::vector_type bsta_gaussian_sphere<T,n>::sample(vnl_random& rng) const
+{
+  typedef typename bsta_gaussian_sphere<T,n>::vector_type vector_;
+  vector_ mean = bsta_gaussian<T,n>::mean_;
+  vector_ var = var_from_dist<T, vector_, n, n-1>::value(var_, rng);
+  return mean+var;
 }
 
 
