@@ -159,7 +159,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   // If an image of the same scale already exists, then method returns false.
   bool add_resource(vil_image_resource_sptr const& image);
 
-  //: vitural method for getting a level of the pyramid
+  //: virtual method for getting a level of the pyramid
   vil_image_resource_sptr get_resource(const unsigned level) const
     {return get_level(level);}
 
