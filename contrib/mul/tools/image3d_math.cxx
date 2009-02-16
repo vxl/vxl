@@ -20,7 +20,6 @@
 #include <vsl/vsl_deque_io.txx>
 #include <vsl/vsl_stream.h>
 #include <vnl/vnl_math.h>
-#include <vul/vul_ios_state.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_exception.h>
@@ -459,6 +458,21 @@ void option_load_as_image_float(opstack_t& s)
   global_option_load_as_image_int = false;
 }
 
+void option_precision__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+
+  int prec = vnl_math_rnd(s[0].as_double());
+  if (prec < 0 || prec > 20)
+  {
+    vcl_cerr << "option_precision takes an integer between 0 and 20.\n";
+    vcl_exit(1);
+  }
+  vcl_cout.precision(prec);
+  s.pop_front();
+}
+
+
 void convert_to_float__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -517,23 +531,21 @@ void print_quantiles__image_3d_of_float__double(opstack_t& s)
 
   double nsteps = vnl_math_floor(s[0].as_double());
   double step = storage.size() / nsteps;
-  vul_ios_state_saver saved(vcl_cout);
-  vcl_cout.precision(9);
 
 
   vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
 
-  vcl_cout << "     0%: " << vcl_setw(16) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
+  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
            << '\n' << vcl_setw(6) << 100.0/nsteps << "%: "
-    << vcl_setw(16) << *(storage.begin() + vnl_math_rnd(step)) << '\n';
+    << vcl_setw(20) << *(storage.begin() + vnl_math_rnd(step)) << '\n';
   for (unsigned i=1; i+1<nsteps; ++i)
   {
     vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
       storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
-    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16)
+    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(20)
              << *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
   }
-  vcl_cout << "   100%: " << vcl_setw(16)
+  vcl_cout << "   100%: " << vcl_setw(20)
            << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
   s.pop_front();
   s.pop_front();
@@ -542,26 +554,26 @@ void print_quantiles__image_3d_of_float__double(opstack_t& s)
 void print_quantiles__image_3d_of_int__double(opstack_t& s)
 {
   assert(s.size() >= 2);
-  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
   vil3d_image_view<int> storage(o1.image().ni(), o1.image().nj(),
     o1.image().nk(), o1.image().nplanes());
   vil3d_copy_reformat(o1.image(), storage);
 
   double nsteps = vnl_math_floor(s[0].as_double());
   double step = storage.size() / nsteps;
-  vul_ios_state_saver saved(vcl_cout);
   vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
 
-  vcl_cout << "   0%: " << vcl_setw(16) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
-           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << *(storage.begin() + vnl_math_rnd(step)) << '\n';
-  for (unsigned i=1; i <9; ++i)
+  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math_rnd(step))
+           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << vcl_setw(20) << *(storage.begin() + vnl_math_rnd(step))
+           << '\n';
+  for (unsigned i=1; i+1<nsteps; ++i)
   {
     vcl_nth_element(storage.begin() + vnl_math_rnd(i*step),
       storage.begin() + vnl_math_rnd((i+1)*step), storage.end());
-    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(16)
+    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(20)
              << *(storage.begin() + vnl_math_rnd((i+1)*step)) << '\n';
   }
-  vcl_cout << " 100%: " << vcl_setw(16)
+  vcl_cout << "   100%: " << vcl_setw(20)
            << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
   s.pop_front();
   s.pop_front();
@@ -771,6 +783,9 @@ class operations
     add_operation("--option_load_as_image_int", &option_load_as_image_int,
       no_operands,
       "", "", "Load future image files as int voxel-type");
+    add_operation("--option_precision", &option_precision__double,
+      function_type_t() << operand::e_double,
+      "n", "", "Set precision of floating point numbers on the console to n digits");
     add_operation("--print_quantiles", &print_quantiles__image_3d_of_int__double,
       function_type_t() << operand::e_image_3d_of_int << operand::e_double,
       "image n", "", "Print n evenly space quantiles of image's voxel values");
