@@ -1,0 +1,59 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vpdl : Probability Distribution Library
+* 
+* This library contains data structures to represent univariate and multivariate 
+* probability distributions and provides algorithms to operate on them.  This
+* includes estimating a distribution from data points and sampling from a
+* distribution.  vpdl is built on top of vnl and vnl_algo.
+*
+* \section history History
+*
+* vpdl is the merger of two different design patterns for probability distributions.
+* It was formed from the merger of three contrib libraries: mul/vpdfl, mul/pdf1d, 
+* and brl/bbas/bsta.  
+* 
+* Created by Manchester, vpdfl provided a polymorphic hierarchy 
+* (using virtual functions) for multivariate distributions based on vnl_vector and 
+* vnl_matrix types.  For univariate distributions, pdf1d mirrored the design of
+* vpdfl, but used scalar types (i.e. double).  These libraries were very flexible
+* at run time.  Both distribution type and, in the case of vpdfl, dimension could
+* be selected at run time.
+* 
+* Create by Brown, bsta provided a generic programming hierarchy (using templates)
+* for both univariate and multivariate distributions.  Templates parameters
+* specified scalar type (float or double) and dimension.  Templates allowed
+* the same code base to used scalars in the univariate case and 
+* vnl_vector_fixed/vnl_matrix_fixed in the multivariate case.  The goal of bsta
+* was to be very efficient.  By assuming types and dimension are known at
+* compile time, many optimizations are possible.
+*
+* vpdl was designed as a core library to meet the need of both original designs.
+* It uses templates to select type and dimension at compile time, but for
+* each selection of template parameters there is a polymorphic hierarchy.
+* In addition, the default dimension is 0 which has the special meaning of
+* "dimension determined at run time".
+*
+* \section distributions Distributions
+*
+* Each distribution is derived (directly or indirectly) from a common templated
+* base class called vpdl_distribution<T,n>.  Template parameter T specifies
+* the numeric type (float or double) and n specifies the dimension.
+* vpdl_distribution<T,n> is derived from vpdl_base_traits<T,n> which is a partially
+* specialized class that defines the key data types for representation of 
+* vectors and matrices in each dimension.  In particular:
+* - n==0 uses vnl_vector<T> and vnl_matrix<T> (dimension specified at run time)
+* - n==1 uses T and T (scalar computations)
+* - n>1  uses vnl_vector_fixed<T,n> and vnl_matrix_fixed<T,n,n>
+* 
+* vpdl_base_traits<T,n> also defines various functions operate on these
+* different types with a consistent API.  These included functions to get/set
+* dimension, access a vector or matrix element, resize a vector or matrix, etc.
+* For some types these functions may do nothing, but their existence allows
+* a single implementation of many functions on distributions without need for
+* further template specialization.
+*
+*
+* \section Lead Developer
+* Matt Leotta is responsible for co-ordinating significant changes to vpdl.
+* http://sourceforge.net/sendmessage.php?touser=857661
+*/
