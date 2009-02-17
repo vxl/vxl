@@ -86,6 +86,9 @@ SET(rgtl_sources
 ADD_LIBRARY(rgtl ${rgtl_sources})
 TARGET_LINK_LIBRARIES(rgtl vnl_algo vnl vcl)
 
+INSTALL_TARGETS(/lib rgtl)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgtl ${rgtl_sources})
+
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
