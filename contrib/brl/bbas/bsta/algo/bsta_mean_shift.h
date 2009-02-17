@@ -38,7 +38,7 @@ class bsta_mean_shift_sample_set : public bsta_parzen_sphere<T,n>
   bool mean(vector_ const& pt, vector_& out);
 
   //: Insert a weighted sample into the distribution
-  void insert_w_sample(const vector_& sample, T weight)  { samples_.push_back(sample); weights_.push_back(weight); }
+  void insert_w_sample(vector_ const& sample, T weight);
 
   T weight(unsigned i) { return weights_[i]; }
 
