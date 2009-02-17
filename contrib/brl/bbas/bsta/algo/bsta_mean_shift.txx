@@ -11,13 +11,13 @@ template <class T, unsigned n>
 bool
 bsta_mean_shift_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_type const& pt, typename bsta_parzen_sphere<T,n>::vector_type& out)
 {
-  typedef typename bsta_distribution<T,n>::vector_type vect_t;
+  typedef typename bsta_parzen_sphere<T,n>::vector_type vect_t;
   typedef typename vcl_vector<vect_t >::const_iterator sit_t;
   typedef typename vcl_vector<T >::const_iterator wit_t;
 
-  if (samples_.size() != weights_.size()) {
+  if (bsta_parzen<T,n>::samples_.size() != weights_.size()) {
     weights_.clear();
-    weights_ = vcl_vector<T>(samples_.size(), T(1.0));
+    weights_ = vcl_vector<T>(bsta_parzen<T,n>::samples_.size(), T(1.0));
   }
 
   vect_t sum(T(0));
@@ -25,7 +25,6 @@ bsta_mean_shift_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_t
   wit_t wit = weights_.begin();
   T nsamp = 0;
   for (; sit != bsta_parzen<T,n>::samples_.end(); ++sit, ++wit) {
-
     vect_t s = *sit;
     vect_t dif = s-pt;
     vnl_vector_fixed<T,n> dummy(dif);
