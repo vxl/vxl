@@ -31,7 +31,7 @@ class bsta_mean_shift_sample_set : public bsta_parzen_sphere<T,n>
   enum { data_dimension = bsta_parzen_sphere<T,n>::dimension };
   
   // Constructor
-  bsta_mean_shift_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere() { set_bandwidth(bandwidth); }
+  bsta_mean_shift_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere<T,n>() { set_bandwidth(bandwidth); }
 
   //: Compute the mean in a window around the given pt, the window size is the bandwidth
   //  If there are no points within bandwidth of the input pt, \return false
