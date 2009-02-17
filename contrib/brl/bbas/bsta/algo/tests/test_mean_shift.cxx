@@ -40,18 +40,25 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   unsigned n3 = (unsigned)(rng.drand32()*100);
 
   T bandwidth = T(0.2);
+  //T bandwidth = T(1.0);
   bsta_mean_shift_sample_set<T, n> ss(bandwidth);
   TEST_NEAR((type_name + ": mean shift sample set constructor").c_str(), bandwidth, ss.bandwidth(), epsilon);
   
   for (unsigned i = 0; i < n1; i++) {
     vect_t s = g1.sample(rng);
+    //float w1 = 0.99f;
     ss.insert_sample(s);
+    //ss.insert_w_sample(s, w1);
   }
   for (unsigned i = 0; i < n2; i++) {
+    //float w2 = 0.01f;
     ss.insert_sample(g2.sample(rng));
+    //ss.insert_w_sample(g2.sample(rng), w2);
   }
   for (unsigned i = 0; i < n3; i++) {
+    //float w3 = 0.01f;
     ss.insert_sample(g3.sample(rng));
+    //ss.insert_w_sample(g3.sample(rng), w3);
   }
   TEST_NEAR((type_name + ": mean shift sample set insert method").c_str(), n1+n2+n3, ss.size(), epsilon);
   
@@ -65,6 +72,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
 
   bsta_mean_shift<T,n> ms;
   ms.find_modes(ss, rng, 50.0f, T(1e-2));
+  //ms.find_modes(ss, T(1e-2));
   vcl_cout << "modes size: " << ms.size() << vcl_endl;
 
   ms.trim_modes(T(1e-1));

@@ -4,6 +4,10 @@
 //:
 // \file
 // \brief Classes to run mean shift algorithm on data distributions to find its modes
+//        Implements mean shift with a flat kernel of fixed bandwidth_
+//
+//        Not optimized for large datasets
+// 
 // \author Ozge C. Ozcanli
 // \date February 10, 2009
 //
@@ -22,16 +26,30 @@ template <class T, unsigned n>
 class bsta_mean_shift_sample_set : public bsta_parzen_sphere<T,n>
 {
  public:
-  typedef typename bsta_parzen_sphere<T,n>::math_type T;
-  typedef typename bsta_parzen_sphere<T,n>::vector_type vector_;
-  enum { data_dimension = bsta_parzen_sphere<T,n>::dimension };
 
+  typedef typename bsta_parzen_sphere::vector_type vector_;
+  enum { data_dimension = bsta_parzen_sphere::dimension };
+  
   // Constructor
   bsta_mean_shift_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere() { set_bandwidth(bandwidth); }
 
   //: Compute the mean in a window around the given pt, the window size is the bandwidth
   //  If there are no points within bandwidth of the input pt, \return false
   bool mean(vector_ const& pt, vector_& out);
+
+  //: Insert a weighted sample into the distribution
+  void insert_w_sample(const vect_t& sample, T weight)  { samples_.push_back(sample); weights_.push_back(weight); }
+
+  T weight(unsigned i) { return weights_[i]; }
+
+  //: one may need to normalize the weights after the insertion is over
+  void normalize_weights();
+  
+ private:
+   //: hold a vector of weights for each data sample
+   //  needs to be set separately with each insert into the data set, otherwise its set to 1.0 by default at the first call to mean()
+   vcl_vector<T> weights_;
+  
 };
 
 template <class T, unsigned n>
@@ -47,6 +65,9 @@ class bsta_mean_shift
   //  \p epsilon : the difference required for updating to come to a halt
   //  \p percentage: the percentage of the sample set to initialize as seed
   bool find_modes(bsta_mean_shift_sample_set<T,n>& set, vnl_random & rng, float percentage = 10.0f, T epsilon = 10e-3);
+  
+  //: use all the samples to get its mode, no need for random seed picking
+  bool find_modes(bsta_mean_shift_sample_set<T,n>& set, T epsilon = 10e-3);
 
   //: trim modes that are within epsilon distance to each other
   //  \p epsilon : the difference required for two modes to be merged
