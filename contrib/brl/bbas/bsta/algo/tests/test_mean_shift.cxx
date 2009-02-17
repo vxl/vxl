@@ -3,6 +3,7 @@
 #include <vcl_string.h>
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_gaussian_indep.h>
+#include <vcl_fstream.h>
 
 vnl_random rng;
 
