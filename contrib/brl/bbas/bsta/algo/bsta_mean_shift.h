@@ -27,8 +27,8 @@ class bsta_mean_shift_sample_set : public bsta_parzen_sphere<T,n>
 {
  public:
 
-  typedef typename bsta_parzen_sphere::vector_type vector_;
-  enum { data_dimension = bsta_parzen_sphere::dimension };
+  typedef typename bsta_parzen_sphere<T,n>::vector_type vector_;
+  enum { data_dimension = bsta_parzen_sphere<T,n>::dimension };
   
   // Constructor
   bsta_mean_shift_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere() { set_bandwidth(bandwidth); }
