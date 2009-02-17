@@ -62,10 +62,10 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   }
   TEST_NEAR((type_name + ": mean shift sample set insert method").c_str(), n1+n2+n3, ss.size(), epsilon);
   
-  bsta_gaussian_sphere<T,n>::vector_type out;
+  vect_t out;
   TEST("find mean around m1", ss.mean(meanv1, out), true);
   vcl_cout << "calculated mean: " << out << " within m1: " << meanv1 << vcl_endl;
-  bsta_gaussian_sphere<T,n>::vector_type dif = out-meanv1;
+  vect_t dif = out-meanv1;
   vnl_vector_fixed<T,n> dummy(dif);
   TEST_NEAR((type_name + ": mean shift sample set mean method").c_str(), dummy.magnitude(), T(0), epsilon);
   
