@@ -2,9 +2,11 @@
 # Vision Probability Distribution Library
 
 SET( vpdl_sources
+  vpdl_npower.h            vpdl_npower.cxx
+  vpdl_eigen_sym_matrix.h
+  
   vpdl_base_traits.h
-  vpdl_npower.h         vpdl_npower.cxx
-  vpdl_distribution.h   vpdl_distribution.txx
+  vpdl_distribution.h      vpdl_distribution.txx
   
   vpdl_gaussian_base.h
   vpdl_gaussian_sphere.h
@@ -15,7 +17,7 @@ SET( vpdl_sources
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)
 
 ADD_LIBRARY(vpdl ${vpdl_sources})
-TARGET_LINK_LIBRARIES( vpdl vnl )
+TARGET_LINK_LIBRARIES( vpdl vnl_algo )
 
 INSTALL_TARGETS(/lib vpdl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpdl ${vpdl_sources})

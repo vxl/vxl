@@ -14,6 +14,7 @@
 
 #include <vpdl/vpdl_gaussian_base.h>
 #include <vpdl/vpdl_npower.h>
+#include <vpdl/vpdl_eigen_sym_matrix.h>
 #include <vcl_limits.h>
 #include <vnl/vnl_erf.h>
 
@@ -32,7 +33,8 @@ public:
   //: Constructor
   // Optionally initialize the dimension for when n==0.
   // Otherwise var_dim is ignored
-  vpdl_gaussian(unsigned int var_dim = n) : vpdl_gaussian_base<T,n>(var_dim) {}
+  vpdl_gaussian(unsigned int var_dim = n) 
+  : vpdl_gaussian_base<T,n>(var_dim), covar_(var_dim) {}
   
   //: Constructor - from mean and variance
   vpdl_gaussian(const vector& mean, const covar_type& covar) 
@@ -50,13 +52,21 @@ public:
   //: Evaluate the probability density at a point
   virtual T prob_density(const vector& pt) const
   {
-    return static_cast<T>(norm_const() * vcl_exp(-sqr_mahal_dist(pt)/2));
+    T norm = norm_const();
+    if(vnl_math_isinf(norm))
+      return T(0);
+    
+    return static_cast<T>(norm * vcl_exp(-sqr_mahal_dist(pt)/2));
   }
   
   //: Evaluate the log probability density at a point
   virtual T log_prob_density(const vector& pt) const
   {
-    return static_cast<T>(vcl_log(norm_const()) - sqr_mahal_dist(pt)/2);
+    T norm = norm_const();
+    if(vnl_math_isinf(norm))
+      return -vcl_numeric_limits<T>::infinity();
+    
+    return static_cast<T>(vcl_log(norm) - sqr_mahal_dist(pt)/2);
   };
   
   //: compute the normalization constant (independent of sample point).
@@ -64,22 +74,15 @@ public:
   // non-virtual for efficiency
   T norm_const() const
   { 
-    const unsigned int d = this->dimension();
-    double det = 1.0;
-    // FIXME: compute the determinant
-    
     return static_cast<T>(vcl_sqrt(1/(vpdl_two_pi_power(this->dimension())*
-                                      det)));
+                                      covar_.determinant())));
   }
   
   //: The squared Mahalanobis distance to this point
   // non-virtual for efficiency
   T sqr_mahal_dist(const vector& pt) const
   {    
-    const unsigned int d = this->dimension();
-    T val = 1.0;
-    // FIXME: implement this
-    return val;
+    return covar_.inverse_quad_form(pt - this->mean_);
   }
   
   //: Evaluate the cumulative distribution function at a point
@@ -88,26 +91,31 @@ public:
   virtual T cumulative_prob(const vector& pt) const
   {    
     // FIXME: implement this
+    // probably requires numerical integration
     return 0.0; 
   }
   
-  //: Access the scalar variance
-  const covar_type& covariance() const { return covar_; }
+  //: Access the covariance - requires computation
+  covar_type covariance() const 
+  { 
+    covar_type M;
+    compute_covar(M);
+    return M; 
+  }
   
-  //: Set the scalar variance
-  void set_covariance(const covar_type& covar) { covar_ = covar; }
+  //: Set the covariance matrix
+  void set_covariance(const covar_type& covar) { covar_.set_matrix(covar); }
   
   
   //: Compute the covariance of the distribution.
-  // Should be the identity matrix times var_
   virtual void compute_covar(matrix& covar) const
   {
-    covar = covar_;
+    covar_.form_matrix(covar);
   }
   
 protected:
   //: the matrix covariance
-  covar_type covar_;
+  vpdl_eigen_sym_matrix<T,n> covar_;
 }; 
 
 
