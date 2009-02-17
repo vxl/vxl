@@ -36,7 +36,7 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   vpdl_gaussian_indep(unsigned int var_dim = n)
   : vpdl_gaussian_base<T,n>(var_dim)
   {
-    // initialize mean to all zeros
+    // initialize variance to all zeros
     v_init(var_,var_dim,T(0));
   }
 
@@ -120,15 +120,15 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
     return static_cast<T>(val);
   }
 
-  //: Access the scalar variance
+  //: Access the vector of variance
   const covar_type& covariance() const { return var_; }
 
-  //: Set the scalar variance
+  //: Set the vector of variance
   void set_covariance(const covar_type& var) { var_ = var; }
 
 
   //: Compute the covariance of the distribution.
-  // Should be the identity matrix times var_
+  // Should be the diagonal matrix of var_
   virtual void compute_covar(matrix& covar) const
   {
     const unsigned int d = this->dimension();
