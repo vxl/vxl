@@ -9,7 +9,7 @@
 //  if there are no points within bandwidth of the input pt, return false
 template <class T, unsigned n>
 bool
-bsta_mean_shift_sample_set<T,n>::mean(typename bsta_distribution<T,n>::vector_type const& pt, typename bsta_distribution<T,n>::vector_type& out)
+bsta_mean_shift_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_type const& pt, typename bsta_parzen_sphere<T,n>::vector_type& out)
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
   typedef typename vcl_vector<vect_t >::const_iterator sit_t;
@@ -46,7 +46,7 @@ bsta_mean_shift_sample_set<T,n>::mean(typename bsta_distribution<T,n>::vector_ty
 //: Insert a weighted sample into the distribution
 template <class T, unsigned n>
 void 
-bsta_mean_shift_sample_set<T,n>::insert_w_sample(typename bsta_distribution<T,n>::vector_type const& sample, T weight)  
+bsta_mean_shift_sample_set<T,n>::insert_w_sample(typename bsta_parzen_sphere<T,n>::vector_type const& sample, T weight)  
 { 
   bsta_parzen<T,n>::samples_.push_back(sample); 
   weights_.push_back(weight); 
