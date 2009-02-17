@@ -29,7 +29,7 @@ bsta_mean_shift_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_t
     vect_t dif = s-pt;
     vnl_vector_fixed<T,n> dummy(dif);
     T d = dummy.magnitude();
-    if (d < bandwidth_) { // this sample is within window of the given point, use it to calculate mean
+    if (d < bsta_parzen_sphere<T,n>::bandwidth_) { // this sample is within window of the given point, use it to calculate mean
       sum += (*wit)*(*sit);
       nsamp += (*wit);
     }
@@ -73,7 +73,7 @@ bsta_mean_shift_sample_set<T,n>::normalize_weights()
 template <class T, unsigned n>
 bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, vnl_random & rng, float percentage, T epsilon)
 {
-  typedef typename bsta_distribution<T,n>::vector_type vect_t;
+  typedef typename bsta_parzen_sphere<T,n>::vector_type vect_t;
 
   //: initialize seeds by picking given percentage of the sample set randomly
   int size = set.size();
