@@ -124,7 +124,7 @@ bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, vnl_
 
 //: use all the samples to get its mode, no need for random seed picking
 template <class T, unsigned n>
-bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, T epsilon = 10e-3)
+bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, T epsilon)
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
 
