@@ -57,6 +57,9 @@ core vgui      vgui_     build core/vgl core/vpl core/vbl core/vul core/vnl core
 # should be replaced by the following line or something along these lines:
 #core vgui      vgui_     build core/vnl/algo core/vil core/vil1 core/vgl core/vpl core/vbl core/vul
 
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries (Experimental)
+core vpdl      vpdl_     build core/vnl
+
 package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl core Test Framework
 core testlib testlib_ build
 
