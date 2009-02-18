@@ -4,6 +4,7 @@
 SET( vpdl_sources
   vpdl_npower.h            vpdl_npower.cxx
   vpdl_eigen_sym_matrix.h
+  vpdl_update_gaussian.h
   
   vpdl_base_traits.h
   vpdl_distribution.h      vpdl_distribution.txx
