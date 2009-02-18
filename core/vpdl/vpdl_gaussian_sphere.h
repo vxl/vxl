@@ -70,8 +70,13 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   // non-virtual for efficiency
   T norm_const() const
   {
-    return static_cast<T>(vcl_sqrt(1/vpdl_npower<n>::power(var_*2.0*vnl_math::pi,
-                                                           this->dimension())));
+    const unsigned int dim = this->dimension();
+    double v2pi = var_*2.0*vnl_math::pi;
+    double denom = v2pi;
+    for(unsigned int i=1; i<dim; ++i)
+      denom *= v2pi;
+      
+    return static_cast<T>(vcl_sqrt(1/denom));
   }
 
   //: The squared Mahalanobis distance to this point
