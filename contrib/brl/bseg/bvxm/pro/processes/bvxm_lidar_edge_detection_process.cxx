@@ -107,7 +107,7 @@ bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
   
   //read in parameters
   float threshold_edge_difference = 10.0f;
-  if (pro.parameters()->get_value(param_thresh_diff_, threshold_edge_difference)) {
+  if (!pro.parameters()->get_value(param_thresh_diff_, threshold_edge_difference)) {
     vcl_cout << "problems in retrieving parameters\n";
     return false;
   }
