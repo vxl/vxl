@@ -378,10 +378,14 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo
 }
 
 float bvxm_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof){
-  float return_value = 0.0f;
+  if(dof<1){
+    return edge_statistic;
+  }
+
   if((edge_statistic-n_normal)>0.0f){
     double chi_sq_stat = (double)vnl_math_sqr((edge_statistic-n_normal))/n_normal;
-    return_value = (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
+    return (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
   }
-  return return_value;
+
+  return 0.0f;
 }

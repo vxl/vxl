@@ -281,7 +281,7 @@ bool bvxm_voxel_world::save_edges_raw(vcl_string filename, float n_normal, unsig
   // iterate through slabs and fill in memory array
   char *edges_array = new char[nx*ny*nz];
 
-  int dof = vnl_math_max((int)this->num_observations<EDGES>(0,scale)-1,1);
+  int dof = (int)this->num_observations<EDGES>(0,scale)-1;
 
   vcl_cout << "Saving edges to RAW file:" << vcl_endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
@@ -721,6 +721,9 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
       (*edges_slab_it_it) = 0.1f + 0.8f*(*lidar_prob_it)*(*lidar_edges_backproj_it);
     }
   }
+
+  this->increment_observations<EDGES>(0,scale);
+
   return true;
 }
 
@@ -871,7 +874,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
   }
   vcl_cout << vcl_endl;
 
-  int dof = vnl_math_max((int)this->num_observations<EDGES>(0,scale)-1,1);
+  int dof = (int)this->num_observations<EDGES>(0,scale)-1;
   bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
     (*expected_edge_image_it) = bvxm_util::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);

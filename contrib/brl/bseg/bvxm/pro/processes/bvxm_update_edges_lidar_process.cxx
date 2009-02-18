@@ -95,7 +95,6 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
   for(unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
   {
     result = result && world->update_edges_lidar(lidar_height,lidar_edges,lidar_edges_prob,camera,curr_scale);
-    world->increment_observations<EDGES>(0,curr_scale);
   }
 
   if(!result){
