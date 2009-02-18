@@ -370,6 +370,77 @@ void save__image_3d_of_int__string(opstack_t& s)
   s.pop_front();
 }
 
+
+//: Load a float image from an ascii matlab format
+void load_from_mat__string(opstack_t& s)
+{
+  assert(s.size() >= 1);
+
+  vcl_string o1(s[0].as_string());
+
+  vcl_ifstream input(o1.c_str());
+
+  if (!input)
+    mbl_exception_throw_os_error(o1);
+
+  char c;
+  vcl_string dummy;
+  while (true)
+  {
+    input >> vcl_ws >> c;
+    if (c=='#')
+      vcl_getline(input, dummy);
+    else
+      break;
+  }
+  input.putback(c);
+  unsigned ni, nj, nk;
+  input >> ni >> nj >> nk;
+  if (!input)
+  {
+    vcl_cerr << "Unable to parse " << o1 << vcl_endl;
+    vcl_exit(1);
+  }
+
+
+  s.pop_front();
+
+  if (global_option_load_as_image_int)
+  {
+    vimt3d_image_3d_of<int> result(ni, nj, nk);
+    for (unsigned k=0;k<nk;++k)
+    {
+      for (unsigned j=0;j<nj;++j)
+        for (unsigned i=0;i<ni;++i)
+          input >> result.image()(i,j,k);
+      if (!input)
+      {
+        vcl_cerr << "Unable to parse " << o1 << vcl_endl;
+        vcl_exit(1);
+      }
+    }
+    s.push_front(operand(result));
+  }
+  else
+  {
+    vimt3d_image_3d_of<float> result(ni, nj, nk);
+    for (unsigned k=0;k<nk;++k)
+    {
+      for (unsigned j=0;j<nj;++j)
+        for (unsigned i=0;i<ni;++i)
+          input >> result.image()(i,j,k);
+      if (!input)
+      {
+        vcl_cerr << "Unable to parse " << o1 << vcl_endl;
+        vcl_exit(1);
+      }
+    }
+    s.push_front(operand(result));
+  }
+
+
+}
+
 //: Save a float image to a ascii matlab format
 void save_to_mat__image_3d_of_float__string(opstack_t& s)
 {
@@ -383,6 +454,9 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
 
   if (!output)
     mbl_exception_throw_os_error(o1);
+
+  //copy precision length from console to output file
+  output.precision(vcl_cout.precision());
 
   output <<
     "# Created by vxl/image3d_math\n"
@@ -774,6 +848,9 @@ class operations
     add_operation("--load", &load__string,
       function_type_t() << operand::e_string,
       "filename", "image", "Explicitly load image using current option_load_as_image_type");
+    add_operation("--load_from_mat", &load_from_mat__string,
+      function_type_t() << operand::e_string,
+      "filename", "image", "Explicitly load image from ASCII Matlab file");
     add_operation("--local_z_normalise", &local_z_normalise__image_3d_of_float__double,
       function_type_t() << operand::e_image_3d_of_float << operand::e_double,
       "image half_radius", "image", "Normalise each voxel by mean and stddev measured over half_radius window");
@@ -806,13 +883,13 @@ class operations
       "image im_template", "image", "Resample image to same size and transform as im_template");
     add_operation("--save", &save__image_3d_of_float__string,
       function_type_t() << operand::e_image_3d_of_float << operand::e_string,
-      "filename image", "", "Save image to filename");
+      "image filename", "", "Save image to filename");
     add_operation("--save", &save__image_3d_of_int__string,
       function_type_t() << operand::e_image_3d_of_int << operand::e_string,
-      "filename image", "", "Save image to filename");
+      "image filename", "", "Save image to filename");
     add_operation("--save_to_mat", &save_to_mat__image_3d_of_float__string,
       function_type_t() << operand::e_image_3d_of_float << operand::e_string,
-      "filename image", "", "Save image to text 3D array Matlab format");
+      "image filename", "", "Save image to text 3D array Matlab format");
     add_operation("--scale_and_offset", &scale_and_offset__image_3d_of_float__double__double,
       function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
       "image scale offset", "image", "multiply images's voxels by scale and add offset");
