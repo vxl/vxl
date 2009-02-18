@@ -94,8 +94,6 @@ bool bvxm_detect_edges_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_junctionp_, junctionp);
   pro.parameters()->get_value(param_aggressive_junction_closure_, aggressive_junction_closure);
 
-  vcl_cout << noise_multiplier << ' ' << smooth << ' ' << automatic_threshold << ' ' << junctionp << ' ' << aggressive_junction_closure << vcl_endl;
-
   vil_image_view<vxl_byte> input_image(input_image_sptr);
   vil_image_view<vxl_byte> edge_image = bvxm_util::detect_edges(input_image,noise_multiplier,smooth,automatic_threshold,junctionp,aggressive_junction_closure);
 
