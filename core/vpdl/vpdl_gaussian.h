@@ -18,6 +18,8 @@
 #include <vcl_limits.h>
 #include <vnl/vnl_erf.h>
 
+#include <vpdl/vpdl_gaussian_sphere.h>
+
 //: A Gaussian with variance independent in each dimension 
 template<class T, unsigned int n=0>
 class vpdl_gaussian : public vpdl_gaussian_base<T,n>
@@ -44,7 +46,7 @@ public:
   virtual ~vpdl_gaussian() {}
   
   //: Create a copy on the heap and return base class pointer
-  virtual vpdl_base_traits<T,n>* clone() const
+  virtual vpdl_distribution<T,n>* clone() const
   {
     return new vpdl_gaussian<T,n>(*this);
   }
@@ -112,6 +114,18 @@ public:
   {
     covar_.form_matrix(covar);
   }
+  
+  //: Access the eigenvectors of the covariance matrix
+  const matrix& covar_eigenvecs() const { return covar_.eigenvectors(); }
+  
+  //: Access the eigenvalues of the covariance matrix
+  const vector& covar_eigenvals() const { return covar_.eigenvalues(); }
+  
+  //: Set the eigenvectors of the covariance matrix
+  void set_covar_eigenvecs(const matrix& m) { covar_.set_eigenvectors(m); }
+  
+  //: Set the eigenvalues of the covariance matrix
+  void set_covar_eigenvals(const vector& v) { covar_.set_eigenvalues(v); }
   
 protected:
   //: the matrix covariance

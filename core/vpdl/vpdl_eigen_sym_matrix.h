@@ -69,6 +69,16 @@ public:
   //: Access to the eigenvalues
   const vector& eigenvalues() const { return eigen_val_; }
   
+  //: Set the eigenvectors
+  void set_eigenvectors(const matrix& m) 
+  { 
+    eigen_vec_ = m; 
+    assert(are_evec_orthonormal()); 
+  }
+  
+  //: set the eigenvalues
+  void set_eigenvalues(const vector& v) { eigen_val_ = v; }
+  
   //: set the eigenvectors and eigen values by decomposing m
   void set_matrix(const matrix& m)
   {
@@ -174,7 +184,11 @@ private:
   vector eigen_val_;
   
   //: return true if the eigenvectors are (approximately) orthonormal
-  bool are_evec_orthonormal() const;
+  bool are_evec_orthonormal() const
+  {
+    // FIXME: implement this
+    return false;
+  }
 }; 
 
 
@@ -205,13 +219,19 @@ public:
   vpdl_eigen_sym_matrix(const matrix& m) : var_(m) {}
   
   //: set the eigenvectors and eigen values by decomposing m
-  void set_matrix(matrix& m) { var_ = m; }
+  void set_matrix(const matrix& m) { var_ = m; }
   
   //: Access to the eigenvectors
   const matrix& eigenvectors() const { return 1; }
   
   //: Access to the eigenvalues
   const vector& eigenvalues() const { return var_; }
+  
+  //: Set the eigenvectors
+  void set_eigenvectors(const matrix& m) { assert(m==1); }
+  
+  //: set the eigenvalues
+  void set_eigenvalues(const vector& v) { var_ = v; }
   
   //: Reform the matrix
   void form_matrix(matrix& m) const { m = var_; }
