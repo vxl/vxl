@@ -1,16 +1,51 @@
 #include "mmn_dp_solver.h"
 //:
 // \file
-// \brief Find choice of values at each node which minimises Markov problem
+// \brief Solve restricted class of Markov problems (trees and tri-trees)
 // \author Tim Cootes
 
 #include <mmn/mmn_order_cost.h>
+#include <mmn/mmn_graph_rep1.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
+
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
 
 //: Default constructor
 mmn_dp_solver::mmn_dp_solver()
 {
 }
+
+//: Input the arcs that define the graph
+void mmn_dp_solver::set_arcs(unsigned num_nodes,
+                        const vcl_vector<mmn_arc>& arcs)
+{
+  // Copy in arcs, and ensure ordering v1<v2
+  vcl_vector<mmn_arc> ordered_arcs(arcs.size());
+  for (unsigned i=0;i<arcs.size();++i)
+  {
+    if (arcs[i].v1<arcs[i].v2)
+      ordered_arcs[i]= arcs[i];
+    else
+      ordered_arcs[i]= mmn_arc(arcs[i].v2,arcs[i].v1);
+  }
+
+  mmn_graph_rep1 graph;
+  graph.build(num_nodes,ordered_arcs);
+  vcl_vector<mmn_dependancy> deps;
+  if (!graph.compute_dependancies(deps,0))
+  {
+    vcl_cerr<<"Graph cannot be decomposed - too complex."<<vcl_endl;
+    vcl_cerr<<"Arc list: ";
+    for (unsigned i=0;i<arcs.size();++i) vcl_cout<<arcs[i];
+    vcl_cerr<<vcl_endl;
+    vcl_abort();
+  }
+
+  set_dependancies(deps,num_nodes,graph.max_n_arcs());
+}
+
 
 //: Index of root node
 unsigned mmn_dp_solver::root() const
@@ -309,3 +344,93 @@ void mmn_dp_solver::backtrace(unsigned root_value,vcl_vector<unsigned>& x)
     }
   }
 }
+
+//=======================================================================
+// Method: set_from_stream
+//=======================================================================
+//: Initialise from a string stream
+bool mmn_dp_solver::set_from_stream(vcl_istream &is)
+{
+  // Cycle through stream and produce a map of properties
+  vcl_string s = mbl_parse_block(is);
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  // No properties expected.
+
+  // Check for unused props
+  mbl_read_props_look_for_unused_props(
+      "mmn_dp_solver::set_from_stream", props, mbl_read_props_type());
+  return true;
+}
+
+
+//=======================================================================
+// Method: version_no
+//=======================================================================
+
+short mmn_dp_solver::version_no() const
+{
+  return 1;
+}
+
+//=======================================================================
+// Method: is_a
+//=======================================================================
+
+vcl_string mmn_dp_solver::is_a() const
+{
+  return vcl_string("mmn_dp_solver");
+}
+
+//: Create a copy on the heap and return base class pointer
+mmn_solver* mmn_dp_solver::clone() const
+{
+  return new mmn_dp_solver(*this);
+}
+
+//=======================================================================
+// Method: print
+//=======================================================================
+
+void mmn_dp_solver::print_summary(vcl_ostream& os) const
+{
+}
+
+//=======================================================================
+// Method: save
+//=======================================================================
+
+void mmn_dp_solver::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs,unsigned(deps_.size()));
+  for (unsigned i=0;i<deps_.size();++i)
+    vsl_b_write(bfs,deps_[i]);
+}
+
+//=======================================================================
+// Method: load
+//=======================================================================
+
+void mmn_dp_solver::b_read(vsl_b_istream& bfs)
+{
+  if (!bfs) return;
+  short version;
+  unsigned n;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+    case (1):
+      vsl_b_read(bfs,n);
+      deps_.resize(n);
+      for (unsigned i=0;i<n;++i) vsl_b_read(bfs,deps_[i]);
+      break;
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+  }
+}
+

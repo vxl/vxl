@@ -2,24 +2,26 @@
 #define mmn_dp_solver_h_
 //:
 // \file
-// \brief Find choice of values at each node which minimises Markov problem
+// \brief Solve restricted class of Markov problems (trees and tri-trees)
 // \author Tim Cootes
 
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
+#include <mmn/mmn_solver.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
 
-//: Find choice of values at each node which minimises Markov problem.
+//: Solve restricted class of Markov problems (trees and tri-trees)
+//  Find choice of values at each node which minimises Markov problem.
 //  Minimises F() = sum node_costs + sum pair_costs
 //
 //  Assumes graph defining relationships can be fully decomposed by
 //  repeatedly removing any nodes with two or fewer neighbours.
 //  Global optimum is found using a series of sequential exhaustive
 //  optimisations.
-class mmn_dp_solver
+class mmn_dp_solver : public mmn_solver
 {
  private:
   //: Workspace for incremental costs of each node
@@ -60,6 +62,10 @@ class mmn_dp_solver
   //: Index of root node
   unsigned root() const;
 
+    //: Input the arcs that define the graph
+  virtual void set_arcs(unsigned num_nodes,
+                        const vcl_vector<mmn_arc>& arcs);
+
   //: Define dependencies
   void set_dependancies(const vcl_vector<mmn_dependancy>& deps,
                         unsigned n_nodes, unsigned max_n_arcs);
@@ -73,7 +79,7 @@ class mmn_dp_solver
   // v1 has value i1, v2 has value i2, then the cost of this choice is
   // (v1<v2?pair_cost(i1,i2):pair_cost(i2,i1))
   // Returns the minimum cost
-  double solve(const vcl_vector<vnl_vector<double> >& node_cost,
+  virtual double solve(const vcl_vector<vnl_vector<double> >& node_cost,
                  const vcl_vector<vnl_matrix<double> >& pair_cost,
                  vcl_vector<unsigned>& x);
 
@@ -94,6 +100,28 @@ class mmn_dp_solver
 
   //: root_cost()[i] is cost of selecting value i for the root node
   const vnl_vector<double>& root_cost() const { return nc_[root()]; }
+
+  //: Initialise from a text stream
+  virtual bool set_from_stream(vcl_istream &is);
+
+    //: Version number for I/O
+  short version_no() const;
+
+    //: Name of the class
+  virtual vcl_string is_a() const;
+
+    //: Create a copy on the heap and return base class pointer
+  virtual mmn_solver* clone() const;
+
+    //: Print class to os
+  virtual void print_summary(vcl_ostream& os) const;
+
+    //: Save class to binary file stream
+  virtual void b_write(vsl_b_ostream& bfs) const;
+
+    //: Load class from binary file stream
+  virtual void b_read(vsl_b_istream& bfs);
+
 };
 
 #endif // mmn_dp_solver_h_
