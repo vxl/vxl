@@ -48,7 +48,7 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   virtual ~vpdl_gaussian_indep() {}
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdl_base_traits<T,n>* clone() const
+  virtual vpdl_distribution<T,n>* clone() const
   {
     return new vpdl_gaussian_indep<T,n>(*this);
   }

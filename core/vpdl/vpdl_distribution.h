@@ -40,7 +40,7 @@ class vpdl_distribution : public vpdl_base_traits<T,n>
   virtual ~vpdl_distribution() {}
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdl_base_traits<T,n>* clone() const = 0;
+  virtual vpdl_distribution<T,n>* clone() const = 0;
 
   //: Evaluate the probability density at a point
   virtual T prob_density(const vector& pt) const = 0;
