@@ -206,14 +206,12 @@ struct var_from_dist<T,vector_,1,0>
 
 //: sample
 template <class T, unsigned int n>
-typename bsta_gaussian<T,n>::vector_type bsta_gaussian_sphere<T,n>::sample(vnl_random& rng) const
+typename bsta_gaussian_sphere<T,n>::vector_ bsta_gaussian_sphere<T,n>::sample(vnl_random& rng) const
 {
-  typedef typename bsta_gaussian<T,n>::vector_type vector_;
   vector_ mean = bsta_gaussian<T,n>::mean_;
   vector_ var = var_from_dist<T, vector_, n, n-1>::value(var_, rng);
   return mean+var;
 }
-
 
 #define BSTA_GAUSSIAN_SPHERE_INSTANTIATE(T,n) \
 template class bsta_gaussian_sphere<T,n >
