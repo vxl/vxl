@@ -5,6 +5,7 @@
 // \file
 // \author Matthew Leotta
 // \date February 5, 2009
+// \brief The templated base class for all distributions
 //
 // \verbatim
 //  Modifications
