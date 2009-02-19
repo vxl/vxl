@@ -85,6 +85,7 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
 
 MAIN( test_eigen_sym_matrix )
 {
+  START ("Eigen-decomposed Symmetric Matrix");
   test_matrix_type(float(1e-5),"float");
   test_matrix_type(double(1e-13),"double");
   SUMMARY();

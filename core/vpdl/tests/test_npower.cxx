@@ -6,6 +6,7 @@
 
 MAIN( test_npower )
 {
+  START ("npower");
   
   // test the 2*pi^n lookup table
   double two_pi_n = 1.0;
