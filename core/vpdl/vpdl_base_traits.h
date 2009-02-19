@@ -65,6 +65,9 @@ class vpdl_base_traits
   //: initialize a vector by filling it with val
   static inline void v_init(vector& v, unsigned int s, const T& val)
   { v.fill(val); }
+  //: initialize a vector by filling it with val
+  static inline void m_init(matrix& m, unsigned int s, const T& val)
+  { m.fill(val); }
 
   //: index into a vector
   static inline T& index(vector& v, unsigned int i)
@@ -120,6 +123,14 @@ class vpdl_base_traits<T,1>
   //: initialize a vector by filling it with val
   static inline void v_init(vector& v, unsigned int s, const T& val)
   { v = val; }
+  //: initialize a vector by filling it with val
+  static inline void m_init(matrix& m, unsigned int s, const T& val)
+  { m = val; }
+  
+  //: outer product for scalars
+  // should be defined externally for vnl_vector and vnl_vector_fixed
+  static inline matrix outer_product(const vector& v1, const vector& v2)
+  { return v1*v2; }
 
   //: index into a vector
   static inline T& index(vector& v, unsigned int i)
@@ -181,6 +192,12 @@ class vpdl_base_traits<T,0>
   {
     v.set_size(s);
     v.fill(val);
+  }
+  //: initialize a vector by filling it with val
+  static inline void m_init(matrix& m, unsigned int s, const T& val)
+  {
+    m.set_size(s,s);
+    m.fill(val);
   }
 
   //: index into a vector
