@@ -13,6 +13,9 @@ SET( vpdl_sources
   vpdl_gaussian_sphere.h
   vpdl_gaussian_indep.h
   vpdl_gaussian.h
+  
+  vpdl_multi_cmp_dist.h
+  vpdl_mixture.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)
