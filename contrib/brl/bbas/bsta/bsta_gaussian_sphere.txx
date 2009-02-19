@@ -203,6 +203,7 @@ struct var_from_dist<T,vector_,1,0>
   };
 };
 
+
 //: sample
 template <class T, unsigned int n>
 typename bsta_gaussian<T,n>::vector_type bsta_gaussian_sphere<T,n>::sample(vnl_random& rng) const
