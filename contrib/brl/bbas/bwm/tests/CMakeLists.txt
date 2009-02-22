@@ -1,5 +1,7 @@
 # brl/bbas/bwm/tests/CMakeLists.txt
+IF (EXISTS ${lems_SOURCE_DIR}/contrib )
 INCLUDE_DIRECTORIES(${lems_SOURCE_DIR}/contrib )
+ENDIF (EXISTS ${lems_SOURCE_DIR}/contrib )
 
 ADD_EXECUTABLE( bwm_test_all
                 test_driver.cxx

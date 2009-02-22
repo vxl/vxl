@@ -1,7 +1,9 @@
 # bbas/bsta/CMakeLists.txt
 # Brown statistics Library.
 
+IF (EXISTS ${lems_SOURCE_DIR}/basic )
 INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
+ENDIF (EXISTS ${lems_SOURCE_DIR}/basic )
 
 SET(bsta_sources
  bsta_gauss.cxx            bsta_gauss.h
