@@ -146,6 +146,18 @@ SOURCE=.\vpdl_gaussian_sphere.h
 # Begin Source File
 SOURCE=.\vpdl_npower.h
 # End Source File
+# Begin Source File
+SOURCE=.\vpdl_eigen_sym_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdl_mixture.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdl_update_gaussian.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdl_multi_cmp_dist.h
+# End Source File
 # End Group
 # End Target
 # End Project
