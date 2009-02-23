@@ -220,7 +220,7 @@ void bgui_range_adjuster_tableau::draw_histogram()
   vcl_vector<float> xscaled, yscaled;
   for (unsigned int i=0; i<data_.size(); ++i) {
     xscaled.push_back(left_offset_ + i);
-    yscaled.push_back(top_offset_ + graph_height_ - data_[i]/max*graph_height_);
+    yscaled.push_back(static_cast<float>(top_offset_ + graph_height_ - data_[i]/max*graph_height_));
   }
 
   if (plot_)

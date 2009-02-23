@@ -403,7 +403,7 @@ bool vsrl_manager::do_dense_matching()
         value = 0;
       if (value>2*params_->correlation_range+1)
         value=0;
-      buffer(x,y)=value;
+      buffer(x,y)=static_cast<unsigned char>(value);
     }
   }
 
@@ -560,8 +560,8 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
         for (unsigned int i=0; i<e_line->n;i++)
         {
           vdgl_edgel ed = (*ech)[i];
-          e_line->x[i]=ed.get_x();
-          e_line->y[i]=ed.get_y();
+          e_line->x[i] = (float)ed.get_x();
+          e_line->y[i] = (float)ed.get_y();
         }
       }
       else
@@ -579,7 +579,7 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
            vit != vts.end(); vit++)
       {
         vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-        e2d0_->add_point(v->x(),v->y());
+        e2d0_->add_point(static_cast<float>(v->x()),static_cast<float>(v->y()));
       }
     }
   }
@@ -828,7 +828,7 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
         else if ( v1 < 1e-6 || v2 < 1e-6 )
           *sm=0.0;
         else
-          *sm = vcl_exp(- vcl_fabs(0.693 * (m1-m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
+          *sm = (float)vcl_exp(- vcl_fabs(0.693 * (m1-m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
       }
       vcl_cout << "  Shadow = " << *sm << vcl_endl;
     }
@@ -988,14 +988,14 @@ void vsrl_manager::show_jseg_boundaries(vil1_memory_image_of<unsigned char>* jse
       rimg(x,y) = 0;
       // Vertical Boundaries...
       if ( (*jseg_out)(x,y) != (*jseg_out)(x+1,y) ){
-        tab->add_point(x+0.5,y);
-        e2d2_->add_point(x+0.5,y);
+        tab->add_point(x+0.5f,y);
+        e2d2_->add_point(x+0.5f,y);
         rimg(x,y) = 255;
       }
       // Horizontal Boundaries...
       if ( (*jseg_out)(x,y) != (*jseg_out)(x,y+1) ) {
-        tab->add_point(x,y+0.5);
-        e2d2_->add_point(x,y+0.5);
+        tab->add_point(x,y+0.5f);
+        e2d2_->add_point(x,y+0.5f);
         rimg(x,y) = 255;
       }
     }
@@ -1046,7 +1046,7 @@ float* vsrl_manager::show_correlations(int x, int y)
   vcl_cout << "Correlation results about point: " << x << ", " << y << vcl_endl
            << "X: Y: R:\n";
   for (int xo=-range; xo<=range; xo++) {
-    results[xo+range] = corr.get_correlation(x,y,(x+xo),y);
+    results[xo+range] = (float)corr.get_correlation(x,y,(x+xo),y);
     vcl_cout << (x+xo) << "  " << y << "  " << results[xo+range] << vcl_endl;
   }
 
@@ -1095,14 +1095,14 @@ void vsrl_manager::raw_correlation()
       float max=-1e10f;
       // when the disparities are written to the buffer, they are offset by "range"
       // to keep them positive.
-      disp(x,y) = range; // default value (i.e. disparity=0+offset)
+      disp(x,y) = static_cast<unsigned char>(range); // default value (i.e. disparity=0+offset)
       for (int i=-range; i<=range;i++) {
         // get the values of the correlation of the pixel in the left
         // image with several pixels in the right image.
-        float result = i_corr.get_correlation(x,y,x+i,y);
+        float result = (float)i_corr.get_correlation(x,y,x+i,y);
         if (result > max) {
           max = result; // if we get a new peak, update the max value...
-          disp(x,y) = i+range; // ...and put the new disparity in the disparity buffer
+          disp(x,y) = static_cast<unsigned char>(i+range); // ...and put the new disparity in the disparity buffer
         }
       }
     }
@@ -1325,11 +1325,11 @@ void vsrl_manager::corner_method()
   for (;p0_it < pts0.end(); p0_it++, p1_it++) {
     //    vcl_cout << "p0: " << (**p0_it) << "  p1: " << (**p1_it) << vcl_endl;
     tmp = **p0_it;  // Point 0
-    x0 = tmp.x();
-    y0 = tmp.y();
+    x0 = (float)tmp.x();
+    y0 = (float)tmp.y();
     tmp = **p1_it;  // Point 1
-    x1 = tmp.x();
-    y1 = tmp.y();
+    x1 = (float)tmp.x();
+    y1 = (float)tmp.y();
     d = x1 - x0; // Disparity
     // stuff the disparity into the right place in the image buffer
     disp(int(x0),int(y0)) = vxl_byte(d + zero_disp); // Add in the "0" offset.

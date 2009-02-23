@@ -16,11 +16,11 @@
 class sdet_harris_detector_params : public gevd_param_mixin
 {
  public:
-  sdet_harris_detector_params(const float sigma=1.0,
-                              const float thresh = 2.0,
+  sdet_harris_detector_params(const float sigma=1.0f,
+                              const float thresh = 2.0f,
                               const int n=1,
-                              const float percent_corners=80.0,
-                              const float scale_factor = 0.04,
+                              const float percent_corners=80.0f,
+                              const float scale_factor = 0.04f,
                               const bool use_vil_harris=false);
 
   sdet_harris_detector_params(const sdet_harris_detector_params& old_params);

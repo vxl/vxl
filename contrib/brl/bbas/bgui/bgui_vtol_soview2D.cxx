@@ -49,8 +49,8 @@ bgui_vtol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
   for (unsigned int i=0; i<n;i++)
   {
     vdgl_edgel ed = (*ech)[i];
-    x=ed.get_x();
-    y=ed.get_y();
+    x = (float)ed.get_x();
+    y = (float)ed.get_y();
     vgui_soview2D* p = new vgui_soview2D_point(x, y);
     ls.push_back(p);
   }
@@ -84,8 +84,8 @@ bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
   for (unsigned int i=0; i<n;i++)
   {
     vdgl_edgel ed = (*ech)[i];
-    x[i]=ed.get_x();
-    y[i]=ed.get_y();
+    x[i] = (float)ed.get_x();
+    y[i] = (float)ed.get_y();
   }
 
   return;
@@ -97,8 +97,8 @@ bgui_vtol_soview2D_line_seg(vsol_line_2d_sptr const& seg)
 {
   vsol_point_2d_sptr p0 = seg->p0();
   vsol_point_2d_sptr p1 = seg->p1();
-  x0=p0->x(); y0 = p0->y();
-  x1=p1->x(); y1 = p1->y();
+  x0 = (float)p0->x(); y0 = (float)p0->y();
+  x1 = (float)p1->x(); y1 = (float)p1->y();
 }
 
 //--------------------------------------------------------------------------
@@ -148,8 +148,8 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
     for (unsigned int i=0; i<n;i++)
     {
       vdgl_edgel ed = (*ech)[i];
-      x[i]=ed.get_x();
-      y[i]=ed.get_y();
+      x[i] = (float)ed.get_x();
+      y[i] = (float)ed.get_y();
     }
     return;
   }
@@ -159,9 +159,9 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
     x = new float[n], y = new float[n];
     vsol_line_2d_sptr l = c->cast_to_line();
     vsol_point_2d_sptr p0 = l->p0();
-    x[0]=p0->x();      y[0]=p0->y();
+    x[0] = (float)p0->x();  y[0] = (float)p0->y();
     vsol_point_2d_sptr p1 = l->p1();
-    x[1]=p1->x();      y[1]=p1->y();
+    x[1] = (float)p1->x();  y[1] = (float)p1->y();
     return;
   }
   vcl_cout << "In bgui_vtol_soview2D_edge(vtol_edge_2d_sptr& e) -"

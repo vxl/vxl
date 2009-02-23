@@ -30,7 +30,7 @@ sdet_detector::sdet_detector(sdet_detector_params& params)
     angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
     vertices(NULL), edges(NULL),
     filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
-{   
+{
   if (params.automatic_threshold)
     noise = -params.noise_weight;
   else
@@ -49,7 +49,7 @@ sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma
     locationx(NULL), locationy(NULL), grad_mag(NULL),
     angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
     vertices(NULL), edges(NULL),
-    filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
+    filterFactor(2), hysteresisFactor(2.0f), noiseThreshold(0.0f)
 {
   use_vil_image = false;
   sdet_detector_params::smooth = smoothSigma;
@@ -68,7 +68,7 @@ sdet_detector::sdet_detector(vil_image_resource_sptr & img, float smoothSigma, f
     locationx(NULL), locationy(NULL), grad_mag(NULL),
     angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
     vertices(NULL), edges(NULL),
-    filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
+    filterFactor(2), hysteresisFactor(2.0f), noiseThreshold(0.0f)
 {
   use_vil_image = true;
   sdet_detector_params::smooth = smoothSigma;
@@ -156,7 +156,7 @@ bool  sdet_detector::DoContour()
                            roi->GetOrigX()+0.5, // of pixel instead of
                            roi->GetOrigY()+0.5); // upper-left corner
 #endif
-   if(!use_roi_)
+   if (!use_roi_)
      return true;
    sdet_contour::Translate(*edges, *vertices, // display location at center
                            static_cast<float>(roi_.cmin(0)), // of pixel instead of
@@ -219,7 +219,7 @@ bool sdet_detector::DoStep()
   if (edgel) return true;
 
   const gevd_bufferxy* source;
-  if(use_vil_image)
+  if (use_vil_image)
     source = GetBufferFromVilImage();
   else
     source = GetBufferFromImage();
@@ -230,7 +230,6 @@ bool sdet_detector::DoStep()
   gevd_step step(this->smooth, this->noise, this->contourFactor, this->junctionFactor);
 
   step.DetectEdgels(*source, edgel, direction, locationx, locationy, grad_mag, angle);
-
 
   if (this->junctionp) {                // extension to real/virtual contours
     njunction = step.RecoverJunctions(*source,
@@ -320,7 +319,6 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
 
   image_float_buf = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
 
-
 #if 0 // commented out
   if (image->GetPixelType() == Image::FLOAT)
   {
@@ -355,8 +353,8 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
 
   if (image_float_buf) return image_float_buf;
   //Tests for validity
-  
-  if(!use_vil_image||!vimage->ni()||!vimage->nj())
+
+  if (!use_vil_image||!vimage->ni()||!vimage->nj())
   {
     vcl_cout << "In sdet_detector::GetBufferFromVilImage() - no image\n";
     return 0;
@@ -365,30 +363,28 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
   vil_image_resource_sptr process_region = vimage;
 
   //if an roi is specified then extract view and wrap a resource around it
-  if(use_roi_)
-    {
-      if(roi_.n_regions()!=1)//no roi to process
-        return 0;
-      vil_image_view_base_sptr vb = 
-        vimage->get_view(roi_.cmin(0), roi_.csize(0), roi_.rmin(0), roi_.rsize(0));
-      if(!vb)
-        return 0;
-      process_region = vil_new_image_resource_of_view(*vb);
-    }
+  if (use_roi_)
+  {
+    if (roi_.n_regions()!=1)//no roi to process
+      return 0;
+    vil_image_view_base_sptr vb =
+      vimage->get_view(roi_.cmin(0), roi_.csize(0), roi_.rmin(0), roi_.rsize(0));
+    if (!vb)
+      return 0;
+    process_region = vil_new_image_resource_of_view(*vb);
+  }
 
   if (vimage->nplanes()!=1)
   {
-    vil_image_view<unsigned short> sview 
+    vil_image_view<unsigned short> sview
       = brip_vil_float_ops::convert_to_short(process_region);
     process_region = vil_new_image_resource_of_view(sview);
   }
-  
+
   int sizey= process_region->nj();
   int sizex= process_region->ni();
 
   image_float_buf = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
-
-
 
   gevd_bufferxy image_buf(process_region);
 
@@ -463,51 +459,51 @@ bool sdet_detector::
 get_vdgl_edges(vcl_vector<vdgl_digital_curve_sptr>& vd_edges )
 {
   vd_edges.clear();
-  if(!edges)
+  if (!edges)
     return false;
 
-  for(vcl_vector<vtol_edge_2d_sptr >::iterator eit = edges->begin();
-      eit != edges->end(); ++eit)
-    {
-      vtol_edge_2d_sptr & e = *eit;
-      if(!e)
-        continue;
-      vsol_curve_2d_sptr c = e->curve();
-      vdgl_digital_curve* dc = c->cast_to_vdgl_digital_curve();
-      if(!dc)
-        continue;
-      
-      vd_edges.push_back(dc);
-    }
-  if(!vd_edges.size())
+  for (vcl_vector<vtol_edge_2d_sptr >::iterator eit = edges->begin();
+       eit != edges->end(); ++eit)
+  {
+    vtol_edge_2d_sptr & e = *eit;
+    if (!e)
+      continue;
+    vsol_curve_2d_sptr c = e->curve();
+    vdgl_digital_curve* dc = c->cast_to_vdgl_digital_curve();
+    if (!dc)
+      continue;
+
+    vd_edges.push_back(dc);
+  }
+  if (!vd_edges.size())
     return false;
   return true;
 }
 
-bool 
+bool
 sdet_detector::get_vsol_edges(vcl_vector<vsol_digital_curve_2d_sptr>& edges )
 {
   vcl_vector<vdgl_digital_curve_sptr> vd_edges;
-  if(!this->get_vdgl_edges(vd_edges))
+  if (!this->get_vdgl_edges(vd_edges))
     return false;
   edges.clear();
-  for(vcl_vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
-      eit != vd_edges.end(); ++eit)
+  for (vcl_vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
+       eit != vd_edges.end(); ++eit)
+  {
+      //get the edgel chain
+    vdgl_interpolator_sptr itrp = (*eit)->get_interpolator();
+    vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
+    unsigned int n = ech->size();
+    // convert to vsol_digital curve
+    vsol_digital_curve_2d_sptr vsdc = new vsol_digital_curve_2d();
+    for (unsigned int i=0; i<n;i++)
     {
-        //get the edgel chain
-      vdgl_interpolator_sptr itrp = (*eit)->get_interpolator();
-      vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
-      unsigned int n = ech->size();
-      // convert to vsol_digital curve
-      vsol_digital_curve_2d_sptr vsdc = new vsol_digital_curve_2d();
-      for (unsigned int i=0; i<n;i++)
-        {
-          vdgl_edgel ed = (*ech)[i];
-          double x = ed.get_x(), y = ed.get_y();
-          vsdc->add_vertex(new vsol_point_2d(x, y));
-        }
-          
-     edges.push_back(vsdc);
+      vdgl_edgel ed = (*ech)[i];
+      double x = ed.get_x(), y = ed.get_y();
+      vsdc->add_vertex(new vsol_point_2d(x, y));
     }
+
+   edges.push_back(vsdc);
+  }
   return true;
 }

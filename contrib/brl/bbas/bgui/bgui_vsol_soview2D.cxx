@@ -55,21 +55,21 @@ vsol_point_2d_sptr bgui_vsol_soview2D_point::sptr() const
 void bgui_vsol_soview2D_point::draw() const
 {
   glBegin(GL_POINTS);
-  glVertex2f(sptr()->x(),sptr()->y());
+  glVertex2f(static_cast<float>(sptr()->x()), static_cast<float>(sptr()->y()));
   glEnd();
 }
 
 float bgui_vsol_soview2D_point::distance_squared(float x, float y) const
 {
-  float dx = sptr()->x() - x;
-  float dy = sptr()->y() - y;
+  float dx = (float)sptr()->x() - x;
+  float dy = (float)sptr()->y() - y;
   return dx*dx + dy*dy;
 }
 
 void bgui_vsol_soview2D_point::get_centroid(float* x, float* y) const
 {
-  *x = sptr()->x();
-  *y = sptr()->y();
+  *x = (float)sptr()->x();
+  *y = (float)sptr()->y();
 }
 
 void bgui_vsol_soview2D_point::translate(float tx, float ty)
@@ -95,22 +95,22 @@ vsol_line_2d_sptr bgui_vsol_soview2D_line_seg::sptr() const
 void bgui_vsol_soview2D_line_seg::draw() const
 {
   glBegin(GL_LINES);
-  glVertex2f(sptr()->p0()->x(),sptr()->p0()->y());
-  glVertex2f(sptr()->p1()->x(),sptr()->p1()->y());
+  glVertex2f(static_cast<float>(sptr()->p0()->x()), static_cast<float>(sptr()->p0()->y()));
+  glVertex2f(static_cast<float>(sptr()->p1()->x()), static_cast<float>(sptr()->p1()->y()));
   glEnd();
 }
 
 float bgui_vsol_soview2D_line_seg::distance_squared(float x, float y) const
 {
-  return vgl_distance2_to_linesegment(sptr()->p0()->x(), sptr()->p0()->y(),
-                                      sptr()->p1()->x(), sptr()->p1()->y(),
-                                      double(x), double(y));
+  return (float)vgl_distance2_to_linesegment((float)sptr()->p0()->x(), (float)sptr()->p0()->y(),
+                                             (float)sptr()->p1()->x(), (float)sptr()->p1()->y(),
+                                             x, y);
 }
 
 void bgui_vsol_soview2D_line_seg::get_centroid(float* x, float* y) const
 {
-  *x = (sptr()->p0()->x() + sptr()->p1()->x()) / 2;
-  *y = (sptr()->p0()->y() + sptr()->p1()->y()) / 2;
+  *x = static_cast<float>(sptr()->p0()->x() + sptr()->p1()->x()) / 2;
+  *y = static_cast<float>(sptr()->p0()->y() + sptr()->p1()->y()) / 2;
 }
 
 void bgui_vsol_soview2D_line_seg::translate(float tx, float ty)
@@ -188,8 +188,8 @@ float bgui_vsol_soview2D_conic_seg::distance_squared(float x, float y) const
 
 void bgui_vsol_soview2D_conic_seg::get_centroid(float* x, float* y) const
 {
-  *x = xc_;
-  *y = yc_;
+  *x = (float)xc_;
+  *y = (float)yc_;
 }
 
 void bgui_vsol_soview2D_conic_seg::translate(float tx, float ty)
@@ -203,7 +203,7 @@ void bgui_vsol_soview2D_conic_seg::translate(float tx, float ty)
 
   //compute new d, e, f coefficients for the conic
   double a = sptr()->a(), b = sptr()->b(), c = sptr()->c(),
-    d = sptr()->d(), e = sptr()->e(), f = sptr()->f();
+         d = sptr()->d(), e = sptr()->e(), f = sptr()->f();
   double dp = ( d + 2.0*a*txd + b*ty );
   double ep = ( e + 2.0*c*tyd + b*tx );
   double fp = ( f + a*txd*txd + b*txd*tyd + c*tyd*tyd + d*tx + e*ty);
@@ -231,7 +231,7 @@ void bgui_vsol_soview2D_polyline::draw() const
   glBegin( GL_LINE_STRIP );
   for (unsigned int i=0; i<n;i++)
   {
-    glVertex2f( sptr()->vertex(i)->x() , sptr()->vertex(i)->y() );
+    glVertex2f( static_cast<float>(sptr()->vertex(i)->x()), static_cast<float>(sptr()->vertex(i)->y()) );
   }
   glEnd();
 }
@@ -244,8 +244,8 @@ float bgui_vsol_soview2D_polyline::distance_squared(float x, float y) const
   float* yptr = new float[n];
   for (unsigned int i=0; i<n;i++)
   {
-    xptr[i] = sptr()->vertex(i)->x();
-    yptr[i] = sptr()->vertex(i)->y();
+    xptr[i] = (float)sptr()->vertex(i)->x();
+    yptr[i] = (float)sptr()->vertex(i)->y();
   }
 
   double tmp = vgl_distance_to_non_closed_polygon( xptr , yptr , n , x , y );
@@ -253,7 +253,7 @@ float bgui_vsol_soview2D_polyline::distance_squared(float x, float y) const
   delete [] xptr;
   delete [] yptr;
 
-  return tmp * tmp;
+  return static_cast<float>(tmp * tmp);
 }
 
 void bgui_vsol_soview2D_polyline::get_centroid(float* x, float* y) const
@@ -265,10 +265,10 @@ void bgui_vsol_soview2D_polyline::get_centroid(float* x, float* y) const
 
   for (unsigned int i=0; i<n;i++)
   {
-    *x += sptr()->vertex(i)->x();
-    *y += sptr()->vertex(i)->y();
+    *x += (float)sptr()->vertex(i)->x();
+    *y += (float)sptr()->vertex(i)->y();
   }
-  float s = 1.0f / float( n );
+  float s = 1.0f / n;
   *x *= s;
   *y *= s;
 }
@@ -306,7 +306,7 @@ void bgui_vsol_soview2D_digital_curve::draw() const
   glBegin( GL_LINE_STRIP );
   for (unsigned int i=0; i<n;i++)
   {
-    glVertex2f( sptr()->point(i)->x() , sptr()->point(i)->y() );
+    glVertex2f( static_cast<float>(sptr()->point(i)->x()), static_cast<float>(sptr()->point(i)->y()) );
   }
   glEnd();
 
@@ -315,7 +315,7 @@ void bgui_vsol_soview2D_digital_curve::draw() const
     glBegin(GL_POINTS);
     for (unsigned int i=0; i<n;i++)
     {
-      glVertex2f( sptr()->point(i)->x() , sptr()->point(i)->y() );
+      glVertex2f( static_cast<float>(sptr()->point(i)->x()), static_cast<float>(sptr()->point(i)->y()) );
     }
     glEnd();
   }
@@ -329,8 +329,8 @@ float bgui_vsol_soview2D_digital_curve::distance_squared(float x, float y) const
   float* yptr = new float[n];
   for (unsigned int i=0; i<n;i++)
   {
-    xptr[i] = sptr()->point(i)->x();
-    yptr[i] = sptr()->point(i)->y();
+    xptr[i] = (float)sptr()->point(i)->x();
+    yptr[i] = (float)sptr()->point(i)->y();
   }
 
   double tmp = vgl_distance_to_non_closed_polygon( xptr , yptr , n , x , y );
@@ -338,7 +338,7 @@ float bgui_vsol_soview2D_digital_curve::distance_squared(float x, float y) const
   delete [] xptr;
   delete [] yptr;
 
-  return tmp * tmp;
+  return static_cast<float>(tmp * tmp);
 }
 
 void bgui_vsol_soview2D_digital_curve::get_centroid(float* x, float* y) const
@@ -350,8 +350,8 @@ void bgui_vsol_soview2D_digital_curve::get_centroid(float* x, float* y) const
 
   for (unsigned int i=0; i<n;i++)
   {
-    *x += sptr()->point(i)->x();
-    *y += sptr()->point(i)->y();
+    *x += (float)sptr()->point(i)->x();
+    *y += (float)sptr()->point(i)->y();
   }
   float s = 1.0f / float( n );
   *x *= s;
@@ -397,7 +397,7 @@ void bgui_vsol_soview2D_edgel_curve::draw() const
   for (unsigned int i=0; i<n;i++)
   {
     vdgl_edgel ed = (*ech)[i];
-    glVertex2f( ed.get_x() , ed.get_y() );
+    glVertex2f( static_cast<float>(ed.get_x()), static_cast<float>(ed.get_y()) );
   }
   glEnd();
 
@@ -407,7 +407,7 @@ void bgui_vsol_soview2D_edgel_curve::draw() const
     for (unsigned int i=0; i<n;i++)
     {
       vdgl_edgel ed = (*ech)[i];
-      glVertex2f( ed.get_x() , ed.get_y() );
+      glVertex2f( static_cast<float>(ed.get_x()), static_cast<float>(ed.get_y()) );
     }
     glEnd();
   }
@@ -426,8 +426,8 @@ float bgui_vsol_soview2D_edgel_curve::distance_squared( float x , float y ) cons
   for (unsigned int i=0; i<n;i++)
   {
     vdgl_edgel ed = (*ech)[i];
-    xptr[i]=ed.get_x();
-    yptr[i]=ed.get_y();
+    xptr[i] = (float)ed.get_x();
+    yptr[i] = (float)ed.get_y();
   }
 
   double tmp = vgl_distance_to_non_closed_polygon( xptr , yptr , n , x , y );
@@ -435,7 +435,7 @@ float bgui_vsol_soview2D_edgel_curve::distance_squared( float x , float y ) cons
   delete [] xptr;
   delete [] yptr;
 
-  return tmp * tmp;
+  return static_cast<float>(tmp * tmp);
 }
 
 void bgui_vsol_soview2D_edgel_curve::get_centroid( float* x, float* y ) const
@@ -452,8 +452,8 @@ void bgui_vsol_soview2D_edgel_curve::get_centroid( float* x, float* y ) const
   for (unsigned int i=0; i<n;i++)
   {
     vdgl_edgel ed = (*ech)[i];
-    *x += ed.get_x();
-    *y += ed.get_y();
+    *x += (float)ed.get_x();
+    *y += (float)ed.get_y();
   }
   float s = 1.0f / float( n );
   *x *= s;
@@ -497,7 +497,7 @@ void bgui_vsol_soview2D_polygon::draw() const
   glBegin( GL_LINE_LOOP );
   for (unsigned int i=0; i<n;i++)
   {
-    glVertex2f( sptr()->vertex(i)->x() , sptr()->vertex(i)->y() );
+    glVertex2f( static_cast<float>(sptr()->vertex(i)->x()), static_cast<float>(sptr()->vertex(i)->y()) );
   }
   glEnd();
 }
@@ -510,8 +510,8 @@ float bgui_vsol_soview2D_polygon::distance_squared( float x , float y ) const
   float* yptr = new float[n];
   for (unsigned int i=0; i<n;i++)
   {
-    xptr[i]=sptr()->vertex(i)->x();
-    yptr[i]=sptr()->vertex(i)->y();
+    xptr[i] = (float)sptr()->vertex(i)->x();
+    yptr[i] = (float)sptr()->vertex(i)->y();
   }
 
   double tmp = vgl_distance_to_closed_polygon( xptr , yptr , n , x , y );
@@ -519,7 +519,7 @@ float bgui_vsol_soview2D_polygon::distance_squared( float x , float y ) const
   delete [] xptr;
   delete [] yptr;
 
-  return tmp * tmp;
+  return static_cast<float>(tmp * tmp);
 }
 
 void bgui_vsol_soview2D_polygon::get_centroid( float* x, float* y ) const
@@ -531,10 +531,10 @@ void bgui_vsol_soview2D_polygon::get_centroid( float* x, float* y ) const
 
   for (unsigned int i=0; i<n;i++)
   {
-    *x += sptr()->vertex(i)->x();
-    *y += sptr()->vertex(i)->y();
+    *x += (float)sptr()->vertex(i)->x();
+    *y += (float)sptr()->vertex(i)->y();
   }
-  float s = 1.0f / float( n );
+  float s = 1.0f / n;
   *x *= s;
   *y *= s;
 }

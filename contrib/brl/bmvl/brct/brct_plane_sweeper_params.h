@@ -17,16 +17,16 @@
 class brct_plane_sweeper_params : public gevd_param_mixin
 {
  public:
-  brct_plane_sweeper_params(const float zmin = 0,
-                            const float zmax = 0,
+  brct_plane_sweeper_params(const float zmin = 0.0f,
+                            const float zmax = 0.0f,
                             const int  nz = 2,
-                            const float point_radius=1.0,
+                            const float point_radius=1.0f,
                             const int corr_radius=2,
-                            const float corr_min =-1,
-                            const float corr_max =1,
-                            const float corr_thresh = 0.25,
-                            const float corr_sigma = 1.0,
-                            const float  intensity_thresh = 25.0,
+                            const float corr_min =-1.0f,
+                            const float corr_max =1.0f,
+                            const float corr_thresh = 0.25f,
+                            const float corr_sigma = 1.0f,
+                            const float  intensity_thresh = 25.0f,
                             const sdet_harris_detector_params& hdp =
                                        sdet_harris_detector_params());
 

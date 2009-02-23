@@ -304,7 +304,7 @@ void bmvv_recon_manager::initial_model_projection()
   vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
   for (int i=0; pit != pts_2d.end(); ++pit, ++i)
   {
-    vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
+    vgui_soview2D_point* sov = btab->add_point(static_cast<float>((*pit).x()), static_cast<float>((*pit).y()));
     int id = sov->get_id();
     point_3d_map_[id]=i;
   }
@@ -326,7 +326,7 @@ void bmvv_recon_manager::model_projection()
   vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
   for (int i=0; pit != pts_2d.end(); ++pit, ++i)
   {
-    vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
+    vgui_soview2D_point* sov = btab->add_point(static_cast<float>((*pit).x()), static_cast<float>((*pit).y()));
     int id = sov->get_id();
     point_3d_map_[id]=i;
   }
@@ -1300,7 +1300,7 @@ void bmvv_recon_manager::show_epipolar_line()
   //end test
   if (v2D)
   {
-    v2D->add_infinite_line(lr.a(), lr.b(), lr.c());
+    v2D->add_infinite_line((float)lr.a(), (float)lr.b(), (float)lr.c());
     v2D->post_redraw();
   }
 }

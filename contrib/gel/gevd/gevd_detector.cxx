@@ -42,7 +42,7 @@ gevd_detector::gevd_detector(vil1_image img, float smoothSigma, float noiseSigma
     locationx(NULL), locationy(NULL), grad_mag(NULL),
     angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
     vertices(NULL), edges(NULL),
-    filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
+    filterFactor(2), hysteresisFactor(2.0f), noiseThreshold(0.0f)
 {
   gevd_detector_params::smooth = smoothSigma;
   gevd_detector_params::contourFactor = contour_factor;

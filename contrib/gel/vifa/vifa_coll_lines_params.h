@@ -47,10 +47,10 @@ class vifa_coll_lines_params : public gevd_param_mixin,
   float endpt_distance() { return endpt_distance_; }
 
   //: Default constructor
-  vifa_coll_lines_params(float midpt_distance = 1.0,
-                         float angle_tolerance = 5.0,
-                         float discard_threshold = 0.3,
-                         float endpt_distance = 3.0
+  vifa_coll_lines_params(float midpt_distance = 1.0f,
+                         float angle_tolerance = 5.0f,
+                         float discard_threshold = 0.3f,
+                         float endpt_distance = 3.0f
                         );
 
   //: Copy constructor

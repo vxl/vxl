@@ -54,8 +54,8 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
     for (unsigned int i=0; i<n;i++)
     {
       vdgl_edgel ed = (*ech)[i];
-      x[i]=ed.get_x();
-      y[i]=ed.get_y();
+      x[i] = (float)ed.get_x();
+      y[i] = (float)ed.get_y();
     }
     return;
   }

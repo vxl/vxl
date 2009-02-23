@@ -125,7 +125,7 @@ void segv_vil_segmentation_manager::init()
 vgui_range_map_params_sptr segv_vil_segmentation_manager::
 range_params(vil_image_resource_sptr const& image)
 {
-  double gamma = 1.0;
+  float gamma = 1.0;
   bool invert = false;
   bool gl_map = false;
   bool cache = true;
@@ -144,7 +144,7 @@ range_params(vil_image_resource_sptr const& image)
   iu.set_percent_limit(0.001);
 
   vgui_range_map_params_sptr rmps;
-  if (iu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
+  if (iu.range_map_from_hist((float)gamma, invert, gl_map, cache, rmps))
     return rmps;
   if (iu.default_range_map(rmps, gamma, invert, gl_map, cache))
     return rmps;
@@ -570,6 +570,7 @@ void segv_vil_segmentation_manager::load_image()
   else
     this->add_image(image, rmps);
 }
+
 void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
 {
   bool pyrm = false;
@@ -600,6 +601,7 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
   else
     this->add_image(image, rmps);
 }
+
 void segv_vil_segmentation_manager::save_image()
 {
   vgui_dialog file_dialog("Save Image");
@@ -1763,14 +1765,14 @@ void segv_vil_segmentation_manager::extrema()
     brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr;
   bool output_mask = false, output_unclipped = false;
-  if(choice ==1) output_mask = true;
-  if(choice == 2) output_unclipped = true;
+  if (choice == 1) output_mask = true;
+  if (choice == 2) output_unclipped = true;
   if (fast)
     extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright,
                                             output_mask, output_unclipped);
   else
     extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright,
-                                 output_mask, output_unclipped);
+                                       output_mask, output_unclipped);
 
   vcl_cout << "Extrema computation time " << t.real() << " msec\n";
   unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();

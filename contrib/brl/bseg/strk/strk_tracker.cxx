@@ -484,10 +484,10 @@ void strk_tracker::correlate_face(strk_correlated_face* cf)
 vtol_intensity_face_sptr
 strk_tracker::generate_sample(vtol_intensity_face_sptr const& seed)
 {
-  float x = (2.f*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
-  float y = (2.f*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
-  float theta = (2.f*angle_range_)*float(rand()/(RAND_MAX+1.f)) - angle_range_;
-  float s = (2.f*scale_range_)*float(rand()/(RAND_MAX+1.f)) - scale_range_;
+  float x = (2*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
+  float y = (2*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
+  float theta = (2*angle_range_)*float(rand()/(RAND_MAX+1.f)) - angle_range_;
+  float s = (2*scale_range_)*float(rand()/(RAND_MAX+1.f)) - scale_range_;
   float scale = 1+s;
   return this->transform_face(seed, x, y, theta, scale);
 }

@@ -19,7 +19,7 @@ static void test_region_proc(int argc, char * argv[])
   if (image)
   {
     static sdet_detector_params dp;
-    dp.noise_multiplier=1.0;
+    dp.noise_multiplier=1.0f;
     dp.aggressive_junction_closure=1;
     sdet_region_proc_params rpp(dp);
     sdet_region_proc rp(rpp);

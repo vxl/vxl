@@ -18,8 +18,8 @@
 class brip_para_cvrg_params : public gevd_param_mixin
 {
  public:
-  brip_para_cvrg_params(float sigma = 1, float thresh = 20,
-                        float gauss_tail = 0.015,
+  brip_para_cvrg_params(float sigma = 1.f, float thresh = 20.f,
+                        float gauss_tail = 0.015f,
                         int proj_width =7, int proj_height=2,
                         int sup_radius = 1, bool verbose = false)
   : sigma_(sigma), thresh_(thresh), gauss_tail_(gauss_tail),

@@ -99,16 +99,16 @@
 class sdet_detector_params : public gevd_param_mixin
 {
  public:
-  sdet_detector_params(float smooth_sigma = 1.0, float noise_w = -0.5,
-                       float noise_m = 1.5, bool automatic_t = false,
+  sdet_detector_params(float smooth_sigma = 1.0f, float noise_w = -0.5f,
+                       float noise_m = 1.5f, bool automatic_t = false,
                        int aggressive_jc = 1, int minl = 6,
-                       float maxgp = 4, float minjmp = 0.1,
-                       float contour_f = 2.0, float junction_f = 1.0,
+                       float maxgp = 4.0f, float minjmp = 0.1f,
+                       float contour_f = 2.0f, float junction_f = 1.0f,
                        bool recover_j = true, bool equal_spacing=false,
                        bool follow_b = true,
                        bool peaks_only=false,
                        bool valleys_only=false,
-                       float ang = 10, float sep = 1, int min_corner_len = 5,
+                       float ang = 10.0f, float sep = 1.f, int min_corner_len = 5,
                        int cyc = 2, int ndim = 2);
 
   sdet_detector_params(const sdet_detector_params& old_params);

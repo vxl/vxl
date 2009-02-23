@@ -23,7 +23,7 @@ equiform_uniform(const unsigned n_trans,
     T rnd_dtheta =
       (T)((2.0*dtheta_d)*(vcl_rand()/(RAND_MAX+1.0)) - dtheta_d);
     T rnd_ds = (T)((2.0*ds_d)*(vcl_rand()/(RAND_MAX+1.0)) - ds_d);
-    rnd_ds += 1.0;
+    rnd_ds += 1.0f;
     transform_set[i].set_identity();
     transform_set[i].set_rotation(rnd_dtheta);
     transform_set[i].set_scale(rnd_ds);
@@ -50,9 +50,9 @@ zero_skew_affine_uniform(const unsigned n_trans,
     T rnd_dtheta =
       (T)((2.0*dtheta_d)*(vcl_rand()/(RAND_MAX+1.0)) - dtheta_d);
     T rnd_ds = (T)((2.0*ds_d)*(vcl_rand()/(RAND_MAX+1.0)) - ds_d);
-    rnd_ds += 1.0;
+    rnd_ds += 1.0f;
     T rnd_da = (T)((2.0*da_d)*(vcl_rand()/(RAND_MAX+1.0)) - da_d);
-    rnd_da += 1.0;
+    rnd_da += 1.0f;
     transform_set[i].set_identity();
     transform_set[i].set_rotation(rnd_dtheta);
     transform_set[i].set_scale(rnd_ds);

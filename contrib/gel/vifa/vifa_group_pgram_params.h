@@ -43,9 +43,9 @@ class vifa_group_pgram_params : public gevd_param_mixin,
   float  length_ratio() { return length_ratio_; }
 
   //: Default constructor.
-  vifa_group_pgram_params(float  angle_increment = 5.0,
+  vifa_group_pgram_params(float  angle_increment = 5.0f,
                           int    max_suppress_radius = 2,
-                          float  length_ratio = .1
+                          float  length_ratio = .1f
                          )
     { init_params(angle_increment, max_suppress_radius, length_ratio); }
 

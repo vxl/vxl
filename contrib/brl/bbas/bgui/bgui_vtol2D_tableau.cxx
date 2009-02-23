@@ -71,8 +71,8 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v,
                                 const vgui_style_sptr& style)
 {
   bgui_vtol_soview2D_vertex* obj = new bgui_vtol_soview2D_vertex();
-  obj->x = v->x();
-  obj->y = v->y();
+  obj->x = (float)v->x();
+  obj->y = (float)v->y();
   add(obj);
   if (style)
     obj->set_style( style );
@@ -240,17 +240,17 @@ vtol_edge_2d_sptr bgui_vtol2D_tableau::get_mapped_edge(const int id)
   return to->cast_to_edge()->cast_to_edge_2d();
 }
 
-vtol_face_2d_sptr bgui_vtol2D_tableau::get_mapped_face(const int id) 
+vtol_face_2d_sptr bgui_vtol2D_tableau::get_mapped_face(const int id)
 {
   vtol_topology_object_sptr to = obj_map_[id];
-  if (!to) 
+  if (!to)
   {
     vcl_cout << "In bgui_vtol2D_tableau::get_mapped_face(..) - null map entry\n";
     return 0;
   }
   return to->cast_to_face()->cast_to_face_2d();
 }
-    
+
 
 void bgui_vtol2D_tableau::clear_all()
 {

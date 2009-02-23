@@ -88,9 +88,9 @@ class gevd_detector : public gevd_detector_params
   // be the most important in controlling performance - JLM
   //
   gevd_detector(gevd_detector_params& params);
-  gevd_detector(vil1_image, float smoothSigma = 1.0, float noiseSigma =2.0,
-                float contourFactor = 1.0, float junctionFactor = 1.5,
-                int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
+  gevd_detector(vil1_image, float smoothSigma = 1.0f, float noiseSigma = 2.0f,
+                float contourFactor = 1.0f, float junctionFactor = 1.5f,
+                int minLength = 6, float maxGap = 2.23606f, float minJump=1.0f);
   ~gevd_detector();
 
   // External interfaces

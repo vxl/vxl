@@ -40,12 +40,12 @@ MAIN( test_bvxm_rpc_registration_process )
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
   vgl_vector_3d<unsigned int> num_voxels(20,20,5);
-  float voxel_length = 1.0;
+  float voxel_length = 1.0f;
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs(33.3358982058333, 44.38220165, 74.5333333333333);
   bvxm_world_params_sptr voxel_world_params = new bvxm_world_params();
   // create a test directory for intermediate files
   vul_file::make_directory("./rpc_test");
-  voxel_world_params->set_params("./rpc_test", vgl_point_3d<float> (-10.0,-10.0,-2.5), num_voxels, voxel_length, lvcs);
+  voxel_world_params->set_params("./rpc_test", vgl_point_3d<float>(-10.0f,-10.0f,-2.5f), num_voxels, voxel_length, lvcs);
   bvxm_voxel_world_sptr voxel_world = new bvxm_voxel_world();
   voxel_world->set_params(voxel_world_params);
 

@@ -17,8 +17,8 @@ segv_vtol2D_tableau::segv_vtol2D_tableau(vgui_tableau_sptr const& t,
 segv_vtol_soview2D_vertex* segv_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr& v)
 {
   segv_vtol_soview2D_vertex* obj = new segv_vtol_soview2D_vertex();
-  obj->x = v->x();
-  obj->y = v->y();
+  obj->x = (float)v->x();
+  obj->y = (float)v->y();
   add(obj);
   return obj;
 }

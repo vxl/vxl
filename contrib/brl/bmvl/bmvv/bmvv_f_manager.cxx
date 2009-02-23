@@ -815,7 +815,7 @@ void bmvv_f_manager::display_right_epi_lines()
     bc = corrs_[i];
     vgl_homg_point_2d<double> hpl=bc->match(0);
     vgl_homg_line_2d<double> hl = fm_.r_epipolar_line(hpl);
-    t1->add_infinite_line(hl.a(), hl.b(), hl.c());
+    t1->add_infinite_line((float)hl.a(), (float)hl.b(), (float)hl.c());
   }
   t1->post_redraw();
 }
@@ -837,7 +837,7 @@ void bmvv_f_manager::display_picked_epi_line()
   {
     bgui_vtol2D_tableau_sptr t1 = this->vtol2D_tab_at(1, 0);
     hl = fm_.r_epipolar_line(hp);
-    t1->add_infinite_line(hl.a(), hl.b(), hl.c());
+    t1->add_infinite_line((float)hl.a(), (float)hl.b(), (float)hl.c());
     t1->post_redraw();
     return;
   }
@@ -845,7 +845,7 @@ void bmvv_f_manager::display_picked_epi_line()
   {
     bgui_vtol2D_tableau_sptr t0 = this->vtol2D_tab_at(0, 0);
     hl = fm_.l_epipolar_line(hp);
-    t0->add_infinite_line(hl.a(), hl.b(), hl.c());
+    t0->add_infinite_line((float)hl.a(), (float)hl.b(), (float)hl.c());
     t0->post_redraw();
     return;
   }

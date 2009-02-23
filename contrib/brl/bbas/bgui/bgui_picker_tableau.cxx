@@ -377,7 +377,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       {
         glBegin(GL_LINE_LOOP);
         for (unsigned i=0; i<point_list.size(); ++i)
-          glVertex2f(point_list[i]->x(), point_list[i]->y() );
+          glVertex2f(static_cast<float>(point_list[i]->x()), static_cast<float>(point_list[i]->y()));
         glVertex2f(last_x,last_y);
         glEnd();
         return true;
@@ -387,14 +387,14 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
         unsigned n = point_list.size();
         for (unsigned i=1; i<n; ++i){
           glBegin(GL_LINES);
-          glVertex2f(point_list[i-1]->x(), point_list[i-1]->y());
-          glVertex2f(point_list[i]->x(), point_list[i]->y());
+          glVertex2f(static_cast<float>(point_list[i-1]->x()), static_cast<float>(point_list[i-1]->y()));
+          glVertex2f(static_cast<float>(point_list[i]->x()), static_cast<float>(point_list[i]->y()));
           glEnd();
         }
         if (n > 0) {
           glBegin(GL_LINES);
           glVertex2f(last_x,last_y);
-          glVertex2f(point_list[n-1]->x(), point_list[n-1]->y());
+          glVertex2f(static_cast<float>(point_list[n-1]->x()), static_cast<float>(point_list[n-1]->y()));
           glEnd();
         }
         return true;
@@ -433,7 +433,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       glColor3f(r,g,b);
       glBegin(GL_POINTS);
       for (unsigned i=0; i<n; ++i){
-        glVertex2f(point_set_list[i]->x(),point_set_list[i]->y());
+        glVertex2f(static_cast<float>(point_set_list[i]->x()), static_cast<float>(point_set_list[i]->y()));
       }
       glEnd();
     }
@@ -445,10 +445,10 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
 
     // gesture0 = left mouse click, just add point to list
     if ( gesture0(e) ) {
-      point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d(ix,iy) ));   
+      point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d(ix,iy) ));
       post_overlay_redraw();
       return true;
-#if BGUI_DEBUG
+#ifdef BGUI_DEBUG
       vcl_cout << "Left click returned " << ix << ",  " << iy  << vcl_endl;
       vcl_cout.flush();
 #endif
@@ -461,7 +461,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       if (gesture1(e)) {
         point_set_list.push_back(vsol_point_2d_sptr(new vsol_point_2d(ix,iy)));
         post_overlay_redraw();
-#if BGUI_DEBUG
+#ifdef BGUI_DEBUG
         vcl_cout << "Shift left returned " << ix << ",  " << iy << vcl_endl;
         vcl_cout.flush();
 #endif
@@ -470,7 +470,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       // either way, end of picking
       active = false;
       picking_completed = true;
-#if BGUI_DEBUG
+#ifdef BGUI_DEBUG
       vcl_cout << "Detected either middle or END key\n";
       vcl_cout.flush();
 #endif

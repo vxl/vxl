@@ -43,10 +43,10 @@ strk_info_model_tracker::~strk_info_model_tracker()
 void strk_info_model_tracker::set_image_0(vil1_image& image)
 {
   if (!image)
-    {
-      vcl_cout <<"In strk_info_model_tracker::set_image_i(.) - null input\n";
-      return;
-    }
+  {
+    vcl_cout <<"In strk_info_model_tracker::set_image_i(.) - null input\n";
+    return;
+  }
 
   vil1_memory_image_of<float> flt=brip_vil1_float_ops::convert_to_float(image);
 
@@ -64,10 +64,10 @@ void strk_info_model_tracker::set_image_0(vil1_image& image)
 void strk_info_model_tracker::set_image_i(vil1_image& image)
 {
   if (!image)
-    {
-      vcl_cout <<"In strk_info_model_tracker::set_image_i(.) - null input\n";
-      return;
-    }
+  {
+    vcl_cout <<"In strk_info_model_tracker::set_image_i(.) - null input\n";
+    return;
+  }
 
   vil1_memory_image_of<float> flt=brip_vil1_float_ops::convert_to_float(image);
 
@@ -87,7 +87,7 @@ void strk_info_model_tracker::init()
     return;
   if (!initial_model_.size())
     return;
-//for now use the centroid of the first face
+  // for now use the centroid of the first face
   vsol_point_2d_sptr pivot = btol_face_algs::centroid(initial_model_[0]);
   strk_art_info_model_sptr mod;
   if (gradient_info_)
@@ -99,7 +99,7 @@ void strk_info_model_tracker::init()
 
 static float rand_val(float range)
 {
-  return float((2.0f*range)*(rand()/(RAND_MAX+1.0f)) - range);
+  return (2*range)*float(rand()/(RAND_MAX+1.0)) - range;
 }
 
 //--------------------------------------------------------------------------

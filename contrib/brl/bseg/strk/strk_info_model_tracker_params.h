@@ -17,15 +17,15 @@ class strk_info_model_tracker_params : public gevd_param_mixin
 {
  public:
   strk_info_model_tracker_params(const int n_samples = 10,
-                                 const float stem_trans_radius = 5.0,
-                                 const float long_arm_tip_trans_radius = 5.0,
-                                 const float short_arm_tip_trans_radius = 5.0,
-                                 const float stem_angle_range = 0.01,
-                                 const float long_arm_angle_range = 0.01,
-                                 const float short_arm_angle_range = 0.01,
-                                 const float long_arm_tip_angle_range = 0.01,
-                                 const float short_arm_tip_angle_range = 0.01,
-                                 const float sigma = 1.0,
+                                 const float stem_trans_radius = 5.0f,
+                                 const float long_arm_tip_trans_radius = 5.0f,
+                                 const float short_arm_tip_trans_radius = 5.0f,
+                                 const float stem_angle_range = 0.01f,
+                                 const float long_arm_angle_range = 0.01f,
+                                 const float short_arm_angle_range = 0.01f,
+                                 const float long_arm_tip_angle_range = 0.01f,
+                                 const float short_arm_tip_angle_range = 0.01f,
+                                 const float sigma = 1.0f,
                                  const bool gradient_info = false,
                                  const bool verbose = false);
 

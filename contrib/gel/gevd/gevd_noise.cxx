@@ -28,7 +28,8 @@ gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
 #endif
 
   // 2. Search for visible peak in histogram
-  while (true) {                // search for range of low responses
+  while (true)                // search for range of low responses
+  {
     for (int i = 0; i < nbin; i++)  // clear hist curve
       hist[i] = 0;
     for (int i = 0; i < n; i++) {   // create histogram with initial
@@ -47,9 +48,9 @@ gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
              << "  " << peakh << vcl_endl;
 #endif
     if (peaki < 10) {           // narrow range a whole lot
-      range /= 10.0, binsize /= 10.0;
+      range /= 10.0f, binsize /= 10.0f;
     } else if (peaki >= nbin-5) { // expand range a little
-      range *= 1.5, binsize *= 1.5;
+      range *= 1.5f, binsize *= 1.5f;
     } else {
       range = peaki*binsize*2;  // put peak near center of histogram
       binsize = range/(nbin-1);
@@ -112,9 +113,11 @@ gevd_noise::EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
   const int ymin = (magnitude.GetSizeY() - sy) / 2;
   const int ymax = ymin + sy;
   for (int j = ymin; j < ymax; j++)
-    for (int i = xmin; i < xmax; i++) {
+    for (int i = xmin; i < xmax; i++)
+    {
       float strength = floatPixel(magnitude, i, j);
-      if (strength) {
+      if (strength)
+      {
         float x_s, s_x;
         float dx = floatPixel(dirx, i, j);
         float dy = floatPixel(diry, i, j);

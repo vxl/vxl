@@ -124,11 +124,11 @@ init_params(vdgl_fit_lines_params*    fitter_params,
   if (gpp_s)
     gpp_s_ = new vifa_group_pgram_params(*gpp_s);
   else
-    gpp_s_ = new vifa_group_pgram_params(/*angle_increment=*/ 5.0);
+    gpp_s_ = new vifa_group_pgram_params(/*angle_increment=*/ 5.0f);
   if (gpp_w)
     gpp_w_ = new vifa_group_pgram_params(*gpp_w);
   else
-    gpp_w_ = new vifa_group_pgram_params(/*angle_increment=*/ 20.0);
+    gpp_w_ = new vifa_group_pgram_params(/*angle_increment=*/ 20.0f);
   if (cpp)
     cpp_ = new vifa_coll_lines_params(*cpp);
   else

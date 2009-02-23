@@ -65,12 +65,12 @@ static float find_y_origin(const float ymin, const float yinc)
 }
 //-----------------------------------------------------------------------------
 //: returns a "nice" tic mark increment, given the scale factor between user's coordinates and screen coordinates.
-static float find_increment(float scale, float def = 1.0)
+static float find_increment(float scale, float def = 1.0f)
 {
   if (scale <= 0)
     return def;
 
-  float separation = 50.0 / scale;
+  float separation = 50.0f / scale;
 
   // Find increment > separation
 

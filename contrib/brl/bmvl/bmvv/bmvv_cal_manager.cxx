@@ -40,6 +40,8 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
+#include <vcl_cassert.h>
+
 //static live_video_manager instance
 bmvv_cal_manager *bmvv_cal_manager::instance_ = 0;
 //===============================================================
@@ -482,7 +484,7 @@ bool bmvv_cal_manager::draw_correspondences()
   for (vcl_vector<vgl_point_2d<double> >::iterator pit = corrs_.begin();
        pit != corrs_.end(); ++pit, ++i)
     if (corrs_valid_[i])
-      corr_sovs_.push_back(btab_->add_point((*pit).x(), (*pit).y()));
+      corr_sovs_.push_back(btab_->add_point(float((*pit).x()), float((*pit).y())));
     else
       corr_sovs_.push_back((vgui_soview2D_point*)0);
   btab_->post_redraw();
@@ -526,7 +528,7 @@ bool bmvv_cal_manager::draw_projected_world_points()
   for (vcl_vector<vgl_point_2d<double> >::iterator pit = proj_image_pts_.begin();
        pit != proj_image_pts_.end(); pit++, ++i)
   {
-    vgui_soview2D_point* sov = btab_->add_point((*pit).x(), (*pit).y());
+    vgui_soview2D_point* sov = btab_->add_point(float((*pit).x()), float((*pit).y()));
     int id = sov->get_id();
     point_3d_map_[id]=i;
   }
@@ -577,7 +579,7 @@ void bmvv_cal_manager::pick_correspondence()
   ptab_->set_color(0.0f, 1.0f, 1.0f);
   ptab_->set_line_width(3.0f);
   float x, y;
-  ptab_->anchored_pick_point(pt.x(), pt.y(), &x, &y);
+  ptab_->anchored_pick_point(float(pt.x()), float(pt.y()), &x, &y);
   corrs_[id].set(x, y);
   corrs_valid_[id]=true;
   ptab_->set_color();//restore defaults
@@ -867,6 +869,8 @@ void bmvv_cal_manager::compute_ransac_homography()
     if (!brct_algos::homography_muse(world_points, image_points, H, optimize))
       show = false;
     break;
+   default:
+    assert(!"choice should be one of 0, 1, or 2");
   }
   vcl_vector<vgl_point_2d<double> > proj_image_points;
   vgl_p_matrix<double> P =  brct_algos::p_from_h(H);

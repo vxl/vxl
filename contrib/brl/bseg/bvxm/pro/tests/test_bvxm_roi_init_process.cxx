@@ -45,7 +45,7 @@ MAIN( test_bvxm_roi_init_process )
   float voxel_length = 10;
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs(32.716835, 117.163714, 0);
   bvxm_world_params_sptr world_params = new bvxm_world_params();
-  world_params->set_params("./", vgl_point_3d<float> (0,0,0), num_voxels, voxel_length, lvcs);
+  world_params->set_params("./", vgl_point_3d<float>(0.0f,0.0f,0.0f), num_voxels, voxel_length, lvcs);
   bvxm_voxel_world_sptr world = new bvxm_voxel_world();
   world->set_params(world_params);
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(world);
@@ -63,7 +63,7 @@ MAIN( test_bvxm_roi_init_process )
 
   // run with good lvcs setting
   bgeo_lvcs_sptr lvcs_good = new bgeo_lvcs(32.716835, -117.163714, 0);
-  world_params->set_params("./", vgl_point_3d<float> (0,0,0), num_voxels, voxel_length, lvcs_good);
+  world_params->set_params("./", vgl_point_3d<float>(0.0f,0.0f,0.0f), num_voxels, voxel_length, lvcs_good);
   world->set_params(world_params);
   good=true;
   good = good && bprb_batch_process_manager::instance()->run_process();

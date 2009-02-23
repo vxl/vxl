@@ -2,7 +2,7 @@
 // \file
 // \brief  Test for rpc registration process
 // \author Ibrahim Eden
-// \date   03/14/2008
+// \date   March 14, 2008
 //
 #include <testlib/testlib_test.h>
 #include <bvxm/pro/processes/bvxm_create_local_rpc_process.cxx>
@@ -31,17 +31,17 @@ MAIN( test_bvxm_create_local_rpc_process )
 {
   DECLARE_FUNC_CONS(bvxm_create_local_rpc_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_local_rpc_process, "bvxmCreateLocalRpcProcess");
-  
+
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
 
   vgl_vector_3d<unsigned int> num_voxels(20,20,5);
-  float voxel_length = 1.0;
+  float voxel_length = 1.0f;
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs(33.3358982058333, 44.38220165, 74.5333333333333);
   bvxm_world_params_sptr voxel_world_params = new bvxm_world_params();
   // create a test directory for intermediate files
   vul_file::make_directory("./local_rpc_test");
-  voxel_world_params->set_params("./local_rpc_test", vgl_point_3d<float> (-10.0,-10.0,-2.5), num_voxels, voxel_length, lvcs);
+  voxel_world_params->set_params("./local_rpc_test", vgl_point_3d<float> (-10.0f,-10.0f,-2.5f), num_voxels, voxel_length, lvcs);
   bvxm_voxel_world_sptr voxel_world = new bvxm_voxel_world();
   voxel_world->set_params(voxel_world_params);
 

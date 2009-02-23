@@ -20,10 +20,10 @@ class sdet_vehicle_finder_params : public gevd_param_mixin
                              brip_para_cvrg_params const& pcp = brip_para_cvrg_params(),
                              bool verbose = false,
                              bool debug = false,
-                             float search_radius = 50,
-                             float shadow_thresh = 80,
-                             float para_thresh = 100,
-                             float distance_scale = 5)
+                             float search_radius = 50.0f,
+                             float shadow_thresh = 80.0f,
+                             float para_thresh = 100.0f,
+                             float distance_scale = 5.0f)
     : search_radius_(search_radius), shadow_thresh_(shadow_thresh),
       para_thresh_(para_thresh), debug_(debug), distance_scale_(distance_scale),
       verbose_(verbose), wrpp_(wrpp), pcp_(pcp) {}
