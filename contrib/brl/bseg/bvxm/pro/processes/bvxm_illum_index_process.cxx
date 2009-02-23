@@ -132,7 +132,6 @@ bvxm_illum_index_process_globals::bin_index(vcl_string map_type,
   {
     unsigned num_light_bins = num_lat;
     bin_idx = (unsigned)( num_light_bins*( sun_el + 90 )/180 );
-    if ( bin_idx < 0 ) bin_idx = 0;
     if ( bin_idx >= num_light_bins) bin_idx = num_light_bins-1;
   }
   else if (map_type == "eq_area")

@@ -20,11 +20,11 @@ bvxm_voxel_slab_iterator_base<T>::bvxm_voxel_slab_iterator_base(bvxm_voxel_stora
     vcl_cerr << "error: only slabs of thickness 1 are currently supported.\n";
     assert(slab_thickness == 1);
   }
-  if ( (slice_idx < 0) || (slice_idx >= grid_size_.z()) ) {
+  if ( slice_idx >= grid_size_.z() ) {
     slab_ = this->end_slab_;
   }
   else {
-  slab_ = storage_->get_slab(slice_idx, slab_thickness);
+    slab_ = storage_->get_slab(slice_idx, slab_thickness);
   }
 }
 

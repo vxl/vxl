@@ -340,7 +340,7 @@ get_pixel_value(const unsigned c, const unsigned r)
   vil_image_resource_sptr rs = this->get_image_resource();
   if (!rs)
     return 0;
-  if (c<0||c>=rs->ni()||r<0||r>=rs->nj())
+  if (c>=rs->ni()||r>=rs->nj())
     return 0;
   unsigned n_p = rs->nplanes();
   vil_pixel_format type = rs->pixel_format();
@@ -433,7 +433,7 @@ vcl_vector<double> bgui_image_tableau::get_color_pixel_value(const unsigned c, c
   vil_image_resource_sptr rs = this->get_image_resource();
   if (!rs)
     return vcl_vector<double>(0);
-  if (c<0||c>=rs->ni()||r<0||r>=rs->nj())
+  if (c>=rs->ni()||r>=rs->nj())
     return vcl_vector<double>(0);
   unsigned n_p = rs->nplanes();
   vcl_vector<double> val(n_p, 0.0);

@@ -59,7 +59,7 @@ class bsta_int_histogram_2d
 
   //: set the count in a given bin
   void set_count(const unsigned int binx, const unsigned int biny, const long int count)
-  { if (binx>=0 && binx<nbins_x_ && biny>=0 && biny<nbins_y_) counts_[biny][binx] = count; }
+  { if (binx<nbins_x_ && biny<nbins_y_) counts_[biny][binx] = count; }
 
   //: Total area under the histogram = total counts in histogram
   unsigned long int get_area();

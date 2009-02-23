@@ -4,7 +4,7 @@
 // \file
 // \brief Various utility methods and classes.
 // \author Daniel Crispell (dec@lems.brown.edu)
-// \date 1/22/2008
+// \date Jan 22, 2008
 //
 // \verbatim
 //  Modifications
@@ -25,7 +25,7 @@
 //
 //   12/12/2008 - Ozge C. Ozcanli - Added the method
 //                                  static void warp_slab_nearest_neighbor ...
-
+//
 //   02/12/2009 - Ibrahim Eden - Added the method
 //                                  static void convert_edge_statistics_to_probability ...
 // \endverbatim
@@ -241,10 +241,10 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
 
         for (unsigned i=0; i<4; ++i) {
           // check if input pixel is inbounds
-          if ( (xvals[i] >= 0) && (xvals[i] < slab_in_smooth.nx()) &&
-            (yvals[i] >= 0) && (yvals[i] < slab_in_smooth.ny()) ) {
-              // pixel is good
-              (*out_it) += slab_in_smooth(xvals[i],yvals[i],z)*weights[i];
+          if (xvals[i] < slab_in_smooth.nx() &&
+              yvals[i] < slab_in_smooth.ny()) {
+            // pixel is good
+            (*out_it) += slab_in_smooth(xvals[i],yvals[i],z)*weights[i];
           }
         }
       } //x

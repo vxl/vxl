@@ -166,7 +166,7 @@ brdb_selection::get_value(const vcl_string& attribute_name, unsigned int index, 
   // check and make sure that the selection is updated.
   this->check_and_update();
 
-  if (index < 0 || index >= size())
+  if (index >= size())
   {
     vcl_cout << "DB warning: trying to get value from an invalid index!" << vcl_endl;
     return false;
