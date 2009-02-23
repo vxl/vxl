@@ -94,7 +94,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // have trouble doing. For example, gcc can output
       // code in -O2 and static-linked code that causes this problem.
       // One solution to this is to persuade gcc to output slightly different code
-      // by adding and -fPIC option to the command line for v3p\netlib\dsvdc.c. If
+      // by adding and -fPIC option to the command line for v3p/netlib/dsvdc.c. If
       // that doesn't work try adding -ffloat-store, which should fix the problem
       // at the expense of being significantly slower for big problems. Note that
       // if this is the cause, core/vnl/tests/test_svd should have failed.
@@ -137,7 +137,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     typedef typename vnl_numeric_traits<T>::abs_t abs_t;
     abs_t recomposition_residual = vcl_abs((recompose() - M).fro_norm());
     abs_t n = vcl_abs(M.fro_norm());
-    abs_t thresh = m_ * abs_t(vnl_math::eps) * n;
+    abs_t thresh = abs_t(m_) * abs_t(vnl_math::eps) * n;
     if (recomposition_residual > thresh)
     {
       vcl_cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "

@@ -662,9 +662,8 @@ inline void vil_convert_stretch_range_limited(const vil_image_view<inP>& src,
       for (unsigned i = 0; i < src.ni(); ++i)
       {
         inP s = src(i,j,p);
-        dest(i,j,p) = s<=src_lo ? 0 :
-                      ( s>=src_hi ? 255 :
-                                    static_cast<vxl_byte>(dds*(s-src_lo)+0.5) );
+        dest(i,j,p) = s<=src_lo ? 0u :
+                      static_cast<vxl_byte>( s>=src_hi ? 255 : (dds*(s-src_lo)+0.5) );
       }
 }
 
@@ -879,10 +878,10 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 // This function is designed to be used with vil_load or
 // vil_image_resource::get_view()
 // where you do not know the pixel type in advance. e.g.
-// \verbatim
+// \code
 // vil_image_view<float> input =
 //   vil_convert_to_grey_using_average(vil_load(filename), float());
-// \endverbatim
+// \endcode
 // If you have a image_view of known pixel_type then you should use one of
 // the other vil_convert functions.
 // The output may be a reconfigured view of the input.
@@ -940,10 +939,10 @@ inline vil_image_view<outP> vil_convert_to_grey_using_average(
 // This function is designed to be used with vil_load or
 // vil_image_resource::get_view()
 // where you do not know the pixel type in advance. e.g.
-// \verbatim
+// \code
 // vil_image_view<float> input = vil_convert_cast(
 //   convert_to_grey_using_average(vil_load(filename)), float());
-// \endverbatim
+// \endcode
 // The output may be a reconfigured view of the input.
 // The input image's pixel type and storage arrangement may not be preserved.
 inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
@@ -1134,7 +1133,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
 //
 // This function works on scalar pixel types only, however it can be used to
 // produce an rgb image as in the following example
-// \verbatim
+// \code
 // vil_image_view<vil_rgb<float> > =
 //   vil_convert_cast(
 //     vil_convert_to_component_order(
@@ -1143,7 +1142,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
 //       3),
 //     ),
 //   float());
-// \endverbatim
+// \endcode
 inline vil_image_view_base_sptr vil_convert_to_n_planes(
   unsigned n_planes, const vil_image_view_base_sptr &src)
 {

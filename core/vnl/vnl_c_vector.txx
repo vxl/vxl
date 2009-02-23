@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   12 Feb 98
+// \date   12 Feb 1998
 //
 //-----------------------------------------------------------------------------
 
@@ -283,10 +283,10 @@ void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
   // IMS: MSVC's optimiser does much better with *p++ than with p[i];
   // consistently about 30% better over vectors from 4 to 20000 dimensions.
   // PVr: with gcc 3.0 on alpha this is even a factor 3 faster!
-  S val =0;
+  S val = 0;
   T const* end = p+n;
   while (p != end)
-    val += vnl_math_squared_magnitude(*p++);
+    val += S(vnl_math_squared_magnitude(*p++));
   *out = val;
 #else
   *out = 0;

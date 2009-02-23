@@ -45,7 +45,8 @@ int main(int /*argc*/, char** /*argv*/)
 
 // This function writes, e.g., vil1_rgb_cell(177,49,97) as "#b13161":
 
-char* as_hex(vil1_rgb_cell const& rgb) {
+char* as_hex(vil1_rgb_cell const& rgb)
+{
   // The data members r, g and b of an vil1_rgb_cell are public:
   unsigned char r = rgb.r;
   unsigned char g = rgb.g;
@@ -53,12 +54,12 @@ char* as_hex(vil1_rgb_cell const& rgb) {
 
   // And now some magic char manipulations, to obtain hex values:
   static char s[] = "#000000";
-  s[1] = '0'+(r/16); if (s[1] > '9') s[1] += 'a'-'9'-1;
-  s[2] = '0'+(r%16); if (s[2] > '9') s[2] += 'a'-'9'-1;
-  s[3] = '0'+(g/16); if (s[3] > '9') s[3] += 'a'-'9'-1;
-  s[4] = '0'+(g%16); if (s[4] > '9') s[4] += 'a'-'9'-1;
-  s[5] = '0'+(b/16); if (s[5] > '9') s[5] += 'a'-'9'-1;
-  s[6] = '0'+(b%16); if (s[6] > '9') s[6] += 'a'-'9'-1;
+  s[1] = (char)('0'+(r/16)); if (s[1] > '9') s[1] += (char)('a'-'9'-1);
+  s[2] = (char)('0'+(r%16)); if (s[2] > '9') s[2] += (char)('a'-'9'-1);
+  s[3] = (char)('0'+(g/16)); if (s[3] > '9') s[3] += (char)('a'-'9'-1);
+  s[4] = (char)('0'+(g%16)); if (s[4] > '9') s[4] += (char)('a'-'9'-1);
+  s[5] = (char)('0'+(b/16)); if (s[5] > '9') s[5] += (char)('a'-'9'-1);
+  s[6] = (char)('0'+(b%16)); if (s[6] > '9') s[6] += (char)('a'-'9'-1);
   return s;
 }
 

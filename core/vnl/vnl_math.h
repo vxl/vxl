@@ -29,9 +29,9 @@
 //
 // \verbatim
 //  Modifications
-//   210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
-//   LSB (Modifications) 23/1/01 Documentation tidied
-//   Peter Vanroose - 7 Sept. 2002 - maxdouble etc. replaced by vnl_numeric_traits<T>::maxval
+//   21 May 1998 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
+//   LSB (Modifications) 23 Jan 2001 Documentation tidied
+//   Peter Vanroose - 7 Sep 2002 - maxdouble etc. replaced by vnl_numeric_traits<T>::maxval
 //   Amitha Perera - 13 Sep 2002 - make constant initialization standards compliant.
 // \endverbatim
 
@@ -45,7 +45,7 @@
 // Figure out when the fast implementation can be used
 // Turn on fast impl when using GCC on Intel-based machines with the following exception:
 //   PPC with Mac OS X
-#if defined(__GNUC__) && (!defined(__APPLE__)  || !defined(__ppc__) )  
+#if defined(__GNUC__) && (!defined(__APPLE__)  || !defined(__ppc__) )
 #  define GCC_USE_FAST_IMPL 1
 #else
 #  define GCC_USE_FAST_IMPL 0
@@ -390,9 +390,9 @@ inline int vnl_math_ceil(double x) { return static_cast<int>(x<0.0?x:(x==static_
 // abs
 inline bool           vnl_math_abs(bool x)          { return x; }
 inline unsigned char  vnl_math_abs(unsigned char x) { return x; }
-inline unsigned char  vnl_math_abs(signed char x)   { return x < 0 ? -x : x; }
-inline unsigned char  vnl_math_abs(char x)          { return (unsigned char)x; }
-inline unsigned short vnl_math_abs(short x)         { return x < 0 ? -x : x; }
+inline unsigned char  vnl_math_abs(signed char x)   { return x < 0 ? static_cast<unsigned char>(-x) : x; }
+inline unsigned char  vnl_math_abs(char x)          { return static_cast<unsigned char>(x); }
+inline unsigned short vnl_math_abs(short x)         { return x < 0 ? static_cast<unsigned short>(-x) : x; }
 inline unsigned short vnl_math_abs(unsigned short x){ return x; }
 inline unsigned int   vnl_math_abs(int x)           { return x < 0 ? -x : x; }
 inline unsigned int   vnl_math_abs(unsigned int x)  { return x; }

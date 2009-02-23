@@ -76,6 +76,7 @@ struct vgui_pixel_rgb<5,6,5>
   : R(red>>3), G(green>>2), B(blue>>3) {}
 #endif
 };
+
 typedef vgui_pixel_rgb<5,6,5> vgui_pixel_rgb565;
 
 VCL_DEFINE_SPECIALIZATION
@@ -97,8 +98,8 @@ struct vgui_pixel_bgr<5,6,5>
 #else
   : B(blue>>3), G(green>>2), R(red>>3) {}
 #endif
-
 };
+
 typedef vgui_pixel_bgr<5,6,5> vgui_pixel_bgr565;
 
 VCL_DEFINE_SPECIALIZATION
@@ -196,7 +197,7 @@ vxl_byte vgui_pixel_clamp( T in )
 inline
 vxl_byte vgui_pixel_clamp( bool in )
 {
-  return in*255;
+  return in ? 255u : 0u;
 }
 
 //: Clamps the given type into [0,255].
@@ -215,7 +216,7 @@ inline
 vxl_byte vgui_pixel_clamp( vxl_sbyte in )
 {
   if ( in < 0 ) return 0u;
-  return in;
+  else          return in;
 }
 
 //: Clamps the given type into [0,255].
@@ -226,7 +227,7 @@ inline
 vxl_byte vgui_pixel_clamp( vxl_uint_16 in )
 {
   if ( in > 255 ) return 255u;
-  return in;
+  else            return static_cast<vxl_byte>(in);
 }
 
 //: Clamps the given type into [0,255].
@@ -237,7 +238,7 @@ inline
 vxl_byte vgui_pixel_clamp( vxl_uint_32 in )
 {
   if ( in > 255 ) return 255u;
-  return in;
+  else            return static_cast<vxl_byte>(in);
 }
 
 

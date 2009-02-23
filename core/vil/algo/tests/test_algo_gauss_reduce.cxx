@@ -32,7 +32,7 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
-      image0(i,j) = i+j*10;
+      image0(i,j) = static_cast<vxl_byte>(i+j*10);
 
   vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                           image0.istep(),image0.jstep(),
@@ -61,7 +61,7 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
 
   for (unsigned int j=0;j<image1.nj();++j)
     for (unsigned int i=0;i<image1.ni();++i)
-      image1(i,j) = i+j*10;
+      image1(i,j) = static_cast<vxl_byte>(i+j*10);
 
   vil_gauss_reduce_1plane(image1.top_left_ptr(),image1.nj(),image1.ni(),
                           image1.jstep(),image1.istep(),
@@ -144,7 +144,7 @@ static void test_algo_gauss_reduce_uint_16(unsigned nx)
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
-      image0(i,j) = 64*(i+j*10);
+      image0(i,j) = static_cast<vxl_uint_16>(64*(i+j*10));
 
   vil_gauss_reduce(image0,reduced_both,workspace);
   print_out(image0,"reduced_both",reduced_both);
@@ -156,14 +156,14 @@ static void test_algo_gauss_reduce_uint_16(unsigned nx)
   print_out(image0,"reduced_x",reduced_x);
 
   double dfirst=0.071*image0(2,1) + 0.357*image0(1,1) + 0.572*image0(0,1);
-  vxl_uint_16 ifirst=vnl_math_rnd(dfirst);
+  vxl_uint_16 ifirst=(vxl_uint_16)vnl_math_rnd(dfirst);
   TEST("First element", reduced_x(0,1), ifirst);
 
   TEST("Next element",  reduced_x(1,1), image0(2,1));
 
   unsigned L = (nx-1)/2;
   double dlast=0.071*image0(2*L-2,1) + 0.357*image0(2*L-1,1) + 0.572*image0(2*L,1);
-  vxl_uint_16 ilast=vnl_math_rnd(dlast);
+  vxl_uint_16 ilast=(vxl_uint_16)vnl_math_rnd(dlast);
   TEST("Last element", reduced_x(L,1), ilast);
 
   vil_image_view<vxl_uint_16> test2;
@@ -183,7 +183,7 @@ static void test_algo_gauss_reduce_uint_16(unsigned nx)
 
   for (unsigned int j=0;j<image1.nj();++j)
     for (unsigned int i=0;i<image1.ni();++i)
-      image1(i,j) = 64*(i+j*10);
+      image1(i,j) = static_cast<vxl_uint_16>(64*(i+j*10));
 
   vil_gauss_reduce_1plane(image1.top_left_ptr(),image1.nj(),image1.ni(),
                           image1.jstep(),image1.istep(),
@@ -192,13 +192,13 @@ static void test_algo_gauss_reduce_uint_16(unsigned nx)
   print_out(image1,"reduced_y",reduced_y);
 
   double dfirsty=0.071*image1(1,2) + 0.357*image1(1,1) + 0.572*image1(1,0);
-  vxl_uint_16 ifirsty=vnl_math_rnd(dfirsty);
+  vxl_uint_16 ifirsty=(vxl_uint_16)vnl_math_rnd(dfirsty);
   TEST("First element", reduced_y(1,0), ifirsty);
 
   TEST("Next element",  reduced_y(1,1), image1(1,2));
 
   double dlasty=0.071*image1(1,2*L-2) + 0.357*image1(1,2*L-1) + 0.572*image1(1,2*L);
-  vxl_uint_16 ilasty=vnl_math_rnd(dlasty);
+  vxl_uint_16 ilasty=(vxl_uint_16)vnl_math_rnd(dlasty);
   TEST("Last element",  reduced_y(1,L), ilasty);
 }
 
@@ -251,7 +251,7 @@ static void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
-      image0(i,j) = i+j*10;
+      image0(i,j) = static_cast<vxl_byte>(i+j*10);
 
   vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                               image0.istep(),image0.jstep(),
@@ -342,7 +342,7 @@ static void test_algo_gauss_reduce_121_uint_16(unsigned nx, unsigned ny)
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
-      image0(i,j) = 64*(i+j*10);
+      image0(i,j) = static_cast<vxl_uint_16>(64*(i+j*10));
 
   vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                               image0.istep(),image0.jstep(),
@@ -428,18 +428,18 @@ static void test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny,
            <<", ny="<<ny<<", np="<<np<<")\n"
            << "*************************************************************\n";
 
-#define TEST_BODY                                                       \
+#define TEST_BODY(T)                                                    \
   for (unsigned int j=0;j<image0.nj();++j)                              \
     for (unsigned int i=0;i<image0.ni();++i)                            \
-      for( unsigned p = 0; p < np; ++p )                                \
-        image0(i,j,p) = i+j*10+5*p;                                     \
+      for ( unsigned p = 0; p < np; ++p )                               \
+        image0(i,j,p) = static_cast<T>(i+j*10+5*p);                     \
                                                                         \
   vil_gauss_reduce_121(image0, reduced_x);                              \
                                                                         \
   print_out(image0,"reduced_x",reduced_x);                              \
                                                                         \
-  for( unsigned p = 0; p < np; ++p ) {                                  \
-    vcl_cout << "Test plane " << p << "\n";                             \
+  for ( unsigned p = 0; p < np; ++p ) {                                 \
+    vcl_cout << "Test plane " << p << '\n';                             \
     TEST("First element",reduced_x(0,1,p),image0(0,2,p));               \
     TEST("Next element",reduced_x(1,1,p),image0(2,2,p));                \
     unsigned Lx = (nx+1)/2;                                             \
@@ -454,7 +454,7 @@ static void test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny,
     image0.set_size(nx,ny,np);
     vil_image_view<vxl_byte> reduced_x;
     reduced_x.set_size((nx+1)/2,(ny+1)/2,np);
-    TEST_BODY
+    TEST_BODY(vxl_byte);
   }
 }
 
@@ -500,7 +500,7 @@ static void test_algo_gauss_reduce_byte_2d()
 
   for (unsigned y=0;y<image0.nj();++y)
     for (unsigned x=0;x<image0.ni();++x)
-      image0(x,y) = x+y*10;
+      image0(x,y) = static_cast<vxl_byte>(x+y*10);
 
   vil_gauss_reduce(image0,image1,work_im);
 
@@ -528,7 +528,7 @@ static void test_algo_gauss_reduce_byte_3planes()
   for (unsigned p=0;p<nplanes;++p)
     for (unsigned y=0;y<image0.nj();++y)
       for (unsigned x=0;x<image0.ni();++x)
-        image0(x,y,p) = x+y*10+p*50;
+        image0(x,y,p) = static_cast<vxl_byte>(x+y*10+p*50);
 
   vil_gauss_reduce(image0,image1,work_im);
 
@@ -562,7 +562,7 @@ static void test_algo_gauss_reduce_2_3_byte_2d()
 
   for (unsigned y=0;y<image0.nj();++y)
     for (unsigned x=0;x<image0.ni();++x)
-      image0(x,y) = x+y*10;
+      image0(x,y) = static_cast<vxl_byte>(x+y*10);
 
   vil_gauss_reduce_2_3(image0,image1,work_im);
   unsigned ni2 = (2*ni+1)/3;

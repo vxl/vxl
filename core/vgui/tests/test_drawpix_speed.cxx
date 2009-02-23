@@ -109,8 +109,7 @@ void pattern_grey (unsigned char* data)
 {
   for (int y=0; y < 512; ++y) {
     for (int x=0; x < 256; ++x) {
-      data[y*512 + 2*x] = x;
-      data[y*512 + 2*x + 1] = x;
+      data[y*512 + 2*x] = data[y*512 + 2*x + 1] = static_cast<unsigned char>(x);
     }
   }
 }
@@ -181,7 +180,9 @@ static struct
   GLenum type;
   char const *nfixed;
   char const *pretty;
-} ft_tab[] = {
+}
+ft_tab[] =
+{
   {GL_LUMINANCE,GL_UNSIGNED_BYTE, "LUM   ", "8bit greyscale"},
   {GL_RGB,GL_UNSIGNED_BYTE,       "RGB   ", "24bit 888 RGB"},
   {GL_RGBA,GL_UNSIGNED_BYTE,      "RGBA  ", "32bit 8888 RGBA"},
@@ -195,6 +196,7 @@ static struct
 #endif
   {GL_NONE, GL_NONE, 0, 0}
 };
+
 static const int ft_size = sizeof(ft_tab)/sizeof(ft_tab[0]) - 1;
 
 
@@ -336,13 +338,13 @@ int main()
       vcl_cerr << 512*512*fps << "   ";
     }
     vcl_cerr << "\nzoom 1.90x  ";
-    glPixelZoom(1.9,1.9);
+    glPixelZoom(1.9f, 1.9f);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       vcl_cerr << 512*512*fps << "   ";
     }
     vcl_cerr << "\nzoom 0.51x  ";
-    glPixelZoom(0.51,0.51);
+    glPixelZoom(0.51f, 0.51f);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       vcl_cerr << 0.51*0.51*512*512*fps << "   ";

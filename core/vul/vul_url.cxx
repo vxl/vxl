@@ -530,7 +530,7 @@ bool vul_url::is_file(const char * fn)
 //=======================================================================
 
 static const
-int base64_encoding[]=
+char base64_encoding[]=
 {
   'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
   'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
@@ -669,7 +669,7 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
     if (c==-1)
       return "";
 
-    data[0] = ((c & 0x3f) << 2) | (0x3 & data[0]);
+    data[0] = char(((c & 0x3f) << 2) | (0x3 & data[0]));
 
     // -=- 1 -=-
     // Search next valid char...
@@ -679,9 +679,8 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
     if (c == 64 || c==-1)
       return "";
 
-    data[0] = ((c & 0x30) >> 4) | (0xfc & data[0]);
-    data[1] = ((c & 0xf) << 4) | (0xf & data[1]);
-
+    data[0] = char(((c & 0x30) >> 4) | (0xfc & data[0]));
+    data[1] = char(((c & 0x0f) << 4) | (0x0f & data[1]));
 
     // -=- 2 -=-
     // Search next valid char...
@@ -697,9 +696,8 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
       return out;
     }
 
-    data[1] = ((c & 0x3C) >> 2) | (0xf0 & data[1]);
-    data[2] = ((c & 0x3) << 6) | (0x3f & data[2]);
-
+    data[1] = char(((c & 0x3c) >> 2) | (0xf0 & data[1]));
+    data[2] = char(((c & 0x03) << 6) | (0x3f & data[2]));
 
     // -=- 3 -=-
     // Search next valid char...
@@ -714,7 +712,7 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
       return out;
     }
 
-    data[2] = (c & 0x3f) | (0xc0 & data[2]);
+    data[2] = char((c & 0x3f) | (0xc0 & data[2]));
 
     out.append(data,3);  // write 3 bytes to output
   }

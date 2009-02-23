@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   21 Nov 99
+// \date   21 Nov 1999
 // \brief  See vgui_statusbuf.h for a description of this file.
 
 #include "vgui_statusbuf.h"
@@ -25,7 +25,7 @@ int vgui_statusbuf::overflow(int ch)
     return EOF;
   if (ch != EOF) {
     char cbuf[1];
-    cbuf[0] = ch;
+    cbuf[0] = (char)ch;
     if (status->write(cbuf, 1) != 1)
       return EOF;
   }

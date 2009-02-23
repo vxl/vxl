@@ -78,7 +78,7 @@ int vul_redirector_streambuf::overflow (int ch)
   if (ch != EOF)
   {
     char cbuf[1];
-    cbuf[0] = ch;
+    cbuf[0] = (char)ch;
     if (p->owner->putchunk ( cbuf, 1) != 1)
       return EOF;
   }

@@ -1,8 +1,8 @@
 #include "mil_algo_exp_filter_1d.h"
 //:
-//  \file
-//  \brief Apply exponential filter to 1D data (eg one row of an image)
-//  \author Tim Cootes
+// \file
+// \brief Apply exponential filter to 1D data (eg one row of an image)
+// \author Tim Cootes
 
 #include <vnl/vnl_math.h>
 
@@ -104,7 +104,7 @@ void mil_algo_exp_filter_1d(unsigned char* dest, int dstep,
   while (s!=src_end)
   {
     // Central value already included once, so only add it after updating dest.
-    *dest += (unsigned char) vnl_math_rnd(f * rt);
+    *dest += static_cast<unsigned char>(vnl_math_rnd(f * rt));
     rt += *s;
     rt *= k;
     s-=sstep; dest-=dstep;

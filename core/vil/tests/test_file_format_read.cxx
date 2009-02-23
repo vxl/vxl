@@ -88,13 +88,15 @@ struct CompareRGBNear
     {
       if ( p == 0 && pixel.size() == 3 ) {
         // Find difference in two values whilst avoiding unsigned underflow
-        PixelType diff_A = pixel[0]*pixel[0] + img(i,j).r * img(i,j).r +
-                           pixel[1]*pixel[1] + img(i,j).g * img(i,j).g +
-                           pixel[2]*pixel[2] + img(i,j).b * img(i,j).b;
+        PixelType diff_A = static_cast<PixelType>
+                           ( pixel[0]*pixel[0] + img(i,j).r * img(i,j).r +
+                             pixel[1]*pixel[1] + img(i,j).g * img(i,j).g +
+                             pixel[2]*pixel[2] + img(i,j).b * img(i,j).b );
 
-        PixelType diff_B = 2 * pixel[0] * img(i,j).r + tol_sq_ +
-                           2 * pixel[1] * img(i,j).g + tol_sq_ +
-                           2 * pixel[2] * img(i,j).b + tol_sq_ ;
+        PixelType diff_B = static_cast<PixelType>
+                           ( 2 * pixel[0] * img(i,j).r + tol_sq_ +
+                             2 * pixel[1] * img(i,j).g + tol_sq_ +
+                             2 * pixel[2] * img(i,j).b + tol_sq_ );
         return diff_A < diff_B;
       } else {
         return false;
@@ -102,7 +104,7 @@ struct CompareRGBNear
     }
 
   CompareRGBNear( PixelType tol )
-    : tol_sq_( tol*tol )
+    : tol_sq_( static_cast<PixelType>(tol*tol) )
     { }
 
   PixelType tol_sq_;
@@ -154,8 +156,8 @@ struct CompareGreyNear
     {
       if ( p==0 && pixel.size() == 1 ) {
         // Find difference in two values whilst avoiding unsigned underflow
-        PixelType diff_A = pixel[0] * pixel[0] + img(i,j) * img(i,j);
-        PixelType diff_B = 2 * pixel[0] * img(i,j) + tol_sq_ ;
+        PixelType diff_A = static_cast<PixelType>(pixel[0] * pixel[0] + img(i,j) * img(i,j));
+        PixelType diff_B = static_cast<PixelType>(2 * pixel[0] * img(i,j) + tol_sq_);
         return diff_A <= diff_B;
       } else {
         return false;
@@ -163,7 +165,7 @@ struct CompareGreyNear
     }
 
   CompareGreyNear( PixelType tol )
-    : tol_sq_( tol*tol )
+    : tol_sq_( static_cast<PixelType>(tol*tol) )
     { }
 
   PixelType tol_sq_;
@@ -196,7 +198,7 @@ read_value( vcl_istream& fin, char& pix )
   int x;
   // use operator! to test the stream to avoid compiler warnings
   bool bad = ! ( fin >> x );
-  if ( !bad ) pix = x;
+  if ( !bad ) pix = char(x);
   return bad;
 }
 
@@ -210,7 +212,7 @@ read_value( vcl_istream& fin, unsigned char& pix )
   int x;
   // use operator! to test the stream to avoid compiler warnings
   bool bad = ! ( fin >> x );
-  if ( !bad ) pix = x;
+  if ( !bad ) pix = static_cast<unsigned char>(x);
   return bad;
 }
 
@@ -516,7 +518,7 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGBA without RowsPerStrip" );
   testlib_test_perform(CheckFile(CompareRGBA<vxl_byte>(), "no_rowsperstrip_true.txt", "no_rowsperstrip.tif" ) );
 
-  //The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and 
+  //The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and
   //NSIF 1.0 files.  All three of these formats are covered here as well as all four different
   //types of data layouts for uncompressed data (IMODE).  Also we test a fair number of different
   //data types (eg. 8-bit unsigned, 16-bit unsigned, 32-bit signed, double, float, bool)

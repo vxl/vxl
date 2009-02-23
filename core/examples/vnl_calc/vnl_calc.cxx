@@ -2,20 +2,21 @@
 
 //:
 // \file
-// \brief vnl_calc - Simple command-line matrix calculator
-// \author Andrew W. Fitzgibbon, Oxford RRG 23 Jan 99
+// \brief  vnl_calc - Simple command-line matrix calculator
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   23 Jan 1999
 //
 // Use matcalc to perform simple calculations on the command line.
 // It is reverse-polish notation, and matrices are loaded from files.
 // e.g.
-// \verbatim
+// \code
 // % vnl-calc 1 2 +
-// \endverbatim
+// \endcode
 // prints 3
 //
 // \verbatim
-// Modifications
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   10 Apr 2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 #include <vcl_cstdlib.h>
@@ -151,8 +152,8 @@ int main(int argc, char ** argv)
       if (cout_precision > 99 || cout_precision < 0)
         cout_precision = 16;
       char t[] = "%20.16e";
-      t[4]='0'+cout_precision/10;
-      t[5]='0'+cout_precision%10;
+      t[4]=char('0'+cout_precision/10);
+      t[5]=char('0'+cout_precision%10);
       //Matrix::set_print_format(t);
       print_format = t;
     } else { // Load from file

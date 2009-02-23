@@ -14,11 +14,11 @@
 // express or implied warranty.
 //
 //
-// Created: MNF 06/13/89  Initial Design and Implementation
-// Updated: LGO 08/09/89  Inherit from Generic
-// Updated: MBN 09/07/89  Added conditional exception handling
-// Updated: MBN 12/15/89  Sprinkled "const" qualifiers all over the place!
-// Updated: DLS 03/22/91  New lite version
+// Created: MNF Jun 13, 1989 Initial Design and Implementation
+// Updated: LGO Aug 09, 1989 Inherit from Generic
+// Updated: MBN Sep 07, 1989 Added conditional exception handling
+// Updated: MBN Dec 15, 1989 Sprinkled "const" qualifiers all over the place!
+// Updated: DLS Mar 22, 1991 New lite version
 //
 // This  is the header file  for the regular  expression class.   An object of
 // this class contains a regular expression,  in  a special "compiled" format.
@@ -497,7 +497,7 @@ static char* reg (int paren, int *flagp)
   register char* br;
   register char* ender;
   register int   parno =0;
-       int   flags;
+           int   flags;
 
   *flagp = HASWIDTH; // Tentatively.
 
@@ -729,7 +729,7 @@ static char* regatom (int *flagp)
              return 0;
           }
           for (; rxpclass <= rxpclassend; rxpclass++)
-            regc(rxpclass);
+            regc(static_cast<unsigned char>(rxpclass));
           regparse++;
         }
       }

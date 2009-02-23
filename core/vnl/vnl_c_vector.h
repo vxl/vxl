@@ -5,18 +5,18 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Math on blocks of memory
+// \file
+// \brief Math on blocks of memory
 //
 //    vnl_c_vector interfaces to lowlevel memory-block operations.
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   12 Feb 98
+// \date   12 Feb 1998
 //
 // \verbatim
-// Modifications
-//     980212 AWF Initial version.
-//     LSB (Manchester) 26/3/01 Tidied documentation
+//  Modifications
+//   1998-02-12 AWF Initial version.
+//   LSB (Manchester) 26 Mar 2001 Tidied documentation
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -102,9 +102,9 @@ class vnl_c_vector
   static T max_value(T const *, unsigned);
   static T min_value(T const *, unsigned);
 
-  static T mean(T const *p, unsigned n) { return sum(p,n)/abs_t(n); }
- 
-  //: The standard deviation 
+  static T mean(T const *p, unsigned n) { return T(sum(p,n)/abs_t(n)); }
+
+  //: The standard deviation
   // This method uses the 1/(n-1) normalisation, assuming that your
   // data is a sample of a population.
   static inline real_t std(T const *p, unsigned n) {

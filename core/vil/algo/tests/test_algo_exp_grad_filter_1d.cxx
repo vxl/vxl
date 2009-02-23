@@ -36,7 +36,7 @@ static void test_algo_exp_grad_filter_1d_byte_float()
   for (int i=0;i<n;++i) sum+=dest[i];
   TEST_NEAR("Sum zero",sum,0,1e-6);
 
-  for (int i=0;i<10;++i) src[i]=i;
+  for (int i=0;i<10;++i) src[i]=static_cast<vxl_byte>(i);
   vil_exp_grad_filter_1d(&src[0],1,&dest[0],1,10,float(k));
   vcl_cout<<"Applying to 0 1 2 3 ..\n";
   for (int i=0;i<10;++i) vcl_cout<<' '<<dest[i];

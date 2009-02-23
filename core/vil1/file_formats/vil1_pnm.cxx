@@ -272,6 +272,27 @@ bool operator>>(vil1_stream& vs, int& a)
   return true;
 }
 
+bool operator>>(vil1_stream& vs, unsigned char& a)
+{
+  int b; vs >> b;
+  a = static_cast<unsigned char>(b);
+  return b >= 0 && b <= 0xff;
+}
+
+bool operator>>(vil1_stream& vs, unsigned short& a)
+{
+  int b; vs >> b;
+  a = static_cast<unsigned short>(b);
+  return b >= 0 && b <= 0xffff;
+}
+
+bool operator>>(vil1_stream& vs, unsigned int& a)
+{
+  int b; vs >> b;
+  a = static_cast<unsigned int>(b);
+  return b >= 0;
+}
+
 bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   unsigned char* ib = (unsigned char*) buf;
@@ -310,7 +331,7 @@ bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
       unsigned char b = 0; // output
       int t = 0;
       for (int x = 0; x < xs; ++x) {
-        b |= ((a>>(7-s))&1)<<(7-t); // single bit; high bit = first
+        b |= static_cast<unsigned char>(((a>>(7-s))&1)<<(7-t)); // single bit; high bit = first
         if (s >= 7) { vs_->read(&a, 1L); s = 0; }
         else ++s;
         if (t >= 7) { ib[y * byte_out_width + x/8] = b; b = 0; t = 0; }
@@ -334,15 +355,15 @@ bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
       if (bits_per_component_ <= 1) {
         --ib; // to compensate for first ++ib
         for (int x=0,t=0; x<xs*components_; ++x,++t) {
-          if ((t&=7)==0) *++ib=0; int a; (*vs_) >> a; if (a) *ib|=(1<<(7-t)); }
+          if ((t&=7)==0) *++ib=0; int a; (*vs_) >> a; if (a) *ib|=static_cast<unsigned char>(1<<(7-t)); }
         ++ib;
       }
       else if (bits_per_component_ <= 8)
-        for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
+        for (int x = 0; x < xs*components_; ++x) { unsigned char a; (*vs_) >> a; *(ib++)=a; }
       else if (bits_per_component_ <= 16)
-        for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
+        for (int x = 0; x < xs*components_; ++x) { unsigned short a; (*vs_) >> a; *(jb++)=a; }
       else
-        for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(kb++)=a; }
+        for (int x = 0; x < xs*components_; ++x) { unsigned int a; (*vs_) >> a; *(kb++)=a; }
       // 3. Skip to the next line
       //
       for (int t = 0; t < (width_-x0-xs)*components_; ++t) { int a; (*vs_) >> a; }
@@ -376,7 +397,8 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
         vs_->seek(byte_start + y * byte_width);
         vs_->write(ob + y * byte_out_width, byte_out_width);
       }
-    } else if ( bytes_per_sample==2 ) {
+    }
+    else if ( bytes_per_sample==2 ) {
       // Little endian host; must convert words to have MSB first.
       // Can't convert the input buffer, because it's not ours.
       // Convert line by line to avoid duplicating a potentially large image.
@@ -387,7 +409,8 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
         ConvertHostToMSB( &tempbuf[0], xs*components_ );
         vs_->write(&tempbuf[0], byte_out_width);
       }
-    } else {
+    }
+    else {
       vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
       return false;
     }
@@ -397,7 +420,8 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
     int byte_width = (width_+7)/8;
     int byte_out_width = (xs+7)/8;
 
-    for (int y = 0; y < ys; ++y) {
+    for (int y = 0; y < ys; ++y)
+    {
       vil1_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       int s = x0&7; // = x0%8;
@@ -406,10 +430,10 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
       if (s) {
         vs_->read(&a, 1L);
         vs_->seek(byte_start);
-        a &= ((1<<s)-1)<<(8-s); // clear the last 8-s bits of a
+        a &= static_cast<unsigned char>(((1<<s)-1)<<(8-s)); // clear the last 8-s bits of a
       }
       for (int x = 0; x < xs; ++x) {
-        if (b&(1<<(7-t))) a |= 1<<(7-s); // single bit; high bit = first
+        if (b&(1<<(7-t))) a |= static_cast<unsigned char>(1<<(7-s)); // single bit; high bit = first
         if (t >= 7) { b = ob[y * byte_out_width + (x+1)/8]; t = 0; }
         else ++t;
         if (s >= 7) { vs_->write(&a, 1L); ++byte_start; s = 0; a = 0; }
@@ -420,7 +444,7 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
           vs_->seek(byte_start);
           unsigned char c; vs_->read(&c, 1L);
           vs_->seek(byte_start);
-          c &= ((1<<(8-s))-1); // clear the first s bits of c
+          c &= static_cast<unsigned char>((1<<(8-s))-1); // clear the first s bits of c
           a |= c;
         }
         vs_->write(&a, 1L);
@@ -434,7 +458,7 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
     vs_->seek(start_of_data_);
     for (int y = 0; y < ys; ++y) {
       if (bits_per_component_ <= 1)
-        for (int x = 0; x < xs*components_; ++x) { (*vs_) << ((ob[x/8]>>(7-x&7))&1); }
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << ((ob[x/8]>>(7-(x&7)))&1); }
       else if (bits_per_component_ <= 8)
         for (int x = 0; x < xs*components_; ++x) { (*vs_) << ob[x]; }
       else if (bits_per_component_ <= 16)

@@ -15,26 +15,26 @@
 // Texas Instruments Incorporated, General Electric Company,
 // provides this software "as is" without express or implied warranty.
 //
-// Created: MBN 04/21/89  Initial design and implementation
-// Updated: MBN 06/22/89  Removed non-destructive methods
-// Updated: LGO 08/09/89  Inherit from Generic
-// Updated: MBN 08/20/89  Changed template usage to reflect new syntax
-// Updated: MBN 09/11/89  Added conditional exception handling and base class
-// Updated: LGO 10/05/89  Don't re-allocate data in operator= when same size
-// Updated: LGO 10/19/89  Add extra parameter to varargs constructor
-// Updated: MBN 10/19/89  Added optional argument to set_compare method
-// Updated: LGO 12/08/89  Allocate column data in one chunk
-// Updated: LGO 12/08/89  Clean-up get and put, add const everywhere.
-// Updated: LGO 12/19/89  Remove the map and reduce methods
-// Updated: MBN 02/22/90  Changed size arguments from int to unsigned int
-// Updated: MJF 06/30/90  Added base class name to constructor initializer
-// Updated: VDN 02/21/92  New lite version
-// Updated: VDN 05/05/92  Use envelope to avoid unnecessary copying
-// Updated: VDN 09/30/92  Matrix inversion with singular value decomposition
-// Updated: AWF 08/21/96  set_identity, normalize_rows, scale_row.
-// Updated: AWF 09/30/96  set_row/set_column methods.  Const-correct data_block().
-// Updated: AWF 14/02/97  get_n_rows, get_n_columns.
-// Updated: PVR 20/03/97  get_row, get_column.
+// Created: MBN Apr 21, 1989 Initial design and implementation
+// Updated: MBN Jun 22, 1989 Removed non-destructive methods
+// Updated: LGO Aug 09, 1989 Inherit from Generic
+// Updated: MBN Aug 20, 1989 Changed template usage to reflect new syntax
+// Updated: MBN Sep 11, 1989 Added conditional exception handling and base class
+// Updated: LGO Oct 05, 1989 Don't re-allocate data in operator= when same size
+// Updated: LGO Oct 19, 1989 Add extra parameter to varargs constructor
+// Updated: MBN Oct 19, 1989 Added optional argument to set_compare method
+// Updated: LGO Dec 08, 1989 Allocate column data in one chunk
+// Updated: LGO Dec 08, 1989 Clean-up get and put, add const everywhere.
+// Updated: LGO Dec 19, 1989 Remove the map and reduce methods
+// Updated: MBN Feb 22, 1990 Changed size arguments from int to unsigned int
+// Updated: MJF Jun 30, 1990 Added base class name to constructor initializer
+// Updated: VDN Feb 21, 1992 New lite version
+// Updated: VDN May 05, 1992 Use envelope to avoid unnecessary copying
+// Updated: VDN Sep 30, 1992 Matrix inversion with singular value decomposition
+// Updated: AWF Aug 21, 1996 set_identity, normalize_rows, scale_row.
+// Updated: AWF Sep 30, 1996 set_row/column methods. Const-correct data_block().
+// Updated: AWF 14 Feb 1997  get_n_rows, get_n_columns.
+// Updated: PVR 20 Mar 1997  get_row, get_column.
 //
 // The parameterized vnl_matrix<T> class implements two dimensional arithmetic
 // matrices of a user specified type. The only constraint placed on the type is
@@ -242,7 +242,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
   T *dst = this->data[0];
 
   for (unsigned int i=0; i<n; ++i)
-    dst[i] = a[i] + b[i];
+    dst[i] = T(a[i] + b[i]);
 }
 
 template<class T>
@@ -262,7 +262,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
   T *dst = this->data[0];
 
   for (unsigned int i=0; i<n; ++i)
-    dst[i] = a[i] - b[i];
+    dst[i] = T(a[i] - b[i]);
 }
 
 template<class T>
@@ -276,7 +276,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_mul)
   T *dst = this->data[0];
 
   for (unsigned int i=0; i<n; ++i)
-    dst[i] = m[i] * s;
+    dst[i] = T(m[i] * s);
 }
 
 template<class T>
@@ -290,7 +290,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_div)
   T *dst = this->data[0];
 
   for (unsigned int i=0; i<n; ++i)
-    dst[i] = m[i] / s;
+    dst[i] = T(m[i] / s);
 }
 
 template<class T>
@@ -304,7 +304,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_add)
   T *dst = this->data[0];
 
   for (unsigned int i=0; i<n; ++i)
-    dst[i] = m[i] + s;
+    dst[i] = T(m[i] + s);
 }
 
 template<class T>
@@ -318,7 +318,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_sub)
   T *dst = this->data[0];
 
   for (unsigned int i=0; i<n; ++i)
-    dst[i] = m[i] - s;
+    dst[i] = T(m[i] - s);
 }
 
 template<class T>
@@ -340,7 +340,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
     for (unsigned int k=0; k<n; ++k) {
       T sum(0);
       for (unsigned int j=0; j<m; ++j)
-        sum += A.data[i][j] * B.data[j][k];
+        sum += T(A.data[i][j] * B.data[j][k]);
       this->data[i][k] = sum;
     }
   }
@@ -587,7 +587,7 @@ vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m)
   vnl_matrix<T> result(m.rows(),m.columns());
   for (unsigned int i = 0; i < m.rows(); i++)  // For each row
     for (unsigned int j = 0; j < m.columns(); j++) // For each element in column
-      result.put(i,j, value - m.get(i,j) );    // subtract from value element.
+      result.put(i,j, T(value - m.get(i,j)) );    // subtract from value element.
   return result;
 }
 
@@ -827,7 +827,7 @@ vnl_matrix<T> element_product (vnl_matrix<T> const& m1,
   vnl_matrix<T> result(m1.rows(), m1.columns());
   for (unsigned int i = 0; i < m1.rows(); i++)
     for (unsigned int j = 0; j < m1.columns(); j++)
-      result.put(i,j, m1.get(i,j) * m2.get(i,j) );
+      result.put(i,j, T(m1.get(i,j) * m2.get(i,j)) );
   return result;
 }
 
@@ -846,7 +846,7 @@ vnl_matrix<T> element_quotient (vnl_matrix<T> const& m1,
   vnl_matrix<T> result(m1.rows(), m1.columns());
   for (unsigned int i = 0; i < m1.rows(); i++)
     for (unsigned int j = 0; j < m1.columns(); j++)
-      result.put(i,j, m1.get(i,j) / m2.get(i,j) );
+      result.put(i,j, T(m1.get(i,j) / m2.get(i,j)) );
   return result;
 }
 
@@ -1262,7 +1262,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
       if (c == EOF)
         goto loademup;
       if (!vcl_isspace(c)) {
-        if (!s.putback(c).good())
+        if (!s.putback(char(c)).good())
           vcl_cerr << "vnl_matrix<T>::read_ascii: Could not push back '" << c << "'\n";
 
         goto readfloat;

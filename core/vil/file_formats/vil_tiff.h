@@ -6,10 +6,10 @@
 #endif
 //:
 // \file
-// \author    awf@robots.ox.ac.uk
-// \date 16 Feb 00
+// \author awf@robots.ox.ac.uk
+// \date   16 Feb 2000
 //
-//\verbatim
+// \verbatim
 //  Modifications
 //   3 Oct 2001 Peter Vanroose - Implemented get_property and set_property
 //   5 Jan 2002 Ian Scott      - Converted to vil
@@ -23,7 +23,7 @@
 //       multiple resources from a single tiff file; required for pyramid
 //   KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
 //   KNOWN BUG - bool pixel format write - crashes due to incorrect block size
-//\endverbatim
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
@@ -436,21 +436,21 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
   T temp = in_val[sample_offset];
   if ( strip_left > 0 ){
     //strip off the appropriate bits from the vcl_left (replacing them with zeros)
-    temp = temp << strip_left;
-    temp = temp >> strip_left;
+    temp <<= strip_left;
+    temp >>= strip_left;
   }
   if ( strip_right > 0 ){
     //strip off the appropriate bits from the vcl_right
     //the bit shift operator wasn't having the correct effect, so that'w
     //why the for loop
     for ( int i = 0 ; i < strip_right ; i++ ) temp /= 2;
-    //temp = temp >> strip_right;
+    //temp >>= strip_right;
   }
   else if ( strip_right < 0 ){
     //we didn't have enough bits in the first element of the in_val array
     //need to get some from the next element
 
-    for ( int i = 0 ; i < (-strip_right) ; i++ ) temp *= 2;
+    for ( int i = 0 ; i < (-strip_right) ; ++i ) temp *= 2;
     temp += tiff_get_bits<T>( in_val+sample_offset+1, 0, -strip_right );
 
 #if 0
@@ -460,7 +460,7 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
     for ( int i = 0 ; i < new_strip_right ; i++ ) next /= 2;
     // next is the LSB part
     unsigned new_strip_left = 1- strip_right;
-    temp = temp << new_strip_left;
+    temp <<= new_strip_left;
     temp += next;
 #endif
   }
@@ -510,11 +510,11 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 // shift operator is implementation specific when applied to a negative number, you should probably
 // only use this function on unsigned data.
 //
-// @param in_data: The input data.  It must be at least (num_samples*in_bits_per_sample\8) bytes long.
+// \param in_data: The input data.  It must be at least (num_samples*in_bits_per_sample/8) bytes long.
 //                The values should have the endianness of your platform.
-// @param num_samples: The number of actual samples in in_data.
-// @param in_bits_per_sample: The bits per sample in in_data
-// @param out_data: I'll store the output data here.  It must be at least (num_samples*sizeof(T)) bytes long
+// \param num_samples: The number of actual samples in in_data.
+// \param in_bits_per_sample: The bits per sample in in_data
+// \param out_data: I'll store the output data here.  It must be at least (num_samples*sizeof(T)) bytes long
 //                 The values will have the endianness of your platform.
 //
 // Note that inBitsPerSampe must not be >= sizeof(T).  If they were to be equal, then this function

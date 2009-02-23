@@ -4,9 +4,8 @@
 #endif
 //:
 // \file
-//
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   17 May 97
+// \date   17 May 1997
 //
 //-----------------------------------------------------------------------------
 
@@ -49,7 +48,7 @@ void vul_awk::next()
     }
     if (c == '\n')
       break;
-    line_ += c;
+    line_ += char(c);
   }
 
   char const* linep = line_.c_str();

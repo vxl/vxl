@@ -16,7 +16,7 @@ namespace
   // The last element should be empty and unused.
   class test_streambuf: public vcl_streambuf
   {
-  public:
+   public:
     vcl_vector<vcl_string> messages;
     test_streambuf(): messages(1) {}
     virtual int sync ()
@@ -43,7 +43,7 @@ namespace
       if (ch == EOF)
       return 0;
 
-      char cbuf = ch;
+      char cbuf = (char)ch;
       messages.back().append(&cbuf, 1);
       return ch;
     }
@@ -61,8 +61,6 @@ namespace
     }
   };
 }
-
-
 
 
 void test_log()
@@ -83,7 +81,7 @@ void test_log()
 
   {
     vcl_ofstream cfg_file("mbl_log.properties");
-    cfg_file << 
+    cfg_file <<
       "root: { level: INFO stream_output: test }\n"
       "obj3: { level: INFO stream_output: cout }\n"
       "obj4: { level: INFO stream_output: test_streambuf }\n";
@@ -100,7 +98,7 @@ void test_log()
   if (current.level() >= mbl_logger::INFO)
     current.log(mbl_logger::INFO) << "Output this whatever" << vcl_endl;
 
-  MBL_LOG( WARN, current, "Also this number " << 54 <<
+  MBL_LOG(WARN, current, "Also this number " << 54 <<
           " and" << vcl_endl << "multiline message");
 // Manual expansion of MBL_LOG macro
 //  if (current.level() >= mbl_logger:: WARN)
@@ -151,7 +149,7 @@ void test_log()
 
   {
     vcl_ofstream cfg_file("mbl_log.properties");
-    cfg_file << 
+    cfg_file <<
       "AA.11.bb: { level: CRIT stream_output: cerr }\n"
       "AA.22.aa.ii: { level: WARN file_output: test1.log }\n"
       "AA.11.aa: { level: ALERT }\n"

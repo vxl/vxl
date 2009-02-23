@@ -16,38 +16,38 @@
 // Converts all alphabetical characters to uppercase.
 char* vul_string_c_upcase(char* s)  // Convert entire string to upper case
 {
-  char* p = s;                  // Point to beginning of string
-  while (*p) {                  // While there are still valid characters
-    if (vcl_islower(*p))        // if this is lower case
-      *p = vcl_toupper(*p);     // convert to uppercase
-    p++;                        // Advance pointer
+  char* p = s;                   // Point to beginning of string
+  while (*p) {                   // While there are still valid characters
+    if (vcl_islower(*p))         // if this is lower case
+      *p = (char)vcl_toupper(*p);// convert to uppercase
+    p++;                         // Advance pointer
   }
-  return s;                     // Return reference to modified string
+  return s;                      // Return reference to modified string
 }
 
 // Converts all alphabetical characters to lowercase.
 char* vul_string_c_downcase(char* s)  // Convert entire string to lower case
 {
-  char* p = s;                  // Point to beginning of string
-  while (*p) {                  // While there are still valid characters
-    if (vcl_isupper(*p))        // if this is upper case
-      *p = vcl_tolower(*p);     // convert to lowercase
-    p++;                        // Advance pointer
+  char* p = s;                   // Point to beginning of string
+  while (*p) {                   // While there are still valid characters
+    if (vcl_isupper(*p))         // if this is upper case
+      *p = (char)vcl_tolower(*p);// convert to lowercase
+    p++;                         // Advance pointer
   }
-  return s;                     // Return reference to modified string
+  return s;                      // Return reference to modified string
 }
 
 // Capitalizes all words in a string. A word is defined as
 // a sequence of characters separated by non-alphanumerics.
 char* vul_string_c_capitalize(char* s)  // Capitalize each word in string
 {
-  char* p = s;                          // Point to beginning of string
-  while (true) {                        // Infinite loop
-    for (; *p && !vcl_isalnum(*p); p++);// Skip to first alphanumeric
-    if (*p == END_OF_STRING)            // If end of string
-      return s;                         // Return string
-    *p = vcl_toupper(*p);               // Convert character
-    while (*++p && vcl_isalnum(*p));    // Search for next word
+  char* p = s;                           // Point to beginning of string
+  while (true) {                         // Infinite loop
+    for (; *p && !vcl_isalnum(*p); p++) ;// Skip to first alphanumeric
+    if (*p == END_OF_STRING)             // If end of string
+      return s;                          // Return string
+    *p = (char)vcl_toupper(*p);          // Convert character
+    while (*++p && vcl_isalnum(*p)) ;    // Search for next word
   }
 }
 
@@ -61,12 +61,12 @@ char* vul_string_c_trim(char* str, const char* rem) // Trim characters from stri
   while ((c=*s++) != END_OF_STRING) {
     register const char* r = rem;
     register char t;
-    while ((t=*r++) != END_OF_STRING && t != c); // Scan for match
-    if (t == END_OF_STRING)                      // If no match found
+    while ((t=*r++) != END_OF_STRING && t != c) ; // Scan for match
+    if (t == END_OF_STRING)                       // If no match found
       *result++ = c;
   }
-  *result = END_OF_STRING;                      // NULL terminate string
-  return str;                                   // Return pointer to string
+  *result = END_OF_STRING;                        // NULL terminate string
+  return str;                                     // Return pointer to string
 }
 
 // Removes any prefix occurrence of the string rem from
@@ -79,26 +79,26 @@ char* vul_string_c_left_trim(char* str, const char* rem) // Trim prefix from str
   for (s=str; (c=*s) != END_OF_STRING; s++) {
     register const char* r = rem;
     register char t;
-    while ((t=*r++) != END_OF_STRING && t != c); // Scan for match
-    if (t == END_OF_STRING)                      // If no match found
+    while ((t=*r++) != END_OF_STRING && t != c) ; // Scan for match
+    if (t == END_OF_STRING)                       // If no match found
       break;
   }
-  if (s != result)                               // when characters trimed
-    while ((*result++ = *s++) != END_OF_STRING); // shift string down
-  return str;                                    // Return pointer to string
+  if (s != result)                                // when characters trimed
+    while ((*result++ = *s++) != END_OF_STRING) ; // shift string down
+  return str;                                     // Return pointer to string
 }
 
 // Removes any suffix occurrence of the string rem
 // from the first string str, and returns the modified string str.
 char* vul_string_c_right_trim(char* str, const char* rem) // Trim suffix from string
 {
-  char* s = str + vcl_strlen(str) - 1;           // last character of str
+  char* s = str + vcl_strlen(str) - 1;            // last character of str
   for (; s >= str; s--) {
     register const char* r = rem;
     register char t;
     register char c = *s;
-    while ((t=*r++) != END_OF_STRING && t != c); // Scan for match
-    if (t == END_OF_STRING)                      // If no match found
+    while ((t=*r++) != END_OF_STRING && t != c) ; // Scan for match
+    if (t == END_OF_STRING)                       // If no match found
       break;
   }
   *(s+1) = END_OF_STRING;
@@ -140,7 +140,7 @@ vcl_string& vul_string_reverse(vcl_string& s)
 vcl_string& vul_string_upcase(vcl_string& s)
 {
   for (vcl_string::iterator i=s.begin(); i != s.end(); ++i)
-    *i = vcl_toupper(*i);
+    *i = (char)vcl_toupper(*i);
   return s;
 }
 
@@ -148,7 +148,7 @@ vcl_string& vul_string_upcase(vcl_string& s)
 vcl_string& vul_string_downcase(vcl_string& s)
 {
   for (vcl_string::iterator i=s.begin(); i != s.end(); ++i)
-    *i = vcl_tolower(*i);
+    *i = (char)vcl_tolower(*i);
   return s;
 }
 
@@ -162,7 +162,7 @@ vcl_string& vul_string_capitalize(vcl_string& s)
   bool in_word = false;
   for ( si = s.begin(); si != s.end(); ++si ) {
     if ( !in_word && vcl_isalnum( *si ) ) {
-      *si = vcl_toupper( *si );
+      *si = (char)vcl_toupper( *si );
       in_word = true;
     } else if ( in_word && !vcl_isalnum( *si ) ) {
       in_word = false;
@@ -249,16 +249,13 @@ bool vul_string_to_bool(const vcl_string &str)
 //Leave verbatim in to avoid $->LaTeX munging.
 
 //: Expand any environment variables in the string.
-// \verbatim
-// Expands "foo$VARfoo" to "foobarfoo" when $VAR=bar. If
-// both $VAR and $VARfoo exists, an arbitrary choice will
-// be made of which variable to use. This problem can
-// be avoided by using the syntax "foo${VAR}foo." "$(VAR)"
+// Expands "foo$VARfoo" to "foobarfoo" when $VAR=bar. If both $VAR and $VARfoo
+// exist, an arbitrary choice will be made of which variable to use.
+// This problem can be avoided by using the syntax "foo${VAR}foo." "$(VAR)"
 // and "$[VAR]" can also be used.
-// There are no inbuilt variables like in shell scripting, and
-// variable names cannot contain whitespace or "$"s. "$$"
-// can be used to insert a literal "$" in to the output.
-// \endverbatim
+// There are no inbuilt variables like in shell scripting, and variable names
+// cannot contain whitespace or "$"s.
+// "$$" can be used to insert a literal "$" into the output.
 // \returns false if a matching variable could not be found.
 bool vul_string_expand_var(vcl_string &str)
 {
@@ -346,6 +343,8 @@ bool vul_string_expand_var(vcl_string &str)
             success=false;
         }
       }
+      break;
+     default: // do nothing (silently ignore invalid state)
       break;
     }
     ++i;

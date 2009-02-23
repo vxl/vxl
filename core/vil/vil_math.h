@@ -97,16 +97,16 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
     if (fraction[f]<0.0 || fraction[f]>1.0)
       return;
   }
-  
+
   // Copy the pixel values into a list.
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep(); 
+  vcl_ptrdiff_t istep = im.istep();
   vcl_ptrdiff_t jstep = im.jstep();
   vcl_ptrdiff_t pstep = im.planestep();
   vcl_vector<T> data(ni*nj*np);
-  
+
   typename vcl_vector<T>::iterator it = data.begin();
   const T* plane = im.top_left_ptr();
   for (unsigned int p=0; p<np; ++p, plane+=pstep)
@@ -123,7 +123,7 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
     }
   }
   const unsigned npix = data.size();
-  
+
   // Get the nth_element corresponding to the specified fractions
   value.resize(nfrac);
   for (unsigned f=0; f<nfrac; ++f)
@@ -284,7 +284,6 @@ VCL_DEFINE_SPECIALIZATION
 void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsigned p);
 
 
-
 //: Sum of squares of elements in plane p of image
 // \relates vil_image_view
 template<class imT, class sumT>
@@ -318,10 +317,10 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
 class vil_math_sqrt_functor
 {
  public:
-  vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+vcl_sqrt(float(x))); }
-  unsigned operator()(unsigned x) const { return unsigned(0.5+vcl_sqrt(float(x))); }
-  int operator()(int x)           const { return x>0?int(0.5+vcl_sqrt(float(x))):0; }
-  short operator()(short x)       const { return x>0?short(0.5+vcl_sqrt(float(x))):0; }
+  vxl_byte operator()(vxl_byte x) const { return static_cast<vxl_byte>(0.5+vcl_sqrt(double(x))); }
+  unsigned operator()(unsigned x) const { return static_cast<unsigned int>(0.5+vcl_sqrt(double(x))); }
+  int operator()(int x)           const { return x>0?static_cast<int>(0.5+vcl_sqrt(double(x))):0; }
+  short operator()(short x)       const { return x>0?static_cast<short>(0.5+vcl_sqrt(double(x))):0; }
   float operator()(float x)       const { return x>0?vcl_sqrt(x):0.0f; }
   double operator()(double x)     const { return x>0?vcl_sqrt(x):0.0; }
 };
@@ -382,13 +381,13 @@ class vil_math_scale_functor
 // \sa vil_math_scale_and_offset_values()
 class vil_math_scale_and_translate_functor
 {
-public:
+ public:
   //: Constructor
   // \param s Scaling.
   // \param t Translation (offset).
-  vil_math_scale_and_translate_functor(const double s, const double t) 
+  vil_math_scale_and_translate_functor(const double s, const double t)
     : s_(s), t_(t) {}
-  
+
   vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+s_*x+t_); }
   unsigned operator()(unsigned x) const { return unsigned(0.5+s_*x+t_); }
   short operator()(short x)       const { double r=s_*x+t_; return short(r<0?r-0.5:r+0.5); }
@@ -396,8 +395,8 @@ public:
   float operator()(float x)       const { return float(s_*x+t_); }
   double operator()(double x)     const { return s_*x+t_; }
   vcl_complex<double> operator()(vcl_complex<double> x) const { return s_*x+t_; } // Not sure if this one makes sense
-  
-private:
+
+ private:
   double s_;
   double t_;
 };
@@ -406,11 +405,11 @@ private:
 //: Functor class to compute logarithms (returns zero if x<=0)
 class vil_math_log_functor
 {
-public:
-  vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+vcl_log(float(x))); }
-  unsigned operator()(unsigned x) const { return unsigned(0.5+vcl_log(float(x))); }
-  int operator()(int x)           const { return x>0?int(0.5+vcl_log(float(x))):0; }
-  short operator()(short x)       const { return x>0?short(0.5+vcl_log(float(x))):0; }
+ public:
+  vxl_byte operator()(vxl_byte x) const { return static_cast<vxl_byte>(0.5+vcl_log(double(x))); }
+  unsigned operator()(unsigned x) const { return static_cast<unsigned int>(0.5+vcl_log(double(x))); }
+  int operator()(int x)           const { return x>0?static_cast<int>(0.5+vcl_log(double(x))):0; }
+  short operator()(short x)       const { return x>0?static_cast<short>(0.5+vcl_log(double(x))):0; }
   float operator()(float x)       const { return x>0?vcl_log(x):0.0f; }
   double operator()(double x)     const { return x>0?vcl_log(x):0.0; }
 };
@@ -861,7 +860,7 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
 // \relates vil_image_view
 template<class aT, class bT>
 inline double vil_math_image_abs_difference(const vil_image_view<aT>& imA,
-                                          const vil_image_view<bT>& imB)
+                                            const vil_image_view<bT>& imB)
 {
   double sum=0.0;
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
