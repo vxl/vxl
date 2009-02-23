@@ -41,7 +41,8 @@ void bgeo_lvcs::set_length_conversions(LenUnits len_unit, double& to_meters,
 }
 
 bgeo_lvcs::bgeo_lvcs(const bgeo_lvcs& lvcs)
-  :local_cs_name_(lvcs.local_cs_name_),
+ : vbl_ref_count(),
+   local_cs_name_(lvcs.local_cs_name_),
    localCSOriginLat_(lvcs.localCSOriginLat_),
    localCSOriginLon_(lvcs.localCSOriginLon_),
    localCSOriginElev_(lvcs.localCSOriginElev_),
@@ -205,6 +206,8 @@ void bgeo_lvcs::compute_scale()
     break;
    case bgeo_lvcs::NumNames:
     break;
+   default:
+    break;
   }
 
   //The inputs, wgs84_phi, wgs84_lamda, are assumed to be in radians
@@ -237,6 +240,8 @@ void bgeo_lvcs::compute_scale()
       break;
      case bgeo_lvcs::NumNames:
       break;
+     default:
+      break;
     }
 
     latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt,
@@ -268,6 +273,8 @@ void bgeo_lvcs::compute_scale()
      case bgeo_lvcs::wgs72:
       break;
      case bgeo_lvcs::NumNames:
+      break;
+     default:
       break;
     }
 
@@ -593,31 +600,30 @@ void bgeo_lvcs::read(vcl_istream& strm)
     local_cs_name_ = nad27n;
   else if (local_cs_name_str.compare("wgs72") == 0)
     local_cs_name_ = wgs72;
-  else 
-    vcl_cerr << "undefined local_cs_name" << vcl_endl;
+  else
+    vcl_cerr << "undefined local_cs_name\n";
 
   strm >> ang_u >> len_u;
   if (ang_u.compare("feet") == 0)
     localXYZUnit_ = FEET;
   else if (ang_u.compare("meters") == 0)
     localXYZUnit_ = METERS;
-  else 
-    vcl_cerr << "undefined localXYZUnit_" << vcl_endl;
+  else
+    vcl_cerr << "undefined localXYZUnit_\n";
 
   if (len_u.compare("degrees") == 0)
     geo_angle_unit_ = DEG;
   else if (len_u.compare("radians") == 0)
     geo_angle_unit_ = RADIANS;
-  else 
-    vcl_cerr << "undefined geo_angle_unit_" << vcl_endl;
+  else
+    vcl_cerr << "undefined geo_angle_unit_\n";
 
   strm >> localCSOriginLat_ >> localCSOriginLon_ >> localCSOriginElev_;
   strm >> lat_scale_ >> lon_scale_;
   strm >> lox_ >> loy_ >> theta_;
 
-  if(lat_scale_==0.0 && lon_scale_==0.0)
-      this->compute_scale();
-
+  if (lat_scale_==0.0 && lon_scale_==0.0)
+    this->compute_scale();
 }
 
 //------------------------------------------------------------

@@ -20,7 +20,8 @@ bprb_process::~bprb_process()
 
 //: Copy Constructor
 bprb_process::bprb_process(const bprb_process& other)
-: input_data_(other.n_inputs()), output_data_(other.n_outputs()),
+: vbl_ref_count(),
+  input_data_(other.n_inputs()), output_data_(other.n_outputs()),
   parameters_(new bprb_parameters(other.parameters_)),
   input_types_(other.input_types()),output_types_(other.output_types())
 {

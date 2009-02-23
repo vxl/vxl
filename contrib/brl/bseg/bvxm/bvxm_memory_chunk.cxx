@@ -22,7 +22,8 @@ bvxm_memory_chunk::~bvxm_memory_chunk()
 
 //: Copy constructor
 bvxm_memory_chunk::bvxm_memory_chunk(const bvxm_memory_chunk& d)
-: data_(new char[(unsigned)d.size()]), size_(d.size())
+: vbl_ref_count(),
+  data_(new char[(unsigned)d.size()]), size_(d.size())
 {
   vcl_memcpy(data_,d.data_,(vcl_size_t)size_);
 }

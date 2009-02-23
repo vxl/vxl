@@ -51,6 +51,7 @@ bvgl_articulated_poly(const unsigned n_joints,
 }
 
 bvgl_articulated_poly::bvgl_articulated_poly(const bvgl_articulated_poly& poly)
+: vsol_polyline_2d(poly)
 {
   unsigned n = poly.size();
   joint_transforms_.resize(n);

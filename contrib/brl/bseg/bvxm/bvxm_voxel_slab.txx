@@ -4,7 +4,7 @@
 // \file
 // \brief A 3-D slab of data of type T.  Based loosely on vil_image_view.
 // \author Daniel Crispell (dec@lems.brown.edu)
-// \date 1/22/2008
+// \date Jan 22, 2008
 
 #include "bvxm_voxel_slab.h"
 
@@ -25,7 +25,7 @@ bvxm_voxel_slab<T>::bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz)
 //: Copy constructor
 template<class T>
 bvxm_voxel_slab<T>::bvxm_voxel_slab(const bvxm_voxel_slab<T>& that)
-: mem_(0)
+: bvxm_voxel_slab_base(that), mem_(0)
 {
   operator=( that );
 }

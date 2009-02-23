@@ -48,7 +48,7 @@ brdb_tuple::make_prototype(const vcl_vector<vcl_string>& types)
 
 //: Copy Constructor
 brdb_tuple::brdb_tuple(const brdb_tuple& other)
-: values_(other.values_.size(),NULL)
+: vbl_ref_count(), values_(other.values_.size(),NULL)
 {
   for (unsigned int i=0; i<other.values_.size(); ++i){
     if (other.values_[i])

@@ -97,7 +97,7 @@ class brdb_value : public vbl_ref_count
   //: Constructor
   brdb_value() {}
   //: Copy Constructor
-  brdb_value(const brdb_value&) {}
+  brdb_value(const brdb_value&) : vbl_ref_count() {}
 
  private:
   //: Return a reference to the global registry of database value classes

@@ -57,8 +57,8 @@ vpgl_essential_matrix( const vpgl_perspective_camera<T>& cr,
 template <class T>
 vpgl_essential_matrix<T>::
 vpgl_essential_matrix(const vpgl_essential_matrix<T>& other)
+: vpgl_fundamental_matrix<double>(other)
 {
-  set_matrix( other.F_ );
 }
 
 //---------------------------------

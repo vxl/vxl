@@ -66,7 +66,7 @@ double bmsh3d_ifs_mesh::get_avg_edge_len_from_F ()
 //############################################################################
 
 bmsh3d_mesh::bmsh3d_mesh(const bmsh3d_mesh& mesh)
-: edge_id_counter_(mesh.edge_id_counter_), i_traverse_flag_(mesh.i_traverse_flag_),
+: bmsh3d_ifs_mesh(mesh), edge_id_counter_(mesh.edge_id_counter_), i_traverse_flag_(mesh.i_traverse_flag_),
 b_watertight_(mesh.b_watertight_)
 {
 #if 0 // commented out
