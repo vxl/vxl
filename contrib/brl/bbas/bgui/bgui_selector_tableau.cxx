@@ -353,18 +353,21 @@ class bgui_selector_position_command : public vgui_command
   bgui_selector_position_command(bgui_selector_tableau* s, motion m) : selector(s), m_type(m) {}
   void execute()
   {
-    switch (m_type){
-    case TO_TOP:
+    switch (m_type)
+    {
+     case TO_TOP:
       selector->active_to_top();
       break;
-    case RAISE:
+     case RAISE:
       selector->active_raise();
       break;
-    case LOWER:
+     case LOWER:
       selector->active_lower();
       break;
-    case TO_BOTTOM:
+     case TO_BOTTOM:
       selector->active_to_bottom();
+      break;
+     default: // should never be reached...
       break;
     };
     selector->post_redraw();

@@ -838,6 +838,8 @@ imesh_imls_surface::triangle_quadrature(F quad_func,
            + quad_func(x,pi,p1,p2,vi,v1,v2,eps)
            + quad_func(x,pi,p2,p0,vi,v2,v0,eps);
     }
+    default: // should never be reached
+      assert(!"invalid flag");
   }
   return T();
 }

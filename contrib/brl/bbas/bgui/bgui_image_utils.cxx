@@ -50,12 +50,12 @@ bool bgui_image_utils::range(double& min_value, double& max_value,
                              unsigned plane)
 {
   if (!hist_valid_)
-    if(!this->construct_histogram())
+    if (!this->construct_histogram())
       return false;
-        
+
   min_value = this->compute_lower_bound(plane);
   max_value = this->compute_upper_bound(plane);
-  if(min_value>=max_value)
+  if (min_value>=max_value)
     return false;
   return true;
 }
@@ -84,7 +84,7 @@ bool bgui_image_utils::init_histogram_from_data()
   if (!bir)
     bir = vil_new_blocked_image_facade(image);
 
-  if(!this->set_data_by_random_blocks(min_blocks_, bir, scan_fraction_))
+  if (!this->set_data_by_random_blocks(min_blocks_, bir, scan_fraction_))
     return false;
 
   unsigned np = image_->nplanes();
@@ -124,13 +124,13 @@ bool bgui_image_utils::init_histogram_from_data()
       // determine if the number of bins exceess the limit
       unsigned short smin = static_cast<unsigned short>(minr[p]);
       unsigned short smax = static_cast<unsigned short>(maxr[p]);
-      unsigned short nbins = smax-smin;
+      unsigned short nbins = static_cast<unsigned short>(smax-smin);
       if (nbins>bin_limit_) {
         nbins = bin_limit_;
         //increase max value to make bin delta an integer
         double range = smax-smin;
         unsigned short del = static_cast<unsigned short>(vcl_ceil(range/nbins));
-        smax = smin + nbins*del;
+        smax = static_cast<unsigned short>(smin + nbins*del);
       }
       hist_[p] = bsta_histogram<double>(static_cast<double>(smin),
                                         static_cast<double>(smax), nbins);
@@ -159,7 +159,7 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
   }
   vil_pixel_format type = view->pixel_format();
   unsigned ni = view->ni(), nj = view->nj();
-  float area_frac = ni*nj*fraction;
+  float area_frac = static_cast<float>(ni*nj*fraction);
   unsigned np = view->nplanes();
   switch (type )
   {
@@ -168,13 +168,13 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
     vil_image_view<unsigned char> v = view;
     for (unsigned p = 0; p<np; ++p){
       float cnt = 0.0f;
-      while(cnt++<area_frac)
-        {
-          unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
-          unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
-          double val = static_cast<double>(v(i,j,p));
-          data_[p].push_back(val);
-        }
+      while (cnt++<area_frac)
+      {
+        unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        double val = static_cast<double>(v(i,j,p));
+        data_[p].push_back(val);
+      }
     }
     return true;
    }
@@ -183,13 +183,13 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
     vil_image_view<unsigned short> v = view;
     for (unsigned p = 0; p<np; ++p){
       float cnt = 0.0f;
-      while(cnt++<area_frac)
-        {
-          unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
-          unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
-          double val = static_cast<double>(v(i,j,p));
-          data_[p].push_back(val);
-        }
+      while (cnt++<area_frac)
+      {
+        unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        double val = static_cast<double>(v(i,j,p));
+        data_[p].push_back(val);
+      }
     }
     return true;
    }
@@ -209,7 +209,7 @@ set_data_by_random_blocks(const unsigned total_num_blocks,
   {
     unsigned bi = static_cast<unsigned>((nbi-1)*(vcl_rand()/(RAND_MAX+1.0)));
     unsigned bj = static_cast<unsigned>((nbj-1)*(vcl_rand()/(RAND_MAX+1.0)));
-    if(!this->set_data_from_view(bir->get_block(bi, bj), fraction))
+    if (!this->set_data_from_view(bir->get_block(bi, bj), fraction))
       return false;
   }
  return true;
@@ -335,7 +335,7 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
 }
 
 bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp,
-                                         double gamma, bool invert, 
+                                         double gamma, bool invert,
                                          bool gl_map, bool cache)
 {
   if (!image_) return false;
@@ -355,22 +355,24 @@ bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp,
   {
     case 1:
       rmp=new vgui_range_map_params(minv, maxv, gamma, invert, gl_map, cache);
-      break;
+      return true;
     case 3:
       rmp = new vgui_range_map_params(minv, maxv, minv, maxv, minv, maxv,
                                       gamma, gamma, gamma, invert,
                                       gl_map, cache);
-      break;
+      return true;
     case 4:
     {
       int band_map = 1; //map RGB-InfraRed -> RGB
       rmp = new vgui_range_map_params(minv, maxv, minv, maxv, minv, maxv,
                                       minv, maxv, gamma, gamma, gamma, gamma,
                                       band_map, invert, gl_map, cache);
-      break;
+      return true;
     }
+    default:
+      return false;
   }
-  return true;
+  return true; // never reached
 }
 
 bool bgui_image_utils::range_map_from_hist(float gamma, bool invert,
@@ -385,7 +387,7 @@ bool bgui_image_utils::range_map_from_hist(float gamma, bool invert,
   vcl_vector<double> minr(np, 0.0), maxr(np, 0.0);
 
   for (unsigned p = 0; p<np; ++p)
-    if(!this->range(minr[p], maxr[p], p))
+    if (!this->range(minr[p], maxr[p], p))
       return false;
 
   if (np == 1)

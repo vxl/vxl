@@ -166,21 +166,23 @@ int bmsh3d_fileio_vertex_cb_(p_ply_argument argument)
 
   switch (index)
   {
-  case 0: // "x" coordinate
+   case 0: // "x" coordinate
     parsed_mesh->p[0] = ply_get_argument_value(argument);
     break;
-  case 1: // "y" coordinate
+   case 1: // "y" coordinate
     parsed_mesh->p[1] = ply_get_argument_value(argument);
     break;
-  case 2: // "z" coordinate
+   case 2: // "z" coordinate
     parsed_mesh->p[2] = ply_get_argument_value(argument);
-
-    // INSERT VERTEX INTO THE MESH
-    bmsh3d_vertex* V =
-      parsed_mesh->mesh->_new_vertex ();
-    V->get_pt().set(parsed_mesh->p);
-    parsed_mesh->mesh->_add_vertex (V);
-    break;
+    { // INSERT VERTEX INTO THE MESH
+      bmsh3d_vertex* V =
+        parsed_mesh->mesh->_new_vertex ();
+      V->get_pt().set(parsed_mesh->p);
+      parsed_mesh->mesh->_add_vertex (V);
+      break;
+    }
+   default:
+    assert(!"This should not happen: index out of range");
   };
   return 1;
 }

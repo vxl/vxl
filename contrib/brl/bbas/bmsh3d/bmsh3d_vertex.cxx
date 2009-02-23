@@ -187,6 +187,7 @@ void bmsh3d_vertex::getInfo(vcl_ostringstream& ostrm)
    case VTOPO_2_MANIFOLD_1RING:  ostrm << "VTOPO_2_MANIFOLD_1RING"; break;
    case VTOPO_NON_MANIFOLD:      ostrm << "VTOPO_NON_MANIFOLD"; break;
    case VTOPO_NON_MANIFOLD_1RING:ostrm << "VTOPO_NON_MANIFOLD_1RING"; break;
+   default:                      ostrm << "UNDEFINED_VTOPO_TYPE"; break;
   }
 
   //: the incident edges
