@@ -144,7 +144,9 @@ namespace bvxm_gen_synthetic_world_process_globals
 
   bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale);
 
+#if 0 // avoid compiler warning (unused static function)
   static bool gen_lidar_2box( vgl_vector_3d<unsigned> grid_size,bvxm_voxel_world_sptr world);
+#endif // 0
 }
 
 //:set input and output types
@@ -762,6 +764,8 @@ bool bvxm_gen_synthetic_world_process_globals::test_reconstructed_ocp(bvxm_voxel
   return true;
 }
 
+#if 0 // commented out
+
 bool
 bvxm_gen_synthetic_world_process_globals::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
                                                          bvxm_voxel_world_sptr world)
@@ -794,7 +798,6 @@ bvxm_gen_synthetic_world_process_globals::gen_lidar_2box(vgl_vector_3d<unsigned>
 }
 
 
-#if 0 // commented out
 bool test()
 {
   bvxm_gen_synthetic_world_process();
