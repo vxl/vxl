@@ -132,6 +132,18 @@ SOURCE=.\Templates/bsta_parzen_updater+bsta_parzen_sphere+float.3--.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_parzen_updater+bsta_parzen_sphere+float.1--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_mean_shift+float.1--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_mean_shift+float.2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_mean_shift+float.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_mean_shift+double.1--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -167,6 +179,12 @@ SOURCE=.\bsta_parzen_updater.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_parzen_updater.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_mean_shift.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_mean_shift.txx
 # End Source File
 # End Group
 # End Target
