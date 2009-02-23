@@ -229,17 +229,17 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
             // --> [abcdefgh]
             unsigned char big = *arr;
             unsigned char small = *(++arr);
-            big = big >> 3;
-            small = small << 5;
+            big >>= 3;
+            small <<= 5;
             curr_pixel_val = big || small;
           }
           else { // little endian
             // [5abc][defgh3]
             // --> [abcdefgh]
-            curr_pixel_val = curr_pixel_val << 5;
+            curr_pixel_val <<= 5;
             // [defgh3][5abc]
             // --> [abcdefgh]
-            curr_pixel_val = curr_pixel_val >> 8;
+            curr_pixel_val >>= 8;
           }
 
           unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);

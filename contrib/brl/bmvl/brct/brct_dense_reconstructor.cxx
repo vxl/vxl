@@ -190,7 +190,7 @@ void brct_dense_reconstructor::write_disparity_image(char *filename)
          value = 0;
        if (value>2*correlation_range_+1)
          value=0;
-       buffer(x,y)=value;
+       buffer(x,y)=static_cast<unsigned char>(value);
      }
 
   // save the file, using file name extension to determine type

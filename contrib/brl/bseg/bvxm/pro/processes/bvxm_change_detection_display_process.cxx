@@ -148,7 +148,7 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   //map to 0-255 range
     for ( unsigned int i = 0; i < image_width; i++ ) {
     for ( unsigned int j = 0; j < image_height; j++ ) {
-      prob_img_byte(i,j) = (unsigned)vcl_floor((prob_image(i,j)/max_prob) * 255.0f);
+      prob_img_byte(i,j) = static_cast<unsigned char>(vcl_floor((prob_image(i,j)/max_prob) * 255.0f));
     }
   }
 
@@ -167,16 +167,16 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
         this_prob = prob_image( i,j )/(prob_thresh);
       }
 
-      output_image0(i,j,0) = (int)vcl_floor( input_image(i,j)*this_prob + 255*(1-this_prob) );
-      output_image0(i,j,1) = (int)vcl_floor( input_image(i,j)*this_prob );
-      output_image0(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
+      output_image0(i,j,0) = static_cast<unsigned char>(vcl_floor( input_image(i,j)*this_prob + 255*(1-this_prob) ));
+      output_image0(i,j,1) = static_cast<unsigned char>(vcl_floor( input_image(i,j)*this_prob ));
+      output_image0(i,j,2) = static_cast<unsigned char>(vcl_floor( input_image(i,j)*this_prob ));
 
       if (mask_image(i,j)) {
         original_prob_byte = prob_img_byte(i,j);
         if ( original_prob_byte > 255)
           original_prob_byte = 255;
       }
-      output_image1(i,j) = original_prob_byte;
+      output_image1(i,j) = static_cast<unsigned char>(original_prob_byte);
     }
   }
 

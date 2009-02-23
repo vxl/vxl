@@ -3630,7 +3630,7 @@ color_order(vil_image_view<float> const& color_image, float eq_tol)
       else if (g<b)
         gb = gb_lt;
       else gb = gb_gt;
-      unsigned char v = rg|rb|gb;// bitwise or
+      unsigned char v = static_cast<unsigned char>(rg|rb|gb); // bitwise or
       temp(i,j) = v;
     }
   return temp;

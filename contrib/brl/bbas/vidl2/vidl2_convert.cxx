@@ -140,9 +140,9 @@ struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_UYVY_422>
       vxl_byte y1,u1,v1,y2,u2,v2;
       vidl2_color_convert_rgb2yuv(r1,g1,b1,y1,u1,v1);
       vidl2_color_convert_rgb2yuv(r2,g2,b2,y2,u2,v2);
-      *(uyvy++) = (u1+u2)/2;
+      *(uyvy++) = (u1+u2)/2u;
       *(uyvy++) = y1;
-      *(uyvy++) = (v1+v2)/2;
+      *(uyvy++) = (v1+v2)/2u;
       *(uyvy++) = y2;
     }
     return true;
@@ -233,9 +233,9 @@ struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_YUYV_422>
       vidl2_color_convert_rgb2yuv(r1,g1,b1,y1,u1,v1);
       vidl2_color_convert_rgb2yuv(r2,g2,b2,y2,u2,v2);
       *(yuyv++) = y1;
-      *(yuyv++) = (u1+u2)/2;
+      *(yuyv++) = (u1+u2)/2u;
       *(yuyv++) = y2;
-      *(yuyv++) = (v1+v2)/2;
+      *(yuyv++) = (v1+v2)/2u;
     }
     return true;
   }
@@ -301,9 +301,9 @@ struct convert<VIDL2_PIXEL_FORMAT_RGB_24P, VIDL2_PIXEL_FORMAT_YUYV_422>
       vidl2_color_convert_rgb2yuv(r1,g1,b1,y1,u1,v1);
       vidl2_color_convert_rgb2yuv(r2,g2,b2,y2,u2,v2);
       *(yuyv++) = y1;
-      *(yuyv++) = (u1+u2)/2;
+      *(yuyv++) = (u1+u2)/2u;
       *(yuyv++) = y2;
-      *(yuyv++) = (v1+v2)/2;
+      *(yuyv++) = (v1+v2)/2u;
     }
     return true;
   }

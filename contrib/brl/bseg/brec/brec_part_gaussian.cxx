@@ -147,7 +147,7 @@ bool brec_part_gaussian::mark_receptive_field(vil_image_view<vxl_byte>& img, uns
         if (((int)img(i, j, plane) + strength_*255) > 255)
           img(i, j, plane) = 255;
         else
-          img(i, j, plane) += (vxl_byte)(strength_*255);
+          img(i, j, plane) += static_cast<vxl_byte>(strength_*255);
       }
     }
 

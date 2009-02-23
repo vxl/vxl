@@ -174,7 +174,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b, int* mapping)
     ClearStatus(MM_ERROR|MM_WARN);
   char* ibt = (char*)ib;
   for (int i = 0; i<num_b; i++)
-    *(ibt++) = mapping[*(current++)];
+    *(ibt++) = (char)mapping[*(current++)];
   curr_into += num_b;
   return num_b;
 }
@@ -212,7 +212,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b, int loc, int* mapping)
   }
   char* ibt = (char*)ib;
   for (int i = 0; i<num_b; i++)
-    *(ibt++) = mapping[*(current++)];
+    *(ibt++) = (char)mapping[*(current++)];
   return num_b;
 }
 

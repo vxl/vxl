@@ -22,7 +22,7 @@
 #include <vil/vil_image_view.h>
 
 
-//: This function sets up input for the process and returns the output of 
+//: This function sets up input for the process and returns the output of
 //  vil_convert_to_n_planes_process
 vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img)
 {
@@ -49,18 +49,17 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img)
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr out_img_base = result->value();
-  
+
   return out_img_base;
 }
 
 
 //: This test verifys that vil_convert_to_n_planes_process is working for a
-// floating type image and a vxl_byte image. The images are converted from 4 planes 
+// floating type image and a vxl_byte image. The images are converted from 4 planes
 // to 2 planes
 
 MAIN( test_vil_convert_to_n_planes_process )
 {
- 
   //Take care of database registration
   DECLARE_FUNC_CONS(vil_convert_to_n_planes_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_convert_to_n_planes_process, "vilConvertToNPlanesProcess");
@@ -84,29 +83,28 @@ MAIN( test_vil_convert_to_n_planes_process )
       f_image(i,j,2)=1.0f*i+10.0f*j+5.0f;
       f_image(i,j,3)=1.0f*i+10.0f*j;
 
-      byte_image(i,j,0)=1*i+10*j+15;
-      byte_image(i,j,1)=1*i+10*j+10;
-      byte_image(i,j,2)=1*i+10*j+5;
-      byte_image(i,j,3)=1*i+10*j;
+      byte_image(i,j,0)=static_cast<vxl_byte>(1*i+10*j+15);
+      byte_image(i,j,1)=static_cast<vxl_byte>(1*i+10*j+10);
+      byte_image(i,j,2)=static_cast<vxl_byte>(1*i+10*j+5);
+      byte_image(i,j,3)=static_cast<vxl_byte>(1*i+10*j);
 
       f_expected(i,j,0)=1.0f*i+10.0f*j+15.0f;
       f_expected(i,j,1)=1.0f*i+10.0f*j+10.0f;
       f_expected(i,j,2)=1.0f*i+10.0f*j+5.0f;
 
-      byte_expected(i,j,0)=1*i+10*j+15;
-      byte_expected(i,j,1)=1*i+10*j+10;
-      byte_expected(i,j,2)=1*i+10*j+5;
+      byte_expected(i,j,0)=static_cast<vxl_byte>(1*i+10*j+15);
+      byte_expected(i,j,1)=static_cast<vxl_byte>(1*i+10*j+10);
+      byte_expected(i,j,2)=static_cast<vxl_byte>(1*i+10*j+5);
     }
   }
-
 
   //TEST a floating point case
   vil_image_view_base_sptr f_image_ref = new vil_image_view<float>(f_image);
   vil_image_view_base_sptr f_base = test_process(f_image_ref);
   vil_image_view<float> f_observed(f_base);
- 
+
   TEST("Float-Image as expected",vil_image_view_deep_equality(f_observed, f_expected), true);
-  
+
   bprb_batch_process_manager::instance()->clear();
 
   //TEST a byte case
@@ -116,9 +114,8 @@ MAIN( test_vil_convert_to_n_planes_process )
   vil_image_view<vxl_byte> byte_observed(byte_base);
 
   TEST("Byte-Image as expected",vil_image_view_deep_equality(byte_observed,byte_expected), true);
-  
+
   bprb_batch_process_manager::instance()->clear();
 
-    
   SUMMARY();
 }

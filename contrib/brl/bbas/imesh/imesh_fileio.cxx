@@ -143,7 +143,7 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
     {
       case 'v': // read a vertex
       {
-        char c2 = is.peek();
+        char c2 = (char)is.peek();
         switch (c2)
         {
           case 'n': // read a normal

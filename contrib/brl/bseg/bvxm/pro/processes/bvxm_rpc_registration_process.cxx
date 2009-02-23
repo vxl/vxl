@@ -62,7 +62,7 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   input_types_[i++] = "float";
   input_types_[i++] = "float";
   input_types_[i++] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   // process has 2 outputs:
@@ -73,7 +73,7 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
 
   return true;
@@ -87,17 +87,17 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   //check number of inputs
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
   // get the inputs
   unsigned i = 0;
   // voxel world
-  bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(i++);        
+  bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   // camera
-  vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);    
+  vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
   // image
-  vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);  
+  vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   // boolean parameter specifying the voxel world alignment state
@@ -115,10 +115,10 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
 
   int offset_search_size = bvxm_util::convert_uncertainty_from_meters_to_pixels(uncertainty, vox_world->get_params()->lvcs(), camera_inp);
 
-  vcl_cout << "Offset search size is: " << offset_search_size << "\n";
+  vcl_cout << "Offset search size is: " << offset_search_size << '\n';
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
-  vcl_cout << "Number of observations before the update: " << num_observations << "\n";
+  vcl_cout << "Number of observations before the update: " << num_observations << '\n';
 
   int ni = edge_image.ni();
   int nj = edge_image.nj();
@@ -145,7 +145,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   for (int i=0; i<ni; i++) {
     for (int j=0; j<nj; j++) {
       //      expected_edge_image_output(i,j) = (int)((255.0*(expected_edge_image(i,j)-eei_min))/(eei_max-eei_min));
-      expected_edge_image_output(i,j) = (int)(255.0*expected_edge_image(i,j));
+      expected_edge_image_output(i,j) = static_cast<unsigned char>(255.0*expected_edge_image(i,j));
     }
   }
 
@@ -189,7 +189,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
 
   file_out.clear();
   file_out.open("offsets.txt",vcl_ofstream::app);
-  file_out << best_offset_u << " " << best_offset_v << "\n";
+  file_out << best_offset_u << ' ' << best_offset_v << '\n';
   file_out.close();
 
   float nlx=0.f,nly=0.f,nlz=0.f;

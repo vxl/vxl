@@ -36,7 +36,7 @@ vpgl_read_list(
 
   char line_buffer[256];
   while ( ifp.eof() == 0 ){
-    char nc = ifp.peek();
+    char nc = (char)ifp.peek();
     if ( nc == '-' || (nc >= '0' && nc <= '9') ) {
       T new_object;
       ifp >> new_object;
