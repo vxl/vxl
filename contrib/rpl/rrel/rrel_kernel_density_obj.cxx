@@ -38,12 +38,12 @@ rrel_kernel_density_obj::fcn(vect_const_iter /*res_begin*/, vect_const_iter /*re
 }
 
 double
-rrel_kernel_density_obj::fcn(vect_const_iter res_begin, 
+rrel_kernel_density_obj::fcn(vect_const_iter res_begin,
                              vect_const_iter res_end,
                              double prior_scale,
                              vnl_vector<double>* ) const
 {
-  double h = bandwidth ( res_begin, res_end, prior_scale ); 
+  double h = bandwidth ( res_begin, res_end, prior_scale );
   assert ( h != 0 );
   double x = best_x ( res_begin, res_end, prior_scale );
 
@@ -51,7 +51,7 @@ rrel_kernel_density_obj::fcn(vect_const_iter res_begin,
 }
 
 double
-rrel_kernel_density_obj::best_x(vect_const_iter res_begin, 
+rrel_kernel_density_obj::best_x(vect_const_iter res_begin,
                                 vect_const_iter res_end,
                                 double prior_scale) const
 {
@@ -96,7 +96,7 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin,
 
   f1 = kernel_density( res_begin, res_end, x1, h );
   f2 = kernel_density( res_begin, res_end, x2, h );
-  while ( vnl_math_abs( x3 - x0 ) > 
+  while ( vnl_math_abs( x3 - x0 ) >
           tol * vnl_math_abs( x1 ) + vnl_math_abs( x2 ) ) {
     if ( f2 > f1 ) {
       shft3( x0, x1, x2, R * x2 + C * x3 );
@@ -120,8 +120,9 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
   vcl_vector<double>::difference_type n = res_end - res_begin;
   double scale = 1.0;
 
-  switch ( scale_type_ ) {
-  case RREL_KERNEL_MAD: {
+  switch ( scale_type_ )
+  {
+   case RREL_KERNEL_MAD: {
     //A median absolute deviations (MAD) scale estimate.
 
     //Here I avoid using rrel_util_median_abs_dev_scale
@@ -142,16 +143,19 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     // c=0.5 is chosen to avoid over-smoothing of the estimated density.
     scale = 0.5 * (*loc);
     break;
-  }
+   }
 
-  case RREL_KERNEL_PRIOR:
+   case RREL_KERNEL_PRIOR:
     scale = prior_scale;
     break;
 
-  case RREL_KERNEL_MUSE:
+   case RREL_KERNEL_MUSE: {
     rrel_muset_obj muse( (int)n );
     scale = muse.fcn( res_begin, res_end );
-    break;
+    break; }
+
+   default:
+    assert(!"invalid scale_type");
   }
 
   // h = [243 * R(K) / 35 / Mu(K)^2 / n]^0.2 * scale
@@ -162,9 +166,9 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
 }
 
 double
-rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin, 
+rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin,
                                         vect_const_iter res_end,
-                                        double x, 
+                                        double x,
                                         double h) const
 {
   double f=0;

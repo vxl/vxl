@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 // \author fsm
 
 #include "osl_canny_nms.h"
@@ -32,36 +32,36 @@ unsigned int osl_canny_nms(int xsize_, int ysize_,
       float thick = grad_[x][y];
       float theta = k*(float)vcl_atan2(dx_[x][y],dy_[x][y]);
       // theta not to be used to define theta_[x][y]. Only to define orient.
-      int orient = ( (int) (theta+202.5) ) / 45;
+      int orient = ( (int) (theta+202.5) ) / 45; orient %= 8;
 
       float newx = 0.0f, newy = 0.0f; // Initialise
 
       // Identify quadrant:
       //                     3   2   1
       //
-      //                     4   *   0(8)
+      //                     4   *   0
       //
       //                     5   6   7
-      switch(orient) {
-      case 0:   // sort of horizontal
-      case 4:
-      case 8:
+      switch (orient)
+      {
+       case 0:   // sort of horizontal
+       case 4:
         newx=x+0.5f;   // pixel centre
         del  =  grad_[x][y-1]-grad_[x][y+1];
         del /= (grad_[x][y+1]+grad_[x][y-1]-2*grad_[x][y])*2;
         if (del>0.5f) continue;
         newy=y+del+0.5f;
         break;
-      case 2:   // sort of vertical
-      case 6:
+       case 2:   // sort of vertical
+       case 6:
         newy=y+0.5f;
         del  = grad_[x-1][y]-grad_[x+1][y];
         del /= (grad_[x-1][y]+grad_[x+1][y]-2*grad_[x][y])*2;
         if (del>0.5f) continue;
         newx=x+del+0.5f;
         break;
-      case 1:   // sort of left diagonal
-      case 5:
+       case 1:   // sort of left diagonal
+       case 5:
         if (grad_[x][y]<=grad_[x+1][y-1] || grad_[x][y]<grad_[x-1][y+1])
           continue;
         del  = grad_[x-1][y+1]-grad_[x+1][y-1];
@@ -70,8 +70,8 @@ unsigned int osl_canny_nms(int xsize_, int ysize_,
         newy=y-del+0.5f;
         newx=x+del+0.5f;
         break;
-      case 3:   // sort of right diagonal
-      case 7:
+       case 3:   // sort of right diagonal
+       case 7:
         if (grad_[x][y]<=grad_[x-1][y-1] || grad_[x][y]<grad_[x+1][y+1])
           continue;
         del  = grad_[x+1][y+1]-grad_[x-1][y-1];
@@ -79,6 +79,8 @@ unsigned int osl_canny_nms(int xsize_, int ysize_,
         if (del>0.5f) continue;
         newy=y-del+0.5f;
         newx=x-del+0.5f;
+        break;
+       default: // this cannot be reached
         break;
       }   // end switch
 

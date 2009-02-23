@@ -198,7 +198,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
   double det;
   switch (form_)
   {
-  case Affine:
+   case Affine:
     { // Not really true affine, because shear is forbidden.
       angles(rx, ry, rz);
       det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
@@ -207,16 +207,16 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
       sz = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math_sgn(det);
       if (vnl_math_sqr(sx-sy) +  vnl_math_sqr(sx-sz) < tol*tol)
         this->set_similarity(sx, rx, ry, rz,
-          xt_, yt_, zt_ );
+                             xt_, yt_, zt_ );
       else if (rx*rx+ry*ry+rz*rz < tol*tol)
         this->set_zoom_only(sx, sy, sz,
-          xt_, yt_, zt_);
+                            xt_, yt_, zt_);
       else
         return;
       simplify();
       return;
     }
-  case Similarity:
+   case Similarity:
     angles(rx, ry, rz);
     det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
     sx=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
@@ -225,30 +225,28 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
     else if (vnl_math_sqr(sx-1.0) < tol*tol)
       this->set_rigid_body(rx, ry, rz, xt_, yt_, zt_);
     else
-      return; 
+      return;
     simplify();
     return;
 
-  case RigidBody:
+   case RigidBody:
     angles(rx, ry, rz);
     if (rx*rx+ry*ry+rz*rz >= tol*tol)
       return;
     this->set_translation(xt_, yt_, zt_);
     simplify();
     return;
-  case ZoomOnly:
+   case ZoomOnly:
     if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) || vnl_math_sqr(zz_-1.0) >= tol*tol)
       return;
     set_translation(xt_, yt_, zt_);
-  case Translation:
+   case Translation:
     if (xt_*xt_+yt_*yt_+zt_*zt_<tol*tol)
       set_identity();
     return;
-  case Identity:
-    return;  
-    break;
-
-  default:
+   case Identity:
+    return;
+   default:
     mbl_exception_error(mbl_exception_abort(
       vul_sprintf("vimt3d_transform_3d::simplify() Unexpected form: %d", form_) ));
   }
@@ -851,6 +849,9 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       << vsl_indent()<< "angles = " << p(3) << ',' << p(4) << ',' << p(5) << '\n'
       << vsl_indent()<< "translation = (" << p(6) << ',' << p(7) << ',' << p(8) << ")\n";
     break; }
+   default:
+    mbl_exception_error(mbl_exception_abort(
+      vul_sprintf("vimt3d_transform_3d::print_summary() Unexpected form: %d", form_) ));
   }
   vsl_indent_dec(o);
 }
@@ -885,6 +886,9 @@ void vimt3d_transform_3d::print_all(vcl_ostream& os) const
    case Affine:
     os << "Affine\n";
     break;
+   default:
+    mbl_exception_error(mbl_exception_abort(
+      vul_sprintf("vimt3d_transform_3d::print_all() Unexpected form: %d", form_) ));
   }
 
   os << vsl_indent() << "Matrix:\n";

@@ -432,8 +432,10 @@ static void endian_swap( vxl_byte* a, unsigned n_bytes,
                          unsigned bytes_per_sample)
 {
   switch ( bytes_per_sample ) {
+   case 1: break; // do nothing
    case 2: tif_swap16( a, n_bytes / 2 ); break; //16 bit
    case 4: tif_swap32( a, n_bytes / 4 ); break; //32 bit
+   default: assert(!"Unsupported number of bytes per sample.");
   }
 }
 

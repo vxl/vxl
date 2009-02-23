@@ -282,6 +282,8 @@ rrel_irls::has_converged( const vcl_vector<double>& residuals,
    case rrel_estimation_problem::MULTIPLE:
     obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), params );
     break;
+   default:
+    assert(!"invalid scale_type");
   }
 
   if ( trace_level_ >= 1 )

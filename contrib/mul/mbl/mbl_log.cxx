@@ -98,9 +98,9 @@ int mbl_log_streambuf::overflow(int ch)
   pbump(-n);  // Reset pptr().
 
   if (ch == EOF)
-  return 0;
+    return 0;
 
-  char cbuf = ch;
+  char cbuf = (char)ch;
   logger_->output_->append(&cbuf, 1);
   return ch;
 #else
@@ -133,7 +133,7 @@ mbl_logger::mbl_logger():
   output_(new mbl_log_output_stream(vcl_cerr, "")),
   streambuf_(this),
   logstream_(&streambuf_),
-  mt_logstream_(&logstream_) 
+  mt_logstream_(&logstream_)
 {
   // This will have to change to support proper hierarchical control over categories.
 //  logstream_.tie(output_.real_stream_);
@@ -373,9 +373,9 @@ mbl_logger_root &mbl_logger::root()
 
 //:Load a default configuration file
 // Current Format is
-//\verbatim
+// \verbatim
 //LEVEL
-//\end verbatim
+// \endverbatim
 // where LEVEL is an integer - setting the logging level.
 // see mbl_logger:levels for useful values.
 void mbl_logger_root::load_log_config_file(
@@ -415,7 +415,7 @@ void mbl_logger_root::load_log_config_file(
 
   if (!config_file.is_open())
   {
-    vcl_cerr << "WARNING: No mbl_log.properties file found." << vcl_endl;
+    vcl_cerr << "WARNING: No mbl_log.properties file found.\n";
     return;
   }
 
@@ -427,13 +427,13 @@ void mbl_logger_root::load_log_config_file(
 
 //:Load a default configuration file
 // Current Format is
-//\verbatim
+// \verbatim
 //LEVEL
-//\end verbatim
+// \endverbatim
 // where LEVEL is an integer - setting the logging level.
 // see mbl_logger:levels for useful values.
 void mbl_logger_root::load_log_config(vcl_istream& is,
-  const vcl_map<vcl_string, vcl_ostream *> &stream_names)
+                                      const vcl_map<vcl_string, vcl_ostream *> &stream_names)
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
   categories_.config(is, stream_names);
@@ -467,7 +467,7 @@ typedef vcl_map<vcl_string, vcl_ostream*> stream_names_t;
 
 
 inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
-  const stream_names_t& stream_names)
+                                                   const stream_names_t& stream_names)
 {
   mbl_log_categories::cat_spec spec;
   vcl_istringstream ss(str);
@@ -617,7 +617,7 @@ const mbl_log_categories::cat_spec&
   // The search shouldn't get past the first (root) entry.
   assert(it != cat_list_.rend());
 
-  // vcl_cerr << "MBL_LOG: Using category \"" << it->first << '\"' << vcl_endl;
+  // vcl_cerr << "MBL_LOG: Using category \"" << it->first << '\"' << '\n';
   return it->second;
 }
 
@@ -632,6 +632,9 @@ vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec
     break;
    case mbl_log_categories::cat_spec::NAMED_STREAM:
     os << " stream_output: " << spec.name;
+    break;
+   default:
+    assert(!"This should not happen: invalid spec.output");
     break;
   }
   os << " }";

@@ -487,23 +487,23 @@ vgl_vector_3d<double> mil3d_transform_3d::delta(vgl_point_3d<double> p, vgl_vect
       dp.x()*zx_+dp.y()*zy_+dp.z()*zz_
      );
    default: // general projective transformation
-    {
-      double lambda = tx_*p.x()+ty_*p.y()+tz_*p.z()+tt_;
-      double lamb_d = tx_*dp.x()+ty_*dp.y()+tz_*dp.z();
-      double x = dp.x()*xx_+dp.y()*xy_+dp.z()*xz_;
-      double y = dp.x()*yx_+dp.y()*yy_+dp.z()*yz_;
-      double z = dp.x()*zx_+dp.y()*zy_+dp.z()*zz_;
-      if (lambda==1 && lamb_d==0)
-        return vgl_vector_3d<double>(x,y,z); // quick return if possible
-      vgl_point_3d<double> tp = (*this)(p);
-      x -= tp.x() * lamb_d;
-      y -= tp.y() * lamb_d;
-      z -= tp.z() * lamb_d;
-      x /= lambda+lamb_d; // may be division by 0 - in that case delta=infinity
-      y /= lambda+lamb_d;
-      z /= lambda+lamb_d;
-      return vgl_vector_3d<double>(x,y,z);
-    }
+   {
+    double lambda = tx_*p.x()+ty_*p.y()+tz_*p.z()+tt_;
+    double lamb_d = tx_*dp.x()+ty_*dp.y()+tz_*dp.z();
+    double x = dp.x()*xx_+dp.y()*xy_+dp.z()*xz_;
+    double y = dp.x()*yx_+dp.y()*yy_+dp.z()*yz_;
+    double z = dp.x()*zx_+dp.y()*zy_+dp.z()*zz_;
+    if (lambda==1 && lamb_d==0)
+      return vgl_vector_3d<double>(x,y,z); // quick return if possible
+    vgl_point_3d<double> tp = (*this)(p);
+    x -= tp.x() * lamb_d;
+    y -= tp.y() * lamb_d;
+    z -= tp.z() * lamb_d;
+    x /= lambda+lamb_d; // may be division by 0 - in that case delta=infinity
+    y /= lambda+lamb_d;
+    z /= lambda+lamb_d;
+    return vgl_vector_3d<double>(x,y,z);
+   }
   }
 
   return vgl_vector_3d<double>(); // To keep over-zealous compilers happy
@@ -579,94 +579,94 @@ void mil3d_transform_3d::calcInverse() const
     break;
    case Similarity :
    case Affine :
+   {
+    double det=-xx_*yy_*zz_+xx_*zy_*yz_+yx_*xy_*zz_-yx_*zy_*xz_-zx_*xy_*yz_+zx_*yy_*xz_;
+    if (det==0)
     {
-      double det=-xx_*yy_*zz_+xx_*zy_*yz_+yx_*xy_*zz_-yx_*zy_*xz_-zx_*xy_*yz_+zx_*yy_*xz_;
-      if (det==0)
-      {
-        vcl_cerr<<"mill_transform_3d() : No inverse exists for this affine transform (det==0)\n";
-        vcl_abort();
-      }
-
-      xx2_=(-yy_*zz_+zy_*yz_)/det;
-      xy2_=( xy_*zz_-zy_*xz_)/det;
-      xz2_=(-xy_*yz_+yy_*xz_)/det;
-      xt2_=(xy_*yz_*zt_-xy_*yt_*zz_-yy_*xz_*zt_+yy_*xt_*zz_+zy_*xz_*yt_-zy_*xt_*yz_)/det;
-
-      yx2_=( yx_*zz_-zx_*yz_)/det;
-      yy2_=(-xx_*zz_+zx_*xz_)/det;
-      yz2_=( xx_*yz_-yx_*xz_)/det;
-      yt2_=(-xx_*yz_*zt_+xx_*yt_*zz_+yx_*xz_*zt_-yx_*xt_*zz_-zx_*xz_*yt_+zx_*xt_*yz_)/det;
-
-      zx2_=(-yx_*zy_+zx_*yy_)/det;
-      zy2_=( xx_*zy_-zx_*xy_)/det;
-      zz2_=(-xx_*yy_+yx_*xy_)/det;
-      zt2_=( xx_*yy_*zt_-xx_*yt_*zy_-yx_*xy_*zt_+yx_*xt_*zy_+zx_*xy_*yt_-zx_*xt_*yy_)/det;
-
-      break;
+      vcl_cerr<<"mill_transform_3d() : No inverse exists for this affine transform (det==0)\n";
+      vcl_abort();
     }
+
+    xx2_=(-yy_*zz_+zy_*yz_)/det;
+    xy2_=( xy_*zz_-zy_*xz_)/det;
+    xz2_=(-xy_*yz_+yy_*xz_)/det;
+    xt2_=(xy_*yz_*zt_-xy_*yt_*zz_-yy_*xz_*zt_+yy_*xt_*zz_+zy_*xz_*yt_-zy_*xt_*yz_)/det;
+
+    yx2_=( yx_*zz_-zx_*yz_)/det;
+    yy2_=(-xx_*zz_+zx_*xz_)/det;
+    yz2_=( xx_*yz_-yx_*xz_)/det;
+    yt2_=(-xx_*yz_*zt_+xx_*yt_*zz_+yx_*xz_*zt_-yx_*xt_*zz_-zx_*xz_*yt_+zx_*xt_*yz_)/det;
+
+    zx2_=(-yx_*zy_+zx_*yy_)/det;
+    zy2_=( xx_*zy_-zx_*xy_)/det;
+    zz2_=(-xx_*yy_+yx_*xy_)/det;
+    zt2_=( xx_*yy_*zt_-xx_*yt_*zy_-yx_*xy_*zt_+yx_*xt_*zy_+zx_*xy_*yt_-zx_*xt_*yy_)/det;
+
+    break;
+   }
    case Projective:
+   {
+    // subdivide m in four 2x2 matrices:
+    double A[4], B[4], C[4], D[4];
+    A[0] = xx_; A[1] = xy_; B[0] = xz_; B[1] = xt_;
+    A[2] = yx_; A[3] = yy_; B[2] = yz_; B[3] = yt_;
+    C[0] = zx_; C[1] = zy_; D[0] = zz_; D[1] = zt_;
+    C[2] = tx_; C[3] = ty_; D[2] = tz_; D[3] = tt_;
+    // Now solve the matrix eqns A*Ai+B*Ci=I, A*Bi+B*Di=0=C*Ai+D*Ci, C*Bi+D*Di=I:
+    double det_B = B[0]*B[3] - B[1]*B[2];
+    double det_D = D[0]*D[3] - D[1]*D[2];
+    if (det_B==0 || det_D==0)
     {
-      // subdivide m in four 2x2 matrices:
-      double A[4], B[4], C[4], D[4];
-      A[0] = xx_; A[1] = xy_; B[0] = xz_; B[1] = xt_;
-      A[2] = yx_; A[3] = yy_; B[2] = yz_; B[3] = yt_;
-      C[0] = zx_; C[1] = zy_; D[0] = zz_; D[1] = zt_;
-      C[2] = tx_; C[3] = ty_; D[2] = tz_; D[3] = tt_;
-      // Now solve the matrix eqns A*Ai+B*Ci=I, A*Bi+B*Di=0=C*Ai+D*Ci, C*Bi+D*Di=I:
-      double det_B = B[0]*B[3] - B[1]*B[2];
-      double det_D = D[0]*D[3] - D[1]*D[2];
-      if (det_B==0 || det_D==0)
-      {
-        vcl_cerr<<"mill_transform_3d() : No inverse exists for this projective transform\n";
-        vcl_abort();
-      }
-      // DC = inverse(D)*C
-      double DC[4];
-      DC[0]=(D[3]*C[0]-D[2]*C[2])/det_D;
-      DC[1]=(D[3]*C[1]-D[2]*C[3])/det_D;
-      DC[2]=(D[0]*C[2]-D[1]*C[0])/det_D;
-      DC[3]=(D[0]*C[3]-D[1]*C[1])/det_D;
-      // BA = inverse(B)*A
-      double BA[4];
-      BA[0]=(B[3]*A[0]-B[2]*A[2])/det_B;
-      BA[1]=(B[3]*A[1]-B[2]*A[3])/det_B;
-      BA[2]=(B[0]*A[2]-B[1]*A[0])/det_B;
-      BA[3]=(B[0]*A[3]-B[1]*A[1])/det_B;
-      // Ai = inverse(A-B*DC)
-      double Ai[4];
-      Ai[3]= A[0]-B[0]*DC[0]-B[1]*DC[2];
-      Ai[2]=-A[1]+B[0]*DC[1]+B[1]*DC[3];
-      Ai[1]=-A[2]+B[2]*DC[0]+B[3]*DC[2];
-      Ai[0]= A[3]-B[2]*DC[1]-B[3]*DC[3];
-      double det_Ai = Ai[0]*Ai[3]-Ai[1]*Ai[2];
-      Ai[0]/=det_Ai; Ai[1]/=det_Ai; Ai[2]/=det_Ai; Ai[3]/=det_Ai;
-      // Bi = inverse(C-D*BA)
-      double Bi[4];
-      Bi[3]= C[0]-D[0]*BA[0]-D[1]*BA[2];
-      Bi[2]=-C[1]+D[0]*BA[1]+D[1]*BA[3];
-      Bi[1]=-C[2]+D[2]*BA[0]+D[3]*BA[2];
-      Bi[0]= C[3]-D[2]*BA[1]-D[3]*BA[3];
-      double det_Bi = Bi[0]*Bi[3]-Bi[1]*Bi[2];
-      Bi[0]/=det_Bi; Bi[1]/=det_Bi; Bi[2]/=det_Bi; Bi[3]/=det_Bi;
-      // Ci = -DC*Ai
-      double Ci[4];
-      Ci[0]=-DC[0]*Ai[0]-DC[1]*Ai[2];
-      Ci[1]=-DC[0]*Ai[1]-DC[1]*Ai[3];
-      Ci[2]=-DC[2]*Ai[0]-DC[3]*Ai[2];
-      Ci[3]=-DC[2]*Ai[1]-DC[3]*Ai[3];
-      // Di = -BA*Bi
-      double Di[4];
-      Di[0]=-BA[0]*Bi[0]-BA[1]*Bi[2];
-      Di[1]=-BA[0]*Bi[1]-BA[1]*Bi[3];
-      Di[2]=-BA[2]*Bi[0]-BA[3]*Bi[2];
-      Di[3]=-BA[2]*Bi[1]-BA[3]*Bi[3];
-      // recompose the resulting 4x4 matrix:
-      xx2_ = Ai[0]; xy2_ = Ai[1]; xz2_ = Bi[0]; xt2_ = Bi[1];
-      yx2_ = Ai[2]; yy2_ = Ai[3]; yz2_ = Bi[2]; yt2_ = Bi[3];
-      zx2_ = Ci[0]; zy2_ = Ci[1]; zz2_ = Di[0]; zt2_ = Di[1];
-      tx2_ = Ci[2]; ty2_ = Ci[3]; tz2_ = Di[2]; tt2_ = Di[3];
-      break;
+      vcl_cerr<<"mill_transform_3d() : No inverse exists for this projective transform\n";
+      vcl_abort();
     }
+    // DC = inverse(D)*C
+    double DC[4];
+    DC[0]=(D[3]*C[0]-D[2]*C[2])/det_D;
+    DC[1]=(D[3]*C[1]-D[2]*C[3])/det_D;
+    DC[2]=(D[0]*C[2]-D[1]*C[0])/det_D;
+    DC[3]=(D[0]*C[3]-D[1]*C[1])/det_D;
+    // BA = inverse(B)*A
+    double BA[4];
+    BA[0]=(B[3]*A[0]-B[2]*A[2])/det_B;
+    BA[1]=(B[3]*A[1]-B[2]*A[3])/det_B;
+    BA[2]=(B[0]*A[2]-B[1]*A[0])/det_B;
+    BA[3]=(B[0]*A[3]-B[1]*A[1])/det_B;
+    // Ai = inverse(A-B*DC)
+    double Ai[4];
+    Ai[3]= A[0]-B[0]*DC[0]-B[1]*DC[2];
+    Ai[2]=-A[1]+B[0]*DC[1]+B[1]*DC[3];
+    Ai[1]=-A[2]+B[2]*DC[0]+B[3]*DC[2];
+    Ai[0]= A[3]-B[2]*DC[1]-B[3]*DC[3];
+    double det_Ai = Ai[0]*Ai[3]-Ai[1]*Ai[2];
+    Ai[0]/=det_Ai; Ai[1]/=det_Ai; Ai[2]/=det_Ai; Ai[3]/=det_Ai;
+    // Bi = inverse(C-D*BA)
+    double Bi[4];
+    Bi[3]= C[0]-D[0]*BA[0]-D[1]*BA[2];
+    Bi[2]=-C[1]+D[0]*BA[1]+D[1]*BA[3];
+    Bi[1]=-C[2]+D[2]*BA[0]+D[3]*BA[2];
+    Bi[0]= C[3]-D[2]*BA[1]-D[3]*BA[3];
+    double det_Bi = Bi[0]*Bi[3]-Bi[1]*Bi[2];
+    Bi[0]/=det_Bi; Bi[1]/=det_Bi; Bi[2]/=det_Bi; Bi[3]/=det_Bi;
+    // Ci = -DC*Ai
+    double Ci[4];
+    Ci[0]=-DC[0]*Ai[0]-DC[1]*Ai[2];
+    Ci[1]=-DC[0]*Ai[1]-DC[1]*Ai[3];
+    Ci[2]=-DC[2]*Ai[0]-DC[3]*Ai[2];
+    Ci[3]=-DC[2]*Ai[1]-DC[3]*Ai[3];
+    // Di = -BA*Bi
+    double Di[4];
+    Di[0]=-BA[0]*Bi[0]-BA[1]*Bi[2];
+    Di[1]=-BA[0]*Bi[1]-BA[1]*Bi[3];
+    Di[2]=-BA[2]*Bi[0]-BA[3]*Bi[2];
+    Di[3]=-BA[2]*Bi[1]-BA[3]*Bi[3];
+    // recompose the resulting 4x4 matrix:
+    xx2_ = Ai[0]; xy2_ = Ai[1]; xz2_ = Bi[0]; xt2_ = Bi[1];
+    yx2_ = Ai[2]; yy2_ = Ai[3]; yz2_ = Bi[2]; yt2_ = Bi[3];
+    zx2_ = Ci[0]; zy2_ = Ci[1]; zz2_ = Di[0]; zt2_ = Di[1];
+    tx2_ = Ci[2]; ty2_ = Ci[3]; tz2_ = Di[2]; tt2_ = Di[3];
+    break;
+   }
    case Undefined:
     vcl_cerr<<"mil3d_transform_3d::calcInverse() : Unexpected form Undefined\n";
     break;
@@ -881,6 +881,10 @@ void mil3d_transform_3d::print_summary(vcl_ostream& o) const
    case Undefined:
     o << "Undefined\n";
     break;
+   default:
+    vcl_cerr<<"mil3d_transform_3d::print_summary() Unexpected form: "
+            <<int(form_)<<vcl_endl;
+    vcl_abort();
   }
   vsl_indent_dec(o);
 }

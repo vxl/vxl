@@ -24,9 +24,9 @@ inline vil_image_view<T> vil3d_slice_ji(const vil3d_image_view<T> &im, unsigned 
   vcl_ptrdiff_t pstep = im.planestep();
   if (im.nplanes()==1) pstep=im.ni()*im.nj();
   return vil_image_view<T>(im.memory_chunk(),
-                            im.origin_ptr()+k*im.kstep(),
-                            im.nj(), im.ni(), im.nplanes(),
-                            im.jstep(), im.istep(), pstep);
+                           im.origin_ptr()+k*im.kstep(),
+                           im.nj(), im.ni(), im.nplanes(),
+                           im.jstep(), im.istep(), pstep);
 }
 
 //: Return a 2D view of slice k of 3D image aligned as (i,j).
@@ -41,9 +41,9 @@ inline vil_image_view<T> vil3d_slice_ij(const vil3d_image_view<T> &im, unsigned 
   vcl_ptrdiff_t pstep = im.planestep();
   if (im.nplanes()==1) pstep=im.ni()*im.nj();
   return vil_image_view<T>(im.memory_chunk(),
-                            im.origin_ptr()+k*im.kstep(),
-                            im.ni(), im.nj(), im.nplanes(),
-                            im.istep(), im.jstep(), pstep);
+                           im.origin_ptr()+k*im.kstep(),
+                           im.ni(), im.nj(), im.nplanes(),
+                           im.istep(), im.jstep(), pstep);
 }
 
 //: Return a 2D view of slice i of 3D image aligned as (j,k).
@@ -58,9 +58,9 @@ inline vil_image_view<T> vil3d_slice_jk(const vil3d_image_view<T> &im, unsigned 
   vcl_ptrdiff_t pstep = im.planestep();
   if (im.nplanes()==1) pstep=im.nj()*im.nk();
   return vil_image_view<T>(im.memory_chunk(),
-                            im.origin_ptr()+i*im.istep(),
-                            im.nj(), im.nk(), im.nplanes(),
-                            im.jstep(), im.kstep(), pstep);
+                           im.origin_ptr()+i*im.istep(),
+                           im.nj(), im.nk(), im.nplanes(),
+                           im.jstep(), im.kstep(), pstep);
 }
 
 //: Return a 2D view of slice i of 3D image aligned as (k,j).
@@ -75,9 +75,9 @@ inline vil_image_view<T> vil3d_slice_kj(const vil3d_image_view<T> &im, unsigned 
   vcl_ptrdiff_t pstep = im.planestep();
   if (im.nplanes()==1) pstep=im.nj()*im.nk();
   return vil_image_view<T>(im.memory_chunk(),
-                            im.origin_ptr()+i*im.istep(),
-                            im.nk(), im.nj(), im.nplanes(),
-                            im.kstep(), im.jstep(), pstep);
+                           im.origin_ptr()+i*im.istep(),
+                           im.nk(), im.nj(), im.nplanes(),
+                           im.kstep(), im.jstep(), pstep);
 }
 
 //: Return a 2D view of slice j of 3D image aligned as (k,i).
@@ -92,9 +92,9 @@ inline vil_image_view<T> vil3d_slice_ki(const vil3d_image_view<T> &im, unsigned 
   vcl_ptrdiff_t pstep = im.planestep();
   if (im.nplanes()==1) pstep=im.ni()*im.nk();
   return vil_image_view<T>(im.memory_chunk(),
-                            im.origin_ptr()+j*im.jstep(),
-                            im.nk(), im.ni(), im.nplanes(),
-                            im.kstep(), im.istep(), pstep);
+                           im.origin_ptr()+j*im.jstep(),
+                           im.nk(), im.ni(), im.nplanes(),
+                           im.kstep(), im.istep(), pstep);
 }
 
 //: Return a 2D view of slice j of 3D image aligned as (i,k).
@@ -109,9 +109,9 @@ inline vil_image_view<T> vil3d_slice_ik(const vil3d_image_view<T> &im, unsigned 
   vcl_ptrdiff_t pstep = im.planestep();
   if (im.nplanes()==1) pstep=im.ni()*im.nk();
   return vil_image_view<T>(im.memory_chunk(),
-                            im.origin_ptr()+j*im.jstep(),
-                            im.ni(), im.nk(), im.nplanes(),
-                            im.istep(), im.kstep(), pstep);
+                           im.origin_ptr()+j*im.jstep(),
+                           im.ni(), im.nk(), im.nplanes(),
+                           im.istep(), im.kstep(), pstep);
 }
 
 //: Define format of a slice from a 3D volume
@@ -141,6 +141,7 @@ inline vil_image_view<T> vil3d_slice(const vil3d_image_view<T> &im, unsigned sli
     case VIL3D_SLICE_FORMAT_KI: return vil3d_slice_kj(im,slice_index);
     case VIL3D_SLICE_FORMAT_JK: return vil3d_slice_jk(im,slice_index);
     case VIL3D_SLICE_FORMAT_KJ: return vil3d_slice_kj(im,slice_index);
+    default: assert(!"invalid slice_format");
   }
   return vil_image_view<T>(); // to avoid compiler warning
 }
@@ -158,6 +159,7 @@ inline unsigned vil3d_n_slices(const vil3d_image_view_base& image,
     case VIL3D_SLICE_FORMAT_KI: return image.nj();
     case VIL3D_SLICE_FORMAT_JK: return image.ni();
     case VIL3D_SLICE_FORMAT_KJ: return image.ni();
+    default: assert(!"invalid slice_format");
   }
   return 0; // to avoid compiler warning
 }
@@ -165,7 +167,7 @@ inline unsigned vil3d_n_slices(const vil3d_image_view_base& image,
 //: Return pixel width in i direction of slice, given widths of original 3D volume pixels
 //  Thus if slice_format==VIL3D_SLICE_FORMAT_JK then return src_j_width.
 inline double vil3d_slice_pixel_width_i(double src_i_width, double src_j_width, double src_k_width,
-                               vil3d_slice_format slice_format)
+                                        vil3d_slice_format slice_format)
 {
   switch (slice_format)
   {
@@ -175,6 +177,7 @@ inline double vil3d_slice_pixel_width_i(double src_i_width, double src_j_width, 
     case VIL3D_SLICE_FORMAT_KI: return src_k_width;
     case VIL3D_SLICE_FORMAT_JK: return src_j_width;
     case VIL3D_SLICE_FORMAT_KJ: return src_k_width;
+    default: assert(!"invalid slice_format");
   }
   return 0.0; // to avoid compiler warning
 }
@@ -182,7 +185,7 @@ inline double vil3d_slice_pixel_width_i(double src_i_width, double src_j_width, 
 //: Return pixel width in j direction of slice, given widths of original 3D volume pixels
 //  Thus if slice_format==VIL3D_SLICE_FORMAT_JK then return src_k_width.
 inline double vil3d_slice_pixel_width_j(double src_i_width, double src_j_width, double src_k_width,
-                               vil3d_slice_format slice_format)
+                                        vil3d_slice_format slice_format)
 {
   switch (slice_format)
   {
@@ -192,6 +195,7 @@ inline double vil3d_slice_pixel_width_j(double src_i_width, double src_j_width, 
     case VIL3D_SLICE_FORMAT_KI: return src_i_width;
     case VIL3D_SLICE_FORMAT_JK: return src_k_width;
     case VIL3D_SLICE_FORMAT_KJ: return src_j_width;
+    default: assert(!"invalid slice_format");
   }
   return 0.0; // to avoid compiler warning
 }
@@ -199,7 +203,7 @@ inline double vil3d_slice_pixel_width_j(double src_i_width, double src_j_width, 
 //: Return separation of neighbouring slices, given widths of original 3D volume pixels
 //  Thus if slice_format==VIL3D_SLICE_FORMAT_JK then return src_i_width.
 inline double vil3d_slice_separation(double src_i_width, double src_j_width, double src_k_width,
-                               vil3d_slice_format slice_format)
+                                     vil3d_slice_format slice_format)
 {
   switch (slice_format)
   {
@@ -209,6 +213,7 @@ inline double vil3d_slice_separation(double src_i_width, double src_j_width, dou
     case VIL3D_SLICE_FORMAT_KI: return src_j_width;
     case VIL3D_SLICE_FORMAT_JK: return src_i_width;
     case VIL3D_SLICE_FORMAT_KJ: return src_i_width;
+    default: assert(!"invalid slice_format");
   }
   return 0.0; // to avoid compiler warning
 }

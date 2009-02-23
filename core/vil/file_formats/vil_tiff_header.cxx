@@ -130,7 +130,7 @@ bool vil_tiff_header::read_header()
   read_string(tif_,TIFFTAG_COPYRIGHT, copyright);
   read_string(tif_,TIFFTAG_DATETIME,date_time);
 
-  // EXTRASAMPLES tag requires two input arguments, which is different 
+  // EXTRASAMPLES tag requires two input arguments, which is different
   // from other 16bit values.
   vxl_uint_16* sample_info=0;
   TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
@@ -307,7 +307,7 @@ vxl_uint_32 vil_tiff_header::rows_in_strip() const
       return image_length.val;
     return rps;
   }
-  else if(image_length.valid)
+  else if (image_length.valid)
   {
     return image_length.val;
   }
@@ -538,6 +538,9 @@ bool vil_tiff_header::compute_pixel_format()
                     pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                     return false;
                 }
+              default:
+                pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+                return false;
             }
         }
       case 2: //do signed color images make sense?
@@ -652,7 +655,7 @@ bool vil_tiff_header::set_header(unsigned ni, unsigned nj, unsigned nplns,
     //Check for default -- one scanline per row
     unsigned n_rows = size_block_j;
     if (n_rows == 0)
-      n_rows = 1;
+      n_rows = 1u;
     rows_per_strip.val = n_rows; rows_per_strip.valid = true;
   }
   samples_per_pixel.val = nplanes; samples_per_pixel.valid=true;

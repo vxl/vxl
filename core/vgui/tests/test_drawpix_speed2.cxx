@@ -232,7 +232,8 @@ test_pattern( unsigned option )
   {
     move_dot( i, j, buffer, buffer_copy );
 
-    switch ( option ) {
+    switch ( option )
+    {
      case 0:
       glPixelTransferf( GL_RED_SCALE, g_scale );
       glPixelTransferf( GL_RED_BIAS,  g_bias/255 );
@@ -256,6 +257,8 @@ test_pattern( unsigned option )
       break;
      case 3:
       convert_and_draw(buffer, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (vgui_pixel_rgb565*)0 );
+      break;
+     default: // do nothing (silently ignore invalid option)
       break;
     }
     glFlush();
@@ -409,9 +412,9 @@ int main( int argc, char** argv )
   // Generate color maps
   {
     for ( unsigned i = 0; i < 256; ++i ) {
-      g_mapRfloat[i] = vcl_sqrt( (i-128.0)*(i-128.0) ) / 128;
-      g_mapGfloat[i] = vcl_sqrt( (i-128.0)*(i-128.0) ) / 128;
-      g_mapBfloat[i] = ( 128 - vcl_sqrt( (i-128.0)*(i-128.0) ) ) / 128;
+      g_mapRfloat[i] = float(vcl_sqrt( (i-128.0)*(i-128.0) )) / 128;
+      g_mapGfloat[i] = float(vcl_sqrt( (i-128.0)*(i-128.0) )) / 128;
+      g_mapBfloat[i] = float(128 - vcl_sqrt( (i-128.0)*(i-128.0) )) / 128;
       g_mapRbyte[i] = GLubyte( g_mapRfloat[i]*255 );
       g_mapGbyte[i] = GLubyte( g_mapGfloat[i]*255 );
       g_mapBbyte[i] = GLubyte( g_mapBfloat[i]*255 );

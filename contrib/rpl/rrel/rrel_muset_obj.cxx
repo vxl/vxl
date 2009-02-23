@@ -5,6 +5,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_muse_table.h>
 
@@ -96,10 +97,10 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
   const double min_exp_kth_to_stddev_ratio = 3.0;
   static bool notwarned = true;
 
-  switch ( muse_type_ ) {
-
-  case RREL_MUSE_TRIMMED:
-    {
+  switch ( muse_type_ )
+  {
+   case RREL_MUSE_TRIMMED:
+   {
 #ifdef DEBUG
     vcl_cout << "\nRREL_MUSE_TRIMMED\n";
 #endif
@@ -172,10 +173,10 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       sigma_est = best_sum / table_ -> muset_divisor(best_k, new_n);
     }
     break;
-    }
+   }
 
-  case RREL_MUSE_TRIMMED_SQUARE:
-    {
+   case RREL_MUSE_TRIMMED_SQUARE:
+   {
 #ifdef DEBUG
     vcl_cout << "\nRREL_MUSE_TRIMMED_SQUARE\n";
 #endif
@@ -250,10 +251,10 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
                             / table_->muset_sq_divisor(best_k, new_n) );
     }
     break;
-    }
+   }
 
-  case RREL_MUSE_QUANTILE:
-    {
+   case RREL_MUSE_QUANTILE:
+   {
 #ifdef DEBUG
     vcl_cout << "\nRREL_MUSE_QUANTILE\n";
 #endif
@@ -316,6 +317,8 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       sigma_est = abs_residuals[ best_k ] / table_->expected_kth(best_k, new_n);
     }
     break;
-    }
+   }
+   default:
+    assert(!"invalid muse_type");
   }
 }

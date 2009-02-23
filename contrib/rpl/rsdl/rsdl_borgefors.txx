@@ -1,7 +1,7 @@
 #ifndef rsdl_borgefors_txx_
 #define rsdl_borgefors_txx_
 //:
-//  \file
+// \file
 
 #include "rsdl_borgefors.h"
 #include <vbl/vbl_array_2d.h>
@@ -11,14 +11,15 @@
 
 //********************* NOTE *************************
 // The map constructed is only valid 1 pixel inside it.
-// In other words, the 1st row and column and the last 
-// row and column are invalid. 
+// In other words, the 1st row and column and the last
+// row and column are invalid.
 //****************************************************
 template <class T>
 rsdl_borgefors<T>::rsdl_borgefors()
 {
   this->reset();
 }
+
 template <class T>
 rsdl_borgefors<T>::rsdl_borgefors(int org_x, int org_y,
                                   int size_x, int size_y,
@@ -60,13 +61,13 @@ rsdl_borgefors<T>::set(int org_x, int org_y,
   size_x_ = size_x;
   size_y_ = size_y;
 
-  // when the number of elements is large, 
+  // when the number of elements is large,
   // memory allocation and deallocation are too many to aford
   // count the number first and reserve the size
   unsigned num=0;
-  for( iterator_type i=begin; i!=end; ++i ) 
+  for ( iterator_type i=begin; i!=end; ++i )
     ++num;
-  
+
   // store ptrs of the internal objects to the data_
   data_.reserve( num );
   for (iterator_type i = begin; i!= end; ++i) {
@@ -154,13 +155,13 @@ template <class T>
 void
 rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
 {
-  // when the number of elements is large, 
+  // when the number of elements is large,
   // memory allocation and deallocation are too many to aford
   // count the number first and reserve the size
   unsigned num=0;
-  for( iterator_type i=begin; i!=end; ++i ) 
+  for ( iterator_type i=begin; i!=end; ++i )
     ++num;
-  
+
   // 0. Store ptrs of the internal objects to the data_
   data_.reserve( num );
   for (iterator_type i = begin; i!= end; ++i) {
@@ -184,10 +185,10 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
     int x = vnl_math_rnd((*data_[i])[0] - org_x_);
     int y = vnl_math_rnd((*data_[i])[1] - org_y_);
     if ( x>= 0 && x < size_x_ && y>=0 && y < size_y_ )
-      {
-        distance_map_[y][x] = 0;
-        index_map_[y][x] = i;
-      }
+    {
+      distance_map_[y][x] = 0;
+      index_map_[y][x] = i;
+    }
   }
 
   // 3. Do the Chamfer 3-4 filtering
@@ -205,7 +206,7 @@ rsdl_borgefors<T>::chamfer34()
 {
    forward_chamfer();
    backward_chamfer();
-   
+
    // TODO: two corners (0, size_y_-1) and (size_x_-1, 0) are not filled in
 }
 
@@ -251,47 +252,12 @@ rsdl_borgefors<T>::forward_chamfer()
 {
   for (int i=1; i<=size_y_-1; ++i)
     for (int j=1; j<size_x_-1; ++j)
-      {
-        const int val = minimum5(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
-                                 distance_map_[i-1][j+1]+4, distance_map_[i][j-1]+3,
-                                 distance_map_[i][j]);
-        switch (val)
-          {
-          case 1:
-            distance_map_[i][j] = distance_map_[i-1][j-1]+4;
-            index_map_[i][j] = index_map_[i-1][j-1];
-            break;
-
-          case 2:
-            distance_map_[i][j] = distance_map_[i-1][j]+3;
-            index_map_[i][j] = index_map_[i-1][j];
-            break;
-
-          case 3:
-            distance_map_[i][j] = distance_map_[i-1][j+1]+4;
-            index_map_[i][j] = index_map_[i-1][j+1];
-            break;
-
-          case 4:
-            distance_map_[i][j] = distance_map_[i][j-1]+3;
-            index_map_[i][j] = index_map_[i][j-1];
-            break;
-
-          case 5:
-            break;
-          }
-      }
-  
-  // the last column is not filled in yet
-  for (int i=1; i<=size_y_-1; ++i)
     {
-      const int j = size_x_-1;
-      
-      const int val = minimum4(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
-                               distance_map_[i][j-1]+3, 
+      const int val = minimum5(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
+                               distance_map_[i-1][j+1]+4, distance_map_[i][j-1]+3,
                                distance_map_[i][j]);
       switch (val)
-        {
+      {
         case 1:
           distance_map_[i][j] = distance_map_[i-1][j-1]+4;
           index_map_[i][j] = index_map_[i-1][j-1];
@@ -303,14 +269,55 @@ rsdl_borgefors<T>::forward_chamfer()
           break;
 
         case 3:
+          distance_map_[i][j] = distance_map_[i-1][j+1]+4;
+          index_map_[i][j] = index_map_[i-1][j+1];
+          break;
+
+        case 4:
           distance_map_[i][j] = distance_map_[i][j-1]+3;
           index_map_[i][j] = index_map_[i][j-1];
           break;
 
-        case 4:
+        case 5:
           break;
-        }
+
+        default: // this can never happen
+          break;
+      }
     }
+
+  // the last column is not filled in yet
+  for (int i=1; i<=size_y_-1; ++i)
+  {
+    const int j = size_x_-1;
+
+    const int val = minimum4(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
+                             distance_map_[i][j-1]+3,
+                             distance_map_[i][j]);
+    switch (val)
+    {
+      case 1:
+        distance_map_[i][j] = distance_map_[i-1][j-1]+4;
+        index_map_[i][j] = index_map_[i-1][j-1];
+        break;
+
+      case 2:
+        distance_map_[i][j] = distance_map_[i-1][j]+3;
+        index_map_[i][j] = index_map_[i-1][j];
+        break;
+
+      case 3:
+        distance_map_[i][j] = distance_map_[i][j-1]+3;
+        index_map_[i][j] = index_map_[i][j-1];
+        break;
+
+      case 4:
+        break;
+
+        default: // this can never happen
+          break;
+    }
+  }
 }
 
 //: Performs a forward chamfer convolution on the distance_map_ and update the index_map_ accordingly
@@ -321,66 +328,72 @@ rsdl_borgefors<T>::backward_chamfer()
 {
   for (int i=size_y_-2; i>=0; i--)
     for (int j=size_x_-2; j>0; j--)
+    {
+      const int val = minimum5(distance_map_[i][j],distance_map_[i][j+1]+3,
+                               distance_map_[i+1][j-1]+4, distance_map_[i+1][j]+3,
+                               distance_map_[i+1][j+1]+4 );
+      switch (val)
       {
-        const int val = minimum5(distance_map_[i][j],distance_map_[i][j+1]+3,
-                                 distance_map_[i+1][j-1]+4, distance_map_[i+1][j]+3,
-                                 distance_map_[i+1][j+1]+4 );
-        switch (val)
-          {
-          case 1:
-            break;
+        case 1:
+          break;
 
-          case 2:
-            distance_map_[i][j] = distance_map_[i][j+1]+3;
-            index_map_[i][j] = index_map_[i][j+1];
-            break;
+        case 2:
+          distance_map_[i][j] = distance_map_[i][j+1]+3;
+          index_map_[i][j] = index_map_[i][j+1];
+          break;
 
-          case 3:
-            distance_map_[i][j] = distance_map_[i+1][j-1]+4;
-            index_map_[i][j] = index_map_[i+1][j-1];
-            break;
+        case 3:
+          distance_map_[i][j] = distance_map_[i+1][j-1]+4;
+          index_map_[i][j] = index_map_[i+1][j-1];
+          break;
 
-          case 4:
-            distance_map_[i][j] = distance_map_[i+1][j]+3;
-            index_map_[i][j] = index_map_[i+1][j];
-            break;
+        case 4:
+          distance_map_[i][j] = distance_map_[i+1][j]+3;
+          index_map_[i][j] = index_map_[i+1][j];
+          break;
 
-          case 5:
-            distance_map_[i][j] = distance_map_[i+1][j+1]+4;
-            index_map_[i][j] = index_map_[i+1][j+1];
-            break;
-          }
+        case 5:
+          distance_map_[i][j] = distance_map_[i+1][j+1]+4;
+          index_map_[i][j] = index_map_[i+1][j+1];
+          break;
+
+        default: // this can never happen
+          break;
       }
+    }
 
   // the first column is not filled in yet
   for (int i=size_y_-2; i>=0; i--)
+  {
+    const int j = 0;
+
+    const int val = minimum4(distance_map_[i][j],distance_map_[i][j+1]+3,
+                             distance_map_[i+1][j]+3,
+                             distance_map_[i+1][j+1]+4 );
+    switch (val)
     {
-      const int j = 0;
-      
-        const int val = minimum4(distance_map_[i][j],distance_map_[i][j+1]+3,
-                                 distance_map_[i+1][j]+3,
-                                 distance_map_[i+1][j+1]+4 );
-        switch (val)
-          {
-          case 1:
-            break;
+      case 1:
+        break;
 
-          case 2:
-            distance_map_[i][j] = distance_map_[i][j+1]+3;
-            index_map_[i][j] = index_map_[i][j+1];
-            break;
+      case 2:
+        distance_map_[i][j] = distance_map_[i][j+1]+3;
+        index_map_[i][j] = index_map_[i][j+1];
+        break;
 
-          case 3:
-            distance_map_[i][j] = distance_map_[i+1][j]+3;
-            index_map_[i][j] = index_map_[i+1][j];
-            break;
+      case 3:
+        distance_map_[i][j] = distance_map_[i+1][j]+3;
+        index_map_[i][j] = index_map_[i+1][j];
+        break;
 
-          case 4:
-            distance_map_[i][j] = distance_map_[i+1][j+1]+4;
-            index_map_[i][j] = index_map_[i+1][j+1];
-            break;
-          }
+      case 4:
+        distance_map_[i][j] = distance_map_[i+1][j+1]+4;
+        index_map_[i][j] = index_map_[i+1][j+1];
+        break;
+
+      default: // this can never happen
+        break;
     }
+  }
 }
 
 

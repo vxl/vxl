@@ -151,9 +151,13 @@ namespace
                                           *(out+i+j*hstep) );
                   return true;
                 default:
+                  assert(!"invalid band_map");
                   return false;
               }
           }
+          default:
+            assert(!"invalid nplanes");
+            return false;
         }
       }
       if (rm.mapable()) // have to compute the mapping on the fly,e.g. for float
@@ -227,10 +231,12 @@ namespace
                                       *(out+i+j*hstep) );
               break;
              default:
+              assert(!"invalid band_map");
               return false;
             }
           }
          default:
+          assert(!"invalid nplanes");
           return false;
         }// end switch
       }
@@ -260,6 +266,7 @@ namespace
                                   in(i,j,3), *(out+i+j*hstep) );
           return true;
         default:
+          assert(!"invalid nplanes");
           return false;
       } // end case
     }
