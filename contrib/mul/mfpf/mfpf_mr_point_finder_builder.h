@@ -67,14 +67,16 @@ class mfpf_mr_point_finder_builder
   //: Set up multiple builders to cover patch of size wi x wj
   //  Patch defined in world co-ords.  Selects suitable scales
   //  and levels so that region is covered and at any given
-  //  level the model width (in pixels) is in the range
-  //  [min_pixel_width,max_pixel_width]
+  //  level the model width (in number of samples) is in the range
+  //  [min_n_samples,max_n_samples].
+  //  \params base_pixel_width Pixel width in base image
   void set_size_and_levels(
                 const mfpf_point_finder_builder& builder0,
                 double wi, double wj,
                 double scale_step,
-                int min_pixel_width,
-                int max_pixel_width);
+                int min_n_samples,
+                int max_n_samples,
+                double base_pixel_width=1.0);
 
   //: Define region size in world co-ordinates
   //  Sets up ROI in each model to cover given box (in world coords),

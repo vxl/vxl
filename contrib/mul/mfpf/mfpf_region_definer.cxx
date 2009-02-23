@@ -128,3 +128,69 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer* b)
   else
     return os << "No mfpf_region_definer defined.";
 }
+
+//: Generate a new set of points from pts0 using set of definers
+void mfpf_points_from_definers(
+              const vcl_vector<mfpf_region_definer*>& definer,
+              const vcl_vector<vgl_point_2d<double> >& pts0,
+              vcl_vector<vgl_point_2d<double> >& new_pts)
+{
+  unsigned n=definer.size();
+  new_pts.resize(n);
+  for (unsigned i=0;i<n;++i)
+    new_pts[i]=definer[i]->get_ref_point(pts0);
+}
+
+//: Change indices in definers to refer to points generated
+//  Suppose definer is used to generate a set of n=definer.size()
+//  regions/pts (say pts1), by refering to some other set of m points.
+//  This sets up self_definer to generate an identical set of
+//  regions/pts by using the originally generated points (pts1).
+//  This can only be done if there is a region centred on each 
+//  of the original points used in the definer.
+//  The function tests for this case, and returns false if it fails.
+//  In particular consider the following
+//  \verbatim
+//  vcl_vector<vgl_point_2d<double> > pts0,pts1,pts2;
+//  // Set up pts0
+//  ...
+//  // Generate pts1 from pts0
+//  mfpf_points_from_definers(definer,pts0,pts1);
+//  mfpf_renumber_to_self(definer,pts0.size())
+//  // Now generate pts2 from pts1
+//  mfpf_points_from_definers(self_definer,pts1,pts2);
+//  // pts2 should be the same as pts1
+//  \endverbatim
+//  Note that objects pointed to by definer are changed.
+//  They may be left in an invalid state if this returns false,
+//  so caller should ensure a backup retained.
+bool mfpf_renumber_to_self(
+                  vcl_vector<mfpf_region_definer*>& definer,
+                  unsigned n_pts0)
+{
+  vcl_vector<unsigned> new_index(n_pts0,mfpf_invalid_index);
+  for (unsigned i=0;i<definer.size();++i)
+  {
+    if (definer[i]->is_centred_on_pt())
+    {
+      unsigned ri = definer[i]->ref_point_index();
+      if (ri>=n_pts0) 
+      {
+        vcl_cerr<<"Index out of range:"<<ri<<vcl_endl;
+        return false;
+      }
+      new_index[ri]=i;
+    }
+  }
+
+  for (unsigned i=0;i<definer.size();++i)
+  {
+    if (!definer[i]->replace_index(new_index))
+    {
+      vcl_cerr<<"Failed to update indices in "<<definer[i]<<vcl_endl;
+      return false;
+    }
+  }
+
+  return true;
+}

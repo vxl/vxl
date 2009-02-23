@@ -11,6 +11,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <mfpf/mfpf_region_form.h>
 
+const unsigned mfpf_invalid_index=99999;
+
 //: Base for objects which generate regions from sets of points
 //  Given a set of points, derived classes can generate a region.
 //  Typically this is centred on one point or set of points, and
@@ -33,6 +35,19 @@ class mfpf_region_definer
   //: Destructor
   virtual ~mfpf_region_definer();
 
+  //: Returns true if the region is centred on an input point
+  virtual bool is_centred_on_pt() const = 0;
+
+  //: Returns index of reference point on which the region is centred
+  virtual unsigned ref_point_index() const = 0;
+
+  //: Returns reference point for region
+  //  Returns the point that would be returned by
+  //  set_up(pts).pose().p(), but without changing internal
+  //  state.
+  virtual vgl_point_2d<double> get_ref_point(
+             const vcl_vector<vgl_point_2d<double> >& pts) const = 0;
+
   //: Uses some subset of pts to define a region
   //  The pose for the region will be a translation + rotation,
   //  ie region.pose().u() is a unit length
@@ -46,7 +61,13 @@ class mfpf_region_definer
   //  to define the pose for training an mfpf_point_finder,
   //  for instance. 
   virtual mfpf_region_form get_region(
-                const vcl_vector<vgl_point_2d<double> >& pts) = 0;
+              const vcl_vector<vgl_point_2d<double> >& pts) const = 0;
+
+  //: Replace each point index i with new_index[i]
+  //  Allows for re-numbering of the points used.
+  //  new_index[i]==mfpf_invalid_index indicates an invalid index
+  //  Returns true if successful.
+  virtual bool replace_index(const vcl_vector<unsigned>& new_index)=0;
 
   //: Initialise from a stream
   virtual bool set_from_stream(vcl_istream &is);
@@ -88,5 +109,38 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer& b);
 
 //: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer* b);
+
+//: Generate a new set of points from pts0 using set of definers
+//  new_pts[i] = definer[i]->get_ref_point(pts0)
+void mfpf_points_from_definers(
+              const vcl_vector<mfpf_region_definer*>& definer,
+              const vcl_vector<vgl_point_2d<double> >& pts0,
+              vcl_vector<vgl_point_2d<double> >& new_pts);
+
+//: Change indices in definers to refer to points generated
+//  Suppose definer is used to generate a set of n=definer.size()
+//  regions/pts (say pts1), by refering to some other set of m points.
+//  This sets up self_definer to generate an identical set of
+//  regions/pts by using the originally generated points (pts1).
+//  This can only be done if there is a region centred on each 
+//  of the original points used in the definer.
+//  The function tests for this case, and returns false if it fails.
+//  In particular consider the following
+//  \verbatim
+//  vcl_vector<vgl_point_2d<double> > pts0,pts1,pts2;
+//  // Set up pts0
+//  ...
+//  // Generate pts1 from pts0
+//  mfpf_points_from_definers(definer,pts0,pts1);
+//  mfpf_renumber_to_self(definer,pts0.size())
+//  // Now generate pts2 from pts1
+//  mfpf_points_from_definers(self_definer,pts1,pts2);
+//  // pts2 should be the same as pts1
+//  \endverbatim
+//  Note that objects pointed to by definer are changed.
+//  They may be left in an invalid state if this returns false,
+//  so caller should ensure a backup retained.
+bool mfpf_renumber_to_self(vcl_vector<mfpf_region_definer*>& definer,
+                           unsigned n_pts0);
 
 #endif // mfpf_region_definer_h_

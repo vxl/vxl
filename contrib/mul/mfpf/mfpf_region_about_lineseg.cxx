@@ -31,6 +31,42 @@ mfpf_region_about_lineseg::~mfpf_region_about_lineseg()
 {
 }
 
+//: Returns false as the region is not centred on an input point
+bool mfpf_region_about_lineseg::is_centred_on_pt() const
+{
+  return false;
+}
+
+//: Returns zero
+unsigned mfpf_region_about_lineseg::ref_point_index() const
+{
+  return 0;
+}
+
+//: Replace each point index i with new_index[i]
+//  Allows for re-numbering of the points used.
+//  Returns true if successful.
+bool mfpf_region_about_lineseg::replace_index(
+                        const vcl_vector<unsigned>& new_index)
+{
+  if (i0_>=new_index.size()) return false;
+  if (new_index[i0_]==mfpf_invalid_index) return false;
+  i0_=new_index[i0_];
+  if (i1_>=new_index.size()) return false;
+  if (new_index[i1_]==mfpf_invalid_index) return false;
+  i1_=new_index[i1_];
+  return true;
+}
+
+//: Returns reference point for region, mid_point(pts[i0],pts[i1])
+vgl_point_2d<double> mfpf_region_about_lineseg::get_ref_point(
+             const vcl_vector<vgl_point_2d<double> >& pts) const
+{
+  assert(i0_<pts.size());
+  assert(i1_<pts.size());
+  return midpoint(pts[i0_],pts[i1_]);
+}
+
 //: Defines a region centred on a point
 mfpf_region_form mfpf_region_about_lineseg::set_up(
             const vcl_vector<vgl_point_2d<double> >& pts)
@@ -53,7 +89,7 @@ mfpf_region_form mfpf_region_about_lineseg::set_up(
 //  The aspect ratio of the region will be the same as that
 //  from the last call to set_up.
 mfpf_region_form mfpf_region_about_lineseg::get_region(
-              const vcl_vector<vgl_point_2d<double> >& pts)
+              const vcl_vector<vgl_point_2d<double> >& pts) const
 {
   assert(i0_<pts.size());
   assert(i1_<pts.size());

@@ -51,6 +51,17 @@ public:
   //: Destructor
   virtual ~mfpf_region_about_pt();
 
+  //: Returns true as the region is centred on an input point
+  virtual bool is_centred_on_pt() const;
+
+  //: Returns index of reference point on which the region is centred
+  virtual unsigned ref_point_index() const;
+
+  //: Replace each point index i with new_index[i]
+  //  Allows for re-numbering of the points used.
+  //  Returns true if successful.
+  virtual bool replace_index(const vcl_vector<unsigned>& new_index);
+
   //: Index of point on which region is centred
   unsigned i0() const { return i0_; }
 
@@ -75,6 +86,10 @@ public:
   //: Name of form of shape ("box","ellipse")
   vcl_string form() const { return form_; }
 
+  //: Returns reference point for region, pts[i0()]
+  virtual vgl_point_2d<double> get_ref_point(
+             const vcl_vector<vgl_point_2d<double> >& pts) const;
+
   //: Defines a region centred on a point
   virtual mfpf_region_form set_up(
              const vcl_vector<vgl_point_2d<double> >& pts);
@@ -83,7 +98,7 @@ public:
   //  The aspect ratio of the region will be the same as that
   //  from the last call to set_up.
   virtual mfpf_region_form get_region(
-                const vcl_vector<vgl_point_2d<double> >& pts);
+                const vcl_vector<vgl_point_2d<double> >& pts) const;
 
   //: Initialise from a stream
   virtual bool set_from_stream(vcl_istream &is);

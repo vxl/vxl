@@ -126,20 +126,22 @@ void mfpf_mr_point_finder_builder::set_size_and_levels(
                 const mfpf_point_finder_builder& builder0,
                 double wi, double wj,
                 double scale_step,
-                int min_pixel_width,
-                int max_pixel_width)
+                int min_n_samples,
+                int max_n_samples,
+                double base_pixel_width)
 {
-  double max_w = vcl_max(wi,wj);
+  // Max width in pixel units
+  double max_w = vcl_max(wi/base_pixel_width,wj/base_pixel_width);
 
   double log_s = vcl_log(scale_step);
 
   // Estimate level above which size falls below min_pixel_width pixels
-  int max_L = int(vcl_log(max_w/min_pixel_width)/log_s);
+  int max_L = int(vcl_log(max_w/min_n_samples)/log_s);
   // Estimate level below which size is above max_pixel_width pixels
-  int min_L = vnl_math_rnd(0.5+vcl_log(max_w/max_pixel_width)/log_s);
+  int min_L = vnl_math_rnd(0.5+vcl_log(max_w/max_n_samples)/log_s);
   if (min_L>max_L) max_L=min_L;
 
-  double step0 = vcl_pow(scale_step,min_L);
+  double step0 = base_pixel_width*vcl_pow(scale_step,min_L);
   int n_levels = 1+max_L-min_L;
 
   set(builder0,n_levels,step0,scale_step);
