@@ -190,6 +190,58 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
   return true;
 }
 
+//: Row-wise 1D EDT
+//
+// This is the first step for independent-scanning EDT algorithms.
+//
+// \param[in,out] im : input image.  The non-zero pixels must have a very large
+// value (larger than the number of rows of the image). In the output, non-zero
+// pixels will contain minimum distance to the zero-pixels along the rows.
+//
+// \sa
+// This particular implementation is based on the 1st part of the following method:
+// R. Lotufo and F. Zampirolli, Fast multidimensional parallel euclidean distance
+// transform based on mathematical morphology, in T. Wu and D. Borges, editors,
+// Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
+// and Image Processing, pages 100-105. IEEE Computer Society, 2001.
+//
+//
+inline bool
+bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im)
+{
+   unsigned ni=im.ni(), i,
+            nj=im.nj(), j;
+   vxl_uint_32 b;
+
+   for (j=0; j < nj; j++) {
+      b=1;
+      for (i=1; i<ni; i++)
+         if (im(i,j) > im(i-1,j) + b) {
+            im(i,j) = im(i-1,j) + b;
+            b += 2;
+         } else
+            b = 1;
+      b=1;
+      for (i=ni-2; i != (vxl_uint_32)-1; i--) {
+         if (im(i,j) > im(i+1,j) + b) {
+            im(i,j) = im(i+1,j) + b;
+            b += 2;
+         } else
+            b = 1;
+      }
+   }
+
+   // NOTE: Lotufo's implementation (obtained by requesting him) of this first
+   // part  is much less readable. Although pointers could be used more
+   // efficiently, this first part is much faster than the 2nd part and is not
+   // worth optimizing.  So I kept it readable, close to the paper's pseudocode.
+   // TODO: VIL uses asserts for bounds in the above code. This is not
+   // acceptable for stable code. Optimize this.
+
+   return true;
+}
+
+
 //:
 // Assumes given a Lookup table of integer squares.
 // Also assumes the image \a im already has infinity in all non-zero points.
@@ -322,58 +374,6 @@ bil_edt_maurer(vil_image_view<vxl_uint_32> &im)
    return true;
 }
 
-//: Row-wise 1D EDT
-//
-// This is the first step for independent-scanning EDT algorithms.
-//
-// \param[in,out] im : input image.  The non-zero pixels must have a very large
-// value (larger than the number of rows of the image). In the output, non-zero
-// pixels will contain minimum distance to the zero-pixels along the rows.
-//
-// \sa
-// This particular implementation is based on the 1st part of the following method:
-// R. Lotufo and F. Zampirolli, Fast multidimensional parallel euclidean distance
-// transform based on mathematical morphology, in T. Wu and D. Borges, editors,
-// Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
-// and Image Processing, pages 100-105. IEEE Computer Society, 2001.
-//
-//
-inline bool
-bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im)
-{
-   unsigned ni=im.ni(), i,
-            nj=im.nj(), j;
-   vxl_uint_32 b;
-
-   for (j=0; j < nj; j++) {
-      b=1;
-      for (i=1; i<ni; i++)
-         if (im(i,j) > im(i-1,j) + b) {
-            im(i,j) = im(i-1,j) + b;
-            b += 2;
-         } else
-            b = 1;
-      b=1;
-      for (i=ni-2; i != (vxl_uint_32)-1; i--) {
-         if (im(i,j) > im(i+1,j) + b) {
-            im(i,j) = im(i+1,j) + b;
-            b += 2;
-         } else
-            b = 1;
-      }
-   }
-
-   // NOTE: Lotufo's implementation (obtained by requesting him) of this first
-   // part  is much less readable. Although pointers could be used more
-   // efficiently, this first part is much faster than the 2nd part and is not
-   // worth optimizing.  So I kept it readable, close to the paper's pseudocode.
-   // TODO: VIL uses asserts for bounds in the above code. This is not
-   // acceptable for stable code. Optimize this.
-
-   return true;
-}
-
-
 static inline bool maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h);
 
 //: internal function that computes 2D EDT from 1D using Maurer's Voronoi algorithm for the integer grid.
@@ -401,7 +401,19 @@ edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
    return true;
 }
 
-static bool remove_edt(int du, int dv, int dw, int u,  int v,  int w);
+//: test function as in Maurer's paper
+static inline bool
+remove_edt(int du, int dv, int dw,
+           int u,  int v,  int w)
+{
+    // 11 integer expressions
+    int a = v - u,
+        b = w - v,
+        c = w - u;
+
+    return (c*dv - b*du - a*dw) > (a*b*c);
+}
+
 
 //: Function in the paper that elliminates unnecessary sites and computes 2D Euclidean distances to the nearest sites.
 inline bool
@@ -448,20 +460,6 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
 
    return true;
 }
-
-//: test function as in Maurer's paper
-inline bool
-remove_edt(int du, int dv, int dw,
-           int u,  int v,  int w)
-{
-    // 11 integer expressions
-    int a = v - u,
-        b = w - v,
-        c = w - u;
-
-    return (c*dv - b*du - a*dw) > (a*b*c);
-}
-
 
 //  -----------------------------
 //    Brute-Force (for testing)
