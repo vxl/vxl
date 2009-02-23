@@ -81,7 +81,8 @@ vtol_chain::is_chain_superior(vtol_chain const* chain_superior) const
   vcl_list<vtol_chain*>::const_iterator i;
   for (i=chain_superiors_.begin();
        i!=chain_superiors_.end() && (*i)!=chain_superior;
-       ++i);
+       ++i)
+    /*nothing*/;
 
   return i!=chain_superiors_.end();
 }

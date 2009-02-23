@@ -56,7 +56,8 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
   while ((*in_string == ' ') || (*in_string == '\t'))
     ++in_string;
 
-  for (length=0; vcl_isdigit (*in_string) && length<15; ++in_string, ++length);
+  for (length=0; vcl_isdigit (*in_string) && length<15; ++length)
+    ++in_string;
   if (length>14) return 0;
 
   //three different formats accepted
@@ -79,7 +80,8 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     char* temp = new char[2];
     for (length=0;
          (*in_string=='.' || vcl_isdigit (*in_string)) && length<15;
-         ++in_string, ++length);
+         ++length)
+      ++in_string;
     if (length>14) return 0;
 
     vcl_strncpy(temp,in_string-length,length);
@@ -120,7 +122,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
       ++in_string;
 
     //get the minutes
-    for (length=0; vcl_isdigit (*in_string) && length<15; ++in_string, ++length);
+    for (length=0; vcl_isdigit (*in_string) && length<15; ++in_string, ++length) /*nothing*/;
     if (length>14) return 0;
     if (length > 2)
       return 0;
@@ -136,7 +138,8 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     char* temp= new char[2];
     for (length=0;
          (*in_string=='.' || vcl_isdigit (*in_string)) && length<15;
-         ++in_string, ++length);
+         ++length)
+      ++in_string;
     if (length>14) return 0;
 
     vcl_strncpy(temp,in_string-length,length);
@@ -178,7 +181,8 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     for (length=0;
          (*in_string=='+' ||*in_string=='-' || *in_string=='.' ||
           vcl_isdigit (*in_string)) && length<15;
-         ++in_string, ++length);
+         ++length)
+      ++in_string;
     if (length>14) return 0;
 
     //calculate value of float
@@ -312,18 +316,16 @@ init(vil_nitf2_image* nitf_image, bool verbose)
   scale_offsets_[U_INDX].set_offset(tre_data[81]);
   scale_offsets_[V_INDX].set_scale(tre_data[85]);
   scale_offsets_[V_INDX].set_offset(tre_data[80]);
-  
+
   double correction_u_off,correction_v_off;
   success=hdr->get_correction_offset(correction_u_off,correction_v_off);
 
-  
-  if(success)
+  if (success)
   {
       scale_offsets_[U_INDX].set_offset(scale_offsets_[U_INDX].offset()-correction_u_off);
       scale_offsets_[V_INDX].set_offset(scale_offsets_[V_INDX].offset()-correction_v_off);
   }
   return true;
-
 }
 
 vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(){

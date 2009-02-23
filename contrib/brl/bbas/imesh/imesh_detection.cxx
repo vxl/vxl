@@ -58,7 +58,7 @@ imesh_trace_half_edge_loops(const imesh_half_edge_set& half_edges,
         imesh_half_edge_set::v_const_iterator vend(itr);
         imesh_half_edge_set::v_const_iterator vitr(vend);
         ++vitr;
-        for (; vitr!=vend && !flags[vitr->half_edge_index()]; ++vitr);
+        for (; vitr!=vend && !flags[vitr->half_edge_index()]; ++vitr) /*nothing*/;
         if (vitr == vend)
           return false; // loop reached a dead end
 

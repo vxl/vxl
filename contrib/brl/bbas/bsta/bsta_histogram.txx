@@ -16,6 +16,7 @@ bsta_histogram<T>::bsta_histogram()
     delta_(0),min_prob_(0), min_(0), max_(0)
 {
 }
+
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T range, const unsigned int nbins,
                                   const T min_prob)
@@ -122,7 +123,8 @@ T bsta_histogram<T>::area() const
     compute_area();
   return area_;
 }
-  //: Mean of distribution
+
+//: Mean of distribution
 template <class T>
 T bsta_histogram<T>::mean() const
 {
@@ -218,12 +220,13 @@ void bsta_histogram<T>::parzen(const T sigma)
   for (unsigned int i=0; i<nbins_; i++)
     counts_[i]=(T)out[i];
 }
+
 //The first non-zero bin starting at index = 0
 template <class T>
 unsigned bsta_histogram<T>::low_bin()
 {
   unsigned lowbin=0;
-  for (; lowbin<nbins_&&counts_[lowbin]==0; ++lowbin);
+  for (; lowbin<nbins_&&counts_[lowbin]==0; ++lowbin) /*nothing*/;
   return lowbin;
 }
 
@@ -232,7 +235,7 @@ template <class T>
 unsigned bsta_histogram<T>::high_bin()
 {
   unsigned highbin=nbins_-1;
-  for (; highbin>0&&counts_[highbin]==0; --highbin);
+  for (; highbin>0&&counts_[highbin]==0; --highbin) /*nothing*/;
   return highbin;
 }
 
@@ -325,11 +328,11 @@ template <class T>
 void bsta_histogram<T>::print_to_m(vcl_ostream& os) const
 {
   os << "x = [" << min_;
-  for (unsigned int i=1; i<nbins_; i++) 
+  for (unsigned int i=1; i<nbins_; i++)
     os << ", " << min_ + i*delta_;
   os << "];\n";
   os << "y = [" << p((unsigned int)0);
-  for (unsigned int i=1; i<nbins_; i++) 
+  for (unsigned int i=1; i<nbins_; i++)
     os << ", " << p(i);
   os << "];\n";
   os << "bar(x,y,'r')\n";
