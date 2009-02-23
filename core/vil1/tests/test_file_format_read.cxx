@@ -130,7 +130,7 @@ class CheckBit : public CheckPixel
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 1) return false;
-    TruePixelType imp = (img_(x/8,y)>>(7-x&7))&1;
+    TruePixelType imp = (img_(x/8,y)>>(7-(x&7)))&1;
     if (pixel[0] != imp)
       vcl_cout << "(x,y)=(" << x << ',' << y << "): true=" << pixel[0] << ", img=" << imp << '\n' << vcl_flush;
     return pixel[0] == imp;
