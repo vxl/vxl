@@ -130,7 +130,7 @@ class bmsh3d_edge : public vispt_elm
   vgl_point_3d<double> mid_pt() const;
 
   //: length of this link.
-  const double length() const;
+  double length() const;
 
   //###### Connectivity Modification Functions ######
   void switch_s_e_vertex() {

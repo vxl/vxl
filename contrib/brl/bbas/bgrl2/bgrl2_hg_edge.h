@@ -29,7 +29,7 @@ class bgrl2_hg_edge // : public bgrl2_edge
   vcl_vector<bgrl2_hg_hyperedge*> connecting_hyperedges_;
 
  public:
-  const int id() const {
+  int id() const {
     return id_;
   }
   void set_id (int id) {
@@ -55,7 +55,7 @@ class bgrl2_hg_edge // : public bgrl2_edge
       return connecting_vertices_[0];
     }
   }
-  const bool is_self_loop () const {
+  bool is_self_loop () const {
     return connecting_vertices_[0] == connecting_vertices_[1];
   }
 

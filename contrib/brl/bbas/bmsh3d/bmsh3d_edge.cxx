@@ -302,7 +302,7 @@ vgl_point_3d<double> bmsh3d_edge::mid_pt() const
   return centre(sv->pt(), ev->pt());
 }
 
-const double bmsh3d_edge::length() const
+double bmsh3d_edge::length() const
 {
   // assume that sV and eV is bmsh3d_vertex
   bmsh3d_vertex* sv = sV();

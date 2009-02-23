@@ -70,7 +70,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
     return (*it).second;
   }
 
-  const int edge_id_counter() const {
+  int edge_id_counter() const {
     return edge_id_counter_;
   }
   void set_edge_id_counter (int counter) {

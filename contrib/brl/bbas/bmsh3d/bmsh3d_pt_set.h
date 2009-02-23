@@ -80,13 +80,13 @@ class bmsh3d_pt_set
     return (*it).second;
   }
 
-  const int vertex_id_counter() const {
+  int vertex_id_counter() const {
     return vertex_id_counter_;
   }
   void set_vertex_id_counter (const int counter) {
     vertex_id_counter_ = counter;
   }
-  const bool b_free_objects_in_destructor() const {
+  bool b_free_objects_in_destructor() const {
     return b_free_objects_in_destructor_;
   }
   void set_free_objects_in_destructor (const bool b) {

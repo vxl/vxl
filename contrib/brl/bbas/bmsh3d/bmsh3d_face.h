@@ -115,7 +115,7 @@ class bmsh3d_face : public vispt_elm
 
   void get_incident_HEs(vcl_vector<bmsh3d_halfedge*>& incident_HEs) const;
   void get_incident_Es(vcl_vector<bmsh3d_edge*>& incident_Es) const;
-  const unsigned int n_incident_Es() const;
+  unsigned int n_incident_Es() const;
   bool is_E_incident(const bmsh3d_edge* inputE) const;
   bmsh3d_halfedge* find_bnd_HE() const;
 

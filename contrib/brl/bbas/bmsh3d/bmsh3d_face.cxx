@@ -51,7 +51,7 @@ void bmsh3d_face::get_incident_Es (vcl_vector<bmsh3d_edge*>& incident_Es) const
   while (HE != halfedge_);
 }
 
-const unsigned int bmsh3d_face::n_incident_Es () const
+unsigned int bmsh3d_face::n_incident_Es () const
 {
   unsigned int count = 0;
   bmsh3d_halfedge* HE = halfedge_;

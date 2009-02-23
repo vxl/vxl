@@ -27,7 +27,7 @@ class bgrl2_hg_vertex //: public bgrl2_vertex
   vcl_vector<bgrl2_hg_hyperedge*> connecting_hyperedges_;
 
  public:
-  const int id() const {
+  int id() const {
     return id_;
   }
   void set_id (int id) {

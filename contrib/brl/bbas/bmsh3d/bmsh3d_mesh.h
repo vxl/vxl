@@ -53,7 +53,7 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
 
   //: copy constructor
   bmsh3d_ifs_mesh(const bmsh3d_ifs_mesh& ifs_mesh)
-   : face_id_counter_(0)
+   : bmsh3d_pt_set(ifs_mesh), face_id_counter_(0)
   {
     vcl_map<int, bmsh3d_face*> fmap = ifs_mesh.facemap_;
     vcl_map<int, bmsh3d_face*>::iterator face_it = fmap.begin();
@@ -97,7 +97,7 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
       return NULL;
     return (*it).second;
   }
-  const int face_id_counter() const {
+  int face_id_counter() const {
     return face_id_counter_;
   }
   void set_face_id_counter(int counter) {
@@ -287,7 +287,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
     return (*it).second;
   }
 
-  const int edge_id_counter() const { return edge_id_counter_; }
+  int edge_id_counter() const { return edge_id_counter_; }
   void set_edge_id_counter(int counter) { edge_id_counter_ = counter; }
   bool b_watertight() const { return b_watertight_; }
 
@@ -459,7 +459,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
   ///virtual bool valid_conn();
 
   //###### Mesh Traverse Functions ######
-  const int i_traverse_flag() const {
+  int i_traverse_flag() const {
     return i_traverse_flag_;
   }
   //: increase the search flag, so that every element has lower value than the flag (unvisited).

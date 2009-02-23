@@ -167,11 +167,11 @@ class bmsh3d_vertex : public vispt_elm
     i_value_ = vid;
   }
 
-  const bool is_visited() const {
+  bool is_visited() const {
     return i_value_ != 0;
   }
   //: if i_value_ less than i_traverse_flag, it's not visited
-  const bool is_visited(const int traverse_value) const {
+  bool is_visited(const int traverse_value) const {
     if (i_value_ < traverse_value)
       return false;
     else
@@ -181,7 +181,7 @@ class bmsh3d_vertex : public vispt_elm
     i_value_ = traverse_value;
   }
 
-  const bool is_valid() const {
+  bool is_valid() const {
     return i_value_ != 0;
   }
   void set_valid(const bool v) {
