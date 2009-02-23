@@ -54,7 +54,8 @@ template<class BaseClass, class BaseClassIO>
 const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class(const BaseClass& b) const
 {
   unsigned int i;
-  for (i=0; (i<object_io_.size()) && !(object_io_[i]->is_io_for(b)); i++);
+  for (i=0; (i<object_io_.size()) && !(object_io_[i]->is_io_for(b)); ++i)
+    /*nothing*/;
 
   if (i>=object_io_.size())
   {

@@ -400,7 +400,8 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
   assert((r < rows()) && (c < columns()));
   row& rw = elements[r];
   typename row::iterator ri;
-  for (ri = rw.begin(); (ri != rw.end()) && ((*ri).first < c); ++ri);
+  for (ri = rw.begin(); (ri != rw.end()) && ((*ri).first < c); ++ri)
+    /*nothing*/;
 
   if ((ri == rw.end()) || ((*ri).first != c)) {
     // Add new column to the row.
@@ -523,7 +524,8 @@ void vnl_sparse_matrix<T>::resize( int r, int c)
     for (unsigned int r = 0; r < elements.size(); r++){
       row& rw = elements[r];
       typename row::iterator iter;
-      for (iter = rw.begin(); iter != rw.end() && (*iter).first<cs_ ; ++iter);
+      for (iter = rw.begin(); iter != rw.end() && (*iter).first<cs_ ; ++iter)
+        /*nothing*/;
       if (iter != rw.end()) rw.erase(iter,rw.end());
     }
   }

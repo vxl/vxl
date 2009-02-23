@@ -317,9 +317,9 @@ vidl_mpegcodec::get_view( int position,
   unsigned char * buf = buffers_->get_buff(position);
 
   vil_image_view<vxl_byte> *image;
-  image = new vil_image_view<vxl_byte>(buf, width, height, 
-                                       this->get_bytes_pixel(), 
-                                       this->get_bytes_pixel(), 
+  image = new vil_image_view<vxl_byte>(buf, width, height,
+                                       this->get_bytes_pixel(),
+                                       this->get_bytes_pixel(),
                                        this->get_bytes_pixel()*width, 1);
   vil_image_view_base_sptr image_sptr(image);
 
@@ -379,7 +379,7 @@ vidl_mpegcodec::init()
   //once to get the true width and height.
   if (this->length() == -1)
   {
-    while (decoder_->execute(&req) != -1);
+    while (decoder_->execute(&req) != -1) /*nothing*/;
     this->set_number_frames(decoder_->get_last_frame());
   }
   else decoder_->execute(&req);

@@ -440,7 +440,7 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
             float *dx = dx_[tmpx];
             float *dy = dy_[tmpx];
 
-            // *** Bug fix, Samer Abdallah 5/10/95:  next line was
+            // *** Bug fix, Samer Abdallah May 10, 1995:  next line was
             // theta_[tmpx][tmpy]  = k*vcl_atan2(dy[y],dx[y]);
             theta_[tmpx][tmpy]  = k*(float)vcl_atan2(dy[tmpy],dx[tmpy]);
           }
@@ -487,11 +487,11 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
           if ( !V1 )
             V1 = v1;
           else
-            osl_IUDelete (v1);
+          { osl_IUDelete (v1); }
           if ( !V2 )
             V2 = v2;
           else
-            osl_IUDelete(v2);
+          { osl_IUDelete(v2); }
         }
 
         // Note that the edge can start and end in the same place.
@@ -624,7 +624,7 @@ void osl_canny_rothwell::Jump_single_breaks()
     }
     // or finally for j=0
 
-    // *** Bug fix, Samer Abdallah 5/10/95:  next line was
+    // *** Bug fix, Samer Abdallah May 10, 1995:  next line was
     // else if ( i == 0 )
     else if ( j == 0 ) {
 
@@ -655,7 +655,7 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
 {
   // Reset the smoothing kernel parameters by
   // halfing the size of the smoothing sigma
-  old_sigma_ = sigma_;  sigma_ /= 2.0;
+  old_sigma_ = sigma_;  sigma_ /= 2.0f;
   old_width_ = width_;
   width_ = int(sigma_*vcl_sqrt(2*vcl_log(1.0/gauss_tail_))+1);
   old_k_size_ = k_size_;  k_size_ = 2*width_+ 1;

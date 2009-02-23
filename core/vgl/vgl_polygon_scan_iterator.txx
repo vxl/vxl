@@ -48,7 +48,7 @@ struct compare_vertind
   inline bool operator()(const typename vgl_polygon_scan_iterator<T>::vertind &u,
                          const typename vgl_polygon_scan_iterator<T>::vertind &v) const
   {
-    return (chs_[u.chainnum][u.vertnum].y() < chs_[v.chainnum][v.vertnum].y());
+    return chs_[u.chainnum][u.vertnum].y() < chs_[v.chainnum][v.vertnum].y();
   }
 
   typename vgl_polygon<T>::sheet_t* chs_;
@@ -195,7 +195,8 @@ void vgl_polygon_scan_iterator<T>::delete_edge( vertind v )
     int j;
     for ( j = 0; ( j < numcrossedges ) &&
                  ( !( ( crossedges[j].v.chainnum == v.chainnum ) &&
-                      ( crossedges[j].v.vertnum == v.vertnum ) )); j++ );
+                      ( crossedges[j].v.vertnum == v.vertnum ) )); ++j )
+      /*nothing*/;
 
     // edge not in cross edge list; happens at win->y0
     if ( j >= numcrossedges ) return;

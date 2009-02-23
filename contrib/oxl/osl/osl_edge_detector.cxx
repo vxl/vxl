@@ -1,7 +1,7 @@
 // This is oxl/osl/osl_edge_detector.cxx
 #include "osl_edge_detector.h"
 //:
-//  \file
+// \file
 
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
@@ -52,7 +52,8 @@ osl_edge_detector::osl_edge_detector(osl_edge_detector_params const &params)
 
 //-----------------------------------------------------------------------------
 
-osl_edge_detector::~osl_edge_detector() {
+osl_edge_detector::~osl_edge_detector()
+{
   Free_float_image(dx_,xsize_);
   Free_float_image(dy_,xsize_);
   Free_float_image(grad_,xsize_);
@@ -180,7 +181,8 @@ void osl_edge_detector::detect_edges(vil1_image const &image,
 // edge strengths. Stores sub-pixel positions in dx_ and dy_, and set the
 // orientations in theta_.
 //
-void osl_edge_detector::Sub_pixel_interpolation() {
+void osl_edge_detector::Sub_pixel_interpolation()
+{
   float h1=0.0,h2=0.0; // dummy initialisation values
   float k = 180.0f/float(vnl_math::pi);
   int orient;
@@ -212,7 +214,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         orient = orient%4;
 
         // And now compute the interpolated heights
-        switch( orient ) {
+        switch ( orient ) {
         case 0:
           grad = dy[y]/dx[y];
           h1 = grad*g0[y-1] + (1 - grad)*g0[y];
@@ -245,7 +247,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         // Do subpixel interpolation by fitting a parabola
         // along the NMS line and finding its peak
         fraction = (h1-h2)/(2*(h1-2*g1[y]+h2));
-        switch( orient ) {
+        switch ( orient ) {
         case 0:
           dnewx = fraction;
           dnewy = dy[y]/dx[y]*fraction;
@@ -341,8 +343,9 @@ void osl_edge_detector::Sub_pixel_interpolation() {
 // Thickens the threshold image around each good pixel to take account for
 // the smoothing kernel (almost a dilation with a square structuring element).
 //
-void osl_edge_detector::Thicken_threshold(int x, int y) {
-  // Experimental change 13/4/95 by CAR
+void osl_edge_detector::Thicken_threshold(int x, int y)
+{
+  // Experimental change 13 Apr 1995 by CAR
   int width = width_;
   //    int width = 0;
 
@@ -418,7 +421,7 @@ void osl_edge_detector::Set_thresholds()
                                   a1dist[x][y],
                                   a2dist[x][y]);
         float num=1.0f; int den=1; // dummy initialisation values
-        switch(option) {
+        switch (option) {
         case 1:
         case 2:
           den = fdist[x][y]+bdist[x][y];
@@ -453,14 +456,13 @@ void osl_edge_detector::Set_thresholds()
   // So defer to actual edgel chain formation.
 #if 0 // commented out
   if (gradient_histogram_)
-        {
-            ghist_ =
-              new Histogram(histogram_resolution_, low_, max_gradient);
-            for (x=0; x<xsize_; ++x)
-                for (y=0; y<ysize_; ++y)
-                  //ghist_->UpCount(grad_[x][y]); //All Pixels (Used since 1995)
-                  ghist_->UpCount(thin_[x][y]);  //Just at edgels (First check
-        }                                        //for significant differences)
+  {
+    ghist_ = new Histogram(histogram_resolution_, low_, max_gradient);
+    for (x=0; x<xsize_; ++x)
+      for (y=0; y<ysize_; ++y)
+        //ghist_->UpCount(grad_[x][y]); //All Pixels (Used since 1995)
+        ghist_->UpCount(thin_[x][y]);   //Just at edgels (First check
+  }                                     //for significant differences)
 #endif
 
   Free_int_image(fdist,xsize_);
@@ -473,11 +475,13 @@ void osl_edge_detector::Set_thresholds()
   Free_float_image(a2th,xsize_);
 }
 
-struct osl_edge_detector_xyfloat {
+struct osl_edge_detector_xyfloat
+{
   int x;
   int y;
   float thin;
 };
+
 static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* xyf2)
 {
   if (xyf1->thin < xyf2->thin)
@@ -583,7 +587,8 @@ void osl_edge_detector::Thin_edges()
 // topological descriptions. To simplify matters, we raise the thin_ value
 // of the central pixel and so force it to be an edgel.
 //
-void osl_edge_detector::Fill_holes() {
+void osl_edge_detector::Fill_holes()
+{
   // Find all of the edgels with a strength <= thresh_
   float SMALL = 0.0001f;
 
@@ -739,11 +744,11 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
           if ( !V1 )
             V1 = v1;
           else
-            osl_IUDelete (v1);
+          { osl_IUDelete(v1); }
           if ( !V2 )
             V2 = v2;
           else
-            osl_IUDelete(v2);
+          { osl_IUDelete(v2); }
         }
         //edge = new osl_edge(V1,V2);
 
@@ -837,7 +842,8 @@ void osl_edge_detector::Follow(int x, int y,
 //
 //: Searches for the junctions in the image.
 //
-void osl_edge_detector::Find_junctions() {
+void osl_edge_detector::Find_junctions()
+{
   // Reset the junction variables
   xjunc_->clear();
   yjunc_->clear();
@@ -873,7 +879,8 @@ void osl_edge_detector::Find_junctions() {
 //: Locate junction clusters using the following method of hysteresis.
 //
 //
-void osl_edge_detector::Find_junction_clusters() {
+void osl_edge_detector::Find_junction_clusters()
+{
   vcl_list<int> xcoords,ycoords,xvertices,yvertices,xjunc,yjunc;
 
   // Find a junction and follow
@@ -885,8 +892,8 @@ void osl_edge_detector::Find_junction_clusters() {
   {
     for (unsigned int y=width_; y+width_<ysize_; ++y)
     {
-      if ( junction_[x][y] ) {
-
+      if ( junction_[x][y] )
+      {
         // Each cluster is written to (xcoords,ycooords)
         xcoords.clear();  ycoords.clear();
         Follow_junctions(x,y,&xcoords,&ycoords);
@@ -920,7 +927,6 @@ void osl_edge_detector::Find_junction_clusters() {
   for (vcl_list<int>::iterator i=xvertices.begin(), j=yvertices.begin();
        i!=xvertices.end() && j!=yvertices.end();
        ++i, ++j) {
-    //for (xvertices.reset(),yvertices.reset(); xvertices.next(),yvertices.next(); )  {
 
     osl_Vertex *v = new osl_Vertex( float((*i)/*xvertices.value()*/+xstart_),
                                     float((*j)/*yvertices.value()*/+ystart_));
@@ -980,9 +986,9 @@ void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
   // First find the CofG
   double x=0.0,y=0.0;
   for (xc.reset(),yc.reset(); xc.next(),yc.next(); )
-    {
-      x += xc.value();  y += yc.value();
-    }
+  {
+    x += xc.value();  y += yc.value();
+  }
   x /= xc.size();  y /= yc.size();
 
   // Now find the point closest to the CofG
@@ -990,10 +996,10 @@ void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
   dist = xsize_*ysize_; // A number larger than the image size
   for (xc.reset(),yc.reset(); xc.next(),yc.next(); )
     if ( (newdist=hypot(x-xc.value(),y-yc.value())) < dist )
-      {
-        x0 = xc.value();  y0 = yc.value();
-        dist = newdist;
-      }
+    {
+      x0 = xc.value();  y0 = yc.value();
+      dist = newdist;
+    }
 #endif
 
   typedef vcl_list<int>::iterator it;

@@ -377,7 +377,7 @@ vidl_vil1_mpegcodec::init()
   //once to get the true width and height.
   if (this->length() == -1)
   {
-    while (decoder_->execute(&req) != -1);
+    while (decoder_->execute(&req) != -1) /*nothing*/;
     this->set_number_frames(decoder_->get_last_frame());
   }
   else decoder_->execute(&req);
