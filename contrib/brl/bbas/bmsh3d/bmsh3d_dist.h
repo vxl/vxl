@@ -10,29 +10,37 @@
 //
 // \verbatim
 //  Modifications:
+//   Peter Vanroose - 22 Feb 2009 - Added bmsh3d_dist_3d(point,point)
 // \endverbatim
 
 #include <vcl_cmath.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 
-const inline double bmsh3d_dist_3d (const double& x1, const double& y1, const double& z1,
-                                  const double& x2, const double& y2, const double& z2)
+inline double bmsh3d_sqdist_3d(const double& x1, const double& y1, const double& z1,
+                               const double& x2, const double& y2, const double& z2)
 {
-   return vcl_sqrt ( ((double) x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1) );
+  return (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1);
 }
 
-const inline double bmsh3d_sqdist_3d (const double& x1, const double& y1, const double& z1,
-                                    const double& x2, const double& y2, const double& z2)
+inline double bmsh3d_dist_3d(const double& x1, const double& y1, const double& z1,
+                             const double& x2, const double& y2, const double& z2)
 {
-   return ((double) x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1);
+  return vcl_sqrt( bmsh3d_sqdist_3d(x1, y1, z1, x2, y2, z2) );
 }
 
-const inline double bmsh3d_sqdist_3d (const vgl_point_3d<double>& pt1,
-                                    const vgl_point_3d<double>& pt2)
+inline double bmsh3d_sqdist_3d(const vgl_point_3d<double>& pt1,
+                               const vgl_point_3d<double>& pt2)
 {
-   return bmsh3d_sqdist_3d (pt1.x(), pt1.y(), pt1.z(),
+  return bmsh3d_sqdist_3d(pt1.x(), pt1.y(), pt1.z(),
                           pt2.x(), pt2.y(), pt2.z());
+}
+
+inline double bmsh3d_dist_3d(const vgl_point_3d<double>& pt1,
+                             const vgl_point_3d<double>& pt2)
+{
+  return bmsh3d_dist_3d(pt1.x(), pt1.y(), pt1.z(),
+                        pt2.x(), pt2.y(), pt2.z());
 }
 
 vgl_box_3d<double> bmsh3d_reduce_box (const vgl_box_3d<double>& box, const double red);
