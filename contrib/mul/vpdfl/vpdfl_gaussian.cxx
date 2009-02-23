@@ -6,7 +6,7 @@
 // \file
 // \brief Multi-variate Gaussian PDF with arbitrary axes.
 // \author Tim Cootes
-// \date 16-Oct-98
+// \date 16-Oct-1998
 //
 // \verbatim
 //  Modifications
@@ -31,12 +31,38 @@
 #include <vpdfl/vpdfl_prob_chi2.h>
 
 //=======================================================================
-static inline bool almostEqualsOne(double value);
+static inline bool almostEqualsOne(double value)
+{
+  const double upper = 1 + 1e-06;
+  const double lower = 1 - 1e-06;
+  return value > lower && value < upper;
+}
+//=======================================================================
+
 #ifndef NDEBUG
-static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs);
+static inline bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
+{
+  const int m = vecs.rows();
+  const int n = vecs.cols();
+  for (int j=0; j<n; j++)
+  {
+    double sumsq = 0.0;
+    for (int i=0; i<m; i++)
+      sumsq += vnl_math_sqr(vecs(i,j));
+    if (!almostEqualsOne(sumsq)) return false;
+  }
+  return true;
+}
 #endif // NDEBUG
+//=======================================================================
 #if 0
-static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
+static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
+{
+  int n = v.size();
+  for (int i = 1; i < n; i++)
+    if (v(i-1) < v(i)) return false;
+  return true;
+}
 #endif
 
 //=======================================================================
@@ -148,42 +174,6 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
   set(mean, evecs, evals);
 }
 
-
-//=======================================================================
-static bool almostEqualsOne(double value)
-{
-  const double upper = 1 + 1e-06;
-  const double lower = 1 - 1e-06;
-  return value > lower && value < upper;
-}
-
-//=======================================================================
-#ifndef NDEBUG
-static inline bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
-{
-  const int m = vecs.rows();
-  const int n = vecs.cols();
-  for (int j=0; j<n; j++)
-  {
-    double sumsq = 0.0;
-    for (int i=0; i<m; i++)
-      sumsq += vnl_math_sqr(vecs(i,j));
-    if (!almostEqualsOne(sumsq)) return false;
-  }
-  return true;
-}
-#endif //NDEBUG
-//=======================================================================
-
-#if 0
-static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
-{
-  int n = v.size();
-  for (int i = 1; i < n; i++)
-    if (v(i-1) < v(i)) return false;
-  return true;
-}
-#endif
 
 //=======================================================================
 
