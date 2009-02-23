@@ -400,7 +400,7 @@ short get_short(vil1_stream* file, int location)
 
   unsigned char buff[2];
   file->read(buff, 2L);
-  return (buff[0]<<8)+(buff[1]<<0);
+  return static_cast<short>((buff[0]<<8)|(buff[1]));
 }
 
 
@@ -419,7 +419,7 @@ unsigned short get_ushort(vil1_stream* file, int location)
 
   unsigned char buff[2];
   file->read((void*)buff, 2L);
-  return (buff[0]<<8)+(buff[1]<<0);
+  return static_cast<unsigned short>((buff[0]<<8)|(buff[1]));
 }
 
 long get_long(vil1_stream* file, int location)
@@ -434,23 +434,23 @@ long get_long(vil1_stream* file, int location)
 
 void send_char(vil1_stream* data, int s)
 {
-  char c = s;
+  char c = char(s);
   data->write(&c ,1L);
 }
 
 void send_short(vil1_stream* data, int s)
 {
   unsigned char buff[2];
-  buff[0] = (s >> 8) & 0xff;
-  buff[1] = (s >> 0) & 0xff;
+  buff[0] = static_cast<unsigned char>((s >> 8) & 0xff);
+  buff[1] = static_cast<unsigned char>((s >> 0) & 0xff);
   data->write(buff, 2L);
 }
 
 void send_ushort(vil1_stream* data, unsigned int s)
 {
   unsigned char buff[2];
-  buff[0] = (s >> 8) & 0xff;
-  buff[1] = (s >> 0) & 0xff;
+  buff[0] = static_cast<unsigned char>((s >> 8) & 0xff);
+  buff[1] = static_cast<unsigned char>(s & 0xff);
   data->write(buff, 2L);
 }
 
@@ -472,7 +472,7 @@ void expandrow(unsigned char *optr, unsigned char *iptr, int z)
   while (true)
   {
     pixel = *iptr++;
-    if ( !(count = (pixel & 0x7f)) )
+    if ( !(count = static_cast<unsigned char>(pixel & 0x7f)) )
       return;
     if (pixel & 0x80)
     {

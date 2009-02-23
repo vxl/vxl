@@ -26,7 +26,7 @@ static void test_pyramid_image_resource()
   image.set_size(ni,nj);
   for (unsigned i = 0; i<ni; ++i)
     for (unsigned j = 0; j<nj; ++j)
-      image(i,j) = i + ni*j;
+      image(i,j) = static_cast<unsigned short>(i + ni*j);
   vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
   const unsigned ni2 = 36, nj2 = 21;
@@ -34,7 +34,7 @@ static void test_pyramid_image_resource()
   image2.set_size(ni2,nj2);
   for (unsigned i = 0; i<ni2; ++i)
     for (unsigned j = 0; j<nj2; ++j)
-      image2(i,j) = i + ni2*j;
+      image2(i,j) = static_cast<unsigned short>(i + ni2*j);
   vil_image_resource_sptr ir2 = vil_new_image_resource_of_view(image2);
 
   const unsigned ni3 = 18, nj3 = 10;
@@ -42,7 +42,7 @@ static void test_pyramid_image_resource()
   image3.set_size(ni3,nj3);
   for (unsigned i = 0; i<ni3; ++i)
     for (unsigned j = 0; j<nj3; ++j)
-      image3(i,j) = i + ni3*j;
+      image3(i,j) = static_cast<unsigned short>(i + ni3*j);
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
   vcl_string d = "pyramid_dir";
   vcl_cout << "Made pyramid directory "<< d << '\n';

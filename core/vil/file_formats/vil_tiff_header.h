@@ -7,7 +7,7 @@
 //:
 // \file
 // \author    J.L. Mundy
-// \date 22 Dec 05
+// \date 22 Dec 2005
 // \brief A header structure for tiff files
 //
 // This class is responsible for extracting (putting) information
@@ -79,7 +79,7 @@ class vil_tiff_header
   //vxl_uint_16 CHECK (JLM)
   ushort_tag bits_per_sample;
   vxl_uint_16 bytes_per_sample() const
-    { return bits_per_sample.valid ? (bits_per_sample.val + 7)/8 : 0; }
+  { return bits_per_sample.valid ? static_cast<vxl_uint_16>((bits_per_sample.val + 7)/8) : 0u; }
 
   ushort_tag cell_length;
 

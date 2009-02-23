@@ -130,11 +130,13 @@ static void test_convert_stretch_range_limited()
   vil_image_view<float> f_image(10, 10);
   for (unsigned j=0; j<f_image.nj(); ++j)
     for (unsigned i=0; i<f_image.ni(); ++i) f_image(i,j)=0.1f*i + 0.01f*j + 5.f;
-  //float min_f, max_f;
-  //vil_math_value_range(f_image, min_f, max_f );
-  //vcl_cout << "Min f value: " << min_f << "\n";
-  //vcl_cout << "Max f value: " << max_f << "\n";
-  //vil_print_all(vcl_cout, f_image) ;
+#if 0
+  float min_f, max_f;
+  vil_math_value_range(f_image, min_f, max_f );
+  vcl_cout << "Min f value: " << min_f << '\n'
+           << "Max f value: " << max_f << '\n';
+  vil_print_all(vcl_cout, f_image) ;
+#endif // 0
 
   float slo=5.2f, shi=5.8f;
   vxl_byte dlo=50, dhi=200;
@@ -150,9 +152,11 @@ static void test_convert_stretch_range_limited()
 
   float f55 = f_image(5,5);
   vxl_byte b55 = dlo + vxl_byte((f55-slo)*(dhi-dlo)/(shi-slo) + 0.5);
-  //vcl_cout << "f55= " << f55 << "\n";
-  //vcl_cout << "b55= " << (int)b55 << "\n";
-  //vcl_cout << "b_image(5,5)" << (int)b_image(5,5) << "\n";
+#if 0
+  vcl_cout << "f55= " << f55 << '\n'
+           << "b55= " << (int)b55 << '\n'
+           << "b_image(5,5)" << (int)b_image(5,5) << '\n';
+#endif // 0
   TEST("b_image(5,5)", b_image(5,5), b55);
 }
 
@@ -171,9 +175,9 @@ static void test_convert_to_n_planes()
       f_image_expected(i,j,0)= i + 10.0f*j + 5.0f;
       f_image_expected(i,j,1)= i + 10.0f*j;
       f_image_expected(i,j,2)= i + 10.0f*j + 5.0f;
-      u16_image_expected(i,j,0)= i + 10*j + 5;
-      u16_image_expected(i,j,1)= i + 10*j;
-      u16_image_expected(i,j,2)= i + 10*j + 5;
+      u16_image_expected(i,j,0)= static_cast<vxl_uint_16>(i + 10*j + 5);
+      u16_image_expected(i,j,1)= static_cast<vxl_uint_16>(i + 10*j);
+      u16_image_expected(i,j,2)= static_cast<vxl_uint_16>(i + 10*j + 5);
     }
 
 
@@ -232,16 +236,14 @@ static void test_convert_to_n_planes()
   TEST("implict vil_convert_to_component_order API", rgb_image?true:false, true);
 #endif
 
-
-
-
   TEST("implict vil_convert_to_component_order correct",
        vil_image_view_deep_equality(vil_image_view<float>(rgb_image), f_image_dest),
        true);
-//  vil_print_all(vcl_cout, image_16_3_stretched);
-
-//  vil_print_all(vcl_cout, image_16_3);
-//  vil_print_all(vcl_cout, u16_image_expected);
+#if 0
+  vil_print_all(vcl_cout, image_16_3_stretched);
+  vil_print_all(vcl_cout, image_16_3);
+  vil_print_all(vcl_cout, u16_image_expected);
+#endif // 0
 }
 
 static void test_simple_pixel_conversions()

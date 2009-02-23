@@ -44,7 +44,7 @@ void pattern_RGB16 (unsigned char* data)
 #endif
   for (int y = 0; y < 512; ++y)
     for (int x = 0; x < 512; ++x)
-      my_data[y*512 + x] = ((x << 7) & r) + ((y << 2) & g);
+      my_data[y*512 + x] = static_cast<short>(((x << 7) & r) | ((y << 2) & g));
 }
 
 void pattern_RGB24 (unsigned char* data)
@@ -248,13 +248,13 @@ int main()
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  glPixelZoom(0.4, 0.6);
+  glPixelZoom(0.4f, 0.6f);
   vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  glPixelZoom(1.8, 0.3);
+  glPixelZoom(1.8f, 0.3f);
   vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),data);

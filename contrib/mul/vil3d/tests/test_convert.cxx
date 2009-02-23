@@ -81,9 +81,9 @@ static void test_convert_to_n_planes()
         f_image_expected(i,j,k,0)= i + 10.0f*j + 100.0f*k + 5.0f;
         f_image_expected(i,j,k,1)= i + 10.0f*j + 100.0f*k;
         f_image_expected(i,j,k,2)= i + 10.0f*j + 100.0f*k + 5.0f;
-        u16_image_expected(i,j,k,0)= i + 10*j + 100*k + 5;
-        u16_image_expected(i,j,k,1)= i + 10*j + 100*k;
-        u16_image_expected(i,j,k,2)= i + 10*j + 100*k + 5;
+        u16_image_expected(i,j,k,0)= static_cast<vxl_uint_16>(i + 10*j + 100*k + 5);
+        u16_image_expected(i,j,k,1)= static_cast<vxl_uint_16>(i + 10*j + 100*k);
+        u16_image_expected(i,j,k,2)= static_cast<vxl_uint_16>(i + 10*j + 100*k + 5);
       }
 
 #ifdef DEBUG
@@ -112,8 +112,8 @@ static void test_convert_to_n_planes()
     if (fmaxp-fminp >0)
       b = (65535.999)/static_cast<double>(fmaxp-fminp);
     double a = -1.0*fminp*b + 0.0;
-    vcl_cout << "input (minp=" << fminp << ", maxp=" << fmaxp << ')' << vcl_endl;
-    vcl_cout << "trans (a=" << a << ", b=" << b << ')' << vcl_endl;
+    vcl_cout << "input (minp=" << fminp << ", maxp=" << fmaxp << ')' << vcl_endl
+             << "trans (a=" << a << ", b=" << b << ')' << vcl_endl;
     vcl_cout.precision(oldprec);
   }
   testlib_test_begin( "implicit vil3d_convert_stretch_range float to 16bit with rounding" );

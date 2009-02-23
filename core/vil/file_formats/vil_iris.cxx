@@ -212,13 +212,13 @@ bool vil_iris_generic_image::write_header()
 
   char dummy[410];
 
-  send_short(is_, magic_);
-  send_char(is_, storage_); // either VERBATIM (0) or RLE (1)
-  send_char(is_, vil_pixel_format_sizeof_components(format_));  // bytes per pixel per channel
-  send_ushort(is_, dimension_); // either 1 (1 scanline), 2 (grey image), or 3 (colour)
-  send_ushort(is_, ni_);    // width
-  send_ushort(is_, nj_);    // height
-  send_ushort(is_, nplanes_);    // nr of colour bands; typically 3 (RGB) or 4 (RGBA)
+  send_short(is_, static_cast<vxl_sint_16>(magic_));
+  send_char(is_, (char)storage_); // either VERBATIM (0) or RLE (1)
+  send_char(is_, (char)vil_pixel_format_sizeof_components(format_));  // bytes per pixel per channel
+  send_ushort(is_, static_cast<vxl_uint_16>(dimension_)); // either 1 (1 scanline), 2 (grey image), or 3 (colour)
+  send_ushort(is_, static_cast<vxl_uint_16>(ni_));     // width
+  send_ushort(is_, static_cast<vxl_uint_16>(nj_));     // height
+  send_ushort(is_, static_cast<vxl_uint_16>(nplanes_));// nr of colour bands; typically 3 (RGB) or 4 (RGBA)
   send_long(is_, pixmin_);   // minimum pixel value; typically 0
   send_long(is_, pixmax_); // maximum pixel value; typically 255 if _PBC is 1
   is_->write(dummy, 4L);
@@ -450,12 +450,12 @@ vxl_sint_16 get_short(vil_stream* file, int location)
   file->read(buff, 2L);
 
   // Decode from two's complement to machine format
-  vxl_uint_16 bits = ( buff[0] << 8 ) + buff[1];
+  vxl_uint_16 bits = static_cast<vxl_uint_16>(( buff[0] << 8 ) + buff[1]);
 
   if ( ( bits & 0x8000 ) != 0 )
-    return -vxl_sint_16( ~bits + 1 );
+    return static_cast<vxl_sint_16>(-( ~bits + 1 ));
   else
-    return vxl_sint_16( bits );
+    return static_cast<vxl_sint_16>( bits );
 }
 
 
@@ -474,7 +474,7 @@ vxl_uint_16 get_ushort(vil_stream* file, int location)
 
   unsigned char buff[2];
   file->read((void*)buff, 2L);
-  return (buff[0]<<8)+(buff[1]<<0);
+  return static_cast<vxl_uint_16>((buff[0]<<8)+(buff[1]<<0));
 }
 
 vxl_sint_32 get_long(vil_stream* file, int location)
@@ -506,23 +506,23 @@ void send_short(vil_stream* data, vxl_sint_16 s)
 {
   vxl_uint_16 bits;
   if ( s < 0 ) {
-    bits = -s;
-    bits = ~bits + 1;
+    bits = static_cast<vxl_uint_16>(-s);
+    bits = static_cast<vxl_uint_16>(~bits + 1);
   } else {
-    bits = s;
+    bits = static_cast<vxl_uint_16>(s);
   }
 
   vxl_byte buff[2];
-  buff[0] = (bits >>  8) & 0xff;
-  buff[1] =  bits        & 0xff;
+  buff[0] = static_cast<vxl_byte>((bits >>  8) & 0xff);
+  buff[1] = static_cast<vxl_byte>( bits        & 0xff);
   data->write(buff, 2L);
 }
 
 void send_ushort(vil_stream* data, vxl_uint_16 s)
 {
   unsigned char buff[2];
-  buff[0] = (s >> 8) & 0xff;
-  buff[1] = (s >> 0) & 0xff;
+  buff[0] = static_cast<unsigned char>((s >> 8) & 0xff);
+  buff[1] = static_cast<unsigned char>( s       & 0xff);
   data->write(buff, 2L);
 }
 
@@ -554,7 +554,7 @@ void expandrow(unsigned char *optr, unsigned char *iptr, int z)
   while (true)
   {
     pixel = *iptr++;
-    if ( !(count = (pixel & 0x7f)) )
+    if ( !(count = static_cast<unsigned char>(pixel & 0x7f)) )
       return;
     if (pixel & 0x80)
     {
