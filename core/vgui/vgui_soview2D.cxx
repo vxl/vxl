@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   24 Mar 99
+// \date   24 Mar 1999
 // \brief  See vgui_soview2D.h for a description of this file.
 
 #include "vgui_soview2D.h"
@@ -109,7 +109,7 @@ float vgui_soview2D_lineseg::distance_squared(float x, float y) const
   // this is a const member function so some of the parameters passed
   // to vgl_distance2_to_linesegment are effectively of type const
   // float.
-  return vgl_distance2_to_linesegment(float(x0), float(y0), float(x1), float(y1), x, y);
+  return (float)vgl_distance2_to_linesegment(x0, y0, x1, y1, x, y);
 }
 
 void vgui_soview2D_lineseg::get_centroid(float* x, float* y) const
@@ -131,7 +131,7 @@ void vgui_soview2D_lineseg::translate(float tx, float ty)
 vgui_soview2D_group::~vgui_soview2D_group()
 {
   for (unsigned int i=0; i< ls.size(); i++)
-    if( ls[i] )
+    if ( ls[i] )
       delete ls[i];
 
   // clear vector
@@ -376,7 +376,7 @@ vcl_ostream& vgui_soview2D_linestrip::print(vcl_ostream&s) const { return s << "
 float vgui_soview2D_linestrip::distance_squared(float x, float y) const
 {
   double tmp = vgl_distance_to_non_closed_polygon(this->x, this->y, this->n, x, y);
-  return tmp*tmp;
+  return static_cast<float>(tmp*tmp);
 }
 
 void vgui_soview2D_linestrip::get_centroid(float* x, float* y) const
@@ -452,7 +452,7 @@ vcl_ostream& vgui_soview2D_polygon::print(vcl_ostream&s) const { return s << "[ 
 float vgui_soview2D_polygon::distance_squared(float x, float y) const
 {
   double tmp = vgl_distance_to_closed_polygon(this->x, this->y, this->n, x, y);
-  return tmp*tmp;
+  return static_cast<float>(tmp*tmp);
 }
 
 void vgui_soview2D_polygon::get_centroid(float* x, float* y) const

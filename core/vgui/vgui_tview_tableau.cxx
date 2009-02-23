@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   12 Oct 99
+// \date   12 Oct 1999
 // \brief  See vgui_tview_tableau.h for a description of this file.
 
 #include "vgui_tview_tableau.h"
@@ -43,7 +43,8 @@ vgui_tview_tableau::~vgui_tview_tableau()
 }
 
 
-static void draw_rect(float x, float y, float  w, float h) {
+static void draw_rect(float x, float y, float  w, float h)
+{
   glBegin(GL_POLYGON);
   glVertex2f(x-w,y-h);
   glVertex2f(x+w,y-h);
@@ -52,8 +53,8 @@ static void draw_rect(float x, float y, float  w, float h) {
   glEnd();
 }
 
-static void draw_border(float x, float y, float  w, float h, int lt) {
-
+static void draw_border(float x, float y, float  w, float h, int lt)
+{
   glLineWidth(lt);
 
   glBegin(GL_LINE_LOOP);
@@ -65,8 +66,8 @@ static void draw_border(float x, float y, float  w, float h, int lt) {
 }
 
 
-void vgui_tview_tableau::draw_tableau_icon(float x, float y) {
-
+void vgui_tview_tableau::draw_tableau_icon(float x, float y)
+{
   draw_rect(x,y,icon_width,icon_height);
 
   glColor3f(1,1,1);
@@ -77,20 +78,19 @@ void vgui_tview_tableau::draw_tableau_icon(float x, float y) {
 }
 
 
-void vgui_tview_tableau::draw_tview_icon(float x, float y) {
-
-
+void vgui_tview_tableau::draw_tview_icon(float x, float y)
+{
   glColor3f(1,0,0);
-  draw_rect(x-icon_width/2.0, y-icon_height/2.0, icon_width/2.0, icon_height/2.0);
+  draw_rect(x-icon_width/2.0f, y-icon_height/2.0f, icon_width/2.0f, icon_height/2.0f);
 
   glColor3f(0,1,0);
-  draw_rect(x-icon_width/2.0, y+icon_height/2.0, icon_width/2.0, icon_height/2.0);
+  draw_rect(x-icon_width/2.0f, y+icon_height/2.0f, icon_width/2.0f, icon_height/2.0f);
 
   glColor3f(0,0,1);
-  draw_rect(x+icon_width/2.0, y+icon_height/2.0, icon_width/2.0, icon_height/2.0);
+  draw_rect(x+icon_width/2.0f, y+icon_height/2.0f, icon_width/2.0f, icon_height/2.0f);
 
   glColor3f(1,1,0);
-  draw_rect(x+icon_width/2.0, y-icon_height/2.0, icon_width/2.0, icon_height/2.0);
+  draw_rect(x+icon_width/2.0f, y-icon_height/2.0f, icon_width/2.0f, icon_height/2.0f);
 
   glColor3f(1,1,1);
   glDisable(GL_LINE_STIPPLE);
@@ -100,8 +100,8 @@ void vgui_tview_tableau::draw_tview_icon(float x, float y) {
 }
 
 
-void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, float y) {
-
+void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, float y)
+{
   vcl_vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
 
@@ -121,8 +121,8 @@ void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, fl
 
     int ia = 0;
     for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
-         i != children.end(); ++i, ++ia) {
-
+         i != children.end(); ++i, ++ia)
+    {
       glDisable(GL_LINE_STIPPLE);
       glColor3f(1,1,1);
 
@@ -210,8 +210,8 @@ void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, 
   vcl_vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
 
-  if (children.size() > 0) {
-
+  if (children.size() > 0)
+  {
     float ny = y + spacing*children.size(); // fsm; was: y + spacing*children.size()/10;
     //float ny = y+spacing;
     int num = children.size();
@@ -222,8 +222,8 @@ void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, 
 
 
     for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
-         i != children.end(); ++i) {
-
+         i != children.end(); ++i)
+    {
       add_icons(icons, *i, start_x+offset_x, ny);
       offset_x+=spacing;
     }
@@ -294,8 +294,8 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
   float startx = width/2;
   float starty = height/3;
 
-  if (e.type == vgui_DRAW) {
-
+  if (e.type == vgui_DRAW)
+  {
     // explicitly clearing colour as we do not want colour of
     // any tableaux this might be embedded within
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -315,7 +315,6 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
 
     closest_icon = find_closest_icon(icons, ix, iy);
   }
-
   else if (e.type==vgui_BUTTON_DOWN) {
     vcl_vector<icon> icons;
     add_icons(&icons, child, startx, starty);
@@ -347,7 +346,6 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
     active_icon = 0;
     post_redraw();
   }
-
   else {
     GLint oldbuff;
     glGetIntegerv(GL_DRAW_BUFFER, &oldbuff);
@@ -361,7 +359,8 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
 }
 
 
-void vgui_tview_tableau::get_popup(const vgui_popup_params& /*params*/, vgui_menu &menu) {
+void vgui_tview_tableau::get_popup(const vgui_popup_params& /*params*/, vgui_menu &menu)
+{
   if (closest_icon) {
     menu.separator();
     vgui_popup_params np;

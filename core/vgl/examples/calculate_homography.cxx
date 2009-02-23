@@ -2,7 +2,7 @@
 //
 // \version 1.0
 // \author  Gastón Araguás UTN Cordoba, Argentina
-// \date    03/03/2008
+// \date    3 March, 2008
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_easy2D_tableau.h>
@@ -33,25 +33,25 @@ int main(int argc, char **argv)
   pointsA.push_back(p2);
   pointsA.push_back(p3);
   pointsA.push_back(p4);
-  easy2D->add_point(p1.x(),p1.y());
-  easy2D->add_point(p2.x(),p2.y());
-  easy2D->add_point(p3.x(),p3.y());
-  easy2D->add_point(p4.x(),p4.y());
-  
+  easy2D->add_point(float(p1.x()),float(p1.y()));
+  easy2D->add_point(float(p2.x()),float(p2.y()));
+  easy2D->add_point(float(p3.x()),float(p3.y()));
+  easy2D->add_point(float(p4.x()),float(p4.y()));
+
   // connect all points with lines
   easy2D->set_foreground(1,0,0); easy2D->set_line_width(1);
-  easy2D->add_line(p1.x(),p1.y(),p2.x(),p2.y());
-  easy2D->add_line(p2.x(),p2.y(),p3.x(),p3.y());
-  easy2D->add_line(p3.x(),p3.y(),p4.x(),p4.y());
-  easy2D->add_line(p4.x(),p4.y(),p1.x(),p1.y());
+  easy2D->add_line(float(p1.x()),float(p1.y()),float(p2.x()),float(p2.y()));
+  easy2D->add_line(float(p2.x()),float(p2.y()),float(p3.x()),float(p3.y()));
+  easy2D->add_line(float(p3.x()),float(p3.y()),float(p4.x()),float(p4.y()));
+  easy2D->add_line(float(p4.x()),float(p4.y()),float(p1.x()),float(p1.y()));
 
   // draw a line from (0,0) to the center of gravity of set A
   vgl_homg_point_2d<double> centre_pointA( centre(pointsA).x()/centre(pointsA).w(),
                                            centre(pointsA).y()/centre(pointsA).w(),1.0 );
   easy2D->set_foreground(1,1,0); easy2D->set_point_radius(5);
-  easy2D->add_point(centre_pointA.x(),centre_pointA.y());
+  easy2D->add_point(float(centre_pointA.x()),float(centre_pointA.y()));
   easy2D->set_foreground(0,0,1); easy2D->set_line_width(3);
-  easy2D->add_line(0,0,centre_pointA.x(),centre_pointA.y());
+  easy2D->add_line(0,0,float(centre_pointA.x()),float(centre_pointA.y()));
 
   // rotation and translation
   vgl_h_matrix_2d<double> H;
@@ -71,17 +71,17 @@ int main(int argc, char **argv)
   pointsB.push_back(tr_p2);
   pointsB.push_back(tr_p3);
   pointsB.push_back(tr_p4);
-  easy2D->add_point(tr_p1.x(),tr_p1.y());
-  easy2D->add_point(tr_p2.x(),tr_p2.y());
-  easy2D->add_point(tr_p3.x(),tr_p3.y());
-  easy2D->add_point(tr_p4.x(),tr_p4.y());
+  easy2D->add_point(float(tr_p1.x()),float(tr_p1.y()));
+  easy2D->add_point(float(tr_p2.x()),float(tr_p2.y()));
+  easy2D->add_point(float(tr_p3.x()),float(tr_p3.y()));
+  easy2D->add_point(float(tr_p4.x()),float(tr_p4.y()));
 
   // connect all points with lines
   easy2D->set_foreground(1,0,0); easy2D->set_line_width(1);
-  easy2D->add_line(tr_p1.x(),tr_p1.y(),tr_p2.x(),tr_p2.y());
-  easy2D->add_line(tr_p2.x(),tr_p2.y(),tr_p3.x(),tr_p3.y());
-  easy2D->add_line(tr_p3.x(),tr_p3.y(),tr_p4.x(),tr_p4.y());
-  easy2D->add_line(tr_p4.x(),tr_p4.y(),tr_p1.x(),tr_p1.y());
+  easy2D->add_line(float(tr_p1.x()),float(tr_p1.y()),float(tr_p2.x()),float(tr_p2.y()));
+  easy2D->add_line(float(tr_p2.x()),float(tr_p2.y()),float(tr_p3.x()),float(tr_p3.y()));
+  easy2D->add_line(float(tr_p3.x()),float(tr_p3.y()),float(tr_p4.x()),float(tr_p4.y()));
+  easy2D->add_line(float(tr_p4.x()),float(tr_p4.y()),float(tr_p1.x()),float(tr_p1.y()));
 
   // compute the homography between set A and set B
   vgl_h_matrix_2d_compute_linear hcl;
@@ -93,9 +93,9 @@ int main(int argc, char **argv)
 
   // draw a line from (0,0) to transformed centre of gravity of set A, i.e. centre of gravity of set B
   easy2D->set_foreground(1,1,0); easy2D->set_point_radius(5);
-  easy2D->add_point(centre_pointB.x()/centre_pointB.w(),centre_pointB.y()/centre_pointB.w());
+  easy2D->add_point(float(centre_pointB.x()/centre_pointB.w()),float(centre_pointB.y()/centre_pointB.w()));
   easy2D->set_foreground(0,1,0); easy2D->set_line_width(3);
-  easy2D->add_line(0,0,centre_pointB.x(),centre_pointB.y());
+  easy2D->add_line(0,0,float(centre_pointB.x()),float(centre_pointB.y()));
 
   vgui_viewer2D_tableau_new viewer(easy2D);
   vgui_shell_tableau_new shell(viewer);

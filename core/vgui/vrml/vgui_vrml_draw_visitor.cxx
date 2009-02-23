@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   09 Jan 99
+// \date   9 Jan 1999
 //-----------------------------------------------------------------------------
 
 #include "vgui_vrml_draw_visitor.h"
@@ -381,7 +381,7 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
       vnl_float_3 b(polyverts[1]->x, polyverts[1]->y, polyverts[1]->z);
       vnl_float_3 c(polyverts[2]->x, polyverts[2]->y, polyverts[2]->z);
       normal = vnl_cross_3d(b - a, c - b);
-      normal *= -1.0 / normal.magnitude();
+      normal *= -1.0f / normal.magnitude();
 
       glBegin(GL_POLYGON);
 
@@ -419,8 +419,8 @@ bool vgui_vrml_draw_visitor::Visit(QvAsciiText* /*node*/)
 
 static void GlRotate(double angle_rad, const float* axis)
 {
-  static const double RAD2DEG = 180.0 / vnl_math::pi;
-  glRotatef(angle_rad * RAD2DEG, axis[0], axis[1], axis[2]);
+  static const float RAD2DEG = 180.0f / float(vnl_math::pi);
+  glRotatef(static_cast<float>(angle_rad) * RAD2DEG, axis[0], axis[1], axis[2]);
 }
 
 static void GlRotate(const QvSFRotation& r)
@@ -513,7 +513,7 @@ bool vgui_vrml_draw_visitor::Visit(QvTexture2* node)
   //    virtual QvBool  readInstance(QvInput *in);
   //    QvBool          readImage();
   //
-  //    void setHandle (int handle, int alpha);  // mpichler, 19960506
+  //    void setHandle (int handle, int alpha);  // mpichler, 1996-05-06
   //
   if (gl_mode == textured) {
     char const* filename = node->filename.value.getString();

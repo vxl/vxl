@@ -1,7 +1,7 @@
 // This is oxl/osl/osl_harris.cxx
 #include "osl_harris.h"
 //:
-//  \file
+// \file
 
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
@@ -173,7 +173,7 @@ void osl_harris::do_non_adaptive(double *corner_min)
   if (maxima_count < (float) params_.corner_count_max * 0.9)
     for (int i=0 ; i<10 && maxima_count < (float) params_.corner_count_max * 0.9; i++)
     {
-      params_.relative_minimum *= 0.5;
+      params_.relative_minimum *= 0.5f;
       *corner_min = params_.relative_minimum * corner_max;
       if (params_.verbose)
         vcl_cerr << "Found " << maxima_count

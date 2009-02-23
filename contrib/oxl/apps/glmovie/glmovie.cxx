@@ -3,7 +3,7 @@
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   21 May 99
+// \date   21 May 1999
 //-----------------------------------------------------------------------------
 //
 // test args:
@@ -91,9 +91,9 @@ int window_height = 0;
 int mouse_x = 0; // Set by draw callbacks
 int mouse_y = 0;
 bool playing = true;
-double pixel_zoom = 1.0;
-double pixel_zoom_tx = 0;
-double pixel_zoom_ty = TEXTHEIGHT;
+float pixel_zoom = 1.0f;
+float pixel_zoom_tx = 0;
+float pixel_zoom_ty = TEXTHEIGHT;
 int start_frame = 0;
 char* save_fmt = 0;
 vcl_FILE* idx_fp = 0;
@@ -148,7 +148,7 @@ void init()
     glDisable(GL_BLEND);
 
     glPointSize(3);
-    glLineWidth(0.1);
+    glLineWidth(0.1f);
   }
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_LIGHTING);
@@ -230,8 +230,8 @@ bool drawframe(int frame)
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
     // negative rasterpos must be made +ive by skipping
-    double rx = pixel_zoom_tx;
-    double ry = pixel_zoom_ty;
+    float rx = pixel_zoom_tx;
+    float ry = pixel_zoom_ty;
     int rw = image_w;
     int rh = image_h;
     if (rx < 0) {
@@ -274,8 +274,8 @@ bool drawframe(int frame)
   if (gx_basename) {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(pixel_zoom_tx, pixel_zoom_ty, 0); // Translate GL coords to raster pos
-    double s = a_gx_scale() * pixel_zoom;
+    glTranslatef(pixel_zoom_tx, pixel_zoom_ty, 0.0f); // Translate GL coords to raster pos
+    float s = float(a_gx_scale()) * pixel_zoom;
     glScalef(s,s,s);
 
     int display_list = gx_list_base + frame;
@@ -321,7 +321,7 @@ bool drawframe(int frame)
   {
     // Build msg
     char msg[1024];
-    float fps = 1000.0 / tic.real();
+    float fps = 1000.0f / tic.real();
 
     vcl_sprintf(msg, "Frame[%d] FPS %4.1f ", moviefile->get_frame(frame)->get_real_frame_index(), fps);
     vcl_sprintf(msg + vcl_strlen(msg), "Zoom %g ", pixel_zoom);
@@ -340,10 +340,10 @@ bool drawframe(int frame)
 void reshape(int w, int h)
 {
   if (window_width > 0) {
-    double scale = vcl_min(double(w) / window_width, double(h) / window_height);
-    pixel_zoom_tx = pixel_zoom_tx * scale;
-    pixel_zoom_ty = pixel_zoom_ty * scale;
-    pixel_zoom = pixel_zoom * scale;
+    float scale = vcl_min(float(w) / window_width, float(h) / window_height);
+    pixel_zoom_tx *= scale;
+    pixel_zoom_ty *= scale;
+    pixel_zoom *= scale;
   }
 
   window_width = w;
@@ -515,9 +515,9 @@ struct ShuttleCB : public CB
 // Zoom event handler
 struct ZoomCB : public CB
 {
-  double down_pixel_zoom;
-  double down_pixel_zoom_tx;
-  double down_pixel_zoom_ty;
+  float down_pixel_zoom;
+  float down_pixel_zoom_tx;
+  float down_pixel_zoom_ty;
 
   bool want(int button, int modifiers, int, int) {
     // Take any shifted mouse event
@@ -551,10 +551,10 @@ struct ZoomCB : public CB
       factor = vcl_max(1e-2, factor);
       factor = vcl_min(1e+2, factor);
 
-      double down_img_x = (down_x - down_pixel_zoom_tx) / down_pixel_zoom;
-      double down_img_y = (down_y - down_pixel_zoom_ty) / down_pixel_zoom;
+      float down_img_x = (down_x - down_pixel_zoom_tx) / down_pixel_zoom;
+      float down_img_y = (down_y - down_pixel_zoom_ty) / down_pixel_zoom;
 
-      pixel_zoom = down_pixel_zoom * factor;
+      pixel_zoom = down_pixel_zoom * float(factor);
       pixel_zoom_tx = down_x - pixel_zoom * down_img_x;
       pixel_zoom_ty = down_y - pixel_zoom * down_img_y;
     }
@@ -577,7 +577,7 @@ struct ZoomCB : public CB
       glVertex2f(x,y);
       glEnd();
       glBegin(GL_LINE_LOOP);
-      double boxw = pixel_zoom / 2;
+      float boxw = pixel_zoom / 2;
       glVertex2f(x0-boxw,y0-boxw);
       glVertex2f(x0+boxw,y0-boxw);
       glVertex2f(x0+boxw,y0+boxw);
@@ -643,10 +643,10 @@ struct DrawCB : public CB
       glEnd();
       break;
      case infline: {
-      double dx = x - down_x;
-      double dy = y - down_y;
-      double dirx = -dy * 100;
-      double diry = dx * 100;
+      float dx = x - down_x;
+      float dy = y - down_y;
+      float dirx = -dy * 100;
+      float diry = dx * 100;
       glBegin(GL_LINES);
       glVertex2f(x + dirx, y + diry);
       glVertex2f(x - dirx, y - diry);
@@ -655,8 +655,8 @@ struct DrawCB : public CB
      }
      case conic: {
 #if 0
-      double dx = x - down_x;
-      double dy = y - down_y;
+      float dx = x - down_x;
+      float dy = y - down_y;
       gl_draw_conic(down_x, down_y, dx, dy, 0);
 #endif
       break;
@@ -670,15 +670,15 @@ struct DrawCB : public CB
       glEnd();
       break;
      case circle: {
-      double dx = x - down_x;
-      double dy = y - down_y;
-      double r= vcl_sqrt(dx*dx + dy*dy);
+      float dx = x - down_x;
+      float dy = y - down_y;
+      float r= vcl_sqrt(dx*dx + dy*dy);
       int n = 20;
       glBegin(GL_LINE_LOOP);
       double dt = vnl_math::pi / n * 2;
       for (int i = 0; i < n; ++i) {
-        double ox = r * vcl_cos(i * dt);
-        double oy = r * vcl_sin(i * dt);
+        float ox = float(r * vcl_cos(i * dt));
+        float oy = float(r * vcl_sin(i * dt));
         glVertex2f(down_x + ox, down_y + oy);
       }
       glEnd();
@@ -694,9 +694,9 @@ struct DrawCB : public CB
   }
 
   void up(int x, int y) {
-    double s = 1.0 / pixel_zoom;
-    double tx = -pixel_zoom_tx / pixel_zoom;
-    double ty = -pixel_zoom_ty / pixel_zoom;
+    float s = 1.0f / pixel_zoom;
+    float tx = -pixel_zoom_tx / pixel_zoom;
+    float ty = -pixel_zoom_ty / pixel_zoom;
     vul_printf(vcl_cerr, "v = [%d %g %g %g %g];\n",
                moviefile->get_frame(frame)->get_real_frame_index(),
                s*down_x+tx, s*down_y+ty,
@@ -723,7 +723,7 @@ void keyboard(unsigned char key, int x, int y)
      break;
    }
    case 'c': {
-    pixel_zoom = 1.0;
+    pixel_zoom = 1.0f;
     pixel_zoom_tx = 0;
     pixel_zoom_ty = TEXTHEIGHT;
     break;
@@ -755,6 +755,8 @@ void keyboard(unsigned char key, int x, int y)
    case 'q': {
     vcl_exit(0);
    }
+   default: // do nothing (silently skip over invalid key)
+    break;
   }
   frame = frame % num_frames;
   if (frame<0) frame+=num_frames;
@@ -917,7 +919,7 @@ int main(int argc, char ** argv)
       glDisable(GL_POINT_SMOOTH);
       glDisable(GL_LINE_SMOOTH);
     //  glDisable(GL_BLEND);
-      glLineWidth(0.1);
+      glLineWidth(0.1f);
     }
   }
 

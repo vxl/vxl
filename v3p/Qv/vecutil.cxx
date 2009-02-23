@@ -28,8 +28,8 @@
 //</copyright>
 //
 // \author
-// Created:     15 Mar 93   Michael Pichler
-// Changed:     30 Jan 96   Michael Pichler
+// Created:     15 Mar 1993   Michael Pichler
+// Changed:     30 Jan 1996   Michael Pichler
 //
 
 #include <vcl_cmath.h>
@@ -346,15 +346,15 @@ void rotatearoundaxis (const vector3D& u, float omega)
 
   // sorry, ge3d (as gl) expects angles in degrees
   // note: the matrices are PREconcatenated, therefore to be read from bottom up!
-  if (firstcall)  vcl_cerr << "rotz" << vcl_endl;
+  if (firstcall)  vcl_cerr << "rotz\n";
     ge3d_rotate_axis ('z', DEGREES (s.phi));
-  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty\n";
     ge3d_rotate_axis ('y', DEGREES (s.theta));
-  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz\n";
     ge3d_rotate_axis ('z', DEGREES (omega));  // u lies in positive z axis
-  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty\n";
     ge3d_rotate_axis ('y', DEGREES (-s.theta));
-  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
+  if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz\n";
     ge3d_rotate_axis ('z', DEGREES (-s.phi));
   if (firstcall)  ge3d_print_cur_matrix ();
   firstcall = 0;
@@ -389,7 +389,7 @@ void quaternion2rotation (const vector3D& v, float s, vector3D& axis, float& ang
   else
     init3D (axis, 0.f, 0.f, 0.f);
 
-  angle *= 2.0;  // angle = 2 * vcl_acos (s)
+  angle *= 2.0f;  // angle = 2 * vcl_acos (s)
 }
 
 

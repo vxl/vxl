@@ -123,8 +123,8 @@ void xcv_geometry::change_sel_color()
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator iter = sel_objs.begin(); iter !=
-      sel_objs.end(); iter++)
+    for (vcl_vector<vgui_soview*>::iterator iter = sel_objs.begin();
+         iter != sel_objs.end(); iter++)
     {
       vgui_soview* sv = (vgui_soview*)(*iter);
       sv->set_colour(red_value(color_value),
@@ -746,7 +746,7 @@ static void xcv_geometry_explode_geometry()
     double s = d / r;
     dx *= s;
     dy *= s;
-    sv->translate(dx,dy);
+    sv->translate(float(dx),float(dy));
   }
 
   // Tell easy alll has changed

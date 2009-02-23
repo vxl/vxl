@@ -115,12 +115,12 @@ float vgui_grid_tableau::get_y(unsigned row_pos)
 //------------------------------------------------------------------------------
 //: Get the width of each column.
 //------------------------------------------------------------------------------
-float vgui_grid_tableau::get_w() { return 1.0/nb_cols; }
+float vgui_grid_tableau::get_w() { return 1.0f/nb_cols; }
 
 //------------------------------------------------------------------------------
 //: Get the height of each row.
 //------------------------------------------------------------------------------
-float vgui_grid_tableau::get_h() { return 1.0/nb_rows; }
+float vgui_grid_tableau::get_h() { return 1.0f/nb_rows; }
 
 //------------------------------------------------------------------------------
 //: Adds the default tableau to the given space in the grid (but not to the vcl_list of tableaux).

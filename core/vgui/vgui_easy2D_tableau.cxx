@@ -6,7 +6,7 @@
 // \file
 // \brief  See vgui_easy2D_tableau.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   24 Sep 99
+// \date   24 Sep 1999
 //
 // \verbatim
 //  Modifications
@@ -228,26 +228,26 @@ vgui_soview2D_ellipse* vgui_easy2D_tableau::add_ellipse(float x, float y, float 
 //: Add a point with the given projective coordinates.
 vgui_soview2D_point* vgui_easy2D_tableau::add_point_3dv(double const p[3])
 {
-  return add_point(p[0]/p[2], p[1]/p[2]);
+  return add_point(float(p[0]/p[2]), float(p[1]/p[2]));
 }
 
 //: Add a line with the given projective start and end points.
 vgui_soview2D_lineseg* vgui_easy2D_tableau::add_line_3dv_3dv(double const p[3], double const q[3])
 {
-  return add_line(p[0]/p[2], p[1]/p[2],
-                  q[0]/q[2], q[1]/q[2]);
+  return add_line(float(p[0]/p[2]), float(p[1]/p[2]),
+                  float(q[0]/q[2]), float(q[1]/q[2]));
 }
 
 //: Add an infinite line with the given projective coordinates.
 vgui_soview2D_infinite_line* vgui_easy2D_tableau::add_infinite_line_3dv(double const l[3])
 {
-  return add_infinite_line(l[0], l[1], l[2]);
+  return add_infinite_line(float(l[0]), float(l[1]), float(l[2]));
 }
 
 //: Add a circle with the given centre (in projective coords) and radius to the display.
 vgui_soview2D_circle* vgui_easy2D_tableau::add_circle_3dv(double const point[3], float r)
 {
-  return add_circle(point[0]/point[2], point[1]/point[2], r);
+  return add_circle(float(point[0]/point[2]), float(point[1]/point[2]), r);
 }
 
 //: Add a linestrip with the given n vertices to the display.
@@ -321,7 +321,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
         else {
           if (debug)
             vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
-                     << filename.c_str() << vcl_endl;
+                     << filename.c_str() << '\n';
           psfile.print_greyscale_image(img.top_left_ptr(), img.ni(), img.nj());
         }
       }
@@ -341,14 +341,14 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       {
         if (debug)
           vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
-                   << filename.c_str() << vcl_endl;
+                   << filename.c_str() << '\n';
         psfile.print_greyscale_image(data, wd, ht);
       }
       else if (vil1_pixel_format(img) == VIL1_RGB_BYTE)
       {
         if (debug)
           vcl_cerr << "vgui_easy2D_tableau::print_psfile printing color image to "
-                   << filename.c_str() << vcl_endl;
+                   << filename.c_str() << '\n';
         psfile.print_color_image(data, wd, ht);
       }
       else
@@ -366,7 +366,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
 
   vcl_vector<vgui_soview*> all_objs = get_all();
   vgui_style_sptr style = 0;
-  double style_point_size = 0;
+  float style_point_size = 0;
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); ++i)
   {
     vgui_soview* sv = *i;
@@ -390,7 +390,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       psfile.point(pt->x, pt->y, style_point_size);
       if (debug)
         vcl_cerr << "  vgui_easy2D_tableau: Adding a point at "
-                 << pt->x << ", " << pt->y << vcl_endl;
+                 << pt->x << ", " << pt->y << '\n';
     }
     else if (sv->type_name() == "vgui_soview2D_circle")
     {
@@ -398,7 +398,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       psfile.circle(circ->x, circ->y, circ->r);
       if (debug)
         vcl_cerr << "  vgui_easy2D_tableau: Adding circle, center " << circ->x << ", "
-                 << circ->y << " radius " << circ->r << vcl_endl;
+                 << circ->y << " radius " << circ->r << '\n';
     }
     else if (sv->type_name() == "vgui_soview2D_lineseg")
     {
@@ -406,7 +406,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       psfile.line(line->x0, line->y0, line->x1, line->y1);
       if (debug)
         vcl_cerr << " vgui_easy2D_tableau: Adding line between " << line->x0 << ", "
-                 << line->y0 << " and " << line->x1 << ", " << line->y1 << vcl_endl;
+                 << line->y0 << " and " << line->x1 << ", " << line->y1 << '\n';
     }
     else if (sv->type_name() == "vgui_soview2D_linestrip")
     {
@@ -492,7 +492,7 @@ vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
   }
   else if ( format == GL_RGBA ) {
     img = vil_image_view<vxl_byte>( reinterpret_cast<vxl_byte*>(data), w, h, 4, 4, w*4, 1 );
-#ifdef DEBUG // inserted debugging jr 10/24/2003
+#ifdef DEBUG // inserted debugging jr Oct 24, 2003
     vil_save(img, "tmp_image_GL_RGBA.jpeg", "jpeg");
 #endif
   }

@@ -1,7 +1,7 @@
 // This is oxl/xcv/xcv_axes_tableau.cxx
 #include "xcv_axes_tableau.h"
 //:
-//  \file
+// \file
 // \author   K.Y.McGaul
 // See xcv_axes_tableau.h for a description of this file.
 //
@@ -119,7 +119,7 @@ void xcv_axes_tableau::compute_axes()
     // numbering:
     if (xlimits_.tick_spacing < 1)
     {
-      float tmp_number = xlimits_.tick_start + (xcounter*xlimits_.tick_spacing);
+      double tmp_number = xlimits_.tick_start + (xcounter*xlimits_.tick_spacing);
       const char* tmp_number_string = vul_sprintf("%.1f", tmp_number).c_str();
       text_->add(tmp_width-10, top_offset+graph_height+20, tmp_number_string);
     }
@@ -131,43 +131,43 @@ void xcv_axes_tableau::compute_axes()
     }
   }
 
-  float yspacing = graph_height / (2*ylimits_.tick_n);
+  double yspacing = graph_height / (2*ylimits_.tick_n);
   for (int ycounter = 0; ycounter < ylimits_.tick_n+1; ycounter++)
   {
-    float tmp_height = top_offset + (2*ycounter*yspacing);
+    double tmp_height = top_offset + (2*ycounter*yspacing);
 
     // tick marks:
-    easy_->add_line(left_offset-tick_width, tmp_height, left_offset, tmp_height);
+    easy_->add_line(left_offset-tick_width, (float)tmp_height, (float)left_offset, (float)tmp_height);
     if (ycounter != ylimits_.tick_n)
-      easy_->add_line(left_offset-tick_width, tmp_height+yspacing,
-                      left_offset, tmp_height+yspacing);
+      easy_->add_line(left_offset-tick_width, (float)tmp_height+(float)yspacing,
+                      left_offset, (float)tmp_height+(float)yspacing);
 
     // numbering:
     if (ylimits_.tick_spacing < 1)
     {
-      float tmp_number = ylimits_.tick_end - (ycounter*ylimits_.tick_spacing);
+      double tmp_number = ylimits_.tick_end - (ycounter*ylimits_.tick_spacing);
       const char* tmp_number_string = vul_sprintf("%.1f", tmp_number).c_str();
-      text_->add(left_offset-40, tmp_height+3, tmp_number_string);
+      text_->add(left_offset-40, (float)tmp_height+3, tmp_number_string);
     }
     else
     {
       int tmp_number = (int)vcl_ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing));
       const char* tmp_number_string = vul_sprintf("%d", tmp_number).c_str();
-      text_->add(left_offset-40, tmp_height+3, tmp_number_string);
+      text_->add(left_offset-40, (float)tmp_height+3, tmp_number_string);
     }
   }
 
   // Re-calibrate points and add them to the graph:
   vcl_vector<float> xcalib, ycalib;
-  float xscaling = graph_width/(xlimits_.tick_end - xlimits_.tick_start);
+  float xscaling = graph_width/float(xlimits_.tick_end - (float)xlimits_.tick_start);
   for (unsigned int i=0; i<xpoints_.size(); i++)
-    xcalib.push_back(left_offset + (xpoints_[i] - xlimits_.tick_start)*xscaling);
+    xcalib.push_back(left_offset + (xpoints_[i] - (float)xlimits_.tick_start)*xscaling);
 
-  float yscaling = graph_height/(ylimits_.tick_end - ylimits_.tick_start);
+  float yscaling = graph_height/((float)ylimits_.tick_end - (float)ylimits_.tick_start);
   for (unsigned int i=0; i<ypoints_.size(); i++)
   {
     ycalib.push_back(
-      top_offset + graph_height - ((ypoints_[i]-ylimits_.tick_start)*yscaling));
+      top_offset + graph_height - ((ypoints_[i]-(float)ylimits_.tick_start)*yscaling));
   }
 
   easy_->add_linestrip(xcalib.size(), &xcalib[0]/*.begin()*/, &ycalib[0]/*.begin()*/);

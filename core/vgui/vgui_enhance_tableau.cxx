@@ -4,9 +4,9 @@
 #endif
 //:
 // \file
-// \brief   See vgui_enhance_tableau.h for a description of this file.
-// \author  Philip C. Pritchett, RRG, University of Oxford
-// \date    17 Nov 99
+// \brief  See vgui_enhance_tableau.h for a description of this file.
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   17 Nov 1999
 //
 // \verbatim
 //  Modifications
@@ -141,10 +141,10 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
       }
 #endif
       vnl_matrix_fixed<double,4,4> M = ms.modelview_matrix();
-      float sx = M(0,0);
-      float sy = M(0,0);
-      float ox = M(0,3);
-      float oy = M(1,3);
+      float sx = (float)M(0,0);
+      float sy = (float)M(0,0);
+      float ox = (float)M(0,3);
+      float oy = (float)M(1,3);
 
       glEnable(GL_SCISSOR_TEST);
       int size_2 = size+size;

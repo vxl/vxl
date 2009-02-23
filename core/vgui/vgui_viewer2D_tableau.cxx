@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   14 Sep 99
+// \date   14 Sep 1999
 // \brief  See vgui_viewer2D_tableau.h for a description of this file.
 
 #include "vgui_viewer2D_tableau.h"
@@ -112,7 +112,7 @@ void vgui_viewer2D_tableau::zoomin(float zoom_factor, int x, int y)
 
 void vgui_viewer2D_tableau::zoomout(float zoom_factor, int x, int y)
 {
-  zoomin(1.0 / zoom_factor, x, y);
+  zoomin(1.0f / zoom_factor, x, y);
 }
 
 void vgui_viewer2D_tableau::center_image(int w, int h)
@@ -122,8 +122,8 @@ void vgui_viewer2D_tableau::center_image(int w, int h)
   float width = vp[2];
   float height = vp[3];
 
-  token.offsetX =  width/2 - token.scaleX*(float(w)/2.0);
-  token.offsetY = height/2 - token.scaleY*(float(h)/2.0);
+  token.offsetX =  width/2 - token.scaleX*(float(w)/2.0f);
+  token.offsetY = height/2 - token.scaleY*(float(h)/2.0f);
   post_redraw();
 }
 
@@ -211,7 +211,7 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
   {
     int w, h;
     this->image_size(w,h);
-    float xs = w/100.0;
+    float xs = w/100.0f;
     this->token.offsetX -= this->token.scaleX*xs*(*((const int*)e.data)-npos_x);
     this->post_redraw();
     npos_x = *((const int *)e.data);
@@ -221,7 +221,7 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
   {
     int w, h;
     this->image_size(w, h);
-    float ys = h/100.0;
+    float ys = h/100.0f;
     this->token.offsetY -= this->token.scaleY*ys*(*((const int*)e.data)-npos_y);
     this->post_redraw();
     npos_y = *((const int *)e.data);
@@ -336,7 +336,7 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
     glGetDoublev(GL_VIEWPORT, vp);
     double height = vp[3];
 
-    double newscale = 1 - (1.5*(prev_y - y)/height);
+    float newscale = 1.f - (1.5f*(prev_y - y)/(float)height);
 
     this->zoomin(newscale, int(zoom_x), int(zoom_y));
     this->post_redraw();
@@ -376,7 +376,7 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
     glLoadIdentity();
 
     // get ratio of viewport width to viewport height :
-    double W_H_ratio = width/height;
+    float W_H_ratio = float(width/height);
 
     // new method - draws rectangular box of aspect ratio W/H
     new_x = x;
@@ -405,7 +405,7 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
 
     // useful line as it documents the meaning of
     // zoom_? and new_?
-    draw_rect(zoom_x - vp[0], zoom_y - vp[1], new_x - vp[0], new_y - vp[1]);
+    draw_rect(zoom_x - float(vp[0]), zoom_y - float(vp[1]), new_x - float(vp[0]), new_y - float(vp[1]));
 
     vgui_utils::end_sw_overlay();
   }

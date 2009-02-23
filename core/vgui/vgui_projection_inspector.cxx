@@ -162,20 +162,20 @@ void vgui_projection_inspector::inspect()
 
     // backproject the corners of the plane {z=0} (in clip coordinates) to
     // the plane {z=0} in world coordinates :
-    x1 = ((-1)*T(3,3)-T(0,3))/T(0,0);
-    y1 = ((-1)*T(3,3)-T(1,3))/T(1,1);
+    x1 = float(((-1)*T(3,3)-T(0,3))/T(0,0));
+    y1 = float(((-1)*T(3,3)-T(1,3))/T(1,1));
 
-    x2 = ((+1)*T(3,3)-T(0,3))/T(0,0);
-    y2 = ((+1)*T(3,3)-T(1,3))/T(1,1);
+    x2 = float(((+1)*T(3,3)-T(0,3))/T(0,0));
+    y2 = float(((+1)*T(3,3)-T(1,3))/T(1,1));
 
     //
-    s[0] = T(0,0)/T(3,3);
-    s[1] = T(1,1)/T(3,3);
-    s[2] = T(2,2)/T(3,3);
+    s[0] = float(T(0,0)/T(3,3));
+    s[1] = float(T(1,1)/T(3,3));
+    s[2] = float(T(2,2)/T(3,3));
 
-    t[0] = T(0,3)/T(3,3);
-    t[1] = T(1,3)/T(3,3);
-    t[2] = T(2,3)/T(3,3);
+    t[0] = float(T(0,3)/T(3,3));
+    t[1] = float(T(1,3)/T(3,3));
+    t[2] = float(T(2,3)/T(3,3));
   }
 
   //
@@ -227,8 +227,8 @@ void vgui_projection_inspector::image_to_window_coordinates(float ix,float iy,fl
   vnl_double_4 win = T*img;
 
   // normalized coordinates :
-  float nx = win[0]/win[3];
-  float ny = win[1]/win[3];
+  float nx = float(win[0]/win[3]);
+  float ny = float(win[1]/win[3]);
 
   // convert normalised coordinates to viewport coordinates :
   wx = vp[0] + (nx - -1)/2 * vp[2];

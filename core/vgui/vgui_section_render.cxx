@@ -59,8 +59,8 @@ static bool clamped_viewport(float x0, float y0, float x1, float y1,
   // [ T00  0  T03 ]   [ a   u ]
   // [  0  T11 T13 ] ~ [   b v ]
   // [  0   0  T33 ]   [     1 ]
-  float a = T[0][0]/T[3][3], b = T[1][1]/T[3][3];
-  float u = T[0][3]/T[3][3], v = T[1][3]/T[3][3];
+  float a = float(T[0][0]/T[3][3]), b = float(T[1][1]/T[3][3]);
+  float u = float(T[0][3]/T[3][3]), v = float(T[1][3]/T[3][3]);
 
   // Get size of viewport. We need this to determine how much to scale pixels by.
   GLint vp[4]; // x,y, w,h
@@ -282,7 +282,7 @@ bool vgui_view_render(void const *pixels,
   // Set pixel transfer characteristics.
   glPixelStorei(GL_UNPACK_ALIGNMENT,   1);         // use byte alignment for now.
   glPixelStorei(GL_UNPACK_ROW_LENGTH,  w);         // size of image rows.
-  glPixelZoom( zoomx+0.001, zoomy+0.001 );       // something wierd happens
+  glPixelZoom( zoomx+0.001f, zoomy+0.001f );       // something wierd happens
                                                    // for identity zoom
   vgui_accelerate::instance()->vgui_glDrawPixels(w, // Size of pixel rectangle
                                                  h, // to be written to frame buffer.

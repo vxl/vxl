@@ -31,9 +31,9 @@ inline void vil_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
   while (s!=src_end)
   {
     *dest = (destT)(rt/k_sum); // Set value for -ive half of filter
-    rt *= k; k_sum *= k;    // Scale sums
-    rt -= *s; k_sum += 1.0; // Increment with next element
-    s+=sstep; dest+=dstep;  // Move to next element
+    rt *= k; k_sum *= k;     // Scale sums
+    rt -= *s; k_sum += 1.0f; // Increment with next element
+    s+=sstep; dest+=dstep;   // Move to next element
   }
 
   // Backward pass to compute +ive part of filter response
@@ -44,9 +44,9 @@ inline void vil_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
   while (s!=src_end)
   {
     *dest += (destT)(rt/k_sum); // Add in value for +ive half of filter
-    rt *= k; k_sum *= k;    // Scale sums
-    rt += *s; k_sum += 1.0; // Increment with next element
-    s-=sstep; dest-=dstep;  // Move to next element
+    rt *= k; k_sum *= k;     // Scale sums
+    rt += *s; k_sum += 1.0f; // Increment with next element
+    s-=sstep; dest-=dstep;   // Move to next element
   }
 }
 

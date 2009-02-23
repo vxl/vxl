@@ -31,7 +31,7 @@
 class vgui_range_map_params : public vbl_ref_count
 {
  public:
-  //alpha channel map or projection of 4 bands onto 3 
+  //alpha channel map or projection of 4 bands onto 3
   enum {RGBA_m, RGB_m, XRG_m, RXB_m, RGX_m, END_m};
   //string representation of map index
   static vcl_vector<vcl_string> bmap;
@@ -62,16 +62,16 @@ class vgui_range_map_params : public vbl_ref_count
   //: Default constructor (luminance mapping only)
   vgui_range_map_params(const long double min_L,
                         const long double max_L,
-                        const float gamma_L = 1.0,
+                        const float gamma_L = 1.0f,
                         const bool invert = false,
                         const bool use_glPixelMap = false,
                         const bool cache_mapped_pix= false)
   : n_components_(1),
     min_L_(min_L), max_L_(max_L), gamma_L_(gamma_L), invert_(invert),
-    min_R_(0),     max_R_(0),     gamma_R_(1.0),
-    min_G_(0),     max_G_(0),     gamma_G_(1.0),
-    min_B_(0),     max_B_(0),     gamma_B_(1.0),
-    min_X_(0),     max_X_(0),     gamma_X_(1.0), band_map_(0),
+    min_R_(0),     max_R_(0),     gamma_R_(1.0f),
+    min_G_(0),     max_G_(0),     gamma_G_(1.0f),
+    min_B_(0),     max_B_(0),     gamma_B_(1.0f),
+    min_X_(0),     max_X_(0),     gamma_X_(1.0f), band_map_(0),
     use_glPixelMap_(use_glPixelMap), cache_mapped_pix_(cache_mapped_pix)
   {}
 
@@ -82,18 +82,18 @@ class vgui_range_map_params : public vbl_ref_count
                         const long double max_G,
                         const long double min_B,
                         const long double max_B,
-                        const float gamma_R = 1.0,
-                        const float gamma_G = 1.0,
-                        const float gamma_B = 1.0,
+                        const float gamma_R = 1.0f,
+                        const float gamma_G = 1.0f,
+                        const float gamma_B = 1.0f,
                         const bool invert = false,
                         const bool use_glPixelMap = false,
                         const bool cache_mapped_pix= false)
   : n_components_(3),
-    min_L_(0),     max_L_(0),     gamma_L_(1.0),    invert_(invert),
+    min_L_(0),     max_L_(0),     gamma_L_(1.0f),    invert_(invert),
     min_R_(min_R), max_R_(max_R), gamma_R_(gamma_R),
     min_G_(min_G), max_G_(max_G), gamma_G_(gamma_G),
     min_B_(min_B), max_B_(max_B), gamma_B_(gamma_B),
-    min_X_(0),     max_X_(0),     gamma_X_(1.0), band_map_(0),
+    min_X_(0),     max_X_(0),     gamma_X_(1.0f), band_map_(0),
     use_glPixelMap_(use_glPixelMap), cache_mapped_pix_(cache_mapped_pix)
   {}
 
@@ -106,16 +106,16 @@ class vgui_range_map_params : public vbl_ref_count
                         const long double max_B,
                         const long double min_X,
                         const long double max_X,
-                        const float gamma_R = 1.0,
-                        const float gamma_G = 1.0,
-                        const float gamma_B = 1.0,
-                        const float gamma_X = 1.0,
+                        const float gamma_R = 1.0f,
+                        const float gamma_G = 1.0f,
+                        const float gamma_B = 1.0f,
+                        const float gamma_X = 1.0f,
                         const int band_map = 0,
                         const bool invert = false,
                         const bool use_glPixelMap = false,
                         const bool cache_mapped_pix= false)
   : n_components_(4),
-    min_L_(0),     max_L_(0),     gamma_L_(1.0),    invert_(invert),
+    min_L_(0),     max_L_(0),     gamma_L_(1.0f),    invert_(invert),
     min_R_(min_R), max_R_(max_R), gamma_R_(gamma_R),
     min_G_(min_G), max_G_(max_G), gamma_G_(gamma_G),
     min_B_(min_B), max_B_(max_B), gamma_B_(gamma_B),
@@ -188,7 +188,7 @@ class vgui_range_map_params : public vbl_ref_count
          << "max X range value " << max_X_ << '\n'
          << "gammaX " << gamma_X_ << '\n'
          << "band map " << bmap[band_map_] << '\n';
-    
+
     if (invert_)
       os << "invert  true\n";
     else
@@ -203,8 +203,6 @@ class vgui_range_map_params : public vbl_ref_count
     else
       os << "cache_mapped_pix  false\n";
   }
-  private:
-
 };
 
 #include <vgui/vgui_range_map_params_sptr.h>

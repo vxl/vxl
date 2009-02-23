@@ -117,9 +117,9 @@ vcl_vector<vgui_easy2D_tableau_sptr> get_easy2D_list()
   vcl_vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
   for (unsigned i=0; i<all_tabs.size(); i++)
   {
-    vgui_easy2D_tableau_sptr easy 
-      = (vgui_easy2D_tableau*)vgui_find_below_by_type_name(
-      all_tabs[i], vcl_string("vgui_easy2D_tableau")).operator->();
+    vgui_easy2D_tableau_sptr easy =
+      (vgui_easy2D_tableau*)vgui_find_below_by_type_name(
+        all_tabs[i], vcl_string("vgui_easy2D_tableau")).operator->();
     easy_tabs.push_back(easy);
   }
   return easy_tabs;
@@ -289,8 +289,8 @@ vgui_viewer2D_tableau_sptr get_viewer2D_at(unsigned col, unsigned row)
   if (top_tab)
   {
     vgui_viewer2D_tableau_sptr view;
-    view.vertical_cast(vgui_find_below_by_type_name(top_tab, 
-      vcl_string("vgui_viewer2D_tableau")));
+    view.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                    vcl_string("vgui_viewer2D_tableau")));
     if (view)
       return view;
   }
@@ -483,7 +483,7 @@ void xcv_window_size_adaptive(int rows, int cols,
                               double *viewer_scale)
 {
   xcv_window_size_traditional(rows, cols, images, window_w, window_h,
-    viewer_scale);
+                              viewer_scale);
 
   // resize the window to occupy roughly 64% of a 1024x1280 display by area.
   double mw = 0.80 * 1280;
@@ -535,8 +535,7 @@ int main(int argc, char** argv)
   // arguments not used by vgui::init();
   vul_arg<bool> a_adaptive("-adaptive", "resize window adaptively");
   vul_arg<int>  a_rows("-rows", "desired number of rows in array of images", 0);
-  vul_arg<int>  a_cols("-cols",
-    "desired number of col(umn)s in array of images", 0);
+  vul_arg<int>  a_cols("-cols", "desired number of col(umn)s in array of images", 0);
   vul_arg_parse(argc, argv);
 
   int rows, cols;
@@ -564,7 +563,7 @@ int main(int argc, char** argv)
 
     xcv_tab->set_grid_size_changeable(false);
     for (int argcount=1; argcount<argc && vcl_strcmp(argv[argcount], "-d");
-      ++argcount)
+         ++argcount)
     {
       vil1_image img = vil1_load(argv[argcount]);
       vgui_tableau_sptr tab = create_tableau(img);
@@ -578,16 +577,16 @@ int main(int argc, char** argv)
     double viewer_scale;
     if (a_adaptive())
       xcv_window_size_adaptive(rows, cols, images, &window_width,
-      &window_height, &viewer_scale);
+                               &window_height, &viewer_scale);
     else
       xcv_window_size_traditional(rows, cols, images, &window_width,
-      &window_height, &viewer_scale);
+                                  &window_height, &viewer_scale);
 
     for (unsigned int i=0; i<viewers.size(); ++i)
     {
       vgui_viewer2D_tableau_sptr v; v.vertical_cast(viewers[i]);
-      v->token.scaleX *= viewer_scale;
-      v->token.scaleY *= viewer_scale;
+      v->token.scaleX *= (float)viewer_scale;
+      v->token.scaleY *= (float)viewer_scale;
     }
   }
 

@@ -270,11 +270,11 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
 
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp); // ok
-    double width = vp[2];
-    double height = vp[3];
+    float width  = (float)vp[2];
+    float height = (float)vp[3];
 
-    double wscale = 2.0 / width;
-    double hscale = 2.0 / height;
+    float wscale = 2.0f / width;
+    float hscale = 2.0f / height;
     float delta_r[4];
     trackball(delta_r,
               wscale*beginx - 1, hscale*beginy - 1,
@@ -307,13 +307,13 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
     // the first version is ambiguous when overloads exist for vcl_pow
     double scalefactor = vcl_pow(5.0, dy);
     if (!lock_dolly)
-      this->token.scale = lastpos.scale * scalefactor;
+      this->token.scale = static_cast<float>(lastpos.scale * scalefactor);
 
     // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
     // the first version is ambiguous when overloads exist for vcl_pow
     double zoomfactor = vcl_pow(5.0,dx);
     if (!lock_zoom) {
-      this->token.fov = lastpos.fov * zoomfactor;
+      this->token.fov = static_cast<float>(lastpos.fov * zoomfactor);
       vgui::out << "viewer3D : fov " << this->token.fov << vcl_endl;
     }
     this->post_redraw();
@@ -330,8 +330,8 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
 
-    this->token.trans[0] = lastpos.trans[0] - dx * 20;
-    this->token.trans[1] = lastpos.trans[1] - dy * 20;
+    this->token.trans[0] = static_cast<float>(lastpos.trans[0] - dx * 20);
+    this->token.trans[1] = static_cast<float>(lastpos.trans[1] - dy * 20);
 
     this->post_redraw();
     return true;
@@ -357,11 +357,11 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
     double hscale = 2.0 / height;
     float delta_r[4];
     trackball(delta_r,
-              wscale*beginx - 1, hscale*beginy - 1,
-              wscale*x - 1, hscale*y - 1);
+              static_cast<float>(wscale*beginx - 1), static_cast<float>(hscale*beginy - 1),
+              static_cast<float>(wscale*x - 1), static_cast<float>(hscale*y - 1));
 
-    if (beginx != x && beginy != y) {
-
+    if (beginx != x && beginy != y)
+    {
       this->spinning = true;
       double delay = event.secs_since(last);
 

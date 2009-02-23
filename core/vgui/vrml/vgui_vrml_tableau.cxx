@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   17 Sep 99
+// \date   17 Sep 1999
 //-----------------------------------------------------------------------------
 
 #include "vgui_vrml_tableau.h"
@@ -109,7 +109,7 @@ bool vgui_vrml_tableau::handle(const vgui_event &e)
     return false;
 
   //
-  double scale = 10 / vrml->radius;
+  float scale = 10.0f / vrml->radius;
 
   if ( rescale_model)
   {
