@@ -48,7 +48,7 @@ class vimt3d_vil3d_v3i_format: public vil3d_file_format
   //: The magic number to identify a vsl stream as a v3i image.
   // You can create/read a v3i image using vsl by opening the stream,
   // reading/writing magic_number(), then reading/writing a pointer to a vimt_image.
-  static const unsigned magic_number();
+  static unsigned magic_number();
 };
 
 
@@ -97,7 +97,7 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
   //: Set the size of the each pixel in the i,j,k directions.
   // Return false if underlying image doesn't store pixel sizes.
   virtual bool set_voxel_size(float i, float j, float k);
-  
+
   //: Get full world to image transform
   const vimt3d_transform_3d & world2im() const;
 

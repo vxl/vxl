@@ -22,7 +22,7 @@
 //: The magic number to identify a vsl stream as a v3i image.
 // You can create/read a v3i image using vsl by opening the stream,
 // reading/writing magic_number(), then reading/writing a pointer to a vimt_image.
-const unsigned vimt3d_vil3d_v3i_format::magic_number()
+unsigned vimt3d_vil3d_v3i_format::magic_number()
 {
   return 987123873U;
 }
