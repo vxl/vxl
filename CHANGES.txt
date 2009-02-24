@@ -5,6 +5,10 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - Added a new library to core!  vpdl is a probability distribution
+        library merging the contrib libraries brl/bbas/bsta, mul/vpdfl, and
+        mul/pdf1d.  It is disabled from CMake until more complete.
+        
 **************************
 VXL 1.12.0      - Feb 2009
 **************************
