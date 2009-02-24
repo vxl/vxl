@@ -8,6 +8,7 @@ DECLARE( test_gaussian_indep );
 DECLARE( test_gaussian );
 DECLARE( test_update_gaussian );
 DECLARE( test_mixture );
+DECLARE( test_kernel_gaussian_sfbw );
 
 void
 register_tests()
@@ -19,6 +20,7 @@ register_tests()
   REGISTER( test_gaussian );
   REGISTER( test_update_gaussian );
   REGISTER( test_mixture );
+  REGISTER( test_kernel_gaussian_sfbw );
 }
 
 DEFINE_MAIN;

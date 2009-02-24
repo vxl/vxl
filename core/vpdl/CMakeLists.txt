@@ -16,6 +16,8 @@ SET( vpdl_sources
   
   vpdl_multi_cmp_dist.h
   vpdl_mixture.h
+  vpdl_kernel_base.h
+  vpdl_kernel_gaussian_sfbw.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)
