@@ -17,13 +17,14 @@
 
 //: The base class for all probability distributions.
 // There is a distinct polymorphic class hierarchy for each choice of
-// template parameters.  The vector and matrix data types vary with both T and n.
+// template parameters.  The vector and matrix data types vary with both \c T and \c n.
+// \tparam T is the scalar type use for numerical calculations (generally double or float)
+// \tparam n is the fixed dimension of the space with special case 0 (the default)
+//           indicating dynamic dimension set at run time.
 // - For n > 1 the data types are vnl_vector_fixed<T,n> and vnl_matrix_fixed<T,n,n>
 // - For n == 1 the data types are T and T
 // - For n == 0 the data types are vnl_vector<T> and vnl_matrix<T>
 //
-// The n == 0 (the default) indicates that the dimension is dynamic and
-// may be set at run time.
 template<class T, unsigned int n=0>
 class vpdl_distribution : public vpdl_base_traits<T,n>
 {
