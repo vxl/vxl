@@ -13,8 +13,8 @@
 * and brl/bbas/bsta.  
 * 
 * Created by Manchester, vpdfl provided a polymorphic hierarchy 
-* (using virtual functions) for multivariate distributions based on vnl_vector and 
-* vnl_matrix types.  For univariate distributions, pdf1d mirrored the design of
+* (using virtual functions) for multivariate distributions based on \c vnl_vector and 
+* \c vnl_matrix types.  For univariate distributions, pdf1d mirrored the design of
 * vpdfl, but used scalar types (i.e. double).  These libraries were very flexible
 * at run time.  Both distribution type and, in the case of vpdfl, dimension could
 * be selected at run time.
@@ -36,16 +36,16 @@
 * \section distributions Distributions
 *
 * Each distribution is derived (directly or indirectly) from a common templated
-* base class called \c vpdl_distribution<T,n>.  Template parameter T specifies
+* base class called \c vpdl_distribution <T,n>.  Template parameter T specifies
 * the numeric type (float or double) and n specifies the dimension.
-* \c vpdl_distribution<T,n> is derived from \c vpdl_base_traits<T,n> which is a 
+* \c vpdl_distribution <T,n> is derived from \c vpdl_base_traits <T,n> which is a 
 * partially specialized class that defines the key data types for representation 
 * of vectors and matrices in each dimension.  In particular:
-* - n==0 uses \c vnl_vector<T> and \c vnl_matrix<T> (dimension specified at run time)
+* - n==0 uses \c vnl_vector <T> and \c vnl_matrix <T> (dimension specified at run time)
 * - n==1 uses T and T (scalar computations)
-* - n>1  uses \c vnl_vector_fixed<T,n> and \c vnl_matrix_fixed<T,n,n> (fixed dimension of n)
+* - n>1  uses \c vnl_vector_fixed <T,n> and \c vnl_matrix_fixed <T,n,n> (fixed dimension of n)
 * 
-* \c vpdl_base_traits<T,n> also defines various functions to operate on these
+* \c vpdl_base_traits <T,n> also defines various functions to operate on these
 * different types with a consistent API.  These included functions to get/set
 * dimension, access a vector or matrix element, resize a vector or matrix, etc.
 * For some template parameters these functions may do nothing, but their 
