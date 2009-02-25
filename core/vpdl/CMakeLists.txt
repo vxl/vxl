@@ -16,6 +16,7 @@ SET( vpdl_sources
   
   vpdl_multi_cmp_dist.h
   vpdl_mixture.h
+  vpdl_mixture_of.h
   vpdl_kernel_base.h
   vpdl_kernel_gaussian_sfbw.h
 )

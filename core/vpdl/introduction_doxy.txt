@@ -57,6 +57,7 @@
 * - \c vpdl_gaussian_indep<T,n> : A Gaussian with axis independent covariance
 * - \c vpdl_gaussian_sphere<T,n> : A hyper-spherical Gaussian with a scalar variance  
 * - \c vpdl_mixture<T,n> : A polymorphic weighted mixture of distributions 
+* - \c vpdl_mixture_of<dist_t> : A weighted mixture of distributions of fixed type \c dist_t 
 * - \c vpdl_kernel_gaussian_sfbw<T,n> : a kernel distribution with fixed 
 *      bandwidth using a spherically symmetric Gaussian kernel 
 *

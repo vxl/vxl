@@ -35,6 +35,8 @@ class vpdl_base_traits
  public:
   //: The compile time dimension of the distribution
   enum { fixed_dim = n };
+  //: The type used for scalar operations 
+  typedef T scalar_t;
   //: the data type used for vectors (e.g. the mean)
   typedef vnl_vector_fixed<T,n> vector;
   //: the data type used for matrices (e.g. covariance)
@@ -95,6 +97,8 @@ class vpdl_base_traits<T,1>
  public:
   //: The compile time dimension of the distribution
   enum { fixed_dim = 1 };
+  //: The type used for scalar operations 
+  typedef T scalar_t;
   //: the data type used for vectors (e.g. the mean)
   typedef T vector;
   //: the data type used for matrices (e.g. covariance)
@@ -155,6 +159,8 @@ class vpdl_base_traits<T,0>
  public:
   //: The compile time dimension of the distribution
   enum { fixed_dim = 0 };
+  //: The type used for scalar operations 
+  typedef T scalar_t;
   //: the data type used for vectors (e.g. the mean)
   typedef vnl_vector<T> vector;
   //: the data type used for matrices (e.g. covariance)
