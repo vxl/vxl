@@ -41,6 +41,9 @@ class mfpf_region_definer
   //: Returns index of reference point on which the region is centred
   virtual unsigned ref_point_index() const = 0;
 
+  //: Returns original index of reference point on which the region is centred
+  virtual unsigned orig_ref_point_index() const = 0;
+
   //: Returns reference point for region
   //  Returns the point that would be returned by
   //  set_up(pts).pose().p(), but without changing internal

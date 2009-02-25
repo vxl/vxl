@@ -50,6 +50,14 @@ class mfpf_mr_point_finder
   unsigned image_level(unsigned i, const mfpf_pose& pose,
                        const vimt_image_pyramid& im_pyr) const;
 
+  //: Get sample image at specified point for level L of the point_finder
+  //  hierarchy
+  void get_sample_vector(const vimt_image_pyramid& image_pyr,
+                         const vgl_point_2d<double>& p,
+                         const vgl_vector_2d<double>& u,
+                         unsigned L,
+                         vcl_vector<double>& v);
+
   //: Searches around given pose, starting at coarsest model.
   //  Searches with coarsest model, and feeds best result into
   //  search for next model.  Result can be further improved

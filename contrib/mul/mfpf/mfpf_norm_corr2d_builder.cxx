@@ -84,6 +84,12 @@ void mfpf_norm_corr2d_builder::set_region_size(double wi, double wj)
   set_kernel_size(unsigned(ni),unsigned(nj));
 }
 
+//: Number of dimensions in the model
+unsigned mfpf_norm_corr2d_builder::model_dim() 
+{ 
+  return ni_*nj_; 
+}
+
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
@@ -129,7 +135,7 @@ void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& im
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
 
   vil_image_view<double> sample;
-
+  
   const vgl_point_2d<double> p0 = p-ref_x_*u1-ref_y_*v1;
 
   const vimt_transform_2d& s_w2i = image.world2im();
@@ -140,11 +146,46 @@ void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& im
   vil_resample_bilin(image.image(),sample,
                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
                      im_v.x(),im_v.y(),ni_,nj_);
-
   normalize(sample);
+
   if (n_added_==0) sum_.deep_copy(sample);
   else             vil_math_add_image_fraction(sum_,1.0,sample,1.0);
   n_added_++;
+}
+
+//: Get sample of region around specified point in image
+void mfpf_norm_corr2d_builder::get_sample_vector(const vimt_image_2d_of<float>& image,
+                                                 const vgl_point_2d<double>& p,
+                                                 const vgl_vector_2d<double>& u,
+                                                 vcl_vector<double>& v)
+{
+  assert(image.image().size()>0);
+
+  vgl_vector_2d<double> u1=step_size_*u;
+  vgl_vector_2d<double> v1(-u1.y(),u1.x());
+
+  const vgl_point_2d<double> p0 = p-ref_x_*u1-ref_y_*v1;
+
+  const vimt_transform_2d& s_w2i = image.world2im();
+  vgl_point_2d<double> im_p0 = s_w2i(p0);
+  vgl_vector_2d<double> im_u = s_w2i.delta(p0, u1);
+  vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
+
+  vil_image_view<double> sample;
+  vil_resample_bilin(image.image(),sample,
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),ni_,nj_);
+  normalize( sample );
+
+  v.resize( sample.ni()*sample.nj() );
+  unsigned v_ind=0;
+  for (unsigned j=0;j<sample.nj();j++)
+  {
+    for (unsigned i=0;i<sample.ni();i++,v_ind++)
+    {
+      v[v_ind] = sample(i,j);
+    }
+  }
 }
 
 //: Add one example to the model

@@ -61,6 +61,58 @@ unsigned mfpf_mr_point_finder::image_level(
   return level;
 }
 
+// Find non-empty image in pyramid closest to given level
+static unsigned nearest_valid_level(const vimt_image_pyramid& im_pyr,
+                             unsigned level)
+{
+  int L0=int(level);
+  int bestL=0;
+  int min_d2=999;
+  for (int L=0;L<=im_pyr.hi();++L)
+  {
+    if (im_pyr(L).image_size()[0]>0)  // This level is not empty
+    {
+      int d2 = (L-L0)*(L-L0);
+      if (d2<min_d2) { min_d2=d2; bestL=L; }
+    }
+  }
+  return unsigned(bestL);
+}
+
+//: Get sample image at specified point for level L of the point_finder
+//  hierarchyl
+void mfpf_mr_point_finder::get_sample_vector(
+                        const vimt_image_pyramid& image_pyr,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u,
+                        unsigned L,
+                        vcl_vector<double>& v)
+{
+  assert( L<finders_.size() );
+
+  unsigned im_L = image_level(L,mfpf_pose(p,u),image_pyr);
+
+  if (image_pyr(im_L).image_size()[0]==0)
+  {
+    vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
+            <<"This is required for level "<<L<<" of the mfpf model.\n"
+            <<"Check range for which pyramid is defined.\n";
+
+    im_L=nearest_valid_level(image_pyr,im_L);
+    if (image_pyr(im_L).image_size()[0]==0)
+    {
+       vcl_cerr<<"No image pyramid levels set up.\n";
+       abort();
+    }
+  }
+
+  assert(image_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
+  const vimt_image_2d_of<float>& image
+    = static_cast<const vimt_image_2d_of<float>&>(image_pyr(im_L));
+
+  finders_[L]->get_sample_vector(image,p,u,v);
+}
+
 //: Searches around given pose, starting at coarsest model.
 //  Searches with coarsest model, and feeds best result into
 //  search for next model.  Result can be further improved

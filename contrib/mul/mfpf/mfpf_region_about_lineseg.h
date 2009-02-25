@@ -56,6 +56,9 @@ public:
   //: Returns zero
   virtual unsigned ref_point_index() const;
 
+  //: Returns zero also
+  virtual unsigned orig_ref_point_index() const;
+
   //: Replace each point index i with new_index[i]
   //  Allows for re-numbering of the points used.
   //  Returns true if successful.

@@ -63,6 +63,22 @@ void mfpf_point_finder_builder::set_search_scale_range(unsigned ns, double ds)
   search_ds_=ds;
 }
 
+//: Number of dimensions in the model
+unsigned mfpf_point_finder_builder::model_dim()
+{
+  return 0;
+}
+
+//: Get sample of region around specified point in image
+void mfpf_point_finder_builder::get_sample_vector(const vimt_image_2d_of<float>& image,
+                                                  const vgl_point_2d<double>& p,
+                                                  const vgl_vector_2d<double>& u,
+                                                  vcl_vector<double>& v)
+{
+  // Return empty vector
+  v = vcl_vector<double>();
+}
+
 
 //: Parse relevant parameters from props list
 void mfpf_point_finder_builder::parse_base_props(mbl_read_props_type& props)

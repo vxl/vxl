@@ -160,6 +160,28 @@ void mfpf_point_finder::set_scale_range(unsigned ns, double ds)
   ds_=ds;
 }
 
+//: Define model parameters (return false by default)
+bool mfpf_point_finder::set_model(const vcl_vector<double>& v)
+{
+  return false;
+}
+
+//: Number of dimensions in the model (return 0 by default)
+unsigned mfpf_point_finder::model_dim()
+{
+  return 0;
+}
+
+//: Get sample of region around specified point in image
+void mfpf_point_finder::get_sample_vector(const vimt_image_2d_of<float>& image,
+                                          const vgl_point_2d<double>& p,
+                                          const vgl_vector_2d<double>& u,
+                                          vcl_vector<double>& v)
+{
+  // Return empty vector
+  v.resize(0);
+}
+
 //: Search given image around p, using u to define scale and angle
 //  Evaluates responses on a grid, finds the best point on the
 //  grid, then optimises its position by fitting a parabola.

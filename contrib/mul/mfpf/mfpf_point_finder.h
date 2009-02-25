@@ -75,9 +75,21 @@ class mfpf_point_finder
   //: Number of points either side of centre to search along j
   int search_nj() const { return search_nj_; }
 
+  //: Set model to a new value when provided with a vector
+  virtual bool set_model(const vcl_vector<double>& v);
+
+  //: Number of dimensions in the model
+  virtual unsigned model_dim();
+
   //: Radius of circle containing modelled region (in model frame units)
   //  Radius in world units given by step_size()*radius()
   virtual double radius() const = 0;
+
+  //: Get sample of region around specified point in image
+  virtual void get_sample_vector(const vimt_image_2d_of<float>& image,
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vcl_vector<double>& v);
 
   //: Evaluate match at p, using u to define scale and orientation
   // Returns a qualtity of fit measure at the point (the smaller the better).

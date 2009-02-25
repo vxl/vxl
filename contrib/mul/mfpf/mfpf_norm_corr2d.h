@@ -44,12 +44,27 @@ class mfpf_norm_corr2d : public mfpf_point_finder
   void set(const vil_image_view<double>& k,
            double ref_x, double ref_y);
 
+  //: Define filter kernel to search with, expressed as a vector
+  virtual bool set_model(const vcl_vector<double>& v);
+
+  //: Number of dimensions in the model
+  virtual unsigned model_dim();
+
   //: Relative size of region used for estimating overlap
   //  If 0.5, then overlap requires pt inside central 50% of region.
   void set_overlap_f(double);
 
   //: Filter kernel to search with
   const vil_image_view<double>& kernel() const { return kernel_; }
+
+  //: Filter kernel to search with, expressed as a vector
+  void get_kernel_vector(vcl_vector<double>& v) const;
+
+  //: Get sample of region around specified point in image
+  virtual void get_sample_vector(const vimt_image_2d_of<float>& image,
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vcl_vector<double>& v);
 
   //: Radius of circle containing modelled region
   virtual double radius() const;

@@ -21,6 +21,8 @@
 class mfpf_region_about_pt : public mfpf_region_definer
 {
 private:
+  //: Original index of point on which region is centred
+  unsigned i0_orig_;
   //: Index of point on which region is centred
   unsigned i0_;
   //: Index of first point defining reference frame
@@ -56,6 +58,9 @@ public:
 
   //: Returns index of reference point on which the region is centred
   virtual unsigned ref_point_index() const;
+
+  //: Returns original index of reference point on which the region is centred
+  virtual unsigned orig_ref_point_index() const;
 
   //: Replace each point index i with new_index[i]
   //  Allows for re-numbering of the points used.

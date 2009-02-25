@@ -75,12 +75,21 @@ class mfpf_norm_corr2d_builder : public mfpf_point_finder_builder
   //: Kernel mask is ni x nj
   unsigned nj() const { return nj_; }
 
+  //: Number of dimensions in the model
+  virtual unsigned model_dim();
+
   //: Create new mfpf_norm_corr2d on heap
   virtual mfpf_point_finder* new_finder() const;
 
   //: Initialise building
   // Must be called before any calls to add_example(...)
   virtual void clear(unsigned n_egs);
+
+  //: Get sample of region around specified point in image
+  virtual void get_sample_vector(const vimt_image_2d_of<float>& image,
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vcl_vector<double>& v);
 
   //: Add one example to the model
   virtual void add_example(const vimt_image_2d_of<float>& image,

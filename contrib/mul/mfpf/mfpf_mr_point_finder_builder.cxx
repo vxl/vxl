@@ -13,7 +13,7 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for std::abort()
+#include <vcl_cstdlib.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -30,7 +30,7 @@ mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder()
 //: Copy ctor
 mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder(const mfpf_mr_point_finder_builder& b)
 {
-  *this=b;
+ *this=b;
 }
 
 //: Copy operator
@@ -75,6 +75,15 @@ void mfpf_mr_point_finder_builder::set(
   builders_.resize(builders.size());
   for (unsigned i=0;i<builders.size();++i)
     builders_[i]=builders[i]->clone();
+}
+
+//: Set number of builders. Any existing builders are retained
+void mfpf_mr_point_finder_builder::set_n_levels(unsigned n)
+{
+  unsigned imax=builders_.size();
+  builders_.resize(n);
+  for (unsigned i=imax;i<n;i++)
+    builders_[i]=builders_[imax]->clone();
 }
 
 //: Set up n builders, with step size step0*scale_step^L
@@ -169,7 +178,7 @@ unsigned mfpf_mr_point_finder_builder::image_level(
 
 // Find non-empty image in pyramid closest to given level
 static unsigned nearest_valid_level(const vimt_image_pyramid& im_pyr,
-                                    unsigned level)
+                             unsigned level)
 {
   int L0=int(level);
   int bestL=0;
@@ -192,6 +201,40 @@ void mfpf_mr_point_finder_builder::clear(unsigned n_egs)
   for (unsigned i=0;i<size();++i) builder(i).clear(n_egs);
 }
 
+//: Get sample image at specified point for level L of the point_finder
+//  hierarchyl
+void mfpf_mr_point_finder_builder::get_sample_vector(
+                        const vimt_image_pyramid& image_pyr,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u,
+                        unsigned L,
+                        vcl_vector<double>& v)
+{
+  assert( L<size() );
+
+  unsigned im_L = image_level(L,u,image_pyr);
+
+  if (image_pyr(im_L).image_size()[0]==0)
+  {
+    vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
+            <<"This is required for level "<<L<<" of the mfpf model.\n"
+            <<"Check range for which pyramid is defined.\n";
+
+    im_L=nearest_valid_level(image_pyr,im_L);
+    if (image_pyr(im_L).image_size()[0]==0)
+    {
+       vcl_cerr<<"No image pyramid levels set up.\n";
+       abort();
+    }
+  }
+
+  assert(image_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
+  const vimt_image_2d_of<float>& image
+    = static_cast<const vimt_image_2d_of<float>&>(image_pyr(im_L));
+
+  builder(L).get_sample_vector(image,p,u,v);
+}
+
 //: Add one example to the model
 void mfpf_mr_point_finder_builder::add_example(
                   const vimt_image_pyramid& image_pyr,
@@ -211,8 +254,8 @@ void mfpf_mr_point_finder_builder::add_example(
       im_L=nearest_valid_level(image_pyr,im_L);
       if (image_pyr(im_L).image_size()[0]==0)
       {
-        vcl_cerr<<"No image pyramid levels set up.\n";
-        vcl_abort();
+         vcl_cerr<<"No image pyramid levels set up.\n";
+         abort();
       }
     }
 

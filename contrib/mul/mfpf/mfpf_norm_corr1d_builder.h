@@ -50,6 +50,9 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
   //: Kernel mask is [ilo_,ihi_]
   int ihi() const { return ihi_; }
 
+  //: Number of dimensions in the model
+  virtual unsigned model_dim();
+
   //: Create new mfpf_norm_corr1d on heap
   virtual mfpf_point_finder* new_finder() const;
 

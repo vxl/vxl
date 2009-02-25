@@ -65,6 +65,12 @@ void mfpf_norm_corr1d_builder::set_region_size(double wi, double)
   set_kernel_size(-ni,ni);
 }
 
+//: Number of dimensions in the model
+unsigned mfpf_norm_corr1d_builder::model_dim()
+{ 
+  return sum_.size(); 
+}
+
 
 //: Initialise building
 // Must be called before any calls to add_example(...)

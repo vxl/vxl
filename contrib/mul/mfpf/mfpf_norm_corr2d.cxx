@@ -83,6 +83,54 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k)
   set(k, 0.5*(k.ni()-1.0), 0.5*(k.nj()-1.0));
 }
 
+//: Define filter kernel to search with, expressed as a vector
+bool mfpf_norm_corr2d::set_model(const vcl_vector<double>& v)
+{
+  // we assume that nplanes()==1
+  unsigned ni=kernel_.ni(), nj=kernel_.nj();
+  assert( v.size() == ni*nj );
+
+  // copy vector values into im_k, column by column
+  vil_image_view<double> im_k( kernel_.ni(), kernel_.nj() );
+  unsigned vec_ind=0;
+  for (unsigned i=0;i<ni;++i)
+  {
+    for (unsigned j=0;j<nj;++j,++vec_ind)
+    {
+      im_k(i,j)=v[vec_ind];
+    }
+  }
+
+  // set kernel from created image
+  set(im_k);
+
+  return true;
+}
+
+//: Number of dimensions in the model
+unsigned mfpf_norm_corr2d::model_dim()
+{ 
+  return kernel_.ni()*kernel_.nj(); 
+}
+
+//: Filter kernel to search with, expressed as a vector
+void mfpf_norm_corr2d::get_kernel_vector(vcl_vector<double>& v) const
+{
+  // we assume that nplanes()==1
+  unsigned ni=kernel_.ni(), nj=kernel_.nj();
+  v.resize(ni*nj);
+
+  // copy kernel values into v, column by column
+  unsigned vec_ind=0;
+  for (unsigned i=0;i<ni;++i)
+  {
+    for (unsigned j=0;j<nj;++j,++vec_ind)
+    {
+      v[vec_ind]=kernel_(i,j);
+    }
+  }
+}
+
 //: Relative size of region used for estimating overlap
 //  If 0.5, then overlap requires pt inside central 50% of region.
 void mfpf_norm_corr2d::set_overlap_f(double f)
@@ -110,6 +158,68 @@ inline double norm_corr(const float* im1, const double* im2,
   double s = vcl_sqrt(ss);
 
   return sum1/s;
+}
+
+static void normalize(vil_image_view<double>& im)
+{
+  unsigned ni=im.ni(),nj=im.nj();
+  double sum=0.0,ss=0.0;
+  for (unsigned j=0;j<nj;++j)
+    for (unsigned i=0;i<ni;++i)
+    {
+      sum+=im(i,j); ss+=im(i,j)*im(i,j);
+    }
+
+  assert(!vnl_math_isnan(sum));
+
+  if (ss<1e-6) 
+  {
+    vcl_cerr<<"Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
+            <<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
+  }
+
+  // Normalise so that im has zero mean and unit sum of squares.
+  double mean=sum/(ni*nj);
+  ss-=(mean*mean*ni*nj);
+  double s=1.0;
+  if (ss>0) s = vcl_sqrt(1.0/ss);
+  vil_math_scale_and_offset_values(im,s,-s*mean);
+}
+
+//: Get sample of region around specified point in image
+void mfpf_norm_corr2d::get_sample_vector(const vimt_image_2d_of<float>& image,
+                                         const vgl_point_2d<double>& p,
+                                         const vgl_vector_2d<double>& u,
+                                         vcl_vector<double>& v)
+{
+  assert(image.image().size()>0);
+    
+  vgl_vector_2d<double> u1=step_size_*u;
+  vgl_vector_2d<double> v1(-u1.y(),u1.x());
+
+  const vgl_point_2d<double> p0 = p-ref_x_*u1-ref_y_*v1;
+
+  const vimt_transform_2d& s_w2i = image.world2im();
+  vgl_point_2d<double> im_p0 = s_w2i(p0);
+  vgl_vector_2d<double> im_u = s_w2i.delta(p0, u1);
+  vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
+
+  vil_image_view<double> sample;
+  vil_resample_bilin(image.image(),sample,
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     kernel_.ni(),kernel_.nj());
+  normalize( sample );
+
+  v.resize( sample.ni()*sample.nj() );
+  unsigned v_ind=0;
+  for (unsigned j=0;j<sample.nj();j++)
+  {
+    for (unsigned i=0;i<sample.ni();i++,v_ind++)
+    {
+      v[v_ind] = sample(i,j);
+    }
+  }
 }
 
 //: Radius of circle containing modelled region

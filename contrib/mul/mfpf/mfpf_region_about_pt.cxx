@@ -43,6 +43,12 @@ unsigned mfpf_region_about_pt::ref_point_index() const
   return i0_;
 }
 
+//: Returns original index of reference point on which the region is centred
+unsigned mfpf_region_about_pt::orig_ref_point_index() const
+{
+  return i0_orig_;
+}
+
 //: Replace each point index i with new_index[i]
 //  Allows for re-numbering of the points used.
 //  Returns true if successful.
@@ -128,6 +134,10 @@ bool mfpf_region_about_pt::set_from_stream(vcl_istream &is)
   // Check for unused props
   mbl_read_props_look_for_unused_props(
       "mfpf_region_about_pt::set_from_stream", props, mbl_read_props_type());
+
+  // Store original index of i0 since this may be renumbered later
+  i0_orig_=i0_;
+
   return true;
 }
 

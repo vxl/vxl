@@ -169,6 +169,12 @@ void mfpf_region_finder_builder::set_as_ellipse(double ri, double rj)
   roi_nj_=2*nj+1;
 }
 
+//: Number of dimensions in the model
+unsigned mfpf_region_finder_builder::model_dim()
+{
+  return n_pixels_; 
+}
+
 //: Initialise building
 // Must be called before any calls to add_example(...)
 void mfpf_region_finder_builder::clear(unsigned n_egs)

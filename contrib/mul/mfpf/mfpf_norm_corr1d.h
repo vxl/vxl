@@ -45,6 +45,9 @@ class mfpf_norm_corr1d : public mfpf_point_finder
   //: Filter kernel to search with
   const vnl_vector<double>& kernel() const { return kernel_; }
 
+  //: Number of dimensions in the model
+  virtual unsigned model_dim();
+
   //: Radius of circle containing modelled region
   virtual double radius() const;
 

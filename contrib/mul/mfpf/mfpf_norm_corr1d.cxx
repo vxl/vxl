@@ -62,6 +62,12 @@ void mfpf_norm_corr1d::set(int ilo, int ihi, const vnl_vector<double>& k)
   kernel_.normalize();
 }
 
+//: Number of dimensions in the model
+unsigned mfpf_norm_corr1d::model_dim()
+{ 
+  return kernel_.size(); 
+}
+
 //: Radius of circle containing modelled region
 double mfpf_norm_corr1d::radius() const
 {

@@ -130,6 +130,9 @@ class mfpf_region_finder_builder : public mfpf_point_finder_builder
   //: Builder for PDF
   mfpf_vec_cost_builder& cost_builder() { return cost_builder_; }
 
+  //: Number of dimensions in the model
+  virtual unsigned model_dim();
+
   //: Create new mfpf_region_finder on heap
   virtual mfpf_point_finder* new_finder() const;
 

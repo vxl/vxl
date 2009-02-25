@@ -53,6 +53,9 @@ class mfpf_mr_point_finder_builder
   mfpf_point_finder_builder& builder(unsigned L)
   { assert (L<builders_.size()); return *builders_[L]; }
 
+  //: Set number of builders. Any existing builders are retained
+  void set_n_levels(unsigned n);
+    
   //: Define builders.  Clone of each taken
   void set(const vcl_vector<mfpf_point_finder_builder*>& builders);
 
@@ -94,6 +97,14 @@ class mfpf_mr_point_finder_builder
   //: Initialise building
   // Must be called before any calls to add_example(...)
   void clear(unsigned n_egs);
+
+  //: Get sample image at specified point for level L of the point_finder
+  //  hierarchy
+  void get_sample_vector(const vimt_image_pyramid& image_pyr,
+                         const vgl_point_2d<double>& p,
+                         const vgl_vector_2d<double>& u,
+                         unsigned L,
+                         vcl_vector<double>& v);
 
   //: Add one example to the model
   void add_example(const vimt_image_pyramid& image_pyr,

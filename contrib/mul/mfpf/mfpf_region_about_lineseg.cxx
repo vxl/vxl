@@ -43,6 +43,12 @@ unsigned mfpf_region_about_lineseg::ref_point_index() const
   return 0;
 }
 
+//: Returns zero also
+unsigned mfpf_region_about_lineseg::orig_ref_point_index() const
+{
+  return 0;
+}
+
 //: Replace each point index i with new_index[i]
 //  Allows for re-numbering of the points used.
 //  Returns true if successful.
