@@ -31,11 +31,9 @@ unsigned int bsta_int_histogram_1d::get_min_bin()
 
 unsigned int bsta_int_histogram_1d::get_max_bin()
 {
-  unsigned int i = nbins_-1;
-  while (i>0 && !counts_[i])    // search for the first non-zero bin
-    i--;
-  if (i < 0)                    // this shouldn't happen unless hist is empty
-    return 0;
+  unsigned int i = nbins_;
+  while (i>0 && counts_[--i] == 0) // search for the first non-zero bin
+    ;
   return i;
 }
 
@@ -60,7 +58,7 @@ long int bsta_int_histogram_1d::get_count(unsigned int bin)   // const???
 //: set the count for a given bin
 void bsta_int_histogram_1d::set_count(unsigned int bin, long int val) // const??
 {
-  if (bin>=0 && bin<nbins_) counts_[bin] = val;
+  if (bin<nbins_) counts_[bin] = val;
 }
 
 // get highest bin value in histogram; returns max value; index of max is available in imax
@@ -84,19 +82,19 @@ void bsta_int_histogram_1d::trim(float low_fract, float high_fract)
   long int high_count = static_cast<long int>(((float)total * high_fract) + 0.5);
 
   // trim low end
-  unsigned int i = 0;
-  while (i<nbins_ && low_count > 0)
+  int i = 0;
+  while (i<(int)nbins_ && low_count > 0)
   {
     if (counts_[i] > 0) {
       if (low_count >= counts_[i]) {
         low_count = low_count - counts_[i];
         counts_[i] = 0;
-        i++;
+        ++i;
       }
       else {
         counts_[i] = counts_[i] - low_count;
         low_count = 0;
-        i++;
+        ++i;
       }
     }
   }
@@ -109,12 +107,12 @@ void bsta_int_histogram_1d::trim(float low_fract, float high_fract)
       if (high_count >= counts_[i]) {
         high_count = high_count - counts_[i];
         counts_[i] = 0;
-        i--;
+        --i;
       }
       else {
         counts_[i] = counts_[i] - high_count;
         high_count = 0;
-        i--;
+        --i;
       }
     }
   }
