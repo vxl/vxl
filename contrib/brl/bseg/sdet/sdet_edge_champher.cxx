@@ -39,10 +39,10 @@ sdet_edge_champher::initialize_arrays(vbl_array_2d<vtol_edge_2d_sptr>& edges)
 {
   for (int x=0; x<xsize_; x++)
     for (int y=0; y<ysize_; y++)
-      {
-        if ( edges.get(y,x) !=0 ) distance_[y][x] = 0;
-        edges_[y][x] = edges.get(y,x);
-      }
+    {
+      if ( edges.get(y,x) !=0 ) distance_[y][x] = 0;
+      edges_[y][x] = edges.get(y,x);
+    }
 }
 
 //:
@@ -89,37 +89,37 @@ void sdet_edge_champher::forward_chamfer()
 
   for (j=1;j<xsize_-1;j++)
     for (i=1;i<ysize_-1;i++)
+    {
+      val =
+        minimum_5(distance_[i-1][j-1]+4,distance_[i-1][j]+3,
+                  distance_[i-1][j+1]+4,distance_[i][j-1]+3,
+                  distance_[i][j]);
+      switch (val)
       {
-        val =
-          minimum_5(distance_[i-1][j-1]+4,distance_[i-1][j]+3,
-                    distance_[i-1][j+1]+4,distance_[i][j-1]+3,
-                    distance_[i][j]);
-        switch (val)
-          {
-          case 1:
-            distance_[i][j] = distance_[i-1][j-1]+4;
-            edges_[i][j] = edges_[i-1][j-1];
-            break;
+       case 1:
+        distance_[i][j] = distance_[i-1][j-1]+4;
+        edges_[i][j] = edges_[i-1][j-1];
+        break;
 
-          case 2:
-            distance_[i][j] = distance_[i-1][j]+3;
-            edges_[i][j] = edges_[i-1][j];
-            break;
+       case 2:
+        distance_[i][j] = distance_[i-1][j]+3;
+        edges_[i][j] = edges_[i-1][j];
+        break;
 
-          case 3:
-            distance_[i][j] = distance_[i-1][j+1]+4;
-            edges_[i][j] = edges_[i-1][j+1];
-            break;
+       case 3:
+        distance_[i][j] = distance_[i-1][j+1]+4;
+        edges_[i][j] = edges_[i-1][j+1];
+        break;
 
-          case 4:
-            distance_[i][j] = distance_[i][j-1]+3;
-            edges_[i][j] = edges_[i][j-1];
-            break;
+       case 4:
+        distance_[i][j] = distance_[i][j-1]+3;
+        edges_[i][j] = edges_[i][j-1];
+        break;
 
-          case 5:
-            break;
-          }
+       default:
+        break;
       }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -133,35 +133,35 @@ void sdet_edge_champher::backward_chamfer()
 
   for (j=xsize_-2;j>0;j--)
     for (i=ysize_-2;i>0;i--)
+    {
+      val = minimum_5(distance_[i][j],distance_[i][j+1]+3,distance_[i+1][j-1]+4,
+                      distance_[i+1][j]+3,distance_[i+1][j+1]+4 );
+      switch (val)
       {
-        val = minimum_5(distance_[i][j],distance_[i][j+1]+3,distance_[i+1][j-1]+4,
-                        distance_[i+1][j]+3,distance_[i+1][j+1]+4 );
-        switch (val)
-          {
-          case 1:
-            break;
+       case 2:
+        distance_[i][j] = distance_[i][j+1]+3;
+        edges_[i][j] = edges_[i][j+1];
+        break;
 
-          case 2:
-            distance_[i][j] = distance_[i][j+1]+3;
-            edges_[i][j] = edges_[i][j+1];
-            break;
+       case 3:
+        distance_[i][j] = distance_[i+1][j-1]+4;
+        edges_[i][j] = edges_[i+1][j-1];
+        break;
 
-          case 3:
-            distance_[i][j] = distance_[i+1][j-1]+4;
-            edges_[i][j] = edges_[i+1][j-1];
-            break;
+       case 4:
+        distance_[i][j] = distance_[i+1][j]+3;
+        edges_[i][j] = edges_[i+1][j];
+        break;
 
-          case 4:
-            distance_[i][j] = distance_[i+1][j]+3;
-            edges_[i][j] = edges_[i+1][j];
-            break;
+       case 5:
+        distance_[i][j] = distance_[i+1][j+1]+4;
+        edges_[i][j] = edges_[i+1][j+1];
+        break;
 
-          case 5:
-            distance_[i][j] = distance_[i+1][j+1]+4;
-            edges_[i][j] = edges_[i+1][j+1];
-            break;
-          }
+       default:
+        break;
       }
+    }
 }
 //:
 //-----------------------------------------------------------------------------

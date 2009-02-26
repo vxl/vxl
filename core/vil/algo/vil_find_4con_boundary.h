@@ -24,14 +24,16 @@ inline void vil_next_point_below_thresh4(int& i,int& j,int& dir, const T* &p,
   {
     switch ((dir+k)%4)
     {
-      case (0):   // Try at (i+1,j)
+      case 0:   // Try at (i+1,j)
         if (i<ni1 && p[istep]<=threshold) { ++i; p+=istep; dir=3; return; }
-      case (1):   // Try at (i,j+1)
+      case 1:   // Try at (i,j+1)
         if (j<nj1 && p[jstep]<=threshold) { ++j; p+=jstep; dir=0; return; }
-      case (2):   // Try at (i-1,j)
+      case 2:   // Try at (i-1,j)
         if (i>0 && p[-istep]<=threshold)  { --i; p-=istep; dir=1; return; }
-      case (3):   // Try at (i,j-1)
+      case 3:   // Try at (i,j-1)
         if (j>0 && p[-jstep]<=threshold)  { --j; p-=jstep; dir=2; return; }
+      default:
+        break;
     }
   }
 }
@@ -57,6 +59,8 @@ inline void vil_next_point_above_thresh4(int& i,int& j,int& dir, const T* &p,
         if (i>0 && p[-istep]>=threshold)  { --i; p-=istep; dir=1; return; }
       case (3):   // Try at (i,j-1)
         if (j>0 && p[-jstep]>=threshold)  { --j; p-=jstep; dir=2; return; }
+      default:
+        break;
     }
   }
 }

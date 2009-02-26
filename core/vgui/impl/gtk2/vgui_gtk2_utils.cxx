@@ -70,9 +70,9 @@ vgui_key vgui_gtk2_utils::translate_key(GdkEventKey const *gev)
     return vgui_CURSOR_LEFT;
    case GDK_Right:
     return vgui_CURSOR_RIGHT;
+   default:
+    return vgui_KEY_NULL;
   }
-
-  return vgui_KEY_NULL;
 }
 
 void vgui_gtk2_utils::set_coordinates(vgui_event &e, const gdouble x, const gdouble y)

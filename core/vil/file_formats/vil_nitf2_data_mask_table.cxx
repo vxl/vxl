@@ -182,6 +182,7 @@ void vil_nitf2_data_mask_table::maybe_endian_swap( char* a, unsigned size_of_a_i
    case 8: swap64( a, size_of_a_in_bytes / 8 ); break; //64 bit
    case 4: swap32( a, size_of_a_in_bytes / 4 ); break; //32 bit
    case 2: swap16( a, size_of_a_in_bytes / 2 ); break; //16 bit
+   default: break; // do nothing
   }
 #else
   (void)a;

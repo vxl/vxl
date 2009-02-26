@@ -63,6 +63,8 @@ void vil1_warp_output_driven(vil1_memory_image_of<PixelType> const& in,
           vil1_interpolate_bicubic(in, ixd, iyd, &out(ox,oy));
           break;
         }
+        default:
+          break;
       }
     }
 }

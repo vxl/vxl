@@ -239,7 +239,11 @@ void vdgl_edgel_chain::b_read(vsl_b_istream &is)
       vdgl_edgel e(x, y, grad, theta);
       this->add_edgel(e);
     }
+    return;
    }
+   default:
+    assert(!"Invalid version");
+    return;
   }
 }
 //: Return IO version number;

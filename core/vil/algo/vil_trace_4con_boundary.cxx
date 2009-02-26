@@ -25,6 +25,8 @@ inline void vil_next_4con_boundary_point(int& i,int& j,int& dir, const bool* &p,
         if (i>0 && p[-istep])  { --i; p-=istep; dir=1; return; }
       case (3):   // Try at (i,j-1)
         if (j>0 && p[-jstep])  { --j; p-=jstep; dir=2; return; }
+      default:
+        break;
     }
   }
 }
@@ -74,7 +76,7 @@ void vil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
   if (bi.size()==1) return;  // Isolated pixel (how sad).
 
   // Got back to start.
-  // However, if start is part of a 1 pixel wide line, we need to 
+  // However, if start is part of a 1 pixel wide line, we need to
   // investigate the other side of the line
   // To check for this, find the next boundary point and check that it
   // is the same as was found during the first pass

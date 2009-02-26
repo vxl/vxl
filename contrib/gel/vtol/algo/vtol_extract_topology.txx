@@ -339,6 +339,7 @@ move( unsigned dir, unsigned& i, unsigned& j )
    case 3: // up
     --j;
     break;
+   default: break; // never reached
   }
 }
 
@@ -705,7 +706,7 @@ collect_regions( region_collection& region_list ) const
   for ( unsigned i = 0; i < node_list_.size(); ++i ) {
     for ( unsigned dir = 0; dir < 4; ++dir ) {
       if ( ! is_marked( markers[i], dir ) &&
-          node(i).link[dir] != vertex_node::null_index ) {
+           node(i).link[dir] != vertex_node::null_index ) {
         region_type_sptr chain = new region_type;
         LabelPoint label;
         if ( trace_face_boundary( markers, i, dir, *chain, label ) ) {

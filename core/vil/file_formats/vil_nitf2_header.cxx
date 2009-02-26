@@ -36,8 +36,8 @@ vcl_string vil_nitf2_header::section_num_tag(section_type sec)
    case enum_text_segments:               return "NUMT";
    case enum_data_extension_segments:     return "NUMDES";
    case enum_reserved_extension_segments: return "NUMRES";
+   default:                               return "";
   }
-  return "";
 }
 
 vcl_string vil_nitf2_header::section_len_header_tag(section_type sec)
@@ -50,8 +50,8 @@ vcl_string vil_nitf2_header::section_len_header_tag(section_type sec)
    case enum_text_segments:               return "LTSH";
    case enum_data_extension_segments:     return "LDSH";
    case enum_reserved_extension_segments: return "LRESH";
+   default:                               return "";
   }
-  return "";
 }
 
 vcl_string vil_nitf2_header::section_len_data_tag(section_type sec)
@@ -64,8 +64,8 @@ vcl_string vil_nitf2_header::section_len_data_tag(section_type sec)
    case enum_text_segments:               return "LT";
    case enum_data_extension_segments:     return "LD";
    case enum_reserved_extension_segments: return "LRE";
+   default:                               return "";
   }
-  return "";
 }
 
 bool vil_nitf2_header::read(vil_stream* stream)

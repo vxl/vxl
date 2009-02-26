@@ -635,6 +635,7 @@ int main(int argc, char ** argv)
               case 1: q1=1; break;
               case 2: q1=q2=1; break;
               case 3: q2=1; break;
+              default: break; // never executed
             }
 
             i[k]= voxmap.GetCornerIndex( x,y,z, q1,q2,q3, int(iterations())-1);
@@ -688,6 +689,7 @@ int main(int argc, char ** argv)
               case 1: q1=1; break;
               case 2: q1=q2=1; break;
               case 3: q2=1; break;
+              default: break; // never executed
             }
 
             i[k]= voxmap.GetCornerIndex( x,y,z, q1,q3,q2, int(iterations())-1);
@@ -741,6 +743,7 @@ int main(int argc, char ** argv)
               case 1: q1=1; break;
               case 2: q1=q2=1; break;
               case 3: q2=1; break;
+              default: break; // never executed
             }
 
             i[k]= voxmap.GetCornerIndex( x,y,z, q3,q2,q1, int(iterations())-1);

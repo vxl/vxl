@@ -690,6 +690,8 @@ void vimt_transform_2d::print_summary(vcl_ostream& o) const
               << vsl_indent()<< yx_ << ' ' << yy_ << ' ' << yt_ << '\n'
               << vsl_indent()<< tx_ << ' ' << ty_ << ' ' << tt_;
             break;
+        default:
+            assert(!"Invalid form");
     }
     vsl_indent_dec(o);
 }

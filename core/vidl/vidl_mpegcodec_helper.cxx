@@ -221,6 +221,8 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
     }
     buf += state_bytes;
     break;
+   default:
+    break;
   }
 
   while (true)
@@ -256,7 +258,8 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
       vcl_cerr << "bad stream id : " << header[3] << '\n';
       vcl_exit(1);
     }
-    switch (header[3]) {
+    switch (header[3])
+    {
      case 0xb9: // program end code
       return 1;
      case 0xba: // pack header
@@ -270,7 +273,8 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
       } else if ((header[4] & 0xf0) == 0x20) { // mpeg1
         DONEBYTES (12);
         // header points to the mpeg1 pack header
-      } else {
+      }
+      else {
         vcl_cerr << "weird pack header\n";
         vcl_exit(1);
       }

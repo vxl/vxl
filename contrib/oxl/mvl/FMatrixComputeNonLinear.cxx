@@ -120,6 +120,8 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
             case 3 :
               mat /= mat.get(r2, c2);
               break;
+            default: // this cannot happen
+              break;
           }
 
           vnl_vector<double> f_params(FMatrixComputeNonLinear_nparams);
@@ -222,6 +224,8 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
       b = F.get(r1, c2);
       c = -F.get(r2, c1);
       break;
+    default: // this cannot happen
+      break;
   }
   vgl_homg_point_2d<double> one, two;
   vnl_double_2 e1, e2;
@@ -241,6 +245,8 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
     case 2 :
       e1 = vnl_double_2(e1h[0]/e1h[2], e1h[1]/e1h[2]);
       break;
+    default: // this cannot happen
+      break;
   }
   switch (q_) {
     case 0 :
@@ -251,6 +257,8 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
       break;
     case 2 :
       e2 = vnl_double_2(e2h[0]/e2h[2], e2h[1]/e2h[2]);
+      break;
+    default: // this cannot happen
       break;
   }
   params.put(0, a);
@@ -268,7 +276,8 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
 {
   FMatrix ret;
 
-  if (one_) {
+  if (one_)
+  {
     vnl_double_3x3 ref = ret.get_matrix();
     // Again the d is moved about through the different parametrizations
     int c1= 0, r1 = 0, c2 = 0, r2 = 0;
@@ -331,6 +340,8 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
         ref.put(q_, c2, b*xd - d*yd);
         ref.put(q_, p_, xd*(a*x + b*y) - yd*(c*x + d*y));
         break;
+      default: // this cannot happen
+        break;
     }
     ret.set(ref);
     return ret;
@@ -392,6 +403,8 @@ void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2)
       c1 = 0;
       c2 = 1;
       break;
+    default: // this cannot happen
+      break;
   }
   switch (q_) {
     case 0 :
@@ -405,6 +418,8 @@ void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2)
     case 2 :
       r1 = 0;
       r2 = 1;
+      break;
+    default: // this cannot happen
       break;
   }
 }

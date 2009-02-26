@@ -146,6 +146,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
       case vgl_clip_type_difference:   return poly1;
       case vgl_clip_type_union:        return poly2;
       case vgl_clip_type_xor:          return poly2;
+      default:                         break;
     }
   }
   if ( poly2.num_sheets() == 0 ) {
@@ -155,6 +156,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
       case vgl_clip_type_difference:   return poly1;
       case vgl_clip_type_union:        return poly1;
       case vgl_clip_type_xor:          return poly1;
+      default:                         break;
     }
   }
 
@@ -170,6 +172,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
     case vgl_clip_type_difference:   g_op = GPC_DIFF;  break;
     case vgl_clip_type_union:        g_op = GPC_UNION; break;
     case vgl_clip_type_xor:          g_op = GPC_XOR;   break;
+    default:                         break;
   }
 
   gpc_polygon_clip( g_op, &p1, &p2, &p3 );

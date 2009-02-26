@@ -224,6 +224,8 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
     }
     buf += state_bytes;
     break;
+   default:
+    break;
   }
 
   while (1)

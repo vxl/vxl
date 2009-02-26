@@ -263,20 +263,23 @@ bool vil_pnm_image::read_header()
 
   switch (magic_)
   {
-  case 1:  // pbm format
-  case 4:
+   case 1:  // pbm format
+   case 4:
     format_ = VIL_PIXEL_FORMAT_BOOL;
     break;
-  case 2:  // pgm format
-  case 5:
-  case 3:  // ppm format
-  case 6:
+   case 2:  // pgm format
+   case 5:
+   case 3:  // ppm format
+   case 6:
     if (bits_per_component_ <= 8)
       format_ = VIL_PIXEL_FORMAT_BYTE;
     else if (bits_per_component_ <= 16)
       format_ = VIL_PIXEL_FORMAT_UINT_16;
     else
       format_ = VIL_PIXEL_FORMAT_UINT_32;
+    break;
+   default: // this should never happen
+    break;
   }
 
   return true;

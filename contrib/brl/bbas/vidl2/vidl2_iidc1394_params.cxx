@@ -38,8 +38,8 @@ speed_val(speed_t s)
     case ISO_SPEED_800:  return 800;
     case ISO_SPEED_1600: return 1600;
     case ISO_SPEED_3200: return 3200;
+    default:             return 0;
   }
-  return 0;
 }
 
 
@@ -58,8 +58,8 @@ frame_rate_val(frame_rate_t r)
     case FRAMERATE_60:    return 60.0f;
     case FRAMERATE_120:   return 120.0f;
     case FRAMERATE_240:   return 240.0f;
+    default:              return 0.0f;
   }
-  return 0.0f;
 }
 
 
@@ -102,8 +102,8 @@ video_mode_string(video_mode_t m)
     case MODE_FORMAT7_5: return "Format 7 : Mode 5";
     case MODE_FORMAT7_6: return "Format 7 : Mode 6";
     case MODE_FORMAT7_7: return "Format 7 : Mode 7";
+    default:             return "invalid mode";
   }
-  return "invalid mode";
 }
 
 
@@ -136,8 +136,8 @@ feature_string(feature_t f)
     case FEATURE_OPTICAL_FILTER:  return "Optical Filter";
     case FEATURE_CAPTURE_SIZE:    return "Capture Size";
     case FEATURE_CAPTURE_QUALITY: return "Capture Quality";
+    default:                      return "invalid feature";
   }
-  return "invalid feature";
 }
 
 
@@ -151,8 +151,8 @@ feature_mode_string(feature_mode_t fm)
     case FEATURE_MODE_MANUAL:         return "Manual";
     case FEATURE_MODE_AUTO:           return "Automatic";
     case FEATURE_MODE_ONE_PUSH_AUTO:  return "One Push";
+    default:                          return "invalid feature mode";
   }
-  return "invalid feature mode";
 }
 
 
@@ -212,7 +212,7 @@ vidl2_iidc1394_params::
 video_mode(unsigned int format, unsigned int mode)
 {
   assert(mode < 8);
-  switch(format){
+  switch (format) {
     case 0:
       return video_mode_t(MODE_160x120_YUV444 + mode);
     case 1:
@@ -224,11 +224,9 @@ video_mode(unsigned int format, unsigned int mode)
     case 7:
       return video_mode_t(MODE_FORMAT7_0 + mode);
     default:
-      break;
+      return MODE_FORMAT7_0;
   }
-
-  assert(false);
-  return MODE_FORMAT7_0;
+  assert(false); // never reached
 }
 
 
@@ -274,9 +272,9 @@ vidl2_iidc1394_params::pixel_format(video_mode_t m)
       return VIDL2_PIXEL_FORMAT_MONO_16;
 
     default:
-      break;
+      return VIDL2_PIXEL_FORMAT_UNKNOWN;
   }
-  return VIDL2_PIXEL_FORMAT_UNKNOWN;
+  assert(false); // never reached
 }
 
 
@@ -284,7 +282,8 @@ vidl2_iidc1394_params::pixel_format(video_mode_t m)
 bool
 vidl2_iidc1394_params::resolution(video_mode_t m, unsigned& ni, unsigned& nj)
 {
-  switch(m){
+  switch (m)
+  {
     case MODE_160x120_YUV444:
       ni = 160;  nj = 120;  break;
     case MODE_320x240_YUV422:
@@ -306,7 +305,7 @@ vidl2_iidc1394_params::resolution(video_mode_t m, unsigned& ni, unsigned& nj)
     case MODE_1024x768_MONO16:
       ni = 1024;  nj = 768;  break;
     case MODE_1280x960_YUV422:
-    case MODE_1280x960_RGB8: 
+    case MODE_1280x960_RGB8:
     case MODE_1280x960_MONO8:
     case MODE_1280x960_MONO16:
       ni = 1280;  nj = 960;  break;

@@ -38,15 +38,18 @@ rrel_estimation_problem::compute_weights( const vcl_vector<double>& residuals,
   if ( residuals.size() != weights.size())
     weights.resize( residuals.size() );
 
-  switch( scale_type_ ) {
-  case NONE:
+  switch ( scale_type_ ) {
+   case NONE:
     obj->wgt( residuals.begin(), residuals.end(), scale, weights.begin() );
     break;
-  case SINGLE:
+   case SINGLE:
     obj->wgt( residuals.begin(), residuals.end(), single_scale_, weights.begin() );
     break;
-  case MULTIPLE:
+   case MULTIPLE:
     obj->wgt( residuals.begin(), residuals.end(), multiple_scales_->begin(), weights.begin() );
+    break;
+   default:
+    assert(!"Invalid scale_type");
     break;
   }
 }

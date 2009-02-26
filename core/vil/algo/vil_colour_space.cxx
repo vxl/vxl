@@ -79,8 +79,7 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
   extern long  r2,  g2,  b2; // values from 0 to 63
 #endif
 
-  if (h == 360)
-  h = 0;           /* (THIS LOOKS BACKWARDS)       */
+  h %= 360;          // (THIS LOOKS BACKWARDS)
 
   xh = h / 60;                   // convert hue to be in [0,6)
   i = (int)vcl_floor((double)xh);// i = greatest integer <= xh
@@ -121,9 +120,11 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
             ng = p1;
             nb = p2;
             break;
+    default:
+            break; // cannot be reached
   }
 
-  *r = nr * 255; /* Normalize the values to 63 */
+  *r = nr * 255; // Normalize the values to 63
   *g = ng * 255;
   *b = nb * 255;
   return;
@@ -150,16 +151,16 @@ void vil_colour_space_YUV_to_RGB(T const in[3], T out[3])
   out[2] = in[0] + T(2.0325203252033) * in[1];
 }
 
-/* YPbPr (ITU-R BT.601)
-========================================================
-Y' =     + 0.299    * R' + 0.587    * G' + 0.114    * B'
-Pb =     - 0.168736 * R' - 0.331264 * G' + 0.5      * B'
-Pr =     + 0.5      * R' - 0.418688 * G' - 0.081312 * B'
-........................................................
-R', G', B' in [0; 1]
-Y' in [0; 1]
-Pb in [-0.5; 0.5]
-Pr in [-0.5; 0.5] */
+// YPbPr (ITU-R BT.601)
+// ========================================================
+// Y' =     + 0.299    * R' + 0.587    * G' + 0.114    * B'
+// Pb =     - 0.168736 * R' - 0.331264 * G' + 0.5      * B'
+// Pr =     + 0.5      * R' - 0.418688 * G' - 0.081312 * B'
+// ........................................................
+// R', G', B' in [0; 1]
+// Y' in [0; 1]
+// Pb in [-0.5; 0.5]
+// Pr in [-0.5; 0.5]
 template <class T>
 void vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3])
 {
@@ -168,16 +169,16 @@ void vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3])
   YPbPr[2] = T(0.5)      * RGB[0] - T(0.418688) * RGB[1] - T(0.081312) * RGB[2];
 }
 
-/* YPbPr (ITU-R BT.601)
-==========================================================
-R' =     + 0.299    * Y' + 0.587    * Pb' + 0.114    * Pr'
-G' =     - 0.168736 * Y' - 0.331264 * Pb' + 0.5      * Pr'
-B' =     + 0.5      * Y' - 0.418688 * Pb' - 0.081312 * Pr'
-..........................................................
-Y' in [0; 1]
-Pb in [-0.5; 0.5]
-Pr in [-0.5; 0.5]
-R', G', B' in [0; 1] */
+// YPbPr (ITU-R BT.601)
+// ==========================================================
+// R' =     + 0.299    * Y' + 0.587    * Pb' + 0.114    * Pr'
+// G' =     - 0.168736 * Y' - 0.331264 * Pb' + 0.5      * Pr'
+// B' =     + 0.5      * Y' - 0.418688 * Pb' - 0.081312 * Pr'
+// ..........................................................
+// Y' in [0; 1]
+// Pb in [-0.5; 0.5]
+// Pr in [-0.5; 0.5]
+// R', G', B' in [0; 1]
 template <class T>
 void vil_colour_space_YPbPr_601_to_RGB(T const YPbPr[3], T RGB[3])
 {
@@ -186,18 +187,18 @@ void vil_colour_space_YPbPr_601_to_RGB(T const YPbPr[3], T RGB[3])
   RGB[2] = vcl_max(T(0.0), vcl_min(T(1.0), (YPbPr[0] + T(1.772)    * YPbPr[1]                         )));
 }
 
-/* YCbCr (601) from "digital 8-bit R'G'B'  "
-========================================================================
-Y' = 16  + 1/256 * (   65.738  * R'd +  129.057  * G'd +  25.064  * B'd)
-Cb = 128 + 1/256 * ( - 37.945  * R'd -   74.494  * G'd + 112.439  * B'd)
-Cr = 128 + 1/256 * (  112.439  * R'd -   94.154  * G'd -  18.285  * B'd)
-........................................................................
-R'd, G'd, B'd in {0, 1, 2, ..., 255}
-Y'               in {16, 17, ..., 235}
-   with footroom in {1, 2, ..., 15}
-        headroom in {236, 237, ..., 254}
-        sync.    in {0, 255}
-Cb, Cr           in {16, 17, ..., 240} */
+// YCbCr (601) from "digital 8-bit R'G'B'  "
+// ========================================================================
+// Y' = 16  + 1/256 * (   65.738  * R'd +  129.057  * G'd +  25.064  * B'd)
+// Cb = 128 + 1/256 * ( - 37.945  * R'd -   74.494  * G'd + 112.439  * B'd)
+// Cr = 128 + 1/256 * (  112.439  * R'd -   94.154  * G'd -  18.285  * B'd)
+// ........................................................................
+// R'd, G'd, B'd in {0, 1, 2, ..., 255}
+// Y'               in {16, 17, ..., 235}
+//    with footroom in {1, 2, ..., 15}
+//         headroom in {236, 237, ..., 254}
+//         sync.    in {0, 255}
+// Cb, Cr           in {16, 17, ..., 240}
 void vil_colour_space_RGB_to_YCbCr_601(const unsigned char RGB[3], unsigned char YCbCr[3])
 {
   // Add an extra 0.5555555 to round instead of truncate
@@ -209,11 +210,11 @@ void vil_colour_space_RGB_to_YCbCr_601(const unsigned char RGB[3], unsigned char
     128.0 + ( 112.439 * RGB[0] -  94.154 * RGB[1] -  18.285 * RGB[2])/256.0 + 0.55555555);
 }
 
-/* 8-bit R'G'B' from YCbCr (601)
-=====================================================================
-R'd = ( 298.082 * Y'                + 408.583 * Cr ) / 256 - 222.921
-G'd = ( 298.082 * Y' - 100.291 * Cb - 208.120 * Cr ) / 256 + 135.576
-B'd = ( 298.082 * Y' + 516.412 * Cb                ) / 256 - 276.836 */
+// 8-bit R'G'B' from YCbCr (601)
+// =====================================================================
+// R'd = ( 298.082 * Y'                + 408.583 * Cr ) / 256 - 222.921
+// G'd = ( 298.082 * Y' - 100.291 * Cb - 208.120 * Cr ) / 256 + 135.576
+// B'd = ( 298.082 * Y' + 516.412 * Cb                ) / 256 - 276.836
 void vil_colour_space_YCbCr_601_to_RGB(const unsigned char YCbCr[3], unsigned char RGB[3])
 {
   RGB[0] = static_cast<unsigned char>(

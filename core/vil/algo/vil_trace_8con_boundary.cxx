@@ -37,6 +37,8 @@ inline void vil_next_8con_boundary_point(int& i, int& j, int& dir, const bool* &
      case 7:   // Try at (i+1,j-1)
       if (i<ni1 && j>0 && p[istep-jstep]) {
         ++i; --j; p+=(istep-jstep); dir=4; return; }
+     default:
+       break; // this can never be reached
     }
   }
 }
@@ -97,7 +99,7 @@ void vil_trace_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
   if (bi.size()==1) return;  // Isolated pixel (how sad).
 
   // Got back to start.
-  // However, if start is part of a 1 pixel wide line, we need to 
+  // However, if start is part of a 1 pixel wide line, we need to
   // investigate the other side of the line
   // To check for this, find the next boundary point and check that it
   // is the same as was found during the first pass
