@@ -9,10 +9,10 @@
 #include <vil1/vil1_pixel.h>
 #include <vil1/vil1_scale_intensities.h>
 
-int main (int argc, char** argv) {
-
+int main (int argc, char** argv)
+{
   if (argc != 5) {
-    vcl_cerr << __FILE__ " : scale shift in_image out_image" << vcl_endl;
+    vcl_cerr << __FILE__ " : scale shift in_image out_image\n";
     vcl_abort();
   }
 
@@ -31,8 +31,6 @@ int main (int argc, char** argv) {
     vil1_image scaled_image = vil1_scale_intensities(real_img, scale, shift);
     vil1_save(vil1_image_as_rgb_byte(vil1_clamp(scaled_image, 0, 255)), argv[4], "pnm");
   }
-  else
-    ;
 
   return 0;
 }

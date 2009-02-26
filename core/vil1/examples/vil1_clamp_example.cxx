@@ -11,7 +11,7 @@
 int main (int argc, char** argv)
 {
   if (argc != 5) {
-    vcl_cerr << __FILE__ " : low_clamp high_clamp in_image out_image" << vcl_endl;
+    vcl_cerr << __FILE__ " : low_clamp high_clamp in_image out_image\n";
     vcl_abort();
   }
 
@@ -23,8 +23,6 @@ int main (int argc, char** argv)
     vil1_save(vil1_image_as_byte(vil1_clamp(in, low, high)), argv[4], "pnm");
   else if (vil1_pixel_format(in) == VIL1_RGB_BYTE)
     vil1_save(vil1_image_as_rgb_byte(vil1_clamp(in, low, high)), argv[4], "pnm");
-  else
-    ;
 
   return 0;
 }
