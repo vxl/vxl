@@ -36,8 +36,7 @@ namespace
     bool isvd=(lstat(file, &s) == 0 &&
                S_ISCHR(s.st_mode) && // is character device
                ((int)((unsigned short)(s.st_rdev)>> 8) == 81) && // major number 81
-               ((int)((unsigned short)(s.st_rdev) & 0xFF) >=0) && // minor in [0,63]
-               ((int)((unsigned short)(s.st_rdev) & 0xFF) <=63)
+               ((int)((unsigned short)(s.st_rdev) & 0xC0) ==0)   // minor in [0,63]
            );
 #if 0
     vcl_cout << file << ": ";
