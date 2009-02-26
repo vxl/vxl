@@ -17,6 +17,7 @@ SET(mmn_sources
   mmn_diffusion_solver.h     mmn_diffusion_solver.cxx
 
   mmn_add_all_loaders.h      mmn_add_all_loaders.cxx
+  mmn_parse_arcs.h      mmn_parse_arcs.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates mmn_sources)
 

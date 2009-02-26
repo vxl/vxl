@@ -7,6 +7,7 @@ DECLARE( test_order_cost );
 DECLARE( test_csp_solver );
 DECLARE( test_diffusion_solver );
 DECLARE( test_make_tri_tree );
+DECLARE( test_parse_arcs );
 
 void register_tests()
 {
@@ -17,6 +18,7 @@ void register_tests()
   REGISTER( test_csp_solver );
   REGISTER( test_diffusion_solver );
   REGISTER( test_make_tri_tree );
+  REGISTER( test_parse_arcs );
 }
 
 DEFINE_MAIN;
