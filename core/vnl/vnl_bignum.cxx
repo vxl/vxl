@@ -53,7 +53,7 @@ vnl_bignum::vnl_bignum(long l)
 vnl_bignum::vnl_bignum(int l)
 : count(0), sign(1), data(0)
 {
-  if (l < 0) {                 // Get correct sign
+  if (l < 0) {                  // Get correct sign
     l = -l;                     // Get absolute value of l
     this->sign = -1;
   }
@@ -62,7 +62,7 @@ vnl_bignum::vnl_bignum(int l)
   while (l) {                   // While more bits in l
     assert(i < sizeof(l));      // no more buffer space
     buf[i] = Data(l);           // Peel off lower order bits
-    l >>= 16;   // Shift next bits into place
+    l >>= 16;                   // Shift next bits into place
     i++;
   }
   if (i > 0)
@@ -381,7 +381,7 @@ vnl_bignum::vnl_bignum(const char *s)
   // infinity:    "^ *[-+]?Inf(inity)?$"
 
   if (is_plus_inf(s))
-    sign=1,count=1,data=new Data[1],data[0]=0;
+    count=1,data=new Data[1],data[0]=0;
   else if (is_minus_inf(s))
     sign=-1,count=1,data=new Data[1],data[0]=0;
   else if (is_decimal(s))               // If string is decimal
@@ -811,15 +811,15 @@ void vnl_bignum::dump(vcl_ostream& os) const
 
 int vnl_bignum::dtoBigNum(const char *s)
 {
-  this->resize(0); sign = 1;            // Reset number to 0.
+  this->resize(0); this->sign = 1;      // Reset number to 0.
   Counter len = 0;                      // No chars converted yet
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
-  if (s[0] == '-' || s[0] == '+') ++len;// Skip over leading +,-
-  while (vcl_isdigit(s[len])) {         // If current char is digit
+  if (*s == '-') this->sign = -1;       // If s had leading -, note it
+  if (*s == '-' || *s == '+') ++len;    // Skip over leading +,-
+  while (vcl_isdigit(s[len])) {         // While current char is digit
     (*this) = ((*this) * 10L) +         // Shift vnl_bignum left a decimal
-      vnl_bignum(long(s[++len] - '0')); // digit and add new digit
+      vnl_bignum(long(s[len++] - '0')); // digit and add new digit
   }
-  if (s[0] == '-') this->sign = -1;     // If s had leading -, note it
   return len;                           // Return # of chars processed
 }
 
