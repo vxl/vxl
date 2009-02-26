@@ -148,7 +148,7 @@ class vidl2_v4l2_device
   // ----------------- Methods associated to controls -------------------
 
   //: Get number of controls
-  // \return the number of detected controls (control not disabled and not inactive). 
+  // \return the number of detected controls (control not disabled and not inactive).
   int n_controls() const { return controls_.size(); }
   //: Get control
   // The user must downcast the pointer -depending on type- to use all funcionality.
@@ -160,48 +160,48 @@ class vidl2_v4l2_device
   // The user must downcast the pointer -depending on type- to use all funcionality.
   // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
   // \return pointer to control or 0 if does not exist
-  vidl2_v4l2_control * get_control_id(int id) const 
+  vidl2_v4l2_control * get_control_id(int id) const
     { for (int i=0;i<n_controls();++i) { if (controls_[i]->id()==id) return controls_[i]; } return 0;}
 
   //: Get control from driver id
   // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
   // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_INTEGER
   vidl2_v4l2_control_integer * get_control_integer_id( int id) const
-    { 
-      vidl2_v4l2_control *pc= get_control_id(id);
-      return pc?(pc->type()==V4L2_CTRL_TYPE_INTEGER? 
-                     dynamic_cast<vidl2_v4l2_control_integer *>(pc):0 ):0;
-    }
+  {
+    vidl2_v4l2_control *pc= get_control_id(id);
+    return pc ? (pc->type()==V4L2_CTRL_TYPE_INTEGER ?
+                 dynamic_cast<vidl2_v4l2_control_integer *>(pc) : 0 ) : 0;
+  }
 
   //: Get control from driver id
   // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
   // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_MENU
   vidl2_v4l2_control_menu * get_control_menu_id( int id) const
-    { 
-      vidl2_v4l2_control *pc= get_control_id(id);
-      return pc?(pc->type()==V4L2_CTRL_TYPE_MENU? 
-                     dynamic_cast<vidl2_v4l2_control_menu *>(pc):0 ):0;
-    }
+  {
+    vidl2_v4l2_control *pc= get_control_id(id);
+    return pc ? (pc->type()==V4L2_CTRL_TYPE_MENU ?
+                 dynamic_cast<vidl2_v4l2_control_menu *>(pc) : 0 ) : 0;
+  }
 
   //: Get control from driver id
   // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
   // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_BOOLEAN
   vidl2_v4l2_control_boolean * get_control_boolean_id( int id) const
-    { 
-      vidl2_v4l2_control *pc= get_control_id(id);
-      return pc?(pc->type()==V4L2_CTRL_TYPE_BOOLEAN? 
-                     dynamic_cast<vidl2_v4l2_control_boolean *>(pc):0 ):0;
-    }
+  {
+    vidl2_v4l2_control *pc= get_control_id(id);
+    return pc ? (pc->type()==V4L2_CTRL_TYPE_BOOLEAN ?
+                 dynamic_cast<vidl2_v4l2_control_boolean *>(pc) : 0 ) : 0;
+  }
 
   //: Get control from driver id
   // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
   // \return pointer to control. Null if doesn't exist or is not of type V4L2_CTRL_TYPE_BUTTON
   vidl2_v4l2_control_button * get_control_button_id( int id) const
-    { 
-      vidl2_v4l2_control *pc= get_control_id(id);
-      return pc?(pc->type()==V4L2_CTRL_TYPE_BUTTON? 
-                     dynamic_cast<vidl2_v4l2_control_button *>(pc):0 ):0;
-    }
+  {
+    vidl2_v4l2_control *pc= get_control_id(id);
+    return pc ? (pc->type()==V4L2_CTRL_TYPE_BUTTON ?
+                 dynamic_cast<vidl2_v4l2_control_button *>(pc) : 0 ) : 0;
+  }
 
 
   // ----------------- End methods associated to controls -------------------
@@ -243,7 +243,7 @@ class vidl2_v4l2_device
   // \pre device is capturing
   // \see get_number_of_buffers
   void *ibuffer(unsigned int i) const {
-    return (buffers && 0<=i && i < n_buffers)? buffers[i].start: 0;
+    return buffers && i < n_buffers ? buffers[i].start : 0;
   }
 
   // Return number in sequence associated to last frame, as indicated by driver
