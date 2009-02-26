@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bmdl )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bmdl )
 
 ADD_EXECUTABLE( bmdl_pro_test_all
   test_driver.cxx

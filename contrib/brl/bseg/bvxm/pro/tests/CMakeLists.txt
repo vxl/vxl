@@ -1,7 +1,6 @@
 
-INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm )
-INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm/pro)
-INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm/pro/processes)
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm/pro)
 
 ADD_EXECUTABLE( bvxm_pro_test_all
   test_driver.cxx
@@ -15,7 +14,6 @@ ADD_EXECUTABLE( bvxm_pro_test_all
   test_bvxm_create_local_rpc_process.cxx
   test_bvxm_create_synth_lidar_data_process.cxx
   test_bvxm_update_lidar_process.cxx
-
 )
 
 TARGET_LINK_LIBRARIES( bvxm_pro_test_all testlib bvxm_pro bvxm vcl vbl vpgl_algo vpgl vpgl_io vpgl_pro bprb brdb vil vil_io vil_pro)

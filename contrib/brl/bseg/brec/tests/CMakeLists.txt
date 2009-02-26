@@ -1,5 +1,5 @@
-INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm )
-INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/brec )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
 
 ADD_EXECUTABLE( brec_test_all
   test_driver.cxx
