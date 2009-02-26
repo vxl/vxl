@@ -16,9 +16,12 @@
 /*
  arcs:
  {
-   arc: {LeftEye RightEye}
-   arc: {Nostrils Mouth}
+   arc: { LeftEye RightEye }
+   arc: { Nostrils Mouth }   
+   arc: { LeftEyeBrow LeftEye }
+   arc: { RightEyeBrow RightEye } 
  }
+ //Note separating white space is needed after { and before } in arc definitions
 */
  //Assumes names in node_names are in order of associated node numbers in
  //graph defined by these arcs
