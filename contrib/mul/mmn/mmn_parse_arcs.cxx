@@ -56,10 +56,11 @@ void  mmn_parse_arcs(vcl_istream& is,
             throw mbl_exception_parse_error(error_msg);
         }
 
+        //we have read to just past the next "arc:" label
         vcl_string strNodePair=mbl_parse_block(ss);
         vcl_istringstream ssArc(strNodePair); //stream for just this arc
 
-        //Now reduce this line into 4 tokens for { name1 name2 }
+        //Now reduce this line/block into 4 tokens for { name1 name2 }
         //Note this assumes white space separators
         vcl_vector<vcl_string> tokens;
         vcl_copy(vcl_istream_iterator<vcl_string>(ssArc),
@@ -83,9 +84,11 @@ void  mmn_parse_arcs(vcl_istream& is,
             throw mbl_exception_parse_error(error_msg);
         }
 
+        //Seems to validate
         vcl_string node1=tokens[1];
         vcl_string node2=tokens[2];
 
+        //Find the numeric IDs of these nodes
         vcl_map<vcl_string,unsigned>::const_iterator nodeIter1=nodeMap.find(node1);
         if(nodeIter1 == nodeMap.end())
         {
@@ -101,7 +104,8 @@ void  mmn_parse_arcs(vcl_istream& is,
             error_msg+= strNodePair;
             throw mbl_exception_parse_error(error_msg);
         }
-
+        
+        //Finally add the arc
         arcs.push_back(mmn_arc(nodeIter1->second,nodeIter2->second));
 
     }
