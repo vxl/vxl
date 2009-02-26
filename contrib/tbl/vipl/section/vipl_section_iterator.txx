@@ -27,8 +27,8 @@ template < class DataType >
     hscontainer(containr),
     hsincr_count(0)
 {
-  if (desc) FILTER_IMPTR_INC_REFCOUNT(desc);
-  if (containr) FILTER_IMPTR_INC_REFCOUNT(containr);
+  if (desc) { FILTER_IMPTR_INC_REFCOUNT(desc); }
+  if (containr) { FILTER_IMPTR_INC_REFCOUNT(containr); }
 #if 0
   vcl_cerr << "Warning: called unimplemented constructor with signature "
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* containr\n";

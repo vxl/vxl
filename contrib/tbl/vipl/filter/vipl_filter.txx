@@ -243,13 +243,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #endif
   }
 #ifndef SMARTPTR
-  if (ref_outf()) FILTER_IMPTR_INC_REFCOUNT(ref_outf());
-  if (ref_src_section()) FILTER_IMPTR_INC_REFCOUNT(ref_src_section()); // share so inc_refcount
-  if (ref_dst_section()) FILTER_IMPTR_INC_REFCOUNT(ref_dst_section()); // share so inc_refcount
-  if (ref_secp()) FILTER_IMPTR_INC_REFCOUNT(ref_secp()); // share so inc_refcount
-  if (ref_insecp()) FILTER_IMPTR_INC_REFCOUNT(ref_insecp()); // share so inc_refcount
-  if (ref_ROA()) FILTER_IMPTR_INC_REFCOUNT(ref_ROA()); // share so inc_refcount
-  if (ref_inROA()) FILTER_IMPTR_INC_REFCOUNT(ref_inROA()); // share so inc_refcount
+  if (ref_outf()) { FILTER_IMPTR_INC_REFCOUNT(ref_outf()); }
+  if (ref_src_section()) { FILTER_IMPTR_INC_REFCOUNT(ref_src_section()); } // share so inc_refcount
+  if (ref_dst_section()) { FILTER_IMPTR_INC_REFCOUNT(ref_dst_section()); } // share so inc_refcount
+  if (ref_secp()) { FILTER_IMPTR_INC_REFCOUNT(ref_secp()); } // share so inc_refcount
+  if (ref_insecp()) { FILTER_IMPTR_INC_REFCOUNT(ref_insecp()); } // share so inc_refcount
+  if (ref_ROA()) { FILTER_IMPTR_INC_REFCOUNT(ref_ROA()); } // share so inc_refcount
+  if (ref_inROA()) { FILTER_IMPTR_INC_REFCOUNT(ref_inROA()); } // share so inc_refcount
 #endif
   // FIXME should we do deep copy of filter-ownable parameters.???
   if (FILTER_OWNED(hsoutput_state))

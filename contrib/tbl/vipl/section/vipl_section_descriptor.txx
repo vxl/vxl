@@ -30,8 +30,8 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
     hsi_curr_sec_size(2,0),
     refcount_ (1)
 {
-  if (desc) FILTER_IMPTR_INC_REFCOUNT(desc);
-  if (container) FILTER_IMPTR_INC_REFCOUNT(container);
+  if (desc) { FILTER_IMPTR_INC_REFCOUNT(desc); }
+  if (container) { FILTER_IMPTR_INC_REFCOUNT(container); }
 #ifdef DEBUG
   vcl_cerr << "Warning: called unimplemented vipl_section_descriptor constructor with signature "
            << "vipl_section_descriptor<DataType>*, vipl_section_container<DataType>*\n";
