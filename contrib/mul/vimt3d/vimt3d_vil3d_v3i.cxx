@@ -129,7 +129,7 @@ macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 //macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    default:
     vcl_cerr << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"

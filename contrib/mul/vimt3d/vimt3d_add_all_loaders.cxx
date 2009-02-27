@@ -12,6 +12,7 @@ void vimt3d_add_all_loaders()
 {
 // Add vsl base class loaders
   vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<vxl_byte>());
+  vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<double>());
   vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<float>());
   vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<int>());
   //vsl_add_to_binary_loader(vimt3d_gaussian_pyramid_builder_3d<double>()); // NYI - Placeholder only
