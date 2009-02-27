@@ -79,7 +79,8 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
   extern long  r2,  g2,  b2; // values from 0 to 63
 #endif
 
-  h %= 360;          // (THIS LOOKS BACKWARDS)
+  h -= int(h/360)*360;       // (THIS LOOKS BACKWARDS)
+  if (h < 0) h += 360;
 
   xh = h / 60;                   // convert hue to be in [0,6)
   i = (int)vcl_floor((double)xh);// i = greatest integer <= xh
