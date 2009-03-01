@@ -20,6 +20,7 @@ bvxm_lidar_camera::bvxm_lidar_camera()
 
   is_utm = false;
   img_u_ = img_v_ = 0;
+  scale_format_ = false;
 }
 
 bvxm_lidar_camera::bvxm_lidar_camera(bvxm_lidar_camera const& rhs)
@@ -29,6 +30,7 @@ bvxm_lidar_camera::bvxm_lidar_camera(bvxm_lidar_camera const& rhs)
   this->tiepoints_ = rhs.tiepoints_;
   this->img_u_ = new int(*rhs.img_u_);
   this->img_v_ = new int(*rhs.img_v_);
+  this->scale_format_ = rhs.scale_format_;
 }
 
 //: transforms a given 3d world point to image plane

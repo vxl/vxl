@@ -19,7 +19,7 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   bvxm_lidar_camera(vnl_matrix<double> trans_matrix,
                     bgeo_lvcs_sptr lvcs,
                     vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints), is_utm(false), img_u_(0), img_v_(0) {}
+    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints), is_utm(false), scale_format_(false), img_u_(0), img_v_(0) {}
 
   // copy constructor
   bvxm_lidar_camera(bvxm_lidar_camera const& rhs);
@@ -28,6 +28,7 @@ class bvxm_lidar_camera : public vpgl_camera<double>
 
   ~bvxm_lidar_camera() {}
 
+  virtual vcl_string type_name() const {return "bvxm_lidar_camera";}
   //northing=0 is North, 1 is east
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
 
@@ -46,6 +47,13 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   // adds translation to the trans matrix
   void translate(double tx, double ty);
 
+  //: True if geotiff scale format was used (1 tiepoint and sx, sy, sz specified)
+  void set_scale_format(bool v){scale_format_ = v;}
+
+  //: the lidar pixel size in meters (should be generalized JLM)
+  double pixel_spacing(){if(scale_format_) return trans_matrix_[0][0];
+  else return 1.0;}
+
   bool operator ==(bvxm_lidar_camera const& rhs) const;
 
   //: Write camera to stream
@@ -63,7 +71,7 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   bool is_utm;
   int utm_zone_;
   int northing_; //0 North, 1 South
-
+  bool scale_format_;
   int *img_u_, *img_v_;
   void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
 };
