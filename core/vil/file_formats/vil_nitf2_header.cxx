@@ -29,7 +29,7 @@ vil_nitf2_header::~vil_nitf2_header()
 vcl_string vil_nitf2_header::section_num_tag(section_type sec)
 {
   switch (sec) {
-   case enum_file_header:                 assert(0); break;
+   case enum_file_header:                 assert(0); return "";
    case enum_image_segments:              return "NUMI";
    case enum_graphic_segments:            return "NUMS";
    case enum_label_segments:              return "NUML";
@@ -43,7 +43,7 @@ vcl_string vil_nitf2_header::section_num_tag(section_type sec)
 vcl_string vil_nitf2_header::section_len_header_tag(section_type sec)
 {
   switch (sec) {
-   case enum_file_header:                 assert(0); break;
+   case enum_file_header:                 assert(0); return "";
    case enum_image_segments:              return "LISH";
    case enum_graphic_segments:            return "LSSH";
    case enum_label_segments:              return "LLSH";
@@ -57,7 +57,7 @@ vcl_string vil_nitf2_header::section_len_header_tag(section_type sec)
 vcl_string vil_nitf2_header::section_len_data_tag(section_type sec)
 {
   switch (sec) {
-   case enum_file_header:                 assert(0); break;
+   case enum_file_header:                 assert(0); return "";
    case enum_image_segments:              return "LI";
    case enum_graphic_segments:            return "LS";
    case enum_label_segments:              return "LL";
