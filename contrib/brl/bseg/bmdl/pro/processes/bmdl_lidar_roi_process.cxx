@@ -1,5 +1,3 @@
-//#include "bmdl_processes.h"
-
 #include <vcl_cstring.h>
 
 #include <vgl/vgl_box_2d.h>
@@ -99,7 +97,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
   vil_tiff_image* tiff_first = static_cast<vil_tiff_image*> (lidar_first.ptr());
   vil_tiff_image* tiff_last  = static_cast<vil_tiff_image*> (lidar_last.ptr());
 
-  if (vpgl_geo_camera::init_geo_camera(tiff_first, camera))
+  if (vpgl_geo_camera::init_geo_camera(tiff_first, 0, camera))
   {
     vgl_box_2d<double> roi_box;
 
