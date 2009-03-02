@@ -33,7 +33,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
                   bgeo_lvcs_sptr lvcs,
                   vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), is_utm(false) {this->set_lvcs(lvcs);}
+    : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) {this->set_lvcs(lvcs);}
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);
@@ -52,6 +52,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
 
   void set_lvcs(bgeo_lvcs_sptr lvcs) {lvcs_ = new bgeo_lvcs(*lvcs); }
+
+  void set_scale_format(bool scale_tag) { scale_tag_=scale_tag; }
 
   bgeo_lvcs_sptr const lvcs() {return lvcs_;}
 
@@ -103,15 +105,12 @@ class vpgl_geo_camera : public vpgl_camera<double>
  private:
 
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
-  //: translation if image is cropped
-  //double tx_, ty_;
   //: lvcs of world parameters
   bgeo_lvcs_sptr lvcs_;
-  //: set of 6 values, normally 1 set
-  //vcl_vector<vcl_vector<double> > tiepoints_;
   bool is_utm;
   int utm_zone_;
   int northing_; //0 North, 1 South
+  bool scale_tag_;
 };
 
 #endif // vpgl_geo_camera_h_
