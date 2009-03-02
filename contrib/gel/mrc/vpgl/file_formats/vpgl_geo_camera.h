@@ -67,18 +67,23 @@ class vpgl_geo_camera : public vpgl_camera<double>
   // adds translation to the trans matrix
   void translate(double tx, double ty, double z);
 
+  //: the lidar pixel size in meters assumes square pixels
+  double pixel_spacing(){if(scale_tag_) return trans_matrix_[0][0];
+  else return 1.0;}
+
   bool operator ==(vpgl_geo_camera const& rhs) const;
 
   static bool comp_trans_matrix(double sx1, double sy1, double sz1,
                                 vcl_vector<vcl_vector<double> > tiepoints,
-                                vnl_matrix<double>& trans_matrix);
+                                vnl_matrix<double>& trans_matrix,
+                                bool scale_tag = false);
 
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vpgl_geo_camera"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(vcl_string const& cls) const
-  { return cls==is_a() || cls==vcl_string("vpgl_camera"); }
+  { return cls==is_a() || cls==vcl_string("vpgl_geo_camera"); }
 
   // *** binary IO ***
 

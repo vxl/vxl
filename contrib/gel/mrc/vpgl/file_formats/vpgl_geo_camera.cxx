@@ -55,6 +55,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
     gtif->gtif_tiepoints(tiepoints);
     bool south_flag = (h == 1);
     is_utm = true;
+#if 0  // I, J, K should not be transformed
     // transform each tiepoint
     bgeo_utm utm;
     
@@ -75,20 +76,21 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
         tiepoints[i][2] = K; // elev
       }
     }
-
+#endif
     // create a transformation matrix
     // if there is a transormation matrix in GEOTIFF, use that
     vnl_matrix<double> trans_matrix;
     double* trans_matrix_values;
     double sx1, sy1, sz1;
-    bool scale_tag_=false;
+    bool scale_tag=false;
     if (gtif->gtif_trans_matrix(trans_matrix_values)){
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
       vcl_cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
-      scale_tag_ = true;
-      vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
+      scale_tag = true;
+	  vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints, 
+                              trans_matrix, scale_tag);
     } else {
       vcl_cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
@@ -99,7 +101,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
     camera = new vpgl_geo_camera(trans_matrix, lvcs, tiepoints);
     if (is_utm)
       camera->set_utm(utm_zone, h);  
-    camera->set_scale_format(true);
+    camera->set_scale_format(scale_tag);
     return true;
   } else {
       vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
@@ -234,10 +236,9 @@ vcl_istream&  operator>>(vcl_istream& s,
 
 bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
                                         vcl_vector<vcl_vector<double> > tiepoints,
-                                        vnl_matrix<double>& trans_matrix)
+                                        vnl_matrix<double>& trans_matrix,
+                                        bool scale_tag)
 {
-  double sx, sy, sz;
-
   // use tiepoints and scale values to create a transformation matrix
   // for now use the first tiepoint if there are more than one
   assert (tiepoints.size() > 0);
@@ -260,9 +261,10 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
   //      |                           |
   //      |   0.0   0.0   0.0   1.0   |
   //      |-                         -|
-
-  double scale = 1;
-  sx = scale; sy=scale; sz=scale;
+  double sx = 1.0, sy = 1.0, sz = 1.0;
+  if(scale_tag){
+    sx = sx1; sy = sy1; sz = sz1;
+  }
   double Tx = X - I*sx;
   double Ty = Y + J*sy;
   double Tz = Z - K*sz;
