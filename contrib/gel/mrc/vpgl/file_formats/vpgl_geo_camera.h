@@ -8,7 +8,7 @@
 // \author Gamze Tunali
 //
 //   Geotiff images contain information about the corresponding world coordinate
-//   values of the pixel positions. This class is a wwapper of that information
+//   values of the pixel positions. This class is a wrapper of that information
 //   to project and backproject the 3D points in local coordinates to pixel positions
 
 
@@ -16,6 +16,7 @@
 #include <vcl_vector.h>
 
 #include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vnl/vnl_matrix.h>
 
 #include <vpgl/vpgl_camera.h>
@@ -32,15 +33,15 @@ class vpgl_geo_camera : public vpgl_camera<double>
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
                   bgeo_lvcs_sptr lvcs,
                   vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), tx_(0), ty_(0), lvcs_(lvcs),
-      tiepoints_(tiepoints), is_utm(false) {}
+    : trans_matrix_(trans_matrix), is_utm(false) {this->set_lvcs(lvcs);}
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
-  static bool init_geo_camera(vil_tiff_image* const& geotiff_img,
+  static bool init_geo_camera(vil_tiff_image* const& geotiff_img, 
+                              bgeo_lvcs_sptr lvcs,
                               vpgl_geo_camera*& camera);
 
   ~vpgl_geo_camera() {}
@@ -50,7 +51,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //northing=0 means North, 1 is east
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
 
-  void set_lvcs(bgeo_lvcs_sptr lvcs) {lvcs_ = lvcs;}
+  void set_lvcs(bgeo_lvcs_sptr lvcs) {lvcs_ = new bgeo_lvcs(*lvcs); }
 
   bgeo_lvcs_sptr const lvcs() {return lvcs_;}
 
@@ -91,18 +92,23 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: Read camera  from stream
   friend vcl_istream&  operator>>(vcl_istream& s, vpgl_geo_camera& p);
 
+  //: returns the corresponding geographical coordinates for a given pixel position (i,j)
   void img_to_wgs(const unsigned i, const unsigned j, const unsigned z,
                   double& lon, double& lat, double& elev);
+
+  //: returns the corresponding pixel position (i,j) for a given geographical coordinates (lon, lat)
+  /*void wgs_to_img(double lon, double lat, 
+                  unsigned& i, unsigned& j);*/
 
  private:
 
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
   //: translation if image is cropped
-  double tx_, ty_;
+  //double tx_, ty_;
   //: lvcs of world parameters
   bgeo_lvcs_sptr lvcs_;
   //: set of 6 values, normally 1 set
-  vcl_vector<vcl_vector<double> > tiepoints_;
+  //vcl_vector<vcl_vector<double> > tiepoints_;
   bool is_utm;
   int utm_zone_;
   int northing_; //0 North, 1 South
