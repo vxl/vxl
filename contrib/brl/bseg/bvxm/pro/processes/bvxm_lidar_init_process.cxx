@@ -26,7 +26,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_util.h>
-#include <bvxm/bvxm_lidar_camera.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 
 #include <vcl_cassert.h>
 
@@ -59,16 +59,16 @@ namespace bvxm_lidar_init_process_globals
   bool lidar_init(vil_image_resource_sptr lidar,
                   bvxm_world_params_sptr params,
                   vil_image_view_base_sptr& roi,
-                  bvxm_lidar_camera*& camera);
+                  vpgl_geo_camera*& camera);
 
   bool comp_trans_matrix(double sx1, double sy1, double sz1,
                          vcl_vector<vcl_vector<double> > tiepoints,
                          vnl_matrix<double>& trans_matrix);
 
   bool gen_mask(vil_image_view_base_sptr roi_first,
-                bvxm_lidar_camera* cam_first,
+                vpgl_geo_camera* cam_first,
                 vil_image_view_base_sptr roi_second,
-                bvxm_lidar_camera* cam_second,
+                vpgl_geo_camera* cam_second,
                 vil_image_view_base_sptr& mask,
                 double thresh);
 
@@ -148,7 +148,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
   }
 
   vil_image_view_base_sptr roi_first=0, roi_second=0;
-  bvxm_lidar_camera *cam_first=0, *cam_second=0;
+  vpgl_geo_camera *cam_first=0, *cam_second=0;
 
   if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
     vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
@@ -178,6 +178,24 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
   // store the mask
   pro.set_output_val<vil_image_view_base_sptr>(j++,mask);
 
+  /////////////////////////////////////////////////////////
+  //TEST
+ /* vil_image_view<float>* test = new vil_image_view<float>(501, 501);
+  test->fill(0.0);
+  vil_image_view<float>* view1 = static_cast<vil_image_view<float>*> (roi_first.as_pointer());
+  unsigned k=100;
+  for (unsigned i=200; i<=700; i++){
+    for (unsigned j=200; j<=700; j++) {
+      double u,v;
+      cam_first->project(i,j,k,u,v);
+      (*test)(i-200,j-200) = (*view1)(u,roi_first->nj()-v);
+    }
+  }*/
+ // vil_save(*test, "C:\\test_images\\bvxm_registration\\ONLY_REG_LIDAR_REG_LIDAR_UPD\\test.tif");
+ // vcl_cout << cam_first;
+  
+  /////////////////////////////////////////////////////////
+
   return true;
 }
 
@@ -186,7 +204,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
 bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
                                                   bvxm_world_params_sptr params,
                                                   vil_image_view_base_sptr& roi,
-                                                  bvxm_lidar_camera*& camera)
+                                                  vpgl_geo_camera*& camera)
 {
   // the file should be a geotiff
   vcl_cout << "FORMAT=" << lidar->file_format();
@@ -198,70 +216,13 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
 #if HAS_GEOTIFF
   vil_tiff_image* tiff_img = static_cast<vil_tiff_image*> (lidar.as_pointer());
 
-  // check if the tiff file is geotiff
-  if (!tiff_img->is_GEOTIFF()) {
-    vcl_cout << "bvxm_lidar_init_process::lidar_init -- The image should be a GEOTIFF!\n";
-    return false;
-  }
-
-  vil_geotiff_header* gtif = tiff_img->get_geotiff_header();
-  int utm_zone;
-  vil_geotiff_header::GTIF_HEMISPH h;
-
-  // convert given tiepoint to world coordinates (lat, long)
-  // based on the model defined in GEOTIFF
-
-  // is this a PCS_WGS84_UTM?
-  bool is_utm = gtif->PCS_WGS84_UTM_zone(utm_zone, h);
-  if (is_utm)
+  if (vpgl_geo_camera::init_geo_camera(tiff_img, params->lvcs(), camera))
   {
-    vcl_vector<vcl_vector<double> > tiepoints;
-    gtif->gtif_tiepoints(tiepoints);
-    bool south_flag = (h == 1);
-    // transform each tiepoint
-    for (unsigned i=0; i< tiepoints.size(); ++i) {
-      assert (tiepoints[i].size() == 6);
-      double X = tiepoints[i][3];
-      double Y = tiepoints[i][4];
-      double Z = tiepoints[i][5];
-
-      double I /*lat*/, J /*lon*/, K /*elev*/ ;
-      bgeo_utm utm;
-      utm.transform(utm_zone, X, Y, Z, I, J, K, south_flag);
-      // now, we have a mapping (I,J,K)->(X,Y,Z)
-      tiepoints[i][0] = I;
-      tiepoints[i][1] = J;
-      tiepoints[i][2] = K;
-    }
-
-    // create a transformation matrix
-    // if there is a transormation matrix in GEOTIFF, use that
-    vnl_matrix<double> trans_matrix;
-    double* trans_matrix_values;
-    double sx1, sy1, sz1;
-    if (gtif->gtif_trans_matrix(trans_matrix_values)){
-      vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
-      trans_matrix.copy_in(trans_matrix_values);
-    }
-    else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
-      comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
-    }
-    else {
-      vcl_cout << "bvxm_lidar_init_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
-      return false;
-    }
-
-    // create the camera
-    camera = new bvxm_lidar_camera(trans_matrix, params->lvcs(), tiepoints);
-    if (is_utm)
-      camera->set_utm(utm_zone, h);
-
-    // create image view
-    vil_tiff_image* tiff_img = static_cast<vil_tiff_image*> (lidar.as_pointer());
-
-    // crop the image to include the voxel world only
-    // backproject the voxel world coordinates on the image
     vgl_box_2d<double> roi_box;
+
+    double lon, lat, elev;
+
+    // backproject the 3D world coordinates on the image
     vgl_box_3d<double> world = params->world_box_local();
     vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
     for (unsigned i=0; i<corners.size(); i++) {
@@ -274,6 +235,9 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
       roi_box.add(p);
     }
 
+    vcl_cout << *(camera->lvcs()) << vcl_endl;
+    camera->lvcs()->local_to_global(200,200,0,bgeo_lvcs::wgs84,lon,lat,elev);
+    vcl_cout << "corner--> lon=" << lon << "  lat=" << lat << " gz=" << elev << vcl_endl;
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());
@@ -285,11 +249,13 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
                                      (unsigned int)bb->width(),
                                       (unsigned int)bb->get_min_y(),
                                        (unsigned int)bb->height());
+      //vcl_cout << "CUtting--" << *bb << vcl_endl;
       //add the translation to the camera
-      camera->translate(bb->get_min_x(), bb->get_min_y());
+      camera->translate(bb->get_min_x(), bb->get_min_y(),0);
     }
 
     if (!roi) {
+      vcl_cout << *bb << vcl_endl;
       vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
       return false;
     }
@@ -306,60 +272,10 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
 #endif // HAS_GEOTIFF
 }
 
-bool bvxm_lidar_init_process_globals::comp_trans_matrix(double sx1, double sy1, double sz1,//vil_geotiff_header* gtif,
-                                                        vcl_vector<vcl_vector<double> > tiepoints,
-                                                        vnl_matrix<double>& trans_matrix)
-{
-  double sx, sy, sz;
-
-  // use tiepoints and scale values to create a transformation matrix
-  // for now use the first tiepoint if there are more than one
-  assert (tiepoints.size() > 0);
-  vcl_vector<double> tiepoint = tiepoints[0];
-  assert (tiepoint.size() == 6);
-  double I = tiepoint[0];
-  double J = tiepoint[1];
-  double K = tiepoint[2];
-  double X = tiepoint[3];
-  double Y = tiepoint[4];
-  double Z = tiepoint[5];
-
-  // Define a transformation matrix as follows:
-  //
-  //      |-                         -|
-  //      |   Sx    0.0   0.0   Tx    |
-  //      |                           |      Tx = X - I*Sx
-  //      |   0.0  -Sy    0.0   Ty    |      Ty = Y + J*Sy
-  //      |                           |      Tz = Z - K*Sz
-  //      |   0.0   0.0   Sz    Tz    |
-  //      |                           |
-  //      |   0.0   0.0   0.0   1.0   |
-  //      |-                         -|
-
-  double scale = 1;
-  sx = scale; sy=scale; sz=scale;
-  double Tx = X - I*sx;
-  double Ty = Y + J*sy;
-  double Tz = Z - K*sz;
-
-  vnl_matrix<double> m(4,4);
-  m.fill(0.0);
-  m[0][0] = sx;
-  m[1][1] = -1*sy;
-  m[2][2] = sz;
-  m[3][3] = 1.0;
-  m[0][3] = Tx;
-  m[1][3] = Ty;
-  m[2][3] = Tz;
-  trans_matrix = m;
-  vcl_cout << trans_matrix << vcl_endl;
-  return true;
-}
-
 bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_first,
-                                                bvxm_lidar_camera* cam_first,
+                                                vpgl_geo_camera* cam_first,
                                                 vil_image_view_base_sptr roi_second,
-                                                bvxm_lidar_camera* cam_second,
+                                                vpgl_geo_camera* cam_second,
                                                 vil_image_view_base_sptr& mask,
                                                 double thresh)
 {
