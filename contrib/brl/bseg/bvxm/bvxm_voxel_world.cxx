@@ -36,7 +36,7 @@
 #include "bvxm_voxel_slab.h"
 #include "bvxm_image_metadata.h"
 #include "bvxm_util.h"
-#include "bvxm_lidar_camera.h"
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 //#define DEBUG
 
 //: Destructor
@@ -353,8 +353,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   vpgl_camera_double_sptr dummy_cam = metadata.camera;
   double lidar_pixel_size = 1.0;
-  if(dummy_cam->type_name()=="bvxm_lidar_camera"){
-    bvxm_lidar_camera* lcam = static_cast<bvxm_lidar_camera*>(dummy_cam.ptr());
+  if(dummy_cam->type_name()=="vpgl_geo_camera"){
+    vpgl_geo_camera* lcam = static_cast<vpgl_geo_camera*>(dummy_cam.ptr());
     vcl_cout << "Lidar Camera \n" << *lcam << vcl_endl;
     lidar_pixel_size = lcam->pixel_spacing();
   }
