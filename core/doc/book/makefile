@@ -1,5 +1,5 @@
-# You'll need texi2html version 1.64 from
-# http://www.mathematik.uni-kl.de/~obachman/Texi2html/
+# You'll need texi2html version 1.82 or higher from
+# http://www.nongnu.org/texi2html/
 
 ifeq ($(OS),Windows_NT)
  GS = gswin32c
@@ -26,7 +26,6 @@ SOURCEFILES=book.texi \
             appendix_adding_to_vnl_algo.texi \
             appendix_build.texi \
             appendix_structure.texi \
-            appendix_templates.texi \
             book_header.texi \
             chapter_examples.texi \
             chapter_intro.texi \
