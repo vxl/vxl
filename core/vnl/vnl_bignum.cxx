@@ -810,11 +810,13 @@ int vnl_bignum::dtoBigNum(const char *s)
 {
   this->resize(0); this->sign = 1;      // Reset number to 0.
   Counter len = 0;                      // No chars converted yet
+  vnl_bignum sum;
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   if (*s == '-' || *s == '+') ++len;    // Skip over leading +,-
   while (s[len]>='0' && s[len]<='9') {  // While current char is digit
-    (*this) = ((*this) * 10L) +         // Shift vnl_bignum left a decimal
-      vnl_bignum(long(s[len++] - '0')); // digit and add new digit
+    *this *= vnl_bignum(10L),           // Shift vnl_bignum left a decimal
+    add(*this,vnl_bignum(long(s[len++]-'0')),sum), // digit and add new digit
+    *this = sum;
   }
   if (*s == '-') this->sign = -1;       // If s had leading -, note it
   return len;                           // Return # of chars processed
