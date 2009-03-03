@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <vcl_cctype.h>    // Include character macros
 #include <vcl_cstdlib.h>   // for vcl_atol
 #include <vcl_cstring.h>   // for vcl_strlen
 #include <vcl_cmath.h>     // for vcl_fmod
@@ -724,10 +723,8 @@ vnl_bignum& vnl_bignum_from_string(vnl_bignum& b, const vcl_string& s)
 //: Implicit conversion from a vnl_bignum to a short.
 vnl_bignum::operator short() const
 {
-  short s = 0;
-  for (Counter i = this->count; i > 0; )
-    s *= 0x10000, s += this->data[--i];
-  return (this->sign < 0) ? -s : s;
+  int j = this->operator int();
+  return (short)j;
 }
 
 
@@ -737,7 +734,7 @@ vnl_bignum::operator int() const
   int j = 0;
   for (Counter i = this->count; i > 0; )
     j = int(j*0x10000 + this->data[--i]);
-  return this->sign*j;
+  return (this->sign < 0) ? -j : j;
 }
 
 
@@ -747,7 +744,7 @@ vnl_bignum::operator long() const
   long l = 0;
   for (Counter i = this->count; i > 0; )
     l = l*0x10000L + this->data[--i];
-  return this->sign*l;
+  return (this->sign < 0) ? -l : l;
 }
 
 
@@ -758,7 +755,7 @@ vnl_bignum::operator float() const
   for (Counter i = this->count; i > 0; )
     f = f*0x10000 + this->data[--i];
   if (this->is_infinity()) f = vcl_numeric_limits<float>::infinity();
-  return this->sign*f;
+  return (this->sign < 0) ? -f : f;
 }
 
 
@@ -770,7 +767,7 @@ vnl_bignum::operator double() const
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
   if (this->is_infinity()) d = vcl_numeric_limits<double>::infinity();
-  return this->sign*d;
+  return (this->sign < 0) ? -d : d;
 }
 
 //: Implicit conversion from a vnl_bignum to a long double.
@@ -781,7 +778,7 @@ vnl_bignum::operator long double() const
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
   if (this->is_infinity()) d = vcl_numeric_limits<long double>::infinity();
-  return this->sign*d;
+  return (this->sign < 0) ? -d : d;
 }
 
 //: dump the contents of a vnl_bignum to a stream, default cout.
@@ -814,12 +811,12 @@ int vnl_bignum::dtoBigNum(const char *s)
   this->resize(0); this->sign = 1;      // Reset number to 0.
   Counter len = 0;                      // No chars converted yet
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
-  if (*s == '-') this->sign = -1;       // If s had leading -, note it
   if (*s == '-' || *s == '+') ++len;    // Skip over leading +,-
-  while (vcl_isdigit(s[len])) {         // While current char is digit
+  while (s[len]>='0' && s[len]<='9') {  // While current char is digit
     (*this) = ((*this) * 10L) +         // Shift vnl_bignum left a decimal
       vnl_bignum(long(s[len++] - '0')); // digit and add new digit
   }
+  if (*s == '-') this->sign = -1;       // If s had leading -, note it
   return len;                           // Return # of chars processed
 }
 
@@ -1002,19 +999,19 @@ void subtract(const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff)
 }
 
 
-//: Subtract 1 to bnum (unsigned, non-infinite, non-zero)
+//: Subtract 1 from bnum (unsigned, non-infinite, non-zero)
 void decrement(vnl_bignum& bnum)
 {
   Counter i = 0;
   unsigned long borrow = 1;
-  while (i < bnum.count && borrow) {             // decrement, element by element.
+  while (i < bnum.count && borrow) {            // decrement, element by element.
     unsigned long temp = (unsigned long)bnum.data[i] + 0x10000L - borrow;
-    borrow = (temp/0x10000L == 0);         // Did we have to borrow?
+    borrow = (temp/0x10000L == 0);              // Did we have to borrow?
     bnum.data[i] = (Data)temp;                  // Reduce modulo radix and save
     ++i;
   }
   bnum.trim();                                  // Done. Now trim excess data
-  if (bnum.count==0) bnum.sign=+1;                   // Re-establish sign invariant
+  if (bnum.count==0) bnum.sign=+1;              // Re-establish sign invariant
 }
 
 
