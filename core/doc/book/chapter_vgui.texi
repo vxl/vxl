@@ -309,8 +309,6 @@ Modifier   Key                        Result
           PAGEUP     Page the grid tablaux forward in the active cell
           PAGEDOWN   Page the grid tablaux backward in the active cell
 @end example
-@itemize
-@item
 
 @subsection The Deck
 
@@ -1521,7 +1519,7 @@ The main program for the basic_manager application is:
 #include "basic_manager.h"
 
 int main(int argc, char** argv)
-{
+@{
   vgui::init(argc, argv);
   vgui_menu menubar = basic_menus::get_menu();
   unsigned w = 512, h = 512;
@@ -1534,7 +1532,7 @@ int main(int argc, char** argv)
   win->enable_hscrollbar(true);
   win->show();
   return vgui::run();
-}
+@}
 @end cartouche
 @end example
 Note that the basic manager instance is attached to the adaptor in

@@ -383,7 +383,7 @@ ENDIF( VXL_MPEG2_FOUND )
 # Now that we know all the source components we'll use, we can actually
 # specify that the executable is to be built.
 
-ADD_EXECUTABLE( foo ${foo_sources} )
+ADD_EXECUTABLE( foo $@{foo_sources@} )
 
 # Finally, we need to specify the dependent libraries that are a result
 # of our choices to include or exclude various pieces of code.

@@ -70,7 +70,7 @@ to minimise confusing and help avoid potential problems.
   (It should never return the old value, as this
   can be highly confusing.)
 @example
-     void x(T val) { x_ = val; }  // WRONG!
+     void x(T val) @{ x_ = val; @}  // WRONG!
 @end example
 
 @item Any forward declarations in a library @code{val} should

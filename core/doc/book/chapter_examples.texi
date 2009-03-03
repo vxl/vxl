@@ -37,7 +37,7 @@ the image is greyscale, and does no error checking.
 #include <vil/vil_image_view.h>
 
 int main()
-{
+@{
   // Load image into memory.
   vil_image_view<vil_rgb<vxl_byte> > img = vil_load("foo.ppm");
 
@@ -45,5 +45,5 @@ int main()
   vcl_cerr << "Pixel 100,100 = " << img(100,100) << vcl_endl;
 
   return 0;
-}
+@}
 @end example
