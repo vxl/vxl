@@ -22,6 +22,7 @@
 //  Modifications
 //   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/bvxm_voxel_world.h>
@@ -41,7 +42,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/file_formats/vil_tiff.h>
-#include <vil/file_formats/vil_geotiff_header.h>
 
 #include <vpgl/bgeo/bgeo_utm.h>
 #include <brip/brip_roi.h>
@@ -177,25 +177,6 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(j++,roi_second);
   // store the mask
   pro.set_output_val<vil_image_view_base_sptr>(j++,mask);
-
-  /////////////////////////////////////////////////////////
-  //TEST
- /* vil_image_view<float>* test = new vil_image_view<float>(501, 501);
-  test->fill(0.0);
-  vil_image_view<float>* view1 = static_cast<vil_image_view<float>*> (roi_first.as_pointer());
-  unsigned k=100;
-  for (unsigned i=200; i<=700; i++){
-    for (unsigned j=200; j<=700; j++) {
-      double u,v;
-      cam_first->project(i,j,k,u,v);
-      (*test)(i-200,j-200) = (*view1)(u,roi_first->nj()-v);
-    }
-  }*/
- // vil_save(*test, "C:\\test_images\\bvxm_registration\\ONLY_REG_LIDAR_REG_LIDAR_UPD\\test.tif");
- // vcl_cout << cam_first;
-  
-  /////////////////////////////////////////////////////////
-
   return true;
 }
 
@@ -246,16 +227,14 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
     bb = broi.clip_to_image_bounds(bb);
     if ((bb->width() > 0) && (bb->height() > 0)) {
       roi = tiff_img->get_copy_view((unsigned int)bb->get_min_x(),
-                                     (unsigned int)bb->width(),
-                                      (unsigned int)bb->get_min_y(),
-                                       (unsigned int)bb->height());
-      //vcl_cout << "CUtting--" << *bb << vcl_endl;
+                                    (unsigned int)bb->width(),
+                                    (unsigned int)bb->get_min_y(),
+                                    (unsigned int)bb->height());
       //add the translation to the camera
       camera->translate(bb->get_min_x(), bb->get_min_y(),0);
     }
 
     if (!roi) {
-      vcl_cout << *bb << vcl_endl;
       vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
       return false;
     }
