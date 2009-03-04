@@ -56,12 +56,15 @@ class vpdl_distribution : public vpdl_base_traits<T,n>
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
+  // \note It is not possible to compute this value for all functions in
+  //       closed form.  In some cases, numerical integration may be used.
+  //       If no good solutions exists the function should return a quiet NaN.
   virtual T cumulative_prob(const vector& pt) const = 0;
 
   //: Compute the inverse of the cumulative_prob() function
   // The value of x: P(x'<x) = P for x' drawn from the distribution.
-  // This is only valid for univariate distributions
-  // multivariate distributions will return -infinity
+  // \note This is only valid for univariate distributions
+  //       multivariate distributions will return a quiet NaN
   virtual vector inverse_cdf(const T& p) const;
 
   //: The probability of being in an axis-aligned box

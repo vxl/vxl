@@ -94,7 +94,7 @@ public:
   {    
     // FIXME: implement this
     // probably requires numerical integration
-    return 0.0; 
+    return vcl_numeric_limits<T>::quiet_NaN(); 
   }
   
   //: Access the covariance - requires computation

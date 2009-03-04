@@ -32,7 +32,7 @@ class inverse_cdf_helper
   //: Do the actual inversion
   static inline vector invert(const vpdl_distribution<T,n>& dist, const T& p)
   {
-    return vector(-vcl_numeric_limits<double>::infinity());
+    return vector(vcl_numeric_limits<T>::quiet_NaN());
   }
 };
 
@@ -58,7 +58,7 @@ class inverse_cdf_helper<T,0>
   //: Do the actual inversion
   static inline vector invert(const vpdl_distribution<T,0>& dist, const T& p)
   {
-    return vector(dist.dimension(), -vcl_numeric_limits<double>::infinity());
+    return vector(dist.dimension(), vcl_numeric_limits<T>::quiet_NaN());
   }
 };
 
