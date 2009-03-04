@@ -36,24 +36,12 @@ SET(bvxm_sources
     bvxm_util.h                     bvxm_util.cxx
 )
 
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-  INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
-  IF(GEOTIFF_FOUND)
-    INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
-    SET(bvxm_sources ${bvxm_sources}
-      bvxm_lidar_camera.h                    bvxm_lidar_camera.cxx
-    )
-  ENDIF(GEOTIFF_FOUND)
-ENDIF(TIFF_FOUND)
-
 AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 
 ADD_LIBRARY( bvxm ${bvxm_sources})
 
 
-TARGET_LINK_LIBRARIES( bvxm bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vul vbl vsl bgeo brip sdet bil_algo)
+TARGET_LINK_LIBRARIES( bvxm bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vpgl_file_formats vul vbl vsl bgeo brip sdet bil_algo)
 
 SUBDIRS( io )
 SUBDIRS( pro )
