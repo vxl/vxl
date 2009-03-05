@@ -20,6 +20,7 @@
 //  pdf_builder: vpdfl_axis_gaussian_builder { }
 //  norm: linear
 //  search_ni: 5 search_nj: 4
+//  overlap_f: 0.5
 // }
 // Alternative for shape:
 //   shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }
@@ -60,6 +61,10 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 
   //: Angle displacement
   double dA_;
+
+  //: Relative size of region used for estimating overlap
+  //  If 0.5, then overlap requires pt inside central 50% of region.
+  double overlap_f_;
 
   //: Define default values
   void set_defaults();

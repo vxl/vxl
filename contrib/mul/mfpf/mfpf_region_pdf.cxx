@@ -42,6 +42,7 @@ void mfpf_region_pdf::set_defaults()
   ref_x_=0;
   ref_y_=0;
   norm_method_=1;
+  overlap_f_=1.0;
 }
 
 //=======================================================================
@@ -91,6 +92,14 @@ void mfpf_region_pdf::set(const vcl_vector<mbl_chord>& roi,
   assert(norm_method>=0 && norm_method<=1);
   norm_method_ = norm_method;
 }
+
+//: Relative size of region used for estimating overlap
+//  If 0.5, then overlap requires pt inside central 50% of region.
+void mfpf_region_pdf::set_overlap_f(double f)
+{
+  overlap_f_=f;
+}
+
 
 //: Radius of circle containing modelled region
 double mfpf_region_pdf::radius() const
@@ -261,13 +270,15 @@ double mfpf_region_pdf::search_one_pose(const vimt_image_2d_of<float>& image,
 
 // Returns true if p is inside region at given pose
 bool mfpf_region_pdf::is_inside(const mfpf_pose& pose,
-                                const vgl_point_2d<double>& p) const
+                                const vgl_point_2d<double>& p,
+                                   double f) const
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
   t1.set_similarity(step_size()*pose.u(),pose.p());
   // Compute position of p in model frame
   vgl_point_2d<double> q=t1.inverse()(p);
+  q.x()/=f; q.y()/=f;  // To check that q in the central fraction f
   q.x()+=ref_x_;
   if (q.x()<0 || q.x()>(roi_ni_-1)) return false;
   q.y()+=ref_y_;
@@ -280,8 +291,8 @@ bool mfpf_region_pdf::is_inside(const mfpf_pose& pose,
 bool mfpf_region_pdf::overlap(const mfpf_pose& pose1,
                               const mfpf_pose& pose2) const
 {
-  if (is_inside(pose1,pose2.p())) return true;
-  if (is_inside(pose2,pose1.p())) return true;
+  if (is_inside(pose1,pose2.p(),overlap_f_)) return true;
+  if (is_inside(pose2,pose1.p(),overlap_f_)) return true;
   return false;
 }
 
@@ -333,7 +344,7 @@ void mfpf_region_pdf::print_summary(vcl_ostream& os) const
   if (pdf_.ptr()==0) os << "--"<<vcl_endl; else os << pdf_<<'\n';
   os<<vsl_indent();
   mfpf_point_finder::print_summary(os);
-  os <<'\n';
+  os <<vcl_endl <<vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';
   vsl_indent_dec(os);
   os<<vsl_indent()<<'}';
 }
@@ -372,6 +383,7 @@ void mfpf_region_pdf::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,ref_x_);
   vsl_b_write(bfs,ref_y_);
   vsl_b_write(bfs,norm_method_);
+  vsl_b_write(bfs,overlap_f_);
 }
 
 //=======================================================================
@@ -386,6 +398,7 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
+    case (2):
       mfpf_point_finder::b_read(bfs);  // Load in base class
       vsl_b_read(bfs,roi_);
       vsl_b_read(bfs,roi_ni_);
@@ -395,6 +408,8 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
       vsl_b_read(bfs,norm_method_);
+      if (version==1) overlap_f_=1.0;
+      else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

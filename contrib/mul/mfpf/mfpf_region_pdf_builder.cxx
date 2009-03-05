@@ -48,6 +48,7 @@ void mfpf_region_pdf_builder::set_defaults()
   nA_=0;
   dA_=0.0;
   norm_method_=1;
+  overlap_f_=1.0;
 }
 
 //=======================================================================
@@ -235,12 +236,19 @@ void mfpf_region_pdf_builder::build(mfpf_point_finder& pf)
   mfpf_region_pdf& rp = static_cast<mfpf_region_pdf&>(pf);
 
   vpdfl_pdf_base *pdf = pdf_builder().new_model();
-  mbl_data_array_wrapper<vnl_vector<double> > data(&data_[0],data_.size());
 
-  pdf_builder().build(*pdf,data);
+  if (data_.size()==1)
+    pdf_builder().build(*pdf,data_[0]);
+  else
+  {
+    mbl_data_array_wrapper<vnl_vector<double> > data(&data_[0],
+                                                     data_.size());
+    pdf_builder().build(*pdf,data);
+  }
 
   rp.set(roi_,ref_x_,ref_y_,*pdf,norm_method_);
   set_base_parameters(rp);
+  rp.set_overlap_f(overlap_f_);
 
   // Tidy up
   delete pdf;
@@ -380,6 +388,9 @@ bool mfpf_region_pdf_builder::set_from_stream(vcl_istream &is)
     props.erase("dA");
   }
 
+  overlap_f_=vul_string_atof(props.get_optional_property("overlap_f",
+                                                         "1.0"));
+
   if (props.find("pdf_builder")!=props.end())
   {
     vcl_istringstream b_ss(props["pdf_builder"]);
@@ -428,7 +439,7 @@ void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
   os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<'\n'
      <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
-  os <<'\n';
+  os <<'\n' <<vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';
   vsl_indent_dec(os);
   os <<vsl_indent()<< '}';
 }
@@ -470,6 +481,7 @@ void mfpf_region_pdf_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,pdf_builder_);
   vsl_b_write(bfs,norm_method_);
   vsl_b_write(bfs,data_);
+  vsl_b_write(bfs,overlap_f_);
 }
 
 //=======================================================================
@@ -484,6 +496,7 @@ void mfpf_region_pdf_builder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
+    case (2):
       mfpf_point_finder_builder::b_read(bfs);  // Load base class
       vsl_b_read(bfs,roi_);
       vsl_b_read(bfs,roi_ni_);
@@ -496,6 +509,8 @@ void mfpf_region_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,pdf_builder_);
       vsl_b_read(bfs,norm_method_);
       vsl_b_read(bfs,data_);
+      if (version==1) overlap_f_=1.0;
+      else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

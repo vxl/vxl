@@ -41,6 +41,10 @@ class mfpf_region_pdf : public mfpf_point_finder
   //: Which normalisation to use (0=none, 1=linear)
   short norm_method_;
 
+  //: Relative size of region used for estimating overlap
+  //  If 0.5, then overlap requires pt inside central 50% of region.
+  double overlap_f_;
+
   //: Define default values
   void set_defaults();
 
@@ -57,6 +61,10 @@ class mfpf_region_pdf : public mfpf_point_finder
            double ref_x, double ref_y,
            const vpdfl_pdf_base& pdf,
            short norm_method=1);
+
+  //: Relative size of region used for estimating overlap
+  //  If 0.5, then overlap requires pt inside central 50% of region.
+  void set_overlap_f(double);
 
   //: Radius of circle containing modelled region
   virtual double radius() const;
@@ -92,9 +100,11 @@ class mfpf_region_pdf : public mfpf_point_finder
                                  vgl_point_2d<double>& new_p);
 
   // Returns true if p is inside region at given pose
-  // Actually only checks if p is inside bounding box
+  // Actually only checks if p is inside bounding box,
+  // scaled by a factor f about the reference point.
   bool is_inside(const mfpf_pose& pose,
-                 const vgl_point_2d<double>& p) const;
+                 const vgl_point_2d<double>& p,
+                 double f=1.0) const;
 
   //: Return true if modelled regions at pose1 and pose2 overlap
   //  Checks if reference point of one is inside region of other
