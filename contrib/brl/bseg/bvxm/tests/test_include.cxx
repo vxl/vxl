@@ -1,5 +1,4 @@
 #include <bvxm/bvxm_image_metadata.h>
-#include <bvxm/bvxm_lidar_camera.h>
 #include <bvxm/bvxm_lidar_processor.h>
 #include <bvxm/bvxm_memory_chunk.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
