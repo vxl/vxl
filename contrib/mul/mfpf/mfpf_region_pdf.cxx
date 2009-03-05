@@ -12,6 +12,7 @@
 #include <vil/io/vil_io_image_view.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
+#include <vnl/vnl_vector_ref.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -312,6 +313,30 @@ void mfpf_region_pdf::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
   pts[6]=vgl_point_2d<double>(roi_ni_,roi_nj_)-r;
 }
 
+//: Return an image of the region of interest
+void mfpf_region_pdf::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const
+{
+  vnl_vector<double> mean = pdf().mean();
+
+  assert(mean.size()>=n_pixels_);
+
+  // Just copy first plane
+  vnl_vector_ref<double> mean1(n_pixels_,mean.data_block());
+  double min1=mean1.min_value();
+  double max1=mean1.max_value();
+  double s =255/(max1-min1);
+  image.image().set_size(roi_ni_,roi_nj_);
+  image.image().fill(0);
+  unsigned q=0;
+  for (unsigned k=0;k<roi_.size();++k)
+  {
+    for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
+      image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+  }
+  vimt_transform_2d ref2im;
+  ref2im.set_zoom_only(1.0/step_size_,ref_x_,ref_y_);
+  image.set_world2im(ref2im);
+}
 
 //=======================================================================
 // Method: is_a

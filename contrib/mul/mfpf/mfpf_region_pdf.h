@@ -116,6 +116,12 @@ class mfpf_region_pdf : public mfpf_point_finder
   //  Used for display purposes.
   virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
 
+  //: Create an image summarising the average model (where possible)
+  //  Creates an image of the mean template used for search.
+  //  image.world2im() gives mapping from reference frame
+  //  into raw image co-ords (including the step size).
+  virtual void get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const;
+
   //: Version number for I/O
   short version_no() const;
 
