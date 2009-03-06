@@ -19,13 +19,14 @@ bool bvgl_generate_mask_process_cons(bprb_func_process& pro)
   input_types.resize(2);
   input_types[0]= "vcl_string"; //name of the binary file to read bvgl_changes object
   input_types[1]= "vcl_string"; //type of change
-
-  //output
-
-  output_types.resize(2);
-  output_types[0]= "vil_image_view_base_sptr"; // vxl_byte mask (with don't care areas)
-  output_types[1]= "vil_image_view_base_sptr"; // bool mask (with changes true and other areas false)
-  return true;
+  if (pro.set_input_types(input_types)) {
+    //output
+    output_types.resize(2);
+    output_types[0]= "vil_image_view_base_sptr"; // vxl_byte mask (with don't care areas)
+    output_types[1]= "vil_image_view_base_sptr"; // bool mask (with changes true and other areas false)
+    return pro.set_output_types(output_types);
+  } else 
+    return false;
 }
 
 
@@ -41,9 +42,7 @@ bvgl_generate_mask_process(bprb_func_process& pro)
   }
 
   vcl_string file_name = pro.get_input<vcl_string>(0);
-
   vcl_string change_type = pro.get_input<vcl_string>(1);
-
 
   unsigned ni=0, nj=0; // dummy initialisation, to avoid compiler warning
   if(!pro.parameters()->get_value(NI, ni) || 
@@ -69,9 +68,10 @@ bvgl_generate_mask_process(bprb_func_process& pro)
     for (unsigned j = 0; j < nj; j++)
       out_b(i,j) = (out_view(i,j) == 255 ? true : false);
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, out);
 
+  pro.set_output_val<vil_image_view_base_sptr>(0, out);
   pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<bool>(out_b));
+
   return true;
 }
 
