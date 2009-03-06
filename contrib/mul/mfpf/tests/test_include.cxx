@@ -16,6 +16,7 @@
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <mfpf/mfpf_norm_corr2d_builder.h>
 #include <mfpf/mfpf_norm_vec.h>
+#include <mfpf/mfpf_patch_data.h>
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_pose.h>
@@ -23,6 +24,9 @@
 #include <mfpf/mfpf_profile_pdf.h>
 #include <mfpf/mfpf_profile_pdf_builder.h>
 #include <mfpf/mfpf_prune_overlaps.h>
+#include <mfpf/mfpf_region_about_lineseg.h>
+#include <mfpf/mfpf_region_about_pt.h>
+#include <mfpf/mfpf_region_definer.h>
 #include <mfpf/mfpf_region_finder.h>
 #include <mfpf/mfpf_region_finder_builder.h>
 #include <mfpf/mfpf_region_form.h>
