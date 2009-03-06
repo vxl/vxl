@@ -3,6 +3,7 @@
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <bsta/algo/bsta_gaussian_stats.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
+#include <bsta/algo/bsta_mean_shift.h>
 #include <bsta/algo/bsta_mixture_functors.h>
 #include <bsta/algo/bsta_parzen_updater.h>
 #include <bsta/algo/bsta_truth_updater.h>
