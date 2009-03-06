@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vpdl/vpdl_eigen_sym_matrix.h>
+#include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix_fixed.h>
 
@@ -26,7 +26,7 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
   
   {
     vcl_cout <<"=======================================\n";
-    vpdl_eigen_sym_matrix<T,3> sym(M);
+    vpdt_eigen_sym_matrix<T,3> sym(M);
     vnl_matrix_fixed<T,3,3> M2;
     sym.form_matrix(M2);
     TEST_NEAR(("reform matrix <"+type_name+"> fixed").c_str(), 
@@ -45,7 +45,7 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
   
   {
     vcl_cout <<"=======================================\n";
-    vpdl_eigen_sym_matrix<T> sym(M);
+    vpdt_eigen_sym_matrix<T> sym(M);
     vnl_matrix<T> M2;
     sym.form_matrix(M2);
     TEST_NEAR(("reform matrix <"+type_name+"> variable").c_str(), 
@@ -64,7 +64,7 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
   
   {
     vcl_cout <<"=======================================\n";
-    vpdl_eigen_sym_matrix<T,1> sym(T(2));
+    vpdt_eigen_sym_matrix<T,1> sym(T(2));
     T M2;
     sym.form_matrix(M2);
     TEST_NEAR(("reform matrix <"+type_name+"> scalar").c_str(), 

@@ -285,12 +285,11 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
     vpdl_gaussian_indep<T> gauss2(mean2,var2);
     vpdl_gaussian_indep<T> gauss3(mean3,var3);
     
-    vpdl_mixture<T> mixture, mixture_d3(3);
+    vpdl_mixture<T> mixture;
     TEST(("initial num_components <"+type_name+">").c_str(),
          mixture.num_components(), 0);
-    TEST(("initial dimension <"+type_name+">").c_str(),
-         mixture_d3.dimension() == 3 && 
-         mixture.dimension() == 0, true);
+    TEST(("initial dimension <"+type_name+">").c_str(), 
+         mixture.dimension(), 0);
     
     mixture.insert(gauss1, T(0.2));
     bool valid = mixture.num_components() == 1;

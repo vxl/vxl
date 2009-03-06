@@ -1,10 +1,10 @@
-// This is core/vpdl/vpdl_eigen_sym_matrix.h
-#ifndef vpdl_eigen_sym_matrix_h_
-#define vpdl_eigen_sym_matrix_h_
+// This is core/vpdl/vpdt/vpdt_eigen_sym_matrix.h
+#ifndef vpdt_eigen_sym_matrix_h_
+#define vpdt_eigen_sym_matrix_h_
 //:
 // \file
 // \author Matthew Leotta
-// \date February 16, 2009
+// \date March 5, 2009
 // \brief A symmetric matrix represented in eigenvalue decomposition 
 //
 // \verbatim
@@ -14,8 +14,12 @@
 
 
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vpdl/vpdl_base_traits.h>
+#include <vpdl/vpdt/vpdt_field_traits.h>
+#include <vpdl/vpdt/vpdt_field_default.h>
+#include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_limits.h>
+
+
 
 //: wrapper for the vnl eigensystem function for fixed size data
 template<class T, unsigned int n>
@@ -29,39 +33,43 @@ inline void vnl_symmetric_eigensystem_compute(const vnl_matrix_fixed<T,n,n>& A,
 }
 
 
+
 //: A symmetric matrix represented in eigenvalue decomposition 
 template<class T, unsigned int n=0>
-class vpdl_eigen_sym_matrix
+class vpdt_eigen_sym_matrix
 {
 public:
   //: the data type used for vectors
-  typedef typename vpdl_base_traits<T,n>::vector vector;
+  typedef typename vpdt_field_default<T,n>::type vector;
   //: the data type used for matrices
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
   
   //: Constructor
   // Optionally initialize the dimension for when n==0.
   // Otherwise var_dim is ignored
-  vpdl_eigen_sym_matrix(unsigned int var_dim = n) 
+  vpdt_eigen_sym_matrix(unsigned int var_dim = n) 
   {
-    vpdl_base_traits<T,n>::set_size(eigen_vec_,var_dim);
-    vpdl_base_traits<T,n>::set_size(eigen_val_,var_dim);
+    vpdt_set_size(eigen_vec_,var_dim);
+    vpdt_set_size(eigen_val_,var_dim);
     eigen_vec_.set_identity();
     eigen_val_.fill(T(0));
   }
   
   //: Constructor - from eigenvectors and eigenvalues
-  vpdl_eigen_sym_matrix(const matrix& evec, const vector& eval) 
+  vpdt_eigen_sym_matrix(const matrix& evec, const vector& eval) 
   : eigen_vec_(evec), eigen_val_(eval)
   {
     assert(are_evec_orthonormal());
   }
   
   //: Constructor - from symmetric matrix
-  vpdl_eigen_sym_matrix(const matrix& m) 
+  vpdt_eigen_sym_matrix(const matrix& m) 
   {
     set_matrix(m);
   }
+
+  //: Return the dimension
+  unsigned int dimension() const { return eigen_val_.size(); }
   
   //: Access to the eigenvectors
   const matrix& eigenvectors() const { return eigen_vec_; }
@@ -78,13 +86,22 @@ public:
   
   //: set the eigenvalues
   void set_eigenvalues(const vector& v) { eigen_val_ = v; }
+
+  //: Set the size (if variable) and reset to default
+  void set_size(unsigned int dim)
+  {
+    vpdt_set_size(eigen_vec_,dim);
+    vpdt_set_size(eigen_val_,dim);
+    eigen_vec_.set_identity();
+    eigen_val_.fill(T(0));
+  }
   
   //: set the eigenvectors and eigen values by decomposing m
   void set_matrix(const matrix& m)
   {
-    const unsigned int dim = vpdl_base_traits<T,n>::m_size(m);
-    vpdl_base_traits<T,n>::set_size(eigen_vec_,dim);
-    vpdl_base_traits<T,n>::set_size(eigen_val_,dim);
+    const unsigned int dim = vpdt_size(m);
+    vpdt_set_size(eigen_vec_,dim);
+    vpdt_set_size(eigen_val_,dim);
     vnl_symmetric_eigensystem_compute(m, eigen_vec_, eigen_val_);
   }
   
@@ -93,7 +110,7 @@ public:
   void form_matrix(matrix& m) const
   {
     const unsigned int dim = eigen_val_.size();
-    vpdl_base_traits<T,n>::set_size(m,dim);
+    vpdt_set_size(m,dim);
     m.fill(T(0));
     
     for (unsigned int i = 0; i < dim; ++i)
@@ -114,7 +131,7 @@ public:
   void form_inverse(matrix& m) const
   {
     const unsigned int dim = eigen_val_.size();
-    vpdl_base_traits<T,n>::set_size(m,dim);
+    vpdt_set_size(m,dim);
     m.fill(T(0));
     
     
@@ -195,28 +212,34 @@ private:
 //: A symmetric matrix represented in eigenvalue decomposition 
 // partial specialization for the scalar case
 template<class T>
-class vpdl_eigen_sym_matrix<T,1>
+class vpdt_eigen_sym_matrix<T,1>
 {
 public:
-  //: the data type used for vectors 
-  typedef typename vpdl_base_traits<T,1>::vector vector;
-  //: the data type used for matrices
-  typedef typename vpdl_base_traits<T,1>::matrix matrix;
+  //: the data type used for vectors (should be T)
+  typedef typename vpdt_field_default<T,1>::type vector;
+  //: the data type used for matrices (should be T)
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
   
   //: Constructor
   // Optionally initialize the dimension for when n==0.
   // Otherwise var_dim is ignored
-  vpdl_eigen_sym_matrix(unsigned int var_dim = 1) : var_(T(0)) {}
+  vpdt_eigen_sym_matrix(unsigned int var_dim = 1) : var_(T(0)) {}
   
   //: Constructor - from eigenvectors and eigenvalues
-  vpdl_eigen_sym_matrix(const matrix& evec, const vector& eval) 
+  vpdt_eigen_sym_matrix(const matrix& evec, const vector& eval) 
   : var_(eval)
   {
     assert(evec == T(1));
   }
   
   //: Constructor - from symmetric matrix
-  vpdl_eigen_sym_matrix(const matrix& m) : var_(m) {}
+  vpdt_eigen_sym_matrix(const matrix& m) : var_(m) {}
+  
+  //: Return the dimension
+  unsigned int dimension() const { return 1; }
+  
+  //: Set the size (if variable) and reset to default
+  void set_size(unsigned int dim) { var_(T(0)); }
   
   //: set the eigenvectors and eigen values by decomposing m
   void set_matrix(const matrix& m) { var_ = m; }
@@ -255,4 +278,34 @@ private:
 }; 
 
 
-#endif // vpdl_eigen_sym_matrix_h_
+//: generate the vpdt_eigen_sys_matrix type from a field type
+template <class F>
+struct vpdt_eigen_sym_matrix_gen
+{
+  typedef vpdt_eigen_sym_matrix<typename vpdt_field_traits<F>::scalar_type,
+                                vpdt_field_traits<F>::dimension> type;
+};
+
+//==============================================================================
+// universal access functions (See vpdt_access.h)
+
+//: Set the size of a vpdt_eigen_sym_matrix
+template <class T>
+inline void vpdt_set_size(vpdt_eigen_sym_matrix<T,0>& m, unsigned int s) 
+{ 
+  m.set_size(s);
+}
+
+
+//: Fill a vpdt_eigen_sym_matrix
+template <class T, unsigned int n>
+inline void vpdt_fill(vpdt_eigen_sym_matrix<T,n>& m, const T& val) 
+{ 
+  typename vpdt_eigen_sym_matrix<T,n>::vector v;
+  vpdt_set_size(v,m.dimension());
+  vpdt_fill(v,val);
+  m.set_eigenvalues(v); 
+}
+
+
+#endif // vpdt_eigen_sym_matrix_h_

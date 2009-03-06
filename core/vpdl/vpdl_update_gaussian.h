@@ -40,9 +40,9 @@ void vpdl_update_gaussian(vpdl_gaussian<T,1>& gaussian, T rho,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 void vpdl_update_gaussian(vpdl_gaussian_sphere<T,n>& gaussian, T rho,
-                          const typename vpdl_base_traits<T,n>::vector& sample )
+                          const typename vpdl_gaussian_sphere<T,n>::vector& sample )
 {
-  typedef typename vpdl_base_traits<T,n>::vector vector;
+  typedef typename vpdl_gaussian_sphere<T,n>::vector vector;
   
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0f - rho;
@@ -62,9 +62,9 @@ void vpdl_update_gaussian(vpdl_gaussian_sphere<T,n>& gaussian, T rho,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 void vpdl_update_gaussian(vpdl_gaussian_indep<T,n>& gaussian, T rho,
-                          const typename vpdl_base_traits<T,n>::vector& sample )
+                          const typename vpdl_gaussian_indep<T,n>::vector& sample )
 {
-  typedef typename vpdl_base_traits<T,n>::vector vector;
+  typedef typename vpdl_gaussian_indep<T,n>::vector vector;
   
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0f - rho;
@@ -85,10 +85,10 @@ void vpdl_update_gaussian(vpdl_gaussian_indep<T,n>& gaussian, T rho,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 void vpdl_update_gaussian(vpdl_gaussian<T,n>& gaussian, T rho,
-                          const typename vpdl_base_traits<T,n>::vector& sample )
+                          const typename vpdl_gaussian<T,n>::vector& sample )
 {
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  typedef typename vpdl_gaussian<T,n>::vector vector;
+  typedef typename vpdl_gaussian<T,n>::matrix matrix;
   
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0f - rho;
@@ -117,13 +117,13 @@ void vpdl_update_gaussian(vpdl_gaussian<T,n>& gaussian, T rho,
 
 //: element-wise minimum of vector.
 template <class T, unsigned n>
-typename vpdl_base_traits<T,n>::vector 
-element_max(const typename vpdl_base_traits<T,n>::vector& a_vector,
+typename vpdt_field_default<T,n>::type 
+element_max(const typename vpdt_field_default<T,n>::type & a_vector,
             const T& b)
 {
   const unsigned int dim = a_vector.size();
-  typename vpdl_base_traits<T,n>::vector min_vector;
-  vpdl_base_traits<T,n>::set_size(min_vector,dim);
+  typename vpdt_field_default<T,n>::type min_vector;
+  vpdt_set_size(min_vector,dim);
   
   T* r = min_vector.data_block();
   const T* a = a_vector.data_block();
@@ -135,14 +135,14 @@ element_max(const typename vpdl_base_traits<T,n>::vector& a_vector,
 
 //: element-wise minimum of vector.
 template <class T, unsigned n>
-typename vpdl_base_traits<T,n>::vector 
-element_max(const typename vpdl_base_traits<T,n>::vector & a_vector,
-            const typename vpdl_base_traits<T,n>::vector & b_vector)
+typename vpdt_field_default<T,n>::type  
+element_max(const typename vpdt_field_default<T,n>::type  & a_vector,
+            const typename vpdt_field_default<T,n>::type  & b_vector)
 {
   const unsigned int dim = a_vector.size();
   assert(dim == b_vector.size());
-  typename vpdl_base_traits<T,n>::vector min_vector;
-  vpdl_base_traits<T,n>::set_size(min_vector,dim);
+  typename vpdt_field_default<T,n>::type min_vector;
+  vpdt_set_size(min_vector,dim);
   
   T* r = min_vector.data_block();
   const T* a = a_vector.data_block();
@@ -158,7 +158,7 @@ element_max(const typename vpdl_base_traits<T,n>::vector & a_vector,
 // \param min_var forces the variance to stay above this limit
 template <class T, unsigned n>
 inline void vpdl_update_gaussian(vpdl_gaussian_sphere<T,n>& gaussian, T rho,
-                                 const typename vpdl_base_traits<T,n>::vector& sample,
+                                 const typename vpdl_gaussian_sphere<T,n>::vector& sample,
                                  T min_var)
 {
   vpdl_update_gaussian(gaussian, rho, sample);
@@ -170,7 +170,7 @@ inline void vpdl_update_gaussian(vpdl_gaussian_sphere<T,n>& gaussian, T rho,
 // \param min_var forces all the variances to stay above this limit
 template <class T, unsigned n>
 inline void vpdl_update_gaussian(vpdl_gaussian_indep<T,n>& gaussian, T rho,
-                                 const typename vpdl_base_traits<T,n>::vector& sample,
+                                 const typename vpdl_gaussian_indep<T,n>::vector& sample,
                                  T min_var)
 {
   vpdl_update_gaussian(gaussian, rho, sample);
@@ -182,8 +182,8 @@ inline void vpdl_update_gaussian(vpdl_gaussian_indep<T,n>& gaussian, T rho,
 // \param min_var forces each variance to stay above these limits
 template <class T, unsigned n>
 inline void vpdl_update_gaussian(vpdl_gaussian_indep<T,n>& gaussian, T rho,
-                                 const typename vpdl_base_traits<T,n>::vector& sample,
-                                 const typename vpdl_base_traits<T,n>::vector& min_var)
+                                 const typename vpdl_gaussian_indep<T,n>::vector& sample,
+                                 const typename vpdl_gaussian_indep<T,n>::vector& min_var)
 {
   vpdl_update_gaussian(gaussian, rho, sample);
   gaussian.set_covariance(element_max<T,n>(gaussian.covariance(),min_var));
@@ -194,7 +194,7 @@ inline void vpdl_update_gaussian(vpdl_gaussian_indep<T,n>& gaussian, T rho,
 // \param min_var forces the eigenvalues of covariance to stay above this limit
 template <class T, unsigned n>
 inline void vpdl_update_gaussian(vpdl_gaussian<T,n>& gaussian, T rho,
-                                 const typename vpdl_base_traits<T,n>::vector& sample,
+                                 const typename vpdl_gaussian<T,n>::vector& sample,
                                  T min_var)
 {
   vpdl_update_gaussian(gaussian, rho, sample);
@@ -206,8 +206,8 @@ inline void vpdl_update_gaussian(vpdl_gaussian<T,n>& gaussian, T rho,
 // \param min_var forces the eigenvalues of covariance to stay above these limits
 template <class T, unsigned n>
 inline void vpdl_update_gaussian(vpdl_gaussian<T,n>& gaussian, T rho,
-                                 const typename vpdl_base_traits<T,n>::vector& sample,
-                                 const typename vpdl_base_traits<T,n>::vector& min_var)
+                                 const typename vpdl_gaussian<T,n>::vector& sample,
+                                 const typename vpdl_gaussian<T,n>::vector& min_var)
 {
   vpdl_update_gaussian(gaussian, rho, sample);
   gaussian.set_covar_eigenvals(element_max<T,n>(gaussian.covar_eigenvals(),min_var));

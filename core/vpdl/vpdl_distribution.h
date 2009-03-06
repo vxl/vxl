@@ -12,7 +12,8 @@
 //   None
 // \endverbatim
 
-#include <vpdl/vpdl_base_traits.h>
+#include <vpdl/vpdt/vpdt_field_traits.h>
+#include <vpdl/vpdt/vpdt_field_default.h>
 #include <vcl_cmath.h>
 
 //: The base class for all probability distributions.
@@ -26,23 +27,25 @@
 // - For n == 0 the data types are vnl_vector<T> and vnl_matrix<T>
 //
 template<class T, unsigned int n=0>
-class vpdl_distribution : public vpdl_base_traits<T,n>
+class vpdl_distribution 
 {
  public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
-
-  //: Constructor
-  // Optionally initialize the dimension for when n==0.
-  // Otherwise var_dim is ignored
-  vpdl_distribution(unsigned int var_dim = n) : vpdl_base_traits<T,n>(var_dim) {}
-  //: Destructor
-  virtual ~vpdl_distribution() {}
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
+ 
+  //: Return the run time dimension, which does not equal \c n when \c n==0
+  virtual unsigned int dimension() const = 0;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdl_distribution<T,n>* clone() const = 0;
+
+  //: Evaluate the unnormalized density at a point
+  // \note This is not a probability density. 
+  // To make this a probability multiply by norm_const()
+  // \sa prob_density
+  virtual T density(const vector& pt) const = 0;
 
   //: Evaluate the probability density at a point
   virtual T prob_density(const vector& pt) const = 0;
@@ -52,6 +55,11 @@ class vpdl_distribution : public vpdl_base_traits<T,n>
   {
     return vcl_log(prob_density(pt));
   };
+
+  //: The normalization constant for the density
+  // When density() is multiplied by this value it becomes prob_density
+  // norm_const() is reciprocal of the integral of density over the entire field
+  virtual T norm_const() const = 0;
 
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity

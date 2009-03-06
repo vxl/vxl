@@ -11,8 +11,8 @@
 
 // function to sort by increasing weight
 template <class dist_t>
-bool weight_less(const dist_t& d1, const typename dist_t::scalar_t& w1,
-                 const dist_t& d2, const typename dist_t::scalar_t& w2)
+bool weight_less(const dist_t& d1, const typename vpdt_dist_traits<dist_t>::scalar_type& w1,
+                 const dist_t& d2, const typename vpdt_dist_traits<dist_t>::scalar_type& w2)
 {
   return w1 < w2;
 }
@@ -228,13 +228,12 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
     vpdl_gaussian_indep<T> gauss3(mean3,var3);
     
     typedef vpdl_gaussian_indep<T> dist_t;
-    vpdl_mixture_of<dist_t> mixture, mixture_d3(3);
+    vpdl_mixture_of<dist_t> mixture;
     
     TEST(("initial num_components <"+type_name+">").c_str(),
          mixture.num_components(), 0);
     TEST(("initial dimension <"+type_name+">").c_str(),
-         mixture_d3.dimension() == 3 && 
-         mixture.dimension() == 0, true);
+         mixture.dimension(), 0);
     
     mixture.insert(gauss1, T(0.2));
     bool valid = mixture.num_components() == 1;

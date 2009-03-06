@@ -3,7 +3,6 @@
 
 ADD_EXECUTABLE( vpdl_test_all
   test_driver.cxx
-  test_npower.cxx
   test_eigen_sym_matrix.cxx
   test_gaussian_sphere.cxx
   test_gaussian_indep.cxx
@@ -16,7 +15,6 @@ ADD_EXECUTABLE( vpdl_test_all
 
 TARGET_LINK_LIBRARIES( vpdl_test_all vpdl vul testlib)
 
-ADD_TEST( vpdl_test_npower                vpdl_test_all test_npower )
 ADD_TEST( vpdl_test_eigen_sym_matrix      vpdl_test_all test_eigen_sym_matrix )
 ADD_TEST( vpdl_test_gaussian_sphere       vpdl_test_all test_gaussian_sphere )
 ADD_TEST( vpdl_test_gaussian_indep        vpdl_test_all test_gaussian_indep )

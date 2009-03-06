@@ -84,13 +84,12 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
   {
     vcl_vector<vnl_vector<T> > vsamples;
     vsamples.push_back(samples[0]);
-    vpdl_kernel_gaussian_sfbw<T> kernel_g, kernel_g10(10), kernel_g1(vsamples,bandwidth);
+    vpdl_kernel_gaussian_sfbw<T> kernel_g, kernel_g1(vsamples,bandwidth);
     
     TEST(("init num_components <"+type_name+">").c_str(), 
          kernel_g.num_components(), 0);
     TEST(("init dimension <"+type_name+">").c_str(), 
          kernel_g.dimension() == 0 &&
-         kernel_g10.dimension() == 10 &&
          kernel_g1.dimension() == 3, true);
     
     TEST(("init bandwidth <"+type_name+">").c_str(), 

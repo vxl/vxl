@@ -13,22 +13,20 @@
 // \endverbatim
 
 #include <vpdl/vpdl_gaussian_base.h>
-#include <vpdl/vpdl_npower.h>
-#include <vpdl/vpdl_eigen_sym_matrix.h>
 #include <vcl_limits.h>
 #include <vnl/vnl_erf.h>
 
-#include <vpdl/vpdl_gaussian_sphere.h>
+#include <vpdl/vpdt/vpdt_gaussian.h>
 
 //: A Gaussian with variance independent in each dimension 
 template<class T, unsigned int n=0>
 class vpdl_gaussian : public vpdl_gaussian_base<T,n>
 {
 public:
-  //: the data type used for vectors (e.g. the mean) 
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
   //: the type used internally for covariance
   typedef matrix covar_type;
   
@@ -36,11 +34,11 @@ public:
   // Optionally initialize the dimension for when n==0.
   // Otherwise var_dim is ignored
   vpdl_gaussian(unsigned int var_dim = n) 
-  : vpdl_gaussian_base<T,n>(var_dim), covar_(var_dim) {}
+  : impl_(var_dim) {}
   
   //: Constructor - from mean and variance
   vpdl_gaussian(const vector& mean, const covar_type& covar) 
-  : vpdl_gaussian_base<T,n>(mean), covar_(covar) {}
+  : impl_(mean,covar) {}
   
   //: Destructor
   virtual ~vpdl_gaussian() {}
@@ -50,41 +48,41 @@ public:
   {
     return new vpdl_gaussian<T,n>(*this);
   }
+
+  //: Return the run time dimension, which does not equal \c n when \c n==0
+  virtual unsigned int dimension() const { return impl_.dimension();  }
+
+  //: Evaluate the unnormalized density at a point
+  virtual T density(const vector& pt) const
+  {
+    return impl_.density(pt);
+  }
   
   //: Evaluate the probability density at a point
   virtual T prob_density(const vector& pt) const
   {
-    T norm = norm_const();
-    if(vnl_math_isinf(norm))
-      return T(0);
-    
-    return static_cast<T>(norm * vcl_exp(-sqr_mahal_dist(pt)/2));
+    return impl_.prob_density(pt);
   }
   
   //: Evaluate the log probability density at a point
   virtual T log_prob_density(const vector& pt) const
   {
-    T norm = norm_const();
-    if(vnl_math_isinf(norm))
-      return -vcl_numeric_limits<T>::infinity();
-    
-    return static_cast<T>(vcl_log(norm) - sqr_mahal_dist(pt)/2);
+    return impl_.log_prob_density(pt);
   };
   
-  //: compute the normalization constant (independent of sample point).
-  // Can be precomputed when evaluating at multiple points
-  // non-virtual for efficiency
-  T norm_const() const
+  //: The normalization constant for the density
+  // When density() is multiplied by this value it becomes prob_density
+  // norm_const() is reciprocal of the integral of density over the entire field
+  virtual T norm_const() const
   { 
-    return static_cast<T>(vcl_sqrt(1/(vpdl_two_pi_power(this->dimension())*
-                                      covar_.determinant())));
+    return impl_.norm_const();
   }
   
   //: The squared Mahalanobis distance to this point
   // non-virtual for efficiency
   T sqr_mahal_dist(const vector& pt) const
   {    
-    return covar_.inverse_quad_form(pt - this->mean_);
+    return impl_.sqr_mahal_dist(pt);
   }
   
   //: Evaluate the cumulative distribution function at a point
@@ -96,40 +94,52 @@ public:
     // probably requires numerical integration
     return vcl_numeric_limits<T>::quiet_NaN(); 
   }
+
+  //: Access the mean directly
+  virtual const vector& mean() const { return impl_.mean; }
+
+  //: Set the mean
+  virtual void set_mean(const vector& mean) { impl_.mean = mean; }
+
+  //: Compute the mean of the distribution.
+  virtual void compute_mean(vector& mean) const { mean = impl_.mean; }
   
   //: Access the covariance - requires computation
   covar_type covariance() const 
   { 
     covar_type M;
-    compute_covar(M);
+    impl_.compute_covar(M);
     return M; 
   }
   
   //: Set the covariance matrix
-  void set_covariance(const covar_type& covar) { covar_.set_matrix(covar); }
+  void set_covariance(const covar_type& covar) 
+  { 
+    impl_.covar.set_matrix(covar); 
+  }
   
   
   //: Compute the covariance of the distribution.
   virtual void compute_covar(matrix& covar) const
   {
-    covar_.form_matrix(covar);
+    impl_.compute_covar(covar);
   }
   
   //: Access the eigenvectors of the covariance matrix
-  const matrix& covar_eigenvecs() const { return covar_.eigenvectors(); }
+  const matrix& covar_eigenvecs() const { return impl_.covar.eigenvectors(); }
   
   //: Access the eigenvalues of the covariance matrix
-  const vector& covar_eigenvals() const { return covar_.eigenvalues(); }
+  const vector& covar_eigenvals() const { return impl_.covar.eigenvalues(); }
   
   //: Set the eigenvectors of the covariance matrix
-  void set_covar_eigenvecs(const matrix& m) { covar_.set_eigenvectors(m); }
+  void set_covar_eigenvecs(const matrix& m) { impl_.covar.set_eigenvectors(m); }
   
   //: Set the eigenvalues of the covariance matrix
-  void set_covar_eigenvals(const vector& v) { covar_.set_eigenvalues(v); }
+  void set_covar_eigenvals(const vector& v) { impl_.covar.set_eigenvalues(v); }
   
 protected:
-  //: the matrix covariance
-  vpdl_eigen_sym_matrix<T,n> covar_;
+  //: the Gaussian implementation from vpdt
+  vpdt_gaussian<vector> impl_;
 }; 
 
 

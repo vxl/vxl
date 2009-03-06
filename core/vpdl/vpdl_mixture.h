@@ -27,10 +27,10 @@ template<class T, unsigned int n=0>
 class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
 {
 public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
 private:
   //: A struct to hold the component distributions and weights
@@ -85,14 +85,13 @@ private:
   vcl_vector<component*> components_;
 
 public:
-  // Default Constructor
-  vpdl_mixture(unsigned int var_dim = n) 
-    : vpdl_multi_cmp_dist<T,n>(var_dim) {}
+
+  //: Default Constructor
+  vpdl_mixture() {}
 
   // Copy Constructor
   vpdl_mixture(const vpdl_mixture<T,n>& other)
-    : vpdl_multi_cmp_dist<T,n>(other.dimension()),
-      components_(other.components_.size(),NULL)
+    : components_(other.components_.size(),NULL)
   {
     // deep copy of the data
     for (unsigned int i=0; i<components_.size(); ++i){
@@ -119,7 +118,6 @@ public:
       for (unsigned int i=0; i<rhs.components_.size(); ++i){
         components_.push_back(new component(*rhs.components_[i]));
       }
-      this->set_dimension(rhs.dimension());
     }
     return *this;
   }
@@ -128,6 +126,14 @@ public:
   virtual vpdl_distribution<T,n>* clone() const
   {
     return new vpdl_mixture<T,n>(*this);
+  }
+
+  //: Return the run time dimension, which does not equal \c n when \c n==0
+  virtual unsigned int dimension() const 
+  { 
+    if(n > 0 || num_components() == 0)
+      return n;
+    return components_[0]->distribution->dimension();
   }
 
   //: Return the number of components in the mixture
@@ -165,10 +171,7 @@ public:
   //: Insert a new component at the end of the vector
   bool insert(const vpdl_distribution<T,n>& d, const T& weight = T(0))
   { 
-    // set variable dimension from the first inserted component
-    if(this->dimension() == 0 && components_.empty())
-      this->set_dimension(d.dimension());
-    assert(d.dimension() == this->dimension());
+    assert(d.dimension() == this->dimension() || num_components() == 0);
     components_.push_back(new component(d, weight)); 
     return true;
   }
@@ -181,6 +184,18 @@ public:
     delete components_.back(); 
     components_.pop_back();
     return true;
+  }
+
+  //: Evaluate the unnormalized density at a point
+  virtual T density(const vector& pt) const
+  {
+    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    T density = 0;
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+      // must use prob_density here to get meaningful results
+      density += (*i)->weight * (*i)->distribution->prob_density(pt);
+    }
+    return density;
   }
 
   //: Compute the probability density at this point
@@ -232,7 +247,9 @@ public:
   virtual void compute_mean(vector& mean) const
   {
     const unsigned int d = this->dimension();
-    v_init(mean,d,T(0));
+    vpdt_set_size(mean,d);
+    vpdt_fill(mean,T(0));
+    
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     vector cmp_mean;
     T sum_w = T(0);
@@ -251,8 +268,11 @@ public:
   {
     const unsigned int d = this->dimension();
     vector mean;
-    m_init(covar,d,T(0));
-    v_init(mean,d,T(0));
+    vpdt_set_size(covar,d);
+    vpdt_fill(covar,T(0));
+    vpdt_set_size(mean,d);
+    vpdt_fill(mean,T(0));
+    
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     vector cmp_mean;
     matrix cmp_covar;
@@ -273,16 +293,26 @@ public:
     covar /= sum_w;
   }
 
-  //: Normalize the weights of the components to add to 1.
-  void normalize_weights()
+  //: The normalization constant for the density
+  // When density() is multiplied by this value it becomes prob_density
+  // norm_const() is reciprocal of the integral of density over the entire field
+  virtual T norm_const() const
   {
-    typedef typename vcl_vector<component*>::iterator comp_itr;
+    typedef typename vcl_vector<component*>::const_iterator comp_itr;
     T sum = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i)
       sum += (*i)->weight;
     assert(sum > 0);
+    return 1/sum;
+  }
+
+  //: Normalize the weights of the components to add to 1.
+  void normalize_weights()
+  {
+    typedef typename vcl_vector<component*>::iterator comp_itr;
+    T norm = norm_const();
     for (comp_itr i = components_.begin(); i != components_.end(); ++i)
-      (*i)->weight /= sum;
+      (*i)->weight *= norm;
   }
 
   //: Sort the components in order of decreasing weight

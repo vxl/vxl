@@ -2,11 +2,8 @@
 # Vision Probability Distribution Library
 
 SET( vpdl_sources
-  vpdl_npower.h            vpdl_npower.cxx
-  vpdl_eigen_sym_matrix.h
   vpdl_update_gaussian.h
-  
-  vpdl_base_traits.h
+
   vpdl_distribution.h      vpdl_distribution.txx
   
   vpdl_gaussian_base.h
@@ -19,6 +16,16 @@ SET( vpdl_sources
   vpdl_mixture_of.h
   vpdl_kernel_base.h
   vpdl_kernel_gaussian_sfbw.h
+  
+  # Template Library headers
+  vpdt/vpdt_access.h
+  vpdt/vpdt_field_traits.h
+  vpdt/vpdt_field_default.h
+  vpdt/vpdt_dist_traits.h
+  
+  vpdt/vpdt_norm_metric.h
+  vpdt/vpdt_eigen_sym_matrix.h
+  vpdt/vpdt_gaussian.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)

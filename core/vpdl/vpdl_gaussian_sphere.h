@@ -13,20 +13,21 @@
 // \endverbatim
 
 #include <vpdl/vpdl_gaussian_base.h>
-#include <vpdl/vpdl_npower.h>
 #include <vnl/vnl_erf.h>
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
+
+#include <vpdl/vpdt/vpdt_gaussian.h>
 
 //: A Gaussian with (hyper-)spherical covariance
 template<class T, unsigned int n=0>
 class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
 {
  public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
   //: the type used internally for covariance
   typedef T covar_type;
 
@@ -34,11 +35,11 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   // Optionally initialize the dimension for when n==0.
   // Otherwise var_dim is ignored
   vpdl_gaussian_sphere(unsigned int var_dim = n)
-  : vpdl_gaussian_base<T,n>(var_dim), var_(T(0)) {}
+  : impl_(var_dim) {}
 
   //: Constructor - from mean and variance
   vpdl_gaussian_sphere(const vector& mean, const covar_type& var)
-  : vpdl_gaussian_base<T,n>(mean), var_(var) {}
+  : impl_(mean,var) {}
 
   //: Destructor
   virtual ~vpdl_gaussian_sphere() {}
@@ -49,51 +50,40 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
     return new vpdl_gaussian_sphere<T,n>(*this);
   }
 
+  //: Return the run time dimension, which does not equal \c n when \c n==0
+  virtual unsigned int dimension() const { return impl_.dimension(); }
+
+  //: Evaluate the unnormalized density at a point
+  virtual T density(const vector& pt) const
+  {
+    return impl_.density(pt);
+  }
+
   //: Evaluate the probability density at a point
   virtual T prob_density(const vector& pt) const
   {
-    if (var_<=T(0))
-      return 0.0;
-    return static_cast<T>(norm_const() * vcl_exp(-sqr_mahal_dist(pt)/2));
+    return impl_.prob_density(pt);
   }
 
   //: Evaluate the log probability density at a point
   virtual T log_prob_density(const vector& pt) const
   {
-    if (var_<=T(0))
-      return -vcl_numeric_limits<T>::infinity();
-    return static_cast<T>(vcl_log(norm_const()) - sqr_mahal_dist(pt)/2);
+    return impl_.log_prob_density(pt);
   };
 
-  //: compute the normalization constant (independent of sample point).
-  // Can be precomputed when evaluating at multiple points
-  // non-virtual for efficiency
+  //: The normalization constant for the density
+  // When density() is multiplied by this value it becomes prob_density
+  // norm_const() is reciprocal of the integral of density over the entire field
   T norm_const() const
   {
-    const unsigned int dim = this->dimension();
-    double v2pi = var_*2.0*vnl_math::pi;
-    double denom = v2pi;
-    for(unsigned int i=1; i<dim; ++i)
-      denom *= v2pi;
-      
-    return static_cast<T>(vcl_sqrt(1/denom));
+    return impl_.norm_const();
   }
 
   //: The squared Mahalanobis distance to this point
   // non-virtual for efficiency
   T sqr_mahal_dist(const vector& pt) const
   {
-    if (var_<=T(0))
-      return vcl_numeric_limits<T>::infinity();
-
-    const unsigned int d = this->dimension();
-    T val = T(0);
-    for (unsigned int i=0; i<d; ++i)
-    {
-      T tmp = (index(pt,i)-index(this->mean_,i));
-      val += tmp*tmp/var_;
-    }
-    return val;
+    return impl_.sqr_mahal_dist(pt);
   }
 
   //: Evaluate the cumulative distribution function at a point
@@ -102,20 +92,20 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   virtual T cumulative_prob(const vector& pt) const
   {
     const unsigned int d = this->dimension();
-    if (var_<=T(0))
+    if (impl_.covar<=T(0))
     {
       for (unsigned int i=0; i<d; ++i)
-        if (index(pt,i) < index(this->mean_,i))
+        if (vpdt_index(pt,i) < vpdt_index(impl_.mean,i))
           return T(0);
       return T(1);
     }
-    double sigma_sq_2 = 2.0*static_cast<double>(var_);
+    double sigma_sq_2 = 2.0*static_cast<double>(impl_.covar);
     double s2 = 1/vcl_sqrt(sigma_sq_2);
 
     double val = 1.0;
     for (unsigned int i=0; i<d; ++i)
     {
-      val *= 0.5*vnl_erf(s2*(index(pt,i)-index(this->mean_,i))) + 0.5;
+      val *= 0.5*vnl_erf(s2*(vpdt_index(pt,i)-vpdt_index(impl_.mean,i))) + 0.5;
     }
     return static_cast<T>(val);
   }
@@ -127,43 +117,44 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   {
     const unsigned int dim = this->dimension();
 
-    double s2 = 1/vcl_sqrt(2*var_);
+    double s2 = 1/vcl_sqrt(2*impl_.covar);
     // return zero for ill-defined box
     double prob = T(1);
     for (unsigned int i=0; i<dim; ++i){
-      if (index(max_pt,i)<=index(min_pt,i))
+      if (vpdt_index(max_pt,i)<=vpdt_index(min_pt,i))
         return T(0);
-      prob *= (vnl_erf(s2*(index(max_pt,i)-index(this->mean_,i))) -
-               vnl_erf(s2*(index(min_pt,i)-index(this->mean_,i))))/2;
+      prob *= (vnl_erf(s2*(vpdt_index(max_pt,i)-vpdt_index(impl_.mean,i))) -
+               vnl_erf(s2*(vpdt_index(min_pt,i)-vpdt_index(impl_.mean,i))))/2;
     }
     return static_cast<T>(prob);
   }
 
+  //: Access the mean directly
+  virtual const vector& mean() const { return impl_.mean; }
+
+  //: Set the mean
+  virtual void set_mean(const vector& mean) { impl_.mean = mean; }
+
+  //: Compute the mean of the distribution.
+  virtual void compute_mean(vector& mean) const { mean = impl_.mean; }
+
   //: Access the scalar variance
-  const covar_type& covariance() const { return var_; }
+  const covar_type& covariance() const { return impl_.covar; }
 
   //: Set the scalar variance
-  void set_covariance(const covar_type& var) { var_ = var; }
+  void set_covariance(const covar_type& var) { impl_.covar = var; }
 
 
   //: Compute the covariance of the distribution.
   // Should be the identity matrix times var_
   virtual void compute_covar(matrix& covar) const
   {
-    const unsigned int d = this->dimension();
-    set_size(covar,d);
-    assert(m_size(covar) == d);
-    for (unsigned int i=0; i<d; ++i)
-    {
-      index(covar,i,i) = var_;
-      for (unsigned int j=i+1; j<d; ++j)
-        index(covar,i,j) = index(covar,j,i) = T(0);
-    }
+    impl_.compute_covar(covar);
   }
 
  protected:
-  //: the scalar variance
-  covar_type var_;
+  //: the Gaussian implementation from vpdt
+  vpdt_gaussian<vector,covar_type> impl_;
 };
 
 

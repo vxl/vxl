@@ -23,14 +23,13 @@ template<class T, unsigned int n=0>
 class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
 {
  public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
   //: Default Constructor
-  vpdl_kernel_gaussian_sfbw(unsigned int var_dim = n)
-  : vpdl_kernel_fbw_base<T,n>(var_dim) {}
+  vpdl_kernel_gaussian_sfbw() {}
 
   //: Constructor - from sample centers and bandwidth (variance)
   vpdl_kernel_gaussian_sfbw(const vcl_vector<vector>& samples, 
@@ -44,6 +43,28 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     return new vpdl_kernel_gaussian_sfbw<T,n>(*this);
   }
 
+  //: Evaluate the unnormalized density at a point
+  virtual T density(const vector& pt) const
+  {
+    const unsigned int nc = this->num_components();
+    if (nc <= 0)
+      return 0.0;
+    
+    const unsigned int d = this->dimension();    
+    T sum = T(0);
+    typedef typename vcl_vector<vector>::const_iterator vitr;
+    for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
+      T ssd = T(0);
+      for (unsigned int i=0; i<d; ++i) {
+        T tmp = (vpdt_index(pt,i)-vpdt_index(*s,i))/this->bandwidth();
+        ssd += tmp*tmp;
+      }
+      sum += vcl_exp(-0.5*ssd);
+    }
+    
+    return sum;
+  }
+
   //: Evaluate the probability density at a point
   virtual T prob_density(const vector& pt) const
   {
@@ -51,20 +72,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     if (nc <= 0)
       return 0.0;
     
-    const unsigned int d = this->dimension();    
-    T k = norm_const()/nc;
-    T sum = T(0);
-    typedef typename vcl_vector<vector>::const_iterator vitr;
-    for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
-      T ssd = T(0);
-      for (unsigned int i=0; i<d; ++i) {
-        T tmp = (index(pt,i)-index(*s,i))/this->bandwidth();
-        ssd += tmp*tmp;
-      }
-      sum += vcl_exp(-0.5*ssd);
-    }
-        
-    return k*sum;
+    return density(pt)*this->norm_const();
   }
 
 
@@ -85,7 +93,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       double val = 1.0;
       for (unsigned int i=0; i<d; ++i) {
-        val *= 0.5*vnl_erf(s2*(index(pt,i)-index(*s,i))) + 0.5;
+        val *= 0.5*vnl_erf(s2*(vpdt_index(pt,i)-vpdt_index(*s,i))) + 0.5;
       }
       sum += val;
     }
@@ -109,10 +117,10 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       double prob = 1.0;
       for (unsigned int i=0; i<dim; ++i){
-        if (index(max_pt,i)<=index(min_pt,i))
+        if (vpdt_index(max_pt,i)<=vpdt_index(min_pt,i))
           return T(0);
-        prob *= (vnl_erf(s2*(index(max_pt,i)-index(*s,i))) -
-                 vnl_erf(s2*(index(min_pt,i)-index(*s,i))))/2;
+        prob *= (vnl_erf(s2*(vpdt_index(max_pt,i)-vpdt_index(*s,i))) -
+                 vnl_erf(s2*(vpdt_index(min_pt,i)-vpdt_index(*s,i))))/2;
       }
       sum += prob;
     }
@@ -126,8 +134,10 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     const unsigned int d = this->dimension();
     const unsigned int nc = this->num_components();
     vector mean;
-    m_init(covar,d,T(0));
-    v_init(mean,d,T(0));
+    vpdt_set_size(covar,d);
+    vpdt_fill(covar,T(0));
+    vpdt_set_size(mean,d);
+    vpdt_fill(mean,T(0));
     typedef typename vcl_vector<vector>::const_iterator samp_itr;
     for (samp_itr s = this->samples().begin(); s != this->samples().end(); ++s){
       covar += outer_product(*s,*s);
@@ -138,14 +148,11 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     covar -= outer_product(mean,mean);
     T var = this->bandwidth()*this->bandwidth();
     for(unsigned int i=0; i<d; ++i)
-      index(covar,i,i) += var;
+      vpdt_index(covar,i,i) += var;
   }
 
- protected:
-  //: compute the normalization constant (independent of sample point).
-  // Can be precomputed when evaluating at multiple points
-  // non-virtual for efficiency
-  T norm_const() const
+  //: The normalization constant for the kernel
+  virtual T kernel_norm_const() const
   {
     const unsigned int dim = this->dimension();
     double v2pi = this->bandwidth()*this->bandwidth()*2.0*vnl_math::pi;

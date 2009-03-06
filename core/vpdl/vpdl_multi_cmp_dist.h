@@ -18,17 +18,12 @@
 template<class T, unsigned int n=0>
 class vpdl_multi_cmp_dist : public vpdl_distribution<T,n>
 {
- public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+public:
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
-  //: Constructor
-  // Optionally initialize the dimension for when n==0.
-  // Otherwise var_dim is ignored
-  vpdl_multi_cmp_dist(unsigned int var_dim = n) 
-  : vpdl_distribution<T,n>(var_dim) {}
   
   //: Destructor
   virtual ~vpdl_multi_cmp_dist() {}

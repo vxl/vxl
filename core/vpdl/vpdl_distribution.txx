@@ -5,6 +5,7 @@
 // \file
 
 #include "vpdl_distribution.h"
+#include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
 
@@ -89,7 +90,7 @@ T vpdl_distribution<T,n>::box_prob(const vector& min_pt,
 
   // return zero for ill-defined box
   for (unsigned int j=0; j<dim; ++j){
-    if (index(max_pt,j)<=index(min_pt,j))
+    if (vpdt_index(max_pt,j)<=vpdt_index(min_pt,j))
       return T(0);
   }
 
@@ -110,7 +111,7 @@ T vpdl_distribution<T,n>::box_prob(const vector& min_pt,
     for (unsigned int j=0; j<dim; ++j){
       bool is_max = (i>>j) & 1;
       plus ^= is_max; // toggle plus if is_max
-      index(corner,j) = is_max?index(max_pt,j):index(min_pt,j);
+      vpdt_index(corner,j) = is_max?vpdt_index(max_pt,j):vpdt_index(min_pt,j);
     }
     if (plus)
       prob += cumulative_prob(corner);

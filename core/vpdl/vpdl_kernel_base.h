@@ -25,33 +25,37 @@ template<class T, unsigned int n=0>
 class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
 {
 public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
 
   // Default Constructor
-  vpdl_kernel_base(unsigned int var_dim = n) 
-    : vpdl_multi_cmp_dist<T,n>(var_dim) {}
+  vpdl_kernel_base()  {}
   
   // Constructor from sample points
   vpdl_kernel_base(const vcl_vector<vector>& samples) 
-  : vpdl_multi_cmp_dist<T,n>(samples.empty()?n:v_size(samples.front())), 
-    samples_(samples) {}
+  : samples_(samples) {}
 
 
   //: Return the number of components in the mixture
   unsigned int num_components() const { return samples_.size(); }
+
+  //: Return the run time dimension, which does not equal \c n when \c n==0
+  virtual unsigned int dimension() const 
+  { 
+    if(n > 0 || num_components() == 0)
+      return n;
+    return vpdt_size(samples_[0]);
+  }
 
 
   //: Add a new sample point
   virtual void add_sample(const vector& s)
   { 
     // set variable dimension from the first inserted component
-    if(this->dimension() == 0 && samples_.empty())
-      this->set_dimension(v_size(s));
-    assert(v_size(s) == this->dimension());
+    assert(vpdt_size(s) == this->dimension() || num_components() == 0);
     samples_.push_back(s);
   }
 
@@ -64,9 +68,6 @@ public:
   //: Set the collection of sample points
   virtual void set_samples(const vcl_vector<vector>& samples)
   {
-    // adjust the dimension for these new samples
-    if(!samples.empty())
-      this->set_dimension(v_size(samples.front()));
     samples_ = samples;
   }
   
@@ -81,7 +82,8 @@ public:
   virtual void compute_mean(vector& mean) const
   {
     const unsigned int d = this->dimension();
-    v_init(mean,d,T(0));
+    vpdt_set_size(mean,d);
+    vpdt_fill(mean,T(0));
     if(samples_.empty())
       return;
     typedef typename vcl_vector<vector>::const_iterator samp_itr;
@@ -104,14 +106,14 @@ template<class T, unsigned int n=0>
 class vpdl_kernel_fbw_base : public vpdl_kernel_base<T,n>
 {
 public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
   
   // Default Constructor
-  vpdl_kernel_fbw_base(unsigned int var_dim = n) 
-  : vpdl_kernel_base<T,n>(var_dim), bandwidth_(T(1)) {}
+  vpdl_kernel_fbw_base() 
+  : bandwidth_(T(1)) {}
   
   // Constructor from sample points and a bandwidth
   vpdl_kernel_fbw_base(const vcl_vector<vector>& samples, T bandwidth = T(1)) 
@@ -122,6 +124,17 @@ public:
   
   //: Set the kernel bandwidth
   void set_bandwidth(T b) { bandwidth_ = b; }
+
+  //: The normalization constant for the kernel
+  virtual T kernel_norm_const() const = 0;
+
+  //: The normalization constant for the density
+  // When density() is multiplied by this value it becomes prob_density
+  // norm_const() is reciprocal of the integral of density over the entire field
+  virtual T norm_const() const
+  {
+    return kernel_norm_const()/this->num_components();
+  }
   
 private:
   //: the fixed bandwidth for all kernels
@@ -136,10 +149,10 @@ template<class T, unsigned int n=0>
 class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
 {
 public:
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdl_base_traits<T,n>::vector vector;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdl_base_traits<T,n>::matrix matrix;
+  //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<vector>::matrix matrix;
   
   // Default Constructor
   vpdl_kernel_vbw_base(unsigned int var_dim = n) 
