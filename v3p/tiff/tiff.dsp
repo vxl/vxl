@@ -235,6 +235,9 @@ SOURCE=.\tiffconf.h
 SOURCE=.\tiffio.h
 # End Source File
 # Begin Source File
+SOURCE=.\tiffio.hxx
+# End Source File
+# Begin Source File
 SOURCE=.\tiffiop.h
 # End Source File
 # Begin Source File

@@ -181,6 +181,9 @@ SOURCE=.\test_fit_weibull.cxx
 SOURCE=.\test_gaussian_model.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_mean_shift.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

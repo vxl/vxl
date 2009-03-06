@@ -168,6 +168,9 @@ SOURCE=.\Templates/bsta_parzen_sphere+float.1-.cxx
 SOURCE=.\Templates/bsta_parzen_sphere+float.3-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bsta_gaussian_full+float.2-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bsta_gauss.cxx
 # End Source File
 # Begin Source File

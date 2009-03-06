@@ -91,27 +91,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder_builder-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder_builder-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_cloneables_factory+mfpf_vec_cost_builder-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+mfpf_vec_cost-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+mfpf_vec_cost_builder-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\mfpf_add_all_loaders.cxx
 # End Source File
 # Begin Source File
@@ -209,6 +188,45 @@ SOURCE=.\mfpf_hog_box_finder.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_hog_box_finder_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_about_lineseg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_definer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_patch_data.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_about_pt.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder_builder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder_builder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+mfpf_vec_cost_builder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mfpf_vec_cost-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mfpf_vec_cost_builder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mfpf_region_definer-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+mfpf_region_definer-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -329,6 +347,18 @@ SOURCE=.\mfpf_hog_box_finder.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_hog_box_finder_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_definer.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_about_lineseg.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_about_pt.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_patch_data.h
 # End Source File
 # End Group
 # End Target

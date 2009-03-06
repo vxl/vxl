@@ -114,9 +114,6 @@ SOURCE=.\bvxm_voxel_world.cxx
 SOURCE=.\bvxm_world_params.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_lidar_camera.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_lidar_processor.cxx
 # End Source File
 # Begin Source File
@@ -321,9 +318,6 @@ SOURCE=.\bvxm_voxel_world.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_world_params.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_lidar_camera.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_lidar_processor.h

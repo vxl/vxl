@@ -123,9 +123,6 @@ SOURCE=.\processes/bvxm_pmap_ratio_process.cxx
 SOURCE=.\processes/bvxm_lidar_init_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_generate_edge_map_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/bvxm_illum_index_process.cxx
 # End Source File
 # Begin Source File
@@ -180,9 +177,6 @@ SOURCE=.\processes/bvxm_compare_3d_voxels_process.cxx
 SOURCE=.\processes/bvxm_roi_init_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_rpc_prob_registration_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/bvxm_normalization_util.cxx
 # End Source File
 # Begin Source File
@@ -193,6 +187,15 @@ SOURCE=.\processes/bvxm_detect_scale_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_save_edges_raw_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_edges_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_mog_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_edges_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx

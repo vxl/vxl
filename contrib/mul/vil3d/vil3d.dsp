@@ -93,6 +93,42 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vil3d_file_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_load.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_memory_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_new.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_copy.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_save.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_crop.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_gipl_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_dicom.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_slice_list.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_analyze_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_gen_synthetic.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_image_view+byte-.cxx
 # End Source File
 # Begin Source File
@@ -127,15 +163,6 @@ SOURCE=.\Templates/vil3d_image_view+bool-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vil3d_image_view_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_gipl_format.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_file_format.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_load.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vil3d_image_resource-.cxx
@@ -204,31 +231,10 @@ SOURCE=.\Templates/vil3d_tricub_interp+uint_32-.cxx
 SOURCE=.\Templates/vil3d_resample_tricubic+uint_32.uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil3d_memory_image.cxx
+SOURCE=.\Templates/vil3d_resample_trilinear+double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil3d_new.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_dicom.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_slice_list.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_analyze_format.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_gen_synthetic.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_copy.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_save.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_crop.cxx
+SOURCE=.\Templates/vil3d_sample_profile_trilin+double.double-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -273,9 +279,6 @@ SOURCE=.\vil3d_switch_axes.h
 SOURCE=.\vil3d_math.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil3d_gipl_format.h
-# End Source File
-# Begin Source File
 SOURCE=.\vil3d_file_format.h
 # End Source File
 # Begin Source File
@@ -301,18 +304,6 @@ SOURCE=.\vil3d_memory_image.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_new.h
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_dicom.h
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_slice_list.h
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_analyze_format.h
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil3d_gen_synthetic.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_property.h
@@ -358,6 +349,21 @@ SOURCE=.\vil3d_tricub_interp.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_tricub_interp.txx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_gipl_format.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_dicom.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_slice_list.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_analyze_format.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_gen_synthetic.h
 # End Source File
 # End Group
 # End Target

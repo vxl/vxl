@@ -96,6 +96,9 @@ LIB32=link.exe -lib
 SOURCE=.\vil_io_image_view_base.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil_register.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\processes/vil_load_image_view_process.cxx
 # End Source File
 # Begin Source File
@@ -144,7 +147,10 @@ SOURCE=.\processes/vil_image_pair_process.cxx
 SOURCE=.\processes/vil_crop_image_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_register.cxx
+SOURCE=.\processes/vil_threshold_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_image_size_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx

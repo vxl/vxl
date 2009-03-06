@@ -123,6 +123,9 @@ SOURCE=.\test_region_finder.cxx
 # Begin Source File
 SOURCE=.\test_dp_snake.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_patch_data.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

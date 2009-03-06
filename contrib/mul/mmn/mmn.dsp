@@ -113,6 +113,21 @@ SOURCE=.\mmn_csp_solver.cxx
 # Begin Source File
 SOURCE=.\mmn_diffusion_solver.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mmn_solver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_parse_arcs.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_add_all_loaders.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+mmn_solver-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mmn_solver-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -151,6 +166,15 @@ SOURCE=.\mmn_csp_solver.h
 # End Source File
 # Begin Source File
 SOURCE=.\mmn_diffusion_solver.h
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_add_all_loaders.h
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_solver.h
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_parse_arcs.h
 # End Source File
 # End Group
 # End Target

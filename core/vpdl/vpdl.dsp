@@ -158,6 +158,15 @@ SOURCE=.\vpdl_update_gaussian.h
 # Begin Source File
 SOURCE=.\vpdl_multi_cmp_dist.h
 # End Source File
+# Begin Source File
+SOURCE=.\vpdl_kernel_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdl_kernel_gaussian_sfbw.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdl_mixture_of.h
+# End Source File
 # End Group
 # End Target
 # End Project
