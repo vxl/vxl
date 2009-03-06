@@ -15,6 +15,8 @@
 #include <mfpf/mfpf_pose.h>
 #include <vxl_config.h>  // For vxl_byte
 
+class vimt_image_pyramid;
+
 //: Base for classes which locate feature points
 //  The object will be set up by an
 //  associated mfpf_point_finder_builder object
@@ -251,6 +253,12 @@ class mfpf_point_finder
   //  into raw image co-ords (including the step size).
   //  Default implementation does nothing - returns an empty image.
   virtual void get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const;
+
+  //: Select best level for searching around pose
+  //  Selects pyramid level with pixel sizes best matching
+  //  the model pixel size at given pose.
+  unsigned image_level(const mfpf_pose& pose,
+                       const vimt_image_pyramid& im_pyr) const;
 
   //: Version number for I/O
   short version_no() const;

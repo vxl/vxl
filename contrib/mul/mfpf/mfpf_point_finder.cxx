@@ -9,6 +9,7 @@
 
 #include <vcl_cmath.h>
 #include <vimt/algo/vimt_find_troughs.h>
+#include <vimt/vimt_image_pyramid.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_powell.h>
@@ -576,6 +577,23 @@ void mfpf_point_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) co
   image.image().set_size(0,0);
 }
 
+//: Select best level for searching around pose with finder
+//  Selects pyramid level with pixel sizes best matching
+//  the model pixel size at given pose.
+unsigned mfpf_point_finder::image_level(const mfpf_pose& pose,
+                      const vimt_image_pyramid& im_pyr) const
+{
+  double model_pixel_size = step_size()*pose.scale();
+  double rel_size0 = model_pixel_size/im_pyr.base_pixel_width();
+
+  double log_step = vcl_log(im_pyr.scale_step());
+
+  // Round level down, to work with slightly higher res. image.
+  int level = int(vcl_log(rel_size0)/log_step); 
+  if (level<im_pyr.lo()) return im_pyr.lo();
+  if (level>im_pyr.hi()) return im_pyr.hi();
+  return level;
+}
 
 //: Return true if modelled regions at pose1 and pose2 overlap
 bool mfpf_point_finder::overlap(const mfpf_pose& pose1,

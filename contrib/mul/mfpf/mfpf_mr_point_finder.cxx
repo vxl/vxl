@@ -49,16 +49,7 @@ unsigned mfpf_mr_point_finder::image_level(
                       unsigned i, const mfpf_pose& pose,
                       const vimt_image_pyramid& im_pyr) const
 {
-  double model_pixel_size = finder(i).step_size()*pose.scale();
-  double rel_size0 = model_pixel_size/im_pyr.base_pixel_width();
-
-  double log_step = vcl_log(im_pyr.scale_step());
-
-  // Round level down, to work with slightly higher res. image.
-  int level = int(vcl_log(rel_size0)/log_step); 
-  if (level<im_pyr.lo()) return im_pyr.lo();
-  if (level>im_pyr.hi()) return im_pyr.hi();
-  return level;
+  return finder(i).image_level(pose,im_pyr);
 }
 
 // Find non-empty image in pyramid closest to given level
