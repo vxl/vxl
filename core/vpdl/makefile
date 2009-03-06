@@ -20,6 +20,9 @@ MANPAGE_SOURCES += vpdl_eigen_sym_matrix.h
 MANPAGE_SOURCES += vpdl_mixture.h
 MANPAGE_SOURCES += vpdl_update_gaussian.h
 MANPAGE_SOURCES += vpdl_multi_cmp_dist.h
+MANPAGE_SOURCES += vpdl_kernel_base.h
+MANPAGE_SOURCES += vpdl_kernel_gaussian_sfbw.h
+MANPAGE_SOURCES += vpdl_mixture_of.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

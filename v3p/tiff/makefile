@@ -62,6 +62,7 @@ MANPAGE_SOURCES += tiffconf.h.in
 MANPAGE_SOURCES += tiffconf.h
 MANPAGE_SOURCES += tif_config.h
 MANPAGE_SOURCES += tiffio.h
+MANPAGE_SOURCES += tiffio.hxx
 MANPAGE_SOURCES += tiffiop.h
 MANPAGE_SOURCES += tiffvers.h
 MANPAGE_SOURCES += uvcode.h

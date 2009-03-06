@@ -10,6 +10,7 @@ TESTS += test_order_cost.cxx
 TESTS += test_csp_solver.cxx
 TESTS += test_diffusion_solver.cxx
 TESTS += test_make_tri_tree.cxx
+TESTS += test_parse_arcs.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

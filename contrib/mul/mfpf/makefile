@@ -42,6 +42,10 @@ SOURCES += mfpf_ssd_vec_cost.cxx
 SOURCES += mfpf_ssd_vec_cost_builder.cxx
 SOURCES += mfpf_hog_box_finder.cxx
 SOURCES += mfpf_hog_box_finder_builder.cxx
+SOURCES += mfpf_region_about_lineseg.cxx
+SOURCES += mfpf_region_definer.cxx
+SOURCES += mfpf_patch_data.cxx
+SOURCES += mfpf_region_about_pt.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

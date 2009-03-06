@@ -4,7 +4,6 @@ LIBRARY := bvxm
 VERSION := 1.0
 
 SOURCES += bvxm_image_metadata.cxx
-SOURCES += bvxm_lidar_camera.cxx
 SOURCES += bvxm_memory_chunk.cxx
 SOURCES += bvxm_mog_grey_processor.cxx
 SOURCES += bvxm_mog_rgb_processor.cxx
