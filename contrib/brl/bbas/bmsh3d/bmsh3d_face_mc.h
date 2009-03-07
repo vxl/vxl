@@ -11,7 +11,7 @@
 //
 // \verbatim
 //  Modifications
-//   <none>
+//   <none yet>
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -54,14 +54,14 @@ class bmsh3d_face_mc : public bmsh3d_face
 
   void add_mc_halfedge(bmsh3d_halfedge* he);
 
-  void remove_mc_halfedge(bmsh3d_halfedge* he) {};
+  void remove_mc_halfedge(bmsh3d_halfedge* /*he*/) {}
 
   void get_mc_incident_halfedges (bmsh3d_halfedge* he,
-    vcl_vector<bmsh3d_halfedge*>& incident_edges) const;
+                                  vcl_vector<bmsh3d_halfedge*>& incident_edges) const;
 
   //: given halfedge head, returns the set of incident edges of the inner face
   void get_mc_incident_edges (bmsh3d_halfedge* he,
-    vcl_vector<bmsh3d_edge*>& incident_edges) const;
+                              vcl_vector<bmsh3d_edge*>& incident_edges) const;
 
   void reverse_mc_chain_of_halfedges (bmsh3d_halfedge* he);
 
