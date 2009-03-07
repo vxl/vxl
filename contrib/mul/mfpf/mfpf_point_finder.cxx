@@ -162,7 +162,7 @@ void mfpf_point_finder::set_scale_range(unsigned ns, double ds)
 }
 
 //: Define model parameters (return false by default)
-bool mfpf_point_finder::set_model(const vcl_vector<double>& v)
+bool mfpf_point_finder::set_model(const vcl_vector<double>& /*v*/)
 {
   return false;
 }
@@ -581,7 +581,7 @@ void mfpf_point_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) co
 //  Selects pyramid level with pixel sizes best matching
 //  the model pixel size at given pose.
 unsigned mfpf_point_finder::image_level(const mfpf_pose& pose,
-                      const vimt_image_pyramid& im_pyr) const
+                                        const vimt_image_pyramid& im_pyr) const
 {
   double model_pixel_size = step_size()*pose.scale();
   double rel_size0 = model_pixel_size/im_pyr.base_pixel_width();
@@ -606,8 +606,8 @@ bool mfpf_point_finder::overlap(const mfpf_pose& pose1,
 //  On exit box_pose.p() gives the centre, corners are given by
 //  box_pose(+/-0.5*wi, +/-0.5*wj).
 void mfpf_point_finder::aligned_bounding_box(const mfpf_pose& pose,
-                                    mfpf_pose& box_pose,
-                                    double& wi, double& wj) const
+                                             mfpf_pose& box_pose,
+                                             double& wi, double& wj) const
 {
   // Compute the bounding box of the outline (in ref frame)
   vcl_vector<vgl_point_2d<double> > pts;
@@ -629,7 +629,6 @@ void mfpf_point_finder::aligned_bounding_box(const mfpf_pose& pose,
   wi=xhi-xlo;
   wj=yhi-ylo;
 }
-
 
 
 //: Return true if base class parameters are the same in pf
