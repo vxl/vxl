@@ -33,7 +33,7 @@ inline void vil_convert_stretch_range(const vil_image_view<T>& src,
 class vil_math_abs_functor
 {
  public:
-  vxl_byte operator()(vxl_byte x) const { return vcl_abs(x); }
+  vxl_byte operator()(vxl_byte x) const { return vcl_abs(int(x)); }
   unsigned operator()(unsigned x) const { return x; }
   int operator()(int x)           const { return vcl_abs(x); }
   short operator()(short x)       const { return vcl_abs(x); }
