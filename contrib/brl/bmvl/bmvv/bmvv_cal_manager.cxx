@@ -980,10 +980,12 @@ void bmvv_cal_manager::draw_vsol_polygon_3d(vsol_polygon_3d_sptr const & poly,
     vcl_cerr << "In bmvv_cal_manager::draw_vsol_polygon() - null btol tableau\n";
     return;
   }
+  if (clear)
+    btab_->clear_all();
   vsol_polygon_2d_sptr poly_2d = brct_algos::project(poly,cam_);
   vgui_style_sptr style = vgui_style::new_style(r, g, b, 1, 3);
- bgui_vsol_soview2D_polygon* sov =  btab_->add_vsol_polygon_2d(poly_2d,style);
- sov->set_selectable(false);
+  bgui_vsol_soview2D_polygon* sov =  btab_->add_vsol_polygon_2d(poly_2d,style);
+  sov->set_selectable(false);
 }
 
 void bmvv_cal_manager::draw_polygons_3d(bool clear,
