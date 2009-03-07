@@ -2,8 +2,6 @@
 # Vision Probability Distribution Library
 
 SET( vpdl_sources
-  vpdl_update_gaussian.h
-
   vpdl_distribution.h      vpdl_distribution.txx
   
   vpdl_gaussian_base.h
@@ -26,6 +24,7 @@ SET( vpdl_sources
   vpdt/vpdt_norm_metric.h
   vpdt/vpdt_eigen_sym_matrix.h
   vpdt/vpdt_gaussian.h
+  vpdt/vpdt_update_gaussian.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)
