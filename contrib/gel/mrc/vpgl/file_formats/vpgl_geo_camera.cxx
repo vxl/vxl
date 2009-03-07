@@ -53,12 +53,12 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
   {
     vcl_vector<vcl_vector<double> > tiepoints;
     gtif->gtif_tiepoints(tiepoints);
-    bool south_flag = (h == 1);
     is_utm = true;
 #if 0  // I, J, K should not be transformed
     // transform each tiepoint
     bgeo_utm utm;
 
+    bool south_flag = (h == 1);
     for (unsigned i=0; i< tiepoints.size(); i++) {
       assert (tiepoints[i].size() == 6);
       double I = tiepoints[i][0]; // lat
