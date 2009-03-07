@@ -10,8 +10,8 @@
 template <class T>
 void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
 {
-  bool good = bsta_parzen_sphere<T,3>::dimension == 3;
-  good = good && bsta_parzen_sphere<T,1>::dimension == 1;
+  bool good = bsta_parzen_sphere<T,3>::dimension == 3
+           && bsta_parzen_sphere<T,1>::dimension == 1;
   TEST(("dimension <"+type_name+">").c_str(),good, true);
 
   vnl_vector_fixed<T,3> s0(T(1.0), T(2.0), T(3.0));
