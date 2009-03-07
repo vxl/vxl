@@ -11,27 +11,28 @@
 #include <bxml/bxml_find.h>
 
 //: we assume that the part that is added first as the outgoing part is the central part
-brec_part_base_sptr 
-brec_part_base::central_part() 
-{ 
+brec_part_base_sptr
+brec_part_base::central_part()
+{
   if (out_edges().size() == 0) return 0;
-  else return (*out_edges_begin())->target(); 
+  else return (*out_edges_begin())->target();
 }
 
 //: we assume that the part that is added first as the outgoing part is the central part
-brec_hierarchy_edge_sptr 
-brec_part_base::edge_to_central_part() 
-{ 
+brec_hierarchy_edge_sptr
+brec_part_base::edge_to_central_part()
+{
   if (out_edges().size() == 0) return 0;
-  else return (*out_edges_begin()); 
+  else return *out_edges_begin();
 }
 
 //: marking receptive field is only possible for brec_part_instance class instances
-bool brec_part_base::mark_receptive_field(vil_image_view<vxl_byte>& img, unsigned plane)
+bool brec_part_base::mark_receptive_field(vil_image_view<vxl_byte>& /*img*/, unsigned /*plane*/)
 {
   return true;
 }
-bool brec_part_base::mark_center(vil_image_view<vxl_byte>& img, unsigned plane)
+
+bool brec_part_base::mark_center(vil_image_view<vxl_byte>& /*img*/, unsigned /*plane*/)
 {
   return true;
 }
@@ -50,14 +51,14 @@ bool brec_part_base::xml_parse_element(bxml_data_sptr data)
 {
   bxml_element query("base");
   bxml_data_sptr base_root = bxml_find_by_name(data, query);
-  
+
   if (!base_root)
     return false;
 
   if (base_root->type() == bxml_data::ELEMENT) {
-    return (((bxml_element*)base_root.ptr())->get_attribute("layer", layer_) &&
-            ((bxml_element*)base_root.ptr())->get_attribute("type", type_) &&
-            ((bxml_element*)base_root.ptr())->get_attribute("det_thres", detection_threshold_));
+    return ((bxml_element*)base_root.ptr())->get_attribute("layer", layer_) &&
+           ((bxml_element*)base_root.ptr())->get_attribute("type", type_) &&
+           ((bxml_element*)base_root.ptr())->get_attribute("det_thres", detection_threshold_);
   } else
     return false;
 }
@@ -66,10 +67,12 @@ brec_part_base* brec_part_base::cast_to_base(void)
 {
   return this;
 }
+
 brec_part_gaussian* brec_part_base::cast_to_gaussian(void)
 {
   return 0;
 }
+
 brec_part_instance* brec_part_base::cast_to_instance(void)
 {
   return 0;
@@ -80,6 +83,7 @@ brec_part_gaussian* brec_part_instance::cast_to_gaussian(void)
 {
   return 0;
 }
+
 brec_part_instance* brec_part_instance::cast_to_instance(void)
 {
   return this;
@@ -127,7 +131,7 @@ bool brec_part_instance::mark_center(vil_image_view<vxl_byte>& img, unsigned pla
 }
 
 //: this method should be overwritten by inheriting classes so should never be called
-vnl_vector_fixed<float,2> 
+vnl_vector_fixed<float,2>
 brec_part_instance::direction_vector(void)  // return a unit vector that gives direction of this instance in the image
 {
   vnl_vector_fixed<float,2> v;
@@ -140,7 +144,7 @@ brec_part_instance::direction_vector(void)  // return a unit vector that gives d
 bxml_data_sptr brec_part_instance::xml_element()
 {
   bxml_data_sptr data_super = brec_part_base::xml_element();
-  
+
   bxml_element* data = new bxml_element("instance");
   data->set_attribute("kind",kind_);
   data->set_attribute("x",x_);
@@ -159,7 +163,7 @@ bool brec_part_instance::xml_parse_element(bxml_data_sptr data)
 {
   bxml_element query("instance");
   bxml_data_sptr ins_root = bxml_find_by_name(data, query);
-  
+
   if (!ins_root)
     return false;
 
@@ -178,9 +182,3 @@ bool brec_part_instance::xml_parse_element(bxml_data_sptr data)
   } else
     return false;
 }
-
-
-
-
-
-
