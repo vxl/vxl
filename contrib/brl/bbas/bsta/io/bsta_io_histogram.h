@@ -3,12 +3,13 @@
 #define bsta_io_histogram_h_
 //:
 // \file
-// \brief Binary I/O for bsta_histogram 
+// \brief Binary I/O for bsta_histogram
 // \author J.L. Mundy
 // \date February 29, 2008
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <bsta/bsta_histogram.h>
@@ -53,7 +54,7 @@ vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h)
   vsl_b_read(is, values);
   vsl_b_read(is, counts);
   bsta_histogram<T> temp(min, max, nbins, min_prob);
-  for(unsigned i = 0; i<static_cast<unsigned>(nbins); ++i)
+  for (unsigned i = 0; i<static_cast<unsigned>(nbins); ++i)
     temp.upcount(values[i], counts[i]);
   h = temp;
 }
@@ -96,8 +97,8 @@ vsl_b_read(vsl_b_istream &is, bsta_joint_histogram<T>& h)
   vsl_b_read(is, counts);
   bsta_joint_histogram<T> temp(range, nbins, min_prob);
   unsigned nr = counts.rows(), nc = counts.cols();
-  for(unsigned r = 0; r<nr; ++r)
-    for(unsigned c = 0; c<nc; ++c)
+  for (unsigned r = 0; r<nr; ++r)
+    for (unsigned c = 0; c<nc; ++c)
       temp.set_count(r, c, counts[r][c]);
   h = temp;
 }
@@ -111,22 +112,22 @@ vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram<T>& h)
   h.print(os);
 }
 
-void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& hptr)
+void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& /*hptr*/)
 {
   //not implemented yet
 }
 
-void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& hptr)
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& /*hptr*/)
 {
   //not implemented yet
 }
 
-void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& hptr)
+void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& /*hptr*/)
 {
   //not implemented yet
 }
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_sptr& hptr)
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_sptr& /*hptr*/)
 {
   //not implemented yet
 }
