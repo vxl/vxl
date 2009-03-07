@@ -176,7 +176,7 @@ class rgrl_nonlinear_estimator
   //
   // See the comments for param_dof(). The parameter is required by
   // some algorithms such as random sampling and DBICP.
-  rgrl_nonlinear_estimator( unsigned int param_dof )
+  rgrl_nonlinear_estimator( unsigned int /*param_dof*/ )
    : rgrl_estimator(),
      max_num_iterations_(0),
      relative_threshold_(1e-8)
