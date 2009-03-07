@@ -19,7 +19,7 @@ mmn_dp_solver::mmn_dp_solver()
 
 //: Input the arcs that define the graph
 void mmn_dp_solver::set_arcs(unsigned num_nodes,
-                        const vcl_vector<mmn_arc>& arcs)
+                             const vcl_vector<mmn_arc>& arcs)
 {
   // Copy in arcs, and ensure ordering v1<v2
   vcl_vector<mmn_arc> ordered_arcs(arcs.size());
@@ -36,10 +36,10 @@ void mmn_dp_solver::set_arcs(unsigned num_nodes,
   vcl_vector<mmn_dependancy> deps;
   if (!graph.compute_dependancies(deps,0))
   {
-    vcl_cerr<<"Graph cannot be decomposed - too complex."<<vcl_endl;
-    vcl_cerr<<"Arc list: ";
+    vcl_cerr<<"Graph cannot be decomposed - too complex.\n"
+            <<"Arc list: ";
     for (unsigned i=0;i<arcs.size();++i) vcl_cout<<arcs[i];
-    vcl_cerr<<vcl_endl;
+    vcl_cerr<<'\n';
     vcl_abort();
   }
 
@@ -56,7 +56,7 @@ unsigned mmn_dp_solver::root() const
 
 //: Define dependencies
 void mmn_dp_solver::set_dependancies(const vcl_vector<mmn_dependancy>& deps,
-                        unsigned n_nodes, unsigned max_n_arcs)
+                                     unsigned n_nodes, unsigned max_n_arcs)
 {
   deps_ = deps;
   nc_.resize(n_nodes);
@@ -85,8 +85,8 @@ void mmn_dp_solver::process_dep1(const mmn_dependancy& dep)
     {
       vcl_cerr<<"p.rows()="<<p.rows()<<"p.cols()="<<p.cols()
               <<" nc0.size()="<<nc0.size()
-              <<" nc1.size()="<<nc1.size()<<vcl_endl;
-      vcl_cerr<<"dep: "<<dep<<vcl_endl;
+              <<" nc1.size()="<<nc1.size()<<vcl_endl
+              <<"dep: "<<dep<<vcl_endl;
     }
     assert(p.rows()==nc1.size());
     assert(p.cols()==nc0.size());
@@ -175,14 +175,13 @@ void mmn_dp_solver::process_dep2(const mmn_dependancy& dep)
 }
 
 
-
 //: Compute optimal choice for dep.v0 given v1 and v2
 //  Includes cost depending on (v0,v1,v2) as well as pairwise and 
 //  node costs.
 // tri_cost(i,j,k) is cost of associating smallest node index
 // with i, next with j and largest node index with k.
 void mmn_dp_solver::process_dep2t(const mmn_dependancy& dep,
-                                 const vil_image_view<double>& tri_cost)
+                                  const vil_image_view<double>& tri_cost)
 {
   // n_dep==2
   // dep->v0 depends on dep->v1 and dep->v2
@@ -393,7 +392,7 @@ mmn_solver* mmn_dp_solver::clone() const
 // Method: print
 //=======================================================================
 
-void mmn_dp_solver::print_summary(vcl_ostream& os) const
+void mmn_dp_solver::print_summary(vcl_ostream& /*os*/) const
 {
 }
 
