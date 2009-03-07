@@ -47,7 +47,7 @@ class bsta_mixture_weight_by_obs_updater
 };
 
 
-//: Unroll the power calculation
+//: Unrol the power calculation
 template <class T, unsigned n>
 struct bsta_compute_pow
 {
@@ -60,8 +60,7 @@ struct bsta_compute_pow
 template <class T>
 struct bsta_compute_pow<T,0>
 {
-  static inline T value(const T& v)
-  { return 1; }
+  static inline T value(const T& /*v*/) { return 1; }
 };
 
 
