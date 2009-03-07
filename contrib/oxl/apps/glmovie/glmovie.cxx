@@ -410,7 +410,7 @@ struct CB
   virtual ~CB () {}
 
   //: Return true if this event is interesting.
-  virtual bool want(int button, int modifiers, int x, int y) { return false; }
+  virtual bool want(int /*button*/, int /*modifiers*/, int /*x*/, int /*y*/) { return false; }
   virtual void down(int, int) { }
   virtual void motion(int, int) {}
   virtual void up(int, int) {}
