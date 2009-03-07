@@ -5,7 +5,7 @@
 // \file
 // \brief Templated Helper function extracting a data sample from image planes
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 6/13/06
+// \date June 13, 2006
 //
 // \verbatim
 //  Modifications
@@ -38,7 +38,7 @@ struct bbgm_planes_to_sample<T1,T2,3>
 template <class T1, class T2>
 struct bbgm_planes_to_sample<T1,T2,1>
 {
-  static void apply(const T1* data, T2& sample, vcl_ptrdiff_t step){
+  static void apply(const T1* data, T2& sample, vcl_ptrdiff_t /*step*/){
     sample = *data;
   }
 };
