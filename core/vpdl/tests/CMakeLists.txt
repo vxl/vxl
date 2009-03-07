@@ -24,5 +24,5 @@ ADD_TEST( vpdl_test_mixture               vpdl_test_all test_mixture )
 ADD_TEST( vpdl_test_mixture_of            vpdl_test_all test_mixture_of )
 ADD_TEST( vpdl_test_kernel_gaussian_sfbw  vpdl_test_all test_kernel_gaussian_sfbw )
 
-#ADD_EXECUTABLE( vpdl_test_include test_include.cxx )
-#TARGET_LINK_LIBRARIES( vpdl_test_include vpdl )
+ADD_EXECUTABLE( vpdl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vpdl_test_include vpdl )
