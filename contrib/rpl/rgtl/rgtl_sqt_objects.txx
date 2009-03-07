@@ -57,16 +57,16 @@ struct rgtl_sqt_objects_cell_data
   cone_bounds_type depth_max;
   cone_bounds_type cone_axis[D];
   cone_bounds_type cone_angle;
-private:
+ private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
+  {
     sr & depth_min;
     sr & depth_max;
     sr & cone_axis;
     sr & cone_angle;
-    }
+  }
 };
 
 // Leaves hold per-cell information and also store objects.
@@ -84,15 +84,15 @@ struct rgtl_sqt_objects_leaf_data: public rgtl_sqt_objects_cell_data<D>
   rgtl_sqt_objects_leaf_data() {}
   rgtl_sqt_objects_leaf_data(index_type begin, index_type end):
     index_begin(begin), index_end(end) {}
-private:
+ private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
+  {
     sr & rgtl_serialize_base<derived>(*this);
     sr & index_begin;
     sr & index_end;
-    }
+  }
 };
 
 // Nodes hold per-cell information.
@@ -100,13 +100,13 @@ template <unsigned int D>
 struct rgtl_sqt_objects_node_data: public rgtl_sqt_objects_cell_data<D>
 {
   typedef rgtl_sqt_objects_cell_data<D> derived;
-private:
+ private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
+  {
     sr & rgtl_serialize_base<derived>(*this);
-    }
+  }
 };
 
 //----------------------------------------------------------------------------
@@ -120,7 +120,7 @@ class rgtl_sqt_objects_query_closest_face;
 template <unsigned int D>
 class rgtl_sqt_objects_face_base
 {
-public:
+ public:
   // Type stored in tree leaves.
   typedef rgtl_sqt_objects_leaf_data<D> leaf_data_type;
 
@@ -172,7 +172,7 @@ public:
   tree_type& tree() { return this->tree_; }
   tree_type const& tree() const { return this->tree_; }
 
-protected:
+ protected:
   // Reference the full spatial structure internal implementation that
   // owns this face.
   internal_type& internal_;
@@ -184,20 +184,20 @@ protected:
   // object ids in each leaf.
   vcl_vector<int> object_ids_;
 
-private:
+ private:
   friend class rgtl_serialize_access;
   template <class Serializer> void serialize(Serializer& sr)
-    {
+  {
     sr & tree_;
     sr & object_ids_;
-    }
+  }
 };
 
 // Implementation of spatial structure for a single face.
 template <unsigned int D, unsigned int Face>
 class rgtl_sqt_objects_face: public rgtl_sqt_objects_face_base<D>
 {
-public:
+ public:
   typedef rgtl_sqt_objects_face_base<D> derived;
 
   // Promote type names from superclass.
@@ -231,9 +231,9 @@ public:
   // Convert a direction in this face to parameters.
   virtual void direction_to_parameters(double const d[D],
                                        double u[D-1]) const
-    {
+  {
     space::direction_to_parameters(d, u);
-    }
+  }
 
   // Build the spatial structure in this face.
   virtual void build(sqt_object_set_ptr& oa);
@@ -247,27 +247,27 @@ public:
 #ifdef RGTL_SQT_OBJECTS_DEBUG_BUILD2
   class exception_stack
   {
-  public:
+   public:
     exception_stack(cell_location_type const& cell):
       cell_(cell), msg_(""), sz1_(0) {}
     void set_message(const char* msg) { this->msg_ = msg; }
     void set_size1(unsigned int sz1) { this->sz1_ = sz1; }
     ~exception_stack()
+    {
+      if (std::uncaught_exception())
       {
-      if(std::uncaught_exception())
-        {
         vcl_cerr << "  " << cell_ << " (" << this->sz1_
                  << ") " << this->msg_ << vcl_endl;
-        }
       }
-  private:
+    }
+   private:
     cell_location_type const& cell_;
     const char* msg_;
     unsigned int sz1_;
   };
 #endif
 
-private:
+ private:
   // Recursive method to actually build the spatial structure in this face.
   void build(cell_geometry_type const& cell_geometry,
              cell_index_type cell_index,
@@ -281,18 +281,18 @@ private:
 
   // Access methods for internal representation.
   object_array_type const& object_array() const
-    { return this->internal_.object_array(); }
+  { return this->internal_.object_array(); }
   vnl_vector_fixed<double,D> const& origin() const
-    { return this->internal_.origin(); }
+  { return this->internal_.origin(); }
 
   friend class rgtl_sqt_objects_query_closest_face<D, Face>;
 
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
+  {
     sr & rgtl_serialize_base<derived>(*this);
-    }
+  }
 };
 
 //----------------------------------------------------------------------------
@@ -304,10 +304,10 @@ template <unsigned int D, unsigned int Face> class rgtl_sqt_objects_faces;
 template <unsigned int D>
 class rgtl_sqt_objects_faces_base
 {
-public:
+ public:
   rgtl_sqt_objects_faces_base(rgtl_sqt_objects_internal<D>&,
                               rgtl_sqt_objects_face_base<D>* [(D<<1)]) {}
-private:
+ private:
   friend class rgtl_serialize_access;
   template <class Serializer> void serialize(Serializer&) {}
 };
@@ -318,6 +318,7 @@ template <unsigned int Face> struct rgtl_sqt_objects_face_next
   template <unsigned int D>
   struct get { typedef rgtl_sqt_objects_faces<D, Face-1> type; };
 };
+
 template <> struct rgtl_sqt_objects_face_next<0>
 {
   template <unsigned int D>
@@ -325,39 +326,39 @@ template <> struct rgtl_sqt_objects_face_next<0>
 };
 
 template <unsigned int D, unsigned int Face>
-class rgtl_sqt_objects_faces:
-  public rgtl_sqt_objects_face_next<Face>::template get<D>::type
+class rgtl_sqt_objects_faces
+: public rgtl_sqt_objects_face_next<Face>::template get<D>::type
 {
-public:
+ public:
   // Superclass holds additional faces.
   typedef typename
   rgtl_sqt_objects_face_next<Face>::template get<D>::type derived;
 
   // Construct a face and provide a pointer to it.
   rgtl_sqt_objects_faces(rgtl_sqt_objects_internal<D>& internal,
-                         rgtl_sqt_objects_face_base<D>* p[(D<<1)]):
-    derived(internal, p), face_(internal)
-    {
+                         rgtl_sqt_objects_face_base<D>* p[(D<<1)])
+  : derived(internal, p), face_(internal)
+  {
     p[Face] = &face_;
-    }
-private:
+  }
+ private:
   // Hold a face instance.
   rgtl_sqt_objects_face<D, Face> face_;
 
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
+  {
     sr & rgtl_serialize_base<derived>(*this);
     sr & face_;
-    }
+  }
 };
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
 class rgtl_sqt_objects_internal
 {
-public:
+ public:
   // Type holding original array of objects stored.
   typedef rgtl_object_array<D> object_array_type;
 
@@ -379,13 +380,13 @@ public:
 
   // Get the implementation object for a given face index.
   rgtl_sqt_objects_face_base<D>& face(unsigned int i)
-    {
+  {
     return *faces_[i];
-    }
+  }
   rgtl_sqt_objects_face_base<D> const& face(unsigned int i) const
-    {
+  {
     return *faces_[i];
-    }
+  }
 
   // Get tree building parameters.
   int max_level() const { return this->max_level_; }
@@ -393,7 +394,7 @@ public:
 
   // Get the original object array.
   object_array_type const& object_array() const
-    { return this->object_array_; }
+  { return this->object_array_; }
 
   // Get the SQT guard position.  This is also the origin of all sight rays.
   vnl_vector_fixed<double,D> const& origin() const { return this->origin_; }
@@ -406,22 +407,22 @@ public:
                     double bound_squared) const;
 
   int number_of_objects() const
-    {
+  {
     return this->object_array_.number_of_objects();
-    }
+  }
 
   bool object_closest_point(int id,
                             double const x[D],
                             double y[D],
                             double bound_squared) const
-    {
+  {
     return this->object_array_.object_closest_point(id, x, y, bound_squared);
-    }
+  }
 
   bool visit_once(int id) const
-    {
+  {
     return this->object_once_.visit(id);
-    }
+  }
 
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
   void set_query_closest_debug(bool b) { this->query_closest_debug_ = b; }
@@ -429,7 +430,7 @@ public:
   void set_query_closest_debug(bool) {}
 #endif
 
-private:
+ private:
   // Container holding typed face instances.
   rgtl_sqt_objects_faces<D, (D<<1)-1> faces_container_;
 
@@ -455,7 +456,7 @@ private:
   friend class rgtl_sqt_objects_query_closest<D>;
 
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-public:
+ public:
   // Enable closest point query output only after the distance
   // transform has finished.
   bool query_closest_debug_;
@@ -464,13 +465,13 @@ public:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
+  {
     sr & faces_container_;
     sr & object_once_;
     sr & max_level_;
     sr & max_per_leaf_;
     sr & origin_;
-    }
+  }
 };
 
 //----------------------------------------------------------------------------
@@ -500,23 +501,23 @@ void rgtl_sqt_objects_internal<D>::build(sqt_object_array_type const& objs,
   this->query_closest_debug_ = false;
 #endif
 
-  for(unsigned int a=0; a < D; ++a)
-    {
+  for (unsigned int a=0; a < D; ++a)
+  {
     this->origin_[a] = origin[a];
-    }
+  }
 
   int n = this->number_of_objects();
   vcl_vector<int> ids(n);
-  for(int i=0; i < n; ++i)
-    {
+  for (int i=0; i < n; ++i)
+  {
     ids[i] = i;
-    }
+  }
 
-  for(unsigned int i=0; i < (D<<1); ++i)
-    {
+  for (unsigned int i=0; i < (D<<1); ++i)
+  {
     sqt_object_set_ptr soa(objs.new_set(this->origin_.data_block(), i));
     this->face(i).build(soa);
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -533,7 +534,7 @@ rgtl_sqt_objects_internal<D>::query_ray(double const d[D],
 template <unsigned int D>
 class rgtl_sqt_objects_query_closest
 {
-public:
+ public:
   typedef rgtl_sqt_objects_internal<D> internal_type;
   rgtl_sqt_objects_query_closest(internal_type const& internal,
                                  double const p[D], int k,
@@ -544,12 +545,12 @@ public:
     this->checked_count_ = 0;
 #endif
     this->center_depth_squared_ = 0;
-    for(unsigned int a=0; a < D; ++a)
-      {
+    for (unsigned int a=0; a < D; ++a)
+    {
       this->center_direction_[a] = p[a] - this->internal_.origin(a);
       this->center_depth_squared_ +=
         this->center_direction_[a]*this->center_direction_[a];
-      }
+    }
     this->center_face_ =
       rgtl_sqt_space_base<D>::direction_to_face(this->center_direction_);
     this->internal_.face(this->center_face_).direction_to_parameters(
@@ -557,17 +558,17 @@ public:
     this->center_depth_ = vcl_sqrt(this->center_depth_squared_);
     this->set_bound(bound_squared);
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-    if(this->internal_.query_closest_debug_)
-      {
+    if (this->internal_.query_closest_debug_)
+    {
       vcl_cout << "Querying point (";
       const char* sep = "";
-      for(unsigned int a=0; a < D; ++a)
-        {
+      for (unsigned int a=0; a < D; ++a)
+      {
         vcl_cout << sep << p[a];
         sep = ", ";
-        }
-      vcl_cout << ") with initial bound " << this->bound_ << vcl_endl;
       }
+      vcl_cout << ") with initial bound " << this->bound_ << vcl_endl;
+    }
 #endif
     }
 
@@ -578,24 +579,24 @@ public:
   struct closest_object_entry
   {
     closest_object_entry(): id(-1), distance_squared(-1) {}
-    closest_object_entry(int idx, double d2, double q[D]):
-      id(idx), distance_squared(d2)
+    closest_object_entry(int idx, double d2, double q[D])
+    : id(idx), distance_squared(d2)
+    {
+      for (unsigned int a=0; a < D; ++a)
       {
-      for(unsigned int a=0; a < D; ++a)
-        {
         this->point[a] = q[a];
-        }
       }
+    }
     int id;
     double distance_squared;
     double point[D];
 
     bool operator<(closest_object_entry const& that)
-      {
-      return (this->distance_squared >= 0 &&
-              that.distance_squared >= 0 &&
-              this->distance_squared < that.distance_squared);
-      }
+    {
+      return this->distance_squared >= 0 &&
+             that.distance_squared  >= 0 &&
+             this->distance_squared < that.distance_squared;
+    }
   };
 
   void update_bound(double bound);
@@ -604,22 +605,22 @@ public:
   // Compute the squared distance between two points.
   static double compute_distance_squared(double const p[D],
                                          double const q[D])
-    {
+  {
     double d = 0.0;
-    for(unsigned int a=0; a < D; ++a)
-      {
+    for (unsigned int a=0; a < D; ++a)
+    {
       double da = p[a]-q[a];
       d += da*da;
-      }
-    return d;
     }
+    return d;
+  }
 
   // Compute the distance between two points.
   static double compute_distance(double const p[D],
                                  double const q[D])
-    {
+  {
     return vcl_sqrt(compute_distance_squared(p, q));
-    }
+  }
 
   // The internal sqt objects representation.
   internal_type const& internal_;
@@ -655,33 +656,33 @@ rgtl_sqt_objects_query_closest<D>
 {
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
   ++this->checked_count_;
-  if(this->internal_.query_closest_debug_)
-    {
+  if (this->internal_.query_closest_debug_)
+  {
     vcl_cout << "  checking object id " << id << vcl_endl;
-    }
+  }
 #endif
   // Get the squared distance to this object and use it only
   // if it is smaller than the current distance bound.
   double q[D];
   double distance_squared;
-  if(this->internal_.object_closest_point(id, p, q, this->bound_) &&
-     (distance_squared = this->compute_distance_squared(p, q),
-      distance_squared <= this->bound_))
-    {
+  if (this->internal_.object_closest_point(id, p, q, this->bound_) &&
+      (distance_squared = this->compute_distance_squared(p, q),
+       distance_squared <= this->bound_))
+  {
     // Insert this object into our sorted list of k objects.
     vcl_vector<closest_object_entry>& best = this->best_;
     closest_object_entry obj(id, distance_squared, q);
-    for(int j=0; j < k && obj.distance_squared >= 0; ++j)
+    for (int j=0; j < k && obj.distance_squared >= 0; ++j)
+    {
+      if (best[j].distance_squared < 0 || obj < best[j])
       {
-      if(best[j].distance_squared < 0 || obj < best[j])
-        {
         vcl_swap(obj, best[j]);
-        }
       }
+    }
 
     // Update the current bounding sphere radius.
     this->update_bound(best[k-1].distance_squared);
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -691,48 +692,48 @@ rgtl_sqt_objects_query_closest<D>
 ::get_result(int k, int* ids, double* squared_distances, double* points)
 {
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-  if(this->internal_.query_closest_debug_)
-    {
+  if (this->internal_.query_closest_debug_)
+  {
     vcl_cout << " Checked " << this->checked_count_
              << " of " << this->internal_.number_of_objects()
              << " objects." << vcl_endl;
-    }
+  }
 #endif
   // Copy the final object id list to the output.
   vcl_vector<closest_object_entry>& best = this->best_;
-  for(int i=0; i < k; ++i)
+  for (int i=0; i < k; ++i)
+  {
+    if (best[i].distance_squared >= 0)
     {
-    if(best[i].distance_squared >= 0)
-      {
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-      if(this->internal_.query_closest_debug_)
-        {
+      if (this->internal_.query_closest_debug_)
+      {
         vcl_cout << i
                  << ": id " << best[i].id
                  << ", d  " << vcl_sqrt(best[i].distance_squared) << vcl_endl;
-        }
-#endif
-      if(ids)
-        {
-        ids[i] = best[i].id;
-        }
-      if(squared_distances)
-        {
-        squared_distances[i] = best[i].distance_squared;
-        }
-      if(points)
-        {
-        for(unsigned int a=0; a < D; ++a)
-          {
-          points[i*D+a] = best[i].point[a];
-          }
-        }
       }
-    else
+#endif
+      if (ids)
       {
-      return i;
+        ids[i] = best[i].id;
+      }
+      if (squared_distances)
+      {
+        squared_distances[i] = best[i].distance_squared;
+      }
+      if (points)
+      {
+        for (unsigned int a=0; a < D; ++a)
+        {
+          points[i*D+a] = best[i].point[a];
+        }
       }
     }
+    else
+    {
+      return i;
+    }
+  }
   return k;
 }
 
@@ -752,23 +753,23 @@ void
 rgtl_sqt_objects_query_closest<D>
 ::update_bound(double bound)
 {
-  if(bound >= 0 && bound < this->bound_)
-    {
+  if (bound >= 0 && bound < this->bound_)
+  {
     this->set_bound(bound);
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-    if(this->internal_.query_closest_debug_)
-      {
+    if (this->internal_.query_closest_debug_)
+    {
       vcl_cout << " Reduced bound to " << this->bound_ << vcl_endl;
-      }
-#endif
     }
+#endif
+  }
 }
 
 //----------------------------------------------------------------------------
 template <unsigned int D, unsigned int Face>
 class rgtl_sqt_objects_query_closest_face
 {
-public:
+ public:
   typedef rgtl_sqt_objects_face<D, Face> face_type;
   typedef rgtl_sqt_objects_internal<D> internal_type;
   typedef rgtl_sqt_objects_query_closest<D> qc_type;
@@ -785,10 +786,10 @@ public:
     internal_(qc.internal_), face_(face), qc_(qc) {}
 
   void query(double const p[D], int k, double const u[D-1])
-    {
+  {
     // Recursively visit the tree starting at the root.
     this->query_impl(cell_location_type(Face), cell_index_type(), p, k, u);
-    }
+  }
 
   void query_impl(cell_location_type const& cell,
                   cell_index_type cell_index,
@@ -801,16 +802,16 @@ public:
                 double& nearest_squared) const;
 
   static double dot(cone_bounds_type const u[D], double const v[D])
-    {
+  {
     double d = 0;
-    for(unsigned int a=0; a < D; ++a)
-      {
+    for (unsigned int a=0; a < D; ++a)
+    {
       d += u[a]*v[a];
-      }
-    return d;
     }
+    return d;
+  }
 
-private:
+ private:
   internal_type const& internal_;
   face_type const& face_;
   qc_type& qc_;
@@ -824,106 +825,106 @@ rgtl_sqt_objects_query_closest_face<D, Face>
              double const p[D], int k, double const u[D-1])
 {
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-  if(this->internal_.query_closest_debug_)
-    {
+  if (this->internal_.query_closest_debug_)
+  {
     vcl_cout << "Considering cell " << cell << vcl_endl;
-    }
+  }
 #endif
 
-  if(this->face_.tree().has_children(cell_index))
-    {
+  if (this->face_.tree().has_children(cell_index))
+  {
     // Perform a fast-reject test if the current bounding sphere does
     // not intersect the cell bounding cone.
     double nearest_squared;
-    if(node_data_type const* nd =
+    if (node_data_type const* nd =
        this->face_.tree().get_node_data(cell_index))
+    {
+      if (this->disjoint(nd, nearest_squared))
       {
-      if(this->disjoint(nd, nearest_squared))
-        {
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-        if(this->internal_.query_closest_debug_)
-          {
+        if (this->internal_.query_closest_debug_)
+        {
           vcl_cout << " node is disjoint" << vcl_endl;
-          }
+        }
 #endif
         return;
-        }
       }
+    }
     else
-      {
-      abort();
-      }
+    {
+      vcl_abort();
+    }
 
     // This is a node.  Compute the child containing the ray, if any.
     // Use it to order child visitation to visit cells closer to the
     // query point first.
     unsigned int child_xor = 0;
-    if(u)
-      {
+    if (u)
+    {
       cell_bounds_type upper(cell.get_child(child_index_type((1<<(D-1))-1)));
-      for(unsigned int j=0; j < D-1; ++j)
+      for (unsigned int j=0; j < D-1; ++j)
+      {
+        if (u[j] >= upper.origin(j))
         {
-        if(u[j] >= upper.origin(j))
-          {
           child_xor |= (1<<j);
-          }
         }
       }
+    }
 
     // Recrusively query each child.
-    for(unsigned int i = 0;
-        i < (1<<(D-1)) && this->qc_.bound_ >= nearest_squared; ++i)
-      {
+    for (unsigned int i = 0;
+         i < (1<<(D-1)) && this->qc_.bound_ >= nearest_squared; ++i)
+    {
       child_index_type child_index(i^child_xor);
       this->query_impl(cell.get_child(child_index),
                        this->face_.tree().get_child(cell_index,
                                                     child_index),
                        p, k, u);
-      }
     }
-  else if(leaf_data_type const* ld =
-          this->face_.tree().get_leaf_data(cell_index))
-    {
+  }
+  else if (leaf_data_type const* ld =
+           this->face_.tree().get_leaf_data(cell_index))
+  {
     // Perform a fast-reject test if the current bounding sphere does
     // not intersect the cell bounding cone.
     double nearest_squared;
-    if(this->disjoint(ld, nearest_squared))
-      {
+    if (this->disjoint(ld, nearest_squared))
+    {
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-      if(this->internal_.query_closest_debug_)
-        {
+      if (this->internal_.query_closest_debug_)
+      {
         vcl_cout << " leaf is disjoint" << vcl_endl;
-        }
+      }
 #endif
       return;
-      }
+    }
 
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-    if(this->internal_.query_closest_debug_)
+    if (this->internal_.query_closest_debug_)
+    {
+      if (ld->index_begin < ld->index_end)
       {
-      if(ld->index_begin < ld->index_end)
-        {
         vcl_cout << " checking objects" << vcl_endl;
-        }
-      else
-        {
-        vcl_cout << " no objects" << vcl_endl;
-        }
       }
+      else
+      {
+        vcl_cout << " no objects" << vcl_endl;
+      }
+    }
 #endif
 
     // Test the objects in this leaf.
     typedef typename leaf_data_type::index_type index_type;
-    for(index_type i=ld->index_begin;
-        i != ld->index_end && this->qc_.bound_ >= nearest_squared; ++i)
-      {
+    for (index_type i=ld->index_begin;
+         i != ld->index_end && this->qc_.bound_ >= nearest_squared; ++i)
+    {
       int id = this->face_.object_ids_[i];
-      if(this->internal_.visit_once(id))
-        {
+      if (this->internal_.visit_once(id))
+      {
         this->qc_.check_object(p, k, id);
-        }
       }
     }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -942,16 +943,16 @@ rgtl_sqt_objects_query_closest_face<D, Face>
   double cylinder_r = vcl_tan(cone_angle)*clip_depth;
   double distance_to_plane = query_depth - clip_depth;
   double distance_squared = distance_to_plane*distance_to_plane;
-  if(query_r > cylinder_r)
-    {
+  if (query_r > cylinder_r)
+  {
     // Query point is closest to the disc boundary.
     double distance_to_cylinder = query_r - cylinder_r;
     distance_squared += distance_to_cylinder*distance_to_cylinder;
-    }
+  }
   else
-    {
+  {
     // Query point is closest to the disc interior.
-    }
+  }
   return distance_squared;
 }
 
@@ -965,58 +966,58 @@ rgtl_sqt_objects_query_closest_face<D, Face>
   cone_bounds_type const* a = cell_data->cone_axis;
   double const* c = this->qc_.center_direction_;
   double a_dot_c = dot(a, c);
-  if(a_dot_c+this->qc_.radius_ < cell_data->depth_min)
-    {
+  if (a_dot_c+this->qc_.radius_ < cell_data->depth_min)
+  {
     // The bounding sphere is completely in front of the cell.
     return true;
-    }
-  if(a_dot_c-this->qc_.radius_ > cell_data->depth_max)
-    {
+  }
+  if (a_dot_c-this->qc_.radius_ > cell_data->depth_max)
+  {
     // The bounding sphere is completely behind the cell.
     return true;
-    }
+  }
 
   // Test the current bounding sphere against the cell bounding cone.
   double const beta = cell_data->cone_angle;
   double const theta = vcl_acos(a_dot_c / this->qc_.center_depth_);
-  if(theta <= beta)
-    {
+  if (theta <= beta)
+  {
     // The sphere center is inside the cone.
-    if(a_dot_c < cell_data->depth_min)
-      {
+    if (a_dot_c < cell_data->depth_min)
+    {
       // Query point is closest to near disc interior.
       double distance_to_near_plane = cell_data->depth_min - a_dot_c;
       nearest_squared = distance_to_near_plane*distance_to_near_plane;
-      }
-    else if(a_dot_c > cell_data->depth_max)
-      {
+    }
+    else if (a_dot_c > cell_data->depth_max)
+    {
       // Query point is closest to the far disc.
       nearest_squared = this->compute_disc_nearest(this->qc_.center_depth_,
                                                    theta, a_dot_c, beta,
                                                    cell_data->depth_max);
-      }
+    }
     else
-      {
+    {
       // Query point is inside the clipped cone.
       nearest_squared = 0;
-      }
+    }
 
     // If the distance to the nearest is at least as far as the
     // current bound then the sphere is disjoint.
     return nearest_squared >= this->qc_.bound_;
-    }
+  }
 
   double const phi = beta + vnl_math::pi / 2;
-  if(theta >= phi)
-    {
+  if (theta >= phi)
+  {
     // The sphere center is closest to the cone tip.
-    if(this->qc_.center_depth_squared_ > this->qc_.bound_)
-      {
+    if (this->qc_.center_depth_squared_ > this->qc_.bound_)
+    {
       // The sphere is outside the cone.
       return true;
-      }
+    }
     else
-      {
+    {
       // Query point is closest to the near disc.
       nearest_squared = this->compute_disc_nearest(this->qc_.center_depth_,
                                                    theta, a_dot_c, beta,
@@ -1025,20 +1026,20 @@ rgtl_sqt_objects_query_closest_face<D, Face>
       // If the distance to the nearest is at least as far as the
       // current bound then the sphere is disjoint.
       return nearest_squared >= this->qc_.bound_;
-      }
     }
+  }
 
   // The sphere center is closest to the cone surface.
   double c_dot_c = this->qc_.center_depth_squared_;
   double distance_to_cone_surface =
     (vcl_cos(phi)*a_dot_c + vcl_sin(phi)*vcl_sqrt(c_dot_c - a_dot_c*a_dot_c));
-  if(this->qc_.radius_ < distance_to_cone_surface)
-    {
+  if (this->qc_.radius_ < distance_to_cone_surface)
+  {
     // The sphere is outside the cone.
     return true;
-    }
+  }
   else
-    {
+  {
     // The sphere center is outside the cone.
     // Test against the far normal cone.
     double const alpha = vnl_math::pi/2 - beta;
@@ -1049,8 +1050,8 @@ rgtl_sqt_objects_query_closest_face<D, Face>
       ((scale_far - a_dot_c) /
        vcl_sqrt(c_dot_c - 2*scale_far*a_dot_c + scale_far*scale_far));
     double gamma_far = vcl_acos(cos_gamma_far);
-    if(gamma_far > alpha)
-      {
+    if (gamma_far > alpha)
+    {
       // Query point is behind the far normal cone and outside the
       // primal cone.  It is closest to the far disc boundary.
       double query_r = vcl_sin(theta)*this->qc_.center_depth_;
@@ -1060,34 +1061,34 @@ rgtl_sqt_objects_query_closest_face<D, Face>
       nearest_squared =
         (distance_to_far_plane*distance_to_far_plane +
          distance_to_far_cylinder*distance_to_far_cylinder);
-      }
+    }
     else
-      {
+    {
       // Test against the near normal cone.
       double scale_near = cell_data->depth_min / cos_beta_2;
       double cos_gamma_near =
         ((scale_near - a_dot_c) /
          vcl_sqrt(c_dot_c - 2*scale_near*a_dot_c + scale_near*scale_near));
       double gamma_near = vcl_acos(cos_gamma_near);
-      if(gamma_near < alpha)
-        {
+      if (gamma_near < alpha)
+      {
         // Query point is in front of the near normal cone and outside
         // the primal cone.  It is closest to the near disc.
         nearest_squared = this->compute_disc_nearest(this->qc_.center_depth_,
                                                      theta, a_dot_c, beta,
                                                      cell_data->depth_min);
-        }
+      }
       else
-        {
+      {
         // Query point is closest to the cone surface.
         nearest_squared = distance_to_cone_surface*distance_to_cone_surface;
-        }
       }
+    }
 
     // If the distance to the nearest is at least as far as the
     // current bound then the sphere is disjoint.
     return nearest_squared >= this->qc_.bound_;
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -1099,15 +1100,15 @@ rgtl_sqt_objects_internal<D>
                 double bound_squared) const
 {
   // Setup initial query sphere radius.
-  if(bound_squared < 0)
-    {
+  if (bound_squared < 0)
+  {
     bound_squared = vcl_numeric_limits<double>::infinity();
-    }
+  }
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
-  else if(this->query_closest_debug_)
-    {
+  else if (this->query_closest_debug_)
+  {
     vcl_cout << "User initial bound " << bound_squared << vcl_endl;
-    }
+  }
 #endif
 
   // Keep track objects already tested to avoid duplicating tests.
@@ -1118,13 +1119,13 @@ rgtl_sqt_objects_internal<D>
   rgtl_sqt_objects_query_closest<D> qc(*this, p, k, bound_squared);
   unsigned int f = qc.center_face_;
   this->face(f).query_closest(p, k, qc.center_parameters_, qc);
-  for(unsigned int i=0; i < (D<<1); ++i)
+  for (unsigned int i=0; i < (D<<1); ++i)
+  {
+    if (i != f)
     {
-    if(i != f)
-      {
       this->face(i).query_closest(p, k, 0, qc);
-      }
     }
+  }
   return qc.get_result(k, ids, squared_distances, points);
 }
 
@@ -1159,8 +1160,8 @@ rgtl_sqt_objects_face<D, Face>
 #endif
   bool tooDeep = cell.level() >= this->internal_.max_level();
   bool tooMany = oa->number_of_objects() > this->internal_.max_per_leaf();
-  if(tooMany && !tooDeep)
-    {
+  if (tooMany && !tooDeep)
+  {
     // Divide this cell.
     this->tree_.subdivide(cell_index);
 
@@ -1186,15 +1187,15 @@ rgtl_sqt_objects_face<D, Face>
     typename cell_geometry_type::children_type child_geometry(cell_geometry);
 
     // Build the children recursively.
-    for(child_index_type i(0); i < (1<<(D-1)); ++i)
-      {
+    for (child_index_type i(0); i < (1<<(D-1)); ++i)
+    {
       this->build(child_geometry[i],
                   this->tree_.get_child(cell_index, i),
                   children[i]);
-      }
     }
-  else if(oa->number_of_objects() > 0)
-    {
+  }
+  else if (oa->number_of_objects() > 0)
+  {
     // We will not divide this cell further.
     // Store the objects for this cell.
 #ifdef RGTL_SQT_OBJECTS_DEBUG_BUILD
@@ -1203,10 +1204,10 @@ rgtl_sqt_objects_face<D, Face>
 #endif
     typedef typename leaf_data_type::index_type index_type;
     index_type index_begin = index_type(this->object_ids_.size());
-    for(int i=0; i < oa->number_of_objects(); ++i)
-      {
+    for (int i=0; i < oa->number_of_objects(); ++i)
+    {
       this->object_ids_.push_back(oa->original_id(i));
-      }
+    }
     index_type index_end = index_type(this->object_ids_.size());
     leaf_data_type leaf_data(index_begin, index_end);
 
@@ -1219,7 +1220,7 @@ rgtl_sqt_objects_face<D, Face>
 
     // Store the data in the leaf.
     this->tree_.set_leaf_data(cell_index, &leaf_data);
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -1244,57 +1245,57 @@ rgtl_sqt_objects_face<D, Face>::query_ray(cell_location_type const& cell,
                                           double x[D],
                                           double* s) const
 {
-  if(this->tree_.has_children(cell_index))
-    {
+  if (this->tree_.has_children(cell_index))
+  {
     // This is a node.  Compute the child containing the ray.
     child_index_type child_index(0);
     cell_bounds_type upper(cell.get_child(child_index_type((1<<(D-1))-1)));
-    for(unsigned int j=0; j < D-1; ++j)
+    for (unsigned int j=0; j < D-1; ++j)
+    {
+      if (u[j] >= upper.origin(j))
       {
-      if(u[j] >= upper.origin(j))
-        {
         child_index |= (1<<j);
-        }
       }
+    }
 
     // Recurse into the chosen child.
     return this->query_ray(cell.get_child(child_index),
                            this->tree_.get_child(cell_index, child_index),
                            u, d, x, s);
-    }
-  else if(leaf_data_type const* ld = this->tree_.get_leaf_data(cell_index))
-    {
+  }
+  else if (leaf_data_type const* ld = this->tree_.get_leaf_data(cell_index))
+  {
     // Test the objects in this leaf.
     bool found = false;
     double min_s = vcl_numeric_limits<double>::infinity();
     typedef typename leaf_data_type::index_type index_type;
-    for(index_type i=ld->index_begin; i != ld->index_end; ++i)
-      {
+    for (index_type i=ld->index_begin; i != ld->index_end; ++i)
+    {
       int id = this->object_ids_[i];
       double cur_x[D];
       double cur_s;
-      if(this->query_ray(id, d, cur_x, &cur_s))
-        {
+      if (this->query_ray(id, d, cur_x, &cur_s))
+      {
         found = true;
-        if(cur_s < min_s)
-          {
+        if (cur_s < min_s)
+        {
           min_s = cur_s;
-          if(x)
+          if (x)
+          {
+            for (unsigned int a=0; a < D; ++a)
             {
-            for(unsigned int a=0; a < D; ++a)
-              {
               x[a] = cur_x[a];
-              }
             }
-          if(s)
-            {
+          }
+          if (s)
+          {
             *s = min_s;
-            }
           }
         }
       }
-    return found;
     }
+    return found;
+  }
   return false;
 }
 
@@ -1399,17 +1400,17 @@ void rgtl_sqt_objects<D>::compute_bounds(double bounds[D][2]) const
 
   // Update the bounds to contain the origin.
   vnl_vector_fixed<double,D> const& p = this->origin();
-  for(unsigned int a=0; a < D; ++a)
+  for (unsigned int a=0; a < D; ++a)
+  {
+    if (p[a] < bounds[a][0])
     {
-    if(p[a] < bounds[a][0])
-      {
       bounds[a][0] = p[a];
-      }
-    if(p[a] > bounds[a][1])
-      {
-      bounds[a][1] = p[a];
-      }
     }
+    if (p[a] > bounds[a][1])
+    {
+      bounds[a][1] = p[a];
+    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -1446,24 +1447,24 @@ rgtl_sqt_objects<D>
   typedef typename face_base::node_data_type node_data_type;
   typedef typename face_base::leaf_data_type leaf_data_type;
   tree_type const& tree = this->internal_->face(face).tree();
-  if(tree.has_children(cell_index))
+  if (tree.has_children(cell_index))
+  {
+    if (node_data_type const* nd = tree.get_node_data(cell_index))
     {
-    if(node_data_type const* nd = tree.get_node_data(cell_index))
-      {
       depth_min = nd->depth_min;
       depth_max = nd->depth_max;
       return true;
-      }
     }
+  }
   else
+  {
+    if (leaf_data_type const* ld = tree.get_leaf_data(cell_index))
     {
-    if(leaf_data_type const* ld = tree.get_leaf_data(cell_index))
-      {
       depth_min = ld->depth_min;
       depth_max = ld->depth_max;
       return true;
-      }
     }
+  }
   return false;
 }
 

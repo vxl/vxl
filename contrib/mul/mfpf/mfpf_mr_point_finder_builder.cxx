@@ -201,8 +201,7 @@ void mfpf_mr_point_finder_builder::clear(unsigned n_egs)
   for (unsigned i=0;i<size();++i) builder(i).clear(n_egs);
 }
 
-//: Get sample image at specified point for level L of the point_finder
-//  hierarchyl
+//: Get sample image at specified point for level L of the point_finder hierarchy
 void mfpf_mr_point_finder_builder::get_sample_vector(
                         const vimt_image_pyramid& image_pyr,
                         const vgl_point_2d<double>& p,
@@ -223,8 +222,8 @@ void mfpf_mr_point_finder_builder::get_sample_vector(
     im_L=nearest_valid_level(image_pyr,im_L);
     if (image_pyr(im_L).image_size()[0]==0)
     {
-       vcl_cerr<<"No image pyramid levels set up.\n";
-       abort();
+       vcl_cerr << "No image pyramid levels set up.\n";
+       vcl_abort();
     }
   }
 
@@ -247,15 +246,15 @@ void mfpf_mr_point_finder_builder::add_example(
 
     if (image_pyr(im_L).image_size()[0]==0)
     {
-      vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
-              <<"This is required for level "<<L<<" of the mfpf model.\n"
-              <<"Check range for which pyramid is defined.\n";
+      vcl_cerr << "Image at level "<<im_L<<" in pyramid has not been set up.\n"
+               << "This is required for level "<<L<<" of the mfpf model.\n"
+               << "Check range for which pyramid is defined.\n";
 
       im_L=nearest_valid_level(image_pyr,im_L);
       if (image_pyr(im_L).image_size()[0]==0)
       {
-         vcl_cerr<<"No image pyramid levels set up.\n";
-         abort();
+         vcl_cerr << "No image pyramid levels set up.\n";
+         vcl_abort();
       }
     }
 
@@ -376,13 +375,13 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_mr_point_finder_builder& b)
   return os;
 }
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_mr_point_finder_builder& b)
 {
   b.b_write(bfs);
 }
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mfpf_mr_point_finder_builder& b)
 {
   b.b_read(bfs);

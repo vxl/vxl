@@ -11,6 +11,7 @@
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for std::abort()
 #include <vcl_sstream.h>
 
 #include <vsl/vsl_indent.h>
@@ -70,8 +71,7 @@ static unsigned nearest_valid_level(const vimt_image_pyramid& im_pyr,
   return unsigned(bestL);
 }
 
-//: Get sample image at specified point for level L of the point_finder
-//  hierarchyl
+//: Get sample image at specified point for level L of the point_finder hierarchy
 void mfpf_mr_point_finder::get_sample_vector(
                         const vimt_image_pyramid& image_pyr,
                         const vgl_point_2d<double>& p,
@@ -92,8 +92,8 @@ void mfpf_mr_point_finder::get_sample_vector(
     im_L=nearest_valid_level(image_pyr,im_L);
     if (image_pyr(im_L).image_size()[0]==0)
     {
-       vcl_cerr<<"No image pyramid levels set up.\n";
-       abort();
+       vcl_cerr << "No image pyramid levels set up.\n";
+       vcl_abort();
     }
   }
 
@@ -371,13 +371,13 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_mr_point_finder& b)
   return os;
 }
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_mr_point_finder& b)
 {
   b.b_write(bfs);
 }
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mfpf_mr_point_finder& b)
 {
   b.b_read(bfs);
