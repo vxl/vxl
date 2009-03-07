@@ -58,7 +58,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
 #if 0  // I, J, K should not be transformed
     // transform each tiepoint
     bgeo_utm utm;
-    
+
     for (unsigned i=0; i< tiepoints.size(); i++) {
       assert (tiepoints[i].size() == 6);
       double I = tiepoints[i][0]; // lat
@@ -89,8 +89,8 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
       vcl_cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       scale_tag = true;
-	  vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints, 
-                              trans_matrix, scale_tag);
+      vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints,
+                                         trans_matrix, scale_tag);
     } else {
       vcl_cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
@@ -100,7 +100,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
 
     camera = new vpgl_geo_camera(trans_matrix, lvcs, tiepoints);
     if (is_utm)
-      camera->set_utm(utm_zone, h);  
+      camera->set_utm(utm_zone, h);
     camera->set_scale_format(scale_tag);
     return true;
   } else {
@@ -108,6 +108,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
       return false;
   }
 }
+
 //: transforms a given local 3d world point to image plane
 void vpgl_geo_camera::project(const double x, const double y, const double z,
                               double& u, double& v) const
@@ -121,7 +122,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
     lat = y;
     lon = x;
   }
-  
+
   double x1=lon, y1=lat , z1=gz;
   if (is_utm) {
     bgeo_utm utm;
@@ -262,7 +263,7 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
   //      |   0.0   0.0   0.0   1.0   |
   //      |-                         -|
   double sx = 1.0, sy = 1.0, sz = 1.0;
-  if(scale_tag){
+  if (scale_tag){
     sx = sx1; sy = sy1; sz = sz1;
   }
   double Tx = X - I*sx;
