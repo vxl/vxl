@@ -34,6 +34,7 @@ mfpf_edge_finder_builder::~mfpf_edge_finder_builder()
 //  with ref point at centre.
 void mfpf_edge_finder_builder::set_region_size(double, double)
 {
+  // NYI
 }
 
 //: Create new mfpf_edge_finder on heap
@@ -44,15 +45,17 @@ mfpf_point_finder* mfpf_edge_finder_builder::new_finder() const
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
-void mfpf_edge_finder_builder::clear(unsigned n_egs)
+void mfpf_edge_finder_builder::clear(unsigned /*n_egs*/)
 {
+  // NYI
 }
 
 //: Add one example to the model
-void mfpf_edge_finder_builder::add_example(const vimt_image_2d_of<float>& image,
-                                           const vgl_point_2d<double>& p,
-                                           const vgl_vector_2d<double>& u)
+void mfpf_edge_finder_builder::add_example(const vimt_image_2d_of<float>& /*image*/,
+                                           const vgl_point_2d<double>& /*p*/,
+                                           const vgl_vector_2d<double>& /*u*/)
 {
+  // NYI
 }
 
 //: Build this object from the data supplied in add_example()
