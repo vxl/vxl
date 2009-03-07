@@ -807,7 +807,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigne
   bvxm_voxel_slab<edges_datatype> image_voxel(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<edges_datatype> image_image(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_image)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << '\n';
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)EDGES << '\n';
     return false;
   }
 

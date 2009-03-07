@@ -515,7 +515,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << APM_T << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)APM_T << vcl_endl;
     return false;
   }
 
