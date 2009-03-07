@@ -357,7 +357,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::last_adj_edge(V_sptr v)
 //: returns the successor of edge e in the adjacency list of v.
 //  Precondition: e is incident to v.
 template<class V, class E>
-typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_succ(E_sptr e, V_sptr v)
+typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_succ(E_sptr /*e*/, V_sptr /*v*/)
 {
   return 0;
 }
@@ -365,7 +365,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_succ(E_sptr e, V_sptr v)
 //: returns the predecessor of edge e in the adjacency list of v.
 //  Precondition: e is incident to v.
 template<class V, class E>
-typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_pred(E_sptr e, V_sptr v)
+typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_pred(E_sptr /*e*/, V_sptr /*v*/)
 {
   return 0;
 }
