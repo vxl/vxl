@@ -42,7 +42,7 @@ class vispt_elm
   const void* vis_pointer() const { return vis_pointer_; }
 
   //: Ming: don't make this function pure virtual. It eats up 4 bytes of mem for each derived object!
-  virtual void getInfo (vcl_ostringstream& ostrm) {}
+  virtual void getInfo (vcl_ostringstream& /*ostrm*/) {}
 };
 
 //##########################################################
