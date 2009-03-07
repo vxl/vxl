@@ -1,8 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vpdl/vpdl_gaussian_sphere.h>
-#include <vpdl/vpdl_gaussian_indep.h>
-#include <vpdl/vpdl_gaussian.h>
-#include <vpdl/vpdl_update_gaussian.h>
+#include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -44,203 +41,215 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
   // minimum variance for lower bounding updating tests
   const T min_var = 0.01;
   
-
   // test the spherical gaussian updating
+  vcl_cout <<"================= vpdt_gaussian (spherical) =================\n";
   {
-    vpdl_gaussian_sphere<T,3> gauss3;
+    vpdt_gaussian<vnl_vector_fixed<T,3>, T> gauss3;
     bool test_mean = true;
     bool test_vars = true;
     for(unsigned int i=0; i<data.size(); ++i){
-      vpdl_update_gaussian(gauss3, T(1.0/(i+1)), data[i]);
+      vpdt_update_gaussian(gauss3, T(1.0/(i+1)), data[i]);
       
-      T mean_diff = (gauss3.mean() - means[i]).inf_norm();
+      T mean_diff = (gauss3.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if(mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean()<<vcl_endl;
+        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<vcl_endl;
       
-      T var_diff = gauss3.covariance() - vars[i];
+      T var_diff = gauss3.covar - vars[i];
       test_vars = test_vars && (var_diff < epsilon);
       if(var_diff >= epsilon)
-        vcl_cout << "variance should be "<<vars[i]<<" is "<<gauss3.covariance()<<vcl_endl;
+        vcl_cout << "variance should be "<<vars[i]
+                 <<" is "<<gauss3.covar<<" difference is "<<var_diff<<vcl_endl;
     }
     TEST(("sphere mean update <"+type_name+"> fixed").c_str(), test_mean, true);
     TEST(("sphere variance update <"+type_name+"> fixed").c_str(), test_vars, true);
     
     // test updating with a lower bound on variance
     for(unsigned int i=0; i<20; ++i)
-      vpdl_update_gaussian(gauss3, T(0.5), data[0], min_var);
-    TEST(("sphere variance bound <"+type_name+"> fixed").c_str(), gauss3.covariance(), min_var);
+      vpdt_update_gaussian(gauss3, T(0.5), data[0], min_var);
+    TEST(("sphere variance bound <"+type_name+"> fixed").c_str(), gauss3.covar, min_var);
     
     // test dynamic dimension variant
-    vpdl_gaussian_sphere<T> gauss(3);
+    vpdt_gaussian<vnl_vector<T>,T> gauss(3);
     test_mean = true;
     test_vars = true;
     for(unsigned int i=0; i<data.size(); ++i){
-      vpdl_update_gaussian(gauss, T(1.0/(i+1)), data[i]);
+      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i]));
       
-      T mean_diff = (gauss.mean() - means[i]).inf_norm();
+      T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if(mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean()<<vcl_endl;
+        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<vcl_endl;
       
-      T var_diff = gauss.covariance() - vars[i];
+      T var_diff = gauss.covar - vars[i];
       test_vars = test_vars && (var_diff < epsilon);
       if(var_diff >= epsilon)
-        vcl_cout << "variance should be "<<vars[i]<<" is "<<gauss.covariance()<<vcl_endl;
+        vcl_cout << "variance should be "<<vars[i]
+                 <<" is "<<gauss.covar<<" difference is "<<var_diff<<vcl_endl;
     }
     TEST(("sphere mean update <"+type_name+"> variable").c_str(), test_mean, true);
     TEST(("sphere variance update <"+type_name+"> variable").c_str(), test_vars, true);
     
     // test updating with a lower bound on variance
     for(unsigned int i=0; i<20; ++i)
-      vpdl_update_gaussian(gauss, T(0.5), data[0], min_var);
-    TEST(("sphere variance bound <"+type_name+"> variable").c_str(), gauss.covariance(), min_var);
+      vpdt_update_gaussian(gauss, T(0.5), vnl_vector<T>(data[0]), min_var);
+    
+    TEST(("sphere variance bound <"+type_name+"> variable").c_str(), gauss.covar, min_var);
   }
   
-  vcl_cout <<"======================================================\n";
   
   // test the independent gaussian updating
+  vcl_cout <<"================ vpdt_gaussian (independent) ================\n";
   {
-    vpdl_gaussian_indep<T,3> gauss3;
+    vpdt_gaussian<vnl_vector_fixed<T,3>, vnl_vector_fixed<T,3> > gauss3;
     bool test_mean = true;
     bool test_vars = true;
     for(unsigned int i=0; i<data.size(); ++i){
-      vpdl_update_gaussian(gauss3, T(1.0/(i+1)), data[i]);
+      vpdt_update_gaussian(gauss3, T(1.0/(i+1)), data[i]);
       
-      T mean_diff = (gauss3.mean() - means[i]).inf_norm();
+      T mean_diff = (gauss3.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if(mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean()<<vcl_endl;
+        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<vcl_endl;
       
-      T var_diff = (gauss3.covariance() - diagvars[i]).inf_norm();
+      T var_diff = (gauss3.covar - diagvars[i]).inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if(var_diff >= epsilon)
-        vcl_cout << "variance should be "<<diagvars[i]<<" is "<<gauss3.covariance()<<vcl_endl;
+        vcl_cout << "variance should be "<<diagvars[i]
+                 <<" is "<<gauss3.covar<<" difference is "<<var_diff<<vcl_endl;
     }
     TEST(("independent mean update <"+type_name+"> fixed").c_str(), test_mean, true);
     TEST(("independent variance update <"+type_name+"> fixed").c_str(), test_vars, true);   
     
     // test updating with a lower bound on variance
     for(unsigned int i=0; i<20; ++i)
-      vpdl_update_gaussian(gauss3, T(0.5), data[0], min_var);
+      vpdt_update_gaussian(gauss3, T(0.5), data[0], min_var);
     TEST(("independent variance bound <"+type_name+"> fixed").c_str(), 
-         gauss3.covariance().min_value(), min_var);
+         gauss3.covar.min_value(), min_var);
     
     // test dynamic dimension variant
-    vpdl_gaussian_indep<T> gauss(3);
+    vpdt_gaussian<vnl_vector<T>,vnl_vector<T> > gauss(3);
     test_mean = true;
     test_vars = true;
     for(unsigned int i=0; i<data.size(); ++i){
-      vpdl_update_gaussian(gauss, T(1.0/(i+1)), data[i]);
+      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i]));
       
-      T mean_diff = (gauss.mean() - means[i]).inf_norm();
+      T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if(mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean()<<vcl_endl;
+        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<vcl_endl;
       
-      T var_diff = (gauss.covariance() - diagvars[i]).inf_norm();
+      T var_diff = (gauss.covar - diagvars[i]).inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if(var_diff >= epsilon)
-        vcl_cout << "variance should be "<<diagvars[i]<<" is "<<gauss.covariance()<<vcl_endl;
+        vcl_cout << "variance should be "<<diagvars[i]
+                 <<" is "<<gauss.covar<<" difference is "<<var_diff<<vcl_endl;
     }
     TEST(("independent mean update <"+type_name+"> variable").c_str(), test_mean, true);
     TEST(("independent variance update <"+type_name+"> variable").c_str(), test_vars, true);   
     
     // test updating with a lower bound on variance
     for(unsigned int i=0; i<20; ++i)
-      vpdl_update_gaussian(gauss, T(0.5), data[0], min_var);
+      vpdt_update_gaussian(gauss, T(0.5), vnl_vector<T>(data[0]), min_var);
     TEST(("independent variance bound <"+type_name+"> variable").c_str(), 
-         gauss.covariance().min_value(), min_var);
+         gauss.covar.min_value(), min_var);
   }
   
-  vcl_cout <<"======================================================\n";
   
   // test the full generality gaussian updating
+  vcl_cout <<"================= vpdt_gaussian (general) =================\n";
   {
-    vpdl_gaussian<T,3> gauss3;
+    vpdt_gaussian<vnl_vector_fixed<T,3> > gauss3;
     bool test_mean = true;
     bool test_vars = true;
     for(unsigned int i=0; i<data.size(); ++i){
-      vpdl_update_gaussian(gauss3, T(1.0/(i+1)), data[i]);
+      vpdt_update_gaussian(gauss3, T(1.0/(i+1)), data[i]);
       
-      T mean_diff = (gauss3.mean() - means[i]).inf_norm();
+      T mean_diff = (gauss3.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if(mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean()<<vcl_endl;
+        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<vcl_endl;
       
-      T var_diff = (gauss3.covariance() - covars[i]).array_inf_norm();
+      vnl_matrix_fixed<T,3,3> covariance;
+      gauss3.compute_covar(covariance);
+      T var_diff = (covariance - covars[i]).array_inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if(var_diff >= epsilon)
-        vcl_cout << "covariance should be\n"<<covars[i]<<"covariance is\n"<<gauss3.covariance()<<vcl_endl;
+        vcl_cout << "covariance should be\n"<<covars[i]
+                 <<"covariance is\n"<<covariance
+                 <<"difference is "<<var_diff<<vcl_endl;
     }
     TEST(("general mean update <"+type_name+"> fixed").c_str(), test_mean, true);
     TEST(("general covariance update <"+type_name+"> fixed").c_str(), test_vars, true);  
     
     // test updating with a lower bound on variance
     for(unsigned int i=0; i<20; ++i)
-      vpdl_update_gaussian(gauss3, T(0.5), data[0], min_var);
+      vpdt_update_gaussian(gauss3, T(0.5), data[0], min_var);
     TEST(("general covariance bound <"+type_name+"> fixed").c_str(), 
-         gauss3.covar_eigenvals().min_value(), min_var);
+         gauss3.covar.eigenvalues().min_value(), min_var);
     
     // test dynamic dimension variant
-    vpdl_gaussian<T> gauss(3);
+    vpdt_gaussian<vnl_vector<T> > gauss(3);
     test_mean = true;
     test_vars = true;
     for(unsigned int i=0; i<data.size(); ++i){
-      vpdl_update_gaussian(gauss, T(1.0/(i+1)), data[i]);
+      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i]));
       
-      T mean_diff = (gauss.mean() - means[i]).inf_norm();
+      T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if(mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean()<<vcl_endl;
+        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<vcl_endl;
       
-      T var_diff = (gauss.covariance() - covars[i]).array_inf_norm();
+      vnl_matrix<T> covariance;
+      gauss.compute_covar(covariance);
+      T var_diff = (covariance - covars[i]).array_inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if(var_diff >= epsilon)
-        vcl_cout << "covariance should be\n"<<covars[i]<<"covariance is\n"<<gauss.covariance()<<vcl_endl;
+        vcl_cout << "covariance should be\n"<<covars[i]
+                 <<"covariance is\n"<<covariance
+                 <<"difference is "<<var_diff<<vcl_endl;
     }
     TEST(("general mean update <"+type_name+"> variable").c_str(), test_mean, true);
     TEST(("general covariance update <"+type_name+"> variable").c_str(), test_vars, true);
     
     // test updating with a lower bound on variance
     for(unsigned int i=0; i<20; ++i)
-      vpdl_update_gaussian(gauss, T(0.5), data[0], min_var);
+      vpdt_update_gaussian(gauss, T(0.5), vnl_vector<T>(data[0]), min_var);
     TEST(("general covariance bound <"+type_name+"> variable").c_str(), 
-         gauss.covar_eigenvals().min_value(), min_var);
+         gauss.covar.eigenvalues().min_value(), min_var);
   }
   
-  vcl_cout <<"======================================================\n";
   
   // test scalar gaussian updating
+  vcl_cout <<"================= vpdt_gaussian (scalar) =================\n";
   {
-    vpdl_gaussian<T,1> gauss1;
+    vpdt_gaussian<T> gauss1;
     bool test_mean = true;
     bool test_vars = true;
     for(unsigned int i=0; i<data.size(); ++i){
-      vpdl_update_gaussian(gauss1, T(1.0/(i+1)), data[i][0]);
+      vpdt_update_gaussian(gauss1, T(1.0/(i+1)), data[i][0]);
       
-      T mean_diff = gauss1.mean() - means[i][0];
+      T mean_diff = gauss1.mean - means[i][0];
       test_mean = test_mean && (mean_diff < epsilon);
       if(mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i][0]<<" is "<<gauss1.mean()<<vcl_endl;
+        vcl_cout << "mean should be "<<means[i][0]<<" is "<<gauss1.mean<<vcl_endl;
       
-      T var_diff = gauss1.covariance() - diagvars[i][0];
+      T var_diff = gauss1.covar - diagvars[i][0];
       test_vars = test_vars && (var_diff < epsilon);
       if(var_diff >= epsilon)
-        vcl_cout << "covariance should be "<<diagvars[i][0]<<" is "<<gauss1.covariance()<<vcl_endl;
+        vcl_cout << "covariance should be "<<diagvars[i][0]<<" is "<<gauss1.covar<<vcl_endl;
     }
     TEST(("scalar mean update <"+type_name+">").c_str(), test_mean, true);
     TEST(("scalar covariance update <"+type_name+">").c_str(), test_vars, true);
     
     // test updating with a lower bound on variance
     for(unsigned int i=0; i<20; ++i)
-      vpdl_update_gaussian(gauss1, T(0.5), data[0][0], min_var);
+      vpdt_update_gaussian(gauss1, T(0.5), data[0][0], min_var);
     TEST(("scalar covariance bound <"+type_name+"> fixed").c_str(), 
-         gauss1.covariance(), min_var);
+         gauss1.covar, min_var);
     
   }
   
-  vcl_cout <<"======================================================\n";
   
 }
 
@@ -249,7 +258,7 @@ MAIN( test_update_gaussian )
 {
   START ("update gaussian");
   test_update_gaussian_type(float(1e-5),"float");
-  test_update_gaussian_type(double(1e-14),"double");
+  test_update_gaussian_type(double(1e-13),"double");
   SUMMARY();
 }
 

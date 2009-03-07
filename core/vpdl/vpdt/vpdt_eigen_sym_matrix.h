@@ -104,6 +104,15 @@ public:
     vpdt_set_size(eigen_val_,dim);
     vnl_symmetric_eigensystem_compute(m, eigen_vec_, eigen_val_);
   }
+
+  //: multiply the matrix by a scalar
+  vpdt_eigen_sym_matrix<T,n>& operator*=(const T& val)
+  {
+    const unsigned int dim = eigen_val_.size();
+    for(unsigned int i=0; i<dim; ++i)
+      eigen_val_[i] *= val;
+    return *this;
+  }
   
   //: Reform the matrix
   // m = eigen_vec_ * diag(eigen_val_) * eigen_vec_.transpose()
@@ -232,6 +241,12 @@ public:
     assert(evec == T(1));
   }
   
+  //: Cast into a scalar value
+  operator T() { return var_; }
+  
+  //: Assign from a scalar
+  vpdt_eigen_sym_matrix<T,1>& operator= (const T& v) { var_=v; return *this; }
+  
   //: Constructor - from symmetric matrix
   vpdt_eigen_sym_matrix(const matrix& m) : var_(m) {}
   
@@ -255,6 +270,13 @@ public:
   
   //: set the eigenvalues
   void set_eigenvalues(const vector& v) { var_ = v; }
+  
+  //: multiply the matrix by a scalar
+  vpdt_eigen_sym_matrix<T,1>& operator*=(const T& val)
+  {
+    var_ *= val;
+    return *this;
+  }
   
   //: Reform the matrix
   void form_matrix(matrix& m) const { m = var_; }

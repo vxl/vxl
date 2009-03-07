@@ -79,6 +79,10 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
               sym.quad_form(3), 18, epsilon);
     TEST_NEAR(("inverse quad form <"+type_name+"> scalar").c_str(), 
               sym.inverse_quad_form(3), 4.5, epsilon);
+    
+    TEST("implicit cast to scalar", sym, T(2));
+    sym = T(3);
+    TEST("assignment from scalar", sym, T(3));
   }
 
 }

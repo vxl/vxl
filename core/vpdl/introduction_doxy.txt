@@ -6,6 +6,18 @@
 * includes estimating a distribution from data points and sampling from a
 * distribution.  vpdl is built on top of vnl and vnl_algo.
 *
+* vpdl is comprised of two programming paradigms: generic programming and 
+* polymorphic inheritance.  The generic programming part is its own sub-library
+* called \c vpdt.  \c vpdt is a template library (like STL).  There is no compiled
+* library, only a collection of header files in \c vpdl/vpdt. \c vpdt works
+* with vnl types, but in many cases can generalize to other types.
+* The goal of vpdt is to provide generic implementations that are both time
+* and memory efficient when types are known at compile time.
+*
+* The rest of vpdl uses a polymorphic design as provides greater run time 
+* flexibility and easy of use.  It is limited to distributions over scalar, 
+* vnl_vector, and vnl_vector_fixed types.
+*
 * \section history History
 *
 * vpdl is the merger of two different design patterns for probability distributions.
