@@ -25,86 +25,87 @@
 #include <vcl_cmath.h>
 #include <vcl_cstddef.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 
 //----------------------------------------------------------------------------
 // Represent the geometry of a single triangle for use by closest point
 // computation.
 class rgtl_oat3_geometry
 {
-public:
+ public:
   rgtl_oat3_geometry(rgtl_object_array_triangles_3d const* self,
                      int const point_ids[3])
-    {
+  {
     self->get_point(point_ids[0], this->verts[0]);
     self->get_point(point_ids[1], this->verts[1]);
     self->get_point(point_ids[2], this->verts[2]);
     this->compute();
-    }
+  }
 
   // Return the number of vertices.
   unsigned int get_number_of_vertices() const { return 3; }
 
   // Return the vertex at the given index.
   double const* get_vertex(unsigned int i) const
-    {
+  {
     return this->verts[i];
-    }
+  }
 
   // Return the tangent direction pointing along the right-handed
   // traversal of the given edge.
   double const* get_edge_tangent(unsigned int i) const
-    {
+  {
     return this->edge_tangents[i];
-    }
+  }
 
   // Return the direction normal to the edge and contained in the face
   // plane.  Orient the normal to point toward the face interior.
   double const* get_edge_normal(unsigned int i) const
-    {
+  {
     return this->edge_normals[i];
-    }
+  }
 
   // Return the direction normal to the polygon face.  A right-handed
   // walk corresponds to the finger curl when the thumb points along
   // this normal.
   double const* get_face_normal() const
-    {
+  {
     return this->face_normal;
-    }
+  }
 
-private:
+ private:
   void compute()
+  {
+    for (int cur=0; cur < 3; ++cur)
     {
-    for(int cur=0; cur < 3; ++cur)
-      {
       int next = (cur+1)%3;
-      for(int a=0; a < 3; ++a)
-        {
+      for (int a=0; a < 3; ++a)
+      {
         this->edge_tangents[cur][a] =
           this->verts[next][a] - this->verts[cur][a];
-        }
-      }
-    this->cross_left(this->edge_tangents[0], this->edge_tangents[2],
-                     this->face_normal);
-    for(int i=0; i < 3; ++i)
-      {
-      this->cross_right(this->face_normal, this->edge_tangents[i],
-                        this->edge_normals[i]);
       }
     }
+    this->cross_left(this->edge_tangents[0], this->edge_tangents[2],
+                     this->face_normal);
+    for (int i=0; i < 3; ++i)
+    {
+      this->cross_right(this->face_normal, this->edge_tangents[i],
+                        this->edge_normals[i]);
+    }
+  }
 
   static void cross_right(double const u[3], double const v[3], double w[3])
-    {
+  {
     w[0] = u[1] * v[2] - u[2] * v[1];
     w[1] = u[2] * v[0] - u[0] * v[2];
     w[2] = u[0] * v[1] - u[1] * v[0];
-    }
+  }
   static void cross_left(double const u[3], double const v[3], double w[3])
-    {
+  {
     w[0] = u[2] * v[1] - u[1] * v[2];
     w[1] = u[0] * v[2] - u[2] * v[0];
     w[2] = u[1] * v[0] - u[0] * v[1];
-    }
+  }
   double verts[3][3];
   double edge_tangents[3][3];
   double edge_normals[3][3];
@@ -115,39 +116,39 @@ private:
 // Private implementation of class rgtl_object_array_triangles_3d.
 class rgtl_object_array_triangles_3d::pimpl
 {
-public:
+ public:
   // Construct for a given number of triangles.
-  pimpl(int ntris):
-    triangle_computed_(ntris, 0),
+  pimpl(int ntris)
+  : triangle_computed_(ntris, 0),
     triangle_axes_(ntris),
     triangle_centers_(ntris),
     triangle_radii_(ntris),
     triangle_closest_features_(ntris)
-    {
+  {
     have_pseudonormals = false;
-    }
+  }
 
   // Allocate the structures below for a new triangle.
   void add_triangle()
-    {
+  {
     this->set_number_of_triangles(triangle_axes_.size()+1);
-    }
+  }
   void set_number_of_triangles(vcl_size_t n)
-    {
+  {
     this->triangle_computed_.resize(n, 0);
     this->triangle_axes_.resize(n);
     this->triangle_centers_.resize(n);
     this->triangle_radii_.resize(n);
     this->triangle_closest_features_.resize(n);
-    }
+  }
   void reserve_triangles(vcl_size_t n)
-    {
+  {
     this->triangle_computed_.reserve(n);
     this->triangle_axes_.reserve(n);
     this->triangle_centers_.reserve(n);
     this->triangle_radii_.reserve(n);
     this->triangle_closest_features_.reserve(n);
-    }
+  }
 
   // Store the flags for whether triangle axes have been computed.
   vcl_vector<char> triangle_computed_;
@@ -196,40 +197,41 @@ public:
     int lower;
     int upper;
     edge_key(int a, int b)
-      {
-      if(a <= b) { lower = a; upper = b; }
+    {
+      if (a <= b) { lower = a; upper = b; }
       else { lower = b; upper = a; }
-      }
+    }
     bool operator<(const edge_key& that) const
-      {
-      return (this->lower < that.lower || (this->lower == that.lower &&
-                                           this->upper < that.upper));
-      }
+    {
+      return this->lower < that.lower ||
+	     (this->lower == that.lower &&
+              this->upper <  that.upper);
+    }
   };
 
   // Math utilities.
   static double dot(double const u[3], double const v[3])
-    {
+  {
     return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
-    }
+  }
   static void cross(double const u[3], double const v[3], double w[3])
-    {
+  {
     w[0] = u[1] * v[2] - u[2] * v[1];
     w[1] = u[2] * v[0] - u[0] * v[2];
     w[2] = u[0] * v[1] - u[1] * v[0];
-    }
+  }
   static double normalize(double n[3])
-    {
+  {
     double mag = vcl_sqrt(dot(n,n));
-    if(mag > 0)
-      {
+    if (mag > 0)
+    {
       double maginv = 1/mag;
       n[0] *= maginv;
       n[1] *= maginv;
       n[2] *= maginv;
-      }
-    return mag;
     }
+    return mag;
+  }
   static double square(double x) { return x*x; }
 
   // Compute the minimum bounding sphere containing a triangle.
@@ -321,40 +323,40 @@ rgtl_object_array_triangles_3d
 
   // If the box bounding sphere does not intersect the triangle
   // bounding sphere we have a fast-rejection.
-  if(!this->pimpl_->balls_intersect(id, center, radius))
-    {
+  if (!this->pimpl_->balls_intersect(id, center, radius))
+  {
     return false;
-    }
+  }
 
   // If any vertex is in the box we have a fast-accept.
   triangle_type const& t = this->triangles_[id];
-  for(unsigned int i=0; i < 3; ++i)
-    {
-    if(this->derived::object_intersects_box(t[i], center, radius,
+  for (unsigned int i=0; i < 3; ++i)
+  {
+    if (this->derived::object_intersects_box(t[i], center, radius,
                                             lower, upper, corners))
-      {
+    {
       return true;
-      }
     }
+  }
 
   // Get the separating axes for this triangle and the box.
   pimpl::triangle_axes_type const& ta = this->pimpl_->triangle_axes_[id];
 
   // Project the box onto each axis to check for separation from the
   // triangle.
-  for(unsigned int j=0; j < 13; ++j)
-    {
+  for (unsigned int j=0; j < 13; ++j)
+  {
     pimpl::axis_type ba(ta.axes[j].axis());
-    for(unsigned int k=0; k < 8; ++k)
-      {
+    for (unsigned int k=0; k < 8; ++k)
+    {
       ba.update(corners[k]);
-      }
-    if(pimpl::axis_type::projection_type::disjoint(ba.projection(),
-                                                   ta.axes[j].projection()))
-      {
-      return false;
-      }
     }
+    if (pimpl::axis_type::projection_type::disjoint(ba.projection(),
+                                                    ta.axes[j].projection()))
+    {
+      return false;
+    }
+  }
 
   // No separating axis was found.  The triangle does intersect
   // the box.
@@ -373,11 +375,11 @@ rgtl_object_array_triangles_3d
 
   // If the triangle bounding ball does not intersect the query ball
   // skip computing the closest point.
-  if(bound_squared >= 0 &&
-     !this->pimpl_->balls_intersect(id, x, vcl_sqrt(bound_squared)))
-    {
+  if (bound_squared >= 0 &&
+      !this->pimpl_->balls_intersect(id, x, vcl_sqrt(bound_squared)))
+  {
     return false;
-    }
+  }
 
   // Get the triangle geometry.
   triangle_type const& t = this->triangles_[id];
@@ -401,10 +403,10 @@ rgtl_object_array_triangles_3d
 ::compute_axes(int id) const
 {
   // Compute triangle information at most once.
-  if(this->pimpl_->triangle_computed_[id])
-    {
+  if (this->pimpl_->triangle_computed_[id])
+  {
     return;
-    }
+  }
   this->pimpl_->triangle_computed_[id] = 1;
 
   // Get references to the structures for the triangle of interest.
@@ -436,21 +438,21 @@ rgtl_object_array_triangles_3d
   ta.axes[1] = axis_type(ijk[0]);
   ta.axes[2] = axis_type(ijk[1]);
   ta.axes[3] = axis_type(ijk[2]);
-  for(unsigned int j=0; j < 3; ++j)
+  for (unsigned int j=0; j < 3; ++j)
+  {
+    for (unsigned int k=0; k < 3; ++k)
     {
-    for(unsigned int k=0; k < 3; ++k)
-      {
       ta.axes[k*3 + j + 4] = axis_type(vnl_cross_3d(ijk[k], edges[j]));
-      }
     }
+  }
 
   // Project the triangle onto each axis.
-  for(unsigned int j=0; j < 13; ++j)
-    {
+  for (unsigned int j=0; j < 13; ++j)
+  {
     ta.axes[j].update(verts[0]);
     ta.axes[j].update(verts[1]);
     ta.axes[j].update(verts[2]);
-    }
+  }
 
   double radius_squared;
   this->pimpl_->compute_minimum_ball(verts[0].data_block(),
@@ -476,8 +478,8 @@ rgtl_object_array_triangles_3d
   // First compute the intersection with the triangle plane.
   double const* n = g.get_face_normal();
   double denominator = pimpl::dot(direction, n);
-  if(vcl_fabs(denominator) > 0)
-    {
+  if (vcl_fabs(denominator) > 0)
+  {
     double local_s;
     double local_y[3];
     double* y = in_y? in_y : local_y;
@@ -487,37 +489,37 @@ rgtl_object_array_triangles_3d
     s = pimpl::dot(v, n) / denominator;
 
     // The ray is only one sided.
-    if(s < 0)
-      {
+    if (s < 0)
+    {
       return false;
-      }
+    }
 
     // Compute the point of intersection on the plane.
-    for(int a=0; a < 3; ++a)
-      {
+    for (int a=0; a < 3; ++a)
+    {
       y[a] = origin[a] + s*direction[a];
-      }
+    }
 
     // Test if the point of intersection is on the inside side of
     // every edge.
-    for(int i=0; i < 3; ++i)
-      {
+    for (int i=0; i < 3; ++i)
+    {
       double const* vi = g.get_vertex(i);
       double const* ni = g.get_edge_normal(i);
       double ui[3] = {y[0]-vi[0], y[1]-vi[1], y[2]-vi[2]};
-      if(pimpl::dot(ui, ni) < 0)
-        {
+      if (pimpl::dot(ui, ni) < 0)
+      {
         return false;
-        }
       }
+    }
 
     // The intersection is inside the triangle.
     return true;
-    }
+  }
   else
-    {
+  {
     return false;
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -538,23 +540,23 @@ rgtl_object_array_triangles_3d
   // Use the angle-weighted pseudo-normal of the closest feature.
   pimpl::closest_feature_type const& feature =
     this->pimpl_->triangle_closest_features_[id];
-  if(feature.kind == pimpl::closest_finder_type::feature_vertex)
-    {
+  if (feature.kind == pimpl::closest_finder_type::feature_vertex)
+  {
     // The query point is closest to a triangle vertex.
     int v = this->triangles_[id][feature.index];
     this->pimpl_->vertex_normals_[v].copy_out(n);
-    }
-  else if(feature.kind == pimpl::closest_finder_type::feature_edge)
-    {
+  }
+  else if (feature.kind == pimpl::closest_finder_type::feature_edge)
+  {
     // The query point is closest to a triangle edge.
     int e = this->pimpl_->triangle_edges_ids_[id][feature.index];
     this->pimpl_->edge_normals_[e].copy_out(n);
-    }
+  }
   else // feature.kind == pimpl::closest_finder_type::feature_face
-    {
+  {
     // The query point is closest to a triangle face.
     this->pimpl_->face_normals_[id].copy_out(n);
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -570,17 +572,17 @@ rgtl_object_array_triangles_3d::pimpl
   // the three points.  This center will be in the plane of the
   // triangle and in the bisecting planes of the edges of the
   // triangle.
-  /*
-                      |
-                      |m02
-             x0 O-----o----O x2
-                 \    |
-                  \   O c0
-             m01___\_/
-                  _/\
-                 /   \
-                      O  x1
-  */
+  // \verbatim
+  //                  |
+  //                  |m02
+  //         x0 O-----o----O x2
+  //             \    |
+  //              \   O c0
+  //         m01___\_/
+  //              _/\
+  //             /   \
+  //                  O  x1
+  // \endverbatim
 
   // Normals to two of the bisecting planes.
   double n01[3] = {x1[0]-x0[0], x1[1]-x0[1], x1[2]-x0[2]};
@@ -653,8 +655,8 @@ rgtl_object_array_triangles_3d::pimpl
   edge_map_type edge_map;
 
   // Compute normal information using every triangle.
-  for(int index=0; index < num_triangles; ++index)
-    {
+  for (int index=0; index < num_triangles; ++index)
+  {
     // Get the triangle point ids.
     int point_ids[3];
     self->get_triangle(index, point_ids);
@@ -667,8 +669,8 @@ rgtl_object_array_triangles_3d::pimpl
     this->face_normals_[index].normalize();
 
     // Contribute to each vertex and edge normal.
-    for(int j=0; j < 3; ++j)
-      {
+    for (int j=0; j < 3; ++j)
+    {
       // Compute the angle incident to this vertex.
       double const* pne = g.get_edge_tangent(j);
       double const* ppe = g.get_edge_tangent((j+2)%3);
@@ -689,29 +691,29 @@ rgtl_object_array_triangles_3d::pimpl
       // Contribute the triangle normal to this edge.
       edge_key ek(point_ids[j], point_ids[(j+1)%3]);
       edge_map_type::iterator emi = edge_map.find(ek);
-      if(emi == edge_map.end())
-        {
+      if (emi == edge_map.end())
+      {
         int ei = static_cast<int>(this->edge_normals_.size());
         this->edge_normals_.push_back(fn);
         emi = edge_map.insert(edge_map_type::value_type(ek, ei)).first;
-        }
+      }
       else
-        {
+      {
         vnl_double_3& en = this->edge_normals_[emi->second];
         en += fn;
         en.normalize();
-        }
+      }
 
       // Store the edge id in the triangle.
       this->triangle_edges_ids_[index][j] = emi->second;
-      }
     }
+  }
 
   // Scale the computed normals to unit length.
-  for(int i=0; i < num_verts; ++i)
-    {
+  for (int i=0; i < num_verts; ++i)
+  {
     this->vertex_normals_[i].normalize();
-    }
+  }
 
   // We now have pseudo-normals.
   have_pseudonormals = true;
@@ -739,10 +741,10 @@ void rgtl_object_array_triangles_3d::serialize_load(Serializer& sr)
 
   // Compute the pseudonormals now if they were already computed when
   // the instance was serialized.
-  if(have_pseudonormals)
-    {
+  if (have_pseudonormals)
+  {
     this->compute_normals();
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
