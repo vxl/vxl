@@ -280,11 +280,9 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(vcl_string
 }
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
-void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy_learner const & /*ph*/)
+void vsl_b_write(vsl_b_ostream & /*os*/, brec_part_hierarchy_learner const & /*ph*/)
 {
-  os << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
-  if (&os != &vcl_cerr)
-    vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
+  vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
   return;
 }
 

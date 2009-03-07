@@ -156,11 +156,9 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 }
 
 //: Binary write voxel world to stream
-void vsl_b_write(vsl_b_ostream & os, vil_image_view_base const& /*view_base*/)
+void vsl_b_write(vsl_b_ostream & /*os*/, vil_image_view_base const& /*view_base*/)
 {
-  os << "warning: vsl_b_write not implemented for vil_image_view_base\n";
-  if (&os != &vcl_cerr)
-    vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base\n";
+  vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base\n";
 }
 
 //: Binary load voxel world from stream.
