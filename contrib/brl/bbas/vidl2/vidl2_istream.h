@@ -69,7 +69,7 @@ class vidl2_istream
 
  private:
   //: prevent deep copying a stream
-  vidl2_istream(const vidl2_istream& other):ref_count_(0){}
+  vidl2_istream(const vidl2_istream& /*other*/) : ref_count_(0) {}
 
  //-------------------------------------------------------
  // reference counting

@@ -33,9 +33,9 @@ class vidl2_ostream
   // \retval false if the image could not be written
   virtual bool write_frame(const vidl2_frame_sptr& frame) = 0;
 
-   private:
+ private:
   //: prevent deep copying a stream
-  vidl2_ostream(const vidl2_ostream& other):ref_count_(0){}
+  vidl2_ostream(const vidl2_ostream& /*other*/) : ref_count_(0) {}
 
  //-------------------------------------------------------
  // reference counting
