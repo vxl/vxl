@@ -64,7 +64,7 @@ class  bvxm_mog_grey_processor
 
 
   // bin number is always 0 for the simple mixture of gaussian case
-  virtual unsigned int get_light_bin(unsigned int num_light_bins, const vnl_vector<float>& light) {return 0;}
+  virtual unsigned int get_light_bin(unsigned int /*num_light_bins*/, const vnl_vector<float>& /*light*/) { return 0; }
 };
 
 #endif // bvxm_mog_grey_processor_h_
