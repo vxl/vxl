@@ -9,10 +9,8 @@
 
 void test_parse_arcs_a()
 {
-  vcl_cout<<"========= test_parse_arcs ========="<<vcl_endl
-          <<vcl_endl;
+  vcl_cout<<"========= test_parse_arcs =========\n" << vcl_endl;
 
-  unsigned n=5;
   vcl_vector<vcl_string> nodeNames;
   nodeNames.push_back("L1_top_post");
   nodeNames.push_back("L1_top_ant");
@@ -25,7 +23,6 @@ void test_parse_arcs_a()
   nodeNames.push_back("L2_bot_post");
   nodeNames.push_back("L2_bot_ant");
   nodeNames.push_back("L2_pedicle");
-
 
   vcl_string testStreamStr= "{\n"
       "arc: { L1_top_post L1_top_ant }\n"
@@ -58,10 +55,7 @@ void test_parse_arcs_a()
   vcl_cout<<"Arc set follows:"<<vcl_endl;
   vcl_copy(arcs.begin(),arcs.end(),
            vcl_ostream_iterator<mmn_arc>(vcl_cout,"\t"));
-  vcl_cout<<vcl_endl
-          <<vcl_endl
-          <<"========= end test_parse_arcs ========="<<vcl_endl
-          <<vcl_endl;
+  vcl_cout<<"\n\n========= end test_parse_arcs =========\n"<<vcl_endl;
 }
 
 void test_parse_arcs()
