@@ -12,14 +12,14 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
 {
   typedef typename bsta_gaussian_indep<T,n>::vector_type vect_t;
 
-  //: initialize 3 gaussian distributions
+  // initialize 3 gaussian distributions
   T mean1 = T(0.504); T std_dev1 = T(0.005);
   T mean2 = T(0.004); T std_dev2 = T(0.005);
   T mean3 = T(1.004); T std_dev3 = T(0.005);
-  
-  vect_t m1(mean1); 
-  vect_t m2(mean2); 
-  vect_t m3(mean3); 
+
+  vect_t m1(mean1);
+  vect_t m2(mean2);
+  vect_t m3(mean3);
 
   //bsta_gaussian_sphere<T,n> g1(m1, std_dev1*std_dev1);
   //bsta_gaussian_sphere<T,n> g2(m2, std_dev2*std_dev2);
@@ -27,7 +27,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   vnl_vector_fixed<T,n> meanv1(m1), meanv2(m2), meanv3(m3);
   for (unsigned i = 1; i < n; i++) {
     meanv1[i] = T(rng.drand32()); meanv2[i] = T(rng.drand32()); meanv3[i] = T(rng.drand32()); }
-  
+
   vnl_vector_fixed<T,n> sd1(T(vcl_pow(std_dev1, 2))), sd2(T(vcl_pow(std_dev2,2))), sd3(T(vcl_pow(std_dev3,2)));
   for (unsigned i = 1; i < n; i++) {
     sd1[i] = T(vcl_pow(rng.drand32()/1000,2)); sd2[i] = T(vcl_pow(rng.drand32()/1000,2)); sd3[i] = T(vcl_pow(rng.drand32()/1000,2)); }
@@ -44,7 +44,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   //T bandwidth = T(1.0);
   bsta_mean_shift_sample_set<T, n> ss(bandwidth);
   TEST_NEAR((type_name + ": mean shift sample set constructor").c_str(), bandwidth, ss.bandwidth(), epsilon);
-  
+
   for (unsigned i = 0; i < n1; i++) {
     vect_t s = g1.sample(rng);
     //float w1 = 0.99f;
@@ -62,14 +62,13 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
     //ss.insert_w_sample(g3.sample(rng), w3);
   }
   TEST_NEAR((type_name + ": mean shift sample set insert method").c_str(), n1+n2+n3, ss.size(), epsilon);
-  
+
   vect_t out;
   TEST("find mean around m1", ss.mean(meanv1, out), true);
   vcl_cout << "calculated mean: " << out << " within m1: " << meanv1 << vcl_endl;
   vect_t dif = out-meanv1;
   vnl_vector_fixed<T,n> dummy(dif);
   TEST_NEAR((type_name + ": mean shift sample set mean method").c_str(), dummy.magnitude(), T(0), epsilon);
-  
 
   bsta_mean_shift<T,n> ms;
   ms.find_modes(ss, rng, 50.0f, T(1e-2));
@@ -80,11 +79,12 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   vcl_cout << "modes size after trimming: " << ms.size() << vcl_endl;
   TEST((type_name + ": mean shift find modes and trim modes methods").c_str(), ms.size(), 3);
 
-  //: print m files to visualize the sample set and the fitted modes
+  // print m files to visualize the sample set and the fitted modes
   vcl_ofstream of((type_name + "_out.m").c_str(), vcl_ios::out);
-  switch(n) {
+  switch (n)
+  {
     case 1: {
-      vcl_cout << "case 1\n"; 
+      vcl_cout << "case 1\n";
       of << "x = [" << ss.sample(0);
       for (unsigned i = 0; i < ss.size(); i++) {
         of << ", " << ss.sample(i);
@@ -97,7 +97,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
     case 2: {
       vcl_cout << "case 2\n";
       of << "cmap = colormap(lines(" << ms.modes().size() << "));\n";
-      //: plot the assignments
+      // plot the assignments
       for (unsigned m = 0; m < ms.modes().size(); m++) {
         vcl_vector<vcl_pair<T,T> > points;
         for (unsigned i = 0; i < ms.assignments().size(); i++) {
@@ -121,11 +121,11 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
         }
         of << "xx = [" << (ms.modes()[m])[0] << "];\n";
         of << "yy = [" << (ms.modes()[m])[1] << "];\n";
-        of << "h = plot(xx,yy,'+r');\nset(h, 'Color', cmap(" << m+1 << ",:));\n";  
+        of << "h = plot(xx,yy,'+r');\nset(h, 'Color', cmap(" << m+1 << ",:));\n";
         of << "hold on\n";
       }
 
-      /*
+#if 0 // commented out
       vnl_vector_fixed<T,2> s0(ss.sample(0));
       of << "x = [" << s0[0];
       for (unsigned i = 0; i < ss.size(); i++) {
@@ -140,8 +140,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       }
       of << "];\n";
       of << "plot(x,y,'or');\n";
-      */
-      /*
+
       vnl_vector_fixed<T,2> m0(ms.modes()[0]);
       of << "xm = [" << m0[0];
       for (unsigned i = 0; i < ms.size(); i++) {
@@ -156,11 +155,10 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       }
       of << "];\nhold on\n";
       of << "plot(xm, ym, 'ob');\n";
-     */
-
+#endif // 0
       break;
             }
-     
+
     case 3: {
       vcl_cout << "case 3\n";
       vnl_vector_fixed<T,3> s0(ss.sample(0));
@@ -185,18 +183,19 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       of << "plot3(x,y,z,'or');\n";
       break;
             }
-    default: vcl_cout << " default\n"; 
+    default: vcl_cout << " default\n";
   }
   of.close();
 
   TEST("recompute modes ", ms.recompute_modes(ss), true);
 
-  //: print m files to visualize the sample set and the fitted modes
+  // print m files to visualize the sample set and the fitted modes
   of.open((type_name + "_out_recomputed.m").c_str(), vcl_ios::out);
- 
-  switch(n) {
+
+  switch (n)
+  {
     case 1: {
-      vcl_cout << "case 1\n"; 
+      vcl_cout << "case 1\n";
       of << "x = [" << ss.sample(0);
       for (unsigned i = 0; i < ss.size(); i++) {
         of << ", " << ss.sample(i);
@@ -209,7 +208,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
     case 2: {
       vcl_cout << "case 2\n";
       of << "cmap = colormap(lines(" << ms.modes().size() << "));\n";
-      //: plot the assignments
+      // plot the assignments
       for (unsigned m = 0; m < ms.modes().size(); m++) {
         vcl_vector<vcl_pair<T,T> > points;
         for (unsigned i = 0; i < ms.assignments().size(); i++) {
@@ -233,13 +232,13 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
         }
         of << "xx = [" << (ms.modes()[m])[0] << "];\n";
         of << "yy = [" << (ms.modes()[m])[1] << "];\n";
-        of << "h = plot(xx,yy,'*r');\nset(h, 'Color', cmap(" << m+1 << ",:));\n";  
+        of << "h = plot(xx,yy,'*r');\nset(h, 'Color', cmap(" << m+1 << ",:));\n";
         of << "hold on\n";
       }
 
       break;
             }
-     
+
     case 3: {
       vcl_cout << "case 3\n";
       vnl_vector_fixed<T,3> s0(ss.sample(0));
@@ -264,7 +263,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       of << "plot3(x,y,z,'or');\n";
       break;
             }
-    default: vcl_cout << " default\n"; 
+    default: vcl_cout << " default\n";
   }
   of.close();
 }
@@ -273,7 +272,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
 MAIN( test_mean_shift )
 {
   START ("mean_shift");
-  
+
   test_mean_shift_algo<float,2>(float(1e-1),"float_2");
   test_mean_shift_algo<float,3>(float(1e-1),"float_3");
   SUMMARY();
