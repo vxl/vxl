@@ -68,7 +68,7 @@ bool vpgl_nitf_camera_coverage::coverage_list(vcl_vector<vgl_point_2d<double> > 
 }
 
 //Not implemented yet
-bool vpgl_nitf_camera_coverage::compute_coverage_region(vcl_string camera_list, vcl_string out_imfile)
+bool vpgl_nitf_camera_coverage::compute_coverage_region(vcl_string /*camera_list*/, vcl_string /*out_imfile*/)
 {
   return true;
 }
