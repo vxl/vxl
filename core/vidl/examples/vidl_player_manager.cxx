@@ -145,7 +145,7 @@ void vidl_player_manager::play_video()
   for (; pframe_!=my_movie_->end() && play_video_;++pframe_) {
     this->redraw();
     //Delay until the time interval has passed
-    while (t.all()<time_interval_);
+    while (t.all()<time_interval_) { /* do nothing*/; }
     t.mark();
   }
 
