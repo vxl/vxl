@@ -10,7 +10,6 @@
 //: Binary write image view base to stream
 void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 {
-
   switch (view_base->pixel_format())
   {
 #if VXL_HAS_INT_64
@@ -33,7 +32,7 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
      break; }
    case VIL_PIXEL_FORMAT_UINT_16: {
      vil_image_view<vxl_uint_16> v(view_base);
-     vsl_b_write(os, v); 
+     vsl_b_write(os, v);
      break; }
    case VIL_PIXEL_FORMAT_INT_16: {
      vil_image_view<vxl_int_16> v(view_base);
@@ -82,10 +81,10 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
   short w;
   vsl_b_read(is, w);
   if (w != 1) {
-    vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view binary io version: " << w <<  "\n";
+    vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view binary io version: " << w <<  '\n';
     return;
   }
-  
+
   vsl_b_read(is, ni);
   vsl_b_read(is, nj);
   vsl_b_read(is, np);
@@ -93,13 +92,13 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
   vsl_b_read(is, jstep);
   vsl_b_read(is, pstep);
   if (ni*nj*np==0) {
-    vcl_cerr << "warning: vsl_b_read image ni*nj*np = 0 \n";
+    vcl_cerr << "warning: vsl_b_read image ni*nj*np = 0\n";
     //image.set_size(0,0,0);
   } else {
     vsl_b_read(is, chunk);
     vsl_b_read(is, offset);
 
-    switch(chunk->pixel_format()) {
+    switch (chunk->pixel_format()) {
 #if VXL_HAS_INT_64
      case VIL_PIXEL_FORMAT_UINT_64: {
        const vxl_uint_64* data = reinterpret_cast<const vxl_uint_64*>(chunk->data());
@@ -157,13 +156,15 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 }
 
 //: Binary write voxel world to stream
-void vsl_b_write(vsl_b_ostream & os, vil_image_view_base const& view_base)
+void vsl_b_write(vsl_b_ostream & os, vil_image_view_base const& /*view_base*/)
 {
-  vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base\n";
+  os << "warning: vsl_b_write not implemented for vil_image_view_base\n";
+  if (&os != &vcl_cerr)
+    vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base\n";
 }
 
 //: Binary load voxel world from stream.
-void vsl_b_read(vsl_b_istream & is, vil_image_view_base &view_base)
+void vsl_b_read(vsl_b_istream & /*is*/, vil_image_view_base & /*view_base*/)
 {
   vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view_base\n";
 }
