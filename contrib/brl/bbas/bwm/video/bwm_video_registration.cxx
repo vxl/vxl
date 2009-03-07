@@ -12,7 +12,6 @@
 #include <vpgl/algo/vpgl_camera_homographies.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vidl2/vidl2_frame.h>
-#include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_convert.h>
 #include <vidl2/vidl2_istream.h>
 #include <vidl2/vidl2_ostream.h>
@@ -132,7 +131,8 @@ convert_to_frame(vcl_vector<vil_image_view<float> >const&  views)
 
   return  new vidl2_memory_chunk_frame(out_view);
 }
-static vgl_h_matrix_2d<double> 
+
+static vgl_h_matrix_2d<double>
 compute_homography(vgl_h_matrix_2d<double> const& H0,
                    vnl_matrix_fixed<double, 3, 3> const& t,
                    vpgl_perspective_camera<double>* cam,
