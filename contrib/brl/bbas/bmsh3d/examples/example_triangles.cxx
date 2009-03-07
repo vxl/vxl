@@ -1,15 +1,19 @@
-//: This is lemsvxlsrc\brcv\shp\bmsh3d\examples\example_triangles.cxx
+// This is brl/bbas/bmsh3d/examples/example_triangles.cxx
+
+//:
+// \file
+//
 //  This example program demonstrates how to use the bmsh3d mesh library
 //  to create a mesh of two triangular faces and save to a file.
-//  Ming-Ching Chang
-//  Oct 03, 2006.
+//  \author Ming-Ching Chang
+//  \date Oct 03, 2006.
 
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 
-int main(int argc, char** argv)
+int main()
 {
   vcl_cout << "This example program demonstrates how to use the bmsh3d mesh library\n"
            << "  to create a mesh of two triangular faces as follows:\n"
