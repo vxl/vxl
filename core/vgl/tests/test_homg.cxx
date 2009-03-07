@@ -367,6 +367,14 @@ static void test_homg_line_2d()
   bool b = concurrent(l1,l2,l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
 
+  l2.set(5,-12,-7);
+  l2.normalize();
+  TEST("normalize", l2.a() == -5.0/13 && l2.b() == 12.0/13 && l2.c() == 7.0/13, true);
+
+  l2.set(3,4,0);
+  l2.normalize();
+  TEST("normalize", l2.a() == 0.6 && l2.b() == 0.8 && l2.c() == 0.0, true);
+
   vcl_vector<vgl_homg_line_2d<double> > lst;
   lst.push_back(l1); lst.push_back(l2); lst.push_back(l3);
   p = vgl_homg_operators_2d<double>::lines_to_point(lst);
@@ -487,6 +495,14 @@ static void test_homg_plane_3d()
   TEST("ideal", pp.ideal(), false);
   pp.set(0,0,0,-7);
   TEST("ideal", pp.ideal(), true);
+
+  pl2.set(-4,3,0,27);
+  pl2.normalize();
+  TEST("normalize", pl2.a() == 0.8 && pl2.b() == -0.6 && pl2.c() == 0.0 && pl2.d() == -5.4, true);
+
+  pl2.set(-9,-12,20,15);
+  pl2.normalize();
+  TEST("normalize", pl2.a() == -0.36 && pl2.b() == -0.48 && pl2.c() == 0.8 && pl2.d() == 0.6, true);
 }
 
 inline bool collinear(vgl_homg_line_2d<int> const& l1,
