@@ -128,6 +128,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
     bgeo_utm utm;
     int utm_zone;
     utm.transform(lat, lon, x1, y1, utm_zone);
+    z1 = 0;
   }
   vec[0] = x1;
   vec[1] = y1;
