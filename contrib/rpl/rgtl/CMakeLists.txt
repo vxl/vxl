@@ -34,7 +34,7 @@ SET(rgtl_sources
   rgtl_tagged_vector.hxx
 
   # Serialization
-  rgtl_serialize.txt
+# rgtl_serialize.txt
   rgtl_serialize_access.hxx
   rgtl_serialize_base.hxx
   rgtl_serialize_direction.hxx
