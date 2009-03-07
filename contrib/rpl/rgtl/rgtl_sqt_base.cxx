@@ -5,18 +5,14 @@
 #include "rgtl_sqt_base.hxx"
 
 // Define a constant for pi.
-#include <vcl_cmath.h>
-#ifdef M_PI
-# define RGTL_SQT_PI M_PI
-#else
-# define RGTL_SQT_PI 3.14159265358979323846
-#endif
+#include <vnl/vnl_math.h>
+#define RGTL_SQT_PI vnl_math::pi
 
 // Conversion factor from parameter value to angle.
-#define RGTL_SQT_PI_OVER_FOUR (RGTL_SQT_PI / 4.0)
+#define RGTL_SQT_PI_OVER_FOUR vnl_math::pi_over_4
 
 // Conversion factor from angle to parameter value.
-#define RGTL_SQT_FOUR_OVER_PI (4.0 / RGTL_SQT_PI)
+#define RGTL_SQT_FOUR_OVER_PI (2.0 * vnl_math::two_over_pi)
 
 // The following rules help write the functions based on the ascii-art
 // diagrams of the parameterization of each face.  These rules hold no
@@ -59,18 +55,21 @@ static void ParametersToDirectionNegativeX(double u, double v, double d[3])
   d[1] = +vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
   d[2] = +vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
+
 static void DirectionToParametersNegativeX(double const d[3],
                                            double& u, double& v)
 {
   u = vcl_atan(+d[1]/-d[0]) * RGTL_SQT_FOUR_OVER_PI;
   v = vcl_atan(+d[2]/-d[0]) * RGTL_SQT_FOUR_OVER_PI;
 }
+
 static void PlaneNormalUNegativeX(double u, double n[3])
 {
   n[0] = +vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
+
 static void PlaneNormalVNegativeX(double v, double n[3])
 {
   n[0] = +vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
@@ -95,18 +94,21 @@ static void ParametersToDirectionPositiveX(double u, double v, double d[3])
   d[1] = -vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
   d[2] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
+
 static void DirectionToParametersPositiveX(double const d[3],
                                            double& u, double& v)
 {
   u = vcl_atan(-d[1]/+d[0]) * RGTL_SQT_FOUR_OVER_PI;
   v = vcl_atan(+d[2]/+d[0]) * RGTL_SQT_FOUR_OVER_PI;
 }
+
 static void PlaneNormalUPositiveX(double u, double n[3])
 {
   n[0] = -vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = -vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
+
 static void PlaneNormalVPositiveX(double v, double n[3])
 {
   n[0] = -vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
@@ -131,18 +133,21 @@ static void ParametersToDirectionNegativeY(double u, double v, double d[3])
   d[1] = -1;
   d[2] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
+
 static void DirectionToParametersNegativeY(double const d[3],
                                            double& u, double& v)
 {
   u = vcl_atan(-d[0]/-d[1]) * RGTL_SQT_FOUR_OVER_PI;
   v = vcl_atan(+d[2]/-d[1]) * RGTL_SQT_FOUR_OVER_PI;
 }
+
 static void PlaneNormalUNegativeY(double u, double n[3])
 {
   n[0] = -vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = +vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
+
 static void PlaneNormalVNegativeY(double v, double n[3])
 {
   n[0] = 0;
@@ -167,18 +172,21 @@ static void ParametersToDirectionPositiveY(double u, double v, double d[3])
   d[1] = +1;
   d[2] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
+
 static void DirectionToParametersPositiveY(double const d[3],
                                            double& u, double& v)
 {
   u = vcl_atan(+d[0]/+d[1]) * RGTL_SQT_FOUR_OVER_PI;
   v = vcl_atan(+d[2]/+d[1]) * RGTL_SQT_FOUR_OVER_PI;
 }
+
 static void PlaneNormalUPositiveY(double u, double n[3])
 {
   n[0] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = -vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
+
 static void PlaneNormalVPositiveY(double v, double n[3])
 {
   n[0] = 0;
@@ -203,18 +211,21 @@ static void ParametersToDirectionNegativeZ(double u, double v, double d[3])
   d[1] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
   d[2] = -1;
 }
+
 static void DirectionToParametersNegativeZ(double const d[3],
                                            double& u, double& v)
 {
   u = vcl_atan(+d[0]/-d[2]) * RGTL_SQT_FOUR_OVER_PI;
   v = vcl_atan(+d[1]/-d[2]) * RGTL_SQT_FOUR_OVER_PI;
 }
+
 static void PlaneNormalUNegativeZ(double u, double n[3])
 {
   n[0] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = 0;
   n[2] = +vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
 }
+
 static void PlaneNormalVNegativeZ(double v, double n[3])
 {
   n[0] = 0;
@@ -239,18 +250,21 @@ static void ParametersToDirectionPositiveZ(double u, double v, double d[3])
   d[1] = -vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
   d[2] = +1;
 }
+
 static void DirectionToParametersPositiveZ(double const d[3],
                                            double& u, double& v)
 {
   u = vcl_atan(+d[0]/+d[2]) * RGTL_SQT_FOUR_OVER_PI;
   v = vcl_atan(-d[1]/+d[2]) * RGTL_SQT_FOUR_OVER_PI;
 }
+
 static void PlaneNormalUPositiveZ(double u, double n[3])
 {
   n[0] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = 0;
   n[2] = -vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
 }
+
 static void PlaneNormalVPositiveZ(double v, double n[3])
 {
   n[0] = 0;
@@ -264,8 +278,8 @@ rgtl_sqt_base::direction_to_face(double const d[3])
 {
   unsigned int max_a = 0;
   double mag_d[3] = {vcl_fabs(d[0]), vcl_fabs(d[1]), vcl_fabs(d[2])};
-  if(mag_d[1] > mag_d[max_a]) { max_a = 1; }
-  if(mag_d[2] > mag_d[max_a]) { max_a = 2; }
+  if (mag_d[1] > mag_d[max_a]) { max_a = 1; }
+  if (mag_d[2] > mag_d[max_a]) { max_a = 2; }
   return face_index_type((max_a<<1) | (d[max_a] >= 0? 1:0));
 }
 
@@ -276,15 +290,15 @@ rgtl_sqt_base::direction_to_parameters(double const d[3],
                                        double& u, double& v)
 {
   face = direction_to_face(d);
-  switch(face)
-    {
+  switch (face)
+  {
     case face_negative_x: DirectionToParametersNegativeX(d, u, v); return;
     case face_positive_x: DirectionToParametersPositiveX(d, u, v); return;
     case face_negative_y: DirectionToParametersNegativeY(d, u, v); return;
     case face_positive_y: DirectionToParametersPositiveY(d, u, v); return;
     case face_negative_z: DirectionToParametersNegativeZ(d, u, v); return;
     case face_positive_z: DirectionToParametersPositiveZ(d, u, v); return;
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -292,45 +306,45 @@ void
 rgtl_sqt_base::parameters_to_direction(face_index_type face,
                                        double u, double v, double d[3])
 {
-  switch(face)
-    {
+  switch (face)
+  {
     case face_negative_x: ParametersToDirectionNegativeX(u, v, d); return;
     case face_positive_x: ParametersToDirectionPositiveX(u, v, d); return;
     case face_negative_y: ParametersToDirectionNegativeY(u, v, d); return;
     case face_positive_y: ParametersToDirectionPositiveY(u, v, d); return;
     case face_negative_z: ParametersToDirectionNegativeZ(u, v, d); return;
     case face_positive_z: ParametersToDirectionPositiveZ(u, v, d); return;
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
 void rgtl_sqt_base::plane_normal_u(face_index_type face, double u,
                                    double n[3])
 {
-  switch(face)
-    {
+  switch (face)
+  {
     case face_negative_x: PlaneNormalUNegativeX(u, n); return;
     case face_positive_x: PlaneNormalUPositiveX(u, n); return;
     case face_negative_y: PlaneNormalUNegativeY(u, n); return;
     case face_positive_y: PlaneNormalUPositiveY(u, n); return;
     case face_negative_z: PlaneNormalUNegativeZ(u, n); return;
     case face_positive_z: PlaneNormalUPositiveZ(u, n); return;
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
 void rgtl_sqt_base::plane_normal_v(face_index_type face, double v,
                                    double n[3])
 {
-  switch(face)
-    {
+  switch (face)
+  {
     case face_negative_x: PlaneNormalVNegativeX(v, n); return;
     case face_positive_x: PlaneNormalVPositiveX(v, n); return;
     case face_negative_y: PlaneNormalVNegativeY(v, n); return;
     case face_positive_y: PlaneNormalVPositiveY(v, n); return;
     case face_negative_z: PlaneNormalVNegativeZ(v, n); return;
     case face_positive_z: PlaneNormalVPositiveZ(v, n); return;
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
