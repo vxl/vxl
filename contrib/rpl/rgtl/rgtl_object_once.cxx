@@ -34,13 +34,13 @@ void rgtl_object_once::set_number_of_objects(size_type n)
 void rgtl_object_once::reset() const
 {
   // Rollover the counter if necessary.
-  if(this->mark_ == 0xFFFFFFFF)
-    {
+  if (this->mark_ == 0xFFFFFFFF)
+  {
     vcl_size_t s = this->marks_.size();
     this->mark_ = 0;
     this->marks_.resize(0);
     this->marks_.resize(s, 0);
-    }
+  }
 
   // Increment the counter.
   ++this->mark_;
@@ -49,11 +49,11 @@ void rgtl_object_once::reset() const
 //----------------------------------------------------------------------------
 bool rgtl_object_once::visit(size_type i) const
 {
-  if(this->marks_[i] != this->mark_)
-    {
+  if (this->marks_[i] != this->mark_)
+  {
     this->marks_[i] = this->mark_;
     return true;
-    }
+  }
   return false;
 }
 
@@ -88,6 +88,6 @@ void rgtl_object_once::serialize_save(Serializer& sr)
 }
 
 #define RGTL_OBJECT_ONCE_SERIALIZE_INSTANTIATE(T) \
-  template void rgtl_object_once::serialize<T>(T&)
+  template void rgtl_object_once::serialize<T >(T&)
 RGTL_OBJECT_ONCE_SERIALIZE_INSTANTIATE(rgtl_serialize_istream);
 RGTL_OBJECT_ONCE_SERIALIZE_INSTANTIATE(rgtl_serialize_ostream);
