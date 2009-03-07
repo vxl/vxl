@@ -218,7 +218,7 @@ void test_rational_camera_approx(vcl_string dir_base)
 #endif
 
   // read a camera from file
-  vcl_string file =  "07JAN27.RPB";
+  vcl_string file =  dir_base + "/07JAN27.RPB";
 
   vpgl_rational_camera<double> *rat_cam2 = read_rational_camera<double>(file);
   vcl_cout << *rat_cam2;
