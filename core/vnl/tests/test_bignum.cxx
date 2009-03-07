@@ -86,7 +86,7 @@ static void run_constructor_tests()
   {vnl_bignum b("1"); TEST("vnl_bignum b(\"1\");", b, 1L);}
   {vnl_bignum b("123"); TEST("vnl_bignum b(\"123\");", b, 123L);}
   {vnl_bignum b("123e5"); TEST("vnl_bignum b(\"123e5\");", b, 12300000L);}
-  {vnl_bignum b("123e+4"); TEST("vnl_bignum b(\"123e+4\");", b, 1230000L);}
+  {vnl_bignum b("-123e+4"); TEST("vnl_bignum b(\"-123e+4\");", b, -1230000L);}
   {vnl_bignum b("123e12"); TEST("vnl_bignum b(\"123e12\");", (double)b, 123e12);}
 #ifndef __alpha__ // On Alpha, compiler runs out of memory when using <sstream>
   {vnl_bignum b("-1e120"); vcl_stringstream s; s << b; vcl_cout << b << '\n';
