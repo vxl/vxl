@@ -574,12 +574,12 @@ bool save_unmeshed_p3d(bmsh3d_mesh* M, const char* file)
   return true;
 }
 
-bool bmsh3d_load_ply2(vcl_vector<vgl_point_3d<double> >& pts,
-                      vcl_vector<vcl_vector<int> >* faces,
-                      const char* file)
+bool bmsh3d_load_ply2(vcl_vector<vgl_point_3d<double> >& /*pts*/,
+                      vcl_vector<vcl_vector<int> >* /*faces*/,
+                      const char* /*file*/)
 {
   assert (0);
-  return true;
+  return false;
 }
 
 bool bmsh3d_save_ply2(const vcl_vector<vgl_point_3d<double> >& pts,
