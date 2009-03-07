@@ -7,9 +7,9 @@
 // \date 10/24/2008
 // \author Gamze Tunali
 //
-//   Geotiff images contain information about the corresponding world coordinate
-//   values of the pixel positions. This class is a wrapper of that information
-//   to project and backproject the 3D points in local coordinates to pixel positions
+// Geotiff images contain information about the corresponding world coordinate
+// values of the pixel positions. This class is a wrapper of that information
+// to project and backproject the 3D points in local coordinates to pixel positions
 
 
 #include <vcl_iosfwd.h>
@@ -32,15 +32,15 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
                   bgeo_lvcs_sptr lvcs,
-                  vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) {this->set_lvcs(lvcs);}
+                  vcl_vector<vcl_vector<double> > tiepoints) // FIXME - unused parameter
+    : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) { this->set_lvcs(lvcs); }
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
-  static bool init_geo_camera(vil_tiff_image* const& geotiff_img, 
+  static bool init_geo_camera(vil_tiff_image* const& geotiff_img,
                               bgeo_lvcs_sptr lvcs,
                               vpgl_geo_camera*& camera);
 
@@ -68,8 +68,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
   void translate(double tx, double ty, double z);
 
   //: the lidar pixel size in meters assumes square pixels
-  double pixel_spacing(){if(scale_tag_) return trans_matrix_[0][0];
-  else return 1.0;}
+  double pixel_spacing() { if (scale_tag_) return trans_matrix_[0][0];
+                           else return 1.0; }
 
   bool operator ==(vpgl_geo_camera const& rhs) const;
 
@@ -103,9 +103,11 @@ class vpgl_geo_camera : public vpgl_camera<double>
   void img_to_wgs(const unsigned i, const unsigned j, const unsigned z,
                   double& lon, double& lat, double& elev);
 
+#if 0
   //: returns the corresponding pixel position (i,j) for a given geographical coordinates (lon, lat)
-  /*void wgs_to_img(double lon, double lat, 
-                  unsigned& i, unsigned& j);*/
+  void wgs_to_img(double lon, double lat,
+                  unsigned& i, unsigned& j);
+#endif // 0
 
  private:
 
