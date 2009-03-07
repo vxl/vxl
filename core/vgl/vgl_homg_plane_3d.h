@@ -16,7 +16,8 @@
 //   Peter Vanroose  6 July 2001: Added constructor from 3 points
 //   CJB (Manchester) 16/03/2001: Tidied up the documentation
 //   Peter Vanroose 15 July 2002: Added constructor from two concurrent lines
-//   cbw (imorphics) 31 March 2008: Corrected constructor with normal and point (negated d) and added test
+//   cbw (imorphics) 31 Mar 2008: Corrected constructor with normal and point (negated d) and added test
+//   Peter Vanroose 7 March 2009: Added normalize(), similar to the one in vgl_homg_line_2d<T>
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -93,6 +94,9 @@ class vgl_homg_plane_3d
   }
 
   inline vgl_vector_3d<double> normal() const { return normalized(vgl_vector_3d<double>(a(),b(),c())); }
+
+  //: divide all coefficients by sqrt(a^2 + b^2 + c^2)
+  void normalize();
 };
 
 //: Return true iff p is the plane at infinity

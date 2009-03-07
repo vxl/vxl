@@ -6,6 +6,7 @@
 
 #include "vgl_homg_plane_3d.h"
 #include <vcl_cassert.h>
+#include <vcl_cmath.h> // for std::sqrt and std::fabs(double)
 #include <vcl_iostream.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -57,6 +58,26 @@ vgl_homg_plane_3d<Type>::vgl_homg_plane_3d(vgl_vector_3d<Type> const& n,
                                            vgl_homg_point_3d<Type> const&p)
  : a_(n.x()*p.w()), b_(n.y()*p.w()), c_(n.z()*p.w()),
    d_(-(n.x()*p.x()+n.y()*p.y()+n.z()*p.z())) {}
+
+//: divide all coefficients by sqrt(a^2 + b^2 + c^2)
+template <class Type>
+void vgl_homg_plane_3d<Type>::normalize()
+{
+  double sum = a_*a_ + b_*b_ + c_*c_;
+  if (sum<1e-12) // don't normalize plane at infinity
+    return;
+  double den = vcl_sqrt(sum);
+  double an= (double)a()/den; a_ = (Type)an;
+  double bn= (double)b()/den; b_ = (Type)bn;
+  double cn= (double)c()/den; c_ = (Type)cn;
+  double dn= (double)d()/den; d_ = (Type)dn;
+  //standardize so that largest of (|a|,|b|,|c|) is positive
+  if ((vcl_fabs(an)>=vcl_fabs(bn) && vcl_fabs(an)>=vcl_fabs(cn) && an < 0) ||
+      (vcl_fabs(bn)>vcl_fabs(an) && vcl_fabs(bn)>=vcl_fabs(cn) && bn < 0) ||
+      (vcl_fabs(cn)>vcl_fabs(an) && vcl_fabs(cn)>vcl_fabs(bn) && cn < 0))
+    a_ = -a_, b_ = -b_, c_ = -c_, d_ = -d_;
+  return;
+}
 
 template <class Type>
 bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const& p) const
