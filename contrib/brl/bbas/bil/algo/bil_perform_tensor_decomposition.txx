@@ -18,9 +18,9 @@ class vil_math_square_functor
 
 
 template <class T>
-void bil_perform_tensor_decomposition( const vil_image_view<T >& k11,
+void bil_perform_tensor_decomposition( const vil_image_view<T>& k11,
                                        const vil_image_view<T>& k12,
-                                       const vil_image_view<T>& k21,
+                                       const vil_image_view<T>& k21, // FIXME - unused ?!?
                                        const vil_image_view<T>& k22,
                                        vil_image_view<T>& e1,
                                        vil_image_view<T>& e2,
