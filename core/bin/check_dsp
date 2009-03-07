@@ -75,13 +75,13 @@ foreach my $dir (@DIRS)
     my %inc_files = ();
     my $prefix=$dir; $prefix =~ s![^/]*$ !!x; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
     if (opendir UPDIR,"$dir/..") {
-      foreach (grep {m/\.h$/} readdir(UPDIR)) { ++ $updir_files{$prefix.$_} unless (m/\bdll\.h$/); } # || m/vidl_(win|avifile)_avicodec/
+      foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{$prefix.$_} unless (m/\bdll\.h$/); } # || m/vidl_(win|avifile)_avicodec/
       closedir(UPDIR);
     }
     foreach my $subdir (qw(algo io file_formats gui pro xio))
     {
       if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
-        foreach (grep {m/\.h$/} readdir(UPDIR)) { ++ $updir_files{"$prefix$subdir/$_"}; }
+        foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{"$prefix$subdir/$_"}; }
         closedir(UPDIR);
       }
     }
@@ -109,8 +109,8 @@ foreach my $dir (@DIRS)
     }
   }
 
-  my %hfiles = (); # full list of existing *.h, *.h.in and *.txx files
-  foreach my $fx (grep {m/\.(h|txx)(\.in)?$/} @file_list)
+  my %hfiles = (); # full list of existing *.h, *.h.in, *.hxx and *.txx files
+  foreach my $fx (grep {m/\.(h|txx|hxx)(\.in)?$/} @file_list)
   {
     next if ($dir =~ m!\bvcl/generic$ !x);
     next if ($fx  =~ m/\b(Resource|StdAfx)\.h$/i);
@@ -249,10 +249,11 @@ foreach my $dir (@DIRS)
 ###-- foreach (map {s/\.h$/_mocced.cxx/; $_} split(/\s+/, $3)) { ++ $source_files{$_}; }
   }
   $cmakefile =~ s/\$\{$moc_files\}//g;
-  while ($cmakefile =~ s/\bSET\s*\(\s*(\S+)\s*(.*?)\)//s)
+  while ($cmakefile =~ s/\b(SET|FOREACH)\s*\(\s*(\S+)\s*(.*?)\)/$1@($2)/s)
   {
-    my $n = $1; # $n is typically of the form ..._sources or ..._SOURCES
-    my $l = $2; # the list of files constituting the definition of $n.
+    my $f = $1; # $f is either SET or FOREACH
+    my $n = $2; # $n is typically of the form ..._sources or ..._SOURCES
+    my $l = $3; # the list of files constituting the definition of $n.
     next if $n =~ m/_(PREFIX|FLAGS|LIBRARIES|PATH|SOURCE_DIR|BINARY_DIR|INCLUDE_DIR)$/;
     next if $n =~ m/^[a-z0-9]+_test_include_sources$/;
     next if $n =~ m/^\${/;
@@ -265,7 +266,15 @@ foreach my $dir (@DIRS)
       else { $l =~ s/\$\{$a\}/$b/g; }
     }
     # %names is a global hash list, first filled in here
-    $names{$n} = $l;
+    if ($f eq 'SET') { $names{$n} = $l; }
+    if ($f eq 'FOREACH') {
+      my ($pat) = $cmakefile =~ m/\bFOREACH@\($n\)\s*(.*?)ENDFOREACH\s*\(\s*$n\s*\)/s;
+      foreach my $repl (split /\s+/,$l) {
+	my $p = $pat; $p =~ s/\$\{$n\}/$repl/g;
+        $cmakefile =~ s/\b(FOREACH@\($n\))/$p$1/;
+      }
+      $cmakefile =~ s/\bFOREACH@\($n\)\s*(.*?)ENDFOREACH\s*\(\s*$n\s*\)//s;
+    }
   }
   while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+(\S+)\s*\)//s)
   {
@@ -307,8 +316,8 @@ foreach my $dir (@DIRS)
     $g =~ s/^SHARED\s+//; # ignore optional keyword "SHARED", if present
     foreach (split /\s+/, $g) {
       if (m/^\s*$/) { next; }
-      elsif (-f "$dir/$_" && m/\.(h(\.in)?|txx)$/) { ++ $hsource_files{$_}; }
-      elsif (-f "$dir/$_")                         { ++ $source_files{$_}; }
+      elsif (-f "$dir/$_" && m/\.(h(\.in)?|[th]xx)$/) { ++ $hsource_files{$_}; }
+      elsif (-f "$dir/$_")                            { ++ $source_files{$_}; }
       elsif (-f "$dir/$_.cxx") { print "Should replace $_ by $_.cxx in $cmakef"; ++ $source_files{"$_.cxx"}; }
       elsif (-f "$dir/$_.c")   { print "Should replace $_ by $_.c in $cmakef";   ++ $source_files{"$_.c"}; }
       elsif (-f "$dir/$_.cc")  { print "Should replace $_ by $_.cc in $cmakef";  ++ $source_files{"$_.cc"}; }
@@ -323,7 +332,7 @@ foreach my $dir (@DIRS)
     my $g = $1; # list of file names
     foreach my $x (grep {! m/^\s*$/} split /\s+/, $g) {
       if (! -f "$dir/$x") { print $shell ? '# ' : '' . "file $x listed in INSTALL_NOBASE_HEADER_FILES does not exist"; }
-      elsif ($x =~ m/\.(h|txx|in)$/) { ++ $hsource_files{$x} unless (exists $hsource_files{$x}); }
+      elsif ($x =~ m/\.(h|[th]xx|in)$/) { ++ $hsource_files{$x} unless (exists $hsource_files{$x}); }
     }
   }
   while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//)
@@ -341,8 +350,8 @@ foreach my $dir (@DIRS)
         $names{$name} = join '',keys %source_files if (%source_files);
         next;
       }
-      if (m/\.(h(\.in)?|txx)$/) { ++ $hsource_files{$_}; }
-      elsif (-f "$dir/$_")      { ++ $source_files{$_}; }
+      if (m/\.(h(\.in)?|[th]xx)$/) { ++ $hsource_files{$_}; }
+      elsif (-f "$dir/$_")         { ++ $source_files{$_}; }
       elsif (-f "$dir/$_.cxx")  { print "Should replace $_ by $_.cxx in $cmakef"; ++ $source_files{"$_.cxx"}; }
       elsif (-f "$dir/$_.c")    { print "Should replace $_ by $_.c in $cmakef";   ++ $source_files{"$_.c"}; }
       elsif (-f "$dir/$_.cc")   { print "Should replace $_ by $_.cc in $cmakef";  ++ $source_files{"$_.cc"}; }
