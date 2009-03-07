@@ -23,7 +23,7 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, vcl_string change_
       {
         unsigned u = static_cast<unsigned>(x);
         unsigned v = static_cast<unsigned>(y);
-        if (u < 0 || v < 0 || u >= ni || v >= nj)
+        if (u >= ni || v >= nj)
           continue;
         if (objs_[i]->type().compare(change_type)==0)
           (*mask)(u,v) = 255;
@@ -35,6 +35,7 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, vcl_string change_
 
   return mask;
 }
+
 vil_image_view_base_sptr 
 bvgl_changes::create_mask_from_objs_all_types(unsigned ni, unsigned nj)
 {
@@ -124,17 +125,17 @@ void bvgl_changes::b_read(vsl_b_istream& is)
   switch (ver)
   {
    case 1:
-    {
-      vsl_b_read(is, img_name_);
-      unsigned size;
-      vsl_b_read(is, size);
-      for (unsigned i = 0; i < size; ++i) {
-        bvgl_change_obj o;
-        o.b_read(is);
-        objs_.push_back(new bvgl_change_obj(o));
-      }
-      break;
+   {
+    vsl_b_read(is, img_name_);
+    unsigned size;
+    vsl_b_read(is, size);
+    for (unsigned i = 0; i < size; ++i) {
+      bvgl_change_obj o;
+      o.b_read(is);
+      objs_.push_back(new bvgl_change_obj(o));
     }
+    break;
+   }
    default:
     vcl_cout << "In bvgl_changes::b_read() -- Unrecognized version number " << ver << vcl_endl;
     break;
