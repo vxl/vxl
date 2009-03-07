@@ -8,7 +8,7 @@
 // \author Antonio Garrido
 // \verbatim
 //  Modifications
-//     30 Apr 2008 Created (A. Garrido)
+//   30 Apr 2008 Created (A. Garrido)
 //\endverbatim
 
 #include "vidl2_istream.h"
@@ -16,7 +16,8 @@
 #include "v4l2_pixel_format.h"
 
 //: A video input stream using a v4l2 device
-class vidl2_v4l2_istream: public vidl2_istream {
+class vidl2_v4l2_istream: public vidl2_istream
+{
     //vidl2_v4l2_device_sptr dev;
     vidl2_v4l2_device& dev;
     mutable vidl2_frame_sptr cur_frame_;
@@ -38,10 +39,10 @@ class vidl2_v4l2_istream: public vidl2_istream {
     virtual bool is_valid() const { return cur_frame_ && dev; }
 
     //: Return true if the stream support seeking
-    virtual bool is_seekable() const {return false;};
+    virtual bool is_seekable() const {return false;}
 
     //: Return the current frame number. 
-    virtual unsigned int frame_number() const{return frame_number_;};
+    virtual unsigned int frame_number() const{return frame_number_;}
 
     //: Return the number of frames if known
     //  returns -1 for non-seekable streams
@@ -60,12 +61,10 @@ class vidl2_v4l2_istream: public vidl2_istream {
     virtual double frame_rate() const { return 0.0; }
 
     //: Return the current frame number. does this works?
-    unsigned int frame_number_device() const{return dev.sequence();};
-
+    unsigned int frame_number_device() const { return dev.sequence(); }
 
     //: Close the stream
     virtual void close() { dev.stop_capturing(); } // why to close?
-
 
     //: Advance to the next frame (but don't acquire an image)
     virtual bool advance();
@@ -74,13 +73,12 @@ class vidl2_v4l2_istream: public vidl2_istream {
     virtual vidl2_frame_sptr read_frame();
 
     //: Return the current frame in the stream
-    virtual vidl2_frame_sptr current_frame(){return cur_frame_;};
+    virtual vidl2_frame_sptr current_frame() { return cur_frame_; }
 
     //: Seek to the given frame number
     // \returns true if successful
-    virtual bool seek_frame(unsigned int frame_number){return false;};
+    virtual bool seek_frame(unsigned int /*frame_number*/) { return false; }
 };
-
 
 
 #endif // vidl2_v4l2_istream_h_
