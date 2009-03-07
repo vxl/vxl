@@ -9,58 +9,56 @@
 #include <vcl_limits.h>
 #include <vnl/vnl_erf.h>
 
-namespace {
-
-//: Unroll the mahalanobis distance calculation
-template <class T, unsigned n, unsigned index>
-struct compute_dot
+namespace
 {
-  static inline T value(const vnl_vector_fixed<T,n>& d)
+  //: Unrol the Mahalanobis distance calculation
+  template <class T, unsigned n, unsigned index>
+  struct compute_dot
   {
-    return d[index-1]*d[index-1]
-         + compute_dot<T,n,index-1>::value(d);
-  }
-};
+    static inline T value(const vnl_vector_fixed<T,n>& d)
+    {
+      return d[index-1]*d[index-1]
+           + compute_dot<T,n,index-1>::value(d);
+    }
+  };
 
-//: base case
-// this is partial specialization: expect MSVC6 to complain
-template <class T, unsigned n>
-struct compute_dot<T,n,0>
-{
-  static inline T value(const vnl_vector_fixed<T,n>& d)
-  { return 0; }
-};
-
-//: base case
-// this is partial specialization: expect MSVC6 to complain
-template <class T>
-    struct compute_dot<T,1,1>
-{
-  static inline T value(const T& d)
-  { return d*d; }
-};
-
-
-//: Unroll the determinant calculation
-template <class T, unsigned n, unsigned index>
-struct determinant
-{
-  static inline T value(const T& var)
+  //: base case
+  // this is partial specialization: expect MSVC6 to complain
+  template <class T, unsigned n>
+  struct compute_dot<T,n,0>
   {
-    return var * determinant<T,n,index-1>::value(var);
-  }
-};
+    static inline T value(const vnl_vector_fixed<T,n>& d)
+    { return 0; }
+  };
 
-//: base case
-// this is partial specialization: expect MSVC6 to complain
-template <class T, unsigned n>
-struct determinant<T,n,0>
-{
-  static inline T value(const T& var)
-  { return 1; }
-};
+  //: base case
+  // this is partial specialization: expect MSVC6 to complain
+  template <class T>
+      struct compute_dot<T,1,1>
+  {
+    static inline T value(const T& d)
+    { return d*d; }
+  };
 
-}
+
+  //: Unroll the determinant calculation
+  template <class T, unsigned n, unsigned index>
+  struct determinant
+  {
+    static inline T value(const T& var)
+    {
+      return var * determinant<T,n,index-1>::value(var);
+    }
+  };
+
+  //: base case
+  // this is partial specialization: expect MSVC6 to complain
+  template <class T, unsigned n>
+  struct determinant<T,n,0>
+  {
+    static inline T value(const T& /*var*/) { return 1; }
+  };
+} // namespace
 
 
 //: The squared Mahalanobis distance to this point
@@ -82,7 +80,7 @@ struct compute_probability_box
   static inline T value(const vector_& min_minus_mean,
                         const vector_& max_minus_mean,
                         const T& var
-                        )
+                       )
   {
     if (var<=T(0))
       return vcl_numeric_limits<T>::infinity();
@@ -141,7 +139,7 @@ struct compute_probability_box<T,vector_,1,0>
 //  \note min_pt and max_pt are the corners of the box
 template <class T, unsigned int n>
 T bsta_gaussian_sphere<T,n>::probability(const vector_& min_pt,
-                                        const vector_& max_pt) const
+                                         const vector_& max_pt) const
 {
   vector_ min_minus_mean = min_pt-bsta_gaussian<T,n>::mean_;
   vector_ max_minus_mean = max_pt-bsta_gaussian<T,n>::mean_;
