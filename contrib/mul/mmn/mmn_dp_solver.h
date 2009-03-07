@@ -12,6 +12,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: Solve restricted class of Markov problems (trees and tri-trees)
 //  Find choice of values at each node which minimises Markov problem.
@@ -48,7 +49,7 @@ class mmn_dp_solver : public mmn_solver
   void process_dep2(const mmn_dependancy& dep);
 
   //: Compute optimal choice for dep.v0 given v1 and v2
-  //  Includes cost depending on (v0,v1,v2) as well as pairwise and 
+  //  Includes cost depending on (v0,v1,v2) as well as pairwise and
   //  node costs.
   // tri_cost(i,j,k) is cost of associating smallest node index
   // with i, next with j and largest node index with k.
@@ -62,7 +63,7 @@ class mmn_dp_solver : public mmn_solver
   //: Index of root node
   unsigned root() const;
 
-    //: Input the arcs that define the graph
+  //: Input the arcs that define the graph
   virtual void set_arcs(unsigned num_nodes,
                         const vcl_vector<mmn_arc>& arcs);
 
@@ -87,7 +88,7 @@ class mmn_dp_solver : public mmn_solver
   //  As solve(node_cost,pair_cost,x), but allows inclusion of
   //  costs for triplets (ie when v0 depends on v1 and v2).
   //  tri_cost(i,j,k) gives cost of node min(v0,v1,v2) being
-  //  value i, node mid(v0,v1,v2) being value j and 
+  //  value i, node mid(v0,v1,v2) being value j and
   //  node max(v0,v1,v2) being value k.
   double solve(const vcl_vector<vnl_vector<double> >& node_cost,
                  const vcl_vector<vnl_matrix<double> >& pair_cost,
@@ -104,24 +105,23 @@ class mmn_dp_solver : public mmn_solver
   //: Initialise from a text stream
   virtual bool set_from_stream(vcl_istream &is);
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Create a copy on the heap and return base class pointer
+  //: Create a copy on the heap and return base class pointer
   virtual mmn_solver* clone() const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
-
 };
 
 #endif // mmn_dp_solver_h_
