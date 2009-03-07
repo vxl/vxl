@@ -123,7 +123,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
     lon = x;
   }
 
-  double x1=lon, y1=lat , z1=gz;
+  double x1=lon, y1=lat, z1=gz;
   if (is_utm) {
     bgeo_utm utm;
     int utm_zone;
@@ -131,7 +131,7 @@ void vpgl_geo_camera::project(const double x, const double y, const double z,
   }
   vec[0] = x1;
   vec[1] = y1;
-  vec[2] = 0;
+  vec[2] = z1;
   vec[3] = 1;
 
   // do we really need this, const does not allow this
