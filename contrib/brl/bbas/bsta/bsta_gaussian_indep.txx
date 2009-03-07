@@ -48,7 +48,7 @@ namespace
   template <class T, unsigned n>
   struct determinant<T,n,0>
   {
-    static inline T value(const vnl_vector_fixed<T,n>& covar)
+    static inline T value(const vnl_vector_fixed<T,n>& /*covar*/)
     { return 1; }
   };
 };
@@ -82,7 +82,7 @@ struct compute_probability_box
   static inline T value(const vnl_vector_fixed<T,n>& min_minus_mean,
                         const vnl_vector_fixed<T,n>& max_minus_mean,
                         const vnl_vector_fixed<T,n>& covar
-                        )
+                       )
   {
     if (covar[index]<=T(0))
       return vcl_numeric_limits<T>::infinity();
@@ -126,8 +126,8 @@ T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
   vnl_vector_fixed<T,n> min_minus_mean = min_pt-bsta_gaussian<T,n>::mean_;
   vnl_vector_fixed<T,n> max_minus_mean = max_pt-bsta_gaussian<T,n>::mean_;
   return compute_probability_box<T, n, n-1>::value(min_minus_mean,
-                                                 max_minus_mean,
-                                                 diag_covar_);
+                                                   max_minus_mean,
+                                                   diag_covar_);
 }
 
 
