@@ -89,15 +89,15 @@ rgtl_object_array_points<D>
                         double const [1<<D][D]) const
 {
   point_type const& x = this->points_[id];
-  for(unsigned int a=0; a < D; ++a)
-    {
+  for (unsigned int a=0; a < D; ++a)
+  {
     // Use an asymmetric test so that points on the boundary between
     // adjacent boxes are given to only one box.
-    if(x[a] < lower[a] || x[a] >= upper[a])
-      {
+    if (x[a] < lower[a] || x[a] >= upper[a])
+    {
       return false;
-      }
     }
+  }
   return true;
 }
 
@@ -132,33 +132,33 @@ template <unsigned int D>
 void rgtl_object_array_points<D>::compute_bounds(double bounds[D][2]) const
 {
   // Initialize bounds to empty.
-  for(unsigned int a=0; a < D; ++a)
-    {
+  for (unsigned int a=0; a < D; ++a)
+  {
     bounds[a][0] = +vcl_numeric_limits<double>::max();
     bounds[a][1] = -vcl_numeric_limits<double>::max();
-    }
+  }
 
   // Update the bounds for each point.
   int n = this->get_number_of_points();
-  for(int i=0; i < n; ++i)
-    {
+  for (int i=0; i < n; ++i)
+  {
     point_type const& p = this->points_[i];
-    for(unsigned int a=0; a < D; ++a)
+    for (unsigned int a=0; a < D; ++a)
+    {
+      if (p[a] < bounds[a][0])
       {
-      if(p[a] < bounds[a][0])
-        {
         bounds[a][0] = p[a];
-        }
-      if(p[a] > bounds[a][1])
-        {
+      }
+      if (p[a] > bounds[a][1])
+      {
         bounds[a][1] = p[a];
-        }
       }
     }
+  }
 }
 
 #undef RGTL_OBJECT_ARRAY_POINTS_INSTANTIATE
 #define RGTL_OBJECT_ARRAY_POINTS_INSTANTIATE( D ) \
-  template class rgtl_object_array_points< D >; \
+  template class rgtl_object_array_points<D >
 
 #endif

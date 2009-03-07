@@ -6,7 +6,7 @@
 #include "bsta_mean_shift.h"
 
 //: Compute the mean in a window around the given pt, the window size is the bandwidth
-//  if there are no points within bandwidth of the input pt, return false
+//  \return false if there are no points within bandwidth of the input pt
 template <class T, unsigned n>
 bool
 bsta_mean_shift_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_type const& pt, typename bsta_parzen_sphere<T,n>::vector_type& out)
@@ -38,23 +38,23 @@ bsta_mean_shift_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_t
     out = sum / nsamp;
     return true;
   }
-    
+
   return false;
 }
 
 //: Insert a weighted sample into the distribution
 template <class T, unsigned n>
-void 
-bsta_mean_shift_sample_set<T,n>::insert_w_sample(typename bsta_parzen_sphere<T,n>::vector_type const& sample, T weight)  
-{ 
-  bsta_parzen<T,n>::samples_.push_back(sample); 
-  weights_.push_back(weight); 
+void
+bsta_mean_shift_sample_set<T,n>::insert_w_sample(typename bsta_parzen_sphere<T,n>::vector_type const& sample, T weight)
+{
+  bsta_parzen<T,n>::samples_.push_back(sample);
+  weights_.push_back(weight);
 }
 
 //: one may need to normalize the weights after the insertion is over
 template <class T, unsigned n>
-void 
-bsta_mean_shift_sample_set<T,n>::normalize_weights() 
+void
+bsta_mean_shift_sample_set<T,n>::normalize_weights()
 {
   T sum(0);
   for (unsigned i = 0; i < weights_.size(); i++) {
@@ -66,16 +66,15 @@ bsta_mean_shift_sample_set<T,n>::normalize_weights()
       weights_[i] = weights_[i]/sum;
     }
   }
-
 }
-  
+
 
 template <class T, unsigned n>
 bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, vnl_random & rng, float percentage, T epsilon)
 {
   typedef typename bsta_parzen_sphere<T,n>::vector_type vect_t;
 
-  //: initialize seeds by picking given percentage of the sample set randomly
+  // initialize seeds by picking given percentage of the sample set randomly
   int size = set.size();
   int seed_size = (int)vcl_ceil(percentage*size/100.0f);
   vcl_cout << "size: " << size << " seed_size: " << seed_size << vcl_endl;
@@ -88,17 +87,17 @@ bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, vnl_
   vcl_cout << "initialized assignment_, its size: " << assignment_.size()  << vcl_endl;
 
   for (int i = 0; i < seed_size; i++) {
-    //: randomly pick one of the samples as seed
+    // randomly pick one of the samples as seed
     double rn = rng.drand32();
     int s_id = (int)vcl_floor(rn*(size-1)+0.5f);
     if (assignment_[s_id].first) {
       i--;
       continue;
     }
-    vnl_vector_fixed<T,n> dif(T(10e4));
-    
+    vnl_vector_fixed<T,n> dif (T(10e4));
+
     vect_t current = set.sample(s_id);
-    
+
     unsigned cnt = 0;
     while (dif.magnitude() > epsilon) {
       vect_t mean;
@@ -112,7 +111,7 @@ bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, vnl_
         break;
     }
     if (cnt < max_iter_) {
-      //: found a stable mode
+      // found a stable mode
       modes_.push_back(current);
       vcl_pair<bool, unsigned> p(true, modes_.size()-1);
       assignment_[s_id] = p;
@@ -136,11 +135,11 @@ bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, T ep
   }
 
   for (int i = 0; i < size; i++) {
-    
-    vnl_vector_fixed<T,n> dif(T(10e4));
-    
+
+    vnl_vector_fixed<T,n> dif (T(10e4));
+
     vect_t current = set.sample(i);
-    
+
     unsigned cnt = 0;
     while (dif.magnitude() > epsilon) {
       vect_t mean;
@@ -154,7 +153,7 @@ bool bsta_mean_shift<T,n>::find_modes(bsta_mean_shift_sample_set<T,n>& set, T ep
         break;
     }
     if (cnt < max_iter_) {
-      //: found a stable mode
+      // found a stable mode
       modes_.push_back(current);
       vcl_pair<bool, unsigned> p(true, modes_.size()-1);
       assignment_[i] = p;
@@ -183,10 +182,10 @@ bool bsta_mean_shift<T,n>::trim_modes(T epsilon)
         continue;
       vect_t v_j = modes_[j];
       vect_t dif = v_i - v_j;
-      vnl_vector_fixed<T,n> v_dif(dif);
+      vnl_vector_fixed<T,n> v_dif (dif);
       if (v_dif.magnitude() < epsilon) {
         trimmed[j] = true;
-        //: assign all the samples of the trimmed mode to this new mode v_i
+        // assign all the samples of the trimmed mode to this new mode v_i
         for (unsigned kk = 0; kk < assignment_.size(); kk++) {
           if (assignment_[kk].first && assignment_[kk].second == j) {
             assignment_[kk].second = i;
@@ -226,7 +225,7 @@ bool bsta_mean_shift<T,n>::recompute_modes(bsta_mean_shift_sample_set<T,n>& set)
         cnt += w;
       }
     }
-    if (cnt == 0) 
+    if (cnt == 0)
       return false;
     modes_[i] = sum/T(cnt);
   }
@@ -234,12 +233,11 @@ bool bsta_mean_shift<T,n>::recompute_modes(bsta_mean_shift_sample_set<T,n>& set)
 }
 
 
-
 #define BSTA_MEAN_SHIFT_SAMPLE_SET_INSTANTIATE(T,n) \
-template class bsta_mean_shift_sample_set<T,n >; 
+template class bsta_mean_shift_sample_set<T,n >
 
 #define BSTA_MEAN_SHIFT_INSTANTIATE(T,n) \
-template class bsta_mean_shift<T,n >; 
+template class bsta_mean_shift<T,n >
 
 
 #endif // bsta_mean_shift_txx_
