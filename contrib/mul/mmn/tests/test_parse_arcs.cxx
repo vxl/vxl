@@ -1,4 +1,4 @@
-// This is mul/mmn/tests/test_dp_solver.cxx
+// This is mul/mmn/tests/test_parse_arcs.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <mmn/mmn_parse_arcs.h>
@@ -9,8 +9,8 @@
 
 void test_parse_arcs_a()
 {
-  vcl_cout<<"========= test_parse_arcs ========="<<vcl_endl;
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"========= test_parse_arcs ========="<<vcl_endl
+          <<vcl_endl;
 
   unsigned n=5;
   vcl_vector<vcl_string> nodeNames;
@@ -54,20 +54,19 @@ void test_parse_arcs_a()
   TEST("Test first arc ",arcs[0].v1==0 && arcs[0].v2==1,true );
   TEST("Test second arc ",arcs[1].v1==0 && arcs[1].v2==2,true );
   TEST("Test last arc ",arcs.back().v1==9 && arcs.back().v2==5,true );
-  
+
   vcl_cout<<"Arc set follows:"<<vcl_endl;
   vcl_copy(arcs.begin(),arcs.end(),
            vcl_ostream_iterator<mmn_arc>(vcl_cout,"\t"));
-  vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"========= end test_parse_arcs ========="<<vcl_endl;
-  vcl_cout<<vcl_endl;
+  vcl_cout<<vcl_endl
+          <<vcl_endl
+          <<"========= end test_parse_arcs ========="<<vcl_endl
+          <<vcl_endl;
 }
 
 void test_parse_arcs()
 {
   test_parse_arcs_a();
-
 }
 
 TESTMAIN(test_parse_arcs);

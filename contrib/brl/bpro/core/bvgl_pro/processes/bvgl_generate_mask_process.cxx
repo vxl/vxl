@@ -1,5 +1,6 @@
-// This is brl/bpro/bvgl_pro/bvgl_generate_mask_process.cxx
-
+// This is brl/bpro/core/bvgl_pro/processes/bvgl_generate_mask_process.cxx
+#include <bprb/bprb_func_process.h>
+#include <bprb/bprb_parameters.h>
 //:
 // \file
 
@@ -7,10 +8,9 @@
 #include <vcl_iostream.h>
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
-#include <bprb/bprb_parameters.h>
-#include <bprb/bprb_func_process.h>
 #define NI "ni"
 #define NJ "nj"
+
 // Constructor
 bool bvgl_generate_mask_process_cons(bprb_func_process& pro)
 {
@@ -25,10 +25,9 @@ bool bvgl_generate_mask_process_cons(bprb_func_process& pro)
     output_types[0]= "vil_image_view_base_sptr"; // vxl_byte mask (with don't care areas)
     output_types[1]= "vil_image_view_base_sptr"; // bool mask (with changes true and other areas false)
     return pro.set_output_types(output_types);
-  } else 
+  } else
     return false;
 }
-
 
 
 // Execute the process
@@ -45,12 +44,12 @@ bvgl_generate_mask_process(bprb_func_process& pro)
   vcl_string change_type = pro.get_input<vcl_string>(1);
 
   unsigned ni=0, nj=0; // dummy initialisation, to avoid compiler warning
-  if(!pro.parameters()->get_value(NI, ni) || 
-     !pro.parameters()->get_value(NJ, nj))
-    { 
+  if (!pro.parameters()->get_value(NI, ni) ||
+      !pro.parameters()->get_value(NJ, nj))
+  {
       vcl_cerr << "In bvgl_generate_mask_process - failed to get parameters\n";
       return false;
-    }
+  }
 
   // read the object
   vsl_b_ifstream bif(file_name);
