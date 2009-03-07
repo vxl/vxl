@@ -191,6 +191,7 @@ namespace
           case 1: matcher = new rgrl_matcher_k_nearest_adv(k);
                   str = "rgrl_matcher_k_nearest_adv";
                   break;
+          default: break;
         }
         str += vul_sprintf( "(%1d)", k );
 

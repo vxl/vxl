@@ -74,6 +74,7 @@ void osl_chamfer_Forward (int m, int n, int **dist, float **param)
         break;
 
       case 5:
+      default:
         break;
       }
     }
@@ -113,6 +114,9 @@ void osl_chamfer_Backward(int m, int n, int **dist, float **param)
       case 5:
         dist[i][j] = dist[i+1][j+1]+4;
         param[i][j] = param[i+1][j+1];
+        break;
+
+      default:
         break;
       }
     }
@@ -158,6 +162,7 @@ void osl_chamfer_Alt1(int m, int n, int **dist, float **param)
         break;
 
       case 5:
+      default:
         break;
       }
     }
@@ -175,8 +180,8 @@ void osl_chamfer_Alt1(int m, int n, int **dist, float **param)
 void osl_chamfer_Alt2(int m, int n, int **dist, float **param)
 {
   for (int i=m-2; i>0; --i) {
-    for (int j=1; j<n-1; ++j) {
-
+    for (int j=1; j<n-1; ++j)
+    {
       int val = osl_Minimum5(dist[i  ][j  ],
                              dist[i  ][j+1]+3,
                              dist[i+1][j-1]+4,
@@ -204,6 +209,9 @@ void osl_chamfer_Alt2(int m, int n, int **dist, float **param)
       case 5:
         dist[i][j] = dist[i+1][j+1]+4;
         param[i][j] = param[i+1][j+1];
+        break;
+
+      default:
         break;
       }
     }

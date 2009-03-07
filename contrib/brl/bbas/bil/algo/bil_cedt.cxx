@@ -213,7 +213,8 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
 
   switch (dir)
   {
-  case (0): {
+   case 0:
+   {
     yy = y; xx =x+1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -225,9 +226,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (1):
-  {
+   }
+   case 1:
+   {
     yy = y-1; xx =x+1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -239,9 +240,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (2):
-  {
+   }
+   case 2:
+   {
     yy = y-1; xx =x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -253,9 +254,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (3):
-  {
+   }
+   case 3:
+   {
     yy = y-1; xx =x-1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -267,9 +268,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (4):
-  {
+   }
+   case 4:
+   {
     yy = y; xx = x-1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -281,9 +282,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (5):
-  {
+   }
+   case 5:
+   {
     yy = y+1; xx = x-1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -292,12 +293,12 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
       dist = dist_x*dist_x+dist_y*dist_y;
       if (surface(yy,xx) > dist)
        add_to_contour(pf, heap, surface, tag_array, dir_array,dist_x, dist_y,dist,
-                       yy, xx, dir, position);
+                      yy, xx, dir, position);
     }
     break;
-  }
-  case (6):
-  {
+   }
+   case 6:
+   {
     yy = y+1; xx = x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -306,12 +307,12 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
       dist = dist_x*dist_x+dist_y*dist_y;
       if (surface(yy,xx) > dist)
        add_to_contour(pf, heap, surface, tag_array, dir_array,dist_x, dist_y,dist,
-                       yy, xx, dir, position);
+                      yy, xx, dir, position);
     }
     break;
-  }
-  case (7):
-  {
+   }
+   case 7:
+   {
     yy = y+1; xx = x+1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -323,9 +324,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (8):
-  {
+   }
+   case 8:
+   {
     yy = y; xx = x+1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -347,9 +348,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (9):
-  {
+   }
+   case 9:
+   {
     yy = y-1; xx = x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -371,9 +372,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (10):
-  {
+   }
+   case 10:
+   {
     yy = y-1; xx = x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -393,12 +394,12 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
       dist = dist_x*dist_x+dist_y*dist_y;
       if (surface(yy,xx) > dist)
        add_to_contour(pf, heap, surface, tag_array, dir_array,dist_x, dist_y,dist,
-                       yy, xx, dir, position);
+                      yy, xx, dir, position);
     }
     break;
-  }
-  case (11):
-  {
+   }
+   case 11:
+   {
     yy = y-1; xx = x-1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -420,9 +421,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (12):
-  {
+   }
+   case 12:
+   {
     yy = y; xx = x-1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -444,9 +445,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (13):
-  {
+   }
+   case 13:
+   {
     yy = y+1; xx = x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -468,9 +469,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (14):
-  {
+   }
+   case 14:
+   {
     yy = y+1; xx = x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
       position = yy*ni_+xx;
@@ -492,9 +493,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
                        yy, xx, dir, position);
     }
     break;
-  }
-  case (15):
-  {
+   }
+   case 15:
+   {
       yy = y; xx = x+1;
       if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
         position = yy*ni_+xx;
@@ -514,7 +515,9 @@ void bil_cedt::propagate_dist(bil_cedt_contour *pf, bil_cedt_heap *heap, vbl_arr
             add_to_contour(pf, heap,surface, tag_array, dir_array,dist_x, dist_y,dist,yy, xx, dir, position);
       }
       break;
-    }
+   }
+   default:
+    break;
   }
 }
 
@@ -528,7 +531,7 @@ void bil_cedt::initial_diagonal_propagate(bil_cedt_contour *pf, bil_cedt_heap *h
 
   switch (dir)
   {
-   case (1):
+   case 1:
    {
     yy = y; xx = x+1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
@@ -562,7 +565,7 @@ void bil_cedt::initial_diagonal_propagate(bil_cedt_contour *pf, bil_cedt_heap *h
     }
     break;
    }
-   case (3):
+   case 3:
    {
     yy = y-1; xx = x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
@@ -596,7 +599,7 @@ void bil_cedt::initial_diagonal_propagate(bil_cedt_contour *pf, bil_cedt_heap *h
     }
     break;
    }
-   case (5):
+   case 5:
    {
     yy = y; xx = x-1;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
@@ -630,7 +633,7 @@ void bil_cedt::initial_diagonal_propagate(bil_cedt_contour *pf, bil_cedt_heap *h
     }
     break;
    }
-   case (7):
+   case 7:
    {
     yy = y+1; xx = x;
     if (yy>=0 && yy<nj_ && xx>=0 && xx<ni_){
@@ -664,6 +667,8 @@ void bil_cedt::initial_diagonal_propagate(bil_cedt_contour *pf, bil_cedt_heap *h
     }
     break;
    }
+   default:
+    break;
   }
 }
 
@@ -712,13 +717,12 @@ bil_cedt_heap::bil_cedt_heap(int nj,int ni)
 
 bil_cedt_heap::~bil_cedt_heap()
 {
-        delete[] data;
+    delete[] data;
     delete[] index;
     delete[] rank;
     delete[] loc;
     delete[] locx;
     delete[] locy;
-
 }
 
 void bil_cedt_heap::print_heap()
@@ -756,16 +760,14 @@ void bil_cedt_heap::insert( int pos, int location, double item)
 
 void bil_cedt_heap::downheap(int k)
 {
-  int j;
-
   int v = index[k];
 
   while (k <= (int) N/2.0) {
-    j = k+k;
+    int j = k+k;
     if (j < N && data[index[j]] > data[index[j+1]])
-        j++;
+      j++;
     if (data[v] <= data[index[j]])
-        break;
+      break;
     index[k] = index[j];
     k = j;
   }
@@ -782,7 +784,7 @@ void bil_cedt_heap::remove_max()
   int y = locy[v];
   int x = locx[v];
   loc[y*ni_+x] = v;
-  N--;
+  --N;
   downheap(1);
 }
 
@@ -800,6 +802,5 @@ bil_cedt_contour::~bil_cedt_contour()
     delete[] x;
     delete[] y;
     delete[] dir;
-    
-}   
+}
 

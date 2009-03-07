@@ -207,6 +207,8 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
         right_outer_box.set_min_z(mean);
       }
       break;
+    default:
+      break;
   }
 
   // recursively construct child nodes
