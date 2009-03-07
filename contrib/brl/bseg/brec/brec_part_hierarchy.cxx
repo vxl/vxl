@@ -435,13 +435,15 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
 }
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
-void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy const &ph)
+void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy const & /*ph*/)
 {
-  vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  os << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  if (&os != &vcl_cerr)
+    vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
 
-void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy &ph)
+void vsl_b_read(vsl_b_istream & /*is*/, brec_part_hierarchy & /*ph*/)
 {
   vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
