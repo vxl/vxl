@@ -185,8 +185,8 @@ inline void vidl2_color_convert_rgb2yuv( double r, double g, double b,
   double du = (b-dy)/1.772;
   double dv = (r-dy)/1.402;
   vidl2_type_convert(dy,y);
-  vidl2_type_convert(du+0.5,y);
-  vidl2_type_convert(dv+0.5,y);
+  vidl2_type_convert(du+0.5,u);
+  vidl2_type_convert(dv+0.5,v);
 }
 
 
