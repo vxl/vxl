@@ -116,15 +116,9 @@ SOURCE=.\Templates/vpdl_distribution+double.1-.cxx
 # Begin Source File
 SOURCE=.\Templates/vpdl_distribution+float.0-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\vpdl_npower.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\vpdl_base_traits.h
-# End Source File
 # Begin Source File
 SOURCE=.\vpdl_distribution.txx
 # End Source File
@@ -144,12 +138,6 @@ SOURCE=.\vpdl_gaussian.h
 SOURCE=.\vpdl_gaussian_sphere.h
 # End Source File
 # Begin Source File
-SOURCE=.\vpdl_npower.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpdl_eigen_sym_matrix.h
-# End Source File
-# Begin Source File
 SOURCE=.\vpdl_mixture.h
 # End Source File
 # Begin Source File
@@ -166,6 +154,27 @@ SOURCE=.\vpdl_kernel_gaussian_sfbw.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpdl_mixture_of.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_dist_traits.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_field_default.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_field_traits.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_access.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_eigen_sym_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_gaussian.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_norm_metric.h
 # End Source File
 # End Group
 # End Target
