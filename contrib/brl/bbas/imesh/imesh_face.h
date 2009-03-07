@@ -255,7 +255,7 @@ class imesh_regular_face_array : public imesh_face_array_base
   virtual unsigned int size() const { return faces_.size(); }
 
   //: returns the number of vertices in face \param f
-  virtual unsigned int num_verts(unsigned int f) const { return s; }
+  virtual unsigned int num_verts(unsigned int /*f*/) const { return s; }
 
   //: Access a vertex index by face index and within-face index
   virtual unsigned int operator() (unsigned int f, unsigned int i) const { return faces_[f][i]; }
