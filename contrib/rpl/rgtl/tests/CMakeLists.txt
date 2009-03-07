@@ -26,3 +26,6 @@ TARGET_LINK_LIBRARIES(rgtl_test_all rgtl vul testlib)
 FOREACH(name ${test_names})
   ADD_TEST(rgtl_${name} rgtl_test_all test_${name})
 ENDFOREACH(name)
+
+ADD_EXECUTABLE( rgtl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( rgtl_test_include rgtl )
