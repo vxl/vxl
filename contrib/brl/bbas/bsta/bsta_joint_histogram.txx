@@ -1,6 +1,7 @@
 #ifndef bsta_joint_histogram_txx_
 #define bsta_joint_histogram_txx_
-
+//:
+// \file
 #include "bsta_joint_histogram.h"
 
 #include <vcl_cmath.h> // for log()
@@ -81,24 +82,24 @@ bool bsta_joint_histogram<T>::avg_and_variance_bin_for_row_a(const unsigned int 
 {
   if (a >= nbins_)
     return false;
-    
+
   T sum = 0;
   for (unsigned int b =0; b<nbins_; b++)
     sum += counts_[a][b];
-    
+
   if (sum <= 0)
     return false;
-  
+
   avg = 0;
   for (unsigned int b =0; b<nbins_; b++)
     avg += ((b+1)*delta_/2)*(counts_[a][b]/sum);
-  
+
   var = 0;
   for (unsigned int b =0; b<nbins_; b++) {
     T dif = (b+1)*delta_/2-avg;
     var += vcl_pow(dif, T(2.0))*(counts_[a][b]/sum);
   }
-  
+
   return true;
 }
 
@@ -176,51 +177,54 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
     for (unsigned int b = 0; b<nbins_; b++)
       if (p(a,b) > max)
         max = p(a,b);
-        
-  os << "#VRML V2.0 utf8\n";
-  os << "Group { children [\n";
-  
-  for (unsigned int a = 0; a<nbins_; a++) {
-    for (unsigned int b = 0; b<nbins_; b++) {
-      if (p(a,b) > 0) {
+
+  os << "#VRML V2.0 utf8\n"
+     << "Group { children [\n";
+
+  for (unsigned int a = 0; a<nbins_; a++)
+  {
+    for (unsigned int b = 0; b<nbins_; b++)
+    {
+      if (p(a,b) > 0)
+      {
         float height = float((p(a,b)/max)*nbins_);
-        os << "Transform {\n";
-        os << "  translation " << a << " " << b << " " << height << vcl_endl;
-        os << "  children Shape {\n";
-        os << "    geometry Sphere { radius 0.2 }\n";
-        os << "    appearance DEF A1 Appearance {";
-        os << "      material Material {\n";
-        os << "        diffuseColor 1 0 0\n";
-        os << "        emissiveColor .3 0 0\n";
-        os << "      }\n";
-        os << "    }\n";
-        os << "  }\n";
-        os << "}\n";
-        os << "Transform { \n";
-        os << "  translation " << a << " " << b << " " << height/2.0 << "\n";
-        os << "  rotation 1 0 0 " << vnl_math::pi/2.0 << " \n";
-        os << "  children Shape { \n";
-        os << "    appearance USE A1 \n"; 
-        os << "    geometry Cylinder { radius 0.05 height " << height << " }\n";
-        os << "  }\n";
-        os << "}\n";
+        os << "Transform {\n"
+           << "  translation " << a << ' ' << b << ' ' << height << vcl_endl
+           << "  children Shape {\n"
+           << "    geometry Sphere { radius 0.2 }\n"
+           << "    appearance DEF A1 Appearance {"
+           << "      material Material {\n"
+           << "        diffuseColor 1 0 0\n"
+           << "        emissiveColor .3 0 0\n"
+           << "      }\n"
+           << "    }\n"
+           << "  }\n"
+           << "}\n"
+           << "Transform {\n"
+           << "  translation " << a << ' ' << b << ' ' << height/2.0 << '\n'
+           << "  rotation 1 0 0 " << vnl_math::pi/2.0 << "\n"
+           << "  children Shape {\n"
+           << "    appearance USE A1\n"
+           << "    geometry Cylinder { radius 0.05 height " << height << " }\n"
+           << "  }\n"
+           << "}\n";
       }
     }
   }
-  
-  os << "Transform {\n";
-  os << "  translation " << (nbins_-1)/2.0f << " " << (nbins_-1)/2.0f << " 0\n";
-  os << "  children Shape {\n";
-  os << "    geometry Box { size " << nbins_-1 << " " << nbins_-1 << " 0.3 } \n";
-  os << "    appearance Appearance { \n";
-  os << "      material Material { diffuseColor 0.8 0.8 0.8 } \n";
-  os << "    } \n";
-  os << "  } \n";
-  os << "}\n";
-  
-  os << "Background { skyColor 1 1 1 }\n";
-  os << "NavigationInfo { type \"EXAMINE\" }\n";
-  os << "] }\n";
+
+  os << "Transform {\n"
+     << "  translation " << (nbins_-1)/2.0f << ' ' << (nbins_-1)/2.0f << " 0\n"
+     << "  children Shape {\n"
+     << "    geometry Box { size " << nbins_-1 << ' ' << nbins_-1 << " 0.3 }\n"
+     << "    appearance Appearance {\n"
+     << "      material Material { diffuseColor 0.8 0.8 0.8 }\n"
+     << "    }\n"
+     << "  }\n"
+     << "}\n";
+
+  os << "Background { skyColor 1 1 1 }\n"
+     << "NavigationInfo { type \"EXAMINE\" }\n"
+     << "] }\n";
 }
 
 template <class T>
@@ -234,9 +238,9 @@ void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
         os << "y(" << a+1 << ", " << b+1 << ") = " << counts_[a][b] << "; ";
       }
     }
-    //os << "\n";
+    //os << '\n';
   }
-  //os << "\n";
+  //os << '\n';
   os << "bar3(y,'detached');\n";
 }
 
