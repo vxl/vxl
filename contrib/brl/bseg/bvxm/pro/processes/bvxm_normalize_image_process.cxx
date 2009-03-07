@@ -117,13 +117,13 @@ bool bvxm_normalize_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
   bvxm_voxel_slab_base_sptr mog_image = pro.get_input<bvxm_voxel_slab_base_sptr>(i++);
   vcl_string voxel_type = pro.get_input<vcl_string>(i++);
-  
+
   //check inputs validity
   if (!input_img) {
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
-  
+
   //get parameters and overwrite global values
   pro.parameters()->get_value(param_a_start_,a_start_);
   pro.parameters()->get_value(param_a_inc_, a_inc_);
@@ -138,7 +138,7 @@ bool bvxm_normalize_image_process(bprb_func_process& pro)
   nplanes_= input_img->nplanes();
 
   if (!mog_image) {
-    vcl_cout << pro.name() <<" bvxm_normalize_image_process(): Warning:--  Input 1  is an empty pointer! Either the world was empty, or a problem occured during MOG creation, will return input image back.\n";
+    vcl_cout << pro.name() <<" bvxm_normalize_image_process(): Warning: -- Input 1 is an empty pointer! Either the world was empty, or a problem occurred during MOG creation, will return input image back.\n";
     pro.set_output_val<vil_image_view_base_sptr>(0,input_img);
     pro.set_output_val<float>(1, 1.0f);
     pro.set_output_val<float>(2, 0.0f); // switch back to byte
