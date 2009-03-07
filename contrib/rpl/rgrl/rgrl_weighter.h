@@ -1,13 +1,12 @@
 #ifndef rgrl_weighter_h_
 #define rgrl_weighter_h_
-
 //:
 // \file
 // \brief  Base class to compute weights.  Main function is pure virtual.
 // \author Chuck Stewart
 // \date   25 Nov 2002
-#include <vcl_cassert.h>
 
+#include <vcl_cassert.h>
 #include "rgrl_scale_sptr.h"
 #include "rgrl_match_set_sptr.h"
 #include "rgrl_object.h"
@@ -34,7 +33,7 @@ class rgrl_weighter
   rgrl_type_macro( rgrl_weighter,  rgrl_object);
 
   // Auxiliary functions related to the m_est
-  virtual double 
+  virtual double
   aux_sum_weighted_residuals( rgrl_scale const&           /*scale*/,
                               rgrl_match_set&             /*match_set*/,
                               rgrl_transformation const&  /*xform*/ ){ assert(!"NYI"); return 0;}
@@ -42,15 +41,14 @@ class rgrl_weighter
   aux_sum_rho_values( rgrl_scale const&           /*scale*/,
                       rgrl_match_set&             /*match_set*/,
                       rgrl_transformation const&  /*xform*/){ assert(!"NYI"); return 0 ;}
-  virtual double 
+  virtual double
   aux_neg_log_likelihood( rgrl_scale const&           /*scale*/,
                           rgrl_match_set&             /*match_set*/,
                           rgrl_transformation const&  /*xform*/ ){ assert(!"NYI"); return 0;}
-  virtual
-  double 
-  aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
-                              rgrl_match_set&    match_set,
-                              rgrl_transformation const&  xform ){ assert(!"NYI"); return 0;}
+  virtual double
+  aux_avg_neg_log_likelihood( rgrl_scale const&  /*scale*/,
+                              rgrl_match_set&    /*match_set*/,
+                              rgrl_transformation const&  /*xform*/ ){ assert(!"NYI"); return 0;}
 };
 
 #endif
