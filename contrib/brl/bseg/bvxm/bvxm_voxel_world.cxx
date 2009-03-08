@@ -46,13 +46,13 @@ bvxm_voxel_world::~bvxm_voxel_world()
 
 
 //: equality operator
-bool bvxm_voxel_world::operator == (bvxm_voxel_world const& that) const
+bool bvxm_voxel_world::operator == (bvxm_voxel_world const& /*that*/) const
 {
   return true;
 }
 
 //: less than operator
-bool bvxm_voxel_world::operator < (bvxm_voxel_world const& that) const
+bool bvxm_voxel_world::operator < (bvxm_voxel_world const& /*that*/) const
 {
   return false;
 }
