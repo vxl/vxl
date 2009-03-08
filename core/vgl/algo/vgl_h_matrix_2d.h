@@ -50,6 +50,7 @@ class vgl_h_matrix_2d
 
   vgl_homg_point_2d<T> operator()(vgl_homg_point_2d<T> const& p) const;
   vgl_homg_point_2d<T> operator*(vgl_homg_point_2d<T> const& p) const { return (*this)(p);}
+  bool operator==(vgl_h_matrix_2d<T> const& M) { return t12_matrix_ == M.get_matrix(); }
 
   vgl_homg_line_2d<T> preimage(vgl_homg_line_2d<T> const& l) const;
   vgl_homg_line_2d<T> correlation(vgl_homg_point_2d<T> const& p) const;

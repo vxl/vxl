@@ -45,15 +45,17 @@ class vgl_h_matrix_1d
 
   // Operations----------------------------------------------------------------
 
-  vgl_homg_point_1d<T > operator()(const vgl_homg_point_1d<T >& x1) const;
-  vgl_homg_point_1d<T > preimage(const vgl_homg_point_1d<T >& x2) const;
-  vgl_homg_point_1d<T > operator* (const vgl_homg_point_1d<T >& x1) const;
+  vgl_homg_point_1d<T> operator()(const vgl_homg_point_1d<T>& x1) const;
+  vgl_homg_point_1d<T> preimage(const vgl_homg_point_1d<T>& x2) const;
+  vgl_homg_point_1d<T> operator* (const vgl_homg_point_1d<T>& x1) const;
+  bool operator==(vgl_h_matrix_1d<T> const& M) { return t12_matrix_ == M.get_matrix(); }
+
   // Data Access---------------------------------------------------------------
 
   T get (unsigned int row_index, unsigned int col_index) const;
   void get (T *t_matrix) const;
-  void get (vnl_matrix<T >* t_matrix) const;
-  const vnl_matrix_fixed<T,2,2 >& get_matrix () const { return t12_matrix_; }
+  void get (vnl_matrix<T>* t_matrix) const;
+  const vnl_matrix_fixed<T,2,2>& get_matrix () const { return t12_matrix_; }
   const vgl_h_matrix_1d get_inverse () const;
 
   //: transformation to projective basis (canonical frame)
@@ -72,8 +74,8 @@ class vgl_h_matrix_1d
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,2,2> const& t_matrix);
 
-  static vgl_h_matrix_1d<T > read(char const* filename);
-  static vgl_h_matrix_1d<T > read(vcl_istream&);
+  static vgl_h_matrix_1d<T> read(char const* filename);
+  static vgl_h_matrix_1d<T> read(vcl_istream&);
 };
 
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_1d<T>& h);

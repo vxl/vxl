@@ -47,6 +47,7 @@ class vgl_h_matrix_3d
 
   vgl_homg_point_3d<T> operator()(vgl_homg_point_3d<T> const& x) const;
   vgl_homg_point_3d<T> operator* (vgl_homg_point_3d<T> const& x) const {return (*this)(x);}
+  bool operator==(vgl_h_matrix_3d<T> const& M) { return t12_matrix_ == M.get_matrix(); }
 
   vgl_homg_plane_3d<T> preimage(vgl_homg_plane_3d<T> const& p);
 
