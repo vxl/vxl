@@ -142,7 +142,7 @@ static void test_accessors()
   TEST_NEAR( "operator()(point projection)", vgl_distance(P(vgl_homg_point_3d<double>(1.0,2.0,0.0,0.0)),vgl_homg_point_2d<double>(1.0,1.2,-1.6)), 0, 1e-10 );
   TEST( "get_focal()", P.get_focal(), vgl_homg_point_3d<double>(0.0,0.0,0.0,1.0) );
   rotation[6] *= -1; rotation[9] *= -1; vgl_h_matrix_3d<double> H(rotation);
-  TEST( "get_canonical_H()", P.get_canonical_H(), H.get_matrix() );
+  TEST( "get_canonical_H()", P.get_canonical_H(), H );
   TEST( "is_canonical() (small tolerance)", P.is_canonical(0.75), false );
   TEST( "is_canonical() (larger tolerance)", P.is_canonical(0.8), true );
 }
