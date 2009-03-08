@@ -1,9 +1,16 @@
 #include <testlib/testlib_test.h>
 //:
 // \file
+// \verbatim
+//  Modifications
+//   2009-03-08 Peter Vanroose - Increased test coverage: added "inside" & "plane intersection" tests
+// \endverbatim
+
 #include <vcl_iostream.h>
 #include <vcl_ctime.h>
 #include <vgl/vgl_triangle_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_line_segment_3d.h>
 
 //==============================================================================
 inline void test_non_intersecting()
@@ -110,6 +117,11 @@ inline void test_intersecting4()
 //==============================================================================
 inline void test_intersecting_degenerate_triangles1()
 {
+  vcl_cout << '\n'
+           << "----------------------------------------------\n"
+           << " test vgl_triangle_3d_triangle_intersection()\n"
+           << "----------------------------------------------\n";
+
   //the valid triangle
   vgl_point_3d<double> valid_p1(0, 0, 0);
   vgl_point_3d<double> valid_p2(0, 4, 0);
@@ -198,6 +210,11 @@ inline void test_intersecting_degenerate_triangles1()
 //==============================================================================
 inline void test_intersecting_degenerate_triangles2()
 {
+  vcl_cout << '\n'
+           << "----------------------------------------------\n"
+           << " test vgl_triangle_3d_triangle_intersection()\n"
+           << "----------------------------------------------\n";
+
   //test intersection of 2 degenerate triangles
   vgl_point_3d<double> d1_p1(0, 0, 0);
   vgl_point_3d<double> d1_p2(2, 0, 0);
@@ -236,6 +253,11 @@ inline void test_intersecting_degenerate_triangles2()
 //==============================================================================
 inline void test_coincident_edges1()
 {
+  vcl_cout << '\n'
+           << "-----------------------------------------\n"
+           << " test vgl_triangle_3d_coincident_edges()\n"
+           << "-----------------------------------------\n";
+
   vgl_point_3d<double> a_p1(0, 0, 0);
   vgl_point_3d<double> a_p2(0, 4, 0);
   vgl_point_3d<double> a_p3(4, 0, 0);
@@ -271,6 +293,99 @@ inline void test_coincident_edges2()
        coinc.size() == 1 && coinc[0] == exp_edge, true);
 }
 
+//==============================================================================
+inline void test_intersect_plane()
+{
+  vcl_cout << '\n'
+           << "-------------------------------------------\n"
+           << " test vgl_triangle_3d_plane_intersection()\n"
+           << "-------------------------------------------\n";
+
+  vgl_point_3d<double> p1(0,  0,  0);
+  vgl_point_3d<double> p2(0, 15, 25);
+  vgl_point_3d<double> p3(0, 45, 10);
+
+  vgl_plane_3d<double> pl(0,0,1,-20); // the plane z=20 ==> normal intersection
+  vgl_line_segment_3d<double> l; // the returned intersection
+  vgl_point_3d<double> p(0,12,20), q(0,25,20);
+  vgl_line_segment_3d<double> l0(p,q); // the correct intersection
+  vgl_triangle_3d_intersection_t ret;
+
+  ret = vgl_triangle_3d_plane_intersection(p1,p2,p3,pl,l);
+  TEST("normal intersection", ret == Skew && l == l0, true);
+
+  pl.set(0,0,1,1); // z=-1 ==> no intersection
+  ret = vgl_triangle_3d_plane_intersection(p1,p2,p3,pl,l);
+  TEST("no intersection", ret, None);
+
+  pl.set(0,0,1,-25); // z=25 ==> corner point intersection
+  l0.set(p2,p2);
+  ret = vgl_triangle_3d_plane_intersection(p1,p2,p3,pl,l);
+  TEST("corner point intersection", ret == Skew && l == l0, true);
+
+  pl.set(1,0,0,0); // x=0 ==> coplanar with triangle
+  ret = vgl_triangle_3d_plane_intersection(p1,p2,p3,pl,l);
+  TEST("coplanar intersection", ret, Coplanar);
+}
+
+//==============================================================================
+inline void test_point_containment()
+{
+  vcl_cout << '\n'
+           << "------------------------------------\n"
+           << " test vgl_triangle_3d_test_inside()\n"
+           << "------------------------------------\n";
+
+  // three arbitrary coplanar points (note that coplanarity is assumed by the two methods!)
+  {
+    vgl_point_3d<double> p1(0,0,0);
+    vgl_point_3d<double> p2(5,0,3);
+    vgl_point_3d<double> p3(2,0,10);
+    vgl_point_3d<double> in1 = centre(p1,p2,p3); // barycentre
+    vgl_point_3d<double> in2(2.5,0,1.51); // point almost on the edge p1--p2
+    vgl_point_3d<double> in3(0.01,0,0.01); // almost a corner point
+    vgl_point_3d<double> out1(2,0,1); // same plane, outside triangle
+    vgl_point_3d<double> out2(2,1,1); // not coplanar, still outside triangle
+    TEST("inside 1 - barycentric method", vgl_triangle_3d_test_inside(in1,p1,p2,p3), true);
+    TEST("inside 1 - cosine method", vgl_triangle_3d_test_inside_simple(in1,p1,p2,p3), true);
+    TEST("inside 2 - barycentric method", vgl_triangle_3d_test_inside(in2,p1,p2,p3), true);
+    TEST("inside 2 - cosine method", vgl_triangle_3d_test_inside_simple(in2,p1,p2,p3), true);
+    TEST("inside 3 - barycentric method", vgl_triangle_3d_test_inside(in3,p1,p2,p3), true);
+    TEST("inside 3 - cosine method", vgl_triangle_3d_test_inside_simple(in3,p1,p2,p3), true);
+    TEST("not inside 1 - barycentric method", vgl_triangle_3d_test_inside(out1,p1,p2,p3), false);
+    TEST("not inside 1 - cosine method", vgl_triangle_3d_test_inside_simple(out1,p1,p2,p3), false);
+    TEST("not inside 2 - barycentric method", vgl_triangle_3d_test_inside(out2,p1,p2,p3), false);
+    TEST("not inside 2 - cosine method", vgl_triangle_3d_test_inside_simple(out2,p1,p2,p3), false);
+  }
+  // three collinear points -- the cosine method will always fail in this case
+  {
+    vgl_point_3d<double> p1(0,0,0);
+    vgl_point_3d<double> p2(5,0,3);
+    vgl_point_3d<double> p3(15,0,9);
+    vgl_point_3d<double> in1(2.5,0,1.5); // barycentre
+    vgl_point_3d<double> in2(2,0,1.2);
+    vgl_point_3d<double> in3(0.05,0,0.03); // almost a corner point
+    vgl_point_3d<double> out1(15.05,0,9.03); // collinear, almost a corner point
+    vgl_point_3d<double> out2(20,0,12); // collinear
+    vgl_point_3d<double> out3(2,0,1); // not collinear
+    TEST("inside 1 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(in1,p1,p2,p3), true);
+    TEST("inside 2 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(in2,p1,p2,p3), true);
+    TEST("inside 3 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(in3,p1,p2,p3), true);
+    TEST("not inside 1 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(out1,p1,p2,p3), false);
+    TEST("not inside 2 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(out2,p1,p2,p3), false);
+    TEST("not inside 3 (collinear points) - barycentric method", vgl_triangle_3d_test_inside(out3,p1,p2,p3), false);
+  }
+  // three coincident points
+  {
+    vgl_point_3d<double> p1(5,0,3);
+    vgl_point_3d<double> p2(5,0,3);
+    vgl_point_3d<double> p3(5,0,3);
+    vgl_point_3d<double> in1(5,0,3);
+    vgl_point_3d<double> out1(5,0,2);
+    TEST("inside (coincident points) - barycentric method", vgl_triangle_3d_test_inside(in1,p1,p2,p3), true);
+    TEST("not inside (coincident points) - barycentric method", vgl_triangle_3d_test_inside(out1,p1,p2,p3), false);
+  }
+}
 
 //==============================================================================
 //: A simple performance test on the different triangle point containment algorithms
@@ -439,6 +554,11 @@ inline void test_distance()
 //==============================================================================
 inline void test_area()
 {
+  vcl_cout << '\n'
+           << "-----------------------------\n"
+           << " test vgl_triangle_3d_area()\n"
+           << "-----------------------------\n";
+
   vgl_point_3d<double> p1(0,0,0);
   vgl_point_3d<double> p2(1,0,0);
   vgl_point_3d<double> p3(0,1,0);
@@ -453,6 +573,11 @@ inline void test_area()
 //==============================================================================
 inline void test_aspect_ratio()
 {
+  vcl_cout << '\n'
+           << "-------------------------------------\n"
+           << " test vgl_triangle_3d_aspect_ratio()\n"
+           << "-------------------------------------\n";
+
   vgl_point_3d<double> p1(0,0,0);
   vgl_point_3d<double> p2(1,0,0);
   vgl_point_3d<double> p3(0,1,0);
@@ -476,6 +601,8 @@ MAIN( test_triangle_3d )
   test_intersecting3();
   test_intersecting4();
 
+  test_intersect_plane();
+
   test_intersecting_degenerate_triangles1();
   test_intersecting_degenerate_triangles2();
 
@@ -487,7 +614,10 @@ MAIN( test_triangle_3d )
   test_area();
   test_aspect_ratio();
 
-//  test_point_containment_algo_perf(); // Performance Test disabled by default - KOM
+  test_point_containment();
+#ifdef PERFORMANCE_TEST // Performance Test disabled by default - KOM
+  test_point_containment_algo_perf();
+#endif
 
   SUMMARY();
 }
