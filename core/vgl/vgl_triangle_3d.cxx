@@ -235,7 +235,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   vgl_point_3d<double>& i_pnt,
   bool ignore_coplanar/*=false*/)
 {
-
   vgl_point_3d<double> line_p1 = line.point1();
   vgl_point_3d<double> line_p2 = line.point2();
 
@@ -323,10 +322,10 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   }
 
   i_pnt = vgl_intersection(line,
-    vgl_plane_3d<double>(p1, p2, p3) );
+                           vgl_plane_3d<double>(p1, p2, p3) );
   return Skew;
-
 }
+
 //=======================================================================
 //: Compute the intersection point between the line segment and triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
@@ -372,8 +371,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
 
     return None;
   }
-
-
 
   vgl_triangle_3d_intersection_t rv1 = same_side(line.point1(), p1, p2, p3, line.point2());
   if (rv1 == None) return None;
@@ -431,7 +428,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
     return None;
 
   i_pnt = vgl_intersection(vgl_line_3d_2_points<double>(line_p1, line_p2),
-    vgl_plane_3d<double>(p1, p2, p3) );
+                           vgl_plane_3d<double>(p1, p2, p3) );
   return Skew;
 }
 
@@ -720,7 +717,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     {
       i_line.set( isect1 ? i_pnt1 : (isect2 ? i_pnt2 : i_pnt3),
                   isect1 && isect2 ? i_pnt2 : (isect1 || isect2) && isect3 ? i_pnt3 :
-                    (isect1 ? i_pnt1 : (isect2 ? i_pnt2 : i_pnt3)) );
+                  (isect1 ? i_pnt1 : (isect2 ? i_pnt2 : i_pnt3)) );
       return Coplanar;
     }
 
@@ -1236,24 +1233,29 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
   if (vcl_fabs(p2_d) < sqrteps) p2_d = 0.0;
   if (vcl_fabs(p3_d) < sqrteps) p3_d = 0.0;
 
-  double p1_dp2_d = p1_d*p2_d;
-  double p1_dp3_d = p1_d*p3_d;
-
-  // all distances same sign => no intersection
-  if (p1_dp2_d > 0 && p1_dp3_d > 0)
-    return None;
-
   vgl_point_3d<double> i_pnt1;
   vgl_point_3d<double> i_pnt2;
   vgl_line_3d_2_points<double> edge;
-  if (p1_dp2_d > 0) //p1, p2 on same side, p3 on the other
+
+  if (p1_d*p2_d > 0 && p1_d*p3_d > 0) // all distances strictly same sign => no intersection
+  {
+    i_line.set(vgl_point_3d<double>(),vgl_point_3d<double>());
+    return None;
+  }
+  else if (p1_d == 0 && p2_d == 0 && p3_d == 0) //triangle lies in plane
+  {
+    i_pnt1.set(vgl_nan, vgl_nan, vgl_nan);
+    i_line.set(i_pnt1,i_pnt1);
+    return Coplanar;
+  }
+  else if (p1_d*p2_d > 0) //p1, p2 on same side, p3 on the other
   {
     edge.set(p1,p3);
     i_pnt1 = vgl_intersection(edge, i_plane);
     edge.set(p2,p3);
     i_pnt2 = vgl_intersection(edge, i_plane);
   }
-  else if (p1_dp3_d > 0) //p1, p3 on same side, p2 on the other
+  else if (p1_d*p3_d > 0) //p1, p3 on same side, p2 on the other
   {
     edge.set(p1,p2);
     i_pnt1 = vgl_intersection(edge, i_plane);
@@ -1267,20 +1269,17 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
     edge.set(p3,p1);
     i_pnt2 = vgl_intersection(edge, i_plane);
   }
-  else if (p1_d == 0 &&
-           p2_d == 0) //edge p1,p2 in plane
+  else if (p1_d == 0 && p2_d == 0) //edge p1,p2 in plane
   {
     i_pnt1 = p1;
     i_pnt2 = p2;
   }
-  else if (p1_d == 0 &&
-           p3_d == 0) //edge p1,p3 in plane
+  else if (p1_d == 0 && p3_d == 0) //edge p1,p3 in plane
   {
     i_pnt1 = p1;
     i_pnt2 = p3;
   }
-  else if (p3_d == 0 &&
-           p2_d == 0) //edge p2,p3 in plane
+  else if (p3_d == 0 && p2_d == 0) //edge p2,p3 in plane
   {
     i_pnt1 = p2;
     i_pnt2 = p3;
@@ -1303,15 +1302,8 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
     edge.set(p2,p1);
     i_pnt2 = vgl_intersection(edge, i_plane);
   }
-  else //triangle lies in plane
-  {
-    i_pnt1.set(vgl_nan, vgl_nan, vgl_nan);
-    i_line.set(i_pnt1,i_pnt1);
-    return Coplanar;
-  }
 
   i_line.set(i_pnt1,i_pnt2);
-
   return Skew;
 }
 
@@ -1451,5 +1443,4 @@ double vgl_triangle_3d_aspect_ratio(
 {
   return vgl_triangle_3d_longest_side( p0, p1, p2 ) / vgl_triangle_3d_shortest_side( p0, p1, p2 );
 }
-
 
