@@ -17,5 +17,6 @@
 #include <vpdl/vpdt/vpdt_gaussian.h>
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vpdl/vpdt/vpdt_norm_metric.h>
+#include <vpdl/vpdt/vpdt_mixture_of.h>
 
 int main() { return 0; }

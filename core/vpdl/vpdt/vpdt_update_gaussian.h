@@ -64,35 +64,6 @@ struct vpdt_update_covariance<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
 
 //: Specialized classes to update covariance of different types
 template<class F>
-struct vpdt_update_covariance<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
-                              typename vpdt_field_traits<F>::type_is_scalar>
-{
-  //: the data type used for covariance
-  typedef typename vpdt_eigen_sym_matrix_gen<F>::type Covar;
-  //: the data type used for scalars
-  typedef typename vpdt_field_traits<F>::scalar_type T;
-  
-  //: update the covariance matrix with a weighted vector difference
-  static inline void increment(Covar& c, const T& s, const T& d)
-  {
-    T m;
-    c.form_matrix(m);
-    m += s*d*d;
-    c.set_matrix(m);
-  }
-  
-  //: enforce a minimum covariance value in all dimensions
-  static inline void enforce_min(Covar& c, const T& min_var)
-  {
-    if(c.eigenvalues() < min_var)
-      c.set_eigenvalues(min_var);
-  }
-  
-}; 
-
-
-//: Specialized classes to update covariance of different types
-template<class F>
 struct vpdt_update_covariance<F, typename vpdt_field_traits<F>::vector_type,
                               typename vpdt_field_traits<F>::type_is_vector>
 {

@@ -90,9 +90,7 @@ public:
   // (in all dimensions) to the point in question
   virtual T cumulative_prob(const vector& pt) const
   {    
-    // FIXME: implement this
-    // probably requires numerical integration
-    return vcl_numeric_limits<T>::quiet_NaN(); 
+    return impl_.cumulative_prob(pt);
   }
 
   //: Access the mean directly

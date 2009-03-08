@@ -91,23 +91,7 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   // (in all dimensions) to the point in question
   virtual T cumulative_prob(const vector& pt) const
   {
-    const unsigned int d = this->dimension();
-    if (impl_.covar<=T(0))
-    {
-      for (unsigned int i=0; i<d; ++i)
-        if (vpdt_index(pt,i) < vpdt_index(impl_.mean,i))
-          return T(0);
-      return T(1);
-    }
-    double sigma_sq_2 = 2.0*static_cast<double>(impl_.covar);
-    double s2 = 1/vcl_sqrt(sigma_sq_2);
-
-    double val = 1.0;
-    for (unsigned int i=0; i<d; ++i)
-    {
-      val *= 0.5*vnl_erf(s2*(vpdt_index(pt,i)-vpdt_index(impl_.mean,i))) + 0.5;
-    }
-    return static_cast<T>(val);
+    return impl_.cumulative_prob(pt);
   }
 
   //: The probability of being in an axis-aligned box

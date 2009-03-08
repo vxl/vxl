@@ -219,94 +219,34 @@ private:
 
 
 //: A symmetric matrix represented in eigenvalue decomposition 
-// partial specialization for the scalar case
+// This partial specialization for the scalar case is no longer needed
+// If you get an error related to this, you should be using a scalar instead.
 template<class T>
-class vpdt_eigen_sym_matrix<T,1>
-{
-public:
-  //: the data type used for vectors (should be T)
-  typedef typename vpdt_field_default<T,1>::type vector;
-  //: the data type used for matrices (should be T)
-  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
-  
-  //: Constructor
-  // Optionally initialize the dimension for when n==0.
-  // Otherwise var_dim is ignored
-  vpdt_eigen_sym_matrix(unsigned int var_dim = 1) : var_(T(0)) {}
-  
-  //: Constructor - from eigenvectors and eigenvalues
-  vpdt_eigen_sym_matrix(const matrix& evec, const vector& eval) 
-  : var_(eval)
-  {
-    assert(evec == T(1));
-  }
-  
-  //: Cast into a scalar value
-  operator T() { return var_; }
-  
-  //: Assign from a scalar
-  vpdt_eigen_sym_matrix<T,1>& operator= (const T& v) { var_=v; return *this; }
-  
-  //: Constructor - from symmetric matrix
-  vpdt_eigen_sym_matrix(const matrix& m) : var_(m) {}
-  
-  //: Return the dimension
-  unsigned int dimension() const { return 1; }
-  
-  //: Set the size (if variable) and reset to default
-  void set_size(unsigned int dim) { var_(T(0)); }
-  
-  //: set the eigenvectors and eigen values by decomposing m
-  void set_matrix(const matrix& m) { var_ = m; }
-  
-  //: Access to the eigenvectors
-  const matrix& eigenvectors() const { return 1; }
-  
-  //: Access to the eigenvalues
-  const vector& eigenvalues() const { return var_; }
-  
-  //: Set the eigenvectors
-  void set_eigenvectors(const matrix& m) { assert(m==1); }
-  
-  //: set the eigenvalues
-  void set_eigenvalues(const vector& v) { var_ = v; }
-  
-  //: multiply the matrix by a scalar
-  vpdt_eigen_sym_matrix<T,1>& operator*=(const T& val)
-  {
-    var_ *= val;
-    return *this;
-  }
-  
-  //: Reform the matrix
-  void form_matrix(matrix& m) const { m = var_; }
-  
-  //: compute the matrix inverse
-  void form_inverse(matrix& m) const { m = 1/var_; }
-  
-  //: evaluate the Quadratic form x^t * M * x 
-  T quad_form(const vector& x) const { return x*x*var_; }
-  
-  //: evaluate the inverse Quadratic form x^t * M^-1 * x 
-  T inverse_quad_form(const vector& x) const { return x*x/var_; }
-  
-  //: compute the determinant
-  T determinant() const { return var_; }
-  
-  
-private:
-  //: the scalar variance
-  T var_;
-}; 
+class vpdt_eigen_sym_matrix<T,1> {}; 
 
+
+//==============================================================================
+// These type generators produce a vpdt_eigen_sym_matrix for a field type
+
+//: generate the vpdt_eigen_sys_matrix type from a field type
+template <class F, class Disambiguate= void>
+struct vpdt_eigen_sym_matrix_gen;
 
 //: generate the vpdt_eigen_sys_matrix type from a field type
 template <class F>
-struct vpdt_eigen_sym_matrix_gen
+struct vpdt_eigen_sym_matrix_gen<F,typename vpdt_field_traits<F>::type_is_vector>
 {
   typedef vpdt_eigen_sym_matrix<typename vpdt_field_traits<F>::scalar_type,
                                 vpdt_field_traits<F>::dimension> type;
 };
+
+//: generate the vpdt_eigen_sys_matrix type from a field type
+template <class F>
+struct vpdt_eigen_sym_matrix_gen<F,typename vpdt_field_traits<F>::type_is_scalar>
+{
+  typedef typename vpdt_field_traits<F>::matrix_type type;
+};
+
 
 //==============================================================================
 // universal access functions (See vpdt_access.h)

@@ -62,28 +62,6 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
               sym.inverse_quad_form(x), dot_product(x,invM*x), epsilon);
   }
   
-  {
-    vcl_cout <<"=======================================\n";
-    vpdt_eigen_sym_matrix<T,1> sym(T(2));
-    T M2;
-    sym.form_matrix(M2);
-    TEST_NEAR(("reform matrix <"+type_name+"> scalar").c_str(), 
-              M2, T(2), epsilon);
-    sym.form_inverse(M2);
-    TEST_NEAR(("inverse matrix <"+type_name+"> scalar").c_str(), 
-              M2, T(0.5), epsilon);
-    TEST_NEAR(("determinant <"+type_name+"> scalar").c_str(), 
-              sym.determinant(), 2, epsilon);
-    
-    TEST_NEAR(("quad form <"+type_name+"> scalar").c_str(), 
-              sym.quad_form(3), 18, epsilon);
-    TEST_NEAR(("inverse quad form <"+type_name+"> scalar").c_str(), 
-              sym.inverse_quad_form(3), 4.5, epsilon);
-    
-    TEST("implicit cast to scalar", sym, T(2));
-    sym = T(3);
-    TEST("assignment from scalar", sym, T(3));
-  }
 
 }
 

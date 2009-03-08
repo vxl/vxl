@@ -25,12 +25,13 @@
 // \note the \c Disambiguate template parameter is a dummy used to 
 //  prevent ambiguous instantiations
 template<class F, class Tensor, class Disambiguate= void>
-struct vpdt_norm_metric {}; 
+struct vpdt_norm_metric; 
 
 
 //: A metric in field \c F with vpdt_eigen_sym_matrix covariance
 template<class F>
-struct vpdt_norm_metric<F, typename vpdt_eigen_sym_matrix_gen<F>::type >
+struct vpdt_norm_metric<F, typename vpdt_eigen_sym_matrix_gen<F>::type, 
+                        typename vpdt_field_traits<F>::type_is_vector >
 {
   //: the data type used for the metric tensor
   typedef typename vpdt_eigen_sym_matrix_gen<F>::type covar_type;

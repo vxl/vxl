@@ -22,8 +22,13 @@
 #include <vnl/vnl_erf.h>
 
 
+//: Forward declare integration helper struct
+template <class F, class Covar, class Metric, class Disambiguate= void >
+struct vpdt_gaussian_integrator;
+
+
 //: A Gaussian with variance independent in each dimension 
-template<class F, 
+template<class F,
          class Covar = typename vpdt_eigen_sym_matrix_gen<F>::type,
          class Metric = vpdt_norm_metric<F,Covar> >
 class vpdt_gaussian 
@@ -98,13 +103,8 @@ public:
   // Can be precomputed when evaluating at multiple points
   T norm_const() const
   { 
-    const unsigned int d = dimension();
-    const double two_pi = 2.0*vnl_math::pi;
-    double two_pi_n = two_pi;
-    for(unsigned int i=1; i<d; ++i)
-      two_pi_n *= two_pi;
-    
-    return static_cast<T>(vcl_sqrt(1/(two_pi_n*Metric::covar_det(mean,covar))));
+    return T(1)/vpdt_gaussian_integrator<F,Covar,Metric>::
+                    domain_integral(*this);
   }
   
   //: The squared Mahalanobis distance to this point
@@ -117,11 +117,10 @@ public:
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
-  T cumulative_prob(const vector& pt) const
+  T cumulative_prob(const F& pt) const
   {    
-    // FIXME: implement this
-    // probably requires numerical integration
-    return vcl_numeric_limits<T>::quiet_NaN(); 
+    return vpdt_gaussian_integrator<F,Covar,Metric>::
+               partial_integral(*this,pt);
   }
 
   //: Compute the mean of the distribution.
@@ -134,8 +133,8 @@ public:
     Metric::compute_covar(c, mean, covar);
   }
 
-//==============================================================================
-// member variables - public for efficiency
+  //=========================================
+  // member variables - public for efficiency
     
   //: the mean
   F mean;
@@ -143,6 +142,157 @@ public:
   covar_type covar;
 }; 
 
+
+
+//=============================================================================
+// Implementations of Gaussian integration structs
+
+//: integrate over a Gaussian distribution
+//  This is the variation for multivariate with general covariance
+template <class F>
+struct vpdt_gaussian_integrator<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
+           vpdt_norm_metric<F, typename vpdt_eigen_sym_matrix_gen<F>::type>, 
+           typename vpdt_field_traits<F>::type_is_vector >
+{
+  typedef typename vpdt_eigen_sym_matrix_gen<F>::type Covar;
+  typedef vpdt_norm_metric<F,typename vpdt_eigen_sym_matrix_gen<F>::type> Metric;
+  typedef typename vpdt_field_traits<F>::scalar_type T;
+  
+  //: integrate over the entire domain
+  static inline T domain_integral(const vpdt_gaussian<F,Covar>& g)
+  {
+    const unsigned int d = g.dimension();
+    const double two_pi = 2.0*vnl_math::pi;
+    double two_pi_n = two_pi;
+    for(unsigned int i=1; i<d; ++i)
+      two_pi_n *= two_pi;
+    
+    return static_cast<T>(vcl_sqrt(two_pi_n*Metric::covar_det(g.mean,g.covar)));
+  }
+  
+  //: integrate from -infinity to \c pt
+  static inline T partial_integral(const vpdt_gaussian<F,Covar>& g, const F& pt)
+  {    
+    // FIXME: implement this
+    // probably requires numerical integration
+    return vcl_numeric_limits<T>::quiet_NaN(); 
+  }
+};
+
+
+//: integrate over a Gaussian distribution
+//  This is the variation for multivariate with independent covariance
+template <class F>
+struct vpdt_gaussian_integrator<F,F,vpdt_norm_metric<F,F>, 
+           typename vpdt_field_traits<F>::type_is_vector >
+{
+  typedef typename vpdt_field_traits<F>::scalar_type T;
+  
+  //: integrate over the entire domain
+  static inline T domain_integral(const vpdt_gaussian<F,F>& g)
+  {
+    const unsigned int d = g.dimension();
+    const double two_pi = 2.0*vnl_math::pi;
+    double val = 1.0;
+    for(unsigned int i=0; i<d; ++i)
+      val *= two_pi*g.covar[i];
+    
+    return static_cast<T>(vcl_sqrt(val));
+  }
+  
+  //: integrate from -infinity to \c pt
+  static inline T partial_integral(const vpdt_gaussian<F,F>& g, const F& pt)
+  {    
+    const unsigned int d = g.dimension();
+    double val = 1.0;
+    for (unsigned int i=0; i<d; ++i)
+    {
+      if(vpdt_index(g.covar,i) <= T(0))
+      {
+        if (vpdt_index(pt,i) < vpdt_index(g.mean,i))
+          return T(0);
+      }
+      else{
+        double s2 = vcl_sqrt(2.0*vpdt_index(g.covar,i));
+        val *= 0.5*vnl_erf((vpdt_index(pt,i)-vpdt_index(g.mean,i))/s2) + 0.5;
+      }
+    }
+    return static_cast<T>(val);
+  }
+};
+
+
+//: integrate over a Gaussian distribution
+//  This is the variation for multivariate with hyper-spherical covariance
+template <class F>
+struct vpdt_gaussian_integrator<F,typename vpdt_field_traits<F>::scalar_type,
+          vpdt_norm_metric<F,typename vpdt_field_traits<F>::scalar_type>,
+          typename vpdt_field_traits<F>::type_is_vector>
+{
+  typedef typename vpdt_field_traits<F>::vector_type vector;
+  typedef typename vpdt_field_traits<F>::scalar_type T;
+  
+  //: integrate over the entire domain
+  static inline T domain_integral(const vpdt_gaussian<F,T>& g)
+  {
+    const unsigned int d = g.dimension();
+    const double two_pi = 2.0*vnl_math::pi;
+    double val = 1.0;
+    for(unsigned int i=0; i<d; ++i)
+      val *= two_pi*g.covar;
+    
+    return static_cast<T>(vcl_sqrt(val));
+  }
+  
+  //: integrate from -infinity to \c pt
+  static inline T partial_integral(const vpdt_gaussian<F,T>& g, const F& pt)
+  {    
+    const unsigned int d = g.dimension();
+    if (g.covar<=T(0))
+    {
+      for (unsigned int i=0; i<d; ++i)
+        if (vpdt_index(pt,i) < vpdt_index(g.mean,i))
+          return T(0);
+      return T(1);
+    }
+    double s2 = 1/vcl_sqrt(2.0*g.covar);
+    double val = 1.0;
+    for (unsigned int i=0; i<d; ++i)
+    {
+      val *= 0.5*vnl_erf(s2*(vpdt_index(pt,i)-vpdt_index(g.mean,i))) + 0.5;
+    }
+    return static_cast<T>(val);
+  }
+};
+
+
+//: integrate over a Gaussian distribution
+//  This is the variation for univariate
+template <class F>
+struct vpdt_gaussian_integrator<F,F,vpdt_norm_metric<F,F>,
+typename vpdt_field_traits<F>::type_is_scalar>
+{
+  typedef typename vpdt_field_traits<F>::scalar_type T;
+  
+  //: integrate over the entire domain
+  static inline T domain_integral(const vpdt_gaussian<F,F>& g)
+  {    
+    return static_cast<T>(vcl_sqrt(2.0*vnl_math::pi*g.covar));
+  }
+  
+  //: integrate from -infinity to \c pt
+  static inline T partial_integral(const vpdt_gaussian<F,F>& g, const F& pt)
+  {    
+    if (g.covar<=T(0))
+    {
+      if (pt < g.mean)
+        return T(0);
+      return T(1);
+    }
+    double val = 0.5*vnl_erf((pt-g.mean)/vcl_sqrt(2.0*g.covar)) + 0.5;
+    return static_cast<T>(val);
+  }
+};
 
 
 #endif // vpdt_gaussian_h_

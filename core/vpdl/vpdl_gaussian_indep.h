@@ -91,15 +91,7 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   // (in all dimensions) to the point in question
   virtual T cumulative_prob(const vector& pt) const
   {
-    const unsigned int d = this->dimension();
-    double val = 1.0;
-    for (unsigned int i=0; i<d; ++i)
-    {
-      double sigma_sq_2 = 2.0*static_cast<double>(vpdt_index(impl_.covar,i));
-      val *= 0.5*vnl_erf((vpdt_index(pt,i)-vpdt_index(impl_.mean,i))
-                         / vcl_sqrt(sigma_sq_2)) + 0.5;
-    }
-    return static_cast<T>(val);
+    return impl_.cumulative_prob(pt);
   }
 
   //: Access the mean directly
