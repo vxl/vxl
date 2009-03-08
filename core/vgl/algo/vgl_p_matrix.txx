@@ -9,6 +9,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
@@ -332,16 +333,19 @@ template <class T>
 void
 vgl_p_matrix<T>::get_rows (vnl_vector<T>* a, vnl_vector<T>* b, vnl_vector<T>* c) const
 {
+  if (a->size() < 4) a->set_size(4);
   a->put(0, p_matrix_(0, 0));
   a->put(1, p_matrix_(0, 1));
   a->put(2, p_matrix_(0, 2));
   a->put(3, p_matrix_(0, 3));
 
+  if (b->size() < 4) b->set_size(4);
   b->put(0, p_matrix_(1, 0));
   b->put(1, p_matrix_(1, 1));
   b->put(2, p_matrix_(1, 2));
   b->put(3, p_matrix_(1, 3));
 
+  if (c->size() < 4) c->set_size(4);
   c->put(0, p_matrix_(2, 0));
   c->put(1, p_matrix_(2, 1));
   c->put(2, p_matrix_(2, 2));
@@ -378,16 +382,19 @@ template <class T>
 void
 vgl_p_matrix<T>::set_rows (vnl_vector<T> const& a, vnl_vector<T> const& b, vnl_vector<T> const& c)
 {
+  assert(a.size() >= 4);
   p_matrix_.put(0, 0, a(0));
   p_matrix_.put(0, 1, a(1));
   p_matrix_.put(0, 2, a(2));
   p_matrix_.put(0, 3, a(3));
 
+  assert(b.size() >= 4);
   p_matrix_.put(1, 0, b(0));
   p_matrix_.put(1, 1, b(1));
   p_matrix_.put(1, 2, b(2));
   p_matrix_.put(1, 3, b(3));
 
+  assert(c.size() >= 4);
   p_matrix_.put(2, 0, c(0));
   p_matrix_.put(2, 1, c(1));
   p_matrix_.put(2, 2, c(2));
