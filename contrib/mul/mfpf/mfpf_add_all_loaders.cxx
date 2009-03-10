@@ -8,6 +8,8 @@
 #include <mfpf/mfpf_norm_corr1d_builder.h>
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <mfpf/mfpf_norm_corr2d_builder.h>
+#include <mfpf/mfpf_grad_corr2d.h>
+#include <mfpf/mfpf_grad_corr2d_builder.h>
 #include <mfpf/mfpf_profile_pdf.h>
 #include <mfpf/mfpf_profile_pdf_builder.h>
 #include <mfpf/mfpf_region_pdf.h>
@@ -34,13 +36,14 @@ void mfpf_add_all_loaders()
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_edge_finder_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_norm_corr1d_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_norm_corr2d_builder());
+  mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_grad_corr2d_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_profile_pdf_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_region_pdf_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_region_finder_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_hog_box_finder_builder());
   vsl_add_to_binary_loader(mfpf_edge_finder_builder());
   vsl_add_to_binary_loader(mfpf_norm_corr1d_builder());
-  vsl_add_to_binary_loader(mfpf_norm_corr2d_builder());
+  vsl_add_to_binary_loader(mfpf_grad_corr2d_builder());
   vsl_add_to_binary_loader(mfpf_profile_pdf_builder());
   vsl_add_to_binary_loader(mfpf_region_pdf_builder());
   vsl_add_to_binary_loader(mfpf_region_finder_builder());
@@ -49,6 +52,7 @@ void mfpf_add_all_loaders()
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_edge_finder());
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_norm_corr1d());
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_norm_corr2d());
+  mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_grad_corr2d());
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_profile_pdf());
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_region_pdf());
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_region_finder());
@@ -56,6 +60,7 @@ void mfpf_add_all_loaders()
   vsl_add_to_binary_loader(mfpf_edge_finder());
   vsl_add_to_binary_loader(mfpf_norm_corr1d());
   vsl_add_to_binary_loader(mfpf_norm_corr2d());
+  vsl_add_to_binary_loader(mfpf_grad_corr2d());
   vsl_add_to_binary_loader(mfpf_profile_pdf());
   vsl_add_to_binary_loader(mfpf_region_pdf());
   vsl_add_to_binary_loader(mfpf_region_finder());

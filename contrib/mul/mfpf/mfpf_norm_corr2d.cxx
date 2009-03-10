@@ -93,9 +93,9 @@ bool mfpf_norm_corr2d::set_model(const vcl_vector<double>& v)
   // copy vector values into im_k, column by column
   vil_image_view<double> im_k( kernel_.ni(), kernel_.nj() );
   unsigned vec_ind=0;
-  for (unsigned i=0;i<ni;++i)
+  for (unsigned j=0;j<nj;++j)
   {
-    for (unsigned j=0;j<nj;++j,++vec_ind)
+    for (unsigned i=0;i<ni;++i,++vec_ind)
     {
       im_k(i,j)=v[vec_ind];
     }
@@ -122,9 +122,9 @@ void mfpf_norm_corr2d::get_kernel_vector(vcl_vector<double>& v) const
 
   // copy kernel values into v, column by column
   unsigned vec_ind=0;
-  for (unsigned i=0;i<ni;++i)
+  for (unsigned j=0;j<nj;++j)
   {
-    for (unsigned j=0;j<nj;++j,++vec_ind)
+    for (unsigned i=0;i<ni;++i,++vec_ind)
     {
       v[vec_ind]=kernel_(i,j);
     }

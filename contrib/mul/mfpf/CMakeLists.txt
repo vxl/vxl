@@ -15,6 +15,8 @@ SET(mfpf_sources
   mfpf_norm_corr1d_builder.h     mfpf_norm_corr1d_builder.cxx
   mfpf_norm_corr2d.h             mfpf_norm_corr2d.cxx
   mfpf_norm_corr2d_builder.h     mfpf_norm_corr2d_builder.cxx
+  mfpf_grad_corr2d.h             mfpf_grad_corr2d.cxx
+  mfpf_grad_corr2d_builder.h     mfpf_grad_corr2d_builder.cxx
   mfpf_profile_pdf.h             mfpf_profile_pdf.cxx
   mfpf_profile_pdf_builder.h     mfpf_profile_pdf_builder.cxx
   mfpf_region_pdf.h              mfpf_region_pdf.cxx
