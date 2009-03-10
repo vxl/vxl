@@ -97,7 +97,7 @@ static void test_constructors()
     vnl_double_3x3 m = M;
     P.get(&m,&V);
     vgl_p_matrix<double> P3(m,V); P3.get(data);
-    TEST( "get(vnl_matrix_fixed*,vnl_vector_fixed*)", equals(data, gold), true );
+    TEST( "get(vnl_double_3x3*,vnl_double_3*)", equals(data, gold), true );
   }
   {
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
@@ -114,7 +114,21 @@ static void test_constructors()
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
     double matrix[][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12}}; // the "ground truth"
     vgl_p_matrix<double> P; P.set(matrix); P.get(data);
-    TEST( "set(matrix)", equals(data, gold), true );
+    TEST( "set(2D array)", equals(data, gold), true );
+  }
+  {
+    double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
+    vnl_double_4 v1(1,2,3,4), v2(5,6,7,8), v3(9,10,11,12);
+    vgl_p_matrix<double> P; P.set_rows(v1,v2,v3); P.get(data);
+    TEST( "set_rows()", equals(data, gold), true );
+  }
+  {
+    double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
+    vnl_double_3x4 M(gold);
+    vgl_p_matrix<double> P; P.set(M); P.get(data);
+    TEST( "set(vnl_matrix)", equals(data, gold), true );
+    vnl_matrix<double> m = M; P.set(m); P.get(data);
+    TEST( "set(vnl_double_3x4)", equals(data, gold), true );
   }
   {
     double gold[] = {7,7,7,30, 7,7,7,40, 7,7,7,50}; // the "ground truth"
@@ -129,14 +143,17 @@ static void test_accessors()
 {
   double rotation[] = {1,0,0,0, 0,0.6,0.8,0, 0,-0.8,0.6,0, 0,0,0,1}; // Euclidean rotation around (0,0,0,1)
   vgl_p_matrix<double> P(rotation);
-  vnl_double_3x4 M(rotation);
+  vnl_double_3x4 M(rotation), M1;
+  vnl_matrix<double> M2;
 
-  TEST( "get()", P.get(1,2), 0.8 );
+  TEST( "get(row,col)", P.get(1,2), 0.8 );
   TEST( "get_matrix()", P.get_matrix(), M );
+  P.get(M1); TEST( "get(vnl_matrix)", M1, M );
+  P.get(M2); TEST( "get(vnl_double_3x4)", M2, M );
   vnl_vector<double> v1, v2, v3; P.get_rows(&v1,&v2,&v3);
-  TEST( "get_rows(vnl_vector x3)", v1==vnl_double_4(1,0,0,0) && v2==vnl_double_4(0,0.6,0.8,0) && v3==vnl_double_4(0,-0.8,0.6,0), true );
+  TEST( "get_rows(vnl_vector 3x)", v1==vnl_double_4(1,0,0,0) && v2==vnl_double_4(0,0.6,0.8,0) && v3==vnl_double_4(0,-0.8,0.6,0), true );
   vnl_double_4 d1, d2, d3; P.get_rows(&d1,&d2,&d3);
-  TEST( "get_rows(vnl_vector_fixed x3)", d1==v1 && d2==v2 && d3==v3, true );
+  TEST( "get_rows(vnl_double_4 3x)", d1==v1 && d2==v2 && d3==v3, true );
   vcl_stringstream ss; ss << P;
   TEST( "operator<< to ostream", P, vgl_p_matrix<double>(ss) );
   TEST_NEAR( "operator()(point projection)", vgl_distance(P(vgl_homg_point_3d<double>(1.0,2.0,0.0,0.0)),vgl_homg_point_2d<double>(1.0,1.2,-1.6)), 0, 1e-10 );
