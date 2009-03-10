@@ -9,7 +9,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
@@ -27,9 +26,9 @@ vgl_p_matrix<T>::vgl_p_matrix() :
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
       if (row_index == col_index)
-        p_matrix_. put (row_index, col_index, 1);
+        p_matrix_. put(row_index, col_index, 1);
       else
-        p_matrix_. put (row_index, col_index, 0);
+        p_matrix_. put(row_index, col_index, 0);
 }
 
 //--------------------------------------------------------------
@@ -99,7 +98,7 @@ vgl_p_matrix<T>::~vgl_p_matrix()
 //-----------------------------------------------------------------------------
 //
 template <class T>
-vgl_homg_line_2d<T> vgl_p_matrix<T>::operator () (const vgl_homg_line_3d_2_points<T>& L) const
+vgl_homg_line_2d<T> vgl_p_matrix<T>::operator()(const vgl_homg_line_3d_2_points<T>& L) const
 {
   return vgl_homg_line_2d<T>((*this)(L.point_finite()), (*this)(L.point_infinite()));
 }
@@ -107,17 +106,17 @@ vgl_homg_line_2d<T> vgl_p_matrix<T>::operator () (const vgl_homg_line_3d_2_point
 //-----------------------------------------------------------------------------
 //
 template <class T>
-vgl_line_segment_2d<T> vgl_p_matrix<T>::operator ()(vgl_line_segment_3d<T> const& L) const
+vgl_line_segment_2d<T> vgl_p_matrix<T>::operator()(vgl_line_segment_3d<T> const& L) const
 {
   vgl_point_3d<T> p1 = L.point1(), p2 = L.point2();
-  vgl_homg_point_3d<T> q1 (p1.x(),p1.y(),p1.z()), q2 (p2.x(),p2.y(),p2.z());
+  vgl_homg_point_3d<T> q1(p1.x(),p1.y(),p1.z()), q2(p2.x(),p2.y(),p2.z());
   return vgl_line_segment_2d<T>((*this)(q1), (*this)(q2));
 }
 
 //-----------------------------------------------------------------------------
 //
 template <class T>
-vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse (const vgl_homg_point_2d<T>& x) const
+vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse(const vgl_homg_point_2d<T>& x) const
 {
   //compute with double precision but cast back to type T
   vnl_vector_fixed<double,4> p = svd()->solve(vnl_vector_fixed<double,3>(x.x(),x.y(),x.w()));
@@ -127,7 +126,7 @@ vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse (const vgl_homg_
 //-----------------------------------------------------------------------------
 //
 template <class T>
-vgl_homg_line_3d_2_points<T> vgl_p_matrix<T>::backproject (const vgl_homg_point_2d<T>& x) const
+vgl_homg_line_3d_2_points<T> vgl_p_matrix<T>::backproject(const vgl_homg_point_2d<T>& x) const
 {
   return vgl_homg_line_3d_2_points<T>(get_focal(), backproject_pseudoinverse(x));
 }
@@ -135,7 +134,7 @@ vgl_homg_line_3d_2_points<T> vgl_p_matrix<T>::backproject (const vgl_homg_point_
 //-----------------------------------------------------------------------------
 //
 template <class T>
-vgl_homg_plane_3d<T> vgl_p_matrix<T>::backproject (const vgl_homg_line_2d<T>& l) const
+vgl_homg_plane_3d<T> vgl_p_matrix<T>::backproject(const vgl_homg_line_2d<T>& l) const
 {
   return p_matrix_.transpose() * l;
 }
@@ -266,19 +265,19 @@ vgl_p_matrix<T> operator*(const vgl_p_matrix<T>& P, const vgl_h_matrix_3d<T>& H)
 //-----------------------------------------------------------------------------
 //
 template <class T>
-T vgl_p_matrix<T>::get (unsigned int row_index, unsigned int col_index) const
+T vgl_p_matrix<T>::get(unsigned int row_index, unsigned int col_index) const
 {
-  return p_matrix_. get (row_index, col_index);
+  return p_matrix_. get(row_index, col_index);
 }
 
 //-----------------------------------------------------------------------------
 //
 template <class T>
-void vgl_p_matrix<T>::get (T* c_matrix) const
+void vgl_p_matrix<T>::get(T* c_matrix) const
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      *c_matrix++ = p_matrix_. get (row_index, col_index);
+      *c_matrix++ = p_matrix_. get(row_index, col_index);
 }
 
 //----------------------------------------------------------------
@@ -308,7 +307,7 @@ vgl_p_matrix<T>::get(vnl_matrix<T>* A, vnl_vector<T>* a) const
 //
 template <class T>
 void
-vgl_p_matrix<T>::get (vnl_matrix_fixed<T,3,3>* A, vnl_vector_fixed<T,3>* a) const
+vgl_p_matrix<T>::get(vnl_matrix_fixed<T,3,3>* A, vnl_vector_fixed<T,3>* a) const
 {
   A->put(0,0, p_matrix_(0,0));
   A->put(1,0, p_matrix_(1,0));
@@ -331,7 +330,7 @@ vgl_p_matrix<T>::get (vnl_matrix_fixed<T,3,3>* A, vnl_vector_fixed<T,3>* a) cons
 //
 template <class T>
 void
-vgl_p_matrix<T>::get_rows (vnl_vector<T>* a, vnl_vector<T>* b, vnl_vector<T>* c) const
+vgl_p_matrix<T>::get_rows(vnl_vector<T>* a, vnl_vector<T>* b, vnl_vector<T>* c) const
 {
   if (a->size() < 4) a->set_size(4);
   a->put(0, p_matrix_(0, 0));
@@ -380,21 +379,18 @@ vgl_p_matrix<T>::get_rows(vnl_vector_fixed<T,4>* a,
 //
 template <class T>
 void
-vgl_p_matrix<T>::set_rows (vnl_vector<T> const& a, vnl_vector<T> const& b, vnl_vector<T> const& c)
+vgl_p_matrix<T>::set_rows(vnl_vector_fixed<T,4> const& a, vnl_vector_fixed<T,4> const& b, vnl_vector_fixed<T,4> const& c)
 {
-  assert(a.size() >= 4);
   p_matrix_.put(0, 0, a(0));
   p_matrix_.put(0, 1, a(1));
   p_matrix_.put(0, 2, a(2));
   p_matrix_.put(0, 3, a(3));
 
-  assert(b.size() >= 4);
   p_matrix_.put(1, 0, b(0));
   p_matrix_.put(1, 1, b(1));
   p_matrix_.put(1, 2, b(2));
   p_matrix_.put(1, 3, b(3));
 
-  assert(c.size() >= 4);
   p_matrix_.put(2, 0, c(0));
   p_matrix_.put(2, 1, c(1));
   p_matrix_.put(2, 2, c(2));
@@ -405,11 +401,11 @@ vgl_p_matrix<T>::set_rows (vnl_vector<T> const& a, vnl_vector<T> const& b, vnl_v
 //
 template <class T>
 void
-vgl_p_matrix<T>::set (const T p_matrix [3][4])
+vgl_p_matrix<T>::set(const T p_matrix [3][4])
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      p_matrix_. put (row_index, col_index, p_matrix [row_index][col_index]);
+      p_matrix_. put(row_index, col_index, p_matrix [row_index][col_index]);
   clear_svd();
 }
 
@@ -417,11 +413,11 @@ vgl_p_matrix<T>::set (const T p_matrix [3][4])
 //
 template <class T>
 void
-vgl_p_matrix<T>::set (const T *p)
+vgl_p_matrix<T>::set(const T *p)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
-      p_matrix_. put (row_index, col_index, *p++);
+      p_matrix_. put(row_index, col_index, *p++);
   clear_svd();
 }
 
@@ -430,7 +426,7 @@ vgl_p_matrix<T>::set (const T *p)
 //
 template <class T>
 void
-vgl_p_matrix<T>::set (const vnl_matrix<T>& A, const vnl_vector<T>& a)
+vgl_p_matrix<T>::set(const vnl_matrix<T>& A, const vnl_vector<T>& a)
 {
   p_matrix_(0,0) = A(0,0);
   p_matrix_(1,0) = A(1,0);
@@ -542,7 +538,7 @@ vgl_p_matrix<T> vgl_p_matrix<T>::premultiply(vnl_matrix_fixed<T,3,3> const& H) c
 #define VGL_P_MATRIX_INSTANTIATE(T) \
 template class vgl_p_matrix<T >; \
 template vgl_p_matrix<T > operator*(const vgl_p_matrix<T >& P, const vgl_h_matrix_3d<T >& H); \
-template vcl_ostream& operator << (vcl_ostream& s, const vgl_p_matrix<T >& h); \
-template vcl_istream& operator >> (vcl_istream& s, vgl_p_matrix<T >& h)
+template vcl_ostream& operator<<(vcl_ostream& s, const vgl_p_matrix<T >& h); \
+template vcl_istream& operator>>(vcl_istream& s, vgl_p_matrix<T >& h)
 
 #endif // vgl_p_matrix_txx_

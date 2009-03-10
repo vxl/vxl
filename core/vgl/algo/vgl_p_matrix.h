@@ -150,9 +150,9 @@ class vgl_p_matrix
   //: Return the rows of P = [a b c]'.
   void get_rows(vnl_vector<T>* a, vnl_vector<T>* b, vnl_vector<T>* c) const;
   //: Return the rows of P = [a b c]'.
-  void get_rows(vnl_vector_fixed<T, 4>* a, vnl_vector_fixed<T, 4>* b, vnl_vector_fixed<T, 4>* c) const;
+  void get_rows(vnl_vector_fixed<T,4>* a, vnl_vector_fixed<T,4>* b, vnl_vector_fixed<T,4>* c) const;
   //: Set P = [a b c]' from its rows a, b, c.
-  void set_rows(const vnl_vector<T>& a, const vnl_vector<T>& b, const vnl_vector<T>& c);
+  void set_rows(const vnl_vector_fixed<T,4>& a, const vnl_vector_fixed<T,4>& b, const vnl_vector_fixed<T,4>& c);
 
   //: Return the element of the matrix at the specified index pair
   T get(unsigned int row_index, unsigned int col_index) const;
