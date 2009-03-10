@@ -313,6 +313,14 @@ static void test_line_2d()
   TEST("line segment second end point", ls2.point2(), p10);
 
   // line segment intersections:
+  // 1. with points:
+  vgl_line_segment_2d<double> ls1(p12,p30); // line segment containing p21; its support line contains p03.
+  TEST("end point is coincident", vgl_lineseg_test_point(p12,ls1), true);
+  TEST("mid point is coincident", vgl_lineseg_test_point(p21,ls1), true);
+  TEST("point on support line is not coincident", vgl_lineseg_test_point(p03,ls1), false);
+  TEST("arbitrary point is not coincident", vgl_lineseg_test_point(p11,ls1), false);
+  TEST("very nearby point is not coincident", vgl_lineseg_test_point(vgl_point_2d<double>(2.01,1.0),ls1), false);
+  // 2. with each other:
   TEST("identical line segments: intersect", vgl_lineseg_test_lineseg(ls,ls2), true);
   TEST("identical line segments: intersect",
        vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p11), vgl_line_segment_2d<double>(p11, p01)), true);
