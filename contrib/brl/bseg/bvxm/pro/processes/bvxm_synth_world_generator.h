@@ -44,7 +44,7 @@ class bvxm_synth_world_generator
 public:
 
   bvxm_synth_world_generator();
-  bool generate_world(bvxm_voxel_world_sptr& world);
+  bvxm_voxel_world_sptr generate_world();
   void set_dim_parmas( unsigned nx, unsigned ny, unsigned nz);
   void set_min_dim_params( unsigned minx, unsigned miny, unsigned minz);
   void set_bool_params ( bool gen_out_imgs, bool gen2box, bool rand1, bool rand2);
@@ -68,7 +68,7 @@ private:
   unsigned dimy_;
   unsigned dimz_;
   unsigned num_train_images_;
-  bool gen_image_outs_;
+  bool gen_images_;
   bool gen2_box_;
   vcl_string world_dir_;
   vcl_string recon_world_dir_;
@@ -103,7 +103,7 @@ private:
   vpgl_rational_camera<double> perspective_to_rational(vpgl_perspective_camera<double>& cam_pers);
   vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world);
   vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& world);
-  bool gen_images(vgl_vector_3d<unsigned> grid_size,
+  bool update(vgl_vector_3d<unsigned> grid_size,
                   bvxm_voxel_world_sptr world,
                   bvxm_voxel_grid<float>* intensity_grid,
                   bvxm_voxel_grid<float>* ocp_grid,

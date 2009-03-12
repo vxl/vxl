@@ -14,9 +14,9 @@ bvxm_synth_world_generator::bvxm_synth_world_generator()
   dimx_=89;
   dimy_=89;
   dimz_=23;
-  gen_image_outs_=true;
+  gen_images_=false;
   gen2_box_=true;
-  world_dir_ = "./world_dir";
+  world_dir_ = "./synth_world";
   num_train_images_ = 30;
   rand1_=true;
   rand2_=true;
@@ -215,24 +215,27 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
     
     //save the camera to file
     vcl_stringstream cam_file;
-    cam_file <<world_dir_ << "/cams/cam_" << i << ".txt";
+    vul_file::make_directory("./cams");
+    cam_file <<world_dir_ << "./cams/cam_" << i << ".txt";
     vcl_ofstream cam_out(cam_file.str().c_str());
     cam_out << persp_cam;
 
-    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
-    for (unsigned i=0; i<corners.size(); i++) {
-      vgl_point_3d<double> c = corners[i];
-      double u,v;
-      persp_cam.project(c.x(), c.y() ,c.z(), u, v);
-      bb.add(vgl_point_2d<double> (u,v));
-      vcl_cout << "Perspective [" << u << ',' << v << "]\n"<< vcl_endl;
+    if(verbose){
+      vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
+      for (unsigned i=0; i<corners.size(); i++) {
+        vgl_point_3d<double> c = corners[i];
+        double u,v;
+        persp_cam.project(c.x(), c.y() ,c.z(), u, v);
+        bb.add(vgl_point_2d<double> (u,v));
+        vcl_cout << "Perspective [" << u << ',' << v << "]\n"<< vcl_endl;
+      }
+      vcl_cout << bb << vcl_endl;
     }
-    vcl_cout << bb << vcl_endl;
   }
   return persp_cameras;
 }
 
-bool bvxm_synth_world_generator::gen_images(vgl_vector_3d<unsigned> grid_size,
+bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
                                                           bvxm_voxel_world_sptr world,
                                                           bvxm_voxel_grid<float>* intensity_grid,
                                                           bvxm_voxel_grid<float>* ocp_grid,
@@ -258,6 +261,7 @@ bool bvxm_synth_world_generator::gen_images(vgl_vector_3d<unsigned> grid_size,
 
   vcl_string path = world_dir_ + "/test_img";
 
+  if(gen_images_){
   for (unsigned i=0; i<cameras.size(); i++) {
     vil_image_view_base_sptr img_arg;
     vil_image_view<float>* mask = new vil_image_view<float>(IMAGE_U, IMAGE_V);
@@ -269,6 +273,7 @@ bool bvxm_synth_world_generator::gen_images(vgl_vector_3d<unsigned> grid_size,
     s << path << i << ".tif";
     vil_save(*expected, s.str().c_str());
     image_set.push_back(expected);
+  }
   }
   return true;
 }
@@ -530,16 +535,15 @@ bvxm_synth_world_generator::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
 
   return true;
 }
-bool
-bvxm_synth_world_generator::generate_world(bvxm_voxel_world_sptr& world)
-{
 
+bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
+{
+  bvxm_voxel_world_sptr world = new bvxm_voxel_world();
   vul_file::make_directory(world_dir_);
   
   vgl_vector_3d<unsigned> grid_size(nx_,ny_,nz_);
   vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
                                  vgl_point_3d<double> (nx_, ny_, nz_));
-
   bvxm_world_params_sptr world_params = new bvxm_world_params();
   world_params->set_params(world_dir_,
                            vgl_point_3d<float> (0,0,0),
@@ -550,14 +554,15 @@ bvxm_synth_world_generator::generate_world(bvxm_voxel_world_sptr& world)
   world->clean_grids();
 
   unsigned scale=0;
+  unsigned int bin = 0;
 
   //create a mog grid for appearance model and use appearance model processor update to properly initialize it
   bvxm_voxel_grid<float>* ocp_grid = static_cast<bvxm_voxel_grid<float>* >
       (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
 
-  unsigned int bin_num_1 = 0;
-  bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
-      (world->get_grid<APM_MOG_GREY>(bin_num_1,scale).as_pointer());
+  bvxm_voxel_grid_base_sptr apm_grid_base = world->get_grid<APM_MOG_GREY>(bin,scale);
+  
+  bvxm_voxel_grid<apm_datatype> *apm_grid = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
       (world_dir_ + "/intensity.vox",grid_size);
@@ -567,13 +572,10 @@ bvxm_synth_world_generator::generate_world(bvxm_voxel_world_sptr& world)
 
   vcl_vector <vil_image_view_base_sptr> image_set_1;
 
-  if (gen_image_outs_) {
-    // generate images from synthetic world
-    gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
-               cameras, image_set_1, bin_num_1);
-  }
-
+  update(grid_size, world, intensity_grid, ocp_grid, apm_grid,
+               cameras, image_set_1, bin);
+  
   world->save_occupancy_raw(world_dir_ + "/ocp.raw");
-  return true;
+  return world;
 }
 

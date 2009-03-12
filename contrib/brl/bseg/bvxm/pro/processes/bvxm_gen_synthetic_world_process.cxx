@@ -38,13 +38,12 @@ bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
 {
 
   bvxm_synth_world_generator *world_gen = new bvxm_synth_world_generator();
-  bvxm_voxel_world_sptr world = new bvxm_voxel_world();
-  world_gen->generate_world(world);
+  bvxm_voxel_world_sptr world = world_gen->generate_world();
   bvxm_voxel_world_sptr world_recontructed = new bvxm_voxel_world();
   
   //store output
   pro.set_output_val<bvxm_voxel_world_sptr>(0,world);
- 
+  vcl_cout << "synth world params " << *world->get_params();
   return true;
 }
 
