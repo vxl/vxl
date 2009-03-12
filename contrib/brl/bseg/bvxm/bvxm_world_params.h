@@ -87,6 +87,8 @@ class bvxm_world_params : public vbl_ref_count
   inline void set_base_y(vgl_vector_3d<float>& basey) { base_y_ = basey; }
   inline void set_base_z(vgl_vector_3d<float>& basez) { base_z_ = basez; }
 
+  inline void set_model_dir(vcl_string model_dir) {model_dir_ = model_dir;}
+
   inline float min_occupancy_prob() { return min_occupancy_prob_; }
   inline float max_occupancy_prob() { return max_occupancy_prob_; }
   inline bgeo_lvcs_sptr lvcs() { return lvcs_; }
