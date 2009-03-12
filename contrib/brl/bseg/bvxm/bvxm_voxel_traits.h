@@ -26,6 +26,7 @@
 #include "bvxm_mog_rgb_processor.h"
 #include "bvxm_mog_mc_processor.h"
 #include "bvxm_lidar_processor.h"
+#include "bvxm_float_processor.h"
 
 enum bvxm_voxel_type
 {
@@ -37,6 +38,7 @@ enum bvxm_voxel_type
   APM_MOG_MC_4_3,
   EDGES,
   LIDAR,
+  FLOAT,
   UNKNOWN
 };
 
@@ -63,6 +65,7 @@ class bvxm_voxel_traits_mc
     return init_val;
   }
 };
+
 
 //: Voxel traits for an occupancy grid
 template<>
@@ -157,6 +160,31 @@ class bvxm_voxel_traits<LIDAR>
   static inline vcl_string filename_prefix() { return "lidar"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return 0.0f; }
+};
+
+
+//: Voxel traits for an occupancy grid
+template<>
+class bvxm_voxel_traits<FLOAT>
+{
+
+ public:
+  //:Datatype of the occupancy probabilities
+  typedef bvxm_float_processor appearance_processor;
+  typedef bvxm_float_processor::apm_datatype voxel_datatype;
+  typedef bvxm_float_processor::obs_datatype obs_datatype;
+  typedef bvxm_float_processor::obs_mathtype obs_mathtype;
+
+  static inline vcl_string filename_prefix(){ return "apm_float"; }
+  static inline bool is_multibin() { return true; }
+  static inline voxel_datatype initial_val()
+  {
+    voxel_datatype init_val = 0.0f;
+    return init_val;
+  }
+
+
+
 };
 
 #endif // bvxm_voxel_traits_h_
