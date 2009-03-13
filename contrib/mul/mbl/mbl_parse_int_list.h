@@ -22,7 +22,7 @@
 // \verbatim
 // Example:
 // vcl_vector<unsigned> v;
-// mbl_parse_int_list(vcl_cin, vcl_back_inserter(v));
+// mbl_parse_int_list(vcl_cin, vcl_back_inserter(v), unsigned());
 // \endverbatim
 template <class ITER, class T>
 inline void mbl_parse_int_list(vcl_istream &afs, ITER insert_iter, T)
