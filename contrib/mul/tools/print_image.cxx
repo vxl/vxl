@@ -54,86 +54,71 @@ static vgl_vector_3d<double> voxel_size_from_transform(const vimt3d_transform_3d
 //: Try to load a 3D image
 static unsigned try_3d_image(const char * filename, float unit_scaling, bool range)
 {
-  try
+  vil3d_image_resource_sptr ir = vil3d_load_image_resource(filename);
+  if (!ir) return 1;
+
+  vimt3d_transform_3d w2i;
+
+  if (unit_scaling == 1000.0)
+    w2i = vimt3d_load_transform(ir, true);
+  else if (unit_scaling == 1.0)
+    w2i = vimt3d_load_transform(ir, false);
+  else
   {
-    vil3d_image_resource_sptr ir = vil3d_load_image_resource(filename);
-    if (!ir) return 1;
-
-    vimt3d_transform_3d w2i;
-
-    if (unit_scaling == 1000.0)
-      w2i = vimt3d_load_transform(ir, true);
-    else if (unit_scaling == 1.0)
-      w2i = vimt3d_load_transform(ir, false);
-    else
-    {
-      vcl_cerr << "Can only cope with \"-s 1\" or \"-s 1000\" for 3D images.\n";
-      vcl_exit(3);
-    }
-
-    vgl_vector_3d<double> voxel = voxel_size_from_transform(w2i);    
-    vgl_point_3d<double> world_min_point = w2i.inverse().origin();
-    vgl_point_3d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999, ir->nk()+0.999);
-    vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
-             << "size: " << ir->ni()*voxel.x() << 'x' << ir->nj()*voxel.y() << 'x' << ir->nk()*voxel.z()
-             << " in units of " << 1.0/unit_scaling << "m\n"
-             << "voxel size: " << voxel.x() << 'x' << voxel.y() << 'x' << voxel.z()
-             << " in units of " << 1.0/unit_scaling << "m\n"
-             << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << 'x' << w2i.origin().z() << " voxels\n"
-             << "world bounds: [" << world_min_point.x() << ',' << world_min_point.y() << ',' << world_min_point.z() << "] -> ["
-             << world_max_point.x() << ',' << world_max_point.y() << ',' << world_max_point.z() << "]\n"
-             << "voxel_type: " << ir->pixel_format() << '\n'
-             << "transform: " << w2i;
-    
-    if (range)
-    {
-      double min,max;
-      get_intensity_range_3d(ir, min, max);
-      vcl_cout << "intensity range: " << min << " to " << max << "\n";
-    }
-
-    return 0;
+    vcl_cerr << "Can only cope with \"-s 1\" or \"-s 1000\" for 3D images.\n";
+    vcl_exit(3);
   }
-  catch (vcl_exception &e)
+
+  vgl_vector_3d<double> voxel = voxel_size_from_transform(w2i);    
+  vgl_point_3d<double> world_min_point = w2i.inverse().origin();
+  vgl_point_3d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999, ir->nk()+0.999);
+  vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
+           << "size: " << ir->ni()*voxel.x() << 'x' << ir->nj()*voxel.y() << 'x' << ir->nk()*voxel.z()
+           << " in units of " << 1.0/unit_scaling << "m\n"
+           << "voxel size: " << voxel.x() << 'x' << voxel.y() << 'x' << voxel.z()
+           << " in units of " << 1.0/unit_scaling << "m\n"
+           << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << 'x' << w2i.origin().z() << " voxels\n"
+           << "world bounds: [" << world_min_point.x() << ',' << world_min_point.y() << ',' << world_min_point.z() << "] -> ["
+           << world_max_point.x() << ',' << world_max_point.y() << ',' << world_max_point.z() << "]\n"
+           << "voxel_type: " << ir->pixel_format() << '\n'
+           << "transform: " << w2i;
+  
+  if (range)
   {
-    vcl_cerr << e.what();
-    return 1;
+    double min,max;
+    get_intensity_range_3d(ir, min, max);
+    vcl_cout << "intensity range: " << min << " to " << max << "\n";
   }
+
 }
 
 
 //: Try to load a 2D image
 static unsigned try_2d_image(const char * filename, float unit_scaling, bool range)
 {
-  try
-  {
-    vil_image_resource_sptr ir = vil_load_image_resource(filename);
-    if (!ir) return 1;
-    
-    vimt_transform_2d w2i = vimt_load_transform(ir, unit_scaling);
-    vgl_vector_2d<double> pixel = w2i.inverse().delta(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1,1));
-    vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes\n"
-             << "size: " << ir->ni()*pixel.x() << 'x' << ir->nj()*pixel.y()
-             << " in units of " << 1.0/unit_scaling << "m\n"
-             << "pixel size: " << pixel.x() << 'x' << pixel.y()
-             << " in units of " << 1.0/unit_scaling << "m\n"
-             << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << " pixels\n"
-             << "pixel_type: " << ir->pixel_format() << '\n';
 
-    if (range)
-    {
-      double min,max;
-      get_intensity_range_2d(ir, min, max);
-      vcl_cout << "intensity range: " << min << " to " << max << "\n";
-    }
-    
-    return 0;
-  }
-  catch (vcl_exception &e)
+  vil_image_resource_sptr ir = vil_load_image_resource(filename);
+  if (!ir) return 1;
+  
+  vimt_transform_2d w2i = vimt_load_transform(ir, unit_scaling);
+  vgl_vector_2d<double> pixel = w2i.inverse().delta(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1,1));
+  vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes\n"
+           << "size: " << ir->ni()*pixel.x() << 'x' << ir->nj()*pixel.y()
+           << " in units of " << 1.0/unit_scaling << "m\n"
+           << "pixel size: " << pixel.x() << 'x' << pixel.y()
+           << " in units of " << 1.0/unit_scaling << "m\n"
+           << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << " pixels\n"
+           << "pixel_type: " << ir->pixel_format() << '\n';
+
+  if (range)
   {
-    vcl_cerr << e.what();
-    return 1;
+    double min,max;
+    get_intensity_range_2d(ir, min, max);
+    vcl_cout << "intensity range: " << min << " to " << max << "\n";
   }
+  
+  return 0;
+
 }
 
 
@@ -169,9 +154,15 @@ int main2(int argc, char*argv[])
   }
   else
   {
-    if (try_3d_image(img_src().c_str(), unit_scaling(), range()) == 0)
-      return 0;
-
+    try
+    {
+      if (try_3d_image(img_src().c_str(), unit_scaling(), range()) == 0)
+        return 0;
+    }
+    catch (vcl_exception& e)
+    {
+      vcl_cout << "caught exception " << e.what() << vcl_endl;
+    }
     return try_2d_image(img_src().c_str(), unit_scaling(), range());
   }
 }
