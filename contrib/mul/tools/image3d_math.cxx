@@ -51,8 +51,9 @@ static mbl_logger& logger()
 //: This is the return value of the program.
 // It can be modified using the (as yet unimplemented) "-return" operator.
 int global_retval=0;
-//: load images as float types if not true
-bool global_option_load_as_image_int = false;
+
+//: load images by default as given type.
+enum {float_t, double_t, int_t} global_option_load_as_image = float_t;
 
 class operand;
 vcl_ostream& operator <<( vcl_ostream&, const operand&);
@@ -68,21 +69,8 @@ bool string_to_double(const vcl_string&s, double&d)
   return true;
 }
 
-bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<float>&d)
-{
-  try
-  {
-    vimt3d_load(s, d, true);
-  }
-  catch (const vcl_exception& e)
-  {
-    vcl_cerr << e.what() << '\n';
-    return false;
-  }
-  return true;
-}
-
-bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<int>&d)
+template <class T>
+bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
 {
   try
   {
@@ -102,16 +90,19 @@ bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<int>&d)
 class operand
 {
   vcl_string string_;
+  vimt3d_image_3d_of<double> image_3d_of_double_;
   vimt3d_image_3d_of<float> image_3d_of_float_;
   vimt3d_image_3d_of<int> image_3d_of_int_;
   double double_;
 
  public:
-  enum operand_type_t { e_string, e_image_3d_of_float, e_image_3d_of_int, e_double };
+  enum operand_type_t { e_string, e_image_3d_of_double, e_image_3d_of_float, e_image_3d_of_int, e_double };
   operand_type_t operand_type_;
 
   explicit operand(const vcl_string& s):
     string_(s), operand_type_(e_string) {}
+  explicit operand(const vimt3d_image_3d_of<double>& i):
+    image_3d_of_double_(i), operand_type_(e_image_3d_of_double) {}
   explicit operand(const vimt3d_image_3d_of<float>& i):
     image_3d_of_float_(i), operand_type_(e_image_3d_of_float) {}
   explicit operand(const vimt3d_image_3d_of<int>& i):
@@ -148,13 +139,13 @@ class operand
   bool is_image_3d_of_float() const
   {
     vimt3d_image_3d_of<float> dummy;
-    return (operand_type_==e_string && !global_option_load_as_image_int && string_to_image(string_, dummy))
+    return (operand_type_==e_string && global_option_load_as_image==float_t && string_to_image(string_, dummy))
       || operand_type_==e_image_3d_of_float;
   }
   const vimt3d_image_3d_of<float> as_image_3d_of_float() const
   {
     if (operand_type_==e_image_3d_of_float) return image_3d_of_float_;
-    else if (operand_type_==e_string && !global_option_load_as_image_int)
+    else if (operand_type_==e_string && global_option_load_as_image==float_t)
     {
       vimt3d_image_3d_of<float> v;
       string_to_image(string_, v);
@@ -166,16 +157,37 @@ class operand
     return vimt3d_image_3d_of<float>();
   }
 
+  bool is_image_3d_of_double() const
+  {
+    vimt3d_image_3d_of<double> dummy;
+    return (operand_type_==e_string && global_option_load_as_image==double_t && string_to_image(string_, dummy))
+      || operand_type_==e_image_3d_of_double;
+  }
+  const vimt3d_image_3d_of<double> as_image_3d_of_double() const
+  {
+    if (operand_type_==e_image_3d_of_double) return image_3d_of_double_;
+    else if (operand_type_==e_string && global_option_load_as_image==double_t)
+    {
+      vimt3d_image_3d_of<double> v;
+      string_to_image(string_, v);
+      return v;
+    }
+    vcl_ostringstream ss;
+    ss << "Tried to use unsuitable operand as a vimt_image_3d_of<double>: " << *this;
+    mbl_exception_abort(ss.str());
+    return vimt3d_image_3d_of<double>();
+  }
+
   bool is_image_3d_of_int() const
   {
     vimt3d_image_3d_of<int> dummy;
-    return (operand_type_==e_string && global_option_load_as_image_int && string_to_image(string_, dummy))
+    return (operand_type_==e_string && global_option_load_as_image==int_t && string_to_image(string_, dummy))
       || operand_type_==e_image_3d_of_int;
   }
   const vimt3d_image_3d_of<int> as_image_3d_of_int() const
   {
     if (operand_type_==e_image_3d_of_int) return image_3d_of_int_;
-    else if (operand_type_==e_string && global_option_load_as_image_int)
+    else if (operand_type_==e_string && global_option_load_as_image==int_t)
     {
       vimt3d_image_3d_of<int> v;
       string_to_image(string_, v);
@@ -199,6 +211,9 @@ class operand
      case e_string:
       ss << string_;
       break;
+     case e_image_3d_of_double:
+      ss << vsl_stream_summary(image_3d_of_double_);
+      break;
      case e_image_3d_of_float:
       ss << vsl_stream_summary(image_3d_of_float_);
       break;
@@ -221,6 +236,8 @@ class operand
     {
      case e_string:
       return is_string();
+     case e_image_3d_of_double:
+      return is_image_3d_of_double();
      case e_image_3d_of_float:
       return is_image_3d_of_float();
      case e_image_3d_of_int:
@@ -258,6 +275,8 @@ vcl_ostream& operator <<( vcl_ostream&ss, const operand::operand_type_t& t)
   {
     case operand::e_string:
       ss << "string"; break;
+    case operand::e_image_3d_of_double:
+      ss << "image_3d_of_double"; break;
     case operand::e_image_3d_of_float:
       ss << "image_3d_of_float"; break;
     case operand::e_image_3d_of_int:
@@ -370,7 +389,7 @@ void save__image_3d_of_int__string(opstack_t& s)
 }
 
 
-//: Load a float image from an ascii matlab format
+//: Load a image from an ascii matlab format - according to 
 void load_from_mat__string(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -404,37 +423,59 @@ void load_from_mat__string(opstack_t& s)
 
   s.pop_front();
 
-  if (global_option_load_as_image_int)
+  switch (global_option_load_as_image)
   {
-    vimt3d_image_3d_of<int> result(ni, nj, nk);
-    for (unsigned k=0;k<nk;++k)
+  case int_t:
     {
-      for (unsigned j=0;j<nj;++j)
-        for (unsigned i=0;i<ni;++i)
-          input >> result.image()(i,j,k);
-      if (!input)
+      vimt3d_image_3d_of<int> result(ni, nj, nk);
+      for (unsigned k=0;k<nk;++k)
       {
-        vcl_cerr << "Unable to parse " << o1 << '\n';
-        vcl_exit(1);
+        for (unsigned j=0;j<nj;++j)
+          for (unsigned i=0;i<ni;++i)
+            input >> result.image()(i,j,k);
+        if (!input)
+        {
+          vcl_cerr << "Unable to parse " << o1 << '\n';
+          vcl_exit(1);
+        }
       }
+      s.push_front(operand(result));
+      break;
     }
-    s.push_front(operand(result));
-  }
-  else
-  {
-    vimt3d_image_3d_of<float> result(ni, nj, nk);
-    for (unsigned k=0;k<nk;++k)
+  case double_t:
     {
-      for (unsigned j=0;j<nj;++j)
-        for (unsigned i=0;i<ni;++i)
-          input >> result.image()(i,j,k);
-      if (!input)
+      vimt3d_image_3d_of<double> result(ni, nj, nk);
+      for (unsigned k=0;k<nk;++k)
       {
-        vcl_cerr << "Unable to parse " << o1 << '\n';
-        vcl_exit(1);
+        for (unsigned j=0;j<nj;++j)
+          for (unsigned i=0;i<ni;++i)
+            input >> result.image()(i,j,k);
+        if (!input)
+        {
+          vcl_cerr << "Unable to parse " << o1 << '\n';
+          vcl_exit(1);
+        }
       }
+      s.push_front(operand(result));
+      break;
     }
-    s.push_front(operand(result));
+  case float_t:
+    {
+      vimt3d_image_3d_of<float> result(ni, nj, nk);
+      for (unsigned k=0;k<nk;++k)
+      {
+        for (unsigned j=0;j<nj;++j)
+          for (unsigned i=0;i<ni;++i)
+            input >> result.image()(i,j,k);
+        if (!input)
+        {
+          vcl_cerr << "Unable to parse " << o1 << '\n';
+          vcl_exit(1);
+        }
+      }
+      s.push_front(operand(result));
+      break;
+    }
   }
 }
 
@@ -471,25 +512,68 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
   s.pop_front();
 }
 
-//: Force an image to load - replace the filename in the operand stack with the image.
-// Uses global_option_load_as_image_int to decide whether to load as float or int.
-void load__string(opstack_t& s)
+
+//: Save a double image to a ascii matlab format
+void save_to_mat__image_3d_of_double__string(opstack_t& s)
+{
+  assert(s.size() >= 2);
+
+  vcl_string o1(s[0].as_string());
+  vimt3d_image_3d_of<double> o2(s[1].as_image_3d_of_double());
+  const vil3d_image_view<double>& o2_image = o2.image();;
+
+  vcl_ofstream output(o1.c_str());
+
+  if (!output)
+    mbl_exception_throw_os_error(o1);
+
+  //copy precision length from console to output file
+  output.precision(vcl_cout.precision());
+
+  output <<
+    "# Created by vxl/image3d_math\n"
+    "# name: image3d\n"
+    "# type: matrix\n"
+    "# ndims: 3\n"
+    << o2.image().ni() << ' ' << o2.image().nj() << ' ' << o2.image().nk() << '\n';
+
+  for (unsigned k=0;k<o2_image.nk();++k)
+    for (unsigned j=0;j<o2_image.nj();++j)
+      for (unsigned i=0;i<o2_image.ni();++i)
+        output <<  o2_image(i,j,k) << '\n';
+
+  s.pop_front();
+  s.pop_front();
+}
+
+//: Force an image to load as double - replace the filename in the operand stack with the image.
+void load_image_double__string(opstack_t& s)
 {
   assert(s.size() >= 1);
-  if (global_option_load_as_image_int)
-  {
-    vimt3d_image_3d_of<int> v;
-    string_to_image(s[0].as_string(), v);
-    s.pop_front();
-    s.push_front(operand(v));
-  }
-  else
-  {
-    vimt3d_image_3d_of<float> v;
-    string_to_image(s[0].as_string(), v);
-    s.pop_front();
-    s.push_front(operand(v));
-  }
+  vimt3d_image_3d_of<double> v;
+  string_to_image(s[0].as_string(), v);
+  s.pop_front();
+  s.push_front(operand(v));
+}
+
+//: Force an image to load as float - replace the filename in the operand stack with the image.
+void load_image_float__string(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> v;
+  string_to_image(s[0].as_string(), v);
+  s.pop_front();
+  s.push_front(operand(v));
+}
+
+//: Force an image to load as int - replace the filename in the operand stack with the image.
+void load_image_int__string(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> v;
+  string_to_image(s[0].as_string(), v);
+  s.pop_front();
+  s.push_front(operand(v));
 }
 
 void scale_and_offset__image_3d_of_float__double__double(opstack_t& s)
@@ -522,12 +606,17 @@ void convert_to_int__image_3d_of_float(opstack_t& s)
 
 void option_load_as_image_int(opstack_t& s)
 {
-  global_option_load_as_image_int = true;
+  global_option_load_as_image = int_t;
+}
+
+void option_load_as_image_double(opstack_t& s)
+{
+  global_option_load_as_image = double_t;
 }
 
 void option_load_as_image_float(opstack_t& s)
 {
-  global_option_load_as_image_int = false;
+  global_option_load_as_image = float_t;
 }
 
 void option_precision__double(opstack_t& s)
@@ -843,15 +932,24 @@ class operations
     add_operation("--help", &help,
                   no_operands,
                   "", "", "Display help");
-    add_operation("--load", &load__string,
-                  function_type_t() << operand::e_string,
-                  "filename", "image", "Explicitly load image using current option_load_as_image_type");
     add_operation("--load_from_mat", &load_from_mat__string,
                   function_type_t() << operand::e_string,
-                  "filename", "image", "Explicitly load image from ASCII Matlab file");
+                  "filename", "image", "Explicitly load float image from ASCII Matlab file");
+    add_operation("--load_image_double", &load_image_double__string,
+                  function_type_t() << operand::e_string,
+                  "filename", "image", "Explicitly load into double image.");
+    add_operation("--load_image_float", &load_image_float__string,
+                  function_type_t() << operand::e_string,
+                  "filename", "image", "Explicitly load into float image.");
+    add_operation("--load_image_int", &load_image_int__string,
+                  function_type_t() << operand::e_string,
+                  "filename", "image", "Explicitly load into integer image");
     add_operation("--local_z_normalise", &local_z_normalise__image_3d_of_float__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double,
                   "image half_radius", "image", "Normalise each voxel by mean and stddev measured over half_radius window");
+    add_operation("--option_load_as_image_double", &option_load_as_image_double,
+                  no_operands,
+                  "", "", "Load future image files as double voxel-type");
     add_operation("--option_load_as_image_float", &option_load_as_image_float,
                   no_operands,
                   "", "", "Load future image files as float voxel-type (default)");
@@ -887,6 +985,9 @@ class operations
                   "image filename", "", "Save image to filename");
     add_operation("--save_to_mat", &save_to_mat__image_3d_of_float__string,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_string,
+                  "image filename", "", "Save image to text 3D array Matlab format");
+    add_operation("--save_to_mat", &save_to_mat__image_3d_of_double__string,
+                  function_type_t() << operand::e_image_3d_of_double << operand::e_string,
                   "image filename", "", "Save image to text 3D array Matlab format");
     add_operation("--scale_and_offset", &scale_and_offset__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
@@ -1009,20 +1110,19 @@ int main(int argc, char*argv[])
     vimt3d_add_all_loaders();
     vil3d_file_format::add_format(new vil3d_gen_synthetic_format);
 
-    main2(argc, argv);
+    return main2(argc, argv);
   }
   catch (vcl_exception& e)
   {
-    vcl_cout << "caught exception " << e.what() << vcl_endl;
+    vcl_cerr << "caught exception " << e.what() << vcl_endl;
     return 3;
   }
   catch (...)
   {
-    vcl_cout << "caught unknown exception" << vcl_endl;
+    vcl_cerr << "caught unknown exception" << vcl_endl;
     return 3;
   }
 
-  return 0;
 }
 #else // VCL_HAS_EXCEPTIONS
 int main(int argc, char*argv[])

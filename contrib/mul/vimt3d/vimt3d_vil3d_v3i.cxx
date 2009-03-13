@@ -283,7 +283,7 @@ macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 //macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    default:
     return 0;
@@ -320,7 +320,7 @@ macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
 macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 //macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    default:
     return 0;
@@ -364,7 +364,7 @@ bool vimt3d_vil3d_v3i_image::put_view(const vil3d_image_view_base& vv,
     macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 //  macro(VIL_PIXEL_FORMAT_BOOL , bool )
     macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//  macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    default:
     return false;
