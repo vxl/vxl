@@ -5,7 +5,7 @@ This library contains data structures to represent univariate and
 multivariate probability distributions and provides algorithms to operate on them. 
 This includes estimating a distribution from data points and 
 sampling from a distribution. 
-vpdl is built on top of vnl and vnl_algo.
+@code{vpdl} is built on top of @code{vnl} and @code{vnl_algo}.
 @endchapsummary
 
 @code{vpdl} is comprised of two programming paradigms: 

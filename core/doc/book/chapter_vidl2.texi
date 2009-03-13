@@ -70,7 +70,7 @@ implemented.
 
 @table @code
 @item vidl2_image_list_istream
-Treats an ordered list of vil_image_resource_sptr as a video stream. 
+Treats an ordered list of @code{vil_image_resource_sptr} as a video stream. 
 Also supports reading a list of images from disk given a list of 
 filenames or a file glob.
 @item vidl2_ffmpeg_istream
@@ -294,7 +294,7 @@ vcl_cout << "The frame has format " << pt.name
 To simplify this process there are several convenience functions, such
 as @code{vidl2_pixel_format_bpp}, to directly look up a pixel trait
 given the format without the need for the traits struct.  There is
-also a vcl_ostream operator for @code{vidl2_pixel_format} so that the
+also a @code{vcl_ostream} operator for @code{vidl2_pixel_format} so that the
 human readable string name is printed.  The following example
 @example
 vidl2_pixel_format format = VIDL2_PIXEL_FORMAT_RGB_24;
