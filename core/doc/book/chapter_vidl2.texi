@@ -258,7 +258,7 @@ The X color subsampling factor.  In YUV color space, the U and V
 channels have a horizontal (X) resolution that is @math{2^@{-xcs@}} times that of the Y channel.
 @item ycs
 The Y color subsampling factor.  In YUV color space, the U and V
-channels have a vertical (Y) resolution that is @math{2^@{-xcs@}} times that of the Y channel.
+channels have a vertical (Y) resolution that is @math{2^@{-ycs@}} times that of the Y channel.
 @end table
 
 A new pixel format may be introduced by simply adding an entry in this
