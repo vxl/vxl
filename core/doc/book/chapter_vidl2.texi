@@ -216,22 +216,22 @@ pixel format.
 
 The following is a subset of the pixel traits table.
 @example
-//            format    name        type         bpp  color    arrange  xcs  ycs
-//            ------    ---------   ----         ---  -------  -------  ---  ---
-vidl2_pt_mac( UNKNOWN,  "unknown",  void,        0,   UNKNOWN, UNKNOWN, 0,   0  );
+//            format    name        type       bpp color    arrange xcs ycs
+//            ------    ---------   ----       --- -------  ------- --- ---
+vidl2_pt_mac( UNKNOWN,  "unknown",  void,       0, UNKNOWN, UNKNOWN, 0, 0 );
 
-vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,    24,  RGB,     PLANAR,  0,   0  );
-vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  RGBA,    SINGLE,  0,   0  );
-vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  YUV,     PLANAR,  0,   0  );
-vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  YUV,     PLANAR,  1,   0  );
-vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
-vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  YUV,     PLANAR,  2,   1  );
-vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,    16,  YUV,     PACKED,  1,   0  );
-vidl2_pt_mac( MONO_1,   "Mono 1",   bool,        1,   MONO,    SINGLE,  0,   0  );
-vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,    8,   MONO,    SINGLE,  0,   0  );
-vidl2_pt_mac( MONO_16,  "Mono 16",  vxl_uint_16, 16,  MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,   24, RGB,    SINGLE,  0, 0 );
+vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,   24, RGB,    PLANAR,  0, 0 );
+vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,   24, RGB,    SINGLE,  0, 0 );
+vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,   32, RGBA,   SINGLE,  0, 0 );
+vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,   24, YUV,    PLANAR,  0, 0 );
+vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,   16, YUV,    PLANAR,  1, 0 );
+vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,   12, YUV,    PLANAR,  1, 1 );
+vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,   10, YUV,    PLANAR,  2, 1 );
+vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,   16, YUV,    PACKED,  1, 0 );
+vidl2_pt_mac( MONO_1,   "Mono 1",   bool,       1,  MONO,   SINGLE,  0, 0 );
+vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,   8,  MONO,   SINGLE,  0, 0 );
+vidl2_pt_mac( MONO_16,  "Mono 16", vxl_uint_16, 16, MONO,   SINGLE,  0, 0 );
 @end example
 
 The meaning of each column in the pixel traits table are as follows.
