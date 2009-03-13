@@ -54,6 +54,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vgui::
 * vidl::
 * vidl2::
+* vpdl::
 * vcsl::
 * structure::
 * build::
@@ -174,6 +175,14 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @cindex video
 
 @include chapter_vidl2.texi
+
+@comment ------------------------------------------------------------------
+@node    vpdl
+@comment node-name, next,      previous, up
+@chapter vpdl: Probability Distributions (Experimental)
+@cindex Probability
+
+@include chapter_vpdl.texi
 
 @comment ------------------------------------------------------------------
 @node    vcsl
