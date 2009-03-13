@@ -4,6 +4,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_cstddef.h>
+#include <vcl_iomanip.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_string_io.h>
 #include <mbl/mbl_log.h>
@@ -94,12 +95,17 @@ void test_log()
   mbl_logger::root().categories().print(vcl_cout);
 
   mbl_logger current("wibble1");
+  mbl_logger current2("wibble2");
 
   if (current.level() >= mbl_logger::INFO)
     current.log(mbl_logger::INFO) << "Output this whatever" << vcl_endl;
 
   MBL_LOG(WARN, current, "Also this number " << 54 <<
-          " and" << vcl_endl << "multiline message");
+          " and" << vcl_endl << "multiline message" << vcl_setprecision(16));
+
+
+  MBL_LOG( WARN, current2, "Check the precision changes do not propagate: " << 1.0/3.0);
+
 // Manual expansion of MBL_LOG macro
 //  if (current.level() >= mbl_logger:: WARN)
 //  {
@@ -115,7 +121,8 @@ void test_log()
 
   TEST("Log output is as expected", output.str(),
        "INFO: wibble1 Output this whatever\n"
-       "WARN: wibble1 Also this number 54 and\nmultiline message\n");
+       "WARN: wibble1 Also this number 54 and\nmultiline message\n"
+       "WARN: wibble2 Check the precision changes do not propagate: 0.333333\n");
 
 
   mbl_logger obj3("obj3");
