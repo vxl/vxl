@@ -3,18 +3,18 @@
 
 SET( vpdl_sources
   vpdl_distribution.h      vpdl_distribution.txx
-  
+
   vpdl_gaussian_base.h
   vpdl_gaussian_sphere.h
   vpdl_gaussian_indep.h
   vpdl_gaussian.h
-  
+
   vpdl_multi_cmp_dist.h
   vpdl_mixture.h
   vpdl_mixture_of.h
   vpdl_kernel_base.h
   vpdl_kernel_gaussian_sfbw.h
-  
+
   # Template Library headers
   vpdt/vpdt_access.h
   vpdt/vpdt_field_traits.h
@@ -22,7 +22,7 @@ SET( vpdl_sources
   vpdt/vpdt_dist_traits.h
   vpdt/vpdt_probability.h
   vpdt/vpdt_log_probability.h
-  
+
   vpdt/vpdt_norm_metric.h
   vpdt/vpdt_eigen_sym_matrix.h
   vpdt/vpdt_gaussian.h
@@ -30,6 +30,9 @@ SET( vpdl_sources
   vpdt/vpdt_update_gaussian.h
   vpdt/vpdt_update_mog.h
   vpdt/vpdt_mog_fitness.h
+
+  vpdt/vpdt_gaussian_detector.h
+  vpdt/vpdt_mixture_detector.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)
