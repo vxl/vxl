@@ -179,6 +179,24 @@ SOURCE=.\vpdt/vpdt_update_gaussian.h
 # Begin Source File
 SOURCE=.\vpdt/vpdt_mixture_of.h
 # End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_log_probability.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_probability.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_mog_fitness.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_update_mog.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_gaussian_detector.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_mixture_detector.h
+# End Source File
 # End Group
 # End Target
 # End Project
