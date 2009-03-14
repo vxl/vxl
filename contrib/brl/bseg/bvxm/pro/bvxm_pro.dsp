@@ -198,6 +198,9 @@ SOURCE=.\processes/bvxm_create_mog_image_process.cxx
 SOURCE=.\processes/bvxm_detect_edges_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_synth_world_generator.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -214,6 +217,9 @@ SOURCE=.\bvxm_processes.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_normalization_util.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_synth_world_generator.h
 # End Source File
 # End Group
 # End Target

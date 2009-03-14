@@ -141,9 +141,6 @@ SOURCE=.\vpdl_gaussian_sphere.h
 SOURCE=.\vpdl_mixture.h
 # End Source File
 # Begin Source File
-SOURCE=.\vpdl_update_gaussian.h
-# End Source File
-# Begin Source File
 SOURCE=.\vpdl_multi_cmp_dist.h
 # End Source File
 # Begin Source File
@@ -175,6 +172,12 @@ SOURCE=.\vpdt/vpdt_gaussian.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpdt/vpdt_norm_metric.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_update_gaussian.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_mixture_of.h
 # End Source File
 # End Group
 # End Target

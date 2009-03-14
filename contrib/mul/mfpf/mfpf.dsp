@@ -202,6 +202,12 @@ SOURCE=.\mfpf_patch_data.cxx
 SOURCE=.\mfpf_region_about_pt.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mfpf_grad_corr2d_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_grad_corr2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder-.cxx
 # End Source File
 # Begin Source File
@@ -359,6 +365,12 @@ SOURCE=.\mfpf_region_about_pt.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_patch_data.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_grad_corr2d_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_grad_corr2d.h
 # End Source File
 # End Group
 # End Target
