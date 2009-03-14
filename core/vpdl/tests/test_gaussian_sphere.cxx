@@ -169,6 +169,34 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("probability density <"+type_name+"> variable").c_str(),
               dist.log_prob_density(test_pt), vcl_log(prob3), epsilon);
     
+    // test gradient virtual functions against numerical difference
+    vnl_vector_fixed<T,3> g3;
+    T dp = vcl_sqrt(epsilon);
+    T den = dist3.density(test_pt);
+    T den_x = dist3.density(test_pt+vnl_vector_fixed<T,3>(dp,0,0));
+    T den_y = dist3.density(test_pt+vnl_vector_fixed<T,3>(0,dp,0));
+    T den_z = dist3.density(test_pt+vnl_vector_fixed<T,3>(0,0,dp));
+    vnl_vector_fixed<T,3> grad(den_x-den, den_y-den, den_z-den);
+    grad /= dp;
+    T density = dist3.gradient_density(test_pt,g3);
+    TEST_NEAR(("gradient density <"+type_name+"> fixed").c_str(),
+              (g3-grad).inf_norm(), 0, dp);
+    TEST_NEAR(("density <"+type_name+"> fixed").c_str(),
+              density, den, epsilon);
+    density = dist1.gradient_density(test_pt[0],g3[0]);
+    T den1 = dist1.density(test_pt[0]);
+    T den1_x = dist1.density(test_pt[0]+dp);
+    TEST_NEAR(("gradient density <"+type_name+"> scalar").c_str(),
+              g3[0], (den1_x-den1)/dp, dp);
+    TEST_NEAR(("density <"+type_name+"> scalar").c_str(),
+              density, den1, epsilon);
+    vnl_vector<T> g;
+    density = dist.gradient_density(test_pt,g);
+    TEST_NEAR(("gradient density <"+type_name+"> variable").c_str(),
+              (g-grad).inf_norm(), 0, dp);
+    TEST_NEAR(("density <"+type_name+"> variable").c_str(),
+              density, den, epsilon);
+    
     // test cumulative probability
     vnl_vector_fixed<T,3> test1(T(3), T(3), T(3));
     vnl_vector_fixed<T,3> cum_test1;

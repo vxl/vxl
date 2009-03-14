@@ -1,4 +1,4 @@
-// This is core/vpdl/vpdt_update_gaussian.h
+// This is core/vpdl/vpdt/vpdt_update_gaussian.h
 #ifndef vpdt_update_gaussian_h_
 #define vpdt_update_gaussian_h_
 //:

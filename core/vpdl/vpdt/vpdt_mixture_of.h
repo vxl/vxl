@@ -18,6 +18,16 @@
 #include <vcl_algorithm.h>
 #include <vcl_memory.h>
 
+// forward declarations
+template<class dist_t> class vpdt_mixture_of; 
+
+template <class dist>
+typename vpdt_dist_traits<vpdt_mixture_of<dist> >::scalar_type 
+vpdt_box_prob(const vpdt_mixture_of<dist>& d, 
+              const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& min_pt,
+              const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& max_pt);
+
+
 //: A mixture of a fixed type of distributions
 // A mixture is a weighted linear combination of other mixtures.
 // This class represents a mixture of a specific type of distribution.
@@ -29,16 +39,22 @@ template<class dist_t>
 class vpdt_mixture_of 
 {
 public:
-  //: the data type used for vectors
-  typedef typename dist_t::vector vector;
-  //: define the fixed dimension (normally specified by template parameter n)
-  static const unsigned int n = vpdt_field_traits<vector>::dimension;
-  //: define the scalar type (normally specified by template parameter T)
-  typedef typename vpdt_field_traits<vector>::scalar_type T;
-  //: the data type used for matrices
-  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
+  //: the data type to represent a point in the field
+  typedef typename dist_t::field_type field_type;
   //: define the component type
   typedef dist_t component_type;
+  
+  //: define the fixed dimension (normally specified by template parameter n)
+  static const unsigned int n = vpdt_field_traits<field_type>::dimension;
+  //: the data type to represent a point in the field
+  typedef typename dist_t::field_type F;
+  //: define the scalar type (normally specified by template parameter T)
+  typedef typename vpdt_field_traits<field_type>::scalar_type T;
+  //: define the vector type
+  typedef typename vpdt_field_traits<field_type>::vector_type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<field_type>::matrix_type matrix;
+
 
 private:
   //: A struct to hold the component distributions and weights
@@ -119,7 +135,6 @@ public:
       for (unsigned int i=0; i<rhs.components_.size(); ++i){
         components_.push_back(new component(*rhs.components_[i]));
       }
-      this->set_dimension(rhs.dimension());
     }
     return *this;
   }
@@ -183,7 +198,7 @@ public:
   }
   
   //: Compute the unnormalized density at this point
-  T density(const vector& pt) const
+  T density(const F& pt) const
   {
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     T prob = 0;
@@ -193,39 +208,32 @@ public:
     }
     return prob;
   }
-
-  //: Compute the probability density at this point
-  T prob_density(const vector& pt) const
+  
+  //: Compute the gradient of the unnormalized density at a point
+  // \return the density at \a pt since it is usually needed as well, and
+  //         is often trivial to compute while computing gradient
+  // \retval g the gradient vector
+  T gradient_density(const F& pt, vector& g) const 
   {
+    const unsigned int d = this->dimension();
+    vpdt_set_size(g,d);
+    vpdt_fill(g,T(0));
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
-    T prob = 0;
-    T sum_w = 0;
+    T density = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i){
-      prob += (*i)->weight * (*i)->distribution.prob_density(pt);
-      sum_w += (*i)->weight;
+      vector g_i;
+      T w_i = (*i)->distribution.norm_const() * (*i)->weight;
+      density +=  w_i * (*i)->distribution.gradient_density(pt,g_i);
+      g_i *= w_i;
+      g += g_i;
     }
-    assert(sum_w > T(0));
-    return prob/sum_w;
-  }
-
-  //: The probability integrated over a box
-  T box_prob(const vector& min_pt, const vector& max_pt) const
-  {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
-    T prob = 0;
-    T sum_w = 0;
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
-      prob += (*i)->weight * (*i)->distribution.box_prob(min_pt,max_pt);
-      sum_w += (*i)->weight;
-    }
-    assert(sum_w > T(0));
-    return prob/sum_w;
+    return density;
   }
   
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
-  T cumulative_prob(const vector& pt) const
+  T cumulative_prob(const F& pt) const
   {
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     T prob = 0;
@@ -240,14 +248,14 @@ public:
   
   //: Compute the mean of the distribution.
   // weighted average of the component means
-  void compute_mean(vector& mean) const
+  void compute_mean(F& mean) const
   {
     const unsigned int d = this->dimension();
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
     
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
-    vector cmp_mean;
+    F cmp_mean;
     T sum_w = T(0);
     for (comp_itr i = components_.begin(); i != components_.end(); ++i){
       (*i)->distribution.compute_mean(cmp_mean);
@@ -263,14 +271,14 @@ public:
   void compute_covar(matrix& covar) const
   {
     const unsigned int d = this->dimension();
-    vector mean;
+    F mean;
     vpdt_set_size(covar,d);
     vpdt_fill(covar,T(0));
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
     
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
-    vector cmp_mean;
+    F cmp_mean;
     matrix cmp_covar;
     T sum_w = T(0);
     for (comp_itr i = components_.begin(); i != components_.end(); ++i){
@@ -329,8 +337,32 @@ public:
   template <class comp_type_>
   void sort(comp_type_ comp, unsigned int idx)
   { vcl_sort(components_.begin(), components_.begin()+idx+1, sort_adaptor<comp_type_>(comp)); }
+  
 
+  friend T vpdt_box_prob<>(const vpdt_mixture_of<dist_t>& d, const F& min_pt, const F& max_pt);
 };
+
+
+//: The probability of being in an axis-aligned box.
+// The box is defined by two points, the minimum and maximum.
+// Implemented in terms of \c vpdt_cumulative_prob() by default.
+template <class dist>
+typename vpdt_dist_traits<vpdt_mixture_of<dist> >::scalar_type 
+vpdt_box_prob(const vpdt_mixture_of<dist>& d, 
+              const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& min_pt,
+              const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& max_pt)
+{
+  typedef typename vpdt_dist_traits<vpdt_mixture_of<dist> >::scalar_type T;
+  typedef typename vcl_vector<typename vpdt_mixture_of<dist>::component*>::const_iterator comp_itr;
+  T prob = 0;
+  T sum_w = 0;
+  for (comp_itr i = d.components_.begin(); i != d.components_.end(); ++i){
+    prob += (*i)->weight * (*i)->distribution.box_prob(min_pt,max_pt);
+    sum_w += (*i)->weight;
+  }
+  assert(sum_w > T(0));
+  return prob/sum_w;
+}
 
 
 #endif // vpdt_mixture_of_h_

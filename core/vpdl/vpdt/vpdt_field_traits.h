@@ -9,7 +9,7 @@
 //
 // Each type of object upon which you define a field for a probability 
 // distribution requires a field traits class.  The field traits determine
-// the dimension, scalar type, vector type, matrix type, etc to be used.
+// the dimension, scalar type, field type, vector type, matrix type, etc to be used.
 //
 // \verbatim
 //  Modifications
@@ -32,9 +32,11 @@ struct vpdt_field_traits
   static const unsigned int dimension = 1;
   //: The type used for scalar operations 
   typedef T scalar_type;
-  //: the data type used for vectors (e.g. the mean)
+  //: the data type to represent a point in the field
+  typedef T field_type;
+  //: the data type used for vectors (difference between points)
   typedef T vector_type;
-  //: the data type used for matrices (e.g. covariance)
+  //: the data type used for square matrices
   typedef T matrix_type;
   
   //: use this to disambiguate templates
@@ -50,10 +52,12 @@ struct vpdt_field_traits<vnl_vector_fixed<T,n> >
   //: The compile time dimension of the field
   static const unsigned int dimension = n;
   //: The type used for scalar operations 
-  typedef T scalar_type;
-  //: the data type used for vectors (e.g. the mean)
+  typedef T scalar_type;  
+  //: the data type to represent a point in the field
+  typedef vnl_vector_fixed<T,n> field_type;
+  //: the data type used for vectors (difference between points)
   typedef vnl_vector_fixed<T,n> vector_type;
-  //: the data type used for matrices (e.g. covariance)
+  //: the data type used for square matrices
   typedef vnl_matrix_fixed<T,n,n> matrix_type;
   
   //: use this to disambiguate templates
@@ -71,9 +75,11 @@ struct vpdt_field_traits<vnl_vector<T> >
   static const unsigned int dimension = 0;
   //: The type used for scalar operations 
   typedef T scalar_type;
-  //: the data type used for vectors (e.g. the mean)
+  //: the data type to represent a point in the field
+  typedef vnl_vector<T> field_type;
+  //: the data type used for vectors (difference between points)
   typedef vnl_vector<T> vector_type;
-  //: the data type used for matrices (e.g. covariance)
+  //: the data type used for square matrices
   typedef vnl_matrix<T> matrix_type;
   
   //: use this to disambiguate templates

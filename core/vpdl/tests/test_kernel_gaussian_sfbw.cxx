@@ -65,6 +65,21 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("box_prob <"+type_name+">").c_str(), 
               kernel_g3.box_prob(pt1,pt2), box_prob, epsilon);
     
+    // test gradient virtual functions against numerical difference
+    vnl_vector_fixed<T,3> g3;
+    T dp = vcl_sqrt(epsilon);
+    T den = kernel_g3.density(pt1);
+    T den_x = kernel_g3.density(pt1+vnl_vector_fixed<T,3>(dp,0,0));
+    T den_y = kernel_g3.density(pt1+vnl_vector_fixed<T,3>(0,dp,0));
+    T den_z = kernel_g3.density(pt1+vnl_vector_fixed<T,3>(0,0,dp));
+    vnl_vector_fixed<T,3> grad(den_x-den, den_y-den, den_z-den);
+    grad /= dp;
+    T density =  kernel_g3.gradient_density(pt1,g3);
+    TEST_NEAR(("gradient density <"+type_name+">").c_str(),
+              (g3-grad).inf_norm(), 0, dp);
+    TEST_NEAR(("density <"+type_name+">").c_str(),
+              density, den, epsilon);
+    
     // test mean and covariance computation
     vnl_vector_fixed<T,3> m;
     kernel_g3.compute_mean(m);
@@ -116,6 +131,21 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("box_prob <"+type_name+">").c_str(), 
               kernel_g.box_prob(pt1,pt2), box_prob, epsilon);
     
+    // test gradient virtual functions against numerical difference
+    vnl_vector<T> g;
+    T dp = vcl_sqrt(epsilon);
+    T den = kernel_g.density(pt1);
+    T den_x = kernel_g.density(pt1+vnl_vector_fixed<T,3>(dp,0,0));
+    T den_y = kernel_g.density(pt1+vnl_vector_fixed<T,3>(0,dp,0));
+    T den_z = kernel_g.density(pt1+vnl_vector_fixed<T,3>(0,0,dp));
+    vnl_vector_fixed<T,3> grad(den_x-den, den_y-den, den_z-den);
+    grad /= dp;
+    T density =  kernel_g.gradient_density(pt1,g);
+    TEST_NEAR(("gradient density <"+type_name+">").c_str(),
+              (g-grad).inf_norm(), 0, dp);
+    TEST_NEAR(("density <"+type_name+">").c_str(),
+              density, den, epsilon);
+    
     // test mean and covariance computation
     vnl_vector<T> m;
     kernel_g.compute_mean(m);
@@ -163,6 +193,18 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
               kernel_g1.cumulative_prob(pt1), cum_prob, epsilon);
     TEST_NEAR(("box_prob <"+type_name+">").c_str(), 
               kernel_g1.box_prob(pt1,pt2), box_prob, epsilon);
+    
+    // test gradient virtual functions against numerical difference
+    T g;
+    T dp = vcl_sqrt(epsilon);
+    T den = kernel_g1.density(pt1);
+    T den_x = kernel_g1.density(pt1+dp);
+    T grad = (den_x-den)/dp;
+    T density =  kernel_g1.gradient_density(pt1,g);
+    TEST_NEAR(("gradient density <"+type_name+">").c_str(),
+              g, grad, dp);
+    TEST_NEAR(("density <"+type_name+">").c_str(),
+              density, den, epsilon);
     
     // test mean and covariance computation
     T m;

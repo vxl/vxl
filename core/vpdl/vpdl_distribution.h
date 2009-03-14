@@ -31,9 +31,12 @@ class vpdl_distribution
 {
  public:
   //: the data type used for vectors
+  typedef typename vpdt_field_default<T,n>::type field_type;
+
+  //: the data type used for vectors
   typedef typename vpdt_field_default<T,n>::type vector;
   //: the data type used for matrices
-  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
+  typedef typename vpdt_field_traits<field_type>::matrix_type matrix;
  
   //: Return the run time dimension, which does not equal \c n when \c n==0
   virtual unsigned int dimension() const = 0;
@@ -55,6 +58,12 @@ class vpdl_distribution
   {
     return vcl_log(prob_density(pt));
   };
+
+  //: Compute the gradient of the unnormalized density at a point
+  // \return the density at \a pt since it is usually needed as well, and
+  //         is often trivial to compute while computing gradient
+  // \retval g the gradient vector
+  virtual T gradient_density(const vector& pt, vector& g) const = 0;
 
   //: The normalization constant for the density
   // When density() is multiplied by this value it becomes prob_density
@@ -97,6 +106,46 @@ class vpdl_distribution
 // in the univariate case.
 template <class T>
 T vpdl_compute_inverse_cdf(const vpdl_distribution<T,1>& dist, double p);
+
+
+//=============================================================================
+// These global functions allow vpdl_distributions be used efficiently as
+// components in vpdt distributions like vpdt_mixture_of
+
+//: probability density wrapper for vpdt
+template<class T, unsigned int n>
+inline T vpdt_prob_density(const vpdl_distribution<T,n>& d, 
+                           const typename vpdt_field_default<T,n>::type& pt)
+{
+  return d.prob_density(pt);
+}
+
+//: The box probability wrapper for vpdt
+template<class T, unsigned int n>
+inline T vpdt_box_prob(const vpdl_distribution<T,n>& d,
+                       const typename vpdt_field_default<T,n>::type& min_pt,
+                       const typename vpdt_field_default<T,n>::type& max_pt)
+{
+  return d.box_prob(min_pt,max_pt);
+}
+
+//: The log density wrapper for vpdt
+template<class T, unsigned int n>
+inline T vpdt_log_density(const vpdl_distribution<T,n>& d, 
+                          const typename vpdt_field_default<T,n>::type& pt)
+{
+  return d.log_density(pt);
+}
+
+//: The log probability density wrapper for vpdt
+template<class T, unsigned int n>
+inline T vpdt_log_prob_density(const vpdl_distribution<T,n>& d, 
+                               const typename vpdt_field_default<T,n>::type& pt)
+{
+  return d.log_prob_density(pt);
+}
+
+
 
 
 #endif // vpdl_distribution_h_

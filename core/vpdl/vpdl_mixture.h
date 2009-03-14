@@ -212,6 +212,27 @@ public:
     return prob/sum_w;
   }
 
+  //: Compute the gradient of the unnormalized density at a point
+  // \return the density at \a pt since it is usually needed as well, and
+  //         is often trivial to compute while computing gradient
+  // \retval g the gradient vector
+  virtual T gradient_density(const vector& pt, vector& g) const 
+  {
+    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    const unsigned int d = this->dimension();
+    vpdt_set_size(g,d);
+    vpdt_fill(g,T(0));
+    T density = 0;
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+      vector g_i;
+      T w_i = (*i)->distribution->norm_const() * (*i)->weight;
+      density +=  w_i * (*i)->distribution->gradient_density(pt,g_i);
+      g_i *= w_i;
+      g += g_i;
+    }
+    return density;
+  }
+
   //: The probability integrated over a box
   T box_prob(const vector& min_pt, const vector& max_pt) const
   {

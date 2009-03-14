@@ -15,6 +15,7 @@
 
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
+#include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #include <vpdl/vpdt/vpdt_norm_metric.h>
@@ -72,32 +73,16 @@ public:
   {    
     return static_cast<T>(vcl_exp(-sqr_mahal_dist(pt)/2));
   }
-  
-  //: Evaluate the probability density at a point
-  T prob_density(const F& pt) const
-  {
-    T norm = norm_const();
-    if(vnl_math_isinf(norm))
-      return T(0);
-  
-    return static_cast<T>(norm * density(pt));
-  }
 
-  //: Evaluate the log unnormalized density at a point
-  T log_density(const F& pt) const
+  //: Compute the gradient of the density function, returned in \a g
+  // the return value of the function is the density itself
+  T gradient_density(const F& pt, vector& g) const
   {    
-    return static_cast<T>(-sqr_mahal_dist(pt)/2);
-  };
-  
-  //: Evaluate the log probability density at a point
-  T log_prob_density(const F& pt) const
-  {
-    T norm = norm_const();
-    if(vnl_math_isinf(norm))
-      return -vcl_numeric_limits<T>::infinity();
-    
-    return static_cast<T>(vcl_log(norm) - sqr_mahal_dist(pt)/2);
-  };
+    T d = Metric::sqr_distance_deriv(pt,mean,covar,g);
+    d = vcl_exp(-d/2);
+    g *= -d/2;
+    return d;
+  }
   
   //: compute the normalization constant (independent of sample point).
   // Can be precomputed when evaluating at multiple points
@@ -142,6 +127,29 @@ public:
   covar_type covar;
 }; 
 
+
+//: Compute the log of the unnormalized density
+template<class F, class C, class M >
+inline typename vpdt_dist_traits<vpdt_gaussian<F,C,M> >::scalar_type 
+vpdt_log_density(const vpdt_gaussian<F,C,M>& d, 
+                 const typename vpdt_dist_traits<vpdt_gaussian<F,C,M> >::field_type& pt)
+{
+  typedef typename vpdt_dist_traits<vpdt_gaussian<F,C,M> >::scalar_type T;
+  return static_cast<T>(-d.sqr_mahal_dist(pt)/2);
+}
+
+//: Compute the gradient of the log of the unnormalized density
+template<class F, class C, class M >
+inline typename vpdt_dist_traits<vpdt_gaussian<F,C,M> >::scalar_type 
+vpdt_gradient_log_density(const vpdt_gaussian<F,C,M>& d, 
+                          const typename vpdt_dist_traits<vpdt_gaussian<F,C,M> >::field_type& pt,
+                          typename vpdt_dist_traits<vpdt_gaussian<F,C,M> >::field_type& g)
+{
+  typedef typename vpdt_dist_traits<vpdt_gaussian<F,C,M> >::scalar_type T;
+  T logd = M::sqr_distance_deriv(pt,d.mean,d.covar,g);
+  g /= -2;
+  return static_cast<T>(-logd/2);
+}
 
 
 //=============================================================================

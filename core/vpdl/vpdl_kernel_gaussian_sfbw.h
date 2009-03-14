@@ -75,6 +75,38 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     return density(pt)*this->norm_const();
   }
 
+  //: Compute the gradient of the unnormalized density at a point
+  // \return the density at \a pt since it is usually needed as well, and
+  //         is often trivial to compute while computing gradient
+  // \retval g the gradient vector
+  virtual T gradient_density(const vector& pt, vector& g) const 
+  {
+    const unsigned int d = this->dimension();
+    vpdt_set_size(g,d);
+    vpdt_fill(g,T(0));
+    const unsigned int nc = this->num_components();
+    if (nc <= 0)
+      return 0.0;
+    
+    T sum = T(0);
+    vector g_s;
+    vpdt_set_size(g_s,d);
+    typedef typename vcl_vector<vector>::const_iterator vitr;
+    for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
+      T ssd = T(0);
+      for (unsigned int i=0; i<d; ++i) {
+        T tmp = (vpdt_index(pt,i)-vpdt_index(*s,i))/this->bandwidth();
+        vpdt_index(g_s,i) = tmp/this->bandwidth();
+        ssd += tmp*tmp;
+      }
+      T density = vcl_exp(-0.5*ssd);
+      g_s *= -density;
+      sum += density;
+      g += g_s;
+    }
+    
+    return sum;
+  }
 
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity

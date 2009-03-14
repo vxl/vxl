@@ -15,6 +15,7 @@
 #include <vpdl/vpdl_multi_cmp_dist.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_mixture_of.h>
+#include <vpdl/vpdt/vpdt_probability.h>
 
 //: A mixture of a fixed type of distributions
 // A mixture is a weighted linear combination of other mixtures.
@@ -31,16 +32,21 @@ class vpdl_mixture_of
   vpdt_mixture_of<dist_t> impl_;
   
 public:
-  //: the data type used for vectors
-  typedef typename dist_t::vector vector;
-  //: define the fixed dimension (normally specified by template parameter n)
-  static const unsigned int n = vpdt_field_traits<vector>::dimension;
-  //: define the scalar type (normally specified by template parameter T)
-  typedef typename vpdt_field_traits<vector>::scalar_type T;
-  //: the data type used for matrices
-  typedef typename vpdt_field_traits<vector>::matrix_type matrix;
+  //: the data type to represent a point in the field
+  typedef typename dist_t::field_type field_type;
   //: define the component type
   typedef dist_t component_type;
+  
+  //: define the fixed dimension (normally specified by template parameter n)
+  static const unsigned int n = vpdt_field_traits<field_type>::dimension;
+  //: the data type to represent a point in the field
+  typedef typename dist_t::field_type F;
+  //: define the scalar type (normally specified by template parameter T)
+  typedef typename vpdt_field_traits<field_type>::scalar_type T;
+  //: define the vector type
+  typedef typename vpdt_field_traits<field_type>::vector_type vector;
+  //: the data type used for matrices
+  typedef typename vpdt_field_traits<field_type>::matrix_type matrix;
 
   
   // Default Constructor
@@ -85,11 +91,20 @@ public:
   T density(const vector& pt) const { return impl_.density(pt); }
 
   //: Compute the probability density at this point
-  T prob_density(const vector& pt) const { return impl_.prob_density(pt); }
+  T prob_density(const vector& pt) const { return vpdt_prob_density(impl_,pt); }
+  
+  //: Compute the gradient of the unnormalized density at a point
+  // \return the density at \a pt since it is usually needed as well, and
+  //         is often trivial to compute while computing gradient
+  // \retval g the gradient vector
+  virtual T gradient_density(const vector& pt, vector& g) const 
+  {
+    return impl_.gradient_density(pt,g);
+  }
 
   //: The probability integrated over a box
   T box_prob(const vector& min_pt, const vector& max_pt) const
-  { return impl_.box_prob(min_pt,max_pt); }
+  { return vpdt_box_prob(impl_,min_pt,max_pt); }
   
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity

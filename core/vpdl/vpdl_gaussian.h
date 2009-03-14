@@ -17,6 +17,8 @@
 #include <vnl/vnl_erf.h>
 
 #include <vpdl/vpdt/vpdt_gaussian.h>
+#include <vpdl/vpdt/vpdt_probability.h>
+#include <vpdl/vpdt/vpdt_log_probability.h>
 
 //: A Gaussian with variance independent in each dimension 
 template<class T, unsigned int n=0>
@@ -61,15 +63,24 @@ public:
   //: Evaluate the probability density at a point
   virtual T prob_density(const vector& pt) const
   {
-    return impl_.prob_density(pt);
+    return vpdt_prob_density(impl_,pt);
   }
   
   //: Evaluate the log probability density at a point
   virtual T log_prob_density(const vector& pt) const
   {
-    return impl_.log_prob_density(pt);
+    return vpdt_log_prob_density(impl_,pt);
   };
-  
+
+  //: Compute the gradient of the unnormalized density at a point
+  // \return the density at \a pt since it is usually needed as well, and
+  //         is often trivial to compute while computing gradient
+  // \retval g the gradient vector
+  virtual T gradient_density(const vector& pt, vector& g) const 
+  {
+    return impl_.gradient_density(pt,g);
+  }
+    
   //: The normalization constant for the density
   // When density() is multiplied by this value it becomes prob_density
   // norm_const() is reciprocal of the integral of density over the entire field

@@ -22,14 +22,16 @@
 template <class dist>
 struct vpdt_dist_traits 
 {
+  //: the data type to represent a point in the field
+  typedef typename vpdt_field_traits<typename dist::field_type>::field_type field_type;
   //: The compile time dimension of the distribution
-  static const unsigned int dimension = vpdt_field_traits<typename dist::vector>::dimension;
+  static const unsigned int dimension = vpdt_field_traits<field_type>::dimension;
   //: The type used for scalar operations 
-  typedef typename vpdt_field_traits<typename dist::vector>::scalar_type scalar_type;
-  //: the data type used for vectors (e.g. the mean)
-  typedef typename vpdt_field_traits<typename dist::vector>::vector_type vector_type;
-  //: the data type used for matrices (e.g. covariance)
-  typedef typename vpdt_field_traits<typename dist::vector>::matrix_type matrix_type;
+  typedef typename vpdt_field_traits<field_type>::scalar_type scalar_type;
+  //: the data type used for vectors (difference between points)
+  typedef typename vpdt_field_traits<field_type>::vector_type vector_type;
+  //: the data type used for square matrices
+  typedef typename vpdt_field_traits<field_type>::matrix_type matrix_type;
   
 };
 

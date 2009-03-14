@@ -20,11 +20,16 @@ SET( vpdl_sources
   vpdt/vpdt_field_traits.h
   vpdt/vpdt_field_default.h
   vpdt/vpdt_dist_traits.h
+  vpdt/vpdt_probability.h
+  vpdt/vpdt_log_probability.h
   
   vpdt/vpdt_norm_metric.h
   vpdt/vpdt_eigen_sym_matrix.h
   vpdt/vpdt_gaussian.h
+  vpdt/vpdt_mixture_of.h
   vpdt/vpdt_update_gaussian.h
+  vpdt/vpdt_update_mog.h
+  vpdt/vpdt_mog_fitness.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)

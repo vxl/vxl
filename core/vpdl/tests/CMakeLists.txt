@@ -10,6 +10,7 @@ ADD_EXECUTABLE( vpdl_test_all
   test_update_gaussian.cxx
   test_mixture.cxx
   test_mixture_of.cxx
+  test_update_mog.cxx
   test_kernel_gaussian_sfbw.cxx
 )
 
@@ -22,6 +23,7 @@ ADD_TEST( vpdl_test_gaussian              vpdl_test_all test_gaussian )
 ADD_TEST( vpdl_test_update_gaussian       vpdl_test_all test_update_gaussian )
 ADD_TEST( vpdl_test_mixture               vpdl_test_all test_mixture )
 ADD_TEST( vpdl_test_mixture_of            vpdl_test_all test_mixture_of )
+ADD_TEST( vpdl_test_update_mog            vpdl_test_all test_update_mog )
 ADD_TEST( vpdl_test_kernel_gaussian_sfbw  vpdl_test_all test_kernel_gaussian_sfbw )
 
 ADD_EXECUTABLE( vpdl_test_include test_include.cxx )

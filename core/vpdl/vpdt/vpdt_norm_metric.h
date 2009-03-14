@@ -56,6 +56,18 @@ struct vpdt_norm_metric<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
     return c.inverse_quad_form(d);
   }
   
+  //: Compute the square Mahalanobis distance and also the derivative \a g wrt \a pt1
+  static inline T sqr_distance_deriv(const F& pt1, const F& pt2, 
+                                     const covar_type& c, vector& g)
+  {
+    // F must provide operator-(F,F) that returns (or can cast to) the vector type
+    vector d(pt1-pt2);
+    c.inverse_product(d,g);
+    T sqr_dist = dot_product(d,g);
+    g *= 2;
+    return sqr_dist;
+  }
+  
   //: Compute the covariance matrix (metric tensor) at a point 
   // \note this metric is independent of the point
   static inline void compute_covar(matrix& covar, const F& pt, const covar_type& c)
@@ -97,7 +109,6 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::vector_type,
   //: Compute the square Mahalanobis distance between two points
   static inline T sqr_distance(const F& pt1, const F& pt2, const covar_type& c)
   {
-    // F must provide element access to each of the dimensions
     const unsigned int d = vpdt_size(c);
     assert(vpdt_size(pt1) == d);
     assert(vpdt_size(pt2) == d);
@@ -106,6 +117,25 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::vector_type,
     {
       T tmp = (vpdt_index(pt1,i)-vpdt_index(pt2,i));
       val += tmp*tmp/vpdt_index(c,i);
+    }
+    return val;
+  }
+  
+  //: Compute the square Mahalanobis distance and also the derivative \a g wrt \a pt1
+  static inline T sqr_distance_deriv(const F& pt1, const F& pt2, 
+                                     const covar_type& c, vector& g)
+  {
+    const unsigned int d = vpdt_size(c);
+    vpdt_set_size(g,d);
+    assert(vpdt_size(pt1) == d);
+    assert(vpdt_size(pt2) == d);
+    T val = T(0);
+    for (unsigned int i=0; i<d; ++i)
+    {
+      T tmp = (vpdt_index(pt1,i)-vpdt_index(pt2,i));
+      T& g_i = vpdt_index(g,i) = tmp/vpdt_index(c,i);
+      val += tmp*g_i;
+      g_i *= 2;
     }
     return val;
   }
@@ -163,7 +193,6 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::scalar_type,
   //: Compute the square Mahalanobis distance between two points
   static inline T sqr_distance(const F& pt1, const F& pt2, const covar_type& c)
   {
-    // F must provide element access to each of the dimensions
     const unsigned int d = vpdt_size(pt1);
     assert(vpdt_size(pt2) == d);
     T val = T(0);
@@ -171,6 +200,24 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::scalar_type,
     {
       T tmp = (vpdt_index(pt1,i)-vpdt_index(pt2,i));
       val += tmp*tmp/c;
+    }
+    return val;
+  }
+  
+  //: Compute the square Mahalanobis distance and also the derivative \a g wrt \a pt1
+  static inline T sqr_distance_deriv(const F& pt1, const F& pt2,
+                                     const covar_type& c, vector& g)
+  {
+    const unsigned int d = vpdt_size(pt1);
+    vpdt_set_size(g,d);
+    assert(vpdt_size(pt2) == d);
+    T val = T(0);
+    for (unsigned int i=0; i<d; ++i)
+    {
+      T tmp = (vpdt_index(pt1,i)-vpdt_index(pt2,i));
+      T& g_i = vpdt_index(g,i) = tmp/c;
+      val += tmp*g_i;
+      g_i *= 2;
     }
     return val;
   }
@@ -229,6 +276,15 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::scalar_type,
   static inline T sqr_distance(const F& pt1, const F& pt2, const covar_type& c)
   {
     T tmp = pt1-pt2;
+    return tmp*tmp/c;
+  }
+  
+  //: Compute the square Mahalanobis distance and also the derivative \a g wrt \a pt1
+  static inline T sqr_distance_deriv(const F& pt1, const F& pt2, 
+                                     const covar_type& c, vector& g)
+  {
+    T tmp = pt1-pt2;
+    g = 2*tmp/c;
     return tmp*tmp/c;
   }
   
