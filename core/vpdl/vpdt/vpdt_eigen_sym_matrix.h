@@ -159,7 +159,43 @@ public:
       for (unsigned int j = i+1; j < dim; ++j)
         m[j][i] = m[i][j];
   }
-  
+
+  //: evaluate y = M * x 
+  void product(const vector& x, vector& y) const
+  {
+    const unsigned int dim = eigen_val_.size();
+    vpdt_set_size(y,dim);
+    vpdt_fill(y,T(0));
+    for(unsigned int i = 0; i < dim; ++i){
+      T t_i = T(0);
+      for(unsigned int j = 0; j < dim; ++j){
+        t_i += eigen_vec_[j][i] * x[j];
+      }
+      t_i *= eigen_val_[i];
+      for(unsigned int j = 0; j < dim; ++j){
+        y[j] += eigen_vec_[j][i] * t_i;
+      }
+    }
+  }
+
+  //: evaluate y = M^-1 * x 
+  void inverse_product(const vector& x, vector& y) const
+  {
+    const unsigned int dim = eigen_val_.size();
+    vpdt_set_size(y,dim);
+    vpdt_fill(y,T(0));
+    for(unsigned int i = 0; i < dim; ++i){
+      T t_i = T(0);
+      for(unsigned int j = 0; j < dim; ++j){
+        t_i += eigen_vec_[j][i] * x[j];
+      }
+      t_i /= eigen_val_[i];
+      for(unsigned int j = 0; j < dim; ++j){
+        y[j] += eigen_vec_[j][i] * t_i;
+      }
+    }
+  }
+    
   //: evaluate the Quadratic form x^t * M * x 
   T quad_form(const vector& x) const
   {
