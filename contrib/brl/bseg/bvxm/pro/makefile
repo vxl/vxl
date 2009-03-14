@@ -40,6 +40,7 @@ SOURCES += processes/bvxm_detect_edges_process.cxx
 
 SOURCES += processes/bvxm_compare_3d_voxels_process.cxx # multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 SOURCES += processes/bvxm_detect_scale_process.cxx      # multiscale_pro/bvxm_detect_scale_process.cxx
+SOURCES += processes/bvxm_synth_world_generator.cxx
 
 MANPAGE_SOURCES += bvxm_processes.h
 

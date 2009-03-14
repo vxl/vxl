@@ -46,6 +46,8 @@ SOURCES += mfpf_region_about_lineseg.cxx
 SOURCES += mfpf_region_definer.cxx
 SOURCES += mfpf_patch_data.cxx
 SOURCES += mfpf_region_about_pt.cxx
+SOURCES += mfpf_grad_corr2d_builder.cxx
+SOURCES += mfpf_grad_corr2d.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

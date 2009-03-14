@@ -22,6 +22,7 @@ MANPAGE_SOURCES += bvxm_voxel_storage_disk.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_disk_cached.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_mem.txx
 MANPAGE_SOURCES += bvxm_mog_mc_processor.txx
+MANPAGE_SOURCES += bvxm_float_processor.h
 
 SUBDIRS += io pro
 
