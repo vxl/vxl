@@ -84,7 +84,7 @@ static void test_fit_plane_random()
     vgl_homg_point_3d<double> p(r1, r2, r3);
     fit_plane.add_point(p);
   }
- double tol = 1e-3;
+  double tol = 1e-3;
   bool success = fit_plane.fit(tol);
   TEST("random fit", success, false);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
