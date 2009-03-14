@@ -55,6 +55,7 @@ foreach my $dir (@DIRS)
   if    ($dir =~ m/\bvcl$/)   { @sd = qw(vcl_sys iso generic gcc egcs gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 emulation borland55 borland56 mwerks stlport internal); }
   elsif ($dir =~ m/\bvil1?$/) { @sd = qw(file_formats); }
   elsif ($dir =~ m/\bvgl$/)   { @sd = qw(internals); }
+  elsif ($dir =~ m/\bvpdl$/)  { @sd = qw(vpdt); }
   elsif ($dir =~ m/\bvipl$/)  { @sd = qw(filter section accessors vipl_with_section vipl_with_vbl_array_2d vipl_with_vnl_matrix vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors); }
   elsif ($dir =~ m/\bvepl2$/) { @sd = qw(accessors section); }
   elsif ($dir =~ m/\bvgui$/)  { @sd = qw(internals vrml impl/qt impl/qt4 impl/wx impl/gtk impl/gtk2 impl/mfc impl/glut); }
@@ -78,7 +79,7 @@ foreach my $dir (@DIRS)
       foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{$prefix.$_} unless (m/\bdll\.h$/); } # || m/vidl_(win|avifile)_avicodec/
       closedir(UPDIR);
     }
-    foreach my $subdir (qw(algo io file_formats gui pro xio))
+    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt))
     {
       if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
         foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{"$prefix$subdir/$_"}; }
