@@ -10,6 +10,7 @@ TESTS += test_mixture_of.cxx
 TESTS += test_update_gaussian.cxx
 TESTS += test_kernel_gaussian_sfbw.cxx
 TESTS += test_mixture.cxx
+TESTS += test_update_mog.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
