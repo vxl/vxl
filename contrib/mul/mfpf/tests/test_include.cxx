@@ -6,6 +6,8 @@
 #include <mfpf/mfpf_edge_finder.h>
 #include <mfpf/mfpf_edge_finder_builder.h>
 #include <mfpf/mfpf_feature_vec.h>
+#include <mfpf/mfpf_grad_corr2d_builder.h>
+#include <mfpf/mfpf_grad_corr2d.h>
 #include <mfpf/mfpf_hog_box_finder.h>
 #include <mfpf/mfpf_hog_box_finder_builder.h>
 #include <mfpf/mfpf_max_finder.h>
