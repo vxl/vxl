@@ -112,6 +112,45 @@ A collection of more basic concepts will form the building blocks of the probabi
 @item Matrix
 @end itemize
 
+@code{vnl} data structures satisfiy these concepts and are used in practice.
+However, other representations could be used 
+if the appropriate functions are provided.
+These concepts are all interrelated by various function requirements.
+The type that meets the Field concept is considered the primary type.
+For each Field type there should be a unique associated 
+Scalar, Vector, and Matrix type 
+The @code{vpdt_field_traits<F>} struct defines these types for each @code{F}.
+@code{vpdt_field_traits<F>} needs to be specialized for each Field type. 
+This traits struct defines the following typedefs:
+@table @code
+@item vpdt_field_traits<F>::dimension
+This is actually a @code{static const unsigned int} and indicates the
+fixed dimension of the Field type
+
+@item vpdt_field_traits<F>::scalar_type
+The Scalar type associated with the Field type
+
+@item vpdt_field_traits<F>::field_type
+The Field type itself (@code{F==field_type}).  
+Redundant, but provided for consistency.
+
+@item vpdt_field_traits<F>::vector_type
+The Vector type associated with the Field type
+
+@item vpdt_field_traits<F>::matrix_type
+The Matrix type associated with the Field type
+@end table
+
+In the special case of univariate distributions,
+all four of these type become equal, and @code{dimension==1}.
+There is also a special typedef @code{vpdt_field_traits<F>::type_is_scalar}
+defined to @code{void} that only exists if @code{F} is scalar.
+Similarly, @code{vpdt_field_traits<F>::type_is_vector} is defined to
+@code{void} only if @code{F} is non-scalar.
+The existence of these special types is used to disambiguate some
+template specializations, and to provide faster implementations 
+for the scalar case.
+
 @subheading Scalar
 
 A probability distribution is defined over some scalar field. 
@@ -193,6 +232,13 @@ plus several other arithmetic operations:
 @item @code{vector *= scalar}
 @end itemize
 
+Vectors should also defined these global functions
+@itemize @bullet
+@item @code{scalar dot_product(const vector&, const vector&)}
+@item @code{vector element_product(const vector&, const vector&)}
+@item @code{matrix outer_product(const vector&, const vector&)}
+@end itemize
+
 @subheading Matrix
 
 The Matrix concept actually refers to a square matrix. 
@@ -217,3 +263,65 @@ A few arithmetic operations are also needed:
 
 
 @subsection Distribution Concept
+
+The Distribution concept is the central concept in @code{vpdt}.
+The Distribution is a probability distribution class that is analogous
+to @code{vpdt_distribution<T,n>}.
+In fact, @code{vpdt_distribution<T,n>} and all its subclasses satisfy
+the Distribution concept.
+The Distribution requires a subset of the functions that are
+declared virtual on the @code{vpdt_distribution<T,n>}.
+The following example lays out the required API that 
+a Distribution is required to have.
+In this example, it is assumed that a consistent set of basic types
+have been defined such that @code{T} satisfies Scalar,
+ @code{F} satisfies Field, @code{V} satisfies Vector, 
+and @code{M} satisfies Matrix.
+
+@example
+class vpdt_distribution 
+@{
+public:
+  //: The field type
+  typedef F field_type;
+
+
+  //: Return the variable (run time) dimension
+  unsigned int dimension() const;
+
+  //: Evaluate the unnormalized density at a point
+  // this must be multiplied by norm_const() to integrate to 1
+  T density(const F& pt) const;
+  
+  //: Compute the gradient of the density function, returned in \a g
+  // the return value of the function is the density itself
+  T gradient_density(const F& pt, V& g) const;
+  
+  //: Compute the normalization constant (independent of sample point).
+  T norm_const() const;
+    
+  //: Evaluate the cumulative distribution function at a point
+  // This is the integral of the density function from negative infinity
+  // (in all dimensions) to the point in question
+  T cumulative_prob(const F& pt) const;
+
+  //: Compute the mean of the distribution.
+  void compute_mean(F& m) const;
+    
+  //: Compute the covariance matrix of the distribution.
+  void compute_covar(M& c) const;
+@}; 
+@end example
+
+The other member functions that are defined in @code{vpdt_distribution<T,n>}
+are not needed for a @code{vpdt} Distribution because they can be 
+implemented in terms of the required functions.
+These extra functions are provided as global functions instead.
+For example, @code{T vpdt_prob_density(const dist& d, const F& pt)} is a function
+that returns @code{d.density(pt) * d.norm_const()}.
+These functions can be overloaded when a more efficient implementation
+exists for a particular distribution class.
+For example, the default @code{vpdt_log_density} function applied to a 
+Gaussian distribution would compute the log of an exponential.
+An overload of @code{vpdt_log_density} for Gaussians can eliminate this
+extra unnecessary step.
