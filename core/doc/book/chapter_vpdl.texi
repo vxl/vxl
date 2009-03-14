@@ -2,105 +2,105 @@
 @code{vpdl} is a library of probability distributions.
 
 This library contains data structures to represent univariate and
-multivariate probability distributions and provides algorithms to operate on them. 
-This includes estimating a distribution from data points and 
-sampling from a distribution. 
+multivariate probability distributions and provides algorithms to operate on them.
+This includes estimating a distribution from data points and
+sampling from a distribution.
 @code{vpdl} is built on top of @code{vnl} and @code{vnl_algo}.
 @endchapsummary
 
-@code{vpdl} is comprised of two programming paradigms: 
-generic programming and polymorphic inheritance. 
-The generic programming part is its own sub-library called @code{vpdt}. 
-@code{vpdt} is a template library (like STL). 
-There is no compiled library for @code{vpdt}, 
-only a collection of header files in subdirectory @code{vpdl/vpdt}. 
-@code{vpdt} works with @code{vnl} types, 
-but in many cases can generalize to other types. 
+@code{vpdl} is comprised of two programming paradigms:
+generic programming and polymorphic inheritance.
+The generic programming part is in its own sub-library called @code{vpdt}.
+@code{vpdt} is a template library (like STL).
+There is no compiled library for @code{vpdt},
+only a collection of header files in subdirectory @code{vpdl/vpdt}.
+@code{vpdt} works with @code{vnl} types,
+but in many cases can generalize to other types.
 The goal of @code{vpdt} is to provide generic implementations that are both time and
 memory efficient when types are known at compile time.
 
 The rest of @code{vpdl} uses a polymorphic design and provides greater run time
 flexibility and easy of use. It is limited to distributions over scalar,
-@code{vnl_vector}, and @code{vnl_vector_fixed types}.
+@code{vnl_vector}, and @code{vnl_vector_fixed} types.
 
 
 @section History
 
-@code{vpdl} is the combination of two different design patterns 
-for probability distributions. 
-It was formed from the merger of three contrib libraries: 
+@code{vpdl} is the combination of two different design patterns
+for probability distributions.
+It was formed from the merger of three contrib libraries:
 @code{mul/vpdfl}, @code{mul/pdf1d}, and @code{brl/bbas/bsta}.
 
-Created by Manchester, @code{vpdfl} provided a polymorphic hierarchy 
-(using virtual functions) for multivariate distributions based on 
-@code{vnl_vector} and @code{vnl_matrix types}. 
-For univariate distributions, @code{pdf1d} mirrored the design of @code{vpdfl}, 
-but used scalar types (i.e. @code{double}). 
-These libraries were very flexible at run time. 
-Both distribution type and, in the case of @code{vpdfl}, 
+Created by Manchester, @code{vpdfl} provided a polymorphic hierarchy
+(using virtual functions) for multivariate distributions based on
+@code{vnl_vector} and @code{vnl_matrix types}.
+For univariate distributions, @code{pdf1d} mirrored the design of @code{vpdfl},
+but used scalar types (i.e. @code{double}).
+These libraries were very flexible at run time.
+Both distribution type and, in the case of @code{vpdfl},
 dimension could be selected at run time.
 
-Created by Brown, @code{bsta} provided a generic programming hierarchy 
-(using templates) for both univariate and multivariate distributions. 
-Template parameters specified scalar type (@code{float} or @code{double}) 
-and dimension. 
-Templates allowed the same code base to used scalars in the univariate case and 
-@code{vnl_vector_fixed} and @code{vnl_matrix_fixed} in the multivariate case. 
-The goal of @code{bsta} was to be very efficient. 
-Many optimizations are possible by assuming types and 
+Created by Brown, @code{bsta} provided a generic programming hierarchy
+(using templates) for both univariate and multivariate distributions.
+Template parameters specified scalar type (@code{float} or @code{double})
+and dimension.
+Templates allowed the same code base to use scalars in the univariate case and
+@code{vnl_vector_fixed} and @code{vnl_matrix_fixed} in the multivariate case.
+The goal of @code{bsta} was to be very efficient.
+Many optimizations are possible by assuming types and
 dimension are known at compile time.
 
-@code{vpdl} was designed as a core library 
-to meet the needs of both original designs. 
-The main library generalizes Manchester's polymorphic design with 
-a templated distribution library. 
-This creates polymorphic inheritance hierarchy 
-for each choice to template parameters. 
-The templates allow heirarchies based on scalar, 
-@code{vnl_vector}, and @code{vnl_vector_fixed} types. 
+@code{vpdl} was designed as a core library
+to meet the needs of both original designs.
+The main library generalizes Manchester's polymorphic design with
+a templated distribution library.
+This creates polymorphic inheritance hierarchy
+for each choice to template parameters.
+The templates allow hierarchies based on scalar,
+@code{vnl_vector}, and @code{vnl_vector_fixed} types.
 When possible, the implementations of @code{vpdl} distributions are wrappers
-around corresponding @code{vpdt} distributions. 
+around corresponding @code{vpdt} distributions.
 The @code{vpdt} distributions provide even more generalized implementations but
 without virtual functions or inheritance.
 
 @section Polymorphic Distributions
 
-Each polymorphic distribution is derived (directly or indirectly) from 
-a common templated base class called @code{vpdl_distribution<T,n>}. 
-Template parameter @code{T} specifies the scalar numeric type 
-(@code{float} or @code{double}) and @code{n} specifies the dimension. 
+Each polymorphic distribution is derived (directly or indirectly) from
+a common templated base class called @code{vpdl_distribution<T,n>}.
+Template parameter @code{T} specifies the scalar numeric type
+(@code{float} or @code{double}) and @code{n} specifies the dimension.
 In particular:
 @itemize @bullet
-@item @code{n==0} uses @code{vnl_vector<T>} and @code{vnl_matrix<T>} 
+@item @code{n==0} uses @code{vnl_vector<T>} and @code{vnl_matrix<T>}
       (dimension specified at run time)
-@item @code{n==1} uses @code{T} and @code{T} (scalar computations)
-@item @code{n>1} uses @code{vnl_vector_fixed<T,n>} and 
+@item @code{n==1} uses @code{T} (scalar computations)
+@item @code{n>1} uses @code{vnl_vector_fixed<T,n>} and
       @code{vnl_matrix_fixed<T,n,n>} (fixed dimension of @code{n})
 @end itemize
 
 @section Generic Probability (@code{vpdt})
 
-The subdirectory @code{vpdl/vpdt} contains the 
-generic programming components of this library. 
-@code{vpdt} is a self-sufficient template library 
-that does not depended on the rest of @code{vpdl}. 
-However, there is nothing to stop @code{vpdl} distribution classes from being 
-used as @code{vpdt} distribution types as long as the meet the requirements.
+The subdirectory @code{vpdl/vpdt} contains the
+generic programming components of this library.
+@code{vpdt} is a self-sufficient template library
+that does not depended on the rest of @code{vpdl}.
+However, there is nothing to stop @code{vpdl} distribution classes from being
+used as @code{vpdt} distribution types as long as they meet the requirements.
 
-Generic programming uses @emph{concepts} 
-to implement compile time type polymorphism rather than inheritance 
-to implement run time object-oriented polymorphism. 
-Concepts are sets of requirements that a data type must meet. 
-To satisfy a concept a class must define the required typedefs, 
-static constants, member functions, or related global functions. 
+Generic programming uses @emph{concepts}
+to implement compile time type polymorphism rather than inheritance
+to implement run time object-oriented polymorphism.
+Concepts are sets of requirements that a data type must meet.
+To satisfy a concept a class must define the required typedefs,
+static constants, member functions, or related global functions.
 Classes that satisfy a concept need not be related by inheritance.
-The Standard Template Library (STL) is built upon the definition of concepts. 
-In STL, some concepts (like Iterators) are general enough 
-to include built-in types (like pointers). 
-In @code{vpdt}, there are also some basic concepts 
+The Standard Template Library (STL) is built upon the definition of concepts.
+In STL, some concepts (like Iterators) are general enough
+to include built-in types (like pointers).
+In @code{vpdt}, there are also some basic concepts
 which can be satisfied by built-in types.
-However, the most useful concepts (like Distributions) 
-are bit more specific and require a class implementation.
+However, the most useful concepts (like Distributions)
+are a bit more specific and require a class implementation.
 
 @subsection Basic Concepts
 
@@ -113,14 +113,14 @@ A collection of more basic concepts will form the building blocks of the probabi
 @end itemize
 
 @code{vnl} data structures satisfiy these concepts and are used in practice.
-However, other representations could be used 
+However, other representations could be used
 if the appropriate functions are provided.
 These concepts are all interrelated by various function requirements.
 The type that meets the Field concept is considered the primary type.
-For each Field type there should be a unique associated 
-Scalar, Vector, and Matrix type 
+For each Field type there should be a unique associated
+Scalar, Vector, and Matrix type
 The @code{vpdt_field_traits<F>} struct defines these types for each @code{F}.
-@code{vpdt_field_traits<F>} needs to be specialized for each Field type. 
+@code{vpdt_field_traits<F>} needs to be specialized for each Field type.
 This traits struct defines the following typedefs:
 @table @code
 @item vpdt_field_traits<F>::dimension
@@ -131,7 +131,7 @@ fixed dimension of the Field type
 The Scalar type associated with the Field type
 
 @item vpdt_field_traits<F>::field_type
-The Field type itself (@code{F==field_type}).  
+The Field type itself (@code{F==field_type}).
 Redundant, but provided for consistency.
 
 @item vpdt_field_traits<F>::vector_type
@@ -148,48 +148,48 @@ defined to @code{void} that only exists if @code{F} is scalar.
 Similarly, @code{vpdt_field_traits<F>::type_is_vector} is defined to
 @code{void} only if @code{F} is non-scalar.
 The existence of these special types is used to disambiguate some
-template specializations, and to provide faster implementations 
+template specializations, and to provide faster implementations
 for the scalar case.
 
 @subheading Scalar
 
-A probability distribution is defined over some scalar field. 
+A probability distribution is defined over some scalar field.
 The Scalar concept represents this value at each point in space.
-It is satisfied by floating point types. 
-For now this is likely to be limited to @code{double} or @code{float}. 
-Scalars must support all built in arithmetic operators (+, -, *, /, etc.) 
-as well as all standard cmath functions like 
-@code{sqrt}, @code{exp}, and @code{log}. 
-If the type does not support these functions directly, 
+It is satisfied by floating point types.
+For now this is likely to be limited to @code{double} or @code{float}.
+Scalars must support all built in arithmetic operators (+, -, *, /, etc.)
+as well as all standard cmath functions like
+@code{sqrt}, @code{exp}, and @code{log}.
+If the type does not support these functions directly,
 it must be able to implicitly cast itself to and from a type that does.
 
 @subheading Field
 
-Each point a probability space is represented by the Field concept. 
-When used in @code{vpdl} distributions the Field is sasified by either
-a scalar, a @code{vnl_vector}, or a @code{vnl_vector_fixed}. 
-The Field has an associated Scalar and dimension. 
-For dimension @code{n}, a Field contains @code{n} values of its Scalar type. 
-A Field actually has two measure of dimension: 
-a fixed (compile time) dimension and a variable (run time) dimension. 
-These dimensions may or may not be equal. 
-Field types with data allocated on the stack 
-will have size specified at compile time. 
-The fixed dimension and variable dimension will both equal this fixed size. 
-Field types with data allocated on the heap 
-will have a fixed dimension of zero and a variable dimension equal to 
+Each point in a probability space is represented by the Field concept.
+When used in @code{vpdl} distributions the Field is satisfied by either
+a scalar, a @code{vnl_vector}, or a @code{vnl_vector_fixed}.
+The Field has an associated Scalar and dimension.
+For dimension @code{n}, a Field contains @code{n} values of its Scalar type.
+A Field actually has two measure of dimension:
+a fixed (compile time) dimension and a variable (run time) dimension.
+These dimensions may or may not be equal.
+Field types with data allocated on the stack
+will have size specified at compile time.
+The fixed dimension and variable dimension will both equal this fixed size.
+Field types with data allocated on the heap
+will have a fixed dimension of zero and a variable dimension equal to
 the number of currently allocated Scalar objects.
 
-A Field type will be equal to its Scalar type 
-in the case of univariate distributions. 
-Since Scalar types are usually built-in C++ types, 
-they can not be required to implement any member functions. 
-Instead, they are required to implement a set of overloaded global functions 
-to perform the required set of actions. 
-For the standard types used in @code{vpdl}, 
-these functions are implemented in @code{vpdl/vpdt/vpdt_access.h}. 
-For some types that satisfy the concept these functions are trivial or even empty. 
-In the table below the Field type is denoted @code{field} and 
+A Field type will be equal to its Scalar type
+in the case of univariate distributions.
+Since Scalar types are usually built-in C++ types,
+they can not be required to implement any member functions.
+Instead, they are required to implement a set of overloaded global functions
+to perform the required set of actions.
+For the standard types used in @code{vpdl},
+these functions are implemented in @code{vpdl/vpdt/vpdt_access.h}.
+For some types that satisfy the concept these functions are trivial or even empty.
+In the table below the Field type is denoted @code{field} and
 its corresponding Scalar type is @code{scalar}.
 
 @table @code
@@ -209,17 +209,17 @@ Access a scalar element reference (const) by index
 Access a scalar element reference (non-const) by index
 @end table
 
-The Field type should also support the subtraction operator on two Field types. 
+The Field type should also support the subtraction operator on two Field types.
 The return type for the difference of two Field types is a Vector type.
 
 @subheading Vector
 
-The Vector concept represents the difference between two Field values. 
-In the case of the default @code{vnl} types, 
-the Field and Vector types are the same. 
-The requirements for the Vector are a superset of 
-the requirements for a Field. 
-A Vector should support all the operation of Field 
+The Vector concept represents the difference between two Field values.
+In the case of the default @code{vnl} types,
+the Field and Vector types are the same.
+The requirements for the Vector are a superset of
+the requirements for a Field.
+A Vector should support all the operation of Field
 plus several other arithmetic operations:
 @itemize @bullet
 @item @code{vector = vector + vector} @ @ @ (and equivalent for @code{-})
@@ -232,7 +232,7 @@ plus several other arithmetic operations:
 @item @code{vector *= scalar}
 @end itemize
 
-Vectors should also defined these global functions
+Vectors should also define these global functions
 @itemize @bullet
 @item @code{scalar dot_product(const vector&, const vector&)}
 @item @code{vector element_product(const vector&, const vector&)}
@@ -241,11 +241,11 @@ Vectors should also defined these global functions
 
 @subheading Matrix
 
-The Matrix concept actually refers to a square matrix. 
-It is used for second order statistics (like covariance). 
-Since it is square, the matrix also has a single (fixed or variable) dimension 
-like the Field and Vector. 
-It requires all the same @code{vpdt_access.h} functions except 
+The Matrix concept actually refers to a square matrix.
+It is used for second order statistics (like covariance).
+Since it is square, the matrix also has a single (fixed or variable) dimension
+like the Field and Vector.
+It requires all the same @code{vpdt_access.h} functions except
 the signature of the @code{vpdt_index} function now has two indices
 @itemize @bullet
 @item @code{const scalar& vpdt_index(const matrix&, unsigned int, unsigned int)}
@@ -270,18 +270,18 @@ to @code{vpdt_distribution<T,n>}.
 In fact, @code{vpdt_distribution<T,n>} and all its subclasses satisfy
 the Distribution concept.
 The Distribution requires a subset of the functions that are
-declared virtual on the @code{vpdt_distribution<T,n>}.
-The following example lays out the required API that 
+declared virtual on @code{vpdt_distribution<T,n>}.
+The following example lays out the required API that
 a Distribution is required to have.
 In this example, it is assumed that a consistent set of basic types
 have been defined such that @code{T} satisfies Scalar,
- @code{F} satisfies Field, @code{V} satisfies Vector, 
+@code{F} satisfies Field, @code{V} satisfies Vector,
 and @code{M} satisfies Matrix.
 
 @example
-class vpdt_distribution 
+class vpdt_distribution
 @{
-public:
+ public:
   //: The field type
   typedef F field_type;
 
@@ -290,16 +290,16 @@ public:
   unsigned int dimension() const;
 
   //: Evaluate the unnormalized density at a point
-  // this must be multiplied by norm_const() to integrate to 1
+  // This must be multiplied by norm_const() to integrate to 1
   T density(const F& pt) const;
-  
+
   //: Compute the gradient of the density function, returned in \a g
-  // the return value of the function is the density itself
+  // The return value of the function is the density itself
   T gradient_density(const F& pt, V& g) const;
-  
+
   //: Compute the normalization constant (independent of sample point).
   T norm_const() const;
-    
+
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
@@ -307,21 +307,21 @@ public:
 
   //: Compute the mean of the distribution.
   void compute_mean(F& m) const;
-    
+
   //: Compute the covariance matrix of the distribution.
   void compute_covar(M& c) const;
-@}; 
+@};
 @end example
 
 The other member functions that are defined in @code{vpdt_distribution<T,n>}
-are not needed for a @code{vpdt} Distribution because they can be 
+are not needed for a @code{vpdt} Distribution because they can be
 implemented in terms of the required functions.
 These extra functions are provided as global functions instead.
 For example, @code{T vpdt_prob_density(const dist& d, const F& pt)} is a function
 that returns @code{d.density(pt) * d.norm_const()}.
 These functions can be overloaded when a more efficient implementation
 exists for a particular distribution class.
-For example, the default @code{vpdt_log_density} function applied to a 
+For example, the default @code{vpdt_log_density} function applied to a
 Gaussian distribution would compute the log of an exponential.
 An overload of @code{vpdt_log_density} for Gaussians can eliminate this
 extra unnecessary step.
