@@ -1,15 +1,15 @@
-// This is core/vpdl/vpdt_gaussian_detector.h
+// This is core/vpdl/vpdt/vpdt_gaussian_detector.h
 #ifndef vpdt_gaussian_detector_h_
 #define vpdt_gaussian_detector_h_
 //:
 // \file
 // \brief Detectors applying to Gaussians
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 03/11/09
+// \date March 11, 2009
 //
 // \verbatim
 //  Modifications
-//   (none yet)
+//   <None yet>
 // \endverbatim
 
 //: A simple Mahalanobis distance detector for a Gaussian
@@ -17,21 +17,21 @@
 template <class gaussian_type>
 class vpdt_gaussian_mthresh_detector
 {
-public:
+ public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
   static const unsigned int return_dim = 1;
   //: the distribution operated on by the detector
   typedef gaussian_type distribution_type;
-  
+
   //: the data type to represent a point in the field
   typedef typename gaussian_type::field_type F;
   //: define the scalar type (normally specified by template parameter T)
   typedef typename vpdt_field_traits<F>::scalar_type T;
 
   //: Constructor
-  vpdt_gaussian_mthresh_detector(const T& thresh=T(2.5)) 
+  vpdt_gaussian_mthresh_detector(const T& thresh=T(2.5))
   : sqr_threshold(thresh*thresh) {}
 
   //: The main function

@@ -1,4 +1,4 @@
-// This is core/vpdl/vpdt/vpdt_traits.h
+// This is core/vpdl/vpdt/vpdt_access.h
 #ifndef vpdt_traits_h_
 #define vpdt_traits_h_
 //:
@@ -15,7 +15,7 @@
 //
 // \verbatim
 //  Modifications
-//   None
+//   <None yet>
 // \endverbatim
 
 #include <vnl/vnl_vector.h>

@@ -1,15 +1,15 @@
-// This is core/vpdl/vpdt_mixture_detector.h
+// This is core/vpdl/vpdt/vpdt_mixture_detector.h
 #ifndef vpdt_mixture_detector_h_
 #define vpdt_mixture_detector_h_
 //:
 // \file
 // \brief Detectors applying to mixtures
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 03/11/09
+// \date March 11, 2009
 //
 // \verbatim
 //  Modifications
-//   (none yet)
+//   <None yet>
 // \endverbatim
 
 
@@ -18,22 +18,22 @@
 template <class mixture_type, class detector_type>
 class vpdt_mixture_any_detector
 {
-public:
+ public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
   static const unsigned int return_dim = 1;
   //: the distribution operated on by the detector
   typedef mixture_type distribution_type;
-  
+
   //: the data type to represent a point in the field
   typedef typename mixture_type::field_type F;
   //: define the scalar type (normally specified by template parameter T)
   typedef typename vpdt_field_traits<F>::scalar_type T;
-  
+
   //: Constructor
   vpdt_mixture_any_detector(const detector_type& d) : detect(d) {}
-  
+
   //: The main function
   bool operator() (const mixture_type& mix, const F& sample, bool& result) const
   {
@@ -46,7 +46,7 @@ public:
     }
     return true;
   }
-  
+
   //: The detector to apply to components
   detector_type detect;
 };
@@ -57,22 +57,22 @@ public:
 template <class mixture_type, class detector_type>
 class vpdt_mixture_all_detector
 {
-public:
+ public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
   static const unsigned int return_dim = 1;
   //: the distribution operated on by the detector
   typedef mixture_type distribution_type;
-  
+
   //: the data type to represent a point in the field
   typedef typename mixture_type::field_type F;
   //: define the scalar type (normally specified by template parameter T)
   typedef typename vpdt_field_traits<F>::scalar_type T;
-  
+
   //: Constructor
   vpdt_mixture_all_detector(const detector_type& d) : detect(d) {}
-  
+
   //: The main function
   bool operator() (const mixture_type& mix, const F& sample, bool& result) const
   {
@@ -85,7 +85,7 @@ public:
     }
     return true;
   }
-  
+
   //: The detector to apply to components
   detector_type detect;
 };
@@ -96,14 +96,14 @@ public:
 template <class mixture_type, class detector_type>
 class vpdt_mixture_top_weight_detector
 {
-public:
+ public:
   //: the functor return type
   typedef bool return_type;
   //: the functor return type
   static const unsigned int return_dim = 1;
   //: the distribution operated on by the detector
   typedef mixture_type distribution_type;
-  
+
   //: the data type to represent a point in the field
   typedef typename mixture_type::field_type F;
   //: define the scalar type (normally specified by template parameter T)
@@ -137,6 +137,4 @@ public:
 };
 
 
-
-
-#endif
+#endif // vpdt_mixture_detector_h_
