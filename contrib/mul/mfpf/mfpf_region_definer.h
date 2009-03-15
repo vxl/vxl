@@ -17,7 +17,7 @@ const unsigned mfpf_invalid_index=99999;
 //  Given a set of points, derived classes can generate a region.
 //  Typically this is centred on one point or set of points, and
 //  is aligned with reference to some other points.
-//  
+//
 //  Two key functions are provided: set_up(pts1), which defines
 //  the region and its aspect ratio, and get_region(pts2), which
 //  returns a box of the same aspect ratio, with its pose defined
@@ -62,7 +62,7 @@ class mfpf_region_definer
   //  from the last call to set_up. Only region.pose() will be
   //  different.  Thus the returned region.pose() can be used
   //  to define the pose for training an mfpf_point_finder,
-  //  for instance. 
+  //  for instance.
   virtual mfpf_region_form get_region(
               const vcl_vector<vgl_point_2d<double> >& pts) const = 0;
 
@@ -95,7 +95,6 @@ class mfpf_region_definer
 
   //: Create a concrete object, from a text specification.
   static vcl_auto_ptr<mfpf_region_definer> create_from_stream(vcl_istream &is);
-
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -113,8 +112,10 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer& b);
 //: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer* b);
 
-//: Generate a new set of points from pts0 using set of definers
+//: Generate a new set of points from \p pts0 using set of definers
+// \code
 //  new_pts[i] = definer[i]->get_ref_point(pts0)
+// \endcode
 void mfpf_points_from_definers(
               const vcl_vector<mfpf_region_definer*>& definer,
               const vcl_vector<vgl_point_2d<double> >& pts0,
@@ -125,11 +126,11 @@ void mfpf_points_from_definers(
 //  regions/pts (say pts1), by refering to some other set of m points.
 //  This sets up self_definer to generate an identical set of
 //  regions/pts by using the originally generated points (pts1).
-//  This can only be done if there is a region centred on each 
+//  This can only be done if there is a region centred on each
 //  of the original points used in the definer.
 //  The function tests for this case, and returns false if it fails.
 //  In particular consider the following
-//  \verbatim
+//  \code
 //  vcl_vector<vgl_point_2d<double> > pts0,pts1,pts2;
 //  // Set up pts0
 //  ...
@@ -139,7 +140,7 @@ void mfpf_points_from_definers(
 //  // Now generate pts2 from pts1
 //  mfpf_points_from_definers(self_definer,pts1,pts2);
 //  // pts2 should be the same as pts1
-//  \endverbatim
+//  \endcode
 //  Note that objects pointed to by definer are changed.
 //  They may be left in an invalid state if this returns false,
 //  so caller should ensure a backup retained.
