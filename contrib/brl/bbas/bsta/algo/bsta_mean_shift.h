@@ -7,7 +7,7 @@
 //        Implements mean shift with a flat kernel of fixed bandwidth_
 //
 //        Not optimized for large datasets
-// 
+//
 // \author Ozge C. Ozcanli
 // \date February 10, 2009
 //
@@ -28,7 +28,7 @@ class bsta_mean_shift_sample_set : public bsta_parzen_sphere<T,n>
  public:
 
   typedef typename bsta_parzen_sphere<T,n>::vector_type vector_;
-  
+
   // Constructor
   bsta_mean_shift_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere<T,n>() { set_bandwidth(bandwidth); }
 
@@ -43,12 +43,12 @@ class bsta_mean_shift_sample_set : public bsta_parzen_sphere<T,n>
 
   //: one may need to normalize the weights after the insertion is over
   void normalize_weights();
-  
+
  private:
    //: hold a vector of weights for each data sample
-   //  needs to be set separately with each insert into the data set, otherwise its set to 1.0 by default at the first call to mean()
+   //  Needs to be set separately with each insert into the data set,
+   //  otherwise it's set to 1.0 by default at the first call to mean()
    vcl_vector<T> weights_;
-  
 };
 
 template <class T, unsigned n>
@@ -64,7 +64,7 @@ class bsta_mean_shift
   //  \p epsilon : the difference required for updating to come to a halt
   //  \p percentage: the percentage of the sample set to initialize as seed
   bool find_modes(bsta_mean_shift_sample_set<T,n>& set, vnl_random & rng, float percentage = 10.0f, T epsilon = 10e-3);
-  
+
   //: use all the samples to get its mode, no need for random seed picking
   bool find_modes(bsta_mean_shift_sample_set<T,n>& set, T epsilon = 10e-3);
 
@@ -91,7 +91,7 @@ class bsta_mean_shift
 
   unsigned max_iter_;
 
-  //: whether a mode is found for a given sample and the id of the mode in the modes_ vector
+  //: whether a mode is found for a given sample and the id of the mode in the \a modes_ vector
   vcl_vector<vcl_pair<bool, unsigned> > assignment_;
 };
 
