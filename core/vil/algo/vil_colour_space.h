@@ -54,41 +54,43 @@ template <class T>
 void vil_colour_space_YUV_to_RGB(T const in[3], T out[3]);
 
 //: Transformation from analog RGB to analog YPbPr colour spaces
-// the input and out value lie in the ranges:
-// R', G', B' in [0; 1]
-// Y' in [0; 1]
-// Pb in [-0.5; 0.5]
-// Pr in [-0.5; 0.5] 
+//  The input and out value lie in the ranges:
+//  - R', G', B' in [0; 1]
+//  - Y' in [0; 1]
+//  - Pb in [-0.5; 0.5]
+//  - Pr in [-0.5; 0.5]
 template <class T>
 void vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3]);
 
 //: Transformation from analog YPbPr to RGB colour spaces
-// the input and out value lie in the ranges:
-// Y' in [0; 1]
-// Pb in [-0.5; 0.5]
-// Pr in [-0.5; 0.5]
-// R', G', B' in [0; 1]
+//  The input and out value lie in the ranges:
+//  - Y' in [0; 1]
+//  - Pb in [-0.5; 0.5]
+//  - Pr in [-0.5; 0.5]
+//  - R', G', B' in [0; 1]
 template <class T>
 void vil_colour_space_YPbPr_601_to_RGB(T const YPbPr[3], T RGB[3]);
 
 //: Transformation from 8 bit RGB to 8 bit YCbCr colour spaces
-// the input and out value lie in the ranges:
-// R'd, G'd, B'd   in {0, 1, 2, ..., 255}
-// Y'              in {16, 17, ..., 235}
-//   with footroom in {1, 2, ..., 15}
-//        headroom in {236, 237, ..., 254}
-//        sync.    in {0, 255}
-// Cb, Cr          in {16, 17, ..., 240}
+//  The input and out value lie in the ranges:
+//  - R'd, G'd, B'd   in {0, 1, 2, ..., 255}
+//  - Y'              in {16, 17, ..., 235}
+//    with
+//         * footroom in {1, 2, ..., 15}
+//         * headroom in {236, 237, ..., 254}
+//         * sync.    in {0, 255}
+//  - Cb, Cr          in {16, 17, ..., 240}
 void vil_colour_space_RGB_to_YCbCr_601(const unsigned char RGB[3], unsigned char YCbCr[3]);
 
 //: Transformation from 8 bit YCbCr to 8 bit RGB colour spaces
-// the input and out value lie in the ranges:
-// Y'              in {16, 17, ..., 235}
-//   with footroom in {1, 2, ..., 15}
-//        headroom in {236, 237, ..., 254}
-//        sync.    in {0, 255}
-// Cb, Cr          in {16, 17, ..., 240}
-// R'd, G'd, B'd   in {0, 1, 2, ..., 255}
+//  The input and out value lie in the ranges:
+//  - Y'              in {16, 17, ..., 235}
+//    with
+//         * footroom in {1, 2, ..., 15}
+//         * headroom in {236, 237, ..., 254}
+//         * sync.    in {0, 255}
+//  - Cb, Cr          in {16, 17, ..., 240}
+//  - R'd, G'd, B'd   in {0, 1, 2, ..., 255}
 void vil_colour_space_YCbCr_601_to_RGB(const unsigned char YCbCr[3], unsigned char RGB[3]);
 
 #endif // vil_colour_space_h_
