@@ -1,7 +1,7 @@
 #include "bvxm_synth_world_generator.h"
+#include <vcl_cassert.h>
 
-
-//: Default constructor
+// Default constructor
 bvxm_synth_world_generator::bvxm_synth_world_generator()
 {
   //initialize class variables
@@ -32,7 +32,6 @@ bvxm_synth_world_generator::bvxm_synth_world_generator()
   camera_dist= 200;
 
   verbose = false;
-
 }
 
 // Returns a face number if a point is on the surface of a box [0,1,2,3,4,5],
@@ -131,7 +130,6 @@ bvxm_synth_world_generator::perspective_to_rational(vpgl_perspective_camera<doub
 }
 
 
-
 vcl_vector<vpgl_camera_double_sptr >
 bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
 {
@@ -169,12 +167,11 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
       rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
       bb.add(vgl_point_2d<double> (u,v));
 
-      if(verbose)
+      if (verbose)
       {
         vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-          << "Rational [" << u2 << ',' << v2 << "]\n\n";
+                 << "Rational [" << u2 << ',' << v2 << "]\n\n";
       }
-
     }
     vcl_cout << bb << vcl_endl;
   }
@@ -192,12 +189,12 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
   double alpha = (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/40.;
   vcl_vector<vgl_point_3d<double> > centers;
-  
+
   for (unsigned i=0; i<num_train_images_; i++) {
     x = camera_dist*vcl_cos(alpha);
     y = camera_dist*vcl_sin(alpha);
     centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
-  if(verbose)
+  if (verbose)
     vcl_cout << centers[i] << vcl_endl;
 
     alpha += delta_alpha;
@@ -212,7 +209,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
     generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
     persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
     persp_cameras.push_back(new vpgl_perspective_camera<double>(persp_cam));
-    
+
     //save the camera to file
     vcl_stringstream cam_file;
     vul_file::make_directory("./cams");
@@ -220,7 +217,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
     vcl_ofstream cam_out(cam_file.str().c_str());
     cam_out << persp_cam;
 
-    if(verbose){
+    if (verbose) {
       vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
       for (unsigned i=0; i<corners.size(); i++) {
         vgl_point_3d<double> c = corners[i];
@@ -261,23 +258,22 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
 
   vcl_string path = world_dir_ + "/test_img";
 
-  if(gen_images_){
-  for (unsigned i=0; i<cameras.size(); i++) {
-    vil_image_view_base_sptr img_arg;
-    vil_image_view<float>* mask = new vil_image_view<float>(IMAGE_U, IMAGE_V);
-    vil_image_view_base_sptr expected = new vil_image_view<unsigned char>(IMAGE_U, IMAGE_V);
-    bvxm_image_metadata camera(img_arg, cameras[i]);
+  if (gen_images_) {
+    for (unsigned i=0; i<cameras.size(); i++) {
+      vil_image_view_base_sptr img_arg;
+      vil_image_view<float>* mask = new vil_image_view<float>(IMAGE_U, IMAGE_V);
+      vil_image_view_base_sptr expected = new vil_image_view<unsigned char>(IMAGE_U, IMAGE_V);
+      bvxm_image_metadata camera(img_arg, cameras[i]);
 
-    world->expected_image<APM_MOG_GREY>(camera, expected, *mask, bin_num);
-    vcl_stringstream s;
-    s << path << i << ".tif";
-    vil_save(*expected, s.str().c_str());
-    image_set.push_back(expected);
-  }
+      world->expected_image<APM_MOG_GREY>(camera, expected, *mask, bin_num);
+      vcl_stringstream s;
+      s << path << i << ".tif";
+      vil_save(*expected, s.str().c_str());
+      image_set.push_back(expected);
+    }
   }
   return true;
 }
-
 
 
 void bvxm_synth_world_generator::gen_texture_map(vgl_box_3d<double> box,
@@ -295,9 +291,8 @@ void bvxm_synth_world_generator::gen_texture_map(vgl_box_3d<double> box,
   intens_map_side1.resize(upw);
   intens_map_side2.resize(upw);
 
-  if(verbose)
+  if (verbose)
     vcl_cout << box.width() << ' ' << box.depth() << ' ' << box.height() << vcl_endl;
-
 
   if (gen_rand) {
     for (unsigned i=0; i<upw;i++) {
@@ -372,7 +367,6 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> gr
 
   vcl_ofstream is((world_dir_ + "/intensity_grid.txt").c_str());
 
-  
   assert(boxes_vector.size() == 2);
 
   vgl_box_3d<double> box=boxes_vector[0], top_box=boxes_vector[1];
@@ -540,7 +534,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
 {
   bvxm_voxel_world_sptr world = new bvxm_voxel_world();
   vul_file::make_directory(world_dir_);
-  
+
   vgl_vector_3d<unsigned> grid_size(nx_,ny_,nz_);
   vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
                                  vgl_point_3d<double> (nx_, ny_, nz_));
@@ -549,7 +543,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
                            vgl_point_3d<float> (0,0,0),
                            vgl_vector_3d<unsigned int>(nx_, ny_, nz_),
                            vox_length);
-  
+
   world->set_params(world_params);
   world->clean_grids();
 
@@ -561,7 +555,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
       (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
 
   bvxm_voxel_grid_base_sptr apm_grid_base = world->get_grid<APM_MOG_GREY>(bin,scale);
-  
+
   bvxm_voxel_grid<apm_datatype> *apm_grid = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
@@ -574,7 +568,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
 
   update(grid_size, world, intensity_grid, ocp_grid, apm_grid,
                cameras, image_set_1, bin);
-  
+
   world->save_occupancy_raw(world_dir_ + "/ocp.raw");
   return world;
 }
