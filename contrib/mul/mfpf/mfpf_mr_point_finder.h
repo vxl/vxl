@@ -24,7 +24,7 @@ class mfpf_mr_point_finder
 
  public:
 
-    //: Dflt ctor
+  //: Dflt ctor
   mfpf_mr_point_finder();
 
   //: Destructor
@@ -44,14 +44,13 @@ class mfpf_mr_point_finder
   //: Define point finders.  Clone of each taken
   void set(const vcl_vector<mfpf_point_finder*>& finders);
 
-  //: Select best level for searching around pose with finder i
+  //: Select best level for searching around pose with finder \p i
   //  Selects pyramid level with pixel sizes best matching
   //  the model pixel size at given pose.
   unsigned image_level(unsigned i, const mfpf_pose& pose,
                        const vimt_image_pyramid& im_pyr) const;
 
-  //: Get sample image at specified point for level L of the point_finder
-  //  hierarchy
+  //: Get sample image at specified point for level L of the point_finder hierarchy
   void get_sample_vector(const vimt_image_pyramid& image_pyr,
                          const vgl_point_2d<double>& p,
                          const vgl_vector_2d<double>& u,
@@ -139,4 +138,3 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_mr_point_finder& b);
 void vsl_b_read(vsl_b_istream& bfs, mfpf_mr_point_finder& b);
 
 #endif // mfpf_mr_point_finder_h_
-
