@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   None
+//   <None yet>
 // \endverbatim
 
 #include <vpdl/vpdl_gaussian_base.h>
@@ -77,7 +77,7 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  virtual T gradient_density(const vector& pt, vector& g) const 
+  virtual T gradient_density(const vector& pt, vector& g) const
   {
     return impl_.gradient_density(pt,g);
   }
@@ -91,7 +91,7 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   }
 
   //: The squared Mahalanobis distance to this point
-  // non-virtual for efficiency
+  // Non-virtual for efficiency
   T sqr_mahal_dist(const vector& pt) const
   {
     return impl_.sqr_mahal_dist(pt);

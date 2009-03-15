@@ -11,7 +11,7 @@
 // \date Feb. 10, 2009
 // \verbatim
 //  Modifications
-//   Ozge C Ozcanli - 02/10/09 - change input/output signature
+//   Ozge C Ozcanli - Feb 10, 2009 - change input/output signature
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>
@@ -32,18 +32,17 @@
 
 bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
 {
-  
   //inputs
-  
+
   //0: The voxel world
   //1: The appereance model type
   //2: The illumination bin index nplanes_
   //3: The scale
   //4: The camera
-  //5: ni, the size of the output MOG image 
+  //5: ni, the size of the output MOG image
   //6: nj
   vcl_vector<vcl_string> input_types_;
-  
+
   input_types_.push_back("bvxm_voxel_world_sptr");
   input_types_.push_back("vcl_string");
   input_types_.push_back("unsigned");
@@ -51,7 +50,7 @@ bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
   input_types_.push_back("vpgl_camera_double_sptr");
   input_types_.push_back("unsigned");
   input_types_.push_back("unsigned");
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -65,8 +64,8 @@ bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
 }
 
 template <bvxm_voxel_type APM_T>
-bool mix_gaussian(bvxm_voxel_world_sptr world, 
-                  unsigned mog_creation_method_, 
+bool mix_gaussian(bvxm_voxel_world_sptr world,
+                  unsigned mog_creation_method_,
                   unsigned bin_index, unsigned scale_index,unsigned n_samples,
                   bvxm_image_metadata observation,
                   bvxm_voxel_slab_base_sptr& mog_image)
@@ -105,10 +104,10 @@ bool bvxm_create_mog_image_process(bprb_func_process& pro)
   unsigned scale_index = pro.get_input<unsigned>(i++);
 
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  
+
   unsigned ni = pro.get_input<unsigned>(i++);
   unsigned nj = pro.get_input<unsigned>(i++);
-  
+
   if (!camera) {
     vcl_cout << pro.name() <<" :--  Input 1  is not valid!\n";
     return false;
@@ -131,7 +130,7 @@ bool bvxm_create_mog_image_process(bprb_func_process& pro)
   bool verbose_ = false;
   pro.parameters()->get_value("verbose", verbose_);
 
-  //: the image in the observation is only used to determine ni and nj for the output MOG
+  //: the image in the observation is only used to determine \p ni and \p nj for the output MOG.
   //  so create a dummy image
   vil_image_view_base_sptr dummy_img = new vil_image_view<vxl_byte>(ni, nj, 1);
   bvxm_image_metadata observation(dummy_img,camera);
@@ -150,7 +149,7 @@ bool bvxm_create_mog_image_process(bprb_func_process& pro)
   }
 
   bvxm_voxel_slab_base_sptr mog_image;
-  
+
   if (num_observations == 0)
   {
     pro.set_output_val<bvxm_voxel_slab_base_sptr>(0,mog_image); // returns empty pointer
@@ -169,7 +168,7 @@ bool bvxm_create_mog_image_process(bprb_func_process& pro)
       { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method_ << " to create mog image\n"; return false; }
     }
   }
-  
+
   bool good = false;
   if (voxel_type == "apm_mog_grey")
     good = mix_gaussian<APM_MOG_GREY>(world,mog_creation_method_,bin_index,scale_index,n_samples,observation,mog_image);
@@ -184,7 +183,7 @@ bool bvxm_create_mog_image_process(bprb_func_process& pro)
 
   if (!good)
     return false;
-  
+
   unsigned j=0;
   pro.set_output_val<bvxm_voxel_slab_base_sptr>(j++,mog_image);
   return true;

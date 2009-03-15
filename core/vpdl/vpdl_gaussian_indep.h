@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   None
+//   <None yet>
 // \endverbatim
 
 #include <vpdl/vpdl_gaussian_base.h>
@@ -62,9 +62,9 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   }
 
   //: Evaluate the probability density at a point
-  virtual T prob_density(const vector& pt) const 
-  { 
-    return vpdt_prob_density(impl_,pt); 
+  virtual T prob_density(const vector& pt) const
+  {
+    return vpdt_prob_density(impl_,pt);
   }
 
   //: Evaluate the log probability density at a point
@@ -77,7 +77,7 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  virtual T gradient_density(const vector& pt, vector& g) const 
+  virtual T gradient_density(const vector& pt, vector& g) const
   {
     return impl_.gradient_density(pt,g);
   }
@@ -91,7 +91,7 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   }
 
   //: The squared Mahalanobis distance to this point
-  // non-virtual for efficiency
+  // Non-virtual for efficiency
   T sqr_mahal_dist(const vector& pt) const
   {
     return impl_.sqr_mahal_dist(pt);
@@ -120,7 +120,6 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   //: Set the vector of variance
   void set_covariance(const covar_type& var) { impl_.covar = var; }
 
-
   //: Compute the covariance of the distribution.
   // Should be the diagonal matrix of var_
   virtual void compute_covar(matrix& covar) const
@@ -129,9 +128,8 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   }
 
  protected:
- //: the Gaussian implementation from vpdt
- vpdt_gaussian<vector,covar_type> impl_;
+  //: the Gaussian implementation from vpdt
+  vpdt_gaussian<vector,covar_type> impl_;
 };
-
 
 #endif // vpdl_gaussian_indep_h_
