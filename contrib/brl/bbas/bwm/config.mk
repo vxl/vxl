@@ -1,0 +1,23 @@
+IULIBS += -lbwm
+include ${VXLROOT}/contrib/gel/mrc/vpgl/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/algo/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/file_formats/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bvgl/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bwm/reg/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bwm/algo/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bwm/io/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bwm/video/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bmsh3d/algo/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bmsh3d/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/bgeo/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bgui/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bsol/config.mk
+include ${VXLROOT}/contrib/gel/vsol/config.mk
+include ${VXLROOT}/contrib/gel/vdgl/config.mk
+include ${VXLROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vgl/algo/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/contrib/brl/b3p/expatpp/config.mk

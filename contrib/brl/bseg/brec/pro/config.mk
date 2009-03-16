@@ -1,0 +1,23 @@
+IULIBS += -lbrec_pro
+include ${VXLROOT}/contrib/brl/bseg/brec/config.mk
+include ${VXLROOT}/contrib/brl/bseg/bvxm/config.mk
+include ${VXLROOT}/contrib/brl/bseg/bvxm/io/config.mk
+include ${VXLROOT}/contrib/brl/bseg/bbgm/pro/config.mk
+include ${VXLROOT}/contrib/brl/bpro/bprb/config.mk
+include ${VXLROOT}/contrib/brl/bseg/sdet/config.mk
+include ${VXLROOT}/contrib/brl/bpro/vpgl_pro/config.mk
+include ${VXLROOT}/contrib/brl/bseg/brip/config.mk
+include ${VXLROOT}/contrib/brl/bbas/brdb/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/io/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/algo/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/file_formats/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/bgeo/config.mk
+include ${VXLROOT}/contrib/gel/vsol/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vil/io/config.mk
+include ${VXLROOT}/core/vil_pro/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vnl/io/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vgl/algo/config.mk
