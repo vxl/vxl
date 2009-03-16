@@ -14,7 +14,7 @@ IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
   INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
   IF(GEOTIFF_FOUND)
-    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR}) 
+    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
   ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
 
@@ -31,7 +31,7 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bprb sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vnl_io bgeo brdb)
+TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vnl_io bgeo brdb)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
