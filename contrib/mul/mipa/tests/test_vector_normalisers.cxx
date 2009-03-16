@@ -103,12 +103,12 @@ void test_vector_normalisers1()
 
         vil_image_view<float> srcBlock(sni,snj);
         vnl_random rng(123456);
-        vnl_vector<double> data(nData);
+        vnl_vector<float> data2(nData);
         for (unsigned int i = 0; i < nData; ++i)
-            data(i) = rng.normal();
-        data *= 5.0;
+            data2(i) = (float)rng.normal();
+        data2 *= 5.0f;
         //Copy in some background noise
-        vcl_copy(data.begin(),data.end(),srcBlock.top_left_ptr());
+        vcl_copy(data2.begin(),data2.end(),srcBlock.top_left_ptr());
 
         //Fill in one block
         for (unsigned i=0;i<sni;++i)
