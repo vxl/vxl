@@ -69,7 +69,7 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
     vcl_exit(3);
   }
 
-  vgl_vector_3d<double> voxel = voxel_size_from_transform(w2i);    
+  vgl_vector_3d<double> voxel = voxel_size_from_transform(w2i);
   vgl_point_3d<double> world_min_point = w2i.inverse().origin();
   vgl_point_3d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999, ir->nk()+0.999);
   vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
@@ -82,24 +82,23 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
            << world_max_point.x() << ',' << world_max_point.y() << ',' << world_max_point.z() << "]\n"
            << "voxel_type: " << ir->pixel_format() << '\n'
            << "transform: " << w2i;
-  
+
   if (range)
   {
     double min,max;
     get_intensity_range_3d(ir, min, max);
-    vcl_cout << "intensity range: " << min << " to " << max << "\n";
+    vcl_cout << "intensity range: " << min << " to " << max << vcl_endl;
   }
-
+  return 0;
 }
 
 
 //: Try to load a 2D image
 static unsigned try_2d_image(const char * filename, float unit_scaling, bool range)
 {
-
   vil_image_resource_sptr ir = vil_load_image_resource(filename);
   if (!ir) return 1;
-  
+
   vimt_transform_2d w2i = vimt_load_transform(ir, unit_scaling);
   vgl_vector_2d<double> pixel = w2i.inverse().delta(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1,1));
   vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes\n"
@@ -114,11 +113,10 @@ static unsigned try_2d_image(const char * filename, float unit_scaling, bool ran
   {
     double min,max;
     get_intensity_range_2d(ir, min, max);
-    vcl_cout << "intensity range: " << min << " to " << max << "\n";
+    vcl_cout << "intensity range: " << min << " to " << max << vcl_endl;
   }
-  
-  return 0;
 
+  return 0;
 }
 
 
