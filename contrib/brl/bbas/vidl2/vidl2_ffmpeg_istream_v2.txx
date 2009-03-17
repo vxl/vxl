@@ -8,7 +8,8 @@
 // \author Amitha Perera
 // \date   26 Dec 2007
 //
-// Update implementation based on ffmpeg svn -r11322.
+// Update implementation based on ffmpeg svn -r11322
+// and libswscale svn -r25485.
 
 //-----------------------------------------------------------------------------
 
