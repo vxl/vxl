@@ -15,6 +15,8 @@
 
 #include "bbgm_image_of.h"
 #include "bbgm_image_sptr.h"
+#include "bbgm_view_maker.h"
+#include "bbgm_view_maker_sptr.h"
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_ref_count.h>
 #include <vnl/vnl_vector.h>
@@ -22,97 +24,144 @@
 //: base class for viewers
 class bbgm_viewer : public vbl_ref_count
 {
-  public:
-    //: Constructor
-    bbgm_viewer() : active_component_(0) {fail_val_[0] = fail_val_[1] = fail_val_[2] = 0.0;}
-    //: Destructor
-    virtual ~bbgm_viewer() {}
+public:
+  //: Constructor
+  bbgm_viewer() : active_component_(0), view_maker_(bbgm_view_maker_sptr(NULL)) 
+  {fail_val_[0] = fail_val_[1] = fail_val_[2] = 0.0;}
+  //: Destructor
+  virtual ~bbgm_viewer() {}
 
-    //: Probe to see if this viewer can handle this image type
-    virtual bool probe(const bbgm_image_sptr& dimg) const = 0;
-    //: Return the maximum number of components if a mixture
-    // If not a mixture return 1
-    virtual unsigned int max_components(const bbgm_image_sptr& dimg) const = 0;
-    //: Apply the operations to the distribution image to produce a vil image
-    virtual bool apply(const bbgm_image_sptr& dimg,
-                       vil_image_view<double>& image) const = 0;
-    //: Return the name of this view
-    virtual vcl_string name() const = 0;
+  //: Probe to see if this viewer can handle this image type
+  bool probe(const bbgm_image_sptr& dimg) const;
+  //: Return the maximum number of components if a mixture
+  // If not a mixture return 1
+  unsigned int max_components(const bbgm_image_sptr& dimg) const;
+  //: Apply the operations to the distribution image to produce a vil image
+  bool apply(const bbgm_image_sptr& dimg,
+             vil_image_view<double>& image) const;
+  //: Return the name of this view
+  virtual vcl_string name() const = 0;
 
-    //: Set the value for failure at a pixel
-    void set_failure_value(const vnl_vector<double>& val) { fail_val_[0] = val[0];
-                                                            fail_val_[1] = val[1];
-                                                            fail_val_[2] = val[2]; }
-    //: Set the value for failure at a pixel
-    void set_active_component(unsigned int val) { active_component_ = val; }
+  //: Set the value for failure at a pixel
+  void set_failure_value(const vnl_vector<double>& val) { fail_val_[0] = val[0];
+                                                          fail_val_[1] = val[1];
+                                                          fail_val_[2] = val[2]; }
+  //: Set the value for failure at a pixel
+  void set_active_component(unsigned int val) { active_component_ = val; }
 
-    //: Return the active component
-    unsigned int active_component() const { return active_component_; }
+  //: Return the active component
+  unsigned int active_component() const { return active_component_; }
 
-  protected:
-    double fail_val_[3];
-    unsigned int active_component_;
+protected:
+  //: Return a pointer to the view_maker that applies to this image type.
+  //  Return a null pointer if no such view_maker is found
+  virtual bbgm_view_maker_sptr 
+  find_vm(const vcl_type_info& dist_type) const = 0;
+  
+  //: the data used when a pixel fails the operation
+  double fail_val_[3];
+  //: the active component to use if the distribution is a mixture
+  unsigned int active_component_;
+  //: a cached pointer to the view_maker object last found
+  mutable bbgm_view_maker_sptr view_maker_;
 };
 
+//=============================================================================
 
 //: A mean viewer
 class bbgm_mean_viewer : public bbgm_viewer
 {
-  public:
-    //: Probe to see if this viewer can handle this image type
-    virtual bool probe(const bbgm_image_sptr& dimg) const;
-
-    //: Return the maximum number of components if a mixture
-    // If not a mixture return 1
-    virtual unsigned int max_components(const bbgm_image_sptr& dimg) const;
-
-    //: Apply the operations to the distribution image to produce a vil image
-    virtual bool apply(const bbgm_image_sptr& dimg,
-                       vil_image_view<double>& image) const;
-
-    //: Return the name of this view
-    virtual vcl_string name() const { return "mean"; }
+public:
+  //: Return the name of this view
+  virtual vcl_string name() const { return "mean"; }
+  
+  //: Register a new view_maker 
+  // \return true if successfully registered or false if invalid or already
+  //         registered.
+  static bool register_view_maker(const bbgm_view_maker_sptr& vm);
+  
+  //: Return a pointer to the view_maker that applies to this image type.
+  //  Return a null pointer if no such view_maker is found
+  static bbgm_view_maker_sptr 
+  find_view_maker(const vcl_type_info& dist_type);
+  
+protected:
+  //: A virtual wrapper around the static find function
+  virtual bbgm_view_maker_sptr 
+  find_vm(const vcl_type_info& dist_type) const
+  {
+    return find_view_maker(dist_type);
+  }
+  
+private:
+  //: The registered view maker objects
+  static vcl_vector<bbgm_view_maker_sptr> reg_vms;
 };
 
+//=============================================================================
 
 //: A variance viewer
 class bbgm_variance_viewer : public bbgm_viewer
 {
-  public:
-    //: Probe to see if this viewer can handle this image type
-    virtual bool probe(const bbgm_image_sptr& dimg) const;
-
-    //: Return the maximum number of components if a mixture
-    // If not a mixture return 1
-    virtual unsigned int max_components(const bbgm_image_sptr& dimg) const;
-
-    //: Apply the operations to the distribution image to produce a vil image
-    virtual bool apply(const bbgm_image_sptr& dimg,
-                       vil_image_view<double>& image) const;
-
-    //: Return the name of this view
-    virtual vcl_string name() const { return "variance"; }
+public:
+  //: Return the name of this view
+  virtual vcl_string name() const { return "variance"; }
+  
+  //: Register a new view_maker 
+  // \return true if successfully registered or false if invalid or already
+  //         registered.
+  static bool register_view_maker(const bbgm_view_maker_sptr& vm);
+  
+  //: Return a pointer to the view_maker that applies to this image type.
+  //  Return a null pointer if no such view_maker is found
+  static bbgm_view_maker_sptr 
+  find_view_maker(const vcl_type_info& dist_type);
+  
+protected:
+  //: A virtual wrapper around the static find function
+  virtual bbgm_view_maker_sptr 
+  find_vm(const vcl_type_info& dist_type) const
+  {
+    return find_view_maker(dist_type);
+  }
+  
+private:
+  //: The registered view maker objects
+  static vcl_vector<bbgm_view_maker_sptr> reg_vms;
 };
 
+//=============================================================================
 
 //: A weight viewer
 class bbgm_weight_viewer : public bbgm_viewer
 {
-  public:
-    //: Probe to see if this viewer can handle this image type
-    virtual bool probe(const bbgm_image_sptr& dimg) const;
-
-    //: Return the maximum number of components if a mixture
-    // If not a mixture return 1
-    virtual unsigned int max_components(const bbgm_image_sptr& dimg) const;
-
-    //: Apply the operations to the distribution image to produce a vil image
-    virtual bool apply(const bbgm_image_sptr& dimg,
-                       vil_image_view<double>& image) const;
-
-    //: Return the name of this view
-    virtual vcl_string name() const { return "weight"; }
+public:
+  //: Return the name of this view
+  virtual vcl_string name() const { return "weight"; }
+  
+  //: Register a new view_maker 
+  // \return true if successfully registered or false if invalid or already
+  //         registered.
+  static bool register_view_maker(const bbgm_view_maker_sptr& vm);
+  
+  //: Return a pointer to the view_maker that applies to this image type.
+  //  Return a null pointer if no such view_maker is found
+  static bbgm_view_maker_sptr 
+  find_view_maker(const vcl_type_info& dist_type);
+  
+protected:
+  //: A virtual wrapper around the static find function
+  virtual bbgm_view_maker_sptr 
+  find_vm(const vcl_type_info& dist_type) const
+  {
+    return find_view_maker(dist_type);
+  }
+  
+private:
+  //: The registered view maker objects
+  static vcl_vector<bbgm_view_maker_sptr> reg_vms;
 };
+
 
 
 #endif // bbgm_viewer_h_

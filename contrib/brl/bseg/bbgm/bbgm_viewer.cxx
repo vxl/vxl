@@ -3,351 +3,169 @@
 // \file
 
 #include "bbgm_viewer.h"
+#include "bbgm_view_maker.h"
 #include "bbgm_apply.h"
-#include <bsta/bsta_gauss_if3.h>
-#include <bsta/bsta_gauss_f1.h>
-#include <bsta/bsta_attributes.h>
-#include <bsta/bsta_mixture.h>
-#include <bsta/bsta_basic_functors.h>
 #include <vil/vil_math.h>
-#include <bsta/bsta_mixture_fixed.h>
+
 
 //: Probe to see if this viewer can handle this image type
-bool
-bbgm_mean_viewer::probe(const bbgm_image_sptr& dimg) const
+bool bbgm_viewer::probe(const bbgm_image_sptr& dimg) const
 {
-  if (!dimg)
+  if(!dimg)
     return false;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }\
-  {\
-    typedef DIST T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-  return false;
+  
+  if(!view_maker_ || view_maker_->dist_typeid() != dimg->dist_typeid())
+    view_maker_ = this->find_vm(dimg->dist_typeid());
+  
+  return (view_maker_ != 0);
 }
 
 
 //: Return the maximum number of components if a mixture
 // If not a mixture return 1
-unsigned int
-bbgm_mean_viewer::max_components(const bbgm_image_sptr& dimg) const
+unsigned int bbgm_viewer::max_components(const bbgm_image_sptr& dimg) const
 {
-  if (!dimg)
+  if(!dimg)
     return 0;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
-      bsta_mixture_size_functor<T> func;\
-      vil_image_view<unsigned int> count;\
-      unsigned int fail_val = 0;\
-      bbgm_apply(*d, func, count, &fail_val);\
-      unsigned int min, max;\
-      vil_math_value_range(count, min, max);\
-      return max;\
-    }\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
-      return 3;\
-    }\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-
-  return 1;
+  
+  if(!view_maker_ || view_maker_->dist_typeid() != dimg->dist_typeid())
+    view_maker_ = this->find_vm(dimg->dist_typeid());
+  if(!view_maker_)
+    return 0;
+  return view_maker_->max_components(dimg);
 }
 
 
 //: Apply the operations to the distribution image to produce a vil image
-bool bbgm_mean_viewer::apply(const bbgm_image_sptr& dimg,
-                              vil_image_view<double>& image) const
+bool bbgm_viewer::apply(const bbgm_image_sptr& dimg,
+                        vil_image_view<double>& image) const
 {
-  if (!dimg)
+  if(!dimg)
     return false;
+  
+  if(!view_maker_ || view_maker_->dist_typeid() != dimg->dist_typeid())
+    view_maker_ = this->find_vm(dimg->dist_typeid());
+  if(!view_maker_)
+    return false;
+  return view_maker_->apply(dimg, image, fail_val_, active_component_);
+}
 
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      typedef bsta_mean_functor<DIST > func_T;\
-      func_T m_func;\
-      bsta_mixture_functor<T, func_T > func(m_func,this->active_component_);\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      typedef bsta_mean_functor<DIST > func_T;\
-      func_T m_func;\
-      bsta_mixture_functor<T, func_T > func(m_func,this->active_component_);\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }\
-  {\
-    typedef DIST T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      bsta_mean_functor<T> func;\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
 
-  return false;
+//=============================================================================
+
+//: initialize the static vector of registered types
+vcl_vector<bbgm_view_maker_sptr> bbgm_mean_viewer::reg_vms;
+
+//: Register a new view_maker 
+// \return true if successfully registered or false if invalid or already
+//         registered.
+bool bbgm_mean_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
+{
+  if(!vm) // don't add null pointers
+    return false;
+  
+  // replace existing type match
+  typedef vcl_vector<bbgm_view_maker_sptr>::iterator vm_itr;
+  for(vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
+    if((*i)->dist_typeid() == vm->dist_typeid()){
+      *i = vm;
+      return true;
+    }
+  
+  // add to the collection if no duplicate found
+  reg_vms.push_back(vm);
+  return true;
+}
+
+
+//: Return a pointer to the view_maker that applies to this image type.
+//  Return a null pointer if no such view_maker is found
+bbgm_view_maker_sptr 
+bbgm_mean_viewer::find_view_maker(const vcl_type_info& dist_type) 
+{
+  typedef vcl_vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
+  for(vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
+    if((*i)->dist_typeid() == dist_type)
+      return *i;
+  return bbgm_view_maker_sptr(NULL);
 }
 
 //=============================================================================
 
+//: initialize the static vector of registered types
+vcl_vector<bbgm_view_maker_sptr> bbgm_variance_viewer::reg_vms;
 
-//: Probe to see if this viewer can handle this image type
-bool
-bbgm_variance_viewer::probe(const bbgm_image_sptr& dimg) const
+//: Register a new view_maker 
+// \return true if successfully registered or false if invalid or already
+//         registered.
+bool bbgm_variance_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 {
-  if (!dimg)
+  if(!vm) // don't add null pointers
     return false;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }\
-  {\
-    typedef DIST T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-  return false;
+  
+  // replace existing type match
+  typedef vcl_vector<bbgm_view_maker_sptr>::iterator vm_itr;
+  for(vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
+    if((*i)->dist_typeid() == vm->dist_typeid()){
+      *i = vm;
+      return true;
+    }
+  
+  // add to the collection if no duplicate found
+  reg_vms.push_back(vm);
+  return true;
 }
 
 
-//: Return the maximum number of components if a mixture
-// If not a mixture return 1
-unsigned int
-bbgm_variance_viewer::max_components(const bbgm_image_sptr& dimg) const
+//: Return a pointer to the view_maker that applies to this image type.
+//  Return a null pointer if no such view_maker is found
+bbgm_view_maker_sptr 
+bbgm_variance_viewer::find_view_maker(const vcl_type_info& dist_type) 
 {
-  if (!dimg)
-    return 0;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
-      bsta_mixture_size_functor<T> func;\
-      vil_image_view<unsigned int> count;\
-      unsigned int fail_val = 0;\
-      bbgm_apply(*d, func, count, &fail_val);\
-      unsigned int min, max;\
-      vil_math_value_range(count, min, max);\
-      return max;\
-    }\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
-      return 3;\
-    }\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-  return 1;
+  typedef vcl_vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
+  for(vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
+    if((*i)->dist_typeid() == dist_type)
+      return *i;
+  return bbgm_view_maker_sptr(NULL);
 }
 
-
-//: Apply the operations to the distribution image to produce a vil image
-bool bbgm_variance_viewer::apply(const bbgm_image_sptr& dimg,
-                                  vil_image_view<double>& image) const
-{
-  if (!dimg)
-    return false;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      typedef bsta_diag_covar_functor<DIST > func_T;\
-      func_T m_func;\
-      bsta_mixture_functor<T, func_T > func(m_func,this->active_component_);\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }\
-  {\
-    typedef DIST T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      bsta_diag_covar_functor<T> func;\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      typedef bsta_var_functor<DIST > func_T;\
-      func_T m_func;\
-      bsta_mixture_functor<T, func_T > func(m_func,this->active_component_);\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      typedef bsta_var_functor<DIST > func_T;\
-      func_T m_func;\
-      bsta_mixture_functor<T, func_T > func(m_func,this->active_component_);\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }\
-  {\
-    typedef DIST T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      bsta_var_functor<T> func;\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-#undef macro
-
-  return false;
-}
 
 //=============================================================================
 
+//: initialize the static vector of registered types
+vcl_vector<bbgm_view_maker_sptr> bbgm_weight_viewer::reg_vms;
 
-//: Probe to see if this viewer can handle this image type
-bool
-bbgm_weight_viewer::probe(const bbgm_image_sptr& dimg) const
+//: Register a new view_maker 
+// \return true if successfully registered or false if invalid or already
+//         registered.
+bool bbgm_weight_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 {
-  if (!dimg)
+  if(!vm) // don't add null pointers
     return false;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())) return true;\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-  return false;
+  
+  // replace existing type match
+  typedef vcl_vector<bbgm_view_maker_sptr>::iterator vm_itr;
+  for(vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
+    if((*i)->dist_typeid() == vm->dist_typeid()){
+      *i = vm;
+      return true;
+    }
+  
+  // add to the collection if no duplicate found
+  reg_vms.push_back(vm);
+  return true;
 }
 
 
-//: Return the maximum number of components if a mixture
-// If not a mixture return 1
-unsigned int
-bbgm_weight_viewer::max_components(const bbgm_image_sptr& dimg) const
+//: Return a pointer to the view_maker that applies to this image type.
+//  Return a null pointer if no such view_maker is found
+bbgm_view_maker_sptr 
+bbgm_weight_viewer::find_view_maker(const vcl_type_info& dist_type) 
 {
-  if (!dimg)
-    return 0;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
-      bsta_mixture_size_functor<T> func;\
-      vil_image_view<unsigned int> count;\
-      unsigned int fail_val = 0;\
-      bbgm_apply(*d, func, count, &fail_val);\
-      unsigned int min, max;\
-      vil_math_value_range(count, min, max);\
-      return max;\
-    }\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST, 3> > T;\
-    if (dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr())){\
-      return 3;\
-    }\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-  return 1;
+  typedef vcl_vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
+  for(vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
+    if((*i)->dist_typeid() == dist_type)
+      return *i;
+  return bbgm_view_maker_sptr(NULL);
 }
 
-
-//: Apply the operations to the distribution image to produce a vil image
-bool bbgm_weight_viewer::apply(const bbgm_image_sptr& dimg,
-                                vil_image_view<double>& image) const
-{
-  if (!dimg)
-    return false;
-
-#define macro(DIST)\
-  {\
-    typedef bsta_num_obs<bsta_mixture<DIST > > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      bsta_weight_functor<T > func(this->active_component_);\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }\
-  {\
-    typedef bsta_num_obs<bsta_mixture_fixed<DIST,3> > T;\
-    if (const bbgm_image_of<T>* d = dynamic_cast<const bbgm_image_of<T>*>(dimg.ptr()))\
-    {\
-      bsta_weight_functor<T > func(this->active_component_);\
-      bbgm_apply(*d, func, image, fail_val_);\
-      return true;\
-    }\
-  }
-  macro(bsta_num_obs<bsta_gauss_f1>);
-  macro(bsta_num_obs<bsta_gauss_if3>);
-#undef macro
-
-  return false;
-}

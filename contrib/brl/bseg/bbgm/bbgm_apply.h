@@ -18,6 +18,7 @@
 
 #include "bbgm_image_of.h"
 #include "bbgm_planes_to_sample.h"
+#include <vpdl/vpdt/vpdt_field_traits.h>
 
 //: Apply the functor at every pixel
 //  \returns an image of results, each vector component in a separate plane
@@ -30,11 +31,11 @@ struct bbgm_apply_no_data
                            vil_image_view<T>& result,
                            const T* fail_val = NULL )
   {
-    typedef typename functor_::return_T return_T;
+    typedef typename functor_::return_type return_T;
 
     const unsigned ni = dimg.ni();
     const unsigned nj = dimg.nj();
-    const unsigned np = functor_::return_dim;
+    const unsigned np = vpdt_field_traits<return_T>::dimension;
 
     if (ni==0 && nj==0)
       return;
@@ -78,7 +79,7 @@ struct bbgm_apply_no_data<dist_,functor_,T,true>
                            vil_image_view<T>& result,
                            const T* fail_val = NULL )
   {
-    typedef typename functor_::return_T return_T;
+    typedef typename functor_::return_type return_T;
 
     const unsigned ni = dimg.ni();
     const unsigned nj = dimg.nj();
@@ -112,7 +113,9 @@ void bbgm_apply(const bbgm_image_of<dist_>& dimg,
                 vil_image_view<T>& result,
                 const T* fail_val = NULL )
 {
-  bbgm_apply_no_data<dist_,functor_,T,functor_::return_dim == 1>::apply(dimg,functor,result,fail_val);
+  typedef vpdt_field_traits<typename functor_::return_type> return_traits;
+  bbgm_apply_no_data<dist_,functor_,T,return_traits::dimension == 1>::
+      apply(dimg,functor,result,fail_val);
 }
 
 
@@ -128,13 +131,13 @@ struct bbgm_apply_data
                            vil_image_view<rT>& result,
                            const rT* fail_val = NULL )
   {
-    typedef typename functor_::return_T return_T;
+    typedef typename functor_::return_type return_T;
     typedef vnl_vector_fixed<dT,dist_::dimension> vector_;
 
     const unsigned ni = dimg.ni();
     const unsigned nj = dimg.nj();
     const unsigned d_np = dist_::dimension;
-    const unsigned r_np = functor_::return_dim;
+    const unsigned r_np = vpdt_field_traits<return_T>::dimension;
     assert(data.ni() == ni);
     assert(data.nj() == nj);
     assert(data.nplanes() == d_np);
@@ -183,7 +186,7 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
                            vil_image_view<rT>& result,
                            const rT* fail_val = NULL )
   {
-    typedef typename functor_::return_T return_T;
+    typedef typename functor_::return_type return_T;
     typedef typename dist_::vector_type vector_;
 
     const unsigned ni = dimg.ni();
@@ -229,7 +232,9 @@ void bbgm_apply(const bbgm_image_of<dist_>& dimg,
                  vil_image_view<rT>& result,
                  const rT* fail_val = NULL )
 {
-  bbgm_apply_data<dist_,functor_,dT,rT,functor_::return_dim == 1>::apply(dimg,functor,data,result,fail_val);
+  typedef vpdt_field_traits<typename functor_::return_type> return_traits;
+  bbgm_apply_data<dist_,functor_,dT,rT,return_traits::dimension == 1>::
+      apply(dimg,functor,data,result,fail_val);
 }
 
 

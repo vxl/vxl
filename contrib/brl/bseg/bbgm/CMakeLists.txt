@@ -9,6 +9,7 @@ SET(bbgm_sources
   bbgm_detect.h
   bbgm_image_of.h      bbgm_image_of.cxx   bbgm_image_of.txx  bbgm_image_sptr.h
   bbgm_viewer.h        bbgm_viewer.cxx     bbgm_viewer_sptr.h
+  bbgm_view_maker.h                        bbgm_view_maker_sptr.h
   bbgm_loader.h        bbgm_loader.cxx
   bbgm_measure.h
 )

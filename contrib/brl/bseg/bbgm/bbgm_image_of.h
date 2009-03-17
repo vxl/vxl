@@ -13,6 +13,7 @@
 // \endverbatim
 
 
+#include <vcl_typeinfo.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_loader.h>
@@ -22,6 +23,9 @@ class bbgm_image_base : public vbl_ref_count
 {
   public:
     virtual ~bbgm_image_base(){}
+  
+    //: return the type_info for the distribution type
+    virtual const vcl_type_info& dist_typeid() const=0;
 
     //: Binary save self to stream.
     virtual void b_write(vsl_b_ostream &os) const=0;
@@ -44,7 +48,9 @@ class bbgm_image_of : public bbgm_image_base
   bbgm_image_of<_dist>(){};
   bbgm_image_of<_dist>(unsigned int ni, unsigned int nj,
                         const _dist& model) : data_(nj,ni,model) {}
-
+  
+  //: return the type_info for the distribution type
+  virtual const vcl_type_info& dist_typeid() const { return typeid(_dist); }
 
   //: Return the width of the image
   unsigned int ni() const { return data_.cols(); }
