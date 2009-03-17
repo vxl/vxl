@@ -1,7 +1,7 @@
 # gel/vifa/tests/CMakeLists.txt
 
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 ADD_EXECUTABLE( vifa_test_all
   test_ifa_factory.h
