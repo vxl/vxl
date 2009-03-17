@@ -25,6 +25,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
 {
  public:
   typedef dist_ dist_type;
+  typedef dist_type component_type; // for compatibility with vpdl/vpdt
   enum { max_components = s };
 
  private:

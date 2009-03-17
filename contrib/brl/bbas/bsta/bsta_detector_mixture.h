@@ -20,6 +20,7 @@ class bsta_top_weight_detector
 {
   public:
     typedef bool return_T;
+    typedef return_T return_type; // for compatiblity with vpdl/vdpt
     enum { return_dim = 1 };
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;
@@ -57,6 +58,7 @@ class bsta_mix_any_less_index_detector
 {
   public:
     typedef bool return_T;
+    typedef return_T return_type; // for compatiblity with vpdl/vdpt
     enum { return_dim = 1 };
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;

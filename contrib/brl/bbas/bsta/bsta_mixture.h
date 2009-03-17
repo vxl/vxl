@@ -19,6 +19,10 @@
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include "bsta_sampler.h"
+#include <vpdl/vpdt/vpdt_dist_traits.h>
+
+
+
 
 //: A mixture of distributions
 template <class dist_>
@@ -27,6 +31,7 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
 {
  public:
   typedef dist_ dist_type;
+  typedef dist_type component_type; // for compatibility with vpdl/vpdt
   // unlimited number of component is indicated by 0
   enum { max_components = 0 };
 
@@ -239,5 +244,12 @@ inline vcl_ostream& operator<< (vcl_ostream& os,
   }
   return os;
 }
+
+//: for compatibility with vpdl/vpdt
+template <class dist>
+struct vpdt_is_mixture<bsta_mixture<dist> >
+{
+  static const bool value = true;
+};
 
 #endif // bsta_mixture_h_

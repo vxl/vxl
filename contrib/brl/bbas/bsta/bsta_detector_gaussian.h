@@ -19,6 +19,7 @@ class bsta_g_mdist_detector
 {
   public:
     typedef bool return_T;
+    typedef return_T return_type; // for compatiblity with vpdl/vdpt
     enum { return_dim = 1 };
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;

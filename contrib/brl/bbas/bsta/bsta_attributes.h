@@ -14,6 +14,7 @@
 
 #include "bsta_distribution.h"
 #include <vcl_iostream.h>
+#include <vpdl/vpdt/vpdt_dist_traits.h>
 
 //: Adds number of observations
 template <class dist_>
@@ -45,5 +46,12 @@ inline vcl_ostream& operator<< (vcl_ostream& os,
      << dist ;
   return os;
 }
+
+//: for compatibility with vpdl/vpdt
+template <class dist>
+struct vpdt_is_mixture<bsta_num_obs<dist> >
+{
+  static const bool value = vpdt_is_mixture<dist>::value;
+};
 
 #endif // bsta_attributes_h_
