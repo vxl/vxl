@@ -1,7 +1,12 @@
 USES += contrib/gel contrib/brl contrib/brl/bseg core
 include ../config.mk
-include ${VXLROOT}/core/testlib/config.mk
 include ${VXLROOT}/contrib/brl/bseg/sdet/config.mk
+include ${VXLROOT}/contrib/gel/vtol/config.mk
+include ${VXLROOT}/contrib/gel/vdgl/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 SOURCES += test_ifa_factory.cxx

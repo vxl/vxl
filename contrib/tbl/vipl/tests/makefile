@@ -4,6 +4,8 @@ include ../config.mk
 include ${VXLROOT}/core/vnl/algo/config.mk
 include ${VXLROOT}/core/vnl/io/config.mk
 include ${VXLROOT}/core/vgl/io/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vnl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 # Do not instantiate templates in the library but implicitly, on use:

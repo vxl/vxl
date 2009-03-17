@@ -1,5 +1,6 @@
 USES += contrib/mul core
 include ../config.mk
+include ../../config.mk
 include $(VXLROOT)/core/vpl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 

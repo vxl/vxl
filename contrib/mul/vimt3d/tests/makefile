@@ -1,5 +1,10 @@
 USES += contrib/mul core
 include ../config.mk
+include ${VXLROOT}/contrib/mul/vil3d/config.mk
+include ${VXLROOT}/contrib/mul/mbl/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vul/config.mk
 include ${VXLROOT}/core/vpl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 

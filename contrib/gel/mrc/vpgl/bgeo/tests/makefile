@@ -1,5 +1,6 @@
 USES += contrib/gel contrib/gel/mrc core
 include ../config.mk
+include ${VXLROOT}/core/vgl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

@@ -1,6 +1,11 @@
 USES += core
 include ../config.mk
 include ${VXLROOT}/core/vidl_vil1/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vul/config.mk
 
 MINI_PROG_SOURCES += basic01_display_image.cxx
 MINI_PROG_SOURCES += basic01a_multiple_panes.cxx

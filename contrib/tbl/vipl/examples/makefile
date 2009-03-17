@@ -13,6 +13,7 @@
 
 USES += contrib/tbl core
 include ../config.mk
+include ${VXLROOT}/core/vil/config.mk # for A.
 include ${VXLROOT}/core/vil1/config.mk # for B.
 include ${VXLROOT}/core/vnl/config.mk # for C.
 include $(VXLROOT)/core/vbl/config.mk # for D.

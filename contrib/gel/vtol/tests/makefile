@@ -1,6 +1,11 @@
 USES += contrib/gel core
 include ../config.mk
 include ../algo/config.mk
+include ${VXLROOT}/contrib/gel/vsol/config.mk
+include ${VXLROOT}/contrib/gel/vdgl/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vul/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

@@ -1,6 +1,13 @@
 USES += contrib/rpl core
 include ../config.mk
+include ${VXLROOT}/contrib/rpl/rrel/config.mk
+include ${VXLROOT}/contrib/rpl/rsdl/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vnl/config.mk
 include $(VXLROOT)/core/vil/algo/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vul/config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 TESTS += registration1.cxx

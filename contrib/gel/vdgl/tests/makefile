@@ -1,5 +1,8 @@
 USES += contrib/gel core
 include ../config.mk
+include ${VXLROOT}/contrib/gel/vsol/config.mk
+include ${VXLROOT}/core/vbl/io/config.mk
+include ${VXLROOT}/core/vsl/config.mk
 include ${VXLROOT}/core/vpl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 

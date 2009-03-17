@@ -1,5 +1,11 @@
 USES += contrib/brl contrib/brl/bbas core
 include ../config.mk
+include ../reg/config.mk
+include ../algo/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/config.mk
+include ${VXLROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vil/config.mk
 
 MINI_PROG_SOURCES += bwm_main.cxx
 MINI_PROG_SOURCES += bwm_batch_project.cxx

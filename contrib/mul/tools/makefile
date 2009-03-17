@@ -1,5 +1,8 @@
 USES += contrib/mul core
 include ${VXLROOT}/contrib/mul/vimt3d/config.mk
+include ${VXLROOT}/contrib/mul/vil3d/config.mk
+include ${VXLROOT}/contrib/mul/mbl/config.mk
+include ${VXLROOT}/core/vul/config.mk
 include ${VXLROOT}/core/vbl/config.mk
 
 MINI_PROG_SOURCES += concat_3d_images.cxx

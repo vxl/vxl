@@ -1,9 +1,5 @@
 USES += contrib/mul core
 include ../config.mk
-include ${VXLROOT}/contrib/mul/pdf1d/config.mk
-include $(VXLROOT)/core/vul/config.mk
-include $(VXLROOT)/core/vpl/config.mk
-include $(VXLROOT)/core/testlib/config.mk
 
 TESTS += test_binary_hyperplane.cxx
 TESTS += test_binary_pdf_classifier.cxx

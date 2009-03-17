@@ -1,6 +1,8 @@
 USES += contrib/rpl contrib/mul core
 IULIBS += -lrrel_tests
 include ../config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vnl/config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 LIBRARY := rrel_tests

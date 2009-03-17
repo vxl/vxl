@@ -1,5 +1,6 @@
 USES += core contrib/brl contrib/brl/bbas
 include ../config.mk
+include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_legendre_polynomial.cxx

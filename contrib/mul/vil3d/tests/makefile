@@ -1,5 +1,9 @@
 USES += contrib/mul core
+include ../config.mk
 include ../algo/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vgl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 include ${VXLROOT}/core/vpl/config.mk
 

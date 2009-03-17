@@ -1,6 +1,9 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
-include ${VXLROOT}/contrib/brl/bseg/segv/config.mk
+include ../segv/config.mk
 include ${VXLROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vpl/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vil/config.mk
 
 MINI_PROG_SOURCES += seg.cxx
 MINI_PROG_SOURCES += seg_vil.cxx

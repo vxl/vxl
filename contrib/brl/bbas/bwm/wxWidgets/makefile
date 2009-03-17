@@ -1,5 +1,8 @@
 USES += contrib/brl contrib/brl/bbas core
 include ../config.mk
+include ${VXLROOT}/core/vgui/wx/config.mk
+include ${VXLROOT}/core/vgui/config.mk
+USE_WXWIDGETS := 1
 
 PROGRAM := wx_example
 

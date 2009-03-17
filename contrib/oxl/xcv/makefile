@@ -3,6 +3,9 @@ include $(VXLROOT)/core/vgui/config.mk
 include $(VXLROOT)/contrib/oxl/mvl/config.mk
 include $(VXLROOT)/contrib/oxl/osl/config.mk
 include $(VXLROOT)/core/vgl/config.mk
+include ${VXLROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vul/config.mk
 
 PROGRAM = xcv
 

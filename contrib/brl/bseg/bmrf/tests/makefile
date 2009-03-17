@@ -1,7 +1,6 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 include ../config.mk
 include ${VXLROOT}/core/vpl/config.mk
-include ${VXLROOT}/contrib/brl/bseg/brip/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

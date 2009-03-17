@@ -1,6 +1,7 @@
 USES += core
 include ../config.mk
 include ${VXLROOT}/core/vpl/config.mk
+include ${VXLROOT}/core/vsl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

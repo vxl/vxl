@@ -1,7 +1,5 @@
 USES += contrib/brl contrib/gel contrib/brl/bbas core
 include ../config.mk
-include ${VXLROOT}/contrib/gel/vdgl/config.mk
-include ${VXLROOT}/contrib/gel/vtol/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

@@ -1,5 +1,6 @@
 USES += contrib/mul core
 include ../config.mk
+include ${VXLROOT}/contrib/mul/mipa/config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

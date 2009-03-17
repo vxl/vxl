@@ -1,5 +1,6 @@
 USES += contrib/rpl core
 include ../config.mk
+include ${VXLROOT}/core/vul/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

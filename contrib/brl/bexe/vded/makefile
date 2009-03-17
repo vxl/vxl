@@ -1,4 +1,5 @@
 USES += contrib/brl contrib/brl/bseg
+include ${VXLROOT}/contrib/brl/bseg/brip/config.mk
 include ${VXLROOT}/core/vul/config.mk
 include ${VXLROOT}/core/vidl/config.mk
 include ${VXLROOT}/core/vil/algo/config.mk

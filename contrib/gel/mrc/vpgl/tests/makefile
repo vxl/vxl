@@ -1,5 +1,7 @@
 USES += contrib/gel core
 include ../config.mk
+include ../bgeo/config.mk
+include ${VXLROOT}/core/vpl/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

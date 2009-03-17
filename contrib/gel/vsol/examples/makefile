@@ -2,6 +2,7 @@
 
 USES += contrib/gel core
 include ../config.mk
+include ${VXLROOT}/core/vgl/algo/config.mk
 
 MINI_PROG_SOURCES += vsol_spatial_object_example.cxx
 MINI_PROG_SOURCES += vsol_point_example.cxx

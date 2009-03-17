@@ -1,6 +1,7 @@
 USES += contrib/oxl core
 include ${VXLROOT}/core/vgui/config.mk
 include ${VXLROOT}/contrib/oxl/osl/config.mk
+USE_GLUT := 1
 
 MINI_PROG_SOURCES += satellite.cxx
 

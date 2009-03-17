@@ -1,5 +1,8 @@
 USES += contrib/oxl core
+include ${VXLROOT}/contrib/oxl/oxp/config.mk
 include ${VXLROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vidl_vil1/config.mk
+include ${VXLROOT}/core/vul/config.mk
 
 #######################################
 include $(VXLROOT)/config/top-params.mk
@@ -15,7 +18,7 @@ ifeq ($(OS),win32)
  SOURCES += vplayer_geometry.cxx
  SOURCES += vplayer_video.cxx
 
- IULIBS = -lnafxcw  -lopengl32 -lglu32 # -lmvox
+ IULIBS = -lnafxcw  -lopengl32 -lglu32 -lvfw32 # -lmvox
 endif
 
 ######################################

@@ -1,5 +1,6 @@
 USES += contrib/brl contrib/brl/bbas core
 include ../config.mk
+include ../algo/config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx

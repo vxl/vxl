@@ -1,5 +1,11 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 include ../config.mk
+include ${VXLROOT}/contrib/brl/bseg/vvid/config.mk
+include ${VXLROOT}/contrib/brl/bseg/sdet/config.mk
+include ${VXLROOT}/contrib/brl/bseg/vpro/config.mk
+include ${VXLROOT}/core/vidl_vil1/config.mk
+include ${VXLROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vul/config.mk
 
 LIBRARY := vvid_bin
 SOURCES += vidfpl_menus.cxx

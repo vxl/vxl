@@ -1,5 +1,6 @@
 USES += core
 include ../config.mk
+include ${VXLROOT}/core/vil1/config.mk
 include ${VXLROOT}/core/vul/config.mk
 
 MINI_PROG_SOURCES += vidl_vil1_mpegcodec_example.cxx
