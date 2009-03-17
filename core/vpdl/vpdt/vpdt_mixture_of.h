@@ -27,6 +27,12 @@ vpdt_box_prob(const vpdt_mixture_of<dist>& d,
               const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& min_pt,
               const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& max_pt);
 
+template <class dist>
+struct vpdt_is_mixture<vpdt_mixture_of<dist> >
+{
+  static const bool value = true;
+};
+
 
 //: A mixture of a fixed type of distributions
 // A mixture is a weighted linear combination of other mixtures.

@@ -17,6 +17,7 @@ SET( vpdl_sources
 
   # Template Library headers
   vpdt/vpdt_access.h
+  vpdt/vpdt_enable_if.h
   vpdt/vpdt_field_traits.h
   vpdt/vpdt_field_default.h
   vpdt/vpdt_dist_traits.h
@@ -30,7 +31,9 @@ SET( vpdl_sources
   vpdt/vpdt_update_gaussian.h
   vpdt/vpdt_update_mog.h
   vpdt/vpdt_mog_fitness.h
-
+  
+  vpdt/vpdt_distribution_accessors.h
+  vpdt/vpdt_mixture_accessors.h
   vpdt/vpdt_gaussian_detector.h
   vpdt/vpdt_mixture_detector.h
 )

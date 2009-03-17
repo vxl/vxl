@@ -90,7 +90,7 @@ public:
                       T g_thresh = T(2.5),
                       T alpha = T(0.1),
                       T init_weight = T(0.1),
-                      T min_stdev = T(0) )
+                      T min_stdev = T(0.16) )
   : vpdt_mog_updater<mog_type>(init_gaussian, max_cmp),
     gt2_(g_thresh*g_thresh), alpha_(alpha), init_weight_(init_weight), 
     min_var_(min_stdev*min_stdev) {}
