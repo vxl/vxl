@@ -616,7 +616,7 @@ foreach $f (@FILES)
   &msg(1, "contains long /*...*/ comments")
     if ($cpp_file && $f !~ m!\bvidl/vidl_mpegcodec\.cxx$! && $f !~ m!\bvidl_vil1/vidl_vil1_mpegcodec\.cxx$! &&
         $f !~ m!\bvul/vul_url\.cxx$! && $f !~ m!\bvcl/gtkgl/! &&
-        $f !~ m!\bvul/tests/test_file_iterator\.cxx$! && $file =~ m!\001[^\001\002]{121,}\002!);
+        $f !~ m!\bvul/tests/test_file_iterator\.cxx$! && $file =~ s!\001[^\001\002]{121,}\002!!g);
   if ($file =~ m!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}! && $file !~ m!//\s*\\code!)
   {
     $tmp=$file; $tmp =~ s!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
@@ -922,7 +922,8 @@ foreach $f (@FILES)
   &msg(1, "definition of $1 does not start with a space")
     if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*)\s*\([^)]*\)\S!);
   &msg(1, "definition of $1 has no space before > in $2")
-    if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+(\<[^<>\n]*[A-Za-z_]\w*\>)! && $2 ne "<float>" && $2 ne "<double>" && $2 ne "<T,n>");
+    if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+(\<[^<>\n]*[A-Za-z_]\w*\>)!
+        && length($2) < 16 && $2 ne "<float>" && $2 ne "<double>" && $2 ne "<T,n>");
 # Presence of VCL_*_INSTANTIATE in *.cxx files outside Templates directories
   &msg(1, "$1 may only be used in Templates subdirectories")
     if ($f !~ m!/Templates/! &&
