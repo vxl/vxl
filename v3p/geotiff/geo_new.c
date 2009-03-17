@@ -12,7 +12,7 @@
  *    20 June, 1995      Niles D. Ritter         New
  *    7 July,  1995      Greg Martin             Fix index
  *
- * Log: geo_new.c
+ * $Log$
  * Revision 1.11  2004/04/27 21:32:08  warmerda
  * Allow GTIFNew(NULL) to work
  *

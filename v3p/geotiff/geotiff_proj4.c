@@ -28,7 +28,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: geotiff_proj4.c
+ * $Log$
  * Revision 1.22  2005/03/04 04:32:37  fwarmerdam
  * added cylindricalequalarea support
  *

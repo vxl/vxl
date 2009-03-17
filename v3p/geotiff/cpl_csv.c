@@ -22,7 +22,7 @@
  *
  * cpl_csv.c: Support functions for accessing CSV files.
  *
- * Log: cpl_csv.c
+ * $Log$
  * Revision 1.16  2003/07/10 18:03:28  warmerda
  * don't crash if NULL passed to gtCSVAccess()
  *

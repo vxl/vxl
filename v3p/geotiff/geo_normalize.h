@@ -28,7 +28,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: geo_normalize.h
+ * $Log$
  * Revision 1.12  2005/08/26 16:08:14  fwarmerdam
  * Include void in empty argument list for prototype.
  *

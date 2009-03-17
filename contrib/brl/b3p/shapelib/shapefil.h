@@ -36,7 +36,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: shapefil.h
+ * $Log$
  * Revision 1.26  2002/09/29 00:00:08  warmerda
  * added FTLogical and logical attribute read/write calls
  *

@@ -27,7 +27,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: geo_normalize.c
+ * $Log$
  * Revision 1.45  2005/03/15 16:01:18  fwarmerdam
  * zero inv flattening interpreted as sphere
  *

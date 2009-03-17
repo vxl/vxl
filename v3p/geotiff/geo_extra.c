@@ -28,7 +28,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: geo_extra.c
+ * $Log$
  * Revision 1.4  2002/12/01 23:44:34  warmerda
  * Fixed typo in last fix.
  *

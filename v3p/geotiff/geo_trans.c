@@ -28,7 +28,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: geo_trans.c
+ * $Log$
  * Revision 1.10  2003/07/08 17:31:30  warmerda
  * cleanup various warnings
  *

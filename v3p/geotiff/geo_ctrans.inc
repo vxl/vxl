@@ -27,7 +27,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: geo_ctrans.inc
+ * $Log$
  * Revision 1.3  2005/03/04 03:59:11  fwarmerdam
  * Added header.
  *

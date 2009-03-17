@@ -22,7 +22,7 @@
  *
  * cpl_serv.c: Various Common Portability Library derived convenience functions
  *
- * Log: cpl_serv.c
+ * $Log$
  * Revision 1.8  2001/07/09 20:14:37  warmerda
  * Another problem freeing pszRLBuffer and not setting to NULL.
  *

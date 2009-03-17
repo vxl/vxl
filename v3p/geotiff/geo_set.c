@@ -9,7 +9,7 @@
  *  Permission granted to use this software, so long as this copyright
  *  notice accompanies any products derived therefrom.
  *
- * Log: geo_set.c
+ * $Log$
  * Revision 1.11  2004/04/27 21:32:33  warmerda
  * reformat for clarity
  *

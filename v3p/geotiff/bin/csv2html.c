@@ -27,7 +27,7 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * Log: csv2html.c
+ * $Log$
  * Revision 1.3  2000/12/28 23:26:56  warmerda
  * Changed to default csv path.
  *
