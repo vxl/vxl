@@ -5,6 +5,12 @@
 #include <vil/vil_crop.h>
 #include <vul/vul_file.h>
 
+#if LIBAVCODEC_BUILD >= ((52<<16)+(0<<8)+0)
+extern "C" {
+#include <libswscale/swscale.h>
+}
+#endif
+
 // Constructor
 vidl_ffmpeg_codec::vidl_ffmpeg_codec()
 : fmt_cxt_( NULL ),
@@ -256,11 +262,24 @@ vidl_ffmpeg_codec::cur_frame() const
     AVPicture out_pict;
     out_pict.data[0] = cur_img_.top_left_ptr();
     out_pict.linesize[0] = cur_img_.ni() * 3;
+#if LIBAVCODEC_BUILD < ((52<<16)+(0<<8)+0)
     if ( img_convert(&out_pict, PIX_FMT_RGB24,
                      (AVPicture*)frame_, enc->pix_fmt,
                      width, height ) == -1 ) {
       cur_img_ = 0;
     }
+#else
+    SwsContext* ctx = sws_getContext(width, height, enc->pix_fmt,  // input format
+                                     width, height, PIX_FMT_RGB24, // output format
+                                     SWS_BILINEAR,
+                                     NULL, NULL, NULL );
+    AVPicture* in_pict = (AVPicture*)frame_;
+    sws_scale( ctx,
+              in_pict->data, in_pict->linesize,
+              0, height,
+              out_pict.data, out_pict.linesize );
+    sws_freeContext( ctx );
+#endif
   }
 
   // The MPEG 2 codec has a latency of 1 frame, so the dts of the last
