@@ -37,7 +37,7 @@ VXL 1.11.0      - July 2008
       - Added fast exact Euclidean distance transforms to vil/algo
 
 ****************************
-VXL 1.9.0	- July 2007
+VXL 1.9.0        - July 2007
 ****************************
       - support for qt4 added to vgui
 
