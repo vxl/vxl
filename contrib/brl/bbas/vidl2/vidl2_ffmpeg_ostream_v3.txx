@@ -96,7 +96,7 @@ open()
   // are smaller.
   os_->bit_buf_ = new vil_memory_chunk( params_.ni_ * params_.nj_ * 3, VIL_PIXEL_FORMAT_BYTE );
 
-  os_->fmt_cxt_ = av_alloc_format_context();
+  os_->fmt_cxt_ = avformat_alloc_context();
 
   AVOutputFormat* file_oformat = 0;
   if ( params_.file_format_ == vidl2_ffmpeg_ostream_params::GUESS ) {
