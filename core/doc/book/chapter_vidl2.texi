@@ -2,13 +2,15 @@
 @code{vidl2} is a library for managing video streams.
 
 The purpose of this library is to provide a unified interface for
-reading and writing video data in VXL. Unlike the previous vidl
-library, this library treats video as a data stream.  The input
-streams are derived from @code{vidl2_istream} and can provide
-data from disk or from a live capture (a camera, for example).
-The output streams are dervied from @code{vidl2_ostream} 
-and can write data to disk or potentially display on a screen
-or stream onto the internet (not implemented yet).
+reading and writing video data in VXL. 
+Unlike the previous vidl library, this library treats 
+video as a data stream.  
+The input streams are derived from @code{vidl2_istream} and can 
+provide data from disk or from a live capture (a camera, for example).
+The output streams are derived from @code{vidl2_ostream} 
+and can write data to disk.
+Potentially, output streams could also display on a screen
+or transmit an internet video stream, but these are not implemented yet.
 @endchapsummary
 
 @section Introduction
@@ -32,7 +34,7 @@ An example of simple compact video transcoding with @code{vidl2}
 @end example
 
 @subsection Comparison with Previous Video Library
-This design has the following advantages over the old vxl video 
+This design has the following advantages over the old VXL video 
 library that treated videos as container objects.
 @itemize @bullet
 @item Better support for large video files
@@ -45,9 +47,15 @@ library that treated videos as container objects.
 @subheading Streams vs. Codecs
 
 Various stream subclasses are used to interface with different types 
-of video streams. Note that these are not called codecs. The codec in 
-the old @code{vidl} library was somewhat of a misnomer. Each 
-@code{vidl2_istream} and @code{vidl2_ostream} subclass is a wrapper 
+of video streams. 
+Note that these are no longer called @emph{codecs}. 
+The codec in the old @code{vidl} library was somewhat of a misnomer. 
+A codec (COder/DECoder) provides encoding and decoding algorithms for
+a specific video compression format (e.g. MPEG2, DV, H.264, etc.).
+@code{vidl2} (and its predecessor) provided wrappers to other APIs
+(like DirectShow and FFMPEG) which may encode or decode with a variety
+of codecs. 
+Each @code{vidl2_istream} and @code{vidl2_ostream} subclass is a wrapper 
 for another video API that may or may not provide encoding, and may 
 support many different codecs. For example,
 @code{vidl2_ffmpeg_istream} provides a input using the FFMPEG
@@ -56,9 +64,20 @@ formats (avi, mpeg, etc.) and decode using an even larger variety of
 codecs (MPEG2, MPEG4, MJPEG, H.264, Cinepak, etc.).  
 
 The video stream design also allows for streams that receive images
-from live video feeds. This could be from a camera, network video
-feed, or other source. Thus, video capture and video transcoding are
-both accomplished by directing an input stream into and output stream.
+from live video feeds. 
+This could be from a camera, network video feed, or other source. 
+Thus, video capture and video transcoding are both accomplished by 
+directing an input stream into and output stream.
+
+Several APIs that @code{vidl2} interfaces with allow for both input
+and output.
+For these there are both a corresponding @code{vidl2_istream} and
+@code{vidl2_ostream}.
+Other APIs are designed only for one or the other.
+For example, video capture APIs (like libdc1394) only provide an
+interface for input, so only a @code{vidl2_istream} is needed.
+The separation of input and output was not allowed by the previous 
+@code{vidl} library design.
 
 
 @section Stream Types
@@ -72,7 +91,7 @@ implemented.
 @item vidl2_image_list_istream
 Treats an ordered list of @code{vil_image_resource_sptr} as a video stream. 
 Also supports reading a list of images from disk given a list of 
-filenames or a file glob.
+file names or a file glob.
 @item vidl2_ffmpeg_istream
 Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
 decode many common video file formats.
@@ -89,7 +108,7 @@ Use libdc1394 v2 to stream video directly from IEEE 1394 (firewire)
 based cameras (Windows not supported yet)
 @end table
 
-@subheading Ouput Stream Types
+@subheading Output Stream Types
 
 @table @code
 @item vidl2_image_list_ostream 
@@ -126,44 +145,50 @@ Additional details for using these stream types is provide below.
 @section Video Frames
 
 The @code{vidl2_frame_sptr} is data structure used to transport video
-frame data from a @code{vidl2_istream} to a @code{vidl2_ostream}. The
-@code{vidl2_frame} contains a pointer to the frame buffer, the image
-resolution, the pixel format, and may eventually contain a time
-stamp. A @code{vidl2_frame} is more restrictive than a
-@code{vil_image_view} since it requires contiguous memory and is
-limited in pixel data types. However, it also handles many pixels
-formats not supported by @code{vil} such as those with subsampled
-chrominance (i.e. YUV 4:2:2).
+frame data from a @code{vidl2_istream} to a @code{vidl2_ostream}. 
+The @code{vidl2_frame} contains a pointer to the frame buffer, 
+the image resolution, the pixel format, and may eventually contain 
+a time stamp. 
+A @code{vidl2_frame} is more restrictive than a @code{vil_image_view} 
+since it requires contiguous memory and is limited in pixel data types. 
+However, it also handles many pixels formats not supported by 
+@code{vil}, such as those with sub-sampled chrominance 
+(i.e. YUV 4:2:2).
 
 In some cases the @code{vidl2_frame} data can be wrapped by a
-@code{vil_image_view}, but usually this is not a good idea. The
-@code{vidl2_frame} should be considered a volatile data structure. The
-image buffer is only guaranteed to be valid until the next call of
-@code{vidl2_ostream::advance()}. The ostream will keep a pointer to
-the released frame and then invalidate it before reusing memory. Use
-the functions in @code{vidl2_convert.h} to obtain a non-volatile
+@code{vil_image_view}, but usually this is not a good idea. 
+The @code{vidl2_frame} should be considered a volatile data structure. 
+The image buffer is only guaranteed to be valid until the next call of
+@code{vidl2_istream::advance()}. 
+The istream will keep a pointer to the released frame and then 
+invalidate it before reusing memory. 
+Use the functions in @code{vidl2_convert.h} to obtain a non-volatile
 @code{vil_image_view}.
 
 @section Pixel Formats
 
 The supported pixel formats are enumerated in
-@code{vidl2_pixel_format} enum.  The naming convention is
-@code{VIDL2_PIXEL_FORMAT_color_num[P]}, where @emph{color} is the color
-encoding, @emph{num} is the bit number, and the @code{P} character
-is optionally appended to indicate a planar encoding.  There are also
-two special formats.  @code{VIDL2_PIXEL_FORMAT_UNKNOWN} is used when
+@code{vidl2_pixel_format} enum.  
+The naming convention is @code{VIDL2_PIXEL_FORMAT_color_num[P]}, 
+where @emph{color} is the color encoding,
+ @emph{num} is the bit number, 
+and the @code{P} character is optionally appended to indicate 
+a planar encoding.  
+There are also two special formats.  
+@code{VIDL2_PIXEL_FORMAT_UNKNOWN} is used when
 the pixel format is not known or does not matter.
-@code{VIDL2_PIXEL_FORMAT_ENUM_END} is an end of enum marker that
-should never be used in a @code{vidl2_frame}.  This marker is used to
-count the number of pixel formats, all new formats should be added
-before the end marker in the enum.
+@code{VIDL2_PIXEL_FORMAT_ENUM_END} is an end of enum marker and
+should never be used in a @code{vidl2_frame}.  
+This marker is used to count the number of pixel formats.
+All new formats should be added before the end marker in the enum.
 
-The @emph{color} of a pixel format specifies the color encoding.  A
-separate enum named @code{vidl2_pixel_color} enumerates the available
-color modes.  These are
+The @emph{color} of a pixel format specifies the color encoding.  
+A separate enum named @code{vidl2_pixel_color} enumerates the 
+available color modes.  
+These are
 @table @code
 @item VIDL2_PIXEL_COLOR_MONO
-Monochrome or greyscale (1 color channel)
+Monochrome or grayscale (1 color channel)
 @item VIDL2_PIXEL_COLOR_RGB
 Red Green Blue (3 color channels)
 @item VIDL2_PIXEL_COLOR_RGBA
@@ -172,32 +197,36 @@ Red Green Blue Alpha (4 color channels)
 Luma Chroma-Blue Chroma-Red, aka YCrCb (3 color channels)
 @end table
 The multichannel color formats are not always encoded in the order
-given above.  The characters are permuted in the
-@code{vidl2_pixel_format} names to indicate the actual ordering.  For
-example, @code{BGR} indicates RGB color stored in reverse order.
+given above.  
+The characters are permuted in the @code{vidl2_pixel_format} 
+names to indicate the actual ordering.  
+For example, @code{BGR} indicates RGB color stored in reverse order.
 
 The @emph{bit number} in the indicates how the bits are laid out.  
 This is most important in packed color frames where a group 
 of 2 or 4 pixels is encoded together and differing numbers of bits are 
-added to different color channels.  When no packing occurs, the number
-in the @code{vidl2_pixel_format} name is the total number of bits
-(i.e. @code{RGB_24} is RGB with 8 bits for each channel).  When the
-number of bits per channel is different the standard chroma subsambing
-numbering is used (i.e. @code{422} for 4:2:2).  See
-@uref{http://en.wikipedia.org/wiki/Chroma_subsampling} for more
-details. A separate enum named @code{vidl2_pixel_arrangement}
-enumerates the available arrangements.  These are
+added to different color channels.  
+When no packing occurs, the number in the @code{vidl2_pixel_format} 
+name is the total number of bits
+(i.e. @code{RGB_24} is RGB with 8 bits for each channel).  
+When the number of bits per channel is different the standard 
+chroma sub-sampling numbering is used (i.e. @code{422} for 4:2:2).  
+See @uref{http://en.wikipedia.org/wiki/Chroma_subsampling} 
+for more details. 
+A separate enum named @code{vidl2_pixel_arrangement}
+enumerates the available arrangements.  
+These are
 @table @code
 @item VIDL2_PIXEL_ARRANGE_SINGLE
 Each pixel is listed in single file with equal bit allocation to each
-channel (ex. RGBRGBRGBRGBRGB...)
+channel (e.g. RGBRGBRGBRGBRGB...)
 @item VIDL2_PIXEL_ARRANGE_PACKED
 Small blocks of data represent a group of pixels and bit allocation
 generally differs between channels
 @item VIDL2_PIXEL_ARRANGE_PLANAR
 All data from one channel is provided before providing all data from
-the next channel (ex. RRRR... GGGG... BBBB...).  Chroma subsampling
-may still apply.
+the next channel (e.g. RRRR... GGGG... BBBB...).  
+Chroma sub-sampling may still apply.
 @item VIDL2_PIXEL_ARRANGE_PALETTE
 (Not currently used) 
 Each pixel is an index into a look-up table of colors.
@@ -206,13 +235,14 @@ Each pixel is an index into a look-up table of colors.
 @subsection The Pixel Traits Table
 
 To determine properties of each pixel type, @code{vidl2} relies
-heavily on template specialization and metaprogramming.  The template
-@code{vidl2_pixel_traits_of<FMT>} is specialized for each pixel format
-@code{FMT}.  The traits class provides several static members that
-describe the properties of each format.  The trait specializations are
-created using the macro @code{vidl2_pt_mac}.  This macro lets all the
-properties appear in a nice table.  It also makes it easy to add a new
-pixel format.
+heavily on template specialization and meta-programming.  
+The template @code{vidl2_pixel_traits_of<FMT>} is specialized for 
+each pixel format @code{FMT}.  
+The traits class provides several static members that describe the 
+properties of each format.  
+The trait specializations are created using the macro @code{vidl2_pt_mac}.  
+This macro lets all the properties appear in a nice table.  
+It also makes it easy to add a new pixel format.
 
 The following is a subset of the pixel traits table.
 @example
@@ -237,45 +267,51 @@ vidl2_pt_mac( MONO_16,  "Mono 16", vxl_uint_16, 16, MONO,   SINGLE,  0, 0 );
 The meaning of each column in the pixel traits table are as follows.
 @table @code
 @item format
-The format identifier symbol.  Appended to @code{VIDL2_PIXEL_FORMAT_},
+The format identifier symbol.  
+Appended to @code{VIDL2_PIXEL_FORMAT_},
 this should match the @code{vidl2_pixel_format} enum value.
 @item name
 The string name of the format for human readability.
 @item type
 The data type to be used when converting to a @code{vil_image_view}.
 @item bpp
-The number of bits per pixel. Not always an even multiple of
-@code{sizeof(type)} because pixels may be packed or subsampled in some
-planes (see @code{xcs} and @code{ycs}).
+The number of bits per pixel. 
+Not always an even multiple of @code{sizeof(type)} because pixels 
+may be packed or sub-sampled in some planes 
+(see @code{xcs} and @code{ycs}).
 @item color
 The color format.  Appended to @code{VIDL2_PIXEL_COLOR_} this
 determines the @code{vidl2_pixel_color}.
 @item arrange
-The pixel arrangement.  Appended to @code{VIDL2_PIXEL_ARRANGE_} this
-determines the @code{vidl2_pixel_arrangement}.
+The pixel arrangement.  Appended to @code{VIDL2_PIXEL_ARRANGE_} 
+this determines the @code{vidl2_pixel_arrangement}.
 @item xcs
-The X color subsampling factor.  In YUV color space, the U and V
-channels have a horizontal (X) resolution that is @math{2^@{-xcs@}} times that of the Y channel.
+The X color sub-sampling factor.  In YUV color space, the U and V
+channels have a horizontal (X) resolution that is @math{2^@{-xcs@}} 
+times that of the Y channel.
 @item ycs
-The Y color subsampling factor.  In YUV color space, the U and V
-channels have a vertical (Y) resolution that is @math{2^@{-ycs@}} times that of the Y channel.
+The Y color sub-sampling factor.  In YUV color space, the U and V
+channels have a vertical (Y) resolution that is @math{2^@{-ycs@}} 
+times that of the Y channel.
 @end table
 
 A new pixel format may be introduced by simply adding an entry in this
-table in @code{vidl2_pixel_format.h}. The traits of a pixel format are
-used in the automatic generation of conversion routines.  The ultimate
-goal of the @code{vidl2} pixel format framework is that new formats
-added to the table should automatically work (possibly slowly) without
-writing any additional conversion routines.
+table in @code{vidl2_pixel_format.h}. 
+The traits of a pixel format are used in the automatic generation of 
+conversion routines.  
+The ultimate goal of the @code{vidl2} pixel format framework is that 
+new formats added to the table should automatically work (possibly slowly) 
+without writing any additional conversion routines.
 
 
 @subsection Run-time Pixel Traits
 
 The template specializations used to define traits are very useful at
 compile-time, but less useful given a pixel format that is not known
-until run-time.  A second (non-templated) struct named
-@code{vidl2_pixel_traits} is available to dynamically hold traits at
-run-time.  The function @code{vidl2_pixel_format_traits} provides
+until run-time.  
+A second (non-templated) struct named @code{vidl2_pixel_traits} 
+is available to dynamically hold traits at run-time.  
+The function @code{vidl2_pixel_format_traits} provides
 dynamic look-up of traits from a @code{vidl2_pixel_format} variable.
 
 @example
@@ -293,9 +329,10 @@ vcl_cout << "The frame has format " << pt.name
 
 To simplify this process there are several convenience functions, such
 as @code{vidl2_pixel_format_bpp}, to directly look up a pixel trait
-given the format without the need for the traits struct.  There is
-also a @code{vcl_ostream} operator for @code{vidl2_pixel_format} so that the
-human readable string name is printed.  The following example
+given the format without the need for the traits struct. 
+There is also a @code{vcl_ostream} operator for @code{vidl2_pixel_format} 
+so that the human readable string name is printed.  
+The following example
 @example
 vidl2_pixel_format format = VIDL2_PIXEL_FORMAT_RGB_24;
 vcl_cout << "pixel format is " << format << vcl_endl;
@@ -305,11 +342,14 @@ produces the output
 pixel format is RGB 24
 @end example
 
-There is also a function that allows the look up of a pixel format
-from its string name.  Use @code{vidl2_pixel_format_from_string} for
-this purpose.  The expression
+There is also a function that provides a look up of a pixel format
+from its string name.  
+Use @code{vidl2_pixel_format_from_string} for this purpose.  
+The expression
 @example
 vidl2_pixel_format_from_string("RGB 24") == VIDL2_PIXEL_FORMAT_RGB_24
 @end example
-should evalute to @code{true}.
+should evaluate to @code{true}.
 @section Pixel Format Conversion
+
+@c  LocalWords:  istream ostream libdc
