@@ -25,7 +25,9 @@ MAKEINFOFLAGS=-Dmakeinfo
 SOURCEFILES=book.texi \
             appendix_adding_to_vnl_algo.texi \
             appendix_build.texi \
+            appendix_coding_standards.texi \
             appendix_structure.texi \
+            appendix_vsl_for_developers.texi \
             book_header.texi \
             chapter_examples.texi \
             chapter_intro.texi \
@@ -33,8 +35,13 @@ SOURCEFILES=book.texi \
             chapter_vcl.texi \
             chapter_vcsl.texi \
             chapter_vgl.texi \
+            chapter_vgui.texi \
+            chapter_vidl.texi \
+            chapter_vidl2.texi \
             chapter_vil.texi \
+            chapter_vil1.texi \
             chapter_vnl.texi \
+            chapter_vpdl.texi \
             chapter_vsl.texi \
             chapter_vul.texi
 
