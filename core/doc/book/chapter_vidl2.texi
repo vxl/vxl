@@ -350,6 +350,112 @@ The expression
 vidl2_pixel_format_from_string("RGB 24") == VIDL2_PIXEL_FORMAT_RGB_24
 @end example
 should evaluate to @code{true}.
+
 @section Pixel Format Conversion
 
-@c  LocalWords:  istream ostream libdc
+When passing a frame from an input stream to an output stream,
+pixel format conversion is generally not something the user needs 
+to worry about.
+The @code{vidl2_istream} should provide a @code{vidl_frame_sptr}
+that uses whatever pixel format is native to the video data.
+If the @code{vidl2_ostream} requires a different pixel format,
+then it perform the required conversion automatically.
+
+If for some reason manual conversion is required, the appropriate
+functions are found in @code{vidl_convert.h'}.
+The function is called @code{vidl2_convert_frame}, 
+and it comes in two forms.
+The first
+@example
+bool vidl2_convert_frame(const vidl2_frame& in_frame,
+                               vidl2_frame& out_frame);
+@end example
+takes an input frame and an output frame. 
+The output frame must have the appropriate size and pixel format
+for the output.
+If the size is not appropriate then the function returns false.
+This version is useful when you want to store the converted data 
+into an existing memory buffer; 
+for example, reusing the same output frame for each new input frame.
+The second form of the function
+@example
+vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
+                                     vidl2_pixel_format format);
+@end example
+take a smart pointer to an input frame and allocates new memory
+for the output frame using the specified pixel format.
+If the conversion is possible, a smart pointer to the new frame
+is returned.
+Otherwise, a null smart pointer is returned. 
+This version requires less preparation by the user, 
+but does not allow for the reuse of frame memory.
+
+@subsection Frame to Image View Conversion
+
+One case where the user usually does want to convert a frame
+is conversion to and from a @code{vil_image_view}.
+This type of conversion is needed to do any image processing
+on the data.
+There is more than one way to do such a conversion.
+The fastest way, if possible, is to wrap the @code{vil_image_view}
+in a @code{vidl2_frame} that shares the memory.
+Wrapping is only possible when the memory layout of the @code{vil}
+memory format is compatible with a @code{vidl2} pixel format.
+
+For writing to output streams, wrapping is usually safe
+because the data is immediately used and then no longer needed.
+The function @code{vidl2_convert_to_frame} takes a 
+@code{vil_image_view_base_sptr} and always tries to wrap 
+the memory first before allocating new memory and making
+a conversion.
+The result is returned as a @code{vidl2_frame_sptr}.
+
+When reading frames from video wrapping can be more dangerous.
+Processing images from video often involves multiple frames.
+To reduce memory allocation, most input streams will reuse
+the same memory.
+A member function on the @code{vidl2_frame} allows an input
+stream to @code{invalidate} the frame object it previously
+released in order to reclaim the memory for the next frame.
+The invalidated frame will now have a null pointer to memory,
+but any @code{vil_image_view} that was sharing the memory
+will now be overwritten by the next frame.
+It is safer to copy memory when converting a frame to an image,
+but it is potentially much slower than wrapping.
+Functions are provided for both copy conversion and 
+wrapping conversion.
+The appropriate conversion depends on the situation.
+
+When in doubt, the safest way to get a @code{vil_image_view}
+from a @code{vidl2_frame} is by copying with
+@example
+bool vidl2_convert_to_view(const vidl2_frame& frame,
+                           vil_image_view_base& image,
+                           vidl2_pixel_color require_color);
+@end example
+This function resizes the image (if necessary) and then copies
+the frame data into it with the appropriate conversion (if necessary).
+The conversion is based on the data type of the image view.
+The last function argument, @code{require_color}, is optional and
+defaults to @code{VIDL2_PIXEL_COLOR_UNKNOWN}.
+In the default case the color encoding is kept the same as in
+the input frame.
+If @code{require_color} is specified, then it will be used as the
+resulting color encoding.
+Videos are often stored and transmitted in YUV, but @code{vil}
+images are usually assumed to be in RGB.
+The @code{require_color} is used to force that conversion.
+@code{vidl2_convert_to_view} will return true if the conversion
+is successful.
+
+The fastest way to obtain a @code{vil_image_view} is by wrapping.
+The function @code{vidl2_convert_wrap_in_view} take a 
+@code{vidl2_frame} and tries to wrap its memory with an 
+appropriate image view.
+If the wrapping is possible, the function returns a 
+@code{vil_image_view_base_sptr} to the view.
+Otherwise, it returns a null smart pointer.
+
+@subsection Adding Optimized Conversion Routines
+
+
