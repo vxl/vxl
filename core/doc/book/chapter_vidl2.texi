@@ -10,13 +10,20 @@ provide data from disk or from a live capture (a camera, for example).
 The output streams are derived from @code{vidl2_ostream} 
 and can write data to disk.
 Potentially, output streams could also display on a screen
-or transmit an internet video stream, but these are not implemented yet.
+or transmit an internet video stream, but these capabilities
+are not implemented yet.
 @endchapsummary
 
 @section Introduction
 
-An example of simple compact video transcoding with @code{vidl2}
+An example of simple, compact video transcoding with 
+@code{vidl2} is given below.
 @example
+#include <vidl2/vidl2_image_list_istream.h>
+#include <vidl2/vidl2_ffmpeg_ostream.h>
+
+...
+
   // create an input stream
   vidl2_image_list_istream my_istream("*.png");
 
@@ -30,8 +37,51 @@ An example of simple compact video transcoding with @code{vidl2}
   vidl2_frame_sptr frame;
   while (bool(frame = my_istream.read_frame()) &&
          my_ostream.write_frame(frame) );
-
 @end example
+This example has three parts:
+open an input stream, open an output stream, and
+transfer the data.
+The streams are opened by constructing a stream instance.
+The constructor arguments are different for each stream type.
+
+In the example, the @code{vidl2_image_list_istream} is 
+constructed with a file glob string (See @code{vul_file_iterator}
+for details).
+The input video will consist all PNG files in the current directory
+sorted alphanumerically by file name.
+The images should all have the same size because the output
+format requires this.
+
+The @code{vidl2_ffmpeg_ostream} is constructed with
+the name of the output video file and a parameters class
+that specifies all the encoding parameters.
+The @code{vidl2_ffmpeg_ostream_params} class uses a
+design that allows the parameters to be set on an 
+anonymous instance by chaining together function calls
+that each return a reference to the instance to the next function.
+Here the encoder @code{enum} is set to @code{DVVIDEO} and
+the frame rate is set to 29.95 frames per second.
+All other parameters take default values.
+
+In the transcoding loop, all frames are read from the
+input stream one at a time. 
+Each frame is written to the output stream until an invalid
+frame is detected indicating the end of the input stream.
+All of this processing is done within the loop condition test,
+and the body of the loop is empty 
+(there are, of course, several other ways to structure this code).
+The @code{read_frame()} member function advances to the
+next frame in the input sequence and then returns that frame.
+It return a null smart pointer when no more frames are available.
+The cast to @code{bool} causes the loop to terminate when
+the end of input is reached (i.e. a null pointer evaluates to false).
+Because of lazy evaluation, @code{write_frame()} is only 
+called on the output stream when the frame is valid.
+This member function writes the frame to the output and
+returns true on a successful write.
+Thus, a failed write will also terminate the loop.
+The streams are closed when the stream instances go out
+of scope and are destroyed.
 
 @subsection Comparison with Previous Video Library
 This design has the following advantages over the old VXL video 
@@ -67,7 +117,7 @@ The video stream design also allows for streams that receive images
 from live video feeds. 
 This could be from a camera, network video feed, or other source. 
 Thus, video capture and video transcoding are both accomplished by 
-directing an input stream into and output stream.
+directing an input stream into an output stream.
 
 Several APIs that @code{vidl2} interfaces with allow for both input
 and output.
@@ -164,6 +214,7 @@ The istream will keep a pointer to the released frame and then
 invalidate it before reusing memory. 
 Use the functions in @code{vidl2_convert.h} to obtain a non-volatile
 @code{vil_image_view}.
+More details are given below in the section on conversions.
 
 @section Pixel Formats
 
@@ -209,9 +260,10 @@ added to different color channels.
 When no packing occurs, the number in the @code{vidl2_pixel_format} 
 name is the total number of bits
 (i.e. @code{RGB_24} is RGB with 8 bits for each channel).  
-When the number of bits per channel is different the standard 
+When the number of bits per channel is different, the standard 
 chroma sub-sampling numbering is used (i.e. @code{422} for 4:2:2).  
-See @uref{http://en.wikipedia.org/wiki/Chroma_subsampling} 
+See 
+@uref{http://en.wikipedia.org/wiki/Chroma_subsampling, Wikipedia} 
 for more details. 
 A separate enum named @code{vidl2_pixel_arrangement}
 enumerates the available arrangements.  
@@ -244,7 +296,8 @@ The trait specializations are created using the macro @code{vidl2_pt_mac}.
 This macro lets all the properties appear in a nice table.  
 It also makes it easy to add a new pixel format.
 
-The following is a subset of the pixel traits table.
+The following is a subset of the pixel traits table found in
+@code{vidl2_pixel_format.h}.
 @example
 //            format    name        type       bpp color    arrange xcs ycs
 //            ------    ---------   ----       --- -------  ------- --- ---
@@ -296,7 +349,8 @@ times that of the Y channel.
 @end table
 
 A new pixel format may be introduced by simply adding an entry in this
-table in @code{vidl2_pixel_format.h}. 
+table and a corresponding @code{enum} addition to 
+@code{vidl2_pixel_format}. 
 The traits of a pixel format are used in the automatic generation of 
 conversion routines.  
 The ultimate goal of the @code{vidl2} pixel format framework is that 
@@ -349,7 +403,7 @@ The expression
 @example
 vidl2_pixel_format_from_string("RGB 24") == VIDL2_PIXEL_FORMAT_RGB_24
 @end example
-should evaluate to @code{true}.
+should evaluate to true.
 
 @section Pixel Format Conversion
 
@@ -359,10 +413,10 @@ to worry about.
 The @code{vidl2_istream} should provide a @code{vidl_frame_sptr}
 that uses whatever pixel format is native to the video data.
 If the @code{vidl2_ostream} requires a different pixel format,
-then it perform the required conversion automatically.
+then it performs the required conversion automatically.
 
 If for some reason manual conversion is required, the appropriate
-functions are found in @code{vidl_convert.h'}.
+functions are found in @code{vidl_convert.h}.
 The function is called @code{vidl2_convert_frame}, 
 and it comes in two forms.
 The first
@@ -382,7 +436,7 @@ The second form of the function
 vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
                                      vidl2_pixel_format format);
 @end example
-take a smart pointer to an input frame and allocates new memory
+takes a smart pointer to an input frame and allocates new memory
 for the output frame using the specified pixel format.
 If the conversion is possible, a smart pointer to the new frame
 is returned.
@@ -390,7 +444,7 @@ Otherwise, a null smart pointer is returned.
 This version requires less preparation by the user, 
 but does not allow for the reuse of frame memory.
 
-@subsection Frame to Image View Conversion
+@subsection Conversion Between Frames and Image Views
 
 One case where the user usually does want to convert a frame
 is conversion to and from a @code{vil_image_view}.
@@ -405,21 +459,24 @@ memory format is compatible with a @code{vidl2} pixel format.
 For writing to output streams, wrapping is usually safe
 because the data is immediately used and then no longer needed.
 The function @code{vidl2_convert_to_frame} takes a 
-@code{vil_image_view_base_sptr} and always tries to wrap 
-the memory first before allocating new memory and making
-a conversion.
+@code{vil_image_view_base_sptr} and always tries first to wrap 
+the memory. 
+If wrapping fails, new memory is allocated and the image data is
+copied (and converted if necessary) into that memory.
 The result is returned as a @code{vidl2_frame_sptr}.
 
 When reading frames from video wrapping can be more dangerous.
 Processing images from video often involves multiple frames.
-To reduce memory allocation, most input streams will reuse
-the same memory.
+To reduce repeated reallocation of memory, most input streams 
+will reuse the same memory.
 A member function on the @code{vidl2_frame} allows an input
-stream to @code{invalidate} the frame object it previously
+stream to @emph{invalidate} the frame object it previously
 released in order to reclaim the memory for the next frame.
-The invalidated frame will now have a null pointer to memory,
+The invalidated frame will now have a null pointer to image data,
 but any @code{vil_image_view} that was sharing the memory
-will now be overwritten by the next frame.
+will not be notified.
+The image sharing the memory will be overwritten when the next 
+frame is read from the video stream.
 It is safer to copy memory when converting a frame to an image,
 but it is potentially much slower than wrapping.
 Functions are provided for both copy conversion and 
@@ -449,7 +506,7 @@ The @code{require_color} is used to force that conversion.
 is successful.
 
 The fastest way to obtain a @code{vil_image_view} is by wrapping.
-The function @code{vidl2_convert_wrap_in_view} take a 
+The function @code{vidl2_convert_wrap_in_view} takes a 
 @code{vidl2_frame} and tries to wrap its memory with an 
 appropriate image view.
 If the wrapping is possible, the function returns a 
@@ -458,4 +515,70 @@ Otherwise, it returns a null smart pointer.
 
 @subsection Adding Optimized Conversion Routines
 
+The pixel traits table is used to automatically generate conversion
+routines between any pair of listed pixel formats.
+There are two types of automatically generated conversion
+functions.
+The first, and simplest, is applied when the input pixel
+format matches the output pixel format.
+In this case, no conversion is needed so the frame data
+is copied directly to the output with @code{vcl_memcpy}.
+The second, and most general, is applied when the pixel
+formats do not match and an actual conversion is needed.
+In this case, the function uses a @code{vidl2_pixel_iterator}
+for the input and output frames to step through 
+each pixel and convert it.
+A @code{vidl2_pixel_iterator} uses virtual functions to 
+provide a standard interface for accessing or setting the pixel 
+data as an array of bytes, even when multiple pixels are packed 
+together.  
+The data at each pixel is also passed through a color conversion
+function to convert the pixel data type and color representation
+when necessary.
 
+It is obvious that this generic conversion process is not optimal.
+For each pixel, multiple virtual functions are called, and the
+pixel data is copied through multiple intermediate variables.
+Pixel iterators introduce additional overhead in packed formats
+where data shared across pixels is accessed multiple times.
+Since fast pixel format conversions are required in many 
+applications, the generic routine is not acceptable.
+Unfortunately, it is intractable to write an optimized conversion
+routine for all pairs of pixel formats.
+That would require hundreds of specialized functions.
+Yet, not every conversion combination needs optimal performance.
+Only a small subset of conversions are commonly used in 
+practice. 
+@code{vidl2} allows the default, generic conversion routine
+to be overridden by an optimized implementation for the
+most common format pairs.
+
+Optimized conversion routines are added by creating a template
+specialization within the designated area in
+@code{vidl2_convert.cxx}.
+The specialization should follow the example below. 
+@example
+VCL_DEFINE_SPECIALIZATION
+struct convert<IN_FMT, OUT_FMT>
+@{
+  enum @{ defined = true @};
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
+  @{
+    assert(in_frame.pixel_format()==IN_FMT);
+    assert(out_frame.pixel_format()==OUT_FMT);
+
+    // convert the data here
+ 
+    return true;
+  @}
+@};
+@end example
+In this example, @code{IN_FMT} should be replaced by the
+input pixel format @code{enum} value
+(e.g. @code{VIDL2_PIXEL_FORMAT_RGB_24}).
+Likewise, @code{OUT_FMT} should be replaced with the 
+output pixel format @code{enum} value.
+Several optimized conversion routines are already provided.
+The existing functions can be used as an example when
+adding new optimizations.
