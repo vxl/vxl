@@ -61,7 +61,7 @@ hr {
 p {
 	line-height: 1.25em;
 	text-align: justify;
-	text-indent: 3ex;
+	text-indent: 0;
 }
 
 a {
