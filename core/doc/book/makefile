@@ -43,7 +43,8 @@ SOURCEFILES=book.texi \
             chapter_vnl.texi \
             chapter_vpdl.texi \
             chapter_vsl.texi \
-            chapter_vul.texi
+            chapter_vul.texi \
+            book.css
 
 all: book.html
 tex: book.dvi
@@ -65,7 +66,7 @@ book.html: $(SOURCEFILES) rosenbrock.png
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
 book.html: $(SOURCEFILES) rosenbrock.png
-	$(TEXI2HTML) -menu -number -split=chapter --nosec-nav -frames book.texi
+	$(TEXI2HTML) -menu -number -split=chapter --css-include=book.css --nosec-nav -frames book.texi
 endif
 
 
