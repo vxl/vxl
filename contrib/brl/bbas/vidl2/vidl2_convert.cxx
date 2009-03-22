@@ -122,8 +122,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_UYVY_422>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_UYVY_422);
@@ -155,8 +155,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_RGB_24>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_UYVY_422);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
@@ -188,8 +188,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_MONO_8>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_UYVY_422);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_MONO_8);
@@ -214,8 +214,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_YUYV_422>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
@@ -247,8 +247,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_YUYV_422, VIDL2_PIXEL_FORMAT_RGB_24>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
@@ -280,8 +280,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_RGB_24P, VIDL2_PIXEL_FORMAT_YUYV_422>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24P);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
@@ -314,8 +314,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_YUYV_422, VIDL2_PIXEL_FORMAT_RGB_24P>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24P);
@@ -348,8 +348,8 @@ VCL_DEFINE_SPECIALIZATION
 struct convert<VIDL2_PIXEL_FORMAT_YUYV_422, VIDL2_PIXEL_FORMAT_MONO_8>
 {
   enum { defined = true };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static bool apply(const vidl2_frame& in_frame,
+                          vidl2_frame& out_frame)
   {
     assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_YUYV_422);
     assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_MONO_8);
