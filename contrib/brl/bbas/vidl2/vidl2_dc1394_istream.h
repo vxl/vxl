@@ -38,9 +38,6 @@ class vidl2_dc1394_istream
   //: Constructor - default
   vidl2_dc1394_istream();
 
-  //: Constructor - from a filename
-  vidl2_dc1394_istream(const vcl_string& filename);
-
   //: Destructor
   virtual ~vidl2_dc1394_istream();
 
