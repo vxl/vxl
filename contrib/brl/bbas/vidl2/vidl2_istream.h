@@ -27,9 +27,12 @@ class vidl2_istream
   virtual bool is_open() const = 0;
 
   //: Return true if the stream is in a valid state
+  // Streams open in an invalid state pointing to the frame
+  // before the first valid frame.  The stream becomes valid when
+  // it is first advanced.
   virtual bool is_valid() const = 0;
 
-  //: Return true if the stream support seeking
+  //: Return true if the stream supports seeking
   virtual bool is_seekable() const = 0;
 
   //: Return the number of frames if known
@@ -37,6 +40,8 @@ class vidl2_istream
   virtual int num_frames() const = 0;
 
   //: Return the current frame number
+  //  before the first call to advance() the frame number
+  //  is static_cast<unsigned int>(-1)
   virtual unsigned int frame_number() const = 0;
 
   //: Return the width of each frame
