@@ -130,18 +130,86 @@ The separation of input and output was not allowed by the previous
 @code{vidl} library design.
 
 
-@section Stream Types
+@section Streams
 
-At the time of this writing, the following stream classes had been
-implemented.
+All @code{vidl2} input streams are derived from the abstract base
+class @code{vidl2_istream}.
+Likewise all output streams are derived from @code{vidl2_ostream}.
+Once a stream is created, all critical operations are controlled by
+invoking base class virtual functions.
+This polymorphic design allows video processing algorithms
+to operate on any combination of input and output streams 
+configurable at run time.
+
+The following subsections give an overview of the input and
+output stream base classes followed by an overview of the
+different derived stream types.
+
+@subsection Input Streams
+
+The @code{vidl2_istream} API defines several methods to access
+properties of the stream, control the stream state, and access 
+frame data.  
+The functionality of most methods is obvious from the name.  
+@code{width()} and @code{height()} return the video resolution in pixels, 
+and @code{frame_rate()} returns the video frame rate in frames per second.  
+Frame rate may not be define in some streams,
+like a sequence of image files, and 0 is returned in this case.
+@code{format()} returns the @code{vidl2_pixel_format} of the frames.
+@code{num_frames()} returns a count of the number frames in
+a finite length video clip or -1 in a live video stream.
+Note that some video files do not store an accurate count of all
+video frames.
+In this case, @code{num_frames()} must scan the entire video to 
+count the number of frames.
+Accessing the entire video can be costly, so use this function
+only when you really need an accurate frame count.
+@code{frame_number()} returns the current frame number in
+the sequence of video frames (starting at 0 for the first frame).
+
+The method @code{is_open()} returns true when a video stream 
+has been opened successfully and has not been closed by 
+calling @code{close()}.
+The method @code{is_valid()} has a slight different meaning.
+A video stream is valid when its frame counter refers to a valid
+video frame.
+Video streams should open in an @emph{invalid} state, referring 
+to the position @emph{before} the first valid frame.
+When first opened, @code{frame_number()} should return 
+@code{static_cast<unsigned int>(-1)} to indicate the invalid
+frame before frame 0.
+The stream is also invalid when it advances past the last valid frame.
+The @code{advance()} method advances the frame counter and may
+invalidate the previously release frame, but does not necessarily 
+acquire or decode the next frame.
+If the advance was successful it returns true.
+The @code{current_frame()} method returns a smart pointer to 
+the current frame, acquiring or decoding it 
+the first time this method is called.  
+The @code{read_frame()} method advances the frame counter
+and returns the resulting current frame in one function call.
+
+Live streams only support advancing through frames 
+sequentially, but most other streams allow traversal forward
+for backward through the video to a find a particular frame.
+This operation is called @emph{seeking}.
+If an input stream supports seeking, the method 
+@code{is_seekable()} will return true.
+If supported, the method @code{seek_frame(frame_number)} 
+will seek forward or backward to set the current frame 
+number to @code{frame_number}.
+Keep in mind that, even when supported, seeking is almost
+always much slower than advancing.
+For some video decoders it may even be error prone.
+Try to avoid seeking when possible. 
 
 @subheading Input Stream Types
+At the time of this writing, the following input stream classes 
+have been implemented.
 
 @table @code
 @item vidl2_image_list_istream
-Treats an ordered list of @code{vil_image_resource_sptr} as a video stream. 
-Also supports reading a list of images from disk given a list of 
-file names or a file glob.
+Treats an ordered list of image file paths as a video stream. 
 @item vidl2_ffmpeg_istream
 Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
 decode many common video file formats.
@@ -158,7 +226,35 @@ Use libdc1394 v2 to stream video directly from IEEE 1394 (firewire)
 based cameras (Windows not supported yet)
 @end table
 
+
+@subsection Output Streams
+
+The interface for output streams is much simpler than for input
+streams.
+Once an output video stream is open, its sole job is to accept
+frames and appended them to the output video.
+The key method is @code{write_frame(frame)} which takes a 
+frame smart pointer and 
+tries to write it to the end of the output stream.
+It returns true if successful.
+The other methods are @code{is_open()} which returns true
+if the stream is open for writing, and @code{close()}
+which closes the stream.
+
+The most complicated part of using output streams is 
+typically their construction.
+The constructors for output streams differ depending on
+the particular stream type, but tend to involve many 
+parameters especially when video encoding and compression
+are involved. 
+When the number of parameters is very large,
+a special parameters struct may be used to encapsulate the
+parameter collection.
+For example, @code{vidl2_ffmpeg_ostream_params}.
+
 @subheading Output Stream Types
+At the time of this writing, the following output stream classes 
+have been implemented.
 
 @table @code
 @item vidl2_image_list_ostream 
@@ -170,15 +266,119 @@ encode to many common video file formats with many encoding options
 for video quality and compression.
 @end table
 
-Additional details for using these stream types is provide below.
 
 @subsection Image List Streams
 
-@emph{Not written yet.}
+The image list streams are the simplest streams in @code{vidl2}.
+They require no 3rd party libraries and rely only on @code{vil}.
+The @code{vidl2_image_list_istream} treats a vector of paths
+to image files as a video (with unknown frame rate).
+The stream is constructed with a vector of paths or a file glob
+string that is used to match files on disk and produce a vector
+of paths in alphanumeric order.
+When the stream is ``opened'', each file path is tested to see if
+@code{vil} can open it as an image (image data is not read yet).
+The first frame defines the video resolution.
+Any frame that does not open in @code{vil} as a @code{vidl2}
+compatible format or does not match the video resolution is 
+ignored.
+
+The @code{vidl2_image_list_ostream} works in the opposite way.
+Opening a stream requires an output directory, a name format,
+a file format, and an initial index.
+For each frame that is written to the stream, @code{vil} is used
+to write an image file to the specified directory in the specified 
+image file format.
+The name of the files is produced by applying the frame number,
+starting at the specified initial index, to the name format 
+using @code{printf} syntax.
+For example
+@example
+vidl2_image_list_ostream my_ostream("video","frame%03d","tiff",7);
+@end example
+will write TIFF images with the following paths
+@example
+video/frame007.tiff
+video/frame008.tiff
+video/frame009.tiff
+video/frame010.tiff
+...
+@end example
 
 @subsection FFMPEG Streams
 
-@emph{Not written yet.}
+@uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} is a collection of 
+cross-platform, open source, C libraries for encoding and 
+decoding video.
+It is primarily used on Linux and Mac OS X, but can be compiled
+for Windows too.
+It requires GCC and will not compile with Microsoft's compiler.
+The primary libraries are libavcodec and libavformat.
+Newer versions of FFMPEG also use libavutil and libswscale.
+For several years prior to the version 0.5 release, FFMPEG
+evolved continually with an ever-changing API, 
+but no formal releases.
+@code{vidl2} has tried to support several ``versions'' of the
+API by supplying multiple stream implementations.
+However, the selection of implementation and its interface 
+with FFMPEG is encapsulated and hidden
+from the public @code{vidl2} stream interfaces.
+Going forward, @code{vidl2} will try to support any official 
+release versions of FFMPEG.
+If official release versions continue to be few and far between,
+a subversion snapshot of FFMPEG may also be supported
+and updated only when the need arises for new features.
+In the future, a version of FFMPEG may also be added to 
+@code{v3p} to make a common version easily accessible 
+to all VXL users.
+
+Using the @code{vidl2_ffmpeg_istream} is trivial.
+The constructor only requires the path to a video file.
+FFMPEG can decode almost any video file format with
+any video codec that is thrown at it.
+Be warned that some malformed files will still open
+but may produce errors during seeking.
+
+Using the @code{vidl2_ffmpeg_ostream} is also 
+straightforward.
+The constructor requires the path to the output 
+video file and a @code{vidl2_ffmpeg_ostream_params}
+struct to specify the encoding parameters.
+The @code{vidl2_ffmpeg_ostream_params} is a struct that
+mirrors the enormous set of parameters available to
+FFMPEG for encoding.
+The current set of parameters is not complete an will
+need to be updated in the future.
+Leaving most of the parameters at their default value
+will produce reasonable results in most cases.
+The most important parameters to set are
+encoder, frame rate, and bit rate.
+The encoder is the selection of codec to use from those
+supported by FFMPEG.
+An @code{enum} specifies a list of codecs allowed by 
+@code{vidl2}.
+This list needs to be expanded and should ultimately 
+vary depending on the FFMPEG configuration since some
+codecs are optionally enabled during FFMPEG compilation. 
+The frame rate is a @code{double} specifying the number 
+of frames per second in the output video.
+The bit rate is an @code{unsigned int} specifying the 
+target compression level in number of bits per second
+of video.
+Another set of important parameters is the frame size,
+the width (@code{ni}) and height (@code{nj}) of each image.
+However, @code{vidl2_ffmpeg_ostream} does not require 
+that you specify the frame size directly.
+Instead, it uses a delayed stream opening scheme.
+The constructor stores the parameters but does not 
+immediately open the stream.
+When the first frame is written, the size of this frame
+is used to specify the size of the output video and
+the output stream is opened at this point.
+If necessary, one can force the stream to open without
+writing a frame by calling the @code{open()} method on 
+the stream.
+ 
 
 @subsection DirectShow Streams
 
@@ -186,11 +386,62 @@ Additional details for using these stream types is provide below.
 
 @subsection 1394 (Firewire) Camera Streams
 
-@emph{Not written yet.}
+There are several cameras that capture and transmit video over
+the 1394 (aka Firewire) interface.
+Many of these cameras conform to a standard of camera 
+configuration and streaming parameters.
+This standard is known as the IIDC or DCAM Specifications.
+Note that this refers to live capture 1394 cameras and 
+does not generally include camcorders that transfer
+saved video using the 1394 interface.
+
+There are several driver packages that implement the
+IIDC Specifications.
+@code{vidl2} supports an open source package called 
+@uref{http://damien.douxchamps.net/ieee1394/libdc1394/,libdc1394}.
+The @code{vidl2_dc1394_istream} uses the libdc1394 version 2
+API to capture live video from 1394 cameras.
+libdc1394 currently runs on linux and Mac OS X.
+It may also run on Windows in the future.
+Other examples of IIDC camera APIs are the
+@uref{http://www.cs.cmu.edu/~iwan/1394/,CMU 1394 Driver}
+for Windows and the Point Grey 
+@uref{http://www.ptgrey.com/products/pgrflycapture/index.asp,FlyCapture SDK}
+for Windows that adds additional features beyond the standard
+for its own line of cameras.
+Separate @code{vidl2_istream} classes could be written for
+these in the future.
+
+This @code{vidl2_dc1394_istream} is opened with a parameters
+ struct called @code{vidl2_iidc1394_params} that specifies 
+all the IIDC parameters needed to configure the camera.
+Since the parameters are standard and not specific to libdc1394,
+the @code{vidl2_iidc1394_params} struct is intended to be 
+shared with any other IIDC 1394 stream classes written in the future.
+Additional parameters that are specific to libdc1394 are
+kept out of @code{vidl2_iidc1394_params}.
+Namely, the @code{num_dma_buffers} parameter is passed in
+separately when opening the stream.
+This parameter specifies the number of frame buffers to use
+for Direct Memory Access (DMA) transfer.
+libdc1394 will create a separate thread to continually read
+frames into these buffers asynchronously from the main
+program.
+Refer to the libdc1394 documentation for details.
+
+The @code{vidl2_iidc1394_params} struct also contains a
+nested struct called @code{valid_options}.
+This struct is used to represent the available devices
+and their parameters found by probing the 1394 bus.
+The @code{vidl2_dc1394_istream} class has a static
+member function called @code{valid_params} that
+can be used to probe the bus and populate this struct.
+  
 
 @subsection Video 4 Linux Streams
 
 @emph{Not written yet.}
+
 
 @section Video Frames
 
