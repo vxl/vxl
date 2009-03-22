@@ -52,10 +52,10 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vgl::
 * vsl::
 * vgui::
-* vidl::
 * vidl2::
 * vpdl::
 * vcsl::
+* vidl1::
 * structure::
 * build::
 * coding standards::
@@ -161,12 +161,12 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vgui.texi
 
 @comment ------------------------------------------------------------------
-@node    vidl
+@node    vidl1
 @comment node-name, next,      previous, up
-@chapter vidl: Video Access
+@chapter vidl: Video Access (Deprecated)
 @cindex video
 
-@include chapter_vidl.texi
+@include chapter_vidl1.texi
 
 @comment ------------------------------------------------------------------
 @node    vidl2
