@@ -1,11 +1,11 @@
-// This is core/vidl/vidl_mpegcodec.h
-#ifndef vidl_mpegcodec_h
-#define vidl_mpegcodec_h
+// This is core/vidl1/vidl1_mpegcodec.h
+#ifndef vidl1_mpegcodec_h
+#define vidl1_mpegcodec_h
 //:
 // \file
 //
 // \author l.e.galup
-//  this class sets up and executes the vidl_mpegcodec_helper, which
+//  this class sets up and executes the vidl1_mpegcodec_helper, which
 //  is a wrapped port of mpeg2dec. it accepts the vo open function ptr
 //  in the constructor. this was done this way to make it more extensible,
 //  in case other video outputs would be added later.
@@ -21,28 +21,28 @@
 //  this class works on both mpeg1 and mpeg2.
 // \date July 2002
 
-#include "vidl_mpegcodec_helper.h"
-#include <vidl/vidl_codec.h>
-#include <vidl/vidl_codec_sptr.h>
+#include "vidl1_mpegcodec_helper.h"
+#include <vidl1/vidl1_codec.h>
+#include <vidl1/vidl1_codec_sptr.h>
 
 class vil_image_resource;
 
 //: Allows user to load MPEG files as vxl video.
-class vidl_mpegcodec : public vidl_codec
+class vidl1_mpegcodec : public vidl1_codec
 {
   //--- these are set by load/save
-  vidl_mpegcodec_helper * decoder_;
+  vidl1_mpegcodec_helper * decoder_;
   frame_buffer * buffers_;
   bool inited;
 
   //-------------------------------------------------
 
  public:
-  vidl_mpegcodec();
-  ~vidl_mpegcodec();
+  vidl1_mpegcodec();
+  ~vidl1_mpegcodec();
 
   //Casting methods overridden here...
-  vidl_mpegcodec* castto_vidl_mpegcodec() { return this; }
+  vidl1_mpegcodec* castto_vidl1_mpegcodec() { return this; }
 
   //-----------------------------------------------------
   //pure virtual methods
@@ -57,8 +57,8 @@ class vidl_mpegcodec : public vidl_codec
                  int /*x0*/, int /*y0*/ ) { return false; }
 
   virtual bool probe(vcl_string const& fname);
-  virtual vidl_codec_sptr load(vcl_string const& fname, char mode = 'r' );
-  bool save(vidl_movie* /*movie*/, vcl_string const& /*fname*/) { return true; }
+  virtual vidl1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  bool save(vidl1_movie* /*movie*/, vcl_string const& /*fname*/) { return true; }
   virtual vcl_string type() const { return "MPEG"; }
 
   //-----------------------------------------------
@@ -72,4 +72,4 @@ class vidl_mpegcodec : public vidl_codec
   bool init();
 };
 
-#endif // vidl_mpegcodec_h
+#endif // vidl1_mpegcodec_h

@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_yuv_2_rgb.h
-#ifndef vidl_yuv_2_rgb_h_
-#define vidl_yuv_2_rgb_h_
+// This is core/vidl1/vidl1_yuv_2_rgb.h
+#ifndef vidl1_yuv_2_rgb_h_
+#define vidl1_yuv_2_rgb_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -48,7 +48,7 @@ const int c0391 = int(0.391 * 1024);
 const int c2018 = int(2.018 * 1024);
 
 inline
-unsigned char vidl_yuv_2_rgb_byte_clamp(int x)
+unsigned char vidl1_yuv_2_rgb_byte_clamp(int x)
 {
   x = x >> 10;
   if (x < 0) return 0;
@@ -57,20 +57,20 @@ unsigned char vidl_yuv_2_rgb_byte_clamp(int x)
 }
 
 inline
-void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, unsigned char* rgb)
+void vidl1_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, unsigned char* rgb)
 {
   // int ym16 = c1164*(y-16); replacing this into the below actually takes longer. go figure.
-  rgb[0] = vidl_yuv_2_rgb_byte_clamp(c1164*(y - 16) + c1596 * (v - 128));
-  rgb[1] = vidl_yuv_2_rgb_byte_clamp(c1164*(y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
-  rgb[2] = vidl_yuv_2_rgb_byte_clamp(c1164*(y - 16) + c2018 * (u - 128));
+  rgb[0] = vidl1_yuv_2_rgb_byte_clamp(c1164*(y - 16) + c1596 * (v - 128));
+  rgb[1] = vidl1_yuv_2_rgb_byte_clamp(c1164*(y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
+  rgb[2] = vidl1_yuv_2_rgb_byte_clamp(c1164*(y - 16) + c2018 * (u - 128));
 }
 
 inline
-void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, vil_rgb<vxl_byte> &vrgb)
+void vidl1_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, vil_rgb<vxl_byte> &vrgb)
 {
-  vrgb.r = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c1596 * (v - 128));
-  vrgb.g = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
-  vrgb.b = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c2018 * (u - 128));
+  vrgb.r = vidl1_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c1596 * (v - 128));
+  vrgb.g = vidl1_yuv_2_rgb_byte_clamp(c1164 * (y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
+  vrgb.b = vidl1_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c2018 * (u - 128));
 }
 
-#endif // vidl_yuv_2_rgb_h_
+#endif // vidl1_yuv_2_rgb_h_

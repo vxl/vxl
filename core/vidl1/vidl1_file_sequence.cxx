@@ -1,5 +1,5 @@
-// This is core/vidl/vidl_file_sequence.cxx
-#include "vidl_file_sequence.h"
+// This is core/vidl1/vidl1_file_sequence.cxx
+#include "vidl1_file_sequence.h"
 
 #include <vcl_cassert.h>
 #include <vcl_fstream.h>
@@ -9,7 +9,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 
-bool vidl_file_sequence::open(vcl_string const& fmt)
+bool vidl1_file_sequence::open(vcl_string const& fmt)
 {
   current_file_index = -1;
 
@@ -57,7 +57,7 @@ bool vidl_file_sequence::open(vcl_string const& fmt)
   unsigned int n = filenames.size();
 
   if (n == 0) {
-    vcl_cerr << "vidl_file_sequence: ERROR: Could not turn [" << fmt << "] into a list of files\n";
+    vcl_cerr << "vidl1_file_sequence: ERROR: Could not turn [" << fmt << "] into a list of files\n";
     return false;
   }
 
@@ -87,7 +87,7 @@ bool vidl_file_sequence::open(vcl_string const& fmt)
     vcl_string const& fn = filenames[i];
     fps[i] = vcl_fopen(fn.c_str(), "rb");
     if (!fps[i]) {
-      vcl_cerr << "vidl_file_sequence::open(): ERROR: Could not open [" << fn << "]\n";
+      vcl_cerr << "vidl1_file_sequence::open(): ERROR: Could not open [" << fn << "]\n";
       current_file_index = -1;
       return false;
     }
@@ -102,7 +102,7 @@ bool vidl_file_sequence::open(vcl_string const& fmt)
   return true;
 }
 
-bool vidl_file_sequence::seek(offset_t to)
+bool vidl1_file_sequence::seek(offset_t to)
 {
   int newindex = -1;
   for (unsigned int i = 1; i < filesizes.size(); ++i)
@@ -119,7 +119,7 @@ bool vidl_file_sequence::seek(offset_t to)
   }
 
   if (newindex == -1) {
-    vcl_cerr << "vidl_file_sequence::seek(): ERROR: Could not seek to [" << to << "]\n";
+    vcl_cerr << "vidl1_file_sequence::seek(): ERROR: Could not seek to [" << to << "]\n";
     return false;
   }
 
@@ -132,12 +132,12 @@ bool vidl_file_sequence::seek(offset_t to)
   return 0 <= vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
 }
 
-vidl_file_sequence::offset_t vidl_file_sequence::tell() const
+vidl1_file_sequence::offset_t vidl1_file_sequence::tell() const
 {
   return start_byte[current_file_index] + ftell(fps[current_file_index]);
 }
 
-vidl_file_sequence::offset_t vidl_file_sequence::read(void* buf, offset_t len)
+vidl1_file_sequence::offset_t vidl1_file_sequence::read(void* buf, offset_t len)
 {
   offset_t space_left_in_this_file = filesizes[current_file_index] - ftell(fps[current_file_index]);
 
@@ -166,7 +166,7 @@ vidl_file_sequence::offset_t vidl_file_sequence::read(void* buf, offset_t len)
   return n1 + n2;
 }
 
-void vidl_file_sequence::close()
+void vidl1_file_sequence::close()
 {
   for (unsigned int i = 0; i < fps.size(); ++i)
     vcl_fclose(fps[i]);

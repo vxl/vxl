@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_file_sequence.h
-#ifndef vidl_file_sequence_h_
-#define vidl_file_sequence_h_
+// This is core/vidl1/vidl1_file_sequence.h
+#ifndef vidl1_file_sequence_h_
+#define vidl1_file_sequence_h_
 //:
 // \file
 // \author awf@robots.ox.ac.uk
@@ -12,13 +12,13 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-class vidl_file_sequence
+class vidl1_file_sequence
 {
   typedef unsigned long offset_t;
  public:
-  vidl_file_sequence() {}
-  vidl_file_sequence(vcl_string const& fmt) { open(fmt); }
-  ~vidl_file_sequence() { close(); }
+  vidl1_file_sequence() {}
+  vidl1_file_sequence(vcl_string const& fmt) { open(fmt); }
+  ~vidl1_file_sequence() { close(); }
 
   bool open(vcl_string const& fmt);
   void close();
@@ -36,4 +36,4 @@ class vidl_file_sequence
   vcl_vector<offset_t> start_byte;
 };
 
-#endif   // vidl_file_sequence_h_
+#endif   // vidl1_file_sequence_h_

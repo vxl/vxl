@@ -1,9 +1,9 @@
-// This is core/vidl/vidl_mpegcodec_helper.h
-#ifndef vidl_mpegcodec_helper_h
-#define vidl_mpegcodec_helper_h
+// This is core/vidl1/vidl1_mpegcodec_helper.h
+#ifndef vidl1_mpegcodec_helper_h
+#define vidl1_mpegcodec_helper_h
 //:
 // \file
-// \brief Contains classes vidl_mpegcodec_data and vidl_mpegcodec_helper
+// \brief Contains classes vidl1_mpegcodec_data and vidl1_mpegcodec_helper
 // \author l.e.galup
 // \date July 2002
 //
@@ -63,7 +63,7 @@ extern "C" {
 #undef this
 }
 
-class vidl_file_sequence;
+class vidl1_file_sequence;
 
 class decode_request
 {
@@ -157,7 +157,7 @@ class frame_buffer
   vcl_map<int,unsigned char *> * buffers_;
 };
 
-struct vidl_mpegcodec_data : public vo_instance_t
+struct vidl1_mpegcodec_data : public vo_instance_t
 {
  public:
   enum output_format_t
@@ -181,22 +181,22 @@ struct vidl_mpegcodec_data : public vo_instance_t
 };
 
 //this class does the actual decoding.
-class vidl_mpegcodec_helper
+class vidl1_mpegcodec_helper
 {
-  friend class vidl_mpegcodec;
+  friend class vidl1_mpegcodec;
 
  public:
-  vidl_mpegcodec_helper(vo_open_t * vopen,
+  vidl1_mpegcodec_helper(vo_open_t * vopen,
                         vcl_string filename,
                         frame_buffer * buffers);
-  ~vidl_mpegcodec_helper();
+  ~vidl1_mpegcodec_helper();
   bool init();
   int execute(decode_request * p);
   void print();
   int get_width() const {return output_->width;}
   int get_height() const {return output_->height;}
   int get_last_frame() const {return output_->last_frame_decoded;}
-  vidl_mpegcodec_data::output_format_t get_format() const {return output_->output_format;}
+  vidl1_mpegcodec_data::output_format_t get_format() const {return output_->output_format;}
 
  private:
   /////////////////////////////////////////////////////////
@@ -219,18 +219,18 @@ class vidl_mpegcodec_helper
   // of mpeg2dec
   uint8_t buffer_[BUFFER_SIZE];
   vcl_string filename_;
-  vidl_file_sequence * in_file_;
+  vidl1_file_sequence * in_file_;
   int demux_track_;
   int demux_pid_;
   int disable_accel_;
   mpeg2dec_t * mpeg2dec_;
   vo_open_t * output_open_;
-  vidl_mpegcodec_data * output_;
+  vidl1_mpegcodec_data * output_;
   int chunk_size_;
   int chunk_number_;
-  bool (vidl_mpegcodec_helper::*decoder_routine)(int);
+  bool (vidl1_mpegcodec_helper::*decoder_routine)(int);
 
   bool init_; //true once init() has completed
 };
 
-#endif // vidl_mpegcodec_helper_h
+#endif // vidl1_mpegcodec_helper_h

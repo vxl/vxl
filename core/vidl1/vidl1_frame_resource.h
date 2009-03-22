@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_frame_resource.h
-#ifndef vidl_frame_resource_h_
-#define vidl_frame_resource_h_
+// This is core/vidl1/vidl1_frame_resource.h
+#ifndef vidl1_frame_resource_h_
+#define vidl1_frame_resource_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -14,20 +14,20 @@
 //\endverbatim
 
 #include <vil/vil_image_resource.h>
-#include <vidl/vidl_frame.h>
+#include <vidl1/vidl1_frame.h>
 
 
-//: A vil_image_resource to a frame of a vidl_movie
-class vidl_frame_resource : public vil_image_resource
+//: A vil_image_resource to a frame of a vidl1_movie
+class vidl1_frame_resource : public vil_image_resource
 {
-  vidl_codec_sptr codec_;
+  vidl1_codec_sptr codec_;
   int frame_number_;
   
  public:
 
-  vidl_frame_resource(const vidl_codec_sptr& codec, int frame);
-  vidl_frame_resource(const vidl_frame& frame);
-  ~vidl_frame_resource();
+  vidl1_frame_resource(const vidl1_codec_sptr& codec, int frame);
+  vidl1_frame_resource(const vidl1_frame& frame);
+  ~vidl1_frame_resource();
 
   //: Dimensions
   virtual unsigned nplanes() const;
@@ -47,4 +47,4 @@ class vidl_frame_resource : public vil_image_resource
   bool get_property(char const *tag, void *prop = 0) const;
 };
 
-#endif // vidl_frame_resource_h_
+#endif // vidl1_frame_resource_h_

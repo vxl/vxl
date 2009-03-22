@@ -14,12 +14,12 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vxl_config.h>
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_movie.h>
+#include <vidl1/vidl1_io.h>
+#include <vidl1/vidl1_movie.h>
 
 // windows does not seem to get the -DHAS_MPEG2 option from CMake
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)
-#include <vidl/vidl_mpegcodec.h>
+#include <vidl1/vidl1_mpegcodec.h>
 #endif
 
 // assert t is true, otherwise print message m and exit if e is true
@@ -52,7 +52,7 @@ print_help_exit (const char * help_text[])
 
 // help text printed with -help option
 static const char * help_text[] = {
-"vidl_video2images",
+"vidl1_video2images",
 "",
 "Convert selected frames of a video file to individual image files.",
 "",
@@ -130,9 +130,9 @@ static int callback_numframes = -1;
 // MPEG2 codec.  Normally, this would be done by reading the header,
 // but that is not implemented yet.
 static void
-load_mpegcodec_callback (vidl_codec * vc)
+load_mpegcodec_callback (vidl1_codec * vc)
 {
-  vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
+  vidl1_mpegcodec * mpegcodec = vc->castto_vidl1_mpegcodec();
   if ( ! mpegcodec) return;
   mpegcodec->set_grey_scale (callback_greyscale);
   if (callback_demux_video) mpegcodec->set_demux_video();
@@ -182,10 +182,10 @@ main (int argc, char **argv)
 #endif
 
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)
-  vidl_io::load_mpegcodec_callback = &load_mpegcodec_callback;
+  vidl1_io::load_mpegcodec_callback = &load_mpegcodec_callback;
 #endif
 
-  vidl_movie_sptr movie = vidl_io::load_movie (ivfn());
+  vidl1_movie_sptr movie = vidl1_io::load_movie (ivfn());
   CHECKE2( movie, "could not load file ", ivfn() );
 
   V1( "number of frames in video: " << movie->length() );
@@ -193,7 +193,7 @@ main (int argc, char **argv)
   // the highest frame index to be converted
   int frame_max = * vcl_max_element (frames().begin(), frames().end());
 
-  for (vidl_movie::frame_iterator pframe = movie->begin(); pframe < movie->end(); ++pframe)
+  for (vidl1_movie::frame_iterator pframe = movie->begin(); pframe < movie->end(); ++pframe)
   {
     int i = pframe->get_real_frame_index();
 

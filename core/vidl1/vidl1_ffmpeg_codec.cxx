@@ -1,7 +1,7 @@
 //:
 // \file
 
-#include "vidl_ffmpeg_codec.h"
+#include "vidl1_ffmpeg_codec.h"
 #include <vil/vil_crop.h>
 #include <vul/vul_file.h>
 
@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 // Constructor
-vidl_ffmpeg_codec::vidl_ffmpeg_codec()
+vidl1_ffmpeg_codec::vidl1_ffmpeg_codec()
 : fmt_cxt_( NULL ),
   vid_index_( -1 ),
   vid_str_( NULL ),
@@ -26,14 +26,14 @@ vidl_ffmpeg_codec::vidl_ffmpeg_codec()
 
 
 // Destructor
-vidl_ffmpeg_codec::~vidl_ffmpeg_codec()
+vidl1_ffmpeg_codec::~vidl1_ffmpeg_codec()
 {
   close();
 }
 
 
 void
-vidl_ffmpeg_codec::initialize()
+vidl1_ffmpeg_codec::initialize()
 {
   static bool initialized = false;
   if ( ! initialized ) {
@@ -47,7 +47,7 @@ vidl_ffmpeg_codec::initialize()
 //: Probe the file fname, open it as an AVI file.
 //  If it works, return true, false otherwise.
 
-bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
+bool vidl1_ffmpeg_codec::probe(vcl_string const& fname)
 {
   // Close any currently opened file
   close();
@@ -108,22 +108,22 @@ bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
 //  loading multiple videos at once) and loads the video
 //  into the cloned codec. The cloned codec is the one that is returned
 //  by this function.
-vidl_codec_sptr
-vidl_ffmpeg_codec::load(vcl_string const& fname, char mode)
+vidl1_codec_sptr
+vidl1_ffmpeg_codec::load(vcl_string const& fname, char mode)
 {
-  vidl_ffmpeg_codec *cloned_avi_codec = new vidl_ffmpeg_codec;
+  vidl1_ffmpeg_codec *cloned_avi_codec = new vidl1_ffmpeg_codec;
 
   if (!cloned_avi_codec->open(fname,mode)){
     delete cloned_avi_codec;
     return NULL;
   }
 
-  return vidl_codec_sptr(cloned_avi_codec);
+  return vidl1_codec_sptr(cloned_avi_codec);
 }
 
 
 bool
-vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
+vidl1_ffmpeg_codec::open(vcl_string const& fname, char mode )
 {
   // Close any currently opened file
   close();
@@ -197,7 +197,7 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
 
 
 void
-vidl_ffmpeg_codec::close()
+vidl1_ffmpeg_codec::close()
 {
   if ( frame_ ) {
     av_free( frame_ );
@@ -221,7 +221,7 @@ vidl_ffmpeg_codec::close()
 
 
 vil_image_view_base_sptr
-vidl_ffmpeg_codec::get_view( int position,
+vidl1_ffmpeg_codec::get_view( int position,
                              int x0, int xs,
                              int y0, int ys ) const
 {
@@ -239,7 +239,7 @@ vidl_ffmpeg_codec::get_view( int position,
 
 //: Read the current frame.
 vil_image_view<vxl_byte>
-vidl_ffmpeg_codec::cur_frame() const
+vidl1_ffmpeg_codec::cur_frame() const
 {
 #if LIBAVFORMAT_BUILD <= 4628
   AVCodecContext* enc = &fmt_cxt_->streams[vid_index_]->codec;
@@ -295,11 +295,11 @@ vidl_ffmpeg_codec::cur_frame() const
 
 
 bool
-vidl_ffmpeg_codec::put_view( int /*position*/,
+vidl1_ffmpeg_codec::put_view( int /*position*/,
                              const vil_image_view_base &/*im*/,
                              int /*x0*/, int /*y0*/)
 {
-  vcl_cerr << "vidl_ffmpeg_codec::put_view not implemented\n";
+  vcl_cerr << "vidl1_ffmpeg_codec::put_view not implemented\n";
   return false;
 }
 
@@ -308,7 +308,7 @@ vidl_ffmpeg_codec::put_view( int /*position*/,
 // \returns The frame number of the frame returned by cur_frame().
 // \warning This number is meaningful only if cur_frame() is valid.
 int
-vidl_ffmpeg_codec::cur_frame_num() const
+vidl1_ffmpeg_codec::cur_frame_num() const
 {
   return ((last_dts - vid_str_->start_time)
 #if LIBAVFORMAT_BUILD <= 4623
@@ -329,7 +329,7 @@ vidl_ffmpeg_codec::cur_frame_num() const
 //: count the number of frames in the video.
 // Scan through the video counting frames, but don't decode.
 int
-vidl_ffmpeg_codec::count_frames() const
+vidl1_ffmpeg_codec::count_frames() const
 {
   // seek back to the first frame
 #if LIBAVFORMAT_BUILD <= 4616
@@ -406,7 +406,7 @@ vidl_ffmpeg_codec::count_frames() const
 //:
 // \return \c false if the end of the video is reached.
 bool
-vidl_ffmpeg_codec::advance() const
+vidl1_ffmpeg_codec::advance() const
 {
   // Quick return if the file isn't open.
   if ( !frame_ ) {
@@ -480,7 +480,7 @@ vidl_ffmpeg_codec::advance() const
 //  \return Returns \c false if the seek was unsuccessful.
 //
 bool
-vidl_ffmpeg_codec::seek( unsigned frame ) const
+vidl1_ffmpeg_codec::seek( unsigned frame ) const
 {
 #if LIBAVFORMAT_BUILD <= 4623
   int64_t frame_size = int64_t(AV_TIME_BASE) * vid_str_->r_frame_rate_base

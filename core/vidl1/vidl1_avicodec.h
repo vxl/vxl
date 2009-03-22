@@ -1,5 +1,5 @@
-#ifndef vidl_avicodec_h_
-#define vidl_avicodec_h_
+#ifndef vidl1_avicodec_h_
+#define vidl1_avicodec_h_
 
 //:
 // \file
@@ -7,9 +7,9 @@
 // \author Matt Leotta
 
 #if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__MINGW32__)
-#include "vidl_win_avicodec.h"
+#include "vidl1_win_avicodec.h"
 #else
-#include "vidl_avifile_avicodec.h"
+#include "vidl1_avifile_avicodec.h"
 #endif
 
-#endif // vidl_avicodec_h_
+#endif // vidl1_avicodec_h_

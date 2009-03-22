@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_avifile_avicodec.h
-#ifndef vidl_avifile_avicodec_h
-#define vidl_avifile_avicodec_h
+// This is core/vidl1/vidl1_avifile_avicodec.h
+#ifndef vidl1_avifile_avicodec_h
+#define vidl1_avifile_avicodec_h
 //:
 // \file
 // \author Matt Leotta
@@ -11,17 +11,17 @@
 // \endverbatim
 
 #include <avifile.h>
-#include <vidl/vidl_codec.h>
+#include <vidl1/vidl1_codec.h>
 
 //: Allows user to load an AVI video with avifile
-// See also vidl_codec
-class vidl_avicodec : public vidl_codec
+// See also vidl1_codec
+class vidl1_avicodec : public vidl1_codec
 {
  public:
   //: Constructor
-  vidl_avicodec();
+  vidl1_avicodec();
   //: Destructor
- ~vidl_avicodec();
+ ~vidl1_avicodec();
 
   //-----------------------------------------------------
 
@@ -34,10 +34,10 @@ class vidl_avicodec : public vidl_codec
 
   //-----------------------------------------------------
   virtual bool probe(vcl_string const& fname);
-  virtual vidl_codec_sptr load(vcl_string const& fname, char mode = 'r' );
-  virtual bool save(vidl_movie* movie, vcl_string const& fname) { return false; }
+  virtual vidl1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  virtual bool save(vidl1_movie* movie, vcl_string const& fname) { return false; }
   virtual vcl_string type() const { return "AVI"; }
-  virtual vidl_avicodec* castto_vidl_avicodec() { return this; }
+  virtual vidl1_avicodec* castto_vidl1_avicodec() { return this; }
 
  protected:
   int seek(int frame_num) const;
@@ -53,4 +53,4 @@ class vidl_avicodec : public vidl_codec
   IAviReadStream* moviestream_;
 };
 
-#endif // vidl_avifile_avicodec_h
+#endif // vidl1_avifile_avicodec_h

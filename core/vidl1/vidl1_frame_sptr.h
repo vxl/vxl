@@ -1,17 +1,17 @@
-// This is core/vidl/vidl_frame_sptr.h
-#ifndef vidl_frame_sptr_h
-#define vidl_frame_sptr_h
+// This is core/vidl1/vidl1_frame_sptr.h
+#ifndef vidl1_frame_sptr_h
+#define vidl1_frame_sptr_h
 
 //
-// typedef for class vbl_smart_ptr<vidl_frame>
-// Include this file to use the smart pointer vidl_frame_sptr
+// typedef for class vbl_smart_ptr<vidl1_frame>
+// Include this file to use the smart pointer vidl1_frame_sptr
 //
 
-class vidl_frame;
+class vidl1_frame;
 
 #include <vbl/vbl_smart_ptr.h>
 
-typedef vbl_smart_ptr<vidl_frame> vidl_frame_sptr;
+typedef vbl_smart_ptr<vidl1_frame> vidl1_frame_sptr;
 
-#endif // vidl_frame_sptr_h
+#endif // vidl1_frame_sptr_h
 

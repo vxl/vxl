@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_mpegcodec_helper.cxx
-#include "vidl_mpegcodec_helper.h"
-#include <vidl/vidl_file_sequence.h>
+// This is core/vidl1/vidl1_mpegcodec_helper.cxx
+#include "vidl1_mpegcodec_helper.h"
+#include <vidl1/vidl1_file_sequence.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // for memcpy
 #include <vcl_cstdlib.h> // for exit()
@@ -10,7 +10,7 @@
 #include <io.h>
 #endif
 
-vidl_mpegcodec_helper::vidl_mpegcodec_helper(vo_open_t * vopen,
+vidl1_mpegcodec_helper::vidl1_mpegcodec_helper(vo_open_t * vopen,
                                              vcl_string filename,
                                              frame_buffer * buffers) :
   filename_(filename),output_open_(vopen)
@@ -21,9 +21,9 @@ vidl_mpegcodec_helper::vidl_mpegcodec_helper(vo_open_t * vopen,
 
   //use our passed function pointer to make
   //our homemade video out driver
-  output_ = (vidl_mpegcodec_data*) vo_open (output_open_);
+  output_ = (vidl1_mpegcodec_data*) vo_open (output_open_);
   output_->buffers = buffers;
-  output_->output_format = vidl_mpegcodec_data::GREY;
+  output_->output_format = vidl1_mpegcodec_data::GREY;
   output_->last_frame_decoded = -2;
 
   in_file_ = 0;
@@ -32,9 +32,9 @@ vidl_mpegcodec_helper::vidl_mpegcodec_helper(vo_open_t * vopen,
   decoder_routine = 0;
 }
 
-vidl_mpegcodec_helper::~vidl_mpegcodec_helper()
+vidl1_mpegcodec_helper::~vidl1_mpegcodec_helper()
 {
-  vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. entering.\n";
+  vcl_cout << "vidl1_mpegcodec_helper::~vidl1_mpegcodec_helper. entering.\n";
   vo_close (output_);
   if (in_file_)
   {
@@ -44,16 +44,16 @@ vidl_mpegcodec_helper::~vidl_mpegcodec_helper()
   //mpeg2_close (mpeg2dec_);
   delete mpeg2dec_;
 
-  vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. exiting.\n";
+  vcl_cout << "vidl1_mpegcodec_helper::~vidl1_mpegcodec_helper. exiting.\n";
 }
 
 bool
-vidl_mpegcodec_helper::init()
+vidl1_mpegcodec_helper::init()
 {
   if (init_) return true;
 
   //set up file pointer to mpeg file
-  in_file_ = new vidl_file_sequence();
+  in_file_ = new vidl1_file_sequence();
   in_file_->open(filename_.c_str());
 
   //set the acceleration. this doesn't work
@@ -74,21 +74,21 @@ vidl_mpegcodec_helper::init()
     //transport stream
     chunk_size_ = 188;
     chunk_number_ = PACKETS;
-    decoder_routine = &vidl_mpegcodec_helper::decode_ts;
+    decoder_routine = &vidl1_mpegcodec_helper::decode_ts;
   }
   else if (demux_track_)
   {
     //program stream
     chunk_size_ = 1;
     chunk_number_ = BUFFER_SIZE;
-    decoder_routine = &vidl_mpegcodec_helper::decode_ps;
+    decoder_routine = &vidl1_mpegcodec_helper::decode_ps;
   }
   else
   {
     //elementary stream
     chunk_size_ = 1;
     chunk_number_ = BUFFER_SIZE;
-    decoder_routine = &vidl_mpegcodec_helper::decode_es;
+    decoder_routine = &vidl1_mpegcodec_helper::decode_es;
   }
 
   init_ = true;
@@ -99,7 +99,7 @@ vidl_mpegcodec_helper::init()
 //this method acts on p, changing the state of its buf.
 //returns a -1 if eof,0 is AOK, 1 otherwise.
 int
-vidl_mpegcodec_helper::execute(decode_request * p)
+vidl1_mpegcodec_helper::execute(decode_request * p)
 {
   if (!init_) init();
 
@@ -126,7 +126,7 @@ vidl_mpegcodec_helper::execute(decode_request * p)
 }
 
 void
-vidl_mpegcodec_helper::decode_mpeg2 (uint8_t * buf, uint8_t * endb)
+vidl1_mpegcodec_helper::decode_mpeg2 (uint8_t * buf, uint8_t * endb)
 {
   int num_frames = mpeg2_decode_data (mpeg2dec_, buf, endb);
   output_->last_frame_decoded += num_frames;
@@ -134,7 +134,7 @@ vidl_mpegcodec_helper::decode_mpeg2 (uint8_t * buf, uint8_t * endb)
 
 #define DEMUX_PAYLOAD_START 1
 int
-vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
+vidl1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
 {
   static int mpeg1_skip_table[16] = {
     0, 0, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -358,13 +358,13 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
 }
 
 bool
-vidl_mpegcodec_helper::decode_ps(int reads)
+vidl1_mpegcodec_helper::decode_ps(int reads)
 {
   return 0 != demux (buffer_, buffer_+reads, 0);
 }
 
 bool
-vidl_mpegcodec_helper::decode_ts(int packets)
+vidl1_mpegcodec_helper::decode_ts(int packets)
 {
   uint8_t * buf;
   uint8_t * data;
@@ -397,17 +397,17 @@ vidl_mpegcodec_helper::decode_ts(int packets)
 }
 
 bool
-vidl_mpegcodec_helper::decode_es(int reads)
+vidl1_mpegcodec_helper::decode_es(int reads)
 {
   decode_mpeg2 (buffer_, buffer_+reads);
   return true;
 }
 
 void
-vidl_mpegcodec_helper::print()
+vidl1_mpegcodec_helper::print()
 {
   vcl_cout << "about to print out decoder members.\n"
            << "frmt is: " << int(this->get_format()) << '\n'
            << "the last frame decoded is: " << output_->last_frame_decoded
-           << "\nvidl_mpegcodec_helper::print. end.\n";
+           << "\nvidl1_mpegcodec_helper::print. end.\n";
 }

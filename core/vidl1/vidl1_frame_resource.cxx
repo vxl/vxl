@@ -1,63 +1,63 @@
-// This is core/vidl/vidl_frame_resource.cxx
+// This is core/vidl1/vidl1_frame_resource.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
 
-#include "vidl_frame_resource.h"
+#include "vidl1_frame_resource.h"
 #include <vcl_cstring.h>
 #include <vil/vil_image_view_base.h>
 
-vidl_frame_resource::vidl_frame_resource(const vidl_codec_sptr& codec, int frame)
+vidl1_frame_resource::vidl1_frame_resource(const vidl1_codec_sptr& codec, int frame)
  : codec_(codec),
    frame_number_(frame)
 {
 }
 
 
-vidl_frame_resource::vidl_frame_resource(const vidl_frame& frame)
+vidl1_frame_resource::vidl1_frame_resource(const vidl1_frame& frame)
  : codec_(frame.get_codec()),
    frame_number_(frame.get_real_frame_index())
 {
 }
 
 
-vidl_frame_resource::~vidl_frame_resource()
+vidl1_frame_resource::~vidl1_frame_resource()
 {
 }
 
 
 unsigned
-vidl_frame_resource::nplanes() const
+vidl1_frame_resource::nplanes() const
 {
   return codec_->get_bytes_pixel();
 }
 
 
 unsigned
-vidl_frame_resource::ni() const
+vidl1_frame_resource::ni() const
 {
   return codec_->width();
 }
 
 
 unsigned
-vidl_frame_resource::nj() const
+vidl1_frame_resource::nj() const
 {
   return codec_->height();
 }
 
 
 enum vil_pixel_format
-vidl_frame_resource::pixel_format() const
+vidl1_frame_resource::pixel_format() const
 {
   return codec_->pixel_format();
 }
 
 
 bool
-vidl_frame_resource::get_property(char const *key, void * value) const
+vidl1_frame_resource::get_property(char const *key, void * value) const
 {
   if (vcl_strcmp("description", key)==0)
   {
@@ -71,7 +71,7 @@ vidl_frame_resource::get_property(char const *key, void * value) const
 
 
 vil_image_view_base_sptr
-vidl_frame_resource::get_copy_view(unsigned x0, unsigned nx,
+vidl1_frame_resource::get_copy_view(unsigned x0, unsigned nx,
                                    unsigned y0, unsigned ny) const
 {
   return codec_->get_view(frame_number_, x0, nx, y0, ny);
@@ -79,7 +79,7 @@ vidl_frame_resource::get_copy_view(unsigned x0, unsigned nx,
 
 
 bool
-vidl_frame_resource::put_view(const vil_image_view_base &view,
+vidl1_frame_resource::put_view(const vil_image_view_base &view,
                               unsigned x0, unsigned y0)
 {
   return codec_->put_view(frame_number_, view, x0, y0);

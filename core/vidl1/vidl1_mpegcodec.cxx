@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_mpegcodec.cxx
-#include "vidl_mpegcodec.h"
-#include <vidl/vidl_yuv_2_rgb.h>
+// This is core/vidl1/vidl1_mpegcodec.cxx
+#include "vidl1_mpegcodec.h"
+#include <vidl1/vidl1_yuv_2_rgb.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #undef sprintf // bug in libintl.h : defines sprintf to libintl_sprintf
@@ -62,7 +62,7 @@ extern "C" {
 // and now, for something completely different...
 // ultimately all these static functions are used to make
 // vo_vil_im_open, whose function pointer I will pass to
-// vidl_mpegcodec_helper.
+// vidl1_mpegcodec_helper.
 //
 /////////////////////////////////////////////////////////////////////
 // This copies the frame into the current frame buffer.
@@ -70,7 +70,7 @@ extern "C" {
 // hence, the width gotten from the instance variable
 // below, the frame width. however, the width from
 // the request is the roi width.
-static void internal_draw_frame(vidl_mpegcodec_data* instance,
+static void internal_draw_frame(vidl1_mpegcodec_data* instance,
                                 vo_frame_t* frame,
                                 unsigned char* buf)
 {
@@ -90,7 +90,7 @@ static void internal_draw_frame(vidl_mpegcodec_data* instance,
 //int roixend = roix + p->w;
   int wh = w>>1;
 
-  if (instance->output_format == vidl_mpegcodec_data::GREY)
+  if (instance->output_format == vidl1_mpegcodec_data::GREY)
   {
     // Recover in gray
     for (int i=roiy; i<(roiy+roih); ++i)
@@ -105,7 +105,7 @@ static void internal_draw_frame(vidl_mpegcodec_data* instance,
       {
         int arg = (i>>1)*(wh)+(j>>1);
         // this is assuming the chroma channels are half-size in each direction.
-        vidl_yuv_2_rgb(Y[i*w+j],
+        vidl1_yuv_2_rgb(Y[i*w+j],
                        U[arg],
                        V[arg],
                        &(buf[c]));
@@ -119,9 +119,9 @@ static int internal_setup(vo_instance_t* instance_,
                           int height,
                           void (*draw_frame) (vo_frame_t*))
 {
-  vidl_mpegcodec_data * instance;
+  vidl1_mpegcodec_data * instance;
 
-  instance = (vidl_mpegcodec_data *) instance_;
+  instance = (vidl1_mpegcodec_data *) instance_;
 
   instance->close = libvo_common_free_frames;
   instance->get_frame = libvo_common_get_frame;
@@ -145,9 +145,9 @@ static int internal_setup(vo_instance_t* instance_,
 
 static void vil_im_draw_frame(vo_frame_t * frame)
 {
-  vidl_mpegcodec_data * instance;
+  vidl1_mpegcodec_data * instance;
 
-  instance = (vidl_mpegcodec_data *) frame->instance;
+  instance = (vidl1_mpegcodec_data *) frame->instance;
   int n = ++(instance->framenum);
   if ( n < 0)
     return;
@@ -155,7 +155,7 @@ static void vil_im_draw_frame(vo_frame_t * frame)
   decode_request * p = instance->pending_decode;
   if (!p)
   {
-    vcl_cerr << "vidl_mpegcodec. vil_im_draw_frame."
+    vcl_cerr << "vidl1_mpegcodec. vil_im_draw_frame."
              << " decode request was never set\n";
     return;
   }
@@ -186,9 +186,9 @@ static int vil_im_setup(vo_instance_t * instance, int width, int height)
 // this method is a callback, called by the helper class
 vo_instance_t * vo_vil_im_open(void)
 {
-  vidl_mpegcodec_data * instance;
+  vidl1_mpegcodec_data * instance;
 
-  instance = new vidl_mpegcodec_data;
+  instance = new vidl1_mpegcodec_data;
 
   //set call backs
   instance->setup = vil_im_setup;
@@ -197,7 +197,7 @@ vo_instance_t * vo_vil_im_open(void)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-vidl_mpegcodec::vidl_mpegcodec()
+vidl1_mpegcodec::vidl1_mpegcodec()
 {
   decoder_ = 0;
   buffers_ = new frame_buffer;
@@ -205,43 +205,43 @@ vidl_mpegcodec::vidl_mpegcodec()
   set_number_frames(-1);
 }
 
-vidl_mpegcodec::~vidl_mpegcodec()
+vidl1_mpegcodec::~vidl1_mpegcodec()
 {
-  vcl_cout << "vidl_mpegcodec::~vidl_mpegcodec. entering\n";
+  vcl_cout << "vidl1_mpegcodec::~vidl1_mpegcodec. entering\n";
   if (decoder_) decoder_->print();
   buffers_->print();
   vcl_cout << "first frame number in memory is: " << buffers_->first_frame_num() << vcl_endl;
   delete buffers_;
   if (decoder_) delete decoder_;
 
-  vcl_cout << "vidl_mpegcodec::~vidl_mpegcodec. exiting\n";
+  vcl_cout << "vidl1_mpegcodec::~vidl1_mpegcodec. exiting\n";
 }
 
 void
-vidl_mpegcodec::set_grey_scale(bool grey)
+vidl1_mpegcodec::set_grey_scale(bool grey)
 {
   if (!decoder_)
   {
-    vcl_cout << "vidl_mpegcodec::set_gray_scale. need to load file first.\n";
+    vcl_cout << "vidl1_mpegcodec::set_gray_scale. need to load file first.\n";
     return;
   }
 
-  if (grey) decoder_->output_->output_format = vidl_mpegcodec_data::GREY;
-  else decoder_->output_->output_format = vidl_mpegcodec_data::RGB;
+  if (grey) decoder_->output_->output_format = vidl1_mpegcodec_data::GREY;
+  else decoder_->output_->output_format = vidl1_mpegcodec_data::RGB;
 }
 
 //this method is SUPPOSED to parse the header and determine stuff
 //like height, width, number of frames, bits per pixel, etc. however,
 //i don't have the time right now to write such a header. hopefully it
 //will be done someday.
-vidl_codec_sptr vidl_mpegcodec::load(vcl_string const& fname, char  /*mode*/)
+vidl1_codec_sptr vidl1_mpegcodec::load(vcl_string const& fname, char  /*mode*/)
 {
   //just running probe here just to be safe,
   //though the client is supposed to run this anyway before
   //using this method.
   if (this->probe(fname))
   {
-    decoder_ = new vidl_mpegcodec_helper(vo_vil_im_open,
+    decoder_ = new vidl1_mpegcodec_helper(vo_vil_im_open,
                                          fname,
                                          buffers_);
     return this;
@@ -250,7 +250,7 @@ vidl_codec_sptr vidl_mpegcodec::load(vcl_string const& fname, char  /*mode*/)
 }
 
 vil_image_view_base_sptr
-vidl_mpegcodec::get_view( int position,
+vidl1_mpegcodec::get_view( int position,
                           int x0, int width,
                           int y0, int height) const
 {
@@ -327,7 +327,7 @@ vidl_mpegcodec::get_view( int position,
 }
 
 bool
-vidl_mpegcodec::probe(vcl_string const& fname)
+vidl1_mpegcodec::probe(vcl_string const& fname)
 {
   vcl_string exten = vul_file::extension(fname);
   bool isthere = vul_file::exists(fname) && (exten == ".mpeg" ||
@@ -339,13 +339,13 @@ vidl_mpegcodec::probe(vcl_string const& fname)
 }
 
 void
-vidl_mpegcodec::set_demux_video()
+vidl1_mpegcodec::set_demux_video()
 {
   decoder_->demux_track_ = 0xe0;
 }
 
 void
-vidl_mpegcodec::set_pid(vcl_string pid)
+vidl1_mpegcodec::set_pid(vcl_string pid)
 {
   decoder_->demux_pid_ = vcl_strtol(pid.c_str(),0,16);
 }
@@ -353,7 +353,7 @@ vidl_mpegcodec::set_pid(vcl_string pid)
 //called by load method
 //assumed the helper is already instantiated
 bool
-vidl_mpegcodec::init()
+vidl1_mpegcodec::init()
 {
   if (inited) return true;
 
@@ -397,9 +397,9 @@ vidl_mpegcodec::init()
   int b;
   this->set_width(w);
   this->set_height(h);
-  if (decoder_->get_format() == vidl_mpegcodec_data::RGB)
+  if (decoder_->get_format() == vidl1_mpegcodec_data::RGB)
     b=24;
-  else // if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
+  else // if (decoder_->get_format() == vidl1_mpegcodec_data::GREY)
     b=8;
   set_bits_pixel(b);
 
@@ -428,7 +428,7 @@ vidl_mpegcodec::init()
 //vil_image_resource from these char * buffers.
 
 vil_image_resource *
-vidl_mpegcodec::get_image(int frame_position,
+vidl1_mpegcodec::get_image(int frame_position,
                           int x0,
                           int y0,
                           int width,
@@ -441,7 +441,7 @@ vidl_mpegcodec::get_image(int frame_position,
   this->get_view( // Fix params : remove first (becomes return value) and interchange third and fourth
                  frame_position,(void*)ib,x0,y0,width,height);
 
-  if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
+  if (decoder_->get_format() == vidl1_mpegcodec_data::GREY)
     frame = new vil_image_view<unsigned char >(&ib[0],this->ni(),this->nj());
   else
   {

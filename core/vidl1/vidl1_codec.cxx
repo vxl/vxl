@@ -1,44 +1,44 @@
-// This is core/vidl/vidl_codec.cxx
+// This is core/vidl1/vidl1_codec.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
-#include "vidl_codec.h"
-#include <vidl/vidl_image_list_codec.h>
+#include "vidl1_codec.h"
+#include <vidl1/vidl1_image_list_codec.h>
 #ifdef HAS_FFMPEG
-#include <vidl/vidl_ffmpeg_codec.h>
+#include <vidl1/vidl1_ffmpeg_codec.h>
 #endif
 #ifdef HAS_MPEG2
-#include <vidl/vidl_mpegcodec.h>
+#include <vidl1/vidl1_mpegcodec.h>
 #endif
 #ifdef HAS_AVI
-#include <vidl/vidl_avicodec.h>
+#include <vidl1/vidl1_avicodec.h>
 #endif
-#include "vidl_frame_resource.h"
+#include "vidl1_frame_resource.h"
 
 //: Local class to hold the codec list
 // Clears list on deletion.
-struct vidl_codec_storage
+struct vidl1_codec_storage
 {
-  vidl_codec_sptr* l;
-  vidl_codec_storage(): l(new vidl_codec_sptr[5])
+  vidl1_codec_sptr* l;
+  vidl1_codec_storage(): l(new vidl1_codec_sptr[5])
   {
     unsigned int c=0;
-    l[c++] = new vidl_image_list_codec;
+    l[c++] = new vidl1_image_list_codec;
 #ifdef HAS_FFMPEG
-    l[c++] = new vidl_ffmpeg_codec;
+    l[c++] = new vidl1_ffmpeg_codec;
 #endif
 #ifdef HAS_MPEG2
-    l[c++] = new vidl_mpegcodec;
+    l[c++] = new vidl1_mpegcodec;
 #endif
 #ifdef HAS_AVI
-    l[c++] = new vidl_avicodec;
+    l[c++] = new vidl1_avicodec;
 #endif
     l[c++] = 0;
   }
 
-  ~vidl_codec_storage()
+  ~vidl1_codec_storage()
   {
     unsigned int c=0;
     while (l[c])
@@ -48,18 +48,18 @@ struct vidl_codec_storage
   }
 };
 
-vidl_codec_sptr* vidl_codec::all_codecs()
+vidl1_codec_sptr* vidl1_codec::all_codecs()
 {
-  static vidl_codec_storage storage;
+  static vidl1_codec_storage storage;
   return storage.l;
 }
 
 
 //: Return the resource to the image
 vil_image_resource_sptr
-vidl_codec::get_resource(int position) const
+vidl1_codec::get_resource(int position) const
 {
-  return new vidl_frame_resource(const_cast<vidl_codec*>(this), position);
+  return new vidl1_frame_resource(const_cast<vidl1_codec*>(this), position);
   // Create a new resource of a view by default
   // since a resource is not always available
   //return vil_new_image_resource_of_view(*(this->get_view(position)));

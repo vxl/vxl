@@ -1,6 +1,6 @@
-// This is core/vidl/dll.h
-#ifndef vidl_dll_h_
-#define vidl_dll_h_
+// This is core/vidl1/dll.h
+#ifndef vidl1_dll_h_
+#define vidl1_dll_h_
 
 #include <vcl_compiler.h>
 
@@ -16,4 +16,4 @@
 # endif // BUILD_DLL
 #endif // VCL_WIN32 and !Building_*_dll
 
-#endif // vidl_dll_h_
+#endif // vidl1_dll_h_

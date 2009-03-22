@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_codec.h
-#ifndef vidl_codec_h
-#define vidl_codec_h
+// This is core/vidl1/vidl1_codec.h
+#ifndef vidl1_codec_h
+#define vidl1_codec_h
 //:
 // \file
 // \author Nicolas Dano, september 1999
@@ -14,37 +14,37 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vidl/vidl_codec_sptr.h>
+#include <vidl1/vidl1_codec_sptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_view_base.h>
 
 #include <vil/vil_image_resource_sptr.h>
 
-class vidl_movie;
-class vidl_image_list_codec;
-class vidl_mpegcodec;
-class vidl_avicodec;
-class vidl_ffmpeg_codec;
+class vidl1_movie;
+class vidl1_image_list_codec;
+class vidl1_mpegcodec;
+class vidl1_avicodec;
+class vidl1_ffmpeg_codec;
 
 //: Base for video coder/decoder
-//   A vidl_codec is a pure virtual class defining the codecs of video
-//   See also vidl_io and vidl_image_list_codec and vidl_avicodec
-class vidl_codec : public vbl_ref_count
+//   A vidl1_codec is a pure virtual class defining the codecs of video
+//   See also vidl1_io and vidl1_image_list_codec and vidl1_avicodec
+class vidl1_codec : public vbl_ref_count
 {
-  vidl_codec(vidl_codec const&) : vbl_ref_count() {}
+  vidl1_codec(vidl1_codec const&) : vbl_ref_count() {}
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
-  vidl_codec() { clear_strings(); }
-  virtual ~vidl_codec() {}
+  vidl1_codec() { clear_strings(); }
+  virtual ~vidl1_codec() {}
 
   //=====================================================
   // Casting methods -- lets use a standard form for these, namely
   // CastToXXX, where XXX is the subclass
-  virtual vidl_image_list_codec* castto_vidl_image_list_codec() { return 0; }
-  virtual vidl_mpegcodec* castto_vidl_mpegcodec() { return 0; }
-  virtual vidl_avicodec* castto_vidl_avicodec() { return 0; }
-  virtual vidl_ffmpeg_codec* castto_vidl_ffmpeg_codec() { return 0; }
+  virtual vidl1_image_list_codec* castto_vidl1_image_list_codec() { return 0; }
+  virtual vidl1_mpegcodec* castto_vidl1_mpegcodec() { return 0; }
+  virtual vidl1_avicodec* castto_vidl1_avicodec() { return 0; }
+  virtual vidl1_ffmpeg_codec* castto_vidl1_ffmpeg_codec() { return 0; }
   // Data Control--------------------------------------------------------------
 
   inline void set_number_frames(int n = 0) { numberframes = n; }
@@ -94,10 +94,10 @@ class vidl_codec : public vbl_ref_count
   // IO
 
   //: Try to load fname, and if successful, return the codec that did it
-  virtual vidl_codec_sptr load(vcl_string const& fname, char mode = 'r' ) = 0;
+  virtual vidl1_codec_sptr load(vcl_string const& fname, char mode = 'r' ) = 0;
 
-  //: Take a vidl_movie, and save in the format of this codec.
-  virtual bool save(vidl_movie* movie, vcl_string const& fname) = 0;
+  //: Take a vidl1_movie, and save in the format of this codec.
+  virtual bool save(vidl1_movie* movie, vcl_string const& fname) = 0;
 
   //: Return true if fname looks like something we can read.
   virtual bool probe(vcl_string const& fname) = 0;
@@ -107,7 +107,7 @@ class vidl_codec : public vbl_ref_count
   virtual void close() {}
 
   //: Access to a static array of all available codecs
-  static vidl_codec_sptr* all_codecs();
+  static vidl1_codec_sptr* all_codecs();
 
  private:
 
@@ -123,4 +123,4 @@ class vidl_codec : public vbl_ref_count
   int        numberframes;     //!< Length of the sequence
 };
 
-#endif // vidl_codec_h
+#endif // vidl1_codec_h

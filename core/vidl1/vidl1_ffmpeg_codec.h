@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_ffmpeg_codec.h
-#ifndef vidl_ffmpeg_codec_h
-#define vidl_ffmpeg_codec_h
+// This is core/vidl1/vidl1_ffmpeg_codec.h
+#ifndef vidl1_ffmpeg_codec_h
+#define vidl1_ffmpeg_codec_h
 //:
 // \file
 // \author Matt Leotta
@@ -21,18 +21,18 @@ extern "C" {
 #endif
 }
 
-#include <vidl/vidl_codec.h>
+#include <vidl1/vidl1_codec.h>
 #include <vil/vil_image_view.h>
 
 //: Allows user to load a video with ffmpeg
-// See also vidl_codec
-class vidl_ffmpeg_codec : public vidl_codec
+// See also vidl1_codec
+class vidl1_ffmpeg_codec : public vidl1_codec
 {
  public:
   //: Constructor
-  vidl_ffmpeg_codec();
+  vidl1_ffmpeg_codec();
   //: Destructor
- ~vidl_ffmpeg_codec();
+ ~vidl1_ffmpeg_codec();
 
   //-----------------------------------------------------
 
@@ -45,10 +45,10 @@ class vidl_ffmpeg_codec : public vidl_codec
 
   //-----------------------------------------------------
   virtual bool probe(vcl_string const& fname);
-  virtual vidl_codec_sptr load(vcl_string const& fname, char mode = 'r' );
-  virtual bool save(vidl_movie* movie, vcl_string const& fname) { return false; }
+  virtual vidl1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  virtual bool save(vidl1_movie* movie, vcl_string const& fname) { return false; }
   virtual vcl_string type() const { return "FFMPEG"; }
-  virtual vidl_ffmpeg_codec* castto_vidl_ffmpeg_codec() { return this; }
+  virtual vidl1_ffmpeg_codec* castto_vidl1_ffmpeg_codec() { return this; }
 
   //: Advance to the next frame
   bool advance() const;
@@ -107,4 +107,4 @@ class vidl_ffmpeg_codec : public vidl_codec
   mutable unsigned frame_number_offset_;
 };
 
-#endif // vidl_ffmpeg_codec_h
+#endif // vidl1_ffmpeg_codec_h

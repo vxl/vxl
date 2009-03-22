@@ -1,6 +1,6 @@
-// This is core/vidl/examples/vidl_player_menus.cxx
-#include "vidl_player_menus.h"
-#include "vidl_player_manager.h"
+// This is core/vidl1/examples/vidl1_player_menus.cxx
+#include "vidl1_player_menus.h"
+#include "vidl1_player_manager.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
@@ -8,8 +8,8 @@
 #include <vgui/vgui_menu.h>
 
 #ifdef HAS_MPEG2
-#include <vidl/vidl_mpegcodec.h>
-#include <vidl/vidl_io.h>
+#include <vidl1/vidl1_mpegcodec.h>
+#include <vidl1/vidl1_io.h>
 
 //define mpeg callback here
 //this dialog box queries the user for info
@@ -17,7 +17,7 @@
 //would be done by reading the header, but that is
 //not implemented here.
 static void
-vidl_player_load_mpegcodec_callback(vidl_codec * vc)
+vidl1_player_load_mpegcodec_callback(vidl1_codec * vc)
 {
   vgui_dialog dialog( "MPEG player setup");
 
@@ -33,10 +33,10 @@ vidl_player_load_mpegcodec_callback(vidl_codec * vc)
 
   if ( !dialog.ask())
   {
-    vcl_cout << "vidl_player_load_mpegcodec_callback. did not initialize codec.\n";
+    vcl_cout << "vidl1_player_load_mpegcodec_callback. did not initialize codec.\n";
   }
 
-  vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
+  vidl1_mpegcodec * mpegcodec = vc->castto_vidl1_mpegcodec();
   if (!mpegcodec) return;
 
   mpegcodec->set_grey_scale(grey_scale);
@@ -51,55 +51,55 @@ vidl_player_load_mpegcodec_callback(vidl_codec * vc)
 
 //----- Static menu callback functions -----
 
-void vidl_player_menus::load_video_callback()
+void vidl1_player_menus::load_video_callback()
 {
 #ifdef HAS_MPEG2
   //need to define callbacks
-  vidl_io::load_mpegcodec_callback = &vidl_player_load_mpegcodec_callback;
+  vidl1_io::load_mpegcodec_callback = &vidl1_player_load_mpegcodec_callback;
 #endif
-  vidl_player_manager::instance()->load_video_file();
+  vidl1_player_manager::instance()->load_video_file();
 }
 
-void vidl_player_menus::quit_callback()
+void vidl1_player_menus::quit_callback()
 {
   vcl_exit(1);
 }
 
 
-void vidl_player_menus::pause_video_callback()
+void vidl1_player_menus::pause_video_callback()
 {
-  vidl_player_manager::instance()->pause_video();
+  vidl1_player_manager::instance()->pause_video();
 }
 
-void vidl_player_menus::next_frame_callback()
+void vidl1_player_menus::next_frame_callback()
 {
-  vidl_player_manager::instance()->next_frame();
+  vidl1_player_manager::instance()->next_frame();
 }
 
-void vidl_player_menus::prev_frame_callback()
+void vidl1_player_menus::prev_frame_callback()
 {
-  vidl_player_manager::instance()->prev_frame();
+  vidl1_player_manager::instance()->prev_frame();
 }
 
-void vidl_player_menus::go_to_frame_callback()
+void vidl1_player_menus::go_to_frame_callback()
 {
-  vidl_player_manager::instance()->go_to_frame();
+  vidl1_player_manager::instance()->go_to_frame();
 }
 
-void vidl_player_menus::play_video_callback()
+void vidl1_player_menus::play_video_callback()
 {
-  vidl_player_manager::instance()->play_video();
+  vidl1_player_manager::instance()->play_video();
 }
 
-void vidl_player_menus::stop_video_callback()
+void vidl1_player_menus::stop_video_callback()
 {
-  vidl_player_manager::instance()->stop_video();
+  vidl1_player_manager::instance()->stop_video();
 }
 
 
-//----- vidl_player_menus definition -----
+//----- vidl1_player_menus definition -----
 
-vgui_menu vidl_player_menus::get_menu()
+vgui_menu vidl1_player_menus::get_menu()
 {
   vgui_menu menubar;
   vgui_menu menufile;

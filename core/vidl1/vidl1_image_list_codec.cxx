@@ -1,5 +1,5 @@
-// This is core/vidl/vidl_image_list_codec.cxx
-#include "vidl_image_list_codec.h"
+// This is core/vidl1/vidl1_image_list_codec.cxx
+#include "vidl1_image_list_codec.h"
 //:
 // \file
 
@@ -8,23 +8,23 @@
 
 #include <vul/vul_sprintf.h>
 
-#include <vidl/vidl_movie.h>
+#include <vidl1/vidl1_movie.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
 //=========================================================================
-//  Methods for vidl_image_list_codec.
+//  Methods for vidl1_image_list_codec.
 //_________________________________________________________________________
 
-vcl_string vidl_image_list_codec::default_initialization_image_type_ = "tiff";
+vcl_string vidl1_image_list_codec::default_initialization_image_type_ = "tiff";
 
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
 
 //: Constructor, from a list of images
-vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil_image_resource_sptr>& images)
+vidl1_image_list_codec::vidl1_image_list_codec(vcl_list<vil_image_resource_sptr>& images)
 {
   // Set the image type to the default value
   default_image_type_ = default_initialization_image_type_;
@@ -37,7 +37,7 @@ vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil_image_resource_sptr>& 
 }
 
 //: Constructor, from a vector of images
-vidl_image_list_codec::vidl_image_list_codec(vcl_vector<vil_image_resource_sptr>& images)
+vidl1_image_list_codec::vidl1_image_list_codec(vcl_vector<vil_image_resource_sptr>& images)
 {
   // Set the image type to the default value
   default_image_type_ = default_initialization_image_type_;
@@ -50,7 +50,7 @@ vidl_image_list_codec::vidl_image_list_codec(vcl_vector<vil_image_resource_sptr>
 }
 
 //: Basic constructor. Should not be called unless we initialize the codec by some ways.
-vidl_image_list_codec::vidl_image_list_codec()
+vidl1_image_list_codec::vidl1_image_list_codec()
 {
   // Set the image type to the default value
   default_image_type_ = default_initialization_image_type_;
@@ -61,7 +61,7 @@ vidl_image_list_codec::vidl_image_list_codec()
 }
 
 //: Initialize
-bool vidl_image_list_codec::init()
+bool vidl1_image_list_codec::init()
 {
   if (images_.empty())
     return false;
@@ -85,26 +85,26 @@ bool vidl_image_list_codec::init()
 
 //: Return the resource to the image
 vil_image_resource_sptr
-vidl_image_list_codec::get_resource(int position) const
+vidl1_image_list_codec::get_resource(int position) const
 {
   return images_[position];
 }
 
 //: Get a section of pixels in function of the frame number, position and size.
-vil_image_view_base_sptr vidl_image_list_codec::get_view(int position, int x0, int w, int y0, int h) const
+vil_image_view_base_sptr vidl1_image_list_codec::get_view(int position, int x0, int w, int y0, int h) const
 {
   return images_[position]->get_view(x0, w, y0, h);
 }
 
 //: Put a section of pixels in function of the frame number, position and size.
-bool vidl_image_list_codec::put_view(int /*position*/, const vil_image_view_base & /*im*/, int /*x0*/, int /*y0*/)
+bool vidl1_image_list_codec::put_view(int /*position*/, const vil_image_view_base & /*im*/, int /*x0*/, int /*y0*/)
 {
-  vcl_cerr << "vidl_image_list_codec::put_section not implemented\n";
+  vcl_cerr << "vidl1_image_list_codec::put_section not implemented\n";
   return false;
 }
 
 //: Load from a file name.
-vidl_codec_sptr vidl_image_list_codec::load(vcl_string const& fname, char mode)
+vidl1_codec_sptr vidl1_image_list_codec::load(vcl_string const& fname, char mode)
 {
   // will try and load as many images as possible starting with
   //   index 0 and stopping when we run out of images
@@ -131,7 +131,7 @@ vidl_codec_sptr vidl_image_list_codec::load(vcl_string const& fname, char mode)
 }
 
 //: Load a 'movie' from a list of filenames, return a codec.
-vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, char mode)
+vidl1_codec_sptr vidl1_image_list_codec::load(const vcl_list<vcl_string> &fnames, char mode)
 {
 #if 0 // commented out (why?)
   // Makes sure image loaders are registered
@@ -161,7 +161,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, 
 }
 
 //: Load a 'movie' from a vector of filenames, return a codec.
-vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames, char mode)
+vidl1_codec_sptr vidl1_image_list_codec::load(const vcl_vector<vcl_string> &fnames, char mode)
 {
 #if 0 // commented out (why?)
   // Make sure image loaders are registered
@@ -193,13 +193,13 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames
 // Not so well implemented for this codec.
 // This could check if the filename is a valid image type
 // by probing all the image types.
-bool vidl_image_list_codec::probe(vcl_string const& /*fname*/)
+bool vidl1_image_list_codec::probe(vcl_string const& /*fname*/)
 {
   return false;
 }
 
 //: Save the given video as a set of images of the default set type.
-bool vidl_image_list_codec::save(vidl_movie* movie, vcl_string const& fname)
+bool vidl1_image_list_codec::save(vidl1_movie* movie, vcl_string const& fname)
 {
   if (default_image_type_ == "")
   {
@@ -211,7 +211,7 @@ bool vidl_image_list_codec::save(vidl_movie* movie, vcl_string const& fname)
 }
 
 //: Save the given video as a set of images of the type given.
-bool vidl_image_list_codec::save(vidl_movie* movie,
+bool vidl1_image_list_codec::save(vidl1_movie* movie,
                                  vcl_string const& fname,
                                  vcl_string const& type)
 {
@@ -221,7 +221,7 @@ bool vidl_image_list_codec::save(vidl_movie* movie,
   // Create the extension for filenames
   vcl_string extension = type.substr(0, type.size()-5); // To get rid of "Image" string
 
-  for (vidl_movie::frame_iterator pframe = movie->begin();
+  for (vidl1_movie::frame_iterator pframe = movie->begin();
        pframe <= movie->last();
        ++pframe)
   {

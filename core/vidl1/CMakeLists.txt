@@ -1,4 +1,4 @@
-# vxl/vidl/CMakeLists.txt
+# vxl/vidl1/CMakeLists.txt
 
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
@@ -20,35 +20,35 @@ if ( FFMPEG_FOUND_SEVERAL )
   ADD_DEFINITIONS(-DHAS_FFMPEG_SEVERAL)
 ENDIF ( FFMPEG_FOUND_SEVERAL )
 
-SET(vidl_sources
+SET(vidl1_sources
   dll.h
 
-  vidl_vob_frame_index.cxx    vidl_vob_frame_index.h
-  vidl_file_sequence.cxx      vidl_file_sequence.h
-  vidl_codec.cxx vidl_codec.h vidl_codec_sptr.h
-  vidl_clip.cxx  vidl_clip.h  vidl_clip_sptr.h
-  vidl_movie.cxx vidl_movie.h vidl_movie_sptr.h
-  vidl_frame.cxx vidl_frame.h vidl_frame_sptr.h
-  vidl_frame_resource.cxx     vidl_frame_resource.h
-  vidl_image_list_codec.cxx vidl_image_list_codec.h vidl_image_list_codec_sptr.h
-  vidl_io.cxx    vidl_io.h
+  vidl1_vob_frame_index.cxx    vidl1_vob_frame_index.h
+  vidl1_file_sequence.cxx      vidl1_file_sequence.h
+  vidl1_codec.cxx vidl1_codec.h vidl1_codec_sptr.h
+  vidl1_clip.cxx  vidl1_clip.h  vidl1_clip_sptr.h
+  vidl1_movie.cxx vidl1_movie.h vidl1_movie_sptr.h
+  vidl1_frame.cxx vidl1_frame.h vidl1_frame_sptr.h
+  vidl1_frame_resource.cxx     vidl1_frame_resource.h
+  vidl1_image_list_codec.cxx vidl1_image_list_codec.h vidl1_image_list_codec_sptr.h
+  vidl1_io.cxx    vidl1_io.h
 )
 
 IF( MPEG2_FOUND )
-  SET(vidl_sources ${vidl_sources}
-    vidl_mpegcodec.cxx vidl_mpegcodec.h vidl_mpegcodec_sptr.h
-    vidl_mpegcodec_helper.cxx vidl_mpegcodec_helper.h
-    vidl_yuv_2_rgb.h
+  SET(vidl1_sources ${vidl1_sources}
+    vidl1_mpegcodec.cxx vidl1_mpegcodec.h vidl1_mpegcodec_sptr.h
+    vidl1_mpegcodec_helper.cxx vidl1_mpegcodec_helper.h
+    vidl1_yuv_2_rgb.h
   )
 ENDIF( MPEG2_FOUND )
 
 IF( FFMPEG_FOUND )
-  SET(vidl_sources ${vidl_sources}
-    vidl_ffmpeg_codec.cxx vidl_ffmpeg_codec.h
+  SET(vidl1_sources ${vidl1_sources}
+    vidl1_ffmpeg_codec.cxx vidl1_ffmpeg_codec.h
   )
 ENDIF( FFMPEG_FOUND )
 
-AUX_SOURCE_DIRECTORY(Templates vidl_sources)
+AUX_SOURCE_DIRECTORY(Templates vidl1_sources)
 
 
 IF (NOT AVIFILE_FOUND)
@@ -61,9 +61,9 @@ ENDIF (NOT AVIFILE_FOUND)
 
 SET(AVI_FOUND "NO")
 IF (AVIFILE_FOUND)
-  SET(vidl_sources ${vidl_sources}
-      vidl_avicodec.h
-      vidl_avifile_avicodec.h vidl_avifile_avicodec.cxx
+  SET(vidl1_sources ${vidl1_sources}
+      vidl1_avicodec.h
+      vidl1_avifile_avicodec.h vidl1_avifile_avicodec.cxx
      )
   SET(AVI_LIBRARIES ${AVIFILE_LIBRARIES})
   SET(AVI_FOUND "YES")
@@ -71,9 +71,9 @@ IF (AVIFILE_FOUND)
 ELSE (AVIFILE_FOUND)
   IF (WIN32)
     IF( NOT CYGWIN )
-      SET(vidl_sources ${vidl_sources}
-          vidl_avicodec.h
-          vidl_win_avicodec.h vidl_win_avicodec.cxx
+      SET(vidl1_sources ${vidl1_sources}
+          vidl1_avicodec.h
+          vidl1_win_avicodec.h vidl1_win_avicodec.cxx
          )
 
       # Borland compilers may fail to link vfw32.lib if they are not
@@ -88,19 +88,19 @@ ELSE (AVIFILE_FOUND)
 ENDIF (AVIFILE_FOUND)
 
 
-ADD_LIBRARY(vidl ${vidl_sources})
-INSTALL_TARGETS(/lib vidl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vidl ${vidl_sources})
+ADD_LIBRARY(vidl1 ${vidl1_sources})
+INSTALL_TARGETS(/lib vidl1)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vidl1 ${vidl1_sources})
 
-TARGET_LINK_LIBRARIES( vidl vbl vul vil vcl )
+TARGET_LINK_LIBRARIES( vidl1 vbl vul vil vcl )
 IF( MPEG2_FOUND )
-  TARGET_LINK_LIBRARIES( vidl ${MPEG2_LIBRARIES} )
+  TARGET_LINK_LIBRARIES( vidl1 ${MPEG2_LIBRARIES} )
 ENDIF( MPEG2_FOUND )
 IF( FFMPEG_FOUND )
-  TARGET_LINK_LIBRARIES( vidl ${FFMPEG_LIBRARIES} )
+  TARGET_LINK_LIBRARIES( vidl1 ${FFMPEG_LIBRARIES} )
 ENDIF( FFMPEG_FOUND )
 IF( AVI_FOUND )
-  TARGET_LINK_LIBRARIES( vidl ${AVI_LIBRARIES} )
+  TARGET_LINK_LIBRARIES( vidl1 ${AVI_LIBRARIES} )
 ENDIF( AVI_FOUND )
 
 IF( BUILD_TESTING )

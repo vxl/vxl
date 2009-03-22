@@ -1,6 +1,6 @@
-// This is core/vidl/vidl_frame.h
-#ifndef vidl_frame_h
-#define vidl_frame_h
+// This is core/vidl1/vidl1_frame.h
+#ifndef vidl1_frame_h
+#define vidl1_frame_h
 //:
 // \file
 // \author Nicolas Dano, march 1999
@@ -15,21 +15,21 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_view_base.h>
-#include <vidl/vidl_frame_sptr.h>
-#include <vidl/vidl_codec.h>
+#include <vidl1/vidl1_frame_sptr.h>
+#include <vidl1/vidl1_codec.h>
 #include <vil/vil_image_resource_sptr.h>
 
 //: A single frame of a Video Sequence.
-class vidl_frame : public vbl_ref_count
+class vidl1_frame : public vbl_ref_count
 {
   // PUBLIC INTERFACE
  public:
 
   // Constructors/Initializers/Destructors
-  vidl_frame(int position, vidl_codec_sptr coder);
-  vidl_frame(vidl_frame const& f)
+  vidl1_frame(int position, vidl1_codec_sptr coder);
+  vidl1_frame(vidl1_frame const& f)
     : vbl_ref_count(), position_(f.position_), coder_(f.coder_) {}
-  ~vidl_frame();
+  ~vidl1_frame();
 
   //: Return an image resource
   vil_image_resource_sptr get_resource() const;
@@ -37,7 +37,7 @@ class vidl_frame : public vbl_ref_count
   virtual vil_image_view_base_sptr get_view(
                          int x0, int width, int y0, int height) const;
 
-  vidl_codec_sptr get_codec() const {return coder_;}
+  vidl1_codec_sptr get_codec() const {return coder_;}
 
   inline char get_image_class()const { return coder_->get_image_class(); }
   inline char get_format() const     { return coder_->get_format(); }
@@ -53,7 +53,7 @@ class vidl_frame : public vbl_ref_count
 
   // Data Members
   const int position_;
-  vidl_codec_sptr coder_;
+  vidl1_codec_sptr coder_;
 };
 
-#endif // vidl_frame_h
+#endif // vidl1_frame_h

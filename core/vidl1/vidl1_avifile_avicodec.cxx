@@ -1,7 +1,7 @@
 //:
 // \file
 
-#include "vidl_avifile_avicodec.h"
+#include "vidl1_avifile_avicodec.h"
 
 #include <avifile.h>
 #include <videodecoder.h>
@@ -19,14 +19,14 @@
 #include <vcl_cassert.h>
 
 //: Constructor
-vidl_avicodec::vidl_avicodec()
+vidl1_avicodec::vidl1_avicodec()
 : current_frame_(0), moviefile_(NULL), moviestream_(NULL)
 {
 }
 
 
 //: Destructor
-vidl_avicodec::~vidl_avicodec()
+vidl1_avicodec::~vidl1_avicodec()
 {
   if (moviestream_){
     moviestream_->StopStreaming();
@@ -39,7 +39,7 @@ vidl_avicodec::~vidl_avicodec()
 //-----------------------------------------------------------------------------
 //: Probe the file fname, open it as an AVI file. If it works, return true, false otherwise.
 
-bool vidl_avicodec::probe(vcl_string const& fname)
+bool vidl1_avicodec::probe(vcl_string const& fname)
 {
   IAviReadFile* avi_file;
   IAviReadStream* avi_stream;
@@ -61,22 +61,22 @@ bool vidl_avicodec::probe(vcl_string const& fname)
 //  loading multiple avi videos at once) and loads the avi
 //  into the cloned codec. The cloned codec is the one that is returned
 //  by this function.
-vidl_codec_sptr
-vidl_avicodec::load(vcl_string const& fname, char mode)
+vidl1_codec_sptr
+vidl1_avicodec::load(vcl_string const& fname, char mode)
 {
-  vidl_avicodec *cloned_avi_codec = new vidl_avicodec;
+  vidl1_avicodec *cloned_avi_codec = new vidl1_avicodec;
 
   if (!cloned_avi_codec->load_avi(fname,mode)){
     delete cloned_avi_codec;
     return NULL;
   }
 
-  return vidl_codec_sptr(cloned_avi_codec);
+  return vidl1_codec_sptr(cloned_avi_codec);
 }
 
 
 bool
-vidl_avicodec::load_avi(vcl_string const& fname, char mode )
+vidl1_avicodec::load_avi(vcl_string const& fname, char mode )
 {
   current_frame_=-1;
 
@@ -115,7 +115,7 @@ vidl_avicodec::load_avi(vcl_string const& fname, char mode )
 
 
 vil_image_view_base_sptr
-vidl_avicodec::get_view( int position,
+vidl1_avicodec::get_view( int position,
                          int x0, int xs,
                          int y0, int ys ) const
 {
@@ -156,17 +156,17 @@ vidl_avicodec::get_view( int position,
 
 
 bool
-vidl_avicodec::put_view( int /*position*/,
+vidl1_avicodec::put_view( int /*position*/,
                          const vil_image_view_base &/*im*/,
                          int /*x0*/, int /*y0*/)
 {
-  vcl_cerr << "vidl_avicodec::put_view not implemented\n";
+  vcl_cerr << "vidl1_avicodec::put_view not implemented\n";
   return false;
 }
 
 
 int
-vidl_avicodec::seek(int frame_number) const
+vidl1_avicodec::seek(int frame_number) const
 {
   assert (moviestream_);
   assert ((unsigned int)frame_number <= moviestream_->GetLength());
@@ -191,7 +191,7 @@ vidl_avicodec::seek(int frame_number) const
   moviestream_->Seek(frame_number);
   moviestream_->SeekToPrevKeyFrame();
   int key_frame = moviestream_->GetPos();
-  vcl_cout << "[vidl_avicodec::seek] key frame " << key_frame
+  vcl_cout << "[vidl1_avicodec::seek] key frame " << key_frame
            << "  -> uncompress " << frame_number-key_frame << " frames" << vcl_endl;
   for (int i=key_frame; i<frame_number; ++i)
   {
@@ -208,7 +208,7 @@ vidl_avicodec::seek(int frame_number) const
 
 
 int
-vidl_avicodec::next_frame() const
+vidl1_avicodec::next_frame() const
 {
   assert (moviestream_);
   if (!moviestream_) return -1;

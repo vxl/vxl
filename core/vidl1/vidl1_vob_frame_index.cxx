@@ -1,5 +1,5 @@
-// This is core/vidl/vidl_vob_frame_index.cxx
-#include "vidl_vob_frame_index.h"
+// This is core/vidl1/vidl1_vob_frame_index.cxx
+#include "vidl1_vob_frame_index.h"
 //
 // this file has been copied from oxl/oxp
 // author:  AWF
@@ -11,14 +11,14 @@
 #include <vcl_fstream.h>
 #include <vul/vul_awk.h>
 
-bool vidl_vob_frame_index::load(vcl_string const& filename)
+bool vidl1_vob_frame_index::load(vcl_string const& filename)
 {
-  vcl_vector<vidl_vob_frame_index_entry> tmp;
+  vcl_vector<vidl1_vob_frame_index_entry> tmp;
 
   vcl_ifstream f(filename.c_str(), vcl_ios_binary);
   if (!f.good())
   {
-    vcl_cerr << "vidl_vob_frame_index: Cannot read IDX file ["<< filename <<"]\n";
+    vcl_cerr << "vidl1_vob_frame_index: Cannot read IDX file ["<< filename <<"]\n";
     return false;
   }
   vul_awk awk(f);
@@ -31,12 +31,12 @@ bool vidl_vob_frame_index::load(vcl_string const& filename)
   else if (tag == "LBA")
     idx_type = LBA;
   else
-    vcl_cerr << "vidl_vob_frame_index: WARNING: unknown type [" << awk[0] << "]\n";
+    vcl_cerr << "vidl1_vob_frame_index: WARNING: unknown type [" << awk[0] << "]\n";
 
   for (int frame=0; awk; ++awk, ++frame)
   {
     // Skip comment and ----- lines
-    vidl_vob_frame_index_entry e;
+    vidl1_vob_frame_index_entry e;
     if (idx_type == LBA && vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
       tmp.push_back(e);
     int dummy;
@@ -57,7 +57,7 @@ bool vidl_vob_frame_index::load(vcl_string const& filename)
   return true;
 }
 
-int vidl_vob_frame_index::frame_to_lba_of_prev_I_frame(int f, int* f_actual)
+int vidl1_vob_frame_index::frame_to_lba_of_prev_I_frame(int f, int* f_actual)
 {
   int lo = 0;
   int hi = l.size()-1;
@@ -78,7 +78,7 @@ int vidl_vob_frame_index::frame_to_lba_of_prev_I_frame(int f, int* f_actual)
       break;
     }
   }
-  // vcl_fprintf(stderr, "vidl_vob_frame_index: [%5d %5d] -> [%5d %5d]\n", lo, hi, l[lo].frame, l[hi].frame);
+  // vcl_fprintf(stderr, "vidl1_vob_frame_index: [%5d %5d] -> [%5d %5d]\n", lo, hi, l[lo].frame, l[hi].frame);
   if (f_actual)
     *f_actual = l[lo].frame;
   return l[lo].lba;

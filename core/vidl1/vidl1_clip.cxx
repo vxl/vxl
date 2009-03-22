@@ -1,47 +1,47 @@
 //:
 // \file
 
-#include "vidl_clip.h"
+#include "vidl1_clip.h"
 
 #include <vcl_iostream.h>
 
-#include <vidl/vidl_codec_sptr.h>
-#include <vidl/vidl_image_list_codec.h>
-#include <vidl/vidl_frame.h>
+#include <vidl1/vidl1_codec_sptr.h>
+#include <vidl1/vidl1_image_list_codec.h>
+#include <vidl1/vidl1_frame.h>
 
 //=========================================================================
-//  Methods for vidl_clip.
+//  Methods for vidl1_clip.
 //_________________________________________________________________________
 
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
-//: Constructor. Takes a vidl_codec, start, end and increment frames are optional.
-vidl_clip::vidl_clip(
-        vidl_codec_sptr codec,
+//: Constructor. Takes a vidl1_codec, start, end and increment frames are optional.
+vidl1_clip::vidl1_clip(
+        vidl1_codec_sptr codec,
         int start,
         int end,
         int increment) : frames_(codec->length()), coder_(codec)
 {
   for (unsigned int i=0; i<frames_.size(); i++)
-    frames_[i] = new vidl_frame(i, codec);
+    frames_[i] = new vidl1_frame(i, codec);
 
   init(start, end, increment);
 }
 
 //: Constructor. Create a clip from a vector of images. Start, end and increment frames are optional.
-vidl_clip::vidl_clip(vcl_vector<vil_image_resource_sptr> &images,
+vidl1_clip::vidl1_clip(vcl_vector<vil_image_resource_sptr> &images,
                      int start,
                      int end,
                      int increment)
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
-  vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
+  vidl1_image_list_codec_sptr codec = new vidl1_image_list_codec(images);
 
   for (vcl_vector<vil_image_resource_sptr>::iterator i=images.begin(); i!= images.end(); ++i)
   {
-    vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
+    vidl1_frame_sptr f = new vidl1_frame(position, codec.ptr());
     frames_.push_back(f);
     position++;
   }
@@ -52,18 +52,18 @@ vidl_clip::vidl_clip(vcl_vector<vil_image_resource_sptr> &images,
 }
 
 //: Constructor. Create a clip from a list of images. Start, end and increment frames are optional.
-vidl_clip::vidl_clip(vcl_list<vil_image_resource_sptr> &images,
+vidl1_clip::vidl1_clip(vcl_list<vil_image_resource_sptr> &images,
                      int start,
                      int end,
                      int increment)
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
-  vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
+  vidl1_image_list_codec_sptr codec = new vidl1_image_list_codec(images);
 
   for (vcl_list<vil_image_resource_sptr>::iterator i=images.begin(); i!= images.end(); ++i)
   {
-    vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
+    vidl1_frame_sptr f = new vidl1_frame(position, codec.ptr());
     frames_.push_back(f);
     position++;
   }
@@ -74,9 +74,9 @@ vidl_clip::vidl_clip(vcl_list<vil_image_resource_sptr> &images,
 }
 
 //: Initialization of the clip. Protected.
-void vidl_clip::init(int start, int end, int increment)
+void vidl1_clip::init(int start, int end, int increment)
 {
-  // Initialize startframe_, endframe_ and increment_ in the vidl_clip
+  // Initialize startframe_, endframe_ and increment_ in the vidl1_clip
   //
   // Some sanity checks first
   //
@@ -99,7 +99,7 @@ void vidl_clip::init(int start, int end, int increment)
   // Make end equal to start + some multiple of increment
   end = start + (((end-start)/increment)*increment);
 
-  // Now, set the fields of vidl_clip
+  // Now, set the fields of vidl1_clip
   increment_  = increment;
   startframe_ = start;
   endframe_   = end;
@@ -108,12 +108,12 @@ void vidl_clip::init(int start, int end, int increment)
 
 //: Get the frame numbered n inside the range defined by startframe, endframe and increment.
 // So, the returned frame is startframe_+n*increment_
-vidl_frame_sptr vidl_clip::get_frame(int n)
+vidl1_frame_sptr vidl1_clip::get_frame(int n)
 {
   // Check that the asked frame is in the clip
   if (n>=length() || n < 0)
   {
-    vcl_cerr << "vidl_clip::get_frame Frame number " << n << " does not exist.\n";
+    vcl_cerr << "vidl1_clip::get_frame Frame number " << n << " does not exist.\n";
     return 0;
   }
 
@@ -122,13 +122,13 @@ vidl_frame_sptr vidl_clip::get_frame(int n)
 }
 
 //: Return the horizontal size of the frames in the clip
-int vidl_clip::width() const
+int vidl1_clip::width() const
 {
   return coder_->width();
 }
 
 //: Return the vertical size of the frames in the clip
-int vidl_clip::height() const
+int vidl1_clip::height() const
 {
   return coder_->height();
 }

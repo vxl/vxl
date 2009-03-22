@@ -1,11 +1,11 @@
-// This is core/vidl/examples/vidl_player_manager.h
-#ifndef vidl_player_manager_h_
-#define vidl_player_manager_h_
+// This is core/vidl1/examples/vidl1_player_manager.h
+#ifndef vidl1_player_manager_h_
+#define vidl1_player_manager_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \author Matt Leotta
-// \brief A sample vidl video player
+// \brief A sample vidl1 video player
 //
 //----------------------------------------------------------------------------
 
@@ -13,10 +13,10 @@
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_window.h>
-#include <vidl/vidl_movie.h>
+#include <vidl1/vidl1_movie.h>
 
 //: A singleton manager class for playing videos.
-//  The purpose this code is demonstrate the use of vidl.  The vidl_player
+//  The purpose this code is demonstrate the use of vidl1.  The vidl1_player
 //  loads, displays, and saves (saving not implemented yet) videos in the
 //  following formats:
 //   - Directory of Images (any type supported by vil)
@@ -24,13 +24,13 @@
 //   - AVI (currently Windows only)
 //
 
-class vidl_player_manager : public vgui_wrapper_tableau
+class vidl1_player_manager : public vgui_wrapper_tableau
 {
  public:
-  vidl_player_manager();
-  ~vidl_player_manager();
-  //: returns the unique instance of vidl_player_manger
-  static vidl_player_manager *instance();
+  vidl1_player_manager();
+  ~vidl1_player_manager();
+  //: returns the unique instance of vidl1_player_manger
+  static vidl1_player_manager *instance();
 
   //: height (in pixels) of the video frame
   unsigned get_height() const { return height_; }
@@ -82,13 +82,13 @@ class vidl_player_manager : public vgui_wrapper_tableau
   float time_interval_;
   unsigned width_;
   unsigned height_;
-  vidl_movie_sptr my_movie_;
-  vidl_movie::frame_iterator pframe_;
+  vidl1_movie_sptr my_movie_;
+  vidl1_movie::frame_iterator pframe_;
   vgui_window* win_;
   vgui_viewer2D_tableau_sptr v2D_;
   vgui_image_tableau_sptr itab_;
 
-  static vidl_player_manager *instance_;
+  static vidl1_player_manager *instance_;
 };
 
-#endif // vidl_player_manager_h_
+#endif // vidl1_player_manager_h_
