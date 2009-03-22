@@ -50,7 +50,7 @@ core vul     vul_     build core/vsl
 core vpl     vpl_     build
 
 package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
-core vidl      vidl_     build core/vbl core/vul core/vil
+core vidl1    vidl1_    build core/vbl core/vul core/vil
 core vidl_vil1 vidl_vil1 build core/vbl core/vul core/vil1
 core vcsl      vcsl_     build core/vnl core/vbl
 core vgui      vgui_     build core/vgl core/vpl core/vbl core/vul core/vnl core/vil core/vil1
@@ -119,7 +119,7 @@ contrib/gel vtol   vtol_   build contrib/gel/vdgl core/vil
 contrib/gel gevd   gevd_   build contrib/gel/vtol core/vil1
 contrib/gel vifa   vifa_   build contrib/gel/gevd
 contrib/gel gmvl   gmvl_   build contrib/gel/vtol core/vil1
-contrib/gel vgel   vgel_   build contrib/gel/vtol core/vidl core/vidl_vil1 contrib/oxl/mvl
+contrib/gel vgel   vgel_   build contrib/gel/vtol core/vidl1 core/vidl_vil1 contrib/oxl/mvl
 contrib/gel geml   geml_   build core/vil1 core/vnl
 contrib/gel gtrl   gtrl_   build core/vbl v3p/netlib
 contrib/gel gst    gst_    build core/vbl
