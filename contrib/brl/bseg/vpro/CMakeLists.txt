@@ -37,7 +37,7 @@ ADD_LIBRARY(vpro ${vpro_sources})
 INSTALL_TARGETS(/lib vpro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/vpro ${vpro_sources})
 
-TARGET_LINK_LIBRARIES(vpro sdet brip gevd vtol vsol vidl_vil1 vil1 vidl vil vul vbl)
+TARGET_LINK_LIBRARIES(vpro sdet brip gevd vtol vsol vidl_vil1 vil1 vidl1 vil vul vbl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

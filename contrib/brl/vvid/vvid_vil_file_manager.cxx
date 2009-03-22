@@ -8,8 +8,8 @@
 #include <vcl_iostream.h>
 #include <vil/vil_image_list.h>
 #include <vil/vil_image_resource.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_io.h>
+#include <vidl1/vidl1_movie.h>
+#include <vidl1/vidl1_io.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_adaptor.h>
@@ -79,7 +79,7 @@ vvid_vil_file_manager::vvid_vil_file_manager(): vgui_wrapper_tableau()
 
   window_ = 0;
 
-  my_movie_=(vidl_movie*)0;
+  my_movie_=(vidl1_movie*)0;
   win_ = 0;
   play_video_ = true;
   pause_video_ = false;
@@ -129,7 +129,7 @@ void vvid_vil_file_manager::load_video_file()
   if (!load_video_dlg.ask())
     return;
 
-  my_movie_ = vidl_io::load_movie(image_filename.c_str());
+  my_movie_ = vidl1_io::load_movie(image_filename.c_str());
   if (!my_movie_) {
     vgui_error_dialog("Failed to load movie file");
     return;
@@ -138,7 +138,7 @@ void vvid_vil_file_manager::load_video_file()
   int n_frames = my_movie_->length();
   start_frame_ = 0;
   end_frame_ = n_frames-1;
-  vidl_movie::frame_iterator pframe = my_movie_->first();
+  vidl1_movie::frame_iterator pframe = my_movie_->first();
   vil_image_resource_sptr img = pframe->get_resource();
   if (!img)
     return;
@@ -233,8 +233,8 @@ void vvid_vil_file_manager::un_cached_play()
   }
   if (video_process_)
     video_process_->set_n_frames(my_movie_->length());
-  vidl_movie::frame_iterator pframe = my_movie_->begin();
-  vidl_movie::frame_iterator lframe = pframe;
+  vidl1_movie::frame_iterator pframe = my_movie_->begin();
+  vidl1_movie::frame_iterator lframe = pframe;
   pframe += start_frame_;
   lframe += end_frame_+1;
   for ( ; pframe!=my_movie_->end() && pframe!=lframe && play_video_; ++pframe)

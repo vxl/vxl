@@ -4,7 +4,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief  Captures a vidl movie from a live video feed
+// \brief  Captures a vidl1 movie from a live video feed
 // \author J.L. Mundy
 //
 // \verbatim

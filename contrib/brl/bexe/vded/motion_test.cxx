@@ -4,9 +4,9 @@
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vul/vul_arg.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_clip.h>
-#include <vidl/vidl_io.h>
+#include <vidl1/vidl1_movie.h>
+#include <vidl1/vidl1_clip.h>
+#include <vidl1/vidl1_io.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     return 0;
 
   // Open the movie
-  vidl_movie_sptr video = vidl_io::load_movie(input_video_file().c_str());
+  vidl1_movie_sptr video = vidl1_io::load_movie(input_video_file().c_str());
   if (!video) {
     vcl_cerr << "Failed to open the video\n";
     return -1;
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
   vil_image_view<float> prev_image;
   vcl_vector< double > scores;
   vcl_vector< vil_image_resource_sptr > results;
-  for ( vidl_movie::frame_iterator f_itr = video->first();
+  for ( vidl1_movie::frame_iterator f_itr = video->first();
         f_itr != video->end();  ++f_itr )
   {
     vil_image_view<vxl_byte> input_image;
@@ -126,9 +126,9 @@ int main(int argc, char** argv)
     print_xml_performance( performance_output_file(), input_video_file(), scores );
 
   if ( make_output_video ) {
-    vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
+    vidl1_movie_sptr result_movie = new vidl1_movie(new vidl1_clip(results, 0, results.size()));
     vcl_string output_name = output_video_directory()+"/output";
-    vidl_io::save(result_movie.ptr(), output_name.c_str(), "ImageList");
+    vidl1_io::save(result_movie.ptr(), output_name.c_str(), "ImageList");
   }
 
   vcl_cout << "done!\n";

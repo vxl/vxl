@@ -18,7 +18,7 @@ ADD_EXECUTABLE (vidfpl_vil ${vidfpl_vil_sources})
 ADD_EXECUTABLE (cl_grid_finder ${cl_grid_finder_sources})
 
 TARGET_LINK_LIBRARIES(vidfpl vvid vidl_vil1 vgui)
-TARGET_LINK_LIBRARIES(vidfpl_vil vvid vidl vgui)
+TARGET_LINK_LIBRARIES(vidfpl_vil vvid vidl1 vgui)
 
 TARGET_LINK_LIBRARIES(cl_grid_finder sdet vpro vvid vul)
 

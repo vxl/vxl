@@ -4,9 +4,9 @@
 #include <vcl_iostream.h>
 #include <vil/vil_new.h>
 #include <vil/vil_image_resource.h>
-#include <vidl/vidl_movie.h>
-#include <vidl/vidl_clip.h>
-#include <vidl/vidl_io.h>
+#include <vidl1/vidl1_movie.h>
+#include <vidl1/vidl1_clip.h>
+#include <vidl1/vidl1_io.h>
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_roi.h>
@@ -51,10 +51,10 @@ bool vpro_roi_process::finish()
 {
   if (!out_frames_.size())
     return false;
-  vidl_clip_sptr clip = new vidl_clip(out_frames_);
-  vidl_movie_sptr mov= new vidl_movie();
+  vidl1_clip_sptr clip = new vidl1_clip(out_frames_);
+  vidl1_movie_sptr mov= new vidl1_movie();
   mov->add_clip(clip);
-  if (!vidl_io::save(mov.ptr(), video_file_.c_str(), "ImageList")) {
+  if (!vidl1_io::save(mov.ptr(), video_file_.c_str(), "ImageList")) {
     vcl_cerr << "In vpro_roi_process::finish() - failed to save video\n";
     return false;
   }

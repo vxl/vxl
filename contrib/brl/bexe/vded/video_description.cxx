@@ -2,8 +2,8 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vul/vul_arg.h>
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_movie.h>
+#include <vidl1/vidl1_io.h>
+#include <vidl1/vidl1_movie.h>
 
 //--------------------------------------------------------------------
 //  This executable describes a video as an xml file
@@ -25,7 +25,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> xml_file("-xml-file", "video description file");
 
   vul_arg_parse(argc, argv);
-  vidl_movie_sptr my_movie = vidl_io::load_movie(video_file().c_str());
+  vidl1_movie_sptr my_movie = vidl1_io::load_movie(video_file().c_str());
   if (!my_movie)
   {
     vcl_cout << "Failed to load movie\n";

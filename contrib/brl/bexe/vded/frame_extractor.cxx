@@ -1,8 +1,8 @@
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_save.h>
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_movie.h>
+#include <vidl1/vidl1_io.h>
+#include <vidl1/vidl1_movie.h>
 
 //--------------------------------------------------------------------
 //  This executable extracts a specified frame from a video and writes it
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
   vul_arg_parse(argc, argv);
 
   // --- Load the Movie ---
-  vidl_movie_sptr my_movie = vidl_io::load_movie(video_file().c_str());
+  vidl1_movie_sptr my_movie = vidl1_io::load_movie(video_file().c_str());
   if (!my_movie)
   {
     vcl_cout << "Failed to load movie\n";

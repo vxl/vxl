@@ -27,7 +27,7 @@
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_window.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#include <vidl/vidl_movie_sptr.h>
+#include <vidl1/vidl1_movie_sptr.h>
 #include <vil/vil_image_resource.h>
 #include <vpro/vpro_vil_video_process_sptr.h>
 
@@ -144,7 +144,7 @@ class vvid_vil_file_manager : public vgui_wrapper_tableau
   unsigned y0_;
   unsigned xsize_;
   unsigned ysize_;
-  vidl_movie_sptr my_movie_;
+  vidl1_movie_sptr my_movie_;
   vcl_vector<vil_image_resource_sptr> pyramid_movie_;
   vgui_window* win_;
   vsol_polygon_2d_sptr box_;
