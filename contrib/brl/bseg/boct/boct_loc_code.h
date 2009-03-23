@@ -23,10 +23,13 @@ public:
 
   bool isequal(const boct_loc_code * test,short level);
   
-//private:
+  boct_loc_code * XOR(boct_loc_code * b);
+
   short x_loc_;
   short y_loc_;
   short z_loc_;
+
+private:
 };
 
 vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code& code);

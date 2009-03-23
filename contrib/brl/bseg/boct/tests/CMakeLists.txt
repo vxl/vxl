@@ -2,6 +2,7 @@ ADD_EXECUTABLE( boct_test_all
   test_driver.cxx
   test_create_tree.cxx
   test_locate_point.cxx
+  test_locate_region.cxx
  )
 
 TARGET_LINK_LIBRARIES( boct_test_all boct testlib)

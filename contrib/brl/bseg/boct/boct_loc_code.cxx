@@ -66,3 +66,13 @@ bool boct_loc_code::isequal(const boct_loc_code * test,short level)
       return false;
 }
 
+boct_loc_code * boct_loc_code::XOR(boct_loc_code * b)
+{
+    boct_loc_code * xorcode=new boct_loc_code();
+    xorcode->x_loc_=this->x_loc_^b->x_loc_;
+    xorcode->y_loc_=this->y_loc_^b->y_loc_;
+    xorcode->z_loc_=this->z_loc_^b->z_loc_;
+
+    return xorcode;
+
+}
