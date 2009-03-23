@@ -38,7 +38,7 @@ else {
     print STDERR "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib";
     exit 0;
   }
-  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$ !x } @DIRS;
+  @DIRS = grep { ! m!(/\.|/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$ !x } @DIRS;
 }
 
 foreach my $dir (@DIRS)
