@@ -11,9 +11,9 @@ boct_loc_code::boct_loc_code(vgl_point_3d<double> p, short max_level)
 {
   // root level r = n -1
   int max_val = 1 << (max_level-1);
-  x_loc_ = (short) p.x()*max_level;
-  y_loc_ = (short) p.y()*max_level;
-  z_loc_ = (short) p.z()*max_level;
+  x_loc_ = (short) (p.x()*max_val);
+  y_loc_ = (short) (p.y()*max_val);
+  z_loc_ = (short) (p.z()*max_val);
 
 }
 
@@ -34,7 +34,9 @@ short boct_loc_code::child_index(short level)
 bool boct_loc_code::isequal(const boct_loc_code * test,short level)
 {
   short relevantbit = 1 << (level-1);
-  if( (x_loc_ & relevantbit) && (y_loc_ & relevantbit) && (z_loc_ & relevantbit) )
+  if( (x_loc_ & relevantbit) == (test->x_loc_ & relevantbit)&& 
+      (y_loc_ & relevantbit) == (test->y_loc_ & relevantbit)&& 
+      (z_loc_ & relevantbit) == (test->z_loc_ & relevantbit) )
       return true;
   else
       return false;
