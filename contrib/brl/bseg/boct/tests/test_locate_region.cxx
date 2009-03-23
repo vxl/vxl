@@ -12,6 +12,13 @@ MAIN( test_locate_region )
   vgl_box_3d<double> box(vgl_point_3d<double>(0.1,0.1,0.1),vgl_point_3d<double>(0.9,0.9,0.9));
   boct_tree_cell* cell=block->locate_region(box);
   TEST("Returns the correct level",nlevels-1, cell->level());
+  
+  //: two layer tree;
+  block->split();
+  vgl_box_3d<double> box1(vgl_point_3d<double>(0.05,0.05,0.05),vgl_point_3d<double>(0.1,0.1,0.1));
+  cell=block->locate_region(box);
+  TEST("Returns the correct level",nlevels-2, cell->level());
+
   SUMMARY();
 
   
