@@ -1512,14 +1512,6 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "DART_BUILD ";
-#ifdef DART_BUILD
-  vcl_cout << "is set to " << quote(DART_BUILD);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VXL_WARN_DEPRECATED ";
 #ifdef VXL_WARN_DEPRECATED
   vcl_cout << "is set to " << quote(VXL_WARN_DEPRECATED);

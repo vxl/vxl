@@ -250,7 +250,6 @@ for $var_exp (
   'GNU_LIBSTDCXX_V3',
 
   # from VXL CMake configuration files
-  'DART_BUILD',
   'VXL_WARN_DEPRECATED',
   'VXL_WARN_DEPRECATED_ONCE',
   'VXL_WARN_DEPRECATED_ABORT',
