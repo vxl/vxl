@@ -1,5 +1,14 @@
 #include "boct_tree.h"
 
+//; constructor initializes an empty tree
+boct_tree::boct_tree(short max_level): max_level_(max_level) 
+{
+    //: root is allocated max_level_-1
+    boct_loc_code code;
+    if(max_level_>0)
+        root_=new boct_tree_cell( code, max_level_-1);
+}
+
 boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
 {
   // remove this

@@ -10,6 +10,8 @@ public:
 
   //constructors
   boct_tree_cell(const boct_loc_code& code);
+  //constructor given code and level
+  boct_tree_cell(const boct_loc_code& code, short level);
   boct_tree_cell(const boct_tree_cell& rhs);
   bool is_leaf();
   const boct_loc_code& get_code();
@@ -19,7 +21,7 @@ public:
 
 private:
   short level_;
-  boct_tree_cell* parent;
+  boct_tree_cell* parent_;
   boct_tree_cell* children_;
   boct_loc_code code_;
 };
