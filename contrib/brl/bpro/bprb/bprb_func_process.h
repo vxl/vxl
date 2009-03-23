@@ -52,6 +52,10 @@ class bprb_func_process: public bprb_process_ext
   T get_input(unsigned i)
   {
     if (input_types_.size()>i) {
+      if (!input_data_[i]) {
+        vcl_cerr << "ERROR: input_data_[" << i << "] == NULL" << vcl_endl;
+        return 0;
+      }
       if (!(input_data_[i]->is_a()==input_types_[i])) {
         vcl_cerr << "Wrong INPUT TYPE!\n";
         return 0;
