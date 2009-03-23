@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vidl" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vidl1" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# vidl  == name of output library
+# vidl1  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vidl - Win32 Debug
+CFG=vidl1 - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vidl.mak".
+!MESSAGE NMAKE /f "vidl1.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vidl.mak" CFG="vidl - Win32 Debug"
+!MESSAGE NMAKE /f "vidl1.mak" CFG="vidl1 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vidl - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vidl - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vidl1 - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vidl1 - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=vidl - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vidl - Win32 Release"
+!IF  "$(CFG)" == "vidl1 - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl1_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "vidl - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vidl1 - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl1_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,66 +87,66 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "vidl - Win32 Release"
-# Name "vidl - Win32 Debug"
+# Name "vidl1 - Win32 Release"
+# Name "vidl1 - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\vidl_mpegcodec.cxx
+SOURCE=.\vidl1_mpegcodec.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_mpegcodec_helper.cxx
+SOURCE=.\vidl1_mpegcodec_helper.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vidl_clip-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl1_clip-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vidl_codec-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl1_codec-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vidl_frame-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl1_frame-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vidl_image_list_codec-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl1_image_list_codec-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vidl_movie-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl1_movie-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_codec.cxx
+SOURCE=.\vidl1_codec.cxx
 # Begin Source File
-SOURCE=.\vidl_win_avicodec.cxx
+SOURCE=.\vidl1_win_avicodec.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_avifile_avicodec.cxx
+SOURCE=.\vidl1_avifile_avicodec.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_clip.cxx
+SOURCE=.\vidl1_clip.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_frame.cxx
+SOURCE=.\vidl1_frame.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_image_list_codec.cxx
+SOURCE=.\vidl1_image_list_codec.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_io.cxx
+SOURCE=.\vidl1_io.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_movie.cxx
+SOURCE=.\vidl1_movie.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_file_sequence.cxx
+SOURCE=.\vidl1_file_sequence.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_vob_frame_index.cxx
+SOURCE=.\vidl1_vob_frame_index.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_ffmpeg_codec.cxx
+SOURCE=.\vidl1_ffmpeg_codec.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_frame_resource.cxx
+SOURCE=.\vidl1_frame_resource.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -155,70 +155,70 @@ SOURCE=.\vidl_frame_resource.cxx
 SOURCE=.\dll.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_win_avicodec.h
+SOURCE=.\vidl1_win_avicodec.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_avifile_avicodec.h
+SOURCE=.\vidl1_avifile_avicodec.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_avicodec.h
+SOURCE=.\vidl1_avicodec.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_clip.h
+SOURCE=.\vidl1_clip.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_frame.h
+SOURCE=.\vidl1_frame.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_image_list_codec.h
+SOURCE=.\vidl1_image_list_codec.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_io.h
+SOURCE=.\vidl1_io.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_movie.h
+SOURCE=.\vidl1_movie.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_clip_sptr.h
+SOURCE=.\vidl1_clip_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_codec.h
+SOURCE=.\vidl1_codec.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_mpegcodec.h
+SOURCE=.\vidl1_mpegcodec.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_mpegcodec_helper.h
+SOURCE=.\vidl1_mpegcodec_helper.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_yuv_2_rgb.h
+SOURCE=.\vidl1_yuv_2_rgb.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_codec_sptr.h
+SOURCE=.\vidl1_codec_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_frame_sptr.h
+SOURCE=.\vidl1_frame_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_image_list_codec_sptr.h
+SOURCE=.\vidl1_image_list_codec_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_movie_sptr.h
+SOURCE=.\vidl1_movie_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_mpegcodec_sptr.h
+SOURCE=.\vidl1_mpegcodec_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_file_sequence.h
+SOURCE=.\vidl1_file_sequence.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_vob_frame_index.h
+SOURCE=.\vidl1_vob_frame_index.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_ffmpeg_codec.h
+SOURCE=.\vidl1_ffmpeg_codec.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_frame_resource.h
+SOURCE=.\vidl1_frame_resource.h
 # End Source File
 # End Group
 # End Target
