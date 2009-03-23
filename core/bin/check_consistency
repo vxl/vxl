@@ -86,7 +86,7 @@ foreach $f (@FILES)
                $f !~ m!vil1?/file_formats/vil1?_viff(header|_support)! &&
                $f !~ m!\bvgui/internals/trackball! &&
                $f !~ m!\bcore/vgl/internals/gpc\.h$! &&
-               $f !~ m!\bcore/vidl/vidl_mpegcodec_helper\.cxx$! &&
+               $f !~ m!\bcore/vidl1/vidl1_mpegcodec_helper\.cxx$! &&
                $f !~ m!\bcore/vidl_vil1/vidl_vil1_mpegcodec_helper\.cxx$! &&
                $f !~ m!/oufgl/(pxc200|bt848(-addons)?)\.h$! &&
                $f !~ m!\bgel/vgel/kl/.*\.h$! &&
@@ -166,7 +166,7 @@ foreach $f (@FILES)
 #   @class_list = map {s!^\s*\#\s*include\s*[<\"](.*?)[>\"].*!$1!; $_} grep {m!^\s*\#\s*include!} split /\n/,$file;
 #   $file =~ s!\#\s*include\s*[<\"].*?[>\"]\s*!!g;
 #   $file =~ s!\bvnl_huge_val\b!vnl_math_huge!g;
-#   foreach $pref (qw(vul vbl vpl vil vnl vgl vidl vcsl mbl))
+#   foreach $pref (qw(vul vbl vpl vil vnl vgl vidl1 vcsl mbl))
 #   {
 #     foreach $class (map {s!^$pref/(${pref}_[^/]+)\.h$!$1!; s!(vul_get_time)stamp!$1!; s!(mbl_matrix_product)s!$1!; s!(vnl_matlab_print)2!$1!; $_}
 #                     grep {!m!_traits\.h$! && m!^$pref/${pref}_([^/]+)\.h$! && $1 ne 'fwd' } @class_list)
@@ -215,7 +215,7 @@ foreach $f (@FILES)
          "$f-$j" !~ m!\bbgui3d_file_io\.cxx-Inventor/! &&
           $j !~ m!^(stdlib|varargs|sys/types|stdio|windows|GL/glu?t?)\.h$!);
     $jj = $j; $i = $j;
-    next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl|vidl_vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s!^(v[cx]l_[a-z]+)\.h$!$1!);
+    next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl1|vidl_vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s!^(v[cx]l_[a-z]+)\.h$!$1!);
 #   next if ("$f-$j" =~ m!(.*)\.h-\1_sptr\.h!);
     next if ($j eq 'vcl_compiler.h' || $j eq 'vcl_new.h');
     next if ($j eq 'vcl_cstdio.h' && $f =~ m!/StdAfx\.h$!);
@@ -236,7 +236,7 @@ foreach $f (@FILES)
     $i =~ s!^([vb]gui.*)!$1\(\|_sptr\|_new\)!;
     $i =~ s!^(v(so|to|dg|cs)l.*)!$1\(\|_sptr\)! unless ($f =~ m!\.h$!);
     # CURRENTLY NOT YET WELL TESTED, HENCE IGNORED:
-    next if ($j =~ m!^(vsl/|vidl_vil1/|vidl/|vgui/|bgui/|vsol/|vtol/|vdgl/|v.l/io/|rgrl/|rsdl/|rrel/)!);
+    next if ($j =~ m!^(vsl/|vidl_vil1/|vidl1/|vgui/|bgui/|vsol/|vtol/|vdgl/|v.l/io/|rgrl/|rsdl/|rrel/)!);
     # VCL
     if ($j eq 'vcl_algorithm.h') { $i='vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|stable_partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)'; }
     elsif ($j eq 'vxl_config.h') { $i='VXL_\w+|vxl_([su]?(int|ieee)_(8|16|32|64)|s?byte)'; }
@@ -448,10 +448,10 @@ foreach $f (@FILES)
     elsif ($j eq 'vgui/internals/vgui_rasterpos.h') { $i.='.*'; }
     elsif ($j eq 'vgui/internals/vgui_simple_field.h') { $i='vgui_(simple|bool|int|long|float|double)_field'; }
     # VIDL
-    elsif ($j eq 'vidl/vidl_clip.h') { $i.='(|_sptr)'; }
-    elsif ($j eq 'vidl/vidl_codec.h') { $i.='|coder_->'; }
+    elsif ($j eq 'vidl1/vidl1_clip.h') { $i.='(|_sptr)'; }
+    elsif ($j eq 'vidl1/vidl1_codec.h') { $i.='|coder_->'; }
     elsif ($j eq 'vidl_vil1/vidl_vil1_codec.h') { $i.='|coder_->'; }
-    elsif ($j eq 'vidl/vidl_frame.h') { $i.='|->get_(view|image)\(\)'; }
+    elsif ($j eq 'vidl1/vidl1_frame.h') { $i.='|->get_(view|image)\(\)'; }
     elsif ($j eq 'vidl_vil1/vidl_vil1_frame.h') { $i.='|get_view'; }
     # VIPL
     elsif ($j eq 'vipl/filter/vipl_filter_abs.h') { $i.='|FILTER_IMPTR_(INC|DEC)_REFCOUNT'; }
@@ -614,7 +614,7 @@ foreach $f (@FILES)
 #     unless ($f =~ m!vcl/vcl_complex_fwd\.h$! || $f =~ m!win32-vc60/vcl_complex\.h$! || $f =~ m!vgui/vgui_glut\.h$!);
 # }
   &msg(1, "contains long /*...*/ comments")
-    if ($cpp_file && $f !~ m!\bvidl/vidl_mpegcodec\.cxx$! && $f !~ m!\bvidl_vil1/vidl_vil1_mpegcodec\.cxx$! &&
+    if ($cpp_file && $f !~ m!\bvidl1/vidl1_mpegcodec\.cxx$! && $f !~ m!\bvidl_vil1/vidl_vil1_mpegcodec\.cxx$! &&
         $f !~ m!\bvul/vul_url\.cxx$! && $f !~ m!\bvcl/gtkgl/! &&
         $f !~ m!\bvul/tests/test_file_iterator\.cxx$! && $file =~ s!\001[^\001\002]{121,}\002!!g);
   if ($file =~ m!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}! && $file !~ m!//\s*\\code!)

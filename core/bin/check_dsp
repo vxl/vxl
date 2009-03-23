@@ -76,7 +76,7 @@ foreach my $dir (@DIRS)
     my %inc_files = ();
     my $prefix=$dir; $prefix =~ s![^/]*$ !!x; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
     if (opendir UPDIR,"$dir/..") {
-      foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{$prefix.$_} unless (m/\bdll\.h$/); } # || m/vidl_(win|avifile)_avicodec/
+      foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{$prefix.$_} unless (m/\bdll\.h$/); } # || m/vidl1_(win|avifile)_avicodec/
       closedir(UPDIR);
     }
     foreach my $subdir (qw(algo io file_formats gui pro xio vpdt))
@@ -478,7 +478,7 @@ foreach my $dir (@DIRS)
   {
     if ($hsource_files{$s} > 1) {
       &duplicate_message($s, $cmakef, '# !!')
-        unless ($s eq 'vidl_avicodec.h' || $s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/
+        unless ($s eq 'vidl1_avicodec.h' || $s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/
              || $s eq 'my_pyramid.h' || $s eq 'my_pyramid_functions.txx');
     }
     delete $hsource_files{$s};
