@@ -11,6 +11,7 @@ SET(boct_sources
 ADD_LIBRARY(boct  ${boct_sources})   
         
 TARGET_LINK_LIBRARIES(boct vcl vgl) 
-      
-        
+
+#tests       
+SUBDIRS(tests)        
     
