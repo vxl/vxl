@@ -2,6 +2,7 @@
 #define boct_loc_code_h_
 
 #include <vgl/vgl_point_3d.h>
+#include <vcl_iostream.h>
 
 class boct_loc_code
 {
@@ -17,12 +18,17 @@ public:
 
   short child_index(short level);
 
+  //: returns a code for a given child index. It is used at creating new children
+  boct_loc_code child_loc_code(unsigned int index, short child_level);
+
   bool isequal(const boct_loc_code * test,short level);
   
-private:
+//private:
   short x_loc_;
   short y_loc_;
   short z_loc_;
 };
+
+vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code& code);
 
 #endif

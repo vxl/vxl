@@ -1,4 +1,5 @@
 #include "boct_tree.h"
+#include <vcl_iostream.h>
 
 //; constructor initializes an empty tree
 boct_tree::boct_tree(short max_level): max_level_(max_level) 
@@ -50,7 +51,7 @@ boct_tree_cell* boct_tree::get_cell(const boct_loc_code& code)
 
 bool boct_tree::split()
 { 
-  return false;
+  return root_->split();
 }
 
 bool boct_tree::split_all()
@@ -63,4 +64,10 @@ boct_tree::leaf_cells()
 { 
   vcl_vector<boct_tree_cell*> v;
   return v;
+}
+
+void boct_tree::print()
+{
+  vcl_cout << "Max Level=" << max_level_ << vcl_endl;
+  root_->print();
 }

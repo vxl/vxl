@@ -9,7 +9,8 @@ public:
   typedef enum {NONE, X_LOW, X_HIGH, Y_LOW, Y_HIGH, Z_LOW, Z_HIGH, ALL} FACE_IDX;
 
   //constructors
-  boct_tree_cell(const boct_loc_code& code);
+  boct_tree_cell();
+  boct_tree_cell(const boct_loc_code& code, boct_tree_cell* p, short l) {code_=code; children_=0; parent_=p; level_=l; }
   //constructor given code and level
   boct_tree_cell(const boct_loc_code& code, short level);
   boct_tree_cell(const boct_tree_cell& rhs);
@@ -18,6 +19,7 @@ public:
   boct_tree_cell* traverse(boct_loc_code code);
   boct_tree_cell* traverse_to_level(boct_loc_code code, short level);
   bool split();
+  void print();
   short level(){return level_;}
   boct_tree_cell* children(){return children_;}
   boct_loc_code code_;
