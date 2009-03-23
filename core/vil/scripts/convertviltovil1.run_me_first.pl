@@ -63,6 +63,7 @@ sub wanted {
     if (! -f $filename)  {return;}
 #    print "Found2 $filename\n";
     if ($filename =~ /CVS/) {return;}
+    if ($filename =~ /\.svn/) {return;}
 #    print "Found3 $filename\n";
     if (mentions_vil($filename))
     {

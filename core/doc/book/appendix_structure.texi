@@ -85,7 +85,7 @@ You can find any overview documentation about these modules from the
 @uref{http://vxl.sourceforge.net/,vxl homepage} by following the
 ``documentation'' link.
 
-@section CVS Repository
+@section Subversion (svn) Repository
 
 The VXL repository is provided by SourceForge---Thanks guys! The
 instructions for downloading @vxl{x} are documented at

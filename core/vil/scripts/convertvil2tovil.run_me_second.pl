@@ -71,6 +71,7 @@ sub wanted {
 #    print "Found2 $filename\n";
     if ($filename =~ /CVS/) {return;}
     if ($filename =~ /\.old/) {return;}
+    if ($filename =~ /\.svn/) {return;}
 #    print "Found3 $filename\n";
     
     if (mentions_vil($filename))

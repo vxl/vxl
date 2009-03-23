@@ -58,9 +58,9 @@ section should be used in conjunction with the CMake User's Manual
 
 CMake is available from @uref{http://www.cmake.org} where you'll find
 pre-compiled versions and instructions for getting the source code
-from an anonymous CVS server.  VXL is designed to be configured by the
+from an anonymous Subversion (svn) server.  VXL is designed to be configured by the
 latest released version of CMake.  At the time of writing, this is
-version 1.8.1.  When obtaining CMake via CVS, you can use the tag
+version 2.6.0.  When obtaining CMake via CVS, you can use the tag
 @code{LatestRelease}.  Cmake documentation can be found at
 @uref{http://www.cmake.org/HTML/Documentation.html}.
 
@@ -350,7 +350,7 @@ ENDIF(VXL_FOUND)
 #   SET( VXL_DIR /usr/local/vxl-1.0-beta2/bin )
 # This has the drawback that the CMakeLists.txt file (this file) has
 # to be modified to suit your particular setup, which may cause
-# trouble.  If this file is under CVS control, for example, you may
+# trouble.  If this file is under svn control, for example, you may
 # inadvertently commit it with your local setup hard-coded, thus
 # playing havoc with other users.
 
