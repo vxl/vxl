@@ -120,7 +120,7 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
         bprb_param* p=0;
         if (!type.compare("float")) {
           p =  new bprb_param_type<float>(param->name(), desc, 0);
-        } else if (!type.compare("unsigned")) {
+        } else if ( (!type.compare("unsigned int")) || (!type.compare("unsigned")) ) {
           p =  new bprb_param_type<unsigned>(param->name(), desc, 0);
         } else if (!type.compare("int")) {
           p =  new bprb_param_type<int>(param->name(), desc, 0);
@@ -130,6 +130,9 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
           p =  new bprb_param_type<bool>(param->name(), desc, false);
         } else if (!type.compare("double")) {
           p =  new bprb_param_type<double>(param->name(), desc, false);
+        } else {
+          vcl_cerr << "Parsing Error: Unknown parameter type \"" << type << "\"" << vcl_endl;
+          continue; // maybe should abort and return false here?
         }
         p->parse_value_str(value);
         param_list_.push_back(p);
