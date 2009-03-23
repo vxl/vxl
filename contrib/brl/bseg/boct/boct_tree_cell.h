@@ -18,12 +18,14 @@ public:
   boct_tree_cell* traverse(boct_loc_code code);
   boct_tree_cell* traverse_to_level(boct_loc_code code, short level);
   bool split();
-
+  short level(){return level_;}
+  boct_tree_cell* children(){return children_;}
+  boct_loc_code code_;
 private:
   short level_;
   boct_tree_cell* parent_;
   boct_tree_cell* children_;
-  boct_loc_code code_;
+  
 };
 
 #endif

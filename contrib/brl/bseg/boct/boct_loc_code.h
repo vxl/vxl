@@ -16,6 +16,8 @@ public:
   { x_loc_=x_loc; y_loc_=y_loc; z_loc_=z_loc; }
 
   short child_index(short level);
+
+  bool isequal(const boct_loc_code * test,short level);
   
 private:
   short x_loc_;

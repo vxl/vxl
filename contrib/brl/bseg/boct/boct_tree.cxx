@@ -11,8 +11,22 @@ boct_tree::boct_tree(short max_level): max_level_(max_level)
 
 boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
 {
-  // remove this
-  return root_;
+  boct_loc_code* loccode_=new boct_loc_code(p, max_level_);
+
+  short curr_level=max_level_;
+  if(!root_->code_.isequal(loccode_,curr_level))
+    return NULL;
+  
+  boct_tree_cell* curr_cell=root_;
+
+  while(curr_cell->children())
+  {
+      short index_child=loccode_->child_index(curr_level);
+      curr_cell=curr_cell->children()+index_child;  
+      --curr_level;
+  }
+  delete loccode_;
+  return curr_cell;
 }
 
 boct_tree_cell* boct_tree::locate_point_at_level(const vgl_point_3d<double>& p, short level)

@@ -30,3 +30,12 @@ short boct_loc_code::child_index(short level)
   short index_z = (z_loc_ & child_bit) >> (child_bit -2);
   return (index_x+index_y+index_z);
 }
+
+bool boct_loc_code::isequal(const boct_loc_code * test,short level)
+{
+  short relevantbit = 1 << (level-1);
+  if( (x_loc_ & relevantbit) && (y_loc_ & relevantbit) && (z_loc_ & relevantbit) )
+      return true;
+  else
+      return false;
+}
