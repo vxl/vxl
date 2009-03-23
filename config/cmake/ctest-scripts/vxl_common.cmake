@@ -98,7 +98,7 @@ foreach(req
     CTEST_BUILD_NAME
     )
   if(NOT DEFINED ${req})
-    message(FATAL_ERROR "The containing script must set CTEST_CMAKE_GENERATOR")
+    message(FATAL_ERROR "The containing script must set ${req}")
   endif()
 endforeach(req)
 
