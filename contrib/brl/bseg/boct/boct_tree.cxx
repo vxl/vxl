@@ -17,8 +17,8 @@ boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
   boct_loc_code* loccode_=new boct_loc_code(p, max_level_);
 
   //: check to see if point is contained in the octree
-  if(!root_->code_.isequal(loccode_,curr_level))
-    return NULL;
+  //if(!root_->code_.isequal(loccode_,curr_level))
+  //  return NULL;
   
   //: temporary pointer to traverse 
   boct_tree_cell* curr_cell=root_;

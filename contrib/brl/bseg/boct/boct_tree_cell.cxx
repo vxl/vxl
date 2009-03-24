@@ -79,6 +79,28 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
 
     case X_LOW:
          {
+             short xlowcode=this->code_.x_loc_-(short)(1);
+             if(xlowcode<0)
+                 return;
+             short diff=this->code_.x_loc_^xlowcode;
+
+             boct_loc_code neighborcode;
+             neighborcode.set_code(xlowcode,this->code_.y_loc_,this->code_.z_loc_);
+
+             boct_tree_cell* commonancestor=get_common_ancestor(diff);
+             
+             if(commonancestor==NULL)
+                 return;
+             //: at the same or greater level ( towards the root)   
+             boct_tree_cell * neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+                
+
+             if(!neighborcell->children())
+                 neighbors.push_back(neighborcell);
+
+             //: TODO code to get the cells which are further down the tree. 
+
+
             break;
          }
     case X_HIGH:
@@ -107,7 +129,110 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
 
              break;
          }
+    case Y_LOW:
+         {
+             short ylowcode=this->code_.y_loc_-(short)(1);
+             if(ylowcode<0)
+                 return;
+             short diff=this->code_.y_loc_^ylowcode;
 
+             boct_loc_code neighborcode;
+             neighborcode.set_code(this->code_.x_loc_,ylowcode,this->code_.z_loc_);
+
+             boct_tree_cell* commonancestor=get_common_ancestor(diff);
+             
+             if(commonancestor==NULL)
+                 return;
+             //: at the same or greater level ( towards the root)   
+             boct_tree_cell * neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+                
+
+             if(!neighborcell->children())
+                 neighbors.push_back(neighborcell);
+
+             //: TODO code to get the cells which are further down the tree. 
+
+
+            break;
+         }
+    case Y_HIGH:
+         {
+             if((this->code_.y_loc_+cellsize)>=(1<<max_level-1))
+                 return ;
+             short yhighcode=this->code_.y_loc_+cellsize;
+             short diff=this->code_.y_loc_^yhighcode;
+             //: set the code for the neighboring point
+             boct_loc_code neighborcode;
+             neighborcode.set_code(this->code_.x_loc_,yhighcode,this->code_.z_loc_);
+
+             boct_tree_cell* commonancestor=get_common_ancestor(diff);
+             
+             if(commonancestor==NULL)
+                 return;
+             //: at the same or greater level ( towards the root)   
+             boct_tree_cell * neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+                
+
+             if(!neighborcell->children())
+                 neighbors.push_back(neighborcell);
+
+             //: TODO code to get the cells which are further down the tree. 
+             
+
+             break;
+         }
+    case Z_LOW:
+         {
+             short zlowcode=this->code_.z_loc_-(short)(1);
+             if(zlowcode<0)
+                 return;
+             short diff=this->code_.z_loc_^zlowcode;
+
+             boct_loc_code neighborcode;
+             neighborcode.set_code(this->code_.x_loc_,this->code_.y_loc_,zlowcode);
+
+             boct_tree_cell* commonancestor=get_common_ancestor(diff);
+             
+             if(commonancestor==NULL)
+                 return;
+             //: at the same or greater level ( towards the root)   
+             boct_tree_cell * neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+                
+
+             if(!neighborcell->children())
+                 neighbors.push_back(neighborcell);
+
+             //: TODO code to get the cells which are further down the tree. 
+
+
+            break;
+         }
+    case Z_HIGH:
+         {
+             if((this->code_.z_loc_+cellsize)>=(1<<max_level-1))
+                 return ;
+             short zhighcode=this->code_.z_loc_+cellsize;
+             short diff=this->code_.z_loc_^zhighcode;
+             //: set the code for the neighboring point
+             boct_loc_code neighborcode;
+             neighborcode.set_code(this->code_.x_loc_,this->code_.y_loc_,zhighcode);
+
+             boct_tree_cell* commonancestor=get_common_ancestor(diff);
+             
+             if(commonancestor==NULL)
+                 return;
+             //: at the same or greater level ( towards the root)   
+             boct_tree_cell * neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+                
+
+             if(!neighborcell->children())
+                 neighbors.push_back(neighborcell);
+
+             //: TODO code to get the cells which are further down the tree. 
+             
+
+             break;
+         }
     default:
         break;
 
