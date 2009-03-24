@@ -159,7 +159,7 @@ SOURCE=.\vidl_v4l_params.cxx
 SOURCE=.\vidl_istream_image_resource.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\v4l2_pixel_format.cxx
+SOURCE=.\vidl_v4l2_pixel_format.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_v4l2_device.cxx
@@ -294,7 +294,7 @@ SOURCE=.\vidl_ffmpeg_ostream_v1.txx
 SOURCE=.\vidl_ffmpeg_ostream_v2.txx
 # End Source File
 # Begin Source File
-SOURCE=.\v4l2_pixel_format.h
+SOURCE=.\vidl_v4l2_pixel_format.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_v4l2_device.h
