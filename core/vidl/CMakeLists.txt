@@ -11,8 +11,6 @@ FIND_FILE (VIDEODEV2_FOUND videodev2.h /usr/include/linux/)
 CONFIGURE_FILE( ${vidl_SOURCE_DIR}/vidl_config.h.in
                 ${vidl_BINARY_DIR}/vidl_config.h )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
 IF( FFMPEG_FOUND )
   INCLUDE_DIRECTORIES(${FFMPEG_INCLUDE_DIR})
