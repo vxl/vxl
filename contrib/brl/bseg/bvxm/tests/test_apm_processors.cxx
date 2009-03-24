@@ -15,27 +15,6 @@
 
 #include <vnl/vnl_random.h>
 
-namespace
-{
-  void init_random_slab(bvxm_voxel_slab<float>& slab)
-  {
-    vnl_random rand;
-      for (unsigned int y=0; y<slab.ny(); ++y)
-        for (unsigned int x=0; x<slab.nx(); ++x)
-          slab(x,y) = static_cast<float>(rand.drand32());
-  }
-
-  void add_random_noise(bvxm_voxel_slab<float>& slab, float std)
-  {
-    vnl_random rand;
-      for (unsigned int y=0; y<slab.ny(); ++y)
-        for (unsigned int x=0; x<slab.nx(); ++x){
-          slab(x,y) = slab(x,y) + static_cast<float>(rand.normal()*std);
-          if (slab(x,y)>1.0f) slab(x,y) = 1.0f;
-          if (slab(x,y)<0.0f) slab(x,y) = 0.0f;
-        }
-  }
-};
 
 void test_mog_grey_processor()
 {
