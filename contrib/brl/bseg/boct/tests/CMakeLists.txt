@@ -3,6 +3,7 @@ ADD_EXECUTABLE( boct_test_all
   test_create_tree.cxx
   test_locate_point.cxx
   test_locate_region.cxx
+  test_find_neighbors.cxx
  )
 
 TARGET_LINK_LIBRARIES( boct_test_all boct testlib)

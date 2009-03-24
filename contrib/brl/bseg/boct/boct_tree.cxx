@@ -49,8 +49,8 @@ boct_tree_cell* boct_tree::locate_point_at_level(const vgl_point_3d<double>& p, 
 
   while(curr_cell->children()&& curr_level>level)
   {
-      short index_child=loccode_->child_index(curr_level);
-      curr_cell=curr_cell->children()+index_child;  
+      short child_index=loccode_->child_index(curr_level);
+      curr_cell=curr_cell->children()+child_index;  
         --curr_level;
   }
   //: delete the location code constructed

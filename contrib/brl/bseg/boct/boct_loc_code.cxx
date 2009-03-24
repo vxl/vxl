@@ -43,9 +43,9 @@ short boct_loc_code::child_index(short level)
 
   // the bits are stored as [00...00ZYX]
   short child_bit = 1 << (level-1);
-  short index_x = (x_loc_ & child_bit) >> child_bit;
-  short index_y = (y_loc_ & child_bit) >> (child_bit-1);
-  short index_z = (z_loc_ & child_bit) >> (child_bit -2);
+  short index_x = ((x_loc_ & child_bit) >> (level-1));
+  short index_y = ((y_loc_ & child_bit) >> (level-2));
+  short index_z = ((z_loc_ & child_bit) >> (level-3));
   return (index_x+index_y+index_z);
 }
 

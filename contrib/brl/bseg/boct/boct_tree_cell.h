@@ -17,11 +17,14 @@ public:
   bool is_leaf();
   const boct_loc_code& get_code();
   boct_tree_cell* traverse(boct_loc_code code);
-  boct_tree_cell* traverse_to_level(boct_loc_code code, short level);
+  boct_tree_cell* traverse_to_level(boct_loc_code *code, short level);
   bool split();
   void print();
   short level(){return level_;}
   boct_tree_cell* children(){return children_;}
+  void  find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> & neighbors,short max_level);
+  boct_tree_cell *get_common_ancestor(short binarydiff);
+
   boct_loc_code code_;
 private:
   short level_;
