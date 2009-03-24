@@ -49,7 +49,7 @@ MANPAGE_SOURCES += vidl_ffmpeg_ostream_v1.txx
 MANPAGE_SOURCES += vidl_ffmpeg_ostream_v2.txx
 MANPAGE_SOURCES += vidl_ffmpeg_ostream_v3.txx
 
-SOURCES += v4l2_pixel_format.cxx
+SOURCES += vidl_v4l2_pixel_format.cxx
 SOURCES += vidl_v4l2_device.cxx
 SOURCES += vidl_v4l2_devices.cxx
 SOURCES += vidl_v4l2_istream.cxx
