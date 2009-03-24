@@ -15,10 +15,10 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-#include <vidl2/vidl2_image_list_istream.h>
-#include <vidl2/vidl2_frame.h>
-#include <vidl2/vidl2_convert.h>
-#include <core/vidl2_pro/vidl2_pro_utils.h>
+#include <vidl/vidl_image_list_istream.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_convert.h>
+#include <core/vidl_pro/vidl_pro_utils.h>
 
 static void eigenvalues(double B, double C, double E, double& la,
                         double& lb)

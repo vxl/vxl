@@ -4,7 +4,7 @@
 #include <bprb/bprb_func_process.h>
 // processes
 #include <vil_pro/vil_register.h>
-#include <vidl2_pro/vidl2_register.h>
+#include <vidl_pro/vidl_register.h>
 
 #include <bbgm/pro/bbgm_processes.h>
 #include <bbgm/pro/bbgm_register.h>
@@ -14,7 +14,7 @@ register_processes(PyObject *self, PyObject *args)
 {
   bbgm_register::register_process();
   vil_register::register_process();
-  vidl2_register::register_process();
+  vidl_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -24,7 +24,7 @@ register_datatypes(PyObject *self, PyObject *args)
 {
   register_basic_datatypes();
   vil_register::register_datatype();
-  vidl2_register::register_datatype();
+  vidl_register::register_datatype();
   bbgm_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;

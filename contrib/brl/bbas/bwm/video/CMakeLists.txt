@@ -17,7 +17,7 @@ SET(bwm_video_sources
 AUX_SOURCE_DIRECTORY(Templates bwm_video_sources)
 ADD_LIBRARY(bwm_video ${bwm_video_sources})
 
-TARGET_LINK_LIBRARIES( bwm_video vidl2 brip vil vbl vgl vul vpl vsl vgl_algo vnl_algo vnl bsta bsol expatpp vsol vpgl vpgl_algo)
+TARGET_LINK_LIBRARIES( bwm_video vidl brip vil vbl vgl vul vpl vsl vgl_algo vnl_algo vnl bsta bsol expatpp vsol vpgl vpgl_algo)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

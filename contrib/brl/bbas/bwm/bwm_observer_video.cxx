@@ -12,10 +12,10 @@
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vil/vil_image_view.h>
-#include <vidl2/vidl2_image_list_istream.h>
+#include <vidl/vidl_image_list_istream.h>
 #include <bwm/video/bwm_video_cam_istream.h>
-#include <vidl2/vidl2_frame.h>
-#include <vidl2/vidl2_convert.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_convert.h>
 
 bool bwm_observer_video::handle(const vgui_event &e)
 {
@@ -66,7 +66,7 @@ void bwm_observer_video::init()
 bool bwm_observer_video::open_video_stream(vcl_string const& video_glob)
 {
   //for now assume we are opening an image_list codec
-  video_istr_ = new vidl2_image_list_istream(video_glob);
+  video_istr_ = new vidl_image_list_istream(video_glob);
   bool open = video_istr_->is_open();
   if  (open)
     this->seek(0);
@@ -125,19 +125,19 @@ void bwm_observer_video::display_current_frame()
     else
       vgui::out << "frame["<< frame_num <<"]\n";
 
-    vidl2_frame_sptr frame = video_istr_->current_frame();
+    vidl_frame_sptr frame = video_istr_->current_frame();
     if (!frame)
       img_tab_->set_image_resource(NULL);
-    else if (frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
+    else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
       static vil_image_view<vxl_uint_16> img;
-      if (vidl2_convert_to_view(*frame,img))
+      if (vidl_convert_to_view(*frame,img))
         img_tab_->set_image_view(img);
       else
         img_tab_->set_image_resource(NULL);
     }
     else{
       static vil_image_view<vxl_byte> img;
-      if (vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
+      if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB))
         img_tab_->set_image_view(img);
       else
         img_tab_->set_image_resource(NULL);

@@ -6,9 +6,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <bwm/video/bwm_video_registration.h>
-#include <vidl2/vidl2_image_list_istream.h>
-#include <vidl2/vidl2_image_list_ostream.h>
-#include <vidl2/vidl2_frame.h>
+#include <vidl/vidl_image_list_istream.h>
+#include <vidl/vidl_image_list_ostream.h>
+#include <vidl/vidl_frame.h>
 #include <bwm/video/bwm_video_cam_istream.h>
 
 static bool planar_reg(vcl_string const& video_input_glob,
@@ -34,20 +34,20 @@ static bool planar_reg(vcl_string const& video_input_glob,
     if (!vul_file::make_directory_path(video_output_dir))
       return false;
 
-  vidl2_istream_sptr video_istr =
-    new vidl2_image_list_istream(video_input_glob);
+  vidl_istream_sptr video_istr =
+    new vidl_image_list_istream(video_input_glob);
   bwm_video_cam_istream_sptr cam_istr =
     new bwm_video_cam_istream(camera_input_glob);
 
-  vidl2_ostream_sptr video_ostr =
-    new vidl2_image_list_ostream(video_output_dir);
+  vidl_ostream_sptr video_ostr =
+    new vidl_image_list_ostream(video_output_dir);
 
   if (!(cam_istr&&cam_istr->seek_camera(0)))
     return false;
   if (!(video_istr&&video_istr->seek_frame(0)))
     return false;
 
-  vidl2_frame_sptr f0 = video_istr->current_frame();
+  vidl_frame_sptr f0 = video_istr->current_frame();
   unsigned input_ni = f0->ni(), input_nj = f0->nj();
   unsigned output_ni = 0, output_nj = 0;
 

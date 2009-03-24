@@ -5,6 +5,10 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - Promoted brl/bbas/vidl2 to core/vidl.  This replaces the old vidl (now vidl1).
+
+      - Renamed core/vidl to core/vidl1.  vidl1 is now deprecated.
+
       - Added a new library to core!  vpdl is a probability distribution
         library merging the contrib libraries brl/bbas/bsta, mul/vpdfl, and
         mul/pdf1d.  It is disabled from CMake until more complete.

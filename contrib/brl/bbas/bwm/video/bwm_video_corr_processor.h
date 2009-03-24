@@ -19,7 +19,7 @@
 #include <vnl/vnl_cost_function.h>
 #include <vil/vil_image_view.h>
 #include <bwm/video/bwm_video_corr.h>
-#include <vidl2/vidl2_istream_sptr.h>
+#include <vidl/vidl_istream_sptr.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
@@ -205,7 +205,7 @@ void exhaustive_init(vnl_vector<double>& unknowns,
   //: the list of corrs
   vcl_vector<bwm_video_corr_sptr> corrs_;
   //: the video input stream - currently only image list is supported
-  vidl2_istream_sptr video_istr_;
+  vidl_istream_sptr video_istr_;
   //: the camera input stream - currently only camera list is supported
   bwm_video_cam_istream_sptr cam_istr_;
   //: the camera output stream - currently only camera list is supported

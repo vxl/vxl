@@ -16,13 +16,13 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
-#include <vidl2/vidl2_istream_sptr.h>
-#include <vidl2/vidl2_image_list_istream.h>
-#include <vidl2/vidl2_frame.h>
-#include <vidl2/vidl2_convert.h>
+#include <vidl/vidl_istream_sptr.h>
+#include <vidl/vidl_image_list_istream.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_convert.h>
 
 namespace {
-  vidl2_istream_sptr istr = 0;
+  vidl_istream_sptr istr = 0;
   unsigned ni = 0;
   unsigned nj = 0;
 };
@@ -32,7 +32,7 @@ bool bbgm_update_dist_image_stream_process_cons(bprb_func_process& pro)
   
   vcl_vector<vcl_string> in_types(9), out_types(1);
   in_types[0]= "bbgm_image_sptr";//pointer to initial distribution image (typically null)
-  in_types[1]= "vidl2_istream_sptr";//the video stream
+  in_types[1]= "vidl_istream_sptr";//the video stream
   in_types[2]= "int"; //max_components
   in_types[3]= "int"; //window size
   in_types[4]= "float"; //initial_variance
@@ -49,7 +49,7 @@ bool bbgm_update_dist_image_stream_process_cons(bprb_func_process& pro)
 bool bbgm_update_dist_image_stream_process_init(bprb_func_process& pro)
 {
   //extract the stream
-  istr = pro.get_input<vidl2_istream_sptr>(1);
+  istr = pro.get_input<vidl_istream_sptr>(1);
   if (!(istr && istr->is_open())){
     vcl_cerr << "In bbgm_update_dist_image_stream_process::init() -"
              << " invalid input stream\n";
@@ -57,7 +57,7 @@ bool bbgm_update_dist_image_stream_process_init(bprb_func_process& pro)
   }
   if (istr->is_seekable())
     istr->seek_frame(0);
-  vidl2_frame_sptr f = istr->current_frame();
+  vidl_frame_sptr f = istr->current_frame();
   if (!f){
     vcl_cerr << "In bbgm_update_dist_image_stream_process::init() -"
              << " invalid initial frame\n";
@@ -142,8 +142,8 @@ bool bbgm_update_dist_image_stream_process(bprb_func_process& pro)
   while (istr->advance() && (end_frame<0||(int)(istr->frame_number()) <= end_frame)) {
     // get frame from stream
     if ((int)(istr->frame_number()) >= start_frame) {
-      vidl2_frame_sptr f = istr->current_frame();
-      vil_image_view_base_sptr fb = vidl2_convert_wrap_in_view(*f);
+      vidl_frame_sptr f = istr->current_frame();
+      vil_image_view_base_sptr fb = vidl_convert_wrap_in_view(*f);
       if (!fb)
         return false;
       vil_image_view<float> frame = *vil_convert_cast(float(), fb);

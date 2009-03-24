@@ -11,10 +11,10 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vpgl/algo/vpgl_camera_homographies.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vidl2/vidl2_frame.h>
-#include <vidl2/vidl2_convert.h>
-#include <vidl2/vidl2_istream.h>
-#include <vidl2/vidl2_ostream.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_convert.h>
+#include <vidl/vidl_istream.h>
+#include <vidl/vidl_ostream.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
@@ -81,21 +81,21 @@ output_frame_bounds_planar(bwm_video_cam_istream_sptr& cam_istream,
   return true;
 }
 
-bool convert_from_frame(vidl2_frame_sptr const& frame,
+bool convert_from_frame(vidl_frame_sptr const& frame,
                         vcl_vector<vil_image_view<float> >& views)
 {
   if (!frame) return false;
 
-  if (frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
+  if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
     static vil_image_view<vxl_uint_16> img;
-    if (vidl2_convert_to_view(*frame,img))
+    if (vidl_convert_to_view(*frame,img))
       views.push_back(brip_vil_float_ops::convert_to_float(img));
     else
       return false;
   }
   else{
     static vil_image_view<vxl_byte> img;
-    if (vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB)) {
+    if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB)) {
       unsigned ni = img.ni(), nj = img.nj();
       for (unsigned p = 0; p<img.nplanes(); ++p)
       {
@@ -112,7 +112,7 @@ bool convert_from_frame(vidl2_frame_sptr const& frame,
   return true;
 }
 
-static vidl2_frame_sptr
+static vidl_frame_sptr
 convert_to_frame(vcl_vector<vil_image_view<float> >const&  views)
 {
   unsigned np = views.size();
@@ -129,7 +129,7 @@ convert_to_frame(vcl_vector<vil_image_view<float> >const&  views)
       for (unsigned p = 0; p<np; ++p)
         out_view(i, j, p) = cviews[p](i,j);
 
-  return  new vidl2_memory_chunk_frame(out_view);
+  return  new vidl_memory_chunk_frame(out_view);
 }
 
 static vgl_h_matrix_2d<double>
@@ -148,12 +148,12 @@ compute_homography(vgl_h_matrix_2d<double> const& H0,
 }
 
 bool bwm_video_registration::
-register_image_stream_planar(vidl2_istream_sptr& in_stream,
+register_image_stream_planar(vidl_istream_sptr& in_stream,
                              bwm_video_cam_istream_sptr& cam_istream,
                              vgl_plane_3d<double> const& world_plane,
                              vsol_box_2d_sptr const& bounds,
                              double world_sample_distance,
-                             vidl2_ostream_sptr& out_stream,
+                             vidl_ostream_sptr& out_stream,
                              unsigned skip_frames
                              )
 {
@@ -182,7 +182,7 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
   do
   {
     vul_timer tim;
-    vidl2_frame_sptr frame = in_stream->current_frame();
+    vidl_frame_sptr frame = in_stream->current_frame();
     vcl_vector<vil_image_view<float> > float_vs;
     if (!convert_from_frame(frame, float_vs)) return false;
     vpgl_perspective_camera<double>* cam = cam_istream->current_camera();
@@ -196,7 +196,7 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
         return false;
       out_vs.push_back(out_view);
     }
-    vidl2_frame_sptr oframe = convert_to_frame(out_vs);
+    vidl_frame_sptr oframe = convert_to_frame(out_vs);
     if (!oframe)
       return false;
     if (!out_stream->write_frame(oframe))
@@ -229,7 +229,7 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
 
   if (!vul_file::exists(homg_out_dir))
     if (!vul_file::make_directory(homg_out_dir)){
-      vcl_cerr << "In  vidl2_pro_utils::create_directory() -"
+      vcl_cerr << "In  vidl_pro_utils::create_directory() -"
                << " could not make directory\n" << homg_out_dir << vcl_endl;
       return false;
     }

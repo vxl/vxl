@@ -8,7 +8,7 @@
 #include <vcl_map.h>
 #include <vgui/vgui_style.h>
 #include <vpgl/vpgl_camera.h>
-#include <vidl2/vidl2_istream_sptr.h>
+#include <vidl/vidl_istream_sptr.h>
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
 
 class vgui_soview2D_point;
@@ -133,7 +133,7 @@ class bwm_observer_video : public bwm_observer_cam
   //:the delay before displaying a new frame - default is 0
   float time_interval_;
   //: the video input stream - currently only image list is supported
-  vidl2_istream_sptr video_istr_;
+  vidl_istream_sptr video_istr_;
   //: the camera input stream - currently only camera list is supported
   bwm_video_cam_istream_sptr cam_istr_;
 

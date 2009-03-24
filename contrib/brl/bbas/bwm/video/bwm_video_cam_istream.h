@@ -4,7 +4,7 @@
 //:
 // \file
 // \author J.L. Mundy
-// \brief A stream for cameras to complement the vidl2 video stream
+// \brief A stream for cameras to complement the vidl video stream
 //
 // \verbatim
 //  Modifications

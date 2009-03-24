@@ -14,8 +14,8 @@
 //-----------------------------------------------------------------------------
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vidl2/vidl2_istream_sptr.h>
-#include <vidl2/vidl2_ostream_sptr.h>
+#include <vidl/vidl_istream_sptr.h>
+#include <vidl/vidl_ostream_sptr.h>
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
 
 class bwm_video_registration
@@ -48,12 +48,12 @@ class bwm_video_registration
   // World sample distance is output pixel size in world units.
   // This parameter determines the scale of the output image stream.
   static bool
-  register_image_stream_planar(vidl2_istream_sptr& in_stream,
+  register_image_stream_planar(vidl_istream_sptr& in_stream,
                                bwm_video_cam_istream_sptr& cam_istream,
                                vgl_plane_3d<double> const& world_plane,
                                vsol_box_2d_sptr const& bounds,
                                double world_sample_distance,
-                               vidl2_ostream_sptr& out_stream,
+                               vidl_ostream_sptr& out_stream,
                                unsigned skip_frames = 1
                               );
 

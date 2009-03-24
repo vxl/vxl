@@ -37,7 +37,7 @@ IF( PYTHON_FOUND )
         ENDIF(WIN32)
         SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES PREFIX "")
 
-        TARGET_LINK_LIBRARIES(bbgm_batch bprb brdb bpro_batch bbgm_pro vbl vidl2_pro vil_io vil_pro) 
+        TARGET_LINK_LIBRARIES(bbgm_batch bprb brdb bpro_batch bbgm_pro vbl vidl_pro vil_io vil_pro) 
       
         IF (PYTHON_DEBUG_LIBRARIES)
           TARGET_LINK_LIBRARIES( bbgm_batch debug ${PYTHON_DEBUG_LIBRARY})

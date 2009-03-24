@@ -57,9 +57,4 @@ IF( BUILD_GEL )
   SUBDIRS(imesh)
 ENDIF( BUILD_GEL )
 
-OPTION( BUILD_CONTRIB_VIDL2 "Build Experimental Video Streaming Library" YES )
-IF(BUILD_CONTRIB_VIDL2)
-# Video Library (rewrite)
-SUBDIRS(vidl2)
-ENDIF(BUILD_CONTRIB_VIDL2)
 

@@ -19,9 +19,9 @@
 #include <brip/brip_vil_float_ops.h>
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
-#include <vidl2/vidl2_frame.h>
-#include <vidl2/vidl2_convert.h>
-#include <vidl2/vidl2_image_list_istream.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_convert.h>
+#include <vidl/vidl_image_list_istream.h>
 //Minimum number of correspondences on a frame to compute cameras
 static const unsigned min_corrs = 10;
 // if an element of pixels is negative it indicates the point was outside the
@@ -116,7 +116,7 @@ bool bwm_video_corr_processor::open_video_stream(vcl_string const& video_path)
   if (video_path=="")
     return false;
   //for now assume we are opening an image_list codec
-  video_istr_ = new vidl2_image_list_istream(video_path);
+  video_istr_ = new vidl_image_list_istream(video_path);
   bool open = video_istr_->is_open();
   if (open)
     video_istr_->seek_frame(0);
@@ -448,15 +448,15 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
   // extract the image from the frame
   if (!video_istr_) return false;
   video_istr_->seek_frame(frame_index);
-  vidl2_frame_sptr frame = video_istr_->current_frame();
+  vidl_frame_sptr frame = video_istr_->current_frame();
   if (!frame)
   {
     vcl_cerr << "Failed to seek to frame " << frame_index << '\n';
     return false;
   }
-  else if (frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
+  else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
     static vil_image_view<vxl_uint_16> img;
-    if (vidl2_convert_to_view(*frame,img))
+    if (vidl_convert_to_view(*frame,img))
       view = brip_vil_float_ops::convert_to_float(img);
     else{
       vcl_cerr << "Failed to convert frame to vil_image_view\n";
@@ -465,7 +465,7 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
   }
   else{
     static vil_image_view<vxl_byte> img;
-    if (vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
+    if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB))
       view = brip_vil_float_ops::convert_to_float(img);
     else{
       vcl_cerr << "Failed to convert frame to vil_image_view\n";
