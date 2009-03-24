@@ -587,7 +587,7 @@ foreach $f (@FILES)
               ($f =~ m!\bcore/vnl/vnl_sample\.cxx$! && $t eq "stdlib") ||
               ($f =~ m!\bcore/vpl/os_unix/vpl\.cxx$! && $t eq "stdlib") ||
               ($f =~ m!\bcmake/config/vxl_platform_tests\.cxx$!) ||
-              ($f =~ m!\bvidl2/vidl2_v4l_istream\.h$! && $t eq "errno") ||
+              ($f =~ m!\bvidl/vidl_v4l_istream\.h$! && $t eq "errno") ||
               ($f =~ m!\bcore/vul/vul_temp_filename\.cxx$! && $t eq "stdio") ||
               ($f =~ m!\bcore/vul/vul_redirector\.cxx$! && $t eq "stddef"));
   }
@@ -1011,7 +1011,7 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bbdgl_curve_clustering\.(cxx|h)\.(min|max)$! &&
           "$f.$wd" !~ m!\bbsta_histogram\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bbvxm_lidar_processor\.cxx\.(min|max)$! &&
-          "$f.$wd" !~ m!\bvidl2_pixel_format\.h\.(min|max)$! &&
+          "$f.$wd" !~ m!\bvidl_pixel_format\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bmbl_sample_stats_1d\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bmbl/tools/sample_stats\.cxx\.(min|max)$! &&
           "$f.$wd" !~ m!\balgo/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$! &&
