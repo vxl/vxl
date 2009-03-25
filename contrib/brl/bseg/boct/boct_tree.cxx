@@ -97,11 +97,16 @@ vcl_vector<boct_tree_cell*>
 boct_tree::leaf_cells()
 { 
   vcl_vector<boct_tree_cell*> v;
+  if (root_)
+    if (root_->is_leaf())
+      v.push_back(root_);
+    else
+      root_->leaf_children(v);
   return v;
 }
 
 void boct_tree::print()
 {
-  vcl_cout << "Max Level=" << max_level_ << vcl_endl;
+  vcl_cout << "Octree Max Level=" << max_level_ << vcl_endl;
   root_->print();
 }

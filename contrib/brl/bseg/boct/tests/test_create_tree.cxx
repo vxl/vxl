@@ -26,6 +26,10 @@ MAIN( test_create_tree )
   block->split();
   block->print();
 
+  vcl_vector<boct_tree_cell*> leaves = block->leaf_cells();
+  TEST("No of Leaf Cells", 8, leaves.size());
+  for (unsigned i=0; i<leaves.size(); i++)
+    leaves[i]->print();
 
   boct_tree * randomtree=new boct_tree(3);
   create_random_configuration_tree(randomtree);

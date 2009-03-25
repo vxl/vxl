@@ -15,7 +15,12 @@ public:
   boct_tree_cell(const boct_loc_code& code, short level);
   boct_tree_cell(const boct_tree_cell& rhs);
   bool is_leaf();
+
+  //: adds a pointer for each leaf children to v
+  void leaf_children(vcl_vector<boct_tree_cell*>& v);
+
   const boct_loc_code& get_code();
+
   boct_tree_cell* traverse(boct_loc_code code);
   boct_tree_cell* traverse_to_level(boct_loc_code *code, short level);
   bool split();

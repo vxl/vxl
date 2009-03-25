@@ -12,6 +12,8 @@ boct_tree_cell::boct_tree_cell(const boct_loc_code& code, short level)
 
 bool boct_tree_cell::is_leaf()
 {
+  if (!children_)
+    return true;
   return false;
 }
   
@@ -26,6 +28,7 @@ boct_tree_cell* boct_tree_cell::traverse(boct_loc_code code)
   // remove this
   return this;
 }
+
 //: this is always going down the tree
 boct_tree_cell* boct_tree_cell::traverse_to_level(boct_loc_code * code, short level)
 {
@@ -105,7 +108,7 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
          }
     case X_HIGH:
          {
-             if((this->code_.x_loc_+cellsize)>=(1<<max_level-1))
+             if((this->code_.x_loc_+cellsize)>=(1<<(max_level-1)))
                  return ;
              short xhighcode=this->code_.x_loc_+cellsize;
              short diff=this->code_.x_loc_^xhighcode;
@@ -157,7 +160,7 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
          }
     case Y_HIGH:
          {
-             if((this->code_.y_loc_+cellsize)>=(1<<max_level-1))
+             if((this->code_.y_loc_+cellsize)>=(1<<(max_level-1)))
                  return ;
              short yhighcode=this->code_.y_loc_+cellsize;
              short diff=this->code_.y_loc_^yhighcode;
@@ -209,7 +212,7 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
          }
     case Z_HIGH:
          {
-             if((this->code_.z_loc_+cellsize)>=(1<<max_level-1))
+             if((this->code_.z_loc_+cellsize)>=(1<<(max_level-1)))
                  return ;
              short zhighcode=this->code_.z_loc_+cellsize;
              short diff=this->code_.z_loc_^zhighcode;
@@ -238,13 +241,28 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
 
     }
 }
+
+void boct_tree_cell::leaf_children(vcl_vector<boct_tree_cell*>& v)
+{
+  if (!children_)
+    return;
+
+  for(unsigned i=0; i<8; i++) {
+    if (children_[i].is_leaf())
+      v.push_back(&children_[i]);
+    else
+      children_[i].leaf_children(v);
+  }
+}
+
 void boct_tree_cell::print()
 {
-  vcl_cout << "LEVEL=" << level_ << vcl_endl; 
+  vcl_cout << "LEVEL=" << level_; 
   vcl_cout << " code=" << code_;
   if (!children_)
-    vcl_cout << "LEAF " << vcl_endl << vcl_endl;
+    vcl_cout << " LEAF " << vcl_endl;
   else {
+    vcl_cout << vcl_endl;
     for (unsigned i=0; i<8; i++) {
       children_[i].print();
     }

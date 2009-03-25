@@ -51,7 +51,7 @@ short boct_loc_code::child_index(short level)
 
 vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code& code)
 {
-  s << "[" << code.x_loc_ << "," << code.y_loc_ << "," << code.z_loc_ << "]" << vcl_endl;
+  s << "[" << code.x_loc_ << "," << code.y_loc_ << "," << code.z_loc_ << "] ";
   return s;
 }
 
