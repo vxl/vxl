@@ -56,8 +56,9 @@ SET(VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS "@VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS@")
 # determine whether a part was built (_FOUND), where its headers are
 # located (_INCLUDE_DIR) and in some cases what libraries must be
 # linked to use the part (_LIBRARIES).  Most client projects will
-# likely still refer to vcl by hard-wired "vcl" instead of using the
-# variable VXL_VCL_LIBRARIES, but it is there just in case.
+# likely still refer to individual VXL libraries such as vcl, for
+# example, by hard-wired "vcl" instead of using the variable
+# VXL_VCL_LIBRARIES, but it is there just in case.
 
 SET(VXL_VCL_FOUND "YES" ) # VXL vcl is always FOUND.  It is not optional.
 SET(VXL_VCL_INCLUDE_DIR "@VCL_INCLUDE_DIR@")
@@ -66,6 +67,10 @@ SET(VXL_VCL_LIBRARIES "vcl")
 SET(VXL_CORE_FOUND "YES" ) # VXL core is always FOUND.  It is not optional.
 SET(VXL_CORE_INCLUDE_DIR "@VXLCORE_INCLUDE_DIR@")
 # VXL core has many libraries
+
+SET(VXL_CORE_VIDEO_FOUND "@CORE_VIDEO_FOUND@" )
+SET(VXL_CORE_VIDEO_INCLUDE_DIR "@VXLCORE_INCLUDE_DIR@")
+SET(VXL_CORE_VIDEO_LIBRARIES "vidl1 vidl_vil1 vidl")
 
 SET(VXL_VGUI_FOUND "@VGUI_FOUND@")
 SET(VXL_VGUI_INCLUDE_DIR "@OPENGL_INCLUDE_DIR@")
