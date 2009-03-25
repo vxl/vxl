@@ -6,9 +6,9 @@ ADD_EXECUTABLE( boct_test_all
   test_find_neighbors.cxx
  )
 
-TARGET_LINK_LIBRARIES( boct_test_all boct testlib)
+TARGET_LINK_LIBRARIES( boct_test_all boct testlib vnl)
 
 #ADD_TEST( bvxm_test_voxel_storage_mem         ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_storage_mem )
 
 ADD_EXECUTABLE( boct_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boct_test_include boct)
+TARGET_LINK_LIBRARIES( boct_test_include boct vnl )
