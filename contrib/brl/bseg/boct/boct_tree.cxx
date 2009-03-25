@@ -23,7 +23,7 @@ boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
   //: temporary pointer to traverse 
   boct_tree_cell* curr_cell=root_;
 
-  while(curr_cell->children())
+  while(curr_cell->children()&& curr_level>0)
   {
       short index_child=loccode_->child_index(curr_level);
       curr_cell=curr_cell->children()+index_child;  

@@ -22,6 +22,4 @@ MAIN( test_locate_point )
   
   
   SUMMARY();
-
-  
 }
