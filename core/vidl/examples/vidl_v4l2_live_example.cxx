@@ -2,7 +2,7 @@
 
 #include <vcl_iostream.h>
 #include <vidl/vidl_v4l2_devices.h>
-#include <vidl/v4l2_pixel_format.h>
+#include <vidl/vidl_v4l2_pixel_format.h>
 #include <vidl/vidl_v4l2_istream.h>
 
 
