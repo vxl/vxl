@@ -12,7 +12,7 @@ boct_tree_cell::boct_tree_cell(const boct_loc_code& code, short level)
 
 bool boct_tree_cell::is_leaf()
 {
-  if (!children_)
+  if (children_==NULL)
     return true;
   return false;
 }

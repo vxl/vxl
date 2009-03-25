@@ -8,7 +8,8 @@
 
 class boct_tree {
 public:
-  boct_tree(short max_level);
+  //boct_tree(short max_level);
+  boct_tree(short max_level, short init_levels=1);
   boct_tree_cell* locate_point(const vgl_point_3d<double>& p);
   boct_tree_cell* locate_point_at_level(const vgl_point_3d<double>& p, short level);
   boct_tree_cell* locate_region(const vgl_box_3d<double>& r);

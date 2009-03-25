@@ -2,13 +2,40 @@
 #include <vgl/vgl_box_3d.h>
 #include <vcl_iostream.h>
 //; constructor initializes an empty tree
-boct_tree::boct_tree(short max_level): max_level_(max_level) 
+boct_tree::boct_tree(short max_level, short init_levels): max_level_(max_level) 
 {
-    //: root is allocated max_level_-1
+    //: root is allocated max_level_-1 with code [0,0,0]
     boct_loc_code code;
     if(max_level_>0)
         root_=new boct_tree_cell( code, max_level_-1);
+
+    vcl_vector<boct_tree_cell*> cells;
+    init_levels--;
+    while (init_levels > 0) {
+      cells = leaf_cells();
+      for(unsigned i=0; i<cells.size(); i++)
+        cells[i]->split();
+      init_levels--;
+      cells.empty();
+    }
 }
+
+/*boct_tree::boct_tree(short max_level, short init_levels)
+{
+  boct_loc_code code;
+  if(max_level>0)
+    root_=new boct_tree_cell( code, max_level-1);
+
+  vcl_vector<boct_tree_cell*> cells;
+  while (init_levels > 0) {
+    cells = leaf_cells();
+    for(unsigned i=0; i<cells.size(); i++)
+      cells[i]->split();
+    init_levels--;
+    cells.empty();
+  }
+
+}*/
 
 boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
 {
