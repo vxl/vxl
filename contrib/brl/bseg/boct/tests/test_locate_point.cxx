@@ -1,7 +1,23 @@
 #include <testlib/testlib_test.h>
 
 #include <boct/boct_tree.h>
+#include <boct/boct_test_util.h>
 
+boct_tree_cell* brute_force_locate_point(vcl_vector<boct_tree_cell*> leafcells, vgl_point_3d<double> p, int max_level)
+{
+ boct_loc_code code(p,max_level);
+ 
+ boct_tree_cell* point_container;
+
+ for (unsigned i=0;i<leafcells.size();i++)
+ {
+     if(leafcells[i]->code_.isequal(&code,leafcells[i]->level()))
+         point_container=leafcells[i];
+
+ }
+
+ return point_container;
+}
 
 
 MAIN( test_locate_point )
@@ -20,6 +36,24 @@ MAIN( test_locate_point )
   cell=twolevelblock->locate_point(p2);
   TEST("Returns the correct level",nlevels-2, cell->level());
   
-  
+  //: Testing on randomly created trees.
+  boct_tree * rtree=new boct_tree(nlevels);
+  create_random_configuration_tree(rtree);
+
+  vcl_vector<boct_tree_cell*> leaves=rtree->leaf_cells();
+  unsigned int cnt=0;
+  for(unsigned i=0;i<100;i++)
+  {
+      vnl_random rand;
+      vgl_point_3d<double> p(rand.drand32(),rand.drand32(),rand.drand32());
+      boct_tree_cell * curr_cell_using_point_locate=rtree->locate_point(p);
+
+      boct_tree_cell * cell_found_brute_force=brute_force_locate_point(leaves,p,nlevels);
+   
+      if(curr_cell_using_point_locate->code_.isequal(&cell_found_brute_force->code_,cell_found_brute_force->level()))
+          cnt++;
+  }
+  TEST("Returns the correct Point for 100 points",100, cnt);
+
   SUMMARY();
 }
