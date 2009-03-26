@@ -2,6 +2,7 @@
 
 #include <boct/boct_tree.h>
 #include <boct/boct_test_util.h>
+#include <vnl/vnl_random.h>
 
 boct_tree_cell* brute_force_locate_point(vcl_vector<boct_tree_cell*> leafcells, vgl_point_3d<double> p, int max_level)
 {
@@ -13,9 +14,7 @@ boct_tree_cell* brute_force_locate_point(vcl_vector<boct_tree_cell*> leafcells, 
  {
      if(leafcells[i]->code_.isequal(&code,leafcells[i]->level()))
          point_container=leafcells[i];
-
  }
-
  return point_container;
 }
 

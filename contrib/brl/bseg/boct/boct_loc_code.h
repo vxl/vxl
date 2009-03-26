@@ -25,6 +25,8 @@ public:
   
   boct_loc_code * XOR(boct_loc_code * b);
 
+  vgl_point_3d<double>  get_point(short max_level);
+
   short x_loc_;
   short y_loc_;
   short z_loc_;

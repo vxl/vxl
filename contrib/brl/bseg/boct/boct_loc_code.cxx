@@ -76,3 +76,16 @@ boct_loc_code * boct_loc_code::XOR(boct_loc_code * b)
     return xorcode;
 
 }
+//: function to convert location code to a point.
+vgl_point_3d<double> boct_loc_code::get_point(short max_level)
+{
+     
+    int max_val = 1 << (max_level-1);
+
+    vgl_point_3d<double> p((double)x_loc_/(double)(max_val),
+                           (double)y_loc_/(double)(max_val),
+                           (double)z_loc_/(double)(max_val));
+
+    return p;
+ 
+}

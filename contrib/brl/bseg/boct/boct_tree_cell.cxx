@@ -100,9 +100,21 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
 
              if(!neighborcell->children())
                  neighbors.push_back(neighborcell);
+             else
+             {
+                 //: TODO code to get the cells which are further down the tree. 
+                 //: This is naive implementation of getting all the leaf nodes from a node and 
+                 //: test each of them if  they are neighbors.
+                 vcl_vector<boct_tree_cell*> leafnodes;
+                 neighborcell->leaf_children(leafnodes);
 
-             //: TODO code to get the cells which are further down the tree. 
+                 for (unsigned int i=0;i<leafnodes.size();i++)
+                 {
+                     if(leafnodes[i]->code_.x_loc_^xlowcode)
+                         neighbors.push_back(leafnodes[i]);
+                 }
 
+             }
 
             break;
          }
@@ -126,9 +138,21 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
 
              if(!neighborcell->children())
                  neighbors.push_back(neighborcell);
+             else
+             {
+                 //: TODO code to get the cells which are further down the tree. 
+                 //: This is naive implementation of getting all the leaf nodes from a node and 
+                 //: test each of them if  they are neighbors.
+                 vcl_vector<boct_tree_cell*> leafnodes;
+                 neighborcell->leaf_children(leafnodes);
 
-             //: TODO code to get the cells which are further down the tree. 
-             
+                 for (unsigned int i=0;i<leafnodes.size();i++)
+                 {
+                     if(leafnodes[i]->code_.x_loc_^xhighcode)
+                         neighbors.push_back(leafnodes[i]);
+                 }
+
+             }
 
              break;
          }
@@ -152,8 +176,22 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
 
              if(!neighborcell->children())
                  neighbors.push_back(neighborcell);
+             else
+             {
+                 //: TODO code to get the cells which are further down the tree. 
+                 //: This is naive implementation of getting all the leaf nodes from a node and 
+                 //: test each of them if  they are neighbors.
+                 vcl_vector<boct_tree_cell*> leafnodes;
+                 neighborcell->leaf_children(leafnodes);
 
-             //: TODO code to get the cells which are further down the tree. 
+                 for (unsigned int i=0;i<leafnodes.size();i++)
+                 {
+                     if(leafnodes[i]->code_.y_loc_^ylowcode)
+                         neighbors.push_back(leafnodes[i]);
+                 }
+
+             }
+
 
 
             break;
@@ -179,7 +217,21 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
              if(!neighborcell->children())
                  neighbors.push_back(neighborcell);
 
-             //: TODO code to get the cells which are further down the tree. 
+             else
+             {
+                 //: TODO code to get the cells which are further down the tree. 
+                 //: This is naive implementation of getting all the leaf nodes from a node and 
+                 //: test each of them if  they are neighbors.
+                 vcl_vector<boct_tree_cell*> leafnodes;
+                 neighborcell->leaf_children(leafnodes);
+
+                 for (unsigned int i=0;i<leafnodes.size();i++)
+                 {
+                     if(leafnodes[i]->code_.y_loc_^yhighcode)
+                         neighbors.push_back(leafnodes[i]);
+                 }
+
+             }
              
 
              break;
@@ -205,7 +257,21 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
              if(!neighborcell->children())
                  neighbors.push_back(neighborcell);
 
-             //: TODO code to get the cells which are further down the tree. 
+             else
+             {
+                 //: TODO code to get the cells which are further down the tree. 
+                 //: This is naive implementation of getting all the leaf nodes from a node and 
+                 //: test each of them if  they are neighbors.
+                 vcl_vector<boct_tree_cell*> leafnodes;
+                 neighborcell->leaf_children(leafnodes);
+
+                 for (unsigned int i=0;i<leafnodes.size();i++)
+                 {
+                     if(leafnodes[i]->code_.z_loc_^zlowcode)
+                         neighbors.push_back(leafnodes[i]);
+                 }
+
+             }
 
 
             break;
@@ -231,7 +297,21 @@ void  boct_tree_cell::find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell*> &
              if(!neighborcell->children())
                  neighbors.push_back(neighborcell);
 
-             //: TODO code to get the cells which are further down the tree. 
+             else
+             {
+                 //: TODO code to get the cells which are further down the tree. 
+                 //: This is naive implementation of getting all the leaf nodes from a node and 
+                 //: test each of them if  they are neighbors.
+                 vcl_vector<boct_tree_cell*> leafnodes;
+                 neighborcell->leaf_children(leafnodes);
+
+                 for (unsigned int i=0;i<leafnodes.size();i++)
+                 {
+                     if(leafnodes[i]->code_.z_loc_^zhighcode)
+                         neighbors.push_back(leafnodes[i]);
+                 }
+
+             }
              
 
              break;
