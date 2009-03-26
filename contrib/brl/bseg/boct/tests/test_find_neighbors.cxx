@@ -5,8 +5,11 @@
 #include <boct/boct_test_util.h>
 //: this function computes the neighbors in brute force way by going through all leaf nodes and checking if the codes of the opposit faces is the same. 
 //: This means that checking if the X_HIGH of one and X_LOW of other have the same x code and viceversa.
-void brute_force_test_neighbor(boct_tree_cell * cell,vcl_vector<boct_tree_cell*> leaf_nodes, 
-                                                      boct_tree_cell::FACE_IDX face,int max_level, vcl_vector<boct_tree_cell*> & neighbors)
+void brute_force_test_neighbor(boct_tree_cell_sptr cell,
+                               vcl_vector<boct_tree_cell_sptr> leaf_nodes, 
+                               boct_tree_cell::FACE_IDX face,
+                               int max_level, 
+                               vcl_vector<boct_tree_cell_sptr> & neighbors)
 {
     double cellsize=(double)(1<<cell->level())/(double)(1<<(max_level-1));
 
@@ -87,9 +90,9 @@ MAIN( test_find_neighbors )
   //: two layer tree;
   block->split();
   vgl_point_3d<double> p1(0.1,0.1,0.1);
-  boct_tree_cell* cell=block->locate_point(p1);
+  boct_tree_cell_sptr cell=block->locate_point(p1);
 
-  vcl_vector<boct_tree_cell*> n;
+  vcl_vector<boct_tree_cell_sptr> n;
   cell->find_neighbors(boct_tree_cell::X_HIGH,n,10);
 
   //: ground truth for the code of the neighbor 
@@ -99,7 +102,7 @@ MAIN( test_find_neighbors )
   TEST("Returns the correct  Neighbor for X_HIGH",gt_code.x_loc_,n[0]->get_code().x_loc_);
 
   vgl_point_3d<double> p_x_low(0.6,0.1,0.1);
-  boct_tree_cell* cell_xlow=block->locate_point(p_x_low);
+  boct_tree_cell_sptr cell_xlow=block->locate_point(p_x_low);
 
   n.clear();
   cell_xlow->find_neighbors(boct_tree_cell::X_LOW,n,10);
@@ -117,15 +120,15 @@ MAIN( test_find_neighbors )
   boct_tree * tree3=new boct_tree(nlevels);
   create_random_configuration_tree(tree3);
   tree3->print();
-  vcl_vector<boct_tree_cell * > leaf_nodes=tree3->leaf_cells();
+  vcl_vector<boct_tree_cell_sptr> leaf_nodes=tree3->leaf_cells();
   vgl_point_3d<double> p_z_low(0.6,0.1,0.1);
-  boct_tree_cell* cell_zlow=tree3->locate_point(p_z_low);
+  boct_tree_cell_sptr cell_zlow=tree3->locate_point(p_z_low);
 
 
   n.clear();
   cell_zlow->find_neighbors(boct_tree_cell::X_LOW,n,10);
 
-  vcl_vector<boct_tree_cell*> n_brute_force;
+  vcl_vector<boct_tree_cell_sptr> n_brute_force;
 
   brute_force_test_neighbor(cell_zlow,leaf_nodes,boct_tree_cell::X_LOW,nlevels, n_brute_force);
 

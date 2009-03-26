@@ -8,7 +8,7 @@ void create_random_configuration_tree(boct_tree* tree)
     {
         vnl_random rand;
         vgl_point_3d<double> p(rand.drand32(),rand.drand32(),rand.drand32());
-        boct_tree_cell * curr_cell=tree->locate_point(p);
+        boct_tree_cell_sptr curr_cell=tree->locate_point(p);
         if(curr_cell && curr_cell->level()>0)
             curr_cell->split();
     }

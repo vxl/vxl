@@ -9,7 +9,7 @@ boct_tree::boct_tree(short max_level, short init_levels): max_level_(max_level)
     if(max_level_>0)
         root_=new boct_tree_cell( code, max_level_-1);
 
-    vcl_vector<boct_tree_cell*> cells;
+    vcl_vector<boct_tree_cell_sptr> cells;
     init_levels--;
     while (init_levels > 0) {
       cells = leaf_cells();
@@ -37,7 +37,7 @@ boct_tree::boct_tree(short max_level, short init_levels): max_level_(max_level)
 
 }*/
 
-boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
+boct_tree_cell_sptr boct_tree::locate_point(const vgl_point_3d<double>& p)
 {
   short curr_level=max_level_-1;
   //: convert point to location code.
@@ -48,7 +48,7 @@ boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
   //  return NULL;
   
   //: temporary pointer to traverse 
-  boct_tree_cell* curr_cell=root_;
+  boct_tree_cell_sptr curr_cell=root_;
 
   while(curr_cell->children()&& curr_level>0)
   {
@@ -61,7 +61,7 @@ boct_tree_cell* boct_tree::locate_point(const vgl_point_3d<double>& p)
   return curr_cell;
 }
 
-boct_tree_cell* boct_tree::locate_point_at_level(const vgl_point_3d<double>& p, short level)
+boct_tree_cell_sptr boct_tree::locate_point_at_level(const vgl_point_3d<double>& p, short level)
 { 
   short curr_level=max_level_-1;
   //: convert point to location code.
@@ -72,7 +72,7 @@ boct_tree_cell* boct_tree::locate_point_at_level(const vgl_point_3d<double>& p, 
     return NULL;
   
   //: temporary pointer to traverse 
-  boct_tree_cell* curr_cell=root_;
+  boct_tree_cell_sptr curr_cell=root_;
 
   while(curr_cell->children()&& curr_level>level)
   {
@@ -85,7 +85,7 @@ boct_tree_cell* boct_tree::locate_point_at_level(const vgl_point_3d<double>& p, 
   return curr_cell;
 }
 
-boct_tree_cell* boct_tree::locate_region(const vgl_box_3d<double>& r)
+boct_tree_cell_sptr boct_tree::locate_region(const vgl_box_3d<double>& r)
 { 
   boct_loc_code* mincode=new boct_loc_code(r.min_point(), max_level_);
   boct_loc_code* maxcode=new boct_loc_code(r.max_point(), max_level_);
@@ -104,7 +104,7 @@ boct_tree_cell* boct_tree::locate_region(const vgl_box_3d<double>& r)
   return locate_point_at_level(r.min_point(),level_z);
 }
 
-boct_tree_cell* boct_tree::get_cell(const boct_loc_code& code)
+boct_tree_cell_sptr boct_tree::get_cell(const boct_loc_code& code)
 { 
   // remove this
   return root_;
@@ -120,10 +120,10 @@ bool boct_tree::split_all()
   return false;
 }
 
-vcl_vector<boct_tree_cell*> 
+vcl_vector<boct_tree_cell_sptr> 
 boct_tree::leaf_cells()
 { 
-  vcl_vector<boct_tree_cell*> v;
+  vcl_vector<boct_tree_cell_sptr> v;
   if (root_)
     if (root_->is_leaf())
       v.push_back(root_);
