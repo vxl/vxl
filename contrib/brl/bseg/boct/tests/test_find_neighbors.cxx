@@ -148,11 +148,5 @@ MAIN( test_find_neighbors )
     }
   }
   TEST("Returns the Correct Neighbors",n.size(),cnt);
-
-
-
-
   SUMMARY();
-
-  
 }
