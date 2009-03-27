@@ -3,43 +3,23 @@
 
 #include <vbl/vbl_ref_count.h>
 #include "boct_loc_code.h"
-#include "boct_tree_cell_sptr.h"
+#include "boct_tree_cell_base.h"
+#include "boct_tree_cell_base_sptr.h"
 
-class boct_tree_cell : public vbl_ref_count
+template <class T>
+class boct_tree_cell : public boct_tree_cell_base
 {
 public:
-  typedef enum {NONE, X_LOW, X_HIGH, Y_LOW, Y_HIGH, Z_LOW, Z_HIGH, ALL} FACE_IDX;
-
-  //constructors
   boct_tree_cell();
-  boct_tree_cell(const boct_loc_code& code, boct_tree_cell* p, short l) {code_=code; children_=0; parent_=p; level_=l; }
+  boct_tree_cell(const boct_loc_code& code, boct_tree_cell_base_sptr p, short l) {code_=code; children_=0; parent_=p; level_=l; }
   //constructor given code and level
-  boct_tree_cell(const boct_loc_code& code, short level);
+  boct_tree_cell(const boct_loc_code& code, short level) : boct_tree_cell_base(code,level) {}
   boct_tree_cell(const boct_tree_cell& rhs);
-  ~boct_tree_cell();
-
-  bool is_leaf();
-
-  //: adds a pointer for each leaf children to v
-  void leaf_children(vcl_vector<boct_tree_cell_sptr>& v);
-
-  const boct_loc_code& get_code();
-
-  //boct_tree_cell* traverse(boct_loc_code code);
-  boct_tree_cell* traverse_to_level(boct_loc_code *code, short level);
-  bool split();
-  void print();
-  short level(){return level_;}
-  boct_tree_cell* children(){return children_;}
-  void  find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell_sptr> & neighbors,short max_level);
-  boct_tree_cell_sptr get_common_ancestor(short binarydiff);
-
-  boct_loc_code code_;
+  ~boct_tree_cell() {}
+  void set_data(T& data) {data_=data; }
+  T get_data() {return data_; }
 private:
-  short level_;
-  boct_tree_cell_sptr parent_;
-  boct_tree_cell* children_;
-  
+  T data_;
 };
 
 //void vsl_b_write(vsl_b_ostream & os, bvxm_world_params const& params);

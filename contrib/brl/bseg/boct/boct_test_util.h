@@ -3,6 +3,9 @@
 
 #include <boct/boct_tree.h>
 
-void create_random_configuration_tree(boct_tree* tree);
+template <typename T>
+void create_random_configuration_tree(boct_tree<T>* tree);
+
+#define BOCT_TEST_UTIL_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.txx first"
 
 #endif
