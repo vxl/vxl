@@ -5,7 +5,7 @@
 SET(boct_sources
     boct_loc_code.cxx           boct_loc_code.h
     boct_tree_cell_base.cxx     boct_tree_cell_base.h    boct_tree_cell_base_sptr.h
-    boct_tree_cell.h
+    boct_tree_cell.txx          boct_tree_cell.h
     boct_tree.txx               boct_tree.h
     boct_test_util.txx          boct_test_util.h
 )

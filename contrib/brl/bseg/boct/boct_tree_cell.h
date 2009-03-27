@@ -2,6 +2,7 @@
 #define boct_tree_cell_h_
 
 #include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
 #include "boct_tree_cell_base.h"
 #include "boct_tree_cell_base_sptr.h"
@@ -17,11 +18,15 @@ public:
   boct_tree_cell(const boct_tree_cell& rhs);
   ~boct_tree_cell() {}
   void set_data(T& data) {data_=data; }
-  T get_data() {return data_; }
+  T data() {return data_; }
 private:
   T data_;
 };
 
+template <class T>
 void vsl_b_write(vsl_b_ostream & os, const boct_tree_cell<T>& cell);
+
+template <class T>
+void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T>& cell);
 
 #endif
