@@ -22,6 +22,6 @@ private:
   T data_;
 };
 
-//void vsl_b_write(vsl_b_ostream & os, bvxm_world_params const& params);
+void vsl_b_write(vsl_b_ostream & os, const boct_tree_cell<T>& cell);
 
 #endif
