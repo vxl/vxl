@@ -11,12 +11,15 @@
 
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
+#include <vpdl/vpdt/vpdt_distribution_accessors.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
+#include <vpdl/vpdt/vpdt_enable_if.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_gaussian.h>
 #include <vpdl/vpdt/vpdt_gaussian_detector.h>
 #include <vpdl/vpdt/vpdt_log_probability.h>
+#include <vpdl/vpdt/vpdt_mixture_accessors.h>
 #include <vpdl/vpdt/vpdt_mixture_detector.h>
 #include <vpdl/vpdt/vpdt_mixture_of.h>
 #include <vpdl/vpdt/vpdt_mog_fitness.h>
