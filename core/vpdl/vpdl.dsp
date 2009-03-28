@@ -197,6 +197,15 @@ SOURCE=.\vpdt/vpdt_gaussian_detector.h
 # Begin Source File
 SOURCE=.\vpdt/vpdt_mixture_detector.h
 # End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_distribution_accessors.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_mixture_accessors.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpdt/vpdt_enable_if.h
+# End Source File
 # End Group
 # End Target
 # End Project
