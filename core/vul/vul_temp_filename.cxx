@@ -15,7 +15,7 @@
 #if defined(VCL_VC) || defined(VCL_BORLAND) || defined(__MINGW32__)
   #include <Windows.h>
 #else
-#if defined(unix) || defined(__unix) || defined(__APPLE__)
+#if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
   // Helper functions for Unix
 
   #include <stdio.h>  // for P_tmpdir

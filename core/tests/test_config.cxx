@@ -1840,6 +1840,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "__unix__ ";
+#ifdef __unix__
+  vcl_cout << "is set to " << quote(__unix__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__linux ";
 #ifdef __linux
   vcl_cout << "is set to " << quote(__linux);

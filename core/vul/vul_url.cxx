@@ -20,7 +20,7 @@
 #include <vcl_fstream.h>
 #include <vul/vul_file.h>
 
-#if defined(unix) || defined(__unix)
+#if defined(unix) || defined(__unix) || defined(__unix__)
 
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()

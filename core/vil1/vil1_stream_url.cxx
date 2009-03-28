@@ -18,7 +18,7 @@
 #undef sprintf // This works around a bug in libintl.h
 #include <vcl_cstdio.h>  // sprintf()
 
-#if defined(unix) || defined(__unix)
+#if defined(unix) || defined(__unix) || defined(__unix__)
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
 # include <sys/socket.h>
