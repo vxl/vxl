@@ -132,6 +132,8 @@ vxl_uint_32 vil_nitf2_data_mask_table::pad_pixel( unsigned int block_x,
 }
 
 #if VXL_LITTLE_ENDIAN
+
+#undef swap16
 void swap16(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 2; i += 2)
@@ -140,6 +142,7 @@ void swap16(char *a, unsigned n)
   }
 }
 
+#undef swap32
 void swap32(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 4; i += 4)
@@ -149,6 +152,7 @@ void swap32(char *a, unsigned n)
   }
 }
 
+#undef swap64
 void swap64(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 8; i += 8)
@@ -159,6 +163,7 @@ void swap64(char *a, unsigned n)
     vcl_swap( a[i+3], a[i+4] );
   }
 }
+
 #endif
 
 void vil_nitf2_data_mask_table::maybe_endian_swap( char* a, unsigned size_of_a_in_bytes,
