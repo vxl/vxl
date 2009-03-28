@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vidl2_pro" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vidl_pro" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# vidl2_pro  == name of output library
+# vidl_pro  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vidl2_pro - Win32 Debug
+CFG=vidl_pro - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vidl2_pro.mak".
+!MESSAGE NMAKE /f "vidl_pro.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vidl2_pro.mak" CFG="vidl2_pro - Win32 Debug"
+!MESSAGE NMAKE /f "vidl_pro.mak" CFG="vidl_pro - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vidl2_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vidl2_pro - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vidl_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vidl_pro - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=vidl2_pro - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vidl2_pro - Win32 Release"
+!IF  "$(CFG)" == "vidl_pro - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "vidl2_pro - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vidl_pro - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,61 +87,61 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "vidl2_pro - Win32 Release"
-# Name "vidl2_pro - Win32 Debug"
+# Name "vidl_pro - Win32 Release"
+# Name "vidl_pro - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\vidl2_io_istream.cxx
+SOURCE=.\vidl_io_istream.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl2_io_ostream.cxx
+SOURCE=.\vidl_io_ostream.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/vidl2_open_istream_process.cxx
+SOURCE=.\processes/vidl_open_istream_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/vidl2_open_ostream_process.cxx
+SOURCE=.\processes/vidl_open_ostream_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl2_pro_utils.cxx
+SOURCE=.\vidl_pro_utils.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/vidl2_close_istream_process.cxx
+SOURCE=.\processes/vidl_close_istream_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/vidl2_get_frame_istream_process.cxx
+SOURCE=.\processes/vidl_get_frame_istream_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/vidl2_open_dshow_istream_process.cxx
+SOURCE=.\processes/vidl_open_dshow_istream_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl2_register.cxx
+SOURCE=.\vidl_register.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+vidl2_istream_sptr-.cxx
+SOURCE=.\Templates/brdb_value_t+vidl_istream_sptr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+vidl2_ostream_sptr-.cxx
+SOURCE=.\Templates/brdb_value_t+vidl_ostream_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\vidl2_io_istream.h
+SOURCE=.\vidl_io_istream.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl2_io_ostream.h
+SOURCE=.\vidl_io_ostream.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl2_pro_utils.h
+SOURCE=.\vidl_pro_utils.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl2_register.h
+SOURCE=.\vidl_register.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl2_processes.h
+SOURCE=.\vidl_processes.h
 # End Source File
 # End Group
 # End Target
