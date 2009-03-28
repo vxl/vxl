@@ -30,10 +30,7 @@ SUBDIRS += vsl vul/io vbl/io vnl/io vnl/xio vgl/io vgl/xio vil/io vil1/io
 SUBDIRS += vcsl
 
 # video
-SUBDIRS += vidl
-
-# video (using vil1)
-SUBDIRS += vidl_vil1
+SUBDIRS += vidl vidl1 vidl_vil1
 
 # multi-platform GUI toolkit
 SUBDIRS += vgui

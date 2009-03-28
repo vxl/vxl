@@ -6,8 +6,8 @@ SUBDIRS += vpgl_pro
 # vil process classes
 SUBDIRS += vil_pro
 
-# vidl2 process classes (note it is expected that vidl2 will go to core)
-SUBDIRS += vidl2_pro
+# vidl process classes
+SUBDIRS += vidl_pro
 
 # brip process classes 
 SUBDIRS += brip_pro

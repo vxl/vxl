@@ -40,6 +40,9 @@ MANPAGE_SOURCES += vpdt/vpdt_mog_fitness.h
 
 MANPAGE_SOURCES += vpdt/vpdt_gaussian_detector.h
 MANPAGE_SOURCES += vpdt/vpdt_mixture_detector.h
+MANPAGE_SOURCES += vpdt/vpdt_distribution_accessors.h
+MANPAGE_SOURCES += vpdt/vpdt_mixture_accessors.h
+MANPAGE_SOURCES += vpdt/vpdt_enable_if.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

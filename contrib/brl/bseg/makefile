@@ -46,6 +46,8 @@ SUBDIRS += bmdl_batch
 # recognition library - uses background models of bbgm and/or bvxm
 SUBDIRS += brec
 
+SUBDIRS += boct
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
