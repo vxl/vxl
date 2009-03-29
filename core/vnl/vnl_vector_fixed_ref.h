@@ -16,6 +16,7 @@
 // \verbatim
 //  Modifications
 //   4-Jul-2003 Paul Smyth - general cleanup and rewrite; interface now as vnl_vector_fixed
+//   30-Mar-2009 Peter Vanroose - added arg_min() and arg_max()
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -165,6 +166,12 @@ class vnl_vector_fixed_ref_const
 
   //: Largest value
   T max_value () const { return vnl_c_vector<T>::max_value(begin(), n); }
+
+  //: Location of smallest value
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), n); }
+
+  //: Location of largest value
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), n); }
 
   //: Mean of values in vector
   T mean() const { return vnl_c_vector<T>::mean(begin(), n); }

@@ -253,6 +253,22 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n)
   return vnl_sse<T>::min(src,n);
 }
 
+//: Returns location of max value of the vector.
+template<class T>
+unsigned vnl_c_vector<T>::arg_max(T const *src, unsigned n)
+{
+  assert(n!=0); // max value of an empty vector is undefined
+  return vnl_sse<T>::arg_max(src,n);
+}
+
+//: Returns location of min value of the vector.
+template<class T>
+unsigned vnl_c_vector<T>::arg_min(T const *src, unsigned n)
+{
+  assert(n!=0); // min value of an empty vector is undefined
+  return vnl_sse<T>::arg_min(src,n);
+}
+
 //: Sum of Differences squared.
 template<class T>
 T vnl_c_vector<T>::euclid_dist_sq(T const *a, T const *b, unsigned n)
@@ -446,10 +462,14 @@ template vcl_ostream& print_vector(vcl_ostream &,T const *,unsigned)
 #define VNL_C_VECTOR_INSTANTIATE_unordered(T) \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::max_value(T const *, unsigned), T(0)); \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::min_value(T const *, unsigned), T(0)); \
+VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_vector<T >::arg_max(T const *, unsigned), 0U); \
+VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_vector<T >::arg_min(T const *, unsigned), 0U); \
 VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t); \
 template class vnl_c_vector<T >; \
 VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::max_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned))
+VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned)); \
+VCL_UNINSTANTIATE_SPECIALIZATION(unsigned vnl_c_vector<T >::arg_max(T const *, unsigned)); \
+VCL_UNINSTANTIATE_SPECIALIZATION(unsigned vnl_c_vector<T >::arg_min(T const *, unsigned))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #undef VNL_C_VECTOR_INSTANTIATE

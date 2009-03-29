@@ -18,8 +18,9 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Oct.2002 - Amitha Perera  - separated vnl_matrix and vnl_matrix_fixed,
 //                               removed necessity for vnl_matrix_fixed_ref
-//   26Oct.2002 - Peter Vanroose - added inplace_transpose() method
-//   July.2003 - Paul Smyth - fixed end() bug, made op*=() more general
+//   Oct.2002 - Peter Vanroose - added inplace_transpose() method
+//   Jul.2003 - Paul Smyth     - fixed end() bug, made op*=() more general
+//   Mar.2009 - Peter Vanroose - added arg_min() and arg_max()
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -492,6 +493,12 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
   //: Return maximum value of elements
   T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
+
+  //: Return location of minimum value of elements
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+
+  //: Return location of maximum value of elements
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
 
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }

@@ -15,8 +15,9 @@
 //
 // \verbatim
 //  Modifications
-//   1998-02-12 AWF Initial version.
-//   LSB (Manchester) 26 Mar 2001 Tidied documentation
+//   1998-02-12 AWF              Initial version.
+//   2001-03-26 LSB (Manchester) Tidied documentation
+//   2009-03-30 Peter Vanroose   added arg_min() and arg_max()
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -47,60 +48,61 @@ class vnl_c_vector
   static void apply(T const *, unsigned, T (*f)(T), T* v_out);
   static void apply(T const *, unsigned, T (*f)(T const&), T* v_out);
 
-
-//: y[i]  = x[i]
+  //: y[i]  = x[i]
   static void copy    (T const *x, T       *y, unsigned);
 
-//:  y[i]  = a*x[i]
+  //:  y[i]  = a*x[i]
   static void scale   (T const *x, T       *y, unsigned, T const &);
 
-//: z[i]  = x[i] + y[i];
+  //: z[i]  = x[i] + y[i];
   static void add     (T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] + y;
+  //: z[i]  = x[i] + y;
   static void add     (T const *x, T const& y, T *z, unsigned);
 
-//: z[i]  = x[i] - y[i]
+  //: z[i]  = x[i] - y[i]
   static void subtract(T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] - y[i]
+  //: z[i]  = x[i] - y[i]
   static void subtract(T const *x, T const& y, T *z, unsigned);
 
-//: z[i]  = x[i] * y[i]
+  //: z[i]  = x[i] * y[i]
   static void multiply(T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] * y[i]
+  //: z[i]  = x[i] * y[i]
   static void multiply(T const *x, T const& y, T *z, unsigned);
 
-//: z[i]  = x[i] / y[i]
+  //: z[i]  = x[i] / y[i]
   static void divide  (T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] / y[i]
+  //: z[i]  = x[i] / y[i]
   static void divide  (T const *x, T const& y, T *z, unsigned);
 
-//: y[i]  = -x[i]
-// Note that this is a no-op when T is an unsigned type.
+  //: y[i]  = -x[i]
+  // Note that this is a no-op when T is an unsigned type.
   static void negate  (T const *x, T       *y, unsigned);
 
-//: y[i]  = 1/x[i]
+  //: y[i]  = 1/x[i]
   static void invert  (T const *x, T       *y, unsigned);
 
-//:  y[i] += a*x[i]
+  //:  y[i] += a*x[i]
   static void saxpy   (T const &a, T const *x, T *y, unsigned);
 
-//: x[i]  = v
+  //: x[i]  = v
   static void fill    (T *x, unsigned, T const &v);
 
 
   static void reverse (T *x, unsigned);
   static T dot_product  (T const *, T const *, unsigned);
 
-//: conjugate second
+  //: conjugate second
   static T inner_product(T const *, T const *, unsigned);
   static void conjugate(T const *, T *, unsigned);
 
   static T max_value(T const *, unsigned);
   static T min_value(T const *, unsigned);
+  static unsigned arg_max(T const *, unsigned);
+  static unsigned arg_min(T const *, unsigned);
 
   static T mean(T const *p, unsigned n) { return T(sum(p,n)/abs_t(n)); }
 

@@ -187,6 +187,10 @@ void test_int()
   vnl_matrix<int> m3;
   TEST("m(i,j)",
        (m(0,0)==0 && m(0,1)==-2 && m(1,0)==2 && m(1,1)==0), true);
+  TEST("m.max_value()", m.max_value(),  2);
+  TEST("m.min_value()", m.min_value(), -2);
+  TEST("m.arg_max()",   m.arg_max(),   2);
+  TEST("m.arg_min()",   m.arg_min(),   1);
   TEST("m.transpose()",
        ((m0 = m.transpose()),
         (m0(0,0)==0 && m0(0,1)==2 && m0(1,0)==-2 && m0(1,1)==0)), true);
@@ -282,6 +286,10 @@ void test_float()
   vnl_matrix<float> m3;
   TEST("m(i,j)",
        (m(0,0)==0 && m(0,1)==-2 && m(1,0)==2 && m(1,1)==0), true);
+  TEST("m.max_value()", m.max_value(),  2);
+  TEST("m.min_value()", m.min_value(), -2);
+  TEST("m.arg_max()",   m.arg_max(),   2);
+  TEST("m.arg_min()",   m.arg_min(),   1);
   TEST("m.transpose()",
        ((m1 = m.transpose()),
         (m1(0,0)==0 && m1(0,1)==2 && m1(1,0)==-2 && m1(1,1)==0)), true);

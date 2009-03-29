@@ -1,9 +1,14 @@
 #ifndef vnl_sse_h_
 #define vnl_sse_h_
-//: \file
-//  \author Kieran O'Mahony
-//  \date Sep 2007
-//  \brief Support for Streaming SIMD Extensions to speed up vector arithmetic
+//:
+// \file
+// \author Kieran O'Mahony
+// \date Sep 2007
+// \brief Support for Streaming SIMD Extensions to speed up vector arithmetic
+// \verbatim
+//  Modifications
+//   2009-03-30 Peter Vanroose - Added arg_min() & arg_max() and reimplemented min() & max()
+// \endverbatim
 
 #include <vcl_compiler.h> // for macro decisions based on compiler type
 #include <vxl_config.h>   // for checking supported integer data types
@@ -181,20 +186,44 @@ class vnl_sse
 
   static VNL_SSE_FORCE_INLINE T max(const T* v, unsigned n)
   {
-    T tmp = v[0];
-    for (unsigned i=1; i<n; ++i)
-      if (v[i] > tmp)
-        tmp = v[i];
+    if (n==0) return T(0); // the maximum of an empty set is undefined
+    T tmp = *v;
+    while (--n > 0)
+      if (*++v > tmp)
+        tmp = *v;
     return tmp;
   }
 
   static VNL_SSE_FORCE_INLINE T min(const T* v, unsigned n)
   {
-    T tmp = v[0];
-    for (unsigned i=1; i<n; ++i)
-      if (v[i] < tmp)
-        tmp = v[i];
+    if (n==0) return T(0); // the minimum of an empty set is undefined
+    T tmp = *v;
+    while (--n > 0)
+      if (*++v < tmp)
+        tmp = *v;
     return tmp;
+  }
+
+  static VNL_SSE_FORCE_INLINE unsigned arg_max(const T* v, unsigned n)
+  {
+    if (n==0) return unsigned(-1); // the maximum of an empty set is undefined
+    T tmp = *v;
+    unsigned idx = 0;
+    for (unsigned i=1; i<n; ++i)
+      if (*++v > tmp)
+        tmp = *v, idx = i;
+    return idx;
+  }
+
+  static VNL_SSE_FORCE_INLINE unsigned arg_min(const T* v, unsigned n)
+  {
+    if (n==0) return unsigned(-1); // the minimum of an empty set is undefined
+    T tmp = *v;
+    unsigned idx = 0;
+    for (unsigned i=1; i<n; ++i)
+      if (*++v < tmp)
+        tmp = *v, idx = i;
+    return idx;
   }
 };
 

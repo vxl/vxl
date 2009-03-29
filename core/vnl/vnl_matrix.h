@@ -405,6 +405,12 @@ class vnl_matrix
   //: Return maximum value of elements
   T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
 
+  //: Return location of minimum value of elements
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+
+  //: Return location of maximum value of elements
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
+
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 

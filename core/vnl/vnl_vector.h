@@ -13,6 +13,7 @@
 // Comments re-written by Tim Cootes, for his sins.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Mar.2004 - Peter Vanroose - deprecated fixed-size constructors now compile only when VNL_CONFIG_LEGACY_METHODS==1
+//   Mar.2009 - Peter Vanroose - added arg_min() and arg_max()
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -316,6 +317,12 @@ class vnl_vector
 
   //: Largest value
   T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
+
+  //: Location of smallest value
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+
+  //: Location of largest value
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
 
   //: Mean of values in vector
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }

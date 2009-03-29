@@ -136,6 +136,7 @@
 //    4-Jul-2003 Paul Smyth - general cleanup and rewrite; interface now as vnl_matrix_fixed
 //   15-Aug-2003 Peter Vanroose - removed "duplicate" operator=(vnl_matrix_fixed<T,n> const&)
 //    8-Dec-2006 Markus Moll - changed operator>> signature (to const& argument)
+//   30-Mar-2009 Peter Vanroose - added arg_min() and arg_max()
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -311,6 +312,12 @@ class vnl_matrix_fixed_ref_const
 
   //: Return maximum value of elements
   T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
+
+  //: Return location of minimum value of elements
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+
+  //: Return location of maximum value of elements
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
 
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }

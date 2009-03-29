@@ -179,6 +179,44 @@ inline bool test_min(const vnl_vector<float> &vec)
   }
 }
 
+inline bool test_arg_max(const vnl_vector<float> &vec)
+{
+  unsigned idx = vec.arg_max();
+  unsigned n = vec.size();
+  float correct_val(-vcl_numeric_limits<float>::max());
+  unsigned correct_idx = 0;
+  for (unsigned i = 0; i < n; ++i)
+    if (vec(i) > correct_val)
+      correct_val = vec(i), correct_idx = i;
+
+  if (idx == correct_idx)
+    return true;
+  else
+  {
+    vcl_cout << "max " << correct_val << " found at position " << idx << " instead of at " << correct_idx << vcl_endl;
+    return false;
+  }
+}
+
+inline bool test_arg_min(const vnl_vector<float> &vec)
+{
+  unsigned idx = vec.arg_min();
+  unsigned n = vec.size();
+  float correct_val(vcl_numeric_limits<float>::max());
+  unsigned correct_idx = 0;
+  for (unsigned i = 0; i < n; ++i)
+    if (vec(i) < correct_val)
+      correct_val = vec(i), correct_idx = i;
+
+  if (idx == correct_idx)
+    return true;
+  else
+  {
+    vcl_cout << "min " << correct_val << " found at position " << idx << " instead of at " << correct_idx << vcl_endl;
+    return false;
+  }
+}
+
 
 static void test_alignment_type()
 {
@@ -222,7 +260,9 @@ static void test_alignment_type()
             test_vector_x_matrix(vec, mat, result) &&
             test_sum(vec) &&
             test_max(vec) &&
-            test_min(vec);
+            test_min(vec) &&
+            test_arg_max(vec) &&
+            test_arg_min(vec);
           TEST("SSE", rvtest, true);
         }
   }

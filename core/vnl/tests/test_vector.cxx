@@ -72,6 +72,11 @@ void vnl_vector_test_int()
   vnl_vector<int> v(4,4,vvalues);
   v0 = v; v1 = v; v2 = v;
   TEST("v(i)", (v(0)==0 && v(1)==-2 && v(2)==2 && v(3)==0), true);
+
+  TEST("v.max_value()", v.max_value(),  2);
+  TEST("v.min_value()", v.min_value(), -2);
+  TEST("v.arg_max()",   v.arg_max(),   2);
+  TEST("v.arg_min()",   v.arg_min(),   1);
 #if 0
   TEST("v.abs()",
        ((v1 = v.abs()),

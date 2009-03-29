@@ -24,6 +24,7 @@
 //              removed duplicate cross_3d
 //   Jun.2003 - Peter Vanroose - added cross_2d
 //   Oct.2003 - Peter Vanroose - removed deprecated x(), y(), z(), t()
+//   Mar.2009 - Peter Vanroose - added arg_min() and arg_max()
 // \endverbatim
 
 #include <vcl_cstring.h> // memcpy()
@@ -373,6 +374,12 @@ class vnl_vector_fixed
 
   //: Largest value
   T max_value () const { return vnl_c_vector<T>::max_value(begin(), size()); }
+
+  //: Location of smallest value
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+
+  //: Location of largest value
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
 
   //: Mean of values in vector
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
