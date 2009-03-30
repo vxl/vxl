@@ -14,6 +14,9 @@ MAIN( test_create_tree )
   block->split();
   block->print();
 
+  vsl_b_ofstream os("C:\\test_images\\octree\\tree.bin");
+  block->b_write(os);
+
   vcl_vector<boct_tree_cell_base_sptr> leaves = block->leaf_cells();
   TEST("No of Leaf Cells", 8, leaves.size());
   for (unsigned i=0; i<leaves.size(); i++)

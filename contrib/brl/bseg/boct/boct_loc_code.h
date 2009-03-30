@@ -3,6 +3,7 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_binary_io.h>
 
 class boct_loc_code
 {
@@ -35,5 +36,7 @@ private:
 };
 
 vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code& code);
+void vsl_b_write(vsl_b_ostream & os, const boct_loc_code& c);
+void vsl_b_read(vsl_b_istream & is, boct_loc_code& c);
 
 #endif

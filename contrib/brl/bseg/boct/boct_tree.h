@@ -5,6 +5,7 @@
 #include "boct_loc_code.h"
 
 #include <vgl/vgl_point_3d.h>
+#include <vsl/vsl_binary_io.h>
 
 template <class T>
 class boct_tree {
@@ -19,10 +20,17 @@ public:
   //: return the max level
   short num_levels() { return max_level_; }
   void print();
-
+  void b_write(vsl_b_ostream & os);
+  void b_read(vsl_b_istream & is);
 private:
   short max_level_;
   boct_tree_cell_base_sptr root_;
 };
+
+/*template <class T>
+void vsl_b_write(vsl_b_ostream & os, boct_tree<T>& tree);
+
+template <class T>
+void vsl_b_read(vsl_b_istream & is, boct_tree<T>& tree);*/
 
 #endif

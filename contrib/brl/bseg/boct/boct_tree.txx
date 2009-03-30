@@ -120,7 +120,21 @@ void boct_tree<T>::print()
   root_->print();
 }
 
-#define BOCT_TREE_INSTANTIATE(T) \
-template class boct_tree<T>;
+template <class T>
+void boct_tree<T>::b_write(vsl_b_ostream & os)
+{
+  if (root_)
+    vsl_b_write(os, *root_);
+}
 
+template <class T>
+void boct_tree<T>::b_read(vsl_b_istream & is)
+{
+  
+}
+
+#define BOCT_TREE_INSTANTIATE(T) \
+template class boct_tree<T>; 
+//void vsl_b_write(vsl_b_ostream & os, boct_tree<T>&); \
+//void vsl_b_read(vsl_b_istream & is, boct_tree<T>&);
 #endif

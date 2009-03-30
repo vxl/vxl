@@ -59,10 +59,8 @@ bool boct_tree_cell_base::split()
   children_ = (boct_tree_cell_base*) malloc(sizeof(boct_tree_cell_base)*8);
   short child_level = level_-1;
   for (unsigned i=0; i<8; i++) {
-    children_[i].level_ = child_level;
-    children_[i].parent_ = this;
-    children_[i].children_ = (boct_tree_cell_base*)0;
-    children_[i].code_ = code_.child_loc_code(i, child_level);
+    children_[i] = boct_tree_cell_base(code_.child_loc_code(i, child_level), child_level);
+    children_[i].set_parent(this);
   }
   return false;
 }
@@ -364,3 +362,22 @@ void boct_tree_cell_base::print()
   }
 }
 
+void vsl_b_write(vsl_b_ostream & os, boct_tree_cell_base& cell)
+{
+  const short io_version_no = 1;
+
+  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, cell.level());
+  vsl_b_write(os, cell.code_);
+  vsl_b_write(os, cell.parent());
+  boct_tree_cell_base* children = cell.children();
+  if (children) {
+    for(unsigned i=0; i<8; i++)
+      vsl_b_write(os, children[i]);
+  }
+}
+
+void vsl_b_read(vsl_b_istream & is, boct_tree_cell_base& c)
+{
+
+}

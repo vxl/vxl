@@ -89,3 +89,17 @@ vgl_point_3d<double> boct_loc_code::get_point(short max_level)
     return p;
  
 }
+
+void vsl_b_write(vsl_b_ostream & os, const boct_loc_code& c)
+{
+  const short io_version_no = 1;
+
+  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, c.x_loc_);
+  vsl_b_write(os, c.y_loc_);
+  vsl_b_write(os, c.z_loc_);
+}
+
+void vsl_b_read(vsl_b_istream & is, boct_loc_code& c)
+{
+}

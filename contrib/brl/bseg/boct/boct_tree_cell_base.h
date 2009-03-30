@@ -2,6 +2,7 @@
 #define boct_tree_cell_base_h_
 
 #include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
 #include "boct_tree_cell_base_sptr.h"
 
@@ -17,7 +18,7 @@ public:
   boct_tree_cell_base(const boct_loc_code& code, short level);
   boct_tree_cell_base(const boct_tree_cell_base& rhs);
   ~boct_tree_cell_base();
-
+  void set_parent(boct_tree_cell_base* p) {parent_ = p; }
   bool is_leaf();
 
   //: adds a pointer for each leaf children to v
@@ -31,6 +32,7 @@ public:
   void print();
   short level(){return level_;}
   boct_tree_cell_base* children(){return children_;}
+  boct_tree_cell_base* parent() { return parent_; }
   void  find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell_base_sptr> & neighbors,short max_level);
   boct_tree_cell_base_sptr get_common_ancestor(short binarydiff);
 
@@ -41,6 +43,7 @@ private:
   boct_tree_cell_base* children_;
 };
 
-//void vsl_b_write(vsl_b_ostream & os, bvxm_world_params const& params);
+void vsl_b_write(vsl_b_ostream & os, boct_tree_cell_base& c);
+void vsl_b_read(vsl_b_istream & is, boct_tree_cell_base& c);
 
 #endif
