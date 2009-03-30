@@ -94,12 +94,12 @@ vidl_pixel_format_from_ffmpeg(PixelFormat ffmpeg_pix_fmt)
   switch (ffmpeg_pix_fmt)
   {
     case PIX_FMT_YUV420P:   return VIDL_PIXEL_FORMAT_YUV_420P;
-    case PIX_FMT_YUV422:    return VIDL_PIXEL_FORMAT_YUYV_422;
+    case PIX_FMT_YUYV422:   return VIDL_PIXEL_FORMAT_YUYV_422;
     case PIX_FMT_RGB24:     return VIDL_PIXEL_FORMAT_RGB_24;
     case PIX_FMT_BGR24:     return VIDL_PIXEL_FORMAT_BGR_24;
     case PIX_FMT_YUV422P:   return VIDL_PIXEL_FORMAT_YUV_422P;
     case PIX_FMT_YUV444P:   return VIDL_PIXEL_FORMAT_YUV_444P;
-    case PIX_FMT_RGBA32:    return VIDL_PIXEL_FORMAT_RGBA_32;
+    case PIX_FMT_RGBA:      return VIDL_PIXEL_FORMAT_RGBA_32;
     case PIX_FMT_YUV410P:   return VIDL_PIXEL_FORMAT_YUV_410P;
     case PIX_FMT_YUV411P:   return VIDL_PIXEL_FORMAT_YUV_411P;
     case PIX_FMT_RGB565:    return VIDL_PIXEL_FORMAT_RGB_565;
@@ -107,11 +107,8 @@ vidl_pixel_format_from_ffmpeg(PixelFormat ffmpeg_pix_fmt)
     case PIX_FMT_GRAY8:     return VIDL_PIXEL_FORMAT_MONO_8;
     case PIX_FMT_MONOWHITE: return VIDL_PIXEL_FORMAT_MONO_1;
     case PIX_FMT_MONOBLACK: return VIDL_PIXEL_FORMAT_MONO_1;
-// Some libffmpeg distribs (notably Mandriva's) don't include these two:
-#if LIBAVCODEC_BUILD >= ((52<<16)+(10<<8)+0)  // after ver 52.10.0
     case PIX_FMT_UYVY422:   return VIDL_PIXEL_FORMAT_UYVY_422;
-    case PIX_FMT_UYVY411:   return VIDL_PIXEL_FORMAT_UYVY_411;
-#endif
+    case PIX_FMT_UYYVYY411: return VIDL_PIXEL_FORMAT_UYVY_411;
     default: break;
   }
   return VIDL_PIXEL_FORMAT_UNKNOWN;
@@ -126,20 +123,17 @@ vidl_pixel_format_to_ffmpeg(vidl_pixel_format vidl_pix_fmt)
   {
     case VIDL_PIXEL_FORMAT_RGB_24:   return PIX_FMT_RGB24;
     case VIDL_PIXEL_FORMAT_BGR_24:   return PIX_FMT_BGR24;
-    case VIDL_PIXEL_FORMAT_RGBA_32:  return PIX_FMT_RGBA32;
+    case VIDL_PIXEL_FORMAT_RGBA_32:  return PIX_FMT_RGBA;
     case VIDL_PIXEL_FORMAT_RGB_565:  return PIX_FMT_RGB565;
     case VIDL_PIXEL_FORMAT_RGB_555:  return PIX_FMT_RGB555;
     case VIDL_PIXEL_FORMAT_YUV_444P: return PIX_FMT_YUV444P;
-    case VIDL_PIXEL_FORMAT_YUYV_422: return PIX_FMT_YUV422;
+    case VIDL_PIXEL_FORMAT_YUYV_422: return PIX_FMT_YUYV422;
     case VIDL_PIXEL_FORMAT_YUV_422P: return PIX_FMT_YUV422P;
     case VIDL_PIXEL_FORMAT_YUV_420P: return PIX_FMT_YUV420P;
     case VIDL_PIXEL_FORMAT_YUV_411P: return PIX_FMT_YUV411P;
     case VIDL_PIXEL_FORMAT_YUV_410P: return PIX_FMT_YUV410P;
-// Some libffmpeg distribs (notably Mandriva's) don't include these two:
-#if LIBAVCODEC_BUILD >= ((52<<16)+(10<<8)+0)  // after ver 52.10.0
     case VIDL_PIXEL_FORMAT_UYVY_422: return PIX_FMT_UYVY422;
-    case VIDL_PIXEL_FORMAT_UYVY_411: return PIX_FMT_UYVY411;
-#endif
+    case VIDL_PIXEL_FORMAT_UYVY_411: return PIX_FMT_UYYVYY411;
     case VIDL_PIXEL_FORMAT_MONO_1:   return PIX_FMT_MONOBLACK;
     case VIDL_PIXEL_FORMAT_MONO_8:   return PIX_FMT_GRAY8;
     default: break;
