@@ -10,6 +10,7 @@
 template <class T>
 class boct_tree {
 public:
+  boct_tree(): root_(0){}
   boct_tree(short max_level, short init_levels=1);
   boct_tree_cell_base_sptr locate_point(const vgl_point_3d<double>& p);
   boct_tree_cell_base_sptr locate_point_at_level(const vgl_point_3d<double>& p, short level);

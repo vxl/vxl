@@ -17,6 +17,11 @@ MAIN( test_create_tree )
   vsl_b_ofstream os("C:\\test_images\\octree\\tree.bin");
   block->b_write(os);
 
+  boct_tree<vgl_point_3d<double> > *tree=new boct_tree<vgl_point_3d<double> >();
+  vsl_b_ifstream is("C:\\test_images\\octree\\tree.bin");
+  tree->b_read(is);
+  tree->print();
+
   vcl_vector<boct_tree_cell_base_sptr> leaves = block->leaf_cells();
   TEST("No of Leaf Cells", 8, leaves.size());
   for (unsigned i=0; i<leaves.size(); i++)

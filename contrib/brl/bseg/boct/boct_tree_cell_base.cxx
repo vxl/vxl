@@ -369,15 +369,45 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell_base& cell)
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, cell.level());
   vsl_b_write(os, cell.code_);
-  vsl_b_write(os, cell.parent());
+  //vsl_b_write(os, cell.parent());
   boct_tree_cell_base* children = cell.children();
+  bool leaf=false;
   if (children) {
+    leaf = true;
+    vsl_b_write(os, leaf);
     for(unsigned i=0; i<8; i++)
       vsl_b_write(os, children[i]);
-  }
+  } else // no children
+      vsl_b_write(os, leaf);
 }
 
 void vsl_b_read(vsl_b_istream & is, boct_tree_cell_base& c)
 {
+  if (!is) return;
 
+  short version;
+  vsl_b_read(is, version);
+  switch (version)
+  {
+   case 1:
+    short level;
+    vsl_b_read(is, level);
+
+    boct_loc_code code;
+    vsl_b_read(is, code);
+
+    bool leaf;
+    vsl_b_read(is, leaf);
+
+    c = boct_tree_cell_base(code, level);
+
+    if (!leaf) {
+      boct_tree_cell_base* children = (boct_tree_cell_base*) malloc(sizeof(boct_tree_cell_base)*8);
+      for (unsigned i=0; i<8; i++) {
+        vsl_b_read(is, children[i]);
+        children[i].set_parent(&c);
+      }
+    }
+
+  }
 }

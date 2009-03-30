@@ -102,4 +102,25 @@ void vsl_b_write(vsl_b_ostream & os, const boct_loc_code& c)
 
 void vsl_b_read(vsl_b_istream & is, boct_loc_code& c)
 {
+  if (!is) return;
+
+  short v;
+  vsl_b_read(is, v);
+  switch (v)
+  {
+   case 1:
+    short x, y, z;
+    vsl_b_read(is, x);
+    vsl_b_read(is, y);
+    vsl_b_read(is, z);
+    c.set_code(x,y,z);
+    break;
+  
+  default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_loc_code&)\n"
+             << "           Unknown version number "<< v << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+  
 }
