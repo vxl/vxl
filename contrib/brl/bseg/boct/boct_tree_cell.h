@@ -35,6 +35,7 @@ public:
   bool split();
   void print();
   short level(){return level_;}
+  void set_level(short level) {level_=level; }
   boct_tree_cell<T>* children(){return children_;}
   boct_tree_cell<T>* parent() { return parent_; }
   void  find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell<T>*> & neighbors,short max_level);
@@ -42,7 +43,7 @@ public:
   void set_data(T& data) {data_=data; }
   T data() {return data_; }
   boct_loc_code code_;
-
+  static short version_no() { return 1; }
 protected:
   short level_;
   boct_tree_cell<T>* parent_;

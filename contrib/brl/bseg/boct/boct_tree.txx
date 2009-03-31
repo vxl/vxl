@@ -129,7 +129,7 @@ void boct_tree<T>::b_write(vsl_b_ostream & os)
   // write header info 
   const short io_version_no = 1;
 
-  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, version_no());
   vsl_b_write(os, max_level_);
   if (root_) 
     vsl_b_write(os, *root_);

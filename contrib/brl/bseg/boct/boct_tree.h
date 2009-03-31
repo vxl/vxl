@@ -24,6 +24,7 @@ public:
   void print();
   void b_write(vsl_b_ostream & os);
   void b_read(vsl_b_istream & is);
+  short version_no() { return 1; }
 private:
   short max_level_;
   boct_tree_cell<T>* root_;

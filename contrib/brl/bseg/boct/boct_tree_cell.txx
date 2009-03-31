@@ -379,9 +379,7 @@ void boct_tree_cell<T>::print()
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T>& cell)
 {
-  const short io_version_no = 0;
-
-  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, boct_tree_cell<T>::version_no());
   vsl_b_write(os, cell.level());
   vsl_b_write(os, cell.code_);
   T data = cell.data();
@@ -403,33 +401,35 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T>& c, boct_tree_cell<T>* par
   if (!is) return;
 
   short version;
-  vsl_b_read(is, version);
+  vsl_b_read(is,version);
   switch (version)
   {
-   case (0):
-    short level;
-    vsl_b_read(is, level);
-
-    boct_loc_code code;
-    vsl_b_read(is, code);
-
-    c = boct_tree_cell<T>(code, level);
-    T data;
-    vsl_b_read(is, data);
-    c.set_data(data);
-    c.set_parent(parent);
-    bool leaf;
-    vsl_b_read(is, leaf);
-    if (!leaf) {
-      c.split();
-      boct_tree_cell<T>* children = c.children();
-      for (unsigned i=0; i<8; i++) {
-        children[i].set_parent(&c);
-        vsl_b_read(is, children[i], &c);
-      }
-    } 
-	break;
-  }
+    case (1):
+     short level;
+     vsl_b_read(is, level);
+     vsl_b_read(is, c.code_);
+     c.set_level(level);
+     T data;
+     vsl_b_read(is, data);
+     c.set_data(data);
+     c.set_parent(parent);
+     bool leaf;
+     vsl_b_read(is, leaf);
+     if (!leaf) {
+       c.split();
+       boct_tree_cell<T>* children = c.children();
+       for (unsigned i=0; i<8; i++) {
+         children[i].set_parent(&c);
+         vsl_b_read(is, children[i], &c);
+       }
+     }
+	 break;
+   /*default:
+     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
+              << "           Unknown version number "<< version << '\n';
+     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+     return;*/
+   }
   
 }
 
