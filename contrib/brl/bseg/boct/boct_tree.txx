@@ -9,24 +9,26 @@
 template <class T>
 boct_tree<T>::boct_tree(short max_level, short init_levels): max_level_(max_level) 
 {
-    //: root is allocated max_level_-1 with code [0,0,0]
+    //: root is allocated at (max_level_-1) with code [0,0,0]
     boct_loc_code code;
     if(max_level_>0)
       root_=new boct_tree_cell<T>( code, max_level_-1);
 
-    vcl_vector<boct_tree_cell_base_sptr> cells;
     init_levels--;
     while (init_levels > 0) {
+      vcl_vector<boct_tree_cell<T>*> cells;
       cells = leaf_cells();
-      for(unsigned i=0; i<cells.size(); i++)
-        cells[i]->split();
+      for(unsigned i=0; i<cells.size(); i++) {
+        boct_tree_cell<T>* c = static_cast<boct_tree_cell<T>*>(cells[i]);
+        c->print();
+        c->split();
+        }
       init_levels--;
-      cells.empty();
     }
 }
 
 template <class T>
-boct_tree_cell_base_sptr boct_tree<T>::locate_point(const vgl_point_3d<double>& p)
+boct_tree_cell<T>* boct_tree<T>::locate_point(const vgl_point_3d<double>& p)
 {
   short curr_level=max_level_-1;
   //: convert point to location code.
@@ -37,7 +39,7 @@ boct_tree_cell_base_sptr boct_tree<T>::locate_point(const vgl_point_3d<double>& 
   //  return NULL;
   
   //: temporary pointer to traverse 
-  boct_tree_cell_base_sptr curr_cell=root_;
+  boct_tree_cell<T>* curr_cell=root_;
 
   while(curr_cell->children()&& curr_level>0)
   {
@@ -51,7 +53,7 @@ boct_tree_cell_base_sptr boct_tree<T>::locate_point(const vgl_point_3d<double>& 
 }
 
 template <class T>
-boct_tree_cell_base_sptr boct_tree<T>::locate_point_at_level(const vgl_point_3d<double>& p, short level)
+boct_tree_cell<T>* boct_tree<T>::locate_point_at_level(const vgl_point_3d<double>& p, short level)
 { 
   short curr_level=max_level_-1;
   //: convert point to location code.
@@ -62,7 +64,7 @@ boct_tree_cell_base_sptr boct_tree<T>::locate_point_at_level(const vgl_point_3d<
     return NULL;
   
   //: temporary pointer to traverse 
-  boct_tree_cell_base_sptr curr_cell=root_;
+  boct_tree_cell<T>* curr_cell=root_;
 
   while(curr_cell->children()&& curr_level>level)
   {
@@ -76,7 +78,7 @@ boct_tree_cell_base_sptr boct_tree<T>::locate_point_at_level(const vgl_point_3d<
 }
 
 template <class T>
-boct_tree_cell_base_sptr boct_tree<T>::locate_region(const vgl_box_3d<double>& r)
+boct_tree_cell<T>* boct_tree<T>::locate_region(const vgl_box_3d<double>& r)
 { 
   boct_loc_code* mincode=new boct_loc_code(r.min_point(), max_level_);
   boct_loc_code* maxcode=new boct_loc_code(r.max_point(), max_level_);
@@ -102,14 +104,15 @@ bool boct_tree<T>::split()
 }
 
 template <class T>
-vcl_vector<boct_tree_cell_base_sptr> boct_tree<T>::leaf_cells()
+vcl_vector<boct_tree_cell<T>*> boct_tree<T>::leaf_cells()
 { 
-  vcl_vector<boct_tree_cell_base_sptr> v;
+  vcl_vector<boct_tree_cell<T>*> v;
   if (root_)
-    if (root_->is_leaf())
+    if (root_->is_leaf()) {
       v.push_back(root_);
-    else
+    } else {
       root_->leaf_children(v);
+    }
   return v;
 }
 
@@ -123,18 +126,41 @@ void boct_tree<T>::print()
 template <class T>
 void boct_tree<T>::b_write(vsl_b_ostream & os)
 {
-  if (root_)
+  // write header info 
+  const short io_version_no = 1;
+
+  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, max_level_);
+  if (root_) 
     vsl_b_write(os, *root_);
 }
 
 template <class T>
 void boct_tree<T>::b_read(vsl_b_istream & is)
 {
-  
+  // read header info 
+  if (!is) return;
+
+  short v;
+  vsl_b_read(is, v);
+  switch (v)
+  {
+   case (1):
+     //short max_level;
+     vsl_b_read(is, max_level_);
+     root_ = new boct_tree_cell<T>();
+     vsl_b_read(is, *root_, (boct_tree_cell<T>*)0);
+     break;
+   default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
+               << "           Unknown version number "<< v << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
 }
 
 #define BOCT_TREE_INSTANTIATE(T) \
-template class boct_tree<T>; 
-//void vsl_b_write(vsl_b_ostream & os, boct_tree<T>&); \
-//void vsl_b_read(vsl_b_istream & is, boct_tree<T>&);
+template class boct_tree<T>; \
+//template void vsl_b_write(vsl_b_ostream & os, boct_tree<T>&); \
+//template void vsl_b_read(vsl_b_istream & is, boct_tree<T>&);
 #endif

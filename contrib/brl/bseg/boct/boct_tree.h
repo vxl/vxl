@@ -12,12 +12,13 @@ class boct_tree {
 public:
   boct_tree(): root_(0){}
   boct_tree(short max_level, short init_levels=1);
-  boct_tree_cell_base_sptr locate_point(const vgl_point_3d<double>& p);
-  boct_tree_cell_base_sptr locate_point_at_level(const vgl_point_3d<double>& p, short level);
-  boct_tree_cell_base_sptr locate_region(const vgl_box_3d<double>& r);
-  boct_tree_cell_base_sptr get_cell(const boct_loc_code& code) { return root_; }
+  ~boct_tree() {}
+  boct_tree_cell<T>* locate_point(const vgl_point_3d<double>& p);
+  boct_tree_cell<T>* locate_point_at_level(const vgl_point_3d<double>& p, short level);
+  boct_tree_cell<T>* locate_region(const vgl_box_3d<double>& r);
+  boct_tree_cell<T>* get_cell(const boct_loc_code& code) { return root_; }
   bool split();
-  vcl_vector<boct_tree_cell_base_sptr> leaf_cells();
+  vcl_vector<boct_tree_cell<T>*> leaf_cells();
   //: return the max level
   short num_levels() { return max_level_; }
   void print();
@@ -25,7 +26,7 @@ public:
   void b_read(vsl_b_istream & is);
 private:
   short max_level_;
-  boct_tree_cell_base_sptr root_;
+  boct_tree_cell<T>* root_;
 };
 
 /*template <class T>
