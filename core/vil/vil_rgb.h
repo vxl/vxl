@@ -188,6 +188,13 @@ vil_rgb<T> operator+(vil_rgb<T> const& a, vil_rgb<T> const& b)
 
 template <class T>
 inline
+vil_rgb<T> operator*(vil_rgb<T> const& a, vil_rgb<T> const& b)
+{
+  return vil_rgb<T>(a.r * b.r, a.g * b.g, a.b * b.b);
+}
+
+template <class T>
+inline
 vil_rgb<double> operator*(double b, vil_rgb<T> const& a)
 {
   return vil_rgb<double>(a.r * b, a.g * b, a.b * b);
