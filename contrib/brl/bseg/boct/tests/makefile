@@ -8,6 +8,7 @@ TESTS += test_find_neighbors.cxx
 TESTS += test_locate_point.cxx
 TESTS += test_create_tree.cxx
 TESTS += test_locate_region.cxx
+TESTS += test_binary_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
