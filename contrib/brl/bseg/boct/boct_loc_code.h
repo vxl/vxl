@@ -4,7 +4,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
-
+template <typename T>
 class boct_loc_code
 {
 public:
@@ -14,7 +14,7 @@ public:
   boct_loc_code(const boct_loc_code& rhs);
   boct_loc_code(vgl_point_3d<double> p, short max_level);
 
-  void set_code(short x_loc, short y_loc, short z_loc)
+  void set_code(T x_loc, T y_loc, T z_loc)
   { x_loc_=x_loc; y_loc_=y_loc; z_loc_=z_loc; }
 
   short child_index(short level);
@@ -28,15 +28,17 @@ public:
 
   vgl_point_3d<double>  get_point(short max_level);
 
-  short x_loc_;
-  short y_loc_;
-  short z_loc_;
+  T x_loc_;
+  T y_loc_;
+  T z_loc_;
 
 private:
 };
-
-vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code& code);
-void vsl_b_write(vsl_b_ostream & os, const boct_loc_code& c);
-void vsl_b_read(vsl_b_istream & is, boct_loc_code& c);
+template<class T>
+vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T>& code);
+template<class T>
+void vsl_b_write(vsl_b_ostream & os, const boct_loc_code<T>& c);
+template<class T>
+void vsl_b_read(vsl_b_istream & is, boct_loc_code<T>& c);
 
 #endif

@@ -5,8 +5,8 @@
 
 #include <vcl_iostream.h>
 
-template<class T>
-boct_tree_cell<T>::boct_tree_cell(const boct_loc_code& code, short level)
+template<class T_loc,class T>
+boct_tree_cell<T_loc,T>::boct_tree_cell(const boct_loc_code<T_loc>& code, short level)
 {
   level_=level;
   code_=code;
@@ -15,23 +15,23 @@ boct_tree_cell<T>::boct_tree_cell(const boct_loc_code& code, short level)
 }
 
 
-template<class T>
-bool boct_tree_cell<T>::is_leaf()
+template<class T_loc,class T>
+bool boct_tree_cell<T_loc,T>::is_leaf()
 {
   if (children_== NULL)
     return true;
   return false;
 }
 
-template<class T>
-const boct_loc_code&
-boct_tree_cell<T>::get_code()
+template<class T_loc,class T>
+const boct_loc_code<T_loc>&
+boct_tree_cell<T_loc,T>::get_code()
 {
   return code_;
 }
 
-template<class T>
-boct_tree_cell<T>::~boct_tree_cell()
+template<class T_loc,class T>
+boct_tree_cell<T_loc,T>::~boct_tree_cell()
 {
   if (children_ != NULL) {
    free(children_);
@@ -40,12 +40,12 @@ boct_tree_cell<T>::~boct_tree_cell()
 
 
 // this is always going down the tree
-template<class T>
-boct_tree_cell<T>* boct_tree_cell<T>::traverse_to_level(boct_loc_code * code, short level)
+template<class T_loc,class T>
+boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::traverse_to_level(boct_loc_code<T_loc> * code, short level)
 {
   if (level<0)
     return NULL;
-  boct_tree_cell<T>* curr_cell=this;
+  boct_tree_cell<T_loc,T>* curr_cell=this;
   while (level<curr_cell->level() && curr_cell->children())
   {
     //boct_loc_code tempcode=curr_cell->get_code();
@@ -56,12 +56,12 @@ boct_tree_cell<T>* boct_tree_cell<T>::traverse_to_level(boct_loc_code * code, sh
 }
 
 
-template <class T>
-bool boct_tree_cell<T>::split()
+template<class T_loc,class T>
+bool boct_tree_cell<T_loc,T>::split()
 {
   // create new children if there is none
   if (is_leaf()) {
-  children_ = (boct_tree_cell<T>*) malloc(sizeof(boct_tree_cell<T>)*8);
+  children_ = (boct_tree_cell<T_loc,T>*) malloc(sizeof(boct_tree_cell<T_loc,T>)*8);
   short child_level = level_-1;
   for (unsigned i=0; i<8; i++) {
     children_[i].code_ = code_.child_loc_code(i, child_level);
@@ -75,11 +75,11 @@ bool boct_tree_cell<T>::split()
   return false;
 }
 
-template <class T>
-boct_tree_cell<T>* boct_tree_cell<T>::get_common_ancestor(short binarydiff)
+template<class T_loc,class T>
+boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::get_common_ancestor(short binarydiff)
 {
   short curr_level=level_;
-  boct_tree_cell<T>* curr_cell=this;
+  boct_tree_cell<T_loc,T>* curr_cell=this;
   while (binarydiff & (1<< (curr_level)))
   {
     curr_cell=curr_cell->parent_;
@@ -88,9 +88,9 @@ boct_tree_cell<T>* boct_tree_cell<T>::get_common_ancestor(short binarydiff)
   return curr_cell;
 }
 
-template <class T>
-void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
-                                        vcl_vector<boct_tree_cell<T>*> & neighbors,
+template<class T_loc,class T>
+void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
+                                        vcl_vector<boct_tree_cell<T_loc,T>*> & neighbors,
                                         short max_level)
 {
   short cellsize=1<<this->level_;
@@ -107,15 +107,15 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         return;
       short diff=this->code_.x_loc_^xlowcode;
 
-      boct_loc_code neighborcode;
+      boct_loc_code<T_loc> neighborcode;
       neighborcode.set_code(xlowcode,this->code_.y_loc_,this->code_.z_loc_);
 
-      boct_tree_cell<T>* commonancestor=get_common_ancestor(diff);
+      boct_tree_cell<T_loc,T>* commonancestor=get_common_ancestor(diff);
 
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
 
       if (!neighborcell->children())
         neighbors.push_back(neighborcell);
@@ -124,7 +124,7 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T>*> leafnodes;
+        vcl_vector<boct_tree_cell<T_loc,T>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -143,15 +143,15 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
       short xhighcode=this->code_.x_loc_+cellsize;
       short diff=this->code_.x_loc_^xhighcode;
       // set the code for the neighboring point
-      boct_loc_code neighborcode;
+      boct_loc_code<T_loc> neighborcode;
       neighborcode.set_code(xhighcode,this->code_.y_loc_,this->code_.z_loc_);
 
-      boct_tree_cell<T>* commonancestor=get_common_ancestor(diff);
+      boct_tree_cell<T_loc,T>* commonancestor=get_common_ancestor(diff);
 
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
 
 
       if (!neighborcell->children())
@@ -161,7 +161,7 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T>*> leafnodes;
+        vcl_vector<boct_tree_cell<T_loc,T>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -180,15 +180,15 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         return;
       short diff=this->code_.y_loc_^ylowcode;
 
-      boct_loc_code neighborcode;
+      boct_loc_code<T_loc> neighborcode;
       neighborcode.set_code(this->code_.x_loc_,ylowcode,this->code_.z_loc_);
 
-      boct_tree_cell<T>* commonancestor=get_common_ancestor(diff);
+      boct_tree_cell<T_loc,T>* commonancestor=get_common_ancestor(diff);
 
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
 
 
       if (!neighborcell->children())
@@ -198,7 +198,7 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T>*> leafnodes;
+        vcl_vector<boct_tree_cell<T_loc,T>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -216,15 +216,15 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
       short yhighcode=this->code_.y_loc_+cellsize;
       short diff=this->code_.y_loc_^yhighcode;
       // set the code for the neighboring point
-      boct_loc_code neighborcode;
+      boct_loc_code<T_loc> neighborcode;
       neighborcode.set_code(this->code_.x_loc_,yhighcode,this->code_.z_loc_);
 
-      boct_tree_cell<T>* commonancestor=get_common_ancestor(diff);
+      boct_tree_cell<T_loc,T>* commonancestor=get_common_ancestor(diff);
 
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
 
 
       if (!neighborcell->children())
@@ -235,7 +235,7 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T>*> leafnodes;
+        vcl_vector<boct_tree_cell<T_loc,T>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -253,15 +253,15 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         return;
       short diff=this->code_.z_loc_^zlowcode;
 
-      boct_loc_code neighborcode;
+      boct_loc_code<T_loc> neighborcode;
       neighborcode.set_code(this->code_.x_loc_,this->code_.y_loc_,zlowcode);
 
-      boct_tree_cell<T>* commonancestor=get_common_ancestor(diff);
+      boct_tree_cell<T_loc,T>* commonancestor=get_common_ancestor(diff);
 
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
 
 
       if (!neighborcell->children())
@@ -272,7 +272,7 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T>*> leafnodes;
+        vcl_vector<boct_tree_cell<T_loc,T>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -290,15 +290,15 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
       short zhighcode=this->code_.z_loc_+cellsize;
       short diff=this->code_.z_loc_^zhighcode;
       // set the code for the neighboring point
-      boct_loc_code neighborcode;
+      boct_loc_code<T_loc> neighborcode;
       neighborcode.set_code(this->code_.x_loc_,this->code_.y_loc_,zhighcode);
 
-      boct_tree_cell<T>* commonancestor=get_common_ancestor(diff);
+      boct_tree_cell<T_loc,T>* commonancestor=get_common_ancestor(diff);
 
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
 
 
       if (!neighborcell->children())
@@ -309,7 +309,7 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T>*> leafnodes;
+        vcl_vector<boct_tree_cell<T_loc,T>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -325,8 +325,8 @@ void  boct_tree_cell<T>::find_neighbors(FACE_IDX face,
   }
 }
 
-template <class T>
-void boct_tree_cell<T>::leaf_children(vcl_vector<boct_tree_cell<T>*>& v)
+template<class T_loc,class T>
+void boct_tree_cell<T_loc,T>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T>*>& v)
 {
   if (!children_)
     return;
@@ -340,8 +340,8 @@ void boct_tree_cell<T>::leaf_children(vcl_vector<boct_tree_cell<T>*>& v)
   }
 }
 
-template <class T>
-void boct_tree_cell<T>::print()
+template<class T_loc,class T>
+void boct_tree_cell<T_loc,T>::print()
 {
   vcl_cout << "LEVEL=" << level_
            << " code=" << code_
@@ -357,15 +357,15 @@ void boct_tree_cell<T>::print()
   }
 }
 
-template <class T>
-void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T>& cell)
+template<class T_loc,class T>
+void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T>& cell)
 {
-  vsl_b_write(os, boct_tree_cell<T>::version_no());
+  vsl_b_write(os, boct_tree_cell<T_loc,T>::version_no());
   vsl_b_write(os, cell.level());
   vsl_b_write(os, cell.code_);
   T data = cell.data();
   vsl_b_write(os, data);
-  boct_tree_cell<T>* children = cell.children();
+  boct_tree_cell<T_loc,T>* children = cell.children();
   bool leaf=true;
   if (!cell.is_leaf()) {
     leaf = false;
@@ -376,8 +376,8 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T>& cell)
       vsl_b_write(os, leaf);
 }
 
-template <class T>
-void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T>& c, boct_tree_cell<T>* parent)
+template <class T_loc,class T>
+void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T>& c, boct_tree_cell<T_loc,T>* parent)
 {
   if (!is) return;
 
@@ -398,7 +398,7 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T>& c, boct_tree_cell<T>* par
      vsl_b_read(is, leaf);
      if (!leaf) {
        c.split();
-       boct_tree_cell<T>* children = c.children();
+       boct_tree_cell<T_loc,T>* children = c.children();
        for (unsigned i=0; i<8; i++) {
          children[i].set_parent(&c);
          vsl_b_read(is, children[i], &c);
@@ -415,9 +415,8 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T>& c, boct_tree_cell<T>* par
    }
 }
 
-#define BOCT_TREE_CELL_INSTANTIATE(T) \
-template class boct_tree_cell<T >; \
-template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T >&, boct_tree_cell<T >*); \
-template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T >&)
-
+#define BOCT_TREE_CELL_INSTANTIATE(T_loc,T) \
+template class boct_tree_cell<T_loc,T>; \
+template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T >&, boct_tree_cell<T_loc,T >*); \
+template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T >&)
 #endif // boct_tree_cell_txx_
