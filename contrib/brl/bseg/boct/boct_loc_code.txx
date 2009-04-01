@@ -8,6 +8,7 @@ boct_loc_code<T>::boct_loc_code(const boct_loc_code<T>& rhs)
   x_loc_ = rhs.x_loc_;
   y_loc_ = rhs.y_loc_;
   z_loc_ = rhs.z_loc_;
+  level  = rhs.level;
 }
 template <class T>
 boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short max_level)

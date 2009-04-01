@@ -16,11 +16,11 @@ class boct_tree_cell // public vbl_ref_count
   boct_tree_cell<T_loc,T>()
   : children_(0), parent_(0) {}
 
-  boct_tree_cell<T_loc,T>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T>* p, short l)
-  : code_(code), children_(0), parent_(p), level_(l) {}
+  boct_tree_cell<T_loc,T>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T>* p)
+  : code_(code), children_(0), parent_(p) {}
 
   //constructor given code and level
-  boct_tree_cell<T_loc,T>(const boct_loc_code<T_loc>& code, short level);
+  boct_tree_cell<T_loc,T>(const boct_loc_code<T_loc>& code);
 
   ~boct_tree_cell<T_loc,T>();
   void set_parent(boct_tree_cell<T_loc,T>* p) {parent_ = p; }
@@ -33,20 +33,24 @@ class boct_tree_cell // public vbl_ref_count
 
   //boct_tree_cell* traverse(boct_loc_code code);
   boct_tree_cell<T_loc,T>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
-  bool split();
-  void print();
-  short level(){return level_;}
-  void set_level(short level) {level_=level; }
+  
+  short level(){return code_.level;}
+  void set_level(short level) {code_.level=level; }
   boct_tree_cell<T_loc,T>* children(){return children_;}
   boct_tree_cell<T_loc,T>* parent() { return parent_; }
+
   void  find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell<T_loc,T>*> & neighbors,short max_level);
   boct_tree_cell<T_loc,T>* get_common_ancestor(short binarydiff);
+  
   void set_data(T const& data) {data_=data; }
   T data() {return data_; }
   boct_loc_code<T_loc> code_;
+  
+  bool split();
+  void print();
+  
   static short version_no() { return 1; }
  protected:
-  short level_;
   boct_tree_cell<T_loc,T>* parent_;
   boct_tree_cell<T_loc,T>* children_;
   T data_;

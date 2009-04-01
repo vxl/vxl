@@ -12,8 +12,11 @@ boct_tree<T_loc,T>::boct_tree(short max_level, short init_levels): max_level_(ma
     //: root is allocated at (max_level_-1) with code [0,0,0]
     boct_loc_code<T_loc> code;
     if(max_level_>0)
-      root_=new boct_tree_cell<T_loc,T>( code, max_level_-1);
-
+    {
+      code.set_code(0,0,0);
+	  code.set_level(max_level_-1);
+      root_=new boct_tree_cell<T_loc,T>( code);
+	}
     init_levels--;
     while (init_levels > 0) {
       vcl_vector<boct_tree_cell<T_loc,T>*> cells;

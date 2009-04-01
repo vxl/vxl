@@ -6,9 +6,8 @@
 #include <vcl_iostream.h>
 
 template<class T_loc,class T>
-boct_tree_cell<T_loc,T>::boct_tree_cell(const boct_loc_code<T_loc>& code, short level)
+boct_tree_cell<T_loc,T>::boct_tree_cell(const boct_loc_code<T_loc>& code)
 {
-  level_=level;
   code_=code;
   parent_=NULL;
   children_=NULL;
@@ -43,7 +42,7 @@ boct_tree_cell<T_loc,T>::~boct_tree_cell()
 template<class T_loc,class T>
 boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::traverse_to_level(boct_loc_code<T_loc> * code, short level)
 {
-  if (level<0)
+  if (code->level<0)
     return NULL;
   boct_tree_cell<T_loc,T>* curr_cell=this;
   while (level<curr_cell->level() && curr_cell->children())
@@ -62,10 +61,10 @@ bool boct_tree_cell<T_loc,T>::split()
   // create new children if there is none
   if (is_leaf()) {
   children_ = (boct_tree_cell<T_loc,T>*) malloc(sizeof(boct_tree_cell<T_loc,T>)*8);
-  short child_level = level_-1;
+  short child_level = this->level()-1;
   for (unsigned i=0; i<8; i++) {
     children_[i].code_ = code_.child_loc_code(i, child_level);
-    children_[i].level_ = child_level;
+    children_[i].code_.level = child_level;
     children_[i].set_parent(this);
     children_[i].data_ = this->data_;
     children_[i].children_ = 0;
@@ -78,7 +77,7 @@ bool boct_tree_cell<T_loc,T>::split()
 template<class T_loc,class T>
 boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::get_common_ancestor(short binarydiff)
 {
-  short curr_level=level_;
+  short curr_level=this->level();
   boct_tree_cell<T_loc,T>* curr_cell=this;
   while (binarydiff & (1<< (curr_level)))
   {
@@ -93,7 +92,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
                                         vcl_vector<boct_tree_cell<T_loc,T>*> & neighbors,
                                         short max_level)
 {
-  short cellsize=1<<this->level_;
+  short cellsize=1<<this->level();
 
   switch (face)
   {
@@ -115,7 +114,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
       if (!neighborcell->children())
         neighbors.push_back(neighborcell);
@@ -151,7 +150,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
 
       if (!neighborcell->children())
@@ -188,7 +187,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
 
       if (!neighborcell->children())
@@ -224,7 +223,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
 
       if (!neighborcell->children())
@@ -261,7 +260,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
 
       if (!neighborcell->children())
@@ -298,7 +297,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       if (commonancestor==NULL)
         return;
       // at the same or greater level ( towards the root)
-      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level_);
+      boct_tree_cell<T_loc,T>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
 
       if (!neighborcell->children())
@@ -343,7 +342,7 @@ void boct_tree_cell<T_loc,T>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T>*>
 template<class T_loc,class T>
 void boct_tree_cell<T_loc,T>::print()
 {
-  vcl_cout << "LEVEL=" << level_
+  vcl_cout << "LEVEL=" << this->level()
            << " code=" << code_
            << " parent=" << parent_
            << " data=" << data_;

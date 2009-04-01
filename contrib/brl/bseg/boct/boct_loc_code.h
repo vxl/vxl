@@ -10,12 +10,14 @@ class boct_loc_code
 public:
 
   // constructor, creates a code for the root node
-  boct_loc_code(): x_loc_(0), y_loc_(0), z_loc_(0) {}
+  boct_loc_code(): x_loc_(0), y_loc_(0), z_loc_(0),level(0) {}
   boct_loc_code(const boct_loc_code& rhs);
   boct_loc_code(vgl_point_3d<double> p, short max_level);
 
   void set_code(T x_loc, T y_loc, T z_loc)
   { x_loc_=x_loc; y_loc_=y_loc; z_loc_=z_loc; }
+
+  void set_level(short levelnum){level=levelnum;}
 
   short child_index(short level);
 
@@ -31,6 +33,8 @@ public:
   T x_loc_;
   T y_loc_;
   T z_loc_;
+
+  short level;
 
 private:
 };
