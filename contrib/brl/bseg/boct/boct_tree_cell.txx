@@ -42,7 +42,7 @@ boct_tree_cell<T_loc,T>::~boct_tree_cell()
 template<class T_loc,class T>
 boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::traverse_to_level(boct_loc_code<T_loc> * code, short level)
 {
-  if (code->level<0)
+  if (level<0)
     return NULL;
   boct_tree_cell<T_loc,T>* curr_cell=this;
   while (level<curr_cell->level() && curr_cell->children())
@@ -54,7 +54,21 @@ boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::traverse_to_level(boct_loc_cod
   return curr_cell;
 }
 
-
+// this is always going down the tree
+template<class T_loc,class T>
+boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::traverse(boct_loc_code<T_loc> & code)
+{
+  if (code.level<0)
+    return NULL;
+  boct_tree_cell<T_loc,T>* curr_cell=this;
+  while (code.level<curr_cell->level() && curr_cell->children())
+  {
+    //boct_loc_code tempcode=curr_cell->get_code();
+    short child_index=code.child_index(curr_cell->level());
+    curr_cell=curr_cell->children()+child_index;
+  }
+  return curr_cell;
+}
 template<class T_loc,class T>
 bool boct_tree_cell<T_loc,T>::split()
 {

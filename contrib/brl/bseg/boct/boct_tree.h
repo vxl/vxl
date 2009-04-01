@@ -16,7 +16,7 @@ public:
   boct_tree_cell<T_loc,T>* locate_point(const vgl_point_3d<double>& p);
   boct_tree_cell<T_loc,T>* locate_point_at_level(const vgl_point_3d<double>& p, short level);
   boct_tree_cell<T_loc,T>* locate_region(const vgl_box_3d<double>& r);
-  boct_tree_cell<T_loc,T>* get_cell(const boct_loc_code<T_loc>& code) { return root_; }
+  boct_tree_cell<T_loc,T>* get_cell( boct_loc_code<T_loc>& code) { return root_->traverse(code); }
   bool split();
   vcl_vector<boct_tree_cell<T_loc,T>*> leaf_cells();
   //: return the max level

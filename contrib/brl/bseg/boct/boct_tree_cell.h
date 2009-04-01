@@ -31,9 +31,13 @@ class boct_tree_cell // public vbl_ref_count
 
   const boct_loc_code<T_loc>& get_code();
 
-  //boct_tree_cell* traverse(boct_loc_code code);
+  //: currently this function just goes down the tree 
+  //: TODO to make it flexible and go from one node to another.
+  boct_tree_cell<T_loc,T>* traverse(boct_loc_code<T_loc> &code);
   boct_tree_cell<T_loc,T>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
-  
+ 
+  bool traverse_and_split(boct_loc_code<T_loc> &code);
+
   short level(){return code_.level;}
   void set_level(short level) {code_.level=level; }
   boct_tree_cell<T_loc,T>* children(){return children_;}
