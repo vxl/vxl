@@ -13,7 +13,7 @@
 //   (none yet)
 // \endverbatim
 //
-
+#include <vcl_fstream.h>
 #include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
@@ -58,8 +58,8 @@ class bsta_sample_set : public bsta_parzen_sphere<T,n>
   //: compute the mean of a particular assignment/mode/cluster
   bool mode_mean(int mode, vector_& out) const;
 
-  typename vcl_vector<bsta_parzen_sphere<T,n>::vector_type >::const_iterator samples_begin() const { return bsta_parzen<T,n>::samples_.begin(); }
-  typename vcl_vector<bsta_parzen_sphere<T,n>::vector_type >::const_iterator samples_end() const { return bsta_parzen<T,n>::samples_.end(); }
+  typename vcl_vector<typename bsta_parzen_sphere<T,n>::vector_type >::const_iterator samples_begin() const { return bsta_parzen<T,n>::samples_.begin(); }
+  typename vcl_vector<typename bsta_parzen_sphere<T,n>::vector_type >::const_iterator samples_end() const { return bsta_parzen<T,n>::samples_.end(); }
 
   typename vcl_vector<T >::const_iterator weights_begin() const { return weights_.begin(); }
   typename vcl_vector<T >::const_iterator weights_end() const { return weights_.end(); }
