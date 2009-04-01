@@ -234,8 +234,8 @@ void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
   for (unsigned int a = 0; a<nbins_; a++) {
     for (unsigned int b = 0; b<nbins_; b++) {
       if (p(a,b) > 0) {
-        //os << "y(" << a+1 << ", " << b+1 << ") = " << p(a,b) << "; ";
-        os << "y(" << a+1 << ", " << b+1 << ") = " << counts_[a][b] << "; ";
+        os << "y(" << a+1 << ", " << b+1 << ") = " << p(a,b) << "; ";
+        //os << "y(" << a+1 << ", " << b+1 << ") = " << counts_[a][b] << "; ";
       }
     }
     //os << '\n';
