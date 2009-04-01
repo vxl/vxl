@@ -217,3 +217,4 @@ template class bsta_mean_shift<T,n >;
 
 
 #endif // bsta_mean_shift_txx_
+
