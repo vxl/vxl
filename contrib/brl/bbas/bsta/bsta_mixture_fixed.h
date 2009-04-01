@@ -59,8 +59,8 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
   class sort_weight
   {
    public:
-    bool operator() (const component* c1, const component* c2) const
-      { return c1->weight > c2->weight; }
+    bool operator() (const component c1, const component c2) const
+      { return c1.weight > c2.weight; }
   };
 
   //: This adaptor allows users to define ordering functors on the components without accessing the components directly
