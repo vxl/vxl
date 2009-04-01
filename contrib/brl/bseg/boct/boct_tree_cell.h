@@ -1,21 +1,22 @@
 #ifndef boct_tree_cell_h_
 #define boct_tree_cell_h_
-
+//:
+// \file
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
 
 template <class T>
-class boct_tree_cell //: public vbl_ref_count
+class boct_tree_cell // public vbl_ref_count
 {
-public:
+ public:
   typedef enum {NONE, X_LOW, X_HIGH, Y_LOW, Y_HIGH, Z_LOW, Z_HIGH, ALL} FACE_IDX;
 
   //constructors
   boct_tree_cell<T>()
   : children_(0), parent_(0) {}
 
-  boct_tree_cell<T>(const boct_loc_code& code, boct_tree_cell<T>* p, short l) 
+  boct_tree_cell<T>(const boct_loc_code& code, boct_tree_cell<T>* p, short l)
   : code_(code), children_(0), parent_(p), level_(l) {}
 
   //constructor given code and level
@@ -40,11 +41,11 @@ public:
   boct_tree_cell<T>* parent() { return parent_; }
   void  find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell<T>*> & neighbors,short max_level);
   boct_tree_cell<T>* get_common_ancestor(short binarydiff);
-  void set_data(T& data) {data_=data; }
+  void set_data(T const& data) {data_=data; }
   T data() {return data_; }
   boct_loc_code code_;
   static short version_no() { return 1; }
-protected:
+ protected:
   short level_;
   boct_tree_cell<T>* parent_;
   boct_tree_cell<T>* children_;
