@@ -3765,6 +3765,36 @@ std_dev_operator(vil_image_view<float> const& sd_image,
   return res;
 }
 
+// Compute the standard deviation of an operator response
+// given the image intensity standard deviation at each pixel
+// uses a modified formula to compute std_dev
+vil_image_view<float> brip_vil_float_ops::
+std_dev_operator_method2(vil_image_view<float> const& sd_image,
+                 vbl_array_2d<float> const& kernel)
+{
+  unsigned ni = sd_image.ni(), nj = sd_image.nj();
+  unsigned nrows = kernel.rows(), ncols = kernel.cols();
+  int rrad = (nrows-1)/2, crad = (ncols-1)/2;
+  float sd_min, sd_max;
+  vil_math_value_range(sd_image, sd_min, sd_max);
+
+  vil_image_view<float> res(ni, nj);
+  res.fill(sd_max);
+
+  for (int j = rrad; j<static_cast<int>(nj-rrad); ++j)
+    for (int i = crad; i<static_cast<int>(ni-crad); ++i)
+    {
+      float sum = 0;
+      for (int jj = -rrad; jj<=rrad; ++jj)
+        for (int ii = -crad; ii<=crad; ++ii) {
+          float sd = sd_image(i+ii, j+jj);
+          sum += (float)(sd*vcl_abs(kernel[jj+rrad][ii+crad]));
+        }
+      res(i,j) = sum;
+    }
+  return res;
+}
+
 vil_image_view<float>
 brip_vil_float_ops::extrema(vil_image_view<float> const& input,
                             float lambda0, float lambda1, float theta,

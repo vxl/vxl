@@ -120,6 +120,12 @@ class brip_vil_float_ops
   static  vil_image_view<float> 
     std_dev_operator(vil_image_view<float> const& sd_image,
                      vbl_array_2d<float> const& kernel);
+
+  // Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel, uses a modified formula to compute std_dev
+  static vil_image_view<float> 
+    std_dev_operator_method2(vil_image_view<float> const& sd_image,
+                             vbl_array_2d<float> const& kernel);
+
   //: Find ansiotropic intensity extrema. Theta is in degrees
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
