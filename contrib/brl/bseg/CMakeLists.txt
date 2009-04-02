@@ -49,3 +49,6 @@ SUBDIRS(brec)
 
 # octree
 SUBDIRS(boct)
+
+#octree based modeling 
+SUBDIRS(boxm)
