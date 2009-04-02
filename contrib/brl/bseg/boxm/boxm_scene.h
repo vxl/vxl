@@ -8,6 +8,8 @@
 #include <vbl/vbl_array_3d.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
+class boxm_scene_parser;
+
 template <class T>
 class boxm_scene
 {
@@ -55,6 +57,7 @@ private:
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
 
+  boxm_scene_parser* parse_config(vcl_string xml);
 };
 
 //: generates an XML file from the member variables

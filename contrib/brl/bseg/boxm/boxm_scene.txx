@@ -2,6 +2,7 @@
 #define boxm_scene_txx_
 
 #include "boxm_scene.h"
+#include "io/boxm_scene_parser.h"
 
 #include <vcl_cmath.h>
 #include <vgl/xio/vgl_xio_point_3d.h>
@@ -101,13 +102,22 @@ void boxm_scene<T>::b_read(vsl_b_istream & is)
       vcl_string xml="";
       vsl_b_read(is, xml);
       vcl_cout << xml << vcl_endl;
+      boxm_scene_parser* parser = parse_config(xml);
+      if (parser)
+      {
+        parser->lvcs(lvcs_);
+        origin_ = parser->origin();
+        block_dim_ = parser->block_dim();
+        vgl_vector_3d<unsigned> nums = parser->block_nums();
+        blocks_ =  vbl_array_3d<boxm_block<T>*>(nums.x(), nums.y(), nums.z(), (boxm_block<T>*)NULL);
+        parser->paths(scene_path_, block_pref_);
+      }
       break;
-      
-   /* default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_scene<T>&)\n"
-              << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;*/
+ /* default:
+	  vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_scene<T>&)\n"
+			  << "           Unknown version number "<< version << '\n';
+	  is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+	  return;*/
   }
 }
 
@@ -131,22 +141,42 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
     
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
-  scene.lvcs().x_write(os, "lvcs");
-  x_write(os, scene.origin(), "local_origin");
-  x_write(os, scene.block_dim(), "block_dimensions"); 
+  scene.lvcs().x_write(os, LVCS_TAG);
+  x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
+  x_write(os, scene.block_dim(), BLOCK_DIMENSIONS_TAG); 
   
-  vsl_basic_xml_element blocks("blocks");
+  vsl_basic_xml_element blocks(BLOCK_NUM_TAG);
   int x_dim, y_dim, z_dim;
   scene.block_num(x_dim, y_dim, z_dim);
   blocks.add_attribute("x_dimension", x_dim);
   blocks.add_attribute("y_dimension", y_dim);
   blocks.add_attribute("z_dimension", z_dim);
   blocks.x_write(os);
-  vsl_basic_xml_element paths("scene_paths");
+  vsl_basic_xml_element paths(SCENE_PATHS_TAG);
   paths.add_attribute("path", scene.path());
   paths.add_attribute("block_prefix", scene.block_prefix());
   paths.x_write(os);
   scene_elm.x_write_close(os);
+}
+
+template <class T>
+boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml)
+{
+  if (xml.size() == 0){
+    vcl_cerr << "XML string is empty\n";
+    return 0;
+  }
+  
+  boxm_scene_parser* parser = new boxm_scene_parser();
+  if (!parser->parseString(xml.data())) {
+    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+             << parser->XML_GetCurrentLineNumber() << vcl_endl;
+
+    delete parser;
+    return 0;
+  }
+  vcl_cout << "finished!" << vcl_endl;
+  return parser;
 }
 
 #define BOXM_SCENE_INSTANTIATE(T) \
