@@ -68,6 +68,8 @@ class bsta_fit_weibull
     if (!sd) return false;
     double ki = 1.0 + 1.21*((m/sd)-1.0);
     if (ki>0) {
+      if (ki < 1.0)
+        ki = 1.0001;  // we need it to be ki > 1.0
       k = static_cast<T>(ki);
       return true;
     } else 
