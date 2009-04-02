@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 
 #include <boxm/boxm_scene.h>
+#include <boct/boct_tree.h>
 #include <vpl/vpl.h>
 
 MAIN( test_binary_io )
@@ -18,7 +19,7 @@ MAIN( test_binary_io )
   vgl_point_3d<double> origin(10,10,20);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<double> world_dim(30,30,30);
-  boxm_scene<vgl_point_3d<double> > scene(lvcs, origin, block_dim, world_dim);
+  boxm_scene<boct_tree<short,vgl_point_3d<double> > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_paths("./boxm_scene", "block");
   x_write(vcl_cout, scene, "scene");
 
@@ -26,7 +27,7 @@ MAIN( test_binary_io )
   scene.b_write(os);
   os.close();
 
-  boxm_scene<vgl_point_3d<double> > scene_out;
+  boxm_scene<boct_tree<short,vgl_point_3d<double> > > scene_out;
   vsl_b_ifstream is("scene.bin", vcl_ios_binary);
   scene_out.b_read(is);
   vpl_unlink("scene.bin");

@@ -16,7 +16,7 @@ void boxm_block<T>::b_read(vsl_b_istream &is)
   {
     case (1):
       vsl_b_read(is, bbox_);
-      octree_ = new boct_tree<short, T>();
+      octree_ = new T();
       octree_->b_read(is);
       break;
     default:
