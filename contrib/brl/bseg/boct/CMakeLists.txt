@@ -1,6 +1,4 @@
-# contrib/brl/bseg/bmdl_batch/CMakeLists.txt
-
-#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bmdl )
+# contrib/brl/bseg/boct/CMakeLists.txt
 
 SET(boct_sources
     boct_loc_code.txx           boct_loc_code.h
