@@ -3,6 +3,7 @@
 // \file
 #include <vcl_string.h>
 #include <vcl_cstring.h>
+#include <vsl/vsl_basic_xml_element.h>
 #include <vpgl/bgeo/bgeo_datum_conversion.h>
 #include <vpgl/bgeo/bgeo_earth_constants.h>
 
@@ -751,4 +752,26 @@ void bgeo_lvcs::b_read(vsl_b_istream &is)
   vsl_b_read(is, lox_);
   vsl_b_read(is, loy_);
   vsl_b_read(is, theta_);
+}
+
+void bgeo_lvcs::x_write(vcl_ostream &os, vcl_string element_name)
+{
+  vcl_string len_u = "meters", ang_u="degrees";
+  if (localXYZUnit_ == FEET)
+    len_u = "feet";
+  if (geo_angle_unit_ == RADIANS)
+    ang_u= "radians";
+
+  vsl_basic_xml_element xml_element(element_name);
+  xml_element.add_attribute("cs_name", cs_name_strings[local_cs_name_]);
+  xml_element.add_attribute("origin_lon", localCSOriginLon_);
+  xml_element.add_attribute("origin_lat", localCSOriginElev_);
+  xml_element.add_attribute("lon_scale", lon_scale_);
+  xml_element.add_attribute("lat_scale", lat_scale_);
+  xml_element.add_attribute("local_XYZ_unit", len_u);
+  xml_element.add_attribute("geo_angle_unit", ang_u);
+  xml_element.add_attribute("local_origin_x", lox_);
+  xml_element.add_attribute("local_origin_y", loy_);
+  xml_element.add_attribute("theta", theta_);
+  xml_element.x_write(os);
 }
