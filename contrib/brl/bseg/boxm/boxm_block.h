@@ -16,7 +16,7 @@ public:
   bool is_visible(const vpgl_camera_double_sptr camera) {return true; }
   void b_read(vsl_b_istream &s);
   void b_write(vsl_b_ostream &s);
-  
+  short version_no() { return 1; }
 private:
   vgl_box_3d<double> bbox_;
   boct_tree<short,T>* octree_;

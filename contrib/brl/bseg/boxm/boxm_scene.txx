@@ -7,6 +7,7 @@
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <vsl/vsl_basic_xml_element.h>
+#include <vsl/vsl_binary_io.h>
 
 #define NULL 0
 
@@ -73,49 +74,82 @@ vcl_string boxm_scene<T>::gen_block_path(int x, int y, int z)
 
   strm << x << "_" << y << "_" << z;
   vcl_string str(strm.str());
-  vcl_string s = block_pref_+ '_' + str + ".bin";
+  vcl_string s = scene_path_ + '/' + block_pref_+ '_' + str + ".bin";
   return s;
 }
   
 template <class T>
-void boxm_scene<T>::x_write(vcl_ostream &os)
+void boxm_scene<T>::load_block_binary(unsigned i, unsigned j, unsigned k)
 {
-    
-  vsl_basic_xml_element scene("scene");
-  scene.x_write_open(os);
-  lvcs_.x_write(os, "lvcs");
-  //x_write(os, (vgl_point_3d<double>)this->origin_, "local_origin");
-  //x_write(os, (vgl_vector_3d<double>)this->block_dim_, "block_dimensions"); 
+  vcl_string block_path = gen_block_path(i,j,k);
   
-  vsl_basic_xml_element blocks("blocks");
-  blocks.add_attribute("row1_count", (int) blocks_.get_row1_count());
-  blocks.add_attribute("row2_count", (int) blocks_.get_row2_count());
-  blocks.add_attribute("row3_count", (int) blocks_.get_row3_count());
-  blocks.x_write_open(os);
-  for (unsigned i=0; i<blocks_.get_row1_count(); i++) {
-    for (unsigned j=0; j<blocks_.get_row2_count(); j++) {
-      for (unsigned k=0; j<blocks_.get_row3_count(); k++) {
-        vsl_basic_xml_element block(gen_block_path(i,j,k));
-        block.append_cdata(gen_block_path(i,j,k));
-        block.x_write(os);
-      }
-    }
-  }
-  blocks.x_write_close(os);      
-  scene.x_write_close(os);
+  vsl_b_ifstream os(block_path);
+  blocks_(i,j,k)->b_read(os);
+  os.close();
 }
 
 template <class T>
-void boxm_scene<T>::b_read(vsl_b_istream & s)
+void boxm_scene<T>::b_read(vsl_b_istream & is)
 {
+  if (!is) return;
+
+  short version;
+  vsl_b_read(is,version);
+  switch (version)
+  {
+    case (1):
+      vcl_string xml="";
+      vsl_b_read(is, xml);
+      vcl_cout << xml << vcl_endl;
+      break;
+      
+   /* default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_scene<T>&)\n"
+              << "           Unknown version number "<< version << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;*/
+  }
 }
 
 template <class T>
 void boxm_scene<T>::b_write(vsl_b_ostream & s)
 {
+  // create an XML stream for the parameters
+  vcl_stringstream strm;
+  x_write(strm, *this, "scene");
+  vcl_string str(strm.str());
+  
+  vsl_b_write(s, version_no());
+  // write the XML as char stream
+  vsl_b_write(s, str);
+  
+}
+
+template <class T>
+void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
+{
+    
+  vsl_basic_xml_element scene_elm(name);
+  scene_elm.x_write_open(os);
+  scene.lvcs().x_write(os, "lvcs");
+  x_write(os, scene.origin(), "local_origin");
+  x_write(os, scene.block_dim(), "block_dimensions"); 
+  
+  vsl_basic_xml_element blocks("blocks");
+  int x_dim, y_dim, z_dim;
+  scene.block_num(x_dim, y_dim, z_dim);
+  blocks.add_attribute("x_dimension", x_dim);
+  blocks.add_attribute("y_dimension", y_dim);
+  blocks.add_attribute("z_dimension", z_dim);
+  blocks.x_write(os);
+  vsl_basic_xml_element paths("scene_paths");
+  paths.add_attribute("path", scene.path());
+  paths.add_attribute("block_prefix", scene.block_prefix());
+  paths.x_write(os);
+  scene_elm.x_write_close(os);
 }
 
 #define BOXM_SCENE_INSTANTIATE(T) \
-template boxm_scene<T>; 
-
+template boxm_scene<T>; \
+template void x_write(vcl_ostream&, boxm_scene<T>&, vcl_string);
 #endif

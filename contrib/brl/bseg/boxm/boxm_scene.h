@@ -22,9 +22,18 @@ public:
   { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
   ~boxm_scene() {}
+  bgeo_lvcs lvcs() { return lvcs_;}
+  vgl_point_3d<double> origin() {return origin_;}
+  vgl_vector_3d<double> block_dim() {return block_dim_;}
+  void block_num(int &x, int &y, int &z) {x = (int) blocks_.get_row1_count();
+  y=(int) blocks_.get_row2_count(); z=(int) blocks_.get_row3_count();}
+  vcl_string path() { return scene_path_; }
+  vcl_string block_prefix() { return block_pref_; }
 
   void b_read(vsl_b_istream & s);
   void b_write(vsl_b_ostream & s);
+  
+  short version_no() { return 1; }
 
 private:
   bgeo_lvcs lvcs_;
@@ -39,14 +48,17 @@ private:
 
   boxm_block<T>* get_block(const vgl_point_3d<double>& p);
 
+  void load_block_binary(unsigned i, unsigned j, unsigned k);
+
   vgl_box_3d<double> get_world_bbox();
 
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
 
-  //: generates an XML file from the member variables
-  void x_write(vcl_ostream &os);
-
 };
+
+//: generates an XML file from the member variables
+template <class T>
+void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name="boxm_scene");
 
 #endif
