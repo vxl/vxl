@@ -765,6 +765,7 @@ void bgeo_lvcs::x_write(vcl_ostream &os, vcl_string element_name)
   vsl_basic_xml_element xml_element(element_name);
   xml_element.add_attribute("cs_name", cs_name_strings[local_cs_name_]);
   xml_element.add_attribute("origin_lon", localCSOriginLon_);
+  xml_element.add_attribute("origin_lat", localCSOriginLat_);
   xml_element.add_attribute("origin_lat", localCSOriginElev_);
   xml_element.add_attribute("lon_scale", lon_scale_);
   xml_element.add_attribute("lat_scale", lat_scale_);
