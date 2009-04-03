@@ -116,6 +116,13 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
   }
   vcl_string block_path = gen_block_path(i,j,k);
   vsl_b_ifstream os(block_path);
+  
+  //if the binary block file is not found
+  if (!os) {
+    create_block(i,j,k);
+    return;
+  }
+  
   blocks_(i,j,k)->b_read(os);
   active_block_.set(i,j,k);
   os.close();
