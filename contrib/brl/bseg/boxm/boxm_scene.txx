@@ -15,7 +15,8 @@
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin, 
     const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
-: lvcs_(lvcs), block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_("")
+: lvcs_(lvcs), block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""), 
+active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
 	// compute the dimensions of 3D array
 	int x_dim = vcl_floor(world_dim.x()/block_dim.x());
@@ -29,7 +30,8 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& ori
 template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin, 
     const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
-: block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_("")
+: block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""), 
+active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
 	// compute the dimensions of 3D array
 	int x_dim = vcl_floor(world_dim.x()/block_dim.x());
@@ -93,14 +95,44 @@ vcl_string boxm_scene<T>::gen_block_path(int x, int y, int z)
 }
   
 template <class T>
-void boxm_scene<T>::load_block_binary(unsigned i, unsigned j, unsigned k)
+void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 {
+  if (!valid_index(vgl_point_3d<int>(i,j,k)))
+    return;
+    
+  // make sure the active one is saved first
+  if (valid_index(active_block_)) {
+    if (active_block_ == vgl_point_3d<int>(i,j,k))
+      return;
+    else {
+      int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
+      vcl_string path = gen_block_path(x,y,z);
+      vsl_b_ofstream os(path);
+      blocks_(x,y,z)->b_write(os);
+      // delete the block's data
+      boxm_block<T>* block = blocks_(x,y,z);
+      delete block;
+    }
+  }
   vcl_string block_path = gen_block_path(i,j,k);
-  
   vsl_b_ifstream os(block_path);
   blocks_(i,j,k)->b_read(os);
+  active_block_.set(i,j,k);
   os.close();
 }
+
+template <class T>
+bool boxm_scene<T>::valid_index(vgl_point_3d<int> idx)
+{
+  vgl_point_3d<int> min(0,0,0);
+  vgl_point_3d<int> max(blocks_.get_row1_count(), blocks_.get_row2_count(), blocks_.get_row3_count());
+  vgl_box_3d<int> bbox(min, max);
+  if (bbox.contains(idx))
+    return true;
+    
+  return false;
+}
+
 
 template <class T>
 void boxm_scene<T>::b_read(vsl_b_istream & is)
