@@ -4,6 +4,7 @@
 #include "boct_tree_cell.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for std::malloc and std::free
 
 template<class T_loc,class T>
 boct_tree_cell<T_loc,T>::boct_tree_cell(const boct_loc_code<T_loc>& code)
@@ -33,7 +34,7 @@ template<class T_loc,class T>
 boct_tree_cell<T_loc,T>::~boct_tree_cell()
 {
   if (children_ != NULL) {
-   free(children_);
+   vcl_free(children_);
   }
 }
 
@@ -69,12 +70,13 @@ boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::traverse(boct_loc_code<T_loc> 
   }
   return curr_cell;
 }
+
 template<class T_loc,class T>
 bool boct_tree_cell<T_loc,T>::split()
 {
   // create new children if there is none
   if (is_leaf()) {
-  children_ = (boct_tree_cell<T_loc,T>*) malloc(sizeof(boct_tree_cell<T_loc,T>)*8);
+  children_ = (boct_tree_cell<T_loc,T>*) vcl_malloc(sizeof(boct_tree_cell<T_loc,T>)*8);
   short child_level = this->level()-1;
   for (unsigned i=0; i<8; i++) {
     children_[i].code_ = code_.child_loc_code(i, child_level);
@@ -344,7 +346,7 @@ void boct_tree_cell<T_loc,T>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T>*>
   if (!children_)
     return;
 
-  for(unsigned i=0; i<8; i++) {
+  for (unsigned i=0; i<8; i++) {
     if (children_[i].is_leaf()) {
       v.push_back(&children_[i]);
     } else {
@@ -383,7 +385,7 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T>& cell)
   if (!cell.is_leaf()) {
     leaf = false;
     vsl_b_write(os, leaf);
-    for(unsigned i=0; i<8; i++)
+    for (unsigned i=0; i<8; i++)
       vsl_b_write(os, children[i]);
   } else // no children
       vsl_b_write(os, leaf);
@@ -429,7 +431,7 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T>& c, boct_tree_cell<T
 }
 
 #define BOCT_TREE_CELL_INSTANTIATE(T_loc,T) \
-template class boct_tree_cell<T_loc,T>; \
+template class boct_tree_cell<T_loc,T >; \
 template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T >&, boct_tree_cell<T_loc,T >*); \
 template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T >&)
 #endif // boct_tree_cell_txx_
