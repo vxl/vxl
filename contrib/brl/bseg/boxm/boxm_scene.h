@@ -18,12 +18,13 @@ class boxm_scene:public vbl_ref_count
 {
 public:
   
-  boxm_scene() : scene_path_(""), block_pref_("") {}
+  boxm_scene() : scene_path_(""), block_pref_(""), active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
 
   boxm_scene(const bgeo_lvcs& lvcs, 
              const vgl_point_3d<double>& origin, 
              const vgl_vector_3d<double>& block_dim, 
              const vgl_vector_3d<double>& world_dim);
+
   //: when lvcs is not avialable 
   boxm_scene( const vgl_point_3d<double>& origin, 
               const vgl_vector_3d<double>& block_dim, 
@@ -34,13 +35,21 @@ public:
   { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
   ~boxm_scene() {}
+
+  void load_block(unsigned i, unsigned j, unsigned k);
+
   bgeo_lvcs lvcs() { return lvcs_;}
+
   vgl_point_3d<double> origin() {return origin_;}
+
   vgl_vector_3d<double> block_dim() {return block_dim_;}
+
   void block_num(int &x, int &y, int &z) {x=(int) blocks_.get_row1_count();
                                           y=(int) blocks_.get_row2_count(); 
                                           z=(int) blocks_.get_row3_count();}
+
   vcl_string path() { return scene_path_; }
+
   vcl_string block_prefix() { return block_pref_; }
 
   void b_read(vsl_b_istream & s);
@@ -57,16 +66,19 @@ private:
   vcl_string scene_path_;
   vcl_string block_pref_;
 
-  // private methods
+  //: index of the blocks (3D array) that is active at the time, 
+  // only one active block at a time
+  vgl_point_3d<int> active_block_;
+
+  //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
-
-
-  void load_block_binary(unsigned i, unsigned j, unsigned k);
 
   vgl_box_3d<double> get_world_bbox();
 
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
+
+  bool valid_index(vgl_point_3d<int> idx);
 
   boxm_scene_parser* parse_config(vcl_string xml);
 };
