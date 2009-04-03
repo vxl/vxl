@@ -10,6 +10,9 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 SET(boxm_sources
     boxm_block.txx       boxm_block.h           
     boxm_scene.txx       boxm_scene.h
+    boxm_sample.h
+    boxm_apm_traits.h
+    boxm_mog_grey_processor.cxx  boxm_mog_grey_processor.h  
     
 )
 
@@ -17,7 +20,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl bgeo)
+TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl bgeo bsta)
 
 
 #processes 
