@@ -30,10 +30,10 @@ private:
   boct_tree_cell<T_loc,T>* root_;
 };
 
-/*template <class T>
-void vsl_b_write(vsl_b_ostream & os, boct_tree<T>& tree);
+template <class T_loc,class T>
+void vsl_b_write(vsl_b_ostream & os, boct_tree<T_loc,T>& tree);
 
-template <class T>
-void vsl_b_read(vsl_b_istream & is, boct_tree<T>& tree);*/
+template <class T_loc,class T>
+void vsl_b_read(vsl_b_istream & is, boct_tree<T_loc,T>& tree);
 
 #endif

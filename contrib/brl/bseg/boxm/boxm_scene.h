@@ -20,11 +20,14 @@ public:
   
   boxm_scene() : scene_path_(""), block_pref_("") {}
 
-  boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin, 
-    const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
+  boxm_scene(const bgeo_lvcs& lvcs, 
+             const vgl_point_3d<double>& origin, 
+             const vgl_vector_3d<double>& block_dim, 
+             const vgl_vector_3d<double>& world_dim);
   //: when lvcs is not avialable 
   boxm_scene( const vgl_point_3d<double>& origin, 
-      const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
+              const vgl_vector_3d<double>& block_dim, 
+              const vgl_vector_3d<double>& world_dim);
 
 
   void set_paths(vcl_string scene_path, vcl_string block_prefix) 
@@ -34,8 +37,9 @@ public:
   bgeo_lvcs lvcs() { return lvcs_;}
   vgl_point_3d<double> origin() {return origin_;}
   vgl_vector_3d<double> block_dim() {return block_dim_;}
-  void block_num(int &x, int &y, int &z) {x = (int) blocks_.get_row1_count();
-  y=(int) blocks_.get_row2_count(); z=(int) blocks_.get_row3_count();}
+  void block_num(int &x, int &y, int &z) {x=(int) blocks_.get_row1_count();
+                                          y=(int) blocks_.get_row2_count(); 
+                                          z=(int) blocks_.get_row3_count();}
   vcl_string path() { return scene_path_; }
   vcl_string block_prefix() { return block_pref_; }
 

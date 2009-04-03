@@ -164,6 +164,6 @@ void boct_tree<T_loc,T>::b_read(vsl_b_istream & is)
 
 #define BOCT_TREE_INSTANTIATE(T_loc,T) \
 template class boct_tree<T_loc,T>; \
-//template void vsl_b_write(vsl_b_ostream & os, boct_tree<T_loc,T>&); \
-//template void vsl_b_read(vsl_b_istream & is, boct_tree<T_loc,T>&);
+template void vsl_b_write(vsl_b_ostream & os, boct_tree<T_loc,T>&); \
+template void vsl_b_read(vsl_b_istream & is, boct_tree<T_loc,T>&);
 #endif
