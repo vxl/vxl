@@ -21,13 +21,13 @@ void boxm_block<T>::b_read(vsl_b_istream &is)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_block<T>&)\n"
-              << "           Unknown version number "<< version << '\n';
+               << "           Unknown version number "<< version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
-  
-  
+
+
 template <class T>
 void boxm_block<T>::b_write(vsl_b_ostream &os)
 {
@@ -37,6 +37,6 @@ void boxm_block<T>::b_write(vsl_b_ostream &os)
 }
 
 #define BOXM_BLOCK_INSTANTIATE(T) \
-template boxm_block<T>; 
+template boxm_block<T >
 
 #endif
