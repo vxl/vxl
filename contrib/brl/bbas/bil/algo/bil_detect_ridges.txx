@@ -5,7 +5,6 @@
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_correlate_2d.h>
 #include <vil/vil_transpose.h>
-//#include <vil/vil_bilin_interp.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_math.h>
 
@@ -76,12 +75,12 @@ void bil_detect_ridges( const vil_image_view<T>& Im,
 
 #undef  BIL_DETECT_RIDGES_INSTANTIATE
 #define BIL_DETECT_RIDGES_INSTANTIATE(T) \
-template void bil_detect_ridges( const vil_image_view<T>& Im,\
+template void bil_detect_ridges( const vil_image_view<T >& Im,\
                                  float sigma,\
                                  float epsilon,\
-                                 vil_image_view<int>& rho_int,\
-                                 vil_image_view<float>& ex,\
-                                 vil_image_view<float>& ey,\
-                                 vil_image_view<float>& lambda)
+                                 vil_image_view<int >& rho_int,\
+                                 vil_image_view<float >& ex,\
+                                 vil_image_view<float >& ey,\
+                                 vil_image_view<float >& lambda)
 
 #endif // bil_detect_ridges_txx_

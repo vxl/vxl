@@ -1,7 +1,9 @@
 #ifndef boct_loc_code_txx_
 #define boct_loc_code_txx_
-
+//:
+// \file
 #include "boct_loc_code.h"
+
 template <class T>
 boct_loc_code<T>::boct_loc_code(const boct_loc_code<T>& rhs)
 {
@@ -10,6 +12,7 @@ boct_loc_code<T>::boct_loc_code(const boct_loc_code<T>& rhs)
   z_loc_ = rhs.z_loc_;
   level  = rhs.level;
 }
+
 template <class T>
 boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short max_level)
 {
@@ -18,8 +21,8 @@ boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short max_level)
   x_loc_ = (T) (p.x()*max_val);
   y_loc_ = (T) (p.y()*max_val);
   z_loc_ = (T) (p.z()*max_val);
-
 }
+
 template <class T>
 boct_loc_code<T> boct_loc_code<T>::child_loc_code(unsigned int index, short child_level)
 {
@@ -38,11 +41,12 @@ boct_loc_code<T> boct_loc_code<T>::child_loc_code(unsigned int index, short chil
   code.set_code(xloc, yloc, zloc);
   return code;
 }
+
 template <class T>
 short boct_loc_code<T>::child_index(short level)
 {
   // level 0 cannot have a child, that ought to be the last level
-  if (level == 0) 
+  if (level == 0)
     return -1;
 
   // the bits are stored as [00...00ZYX]
@@ -50,25 +54,28 @@ short boct_loc_code<T>::child_index(short level)
   T index_x = ((x_loc_ & child_bit) >> (level-1));
   T index_y = ((y_loc_ & child_bit) >> (level-2));
   T index_z = ((z_loc_ & child_bit) >> (level-3));
-  return (index_x+index_y+index_z);
+  return index_x+index_y+index_z;
 }
+
 template <class T>
 vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T>& code)
 {
-  s << "[" << code.x_loc_ << "," << code.y_loc_ << "," << code.z_loc_ << "] ";
+  s << '[' << code.x_loc_ << ',' << code.y_loc_ << ',' << code.z_loc_ << "] ";
   return s;
 }
+
 template <class T>
 bool boct_loc_code<T>::isequal(const boct_loc_code<T> * test,short level)
 {
   T relevantbit = 1 << (level-1);
-  if( (x_loc_ & relevantbit) == (test->x_loc_ & relevantbit)&& 
-      (y_loc_ & relevantbit) == (test->y_loc_ & relevantbit)&& 
-      (z_loc_ & relevantbit) == (test->z_loc_ & relevantbit) )
-      return true;
+  if ( (x_loc_ & relevantbit) == (test->x_loc_ & relevantbit)&&
+       (y_loc_ & relevantbit) == (test->y_loc_ & relevantbit)&&
+       (z_loc_ & relevantbit) == (test->z_loc_ & relevantbit) )
+    return true;
   else
-      return false;
+    return false;
 }
+
 template <class T>
 boct_loc_code<T> * boct_loc_code<T>::XOR(boct_loc_code<T> * b)
 {
@@ -78,13 +85,12 @@ boct_loc_code<T> * boct_loc_code<T>::XOR(boct_loc_code<T> * b)
     xorcode->z_loc_=this->z_loc_^b->z_loc_;
 
     return xorcode;
-
 }
+
 //: function to convert location code to a point.
 template <class T>
 vgl_point_3d<double> boct_loc_code<T>::get_point(short max_level)
 {
-     
     int max_val = 1 << (max_level-1);
 
     vgl_point_3d<double> p((double)x_loc_/(double)(max_val),
@@ -92,8 +98,8 @@ vgl_point_3d<double> boct_loc_code<T>::get_point(short max_level)
                            (double)z_loc_/(double)(max_val));
 
     return p;
- 
 }
+
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, const boct_loc_code<T>& c)
 {
@@ -104,6 +110,7 @@ void vsl_b_write(vsl_b_ostream & os, const boct_loc_code<T>& c)
   vsl_b_write(os, c.y_loc_);
   vsl_b_write(os, c.z_loc_);
 }
+
 template <class T>
 void vsl_b_read(vsl_b_istream & is, boct_loc_code<T>& c)
 {
@@ -120,21 +127,19 @@ void vsl_b_read(vsl_b_istream & is, boct_loc_code<T>& c)
     vsl_b_read(is, z);
     c.set_code(x,y,z);
     break;
-  
+
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_loc_code&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
-  
 }
 
 #define BOCT_LOC_CODE_INSTANTIATE(T) \
-template class boct_loc_code<T>; \
-template void vsl_b_write(vsl_b_ostream & os,const boct_loc_code<T>&); \
-template void vsl_b_read(vsl_b_istream & is,  boct_loc_code<T>&);\
-template vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T>& );
-
+template class boct_loc_code<T >; \
+template void vsl_b_write(vsl_b_ostream & os,const boct_loc_code<T >&); \
+template void vsl_b_read(vsl_b_istream & is,  boct_loc_code<T >&); \
+template vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T >& )
 
 #endif
