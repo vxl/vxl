@@ -19,6 +19,10 @@ ADD_LIBRARY(boxm  ${boxm_sources})
 
 TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl bgeo)
 
+
+#processes 
+SUBDIRS(pro)
+
 SUBDIRS(io)
 
 #tests

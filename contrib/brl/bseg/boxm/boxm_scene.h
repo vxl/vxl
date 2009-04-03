@@ -7,11 +7,14 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+#include <boct/boct_tree.h>
 
 class boxm_scene_parser;
 
 template <class T>
-class boxm_scene
+class boxm_scene:public vbl_ref_count
 {
 public:
   
@@ -19,6 +22,10 @@ public:
 
   boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin, 
     const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
+  //: when lvcs is not avialable 
+  boxm_scene( const vgl_point_3d<double>& origin, 
+      const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
+
 
   void set_paths(vcl_string scene_path, vcl_string block_prefix) 
   { scene_path_ = scene_path;  block_pref_=block_prefix; }
@@ -34,6 +41,7 @@ public:
 
   void b_read(vsl_b_istream & s);
   void b_write(vsl_b_ostream & s);
+  boxm_block<T>* get_block(const vgl_point_3d<double>& p);
   
   short version_no() { return 1; }
 
@@ -48,7 +56,6 @@ private:
   // private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 
-  boxm_block<T>* get_block(const vgl_point_3d<double>& p);
 
   void load_block_binary(unsigned i, unsigned j, unsigned k);
 
@@ -63,5 +70,18 @@ private:
 //: generates an XML file from the member variables
 template <class T>
 void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name="boxm_scene");
+
+
+template <class T>
+void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene);
+template <class T>
+void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const * &scene);
+template <class T>
+void vsl_b_read(vsl_b_istream & is, boxm_scene<T> &scene);
+template <class T>
+void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene);
+
+typedef vbl_smart_ptr<boxm_scene<boct_tree<short,vgl_point_3d<double> > > > boxm_scene_short_point_double_sptr;
+
 
 #endif

@@ -26,7 +26,20 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& ori
 	blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
 	
 }
-
+template <class T>
+boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin, 
+    const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
+: block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_("")
+{
+	// compute the dimensions of 3D array
+	int x_dim = vcl_floor(world_dim.x()/block_dim.x());
+	int y_dim = vcl_floor(world_dim.y()/block_dim.y());
+	int z_dim = vcl_floor(world_dim.z()/block_dim.z());
+	
+	// pointers are initialized to NULL
+	blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
+	
+}
 template <class T>
 void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 {
@@ -178,8 +191,27 @@ boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml)
   vcl_cout << "finished!" << vcl_endl;
   return parser;
 }
+template <class T>
+void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene)
+{}
+template <class T>
+void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const * &scene)
+{}
+template <class T>
+void vsl_b_read(vsl_b_istream & is, boxm_scene<T> &scene)
+{}
+template <class T>
+void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene)
+{}
 
 #define BOXM_SCENE_INSTANTIATE(T) \
 template boxm_scene<T>; \
-template void x_write(vcl_ostream&, boxm_scene<T>&, vcl_string);
+template void x_write(vcl_ostream&, boxm_scene<T>&, vcl_string);\
+template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene);\
+template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const * &scene);\
+template void vsl_b_read(vsl_b_istream & is, boxm_scene<T>  &scene);\
+template void vsl_b_read(vsl_b_istream & is, boxm_scene<T> * &scene)
+
+
+
 #endif
