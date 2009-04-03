@@ -71,6 +71,17 @@ boxm_block<T>* boxm_scene<T>::get_block(const vgl_point_3d<double>& p)
     return 0;
   }
 }
+template <class T>
+boxm_block<T>* boxm_scene<T>::get_active_block()
+{
+	if(valid_index(active_block_))
+		return blocks_(active_block_.x(),active_block_.y(),active_block_.z());
+	else{
+		vcl_cerr << "index"<<active_block_<<"  is out of world " <<  vcl_endl;
+		return 0;
+	}
+	
+}
 
 template <class T>
 vgl_box_3d<double> boxm_scene<T>::get_world_bbox()
@@ -106,6 +117,7 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     if (active_block_ == vgl_point_3d<int>(i,j,k))
       return;
     else {
+      vcl_cout<<"Writing of the old block";vcl_cout.flush();
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       vcl_string path = gen_block_path(x,y,z);
       vsl_b_ofstream os(path);
@@ -115,17 +127,22 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
       delete block;
     }
   }
+  active_block_.set(i,j,k);
+  
   vcl_string block_path = gen_block_path(i,j,k);
   vsl_b_ifstream os(block_path);
 
+  vcl_cout<<"Block Path: "<<block_path<<vcl_endl;
+  vcl_cout.flush();
+
   //if the binary block file is not found
   if (!os) {
+    vcl_cout<<"Create a new block";vcl_cout.flush();
     create_block(i,j,k);
     return;
   }
 
   blocks_(i,j,k)->b_read(os);
-  active_block_.set(i,j,k);
   os.close();
 }
 

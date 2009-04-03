@@ -40,9 +40,12 @@ public:
 
   bgeo_lvcs lvcs() { return lvcs_;}
 
+  boxm_block<T>* get_active_block();
+
   vgl_point_3d<double> origin() {return origin_;}
 
   vgl_vector_3d<double> block_dim() {return block_dim_;}
+
 
   void block_num(int &x, int &y, int &z) {x=(int) blocks_.get_row1_count();
                                           y=(int) blocks_.get_row2_count(); 
@@ -55,7 +58,8 @@ public:
   void b_read(vsl_b_istream & s);
   void b_write(vsl_b_ostream & s);
   boxm_block<T>* get_block(const vgl_point_3d<double>& p);
-  
+  boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k);
+
   short version_no() { return 1; }
 
 private:
