@@ -10,6 +10,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <boct/boct_tree.h>
+#include <boxm/boxm_sample.h>
 
 class boxm_scene_parser;
 
@@ -102,6 +103,7 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene);
 
 typedef vbl_smart_ptr<boxm_scene<boct_tree<short,vgl_point_3d<double> > > > boxm_scene_short_point_double_sptr;
+typedef vbl_smart_ptr<boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > > boxm_scene_short_sample_mog_grey_sptr;
 
 
 #endif
