@@ -2,7 +2,8 @@
 #define boxm_sample_h_
 
 #include "boxm_apm_traits.h"
-
+#include <vcl_iostream.h>
+#include <vsl/vsl_binary_io.h>
 
 template <boxm_apm_type APM_MODEL>
 class boxm_sample
@@ -18,11 +19,15 @@ public:
   //: constructor
   boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance(apm_val) {}
 
+  short version_no() { return 1; }
+
   //: the occlusion density at the sample point
   float alpha;
 
   //: the appearance model at the sample point
   typename boxm_apm_traits<APM_MODEL>::apm_datatype appearance;
+
+  void print(vcl_ostream& os);
 
 };
 
@@ -37,6 +42,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> &sample);
 
 template <boxm_apm_type APM_MODEL>
 void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> *&sample);
+
+template <boxm_apm_type APM_MODEL>
+vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample);
 
 #endif
 

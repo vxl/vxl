@@ -102,7 +102,6 @@ private:
 template <class T>
 void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name="boxm_scene");
 
-
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene);
 

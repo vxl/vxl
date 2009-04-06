@@ -1,0 +1,30 @@
+#ifndef boxm_neighb_graph_node_h_
+#define boxm_neighb_graph_node_h_
+
+#include <vcl_vector.h>
+#include <vcl_map.h>
+#include <boct/boct_tree_cell.h>
+
+#include "boxm_neighb_graph_node.h"
+
+class boxm_neighb_graph_node
+{
+public:
+  boxm_neighb_graph_node(){}
+
+  ~boxm_neighb_graph_node(){}
+
+  void insert(boct_tree_cell::FACE_IDX face, boct_tree_cell* cell) 
+    { neighbors_[face].push_back(cell); }
+
+  vcl_vector<boct_tree_cell*> neighbors(boct_tree_cell::FACE_IDX face)
+    { return neighbors_[face]; }
+
+  int num_neighbors() { return neighbors_.size(); }
+
+private:
+  vcl_map<boct_tree_cell::FACE_IDX, vcl_vector<boct_tree_cell*> > neighbors_;
+
+};
+
+#endif

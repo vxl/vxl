@@ -14,7 +14,10 @@ private:
   int in_count;
 
   //: graph links to the outgoing blocks
-  vcl_vector<boxm_block*> out_blocks_;
+  vcl_vector<boxm_block*> out_links_;
 };
+
+#define BOXM_BLOCK_VIS_GRAPH_NODE_INSTANTIATE(T) \
+template boxm_block_vis_graph_node<T>; 
 
 #endif
