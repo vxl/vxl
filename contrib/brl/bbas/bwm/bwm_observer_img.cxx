@@ -865,6 +865,12 @@ void bwm_observer_img::set_change_type()
   choices.push_back("building");
   choices.push_back("shadow");
   choices.push_back("sewage");
+  choices.push_back("car");
+  choices.push_back("pick-up truck");
+  choices.push_back("utility");
+  choices.push_back("van");
+  choices.push_back("suv");
+  choices.push_back("minivan");
   type_dialog.choice("Change Type", choices, type);
   if (!type_dialog.ask())
     return;
