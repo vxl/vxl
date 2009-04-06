@@ -2,7 +2,7 @@
 #define boxm_sample_txx_
 
 #include "boxm_sample.h"
-
+ 
 template <boxm_apm_type APM_MODEL>
 void boxm_sample<APM_MODEL>::print(vcl_ostream& os)
 {

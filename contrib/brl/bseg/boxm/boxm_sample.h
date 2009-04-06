@@ -4,6 +4,7 @@
 #include "boxm_apm_traits.h"
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
+#include <bsta/bsta_attributes.h>
 
 template <boxm_apm_type APM_MODEL>
 class boxm_sample
