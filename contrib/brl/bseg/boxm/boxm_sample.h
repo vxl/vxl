@@ -26,6 +26,17 @@ public:
 
 };
 
+template <boxm_apm_type APM_MODEL>
+void vsl_b_write(vsl_b_ostream & os, boxm_sample<APM_MODEL> const &sample);
+
+template <boxm_apm_type APM_MODEL>
+void vsl_b_write(vsl_b_ostream & os, boxm_sample<APM_MODEL> const * &sample);
+
+template <boxm_apm_type APM_MODEL>
+void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> &sample);
+
+template <boxm_apm_type APM_MODEL>
+void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> *&sample);
 
 #endif
 

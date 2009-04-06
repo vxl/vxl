@@ -1,5 +1,15 @@
 #ifndef boxm_scene_h_
 #define boxm_scene_h_
+//:
+// \file
+// \brief  The main class to keep the 3D world data and pieces
+//
+// \author Gamze Tunali
+// \date 04/03/2009
+// \verbatim
+//  Modifications
+//  
+// \endverbatim
 
 #include "boxm_block.h"
 #include <vcl_string.h>
@@ -95,10 +105,13 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name="boxm_scene"
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene);
+
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const * &scene);
+
 template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> &scene);
+
 template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene);
 
