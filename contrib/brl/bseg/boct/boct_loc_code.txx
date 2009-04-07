@@ -109,6 +109,7 @@ void vsl_b_write(vsl_b_ostream & os, const boct_loc_code<T>& c)
   vsl_b_write(os, c.x_loc_);
   vsl_b_write(os, c.y_loc_);
   vsl_b_write(os, c.z_loc_);
+  vsl_b_write(os, c.level);
 }
 
 template <class T>
@@ -121,11 +122,13 @@ void vsl_b_read(vsl_b_istream & is, boct_loc_code<T>& c)
   switch (v)
   {
    case 1:
-    short x, y, z;
+    short x, y, z,level;
     vsl_b_read(is, x);
     vsl_b_read(is, y);
     vsl_b_read(is, z);
+    vsl_b_read(is, level);
     c.set_code(x,y,z);
+    c.set_level(level);
     break;
 
   default:

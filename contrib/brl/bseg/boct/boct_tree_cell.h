@@ -59,6 +59,8 @@ class boct_tree_cell // public vbl_ref_count
   boct_tree_cell<T_loc,T>* children_;
   T data_;
 };
+template<class T_loc,class T>
+vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T>& cell);
 
 template <class T_loc,class T>
 void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T>& cell);

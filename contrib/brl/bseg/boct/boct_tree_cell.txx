@@ -376,7 +376,7 @@ template<class T_loc,class T>
 void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T>& cell)
 {
   vsl_b_write(os, boct_tree_cell<T_loc,T>::version_no());
-  vsl_b_write(os, cell.level());
+  //vsl_b_write(os, cell.level());
   vsl_b_write(os, cell.code_);
   T data = cell.data();
   vsl_b_write(os, data);
@@ -401,10 +401,10 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T>& c, boct_tree_cell<T
   switch (version)
   {
     case (1):
-     short level;
-     vsl_b_read(is, level);
+     //short level;
+     //vsl_b_read(is, level);
      vsl_b_read(is, c.code_);
-     c.set_level(level);
+     //c.set_level(level);
      T data;
      vsl_b_read(is, data);
      c.set_data(data);
@@ -429,9 +429,17 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T>& c, boct_tree_cell<T
 #endif // 0
    }
 }
+template<class T_loc,class T>
+vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T>& cell)
+{
+  s <<  cell.code_ ;
+  return s;
+
+}
 
 #define BOCT_TREE_CELL_INSTANTIATE(T_loc,T) \
 template class boct_tree_cell<T_loc,T >; \
+template vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T>& cell);\
 template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T >&, boct_tree_cell<T_loc,T >*); \
 template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T >&)
 #endif // boct_tree_cell_txx_
