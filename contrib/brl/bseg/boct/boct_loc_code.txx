@@ -41,7 +41,7 @@ boct_loc_code<T> boct_loc_code<T>::child_loc_code(unsigned int index, short chil
   code.set_code(xloc, yloc, zloc);
   return code;
 }
-
+//: level is the previous level to the child
 template <class T>
 short boct_loc_code<T>::child_index(short level)
 {
@@ -51,10 +51,21 @@ short boct_loc_code<T>::child_index(short level)
 
   // the bits are stored as [00...00ZYX]
   T child_bit = 1 << (level-1);
-  T index_x = ((x_loc_ & child_bit) >> (level-1));
-  T index_y = ((y_loc_ & child_bit) >> (level-2));
-  T index_z = ((z_loc_ & child_bit) >> (level-3));
-  return index_x+index_y+index_z;
+  //T index_x = ((x_loc_ & child_bit) >> (level-1));
+  //T index_y = ((y_loc_ & child_bit) >> (level-1));
+  //T index_z = ((z_loc_ & child_bit) >> (level-1));
+  //return index_x+2*index_y+4*index_z;
+  short index =0;
+  if((x_loc_ & child_bit))
+	index+=1;
+  if((y_loc_ & child_bit))
+	index+=2;
+  if((z_loc_ & child_bit))
+	index+=4;
+
+
+  return index;
+
 }
 
 template <class T>

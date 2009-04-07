@@ -62,7 +62,7 @@ boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::traverse(boct_loc_code<T_loc> 
   if (code.level<0)
     return NULL;
   boct_tree_cell<T_loc,T>* curr_cell=this;
-  while (code.level<curr_cell->level() && curr_cell->children())
+  while (code.level<curr_cell->level() && !curr_cell->is_leaf())
   {
     //boct_loc_code tempcode=curr_cell->get_code();
     short child_index=code.child_index(curr_cell->level());
