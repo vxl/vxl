@@ -20,9 +20,9 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& ori
 active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
-  int x_dim = vcl_floor(world_dim.x()/block_dim.x());
-  int y_dim = vcl_floor(world_dim.y()/block_dim.y());
-  int z_dim = vcl_floor(world_dim.z()/block_dim.z());
+  int x_dim = vcl_ceil(world_dim.x()/block_dim.x());
+  int y_dim = vcl_ceil(world_dim.y()/block_dim.y());
+  int z_dim = vcl_ceil(world_dim.z()/block_dim.z());
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
@@ -35,9 +35,9 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
 active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
-  int x_dim = vcl_floor(world_dim.x()/block_dim.x());
-  int y_dim = vcl_floor(world_dim.y()/block_dim.y());
-  int z_dim = vcl_floor(world_dim.z()/block_dim.z());
+  int x_dim = vcl_ceil(world_dim.x()/block_dim.x());
+  int y_dim = vcl_ceil(world_dim.y()/block_dim.y());
+  int z_dim = vcl_ceil(world_dim.z()/block_dim.z());
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
@@ -53,6 +53,24 @@ void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
     vgl_box_3d<double> bbox(min, max);
     blocks_(i,j,k) = new boxm_block<T>(bbox);
     }
+}
+template <class T>
+void boxm_scene<T>::write_active_block()
+{
+	if(valid_index(active_block_))
+{
+      vcl_cout<<"Writing of the active block";vcl_cout.flush();
+      int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
+      vcl_string path = gen_block_path(x,y,z);
+      vsl_b_ofstream os(path);
+      blocks_(x,y,z)->b_write(os);
+      // delete the block's data
+      boxm_block<T>* block = blocks_(x,y,z);
+      delete block;
+  
+  active_block_.set(-1,-1,-1);
+
+}
 }
 
 //: returns the block this point resides in
@@ -132,16 +150,13 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
   vcl_string block_path = gen_block_path(i,j,k);
   vsl_b_ifstream os(block_path);
 
-  vcl_cout<<"Block Path: "<<block_path<<vcl_endl;
-  vcl_cout.flush();
-
   //if the binary block file is not found
   if (!os) {
     vcl_cout<<"Create a new block";vcl_cout.flush();
     create_block(i,j,k);
     return;
   }
-
+  blocks_(i,j,k) = new boxm_block<T>();
   blocks_(i,j,k)->b_read(os);
   os.close();
 }
@@ -204,6 +219,23 @@ void boxm_scene<T>::b_write(vsl_b_ostream & s)
   vsl_b_write(s, version_no());
   // write the XML as char stream
   vsl_b_write(s, str);
+}
+template <class T>
+void boxm_scene<T>::write_scene()
+{
+  vcl_string filename=scene_path_+"/scene.bin";
+  vsl_b_ofstream os(filename.c_str());
+  this->b_write(os);
+  os.close();
+}
+
+template <class T>
+void boxm_scene<T>::load_scene(vcl_string filename)
+{
+   vsl_b_ifstream is(filename.c_str());
+   this->b_read(is);
+    is.close();
+
 }
 
 template <class T>

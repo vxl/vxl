@@ -20,7 +20,7 @@ public:
   //: constructor
   boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance(apm_val) {}
 
-  short version_no() { return 1; }
+  short version_no() const{ return 1; }
 
   //: the occlusion density at the sample point
   float alpha;
@@ -28,7 +28,7 @@ public:
   //: the appearance model at the sample point
   typename boxm_apm_traits<APM_MODEL>::apm_datatype appearance;
 
-  void print(vcl_ostream& os);
+  void  print(vcl_ostream& os) const;
 
 };
 

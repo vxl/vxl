@@ -14,6 +14,7 @@ public:
   boxm_block(vgl_box_3d<double> bbox): bbox_(bbox) {}
   boxm_block(vgl_box_3d<double> bbox, T* tree) : bbox_(bbox), octree_(tree) {}
   void set_tree(T * octree){ octree_=octree;}
+  T* get_tree(){return octree_;}
   bool is_visible(const vpgl_camera_double_sptr camera) {return true; }
   void b_read(vsl_b_istream &s);
   void b_write(vsl_b_ostream &s);

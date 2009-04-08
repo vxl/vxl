@@ -23,7 +23,7 @@ MAIN( test_binary_io )
   scene.set_paths("./boxm_scene", "block");
   x_write(vcl_cout, scene, "scene");
 
-  vsl_b_ofstream os("scene.bin");
+  vsl_b_ofstream os("d://scene.bin");
   scene.b_write(os);
   os.close();
 

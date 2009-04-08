@@ -49,6 +49,8 @@ public:
 
   void load_block(unsigned i, unsigned j, unsigned k);
 
+  void write_active_block();
+
   bgeo_lvcs lvcs() { return lvcs_;}
 
   boxm_block<T>* get_active_block();
@@ -71,6 +73,8 @@ public:
   boxm_block<T>* get_block(const vgl_point_3d<double>& p);
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k);
 
+  void write_scene();
+  void load_scene(vcl_string filename);
   short version_no() { return 1; }
 
 private:
