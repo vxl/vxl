@@ -138,6 +138,7 @@ public:
 
   boxm_block<T>* operator->();
 
+  vgl_point_3d<int> index(){return vgl_point_3d<int>(i_,j_,k_);}
 private:
   int i_;
   int j_;

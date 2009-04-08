@@ -63,7 +63,7 @@ template <class T>
 void boxm_scene<T>::write_active_block()
 {
 	if(valid_index(active_block_))
-{
+    {
       vcl_cout<<"Writing of the active block";vcl_cout.flush();
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       vcl_string path = gen_block_path(x,y,z);
@@ -73,9 +73,9 @@ void boxm_scene<T>::write_active_block()
       boxm_block<T>* block = blocks_(x,y,z);
       delete block;
   
-  active_block_.set(-1,-1,-1);
+       active_block_.set(-1,-1,-1);
 
-}
+      }
 }
 
 //: returns the block this point resides in
