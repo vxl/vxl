@@ -52,7 +52,7 @@ class boct_tree_cell // public vbl_ref_count
   
   bool split();
   void print();
-  
+  void delete_children();
   static short version_no() { return 1; }
  protected:
   boct_tree_cell<T_loc,T>* parent_;

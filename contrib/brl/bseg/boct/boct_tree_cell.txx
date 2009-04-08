@@ -33,9 +33,24 @@ boct_tree_cell<T_loc,T>::get_code()
 template<class T_loc,class T>
 boct_tree_cell<T_loc,T>::~boct_tree_cell()
 {
-  if (children_ != NULL) {
-   vcl_free(children_);
+  if (!is_leaf()) {
+    delete_children();
   }
+}
+
+template<class T_loc,class T>
+void boct_tree_cell<T_loc,T>::delete_children()
+{
+  if (!is_leaf()) {
+    // first delete all non-leaf children before deleting the cell
+    for (unsigned i=0; i<8; i++) {
+      children_[i].delete_children();
+    }
+    vcl_cout << "deleting cell's children " << this->code_ << vcl_endl;
+    delete[] children_;
+    children_=NULL;
+    }
+  
 }
 
 
@@ -76,7 +91,7 @@ bool boct_tree_cell<T_loc,T>::split()
 {
   // create new children if there is none
   if (is_leaf()) {
-  children_ = (boct_tree_cell<T_loc,T>*) vcl_malloc(sizeof(boct_tree_cell<T_loc,T>)*8);
+  children_ = (boct_tree_cell<T_loc,T>*) new boct_tree_cell<T_loc,T>[8];
   short child_level = this->level()-1;
   for (unsigned i=0; i<8; i++) {
     children_[i].code_ = code_.child_loc_code(i, child_level);
