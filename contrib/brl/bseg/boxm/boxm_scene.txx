@@ -395,10 +395,6 @@ boxm_block<T>*  boxm_block_iterator<T>::operator->()
 }
 
 
-#define BOXM_BLOCK_ITERATOR_INSTANTIATE(T) \
-template class boxm_block_iterator<T>; 
-
-
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene)
 {}
