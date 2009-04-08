@@ -5,6 +5,9 @@
 #include <vcl_sstream.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stl.h>
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
+
 //:
 // \file
 // \brief Run loopy belief propagation to estimate maximum marginal probabilities of all node states
@@ -71,6 +74,14 @@ void mmn_lbp_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs
 
     //Set max iterations, somewhat arbitrarily, increasing with nodes and arcs
     max_iterations_ = min_simple_iterations_ + nnodes_ + arcs_.size();
+}
+
+double mmn_lbp_solver::solve(
+                 const vcl_vector<vnl_vector<double> >& node_cost,
+                 const vcl_vector<vnl_matrix<double> >& pair_cost,
+                 vcl_vector<unsigned>& x)
+{
+    return (*this)(node_cost,pair_cost,x);
 }
 
 //: Run the algorithm
@@ -484,3 +495,90 @@ bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
 
     return retstate;
 }
+
+
+
+//=======================================================================
+// Method: set_from_stream
+//=======================================================================
+//: Initialise from a string stream
+bool mmn_lbp_solver::set_from_stream(vcl_istream &is)
+{
+  // Cycle through stream and produce a map of properties
+  vcl_string s = mbl_parse_block(is);
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  // No properties expected.
+
+  // Check for unused props
+  mbl_read_props_look_for_unused_props(
+      "mmn_lbp_solver::set_from_stream", props, mbl_read_props_type());
+  return true;
+}
+
+
+//=======================================================================
+// Method: version_no
+//=======================================================================
+
+short mmn_lbp_solver::version_no() const
+{
+  return 1;
+}
+
+//=======================================================================
+// Method: is_a
+//=======================================================================
+
+vcl_string mmn_lbp_solver::is_a() const
+{
+  return vcl_string("mmn_lbp_solver");
+}
+
+//: Create a copy on the heap and return base class pointer
+mmn_solver* mmn_lbp_solver::clone() const
+{
+  return new mmn_lbp_solver(*this);
+}
+
+//=======================================================================
+// Method: print
+//=======================================================================
+
+void mmn_lbp_solver::print_summary(vcl_ostream& os) const
+{
+    os<<"This is a "<<is_a()<<"\t"<<"with "<<nnodes_<<" nodes"<<vcl_endl;
+}
+
+//=======================================================================
+// Method: save
+//=======================================================================
+
+void mmn_lbp_solver::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs,version_no());
+}
+
+//=======================================================================
+// Method: load
+//=======================================================================
+
+void mmn_lbp_solver::b_read(vsl_b_istream& bfs)
+{
+  if (!bfs) return;
+  short version;
+  unsigned n;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+    case (1):
+      break;
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+  }
+}
+

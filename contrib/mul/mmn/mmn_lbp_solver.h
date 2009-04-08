@@ -12,6 +12,7 @@
 #include <vnl/vnl_matrix.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_graph_rep1.h>
+#include <mmn/mmn_solver.h>
 //: Run loopy belief to estimate overall marginal probabilities of all node states
 //  Then use converged LBP messages to also estimate overall most likely configuration
 //
@@ -19,7 +20,7 @@
 // Should converge if there is at most one loop in the graph
 // The input graph is converted to form mmn_graph_rep1 from the input arcs
 
-class mmn_lbp_solver
+class mmn_lbp_solver: public mmn_solver
 {
  public:
     //: Message update mode type (all in parallel, or randomised node order with immediate effect}
@@ -140,7 +141,7 @@ class mmn_lbp_solver
     mmn_lbp_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
 
     //: Input the arcs that define the graph
-    void set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
+    virtual void set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
 
     //: Find values for each node with minimise the total cost
     //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i
@@ -163,6 +164,12 @@ class mmn_lbp_solver
                       vcl_vector<unsigned>& x);
 
     //: return the beliefs, i.e. the marginal probabilities of each node's states
+    //
+    virtual double solve(
+                 const vcl_vector<vnl_vector<double> >& node_cost,
+                 const vcl_vector<vnl_matrix<double> >& pair_cost,
+                 vcl_vector<unsigned>& x);
+
     const vcl_vector<vnl_vector<double>  >&  belief() const {return belief_;}
 
     //: final iteration count
@@ -179,6 +186,28 @@ class mmn_lbp_solver
     //: Set message update mode (parallel or randomised serial}
     void set_msg_upd_mode(msg_update_t msg_upd_mode) {msg_upd_mode_ = msg_upd_mode;}
 
+    //: Initialise from a text stream
+    virtual bool set_from_stream(vcl_istream &is);
+
+    //: Version number for I/O
+    short version_no() const;
+
+    //: Name of the class
+    virtual vcl_string is_a() const;
+
+    //: Create a copy on the heap and return base class pointer
+    virtual mmn_solver* clone() const;
+
+    //: Print class to os
+    virtual void print_summary(vcl_ostream& os) const;
+
+    //: Save class to binary file stream
+    virtual void b_write(vsl_b_ostream& bfs) const;
+
+    //: Load class from binary file stream
+    virtual void b_read(vsl_b_istream& bfs);
+
+    
 };
 
 #endif // mmn_lbp_solver_h_
