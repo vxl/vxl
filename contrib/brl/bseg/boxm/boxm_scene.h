@@ -12,6 +12,8 @@
 // \endverbatim
 
 #include "boxm_block.h"
+#include "boxm_sample.h"
+
 #include <vcl_string.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -20,15 +22,15 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <boct/boct_tree.h>
-#include <boxm/boxm_sample.h>
+
 
 class boxm_scene_parser;
+template <class T> class boxm_block_iterator;
 
 template <class T>
 class boxm_scene:public vbl_ref_count
 {
 public:
-  
   boxm_scene() : scene_path_(""), block_pref_(""), active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
 
   boxm_scene(const bgeo_lvcs& lvcs, 
@@ -69,13 +71,18 @@ public:
   vcl_string block_prefix() { return block_pref_; }
 
   void b_read(vsl_b_istream & s);
+
   void b_write(vsl_b_ostream & s);
+
   boxm_block<T>* get_block(const vgl_point_3d<double>& p);
-  boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k);
+
+  boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
   void write_scene();
   void load_scene(vcl_string filename);
   short version_no() { return 1; }
+  
+  boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;} 
 
 private:
   bgeo_lvcs lvcs_;
@@ -94,12 +101,49 @@ private:
 
   vgl_box_3d<double> get_world_bbox();
 
+  vgl_box_3d<double> get_block_bbox(int x, int y, int z);
+
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
 
   bool valid_index(vgl_point_3d<int> idx);
 
   boxm_scene_parser* parse_config(vcl_string xml);
+
+};
+
+template <class T>
+class boxm_block_iterator
+{
+public:
+  boxm_block_iterator(boxm_scene<T>* const scene): scene_(scene), i_(0), j_(0), k_(0) {}
+
+  ~boxm_block_iterator(){}
+
+  boxm_block_iterator<T>& begin();
+
+  bool end();
+
+  boxm_block_iterator<T>& operator=(const boxm_block_iterator<T>& that);
+
+  bool operator==(const boxm_block_iterator<T>& that);
+
+  bool operator!=(const boxm_block_iterator<T>& that);
+
+  boxm_block_iterator<T>& operator++();
+
+  boxm_block_iterator<T>& operator--();
+
+  boxm_block<T>& operator*();
+
+  boxm_block<T>* operator->();
+
+private:
+  int i_;
+  int j_;
+  int k_;
+
+  boxm_scene<T>* const scene_;
 };
 
 //: generates an XML file from the member variables

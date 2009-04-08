@@ -11,18 +11,18 @@ class boxm_block
 public:
   boxm_block(): octree_(0) {}
   ~boxm_block(){}
-  boxm_block(vgl_box_3d<double> bbox): bbox_(bbox) {}
+  boxm_block(vgl_box_3d<double> bbox): bbox_(bbox), octree_(0) {}
   boxm_block(vgl_box_3d<double> bbox, T* tree) : bbox_(bbox), octree_(tree) {}
   void set_tree(T * octree){ octree_=octree;}
+  vgl_box_3d<double> bounding_box() { return bbox_; }
   T* get_tree(){return octree_;}
-  bool is_visible(const vpgl_camera_double_sptr camera) {return true; }
   void b_read(vsl_b_istream &s);
   void b_write(vsl_b_ostream &s);
   short version_no() { return 1; }
+
 private:
   vgl_box_3d<double> bbox_;
   T* octree_;
-  //boxm_visibility_graph_node* vis_graph_;
 };
 
 #endif

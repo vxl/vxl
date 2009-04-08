@@ -7,7 +7,8 @@ template <class T>
 class boxm_block_vis_graph_iterator
 {
 public:
-  boxm_block_vis_graph_iterator(vpgl_camera_double_sptr cam, boxm_scene<T>* scene, bool rev_iter);
+  boxm_block_vis_graph_iterator(vpgl_camera_double_sptr cam, boxm_scene<T>* scene, bool rev_iter,
+    unsigned img_ni, unsigned img_nj);
 
   ~boxm_block_vis_graph_iterator(){}
 

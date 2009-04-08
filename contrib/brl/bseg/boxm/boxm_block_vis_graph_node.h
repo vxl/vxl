@@ -3,6 +3,7 @@
 
 #include <vcl_vector.h>
 
+template <class T>
 class boxm_block_vis_graph_node
 {
 public:
@@ -14,7 +15,7 @@ private:
   int in_count;
 
   //: graph links to the outgoing blocks
-  vcl_vector<boxm_block*> out_links_;
+  vcl_vector<boxm_block<T>*> out_links_;
 };
 
 #define BOXM_BLOCK_VIS_GRAPH_NODE_INSTANTIATE(T) \

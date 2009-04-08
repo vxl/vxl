@@ -26,6 +26,13 @@ active_block_(vgl_point_3d<int>(-1,-1,-1))
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
+  for (unsigned i=0; i<x_dim; i++) {
+    for (unsigned j=0; j<y_dim; j++) {
+      for (unsigned k=0; k<z_dim; k++) {
+        create_block(i,j,k);
+      }
+    }
+  }
 }
 
 template <class T>
@@ -47,10 +54,8 @@ template <class T>
 void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 {
   if (blocks_(i,j,k) == NULL) {
-    vgl_point_3d<double> min(i*block_dim_.x(), j*block_dim_.y(), k*block_dim_.z());
-    vgl_point_3d<double> max(min.x()+block_dim_.x(), min.y()+block_dim_.y(), min.z()+block_dim_.z());
-
-    vgl_box_3d<double> bbox(min, max);
+    
+    vgl_box_3d<double> bbox = get_block_bbox(i,j,k);
     blocks_(i,j,k) = new boxm_block<T>(bbox);
     }
 }
@@ -108,6 +113,16 @@ vgl_box_3d<double> boxm_scene<T>::get_world_bbox()
   vgl_point_3d<double> max(min.x()+block_dim_.x()*blocks_.get_row1_count(),
                            min.y()+block_dim_.y()*blocks_.get_row2_count(),
                            min.z()+block_dim_.z()*blocks_.get_row3_count());
+
+  vgl_box_3d<double> bbox(min, max);
+  return bbox;
+}
+
+template <class T>
+vgl_box_3d<double> boxm_scene<T>::get_block_bbox(int x, int y, int z)
+{
+  vgl_point_3d<double> min(block_dim_.x()*x, block_dim_.y()*y, block_dim_.z()*z);
+  vgl_point_3d<double> max(min.x()+block_dim_.x(), min.y()+block_dim_.y(), min.z()+block_dim_.z());
 
   vgl_box_3d<double> bbox(min, max);
   return bbox;
@@ -282,6 +297,109 @@ boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml)
 }
 
 template <class T>
+boxm_block_iterator<T>& boxm_block_iterator<T>::begin()
+{
+  i_=j_=k_=0;
+  return (*this);
+}
+
+template <class T>
+bool boxm_block_iterator<T>::end()
+{
+  int x,y,z;
+  scene_->block_num(x,y,z);
+  
+  //if ((i_==x-1) && (j_==y-1) && (k_==z-1))
+  if ((k_==z) || (k_ == -1))
+    return true;
+    
+  return false;
+}
+
+template <class T>
+boxm_block_iterator<T>& boxm_block_iterator<T>::operator=(const boxm_block_iterator<T>& that)
+{
+  this->i_ = that.i_;
+  this->j_ = that.j_;
+  this->k_ = that.k_;
+  //this->scene_ = that.scene_;
+  return (*this);
+}
+
+  
+template <class T>  
+bool boxm_block_iterator<T>::operator==(const boxm_block_iterator<T>& that)
+{
+  if ((this->i_ == that.i_) && (this->j_ == that.j_) && (this->k_ == that.k_) && (this->scene_ == that.scene_))
+    return true;
+  return false;
+}
+
+template <class T>
+bool boxm_block_iterator<T>::operator!=(const boxm_block_iterator<T>& that)
+{
+  if ((this->i_ != that.i_) || (this->j_ != that.j_) == (this->k_ != that.k_) || (this->scene_ != that.scene_))
+    return true;
+  return false;
+}
+template <class T>
+boxm_block_iterator<T>& boxm_block_iterator<T>::operator++()
+{
+  int x,y,z;
+  scene_->block_num(x,y,z);
+  
+  if (++i_==x) {
+    i_=0;
+    if (++j_==y) {
+      j_=0;
+      ++k_;
+      //if (++k_==z) {
+      //  k_=0;
+      //}
+    }
+  }
+  return (*this);
+}
+
+template <class T>
+boxm_block_iterator<T>& boxm_block_iterator<T>::operator--()
+{
+  int x,y,z;
+  
+  scene_->block_num(x,y,z);
+  if (--i_==-1) {
+    i_=0;
+    if (--j_==-1) {
+      j_=0;
+      k_--;
+      //if (--k_==-1) {
+      //  k_=0;
+      //}
+    }
+  }
+  return (*this);
+}
+
+template <class T>
+boxm_block<T>&  boxm_block_iterator<T>::operator*()
+{
+  boxm_block<T>* block = scene_->get_block(i_,j_,k_);
+  return *block;
+}
+
+template <class T>
+boxm_block<T>*  boxm_block_iterator<T>::operator->()
+{
+  boxm_block<T>* block = scene_->get_block(i_,j_,k_);
+  return block;
+}
+
+
+#define BOXM_BLOCK_ITERATOR_INSTANTIATE(T) \
+template class boxm_block_iterator<T>; 
+
+
+template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene)
 {}
 template <class T>
@@ -296,6 +414,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene)
 
 #define BOXM_SCENE_INSTANTIATE(T) \
 template boxm_scene<T >; \
+template boxm_block_iterator<T>; \
 template void x_write(vcl_ostream&, boxm_scene<T >&, vcl_string);\
 template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const &scene);\
 template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const * &scene);\
