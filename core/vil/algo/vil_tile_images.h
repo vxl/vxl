@@ -11,17 +11,18 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
-//: Create a big image by tiling images in patches (must be of same size)
+//: Create a big image by tiling images in patches (must be of same size).
 //  Creates a large image by putting smaller images into an approximately
 //  square grid.
 //  If there are n small images, the grid will have sqrt(n) columns.
+// \sa contrib/mul/tools/tile_images_2d
 template<class T>
 inline void vil_tile_images(vil_image_view<T>& big_image,
                             const vcl_vector<vil_image_view<T> >& patches)
 {
   unsigned n = patches.size();
-  unsigned ni = unsigned(vcl_sqrt(float(n)));
-  unsigned nj = 1+(n-1)/ni;
+  unsigned nj = unsigned(vcl_sqrt(float(n)));
+  unsigned ni = 1+(n-1)/nj;
 
   unsigned pi = patches[0].ni();
   unsigned pj = patches[0].nj();
