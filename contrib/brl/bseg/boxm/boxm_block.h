@@ -1,9 +1,23 @@
 #ifndef boxm_block_h_
 #define boxm_block_h_
 
+//:
+// \file
+// \brief  a block is a smallest area that is going to be processed
+//         with an octree
+//
+// \author Gamze Tunali
+// \date 04/01/2009
+// \verbatim
+//  Modifications
+//  
+// \endverbatim
+
+
 #include <vpgl/vpgl_camera.h>
 #include <vgl/vgl_box_3d.h>
 #include <boct/boct_tree.h>
+
 
 template <class T>
 class boxm_block

@@ -77,6 +77,8 @@ public:
   boxm_block<T>* get_block(const vgl_point_3d<double>& p);
 
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
+  
+  boxm_block<T>* get_block(const vgl_point_3d<unsigned>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
 
   void write_scene();
   void load_scene(vcl_string filename);
@@ -130,7 +132,9 @@ public:
 
   bool operator!=(const boxm_block_iterator<T>& that);
 
-  boxm_block_iterator<T>& operator++();
+  boxm_block_iterator<T>& operator++();  // pre-inc
+
+  boxm_block_iterator<T> operator++(int); // post-inc
 
   boxm_block_iterator<T>& operator--();
 

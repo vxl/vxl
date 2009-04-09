@@ -360,7 +360,14 @@ boxm_block_iterator<T>& boxm_block_iterator<T>::operator++()
   }
   return (*this);
 }
-
+template <class T>
+boxm_block_iterator<T> boxm_block_iterator<T>::operator++(int)
+{ 
+  boxm_block_iterator<T> old = *this;
+  ++*this;
+  return old;
+}
+          
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::operator--()
 {
