@@ -23,6 +23,7 @@ SET( vpdl_sources
   vpdt/vpdt_dist_traits.h
   vpdt/vpdt_probability.h
   vpdt/vpdt_log_probability.h
+  vpdt/vpdt_num_obs.h
 
   vpdt/vpdt_norm_metric.h
   vpdt/vpdt_eigen_sym_matrix.h
