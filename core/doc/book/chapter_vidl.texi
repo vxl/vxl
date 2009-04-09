@@ -72,7 +72,7 @@ and the body of the loop is empty
 (there are, of course, several other ways to structure this code).
 The @code{read_frame()} member function advances to the
 next frame in the input sequence and then returns that frame.
-It return a null smart pointer when no more frames are available.
+It returns a null smart pointer when no more frames are available.
 The cast to @code{bool} causes the loop to terminate when
 the end of input is reached (i.e. a null pointer evaluates to false).
 Because of lazy evaluation, @code{write_frame()} is only 
@@ -119,7 +119,7 @@ This could be from a camera, network video feed, or other source.
 Thus, video capture and video transcoding are both accomplished by 
 directing an input stream into an output stream.
 
-Several APIs that @code{vidl} interfaces with allow for both input
+Several APIs that @code{vidl} interfaces allow for both input
 and output.
 For these there are both a corresponding @code{vidl_istream} and
 @code{vidl_ostream}.
@@ -191,7 +191,7 @@ and returns the resulting current frame in one function call.
 
 Live streams only support advancing through frames 
 sequentially, but most other streams allow traversal forward
-for backward through the video to a find a particular frame.
+or backward through the video to find a particular frame.
 This operation is called @emph{seeking}.
 If an input stream supports seeking, the method 
 @code{is_seekable()} will return true.
@@ -232,7 +232,7 @@ based cameras (Windows not supported yet)
 The interface for output streams is much simpler than for input
 streams.
 Once an output video stream is open, its sole job is to accept
-frames and appended them to the output video.
+frames and append them to the output video.
 The key method is @code{write_frame(frame)} which takes a 
 frame smart pointer and 
 tries to write it to the end of the output stream.
@@ -261,7 +261,7 @@ have been implemented.
 Writes a video to disk as a sequence of numbered image files using 
 any image file format supported by vil.
 @item vidl_ffmpeg_ostream 
-Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
+Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} libraries to 
 encode to many common video file formats with many encoding options 
 for video quality and compression.
 @end table
@@ -270,7 +270,7 @@ for video quality and compression.
 @subsection Image List Streams
 
 The image list streams are the simplest streams in @code{vidl}.
-They require no 3rd party libraries and rely only on @code{vil}.
+They require no third party libraries and rely only on @code{vil}.
 The @code{vidl_image_list_istream} treats a vector of paths
 to image files as a video (with unknown frame rate).
 The stream is constructed with a vector of paths or a file glob
@@ -310,17 +310,17 @@ video/frame010.tiff
 @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} is a collection of 
 cross-platform, open source, C libraries for encoding and 
 decoding video.
-It is primarily used on Linux and Mac OS X, but can be compiled
+It is primarily used on Linux and Mac OS X, but it can be compiled
 for Windows too.
 It requires GCC and will not compile with Microsoft's compiler.
 The primary libraries are libavcodec and libavformat.
 Newer versions of FFMPEG also use libavutil and libswscale.
 For several years prior to the version 0.5 release, FFMPEG
-evolved continually with an ever-changing API, 
+evolved continually with an ever-changing API 
 but no formal releases.
 @code{vidl} has tried to support several ``versions'' of the
 API by supplying multiple stream implementations.
-However, the selection of implementation and its interface 
+The selection of implementation and its interface 
 with FFMPEG is encapsulated and hidden
 from the public @code{vidl} stream interfaces.
 Going forward, @code{vidl} will try to support any official 
@@ -407,7 +407,8 @@ Other examples of IIDC camera APIs are the
 @uref{http://www.cs.cmu.edu/~iwan/1394/,CMU 1394 Driver}
 for Windows and the Point Grey 
 @uref{http://www.ptgrey.com/products/pgrflycapture/index.asp,FlyCapture SDK}
-for Windows that adds additional features beyond the standard
+for Windows.
+Point Grey adds additional features beyond the standard
 for its own line of cameras.
 Separate @code{vidl_istream} classes could be written for
 these in the future.
@@ -445,7 +446,7 @@ can be used to probe the bus and populate this struct.
 
 @section Video Frames
 
-The @code{vidl_frame_sptr} is data structure used to transport video
+The @code{vidl_frame_sptr} is a data structure used to transport video
 frame data from a @code{vidl_istream} to a @code{vidl_ostream}. 
 The @code{vidl_frame} contains a pointer to the frame buffer, 
 the image resolution, the pixel format, and may eventually contain 
@@ -504,7 +505,7 @@ The characters are permuted in the @code{vidl_pixel_format}
 names to indicate the actual ordering.  
 For example, @code{BGR} indicates RGB color stored in reverse order.
 
-The @emph{bit number} in the indicates how the bits are laid out.  
+The @emph{bit number} indicates how the bits are laid out.  
 This is most important in packed color frames where a group 
 of 2 or 4 pixels is encoded together and differing numbers of bits are 
 added to different color channels.  
@@ -591,12 +592,12 @@ The pixel arrangement.  Appended to @code{VIDL_PIXEL_ARRANGE_}
 this determines the @code{vidl_pixel_arrangement}.
 @item xcs
 The X color sub-sampling factor.  In YUV color space, the U and V
-channels have a horizontal (X) resolution that is @math{2^@{-xcs@}} 
-times that of the Y channel.
+channels have a horizontal resolution (@code{ni}) that is 
+@math{2^@{-xcs@}} times that of the Y channel.
 @item ycs
 The Y color sub-sampling factor.  In YUV color space, the U and V
-channels have a vertical (Y) resolution that is @math{2^@{-ycs@}} 
-times that of the Y channel.
+channels have a vertical resolution (@code{nj}) that is 
+@math{2^@{-ycs@}} times that of the Y channel.
 @end table
 
 A new pixel format may be introduced by simply adding an entry in this
@@ -702,8 +703,8 @@ is conversion to and from a @code{vil_image_view}.
 This type of conversion is needed to do any image processing
 on the data.
 There is more than one way to do such a conversion.
-The fastest way, if possible, is to wrap the @code{vil_image_view}
-in a @code{vidl_frame} that shares the memory.
+The fastest way, if possible, is to share the memory and 
+wrap the @code{vidl_frame} in a @code{vil_image_view} or vice versa.
 Wrapping is only possible when the memory layout of the @code{vil}
 memory format is compatible with a @code{vidl} pixel format.
 
@@ -716,7 +717,7 @@ If wrapping fails, new memory is allocated and the image data is
 copied (and converted if necessary) into that memory.
 The result is returned as a @code{vidl_frame_sptr}.
 
-When reading frames from video wrapping can be more dangerous.
+When reading frames from video, wrapping can be more dangerous.
 Processing images from video often involves multiple frames.
 To reduce repeated reallocation of memory, most input streams 
 will reuse the same memory.
@@ -746,7 +747,7 @@ the frame data into it with the appropriate conversion (if necessary).
 The conversion is based on the data type of the image view.
 The last function argument, @code{require_color}, is optional and
 defaults to @code{VIDL_PIXEL_COLOR_UNKNOWN}.
-In the default case the color encoding is kept the same as in
+In the default case, the color encoding is kept the same as
 the input frame.
 If @code{require_color} is specified, then it will be used as the
 resulting color encoding.
