@@ -144,15 +144,16 @@ class bbgm_view_maker<dist_type, func_type,
       return false;
     
     typedef typename func_type::template rebind<comp_type>::other func_comp;
-    if(component_idx < 0 || (func_type::valid_functor && !func_comp::valid_functor))
+    typedef vpdt_mixture_accessor<dist_type, func_comp> func_mix;
+    if(component_idx < 0 || (func_type::valid_functor && !func_mix::valid_functor))
     {
       func_type func;
       bbgm_apply(*d, func, image, fail_val);
       return true;
     }
-    else if (func_comp::valid_functor)
+    else if (func_mix::valid_functor)
     {
-      vpdt_mixture_accessor<dist_type, func_comp> func(component_idx);
+      func_mix func(component_idx);
       bbgm_apply(*d, func, image, fail_val);
       return true;
     }
