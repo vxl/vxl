@@ -9,7 +9,7 @@
 //: This means that checking if the X_HIGH of one and X_LOW of other have the same x code and viceversa.
 void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell,
                                vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaf_nodes, 
-                               boct_tree_cell<short,vgl_point_3d<double> >::FACE_IDX face,
+                               boct_face_idx face,
                                int max_level, 
                                vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> & neighbors)
 {
@@ -27,46 +27,46 @@ void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell
 
             switch(face)
             {
-            case boct_tree_cell<short,vgl_point_3d<double> >::NONE:
+            case boct_cell_face::NONE:
 
                 break;
 
-            case boct_tree_cell<short,vgl_point_3d<double> >::X_LOW:
+            case boct_cell_face::X_LOW:
                 {
                     if(intersectionbox.min_y()!=intersectionbox.max_y() && intersectionbox.min_z()!=intersectionbox.max_z())
                     if(intersectionbox.min_x()==intersectionbox.max_x()&& intersectionbox.min_x()==cellbox.min_x())
                         neighbors.push_back(leaf_nodes[i]);
                     break;
                 }
-            case boct_tree_cell<short,vgl_point_3d<double> >::X_HIGH:
+            case boct_cell_face::X_HIGH:
                 {
                     if(intersectionbox.min_y()!=intersectionbox.max_y() && intersectionbox.min_z()!=intersectionbox.max_z())
                         if(intersectionbox.min_x()==intersectionbox.max_x()==cellbox.max_x())
                             neighbors.push_back(leaf_nodes[i]);
                     break;
                 }
-            case boct_tree_cell<short,vgl_point_3d<double> >::Y_LOW:
+            case boct_cell_face::Y_LOW:
                 {
                     if(intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_z()!=intersectionbox.max_z())
                         if(intersectionbox.min_y()==intersectionbox.max_y()==cellbox.min_y())
                             neighbors.push_back(leaf_nodes[i]);
                     break;
                 }
-            case boct_tree_cell<short,vgl_point_3d<double> >::Y_HIGH:
+            case boct_cell_face::Y_HIGH:
                 {
                     if(intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_z()!=intersectionbox.max_z())
                         if(intersectionbox.min_y()==intersectionbox.max_y()==cellbox.max_y())
                             neighbors.push_back(leaf_nodes[i]);
                     break;
                 }
-            case boct_tree_cell<short,vgl_point_3d<double> >::Z_LOW:
+            case boct_cell_face::Z_LOW:
                 {
                     if(intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_y()!=intersectionbox.max_y())
                         if(intersectionbox.min_z()==intersectionbox.max_z()==cellbox.min_z())
                             neighbors.push_back(leaf_nodes[i]);
                     break;
                 }
-            case boct_tree_cell<short,vgl_point_3d<double> >::Z_HIGH:
+            case boct_cell_face::Z_HIGH:
                 {
                     if(intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_y()!=intersectionbox.max_y())
                         if(intersectionbox.min_z()==intersectionbox.max_z()==cellbox.max_z())
@@ -95,7 +95,7 @@ MAIN( test_find_neighbors )
   boct_tree_cell<short,vgl_point_3d<double> >* cell=block->locate_point(p1);
 
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n;
-  cell->find_neighbors(boct_tree_cell<short,vgl_point_3d<double> >::X_HIGH,n,10);
+  cell->find_neighbors(boct_cell_face::X_HIGH,n,10);
 
   //: ground truth for the code of the neighbor 
   boct_loc_code<short> gt_code;
@@ -107,7 +107,7 @@ MAIN( test_find_neighbors )
   boct_tree_cell<short,vgl_point_3d<double> >* cell_xlow=block->locate_point(p_x_low);
 
   n.clear();
-  cell_xlow->find_neighbors(boct_tree_cell<short,vgl_point_3d<double> >::X_LOW,n,10);
+  cell_xlow->find_neighbors(boct_cell_face::X_LOW,n,10);
 
   //: ground truth for the code of the neighbor 
   boct_loc_code<short> gt_code_x_low;
@@ -128,11 +128,11 @@ MAIN( test_find_neighbors )
 
 
   n.clear();
-  cell_zlow->find_neighbors(boct_tree_cell<short,vgl_point_3d<double> >::X_LOW,n,10);
+  cell_zlow->find_neighbors(boct_cell_face::X_LOW,n,10);
 
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n_brute_force;
 
-  brute_force_test_neighbor(cell_zlow,leaf_nodes,boct_tree_cell<short,vgl_point_3d<double> >::X_LOW,nlevels, n_brute_force);
+  brute_force_test_neighbor(cell_zlow,leaf_nodes,boct_cell_face::X_LOW,nlevels, n_brute_force);
 
 
   TEST("Returns the correct # of Neighbors",n.size(),n_brute_force.size());

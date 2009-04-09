@@ -6,11 +6,25 @@
 #include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
 
+class boct_cell_face
+{
+public:
+  static const unsigned char NONE = 0x00;
+  static const unsigned char Z_LOW = 0x01;
+  static const unsigned char Z_HIGH = 0x02;
+  static const unsigned char Y_LOW = 0x04;
+  static const unsigned char Y_HIGH = 0x08;
+  static const unsigned char X_LOW = 0x10;
+  static const unsigned char X_HIGH = 0x20;
+  static const unsigned char ALL = 0x3F;
+};
+
+typedef unsigned char boct_face_idx;
+
 template <class T_loc,class T>
 class boct_tree_cell // public vbl_ref_count
 {
  public:
-  typedef enum {NONE, X_LOW, X_HIGH, Y_LOW, Y_HIGH, Z_LOW, Z_HIGH, ALL} FACE_IDX;
 
   //constructors
   boct_tree_cell<T_loc,T>()
@@ -43,7 +57,7 @@ class boct_tree_cell // public vbl_ref_count
   boct_tree_cell<T_loc,T>* children(){return children_;}
   boct_tree_cell<T_loc,T>* parent() { return parent_; }
 
-  void  find_neighbors(FACE_IDX face,vcl_vector<boct_tree_cell<T_loc,T>*> & neighbors,short max_level);
+  void  find_neighbors(boct_face_idx face,vcl_vector<boct_tree_cell<T_loc,T>*> & neighbors,short max_level);
   boct_tree_cell<T_loc,T>* get_common_ancestor(short binarydiff);
   
   void set_data(T const& data) {data_=data; }

@@ -32,7 +32,6 @@ boct_tree<T_loc,T>::boct_tree(short max_level, short init_levels): max_level_(ma
 template <class T_loc,class T>
 boct_tree<T_loc,T>::~boct_tree() 
 {
-  vcl_cout << "deleting tree n";
   vcl_vector<boct_tree_cell<T_loc,T>*> v;
   if (root_)
     if (root_->is_leaf()) {

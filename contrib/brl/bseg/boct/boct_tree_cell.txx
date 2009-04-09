@@ -46,11 +46,9 @@ void boct_tree_cell<T_loc,T>::delete_children()
     for (unsigned i=0; i<8; i++) {
       children_[i].delete_children();
     }
-    vcl_cout << "deleting cell's children " << this->code_ << vcl_endl;
     delete[] children_;
     children_=NULL;
     }
-  
 }
 
 
@@ -119,7 +117,7 @@ boct_tree_cell<T_loc,T>* boct_tree_cell<T_loc,T>::get_common_ancestor(short bina
 }
 
 template<class T_loc,class T>
-void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
+void  boct_tree_cell<T_loc,T>::find_neighbors(boct_face_idx face,
                                         vcl_vector<boct_tree_cell<T_loc,T>*> & neighbors,
                                         short max_level)
 {
@@ -127,10 +125,10 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
 
   switch (face)
   {
-    case NONE:
+    case boct_cell_face::NONE:
       break;
 
-    case X_LOW:
+    case boct_cell_face::X_LOW:
     {
       short xlowcode=this->code_.x_loc_-(short)(1);
       if (xlowcode<0)
@@ -166,7 +164,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
 
       break;
     }
-    case X_HIGH:
+    case boct_cell_face::X_HIGH:
     {
       if ((this->code_.x_loc_+cellsize)>=(1<<(max_level-1)))
         return ;
@@ -203,7 +201,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
 
       break;
     }
-    case Y_LOW:
+    case boct_cell_face::Y_LOW:
     {
       short ylowcode=this->code_.y_loc_-(short)(1);
       if (ylowcode<0)
@@ -239,7 +237,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       }
       break;
     }
-    case Y_HIGH:
+    case boct_cell_face::Y_HIGH:
     {
       if ((this->code_.y_loc_+cellsize)>=(1<<(max_level-1)))
         return ;
@@ -276,7 +274,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       }
       break;
     }
-    case Z_LOW:
+    case boct_cell_face::Z_LOW:
     {
       short zlowcode=this->code_.z_loc_-(short)(1);
       if (zlowcode<0)
@@ -313,7 +311,7 @@ void  boct_tree_cell<T_loc,T>::find_neighbors(FACE_IDX face,
       }
       break;
     }
-    case Z_HIGH:
+    case boct_cell_face::Z_HIGH:
     {
       if ((this->code_.z_loc_+cellsize)>=(1<<(max_level-1)))
         return ;
