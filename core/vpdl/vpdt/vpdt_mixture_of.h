@@ -327,6 +327,10 @@ public:
 
   //: Sort the components in order of decreasing weight
   void sort() { vcl_sort(components_.begin(), components_.end(), sort_weight() ); }
+  
+  //: Sort the components in the range \a idx1 to \a idx2 in order of decreasing weight
+  void sort(unsigned int idx1, unsigned int idx2) 
+  { vcl_sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_weight() ); }
 
   //: Sort the components using any StrictWeakOrdering function
   // The prototype should be
@@ -339,10 +343,10 @@ public:
   void sort(comp_type_ comp)
   { vcl_sort(components_.begin(), components_.end(), sort_adaptor<comp_type_>(comp)); }
 
-  //: Sort the top \c idx components using any StrictWeakOrdering function
+  //: Sort the components in the range \a idx1 to \a idx2 using any StrictWeakOrdering function
   template <class comp_type_>
-  void sort(comp_type_ comp, unsigned int idx)
-  { vcl_sort(components_.begin(), components_.begin()+idx+1, sort_adaptor<comp_type_>(comp)); }
+  void sort(comp_type_ comp, unsigned int idx1, unsigned int idx2)
+  { vcl_sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_adaptor<comp_type_>(comp)); }
   
 
   friend T vpdt_box_prob<>(const vpdt_mixture_of<dist_t>& d, const F& min_pt, const F& max_pt);

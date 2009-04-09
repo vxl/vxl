@@ -129,6 +129,9 @@ public:
 
   //: Sort the components in order of decreasing weight
   void sort() { impl_.sort(); }
+  
+  //: Sort the components in the range \a idx1 to \a idx2 in order of decreasing weight
+  void sort(unsigned int idx1, unsigned int idx2) { impl_.sort(idx1, idx2); }
 
   //: Sort the components using any StrictWeakOrdering function
   // The prototype should be
@@ -140,9 +143,10 @@ public:
   template <class comp_type_>
   void sort(comp_type_ comp) { impl_.sort(comp); }
 
-  //: Sort the top \c idx components using any StrictWeakOrdering function
+  //: Sort the components in the range \a idx1 to \a idx2 using any StrictWeakOrdering function
   template <class comp_type_>
-  void sort(comp_type_ comp, unsigned int idx) { impl_.sort(comp,idx); }
+  void sort(comp_type_ comp, unsigned int idx1, unsigned int idx2) 
+  { impl_.sort(comp,idx1,idx2); }
 
 };
 
