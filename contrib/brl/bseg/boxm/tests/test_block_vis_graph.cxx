@@ -8,7 +8,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpl/vpl.h>
 
-typedef boct_tree<short,vgl_point_3d<double> > tree_type;
+typedef boct_tree<short,vgl_point_3d<double>,void > tree_type;
 
 double IMAGE_U = 200;
 double IMAGE_V = 200;
