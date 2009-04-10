@@ -15,10 +15,12 @@ IF(wxWidgets_FOUND)
 
     # wxWidgets
     wxSliderPanel.cxx               wxSliderPanel.h
+    wxVideoControl.cxx              wxVideoControl.h
 
     # XML Resource Handlers
     vgui_wx_adaptorXmlHandler.cxx   vgui_wx_adaptorXmlHandler.h
     wxSliderPanelXmlHandler.cxx     wxSliderPanelXmlHandler.h
+    wxVideoControlXmlHandler.cxx    wxVideoControlXmlHandler.h
   )
 
   ADD_LIBRARY(vgui_wx ${vgui_wx_sources})
