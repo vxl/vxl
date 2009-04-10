@@ -74,11 +74,11 @@ public:
 
   void b_write(vsl_b_ostream & s);
 
-  boxm_block<T>* get_block(const vgl_point_3d<double>& p);
+  boxm_block<T>* get_block(vgl_point_3d<double>& p);
 
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
   
-  boxm_block<T>* get_block(const vgl_point_3d<unsigned>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
+  boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
 
   void write_scene();
   void load_scene(vcl_string filename);
@@ -143,7 +143,9 @@ public:
   boxm_block<T>* operator->();
 
   vgl_point_3d<int> index(){return vgl_point_3d<int>(i_,j_,k_);}
+
 private:
+
   int i_;
   int j_;
   int k_;

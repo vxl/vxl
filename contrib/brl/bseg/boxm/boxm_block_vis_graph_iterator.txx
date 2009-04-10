@@ -1,110 +1,161 @@
 #ifndef boxm_block_vis_graph_iterator_txx_
 #define boxm_block_vis_graph_iterator_txx_
 
-#define <boct/boct_tree_cell.h>
+#include "boxm_block_vis_graph_iterator.h"
+#include "boxm_block_vis_graph_node.h"
+#include "boxm_utils.h"
+#include <boct/boct_tree_cell.h>
 
 template <class T>
-boxm_block_vis_graph_iterator::boxm_block_vis_graph_iterator(vpgl_camera_double_sptr cam, 
-                                                             boxm_scene<T>* scene, 
-                                                             bool rev_iter, 
-                                                             unsigned img_ni, 
-                                                             unsigned img_nj)
-    : camera_(cam), scene_(scene), reverse_iter_(iter)
+boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_double_sptr cam, 
+                                                               boxm_scene<T>* scene,  
+                                                               unsigned img_ni, 
+                                                               unsigned img_nj,
+                                                               bool rev_iter)
+    : camera_(cam), scene_(scene), reverse_it_(rev_iter)
 {
   // compute the visibility graph
   boxm_block_iterator<T> iter = scene->iterator();
   for (; !iter.end(); iter++) {
     boxm_block<tree_type> block = *iter;
-    if (is_visible(block.bounding_box(), cam, img_ni, img_nj))
-      vis_graph_.insert(vcl_make_pair<vgl_point_3d<int>,boxm_visibility_graph_node>(iter.index(),boxm_visibility_graph_node()));
+    if (boxm_utils::is_visible(block.bounding_box(), cam, img_ni, img_nj))
+      vis_graph_.insert(vcl_make_pair<vgl_point_3d<int>,boxm_block_vis_graph_node<T> >(iter.index(),boxm_block_vis_graph_node<T>()));
   }
   
-  vcl_map<vgl_point_3d<int>, boxm_visibility_graph_node<T> >::iterator vis_iter;
+  vis_graph_type::iterator vis_iter;
   for (vis_iter=vis_graph_.begin(); vis_iter!=vis_graph_.end(); vis_iter++) {
-    boct_face_idx vis_faces = visible_faces(scene->get_block(vis_iter->first).bounding_box(), cam);
+    vgl_point_3d<int> idx = vis_iter->first;
+    boxm_block<T>* block = scene->get_block(idx);
+    boct_face_idx vis_faces = boxm_utils::visible_faces(block->bounding_box(), cam);
+    
+    vgl_point_3d<int> neighbor_idx = vis_iter->first;
+    bool face_in = false;
     if (vis_faces & boct_cell_face::X_HIGH) {
       // check for neighbor on X_HIGH face
-      vgl_point_3d<int> neighbor_idx = vis_iter->first;
       if (reverse_it_) 
         neighbor_idx += vgl_vector_3d<int>(-1,0,0);
       else 
         neighbor_idx += vgl_vector_3d<int>(1,0,0);
-        
-    } else if (vis_faces & psm_cube_face::X_LOW) {
+      face_in = true;  
+    } else if (vis_faces & boct_cell_face::X_LOW) {
       // check for neighbor on X_LOW face
-      vgl_point_3d<int> neighbor_idx = vis_iter->first;
-      if (reverse_it_) {
+      if (reverse_it_) 
         neighbor_idx += vgl_vector_3d<int>(1,0,0);
       else 
         neighbor_idx += vgl_vector_3d<int>(-1,0,0);
+      face_in = true;
     } 
     
-    psm_block_vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
-    if (nit == vis_graph_.end()) {
-      vis_iter->second.incoming_count++;
-      curr_blocks_.push_back(vis_iter);
-    } else {
-      vis_iter->second.incoming_count++;
-      nit->second.outgoing_links.push_back(vis_iter);
+    if (face_in) {
+		vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+		if (nit == vis_graph_.end()) {
+		  vis_iter->second.in_count++;
+		  curr_blocks_.push_back(vis_iter);
+		} else {
+		  vis_iter->second.in_count++;
+		  nit->second.out_links.push_back(vis_iter);
+		}
     }
     
-    if (vis_faces & psm_cube_face::Y_HIGH) {
+    face_in = false;
+    neighbor_idx = vis_iter->first;
+    if (vis_faces & boct_cell_face::Y_HIGH) {
       // check for neighbor on Y_HIGH face
-      vgl_point_3d<int> neighbor_idx = vis_iter->first;
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(0,-1,0);
       else 
         neighbor_idx += vgl_vector_3d<int>(0,1,0);
-    }else if (vis_faces & psm_cube_face::Y_LOW) {
+      face_in = true;
+    } else if (vis_faces & boct_cell_face::Y_LOW) {
       // check for neighbor on Y_LOW face
-      vgl_point_3d<int> neighbor_idx = vis_iter->first;
       if (reverse_it_) 
         neighbor_idx += vgl_vector_3d<int>(0,1,0);
       else 
         neighbor_idx += vgl_vector_3d<int>(0,-1,0);
-      }
-      psm_block_vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
-      if (nit == vis_graph_.end()) {
-        vis_iter->second.incoming_count++;
-        curr_blocks_.push_back(vis_iter);
-      } else {
-        vis_iter->second.incoming_count++;
-        nit->second.outgoing_links.push_back(vis_iter);
-      }
+      face_in = true;
     }
     
-    if (vis_faces & psm_cube_face::Z_HIGH) {
+    if (face_in) {
+		vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+		if (nit == vis_graph_.end()) {
+		  vis_iter->second.in_count++;
+		  curr_blocks_.push_back(vis_iter);
+		} else {
+		  vis_iter->second.in_count++;
+		  nit->second.out_links.push_back(vis_iter);
+		}
+    }
+    
+    face_in=false;
+    neighbor_idx = vis_iter->first;
+    if (vis_faces & boct_cell_face::Z_HIGH) {
       // check for neighbor on Z_HIGH face
-      vgl_point_3d<int> neighbor_idx = vis_iter->first;
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(0,0,-1);
       else 
         neighbor_idx += vgl_vector_3d<int>(0,0,1);
-    }else if (vis_faces & psm_cube_face::Z_LOW) {
+      face_in = true;
+    }else if (vis_faces & boct_cell_face::Z_LOW) {
       // check for neighbor on Y_LOW face
-      vgl_point_3d<int> neighbor_idx = vis_iter->first;
       if (reverse_it_) 
         neighbor_idx += vgl_vector_3d<int>(0,0,1);
       else 
         neighbor_idx += vgl_vector_3d<int>(0,0,-1);
-      }
-      
-      psm_block_vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
-      if (nit == vis_graph_.end()) {
-        vis_iter->second.incoming_count++;
-        curr_blocks_.push_back(vis_iter);
-      } else {
-        vis_iter->second.incoming_count++;
-        nit->second.outgoing_links.push_back(vis_iter);
+      face_in = true;
+       
+      if (face_in) {
+        vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+        if (nit == vis_graph_.end()) {
+          vis_iter->second.in_count++;
+          curr_blocks_.push_back(vis_iter);
+        } else {
+          vis_iter->second.in_count++;
+          nit->second.out_links.push_back(vis_iter);
+        }
       }
     }
   }
 }
 
 template <class T>
-bool next()
+bool boxm_block_vis_graph_iterator<T>::next()
 {
- return false;
+  vcl_vector<vis_graph_type::iterator>::iterator block_iter = curr_blocks_.begin();
+  vcl_vector<vis_graph_type::iterator> to_process;
+  
+  for (; block_iter != curr_blocks_.end(); block_iter++) {
+    if ((*block_iter)->second.dec_in_count() == 0)
+      to_process.push_back(*block_iter);
+  }
+  
+  if (to_process.size() == 0) {
+    to_process_indices_.resize(0);
+    return false;
+  }
+  to_process_indices_.resize(to_process.size());
+  
+  // add linked blocks to list for next iteration
+  curr_blocks_.clear();
+  for (block_iter = to_process.begin(); block_iter != to_process.end(); ++block_iter) {
+    vcl_vector<vis_graph_type::iterator > &links = (*block_iter)->second.out_links;
+    vcl_vector<vis_graph_type::iterator >::iterator neighbor_it = links.begin();
+    for (; neighbor_it != links.end(); ++neighbor_it) {
+      curr_blocks_.push_back(*neighbor_it);
+    }
+  }
+  return true;
+}
+
+template <class T>
+vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier() 
+{ 
+  vcl_vector<boxm_block<T>*> frontier;
+ 
+  for (unsigned i=0; i<curr_blocks_.size(); i++) {
+    vgl_point_3d<int> index = curr_blocks_[i]->first;
+    frontier.push_back(scene_->get_block(index)); //.x(), index.y(), index.z());
+  }
+  return frontier;
 }
 
 #define BOXM_BLOCK_VIS_GRAPH_ITERATOR_INSTANTIATE(T) \

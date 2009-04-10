@@ -80,7 +80,7 @@ void boxm_scene<T>::write_active_block()
 
 //: returns the block this point resides in
 template <class T>
-boxm_block<T>* boxm_scene<T>::get_block(const vgl_point_3d<double>& p)
+boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
 {
   vgl_box_3d<double> world(get_world_bbox());
   if (world.contains(p)) {
@@ -94,6 +94,7 @@ boxm_block<T>* boxm_scene<T>::get_block(const vgl_point_3d<double>& p)
     return 0;
   }
 }
+
 template <class T>
 boxm_block<T>* boxm_scene<T>::get_active_block()
 {
@@ -121,7 +122,7 @@ vgl_box_3d<double> boxm_scene<T>::get_world_bbox()
 template <class T>
 vgl_box_3d<double> boxm_scene<T>::get_block_bbox(int x, int y, int z)
 {
-  vgl_point_3d<double> min(block_dim_.x()*x, block_dim_.y()*y, block_dim_.z()*z);
+  vgl_point_3d<double> min(block_dim_.x()*x+origin_.x(), block_dim_.y()*y+origin_.y(), block_dim_.z()*z+origin_.z());
   vgl_point_3d<double> max(min.x()+block_dim_.x(), min.y()+block_dim_.y(), min.z()+block_dim_.z());
 
   vgl_box_3d<double> bbox(min, max);

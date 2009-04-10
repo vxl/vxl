@@ -3,10 +3,10 @@ INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
 
 INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-
+INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expat )
+
 SET(boxm_sources
     boxm_block.txx                    boxm_block.h           
     boxm_scene.txx                    boxm_scene.h
@@ -25,7 +25,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl bgeo bsta)
+TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vsol bgeo bsta)
 
 
 #processes 

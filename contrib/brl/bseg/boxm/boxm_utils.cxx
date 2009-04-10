@@ -14,7 +14,7 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
                 unsigned int img_ni, unsigned int img_nj, 
                 bool do_front_test)
 {
-  if (camera->type_name().compare("vpgl_perspective_camera")) {
+  if (camera->type_name().compare("vpgl_perspective_camera")==0) {
     // make a test for vertices for behind-front case
     vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     if (do_front_test) {
@@ -135,7 +135,7 @@ boct_face_idx
 boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr camera)
 {
   boct_face_idx faces = boct_cell_face::NONE;
-  if (camera->type_name().compare("vpgl_perspective_camera")) {
+  if (camera->type_name().compare("vpgl_perspective_camera")==0) {
     vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     vgl_point_3d<double> const& cam_center = cam->camera_center();
 
@@ -190,10 +190,10 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
       faces |= boct_cell_face::X_HIGH;  
 
     face_corners.clear();
-    face_corners.push_back(corners[3]);
-    face_corners.push_back(corners[0]);
-    face_corners.push_back(corners[4]);
     face_corners.push_back(corners[7]);
+    face_corners.push_back(corners[4]);
+    face_corners.push_back(corners[0]);
+    face_corners.push_back(corners[3]);
     if (is_face_visible(face_corners, camera))
       faces |= boct_cell_face::X_LOW;  
 
