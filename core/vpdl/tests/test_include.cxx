@@ -24,6 +24,7 @@
 #include <vpdl/vpdt/vpdt_mixture_of.h>
 #include <vpdl/vpdt/vpdt_mog_fitness.h>
 #include <vpdl/vpdt/vpdt_norm_metric.h>
+#include <vpdl/vpdt/vpdt_num_obs.h>
 #include <vpdl/vpdt/vpdt_probability.h>
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vpdl/vpdt/vpdt_update_mog.h>

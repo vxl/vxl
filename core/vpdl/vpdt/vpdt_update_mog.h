@@ -16,6 +16,7 @@
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vpdl/vpdt/vpdt_mog_fitness.h>
 #include <vpdl/vpdt/vpdt_num_obs.h>
+#include <vcl_utility.h>
 
 
 //: A mixture of Gaussians updater
