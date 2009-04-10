@@ -4,7 +4,12 @@
 #include "boxm_block.h"
 
 #include <vgl/io/vgl_io_box_3d.h>
-
+template <class T>
+void boxm_block<T>::init_tree(T * octree)
+{
+octree_=octree;
+octree->set_bbox(bbox_);
+}
 template <class T>
 void boxm_block<T>::b_read(vsl_b_istream &is)
 {

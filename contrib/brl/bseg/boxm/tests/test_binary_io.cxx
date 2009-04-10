@@ -14,7 +14,7 @@ MAIN( test_binary_io )
   TEST("No of Max levels of tree",nlevels, block->num_levels());
   
   block->split();
-  block->print();
+  //block->print();
 
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(10,10,20);
@@ -49,7 +49,7 @@ MAIN( test_binary_io )
     mog_scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=mog_scene.get_active_block();
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(10,6);
-    block->set_tree(tree);
+    block->init_tree(tree);
     mog_scene.write_active_block();
     iter++;
   }
@@ -64,11 +64,10 @@ MAIN( test_binary_io )
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > read_iter(&read_mog_scene);
   while(!read_iter.end())
   {
-    read_mog_scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
+    read_mog_scene.load_block(read_iter.index().x(),read_iter.index().y(),read_iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=read_mog_scene.get_active_block();
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=block->get_tree();
-    tree->print();
-    iter++;
+    read_iter++;
   }
 
   SUMMARY();  

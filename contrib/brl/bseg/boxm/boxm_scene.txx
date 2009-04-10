@@ -64,7 +64,6 @@ void boxm_scene<T>::write_active_block()
 {
 	if(valid_index(active_block_))
     {
-      vcl_cout<<"Writing of the active block";vcl_cout.flush();
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       vcl_string path = gen_block_path(x,y,z);
       vsl_b_ofstream os(path);
