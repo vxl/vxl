@@ -27,5 +27,6 @@
 #define HAS_TIFF    @HAS_TIFF@
 #define HAS_GEOTIFF @HAS_GEOTIFF@
 #define HAS_DCMTK   @HAS_DCMTK@
+#define HAS_J2K     @HAS_J2K@
 
 #endif // vil_config_h_in_
