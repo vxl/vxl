@@ -212,9 +212,6 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //: returns a list of selected object from the given type
   vcl_vector<vgui_soview2D*> get_selected_objects(vcl_string type);
 
-
-  vil_image_resource_sptr load_image(vcl_string& filename,
-                                     vgui_range_map_params_sptr& rmps);
   vcl_string tab_name_;
 
   unsigned row_; //location of observer in grid

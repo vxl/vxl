@@ -27,7 +27,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
-
+#include <vil/file_formats/vil_nitf2_image.h>
+#include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 #include <vul/vul_file.h>
 #include <bgui/bgui_image_utils.h>
 
@@ -41,7 +42,7 @@ bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_strin
 // LOAD IMAGE
 
   vgui_range_map_params_sptr params;
-  vil_image_resource_sptr img_res = load_image(image_path, params);
+  vil_image_resource_sptr img_res = bwm_utils::load_image(image_path, params);
   if (!img_res) {
     //show_error("Image [" + image_path + "] NOT found");
     return;
@@ -817,35 +818,6 @@ void bwm_observer_img::scroll_to_point()
     return;
   float x = static_cast<float>(ix), y = static_cast<float>(iy);
   this->move_to_point(x,y);
-}
-
-vil_image_resource_sptr bwm_observer_img::load_image(vcl_string& filename,
-                                                     vgui_range_map_params_sptr& rmps)
-{
-  vil_image_resource_sptr res;
-
-  // if filename is a directory, assume pyramid image
-  if (vul_file::is_directory(filename))
-  {
-    vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(filename.c_str());
-
-    if (pyr) {
-      res = pyr.ptr();
-    }
-    else {
-      vcl_cerr << "error loading image pyramid "<< filename << '\n';
-      return 0;
-    }
-  }
-  else {
-    res = vil_load_image_resource(filename.c_str());
-  }
-  bgui_image_utils biu(res);
-#if 0
-  biu.default_range_map(rmps);
-#endif
-  biu.range_map_from_hist(1.0, false, true, true,rmps);
-  return res;
 }
 
 void bwm_observer_img::init_mask()
