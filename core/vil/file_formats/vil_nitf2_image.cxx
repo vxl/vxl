@@ -14,6 +14,7 @@
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_property.h>
+#include <vil/vil_config.h>
 #include "vil_nitf2_data_mask_table.h"
 #include "vil_nitf2_des.h"
 
