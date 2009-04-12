@@ -6,6 +6,7 @@
 #include <bsta/algo/bsta_mean_shift.h>
 #include <bsta/algo/bsta_mixture_functors.h>
 #include <bsta/algo/bsta_parzen_updater.h>
+#include <bsta/algo/bsta_sample_set.h>
 #include <bsta/algo/bsta_truth_updater.h>
 
 int main() { return 0; }
