@@ -28,7 +28,6 @@
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/file_formats/vil_nitf2_image.h>
-#include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 #include <vul/vul_file.h>
 #include <bgui/bgui_image_utils.h>
 
