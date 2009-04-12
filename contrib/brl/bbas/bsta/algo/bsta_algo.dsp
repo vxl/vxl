@@ -186,6 +186,12 @@ SOURCE=.\bsta_mean_shift.h
 # Begin Source File
 SOURCE=.\bsta_mean_shift.txx
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_sample_set.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_sample_set.txx
+# End Source File
 # End Group
 # End Target
 # End Project

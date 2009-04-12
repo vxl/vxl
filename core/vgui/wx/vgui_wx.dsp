@@ -104,6 +104,12 @@ SOURCE=.\wxSliderPanel.cxx
 # Begin Source File
 SOURCE=.\wxSliderPanelXmlHandler.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\wxVideoControl.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\wxVideoControlXmlHandler.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -118,6 +124,12 @@ SOURCE=.\wxSliderPanel.h
 # End Source File
 # Begin Source File
 SOURCE=.\wxSliderPanelXmlHandler.h
+# End Source File
+# Begin Source File
+SOURCE=.\wxVideoControlXmlHandler.h
+# End Source File
+# Begin Source File
+SOURCE=.\wxVideoControl.h
 # End Source File
 # End Group
 # End Target
