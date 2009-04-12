@@ -48,6 +48,8 @@ SUBDIRS += brec
 
 SUBDIRS += boct
 
+SUBDIRS += boxm
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

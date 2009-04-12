@@ -11,6 +11,7 @@ MANPAGE_SOURCES += bsta_truth_updater.txx
 MANPAGE_SOURCES += bsta_parzen_updater.txx
 SOURCES += bsta_fit_weibull.cxx
 MANPAGE_SOURCES += bsta_mean_shift.txx
+MANPAGE_SOURCES += bsta_sample_set.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

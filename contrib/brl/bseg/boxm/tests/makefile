@@ -1,0 +1,14 @@
+USES += contrib/brl contrib/brl/bseg core
+include ../config.mk
+include $(VXLROOT)/core/testlib/config.mk
+
+TESTMAIN := test_driver.cxx
+TESTS += test_binary_io.cxx
+TESTS += test_block_iter.cxx
+TESTS += test_block_vis_graph.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
+
+#########################################
+include ${VXLROOT}/config/static-tests.mk
+#########################################

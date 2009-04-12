@@ -43,6 +43,7 @@ MANPAGE_SOURCES += vpdt/vpdt_mixture_detector.h
 MANPAGE_SOURCES += vpdt/vpdt_distribution_accessors.h
 MANPAGE_SOURCES += vpdt/vpdt_mixture_accessors.h
 MANPAGE_SOURCES += vpdt/vpdt_enable_if.h
+MANPAGE_SOURCES += vpdt/vpdt_num_obs.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
