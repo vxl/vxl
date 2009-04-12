@@ -188,6 +188,10 @@ void vgui_gtk2_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
       gtk_widget_show(item);
 
       add_submenu(submenu, *menu[i].menu);
+      
+      GtkWidget *tearoffitem= gtk_tearoff_menu_item_new();
+      gtk_menu_prepend(GTK_MENU(submenu), tearoffitem);
+      gtk_widget_show(tearoffitem);
     }
   }
 }
@@ -260,6 +264,13 @@ void vgui_gtk2_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is
       gtk_widget_show(item);
 
       add_submenu(submenu, *menu[i].menu);
+
+      GtkWidget *tearoffitem= gtk_tearoff_menu_item_new();
+      gtk_menu_prepend(GTK_MENU(submenu), tearoffitem);
+      gtk_widget_show(tearoffitem);
     }
+
+    
   }
+
 }
