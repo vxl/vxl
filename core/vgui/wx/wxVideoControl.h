@@ -58,6 +58,8 @@ class wxVideoControl: public wxPanel, public vgui_observable
   //: Event handler
   void OnEnterText( wxCommandEvent& event );
   //: Event handler
+  void OnButton( wxCommandEvent& event );
+  //: Event handler
   void OnKeyDown( wxKeyEvent& event );
   
   //: Handle Textbox loss of focus
@@ -76,13 +78,29 @@ class wxVideoControl: public wxPanel, public vgui_observable
   
   //: Set the current frame
   void set_frame(unsigned int frame);
+  
+  //: Advance to next frame
+  void next();
+  
+  //: Step to previous frame
+  void prev();
+  
+  //: Start the video playing
+  void play();
+  
+  //: Pause the video
+  void pause();
 
   //: Should we show tooltips?
   static bool ShowToolTips();
 
   //: These static memory address are used to identify vgui_message types
-  static const char preview[];
-  static const char seek[];
+  static const char m_preview[];
+  static const char m_seek[];
+  static const char m_next[];
+  static const char m_prev[];
+  static const char m_play[];
+  static const char m_pause[];
 
 private:
   wxBitmapButton* prev_button_;
@@ -96,6 +114,9 @@ private:
 
   //: used to disable sending of message
   bool send_messages_;
+  
+  //: is the video playing
+  bool is_playing_;
 };
 
 

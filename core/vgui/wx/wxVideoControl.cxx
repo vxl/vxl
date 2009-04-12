@@ -17,7 +17,10 @@
 
 #include <vcl_cassert.h>
 #include <vgui/vgui_message.h>
+#include "bitmaps/prev.xpm"
 #include "bitmaps/play.xpm"
+#include "bitmaps/pause.xpm"
+#include "bitmaps/next.xpm"
 
 #include <vcl_iostream.h>
 
@@ -35,11 +38,16 @@ BEGIN_EVENT_TABLE( wxVideoControl, wxPanel )
   EVT_SCROLL_THUMBRELEASE( wxVideoControl::OnSliderChange )
   EVT_SCROLL_CHANGED( wxVideoControl::OnSliderChange )
   EVT_TEXT_ENTER( wxID_ANY, wxVideoControl::OnEnterText )
+  EVT_BUTTON( wxID_ANY, wxVideoControl::OnButton )
 END_EVENT_TABLE()
 
 
-const char wxVideoControl::preview[] = "";
-const char wxVideoControl::seek[] = "";
+const char wxVideoControl::m_preview[] = "";
+const char wxVideoControl::m_seek[] = "";
+const char wxVideoControl::m_next[] = "";
+const char wxVideoControl::m_prev[] = "";
+const char wxVideoControl::m_play[] = "";
+const char wxVideoControl::m_pause[] = "";
 
 
 //: Constructor - Default
@@ -96,14 +104,14 @@ void wxVideoControl::CreateControls()
   wxBoxSizer* itemBoxSizer = new wxBoxSizer(wxHORIZONTAL);
   this->SetSizer(itemBoxSizer);
   
-  prev_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(play_xpm, wxBITMAP_TYPE_XPM));
-  itemBoxSizer->Add(prev_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 3);
+  prev_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(prev_xpm, wxBITMAP_TYPE_XPM));
+  itemBoxSizer->Add(prev_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3);
   
   play_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(play_xpm, wxBITMAP_TYPE_XPM));
-  itemBoxSizer->Add(play_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 3);
+  itemBoxSizer->Add(play_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3);
   
-  next_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(play_xpm, wxBITMAP_TYPE_XPM));
-  itemBoxSizer->Add(next_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 3);
+  next_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(next_xpm, wxBITMAP_TYPE_XPM));
+  itemBoxSizer->Add(next_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3);
   
   slider_ = new wxSlider(this, wxNewId(), 0, 0, num_frames_, 
                          wxDefaultPosition, wxSize(100, -1),
@@ -130,8 +138,6 @@ void wxVideoControl::CreateControls()
   
   slider_->Connect(-1, wxEVT_KEY_DOWN, 
                        (wxObjectEventFunction)&wxVideoControl::OnKeyDown);
-  
-  //EVT_KEY_DOWN(wxVideoControl::OnKeyDown)
 
 }
 
@@ -179,7 +185,7 @@ void wxVideoControl::OnSliderTrack( wxScrollEvent& event )
   {
     vgui_message m;
     m.from = this;
-    m.user = wxVideoControl::preview;
+    m.user = wxVideoControl::m_preview;
     m.data = &spos;
     notify(m);
   }
@@ -194,7 +200,7 @@ void wxVideoControl::OnSliderChange( wxScrollEvent& event )
     frame_ = event.GetInt();
     vgui_message m;
     m.from = this;
-    m.user = wxVideoControl::seek;
+    m.user = wxVideoControl::m_seek;
     m.data = &frame_;
     notify(m);
   }
@@ -217,7 +223,7 @@ void wxVideoControl::OnEnterText( wxCommandEvent& event )
   {
     vgui_message m;
     m.from = this;
-    m.user = wxVideoControl::seek;
+    m.user = wxVideoControl::m_seek;
     m.data = &frame_;
     notify(m);
   }
@@ -225,9 +231,101 @@ void wxVideoControl::OnEnterText( wxCommandEvent& event )
 
 
 //: Event handler
+void wxVideoControl::OnButton( wxCommandEvent& event )
+{
+  int id = event.GetId();
+  if(id == next_button_->GetId())
+    next();
+  else if(id == play_button_->GetId()){
+    if(is_playing_)
+      pause();
+    else
+      play();
+  }
+  else if(id == prev_button_->GetId())
+    prev();
+}
+
+
+//: Event handler
 void wxVideoControl::OnKeyDown( wxKeyEvent& event )
 {
   vcl_cout << "key press!"<<vcl_endl;
+}
+
+//: Advance to next frame
+void wxVideoControl::next()
+{
+  if(frame_ >= num_frames_)
+    return;
+  ++frame_;
+  frame_text_->SetValue(wxString::Format(wxT("%d"),frame_));
+  slider_->SetValue(frame_);
+  if (send_messages_)
+  {
+    vgui_message m;
+    m.from = this;
+    m.user = wxVideoControl::m_next;
+    m.data = &frame_;
+    notify(m);
+  }
+}
+
+//: Step to previous frame
+void wxVideoControl::prev()
+{
+  if(frame_ <= 0)
+    return;
+  --frame_;
+  frame_text_->SetValue(wxString::Format(wxT("%d"),frame_));
+  slider_->SetValue(frame_);
+  if (send_messages_)
+  {
+    vgui_message m;
+    m.from = this;
+    m.user = wxVideoControl::m_prev;
+    m.data = &frame_;
+    notify(m);
+  }
+}
+
+
+//: Start the video playing
+void wxVideoControl::play()
+{
+  play_button_->SetBitmapLabel(wxBitmap(pause_xpm, wxBITMAP_TYPE_XPM));
+  is_playing_ = true;
+  prev_button_->Disable();
+  next_button_->Disable();
+  frame_text_->Disable();
+  slider_->Disable();
+  if (send_messages_)
+  {
+    vgui_message m;
+    m.from = this;
+    m.user = wxVideoControl::m_play;
+    m.data = &frame_;
+    notify(m);
+  }
+}
+
+//: Pause the video
+void wxVideoControl::pause()
+{
+  play_button_->SetBitmapLabel(wxBitmap(play_xpm, wxBITMAP_TYPE_XPM));
+  is_playing_ = false;
+  prev_button_->Enable();
+  next_button_->Enable();
+  frame_text_->Enable();
+  slider_->Enable();
+  if (send_messages_)
+  {
+    vgui_message m;
+    m.from = this;
+    m.user = wxVideoControl::m_pause;
+    m.data = &frame_;
+    notify(m);
+  }
 }
 
 
