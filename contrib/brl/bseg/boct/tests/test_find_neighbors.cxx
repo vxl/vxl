@@ -31,32 +31,32 @@ void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double>,void >*
                 break;
               case boct_cell_face::X_LOW:
                 if (intersectionbox.min_y()!=intersectionbox.max_y() && intersectionbox.min_z()!=intersectionbox.max_z())
-                    if (intersectionbox.min_x()==intersectionbox.max_x()&& intersectionbox.min_x()==cellbox.min_x())
+                    if (intersectionbox.min_x()==intersectionbox.max_x() && intersectionbox.min_x()==cellbox.min_x())
                         neighbors.push_back(leaf_nodes[i]);
                 break;
               case boct_cell_face::X_HIGH:
                 if (intersectionbox.min_y()!=intersectionbox.max_y() && intersectionbox.min_z()!=intersectionbox.max_z())
-                    if (intersectionbox.min_x()==intersectionbox.max_x()==cellbox.max_x())
+                    if (intersectionbox.min_x()==intersectionbox.max_x() && intersectionbox.max_x()==cellbox.max_x())
                         neighbors.push_back(leaf_nodes[i]);
                 break;
               case boct_cell_face::Y_LOW:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_z()!=intersectionbox.max_z())
-                    if (intersectionbox.min_y()==intersectionbox.max_y()==cellbox.min_y())
+                    if (intersectionbox.min_y()==intersectionbox.max_y() && intersectionbox.min_y()==cellbox.min_y())
                         neighbors.push_back(leaf_nodes[i]);
                 break;
               case boct_cell_face::Y_HIGH:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_z()!=intersectionbox.max_z())
-                    if (intersectionbox.min_y()==intersectionbox.max_y()==cellbox.max_y())
+                    if (intersectionbox.min_y()==intersectionbox.max_y() && intersectionbox.max_y()==cellbox.max_y())
                         neighbors.push_back(leaf_nodes[i]);
                 break;
               case boct_cell_face::Z_LOW:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_y()!=intersectionbox.max_y())
-                    if (intersectionbox.min_z()==intersectionbox.max_z()==cellbox.min_z())
+                    if (intersectionbox.min_z()==intersectionbox.max_z() && intersectionbox.min_z()==cellbox.min_z())
                         neighbors.push_back(leaf_nodes[i]);
                 break;
               case boct_cell_face::Z_HIGH:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_y()!=intersectionbox.max_y())
-                    if (intersectionbox.min_z()==intersectionbox.max_z()==cellbox.max_z())
+                    if (intersectionbox.min_z()==intersectionbox.max_z() && intersectionbox.max_z()==cellbox.max_z())
                         neighbors.push_back(leaf_nodes[i]);
                 break;
               default:
