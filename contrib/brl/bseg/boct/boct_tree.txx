@@ -35,12 +35,14 @@ boct_tree<T_loc,T_data,T_aux>::~boct_tree()
 {
   vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> v;
   if (root_)
+  {
     if (root_->is_leaf()) {
       delete root_;
     } else {
       root_->delete_children();
       delete root_;
     }
+  }
 }
 
 template <class T_loc,class T_data, class T_aux>
@@ -122,12 +124,14 @@ vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> boct_tree<T_loc,T_data,T_aux>::l
 {
   vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> v;
   if (root_)
+  {
     if (root_->is_leaf()) {
       v.push_back(root_);
     }
     else {
       root_->leaf_children(v);
     }
+  }
   return v;
 }
 
@@ -141,13 +145,11 @@ vgl_box_3d<double> boct_tree<T_loc,T_data,T_aux>::cell_bounding_box(boct_tree_ce
                                      global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
                                      global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());
 
-   return vgl_box_3d<double>(global_origin, 
-							 cellsize*global_bbox_.width(), 
-							 cellsize*global_bbox_.height(), 
-							 cellsize*global_bbox_.depth(),
-							 vgl_box_3d<double>::min_pos);							  
-	
-
+  return vgl_box_3d<double>(global_origin,
+                            cellsize*global_bbox_.width(),
+                            cellsize*global_bbox_.height(),
+                            cellsize*global_bbox_.depth(),
+                            vgl_box_3d<double>::min_pos);
 }
 
 template <class T_loc,class T_data, class T_aux>
@@ -160,9 +162,6 @@ void boct_tree<T_loc,T_data,T_aux>::print()
 template <class T_loc,class T_data, class T_aux>
 void boct_tree<T_loc,T_data,T_aux>::b_write(vsl_b_ostream & os)
 {
-  // write header info
-  const short io_version_no = 1;
-
   vsl_b_write(os, version_no());
   vsl_b_write(os, max_level_);
   if (root_)
