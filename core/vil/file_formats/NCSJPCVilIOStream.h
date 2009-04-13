@@ -20,11 +20,19 @@
   * Known Issues:
   * 1) As of 2/24/05, the writing capability of this class has not been tested.  In
   * theory it should work just fine though.
+  *
+  * 2) It is necessary to provide a unique string name to an open stream.
+  * The original code always used the same name "VIL", and so all resources
+  * would access the same J2K data, since the ecw library accesses streams 
+  * by name. Only one stream with the same name can exist, which is the first
+  * one opened with that name. To provide a unique name, a static integer
+  * is maintained and appended to the stream name prefix. JLM April 13, 2009
   */
 class CNCSJPCVilIOStream : public CNCSJPCIOStream
 {
 public:
   CNCSJPCVilIOStream();
+  ~CNCSJPCVilIOStream();
 
   /**
     * Pass me the stream you want me to wrap.  stream->tell() at the time
@@ -58,6 +66,9 @@ protected:
     * to me.  Tell() is the position relative to this position etc.
     */
   vil_streampos mHomePos;
+  
+  static unsigned short mId; /*unique id*/
+  wchar_t* mName; /*wide character name array*/
 };
 
 #endif //NCSJPCVILIOSTREAM_H

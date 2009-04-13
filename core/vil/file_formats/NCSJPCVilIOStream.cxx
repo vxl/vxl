@@ -2,9 +2,9 @@
 
 #include <vil/vil_stream.h>
 #include <vcl_limits.h>
-
 #undef max
 #undef min
+unsigned short CNCSJPCVilIOStream::mId = 0;//initialize static id variable
   //vil_streams can only hand 32 bit offsets
   static const vil_streampos maxVilStreamPos = vcl_numeric_limits< vil_streampos >::max();
   static const vil_streampos minVilStreamPos = vcl_numeric_limits< vil_streampos >::min();
@@ -12,15 +12,22 @@
 CNCSJPCVilIOStream::CNCSJPCVilIOStream()
   : mVilStream( 0 ),
     mHomePos( -1 )
-{ }
+{ 
+  mName = new wchar_t[1];
+}
 
-CNCSError CNCSJPCVilIOStream::Open( vil_stream* stream )
+CNCSJPCVilIOStream::~CNCSJPCVilIOStream()
+{
+  delete [] mName;
+}
+CNCSError CNCSJPCVilIOStream::Open( vil_stream* stream)
 {
   mVilStream = stream;
   mVilStream->ref();
   mHomePos = stream->tell();
-
-  *(CNCSError*)this = CNCSJPCIOStream::Open("VIL", false);
+  bool ProgressiveDisplay = false;
+  mName[0]=mId++;
+  *(CNCSError*)this = CNCSJPCIOStream::Open(mName,ProgressiveDisplay );
 
   return *(CNCSError*)this;
 }
