@@ -8,14 +8,14 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpl/vpl.h>
 
-typedef boct_tree<short,vgl_point_3d<double>,void > tree_type;
+typedef boct_tree<short,vgl_point_3d<double>,void> tree_type;
 
-double IMAGE_U = 200;
-double IMAGE_V = 200;
-int x_scale = 900;
-int y_scale = 900;
-double  focal_length = 1.;
-double camera_dist= 200;
+const int IMAGE_U = 200;
+const int IMAGE_V = 200;
+const int boxm_x_scale = 900;
+const int boxm_y_scale = 900;
+const double boxm_focal_length = 1.0;
+const double boxm_camera_dist= 200;
 
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
@@ -34,15 +34,15 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
   vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
   vcl_vector<double> neu_u,den_u,neu_v,den_v;
   double x_scale = 1.0,
-        x_off = 0.0,
-        y_scale = 1.0,
-        y_off = 0.0,
-        z_scale = 1.0,
-        z_off = 0.0,
-        u_scale = 1.0,
-        u_off = 0.0,
-        v_scale = 1.0,
-        v_off = 0.0;
+         x_off = 0.0,
+         y_scale = 1.0,
+         y_off = 0.0,
+         z_scale = 1.0,
+         z_off = 0.0,
+         u_scale = 1.0,
+         u_off = 0.0,
+         v_scale = 1.0,
+         v_off = 0.0;
 
   for (int i=0; i<20; i++) {
     neu_u.push_back(0.0);
@@ -68,21 +68,20 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 
 vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world)
 {
-  vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
+  vgl_point_2d<double> principal_point(IMAGE_U*0.5, IMAGE_V*0.5);
 
   vgl_point_3d<double> centroid = world.centroid();
-  //double x,z;
-  vgl_point_3d<double> camera_center(centroid.x(), centroid.y(), centroid.z()+camera_dist);
+  vgl_point_3d<double> camera_center(centroid.x(), centroid.y(), centroid.z()+boxm_camera_dist);
 
-  //vgl_box_2d<double> bb;
   vcl_vector<vpgl_camera_double_sptr> rat_cameras;
 
   vpgl_perspective_camera<double> persp_cam;
-  generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
+  generate_persp_camera(boxm_focal_length,principal_point, boxm_x_scale, boxm_y_scale, camera_center, persp_cam);
   persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
   vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
   return rat_cam;
 }
+
 MAIN( test_block_vis_graph )
 {
   START ("CREATE SCENE");
@@ -95,14 +94,14 @@ MAIN( test_block_vis_graph )
   vgl_vector_3d<double> world_dim(30,30,30);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
   scene.set_paths("./boxm_scene", "block");
-  
+
   vgl_box_3d<double> world;
   world.add(origin);
   world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
   vpgl_camera_double_sptr camera = generate_camera_top(world);
   boxm_block_vis_graph_iterator<tree_type> block_vis_iter(camera, &scene, IMAGE_U, IMAGE_V);
-  
+
   vcl_vector<boxm_block<tree_type>*> blocks = block_vis_iter.frontier();
   //TEST("Number of blocks iterator visits", num_blocks, x*y*z);
-  SUMMARY();  
+  SUMMARY();
 }
