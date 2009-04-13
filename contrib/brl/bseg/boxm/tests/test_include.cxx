@@ -2,8 +2,8 @@
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_block_vis_graph_node.h>
-#include <boxm/boxm_cell_vis_graph_iterator.h>
-#include <boxm/boxm_cell_vis_graph_node.h>
+//#include <boxm/boxm_cell_vis_graph_iterator.h>
+//#include <boxm/boxm_cell_vis_graph_node.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_neighb_graph_node.h>
 #include <boxm/boxm_sample.h>
