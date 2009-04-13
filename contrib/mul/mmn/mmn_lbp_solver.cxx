@@ -134,7 +134,6 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
                 throw mbl_exception_abort(msg);
             }
 
-
             if (inode==minv)
             {
                 linkCosts=srcArcCosts;
@@ -497,7 +496,6 @@ bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
 }
 
 
-
 //=======================================================================
 // Method: set_from_stream
 //=======================================================================
@@ -548,7 +546,7 @@ mmn_solver* mmn_lbp_solver::clone() const
 
 void mmn_lbp_solver::print_summary(vcl_ostream& os) const
 {
-    os<<"This is a "<<is_a()<<"\t"<<"with "<<nnodes_<<" nodes"<<vcl_endl;
+    os<<"This is a "<<is_a()<<'\t'<<"with "<<nnodes_<<" nodes"<<vcl_endl;
 }
 
 //=======================================================================
@@ -568,7 +566,6 @@ void mmn_lbp_solver::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
   short version;
-  unsigned n;
   vsl_b_read(bfs,version);
   switch (version)
   {
