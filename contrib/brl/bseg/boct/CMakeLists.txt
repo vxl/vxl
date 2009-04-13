@@ -1,7 +1,7 @@
 # contrib/brl/bseg/boct/CMakeLists.txt
 
 SET(boct_sources
-    boct_loc_code.txx   boct_loc_code.h  boct_loc_code.cxx
+    boct_loc_code.txx   boct_loc_code.h
     boct_tree_cell.txx  boct_tree_cell.h
     boct_tree.txx       boct_tree.h
     boct_test_util.txx  boct_test_util.h
