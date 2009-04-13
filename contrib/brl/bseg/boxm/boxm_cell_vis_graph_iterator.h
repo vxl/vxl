@@ -18,7 +18,7 @@ class boxm_cell_vis_graph_iterator
 
   bool next();
 
-  vcl_vector<boxm_tree_cell<T_loc,T_data>*> frontier() { return frontier_; }
+  vcl_vector<boxm_tree_cell<T_loc,T_data,void>*> frontier() { return frontier_; }
 
   void set_reverse_iter(bool reverse) { reverse_iter_ = reverse; }
 
@@ -27,7 +27,7 @@ class boxm_cell_vis_graph_iterator
   vpgl_camera_double_sptr camera_;
 
   //: blocks that can be seen by the camera unoccluded
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> frontier_;
+  vcl_vector<boct_tree_cell<T_loc,T_data,void>*> frontier_;
 
   //boxm_block<T>* block_;
 

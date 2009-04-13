@@ -85,4 +85,6 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data,T_aux>& cell, bo
 
 //typedef vbl_smart_ptr<boct_tree_cell<vgl_point_3d<double> > boct_tree_cell_pt_sptr;
 
+//class boct_cell_directed_graph
 #endif
+

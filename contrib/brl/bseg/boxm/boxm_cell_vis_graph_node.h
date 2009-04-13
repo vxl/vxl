@@ -2,21 +2,17 @@
 #define boxm_cell_vis_graph_node_h_
 
 #include <vcl_vector.h>
-#include <boct/boct_tree_cell.h>
-
 #include "boxm_neighb_graph_node.h"
 
+template <class T_loc, class T_data, class T_aux>
 class boxm_cell_vis_graph_node
 {
 public:
   boxm_cell_vis_graph_node(){}
   ~boxm_cell_vis_graph_node(){}
   //bool visible() { return visible; }
-  void inc_in_count() { in_count_++; }
-  void dec_in_count() { in_count_--; }
-  int in_count() {return in_count; }
-  void insert_out_link(boct_tree_cell* link) { out_links_.push_back(link); }
-  void clear_outlinks() { out_links_.empty(); }
+  unsigned int incount;
+
   
   bool visible;
 private:
@@ -24,9 +20,11 @@ private:
   int in_count;
 
   //: graph links to the outgoing blocks
-  vcl_vector<boct_tree_cell*> out_links_;
+  vcl_vector<T*> out_links_;
 
-  boxm_neighb_graph_node neighbors_;
+  vcl_vector<T*>  neighbors_;
 };
+#define BOXM_CELL_VIS_GRAPH_NODE_INSTANTIATE(T) \
+template boxm_cell_vis_graph_node<T>; 
 
 #endif

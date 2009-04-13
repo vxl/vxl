@@ -1,7 +1,7 @@
 #ifndef boxm_cell_vis_graph_iterator_txx_
 #define boxm_cell_vis_graph_iterator_txx_
 
-template <T_loc,T_data>
+template <class T_loc,class T_data, class T_aux>
 boxm_cell_vis_graph_iterator::boxm_cell_vis_graph_iterator(vpgl_camera_double_sptr cam,
                                                            boct_tree<T_loc,T_data>* tree,
                                                            bool rev_iter,
@@ -12,11 +12,12 @@ boxm_cell_vis_graph_iterator::boxm_cell_vis_graph_iterator(vpgl_camera_double_sp
   // compute the visibility graph
 }
 
-template <class T>
+template <class T_loc,class T_data, class T_aux>
 bool next()
 {
  return false;
 }
+
 
 #define BOXM_cell_VIS_GRAPH_ITERATOR_INSTANTIATE(T) \
 template boxm_cell_vis_graph_iterator<T >
