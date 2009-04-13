@@ -3,11 +3,11 @@
 
 #include "boxm_sample.h"
 #include <bsta/bsta_mixture_fixed.h>
- 
+
 template <boxm_apm_type APM_MODEL>
 void boxm_sample<APM_MODEL>::print(vcl_ostream& os) const
 {
-  os << "(alpha=" << alpha << " appearence=" << appearance << ")";
+  os << "(alpha=" << alpha << " appearence=" << appearance << ')';
 }
 
 template <boxm_apm_type APM_MODEL>
@@ -56,11 +56,11 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample)
 }
 
 #define BOXM_SAMPLE_INSTANTIATE(T) \
-template boxm_sample<T>; \
-template void vsl_b_write(vsl_b_ostream &, boxm_sample<T> const &); \
-template void vsl_b_write(vsl_b_ostream &, boxm_sample<T> const *&); \
-template void vsl_b_read(vsl_b_istream &, boxm_sample<T> &); \
-template void vsl_b_read(vsl_b_istream &, boxm_sample<T> *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_sample<T>&);
+template boxm_sample<T >; \
+template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const &); \
+template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const *&); \
+template void vsl_b_read(vsl_b_istream &, boxm_sample<T > &); \
+template void vsl_b_read(vsl_b_istream &, boxm_sample<T > *&); \
+template vcl_ostream& operator << (vcl_ostream&, const boxm_sample<T >&)
 
 #endif
