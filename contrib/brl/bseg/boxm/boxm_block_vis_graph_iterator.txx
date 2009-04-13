@@ -125,8 +125,8 @@ bool boxm_block_vis_graph_iterator<T>::next()
   vcl_vector<typename vis_graph_type::iterator> to_process;
 
   for (; block_iter != curr_blocks_.end(); block_iter++) {
-    vcl_cout << (*block_iter)->first;
-    vcl_cout << (*block_iter)->second.in_count << vcl_endl;
+    //vcl_cout << (*block_iter)->first;
+    //vcl_cout << (*block_iter)->second.in_count << vcl_endl;
     if (--((*block_iter)->second.in_count) == 0)
       to_process.push_back(*block_iter);
   }
