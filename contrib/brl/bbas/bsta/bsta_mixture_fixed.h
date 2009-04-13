@@ -17,7 +17,7 @@
 #include "bsta_sampler.h"
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 
 //: A mixture of distributions with a fixed size of s components
 template <class dist_, unsigned s>
@@ -242,8 +242,8 @@ template <class dist_, unsigned s>
 inline vcl_ostream& operator<< (vcl_ostream& os,
                                 bsta_mixture_fixed<dist_,s> const& no)
 {
-   for (unsigned i=0; i<no.num_components(); ++i){
-       os<<"Component #"<<i<<" weight=: "<<no.weight(i)<<"distribution: "<<no.distribution(i)<<vcl_endl;}
+  for (unsigned i=0; i<no.num_components(); ++i)
+    os<<"Component #"<<i<<" weight=: "<<no.weight(i)<<"distribution: "<<no.distribution(i)<<vcl_endl;
   return os;
 }
 #endif // bsta_mixture_fixed_h_
