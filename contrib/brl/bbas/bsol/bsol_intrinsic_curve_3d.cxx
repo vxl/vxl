@@ -420,23 +420,23 @@ bool bsol_intrinsic_curve_3d::LoadCON3File(vcl_string fileName)
   }
   CON3Filename_ = fileName;
 
-  vcl_fscanf(fp, "CONTOUR\n");
-  vcl_fscanf(fp, "%s\n", buffer);
+  int ret = vcl_fscanf(fp, "CONTOUR\n"); assert (ret==0);
+  ret = vcl_fscanf(fp, "%s\n", buffer); assert (ret==1);
   if (vcl_strcmp(buffer, "OPEN")==0) //the same
     isOpen_ = true;
   else //"CLOSE"
     isOpen_ = false;
   int numPoints=0;
-  vcl_fscanf(fp, "%d\n", &numPoints);
+  ret = vcl_fscanf(fp, "%d\n", &numPoints); assert (ret==1);
   if (numPoints<=0)
     vcl_fprintf(stderr, "WARNING: First line of file %s (number of points) should be strictly positive.\n",
                 fileName.c_str());
 
   for (int i=0; i<numPoints; ++i) {
     double x, y, z;
-    vcl_fscanf(fp, "%lf", &x);
-    vcl_fscanf(fp, "%lf", &y);
-    vcl_fscanf(fp, "%lf", &z);
+    ret = vcl_fscanf(fp, "%lf", &x); assert (ret==1);
+    ret = vcl_fscanf(fp, "%lf", &y); assert (ret==1);
+    ret = vcl_fscanf(fp, "%lf", &z); assert (ret==1);
     add_vertex(x, y, z);
   }
 

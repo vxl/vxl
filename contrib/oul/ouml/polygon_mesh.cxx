@@ -162,7 +162,7 @@ bool PolygonMesh::read_file(char *filename)
     {
       int index;
       double x, y, z;
-      vcl_fscanf(fp, "%d %lf %lf %lf", &index, &x, &y, &z);
+      int ret = vcl_fscanf(fp, "%d %lf %lf %lf", &index, &x, &y, &z); assert (ret==4);
       // add the vertex
       DPoint pt(x,y,z);
       //vcl_printf("Vertex: %d %f %f %f\n", index, x, y, z);
@@ -173,7 +173,7 @@ bool PolygonMesh::read_file(char *filename)
       int index;
       int vertex;
       Face fc;
-      vcl_fscanf(fp, "%d", &index);
+      int ret = vcl_fscanf(fp, "%d", &index); assert (ret==1);
       //vcl_printf("Face: %d ", index);
       // read in all the vertex indices
       while ((vcl_fscanf(fp, "%d", &vertex)))
@@ -190,7 +190,7 @@ bool PolygonMesh::read_file(char *filename)
     {
       char c;
       do {
-        vcl_fscanf(fp, "%c", &c);
+        int ret = vcl_fscanf(fp, "%c", &c); assert (ret==1);
       } while (c!='\n');
     }
   }
