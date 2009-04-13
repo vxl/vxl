@@ -420,7 +420,6 @@ void load_from_mat__string(opstack_t& s)
     vcl_exit(1);
   }
 
-
   s.pop_front();
 
   switch (global_option_load_as_image)
@@ -476,6 +475,8 @@ void load_from_mat__string(opstack_t& s)
       s.push_front(operand(result));
       break;
     }
+    default: // do nothing
+      break;
   }
 }
 
@@ -1114,12 +1115,12 @@ int main(int argc, char*argv[])
   }
   catch (vcl_exception& e)
   {
-    vcl_cerr << "caught exception " << e.what() << vcl_endl;
+    vcl_cerr << "caught exception " << e.what() << '\n';
     return 3;
   }
   catch (...)
   {
-    vcl_cerr << "caught unknown exception" << vcl_endl;
+    vcl_cerr << "caught unknown exception\n";
     return 3;
   }
 }

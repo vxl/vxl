@@ -39,7 +39,12 @@ void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> &sample)
       vsl_b_read(is, sample.alpha);
       vsl_b_read(is, sample.appearance);
       break;
-   }
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
+               << "           Unknown version number "<< version << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      break;
+  }
 }
 
 template <boxm_apm_type APM_MODEL>
