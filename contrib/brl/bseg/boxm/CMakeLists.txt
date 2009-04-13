@@ -16,7 +16,7 @@ SET(boxm_sources
     boxm_block_vis_graph_node.h
     boxm_block_vis_graph_iterator.txx boxm_block_vis_graph_iterator.h
     #boxm_cell_vis_graph_node.h
-    #boxm_cell_vis_graph_iterator.txx    boxm_cell_vis_graph_iterator.h
+    boxm_cell_vis_graph_iterator.txx    boxm_cell_vis_graph_iterator.h
     boxm_neighb_graph_node.h
     boxm_utils.cxx                    boxm_utils.h
 )

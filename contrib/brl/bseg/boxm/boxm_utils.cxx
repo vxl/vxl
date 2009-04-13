@@ -116,6 +116,7 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
     vs.push_back(new vsol_point_2d(u,v));
   }
 
+
   vgl_vector_2d<double> v0 = vs[1]->get_p() - vs[0]->get_p();
   vgl_vector_2d<double> v1 = vs[2]->get_p() - vs[1]->get_p();
   double normal = cross_product<double>(v0,v1);
