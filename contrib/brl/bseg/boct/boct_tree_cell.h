@@ -22,6 +22,9 @@ class boct_cell_face
 typedef unsigned char boct_face_idx;
 
 template <class T_loc,class T_data, class T_aux>
+class boct_cell_vis_graph_node;
+
+template <class T_loc,class T_data, class T_aux>
 class boct_tree_cell // public vbl_ref_count
 {
  public:
@@ -59,10 +62,14 @@ class boct_tree_cell // public vbl_ref_count
 
   void  find_neighbors(boct_face_idx face,vcl_vector<boct_tree_cell<T_loc,T_data, T_aux>*> & neighbors,short max_level);
   boct_tree_cell<T_loc,T_data, T_aux>* get_common_ancestor(short binarydiff);
+  
+  void set_data(T_data const& data) {data_=data; }
+  T_data data() {return data_; }
 
-  void set_data(T_data const& data) { data_=data; }
-  T_data data() { return data_; }
+  void set_vis_node(boct_cell_vis_graph_node<T_loc,T_data,T_aux> * node) {vis_node_=node; }
+  boct_cell_vis_graph_node<T_loc,T_data,T_aux> * vis_node() {return vis_node_; }
 
+  
   bool split();
   void print();
   void delete_children();
@@ -73,7 +80,7 @@ class boct_tree_cell // public vbl_ref_count
   boct_tree_cell<T_loc,T_data, T_aux>* parent_;
   boct_tree_cell<T_loc,T_data, T_aux>* children_;
   T_data data_;
-  T_aux * aux_data_;
+  boct_cell_vis_graph_node<T_loc,T_data,T_aux>* vis_node_;
 };
 
 template<class T_loc,class T_data,class T_aux>
@@ -85,4 +92,19 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data,T_aux>& cell);
 template <class T_loc,class T_data,class T_aux>
 void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data,T_aux>& cell, boct_tree_cell<T_loc,T_data,T_aux>* parent);
 
+//typedef vbl_smart_ptr<boct_tree_cell<vgl_point_3d<double> > boct_tree_cell_pt_sptr;
+template<class T_loc,class T_data, class T_aux>
+class boct_cell_vis_graph_node{
+public:
+	boct_cell_vis_graph_node():incoming_count(0),visible(false){};
+	~boct_cell_vis_graph_node(){
+		for(unsigned i=0;i<outgoing_links.size();i++)
+			outgoing_links[i]=0;		
+	}
+	unsigned int incoming_count;
+	vcl_vector<boct_tree_cell<T_loc,T_data, T_aux> * > outgoing_links;
+	bool visible;
+};
 #endif // boct_tree_cell_h_
+
+

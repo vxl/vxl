@@ -27,8 +27,9 @@ class boct_tree
   void set_bbox(vgl_box_3d<double> & bbox){global_bbox_=bbox;}
 
   vgl_box_3d<double> cell_bounding_box(boct_tree_cell<T_loc,T_data,T_aux>* const cell);
+  vgl_box_3d<double> bounding_box(){return global_bbox_;}
   void print();
-
+  boct_tree_cell<T_loc,T_data,T_aux>* root(){return root_;}
   void b_write(vsl_b_ostream & os);
   void b_read(vsl_b_istream & is);
   short version_no() { return 1; }

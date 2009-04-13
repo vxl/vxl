@@ -442,5 +442,6 @@ vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data,T_aux>& cel
 template class boct_tree_cell<T_loc,T_data,T_aux >; \
 template vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data,T_aux>& cell);\
 template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T_data,T_aux>&, boct_tree_cell<T_loc,T_data,T_aux >*); \
-template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T_data,T_aux>&)
+template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T_data,T_aux>&);\
+template class boct_cell_vis_graph_node<T_loc,T_data,T_aux>;
 #endif // boct_tree_cell_txx_
