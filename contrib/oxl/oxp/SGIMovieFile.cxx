@@ -11,6 +11,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 #include <vcl_cstddef.h> // for std::size_t
+#include <vcl_cassert.h>
 
 #include <oxp/JPEG_Decompressor.h>
 #include <vxl_config.h>
@@ -245,7 +246,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
         vcl_cerr << "fld " << i << ' ';
       for (int y=h-1; y >= 0; --y)
       {
-        vcl_fread(row_buf, 1, inrowsize, fp);
+        int ret = vcl_fread(row_buf, 1, inrowsize, fp); assert (ret==inrowsize);
         char* buf_ptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
         char* row_ptr = row_buf;
         for (int x=0; x < w; ++x) {
