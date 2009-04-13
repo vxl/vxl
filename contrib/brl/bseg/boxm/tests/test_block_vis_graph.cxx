@@ -89,7 +89,7 @@ MAIN( test_block_vis_graph )
 
   // create scene
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
-  vgl_point_3d<double> origin(10,10,20);
+  vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<double> world_dim(30,30,30);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
@@ -101,7 +101,14 @@ MAIN( test_block_vis_graph )
   vpgl_camera_double_sptr camera = generate_camera_top(world);
   boxm_block_vis_graph_iterator<tree_type> block_vis_iter(camera, &scene, IMAGE_U, IMAGE_V);
 
-  vcl_vector<boxm_block<tree_type>*> blocks = block_vis_iter.frontier();
+  vcl_vector<boxm_block<tree_type>*> blocks;
+  do {
+    blocks = block_vis_iter.frontier();
+    for(unsigned i=0; i<blocks.size(); i++) {
+      vcl_cout << i << "- " << blocks[i]->bounding_box() << vcl_endl; 
+    }
+  }while (block_vis_iter.next());
+
   //TEST("Number of blocks iterator visits", num_blocks, x*y*z);
   SUMMARY();
 }
