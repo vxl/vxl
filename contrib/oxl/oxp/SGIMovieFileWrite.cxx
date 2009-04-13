@@ -11,6 +11,7 @@
 #undef sprintf // works around a bug in libintl.h
 #undef fprintf
 #include <vcl_cstdio.h>
+#include <vcl_cassert.h>
 
 #include <vil1/vil1_jpeglib.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -24,7 +25,7 @@ inline int ROUNDUP(int x)
 
 void send4(FILE* fp, unsigned int val)
 {
-  vcl_fwrite(&val, 4, 1, fp);
+  int ret = vcl_fwrite(&val, 4, 1, fp); assert (ret == 1);
 }
 
 struct Vars {
@@ -55,11 +56,11 @@ struct Vars {
       int l = names[i].size();
       vcl_strncpy(buf, names[i].c_str(), l);
       while (l < 16) buf[l++] = 0;
-      vcl_fwrite(buf, 16, 1, fp);
+      int ret = vcl_fwrite(buf, 16, 1, fp); assert (ret==1);
       // Send values
       l = values[i].size();
       send4(fp, l + 1);
-      vcl_fwrite(values[i].c_str(), l+1, 1, fp);
+      ret = vcl_fwrite(values[i].c_str(), l+1, 1, fp); assert (ret==1);
     }
   }
 };
@@ -87,7 +88,7 @@ struct SGIMovieFileWriteData {
   jpeg_compress_struct cinfo;
   jpeg_error_mgr jerr;
 
-  void send4(unsigned int val) { vcl_fwrite(&val, 4, 1, fp); }
+  void send4(unsigned int val) { int ret = vcl_fwrite(&val, 4, 1, fp); assert (ret==1); }
 };
 
 SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
@@ -187,7 +188,7 @@ void SGIMovieFileWriteData::Finish()
     f.size = end - start;
     f.pad = 0;
     f.frame = 0;
-    vcl_fwrite(&f, 4, 4, fp);
+    int ret = vcl_fwrite(&f, 4, 4, fp); assert (ret==4);
   }
 
   jpeg_destroy_compress(&cinfo);
