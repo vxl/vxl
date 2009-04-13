@@ -16,6 +16,7 @@
 //********************************************************************************
 
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class XXX : public vnl_least_squares_function
 {
  private:
@@ -59,6 +60,7 @@ class XXX : public vnl_least_squares_function
     }
   }
 };
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 static
 void do_compute(const vcl_vector<double> &z1,const vcl_vector<double> &z2,vgl_h_matrix_1d<double>  &M)
