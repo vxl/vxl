@@ -136,10 +136,12 @@ class converter
     // generate the table of function pointers
     table_init<VIDL_PIXEL_FORMAT_ENUM_END*VIDL_PIXEL_FORMAT_ENUM_END-1>::populate(table);
     type_table_init<VIDL_PIXEL_FORMAT_ENUM_END-1>::populate(type_table);
+    /*
     for (unsigned int i=0; i<num_types; ++i){
       if (type_table[i])
         vcl_cout << "type "<<i<<" is "<<type_table[i]->name() << vcl_endl;
     }
+    */
   }
 
   //: Apply the conversion
