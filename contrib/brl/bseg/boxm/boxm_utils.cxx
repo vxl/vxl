@@ -7,12 +7,12 @@
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vcl_cassert.h>
 
-
-bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox, 
-                vpgl_camera_double_sptr const& camera, 
-                unsigned int img_ni, unsigned int img_nj, 
-                bool do_front_test)
+bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
+                            vpgl_camera_double_sptr const& camera,
+                            unsigned int img_ni, unsigned int img_nj,
+                            bool do_front_test)
 {
   if (camera->type_name().compare("vpgl_perspective_camera")==0) {
     // make a test for vertices for behind-front case
@@ -35,8 +35,8 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
       if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.max_y(),bbox.max_z())))
         return false;
     }
-  } 
-   
+  }
+
   // make sure corners project into image bounds
   vgl_box_2d<double> cube_proj_bb;
   vgl_box_2d<double> img_bb;
@@ -60,7 +60,7 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
   cube_proj_bb.add(vgl_point_2d<double>(u,v));
   camera->project(bbox.max_x(),bbox.max_y(),bbox.max_z(),u,v);
   cube_proj_bb.add(vgl_point_2d<double>(u,v));
-  // check for intersection 
+  // check for intersection
   vgl_box_2d<double> intersection =  vgl_intersection(cube_proj_bb, img_bb);
   if (intersection.is_empty()){
     // add to list
@@ -70,17 +70,17 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
 }
 
 //                                 MaxPosition
-//                                      
-//                       7-----------6 
-//                      /           /|  
-//                     /           / |   
-//                    4-----------5  | 
-//                    |           |  |  
+//
+//                       7-----------6
+//                      /           /|
+//                     /           / |
+//                    4-----------5  |
+//                    |           |  |
 //                    |           |  |
 //                    |    3      |  2
-//     Y              |           | /   
-//     |   Z          |           |/  
-//     |  /           0-----------1  
+//     Y              |           | /
+//     |   Z          |           |/
+//     |  /           0-----------1
 //     | /         MinPosition
 //     O-----X
 
@@ -101,7 +101,7 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> box)
 }
 
 bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
-                                vpgl_camera_double_sptr const& camera)
+                                 vpgl_camera_double_sptr const& camera)
 {
   double u,v;
   vgl_box_2d<double> face;
@@ -113,10 +113,11 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
     camera->project(corners[i].x(), corners[i].y(), corners[i].z(), u, v);
     vs.push_back(new vsol_point_3d(u,v,0));
   }
-  
+
   vsol_polygon_3d poly3d(vs);
   vgl_vector_3d<double> normal = poly3d.normal();
-  /*vsol_point_2d_sptr c = poly2d.centroid();
+#if 0 // commented out
+  vsol_point_2d_sptr c = poly2d.centroid();
   vgl_vector_3d<double> normal(0.0, 0.0, 0.0);
   for (unsigned i=0; i<vs.size(); i++) {
     vgl_vector_2d<double> v0 = vs[i]->get_p() - c->get_p();
@@ -125,7 +126,8 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
       next = 0;
     vgl_vector_2d<double> v1 = vs[next]->get_p() - c->get_p();
     normal += cross_product<double>(v0,v1);
-  }*/
+  }
+#endif // 0
   if (normal.z() < 0)
     return true;
   return false;
@@ -157,12 +159,12 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     else if (cam_center.z() < bbox.min_z()) {
       faces |= boct_cell_face::Z_LOW;
     }
-  } 
+  }
   // for other cameras, use projection and normals
   else {
     // fix the face normals so that the vertices are the counter clokwise order
     vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
-  
+
     // face bottom [1,0,3,2]
     vcl_vector<vgl_point_3d<double> > face_corners;
     face_corners.push_back(corners[1]);
@@ -171,7 +173,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[2]);
     if (is_face_visible(face_corners, camera))
       faces |= boct_cell_face::Z_LOW;
-  
+
     // face top [4,5,6,7]
     face_corners.clear();
     face_corners.push_back(corners[4]);
@@ -179,7 +181,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[6]);
     face_corners.push_back(corners[7]);
     if (is_face_visible(face_corners, camera))
-      faces |= boct_cell_face::Z_HIGH;  
+      faces |= boct_cell_face::Z_HIGH;
 
     face_corners.clear();
     face_corners.push_back(corners[1]);
@@ -187,7 +189,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[6]);
     face_corners.push_back(corners[5]);
     if (is_face_visible(face_corners, camera))
-      faces |= boct_cell_face::X_HIGH;  
+      faces |= boct_cell_face::X_HIGH;
 
     face_corners.clear();
     face_corners.push_back(corners[7]);
@@ -195,7 +197,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[0]);
     face_corners.push_back(corners[3]);
     if (is_face_visible(face_corners, camera))
-      faces |= boct_cell_face::X_LOW;  
+      faces |= boct_cell_face::X_LOW;
 
     face_corners.clear();
     face_corners.push_back(corners[2]);
@@ -203,7 +205,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[7]);
     face_corners.push_back(corners[6]);
     if (is_face_visible(face_corners, camera))
-      faces |= boct_cell_face::Y_HIGH;  
+      faces |= boct_cell_face::Y_HIGH;
     face_corners.clear();
 
     face_corners.clear();
@@ -212,7 +214,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[5]);
     face_corners.push_back(corners[4]);
     if (is_face_visible(face_corners, camera))
-      faces |= boct_cell_face::Y_LOW;  
+      faces |= boct_cell_face::Y_LOW;
   }
   return faces;
 }
