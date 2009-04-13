@@ -5,10 +5,10 @@
 // \brief  The main class to keep the 3D world data and pieces
 //
 // \author Gamze Tunali
-// \date 04/03/2009
+// \date Apr 03, 2009
 // \verbatim
 //  Modifications
-//  
+//   <none yet>
 // \endverbatim
 
 #include "boxm_block.h"
@@ -22,6 +22,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <boct/boct_tree.h>
+#include <vcl_iosfwd.h>
 
 
 class boxm_scene_parser;
@@ -30,21 +31,20 @@ template <class T> class boxm_block_iterator;
 template <class T>
 class boxm_scene:public vbl_ref_count
 {
-public:
+ public:
   boxm_scene() : scene_path_(""), block_pref_(""), active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
 
-  boxm_scene(const bgeo_lvcs& lvcs, 
-             const vgl_point_3d<double>& origin, 
-             const vgl_vector_3d<double>& block_dim, 
+  boxm_scene(const bgeo_lvcs& lvcs,
+             const vgl_point_3d<double>& origin,
+             const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<double>& world_dim);
 
-  //: when lvcs is not avialable 
-  boxm_scene( const vgl_point_3d<double>& origin, 
-              const vgl_vector_3d<double>& block_dim, 
+  //: when lvcs is not avialable
+  boxm_scene( const vgl_point_3d<double>& origin,
+              const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<double>& world_dim);
 
-
-  void set_paths(vcl_string scene_path, vcl_string block_prefix) 
+  void set_paths(vcl_string scene_path, vcl_string block_prefix)
   { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
   ~boxm_scene() {}
@@ -61,9 +61,8 @@ public:
 
   vgl_vector_3d<double> block_dim() {return block_dim_;}
 
-
   void block_num(int &x, int &y, int &z) {x=(int) blocks_.get_row1_count();
-                                          y=(int) blocks_.get_row2_count(); 
+                                          y=(int) blocks_.get_row2_count();
                                           z=(int) blocks_.get_row3_count();}
 
   vcl_string path() { return scene_path_; }
@@ -77,16 +76,16 @@ public:
   boxm_block<T>* get_block(vgl_point_3d<double>& p);
 
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
-  
+
   boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
 
   void write_scene();
   void load_scene(vcl_string filename);
   short version_no() { return 1; }
-  
-  boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;} 
 
-private:
+  boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
+
+ private:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
   vgl_vector_3d<double> block_dim_;
@@ -94,8 +93,7 @@ private:
   vcl_string scene_path_;
   vcl_string block_pref_;
 
-  //: index of the blocks (3D array) that is active at the time, 
-  // only one active block at a time
+  //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
 
   //************** private methods
@@ -111,13 +109,12 @@ private:
   bool valid_index(vgl_point_3d<int> idx);
 
   boxm_scene_parser* parse_config(vcl_string xml);
-
 };
 
 template <class T>
 class boxm_block_iterator
 {
-public:
+ public:
   boxm_block_iterator(boxm_scene<T>* const scene): scene_(scene), i_(0), j_(0), k_(0) {}
 
   ~boxm_block_iterator(){}
@@ -144,7 +141,7 @@ public:
 
   vgl_point_3d<int> index(){return vgl_point_3d<int>(i_,j_,k_);}
 
-private:
+ private:
 
   int i_;
   int j_;

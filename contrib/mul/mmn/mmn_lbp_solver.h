@@ -13,6 +13,8 @@
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_graph_rep1.h>
 #include <mmn/mmn_solver.h>
+#include <vcl_iosfwd.h>
+
 //: Run loopy belief to estimate overall marginal probabilities of all node states
 //  Then use converged LBP messages to also estimate overall most likely configuration
 //
@@ -47,7 +49,6 @@ class mmn_lbp_solver: public mmn_solver
     //: Workspace for costs of each arc
     vcl_vector<neigh_arc_cost_t > arc_costs_;
 
-
     //: All the messages at previous iteration (vector index is source node)
     vcl_vector<message_set_t > messages_;
     //: Update messages calculated during this iteration (vector index is source node)
@@ -59,7 +60,6 @@ class mmn_lbp_solver: public mmn_solver
     //: belief prob for each state of each node
     // Assumes input node costs are well-normalised for these to be proper probabilities
     vcl_vector<vnl_vector<double> > belief_;
-
 
     //: previous N solutions (used to trap cycling)
     vcl_deque<vcl_vector<unsigned  > > soln_history_;
@@ -206,8 +206,6 @@ class mmn_lbp_solver: public mmn_solver
 
     //: Load class from binary file stream
     virtual void b_read(vsl_b_istream& bfs);
-
-    
 };
 
 #endif // mmn_lbp_solver_h_
