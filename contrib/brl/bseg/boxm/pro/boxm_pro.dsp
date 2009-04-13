@@ -96,10 +96,10 @@ LIB32=link.exe -lib
 SOURCE=.\boxm_register.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+boct_tree+short-+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY-.void----.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+boct_tree+short-+vgl_point_3d+double---.cxx
+SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+boxm_scene+boct_tree+short.vgl_point_3d+double-.void----.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

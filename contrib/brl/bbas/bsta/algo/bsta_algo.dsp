@@ -133,16 +133,28 @@ SOURCE=.\Templates/bsta_parzen_updater+bsta_parzen_sphere+float.3--.cxx
 SOURCE=.\Templates/bsta_parzen_updater+bsta_parzen_sphere+float.1--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_mean_shift+float.1--.cxx
+SOURCE=.\Templates/bsta_mean_shift+float.1-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_mean_shift+float.2--.cxx
+SOURCE=.\Templates/bsta_mean_shift+float.2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_mean_shift+float.3--.cxx
+SOURCE=.\Templates/bsta_mean_shift+float.3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_mean_shift+double.1--.cxx
+SOURCE=.\Templates/bsta_mean_shift+double.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_sample_set+float.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_sample_set+float.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_sample_set+double.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_sample_set+float.3-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
