@@ -159,6 +159,6 @@ vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier()
 }
 
 #define BOXM_BLOCK_VIS_GRAPH_ITERATOR_INSTANTIATE(T) \
-template boxm_block_vis_graph_iterator<T >
+template boxm_block_vis_graph_iterator<T >;
 
 #endif
