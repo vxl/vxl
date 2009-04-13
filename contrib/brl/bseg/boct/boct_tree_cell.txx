@@ -14,7 +14,6 @@ boct_tree_cell<T_loc,T_data, T_aux>::boct_tree_cell(const boct_loc_code<T_loc>& 
   children_=NULL;
 }
 
-
 template<class T_loc,class T_data, class T_aux>
 bool boct_tree_cell<T_loc,T_data, T_aux>::is_leaf()
 {
@@ -50,7 +49,6 @@ void boct_tree_cell<T_loc,T_data, T_aux>::delete_children()
     children_=NULL;
     }
 }
-
 
 // this is always going down the tree
 template<class T_loc,class T_data, class T_aux>
@@ -118,8 +116,8 @@ boct_tree_cell<T_loc,T_data, T_aux>* boct_tree_cell<T_loc,T_data, T_aux>::get_co
 
 template<class T_loc,class T_data, class T_aux>
 void  boct_tree_cell<T_loc,T_data, T_aux>::find_neighbors(boct_face_idx face,
-                                        vcl_vector<boct_tree_cell<T_loc,T_data, T_aux>*> & neighbors,
-                                        short max_level)
+                                                          vcl_vector<boct_tree_cell<T_loc,T_data, T_aux>*> & neighbors,
+                                                          short max_level)
 {
   short cellsize=1<<this->level();
 
@@ -181,7 +179,6 @@ void  boct_tree_cell<T_loc,T_data, T_aux>::find_neighbors(boct_face_idx face,
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data, T_aux>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
-
       if (!neighborcell->children())
         neighbors.push_back(neighborcell);
       else
@@ -218,7 +215,6 @@ void  boct_tree_cell<T_loc,T_data, T_aux>::find_neighbors(boct_face_idx face,
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data, T_aux>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
-
       if (!neighborcell->children())
         neighbors.push_back(neighborcell);
       else
@@ -253,7 +249,6 @@ void  boct_tree_cell<T_loc,T_data, T_aux>::find_neighbors(boct_face_idx face,
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data, T_aux>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
-
 
       if (!neighborcell->children())
         neighbors.push_back(neighborcell);
@@ -291,10 +286,8 @@ void  boct_tree_cell<T_loc,T_data, T_aux>::find_neighbors(boct_face_idx face,
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data,T_aux>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
 
-
       if (!neighborcell->children())
         neighbors.push_back(neighborcell);
-
       else
       {
         // TODO code to get the cells which are further down the tree.
@@ -327,7 +320,6 @@ void  boct_tree_cell<T_loc,T_data, T_aux>::find_neighbors(boct_face_idx face,
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data,T_aux>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
-
 
       if (!neighborcell->children())
         neighbors.push_back(neighborcell);
@@ -413,11 +405,8 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data,T_aux>& c, boct_
   vsl_b_read(is,version);
   switch (version)
   {
-    case (1):
-     //short level;
-     //vsl_b_read(is, level);
+    case 1: {
      vsl_b_read(is, c.code_);
-     //c.set_level(level);
      T_data data;
      vsl_b_read(is, data);
      c.set_data(data);
@@ -433,21 +422,20 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data,T_aux>& c, boct_
        }
      }
      break;
-#if 0
+    }
     default:
      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
               << "           Unknown version number "<< version << '\n';
      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
      return;
-#endif // 0
-   }
+  }
 }
+
 template<class T_loc,class T_data, class T_aux>
 vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data,T_aux>& cell)
 {
   s <<  cell.code_ ;
   return s;
-
 }
 
 #define BOCT_TREE_CELL_INSTANTIATE(T_loc,T_data,T_aux) \
