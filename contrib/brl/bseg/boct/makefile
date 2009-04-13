@@ -3,7 +3,6 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 LIBRARY := boct
 VERSION := 1.0
 
-SOURCES += boct_loc_code.cxx
 MANPAGE_SOURCES += boct_loc_code.txx
 MANPAGE_SOURCES += boct_test_util.txx
 MANPAGE_SOURCES += boct_tree.txx
