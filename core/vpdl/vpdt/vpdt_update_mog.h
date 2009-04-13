@@ -6,9 +6,6 @@
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date March 8, 2009
 // \brief Iterative updating of a mixture of Gaussians
-//
-// \endverbatim
-
 
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_gaussian.h>
@@ -17,32 +14,32 @@
 #include <vpdl/vpdt/vpdt_mog_fitness.h>
 #include <vpdl/vpdt/vpdt_num_obs.h>
 #include <vcl_utility.h>
-
+#include <vcl_cassert.h>
 
 //: A mixture of Gaussians updater
 //  Base class for common functionality in adaptive updating schemes
 template <class mog_type>
 class vpdt_mog_updater
 {
-public:
+ public:
   typedef mog_type distribution_type;
   typedef typename mog_type::field_type field_type;
-  
-private:
+
+ private:
   typedef typename mog_type::component_type gaussian_type;
   typedef typename gaussian_type::field_type F;
   typedef typename vpdt_field_traits<F>::scalar_type T;
-  
-protected:
+
+ protected:
   //: Constructor
   vpdt_mog_updater(const gaussian_type& init_gaussian,
                    unsigned int max_cmp = 5)
   : init_gaussian_(init_gaussian), max_components_(max_cmp) {}
-  
+
   //: insert a sample in the mixture
   // \param sample A Gaussian is inserted with a mean of \a sample and a
   //               covariance from \a init_gaussian_
-  // \param init_weight The normalized weight the resulting sample 
+  // \param init_weight The normalized weight the resulting sample
   //                    should have after insertion
   void insert(mog_type& mixture, const F& sample, T init_weight) const
   {
@@ -55,24 +52,24 @@ protected:
       mixture.remove_last();
       removed = true;
     }
-    
+
     // this correction accounts for the fact that the remaining components
     // are not normalized to 1-init_weight
-    if(mixture.num_components() > 0)
+    if (mixture.num_components() > 0)
       init_weight /= (1-init_weight)*mixture.norm_const();
     else
       init_weight = T(1);
-    
+
     // the mean is moved to the sample point (initial covariance is fixed)
     init_gaussian_.mean = sample;
     mixture.insert(init_gaussian_,init_weight);
   }
-  
-  //: Return the index of the first Gaussian within the threshold distance 
+
+  //: Return the index of the first Gaussian within the threshold distance
   //  The threshold \a gt2 is on the square distance.
   //  The computed square distance is returned by reference in \a sqr_dist
   //  If there are no matches return the number of components (last index + 1)
-  unsigned int match( const mog_type& mix, const F& sample, 
+  unsigned int match( const mog_type& mix, const F& sample,
                       const T& gt2, T& sqr_dist ) const
   {
     const unsigned int mix_nc = mix.num_components();
@@ -84,13 +81,12 @@ protected:
     }
     return mix_nc;
   }
-  
+
   //: A model for new Gaussians inserted
   mutable gaussian_type init_gaussian_;
   //: The maximum number of components in the mixture
   unsigned int max_components_;
 };
-
 
 
 //: A mixture of Gaussians adaptive updater based on Stauffer-Grimson.
@@ -100,11 +96,11 @@ protected:
 template <class mog_type>
 class vpdt_mog_sg_updater : public vpdt_mog_updater<mog_type>
 {
-public:
+ public:
   typedef typename mog_type::component_type gaussian_type;
   typedef typename gaussian_type::field_type F;
   typedef typename vpdt_field_traits<F>::scalar_type T;
-  
+
   //: Constructor
   vpdt_mog_sg_updater(const gaussian_type& init_gaussian,
                       unsigned int max_cmp = 5,
@@ -113,16 +109,16 @@ public:
                       T init_weight = T(0.1),
                       T min_stdev = T(0.16) )
   : vpdt_mog_updater<mog_type>(init_gaussian, max_cmp),
-    gt2_(g_thresh*g_thresh), alpha_(alpha), init_weight_(init_weight), 
+    gt2_(g_thresh*g_thresh), alpha_(alpha), init_weight_(init_weight),
     min_var_(min_stdev*min_stdev) {}
-  
+
   //: The main function
   void operator() ( mog_type& mix, const F& sample ) const
   {
     this->update(mix, sample, alpha_);
   }
-  
-protected:
+
+ protected:
 
   //: Update the mixture with \a sample using learning rate \a alpha
   void update( mog_type& mix, const F& sample, T alpha ) const
@@ -134,12 +130,12 @@ protected:
       gaussian_type& g = mix.distribution(i);
       // unlike the original paper, the normal distribution here is unnormalized
       // if normalized, rho can exceed 1 leading to divergence
-      T rho = alpha * vcl_exp(-sqr_dist/2); 
-      if(min_var_ > T(0))
+      T rho = alpha * vcl_exp(-sqr_dist/2);
+      if (min_var_ > T(0))
         vpdt_update_gaussian(g, rho, sample, min_var_);
       else
         vpdt_update_gaussian(g, rho, sample);
-      // this is equivalent to 
+      // this is equivalent to
       // w_j = (1-alpha)*w_j + alpha*(j==i?1:0) for all j, but without normalization
       mix.set_weight(i, mix.weight(i) + alpha/((1-alpha)*mix.norm_const()));
     }
@@ -149,11 +145,11 @@ protected:
     }
     mix.sort(vpdt_mog_fitness<gaussian_type>::order);
   }
- 
+
   //: Squared Gaussian Mahalanobis distance threshold
   T gt2_;
   //: The learning rate
-  T alpha_; 
+  T alpha_;
   //: The initial weight for added Gaussians
   T init_weight_;
   //: Minimum variance allowed in each Gaussian component
@@ -161,23 +157,22 @@ protected:
 };
 
 
-
 //: A mixture of Gaussians adaptive updater based on D.-S. Lee.
 // Modification of the S-G method.  Each Gaussian has its own learning rate
 // that adjusts with the number of observations.
 // This algorithm requires that the Gaussians in the mixture are wrapped
 // in a vpdt_num_obs class to count the number of observations.
-// This algorithm is based on: D.-S. Lee. 
-// "Eﬀective gaussian mixture learning for video background subtraction",
-// PAMI, 27:827–832, May 2005.
+// This algorithm is based on: D.-S. Lee.
+// "Effective gaussian mixture learning for video background subtraction",
+// PAMI, 27:827--832, May 2005.
 template <class mog_type>
 class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
 {
-public:
+ public:
   typedef typename mog_type::component_type gaussian_type;
   typedef typename gaussian_type::field_type F;
   typedef typename vpdt_field_traits<F>::scalar_type T;
-  
+
   //: Constructor
   vpdt_mog_lee_updater(const gaussian_type& init_gaussian,
                        unsigned int max_cmp = 5,
@@ -187,16 +182,16 @@ public:
   : vpdt_mog_updater<mog_type>(init_gaussian, max_cmp),
   gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev),
   use_winner_take_all_(use_wta) {}
-  
+
   //: The main function
   void operator() ( mog_type& mix, const F& sample ) const
   {
     T num_obs = total_num_obs(mix) + 1;
     this->update(mix, sample, T(1)/num_obs);
   }
-  
-protected:
-  
+
+ protected:
+
   //: Count the total number of observations in all components
   T total_num_obs( const mog_type& mix ) const
   {
@@ -208,9 +203,9 @@ protected:
     }
     return num_obs;
   }
-  
-  //: find all matches within the \c gt2_ threshold and compute the probability of each 
-  vcl_vector<vcl_pair<unsigned int,double> > 
+
+  //: find all matches within the \c gt2_ threshold and compute the probability of each
+  vcl_vector<vcl_pair<unsigned int,double> >
   matches(const mog_type& mix, const F& sample) const
   {
     const unsigned int mix_nc = mix.num_components();
@@ -224,11 +219,11 @@ protected:
         matches.push_back(vcl_pair<unsigned int,double>(i,sqr_dist));
     }
     // if only one match, it has prob 1
-    if(matches.size() == 1){
+    if (matches.size() == 1){
       matches[0].second = 1.0;
     }
     // find the probability of each match
-    else if(matches.size() > 1) {
+    else if (matches.size() > 1) {
       for (unsigned int j=0; j<matches.size(); ++j) {
         unsigned int& i = matches[j].first;
         double& p = matches[j].second;
@@ -243,7 +238,7 @@ protected:
     }
     return matches;
   }
-  
+
   //: Apply a winner-take-all strategy to the matches.
   //  Keep only the highest probability match and assign it probability 1
   void winner_take_all(vcl_vector<vcl_pair<unsigned int,double> >& m) const
@@ -251,7 +246,7 @@ protected:
     double max_p = m[0].second;
     unsigned int max_j = 0;
     for (unsigned int j=1; j<m.size(); ++j) {
-      if(m[j].second > max_p){
+      if (m[j].second > max_p){
         max_p = m[j].second;
         max_j = j;
       }
@@ -260,35 +255,35 @@ protected:
     m[0].second = 1.0;
     m.resize(1);
   }
-  
+
   //: Update the mixture with \a sample using learning rate \a alpha
   void update( mog_type& mix, const F& sample, T alpha ) const
   {
     const unsigned int mix_nc = mix.num_components();
-    if(mix_nc == 0){
+    if (mix_nc == 0){
       insert(mix,sample,alpha);
       return;
     }
     // find all matching components (sqr dist < gt2_) and their probabilites
-    vcl_vector<vcl_pair<unsigned int,double> > m = matches(mix, sample);    
-    
+    vcl_vector<vcl_pair<unsigned int,double> > m = matches(mix, sample);
+
     if (!m.empty())
     {
-      if(use_winner_take_all_ && m.size() > 1)
+      if (use_winner_take_all_ && m.size() > 1)
         winner_take_all(m);
       T w_inc = alpha / ((T(1)-alpha)*mix.norm_const());
-      for(unsigned int j=0; j<m.size(); ++j){
+      for (unsigned int j=0; j<m.size(); ++j){
         unsigned int i = m[j].first;
         double p = m[j].second;
         gaussian_type& g = mix.distribution(i);
         g.num_observations += T(p);
         T rho = (T(1)-alpha)/g.num_observations + alpha;
         rho *= p;
-        if(min_var_ > T(0))
+        if (min_var_ > T(0))
           vpdt_update_gaussian(g, rho, sample, min_var_);
         else
           vpdt_update_gaussian(g, rho, sample);
-        // this is equivalent to 
+        // this is equivalent to
         // w_j = (1-alpha)*w_j + alpha*(j==i?1:0) for all j, but without normalization
         mix.set_weight(i, mix.weight(i)+p*w_inc);
       }
@@ -299,12 +294,12 @@ protected:
     }
     mix.sort(vpdt_mog_fitness<gaussian_type>::order);
   }
-  
+
   //: Squared Gaussian Mahalanobis distance threshold
   T gt2_;
   //: Minimum variance allowed in each Gaussian component
   T min_var_;
-  
+
   //: Use a winner-take_all strategy
   bool use_winner_take_all_;
 };
@@ -312,19 +307,19 @@ protected:
 
 //: A mixture of Gaussians adaptive updater base on Leotta-Mundy
 // Combines the greedy matching of the S-G method for speed with the
-// dynamic learning rate of Lee for faster learning.  
+// dynamic learning rate of Lee for faster learning.
 // Unnormalized weights serve a dual role with observation counts.
 // This algorithm is based on: M. Leotta and J. Mundy,
-// "Learning background and shadow appearance with 3-d vehicle models", 
-// BMVC, 2:649–658, September 2006.
+// "Learning background and shadow appearance with 3-d vehicle models",
+// BMVC, 2:649--658, September 2006.
 template <class mog_type>
 class vpdt_mog_lm_updater : public vpdt_mog_updater<mog_type>
 {
-public:
+ public:
   typedef typename mog_type::component_type gaussian_type;
   typedef typename gaussian_type::field_type F;
   typedef typename vpdt_field_traits<F>::scalar_type T;
-  
+
   //: Constructor
   vpdt_mog_lm_updater(const gaussian_type& init_gaussian,
                       unsigned int max_cmp = 5,
@@ -334,16 +329,16 @@ public:
   : vpdt_mog_updater<mog_type>(init_gaussian, max_cmp),
   gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev),
   window_size_(ws) {}
-  
+
   //: The main function
   void operator() ( mog_type& mix, const F& sample, T sample_weight = T(1) ) const
   {
     this->update(mix, sample, sample_weight);
   }
-  
-protected:
-  
-  //: Count the total mixture weight 
+
+ protected:
+
+  //: Count the total mixture weight
   T total_weight( const mog_type& mix ) const
   {
     T tw = T(0);
@@ -353,15 +348,14 @@ protected:
     }
     return tw;
   }
-  
-  
+
   //: Update the mixture with \a sample using learning rate \a alpha
   void update( mog_type& mix, const F& sample, T samp_weight ) const
   {
     assert(samp_weight > 0.0);
     T tw = total_weight(mix);
     tw += samp_weight;
-    
+
     T alpha = 1/tw;
     T sqr_dist;
     unsigned int i = match(mix,sample,gt2_,sqr_dist);
@@ -371,7 +365,7 @@ protected:
       T w = mix.weight(i);
       w += samp_weight;
       T rho = (T(1)-alpha)/w + alpha;
-      if(min_var_ > T(0))
+      if (min_var_ > T(0))
         vpdt_update_gaussian(g, rho, sample, min_var_);
       else
         vpdt_update_gaussian(g, rho, sample);
@@ -382,7 +376,7 @@ protected:
       insert(mix,sample,alpha);
     }
     // scale down weights for a moving window effect
-    if(tw > window_size_){
+    if (tw > window_size_){
       T scale = window_size_ / tw;
       const unsigned int mix_nc = mix.num_components();
       for (unsigned int i=0; i<mix_nc; ++i) {
@@ -391,7 +385,7 @@ protected:
     }
     mix.sort(vpdt_mog_fitness<gaussian_type>::order);
   }
-  
+
   //: Squared Gaussian Mahalanobis distance threshold
   T gt2_;
   //: Minimum variance allowed in each Gaussian component
