@@ -20,7 +20,7 @@ bgeo_lvcs::cs_names bgeo_lvcs::str_to_enum(const char* s)
 }
 
 void bgeo_lvcs::set_angle_conversions(AngUnits ang_unit, double& to_radians,
-                                 double& to_degrees)
+                                      double& to_degrees)
 {
   to_radians=1.0;
   to_degrees=1.0;
@@ -31,7 +31,7 @@ void bgeo_lvcs::set_angle_conversions(AngUnits ang_unit, double& to_radians,
 }
 
 void bgeo_lvcs::set_length_conversions(LenUnits len_unit, double& to_meters,
-                                  double& to_feet)
+                                       double& to_feet)
 {
   to_meters = 1.0;
   to_feet = 1.0;
@@ -261,8 +261,8 @@ void bgeo_lvcs::compute_scale()
      case bgeo_lvcs::nad27n:
       nad27n_to_wgs84(localCSOriginLat_*to_degrees,
                       (localCSOriginLon_*to_radians+SMALL_STEP)*to_degrees,
-                       localCSOriginElev_*to_meters,
-                       &wgs84_phi, &wgs84_lamda, &wgs84_hgt);
+                      localCSOriginElev_*to_meters,
+                      &wgs84_phi, &wgs84_lamda, &wgs84_hgt);
       wgs84_phi *= to_radians;
       wgs84_lamda *= to_radians;
       break;
@@ -348,15 +348,15 @@ void bgeo_lvcs::local_to_global(const double pointin_x,
       if (global_cs_name == bgeo_lvcs::wgs84)
       {
         nad27n_to_wgs84(local_lat,
-                  local_lon,
-                  local_elev,
-                  &global_lat, &global_lon, &global_elev);
+                        local_lon,
+                        local_elev,
+                        &global_lat, &global_lon, &global_elev);
       }
       else if (global_cs_name ==  bgeo_lvcs::wgs72)
       {
         nad27n_to_wgs72(local_lat, local_lon,
-                  local_elev,
-                  &global_lat, &global_lon, &global_elev);
+                        local_elev,
+                        &global_lat, &global_lon, &global_elev);
       }
       else
         vcl_cout << "Error: Global CS " << bgeo_lvcs::cs_name_strings[global_cs_name]
@@ -489,12 +489,12 @@ void bgeo_lvcs::global_to_local(const double pointin_lon,
     if (local_cs_name_ == bgeo_lvcs::wgs84)
     {
       nad27n_to_wgs84(global_lat, global_lon, global_elev,
-                &local_lat, &local_lon, &local_elev);
+                      &local_lat, &local_lon, &local_elev);
     }
     else if (local_cs_name_ == bgeo_lvcs::wgs72)
     {
       nad27n_to_wgs72(global_lat, global_lon, global_elev,
-                &local_lat, &local_lon, &local_elev);
+                      &local_lat, &local_lon, &local_elev);
     }
     else
       vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
@@ -506,12 +506,12 @@ void bgeo_lvcs::global_to_local(const double pointin_lon,
     if (local_cs_name_ == bgeo_lvcs::nad27n)
     {
       wgs72_to_nad27n(global_lat, global_lon, global_elev,
-                &local_lat, &local_lon, &local_elev);
+                      &local_lat, &local_lon, &local_elev);
     }
     else if (local_cs_name_ == bgeo_lvcs::wgs84)
     {
       wgs72_to_wgs84(global_lat, global_lon, global_elev,
-               &local_lat, &local_lon, &local_elev);
+                     &local_lat, &local_lon, &local_elev);
     }
     else
       vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
@@ -523,12 +523,12 @@ void bgeo_lvcs::global_to_local(const double pointin_lon,
     if (local_cs_name_ == bgeo_lvcs::nad27n)
     {
       wgs84_to_nad27n(global_lat, global_lon, global_elev,
-                &local_lat, &local_lon, &local_elev);
+                      &local_lat, &local_lon, &local_elev);
     }
     else if (local_cs_name_ ==  bgeo_lvcs::wgs72)
     {
       wgs84_to_wgs72(global_lat, global_lon, global_elev,
-               &local_lat, &local_lon, &local_elev);
+                     &local_lat, &local_lon, &local_elev);
     }
     else
       vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
