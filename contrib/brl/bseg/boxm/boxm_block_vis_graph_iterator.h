@@ -30,17 +30,13 @@ class boxm_block_vis_graph_iterator
   //: visibility graph, indexed by the block indices
   vis_graph_type vis_graph_;
 
+  //: blocks that can be seen by the camera unoccluded
   vcl_vector<typename vis_graph_type::iterator> curr_blocks_;
 
   vcl_vector<vgl_point_3d<int> > to_process_indices_;
 
   //: the camera
   vpgl_camera_double_sptr camera_;
-
-#if 0
-  //: blocks that can be seen by the camera unoccluded
-  vcl_vector<boxm_block<T>*> frontier_;
-#endif
 
   boxm_scene<T>* scene_;
 

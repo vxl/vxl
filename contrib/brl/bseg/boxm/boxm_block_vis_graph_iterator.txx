@@ -102,18 +102,19 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
       else
         neighbor_idx += vgl_vector_3d<int>(0,0,-1);
       face_in = true;
-
-      if (face_in) {
-        typename vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
-        if (nit == vis_graph_.end()) {
-          vis_iter->second.in_count++;
-          curr_blocks_.push_back(vis_iter);
-        } else {
-          vis_iter->second.in_count++;
-          nit->second.out_links.push_back(vis_iter);
-        }
-      }
+     }
+     
+    if (face_in) {
+      vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+    if (nit == vis_graph_.end()) {
+      vis_iter->second.in_count++;
+      curr_blocks_.push_back(vis_iter);
+    } else {
+      vis_iter->second.in_count++;
+      nit->second.out_links.push_back(vis_iter);
     }
+  }
+    
   }
 }
 
@@ -124,7 +125,7 @@ bool boxm_block_vis_graph_iterator<T>::next()
   vcl_vector<typename vis_graph_type::iterator> to_process;
 
   for (; block_iter != curr_blocks_.end(); block_iter++) {
-    if ((*block_iter)->second.dec_in_count() == 0)
+    if (--((*block_iter)->second.in_count) == 0)
       to_process.push_back(*block_iter);
   }
 

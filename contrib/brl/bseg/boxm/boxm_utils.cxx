@@ -3,11 +3,13 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vsol/vsol_point_3d.h>
-#include <vsol/vsol_point_3d_sptr.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_cassert.h>
+
+#define DEBUG 1
 
 bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
                             vpgl_camera_double_sptr const& camera,
@@ -105,30 +107,19 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
 {
   double u,v;
   vgl_box_2d<double> face;
-  vcl_vector<vsol_point_3d_sptr> vs;
+  vcl_vector<vsol_point_2d_sptr> vs;
 
   assert(corners.size() >= 3);
 
   for (unsigned i=0; i<corners.size(); i++) {
     camera->project(corners[i].x(), corners[i].y(), corners[i].z(), u, v);
-    vs.push_back(new vsol_point_3d(u,v,0));
+    vs.push_back(new vsol_point_2d(u,v));
   }
 
-  vsol_polygon_3d poly3d(vs);
-  vgl_vector_3d<double> normal = poly3d.normal();
-#if 0 // commented out
-  vsol_point_2d_sptr c = poly2d.centroid();
-  vgl_vector_3d<double> normal(0.0, 0.0, 0.0);
-  for (unsigned i=0; i<vs.size(); i++) {
-    vgl_vector_2d<double> v0 = vs[i]->get_p() - c->get_p();
-    unsigned next = i+1;
-    if (next == vs.size())
-      next = 0;
-    vgl_vector_2d<double> v1 = vs[next]->get_p() - c->get_p();
-    normal += cross_product<double>(v0,v1);
-  }
-#endif // 0
-  if (normal.z() < 0)
+  vgl_vector_2d<double> v0 = vs[1]->get_p() - vs[0]->get_p();
+  vgl_vector_2d<double> v1 = vs[2]->get_p() - vs[1]->get_p();
+  double normal = cross_product<double>(v0,v1);
+  if (normal < 0)
     return true;
   return false;
 }
@@ -171,8 +162,12 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[0]);
     face_corners.push_back(corners[3]);
     face_corners.push_back(corners[2]);
-    if (is_face_visible(face_corners, camera))
+    if (is_face_visible(face_corners, camera)) {
       faces |= boct_cell_face::Z_LOW;
+#if DEBUG
+      vcl_cout << "Z_LOW " ;
+#endif
+    }
 
     // face top [4,5,6,7]
     face_corners.clear();
@@ -180,32 +175,47 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[5]);
     face_corners.push_back(corners[6]);
     face_corners.push_back(corners[7]);
-    if (is_face_visible(face_corners, camera))
+    if (is_face_visible(face_corners, camera)) {
       faces |= boct_cell_face::Z_HIGH;
-
+#if DEBUG
+      vcl_cout << "Z_HIGH " ;
+#endif
+    }
     face_corners.clear();
     face_corners.push_back(corners[1]);
     face_corners.push_back(corners[2]);
     face_corners.push_back(corners[6]);
     face_corners.push_back(corners[5]);
-    if (is_face_visible(face_corners, camera))
+    if (is_face_visible(face_corners, camera)) {
       faces |= boct_cell_face::X_HIGH;
+#if DEBUG
+      vcl_cout << "X_HIGH " ;
+#endif
+    }
 
     face_corners.clear();
     face_corners.push_back(corners[7]);
-    face_corners.push_back(corners[4]);
-    face_corners.push_back(corners[0]);
     face_corners.push_back(corners[3]);
-    if (is_face_visible(face_corners, camera))
+    face_corners.push_back(corners[0]);
+    face_corners.push_back(corners[4]);
+    if (is_face_visible(face_corners, camera)) {
       faces |= boct_cell_face::X_LOW;
+#if DEBUG
+      vcl_cout << "X_LOW " ;
+#endif
+    }
 
     face_corners.clear();
     face_corners.push_back(corners[2]);
     face_corners.push_back(corners[3]);
     face_corners.push_back(corners[7]);
     face_corners.push_back(corners[6]);
-    if (is_face_visible(face_corners, camera))
+    if (is_face_visible(face_corners, camera)) {
       faces |= boct_cell_face::Y_HIGH;
+#if DEBUG
+      vcl_cout << "Y_HIGH " ;
+#endif
+    }
     face_corners.clear();
 
     face_corners.clear();
@@ -213,8 +223,13 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
     face_corners.push_back(corners[1]);
     face_corners.push_back(corners[5]);
     face_corners.push_back(corners[4]);
-    if (is_face_visible(face_corners, camera))
+    if (is_face_visible(face_corners, camera)){
       faces |= boct_cell_face::Y_LOW;
+#if DEBUG
+      vcl_cout << "Y_LOW " ;
+#endif
+    }
   }
+  vcl_cout << vcl_endl;
   return faces;
 }

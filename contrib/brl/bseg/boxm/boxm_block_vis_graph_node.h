@@ -29,8 +29,9 @@ class boxm_block_vis_graph_node
 {
  public:
   typedef vcl_map<vgl_point_3d<int>, boxm_block_vis_graph_node<T>, vgl_point_3d_cmp<int> > vis_graph_type;
-  boxm_block_vis_graph_node() {}
-  ~boxm_block_vis_graph_node() {}
+
+  boxm_block_vis_graph_node() : in_count(0) {}
+  ~boxm_block_vis_graph_node(){}
 
   int dec_in_count() { return --in_count; }
 
