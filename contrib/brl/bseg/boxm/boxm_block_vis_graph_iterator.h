@@ -1,15 +1,17 @@
 #ifndef boxm_block_vis_graph_iterator_h_
 #define boxm_block_vis_graph_iterator_h_
-
+//:
+// \file
 #include "boxm_block_vis_graph_node.h"
 #include "boxm_block.h"
 #include "boxm_scene.h"
 #include <vcl_vector.h>
+#include <vcl_map.h>
 
 template <class T>
 class boxm_block_vis_graph_iterator
 {
-public:
+ public:
   boxm_block_vis_graph_iterator(vpgl_camera_double_sptr cam, boxm_scene<T>* scene,
     unsigned img_ni, unsigned img_nj, bool rev_iter=false);
 
@@ -21,11 +23,11 @@ public:
 
   void set_reverse_iter(bool reverse) { reverse_it_ = reverse; }
 
-private:
+ private:
 
   typedef vcl_map<vgl_point_3d<int>, boxm_block_vis_graph_node<T>, vgl_point_3d_cmp<int> > vis_graph_type;
 
-  // visibility graph, indexed by the block indices
+  //: visibility graph, indexed by the block indices
   vis_graph_type vis_graph_;
 
   vcl_vector<typename vis_graph_type::iterator> curr_blocks_;
@@ -35,13 +37,14 @@ private:
   //: the camera
   vpgl_camera_double_sptr camera_;
 
+#if 0
   //: blocks that can be seen by the camera unoccluded
-  //vcl_vector<boxm_block<T>*> frontier_;
+  vcl_vector<boxm_block<T>*> frontier_;
+#endif
 
   boxm_scene<T>* scene_;
 
   bool reverse_it_;
-
 };
 
 #endif

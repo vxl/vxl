@@ -17,12 +17,12 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
   // compute the visibility graph
   boxm_block_iterator<T> iter = scene->iterator();
   for (; !iter.end(); iter++) {
-    boxm_block<tree_type> block = *iter;
+    boxm_block<T> block = *iter;
     if (boxm_utils::is_visible(block.bounding_box(), cam, img_ni, img_nj))
       vis_graph_.insert(vcl_make_pair<vgl_point_3d<int>,boxm_block_vis_graph_node<T> >(iter.index(),boxm_block_vis_graph_node<T>()));
   }
 
-  vis_graph_type::iterator vis_iter;
+  typename vis_graph_type::iterator vis_iter;
   for (vis_iter=vis_graph_.begin(); vis_iter!=vis_graph_.end(); vis_iter++) {
     vgl_point_3d<int> idx = vis_iter->first;
     boxm_block<T>* block = scene->get_block(idx);
@@ -47,7 +47,7 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
     }
 
     if (face_in) {
-      vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+      typename vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
       if (nit == vis_graph_.end()) {
         vis_iter->second.in_count++;
         curr_blocks_.push_back(vis_iter);
@@ -76,7 +76,7 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
     }
 
     if (face_in) {
-      vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+      typename vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
       if (nit == vis_graph_.end()) {
         vis_iter->second.in_count++;
         curr_blocks_.push_back(vis_iter);
@@ -104,7 +104,7 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
       face_in = true;
 
       if (face_in) {
-        vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+        typename vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
         if (nit == vis_graph_.end()) {
           vis_iter->second.in_count++;
           curr_blocks_.push_back(vis_iter);
@@ -120,8 +120,8 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
 template <class T>
 bool boxm_block_vis_graph_iterator<T>::next()
 {
-  vcl_vector<vis_graph_type::iterator>::iterator block_iter = curr_blocks_.begin();
-  vcl_vector<vis_graph_type::iterator> to_process;
+  typename vcl_vector<typename vis_graph_type::iterator>::iterator block_iter = curr_blocks_.begin();
+  vcl_vector<typename vis_graph_type::iterator> to_process;
 
   for (; block_iter != curr_blocks_.end(); block_iter++) {
     if ((*block_iter)->second.dec_in_count() == 0)
@@ -137,8 +137,8 @@ bool boxm_block_vis_graph_iterator<T>::next()
   // add linked blocks to list for next iteration
   curr_blocks_.clear();
   for (block_iter = to_process.begin(); block_iter != to_process.end(); ++block_iter) {
-    vcl_vector<vis_graph_type::iterator > &links = (*block_iter)->second.out_links;
-    vcl_vector<vis_graph_type::iterator >::iterator neighbor_it = links.begin();
+    vcl_vector<typename vis_graph_type::iterator > &links = (*block_iter)->second.out_links;
+    typename vcl_vector<typename vis_graph_type::iterator >::iterator neighbor_it = links.begin();
     for (; neighbor_it != links.end(); ++neighbor_it) {
       curr_blocks_.push_back(*neighbor_it);
     }
@@ -159,6 +159,6 @@ vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier()
 }
 
 #define BOXM_BLOCK_VIS_GRAPH_ITERATOR_INSTANTIATE(T) \
-template boxm_block_vis_graph_iterator<T >;
+template boxm_block_vis_graph_iterator<T >
 
 #endif
