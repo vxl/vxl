@@ -49,7 +49,7 @@ mfpf_grad_corr2d::~mfpf_grad_corr2d()
 }
 
 //: Define filter kernel to search with
-void mfpf_grad_corr2d::set(const vil_image_view<double>& kx, 
+void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
                            const vil_image_view<double>& ky,
                            double ref_x, double ref_y)
 {
@@ -101,7 +101,7 @@ void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
 }
 
 //: Define filter kernel to search with
-void mfpf_grad_corr2d::set(const vil_image_view<double>& kx, 
+void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
                            const vil_image_view<double>& ky)
 {
   set(kx, ky, 0.5*(kx.ni()-1.0), 0.5*(kx.nj()-1.0));
@@ -134,7 +134,7 @@ bool mfpf_grad_corr2d::set_model(const vcl_vector<double>& v)
 
 //: Number of dimensions in the model
 unsigned mfpf_grad_corr2d::model_dim()
-{ 
+{
   return kernel_x_.ni()*kernel_x_.nj() + kernel_y_.ni()*kernel_y_.nj();
 }
 
@@ -184,6 +184,7 @@ inline double norm_corr(const double* im1, const double* im2,
   return sum1/s;
 }
 
+#if 0 // static (=local) function not used in this file
 static void normalize(vil_image_view<double>& im)
 {
   unsigned ni=im.ni(),nj=im.nj();
@@ -196,7 +197,7 @@ static void normalize(vil_image_view<double>& im)
 
   assert(!vnl_math_isnan(sum));
 
-  if (ss<1e-6) 
+  if (ss<1e-6)
   {
     vcl_cerr<<"Warning: Almost flat region in mfpf_grad_corr2d_builder\n"
             <<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
@@ -209,6 +210,7 @@ static void normalize(vil_image_view<double>& im)
   if (ss>0) s = vcl_sqrt(1.0/ss);
   vil_math_scale_and_offset_values(im,s,-s*mean);
 }
+#endif // 0
 
 void mfpf_grad_corr2d::diff_image(const vimt_image_2d_of<float>& image,
                                   const vgl_point_2d<double>& p,
@@ -239,9 +241,9 @@ void mfpf_grad_corr2d::diff_image(const vimt_image_2d_of<float>& image,
   im_p0 = s_w2i(p0);
   im_u = s_w2i.delta(p0, u1);
   im_v = s_w2i.delta(p0, v1);
-  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),  
+  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),
                      im_u.x(),im_u.y(), im_v.x(),im_v.y(), nsi+1,nsj);
-  
+
   // take differences across x
   grad_x.set_size( nsi,nsj );
 
@@ -262,7 +264,7 @@ void mfpf_grad_corr2d::diff_image(const vimt_image_2d_of<float>& image,
   im_p0 = s_w2i(p0);
   im_u = s_w2i.delta(p0, u1);
   im_v = s_w2i.delta(p0, v1);
-  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),  
+  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),
                      im_u.x(),im_u.y(), im_v.x(),im_v.y(), nsi,nsj+1);
 
   // take differences across y
@@ -324,7 +326,7 @@ double mfpf_grad_corr2d::evaluate(const vimt_image_2d_of<float>& image,
 {
   vil_image_view<double> grad_x, grad_y;
   diff_image(image,p,u,grad_x,grad_y);
-  
+
   return 2.0-norm_corr(grad_x.top_left_ptr(),kernel_x_.top_left_ptr(),
                        grad_x.jstep(),kernel_x_.jstep(),
                        kernel_x_.ni(),kernel_x_.nj())
@@ -523,10 +525,9 @@ mfpf_point_finder* mfpf_grad_corr2d::clone() const
 
 void mfpf_grad_corr2d::print_summary(vcl_ostream& os) const
 {
-  os<<"{  size: "<<kernel_x_.ni()<<" x "<<kernel_x_.nj();
+  os << "{  size: " << kernel_x_.ni() << " x " << kernel_x_.nj();
   mfpf_point_finder::print_summary(os);
-  os<<" overlap_f: "<<overlap_f_;
-  os<<" }";
+  os << " overlap_f: " << overlap_f_ << " }";
 }
 
 void mfpf_grad_corr2d::b_write(vsl_b_ostream& bfs) const
