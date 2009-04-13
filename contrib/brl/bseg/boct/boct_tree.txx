@@ -141,11 +141,13 @@ vgl_box_3d<double> boct_tree<T_loc,T_data,T_aux>::cell_bounding_box(boct_tree_ce
                                      global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
                                      global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());
 
-  return vgl_box_3d<double>(global_origin,
-                            cellsize*global_bbox_.width(),
-                            cellsize*global_bbox_.height(),
-                            cellsize*global_bbox_.depth(),
-                            min_pos);
+   return vgl_box_3d<double>(global_origin, 
+							 cellsize*global_bbox_.width(), 
+							 cellsize*global_bbox_.height(), 
+							 cellsize*global_bbox_.depth(),
+							 vgl_box_3d<double>::min_pos);							  
+	
+
 }
 
 template <class T_loc,class T_data, class T_aux>
