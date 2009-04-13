@@ -15,7 +15,7 @@
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
-    const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
+                          const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
 : lvcs_(lvcs), block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
 active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
@@ -37,7 +37,8 @@ active_block_(vgl_point_3d<int>(-1,-1,-1))
 
 template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
-    const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
+                           const vgl_vector_3d<double>& block_dim,
+                           const vgl_vector_3d<double>& world_dim)
 : block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
 active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
@@ -54,27 +55,26 @@ template <class T>
 void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 {
   if (blocks_(i,j,k) == NULL) {
-    
     vgl_box_3d<double> bbox = get_block_bbox(i,j,k);
     blocks_(i,j,k) = new boxm_block<T>(bbox);
-    }
+  }
 }
+
 template <class T>
 void boxm_scene<T>::write_active_block()
 {
-	if(valid_index(active_block_))
-    {
-      int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
-      vcl_string path = gen_block_path(x,y,z);
-      vsl_b_ofstream os(path);
-      blocks_(x,y,z)->b_write(os);
-      // delete the block's data
-      boxm_block<T>* block = blocks_(x,y,z);
-      delete block;
-  
-       active_block_.set(-1,-1,-1);
+  if (valid_index(active_block_))
+  {
+    int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
+    vcl_string path = gen_block_path(x,y,z);
+    vsl_b_ofstream os(path);
+    blocks_(x,y,z)->b_write(os);
+    // delete the block's data
+    boxm_block<T>* block = blocks_(x,y,z);
+    delete block;
 
-      }
+    active_block_.set(-1,-1,-1);
+  }
 }
 
 //: returns the block this point resides in
@@ -89,7 +89,7 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
     unsigned k = (p.z()-origin_.z())/block_dim_.z();
     return blocks_(i,j,k);
   } else {
-    vcl_cerr << "Point " << p << " is out of world " << world << vcl_endl;
+    vcl_cerr << "Point " << p << " is out of world " << world << '\n';
     return 0;
   }
 }
@@ -97,34 +97,33 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
 template <class T>
 boxm_block<T>* boxm_scene<T>::get_active_block()
 {
-	if(valid_index(active_block_))
-		return blocks_(active_block_.x(),active_block_.y(),active_block_.z());
-	else{
-		vcl_cerr << "index"<<active_block_<<"  is out of world " <<  vcl_endl;
-		return 0;
-	}
-	
+  if (valid_index(active_block_))
+    return blocks_(active_block_.x(),active_block_.y(),active_block_.z());
+  else{
+    vcl_cerr << "index"<<active_block_<<"  is out of world\n";
+    return 0;
+  }
 }
 
 template <class T>
 vgl_box_3d<double> boxm_scene<T>::get_world_bbox()
 {
-  vgl_point_3d<double> min(origin_.x(), origin_.y(), origin_.z());
-  vgl_point_3d<double> max(min.x()+block_dim_.x()*blocks_.get_row1_count(),
-                           min.y()+block_dim_.y()*blocks_.get_row2_count(),
-                           min.z()+block_dim_.z()*blocks_.get_row3_count());
+  vgl_point_3d<double> min_p(origin_.x(), origin_.y(), origin_.z());
+  vgl_point_3d<double> max_p(min_p.x()+block_dim_.x()*blocks_.get_row1_count(),
+                             min_p.y()+block_dim_.y()*blocks_.get_row2_count(),
+                             min_p.z()+block_dim_.z()*blocks_.get_row3_count());
 
-  vgl_box_3d<double> bbox(min, max);
+  vgl_box_3d<double> bbox(min_p, max_p);
   return bbox;
 }
 
 template <class T>
 vgl_box_3d<double> boxm_scene<T>::get_block_bbox(int x, int y, int z)
 {
-  vgl_point_3d<double> min(block_dim_.x()*x+origin_.x(), block_dim_.y()*y+origin_.y(), block_dim_.z()*z+origin_.z());
-  vgl_point_3d<double> max(min.x()+block_dim_.x(), min.y()+block_dim_.y(), min.z()+block_dim_.z());
+  vgl_point_3d<double> min_p(block_dim_.x()*x+origin_.x(), block_dim_.y()*y+origin_.y(), block_dim_.z()*z+origin_.z());
+  vgl_point_3d<double> max_p(min_p.x()+block_dim_.x(), min_p.y()+block_dim_.y(), min_p.z()+block_dim_.z());
 
-  vgl_box_3d<double> bbox(min, max);
+  vgl_box_3d<double> bbox(min_p, max_p);
   return bbox;
 }
 
@@ -161,7 +160,7 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     }
   }
   active_block_.set(i,j,k);
-  
+
   vcl_string block_path = gen_block_path(i,j,k);
   vsl_b_ifstream os(block_path);
 
@@ -179,9 +178,9 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 template <class T>
 bool boxm_scene<T>::valid_index(vgl_point_3d<int> idx)
 {
-  vgl_point_3d<int> min(0,0,0);
-  vgl_point_3d<int> max(blocks_.get_row1_count(), blocks_.get_row2_count(), blocks_.get_row3_count());
-  vgl_box_3d<int> bbox(min, max);
+  vgl_point_3d<int> min_p(0,0,0);
+  vgl_point_3d<int> max_p(blocks_.get_row1_count(), blocks_.get_row2_count(), blocks_.get_row3_count());
+  vgl_box_3d<int> bbox(min_p, max_p);
   if (bbox.contains(idx))
     return true;
 
@@ -235,6 +234,7 @@ void boxm_scene<T>::b_write(vsl_b_ostream & s)
   // write the XML as char stream
   vsl_b_write(s, str);
 }
+
 template <class T>
 void boxm_scene<T>::write_scene()
 {
@@ -247,10 +247,9 @@ void boxm_scene<T>::write_scene()
 template <class T>
 void boxm_scene<T>::load_scene(vcl_string filename)
 {
-   vsl_b_ifstream is(filename.c_str());
-   this->b_read(is);
-    is.close();
-
+  vsl_b_ifstream is(filename.c_str());
+  this->b_read(is);
+  is.close();
 }
 
 template <class T>
@@ -300,7 +299,7 @@ template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::begin()
 {
   i_=j_=k_=0;
-  return (*this);
+  return *this;
 }
 
 template <class T>
@@ -308,11 +307,11 @@ bool boxm_block_iterator<T>::end()
 {
   int x,y,z;
   scene_->block_num(x,y,z);
-  
+
   //if ((i_==x-1) && (j_==y-1) && (k_==z-1))
   if ((k_==z) || (k_ == -1))
     return true;
-    
+
   return false;
 }
 
@@ -323,11 +322,10 @@ boxm_block_iterator<T>& boxm_block_iterator<T>::operator=(const boxm_block_itera
   this->j_ = that.j_;
   this->k_ = that.k_;
   //this->scene_ = that.scene_;
-  return (*this);
+  return *this;
 }
 
-  
-template <class T>  
+template <class T>
 bool boxm_block_iterator<T>::operator==(const boxm_block_iterator<T>& that)
 {
   if ((this->i_ == that.i_) && (this->j_ == that.j_) && (this->k_ == that.k_) && (this->scene_ == that.scene_))
@@ -342,12 +340,13 @@ bool boxm_block_iterator<T>::operator!=(const boxm_block_iterator<T>& that)
     return true;
   return false;
 }
+
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::operator++()
 {
   int x,y,z;
   scene_->block_num(x,y,z);
-  
+
   if (++i_==x) {
     i_=0;
     if (++j_==y) {
@@ -358,21 +357,22 @@ boxm_block_iterator<T>& boxm_block_iterator<T>::operator++()
       //}
     }
   }
-  return (*this);
+  return *this;
 }
+
 template <class T>
 boxm_block_iterator<T> boxm_block_iterator<T>::operator++(int)
-{ 
+{
   boxm_block_iterator<T> old = *this;
   ++*this;
   return old;
 }
-          
+
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::operator--()
 {
   int x,y,z;
-  
+
   scene_->block_num(x,y,z);
   if (--i_==-1) {
     i_=0;
@@ -384,7 +384,7 @@ boxm_block_iterator<T>& boxm_block_iterator<T>::operator--()
       //}
     }
   }
-  return (*this);
+  return *this;
 }
 
 template <class T>
@@ -417,7 +417,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene)
 
 #define BOXM_SCENE_INSTANTIATE(T) \
 template boxm_scene<T >; \
-template boxm_block_iterator<T>; \
+template boxm_block_iterator<T >; \
 template void x_write(vcl_ostream&, boxm_scene<T >&, vcl_string);\
 template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const &scene);\
 template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const * &scene);\

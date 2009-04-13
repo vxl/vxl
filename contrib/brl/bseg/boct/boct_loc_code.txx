@@ -56,16 +56,14 @@ short boct_loc_code<T>::child_index(short level)
   //T index_z = ((z_loc_ & child_bit) >> (level-1));
   //return index_x+2*index_y+4*index_z;
   short index =0;
-  if((x_loc_ & child_bit))
-	index+=1;
-  if((y_loc_ & child_bit))
-	index+=2;
-  if((z_loc_ & child_bit))
-	index+=4;
-
+  if ((x_loc_ & child_bit))
+    index+=1;
+  if ((y_loc_ & child_bit))
+    index+=2;
+  if ((z_loc_ & child_bit))
+    index+=4;
 
   return index;
-
 }
 
 template <class T>

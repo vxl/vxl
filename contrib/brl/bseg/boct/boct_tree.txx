@@ -29,8 +29,9 @@ boct_tree<T_loc,T_data,T_aux>::boct_tree(short max_level, short init_levels): ma
     init_levels--;
   }
 }
+
 template <class T_loc,class T_data, class T_aux>
-boct_tree<T_loc,T_data,T_aux>::~boct_tree() 
+boct_tree<T_loc,T_data,T_aux>::~boct_tree()
 {
   vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> v;
   if (root_)
@@ -129,23 +130,22 @@ vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> boct_tree<T_loc,T_data,T_aux>::l
     }
   return v;
 }
+
 template <class T_loc,class T_data, class T_aux>
 vgl_box_3d<double> cell_bounding_box(boct_tree_cell<T_loc,T_data,T_aux>* const cell)
 {
-	double treesize=(double)(1<<(max_level_-1));
-	double cellsize=(double)(1<<cell->level())/treesize;
-	vgl_point_3d<double> local_origin(cell->code_.x_loc_,cell->code_.y_loc_,cell->code_.z_loc_);
-	vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/treesize*global_bbox_.width(),
-									   global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
-									   global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());
+  double treesize=(double)(1<<(max_level_-1));
+  double cellsize=(double)(1<<cell->level())/treesize;
+  vgl_point_3d<double> local_origin(cell->code_.x_loc_,cell->code_.y_loc_,cell->code_.z_loc_);
+  vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/treesize*global_bbox_.width(),
+                                     global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
+                                     global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());
 
-   return vgl_box_3d<double>(global_origin, 
-							 cellsize*global_bbox_.width(), 
-							 cellsize*global_bbox_.height(), 
-							 cellsize*global_bbox_.depth(),
-							 min_pos);							  
-	
-
+  return vgl_box_3d<double>(global_origin,
+                            cellsize*global_bbox_.width(),
+                            cellsize*global_bbox_.height(),
+                            cellsize*global_bbox_.depth(),
+                            min_pos);
 }
 
 template <class T_loc,class T_data, class T_aux>
