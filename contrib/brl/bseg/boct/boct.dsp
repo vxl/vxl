@@ -93,16 +93,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boct_loc_code.cxx
+SOURCE=.\Templates/boct_tree_cell+short.vgl_point_3d+double-.void-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short-+vgl_point_3d+double--+void-.cxx
+SOURCE=.\Templates/boct_tree+short.vgl_point_3d+double-.void-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short-+vgl_point_3d+double--+void-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boct_test_util+short-+vgl_point_3d+double--+void-.cxx
+SOURCE=.\Templates/boct_test_util+short.vgl_point_3d+double-.void-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_loc_code+short-.cxx
