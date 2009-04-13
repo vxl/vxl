@@ -59,13 +59,12 @@ void testresult( int testresult )
   }
 }
 
-// The else is for a trailing ; after the macro
 #define DO_TEST( Name ) \
   if ( name == "" || name == "test_" #Name ) { \
     testname( #Name ); \
     testresult( test_##Name##_main(argc,argv) ); \
     test_run = 1; \
-  } else
+  }
 
 int main( int argc, char* argv[] )
 {
