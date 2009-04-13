@@ -8,7 +8,7 @@
 
 class boct_cell_face
 {
-public:
+ public:
   static const unsigned char NONE = 0x00;
   static const unsigned char Z_LOW = 0x01;
   static const unsigned char Z_HIGH = 0x02;
@@ -28,10 +28,10 @@ class boct_tree_cell // public vbl_ref_count
 
   //constructors
   boct_tree_cell<T_loc,T_data, T_aux>()
-  : children_(0), parent_(0) {}
+  : parent_(0), children_(0) {}
 
   boct_tree_cell<T_loc,T_data, T_aux>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T_data, T_aux>* p)
-  : code_(code), children_(0), parent_(p) {}
+  : code_(code), parent_(p), children_(0) {}
 
   //constructor given code and level
   boct_tree_cell<T_loc,T_data, T_aux>(const boct_loc_code<T_loc>& code);
@@ -45,35 +45,37 @@ class boct_tree_cell // public vbl_ref_count
 
   const boct_loc_code<T_loc>& get_code();
 
-  //: currently this function just goes down the tree 
-  //: TODO to make it flexible and go from one node to another.
+  //: currently this function just goes down the tree
+  //  TODO: make it flexible and go from one node to another.
   boct_tree_cell<T_loc,T_data, T_aux>* traverse(boct_loc_code<T_loc> &code);
   boct_tree_cell<T_loc,T_data, T_aux>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
- 
+
   bool traverse_and_split(boct_loc_code<T_loc> &code);
 
-  short level(){return code_.level;}
-  void set_level(short level) {code_.level=level; }
-  boct_tree_cell<T_loc,T_data, T_aux>* children(){return children_;}
+  short level() { return code_.level; }
+  void set_level(short level) { code_.level=level; }
+  boct_tree_cell<T_loc,T_data, T_aux>* children() { return children_; }
   boct_tree_cell<T_loc,T_data, T_aux>* parent() { return parent_; }
 
   void  find_neighbors(boct_face_idx face,vcl_vector<boct_tree_cell<T_loc,T_data, T_aux>*> & neighbors,short max_level);
   boct_tree_cell<T_loc,T_data, T_aux>* get_common_ancestor(short binarydiff);
-  
-  void set_data(T_data const& data) {data_=data; }
-  T_data data() {return data_; }
-  boct_loc_code<T_loc> code_;
-  
+
+  void set_data(T_data const& data) { data_=data; }
+  T_data data() { return data_; }
+
   bool split();
   void print();
   void delete_children();
   static short version_no() { return 1; }
+
+  boct_loc_code<T_loc> code_;
  protected:
   boct_tree_cell<T_loc,T_data, T_aux>* parent_;
   boct_tree_cell<T_loc,T_data, T_aux>* children_;
   T_data data_;
   T_aux * aux_data_;
 };
+
 template<class T_loc,class T_data,class T_aux>
 vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data,T_aux>& cell);
 
@@ -83,8 +85,4 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data,T_aux>& cell);
 template <class T_loc,class T_data,class T_aux>
 void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data,T_aux>& cell, boct_tree_cell<T_loc,T_data,T_aux>* parent);
 
-//typedef vbl_smart_ptr<boct_tree_cell<vgl_point_3d<double> > boct_tree_cell_pt_sptr;
-
-//class boct_cell_directed_graph
-#endif
-
+#endif // boct_tree_cell_h_
