@@ -101,7 +101,10 @@ MAIN( test_cell_vis_graph )
 
   vpgl_camera_double_sptr camera = generate_camera_top(world);
 
+#if 0
+  ??? block_vis_iter = ???;
   vcl_vector<boxm_block<tree_type>*> blocks = block_vis_iter.frontier();
-  //TEST("Number of blocks iterator visits", num_blocks, x*y*z);
+  TEST("Number of blocks iterator visits", num_blocks, x*y*z);
+#endif
   SUMMARY();
 }
