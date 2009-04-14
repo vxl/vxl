@@ -155,7 +155,7 @@ bool boxm_block_vis_graph_iterator<T>::next()
 }
 
 template <class T>
-vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier()
+vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier_blocks()
 {
   vcl_vector<boxm_block<T>*> frontier;
 

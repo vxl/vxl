@@ -19,7 +19,9 @@ class boxm_block_vis_graph_iterator
 
   bool next();
 
-  vcl_vector<boxm_block<T>*> frontier();
+  vcl_vector<boxm_block<T>*> frontier_blocks();
+
+  vcl_vector<vgl_point_3d<int> > frontier_indices() {return to_process_indices_; }
 
   void set_reverse_iter(bool reverse) { reverse_it_ = reverse; }
 
