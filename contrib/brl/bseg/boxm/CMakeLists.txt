@@ -19,6 +19,7 @@ SET(boxm_sources
     boxm_cell_vis_graph_iterator.txx    boxm_cell_vis_graph_iterator.h
     boxm_neighb_graph_node.h
     boxm_utils.cxx                    boxm_utils.h
+    boxm_render_image.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
