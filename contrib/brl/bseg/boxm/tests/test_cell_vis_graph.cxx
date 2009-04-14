@@ -26,19 +26,19 @@ MAIN( test_cell_vis_graph )
   tree_type * tree=new tree_type();
   vpgl_camera_double_sptr camera = generate_camera_top(world);
 
-  boxm_block_iterator<boct_tree<short,vgl_point_3d<double>,void > > iter(&scene);
+  boxm_block_iterator<boct_tree<short,vgl_point_3d<double> > > iter(&scene);
   
   while(!iter.end())
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
-    boxm_block<boct_tree<short,vgl_point_3d<double>,void > > * block=scene.get_active_block();
-    boct_tree<short,vgl_point_3d<double>,void > * tree=new boct_tree<short,vgl_point_3d<double>,void >(3,2);
+    boxm_block<boct_tree<short,vgl_point_3d<double> > > * block=scene.get_active_block();
+    boct_tree<short,vgl_point_3d<double> > * tree=new boct_tree<short,vgl_point_3d<double> >(3,2);
     block->init_tree(tree);
-	boxm_cell_vis_graph_iterator<short,vgl_point_3d<double>,void > cell_iterator(camera,tree,IMAGE_U, IMAGE_V);
+	boxm_cell_vis_graph_iterator<short,vgl_point_3d<double> > cell_iterator(camera,tree,IMAGE_U, IMAGE_V);
 	double cnt=30;
 	while (cell_iterator.next()){
 		vcl_cout<<"Frontier\n";
-		vcl_vector<boct_tree_cell<short,vgl_point_3d<double>,void> *> vis_cells=cell_iterator.frontier();
+		vcl_vector<boct_tree_cell<short,vgl_point_3d<double>> *> vis_cells=cell_iterator.frontier();
 		for(unsigned i=0;i<vis_cells.size();i++)
 		{
 			vgl_box_3d<double> box=tree->cell_bounding_box(vis_cells[i]);

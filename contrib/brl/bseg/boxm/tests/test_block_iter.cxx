@@ -5,7 +5,7 @@
 #include <boct/boct_tree.h>
 #include <vpl/vpl.h>
 
-typedef boct_tree<short,vgl_point_3d<double>,void > tree_type;
+typedef boct_tree<short,vgl_point_3d<double> > tree_type;
 
 MAIN( test_block_iter )
 {

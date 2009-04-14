@@ -4,9 +4,9 @@
 #include "boxm_cell_vis_graph_iterator.h"
 #include "boxm_utils.h"
 
-template <class T_loc,class T_data, class T_aux>
-boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::boxm_cell_vis_graph_iterator(vpgl_camera_double_sptr cam,
-                                                           boct_tree<T_loc,T_data,T_aux>* tree,
+template <class T_loc,class T_data>
+boxm_cell_vis_graph_iterator<T_loc,T_data>::boxm_cell_vis_graph_iterator(vpgl_camera_double_sptr cam,
+                                                           boct_tree<T_loc,T_data>* tree,
                                                            unsigned img_ni,
                                                            unsigned img_nj) : camera_(cam),img_ni_(img_ni), img_nj_(img_nj)
 {
@@ -39,13 +39,13 @@ boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::boxm_cell_vis_graph_iterator(v
     list_of_vis_nodes_.clear();
 }
 
-template <class T_loc,class T_data,class T_aux>
-bool boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::next()
+template <class T_loc,class T_data>
+bool boxm_cell_vis_graph_iterator<T_loc,T_data>::next()
 {
-  vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>* > to_process;
-  vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>* > to_process_refine;
+  vcl_vector<boct_tree_cell<T_loc,T_data>* > to_process;
+  vcl_vector<boct_tree_cell<T_loc,T_data>* > to_process_refine;
 
-  vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>* >::iterator cell_it = curr_cells_.begin();
+  vcl_vector<boct_tree_cell<T_loc,T_data>* >::iterator cell_it = curr_cells_.begin();
   for (; cell_it != curr_cells_.end(); ++cell_it) {
     // decrement each cell's count in list. if count == 0, add to list of nodes to process
     if (--((*cell_it)->vis_node()->incoming_count) == 0) {
@@ -63,8 +63,8 @@ bool boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::next()
   // add linked cells to list for next iteration
   curr_cells_.clear();
   for (cell_it = to_process.begin(); cell_it != to_process.end(); ++cell_it) {
-    vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>* > links = (*cell_it)->vis_node()->outgoing_links;
-    vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>* >::iterator neighbor_it = links.begin();
+    vcl_vector<boct_tree_cell<T_loc,T_data>* > links = (*cell_it)->vis_node()->outgoing_links;
+    vcl_vector<boct_tree_cell<T_loc,T_data>* >::iterator neighbor_it = links.begin();
     for (; neighbor_it != links.end(); ++neighbor_it) {
       curr_cells_.push_back(*neighbor_it);
     }
@@ -72,9 +72,9 @@ bool boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::next()
   return true;
 }
 
-template<class T_loc,class T_data, class T_aux>
-void boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::check_cell_visibility(boct_tree<T_loc,T_data,T_aux>* tree,
-																			 boct_tree_cell<T_loc,T_data,T_aux>* tree_cell)
+template<class T_loc,class T_data>
+void boxm_cell_vis_graph_iterator<T_loc,T_data>::check_cell_visibility(boct_tree<T_loc,T_data>* tree,
+																			 boct_tree_cell<T_loc,T_data>* tree_cell)
 {
    vgl_box_3d<double> bbox=tree->cell_bounding_box(tree_cell);
    if(boxm_utils::is_visible(bbox, camera_,img_ni_, img_nj_, true))
@@ -82,30 +82,30 @@ void boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::check_cell_visibility(boc
 	//: base case for recursion
 	if(tree_cell->is_leaf())
 	{
-		boct_cell_vis_graph_node<T_loc,T_data,T_aux> * node=new boct_cell_vis_graph_node<T_loc,T_data,void>();
+		boct_cell_vis_graph_node<T_loc,T_data> * node=new boct_cell_vis_graph_node<T_loc,T_data>();
 		node->visible=true;
 		tree_cell->set_vis_node(node);
 		list_of_vis_nodes_.push_back(tree_cell);
 	}
 	else
 	{
-	  boct_tree_cell<T_loc,T_data,T_aux>* children = tree_cell->children();
+	  boct_tree_cell<T_loc,T_data>* children = tree_cell->children();
 	  for (unsigned i=0; i<8; i++)
 		 check_cell_visibility(tree,&children[i]);
 	}
 	}
 }
-template<class T_loc,class T_data, class T_aux>
-void boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::form_graph_per_cell(boct_tree_cell<T_loc,T_data,T_aux>* cell,boct_face_idx face_idx,boct_tree<T_loc,T_data,T_aux>* tree)
+template<class T_loc,class T_data>
+void boxm_cell_vis_graph_iterator<T_loc,T_data>::form_graph_per_cell(boct_tree_cell<T_loc,T_data>* cell,boct_face_idx face_idx,boct_tree<T_loc,T_data>* tree)
 {
-		boct_cell_vis_graph_node<T_loc,T_data,T_aux>* vis_node=cell->vis_node();
-	    vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> neighbors;
+		boct_cell_vis_graph_node<T_loc,T_data>* vis_node=cell->vis_node();
+	    vcl_vector<boct_tree_cell<T_loc,T_data>*> neighbors;
 	    cell->find_neighbors(face_idx, neighbors,tree->num_levels());
         unsigned int visible_neighbor_count = 0;
-        vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*>::iterator neighbor_it = neighbors.begin();
+        vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator neighbor_it = neighbors.begin();
         bool visible_neighbors=false;
         for (; neighbor_it != neighbors.end(); ++neighbor_it) {
-          boct_cell_vis_graph_node<T_loc,T_data,T_aux>* neighbor_vis_node=(*neighbor_it)->vis_node();
+          boct_cell_vis_graph_node<T_loc,T_data>* neighbor_vis_node=(*neighbor_it)->vis_node();
           if (neighbor_vis_node) {
             vis_node->incoming_count++;
             neighbor_vis_node->outgoing_links.push_back(cell);
@@ -117,7 +117,7 @@ void boxm_cell_vis_graph_iterator<T_loc,T_data,T_aux>::form_graph_per_cell(boct_
           curr_cells_.push_back(cell);
         }
 }
-#define BOXM_CELL_VIS_GRAPH_ITERATOR_INSTANTIATE(T1,T2,T3) \
-template boxm_cell_vis_graph_iterator<T1,T2,T3>;
+#define BOXM_CELL_VIS_GRAPH_ITERATOR_INSTANTIATE(T1,T2) \
+template boxm_cell_vis_graph_iterator<T1,T2>;
 
 #endif // boxm_cell_vis_graph_iterator_txx_
