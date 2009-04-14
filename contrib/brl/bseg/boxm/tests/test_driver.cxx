@@ -10,7 +10,7 @@ void register_tests()
   REGISTER( test_binary_io );
   REGISTER( test_block_iter );
   REGISTER( test_block_vis_graph );
-    REGISTER( test_cell_vis_graph );
+   REGISTER( test_cell_vis_graph );
 
 }
 

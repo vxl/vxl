@@ -5,6 +5,7 @@ ADD_EXECUTABLE( boxm_test_all
   test_block_vis_graph.cxx
   test_cell_vis_graph.cxx
 
+  test_utils.h test_utils.cxx
  )
 
 TARGET_LINK_LIBRARIES( boxm_test_all boxm boct testlib vnl vgl_xio vpl vul vpgl)

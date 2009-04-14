@@ -13,7 +13,6 @@ class boxm_cell_vis_graph_iterator
  public:
   boxm_cell_vis_graph_iterator(vpgl_camera_double_sptr cam,
                                boct_tree<T_loc,T_data,T_aux>* tree,
-                               bool rev_iter,
                                unsigned img_ni,
                                unsigned img_nj);
 
@@ -32,6 +31,7 @@ class boxm_cell_vis_graph_iterator
 
   //: blocks that can be seen by the camera unoccluded
   vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> frontier_;
+  vcl_vector<boct_tree_cell<T_loc,T_data,T_aux>*> curr_cells_;
   bool reverse_iter_;
 
   unsigned img_ni_;

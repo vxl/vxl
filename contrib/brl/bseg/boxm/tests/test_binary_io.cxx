@@ -31,7 +31,7 @@ MAIN( test_binary_io )
   boxm_scene<boct_tree<short,vgl_point_3d<double>,void > > scene_out;
   vsl_b_ifstream is("scene.bin", vcl_ios_binary);
   scene_out.b_read(is);
-
+  vpl_rmdir("./boxm_scene");
   vpl_unlink("scene.bin");
 
   //: writing the binary file for a scene with grey MOG
@@ -54,9 +54,6 @@ MAIN( test_binary_io )
     iter++;
   }
 
-  vsl_b_ofstream mog_os("./boxm_scene/scene.bin");
-  mog_scene.b_write(mog_os);
-  mog_os.close();
   //: writing the binary file for a scene with grey MOG
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY>,void > > read_mog_scene;
   read_mog_scene.load_scene("./boxm_scene/scene.bin");
@@ -69,6 +66,8 @@ MAIN( test_binary_io )
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY>,void > * tree=block->get_tree();
     read_iter++;
   }
+  vpl_rmdir("./boxm_scene");
+  vpl_unlink("./scene.bin");
 
   SUMMARY();  
 }
