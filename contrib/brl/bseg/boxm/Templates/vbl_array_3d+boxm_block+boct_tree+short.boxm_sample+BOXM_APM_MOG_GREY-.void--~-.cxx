@@ -5,5 +5,5 @@
 #include <boct/boct_tree.txx>
 #include <boxm/boxm_sample.h>
 
-typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY>,void> tree_type;
+typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY>> tree_type;
 VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type>*);
