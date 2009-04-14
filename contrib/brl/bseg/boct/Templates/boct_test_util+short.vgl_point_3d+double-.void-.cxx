@@ -3,4 +3,4 @@
 
 typedef vgl_point_3d<double> point_3d;
 
-BOCT_TEST_UTIL_INSTANTIATE(short,point_3d,void);
+BOCT_TEST_UTIL_INSTANTIATE(short,point_3d);
