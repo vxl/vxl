@@ -15,12 +15,17 @@
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
 
+#include "boxm_sample.h"
 
 class boxm_scene_base : public vbl_ref_count
 {
 public:
   boxm_scene_base() {}
   virtual ~boxm_scene_base(){}
+  boxm_apm_type appearence_model() { return apperance_model_; }
+
+protected:
+  boxm_apm_type apperance_model_;
 };
 
 typedef vbl_smart_ptr<boxm_scene_base> boxm_scene_base_sptr;

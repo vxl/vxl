@@ -34,6 +34,12 @@ enum boxm_apm_type
   BOXM_APM_UNKNOWN
 };
 
+class boxm_apm_types {
+public:
+  static const char* app_model_strings[];
+  static boxm_apm_type str_to_enum(const char* s);
+};
+
 //: Pixel properties for templates.
 template <boxm_apm_type>
 class boxm_apm_traits;

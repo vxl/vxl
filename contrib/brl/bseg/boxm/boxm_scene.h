@@ -52,6 +52,8 @@ class boxm_scene :public boxm_scene_base
 
   void load_block(unsigned i, unsigned j, unsigned k);
 
+  void load_block(vgl_point_3d<int> i) { load_block(i.x(), i.y(), i.z()); }
+
   void write_active_block();
 
   bgeo_lvcs lvcs() { return lvcs_;}
@@ -87,7 +89,7 @@ class boxm_scene :public boxm_scene_base
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
-
+  
  private:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;

@@ -12,7 +12,7 @@ SET(boxm_sources
     boxm_scene_base.h        
     boxm_scene.txx                    boxm_scene.h
     boxm_sample.txx                   boxm_sample.h        
-    boxm_apm_traits.h
+    boxm_apm_traits.cxx               boxm_apm_traits.h
     boxm_mog_grey_processor.cxx       boxm_mog_grey_processor.h  
     boxm_block_vis_graph_node.h
     boxm_block_vis_graph_iterator.txx boxm_block_vis_graph_iterator.h
