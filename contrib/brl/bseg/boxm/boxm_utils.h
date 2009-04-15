@@ -46,24 +46,33 @@ public:
                             vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > & faces);
 
   static void project_cube(vgl_box_3d<double> &bbox, 
-                           vpgl_camera_double_sptr camera,
-                           vgl_polygon<double> &poly);
+                              vpgl_camera_double_sptr camera,
+                              vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > & faces,
+							  boct_face_idx & vis_face_ids);
   static vcl_vector<vgl_point_2d<double> >  project_face(vcl_vector<vgl_point_3d<double> > &face,
 														 vpgl_camera_double_sptr const& camera);
 
   
   static void quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it, 
-						 double* xvals, double* yvals, double* vals, 
-						 vil_image_view<float> &img,unsigned img_plane_num=0,
-						 unsigned int v0=0, unsigned int v1=1, 
-						 unsigned int v2=2,unsigned int v3=3);
+								 double* xvals, double* yvals, double* vals, 
+								 vil_image_view<float> &img,unsigned img_plane_num=0,
+								 unsigned int v0=0, unsigned int v1=1, 
+								 unsigned int v2=2,unsigned int v3=3);
   static void quad_fill(vgl_polygon_scan_iterator<double> &poly_it, 
-							 vil_image_view<float> &img, float val,unsigned img_plane_num=0);
+						 vil_image_view<float> &img, float val,
+						 unsigned img_plane_num=0);
 
-static bool project_cube_xyz(vgl_box_3d<double> & cube,
-									  vpgl_camera_double_sptr const& cam, 
-									  vil_image_view<float> &front_xyz,
-									  vil_image_view<float> &back_xyz);
+  static bool project_cube_xyz(vcl_map<boct_face_idx,
+							   vcl_vector< vgl_point_3d<double> > > & faces,
+							   boct_face_idx & vis_face_ids,
+							   vil_image_view<float> &front_xyz,
+							   vil_image_view<float> &back_xyz,
+							   vpgl_camera_double_sptr camera);
+
+  static bool project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
+								   boct_face_idx & vis_face_ids,
+								   vil_image_view<float> &fill_img,
+								   float val, vpgl_camera_double_sptr cam);
 
 
 };

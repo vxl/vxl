@@ -282,35 +282,13 @@ void boxm_utils::faces_of_box_3d(vgl_box_3d<double> &bbox,
 //: returns the union of the projected faces of a polygon
 void boxm_utils::project_cube(vgl_box_3d<double> &bbox, 
                               vpgl_camera_double_sptr camera,
-                              vgl_polygon<double> &polygon)
-{
-   //vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > faces;
-   //faces_of_box_3d(bbox, faces);
-  
-   //vcl_map<boct_face_idx, vsol_polygon_3d_sptr>::iterator it = faces.begin();
-   //vcl_vector<vgl_polygon<double> > polygons;
-   //for (; it!= faces.end(); it++) {
-   //  vcl_vector<vsol_point_2d_sptr> vs;
-   //  vsol_polygon_3d_sptr face = it->second;
-   //  // project the face
-   //  vgl_polygon<double> poly(1);
-   //  double u,v;
-   //  for (unsigned i=0; i<face->size(); i++) {
-   //    camera->project(face->vertex(i)->x(), face->vertex(i)->y(), face->vertex(i)->z(), u, v);
-   //    poly.push_back(u,v);
-   //    vcl_cout << "(" << u << "," << v << ")" << vcl_endl;
-   //  }
-   //  polygons.push_back(poly);
-   //}
+                              vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > & faces,
+							  boct_face_idx & vis_face_ids)
 
-   //// take the union of the polygons
-   //vgl_polygon<double> union_poly = polygons[0];
-   //for (unsigned i=1; i<polygons.size(); i++) {
-   //  union_poly = vgl_clip<double>(polygons[i], union_poly, vgl_clip_type_union);
-   //}
-   //vcl_cout << union_poly;
-   //
-   //polygon=union_poly;
+{
+	faces_of_box_3d(bbox, faces);
+	vis_face_ids=boxm_utils::visible_faces(bbox,camera); 
+
 }
 
 
@@ -398,14 +376,12 @@ void boxm_utils::quad_fill(vgl_polygon_scan_iterator<double> &poly_it,
 
 
 
-bool boxm_utils::project_cube_xyz(vgl_box_3d<double> & cube,
-									  vpgl_camera_double_sptr const& cam, 
-									  vil_image_view<float> &front_xyz,
-									  vil_image_view<float> &back_xyz)
+bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
+								   boct_face_idx & vis_face_ids,
+								   vil_image_view<float> &front_xyz,
+								   vil_image_view<float> &back_xyz,
+								   vpgl_camera_double_sptr cam)
 {
-  boct_face_idx vis_face_ids=boxm_utils::visible_faces(cube,cam); 
-  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
-  faces_of_box_3d(cube, faces);
   vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
   for(;face_it!=faces.end();face_it)
   {
@@ -431,6 +407,35 @@ bool boxm_utils::project_cube_xyz(vgl_box_3d<double> & cube,
 		  quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
 		  quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
 		  quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
+	  }
+  }
+          
+ return true; 
+}
+
+
+
+
+
+bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
+								   boct_face_idx & vis_face_ids,
+								   vil_image_view<float> &fill_img,
+								   float val, vpgl_camera_double_sptr cam)
+{
+  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
+  for(;face_it!=faces.end();face_it)
+  {
+	  vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
+	  vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
+	  vgl_polygon<double> face_polygon(face_projected);
+	  vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+
+	  double xs[]={face_projected[0].x(),face_projected[1].x(),face_projected[2].x(),face_projected[3].x()};
+	  double ys[]={face_projected[0].y(),face_projected[1].y(),face_projected[2].y(),face_projected[3].y()};
+
+
+	  if (vis_face_ids & face_it->first){
+		  quad_fill(poly_it,fill_img,val,0);
 	  }
   }
           

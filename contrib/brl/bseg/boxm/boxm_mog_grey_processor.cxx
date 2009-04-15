@@ -10,3 +10,24 @@
 
 
 #include <vcl_cassert.h>
+//: Expected value
+boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype 
+boxm_mog_grey_processor::expected_color(boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype const& appear)
+{
+
+  float total_weight= 0;
+  obs_datatype c = 0;
+  obs_datatype expected = 0;
+
+  //should be components used
+  for (unsigned i = 0; i< appear.num_components(); ++i)
+  {
+    total_weight += appear.weight(i);
+    c += appear.distribution(i).mean() * appear.weight(i);
+  }
+  if (total_weight > 0.0f) {
+    expected = c/total_weight;
+  }
+
+  return expected;
+}
