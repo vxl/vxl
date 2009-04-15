@@ -17,6 +17,9 @@
 #include <vil/vil_transform.h>
 #include <vil/vil_save.h>
 #include <vil/vil_view_as.h>
+#include <boxm/boxm_block_vis_graph_iterator.h>
+#include <boxm/boxm_cell_vis_graph_iterator.h>
+#include <boxm/boxm_mog_grey_processor.h>
 
 class image_exp_functor
 {
@@ -38,13 +41,13 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
 
 	//: code to iterate over the blocks in order of visibility 
-	boxm_block_vis_graph_iterator<tree_type> block_vis_iter(cam, &scene, expected.ni(), expected.nj());
+	boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, expected.ni(), expected.nj());
 
 	while (block_vis_iter.next()) {
 		vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
 		for(unsigned i=0; i<block_indices.size(); i++) {
 			//: code for each block
-			scene.load_block(block_indices[i]);
+			scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
 			boxm_block<tree_type> * curr_block=scene.get_active_block();
 			boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);	
 			//: for each frontier layer of each block
@@ -78,9 +81,9 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 						typename boxm_apm_traits<APM>::obs_datatype cell_expected  = 
 							boxm_apm_traits<APM>::apm_processor::expected_color(sample.appearance);
 						// get  alpha
-            boxm_utils::project_cube_fill_val( faces,vis_face_ids,alphas,sample.alpha, cam);
+						boxm_utils::project_cube_fill_val( faces,vis_face_ids,alphas,sample.alpha, cam);
 						// fill expected value image
-            boxm_utils::project_cube_fill_val( faces,vis_face_ids,temp_expected,(float)cell_expected, cam);
+						boxm_utils::project_cube_fill_val( faces,vis_face_ids,temp_expected,(float)cell_expected, cam);
    
 					}
 				}

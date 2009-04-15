@@ -5,7 +5,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 
-typedef boct_tree<short,vgl_point_3d<double>> tree_type;
+typedef boct_tree<short,vgl_point_3d<double> > tree_type;
 
 const int IMAGE_U = 200;
 const int IMAGE_V = 200;
