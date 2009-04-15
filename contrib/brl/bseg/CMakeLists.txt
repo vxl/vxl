@@ -52,3 +52,6 @@ SUBDIRS(boct)
 
 #octree based modeling 
 SUBDIRS(boxm)
+
+#octree based modeling python interface
+SUBDIRS(boxm_batch)
