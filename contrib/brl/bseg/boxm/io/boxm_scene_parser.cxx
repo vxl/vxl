@@ -159,4 +159,11 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
         convert(atts[i+1], block_pref_);
     }
   }
+  else if (vcl_strcmp(name,APP_MODEL_TAG)== 0) {
+    for (int i=0; atts[i]; i+=2) {
+      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
+      if (vcl_strcmp(atts[i], "type") == 0)
+        convert(atts[i+1], app_model_);
+    }
+  }
 }
