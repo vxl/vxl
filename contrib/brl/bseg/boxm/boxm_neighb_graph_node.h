@@ -15,16 +15,16 @@ class boxm_neighb_graph_node
 
   ~boxm_neighb_graph_node() {}
 
-  void insert(boct_face_idx face, boct_tree_cell<short,vgl_point_3d<double>>* cell)
+  void insert(boct_face_idx face, boct_tree_cell<short,vgl_point_3d<double> >* cell)
   { neighbors_[face].push_back(cell); }
 
-  vcl_vector<boct_tree_cell<short,vgl_point_3d<double>>*> neighbors(boct_face_idx face)
+  vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> neighbors(boct_face_idx face)
   { return neighbors_[face]; }
 
   int num_neighbors() { return neighbors_.size(); }
 
  private:
-  vcl_map<boct_face_idx, vcl_vector<boct_tree_cell<short,vgl_point_3d<double>>*> > neighbors_;
+  vcl_map<boct_face_idx, vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> > neighbors_;
 };
 
 #endif
