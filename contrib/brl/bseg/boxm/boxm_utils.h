@@ -34,7 +34,7 @@ public:
 
   static vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
 
-  static bool is_face_visible(vsol_polygon_3d_sptr face,
+  static bool is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
                               vpgl_camera_double_sptr const& camera);
 
     //: returns the visible faces of a box given a camera. It puts
@@ -43,7 +43,7 @@ public:
                                 vpgl_camera_double_sptr camera);
 
   static void faces_of_box_3d(vgl_box_3d<double> &bbox, 
-                            vcl_map<boct_face_idx, vsol_polygon_3d_sptr>& faces);
+                            vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > & faces);
 
   static void project_cube(vgl_box_3d<double> &bbox, 
                            vpgl_camera_double_sptr camera,
@@ -55,6 +55,9 @@ public:
 						 vil_image_view<float> &min_img, vil_image_view<float> &max_img,
 						 unsigned int v0=0, unsigned int v1=1, 
 						 unsigned int v2=2,unsigned int v3=3);
+static bool cube_camera_distance(vgl_box_3d<double> & cube,
+						  vpgl_camera_double_sptr const& cam, 
+						  vil_image_view<float> &dist);
 
 
 };

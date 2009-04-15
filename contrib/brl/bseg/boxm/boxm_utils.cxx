@@ -110,23 +110,23 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> box)
   return corners;
 }
 //: corners of the input face
-bool boxm_utils::is_face_visible(vsol_polygon_3d_sptr face,
+bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
                                  vpgl_camera_double_sptr const& camera)
 {
   double u,v;
   //vgl_box_2d<double> face;
-  vcl_vector<vsol_point_2d_sptr> vs;
+  vcl_vector<vgl_point_2d<double> > vs;
 
-  assert(face->size() >= 3);
+  assert(face.size() >= 3);
 
-  for (unsigned i=0; i<face->size(); i++) {
-    camera->project(face->vertex(i)->x(), face->vertex(i)->y(), face->vertex(i)->z(), u, v);
-    vs.push_back(new vsol_point_2d(u,v));
+  for (unsigned i=0; i<face.size(); i++) {
+    camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
+    vs.push_back(vgl_point_2d<double>(u,v));
   }
 
 
-  vgl_vector_2d<double> v0 = vs[1]->get_p() - vs[0]->get_p();
-  vgl_vector_2d<double> v1 = vs[2]->get_p() - vs[1]->get_p();
+  vgl_vector_2d<double> v0 = vs[1] - vs[0];
+  vgl_vector_2d<double> v1 = vs[2] - vs[1];
   double normal = cross_product<double>(v0,v1);
   if (normal < 0)
     return true;
@@ -163,7 +163,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
   // for other cameras, use projection and normals
   else {
     // fix the face normals so that the vertices are the counter clokwise order
-    vcl_map<boct_face_idx, vsol_polygon_3d_sptr > faces;
+    vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
     faces_of_box_3d(bbox, faces);
 
     if (is_face_visible(faces.find(boct_cell_face::Z_LOW)->second, camera)) {
@@ -216,52 +216,52 @@ boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr came
 
 //: returns the faces of a box, the vertices are ordered in the normal direction
 void boxm_utils::faces_of_box_3d(vgl_box_3d<double> &bbox, 
-                            vcl_map<boct_face_idx, vsol_polygon_3d_sptr>& faces)
+                            vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >& faces)
 {
   vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
    
   // face bottom [1,0,3,2]
-  vcl_vector<vsol_point_3d_sptr> face_corners;
-  face_corners.push_back(new vsol_point_3d(corners[1]));
-  face_corners.push_back(new vsol_point_3d(corners[0]));
-  face_corners.push_back(new vsol_point_3d(corners[3]));
-  face_corners.push_back(new vsol_point_3d(corners[2]));
-  faces[boct_cell_face::Z_LOW] = new vsol_polygon_3d(face_corners);
+  vcl_vector<vgl_point_3d<double> > face_corners;
+  face_corners.push_back(corners[1]);
+  face_corners.push_back(corners[0]);
+  face_corners.push_back(corners[3]);
+  face_corners.push_back(corners[2]);
+  faces[boct_cell_face::Z_LOW] = face_corners;
 
   face_corners.resize(0);
-  face_corners.push_back(new vsol_point_3d(corners[4]));
-  face_corners.push_back(new vsol_point_3d(corners[5]));
-  face_corners.push_back(new vsol_point_3d(corners[6]));
-  face_corners.push_back(new vsol_point_3d(corners[7]));
-  faces[boct_cell_face::Z_HIGH] = new vsol_polygon_3d(face_corners);
+  face_corners.push_back(corners[4]);
+  face_corners.push_back(corners[5]);
+  face_corners.push_back(corners[6]);
+  face_corners.push_back(corners[7]);
+  faces[boct_cell_face::Z_HIGH] = face_corners;
 
   face_corners.resize(0);
-  face_corners.push_back(new vsol_point_3d(corners[7]));
-  face_corners.push_back(new vsol_point_3d(corners[3]));
-  face_corners.push_back(new vsol_point_3d(corners[0]));
-  face_corners.push_back(new vsol_point_3d(corners[4]));
-  faces[boct_cell_face::X_LOW] = new vsol_polygon_3d(face_corners);
+  face_corners.push_back(corners[7]);
+  face_corners.push_back(corners[3]);
+  face_corners.push_back(corners[0]);
+  face_corners.push_back(corners[4]);
+  faces[boct_cell_face::X_LOW] = face_corners;
 
   face_corners.resize(0);
-  face_corners.push_back(new vsol_point_3d(corners[1]));
-  face_corners.push_back(new vsol_point_3d(corners[2]));
-  face_corners.push_back(new vsol_point_3d(corners[6]));
-  face_corners.push_back(new vsol_point_3d(corners[5]));
-  faces[boct_cell_face::X_HIGH] = new vsol_polygon_3d(face_corners);
+  face_corners.push_back(corners[1]);
+  face_corners.push_back(corners[2]);
+  face_corners.push_back(corners[6]);
+  face_corners.push_back(corners[5]);
+  faces[boct_cell_face::X_HIGH] = face_corners;
 
   face_corners.resize(0);
-  face_corners.push_back(new vsol_point_3d(corners[0]));
-  face_corners.push_back(new vsol_point_3d(corners[1]));
-  face_corners.push_back(new vsol_point_3d(corners[5]));
-  face_corners.push_back(new vsol_point_3d(corners[4]));
-  faces[boct_cell_face::Y_LOW] = new vsol_polygon_3d(face_corners);
+  face_corners.push_back(corners[0]);
+  face_corners.push_back(corners[1]);
+  face_corners.push_back(corners[5]);
+  face_corners.push_back(corners[4]);
+  faces[boct_cell_face::Y_LOW] = face_corners;
 
   face_corners.resize(0);
-  face_corners.push_back(new vsol_point_3d(corners[2]));
-  face_corners.push_back(new vsol_point_3d(corners[3]));
-  face_corners.push_back(new vsol_point_3d(corners[7]));
-  face_corners.push_back(new vsol_point_3d(corners[6]));
-  faces[boct_cell_face::Y_HIGH] = new vsol_polygon_3d(face_corners);
+  face_corners.push_back(corners[2]);
+  face_corners.push_back(corners[3]);
+  face_corners.push_back(corners[7]);
+  face_corners.push_back(corners[6]);
+  faces[boct_cell_face::Y_HIGH] = face_corners;
 }
 
 //: returns the union of the projected faces of a polygon
@@ -269,33 +269,33 @@ void boxm_utils::project_cube(vgl_box_3d<double> &bbox,
                               vpgl_camera_double_sptr camera,
                               vgl_polygon<double> &polygon)
 {
-   vcl_map<boct_face_idx, vsol_polygon_3d_sptr> faces;
-   faces_of_box_3d(bbox, faces);
+   //vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > faces;
+   //faces_of_box_3d(bbox, faces);
   
-   vcl_map<boct_face_idx, vsol_polygon_3d_sptr>::iterator it = faces.begin();
-   vcl_vector<vgl_polygon<double> > polygons;
-   for (; it!= faces.end(); it++) {
-     vcl_vector<vsol_point_2d_sptr> vs;
-     vsol_polygon_3d_sptr face = it->second;
-     // project the face
-     vgl_polygon<double> poly(1);
-     double u,v;
-     for (unsigned i=0; i<face->size(); i++) {
-       camera->project(face->vertex(i)->x(), face->vertex(i)->y(), face->vertex(i)->z(), u, v);
-       poly.push_back(u,v);
-       vcl_cout << "(" << u << "," << v << ")" << vcl_endl;
-     }
-     polygons.push_back(poly);
-   }
+   //vcl_map<boct_face_idx, vsol_polygon_3d_sptr>::iterator it = faces.begin();
+   //vcl_vector<vgl_polygon<double> > polygons;
+   //for (; it!= faces.end(); it++) {
+   //  vcl_vector<vsol_point_2d_sptr> vs;
+   //  vsol_polygon_3d_sptr face = it->second;
+   //  // project the face
+   //  vgl_polygon<double> poly(1);
+   //  double u,v;
+   //  for (unsigned i=0; i<face->size(); i++) {
+   //    camera->project(face->vertex(i)->x(), face->vertex(i)->y(), face->vertex(i)->z(), u, v);
+   //    poly.push_back(u,v);
+   //    vcl_cout << "(" << u << "," << v << ")" << vcl_endl;
+   //  }
+   //  polygons.push_back(poly);
+   //}
 
-   // take the union of the polygons
-   vgl_polygon<double> union_poly = polygons[0];
-   for (unsigned i=1; i<polygons.size(); i++) {
-     union_poly = vgl_clip<double>(polygons[i], union_poly, vgl_clip_type_union);
-   }
-   vcl_cout << union_poly;
-   
-   polygon=union_poly;
+   //// take the union of the polygons
+   //vgl_polygon<double> union_poly = polygons[0];
+   //for (unsigned i=1; i<polygons.size(); i++) {
+   //  union_poly = vgl_clip<double>(polygons[i], union_poly, vgl_clip_type_union);
+   //}
+   //vcl_cout << union_poly;
+   //
+   //polygon=union_poly;
 }
 
 
@@ -398,90 +398,34 @@ void boxm_utils::quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it,
 //}
 //
 //
-//bool cube_camera_distance(vbl_box_3d<double> const& cube,
-//						  vpgl_perspective_camera<double> const& cam, 
-//						  vil_image_view<float> &front_dist, 
-//						  vil_image_view<float> &back_dist,
-//						  psm_cube_face_list visible_faces)
-//{
-//  // 3d coordinates of cube
-//  double xverts_3d[] = {cube.xmin(), cube.xmax()};
-//  double yverts_3d[] = {cube.ymin(), cube.ymax()};
-//  double zverts_3d[] = {cube.zmin(), cube.zmax()};
-//  // 2d projected coordinates of cube
-//  double xverts_2d[8], yverts_2d[8];
-//  // distances from camera center of 3d vertices
-//  float vert_distances[8];
-//
-//  vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam.camera_center());
-//
-//  unsigned int n=0;
-//  for (unsigned int k=0; k<2; ++k) {
-//    for (unsigned int j=0; j<2; ++j) {
-//      for (unsigned int i=0; i<2; ++i) {
-//        cam.project(xverts_3d[i],yverts_3d[j],zverts_3d[k],xverts_2d[n],yverts_2d[n]);
-//        vert_distances[n] =  (float)(cam_center - vgl_point_3d<double>(xverts_3d[i],yverts_3d[j],zverts_3d[k])).length();
-//        ++n;
-//      }
-//    }
-//  }
-//  // for each face, create two triangle iterators and fill in pixel data
-//  vgl_triangle_scan_iterator<double> tri_it;
-//  vgl_point_2d<double> tri_verts[3];
-//
-//  // X_LOW
-//  // tri 0
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 2, 0, 6);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 2, 0, 6);
-//
-//  // tri 1
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 0, 4, 6);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 0, 4, 6);
-//
-//  // X_HIGH
-//  // tri 0
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 1, 3, 7);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 1, 3, 7);
-//  // tri 1
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 7, 5, 1);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 7, 5, 1);
-//
-//  // Y_LOW
-//  // tri 0
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 0, 1, 5);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 0, 1, 5);
-//  // tri 1
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 4, 0, 5);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 4, 0, 5);
-//
-//  // Y_HIGH
-//  // tri 0
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 7, 3, 2);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 7, 3, 2);
-//  // tri 1
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 2, 6, 7);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 2, 6, 7);
-//
-//  // Z_LOW
-//  // tri 0
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 0, 1, 2);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 0, 2, 1);
-//  // tri 1
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 1, 3, 2);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 1, 2, 3);
-//
-//  // Z_HIGH
-//  // tri 0
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 4, 5, 6);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 4, 5, 6);
-//  // tri 1
-//  init_triangle_scan_iterator(tri_it, xverts_2d, yverts_2d, 5, 7, 6);
-//  tri_interpolate_min_max(tri_it, xverts_2d, yverts_2d, vert_distances, front_dist, back_dist, 5, 7, 6);
-//
-//  return true;
-//
-//}
-//
-//
-//
+bool boxm_utils::cube_camera_distance(vgl_box_3d<double> & cube,
+						  vpgl_camera_double_sptr const& cam, 
+						  vil_image_view<float> &dist)
+{
+  boct_face_idx vis_face_ids=boxm_utils::visible_faces(cube,cam); 
+  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
+  faces_of_box_3d(cube, faces);
+          
+  vil_image_view<float> front_X(dist.ni(),dist.nj());
+  vil_image_view<float> front_Y(dist.ni(),dist.nj());
+  vil_image_view<float> front_Z(dist.ni(),dist.nj());
+
+  vil_image_view<float> back_X(dist.ni(),dist.nj());
+  vil_image_view<float> back_Y(dist.ni(),dist.nj());
+  vil_image_view<float> back_Z(dist.ni(),dist.nj());
+  
+  vcl_vector<vgl_point_3d<double> > face_corners=faces.find(boct_cell_face::X_LOW)->second;
+  if (vis_face_ids & boct_cell_face::X_LOW){
+	  
+  }
+
+  // for each face, create two triangle iterators and fill in pixel data
+
+
+  return true;
+
+}
+
+
+
 
