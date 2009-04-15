@@ -10,7 +10,8 @@ MAIN( test_binary_io )
 {
   START ("CREATE SCENE");
   short nlevels=5;
-  boct_tree<short,vgl_point_3d<double> > * block = new boct_tree<short,vgl_point_3d<double> >(nlevels);
+  typedef vgl_point_3d<double> point_type
+  boct_tree<short,point_type > * block = new boct_tree<short,point_type >(nlevels);
   TEST("No of Max levels of tree",nlevels, block->num_levels());
   
   block->split();
@@ -20,7 +21,7 @@ MAIN( test_binary_io )
   vgl_point_3d<double> origin(10,10,20);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<double> world_dim(30,30,30);
-  boxm_scene<boct_tree<short,vgl_point_3d<double> > > scene(lvcs, origin, block_dim, world_dim);
+  boxm_scene<boct_tree<short,point_type > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_paths("./boxm_scene", "block");
   x_write(vcl_cout, scene, "scene");
 

@@ -48,16 +48,22 @@ public:
   static void project_cube(vgl_box_3d<double> &bbox, 
                            vpgl_camera_double_sptr camera,
                            vgl_polygon<double> &poly);
+  static vcl_vector<vgl_point_2d<double> >  project_face(vcl_vector<vgl_point_3d<double> > &face,
+														 vpgl_camera_double_sptr const& camera);
 
   
   static void quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it, 
 						 double* xvals, double* yvals, double* vals, 
-						 vil_image_view<float> &min_img, vil_image_view<float> &max_img,
+						 vil_image_view<float> &img,unsigned img_plane_num=0,
 						 unsigned int v0=0, unsigned int v1=1, 
 						 unsigned int v2=2,unsigned int v3=3);
-static bool cube_camera_distance(vgl_box_3d<double> & cube,
-						  vpgl_camera_double_sptr const& cam, 
-						  vil_image_view<float> &dist);
+  static void quad_fill(vgl_polygon_scan_iterator<double> &poly_it, 
+							 vil_image_view<float> &img, float val,unsigned img_plane_num=0);
+
+static bool project_cube_xyz(vgl_box_3d<double> & cube,
+									  vpgl_camera_double_sptr const& cam, 
+									  vil_image_view<float> &front_xyz,
+									  vil_image_view<float> &back_xyz);
 
 
 };

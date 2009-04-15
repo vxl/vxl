@@ -132,6 +132,21 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
     return true;
   return false;
 }
+vcl_vector<vgl_point_2d<double> >  
+boxm_utils::project_face(vcl_vector<vgl_point_3d<double> > &face,
+                                 vpgl_camera_double_sptr const& camera)
+{
+  double u,v;
+  vcl_vector<vgl_point_2d<double> > vs;
+
+
+  for (unsigned i=0; i<face.size(); i++) {
+    camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
+    vs.push_back(vgl_point_2d<double>(u,v));
+  }
+
+  return vs;
+}
 
 boct_face_idx
 boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr camera)
@@ -301,9 +316,9 @@ void boxm_utils::project_cube(vgl_box_3d<double> &bbox,
 
 void boxm_utils::quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it, 
 							 double* xvals, double* yvals, double* vals, 
-							 vil_image_view<float> &min_img, vil_image_view<float> &max_img,
+							 vil_image_view<float> &img,unsigned img_plane_num,
 							 unsigned int v0, unsigned int v1, 
-							 unsigned int v2,unsigned int v3)
+							 unsigned int v2,unsigned int v3 )
 {
 	// first compute s0, s1, s2, s3 such that  val = s0*x + s1*y + s2 for any point within the triangle
 	// (no need to compute barycentric coordinates of a quadrilateral at each step)
@@ -332,98 +347,94 @@ void boxm_utils::quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it,
 			continue;
 		}
 		unsigned int yu = (unsigned int)y;
-		if (yu >= max_img.nj() ) {
+		if (yu >= img.nj() ) {
 			// we have left the image bounds. no need to continue.
 			break;
 		}
-		if ( (poly_it.startx() >= (int)max_img.ni()) || (poly_it.endx() <= 0) ) {
+		if ( (poly_it.startx() >= (int)img.ni()) || (poly_it.endx() <= 0) ) {
 			// no part of this scanline is within the image bounds. go to next scanline.
 			continue;
 		}
 		unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-		unsigned int endx = (unsigned int)vcl_min((int)max_img.ni(),poly_it.endx());
+		unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
 		for (unsigned int x = startx; x < endx; ++x) {
 			float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
-			if ( (min_img(x,yu) == 0) || (min_img(x,yu) > interp_val) ){
-				min_img(x,yu) = interp_val;
-			}
-			if (max_img(x,yu) < interp_val) {
-				max_img(x,yu) = interp_val;
-			}
+			img(x,yu,img_plane_num) = interp_val;
 		}
 	}
 	return;
 }
 
-//void project_cube_vertices(vbl_box_3d<double> const &cube, vpgl_perspective_camera<double> const& cam, double* xverts_2d, double* yverts_2d, float* vert_distances, psm_cube_face_list &visible_faces)
-//{
-//  // 3d coordinates of cube
-//  double xverts_3d[] = {cube.xmin(), cube.xmax()};
-//  double yverts_3d[] = {cube.ymin(), cube.ymax()};
-//  double zverts_3d[] = {cube.zmin(), cube.zmax()};
-//
-//  vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam.camera_center());
-//
-//  unsigned int n=0;
-//  for (unsigned int k=0; k<2; ++k) {
-//    for (unsigned int j=0; j<2; ++j) {
-//      for (unsigned int i=0; i<2; ++i) {
-//        cam.project(xverts_3d[i],yverts_3d[j],zverts_3d[k],xverts_2d[n],yverts_2d[n]);
-//        vert_distances[n] =  (float)(cam_center - vgl_point_3d<double>(xverts_3d[i],yverts_3d[j],zverts_3d[k])).length();
-//        ++n;
-//      }
-//    }
-//  }
-//
-//  visible_faces = psm_cube_face::NONE;
-//  if (visible(xverts_2d,yverts_2d, 2,0,6)) {
-//    visible_faces |= psm_cube_face::X_LOW;
-//  }
-//  if (visible(xverts_2d,yverts_2d, 1,3,7)) {
-//    visible_faces |= psm_cube_face::X_HIGH;
-//  }
-//  if (visible(xverts_2d,yverts_2d, 0,1,5)) {
-//    visible_faces |= psm_cube_face::Y_LOW;
-//  }
-//  if (visible(xverts_2d,yverts_2d, 7,3,2)) {
-//    visible_faces |= psm_cube_face::Y_HIGH;
-//  }
-//  if (visible(xverts_2d,yverts_2d, 0,2,1)) {
-//    visible_faces |= psm_cube_face::Z_LOW;
-//  }
-//  if (visible(xverts_2d,yverts_2d, 4,5,6)) {
-//    visible_faces |= psm_cube_face::Z_HIGH;
-//  }
-//}
-//
-//
-bool boxm_utils::cube_camera_distance(vgl_box_3d<double> & cube,
-						  vpgl_camera_double_sptr const& cam, 
-						  vil_image_view<float> &dist)
+void boxm_utils::quad_fill(vgl_polygon_scan_iterator<double> &poly_it, 
+							 vil_image_view<float> &img, float val, unsigned img_plane_num)
+{
+
+	poly_it.reset();
+	while(poly_it.next()) {
+		int y = poly_it.scany();
+		if (y < 0){
+			// not inside of image bounds yet. go to next scanline.
+			continue;
+		}
+		unsigned int yu = (unsigned int)y;
+		if (yu >= img.nj() ) {
+			// we have left the image bounds. no need to continue.
+			break;
+		}
+		if ( (poly_it.startx() >= (int)img.ni()) || (poly_it.endx() <= 0) ) {
+			// no part of this scanline is within the image bounds. go to next scanline.
+			continue;
+		}
+		unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
+		unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+
+		for (unsigned int x = startx; x < endx; ++x) {
+			img(x,yu,img_plane_num) = val;
+		}
+	}
+	return;
+}
+
+
+
+bool boxm_utils::project_cube_xyz(vgl_box_3d<double> & cube,
+									  vpgl_camera_double_sptr const& cam, 
+									  vil_image_view<float> &front_xyz,
+									  vil_image_view<float> &back_xyz)
 {
   boct_face_idx vis_face_ids=boxm_utils::visible_faces(cube,cam); 
   vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
   faces_of_box_3d(cube, faces);
-          
-  vil_image_view<float> front_X(dist.ni(),dist.nj());
-  vil_image_view<float> front_Y(dist.ni(),dist.nj());
-  vil_image_view<float> front_Z(dist.ni(),dist.nj());
+  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
+  for(;face_it!=faces.end();face_it)
+  {
+	  vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
+	  vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
+	  vgl_polygon<double> face_polygon(face_projected);
+	  vgl_polygon_scan_iterator<double> poly_it(face_polygon);
 
-  vil_image_view<float> back_X(dist.ni(),dist.nj());
-  vil_image_view<float> back_Y(dist.ni(),dist.nj());
-  vil_image_view<float> back_Z(dist.ni(),dist.nj());
-  
-  vcl_vector<vgl_point_3d<double> > face_corners=faces.find(boct_cell_face::X_LOW)->second;
-  if (vis_face_ids & boct_cell_face::X_LOW){
-	  
+	  double xs[]={face_projected[0].x(),face_projected[1].x(),face_projected[2].x(),face_projected[3].x()};
+	  double ys[]={face_projected[0].y(),face_projected[1].y(),face_projected[2].y(),face_projected[3].y()};
+
+	  double Xs[]={face_corners[0].x(),face_corners[1].x(),face_corners[2].x(),face_corners[3].x()};
+	  double Ys[]={face_corners[0].y(),face_corners[1].y(),face_corners[2].y(),face_corners[3].y()};
+	  double Zs[]={face_corners[0].z(),face_corners[1].z(),face_corners[2].z(),face_corners[3].z()};
+
+	  if (vis_face_ids & face_it->first){
+		  quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
+		  quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
+		  quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
+	  }
+	  else
+	  {
+		  quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
+		  quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
+		  quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
+	  }
   }
-
-  // for each face, create two triangle iterators and fill in pixel data
-
-
-  return true;
-
+          
+ return true; 
 }
 
 
