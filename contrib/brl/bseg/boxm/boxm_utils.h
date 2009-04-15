@@ -15,6 +15,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
+#include <vsol/vsol_polygon_3d_sptr.h>
 #include <boct/boct_tree_cell.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil/vil_image_view.h>
@@ -33,7 +34,7 @@ public:
 
   static vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
 
-  static bool is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
+  static bool is_face_visible(vsol_polygon_3d_sptr face,
                               vpgl_camera_double_sptr const& camera);
 
     //: returns the visible faces of a box given a camera. It puts
@@ -41,13 +42,19 @@ public:
   static boct_face_idx visible_faces(vgl_box_3d<double> &bbox, 
                                 vpgl_camera_double_sptr camera);
 
+  static void faces_of_box_3d(vgl_box_3d<double> &bbox, 
+                            vcl_map<boct_face_idx, vsol_polygon_3d_sptr>& faces);
+
+  static void project_cube(vgl_box_3d<double> &bbox, 
+                           vpgl_camera_double_sptr camera,
+                           vgl_polygon<double> &poly);
+
   
   static void quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it, 
 						 double* xvals, double* yvals, double* vals, 
 						 vil_image_view<float> &min_img, vil_image_view<float> &max_img,
 						 unsigned int v0=0, unsigned int v1=1, 
 						 unsigned int v2=2,unsigned int v3=3);
-
 
 
 };

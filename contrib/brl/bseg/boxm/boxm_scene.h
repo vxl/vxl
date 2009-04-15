@@ -11,6 +11,7 @@
 //   <none yet>
 // \endverbatim
 
+#include "boxm_scene_base.h"
 #include "boxm_block.h"
 #include "boxm_sample.h"
 
@@ -29,7 +30,7 @@ class boxm_scene_parser;
 template <class T> class boxm_block_iterator;
 
 template <class T>
-class boxm_scene:public vbl_ref_count
+class boxm_scene :public boxm_scene_base
 {
  public:
   boxm_scene() : scene_path_(""), block_pref_(""), active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
@@ -71,7 +72,7 @@ class boxm_scene:public vbl_ref_count
 
   void b_read(vsl_b_istream & s);
 
-  void b_write(vsl_b_ostream & s);
+  void b_write(vsl_b_ostream& s) const;
 
   boxm_block<T>* get_block(vgl_point_3d<double>& p);
 
@@ -80,8 +81,10 @@ class boxm_scene:public vbl_ref_count
   boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
 
   void write_scene();
+
   void load_scene(vcl_string filename);
-  short version_no() { return 1; }
+
+  static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
 
@@ -152,7 +155,7 @@ class boxm_block_iterator
 
 //: generates an XML file from the member variables
 template <class T>
-void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name="boxm_scene");
+void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name="boxm_scene");
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene);
@@ -166,8 +169,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_scene<T> &scene);
 template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene);
 
-typedef vbl_smart_ptr<boxm_scene<boct_tree<short,vgl_point_3d<double> > > > boxm_scene_short_point_double_sptr;
-typedef vbl_smart_ptr<boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > > boxm_scene_short_sample_mog_grey_sptr;
-
+//typedef vbl_smart_ptr<boxm_scene<boct_tree<short,vgl_point_3d<double> > > > boxm_scene_short_point_double_sptr;
+//typedef vbl_smart_ptr<boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > > boxm_scene_short_sample_mog_grey_sptr;
 
 #endif

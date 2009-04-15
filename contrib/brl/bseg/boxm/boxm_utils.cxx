@@ -3,16 +3,21 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_clip.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-
 #include <vnl/algo/vnl_determinant.h>
-#define DEBUG 1
+
+#define DEBUG 0
+
 
 bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
                             vpgl_camera_double_sptr const& camera,
@@ -105,17 +110,17 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> box)
   return corners;
 }
 //: corners of the input face
-bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
+bool boxm_utils::is_face_visible(vsol_polygon_3d_sptr face,
                                  vpgl_camera_double_sptr const& camera)
 {
   double u,v;
-  vgl_box_2d<double> face;
+  //vgl_box_2d<double> face;
   vcl_vector<vsol_point_2d_sptr> vs;
 
-  assert(corners.size() >= 3);
+  assert(face->size() >= 3);
 
-  for (unsigned i=0; i<corners.size(); i++) {
-    camera->project(corners[i].x(), corners[i].y(), corners[i].z(), u, v);
+  for (unsigned i=0; i<face->size(); i++) {
+    camera->project(face->vertex(i)->x(), face->vertex(i)->y(), face->vertex(i)->z(), u, v);
     vs.push_back(new vsol_point_2d(u,v));
   }
 
@@ -131,112 +136,169 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > corners,
 boct_face_idx
 boxm_utils::visible_faces(vgl_box_3d<double> &bbox, vpgl_camera_double_sptr camera)
 {
-  boct_face_idx faces = boct_cell_face::NONE;
+  boct_face_idx face_idx = boct_cell_face::NONE;
   if (camera->type_name().compare("vpgl_perspective_camera")==0) {
     vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     vgl_point_3d<double> const& cam_center = cam->camera_center();
 
     if (cam_center.x() > bbox.max_x()) {
-      faces |= boct_cell_face::X_HIGH;
+      face_idx |= boct_cell_face::X_HIGH;
     }
     else if (cam_center.x() < bbox.min_x()) {
-      faces |= boct_cell_face::X_LOW;
+      face_idx |= boct_cell_face::X_LOW;
     }
     if (cam_center.y() > bbox.max_y()) {
-      faces |= boct_cell_face::Y_HIGH;
+      face_idx |= boct_cell_face::Y_HIGH;
     }
     else if (cam_center.y() < bbox.min_y()) {
-      faces |= boct_cell_face::Y_LOW;
+      face_idx |= boct_cell_face::Y_LOW;
     }
     if (cam_center.z() > bbox.max_x()) {
-      faces |= boct_cell_face::Z_HIGH;
+      face_idx |= boct_cell_face::Z_HIGH;
     }
     else if (cam_center.z() < bbox.min_z()) {
-      faces |= boct_cell_face::Z_LOW;
+      face_idx |= boct_cell_face::Z_LOW;
     }
   }
   // for other cameras, use projection and normals
   else {
     // fix the face normals so that the vertices are the counter clokwise order
-    vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
+    vcl_map<boct_face_idx, vsol_polygon_3d_sptr > faces;
+    faces_of_box_3d(bbox, faces);
 
-    // face bottom [1,0,3,2]
-    vcl_vector<vgl_point_3d<double> > face_corners;
-    face_corners.push_back(corners[1]);
-    face_corners.push_back(corners[0]);
-    face_corners.push_back(corners[3]);
-    face_corners.push_back(corners[2]);
-    if (is_face_visible(face_corners, camera)) {
-      faces |= boct_cell_face::Z_LOW;
+    if (is_face_visible(faces.find(boct_cell_face::Z_LOW)->second, camera)) {
+      face_idx |= boct_cell_face::Z_LOW;
 #if DEBUG
       vcl_cout << "Z_LOW " ;
 #endif
     }
-
-    // face top [4,5,6,7]
-    face_corners.clear();
-    face_corners.push_back(corners[4]);
-    face_corners.push_back(corners[5]);
-    face_corners.push_back(corners[6]);
-    face_corners.push_back(corners[7]);
-    if (is_face_visible(face_corners, camera)) {
-      faces |= boct_cell_face::Z_HIGH;
+    if (is_face_visible(faces.find(boct_cell_face::Z_HIGH)->second, camera)) {
+      face_idx |= boct_cell_face::Z_HIGH;
 #if DEBUG
       vcl_cout << "Z_HIGH " ;
 #endif
     }
-    face_corners.clear();
-    face_corners.push_back(corners[1]);
-    face_corners.push_back(corners[2]);
-    face_corners.push_back(corners[6]);
-    face_corners.push_back(corners[5]);
-    if (is_face_visible(face_corners, camera)) {
-      faces |= boct_cell_face::X_HIGH;
-#if DEBUG
-      vcl_cout << "X_HIGH " ;
-#endif
-    }
-
-    face_corners.clear();
-    face_corners.push_back(corners[7]);
-    face_corners.push_back(corners[3]);
-    face_corners.push_back(corners[0]);
-    face_corners.push_back(corners[4]);
-    if (is_face_visible(face_corners, camera)) {
-      faces |= boct_cell_face::X_LOW;
+    if (is_face_visible(faces.find(boct_cell_face::X_LOW)->second, camera)) {
+      face_idx |= boct_cell_face::X_LOW;
 #if DEBUG
       vcl_cout << "X_LOW " ;
 #endif
     }
 
-    face_corners.clear();
-    face_corners.push_back(corners[2]);
-    face_corners.push_back(corners[3]);
-    face_corners.push_back(corners[7]);
-    face_corners.push_back(corners[6]);
-    if (is_face_visible(face_corners, camera)) {
-      faces |= boct_cell_face::Y_HIGH;
+    if (is_face_visible(faces.find(boct_cell_face::X_HIGH)->second, camera)) {
+      face_idx |= boct_cell_face::X_HIGH;
 #if DEBUG
-      vcl_cout << "Y_HIGH " ;
+      vcl_cout << "X_HIGH " ;
 #endif
     }
-    face_corners.clear();
 
-    face_corners.clear();
-    face_corners.push_back(corners[0]);
-    face_corners.push_back(corners[1]);
-    face_corners.push_back(corners[5]);
-    face_corners.push_back(corners[4]);
-    if (is_face_visible(face_corners, camera)){
-      faces |= boct_cell_face::Y_LOW;
+    if (is_face_visible(faces.find(boct_cell_face::Y_LOW)->second, camera)) {
+      face_idx |= boct_cell_face::Y_LOW;
 #if DEBUG
       vcl_cout << "Y_LOW " ;
 #endif
     }
+
+    if (is_face_visible(faces.find(boct_cell_face::Y_HIGH)->second, camera)) {
+      face_idx |= boct_cell_face::Y_HIGH;
+#if DEBUG
+      vcl_cout << "Y_HIGH " ;
+#endif
+    }
+    
   }
+#if DEBUG
   vcl_cout << vcl_endl;
-  return faces;
+#endif
+
+  return face_idx;
 }
+
+//: returns the faces of a box, the vertices are ordered in the normal direction
+void boxm_utils::faces_of_box_3d(vgl_box_3d<double> &bbox, 
+                            vcl_map<boct_face_idx, vsol_polygon_3d_sptr>& faces)
+{
+  vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
+   
+  // face bottom [1,0,3,2]
+  vcl_vector<vsol_point_3d_sptr> face_corners;
+  face_corners.push_back(new vsol_point_3d(corners[1]));
+  face_corners.push_back(new vsol_point_3d(corners[0]));
+  face_corners.push_back(new vsol_point_3d(corners[3]));
+  face_corners.push_back(new vsol_point_3d(corners[2]));
+  faces[boct_cell_face::Z_LOW] = new vsol_polygon_3d(face_corners);
+
+  face_corners.resize(0);
+  face_corners.push_back(new vsol_point_3d(corners[4]));
+  face_corners.push_back(new vsol_point_3d(corners[5]));
+  face_corners.push_back(new vsol_point_3d(corners[6]));
+  face_corners.push_back(new vsol_point_3d(corners[7]));
+  faces[boct_cell_face::Z_HIGH] = new vsol_polygon_3d(face_corners);
+
+  face_corners.resize(0);
+  face_corners.push_back(new vsol_point_3d(corners[7]));
+  face_corners.push_back(new vsol_point_3d(corners[3]));
+  face_corners.push_back(new vsol_point_3d(corners[0]));
+  face_corners.push_back(new vsol_point_3d(corners[4]));
+  faces[boct_cell_face::X_LOW] = new vsol_polygon_3d(face_corners);
+
+  face_corners.resize(0);
+  face_corners.push_back(new vsol_point_3d(corners[1]));
+  face_corners.push_back(new vsol_point_3d(corners[2]));
+  face_corners.push_back(new vsol_point_3d(corners[6]));
+  face_corners.push_back(new vsol_point_3d(corners[5]));
+  faces[boct_cell_face::X_HIGH] = new vsol_polygon_3d(face_corners);
+
+  face_corners.resize(0);
+  face_corners.push_back(new vsol_point_3d(corners[0]));
+  face_corners.push_back(new vsol_point_3d(corners[1]));
+  face_corners.push_back(new vsol_point_3d(corners[5]));
+  face_corners.push_back(new vsol_point_3d(corners[4]));
+  faces[boct_cell_face::Y_LOW] = new vsol_polygon_3d(face_corners);
+
+  face_corners.resize(0);
+  face_corners.push_back(new vsol_point_3d(corners[2]));
+  face_corners.push_back(new vsol_point_3d(corners[3]));
+  face_corners.push_back(new vsol_point_3d(corners[7]));
+  face_corners.push_back(new vsol_point_3d(corners[6]));
+  faces[boct_cell_face::Y_HIGH] = new vsol_polygon_3d(face_corners);
+}
+
+//: returns the union of the projected faces of a polygon
+void boxm_utils::project_cube(vgl_box_3d<double> &bbox, 
+                              vpgl_camera_double_sptr camera,
+                              vgl_polygon<double> &polygon)
+{
+   vcl_map<boct_face_idx, vsol_polygon_3d_sptr> faces;
+   faces_of_box_3d(bbox, faces);
+  
+   vcl_map<boct_face_idx, vsol_polygon_3d_sptr>::iterator it = faces.begin();
+   vcl_vector<vgl_polygon<double> > polygons;
+   for (; it!= faces.end(); it++) {
+     vcl_vector<vsol_point_2d_sptr> vs;
+     vsol_polygon_3d_sptr face = it->second;
+     // project the face
+     vgl_polygon<double> poly(1);
+     double u,v;
+     for (unsigned i=0; i<face->size(); i++) {
+       camera->project(face->vertex(i)->x(), face->vertex(i)->y(), face->vertex(i)->z(), u, v);
+       poly.push_back(u,v);
+       vcl_cout << "(" << u << "," << v << ")" << vcl_endl;
+     }
+     polygons.push_back(poly);
+   }
+
+   // take the union of the polygons
+   vgl_polygon<double> union_poly = polygons[0];
+   for (unsigned i=1; i<polygons.size(); i++) {
+     union_poly = vgl_clip<double>(polygons[i], union_poly, vgl_clip_type_union);
+   }
+   vcl_cout << union_poly;
+   
+   polygon=union_poly;
+}
+
+
 void boxm_utils::quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it, 
 							 double* xvals, double* yvals, double* vals, 
 							 vil_image_view<float> &min_img, vil_image_view<float> &max_img,
@@ -422,3 +484,4 @@ void boxm_utils::quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it,
 //
 //
 //
+

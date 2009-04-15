@@ -223,14 +223,16 @@ void boxm_scene<T>::b_read(vsl_b_istream & is)
 }
 
 template <class T>
-void boxm_scene<T>::b_write(vsl_b_ostream & s)
+void boxm_scene<T>::b_write(vsl_b_ostream & s) const
 {
   // create an XML stream for the parameters
   vcl_stringstream strm;
-  x_write(strm, *this, "scene");
+  boxm_scene<T> scene = *this;
+  x_write(strm, scene, "scene");
   vcl_string str(strm.str());
 
-  vsl_b_write(s, version_no());
+  short v = boxm_scene<T>::version_no();
+  vsl_b_write(s, v);
   // write the XML as char stream
   vsl_b_write(s, str);
 }
@@ -253,11 +255,12 @@ void boxm_scene<T>::load_scene(vcl_string filename)
 }
 
 template <class T>
-void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
+void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
 {
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
-  scene.lvcs().x_write(os, LVCS_TAG);
+  bgeo_lvcs lvcs=scene.lvcs();
+  lvcs.x_write(os, LVCS_TAG);
   x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
   x_write(os, scene.block_dim(), BLOCK_DIMENSIONS_TAG);
 
@@ -352,9 +355,6 @@ boxm_block_iterator<T>& boxm_block_iterator<T>::operator++()
     if (++j_==y) {
       j_=0;
       ++k_;
-      //if (++k_==z) {
-      //  k_=0;
-      //}
     }
   }
   return *this;
@@ -379,9 +379,6 @@ boxm_block_iterator<T>& boxm_block_iterator<T>::operator--()
     if (--j_==-1) {
       j_=0;
       k_--;
-      //if (--k_==-1) {
-      //  k_=0;
-      //}
     }
   }
   return *this;
@@ -404,16 +401,27 @@ boxm_block<T>*  boxm_block_iterator<T>::operator->()
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene)
-{}
+{
+  scene.b_write(os);
+}
+
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const * &scene)
-{}
+{
+  scene->b_write(os);
+}
+
 template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> &scene)
-{}
+{
+  scene.b_read(is);
+}
+
 template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene)
-{}
+{
+  scene->b_read(is);
+}
 
 #define BOXM_SCENE_INSTANTIATE(T) \
 template boxm_scene<T >; \
