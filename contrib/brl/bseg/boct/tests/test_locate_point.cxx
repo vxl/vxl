@@ -47,9 +47,9 @@ MAIN( test_locate_point )
   {
     vnl_random rand;
     vgl_point_3d<double> p(rand.drand32(),rand.drand32(),rand.drand32());
-    boct_tree_cell<short,vgl_point_3d<double>,void >* curr_cell_using_point_locate=rtree->locate_point(p);
+    boct_tree_cell<short,vgl_point_3d<double> >* curr_cell_using_point_locate=rtree->locate_point(p);
 
-    boct_tree_cell<short,vgl_point_3d<double>,void >* cell_found_brute_force=brute_force_locate_point(leaves,p,nlevels);
+    boct_tree_cell<short,vgl_point_3d<double> >* cell_found_brute_force=brute_force_locate_point(leaves,p,nlevels);
 
     if (curr_cell_using_point_locate->code_.isequal(&cell_found_brute_force->code_,cell_found_brute_force->level()))
       ++cnt;
