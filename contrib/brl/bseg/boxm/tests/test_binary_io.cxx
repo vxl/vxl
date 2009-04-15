@@ -10,7 +10,7 @@ MAIN( test_binary_io )
 {
   START ("CREATE SCENE");
   short nlevels=5;
-  typedef vgl_point_3d<double> point_type
+  typedef vgl_point_3d<double> point_type;
   boct_tree<short,point_type > * block = new boct_tree<short,point_type >(nlevels);
   TEST("No of Max levels of tree",nlevels, block->num_levels());
   

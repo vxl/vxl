@@ -34,7 +34,7 @@ MAIN( test_quad_interpolate )
   g_img_max(10,10)=10.5;g_img_max(10,11)=10.5;g_img_max(10,12)=10.5;
   g_img_max(11,10)=11.5;g_img_max(11,11)=11.5;g_img_max(11,12)=11.5;
 
-  boxm_utils::quad_interpolate(poly_it, xvals, yvals, vals, img_min, img_max);
+  boxm_utils::quad_interpolate(poly_it, xvals, yvals, vals,img_max,0);
   vcl_cout<<img_min;
   bool flag=true;
   for(unsigned i=0;i<g_img_max.ni();i++)
