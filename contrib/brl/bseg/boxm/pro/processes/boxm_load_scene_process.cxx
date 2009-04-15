@@ -20,20 +20,26 @@
 namespace boxm_load_scene_process_globals
 {
   const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 1;
 }
 
 bool boxm_load_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_load_scene_process_globals;
-  //process takes 3 inputs
+  //process takes 2 inputs
   //input[0]: scene binary file
   //input[1]: APM type
-  //input[2]: The ROC output filename
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
-  //input_types_[2] = "vcl_string";
   if (!pro.set_input_types(input_types_))
+    return false;
+
+  // process has 1 output:
+  // output[0]: scene sptr
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  output_types_[0] = "boxm_scene_base_sptr";
+  if (!pro.set_output_types(output_types_))
     return false;
 
   return true;
@@ -66,7 +72,7 @@ bool boxm_load_scene_process(bprb_func_process& pro)
   }
 
   unsigned j = 0;
-  // store image output
+  // store scene smaprt pointer
   pro.set_output_val<boxm_scene_base_sptr>(j++, scene);
   return true;
 }
