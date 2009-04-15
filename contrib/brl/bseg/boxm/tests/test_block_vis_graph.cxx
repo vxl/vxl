@@ -28,7 +28,7 @@ MAIN( test_block_vis_graph )
   vcl_vector<boxm_block<tree_type>*> blocks;
   while (block_vis_iter.next()) {
     vcl_cout << "Frontier\n";
-    blocks = block_vis_iter.frontier();
+    blocks = block_vis_iter.frontier_blocks();
     for(unsigned i=0; i<blocks.size(); i++) {
       vcl_cout << i << "- " << blocks[i]->bounding_box() << vcl_endl; 
     }

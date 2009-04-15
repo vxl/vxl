@@ -16,6 +16,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
 #include <boct/boct_tree_cell.h>
+#include <vgl/vgl_polygon_scan_iterator.h>
+#include <vil/vil_image_view.h>
 
 class boxm_utils {
 
@@ -38,6 +40,16 @@ public:
     // a bit 1 for each face visible based on the boct_cell_face values.
   static boct_face_idx visible_faces(vgl_box_3d<double> &bbox, 
                                 vpgl_camera_double_sptr camera);
+
+  
+  static void quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it, 
+						 double* xvals, double* yvals, double* vals, 
+						 vil_image_view<float> &min_img, vil_image_view<float> &max_img,
+						 unsigned int v0=0, unsigned int v1=1, 
+						 unsigned int v2=2,unsigned int v3=3);
+
+
+
 };
 
 #endif
