@@ -6,5 +6,6 @@
 
 //the init functions
 DECLARE_FUNC_CONS(boxm_load_scene_process);
+DECLARE_FUNC_CONS(boxm_render_expected_process);
 
 #endif
