@@ -5,6 +5,7 @@
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include "test_utils.h"
 #include <vpl/vpl.h>
+#include <vul/vul_file.h>
 
 MAIN( test_cell_vis_graph )
 {
@@ -17,7 +18,8 @@ MAIN( test_cell_vis_graph )
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<double> world_dim(10,10,10);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
-  scene.set_paths("./boxm_scene", "block");
+  scene.set_paths("./boxm_scene_cell", "block");
+  vul_file::make_directory("./boxm_scene_cell");
 
   vgl_box_3d<double> world;
   world.add(origin);
@@ -53,8 +55,7 @@ MAIN( test_cell_vis_graph )
 	scene.write_active_block();
     iter++;
   }
-  vpl_rmdir("./boxm_scene");
-  vpl_unlink("./scene.bin");
+  vpl_rmdir("./boxm_scene_cell");
 
   SUMMARY();
 }

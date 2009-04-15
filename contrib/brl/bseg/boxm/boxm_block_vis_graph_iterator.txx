@@ -17,8 +17,8 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
   // compute the visibility graph
   boxm_block_iterator<T> iter = scene->iterator();
   for (; !iter.end(); iter++) {
-    boxm_block<T> block = *iter;
-    if (boxm_utils::is_visible(block.bounding_box(), cam, img_ni, img_nj))
+    boxm_block<T>* block = *iter;
+    if (boxm_utils::is_visible(block->bounding_box(), cam, img_ni, img_nj))
       vis_graph_.insert(vcl_make_pair<vgl_point_3d<int>,boxm_block_vis_graph_node<T> >(iter.index(),boxm_block_vis_graph_node<T>()));
   }
 

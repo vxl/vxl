@@ -28,6 +28,7 @@ MAIN( test_binary_io )
   vsl_b_ofstream os("scene.bin");
   scene.b_write(os);
   os.close();
+  vul_file::make_directory("./boxm_scene");
 
   boxm_scene<boct_tree<short,vgl_point_3d<double> > > scene_out;
   vsl_b_ifstream is("scene.bin", vcl_ios_binary);

@@ -5,6 +5,7 @@
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include "test_utils.h"
 #include <vpl/vpl.h>
+#include <vul/vul_file.h>
 
 MAIN( test_block_vis_graph )
 {
@@ -18,6 +19,10 @@ MAIN( test_block_vis_graph )
   vgl_vector_3d<double> world_dim(20,20,30);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
   scene.set_paths("./boxm_scene", "block");
+  vul_file::make_directory("./boxm_scene");
+  vcl_ofstream os("scene.xml");
+  x_write(os, scene, "scene");
+  os.close();
 
   vgl_box_3d<double> world;
   world.add(origin);
@@ -34,7 +39,7 @@ MAIN( test_block_vis_graph )
     }
   }
   vpl_rmdir("./boxm_scene");
-  vpl_unlink("./scene.bin");
+  vpl_unlink("./scene.xml");
 
   //TEST("Number of blocks iterator visits", num_blocks, x*y*z);
   SUMMARY();

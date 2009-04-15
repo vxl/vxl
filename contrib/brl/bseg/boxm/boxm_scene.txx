@@ -72,8 +72,8 @@ void boxm_scene<T>::write_active_block()
     blocks_(x,y,z)->b_write(os);
     // delete the block's data
     boxm_block<T>* block = blocks_(x,y,z);
-    delete block;
-
+    delete block->get_tree();
+	
     active_block_.set(-1,-1,-1);
   }
 }
@@ -157,7 +157,8 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
       blocks_(x,y,z)->b_write(os);
       // delete the block's data
       boxm_block<T>* block = blocks_(x,y,z);
-      delete block;
+      delete block->get_tree();
+
     }
   }
   active_block_.set(i,j,k);
@@ -262,7 +263,7 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
   vsl_basic_xml_element app_model(APP_MODEL_TAG);
-  app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
+  //app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
   
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
@@ -390,10 +391,10 @@ boxm_block_iterator<T>& boxm_block_iterator<T>::operator--()
 }
 
 template <class T>
-boxm_block<T>&  boxm_block_iterator<T>::operator*()
+boxm_block<T>* boxm_block_iterator<T>::operator*()
 {
   boxm_block<T>* block = scene_->get_block(i_,j_,k_);
-  return *block;
+  return block;
 }
 
 template <class T>

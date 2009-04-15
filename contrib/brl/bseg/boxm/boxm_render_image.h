@@ -20,6 +20,10 @@
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_mog_grey_processor.h>
+#include <vcl_iostream.h>
+#include <vil/vil_save.h>
+#include <vil/vil_convert.h>
+
 
 class image_exp_functor
 {
@@ -42,7 +46,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 
 	//: code to iterate over the blocks in order of visibility 
 	boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, expected.ni(), expected.nj());
-
+	int cnt=0;
 	while (block_vis_iter.next()) {
 		vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
 		for(unsigned i=0; i<block_indices.size(); i++) {
@@ -103,6 +107,12 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 				vil_math_image_product( temp_expected,vis_end, temp_expected);
 				// ..and use result to update final expected image
 				vil_math_image_sum(temp_expected,expected,expected);
+				vcl_ostringstream s;
+				s<<"./tempimage"<<cnt<<".tif";
+				vil_image_view<unsigned char> img;
+				vil_convert_stretch_range(expected,img);
+				vil_save(img,s.str().c_str());
+				
 			}
 		}
 	}

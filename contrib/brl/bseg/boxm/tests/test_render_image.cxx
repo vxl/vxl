@@ -10,6 +10,7 @@
 #include <boct/boct_tree_cell.h>
 #include <vpl/vpl.h>
 #include <boxm/boxm_render_image.h>
+#include <vul/vul_file.h>
 
 
 MAIN( test_render_image )
@@ -20,8 +21,11 @@ MAIN( test_render_image )
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<double> world_dim(20,20,30);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
-  scene.set_paths("./boxm_scene", "block");
-  x_write(vcl_cout, scene, "scene");
+  scene.set_paths("./boxm_scene1", "block");
+  vul_file::make_directory("./boxm_scene1");
+  vcl_ofstream os("scene1.xml");
+  x_write(os, scene, "scene");
+  os.close();
 
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
   //: default model
@@ -97,5 +101,8 @@ MAIN( test_render_image )
 
   boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene,camera,expected,mask);
 //  TEST("Interpolated image", true, flag);
+  vpl_rmdir("./boxm_scene1");
+  vpl_unlink("./scene1.xml");
+
   SUMMARY();  
 }

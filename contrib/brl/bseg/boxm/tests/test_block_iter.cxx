@@ -27,8 +27,8 @@ MAIN( test_block_iter )
   boxm_block_iterator<tree_type> iter = scene.iterator();
   unsigned num_blocks=0;
   for (; !iter.end(); ++iter) {
-    boxm_block<tree_type> block = *iter;
-    vcl_cout << block.bounding_box() << vcl_endl;
+    boxm_block<tree_type> *block = *iter;
+    vcl_cout << block->bounding_box() << vcl_endl;
     num_blocks++;
   }
   int x,y,z;

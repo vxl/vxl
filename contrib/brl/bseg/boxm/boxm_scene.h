@@ -89,7 +89,8 @@ class boxm_scene :public boxm_scene_base
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
-  
+  vcl_string appearance_model(){return appearance_model_;}
+
  private:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
@@ -97,7 +98,7 @@ class boxm_scene :public boxm_scene_base
   vbl_array_3d<boxm_block<T>*> blocks_;
   vcl_string scene_path_;
   vcl_string block_pref_;
-
+  vcl_string appearance_model_;
   //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
 
@@ -140,7 +141,7 @@ class boxm_block_iterator
 
   boxm_block_iterator<T>& operator--();
 
-  boxm_block<T>& operator*();
+  boxm_block<T>* operator*();
 
   boxm_block<T>* operator->();
 

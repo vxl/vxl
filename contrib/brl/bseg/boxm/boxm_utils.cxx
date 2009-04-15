@@ -383,7 +383,7 @@ bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3
 								   vpgl_camera_double_sptr cam)
 {
   vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
-  for(;face_it!=faces.end();face_it)
+  for(;face_it!=faces.end();face_it++)
   {
 	  vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
 	  vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
@@ -423,7 +423,7 @@ bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_po
 								   float val, vpgl_camera_double_sptr cam)
 {
   vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
-  for(;face_it!=faces.end();face_it)
+  for(;face_it!=faces.end();face_it++)
   {
 	  vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
 	  vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);

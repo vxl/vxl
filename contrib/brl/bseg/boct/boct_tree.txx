@@ -4,6 +4,7 @@
 #include "boct_tree.h"
 #include <vgl/vgl_box_3d.h>
 #include <vcl_iostream.h>
+#include <vgl/io/vgl_io_box_3d.h>
 
 //; constructor initializes an empty tree
 template <class T_loc,class T_data>
@@ -164,6 +165,7 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os)
 {
   vsl_b_write(os, version_no());
   vsl_b_write(os, max_level_);
+  vsl_b_write(os, global_bbox_);
   if (root_)
     vsl_b_write(os, *root_);
 }
@@ -181,6 +183,8 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
    case (1):
      //short max_level;
      vsl_b_read(is, max_level_);
+       vsl_b_read(is, global_bbox_);
+
      root_ = new boct_tree_cell<T_loc,T_data>();
      vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
      break;
