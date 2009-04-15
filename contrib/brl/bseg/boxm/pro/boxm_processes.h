@@ -5,5 +5,6 @@
 #include <bprb/bprb_macros.h>
 
 //the init functions
+DECLARE_FUNC_CONS(boxm_load_scene_process);
 
 #endif
