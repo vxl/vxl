@@ -243,9 +243,9 @@ void boxm_scene<T>::b_write(vsl_b_ostream & s) const
 template <class T>
 void boxm_scene<T>::write_scene()
 {
-  vcl_string filename=scene_path_+"/scene.bin";
-  vsl_b_ofstream os(filename.c_str());
-  this->b_write(os);
+  vcl_string filename=scene_path_+"/scene.xml";
+  vcl_ofstream os(filename.c_str());
+  x_write(os, *this);
   os.close();
 }
 
