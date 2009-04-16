@@ -103,18 +103,18 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
         neighbor_idx += vgl_vector_3d<int>(0,0,-1);
       face_in = true;
      }
-     
+
     if (face_in) {
-      vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
-    if (nit == vis_graph_.end()) {
-      vis_iter->second.in_count++;
-      curr_blocks_.push_back(vis_iter);
-    } else {
-      vis_iter->second.in_count++;
-      nit->second.out_links.push_back(vis_iter);
+      typename vis_graph_type::iterator nit = vis_graph_.find(neighbor_idx);
+      if (nit == vis_graph_.end()) {
+        vis_iter->second.in_count++;
+        curr_blocks_.push_back(vis_iter);
+      }
+      else {
+        vis_iter->second.in_count++;
+        nit->second.out_links.push_back(vis_iter);
+      }
     }
-  }
-    
   }
 }
 
@@ -141,7 +141,7 @@ bool boxm_block_vis_graph_iterator<T>::next()
   for (block_iter = to_process.begin(); block_iter != to_process.end(); ++block_iter, ++to_proc_it) {
     *to_proc_it = (*block_iter)->first;
   }
-  
+
   // add linked blocks to list for next iteration
   curr_blocks_.clear();
   for (block_iter = to_process.begin(); block_iter != to_process.end(); ++block_iter) {
@@ -164,7 +164,7 @@ vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier_blocks()
     vgl_point_3d<int> index = blocks[i];
     frontier.push_back(scene_->get_block(index)); //.x(), index.y(), index.z());
   }
-  
+
   return frontier;
 }
 
