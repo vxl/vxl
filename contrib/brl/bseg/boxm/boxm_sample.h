@@ -1,6 +1,7 @@
 #ifndef boxm_sample_h_
 #define boxm_sample_h_
-
+//:
+// \file
 #include "boxm_apm_traits.h"
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
@@ -9,7 +10,7 @@
 template <boxm_apm_type APM_MODEL>
 class boxm_sample
 {
-public:
+ public:
   static const boxm_apm_type apm_type = APM_MODEL;
   typedef typename boxm_apm_traits<APM_MODEL>::apm_datatype apm_datatype;
   typedef typename boxm_apm_traits<APM_MODEL>::obs_datatype obs_datatype;
@@ -29,7 +30,6 @@ public:
   typename boxm_apm_traits<APM_MODEL>::apm_datatype appearance;
 
   void  print(vcl_ostream& os) const;
-
 };
 
 template <boxm_apm_type APM_MODEL>
@@ -48,4 +48,3 @@ template <boxm_apm_type APM_MODEL>
 vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample);
 
 #endif
-
