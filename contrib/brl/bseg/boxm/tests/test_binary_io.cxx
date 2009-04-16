@@ -13,7 +13,7 @@ MAIN( test_binary_io )
   typedef vgl_point_3d<double> point_type;
   boct_tree<short,point_type > * block = new boct_tree<short,point_type >(nlevels);
   TEST("No of Max levels of tree",nlevels, block->num_levels());
-  
+
   block->split();
   //block->print();
 
@@ -36,7 +36,7 @@ MAIN( test_binary_io )
   vpl_rmdir("./boxm_scene");
   vpl_unlink("./scene.bin");
 
-  //: writing the binary file for a scene with grey MOG
+  // writing the binary file for a scene with grey MOG
   vgl_point_3d<double>  mog_origin(0,0,0);
   vgl_vector_3d<double> mog_block_dim(1,1,1);
   vgl_vector_3d<double> mog_world_dim(3,3,1);
@@ -45,8 +45,8 @@ MAIN( test_binary_io )
   mog_scene.set_paths("./boxm_scene", "block");
   vul_file::make_directory("./boxm_scene");
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&mog_scene);
-  
-  while(!iter.end())
+
+  while (!iter.end())
   {
     mog_scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=mog_scene.get_active_block();
@@ -56,12 +56,12 @@ MAIN( test_binary_io )
     iter++;
   }
   mog_scene.write_scene();
-  //: writing the binary file for a scene with grey MOG
+  // writing the binary file for a scene with grey MOG
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > read_mog_scene;
   read_mog_scene.load_scene("./boxm_scene/scene.xml");
 
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > read_iter(&read_mog_scene);
-  while(!read_iter.end())
+  while (!read_iter.end())
   {
     read_mog_scene.load_block(read_iter.index().x(),read_iter.index().y(),read_iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=read_mog_scene.get_active_block();
@@ -71,5 +71,5 @@ MAIN( test_binary_io )
   vpl_rmdir("./boxm_scene");
   vpl_unlink("./scene.bin");
 
-  SUMMARY();  
+  SUMMARY();
 }
