@@ -66,6 +66,10 @@ bool boxm_load_scene_process(bprb_func_process& pro)
     boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > *s = new boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > ();
     //vsl_b_read(is, s);
     s->load_scene(scene_file);
+    if (s->appearence_model() != BOXM_APM_MOG_GREY) {
+      vcl_cout << "boxm_load_scene_process: inconsistent APM type" << vcl_endl;
+      return false;
+    }
     scene = s;
   } else {
     vcl_cout << "boxm_load_scene_process: undefined APM type" << vcl_endl;
