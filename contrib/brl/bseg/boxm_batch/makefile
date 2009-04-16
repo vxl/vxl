@@ -1,10 +1,9 @@
 USES += contrib/brl contrib/brl/bseg core
 
-LIBRARY := boxm_io
+LIBRARY := boxm_batch
 VERSION := 1.0
 
-SOURCES += boxm_scene_parser.cxx
-SOURCES += boxm_io_scene_base.cxx
+SOURCES += reg_boxm.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

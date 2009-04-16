@@ -50,6 +50,8 @@ SUBDIRS += boct
 
 SUBDIRS += boxm
 
+SUBDIRS += boxm_batch
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
