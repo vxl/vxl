@@ -4,10 +4,10 @@
 // \brief A class for obtaining roc curve from change detection results.
 //
 // \author Gamze Tunali
-// \date 04/14/2009
+// \date Apr 14, 2009
 // \verbatim
 //  Modifications
-//   
+//   <none yet>
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -42,7 +42,7 @@ bool boxm_render_expected_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: rendered image
-  // output[0]: mask 
+  // output[0]: mask
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[0] = "vil_image_view_base_sptr";
@@ -74,11 +74,11 @@ bool boxm_render_expected_process(bprb_func_process& pro)
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-    vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
+    vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
     boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-    vil_image_view<float> mask(ni,nj);  
+    vil_image_view<float> mask(ni,nj);
     boxm_render_image_splatting<short, BOXM_APM_MOG_GREY>(*scene, camera, expected, mask);
-    img = new vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
+    img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
     img_mask = new vil_image_view<float>(mask);
   } else {
     vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;
