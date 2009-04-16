@@ -106,9 +106,12 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
 template <class T>
 boxm_block<T>* boxm_scene<T>::get_active_block()
 {
-  if (valid_index(active_block_))
-    return blocks_(active_block_.x(),active_block_.y(),active_block_.z());
-  else{
+  if (valid_index(active_block_)) {
+    boxm_block<T>* block = blocks_(active_block_.x(),active_block_.y(),active_block_.z());
+    if (block->get_tree() == 0)
+      load_block(active_block_.x(),active_block_.y(),active_block_.z());
+    return block;
+  } else{
     vcl_cerr << "index"<<active_block_<<"  is out of world\n";
     return 0;
   }
