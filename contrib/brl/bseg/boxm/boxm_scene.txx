@@ -51,6 +51,13 @@ active_block_(vgl_point_3d<int>(-1,-1,-1))
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
+  for (unsigned i=0; i<x_dim; i++) {
+    for (unsigned j=0; j<y_dim; j++) {
+      for (unsigned k=0; k<z_dim; k++) {
+        create_block(i,j,k);
+      }
+    }
+  }
 }
 
 template <class T>
@@ -204,17 +211,7 @@ void boxm_scene<T>::b_read(vsl_b_istream & is)
       vcl_string xml="";
       vsl_b_read(is, xml);
       vcl_cout << xml << vcl_endl;
-      boxm_scene_parser* parser = parse_config(xml);
-      if (parser)
-      {
-        parser->lvcs(lvcs_);
-        origin_ = parser->origin();
-        block_dim_ = parser->block_dim();
-        vgl_vector_3d<unsigned> nums = parser->block_nums();
-        blocks_ =  vbl_array_3d<boxm_block<T>*>(nums.x(), nums.y(), nums.z(), (boxm_block<T>*)NULL);
-        parser->paths(scene_path_, block_pref_);
-        apperance_model_ = boxm_apm_types::str_to_enum(parser->app_model().data());
-      }
+      parse_config(xml);
       break;
 #if 0
     default:
@@ -256,16 +253,18 @@ void boxm_scene<T>::load_scene(vcl_string filename)
   //vsl_b_ifstream is(filename.c_str());
   //this->b_read(is);
   //is.close();
-  boxm_scene_parser* parser = parse_config(filename, true);
-  if (parser) {
-     parser->lvcs(lvcs_);
-     origin_ = parser->origin();
-     block_dim_ = parser->block_dim();
-      vgl_vector_3d<unsigned> nums = parser->block_nums();
-     blocks_ =  vbl_array_3d<boxm_block<T>*>(nums.x(), nums.y(), nums.z(), (boxm_block<T>*)NULL);
-     parser->paths(scene_path_, block_pref_);
-     apperance_model_ = boxm_apm_types::str_to_enum(parser->app_model().data());
-   }
+  //boxm_scene_parser* parser = parse_config(filename, true);
+  parse_config(filename, true);
+  /*if (parser) {
+    bgeo_lvcs lvcs;
+    parser->lvcs(lvcs);
+    vgl_vector_3d<unsigned> nums = parser->block_nums();
+    vgl_vector_3d<double> world(nums.x()*parser->block_dim().x(), 
+    nums.y()*parser->block_dim().y(), nums.z()*parser->block_dim().z());
+    *this = boxm_scene<T>( lvcs, parser->origin(), parser->block_dim(), world);
+    parser->paths(scene_path_, block_pref_);
+    apperance_model_ = boxm_apm_types::str_to_enum(parser->app_model().data());
+    }*/
 }
 
 template <class T>
@@ -274,7 +273,7 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
   vsl_basic_xml_element app_model(APP_MODEL_TAG);
-  //app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
+  app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
   
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
@@ -328,6 +327,14 @@ boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml, bool filename)
 	  }
   }
   vcl_cout << "finished!" << vcl_endl;
+  bgeo_lvcs lvcs;
+  parser->lvcs(lvcs);
+  vgl_vector_3d<unsigned> nums = parser->block_nums();
+  vgl_vector_3d<double> world(nums.x()*parser->block_dim().x(), 
+  nums.y()*parser->block_dim().y(), nums.z()*parser->block_dim().z());
+  *this = boxm_scene<T>( lvcs, parser->origin(), parser->block_dim(), world);
+  parser->paths(scene_path_, block_pref_);
+  apperance_model_ = boxm_apm_types::str_to_enum(parser->app_model().data());
   return parser;
 }
 

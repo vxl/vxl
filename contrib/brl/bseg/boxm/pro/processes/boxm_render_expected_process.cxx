@@ -20,19 +20,23 @@
 
 namespace boxm_render_expected_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 2;
 }
 
 bool boxm_render_expected_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_process_globals;
-  //process takes 2 inputs
+  //process takes 4 inputs
   //input[0]: scene binary file
   //input[1]: camera
+  //input[2]: ni of the expected image
+  //input[3]: nj of the expected image
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
+  input_types_[2] = "unsigned";
+  input_types_[3] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -61,15 +65,18 @@ bool boxm_render_expected_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned ni = pro.get_input<unsigned>(i++);
+  unsigned nj = pro.get_input<unsigned>(i++);
+
   vil_image_view_base_sptr img;
   vil_image_view_base_sptr img_mask;
 
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-    vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected;
+    vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
     boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-    vil_image_view<float> mask;  
+    vil_image_view<float> mask(ni,nj);  
     boxm_render_image_splatting<short, BOXM_APM_MOG_GREY>(*scene, camera, expected, mask);
     img = new vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
     img_mask = new vil_image_view<float>(mask);
