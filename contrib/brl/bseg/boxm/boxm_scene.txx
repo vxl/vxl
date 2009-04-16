@@ -7,6 +7,7 @@
 #include "io/boxm_scene_parser.h"
 
 #include <vcl_cmath.h>
+#include <vcl_cstdio.h>
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <vsl/vsl_basic_xml_element.h>
@@ -252,9 +253,19 @@ void boxm_scene<T>::write_scene()
 template <class T>
 void boxm_scene<T>::load_scene(vcl_string filename)
 {
-  vsl_b_ifstream is(filename.c_str());
-  this->b_read(is);
-  is.close();
+  //vsl_b_ifstream is(filename.c_str());
+  //this->b_read(is);
+  //is.close();
+  boxm_scene_parser* parser = parse_config(filename, true);
+  if (parser) {
+     parser->lvcs(lvcs_);
+     origin_ = parser->origin();
+     block_dim_ = parser->block_dim();
+      vgl_vector_3d<unsigned> nums = parser->block_nums();
+     blocks_ =  vbl_array_3d<boxm_block<T>*>(nums.x(), nums.y(), nums.z(), (boxm_block<T>*)NULL);
+     parser->paths(scene_path_, block_pref_);
+     apperance_model_ = boxm_apm_types::str_to_enum(parser->app_model().data());
+   }
 }
 
 template <class T>
@@ -285,20 +296,36 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
 }
 
 template <class T>
-boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml)
+boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml, bool filename)
 {
-  if (xml.size() == 0) {
-    vcl_cerr << "XML string is empty\n";
-    return 0;
-  }
-
   boxm_scene_parser* parser = new boxm_scene_parser();
-  if (!parser->parseString(xml.data())) {
-    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+  if (filename) {
+	  vcl_FILE* xmlFile = vcl_fopen(xml.c_str(), "r");
+	  if (!xmlFile){
+		vcl_cerr << xml.c_str() << " error on opening\n";
+		delete parser;
+		return 0;
+	  }
+	  if (!parser->parseFile(xmlFile)) {
+        vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
              << parser->XML_GetCurrentLineNumber() << vcl_endl;
 
-    delete parser;
-    return 0;
+       delete parser;
+       return 0;
+      }
+  } else { //whole xml as a string
+	  if (xml.size() == 0) {
+		vcl_cerr << "XML string is empty\n";
+		return 0;
+	  }
+
+	  if (!parser->parseString(xml.data())) {
+		vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+				 << parser->XML_GetCurrentLineNumber() << vcl_endl;
+
+		delete parser;
+		return 0;
+	  }
   }
   vcl_cout << "finished!" << vcl_endl;
   return parser;

@@ -114,7 +114,7 @@ class boxm_scene :public boxm_scene_base
 
   bool valid_index(vgl_point_3d<int> idx);
 
-  boxm_scene_parser* parse_config(vcl_string xml);
+  boxm_scene_parser* parse_config(vcl_string xml, bool filename=false);
 };
 
 template <class T>

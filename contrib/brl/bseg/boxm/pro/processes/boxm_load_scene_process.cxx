@@ -59,12 +59,13 @@ bool boxm_load_scene_process(bprb_func_process& pro)
   vcl_string scene_file = pro.get_input<vcl_string>(i++);
   vcl_string apm_type = pro.get_input<vcl_string>(i++);
 
-  vsl_b_ifstream is(scene_file, vcl_ios_binary);
+  //vsl_b_ifstream is(scene_file, vcl_ios_binary);
   boxm_scene_base_sptr scene;
 
   if (apm_type == "apm_mog_grey") {
     boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > *s = new boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > ();
-    vsl_b_read(is, s);
+    //vsl_b_read(is, s);
+    s->load_scene(scene_file);
     scene = s;
   } else {
     vcl_cout << "boxm_load_scene_process: undefined APM type" << vcl_endl;
