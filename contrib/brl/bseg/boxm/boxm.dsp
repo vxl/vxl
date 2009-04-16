@@ -99,46 +99,49 @@ SOURCE=.\boxm_utils.cxx
 SOURCE=.\boxm_mog_grey_processor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY-.void--.cxx
+SOURCE=.\boxm_apm_traits.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.vgl_point_3d+double-.void--~-.cxx
+SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY-.void--~-.cxx
+SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.vgl_point_3d+double---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY-.void-.cxx
+SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.vgl_point_3d+double-.void--.cxx
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY-.void---.cxx
+SOURCE=.\Templates/boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.boxm_sample+BOXM_APM_MOG_GREY-.void-.cxx
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.vgl_point_3d+double-.void--.cxx
+SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.vgl_point_3d+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block_vis_graph_node+boct_tree+short.vgl_point_3d+double-.void--.cxx
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.vgl_point_3d+double-.void--.cxx
+SOURCE=.\Templates/boxm_block_vis_graph_node+boct_tree+short.vgl_point_3d+double---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY-.void--.cxx
+SOURCE=.\Templates/boct_tree_cell+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+boxm_scene+boct_tree+short.vgl_point_3d+double-.void---.cxx
+SOURCE=.\Templates/vbl_smart_ptr+boxm_scene_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm_scene+boct_tree+short.vgl_point_3d+double-.void---.cxx
+SOURCE=.\Templates/boxm_block+boct_tree+short.vgl_point_3d+double---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY-.void---.cxx
+SOURCE=.\Templates/boxm_scene+boct_tree+short.vgl_point_3d+double---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.vgl_point_3d+double---~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_sample+BOXM_APM_MOG_GREY-.cxx
@@ -196,6 +199,12 @@ SOURCE=.\boxm_mog_grey_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_block_vis_graph_node.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_scene_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_image.h
 # End Source File
 # End Group
 # End Target

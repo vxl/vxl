@@ -224,7 +224,25 @@ SOURCE=.\test_block_iter.cxx
 SOURCE=.\test_block_vis_graph.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_quad_interpolate.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_utils.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_cell_vis_graph.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_render_image.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\test_utils.h
 # End Source File
 # End Group
 # End Target
