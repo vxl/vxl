@@ -11,6 +11,9 @@
 #include <vpl/vpl.h>
 #include <boxm/boxm_render_image.h>
 #include <vul/vul_file.h>
+#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_calibration_matrix.h>
 
 
 MAIN( test_render_image )
@@ -62,7 +65,7 @@ MAIN( test_render_image )
   s1_sample.appearance=s1_simple_obs_mix_gauss_val_f1;
 
   //: sample 2
-  bsta_gauss_f1 s2_simple_gauss_f1(0.5,0.1);
+  bsta_gauss_f1 s2_simple_gauss_f1(1.0,0.1);
   bsta_num_obs<bsta_gauss_f1> s2_simple_obs_gauss_val_f1(s2_simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s2_simple_mix_gauss_val_f1;
 
@@ -84,7 +87,7 @@ MAIN( test_render_image )
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
 	boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
 	cel11->set_data(s2_sample);
-	boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.21,0.01));
+	boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
 	cell2->set_data(s1_sample);
     block->init_tree(tree);
     scene.write_active_block();
@@ -104,6 +107,22 @@ MAIN( test_render_image )
 //  TEST("Interpolated image", true, flag);
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
+
+  boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene1;
+  scene1.load_scene("D:/vj/data/CapitolSiteHigh/boxm/scene.xml");
+
+  // read projection matrix from the file.
+  vcl_ifstream ifs("D:/vj/data/CapitolSiteHigh/boxm/camera_00116.txt");
+  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
+  ifs >> *cam;
+  ifs.close();
+
+  vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected1(1280,720);
+  expected1.fill(0.0);
+  vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask1(1280,720);
+  mask1.fill(0.0);
+  boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene1,cam,expected1,mask1);
+
 
   SUMMARY();  
 }
