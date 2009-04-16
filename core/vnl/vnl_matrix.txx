@@ -156,17 +156,27 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
       this->data[i][j] = value;
 }
 
-//: r rows, c cols, special type.  Currently implements "identity".
+//: r rows, c cols, special type.  Currently implements "identity" and "null".
 template <class T>
 vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
 {
   vnl_matrix_construct_hack();
   vnl_matrix_alloc_blah(r, c);
-  if (t == vnl_matrix_identity) {
+  switch (t) {
+   case vnl_matrix_identity:
     assert(r == c);
     for (unsigned int i = 0; i < r; ++ i)
       for (unsigned int j = 0; j < c; ++ j)
         this->data[i][j] = (i==j) ? T(1) : T(0);
+    break;
+   case vnl_matrix_null:
+    for (unsigned int i = 0; i < r; ++ i)
+      for (unsigned int j = 0; j < c; ++ j)
+        this->data[i][j] = T(0);
+    break;
+   default:
+    assert(false);
+    break;
   }
 }
 
