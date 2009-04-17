@@ -53,7 +53,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 		vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
 		for(unsigned i=0; i<block_indices.size(); i++) {
 			//: code for each block
-			if(block_indices[i].x()==1 &&block_indices[i].y()==1&&block_indices[i].z()==0)
+			//if(block_indices[i].x()==1 &&block_indices[i].y()==1&&block_indices[i].z()==0)
 			{
 			scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
 			boxm_block<tree_type> * curr_block=scene.get_active_block();
