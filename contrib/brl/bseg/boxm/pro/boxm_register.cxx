@@ -19,7 +19,7 @@ void boxm_register::register_process()
   
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_load_scene_process, "boxmLoadSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_render_expected_process, "boxmRenderExpectedProcess");  
-  //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, psm_init_vis_implicit_aux_scene_process, "psmInitVisImplicitAuxSceneProcess"); 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_save_occupancy_raw_process, "boxmSaveOccupancyRawProcess"); 
   //REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, psm_save_alpha_raw_process, "psmSaveAlphaRawProcess");  
   
 }
