@@ -3,8 +3,8 @@
 #define bsta_sample_set_h_
 //:
 // \file
-// \brief Classes to collect samples 
-// 
+// \brief Classes to collect samples
+//
 // \author Ozge C. Ozcanli
 // \date March 04, 2009
 //
@@ -24,15 +24,15 @@
 
 #define MIN_VAR_  0.0001
 
-//: A class to hold samples, the window width parameter, weights for each sample, assignments of each sample to modes/cluster centers/classes/  
-//  this class is used by mean-shift and EM algorithms
+//: A class to hold samples, the window width parameter, weights for each sample, assignments of each sample to modes/cluster centers/classes
+//  This class is used by mean-shift and EM algorithms
 template <class T, unsigned n>
 class bsta_sample_set : public bsta_parzen_sphere<T,n>
 {
  public:
 
   typedef typename bsta_parzen_sphere<T,n>::vector_type vector_;
-  
+
   // Constructor
   bsta_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere<T,n>() { set_bandwidth(bandwidth); }
 
@@ -66,16 +66,16 @@ class bsta_sample_set : public bsta_parzen_sphere<T,n>
 
   vcl_vector<int >::const_iterator assignments_begin() const { return assignments_.begin(); }
   vcl_vector<int >::const_iterator assignments_end() const { return assignments_.end(); }
-  
-  bool check_initializations() const { return bsta_parzen<T,n>::samples_.size() == weights_.size() && 
+
+  bool check_initializations() const { return bsta_parzen<T,n>::samples_.size() == weights_.size() &&
                                         bsta_parzen<T,n>::samples_.size() == assignments_.size(); }
 
   //: return number of assignments to this mode
   int mode_size(int mode) const;
-  
+
   //: return total weight of assignments to this mode
   T mode_weight(int mode) const;
-  
+
   //: return number of modes in the current assignment vector
   unsigned mode_cnt() const;
 
@@ -83,11 +83,11 @@ class bsta_sample_set : public bsta_parzen_sphere<T,n>
   T total_weight() const;
 
  private:
-   //: hold a vector of weights for each data sample
-   //  needs to be set separately with each insert into the data set, otherwise its set to 1.0 by default at the first call to mean()
-   vcl_vector<T> weights_;
-  
-   vcl_vector<int> assignments_;  // a negative value indicates "null assignment"
+  //: hold a vector of weights for each data sample
+  //  needs to be set separately with each insert into the data set, otherwise its set to 1.0 by default at the first call to mean()
+  vcl_vector<T> weights_;
+
+  vcl_vector<int> assignments_;  // a negative value indicates "null assignment"
 };
 
 //: compute the variance of a particular assignment in a bsta_sample_set
@@ -97,12 +97,12 @@ bool bsta_sample_set_variance(const bsta_sample_set<T,1>& set, int mode, T min_v
   typedef typename vcl_vector<T >::const_iterator sit_t;
   typedef typename vcl_vector<T >::const_iterator wit_t;
   typedef typename vcl_vector<int >::const_iterator ait_t;
-  
+
   if (!set.check_initializations()) {
     vcl_cout << "Error in - bsta_sample_set<T,n>::mean() : assignments not initialized!\n";
     return false;
   }
-  
+
   T mv;
   set.mode_mean(mode, mv);
 
@@ -112,9 +112,9 @@ bool bsta_sample_set_variance(const bsta_sample_set<T,1>& set, int mode, T min_v
   ait_t ait = set.assignments_begin();
   T nsamp = 0;
   for (; sit != set.samples_end(); ++sit, ++wit, ++ait) {
-    if (*ait != mode) 
+    if (*ait != mode)
       continue;
-      
+
     T s = (*sit-mv)*(*sit-mv);
     sum += (*wit)*s;
     nsamp += (*wit);
@@ -125,7 +125,7 @@ bool bsta_sample_set_variance(const bsta_sample_set<T,1>& set, int mode, T min_v
       out = min_var;
     return true;
   }
-  
+
   return false;
 }
 
@@ -136,12 +136,12 @@ bool bsta_sample_set_variance(const bsta_sample_set<T,n>& set, int mode, vnl_mat
   typedef typename vcl_vector<vnl_vector_fixed<T,n> >::const_iterator sit_t;
   typedef typename vcl_vector<T >::const_iterator wit_t;
   typedef typename vcl_vector<int >::const_iterator ait_t;
-  
+
   if (!set.check_initializations()) {
     vcl_cout << "Error in - bsta_sample_set<T,n>::mean() : assignments not initialized!\n";
     return false;
   }
-  
+
   vnl_vector_fixed<T,n> mv;
   set.mode_mean(mode, mv);
 
@@ -151,19 +151,19 @@ bool bsta_sample_set_variance(const bsta_sample_set<T,n>& set, int mode, vnl_mat
   ait_t ait = set.assignments_begin();
   T nsamp = 0;
   for (; sit != set.samples_end(); ++sit, ++wit, ++ait) {
-    if (*ait != mode) 
+    if (*ait != mode)
       continue;
-      
+
     vnl_vector_fixed<T,n> diff = (*sit)-mv;
     sum += (*wit)*outer_product(diff,diff);
     nsamp += (*wit);
   }
   if (nsamp > 0) {
     out = sum / nsamp;
-    
+
     return true;
   }
-  
+
   return false;
 }
 
@@ -173,20 +173,20 @@ bool bsta_sample_set_marginalize(const bsta_sample_set<T,n>& set, unsigned compo
 {
   typedef typename vcl_vector<vnl_vector_fixed<T,n> >::const_iterator sit_t;
   typedef typename vcl_vector<T >::const_iterator wit_t;
-  
+
   if (n <= component)  // if the vector is not as large to have component return false
-    return false;                 
+    return false;
 
   sit_t sit = set.samples_begin();
   wit_t wit = set.weights_begin();
-  
+
   for (; sit != set.samples_end(); ++sit, ++wit) {
     out_set.insert_sample((*sit)[component], (*wit));
   }
 
   return true;
 }
- 
+
 template <class T>
 bool bsta_sample_set_fit_distribution(const bsta_sample_set<T,1>& set, bsta_mixture<bsta_num_obs<bsta_gaussian_sphere<T,1> > >& out)
 {
@@ -195,9 +195,9 @@ bool bsta_sample_set_fit_distribution(const bsta_sample_set<T,1>& set, bsta_mixt
     return false;
   }
 
-  //: compute mean and variance for each mode
+  // compute mean and variance for each mode
   unsigned mode_cnt = set.mode_cnt();
-    
+
   while (out.num_components() != 0) {
     out.remove_last();
   }
@@ -227,9 +227,9 @@ bool bsta_sample_set_fit_distribution(const bsta_sample_set<T,n>& set, bsta_mixt
     return false;
   }
 
-  //: compute mean and variance for each mode
+  // compute mean and variance for each mode
   unsigned mode_cnt = set.mode_cnt();
-    
+
   while (out.num_components() != 0) {
     out.remove_last();
   }
@@ -251,7 +251,8 @@ bool bsta_sample_set_fit_distribution(const bsta_sample_set<T,n>& set, bsta_mixt
   return true;
 }
 
-//: total weight is used to normalize the weight of the distribution
+//:
+//  Total weight is used to normalize the weight of the distribution
 //  (bsta_num_obs class contains total weight of samples assigned to this distribution)
 template <class T>
 T bsta_sample_set_log_likelihood(const bsta_sample_set<T,1>& set, bsta_num_obs<bsta_gaussian_sphere<T,1> >& dist, T total_weight)
@@ -271,11 +272,12 @@ T bsta_sample_set_log_likelihood(const bsta_sample_set<T,1>& set, bsta_num_obs<b
       sum += p + pw;  // log is natural logarithm
     }
   }
-  
+
   return sum;
 }
 
-//: total weight is used to normalize the weight of the distribution
+//:
+//  Total weight is used to normalize the weight of the distribution
 //  (bsta_num_obs class contains total weight of samples assigned to this distribution)
 template <class T, unsigned n>
 T bsta_sample_set_log_likelihood(const bsta_sample_set<T,n>& set, bsta_num_obs<bsta_gaussian_full<T,n> >& dist, T total_weight)
@@ -295,11 +297,12 @@ T bsta_sample_set_log_likelihood(const bsta_sample_set<T,n>& set, bsta_num_obs<b
       sum += p + pw;  // log is natural logarithm
     }
   }
-  
+
   return sum;
 }
 
-//: total weight is used to normalize the weight of the distribution
+//:
+//  Total weight is used to normalize the weight of the distribution
 //  (bsta_num_obs class contains total weight of samples assigned to this distribution)
 template <class T>
 T bsta_sample_set_log_likelihood(const bsta_sample_set<T,2>& set, bsta_num_obs<bsta_gaussian_sphere<T,1> >& dist0, T w0, bsta_num_obs<bsta_gaussian_sphere<T,1> >& dist1, T w1, T& w_sum)
@@ -339,11 +342,11 @@ T bsta_sample_set_log_likelihood(const bsta_sample_set<T,2>& set, bsta_num_obs<b
     T p1 = T(vcl_log(p));
 
     sum += p0 + p1;  // log is natural logarithm
-    
+
     total_weight += set.weight(i);
   }
-  
-  //: w_sum is the total weight of all the samples assigned to these two modes w_sum/total_weight becomes the probability of this joint mode
+
+  // w_sum is the total weight of all the samples assigned to these two modes w_sum/total_weight becomes the probability of this joint mode
   T prior = w_sum/total_weight;
   T log_prior = T(vcl_log(prior));
   T tot_log_prior = set.size()*log_prior;
@@ -357,11 +360,11 @@ T bsta_sample_set_log_likelihood(const bsta_sample_set<T,2>& set, bsta_num_obs<b
 template<class T>
 bool bsta_sample_set_print_to_m(const bsta_sample_set<T,2>& set, vcl_ofstream& of)
 {
-  //: print samples in different colors according to the assignment
+  // print samples in different colors according to the assignment
   unsigned mode_cnt = set.mode_cnt();
 
   of << "cmap = colormap(lines(" << mode_cnt << "));\n";
-  
+
   for (unsigned m = 0; m < mode_cnt; m++) {
     vcl_vector<vcl_pair<T,T> > points;
     for (unsigned i = 0; i < set.size(); i++) {
@@ -387,7 +390,7 @@ bool bsta_sample_set_print_to_m(const bsta_sample_set<T,2>& set, vcl_ofstream& o
     set.mode_mean(m, mode);
     of << "xx = [" << mode[0] << "];\n";
     of << "yy = [" << mode[1] << "];\n";
-    of << "h = plot(xx,yy,'+r');\nset(h, 'Color', cmap(" << m+1 << ",:));\n";  
+    of << "h = plot(xx,yy,'+r');\nset(h, 'Color', cmap(" << m+1 << ",:));\n";
     of << "hold on\n";
   }
 
@@ -398,12 +401,12 @@ bool bsta_sample_set_print_to_m(const bsta_sample_set<T,2>& set, vcl_ofstream& o
 template<class T>
 bool bsta_sample_set_dist_print_to_m(const bsta_sample_set<T,2>& set, vcl_ofstream& of)
 {
-  //: print samples in different colors according to the assignment
+  // print samples in different colors according to the assignment
   unsigned mode_cnt = set.mode_cnt();
 
   of << "cmap = colormap(lines(" << mode_cnt << "));\n";
-  
-  //: find range of data to construct surface properly
+
+  // find range of data to construct surface properly
   T min = T(10000), max = T(0);
   for (unsigned i = 0; i < set.size(); i++) {
     if (set.sample(i)[0] < min)
@@ -448,12 +451,12 @@ bool bsta_sample_set_dist_print_to_m(const bsta_sample_set<T,2>& set, vcl_ofstre
 template<class T>
 bool bsta_sample_set_dist_print_to_m(const bsta_sample_set<T,1>& set, vcl_ofstream& of)
 {
-  //: print samples in different colors according to the assignment
+  // print samples in different colors according to the assignment
   unsigned mode_cnt = set.mode_cnt();
 
   of << "cmap = colormap(lines(" << mode_cnt << "));\n";
-  
-  //: find range of data to construct surface properly
+
+  // find range of data to construct surface properly
   T min = T(10000), max = T(0);
   for (unsigned i = 0; i < set.size(); i++) {
     if (set.sample(i) < min)
@@ -474,7 +477,7 @@ bool bsta_sample_set_dist_print_to_m(const bsta_sample_set<T,1>& set, vcl_ofstre
       return false;
     of << "sigma = [" << var << "];\n";
     of << "p = " << set.mode_weight(m)/total_weight << "*mvnpdf(X, mu, sigma);\n";
-    of << "hh = plot(X,p,'+r');\nset(hh, 'Color', cmap(" << m+1 << ",:));\n"; 
+    of << "hh = plot(X,p,'+r');\nset(hh, 'Color', cmap(" << m+1 << ",:));\n";
     of << "hold on\n";
   }
 
@@ -482,4 +485,3 @@ bool bsta_sample_set_dist_print_to_m(const bsta_sample_set<T,1>& set, vcl_ofstre
 }
 
 #endif // bsta_sample_set_h_
-

@@ -8,7 +8,7 @@
 #include <vcl_map.h>
 
 template <class T, unsigned n>
-bool 
+bool
 bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, float percentage, T epsilon)
 {
   typedef typename bsta_parzen_sphere<T,n>::vector_type vect_t;
@@ -31,9 +31,9 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, fl
       continue;
     }
     vnl_vector_fixed<T,n> dif(T(10e4));
-    
+
     vect_t current = set.sample(s_id);
-    
+
     unsigned cnt = 0;
     while (dif.magnitude() > epsilon) {
       vect_t mean;
@@ -58,7 +58,7 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, fl
 
 //: use all the samples to get its mode, no need for random seed picking
 template <class T, unsigned n>
-bool 
+bool
 bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, T epsilon)
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
@@ -67,11 +67,11 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, T epsilon)
   set.initialize_assignments();
 
   for (int i = 0; i < size; i++) {
-    
+
     vnl_vector_fixed<T,n> dif(T(10e4));
-    
+
     vect_t current = set.sample(i);
-    
+
     unsigned cnt = 0;
     while (dif.magnitude() > epsilon) {
       vect_t mean;
@@ -96,12 +96,12 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, T epsilon)
 
 //: merge the mode with samples less than cnt to one of the modes depending on its samples mean-shift paths
 template <class T, unsigned n>
-bool 
+bool
 bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
   vcl_vector<bool> eliminated_modes(modes_.size(), false);
-  
+
   for (unsigned m = 0; m < modes_.size(); m++) {
     if (set.mode_size(m) < cnt) {
       //: eliminate this mode
@@ -129,19 +129,19 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
           for (unsigned mm = 0; mm < modes_.size(); mm++) {
             if (eliminated_modes[mm])
               continue;
-            
+
             vect_t v_dif = modes_[mm]- current;
             vnl_vector_fixed<T,n> dif(v_dif);
             if (dif.magnitude() < dif_min.magnitude()) {
               dif_min = dif; mm_min = mm;
-            }  
+            }
           }
           set.set_assignment(i, mm_min);
         }
       }
     }
   }
-  
+
   //: re-arrange the assignment vector with the new mode ids
   vcl_vector<vect_t > new_modes;
   for (unsigned i = 0; i < modes_.size(); i++) {
@@ -156,13 +156,13 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
 
   modes_.clear();
   modes_ = new_modes;
-  
+
   return true;
 }
 
 
 template <class T, unsigned n>
-bool 
+bool
 bsta_mean_shift<T,n>::trim_modes(bsta_sample_set<T,n>& set, T epsilon)
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
@@ -210,11 +210,10 @@ bsta_mean_shift<T,n>::trim_modes(bsta_sample_set<T,n>& set, T epsilon)
 }
 
 #define BSTA_SAMPLE_SET_INSTANTIATE(T,n) \
-template class bsta_sample_set<T,n >; 
+template class bsta_sample_set<T,n >
 
 #define BSTA_MEAN_SHIFT_INSTANTIATE(T,n) \
-template class bsta_mean_shift<T,n >; 
+template class bsta_mean_shift<T,n >
 
 
 #endif // bsta_mean_shift_txx_
-

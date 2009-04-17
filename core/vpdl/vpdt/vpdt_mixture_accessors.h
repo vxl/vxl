@@ -15,12 +15,13 @@
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_enable_if.h>
 
+
 //: A functor to return the number of components in a mixture
-// this is a dummy class for non-mixture types, it always fails
+// This is a dummy class for non-mixture types; it always fails
 template <class mixture_type, class Disambiguate=void>
 class vpdt_num_components_accessor
 {
-public:
+ public:
   //: the functor return type
   typedef unsigned int return_type;
   //: the distribution operated on by the functor
@@ -41,12 +42,13 @@ public:
   }
 };
 
+//
 //: A functor to return the number of components in a mixture
 template <class mixture_type>
 class vpdt_num_components_accessor<mixture_type, 
           typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
 {
-public:
+ public:
   //: the functor return type
   typedef unsigned int return_type;
   //: the distribution operated on by the functor
@@ -67,7 +69,6 @@ public:
     return true;
   }
 };
-
 
 
 //: A functor to return the weight of the component with given index
@@ -98,12 +99,13 @@ class vpdt_weight_accessor
   }
 };
 
+
 //: A functor to return the weight of the component with given index
 template <class mixture_type>
 class vpdt_weight_accessor<mixture_type,
           typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
 {
-public:
+ public:
   //: the functor return type
   typedef typename vpdt_dist_traits<mixture_type>::scalar_type return_type;
   //: the distribution operated on by the functor
@@ -135,12 +137,11 @@ public:
 };
 
 
-
 //: A functor to apply another functor to the component with given index
 template <class mixture_type, class accessor_type, class Disambiguate=void>
 class vpdt_mixture_accessor
 {
-public:
+ public:
   //: the functor return type
   typedef typename accessor_type::return_type return_type;
   //: the distribution operated on by the functor
@@ -167,12 +168,13 @@ public:
   }
 };
 
+
 //: A functor to apply another functor to the component with given index
 template <class mixture_type, class accessor_type>
 class vpdt_mixture_accessor<mixture_type,accessor_type,
           typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
 {
-public:
+ public:
   //: the functor return type
   typedef typename accessor_type::return_type return_type;
   //: the distribution operated on by the functor
@@ -216,7 +218,7 @@ class vpdt_mixture_accessor<mixture_type,
           vpdt_weight_accessor<typename mixture_type::component_type>,
           typename vpdt_enable_if<vpdt_is_mixture<mixture_type> >::type>
 {
-public:
+ public:
   //: the accessor type
   typedef vpdt_weight_accessor<typename mixture_type::component_type> accessor_type;
   //: the functor return type
@@ -252,9 +254,7 @@ public:
 
   //: The component index
   unsigned int idx;
-
 };
-
 
 
 #endif // vpdt_mixture_accessors_h_

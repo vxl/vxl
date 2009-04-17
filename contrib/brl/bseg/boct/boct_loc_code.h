@@ -1,13 +1,14 @@
 #ifndef boct_loc_code_h_
 #define boct_loc_code_h_
-
+//:
+// \file
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 template <typename T>
 class boct_loc_code
 {
-public:
+ public:
 
   // constructor, creates a code for the root node
   boct_loc_code(): x_loc_(0), y_loc_(0), z_loc_(0),level(0) {}
@@ -25,7 +26,7 @@ public:
   boct_loc_code child_loc_code(unsigned int index, short child_level);
 
   bool isequal(const boct_loc_code * test,short level);
-  
+
   boct_loc_code * XOR(boct_loc_code * b);
 
   vgl_point_3d<double>  get_point(short max_level);
