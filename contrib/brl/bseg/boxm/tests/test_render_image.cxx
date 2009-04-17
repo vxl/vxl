@@ -109,7 +109,7 @@ MAIN( test_render_image )
   scene1.load_scene("D:/vj/data/CapitolSiteHigh/boxm/scene.xml");
 
   // read projection matrix from the file.
-  vcl_ifstream ifs("D:/vj/data/CapitolSiteHigh/boxm/camera_00116.txt");
+  vcl_ifstream ifs("D:/vj/data/CapitolSiteHigh/boxm/camera_00032.txt");
   vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
   ifs >> *cam;
   ifs.close();
