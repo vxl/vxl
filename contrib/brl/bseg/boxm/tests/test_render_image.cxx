@@ -45,7 +45,7 @@ MAIN( test_render_image )
 
 
   boxm_sample<BOXM_APM_MOG_GREY> default_sample;
-  default_sample.alpha=0.001;
+  default_sample.alpha=0.001f;
   default_sample.appearance=simple_obs_mix_gauss_val_f1;
 
   // sample 1
@@ -59,7 +59,7 @@ MAIN( test_render_image )
   bsta_num_obs<s1_simple_bsta_mixture_fixed_f1_3>  s1_simple_obs_mix_gauss_val_f1(s1_simple_mix_gauss_val_f1);
 
   boxm_sample<BOXM_APM_MOG_GREY> s1_sample;
-  s1_sample.alpha=0.6;
+  s1_sample.alpha=0.6f;
   s1_sample.appearance=s1_simple_obs_mix_gauss_val_f1;
 
   // sample 2
@@ -73,7 +73,7 @@ MAIN( test_render_image )
   bsta_num_obs<s2_simple_bsta_mixture_fixed_f1_3>  s2_simple_obs_mix_gauss_val_f1(s2_simple_mix_gauss_val_f1);
 
   boxm_sample<BOXM_APM_MOG_GREY> s2_sample;
-  s2_sample.alpha=0.6;
+  s2_sample.alpha=0.6f;
   s2_sample.appearance=s2_simple_obs_mix_gauss_val_f1;
 
 
