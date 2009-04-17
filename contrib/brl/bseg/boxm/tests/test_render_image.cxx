@@ -1,4 +1,3 @@
-
 #include <testlib/testlib_test.h>
 #include <boxm/boxm_utils.h>
 #include <vgl/vgl_point_2d.h>
@@ -32,7 +31,7 @@ MAIN( test_render_image )
   os.close();
 
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
-  //: default model
+  // default model
   bsta_gauss_f1 simple_gauss_f1(0.0,0.1);
   bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  simple_mix_gauss_val_f1;
@@ -40,7 +39,7 @@ MAIN( test_render_image )
   simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1);
   simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1);
   simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1);
-  
+
   typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  simple_bsta_mixture_fixed_f1_3;
   bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
 
@@ -49,22 +48,21 @@ MAIN( test_render_image )
   default_sample.alpha=0.001;
   default_sample.appearance=simple_obs_mix_gauss_val_f1;
 
-  //: sample 1
+  // sample 1
   bsta_gauss_f1 s1_simple_gauss_f1(0.5,0.1);
   bsta_num_obs<bsta_gauss_f1> s1_simple_obs_gauss_val_f1(s1_simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s1_simple_mix_gauss_val_f1;
 
   s1_simple_mix_gauss_val_f1.insert(s1_simple_obs_gauss_val_f1,1);
-  
+
   typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  s1_simple_bsta_mixture_fixed_f1_3;
   bsta_num_obs<s1_simple_bsta_mixture_fixed_f1_3>  s1_simple_obs_mix_gauss_val_f1(s1_simple_mix_gauss_val_f1);
-
 
   boxm_sample<BOXM_APM_MOG_GREY> s1_sample;
   s1_sample.alpha=0.6;
   s1_sample.appearance=s1_simple_obs_mix_gauss_val_f1;
 
-  //: sample 2
+  // sample 2
   bsta_gauss_f1 s2_simple_gauss_f1(1.0,0.1);
   bsta_num_obs<bsta_gauss_f1> s2_simple_obs_gauss_val_f1(s2_simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s2_simple_mix_gauss_val_f1;
@@ -74,21 +72,20 @@ MAIN( test_render_image )
   typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  s2_simple_bsta_mixture_fixed_f1_3;
   bsta_num_obs<s2_simple_bsta_mixture_fixed_f1_3>  s2_simple_obs_mix_gauss_val_f1(s2_simple_mix_gauss_val_f1);
 
-
   boxm_sample<BOXM_APM_MOG_GREY> s2_sample;
   s2_sample.alpha=0.6;
   s2_sample.appearance=s2_simple_obs_mix_gauss_val_f1;
 
 
-  while(!iter.end())
+  while (!iter.end())
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >  > * block=scene.get_active_block();
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
-	boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
-	cel11->set_data(s2_sample);
-	boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
-	cell2->set_data(s1_sample);
+    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
+    cel11->set_data(s2_sample);
+    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
+    cell2->set_data(s1_sample);
     block->init_tree(tree);
     scene.write_active_block();
     iter++;
@@ -98,13 +95,13 @@ MAIN( test_render_image )
   world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
   vpgl_camera_double_sptr camera = generate_camera_top(world);
 
-  vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(IMAGE_U,IMAGE_V);
+  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(IMAGE_U,IMAGE_V);
   expected.fill(0.0);
-  vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask(IMAGE_U,IMAGE_V);
+  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask(IMAGE_U,IMAGE_V);
   mask.fill(0.0);
 
   boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene,camera,expected,mask);
-//  TEST("Interpolated image", true, flag);
+  //  TEST("Interpolated image", true, flag);
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
 
@@ -117,12 +114,11 @@ MAIN( test_render_image )
   ifs >> *cam;
   ifs.close();
 
-  vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected1(1280,720);
+  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected1(1280,720);
   expected1.fill(0.0);
-  vil_image_view<typename boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask1(1280,720);
+  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask1(1280,720);
   mask1.fill(0.0);
   boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene1,cam,expected1,mask1);
 
-
-  SUMMARY();  
+  SUMMARY();
 }
