@@ -12,6 +12,7 @@ boct_tree_cell<T_loc,T_data>::boct_tree_cell(const boct_loc_code<T_loc>& code)
   code_=code;
   parent_=NULL;
   children_=NULL;
+  vis_node_=NULL;
 }
 
 template<class T_loc,class T_data>
@@ -411,6 +412,7 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data>& c, boct_tree_c
      vsl_b_read(is, data);
      c.set_data(data);
      c.set_parent(parent);
+     c.set_vis_node(NULL);
      bool leaf;
      vsl_b_read(is, leaf);
      if (!leaf) {
