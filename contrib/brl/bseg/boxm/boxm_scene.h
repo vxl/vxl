@@ -121,7 +121,7 @@ template <class T>
 class boxm_block_iterator
 {
  public:
-  boxm_block_iterator(boxm_scene<T>* const scene): scene_(scene), i_(0), j_(0), k_(0) {}
+  boxm_block_iterator(boxm_scene<T>* const scene): i_(0), j_(0), k_(0), scene_(scene) {}
 
   ~boxm_block_iterator(){}
 
