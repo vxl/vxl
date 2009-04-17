@@ -16,11 +16,11 @@ SET(boxm_sources
     boxm_mog_grey_processor.cxx       boxm_mog_grey_processor.h  
     boxm_block_vis_graph_node.h
     boxm_block_vis_graph_iterator.txx boxm_block_vis_graph_iterator.h
-    #boxm_cell_vis_graph_node.h
     boxm_cell_vis_graph_iterator.txx    boxm_cell_vis_graph_iterator.h
     boxm_neighb_graph_node.h
     boxm_utils.cxx                    boxm_utils.h
     boxm_render_image.h
+    boxm_save_block_raw.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)

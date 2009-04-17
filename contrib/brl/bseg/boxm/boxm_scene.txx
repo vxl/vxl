@@ -337,9 +337,10 @@ boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml, bool filename)
   nums.y()*parser->block_dim().y(), nums.z()*parser->block_dim().z());
   *this = boxm_scene<T>( lvcs, parser->origin(), parser->block_dim(), world);
   parser->paths(scene_path_, block_pref_);
-  apperance_model_ = boxm_apm_types::str_to_enum(parser->app_model().data());
+  app_model_ = boxm_apm_types::str_to_enum(parser->app_model().data());
   return parser;
 }
+
 
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::begin()

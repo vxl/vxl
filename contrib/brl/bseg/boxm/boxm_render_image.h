@@ -41,7 +41,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
   unsigned ni=expected.ni();
   unsigned nj=expected.nj();
   expected.fill(0.0);
-
+  
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
   vil_image_view<float> vis(expected.ni(),expected.nj(),1);vis.fill(1.0);
   vil_image_view<float> alpha_integral(expected.ni(),expected.nj(),1);alpha_integral.fill(0.0);

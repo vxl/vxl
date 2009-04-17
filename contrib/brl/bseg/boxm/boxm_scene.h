@@ -89,7 +89,6 @@ class boxm_scene :public boxm_scene_base
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
-  ///vcl_string appearance_model(){return appearance_model_;}
 
  private:
   bgeo_lvcs lvcs_;

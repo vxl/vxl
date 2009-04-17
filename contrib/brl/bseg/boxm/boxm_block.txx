@@ -7,9 +7,12 @@
 template <class T>
 void boxm_block<T>::init_tree(T * octree)
 {
-octree_=octree;
-octree->set_bbox(bbox_);
+  octree_=octree;
+  octree->set_bbox(bbox_);
 }
+
+
+
 template <class T>
 void boxm_block<T>::b_read(vsl_b_istream &is)
 {
