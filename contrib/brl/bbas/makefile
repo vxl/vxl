@@ -55,9 +55,6 @@ SUBDIRS += brdb
 # Brown imaging library
 SUBDIRS += bil
 
-# video library (rewrite)
-SUBDIRS += vidl2
-
 # indexed mesh library
 SUBDIRS += imesh
 
