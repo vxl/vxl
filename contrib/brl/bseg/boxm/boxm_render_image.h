@@ -61,10 +61,6 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 			boct_face_idx  vis_face_ids1;
 			// project vertices to the image determine which faces of the cell are visible
 			boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);	
-			//vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);front_xyz.fill(0.0);
-			//vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3);back_xyz.fill(0.0);
-			//boxm_utils::project_cube(curr_block->bounding_box(),cam,faces1,vis_face_ids1);
-			//boxm_utils::project_cube_xyz(faces1,vis_face_ids1,front_xyz,back_xyz,cam);
 
 			//: for each frontier layer of each block
 			boct_tree<T_loc,boxm_sample<APM> > * tree=curr_block->get_tree();
@@ -73,11 +69,9 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 				vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *>::iterator cell_it=vis_cells.begin();
 				vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);front_xyz.fill(0.0);
 				vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3); back_xyz.fill(0.0);
-
 				vil_image_view<float> alphas(expected.ni(),expected.nj(),1);alphas.fill(0.0);
 				vil_image_view<float> vis_end(expected.ni(),expected.nj(),1);vis_end.fill(0.0);
-
-        vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);temp_expected.fill(0.0);
+				vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);temp_expected.fill(0.0);
 
 				for(;cell_it!=vis_cells.end();cell_it++)
 				{
