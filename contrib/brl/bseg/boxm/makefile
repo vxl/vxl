@@ -19,6 +19,7 @@ MANPAGE_SOURCES += boxm_block_vis_graph_node.txx
 SOURCES += boxm_apm_traits.cxx
 MANPAGE_SOURCES += boxm_scene_base.h
 MANPAGE_SOURCES += boxm_render_image.h
+MANPAGE_SOURCES += boxm_save_block_raw.h
 
 SUBDIRS += io pro
 
