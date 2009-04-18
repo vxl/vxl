@@ -8,6 +8,7 @@
 #include <boxm/boxm_neighb_graph_node.h>
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_sample.h>
+#include <boxm/boxm_save_block_raw.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_utils.h>
