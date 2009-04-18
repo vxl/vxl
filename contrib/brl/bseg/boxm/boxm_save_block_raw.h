@@ -15,39 +15,27 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_transform.h>
-#include <vil/vil_save.h>
 #include <vil/vil_view_as.h>
-#include <boxm/boxm_block_vis_graph_iterator.h>
-#include <boxm/boxm_cell_vis_graph_iterator.h>
-#include <boxm/boxm_mog_grey_processor.h>
-#include <vcl_iostream.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
-
-
-/*class image_exp_functor
-{
-public:
-	float operator()(float x)       const { return x<0?vcl_exp(x):1.0f; }
-};*/
-
+#include <vcl_iostream.h>
 
 template <class T_loc, boxm_apm_type APM>
 void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                          vgl_point_3d<int> block_idx,
-                         vcl_string filename, 
+                         vcl_string filename,
                          unsigned int resolution_level)
 {
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
 
   vcl_ofstream os(filename.c_str(),vcl_ios::binary);
   if (!os.good()) {
-    vcl_cerr << "error opening " << filename << " for write! " << vcl_endl;
+    vcl_cerr << "error opening " << filename << " for write!\n";
     return;
   }
-  
+
   scene.load_block(block_idx);
-	boxm_block<tree_type>* block = scene.get_block(block_idx);
+  boxm_block<tree_type>* block = scene.get_block(block_idx);
   vgl_box_3d<double> block_bb = block->bounding_box();
   tree_type* tree = block->get_tree();
 
@@ -60,7 +48,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
 
   // origin should specify center of first cell
   vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
-  
+
   float *data = new float[ncells*ncells*ncells];
   // init to zero
   for (float* dp = data; dp < data + ncells*ncells*ncells; ++dp) {
@@ -71,11 +59,12 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
   out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
   vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *> cells = tree->leaf_cells();
-  for (unsigned i=0; i<cells.size(); i++) {
-    vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
-    
+  for (unsigned i=0; i<cells.size(); i++)
+  {
+    vgl_point_3d<double> node = tree->cell_bounding_box(cells[i]).min_point();
+
     float cell_val = cells[i]->data().alpha;
-    
+
     short level = cells[i]->get_code().level;
 
     if (level == resolution_level) {
@@ -93,7 +82,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
         for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
           for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
             unsigned int out_index = z*ncells*ncells + y*ncells + x;
-            //vcl_cout << x << " " << y << " " << z << " " << out_index << vcl_endl;
+            //vcl_cout << x << ' ' << y << ' ' << z << ' ' << out_index << vcl_endl;
             data[out_index] = cell_val;
           }
         }
@@ -135,7 +124,4 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
 }
 
 
-
-
 #endif
-
