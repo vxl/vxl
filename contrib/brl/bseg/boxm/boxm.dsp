@@ -206,6 +206,9 @@ SOURCE=.\boxm_scene_base.h
 # Begin Source File
 SOURCE=.\boxm_render_image.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_save_block_raw.h
+# End Source File
 # End Group
 # End Target
 # End Project
