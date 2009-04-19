@@ -120,6 +120,6 @@ void boxm_cell_vis_graph_iterator<T_loc,T_data>::form_graph_per_cell(boct_tree_c
 }
 
 #define BOXM_CELL_VIS_GRAPH_ITERATOR_INSTANTIATE(T1,T2) \
-template boxm_cell_vis_graph_iterator<T1,T2 >
+template class boxm_cell_vis_graph_iterator<T1,T2 >
 
 #endif // boxm_cell_vis_graph_iterator_txx_

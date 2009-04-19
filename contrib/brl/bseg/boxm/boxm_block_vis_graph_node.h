@@ -43,6 +43,6 @@ class boxm_block_vis_graph_node
 };
 
 #define BOXM_BLOCK_VIS_GRAPH_NODE_INSTANTIATE(T) \
-template boxm_block_vis_graph_node<T >
+template class boxm_block_vis_graph_node<T >
 
 #endif

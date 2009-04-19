@@ -45,6 +45,6 @@ void boxm_block<T>::b_write(vsl_b_ostream &os)
 }
 
 #define BOXM_BLOCK_INSTANTIATE(T) \
-template boxm_block<T >
+template class boxm_block<T >
 
 #endif

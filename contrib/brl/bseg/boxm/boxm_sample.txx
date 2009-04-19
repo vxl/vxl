@@ -61,7 +61,7 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample)
 }
 
 #define BOXM_SAMPLE_INSTANTIATE(T) \
-template boxm_sample<T >; \
+template class boxm_sample<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_sample<T > &); \
