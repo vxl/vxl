@@ -29,17 +29,17 @@ class boxm_utils
                          unsigned int img_ni, unsigned int img_nj,
                          bool do_front_test = true);
 
-  static vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
+  static vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> const& box);
 
   static bool is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
                               vpgl_camera_double_sptr const& camera);
 
   //: returns the visible faces of a box given a camera.
   // It puts a bit 1 for each face visible based on the boct_cell_face values.
-  static boct_face_idx visible_faces(vgl_box_3d<double> &bbox,
+  static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox,
                                      vpgl_camera_double_sptr camera);
 
-  static void faces_of_box_3d(vgl_box_3d<double> &bbox,
+  static void faces_of_box_3d(vgl_box_3d<double> const& bbox,
                               vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > & faces);
 
   static void project_cube(vgl_box_3d<double> &bbox,
