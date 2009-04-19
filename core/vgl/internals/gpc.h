@@ -8,10 +8,10 @@ Project:   Generic Polygon Clipper
 
 File:      gpc.h
 Author:    Alan Murta (email: gpc@cs.man.ac.uk)
-Version:   2.31
-Date:      4th June 1999
+Version:   2.32
+Date:      17th December 2004
 
-Copyright: (C) 1997-1999, Advanced Interfaces Group,
+Copyright: (C) 1997-2004, Advanced Interfaces Group,
            University of Manchester.
 
            This software is free for non-commercial use. It may be copied,
@@ -43,10 +43,11 @@ Copyright: (C) 1997-1999, Advanced Interfaces Group,
 */
 
 /* Increase GPC_EPSILON to encourage merging of near coincident edges    */
-
+/*                                                                       */
+/* For example: #define GPC_EPSILON (DBL_EPSILON*1000000000)             */
 #define GPC_EPSILON (DBL_EPSILON)
 
-#define GPC_VERSION "2.31"
+#define GPC_VERSION "2.32"
 
 
 /*
@@ -98,7 +99,7 @@ typedef struct                      /* Tristrip set structure            */
 ===========================================================================
 */
 
-void gpc_polygon_clip        (gpc_op           set_operation,
+int  gpc_polygon_clip        (gpc_op           set_operation,
                               gpc_polygon     *subject_polygon,
                               gpc_polygon     *clip_polygon,
                               gpc_polygon     *result_polygon);
