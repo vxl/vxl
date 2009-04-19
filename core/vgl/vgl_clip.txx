@@ -138,6 +138,16 @@ template <class T>
 vgl_polygon<T>
 vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op )
 {
+  int retval;
+  return vgl_clip(poly1, poly2, op, &retval);
+  vcl_fprintf(stdout,"WARNING: Degeneracy bug in gpc library -- returning empty polygon.\n");
+  vcl_fprintf(stderr,"WARNING: Degeneracy bug in gpc library -- returning empty polygon.\n");
+}
+
+template <class T>
+vgl_polygon<T>
+vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval)
+{
   // Check for the null case
   if ( poly1.num_sheets() == 0 ) {
     switch ( op )
@@ -175,7 +185,14 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
     default:                         break;
   }
 
-  gpc_polygon_clip( g_op, &p1, &p2, &p3 );
+  int retval = gpc_polygon_clip( g_op, &p1, &p2, &p3 );
+  *p_retval = retval;
+
+  if (retval == 0) {
+    gpc_free_polygon( &p1 );
+    gpc_free_polygon( &p2 );
+    return result;
+  }
   add_gpc_to_vgl( result, p3 );
 
   gpc_free_polygon( &p1 );

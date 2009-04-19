@@ -75,6 +75,16 @@ vgl_polygon<T>
 vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
           vgl_clip_type op = vgl_clip_type_intersect );
 
+//: Same as vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
+//          vgl_clip_type op = vgl_clip_type_intersect );
+//
+//  But where the fourth parameter is a return flag which is 1 if success, or 0 if the operation
+//  faced a geometric degeneracy which could not be handled. In this case, it might be necessary
+//  to perturb the input with a tiny ammount of random noise and try again.
+template <class T>
+vgl_polygon<T>
+vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval);
+
 #define VGL_CLIP_INSTANTIATE(T) extern "please include vgl/vgl_clip.txx instead"
 
 #endif // vgl_clip_h_
