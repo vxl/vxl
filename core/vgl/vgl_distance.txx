@@ -254,19 +254,20 @@ double vgl_distance(vgl_polygon<T> const& poly, vgl_point_2d<T> const& point, bo
   double dist = -1;
   for ( unsigned int s=0; s < poly.num_sheets(); ++s )
   {
-    unsigned int n = poly[s].size();
+    const vcl_vector<vgl_point_2d<T> > &sheet = poly[s];
+    unsigned int n = sheet.size();
     assert( n > 1 );
     double dd = closed ?
-                vgl_distance_to_linesegment(poly[s][n-1].x(), poly[s][n-1].y(),
-                                            poly[s][0  ].x(), poly[s][0  ].y(),
+                vgl_distance_to_linesegment(sheet[n-1].x(), sheet[n-1].y(),
+                                            sheet[0  ].x(), sheet[0  ].y(),
                                             point.x(), point.y()) :
-                vgl_distance_to_linesegment(poly[s][0  ].x(), poly[s][0  ].y(),
-                                            poly[s][1  ].x(), poly[s][1  ].y(),
+                vgl_distance_to_linesegment(sheet[0  ].x(), sheet[0  ].y(),
+                                            sheet[1  ].x(), sheet[1  ].y(),
                                             point.x(), point.y());
     for ( unsigned int i=0; i+1 < n; ++i )
     {
-      double nd = vgl_distance_to_linesegment(poly[s][i  ].x(), poly[s][i  ].y(),
-                                              poly[s][i+1].x(), poly[s][i+1].y(),
+      double nd = vgl_distance_to_linesegment(sheet[i  ].x(), sheet[i  ].y(),
+                                              sheet[i+1].x(), sheet[i+1].y(),
                                               point.x(), point.y());
       if ( nd<dd )  dd=nd;
     }
