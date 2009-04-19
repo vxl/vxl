@@ -84,14 +84,17 @@ bool vgl_polygon<T>::contains(T x, T y) const
     int n = pgon.size();
     for (int i = 0, j = n-1; i < n; j = i++)
     {
+      const vgl_point_2d<T> &p_i = pgon[i];
+      const vgl_point_2d<T> &p_j = pgon[j];
+
       // by definition, corner points and edge points are inside the polygon:
-      if ((pgon[j].x() - x) * (pgon[i].y() - y) == (pgon[i].x() - x) * (pgon[j].y() - y) &&
-          (((pgon[i].x()<=x) && (x<=pgon[j].x())) || ((pgon[j].x()<=x) && (x<=pgon[i].x()))) &&
-          (((pgon[i].y()<=y) && (y<=pgon[j].y())) || ((pgon[j].y()<=y) && (y<=pgon[i].y()))))
+      if ((p_j.x() - x) * (p_i.y() - y) == (p_i.x() - x) * (p_j.y() - y) &&
+          (((p_i.x()<=x) && (x<=p_j.x())) || ((p_j.x()<=x) && (x<=p_i.x()))) &&
+          (((p_i.y()<=y) && (y<=p_j.y())) || ((p_j.y()<=y) && (y<=p_i.y()))))
         return true;
       // invert c for each edge crossing:
-      if ((((pgon[i].y()<=y) && (y<pgon[j].y())) || ((pgon[j].y()<=y) && (y<pgon[i].y()))) &&
-          (x < (pgon[j].x() - pgon[i].x()) * (y - pgon[i].y()) / (pgon[j].y() - pgon[i].y()) + pgon[i].x()))
+      if ((((p_i.y()<=y) && (y<p_j.y())) || ((p_j.y()<=y) && (y<p_i.y()))) &&
+          (x < (p_j.x() - p_i.x()) * (y - p_i.y()) / (p_j.y() - p_i.y()) + p_i.x()))
         c = !c;
     }
   }
