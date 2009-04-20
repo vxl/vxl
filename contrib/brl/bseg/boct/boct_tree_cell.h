@@ -6,18 +6,14 @@
 #include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
 
-class boct_cell_face
-{
- public:
-  static const unsigned char NONE = 0x00;
-  static const unsigned char Z_LOW = 0x01;
-  static const unsigned char Z_HIGH = 0x02;
-  static const unsigned char Y_LOW = 0x04;
-  static const unsigned char Y_HIGH = 0x08;
-  static const unsigned char X_LOW = 0x10;
-  static const unsigned char X_HIGH = 0x20;
-  static const unsigned char ALL = 0x3F;
-};
+enum boct_cell_face {NONE = 0x00, 
+                     Z_LOW = 0x01, 
+                     Z_HIGH = 0x02, 
+                     Y_LOW = 0x04, 
+                     Y_HIGH = 0x08,
+                     X_LOW = 0x10, 
+                     X_HIGH = 0x20, 
+                     ALL = 0x3F}; 
 
 typedef unsigned char boct_face_idx;
 
