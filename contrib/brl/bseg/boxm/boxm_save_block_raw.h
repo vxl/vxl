@@ -61,23 +61,23 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
   vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *> cells = tree->leaf_cells();
   for (unsigned i=0; i<cells.size(); i++)
   {
-    vgl_point_3d<double> node = tree->cell_bounding_box(cells[i]).min_point();
+    vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
 
     float cell_val = cells[i]->data().alpha;
 
-    short level = cells[i]->get_code().level;
+    unsigned int level = cells[i]->get_code().level;
 
     if (level == resolution_level) {
       // just copy value to output array
-      unsigned int out_index = node.x()*ncells*ncells + node.y()*ncells + node.z();
+      unsigned int out_index = static_cast<unsigned int>(node.x()*ncells*ncells + node.y()*ncells + node.z());
       data[out_index] = cell_val;
     }
     else if (level > resolution_level) {
       // cell is bigger than output cells.  copy value to all contained output cells.
       const unsigned int us_factor = 1 << (level - resolution_level);
-      const unsigned int node_x_start = node.x()/step_len; //*us_factor;
-      const unsigned int node_y_start = node.y()/step_len; //*us_factor;
-      const unsigned int node_z_start = node.z()/step_len; //*us_factor;
+      const unsigned int node_x_start = static_cast<unsigned int>(node.x()/step_len); //*us_factor;
+      const unsigned int node_y_start = static_cast<unsigned int>(node.y()/step_len); //*us_factor;
+      const unsigned int node_z_start = static_cast<unsigned int>(node.z()/step_len); //*us_factor;
       for (unsigned int z=node_z_start; z<node_z_start+us_factor; ++z) {
         for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
           for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
@@ -92,7 +92,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
       // cell is smaller than output cells. increment output cell value
       unsigned int ds_factor = 1 << (level - resolution_level);
       double update_weight = 1.0 / double(ds_factor*ds_factor*ds_factor);
-      unsigned int out_index = (node.z()/ds_factor)*ncells*ncells + (node.y()/ds_factor)*ncells + (node.x()/ds_factor);
+      unsigned int out_index = static_cast<unsigned int>((node.z()/ds_factor)*ncells*ncells + (node.y()/ds_factor)*ncells + (node.x()/ds_factor));
       data[out_index] += float(cell_val*update_weight);
     }
   }

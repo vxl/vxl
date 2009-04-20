@@ -22,15 +22,15 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& ori
 active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
-  int x_dim = vcl_ceil(world_dim.x()/block_dim.x());
-  int y_dim = vcl_ceil(world_dim.y()/block_dim.y());
-  int z_dim = vcl_ceil(world_dim.z()/block_dim.z());
+  int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
+  int y_dim = static_cast<int>(vcl_ceil(world_dim.y()/block_dim.y()));
+  int z_dim = static_cast<int>(vcl_ceil(world_dim.z()/block_dim.z()));
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
-  for (unsigned i=0; i<x_dim; i++) {
-    for (unsigned j=0; j<y_dim; j++) {
-      for (unsigned k=0; k<z_dim; k++) {
+  for (int i=0; i<x_dim; i++) {
+    for (int j=0; j<y_dim; j++) {
+      for (int k=0; k<z_dim; k++) {
         create_block(i,j,k);
       }
     }
@@ -45,15 +45,15 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
 active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
-  int x_dim = vcl_ceil(world_dim.x()/block_dim.x());
-  int y_dim = vcl_ceil(world_dim.y()/block_dim.y());
-  int z_dim = vcl_ceil(world_dim.z()/block_dim.z());
+  int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
+  int y_dim = static_cast<int>(vcl_ceil(world_dim.y()/block_dim.y()));
+  int z_dim = static_cast<int>(vcl_ceil(world_dim.z()/block_dim.z()));
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
-  for (unsigned i=0; i<x_dim; i++) {
-    for (unsigned j=0; j<y_dim; j++) {
-      for (unsigned k=0; k<z_dim; k++) {
+  for (int i=0; i<x_dim; i++) {
+    for (int j=0; j<y_dim; j++) {
+      for (int k=0; k<z_dim; k++) {
         create_block(i,j,k);
       }
     }
@@ -93,9 +93,9 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
   vgl_box_3d<double> world(get_world_bbox());
   if (world.contains(p)) {
     // find the block index
-    unsigned i = (p.x()-origin_.x())/block_dim_.x();
-    unsigned j = (p.y()-origin_.y())/block_dim_.y();
-    unsigned k = (p.z()-origin_.z())/block_dim_.z();
+    unsigned i = static_cast<unsigned>((p.x()-origin_.x())/block_dim_.x());
+    unsigned j = static_cast<unsigned>((p.y()-origin_.y())/block_dim_.y());
+    unsigned k = static_cast<unsigned>((p.z()-origin_.z())/block_dim_.z());
     return blocks_(i,j,k);
   } else {
     vcl_cerr << "Point " << p << " is out of world " << world << '\n';
