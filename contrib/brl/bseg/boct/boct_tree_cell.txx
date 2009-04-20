@@ -124,10 +124,10 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
   switch (face)
   {
-    case boct_cell_face::NONE:
+    case NONE:
       break;
 
-    case boct_cell_face::X_LOW:
+    case X_LOW:
     {
       short xlowcode=this->code_.x_loc_-(short)(1);
       if (xlowcode<0)
@@ -163,7 +163,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       break;
     }
-    case boct_cell_face::X_HIGH:
+    case X_HIGH:
     {
       if ((this->code_.x_loc_+cellsize)>=(1<<(max_level-1)))
         return ;
@@ -199,7 +199,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       break;
     }
-    case boct_cell_face::Y_LOW:
+    case Y_LOW:
     {
       short ylowcode=this->code_.y_loc_-(short)(1);
       if (ylowcode<0)
@@ -234,7 +234,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
       }
       break;
     }
-    case boct_cell_face::Y_HIGH:
+    case Y_HIGH:
     {
       if ((this->code_.y_loc_+cellsize)>=(1<<(max_level-1)))
         return ;
@@ -270,7 +270,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
       }
       break;
     }
-    case boct_cell_face::Z_LOW:
+    case Z_LOW:
     {
       short zlowcode=this->code_.z_loc_-(short)(1);
       if (zlowcode<0)
@@ -305,7 +305,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
       }
       break;
     }
-    case boct_cell_face::Z_HIGH:
+    case Z_HIGH:
     {
       if ((this->code_.z_loc_+cellsize)>=(1<<(max_level-1)))
         return ;

@@ -1,10 +1,23 @@
 #ifndef boct_loc_code_h_
 #define boct_loc_code_h_
+
 //:
 // \file
+// \brief  locational code for octree. The code is stored seperately from x, y and z 
+//         dimensions. In that sense, it is similar or biTree in each dimension.
+//         
+//
+// \author Gamze Tunali
+// \date April 01, 2009
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
+
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
+
 template <typename T>
 class boct_loc_code
 {
@@ -12,37 +25,55 @@ class boct_loc_code
 
   // constructor, creates a code for the root node
   boct_loc_code(): x_loc_(0), y_loc_(0), z_loc_(0),level(0) {}
+
+  //: copy constructor
   boct_loc_code(const boct_loc_code& rhs);
+
+  //: Constructor from a point and a max_level (= root_level+1) of the tree
   boct_loc_code(vgl_point_3d<double> p, short max_level);
 
-  void set_code(T x_loc, T y_loc, T z_loc)
-  { x_loc_=x_loc; y_loc_=y_loc; z_loc_=z_loc; }
+  //: set code from the dimensional data
+  void set_code(T x_loc, T y_loc, T z_loc) { x_loc_=x_loc; y_loc_=y_loc; z_loc_=z_loc; }
 
+  //: sets the level where this loc code belongs to
   void set_level(short levelnum){level=levelnum;}
 
+  //: the bits are stored as [00...00ZYX]. level is the previous level to the child
   short child_index(short level);
 
   //: returns a code for a given child index. It is used at creating new children
   boct_loc_code child_loc_code(unsigned int index, short child_level);
 
+  //: returns true if the locational codes of test is equal to this
   bool isequal(const boct_loc_code * test,short level);
 
+  //: returns the XOR of the locational codes of this and b
   boct_loc_code * XOR(boct_loc_code * b);
 
+  //: converts location code to a point.
   vgl_point_3d<double>  get_point(short max_level);
 
+  //: locational code in X dimension
   T x_loc_;
+
+  //: locational code in Y dimension
   T y_loc_;
+
+  //: locational code in Z dimension
   T z_loc_;
 
+  //: the level of the tree where this loc code belongs to
   short level;
 
 private:
 };
+
 template<class T>
 vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T>& code);
+
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const boct_loc_code<T>& c);
+
 template<class T>
 void vsl_b_read(vsl_b_istream & is, boct_loc_code<T>& c);
 

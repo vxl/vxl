@@ -21,7 +21,7 @@ template <class T_loc,class T_data>
 class boct_cell_vis_graph_node;
 
 template <class T_loc,class T_data>
-class boct_tree_cell // public vbl_ref_count
+class boct_tree_cell
 {
  public:
 
@@ -88,7 +88,6 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data>& cell);
 template <class T_loc,class T_data>
 void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data>& cell, boct_tree_cell<T_loc,T_data>* parent);
 
-//typedef vbl_smart_ptr<boct_tree_cell<vgl_point_3d<double> > boct_tree_cell_pt_sptr;
 template<class T_loc,class T_data>
 class boct_cell_vis_graph_node{
 public:
