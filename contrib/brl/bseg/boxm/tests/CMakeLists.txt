@@ -20,4 +20,4 @@ ADD_TEST( boxm_test_quad_interpolate   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all t
 ADD_TEST( boxm_test_render_image   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_render_image  )
 
 ADD_EXECUTABLE( boxm_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boxm_test_include boxm)
+TARGET_LINK_LIBRARIES( boxm_test_include boxm boct)
