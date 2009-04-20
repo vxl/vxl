@@ -69,10 +69,10 @@ class vgl_line_segment_2d
   Type c() const;
 
   //: unit vector describing line direction
-  vgl_vector_2d<double> direction() const;
+  vgl_vector_2d<Type> direction() const;
 
   //: unit vector orthogonal to line
-  vgl_vector_2d<double> normal() const;
+  vgl_vector_2d<Type> normal() const;
 
   //: angle with the oriented horizontal line y=0, measured in radians.
   //  Returns values between -pi and pi.
@@ -85,6 +85,13 @@ class vgl_line_segment_2d
   //: Assignment
   inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2) {
     point1_ = p1; point2_ = p2; }
+
+  //: Return a point on the line defined by a scalar parameter \a t.
+  // \a t=0.0 corresponds to point1 and \a t=1.0 to point2.
+  // 0<t<1 for points on the segment between point1 and point2.
+  // t<0 for points on the (infinite) line, outside the segment, and closer to point1 than to point2.
+  // t>1 for points on the (infinite) line, outside the segment, and closer to point2 than to point1.
+  inline vgl_point_2d<Type> point_t(const double t) const { return point1() + t*direction(); }
 };
 
 //: Write to stream

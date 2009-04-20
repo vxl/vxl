@@ -100,12 +100,12 @@ class vgl_line_2d
   inline Type c() const {return c_;}
 
   //: unit vector describing line direction
-  inline vgl_vector_2d<double> direction() const
-  { return normalized(vgl_vector_2d<double>(b_,-a_)); }
+  inline vgl_vector_2d<Type> direction() const
+  { return normalized(vgl_vector_2d<Type>(b_,-a_)); }
 
   //: unit vector orthogonal to line
-  inline vgl_vector_2d<double> normal() const
-  { return normalized(vgl_vector_2d<double>(a_,b_)); }
+  inline vgl_vector_2d<Type> normal() const
+  { return normalized(vgl_vector_2d<Type>(a_,b_)); }
 
   //: normalize the line coefficients s.t. a^2 + b^2 = 1
   bool normalize();

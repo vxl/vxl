@@ -40,16 +40,16 @@ Type vgl_line_segment_2d<Type>::c() const
 }
 
 template <class Type>
-vgl_vector_2d<double>  vgl_line_segment_2d<Type>::direction() const
+vgl_vector_2d<Type>  vgl_line_segment_2d<Type>::direction() const
 {
-  vgl_vector_2d<double> v(point2_.x()-point1_.x(),point2_.y()-point1_.y());
+  vgl_vector_2d<Type> v(point2_.x()-point1_.x(),point2_.y()-point1_.y());
   return normalized(v);
 }
 
 template <class Type>
-vgl_vector_2d<double>  vgl_line_segment_2d<Type>::normal() const
+vgl_vector_2d<Type>  vgl_line_segment_2d<Type>::normal() const
 {
-  vgl_vector_2d<double> v(point1_.y()-point2_.y(),point2_.x()-point1_.x());
+  vgl_vector_2d<Type> v(point1_.y()-point2_.y(),point2_.x()-point1_.x());
   return normalized(v);
 }
 
