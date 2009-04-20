@@ -32,13 +32,13 @@ MAIN( test_render_image )
 
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
   // default model
-  bsta_gauss_f1 simple_gauss_f1(0.0,0.1);
+  bsta_gauss_f1 simple_gauss_f1(0.0f,0.1f);
   bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  simple_mix_gauss_val_f1;
 
-  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1);
-  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1);
-  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1);
+  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1f);
+  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1f);
+  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1f);
 
   typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  simple_bsta_mixture_fixed_f1_3;
   bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
@@ -49,7 +49,7 @@ MAIN( test_render_image )
   default_sample.appearance=simple_obs_mix_gauss_val_f1;
 
   // sample 1
-  bsta_gauss_f1 s1_simple_gauss_f1(0.5,0.1);
+  bsta_gauss_f1 s1_simple_gauss_f1(0.5f,0.1f);
   bsta_num_obs<bsta_gauss_f1> s1_simple_obs_gauss_val_f1(s1_simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s1_simple_mix_gauss_val_f1;
 
@@ -63,7 +63,7 @@ MAIN( test_render_image )
   s1_sample.appearance=s1_simple_obs_mix_gauss_val_f1;
 
   // sample 2
-  bsta_gauss_f1 s2_simple_gauss_f1(1.0,0.1);
+  bsta_gauss_f1 s2_simple_gauss_f1(1.0f,0.1f);
   bsta_num_obs<bsta_gauss_f1> s2_simple_obs_gauss_val_f1(s2_simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s2_simple_mix_gauss_val_f1;
 
@@ -103,21 +103,6 @@ MAIN( test_render_image )
   boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene,camera,expected,mask);
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
-#if 0 
-  boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene1;
-  scene1.load_scene("D:/vj/data/CapitolSiteHigh/boxm/scene.xml");
 
-  // read projection matrix from the file.
-  vcl_ifstream ifs("D:/vj/data/CapitolSiteHigh/boxm/camera_00032.txt");
-  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
-  ifs >> *cam;
-  ifs.close();
-
-  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected1(1280,720);
-  expected1.fill(0.0);
-  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask1(1280,720);
-  mask1.fill(0.0);
-  boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene1,cam,expected1,mask1);
-#endif
   SUMMARY();
 }

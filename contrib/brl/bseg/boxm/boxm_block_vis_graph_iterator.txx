@@ -30,14 +30,14 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
 
     vgl_point_3d<int> neighbor_idx = vis_iter->first;
     bool face_in = false;
-    if (vis_faces & boct_cell_face::X_HIGH) {
+    if (vis_faces & X_HIGH) {
       // check for neighbor on X_HIGH face
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(-1,0,0);
       else
         neighbor_idx += vgl_vector_3d<int>(1,0,0);
       face_in = true;
-    } else if (vis_faces & boct_cell_face::X_LOW) {
+    } else if (vis_faces & X_LOW) {
       // check for neighbor on X_LOW face
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(1,0,0);
@@ -59,14 +59,14 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
 
     face_in = false;
     neighbor_idx = vis_iter->first;
-    if (vis_faces & boct_cell_face::Y_HIGH) {
+    if (vis_faces & Y_HIGH) {
       // check for neighbor on Y_HIGH face
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(0,-1,0);
       else
         neighbor_idx += vgl_vector_3d<int>(0,1,0);
       face_in = true;
-    } else if (vis_faces & boct_cell_face::Y_LOW) {
+    } else if (vis_faces & Y_LOW) {
       // check for neighbor on Y_LOW face
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(0,1,0);
@@ -88,14 +88,14 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
 
     face_in=false;
     neighbor_idx = vis_iter->first;
-    if (vis_faces & boct_cell_face::Z_HIGH) {
+    if (vis_faces & Z_HIGH) {
       // check for neighbor on Z_HIGH face
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(0,0,-1);
       else
         neighbor_idx += vgl_vector_3d<int>(0,0,1);
       face_in = true;
-    }else if (vis_faces & boct_cell_face::Z_LOW) {
+    }else if (vis_faces & Z_LOW) {
       // check for neighbor on Y_LOW face
       if (reverse_it_)
         neighbor_idx += vgl_vector_3d<int>(0,0,1);

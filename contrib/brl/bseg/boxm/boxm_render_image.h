@@ -92,7 +92,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         vil_math_sum_sqr<float,float>(back_xyz,len_seg);
         vil_math_sqrt<float>(len_seg);
 
-		vil_math_image_product(len_seg,alphas, alphas);
+		    vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
         vil_math_image_difference(alpha_integral, alphas, alpha_integral);
         // compute new vis image

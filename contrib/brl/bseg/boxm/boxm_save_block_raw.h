@@ -75,14 +75,13 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
     else if (level > resolution_level) {
       // cell is bigger than output cells.  copy value to all contained output cells.
       const unsigned int us_factor = 1 << (level - resolution_level);
-      const unsigned int node_x_start = static_cast<unsigned int>(node.x()/step_len); //*us_factor;
-      const unsigned int node_y_start = static_cast<unsigned int>(node.y()/step_len); //*us_factor;
-      const unsigned int node_z_start = static_cast<unsigned int>(node.z()/step_len); //*us_factor;
+      const unsigned int node_x_start = static_cast<unsigned int>(node.x()/step_len);  
+      const unsigned int node_y_start = static_cast<unsigned int>(node.y()/step_len);  
+      const unsigned int node_z_start = static_cast<unsigned int>(node.z()/step_len);  
       for (unsigned int z=node_z_start; z<node_z_start+us_factor; ++z) {
         for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
           for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
             unsigned int out_index = z*ncells*ncells + y*ncells + x;
-            //vcl_cout << x << ' ' << y << ' ' << z << ' ' << out_index << vcl_endl;
             data[out_index] = cell_val;
           }
         }

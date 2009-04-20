@@ -17,23 +17,23 @@ boxm_cell_vis_graph_iterator<T_loc,T_data>::boxm_cell_vis_graph_iterator(vpgl_ca
   for (unsigned i=0;i<list_of_vis_nodes_.size();i++)
   {
     boct_face_idx vis_faces = boxm_utils::visible_faces(tree->cell_bounding_box(list_of_vis_nodes_[i]), cam);
-    if (vis_faces & boct_cell_face::X_HIGH) {
-      form_graph_per_cell(list_of_vis_nodes_[i],boct_cell_face::X_HIGH,tree);
+    if (vis_faces & ::X_HIGH) {
+      form_graph_per_cell(list_of_vis_nodes_[i],X_HIGH,tree);
     }
-    else if (vis_faces & boct_cell_face::X_LOW) {
-      form_graph_per_cell(list_of_vis_nodes_[i],boct_cell_face::X_LOW,tree);
+    else if (vis_faces & ::X_LOW) {
+      form_graph_per_cell(list_of_vis_nodes_[i],X_LOW,tree);
     }
-    if (vis_faces & boct_cell_face::Y_HIGH) {
-      form_graph_per_cell(list_of_vis_nodes_[i],boct_cell_face::Y_HIGH,tree);
+    if (vis_faces & ::Y_HIGH) {
+      form_graph_per_cell(list_of_vis_nodes_[i],Y_HIGH,tree);
     }
-    else if (vis_faces & boct_cell_face::Y_LOW) {
-      form_graph_per_cell(list_of_vis_nodes_[i],boct_cell_face::Y_LOW,tree);
+    else if (vis_faces & ::Y_LOW) {
+      form_graph_per_cell(list_of_vis_nodes_[i],Y_LOW,tree);
     }
-    if (vis_faces & boct_cell_face::Z_HIGH) {
-      form_graph_per_cell(list_of_vis_nodes_[i],boct_cell_face::Z_HIGH,tree);
+    if (vis_faces & ::Z_HIGH) {
+      form_graph_per_cell(list_of_vis_nodes_[i],Z_HIGH,tree);
     }
-    else if (vis_faces & boct_cell_face::Z_LOW) {
-      form_graph_per_cell(list_of_vis_nodes_[i],boct_cell_face::Z_LOW,tree);
+    else if (vis_faces & ::Z_LOW) {
+      form_graph_per_cell(list_of_vis_nodes_[i],Z_LOW,tree);
     }
   }
   list_of_vis_nodes_.clear();
