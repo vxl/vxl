@@ -161,9 +161,6 @@ vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box_local(boct_tree_ce
   double treesize=(double)(1<<(max_level_-1));
   double cellsize=(double)(1<<cell->level())/treesize;
   vgl_point_3d<double> local_origin(cell->code_.x_loc_,cell->code_.y_loc_,cell->code_.z_loc_);
-  /*vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/treesize*global_bbox_.width(),
-                                     global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
-                                     global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());*/
                                      
   vgl_point_3d<double> global_origin(local_origin.x()/treesize*global_bbox_.width(),
                                      local_origin.y()/treesize*global_bbox_.height(),
