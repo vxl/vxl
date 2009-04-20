@@ -95,24 +95,14 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         // compute the length of ray segment at each pixel
         vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);
         len_seg.fill(0.0f);
-        //vil_save(vil_plane(back_xyz,0),"./back_x.tiff");
-        //vil_save(vil_plane(back_xyz,1),"./back_y.tiff");
-        //vil_save(vil_plane(back_xyz,2),"./back_z.tiff");
-        //
-        //vil_save(vil_plane(front_xyz,0),"./front_x.tiff");
-        //vil_save(vil_plane(front_xyz,1),"./front_y.tiff");
-        //vil_save(vil_plane(front_xyz,2),"./front_z.tiff");
-        //vil_save(temp_expected,"./temp_expected.tiff");
-
+ 
         vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
         vil_math_sum_sqr<float,float>(back_xyz,len_seg);
         vil_math_sqrt<float>(len_seg);
-        //vil_save(len_seg,"./length.tiff");
-        vil_math_image_product(len_seg,alphas, alphas);
-        //vil_save(alphas,"./lengthalpha.tiff");
+
+		vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
         vil_math_image_difference(alpha_integral, alphas, alpha_integral);
-        //vil_save(alpha_integral,"./alpha_integral.tiff");
         // compute new vis image
         image_exp_functor exp_fun;
         vil_transform(alpha_integral,vis_end,exp_fun);
