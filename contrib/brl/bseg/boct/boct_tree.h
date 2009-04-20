@@ -20,6 +20,7 @@ class boct_tree
   boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level);
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r);
   boct_tree_cell<T_loc,T_data>* get_cell( boct_loc_code<T_loc>& code) { return root_->traverse(code); }
+  boct_tree_cell<T_loc,T_data>* root(){return root_;}
   bool split();
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
   //: return the max level
@@ -27,9 +28,14 @@ class boct_tree
   void set_bbox(vgl_box_3d<double> & bbox){global_bbox_=bbox;}
 
   vgl_box_3d<double> cell_bounding_box(boct_tree_cell<T_loc,T_data>* const cell);
+
+  //: returns the location of the cell in the block, with respect to blocks min point
+  vgl_box_3d<double> cell_bounding_box_local(boct_tree_cell<T_loc,T_data>* const cell);
+
   vgl_box_3d<double> bounding_box(){return global_bbox_;}
+  
   void print();
-  boct_tree_cell<T_loc,T_data>* root(){return root_;}
+  
   void b_write(vsl_b_ostream & os);
   void b_read(vsl_b_istream & is);
   short version_no() { return 1; }

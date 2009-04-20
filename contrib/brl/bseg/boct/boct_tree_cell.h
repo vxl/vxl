@@ -31,10 +31,10 @@ class boct_tree_cell // public vbl_ref_count
 
   //constructors
   boct_tree_cell<T_loc,T_data>()
-  : parent_(0), children_(0) {}
+  : parent_(0), children_(0), vis_node_(0) {}
 
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T_data>* p)
-  : code_(code), parent_(p), children_(0) {}
+  : code_(code), parent_(p), children_(0), vis_node_(0) {}
 
   //constructor given code and level
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code);

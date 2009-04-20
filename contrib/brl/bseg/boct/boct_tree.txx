@@ -2,8 +2,9 @@
 #define boct_tree_txx_
 
 #include "boct_tree.h"
-#include <vgl/vgl_box_3d.h>
+#include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/io/vgl_io_box_3d.h>
 
 //; constructor initializes an empty tree
@@ -145,7 +146,29 @@ vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box(boct_tree_cell<T_l
   vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/treesize*global_bbox_.width(),
                                      global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
                                      global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());
+                                    
+                                     
+  return vgl_box_3d<double>(global_origin,
+                            cellsize*global_bbox_.width(),
+                            cellsize*global_bbox_.height(),
+                            cellsize*global_bbox_.depth(),
+                            vgl_box_3d<double>::min_pos);
+}
 
+template <class T_loc,class T_data>
+vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box_local(boct_tree_cell<T_loc,T_data>* const cell)
+{
+  double treesize=(double)(1<<(max_level_-1));
+  double cellsize=(double)(1<<cell->level())/treesize;
+  vgl_point_3d<double> local_origin(cell->code_.x_loc_,cell->code_.y_loc_,cell->code_.z_loc_);
+  /*vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/treesize*global_bbox_.width(),
+                                     global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
+                                     global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());*/
+                                     
+  vgl_point_3d<double> global_origin(local_origin.x()/treesize*global_bbox_.width(),
+                                     local_origin.y()/treesize*global_bbox_.height(),
+                                     local_origin.z()/treesize*global_bbox_.depth());
+                                     
   return vgl_box_3d<double>(global_origin,
                             cellsize*global_bbox_.width(),
                             cellsize*global_bbox_.height(),
