@@ -45,7 +45,7 @@ bool boxm_render_expected_process_cons(bprb_func_process& pro)
   // output[0]: mask
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-  output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[1] = "vil_image_view_base_sptr";
   if (!pro.set_output_types(output_types_))
     return false;
 
@@ -86,7 +86,6 @@ bool boxm_render_expected_process(bprb_func_process& pro)
   }
 
   unsigned j = 0;
-  // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(j++, img);
   pro.set_output_val<vil_image_view_base_sptr>(j++, img_mask);
   return true;
