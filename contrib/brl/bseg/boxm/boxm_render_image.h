@@ -47,13 +47,8 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
-#if 0
-      if (block_indices[i].x()!=1 || block_indices[i].y()!=1 || block_indices[i].z()!=0) continue;
-#endif
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       boxm_block<tree_type> * curr_block=scene.get_active_block();
-      vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > >  faces1;
-      boct_face_idx  vis_face_ids1;
       // project vertices to the image determine which faces of the cell are visible
       boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);
 
@@ -73,9 +68,6 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         {
           // for each cell
           boxm_sample<APM> sample=(*cell_it)->data();
-#if 0
-          if (sample.alpha <= 0.001f) continue;
-#endif
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > >  faces;
@@ -114,14 +106,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         vil_math_image_sum(temp_expected,expected,expected);
 
         vis.deep_copy(vis_end);
-        //vil_save(vis,"./vis.tiff");
 
-        vcl_ostringstream s;
-        s<<"./tempimage"<<cnt<<".tif";
-        //vil_image_view<unsigned char> img;
-        //vil_convert_stretch_range(expected,img);
-        vil_save(expected,s.str().c_str());
-        cnt++;
       }
     }
   }

@@ -101,24 +101,23 @@ MAIN( test_render_image )
   mask.fill(0.0);
 
   boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene,camera,expected,mask);
-  //  TEST("Interpolated image", true, flag);
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
+#if 0 
+  boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene1;
+  scene1.load_scene("D:/vj/data/CapitolSiteHigh/boxm/scene.xml");
 
-  //boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene1;
-  //scene1.load_scene("D:/vj/data/CapitolSiteHigh/boxm/scene.xml");
+  // read projection matrix from the file.
+  vcl_ifstream ifs("D:/vj/data/CapitolSiteHigh/boxm/camera_00032.txt");
+  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
+  ifs >> *cam;
+  ifs.close();
 
-  //// read projection matrix from the file.
-  //vcl_ifstream ifs("D:/vj/data/CapitolSiteHigh/boxm/camera_00032.txt");
-  //vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
-  //ifs >> *cam;
-  //ifs.close();
-
-  //vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected1(1280,720);
-  //expected1.fill(0.0);
-  //vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask1(1280,720);
-  //mask1.fill(0.0);
-  //boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene1,cam,expected1,mask1);
-
+  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected1(1280,720);
+  expected1.fill(0.0);
+  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask1(1280,720);
+  mask1.fill(0.0);
+  boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene1,cam,expected1,mask1);
+#endif
   SUMMARY();
 }
