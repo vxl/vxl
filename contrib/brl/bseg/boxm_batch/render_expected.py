@@ -9,7 +9,7 @@ class dbvalue:
 
 print("Loading Scene");
 boxm_batch.init_process("boxmLoadSceneProcess");
-boxm_batch.set_input_string(0,"C:\\test_images\\octree\\capitol\\scene.xml");
+boxm_batch.set_input_string(0,"D:\\vj\\data\\CapitolSiteHigh\\boxm\\scene.xml");
 boxm_batch.set_input_string(1,"apm_mog_grey");
 boxm_batch.run_process();
 (scene_id, scene_type) = boxm_batch.commit_output(0);
@@ -36,11 +36,11 @@ mask = dbvalue(mask_id, mask_type);
 
 boxm_batch.init_process("vilSaveImageViewProcess");
 boxm_batch.set_input_from_db(0,img);
-boxm_batch.set_input_string(1,"image.jpg");
+boxm_batch.set_input_string(1,"image.tiff");
 boxm_batch.run_process();
 
 boxm_batch.init_process("vilSaveImageViewProcess");
 boxm_batch.set_input_from_db(0,mask);
-boxm_batch.set_input_string(1,"mask.jpg");
+boxm_batch.set_input_string(1,"mask.tiff");
 boxm_batch.run_process();
 
