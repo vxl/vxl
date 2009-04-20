@@ -161,7 +161,6 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     if (active_block_ == vgl_point_3d<int>(i,j,k))
       return;
     else {
-      vcl_cout<<"Writing of the old block";vcl_cout.flush();
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       vcl_string path = gen_block_path(x,y,z);
       vsl_b_ofstream os(path);
