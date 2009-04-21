@@ -20,6 +20,7 @@ SET(boxm_sources
     boxm_neighb_graph_node.h
     boxm_utils.cxx                    boxm_utils.h
     boxm_render_image.h
+    boxm_update.h
     boxm_save_block_raw.h
 )
 
@@ -27,7 +28,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vsol bgeo bsta vil)
+TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vsol bgeo bsta bsta_algo vil)
 
 
 #processes 

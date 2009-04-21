@@ -33,9 +33,11 @@ protected:
   typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_mathtype obs_mathtype;
 
 public:
-  static boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype 
-	  expected_color(boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype const& appear);
+  static obs_datatype expected_color(apm_datatype const& appear);
 
+  static float prob_density(apm_datatype const& appear, obs_datatype const& obs);
+
+  static bool update( apm_datatype &appear, obs_datatype const& obs, float const& weight);
 
 private:
 
