@@ -99,7 +99,9 @@ vidl_pixel_format_from_ffmpeg(PixelFormat ffmpeg_pix_fmt)
     case PIX_FMT_BGR24:     return VIDL_PIXEL_FORMAT_BGR_24;
     case PIX_FMT_YUV422P:   return VIDL_PIXEL_FORMAT_YUV_422P;
     case PIX_FMT_YUV444P:   return VIDL_PIXEL_FORMAT_YUV_444P;
+#ifdef PIX_FMT_RGBA
     case PIX_FMT_RGBA:      return VIDL_PIXEL_FORMAT_RGBA_32;
+#endif
     case PIX_FMT_YUV410P:   return VIDL_PIXEL_FORMAT_YUV_410P;
     case PIX_FMT_YUV411P:   return VIDL_PIXEL_FORMAT_YUV_411P;
     case PIX_FMT_RGB565:    return VIDL_PIXEL_FORMAT_RGB_565;
@@ -123,7 +125,9 @@ vidl_pixel_format_to_ffmpeg(vidl_pixel_format vidl_pix_fmt)
   {
     case VIDL_PIXEL_FORMAT_RGB_24:   return PIX_FMT_RGB24;
     case VIDL_PIXEL_FORMAT_BGR_24:   return PIX_FMT_BGR24;
+#ifdef PIX_FMT_RGBA
     case VIDL_PIXEL_FORMAT_RGBA_32:  return PIX_FMT_RGBA;
+#endif
     case VIDL_PIXEL_FORMAT_RGB_565:  return PIX_FMT_RGB565;
     case VIDL_PIXEL_FORMAT_RGB_555:  return PIX_FMT_RGB555;
     case VIDL_PIXEL_FORMAT_YUV_444P: return PIX_FMT_YUV444P;
