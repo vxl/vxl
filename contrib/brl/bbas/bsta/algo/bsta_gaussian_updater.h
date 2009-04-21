@@ -227,6 +227,12 @@ class bsta_gaussian_updater
     typedef typename gauss_::math_type T;
     typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
+
+    //: for compatiblity with vpdl/vpdt
+    typedef typename gauss_::field_type field_type;
+    typedef gauss_ distribution_type;
+
+  
     //: The main function
     // make the appropriate type casts and call a helper function
     void operator() ( obs_gauss_& d, const vector_& sample ) const
@@ -247,6 +253,12 @@ class bsta_gaussian_window_updater
     typedef typename gauss_::math_type T;
     typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef typename gauss_::field_type field_type;
+    typedef gauss_ distribution_type;
+
+  
     //: Constructor
     bsta_gaussian_window_updater(unsigned int ws) : window_size(ws) {}
 

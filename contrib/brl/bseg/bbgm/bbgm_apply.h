@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   (none yet)
+//   04/21/09  MJL  Update to work with vpdt
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -132,11 +132,11 @@ struct bbgm_apply_data
                            const rT* fail_val = NULL )
   {
     typedef typename functor_::return_type return_T;
-    typedef vnl_vector_fixed<dT,dist_::dimension> vector_;
+    typedef typename dist_::field_type F;
 
     const unsigned ni = dimg.ni();
     const unsigned nj = dimg.nj();
-    const unsigned d_np = dist_::dimension;
+    const unsigned d_np = vpdt_field_traits<F>::dimension;
     const unsigned r_np = vpdt_field_traits<return_T>::dimension;
     assert(data.ni() == ni);
     assert(data.nj() == nj);
@@ -151,7 +151,7 @@ struct bbgm_apply_data
     const vcl_ptrdiff_t d_pstep = data.planestep();
 
     return_T temp_val;
-    vector_ sample;
+    F sample;
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
     rT* r_row = result.top_left_ptr();
     const dT* d_row = data.top_left_ptr();
@@ -187,11 +187,12 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
                            const rT* fail_val = NULL )
   {
     typedef typename functor_::return_type return_T;
-    typedef typename dist_::vector_type vector_;
+    typedef typename dist_::field_type F;
+    const unsigned int data_dim = vpdt_field_traits<F>::dimension;
 
     const unsigned ni = dimg.ni();
     const unsigned nj = dimg.nj();
-    const unsigned d_np = dist_::dimension;
+    const unsigned d_np = data_dim;
     assert(data.ni() == ni);
     assert(data.nj() == nj);
     assert(data.nplanes() == d_np);
@@ -204,7 +205,7 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
     const vcl_ptrdiff_t d_pstep = data.planestep();
 
     return_T temp_val;
-    vector_ sample;
+    F sample;
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
     rT* r_row = result.top_left_ptr();
     const dT* d_row = data.top_left_ptr();
@@ -213,7 +214,7 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
       const dT* d_col = d_row;
       for (unsigned int i=0; i<ni; ++i, d_col+=d_istep, r_col+=r_istep, ++itr){
         const dT* d_plane = d_col;
-        bbgm_planes_to_sample<dT,vector_,dist_::dimension>::apply(d_plane,sample,d_pstep);
+        bbgm_planes_to_sample<dT,F,vpdt_field_traits<F>::dimension>::apply(d_plane,sample,d_pstep);
         if (functor(*itr, sample, temp_val))
           *r_col = static_cast<rT>(temp_val);
         else if ( fail_val )
@@ -236,6 +237,7 @@ void bbgm_apply(const bbgm_image_of<dist_>& dimg,
   bbgm_apply_data<dist_,functor_,dT,rT,return_traits::dimension == 1>::
       apply(dimg,functor,data,result,fail_val);
 }
+
 
 
 #endif // bbgm_apply_h_

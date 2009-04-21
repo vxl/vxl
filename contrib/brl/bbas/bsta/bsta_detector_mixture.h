@@ -20,10 +20,13 @@ class bsta_top_weight_detector
 {
   public:
     typedef bool return_T;
-    typedef return_T return_type; // for compatiblity with vpdl/vdpt
     enum { return_dim = 1 };
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;
+  
+    // for compatiblity with vpdl/vdpt
+    typedef return_T return_type; 
+    typedef mixture_ distribution_type;
 
     //: Constructor
     bsta_top_weight_detector(const detector_& d, const T& w=T(0.5))
@@ -51,6 +54,8 @@ class bsta_top_weight_detector
     //: The index to detect
     T weight_thresh;
 };
+
+
 //: Apply a detector to each component in order while the total weight is below a threshold.
 // Return true if any tested component matches
 template <class mixture_, class detector_>
@@ -58,10 +63,13 @@ class bsta_mix_any_less_index_detector
 {
   public:
     typedef bool return_T;
-    typedef return_T return_type; // for compatiblity with vpdl/vdpt
     enum { return_dim = 1 };
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;
+  
+    // for compatiblity with vpdl/vdpt
+    typedef return_T return_type; 
+    typedef mixture_ distribution_type;
 
     //: Constructor
     bsta_mix_any_less_index_detector(const detector_& d, const T& w=T(0.5))

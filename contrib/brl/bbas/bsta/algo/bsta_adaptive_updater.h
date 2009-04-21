@@ -29,12 +29,17 @@
 //  Base class for common functionality in adaptive updating schemes
 template <class mix_dist_>
 class bsta_mg_adaptive_updater
-{
+{  
   private:
   typedef typename mix_dist_::dist_type obs_gaussian_; //mixture comp type
   typedef typename obs_gaussian_::contained_type gaussian_; //num_obs parent
   typedef typename gaussian_::math_type T;//the field type, e.g. float
   typedef typename gaussian_::vector_type vector_;// the vector type 
+  
+  public:
+  //: for compatiblity with vpdl/vpdt
+  typedef typename gaussian_::field_type field_type;
+  typedef mix_dist_ distribution_type;
 
   protected:
     //: Constructor
@@ -85,6 +90,9 @@ class bsta_mg_statistical_updater : public bsta_mg_adaptive_updater<mix_dist_>
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
     typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef obs_mix_dist_ distribution_type;
 
     enum { data_dimension = gaussian_::dimension };
 
@@ -125,6 +133,9 @@ class bsta_mg_window_updater : public bsta_mg_statistical_updater<mix_dist_>
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
     typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef obs_mix_dist_ distribution_type;
 
     enum { data_dimension = gaussian_::dimension };
 
@@ -160,6 +171,9 @@ class bsta_mg_weighted_updater : bsta_mg_statistical_updater<mix_dist_>
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
     typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef obs_mix_dist_ distribution_type;
 
     enum { data_dimension = gaussian_::dimension };
 
@@ -190,6 +204,9 @@ class bsta_mg_grimson_statistical_updater : public bsta_mg_adaptive_updater<mix_
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
     typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef obs_mix_dist_ distribution_type;
 
     enum { data_dimension = gaussian_::dimension };
 
@@ -227,6 +244,9 @@ class bsta_mg_grimson_window_updater : public bsta_mg_grimson_statistical_update
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
     typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef obs_mix_dist_ distribution_type;
 
     enum { data_dimension = gaussian_::dimension };
 
@@ -262,6 +282,9 @@ class bsta_mg_grimson_weighted_updater : bsta_mg_grimson_statistical_updater<mix
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
     typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef obs_mix_dist_ distribution_type;
 
     enum { data_dimension = gaussian_::dimension };
 

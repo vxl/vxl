@@ -42,6 +42,10 @@ class bsta_distribution<T,1>
     typedef T math_type;
     //: The type used for a n-dimensional vector of math types
     typedef T vector_type;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef vector_type field_type;
+
 };
 
 

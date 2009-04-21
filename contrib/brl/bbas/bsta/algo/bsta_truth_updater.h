@@ -24,6 +24,11 @@ class bsta_truth_updater
     typedef typename dist_::math_type T;
     typedef typename dist_::vector_type sub_vector_;
     typedef vnl_vector_fixed<T,dist_::dimension+1> vector_;
+  
+    //: for compatiblity with vpdl/vpdt
+    typedef vector_ field_type;
+    typedef dist_ distribution_type;
+
 
     enum {data_dimension = dist_::dimension+1};
 

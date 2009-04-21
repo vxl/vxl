@@ -19,10 +19,13 @@ class bsta_g_mdist_detector
 {
   public:
     typedef bool return_T;
-    typedef return_T return_type; // for compatiblity with vpdl/vdpt
     enum { return_dim = 1 };
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
+  
+    // for compatiblity with vpdl/vdpt
+    typedef return_T return_type; 
+    typedef gaussian_ distribution_type;
 
     //: Constructor
     bsta_g_mdist_detector(const T& thresh=T(2.5)) : sqr_threshold(thresh*thresh) {}

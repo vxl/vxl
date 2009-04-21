@@ -34,6 +34,10 @@ class bsta_parzen_updater
   typedef typename parzen_dist_::math_type T;
   typedef typename parzen_dist_::vector_type vector_;
   enum { data_dimension = parzen_dist_::dimension };
+  
+  //: for compatiblity with vpdl/vpdt
+  typedef typename parzen_dist_::field_type field_type;
+  
   // Constructor
   bsta_parzen_updater(T tol, unsigned max_samples)
   : tol_(tol), max_samples_(max_samples) {}
@@ -57,6 +61,12 @@ class bsta_parzen_adapt_bw_updater
   typedef typename parzen_dist_::math_type T;
   typedef typename parzen_dist_::vector_type vector_;
   enum { data_dimension = parzen_dist_::dimension };
+  
+  //: for compatiblity with vpdl/vpdt
+  typedef typename parzen_dist_::field_type field_type;
+  typedef parzen_dist_ distribution_type;
+
+  
   // Constructor
   bsta_parzen_adapt_bw_updater(T tol, unsigned max_samples,
                                T frac_backgnd = T(1))
