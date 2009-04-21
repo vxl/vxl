@@ -754,7 +754,7 @@ void bgeo_lvcs::b_read(vsl_b_istream &is)
   vsl_b_read(is, theta_);
 }
 
-void bgeo_lvcs::x_write(vcl_ostream &os, vcl_string element_name)
+void bgeo_lvcs::x_write(vcl_ostream &os, vcl_string element_name) const
 {
   vcl_string len_u = "meters", ang_u="degrees";
   if (localXYZUnit_ == FEET)

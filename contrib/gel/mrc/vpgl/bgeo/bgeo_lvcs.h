@@ -106,7 +106,7 @@ class bgeo_lvcs : public vbl_ref_count
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
-  void x_write(vcl_ostream &os, vcl_string element_name);
+  void x_write(vcl_ostream &os, vcl_string element_name) const;
 
   // INTERNALS-----------------------------------------------------------------
 
