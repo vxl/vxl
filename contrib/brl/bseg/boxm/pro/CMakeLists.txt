@@ -4,24 +4,22 @@
 # bprb depends on expat and bvxm_prodepends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
-INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bpro/bprb )
-INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${VXL_GEL_INCLUDE_DIR}/mrc/vpgl )
-INCLUDE_DIRECTORIES( ${VXL_GEL_INCLUDE_DIR}/mrc )
-INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/contrib/dec )
+	INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bpro )
+	INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bpro/bprb )
+	INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bseg )
+	INCLUDE_DIRECTORIES( ${VXL_GEL_INCLUDE_DIR}/mrc/vpgl )
+	INCLUDE_DIRECTORIES( ${VXL_GEL_INCLUDE_DIR}/mrc )
+	INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/contrib/dec )
 
-SET(boxm_pro_sources
-   boxm_processes.h
-   boxm_register.h   boxm_register.cxx
-)
+	SET(boxm_pro_sources
+	   boxm_processes.h
+	   boxm_register.h   boxm_register.cxx
+	)
 
-AUX_SOURCE_DIRECTORY(Templates boxm_pro_sources)
-AUX_SOURCE_DIRECTORY(processes boxm_pro_sources)
+	AUX_SOURCE_DIRECTORY(Templates boxm_pro_sources)
+	AUX_SOURCE_DIRECTORY(processes boxm_pro_sources)
 
-ADD_LIBRARY(boxm_pro ${boxm_pro_sources})
+	ADD_LIBRARY(boxm_pro ${boxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(boxm_pro boxm  bprb  bgeo vgl brdb)
-
-
+	TARGET_LINK_LIBRARIES(boxm_pro boxm bprb bgeo vgl brdb)
 ENDIF(EXPAT_FOUND)
