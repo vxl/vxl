@@ -110,17 +110,18 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
   corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
   return corners;
 }
-void 
+
+void
 boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > & corners,
-							vpgl_camera_double_sptr camera,
-							double * xverts, double *yverts
-							)
+                            vpgl_camera_double_sptr camera,
+                            double * xverts, double *yverts
+                           )
 {
-	//vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
-	//xverts= new double[8];
-	//yverts= new double[8];
-	for (unsigned i=0; i<corners.size(); i++) 
-		camera->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
+  //vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
+  //xverts= new double[8];
+  //yverts= new double[8];
+  for (unsigned i=0; i<corners.size(); i++)
+    camera->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
 }
 
 //: corners of the input face
@@ -147,6 +148,7 @@ bool boxm_utils::is_face_visible(double * xverts, double *yverts,
     return true;
   return false;
 }
+
 //: corners of the input face
 bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
                                  vpgl_camera_double_sptr const& camera)
@@ -170,9 +172,10 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
     return true;
   return false;
 }
+
 vcl_vector<vgl_point_2d<double> >
 boxm_utils::project_face(vcl_vector<vgl_point_3d<double> > &face,
-                                 vpgl_camera_double_sptr const& camera)
+                         vpgl_camera_double_sptr const& camera)
 {
   double u,v;
   vcl_vector<vgl_point_2d<double> > vs;
@@ -269,7 +272,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 
 boct_face_idx
 boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera,
-						  double *xverts, double *yverts)
+                          double *xverts, double *yverts)
 {
   boct_face_idx face_idx = NONE;
   if (camera->type_name().compare("vpgl_perspective_camera")==0) {
@@ -300,8 +303,8 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
     // fix the face normals so that the vertices are the counter clokwise order
     //vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
     //faces_of_box_3d(bbox, faces);
-	//double * xverts; double *yverts;
-	//project_corners(bbox,camera,xverts,yverts);
+  //double * xverts; double *yverts;
+  //project_corners(bbox,camera,xverts,yverts);
 
 
     if (is_face_visible(xverts,yverts,1,0,3,2)) {
@@ -353,7 +356,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 
 //: returns the faces of a box, the vertices are ordered in the normal direction
 void boxm_utils::faces_of_box_3d(vgl_box_3d<double> const& bbox,
-                            vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >& faces)
+                                 vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >& faces)
 {
   vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
 
@@ -413,10 +416,10 @@ void boxm_utils::project_cube(vgl_box_3d<double> &bbox,
 
 
 void boxm_utils::quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it,
-               double* xvals, double* yvals, double* vals,
-               vil_image_view<float> &img,unsigned img_plane_num,
-               unsigned int v0, unsigned int v1,
-               unsigned int v2,unsigned int v3 )
+                                  double* xvals, double* yvals, double* vals,
+                                  vil_image_view<float> &img,unsigned img_plane_num,
+                                  unsigned int v0, unsigned int v1,
+                                  unsigned int v2,unsigned int v3 )
 {
   // first compute s0, s1, s2, s3 such that  val = s0*x + s1*y + s2 for any point within the triangle
   // (no need to compute barycentric coordinates of a quadrilateral at each step)
@@ -518,19 +521,18 @@ void boxm_utils::quad_mean(vgl_polygon_scan_iterator<double> &poly_it,
 
     for (unsigned int x = startx; x < endx; ++x) {
       val+=img(x,yu) ;
-	  ++count;
+    ++count;
     }
   }
   return;
 }
 
 
-
 bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
-                   boct_face_idx & vis_face_ids,
-                   vil_image_view<float> &front_xyz,
-                   vil_image_view<float> &back_xyz,
-                   vpgl_camera_double_sptr cam)
+                                   boct_face_idx & vis_face_ids,
+                                   vil_image_view<float> &front_xyz,
+                                   vil_image_view<float> &back_xyz,
+                                   vpgl_camera_double_sptr cam)
 {
   vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
   for (;face_it!=faces.end();face_it++)
@@ -565,150 +567,143 @@ bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3
 
 
 bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
-								  boct_face_idx & vis_face_ids,
-								  vil_image_view<float> &front_xyz,
-								  vil_image_view<float> &back_xyz,
-								  double *xverts,double * yverts)
+                                  boct_face_idx & vis_face_ids,
+                                  vil_image_view<float> &front_xyz,
+                                  vil_image_view<float> &back_xyz,
+                                  double *xverts,double * yverts)
 {
+  {
+    double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
+    double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
 
-	{
-		double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
-		double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    double Xs[]={corners[1].x(),corners[0].x(),corners[3].x(),corners[2].x()};
+    double Ys[]={corners[1].y(),corners[0].y(),corners[3].y(),corners[2].y()};
+    double Zs[]={corners[1].z(),corners[0].z(),corners[3].z(),corners[2].z()};
+    if (vis_face_ids & Z_LOW){
+      quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
+      quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
+      quad_fill(poly_it,front_xyz,Zs[0],2);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
+      quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
+      quad_fill(poly_it,back_xyz,Zs[0],2);
+    }
+  }
+  {
+    double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
+    double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
 
-		double Xs[]={corners[1].x(),corners[0].x(),corners[3].x(),corners[2].x()};
-		double Ys[]={corners[1].y(),corners[0].y(),corners[3].y(),corners[2].y()};
-		double Zs[]={corners[1].z(),corners[0].z(),corners[3].z(),corners[2].z()};
-		if (vis_face_ids & boct_cell_face::Z_LOW){
-			quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
-			quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
-			quad_fill(poly_it,front_xyz,Zs[0],2);
-		}
-		else
-		{
-			quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
-			quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
-			quad_fill(poly_it,back_xyz,Zs[0],2);
-		}
-	}
-	{
-		double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
-		double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    double Xs[]={corners[4].x(),corners[5].x(),corners[6].x(),corners[7].x()};
+    double Ys[]={corners[4].y(),corners[5].y(),corners[6].y(),corners[7].y()};
+    double Zs[]={corners[4].z(),corners[5].z(),corners[6].z(),corners[7].z()};
+    if (vis_face_ids & Z_HIGH){
+      quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
+      quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
+      quad_fill(poly_it,front_xyz,Zs[0],2);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
+      quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
+      quad_fill(poly_it,back_xyz,Zs[0],2);
+    }
+  }
+  {
+    double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
+    double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    double Xs[]={corners[7].x(),corners[3].x(),corners[0].x(),corners[4].x()};
+    double Ys[]={corners[7].y(),corners[3].y(),corners[0].y(),corners[4].y()};
+    double Zs[]={corners[7].z(),corners[3].z(),corners[0].z(),corners[4].z()};
+    if (vis_face_ids & X_LOW){
+      quad_fill(poly_it,front_xyz,Xs[0],0);
+      quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
+      quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
+    }
+    else
+    {
+      quad_fill(poly_it,back_xyz,Xs[0],0);
+      quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
+      quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
+    }
+  }
+  {
+    double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
+    double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    double Xs[]={corners[1].x(),corners[2].x(),corners[6].x(),corners[5].x()};
+    double Ys[]={corners[1].y(),corners[2].y(),corners[6].y(),corners[5].y()};
+    double Zs[]={corners[1].z(),corners[2].z(),corners[6].z(),corners[5].z()};
+    if (vis_face_ids & X_HIGH){
+      quad_fill(poly_it,front_xyz,Xs[0],0);
+      quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
+      quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
+    }
+    else
+    {
+      quad_fill(poly_it,back_xyz,Xs[0],0);
+      quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
+      quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
+    }
+  }
+  {
+    double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
+    double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    double Xs[]={corners[0].x(),corners[1].x(),corners[5].x(),corners[4].x()};
+    double Ys[]={corners[0].y(),corners[1].y(),corners[5].y(),corners[4].y()};
+    double Zs[]={corners[0].z(),corners[1].z(),corners[5].z(),corners[4].z()};
+    if (vis_face_ids & Y_LOW){
+      quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
 
-		double Xs[]={corners[4].x(),corners[5].x(),corners[6].x(),corners[7].x()};
-		double Ys[]={corners[4].y(),corners[5].y(),corners[6].y(),corners[7].y()};
-		double Zs[]={corners[4].z(),corners[5].z(),corners[6].z(),corners[7].z()};
-		if (vis_face_ids & boct_cell_face::Z_HIGH){
-			quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
-			quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
-			quad_fill(poly_it,front_xyz,Zs[0],2);
-		}
-		else
-		{
-			quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
-			quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
-			quad_fill(poly_it,back_xyz,Zs[0],2);
-		}
+      quad_fill(poly_it,front_xyz,Ys[0],1);
+      quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
+      quad_fill(poly_it,back_xyz,Ys[0],1);
+      quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
+    }
+  }
+  {
+    double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
+    double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    double Xs[]={corners[2].x(),corners[3].x(),corners[7].x(),corners[6].x()};
+    double Ys[]={corners[2].y(),corners[3].y(),corners[7].y(),corners[6].y()};
+    double Zs[]={corners[2].z(),corners[3].z(),corners[7].z(),corners[6].z()};
+    if (vis_face_ids & Y_HIGH){
+      quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
+      quad_fill(poly_it,front_xyz,Ys[0],1);
+      quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
+      quad_fill(poly_it,back_xyz,Ys[0],1);
+      quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
+    }
+  }
 
-	}
-	{
-		double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
-		double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		double Xs[]={corners[7].x(),corners[3].x(),corners[0].x(),corners[4].x()};
-		double Ys[]={corners[7].y(),corners[3].y(),corners[0].y(),corners[4].y()};
-		double Zs[]={corners[7].z(),corners[3].z(),corners[0].z(),corners[4].z()};
-		if (vis_face_ids & boct_cell_face::X_LOW){
-			quad_fill(poly_it,front_xyz,Xs[0],0);
-			quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
-			quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
-		}
-		else
-		{
-			quad_fill(poly_it,back_xyz,Xs[0],0);
-			quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
-			quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
-		}
-	}
-	{
-		double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
-		double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		double Xs[]={corners[1].x(),corners[2].x(),corners[6].x(),corners[5].x()};
-		double Ys[]={corners[1].y(),corners[2].y(),corners[6].y(),corners[5].y()};
-		double Zs[]={corners[1].z(),corners[2].z(),corners[6].z(),corners[5].z()};
-		if (vis_face_ids & boct_cell_face::X_HIGH){
-			quad_fill(poly_it,front_xyz,Xs[0],0);
-			quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
-			quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
-		}
-		else
-		{
-			quad_fill(poly_it,back_xyz,Xs[0],0);
-			quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
-			quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
-		}
-
-	}
-	{
-		double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
-		double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		double Xs[]={corners[0].x(),corners[1].x(),corners[5].x(),corners[4].x()};
-		double Ys[]={corners[0].y(),corners[1].y(),corners[5].y(),corners[4].y()};
-		double Zs[]={corners[0].z(),corners[1].z(),corners[5].z(),corners[4].z()};
-		if (vis_face_ids & boct_cell_face::Y_LOW){
-			quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
-
-			quad_fill(poly_it,front_xyz,Ys[0],1);
-			quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
-		}
-		else
-		{
-			quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
-			quad_fill(poly_it,back_xyz,Ys[0],1);
-			quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
-		}
-
-	}
-	{
-		double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
-		double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		double Xs[]={corners[2].x(),corners[3].x(),corners[7].x(),corners[6].x()};
-		double Ys[]={corners[2].y(),corners[3].y(),corners[7].y(),corners[6].y()};
-		double Zs[]={corners[2].z(),corners[3].z(),corners[7].z(),corners[6].z()};
-		if (vis_face_ids & boct_cell_face::Y_HIGH){
-			quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
-			quad_fill(poly_it,front_xyz,Ys[0],1);
-			quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
-		}
-		else
-		{
-			quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
-			quad_fill(poly_it,back_xyz,Ys[0],1);
-			quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
-		}
-
-	}
-
- 
  return true;
 }
 
 
-
 bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
-                   boct_face_idx & vis_face_ids,
-                   vil_image_view<float> &fill_img,
-                   float val, vpgl_camera_double_sptr cam)
+                                        boct_face_idx & vis_face_ids,
+                                        vil_image_view<float> &fill_img,
+                                        float val, vpgl_camera_double_sptr cam)
 {
   vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
   for (;face_it!=faces.end();face_it++)
@@ -724,105 +719,105 @@ bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_po
   }
 
  return true;
-}
+} 
+
 bool boxm_utils::project_cube_fill_val(boct_face_idx & vis_face_ids,
-									   vil_image_view<float> &fill_img,
-									   float val, double *xverts,double * yverts)
+                                       vil_image_view<float> &fill_img,
+                                       float val, double *xverts,double * yverts)
 {
-	if (vis_face_ids & boct_cell_face::Z_LOW){
-		double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
-		double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_fill(poly_it,fill_img,val,0);
-	}
-	if (vis_face_ids & boct_cell_face::Z_HIGH){
-		double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
-		double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_fill(poly_it,fill_img,val,0);
-	}
-	if (vis_face_ids & boct_cell_face::X_LOW){
-		double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
-		double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_fill(poly_it,fill_img,val,0);
-	}
-	if (vis_face_ids & boct_cell_face::X_HIGH){
-		double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
-		double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_fill(poly_it,fill_img,val,0);
-	}
-	if (vis_face_ids & boct_cell_face::Y_LOW){
-		double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
-		double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_fill(poly_it,fill_img,val,0);
-	}
-	if (vis_face_ids & boct_cell_face::Y_HIGH){
-		double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
-		double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_fill(poly_it,fill_img,val,0);
-	}
-	return true;
+  if (vis_face_ids & Z_LOW){
+    double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
+    double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_fill(poly_it,fill_img,val,0);
+  }
+  if (vis_face_ids & Z_HIGH){
+    double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
+    double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_fill(poly_it,fill_img,val,0);
+  }
+  if (vis_face_ids & X_LOW){
+    double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
+    double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_fill(poly_it,fill_img,val,0);
+  }
+  if (vis_face_ids & X_HIGH){
+    double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
+    double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_fill(poly_it,fill_img,val,0);
+  }
+  if (vis_face_ids & Y_LOW){
+    double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
+    double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_fill(poly_it,fill_img,val,0);
+  }
+  if (vis_face_ids & Y_HIGH){
+    double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
+    double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_fill(poly_it,fill_img,val,0);
+  }
+  return true;
 }
 
 
 bool boxm_utils::cube_uniform_mean(boct_face_idx & vis_face_ids,
-								vil_image_view<float> &img,
-								float & val, double *xverts,double * yverts)
+                                   vil_image_view<float> &img,
+                                   float & val, double *xverts,double * yverts)
 {
-	val=0;
-	int count=0;
-	if (vis_face_ids & boct_cell_face::Z_LOW){
-		double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
-		double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_mean(poly_it,img,val,count);
-	}
-	if (vis_face_ids & boct_cell_face::Z_HIGH){
-		double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
-		double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-				quad_mean(poly_it,img,val,count);
-
-	}
-	if (vis_face_ids & boct_cell_face::X_LOW){
-		double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
-		double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_mean(poly_it,img,val,count);
-	}
-	if (vis_face_ids & boct_cell_face::X_HIGH){
-		double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
-		double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_mean(poly_it,img,val,count);
-	}
-	if (vis_face_ids & boct_cell_face::Y_LOW){
-		double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
-		double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_mean(poly_it,img,val,count);
-	}
-	if (vis_face_ids & boct_cell_face::Y_HIGH){
-		double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
-		double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
-		vgl_polygon<double> face_polygon(xs,ys,4);
-		vgl_polygon_scan_iterator<double> poly_it(face_polygon);
-		quad_mean(poly_it,img,val,count);
-	}
-	return true;
+  val=0;
+  int count=0;
+  if (vis_face_ids & Z_LOW){
+    double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
+    double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_mean(poly_it,img,val,count);
+  }
+  if (vis_face_ids & Z_HIGH){
+    double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
+    double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+        quad_mean(poly_it,img,val,count);
+  }
+  if (vis_face_ids & X_LOW){
+    double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
+    double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_mean(poly_it,img,val,count);
+  }
+  if (vis_face_ids & X_HIGH){
+    double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
+    double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_mean(poly_it,img,val,count);
+  }
+  if (vis_face_ids & Y_LOW){
+    double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
+    double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_mean(poly_it,img,val,count);
+  }
+  if (vis_face_ids & Y_HIGH){
+    double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
+    double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
+    vgl_polygon<double> face_polygon(xs,ys,4);
+    vgl_polygon_scan_iterator<double> poly_it(face_polygon);
+    quad_mean(poly_it,img,val,count);
+  }
+  return true;
 }
