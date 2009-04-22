@@ -13,7 +13,6 @@
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsl/vsl_binary_io.h>
 
-#define NULL 0
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
