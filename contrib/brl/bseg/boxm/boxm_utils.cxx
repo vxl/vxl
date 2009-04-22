@@ -819,5 +819,6 @@ bool boxm_utils::cube_uniform_mean(boct_face_idx & vis_face_ids,
     vgl_polygon_scan_iterator<double> poly_it(face_polygon);
     quad_mean(poly_it,img,val,count);
   }
+  val/=(float)count;
   return true;
 }

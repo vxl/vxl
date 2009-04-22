@@ -64,8 +64,7 @@ void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 {
   if (blocks_(i,j,k) == NULL) {
     vgl_box_3d<double> bbox = get_block_bbox(i,j,k);
-    T * tree=new T(max_tree_level_,init_tree_level_);
-    blocks_(i,j,k) = new boxm_block<T>(bbox, tree);
+    blocks_(i,j,k) = new boxm_block<T>(bbox);
   }
 }
 
@@ -179,11 +178,22 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
   //if the binary block file is not found
   if (!os) {
     create_block(i,j,k);
+      if(blocks_(i,j,k)->get_tree()==NULL)
+  {
+	T* tree= new T(max_tree_level_,init_tree_level_);
+	blocks_(i,j,k)->init_tree(tree);
+  }
+
     return;
   }
   blocks_(i,j,k) = new boxm_block<T>();
   blocks_(i,j,k)->b_read(os);
   os.close();
+  if(blocks_(i,j,k)->get_tree()==NULL)
+  {
+	T* tree= new T(max_tree_level_,init_tree_level_);
+	blocks_(i,j,k)->init_tree(tree);
+  }
 }
 
 template <class T>

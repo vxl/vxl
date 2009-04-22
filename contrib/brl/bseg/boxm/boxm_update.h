@@ -6,6 +6,7 @@
 #include <boxm/boxm_utils.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_cell_vis_graph_iterator.h>
+#include <boxm/boxm_block_vis_graph_iterator.h>
 //: functor used for normalizing cell_expected image
 class safe_inverse_functor
 {
