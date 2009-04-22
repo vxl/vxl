@@ -76,7 +76,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         {
           // for each cell
           boxm_sample<APM> sample=(*cell_it)->data();
-		  if(sample.alpha>0.001)
+		  //if(sample.alpha>0.001)
 		  {
 			  // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
 			  vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);

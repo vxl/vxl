@@ -8,6 +8,8 @@
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <vil/vil_math.h>
+#include <vul/vul_timer.h>
+#include <boxm/boxm_render_image.h>
 
 //: functor used for normalizing cell_expected image
 class safe_inverse_functor
@@ -88,7 +90,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 					vcl_cout << "  cell id = " << *cell_it << vcl_endl; 
 				}
 				// fill obs probability density image
-				boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,(float)cell_mean_obs, xverts,yverts);
+				boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,cell_PI, xverts,yverts);
 			}
 			delete [] xverts;
 			delete [] yverts;
@@ -126,6 +128,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 		  PI_background(i,j) = boxm_apm_traits<APM>::apm_processor::prob_density(background_model, img(i,j));
 	  }
   }
+  vil_save(pre,"./pre.tiff");
   vil_math_image_product(PI_background, vis, norm_img);
   vil_math_image_sum(pre,norm_img,norm_img);
   safe_inverse_functor inv_func(1e-8f);
@@ -201,13 +204,13 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 					if (boxm_utils::cube_uniform_mean(vis_face_ids, img, cell_mean_obs,xverts,yverts)) {
 						// get probability density of mean observation
 						float cell_PI = boxm_apm_traits<APM>::apm_processor::prob_density(sample.appearance, cell_mean_obs);
-						if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
-							vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl;
-							vcl_cout << "  cell_obs = " << cell_mean_obs << vcl_endl;
-							vcl_cout << "  cell id = " << *cell_it << vcl_endl; 
-						}
+						//if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
+						//	vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl;
+						//	vcl_cout << "  cell_obs = " << cell_mean_obs << vcl_endl;
+						//	vcl_cout << "  cell id = " << *cell_it << vcl_endl; 
+						//}
 						// fill obs probability density image
-						boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,(float)cell_mean_obs, xverts,yverts);
+						boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,(float)cell_PI, xverts,yverts);
 					}
 					float cell_mean_vis = 0.0f;
 					if (boxm_utils::cube_uniform_mean(vis_face_ids, vis, cell_mean_vis,xverts,yverts)) {
@@ -245,7 +248,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
 				float max_cell_P=0.99f;
 				float min_cell_P=0.001f;
-				for (;cell_it!=vis_cells.end();cell_it++)
+				for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
 				{
 					// for each cell
 					boxm_sample<APM> sample=(*cell_it)->data();
