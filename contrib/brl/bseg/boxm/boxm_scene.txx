@@ -18,7 +18,7 @@ template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
 : lvcs_(lvcs), block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
-active_block_(vgl_point_3d<int>(-1,-1,-1)), max_tree_level_(10),init_tree_level_(6)
+active_block_(vgl_point_3d<int>(-1,-1,-1)), max_tree_level_(3),init_tree_level_(2)
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
@@ -41,7 +41,7 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<double>& world_dim)
 : block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
-active_block_(vgl_point_3d<int>(-1,-1,-1)),max_tree_level_(10),init_tree_level_(6)
+active_block_(vgl_point_3d<int>(-1,-1,-1)),max_tree_level_(3),init_tree_level_(2)
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));

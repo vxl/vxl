@@ -33,8 +33,6 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
   vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
   vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
 
-  vul_timer t;
-  t.mark();
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, ni,nj);
   int cnt=0;

@@ -111,7 +111,7 @@ MAIN( test_update )
   scene_new.set_paths("./boxm_scene_update", "block");
   vul_file::make_directory("./boxm_scene_update");
   vcl_ofstream os1("./boxm_scene_update/scene.xml");
-  x_write(os1, scene, "scene");
+  x_write(os1, scene_new, "scene");
   os1.close();
   boxm_update<short,BOXM_APM_MOG_GREY>(scene_new, expected,camera );
   
