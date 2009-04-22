@@ -10,6 +10,13 @@ boxm_cell_vis_graph_iterator<T_loc,T_data>::boxm_cell_vis_graph_iterator(vpgl_ca
                                                                          unsigned img_ni,
                                                                          unsigned img_nj) : camera_(cam),img_ni_(img_ni), img_nj_(img_nj)
 {
+  if(!tree)
+  {
+   vcl_cout<<"No Tree found"<<vcl_endl;
+  
+  }
+  else
+  {
   list_of_vis_nodes_.clear();
   // check if each node is visible or notr
   check_cell_visibility(tree,tree->root());
@@ -37,6 +44,7 @@ boxm_cell_vis_graph_iterator<T_loc,T_data>::boxm_cell_vis_graph_iterator(vpgl_ca
     }
   }
   list_of_vis_nodes_.clear();
+  }
 }
 
 template <class T_loc,class T_data>

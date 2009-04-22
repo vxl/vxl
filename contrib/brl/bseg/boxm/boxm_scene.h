@@ -97,6 +97,8 @@ class boxm_scene :public boxm_scene_base
   vbl_array_3d<boxm_block<T>*> blocks_;
   vcl_string scene_path_;
   vcl_string block_pref_;
+  unsigned max_tree_level_;
+  unsigned init_tree_level_;
 
   //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
@@ -112,6 +114,8 @@ class boxm_scene :public boxm_scene_base
   vcl_string gen_block_path(int x, int y, int z);
 
   bool valid_index(vgl_point_3d<int> idx);
+
+  
 
   boxm_scene_parser* parse_config(vcl_string xml, bool filename=false);
 };

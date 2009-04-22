@@ -18,7 +18,7 @@ template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
 : lvcs_(lvcs), block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
-active_block_(vgl_point_3d<int>(-1,-1,-1))
+active_block_(vgl_point_3d<int>(-1,-1,-1)), max_tree_level_(10),init_tree_level_(6)
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
@@ -41,7 +41,7 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<double>& world_dim)
 : block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
-active_block_(vgl_point_3d<int>(-1,-1,-1))
+active_block_(vgl_point_3d<int>(-1,-1,-1)),max_tree_level_(10),init_tree_level_(6)
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
@@ -64,7 +64,8 @@ void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 {
   if (blocks_(i,j,k) == NULL) {
     vgl_box_3d<double> bbox = get_block_bbox(i,j,k);
-    blocks_(i,j,k) = new boxm_block<T>(bbox);
+    T * tree=new T(max_tree_level_,init_tree_level_);
+    blocks_(i,j,k) = new boxm_block<T>(bbox, tree);
   }
 }
 
@@ -162,8 +163,8 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     else {
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       vcl_string path = gen_block_path(x,y,z);
-      //vsl_b_ofstream os(path);
-      //blocks_(x,y,z)->b_write(os);
+      vsl_b_ofstream os(path);
+      blocks_(x,y,z)->b_write(os);
       // delete the block's data
       boxm_block<T>* block = blocks_(x,y,z);
       delete block->get_tree();
@@ -177,7 +178,6 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 
   //if the binary block file is not found
   if (!os) {
-    vcl_cout<<"Create a new block";vcl_cout.flush();
     create_block(i,j,k);
     return;
   }

@@ -70,6 +70,8 @@ class boxm_scene_parser : public expatpp
   vcl_string path_;
   vcl_string block_pref_;
   vcl_string app_model_;
+  unsigned max_tree_level_;
+  unsigned init_tree_level_;
 };
 
 #endif

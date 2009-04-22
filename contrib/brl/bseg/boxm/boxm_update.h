@@ -26,6 +26,8 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 {
 
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
+  unsigned ni=img.ni();
+  unsigned nj=img.nj();
   vil_image_view<float> pre(ni,nj,1); pre.fill(0.0f);
   vil_image_view<float> vis(ni,nj,1); vis.fill(1.0f);
   vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
@@ -34,7 +36,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
   vul_timer t;
   t.mark();
   // code to iterate over the blocks in order of visibility
-  boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, expected.ni(), expected.nj());
+  boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, ni,nj);
   int cnt=0;
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
@@ -46,11 +48,11 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
       // for each frontier layer of each block
       boct_tree<T_loc,boxm_sample<APM> > * tree=curr_block->get_tree();
-	  vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);
-	  vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3); 
-	  vil_image_view<float> alphas(expected.ni(),expected.nj(),1);
-	  vil_image_view<float> vis_end(expected.ni(),expected.nj(),1);
-	  vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);
+	  vil_image_view<float> front_xyz(ni,nj,3);
+	  vil_image_view<float> back_xyz(ni,nj,3); 
+	  vil_image_view<float> alphas(ni,nj,1);
+	  vil_image_view<float> vis_end(ni,nj,1);
+	  vil_image_view<float> temp_expected(ni,nj,1);
 
       while (frontier_it.next())
 	  {
@@ -76,9 +78,9 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 			// get  alpha
 			boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
 			typename boxm_apm_traits<APM>::obs_datatype cell_mean_obs;
-			if (cube_uniform_mean(visible_faces, img, cell_mean_obs,xverts,yverts)) {
+			if (boxm_utils::cube_uniform_mean(vis_face_ids, img, cell_mean_obs,xverts,yverts)) {
 				// get probability density of mean observation
-				float cell_PI = boxmm_apm_traits<APM>::apm_processor::prob_density(sample.appearance, cell_mean_obs);
+				float cell_PI = boxm_apm_traits<APM>::apm_processor::prob_density(sample.appearance, cell_mean_obs);
 				if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
 					vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl;
 					vcl_cout << "  cell_obs = " << cell_mean_obs << vcl_endl;
@@ -91,7 +93,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 			delete [] yverts;
         }
         // compute the length of ray segment at each pixel
-        vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);
+        vil_image_view<float> len_seg(ni,nj,1);
         len_seg.fill(0.0f);
         vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
         vil_math_sum_sqr<float,float>(back_xyz,len_seg);
@@ -139,6 +141,8 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 					   vil_image_view<typename boxm_apm_traits<APM>::obs_mathtype> &img,
 					   vil_image_view<float> &norm_img)
 {
+  unsigned ni=img.ni();
+  unsigned nj=img.nj();
 	typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
 	vil_image_view<float> pre_img(ni,nj,1); pre_img.fill(0.0f);
 	vil_image_view<float> vis(ni,nj,1); vis.fill(1.0f);
@@ -149,7 +153,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 	vul_timer t;
 	t.mark();
 	// code to iterate over the blocks in order of visibility
-	boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, expected.ni(), expected.nj());
+	boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, ni,nj);
 	int cnt=0;
 	while (block_vis_iter.next()) {
 		vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
@@ -161,12 +165,12 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
 			// for each frontier layer of each block
 			boct_tree<T_loc,boxm_sample<APM> > * tree=curr_block->get_tree();
-			vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);
-			vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3); 
-			vil_image_view<float> alphas(expected.ni(),expected.nj(),1);
-			vil_image_view<float> vis_end(expected.ni(),expected.nj(),1);
-			vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);
-			vil_image_view<float> update_factor(expected.ni(),expected.nj(),1);
+			vil_image_view<float> front_xyz(ni,nj,3);
+			vil_image_view<float> back_xyz(ni,nj,3); 
+			vil_image_view<float> alphas(ni,nj,1);
+			vil_image_view<float> vis_end(ni,nj,1);
+			vil_image_view<float> temp_expected(ni,nj,1);
+			vil_image_view<float> update_factor(ni,nj,1);
 
 			while (frontier_it.next())
 			{
@@ -193,9 +197,9 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 					// get  alpha
 					boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
 					typename boxm_apm_traits<APM>::obs_datatype cell_mean_obs;
-					if (cube_uniform_mean(visible_faces, img, cell_mean_obs,xverts,yverts)) {
+					if (boxm_utils::cube_uniform_mean(vis_face_ids, img, cell_mean_obs,xverts,yverts)) {
 						// get probability density of mean observation
-						float cell_PI = boxmm_apm_traits<APM>::apm_processor::prob_density(sample.appearance, cell_mean_obs);
+						float cell_PI = boxm_apm_traits<APM>::apm_processor::prob_density(sample.appearance, cell_mean_obs);
 						if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
 							vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl;
 							vcl_cout << "  cell_obs = " << cell_mean_obs << vcl_endl;
@@ -205,7 +209,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 						boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,(float)cell_mean_obs, xverts,yverts);
 					}
 					float cell_mean_vis = 0.0f;
-					if (cube_uniform_mean(visible_faces, vis, cell_mean_vis,xverts,yverts)) {
+					if (boxm_utils::cube_uniform_mean(vis_face_ids, vis, cell_mean_vis,xverts,yverts)) {
 						// update appearance model
 						if (cell_mean_vis > 1e-6) {
 							boxm_apm_traits<APM>::apm_processor::update(sample.appearance, cell_mean_obs, cell_mean_vis);
@@ -217,7 +221,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
 				}
 				// compute the length of ray segment at each pixel
-				vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);
+				vil_image_view<float> len_seg(ni,nj,1);
 				len_seg.fill(0.0f);
 				vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
 				vil_math_sum_sqr<float,float>(back_xyz,len_seg);
@@ -252,11 +256,11 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 					boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
 					boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
 					float mean_update_factor = 0.0f;
-					if (cube_uniform_mean(visible_faces, update_factor, mean_update_factor,xverts,yverts))
+					if (boxm_utils::cube_uniform_mean(vis_face_ids, update_factor, mean_update_factor,xverts,yverts))
 					{	// update alpha value
 						sample.alpha *= mean_update_factor;
 						// do bounds check on new alpha value
-						float cell_len = float(cell_bb.xmax() - cell_bb.xmin());
+						float cell_len = float(cell_bb.max_x() - cell_bb.min_x());
 						float max_alpha = -vcl_log(1.0f - max_cell_P)/cell_len;
 						float min_alpha = -vcl_log(1.0f - min_cell_P)/cell_len;
 						if (sample.alpha > max_alpha) 
@@ -298,18 +302,18 @@ void boxm_update(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
     vcl_cout << "using black background model" << vcl_endl;
     for (unsigned int i=0; i<4; ++i) {
       boxm_apm_traits<APM>::apm_processor::update(background_apm, 0.0f, 1.0f);
-      float peak = psm_apm_traits<APM>::apm_processor::prob_density(background_apm,0.0f);
+      float peak = boxm_apm_traits<APM>::apm_processor::prob_density(background_apm,0.0f);
     }
   }
     vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
 
   boxm_update_pass1<T_loc,APM>(scene, cam,img,norm_img,background_apm);
 
-  vcl_cout << "update: pass1" << vcl_endl;
+  vcl_cout << "update: pass1 completed" << vcl_endl;
   
   boxm_update_pass2<T_loc,APM>(scene, cam,img,norm_img);
 
-  vcl_cout << "update: pass2" << vcl_endl;
+  vcl_cout << "update: pass2 completed" << vcl_endl;
 
   return;
 }
