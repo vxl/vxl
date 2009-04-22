@@ -219,7 +219,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 							boxm_apm_traits<APM>::apm_processor::update(sample.appearance, cell_mean_obs, cell_mean_vis);
 						}
 					}
-
+					(*cell_it)->set_data(sample);
 					delete [] xverts;
 					delete [] yverts;
 
@@ -277,6 +277,8 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 							vcl_cerr << vcl_endl << "error: cell.alpha = " << sample.alpha << vcl_endl;
 							vcl_cerr << "mean_update_factor = " << mean_update_factor << vcl_endl;
 						}
+											(*cell_it)->set_data(sample);
+
 					}
 
 					delete [] xverts;
