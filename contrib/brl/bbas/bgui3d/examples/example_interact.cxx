@@ -104,7 +104,7 @@ int main(int argc, char** argv)
   my_argv[argc] = new char[13];
   vcl_strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
-  delete[] my_argv[argc];
+
   delete[] my_argv;
 
   //Wrap the scene graph in an examiner tableau
