@@ -31,13 +31,12 @@ void update(bbgm_image_of<dist_>& dimg,
 }
 
 //: Update with a new sample image
-template <class dist_, class updater_>
+template <class dist_, class T, class updater_>
 void update(bbgm_image_of<dist_>& dimg,
-            const vil_image_view<typename vpdt_field_traits<typename dist_::field_type>::scalar_type>& image,
+            const vil_image_view<T>& image,
             const updater_& updater)
 {
   typedef typename updater_::field_type F;
-  typedef typename vpdt_field_traits<F>::scalar_type T;
   const unsigned int data_dim = vpdt_field_traits<F>::dimension;
   assert(dimg.ni() == image.ni());
   assert(dimg.nj() == image.nj());
@@ -65,14 +64,13 @@ void update(bbgm_image_of<dist_>& dimg,
 
 
 //: Update with a new sample image only where mask(i,j)
-template <class dist_, class updater_>
+template <class dist_, class T, class updater_>
 void update_masked(bbgm_image_of<dist_>& dimg,
-                   const vil_image_view<typename vpdt_field_traits<typename dist_::field_type>::scalar_type>& image,
+                   const vil_image_view<T>& image,
                    const updater_& updater,
                    const vil_image_view<bool>& mask)
 {
   typedef typename updater_::field_type F;
-  typedef typename vpdt_field_traits<F>::scalar_type T;
   const unsigned int data_dim = vpdt_field_traits<F>::dimension;
   assert(dimg.ni() == image.ni());
   assert(dimg.nj() == image.nj());
