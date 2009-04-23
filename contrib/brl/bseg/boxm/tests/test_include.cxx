@@ -11,6 +11,7 @@
 #include <boxm/boxm_save_block_raw.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_base.h>
+#include <boxm/boxm_update.h>
 #include <boxm/boxm_utils.h>
 
 #include <boxm/pro/boxm_processes.h>
