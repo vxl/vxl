@@ -29,7 +29,8 @@ class image_exp_functor
 
 
 template <class T_loc, boxm_apm_type APM>
-void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene, vpgl_camera_double_sptr cam,
+void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene, 
+                                 vpgl_camera_double_sptr cam,
                                  vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
                                  vil_image_view<float> &mask,
                                  bool use_black_background = false)
