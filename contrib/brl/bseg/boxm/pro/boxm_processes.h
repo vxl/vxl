@@ -9,5 +9,6 @@ DECLARE_FUNC_CONS(boxm_load_scene_process);
 DECLARE_FUNC_CONS(boxm_render_expected_process);
 DECLARE_FUNC_CONS(boxm_save_occupancy_raw_process);
 DECLARE_FUNC_CONS(boxm_create_scene_process);
+DECLARE_FUNC_CONS(boxm_update_process);
 
 #endif
