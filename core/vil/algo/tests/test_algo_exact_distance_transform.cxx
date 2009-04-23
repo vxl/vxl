@@ -10,6 +10,8 @@
 
 void vil_exact_distance_transform_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);
 
+void vil_exact_distance_transform_test_label(vil_image_view<vxl_uint_32> &im, bool print);
+
 void
 vil_exact_distance_transform_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
 
@@ -23,6 +25,38 @@ MAIN( test_algo_exact_distance_transform )
   START ("Exact Euclidean Distance Transform Algorithms");
 
   {
+  unsigned r=3,c=5;
+
+  vil_image_view <vxl_uint_32> image(r,c,1);
+
+  image.fill(1);
+  image(1,1) = 0;
+
+  vcl_cout << "ORIGINAL IMAGE:\n" << vcl_endl;
+  vil_print_all(vcl_cout,image);
+
+  vil_exact_distance_transform_test(image,true);
+  vil_exact_distance_transform_test_label(image,true);
+  }
+
+  {
+  unsigned r=3,c=5;
+
+  vil_image_view <vxl_uint_32> image(r,c,1);
+
+  image.fill(1);
+  image(0,0) = 0;
+  image(1,1) = 0;
+  image(1,2) = 0;
+
+  vcl_cout << "ORIGINAL IMAGE:\n" << vcl_endl;
+  vil_print_all(vcl_cout,image);
+
+  vil_exact_distance_transform_test(image,true);
+  vil_exact_distance_transform_test_label(image,true);
+  }
+
+  {
   unsigned r=5,c=7;
 
   vil_image_view <vxl_uint_32> image(r,c,1);
@@ -30,7 +64,7 @@ MAIN( test_algo_exact_distance_transform )
   image.fill(1);
 
   image(3,2)=0;
-  image(0,2)=0;
+  image(2,0)=0;
   image(0,0)=0;
   image(4,4)=0;
   DATA(image)[34]=0;
@@ -39,6 +73,7 @@ MAIN( test_algo_exact_distance_transform )
   vil_print_all(vcl_cout,image);
 
   vil_exact_distance_transform_test(image,true);
+  vil_exact_distance_transform_test_label(image,true);
   }
 
   {
@@ -46,6 +81,7 @@ MAIN( test_algo_exact_distance_transform )
   image.fill(1);
   image(0,0) = 0;
   vil_exact_distance_transform_test(image,false);
+  vil_exact_distance_transform_test_label(image,false);
   }
 
   {
@@ -53,6 +89,7 @@ MAIN( test_algo_exact_distance_transform )
   image.fill(1);
   image(99,99) = 0;
   vil_exact_distance_transform_test(image,false);
+  vil_exact_distance_transform_test_label(image,false);
   }
 
   {
@@ -60,6 +97,7 @@ MAIN( test_algo_exact_distance_transform )
   image.fill(1);
   image(0,99) = 0;
   vil_exact_distance_transform_test(image,false);
+  vil_exact_distance_transform_test_label(image,false);
   }
 
   {
@@ -67,6 +105,7 @@ MAIN( test_algo_exact_distance_transform )
   image.fill(1);
   image(99,0) = 0;
   vil_exact_distance_transform_test(image,false);
+  vil_exact_distance_transform_test_label(image,false);
   }
 
   { // 8-disconnected Voronoi region that breaks most DT algorithms that claim to be Euclidean
@@ -76,6 +115,7 @@ MAIN( test_algo_exact_distance_transform )
   image(1,6)  = 0;
   image(6,12) = 0;
   vil_exact_distance_transform_test(image,true);
+  vil_exact_distance_transform_test_label(image,true);
   }
 
   // ----- 3D -----
@@ -118,7 +158,6 @@ MAIN( test_algo_exact_distance_transform )
   image(4,3,2)=0;
   vil_exact_distance_transform_test(image,false,true);
   }
-
 
   SUMMARY();
 }
@@ -184,5 +223,54 @@ vil_exact_distance_transform_test_specific(
   }
 
   vcl_string msg = vcl_string("Is ") + algo + vcl_string(" exact");
+  TEST(msg.c_str() , algo_error, false);
+}
+
+//: test closest feature pixel (label) propagation
+void
+vil_exact_distance_transform_test_label(vil_image_view<vxl_uint_32> &im, bool print)
+{
+  vil_image_view <vxl_uint_32> label_brute(im.ni(), im.nj(), 1);
+  vil_image_view <vxl_uint_32> dt_brute(vil_copy_deep(im));
+  vil_exact_distance_transform_brute_force_with_list_label(dt_brute, label_brute);
+
+  vil_image_view <vxl_uint_32> label_algo(im.ni(), im.nj(), 1);
+  vil_image_view <vxl_uint_32> dt_algo(vil_copy_deep(im));
+  vil_exact_distance_transform_maurer_label(dt_algo, label_algo);
+
+  const vcl_string algo("Maurer");
+  if (print) {
+     vcl_cout << "BRUTE Closest Feature Labels:\n";
+     vil_print_all(vcl_cout, label_brute);
+
+     vcl_cout << algo << " Closest Feature Labels:\n";
+     vil_print_all(vcl_cout, label_algo);
+  }
+
+  bool algo_error=false;
+  unsigned ni = im.ni();
+
+  for (unsigned i=0; i<im.size(); ++i) {
+    unsigned dst;
+    dst = DATA(dt_algo)[i];
+
+    unsigned dst_from_label;
+    int r, c, rl, cl;
+
+    r = i / ni;
+    c = i % ni;
+    rl = DATA(label_algo)[i] / ni;
+    cl = DATA(label_algo)[i] % ni;
+    
+    dst_from_label = (r-rl)*(r-rl) + (c-cl)*(c-cl);
+
+    if (dst != dst_from_label) {
+      vcl_cout << "Error! (labels) " << algo << ": " << DATA(label_algo)[i] << " EXACT: " << dst << vcl_endl;
+      algo_error = true;
+      break;
+    }
+  }
+
+  vcl_string msg = vcl_string("Is ") + algo + vcl_string("'s labels correct?");
   TEST(msg.c_str() , algo_error, false);
 }

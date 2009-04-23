@@ -15,6 +15,8 @@
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 
+//: flag indicating no associated label used internally by some algorithms
+static const unsigned no_label_const = (unsigned)-1;
 
 //: Row-wise 1D EDT
 //
@@ -63,6 +65,39 @@ vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im)
    // TODO: VIL uses asserts for bounds in the above code. This is not
    // acceptable for stable code. Optimize this or let the user disable it in
    // CMake?.
+}
+
+//: Same as vil_exact_distance_transform_1d_horizontal, but also returning the label of the closest
+// feature voxel for each pixel.
+//
+inline void
+vil_exact_distance_transform_1d_horizontal_label(
+    vil_image_view<vxl_uint_32> &im,
+    vil_image_view<unsigned> &imlabel)
+{
+   unsigned ni=im.ni(), i,
+            nj=im.nj(), j;
+   vxl_uint_32 b;
+
+   for (j=0; j < nj; ++j){ // for each 'row'
+      b=1;
+      for (i=1; i<ni; ++i) // forward-scan 'row'
+         if (im(i,j) > im(i-1,j) + b) {
+            im(i,j) = im(i-1,j) + b;
+            imlabel(i,j) = imlabel(i-1,j);
+            b += 2;
+         } else
+            b = 1;
+      b=1;
+      for (i=ni-2; i != (vxl_uint_32)-1; --i) { // backward-scan 'row'
+         if (im(i,j) > im(i+1,j) + b) {
+            im(i,j) = im(i+1,j) + b;
+            imlabel(i,j) = imlabel(i+1,j);
+            b += 2;
+         } else
+            b = 1;
+      }
+   }
 }
 
 //  --------------------------------------
@@ -128,6 +163,55 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
    }
 }
 
+//: Same as maurer_voronoi_edt_2D but with propagation of the label of the nearest 0-pixel.
+inline void
+maurer_voronoi_edt_2D_label(
+    vil_image_view<vxl_uint_32> &im, 
+    vil_image_view<unsigned> &imlabel, 
+    unsigned j1, int *g, int *h, unsigned *w)
+{
+   int l, ns, di, dmin, dnext;
+   unsigned i, ni, nj;
+   vxl_uint_32 fi;
+
+   ni = im.ni();
+   nj = im.nj();
+
+   // Remove Voronoi sites not nearest to 'column' j1
+   l = -1;
+   for (i=0; i < nj; ++i){
+      if ((fi = im(j1,i)) != infty_) {
+         while ( l >= 1 && remove_edt(g[l-1], g[l], fi, h[l-1], h[l], i) )
+            --l;
+         ++l;  g[l] = fi;  h[l] = i;  w[l] = imlabel(j1, i);
+      }
+   }
+   // Assertions at this point: 
+   //    h[k] == row containing a site k
+   //    l == index of last site
+
+   // The following are lines 15-25 of the paper
+   if (l == -1) return;
+
+   ns = l;
+   l = 0;
+   for (i=0; i < nj; ++i) {  // Query Partial Voronoi Diagram
+      assert( g[l] == (w[l] - j1)*(w[l] - j1) );
+      di = h[l] - i;
+      dmin = g[l] + di*di;
+
+      for ( ; l < ns; ++l) {
+         di = h[l+1] - i;
+
+         if (dmin <= (dnext = g[l+1] + di*di)) break;
+
+         dmin = dnext;
+      }
+      im(j1,i) = dmin;   
+      imlabel(j1,i) = w[l] + h[l]*ni;
+   }
+}
+
 //: Internal function that computes 2D EDT given 1D EDT using Maurer's Voronoi algorithm for the integer grid.
 inline void
 edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
@@ -139,7 +223,6 @@ edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
    // OBS: g and h are internal to maurer_voronoi_edt_2d and are
    // pre-allocated here for efficiency.
    g = new int[im.nj()];
-
    h = new int[im.nj()];
 
    for (i1=0; i1 < im.ni(); ++i1) // for each 'column'
@@ -149,6 +232,30 @@ edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
    delete [] g;
 }
 
+inline void
+edt_maurer_2D_from_1D_label(
+    vil_image_view<vxl_uint_32> &im,
+    vil_image_view<unsigned> &imlabel
+    )
+{
+   unsigned i1;
+   int *g, *h; // same naming as in the paper
+   unsigned *w;
+
+   // Call voronoi_edt_2D for every row.
+   // OBS: g and h are internal to maurer_voronoi_edt_2d and are
+   // pre-allocated here for efficiency.
+   g = new int[im.nj()];
+   h = new int[im.nj()];
+   w = new unsigned[im.nj()];
+
+   for (i1=0; i1 < im.ni(); ++i1) // for each 'column'
+      maurer_voronoi_edt_2D_label(im, imlabel, i1, /* internal: */ g, h, w);
+
+   delete [] w;
+   delete [] h;
+   delete [] g;
+}
 
 //: Internal function
 inline bool
@@ -208,6 +315,45 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
    // Compute minimum distance of each pixel to zero-pixels on the same 'row'
    vil_exact_distance_transform_1d_horizontal(im);
    edt_maurer_2D_from_1D(im);
+
+   return true;
+}
+
+//: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the
+// closest 0-pixel.
+//
+// \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
+// index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
+// im[i] will contain the corresponding distance.
+//
+bool
+vil_exact_distance_transform_maurer_label(
+    vil_image_view<vxl_uint_32> &im, 
+    vil_image_view<unsigned> &imlabel
+    )
+{
+   unsigned i,r,c;
+   vxl_uint_32 *data;
+   unsigned *ptr_label;
+
+   if (!test_contiguous(im) || !test_contiguous(imlabel))
+      return false;
+
+   r = im.nj();  c = im.ni();
+   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
+
+   data = im.top_left_ptr();
+   ptr_label = imlabel.top_left_ptr();
+   for (i=0;  i<r*c;  ++i)
+      if (data[i]) {
+         data[i]  = infty_;
+         ptr_label[i] = no_label_const;
+      } else
+         ptr_label[i] = i % c;
+
+   // Compute minimum distance of each pixel to zero-pixels on the same 'row'
+   vil_exact_distance_transform_1d_horizontal_label(im, imlabel);
+   edt_maurer_2D_from_1D_label(im, imlabel);
 
    return true;
 }
@@ -486,7 +632,6 @@ vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned pla
 // squared distance map is output to the same array, since the squared Euclidean
 // distances are integers, assuming pixels are unit distance apart.
 //
-//
 bool
 vil_exact_distance_transform_brute_force(vil_image_view<vxl_uint_32> &im)
 {
@@ -578,6 +723,68 @@ vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &
             dst = dx*dx + dy*dy;
             if (I[list[i]] > dst)
                I[list[i]] = dst;
+         }
+   }
+
+   delete [] list;
+
+   return true;
+}
+
+//: Same as vil_exact_distance_transform_brute_force_with_list, but also returns a label array indicating the
+// closest 0-pixel.
+//
+// \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
+// index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
+// im[i] will contain the corresponding distance.
+//
+bool
+vil_exact_distance_transform_brute_force_with_list_label(
+    vil_image_view<vxl_uint_32> &im,
+    vil_image_view<unsigned> &imlabel
+    )
+{
+   unsigned i, xi, yi,
+            j, xj, yj,
+            dx,dy, c,
+            n, dst;
+
+   vxl_uint_32 *I=im.top_left_ptr(), 
+               *list, n_ones, ptr_zeros;
+   unsigned *L = imlabel.top_left_ptr();
+
+   if (!test_contiguous(im) || !test_contiguous(imlabel))
+      return false;
+
+   infty_ = vcl_numeric_limits<vxl_uint_32>::max();
+
+   c = im.ni();
+   n = im.nj()*c;
+
+   list = new vxl_uint_32[n];
+
+   n_ones = 0;
+   ptr_zeros = n-1;
+   for (i=0; i<n; ++i)
+      if (I[i]) {
+         list[n_ones++] = i;
+         I[i] = infty_;
+      } else {
+         list[ptr_zeros--] = i;
+         L[i] = i;
+      }
+
+   for (i=0; i<n_ones; ++i) { // for each 1-pixel
+         xi = list[i] % c;   yi = list[i] / c;
+         for (j=n_ones; j<n; ++j) { // for each 0-pixel
+            xj  = list[j] % c; yj = list[j] / c;
+
+            dx  = xi-xj; dy = yi-yj;  // ok, modular arithmetic
+            dst = dx*dx + dy*dy;
+            if (I[list[i]] > dst) {
+               I[list[i]] = dst;
+               L[list[i]] = list[j];
+            }
          }
    }
 
