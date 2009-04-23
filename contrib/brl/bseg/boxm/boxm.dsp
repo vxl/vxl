@@ -146,6 +146,9 @@ SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.vgl_point_3d+double--
 # Begin Source File
 SOURCE=.\Templates/boxm_sample+BOXM_APM_MOG_GREY-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -208,6 +211,9 @@ SOURCE=.\boxm_render_image.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_save_block_raw.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_update.h
 # End Source File
 # End Group
 # End Target

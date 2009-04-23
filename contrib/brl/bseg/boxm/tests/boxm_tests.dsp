@@ -236,6 +236,12 @@ SOURCE=.\test_cell_vis_graph.cxx
 SOURCE=.\test_render_image.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_update.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_save_raw.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

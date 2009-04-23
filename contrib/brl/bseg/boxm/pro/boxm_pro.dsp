@@ -102,6 +102,15 @@ SOURCE=.\processes/boxm_load_scene_process.cxx
 SOURCE=.\processes/boxm_render_expected_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_save_occupancy_raw_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_create_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_update_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+boxm_scene_base--.cxx
 # End Source File
 # End Group
