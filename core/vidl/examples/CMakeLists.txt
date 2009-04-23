@@ -11,7 +11,7 @@ SET(vidl_player_sources
     vidl_player_manager.cxx    vidl_player_manager.h
 )
 
-ADD_EXECUTABLE (vidl_player WIN32 MACOSX_BUNDLE ${vidl_player_sources})
+ADD_EXECUTABLE (vidl_player MACOSX_BUNDLE ${vidl_player_sources})
 TARGET_LINK_LIBRARIES(vidl_player vidl vidl_gui vul)
 
 ENDIF( HAS_VGUI )
