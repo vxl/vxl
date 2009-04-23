@@ -124,8 +124,8 @@ static vxl_uint_32 infty_;
 inline void
 maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h)
 {
-   int l, ns, di, dmin, dnext;
-   unsigned i, nj;
+   int l, ns;
+   unsigned i, nj, di, dmin, dnext;
    vxl_uint_32 fi;
 
    nj = im.nj();
@@ -149,7 +149,7 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
    ns = l;
    l = 0;
    for (i=0; i < nj; ++i) {  // Query Partial Voronoi Diagram
-      di = h[l] - i;
+      di = h[l] - i;         // Its ok for di to be unsigned -- modular arithmetic
       dmin = g[l] + di*di;
 
       for ( ; l < ns; ++l) {
@@ -170,8 +170,8 @@ maurer_voronoi_edt_2D_label(
     vil_image_view<unsigned> &imlabel, 
     unsigned j1, int *g, int *h, unsigned *w)
 {
-   int l, ns, di, dmin, dnext;
-   unsigned i, ni, nj;
+   int l, ns;
+   unsigned i, ni, nj, di, dmin, dnext;
    vxl_uint_32 fi;
 
    ni = im.ni();
