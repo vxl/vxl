@@ -106,7 +106,7 @@ vil_exact_distance_transform_1d_horizontal_label(
 
 //: internal test function as in Maurer's paper
 inline bool
-remove_edt(int du, int dv, int dw,
+remove_edt(unsigned du, unsigned dv, unsigned dw,
            int u,  int v,  int w)
 {
     // 11 integer expressions
@@ -114,7 +114,7 @@ remove_edt(int du, int dv, int dw,
         b = w - v,
         c = w - u;
 
-    return c*dv - b*du - a*dw > a*b*c;
+    return c*dv > b*du + a*dw + a*b*c;
 }
 
 //: global variable storing the infinity value for each image
@@ -122,9 +122,10 @@ static vxl_uint_32 infty_;
 
 //: Internal function that eliminates unnecessary sites and computes 2D Euclidean distances to the nearest sites.
 inline void
-maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h)
+maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, unsigned *g, unsigned *h)
 {
-   int l, ns;
+   int l; 
+   unsigned ns;
    unsigned i, nj, di, dmin, dnext;
    vxl_uint_32 fi;
 
@@ -168,9 +169,10 @@ inline void
 maurer_voronoi_edt_2D_label(
     vil_image_view<vxl_uint_32> &im, 
     vil_image_view<unsigned> &imlabel, 
-    unsigned j1, int *g, int *h, unsigned *w)
+    unsigned j1, unsigned *g, unsigned *h, unsigned *w)
 {
-   int l, ns;
+   int l; 
+   unsigned ns;
    unsigned i, ni, nj, di, dmin, dnext;
    vxl_uint_32 fi;
 
@@ -216,14 +218,13 @@ maurer_voronoi_edt_2D_label(
 inline void
 edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
 {
-   unsigned i1;
-   int *g, *h; // same naming as in the paper
+   unsigned i1, *g, *h; // same naming as in the paper
 
    // Call voronoi_edt_2D for every row.
    // OBS: g and h are internal to maurer_voronoi_edt_2d and are
    // pre-allocated here for efficiency.
-   g = new int[im.nj()];
-   h = new int[im.nj()];
+   g = new unsigned [im.nj()];
+   h = new unsigned [im.nj()];
 
    for (i1=0; i1 < im.ni(); ++i1) // for each 'column'
       maurer_voronoi_edt_2D(im, i1,  /* internal: */ g, h);
@@ -239,15 +240,16 @@ edt_maurer_2D_from_1D_label(
     )
 {
    unsigned i1;
-   int *g, *h; // same naming as in the paper
+   unsigned *h; // same naming as in the paper
+   unsigned *g;
    unsigned *w;
 
    // Call voronoi_edt_2D for every row.
    // OBS: g and h are internal to maurer_voronoi_edt_2d and are
    // pre-allocated here for efficiency.
-   g = new int[im.nj()];
-   h = new int[im.nj()];
-   w = new unsigned[im.nj()];
+   g = new unsigned [im.nj()];
+   h = new unsigned [im.nj()];
+   w = new unsigned [im.nj()];
 
    for (i1=0; i1 < im.ni(); ++i1) // for each 'column'
       maurer_voronoi_edt_2D_label(im, imlabel, i1, /* internal: */ g, h, w);
