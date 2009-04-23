@@ -127,6 +127,9 @@ class vidl_dshow_live_istream : public vidl_istream
   //: Return the frame rate (FPS, 0.0 if unspecified)
   // TODO return a framerate if it is constant for a live video
   virtual double frame_rate() const { return 0.0; }
+  
+  //: Return the duration in seconds (0.0 if unknown)
+  virtual double duration() const { return 0.0; }
 
   //: Close the stream.
   virtual void close();

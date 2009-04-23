@@ -355,8 +355,26 @@ vidl_ffmpeg_istream
          / is_->vid_str_->r_frame_rate_base
          / AV_TIME_BASE;
 #else
+  return static_cast<double>(is_->vid_str_->r_frame_rate.num) / is_->vid_str_->r_frame_rate.den;
+#endif
+}
+
+
+//: Return the duration in seconds (0.0 if unknown)
+double 
+vidl_ffmpeg_istream
+::duration() const
+{
+  // Quick return if the stream isn't open.
+  if ( !is_open() ) {
+    return 0.0;
+  }
+#if LIBAVFORMAT_BUILD <= 4623
+  return static_cast<double>(is_->vid_str_->duration)
+         / AV_TIME_BASE;
+#else
   return static_cast<double>(is_->vid_str_->time_base.num)/is_->vid_str_->time_base.den
-         * static_cast<double>(is_->vid_str_->r_frame_rate.num) / is_->vid_str_->r_frame_rate.den;
+         * static_cast<double>(is_->vid_str_->duration);
 #endif
 }
 

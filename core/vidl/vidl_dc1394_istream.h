@@ -80,6 +80,9 @@ class vidl_dc1394_istream
 
   //: Return the frame rate (FPS, 0.0 if unspecified)
   virtual double frame_rate() const;
+  
+  //: Return the duration in seconds (0.0 if unknown)
+  virtual double duration() const;
 
   //: Advance to the next frame (but don't acquire an image)
   virtual bool advance();

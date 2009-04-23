@@ -88,6 +88,10 @@ class vidl_dshow_file_istream : public vidl_istream
   //: Return the frame rate (FPS, 0.0 if unspecified)
   // TODO return a valid framerate
   virtual double frame_rate() const { return 0.0; }
+  
+  //: Return the duration in seconds (0.0 if unknown)
+  // TODO implement this
+  virtual double duration() const { return 0.0; }
 
   //: Close the stream.
   virtual void close();

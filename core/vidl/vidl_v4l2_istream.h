@@ -59,6 +59,9 @@ class vidl_v4l2_istream: public vidl_istream
 
     //: Return the frame rate (0.0 if unspecified)
     virtual double frame_rate() const { return 0.0; }
+  
+    //: Return the duration in seconds (0.0 if unknown)
+    virtual double duration() const { return 0.0; }
 
     //: Return the current frame number. does this works?
     unsigned int frame_number_device() const { return dev.sequence(); }

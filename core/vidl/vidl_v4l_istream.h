@@ -85,6 +85,9 @@ class vidl_v4l_istream:public vidl_istream
 
     //: Return the frame rate (FPS, 0.0 if unspecified)
     virtual double frame_rate() const;
+  
+    //: Return the duration in seconds (0.0 if unknown)
+    virtual double duration() const { return 0.0; }
 
     //: Return the current frame number
     virtual unsigned int frame_number() const{return frame_number_;};

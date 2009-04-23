@@ -81,6 +81,9 @@ class vidl_image_list_istream
 
   //: Return the frame rate (0.0 if unspecified)
   virtual double frame_rate() const { return 0.0; }
+  
+  //: Return the duration in seconds (0.0 if unknown)
+  virtual double duration() const { return 0.0; }
 
   //: Advance to the next frame (but do not open the next image)
   virtual bool advance();

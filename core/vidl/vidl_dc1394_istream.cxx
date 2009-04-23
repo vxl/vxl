@@ -526,6 +526,15 @@ frame_rate() const
 }
 
 
+//: Return the duration in seconds (0.0 if unknown)
+double 
+vidl_dc1394_istream::
+duration() const
+{
+  return 0.0;
+}
+
+
 //: Advance to the next frame (but don't acquire an image)
 bool
 vidl_dc1394_istream::
