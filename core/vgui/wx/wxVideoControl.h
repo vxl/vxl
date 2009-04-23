@@ -77,7 +77,7 @@ class wxVideoControl: public wxPanel, public vgui_observable
   void set_num_frames(unsigned int num_frames);
   
   //: Set the current frame
-  void set_frame(unsigned int frame);
+  void set_frame(unsigned int frame, bool send_message = true);
   
   //: Advance to next frame
   void next();
@@ -90,6 +90,9 @@ class wxVideoControl: public wxPanel, public vgui_observable
   
   //: Pause the video
   void pause();
+  
+  //: Return true if in play mode
+  bool is_playing() { return is_playing_; }
 
   //: Should we show tooltips?
   static bool ShowToolTips();

@@ -159,11 +159,15 @@ void wxVideoControl::set_num_frames(unsigned int num_frames)
 
 
 //: Set the current frame
-void wxVideoControl::set_frame(unsigned int frame)
+void wxVideoControl::set_frame(unsigned int frame, bool send_message)
 {
   frame_ = frame;
-  if(slider_)
+  if(slider_ && frame_text_){
+    send_messages_ = send_message;
     slider_->SetValue(frame_);
+    frame_text_->SetValue(wxString::Format(wxT("%d"),frame_));
+    send_messages_ = true;
+  }
 }
 
 
