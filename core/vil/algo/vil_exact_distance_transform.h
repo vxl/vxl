@@ -125,7 +125,7 @@ bool vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_
 // Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
 // and Image Processing, pages 100-105. IEEE Computer Society, 2001.
 //
-bool vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im);
+void vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im);
 
 
 #endif // vil_exact_distance_transform_h
