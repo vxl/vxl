@@ -99,7 +99,6 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
    l = -1;
    for (i=0; i < nj; ++i){
       if ((fi = im(j1,i)) != infty_) {
-      // TODO: VIL uses asserts for bounds in the above code. Optimize this!
          while ( l >= 1 && remove_edt(g[l-1], g[l], fi, h[l-1], h[l], i) )
             --l;
          ++l; g[l] = fi; h[l] = i;
@@ -126,7 +125,6 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
          dmin = dnext;
       }
       im(j1,i) = dmin;
-      // TODO: VIL uses asserts for bounds in the above code. Optimize this!
    }
 }
 
@@ -207,7 +205,7 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
       if (data[i])
          data[i] = infty_;
 
-   // Vertical row-wise EDT
+   // Compute minimum distance of each pixel to zero-pixels on the same 'row'
    vil_exact_distance_transform_1d_horizontal(im);
    edt_maurer_2D_from_1D(im);
 
