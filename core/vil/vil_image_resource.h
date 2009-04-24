@@ -89,7 +89,7 @@ class vil_image_resource
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) = 0;
 
   //: Put the data in this view back into the image source at the origin
-  bool put_view(const vil_image_view_base& im)
+  virtual bool put_view(const vil_image_view_base& im)
   { return put_view(im, 0, 0); }
 
   //: Check that a view will fit into the data at the given offset.
