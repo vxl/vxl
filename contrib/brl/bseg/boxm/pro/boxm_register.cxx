@@ -22,4 +22,5 @@ void boxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_save_occupancy_raw_process, "boxmSaveOccupancyRawProcess"); 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_create_scene_process, "boxmCreateSceneProcess");  
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_update_process, "boxmUpdateProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_refine_scene_process, "boxmRefineSceneProcess");
 }
