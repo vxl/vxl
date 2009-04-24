@@ -1,11 +1,10 @@
 #ifndef boct_loc_code_h_
 #define boct_loc_code_h_
-
 //:
 // \file
-// \brief  locational code for octree. The code is stored seperately from x, y and z 
-//         dimensions. In that sense, it is similar or biTree in each dimension.
-//         
+// \brief  locational code for octree.
+// The code is stored seperately from x, y and z dimensions.
+// In that sense, it is similar or biTree in each dimension.
 //
 // \author Gamze Tunali
 // \date April 01, 2009
@@ -64,8 +63,6 @@ class boct_loc_code
 
   //: the level of the tree where this loc code belongs to
   short level;
-
-private:
 };
 
 template<class T>

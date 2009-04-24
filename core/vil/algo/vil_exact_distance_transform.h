@@ -29,16 +29,15 @@
 //
 bool vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im);
 
-//: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the
-// closest 0-pixel.
+//: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the closest 0-pixel.
 //
 // \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
 // im[i] will contain the corresponding distance.
 //
 bool
-vil_exact_distance_transform_maurer_label( vil_image_view<vxl_uint_32> &im, 
-    vil_image_view<unsigned> &imlabel);
+vil_exact_distance_transform_maurer_label( vil_image_view<vxl_uint_32> &im,
+                                           vil_image_view<unsigned> &imlabel);
 
 //: Cubic-time, exact Euclidean distance transform (Saito's algorithm)
 //
@@ -69,8 +68,8 @@ bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigne
 //
 // \sa see documentation of vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 //
-bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, 
-    unsigned plane_idx, const vcl_vector<unsigned> &sq);
+bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
+                                        unsigned plane_idx, const vcl_vector<unsigned> &sq);
 
 //: Exact 3D EDT
 //
@@ -121,8 +120,7 @@ bool vil_exact_distance_transform_brute_force(vil_image_view<vxl_uint_32> &im);
 //
 bool vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &im);
 
-//: Same as vil_exact_distance_transform_brute_force_with_list, but also returns a label array indicating the
-// closest 0-pixel.
+//: Same as vil_exact_distance_transform_brute_force_with_list, but also returns a label array indicating the closest 0-pixel.
 //
 // \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
