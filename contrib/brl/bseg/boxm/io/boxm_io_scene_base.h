@@ -1,6 +1,7 @@
 #ifndef boxm_io_scene_base_h_
 #define boxm_io_scene_base_h_
-
+//:
+// \file
 #include <boxm/boxm_scene_base.h>
 
 //: Binary write boxm scene to stream

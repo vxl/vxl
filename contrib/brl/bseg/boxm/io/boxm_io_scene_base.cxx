@@ -1,4 +1,6 @@
 #include "boxm_io_scene_base.h"
+//:
+// \file
 
 //: Binary write boxm scene to stream
 void vsl_b_write(vsl_b_ostream & os, boxm_scene_base_sptr const& scene_base)
