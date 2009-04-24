@@ -215,6 +215,9 @@ SOURCE=.\boxm_save_block_raw.h
 # Begin Source File
 SOURCE=.\boxm_update.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_refine.h
+# End Source File
 # End Group
 # End Target
 # End Project
