@@ -62,9 +62,6 @@ vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im)
    // part is less readable. Although pointers could be used more efficiently,
    // this first part is much faster than the 2nd part and is not worth
    // optimizing.  So I kept it readable, close to the paper's pseudocode.
-   // TODO: VIL uses asserts for bounds in the above code. This is not
-   // acceptable for stable code. Optimize this or let the user disable it in
-   // CMake?.
 }
 
 //: Same as vil_exact_distance_transform_1d_horizontal, but also returning the label of the closest
@@ -532,8 +529,6 @@ vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned pla
    unsigned n = r*c*nk;
 
    // Cuisenaire's idea: a LUT with precomputed i*i
-   // TODO: move this outside this fn (class? parameter?)
-   //
    // Create a temporary 2D image view for this plane, whose top_left_ptr is
    // data plus r*c
 
