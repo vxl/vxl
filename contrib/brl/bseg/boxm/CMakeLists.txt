@@ -21,6 +21,7 @@ SET(boxm_sources
     boxm_utils.cxx                    boxm_utils.h
     boxm_render_image.h
     boxm_update.h
+    boxm_refine.h
     boxm_save_block_raw.h
 )
 

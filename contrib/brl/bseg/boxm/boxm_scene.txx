@@ -491,7 +491,7 @@ template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const * &scene); \
 template void vsl_b_read(vsl_b_istream & is, boxm_scene<T >  &scene); \
 template void vsl_b_read(vsl_b_istream & is, boxm_scene<T > * &scene)
 
-BOXM_BLOCK_ITERATOR_INSTANTIATE(T) \
+#define BOXM_BLOCK_ITERATOR_INSTANTIATE(T) \
 template class boxm_block_iterator<T >
 
 #endif
