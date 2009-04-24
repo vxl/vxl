@@ -21,6 +21,7 @@ MANPAGE_SOURCES += boxm_scene_base.h
 MANPAGE_SOURCES += boxm_render_image.h
 MANPAGE_SOURCES += boxm_save_block_raw.h
 MANPAGE_SOURCES += boxm_update.h
+MANPAGE_SOURCES += boxm_refine.h
 
 SUBDIRS += io pro
 
