@@ -1,4 +1,3 @@
-
 #include <testlib/testlib_test.h>
 #include <boxm/boxm_utils.h>
 #include <vgl/vgl_point_2d.h>
@@ -29,17 +28,17 @@ MAIN( test_quad_interpolate )
 
   img_max.fill(0.0);
   g_img_max.fill(0.0);
-  //: creating ground truth
+  // creating ground truth
   g_img_max(10,10)=10.5;g_img_max(10,11)=10.5;g_img_max(10,12)=10.5;
   g_img_max(11,10)=11.5;g_img_max(11,11)=11.5;g_img_max(11,12)=11.5;
 
   boxm_utils::quad_interpolate(poly_it, xvals, yvals, vals,img_max,0);
   bool flag=true;
-  for(unsigned i=0;i<g_img_max.ni();i++)
-	for(unsigned j=0;j<g_img_max.ni();j++)
-		if(g_img_max(i,j)!=img_max(i,j))
-			flag=false;
+  for (unsigned i=0;i<g_img_max.ni();i++)
+  for (unsigned j=0;j<g_img_max.ni();j++)
+    if (g_img_max(i,j)!=img_max(i,j))
+      flag=false;
 
   TEST("Interpolated image", true, flag);
-  SUMMARY();  
+  SUMMARY();
 }
