@@ -193,7 +193,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   node_free[arc.v2]=false;
 
   // Create dependency: v1 depends on v2 though arc 0
-  deps.push_back(mmn_dependancy(arc.v1,arc.v2, 0));
+  deps0.push_back(mmn_dependancy(arc.v1,arc.v2, 0));
 
   // Initialise list of best arcs and distances
   for (unsigned i=0;i<n;++i)
@@ -226,7 +226,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
     triplets.push_back(mmn_triplet(best_i,arc.v1,arc.v2));
 
     // best_i depends on arc.v1 and arc.v2 through 3 arcs and a triplet
-    deps.push_back(mmn_dependancy(best_i,arc.v1,arc.v2, 
+    deps0.push_back(mmn_dependancy(best_i,arc.v1,arc.v2, 
                                   ai,ai+1, best_arc[best_i], ti));
 
     // Re-evaluate distances to each free point

@@ -71,6 +71,9 @@ class mmn_dp_solver : public mmn_solver
   void set_dependancies(const vcl_vector<mmn_dependancy>& deps,
                         unsigned n_nodes, unsigned max_n_arcs);
 
+  //: Read access to dependencies
+  const vcl_vector<mmn_dependancy>& deps() const { return deps_; }
+
   //: Find values for each node with minimise the total cost
   //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i
   //  \param pair_cost: pair_cost[a](i,j) is cost of selecting values (i,j) for nodes at end of arc a.
