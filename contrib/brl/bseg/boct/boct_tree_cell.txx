@@ -117,8 +117,8 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::get_common_ancestor(
 
 template<class T_loc,class T_data>
 void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
-                                                          vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,
-                                                          short max_level)
+                                                   vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,
+                                                   short max_level)
 {
   short cellsize=1<<this->level();
 
@@ -369,7 +369,7 @@ void boct_tree_cell<T_loc,T_data>::print()
            << " parent=" << parent_
            << " data=" << data_;
   if (is_leaf())
-    vcl_cout << " LEAF " << vcl_endl;
+    vcl_cout << " LEAF" << vcl_endl;
   else {
     vcl_cout << vcl_endl;
     for (unsigned i=0; i<8; i++) {
@@ -442,8 +442,8 @@ vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data>& cell)
 
 #define BOCT_TREE_CELL_INSTANTIATE(T_loc,T_data) \
 template class boct_tree_cell<T_loc,T_data >; \
-template vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data>& cell);\
-template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T_data>&, boct_tree_cell<T_loc,T_data >*); \
-template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T_data>&);\
-template class boct_cell_vis_graph_node<T_loc,T_data>;
+template vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data >& cell);\
+template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T_data >&, boct_tree_cell<T_loc,T_data >*); \
+template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T_data >&); \
+template class boct_cell_vis_graph_node<T_loc,T_data >
 #endif // boct_tree_cell_txx_
