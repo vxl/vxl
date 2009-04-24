@@ -14,6 +14,7 @@
 #include <vcl_limits.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 //: flag indicating no associated label used internally by some algorithms
 static const unsigned no_label_const = (unsigned)-1;
@@ -64,9 +65,7 @@ vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im)
    // optimizing.  So I kept it readable, close to the paper's pseudocode.
 }
 
-//: Same as vil_exact_distance_transform_1d_horizontal, but also returning the label of the closest
-// feature voxel for each pixel.
-//
+//: Same as vil_exact_distance_transform_1d_horizontal, but also returning the label of the closest feature voxel for each pixel.
 inline void
 vil_exact_distance_transform_1d_horizontal_label(
     vil_image_view<vxl_uint_32> &im,
@@ -137,7 +136,7 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, unsigned *g,
          ++l; g[l] = fi; h[l] = i;
       }
    }
-   // Assertions at this point: 
+   // Assertions at this point:
    //    h[k] == row containing a site k
    //    l == index of last site
 
@@ -164,8 +163,8 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, unsigned *g,
 //: Same as maurer_voronoi_edt_2D but with propagation of the label of the nearest 0-pixel.
 inline void
 maurer_voronoi_edt_2D_label(
-    vil_image_view<vxl_uint_32> &im, 
-    vil_image_view<unsigned> &imlabel, 
+    vil_image_view<vxl_uint_32> &im,
+    vil_image_view<unsigned> &imlabel,
     unsigned j1, unsigned *g, unsigned *h, unsigned *w)
 {
    int l; 
@@ -185,7 +184,7 @@ maurer_voronoi_edt_2D_label(
          ++l;  g[l] = fi;  h[l] = i;  w[l] = imlabel(j1, i);
       }
    }
-   // Assertions at this point: 
+   // Assertions at this point:
    //    h[k] == row containing a site k
    //    l == index of last site
 
@@ -206,7 +205,7 @@ maurer_voronoi_edt_2D_label(
 
          dmin = dnext;
       }
-      im(j1,i) = dmin;   
+      im(j1,i) = dmin;
       imlabel(j1,i) = w[l] + h[l]*ni;
    }
 }
@@ -233,8 +232,7 @@ edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
 inline void
 edt_maurer_2D_from_1D_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel
-    )
+    vil_image_view<unsigned> &imlabel)
 {
    unsigned i1;
    unsigned *h; // same naming as in the paper
@@ -318,8 +316,7 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
    return true;
 }
 
-//: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the
-// closest 0-pixel.
+//: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the closest 0-pixel.
 //
 // \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
@@ -327,9 +324,8 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
 //
 bool
 vil_exact_distance_transform_maurer_label(
-    vil_image_view<vxl_uint_32> &im, 
-    vil_image_view<unsigned> &imlabel
-    )
+    vil_image_view<vxl_uint_32> &im,
+    vil_image_view<unsigned> &imlabel)
 {
    unsigned i,r,c;
    vxl_uint_32 *data;
@@ -432,7 +428,7 @@ vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im)
      if (data[i])
         data[i] = infty_;
 
-  //: 2D EDT for each plane
+  // 2D EDT for each plane
   for (unsigned k=0; k < nk; ++k) {
     bool stat = vil_exact_distance_transform_saito(im, k, sq);
 
@@ -728,8 +724,7 @@ vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &
    return true;
 }
 
-//: Same as vil_exact_distance_transform_brute_force_with_list, but also returns a label array indicating the
-// closest 0-pixel.
+//: Same as vil_exact_distance_transform_brute_force_with_list, but also returns a label array indicating the closest 0-pixel.
 //
 // \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
@@ -738,15 +733,14 @@ vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &
 bool
 vil_exact_distance_transform_brute_force_with_list_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel
-    )
+    vil_image_view<unsigned> &imlabel)
 {
    unsigned i, xi, yi,
             j, xj, yj,
             dx,dy, c,
             n, dst;
 
-   vxl_uint_32 *I=im.top_left_ptr(), 
+   vxl_uint_32 *I=im.top_left_ptr(),
                *list, n_ones, ptr_zeros;
    unsigned *L = imlabel.top_left_ptr();
 
