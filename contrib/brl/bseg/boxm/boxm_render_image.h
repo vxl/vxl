@@ -29,7 +29,7 @@ class image_exp_functor
 
 
 template <class T_loc, boxm_apm_type APM>
-void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene, 
+void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                                  vpgl_camera_double_sptr cam,
                                  vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
                                  vil_image_view<float> &mask,
@@ -58,11 +58,11 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 
       // for each frontier layer of each block
       boct_tree<T_loc,boxm_sample<APM> > * tree=curr_block->get_tree();
-	  vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);
-	  vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3); 
-	  vil_image_view<float> alphas(expected.ni(),expected.nj(),1);
-	  vil_image_view<float> vis_end(expected.ni(),expected.nj(),1);
-	  vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);
+      vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);
+      vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3);
+      vil_image_view<float> alphas(expected.ni(),expected.nj(),1);
+      vil_image_view<float> vis_end(expected.ni(),expected.nj(),1);
+      vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);
       while (frontier_it.next())
       {
         vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *> vis_cells=frontier_it.frontier();
@@ -72,40 +72,40 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
-		vcl_cout<<".";
+        vcl_cout<<".";
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
           boxm_sample<APM> sample=(*cell_it)->data();
-		  //if(sample.alpha>0.001)
-		  {
-			  // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
-			  vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-			  vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-			  double * xverts=new double[8]; double *yverts=new double[8];
-			  boxm_utils::project_corners(corners,cam,xverts,yverts);
-			  boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-			  boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
-			  // get expected color of cell
-			  typename boxm_apm_traits<APM>::obs_datatype cell_expected  =
-				  boxm_apm_traits<APM>::apm_processor::expected_color(sample.appearance);
-			  // get  alpha
-			  boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-			  // fill expected value image
-			  boxm_utils::project_cube_fill_val( vis_face_ids,temp_expected,(float)cell_expected, xverts,yverts);
-			  delete [] xverts;
-			  delete [] yverts;
-		  }
+          //if (sample.alpha>0.001)
+          {
+            // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
+            vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
+            vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+            double * xverts=new double[8]; double *yverts=new double[8];
+            boxm_utils::project_corners(corners,cam,xverts,yverts);
+            boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
+            boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
+            // get expected color of cell
+            typename boxm_apm_traits<APM>::obs_datatype cell_expected  =
+                boxm_apm_traits<APM>::apm_processor::expected_color(sample.appearance);
+            // get  alpha
+            boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
+            // fill expected value image
+            boxm_utils::project_cube_fill_val( vis_face_ids,temp_expected,(float)cell_expected, xverts,yverts);
+            delete [] xverts;
+            delete [] yverts;
+          }
         }
         // compute the length of ray segment at each pixel
         vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);
         len_seg.fill(0.0f);
- 
+
         vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
         vil_math_sum_sqr<float,float>(back_xyz,len_seg);
         vil_math_sqrt<float>(len_seg);
 
-		vil_math_image_product(len_seg,alphas, alphas);
+        vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
         vil_math_image_difference(alpha_integral, alphas, alpha_integral);
         // compute new vis image
@@ -119,7 +119,6 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         vil_math_image_sum(temp_expected,expected,expected);
 
         vis.deep_copy(vis_end);
-
       }
     }
   }

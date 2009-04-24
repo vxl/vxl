@@ -23,7 +23,6 @@ class boxm_cell_vis_graph_iterator
   vcl_vector<boct_tree_cell<T_loc,T_data>*> frontier() { return frontier_; }
 
   void set_reverse_iter(bool reverse) { reverse_iter_ = reverse; }
-  
 
  private:
   //: the camera
@@ -39,11 +38,11 @@ class boxm_cell_vis_graph_iterator
 
   //: recursive function
   void check_cell_visibility(boct_tree<T_loc,T_data>* tree,
-							 boct_tree_cell<T_loc,T_data>* tree_cell);
+                             boct_tree_cell<T_loc,T_data>* tree_cell);
 
   void form_graph_per_cell(boct_tree_cell<T_loc,T_data>* cell,
-						   boct_face_idx face_idx,
-						   boct_tree<T_loc,T_data>* tree);
+                           boct_face_idx face_idx,
+                           boct_tree<T_loc,T_data>* tree);
 
   vcl_vector<boct_tree_cell<T_loc,T_data>* > list_of_vis_nodes_;
 };

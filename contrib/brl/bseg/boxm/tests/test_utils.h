@@ -25,15 +25,17 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers);
 
 vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world);
 
+#if 0
+bool generate_test_boxes(double box_min_x, double box_min_y, double box_min_z,
+                         double box_dim_x, double box_dim_y, double box_dim_z,
+                         double world_dim_x, double world_dim_y, double world_dim_z,
+                         vcl_vector<vgl_box_3d<double> >& boxes, bool gen_2box = true);
 
-//bool generate_test_boxes(double box_min_x, double box_min_y, double box_min_z,
-//                                    double box_dim_x, double box_dim_y, double box_dim_z,
-//                                    double world_dim_x, double world_dim_y, double world_dim_z,
-//                                    vcl_vector<vgl_box_3d<double> >& boxes, bool gen_2box = true);
-//
-//void gen_texture_map(vgl_box_3d<double> box,
-//					   vcl_vector<vcl_vector<float> >& intens_map_bt,
-//					   vcl_vector<vcl_vector<float> >& intens_map_side1,
-//					   vcl_vector<vcl_vector<float> >& intens_map_side2,
-//					   bool gen_rand, float app_val);
-#endif
+void gen_texture_map(vgl_box_3d<double> box,
+                     vcl_vector<vcl_vector<float> >& intens_map_bt,
+                     vcl_vector<vcl_vector<float> >& intens_map_side1,
+                     vcl_vector<vcl_vector<float> >& intens_map_side2,
+                     bool gen_rand, float app_val);
+#endif // 0
+
+#endif // test_utils_h
