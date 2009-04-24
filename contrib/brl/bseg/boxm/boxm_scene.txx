@@ -17,8 +17,7 @@
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
-: lvcs_(lvcs), block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
-active_block_(vgl_point_3d<int>(-1,-1,-1)), max_tree_level_(3),init_tree_level_(2)
+: lvcs_(lvcs), block_dim_(block_dim), origin_(origin), active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
@@ -40,8 +39,7 @@ template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<double>& world_dim)
-: block_dim_(block_dim), origin_(origin), scene_path_(""), block_pref_(""),
-active_block_(vgl_point_3d<int>(-1,-1,-1)),max_tree_level_(3),init_tree_level_(2)
+: block_dim_(block_dim), origin_(origin), active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
@@ -59,6 +57,17 @@ active_block_(vgl_point_3d<int>(-1,-1,-1)),max_tree_level_(3),init_tree_level_(2
   }
 }
 
+template <class T>
+boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
+                               const vgl_point_3d<double>& origin,
+                               const vgl_vector_3d<double>& block_dim,
+                               const vgl_vector_3d<double>& world_dim, 
+                               unsigned max_level, unsigned init_level)                      
+{ 
+  *this = boxm_scene(lvcs, origin, block_dim, world_dim); 
+  set_octree_levels(max_level, init_level); 
+}
+             
 template <class T>
 void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 {
@@ -260,10 +269,6 @@ void boxm_scene<T>::write_scene()
 template <class T>
 void boxm_scene<T>::load_scene(vcl_string filename)
 {
-  //vsl_b_ifstream is(filename.c_str());
-  //this->b_read(is);
-  //is.close();
-  //boxm_scene_parser* parser = parse_config(filename, true);
   parse_config(filename, true);
 #if 0
   if (parser) {

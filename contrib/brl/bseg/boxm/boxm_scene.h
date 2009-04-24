@@ -33,20 +33,23 @@ template <class T>
 class boxm_scene :public boxm_scene_base
 {
  public:
-  boxm_scene() : scene_path_(""), block_pref_(""), active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
+  boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
 
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<double>& world_dim);
 
+  boxm_scene(const bgeo_lvcs& lvcs,
+             const vgl_point_3d<double>& origin,
+             const vgl_vector_3d<double>& block_dim,
+             const vgl_vector_3d<double>& world_dim, 
+             unsigned max_level, unsigned init_level);
+
   //: when lvcs is not avialable
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<double>& world_dim);
-
-  void set_paths(vcl_string scene_path, vcl_string block_prefix)
-  { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
   ~boxm_scene() {}
 
@@ -95,10 +98,6 @@ class boxm_scene :public boxm_scene_base
   vgl_point_3d<double> origin_;
   vgl_vector_3d<double> block_dim_;
   vbl_array_3d<boxm_block<T>*> blocks_;
-  vcl_string scene_path_;
-  vcl_string block_pref_;
-  unsigned max_tree_level_;
-  unsigned init_tree_level_;
 
   //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
