@@ -1,24 +1,21 @@
 //This is brl/bseg/boxm/pro/processes/boxm_create_scene_process.cxx
+#include <boxm/boxm_scene_base.h>
+#include <boxm/boxm_scene.h>
 //:
 // \file
 // \brief A process for creating a new boxm_scene when there is not a saved one.
 //        It receives the parameters from a parameter file in XML
 //
 // \author Gamze Tunali
-// \date 04/21/2009
+// \date Apr 21, 2009
 //
 // \verbatim
 //  Modifications
-//
+//   <none yet>
 // \endverbatim
-
-
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
-#include <boxm/boxm_scene_base.h>
-#include <boxm/boxm_scene.h>
 
 #include <brdb/brdb_value.h>
 
@@ -39,7 +36,7 @@
 namespace boxm_create_scene_process_globals
 {
   //this process takes no inputs
-  const unsigned n_outputs_ = 1; 
+  const unsigned n_outputs_ = 1;
   //Define parameters here
   const vcl_string param_input_directory_ =  "scene_path";
   const vcl_string param_apm_type_ =  "appearence_model";
@@ -58,7 +55,7 @@ namespace boxm_create_scene_process_globals
   const vcl_string param_max_ocp_prob_ = "max_ocp_prob";
 }
 
-//:sets input and output types 
+//:sets input and output types
 bool boxm_create_scene_process_cons(bprb_func_process& pro)
 {
   //set output types
@@ -66,10 +63,9 @@ bool boxm_create_scene_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
   return true;
-  
 }
 
 //:creates a scene from parameters
@@ -86,7 +82,6 @@ bool boxm_create_scene_process(bprb_func_process& pro)
   }
   vcl_cout << "In boxm_create_scene_process::execute() -- input directory is: " <<  vul_file::get_cwd() << scene_dir << vcl_endl;
 
-  
   double origin_x = 0.0f;
   pro.parameters()->get_value(param_origin_x_, origin_x);
   double origin_y = 0.0f;
@@ -111,7 +106,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_scene_dim_z_, scene_dimz);
   // world dimensions are computed from the block array dimensions which is given as paramaters
   vgl_vector_3d<double> scene_dims(scene_dimx*dimx, scene_dimy*dimy, scene_dimz*dimz);
-  
+
   vcl_string lvcs_path;
   pro.parameters()->get_value(param_lvcs_, lvcs_path);
 
