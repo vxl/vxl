@@ -94,7 +94,7 @@ vidl_ffmpeg_istream
 
 
 //: Return the height of each frame
-unsigned int 
+unsigned int
 vidl_ffmpeg_istream
 ::height() const
 {
@@ -103,7 +103,7 @@ vidl_ffmpeg_istream
 
 
 //: Return the pixel format
-vidl_pixel_format 
+vidl_pixel_format
 vidl_ffmpeg_istream
 ::format() const
 {
@@ -112,13 +112,21 @@ vidl_ffmpeg_istream
 
 
 //: Return the frame rate (0.0 if unspecified)
-double 
+double
 vidl_ffmpeg_istream
 ::frame_rate() const
 {
   return 0.0;
 }
 
+
+//: Return the duration in seconds (0.0 if unknown)
+double
+vidl_ffmpeg_istream
+::duration() const
+{
+  return 0.0;
+}
 
 
 bool
