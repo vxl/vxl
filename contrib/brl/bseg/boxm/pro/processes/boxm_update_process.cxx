@@ -18,7 +18,9 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_update.h>
 
+#include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
+#include <vil/vil_image_view.h>
 
 namespace boxm_update_process_globals
 {
@@ -67,18 +69,12 @@ bool boxm_update_process(bprb_func_process& pro)
      vcl_cout << "boxm_update_process: null input value, cannot run" << vcl_endl;
      return false;
   }
- 
-  if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-    boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > *s = new boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > ();
 
-    // check the image type, for float 
-    if (input_image->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-      vil_image_view<float> image = *vil_convert_cast(float(), input_image);
-      boxm_update<short, BOXM_APM_MOG_GREY>(*s, image, camera, true);
-    } else {
-      vcl_cout << "boxm_update_process: input image expected to be float data type" << vcl_endl;
-      return false;
-    }
+  if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
+    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+    boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+    vil_image_view<float> image = *vil_convert_cast(float(), input_image);
+    boxm_update<short, BOXM_APM_MOG_GREY>(*s, image, camera, true);
   } else {
     vcl_cout << "boxm_update_process: undefined APM type" << vcl_endl;
     return false;

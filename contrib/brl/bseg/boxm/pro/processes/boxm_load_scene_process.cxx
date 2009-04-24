@@ -16,7 +16,6 @@
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 
-
 namespace boxm_load_scene_process_globals
 {
   const unsigned n_inputs_ = 2;
@@ -63,7 +62,8 @@ bool boxm_load_scene_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene;
 
   if (apm_type == "apm_mog_grey") {
-    boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > *s = new boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > ();
+    typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+    boxm_scene<tree_type> *s = new boxm_scene<tree_type>();
     //vsl_b_read(is, s);
     s->load_scene(scene_file);
     if (s->appearence_model() != BOXM_APM_MOG_GREY) {

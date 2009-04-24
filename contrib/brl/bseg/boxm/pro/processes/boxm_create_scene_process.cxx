@@ -51,8 +51,8 @@ namespace boxm_create_scene_process_globals
   const vcl_string param_scene_dim_z_ = "scene_dim_z";
   const vcl_string param_lvcs_ = "lvcs";
   const vcl_string param_block_pref_ = "block_pref";
-  const vcl_string param_min_ocp_prob_ = "min_ocp_prob";
-  const vcl_string param_max_ocp_prob_ = "max_ocp_prob";
+  const vcl_string param_max_octree_level_ = "max_octree_level";
+  const vcl_string param_init_octree_level_ = "init_octree_level";
 }
 
 //:sets input and output types
@@ -104,6 +104,12 @@ bool boxm_create_scene_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_scene_dim_y_, scene_dimy);
   double scene_dimz = 10;
   pro.parameters()->get_value(param_scene_dim_z_, scene_dimz);
+
+  unsigned max_level = 10;
+  pro.parameters()->get_value(param_max_octree_level_, max_level);
+  unsigned init_level = 6;
+  pro.parameters()->get_value(param_init_octree_level_, init_level);
+
   // world dimensions are computed from the block array dimensions which is given as paramaters
   vgl_vector_3d<double> scene_dims(scene_dimx*dimx, scene_dimy*dimy, scene_dimz*dimz);
 
@@ -124,26 +130,23 @@ bool boxm_create_scene_process(bprb_func_process& pro)
   vcl_string block_pref;
   pro.parameters()->get_value(param_block_pref_, block_pref);
 
-  float min_ocp_prob = 1e-5f;
-  pro.parameters()->get_value(param_min_ocp_prob_, min_ocp_prob);
-  float max_ocp_prob = 1- 1e-5f;
-  pro.parameters()->get_value(param_max_ocp_prob_, max_ocp_prob);
-
   vcl_string apm_type;
   pro.parameters()->get_value(param_apm_type_, apm_type);
 
-  boxm_scene_base_sptr scene=0;
+  boxm_scene_base_sptr scene_ptr=0;
   if (apm_type == "apm_mog_grey") {
     typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-
-    scene = new boxm_scene<tree_type>(*lvcs, origin, block_dims, scene_dims);
+    boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(*lvcs, origin, block_dims, scene_dims, max_level, init_level);
+    scene->set_appearence_model(boxm_apm_types::str_to_enum(apm_type.c_str()));
+    scene->set_paths(scene_dir, block_pref);
+    scene_ptr = scene;
   } else {
     vcl_cout << "boxm_create_scene_process: undefined APM type" << vcl_endl;
     return false;
   }
 
   //store output
-  pro.set_output_val<boxm_scene_base_sptr>(0, scene);
+  pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
 
   return true;
 }
