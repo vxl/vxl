@@ -17,7 +17,7 @@
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
-: lvcs_(lvcs), block_dim_(block_dim), origin_(origin), active_block_(vgl_point_3d<int>(-1,-1,-1))
+: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
@@ -39,7 +39,7 @@ template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<double>& world_dim)
-: block_dim_(block_dim), origin_(origin), active_block_(vgl_point_3d<int>(-1,-1,-1))
+: origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   // compute the dimensions of 3D array
   int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
@@ -59,15 +59,15 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
-                               const vgl_point_3d<double>& origin,
-                               const vgl_vector_3d<double>& block_dim,
-                               const vgl_vector_3d<double>& world_dim, 
-                               unsigned max_level, unsigned init_level)                      
-{ 
-  *this = boxm_scene(lvcs, origin, block_dim, world_dim); 
-  set_octree_levels(max_level, init_level); 
+                          const vgl_point_3d<double>& origin,
+                          const vgl_vector_3d<double>& block_dim,
+                          const vgl_vector_3d<double>& world_dim,
+                          unsigned max_level, unsigned init_level)
+{
+  *this = boxm_scene(lvcs, origin, block_dim, world_dim);
+  set_octree_levels(max_level, init_level);
 }
-             
+
 template <class T>
 void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 {
@@ -325,7 +325,7 @@ boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml, bool filename)
     }
     if (!parser->parseFile(xmlFile)) {
       vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
-               << parser->XML_GetCurrentLineNumber() << vcl_endl;
+               << parser->XML_GetCurrentLineNumber() << '\n';
       delete parser;
       return 0;
     }
@@ -337,7 +337,7 @@ boxm_scene_parser* boxm_scene<T>::parse_config(vcl_string xml, bool filename)
     }
     if (!parser->parseString(xml.data())) {
       vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
-               << parser->XML_GetCurrentLineNumber() << vcl_endl;
+               << parser->XML_GetCurrentLineNumber() << '\n';
 
       delete parser;
       return 0;
