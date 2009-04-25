@@ -13,7 +13,7 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, fl
 {
   typedef typename bsta_parzen_sphere<T,n>::vector_type vect_t;
 
-  //: initialize seeds by picking given percentage of the sample set randomly
+  // initialize seeds by picking given percentage of the sample set randomly
   int size = set.size();
   int seed_size = (int)vcl_ceil(percentage*size/100.0f);
   vcl_cout << "size: " << size << " seed_size: " << seed_size << vcl_endl;
@@ -22,8 +22,9 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, fl
 
   vcl_cout << "initialized assignment_, its size: " << set.assignments().size()  << vcl_endl;
 
-  for (int i = 0; i < seed_size; i++) {
-    //: randomly pick one of the samples as seed
+  for (int i = 0; i < seed_size; i++)
+  {
+    // randomly pick one of the samples as seed
     double rn = rng.drand32();
     int s_id = (int)vcl_floor(rn*(size-1)+0.5f);
     if (set.assignment(s_id) >= 0) { // has already been assigned to a mode
@@ -47,7 +48,7 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, fl
         break;
     }
     if (cnt < max_iter_) {
-      //: found a stable mode
+      // found a stable mode
       modes_.push_back(current);
       set.set_assignment(s_id, modes_.size()-1);
     }
@@ -66,10 +67,9 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, T epsilon)
   int size = set.size();
   set.initialize_assignments();
 
-  for (int i = 0; i < size; i++) {
-
+  for (int i = 0; i < size; i++)
+  {
     vnl_vector_fixed<T,n> dif(T(10e4));
-
     vect_t current = set.sample(i);
 
     unsigned cnt = 0;
@@ -85,7 +85,7 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, T epsilon)
         break;
     }
     if (cnt < max_iter_) {
-      //: found a stable mode
+      // found a stable mode
       modes_.push_back(current);
       set.set_assignment(i, modes_.size()-1);
     }
@@ -102,13 +102,15 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
   vcl_vector<bool> eliminated_modes(modes_.size(), false);
 
-  for (unsigned m = 0; m < modes_.size(); m++) {
-    if (set.mode_size(m) < cnt) {
-      //: eliminate this mode
+  for (unsigned m = 0; m < modes_.size(); m++)
+  {
+    if (set.mode_size(m) < cnt)
+    {
+      // eliminate this mode
       eliminated_modes[m] = true;
       for (unsigned i = 0; i < set.size(); i++) {
-        if (set.assignment(i) == m) {
-          //: find a new mode using mean-shift procedure
+        if (set.assignment(i) == (int)m) {
+          // find a new mode using mean-shift procedure
           vnl_vector_fixed<T,n> dif(T(10e4));
           vect_t current = set.sample(i);
           unsigned cnt = 0;
@@ -123,7 +125,7 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
             if (cnt > max_iter_)
               break;
           }
-          //: found a mode, check which other modes, this one is most closest to
+          // found a mode, check which other modes, this one is most closest to
           vnl_vector_fixed<T,n> dif_min(T(10e4));
           unsigned mm_min = m;
           for (unsigned mm = 0; mm < modes_.size(); mm++) {
@@ -142,13 +144,13 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
     }
   }
 
-  //: re-arrange the assignment vector with the new mode ids
+  // re-arrange the assignment vector with the new mode ids
   vcl_vector<vect_t > new_modes;
   for (unsigned i = 0; i < modes_.size(); i++) {
     if (!eliminated_modes[i]) {
       new_modes.push_back(modes_[i]);
       for (unsigned jj = 0; jj < set.assignments().size(); jj++) {
-        if (set.assignment(jj) == i)
+        if (set.assignment(jj) == (int)i)
           set.set_assignment(jj, new_modes.size()-1);
       }
     }
@@ -184,9 +186,9 @@ bsta_mean_shift<T,n>::trim_modes(bsta_sample_set<T,n>& set, T epsilon)
       vnl_vector_fixed<T,n> v_dif(dif);
       if (v_dif.magnitude() < epsilon) {
         trimmed[j] = true;
-        //: assign all the samples of the trimmed mode to this new mode v_i
+        // assign all the samples of the trimmed mode to this new mode v_i
         for (unsigned kk = 0; kk < set.assignments().size(); kk++) {
-          if (set.assignment(kk) == j) {
+          if (set.assignment(kk) == (int)j) {
             set.set_assignment(kk, i);
           }
         }
@@ -198,7 +200,7 @@ bsta_mean_shift<T,n>::trim_modes(bsta_sample_set<T,n>& set, T epsilon)
     if (!trimmed[i]) {
       new_modes.push_back(modes_[i]);
       for (unsigned jj = 0; jj < set.assignments().size(); jj++) {
-        if (set.assignment(jj) == i)
+        if (set.assignment(jj) == (int)i)
           set.set_assignment(jj, new_modes.size()-1);
       }
     }
