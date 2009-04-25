@@ -49,7 +49,8 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>* traverse(boct_loc_code<T_loc> &code);
   boct_tree_cell<T_loc,T_data>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
 
-  bool traverse_and_split(boct_loc_code<T_loc> &code);
+  // TODO: not yet implemented -- currently just returns false
+  bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
 
   short level() { return code_.level; }
   void set_level(short level) { code_.level=level; }
