@@ -6,7 +6,7 @@
 
 #include "vnl_sym_matrix.h"
 #include <vcl_iostream.h>
-
+#include <vnl/vnl_config.h> // for VNL_CONFIG_CHECK_BOUNDS
 
 // ==========================================================================
 //: Replaces the symmetric submatrix of THIS matrix, starting at top left corner, by the elements of matrix m.

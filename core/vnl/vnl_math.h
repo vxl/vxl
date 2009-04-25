@@ -38,6 +38,7 @@
 #include <vcl_cmath.h>
 #include "dll.h"
 #include <vxl_config.h>
+#include <vnl/vnl_config.h> // for VNL_CONFIG_ENABLE_SSE2_ROUNDING
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
 #include <vcl_cassert.h>
 #endif

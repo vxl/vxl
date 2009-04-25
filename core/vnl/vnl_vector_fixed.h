@@ -32,8 +32,9 @@
 #include <vcl_iosfwd.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
-#include "vnl_c_vector.h"
-#include "vnl_matrix.h" // outerproduct
+#include <vnl/vnl_c_vector.h>
+#include <vnl/vnl_matrix.h> // outerproduct
+#include <vnl/vnl_config.h> // for VNL_CONFIG_CHECK_BOUNDS
 
 export template <class T, unsigned int n> class vnl_vector_fixed;
 export template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
