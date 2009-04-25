@@ -4,13 +4,12 @@
 // \file
 // \brief 3D mesh file I/O
 //
-//
-// \author
-//  MingChing Chang  Feb 10, 2005
+// \author MingChing Chang
+// \date   Feb 10, 2005
 //
 // \verbatim
 //  Modifications
-//    6/13/2005   Nhon Trinh     implemented bmsh3d_load_ply(...)
+//    June 13, 2005   Nhon Trinh     implemented bmsh3d_load_ply(...)
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -24,8 +23,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vgl/vgl_point_3d.h>
-
-//#include <rply/rply.h>
+#include <vgl/vgl_vector_3d.h>
 
 // #################################################################
 //    POINT CLOUD FILE I/O
@@ -350,8 +348,7 @@ bool bmsh3d_save_p3d(bmsh3d_pt_set* pointset, const char* file)
   vcl_cerr << "  saving " << file << " : "
            << pointset->vertexmap().size() << " points ...\n";
 
-  vcl_fprintf(fp, "%d\n", 3);
-  vcl_fprintf(fp, "%u\n", pointset->vertexmap().size());
+  vcl_fprintf(fp, "3\n%lu\n", (long unsigned)pointset->vertexmap().size());
 
   vcl_map<int, bmsh3d_vertex*>::iterator it = pointset->vertexmap().begin();
   for (; it != pointset->vertexmap().end(); ++it) {
@@ -404,8 +401,7 @@ bool bmsh3d_save_p3d(vcl_vector<vgl_point_3d<double> >& pts, const char* file)
   }
   vcl_cerr << "  saving " << file << " : " << pts.size() << " points ...\n";
 
-  vcl_fprintf(fp, "%d\n", 3);
-  vcl_fprintf(fp, "%u\n", pts.size());
+  vcl_fprintf(fp, "3\n%lu\n", (long unsigned)pts.size());
 
   vcl_vector<vgl_point_3d<double> >::iterator it = pts.begin();
   for (; it != pts.end(); ++it) {
@@ -461,8 +457,7 @@ bool bmsh3d_save_p3d(vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, c
   }
   vcl_cerr << "  saving " << file << " : " << idpts.size() << " points ...\n";
 
-  vcl_fprintf(fp, "%d\n", 3);
-  vcl_fprintf(fp, "%u\n", idpts.size());
+  vcl_fprintf(fp, "3\n%lu\n", (long unsigned)idpts.size());
 
   vcl_vector<vcl_pair<int, vgl_point_3d<double> > >::iterator it = idpts.begin();
   for (; it != idpts.end(); ++it) {
@@ -554,8 +549,7 @@ bool save_unmeshed_p3d(bmsh3d_mesh* M, const char* file)
     return false;
 
   vcl_cerr << "  saving unmeshed " << num << " points to " << file << "...\n";
-  vcl_fprintf(fp, "%d\n", 3);
-  vcl_fprintf(fp, "%u\n", num);
+  vcl_fprintf(fp, "3\n%u\n", num);
 
   vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   unsigned int count=0;
@@ -592,21 +586,20 @@ bool bmsh3d_save_ply2(const vcl_vector<vgl_point_3d<double> >& pts,
   vcl_cerr << "  saving " << file << " :\n\t" << pts.size() << " points, "
            << faces.size() << " faces ...\n";
 
-  vcl_fprintf(fp, "%d\n", pts.size());
-  vcl_fprintf(fp, "%d\n", faces.size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)pts.size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)faces.size());
 
   for (unsigned int i=0; i<pts.size(); ++i) {
     vcl_fprintf(fp, "%.16f ", pts[i].x());
     vcl_fprintf(fp, "%.16f ", pts[i].y());
-    vcl_fprintf(fp, "%.16f ", pts[i].z());
-    vcl_fprintf(fp, "\n");
+    vcl_fprintf(fp, "%.16f\n",pts[i].z());
   }
 
   for (unsigned int i=0; i<faces.size(); ++i) {
-    vcl_fprintf(fp, "%d ", faces[i].size());
+    vcl_fprintf(fp, "%lu", (long unsigned)faces[i].size());
     assert (faces[i].size() != 0);
     for (unsigned int j=0; j<faces[i].size(); ++j)
-      vcl_fprintf(fp, "%d ", faces[i][j]);
+      vcl_fprintf(fp, " %d", faces[i][j]);
     vcl_fprintf(fp, "\n");
   }
 
@@ -660,8 +653,8 @@ bool bmsh3d_save_ply2(bmsh3d_mesh* M, const char* file)
   vcl_cerr << "  saving " << file << " :\n\t" << M->vertexmap().size()
            << " points, " << M->facemap().size() << " faces ...\n";
 
-  vcl_fprintf(fp, "%d\n", M->vertexmap().size());
-  vcl_fprintf(fp, "%d\n", M->facemap().size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)M->vertexmap().size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)M->facemap().size());
 
   //Use v->vid() to re-index vertices, starting with id 0.
   int vidcounter = 0;
@@ -672,8 +665,7 @@ bool bmsh3d_save_ply2(bmsh3d_mesh* M, const char* file)
 
     vcl_fprintf(fp, "%.16f ", V->pt().x());
     vcl_fprintf(fp, "%.16f ", V->pt().y());
-    vcl_fprintf(fp, "%.16f ", V->pt().z());
-    vcl_fprintf(fp, "\n");
+    vcl_fprintf(fp, "%.16f\n",V->pt().z());
   }
 
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
@@ -681,10 +673,10 @@ bool bmsh3d_save_ply2(bmsh3d_mesh* M, const char* file)
     bmsh3d_face* F = (*fit).second;
     F->_ifs_track_ordered_vertices();
 
-    vcl_fprintf(fp, "%d ", F->vertices().size());
+    vcl_fprintf(fp, "%lu", (long unsigned)F->vertices().size());
     for (unsigned j=0; j<F->vertices().size(); ++j) {
       bmsh3d_vertex* V = F->vertices(j);
-      vcl_fprintf(fp, "%d ", V->vid());
+      vcl_fprintf(fp, " %d", V->vid());
     }
     vcl_fprintf(fp, "\n");
   }
@@ -729,10 +721,10 @@ bool bmsh3d_load_ply2(bmsh3d_mesh* M, const char* file)
     bmsh3d_face* F = M->_new_face();
 
     int num_pt_per_face;
-    ret = vcl_fscanf(fp, "%d ", &num_pt_per_face); assert (ret==1);
+    ret = vcl_fscanf(fp, "%d", &num_pt_per_face); assert (ret==1);
     for (int j=0; j<num_pt_per_face; ++j) {
       int ind;
-      ret = vcl_fscanf(fp, "%d ", &ind); assert (ret==1);
+      ret = vcl_fscanf(fp, " %d", &ind); assert (ret==1);
 
       bmsh3d_vertex* V = M->vertexmap(ind);
       F->_ifs_add_vertex(V);
@@ -817,10 +809,10 @@ bool bmsh3d_load_ply2_f(bmsh3d_mesh* M, const char* file)
     bmsh3d_face* F = M->_new_face();
 
     int num_pt_per_face;
-    ret = vcl_fscanf(fp, "%d ", &num_pt_per_face); assert(ret==1);
+    ret = vcl_fscanf(fp, "%d", &num_pt_per_face); assert(ret==1);
     for (int j=0; j<num_pt_per_face; ++j) {
       int ind;
-      ret = vcl_fscanf(fp, "%d ", &ind); assert(ret==1);
+      ret = vcl_fscanf(fp, " %d", &ind); assert(ret==1);
 
       bmsh3d_vertex* V = M->vertexmap(ind);
       F->_ifs_add_vertex(V);
@@ -886,8 +878,8 @@ bool bmsh3d_save_label_faces_ply2(bmsh3d_mesh* M, const int label, const char* f
   vcl_cerr << "  saving " << file << " :\n\t"
            << vertices.size() << " points, " << faces.size() << " faces ...\n";
 
-  vcl_fprintf(fp, "%d\n", vertices.size());
-  vcl_fprintf(fp, "%d\n", faces.size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)vertices.size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)faces.size());
 
   for (unsigned int i=0; i<vertices.size(); ++i) {
     bmsh3d_vertex* V = vertices[i];
@@ -895,8 +887,7 @@ bool bmsh3d_save_label_faces_ply2(bmsh3d_mesh* M, const int label, const char* f
 
     vcl_fprintf(fp, "%.16f ", V->pt().x());
     vcl_fprintf(fp, "%.16f ", V->pt().y());
-    vcl_fprintf(fp, "%.16f ", V->pt().z());
-    vcl_fprintf(fp, "\n");
+    vcl_fprintf(fp, "%.16f\n",V->pt().z());
   }
 
   for (unsigned int i=0; i<faces.size(); ++i) {
@@ -906,10 +897,10 @@ bool bmsh3d_save_label_faces_ply2(bmsh3d_mesh* M, const int label, const char* f
     vcl_vector<bmsh3d_vertex*> vertices;
     F->get_ordered_Vs (vertices);
 
-    vcl_fprintf(fp, "%d ", vertices.size());
+    vcl_fprintf(fp, "%lu", (long unsigned)vertices.size());
     for (unsigned j=0; j<vertices.size(); ++j) {
       bmsh3d_vertex* V = vertices[j];
-      vcl_fprintf(fp, "%d ", V->vid());
+      vcl_fprintf(fp, " %d", V->vid());
     }
     vcl_fprintf(fp, "\n");
   }
@@ -982,8 +973,8 @@ bool bmsh3d_save_m(bmsh3d_mesh* M, const char* file)
   vcl_cerr << "  saving " << file << " :\n\t" << M->vertexmap().size()
            << " points, " << M->facemap().size() << " faces ...\n";
 
-  vcl_fprintf(fp, "%d\n", M->vertexmap().size());
-  vcl_fprintf(fp, "%d\n", M->facemap().size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)M->vertexmap().size());
+  vcl_fprintf(fp, "%lu\n", (long unsigned)M->facemap().size());
 
   vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (; it != M->vertexmap().end(); ++it) {
@@ -991,18 +982,17 @@ bool bmsh3d_save_m(bmsh3d_mesh* M, const char* file)
 
     vcl_fprintf(fp, "%.16f ", v->pt().x());
     vcl_fprintf(fp, "%.16f ", v->pt().y());
-    vcl_fprintf(fp, "%.16f ", v->pt().z());
-    vcl_fprintf(fp, "\n");
+    vcl_fprintf(fp, "%.16f\n",v->pt().z());
   }
 
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); ++fit) {
     bmsh3d_face* F = (*fit).second;
 
-    vcl_fprintf(fp, "%d ", F->vertices().size());
+    vcl_fprintf(fp, "%lu", (long unsigned)F->vertices().size());
     for (unsigned j=0; j<F->vertices().size(); ++j) {
       bmsh3d_vertex* V = F->vertices(j);
-      vcl_fprintf(fp, "%d ", V->id());
+      vcl_fprintf(fp, " %d", V->id());
     }
     vcl_fprintf(fp, "\n");
   }
@@ -1109,101 +1099,68 @@ bool bmsh3d_save_xml(bmsh3d_mesh* mesh, const char* file)
            << " points, " << mesh->facemap().size() << " faces ...\n";
 
   vcl_fprintf(fp, "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>");
+  vcl_fprintf(fp, "\n<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">");
 
-  vcl_fprintf(fp, "\n");
-  vcl_fprintf(fp, "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">");
+  vcl_fprintf(fp, "\n<gml:description>CityModel description</gml:description><gml:name>CityModel name</gml:name>");
+  vcl_fprintf(fp, "\n<cityObjectMember>");
 
-  vcl_fprintf(fp, "\n");
-  vcl_fprintf(fp, "<gml:description>CityModel description</gml:description>");
-  vcl_fprintf(fp, "<gml:name>CityModel name</gml:name>");
-
-  vcl_fprintf(fp, "\n");
-  vcl_fprintf(fp, "<cityObjectMember>");
   //  <Building gml:id="GEB_TH_IFC_Building_Variant_GEB_0">");
-
-  vcl_fprintf(fp, "\n");
-  vcl_fprintf(fp, "<Building>");
-
-  vcl_fprintf(fp, "\n");
-  vcl_fprintf(fp, "<gml:description>Building Description</gml:description>");
-  vcl_fprintf(fp, " <gml:name>Building Name</gml:name>");
+  vcl_fprintf(fp, "\n<Building>");
+  vcl_fprintf(fp, "\n<gml:description>Building Description</gml:description>");
+  vcl_fprintf(fp, "<gml:name>Building Name</gml:name>");
   vcl_fprintf(fp, "<consistsOfBuildingPart>");
   //       <BuildingPart gml:id="GEB_TH_IFC_Building_Variant_GEB_TEIL_1">
   vcl_fprintf(fp, "<BuildingPart>");
-  vcl_fprintf(fp, " <gml:description>BuildingPart Description</gml:description>");
+  vcl_fprintf(fp, "<gml:description>BuildingPart Description</gml:description>");
   vcl_fprintf(fp, "<gml:name>BuildingPart Name</gml:name>");
 
   vcl_map<int, bmsh3d_face*>::iterator fit = mesh->facemap().begin();
   for (; fit != mesh->facemap().end(); ++fit)
   {
     bmsh3d_face* face = (*fit).second;
-    vcl_fprintf(fp, "\n");
-
-    vcl_fprintf(fp, "<boundedBy>");
+    vcl_fprintf(fp, "\n<boundedBy>");
     vcl_fprintf(fp, "<WallSurface>");
-    vcl_fprintf(fp, "<lod4MultiSurface><gml:MultiSurface>");
-    vcl_fprintf(fp, "\n");
-
+    vcl_fprintf(fp, "<lod4MultiSurface><gml:MultiSurface>\n");
     vcl_fprintf(fp, "<gml:surfaceMember>");
-
     vcl_fprintf(fp, "<TexturedSurface orientation=\"+\">");
-
     vcl_fprintf(fp, "<gml:baseSurface>");
-
     vcl_fprintf(fp, "<gml:Polygon>");
-
     vcl_fprintf(fp, "<gml:exterior>");
-
-    vcl_fprintf(fp, "<gml:LinearRing>");
-    vcl_fprintf(fp, "\n");
+    vcl_fprintf(fp, "<gml:LinearRing>\n");
 
     for (unsigned j=0; j<face->vertices().size(); ++j)
     {
       bmsh3d_vertex* v = face->vertices(j);
-      vcl_fprintf(fp, "\n");
-      vcl_fprintf(fp, "<gml:pos srsDimension=\"3\">");
-      vgl_point_3d<double > pt = v->pt();
+      vcl_fprintf(fp, "\n<gml:pos srsDimension=\"3\">");
+      vgl_point_3d<double> pt = v->pt();
       vcl_fprintf(fp, "%.16f ", v->pt().x());
       vcl_fprintf(fp, "%.16f ", v->pt().y());
-      vcl_fprintf(fp, "%.16f ", v->pt().z());
-      vcl_fprintf(fp, "</gml:pos>");
-      vcl_fprintf(fp, "\n");
+      vcl_fprintf(fp, "%.16f",  v->pt().z());
+      vcl_fprintf(fp, "</gml:pos>\n");
     }
     //Now print the first vertex again to close the polygon
     bmsh3d_vertex* v = face->vertices(0);
-    vcl_fprintf(fp, "\n");
-    vcl_fprintf(fp, "<gml:pos srsDimension=\"3\">");
-    vgl_point_3d<double > pt = v->pt();
+    vcl_fprintf(fp, "\n<gml:pos srsDimension=\"3\">");
+    vgl_point_3d<double> pt = v->pt();
     vcl_fprintf(fp, "%.16f ", v->pt().x());
     vcl_fprintf(fp, "%.16f ", v->pt().y());
-    vcl_fprintf(fp, "%.16f ", v->pt().z());
-    vcl_fprintf(fp, "</gml:pos>");
-    vcl_fprintf(fp, "\n");
-
+    vcl_fprintf(fp, "%.16f",  v->pt().z());
+    vcl_fprintf(fp, "</gml:pos>\n");
     vcl_fprintf(fp, "</gml:LinearRing>");
-
     vcl_fprintf(fp, "</gml:exterior>");
-
     vcl_fprintf(fp, "</gml:Polygon>");
-
     vcl_fprintf(fp, "</gml:baseSurface>");
-
-    vcl_fprintf(fp, "</TexturedSurface>");
-    vcl_fprintf(fp, "\n");
-
-
+    vcl_fprintf(fp, "</TexturedSurface>\n");
     vcl_fprintf(fp, "</gml:surfaceMember>");
-
     vcl_fprintf(fp, "</gml:MultiSurface></lod4MultiSurface>");
-    vcl_fprintf(fp, "     </WallSurface>");
-    vcl_fprintf(fp, "  </boundedBy>");
-    vcl_fprintf(fp, "\n");
+    vcl_fprintf(fp, "</WallSurface>");
+    vcl_fprintf(fp, "</boundedBy>\n");
   }
-  vcl_fprintf(fp, "       </BuildingPart>");
-  vcl_fprintf(fp, "     </consistsOfBuildingPart>");
-  vcl_fprintf(fp, "   </Building>");
-  vcl_fprintf(fp, "  </cityObjectMember>");
-  vcl_fprintf(fp, " </CityModel>");
+  vcl_fprintf(fp, "</BuildingPart>");
+  vcl_fprintf(fp, "</consistsOfBuildingPart>");
+  vcl_fprintf(fp, "</Building>");
+  vcl_fprintf(fp, "</cityObjectMember>");
+  vcl_fprintf(fp, "</CityModel>");
 
   vcl_fclose(fp);
   vcl_cerr << "\tdone.\n";
