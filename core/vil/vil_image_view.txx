@@ -263,8 +263,46 @@ inline bool convert_components_from_planes(vil_image_view<vxl_uint_64> & /*lhs*/
 //: Convert components to planes from planes, or do nothing if types are wrong.
 template <class T>
 inline bool convert_planes_from_components(vil_image_view<T> & /*lhs*/,
-                                           const vil_image_view_base & /*rhs_base*/)
+                                           const vil_image_view_base & /*rhs*/)
 { return false;} // when lhs has non-scalar pixels, don't attempt conversion
+// except for rgb<vxl_byte> and rgba<vxl_uint_16> since they come up in applications
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil_image_view<vil_rgb<vxl_byte> > & lhs,
+                                           const vil_image_view_base & rhs)
+{
+  if(rhs.nplanes() != 3)
+    return false;
+  if(rhs.pixel_format()!=VIL_PIXEL_FORMAT_BYTE)
+    return false;
+  unsigned ni = rhs.ni(), nj = rhs.nj();
+  const vil_image_view<vxl_byte> &rhsv = static_cast<const vil_image_view<vxl_byte>&>(rhs);
+  lhs.set_size(ni, nj);
+  for(unsigned j = 0; j<nj; ++j)
+    for(unsigned i = 0; i<ni; ++i){
+      lhs(i,j).r = rhsv(i,j,0); lhs(i, j).g = rhsv(i,j,1); lhs(i, j).b = rhsv(i,j,2);
+    }
+  return true;
+}
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil_image_view<vil_rgba<vxl_uint_16> > & lhs,
+                                           const vil_image_view_base & rhs)
+{
+  if(rhs.nplanes() != 4)
+    return false;
+  if(rhs.pixel_format()!=VIL_PIXEL_FORMAT_UINT_16)
+    return false;
+  unsigned ni = rhs.ni(), nj = rhs.nj();
+  const vil_image_view<vxl_uint_16> &rhsv = static_cast<const vil_image_view<vxl_uint_16>&>(rhs);
+  lhs.set_size(ni, nj);
+  for(unsigned j = 0; j<nj; ++j)
+    for(unsigned i = 0; i<ni; ++i){
+      lhs(i, j).r = rhsv(i,j,0); lhs(i, j).g = rhsv(i,j,1); lhs(i, j).b = rhsv(i,j,2);
+      lhs(i, j).a = rhsv(i,j,3);
+    }
+ return true;
+}
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil_image_view<vxl_byte> &lhs,
