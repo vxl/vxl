@@ -13,10 +13,10 @@ MAIN( test_binary_io )
   boct_tree<short,vgl_point_3d<double> > *tree_in=new boct_tree<short,vgl_point_3d<double> >(6,3);
   tree_in->split();
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves = tree_in->leaf_cells();
-  int num_leaves = leaves.size();
-  for (unsigned i=0; i<leaves.size(); i++) {
+  unsigned int num_leaves = 0;
+  for (unsigned i=0; i<leaves.size(); ++i) {
     boct_tree_cell<short,vgl_point_3d<double> >* leaf = static_cast<boct_tree_cell<short,vgl_point_3d<double> >*>(leaves[i]);
-    leaf->set_data(vgl_point_3d<double>(i,i,i));
+    if (leaf) { ++num_leaves; leaf->set_data(vgl_point_3d<double>(i,i,i)); }
   }
 
   //tree_in->print();

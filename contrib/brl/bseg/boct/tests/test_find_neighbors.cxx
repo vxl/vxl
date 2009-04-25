@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-//:
-// \file
 
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -9,8 +7,9 @@
 #include <boct/boct_test_util.h>
 #include <boct/boct_tree_cell.h>
 
-//: this function computes the neighbors in brute force way by going through all leaf nodes and checking if the codes of the opposit faces is the same.
-//  This means that checking if the X_HIGH of one and X_LOW of other have the same x code and vice versa.
+// This function computes the neighbors in a brute force way by going through all leaf nodes and checking if the codes of the opposite faces are the same.
+// This means checking that the X_HIGH of one and X_LOW of other have the same x code and vice versa.
+// This function is used in one of the tests.
 void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell,
                                vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaf_nodes,
                                const boct_face_idx face,
@@ -75,7 +74,7 @@ MAIN( test_find_neighbors )
   short nlevels=10;
   boct_tree<short,vgl_point_3d<double> > * block=new boct_tree<short,vgl_point_3d<double> >(nlevels);
 
-  //: two layer tree;
+  // two layer tree;
   block->split();
   vgl_point_3d<double> p1(0.1,0.1,0.1);
   boct_tree_cell<short,vgl_point_3d<double> >* cell=block->locate_point(p1);
@@ -83,7 +82,7 @@ MAIN( test_find_neighbors )
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n;
   cell->find_neighbors(X_HIGH,n,10);
 
-  //: ground truth for the code of the neighbor
+  // ground truth for the code of the neighbor
   boct_loc_code<short> gt_code;
   gt_code.set_code((cell->get_code().x_loc_|1<<(cell->level())),cell->get_code().y_loc_, cell->get_code().z_loc_);
 
@@ -95,7 +94,7 @@ MAIN( test_find_neighbors )
   n.clear();
   cell_xlow->find_neighbors(X_LOW,n,10);
 
-  //: ground truth for the code of the neighbor
+  // ground truth for the code of the neighbor
   boct_loc_code<short> gt_code_x_low;
   gt_code_x_low.set_code((cell_xlow->get_code().x_loc_-(1<<(cell_xlow->level()))),cell->get_code().y_loc_, cell->get_code().z_loc_);
 
@@ -118,7 +117,7 @@ MAIN( test_find_neighbors )
 
   TEST("Returns the correct # of Neighbors",n.size(),n_brute_force.size());
 
-  int cnt=0;
+  unsigned int cnt=0;
   for (unsigned i=0;i<n.size();i++)
   {
     for (unsigned j=0;j<n_brute_force.size();j++)
@@ -126,7 +125,7 @@ MAIN( test_find_neighbors )
       if (n[i]->code_.x_loc_==n_brute_force[j]->code_.x_loc_ &&
           n[i]->code_.y_loc_==n_brute_force[j]->code_.y_loc_ &&
           n[i]->code_.z_loc_==n_brute_force[j]->code_.z_loc_   )
-      cnt++;
+      ++cnt;
     }
   }
   TEST("Returns the Correct Neighbors",n.size(),cnt);
