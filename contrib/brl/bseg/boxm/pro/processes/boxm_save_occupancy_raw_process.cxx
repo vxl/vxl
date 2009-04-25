@@ -55,7 +55,7 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vcl_string filepath = pro.get_input<vcl_string>(i++);
-  unsigned resolution = pro.get_input<unsigned>(i++);
+  /* unsigned resolution = */ pro.get_input<unsigned>(i++);
 
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {

@@ -4,10 +4,10 @@
 // \brief Process to update the scene from an image and camera pair
 //
 // \author Gamze Tunali
-// \date 04/21/2009
+// \date Apr 21, 2009
 // \verbatim
 //  Modifications
-//   
+//   <none yet>
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -41,10 +41,10 @@ bool boxm_update_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
-  //no output 
+  //no output
   return true;
 }
 
@@ -62,7 +62,7 @@ bool boxm_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  unsigned bin_index = pro.get_input<unsigned>(i++);
+  /* unsigned bin_index = */ pro.get_input<unsigned>(i++);
 
   // check the input validity
   if ((input_image == 0) || (camera == 0) || (scene == 0)) {

@@ -10,40 +10,39 @@ boxm_cell_vis_graph_iterator<T_loc,T_data>::boxm_cell_vis_graph_iterator(vpgl_ca
                                                                          unsigned img_ni,
                                                                          unsigned img_nj) : camera_(cam),img_ni_(img_ni), img_nj_(img_nj)
 {
-  if(!tree)
+  if (!tree)
   {
    vcl_cout<<"No Tree found"<<vcl_endl;
-  
   }
   else
   {
-  list_of_vis_nodes_.clear();
-  // check if each node is visible or notr
-  check_cell_visibility(tree,tree->root());
-  // compute the visibility graph
-  for (unsigned i=0;i<list_of_vis_nodes_.size();i++)
-  {
-    boct_face_idx vis_faces = boxm_utils::visible_faces(tree->cell_bounding_box(list_of_vis_nodes_[i]), cam);
-    if (vis_faces & ::X_HIGH) {
-      form_graph_per_cell(list_of_vis_nodes_[i],X_HIGH,tree);
+    list_of_vis_nodes_.clear();
+    // check if each node is visible or notr
+    check_cell_visibility(tree,tree->root());
+    // compute the visibility graph
+    for (unsigned i=0;i<list_of_vis_nodes_.size();i++)
+    {
+      boct_face_idx vis_faces = boxm_utils::visible_faces(tree->cell_bounding_box(list_of_vis_nodes_[i]), cam);
+      if (vis_faces & ::X_HIGH) {
+        form_graph_per_cell(list_of_vis_nodes_[i],X_HIGH,tree);
+      }
+      else if (vis_faces & ::X_LOW) {
+        form_graph_per_cell(list_of_vis_nodes_[i],X_LOW,tree);
+      }
+      if (vis_faces & ::Y_HIGH) {
+        form_graph_per_cell(list_of_vis_nodes_[i],Y_HIGH,tree);
+      }
+      else if (vis_faces & ::Y_LOW) {
+        form_graph_per_cell(list_of_vis_nodes_[i],Y_LOW,tree);
+      }
+      if (vis_faces & ::Z_HIGH) {
+        form_graph_per_cell(list_of_vis_nodes_[i],Z_HIGH,tree);
+      }
+      else if (vis_faces & ::Z_LOW) {
+        form_graph_per_cell(list_of_vis_nodes_[i],Z_LOW,tree);
+      }
     }
-    else if (vis_faces & ::X_LOW) {
-      form_graph_per_cell(list_of_vis_nodes_[i],X_LOW,tree);
-    }
-    if (vis_faces & ::Y_HIGH) {
-      form_graph_per_cell(list_of_vis_nodes_[i],Y_HIGH,tree);
-    }
-    else if (vis_faces & ::Y_LOW) {
-      form_graph_per_cell(list_of_vis_nodes_[i],Y_LOW,tree);
-    }
-    if (vis_faces & ::Z_HIGH) {
-      form_graph_per_cell(list_of_vis_nodes_[i],Z_HIGH,tree);
-    }
-    else if (vis_faces & ::Z_LOW) {
-      form_graph_per_cell(list_of_vis_nodes_[i],Z_LOW,tree);
-    }
-  }
-  list_of_vis_nodes_.clear();
+    list_of_vis_nodes_.clear();
   }
 }
 
@@ -110,7 +109,6 @@ void boxm_cell_vis_graph_iterator<T_loc,T_data>::form_graph_per_cell(boct_tree_c
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node=cell->vis_node();
   vcl_vector<boct_tree_cell<T_loc,T_data>*> neighbors;
   cell->find_neighbors(face_idx, neighbors,tree->num_levels());
-  unsigned int visible_neighbor_count = 0;
   typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator neighbor_it = neighbors.begin();
   bool visible_neighbors=false;
   for (; neighbor_it != neighbors.end(); ++neighbor_it) {

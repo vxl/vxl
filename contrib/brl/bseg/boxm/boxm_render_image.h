@@ -47,7 +47,6 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
   t.mark();
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, expected.ni(), expected.nj());
-  int cnt=0;
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block

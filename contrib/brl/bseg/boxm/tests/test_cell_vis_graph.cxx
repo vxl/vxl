@@ -9,7 +9,6 @@
 MAIN( test_cell_vis_graph )
 {
   START ("CREATE SCENE");
-  short nlevels=5;
 
   // create scene
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
@@ -24,9 +23,7 @@ MAIN( test_cell_vis_graph )
   world.add(origin);
   world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
 
-  tree_type * tree=new tree_type();
   vpgl_camera_double_sptr camera = generate_camera_top(world);
-
   boxm_block_iterator<boct_tree<short,vgl_point_3d<double> > > iter(&scene);
 
   while (!iter.end())

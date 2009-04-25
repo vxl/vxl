@@ -41,7 +41,6 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, ni,nj);
-  int cnt=0;
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
@@ -154,7 +153,6 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
   t.mark();
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, ni,nj);
-  int cnt=0;
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
@@ -303,17 +301,13 @@ void boxm_update(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
     vcl_cout << "using black background model" << vcl_endl;
     for (unsigned int i=0; i<4; ++i) {
       boxm_apm_traits<APM>::apm_processor::update(background_apm, 0.0f, 1.0f);
-      float peak = boxm_apm_traits<APM>::apm_processor::prob_density(background_apm,0.0f);
+      boxm_apm_traits<APM>::apm_processor::prob_density(background_apm,0.0f);
     }
   }
-    vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
-
+  vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
   boxm_update_pass1<T_loc,APM>(scene, cam,img,norm_img,background_apm);
-
   vcl_cout << "update: pass1 completed" << vcl_endl;
-
   boxm_update_pass2<T_loc,APM>(scene, cam,img,norm_img);
-
   vcl_cout << "update: pass2 completed" << vcl_endl;
 
   return;
