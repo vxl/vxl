@@ -260,61 +260,6 @@ VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned int const> : public vil_pixel_traits<unsigned int> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
-class vil_pixel_traits<long>
-{
- public:
-  //: Type of individual components
-  typedef long component_type;
-
-  //: Is signed
-  static bool is_signed() {return true;}
-
-  //: Size in bits
-  static unsigned num_bits() {return 8*sizeof(long);}
-
-  //: Minimum value
-  static long minval() {return LONG_MIN;}
-
-  //: Maximum value
-  static long maxval() {return LONG_MAX;}
-
-  //: Real number field
-  static bool real_number_field() {return false;}
-};
-
-#if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
-class vil_pixel_traits<long const> : public vil_pixel_traits<long > {};
-#endif
-
-VCL_DEFINE_SPECIALIZATION
-class vil_pixel_traits<unsigned long>
-{
- public:
-  //: Type of individual components
-  typedef unsigned long component_type;
-
-  //: Is signed
-  static bool is_signed() {return false;}
-
-  //: Size in bits
-  static unsigned num_bits() {return 8*sizeof(unsigned long);}
-
-  //: Minimum value
-  static unsigned long minval() {return 0;}
-
-  //: Maximum value
-  static unsigned long maxval() {return ULONG_MAX;}
-
-  //: Real number field
-  static bool real_number_field() {return false;}
-};
-
-#if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
-class vil_pixel_traits<unsigned long const> : public vil_pixel_traits<unsigned long> {};
-#endif
 
 #if VXL_HAS_INT_64
 VCL_DEFINE_SPECIALIZATION
