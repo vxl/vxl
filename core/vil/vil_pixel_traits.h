@@ -29,6 +29,7 @@
 //-----------------------------------------------------------------------------
 #include <vcl_climits.h> // for UCHAR_MAX
 #include <vcl_cfloat.h>
+#include <vcl_cmath.h>
 
 //: Pixel properties for templates.
 template <class T>
@@ -314,6 +315,71 @@ class vil_pixel_traits<unsigned long>
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned long const> : public vil_pixel_traits<unsigned long> {};
 #endif
+
+#if VXL_HAS_INT_64
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<vxl_uint_64>
+{
+ public:
+  //: Type of individual components
+  typedef vxl_uint_64 component_type;
+
+  //: Is signed
+  static bool is_signed() {return false;}
+
+  //: Size in bits
+  static unsigned num_bits() {return 8*sizeof(vxl_uint_64);}
+
+  //: Minimum value
+  static vxl_uint_64 minval() {return 0;}
+
+  //: Maximum value
+  static vxl_uint_64 maxval() 
+  {return static_cast<vxl_int_64>(9223372036854775808);}
+ 
+
+  //: Real number field
+  static bool real_number_field() {return false;}
+};
+
+#if !VCL_CANNOT_SPECIALIZE_CV
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<vxl_uint_64 const> : 
+public vil_pixel_traits<vxl_uint_64> {};
+#endif
+
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<vxl_int_64>
+{
+ public:
+  //: Type of individual components
+  typedef vxl_int_64 component_type;
+
+  //: Is signed
+  static bool is_signed() {return true;}
+
+  //: Size in bits
+  static unsigned num_bits() {return 8*sizeof(vxl_uint_64);}
+
+  //: Minimum value
+  static vxl_int_64 minval() 
+    {return -static_cast<vxl_int_64>(4611686018427387904);}
+
+  //: Maximum value
+  static vxl_int_64 maxval() 
+    {return static_cast<vxl_int_64>(4611686018427387904);}
+
+  //: Real number field
+  static bool real_number_field() {return false;}
+};
+
+#if !VCL_CANNOT_SPECIALIZE_CV
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<vxl_int_64 const> : 
+public vil_pixel_traits<vxl_int_64> {};
+#endif
+
+#endif // VXL_HAS_INT_64
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<float>
