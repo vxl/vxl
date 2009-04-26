@@ -280,7 +280,7 @@ class vil_pixel_traits<vxl_uint_64>
 
   //: Maximum value
   static vxl_uint_64 maxval() 
-  {return static_cast<vxl_int_64>(9223372036854775808);}
+  {return static_cast<vxl_uint_64>(9223372036854775807LL);}
  
 
   //: Real number field
@@ -308,11 +308,11 @@ class vil_pixel_traits<vxl_int_64>
 
   //: Minimum value
   static vxl_int_64 minval() 
-    {return -static_cast<vxl_int_64>(4611686018427387904);}
+    {return -static_cast<vxl_int_64>(4611686018427387903LL)-1;}
 
   //: Maximum value
   static vxl_int_64 maxval() 
-    {return static_cast<vxl_int_64>(4611686018427387904);}
+    {return static_cast<vxl_int_64>(4611686018427387903LL);}
 
   //: Real number field
   static bool real_number_field() {return false;}
