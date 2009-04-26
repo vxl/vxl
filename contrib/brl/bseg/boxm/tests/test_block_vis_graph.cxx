@@ -10,7 +10,6 @@
 MAIN( test_block_vis_graph )
 {
   START ("CREATE SCENE");
-  short nlevels=5;
 
   // create scene
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
@@ -18,11 +17,15 @@ MAIN( test_block_vis_graph )
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<double> world_dim(20,20,30);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
-  scene.set_paths("./boxm_scene", "block");
-  vul_file::make_directory("./boxm_scene");
+  vul_file::make_directory("boxm_scene");
+  scene.set_paths("boxm_scene", "block");
+#if 0 // TODO: XML write doesn't work !!
   vcl_ofstream os("scene.xml");
   x_write(os, scene, "scene");
   os.close();
+  TEST("XML write scene", 1, 1);
+  vpl_unlink("scene.xml");
+#endif // 0
 
   vgl_box_3d<double> world;
   world.add(origin);
@@ -30,17 +33,21 @@ MAIN( test_block_vis_graph )
   vpgl_camera_double_sptr camera = generate_camera_top(world);
   boxm_block_vis_graph_iterator<tree_type> block_vis_iter(camera, &scene, IMAGE_U, IMAGE_V);
 
+  int vis_count = 0;
   vcl_vector<boxm_block<tree_type>*> blocks;
   while (block_vis_iter.next()) {
+    int block_count = 0;
+    ++vis_count;
     vcl_cout << "Frontier\n";
     blocks = block_vis_iter.frontier_blocks();
-    for(unsigned i=0; i<blocks.size(); i++) {
-      vcl_cout << i << "- " << blocks[i]->bounding_box() << vcl_endl; 
+    for (unsigned i=0; i<blocks.size(); ++i) {
+      vcl_cout << i << "- " << blocks[i]->bounding_box() << vcl_endl;
+      ++block_count;
     }
+    TEST("block count", block_count, 2 + (vis_count%2)*2);
   }
-  vpl_rmdir("./boxm_scene");
-  vpl_unlink("./scene.xml");
+  vpl_rmdir("boxm_scene");
+  TEST("vis count", vis_count, 4);
 
-  //TEST("Number of blocks iterator visits", num_blocks, x*y*z);
   SUMMARY();
 }
