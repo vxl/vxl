@@ -71,7 +71,7 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-    boxm_refine<short, BOXM_APM_MOG_GREY>(*s, thresh);
+    boxm_refine<short, BOXM_APM_MOG_GREY>(*s, thresh, false);
   } else {
     vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
     return false;
