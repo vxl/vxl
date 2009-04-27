@@ -2,7 +2,7 @@
 #include <boxm/boxm_utils.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include <boxm/boxm_quad_scan_iterator.h>
 
 
 #include <vpl/vpl.h>
@@ -20,19 +20,27 @@ MAIN( test_quad_interpolate )
   double xvals[]={10,10,12,12};
   double yvals[]={10,12,12,10};
   double vals[]={10,10,12,12};
-  vgl_polygon<double> poly(points);
-  vgl_polygon_scan_iterator<double> poly_it(poly);
+  //vgl_polygon<double> poly(points);
+  boxm_quad_scan_iterator poly_it(xvals,yvals);
   vil_image_view<float> img_min(40,40);
   vil_image_view<float> img_max(40,40);
   vil_image_view<float> g_img_max(40,40);
-
+  
   img_max.fill(0.0);
   g_img_max.fill(0.0);
   // creating ground truth
-  g_img_max(10,10)=10.5;g_img_max(10,11)=10.5;g_img_max(10,12)=10.5;
-  g_img_max(11,10)=11.5;g_img_max(11,11)=11.5;g_img_max(11,12)=11.5;
+  g_img_max(10,10)=10.5;g_img_max(10,11)=10.5;
+  g_img_max(11,10)=11.5;g_img_max(11,11)=11.5;
 
   boxm_utils::quad_interpolate(poly_it, xvals, yvals, vals,img_max,0);
+  for (unsigned i=10;i<=12;i++)
+  {
+	  for (unsigned j=10;j<=12;j++)	
+	{
+		vcl_cout<<img_max(j,i)<<" ";
+	}
+	  vcl_cout<<"\n";
+  }
   bool flag=true;
   for (unsigned i=0;i<g_img_max.ni();i++)
   for (unsigned j=0;j<g_img_max.ni();j++)

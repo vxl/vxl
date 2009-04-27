@@ -23,6 +23,7 @@ SET(boxm_sources
     boxm_update.h
     boxm_refine.h
     boxm_save_block_raw.h
+    boxm_quad_scan_iterator.h		boxm_quad_scan_iterator.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)

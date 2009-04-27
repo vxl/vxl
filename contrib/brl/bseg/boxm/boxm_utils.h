@@ -16,7 +16,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <boct/boct_tree_cell.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include <boxm/boxm_quad_scan_iterator.h>
 #include <vil/vil_image_view.h>
 
 class boxm_utils
@@ -62,13 +62,13 @@ class boxm_utils
   static vcl_vector<vgl_point_2d<double> >  project_face(vcl_vector<vgl_point_3d<double> > &face,
                                                          vpgl_camera_double_sptr const& camera);
 
-  static void quad_interpolate(vgl_polygon_scan_iterator<double> &poly_it,
+  static void quad_interpolate(boxm_quad_scan_iterator &poly_it,
                                double* xvals, double* yvals, double* vals,
                                vil_image_view<float> &img,unsigned img_plane_num=0,
                                unsigned int v0=0, unsigned int v1=1,
                                unsigned int v2=2,unsigned int v3=3);
 
-  static void quad_fill(vgl_polygon_scan_iterator<double> &poly_it,
+  static void quad_fill(boxm_quad_scan_iterator &poly_it,
                         vil_image_view<float> &img, float val,
                         unsigned img_plane_num=0);
 
@@ -97,7 +97,7 @@ class boxm_utils
                                 vil_image_view<float> &img,
                                 float & val, double *xverts,double * yverts);
 
-  static void quad_mean(vgl_polygon_scan_iterator<double> &poly_it,
+  static void quad_mean(boxm_quad_scan_iterator &poly_it,
                         vil_image_view<float> &img, float &val,  int & count);
 };
 
