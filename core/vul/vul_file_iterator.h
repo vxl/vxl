@@ -39,7 +39,11 @@ struct vul_file_iterator_data;
 //
 // Valid glob patterns are unix-like - '?' matches precisely one character
 // '*' matches any sequence (including empty), [abc] matches either 'a' or 'b' or 'c'
-
+//
+// \note There is no implicit ordering of the files in a directory; 
+// the order is OS-dependent and is not guaranteed by this class.
+// You may wish, therefore, to store the filenames returned and sort them yourself,
+// if you want to process files in (for example) alphanumeric order.
 class vul_file_iterator
 {
   VCL_SAFE_BOOL_DEFINE;
