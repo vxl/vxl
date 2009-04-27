@@ -17,6 +17,128 @@
 #include "bbgm_image_of.h"
 #include "bbgm_planes_to_sample.h"
 #include <bsta/bsta_detector_mixture.h>
+#include <vil/algo/vil_structuring_element.h>
+
+
+//: For each pixel, detect at all \a se neighbors in bbgm_image
+// return true if detection succeeds at any neighbor
+template <class dist_, class detector_, class dT>
+void detect(bbgm_image_of<dist_>& dimg,
+            const vil_image_view<dT>& data,
+            vil_image_view<bool>& result,
+            const detector_& detector,
+            const vil_structuring_element& se)
+{
+  typedef typename dist_::field_type F;
+  
+  const unsigned ni = dimg.ni();
+  const unsigned nj = dimg.nj();
+  const unsigned d_np = vpdt_field_traits<F>::dimension;
+  assert(data.ni() == ni);
+  assert(data.nj() == nj);
+  assert(data.nplanes() == d_np);
+  
+  result.set_size(ni,nj,1);
+  const vcl_ptrdiff_t r_istep = result.istep();
+  const vcl_ptrdiff_t r_jstep = result.jstep();
+  const vcl_ptrdiff_t d_istep = data.istep();
+  const vcl_ptrdiff_t d_jstep = data.jstep();
+  const vcl_ptrdiff_t d_pstep = data.planestep();
+  
+  const unsigned size_se = se.p_i().size();
+    
+  bool temp_val;
+  F sample;
+  bool* r_row = result.top_left_ptr();
+  const dT* d_row = data.top_left_ptr();
+  for (unsigned int j=0; j<nj; ++j, d_row+=d_jstep, r_row+=r_jstep){
+    bool* r_col = r_row;
+    const dT* d_col = d_row;
+    for (unsigned int i=0; i<ni; ++i, d_col+=d_istep, r_col+=r_istep){
+      bool& detected = *r_col;
+      const dT* d_plane = d_col;
+      for (unsigned int k=0; k<d_np; ++k, d_plane+=d_pstep)
+        sample[k] = *d_plane;
+      detected = false;
+      for (unsigned int k=0; k<size_se; ++k){
+        int ri = static_cast<int>(i)+se.p_i()[k];
+        int rj = static_cast<int>(j)+se.p_j()[k];
+        if(ri < 0 || ri >= ni || rj < 0 || rj >= nj)
+          continue;
+        if (detector(dimg(ri,rj), sample, temp_val) && temp_val){
+          detected = true;
+          break;
+        }
+      }
+    }
+  }
+  
+}
+
+//: For each masked pixel, detect at all \a se neighbors in bbgm_image
+// return true if detection succeeds at any neighbor
+template <class dist_, class detector_, class dT>
+void detect_masked(bbgm_image_of<dist_>& dimg,
+                   const vil_image_view<dT>& data,
+                   vil_image_view<bool>& result,
+                   const detector_& detector,
+                   const vil_structuring_element& se,
+                   const vil_image_view<bool>& mask)
+{
+  typedef typename dist_::field_type F;
+  
+  const unsigned ni = dimg.ni();
+  const unsigned nj = dimg.nj();
+  const unsigned d_np = vpdt_field_traits<F>::dimension;
+  assert(data.ni() == ni);
+  assert(data.nj() == nj);
+  assert(data.nplanes() == d_np);
+  assert(mask.ni() == ni);
+  assert(mask.nj() == nj);
+  
+  result.set_size(ni,nj,1);
+  const vcl_ptrdiff_t r_istep = result.istep();
+  const vcl_ptrdiff_t r_jstep = result.jstep();
+  const vcl_ptrdiff_t d_istep = data.istep();
+  const vcl_ptrdiff_t d_jstep = data.jstep();
+  const vcl_ptrdiff_t d_pstep = data.planestep();
+  const vcl_ptrdiff_t m_istep = mask.istep();
+  const vcl_ptrdiff_t m_jstep = mask.jstep();
+  
+  const unsigned size_se = se.p_i().size();
+  
+  bool temp_val;
+  F sample;
+  bool* r_row = result.top_left_ptr();
+  const dT* d_row = data.top_left_ptr();
+  const bool* m_row = mask.top_left_ptr();
+  for (unsigned int j=0; j<nj; ++j, d_row+=d_jstep, r_row+=r_jstep, m_row+=m_jstep){
+    bool* r_col = r_row;
+    const dT* d_col = d_row;
+    const bool* m_col = m_row;
+    for (unsigned int i=0; i<ni; ++i, d_col+=d_istep, r_col+=r_istep, m_col+=m_istep){
+      if(!*m_col)
+        continue;
+      bool& detected = *r_col;
+      const dT* d_plane = d_col;
+      for (unsigned int k=0; k<d_np; ++k, d_plane+=d_pstep)
+        sample[k] = *d_plane;
+      detected = false;
+      for (unsigned int k=0; k<size_se; ++k){
+        int ri = static_cast<int>(i)+se.p_i()[k];
+        int rj = static_cast<int>(j)+se.p_j()[k];
+        if(ri < 0 || ri >= ni || rj < 0 || rj >= nj)
+          continue;
+        if (detector(dimg(ri,rj), sample, temp_val) && temp_val){
+          detected = true;
+          break;
+        }
+      }
+    }
+  }
+  
+}
+
 
 
 template <class dist_, class detector_>
