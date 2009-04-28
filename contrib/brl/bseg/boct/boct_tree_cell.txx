@@ -110,6 +110,20 @@ bool boct_tree_cell<T_loc,T_data>::split()
 }
 
 template<class T_loc,class T_data>
+bool boct_tree_cell<T_loc,T_data>::split(T_data data)
+{
+  // split the cell first
+  if (split()) {
+    for (unsigned i=0; i<8; i++) {
+      children_[i].data_ = data;
+    }
+    return true;
+  }
+  return false;
+  
+}
+
+template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::get_common_ancestor(short binarydiff)
 {
   short curr_level=this->level();

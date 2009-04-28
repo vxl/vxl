@@ -66,9 +66,16 @@ class boct_tree_cell
   void set_vis_node(boct_cell_vis_graph_node<T_loc,T_data> * node) {vis_node_=node; }
   boct_cell_vis_graph_node<T_loc,T_data> * vis_node() {return vis_node_; }
 
+  //: splits the cell and puts the parent's data into the newly created cells
   bool split();
+
+  // splits and puts the data value new_data at the newly created cells
+  bool split(T_data new_data);
+
   void print();
+
   void delete_children();
+
   static short version_no() { return 1; }
 
   boct_loc_code<T_loc> code_;
