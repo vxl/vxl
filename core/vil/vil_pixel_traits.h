@@ -260,6 +260,61 @@ VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned int const> : public vil_pixel_traits<unsigned int> {};
 #endif
 
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<long>
+{
+ public:
+  //: Type of individual components
+  typedef long component_type;
+
+  //: Is signed
+  static bool is_signed() {return false;}
+
+  //: Size in bits
+  static unsigned num_bits() {return 8*sizeof(long);}
+
+  //: Minimum value
+  static long minval() {return 0;}
+
+  //: Maximum value
+  static long maxval() {return UINT_MAX;}
+
+  //: Real number field
+  static bool real_number_field() {return false;}
+};
+
+#if !VCL_CANNOT_SPECIALIZE_CV
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<long const> : public vil_pixel_traits<long> {};
+#endif
+
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<unsigned long>
+{
+ public:
+  //: Type of individual components
+  typedef unsigned long component_type;
+
+  //: Is signed
+  static bool is_signed() {return false;}
+
+  //: Size in bits
+  static unsigned num_bits() {return 8*sizeof(unsigned long);}
+
+  //: Minimum value
+  static unsigned long minval() {return 0;}
+
+  //: Maximum value
+  static unsigned long maxval() {return UINT_MAX;}
+
+  //: Real number field
+  static bool real_number_field() {return false;}
+};
+
+#if !VCL_CANNOT_SPECIALIZE_CV
+VCL_DEFINE_SPECIALIZATION
+class vil_pixel_traits<unsigned long const> : public vil_pixel_traits<unsigned long> {};
+#endif
 
 #if VXL_HAS_INT_64
 VCL_DEFINE_SPECIALIZATION
@@ -279,9 +334,8 @@ class vil_pixel_traits<vxl_uint_64>
   static vxl_uint_64 minval() {return 0;}
 
   //: Maximum value
-  static vxl_uint_64 maxval() 
+  static vxl_uint_64 maxval()
   {return static_cast<vxl_uint_64>(9223372036854775807LL);}
- 
 
   //: Real number field
   static bool real_number_field() {return false;}
@@ -289,7 +343,7 @@ class vil_pixel_traits<vxl_uint_64>
 
 #if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
-class vil_pixel_traits<vxl_uint_64 const> : 
+class vil_pixel_traits<vxl_uint_64 const> :
 public vil_pixel_traits<vxl_uint_64> {};
 #endif
 
@@ -307,11 +361,11 @@ class vil_pixel_traits<vxl_int_64>
   static unsigned num_bits() {return 8*sizeof(vxl_uint_64);}
 
   //: Minimum value
-  static vxl_int_64 minval() 
+  static vxl_int_64 minval()
     {return -static_cast<vxl_int_64>(4611686018427387903LL)-1;}
 
   //: Maximum value
-  static vxl_int_64 maxval() 
+  static vxl_int_64 maxval()
     {return static_cast<vxl_int_64>(4611686018427387903LL);}
 
   //: Real number field
@@ -320,7 +374,7 @@ class vil_pixel_traits<vxl_int_64>
 
 #if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
-class vil_pixel_traits<vxl_int_64 const> : 
+class vil_pixel_traits<vxl_int_64 const> :
 public vil_pixel_traits<vxl_int_64> {};
 #endif
 
