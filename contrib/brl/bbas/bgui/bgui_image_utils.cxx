@@ -2,9 +2,10 @@
 
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_cmath.h> // for ceil()
+#include <vcl_limits.h> // for min ans max
+
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
-#include <vil/vil_pixel_traits.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vgui/vgui_range_map_params.h>
@@ -109,8 +110,8 @@ bool bgui_image_utils::init_histogram_from_data()
     return true;
    case  VIL_PIXEL_FORMAT_UINT_16:
    {
-    min_val = static_cast<double>(vil_pixel_traits<unsigned short>::minval());
-    max_val = static_cast<double>(vil_pixel_traits<unsigned short>::maxval());
+    min_val = static_cast<double>(vcl_numeric_limits<unsigned short>::min());
+    max_val = static_cast<double>(vcl_numeric_limits<unsigned short>::max());
 
     // determine the min and max range of image values
     vcl_vector<double> minr(np, max_val), maxr(np,min_val);

@@ -1,11 +1,11 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_limits.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_pixel_traits.h>
 #include <vil/vil_new.h>
 #include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
@@ -53,7 +53,7 @@ static bool negate_images(vcl_string const& image_indir,
 #define NEGATE_CASE(FORMAT, T) \
      case FORMAT: { \
       vil_image_view<T> view = imgr->get_copy_view(); \
-      T mxv = vil_pixel_traits<T>::maxval(); \
+      T mxv = vcl_numeric_limits<T>::max(); \
       vil_math_scale_and_offset_values(view, -1.0, mxv); \
       outr = vil_new_image_resource_of_view(view);  \
       break; \

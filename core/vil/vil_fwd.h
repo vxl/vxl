@@ -13,7 +13,6 @@ class vil_image_view_base;
 template <class T> class vil_image_view;
 template <class T> struct vil_rgb;
 template <class T> struct vil_rgba;
-template <class T> class vil_pixel_traits;
 template <class T> class vil_smart_ptr;
 typedef vil_smart_ptr<vil_image_resource> vil_image_resource_sptr;
 typedef vil_smart_ptr<vil_image_view_base> vil_image_view_base_sptr;

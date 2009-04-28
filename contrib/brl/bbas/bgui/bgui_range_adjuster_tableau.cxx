@@ -6,12 +6,14 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> //for fabs()
+#include <vcl_limits.h> // for min and max
+
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_vil.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_histogram.h>
-#include <vil/vil_pixel_traits.h>
+
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_find.h>
@@ -126,47 +128,47 @@ bool bgui_range_adjuster_tableau::update(vil_image_resource_sptr const& r)
    case VIL_PIXEL_FORMAT_BYTE: {
     vil_image_view<vxl_byte> v = r->get_view();
     assert(v);
-    min_ = vil_pixel_traits<vxl_byte>::minval();
-    max_ = vil_pixel_traits<vxl_byte>::maxval();
+    min_ = vcl_numeric_limits<vxl_byte>::min();
+    max_ = vcl_numeric_limits<vxl_byte>::max();
     vil_histogram_byte(v , data_);
     break; }
    case VIL_PIXEL_FORMAT_SBYTE: {
     vil_image_view<vxl_sbyte> v = r->get_view();
     assert(v);
-    min_ = vil_pixel_traits<vxl_sbyte>::minval();
-    max_ = vil_pixel_traits<vxl_sbyte>::maxval();
+    min_ = vcl_numeric_limits<vxl_sbyte>::min();
+    max_ = vcl_numeric_limits<vxl_sbyte>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }
    case VIL_PIXEL_FORMAT_UINT_16: {
     vil_image_view<vxl_uint_16> v = r->get_view();
     assert(v);
-    min_ = vil_pixel_traits<vxl_uint_16>::minval();
-    max_ = vil_pixel_traits<vxl_uint_16>::maxval();
+    min_ = vcl_numeric_limits<vxl_uint_16>::min();
+    max_ = vcl_numeric_limits<vxl_uint_16>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = np==1;
     break; }
    case VIL_PIXEL_FORMAT_INT_16: {
     vil_image_view<vxl_int_16> v = r->get_view();
     assert(v);
-    min_ = vil_pixel_traits<vxl_int_16>::minval();
-    max_ = vil_pixel_traits<vxl_int_16>::maxval();
+    min_ = vcl_numeric_limits<vxl_int_16>::min();
+    max_ = vcl_numeric_limits<vxl_int_16>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }
    case VIL_PIXEL_FORMAT_FLOAT: {
     vil_image_view<float> v = r->get_view();
     assert(v);
-    min_ = vil_pixel_traits<float>::minval();
-    max_ = vil_pixel_traits<float>::maxval();
+    min_ = -vcl_numeric_limits<float>::max();
+    max_ = vcl_numeric_limits<float>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }
    case VIL_PIXEL_FORMAT_DOUBLE: {
     vil_image_view<double> v = r->get_view();
     assert(v);
-    min_ = vil_pixel_traits<double>::minval();
-    max_ = vil_pixel_traits<double>::maxval();
+    min_ = -vcl_numeric_limits<double>::max();
+    max_ = vcl_numeric_limits<double>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }

@@ -5,15 +5,20 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <vil/vil_pixel_traits.h>
+#include <vcl_limits.h>
 
 template <class Type>
 void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,
                                            long double& ratio)
 {
   //A few checks on the map range parameters
-  assert(max<=vil_pixel_traits<Type>::maxval());
-  assert(min>=vil_pixel_traits<Type>::minval());
+  assert(max<=vcl_numeric_limits<Type>::max());
+  Type mymin;
+  if (!vcl_numeric_limits<Type>::is_integer)
+    mymin = -vcl_numeric_limits<Type>::max();
+  else
+    mymin = vcl_numeric_limits<Type>::min();
+  assert(min>=mymin);
   assert(max>=min);
   ratio = 1.0;
   if (max!=min)
@@ -42,7 +47,8 @@ vxl_byte vgui_range_map<Type>::
 map_pixel_byte(const Type pix, const Type min, const Type max,
                const float gamma, const long double ratio)
 {
-  if (vil_pixel_traits<Type>::num_bits()==1) {
+  int num_bits = (sizeof(Type)*8);
+  if (num_bits==1) {
     if (pix)
       return 255;
     else
@@ -70,7 +76,8 @@ float vgui_range_map<Type>::
 map_pixel_float(const Type pix, const Type min, const Type max,
                 const float gamma, const long double ratio)
 {
-  if (vil_pixel_traits<Type>::num_bits()==1) {
+  int num_bits = (sizeof(Type)*8);
+  if (num_bits==1) {
     if (pix)
       return 1.0f;
     else
@@ -99,16 +106,16 @@ compute_byte_table(const Type min, const Type max, const float gamma,
 {
   vbl_array_1d<vxl_byte> bmap(size_, 0);
   //there are two cases, signed and unsigned map domains
-  if (!vil_pixel_traits<Type>::is_signed())
+  if (!vcl_numeric_limits<Type>::is_signed)
     for (unsigned long i = 0; i < size_; i++)
       bmap[i] = map_pixel_byte(static_cast<Type>(i), min, max, gamma, ratio);
   else
   {
     //The values have to be shifted by min
     unsigned long mint =
-      static_cast<unsigned long>(vil_pixel_traits<Type>::minval());
+      static_cast<unsigned long>(vcl_numeric_limits<Type>::min());
     unsigned long maxt =
-      static_cast<unsigned long>(vil_pixel_traits<Type>::maxval());
+      static_cast<unsigned long>(vcl_numeric_limits<Type>::max());
     for (unsigned long i = 0; mint+i <= maxt; ++i)
       bmap[i] = map_pixel_byte(static_cast<Type>(mint+i), min, max,
                                gamma, ratio);
@@ -123,10 +130,10 @@ compute_float_table(const Type min, const Type max, const float gamma,
                     const long double ratio)
 {
   vbl_array_1d<float> null;
-  if (vil_pixel_traits<Type>::is_signed())
+  if (vcl_numeric_limits<Type>::is_signed)
     return null;
   vbl_array_1d<float> fmap(size_, 0);
-  Type maxt = vil_pixel_traits<Type>::maxval();
+  Type maxt = vcl_numeric_limits<Type>::max();
   for (unsigned int i = 0; i <= (unsigned int)maxt; ++i)
     fmap[i] = map_pixel_float(Type(i), min, max, gamma, ratio);
   return fmap;
@@ -139,15 +146,14 @@ vgui_range_map<Type>::vgui_range_map(vgui_range_map_params const& rmp)
   this->init();
   mapable_ = true;
   table_mapable_ = true;
-  if (vil_pixel_traits<Type>::num_bits()==1 ||
-      vil_pixel_traits<Type>::num_bits()>16 ||
-      vil_pixel_traits<Type>::real_number_field())
+  int num_bits = (sizeof(Type)*8);
+  if (num_bits==1 || num_bits>16 || !vcl_numeric_limits<Type>::is_integer)
     table_mapable_ = false;
   //A lookup table is used to represent the pixel mapping
   //The table will primarily be used for byte and short pixel types
   //and can handle direct lookup of the mapping
   if (table_mapable_)
-    size_ = 1 << vil_pixel_traits<Type>::num_bits();
+    size_ = 1 << num_bits;
 
   //The table is not mapable so it will be necessary to compute
   //the mapping on the fly
@@ -165,8 +171,8 @@ vgui_range_map<Type>::~vgui_range_map()
 template <class Type>
 int vgui_range_map<Type>::offset()
 {
-  if (table_mapable_)
-    return - (int)vil_pixel_traits<Type>::minval();
+  if (table_mapable_) 
+    return - (int)vcl_numeric_limits<Type>::min();
   else
     return 0;
 }

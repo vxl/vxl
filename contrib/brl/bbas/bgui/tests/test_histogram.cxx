@@ -1,6 +1,7 @@
 // This is brl/bbas/bgui/tests/test_histogram.cxx
 #include <testlib/testlib_test.h>
-#include <vil/vil_pixel_traits.h>
+
+#include <vcl_limits.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_histogram.h>
@@ -30,39 +31,39 @@ static void test_histogram(int argc, char* argv[])
   vcl_cout << img.ni() << 'x' << img.nj() << '\n'
            << img(455,544) << '\n';
   vcl_vector<double> histogram;
-  int nbins = 1<< vil_pixel_traits<unsigned short>::num_bits();
-  vil_histogram(img,histogram, vil_pixel_traits<unsigned short>::minval(),
-                vil_pixel_traits<unsigned short>::maxval(), nbins);
+  int nbins = 1<< (8*sizeof(unsigned short)); 
+  vil_histogram(img,histogram, vcl_numeric_limits<unsigned short>::min(),
+                vcl_numeric_limits<unsigned short>::max(), nbins);
 
   for (int i =0; i<nbins; i+=200)
     vcl_cout << "H[" << i << "]=" << histogram[i] << '\n';
 
-    vcl_cout << "short [" << vil_pixel_traits<short>::minval()
-             << ' ' << vil_pixel_traits<short>::maxval()  << "]\n"
+    vcl_cout << "short [" << vcl_numeric_limits<short>::min()
+             << ' ' << vcl_numeric_limits<short>::max()  << "]\n"
 
-             << "unsigned short[" << vil_pixel_traits<unsigned short>::minval()
-             << ' ' << vil_pixel_traits<unsigned short>::maxval()  << "]\n"
+             << "unsigned short[" << vcl_numeric_limits<unsigned short>::min()
+             << ' ' << vcl_numeric_limits<unsigned short>::max()  << "]\n"
 
-             << "int [" << vil_pixel_traits<int>::minval()
-             << ' ' << vil_pixel_traits<int>::maxval()  << "]\n"
+             << "int [" << vcl_numeric_limits<int>::min()
+             << ' ' << vcl_numeric_limits<int>::max()  << "]\n"
 
-             << "unsigned int [" << vil_pixel_traits<unsigned int>::minval()
-             << ' ' << vil_pixel_traits<unsigned int>::maxval()  << "]\n"
+             << "unsigned int [" << vcl_numeric_limits<unsigned int>::min()
+             << ' ' << vcl_numeric_limits<unsigned int>::max()  << "]\n"
 
-             << "long [" << vil_pixel_traits< long>::minval()
-             << ' ' << vil_pixel_traits< long>::maxval()  << "]\n"
+             << "long [" << vcl_numeric_limits< long>::min()
+             << ' ' << vcl_numeric_limits< long>::max()  << "]\n"
 
-             << "unsigned  long [" << vil_pixel_traits<unsigned  long>::minval()
-             << ' ' << vil_pixel_traits<unsigned  long>::maxval()  << "]\n"
+             << "unsigned  long [" << vcl_numeric_limits<unsigned  long>::min()
+             << ' ' << vcl_numeric_limits<unsigned  long>::max()  << "]\n"
 
-             << "float [" << vil_pixel_traits< float>::minval()
-             << ' ' << vil_pixel_traits< float>::maxval()  << "]\n"
+             << "float [" << -vcl_numeric_limits< float>::max()
+             << ' ' << vcl_numeric_limits< float>::max()  << "]\n"
 
-             << "double [" << vil_pixel_traits< double>::minval()
-             << ' ' << vil_pixel_traits< double>::maxval()  << "]\n"
+             << "double [" << -vcl_numeric_limits< double>::max()
+             << ' ' << vcl_numeric_limits< double>::max()  << "]\n"
 
-             << "long double [" << vil_pixel_traits< long double>::minval()
-             << ' ' << vil_pixel_traits< long double>::maxval()  << "]\n";
+             << "long double [" << -vcl_numeric_limits< long double>::max()
+             << ' ' << vcl_numeric_limits< long double>::max()  << "]\n";
 }
 
 TESTMAIN_ARGS(test_histogram);

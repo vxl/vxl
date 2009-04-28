@@ -4,6 +4,7 @@
 
 #include <vcl_fstream.h>
 #include <vcl_complex.h>
+#include <vcl_limits.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -25,7 +26,6 @@
 #include <vil/vil_new.h>
 
 #include <vil/vil_math.h>
-#include <vil/vil_pixel_traits.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
@@ -542,7 +542,7 @@ vil_image_resource_sptr brip_vil_float_ops::negate(vil_image_resource_sptr const
 #define NEGATE_CASE(FORMAT, T) \
    case FORMAT: { \
     vil_image_view<T> view = imgr->get_copy_view(); \
-    T mxv = vil_pixel_traits<T>::maxval(); \
+    T mxv = vcl_numeric_limits<T>::max(); \
     vil_math_scale_and_offset_values(view, -1.0, mxv); \
     outr = vil_new_image_resource_of_view(view);  \
     break; \

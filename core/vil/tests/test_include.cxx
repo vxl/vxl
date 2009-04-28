@@ -35,7 +35,6 @@
 #include <vil/vil_new.h>
 #include <vil/vil_open.h>
 #include <vil/vil_pixel_format.h>
-#include <vil/vil_pixel_traits.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_print.h>
 #include <vil/vil_property.h>
