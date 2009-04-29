@@ -33,8 +33,9 @@ MAIN( test_block_vis_graph )
   vpgl_camera_double_sptr camera = generate_camera_top(world);
   boxm_block_vis_graph_iterator<tree_type> block_vis_iter(camera, &scene, IMAGE_U, IMAGE_V);
 
-  int vis_count = 0;
+  int vis_count = -1;
   vcl_vector<boxm_block<tree_type>*> blocks;
+  int counts[] = {2, 4, 4, 2};
   while (block_vis_iter.next()) {
     int block_count = 0;
     ++vis_count;
@@ -44,10 +45,10 @@ MAIN( test_block_vis_graph )
       vcl_cout << i << "- " << blocks[i]->bounding_box() << vcl_endl;
       ++block_count;
     }
-    TEST("block count", block_count, 2 + (vis_count%2)*2);
+    TEST("block count", block_count, counts[vis_count]);
   }
   vpl_rmdir("boxm_scene");
-  TEST("vis count", vis_count, 4);
+  TEST("vis count", ++vis_count, 4);
 
   SUMMARY();
 }
