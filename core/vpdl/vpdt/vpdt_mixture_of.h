@@ -28,6 +28,7 @@ vpdt_box_prob(const vpdt_mixture_of<dist>& d,
               const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& min_pt,
               const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& max_pt);
 
+
 template <class dist>
 struct vpdt_is_mixture<vpdt_mixture_of<dist> >
 {
@@ -350,7 +351,7 @@ public:
   { vcl_sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_adaptor<comp_type_>(comp)); }
   
 
-  friend T vpdt_box_prob<>(const vpdt_mixture_of<dist_t>& d, const F& min_pt, const F& max_pt);
+  friend T vpdt_box_prob<dist_t>(const vpdt_mixture_of<dist_t>& d, const F& min_pt, const F& max_pt);
 };
 
 
