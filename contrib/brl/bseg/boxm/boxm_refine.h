@@ -62,7 +62,7 @@ void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
         // if it is not set, transfer the old appearance to the new sample
         new_sample.appearance = old_sample.appearance;
       }
-      cell->split(new_sample);
+      //cell->split(new_sample);
     }
   }
 }

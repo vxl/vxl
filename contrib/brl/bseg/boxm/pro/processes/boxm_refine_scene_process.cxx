@@ -39,8 +39,8 @@ bool boxm_refine_scene_process_cons(bprb_func_process& pro)
   //input[0]: The scene
   //input[1]: The threshold for splitting 
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[2] = "boxm_scene_base_sptr";
-  input_types_[3] = "float";
+  input_types_[0] = "boxm_scene_base_sptr";
+  input_types_[1] = "float";
   if(!pro.set_input_types(input_types_))
     return false;
 

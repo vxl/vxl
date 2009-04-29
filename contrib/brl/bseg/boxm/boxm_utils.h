@@ -71,6 +71,11 @@ class boxm_utils
   static void quad_fill(boxm_quad_scan_iterator &poly_it,
                         vil_image_view<float> &img, float val,
                         unsigned img_plane_num=0);
+  static void quad_fill(boxm_quad_scan_iterator &poly_it,
+                        vil_image_view<float> &img, 
+						vil_image_view<float> &weights_img,
+						float val,
+                        unsigned img_plane_num=0);
 
   static bool project_cube_xyz(vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
                                boct_face_idx & vis_face_ids,
@@ -92,13 +97,17 @@ class boxm_utils
   static bool project_cube_fill_val(boct_face_idx & vis_face_ids,
                                     vil_image_view<float> &fill_img,
                                     float val, double *xverts,double * yverts);
+  static bool project_cube_fill_val_aa(boct_face_idx & vis_face_ids,
+                                    vil_image_view<float> &fill_img,
+									vil_image_view<float> &weights_img,
+                                    float val, double *xverts,double * yverts);
 
   static bool cube_uniform_mean(boct_face_idx & vis_face_ids,
                                 vil_image_view<float> &img,
                                 float & val, double *xverts,double * yverts);
 
   static void quad_mean(boxm_quad_scan_iterator &poly_it,
-                        vil_image_view<float> &img, float &val,  int & count);
+                        vil_image_view<float> &img, float &val,  float & count);
 };
 
 #endif
