@@ -46,10 +46,12 @@ void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
         split_list.push_back(cell);
         // make sure neighbor cells are not already coarser than this cell
         // get all the faces;
-       /* boct_face_idx faces = ALL;
+#if 0
+        boct_face_idx faces = ALL;
         vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> >*> neighbors;
         cell->find_neighbors(faces, neighbors, cell->level()+1);
-        split_list.insert(split_list.end(), neighbors.begin(), neighbors.end());*/
+        split_list.insert(split_list.end(), neighbors.begin(), neighbors.end());
+#endif
       }
     }
 
@@ -67,7 +69,7 @@ void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
         // if it is not set, transfer the old appearance to the new sample
         new_sample.appearance = old_sample.appearance;
       }
-      //cell->split(new_sample);
+      cell->split(new_sample);
     }
   }
 }
