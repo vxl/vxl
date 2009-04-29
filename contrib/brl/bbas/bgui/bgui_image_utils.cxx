@@ -2,7 +2,7 @@
 
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_cmath.h> // for ceil()
-#include <vcl_limits.h> // for min ans max
+#include <vcl_limits.h> // for vcl_numeric_limits<unsigned short>::min() & max()
 
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
