@@ -33,7 +33,8 @@ boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels /* =1 */):
 }
 
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels /* =1 */) : max_level_(max_level),global_bbox_(bbox)
+boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels) 
+: max_level_(max_level),global_bbox_(bbox)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
