@@ -28,8 +28,7 @@
 
 namespace boxm_refine_scene_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_inputs_ = 3;
 }
 
 bool boxm_refine_scene_process_cons(bprb_func_process& pro)
@@ -38,9 +37,11 @@ bool boxm_refine_scene_process_cons(bprb_func_process& pro)
   //process takes 2 inputs
   //input[0]: The scene
   //input[1]: The threshold for splitting 
+  //input[2]: bool for resetting the appearence model 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "float";
+  input_types_[2] = "bool";
   if(!pro.set_input_types(input_types_))
     return false;
 
@@ -61,6 +62,7 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
   float thresh = pro.get_input<float>(i++);
+  bool reset = pro.get_input<bool>(i++);
 
   // check the input validity
   if (scene == 0) {
@@ -71,7 +73,7 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-    boxm_refine<short, BOXM_APM_MOG_GREY>(*s, thresh, false);
+    boxm_refine<short, BOXM_APM_MOG_GREY>(*s, thresh, reset);
   } else {
     vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
     return false;
