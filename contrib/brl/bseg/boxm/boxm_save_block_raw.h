@@ -49,7 +49,13 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
   // origin should specify center of first cell
   vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
-  float *data = new float[ncells*ncells*ncells];
+  float *data = 0;
+  data = new float[ncells*ncells*ncells];
+
+  if (data == 0) {
+    vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
+    return;
+  }
   // init to zero
   for (float* dp = data; dp < data + ncells*ncells*ncells; ++dp) {
     *dp = 0.0f;
@@ -96,7 +102,14 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
     }
   }
   // convert float values to char
-  unsigned char *byte_data = new unsigned char[ncells*ncells*ncells];
+
+  unsigned char *byte_data = 0;
+  byte_data = new unsigned char[ncells*ncells*ncells];
+  if (byte_data == 0) {
+    vcl_cout << "boxm_save_block_raw: Could not allocate byte data!" << vcl_endl;
+    return;
+  }
+
   float* dp = data;
   for (unsigned char* bdp = byte_data; dp < data + ncells*ncells*ncells; ++dp, ++bdp) {
     double P = 1.0 - vcl_exp(-*dp*step_len);
