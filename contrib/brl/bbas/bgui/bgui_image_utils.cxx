@@ -2,7 +2,6 @@
 
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_cmath.h> // for ceil()
-#include <vcl_limits.h> // for vcl_numeric_limits<unsigned short>::min() & max()
 
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
@@ -97,7 +96,7 @@ bool bgui_image_utils::init_histogram_from_data()
     vcl_cout << "Format not supported by bgui_image_utils\n";
     return false;
   }
-  double min_val=0, max_val = 255;
+  double min_val=0.0, max_val = 255.0;
   switch (type )
   {
    case  VIL_PIXEL_FORMAT_BYTE:
@@ -110,8 +109,7 @@ bool bgui_image_utils::init_histogram_from_data()
     return true;
    case  VIL_PIXEL_FORMAT_UINT_16:
    {
-    min_val = static_cast<double>(vcl_numeric_limits<unsigned short>::min());
-    max_val = static_cast<double>(vcl_numeric_limits<unsigned short>::max());
+    max_val = 65535.0;
 
     // determine the min and max range of image values
     vcl_vector<double> minr(np, max_val), maxr(np,min_val);
