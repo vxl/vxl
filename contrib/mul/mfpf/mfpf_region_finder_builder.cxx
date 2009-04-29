@@ -35,6 +35,7 @@ mfpf_region_finder_builder::mfpf_region_finder_builder()
 //: Define default values
 void mfpf_region_finder_builder::set_defaults()
 {
+
   step_size_=1.0;
   search_ni_=5;
   search_nj_=5;
@@ -48,6 +49,10 @@ void mfpf_region_finder_builder::set_defaults()
   dA_=0.0;
   norm_method_=1;
   overlap_f_=1.0;
+  var_min_ = 1.0E-6;
+  tvar_min_=1.0E30;
+  num_examples_=0;
+  estimate_var_min_=true;
 }
 
 //=======================================================================
@@ -211,8 +216,15 @@ void mfpf_region_finder_builder::add_one_example(
   mfpf_sample_region(sample.top_left_ptr(),sample.jstep(),
                      np,roi_,v);
 
-  if (norm_method_==1) mfpf_norm_vec(v);
+  if (norm_method_==1)
+  {
+      double var=var_min_;
+      mfpf_norm_vec(v,var_min_,&var);
+      if(var<tvar_min_)
+          tvar_min_ = var;
+  }
   cost_builder().add_example(v);
+  ++num_examples_;
 }
 
 //: Add one example to the model
@@ -248,6 +260,28 @@ void mfpf_region_finder_builder::build(mfpf_point_finder& pf)
   rp.set(roi_,ref_x_,ref_y_,*cost,norm_method_);
   set_base_parameters(rp);
   rp.set_overlap_f(overlap_f_);
+
+  if(estimate_var_min_ && norm_method_==1 && num_examples_>0)
+  {
+    //Assume applied var_min is r* min in training set, where r->1 as n->infinity
+    //Set r=0.98 for n around 50
+    double dn=double(num_examples_);
+    if(dn>0.0)
+    {
+      double r=0.925; //so r attains 0.98 around n=50
+      double alpha=1.0;
+      if(dn>50.0)
+        alpha=0.98;
+      else
+      {
+        alpha=1-vcl_pow(r,dn);
+        alpha=vcl_min(alpha,0.98);
+      }
+      tvar_min_ *= alpha;
+      var_min_ = vcl_max(var_min_,tvar_min_);
+    }
+    rp.set_var_min(var_min_);
+  }
 
   // Tidy up
   delete cost;
@@ -373,6 +407,16 @@ bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
 
     props.erase("norm");
   }
+  if(props.find("estimate_var_min") !=props.end())
+  {
+    vcl_string strEstimate=props["estimate_var_min"];
+    if(strEstimate[0]=='f' || strEstimate[0]=='F' || strEstimate[0]=='0')
+        estimate_var_min_=false;
+    else
+        estimate_var_min_=true;
+      
+    props.erase("estimate_var_min");
+  }
 
   overlap_f_=vul_string_atof(props.get_optional_property("overlap_f",
                                                          "1.0"));
@@ -461,7 +505,7 @@ void mfpf_region_finder_builder::print_shape(vcl_ostream& os) const
 //: Version number for I/O
 short mfpf_region_finder_builder::version_no() const
 {
-  return 2;
+  return 3;
 }
 
 void mfpf_region_finder_builder::b_write(vsl_b_ostream& bfs) const
@@ -479,6 +523,8 @@ void mfpf_region_finder_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,cost_builder_);
   vsl_b_write(bfs,norm_method_);
   vsl_b_write(bfs,overlap_f_);
+  if(version_no()>2)
+      vsl_b_write(bfs,var_min_);
 }
 
 //=======================================================================
@@ -494,6 +540,7 @@ void mfpf_region_finder_builder::b_read(vsl_b_istream& bfs)
   {
     case (1):
     case (2):
+    case (3):
       mfpf_point_finder_builder::b_read(bfs);  // Load base class
       vsl_b_read(bfs,roi_);
       vsl_b_read(bfs,roi_ni_);
@@ -505,8 +552,14 @@ void mfpf_region_finder_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,dA_);
       vsl_b_read(bfs,cost_builder_);
       vsl_b_read(bfs,norm_method_);
-      if (version==1) overlap_f_=1.0;
-      else            vsl_b_read(bfs,overlap_f_);
+      if (version==1)
+          overlap_f_=1.0;
+      else
+          vsl_b_read(bfs,overlap_f_);
+      if (version>2)
+          vsl_b_read(bfs,var_min_);
+      else
+          var_min_=1.0E-6;
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

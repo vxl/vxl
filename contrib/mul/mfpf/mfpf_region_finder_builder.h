@@ -62,6 +62,18 @@ class mfpf_region_finder_builder : public mfpf_point_finder_builder
   //  If 0.5, then overlap requires pt inside central 50% of region.
   double overlap_f_;
 
+  //: lower bound on variance used in normalisation
+  double var_min_;
+
+  //: lowest variance found so far in training set 
+  double tvar_min_;
+
+  //: If true reset var_min based on min in training set
+  bool estimate_var_min_;
+
+    //: Number of examples added
+  unsigned num_examples_;
+
   //: Define default values
   void set_defaults();
 

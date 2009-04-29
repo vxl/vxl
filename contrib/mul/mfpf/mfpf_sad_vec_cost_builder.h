@@ -20,6 +20,9 @@ class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
   //: Space to record examples
   vcl_vector<vnl_vector<double> > data_;
 
+  //: If true recalculate min_mad_ based on median of trainig set
+  bool impose_robust_min_mad_;
+
   //: Define default values
   void set_defaults();
  public:
@@ -46,6 +49,9 @@ class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
 
   //: Initialise from a string stream
   virtual bool set_from_stream(vcl_istream &is);
+
+  //: Set flag for robust min mad (based on training set)
+  void set_impose_robust_min_mad(bool on) {impose_robust_min_mad_=on;}
 
   //: Name of the class
   virtual vcl_string is_a() const;

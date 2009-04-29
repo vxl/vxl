@@ -30,7 +30,8 @@ mfpf_sad_vec_cost_builder::mfpf_sad_vec_cost_builder()
 //: Define default values
 void mfpf_sad_vec_cost_builder::set_defaults()
 {
-  min_mad_=1.0;
+  min_mad_ = 0.01;
+  impose_robust_min_mad_=false;
 }
 
 //=======================================================================
@@ -102,9 +103,30 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
   }
 
   vnl_vector<double> wts(mean.size());
+  double dn=double(n);
+  if(impose_robust_min_mad_)
+  {
+      //May impose stricter min_mad as per typical robust kernel fitting (see /isbe_apm/rpca)
+      //If we were using SD this would be the median of the MAD (taken over each pixel)
+      //As we are using MAD not SD, downscale the median MAD by 1.4826 (MAD to SD conversion for Gaussian)
+      //Note this prevents attaching an exaggerated importance to low variance pixels in flat sub-regions of the patch
+      
+      vcl_vector<double> mads;
+      mads.reserve(mean.size());
+
+      for (unsigned i=0;i<mean.size();++i)
+      {
+          mads.push_back(dv_sum[i]/dn);
+      }
+      vcl_vector<double>::iterator medIter=mads.begin()+mads.size()/2;
+      vcl_nth_element(mads.begin(),medIter,mads.end());
+      const double kMADtoSD=1.4826;
+      min_mad_ = vcl_max(min_mad_,(*medIter/kMADtoSD));
+  }
+  
   for (unsigned i=0;i<mean.size();++i)
   {
-    wts[i]=1.0/vcl_max(min_mad_,dv_sum[i]/n);
+    wts[i]=1.0/vcl_max(min_mad_,dv_sum[i]/dn);
   }
 
   nc.set(mean,wts);
@@ -142,6 +164,17 @@ bool mfpf_sad_vec_cost_builder::set_from_stream(vcl_istream &is)
   {
     min_mad_=vul_string_atof(props["min_mad"]);
     props.erase("min_mad");
+  }
+
+  if(props.find("impose_robust_min_mad") !=props.end())
+  {
+    vcl_string strImpose=props["impose_robust_min_mad"];
+    if(strImpose[0]=='f' || strImpose[0]=='F' || strImpose[0]=='0')
+        impose_robust_min_mad_=false;
+    else
+        impose_robust_min_mad_=true;
+      
+    props.erase("impose_robust_min_mad");
   }
 
   // Check for unused props

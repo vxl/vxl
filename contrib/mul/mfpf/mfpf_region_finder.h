@@ -45,6 +45,13 @@ class mfpf_region_finder : public mfpf_point_finder
   //  If 0.5, then overlap requires pt inside central 50% of region.
   double overlap_f_;
 
+  //: Lower bound on variance used in normalisation
+  double var_min_;
+  
+  //: When generating visual image of model with multi-planes, is only
+  // the first plane drawn or L2 norm of all planes
+  bool draw_only_1st_plane_;
+  
   //: Define default values
   void set_defaults();
 
@@ -66,6 +73,8 @@ class mfpf_region_finder : public mfpf_point_finder
   //  If 0.5, then overlap requires pt inside central 50% of region.
   void set_overlap_f(double);
 
+  void set_var_min(double var_min) {var_min_=var_min;}
+  double var_min() const {return var_min_;}
 
   //: Radius of circle containing modelled region
   virtual double radius() const;

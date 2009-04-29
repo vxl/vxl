@@ -9,7 +9,8 @@
 #include <vcl_algorithm.h> // std::max()
 
 //: Sets vec to have zero mean and unit length
-inline void mfpf_norm_vec(vnl_vector<double>& vec)
+inline void mfpf_norm_vec(vnl_vector<double>& vec, double var_min=1.0E-6,
+                          double* pvar=0)
 {
   unsigned n=vec.size();
   double *v=vec.data_block();
@@ -19,10 +20,12 @@ inline void mfpf_norm_vec(vnl_vector<double>& vec)
     sum+=v[i]; sum_sq+=v[i]*v[i];
   }
   double mean = sum/n;
-  double ss = vcl_max(1e-6,sum_sq-n*mean*mean);
+  double ss = vcl_max(var_min,sum_sq-n*mean*mean);
   double s = vcl_sqrt(ss);
 
   for (unsigned i=0;i<n;++i) v[i]=(v[i]-mean)/s;
+  if(pvar) //optionally return variance
+      *pvar=ss;
 }
 
 #endif // mfpf_norm_vec_h_

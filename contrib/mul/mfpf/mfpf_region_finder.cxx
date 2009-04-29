@@ -44,6 +44,8 @@ void mfpf_region_finder::set_defaults()
   ref_y_=0;
   norm_method_=1;
   overlap_f_=1.0;
+  var_min_ = 1.0E-6;
+  draw_only_1st_plane_=true;
 }
 
 //=======================================================================
@@ -146,7 +148,7 @@ double mfpf_region_finder::evaluate(const vimt_image_2d_of<float>& image,
   mfpf_sample_region(sample.top_left_ptr(),sample.jstep(),
                      np,roi_,v);
 
-  if (norm_method_==1) mfpf_norm_vec(v);
+  if (norm_method_==1) mfpf_norm_vec(v,var_min_);
   return cost().evaluate(v);
 }
 
@@ -200,7 +202,7 @@ void mfpf_region_finder::evaluate_region(
     for (int i=0;i<ni;++i)
     {
       mfpf_sample_region(s+i*np,s_jstep,np,roi_,v);
-      if (norm_method_==1) mfpf_norm_vec(v);
+      if (norm_method_==1) mfpf_norm_vec(v,var_min_);
       r[i] = cost().evaluate(v);
     }
   }
@@ -260,7 +262,7 @@ double mfpf_region_finder::search_one_pose(const vimt_image_2d_of<float>& image,
     for (int i=0;i<ni;++i)
     {
       mfpf_sample_region(s+i*np,s_jstep,np,roi_,v);
-      if (norm_method_==1) mfpf_norm_vec(v);
+      if (norm_method_==1) mfpf_norm_vec(v,var_min_);
       double r = cost().evaluate(v);
       if (r<best_r) { best_r=r; best_i=i; best_j=j; }
     }
@@ -324,18 +326,79 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
   assert(mean.size()>=n_pixels_);
 
   // Just copy first plane
-  vnl_vector_ref<double> mean1(n_pixels_,mean.data_block());
-  double min1=mean1.min_value();
-  double max1=mean1.max_value();
+  vnl_vector<double> meanL2;
+  unsigned nplanes=mean.size()/n_pixels_;
+  vcl_cout<<"mfpf_region_finder::get_image_of_model - nplanes= "<<nplanes<<vcl_endl;
+
+  double min1=1.0E30;
+  double max1=-1.0E30;
+  if(nplanes==1)
+  {
+    min1=mean.min_value();
+    max1=mean.max_value();
+  }
+  else if (draw_only_1st_plane_)
+  {
+      double* pData=mean.data_block();
+      double* pDataEnd=mean.data_block()+mean.size();
+      while(pData != pDataEnd)
+      {
+          double z=*pData;
+          min1=vcl_min(z,min1);
+          max1=vcl_max(z,max1);
+          pData += nplanes;
+      }
+  }
+  else //Compute L2 norm over all planes
+  {
+      meanL2.set_size(n_pixels_);
+      double* pData=mean.data_block();
+      double* pDataEnd=mean.data_block()+mean.size();
+      unsigned i=0;
+     
+      while(pData != pDataEnd)
+      {
+          double z = vnl_c_vector<double>::two_norm(pData, nplanes);
+          
+          min1=vcl_min(z,min1);
+          max1=vcl_max(z,max1);
+          meanL2[i++]=z;
+          pData += nplanes;
+      }
+  }
+
   double s =255/(max1-min1);
+  vcl_cout<<"Rescaling factors are min1="<<min1<<"\tmax1="<<max1<<"\ts="<<s<<vcl_endl;
   image.image().set_size(roi_ni_,roi_nj_);
   image.image().fill(0);
   unsigned q=0;
-  for (unsigned k=0;k<roi_.size();++k)
+  if(nplanes==1)
   {
-    for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
-      image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+    for (unsigned k=0;k<roi_.size();++k)
+    {
+      for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
+        image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+    }
   }
+  else if (draw_only_1st_plane_)
+  {
+    for (unsigned k=0;k<roi_.size();++k)
+    {
+      for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,q+=nplanes)
+        image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+      
+    }
+  }
+  else
+  {
+      //Compute L2 norm over all planes
+    for (unsigned k=0;k<roi_.size();++k)
+    {
+      for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
+        image.image()(i,roi_[k].y())=vxl_byte(s*(meanL2[q]-min1));
+    }
+  }
+    
   vimt_transform_2d ref2im;
   ref2im.set_zoom_only(1.0/step_size_,ref_x_,ref_y_);
   image.set_world2im(ref2im);
