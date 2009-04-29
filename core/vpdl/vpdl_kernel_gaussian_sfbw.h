@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <vpdl/vpdl_kernel_base.h>
+#include <vpdl/vpdt/vpdt_access.h>
 #include <vnl/vnl_erf.h>
 #include <vcl_limits.h>
 #include <vcl_cassert.h>

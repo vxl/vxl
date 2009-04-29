@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <vpdl/vpdl_multi_cmp_dist.h>
+#include <vpdl/vpdt/vpdt_access.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_mixture_of.h>
 #include <vpdl/vpdt/vpdt_probability.h>

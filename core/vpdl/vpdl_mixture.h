@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <vpdl/vpdl_multi_cmp_dist.h>
+#include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
