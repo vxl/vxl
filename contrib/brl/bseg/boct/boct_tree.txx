@@ -9,7 +9,7 @@
 
 //; constructor initializes an empty tree
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels): max_level_(max_level)
+boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels /* =1 */): max_level_(max_level)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
@@ -31,8 +31,9 @@ boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels): max_leve
     init_levels--;
   }
 }
+
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels=1):max_level_(max_level),global_bbox_(bbox)
+boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels /* =1 */) : max_level_(max_level),global_bbox_(bbox)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
@@ -53,7 +54,6 @@ boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, sho
       }
     init_levels--;
   }
-  
 }
 
 template <class T_loc,class T_data>
@@ -170,8 +170,7 @@ vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box(boct_tree_cell<T_l
   vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/treesize*global_bbox_.width(),
                                      global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
                                      global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());
-                                    
-                                     
+
   return vgl_box_3d<double>(global_origin,
                             cellsize*global_bbox_.width(),
                             cellsize*global_bbox_.height(),
@@ -185,11 +184,11 @@ vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box_local(boct_tree_ce
   double treesize=(double)(1<<(max_level_-1));
   double cellsize=(double)(1<<cell->level())/treesize;
   vgl_point_3d<double> local_origin(cell->code_.x_loc_,cell->code_.y_loc_,cell->code_.z_loc_);
-                                     
+
   vgl_point_3d<double> global_origin(local_origin.x()/treesize*global_bbox_.width(),
                                      local_origin.y()/treesize*global_bbox_.height(),
                                      local_origin.z()/treesize*global_bbox_.depth());
-                                     
+
   return vgl_box_3d<double>(global_origin,
                             cellsize*global_bbox_.width(),
                             cellsize*global_bbox_.height(),
