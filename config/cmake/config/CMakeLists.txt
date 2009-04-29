@@ -24,7 +24,7 @@ MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
 # number. The format follows a DNS-style numbering: the current date
 # followed by a modification count within the day.
 #
-SET( VXL_CONFIG_SERIAL_CURRENT "2008-12-02-001" )
+SET( VXL_CONFIG_SERIAL_CURRENT "2009-04-28-001" )
 
 IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
