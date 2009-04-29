@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <vpdl/vpdt/vpdt_dist_traits.h>
+#include <vpdl/vpdt/vpdt_probability.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -367,7 +368,7 @@ vpdt_box_prob(const vpdt_mixture_of<dist>& d,
   T prob = 0;
   T sum_w = 0;
   for (comp_itr i = d.components_.begin(); i != d.components_.end(); ++i){
-    prob += (*i)->weight * (*i)->distribution.box_prob(min_pt,max_pt);
+    prob += (*i)->weight * vpdt_box_prob((*i)->distribution,min_pt,max_pt);
     sum_w += (*i)->weight;
   }
   assert(sum_w > T(0));
