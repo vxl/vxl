@@ -2,6 +2,7 @@
 #define boxm_save_block_raw_h_
 
 #include <vcl_vector.h>
+#include <vcl_new.h>
 
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
@@ -50,7 +51,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
   vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
   float *data = 0;
-  data = new float[ncells*ncells*ncells];
+  data = new (std::nothrow)float[ncells*ncells*ncells];
 
   if (data == 0) {
     vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
@@ -104,7 +105,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
   // convert float values to char
 
   unsigned char *byte_data = 0;
-  byte_data = new unsigned char[ncells*ncells*ncells];
+  byte_data = new (std::nothrow) unsigned char[ncells*ncells*ncells];
   if (byte_data == 0) {
     vcl_cout << "boxm_save_block_raw: Could not allocate byte data!" << vcl_endl;
     return;

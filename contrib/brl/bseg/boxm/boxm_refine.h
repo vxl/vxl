@@ -61,7 +61,7 @@ void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
       float new_alpha = max_alpha_int / side_len;
 
       boxm_sample<APM> old_sample = cell->data();
-      boxm_sample<APM>::apm_datatype app;
+      typename boxm_sample<APM>::apm_datatype app;
       boxm_sample<APM> new_sample = boxm_sample<APM>(new_alpha, app);
       if (!reset_appearance) {
         // if it is not set, transfer the old appearance to the new sample
