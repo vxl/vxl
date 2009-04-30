@@ -215,6 +215,18 @@ SOURCE=.\Templates/vimt_sample_grid_bilin+uint_16.float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vimt_image_2d_of+vil_rgb+byte--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bicub+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bilin+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_profile_bilin+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_scale_pyramid_builder_2d+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

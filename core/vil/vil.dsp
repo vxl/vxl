@@ -674,6 +674,18 @@ SOURCE=.\Templates/vil_resample_nearest+int_16.int_16-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil_resample_nearest+uint_16.uint_16-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bicub+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_profile_bicub+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_profile_bilin+double.double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -850,9 +862,6 @@ SOURCE=.\file_formats/vil_png.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_tiff.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_pixel_traits.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_fwd.h

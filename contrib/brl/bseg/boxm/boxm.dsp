@@ -102,6 +102,9 @@ SOURCE=.\boxm_mog_grey_processor.cxx
 SOURCE=.\boxm_apm_traits.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_quad_scan_iterator.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
@@ -217,6 +220,12 @@ SOURCE=.\boxm_update.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_refine.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_quad_scan_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_compute_volume_visibility.h
 # End Source File
 # End Group
 # End Target
