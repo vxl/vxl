@@ -96,7 +96,34 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
   delete loccode_;
   return curr_cell;
 }
+template <class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const vgl_point_3d<double>& p)
+{
+  short curr_level=max_level_-1;
+  vgl_point_3d<double> norm_p((p.x()-global_bbox_.min_x())/global_bbox_.width(),
+							  (p.y()-global_bbox_.min_y())/global_bbox_.height(),	
+							  (p.z()-global_bbox_.min_z())/global_bbox_.depth());		
+							  
+  // convert point to location code.
+  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, max_level_);
+#if 0
+  // check to see if point is contained in the octree
+  if (!root_->code_.isequal(loccode_,curr_level))
+    return NULL;
+#endif
+  // temporary pointer to traverse
+  boct_tree_cell<T_loc,T_data>* curr_cell=root_;
 
+  while (curr_cell->children()&& curr_level>0)
+  {
+    short index_child=loccode_->child_index(curr_level);
+    curr_cell=curr_cell->children()+index_child;
+    --curr_level;
+  }
+  // delete the location code constructed
+  delete loccode_;
+  return curr_cell;
+}
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(const vgl_point_3d<double>& p, short level)
 {
