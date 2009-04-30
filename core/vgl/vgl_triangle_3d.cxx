@@ -1233,8 +1233,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
   if (vcl_fabs(p2_d) < sqrteps) p2_d = 0.0;
   if (vcl_fabs(p3_d) < sqrteps) p3_d = 0.0;
 
-  vgl_point_3d<double> i_pnt1(vgl_nan, vgl_nan, vgl_nan); // dummy initialisation, to avoid compiler warning
-  vgl_point_3d<double> i_pnt2;
+  vgl_point_3d<double> i_pnt1, i_pnt2;
   vgl_line_3d_2_points<double> edge;
 
   if (p1_d*p2_d > 0 && p1_d*p3_d > 0) // all distances strictly same sign => no intersection
