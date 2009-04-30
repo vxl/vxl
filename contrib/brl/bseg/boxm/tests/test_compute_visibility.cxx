@@ -28,12 +28,12 @@ MAIN( test_compute_visibility )
   // sample 1
   bsta_gauss_f1 s1_simple_gauss_f1(0.5f,0.1f);
   bsta_num_obs<bsta_gauss_f1> s1_simple_obs_gauss_val_f1(s1_simple_gauss_f1,1);
-  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s1_simple_mix_gauss_val_f1;
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> s1_simple_mix_gauss_val_f1;
 
   s1_simple_mix_gauss_val_f1.insert(s1_simple_obs_gauss_val_f1,1);
 
-  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  s1_simple_bsta_mixture_fixed_f1_3;
-  bsta_num_obs<s1_simple_bsta_mixture_fixed_f1_3>  s1_simple_obs_mix_gauss_val_f1(s1_simple_mix_gauss_val_f1);
+  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3> s1_simple_bsta_mixture_fixed_f1_3;
+  bsta_num_obs<s1_simple_bsta_mixture_fixed_f1_3> s1_simple_obs_mix_gauss_val_f1(s1_simple_mix_gauss_val_f1);
 
   boxm_sample<BOXM_APM_MOG_GREY> s1_sample;
   s1_sample.alpha=0.6f;
@@ -45,33 +45,32 @@ MAIN( test_compute_visibility )
   while (!iter.end())
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
-    boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >  > * block=scene.get_active_block();
+    boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=scene.get_active_block();
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
-	if(iter.index().z()==1)
-	{
-		vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=tree->leaf_cells();
-		  s1_sample.alpha=0.6f;
+    if (iter.index().z()==1)
+    {
+      vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=tree->leaf_cells();
+      s1_sample.alpha=0.6f;
 
-		for(unsigned i=0;i<leaf_cells.size();i++)
-		{
-			leaf_cells[i]->set_data(s1_sample);
-		}
-	    block->init_tree(tree);
-		scene.write_active_block();
-	}
-	else
-	{
-		vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=
-			tree->leaf_cells();
-	    s1_sample.alpha=0.01f;
+      for (unsigned i=0;i<leaf_cells.size();i++)
+      {
+        leaf_cells[i]->set_data(s1_sample);
+      }
+      block->init_tree(tree);
+      scene.write_active_block();
+    }
+    else
+    {
+      vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells= tree->leaf_cells();
+      s1_sample.alpha=0.01f;
 
-		for(unsigned i=0;i<leaf_cells.size();i++)
-		{
-			leaf_cells[i]->set_data(s1_sample);
-		}
-		block->init_tree(tree);
-		scene.write_active_block();
-	}
+      for (unsigned i=0;i<leaf_cells.size();i++)
+      {
+        leaf_cells[i]->set_data(s1_sample);
+      }
+      block->init_tree(tree);
+      scene.write_active_block();
+    }
 
     iter++;
   }
@@ -80,11 +79,10 @@ MAIN( test_compute_visibility )
   world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
   vpgl_camera_double_sptr camera = generate_camera_top_persp(world);
 
-  double X=5,Y=5,Z=40;
-  for (;Z>-10;Z--)
+  double X=5,Y=5,Z;
+  for (Z=40; Z>-10; --Z)
   {
-	//vcl_cout<<"Z= "<<Z<<" "<<boxm_compute_point_visibility<short,BOXM_APM_MOG_GREY>(vgl_point_3d<double>(X,Y,Z), 
-																	 scene, camera)<<"\n ";
+    vcl_cout<<"Z = "<<Z<<' '<<boxm_compute_point_visibility<short,BOXM_APM_MOG_GREY>(vgl_point_3d<double>(X,Y,Z), scene, camera)<<'\n';
   }
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
