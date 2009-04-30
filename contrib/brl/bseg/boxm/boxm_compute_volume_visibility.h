@@ -57,7 +57,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
     T * tree=curr_block->get_tree();
 
     vgl_point_3d<double> exit_point;
-    boct_face_idx face_id=boct_cell_face::NONE;
+    boct_face_idx face_id=NONE;
     double alpha_int=0;
     boct_tree_cell<T_loc,T_sample > * curr_cell=tree->locate_point_global(entry_point);
     while (continue_flag)
@@ -119,17 +119,17 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
       // when the block is exhausted obtain a new block
       else
       {
-        if (face_id==boct_cell_face::X_LOW)
+        if (face_id==X_LOW)
           curr_block_index.set(curr_block_index.x()-1,curr_block_index.y(),curr_block_index.z());
-        if (face_id==boct_cell_face::X_HIGH)
+        if (face_id==X_HIGH)
           curr_block_index.set(curr_block_index.x()+1,curr_block_index.y(),curr_block_index.z());
-        if (face_id==boct_cell_face::Y_LOW)
+        if (face_id==Y_LOW)
           curr_block_index.set(curr_block_index.x(),curr_block_index.y()-1,curr_block_index.z());
-        if (face_id==boct_cell_face::Y_HIGH)
+        if (face_id==Y_HIGH)
           curr_block_index.set(curr_block_index.x(),curr_block_index.y()+1,curr_block_index.z());
-        if (face_id==boct_cell_face::Z_LOW)
+        if (face_id==Z_LOW)
           curr_block_index.set(curr_block_index.x(),curr_block_index.y(),curr_block_index.z()-1);
-        if (face_id==boct_cell_face::Z_HIGH)
+        if (face_id==Z_HIGH)
           curr_block_index.set(curr_block_index.x(),curr_block_index.y(),curr_block_index.z()+1);
 
         scene.load_block(curr_block_index);
