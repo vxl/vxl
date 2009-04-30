@@ -461,15 +461,15 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
 
     for (unsigned int x = startx; x < endx; ++x) {
       float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
-	  img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
+      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
    }
   }
   return;
 }
 
 void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
-                           vil_image_view<float> &img, float val, 
-						   unsigned img_plane_num)
+                           vil_image_view<float> &img, float val,
+                           unsigned img_plane_num)
 {
   poly_it.reset();
   while (poly_it.next()) {
@@ -491,22 +491,22 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
     unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
-		//img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);   
-		img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val); 
-		//if(poly_it.pix_coverage(x)>1)
-		//	vcl_cout<<"ERROR ALERT "<<poly_it.pix_coverage(x)<<vcl_endl;
-		//assert(poly_it.pix_coverage(x)>1);
-	}
+      //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
+      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
+      //if (poly_it.pix_coverage(x)>1)
+      //  vcl_cout<<"ERROR ALERT "<<poly_it.pix_coverage(x)<<vcl_endl;
+      //assert(poly_it.pix_coverage(x)>1);
+    }
   }
   return;
 }
 
 
 void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
-                           vil_image_view<float> &img, 
-						   vil_image_view<float> &weights_img, 
-						   float val, 
-						   unsigned img_plane_num)
+                           vil_image_view<float> &img,
+                           vil_image_view<float> &weights_img,
+                           float val,
+                           unsigned img_plane_num)
 {
   poly_it.reset();
   while (poly_it.next()) {
@@ -528,14 +528,13 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
     unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
-		//img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);   
-		img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val); 
-		weights_img(x,yu)+=poly_it.pix_coverage(x);
-	}
+      //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
+      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
+      weights_img(x,yu)+=poly_it.pix_coverage(x);
+    }
   }
   return;
 }
-
 
 
 void boxm_utils::quad_mean(boxm_quad_scan_iterator &poly_it,
@@ -615,10 +614,10 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
   {
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
     double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
-	
-	//vcl_vector<vgl_point_2d<double> > face_polygon(4);
-	//for(unsigned i=0;i<4;i++)
-	//	face_polygon.push_back(vgl_point_2d<double>(xs[i],ys[i]));
+
+    //vcl_vector<vgl_point_2d<double> > face_polygon(4);
+    //for (unsigned i=0;i<4;i++)
+    //  face_polygon.push_back(vgl_point_2d<double>(xs[i],ys[i]));
 
     boxm_quad_scan_iterator poly_it(xs,ys);
 
@@ -759,7 +758,7 @@ bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_po
   //}
 
  return true;
-} 
+}
 
 bool boxm_utils::project_cube_fill_val(boct_face_idx & vis_face_ids,
                                        vil_image_view<float> &fill_img,
@@ -806,9 +805,9 @@ bool boxm_utils::project_cube_fill_val(boct_face_idx & vis_face_ids,
 
 
 bool boxm_utils::project_cube_fill_val_aa(boct_face_idx & vis_face_ids,
-                                       vil_image_view<float> &fill_img,
-									   vil_image_view<float> &weight_img,
-                                       float val, double *xverts,double * yverts)
+                                          vil_image_view<float> &fill_img,
+                                          vil_image_view<float> &weight_img,
+                                          float val, double *xverts,double * yverts)
 {
   if (vis_face_ids & Z_LOW){
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
@@ -903,143 +902,142 @@ bool boxm_utils::cube_uniform_mean(boct_face_idx & vis_face_ids,
 }
 
 
-
-bool 
+bool
 boxm_utils::cube_entry_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt,
-							 vgl_vector_3d<double> direction, 
-							 vgl_point_3d<double> & entry_point,
-							 double & lambda,boct_face_idx & face_id)
+                             vgl_vector_3d<double> direction,
+                             vgl_point_3d<double> & entry_point,
+                             double & lambda,boct_face_idx & face_id)
 {
-	
-	// check each face
-	if (direction.x() > 0 && pt.x()<=cube.min_x()) {
-		// intersect with low x plane
-		lambda = (cube.min_x() - pt.x()) / direction.x();
-		entry_point = pt + direction * lambda;
-		if ( (entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) && 
-			(entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::X_LOW;
-				return true;
-		}
-	}
-	else if (direction.x() < 0 && pt.x()>=cube.max_x()){
-		// intersect with high x plane
-		lambda = (cube.max_x() - pt.x()) / direction.x();
-		entry_point = pt + direction * lambda;
-		if ( (entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) && 
-			(entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::X_HIGH;
-				return true;
-		}
-	}
-	if (direction.y() > 0&& pt.y()<=cube.min_y()) {
-		// intersect with low y plane
-		lambda = (cube.min_y() - pt.y()) / direction.y();
-		entry_point = pt + direction * lambda;
-		if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) && 
-			(entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::Y_LOW;
-				return true;
-		}
-	}
-	else if (direction.y() < 0 && pt.y()>=cube.max_y()){
-		// intersect with high y plane
-		lambda = (cube.max_y() - pt.y()) / direction.y();
-		entry_point = pt + direction * lambda;
-		if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) && 
-			(entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::Y_HIGH;
-				return true;
-		}
-	}
-	if (direction.z() > 0&& pt.z()<=cube.min_z()) {
-		// intersect with low z plane
-		lambda = (cube.min_z() - pt.z()) / direction.z();
-		entry_point = pt + direction * lambda;
-		if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) && 
-			(entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) ) {
-				face_id=boct_cell_face::Z_LOW;
-				return true;
-		}
-	}
-	else if (direction.z() < 0 && pt.z()>=cube.max_z()){
-		// intersect with high z plane
-		lambda = (cube.max_z() - pt.z()) / direction.z();
-		entry_point = pt + direction * lambda;
-		if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) && 
-			(entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) ) {
-				face_id=boct_cell_face::Z_HIGH;
-				return true;
-		}
-	}
-	return false;
-
+  // check each face
+  if (direction.x() > 0 && pt.x()<=cube.min_x()) {
+    // intersect with low x plane
+    lambda = (cube.min_x() - pt.x()) / direction.x();
+    entry_point = pt + direction * lambda;
+    if ( (entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) &&
+      (entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
+        face_id=X_LOW;
+        return true;
+    }
+  }
+  else if (direction.x() < 0 && pt.x()>=cube.max_x()){
+    // intersect with high x plane
+    lambda = (cube.max_x() - pt.x()) / direction.x();
+    entry_point = pt + direction * lambda;
+    if ( (entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) &&
+      (entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
+        face_id=X_HIGH;
+        return true;
+    }
+  }
+  if (direction.y() > 0&& pt.y()<=cube.min_y()) {
+    // intersect with low y plane
+    lambda = (cube.min_y() - pt.y()) / direction.y();
+    entry_point = pt + direction * lambda;
+    if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) &&
+      (entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
+        face_id=Y_LOW;
+        return true;
+    }
+  }
+  else if (direction.y() < 0 && pt.y()>=cube.max_y()){
+    // intersect with high y plane
+    lambda = (cube.max_y() - pt.y()) / direction.y();
+    entry_point = pt + direction * lambda;
+    if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) &&
+      (entry_point.z() >= cube.min_z()) && (entry_point.z() <= cube.max_z()) ) {
+        face_id=Y_HIGH;
+        return true;
+    }
+  }
+  if (direction.z() > 0&& pt.z()<=cube.min_z()) {
+    // intersect with low z plane
+    lambda = (cube.min_z() - pt.z()) / direction.z();
+    entry_point = pt + direction * lambda;
+    if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) &&
+      (entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) ) {
+        face_id=Z_LOW;
+        return true;
+    }
+  }
+  else if (direction.z() < 0 && pt.z()>=cube.max_z()){
+    // intersect with high z plane
+    lambda = (cube.max_z() - pt.z()) / direction.z();
+    entry_point = pt + direction * lambda;
+    if ( (entry_point.x() >= cube.min_x()) && (entry_point.x() <= cube.max_x()) &&
+      (entry_point.y() >= cube.min_y()) && (entry_point.y() <= cube.max_y()) ) {
+        face_id=Z_HIGH;
+        return true;
+    }
+  }
+  return false;
 }
+
+
 bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt,
-								 vgl_vector_3d<double> direction, 
-								 vgl_point_3d<double> & exit_pt,
-								 double & lambda,boct_face_idx & face_id)
+                                 vgl_vector_3d<double> direction,
+                                 vgl_point_3d<double> & exit_pt,
+                                 double & lambda,boct_face_idx & face_id)
 {
-	// check each face
-	if (direction.x() < 0 && pt.x()>=cube.min_x()) {
-		// intersect with low x plane
-		lambda = (cube.min_x() - pt.x()) / direction.x();
-		exit_pt = pt + direction * lambda;
-		if ( (exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) && 
-			(exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::X_LOW;
-				return true;
-		}
-	}
-	else if(direction.x() > 0 && pt.x()<=cube.max_x()) {
-		// intersect with high x plane
-		lambda = (cube.max_x() - pt.x()) / direction.x();
-		exit_pt = pt + direction * lambda;
-		if ( (exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) && 
-			(exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::X_HIGH;
-				return true;
-		}
-	}
-	if (direction.y() < 0 && pt.y()>=cube.min_y()) {
-		// intersect with low y plane
-		lambda = (cube.min_y() - pt.y()) / direction.y();
-		exit_pt = pt + direction * lambda;
-		if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) && 
-			(exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::Y_LOW;
-				return true;
-		}
-	}
-	else if (direction.y() > 0 && pt.y()<=cube.max_y()) {
-		// intersect with high y plane
-		lambda = (cube.max_y() - pt.y()) / direction.y();
-		exit_pt = pt + direction * lambda;
-		if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) && 
-			(exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
-				face_id=boct_cell_face::Y_HIGH;
-				return true;
-		}
-	}
-	if (direction.z() < 0 && pt.z()>=cube.min_z()) {
-		// intersect with low z plane
-		lambda = (cube.min_z() - pt.z()) / direction.z();
-		exit_pt = pt + direction * lambda;
-		if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) && 
-			(exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) ) {
-				face_id=boct_cell_face::Z_LOW;
-				return true;
-		}
-	}
-	else if(direction.z() > 0 && pt.z()<=cube.max_z()) {
-		// intersect with high z plane
-		lambda = (cube.max_z() - pt.z()) / direction.z();
-		exit_pt = pt + direction * lambda;
-		if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) && 
-			(exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) ) {
-				face_id=boct_cell_face::Z_HIGH;
-				return true;
-		}
-	}
-	return false;
+  // check each face
+  if (direction.x() < 0 && pt.x()>=cube.min_x()) {
+    // intersect with low x plane
+    lambda = (cube.min_x() - pt.x()) / direction.x();
+    exit_pt = pt + direction * lambda;
+    if ( (exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) &&
+         (exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
+      face_id=X_LOW;
+      return true;
+    }
+  }
+  else if (direction.x() > 0 && pt.x()<=cube.max_x()) {
+    // intersect with high x plane
+    lambda = (cube.max_x() - pt.x()) / direction.x();
+    exit_pt = pt + direction * lambda;
+    if ( (exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) &&
+         (exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
+      face_id=X_HIGH;
+      return true;
+    }
+  }
+  if (direction.y() < 0 && pt.y()>=cube.min_y()) {
+    // intersect with low y plane
+    lambda = (cube.min_y() - pt.y()) / direction.y();
+    exit_pt = pt + direction * lambda;
+    if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) &&
+         (exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
+      face_id=Y_LOW;
+      return true;
+    }
+  }
+  else if (direction.y() > 0 && pt.y()<=cube.max_y()) {
+    // intersect with high y plane
+    lambda = (cube.max_y() - pt.y()) / direction.y();
+    exit_pt = pt + direction * lambda;
+    if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) &&
+         (exit_pt.z() >= cube.min_z()) && (exit_pt.z() <= cube.max_z()) ) {
+      face_id=Y_HIGH;
+      return true;
+    }
+  }
+  if (direction.z() < 0 && pt.z()>=cube.min_z()) {
+    // intersect with low z plane
+    lambda = (cube.min_z() - pt.z()) / direction.z();
+    exit_pt = pt + direction * lambda;
+    if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) &&
+         (exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) ) {
+      face_id=Z_LOW;
+      return true;
+    }
+  }
+  else if (direction.z() > 0 && pt.z()<=cube.max_z()) {
+    // intersect with high z plane
+    lambda = (cube.max_z() - pt.z()) / direction.z();
+    exit_pt = pt + direction * lambda;
+    if ( (exit_pt.x() >= cube.min_x()) && (exit_pt.x() <= cube.max_x()) &&
+         (exit_pt.y() >= cube.min_y()) && (exit_pt.y() <= cube.max_y()) ) {
+      face_id=Z_HIGH;
+      return true;
+    }
+  }
+  return false;
 }
