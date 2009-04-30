@@ -4,8 +4,11 @@
 #include <boxm/boxm_block_vis_graph_node.h>
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_cell_vis_graph_node.h>
+#include <boxm/boxm_compute_volume_visibility.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_neighb_graph_node.h>
+#include <boxm/boxm_quad_scan_iterator.h>
+#include <boxm/boxm_refine.h>
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_save_block_raw.h>
