@@ -12,7 +12,9 @@ const int IMAGE_V = 200;
 const int boxm_x_scale = 900;
 const int boxm_y_scale = 900;
 const double boxm_focal_length = 1.0;
-const double boxm_camera_dist= 200;
+const double boxm_camera_dist = 200;
+const unsigned num_train_images= 20;
+const bool verbose = 1;
 
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
