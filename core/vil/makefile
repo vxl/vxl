@@ -149,7 +149,6 @@ MANPAGE_SOURCES += vil_nearest_interp.h
 MANPAGE_SOURCES += vil_smart_ptr.txx
 MANPAGE_SOURCES += vil_property.h
 SOURCES += vil_pixel_format.cxx
-MANPAGE_SOURCES += vil_pixel_traits.h
 MANPAGE_SOURCES += vil_rgb.txx
 MANPAGE_SOURCES += vil_rgba.txx
 MANPAGE_SOURCES += vil_color_table.h

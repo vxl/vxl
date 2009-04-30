@@ -12,6 +12,7 @@ TESTS += test_render_image.cxx
 TESTS += test_quad_interpolate.cxx
 TESTS += test_update.cxx
 TESTS += test_save_raw.cxx
+TESTS += test_compute_visibility.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

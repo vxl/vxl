@@ -26,6 +26,9 @@ SUBDIRS += vil vil1 vil/algo
 # stream I/O
 SUBDIRS += vsl vul/io vbl/io vnl/io vnl/xio vgl/io vgl/xio vil/io vil1/io
 
+# probability distributions
+SUBDIRS += vpdl
+
 # coordinate systems
 SUBDIRS += vcsl
 

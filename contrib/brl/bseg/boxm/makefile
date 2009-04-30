@@ -22,6 +22,8 @@ MANPAGE_SOURCES += boxm_render_image.h
 MANPAGE_SOURCES += boxm_save_block_raw.h
 MANPAGE_SOURCES += boxm_update.h
 MANPAGE_SOURCES += boxm_refine.h
+MANPAGE_SOURCES += boxm_compute_volume_visibility.h
+SOURCES += boxm_quad_scan_iterator.cxx
 
 SUBDIRS += io pro
 
