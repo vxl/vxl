@@ -26,7 +26,7 @@ vpgl_rational_camera<double>
 perspective_to_rational(vpgl_perspective_camera<double>& cam_pers);
 
 vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world);
-
+vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world);
 #if 0
 bool generate_test_boxes(double box_min_x, double box_min_y, double box_min_z,
                          double box_dim_x, double box_dim_y, double box_dim_z,

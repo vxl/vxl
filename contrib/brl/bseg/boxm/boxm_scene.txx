@@ -110,7 +110,29 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
     return 0;
   }
 }
-
+template <class T>
+bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> & index){
+  vgl_box_3d<double> world(get_world_bbox());
+  if (world.contains(p)) {
+    // find the block index
+    unsigned i = static_cast<unsigned>((p.x()-origin_.x())/block_dim_.x());
+    unsigned j = static_cast<unsigned>((p.y()-origin_.y())/block_dim_.y());
+    unsigned k = static_cast<unsigned>((p.z()-origin_.z())/block_dim_.z());
+	//: boundary case
+    if(p.x()==world.max_x())
+		i-=1;
+	if(p.y()==world.max_y())
+		j-=1;
+	if(p.z()==world.max_z())
+		k-=1;
+    
+    index=vgl_point_3d<int>(i,j,k);
+    return true;
+  } else {
+    vcl_cerr << "Point " << p << " is out of world " << world << '\n';
+    return false;
+  }
+}
 template <class T>
 boxm_block<T>* boxm_scene<T>::get_active_block()
 {
@@ -171,8 +193,8 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     else {
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       vcl_string path = gen_block_path(x,y,z);
-      vsl_b_ofstream os(path);
-      blocks_(x,y,z)->b_write(os);
+      //vsl_b_ofstream os(path);
+      //blocks_(x,y,z)->b_write(os);
       // delete the block's data
       boxm_block<T>* block = blocks_(x,y,z);
       delete block->get_tree();

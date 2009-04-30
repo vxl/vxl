@@ -8,6 +8,7 @@ DECLARE( test_quad_interpolate );
 DECLARE( test_save_raw );
 DECLARE( test_render_image );
 DECLARE( test_update );
+DECLARE( test_compute_visibility );
 
 
 void register_tests()
@@ -20,6 +21,8 @@ void register_tests()
   REGISTER( test_save_raw );
   REGISTER( test_render_image );
   REGISTER( test_update );
+  REGISTER( test_compute_visibility );
+
 }
 
 

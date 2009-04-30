@@ -81,6 +81,8 @@ class boxm_scene :public boxm_scene_base
 
   boxm_block<T>* get_block(vgl_point_3d<double>& p);
 
+  bool get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> & index);
+
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
   boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
@@ -92,6 +94,8 @@ class boxm_scene :public boxm_scene_base
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
+
+  vgl_box_3d<double> get_world_bbox();
 
  private:
   bgeo_lvcs lvcs_;
@@ -105,7 +109,6 @@ class boxm_scene :public boxm_scene_base
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 
-  vgl_box_3d<double> get_world_bbox();
 
   vgl_box_3d<double> get_block_bbox(int x, int y, int z);
 

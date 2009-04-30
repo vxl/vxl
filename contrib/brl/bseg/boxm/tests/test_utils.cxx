@@ -64,6 +64,20 @@ vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world)
   vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
   return rat_cam;
 }
+vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world)
+{
+  vgl_point_2d<double> principal_point(IMAGE_U*0.5, IMAGE_V*0.5);
+
+  vgl_point_3d<double> centroid = world.centroid();
+  vgl_point_3d<double> camera_center(centroid.x(), centroid.y(), centroid.z()+boxm_camera_dist);
+
+  vcl_vector<vpgl_camera_double_sptr> rat_cameras;
+
+  vpgl_perspective_camera<double> * persp_cam= new vpgl_perspective_camera<double>();
+  generate_persp_camera(boxm_focal_length,principal_point, boxm_x_scale, boxm_y_scale, camera_center, *persp_cam);
+  persp_cam->look_at(vgl_homg_point_3d<double>(centroid));
+  return persp_cam;
+}
 
 #if 0
 bool generate_test_boxes(double box_min_x, double box_min_y, double box_min_z,

@@ -126,7 +126,6 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
       PI_background(i,j) = boxm_apm_traits<APM>::apm_processor::prob_density(background_model, img(i,j));
     }
   }
-  vil_save(pre,"./pre.tiff");
   vil_math_image_product(PI_background, vis, norm_img);
   vil_math_image_sum(pre,norm_img,norm_img);
   safe_inverse_functor inv_func(1e-8f);
@@ -285,6 +284,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
         vis.deep_copy(vis_end);
       }
+	//scene.write_active_block();
     }
   }
 }

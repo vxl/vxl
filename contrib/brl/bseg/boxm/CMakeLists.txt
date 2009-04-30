@@ -24,6 +24,7 @@ SET(boxm_sources
     boxm_refine.h
     boxm_save_block_raw.h
     boxm_quad_scan_iterator.h		boxm_quad_scan_iterator.cxx
+    boxm_compute_volume_visibility.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
@@ -35,7 +36,7 @@ TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vsol
 
 #processes 
 SUBDIRS(pro)
-
+#io 
 SUBDIRS(io)
 
 #tests

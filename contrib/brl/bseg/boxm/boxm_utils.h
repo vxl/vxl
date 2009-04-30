@@ -14,7 +14,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
-#include <vsol/vsol_polygon_3d_sptr.h>
+//#include <vsol/vsol_polygon_3d_sptr.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_quad_scan_iterator.h>
 #include <vil/vil_image_view.h>
@@ -108,6 +108,14 @@ class boxm_utils
 
   static void quad_mean(boxm_quad_scan_iterator &poly_it,
                         vil_image_view<float> &img, float &val,  float & count);
+
+  static bool cube_entry_point(vgl_box_3d<double> box,vgl_point_3d<double> pt,
+							   vgl_vector_3d<double> dir, 
+							   vgl_point_3d<double> & entry_point,
+							   double & lambda, boct_face_idx & face_id);
+  static bool cube_exit_point(vgl_box_3d<double> box,vgl_point_3d<double> pt,
+							   vgl_vector_3d<double> dir, vgl_point_3d<double> & exit_point,
+							   double & lambda,boct_face_idx & face_id);
 };
 
 #endif
