@@ -186,12 +186,10 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
   //if the binary block file is not found
   if (!os) {
     create_block(i,j,k);
-      if (blocks_(i,j,k)->get_tree()==NULL)
-  {
-  T* tree= new T(max_tree_level_,init_tree_level_);
-  blocks_(i,j,k)->init_tree(tree);
-  }
-
+    if (blocks_(i,j,k)->get_tree()==NULL) {
+      T* tree= new T(max_tree_level_,init_tree_level_);
+      blocks_(i,j,k)->init_tree(tree);
+    }
     return;
   }
   blocks_(i,j,k) = new boxm_block<T>();
@@ -290,9 +288,11 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
 {
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
+  
   vsl_basic_xml_element app_model(APP_MODEL_TAG);
   app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
-
+  app_model.x_write(os);
+  
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
   x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
