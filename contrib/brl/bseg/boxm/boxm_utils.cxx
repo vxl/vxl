@@ -7,11 +7,6 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_clip.h>
-//#include <vsol/vsol_point_2d.h>
-//#include <vsol/vsol_point_3d.h>
-//#include <vsol/vsol_point_2d_sptr.h>
-//#include <vsol/vsol_point_3d_sptr.h>
-//#include <vsol/vsol_polygon_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -73,13 +68,11 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
   cube_proj_bb.add(vgl_point_2d<double>(u,v));
   // check for intersection
   vgl_box_2d<double> intersection =  vgl_intersection(cube_proj_bb, img_bb);
-  if (intersection.is_empty()){
-    // add to list
-    return false;
-  }
-  return true;
+  return ! intersection.is_empty();
 }
 
+//:
+// \verbatim
 //                                 MaxPosition
 //
 //                       7-----------6
@@ -94,7 +87,8 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
 //     |  /           0-----------1
 //     | /         MinPosition
 //     O-----X
-
+//
+// \endverbatim
 vcl_vector<vgl_point_3d<double> >
 boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
 {
@@ -112,54 +106,55 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
 }
 
 void
-boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > & corners,
+boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
                             vpgl_camera_double_sptr camera,
-                            double * xverts, double *yverts
+                            double* xverts, double* yverts
                            )
 {
-  //vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
-  //xverts= new double[8];
-  //yverts= new double[8];
-  for (unsigned i=0; i<corners.size(); i++)
+#if 0
+  vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
+  xverts= new double[8];
+  yverts= new double[8];
+#endif // 0
+  for (unsigned i=0; i<corners.size(); ++i)
     camera->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
 }
 
-//: corners of the input face
+//: corners of the input face: visible?
 bool boxm_utils::is_face_visible(double * xverts, double *yverts,
                                  unsigned id1,unsigned id2,unsigned id3,unsigned id4)
 {
-  //double u,v;
-  ////vgl_box_2d<double> face;
-  //vcl_vector<vgl_point_2d<double> > vs;
-
-  //assert(face.size() >= 3);
-
-  //for (unsigned i=0; i<face.size(); i++) {
-  //  camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
-  //  vs.push_back(vgl_point_2d<double>(u,v));
-  //}
-  double normal=(xverts[id2]-xverts[id1])*(yverts[id3]-yverts[id2])-(yverts[id2]-yverts[id1])*(xverts[id3]-xverts[id2]);
-
-  //vgl_vector_2d<double> v0 (xverts[id2]-xverts[id1],yverts[id2]-yverts[id1]);
-  //vgl_vector_2d<double> v1 (xverts[id3]-xverts[id2],yverts[id3]-yverts[id2]);
-  ////vgl_vector_2d<double> v1 = vs[2] - vs[1];
-  //double normal = cross_product<double>(v0,v1);
-  if (normal < 0)
-    return true;
-  return false;
-}
-
-//: corners of the input face
-bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
-                                 vpgl_camera_double_sptr const& camera)
-{
-  double u,v;
-  //vgl_box_2d<double> face;
+#if 0
+  vgl_box_2d<double> face;
   vcl_vector<vgl_point_2d<double> > vs;
 
   assert(face.size() >= 3);
 
-  for (unsigned i=0; i<face.size(); i++) {
+  for (unsigned i=0; i<face.size(); ++i) {
+    double u,v;
+    camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
+    vs.push_back(vgl_point_2d<double>(u,v));
+  }
+
+  vgl_vector_2d<double> v0 (xverts[id2]-xverts[id1],yverts[id2]-yverts[id1]);
+  vgl_vector_2d<double> v1 (xverts[id3]-xverts[id2],yverts[id3]-yverts[id2]);
+  vgl_vector_2d<double> v1 = vs[2] - vs[1];
+  double normal = cross_product(v0,v1);
+#endif // 0
+
+  double normal=(xverts[id2]-xverts[id1])*(yverts[id3]-yverts[id2])-(yverts[id2]-yverts[id1])*(xverts[id3]-xverts[id2]);
+  return normal < 0;
+}
+
+//: corners of the input face: visible?
+bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
+                                 vpgl_camera_double_sptr const& camera)
+{
+  assert(face.size() >= 3);
+  vcl_vector<vgl_point_2d<double> > vs;
+
+  for (unsigned i=0; i<face.size(); ++i) {
+    double u,v;
     camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
     vs.push_back(vgl_point_2d<double>(u,v));
   }
@@ -168,20 +163,17 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
   vgl_vector_2d<double> v0 = vs[1] - vs[0];
   vgl_vector_2d<double> v1 = vs[2] - vs[1];
   double normal = cross_product<double>(v0,v1);
-  if (normal < 0)
-    return true;
-  return false;
+  return normal < 0;
 }
 
 vcl_vector<vgl_point_2d<double> >
 boxm_utils::project_face(vcl_vector<vgl_point_3d<double> > &face,
                          vpgl_camera_double_sptr const& camera)
 {
-  double u,v;
   vcl_vector<vgl_point_2d<double> > vs;
 
-
-  for (unsigned i=0; i<face.size(); i++) {
+  for (unsigned i=0; i<face.size(); ++i) {
+    double u,v;
     camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
     vs.push_back(vgl_point_2d<double>(u,v));
   }
@@ -575,11 +567,10 @@ bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3
                                    vpgl_camera_double_sptr cam)
 {
   vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
-  for (;face_it!=faces.end();face_it++)
+  for (; face_it!=faces.end(); ++face_it)
   {
     vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
     vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
-    //vgl_polygon<double> face_polygon(face_projected);
 
     double xs[]={face_projected[0].x(),face_projected[1].x(),face_projected[2].x(),face_projected[3].x()};
     double ys[]={face_projected[0].y(),face_projected[1].y(),face_projected[2].y(),face_projected[3].y()};
@@ -614,10 +605,11 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
   {
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
     double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
-
-    //vcl_vector<vgl_point_2d<double> > face_polygon(4);
-    //for (unsigned i=0;i<4;i++)
-    //  face_polygon.push_back(vgl_point_2d<double>(xs[i],ys[i]));
+#if 0
+    vcl_vector<vgl_point_2d<double> > face_polygon(4);
+    for (unsigned i=0;i<4;++i)
+      face_polygon.push_back(vgl_point_2d<double>(xs[i],ys[i]));
+#endif // 0
 
     boxm_quad_scan_iterator poly_it(xs,ys);
 
@@ -743,21 +735,23 @@ bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_po
                                         vil_image_view<float> &fill_img,
                                         float val, vpgl_camera_double_sptr cam)
 {
-  //vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
-  //for (;face_it!=faces.end();face_it++)
-  //{
-  //  vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
-  //  vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
-  //  //vgl_polygon<double> face_polygon(face_projected);
-  //  double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
-  //  double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
-  //  boxm_quad_scan_iterator poly_it(xs,ys);
-  //  if (vis_face_ids & face_it->first){
-  //    quad_fill(poly_it,fill_img,val,0);
-  //  }
-  //}
-
- return true;
+#if 0
+  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
+  for (;face_it!=faces.end();++face_it)
+  {
+    vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
+    vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
+    vgl_polygon<double> face_polygon(face_projected);
+    double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
+    double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    if (vis_face_ids & face_it->first){
+      quad_fill(poly_it,fill_img,val,0);
+    }
+  }
+#else
+  return true;
+#endif // 0
 }
 
 bool boxm_utils::project_cube_fill_val(boct_face_idx & vis_face_ids,

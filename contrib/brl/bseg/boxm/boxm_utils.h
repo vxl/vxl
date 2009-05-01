@@ -51,7 +51,7 @@ class boxm_utils
   static void faces_of_box_3d(vgl_box_3d<double> const& bbox,
                               vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > & faces);
 
-  static void project_corners(vcl_vector<vgl_point_3d<double> > & corners,vpgl_camera_double_sptr camera,
+  static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,vpgl_camera_double_sptr camera,
                               double * xverts, double *yerts);
 
   static void project_cube(vgl_box_3d<double> &bbox,
