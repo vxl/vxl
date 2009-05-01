@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <boxm/boxm_utils.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
@@ -26,8 +25,7 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& worl
 
   vgl_point_3d<double> centroid = world.centroid();
   double x,z;
-  //double alpha = (vnl_math::pi/8.) * 3;
-  double alpha = (vnl_math::pi/180.)*65;
+  double alpha = (vnl_math::pi/180.)*65; // was: (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/36.;
   vcl_vector<vgl_point_3d<double> > centers;
   for (unsigned i=0; i<11; i++) {
@@ -201,7 +199,9 @@ MAIN( test_update )
   vgl_box_3d<double> world;
   world.add(origin);
   world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
-  //vpgl_camera_double_sptr camera = generate_camera_top(world);
+#if 0
+  vpgl_camera_double_sptr camera = generate_camera_top(world);
+#endif
   vcl_vector<vpgl_camera_double_sptr > cameras = generate_cameras_yz(world);
 
   vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(IMAGE_U,IMAGE_V);
@@ -210,21 +210,23 @@ MAIN( test_update )
   for (unsigned i=0; i<cameras.size(); i++) {
     expected.fill(0.0);
     mask.fill(0.0);
-    
+
     boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene,cameras[i],expected,mask);
     vcl_stringstream ss;
     ss << "./boxm_scene1/img" << i << ".tif";
-	//vil_image_view<unsigned char> expected_byte(expected.ni(),expected.nj(),expected.nplanes());
-	//vil_convert_stretch_range_limited(expected,expected_byte, 0.0f, 1.0f);
+#if 0
+    vil_image_view<unsigned char> expected_byte(expected.ni(),expected.nj(),expected.nplanes());
+    vil_convert_stretch_range_limited(expected,expected_byte, 0.0f, 1.0f);
+#endif
 
     vil_save(expected, ss.str().data());
   }
-
-  //vpl_rmdir("./boxm_scene1");
-  //vpl_unlink("./scene1.xml");
-
-  boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene_new(lvcs, origin, 
-    block_dim, world_dim, 4, 3);
+#if 0
+  vpl_rmdir("./boxm_scene1");
+  vpl_unlink("./scene1.xml");
+#endif
+  boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene_new(lvcs, origin,
+                                                                          block_dim, world_dim, 4, 3);
   scene_new.set_appearence_model(BOXM_APM_MOG_GREY);
   scene_new.set_paths("./boxm_scene_update", "block");
   vul_file::make_directory("./boxm_scene_update");
@@ -246,8 +248,8 @@ MAIN( test_update )
     ss << "./boxm_scene1/img_new" << i << ".tif";
     vil_image_view<float> expected_new(expected.ni(),expected.nj());
     boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene_new,cameras[i],expected_new,mask);
-	vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());
-	vil_convert_stretch_range_limited(expected_new,expected_byte, 0.0f, 1.0f);
+    vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());
+    vil_convert_stretch_range_limited(expected_new,expected_byte, 0.0f, 1.0f);
 
     vil_save(expected_byte, ss.str().data());
   }
