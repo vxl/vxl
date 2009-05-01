@@ -177,7 +177,8 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
         for (unsigned int i=0;i<leafnodes.size();i++)
         {
-          if (leafnodes[i]->code_.x_loc_&xlowcode)
+          short leafnode_cellsize=1<<leafnodes[i]->level();
+          if (leafnodes[i]->code_.x_loc_+leafnode_cellsize==this->code_.x_loc_)
             neighbors.push_back(leafnodes[i]);
         }
       }
@@ -213,7 +214,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
         for (unsigned int i=0;i<leafnodes.size();i++)
         {
-          if (leafnodes[i]->code_.x_loc_&xhighcode)
+          if (leafnodes[i]->code_.x_loc_==xhighcode)
             neighbors.push_back(leafnodes[i]);
         }
       }
@@ -249,7 +250,8 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
         for (unsigned int i=0;i<leafnodes.size();i++)
         {
-          if (leafnodes[i]->code_.y_loc_&ylowcode)
+          short leafnode_cellsize=1<<leafnodes[i]->level();
+          if (leafnodes[i]->code_.y_loc_+leafnode_cellsize==this->code_.y_loc_)
             neighbors.push_back(leafnodes[i]);
         }
       }
@@ -285,7 +287,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
         for (unsigned int i=0;i<leafnodes.size();i++)
         {
-          if (leafnodes[i]->code_.y_loc_&yhighcode)
+          if (leafnodes[i]->code_.y_loc_==yhighcode)
             neighbors.push_back(leafnodes[i]);
         }
       }
@@ -320,7 +322,8 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
         for (unsigned int i=0;i<leafnodes.size();i++)
         {
-          if (leafnodes[i]->code_.z_loc_&zlowcode)
+          short leafnode_cellsize=1<<leafnodes[i]->level();
+          if (leafnodes[i]->code_.z_loc_+leafnode_cellsize==this->code_.z_loc_)
             neighbors.push_back(leafnodes[i]);
         }
       }
@@ -356,7 +359,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
         for (unsigned int i=0;i<leafnodes.size();i++)
         {
-          if (leafnodes[i]->code_.z_loc_&zhighcode)
+          if (leafnodes[i]->code_.z_loc_==zhighcode)
             neighbors.push_back(leafnodes[i]);
         }
       }

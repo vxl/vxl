@@ -109,11 +109,11 @@ MAIN( test_find_neighbors )
   boct_tree_cell<short,vgl_point_3d<double> >* cell_zlow=tree3->locate_point(p_z_low);
 
   n.clear();
-  cell_zlow->find_neighbors(X_LOW,n,10);
+  cell_zlow->find_neighbors(Y_HIGH,n,10);
 
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n_brute_force;
 
-  brute_force_test_neighbor(cell_zlow,leaf_nodes,X_LOW,nlevels, n_brute_force);
+  brute_force_test_neighbor(cell_zlow,leaf_nodes,Y_HIGH,nlevels, n_brute_force);
 
   TEST("Returns the correct # of Neighbors",n.size(),n_brute_force.size());
 
