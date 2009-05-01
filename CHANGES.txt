@@ -9,40 +9,43 @@ effect.  If you change something in VXL, please document it here.
 
       - Renamed core/vidl to core/vidl1.  vidl1 is now deprecated.
 
-      - Added a new library to core!  vpdl is a probability distribution
-        library merging the contrib libraries brl/bbas/bsta, mul/vpdfl, and
-        mul/pdf1d.  It is disabled from CMake until more complete.
-        
-**************************
-VXL 1.12.0      - Feb 2009
-**************************
+      - Added a new library to core!
+        vpdl is a probability distribution library unifying and merging the
+        functionality of the contrib libs brl/bbas/bsta, mul/vpdfl, mul/pdf1d.
+
+******************************
+VXL 1.12.0     - February 2009
+******************************
       - no major changes.
 
-***************************
-VXL 1.11.0      - July 2008
-***************************
-
-      - Note: there was a 1.10.0 release, but it didn't get noted in
-        CHANGES.txt. These changes include all since 1.9.0.
+******************************
+VXL 1.11.0         - July 2008
+******************************
 
       - Added initial CMake configuration to help bring C++ 0x standard code
-         (including TR1) into vcl.  This will remain experimental until fully
-         tested and should not be used outside of vcl for now.
+        (including TR1) into vcl.  This will remain experimental until fully
+        tested and should not be used outside of vcl for now.
 
       - vil_math_median implemented for vxl_byte images using fast histogram
         method.
 
       - Added a sparse least squares function with sparse Levenberg Marquardt
-         optimizer to vnl
+        optimizer to vnl
 
       - changed the interface of vnl_matrix_fixed get_row and get_column
         to return a vnl_vector_fixed
 
       - Added fast exact Euclidean distance transforms to vil/algo
 
-****************************
-VXL 1.9.0        - July 2007
-****************************
+******************************
+VXL 1.10.0      - January 2008
+******************************
+
+      - no major changes.
+
+******************************
+VXL 1.9.0          - July 2007
+******************************
       - support for qt4 added to vgui
 
       - intersection methods & functions in vgl have been separated from classes
@@ -57,29 +60,28 @@ VXL 1.9.0        - July 2007
 
       - Added an plug-in vil loader to save and load vimt_image_2d natively.
 
-****************************
-VXL 1.8.0	- March 2007
-****************************
+******************************
+VXL 1.8.0         - March 2007
+******************************
 
       - vbl_shared_pointer updated to allow base class conversions
 
-*******************************
-VXL 1.7.0	- November 2006
-*******************************
+******************************
+VXL 1.7.0      - November 2006
+******************************
 
       - intersection methods scattered in vgl are combined into
         vgl/algo/vgl_intersection.h. intersect(...) under
         vgl/vgl_box_3d and intersection(...) under vgl/vgl_line_3d_2_points
-        are depracted and no longer available.
+        are deprecated and no longer available.
 
       - Added support for VC++ x64
 
-*****************************
-VXL 1.6.0	- August 2006
-*****************************
+******************************
+VXL 1.6.0        - August 2006
+******************************
 
-      - vnl has been made thread safe, fixing a major weakness with
-        vxl
+      - vnl has been made thread safe, fixing a major weakness with vxl
 
       - VXL's GUI Library (vgui) now has preliminary support for wxWidgets
         as the rendering toolkit. It has been tested only in Windows
@@ -97,9 +99,9 @@ VXL 1.6.0	- August 2006
 
       - PNG reader now supports sBIT for recovering the original bitdepth.
 
-****************************
-VXL 1.5.0	- April 2006
-****************************
+******************************
+VXL 1.5.0         - April 2006
+******************************
 
       - Add support for ICC 8.1
 
@@ -134,13 +136,13 @@ VXL 1.5.0	- April 2006
         VCL_VC_60, etc.  VCL_VC60 will be removed in a future release.
 
 ******************************
-VXL 1.4.0	- January 2006
+VXL 1.4.0       - January 2006
 ******************************
 
       - Added support for NITF image format v.2
 
 ******************************
-VXL 1.3.0	- October 2005
+VXL 1.3.0       - October 2005
 ******************************
 
       - New vgl_sphere_3d primitive, and some extra intersection calculations.
@@ -151,16 +153,16 @@ VXL 1.3.0	- October 2005
         All uncompressed data formats are supported and plugin support is
         provided for handling JPEG 2000 compressed NITF files.
 
-***************************
-VXL 1.2.0	- July 2005
-***************************
+******************************
+VXL 1.2.0          - July 2005
+******************************
 
       - Added an implementation of the Mukres or Hungarian algorithm for
         finding a minimum cost assignment.
 
-**************************
-VXL 1.1.0	- May 2004
-**************************
+******************************
+VXL 1.1.0           - May 2004
+******************************
 
       - Automated codec registration in vidl based on the approach of vil
         file formats.  vidl_io::register_codec() is no longer needed.
@@ -188,7 +190,7 @@ VXL 1.1.0	- May 2004
 
       - vnl_numeric_limits is deprecated in favour of vcl_numeric_limits.
         (vnl_numeric_limits was written before vcl.  vcl_numeric_limits is now
-         more robust, and can use platform defaults.)
+        more robust, and can use platform defaults.)
 
       - vbl_basic_tuple, vbl_basic_relation, etc. are deprecated since we have
         no decent explanation of how to use them.
@@ -204,7 +206,7 @@ VXL 1.1.0	- May 2004
         probably also with the basic MinGW tools as well.
 
 ******************************
-VXL 1.0.0	- October 2003
+VXL 1.0.0       - October 2003
 ******************************
 
       - Support for MSVC 7
@@ -215,21 +217,21 @@ VXL 1.0.0	- October 2003
       - Many hundreds of small bug fixes and improved functionality in the
         core and contributed libraries.
 
-********************************
-VXL 1.0 beta2	- September 2002
-********************************
+******************************
+VXL 1.0 beta2 - September 2002
+******************************
 
       - CMake is now the default build system.
 
-*******************************
-VXL 1.0 beta1	- November 2000
-*******************************
+******************************
+VXL 1.0 beta1  - November 2000
+******************************
 
       - The first official VXL beta release.
 
-*******************************
-VXL 0.1 	- February 2000
-*******************************
+******************************
+VXL 0.1        - February 2000
+******************************
 
       - The very first version of VXL, written from scratch (using pieces of
         TargetJr) during an intensive coding week in Oxford.
