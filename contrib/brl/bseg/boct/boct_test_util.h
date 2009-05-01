@@ -1,5 +1,5 @@
-#ifndef test_util_h_
-#define test_util_h_
+#ifndef boct_test_util_h_
+#define boct_test_util_h_
 
 #include <boct/boct_tree.h>
 
