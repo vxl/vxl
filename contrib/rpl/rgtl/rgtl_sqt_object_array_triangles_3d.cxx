@@ -1,8 +1,10 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #include "rgtl_sqt_object_array_triangles_3d.hxx"
+//:
+// \file
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_object_array_triangles_3d.hxx"
 #include "rgtl_sqt_space.txx"
@@ -127,11 +129,11 @@ void rgtl_soat3d_polygon::split(double n[3], rgtl_soat3d_polygon out[2]) const
         // We know the intersection is between the endpoints.
         double wA = vcl_fabs(dots[i]);
         vnl_double_3 pA(this->verts[last_i][0],
-                       this->verts[last_i][1],
-                       this->verts[last_i][2]);
+                        this->verts[last_i][1],
+                        this->verts[last_i][2]);
         vnl_double_3 pB(this->verts[i][0],
-                       this->verts[i][1],
-                       this->verts[i][2]);
+                        this->verts[i][1],
+                        this->verts[i][2]);
         vnl_double_3 pNew = (wA*pA + wB*pB) / (wA+wB);
         out[0].insert_vertex(pNew.data_block());
         out[1].insert_vertex(pNew.data_block());

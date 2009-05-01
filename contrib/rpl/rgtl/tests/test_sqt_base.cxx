@@ -1,7 +1,9 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+//:
+// \file
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 #include <testlib/testlib_test.h>
 
 #include <rgtl/rgtl_sqt_base.hxx>
@@ -126,20 +128,20 @@ static void cross_product(double const a[3], double const b[3], double c[3])
 static void normalize(double d[3])
 {
   double mag = vcl_sqrt(dot_product(d,d));
-  if(mag > 0)
-    {
+  if (mag > 0)
+  {
     d[0] /= mag;
     d[1] /= mag;
     d[2] /= mag;
-    }
+  }
 }
 
 static bool
 test_sqt()
 {
   int counts[6] = {15, 17, 18, 14, 18, 18};
-  for(int i=0; i < 100; ++i)
-    {
+  for (int i=0; i < 100; ++i)
+  {
     rgtl_sqt_base::face_index_type face;
     double u;
     double v;
@@ -152,31 +154,31 @@ test_sqt()
     --counts[face];
     normalize(td);
     normalize(d);
-    if(dot_product(td, d) < 0.99999999)
-      {
+    if (dot_product(td, d) < 0.99999999)
+    {
       return false;
-      }
+    }
     double nu[3];
     double nv[3];
     rgtl_sqt_base::plane_normal_u(face, u, nu);
     rgtl_sqt_base::plane_normal_v(face, v, nv);
-    if(dot_product(nu, d) > 1e-10)
-      {
-      return false;
-      }
-    if(dot_product(nv, d) > 1e-10)
-      {
-      return false;
-      }
-    }
-
-  for(int i=0; i < 6; ++i)
+    if (dot_product(nu, d) > 1e-10)
     {
-    if(counts[i] != 0)
-      {
       return false;
-      }
     }
+    if (dot_product(nv, d) > 1e-10)
+    {
+      return false;
+    }
+  }
+
+  for (int i=0; i < 6; ++i)
+  {
+    if (counts[i] != 0)
+    {
+      return false;
+    }
+  }
 
   return true;
 }
@@ -184,11 +186,7 @@ test_sqt()
 MAIN( test_sqt_base )
 {
   START("rgtl_sqt_base");
-
-  {
   testlib_test_begin("sqt parameter/direction conversion");
   testlib_test_perform(test_sqt());
-  }
-
   SUMMARY();
 }

@@ -1,7 +1,10 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+//:
+// \file
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <testlib/testlib_test.h>
 #include <rgtl/rgtl_octree_dual_visit.hxx>
 #include <rgtl/rgtl_octree_data_fixed.txx>
@@ -9,45 +12,45 @@
 template <class Tree2D>
 class dual_counter
 {
-public:
+ public:
   typedef Tree2D tree_type;
   dual_counter(tree_type const& t): tree_(t)
-    {
+  {
     this->counts_[0] = 0;
     this->counts_[1] = 0;
     this->counts_[2] = 0;
     this->ecount_[0] = 0;
     this->ecount_[1] = 0;
-    }
+  }
   tree_type const& tree() const
-    {
+  {
     return this->tree_;
-    }
+  }
 
   // Test visiting dual points.
   void operator()(rgtl_octree_dual_element<2, 0> const&)
-    {
+  {
     ++this->counts_[0];
-    }
+  }
 
   // Test visiting dual edges with orientation.
   template <unsigned int m>
   void operator()(rgtl_octree_dual_element_oriented<2, 1, m> const& in)
-    {
+  {
     ++this->counts_[1];
     ++this->ecount_[m-1];
-    }
+  }
 
   // Test visiting dual cells.
   void operator()(rgtl_octree_dual_element<2, 2> const&)
-    {
+  {
     ++this->counts_[2];
-    }
+  }
 
   int count(unsigned int i) const { return this->counts_[i]; }
   int hcount() const { return this->ecount_[0]; }
   int vcount() const { return this->ecount_[1]; }
-private:
+ private:
   tree_type const& tree_;
   int counts_[3];
   int ecount_[2];

@@ -1,11 +1,13 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #include "rgtl_sqt_base.hxx"
+//:
+// \file
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
-// Define a constant for pi.
 #include <vnl/vnl_math.h>
+// Define a constant for pi.
 #define RGTL_SQT_PI vnl_math::pi
 
 // Conversion factor from parameter value to angle.
@@ -14,6 +16,7 @@
 // Conversion factor from angle to parameter value.
 #define RGTL_SQT_FOUR_OVER_PI (2.0 * vnl_math::two_over_pi)
 
+//:
 // The following rules help write the functions based on the ascii-art
 // diagrams of the parameterization of each face.  These rules hold no
 // matter how the parameters are oriented.  Changing the orientation
@@ -78,6 +81,7 @@ static void PlaneNormalVNegativeX(double v, double n[3])
 }
 
 //----------------------------------------------------------------------------
+//:
 // Positive X Axis Face
 //        \      z      /              x                     z
 //  (-1,+1)\_____|_____/(+1,+1)   _____|_____                |    v=+1
@@ -117,6 +121,7 @@ static void PlaneNormalVPositiveX(double v, double n[3])
 }
 
 //----------------------------------------------------------------------------
+//:
 // Negative Y Axis Face
 //        \      z      /                                    z
 //  (-1,+1)\_____|_____/(+1,+1)   ___________                |    v=+1
@@ -156,6 +161,7 @@ static void PlaneNormalVNegativeY(double v, double n[3])
 }
 
 //----------------------------------------------------------------------------
+//:
 // Positive Y Axis Face
 //        \      z      /              y                     z
 //  (-1,+1)\_____|_____/(+1,+1)   _____|_____                |    v=+1
@@ -195,6 +201,7 @@ static void PlaneNormalVPositiveY(double v, double n[3])
 }
 
 //----------------------------------------------------------------------------
+//:
 // Negative Z Axis Face
 //        \      y      /                                    y
 //  (-1,+1)\_____|_____/(+1,+1)   ___________                |    v=+1
@@ -234,6 +241,7 @@ static void PlaneNormalVNegativeZ(double v, double n[3])
 }
 
 //----------------------------------------------------------------------------
+//:
 // Positive Z Axis Face
 //        \             /              z
 //  (-1,+1)\___________/(+1,+1)   _____|_____                     v=+1

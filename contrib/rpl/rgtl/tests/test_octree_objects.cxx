@@ -1,7 +1,10 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+//:
+// \file
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include <testlib/testlib_test.h>
 
 #include <rgtl/rgtl_octree_objects.hxx>
@@ -29,14 +32,14 @@ MAIN( test_octree_objects )
   // Generate points in the unit cube.
   unsigned int const n = 10000;
   rgtl_object_array_points<3> points(n);
-  for(unsigned int i=0; i < n; ++i)
-    {
+  for (unsigned int i=0; i < n; ++i)
+  {
     double x[3];
     x[0] = mz_random.drand32(0,1);
     x[1] = mz_random.drand32(0,1);
     x[2] = mz_random.drand32(0,1);
     points.set_point(i, x);
-    }
+  }
 
   // Construct the spatial structure.
   testlib_test_begin("construct");
@@ -69,10 +72,8 @@ MAIN( test_octree_objects )
   count = objects.query_sphere(p, radius, sphere_ids);
   testlib_test_perform(count == 4);
 
-  vcl_cout << "  octree construction took "
-           << (ct_ms/1000.0) << "s" << vcl_endl;
-  vcl_cout << "  distance transform took "
-           << (df_ms/1000.0) << "s" << vcl_endl;
+  vcl_cout << "  octree construction took " << (ct_ms*0.001) << "s\n"
+           << "  distance transform took " << (df_ms*0.001) << 's' << vcl_endl;
 
   SUMMARY();
 }

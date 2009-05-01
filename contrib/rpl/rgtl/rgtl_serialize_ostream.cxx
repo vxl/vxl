@@ -1,8 +1,10 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #include "rgtl_serialize_ostream.hxx"
+//:
+// \file
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
@@ -18,11 +20,11 @@ rgtl_serialize_ostream&
 rgtl_serialize_ostream::write(void const* data, vcl_size_t length)
 {
   this->stream_.write(static_cast<char const*>(data), length);
-  if(!this->stream_)
-    {
-    vcl_cerr << "Error writing to stream!" << vcl_endl;
+  if (!this->stream_)
+  {
+    vcl_cerr << "Error writing to stream!\n";
     vcl_abort();
-    }
+  }
   return *this;
 }
 
