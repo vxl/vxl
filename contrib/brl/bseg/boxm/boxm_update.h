@@ -284,7 +284,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
         vis.deep_copy(vis_end);
       }
-	//scene.write_active_block();
+      //scene.write_active_block();
     }
   }
 }

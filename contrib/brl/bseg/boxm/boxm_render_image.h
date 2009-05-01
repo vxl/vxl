@@ -20,17 +20,18 @@
 #include <vcl_iostream.h>
 #include <vil/vil_convert.h>
 #include <vul/vul_timer.h>
- class normalize_expected_functor
-  {
-  public:
-	  normalize_expected_functor() {}
 
-    void operator()(float  norm, float & val) const 
-    {
-		if(norm>0)
-		val/=norm;
-	}
-  };
+class normalize_expected_functor
+{
+ public:
+  normalize_expected_functor() {}
+
+  void operator()(float  norm, float & val) const
+  {
+    if (norm>0)
+      val/=norm;
+  }
+};
 
 class image_exp_functor
 {
@@ -65,9 +66,10 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       boxm_block<tree_type> * curr_block=scene.get_active_block();
-	  vcl_cout<<"Block: "<<curr_block->bounding_box()<<vcl_endl;
-	  vcl_cout<<"Tree: "<<curr_block->get_tree()->num_levels()<< " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<vcl_endl;
-	
+      vcl_cout<<"Block: "<<curr_block->bounding_box()<<vcl_endl
+              <<"Tree: "<<curr_block->get_tree()->num_levels()
+              << " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<vcl_endl;
+
       // project vertices to the image determine which faces of the cell are visible
       boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);
 
@@ -78,12 +80,11 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
       vil_image_view<float> alphas(expected.ni(),expected.nj(),1);
       vil_image_view<float> vis_end(expected.ni(),expected.nj(),1);
       vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);
-	  vil_image_view<float> temp_weights(expected.ni(),expected.nj(),1);
-		normalize_expected_functor norm_fn;
+      vil_image_view<float> temp_weights(expected.ni(),expected.nj(),1);
+      normalize_expected_functor norm_fn;
 
-	  double  xverts[8];
-	  double  yverts[8];
-	  
+      double  xverts[8];
+      double  yverts[8];
 
       while (frontier_it.next())
       {
@@ -94,8 +95,8 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
-		temp_weights.fill(0.0f);
-        vcl_cout<<".";
+        temp_weights.fill(0.0f);
+        vcl_cout<<'.';
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
@@ -115,7 +116,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
             boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
             // fill expected value image
             //boxm_utils::project_cube_fill_val( vis_face_ids,temp_expected,(float)cell_expected, xverts,yverts);
-			boxm_utils::project_cube_fill_val_aa( vis_face_ids,temp_expected,temp_weights,(float)cell_expected, xverts,yverts);
+            boxm_utils::project_cube_fill_val_aa( vis_face_ids,temp_expected,temp_weights,(float)cell_expected, xverts,yverts);
 
             //delete [] xverts;
             //delete [] yverts;
@@ -124,17 +125,15 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         // compute the length of ray segment at each pixel
         vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);
 
-		len_seg.fill(0.0f);
-		vcl_stringstream s,s1;
+        len_seg.fill(0.0f);
+        vcl_stringstream s,s1;
 
         vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
         vil_math_sum_sqr<float,float>(back_xyz,len_seg);
         vil_math_sqrt<float>(len_seg);
         vil_math_image_product(len_seg,alphas, alphas);
-		vil_transform2(temp_weights,temp_expected,norm_fn);
-		++cnt;
-
-
+        vil_transform2(temp_weights,temp_expected,norm_fn);
+        ++cnt;
 
         // compute visibility
         vil_math_image_difference(alpha_integral, alphas, alpha_integral);
@@ -149,13 +148,10 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         vil_math_image_sum(temp_expected,expected,expected);
 
         vis.deep_copy(vis_end);
-
-
       }
     }
   }
-  vcl_cout<<"\n";
-  vcl_cout<<"The time taken is"<< t.all()<<vcl_endl;
+  vcl_cout<<"\nThe time taken is"<< t.all()<<vcl_endl;
   return;
 }
 

@@ -33,7 +33,7 @@ boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels /* =1 */):
 }
 
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels) 
+boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels)
 : max_level_(max_level),global_bbox_(bbox)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
@@ -96,14 +96,15 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
   delete loccode_;
   return curr_cell;
 }
+
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const vgl_point_3d<double>& p)
 {
   short curr_level=max_level_-1;
   vgl_point_3d<double> norm_p((p.x()-global_bbox_.min_x())/global_bbox_.width(),
-							  (p.y()-global_bbox_.min_y())/global_bbox_.height(),	
-							  (p.z()-global_bbox_.min_z())/global_bbox_.depth());		
-							  
+                              (p.y()-global_bbox_.min_y())/global_bbox_.height(),
+                              (p.z()-global_bbox_.min_z())/global_bbox_.depth());
+
   // convert point to location code.
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, max_level_);
 #if 0
@@ -124,6 +125,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
   delete loccode_;
   return curr_cell;
 }
+
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(const vgl_point_3d<double>& p, short level)
 {

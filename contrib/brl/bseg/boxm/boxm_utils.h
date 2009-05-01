@@ -72,9 +72,9 @@ class boxm_utils
                         vil_image_view<float> &img, float val,
                         unsigned img_plane_num=0);
   static void quad_fill(boxm_quad_scan_iterator &poly_it,
-                        vil_image_view<float> &img, 
-						vil_image_view<float> &weights_img,
-						float val,
+                        vil_image_view<float> &img,
+                        vil_image_view<float> &weights_img,
+                        float val,
                         unsigned img_plane_num=0);
 
   static bool project_cube_xyz(vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
@@ -98,9 +98,9 @@ class boxm_utils
                                     vil_image_view<float> &fill_img,
                                     float val, double *xverts,double * yverts);
   static bool project_cube_fill_val_aa(boct_face_idx & vis_face_ids,
-                                    vil_image_view<float> &fill_img,
-									vil_image_view<float> &weights_img,
-                                    float val, double *xverts,double * yverts);
+                                       vil_image_view<float> &fill_img,
+                                       vil_image_view<float> &weights_img,
+                                       float val, double *xverts,double * yverts);
 
   static bool cube_uniform_mean(boct_face_idx & vis_face_ids,
                                 vil_image_view<float> &img,
@@ -110,12 +110,12 @@ class boxm_utils
                         vil_image_view<float> &img, float &val,  float & count);
 
   static bool cube_entry_point(vgl_box_3d<double> box,vgl_point_3d<double> pt,
-							   vgl_vector_3d<double> dir, 
-							   vgl_point_3d<double> & entry_point,
-							   double & lambda, boct_face_idx & face_id);
+                               vgl_vector_3d<double> dir,
+                               vgl_point_3d<double> & entry_point,
+                               double & lambda, boct_face_idx & face_id);
   static bool cube_exit_point(vgl_box_3d<double> box,vgl_point_3d<double> pt,
-							   vgl_vector_3d<double> dir, vgl_point_3d<double> & exit_point,
-							   double & lambda,boct_face_idx & face_id);
+                              vgl_vector_3d<double> dir, vgl_point_3d<double> & exit_point,
+                              double & lambda,boct_face_idx & face_id);
 };
 
 #endif

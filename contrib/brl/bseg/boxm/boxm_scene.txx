@@ -110,22 +110,24 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
     return 0;
   }
 }
+
 template <class T>
-bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> & index){
+bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> & index)
+{
   vgl_box_3d<double> world(get_world_bbox());
   if (world.contains(p)) {
     // find the block index
     unsigned i = static_cast<unsigned>((p.x()-origin_.x())/block_dim_.x());
     unsigned j = static_cast<unsigned>((p.y()-origin_.y())/block_dim_.y());
     unsigned k = static_cast<unsigned>((p.z()-origin_.z())/block_dim_.z());
-	//: boundary case
-    if(p.x()==world.max_x())
-		i-=1;
-	if(p.y()==world.max_y())
-		j-=1;
-	if(p.z()==world.max_z())
-		k-=1;
-    
+    //: boundary case
+    if (p.x()==world.max_x())
+      i-=1;
+    if (p.y()==world.max_y())
+      j-=1;
+    if (p.z()==world.max_z())
+      k-=1;
+
     index=vgl_point_3d<int>(i,j,k);
     return true;
   } else {
@@ -133,6 +135,7 @@ bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> &
     return false;
   }
 }
+
 template <class T>
 boxm_block<T>* boxm_scene<T>::get_active_block()
 {
@@ -310,11 +313,11 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
 {
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
-  
+
   vsl_basic_xml_element app_model(APP_MODEL_TAG);
   app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
   app_model.x_write(os);
-  
+
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
   x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);

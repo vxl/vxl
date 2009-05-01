@@ -25,7 +25,7 @@ MAIN( test_quad_interpolate )
   vil_image_view<float> img_min(40,40);
   vil_image_view<float> img_max(40,40);
   vil_image_view<float> g_img_max(40,40);
-  
+
   img_max.fill(0.0);
   g_img_max.fill(0.0);
   // creating ground truth
@@ -35,11 +35,11 @@ MAIN( test_quad_interpolate )
   boxm_utils::quad_interpolate(poly_it, xvals, yvals, vals,img_max,0);
   for (unsigned i=10;i<=12;i++)
   {
-	  for (unsigned j=10;j<=12;j++)	
-	{
-		vcl_cout<<img_max(j,i)<<" ";
-	}
-	  vcl_cout<<"\n";
+    for (unsigned j=10;j<=12;j++)
+    {
+      vcl_cout << img_max(j,i) << ' ';
+    }
+    vcl_cout << '\n';
   }
   bool flag=true;
   for (unsigned i=0;i<g_img_max.ni();i++)

@@ -87,7 +87,7 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   float max_z=pro.get_input<float>(i++);
 
   vgl_box_3d<double> query(min_x,min_y,min_z,
-						   max_x,max_y,max_z);	
+                           max_x,max_y,max_z);
 
   double xverts[8];
   double yverts[8];
@@ -106,13 +106,14 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
     float val=boxm_compute_volume_visibility<short, BOXM_APM_MOG_GREY>(query,*scene, camera);
      vil_image_view<float> img_vol(ni,nj);img_vol.fill(0.0);
 
-	boxm_utils::project_cube_fill_val(face_id,img_vol,val,xverts,yverts);
-	vil_image_view<unsigned char> *vol_vis = new vil_image_view<unsigned char>(img_vol.ni(),img_vol.nj(),img_vol.nplanes());
-	vil_convert_stretch_range_limited(img_vol,*vol_vis, 0.0f, 1.0f);
-	img = vol_vis;
+    boxm_utils::project_cube_fill_val(face_id,img_vol,val,xverts,yverts);
+    vil_image_view<unsigned char> *vol_vis = new vil_image_view<unsigned char>(img_vol.ni(),img_vol.nj(),img_vol.nplanes());
+    vil_convert_stretch_range_limited(img_vol,*vol_vis, 0.0f, 1.0f);
+    img = vol_vis;
 
-	vcl_cout<<"\n Visbility is "<<val;
-  } else {
+    vcl_cout<<"\n Visibility is "<<val;
+  }
+  else {
     vcl_cout << "boxm_volume_visibility_process: undefined APM type" << vcl_endl;
     return false;
   }
