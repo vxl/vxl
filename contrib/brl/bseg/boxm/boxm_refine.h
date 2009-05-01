@@ -6,7 +6,7 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_scene.h>
-
+#include <vcl_iostream.h>
 
 //: This method refines the blocks (octrees) of the scene
 // If there are some cells with big values they are spitted into new child cells;
@@ -29,10 +29,10 @@ void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
     // get the leaf nodes of the block
     vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> >*> leaf_nodes = tree->leaf_cells();
-    vcl_cout << "*****************************************" << vcl_endl;
-    vcl_cout << "BLOCK " << iter.index() << vcl_endl;
-    vcl_cout << "NUMBER OF LEAF NODES=" << leaf_nodes.size() << vcl_endl;
-    vcl_cout << "*****************************************" << vcl_endl;
+    vcl_cout << "*****************************************\n"
+             << " BLOCK " << iter.index() << '\n'
+             << " NUMBER OF LEAF NODES=" << leaf_nodes.size() << '\n'
+             << "*****************************************" << vcl_endl;
     vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> >*> split_list;
     for (unsigned i=0; i<leaf_nodes.size(); i++) {
       boct_tree_cell<T_loc, boxm_sample<APM> >* cell = leaf_nodes[i];
