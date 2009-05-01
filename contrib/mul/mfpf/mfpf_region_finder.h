@@ -47,11 +47,10 @@ class mfpf_region_finder : public mfpf_point_finder
 
   //: Lower bound on variance used in normalisation
   double var_min_;
-  
-  //: When generating visual image of model with multi-planes, is only
-  // the first plane drawn or L2 norm of all planes
+
+  //: When generating visual image of model with multi-planes, is only the first plane drawn or L2 norm of all planes
   bool draw_only_1st_plane_;
-  
+
   //: Define default values
   void set_defaults();
 
