@@ -19,7 +19,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
 
     vcl_cout<<"The point is "<<point;
     if (cam->is_behind_camera(vgl_homg_point_3d<double>(point)))
-      return 1;
+      return 1.0f;
     // first block of intersection
 
     // case 1 : when the camera lies inside the scene
@@ -41,9 +41,9 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
       vgl_box_3d<double> world_bb=scene.get_world_bbox();
       boct_face_idx face_id;
       if (!boxm_utils::cube_entry_point(world_bb,cam_center,dir,entry_point,lambda,face_id))
-        return 1;
+        return 1.0f;
       if (!scene.get_block_index(entry_point,curr_block_index))
-        return 1;
+        return 1.0f;
     }
     else
     {
@@ -110,7 +110,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
               curr_cell=neighbors[min_i];
             else if (neighbors.size()>0)
             {
-              vcl_cout<<"ERROR"<<vcl_endl;return -1;
+              vcl_cout<<"ERROR"<<vcl_endl;return -1.0f;
             }
             entry_point=exit_point;
           }
@@ -132,21 +132,25 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
         if (face_id==Z_HIGH)
           curr_block_index.set(curr_block_index.x(),curr_block_index.y(),curr_block_index.z()+1);
 
-		if(scene.valid_index(curr_block_index))
-		{
-			scene.load_block(curr_block_index);
-			curr_block=scene.get_active_block();
-			tree=curr_block->get_tree();
-			curr_cell=tree->locate_point_global(entry_point);
-		}
-		else
-		{
-			continue_flag=false;
-		}
-
+        if (scene.valid_index(curr_block_index))
+        {
+          scene.load_block(curr_block_index);
+          curr_block=scene.get_active_block();
+          tree=curr_block->get_tree();
+          curr_cell=tree->locate_point_global(entry_point);
+        }
+        else
+        {
+          continue_flag=false;
+        }
       }
     }
-    return vcl_exp(alpha_int);
+    return (float)vcl_exp(alpha_int);
+  }
+  else
+  {
+    vcl_cout<<"Not a perspective camera"<<vcl_endl;
+    return -1.0f;
   }
 }
 
