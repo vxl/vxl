@@ -84,7 +84,8 @@ class bsta_sample_set : public bsta_parzen_sphere<T,n>
 
  private:
   //: hold a vector of weights for each data sample
-  //  needs to be set separately with each insert into the data set, otherwise its set to 1.0 by default at the first call to mean()
+  //  Needs to be set separately with each insert into the data set,
+  //  otherwise it's set to 1.0 by default at the first call to mean()
   vcl_vector<T> weights_;
 
   vcl_vector<int> assignments_;  // a negative value indicates "null assignment"
@@ -425,16 +426,16 @@ bool bsta_sample_set_dist_print_to_m(const bsta_sample_set<T,2>& set, vcl_ofstre
   for (unsigned m = 0; m < mode_cnt; m++) {
     vnl_vector_fixed<T,2> mode;
     set.mode_mean(m, mode);
-    of << "mu = [" << mode[0] << " " << mode[1] << "];\n";
+    of << "mu = [" << mode[0] << ' ' << mode[1] << "];\n";
     vnl_matrix_fixed<T,2,2> covar;
     if (!bsta_sample_set_variance(set, m, covar))
       return false;
     of << "sigma = [";
     for (unsigned r = 0; r < 2; r++) {
       for (unsigned c = 0; c < 2; c++)
-        of << covar[r][c] << " ";
+        of << covar[r][c] << ' ';
       if (r == 0)
-        of << ";";
+        of << ';';
     }
     of << "];\n";
     of << "X = [x(:) y(:)];\n";
