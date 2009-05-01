@@ -1,4 +1,5 @@
 #include "test_utils.h"
+#include <vgl/vgl_line_3d_2_points.h>
 
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
@@ -79,118 +80,29 @@ vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world)
   return persp_cam;
 }
 
-#if 0
-bool generate_test_boxes(double box_min_x, double box_min_y, double box_min_z,
-                         double box_dim_x, double box_dim_y, double box_dim_z,
-                         double world_dim_x, double world_dim_y, double world_dim_z,
-                         vcl_vector<vgl_box_3d<double> >& boxes, bool gen_2box = true)
+vcl_vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>& world)
 {
-  // create the big box at the bottom
-  double max_x = box_min_x + box_dim_x;
-  double max_y = box_min_y + box_dim_y;
-  double max_z = box_min_z + box_dim_z;
-  if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z)) {
-    vcl_cerr << "generate_boxes() -- the box is out of world boundaries!\n";
-    return false;
+  vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
+
+  vgl_line_3d_2_points<double> diag(world.min_point(), world.max_point());
+
+  vcl_vector<vgl_point_3d<double> > centers;
+  unsigned i=0;
+  for (double t=0; t<=1.0; t+=0.1) {
+    vgl_point_3d<double> centroid = diag.point_t(t);
+    centers.push_back(centroid);
+    vcl_cout << centers[i++] << vcl_endl;
   }
 
-  vgl_box_3d<double> box(box_min_x, box_min_y, box_min_z, max_x, max_y, max_z);
-  boxes.push_back(box);
-
-  if (gen_2box) {
-    // create the top boxe
-    vgl_point_3d<double> centroid = box.centroid();
-    // make the top box 2/3 of the size of the previous one
-    double dimx = (box.max_x() - box.min_x())/2;
-    double dimy = (box.max_y() - box.min_y())/2;
-    double dimz = (box.max_z() - box.min_z())/2;
-    centroid.set(centroid.x(), centroid.y(), box.max_z() + dimz/2.0);
-    vgl_box_3d<double> top_box = vgl_box_3d<double> (centroid, dimx, dimy, dimz, vgl_box_3d<double>::centre);
-    // translate it a bit
-    vgl_point_3d<double> top_centroid = top_box.centroid();
-    top_box.set_centroid(vgl_point_3d<double>(top_centroid.x()+dimx/3., top_centroid.y()+dimx/3., top_centroid.z()));
-    // check if the box in the world completely
-    max_x = top_box.max_x();
-    max_y = top_box.max_y();
-    max_z = top_box.max_z();
-    // stop if the new box is getting out of the boundaries
-    if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z))
-      return false;
-    boxes.push_back(top_box);
+//  vgl_box_2d<double> bb;
+  vcl_vector<vpgl_camera_double_sptr> cameras;
+  for (unsigned i=0; i<centers.size(); i++)
+  {
+    vgl_point_3d<double> camera_center  = centers[i];
+    vpgl_perspective_camera<double> persp_cam;
+    generate_persp_camera(boxm_focal_length,principal_point, boxm_x_scale, boxm_y_scale, camera_center, persp_cam);
+    persp_cam.look_at(vgl_homg_point_3d<double>(camera_center.x()+10, camera_center.y()+10, camera_center.z()));
+    cameras.push_back(new vpgl_perspective_camera<double>(persp_cam));
   }
-  else {
-    vgl_box_3d<double> top_box = vgl_box_3d<double>();
-    boxes.push_back(top_box);
-  }
-
-  return true;
+  return cameras;
 }
-
-
-void gen_texture_map(vgl_box_3d<double> box,
-                     vcl_vector<vcl_vector<float> >& intens_map_bt,
-                     vcl_vector<vcl_vector<float> >& intens_map_side1,
-                     vcl_vector<vcl_vector<float> >& intens_map_side2,
-                     bool gen_rand, float app_val)
-{
-  // generate intensity maps
-  unsigned upw = (unsigned)vcl_ceil(box.width()/8)+1;
-  unsigned uph = (unsigned)vcl_ceil(box.height()/8)+1;
-  unsigned upd = (unsigned)vcl_ceil(box.depth()/8)+1;
-
-  intens_map_bt.resize(upw);
-  intens_map_side1.resize(upw);
-  intens_map_side2.resize(upw);
-
-  if (verbose)
-    vcl_cout << box.width() << ' ' << box.depth() << ' ' << box.height() << vcl_endl;
-
-  if (gen_rand) {
-    for (unsigned i=0; i<upw;i++) {
-      intens_map_bt[i].resize(uph);
-      for (unsigned j=0; j<uph;j++) {
-        intens_map_bt[i][j] = (float)((rand() % 85)/255.0);
-      }
-    }
-
-    for (unsigned i=0; i<upw;i++) {
-      intens_map_side1[i].resize(upd);
-      for (unsigned j=0; j<upd;j++) {
-        intens_map_side1[i][j] = (float)((rand() % 85)/255.0 + 0.4);
-      }
-    }
-
-    for (unsigned i=0; i<uph;i++) {
-      intens_map_side2[i].resize(upd);
-      for (unsigned j=0; j<upd;j++) {
-        intens_map_side2[i][j] = (float)((rand() % 85)/255.0 + 0.7);
-        if (intens_map_side2[i][j] > 1.0f)
-          intens_map_side2[i][j] = 0.99f;
-      }
-    }
-  } else {
-    for (unsigned i=0; i<upw;i++) {
-      intens_map_bt[i].resize(uph);
-      for (unsigned j=0; j<uph;j++) {
-        intens_map_bt[i][j] = app_val;
-      }
-    }
-
-    for (unsigned i=0; i<upw;i++) {
-      intens_map_side1[i].resize(upd);
-      for (unsigned j=0; j<upd;j++) {
-        intens_map_side1[i][j] = app_val;
-      }
-    }
-
-    for (unsigned i=0; i<uph;i++) {
-      intens_map_side2[i].resize(upd);
-      for (unsigned j=0; j<upd;j++) {
-        intens_map_side2[i][j] = app_val;
-        if (intens_map_side2[i][j] > 1.0f)
-          intens_map_side2[i][j] = 0.99f;
-      }
-    }
-  }
-}
-#endif // 0
