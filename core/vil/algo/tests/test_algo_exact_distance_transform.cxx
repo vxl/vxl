@@ -213,7 +213,7 @@ vil_exact_distance_transform_test_specific(
   bool algo_error=false;
 
   for (unsigned i=0; i<im.size(); ++i) {
-    unsigned dst;
+    vxl_uint_32 dst;
     dst = DATA(dt_brute)[i];
     if (dst != DATA(dt_algo)[i]) {
       vcl_cout << "Error! " << algo << ": " << DATA(dt_algo)[i] << " EXACT: " << dst << vcl_endl;

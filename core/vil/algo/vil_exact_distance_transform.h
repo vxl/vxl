@@ -29,7 +29,8 @@
 //
 bool vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im);
 
-//: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the closest 0-pixel.
+//: Same as vil_exact_distance_transform_maurer, but also returns a label array
+// indicating the closest 0-pixel.
 //
 // \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
@@ -37,7 +38,7 @@ bool vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im);
 //
 bool
 vil_exact_distance_transform_maurer_label( vil_image_view<vxl_uint_32> &im,
-                                           vil_image_view<unsigned> &imlabel);
+                                           vil_image_view<vxl_uint_32> &imlabel);
 
 //: Cubic-time, exact Euclidean distance transform (Saito's algorithm)
 //
@@ -66,10 +67,11 @@ bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigne
 //: Overload that assumes given a Lookup table of integer squares.
 // Also assumes the image im already has infinity in all non-zero points.
 //
-// \sa see documentation of vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
+// \sa see documentation of vil_exact_distance_transform_saito(
+// vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 //
 bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
-                                        unsigned plane_idx, const vcl_vector<unsigned> &sq);
+    unsigned plane_idx, const vcl_vector<unsigned > &sq);
 
 //: Exact 3D EDT
 //
@@ -77,7 +79,8 @@ bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
 //
 bool vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im);
 
-//: Computes signed Euclidean distance transform by using unsigned EDT of an image and its binary complement.
+//: Computes signed Euclidean distance transform by using the unsigned EDT of an
+// image and its binary complement.
 //
 // The input image will be modified as an auxiliary array, so if you want to
 // keep the input you are responsible for making a copy before calling this
@@ -91,7 +94,7 @@ bool vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im);
 // has been blindly adapted from a previous implementation; the original code was from
 // a legacy repository at Brown University (algo/contourtracing/signed_dt.cpp)
 //
-bool vil_exact_distance_transform_signed( vil_image_view<unsigned int>& input_image,
+bool vil_exact_distance_transform_signed( vil_image_view<vxl_uint_32>& input_image,
                                           vil_image_view<float>& signed_edt_image);
 
 
@@ -128,7 +131,7 @@ bool vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_
 //
 bool vil_exact_distance_transform_brute_force_with_list_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel);
+    vil_image_view<vxl_uint_32> &imlabel);
 
 //: Row-wise 1D EDT
 //

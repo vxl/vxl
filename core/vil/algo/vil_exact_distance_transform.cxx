@@ -17,7 +17,7 @@
 #include <vcl_cassert.h>
 
 //: flag indicating no associated label used internally by some algorithms
-static const unsigned no_label_const = (unsigned)-1;
+static const vxl_uint_32 no_label_const = (vxl_uint_32)-1;
 
 //: Row-wise 1D EDT
 //
@@ -69,7 +69,7 @@ vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im)
 inline void
 vil_exact_distance_transform_1d_horizontal_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel)
+    vil_image_view<vxl_uint_32> &imlabel)
 {
    unsigned ni=im.ni(), i,
             nj=im.nj(), j;
@@ -164,7 +164,7 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, unsigned *g,
 inline void
 maurer_voronoi_edt_2D_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel,
+    vil_image_view<vxl_uint_32> &imlabel,
     unsigned j1, unsigned *g, unsigned *h, unsigned *w)
 {
    int l; 
@@ -232,7 +232,7 @@ edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
 inline void
 edt_maurer_2D_from_1D_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel)
+    vil_image_view<vxl_uint_32> &imlabel)
 {
    unsigned i1;
    unsigned *h; // same naming as in the paper
@@ -325,11 +325,11 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
 bool
 vil_exact_distance_transform_maurer_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel)
+    vil_image_view<vxl_uint_32> &imlabel)
 {
    unsigned i,r,c;
    vxl_uint_32 *data;
-   unsigned *ptr_label;
+   vxl_uint_32 *ptr_label;
 
    if (!test_contiguous(im) || !test_contiguous(imlabel))
       return false;
@@ -515,7 +515,8 @@ vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im)
 // \sa see documentation of vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 //
 bool
-vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vector<unsigned> &sq)
+vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, 
+    unsigned plane_idx, const vcl_vector<unsigned> &sq)
 {
    if (!test_contiguous(im))
       return false;
@@ -733,7 +734,7 @@ vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &
 bool
 vil_exact_distance_transform_brute_force_with_list_label(
     vil_image_view<vxl_uint_32> &im,
-    vil_image_view<unsigned> &imlabel)
+    vil_image_view<vxl_uint_32> &imlabel)
 {
    unsigned i, xi, yi,
             j, xj, yj,
@@ -742,7 +743,7 @@ vil_exact_distance_transform_brute_force_with_list_label(
 
    vxl_uint_32 *I=im.top_left_ptr(),
                *list, n_ones, ptr_zeros;
-   unsigned *L = imlabel.top_left_ptr();
+   vxl_uint_32 *L = imlabel.top_left_ptr();
 
    if (!test_contiguous(im) || !test_contiguous(imlabel))
       return false;
@@ -800,7 +801,7 @@ vil_exact_distance_transform_brute_force_with_list_label(
 //
 bool
 vil_exact_distance_transform_signed(
-    vil_image_view<unsigned int> &input_image,
+    vil_image_view<vxl_uint_32> &input_image,
     vil_image_view<float> &signed_edt_image)
 {
   float distance_from_interior,
