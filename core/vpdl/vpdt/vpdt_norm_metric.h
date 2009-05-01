@@ -70,14 +70,14 @@ struct vpdt_norm_metric<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
 
   //: Compute the covariance matrix (metric tensor) at a point
   // \note this metric is independent of the point
-  static inline void compute_covar(matrix& covar, const F& pt, const covar_type& c)
+  static inline void compute_covar(matrix& covar, const F& /*pt*/, const covar_type& c)
   {
     c.form_matrix(covar);
   }
 
   //: Compute the determinant of the covariance matrix (metric tensor) at a point
   // \note this metric is independent of the point
-  static inline T covar_det(const F& pt, const covar_type& c)
+  static inline T covar_det(const F& /*pt*/, const covar_type& c)
   {
     return c.determinant();
   }
@@ -141,7 +141,7 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::vector_type,
 
   //: Compute the covariance matrix (metric tensor) at a point
   // \note this metric is independent of the point
-  static inline void compute_covar(matrix& covar, const F& pt, const covar_type& c)
+  static inline void compute_covar(matrix& covar, const F& /*pt*/, const covar_type& c)
   {
     const unsigned int d = c.size();
     vpdt_set_size(covar,d);
@@ -287,14 +287,14 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::scalar_type,
 
   //: Compute the covariance matrix (metric tensor) at a point
   // \note this metric is independent of the point
-  static inline void compute_covar(matrix& covar, const F& pt, const covar_type& c)
+  static inline void compute_covar(matrix& covar, const F& /*pt*/, const covar_type& c)
   {
     covar = c;
   }
 
   //: Compute the determinant of the covariance matrix (metric tensor) at a point
   // \note this metric is independent of the point
-  static inline T covar_det(const F& pt, const covar_type& c)
+  static inline T covar_det(const F& /*pt*/, const covar_type& c)
   {
     return c;
   }

@@ -42,15 +42,15 @@ inline unsigned int vpdt_size(const vnl_matrix<T>& m)
 
 //: Access the size of a vnl_vector_fixed
 template <class T, unsigned int n>
-inline unsigned int vpdt_size(const vnl_vector_fixed<T,n>& v) { return n; }
+inline unsigned int vpdt_size(const vnl_vector_fixed<T,n>& /*v*/) { return n; }
 
 //: Access the size of a square vnl_matrix_fixed
 template <class T, unsigned int n>
-inline unsigned int vpdt_size(const vnl_matrix_fixed<T,n,n>& m) { return n; }
+inline unsigned int vpdt_size(const vnl_matrix_fixed<T,n,n>& /*m*/) { return n; }
 
 //: Access the size of a scalar
 template <class T>
-inline unsigned int vpdt_size(const T& v) { return 1; }
+inline unsigned int vpdt_size(const T& /*v*/) { return 1; }
 
 //==============================================================================
 // vpdt_set_size
@@ -65,7 +65,7 @@ inline void vpdt_set_size(vnl_matrix<T>& m, unsigned int s) { m.set_size(s,s); }
 
 //: Default case, do nothing
 template <class T>
-inline void vpdt_set_size(T& v, unsigned int s) {}
+inline void vpdt_set_size(T& /*v*/, unsigned int /*s*/) {}
 
 //==============================================================================
 // vpdt_fill
@@ -109,10 +109,10 @@ inline const T& vpdt_index(const vnl_vector_fixed<T,n>& v, unsigned int i) { ret
 
 //: Index into a scalar
 template <class T>
-inline T& vpdt_index(T& v, unsigned int i) { return v; }
+inline T& vpdt_index(T& v, unsigned int /*i*/) { return v; }
 //: Index into a scalar (const)
 template <class T>
-inline const T& vpdt_index(const T& v, unsigned int i) { return v; }
+inline const T& vpdt_index(const T& v, unsigned int /*i*/) { return v; }
 
 //==============================================================================
 // vpdt_index (matrix)
@@ -133,10 +133,10 @@ inline const T& vpdt_index(const vnl_matrix_fixed<T,n,n>& v, unsigned int i, uns
 
 //: Index into a scalar
 template <class T>
-inline T& vpdt_index(T& v, unsigned int i, unsigned int j) { return v; }
+inline T& vpdt_index(T& v, unsigned int /*i*/, unsigned int /*j*/) { return v; }
 //: Index into a scalar (const)
 template <class T>
-inline const T& vpdt_index(const T& v, unsigned int i, unsigned int j) { return v; }
+inline const T& vpdt_index(const T& v, unsigned int /*i*/, unsigned int /*j*/) { return v; }
 
 
 //==============================================================================

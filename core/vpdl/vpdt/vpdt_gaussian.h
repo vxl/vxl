@@ -179,7 +179,7 @@ struct vpdt_gaussian_integrator<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
   }
 
   //: integrate from -infinity to \c pt
-  static inline T partial_integral(const vpdt_gaussian<F,Covar>& g, const F& pt)
+  static inline T partial_integral(const vpdt_gaussian<F,Covar>& /*g*/, const F& /*pt*/)
   {
     // FIXME: implement this
     // probably requires numerical integration

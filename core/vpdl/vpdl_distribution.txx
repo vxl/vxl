@@ -14,7 +14,7 @@
 // in the univariate case.
 
 template <class T>
-T vpdl_compute_inverse_cdf(const vpdl_distribution<T,1>& dist, double p)
+T vpdl_compute_inverse_cdf(const vpdl_distribution<T,1>& /*dist*/, double /*p*/)
 {
   // FIXME: implement CDF inverse computation here
   return T(0.0);
@@ -31,7 +31,7 @@ class inverse_cdf_helper
   typedef typename vpdl_distribution<T,n>::vector vector;
 
   //: Do the actual inversion
-  static inline vector invert(const vpdl_distribution<T,n>& dist, const T& p)
+  static inline vector invert(const vpdl_distribution<T,n>& /*dist*/, const T& /*p*/)
   {
     return vector(vcl_numeric_limits<T>::quiet_NaN());
   }
@@ -57,7 +57,7 @@ class inverse_cdf_helper<T,0>
   typedef typename vpdl_distribution<T,0>::vector vector;
 
   //: Do the actual inversion
-  static inline vector invert(const vpdl_distribution<T,0>& dist, const T& p)
+  static inline vector invert(const vpdl_distribution<T,0>& dist, const T& /*p*/)
   {
     return vector(dist.dimension(), vcl_numeric_limits<T>::quiet_NaN());
   }
