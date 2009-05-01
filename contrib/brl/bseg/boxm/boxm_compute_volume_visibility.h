@@ -145,24 +145,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
     return vcl_exp(alpha_int);
   }
 }
-				if(scene.valid_index(curr_block_index))
-				{
-					scene.load_block(curr_block_index);
-					curr_block=scene.get_active_block();
-					tree=curr_block->get_tree();
-					curr_cell=tree->locate_point_global(entry_point);
-				}
-				else
-				{
-					continue_flag=false;
-				}
 
-			}
-
-
-		}
-		return vcl_exp(alpha_int);
-	}
 
 template <class T_loc, boxm_apm_type APM>
 float boxm_compute_volume_visibility(vgl_box_3d<double> bbox,
