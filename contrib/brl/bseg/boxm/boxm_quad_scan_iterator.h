@@ -1,6 +1,7 @@
 #ifndef boxm_quad_scan_iterator_h_
 #define boxm_quad_scan_iterator_h_
-
+//:
+// \file
 #include <vcl_vector.h>
 
 #include <vgl/vgl_region_scan_iterator.h>
@@ -11,7 +12,7 @@
 
 class boxm_quad_scan_iterator : public vgl_region_scan_iterator
 {
-public:
+ public:
   //: constructor
   boxm_quad_scan_iterator(double *verts_x, double *verts_y, unsigned int v0 = 0, unsigned int v1 = 1, unsigned int v2 = 2, unsigned int v3 = 3);
   ~boxm_quad_scan_iterator();
@@ -39,7 +40,7 @@ public:
   //: returns the amount of pixel at location x in the current scanline covered by the triangle
   float pix_coverage(int x);
 
-protected:
+ protected:
   static const unsigned int supersample_ratio_ = 4;
   vgl_polygon_scan_iterator<double> * super_it_;
 
@@ -53,12 +54,6 @@ protected:
   int aa_vals_offset_;
 
   vbl_bounding_box<double,2> poly_bb_;
-
- 
 };
 
-
-
-
 #endif
-

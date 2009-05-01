@@ -1,6 +1,7 @@
 #ifndef test_utils_h
 #define test_utils_h
-
+//:
+// \file
 #include <boct/boct_tree.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
