@@ -12,6 +12,7 @@ SOURCES += processes/boxm_save_occupancy_raw_process.cxx
 SOURCES += processes/boxm_create_scene_process.cxx
 SOURCES += processes/boxm_update_process.cxx
 SOURCES += processes/boxm_refine_scene_process.cxx
+SOURCES += processes/boxm_volume_visibility_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
