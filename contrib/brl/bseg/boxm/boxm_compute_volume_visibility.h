@@ -132,14 +132,18 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
         if (face_id==Z_HIGH)
           curr_block_index.set(curr_block_index.x(),curr_block_index.y(),curr_block_index.z()+1);
 
-        scene.load_block(curr_block_index);
-        curr_block=scene.get_active_block();
-        if (curr_block){
-          tree=curr_block->get_tree();
-          curr_cell=tree->locate_point_global(entry_point);
-        }
-        else
-          continue_flag=false;
+		if(scene.valid_index(curr_block_index))
+		{
+			scene.load_block(curr_block_index);
+			curr_block=scene.get_active_block();
+			tree=curr_block->get_tree();
+			curr_cell=tree->locate_point_global(entry_point);
+		}
+		else
+		{
+			continue_flag=false;
+		}
+
       }
     }
     return vcl_exp(alpha_int);
