@@ -78,8 +78,13 @@ bool boxm_render_expected_process(bprb_func_process& pro)
     boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
     vil_image_view<float> mask(ni,nj);
     boxm_render_image_splatting<short, BOXM_APM_MOG_GREY>(*scene, camera, expected, mask);
-    img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
+    //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
     img_mask = new vil_image_view<float>(mask);
+
+	vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
+	vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
+	img = expected_byte;
+
   } else {
     vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;
     return false;

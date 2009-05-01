@@ -129,7 +129,7 @@ MAIN( test_update )
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
-  vgl_vector_3d<double> world_dim(20,20,30);
+  vgl_vector_3d<double> world_dim(30,30,10);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
   scene.set_paths("./boxm_scene1", "block");
@@ -189,7 +189,7 @@ MAIN( test_update )
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >  > * block=scene.get_active_block();
-    boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
+    boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(4,3);
     boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
     cel11->set_data(s2_sample);
     boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
@@ -202,7 +202,7 @@ MAIN( test_update )
   world.add(origin);
   world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
   //vpgl_camera_double_sptr camera = generate_camera_top(world);
-  vcl_vector<vpgl_camera_double_sptr > cameras = generate_cameras_z(world);
+  vcl_vector<vpgl_camera_double_sptr > cameras = generate_cameras_yz(world);
 
   vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(IMAGE_U,IMAGE_V);
   vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask(IMAGE_U,IMAGE_V);
@@ -214,6 +214,9 @@ MAIN( test_update )
     boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene,cameras[i],expected,mask);
     vcl_stringstream ss;
     ss << "./boxm_scene1/img" << i << ".tif";
+	//vil_image_view<unsigned char> expected_byte(expected.ni(),expected.nj(),expected.nplanes());
+	//vil_convert_stretch_range_limited(expected,expected_byte, 0.0f, 1.0f);
+
     vil_save(expected, ss.str().data());
   }
 
@@ -221,7 +224,7 @@ MAIN( test_update )
   //vpl_unlink("./scene1.xml");
 
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene_new(lvcs, origin, 
-    block_dim, world_dim, 6, 2);
+    block_dim, world_dim, 4, 3);
   scene_new.set_appearence_model(BOXM_APM_MOG_GREY);
   scene_new.set_paths("./boxm_scene_update", "block");
   vul_file::make_directory("./boxm_scene_update");
@@ -234,7 +237,7 @@ MAIN( test_update )
     vcl_stringstream ss;
     ss << "./boxm_scene1/img" << i << ".tif";
     expected = vil_load(ss.str().data());
-    boxm_update<short,BOXM_APM_MOG_GREY>(scene_new, expected, cameras[1] );
+    boxm_update<short,BOXM_APM_MOG_GREY>(scene_new, expected, cameras[i] );
   }
 
   // regenerate the images from world
@@ -243,7 +246,10 @@ MAIN( test_update )
     ss << "./boxm_scene1/img_new" << i << ".tif";
     vil_image_view<float> expected_new(expected.ni(),expected.nj());
     boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene_new,cameras[i],expected_new,mask);
-    vil_save(expected_new,ss.str().data());
+	vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());
+	vil_convert_stretch_range_limited(expected_new,expected_byte, 0.0f, 1.0f);
+
+    vil_save(expected_byte, ss.str().data());
   }
 
   SUMMARY();

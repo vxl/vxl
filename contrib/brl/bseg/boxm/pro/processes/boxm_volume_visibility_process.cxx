@@ -82,7 +82,7 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   float min_y=pro.get_input<float>(i++);
   float min_z=pro.get_input<float>(i++);
 
-   float max_x=pro.get_input<float>(i++);
+  float max_x=pro.get_input<float>(i++);
   float max_y=pro.get_input<float>(i++);
   float max_z=pro.get_input<float>(i++);
 
@@ -93,8 +93,8 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   double yverts[8];
 
   boxm_utils::project_corners(boxm_utils::corners_of_box_3d(query),camera,xverts,yverts);
-  vil_image_view<float> *img_vol=new vil_image_view<float>(ni,nj);img_vol->fill(0.0);
   boct_face_idx face_id=boxm_utils::visible_faces(query,camera,xverts,yverts);
+  vil_image_view_base_sptr img;
 
 
   // check the scene's app model
@@ -104,7 +104,12 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
     boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
     vil_image_view<float> mask(ni,nj);
     float val=boxm_compute_volume_visibility<short, BOXM_APM_MOG_GREY>(query,*scene, camera);
-    boxm_utils::project_cube_fill_val(face_id,*img_vol,val,xverts,yverts);
+     vil_image_view<float> img_vol(ni,nj);img_vol.fill(0.0);
+
+	boxm_utils::project_cube_fill_val(face_id,img_vol,val,xverts,yverts);
+	vil_image_view<unsigned char> *vol_vis = new vil_image_view<unsigned char>(img_vol.ni(),img_vol.nj(),img_vol.nplanes());
+	vil_convert_stretch_range_limited(img_vol,*vol_vis, 0.0f, 1.0f);
+	img = vol_vis;
 
 	vcl_cout<<"\n Visbility is "<<val;
   } else {
@@ -113,6 +118,6 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   }
 
   unsigned j = 0;
-  pro.set_output_val<vil_image_view_base_sptr>(j++, img_vol);
+  pro.set_output_val<vil_image_view_base_sptr>(j++, img);
   return true;
 }

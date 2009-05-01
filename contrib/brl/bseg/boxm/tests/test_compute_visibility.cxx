@@ -13,7 +13,7 @@ MAIN( test_compute_visibility )
 {
   START ("TEST VISIBILITY");
 
-    bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+  bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<double> world_dim(20,20,30);
@@ -52,17 +52,18 @@ MAIN( test_compute_visibility )
       vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=tree->leaf_cells();
       s1_sample.alpha=0.6f;
 
-      for (unsigned i=0;i<leaf_cells.size();i++)
-      {
-        leaf_cells[i]->set_data(s1_sample);
-      }
-      block->init_tree(tree);
-      scene.write_active_block();
-    }
-    else
-    {
-      vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells= tree->leaf_cells();
-      s1_sample.alpha=0.01f;
+		for(unsigned i=0;i<leaf_cells.size();i++)
+		{
+			leaf_cells[i]->set_data(s1_sample);
+		}
+	    block->init_tree(tree);
+		scene.write_active_block();
+	}
+	else
+	{
+		vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=
+			tree->leaf_cells();
+		s1_sample.alpha=0.01f;
 
       for (unsigned i=0;i<leaf_cells.size();i++)
       {
@@ -82,7 +83,8 @@ MAIN( test_compute_visibility )
   double X=5,Y=5,Z;
   for (Z=40; Z>-10; --Z)
   {
-    vcl_cout<<"Z = "<<Z<<' '<<boxm_compute_point_visibility<short,BOXM_APM_MOG_GREY>(vgl_point_3d<double>(X,Y,Z), scene, camera)<<'\n';
+	vcl_cout<<"Z= "<<Z<<" "<<boxm_compute_point_visibility<short,BOXM_APM_MOG_GREY>(vgl_point_3d<double>(X,Y,Z), 
+																	 scene, camera)<<"\n ";
   }
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");

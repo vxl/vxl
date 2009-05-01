@@ -193,8 +193,8 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     else {
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       vcl_string path = gen_block_path(x,y,z);
-      //vsl_b_ofstream os(path);
-      //blocks_(x,y,z)->b_write(os);
+      vsl_b_ofstream os(path);
+      blocks_(x,y,z)->b_write(os);
       // delete the block's data
       boxm_block<T>* block = blocks_(x,y,z);
       delete block->get_tree();
