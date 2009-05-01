@@ -47,6 +47,10 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
       children_[i].delete_children();
     }
     delete[] children_;
+    if (vis_node_) {
+      delete vis_node_;
+      vis_node_ = NULL;
+    }
     children_=NULL;
     }
 }

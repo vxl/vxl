@@ -9,7 +9,7 @@
 
 //; constructor initializes an empty tree
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels /* =1 */): max_level_(max_level)
+boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels): max_level_(max_level)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
@@ -191,6 +191,18 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells()
   return v;
 }
 
+template <class T_loc,class T_data>
+short boct_tree<T_loc,T_data>::finest_level()
+{
+  short min_level = max_level_;
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
+  for (unsigned i=0; i<cells.size(); i++) {
+    if (cells[i]->code_.level < min_level)
+      min_level = cells[i]->code_.level;
+  }
+  return min_level;
+}
+ 
 template <class T_loc,class T_data>
 vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box(boct_tree_cell<T_loc,T_data>* const cell)
 {

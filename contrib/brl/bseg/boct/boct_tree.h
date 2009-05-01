@@ -25,8 +25,14 @@ class boct_tree
   boct_tree_cell<T_loc,T_data>* root(){return root_;}
   bool split();
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
-  //: return the max level
+
+  //: return the max level, which is root_level+1
   short num_levels() { return max_level_; }
+  
+  //: The possible finest level is 0, but it does not have to split up to level 0, 
+  // this method 
+  short finest_level();
+
   void set_bbox(vgl_box_3d<double> & bbox){global_bbox_=bbox;}
 
   vgl_box_3d<double> cell_bounding_box(boct_tree_cell<T_loc,T_data>* const cell);
