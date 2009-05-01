@@ -1,28 +1,27 @@
+#include "boxm_quad_scan_iterator.h"
+//:
+// \file
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 
-#include "boxm_quad_scan_iterator.h"
-
-
 //: constructor
-boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_y, 
-													   unsigned int v0, unsigned int v1, 
-													   unsigned int v2, unsigned int v3)
+boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_y,
+                                                 unsigned int v0, unsigned int v1,
+                                                 unsigned int v2, unsigned int v3)
 {
   vgl_polygon<double> poly;
   poly.new_sheet();
-  
-  
+
   poly.push_back(verts_x[v0] * supersample_ratio_ - 0.5,
-				 verts_y[v0] * supersample_ratio_ - 0.5);
+                 verts_y[v0] * supersample_ratio_ - 0.5);
   poly.push_back(verts_x[v1] * supersample_ratio_ - 0.5,
-				 verts_y[v1] * supersample_ratio_ - 0.5);
+                 verts_y[v1] * supersample_ratio_ - 0.5);
   poly.push_back(verts_x[v2] * supersample_ratio_ - 0.5,
-				 verts_y[v2] * supersample_ratio_ - 0.5);
+                 verts_y[v2] * supersample_ratio_ - 0.5);
   poly.push_back(verts_x[v3] * supersample_ratio_ - 0.5,
-				 verts_y[v3] * supersample_ratio_ - 0.5);
+                 verts_y[v3] * supersample_ratio_ - 0.5);
 
   super_it_=new vgl_polygon_scan_iterator<double>(poly,false);
 
@@ -32,7 +31,7 @@ boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_
   poly_bb_.update(verts_x[v3], verts_y[v3]);
 
   int poly_xmin = (int)vcl_floor(poly_bb_.xmin());
-  int poly_xmax = (int)vcl_floor(poly_bb_.xmax()) + 1; 
+  int poly_xmax = (int)vcl_floor(poly_bb_.xmax()) + 1;
   poly_diameter_x_ = (poly_xmax - poly_xmin) + 1;
   aa_vals_.resize(poly_diameter_x_);
   aa_vals_offset_ = -poly_xmin;
@@ -47,7 +46,7 @@ void boxm_quad_scan_iterator::reset()
 {
   super_it_->reset();
   next_return_ = super_it_->next();
-  while(next_return_ && super_it_->scany() < 0) {
+  while (next_return_ && super_it_->scany() < 0) {
     next_return_ = super_it_->next();
   }
 }
@@ -68,10 +67,10 @@ bool boxm_quad_scan_iterator::next()
 
   // compute antialiasing values for each pixel in scanline
   vcl_fill(aa_vals_.begin(), aa_vals_.end(), 0.0f);
- 
+
   int super_scany_end = (scany_ + 1)*supersample_ratio_;
   static const float increment = 1.0f / (supersample_ratio_*supersample_ratio_);
-  static const float full_increment = 1.0f / (supersample_ratio_); 
+  static const float full_increment = 1.0f / (supersample_ratio_);
 
   while ( (super_scany < super_scany_end) && next_return_ ) {
     int super_startx = super_it_->startx();
@@ -94,7 +93,7 @@ bool boxm_quad_scan_iterator::next()
       if (scanline_startx + 1 == scanline_endx) {
         aa_vals_[aa_vals_offset_ + scanline_startx] += increment*(super_endx - super_startx);
       }
-      // case 2: startx is less than endx by more than 1 
+      // case 2: startx is less than endx by more than 1
       else {
         // partial coverage at the beginning of scanline
         aa_vals_[aa_vals_offset_ + scanline_startx] += increment*(supersample_ratio_ - (super_startx % supersample_ratio_));
@@ -138,7 +137,8 @@ float boxm_quad_scan_iterator::pix_coverage(int x)
 {
   return aa_vals_[aa_vals_offset_ + x];
 }
+
 boxm_quad_scan_iterator::~boxm_quad_scan_iterator()
 {
-delete super_it_;
+  delete super_it_;
 }
