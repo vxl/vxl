@@ -2,6 +2,7 @@
 #define boxm_compute_volume_visibility_h
 #include <vgl/vgl_box_3d.h>
 #include <boxm/boxm_scene.h>
+#include <boxm/boxm_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_iostream.h>
 
