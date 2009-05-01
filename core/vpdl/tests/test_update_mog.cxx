@@ -8,6 +8,9 @@ template <class T>
 void test_update_mog_type(T epsilon, const vcl_string& type_name)
 {
   // an arbitrary collection of data points
+  vcl_cout << "************************\n"
+           << " testing for type " << type_name << '\n'
+           << "************************\n";
   vcl_vector<vnl_vector_fixed<T,3> > data;
   data.push_back(vnl_vector_fixed<T,3>(1,1,1));
   data.push_back(vnl_vector_fixed<T,3>(2,2,2));
@@ -21,9 +24,16 @@ void test_update_mog_type(T epsilon, const vcl_string& type_name)
   vpdt_mog_sg_updater<mog_t> mog_updater(gauss3_t(vnl_vector_fixed<T,3>(0.0),1));
   
   mog_t mixture;
-  
   mog_updater(mixture, data[0]);
-  
+  TEST("dimension", mixture.dimension(), 3);
+  TEST("# components", mixture.num_components(), 1);
+  TEST("weight", mixture.weight(0), 1);
+  TEST_NEAR("cumulative prob at minus inf", mixture.cumulative_prob(vnl_vector_fixed<T,3>(-1e29,-1e29,-1e29)), 0, epsilon);
+  TEST_NEAR("cumulative prob at plus inf", mixture.cumulative_prob(vnl_vector_fixed<T,3>(1e29,1e29,1e29)), 1, epsilon);
+  TEST("norm_const", mixture.norm_const(), 1);
+  vnl_vector_fixed<T,3> mean; mixture.compute_mean(mean);
+  vnl_vector_fixed<T,3> exact_mean(1,1,1);
+  TEST("mean", mean, exact_mean);
 }
 
 
