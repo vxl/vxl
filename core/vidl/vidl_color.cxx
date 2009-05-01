@@ -58,7 +58,7 @@ template <int Fmt_Code>
 struct table_init
 {
   static inline void populate(vidl_color_conv_fptr table[VIDL_PIXEL_COLOR_ENUM_END][VIDL_PIXEL_COLOR_ENUM_END]
-                                                         [num_types][num_types])
+                                                        [num_types][num_types])
   {
     const vidl_pixel_format in_fmt = vidl_pixel_format(Fmt_Code/VIDL_PIXEL_FORMAT_ENUM_END);
     const vidl_pixel_format out_fmt = vidl_pixel_format(Fmt_Code%VIDL_PIXEL_FORMAT_ENUM_END);
@@ -82,7 +82,7 @@ VCL_DEFINE_SPECIALIZATION
 struct table_init<0>
 {
   static inline void populate(vidl_color_conv_fptr table[VIDL_PIXEL_COLOR_ENUM_END][VIDL_PIXEL_COLOR_ENUM_END]
-                                                         [num_types][num_types])
+                                                        [num_types][num_types])
   {
     const vidl_pixel_format in_fmt = vidl_pixel_format(0);
     const vidl_pixel_format out_fmt = vidl_pixel_format(0);
@@ -136,17 +136,17 @@ class converter
     // generate the table of function pointers
     table_init<VIDL_PIXEL_FORMAT_ENUM_END*VIDL_PIXEL_FORMAT_ENUM_END-1>::populate(table);
     type_table_init<VIDL_PIXEL_FORMAT_ENUM_END-1>::populate(type_table);
-    /*
+#if 0
     for (unsigned int i=0; i<num_types; ++i){
       if (type_table[i])
         vcl_cout << "type "<<i<<" is "<<type_table[i]->name() << vcl_endl;
     }
-    */
+#endif // 0
   }
 
   //: Apply the conversion
   vidl_color_conv_fptr operator()(vidl_pixel_color in_C, const vcl_type_info& in_type,
-                                   vidl_pixel_color out_C, const vcl_type_info& out_type) const
+                                  vidl_pixel_color out_C, const vcl_type_info& out_type) const
   {
     unsigned int in_idx = type_index(in_type);
     unsigned int out_idx = type_index(out_type);
@@ -182,7 +182,7 @@ converter conversion_table;
 // vxl_uint_16*) via reinterpret_cast
 vidl_color_conv_fptr
 vidl_color_converter_func( vidl_pixel_color in_C, const vcl_type_info& in_type,
-                            vidl_pixel_color out_C, const vcl_type_info& out_type)
+                           vidl_pixel_color out_C, const vcl_type_info& out_type)
 {
   return conversion_table(in_C, in_type, out_C, out_type);
 }
