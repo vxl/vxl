@@ -7,14 +7,14 @@
 // \brief Triangle in 2D space.
 //
 // \author François BERTEL
-// \date   2000/05/02
+// \date   2000-05-02
 //
 // \verbatim
 //  Modifications
-//   2000/05/02 François BERTEL Creation
-//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2004/05/11 Joseph Mundy Implemented binary I/O
-//   2004/05/14 Peter Vanroose  Added describe()
+//   2000-05-02 François BERTEL Creation
+//   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
+//   2004-05-11 Joseph Mundy Implemented binary I/O
+//   2004-05-14 Peter Vanroose  Added describe()
 // \endverbatim
 //*****************************************************************************
 

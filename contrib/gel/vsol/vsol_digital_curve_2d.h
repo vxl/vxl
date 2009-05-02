@@ -9,7 +9,7 @@
 // This class inherits from vsol_curve_2d.
 //
 // \author Matt Leotta
-// \date   2004/07/13
+// \date   2004-07-13
 //
 // \verbatim
 //  Modifications

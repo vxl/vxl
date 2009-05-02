@@ -7,7 +7,7 @@
 // \file
 // \brief Implement a Parzen window classifier builder
 // \author Ian Scott
-// \date 2001/10/07
+// \date 2001-10-07
 
 #include "clsfy_parzen_builder.h"
 
@@ -85,7 +85,7 @@ void clsfy_parzen_builder::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_parzen_builder&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

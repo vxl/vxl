@@ -7,19 +7,19 @@
 // \brief Point in 3D space
 //
 // \author François BERTEL
-// \date   2000/05/03
+// \date   2000-05-03
 //
 // \verbatim
 //  Modifications
-//   2000/05/03 François BERTEL Creation
-//   2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,3> by vnl_double_3
-//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2000/09/18 Peter Tu        connected to vgl
-//   2001/06/30 Peter Vanroose  Added constructor from vgl_point_3d
-//   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-//   2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_3d as member
-//   2004/05/14 Peter Vanroose  Added describe() and operator<<(ostream)
-//   2004/09/06 Peter Vanroose  Added Binary I/O
+//   2000-05-03 François BERTEL Creation
+//   2000-05-12 François BERTEL Replacement of vnl_vector_fixed<double,3> by vnl_double_3
+//   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
+//   2000-09-18 Peter Tu        connected to vgl
+//   2001-06-30 Peter Vanroose  Added constructor from vgl_point_3d
+//   2001-07-03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+//   2001-07-03 Peter Vanroose  Replaced new/delete by vgl_point_3d as member
+//   2004-05-14 Peter Vanroose  Added describe() and operator<<(ostream)
+//   2004-09-06 Peter Vanroose  Added Binary I/O
 // \endverbatim
 //*****************************************************************************
 

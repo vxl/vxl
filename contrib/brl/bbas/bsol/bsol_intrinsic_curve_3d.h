@@ -7,11 +7,11 @@
 // Note that to make the definition intrinsic, I inherit it from vsol_curve_3d.
 //
 // \author MingChing Chang
-// \date   2004/03/19
+// \date   2004-03-19
 //
 // \verbatim
 //  Modifications
-//   2004/03/17 MingChing Chang Creation
+//   2004-03-17 MingChing Chang Creation
 // \endverbatim
 //*****************************************************************************
 

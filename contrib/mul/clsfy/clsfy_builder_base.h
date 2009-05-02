@@ -1,19 +1,15 @@
+// Copyright: (C) 2000 British Telecommunications plc
 #ifndef clsfy_builder_base_h_
 #define clsfy_builder_base_h_
-
-// Copyright: (C) 2000 British Telecommunications plc
-
-
 //:
 // \file
 // \brief Describe an abstract classifier
 // \author Ian Scott
-// \date 2000/05/10
+// \date 2000-05-10
 // \verbatim
 //  Modifications
-//  2 May 2001 IMS Converted to VXL
+//   2 May 2001 IMS Converted to VXL
 // \endverbatim
-
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
@@ -21,14 +17,12 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 
-
 class clsfy_classifier_base;
 
-
 //: Base for classes to build clsfy_classifier_base objects
-class clsfy_builder_base {
-
-public:
+class clsfy_builder_base
+{
+ public:
 
   // Dflt ctor
   clsfy_builder_base();

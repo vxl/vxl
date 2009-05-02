@@ -9,11 +9,11 @@
 // This class inherits from vsol_curve_3d.
 //
 // \author Ming-Ching Chang
-// \date   2004/09/23
+// \date   2004-09-23
 //
 // \verbatim
 //  Modifications
-//   2004/09/23 Ming-Ching Chang  Creation by mimicing vsol_polyline_2d
+//   2004-09-23 Ming-Ching Chang  Creation by mimicking vsol_polyline_2d
 // \endverbatim
 //*****************************************************************************
 

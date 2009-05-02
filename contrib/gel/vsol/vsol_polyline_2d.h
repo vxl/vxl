@@ -9,12 +9,12 @@
 // This class inherits from vsol_curve_2d.
 //
 // \author Amir Tamrakar
-// \date   2002/04/22
+// \date   2002-04-22
 //
 // \verbatim
 //  Modifications
-//   2002/04/22 Amir Tamrakar Creation
-//   2004/05/09 Joseph Mundy Added Binary I/O
+//   2002-04-22 Amir Tamrakar Creation
+//   2004-05-09 Joseph Mundy Added Binary I/O
 // \endverbatim
 //*****************************************************************************
 

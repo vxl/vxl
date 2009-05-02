@@ -6,7 +6,7 @@
 // \file
 // \brief Describe an KNN classifier
 // \author Ian Scott
-// \date 2000/05/10
+// \date 2000-05-10
 // \verbatim
 //  Modifications
 //   2 May 2001 IMS Converted to VXL

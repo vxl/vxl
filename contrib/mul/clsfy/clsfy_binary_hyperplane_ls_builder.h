@@ -6,7 +6,7 @@
 // \file
 // \brief Describe a binary linear classifier builder
 // \author Ian Scott
-// \date 2000/05/26
+// \date 2000-05-26
 
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_builder_base.h>

@@ -9,7 +9,7 @@
 // \file
 // \brief Describe a knn classifier builder
 // \author Ian Scott
-// \date 2001/10/07
+// \date 2001-10-07
 
 #include <clsfy/clsfy_builder_base.h>
 #include <vcl_vector.h>

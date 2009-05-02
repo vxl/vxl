@@ -9,16 +9,16 @@
 // The vertices are to be defined in counterclockwise order.
 //
 // \author François BERTEL
-// \date   2000/05/09
+// \date   2000-05-09
 //
 // \verbatim
 //  Modifications
-//   2000/05/09 François BERTEL Creation
-//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-//   2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
-//   2004/05/14 Peter Vanroose  Added describe()
-//   2004/09/06 Peter Vanroose  Added Binary I/O
+//   2000-05-09 François BERTEL Creation
+//   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001-07-03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+//   2001-07-03 Peter Vanroose  Corrected the implementation of is_convex()
+//   2004-05-14 Peter Vanroose  Added describe()
+//   2004-09-06 Peter Vanroose  Added Binary I/O
 // \endverbatim
 //*****************************************************************************
 
@@ -133,9 +133,9 @@ class vsol_polygon_3d : public vsol_region_3d
   virtual double area(void) const; // virtual of vsol_region_3d
 
   //---------------------------------------------------------------------------
-  //: Return the plane where 'this' polygon resides 
+  //: Return the plane where 'this' polygon resides
   //---------------------------------------------------------------------------
-  vgl_homg_plane_3d<double> plane(void) const { return plane_; } 
+  vgl_homg_plane_3d<double> plane(void) const { return plane_; }
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
@@ -172,7 +172,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //: Return the normal vector
   //---------------------------------------------------------------------------
   vgl_vector_3d<double> normal() const;
-  
+
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.

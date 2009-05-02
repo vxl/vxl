@@ -9,7 +9,7 @@
 // \file
 // \brief Describe a random classifier builder
 // \author Ian Scott
-// \date 2001/10/07
+// \date 2001-10-07
 
 //=======================================================================
 

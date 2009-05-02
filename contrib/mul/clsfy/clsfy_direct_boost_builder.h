@@ -6,7 +6,7 @@
 // \file
 // \brief Describe a concrete classifier
 // \author dac
-// \date 2000/05/10
+// \date 2000-05-10
 
 #include <clsfy/clsfy_builder_base.h> // parent class
 #include <vcl_vector.h>

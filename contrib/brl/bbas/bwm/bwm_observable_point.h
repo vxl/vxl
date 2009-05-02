@@ -9,7 +9,7 @@
 // \brief An observable point object in 3D
 //
 // \author Gamze Tunali (gtunali@brown.edu)
-// \date   2007/10/25
+// \date   2007-10-25
 //
 // \verbatim
 //  Modifications

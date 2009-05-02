@@ -7,18 +7,18 @@
 //:
 // \file
 // \author Don Hamilton, Peter Tu, Peter Vanroose, François BERTEL, Franck Bettinger
-// \date   2000/02/16 Don HAMILTON, Peter TU - Creation
+// \date   2000-02-16 Don HAMILTON, Peter TU - Creation
 //
 // \verbatim
 //  Modifications
-//   2000/02/29 Peter Vanroose    Several minor fixes
-//   2000/05/05 François BERTEL   Several minor bugs fixed
-//   2000/05/09 Peter Vanroose    dist_origin() re-implemented
-//   2000/12/01 Peter Vanroose    moved dist_origin() to vgl_distance.h
-//   2001/03/19 Franck Bettinger  added Manchester binary IO code
-//   2001/06/27 Peter Vanroose    Added operator==
-//   2001/07/05 Peter Vanroose    direction, normal in terms of vgl_vector_2d
-//   2001/07/06 Peter Vanroose    Added concurrent(), added assertions
+//   2000-02-29 Peter Vanroose    Several minor fixes
+//   2000-05-05 François BERTEL   Several minor bugs fixed
+//   2000-05-09 Peter Vanroose    dist_origin() re-implemented
+//   2000-12-01 Peter Vanroose    moved dist_origin() to vgl_distance.h
+//   2001-03-19 Franck Bettinger  added Manchester binary IO code
+//   2001-06-27 Peter Vanroose    Added operator==
+//   2001-07-05 Peter Vanroose    direction, normal in terms of vgl_vector_2d
+//   2001-07-06 Peter Vanroose    Added concurrent(), added assertions
 // \endverbatim
 
 #include <vcl_iosfwd.h>

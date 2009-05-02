@@ -5,10 +5,10 @@
 // \file
 // \brief Implement bits of an abstract classifier builder
 // \author Ian Scott
-// \date 2000/05/10
+// \date 2000-05-10
 // \verbatim
 //  Modifications
-//  2 May 2001 IMS Converted to VXL
+//   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
 

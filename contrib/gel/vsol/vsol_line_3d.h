@@ -9,15 +9,15 @@
 // The direction gives the orientation and the length of the segment
 //
 // \author François BERTEL
-// \date   2000/05/03
+// \date   2000-05-03
 //
 // \verbatim
 //  Modifications
-//   2000/05/03 François BERTEL Creation
-//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-//   2004/05/14 Peter Vanroose  Added describe()
-//   2004/09/06 Peter Vanroose  Added Binary I/O
+//   2000-05-03 François BERTEL Creation
+//   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001-07-03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+//   2004-05-14 Peter Vanroose  Added describe()
+//   2004-09-06 Peter Vanroose  Added Binary I/O
 // \endverbatim
 //*****************************************************************************
 

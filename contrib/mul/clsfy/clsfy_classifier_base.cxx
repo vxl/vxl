@@ -1,16 +1,15 @@
 // Copyright: (C) 2000 British Telecommunications plc
-
+#include "clsfy_classifier_base.h"
 //:
 // \file
 // \brief Implement bits of an abstract classifier
 // \author Ian Scott
-// \date 2000/05/10
+// \date 2000-05-10
 // \verbatim
 //  Modifications
-//  2 May 2001 IMS Converted to VXL
+//   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
-#include "clsfy_classifier_base.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
@@ -142,7 +141,7 @@ double clsfy_test_error(const clsfy_classifier_base &classifier,
 
 //=======================================================================
 //: Calculate the fraction of test samples of a particular class which are classified incorrectly
-// \return -1 if there are no samples of test_class. 
+// \return -1 if there are no samples of test_class.
 double clsfy_test_error(const clsfy_classifier_base &classifier,
                         mbl_data_wrapper<vnl_vector<double> > & test_inputs,
                         const vcl_vector<unsigned> & test_outputs,

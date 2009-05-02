@@ -13,13 +13,13 @@
 // This class inherits from vsol_curve_2d.
 //
 // \author MingChing Chang
-// \date   2003/11/14
+// \date   2003-11-14
 //
 // \verbatim
 //  Modifications
-//   2003/11/14 MingChing Chang - Modified from the code of Thomas Sebastian
-//   2004/10/25 Ozge Can Ozcanli - Modified to add close curve support
-//   2004/11/01 Ozge Can Ozcanli - Added method upsample that interpolates new samples linearly according to arclength
+//   2003-11-14 MingChing Chang - Modified from the code of Thomas Sebastian
+//   2004-10-25 Ozge Can Ozcanli - Modified to add close curve support
+//   2004-11-01 Ozge Can Ozcanli - Added method upsample that interpolates new samples linearly according to arclength
 // \endverbatim
 //*****************************************************************************
 

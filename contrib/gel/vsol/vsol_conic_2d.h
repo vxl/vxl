@@ -15,21 +15,21 @@
 // homogeneous 3-tuples.
 //
 // \author François BERTEL
-// \date   2000/04/28
+// \date   2000-04-28
 //
 // \verbatim
 //  Modifications
-//   2000/04/28 François BERTEL Creation
-//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2001/08/29 Peter Vanroose  midpoint() added
-//   2001/08/29 Peter Vanroose  conic intersection added (implemented in vgl)
-//   2001/08/29 Peter Vanroose  closest_point and distance to point added
-//   2001/08/30 Peter Vanroose  now inheriting from vgl_conic
-//   2001/08/31 Peter Vanroose  constructor added from centre, size, orientation
-//   2002/04/05 Peter Vanroose  axis() added
-//   2003/01/08 Peter Vanroose  moved static private methods to vsol_conic_2d.cxx
-//   2004/05/11 Joseph Mundy    added binary I/O methods
-//   2004/09/23 Ming-CHing Chang  Change cast_to_conic_2d() to cast_to_conic()
+//   2000-04-28 François BERTEL Creation
+//   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001-08-29 Peter Vanroose  midpoint() added
+//   2001-08-29 Peter Vanroose  conic intersection added (implemented in vgl)
+//   2001-08-29 Peter Vanroose  closest_point and distance to point added
+//   2001-08-30 Peter Vanroose  now inheriting from vgl_conic
+//   2001-08-31 Peter Vanroose  constructor added from centre, size, orientation
+//   2002-04-05 Peter Vanroose  axis() added
+//   2003-01-08 Peter Vanroose  moved static private methods to vsol_conic_2d.cxx
+//   2004-05-11 Joseph Mundy    added binary I/O methods
+//   2004-09-23 Ming-CHing Chang  Change cast_to_conic_2d() to cast_to_conic()
 // \endverbatim
 //*****************************************************************************
 

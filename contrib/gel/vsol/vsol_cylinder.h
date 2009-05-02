@@ -8,12 +8,12 @@
 // This class inherits from vsol_spatial_object_3d.
 //
 // \author Gamze D. Tunali
-// \date   2005/11/07
+// \date   2005-11-07
 //
 // \verbatim
 //  Modifications
-//   04-04-2006 K. Kang: a few setters are added
-//   2004/10/07 Gamze D. Tunali  Created
+//   2004-10-07 Gamze D. Tunali  Created
+//   2006-04-04 K. Kang: a few setters are added
 // \endverbatim
 //*****************************************************************************
 
