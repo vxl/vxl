@@ -5,11 +5,7 @@
 // \file
 // \brief  creates basic xml nodes and writes them out to the stream
 // \author Gamze Tunali (gamze@lems.brown.edu)
-// \date   12/21/2005
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+// \date   Dec 21, 2005
 
 #include <vcl_vector.h>
 #include <vcl_utility.h>

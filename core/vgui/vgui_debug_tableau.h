@@ -8,13 +8,13 @@
 // \file
 // \brief  Event-printing "tee" tableau.
 // \author awf@robots.ox.ac.uk
-// \date   08-11-99
+// \date   08-Nov-1999
 //
 //  Contains classes  vgui_debug_tableau  vgui_debug_tableau_new
 //
 // \verbatim
 //  Modifications
-//   991008 AWF Initial version.
+//   1999-10-08 AWF Initial version.
 //   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
 

@@ -1,10 +1,10 @@
 #ifndef VGL_TRIANGLE_3D_H_
 #define VGL_TRIANGLE_3D_H_
-
-//! \file
-//! \brief Some helpful functions when working with triangles
-//! \author Kieran O'Mahony
-//! \date 21/6/2007
+//:
+// \file
+// \brief Some helpful functions when working with triangles
+// \author Kieran O'Mahony
+// \date 21 June 2007
 
 #include <vcl_algorithm.h>
 #include <vcl_utility.h>

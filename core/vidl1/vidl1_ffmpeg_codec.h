@@ -4,11 +4,11 @@
 //:
 // \file
 // \author Matt Leotta
-// \date 03/22/05
+// \date Mar 22, 2005
 //
 // \verbatim
 //  Modifications
-//    Matt Leotta  03/22/05  Adapted from codec by Amitha Perera
+//   Matt Leotta  Mar 22, 2005  Adapted from codec by Amitha Perera
 // \endverbatim
 
 extern "C" {

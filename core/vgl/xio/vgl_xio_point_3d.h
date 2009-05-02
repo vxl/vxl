@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Gamze Tunali
-// \date 12/17/2005
+// \date Dec 17, 2005
 
 #include <vgl/vgl_point_3d.h>
 #include <vcl_string.h>

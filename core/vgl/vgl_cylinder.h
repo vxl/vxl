@@ -8,7 +8,7 @@
 // \file
 // \brief  defines a cylinder in 3D by a center point, radius, length and orientation
 // \author Gamze D. Tunali (gamze@lems.brown.edu)
-// \date   11/07/2005
+// \date   Nov 07, 2005
 //
 // \verbatim
 //  Modifications

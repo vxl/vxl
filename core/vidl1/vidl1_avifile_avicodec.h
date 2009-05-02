@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Matt Leotta
-// \date 05/12/04
+// \date May 12, 2004
 //
 // \verbatim
 //  Modifications

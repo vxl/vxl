@@ -8,7 +8,7 @@
 // \file
 // \brief Contains class for symmetric matrices
 // \author Ian Scott (Manchester ISBE)
-// \date   6/12/2001
+// \date   6 Dec 2001
 
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>

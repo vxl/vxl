@@ -8,11 +8,11 @@
 // \file
 // \brief Contains class for diagonal matrices
 // \author Andrew W. Fitzgibbon (Oxford RRG)
-// \date   5/8/96
+// \date   5 Aug 1996
 //
 // \verbatim
 //  Modifications
-//   IMS (Manchester) 16/03/2001: Tidied up the documentation + added binary_io
+//   IMS (Manchester) 16 Mar 2001: Tidied up the documentation + added binary_io
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Sep.2002 - Peter Vanroose - Added operator+, operator-, operator*
 //   Mar.2004 - Peter Vanroose - removed deprecated resize()

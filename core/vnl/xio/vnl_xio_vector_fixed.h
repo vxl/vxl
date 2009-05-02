@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Gamze Tunali
-// \date  12/28/2005
+// \date  Dec 28, 2005
 
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>

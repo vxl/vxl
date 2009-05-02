@@ -8,16 +8,16 @@
 // \file
 // \brief Contains class for templated 3d array
 // \author Paul Beardsley, Oxford University, UK
-// \date   29.03.96
+// \date   29 Mar 1996
 //
 // \verbatim
-// Modifications
-//  960926 AWF Converted to non-fascist C++ :-)
-//  970218 AWF Templated
-//  01 Mar 2001 fsm. Converted to fascist C++
-//  PDA (Manchester) 21/03/2001: Tidied up the documentation
-//  Peter Vanroose 3 Jan. 2002 added operator==
-//  Peter Vanroose 4 Jan. 2002 bug fix: 3rd arg row2_count_ --> row3_count_
+//  Modifications
+//   1996-09-26 AWF Converted to non-fascist C++ :-)
+//   1997-02-18 AWF Templated
+//   01 Mar 2001 fsm. Converted to fascist C++
+//   PDA (Manchester) 21 Mar 2001: Tidied up the documentation
+//   Peter Vanroose 3 Jan. 2002 added operator==
+//   Peter Vanroose 4 Jan. 2002 bug fix: 3rd arg row2_count_ --> row3_count_
 // \endverbatim
 
 
@@ -62,7 +62,7 @@ class vbl_array_3d
   vbl_array_3d(vbl_array_3d<T> const& that)
   : element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
   {
-    if(that.element_){
+    if (that.element_) {
       construct(that.row1_count_,that.row2_count_,that.row3_count_);
       set(that.data_block());
     }

@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Gamze D. Tunali (gamze@lems.brown.edu)
-// \date   11/07/2005
+// \date   11 July 2005
 
 #include <vgl/vgl_cylinder.h>
 #include <vsl/vsl_binary_io.h>

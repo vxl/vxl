@@ -3,8 +3,9 @@
 #define vnl_vector_txx_
 //:
 // \file
-//
-// \date VDN 02/21/92 new lite version adapted from Matrix.h
+// \author VDN
+// \date   Feb 21, 1992
+// \brief new lite version adapted from Matrix.h
 //
 // The parameterized vnl_vector<T> class implements 1D arithmetic vectors of a
 // user specified type. The only constraint placed on the type is that
@@ -57,7 +58,7 @@
 #else
 # define vnl_vector_construct_hack()
 #endif
-  
+
 // This macro allocates the dynamic storage used by a vnl_vector.
 
 #define vnl_vector_alloc_blah(size) \
@@ -72,7 +73,7 @@ do { \
   vnl_c_vector<T>::deallocate(this->data, this->num_elmts); \
 } while (false)
 
-  
+
 //: Creates a vector with specified length. O(n).
 // Elements are not initialized.
 
@@ -604,11 +605,11 @@ vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("element_product", v1.size(), v2.size());
 #endif
-  
+
   vnl_vector<T> result(v1.size());
- 
+
   vnl_sse<T>::element_product(v1.begin(), v2.begin(), result.begin(), v1.size());
-  
+
   return result;
 }
 

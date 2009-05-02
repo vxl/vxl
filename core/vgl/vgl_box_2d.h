@@ -8,18 +8,18 @@
 // \file
 // \brief Contains class to represent a cartesian 2D bounding box.
 // \author Don Hamilton, Peter Tu
-// \date   15/2/2000
+// \date   15 Feb 2000
 //
 // \verbatim
 //  Modifications
-//   IMS (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
-//   Amitha Perera    10/07/2001: Deprecated get_*() in favour of *(), as agreed in Zurich.
-//   Peter Vanroose    5/10/2001: Added operator==() and is_empty()
-//   Peter Vanroose    6/10/2001: Added method add(vgl_point_2d<T>) to enlarge a box
-//   Peter Vanroose    7/10/2001: Removed deprecated get_*() functions
-//   Peter Vanroose     Feb.2002: brief doxygen comment placed on single line
-//   Peter Vanroose  12 Sep.2002: Added method add(vgl_box_2d<T>) to enlarge a box
-//   Peter Vanroose  22 Apr.2003: Interface change (centroid constructor): now in correspondence with vgl_box_3d<T>
+//   IMS (Manchester)14 Mar 2001: Tidied up the documentation + added binary_io
+//   Amitha Perera   10 Jul 2001: Deprecated get_*() in favour of *(), as agreed in Zurich.
+//   Peter Vanroose   5 Oct 2001: Added operator==() and is_empty()
+//   Peter Vanroose   6 Oct 2001: Added method add(vgl_point_2d<T>) to enlarge a box
+//   Peter Vanroose   7 Oct 2001: Removed deprecated get_*() functions
+//   Peter Vanroose     Feb 2002: brief doxygen comment placed on single line
+//   Peter Vanroose  12 Sep 2002: Added method add(vgl_box_2d<T>) to enlarge a box
+//   Peter Vanroose  22 Apr 2003: Interface change (centroid constructor): now in correspondence with vgl_box_3d<T>
 //   Peter Vanroose  13 May 2003: Constructor interface change (backward compat)
 //   Peter Vanroose  15 Oct 2003: Removed deprecated constructors without 4th arg
 //   Peter Vanroose  16 Oct 2003: Corner pts given to constructor may now be in any order

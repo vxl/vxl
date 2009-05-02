@@ -3,7 +3,7 @@
 // \file
 // \brief Some helpful functions when working with triangles
 // \author Kieran O'Mahony
-// \date 21/6/2007
+// \date 21 June 2007
 
 #include <vcl_limits.h>
 

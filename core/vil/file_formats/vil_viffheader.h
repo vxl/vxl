@@ -35,21 +35,20 @@
 // \file
 // \brief  Khoros Visualization/Image File Format.
 // \author John Rassure
-// \date 5/5/88
+// \date May 5, 1988
 //
 // Design considerations included the need
 // for portability, expandability and simplicity.
 //
 // \verbatim
 //  Modifications
-//   Scott R. Wilson 1/13/88
-//   Scott R. Wilson 5/3/88 - Version 2, Release 0
-//   Scott Wilson, John Rasure, Tom Sauer, and
-//   Mark Young:  2/18/89 - Version 3 Release 0
+//   Scott R. Wilson Jan 13, 1988
+//   Scott R. Wilson May 3, 1988 - Version 2, Release 0
+//   Scott Wilson, John Rasure, Tom Sauer, and Mark Young:  Feb 18, 1989 - Version 3 Release 0
 //   Scott Wilson - Version 3.1
-//   Tom Sauer - 7/12/89 removed the #defines for location dimension
-//   Scott Wilson - Correct comment for subrow_size 5/9/90
-//   Scott Wilson - Deleted unneeded include of vdefines.h 18-Jan-91
+//   Tom Sauer - July 12, 1989 removed the #defines for location dimension
+//   Scott Wilson - Correct comment for subrow_size May 9, 1990
+//   Scott Wilson - Deleted unneeded include of vdefines.h 18-Jan-1991
 // \endverbatim
 //
 // \verbatim

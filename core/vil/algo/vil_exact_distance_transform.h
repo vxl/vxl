@@ -3,13 +3,12 @@
 #define vil_exact_distance_transform_h
 //:
 // \file
-// \brief Euclidean Distance Transform algorithms
+// \brief  Euclidean Distance Transform algorithms
 // \author Ricardo Fabbri (Brown)
-// \date 03/16/2005 11:56:33 AM EST
+// \date   Mar 16, 2005
 
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
-
 
 //: Linear-time, 2D exact Euclidean distance transform (Maurer's Algorithm)
 //
@@ -29,8 +28,7 @@
 //
 bool vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im);
 
-//: Same as vil_exact_distance_transform_maurer, but also returns a label array
-// indicating the closest 0-pixel.
+//: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the closest 0-pixel.
 //
 // \param[out] imlabel  An array indicating the closet feature pixel. imlabel[i] == row_major linear
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
@@ -79,8 +77,7 @@ bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
 //
 bool vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im);
 
-//: Computes signed Euclidean distance transform by using the unsigned EDT of an
-// image and its binary complement.
+//: Computes signed Euclidean distance transform by using the unsigned EDT of an image and its binary complement.
 //
 // The input image will be modified as an auxiliary array, so if you want to
 // keep the input you are responsible for making a copy before calling this
