@@ -5,7 +5,7 @@
 // \file
 // \brief A general graph object
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/17/04
+// \date March 17, 2004
 //
 // The graph object maintains pointers to all of the vertices
 // in the graph.  It also handles the creation and destruction of
@@ -15,6 +15,7 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 
@@ -101,7 +102,7 @@ class bgrl_graph : public vbl_ref_count
    public:
     //: Constructor
     iterator( bgrl_graph* graph, bgrl_search_func_sptr func );
-    
+
     //: Constructor - for end iterator
     iterator( bgrl_graph* graph );
 

@@ -5,7 +5,7 @@
 // \file
 // \brief A Gaussian with full covariance in 3D with type double
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/26/06
+// \date January 26, 2006
 
 #include "bsta_gaussian_full.h"
 

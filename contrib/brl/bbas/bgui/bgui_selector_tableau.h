@@ -5,10 +5,11 @@
 // \file
 // \brief  Tableau that allows the selection of one active child but displays all children
 // \author Matthew Leotta (mleotta@brown.lems.edu)
-// \date   11-5-2003
+// \date   November 5, 2003
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vcl_vector.h>

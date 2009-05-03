@@ -6,10 +6,10 @@
 // \brief A class for a rgb-mixture-of-gaussian processor
 //
 // \author Pradeep
-// \date 02/22/2008
+// \date February 22, 2008
 // \verbatim
 //  Modifications
-//   04/17/2008  Ozge C. Ozcanli added most_probable_mode_color() method
+//   Apr 17, 2008  Ozge C. Ozcanli added most_probable_mode_color() method
 // \endverbatim
 //
 
@@ -23,20 +23,19 @@
 #include <bsta/bsta_gaussian_indep.h>
 
 
-
 // The mix_gauss_type contains the same data as mix_gauss plus an
 // extra attribute that indicate the number of observations
 
 class  bvxm_mog_rgb_processor
 {
-protected:
+ protected:
   static const unsigned n_gaussian_modes_ = 3;
 
   typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
 
-public:
+ public:
 
   typedef mix_gauss_type apm_datatype;
   typedef gauss_type::vector_type obs_datatype;
@@ -59,7 +58,6 @@ public:
    bvxm_voxel_slab<obs_datatype> most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear);
 
    bvxm_voxel_slab<obs_datatype> sample(bvxm_voxel_slab<mix_gauss_type > const& appear);
-
 };
 
 #endif // bvxm_mog_rgb_processor_h_

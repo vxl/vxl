@@ -1,7 +1,7 @@
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
+// \date October 16, 2008
 
 #include "brec_hierarchy_edge.h"
 #include <bsta/algo/bsta_gaussian_updater.h>
@@ -105,7 +105,7 @@ brec_hierarchy_edge::calculate_dist_angle(brec_part_instance_sptr pi, vnl_vector
   return;
 }
 
-vgl_box_2d<float> 
+vgl_box_2d<float>
 brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
 {
   float cx = central_p->x_; float cy = central_p->y_;
@@ -114,12 +114,12 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
   brec_part_instance_sptr pp = central_p;
   while (pp->kind_ == brec_part_instance_kind::COMPOSED) {
     pp = pp->central_part()->cast_to_instance();
-  } 
+  }
   vnl_vector_fixed<float, 2> v = pp->direction_vector();  // get orientation vector of central part: pi
 
   //: define a rotation about z axis (in the image plane)
   vnl_quaternion<float> q(0.0f, 0.0f, mean_angle()-var_angle());
-  
+
   vnl_vector_fixed<float,3> v3d(v[0], v[1], 0.0f);
   vnl_vector_fixed<float,3> out = q.rotate(v3d);
   vnl_vector_fixed<float,3> out_dist = out*mean_dist();
@@ -127,15 +127,15 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
   float mx = cx + out_dist[0];
   float my = cy + out_dist[1];
   float rad = (float)vcl_ceil(vcl_sqrt(var_dist())+3);
-  float si = mx - rad; 
-  float upper_i = mx + rad; 
-  float sj = my - rad; 
-  float upper_j = my + rad; 
-    
+  float si = mx - rad;
+  float upper_i = mx + rad;
+  float sj = my - rad;
+  float upper_j = my + rad;
+
   vgl_point_2d<float> pr0(si, sj), pr1(si, upper_j), pr2(upper_i, upper_j), pr3(upper_i, sj);
   vgl_box_2d<float> probe;
   probe.add(pr0); probe.add(pr1); probe.add(pr2); probe.add(pr3);
-  
+
   //: create these boxes for each var_angle() and take union of all boxes
   vnl_quaternion<float> q2(0.0f, 0.0f, mean_angle()+var_angle());
   vnl_vector_fixed<float,3> out2 = q2.rotate(v3d);
@@ -143,13 +143,13 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
 
   mx = cx + out_dist2[0];
   my = cy + out_dist2[1];
-  si = mx - rad; 
-  upper_i = mx + rad; 
-  sj = my - rad; 
-  upper_j = my + rad; 
+  si = mx - rad;
+  upper_i = mx + rad;
+  sj = my - rad;
+  upper_j = my + rad;
   pr0.set(si, sj); pr1.set(si, upper_j); pr2.set(upper_i, upper_j); pr3.set(upper_i, sj);
   probe.add(pr0); probe.add(pr1); probe.add(pr2); probe.add(pr3);
-  
+
   return probe;
 }
 
@@ -173,7 +173,7 @@ bool brec_hierarchy_edge::xml_parse_element(bxml_data_sptr data)
 {
   bxml_element query("edge");
   bxml_data_sptr base_root = bxml_find_by_name(data, query);
-  
+
   if (!base_root)
     return false;
 
@@ -194,10 +194,8 @@ bool brec_hierarchy_edge::xml_parse_element(bxml_data_sptr data)
     angle_model_.set_var(angle_var);
 
     return true;
-  } else
+  }
+  else
     return false;
 }
-
-
-
 

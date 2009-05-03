@@ -5,10 +5,11 @@
 // \file
 // \brief Provides vdtop_pixel neighborhoods class. Can be yet enhanced.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vdtop/vdtop_pixel.h>

@@ -5,7 +5,7 @@
 // \file
 // \brief Detectors applying to Gaussians
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 02/09/06
+// \date February 09, 2006
 //
 // \verbatim
 //  Modifications
@@ -22,9 +22,9 @@ class bsta_g_mdist_detector
     enum { return_dim = 1 };
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
-  
+
     // for compatiblity with vpdl/vdpt
-    typedef return_T return_type; 
+    typedef return_T return_type;
     typedef gaussian_ distribution_type;
 
     //: Constructor

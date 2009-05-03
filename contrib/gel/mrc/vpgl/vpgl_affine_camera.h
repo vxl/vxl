@@ -5,7 +5,7 @@
 // \file
 // \brief A class for the affine camera model.
 // \author Thomas Pollard
-// \date 01/28/05
+// \date January 28, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 
 #include <vnl/vnl_fwd.h>

@@ -5,11 +5,7 @@
 // \file
 // \brief A KD-Tree for mesh faces
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 6/2/08
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+// \date June 2, 2008
 
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_box_3d.h>

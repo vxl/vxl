@@ -4,7 +4,7 @@
 // \file
 // \brief Helper classes to annotate polygonal regions in images
 // \author Ozge C. Ozcanli ozge@lems.brown.edu
-// \date   09/26/2008
+// \date   September 26, 2008
 //
 // \verbatim
 //  Modifications

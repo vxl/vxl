@@ -5,10 +5,11 @@
 // \file
 // \brief Read and write scene graphs as IV or VRML files
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 5/27/04
+// \date May 27, 2004
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>

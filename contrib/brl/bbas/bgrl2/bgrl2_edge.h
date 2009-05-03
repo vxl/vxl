@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_edge.h
+// This is brl/bbas/bgrl2/bgrl2_edge.h
 #ifndef bgrl2_edge_h_
 #define bgrl2_edge_h_
 
@@ -6,14 +6,14 @@
 // \file
 // \brief A templated directed edge class for a generic graph class
 // \author Amir Tamrakar
-// \date 02/30/05
+// \date February 30, 2005
 //
 // This edge has pointers to its source and target vertices
 //
 // \verbatim
 //  Modifications
-//   Amir Tamrakar 02/30/05    Initial version.
-//   Ozge C. Ozcanli 11/15/08  Moved up to vxl, minor fixes
+//   Amir Tamrakar   Feb 30, 2005  Initial version.
+//   Ozge C. Ozcanli Nov 15, 2008  Moved up to vxl, minor fixes
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -24,7 +24,7 @@
 template<class V>
 class bgrl2_edge : public vbl_ref_count
 {
-protected:
+ protected:
   typedef vbl_smart_ptr<V> V_sptr;
 
  public:
@@ -37,19 +37,19 @@ protected:
   // Destructor
   virtual ~bgrl2_edge(){}
 
-  //: Smart pointer to the vertex where this edge originates 
+  //: Smart pointer to the vertex where this edge originates
   V_sptr source() const { return source_; }
 
-  //: Smart pointer to the vertex where this edge points to 
+  //: Smart pointer to the vertex where this edge points to
   V_sptr target() const { return target_; }
 
-  //: Returns target(edge) if v = source(edge) and source(edge) otherwise. 
+  //: Returns target(edge) if v = source(edge) and source(edge) otherwise.
   V_sptr opposite(V_sptr v);
 
   //: set the source vertex
   void set_source(V_sptr v) { source_ = v; }
 
-  //: set the target vertex  
+  //: set the target vertex
   void set_target(V_sptr v) { target_ = v; }
 
   //: Determine if ``this'' edge shares a vertex with other edge

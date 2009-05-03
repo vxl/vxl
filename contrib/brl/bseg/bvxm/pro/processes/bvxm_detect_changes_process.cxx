@@ -1,13 +1,14 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_detect_changes_process.cxx
+
 //:
 // \file
 // \brief A class for detecting changes using a voxel world .
 //
 // \author Daniel Crispell
-// \date 02/10/2008
+// \date February 10, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
 
@@ -18,7 +19,7 @@
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_math.h>
-#include <vil/algo/vil_threshold.h>//   <none yet>//   <none yet>
+#include <vil/algo/vil_threshold.h>
 
 #include <vpgl/vpgl_camera.h>
 
@@ -30,7 +31,7 @@
 namespace bvxm_detect_changes_process_globals
 {
   const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 3; 
+  const unsigned n_outputs_ = 3;
 }
 
 //: initialize input and output types
@@ -56,7 +57,7 @@ bool bvxm_detect_changes_process_cons(bprb_func_process& pro)
   input_types_[3] = "vcl_string";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   //output has 2 outputs
@@ -67,9 +68,9 @@ bool bvxm_detect_changes_process_cons(bprb_func_process& pro)
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1]= "vil_image_view_base_sptr";
   output_types_[2]= "vil_image_view_base_sptr";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -77,7 +78,7 @@ bool bvxm_detect_changes_process_cons(bprb_func_process& pro)
 bool bvxm_detect_changes_process(bprb_func_process& pro)
 {
   using namespace bvxm_detect_changes_process_globals;
-  //check number of inputs  
+  //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;

@@ -5,7 +5,7 @@
 // \file
 // \brief provides the elements for the base structure of a topological pyramid.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
 //  Modifications

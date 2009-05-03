@@ -5,13 +5,12 @@
 // \file
 // \brief This file defines a process manager for handing batch processing, i.e. no user interface
 // \author J.L. Mundy
-// \date 1/31/2008
+// \date January 31, 2008
 //
 // \verbatim
 //  Modifications
 //   <none yet>
 // \endverbatim
-
 
 #include <vcl_vector.h>
 #include <vcl_string.h>

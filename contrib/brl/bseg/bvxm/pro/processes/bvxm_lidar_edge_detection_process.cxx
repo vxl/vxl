@@ -1,4 +1,5 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_lidar_edge_detection_process.cxx
+
 //:
 // \file
 // \brief A class for generating LiDAR edges given a LiDAR image pair.
@@ -12,25 +13,24 @@
 //             - mask "vil_image_view_base_sptr"
 //
 // \author  Ibrahim Eden
-// \date    07/31/2008
+// \date    July 31, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_convert.h>
 
-
-
 //: global variables/functions
 namespace bvxm_lidar_edge_detection_process_globals
 {
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ =3;
-  
+
   //set parameter identifying strings
   const vcl_string param_thresh_diff_ =  "threshold_edge_difference";
 }
@@ -57,7 +57,7 @@ bool bvxm_lidar_edge_detection_process_cons(bprb_func_process& pro)
   output_types_[j++]= "vil_image_view_base_sptr";  // lidar edge probability image
   if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -66,10 +66,10 @@ bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
   using namespace bvxm_lidar_edge_detection_process_globals;
 
   //check number of inputs
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
   // get the inputs:
@@ -104,7 +104,7 @@ bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
 
   vil_image_view<float> image_first_return = *(vil_convert_cast(float(), image_first_return_base));
   vil_image_view<float> image_second_return = *(vil_convert_cast(float(), image_second_return_base));
-  
+
   //read in parameters
   float threshold_edge_difference = 10.0f;
   if (!pro.parameters()->get_value(param_thresh_diff_, threshold_edge_difference)) {

@@ -6,7 +6,7 @@
 // \author Kongbin Kang (kk@lems.brown.edu)
 //         Brown University
 // \brief zhang linear camera calibration from planary pattern
-// \date  3/23/2003
+// \date  March 23, 2003
 //------------------------------------------------------------------------------
 
 #if defined(_MSC_VER) && ( _MSC_VER > 1000 )

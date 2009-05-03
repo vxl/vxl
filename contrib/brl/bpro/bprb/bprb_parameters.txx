@@ -5,10 +5,10 @@
 // \file
 // \brief Templated code for bprb parameters.
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 7/2/2004
+// \date July 2, 2004
 // \verbatim
 //  Modifications
-//   ported 1/30/2008  J.L. Mundy
+//   Jan 30, 2008  J.L. Mundy - ported
 // \endverbatim
 
 #include "bprb_parameters.h"

@@ -4,7 +4,7 @@
 // \file
 // \brief to represent calibrate object
 // \author Kongbin Kang (Kongbin_Kang@Brown.edu)
-// \date   4/3/2003
+// \date   April 3, 2003
 //
 // \verbatim
 //  Modifications

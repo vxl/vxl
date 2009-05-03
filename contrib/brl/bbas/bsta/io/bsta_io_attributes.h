@@ -5,10 +5,11 @@
 // \file
 // \brief Binary I/O for attributed distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 3/28/06
+// \date March 28, 2006
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <bsta/bsta_attributes.h>

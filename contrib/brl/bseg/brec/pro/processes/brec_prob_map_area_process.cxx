@@ -1,17 +1,18 @@
 // This is brl/bseg/brec/pro/processes/brec_prob_map_area_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A process to find expected area at each pixel for a given prob map
 //
 // \author Ozge Can Ozcanli
-// \date 11/06/08
+// \date November 06, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <brdb/brdb_value.h>
@@ -61,7 +62,7 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
   vil_image_view<bool> input_mask = *vil_convert_cast(bool(), temp);
 
   unsigned c_size = pro.get_input<unsigned>(i++);
-  
+
   vil_image_view<float> out(ni, nj, 1);
   out.fill(0);
 
@@ -80,7 +81,7 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
       if (input_mask(i,j)) {
         float sum = 0.0f;
         bool all_inside = true;
-      
+
         for (unsigned t = 0; t < neighborhood.size(); t++) {
           int ii = i+neighborhood[t].first;
           int jj = j+neighborhood[t].second;
@@ -89,7 +90,7 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
               all_inside = false;
               break;
             }
-            
+
             sum += map(ii,jj);
           }
         }

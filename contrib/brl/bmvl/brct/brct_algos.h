@@ -2,7 +2,7 @@
 // \file
 // \brief collection class for various reconstruction functions
 // \author Kongbin Kang (Kongbin_Kang@Brown.edu)
-// \date   4/24/2003
+// \date   April 24, 2003
 // \verbatim
 //  Modifications
 //   none yet

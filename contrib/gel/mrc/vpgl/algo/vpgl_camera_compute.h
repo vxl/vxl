@@ -5,7 +5,7 @@
 // \file
 // \brief Several routines for computing different kinds of cameras from world-point correspondences.
 // \author Thomas Pollard
-// \date 7/18/05
+// \date July 18, 2005
 //
 // Should template this class.
 

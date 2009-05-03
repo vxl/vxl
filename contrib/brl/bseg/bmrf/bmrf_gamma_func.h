@@ -5,16 +5,12 @@
 // \file
 // \brief Gamma function object
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 03/11/04
+// \date March 11, 2004
 //
 // This file contains a base class for the gamma function object
 // and several specific functions derived from it.  These functions are used
 // in bmrf_epi_transform.h to compute transformations of curves along epipolar
 // lines.  The function returns a gamma value give alpha and time.
-//
-// \verbatim
-//  Modifications
-// \endverbatim
 
 #include <vbl/vbl_ref_count.h>
 #include <vcl_map.h>
@@ -97,7 +93,7 @@ class bmrf_pwl_gamma_func : public bmrf_gamma_func
 {
  public:
   //: Constructor
-  bmrf_pwl_gamma_func( const bmrf_epi_seg_sptr& ep1, 
+  bmrf_pwl_gamma_func( const bmrf_epi_seg_sptr& ep1,
                        const bmrf_epi_seg_sptr& ep2,
                        double t = 1.0 );
 

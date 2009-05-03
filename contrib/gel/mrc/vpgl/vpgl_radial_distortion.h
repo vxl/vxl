@@ -5,7 +5,7 @@
 // \file
 // \brief An abstract base class for radial lens distortions.
 // \author Matt Leotta
-// \date 08/19/05
+// \date August 19, 2005
 //
 //   A radial lens distortion is a 2D warping of the image plane that is radial symmetric
 //   about some center of distortion.  It is assumed that the map is bijective,

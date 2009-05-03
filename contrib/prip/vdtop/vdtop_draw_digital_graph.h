@@ -6,10 +6,11 @@
 // \brief Function to draw a digital graph in a human readable form.
 //  For now, graphs have the structure of vil_image_view<vdtop_8_neighborhood_mask>.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vxl_config.h>

@@ -5,7 +5,7 @@
 // \file
 // \brief A Gaussian with uniform variance in 3D with type float
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/26/06
+// \date January 26, 2006
 
 #include "bsta_gaussian_sphere.h"
 

@@ -5,10 +5,9 @@
 // \file
 // \brief A smart pointer to a bmrf_network.
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 1/16/04
+// \date January 16, 2004
 //
 // Include this file to use the smart pointer bmrf_network_sptr
-//
 
 class bmrf_network;
 

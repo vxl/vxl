@@ -1,19 +1,19 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_ocp_hist_process.cxx
+
 //:
 // \file
 // \brief A class for generating a histogram out of occupancy probability grid
 //        -  Input:
-//             - bvxm_voxel_world_sptr
-//             - vcl_string             --path for the text file of the histogram
-//
+//             * bvxm_voxel_world_sptr
+//             * vcl_string             --path for the text file of the histogram
 //        -  Output:
-//             - none
+//             * none
 //
 // \author  Gamze D. Tunali
-// \date    05/22/2008
+// \date    May 22, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -28,10 +28,9 @@ namespace bvxm_ocp_hist_process_globals
 {
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 0;
-  
+
   //functions
   bool compute(bvxm_voxel_world_sptr w, unsigned scale, vcl_string path);
-  
 }
 
 //: set input and output types
@@ -48,22 +47,22 @@ bool bvxm_ocp_hist_process_cons(bprb_func_process& pro)
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
   input_types_[i++] = "vcl_string";
   input_types_[i++] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
-  
-  return true;
 
+  return true;
 }
+
 //: generates a histogram out of occupancy probability grid
 bool bvxm_ocp_hist_process(bprb_func_process& pro)
 {
   using namespace bvxm_ocp_hist_process_globals;
 
  //check numeber of inputs
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
   // get the inputs:
   unsigned i = 0;
@@ -71,15 +70,15 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr voxel_world = pro.get_input< bvxm_voxel_world_sptr>(i++);
   // the output path
   vcl_string path = pro.get_input<vcl_string>(i++);
-  //scale 
+  //scale
   unsigned scale = pro.get_input<unsigned>(i++);
-  
+
   compute(voxel_world,scale, path);
 
   return true;
 }
 
-bool bvxm_ocp_hist_process_globals::compute(bvxm_voxel_world_sptr w, 
+bool bvxm_ocp_hist_process_globals::compute(bvxm_voxel_world_sptr w,
                                             unsigned scale, vcl_string path)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;

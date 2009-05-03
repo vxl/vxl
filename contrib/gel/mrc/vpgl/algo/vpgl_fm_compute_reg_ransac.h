@@ -9,7 +9,7 @@
 // of corresponding points between two rectified images.  This assumes the matched
 // points lie off of the ground plane.  This uses RREL to do the robust computation.
 // \author Thomas Pollard
-// \date 5/08/05
+// \date May 08, 2005
 //
 // Should template this class.
 
@@ -96,7 +96,8 @@ class rrel_fm_reg_problem : public rrel_estimation_problem
   //: Weighted least squares parameter estimate.
   //  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
-    vnl_matrix<double>& norm_covar, const vcl_vector<double>* weights=0 ) const;
+                                   vnl_matrix<double>& norm_covar,
+                                   const vcl_vector<double>* weights=0 ) const;
 
   // Toggles detailed printing of computations.
   bool verbose;

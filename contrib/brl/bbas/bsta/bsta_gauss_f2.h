@@ -4,8 +4,8 @@
 //:
 // \file
 // \brief A Gaussian in 2D with type float
-// \author Ozge C. Ozcanli (mleotta@lems.brown.edu)
-// \date 20/10/08
+// \author Ozge C. Ozcanli
+// \date 20 October 2008
 //
 // Note: the gaussian sphere implementation is most efficient
 //       for the univariate case

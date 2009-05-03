@@ -4,7 +4,7 @@
 // \file
 // \brief
 // \author Thomas Pollard
-// \date 1/12/08
+// \date January 12, 2008
 
 #include <vcl_string.h>
 

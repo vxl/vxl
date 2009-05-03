@@ -5,7 +5,7 @@
 // \file
 // \brief A set of algorithms related to the area covered by a nitf camera
 // \author Isabel Restrepo (mir@lems.brown.edu)
-// \date 08/08/08
+// \date August 08, 2008
 //
 #include <vcl_vector.h>
 #include <vcl_string.h>

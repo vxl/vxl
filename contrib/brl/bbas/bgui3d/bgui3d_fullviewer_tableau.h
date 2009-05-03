@@ -5,10 +5,11 @@
 // \file
 // \brief  Abstract base tableau for 3D viewers with interaction
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date   5/27/04
+// \date   May 27, 2004
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include "bgui3d_viewer_tableau.h"

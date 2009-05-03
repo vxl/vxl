@@ -5,10 +5,11 @@
 // \file
 // \brief  Abstract base tableau for 3D viewers
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date   5/25/04
+// \date   May 25, 2004
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include "bgui3d_tableau.h"
@@ -109,10 +110,10 @@ class bgui3d_viewer_tableau : public bgui3d_tableau
 
   //: Convert to perspective
   void convertOrtho2Perspective(const SoOrthographicCamera * in,
-                                         SoPerspectiveCamera * out);
+                                SoPerspectiveCamera * out);
   //: Convert to orthographic
   void convertPerspective2Ortho(const SoPerspectiveCamera * in,
-                     SoOrthographicCamera * out);
+                                SoOrthographicCamera * out);
 
   //: Find the camera nodes in the scenegraph
   vcl_vector<SoCamera*> find_cameras(SoNode* root) const;

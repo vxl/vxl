@@ -5,7 +5,7 @@
 // \file
 // \brief A set of search functions to search through a graph
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/24/04
+// \date March 24, 2004
 //
 // \verbatim
 //  Modifications

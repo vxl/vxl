@@ -5,13 +5,12 @@
 // \file
 // \brief A class for polynomial radial lens distortions.
 // \author Matt Leotta
-// \date 08/19/05
+// \date Aug 19, 2005
 //
 //   A radial lens distortion is a 2D warping of the image plane that is radial symmetric
 //   about some center of distortion.  It is assumed that the map is
 //   bijective, though a closed form solution for the inverse may not exist in general.
 //   A default iterative solver is implemented to solve
-
 
 #include "vpgl_radial_distortion.h"
 #include <vgl/vgl_point_2d.h>

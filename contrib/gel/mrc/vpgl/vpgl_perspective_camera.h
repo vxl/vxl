@@ -5,17 +5,16 @@
 // \file
 // \brief A class for the perspective camera model.
 // \author Thomas Pollard
-// \date 01/28/05
+// \date Jan 28, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
 // \verbatim
 //  Modifications
-//   5/08/2005  Ricardo Fabbri   Added binary I/O support
-//   5/08/2005  Ricardo Fabbri   Added == operator
-//   2/8/2007   Thomas Pollard   Added finite backproject method.
-//   3/16/2007  Matt Leotta      Replaced vgl_h_matrix_3d with vgl_rotation_3d for rotation
+//   May 08, 2005  Ricardo Fabbri   Added binary I/O support
+//   May 08, 2005  Ricardo Fabbri   Added == operator
+//   Feb  8, 2007  Thomas Pollard   Added finite backproject method.
+//   Mar 16, 2007  Matt Leotta      Replaced vgl_h_matrix_3d with vgl_rotation_3d for rotation
 // \endverbatim
-
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
@@ -27,7 +26,6 @@
 #include "vpgl_proj_camera.h"
 #include "vpgl_calibration_matrix.h"
 #include <vsl/vsl_binary_io.h>
-
 
 //: This class implements the perspective camera class as described in Hartley & Zisserman as a finite camera.
 //  This is the camera model based on three objects:
@@ -44,7 +42,7 @@
 //
 // \verbatim
 //  Modifications
-//  2/12/2007  Thomas Pollard   Added finite backprojection method.
+//   Feb 12, 2007  Thomas Pollard   Added finite backprojection method.
 // \endverbatim
 //
 //  For adding to this class:
@@ -64,7 +62,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
                            const vgl_point_3d<T>& camera_center,
                            const vgl_rotation_3d<T>& R );
 
-  //: Main constructor based on K[R|t] 
+  //: Main constructor based on K[R|t]
   vpgl_perspective_camera( const vpgl_calibration_matrix<T>& K,
                            const vgl_rotation_3d<T>& R,
                            const vgl_vector_3d<T>& t);

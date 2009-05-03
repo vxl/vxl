@@ -5,10 +5,11 @@
 // \file
 // \brief a builder which builds a simple segmentation.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vmap/vmap_non_oriented_kernel.h>

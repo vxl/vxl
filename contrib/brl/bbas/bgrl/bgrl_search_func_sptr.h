@@ -5,7 +5,7 @@
 // \file
 // \brief A smart pointer to a bgrl_search_func.
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/24/04
+// \date March 24, 2004
 //
 // Include this file to use the smart pointer bgrl_search_func_sptr
 //

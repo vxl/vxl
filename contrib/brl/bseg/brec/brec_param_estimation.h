@@ -1,18 +1,16 @@
+#ifndef brec_param_estimation_H_
+#define brec_param_estimation_H_
 //:
 // \file
 // \brief brec parameter estimation methods for various prob densities used for recognition
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
+// \date October 01, 2008
 //
 // \verbatim
 //  Modifications
 //   <none yet>
 // \endverbatim
-
-
-#ifndef brec_param_estimation_H_
-#define brec_param_estimation_H_
 
 #include <vcl_vector.h>
 #include <vcl_utility.h>

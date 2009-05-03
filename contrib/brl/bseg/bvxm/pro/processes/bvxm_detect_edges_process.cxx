@@ -1,13 +1,14 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_detect_edges_process.cxx
+
 //:
 // \file
 // \brief A process that takes a grayscale image and returns the corresponding edge map
 //
 // \author Ibrahim Eden
-// \date 03/05/2008
+// \date March 05, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>

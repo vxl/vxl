@@ -5,7 +5,7 @@
 // \file
 // \brief The 7 point algorithm for computing a fundamental matrix from point correspondences.
 // \author Thomas Pollard
-// \date 5/10/05
+// \date May 10, 2005
 //
 // Should template this class. The code here is lifted from oxl/mvl/FMatrixCompute7Point.
 // Still need to add preconditioning to points.

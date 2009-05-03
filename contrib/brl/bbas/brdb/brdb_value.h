@@ -5,12 +5,11 @@
 // \file
 // \brief The database value class
 // \author Matt Leotta
-// \date 1/24/05
+// \date January 24, 2005
 //
 // \verbatim
 //  Modifications
-//   Apr 4, 2007 - Yong Zhao
-//   Make it work with the whole database initially based on Matt's sketch.
+//   Apr 4, 2007 - Yong Zhao - Make it work with the whole database initially based on Matt's sketch.
 // \endverbatim
 
 #include <brdb/brdb_value_sptr.h>

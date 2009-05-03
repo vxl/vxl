@@ -3,7 +3,7 @@
 //:
 // \file
 // \author Matthew Leotta
-// \date   11-5-2003
+// \date   November 5, 2003
 // \brief  See bgui_selector_tableau.h for a description of this file.
 
 #include <vcl_iostream.h>

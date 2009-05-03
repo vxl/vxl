@@ -1,5 +1,5 @@
 // This is brl/bseg/brec/pro/processes/brec_prob_map_supress_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A process to suppress a given density/prob map with respect to another map, e.g. to remove vehicle areas from a change map
@@ -8,13 +8,14 @@
 // Output of this process is: P(X in B and X not in V)
 //
 // \author Ozge Can Ozcanli
-// \date 10/28/08
+// \date October 28, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
@@ -52,7 +53,7 @@ bool brec_prob_map_supress_process(bprb_func_process& pro)
   }
 
   //: get input
-  unsigned i = 0; 
+  unsigned i = 0;
   vil_image_view_base_sptr inp = pro.get_input<vil_image_view_base_sptr>(i++);
 
   if (inp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
@@ -113,11 +114,11 @@ bool brec_prob_map_supress_process(bprb_func_process& pro)
   //vil_save(dummy_byte, "./output_map_mult_inverse.png");
 
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(dummy2);
-  pro.set_output_val<vil_image_view_base_sptr>(0, out_map_sptr); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_map_sptr);
+
   vil_image_view_base_sptr out_map_sptr1 = new vil_image_view<vxl_byte>(dummy_byte);
-  pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr1); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr1);
+
   return true;
 }
 

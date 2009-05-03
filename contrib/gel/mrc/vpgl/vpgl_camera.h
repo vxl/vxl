@@ -6,17 +6,18 @@
 // \file
 // \brief A general camera class.
 // \author Thomas Pollard
-// \date 01/28/05
+// \date January 28, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
 //   A basic abstract camera class on which all specific cameras are based.
 //   As such there is only one operation it performs:
 //   project a 3d world point into a 2d image point.  The class is templated
 //   over T which had better be an algebraic field.
-//
-// Modifications:  October 26, 2006 - Moved homogeneous methods to
-// projective camera, since projective geometry may not apply in the
-// most general case, e.g. rational cameras. - JLM
+// \verbatim
+//  Modifications
+//   October 26, 2006 - Moved homogeneous methods to projective camera, since
+//                      projective geometry may not apply in the most general case, e.g. rational cameras. - JLM
+// \endverbatim
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>

@@ -4,7 +4,7 @@
 // \file
 // \brief Implements Otsu's threshold method for 1D distribution and 2 classes
 // \author Vishal Jain, (vj@lems.brown.edu)
-// \date 04/09/05
+// \date April 09, 2005
 //
 //  The Otsu threholding method maximizes the between class variance by
 //  an exhaustive linear scan over the histogram bin indices

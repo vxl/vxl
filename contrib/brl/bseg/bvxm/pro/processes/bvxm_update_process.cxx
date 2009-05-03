@@ -1,13 +1,14 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_update_process.cxx
+// This is brl/bseg/bvxm/pro/processes/bvxm_update_process.cxx
+
 //:
 // \file
 // \brief A class for update process of a voxel world.
 //
 // \author Isabel Restrepo
-// \date 01/30/2008
+// \date January 30, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with new bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -51,7 +52,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   input_types_[3] = "vcl_string";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   //output has 1 output
@@ -61,19 +62,16 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[j++] = "vil_image_view_base_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
-
-
 }
 
 bool bvxm_update_process(bprb_func_process& pro)
 {
-
   using namespace bvxm_update_process_globals;
-  
+
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
@@ -121,7 +119,7 @@ bool bvxm_update_process(bprb_func_process& pro)
     vil_image_view<float> prob_map(img->ni(),img->nj(),1);
     vil_image_view<bool> mask(img->ni(),img->nj(),1);
 
-    if(scale!=curr_scale)
+    if (scale!=curr_scale)
     {
       img=bvxm_util::downsample_image_by_two(img);
       camera=bvxm_util::downsample_camera( camera, scale);
@@ -141,12 +139,11 @@ bool bvxm_update_process(bprb_func_process& pro)
       if (observation.img->nplanes()!= 2)
       {
         vcl_cerr << "appereance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
-          << " planes" << vcl_endl;
+                 << " planes\n";
         return false;
       }
 
       result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
-
     }
     else if (voxel_type == "apm_mog_mc_3_3")
       result = world->update<APM_MOG_MC_3_3>(observation, prob_map, mask, bin_index,scale);
@@ -155,21 +152,21 @@ bool bvxm_update_process(bprb_func_process& pro)
       if (observation.img->nplanes()!= 4)
       {
         vcl_cerr << "appereance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
-          << " planes" << vcl_endl;
+                 << " planes\n";
         return false;
       }
       result = world->update<APM_MOG_MC_4_3>(observation, prob_map, mask, bin_index,scale);
     }
-    else 
-      vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appereance model" << vcl_endl;
+    else
+      vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appereance model\n";
 
     vcl_cout<<"update done ";
     vcl_cout.flush();
 
     prob_map_vec.push_back(prob_map);
     mask_vec.push_back(mask);
-    if(!result){
-      vcl_cerr << "error bvxm_update_process: failed to update observation" << vcl_endl;
+    if (!result){
+      vcl_cerr << "error bvxm_update_process: failed to update observation\n";
       return false;
     }
   }

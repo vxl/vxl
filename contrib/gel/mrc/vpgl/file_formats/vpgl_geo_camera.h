@@ -4,7 +4,7 @@
 // \file
 // \brief A geotiff image deduced camera class.
 // \author Gamze Tunali
-// \date 10/24/2008
+// \date October 24, 2008
 // \author Gamze Tunali
 //
 // Geotiff images contain information about the corresponding world coordinate

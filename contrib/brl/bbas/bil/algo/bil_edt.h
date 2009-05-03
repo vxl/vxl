@@ -3,12 +3,13 @@
 #ifndef bil_edt_h
 #define bil_edt_h
 //:
-//\file
-//\brief 2D Euclidean Distance Transform algorithms
-//\author Ricardo Fabbri (rfabbri), Brown University  (rfabbri@lems.brown.edu)
-//\date 03/16/2005 11:56:33 AM EST
+// \file
+// \brief 2D Euclidean Distance Transform algorithms
+// \author Ricardo Fabbri (rfabbri), Brown University  (rfabbri@lems.brown.edu)
+// \date March 16, 2005
 //
-//\todo Maybe define these in a class; use of inheritance may be useful e.g. by
+// \todo
+// Maybe define these in a class; use of inheritance may be useful e.g. by
 // defining a base "distance_tranform" compute class wich abstracts all EDT
 // algorithms (independent of the author) and imposes uniformity to their interfaces.
 // Otherwise we might end up with multiple DT implementations, each with a
@@ -21,13 +22,13 @@
 
 //: Euclidean Signed Distance Transform
 // Regions on input image are pixels where intensity > 0;
-// Distance Transform is > 0 INSIDE the regions amd 
+// Distance Transform is > 0 INSIDE the regions amd
 //                       < 0 OUTSIDE the regions.
-bool bil_edt_signed( vil_image_view<unsigned int> &input_image, 
-    vil_image_view<float> &signed_edt_image);
+bool bil_edt_signed( vil_image_view<unsigned int> &input_image,
+                     vil_image_view<float> &signed_edt_image);
 
 //: "Maurer's algorithm": Linear-time, 2D Exact Euclidean Distance Transform
-//  Paper: Calvin Maurer et. al. PAMI feb. 2003 
+//  Paper: Calvin Maurer et. al. PAMI feb. 2003
 //
 // Squared Distances are computed for every pixel relative to the zero-pixels.
 //
@@ -54,7 +55,7 @@ bool bil_edt_brute_force(vil_image_view<vxl_uint_32> &im);
 bool bil_edt_brute_force_with_list(vil_image_view<vxl_uint_32> &im);
 
 
-//: Row-wise 1D EDT 
+//: Row-wise 1D EDT
 bool bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im);
 
 #endif // bil_edt_h

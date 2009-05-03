@@ -5,7 +5,7 @@
 // \file
 // \brief Functions to render the faces of a mesh with projected coordinates
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 6/2/08
+// \date June 2, 2008
 //
 // \verbatim
 //  Modifications
@@ -28,8 +28,8 @@ void imesh_render_triangle_label(const vgl_point_3d<double>& v1,
                                  const vgl_point_3d<double>& v2,
                                  const vgl_point_3d<double>& v3,
                                  const T& label,
-                                       vil_image_view<T>& image,
-                                       vil_image_view<double>& depth_img)
+                                 vil_image_view<T>& image,
+                                 vil_image_view<double>& depth_img)
 {
   assert(depth_img.ni() == image.ni());
   assert(depth_img.nj() == image.nj());

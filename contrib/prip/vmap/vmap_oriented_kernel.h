@@ -5,7 +5,7 @@
 // \file
 // \brief provides a wrapper for constructing oriented kernels.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
 //  Modifications

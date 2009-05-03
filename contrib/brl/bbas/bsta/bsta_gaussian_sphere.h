@@ -5,7 +5,7 @@
 // \file
 // \brief A (hyper-)spherical Gaussian distribution (i.e. single variance)
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/25/06
+// \date January 25, 2006
 //
 // \verbatim
 //  Modifications
@@ -73,7 +73,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
   T det_covar() const { return det_covar_; }
 
   //: sample from the distribution
-  vector_ sample(vnl_random& rng) const; 
+  vector_ sample(vnl_random& rng) const;
 
  protected:
   //: The variance

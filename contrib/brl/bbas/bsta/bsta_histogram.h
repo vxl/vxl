@@ -5,7 +5,7 @@
 // \file
 // \brief A simple histogram class
 // \author Joseph Mundy
-// \date 5/19/04
+// \date May 19, 2004
 //
 // A templated histogram class.  Supports entropy calculations
 //
@@ -35,10 +35,9 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   bsta_histogram(const T min, const T max, vcl_vector<T> const& data,
                  const T min_prob = 0.0);
 
+  ~bsta_histogram() {}
 
- ~bsta_histogram() {}
-
- // The number of bins in the histogram
+  // The number of bins in the histogram
   unsigned int nbins() const { return nbins_; }
 
   //: min,max of total range
@@ -53,16 +52,16 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: The value range for a bin
   void value_range(const unsigned int bin, T& vmin, T& vmax) const
-    {assert(bin<nbins_); vmin = bin*delta_+min_; vmax = (bin+1)*delta_+min_;}
-  
+  { assert(bin<nbins_); vmin = bin*delta_+min_; vmax = (bin+1)*delta_+min_; }
+
   //: The average value for a bin
   T avg_bin_value(const unsigned int bin) const
-    {assert(bin<nbins_); return (min_ + bin*delta_ + delta_/2);}
+  { assert(bin<nbins_); return min_ + bin*delta_ + delta_/2; }
 
   //: The counts in a given bin
   T counts(const unsigned int bin) const
-    {assert(bin<nbins_); return counts_[bin];}
-  
+  { assert(bin<nbins_); return counts_[bin]; }
+
   //: probability of a given bin
   T p(const unsigned int bin) const;
 
@@ -84,7 +83,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   //: Variance of distribution between bin indices
   T variance(const unsigned int lowbin, const unsigned int highbin) const;
 
-  //: First non-zero bin from below  
+  //: First non-zero bin from below
   unsigned low_bin();
 
   //: First non-zero bin from above
@@ -113,15 +112,17 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: set the count for a given bin
   void set_count(const unsigned bin, const T count)
-    {if(bin<nbins_) counts_[bin]=count;}
-    
+  { if (bin<nbins_) counts_[bin]=count; }
+
   //: array of bin values
-  vcl_vector<T> value_array() const {vcl_vector<T> v(nbins_);
-  for(unsigned b = 0; b<nbins_; ++b) v[b]=avg_bin_value(b); return v;}
+  vcl_vector<T> value_array() const {
+    vcl_vector<T> v(nbins_);
+    for (unsigned b = 0; b<nbins_; ++b) v[b]=avg_bin_value(b); return v; }
 
   //: array of bin counts
-  vcl_vector<T> count_array() const {vcl_vector<T> v(nbins_);
-  for(unsigned b = 0; b<nbins_; ++b) v[b]=counts(b); return v;}
+  vcl_vector<T> count_array() const {
+    vcl_vector<T> v(nbins_);
+    for (unsigned b = 0; b<nbins_; ++b) v[b]=counts(b); return v; }
 
  //: Smooth the histogram with a Parzen window of sigma
   void parzen(const T sigma);
@@ -151,7 +152,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 };
 
 //: Write histogram to stream
-// \relates bsta_histogram 
+// \relates bsta_histogram
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, bsta_histogram<T> const& h);
 
@@ -159,8 +160,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, bsta_histogram<T> const& h);
 // \relates bsta_histogram
 template <class T>
 vcl_istream&  operator>>(vcl_istream& is,  bsta_histogram<T>& h);
-
-
 
 
 #define BSTA_HISTOGRAM_INSTANTIATE(T) extern "Please #include <bsta/bsta_histogram.txx>"

@@ -5,7 +5,7 @@
 // \file
 // \brief Functors that apply to mixtures of distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 03/29/06
+// \date March 29, 2006
 //
 // \verbatim
 //  Modifications

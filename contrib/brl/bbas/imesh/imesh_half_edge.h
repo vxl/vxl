@@ -6,11 +6,7 @@
 // \file
 // \brief A simple indexed half-edge
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 5/2/08
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+// \date May 2, 2008
 
 #include <vcl_iterator.h>
 #include <vcl_vector.h>
@@ -20,7 +16,7 @@
 
 class imesh_half_edge
 {
-  friend class imesh_half_edge_set;
+    friend class imesh_half_edge_set;
   public:
     imesh_half_edge(unsigned int e, unsigned int n, unsigned int v, unsigned int f)
     : next_(n), edge_(e), vert_(v), face_(f) {}
@@ -105,7 +101,7 @@ class imesh_half_edge_set
         //: Assignment
         f_iterator& operator = (const f_iterator& other)
         {
-          if(this != &other){
+          if (this != &other){
             assert(&edge_set_ == &other.edge_set_);
             half_edge_index_ = other.half_edge_index_;
           }
@@ -157,8 +153,8 @@ class imesh_half_edge_set
     //: A const iterator of half edges adjacent to a face
     class f_const_iterator : public vcl_iterator<vcl_forward_iterator_tag,imesh_half_edge>
     {
-      friend class f_iterator;
-      friend class v_const_iterator;
+        friend class f_iterator;
+        friend class v_const_iterator;
       public:
         //: Constructor
         f_const_iterator(unsigned int hei, const imesh_half_edge_set& edge_set)
@@ -175,7 +171,7 @@ class imesh_half_edge_set
         //: Assignment
         f_const_iterator& operator = (const f_const_iterator& other)
         {
-          if(this != &other){
+          if (this != &other){
             assert(&edge_set_ == &other.edge_set_);
             half_edge_index_ = other.half_edge_index_;
           }
@@ -220,8 +216,8 @@ class imesh_half_edge_set
     //: An iterator of half edges adjacent to a vertex
     class v_iterator : public vcl_iterator<vcl_forward_iterator_tag,imesh_half_edge>
     {
-      friend class v_const_iterator;
-      friend class f_iterator;
+        friend class v_const_iterator;
+        friend class f_iterator;
       public:
         //: Constructor
         v_iterator(unsigned int hei, imesh_half_edge_set& edge_set)
@@ -234,7 +230,7 @@ class imesh_half_edge_set
         //: Assignment
         v_iterator& operator = (const v_iterator& other)
         {
-          if(this != &other){
+          if (this != &other){
             assert(&edge_set_ == &other.edge_set_);
             half_edge_index_ = other.half_edge_index_;
           }
@@ -287,8 +283,8 @@ class imesh_half_edge_set
     //: A const iterator of half edges adjacent to a vertex
     class v_const_iterator : public vcl_iterator<vcl_forward_iterator_tag,imesh_half_edge>
     {
-      friend class v_iterator;
-      friend class f_const_iterator;
+        friend class v_iterator;
+        friend class f_const_iterator;
       public:
         //: Constructor
         v_const_iterator(unsigned int hei, const imesh_half_edge_set& edge_set)
@@ -305,7 +301,7 @@ class imesh_half_edge_set
         //: Assignment
         v_const_iterator& operator = (const v_const_iterator& other)
         {
-          if(this != &other){
+          if (this != &other){
             assert(&edge_set_ == &other.edge_set_);
             half_edge_index_ = other.half_edge_index_;
           }
@@ -363,7 +359,6 @@ class imesh_half_edge_set
     vcl_vector<unsigned int> vert_to_he_;
     vcl_vector<unsigned int> face_to_he_;
 };
-
 
 
 #endif // imesh_half_edge_h_

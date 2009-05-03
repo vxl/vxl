@@ -1,15 +1,14 @@
 // This is prip/vdtop/vdtop_replace_quasi_8_minima.h
 #ifndef vdtop_replace_quasi_8_minima_h_
 #define vdtop_replace_quasi_8_minima_h_
-
 //:
 // \file
-// \brief.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vdtop_pixel.h"

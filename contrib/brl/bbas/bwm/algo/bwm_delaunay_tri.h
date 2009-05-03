@@ -6,17 +6,16 @@
 //   Triangulation happens in 2D by only using (x,y) component and moving them back to 3D
 //
 // \author Vishal Jain
-// \date   6/10/2008
+// \date   June 10, 2008
 //
 // \verbatim
 //  Modifications
-//   6/10/2008  Gamze Tunali
-//              Created a class and converted all the variable to vxl types
-//              and added the sorting as a part of the code.
+//   Jun 10, 2008  Gamze Tunali
+//                 Created a class and converted all the variable to vxl types
+//                 and added the sorting as a part of the code.
 // \endverbatim
 
 #include <vcl_vector.h>
-
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 

@@ -5,13 +5,9 @@
 // \file
 // \brief A representation of an epipole
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 2/26/04
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+// \date February 26, 2004
 
-#include <vgl/vgl_point_2d.h> 
+#include <vgl/vgl_point_2d.h>
 
 //: A representation of an epipole
 // Contains member function to convert between image
@@ -32,12 +28,11 @@ class bmrf_epipole
   vgl_point_2d<double> to_img_coords(const vgl_point_2d<double>& s_a) const;
   void to_img_coords(double s, double a, double &u, double &v) const;
 
-  const vgl_point_2d<double>& location() const { return epi_; } 
+  const vgl_point_2d<double>& location() const { return epi_; }
 
  private:
   //:the epipole location in image coordinates
   vgl_point_2d<double> epi_;
-
 };
 
 #endif // bmrf_epipole_h_

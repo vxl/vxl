@@ -1,23 +1,21 @@
-//-*-c++-*--------------------------------------------------------------
-/**
- * \file
- *
- * An image database. Basically maintains a list of labels and
- * associated images. And allows for saving and loading a database. 
- * Ideally, this would form an inheritance hierarchy or be a templated
- * class, but I'm looking for simplicity at the moment.
- *
- * The images inserted into the database WILL be deleted on
- * destruction of the database. So only insert things you don't want
- * to persist.
- *
- * \author Brendan McCane
- * \date 17/7/01
- *
- * Copyright (c) 2001 Brendan McCane
- * University of Otago, Dunedin, New Zealand
- * Reproduction rights limited as described in the COPYRIGHT file.
- */
+//:
+// \file
+//
+// An image database. Basically maintains a list of labels and
+// associated images. And allows for saving and loading a database.
+// Ideally, this would form an inheritance hierarchy or be a templated
+// class, but I'm looking for simplicity at the moment.
+//
+// The images inserted into the database WILL be deleted on
+// destruction of the database. So only insert things you don't want
+// to persist.
+//
+// \author Brendan McCane
+// \date 17 July 2001
+//
+// Copyright (c) 2001 Brendan McCane
+// University of Otago, Dunedin, New Zealand
+// Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
 #include "image_database.h"
@@ -31,14 +29,13 @@
 #include <vil1/vil1_save.h>
 
 //----------------------------------------------------------------------
-/** destructor
- *
- * Iterate through all images in the database and delete them.
- *
- * \side Memory is actually deallocated
- *
- * \author Brendan McCane 
- */
+//: destructor
+//
+// Iterate through all images in the database and delete them.
+//
+// \side Memory is actually deallocated
+//
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 ImageDatabase::~ImageDatabase()
@@ -47,12 +44,11 @@ ImageDatabase::~ImageDatabase()
 }
 
 //----------------------------------------------------------------------
-/** clear
- *
- * clear all the images from the database (deletion is performed)
- *
- * \author Brendan McCane 
- */
+//: clear
+//
+// clear all the images from the database (deletion is performed)
+//
+// \author Brendan McCane
 //----------------------------------------------------------------------
 void ImageDatabase::clear()
 {
@@ -64,21 +60,20 @@ void ImageDatabase::clear()
 }
 
 //----------------------------------------------------------------------
-/** save
- *
- * Save all images in the database. To do this, I create a single
- * database file that has a list of label/filename pairs. I also
- * create a subdirectory in which all the images are stored. The
- * images are stored based on the imagetype parameter, which should be
- * the extension of a valid image file type (eg "ppm", "pgm", "png",
- * etc).
- *
- * \param name  the name of the database file (a directory called name.d is also created).
- *
- * \param imagetype  a valid file extension type (eg "ppm");
- *
- * \author Brendan McCane 
- */
+//: save
+//
+// Save all images in the database. To do this, I create a single
+// database file that has a list of label/filename pairs. I also
+// create a subdirectory in which all the images are stored. The
+// images are stored based on the imagetype parameter, which should be
+// the extension of a valid image file type (eg "ppm", "pgm", "png",
+// etc).
+//
+// \param name  the name of the database file (a directory called name.d is also created).
+//
+// \param imagetype  a valid file extension type (eg "ppm");
+//
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 bool ImageDatabase::save(const char *name, const char *imagetype)
@@ -119,14 +114,13 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
 
 
 //----------------------------------------------------------------------
-/** load
- *
- * Load a database from file. 
- *
- * \param name  the name of the database file (a directory called name.d should also exist).
- *
- * \author Brendan McCane 
- */
+//: load
+//
+// Load a database from file.
+//
+// \param name  the name of the database file (a directory called name.d should also exist).
+//
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 bool ImageDatabase::load(const char *name)

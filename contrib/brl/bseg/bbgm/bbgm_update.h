@@ -5,11 +5,11 @@
 // \file
 // \brief Update wrappers for distribution images
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 10/3/05
+// \date October 3, 2005
 //
 // \verbatim
 //  Modifications
-//   04/21/09  MJL  Update to work with vpdt
+//   Apr 21, 2009  MJL  Update to work with vpdt
 // \endverbatim
 
 #include <vil/vil_image_view.h>
@@ -41,14 +41,14 @@ void update(bbgm_image_of<dist_>& dimg,
   assert(dimg.ni() == image.ni());
   assert(dimg.nj() == image.nj());
   assert(data_dim == image.nplanes());
-  
+
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
-  
+
   const vcl_ptrdiff_t planestep = image.planestep();
   const vcl_ptrdiff_t istep = image.istep();
   const vcl_ptrdiff_t jstep = image.jstep();
-  
+
   typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
   const T* row = image.top_left_ptr();
   for (unsigned int j=0; j<nj; ++j, row+=jstep){
@@ -77,16 +77,16 @@ void update_masked(bbgm_image_of<dist_>& dimg,
   assert(dimg.ni() == mask.ni());
   assert(dimg.nj() == mask.nj());
   assert(data_dim == image.nplanes());
-  
+
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
-  
+
   const vcl_ptrdiff_t planestep = image.planestep();
   const vcl_ptrdiff_t istep = image.istep();
   const vcl_ptrdiff_t jstep = image.jstep();
   const vcl_ptrdiff_t m_istep = mask.istep();
   const vcl_ptrdiff_t m_jstep = mask.jstep();
-  
+
   typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
   const bool* m_row = mask.top_left_ptr();
   const T* row = image.top_left_ptr();

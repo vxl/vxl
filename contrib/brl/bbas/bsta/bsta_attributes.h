@@ -5,7 +5,7 @@
 // \file
 // \brief Attributes for distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/26/06
+// \date January 26, 2006
 //
 // Some algorithms require distributions to maintain additions
 // attributes.  Attributes inherit from a distribution and

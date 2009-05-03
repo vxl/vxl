@@ -1,4 +1,5 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_occupancy_vff_process.cxx
+
 //:
 // \file
 // \brief Save the voxel world occupancy grid in binary format
@@ -6,10 +7,10 @@
 // readable by GE MicroView and other volume renderers
 //
 // \author Daniel Crispell
-// \date 05/01/2008
+// \date May 01, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with bvxm_process architecture.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -39,11 +40,10 @@ bool bvxm_save_occupancy_vff_process_cons(bprb_func_process& pro)
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
-  
-  return true;
 
+  return true;
 }
 
 bool bvxm_save_occupancy_vff_process(bprb_func_process& pro)
@@ -63,10 +63,10 @@ bool bvxm_save_occupancy_vff_process(bprb_func_process& pro)
   vcl_string filename = pro.get_input<vcl_string>(i++);
   unsigned scale_idx = pro.get_input<unsigned>(i++);
 
-  if( !world ){
+  if ( !world ){
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
-  
+
   return world->save_occupancy_vff(filename,scale_idx);
 }

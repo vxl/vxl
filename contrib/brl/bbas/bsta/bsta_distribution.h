@@ -5,7 +5,7 @@
 // \file
 // \brief A base class for probability distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/25/06
+// \date January 25, 2006
 //
 // \verbatim
 //  Modifications
@@ -42,10 +42,9 @@ class bsta_distribution<T,1>
     typedef T math_type;
     //: The type used for a n-dimensional vector of math types
     typedef T vector_type;
-  
+
     //: for compatiblity with vpdl/vpdt
     typedef vector_type field_type;
-
 };
 
 

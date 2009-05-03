@@ -1,12 +1,11 @@
 // This is gel/mrc/vpgl/vpgl_lens_distortion.h
 #ifndef vpgl_lens_distortion_h_
 #define vpgl_lens_distortion_h_
-
 //:
 // \file
 // \brief An abstract base class for all lens distortions.
 // \author Matt Leotta
-// \date 08/19/05
+// \date August 19, 2005
 //
 //   A lens distortion is a 2D warping of the image plane to account for lens effects
 //   not accounted for by the simple camera models.  It is assumed that the map is

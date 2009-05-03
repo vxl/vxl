@@ -1,5 +1,5 @@
 // This is brl/bseg/brec/pro/processes/brec_update_changes_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A process to update a change map iteratively based on background and foreground models
@@ -7,13 +7,14 @@
 //  CAUTION: Input image is assumed to be a probability map, i.e. have type float with values in [0,1]
 //
 // \author Ozge Can Ozcanli
-// \date 10/01/08
+// \date October 01, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
@@ -57,14 +58,14 @@ bool brec_update_changes_process(bprb_func_process& pro)
   }
 
   //: get input
-  unsigned i = 0; 
+  unsigned i = 0;
   vil_image_view_base_sptr change_map = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<float> change_map_f(change_map);
 
   vil_image_view_base_sptr orig_view = pro.get_input<vil_image_view_base_sptr>(i++);
   unsigned n = pro.get_input<unsigned>(i++);
   float sigma = pro.get_input<float>(i++);
-  
+
   vul_timer t2;
   t2.mark();
 
@@ -88,13 +89,13 @@ bool brec_update_changes_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(bp.bg_map_);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_map_sptr);
-  
+
   vil_image_view<vxl_byte> out_b(bp.bg_map_.ni(), bp.bg_map_.nj());
   vil_convert_stretch_range_limited(bp.bg_map_, out_b, 0.0f, 1.0f);
 
   vil_image_view_base_sptr out_map_sptr2 = new vil_image_view<vxl_byte>(out_b);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr2);
-  
+
   vcl_cout << " whole process took: " << t2.real() / (60*1000.0f) << " mins.\n";
 
   return true;

@@ -5,16 +5,12 @@
 // \file
 // \brief A builder class that generates the MRF network
 // \author J. L. Mundy
-// \date 1/18/04
+// \date January 18, 2004
 //
 // The builder generates bmrf_epi_seg(s) from a series of frames and adds
 // them to the network.
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+
 #include <vil/vil_image_view.h>
-//#include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
 #include <vcl_set.h>
 #include <vcl_map.h>

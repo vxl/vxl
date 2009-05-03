@@ -3,15 +3,12 @@
 // \brief brec recognition utilities
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
-//      
+// \date October 01, 2008
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
-
 
 #include "brec_fg_bg_pair_density.h"
 #include <vcl_cmath.h>

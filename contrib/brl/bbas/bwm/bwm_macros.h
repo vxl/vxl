@@ -5,19 +5,14 @@
 // \file
 // \brief Macros for use in a main function ow bwm project.
 // \author Gamze Tunali, (gtunali@brown.edu)
-// \date 10/24/07
+// \date October 24, 2007
 //
 // See bwm/exe
-//
-// \verbatim
-//  Modifications
-// \endverbatim
 
 #define REG_TABLEAU(tab) \
-  bwm_tableau_mgr::instance()->register_tableau(new tab());
+  bwm_tableau_mgr::instance()->register_tableau(new tab())
 
 #define REG_PROCESS(proc) \
-  bwm_process_mgr::instance()->register_process(new proc());
-
+  bwm_process_mgr::instance()->register_process(new proc())
 
 #endif // bwm_macros_h_

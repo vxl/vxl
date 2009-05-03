@@ -1,17 +1,16 @@
+#ifndef brec_bg_pair_density_H_
+#define brec_bg_pair_density_H_
 //:
 // \file
 // \brief brec background pair model
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
+// \date October 01, 2008
 //
 // \verbatim
 //  Modifications
 //   <none yet>
 // \endverbatim
-
-#ifndef brec_bg_pair_density_H_
-#define brec_bg_pair_density_H_
 
 #include "brec_pair_density.h"
 

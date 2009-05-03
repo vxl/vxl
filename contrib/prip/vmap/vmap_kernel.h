@@ -5,7 +5,7 @@
 // \file
 // \brief provides the base kernel classes which can be used to contract/remove edges from any map.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
 //  Modifications

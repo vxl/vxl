@@ -2,7 +2,7 @@
 // \file
 // \brief  Test for rpc registration process
 // \author Gamze D. Tunali
-// \date   03/07/2008
+// \date   March 07, 2008
 //
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_voxel_world.h>

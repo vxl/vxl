@@ -5,14 +5,14 @@
 // \file
 // \brief The 8 point algorithm for computing a fundamental matrix from point correspondences.
 // \author Thomas Pollard
-// \date 5/10/05
+// \date May 10, 2005
 //
 //  The point correspondences in relation to F are defined by
-//     pl^t[F]pr = 0
+//     $pl^t[F]pr = 0$
 //
 // \verbatim
 //  Modifications
-//   9/27/2007  Ricardo Fabbri   Imposed order of 1) rank-enforcement and 2) de-normalization.
+//   Sep 27, 2007  Ricardo Fabbri   Imposed order of 1) rank-enforcement and 2) de-normalization.
 // \endverbatim
 
 #include <vgl/vgl_homg_point_2d.h>

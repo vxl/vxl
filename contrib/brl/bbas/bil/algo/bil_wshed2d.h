@@ -7,7 +7,7 @@
 // \brief The watershed transform algorithm as explained in Soille-Vincent paper
 //
 // \author H.C. Aras
-// \date 02/17/2005 (committed), written in August'2004
+// \date February 17, 2005 (committed), written in August'2004
 //
 // \verbatim
 //  Modifications:

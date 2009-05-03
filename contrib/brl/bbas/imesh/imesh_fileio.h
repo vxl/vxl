@@ -1,17 +1,11 @@
 // This is brl/bbas/imesh/imesh_fileio.h
 #ifndef imesh_fileio_h_
 #define imesh_fileio_h_
-
 //:
 // \file
 // \brief Functions for reading mesh files
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 5/2/08
-//
-// \verbatim
-//  Modifications
-// \endverbatim
-
+// \date May 2, 2008
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -56,5 +50,5 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh);
 
 //: Write a mesh into a kml collada file
 void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh);
-                             
+
 #endif // imesh_fileio_h_

@@ -3,7 +3,7 @@
 //:
 // \file
 // \author Ming-Ching Chang
-// \date 040312
+// \date 2004-03-12
 //  Ming: General 3D Utilities
 
 #include <vcl_sstream.h>

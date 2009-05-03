@@ -1,24 +1,20 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_voxel_world_process.cxx
+
 //:
 // \file
 // \brief A process for creating a new bvxm_voxel_world from scratch
 // \author Daniel Crispell
-// \date 02/06/2008
+// \date February 06, 2008
 //
 // \verbatim
 //  Modifications
-//    Ozge C Ozcanli  02/19/2008  removed input string and modified to read input directory 
-//                                path as a parameter from an XML  should be modified
-//                                to read all the parameters from the same XML file
-//   
-//    Gamze Tunali    02/24/2008  added the parameter list to the process. 
-//                                It receives all the world parameters as process 
-//                                parameters now
-//
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes. 
+//   Ozge C Ozcanli  Feb 19, 2008 - removed input string and modified to read input directory
+//                                  path as a parameter from an XML  should be modified
+//                                  to read all the parameters from the same XML file
+//   Gamze Tunali    Feb 24, 2008 - added the parameter list to the process.
+//                                  It receives all the world parameters as process parameters now
+//   Isabel Restrepo Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
-
-
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
@@ -43,7 +39,7 @@
 namespace bvxm_create_voxel_world_process_globals
 {
   //this process takes no inputs
-  const unsigned n_outputs_ = 1; 
+  const unsigned n_outputs_ = 1;
   //Define parameters here
   const vcl_string param_input_directory_ =  "input_directory";
   const vcl_string param_corner_x_ = "corner_x";
@@ -59,17 +55,16 @@ namespace bvxm_create_voxel_world_process_globals
   const vcl_string param_max_scale_ = "max_scale";
 }
 
-//:sets input and output types 
+//:sets input and output types
 bool bvxm_create_voxel_world_process_cons(bprb_func_process& pro)
 {
   //set output types
   using namespace bvxm_create_voxel_world_process_globals;
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_world_sptr";
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
   return true;
-  
 }
 
 //:creates a voxel world
@@ -85,7 +80,7 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
   }
   vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: " <<  vul_file::get_cwd() << vox_dir << vcl_endl;
 
-  
+
   float corner_x = 0.0f;
   pro.parameters()->get_value(param_corner_x_, corner_x);
   float corner_y = 0.0f;

@@ -5,7 +5,7 @@
 // \file
 // \brief A mixture of distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/26/06
+// \date January 26, 2006
 //
 // \verbatim
 //  Modifications
@@ -20,9 +20,6 @@
 #include <vcl_iostream.h>
 #include "bsta_sampler.h"
 #include <vpdl/vpdt/vpdt_dist_traits.h>
-
-
-
 
 //: A mixture of distributions
 template <class dist_>
@@ -209,7 +206,7 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
     T sum = 0;
     for (unsigned i=0; i<num_components(); ++i)
       sum += components_[i].weight;
-    
+
     vcl_vector<float> ps;
     vcl_vector<unsigned> ids;
     for (unsigned i=0; i<num_components(); ++i) {
@@ -224,11 +221,10 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
     vcl_vector<unsigned> out;
     bsta_sampler<unsigned>::sample(ids, ps, 1, out);
     assert(out.size() == 1);
-    
+
     return components_[out[0]].distribution.sample(rng);
     //return components_[out[0]].distribution.mean();
   }
-
 };
 
 template <class dist_>

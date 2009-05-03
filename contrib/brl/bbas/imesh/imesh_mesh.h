@@ -5,11 +5,7 @@
 // \file
 // \brief An indexed face set mesh
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 5/2/08
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+// \date May 2, 2008
 
 #include <vcl_vector.h>
 #include <vcl_memory.h>
@@ -37,7 +33,7 @@ class imesh_mesh
   imesh_mesh(const imesh_mesh& other);
 
   //: Assignment operator
-  imesh_mesh& operator=(imesh_mesh const& other); 
+  imesh_mesh& operator=(imesh_mesh const& other);
 
   //: Return the number of vertices
   unsigned int num_verts() const {return verts_->size();}

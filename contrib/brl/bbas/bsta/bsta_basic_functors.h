@@ -5,12 +5,13 @@
 // \file
 // \brief Basic functors for simple operations on Gaussian mixtures
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/30/06
+// \date January 30, 2006
 //
 // \verbatim
 //  Modifications
 //   (none yet)
 // \endverbatim
+
 #include <vcl_vector.h>
 #include <vpdl/vpdt/vpdt_enable_if.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
@@ -129,9 +130,9 @@ class bsta_mean_functor
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
   enum { return_dim = dist_::dimension };
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef bsta_mean_functor<other_dist> other;
   };
@@ -148,18 +149,18 @@ class bsta_mean_functor
 template <class dist_>
 class bsta_mean_functor<dist_, typename vpdt_enable_if<vpdt_is_mixture<dist_> >::type >
 {
-public:
-  typedef typename dist_::field_type return_type; 
+ public:
+  typedef typename dist_::field_type return_type;
   enum { return_dim = dist_::dimension };
   //: is this functor valid for its distribution type
   static const bool valid_functor = false;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef bsta_mean_functor<other_dist> other;
   };
-  
+
   //: The main function
   bool operator() ( const dist_& d, return_type& retval ) const
   {

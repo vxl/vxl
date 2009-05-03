@@ -5,10 +5,11 @@
 // \file
 // \brief  Examiner viewer tableau for 3D scenes
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date   5/25/04
+// \date   May 25, 2004
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include "bgui3d_fullviewer_tableau.h"

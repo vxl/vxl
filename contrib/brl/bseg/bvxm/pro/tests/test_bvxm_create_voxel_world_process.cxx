@@ -2,8 +2,8 @@
 // \file
 // \brief  Test for creating voxel world from world model parameters
 // \author Gamze D. Tunali
-// \date   02/23/2008
-//
+// \date   February 23, 2008
+
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>

@@ -8,7 +8,7 @@
 // The relative occurrence information of the parts will be stored in the edge
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
+// \date October 16, 2008
 //
 // \verbatim
 //  Modifications
@@ -62,7 +62,7 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   virtual bxml_data_sptr xml_element();
   virtual bool xml_parse_element(bxml_data_sptr data);
 
-protected:
+ protected:
   bool to_central_;
 
   //: 2 1D gaussian models to model location of v2 wrt central part in v1

@@ -5,10 +5,11 @@
 // \file
 // \brief provides a wrapper in order to use any iterator on pairs (e.g. vcl_map::iterator) as if it was an iterator on the 2nd elmt
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 //: A wrapper in order to use any iterator on pairs (e.g. vcl_map::iterator) as if it was an iterator on the second element.

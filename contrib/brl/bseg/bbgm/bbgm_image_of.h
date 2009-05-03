@@ -1,17 +1,11 @@
 // This is brl/bseg/bbgm/bbgm_image_of.h
 #ifndef bbgm_image_of_h_
 #define bbgm_image_of_h_
-
 //:
 // \file
 // \brief An image of distributions (templated)
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 01/27/06
-//
-// \verbatim
-//  Modifications
-// \endverbatim
-
+// \date January 27, 2006
 
 #include <vcl_typeinfo.h>
 #include <vbl/vbl_array_2d.h>
@@ -23,7 +17,7 @@ class bbgm_image_base : public vbl_ref_count
 {
   public:
     virtual ~bbgm_image_base(){}
-  
+
     //: return the type_info for the distribution type
     virtual const vcl_type_info& dist_typeid() const=0;
 
@@ -39,18 +33,18 @@ class bbgm_image_base : public vbl_ref_count
 };
 
 
-//: An image of distributions 
-template<class _dist>
+//: An image of distributions
+template<class dist>
 class bbgm_image_of : public bbgm_image_base
 {
  public:
   //: Constructor
-  bbgm_image_of<_dist>(){};
-  bbgm_image_of<_dist>(unsigned int ni, unsigned int nj,
-                        const _dist& model) : data_(nj,ni,model) {}
-  
+  bbgm_image_of<dist>(){};
+  bbgm_image_of<dist>(unsigned int ni, unsigned int nj,
+                      const dist& model) : data_(nj,ni,model) {}
+
   //: return the type_info for the distribution type
-  virtual const vcl_type_info& dist_typeid() const { return typeid(_dist); }
+  virtual const vcl_type_info& dist_typeid() const { return typeid(dist); }
 
   //: Return the width of the image
   unsigned int ni() const { return data_.cols(); }
@@ -63,46 +57,46 @@ class bbgm_image_of : public bbgm_image_base
   void set_size(unsigned ni, unsigned nj) { data_.resize(nj,ni); }
 
   //: Read only access to the distributions
-  const _dist& operator() (unsigned int i, unsigned int j) const
+  const dist& operator() (unsigned int i, unsigned int j) const
   { return data_(j,i); }
 
   //: Access to the distributions
-  _dist& operator() (unsigned int i, unsigned int j)
+  dist& operator() (unsigned int i, unsigned int j)
   { return data_(j,i); }
 
   //: Set the distribution at (i,j) to a copy of d
-  void set(unsigned int i, unsigned int j, const _dist& d)
+  void set(unsigned int i, unsigned int j, const dist& d)
   { data_(j,i) = d; }
 
   //: An iterator over the distribution in the image
   class iterator
   {
     public:
-      iterator(_dist* ptr) : ptr_(ptr) {}
+      iterator(dist* ptr) : ptr_(ptr) {}
       iterator(const iterator& other) : ptr_(other.ptr_) {}
       void operator++() { ++ptr_; }
-      _dist& operator*(){ return *ptr_; }
-      _dist* operator -> () { return ptr_; }
+      dist& operator*(){ return *ptr_; }
+      dist* operator -> () { return ptr_; }
       bool operator==(const iterator& other) { return ptr_ == other.ptr_; }
       bool operator!=(const iterator& other) { return ptr_ != other.ptr_; }
 
     private:
-      _dist* ptr_;
+      dist* ptr_;
   };
 
   class const_iterator
   {
     public:
-      const_iterator(const _dist* ptr) : ptr_(ptr) {}
+      const_iterator(const dist* ptr) : ptr_(ptr) {}
       const_iterator(const const_iterator& other) : ptr_(other.ptr_) {}
       void operator++() { ++ptr_; }
-      const _dist& operator*(){ return *ptr_; }
-      const _dist* operator -> () { return ptr_; }
+      const dist& operator*(){ return *ptr_; }
+      const dist* operator -> () { return ptr_; }
       bool operator==(const const_iterator& other) { return ptr_ == other.ptr_; }
       bool operator!=(const const_iterator& other) { return ptr_ != other.ptr_; }
 
     private:
-      const _dist* ptr_;
+      const dist* ptr_;
   };
 
   //: Return an iterator to the first element
@@ -134,8 +128,7 @@ class bbgm_image_of : public bbgm_image_base
 
  private:
   //: the data
-   vbl_array_2d<_dist > data_;
-
+   vbl_array_2d<dist> data_;
 };
 
 

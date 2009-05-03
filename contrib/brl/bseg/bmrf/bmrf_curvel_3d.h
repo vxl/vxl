@@ -5,11 +5,7 @@
 // \file
 // \brief An uncertain 3D curve element
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/23/04
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+// \date March 23, 2004
 
 #include <bmrf/bmrf_node_sptr.h>
 #include <bbas/bugl/bugl_gaussian_point_3d.h>

@@ -5,7 +5,7 @@
 // \file
 // \brief Epipolar transformation functions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 02/24/04
+// \date February 24, 2004
 //
 // This file contains a set of functions for epipolar transformations
 // Transformations are calculated as
@@ -13,10 +13,6 @@
 // where (s0,alpha) is an initial point in epipolar space, (s,alpha) is the
 // transformed point, t is time, and gamma is a function of alpha and time
 // that defines the transformation.  See bmrf_gamma_func.h
-//
-// \verbatim
-//  Modifications
-// \endverbatim
 
 #include <bmrf/bmrf_gamma_func.h>
 #include <bmrf/bmrf_gamma_func_sptr.h>

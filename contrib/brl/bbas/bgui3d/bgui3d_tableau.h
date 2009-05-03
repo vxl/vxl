@@ -5,10 +5,11 @@
 // \file
 // \brief  Basic tableau that wraps Coin3D into VGUI
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date   5/24/04
+// \date   May 24, 2004
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vcl_memory.h>

@@ -4,7 +4,7 @@
 // \file
 // \brief A 3-D slab of data of type T.  Based loosely on vil_image_view.
 // \author Daniel Crispell (dec@lems.brown.edu)
-// \date 1/22/2008
+// \date January 22, 2008
 
 #include <vcl_cassert.h>
 

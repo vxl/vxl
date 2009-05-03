@@ -1,9 +1,7 @@
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
-//
-//
+// \date October 16, 2008
 
 #include "brec_part_base.h"
 #include "brec_hierarchy_edge.h"

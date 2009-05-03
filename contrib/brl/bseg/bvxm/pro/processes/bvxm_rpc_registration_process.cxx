@@ -1,13 +1,14 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_rpc_registration_process.cxx
+
 //:
 // \file
 // \brief A process that optimizes rpc camera parameters based on edges in images and the voxel world
 //
 // \author Ibrahim Eden
-// \date 03/02/2008
+// \date March 02, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with new bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>

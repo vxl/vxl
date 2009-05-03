@@ -1,15 +1,15 @@
 // This is prip/vdtop/vil_canny_deriche_grad_filter.h
 #ifndef vil_canny_deriche_grad_filter_h_
 #define vil_canny_deriche_grad_filter_h_
-
 //:
 // \file
 // \brief Function computing canny deriche gradient.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vil/vil_image_view.h>
@@ -18,8 +18,8 @@
 //: the canny_deriche filter for 1d pass.
 template <class srcT, class destT, class accumT>
 inline void vil_canny_deriche_base_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
-                                              destT* dest, vcl_ptrdiff_t dstep,
-                                              int n, accumT a1, accumT a2, accumT a3, accumT a4, accumT b1, accumT b2, accumT c1)
+                                             destT* dest, vcl_ptrdiff_t dstep,
+                                             int n, accumT a1, accumT a2, accumT a3, accumT a4, accumT b1, accumT b2, accumT c1)
 {
   const srcT* s = src, *p=src;
   const srcT* src_end = src + (n-1)*sstep;
@@ -49,9 +49,9 @@ inline void vil_canny_deriche_base_filter_1d(const srcT* src, vcl_ptrdiff_t sste
 //: the canny deriche filter.
 template <class srcT, class destT, class accumT>
 inline void vil_canny_deriche_grad_filter(const vil_image_view<srcT>& src_im,
-                                   vil_image_view<destT>& grad_i,
-                                   vil_image_view<destT>& grad_j,
-                                   accumT alpha)
+                                          vil_image_view<destT>& grad_i,
+                                          vil_image_view<destT>& grad_j,
+                                          accumT alpha)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();

@@ -5,8 +5,7 @@
 // \file
 // \brief A lens distortion adaptor for vil_warp
 // \author Matt Leotta
-// \date 8/22/05
-//
+// \date August 22, 2005
 
 #include <vpgl/vpgl_lens_distortion.h>
 #include <vil/vil_image_view.h>

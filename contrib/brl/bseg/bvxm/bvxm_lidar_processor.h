@@ -6,7 +6,7 @@
 // \brief A class for a lidar processor
 //
 // \author Isabel Restrepo
-// \date 04/03/2008
+// \date April 03, 2008
 // \verbatim
 //  Modifications
 //   <none yet>

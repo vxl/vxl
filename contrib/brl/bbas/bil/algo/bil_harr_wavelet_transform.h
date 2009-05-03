@@ -6,7 +6,7 @@
 // \brief Harr Wavelet Transform on Images
 //
 // \author Matthew Leotta, (mleotta@lems.brown.edu)
-// \date 10/20/2005
+// \date October 20, 2005
 //
 // \verbatim
 //  Modifications

@@ -1,17 +1,11 @@
 // This is brl/bbas/imesh/tests/test_share.h
 #ifndef imesh_test_share_h_
 #define imesh_test_share_h_
-
 //:
 // \file
 // \brief Shared functions used by multiple test files
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 6/26/08
-//
-// \verbatim
-//  Modifications
-// \endverbatim
-
+// \date June 26, 2008
 
 #include <imesh/imesh_mesh.h>
 

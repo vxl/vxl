@@ -1,5 +1,5 @@
 // This is brl/bseg/brec/pro/processes/brec_bayesian_update_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A class to apply Bayesian rule to find posterior probability of an entity given a measurement map based on background and foreground models of the given entity
@@ -11,13 +11,14 @@
 //               return glitch detection map
 //
 // \author Ozge Can Ozcanli
-// \date 10/01/08
+// \date October 01, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
@@ -52,7 +53,7 @@ bool brec_bayesian_update_process_cons(bprb_func_process& pro)
   pro.parameters()->add("k for p(ad | gb)", "k1", 1.4778f);
   pro.parameters()->add("lambda for p(ad | not gb)", "lambda2", 0.9667f);
   pro.parameters()->add("k for p(ad | not gb)", "k2", 1.0f); // if k is 1, weibull becomes an exponential distribution
-  
+
   return true;
 }
 

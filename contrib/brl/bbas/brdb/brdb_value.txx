@@ -5,13 +5,12 @@
 // \file
 // \brief Templated code for brdb_value_t
 // \author Matt Leotta
-// \date 1/25/05
+// \date January 25, 2005
 //
 // \verbatim
 //  Modifications
 //   (none yet)
 // \endverbatim
-
 
 #include "brdb_value.h"
 #include <vcl_cassert.h>

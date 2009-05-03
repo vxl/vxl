@@ -5,7 +5,7 @@
 // \file
 // \brief A KD-Tree template code
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 6/3/08
+// \date June 3, 2008
 //
 // \verbatim
 //  Modifications

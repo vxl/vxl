@@ -5,17 +5,13 @@
 // \file
 // \brief A Markov Random Field (MRF) network
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 1/13/04
+// \date January 13, 2004
 //
 // The MRF network object maintains pointers to all of the nodes
 // in the network.  It also handle the creation and destruction of
 // arcs between nodes.  The network object also contains search
 // iterators to iterate through the nodes along arcs using search
 // algorithms such as depth-first or breadth-first.
-//
-// \verbatim
-//  Modifications
-// \endverbatim
 
 #include <vcl_deque.h>
 #include <vcl_set.h>

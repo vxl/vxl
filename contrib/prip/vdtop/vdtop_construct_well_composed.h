@@ -7,10 +7,11 @@
 // ( G. Bertrand, J. C. Everat and M. Couprie, "Image segmentation through operators based upon topology",
 //   Journal of Electronic Imaging, Vol. 6, N. 4, 395-405, 1997).
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vdtop_kernel.h"

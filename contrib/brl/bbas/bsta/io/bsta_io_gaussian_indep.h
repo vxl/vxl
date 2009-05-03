@@ -1,15 +1,15 @@
 // This is brl/bbas/bsta/io/bsta_io_gaussian_indep.h
 #ifndef bsta_io_gaussian_indep_h_
 #define bsta_io_gaussian_indep_h_
-
 //:
 // \file
 // \brief Binary I/O for independent gaussians
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 3/28/06
+// \date March 28, 2006
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <bsta/bsta_gaussian_indep.h>

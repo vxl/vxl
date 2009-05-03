@@ -5,7 +5,7 @@
 // \file
 // \brief Bundle adjustment sparse least squares functions
 // \author Matt Leotta
-// \date 4/18/05
+// \date April 18, 2005
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>

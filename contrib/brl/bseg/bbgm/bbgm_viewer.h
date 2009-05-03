@@ -1,17 +1,11 @@
 // This is brl/bseg/bbgm/bbgm_viewer.h
 #ifndef bbgm_viewer_h_
 #define bbgm_viewer_h_
-
 //:
 // \file
 // \brief Create a vil_image_view of an image of distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 01/31/06
-//
-// \verbatim
-//  Modifications
-// \endverbatim
-
+// \date January 31, 2006
 
 #include "bbgm_image_of.h"
 #include "bbgm_image_sptr.h"
@@ -24,9 +18,9 @@
 //: base class for viewers
 class bbgm_viewer : public vbl_ref_count
 {
-public:
+ public:
   //: Constructor
-  bbgm_viewer() : active_component_(0), view_maker_(bbgm_view_maker_sptr(NULL)) 
+  bbgm_viewer() : active_component_(0), view_maker_(bbgm_view_maker_sptr(NULL))
   {fail_val_[0] = fail_val_[1] = fail_val_[2] = 0.0;}
   //: Destructor
   virtual ~bbgm_viewer() {}
@@ -52,12 +46,12 @@ public:
   //: Return the active component
   unsigned int active_component() const { return active_component_; }
 
-protected:
+ protected:
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
-  virtual bbgm_view_maker_sptr 
+  virtual bbgm_view_maker_sptr
   find_vm(const vcl_type_info& dist_type) const = 0;
-  
+
   //: the data used when a pixel fails the operation
   double fail_val_[3];
   //: the active component to use if the distribution is a mixture
@@ -71,29 +65,29 @@ protected:
 //: A mean viewer
 class bbgm_mean_viewer : public bbgm_viewer
 {
-public:
+ public:
   //: Return the name of this view
   virtual vcl_string name() const { return "mean"; }
-  
-  //: Register a new view_maker 
+
+  //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
   //         registered.
   static bool register_view_maker(const bbgm_view_maker_sptr& vm);
-  
+
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
-  static bbgm_view_maker_sptr 
+  static bbgm_view_maker_sptr
   find_view_maker(const vcl_type_info& dist_type);
-  
-protected:
+
+ protected:
   //: A virtual wrapper around the static find function
-  virtual bbgm_view_maker_sptr 
+  virtual bbgm_view_maker_sptr
   find_vm(const vcl_type_info& dist_type) const
   {
     return find_view_maker(dist_type);
   }
-  
-private:
+
+ private:
   //: The registered view maker objects
   static vcl_vector<bbgm_view_maker_sptr> reg_vms;
 };
@@ -103,29 +97,29 @@ private:
 //: A variance viewer
 class bbgm_variance_viewer : public bbgm_viewer
 {
-public:
+ public:
   //: Return the name of this view
   virtual vcl_string name() const { return "variance"; }
-  
-  //: Register a new view_maker 
+
+  //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
   //         registered.
   static bool register_view_maker(const bbgm_view_maker_sptr& vm);
-  
+
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
-  static bbgm_view_maker_sptr 
+  static bbgm_view_maker_sptr
   find_view_maker(const vcl_type_info& dist_type);
-  
-protected:
+
+ protected:
   //: A virtual wrapper around the static find function
-  virtual bbgm_view_maker_sptr 
+  virtual bbgm_view_maker_sptr
   find_vm(const vcl_type_info& dist_type) const
   {
     return find_view_maker(dist_type);
   }
-  
-private:
+
+ private:
   //: The registered view maker objects
   static vcl_vector<bbgm_view_maker_sptr> reg_vms;
 };
@@ -135,33 +129,32 @@ private:
 //: A weight viewer
 class bbgm_weight_viewer : public bbgm_viewer
 {
-public:
+ public:
   //: Return the name of this view
   virtual vcl_string name() const { return "weight"; }
-  
-  //: Register a new view_maker 
+
+  //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
   //         registered.
   static bool register_view_maker(const bbgm_view_maker_sptr& vm);
-  
+
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
-  static bbgm_view_maker_sptr 
+  static bbgm_view_maker_sptr
   find_view_maker(const vcl_type_info& dist_type);
-  
-protected:
+
+ protected:
   //: A virtual wrapper around the static find function
-  virtual bbgm_view_maker_sptr 
+  virtual bbgm_view_maker_sptr
   find_vm(const vcl_type_info& dist_type) const
   {
     return find_view_maker(dist_type);
   }
-  
-private:
+
+ private:
   //: The registered view maker objects
   static vcl_vector<bbgm_view_maker_sptr> reg_vms;
 };
-
 
 
 #endif // bbgm_viewer_h_

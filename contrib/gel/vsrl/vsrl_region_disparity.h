@@ -12,7 +12,7 @@
 // assigns it to each pixel in the region.
 //
 // \author G.W. Brooksby
-// \date 09/13/03, 9/17/03
+// \date Sept 13, 2003; Sept 17, 2003
 // Written at ORD on two LONG layovers...
 
 #include <vil1/vil1_image.h>

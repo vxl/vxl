@@ -1,17 +1,18 @@
 // This is brl/bseg/brec/pro/processes/brec_glitch_overlay_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A process to generate a new probability map that extends glitch detection probability over to its effective region
 //
 // \author Ozge Can Ozcanli
-// \date 12/09/08
+// \date December 09, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <brdb/brdb_value.h>
@@ -60,7 +61,7 @@ bool brec_glitch_overlay_process(bprb_func_process& pro)
   unsigned ni = map.ni(), nj = map.nj();
 
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  
+
   if (img->pixel_format() != VIL_PIXEL_FORMAT_BYTE)
     return false;
   vil_image_view<vxl_byte> input_img(img);
@@ -70,8 +71,8 @@ bool brec_glitch_overlay_process(bprb_func_process& pro)
   vil_image_view<float> out(ni, nj, 1);
   brec_glitch::extend_prob_to_square_region(c_size, map, out);
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out));
+
   vil_image_view<vxl_byte> out2(ni, nj, 3);
   if (input_img.nplanes() == 3) {
     for (unsigned i = 0; i < ni; i++)
@@ -95,9 +96,9 @@ bool brec_glitch_overlay_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> out_byte(ni, nj, 1);
   vil_convert_stretch_range_limited(out, out_byte, 0.0f, max);
 
-  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out_byte)); 
-  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<vxl_byte>(out2)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out_byte));
+  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<vxl_byte>(out2));
+
   return true;
 }
 

@@ -5,7 +5,7 @@
 // \file
 // \brief Functors for Bayesian classification
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 07/27/05
+// \date July 27, 2005
 //
 // \verbatim
 //  Modifications

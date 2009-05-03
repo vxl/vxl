@@ -8,10 +8,10 @@
 // A robust algorithm for computing the fundamental matrix from lists
 // of corresponding points.  This uses RREL to do the robust computation.
 // \author Thomas Pollard
-// \date 5/27/05
+// \date May 27, 2005
 //
 //  The point correspondences in relation to F are defined by
-//     pl^t[F]pr = 0
+//     $pl^t[F]pr = 0$
 //
 // Should template this class.
 
@@ -51,7 +51,7 @@ class vpgl_fm_compute_ransac
 
   //: Set the trace level for debugging
   void set_trace_level(int trace_level) { trace_level_ = trace_level; }
-  
+
   //: After "compute" indices will have true set for correspondences that are outliers
   vcl_vector<bool> outliers;
 
@@ -62,7 +62,7 @@ class vpgl_fm_compute_ransac
   double outlier_thresh_;
   double max_outlier_frac_;
   double desired_prob_good_;
-  int max_pops_; 
+  int max_pops_;
   bool gen_all_;
   int trace_level_;
 };
@@ -105,7 +105,8 @@ class rrel_fm_problem : public rrel_estimation_problem
   //: Weighted least squares parameter estimate.
   //  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
-    vnl_matrix<double>& norm_covar, const vcl_vector<double>* weights=0 ) const;
+                                   vnl_matrix<double>& norm_covar,
+                                   const vcl_vector<double>* weights=0 ) const;
 
   // Toggles detailed printing of computations.
   bool verbose;

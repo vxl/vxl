@@ -2,7 +2,7 @@
 // \file
 // \brief  Tests for image normalization process
 // \author Ozge C. Ozcanli
-// \date   03/04/2008
+// \date   March 04, 2008
 //
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
@@ -157,8 +157,8 @@ MAIN( test_bvxm_normalize_image_process )
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(unsigned);
-  
-  
+
+
   unsigned ni = 640;
   unsigned nj = 480;
 

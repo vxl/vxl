@@ -5,12 +5,12 @@
 // \file
 // \brief A camera model using the standard 3x4 matrix representation.
 // \author Thomas Pollard
-// \date 01/28/05
+// \date January 28, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
 // \verbatim
 //  Modifications
-//  5/6/2005  Ricardo Fabbri   Added binary I/O
+//  May 6, 2005  Ricardo Fabbri   Added binary I/O
 // \endverbatim
 //
 // This is the most general camera class based around the 3x4 matrix camera model.

@@ -5,10 +5,9 @@
 // \file
 // \brief A smart pointer to a bmrf_arc.
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 6/7/04
+// \date June 7, 2004
 //
 // Include this file to use the smart pointer bmrf_arc_sptr
-//
 
 class bmrf_arc;
 

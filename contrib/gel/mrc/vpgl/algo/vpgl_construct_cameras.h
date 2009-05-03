@@ -5,7 +5,7 @@
 // \file
 // \brief This class creates a pair of cameras from a set of corresponding points from a pair of images.
 // \author Vishal Jain, (vj@lems.brown.edu)
-// \date 08/31/04
+// \date Aug 31, 2004
 //
 // The first camera is assumed to be identity with supplied calibration matrix.
 // The second camera's center is unique up to a scale.

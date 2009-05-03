@@ -2,7 +2,7 @@
 // \file
 // \brief  Test for converting an image src to a n-planes image using vil_pro
 // \author Isabel Restrepo
-// \date   08/07/2008
+// \date   August 07, 2008
 //
 
 #include <testlib/testlib_test.h>

@@ -11,7 +11,7 @@
 //       so during training, create samples by subtracting other parts' centers from central part's center after measuring from the image
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/16/08
+// \date October 16, 2008
 //
 // \verbatim
 //  Modifications
@@ -48,8 +48,6 @@ class brec_part_hierarchy_builder
 
   //: for note recognition
   static brec_part_hierarchy_sptr construct_mi_detector();
-  
-
 };
 
 #endif // brec_part_hierarchy_builder_h_

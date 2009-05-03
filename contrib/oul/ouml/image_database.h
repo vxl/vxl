@@ -14,7 +14,7 @@
 // to persist.
 //
 // \author Brendan McCane
-// \date 17/7/01
+// \date 17 July 2001
 //
 // Copyright (c) 2001 Brendan McCane
 // University of Otago, Dunedin, New Zealand
@@ -31,17 +31,17 @@
 class ImageDatabase
 {
   // the comparison object for the map
-public:
+ public:
   struct ltstr
   {
     bool operator()(const char* s1, const char* s2) const;
   };
 
-private:
+ private:
   // the multimap to store label/image pairs
   vcl_multimap<const char*, vil1_memory_image *, ltstr> image_db;
 
-public:
+ public:
   // typedefs for access to the image_db
   typedef vcl_multimap<const char*, vil1_memory_image *, ltstr>::iterator iterator;
   typedef vcl_multimap<const char*, vil1_memory_image *, ltstr>::const_iterator const_iterator;

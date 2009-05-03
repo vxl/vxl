@@ -6,7 +6,7 @@
 // \brief  Least Square Function Definition to solve for the right projection plane while moving a polygon to the specified point while keeping the plane in the camera direction of the master camera observer
 //
 // \author Gamze Tunali
-// \date   8/20/2007
+// \date   August 20, 2007
 //
 // \verbatim
 //  Modifications

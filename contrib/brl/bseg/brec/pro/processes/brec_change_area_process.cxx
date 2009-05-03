@@ -1,17 +1,18 @@
 // This is brl/bseg/brec/pro/processes/brec_change_area_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A class to find expected area over the whole image for a given prob map
 //
 // \author Ozge Can Ozcanli
-// \date 10/01/08
+// \date October 01, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
@@ -72,7 +73,7 @@ bool brec_change_area_process(bprb_func_process& pro)
 
   pro.set_output_val<float>(0, sum);
   pro.set_output_val<float>(1, (sum/count)*100.0f);
-  
+
   return true;
 }
 

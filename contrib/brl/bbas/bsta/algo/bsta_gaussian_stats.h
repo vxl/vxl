@@ -5,7 +5,7 @@
 // \file
 // \brief Statistics using Gaussians
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/26/06
+// \date January 26, 2006
 //
 // \verbatim
 //  Modifications

@@ -3,13 +3,9 @@
 #define bmrf_curve_3d_h_
 //:
 // \file
-// \brief A 3D curve 
+// \brief A 3D curve
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/23/04
-//
-// \verbatim
-//  Modifications
-// \endverbatim
+// \date March 23, 2004
 
 #include <bmrf/bmrf_curvel_3d_sptr.h>
 #include <vnl/vnl_double_3x4.h>
@@ -55,7 +51,6 @@ class bmrf_curve_3d : public vcl_list<bmrf_curvel_3d_sptr>, public vbl_ref_count
 
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
-
 };
 
 

@@ -1,5 +1,5 @@
 // This is brl/bseg/brec/pro/processes/brec_prob_map_roc_compute_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A process to generate TPR and FPR for a given prob map and
@@ -7,13 +7,14 @@
 //  CAUTION: Input image is assumed to be a probability map, i.e. have type float with values in [0,1]
 //
 // \author Ozge Can Ozcanli adapted from Joseph Mundy's bbgm_roc_compute_process
-// \date 09/10/08
+// \date September 10, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -119,8 +120,8 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
     }
   }
 
-  pro.set_output_val<float>(0, (float)pa[best_id]); 
-  
+  pro.set_output_val<float>(0, (float)pa[best_id]);
+
   vcl_ofstream of(out_file.c_str());
   of << "# brec_prob_map_roc_compute_process\n#line 1: threshold values\n#line 2: FPR values for thresholds\n#line 3: TPR values\n";
   for (unsigned ip = 0; ip<N; ++ip)

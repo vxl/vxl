@@ -1,19 +1,19 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_pmap_hist_process.cxx
+
 //:
 // \file
 // \brief A class for generating a histogram out of occupancy probability grid
 //        -  Input:
-//             - bvxm_voxel_world_sptr
-//             - vcl_string             --path for the text file of the histogram
-//
+//             * bvxm_voxel_world_sptr
+//             * vcl_string             --path for the text file of the histogram
 //        -  Output:
-//             - none
+//             * none
 //
 // \author  Gamze D. Tunali
-// \date    05/22/2008
+// \date    May 22, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
 // \endverbatim
 
 
@@ -31,7 +31,7 @@ namespace bvxm_pmap_hist_process_globals
 {
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
-  
+
   //functions
   bool compute(vcl_string pmap,  vcl_string path);
 }
@@ -40,7 +40,7 @@ namespace bvxm_pmap_hist_process_globals
 bool bvxm_pmap_hist_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_pmap_hist_process_globals;
-  
+
 // This process has 2 inputs:
   //input[0]: The voxel world
   //input[1]: The path for the output file
@@ -48,22 +48,21 @@ bool bvxm_pmap_hist_process_cons(bprb_func_process& pro)
   int i=0;
   input_types_[i++] = "vcl_string";    // path to the prob. map image
   input_types_[i++] = "vcl_string";    // output path
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
-  
-  return true;
 
+  return true;
 }
 
 bool bvxm_pmap_hist_process(bprb_func_process& pro)
 {
   using namespace bvxm_pmap_hist_process_globals;
-  
+
   //check number of inputs
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
   // get the inputs:
 

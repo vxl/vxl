@@ -5,7 +5,7 @@
 // \file
 // \brief 1-d and 2-d Gaussian smoothing for Parzen window calculations
 // \author Joseph Mundy
-// \date 5/19/04
+// \date May 19, 2004
 //
 // A very simple Gaussian smoothing process to be used by gauss
 // Keeps the link dependence very light

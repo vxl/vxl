@@ -5,7 +5,7 @@
 // \file
 // \brief Form k clusters using distance to representative objects (medoids)
 // \author Joseph Mundy
-// \date 6/11/05
+// \date June 11, 2005
 //
 // A clustering algorithm based on the distance within the cluster to
 // a representative element and the total distance between representatives.
@@ -17,17 +17,15 @@
 // For k = 1 the medoid would be the element that minimizes the average
 // distance to all other elements. The elements are indexed from 0 to n-1.
 //
-//  Fairly computationally expensive:  The space requirement is n x n
-//  The time is k x (n - k) x (n - k) x number of swaps to minimize
-//  total distance.  There might be on the order of k swaps (or worse).
-// \verbatim
-//  Modifications
-// \endverbatim
+// Fairly computationally expensive:  The space requirement is n x n
+// The time is k x (n - k) x (n - k) x number of swaps to minimize
+// total distance.  There might be on the order of k swaps (or worse).
+
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-// not used? #include <vcl_utility.h>
 #include <vcl_iostream.h>
 #include <vbl/vbl_array_2d.h>
+
 class bsta_k_medoid
 {
  public:

@@ -5,10 +5,11 @@
 // \file
 // \brief Binary I/O for a fixed mixture of distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/18/08
+// \date January 18, 2008
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <bsta/bsta_mixture_fixed.h>

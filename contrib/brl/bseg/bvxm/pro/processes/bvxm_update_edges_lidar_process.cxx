@@ -1,13 +1,14 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_lidar_process.cxx
+
 //:
 // \file
 // \brief A class for update process of edge probabilities in a voxel world using LiDAR data.
 //
 // \author Ibrahim Eden
-// \date 07/29/2008
+// \date July 29, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with bvxm_process architecture.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -34,7 +35,7 @@ bool bvxm_update_edges_lidar_process_cons(bprb_func_process& pro)
   //input[1]: The lidar edge prob image
   //input[2]: The camera of the observation (dummy)
   //input[3]: The voxel world
-  //input[4]: scale index  
+  //input[4]: scale index
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vil_image_view_base_sptr";
@@ -42,12 +43,11 @@ bool bvxm_update_edges_lidar_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "bvxm_voxel_world_sptr";
   input_types_[5] = "unsigned";
-  
-  if(pro.set_input_types(input_types_))
+
+  if (pro.set_input_types(input_types_))
     return false;
-  
+
   return true;
- 
 }
 
 bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
@@ -60,7 +60,7 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get the inputs
   unsigned i = 0;
   vil_image_view_base_sptr lidar_height = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -75,29 +75,29 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
     return false;
   }
 
-  if( !lidar_edges ){
+  if ( !lidar_edges ){
     vcl_cout << pro.name() << " :--  Input 1  is not valid!\n";
     return false;
   }
 
-  if( !lidar_edges_prob ){
+  if ( !lidar_edges_prob ){
     vcl_cout << pro.name() << " :--  Input 2  is not valid!\n";
     return false;
   }
 
-  if( !camera ){
+  if ( !camera ){
     vcl_cout << pro.name() << " :--  Input 3  is not valid!\n";
     return false;
   }
 
-  bool result = true; 
+  bool result = true;
 
-  for(unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
+  for (unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
   {
     result = result && world->update_edges_lidar(lidar_height,lidar_edges,lidar_edges_prob,camera,curr_scale);
   }
 
-  if(!result){
+  if (!result){
     vcl_cerr << "error bvxm_update_edges_lidar_process: failed to update observation\n";
     return false;
   }

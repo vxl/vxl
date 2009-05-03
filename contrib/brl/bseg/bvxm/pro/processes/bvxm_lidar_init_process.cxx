@@ -1,26 +1,25 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_lidar_init_process.cxx
+
 //:
 // \file
 // \brief Functions  for clipping and image based on a 3D bounding box.
 //        -  Input:
-//             - First return path (string)
-//             - Second return path (string)
-//             - bvxm_voxel_world_sptr
-//
+//             * First return path (string)
+//             * Second return path (string)
+//             * bvxm_voxel_world_sptr
 //        -  Output:
-//             - lidar pseudo camera "vpgl_camera_double_sptr"
-//             - clipped image area (first ret) "vil_image_view_base_sptr"
-//             - clipped image area (second ret) "vil_image_view_base_sptr"
-//             - mask "vil_image_view_base_sptr"
-//
+//             * lidar pseudo camera "vpgl_camera_double_sptr"
+//             * clipped image area (first ret) "vil_image_view_base_sptr"
+//             * clipped image area (second ret) "vil_image_view_base_sptr"
+//             * mask "vil_image_view_base_sptr"
 //        -  Params:
-//             - threshold for first and second return differences
+//             * threshold for first and second return differences
 //
 // \author  Gamze D. Tunali
-// \date    04/02/2008
+// \date    April 02, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -51,10 +50,10 @@ namespace bvxm_lidar_init_process_globals
 {
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 4;
-  
+
   //parameters identifying strings
   const vcl_string param_mask_thresh_ = "mask_thresh";
-  
+
   //helper functions
   bool lidar_init(vil_image_resource_sptr lidar,
                   bvxm_world_params_sptr params,
@@ -71,16 +70,13 @@ namespace bvxm_lidar_init_process_globals
                 vpgl_geo_camera* cam_second,
                 vil_image_view_base_sptr& mask,
                 double thresh);
-
-  
-  
 }
 
 //: set input and output types
 bool bvxm_lidar_init_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_lidar_init_process_globals;
-  
+
 
   //this process takes 3 input:
   //the filename of the image, the camera and the voxel world
@@ -89,9 +85,9 @@ bool bvxm_lidar_init_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string";             // first ret. image path (geotiff)
   input_types_[i++] = "vcl_string";             // second ret. image path (geotiff)
   input_types_[i++] = "bvxm_voxel_world_sptr";  // rational camera
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
-  
+
     // output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   unsigned j =0;
@@ -99,24 +95,18 @@ bool bvxm_lidar_init_process_cons(bprb_func_process& pro)
   output_types_[j++]= "vil_image_view_base_sptr";  // first ret image ROI
   output_types_[j++]= "vil_image_view_base_sptr";  // second ret image ROI
   output_types_[j++]= "vil_image_view_base_sptr";  // mask
-  if(!pro.set_output_types(output_types_))
-    return false;
-  
-  
-  return true;
-
+  return (bool) pro.set_output_types(output_types_);
 }
 
 
 bool bvxm_lidar_init_process(bprb_func_process& pro)
 {
-
   using namespace bvxm_lidar_init_process_globals;
-  
-  if(pro.n_inputs()<n_inputs_)
+
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
   // get the inputs:
@@ -130,7 +120,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
   // threshold (meters)
   float thresh=10.0f;
   pro.parameters()->get_value(param_mask_thresh_, thresh);
-  
+
   bvxm_world_params_sptr world_params = voxel_world->get_params();
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
   if (!first_ret) {
@@ -167,7 +157,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
     vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
-  
+
   unsigned j = 0;
   // store the camera (camera of first return is sufficient)
   pro.set_output_val<vpgl_camera_double_sptr >(j++, cam_first);
@@ -179,7 +169,6 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(j++,mask);
   return true;
 }
-
 
 
 bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,

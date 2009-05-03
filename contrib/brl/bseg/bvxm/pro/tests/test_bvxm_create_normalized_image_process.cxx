@@ -2,7 +2,7 @@
 // \file
 // \brief  Tests for normalized image creation process
 // \author Ozge C. Ozcanli
-// \date   03/04/2008
+// \date   March 04, 2008
 //
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
@@ -27,8 +27,6 @@
 
 MAIN( test_bvxm_create_normalized_image_process )
 {
-  
-   
   unsigned ni = 640;
   unsigned nj = 480;
 
@@ -67,7 +65,7 @@ MAIN( test_bvxm_create_normalized_image_process )
   DECLARE_FUNC_CONS(bvxm_create_normalized_image_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_normalized_image_process, "bvxmCreateNormalizedImageProcess");
   REGISTER_DATATYPE(vil_image_view_base_sptr);
-  REGISTER_DATATYPE(float);  
+  REGISTER_DATATYPE(float);
 
   //: set the inputs
   vil_image_view_base_sptr input_img1 = new vil_image_view<vxl_byte>(img1);
@@ -107,8 +105,6 @@ MAIN( test_bvxm_create_normalized_image_process )
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 0.01);
   vil_math_sum(sum, im_dif, 2);
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 0.01);
-
-  
 
   SUMMARY();
 }

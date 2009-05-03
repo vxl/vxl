@@ -5,7 +5,7 @@
 // \file
 // \brief Detectors applying to mixtures
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 02/09/06
+// \date February 09, 2006
 //
 // \verbatim
 //  Modifications
@@ -23,9 +23,9 @@ class bsta_top_weight_detector
     enum { return_dim = 1 };
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;
-  
+
     // for compatiblity with vpdl/vdpt
-    typedef return_T return_type; 
+    typedef return_T return_type;
     typedef mixture_ distribution_type;
 
     //: Constructor
@@ -66,9 +66,9 @@ class bsta_mix_any_less_index_detector
     enum { return_dim = 1 };
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;
-  
+
     // for compatiblity with vpdl/vdpt
-    typedef return_T return_type; 
+    typedef return_T return_type;
     typedef mixture_ distribution_type;
 
     //: Constructor

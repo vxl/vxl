@@ -4,11 +4,7 @@
 // \brief A class for obtaining roc curve from change detection results.
 //
 // \author Gamze Tunali
-// \date 04/14/2009
-// \verbatim
-//  Modifications
-//   
-// \endverbatim
+// \date April 14, 2009
 
 #include <bprb/bprb_func_process.h>
 

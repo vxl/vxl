@@ -6,10 +6,11 @@
 // \file
 // \brief vgui_soview2D objects for bmrf classes
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/23/04
+// \date January 23, 2004
 //
 // \verbatim
-//  Modifications:
+//  Modifications
+//   <none yet>
 // \endverbatim
 //--------------------------------------------------------------------------------
 

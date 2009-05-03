@@ -5,7 +5,7 @@
 // \file
 // \brief A smart pointer to a bgrl_vertex.
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/17/04
+// \date March 17, 2004
 //
 // Include this file to use the smart pointer bgrl_vertex_sptr
 //

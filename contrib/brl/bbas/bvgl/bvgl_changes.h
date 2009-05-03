@@ -1,16 +1,15 @@
+#ifndef bvgl_changes_h_
+#define bvgl_changes_h_
 //:
 // \file
 // \brief Helper classes to annotate polygonal regions in images a set of bvgl_change_obj
 // \author Ozge C. Ozcanli ozge@lems.brown.edu
-// \date   09/26/2008
+// \date   September 26, 2008
 //
 // \verbatim
 //  Modifications
 //   <None yet>
 // \endverbatim
-
-#ifndef bvgl_changes_h_
-#define bvgl_changes_h_
 
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_view_base.h>
@@ -47,7 +46,7 @@ class bvgl_changes : public vbl_ref_count
   void add_obj(bvgl_change_obj_sptr obj);
   void remove_obj(bvgl_change_obj_sptr obj);
 
-private:
+ private:
   vcl_vector<bvgl_change_obj_sptr> objs_;
   vcl_string img_name_;
 };

@@ -5,7 +5,7 @@
 // \file
 // \brief defines the elements of a level of a pyramid.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
 //  Modifications

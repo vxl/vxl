@@ -1,14 +1,15 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_edges_raw_process.cxx
+
 //:
 // \file
 // \brief A process that saves the voxel world edge probability grid in a binary format readable by the Drishti volume rendering program
 //        (http://anusf.anu.edu.au/Vizlab/drishti/)
 //
 // \author Ibrahim Eden (modification of bvxm_save_occupancy_raw_process)
-// \date 03/28/08
+// \date March 28, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function as to conform with new bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function as to conform with new bvxm_process architecture.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -41,7 +42,6 @@ bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
 
 bool bvxm_save_edges_raw_process(bprb_func_process& pro)
 {
-
   unsigned n_inputs_ = 3;
   if (pro.n_inputs()<n_inputs_)
   {

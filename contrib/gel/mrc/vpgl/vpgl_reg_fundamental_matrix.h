@@ -5,19 +5,19 @@
 // \file
 // \brief A class for the fundamental matrix between two affine cameras registered to a ground plane.
 // \author Thomas Pollard
-// \date 06/8/05
+// \date June 8, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
 // The fundamental matrix for two registered images has a simplified form and can be
 // written as:
+// \verbatim
 // |  0  0  a |
 // |  0  0 -b |
 // | -a  b  0 |
+// \endverbatim
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-// not used? #include <vcl_iosfwd.h>
-
 #include "vpgl_fundamental_matrix.h"
 
 template <class T>

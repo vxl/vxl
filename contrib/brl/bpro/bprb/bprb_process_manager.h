@@ -7,11 +7,11 @@
 // \brief This file defines a class base process manager
 // It is templated to allow its childs to be singleton managers
 // \author Isabel Restrepo
-// \date 3/27/07
+// \date March 27, 2007
 //
 // \verbatim
 //  Modifications
-//  Ported to brl/bprb - 1/31/2008 - J.L. Mundy
+//   Jan 31, 2008 - J.L. Mundy - Ported to brl/bprb
 // \endverbatim
 
 

@@ -1,15 +1,16 @@
 //This is brl/bseg/bvxm/pro/processes/ bvxm_detect_scale_process.cxx
+
 //:
 // \file
 //
 //  CAUTION: Input image is assumed to have type vxl_byte
 //
 // \author Vishal Jain
-// \date 04/15/2008
+// \date April 15, 2008
 //
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -41,15 +42,15 @@ bool bvxm_detect_scale_process_cons(bprb_func_process& pro)
   input_types_[0] = "bvxm_voxel_world_sptr";   // world
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "unsigned";      // output an expected image of the object at the highest prob location overlayed
-  if(! pro.set_output_types(output_types_))
+  if (! pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -70,7 +71,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr main_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  
+
     //check input's validity
   if (!main_world) {
     vcl_cout << pro.name() <<" :--  Input0  is not valid!\n";
@@ -84,8 +85,8 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :--  Input2  is not valid!\n";
     return false;
   }
-  
-  
+
+
   double ni = static_cast<double>(input_img->ni());
   double nj = static_cast<double>(input_img->nj());
 
@@ -112,9 +113,9 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   if (!success)
     return false;
   success = vpgl_backproject::bproj_plane(camera.ptr(), lr,
-                                               world_plane,
-                                               world_point,
-                                               wlr);
+                                          world_plane,
+                                          world_point,
+                                          wlr);
   vcl_cout<<"\n Success two";
   if (!success)
     return false;

@@ -4,11 +4,11 @@
 // \file
 // \brief
 // \author Thomas Pollard
-// \date 1/12/08
+// \date January 12, 2008
 //
 // \verbatim
 //  Modifications
-//   04/18/2008 - Ozge C. Ozcanli - added the basis vectors to be used in transforming the local coordinate system of the world to actual 3D world
+//   Apr 18, 2008 Ozge C. Ozcanli - added the basis vectors to be used in transforming the local coordinate system of the world to actual 3D world
 //                                  check the method voxel_index_to_xyz() in bvxm_voxel_world class for their use
 //                                - also added a version number and updated binary load and save methods to read and write new parameters
 //                                  since there was no version number previously, the parameters written previous to this update won't be readable

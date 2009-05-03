@@ -2,12 +2,11 @@
 #ifndef bil_cedt_h
 #define bil_cedt_h
 //:
-//\file
-//\brief 2D Contour based Euclidean Distance Transform algorithm
-//\author Vishal Jain & Huysen Tek Brown University
-//\date 06/16/2005 11:56:33 AM EST
+// \file
+// \brief 2D Contour based Euclidean Distance Transform algorithm
+// \author Vishal Jain & Huysen Tek Brown University
+// \date June 16, 2005
 //
-
 
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>

@@ -4,14 +4,13 @@
 //:
 // \file
 // \brief A class for generating a synthetic bvxm_voxel_world.
-//       
 //
 // \author Isabel Restrepo
-// \date 3-7-2009
+// \date March 7, 2009
 // \verbatim
 //  Modifications
-//   10-3-09 - Isabel Restrepo: This class is based on the old bvxm_gen_synthetic_world_process.
-//                              Some of the methods for reconstruction have been left out
+//   10 Mar, 2009 - Isabel Restrepo: This class is based on the old bvxm_gen_synthetic_world_process.
+//                                   Some of the methods for reconstruction have been left out
 // \endverbatim
 
 
@@ -41,7 +40,7 @@
 
 class bvxm_synth_world_generator
 {
-public:
+ public:
 
   bvxm_synth_world_generator();
   bvxm_voxel_world_sptr generate_world();
@@ -52,9 +51,8 @@ public:
   void set_app_val (float app_val);
   void set_world_length(float len);
 
+ private:
 
-private:
-    
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype apm_datatype;
 
   //store parameters as global variables to be used across functions
@@ -104,13 +102,13 @@ private:
   vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world);
   vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& world);
   bool update(vgl_vector_3d<unsigned> grid_size,
-                  bvxm_voxel_world_sptr world,
-                  bvxm_voxel_grid<float>* intensity_grid,
-                  bvxm_voxel_grid<float>* ocp_grid,
-                  bvxm_voxel_grid<apm_datatype>* apm_grid,
-                  vcl_vector<vpgl_camera_double_sptr>& cameras,
-                  vcl_vector <vil_image_view_base_sptr>& image_set,
-                  unsigned int bin_num);
+              bvxm_voxel_world_sptr world,
+              bvxm_voxel_grid<float>* intensity_grid,
+              bvxm_voxel_grid<float>* ocp_grid,
+              bvxm_voxel_grid<apm_datatype>* apm_grid,
+              vcl_vector<vpgl_camera_double_sptr>& cameras,
+              vcl_vector <vil_image_view_base_sptr>& image_set,
+              unsigned int bin_num);
   void gen_texture_map(vgl_box_3d<double> box,
                        vcl_vector<vcl_vector<float> >& intens_map_bt,
                        vcl_vector<vcl_vector<float> >& intens_map_side1,
@@ -133,7 +131,6 @@ private:
                              unsigned nx, unsigned ny, unsigned nz);
 
   bool gen_lidar_2box( vgl_vector_3d<unsigned> grid_size,bvxm_voxel_world_sptr world);
-
 };
 
 #endif

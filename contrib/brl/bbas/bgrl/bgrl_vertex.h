@@ -5,7 +5,7 @@
 // \file
 // \brief A vertex in a graph
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/17/04
+// \date March 17, 2004
 //
 // The vertex contains sets of incoming and outgoing
 // edges to other vertices in the graph

@@ -5,7 +5,7 @@
 // \file
 // \brief Functions to compute Malladi image force
 // \author Nhon Trinh (ntrinh@lems.brown.edu)
-// \date 12/03/2005
+// \date December 03, 2005
 //
 // \verbatim
 //  Modifications

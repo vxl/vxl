@@ -1,13 +1,14 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_roc_process.cxx
+
 //:
 // \file
 // \brief A class for obtaining roc curve from change detection results.
 //
 // \author Isabel Restrepo
-// \date 04/19/2008
+// \date April 19, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with new bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>

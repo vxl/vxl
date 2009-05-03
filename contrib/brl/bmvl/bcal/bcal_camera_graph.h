@@ -2,7 +2,7 @@
 // \file
 // \brief a graph with source
 // \author Kongbin Kang (Kongbin_Kang@Brown.edu)
-// \date   4/3/2003
+// \date   April 3, 2003
 
 #ifndef AFX_CAMERAGRAPH_H__8810B4C3_E6C7_42CE_8C7F_D9F8F201F6F6__INCLUDED_
 #define AFX_CAMERAGRAPH_H__8810B4C3_E6C7_42CE_8C7F_D9F8F201F6F6__INCLUDED_

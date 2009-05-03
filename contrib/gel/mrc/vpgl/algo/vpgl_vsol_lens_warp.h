@@ -5,7 +5,7 @@
 // \file
 // \brief Apply lens distortion to vsol objects
 // \author Matt Leotta
-// \date 8/24/05
+// \date August 24, 2005
 //
 
 #include <vpgl/vpgl_lens_distortion.h>

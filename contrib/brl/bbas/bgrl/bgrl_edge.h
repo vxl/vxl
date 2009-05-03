@@ -5,7 +5,7 @@
 // \file
 // \brief A directed edge in a graph
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/17/04
+// \date March 17, 2004
 //
 // The edge has a pointer to its start and end vertices
 //

@@ -1,7 +1,7 @@
 #ifndef osl_harris_h
 #define osl_harris_h
 //:
-//  \file
+// \file
 // \brief The harris corner detector
 //
 // \par Parameters :
@@ -12,14 +12,12 @@
 //                      strength * relative  minimum).
 // - scale factor     - the 'k' from the harris auto-correlation expression.
 //
-// \author
-//    Paul Beardsley, Robotics Research Group, Oxford University
-// \date   16.10.95
+// \author Paul Beardsley, Robotics Research Group, Oxford University
+// \date   16 October 1995
 //
 // \verbatim
-// Modifications:
-//       First version generated from C code with minimal modification for C++/
-//       Target data structures.
+//  Modifications:
+//   First version generated from C code with minimal modification for C++/TargetJr data structures.
 //   P.Vanroose  Mar97  corrected memory management (point_list_ & *free_*())
 //   P.Vanroose  Aug97  point_list_ now safer (added AddPoint(); SetPointList() out of use now)
 //   J.Mundy     Jan98  slight modified the interface to correspond to new style using parameter blocks and image dispatch

@@ -5,7 +5,7 @@
 // \file
 // \brief
 // \author Nhon Trinh (ntrinh@lems.brown.edu)
-// \date 12/07/2006
+// \date December 07, 2006
 // \verbatim
 //  Modifications
 //   <none yet>

@@ -5,12 +5,7 @@
 // \file
 // \brief A class to build 3D curves from a bmrf_network
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 3/23/04
-//
-// \verbatim
-//  Modifications
-// \endverbatim
-
+// \date March 23, 2004
 
 #include <bmrf/bmrf_curve_3d_sptr.h>
 #include <bmrf/bmrf_curvel_3d_sptr.h>
@@ -45,7 +40,7 @@ class bmrf_curve_3d_builder
   //: Initialize the camera matrices (using a specified camera)
   // \param scale determines the separation between cameras
   void init_cameras(const vnl_double_3x4& C0, double scale = 1.0);
-  
+
   //: Build The curves
   //  Curves with less than \p min_prj projections are removed
   bool build(int min_prj = 3, int min_len = 10, double trim_thresh = 0.001);
@@ -72,17 +67,17 @@ class bmrf_curve_3d_builder
  protected:
   //: Compute the relative change in spacing between cameras
   void compute_camera_offsets();
-  
+
   //: Determine the alpha bounds from the network
   void find_alpha_bounds();
-  
+
   //: Build curvels by linking across time through probable arcs
   vcl_set<bmrf_curvel_3d_sptr>
     build_curvels(vcl_set<bmrf_curvel_3d_sptr>& all_curvels, double alpha) const;
 
-  //: extend all curves to the next alpha 
-  vcl_set<bmrf_curvel_3d_sptr> 
-    extend_curves( vcl_set<bmrf_curve_3d_sptr>& growing_curves, 
+  //: extend all curves to the next alpha
+  vcl_set<bmrf_curvel_3d_sptr>
+    extend_curves( vcl_set<bmrf_curve_3d_sptr>& growing_curves,
                    double alpha );
 
   //: Find all arcs where both nodes are valid at \p alpha
@@ -114,7 +109,7 @@ class bmrf_curve_3d_builder
 
   //: Map from frame numbers to camera offsets
   vcl_map<int,double> offsets_;
-  
+
   //: 3D direction unit vector
   vgl_vector_3d<double> direction_;
 

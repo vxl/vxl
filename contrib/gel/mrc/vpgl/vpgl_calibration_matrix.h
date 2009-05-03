@@ -5,13 +5,13 @@
 // \file
 // \brief A class for the calibration matrix component of a perspective camera matrix.
 // \author Thomas Pollard
-// \date 01/28/05
+// \date January 28, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
 // \verbatim
 //  Modifications
-//   5/08/2004  Ricardo Fabbri  Added binary I/O support
-//   5/08/2004  Ricardo Fabbri  Added == operator
+//   May 08, 2004  Ricardo Fabbri  Added binary I/O support
+//   May 08, 2004  Ricardo Fabbri  Added == operator
 // \endverbatim
 //
 
@@ -38,7 +38,7 @@ class vpgl_calibration_matrix
   //: Construct using all of the camera parameters.
   // Must satisfy the following requirements: x,y_scales must be > 0, focal_length must be not equal to 0.
   vpgl_calibration_matrix( T focal_length, const vgl_point_2d<T>& principal_point,
-    T x_scale = (T)1, T y_scale = (T)1, T skew = (T)0 );
+                           T x_scale = (T)1, T y_scale = (T)1, T skew = (T)0 );
 
   //: Construct from a right upper triangular matrix whose decomposition into the calibration components makes sense.
   //  The supplied matrix can be a scalar multiple of such a matrix.

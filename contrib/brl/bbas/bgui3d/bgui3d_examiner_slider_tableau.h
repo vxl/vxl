@@ -15,10 +15,11 @@
 //         based on those values.
 //
 // \author Gamze Tunali (gamze@lems.brown.edu)
-// \date   12/01/05
+// \date   December 01, 2005
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include "bgui3d_examiner_tableau.h"
@@ -47,7 +48,7 @@ class bgui3d_examiner_slider_tableau: public bgui3d_examiner_tableau
   virtual bool render();
 
   void transfer_callback(const bool & remap, const int & n_min,
-                    const int & n_max);
+                         const int & n_max);
 
  private:
   void loadSliderImage();

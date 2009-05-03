@@ -5,14 +5,10 @@
 // \file
 // \brief A node in a Markov Random Field (MRF) network
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 1/13/04
+// \date January 13, 2004
 //
 // The MRF node contains a link to an epi-segment as well as
 // links to other neighboring nodes in the network
-//
-// \verbatim
-//  Modifications
-// \endverbatim
 
 #include <vcl_list.h>
 #include <vcl_vector.h>

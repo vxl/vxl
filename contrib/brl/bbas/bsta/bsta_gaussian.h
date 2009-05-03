@@ -5,13 +5,12 @@
 // \file
 // \brief A Gaussian distribution for use in a mixture model
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/25/06
+// \date January 25, 2006
 //
 // \verbatim
 //  Modifications
 //   (none yet)
 // \endverbatim
-
 
 #include "bsta_distribution.h"
 #include <vnl/vnl_math.h>

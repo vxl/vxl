@@ -5,9 +5,8 @@
 // \file
 // \brief Methods for projecting geometric structures onto the image
 // \author Matt Leotta
-// \date 3/7/05
+// \date March 7, 2005
 //
-
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

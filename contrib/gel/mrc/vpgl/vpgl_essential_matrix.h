@@ -5,17 +5,16 @@
 // \file
 // \brief A class for the essential matrix between two projective cameras.
 // \author Joseph Mundy
-// \date 02/28/07
-//
+// \date February 28, 2007
 //
 //  The essential matrix is related to the fundamental matrix by
-//       E = [K_left]^t [F] [K_right]
-// The notation "left" and "right" refers to camera producing points used 
+//       $E = [K_{left}]^t [F] [K_{right}]$
+// The notation "left" and "right" refers to camera producing points used
 // on the left side of the F or E matrix and vice versa.
 // Note: the extract left camera function requires points be transformed to
 // the camera focal plane. That is, e.g.,
 // left_coor(in camera focal plane coordinates) =
-//    [K_left]^-1 p_left(in image coordinates). 
+//    $[K_{left}]^{-1} p_{left}$ (in image coordinates).
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_fwd.h>

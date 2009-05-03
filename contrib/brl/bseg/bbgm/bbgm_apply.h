@@ -5,11 +5,11 @@
 // \file
 // \brief Apply functors to distribution images
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 10/3/05
+// \date October 3, 2005
 //
 // \verbatim
 //  Modifications
-//   04/21/09  MJL  Update to work with vpdt
+//   Apr 21, 2009  MJL  Update to work with vpdt
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -228,16 +228,15 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
 //: Apply with data
 template <class dist_, class functor_, class dT, class rT>
 void bbgm_apply(const bbgm_image_of<dist_>& dimg,
-                 const functor_& functor,
-                 const vil_image_view<dT>& data,
-                 vil_image_view<rT>& result,
-                 const rT* fail_val = NULL )
+                const functor_& functor,
+                const vil_image_view<dT>& data,
+                vil_image_view<rT>& result,
+                const rT* fail_val = NULL )
 {
   typedef vpdt_field_traits<typename functor_::return_type> return_traits;
   bbgm_apply_data<dist_,functor_,dT,rT,return_traits::dimension == 1>::
       apply(dimg,functor,data,result,fail_val);
 }
-
 
 
 #endif // bbgm_apply_h_

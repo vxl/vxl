@@ -5,7 +5,7 @@
 // \file
 // \brief A simple joint_histogram class
 // \author Joseph L. Mundy
-// \date   05/19/2004
+// \date   May 19, 2004
 //
 // A templated joint_histogram class.  Supports entropy calculations
 //
@@ -45,7 +45,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 
   //: The average and variance bin value for row a using counts to compute probs
   bool avg_and_variance_bin_for_row_a(const unsigned int a, T & avg, T & var) const;
-  
+
   void set_count(unsigned r, unsigned c, T cnt)
   { if (r<static_cast<unsigned>(counts_.rows())&&
         c<static_cast<unsigned>(counts_.cols()))

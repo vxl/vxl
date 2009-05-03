@@ -2,9 +2,8 @@
 //:
 // \file
 // \brief This program was written to test the Dense Matching software
-// \author
-// G.W. Brooksby
-// \date 02/13/03
+// \author G.W. Brooksby
+// \date February 13, 2003
 
 #include <vcl_cstdlib.h>
 #include <vcl_cmath.h>

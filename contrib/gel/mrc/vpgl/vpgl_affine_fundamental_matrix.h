@@ -5,14 +5,14 @@
 // \file
 // \brief A class for the fundamental matrix between two affine cameras..
 // \author Thomas Pollard
-// \date 06/8/05
+// \date June 8, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
 // The fundamental matrix has the form:
 // \verbatim
-// |  0  0  e |
-// |  0  0  d |
-// |  a  b  c |
+// | 0  0  e |
+// | 0  0  d |
+// | a  b  c |
 // \endverbatim
 
 #include <vnl/vnl_fwd.h>

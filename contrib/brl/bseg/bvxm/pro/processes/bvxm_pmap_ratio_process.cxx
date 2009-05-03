@@ -1,19 +1,20 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_pmap_ratio_process.cxx
+
 //:
 // \file
 // \brief A class for generating a ratio histogram out of occupancy probability grid
 //        -  Input:
-//              -0 path to the prob. map image of LIDAR
-//              -1 path to the prob. map image of NON_LIDAR
-//              -2 output path
+//             * 0 path to the prob. map image of LIDAR
+//             * 1 path to the prob. map image of NON_LIDAR
+//             * 2 output path
 //        -  Output:
-//             - none
+//             * none
 //
 // \author  Gamze D. Tunali
-// \date    05/22/2008
+// \date    May 22, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>

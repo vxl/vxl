@@ -1,18 +1,15 @@
 // This is brl/bseg/boxm/pro/processes/boxm_refine_scene_process.cxx
+
 //:
 // \file
-// \brief Process to refine the block (octrees) of the scene 
+// \brief Process to refine the block (octrees) of the scene
 //        If there are some cells with big values they are spitted into
-//        new child cells, the data of the cell is coppied to the 
+//        new child cells, the data of the cell is coppied to the
 //        children's data. The purspose of this process is to elaborate
 //        the octree at the areas where more details exist.
 //
 // \author Gamze Tunali
-// \date 04/24/2009
-// \verbatim
-//  Modifications
-//   
-// \endverbatim
+// \date April 24, 2009
 
 #include <bprb/bprb_func_process.h>
 
@@ -36,16 +33,16 @@ bool boxm_refine_scene_process_cons(bprb_func_process& pro)
   using namespace boxm_refine_scene_process_globals;
   //process takes 2 inputs
   //input[0]: The scene
-  //input[1]: The threshold for splitting 
-  //input[2]: bool for resetting the appearence model 
+  //input[1]: The threshold for splitting
+  //input[2]: bool for resetting the appearence model
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "float";
   input_types_[2] = "bool";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
-  //no output 
+  //no output
   return true;
 }
 

@@ -5,13 +5,13 @@
 // \file
 // \brief classes to represent parameters to bprb processes
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 7/1/2004
+// \date July 1, 2004
 //
 // \verbatim
 //  Modifications
-//    Matt Leotta  12/15/04     Migrated from vidpro
-//    Amir Tamrakar 09/19/06    Added a parameter type for multiple choice options (bprb_choice_param_type)
-//    J.L. Mundy Migrated from breye 1/30/2007
+//    Matt Leotta   Dec 15, 2004  Migrated from vidpro
+//    Amir Tamrakar Sep 19, 2006  Added a parameter type for multiple choice options (bprb_choice_param_type)
+//    J.L. Mundy    Jan 30, 2007  Migrated from breye
 // \endverbatim
 
 #include <vcl_string.h>
@@ -20,13 +20,9 @@
 #include <vcl_typeinfo.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
-
 #include <vbl/vbl_ref_count.h>
-
 #include <bxml/bxml_document.h>
-
 #include <bprb/bprb_parameters_sptr.h>
-
 
 //: The abstract base class for a process parameter
 class bprb_param
@@ -164,7 +160,7 @@ class bprb_choice_param_type : public bprb_param_type<unsigned>
  public:
   // Constructor
   bprb_choice_param_type(const vcl_string& name, const vcl_string& desc,
-  const vcl_vector<vcl_string>& choices, const unsigned def_val)
+                         const vcl_vector<vcl_string>& choices, const unsigned def_val)
    : bprb_param_type<unsigned>(name, desc, def_val, 0, choices.size()-1), choices_(choices) {}
 
   //: Clone the parameter
@@ -313,7 +309,7 @@ class bprb_parameters : public vbl_ref_count
  //private:
   //: Add parameter helper function
   bool add( bprb_param* param );
-private:
+ private:
   template<class T>
   bool get_param( const vcl_string& name,
                   bprb_param_type<T> * &param) const

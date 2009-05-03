@@ -9,11 +9,7 @@
 // matrices, etc in a standard format.  This will eventually be replaced by XML
 // read/writers.
 // \author Thomas Pollard
-// \date 03/05/05
-//
-// \verbatim
-//
-// \endverbatim
+// \date March 05, 2005
 
 #include <vcl_vector.h>
 

@@ -5,7 +5,7 @@
 // \file
 // \brief A Gaussian distribution with a full covariance matrix
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/25/06
+// \date January 25, 2006
 //
 // \verbatim
 //  Modifications

@@ -5,14 +5,9 @@
 // \file
 // \brief An arc in a Markov Random Field (MRF) network
 // \author Matt Leotta, (mleotta@lems.brown.edu)
-// \date 6/7/04
+// \date June 7, 2004
 //
 // The MRF arc contains a directed link from one node to another
-//
-// \verbatim
-//  Modifications
-// \endverbatim
-
 
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>

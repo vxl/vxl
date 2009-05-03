@@ -1,12 +1,11 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_process.cxx
+
 //:
 // \file
 // \brief A process that updates voxel world edge probabilities
 //
 // \author Ibrahim Eden
-// \date 02/11/2009
-// \verbatim
-// \endverbatim
+// \date February 11, 2009
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>

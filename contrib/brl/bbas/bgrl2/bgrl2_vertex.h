@@ -1,19 +1,18 @@
-// This is contrib/brl/bbas/bgrl2/bgrl2_vertex.h
+// This is brl/bbas/bgrl2/bgrl2_vertex.h
 #ifndef bgrl2_vertex_h_
 #define bgrl2_vertex_h_
-
 //:
 // \file
 // \brief A templated vertex class for a generic graph
 // \author Amir Tamrakar
-// \date 02/30/05
+// \date February 30, 2005
 //
-// The vertex contains sets of incoming and outgoing 
+// The vertex contains sets of incoming and outgoing
 // edges to other vertices in the graph
 //
 // \verbatim
 //  Modifications
-//   Amir Tamrakar 02/30/05    Initial version.
+//   Amir Tamrakar Feb 30, 2005    Initial version.
 // \endverbatim
 
 #include <vcl_list.h>
@@ -25,7 +24,7 @@
 template<class E>
 class bgrl2_vertex : public vbl_ref_count
 {
-protected:
+ protected:
   typedef vbl_smart_ptr<E> E_sptr;
 
  public:
@@ -37,10 +36,10 @@ protected:
   //: Destructor
   virtual ~bgrl2_vertex(){}
 
-  //:  returns all outgoing edges of this vertex  
+  //:  returns all outgoing edges of this vertex
   const vcl_list<E_sptr>& out_edges() { return out_edges_; }
 
-  //:  returns all incoming edges of this vertex  
+  //:  returns all incoming edges of this vertex
   const vcl_list<E_sptr>& in_edges() { return in_edges_; }
 
   //: Returns an iterator to the beginning of the set of incoming edges
@@ -55,13 +54,13 @@ protected:
   //: Returns an iterator to the end of the list of outgoing edges
   edge_iterator out_edges_end() { return out_edges_.end(); }
 
-  //: Returns the total number of edges at this vertex 
+  //: Returns the total number of edges at this vertex
   int degree() const { return this->in_degree() + this->out_degree(); }
 
-  //: Returns the number of incoming edges to this vertex 
+  //: Returns the number of incoming edges to this vertex
   unsigned int in_degree() const { return in_edges_.size(); }
 
-  //: Returns the number of outgoing edges to this vertex 
+  //: Returns the number of outgoing edges to this vertex
   unsigned int out_degree() const { return out_edges_.size(); }
 
   //: add an edge to the incoming edge list of this node

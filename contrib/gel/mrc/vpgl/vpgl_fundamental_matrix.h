@@ -5,7 +5,7 @@
 // \file
 // \brief A class for the fundamental matrix between two projective cameras.
 // \author Thomas Pollard
-// \date 01/28/05
+// \date January 28, 2005
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
 //  A class which holds the fundamental matrix and performs basic computations with it.
@@ -36,7 +36,7 @@ class vpgl_fundamental_matrix
   //: Main constructor takes two projective cameras.
   //  The RHS of the fundamental matrix will correspond to cr and the LHS to cl.
   vpgl_fundamental_matrix( const vpgl_proj_camera<T>& cr,
-                            const vpgl_proj_camera<T>& cl ) : cached_svd_(NULL)
+                           const vpgl_proj_camera<T>& cl ) : cached_svd_(NULL)
   { set_matrix( cr, cl ); }
 
   //: Construct from a fundamental matrix in vnl form.

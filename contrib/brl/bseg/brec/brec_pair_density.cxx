@@ -3,18 +3,16 @@
 // \brief Base class for prob density of an intensity pair
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
-// \date 10/01/08
-//      
+// \date October 01, 2008
+//
 // \verbatim
-//   Modifications
-//  
+//  Modifications
+//   <none yet>
 // \endverbatim
-//
-//
 
 #include "brec_pair_density.h"
 
-vil_image_view<float> 
+vil_image_view<float>
 brec_pair_density::prob_density(vil_image_view<float>& obs)
 {
   unsigned ni = obs.ni();

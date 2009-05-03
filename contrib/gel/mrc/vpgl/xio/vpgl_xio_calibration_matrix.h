@@ -4,10 +4,9 @@
 //:
 // \file
 // \author Gamze Tunali
-// \date 10/31/2006
+// \date October 31, 2006
 
 #include <vpgl/vpgl_calibration_matrix.h>
-// not used? #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
 //: XML write

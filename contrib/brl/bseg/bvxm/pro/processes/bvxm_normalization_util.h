@@ -4,11 +4,11 @@
 // \file
 // \brief Utility functions for normalization processes.
 // \author Isabel Restrepo (mir@lems.brown.edu)
-// \date 1/22/2008
+// \date January 22, 2008
 //
 // \verbatim
 //  Modifications
-//   <none>
+//   <none yet>
 // \endverbatim
 
 #include <vil/vil_image_view_base.h>

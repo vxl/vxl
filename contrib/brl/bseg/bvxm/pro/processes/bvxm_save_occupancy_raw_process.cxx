@@ -1,4 +1,5 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_occupancy_raw_process.cxx
+
 //:
 // \file
 // \brief Save the voxel world occupancy grid in binary format
@@ -7,10 +8,10 @@
 // (http://anusf.anu.edu.au/Vizlab/drishti/)
 //
 // \author Daniel Crispell
-// \date 03/05/2008
+// \date March 05, 2008
 // \verbatim
 //  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with new bvxm_process architecture.
+//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
 // \endverbatim
 
 
@@ -38,7 +39,7 @@ bool bvxm_save_occupancy_raw_process_cons(bprb_func_process& pro)
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
 
   return true;
@@ -58,7 +59,7 @@ bool bvxm_save_occupancy_raw_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   vcl_string filename = pro.get_input<vcl_string>(i++);
   unsigned scale = pro.get_input<unsigned>(i++);
-  
+
   if ( !world ){
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;

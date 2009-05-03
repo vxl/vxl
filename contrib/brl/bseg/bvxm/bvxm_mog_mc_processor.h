@@ -7,7 +7,7 @@
 //
 // \author Isabel Restrepo mir@lems.brown.edu
 //
-// \date 08/1/2008
+// \date August 1, 2008
 //
 // \verbatim
 //  Modifications
@@ -31,7 +31,7 @@
 template <unsigned int dim, unsigned int modes> class bvxm_mog_mc_processor
 {
  protected:
-  
+
   typedef bsta_num_obs<bsta_gaussian_indep<float,dim> > gauss_type;
   typedef bsta_mixture_fixed<gauss_type, modes> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;

@@ -1,4 +1,5 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_ocp_compare_process.cxx
+
 //:
 // \file
 // \brief A class for comparing to occupancy grid for the probability values.
@@ -8,15 +9,14 @@
 //   -  Input:
 //      * bvxm_voxel_world_sptr
 //      * bvxm_voxel_world_sptr
-//
 //   -  Output:
 //      * double    the similarity measureboolbool
 //
 // \author  Gamze D. Tunali
-// \date    05/15/2008bool
+// \date    May 15, 2008
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
 // \endverbatim
 
 
@@ -36,18 +36,17 @@ namespace bvxm_ocp_compare_process_gloabals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
-  
+
   //functions
   bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename);
   double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n, unsigned scale);
-  
 }
 
 //: set input and output types
 bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_ocp_compare_process_gloabals;
-  
+
   // This process has 4 inputs:
   vcl_vector<vcl_string> input_types_(n_inputs_);
   int i=0;
@@ -55,15 +54,15 @@ bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
   input_types_[i++] = "unsigned";                 // search neighb. size
   input_types_[i++] = "unsigned";                 // scale
-  if(!pro.set_input_types(input_types_))
+  if (!pro.set_input_types(input_types_))
     return false;
-  
+
   // This process has 1 output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "double";  // the sum of ocp prob product
-  if(!pro.set_output_types(output_types_))
+  if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -76,10 +75,10 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
   //input[1]: The voxel world for IMAGE ONLY update
   //input[2]: Search neighbohood size
   //input[3]: Scale of the voxel world
-  if(pro.n_inputs()<n_inputs_)
+  if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
-    return false; 
+    return false;
   }
 
   // get the inputs:
@@ -88,7 +87,7 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
   //voxel_world2
   bvxm_voxel_world_sptr voxel_world2 = pro.get_input<bvxm_voxel_world_sptr>(i++);
   unsigned n = pro.get_input<unsigned>(i++);
-  //scale 
+  //scale
   unsigned scale =pro.get_input<unsigned>(i++);
 
    //check inputs validity
@@ -100,7 +99,7 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :--  Input 1  is not valid!\n";
     return false;
   }
-  
+
   double val = compare(voxel_world1, voxel_world2, n,scale);
 
   //store output
@@ -204,7 +203,7 @@ double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
     }
   }
   vcl_cout << "Maximum -->\n"
-      << "k=" << kmax << "  j=" << jmax << "  i=" << imax << "-->" << maxN << vcl_endl;
+           << "k=" << kmax << "  j=" << jmax << "  i=" << imax << "-->" << maxN << vcl_endl;
   save_raw(comp_array,dim,dim,dim,"data_comp.raw");
   return maxN;
 }

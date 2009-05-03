@@ -2,10 +2,10 @@
 // \file
 // \brief  Test for getting a bin numbel from an illumination direction
 // \author Isabel Restrepo
-// \date   02/29/2008
+// \date   February 29, 2008
 
 #include <testlib/testlib_test.h>
-#include "../processes/bvxm_illum_index_process.cxx"
+#include <bvxm/pro/processes/bvxm_illum_index_process.cxx>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 

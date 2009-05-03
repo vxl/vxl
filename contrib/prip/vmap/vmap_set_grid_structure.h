@@ -5,10 +5,11 @@
 // \file
 // \brief function to build Maps that have a grid shape.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 06 May 2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vmap_grid_structure.h"
@@ -19,8 +20,8 @@ void vmap_set_grid_structure(TMap & arg, const vmap_grid_structure& grid, vmap_2
 {
   vcl_cout<<"Building TopologicalGrid"<<vcl_endl ;
   arg.initialise(grid.nb_vertices(),
-                grid.nb_edges(),
-                grid.nb_faces()) ;
+                 grid.nb_edges(),
+                 grid.nb_faces());
   arg.set_edge_cycles();
 
   int i,j;

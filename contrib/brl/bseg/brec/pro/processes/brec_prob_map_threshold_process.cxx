@@ -1,5 +1,5 @@
 // This is brl/bseg/brec/pro/processes/brec_prob_map_threshold_process.cxx
-#include <bprb/bprb_func_process.h>
+
 //:
 // \file
 // \brief A process to generate a thresholded image for a given prob map and threshold value
@@ -7,13 +7,14 @@
 //  CAUTION: Input image is assumed to be a probability map, i.e. have type float with values in [0,1]
 //
 // \author Ozge Can Ozcanli
-// \date 11/06/08
+// \date November 06, 2008
 //
 // \verbatim
 //  Modifications
-//   Ozge C. Ozcanli - 02/03/09 - converted process-class to functions which is the new design for bprb processes.
+//   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <brdb/brdb_value.h>
@@ -52,7 +53,7 @@ bool brec_prob_map_threshold_process(bprb_func_process& pro)
   }
 
   //: get input
-  unsigned i = 0; 
+  unsigned i = 0;
   vil_image_view_base_sptr temp = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<float> frame = *vil_convert_cast(float(), temp);
   if (temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
@@ -103,9 +104,9 @@ bool brec_prob_map_threshold_process(bprb_func_process& pro)
            << "\tnumber of CHANGE PIXELS: " << count << " out of " << ni*nj << " pixels: %" << ((float)count/(ni*nj))*100.0f << vcl_endl
            << "----------------------------------\n";
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(out)); 
-  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out2)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(out));
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out2));
+
   return true;
 }
 

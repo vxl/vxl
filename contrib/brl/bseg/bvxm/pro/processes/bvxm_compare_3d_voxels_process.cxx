@@ -1,13 +1,14 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_compare_3d_voxels_process.cxx
+
 //:
 // \file
 //
 // \author Vishal Jain
-// \date 04/15/2008
+// \date April 15, 2008
 //
 // \verbatim
 //  Modifications
-//   Isabel Restrepo - 1/27/09 - converted process-class to functions which is the new design for bvxm_processes.
+//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
@@ -42,12 +43,11 @@ bool bvxm_compare_3d_voxels_process_cons(bprb_func_process& pro)
   input_types_[1] = "bvxm_voxel_world_sptr";
   input_types_[2] = "unsigned";
   input_types_[3] = "vcl_string";
-  
-  if(!pro.set_input_types(input_types_))
-    return false;
-  
-  return true;
 
+  if (!pro.set_input_types(input_types_))
+    return false;
+
+  return true;
 }
 
 //: compares voxel worlds
