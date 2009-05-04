@@ -18,14 +18,14 @@ class vimt_image_2d : public vimt_image
  protected:
   vimt_transform_2d world2im_;
 
-  vimt_image_2d(const vimt_transform_2d& w2i) : world2im_(w2i) {};
+  vimt_image_2d(const vimt_transform_2d& w2i) : world2im_(w2i) {}
 
  public:
   //: Dflt ctor
-  vimt_image_2d() {};
+  vimt_image_2d() {}
 
   //: Destructor
-  virtual ~vimt_image_2d() {};
+  virtual ~vimt_image_2d() {}
 
   //: Return dimensionality of image
   virtual unsigned n_dims() const { return 2; }

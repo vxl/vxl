@@ -20,12 +20,12 @@ template<class T>
 class bvxm_voxel_storage_header
 {
  public:
-  bvxm_voxel_storage_header(){};
+  bvxm_voxel_storage_header(){}
   bvxm_voxel_storage_header(vgl_vector_3d<unsigned> grid_size)
-    : nx_(grid_size.x()), ny_(grid_size.y()), nz_(grid_size.z()), nobservations_(0) {};
+    : nx_(grid_size.x()), ny_(grid_size.y()), nz_(grid_size.z()), nobservations_(0) {}
   bvxm_voxel_storage_header(unsigned nx, unsigned ny, unsigned nz)
-    : nx_(nx),ny_(ny),nz_(nz),nobservations_(0){};
-  ~bvxm_voxel_storage_header(){};
+    : nx_(nx),ny_(ny),nz_(nz),nobservations_(0) {}
+  ~bvxm_voxel_storage_header() {}
 
   unsigned nx_;
   unsigned ny_;
@@ -63,13 +63,13 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
 #endif //BVXM_USE_FSTREAM64
 
   //vcl_fstream fio_;
-  
+
   // currently active slab starting index
   int active_slab_start_;
 
   //: convert slab start index to file position
   vil_streampos slab_filepos(unsigned slab_index);
-  
+
   // slab-sized buffer
   bvxm_memory_chunk_sptr slab_buffer_;
 };

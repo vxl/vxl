@@ -27,7 +27,7 @@ clsfy_rbf_svm_smo_1_builder::clsfy_rbf_svm_smo_1_builder()
 
 //=======================================================================
 
-inline int class_to_svm_target (unsigned v) {return v==1?1:-1;};
+inline int class_to_svm_target (unsigned v) {return v==1?1:-1;}
 
 //=======================================================================
 //: Build classifier from data
@@ -48,7 +48,7 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
   clsfy_smo_1_rbf svAPI;
   vcl_vector<int> targets(nSamples);
   vcl_transform(outputs.begin(), outputs.end(),
-    targets.begin(), class_to_svm_target);
+                targets.begin(), class_to_svm_target);
 
   svAPI.set_data(inputs, targets);
 
@@ -167,7 +167,7 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -60,7 +60,7 @@ static void test_class()
 
 struct base_class
 {
-  virtual ~base_class() { };
+  virtual ~base_class() {}
   virtual int who() const { return 0; }
 };
 
@@ -72,6 +72,7 @@ struct derv_class1
   ~derv_class1() { --cnt; }
   virtual int who() const { return 1; }
 };
+
 int derv_class1::cnt = 0;
 
 struct derv_class2
@@ -82,6 +83,7 @@ struct derv_class2
   ~derv_class2() { --cnt; }
   virtual int who() const { return 2; }
 };
+
 int derv_class2::cnt = 0;
 
 

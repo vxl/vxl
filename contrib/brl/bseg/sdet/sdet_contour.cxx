@@ -82,7 +82,7 @@ const int FRAME = 4;            // border of image
 // Will result in descending order according to length
 struct sdet_contour_edge
 {
-  sdet_contour_edge () {};
+  sdet_contour_edge () {}
 
   void set_edge(vtol_edge_2d_sptr const& e) {e_ = e;}
   vtol_edge_2d_sptr edge() {return e_;}

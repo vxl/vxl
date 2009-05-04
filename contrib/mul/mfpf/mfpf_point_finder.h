@@ -58,7 +58,7 @@ class mfpf_point_finder
   virtual void set_step_size(double);
 
   //: Size of step between sample points
-  double step_size() const { return step_size_; };
+  double step_size() const { return step_size_; }
 
   //: Define search region size
   //  During search, samples at points on grid [-ni,ni]x[-nj,nj],

@@ -54,11 +54,11 @@ class vpgl_calibration_matrix
   void set_y_scale( T new_y_scale );
   void set_skew( T new_skew );
 
-  T focal_length() const { return focal_length_; };
-  vgl_point_2d<T> principal_point() const { return principal_point_; };
-  T x_scale() const { return x_scale_; };
-  T y_scale() const { return y_scale_; };
-  T skew() const { return skew_; };
+  T focal_length() const { return focal_length_; }
+  vgl_point_2d<T> principal_point() const { return principal_point_; }
+  T x_scale() const { return x_scale_; }
+  T y_scale() const { return y_scale_; }
+  T skew() const { return skew_; }
 
   //: Equality tests
   bool operator==(vpgl_calibration_matrix<T> const &that) const;

@@ -79,7 +79,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   bool handle(const vgui_event& e);
 
   //: Returns the name given to this tableau in the constructor.
-  vcl_string name() const { return name_; };
+  vcl_string name() const { return name_; }
 
   //: Returns the filename of the child image if there is one, else the name.
   vcl_string file_name() const;

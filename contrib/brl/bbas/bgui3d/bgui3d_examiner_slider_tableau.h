@@ -36,7 +36,7 @@ class bgui3d_examiner_slider_tableau: public bgui3d_examiner_tableau
   bgui3d_examiner_slider_tableau(SoNode * scene_root = NULL);
 
   //: Destructor
-  virtual ~bgui3d_examiner_slider_tableau(){};
+  virtual ~bgui3d_examiner_slider_tableau() {}
 
   bool handle(const vgui_event& e);
 

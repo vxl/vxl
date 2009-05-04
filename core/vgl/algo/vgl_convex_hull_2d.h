@@ -23,7 +23,7 @@ class vgl_convex_hull_2d
 {
  public:
   vgl_convex_hull_2d (vcl_vector<vgl_point_2d<T> > const& points);
-  ~vgl_convex_hull_2d (){};
+  ~vgl_convex_hull_2d () {}
   vgl_polygon<T>  hull();
  private:
   vgl_convex_hull_2d();

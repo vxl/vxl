@@ -1,6 +1,6 @@
 // This is gel/gevd/gevd_edgel_regions.h
-#ifndef _gevd_edgel_regions_h_
-#define _gevd_edgel_regions_h_
+#ifndef gevd_edgel_regions_h_
+#define gevd_edgel_regions_h_
 //:
 // \file
 // \brief generation of regions bounded by gevd_edgel chains
@@ -57,7 +57,7 @@
 
 class gevd_edgel_regions
 {
-public:
+ public:
   enum RegionLabel {UNLABELED=0, EDGE, LABEL};
   //Constructors/Destructors
   gevd_edgel_regions(bool debug = false);
@@ -84,7 +84,7 @@ public:
   int GetYSize(){return yend_ - yo_ + 1;}
   vil1_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
 #if 0
-  topo_debug_data_ref get_topo_debug_data(){return debug_data_;};
+  topo_debug_data_ref get_topo_debug_data() {return debug_data_;}
 #endif
   //Utitities (especially for testing)
   bool InsertRegionEquivalence(unsigned int label_b, unsigned int label_a);
@@ -97,7 +97,7 @@ public:
   void print_reverse_region_equivalence();
   void print_base_equivalence();
   void print_intensity_data();
-protected:
+ protected:
   //Utilities
   bool GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg);
   bool InitRegionArray(vcl_vector<vtol_edge_2d_sptr>& sg);
@@ -184,4 +184,4 @@ protected:
   unsigned short* sbuf_;
 };
 
-#endif
+#endif // gevd_edgel_regions_h_

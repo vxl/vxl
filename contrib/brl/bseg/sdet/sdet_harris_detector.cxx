@@ -15,7 +15,7 @@
 //  Will result in descending order according to strength
 struct sdet_harris_point
 {
-  sdet_harris_point () {};
+  sdet_harris_point () {}
 
   void set_point(vsol_point_2d_sptr const& p) {p_ = p;}
   void set_strength(const float s) {strength_ = s;}
@@ -117,8 +117,8 @@ bool sdet_harris_detector::extract_corners_vil1(vcl_vector<float>& x_pos,
 // : extract corners using vil code
 //
 bool sdet_harris_detector::extract_corners_vil(vcl_vector<float>& x_pos,
-                                                vcl_vector<float>& y_pos,
-                                                vcl_vector<float>& val)
+                                               vcl_vector<float>& y_pos,
+                                               vcl_vector<float>& val)
 {
 // Check the image
   if (!vimage_||vimage_->nplanes()!=1)

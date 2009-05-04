@@ -21,7 +21,7 @@ struct vil_chord
 
   //: Construct
   vil_chord(unsigned ilo1, unsigned ihi1, unsigned j1)
-    : ilo(ilo1), ihi(ihi1), j(j1) {};
+    : ilo(ilo1), ihi(ihi1), j(j1) {}
 
   //: length == number of pixels
   unsigned length() const { return ihi+1-ilo; }
@@ -30,7 +30,7 @@ struct vil_chord
 //: Print to stream
 inline vcl_ostream& operator<<(vcl_ostream& os, vil_chord c)
 {
-  return os<<"(["<<c.ilo<<","<<c.ihi<<"],"<<c.j<<")";
+  return os<<"(["<<c.ilo<<','<<c.ihi<<"],"<<c.j<<')';
 }
 
 //: Compute area of region defined by (non-overlapping) chords
@@ -41,4 +41,4 @@ inline unsigned vil_area(const vcl_vector<vil_chord>& region)
   return A;
 }
 
-#endif 
+#endif // vil_chord_h_

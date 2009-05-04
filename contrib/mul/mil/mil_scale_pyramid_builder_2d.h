@@ -66,7 +66,7 @@ class mil_scale_pyramid_builder_2d : public mil_image_pyramid_builder
   ~mil_scale_pyramid_builder_2d();
 
   //: get the current scale step;
-  virtual double scale_step() const { return scale_step_; };
+  virtual double scale_step() const { return scale_step_; }
 
   //: Set the Scale step
   void set_scale_step(double scale_step);

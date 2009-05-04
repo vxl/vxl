@@ -40,7 +40,7 @@ class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_bu
     ~vimt_gaussian_pyramid_builder_2d_general();
 
     //: get the current scale step;
-    double scale_step() const { return scale_params_.scale_step(); };
+    double scale_step() const { return scale_params_.scale_step(); }
 
     //: Set the Scale step
     void set_scale_step(double scale_step);

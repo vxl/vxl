@@ -162,7 +162,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   enum BWM_2D_DRAW_MODE draw_mode_;
 
-  bwm_observer_img(){};
+  bwm_observer_img() {}
 
   bgui_image_tableau_sptr img_tab_;
 

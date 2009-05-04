@@ -41,7 +41,7 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
   void set_value(const T& value) { m_value = value; }
 
   // Output to stream. Overload as necessary.
-  virtual vcl_ostream& output(vcl_ostream& os) const { return os << m_value; };
+  virtual vcl_ostream& output(vcl_ostream& os) const { return os << m_value; }
 
   virtual field_tree* get_tree() const { return vil_nitf2_scalar_field::get_tree(); }
  private:

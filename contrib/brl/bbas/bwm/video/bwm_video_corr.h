@@ -38,7 +38,7 @@ class bwm_video_corr : public vbl_ref_count
     { matches_[frame_index]=pt; }
 
   //: Constructor - don't copy the ref count
-  bwm_video_corr(bwm_video_corr const& c):vbl_ref_count(){};
+  bwm_video_corr(bwm_video_corr const& c):vbl_ref_count() {}
 
   // Destructor
   ~bwm_video_corr() {}

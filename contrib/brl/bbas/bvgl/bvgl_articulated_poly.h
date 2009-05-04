@@ -22,7 +22,7 @@ class bvgl_articulated_poly : public vsol_polyline_2d
   bvgl_articulated_poly(const unsigned n_joints);
   bvgl_articulated_poly(const unsigned n_joints, vcl_vector<double> const& link_lengths);
   bvgl_articulated_poly(const bvgl_articulated_poly& poly);
-  ~bvgl_articulated_poly(){};
+  ~bvgl_articulated_poly() {}
 
   vgl_h_matrix_2d<double> joint_transform(unsigned joint) const
     {return joint_transforms_[joint];}
@@ -58,8 +58,9 @@ class bvgl_articulated_poly : public vsol_polyline_2d
  private:
   //: called when the state of the polygon changes
   void update();
-  bvgl_articulated_poly(){}; //not available
+  bvgl_articulated_poly() {} //not available
   //:the inverse joint transforms for the current state of the articulation
   vcl_vector<vgl_h_matrix_2d<double> > joint_transforms_;
 };
+
 #endif // bvgl_articulated_poly_h_

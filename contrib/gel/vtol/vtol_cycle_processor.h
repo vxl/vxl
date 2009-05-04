@@ -32,7 +32,7 @@ class vtol_cycle_processor
                        bool debug1=false, bool debug_2=false);
   vtol_cycle_processor(vcl_vector<vtol_edge*>& edges,
                        bool debug1=false, bool debug_2=false);
-  ~vtol_cycle_processor(){};
+  ~vtol_cycle_processor() {}
 
   // PUBLIC INTERFACE----------------------------------------------------------
   bool nested_one_cycles(vcl_vector<vtol_one_chain_sptr>& one_chains,
@@ -75,7 +75,7 @@ class vtol_cycle_processor
   //members
   bool debug1_;
   bool debug2_;
-  bool valid_; 
+  bool valid_;
   float tolerance_;
   bool cycle_;
   bool found_next_edge_;

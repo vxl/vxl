@@ -25,7 +25,7 @@ class vil_nitf2_typed_field_formatter : public vil_nitf2_field_formatter
     : vil_nitf2_field_formatter(field_type, field_width) {}
 
   // Destructor
-  virtual ~vil_nitf2_typed_field_formatter() {};
+  virtual ~vil_nitf2_typed_field_formatter() {}
 
   // Returns a vcl_vector field of specified dimensionality.
   vil_nitf2_array_field* create_array_field(
@@ -268,7 +268,7 @@ class vil_nitf2_string_formatter : public vil_nitf2_typed_field_formatter<vcl_st
   vil_nitf2_field_formatter* copy() const;
 
   // Destructor
-  virtual ~vil_nitf2_string_formatter() {};
+  virtual ~vil_nitf2_string_formatter() {}
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vcl_string>::read;

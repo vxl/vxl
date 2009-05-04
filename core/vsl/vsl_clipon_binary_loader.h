@@ -88,7 +88,7 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
 
  public:
   //: Constructor
-  vsl_clipon_binary_loader() {};
+  vsl_clipon_binary_loader() {}
 
   //: Destructor
   ~vsl_clipon_binary_loader();

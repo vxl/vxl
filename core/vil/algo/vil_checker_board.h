@@ -39,7 +39,7 @@ class vil_checker_board_params
   { xoff_=xoff;  yoff_=yoff; }
 
   void use_alpha_plane( bool use )
-  { use_alpha_plane_ = use; };
+  { use_alpha_plane_ = use; }
 
   void not_use_color( int c )
   { not_use_color_ = c;  not_use_color_flag_ = true; }

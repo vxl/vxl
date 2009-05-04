@@ -19,13 +19,13 @@
 ///////////////////////////////////////////////////////////////////////////
 
 
-#ifdef EXPATPP_COMPATIBLE_EXPAT12 // earlier versions of expat up to v1.2 
+#ifdef EXPATPP_COMPATIBLE_EXPAT12 // earlier versions of expat up to v1.2
   #include <xmlparse.h>
 #else
   #include "expat.h"  // since some version of expat moved to SourceForge
 #endif
-#include <stdio.h>
-#include <assert.h>
+#include <vcl_cstdio.h>
+#include <vcl_cassert.h>
 
 
 /**
@@ -34,7 +34,7 @@ Latest version 29-Dec-2002 compatible with expat 1.95.6
 */
 
 /**
-expatpp follows a simple pattern for converting the semi-OOP callback design of 
+expatpp follows a simple pattern for converting the semi-OOP callback design of
 expat into a true class which allows you to override virtual methods to supply
 callbacks.
 
@@ -44,7 +44,8 @@ see testexpatpp.cpp for a detailed example
 1) decide which callbacks you wish to use, eg: just startElement
 
 2) declare a subclass of expatpp, eg:
-class myExpat : public expatpp {
+class myExpat : public expatpp
+{
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
 };
 
@@ -70,7 +71,7 @@ For efficiency, you could provide your own constructor and set some of the callb
 to 0, so expat doesn't call the static functions. (untested idea).
 
 \par Naming Conventions
-The virtual functions violate the usual AD Software convention of lowercase first letter 
+The virtual functions violate the usual AD Software convention of lowercase first letter
 for public methods but this was a late change to protected and too much user code out there.
 
 
@@ -90,14 +91,15 @@ their start and ending elements - makes it harder to unit test them in isolation
 
 \todo allow specification of encoding
 */
-class expatpp {
-public:
+class expatpp
+{
+ public:
   expatpp(bool createParser=true);
   virtual ~expatpp();
 
   operator XML_Parser() const;
-  
-protected:  // callback virtuals should only be invoked through our Callback static functions
+
+ protected:  // callback virtuals should only be invoked through our Callback static functions
   bool emptyCharData(const XML_Char* s, int len);  // utility often used in overridden charData
 
 // overrideable callbacks
@@ -113,16 +115,16 @@ protected:  // callback virtuals should only be invoked through our Callback sta
   virtual void endNamespace(const XML_Char*);
 /// \name Callbacks added to support expat 1.95.5
 //@{
-  virtual void attlistDecl( 
+  virtual void attlistDecl(
     const XML_Char *elname,
     const XML_Char *attname,
     const XML_Char *att_type,
     const XML_Char *dflt,
-    int             isrequired);  
-  virtual void endCdataSection(); 
-  virtual void endDoctypeDecl();  
-  virtual void comment( const XML_Char *data);  
-  virtual void elementDecl( const XML_Char *name, XML_Content *model);  
+    int             isrequired);
+  virtual void endCdataSection();
+  virtual void endDoctypeDecl();
+  virtual void comment( const XML_Char *data);
+  virtual void elementDecl( const XML_Char *name, XML_Content *model);
   virtual void entityDecl(
     const XML_Char *entityName,
     int is_parameter_entity,
@@ -131,19 +133,19 @@ protected:  // callback virtuals should only be invoked through our Callback sta
     const XML_Char *base,
     const XML_Char *systemId,
     const XML_Char *publicId,
-    const XML_Char *notationName);  
-  virtual void skippedEntity(const XML_Char *entityName, int is_parameter_entity);  
+    const XML_Char *notationName);
+  virtual void skippedEntity(const XML_Char *entityName, int is_parameter_entity);
   virtual void startCdataSection();
   virtual void startDoctypeDecl(const XML_Char *doctypeName,
-      const XML_Char *sysid,
-      const XML_Char *pubid,
-      int has_internal_subset); 
+                                const XML_Char *sysid,
+                                const XML_Char *pubid,
+                                int has_internal_subset);
   virtual void xmlDecl( const XML_Char      *version,
-                                      const XML_Char      *encoding,
-                                      int                  standalone);
+                        const XML_Char      *encoding,
+                        int                  standalone);
 //@}
 
-public: 
+ public:
 /// \name XML interfaces
 //@{
   XML_Status XML_Parse(const char* buffer, int len, int isFinal);
@@ -153,11 +155,11 @@ public:
   int XML_GetCurrentLineNumber();
   int XML_GetCurrentColumnNumber();
 //@}
-  
-protected:
+
+ protected:
   XML_Parser mParser;
   bool mHaveParsed;
-  
+
 /// \name overrideables to customise behaviour, must call parent
 //@{
   virtual void ReleaseParser();
@@ -170,10 +172,10 @@ protected:
   rather than leave it for application code to check status.
   Useful point to insert logging to silently grab failed parses
 */
-  virtual void CheckFinalStatus(XML_Status) {};
-    
+  virtual void CheckFinalStatus(XML_Status) {}
+
 // static interface functions for callbacks
-public:
+ public:
   static void startElementCallback(void *userData, const XML_Char* name, const XML_Char** atts);
   static void endElementCallback(void *userData, const XML_Char* name);
   static void startNamespaceCallback(void *userData, const XML_Char* prefix, const XML_Char* uri);
@@ -181,43 +183,43 @@ public:
   static void charDataCallback(void *userData, const XML_Char* s, int len);
   static void processingInstructionCallback(void *userData, const XML_Char* target, const XML_Char* data);
   static void defaultHandlerCallback(void* userData, const XML_Char* s, int len);
-  static int notStandaloneHandlerCallback(void* userData);  
+  static int notStandaloneHandlerCallback(void* userData);
   static void unParsedEntityDeclCallback(void* userData, const XML_Char* entityName, const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId, const XML_Char* notationName);
   static void notationDeclCallback(void *userData, const XML_Char* notationName, const XML_Char* base, const XML_Char* systemId, const XML_Char* publicId);
 /// \name Callback interfacess added to support expat 1.95.5
 //@{
-  static void attlistDeclCallback(void *userData,  
-    const XML_Char *elname,
-    const XML_Char *attname,
-    const XML_Char *att_type,
-    const XML_Char *dflt,
-    int             isrequired);  
-  static void commentCallback(void *userData,  const XML_Char *data); 
-  static void elementDeclCallback(void *userData,  const XML_Char *name, XML_Content *model); 
+  static void attlistDeclCallback(void *userData,
+                                  const XML_Char *elname,
+                                  const XML_Char *attname,
+                                  const XML_Char *att_type,
+                                  const XML_Char *dflt,
+                                  int             isrequired);
+  static void commentCallback(void *userData,  const XML_Char *data);
+  static void elementDeclCallback(void *userData,  const XML_Char *name, XML_Content *model);
   static void endCdataSectionCallback(void *userData);
-  static void endDoctypeDeclCallback(void *userData); 
-  static void entityDeclCallback(void *userData, 
-    const XML_Char *entityName,
-    int is_parameter_entity,
-    const XML_Char *value,
-    int value_length,
-    const XML_Char *base,
-    const XML_Char *systemId,
-    const XML_Char *publicId,
-    const XML_Char *notationName);  
-  static void skippedEntityCallback(void *userData,  const XML_Char *entityName, int is_parameter_entity);  
+  static void endDoctypeDeclCallback(void *userData);
+  static void entityDeclCallback(void *userData,
+                                 const XML_Char *entityName,
+                                 int is_parameter_entity,
+                                 const XML_Char *value,
+                                 int value_length,
+                                 const XML_Char *base,
+                                 const XML_Char *systemId,
+                                 const XML_Char *publicId,
+                                 const XML_Char *notationName);
+  static void skippedEntityCallback(void *userData,  const XML_Char *entityName, int is_parameter_entity);
   static void startCdataSectionCallback(void *userData);
-  static void startDoctypeDeclCallback(void *userData, 
-    const XML_Char *doctypeName,
-        const XML_Char *sysid,
-        const XML_Char *pubid,
-        int has_internal_subset); 
+  static void startDoctypeDeclCallback(void *userData,
+                                       const XML_Char *doctypeName,
+                                       const XML_Char *sysid,
+                                       const XML_Char *pubid,
+                                       int has_internal_subset);
   static void xmlDeclCallback(void *userData,  const XML_Char      *version,
-                                      const XML_Char      *encoding,
-                                      int                  standalone);
+                              const XML_Char      *encoding,
+                              int                  standalone);
 //@}
 
-  
+
 // utilities
   static int skipWhiteSpace(const XML_Char*);
   static const XML_Char* getAttribute(const XML_Char *matchingName, const XML_Char **atts);
@@ -228,11 +230,11 @@ public:
 
 /**
   subclass to support a hierarchy of parsers, in a sort of recursion or
-  'nesting' approach, where a top-level parser might create sub-parsers 
+  'nesting' approach, where a top-level parser might create sub-parsers
   for part of a file.
-  
+
   The currently active child parser is owned (mOwnedChild) and is deleted
-  by DeleteChild (invoked from the dtor) so error handling can propagate 
+  by DeleteChild (invoked from the dtor) so error handling can propagate
   up the tree, closing parsers, without leaks.
 
   \par Switching to sub-parsers
@@ -242,43 +244,44 @@ public:
 
   \warning You can accidentally invoke a new parser without it doing anything
   - new UserChildParser()  // will be new top-level parser, nothing to do with our XML
-  
+
   \par Self-deletion
   If you transfer control to a sub-parser with just new UserChildParser(this) then
   it will be automatically self-deleting in its returnToParent method and
   will invoke OwnedChildOrphansItself to clear our mOwnedChild.
-  
+
   The reason for self-deletion being governed by a somewhat complex chain of
   calls rather than simply a boolean flag is because expatpp has been in use
   worldwide for many years and it was deemed too unfriendly to break code in
   a manner which could cause unwanted side effects - the current approach safely
   preserves self-deletion but also allows for expatpp to have parent parsers
   own and delete children, without compiling with different options.
-  
-  \note 
+
+  \note
   If you invoke a sub-parser with switchToNewSubParser( new UserChildParser() );
   then the user child parser will start with a new XML parser instance
-  created by the expatpp ctor. This is safe but slightly wasteful of processing 
+  created by the expatpp ctor. This is safe but slightly wasteful of processing
   as the new parser will be discarded by BeAdopted().
 
   \par Switching to child and explicitly deleting
   switchToNewSubParser( somevar = new UserChildParser(this) ) allows you to get values
   back out of the child parser, in the context of the parent, eg:
-  
+
 \verbatim
 
 void MultiFilterParser::startElement(const XML_Char* name, const XML_Char **atts)
 {
-  if(strcmp(name,"FilterRequest")==0) {
-    switchToNewSubParser( 
-      mCurrentFilterParser = new FilterRequestParser(this, atts) 
-    );  // we own and will have to explicitly delete 
+  if (strcmp(name,"FilterRequest")==0) {
+    switchToNewSubParser(
+      mCurrentFilterParser = new FilterRequestParser(this, atts)
+    );  // we own and will have to explicitly delete
 ...
+  }
 }
-    
+
 void MultiFilterParser::endElement(const XML_Char *name)
 {
-  if(strcmp(name,"FilterRequest")==0) {
+  if (strcmp(name,"FilterRequest")==0) {
     assert(mCurrentFilterParser);
     FilterClause* newClause = mCurrentFilterParser->orphanBuiltClause();  // retrieve data built by sub-parser
 ...
@@ -288,28 +291,28 @@ void MultiFilterParser::endElement(const XML_Char *name)
 }
 \endverbatim
 */
-class expatppNesting : public expatpp {
-
-public:
+class expatppNesting : public expatpp
+{
+ public:
   expatppNesting(expatppNesting* parent=0);  ///< NOT a copy ctor!! this is a recursive situation
   virtual ~expatppNesting();
-  
+
   void switchToNewSubParser( expatppNesting* pAdoptedChild );
   expatppNesting* returnToParent();
 
-protected:
+ protected:
   void BeAdopted(expatppNesting* adoptingParent);
   void OwnedChildOrphansItself(expatppNesting* callingChild);
   void RegisterWithParentXMLParser();
   virtual void AdoptChild(expatppNesting* adoptingChild);
   virtual void DeleteChild();
-  
-  int mDepth; 
+
+  int mDepth;
   bool mSelfDeleting;   ///< only valid if mParent not null
   expatppNesting* mParent; ///< may be null the parent owns this object
   expatppNesting* mOwnedChild;  ///< owned, optional currently active child (auto_ptr not used to avoid STL dependency)
 
-public:
+ public:
 /// \name interface functions for callbacks
 //@{
   static void nestedStartElementCallback(void* userData, const XML_Char* name, const XML_Char** atts);
@@ -322,7 +325,7 @@ public:
   virtual void SetupHandlers();
 //@}
 
-private:
+ private:
   // Forbid copy-construction and assignment, to prevent double-deletion of mOwnedChild
             expatppNesting( const expatppNesting & );
   expatppNesting &  operator=( const expatppNesting & );
@@ -334,7 +337,7 @@ private:
 // -------------------------------------------------------
 //      e x p a t p p
 // -------------------------------------------------------
-inline  
+inline
 expatpp::operator XML_Parser() const
 {
   return mParser;
@@ -352,5 +355,4 @@ expatppNesting::OwnedChildOrphansItself(expatppNesting* callingChild)
 }
 
 
-  
 #endif   // H_EXPATPP

@@ -57,7 +57,7 @@ class vipl_threshold : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
   // -+-+- constructors/destructors: -+-+-
  public:
   inline vipl_threshold(DataIn t=128, DataOut b=1)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), threshold_(t), below_(b), above_(0), aboveset_(false) {};
+    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), threshold_(t), below_(b), above_(0), aboveset_(false) {}
   inline vipl_threshold(DataIn t, DataOut b, DataOut a)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), threshold_(t), below_(b), above_(a), aboveset_(true) {}
   inline vipl_threshold(vipl_threshold const& A)

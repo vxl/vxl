@@ -120,11 +120,11 @@ class m23d_ortho_flexible_builder
     //: Return 3(m+1) x np matrix, each column containing modes for one 3D point
     //  Points are centred on the origin.
     //  Each 3 rows contains one of the (1+m) bases.
-    const vnl_matrix<double>& shape_3d() const { return P3D_; };
+    const vnl_matrix<double>& shape_3d() const { return P3D_; }
 
     //: The 2ns x 3(m+1) projection matrix
     //  Each 2x3 sub-matrix is a scaled orthographic projection matrix
-    const vnl_matrix<double>& projections() const { return P_; };
+    const vnl_matrix<double>& projections() const { return P_; }
 
     //: Centred version of the 2D views supplied to reconstruct()
     //  Each 2D shape has been translated so that it's CoG is at the origin
@@ -144,7 +144,7 @@ class m23d_ortho_flexible_builder
     // Matrix selected so that projection matrices in each 3 cols have same
     // effective rotation.
     void correct_coord_frame(vnl_matrix<double>& P,
-                            vnl_matrix<double>& B);
+                             vnl_matrix<double>& B);
 
     //: Compute correction matrix so that M1.G has suitable projection properties
     void compute_correction(const vnl_matrix<double>& M1,

@@ -43,7 +43,7 @@ class vipl_dyadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
   // -+-+- constructors/destructors: -+-+-
  public:
   inline vipl_dyadic(DyadicFunction f)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {};
+    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {}
   inline vipl_dyadic(vipl_dyadic const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), func_(A.func()) {}
   inline ~vipl_dyadic() {}

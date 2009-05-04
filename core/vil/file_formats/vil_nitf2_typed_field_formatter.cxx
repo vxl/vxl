@@ -17,7 +17,7 @@
 
 vil_nitf2_date_time_formatter::vil_nitf2_date_time_formatter(int field_width)
   : vil_nitf2_typed_field_formatter<vil_nitf2_date_time>(vil_nitf2::type_date_time, field_width)
-{};
+{}
 
 vil_nitf2_field_formatter* vil_nitf2_date_time_formatter::copy() const
 {
@@ -131,7 +131,7 @@ vil_nitf2_long_long_formatter::
 vil_nitf2_long_long_formatter(int field_width, bool show_sign)
   : vil_nitf2_typed_field_formatter<vil_nitf2_long>(vil_nitf2::type_long_long, field_width),
     show_sign(show_sign)
-{};
+{}
 
 vil_nitf2_field_formatter* vil_nitf2_long_long_formatter::copy() const
 {
@@ -195,7 +195,7 @@ vil_nitf2_double_formatter(int field_width, int precision, bool show_sign)
   : vil_nitf2_typed_field_formatter<double>(vil_nitf2::type_double, field_width),
     precision(precision),
     show_sign(show_sign)
-{};
+{}
 
 vil_nitf2_field_formatter* vil_nitf2_double_formatter::copy() const
 {
@@ -246,7 +246,7 @@ vil_nitf2_exponential_formatter(int mantissa_width, int exponent_width)
                                             mantissa_width + exponent_width + 5),
     mantissa_width(mantissa_width),
     exponent_width(exponent_width)
-{};
+{}
 
 vil_nitf2_field_formatter* vil_nitf2_exponential_formatter::copy() const
 {
@@ -306,7 +306,7 @@ bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output,
 
 vil_nitf2_binary_formatter::vil_nitf2_binary_formatter(int width_bytes)
   : vil_nitf2_typed_field_formatter<void*>(vil_nitf2::type_binary, width_bytes)
-{};
+{}
 
 vil_nitf2_field_formatter* vil_nitf2_binary_formatter::copy() const
 {
@@ -331,7 +331,7 @@ bool vil_nitf2_binary_formatter::write(vil_nitf2_ostream& output, void*const& va
 
 vil_nitf2_char_formatter::vil_nitf2_char_formatter()
   : vil_nitf2_typed_field_formatter<char>(vil_nitf2::type_char, 1)
-{};
+{}
 
 vil_nitf2_field_formatter* vil_nitf2_char_formatter::copy() const
 {
@@ -360,7 +360,7 @@ vil_nitf2_string_formatter::
 vil_nitf2_string_formatter(int field_width, enum_char_set char_set)
   : vil_nitf2_typed_field_formatter<vcl_string>(vil_nitf2::type_string, field_width),
     char_set(char_set)
-{};
+{}
 
 vil_nitf2_field_formatter* vil_nitf2_string_formatter::copy() const
 {

@@ -32,7 +32,7 @@ class bwm_observer_rat_cam : public bwm_observer_cam
   bwm_observer_rat_cam(bgui_image_tableau_sptr img, const char* n="unnamed")
     : bwm_observer_cam(img, n) {}
 
-  virtual ~bwm_observer_rat_cam(){};
+  virtual ~bwm_observer_rat_cam() {}
 
   virtual vcl_string type_name() const { return "bwm_observer_rat_cam"; }
 

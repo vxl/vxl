@@ -68,11 +68,11 @@ class vimt_transform_2d
         xx_(1),xy_(0),xt_(0),
         yx_(0),yy_(1),yt_(0),
         tx_(0),ty_(0),tt_(1),
-        form_(Identity),inv_uptodate_(0) {};
+        form_(Identity),inv_uptodate_(0) {}
 
 
-    bool is_identity() const { return form_==Identity; };
-    Form form() const { return form_; };
+    bool is_identity() const { return form_==Identity; }
+    Form form() const { return form_; }
     vnl_matrix<double> matrix() const;
     void matrix(vnl_matrix<double>&) const;
 
@@ -94,7 +94,7 @@ class vimt_transform_2d
     //   s: Scaling
     // t_x: Translation in x
     // t_y: Translation in y
-    void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y);};
+    void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); }
     //: Sets the transformation to be a translation.
     // t_x: Translation in x
     // t_y: Translation in y
@@ -114,13 +114,13 @@ class vimt_transform_2d
     //: Sets Euclidean transformation.
     // \param dx  Rotation and scaling of x axis
     // \param t  Translation
-    void set_similarity(const vgl_point_2d<double> & dx, 
+    void set_similarity(const vgl_point_2d<double> & dx,
                         const vgl_point_2d<double> & t);
 
     //: Sets Euclidean transformation.
     // \param dx  Rotation and scaling of x axis
     // \param t  Translation
-    void set_similarity(const vgl_vector_2d<double> & dx, 
+    void set_similarity(const vgl_vector_2d<double> & dx,
                         const vgl_point_2d<double> & t);
 
     //: reflect about a line though the points m1, and m2

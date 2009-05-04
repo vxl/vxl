@@ -77,7 +77,7 @@ class mil_gaussian_pyramid_builder_2d_general : public mil_gaussian_pyramid_buil
   ~mil_gaussian_pyramid_builder_2d_general();
 
   //: get the current scale step;
-  double scale_step() const { return scale_step_; };
+  double scale_step() const { return scale_step_; }
 
   //: Set the Scale step
   void set_scale_step(double scale_step);

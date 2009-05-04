@@ -103,7 +103,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
  protected:
   //allows children to take some action if a correspondence is set
-  virtual void correspondence_action(){};
+  virtual void correspondence_action() {}
 
   bwm_observer_vgui() { show_vertices_ = true; }
 

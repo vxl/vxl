@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #ifndef VIL_NITF2_FIELD_H
@@ -22,8 +22,8 @@ class vil_nitf2_array_field;
 
 //-----------------------------------------------------------------------------
 // vil_nitf2_field is an instance of a single NITF field (or sequence of repeating
-// fields), including its definition and value, as read from (or to be written 
-// to) a NITF file. 
+// fields), including its definition and value, as read from (or to be written
+// to) a NITF file.
 
 // Abstract base class for scalar and array-valued fields, as read from
 // or to be written to a NITF file. This class includes its definition
@@ -49,15 +49,15 @@ class vil_nitf2_field
   vil_nitf2_array_field* array_field();
 
   // Destructor
-  virtual ~vil_nitf2_field() { };
+  virtual ~vil_nitf2_field() {}
 
   // Output to stream (required overload as a reminder to implement operator <<)
   virtual vcl_ostream& output(vcl_ostream& os) const = 0;
 
   // Return my element data type
-  vil_nitf2::enum_field_type type() const; 
+  vil_nitf2::enum_field_type type() const;
 
-  // Description of the field and pointers to the descriptions 
+  // Description of the field and pointers to the descriptions
   // of child nodes in the true
   class field_tree {
    public:

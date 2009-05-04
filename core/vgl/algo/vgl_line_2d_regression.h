@@ -37,7 +37,7 @@ class vgl_line_2d_regression
   double squared_error_;//!< an estimate of the squared error
  public:
   vgl_line_2d_regression();
-  ~vgl_line_2d_regression(){};
+  ~vgl_line_2d_regression() {}
 
   //: The number of points added.
   inline unsigned int get_n_pts() const { return npts_; }

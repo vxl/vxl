@@ -39,7 +39,7 @@ class bbgm_image_of : public bbgm_image_base
 {
  public:
   //: Constructor
-  bbgm_image_of<dist>(){};
+  bbgm_image_of<dist>() {}
   bbgm_image_of<dist>(unsigned int ni, unsigned int nj,
                       const dist& model) : data_(nj,ni,model) {}
 

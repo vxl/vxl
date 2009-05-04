@@ -31,7 +31,7 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   double min_var_;
   int max_its_;
   vcl_vector<vnl_vector<double> > initial_means_;
-  
+
   //: Whether weights changed during iterations
   bool weights_fixed_;
 
@@ -44,13 +44,13 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
 
     //: Means centred on data[i*f]
   void initialise_to_regular_samples(vpdfl_mixture& model,
-                  const vnl_vector<double>* data,
-                  const vcl_vector<double>& wts) const;
+                                     const vnl_vector<double>* data,
+                                     const vcl_vector<double>& wts) const;
 
     //: Select positions along diagonal of bounding box
   void initialise_diagonal(vpdfl_mixture& model,
-                  const vnl_vector<double>* data,
-                  const vcl_vector<double>& wts) const;
+                           const vnl_vector<double>* data,
+                           const vcl_vector<double>& wts) const;
 
     //: Select positions and widths for components to start
   void initialise(vpdfl_mixture& model,
@@ -106,7 +106,7 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   unsigned n_builders() const { return builder_.size(); }
 
   //: Return i-th builder
-  vpdfl_builder_base& builder(unsigned i) { return *builder_[i]; };
+  vpdfl_builder_base& builder(unsigned i) { return *builder_[i]; }
 
   //: Create empty model
   virtual vpdfl_pdf_base* new_model() const;
@@ -154,7 +154,7 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   // Note that the vector must  is copied
   void preset_initial_means(const vcl_vector<vnl_vector<double> >& component_means);
 
-  
+
   //: Version number for I/O
   short version_no() const;
 
@@ -193,7 +193,6 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
   virtual void config_from_stream(vcl_istream & is);
-
 };
 
 #endif // vpdfl_mixture_builder_h_

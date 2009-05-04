@@ -29,7 +29,7 @@ class vil_nitf2_field_sequence
  public:
   // Constructor
   vil_nitf2_field_sequence(const vil_nitf2_field_definitions& field_definitions)
-    : m_field_definitions(&field_definitions) {};
+    : m_field_definitions(&field_definitions) {}
 
   // Destructor
   virtual ~vil_nitf2_field_sequence();
@@ -73,9 +73,9 @@ class vil_nitf2_field_sequence
                  vil_nitf2_long& out_value, bool ignore_extra_indexes = false) const;
 #endif
 
-  // Sets out_value to a flattened list of the values of the array field element 
-  // specified by tag and index. If index is the empty vector, then out_values 
-  // hold all instances of the field. If index partially specifies value instances, 
+  // Sets out_value to a flattened list of the values of the array field element
+  // specified by tag and index. If index is the empty vector, then out_values
+  // hold all instances of the field. If index partially specifies value instances,
   // the out_values hold all instances of the field selected by the partial index.
   // Appends to, instead of clearing, out_values if clear_out_values is false.
   // Returns 0 if such a field is not found or is of the wrong type.

@@ -90,7 +90,7 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
   float  IntMax() { return cached_max_; }
 
   //: Mean intensity
-  float  IntMean() { return cached_mean_; };
+  float  IntMean() { return cached_mean_; }
 
   //: Intensity variance
   float  IntVar() { return cached_var_; }

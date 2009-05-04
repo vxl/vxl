@@ -24,7 +24,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
  public:
   // Constructor
   vil_nitf2_typed_array_field(int num_dimensions, vil_nitf2_field_definition* field_definition)
-    : vil_nitf2_array_field(field_definition, num_dimensions) {};
+    : vil_nitf2_array_field(field_definition, num_dimensions) {}
 
   //:
   // Set out_value to the scalar value at the specified index vector,

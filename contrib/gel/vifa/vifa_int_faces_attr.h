@@ -100,8 +100,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   virtual bool  GetNativeAttributes(vcl_vector<float>& attrs);
 
   // Data access for non-attributes
-  virtual iface_list&  GetFaces()
-    { return faces_; };
+  virtual iface_list&  GetFaces() { return faces_; }
   virtual void    SetFaces(iface_list& v);
   edge_2d_list&    GetEdges();
 

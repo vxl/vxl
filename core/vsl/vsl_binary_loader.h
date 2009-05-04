@@ -56,7 +56,7 @@ class vsl_binary_loader : public vsl_binary_loader_base
 
  public :
   //: Constructor
-  vsl_binary_loader() {};
+  vsl_binary_loader() {}
 
   //: Destructor
   ~vsl_binary_loader();
@@ -68,7 +68,7 @@ class vsl_binary_loader : public vsl_binary_loader_base
   void make_empty();
 
   //: Add example object to list of those that can be loaded
-  void add( const BaseClass& b) { object_.push_back(b.clone());};
+  void add( const BaseClass& b) { object_.push_back(b.clone());}
 
   //: Return current list of class objects which can be loaded
   const vcl_vector<BaseClass*>& object() { return object_; }

@@ -19,14 +19,14 @@ class vimt3d_image_3d : public vimt_image
  protected:
   vimt3d_transform_3d world2im_;
 
-  vimt3d_image_3d(const vimt3d_transform_3d& w2i) : world2im_(w2i) {};
+  vimt3d_image_3d(const vimt3d_transform_3d& w2i) : world2im_(w2i) {}
 
  public:
   //: Dflt ctor
-  vimt3d_image_3d() {};
+  vimt3d_image_3d() {}
 
   //: Destructor
-  virtual ~vimt3d_image_3d() {};
+  virtual ~vimt3d_image_3d() {}
 
   //: Return dimensionality of image
   virtual unsigned n_dims() const { return 3; }

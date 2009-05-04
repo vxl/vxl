@@ -588,7 +588,7 @@ void mbl_log_categories::clear()
 struct mbl_log_prefix_comp
 {
   vcl_string s2;
-  mbl_log_prefix_comp(const vcl_string& s): s2(s) {};
+  mbl_log_prefix_comp(const vcl_string& s): s2(s) {}
 
   bool operator() (const vcl_pair<vcl_string, mbl_log_categories::cat_spec>& s1)
   {

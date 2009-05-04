@@ -14,59 +14,58 @@
 //  For comparison, order not important.
 class mmn_triplet
 {
-public:
+ public:
   unsigned v1,v2,v3;
 
-  mmn_triplet() :v1(999999),v2(999999),v3(999999) {};
-  mmn_triplet(unsigned i1, unsigned i2, unsigned i3) 
-    : v1(i1),v2(i2),v3(i3) {};
+  mmn_triplet() :v1(999999),v2(999999),v3(999999) {}
+  mmn_triplet(unsigned i1, unsigned i2, unsigned i3)
+    : v1(i1),v2(i2),v3(i3) {}
 
   //: Return smallest node index
-  unsigned min_v() const 
-  { 
-    if (v1<v2) return (v1<v3?v1:v3); 
-    else       return (v2<v3?v2:v3);
+  unsigned min_v() const
+  {
+    if (v1<v2) return v1<v3?v1:v3;
+    else       return v2<v3?v2:v3;
   }
 
   //: Return middle node index
   unsigned mid_v() const
-  { 
+  {
     if (v1<v2)
     {
-      if (v2<v3) return v2;  // 1-2-3
-      return (v3<v1?v1:v3);  // 3-1-2 or 1-3-2
+      if (v2<v3) return v2;          // 1-2-3
+      else       return v3<v1?v1:v3; // 3-1-2 or 1-3-2
     }
-    if (v1<v3) return v1;  // 2-1-3
-    return (v3<v2?v2:v3);  // 3-2-1 or 2-3-1
+    if (v1<v3) return v1;          // 2-1-3
+    else       return v3<v2?v2:v3; // 3-2-1 or 2-3-1
  }
 
   //: Return largest node index
   unsigned max_v() const
-  { 
-    if (v1>v2) return (v1>v3?v1:v3); 
-    else       return (v2>v3?v2:v3);
+  {
+    if (v1>v2) return v1>v3?v1:v3;
+    else       return v2>v3?v2:v3;
   }
-
 };
 
 inline bool operator==(const mmn_triplet& t1, const mmn_triplet& t2)
 {
   if (t1.v1==t2.v1)
   {
-    if (t1.v2==t2.v2) return (t1.v3==t2.v3);  // Order 1-2-3
-    if (t1.v2==t2.v3) return (t1.v3==t2.v2);  // Order 1-3-2
+    if (t1.v2==t2.v2) return t1.v3==t2.v3;  // Order 1-2-3
+    if (t1.v2==t2.v3) return t1.v3==t2.v2;  // Order 1-3-2
     return false;
   }
   if (t1.v1==t2.v2)
   {
-    if (t1.v2==t2.v1) return (t1.v3==t2.v3);  // Order 2-1-3
-    if (t1.v2==t2.v3) return (t1.v3==t2.v1);  // Order 3-1-2
+    if (t1.v2==t2.v1) return t1.v3==t2.v3;  // Order 2-1-3
+    if (t1.v2==t2.v3) return t1.v3==t2.v1;  // Order 3-1-2
     return false;
   }
   if (t1.v1==t2.v3)
   {
-    if (t1.v2==t2.v1) return (t1.v3==t2.v2);  // Order 2-3-1
-    if (t1.v2==t2.v2) return (t1.v3==t2.v1);  // Order 3-2-1
+    if (t1.v2==t2.v1) return t1.v3==t2.v2;  // Order 2-3-1
+    if (t1.v2==t2.v2) return t1.v3==t2.v1;  // Order 3-2-1
     return false;
   }
   return false;
@@ -77,7 +76,7 @@ inline bool operator!=(const mmn_triplet& t1, const mmn_triplet& t2)
 
 inline vcl_ostream& operator<<(vcl_ostream& os, const mmn_triplet& t)
 {
-  return os<<"{"<<t.v1<<","<<t.v2<<","<<t.v3<<"}";
+  return os<<'{'<<t.v1<<','<<t.v2<<','<<t.v3<<'}';
 }
 
 inline void vsl_b_write(vsl_b_ostream& bfs, const mmn_triplet& t)
@@ -116,15 +115,12 @@ inline void vsl_b_read(vsl_b_istream& bfs, vcl_vector<mmn_triplet>& a)
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,a[i]);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,vector<mmn_triplet>) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,vector<mmn_triplet>)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
-
 }
 
 
-
 #endif // mmn_triplet_h_
-

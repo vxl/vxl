@@ -60,7 +60,7 @@ class vil_nitf2_field_functor
 // The field sequence is passed to the function.
 //
 // You can override any value by specifying an overrideMap.  For example,
-// if 0 was a special value that actually meant 1 but all other values 
+// if 0 was a special value that actually meant 1 but all other values
 // (2, 3, 4...) actually meant when they were you could get that effect like this:
 // <code>
 // vcl_map< int, int > overrides;
@@ -73,7 +73,7 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
  public:
   vil_nitf2_field_value(vcl_string tag) : tag(tag) {}
 
-  vil_nitf2_field_value(vcl_string tag, vcl_map<T, T> overrideMap ) 
+  vil_nitf2_field_value(vcl_string tag, vcl_map<T, T> overrideMap )
     : tag(tag), overrides( overrideMap ) {}
 
   virtual vil_nitf2_field_functor<T>* copy() const {
@@ -83,10 +83,10 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
                    const vil_nitf2_index_vector& indexes, T& value)
   {
     bool success = record->get_value(tag, indexes, value, true);
-    if( success ) {
+    if ( success ) {
       //check to see if this value is overridden or not
       typename vcl_map<T, T>::const_iterator it = overrides.find( value );
-      if( it != overrides.end() ){
+      if ( it != overrides.end() ){
         //found override, use it
         value = (*it).second;
       }
@@ -117,7 +117,7 @@ class vil_nitf2_multiply_field_values : public vil_nitf2_field_functor<int>
 
   vil_nitf2_field_functor<int>* copy() const {
     return new vil_nitf2_multiply_field_values(
-      tag_1, tag_2, use_zero_if_tag_not_found); 
+      tag_1, tag_2, use_zero_if_tag_not_found);
   }
 
   bool operator() (vil_nitf2_field_sequence* record,
@@ -145,7 +145,7 @@ class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_fie
   vil_nitf2_field_functor<int>* copy() const {
     return new vil_nitf2_max_field_value_plus_offset_and_threshold(
       tag, offset, min_threshold, tag_factor); }
-  
+
   bool operator() (vil_nitf2_field_sequence* record,
                    const vil_nitf2_index_vector& indexes, int& value);
 
@@ -171,7 +171,7 @@ class vil_nitf2_field_value_greater_than: public vil_nitf2_field_functor<bool>
 
   vil_nitf2_field_functor<bool>* copy() const {
     return new vil_nitf2_field_value_greater_than(tag, threshold); }
-    
+
   bool operator() (vil_nitf2_field_sequence* record,
                    const vil_nitf2_index_vector& indexes, bool& result) {
     T value;
@@ -217,7 +217,7 @@ class vil_nitf2_field_value_one_of: public vil_nitf2_field_functor<bool>
  public:
   /// Constructor to specify a vcl_vector of acceptable values
   vil_nitf2_field_value_one_of(vcl_string tag, vcl_vector<T> acceptable_values)
-    : tag(tag), acceptable_values(acceptable_values) {};
+    : tag(tag), acceptable_values(acceptable_values) {}
 
   /// Constructor to specify only one acceptable value
   vil_nitf2_field_value_one_of(vcl_string tag, T acceptable_value)
@@ -269,7 +269,7 @@ class vil_nitf2_choose_field_value : public vil_nitf2_field_functor<T>
   vil_nitf2_field_functor<T>* copy() const {
     return new vil_nitf2_choose_field_value(
       tag_1, tag_2, choose_tag_1_predicate->copy()); }
-    
+
   virtual ~vil_nitf2_choose_field_value() {
     if (choose_tag_1_predicate) delete choose_tag_1_predicate;
   }
@@ -295,7 +295,7 @@ class vil_nitf2_choose_field_value : public vil_nitf2_field_functor<T>
 template<typename T>
 class vil_nitf2_constant_functor : public vil_nitf2_field_functor<T>
 {
-public:
+ public:
   vil_nitf2_constant_functor(T value) : value_(value) {}
 
   virtual vil_nitf2_constant_functor* copy() const {
@@ -310,8 +310,8 @@ public:
     return true;
   }
 
-private:
+ private:
   T value_;
-}; 
+};
 
 #endif // VIL_NITF2_FIELD_FUNCTOR_H

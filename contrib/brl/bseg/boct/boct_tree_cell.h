@@ -100,7 +100,7 @@ template<class T_loc,class T_data>
 class boct_cell_vis_graph_node
 {
  public:
-  boct_cell_vis_graph_node():incoming_count(0),visible(false){};
+  boct_cell_vis_graph_node():incoming_count(0),visible(false) {}
   ~boct_cell_vis_graph_node(){
     for (unsigned i=0;i<outgoing_links.size();i++)
       outgoing_links[i]=0;

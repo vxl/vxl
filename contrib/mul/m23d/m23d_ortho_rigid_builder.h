@@ -95,11 +95,11 @@ class m23d_ortho_rigid_builder
 
   //: Return 3 x np matrix, each column containing one 3D point
   //  Points are centred on the origin
-  const vnl_matrix<double>& shape_3d() const { return P3D_; };
+  const vnl_matrix<double>& shape_3d() const { return P3D_; }
 
   //: The 2ns x 3 projection matrix
   //  Each 2x3 sub-matrix is a scaled orthographic projection matrix
-  const vnl_matrix<double>& projections() const { return P_; };
+  const vnl_matrix<double>& projections() const { return P_; }
 
   //: Centred version of the 2D views supplied to reconstruct()
   //  Each 2D shape has been translated so that it's CoG is at the origin

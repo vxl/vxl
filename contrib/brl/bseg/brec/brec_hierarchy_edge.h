@@ -30,10 +30,10 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   //: edge between v1 in layer i to v2 in layer i-1
   //  If no relative spatial arrangement model then this is an edge to the central part in the previous layer.
   //  Default is the central
-  brec_hierarchy_edge(brec_part_base_sptr v1, brec_part_base_sptr v2) : bgrl2_edge<brec_part_base>(v1, v2), to_central_(true), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {};
+  brec_hierarchy_edge(brec_part_base_sptr v1, brec_part_base_sptr v2) : bgrl2_edge<brec_part_base>(v1, v2), to_central_(true), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {}
 
   //: this constructor should only be used during parsing
-  brec_hierarchy_edge() : bgrl2_edge<brec_part_base>(), to_central_(true), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {};
+  brec_hierarchy_edge() : bgrl2_edge<brec_part_base>(), to_central_(true), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {}
 
   //: if the model is updated then the to_central flag is made false since the edge becomes a non-central edge
   void update_dist_model(const float dist);

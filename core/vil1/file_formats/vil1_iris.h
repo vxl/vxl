@@ -63,7 +63,7 @@ class vil1_iris_generic_image : public vil1_image_impl
   virtual int components() const { return components_; }
 
   virtual int bits_per_component() const { return bytes_per_component_ * 8; }
-  int bytes_per_pixel() const { return bytes_per_component_ * planes_; };
+  int bytes_per_pixel() const { return bytes_per_component_ * planes_; }
 
   virtual enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 

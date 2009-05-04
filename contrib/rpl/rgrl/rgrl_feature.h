@@ -27,22 +27,22 @@ class rgrl_feature
   : public rgrl_object
 {
  public:
-  
+
   //: ctor
   rgrl_feature()
   : scale_( 1.0 )
   { }
-  
+
   //: ctor
   rgrl_feature( vnl_vector<double> const& loc, double scale = 1.0 )
-  : location_( loc ), 
+  : location_( loc ),
     scale_( scale )
   {
-    assert(scale_ > 0); 
+    assert(scale_ > 0);
   }
-  
+
   //:
-  virtual ~rgrl_feature() { };
+  virtual ~rgrl_feature() {}
 
   //:  Apply a transformation to create a new feature.
   virtual
@@ -58,10 +58,10 @@ class rgrl_feature
 
   unsigned dim() const
   { return location_.size(); }
-  
+
   //: Provide the scale level at which this feature is detected
   //  If no associated scale, return 0
-  double scale() const 
+  double scale() const
   { return scale_; }
 
   //: Set the scale level at which this feature is detected
@@ -166,7 +166,7 @@ class rgrl_feature
 
   vnl_vector<double> location_;
   double             scale_;
-  
+
  private:
   // disabled
   rgrl_feature& operator=( rgrl_feature const& );

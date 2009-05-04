@@ -32,7 +32,7 @@ class vsrl_menus
   static void corner_method_callback();
   static vgui_menu get_menus();
  private:
-  vsrl_menus(){};
+  vsrl_menus() {}
 };
 
 #endif // vsrl_menus_h_

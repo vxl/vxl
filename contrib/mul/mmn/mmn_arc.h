@@ -13,16 +13,16 @@
 //: Representation of topological arc joining two vertices
 class mmn_arc
 {
-public:
+ public:
   unsigned v1,v2;
 
-  mmn_arc() :v1(999999),v2(999999) {};
-  mmn_arc(unsigned i1, unsigned i2) : v1(i1),v2(i2) {};
+  mmn_arc() :v1(999999),v2(999999) {}
+  mmn_arc(unsigned i1, unsigned i2) : v1(i1),v2(i2) {}
 
   //: Return smallest node index
-  unsigned min_v() const { return (v1<v2?v1:v2); }
+  unsigned min_v() const { return v1<v2?v1:v2; }
   //: Return largest node index
-  unsigned max_v() const { return (v1<v2?v2:v1); }
+  unsigned max_v() const { return v1<v2?v2:v1; }
 };
 
 inline bool operator==(const mmn_arc& t1, const mmn_arc& t2)
@@ -37,10 +37,10 @@ inline bool operator!=(const mmn_arc& t1, const mmn_arc& t2)
 
 inline vcl_ostream& operator<<(vcl_ostream& os, const mmn_arc& t)
 {
-  return os<<"{"<<t.v1<<","<<t.v2<<"}";
+  return os<<'{'<<t.v1<<','<<t.v2<<'}';
 }
 
-inline vcl_ostream& operator<<(vcl_ostream& os, 
+inline vcl_ostream& operator<<(vcl_ostream& os,
                                const vcl_vector<mmn_arc>& arcs)
 {
   for (unsigned i=0;i<arcs.size();++i) os<<arcs[i];
@@ -81,15 +81,12 @@ inline void vsl_b_read(vsl_b_istream& bfs, vcl_vector<mmn_arc>& a)
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,a[i]);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,vector<arc>) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,vector<arc>)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
-
 }
 
 
-
 #endif // mmn_arc_h_
-

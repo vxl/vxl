@@ -35,7 +35,7 @@ class brip_rect_mask
   enum ang_id {a0 = 0, a22, a45, a67, a90, a112, a135, a157, a180, a225,
                a270, a315, nangles};
   brip_rect_mask(mask_id mid);
-  ~brip_rect_mask(){};
+  ~brip_rect_mask() {}
 
   //: the number of columns needed to span the mask
   unsigned ni() const {return current_mask_.cols();}
@@ -45,7 +45,7 @@ class brip_rect_mask
 
   //: the number of orientations
   unsigned n_angles() const {return masks_.size();}
-  
+
   //: the orientation code
   ang_id angle_id(unsigned angle_index) const;
 
@@ -54,12 +54,12 @@ class brip_rect_mask
 
   //: du and dv are measured from the center of the mask, returns +1, -1, 0;
   int operator () (int du, int dv) const
-    {
-      if(du>ru_||du<-ru_) return 0;
-      if(dv>rv_||dv<-rv_) return 0;
-      return current_mask_[dv+rv_][du+ru_];
-    }
-  
+  {
+    if (du>ru_||du<-ru_) return 0;
+    if (dv>rv_||dv<-rv_) return 0;
+    return current_mask_[dv+rv_][du+ru_];
+  }
+
  protected:
   bool find_ait(ang_id aid,
                 vcl_map<ang_id, vnl_matrix<int> >::const_iterator& ait) const;

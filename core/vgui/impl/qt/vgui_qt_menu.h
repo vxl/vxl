@@ -28,7 +28,7 @@ class vgui_qt_menu : public QPopupMenu
   Q_OBJECT
  public:
   vgui_qt_menu(const vgui_menu& menuke);
- ~vgui_qt_menu() { delete[] commands_; };
+ ~vgui_qt_menu() { delete[] commands_; }
 
  public slots:
   void  upon_activated(int id);

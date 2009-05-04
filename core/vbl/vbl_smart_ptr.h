@@ -144,7 +144,7 @@ class vbl_smart_ptr
 
   //: Is this smart pointer responsible for the object being pointed to
   // If this value is false, the object does not have to save it.
-  bool is_protected() const { return protected_;};
+  bool is_protected() const { return protected_; }
 
 #if 0 // no longer needed
   //: If a T_ref is converted to a pointer then back to a T_ref, you'll need to call this

@@ -34,7 +34,7 @@ class brec_part_gaussian : public brec_part_instance
 
   //: the following constructor should only be used during parsing
   brec_part_gaussian() : brec_part_instance(0, 0, brec_part_instance_kind::GAUSSIAN, 0.0f, 0.0f, 0.0f),
-    lambda0_(0), lambda1_(0), theta_(0), bright_(true), cutoff_percentage_(0.0f), lambda_(0.0f), k_(0.0f), fitted_weibull_(false) {};
+    lambda0_(0), lambda1_(0), theta_(0), bright_(true), cutoff_percentage_(0.0f), lambda_(0.0f), k_(0.0f), fitted_weibull_(false) {}
 
   virtual bool mark_receptive_field(vil_image_view<vxl_byte>& img, unsigned plane);
   virtual bool mark_center(vil_image_view<vxl_byte>& img, unsigned plane);

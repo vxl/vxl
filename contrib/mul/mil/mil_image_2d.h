@@ -24,10 +24,10 @@ class mil_image_2d : public mil_image
 
  public:
   //: Dflt ctor
-  mil_image_2d() {};
+  mil_image_2d() {}
 
   //: Destructor
-  virtual ~mil_image_2d() {};
+  virtual ~mil_image_2d() {}
 
   //: Number of dimensions of image (2)
   virtual int n_dims() const { return 2; }

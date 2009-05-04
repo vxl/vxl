@@ -30,7 +30,7 @@ class rrel_objective
   typedef vcl_vector<double>::iterator vect_iter;
 
  public:
-  rrel_objective() {};
+  rrel_objective() {}
   virtual ~rrel_objective() {}
 
   //: Evaluate the objective function on heteroscedastic residuals.

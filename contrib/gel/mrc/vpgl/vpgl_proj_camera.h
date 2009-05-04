@@ -101,7 +101,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
     return project( vgl_homg_point_3d<T>( world_point ) ); }
 
   //: A shortcut to the above function.
-  vgl_homg_point_2d<T> operator()( const vgl_homg_point_3d<T>& world_point ) const{
+  vgl_homg_point_2d<T> operator()( const vgl_homg_point_3d<T>& world_point ) const {
     return this->project( world_point ); }
 
   //: Project a line in the world onto a line in the image plane.
@@ -109,7 +109,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
   //: Standard () forward projection operator
   vgl_line_segment_2d<T> operator()( const vgl_line_segment_3d<T>& world_line ) const
-    { return project( world_line ); };
+  { return project( world_line ); }
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
   vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;

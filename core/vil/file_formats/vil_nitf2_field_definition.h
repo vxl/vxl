@@ -108,7 +108,6 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
 
   // Destructor
   ~vil_nitf2_field_definition();
-
 };
 
 
@@ -151,7 +150,7 @@ class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_n
   vil_nitf2_field_definitions(const vil_nitf2_field_definitions&);
 
   // Default constructor
-  vil_nitf2_field_definitions() {};
+  vil_nitf2_field_definitions() {}
 
   // Destructor
   virtual ~vil_nitf2_field_definitions();

@@ -16,8 +16,8 @@
 class bnl_parabolic_interpolator
 {
  public:
-  bnl_parabolic_interpolator(){};
-  ~bnl_parabolic_interpolator(){};
+  bnl_parabolic_interpolator() {}
+  ~bnl_parabolic_interpolator() {}
   //:p is the parameter to be interpolated, v is the data value
   void add_data_point(const double p, const double v);
   //: reset data array
@@ -26,7 +26,7 @@ class bnl_parabolic_interpolator
   int n_points();
   //: Solve linear regression for the parabola
   bool solve();
-  //:the peak/valley of the parabola 
+  //:the peak/valley of the parabola
   double extremum(){return p_ext_;}
   //: Print the data
   void print();

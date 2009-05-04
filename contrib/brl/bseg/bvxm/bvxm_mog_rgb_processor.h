@@ -41,7 +41,7 @@ class  bvxm_mog_rgb_processor
   typedef gauss_type::vector_type obs_datatype;
   typedef gauss_type::math_type obs_mathtype;
 
-  bvxm_mog_rgb_processor(){};
+  bvxm_mog_rgb_processor() {}
 
   bvxm_voxel_slab<float>  prob_density(bvxm_voxel_slab<apm_datatype> const& appear,
                                        bvxm_voxel_slab<obs_datatype> const& obs);

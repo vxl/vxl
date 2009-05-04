@@ -23,7 +23,7 @@ class vpgl_fm_compute_8_point
  public:
   //: If precondition = true, points are conditioned prior to computation.
   vpgl_fm_compute_8_point( bool precondition = true ) :
-      precondition_(precondition){};
+      precondition_(precondition) {}
 
   //: Compute from two sets of corresponding points.
   // Put the resulting matrix into fm, return true if successful.

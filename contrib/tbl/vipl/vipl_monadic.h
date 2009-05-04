@@ -43,7 +43,7 @@ class vipl_monadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
   // -+-+- constructors/destructors: -+-+-
  public:
   inline vipl_monadic(MonadicFunction f)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {};
+    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {}
   inline vipl_monadic(vipl_monadic const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), func_(A.func()) {}
   inline ~vipl_monadic() {}

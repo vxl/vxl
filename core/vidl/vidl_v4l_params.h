@@ -32,55 +32,55 @@ struct vidl_v4l_params
     vidl_v4l_params(): ni_(320), nj_(240), brightness_(31744), hue_(65535),
                         colour_(32768), contrast_(32768), whiteness_(49152),
                         depth_(24), pixel_format_(VIDL_PIXEL_FORMAT_YUV_420P)
-    {};
+    {}
 
     //: get the current resolution
     vidl_v4l_params& resolution(unsigned int ni, unsigned int nj){
         ni_=ni;nj_=nj;
         return *this;
-    };
+    }
 
     //: brightness
     vidl_v4l_params& brightness(int brightness){
         brightness_=brightness;
         return *this;
-    };
+    }
 
     //: hue
     vidl_v4l_params& hue(int hue){
         hue_=hue;
         return *this;
-    };
+    }
 
     //: colour
     vidl_v4l_params& colour(int colour){
         colour_=colour;
         return *this;
-    };
+    }
 
     //: contrast
     vidl_v4l_params& contrast(int contrast){
         contrast_=contrast;
         return *this;
-    };
+    }
 
     //: whiteness
     vidl_v4l_params& whiteness(int whiteness){
         whiteness_=whiteness;
         return *this;
-    };
+    }
 
     //: depth
     vidl_v4l_params& depth(int depth){
         depth_=depth;
         return *this;
-    };
+    }
 
     //: palette
     vidl_v4l_params& pixel_format(vidl_pixel_format pf){
         pixel_format_=pf;
         return *this;
-    };
+    }
 
     unsigned int ni_, nj_;
     int brightness_;

@@ -83,7 +83,7 @@ class mbl_log_null_streambuf: public vcl_streambuf
 class mbl_log_output_base
 {
  public:
-  virtual ~mbl_log_output_base(){};
+  virtual ~mbl_log_output_base() {}
   //: Start a new log entry, with id info.
   // Future calls to terminate_flush will be ignored.
   virtual void start_with_manual_termination(int level, const char *srcfile, int srcline)=0;
@@ -171,7 +171,7 @@ class mbl_log_output_file: public mbl_log_output_base
 class mbl_logger
 {
 #ifdef MBL_LOG_DISABLE_ALL_LOGGING
-  mbl_logger(): nullstream_(&nullbuf_) {};
+  mbl_logger(): nullstream_(&nullbuf_) {}
   mbl_log_null_streambuf nullbuf_;
   vcl_ostream nullstream_;
  public:  mbl_logger(const char *id): nullstream_(&nullbuf_) {}
@@ -221,7 +221,7 @@ class mbl_logger
   };
   friend class mbl_log_streambuf;
   friend class mbl_logger_root;
-}; 
+};
 
 
 //: This class handles category lists.
@@ -258,7 +258,7 @@ class mbl_log_categories
 
 //: Singleton, keeps records of logging state.
 class mbl_logger_root
-{ 
+{
   friend class mbl_logger;
   mbl_log_categories categories_;
 
@@ -270,7 +270,7 @@ class mbl_logger_root
 
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
-#endif 
+#endif
  public:
 
   //: List of category entries.
@@ -310,7 +310,7 @@ class mbl_logger_root
   //: Force all loggers to update themselves in light of changes to the root and configuration.
   // This is already called automatically by load_log_config_file().
   void update_all_loggers();
-}; 
+};
 
 #ifdef MBL_LOG_DISABLE_ALL_LOGGING
 # define MBL_LOG(my_level, logger, message) do {} while (false)

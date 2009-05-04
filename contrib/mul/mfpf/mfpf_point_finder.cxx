@@ -41,7 +41,7 @@ class mfpf_pf_cost : public vnl_cost_function
   vgl_vector_2d<double> v_;
   double ds_,dA_;
  public:
-  virtual ~mfpf_pf_cost() {};
+  virtual ~mfpf_pf_cost() {}
   mfpf_pf_cost(mfpf_point_finder& pf,
                const vimt_image_2d_of<float>& image,
                const vgl_point_2d<double>& p0,
@@ -589,7 +589,7 @@ unsigned mfpf_point_finder::image_level(const mfpf_pose& pose,
   double log_step = vcl_log(im_pyr.scale_step());
 
   // Round level down, to work with slightly higher res. image.
-  int level = int(vcl_log(rel_size0)/log_step); 
+  int level = int(vcl_log(rel_size0)/log_step);
   if (level<im_pyr.lo()) return im_pyr.lo();
   if (level>im_pyr.hi()) return im_pyr.hi();
   return level;
@@ -621,7 +621,7 @@ void mfpf_point_finder::aligned_bounding_box(const mfpf_pose& pose,
     if (pts[i].y()<ylo) ylo=pts[i].y();
     else if (pts[i].y()>yhi) yhi=pts[i].y();
   }
-  // Mapping required to transform a box centred on the origin to 
+  // Mapping required to transform a box centred on the origin to
   // given bounding box, then scaling by model scale step
   mfpf_pose trans(0.5*(xlo+xhi),0.5*(ylo+yhi),step_size(),0);
   box_pose = pose*trans;

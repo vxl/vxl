@@ -69,7 +69,7 @@ class rrel_fm_reg_problem : public rrel_estimation_problem
   rrel_fm_reg_problem( const vcl_vector< vgl_point_2d<double> > & pr,
                        const vcl_vector< vgl_point_2d<double> > & pl );
 
-  virtual ~rrel_fm_reg_problem(){};
+  virtual ~rrel_fm_reg_problem() {}
 
   // Total number of correspondences.
   unsigned int num_samples() const{ return pr_.size(); }

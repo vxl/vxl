@@ -26,10 +26,10 @@ class mfpf_pose
   vgl_vector_2d<double> u_;
  public:
   //: Position
-  const vgl_point_2d<double>& p() const { return p_; };
+  const vgl_point_2d<double>& p() const { return p_; }
 
   //: Position
-  vgl_point_2d<double>& p() { return p_; };
+  vgl_point_2d<double>& p() { return p_; }
 
   //: Scale and orientation defined by basis vector
   const vgl_vector_2d<double>& u() const { return u_; }
@@ -43,14 +43,14 @@ class mfpf_pose
 
   //: Constructor
   mfpf_pose(const vgl_point_2d<double>& p,
-            const vgl_vector_2d<double>& u) : p_(p),u_(u) {};
+            const vgl_vector_2d<double>& u) : p_(p),u_(u) {}
 
   //: Constructor.  Defines translation (px,py), basis vector (ux,uy)
   mfpf_pose(double px, double py, double ux, double uy)
-    : p_(px,py),u_(ux,uy) {};
+    : p_(px,py),u_(ux,uy) {}
 
   //: Default constructor
-  mfpf_pose() : p_(0,0),u_(1,0) {};
+  mfpf_pose() : p_(0,0),u_(1,0) {}
 
   //: Square of scaling factor applied by this pose
   double sqr_scale() const { return u_.x()*u_.x()+u_.y()*u_.y(); }
@@ -125,7 +125,7 @@ inline bool operator!=(const mfpf_pose& p1,
 //  Returns estimate of square of largest difference in
 //  position for a point on the object (typically an extremal point)
 inline double mfpf_max_sqr_diff(const mfpf_pose& p1,
-                            const mfpf_pose& p2, double r)
+                                const mfpf_pose& p2, double r)
 {
   double dx = vcl_fabs(p1.p().x()-p2.p().x())
               + r*vcl_fabs(p1.u().x()-p2.u().x());
@@ -175,8 +175,8 @@ inline void vsl_b_read(vsl_b_istream& bfs, mfpf_pose& p)
       p.u()=vgl_vector_2d<double>(ux,uy);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,mfpf_pose): "
-               << "Unexpected version number " << version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,mfpf_pose):\n"
+               << "           Unexpected version number " << version << '\n';
       vcl_abort();
   }
 }

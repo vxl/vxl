@@ -32,15 +32,15 @@ class vgui_qt_window :
  public:
    vgui_qt_window(int w, int h, const vgui_menu& menu, const char* title);
    vgui_qt_window(int w, int h, const char* title);
-  ~vgui_qt_window() { };
+  ~vgui_qt_window() {}
 
    void set_menubar(const vgui_menu &menu);
 
    vgui_statusbar* get_statusbar() { return &statusbar; }
-   vgui_adaptor* get_adaptor() { return adaptor; };
+   vgui_adaptor* get_adaptor() { return adaptor; }
 
-   void show() { QMainWindow::show(); };
-   void hide() { QMainWindow::hide(); };
+   void show() { QMainWindow::show(); }
+   void hide() { QMainWindow::hide(); }
 
  private:
    void setup_widget(int w, int h, const char* title);

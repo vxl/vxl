@@ -28,10 +28,10 @@ class mil3d_image_3d : public mil_image
 
  public:
   //: Dflt ctor
-  mil3d_image_3d() {};
+  mil3d_image_3d() {}
 
   //: Destructor
-  virtual ~mil3d_image_3d() {};
+  virtual ~mil3d_image_3d() {}
 
   //: Number of dimensions of image (3)
   virtual int n_dims() const { return 3; }

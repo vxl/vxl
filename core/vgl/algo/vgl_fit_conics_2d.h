@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Fits a contiguous set of conic segments to a sampled curve
-// \author J.L. Mundy 
+// \author J.L. Mundy
 // \date June 18, 2005
 //
 //  The parameters are:
@@ -16,7 +16,7 @@
 //  -  line_thresh - threshold for prefering a line over an conic
 //
 //  An conic segment is incrementally fit to the curve until the tolerance
-//  is exceeded. When the tolerance is exceeded, the conic segment is 
+//  is exceeded. When the tolerance is exceeded, the conic segment is
 //  output and a new conic fit is started.
 //
 // \verbatim
@@ -43,7 +43,7 @@ class vgl_fit_conics_2d
   vgl_fit_conics_2d(const unsigned min_length = 10,
                     const T tol = 0.01);
 
-  ~vgl_fit_conics_2d(){};
+  ~vgl_fit_conics_2d() {}
 
   // Operations----------------------------------------------------------------
 

@@ -99,7 +99,7 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void proj_point(vgl_point_3d<double> world_pt,
                   vgl_point_2d<double> &image_pt);
-  
+
   void proj_line(vsol_line_3d_sptr line_3d,
                  vsol_line_2d_sptr &line_2d);
 
@@ -123,7 +123,7 @@ class bwm_observer_cam : public bwm_observer_vgui
                                vsol_polygon_3d_sptr poly3d,
                                vgl_point_3d<double>& point3d);
 
-  virtual void camera_center(vgl_point_3d<double> &center){};
+  virtual void camera_center(vgl_point_3d<double> &center) {}
 
   bool corr_pt(vgl_point_2d<double> &p)
   { if (corr_.size()>0) {p = corr_[corr_.size()-1].first; return true;} else return false; }
@@ -163,7 +163,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   void create_terrain();
 
   void create_circular_polygon(vcl_vector< vsol_point_2d_sptr > ps_list,
-                               vsol_polygon_3d_sptr &circle, 
+                               vsol_polygon_3d_sptr &circle,
                                int num_sect, double &r, vgl_point_2d<double> &c);
 
   void set_draw_mode(BWM_DRAW_MODE mode) {mode_=mode; update_all();}
@@ -175,7 +175,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
 
   static void project_meshes(vcl_vector<vcl_string> paths,
-                             vpgl_camera<double>* cam, 
+                             vpgl_camera<double>* cam,
                              vcl_vector<vgl_polygon<double> > &poly_2d_list);
 
  protected:

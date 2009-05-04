@@ -282,7 +282,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   bool write_block_to_file(unsigned bi, unsigned bj,
                            unsigned block_size_bytes,
                            vxl_byte* block_buf);
-};//End of single image TIFF resource
+}; //End of single image TIFF resource
 
 
 ///--------- Representation of Pyramid Images by multi-image TIFF -------
@@ -409,7 +409,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
 
   //The set of images in the pyramid. levels_[0] is the base image
   vcl_vector<tiff_pyramid_level*> levels_;
-};//End of pyramid image
+}; //End of pyramid image
 
 
 //------------------------ Lifted from vil_nitf2_image ------------------------

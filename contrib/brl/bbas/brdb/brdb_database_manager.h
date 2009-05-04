@@ -9,8 +9,8 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
-
 
 
 #include <vcl_set.h>
@@ -21,7 +21,7 @@
 
 class brdb_database_manager
 {
-public:
+ public:
   //: the global database instance
   static brdb_database_sptr instance();
 
@@ -33,8 +33,6 @@ public:
   //: remove all relations except
   static bool remove_all_except(const vcl_set<vcl_string>& relation_names);
 
-
-
   //: save the current database into a file
   static bool save_database(const vcl_string& path);
 
@@ -44,14 +42,11 @@ public:
   //: load database from file and merge it with current database
   static bool merge_database(const vcl_string& path);
 
-
-private:
+ private:
   //: Constructor
-  brdb_database_manager() {};
+  brdb_database_manager() {}
 
-
-
-private:
+ private:
   //: A static instance of the database
   static brdb_database_sptr instance_;
   //: A unique id

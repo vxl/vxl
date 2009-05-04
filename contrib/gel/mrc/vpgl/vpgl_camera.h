@@ -27,8 +27,8 @@ class vpgl_camera : public vbl_ref_count
 {
  public:
 
-  vpgl_camera(){};
-  virtual ~vpgl_camera(){};
+  vpgl_camera() {}
+  virtual ~vpgl_camera() {}
 
   virtual vcl_string type_name() const { return "vpgl_camera"; }
 
