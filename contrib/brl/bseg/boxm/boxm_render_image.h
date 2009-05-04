@@ -149,6 +149,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 
         vis.deep_copy(vis_end);
       }
+	  scene.write_active_block();
     }
   }
   vcl_cout<<"\nThe time taken is"<< t.all()<<vcl_endl;
