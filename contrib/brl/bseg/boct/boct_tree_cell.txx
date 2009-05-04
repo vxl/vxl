@@ -33,8 +33,12 @@ boct_tree_cell<T_loc,T_data>::get_code()
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
 {
-  if (!is_leaf()) {
-    delete_children();
+  
+  delete_children();
+  if (vis_node_) {
+	//vcl_cout << "Deleting vis node" << vcl_endl;
+	delete vis_node_;
+	vis_node_ = NULL;
   }
 }
 
@@ -45,14 +49,16 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
     // first delete all non-leaf children before deleting the cell
     for (unsigned i=0; i<8; i++) {
       children_[i].delete_children();
+      //vcl_cout << "Deleting children" << vcl_endl;
     }
     delete[] children_;
+    children_=NULL;
     if (vis_node_) {
+      //vcl_cout << "Deleting vis node" << vcl_endl;
       delete vis_node_;
       vis_node_ = NULL;
-    }
-    children_=NULL;
-    }
+    } 
+  }
 }
 
 // this is always going down the tree

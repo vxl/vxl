@@ -66,7 +66,7 @@ boct_tree<T_loc,T_data>::~boct_tree()
     if (root_->is_leaf()) {
       delete root_;
     } else {
-      root_->delete_children();
+      //root_->delete_children();
       delete root_;
     }
   }
