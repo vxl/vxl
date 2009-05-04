@@ -71,6 +71,7 @@ void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
       }
       cell->split(new_sample);
     }
+	scene.write_active_block();
   }
 }
 

@@ -80,7 +80,7 @@ bool boxm_update_process(bprb_func_process& pro)
 	vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
 
     //vil_image_view<float> image = *vil_convert_cast(float(), input_image);
-    boxm_update<short, BOXM_APM_MOG_GREY>(*s, img, camera, true);
+    boxm_update<short, BOXM_APM_MOG_GREY>(*s, img, camera, false);
   } else {
     vcl_cout << "boxm_update_process: undefined APM type" << vcl_endl;
     return false;

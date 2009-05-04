@@ -117,6 +117,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
         vis.deep_copy(vis_end);
       }
+	  scene.write_active_block();
     }
   }
   vil_image_view<float> PI_background(norm_img.ni(),norm_img.nj(),1);
@@ -157,7 +158,6 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       boxm_block<tree_type> * curr_block=scene.get_active_block();
-      // project vertices to the image determine which faces of the cell are visible
       boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);
 
       // for each frontier layer of each block
@@ -284,7 +284,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
         vis.deep_copy(vis_end);
       }
-      //scene.write_active_block();
+      scene.write_active_block();
     }
   }
 }
