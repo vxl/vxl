@@ -4,8 +4,13 @@
 // \file
 // \author Peter Vanroose, ESAT, KULeuven.
 // \date  4 July, 2001
+//
+// \verbatim
+//  Modifications
+//   PVr - 4 May 2009 - added tests for operator>>
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -77,6 +82,10 @@ static void test_vector_2d()
   TEST("orthogonal", orthogonal(v,vgl_vector_2d<float>()), true); // orthogonal to (0,0)
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
   TEST("orthogonal", orthogonal(v,vgl_vector_2d<float>(0.625,-1.5)), true);
+
+  vcl_stringstream is; is << "4.4 -5 7e1";
+  vgl_vector_2d<double> p; is >> p;
+  TEST("istream", p, vgl_vector_2d<double>(4.4,-5));
 }
 
 static void test_vector_3d()
@@ -176,6 +185,10 @@ static void test_vector_3d()
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case III", check, 0.0, 1e-8);
+
+  vcl_stringstream is; is << "4.4 -5 7e1";
+  vgl_vector_3d<float> p; is >> p;
+  TEST("istream", p, vgl_vector_3d<float>(4.4f,-5,70));
 }
 
 static void test_point_2d()
@@ -230,6 +243,10 @@ static void test_point_2d()
   TEST("intersection", pj, pq);
 
   TEST("vgl_distance_origin", vgl_distance_origin(l1), 1);
+
+  vcl_stringstream is; is << "4.4 -5 7e1";
+  vgl_point_2d<double> p; is >> p;
+  TEST("istream", p, vgl_point_2d<double>(4.4,-5));
 }
 
 static void test_point_3d()
@@ -273,6 +290,10 @@ static void test_point_3d()
   vgl_point_3d<double> pi(pl1,pl2,pl3); // intersection
   vgl_point_3d<double> pp(0,0,0);
   TEST("intersection", pi, pp);
+
+  vcl_stringstream is; is << "4.4 -5 7e1";
+  vgl_point_3d<float> p; is >> p;
+  TEST("istream", p, vgl_point_3d<float>(4.4f,-5,70));
 }
 
 static void test_line_2d()
@@ -409,6 +430,16 @@ static void test_line_2d()
   TEST("normalize", l2.normalize(), true);
   TEST_NEAR("normalize: a()", l2.a(), 0.6, 1e-12);
   TEST_NEAR("normalize: b()", l2.b(), 0.8, 1e-12);
+
+  {
+    vcl_stringstream is; is << "4.4 -5 7e1";
+    vgl_line_2d<float> l; is >> l;
+    TEST("istream line_2d", l, vgl_line_2d<float>(4.4f,-5,70));
+  }
+
+  vcl_stringstream is; is << "\n4 6 7 9";
+  vgl_line_segment_2d<float> l_s; is >> l_s; vcl_cout << l_s;
+  TEST("istream line_segment_2d", l_s, vgl_line_segment_2d<float>(vgl_point_2d<float>(4,6), vgl_point_2d<float>(7,9)));
 }
 
 static void test_line_3d()
@@ -443,6 +474,10 @@ static void test_line_3d()
   TEST("concurrent", coplanar(l,l2), true);
   p2 = vgl_intersection(l,l2);
   TEST("intersection", p2, p1-dir*0.5);
+
+  vcl_stringstream is; is << "4 5 6 7 8 9";
+  vgl_line_segment_3d<float> l_s; is >> l_s;
+  TEST("istream", l_s, vgl_line_segment_3d<float>(vgl_point_3d<float>(4,5,6), vgl_point_3d<float>(7,8,9)));
 }
 
 static void test_plane_3d()
@@ -525,6 +560,10 @@ static void test_plane_3d()
 
   TEST_NEAR("vgl_distance(plane,point)", vgl_distance(plane2,p2), 0.8, 1e-9);
   TEST("vgl_distance(point,plane)", vgl_distance(p3,plane2), 1);
+
+  vcl_stringstream is; is << "4.4 -5 7e1 5e-1";
+  vgl_plane_3d<double> l; is >> l;
+  TEST("istream", l, vgl_plane_3d<double>(4.4,-5,70,0.5));
 }
 
 static void test_box_2d()
@@ -696,6 +735,10 @@ static void test_box_2d()
   vgl_box_2d<double> i2 = vgl_intersection(box2, box3);
   TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
   TEST("vgl_intersection(box2, box3) volume", 25.0, i2.volume());
+
+  vcl_stringstream is; is << "4.4 -5 7e1 5e-1";
+  vgl_box_2d<double> l; is >> l;
+  TEST("istream", l, vgl_box_2d<double>(4.4,70,-5,0.5)); // note different order!!
 }
 
 static void test_box_3d()
@@ -863,6 +906,10 @@ static void test_box_3d()
   vgl_box_3d<double> i2 = vgl_intersection(box2, box3);
   TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
   TEST("vgl_intersection(box2, box3) volume", 125.0, i2.volume());
+
+  vcl_stringstream is; is << "4.4 -5 0 7e1 5e-1 0";
+  vgl_box_3d<float> bx; is >> bx; vcl_cout << bx;
+  TEST("istream", bx, vgl_box_3d<float>(4.4f,-5,0,70,0.5f,0));
 }
 
 inline bool collinear(vgl_line_2d<int> const& l1,

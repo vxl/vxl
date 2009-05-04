@@ -5,6 +5,7 @@
 
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 
 #include <vgl/vgl_homg_point_1d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -100,6 +101,10 @@ static void test_homg_point_1d()
 
   r = vgl_distance(p1,p2);
   TEST("distance", r, 2);
+
+  vcl_stringstream is; is << "4.4 -5 7e1";
+  vgl_homg_point_1d<double> p; is >> p;
+  TEST("istream", p, vgl_homg_point_1d<double>(4.4,-5));
 }
 
 static void test_homg_point_2d()
@@ -217,6 +222,10 @@ static void test_homg_point_2d()
   TEST_NEAR("vgl_homg_operators_2d<double>::abs_angle", r, pi_4, 1e-12);
   r = vgl_homg_operators_2d<double>::abs_angle(l3,l2);
   TEST_NEAR("vgl_homg_operators_2d<double>::abs_angle", r, pi_4, 1e-12);
+
+  vcl_stringstream is; is << "4.4 -5 7e1";
+  vgl_homg_point_2d<float> p; is >> p;
+  TEST("istream", p, vgl_homg_point_2d<float>(4.4f,-5,70));
 }
 
 static void test_homg_point_3d()
@@ -333,6 +342,10 @@ static void test_homg_point_3d()
 
   r = vgl_homg_operators_3d<double>::perp_dist_squared(q1,pl3);
   TEST_NEAR("vgl_homg_operators_3d<double>::perp_dist_squared", r, 49, 1e-12);
+
+  vcl_stringstream is; is << "4 -5 6 0";
+  vgl_homg_point_3d<int> p; is >> p;
+  TEST("istream", p, vgl_homg_point_3d<int>(4,-5,6,0));
 }
 
 static void test_homg_line_2d()
@@ -409,6 +422,10 @@ static void test_homg_line_2d()
   p = pp;
   pp = vgl_homg_operators_2d<double>::closest_point(li,p);
   TEST("closest_point to point on line", pp, p);
+
+  vcl_stringstream is; is << "4.4 -5 7e1";
+  vgl_homg_line_2d<float> h_l; is >> h_l;
+  TEST("istream", h_l, vgl_homg_line_2d<float>(4.4f,-5,70));
 }
 
 static void test_homg_line_3d()
@@ -503,6 +520,10 @@ static void test_homg_plane_3d()
   pl2.set(-9,-12,20,15);
   pl2.normalize();
   TEST("normalize", pl2.a() == -0.36 && pl2.b() == -0.48 && pl2.c() == 0.8 && pl2.d() == 0.6, true);
+
+  vcl_stringstream is; is << "4.4 -5 7e1 5e-1";
+  vgl_homg_plane_3d<double> l; is >> l;
+  TEST("istream", l, vgl_homg_plane_3d<double>(4.4,-5,70,0.5));
 }
 
 inline bool collinear(vgl_homg_line_2d<int> const& l1,

@@ -7,6 +7,7 @@
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
@@ -111,6 +112,11 @@ static void test_conic()
   cc = vgl_conic<double>(direction, 2,1, 3);
   c  = vgl_conic<double>(direction, 2,1,-3);
   TEST_FAR("parabola inequality", cc,c, 1e-6);
+  // istream
+  vcl_stringstream is; is << "1.0 -2.0 3.0 -4.0 5.0 0.0";
+  vgl_conic<double> c4; is >> c4;
+  vgl_conic<double> c5(1.0,-2.0,3.0,-4.0,5.0,0.0);
+  TEST("istream", c4, c5);
 
   // 2. Test circle
   vcl_cout << "\n\t=== test circle ===\n";
