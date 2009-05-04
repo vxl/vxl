@@ -308,8 +308,8 @@ foreach my $dir (@DIRS)
   while ($cmakefile =~ s/\bIF\s*\(\s*(NOT.*?)\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
   while ($cmakefile =~ s/\bIF\s*\(\s*(.*?)\).*?ELSE\s*\(\s*\1\s*\)(.*?)ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
 
-  # remove "WIN32" or "WIN32 MACOSX_BUNDLE" options from ADD_EXECUTABLE()":
-  $cmakefile =~ s/\b(ADD_EXECUTABLE\s*\(\s*\S+)\s+WIN32\s+(MACOSX_BUNDLE\s+)?([^)]+\))/$1 $3/g;
+  # remove "WIN32" or "MACOSX_BUNDLE" options from ADD_EXECUTABLE()":
+  $cmakefile =~ s/\b(ADD_EXECUTABLE\s*\(\s*\S+)\s+(WIN32\s+)?(MACOSX_BUNDLE\s+)?([^)]+\))/$1 $4/g;
 
   while ($cmakefile =~ s/\bADD_LIBRARY\s*\(\s*\S+\s+(.*?)\)//s)
   {
