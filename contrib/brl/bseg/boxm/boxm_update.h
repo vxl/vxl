@@ -117,7 +117,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
         vis.deep_copy(vis_end);
       }
-	  scene.write_active_block();
+      scene.write_active_block();
     }
   }
   vil_image_view<float> PI_background(norm_img.ni(),norm_img.nj(),1);
@@ -267,9 +267,9 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
             if (sample.alpha < min_alpha)
               sample.alpha = min_alpha;
 
-            if (!((sample.alpha >= min_alpha) && (sample.alpha <= max_alpha)) ){
-              vcl_cerr << vcl_endl << "error: cell.alpha = " << sample.alpha << vcl_endl
-                       << "mean_update_factor = " << mean_update_factor << vcl_endl;
+            if (!((sample.alpha >= min_alpha) && (sample.alpha <= max_alpha))) {
+              vcl_cerr << "\nerror: cell.alpha = " << sample.alpha << '\n'
+                       << "mean_update_factor = " << mean_update_factor << '\n';
             }
             (*cell_it)->set_data(sample);
           }

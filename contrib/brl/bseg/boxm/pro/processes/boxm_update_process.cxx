@@ -73,11 +73,11 @@ bool boxm_update_process(bprb_func_process& pro)
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-	vil_image_view<vxl_byte> *img_byte 
-		= dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+    vil_image_view<vxl_byte> *img_byte
+        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
 
-	vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
 
     //vil_image_view<float> image = *vil_convert_cast(float(), input_image);
     boxm_update<short, BOXM_APM_MOG_GREY>(*s, img, camera, false);
