@@ -8,7 +8,7 @@
 // \brief Base classes for kernel (aka Parzen window) distributions
 //
 // \verbatim
-// Modifications
+//  Modifications
 //   None
 // \endverbatim
 
@@ -24,44 +24,41 @@
 template<class T, unsigned int n=0>
 class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
 {
-public:
+ public:
   //: the data type used for vectors
   typedef typename vpdt_field_default<T,n>::type vector;
   //: the data type used for matrices
   typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
-
   // Default Constructor
   vpdl_kernel_base()  {}
-  
-  // Constructor from sample points
-  vpdl_kernel_base(const vcl_vector<vector>& samples) 
-  : samples_(samples) {}
 
+  // Constructor from sample points
+  vpdl_kernel_base(const vcl_vector<vector>& samples)
+  : samples_(samples) {}
 
   //: Return the number of components in the mixture
   unsigned int num_components() const { return samples_.size(); }
 
   //: Return the run time dimension, which does not equal \c n when \c n==0
-  virtual unsigned int dimension() const 
-  { 
-    if(n > 0 || num_components() == 0)
+  virtual unsigned int dimension() const
+  {
+    if (n > 0 || num_components() == 0)
       return n;
     return vpdt_size(samples_[0]);
   }
 
-
   //: Add a new sample point
   virtual void add_sample(const vector& s)
-  { 
+  {
     // set variable dimension from the first inserted component
     assert(vpdt_size(s) == this->dimension() || num_components() == 0);
     samples_.push_back(s);
   }
 
   //: Remove all sample points
-  virtual void clear_samples() 
-  { 
+  virtual void clear_samples()
+  {
     samples_.clear();
   }
 
@@ -70,13 +67,13 @@ public:
   {
     samples_ = samples;
   }
-  
+
   //: Access the sample points
   const vcl_vector<vector>& samples() const
   {
     return samples_;
   }
-  
+
   //: Compute the mean of the distribution.
   // Assume that each kernel has its mean at the sample point
   virtual void compute_mean(vector& mean) const
@@ -84,19 +81,18 @@ public:
     const unsigned int d = this->dimension();
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
-    if(samples_.empty())
+    if (samples_.empty())
       return;
     typedef typename vcl_vector<vector>::const_iterator samp_itr;
     for (samp_itr s = samples_.begin(); s != samples_.end(); ++s){
       mean += *s;
     }
-    mean /= samples_.size();
+    mean /= T(samples_.size());
   }
 
-private:
+ private:
   //: The sample points around which the kernels are centered
   vcl_vector<vector> samples_;
-
 };
 
 
@@ -105,23 +101,23 @@ private:
 template<class T, unsigned int n=0>
 class vpdl_kernel_fbw_base : public vpdl_kernel_base<T,n>
 {
-public:
+ public:
   //: the data type used for vectors
   typedef typename vpdt_field_default<T,n>::type vector;
   //: the data type used for matrices
   typedef typename vpdt_field_traits<vector>::matrix_type matrix;
-  
+
   // Default Constructor
-  vpdl_kernel_fbw_base() 
+  vpdl_kernel_fbw_base()
   : bandwidth_(T(1)) {}
-  
+
   // Constructor from sample points and a bandwidth
-  vpdl_kernel_fbw_base(const vcl_vector<vector>& samples, T bandwidth = T(1)) 
+  vpdl_kernel_fbw_base(const vcl_vector<vector>& samples, T bandwidth = T(1))
   : vpdl_kernel_base<T,n>(samples), bandwidth_(bandwidth){}
-  
+
   //: Access the bandwidth
   T bandwidth() const { return bandwidth_; }
-  
+
   //: Set the kernel bandwidth
   void set_bandwidth(T b) { bandwidth_ = b; }
 
@@ -135,11 +131,10 @@ public:
   {
     return kernel_norm_const()/this->num_components();
   }
-  
-private:
+
+ private:
   //: the fixed bandwidth for all kernels
   T bandwidth_;
-  
 };
 
 
@@ -148,42 +143,42 @@ private:
 template<class T, unsigned int n=0>
 class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
 {
-public:
+ public:
   //: the data type used for vectors
   typedef typename vpdt_field_default<T,n>::type vector;
   //: the data type used for matrices
   typedef typename vpdt_field_traits<vector>::matrix matrix;
-  
+
   // Default Constructor
-  vpdl_kernel_vbw_base(unsigned int var_dim = n) 
+  vpdl_kernel_vbw_base(unsigned int var_dim = n)
   : vpdl_kernel_base<T,n>(var_dim) {}
-  
+
   // Constructor from sample points and bandwidths
-  vpdl_kernel_vbw_base(const vcl_vector<vector>& samples, 
-                       const vcl_vector<T>& bandwidths) 
+  vpdl_kernel_vbw_base(const vcl_vector<vector>& samples,
+                       const vcl_vector<T>& bandwidths)
   : vpdl_kernel_base<T,n>(samples), bandwidths_(bandwidths){}
-  
+
   //: Add a new sample point
   virtual void add_sample(const vector& s)
-  { 
+  {
     vpdl_kernel_base<T,n>::add_sample(s);
     bandwidths_.push_back(T(1));
   }
-  
+
   //: Add a new sample point with bandwidth
   virtual void add_sample(const vector& s, T bw)
-  { 
+  {
     vpdl_kernel_base<T,n>::add_sample(s);
     bandwidths_.push_back(bw);
   }
-  
+
   //: Remove all sample points
-  virtual void clear_samples() 
-  { 
+  virtual void clear_samples()
+  {
     vpdl_kernel_base<T,n>::clear_samples();
     bandwidths_.clear();
   }
-  
+
   //: Set the collection of sample points
   virtual void set_samples(const vcl_vector<vector>& samples)
   {
@@ -191,7 +186,7 @@ public:
     bandwidths_.clear();
     bandwidths.resize(samples.size(),T(1));
   }
-  
+
   //: Set the collection of sample points and bandwidths
   virtual void set_samples(const vcl_vector<vector>& samples,
                            const vcl_vector<T>& bandwidths)
@@ -200,14 +195,13 @@ public:
     vpdl_kernel_base<T,n>::set_samples(samples);
     bandwidths_ = bandwidths;
   }
-  
+
   //: Access the bandwidths
   const vcl_vector<T>& bandwidths() const { return bandwidths_; }
-  
-private:
+
+ private:
   //: the bandwidths for each kernel
   vcl_vector<T> bandwidths_;
-  
 };
 
 

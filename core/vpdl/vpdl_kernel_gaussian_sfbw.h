@@ -33,10 +33,9 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   vpdl_kernel_gaussian_sfbw() {}
 
   //: Constructor - from sample centers and bandwidth (variance)
-  vpdl_kernel_gaussian_sfbw(const vcl_vector<vector>& samples, 
+  vpdl_kernel_gaussian_sfbw(const vcl_vector<vector>& samples,
                             T bandwidth = T(1))
   : vpdl_kernel_fbw_base<T,n>(samples,bandwidth) {}
-  
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdl_distribution<T,n>* clone() const
@@ -50,19 +49,19 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
-    
-    const unsigned int d = this->dimension();    
+
+    const unsigned int d = this->dimension();
     T sum = T(0);
     typedef typename vcl_vector<vector>::const_iterator vitr;
-    for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
+    for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       T ssd = T(0);
       for (unsigned int i=0; i<d; ++i) {
         T tmp = (vpdt_index(pt,i)-vpdt_index(*s,i))/this->bandwidth();
         ssd += tmp*tmp;
       }
-      sum += vcl_exp(-0.5*ssd);
+      sum += T(vcl_exp(-0.5*ssd));
     }
-    
+
     return sum;
   }
 
@@ -72,7 +71,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
-    
+
     return density(pt)*this->norm_const();
   }
 
@@ -80,7 +79,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  virtual T gradient_density(const vector& pt, vector& g) const 
+  virtual T gradient_density(const vector& pt, vector& g) const
   {
     const unsigned int d = this->dimension();
     vpdt_set_size(g,d);
@@ -88,24 +87,24 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
-    
+
     T sum = T(0);
     vector g_s;
     vpdt_set_size(g_s,d);
     typedef typename vcl_vector<vector>::const_iterator vitr;
-    for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
+    for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       T ssd = T(0);
       for (unsigned int i=0; i<d; ++i) {
         T tmp = (vpdt_index(pt,i)-vpdt_index(*s,i))/this->bandwidth();
         vpdt_index(g_s,i) = tmp/this->bandwidth();
         ssd += tmp*tmp;
       }
-      T density = vcl_exp(-0.5*ssd);
+      T density = T(vcl_exp(-0.5*ssd));
       g_s *= -density;
       sum += density;
       g += g_s;
     }
-    
+
     return sum;
   }
 
@@ -117,13 +116,13 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
-    
+
     const unsigned int d = this->dimension();
     double s2 = 1/(this->bandwidth()*vcl_sqrt(2.0));
-    
+
     double sum = 0.0;
     typedef typename vcl_vector<vector>::const_iterator vitr;
-    for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
+    for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       double val = 1.0;
       for (unsigned int i=0; i<d; ++i) {
         val *= 0.5*vnl_erf(s2*(vpdt_index(pt,i)-vpdt_index(*s,i))) + 0.5;
@@ -141,13 +140,13 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     const unsigned int nc = this->num_components();
     if (nc <= 0)
       return 0.0;
-    
+
     const unsigned int dim = this->dimension();
     double s2 = 1/(this->bandwidth()*vcl_sqrt(2.0));
-    
+
     double sum = 0.0;
     typedef typename vcl_vector<vector>::const_iterator vitr;
-    for(vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
+    for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       double prob = 1.0;
       for (unsigned int i=0; i<dim; ++i){
         if (vpdt_index(max_pt,i)<=vpdt_index(min_pt,i))
@@ -176,11 +175,11 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
       covar += outer_product(*s,*s);
       mean += *s;
     }
-    mean /= nc;
-    covar /= nc;
+    mean /= T(nc);
+    covar /= T(nc);
     covar -= outer_product(mean,mean);
     T var = this->bandwidth()*this->bandwidth();
-    for(unsigned int i=0; i<d; ++i)
+    for (unsigned int i=0; i<d; ++i)
       vpdt_index(covar,i,i) += var;
   }
 
@@ -190,12 +189,11 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     const unsigned int dim = this->dimension();
     double v2pi = this->bandwidth()*this->bandwidth()*2.0*vnl_math::pi;
     double denom = v2pi;
-    for(unsigned int i=1; i<dim; ++i)
+    for (unsigned int i=1; i<dim; ++i)
       denom *= v2pi;
-    
+
     return static_cast<T>(vcl_sqrt(1/denom));
   }
-  
 };
 
 
