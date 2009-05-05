@@ -12,11 +12,13 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Nov.2003 - Peter Vanroose - made vgl_polygon a templated class and added lost of documentation
 //   Nov.2003 - Peter Vanroose - added constructor (to replace new_polygon from test_driver)
+//   May.2009 - Matt Leotta - added a function to find self-intersections
 // \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_point_2d.h> // needed for vcl_vector instantiations
 #include <vcl_vector.h>
+#include <vcl_utility.h> // for vcl_pair
 
 //: Store a polygon.
 // May have holes or multiple sections.  The polygon is stored as a list
@@ -144,6 +146,19 @@ struct vgl_polygon_sheet_as_array
   //: Destructor
   ~vgl_polygon_sheet_as_array();
 };
+
+//: Compute all self-intersections between all edges on all sheets.
+// \returns three arrays \a e1, \a e2, and \a ip of equal size.
+// Corresponding elements from these arrays describe an intersection.
+// e1[k].first is the sheet index containing edge (e1[k].second, e1[k].second+1)
+// involved in the k-th intersection.  Similarly, e2[k] indexes the other 
+// edge involved in the k-th intersection.  The corresponding intersection
+// point is returned in ip[k].
+template <class T>
+void vgl_selfintersections(vgl_polygon<T> const& p, 
+                           vcl_vector<vcl_pair<unsigned,unsigned> >& e1,
+                           vcl_vector<vcl_pair<unsigned,unsigned> >& e2,
+                           vcl_vector<vgl_point_2d<T> >& ip);
 
 // \relates vgl_polygon
 template <class T>
