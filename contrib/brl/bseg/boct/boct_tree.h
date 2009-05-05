@@ -28,9 +28,8 @@ class boct_tree
 
   //: return the max level, which is root_level+1
   short num_levels() { return max_level_; }
-  
-  //: The possible finest level is 0, but it does not have to split up to level 0, 
-  // this method 
+
+  //: The possible finest level is 0, but it does not have to split up to level 0, this method
   short finest_level();
 
   void set_bbox(vgl_box_3d<double> & bbox){global_bbox_=bbox;}
@@ -41,9 +40,9 @@ class boct_tree
   vgl_box_3d<double> cell_bounding_box_local(boct_tree_cell<T_loc,T_data>* const cell);
 
   vgl_box_3d<double> bounding_box(){return global_bbox_;}
-  
+
   void print();
-  
+
   void b_write(vsl_b_ostream & os);
   void b_read(vsl_b_istream & is);
   short version_no() { return 1; }
@@ -51,8 +50,7 @@ class boct_tree
   short max_level_;
   boct_tree_cell<T_loc,T_data>* root_;
 
-  //: the local coordinates are from 0 to 1
-  // that's why we need the global coordinates
+  //: the local coordinates are from 0 to 1; that's why we need the global coordinates
   vgl_box_3d<double> global_bbox_;
 };
 
