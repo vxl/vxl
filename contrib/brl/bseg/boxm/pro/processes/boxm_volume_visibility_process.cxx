@@ -18,6 +18,7 @@
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_compute_volume_visibility.h>
+#include <boxm/boxm_sample_multi_bin.h>
 
 namespace boxm_volume_visibility_process_globals
 {
@@ -99,17 +100,25 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
 
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-    vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
-    boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-    vil_image_view<float> mask(ni,nj);
-    float val=boxm_compute_volume_visibility<short, BOXM_APM_MOG_GREY>(query,*scene, camera);
-     vil_image_view<float> img_vol(ni,nj);img_vol.fill(0.0);
+	  float val=1.0;
 
-    boxm_utils::project_cube_fill_val(face_id,img_vol,val,xverts,yverts);
-    vil_image_view<unsigned char> *vol_vis = new vil_image_view<unsigned char>(img_vol.ni(),img_vol.nj(),img_vol.nplanes());
-    vil_convert_stretch_range_limited(img_vol,*vol_vis, 0.0f, 1.0f);
-    img = vol_vis;
+	  if(!scene_ptr->multi_bin()){
+		  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
+		  boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+		  val=boxm_compute_volume_visibility<short, boxm_sample<BOXM_APM_MOG_GREY> >(query,*scene, camera);
+	  }
+	  else
+	  {
+		  typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
+		  boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+		  val=boxm_compute_volume_visibility<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(query,*scene, camera);
+	  }
+	  vil_image_view<float> img_vol(ni,nj);img_vol.fill(0.0);
+	  boxm_utils::project_cube_fill_val(face_id,img_vol,val,xverts,yverts);
+	  vil_image_view<unsigned char> *vol_vis = new vil_image_view<unsigned char>(img_vol.ni(),img_vol.nj(),img_vol.nplanes());
+	  vil_convert_stretch_range_limited(img_vol,*vol_vis, 0.0f, 1.0f);
+	  img = vol_vis;
+	 
 
     vcl_cout<<"\n Visibility is "<<val;
   }

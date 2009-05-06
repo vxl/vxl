@@ -6,13 +6,12 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_iostream.h>
 
-template <class T_loc, boxm_apm_type APM>
+template <class T_loc, class T_data>
 float boxm_compute_point_visibility(vgl_point_3d<double> point,
-                                    boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > & scene,
+                                    boxm_scene<boct_tree<T_loc, T_data > > & scene,
                                     vpgl_camera_double_sptr & camera )
 {
-  typedef boxm_sample<APM> T_sample;
-  typedef boct_tree<T_loc,T_sample > T;
+  typedef boct_tree<T_loc,T_data > tree_type;
   // locate the cells corresponding to query volume.
   if (camera->type_name().compare("vpgl_perspective_camera")==0) {
     // make a test for vertices for behind-front case
@@ -32,7 +31,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
     double lambda0=dir.length();
     dir/=lambda0;
 
-    boxm_block<T> * curr_block=scene.get_block(cam_center);
+    boxm_block<tree_type> * curr_block=scene.get_block(cam_center);
     vgl_point_3d<double> entry_point=cam_center;
     double lambda=0;
 
@@ -55,12 +54,12 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
     curr_block=scene.get_active_block();
     bool continue_flag=true;
 
-    T * tree=curr_block->get_tree();
+    tree_type * tree=curr_block->get_tree();
 
     vgl_point_3d<double> exit_point;
     boct_face_idx face_id=NONE;
     double alpha_int=0;
-    boct_tree_cell<T_loc,T_sample > * curr_cell=tree->locate_point_global(entry_point);
+    boct_tree_cell<T_loc,T_data > * curr_cell=tree->locate_point_global(entry_point);
     while (continue_flag)
     {
       // do processing in the block
@@ -73,11 +72,11 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
             continue_flag=false;
           else
           {
-            vcl_vector<boct_tree_cell<T_loc,T_sample > * > neighbors;
+            vcl_vector<boct_tree_cell<T_loc,T_data > * > neighbors;
             curr_cell->find_neighbors(face_id,neighbors,tree->num_levels());
 
             vgl_vector_3d<double> len(exit_point-entry_point);
-            T_sample data=curr_cell->data();
+            T_data data=curr_cell->data();
             alpha_int-=data.alpha*len.length();
             curr_cell=NULL;
             vcl_cout<<"Lambda= "<<lambda<<" lambda0= "<<lambda0
@@ -156,13 +155,13 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
 }
 
 
-template <class T_loc, boxm_apm_type APM>
+template <class T_loc, class T_data>
 float boxm_compute_volume_visibility(vgl_box_3d<double> bbox,
-                                     boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > & scene,
+                                     boxm_scene<boct_tree<T_loc,T_data> > & scene,
                                      vpgl_camera_double_sptr & cam )
 {
   // locate the cells corresponding to query volume.
-  return boxm_compute_point_visibility<T_loc,APM>(bbox.centroid(),scene,cam);
+  return boxm_compute_point_visibility<T_loc,T_data>(bbox.centroid(),scene,cam);
 }
 
 #endif
