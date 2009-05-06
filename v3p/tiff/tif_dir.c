@@ -831,14 +831,14 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 		if (tv->info->field_tag != tag)
 			continue;
                 
-		if (fip->field_passcount) {
+		if ((fip->field_passcount) && (tag != 34737)) {
 			if (fip->field_readcount == TIFF_VARIABLE2) 
 				*va_arg(ap, uint32*) = (uint32)tv->count;
 			else	/* Assume TIFF_VARIABLE */
 				*va_arg(ap, uint16*) = (uint16)tv->count;
 			*va_arg(ap, void **) = tv->value;
 			ret_val = 1;
-                } else {
+    } else {
 			if ((fip->field_type == TIFF_ASCII
 			    || fip->field_readcount == TIFF_VARIABLE
 			    || fip->field_readcount == TIFF_VARIABLE2
