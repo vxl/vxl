@@ -18,10 +18,10 @@
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_mog_grey_processor.h>
-
+#include <boxm/boxm_sample_multi_bin.h>
 namespace boxm_render_expected_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 2;
 }
 
@@ -38,6 +38,7 @@ bool boxm_render_expected_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
+  input_types_[4] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -74,17 +75,29 @@ bool boxm_render_expected_process(bprb_func_process& pro)
 
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-    vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
-    boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-    vil_image_view<float> mask(ni,nj);
-    boxm_render_image_splatting<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
-    //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
-    img_mask = new vil_image_view<float>(mask);
+	  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
+	  vil_image_view<float> mask(ni,nj);
+	  if(!scene_ptr->multi_bin())
+	  {
+		  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
+		  boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer()); 
+		  boxm_render_image_splatting<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
+	  }
+	  else
+	  {
+		  unsigned bin = pro.get_input<unsigned>(i++);
 
-    vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
-    vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
-    img = expected_byte;
+		  typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
+		  boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer()); 
+		  boxm_render_image_splatting<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,bin);
+	  }
+
+	  //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
+	  img_mask = new vil_image_view<float>(mask);
+
+	  vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
+	  vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
+	  img = expected_byte;
   }
   else {
     vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;

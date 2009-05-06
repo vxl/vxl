@@ -21,10 +21,11 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
+#include <boxm/boxm_sample_multi_bin.h>
 
 namespace boxm_update_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
 }
 
@@ -71,16 +72,27 @@ bool boxm_update_process(bprb_func_process& pro)
   }
 
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-    boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
     vil_image_view<vxl_byte> *img_byte
         = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
-
     vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+	  if(!scene->multi_bin())
+	  {
 
+		  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+		  boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+          boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
+
+	  }
+	  else
+	  {
+		  unsigned bin = pro.get_input<unsigned>(i++);
+		  typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
+		  boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+          boxm_update<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin,false);
+
+	  }
     //vil_image_view<float> image = *vil_convert_cast(float(), input_image);
-    boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
   } else {
     vcl_cout << "boxm_update_process: undefined APM type" << vcl_endl;
     return false;
