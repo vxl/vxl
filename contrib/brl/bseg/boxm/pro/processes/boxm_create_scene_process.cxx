@@ -40,6 +40,7 @@ namespace boxm_create_scene_process_globals
   //Define parameters here
   const vcl_string param_input_directory_ =  "scene_path";
   const vcl_string param_apm_type_ =  "appearence_model";
+  const vcl_string param_bin_type_ =  "multi_bin";
   const vcl_string param_origin_x_ = "origin_x";
   const vcl_string param_origin_y_ = "origin_y";
   const vcl_string param_origin_z_ = "origin_z";
@@ -132,6 +133,9 @@ bool boxm_create_scene_process(bprb_func_process& pro)
 
   vcl_string apm_type;
   pro.parameters()->get_value(param_apm_type_, apm_type);
+
+  bool multi_bin;
+  pro.parameters()->get_value(param_bin_type_, multi_bin);
 
   boxm_scene_base_sptr scene_ptr=0;
   if (apm_type == "apm_mog_grey") {
