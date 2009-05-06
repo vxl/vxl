@@ -307,6 +307,10 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
   vsl_basic_xml_element app_model(APP_MODEL_TAG);
   app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
   app_model.x_write(os);
+  
+  vsl_basic_xml_element bin(MULTI_BIN_TAG);
+  bin.add_attribute("value", scene.multi_bin(): 1 ? 0);
+  bin.x_write(os);
 
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
@@ -366,6 +370,7 @@ bool boxm_scene<T>::parse_config(vcl_string xml, boxm_scene_parser& parser, bool
   *this = boxm_scene<T>( lvcs, parser.origin(), parser.block_dim(), world);
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
+  multi_bin_ = parser.multi_bin();
   return true;
 }
 
