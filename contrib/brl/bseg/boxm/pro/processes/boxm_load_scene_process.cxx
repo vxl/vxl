@@ -60,7 +60,6 @@ bool boxm_load_scene_process(bprb_func_process& pro)
   if (apm_type == "apm_mog_grey") {
     typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = new boxm_scene<tree_type>();
-    //vsl_b_read(is, s);
     s->load_scene(scene_file);
     if (s->appearence_model() != BOXM_APM_MOG_GREY) {
       vcl_cout << "boxm_load_scene_process: inconsistent APM type" << vcl_endl;
