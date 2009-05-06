@@ -152,7 +152,7 @@ MAIN( test_update )
 
   boxm_sample<BOXM_APM_MOG_GREY> default_sample;
   default_sample.alpha=0.001f;
-  default_sample.appearance=simple_obs_mix_gauss_val_f1;
+  default_sample.set_appearance(simple_obs_mix_gauss_val_f1);
 
   // sample 1
   bsta_gauss_f1 s1_simple_gauss_f1(0.5f,0.1f);
@@ -166,7 +166,7 @@ MAIN( test_update )
 
   boxm_sample<BOXM_APM_MOG_GREY> s1_sample;
   s1_sample.alpha=0.6f;
-  s1_sample.appearance=s1_simple_obs_mix_gauss_val_f1;
+  s1_sample.set_appearance(s1_simple_obs_mix_gauss_val_f1);
 
   // sample 2
   bsta_gauss_f1 s2_simple_gauss_f1(1.0f,0.1f);
@@ -180,7 +180,7 @@ MAIN( test_update )
 
   boxm_sample<BOXM_APM_MOG_GREY> s2_sample;
   s2_sample.alpha=0.6f;
-  s2_sample.appearance=s2_simple_obs_mix_gauss_val_f1;
+  s2_sample.set_appearance(s2_simple_obs_mix_gauss_val_f1);
 
 
   while (!iter.end())
@@ -211,7 +211,7 @@ MAIN( test_update )
     expected.fill(0.0);
     mask.fill(0.0);
 
-    boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene,cameras[i],expected,mask);
+    boxm_render_image_splatting<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask);
     vcl_stringstream ss;
     ss << "./boxm_scene2/img" << i << ".tif";
 #if 0
@@ -239,7 +239,7 @@ MAIN( test_update )
     vcl_stringstream ss;
     ss << "./boxm_scene2/img" << i << ".tif";
     expected = vil_load(ss.str().data());
-    boxm_update<short,BOXM_APM_MOG_GREY>(scene_new, expected, cameras[i] );
+    boxm_update<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i] );
   }
 
   // regenerate the images from world
@@ -247,7 +247,7 @@ MAIN( test_update )
     vcl_stringstream ss;
     ss << "./boxm_scene2/img_new" << i << ".tif";
     vil_image_view<float> expected_new(IMAGE_U,IMAGE_V);
-    boxm_render_image_splatting<short,BOXM_APM_MOG_GREY>(scene_new,cameras[i],expected_new,mask);
+    boxm_render_image_splatting<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene_new,cameras[i],expected_new,mask);
     vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());
     vil_convert_stretch_range_limited(expected_new,expected_byte, 0.0f, 1.0f);
 

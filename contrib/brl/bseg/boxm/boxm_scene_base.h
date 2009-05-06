@@ -21,7 +21,7 @@ class boxm_scene_base : public vbl_ref_count
 {
 public:
   boxm_scene_base() 
-    : app_model_(BOXM_APM_UNKNOWN), tree_level_set_(false), scene_path_(""), block_pref_("") {}
+    : app_model_(BOXM_APM_UNKNOWN), tree_level_set_(false), scene_path_(""), block_pref_(""),multi_bin_(false) {}
 
   virtual ~boxm_scene_base(){}
 
@@ -35,8 +35,11 @@ public:
   void set_paths(vcl_string scene_path, vcl_string block_prefix)
    { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
+  bool multi_bin(){return multi_bin_;}
  protected:
   boxm_apm_type app_model_;
+
+  bool multi_bin_;
 
   //: maximum octree levels allowed
   unsigned max_tree_level_;

@@ -24,14 +24,15 @@ class safe_inverse_functor
   float tol_;
 };
 
-template <class T_loc, boxm_apm_type APM>
-void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
+template <class T_loc, class T_data>
+void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vpgl_camera_double_sptr cam,
-                       vil_image_view<typename boxm_apm_traits<APM>::obs_mathtype> &img,
+                       vil_image_view<typename T_data::obs_mathtype> &img,
                        vil_image_view<float> &norm_img,
-                       typename boxm_apm_traits<APM>::apm_datatype background_model)
+                       typename T_data::apm_datatype background_model, int bin)
 {
-  typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
+  typedef boct_tree<T_loc, T_data> tree_type;
+  typedef boct_tree_cell<T_loc, T_data> cell_type;
   unsigned ni=img.ni();
   unsigned nj=img.nj();
   vil_image_view<float> pre(ni,nj,1); pre.fill(0.0f);
@@ -40,17 +41,17 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
   vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
 
   // code to iterate over the blocks in order of visibility
-  boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, ni,nj);
+  boxm_block_vis_graph_iterator<boct_tree<T_loc, T_data > > block_vis_iter(cam, &scene, ni,nj);
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       boxm_block<tree_type> * curr_block=scene.get_active_block();
       // project vertices to the image determine which faces of the cell are visible
-      boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);
+      boxm_cell_vis_graph_iterator<T_loc,T_data > frontier_it(cam,curr_block->get_tree(),ni,nj);
 
       // for each frontier layer of each block
-      boct_tree<T_loc,boxm_sample<APM> > * tree=curr_block->get_tree();
+      tree_type * tree=curr_block->get_tree();
       vil_image_view<float> front_xyz(ni,nj,3);
       vil_image_view<float> back_xyz(ni,nj,3);
       vil_image_view<float> alphas(ni,nj,1);
@@ -59,8 +60,8 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
       while (frontier_it.next())
       {
-        vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *> vis_cells=frontier_it.frontier();
-        typename vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *>::iterator cell_it=vis_cells.begin();
+        vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
+        typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
         front_xyz.fill(0.0f);
         back_xyz.fill(0.0f);
         alphas.fill(0.0f);
@@ -70,7 +71,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
-          boxm_sample<APM> sample=(*cell_it)->data();
+          T_data sample=(*cell_it)->data();
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
@@ -80,10 +81,10 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
           boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
           // get  alpha
           boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-          typename boxm_apm_traits<APM>::obs_datatype cell_mean_obs;
+          typename T_data::obs_datatype cell_mean_obs;
           if (boxm_utils::cube_uniform_mean(vis_face_ids, img, cell_mean_obs,xverts,yverts)) {
             // get probability density of mean observation
-            float cell_PI = boxm_apm_traits<APM>::apm_processor::prob_density(sample.appearance, cell_mean_obs);
+            float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
             if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
               vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
                        << "  cell_obs = " << cell_mean_obs << vcl_endl
@@ -124,7 +125,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
   for (unsigned int j=0; j<img.nj(); ++j) {
     for (unsigned int i=0; i<img.ni(); ++i) {
       // this will have to be modified slightly when we deal with multi-plane images -dec
-      PI_background(i,j) = boxm_apm_traits<APM>::apm_processor::prob_density(background_model, img(i,j));
+      PI_background(i,j) = T_data::apm_processor::prob_density(background_model, img(i,j));
     }
   }
   vil_math_image_product(PI_background, vis, norm_img);
@@ -134,15 +135,16 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 }
 
 
-template <class T_loc, boxm_apm_type APM>
-void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
+template <class T_loc, class T_data>
+void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vpgl_camera_double_sptr cam,
-                       vil_image_view<typename boxm_apm_traits<APM>::obs_mathtype> &img,
-                       vil_image_view<float> &norm_img)
+                       vil_image_view<typename T_data::obs_mathtype> &img,
+                       vil_image_view<float> &norm_img, int bin)
 {
   unsigned ni=img.ni();
   unsigned nj=img.nj();
-  typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
+  typedef boct_tree<T_loc, T_data > tree_type;
+  typedef boct_tree_cell<T_loc, T_data > cell_type;
   vil_image_view<float> pre_img(ni,nj,1); pre_img.fill(0.0f);
   vil_image_view<float> vis(ni,nj,1); vis.fill(1.0f);
   vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
@@ -152,16 +154,19 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
   vul_timer t;
   t.mark();
   // code to iterate over the blocks in order of visibility
-  boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, ni,nj);
+  boxm_block_vis_graph_iterator<boct_tree<T_loc,T_data > > block_vis_iter(cam, &scene, ni,nj);
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
+    double xverts[8]; 
+	double yverts[8];
+
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       boxm_block<tree_type> * curr_block=scene.get_active_block();
-      boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);
+      boxm_cell_vis_graph_iterator<T_loc, T_data > frontier_it(cam,curr_block->get_tree(),ni,nj);
 
       // for each frontier layer of each block
-      boct_tree<T_loc,boxm_sample<APM> > * tree=curr_block->get_tree();
+      tree_type * tree=curr_block->get_tree();
       vil_image_view<float> front_xyz(ni,nj,3);
       vil_image_view<float> back_xyz(ni,nj,3);
       vil_image_view<float> alphas(ni,nj,1);
@@ -171,8 +176,8 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
       while (frontier_it.next())
       {
-        vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *> vis_cells=frontier_it.frontier();
-        typename vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *>::iterator cell_it=vis_cells.begin();
+        vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
+        typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
         front_xyz.fill(0.0f);
         back_xyz.fill(0.0f);
         alphas.fill(0.0f);
@@ -182,21 +187,20 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
-          boxm_sample<APM> sample=(*cell_it)->data();
+          T_data sample=(*cell_it)->data();
 
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          double * xverts=new double[8]; double *yverts=new double[8];
           boxm_utils::project_corners(corners,cam,xverts,yverts);
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
           boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
           // get  alpha
           boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-          typename boxm_apm_traits<APM>::obs_datatype cell_mean_obs;
+          typename T_data::obs_datatype cell_mean_obs;
           if (boxm_utils::cube_uniform_mean(vis_face_ids, img, cell_mean_obs,xverts,yverts)) {
             // get probability density of mean observation
-            float cell_PI = boxm_apm_traits<APM>::apm_processor::prob_density(sample.appearance, cell_mean_obs);
+            float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
 #if 0
             if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
               vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
@@ -211,12 +215,12 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
           if (boxm_utils::cube_uniform_mean(vis_face_ids, vis, cell_mean_vis,xverts,yverts)) {
             // update appearance model
             if (cell_mean_vis > 1e-6) {
-              boxm_apm_traits<APM>::apm_processor::update(sample.appearance, cell_mean_obs, cell_mean_vis);
+				
+              T_data::apm_processor::update(sample.appearance(bin), cell_mean_obs, cell_mean_vis);
+
             }
           }
           (*cell_it)->set_data(sample);
-          delete [] xverts;
-          delete [] yverts;
         }
         // compute the length of ray segment at each pixel
         vil_image_view<float> len_seg(ni,nj,1);
@@ -245,11 +249,10 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
         for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
-          boxm_sample<APM> sample=(*cell_it)->data();
+          T_data sample=(*cell_it)->data();
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          double * xverts=new double[8]; double *yverts=new double[8];
           boxm_utils::project_corners(corners,cam,xverts,yverts);
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
           boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
@@ -274,8 +277,6 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
             (*cell_it)->set_data(sample);
           }
 
-          delete [] xverts;
-          delete [] yverts;
         }
         // multiply cell_PI by cell weights
         vil_math_image_product(pix_weights, PI_img, PI_img);
@@ -289,25 +290,25 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
   }
 }
 
-template <class T_loc, boxm_apm_type APM>
-void boxm_update(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                 vil_image_view<typename boxm_apm_traits<APM>::obs_mathtype> &img,
-                 vpgl_camera_double_sptr cam,
+template <class T_loc, class T_data>
+void boxm_update(boxm_scene<boct_tree<T_loc, T_data > > &scene,
+                 vil_image_view<typename T_data::obs_datatype> &img,
+                 vpgl_camera_double_sptr cam, int bin=-1,
                  bool black_background = false)
 {
-  typename boxm_apm_traits<APM>::apm_datatype background_apm;
+  typename T_data::apm_datatype background_apm;
 
   if (black_background) {
     vcl_cout << "using black background model" << vcl_endl;
     for (unsigned int i=0; i<4; ++i) {
-      boxm_apm_traits<APM>::apm_processor::update(background_apm, 0.0f, 1.0f);
-      boxm_apm_traits<APM>::apm_processor::prob_density(background_apm,0.0f);
+      T_data::apm_processor::update(background_apm, 0.0f, 1.0f);
+      T_data::apm_processor::prob_density(background_apm,0.0f);
     }
   }
   vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
-  boxm_update_pass1<T_loc,APM>(scene, cam,img,norm_img,background_apm);
+  boxm_update_pass1<T_loc,T_data>(scene, cam,img,norm_img,background_apm,bin);
   vcl_cout << "update: pass1 completed" << vcl_endl;
-  boxm_update_pass2<T_loc,APM>(scene, cam,img,norm_img);
+  boxm_update_pass2<T_loc,T_data>(scene, cam,img,norm_img,bin);
   vcl_cout << "update: pass2 completed" << vcl_endl;
 
   return;

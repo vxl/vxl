@@ -46,7 +46,7 @@ MAIN( test_save_raw )
 
   boxm_sample<BOXM_APM_MOG_GREY> default_sample;
   default_sample.alpha=0.001f;
-  default_sample.appearance=simple_obs_mix_gauss_val_f1;
+  default_sample.set_appearance(simple_obs_mix_gauss_val_f1);
 
   // sample 1
   bsta_gauss_f1 s1_simple_gauss_f1(0.5f,0.1f);
@@ -61,7 +61,7 @@ MAIN( test_save_raw )
 
   boxm_sample<BOXM_APM_MOG_GREY> s1_sample;
   s1_sample.alpha=0.6f;
-  s1_sample.appearance=s1_simple_obs_mix_gauss_val_f1;
+  s1_sample.set_appearance(s1_simple_obs_mix_gauss_val_f1);
 
   // sample 2
   bsta_gauss_f1 s2_simple_gauss_f1(1.0f,0.1f);
@@ -76,7 +76,7 @@ MAIN( test_save_raw )
 
   boxm_sample<BOXM_APM_MOG_GREY> s2_sample;
   s2_sample.alpha=0.6f;
-  s2_sample.appearance=s2_simple_obs_mix_gauss_val_f1;
+  s2_sample.set_appearance(s2_simple_obs_mix_gauss_val_f1);
 
   typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
 

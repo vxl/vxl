@@ -17,6 +17,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_apm_traits.h>
+#include <boxm/boxm_mog_grey_processor.h>
 
 namespace boxm_render_expected_process_globals
 {
@@ -77,7 +78,7 @@ bool boxm_render_expected_process(bprb_func_process& pro)
     vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
     boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
     vil_image_view<float> mask(ni,nj);
-    boxm_render_image_splatting<short, BOXM_APM_MOG_GREY>(*scene, camera, expected, mask);
+    boxm_render_image_splatting<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
     //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
     img_mask = new vil_image_view<float>(mask);
 

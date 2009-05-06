@@ -7,6 +7,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_utils.h>
+#include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_mog_grey_processor.h>
@@ -40,25 +41,27 @@ class image_exp_functor
 };
 
 
-template <class T_loc, boxm_apm_type APM>
-void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
+template <class T_loc, class T_data>
+void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                  vpgl_camera_double_sptr cam,
-                                 vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
-                                 vil_image_view<float> &mask,
+                                 vil_image_view<typename T_data::obs_datatype> &expected,
+                                 vil_image_view<float> &mask,int bin=-1,
                                  bool use_black_background = false)
 {
   unsigned ni=expected.ni();
   unsigned nj=expected.nj();
   expected.fill(0.0f);
 
-  typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
-  vil_image_view<float> vis(expected.ni(),expected.nj(),1); vis.fill(1.0f);
+  typedef boct_tree<T_loc, T_data> tree_type;
+  typedef boct_tree_cell<T_loc, T_data> cell_type;
+  vil_image_view<float> vis(expected.ni(),expected.nj(),1);			   vis.fill(1.0f);
   vil_image_view<float> alpha_integral(expected.ni(),expected.nj(),1); alpha_integral.fill(0.0f);
 
   vul_timer t;
   t.mark();
   // code to iterate over the blocks in order of visibility
-  boxm_block_vis_graph_iterator<boct_tree<T_loc, boxm_sample<APM> > > block_vis_iter(cam, &scene, expected.ni(), expected.nj());
+  boxm_block_vis_graph_iterator<boct_tree<T_loc, T_data > > 
+	  block_vis_iter(cam, &scene, expected.ni(), expected.nj());
 
   int cnt=0;
   while (block_vis_iter.next()) {
@@ -71,10 +74,10 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
               << " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<vcl_endl;
 
       // project vertices to the image determine which faces of the cell are visible
-      boxm_cell_vis_graph_iterator<T_loc, boxm_sample<APM> > frontier_it(cam,curr_block->get_tree(),ni,nj);
+      boxm_cell_vis_graph_iterator<T_loc, T_data > frontier_it(cam,curr_block->get_tree(),ni,nj);
 
       // for each frontier layer of each block
-      boct_tree<T_loc,boxm_sample<APM> > * tree=curr_block->get_tree();
+      tree_type * tree=curr_block->get_tree();
       vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);
       vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3);
       vil_image_view<float> alphas(expected.ni(),expected.nj(),1);
@@ -88,8 +91,8 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 
       while (frontier_it.next())
       {
-        vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *> vis_cells=frontier_it.frontier();
-        typename vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *>::iterator cell_it=vis_cells.begin();
+        vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
+        typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
         front_xyz.fill(0.0f);
         back_xyz.fill(0.0f);
         alphas.fill(0.0f);
@@ -100,7 +103,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
-          boxm_sample<APM> sample=(*cell_it)->data();
+          T_data sample=(*cell_it)->data();
           //if (sample.alpha>0.001)
           {
             // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
@@ -110,17 +113,14 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
             boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
             boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
             // get expected color of cell
-            typename boxm_apm_traits<APM>::obs_datatype cell_expected  =
-                boxm_apm_traits<APM>::apm_processor::expected_color(sample.appearance);
+			typename T_data::obs_datatype cell_expected  =T_data::apm_processor::expected_color(sample.appearance(bin));
             // get  alpha
             boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
             // fill expected value image
             //boxm_utils::project_cube_fill_val( vis_face_ids,temp_expected,(float)cell_expected, xverts,yverts);
             boxm_utils::project_cube_fill_val_aa( vis_face_ids,temp_expected,temp_weights,(float)cell_expected, xverts,yverts);
 
-            //delete [] xverts;
-            //delete [] yverts;
-          }
+         }
         }
         // compute the length of ray segment at each pixel
         vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);

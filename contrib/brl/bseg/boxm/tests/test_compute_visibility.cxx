@@ -37,7 +37,7 @@ MAIN( test_compute_visibility )
 
   boxm_sample<BOXM_APM_MOG_GREY> s1_sample;
   s1_sample.alpha=0.6f;
-  s1_sample.appearance=s1_simple_obs_mix_gauss_val_f1;
+  s1_sample.set_appearance(s1_simple_obs_mix_gauss_val_f1);
 
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
 

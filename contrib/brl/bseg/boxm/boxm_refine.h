@@ -64,12 +64,18 @@ void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
 
       boxm_sample<APM> old_sample = cell->data();
       typename boxm_sample<APM>::apm_datatype app;
-      boxm_sample<APM> new_sample = boxm_sample<APM>(new_alpha, app);
       if (!reset_appearance) {
         // if it is not set, transfer the old appearance to the new sample
-        new_sample.appearance = old_sample.appearance;
+        boxm_sample<APM> new_sample = old_sample;
+		new_sample.alpha=new_alpha;
+        cell->split(new_sample);
+
       }
+	  else
+	  {
+      boxm_sample<APM> new_sample = boxm_sample<APM>(new_alpha, app);
       cell->split(new_sample);
+	  }
     }
     scene.write_active_block();
   }
