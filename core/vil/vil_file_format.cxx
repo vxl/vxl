@@ -86,10 +86,6 @@ struct vil_file_format_storage
 #if HAS_PNG
     l[c++] = new vil_png_file_format;
 #endif
-#if HAS_TIFF
-    l[c++] = new vil_tiff_file_format;
-    l[c++] = new vil_pyramid_image_list_format;
-#endif
 #if HAS_PNM
     l[c++] = new vil_pnm_file_format;
     l[c++] = new vil_pbm_file_format;
@@ -131,6 +127,10 @@ struct vil_file_format_storage
   l[c++] = new vil_j2k_file_format;
 #endif
 
+#if HAS_TIFF
+    l[c++] = new vil_tiff_file_format;
+    l[c++] = new vil_pyramid_image_list_format;
+#endif
     l[c++] = 0;
   }
 
