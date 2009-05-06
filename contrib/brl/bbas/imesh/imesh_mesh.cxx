@@ -14,18 +14,25 @@ imesh_mesh::imesh_mesh(const imesh_mesh& other)
     faces_((other.faces_.get()) ? other.faces_->clone() : 0),
     half_edges_(other.half_edges_),
     tex_coords_(other.tex_coords_),
+    valid_tex_faces_(other.valid_tex_faces_),
     tex_coord_status_(other.tex_coord_status_)
 {
 }
 
 
+//: Assignment operator
 imesh_mesh& imesh_mesh::operator=(imesh_mesh const& other) 
 { 
-  verts_ = vcl_auto_ptr<imesh_vertex_array_base>(other.verts_->clone());
-  faces_ = vcl_auto_ptr<imesh_face_array_base>(other.faces_->clone());
-  half_edges_ = other.half_edges_;
-  tex_coords_ = other.tex_coords_;
-  tex_coord_status_ = other.tex_coord_status_;
+  if(this != &other){
+    verts_ = vcl_auto_ptr<imesh_vertex_array_base>((other.verts_.get()) ? 
+                                                   other.verts_->clone() : 0);
+    faces_ = vcl_auto_ptr<imesh_face_array_base>((other.faces_.get()) ?
+                                                 other.faces_->clone() : 0);
+    half_edges_ = other.half_edges_;
+    tex_coords_ = other.tex_coords_;
+    valid_tex_faces_ = other.valid_tex_faces_;
+    tex_coord_status_ = other.tex_coord_status_;
+  }
   return *this;
 }
 

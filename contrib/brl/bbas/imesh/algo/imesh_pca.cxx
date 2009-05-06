@@ -86,6 +86,21 @@ imesh_pca_mesh::imesh_pca_mesh(const imesh_pca_mesh& other)
 }
 
 
+//: Assignment operator
+imesh_pca_mesh& imesh_pca_mesh::operator=(const imesh_pca_mesh& other)
+{
+  if(this != &other){
+    this->imesh_mesh::operator=(other);
+    std_devs_ = other.std_devs_;
+    pc_ = other.pc_;
+    mean_verts_ = vcl_auto_ptr<imesh_vertex_array_base>((other.mean_verts_.get()) ? 
+                                                        other.mean_verts_->clone() : 0);
+    params_ = other.params_;
+  }
+  return *this;
+}
+
+
 //: Construct from a mesh with no variation
 imesh_pca_mesh::imesh_pca_mesh(const imesh_mesh& mesh)
   : imesh_mesh(mesh), mean_verts_(this->vertices().clone())

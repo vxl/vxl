@@ -39,6 +39,9 @@ class imesh_pca_mesh : public imesh_mesh
 
   //: Copy Constructor
   imesh_pca_mesh(const imesh_pca_mesh& other);
+  
+  //: Assignment operator
+  imesh_pca_mesh& operator=(const imesh_pca_mesh& other);
 
   //: Initialize the PCA data (assuming mesh data is already set)
   //  Use this to add PCA data after a mesh has be loaded from a file
