@@ -3,7 +3,7 @@
 
 #include "boxm_sample_multi_bin.h"
 #include <bsta/bsta_mixture_fixed.h>
-#include <vsl/vsl_map_io.h>
+#include <vsl/vsl_map_io.txx>
 #include <bsta/io/bsta_io_mixture_fixed.h>
 #include <bsta/io/bsta_io_gaussian_sphere.h>
 #include <bsta/io/bsta_io_mixture.h>
@@ -22,7 +22,7 @@ typename boxm_sample_multi_bin<APM_MODEL>::apm_datatype & boxm_sample_multi_bin<
 		return appearance_[bin];
 }
 template <boxm_apm_type APM_MODEL>
-void boxm_sample_multi_bin<APM_MODEL>::set_appearnace(apm_datatype  app,int bin)
+void boxm_sample_multi_bin<APM_MODEL>::set_appearance(apm_datatype  app,int bin)
 {
 	appearance_[bin]=app;
 }

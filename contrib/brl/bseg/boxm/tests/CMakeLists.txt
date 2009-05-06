@@ -10,6 +10,7 @@ ADD_EXECUTABLE( boxm_test_all
   test_render_image.cxx
   test_save_raw.cxx
   test_update.cxx
+  test_update_multi_bin.cxx
   test_compute_visibility.cxx
  )
 
@@ -23,6 +24,7 @@ ADD_TEST( boxm_test_quad_interpolate   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all t
 ADD_TEST( boxm_test_render_image   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_render_image  )
 ADD_TEST( boxm_test_save_raw   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_save_raw  )
 ADD_TEST( boxm_test_update   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_update  )
+ADD_TEST( boxm_test_update_multi_bin   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_update_multi_bin  )
 ADD_TEST( boxm_test_compute_visibility   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_compute_visibility  )
 
 

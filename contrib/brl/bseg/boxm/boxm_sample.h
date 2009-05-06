@@ -24,8 +24,8 @@ class boxm_sample
 
   short version_no() const{ return 1; }
 
+  //: bin is to imitate the bin number of multiple_bin case 
   apm_datatype & appearance(int bin=-1) {return appearance_;}
-  //apm_datatype  get_appearance(int bin=-1) const{return appearance_;}
 
   void set_appearance(apm_datatype  app,int bin=-1){appearance_=app;}
 

@@ -26,9 +26,9 @@ class boxm_sample_multi_bin
 
   //: the occlusion density at the sample point
   float alpha;
-  apm_datatype & appearance(int bin);
+  apm_datatype & appearance(int bin=0);
 
-  void set_appearnace(apm_datatype  app,int bin=-1);
+  void set_appearance(apm_datatype  app,int bin=0);
 
   vcl_map<int,apm_datatype> appearance_;
 

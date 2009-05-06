@@ -509,7 +509,6 @@ void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene)
 
 #define BOXM_SCENE_INSTANTIATE(T) \
 template class boxm_scene<T >; \
-template class boxm_block_iterator<T >;\
 template void x_write(vcl_ostream&, boxm_scene<T >&, vcl_string); \
 template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const &scene); \
 template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const * &scene); \
