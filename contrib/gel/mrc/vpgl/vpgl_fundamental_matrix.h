@@ -15,6 +15,15 @@
 //  This implementation forces the rank of the fundamental matrix to be rank 2, and if
 //  the matrix is set with a rank 3 matrix, it will be reduced in rank using SVD
 //  decomposition.
+//
+//  The notation "left" and "right" refers to camera producing points used on
+//  the left side of the F matrix and vice versa.
+//
+// \verbatim
+//  Modifications
+//   May 06, 2009  Ricardo Fabbri   Overloaded {l,r}_epipolar_line to take line as input
+// \endverbatim
+//
 
 
 #include <vnl/vnl_fwd.h>
@@ -49,7 +58,6 @@ class vpgl_fundamental_matrix
   //: Assignment
   const vpgl_fundamental_matrix<T>& operator=( const vpgl_fundamental_matrix<T>& fm );
 
-
   //: Destructor
   virtual ~vpgl_fundamental_matrix();
 
@@ -62,8 +70,14 @@ class vpgl_fundamental_matrix
   vgl_homg_line_2d<T> r_epipolar_line( const vgl_homg_point_2d<T>& pl ) const;
   vgl_homg_line_2d<T> l_epipolar_line( const vgl_homg_point_2d<T>& pr ) const;
 
-  //: Gives the left camera matrix corresponding to the fundamental matrix, when the right camera matrix is assumed to be identity.
-  // The variables v, lambda are free parameters as described in H&Z 2nd ed pg 256.
+  //: Given an epipolar line in one image, find the corresponding epipolar line
+  // in the other image. H&Z 2nd ed p. 247
+  vgl_homg_line_2d<T> r_epipolar_line(const vgl_homg_line_2d<T> &epiline_l) const;
+  vgl_homg_line_2d<T> l_epipolar_line(const vgl_homg_line_2d<T> &epiline_r) const;
+
+  //: Gives the left camera matrix corresponding to the fundamental matrix, when
+  // the right camera matrix is assumed to be identity.  The variables v, lambda
+  // are free parameters as described in H&Z 2nd ed p. 256.
   vpgl_proj_camera<T> extract_left_camera(
     const vnl_vector_fixed<T,3>& v, T lambda ) const;
 
