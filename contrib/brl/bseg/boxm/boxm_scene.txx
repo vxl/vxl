@@ -309,7 +309,7 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
   app_model.x_write(os);
   
   vsl_basic_xml_element bin(MULTI_BIN_TAG);
-  bin.add_attribute("value", scene.multi_bin(): 1 ? 0);
+  bin.add_attribute("value", scene.multi_bin()? 1 : 0);
   bin.x_write(os);
 
   bgeo_lvcs lvcs=scene.lvcs();
