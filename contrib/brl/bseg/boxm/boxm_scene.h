@@ -96,6 +96,7 @@ class boxm_scene :public boxm_scene_base
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
 
   vgl_box_3d<double> get_world_bbox();
+
   bool valid_index(vgl_point_3d<int> idx);
 
  private:
@@ -116,10 +117,7 @@ class boxm_scene :public boxm_scene_base
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
 
-
-  
-
-  boxm_scene_parser* parse_config(vcl_string xml, bool filename=false);
+  bool parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename=false);
 };
 
 template <class T>
