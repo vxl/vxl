@@ -16,6 +16,7 @@
 #define BLOCK_NUM_TAG "blocks"
 #define SCENE_PATHS_TAG "scene_paths"
 #define APP_MODEL_TAG "appearence_model"
+#define MULTI_BIN_TAG "multi_bin"
 
 class boxm_scene_parser : public expatpp
 {
@@ -30,6 +31,7 @@ class boxm_scene_parser : public expatpp
    vgl_vector_3d<unsigned> block_nums() { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_);}
    void paths(vcl_string& scene_path, vcl_string& block_pref) {scene_path=path_; block_pref=block_pref_;}
    vcl_string app_model() { return app_model_; }
+   bool multi_bin() { return multi_bin_; }
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -70,6 +72,7 @@ class boxm_scene_parser : public expatpp
   vcl_string path_;
   vcl_string block_pref_;
   vcl_string app_model_;
+  bool multi_bin_;
   unsigned max_tree_level_;
   unsigned init_tree_level_;
 };
