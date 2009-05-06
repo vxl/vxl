@@ -211,15 +211,17 @@ MAIN( test_update_multi_bin )
     expected.fill(0.0);
     mask.fill(0.0);
 
-    boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask,5);
+    boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask,3);
     vcl_stringstream ss;
-    ss << "./boxm_scene2_mb/img" << i << ".tif";
-#if 0
-    vil_image_view<unsigned char> expected_byte(expected.ni(),expected.nj(),expected.nplanes());
-    vil_convert_stretch_range_limited(expected,expected_byte, 0.0f, 1.0f);
-#endif
-
+    ss << "./boxm_scene2_mb/img3" << i << ".tif";
     vil_save(expected, ss.str().data());
+
+	expected.fill(0.0);
+    boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask,5);
+    vcl_stringstream ss1;
+    ss1 << "./boxm_scene2_mb/img5" << i << ".tif";
+    vil_save(expected, ss1.str().data());
+
   }
 #if 0
   vpl_rmdir("./boxm_scene1");
@@ -237,9 +239,14 @@ MAIN( test_update_multi_bin )
   // update the world, with all the generated images and cameras
   for (unsigned i=0; i<cameras.size(); i++) {
     vcl_stringstream ss;
-    ss << "./boxm_scene2_mb/img" << i << ".tif";
+    ss << "./boxm_scene2_mb/img3" << i << ".tif";
     expected = vil_load(ss.str().data());
+    boxm_update<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i],3 );
+    vcl_stringstream ss1;
+    ss1 << "./boxm_scene2_mb/img5" << i << ".tif";
+    expected = vil_load(ss1.str().data());
     boxm_update<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i],5 );
+
   }
 
   // regenerate the images from world
@@ -247,7 +254,7 @@ MAIN( test_update_multi_bin )
     vcl_stringstream ss;
     ss << "./boxm_scene2_mb/img_new" << i << ".tif";
     vil_image_view<float> expected_new(IMAGE_U,IMAGE_V);
-    boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new,cameras[i],expected_new,mask,5);
+    boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new,cameras[i],expected_new,mask,3);
     vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());
     vil_convert_stretch_range_limited(expected_new,expected_byte, 0.0f, 1.0f);
 

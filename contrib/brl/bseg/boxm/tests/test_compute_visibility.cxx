@@ -82,8 +82,7 @@ MAIN( test_compute_visibility )
   double X=5,Y=5,Z;
   for (Z=40; Z>-10; --Z)
   {
-    vcl_cout<<"Z= "<<Z<<' '<<boxm_compute_point_visibility<short,BOXM_APM_MOG_GREY>(vgl_point_3d<double>(X,Y,Z),
-                                                                     scene, camera)<<"\n ";
+    boxm_compute_point_visibility<short,BOXM_APM_MOG_GREY>(vgl_point_3d<double>(X,Y,Z),scene, camera);
   }
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
