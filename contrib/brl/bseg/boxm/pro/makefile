@@ -13,6 +13,7 @@ SOURCES += processes/boxm_create_scene_process.cxx
 SOURCES += processes/boxm_update_process.cxx
 SOURCES += processes/boxm_refine_scene_process.cxx
 SOURCES += processes/boxm_volume_visibility_process.cxx
+SOURCES += processes/boxm_roi_init_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

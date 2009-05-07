@@ -13,6 +13,7 @@ TESTS += test_quad_interpolate.cxx
 TESTS += test_update.cxx
 TESTS += test_save_raw.cxx
 TESTS += test_compute_visibility.cxx
+TESTS += test_update_multi_bin.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
