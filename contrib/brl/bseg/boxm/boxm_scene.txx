@@ -88,8 +88,7 @@ void boxm_scene<T>::write_active_block()
     blocks_(x,y,z)->b_write(os);
     // delete the block's data
     boxm_block<T>* block = blocks_(x,y,z);
-    delete block->get_tree();
-
+    block->delete_tree();
     active_block_.set(-1,-1,-1);
   }
 }
@@ -200,7 +199,7 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
       //blocks_(x,y,z)->b_write(os);
       // delete the active block's data
       boxm_block<T>* block = blocks_(x,y,z);
-      delete block->get_tree();
+      block->delete_tree();
     }
   }
   active_block_.set(i,j,k);
