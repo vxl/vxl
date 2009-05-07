@@ -18,6 +18,8 @@
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_refine.h>
+#include <boxm/boxm_sample.h>
+#include <boxm/boxm_sample_multi_bin.h>
 
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
@@ -68,9 +70,15 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
   }
 
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-    boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-    boxm_refine<short, BOXM_APM_MOG_GREY>(*s, thresh, reset);
+    if(scene->multi_bin()) {
+      typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      boxm_refine_scene<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
+    } else { 
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      boxm_refine_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
+    }
   } else {
     vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
     return false;
