@@ -157,8 +157,8 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   boxm_block_vis_graph_iterator<boct_tree<T_loc,T_data > > block_vis_iter(cam, &scene, ni,nj);
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
-    double xverts[8]; 
-	double yverts[8];
+    double xverts[8];
+    double yverts[8];
 
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
@@ -215,9 +215,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           if (boxm_utils::cube_uniform_mean(vis_face_ids, vis, cell_mean_vis,xverts,yverts)) {
             // update appearance model
             if (cell_mean_vis > 1e-6) {
-				
               T_data::apm_processor::update(sample.appearance(bin), cell_mean_obs, cell_mean_vis);
-
             }
           }
           (*cell_it)->set_data(sample);
@@ -276,7 +274,6 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             }
             (*cell_it)->set_data(sample);
           }
-
         }
         // multiply cell_PI by cell weights
         vil_math_image_product(pix_weights, PI_img, PI_img);

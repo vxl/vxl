@@ -216,12 +216,11 @@ MAIN( test_update_multi_bin )
     ss << "./boxm_scene2_mb/img3" << i << ".tif";
     vil_save(expected, ss.str().data());
 
-	expected.fill(0.0);
+    expected.fill(0.0);
     boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask,5);
     vcl_stringstream ss1;
     ss1 << "./boxm_scene2_mb/img5" << i << ".tif";
     vil_save(expected, ss1.str().data());
-
   }
 #if 0
   vpl_rmdir("./boxm_scene1");
@@ -246,7 +245,6 @@ MAIN( test_update_multi_bin )
     ss1 << "./boxm_scene2_mb/img5" << i << ".tif";
     expected = vil_load(ss1.str().data());
     boxm_update<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i],5 );
-
   }
 
   // regenerate the images from world

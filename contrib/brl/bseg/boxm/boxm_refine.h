@@ -52,7 +52,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
     if (!reset_appearance) {
       // if it is not set, transfer the old appearance to the new sample
       T_data new_sample = old_sample;
-	    new_sample.alpha=new_alpha;
+      new_sample.alpha=new_alpha;
       cell->split(new_sample);
     }
     else {

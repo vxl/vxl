@@ -50,7 +50,7 @@ namespace boxm_roi_init_process_globals
   bool roi_init(vcl_string const& image_path,
                 vpgl_rational_camera<double>* camera,
                 vgl_box_3d<double> box,
-				bgeo_lvcs lvcs,
+                bgeo_lvcs lvcs,
                 float uncertainty,
                 vil_image_view<unsigned char>* nitf_image_unsigned_char,
                 vpgl_local_rational_camera<double>& local_camera);
@@ -113,13 +113,11 @@ bool boxm_roi_init_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
 
 
-
-
   vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
   vpgl_rational_camera<double>* rat_camera =
     dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
-  	  vcl_cout<<(*rat_camera);
-	  vcl_cout.flush();
+  vcl_cout<<(*rat_camera);
+  vcl_cout.flush();
 
   if (!rat_camera) {
     vcl_cerr << "The camera input is not a rational camera\n";
@@ -128,50 +126,49 @@ bool boxm_roi_init_process(bprb_func_process& pro)
 
   vpgl_local_rational_camera<double> local_camera;
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-	  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-	  boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-	  		  vcl_cout<<"hi1";vcl_cout.flush();
+    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+    boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+    vcl_cout<<"hi1";vcl_cout.flush();
 
-			  for(long k=0;k<1000000;k++);
-	  if (!roi_init(image_path, rat_camera, s->get_world_bbox(),(s->lvcs()), uncertainty, img_ptr, local_camera)) {
-		  vcl_cout<<"hi";vcl_cout.flush();
-		  vcl_cerr << "The process has failed!\n";
-		  return false;
-	  }
-	  vcl_cout<<"hi";
-	  vcl_cout.flush();
+    for (long k=0; k<1000000; ++k) ;
+    if (!roi_init(image_path, rat_camera, s->get_world_bbox(),(s->lvcs()), uncertainty, img_ptr, local_camera)) {
+      vcl_cout<<"hi";vcl_cout.flush();
+      vcl_cerr << "The process has failed!\n";
+      return false;
+    }
+    vcl_cout<<"hi";
+    vcl_cout.flush();
 
-	  if (img_ptr->ni() == 0 || img_ptr->nj() == 0)
-		  return false;
+    if (img_ptr->ni() == 0 || img_ptr->nj() == 0)
+      return false;
 
-	  vcl_cout<<"hi";
-	  vcl_cout.flush();
-	  //Store outputs
-	  unsigned j = 0;
-	  // update the camera and store
-	  pro.set_output_val<vpgl_camera_double_sptr >(j++, new vpgl_local_rational_camera<double> (local_camera));
-	  // store image output
-	  pro.set_output_val<vil_image_view_base_sptr>(j++, img_ptr);
-	  // store uncertainty
-	  pro.set_output_val<float>(j++, uncertainty);
-
-  } else {
-	  vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
-	  return false;
+    vcl_cout<<"hi";
+    vcl_cout.flush();
+    //Store outputs
+    unsigned j = 0;
+    // update the camera and store
+    pro.set_output_val<vpgl_camera_double_sptr >(j++, new vpgl_local_rational_camera<double> (local_camera));
+    // store image output
+    pro.set_output_val<vil_image_view_base_sptr>(j++, img_ptr);
+    // store uncertainty
+    pro.set_output_val<float>(j++, uncertainty);
   }
-
+  else {
+    vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
+    return false;
+  }
 
   return true;
 }
 
 //: roi_init function
 bool boxm_roi_init_process_globals::roi_init(vcl_string const& image_path,
-											vpgl_rational_camera<double>* camera,
-											vgl_box_3d<double> box,
-											bgeo_lvcs lvcs,
-											float uncertainty,
-											vil_image_view<unsigned char>* nitf_image_unsigned_char,
-											vpgl_local_rational_camera<double>& local_camera)
+                                             vpgl_rational_camera<double>* camera,
+                                             vgl_box_3d<double> box,
+                                             bgeo_lvcs lvcs,
+                                             float uncertainty,
+                                             vil_image_view<unsigned char>* nitf_image_unsigned_char,
+                                             vpgl_local_rational_camera<double>& local_camera)
 {
   // read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());

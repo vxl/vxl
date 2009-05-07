@@ -13,18 +13,19 @@
 template <boxm_apm_type APM_MODEL>
 typename boxm_sample_multi_bin<APM_MODEL>::apm_datatype & boxm_sample_multi_bin<APM_MODEL>::appearance(int bin)
 {
-	if(appearance_.find(bin)==appearance_.end())
-	{
-			appearance_[bin]=apm_datatype();
-			return appearance_[bin];
-	}
-	else
-		return appearance_[bin];
+  if (appearance_.find(bin)==appearance_.end())
+  {
+    appearance_[bin]=apm_datatype();
+    return appearance_[bin];
+  }
+  else
+    return appearance_[bin];
 }
+
 template <boxm_apm_type APM_MODEL>
 void boxm_sample_multi_bin<APM_MODEL>::set_appearance(apm_datatype  app,int bin)
 {
-	appearance_[bin]=app;
+  appearance_[bin]=app;
 }
 
 template <boxm_apm_type APM_MODEL>
@@ -32,8 +33,8 @@ void boxm_sample_multi_bin<APM_MODEL>::print(vcl_ostream& os) const
 {
   vcl_map<int,apm_datatype>::const_iterator iter=appearance_.begin();
   os << "(alpha=" << alpha << " appearence=" ;
-  for(;iter!=appearance_.end();iter++)
-	os<<"bin#= "<< iter->first << " "<<iter->second;
+  for (;iter!=appearance_.end();iter++)
+  os << "bin#= " << iter->first << ' ' << iter->second;
 }
 
 template <boxm_apm_type APM_MODEL>

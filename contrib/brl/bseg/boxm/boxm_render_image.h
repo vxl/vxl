@@ -54,14 +54,15 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc, T_data> cell_type;
-  vil_image_view<float> vis(expected.ni(),expected.nj(),1);			   vis.fill(1.0f);
+  vil_image_view<float> vis(expected.ni(),expected.nj(),1);
+  vis.fill(1.0f);
   vil_image_view<float> alpha_integral(expected.ni(),expected.nj(),1); alpha_integral.fill(0.0f);
 
   vul_timer t;
   t.mark();
   // code to iterate over the blocks in order of visibility
-  boxm_block_vis_graph_iterator<boct_tree<T_loc, T_data > > 
-	  block_vis_iter(cam, &scene, expected.ni(), expected.nj());
+  boxm_block_vis_graph_iterator<boct_tree<T_loc, T_data > >
+  block_vis_iter(cam, &scene, expected.ni(), expected.nj());
 
   int cnt=0;
   while (block_vis_iter.next()) {
@@ -113,13 +114,12 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
             boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
             // get expected color of cell
-			typename T_data::obs_datatype cell_expected  =T_data::apm_processor::expected_color(sample.appearance(bin));
+            typename T_data::obs_datatype cell_expected  =T_data::apm_processor::expected_color(sample.appearance(bin));
             // get  alpha
             boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
             // fill expected value image
             //boxm_utils::project_cube_fill_val( vis_face_ids,temp_expected,(float)cell_expected, xverts,yverts);
             boxm_utils::project_cube_fill_val_aa( vis_face_ids,temp_expected,temp_weights,(float)cell_expected, xverts,yverts);
-
          }
         }
         // compute the length of ray segment at each pixel
