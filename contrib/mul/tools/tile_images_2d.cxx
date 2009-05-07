@@ -108,17 +108,34 @@ int main2(int argc, char*argv[])
   // Load the images
   const unsigned nimgs = image_list.size();
   vcl_vector<vil_image_view<vil_rgb<vxl_byte> > > imgs(nimgs);
-  for (unsigned i=0; i<nimgs; ++i)
+  for (unsigned t=0; t<nimgs; ++t)
   {
-    load_image_2d(image_list[i], imgs[i]);
+    load_image_2d(image_list[t], imgs[t]);
   }
+  MBL_LOG(DEBUG, logger(), "Loaded " << nimgs << " images");
+
+  // Check that images are all the same size
+  const unsigned ni = imgs[0].ni();
+  const unsigned nj = imgs[0].nj();
+  const unsigned np = imgs[0].nplanes();
+  for (unsigned t=1; t<nimgs; ++t)
+  {
+    if (imgs[t].ni()!=ni || imgs[t].nj()!=nj || imgs[t].nplanes()!=np) 
+    {
+      vcl_cerr << "ERROR: Images are not all the same size" << vcl_endl;
+      return 2;
+    }
+  }
+  MBL_LOG(DEBUG, logger(), "Images are all the same size");
 
   // Tile the images into a single big image
   vil_image_view<vil_rgb<vxl_byte> > big_image;
   vil_tile_images(big_image, imgs);
+  MBL_LOG(DEBUG, logger(), "Tiled the images");
 
   // Save the big image
   vil_save(big_image, output_image_filename().c_str());
+  MBL_LOG(DEBUG, logger(), "Saved the tiled image");
 
   return 0;
 }
