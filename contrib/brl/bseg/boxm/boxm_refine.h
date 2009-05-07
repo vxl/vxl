@@ -8,75 +8,79 @@
 #include <boxm/boxm_scene.h>
 #include <vcl_iostream.h>
 
+template <class T_loc, class T_data>
+void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
+                       float occlusion_prob_thresh, bool reset_appearance = true)
+{
+  typedef boct_tree<T_loc, T_data> tree_type;
+  tree_type* tree = block->get_tree();
+  float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
+  // get the leaf nodes of the block
+  vcl_vector<boct_tree_cell<T_loc, T_data>*> leaf_nodes = tree->leaf_cells();
+  vcl_cout << /*iter.index() << */"  NUMBER OF LEAF NODES=" << leaf_nodes.size() << vcl_endl;
+  vcl_vector<boct_tree_cell<T_loc, T_data >*> split_list;
+  for (unsigned i=0; i<leaf_nodes.size(); i++) {
+    boct_tree_cell<T_loc, T_data>* cell = leaf_nodes[i];
+    T_data data = cell->data();
+
+    vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
+    float side_len = (float) (cell_bb.max_z() - cell_bb.min_z());
+    float alpha_int = data.alpha * side_len;
+
+    if ((alpha_int > max_alpha_int) && (cell->level() > 0)) {
+      split_list.push_back(cell);
+      // make sure neighbor cells are not already coarser than this cell
+      // get all the faces;
+#if 0
+      boct_face_idx faces = ALL;
+      vcl_vector<boct_tree_cell<T_loc, T_data >*> neighbors;
+      cell->find_neighbors(faces, neighbors, cell->level()+1);
+      split_list.insert(split_list.end(), neighbors.begin(), neighbors.end());
+#endif
+    }
+  }
+
+  // splitting
+  for (unsigned i=0; i<split_list.size(); i++) {
+    boct_tree_cell<T_loc, T_data>* cell = split_list[i];
+    vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
+    float side_len = (float) (cell_bb.max_z() - cell_bb.min_z());
+    float new_alpha = max_alpha_int / side_len;
+
+    T_data old_sample = cell->data();
+    typename T_data::apm_datatype app;
+    if (!reset_appearance) {
+      // if it is not set, transfer the old appearance to the new sample
+      T_data new_sample = old_sample;
+	    new_sample.alpha=new_alpha;
+      cell->split(new_sample);
+    }
+    else {
+      T_data new_sample = T_data();
+      new_sample.alpha = new_alpha;
+      cell->split(new_sample);
+    }
+  }
+}
+
 //: This method refines the blocks (octrees) of the scene
 // If there are some cells with big values they are spitted into new child cells;
 // the data of the cell is copied to the children's data. The purpose of this
 // method is to elaborate the octree at the areas where more details exist.
 
-template <class T_loc, boxm_apm_type APM>
-void boxm_refine(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
+template <class T_loc, class T_data>
+void boxm_refine_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                  float occlusion_prob_thresh,
                  bool reset_appearance = true)
 {
-  typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
+  typedef boct_tree<T_loc, T_data > tree_type;
 
   boxm_block_iterator<tree_type> iter(&scene);
-  float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
+  //float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
   for (; !iter.end(); iter++) {
     scene.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
-    tree_type* tree = block->get_tree();
-
-    // get the leaf nodes of the block
-    vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> >*> leaf_nodes = tree->leaf_cells();
-    vcl_cout << "***************************\n"
-             << " BLOCK " << iter.index() << '\n'
-             << " NUMBER OF LEAF NODES = " << leaf_nodes.size() << '\n'
-             << "***************************" << vcl_endl;
-    vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> >*> split_list;
-    for (unsigned i=0; i<leaf_nodes.size(); i++) {
-      boct_tree_cell<T_loc, boxm_sample<APM> >* cell = leaf_nodes[i];
-      boxm_sample<APM> data = cell->data();
-
-      vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
-      float side_len = (float) (cell_bb.max_z() - cell_bb.min_z());
-      float alpha_int = data.alpha * side_len;
-
-      if ((alpha_int > max_alpha_int) && (cell->level() > 0)) {
-        split_list.push_back(cell);
-        // make sure neighbor cells are not already coarser than this cell
-        // get all the faces;
-#if 0
-        boct_face_idx faces = ALL;
-        vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> >*> neighbors;
-        cell->find_neighbors(faces, neighbors, cell->level()+1);
-        split_list.insert(split_list.end(), neighbors.begin(), neighbors.end());
-#endif
-      }
-    }
-
-    // splitting
-    for (unsigned i=0; i<split_list.size(); i++) {
-      boct_tree_cell<T_loc, boxm_sample<APM> >* cell = split_list[i];
-      vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
-      float side_len = (float) (cell_bb.max_z() - cell_bb.min_z());
-      float new_alpha = max_alpha_int / side_len;
-
-      boxm_sample<APM> old_sample = cell->data();
-      typename boxm_sample<APM>::apm_datatype app;
-      if (!reset_appearance) {
-        // if it is not set, transfer the old appearance to the new sample
-        boxm_sample<APM> new_sample = old_sample;
-		new_sample.alpha=new_alpha;
-        cell->split(new_sample);
-
-      }
-	  else
-	  {
-      boxm_sample<APM> new_sample = boxm_sample<APM>(new_alpha, app);
-      cell->split(new_sample);
-	  }
-    }
+    boxm_refine_block(block, occlusion_prob_thresh, reset_appearance);
     scene.write_active_block();
   }
 }
