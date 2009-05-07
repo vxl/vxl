@@ -220,11 +220,13 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     //blocks_(i,j,k) = new boxm_block<T>();
   blocks_(i,j,k)->b_read(os);
   os.close();
-  /*if (blocks_(i,j,k)->get_tree()==NULL)
+#if 0
+  if (blocks_(i,j,k)->get_tree()==NULL)
   {
     T* tree= new T(max_tree_level_,init_tree_level_);
     blocks_(i,j,k)->init_tree(tree);
-  }*/
+  }
+#endif // 0
 }
 
 template <class T>
@@ -306,7 +308,7 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
   vsl_basic_xml_element app_model(APP_MODEL_TAG);
   app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
   app_model.x_write(os);
-  
+
   vsl_basic_xml_element bin(MULTI_BIN_TAG);
   bin.add_attribute("value", scene.multi_bin()? 1 : 0);
   bin.x_write(os);
@@ -333,7 +335,6 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
 template <class T>
 bool boxm_scene<T>::parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename)
 {
-  
   if (filename) {
     vcl_FILE* xmlFile = vcl_fopen(xml.c_str(), "r");
     if (!xmlFile){
@@ -358,7 +359,7 @@ bool boxm_scene<T>::parse_config(vcl_string xml, boxm_scene_parser& parser, bool
       return false;
     }
   }
-  
+
   vcl_cout << "finished!" << vcl_endl;
   bgeo_lvcs lvcs;
   parser.lvcs(lvcs);
