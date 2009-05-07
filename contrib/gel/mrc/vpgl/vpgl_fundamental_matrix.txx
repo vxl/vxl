@@ -12,7 +12,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
@@ -100,13 +99,13 @@ vgl_homg_line_2d<T> vpgl_fundamental_matrix<T>::r_epipolar_line(
     const vgl_homg_line_2d<T> &epiline_l) const
 {
   vgl_homg_point_2d<T> er, el;
-  
+
   get_epipoles(er, el);
 
   vgl_homg_line_2d<T> el_as_line(el.x(), el.y(), el.w());
 
   vnl_vector_fixed<T,3> epiline_r =
-    get_matrix().transpose() * 
+    get_matrix().transpose() *
     vgl_homg_operators_2d<T>::get_vector(
         vgl_homg_operators_2d<T>::intersection( el_as_line , epiline_l));
 
@@ -120,13 +119,13 @@ vgl_homg_line_2d<T> vpgl_fundamental_matrix<T>::l_epipolar_line(
     const vgl_homg_line_2d<T> &epiline_r) const
 {
   vgl_homg_point_2d<T> er, el;
-  
+
   get_epipoles(er, el);
 
   vgl_homg_line_2d<T> er_as_line(er.x(), er.y(), er.w());
 
   vnl_vector_fixed<T,3> epiline_l =
-    get_matrix() * 
+    get_matrix() *
     vgl_homg_operators_2d<T>::get_vector(
         vgl_homg_operators_2d<T>::intersection( er_as_line , epiline_r));
 
