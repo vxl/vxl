@@ -117,6 +117,9 @@ SOURCE=.\processes/boxm_refine_scene_process.cxx
 SOURCE=.\processes/boxm_volume_visibility_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_roi_init_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+boxm_scene_base--.cxx
 # End Source File
 # End Group

@@ -245,6 +245,9 @@ SOURCE=.\test_save_raw.cxx
 SOURCE=.\test_compute_visibility.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_update_multi_bin.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
