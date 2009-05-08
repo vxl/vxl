@@ -29,4 +29,9 @@
 #define HAS_DCMTK   @HAS_DCMTK@
 #define HAS_J2K     @HAS_J2K@
 
+
+//: Set to 0 if you don't want to use SSE2 instructions to implement rounding, floor, and ceil functions.
+#define VIL_CONFIG_ENABLE_SSE2_ROUNDING @VIL_CONFIG_ENABLE_SSE2_ROUNDING@
+
+
 #endif // vil_config_h_in_

@@ -30,6 +30,7 @@ DECLARE( test_image_list );
 DECLARE( test_border );
 DECLARE( test_4_plane_tiff );
 DECLARE( test_math_median );
+DECLARE( test_round );
 
 void
 register_tests()
@@ -64,6 +65,7 @@ register_tests()
   REGISTER( test_border );
   REGISTER( test_4_plane_tiff );
   REGISTER( test_math_median );
+  REGISTER( test_round );
 }
 
 DEFINE_MAIN;

@@ -80,6 +80,29 @@ ELSE(DCMTK_FOUND)
   SET( HAS_DCMTK 0 )
 ENDIF(DCMTK_FOUND)
 
+
+OPTION(VIL_CONFIG_ENABLE_SSE2_ROUNDING
+  "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
+  ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
+IF( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
+  IF( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
+    IF( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
+      MESSAGE( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
+    ENDIF( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
+    MESSAGE( SEND_ERROR "Cannot have VIL_CONFIG_ENABLE_SSE2_ROUNDING because"
+                        " there is no SSE2 hardware support" )
+    SET(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
+  ENDIF( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
+ENDIF( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
+
+
+IF(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
+  SET(VIL_CONFIG_ENABLE_SSE2_ROUNDING 1)
+ELSE(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
+  SET(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
+ENDIF(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
+
+
 # Store the external library configurations in to the config file
 CONFIGURE_FILE( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
                 ${vxl_BINARY_DIR}/core/vil/vil_config.h @ONLY IMMEDIATE )
@@ -204,7 +227,8 @@ SET( vil_sources ${vil_sources}
   vil_rgba.txx                          vil_rgba.h
   vil_color_table.h
   vil_fwd.h
-
+  vil_round.h
+  
   # Streams
   vil_stream.cxx                        vil_stream.h
   vil_stream_fstream.cxx                vil_stream_fstream.h
