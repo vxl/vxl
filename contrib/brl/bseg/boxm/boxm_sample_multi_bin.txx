@@ -31,10 +31,10 @@ void boxm_sample_multi_bin<APM_MODEL>::set_appearance(apm_datatype  app,int bin)
 template <boxm_apm_type APM_MODEL>
 void boxm_sample_multi_bin<APM_MODEL>::print(vcl_ostream& os) const
 {
-  vcl_map<int,apm_datatype>::const_iterator iter=appearance_.begin();
   os << "(alpha=" << alpha << " appearence=" ;
-  for (;iter!=appearance_.end();iter++)
-  os << "bin#= " << iter->first << ' ' << iter->second;
+  for (typename vcl_map<int,apm_datatype>::const_iterator iter=appearance_.begin();
+       iter!=appearance_.end(); ++iter)
+    os << "bin#= " << iter->first << ' ' << iter->second;
 }
 
 template <boxm_apm_type APM_MODEL>
