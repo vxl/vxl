@@ -37,9 +37,9 @@ inline double vil3d_tricub_interp_safe(double x, double y, double z, const T* da
 
 //: Compute tricubic interpolation at (x,y,z), with minimal bound checks
 //  Image is nx * ny * nz array of Ts. x,y,z element is data[ystep*y+xstep*x]
-//  If (x,y) is outside interpolatable image region and NDEBUG is not defined
+//  If (x,y,z) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
-//  The safe interpolatable region is [1,nx-2]*[1,ny-2]*[1,nz-2].
+//  The safe interpolatable region is [1,nx-3]*[1,ny-3]*[1,nz-3].
 template<class T>
 inline double vil3d_tricub_interp_assert(double x, double y, double z, const T* data,
                                          int nx, int ny, int nz,
@@ -56,8 +56,8 @@ inline double vil3d_tricub_interp_assert(double x, double y, double z, const T* 
 
 //: Compute tricubic interpolation at (x,y,z), with bound checks
 //  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
-//  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
-//  The safe interpolatable region is [1,nx-2]*[1,ny-2].
+//  If (x,y,z) is outside safe interpolatable image region, nearest pixel value is returned.
+//  The safe interpolatable region is [1,nx-3]*[1,ny-3]*[1,nz-3].
 template<class T>
 inline double vil3d_tricub_interp_safe_extend(double x, double y, double z,
                                               const T* data,
@@ -79,6 +79,10 @@ inline double vil3d_tricub_interp_safe_extend(double x, double y, double z,
   return vil3d_tricub_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
+//: Compute tricubic interpolation at (x,y,z), with bound checks
+//  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
+//  If (x,y,z) is outside safe interpolatable image region, trilinear interpolated value of the nearest valid pixels is returned.
+//  The safe interpolatable region is [1,nx-3]*[1,ny-3]*[1,nz-3].
 template<class T>
 double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
                                                  const T* data,
