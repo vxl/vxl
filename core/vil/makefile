@@ -153,6 +153,7 @@ MANPAGE_SOURCES += vil_rgb.txx
 MANPAGE_SOURCES += vil_rgba.txx
 MANPAGE_SOURCES += vil_color_table.h
 MANPAGE_SOURCES += vil_fwd.h
+MANPAGE_SOURCES += vil_round.h
 
 # Streams
 SOURCES += vil_stream.cxx
