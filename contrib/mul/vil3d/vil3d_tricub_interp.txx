@@ -5,8 +5,8 @@
 // \brief Tricubic interpolation functions for 3D images
 
 #include "vil3d_tricub_interp.h"
-#include <vcl_compiler.h>
-#include <vnl/vnl_math.h>
+#include <vcl_limits.h>
+#include <vil/vil_round.h>
 
 
 namespace
@@ -80,6 +80,8 @@ double vil3d_tricub_interp_raw(double x, double y, double z,
     return val;
 }
 
+#pragma optimize( "tpgsy", off )
+
 template<class T>
 double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
                                                  const T* data,
@@ -90,37 +92,37 @@ double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
       x<=nx-3 && y<=ny-3 && z<=nz-3 )
     return vil3d_tricub_interp_raw(x,y,z,data,xstep,ystep,zstep);
 
-  int p1x=int(x);
-  double normx = x-p1x;
-  int p1y=int(y);
-  double normy = y-p1y;
-  int p1z=int(z);
-  double normz = z-p1z;
+  int p1x=vil_round_floor(x);
+  double normx = x - p1x;
+  int p1y=vil_round_floor(y);
+  double normy = y - p1y;
+  int p1z=vil_round_floor(z);
+  double normz = z - p1z;
 
   const T* pix1 = data + p1y*ystep + p1x*xstep + p1z*zstep;
-  double xi00 = vnl_huge_val(double());
-  double xi10 = vnl_huge_val(double());
-  double xi20 = vnl_huge_val(double());
-  double xi30 = vnl_huge_val(double());
-  double xi01 = vnl_huge_val(double());
-  double xi11 = vnl_huge_val(double());
-  double xi21 = vnl_huge_val(double());
-  double xi31 = vnl_huge_val(double());
-  double xi02 = vnl_huge_val(double());
-  double xi12 = vnl_huge_val(double());
-  double xi22 = vnl_huge_val(double());
-  double xi32 = vnl_huge_val(double());
-  double xi03 = vnl_huge_val(double());
-  double xi13 = vnl_huge_val(double());
-  double xi23 = vnl_huge_val(double());
-  double xi33 = vnl_huge_val(double());
+  double xi00 = vcl_numeric_limits<double>::infinity();
+  double xi10 = vcl_numeric_limits<double>::infinity();
+  double xi20 = vcl_numeric_limits<double>::infinity();
+  double xi30 = vcl_numeric_limits<double>::infinity();
+  double xi01 = vcl_numeric_limits<double>::infinity();
+  double xi11 = vcl_numeric_limits<double>::infinity();
+  double xi21 = vcl_numeric_limits<double>::infinity();
+  double xi31 = vcl_numeric_limits<double>::infinity();
+  double xi02 = vcl_numeric_limits<double>::infinity();
+  double xi12 = vcl_numeric_limits<double>::infinity();
+  double xi22 = vcl_numeric_limits<double>::infinity();
+  double xi32 = vcl_numeric_limits<double>::infinity();
+  double xi03 = vcl_numeric_limits<double>::infinity();
+  double xi13 = vcl_numeric_limits<double>::infinity();
+  double xi23 = vcl_numeric_limits<double>::infinity();
+  double xi33 = vcl_numeric_limits<double>::infinity();
 
-  double val0 = vnl_huge_val(double());
-  double val1 = vnl_huge_val(double());
-  double val2 = vnl_huge_val(double());
-  double val3 = vnl_huge_val(double());
+  double val0 = vcl_numeric_limits<double>::infinity();
+  double val1 = vcl_numeric_limits<double>::infinity();
+  double val2 = vcl_numeric_limits<double>::infinity();
+  double val3 = vcl_numeric_limits<double>::infinity();
 
-  double val  = vnl_huge_val(double());
+  double val  = vcl_numeric_limits<double>::infinity();
 
 #define vil3d_I(dx,dy,dz) (pix1[(dx)*xstep+(dy)*ystep+(dz)*zstep])
   if( x < 0 ) x = 0.0;
@@ -168,6 +170,7 @@ double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
 
       val1 = xi11 + (xi21 - xi11)*normy;
       val2 = xi12 + (xi22 - xi12)*normy;
+
     } // end of if y
     else
     {
@@ -410,7 +413,6 @@ double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
 
   return val;
 }
-
 
 #define VIL3D_TRICUB_INTERP_INSTANTIATE(T)                              \
 template double vil3d_tricub_interp_raw (double x, double y, double z, const T* data,  \
