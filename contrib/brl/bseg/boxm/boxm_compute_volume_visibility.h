@@ -79,8 +79,10 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
             T_data data=curr_cell->data();
             alpha_int-=data.alpha*len.length();
             curr_cell=NULL;
-            vcl_cout<<"Lambda= "<<lambda<<" lambda0= "<<lambda0
+#if 0
+			vcl_cout<<"Lambda= "<<lambda<<" lambda0= "<<lambda0
                     <<" exit_point="<<exit_point<<"# of neighbors"<< neighbors.size()<<vcl_endl;
+#endif
             double min_dist=1e5;
             double min_i=-1;
             for (unsigned i=0;i<neighbors.size();i++)

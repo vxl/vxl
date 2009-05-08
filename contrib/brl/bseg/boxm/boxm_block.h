@@ -24,6 +24,7 @@ class boxm_block
   boxm_block(vgl_box_3d<double> bbox): bbox_(bbox), octree_(0) {}
   boxm_block(vgl_box_3d<double> bbox, T* tree) : bbox_(bbox), octree_(tree) {}
   void init_tree(T * octree);
+  void set_tree(T * octree){octree_=octree;}
   vgl_box_3d<double> bounding_box() { return bbox_; }
   T* get_tree(){return octree_;}
   void delete_tree() { if (octree_) delete octree_; octree_ = 0; }

@@ -200,6 +200,7 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
       // delete the active block's data
       boxm_block<T>* block = blocks_(x,y,z);
       block->delete_tree();
+    block->set_tree(0);
     }
   }
   active_block_.set(i,j,k);

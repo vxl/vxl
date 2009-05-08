@@ -59,7 +59,6 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> alpha_integral(expected.ni(),expected.nj(),1); alpha_integral.fill(0.0f);
 
   vul_timer t;
-  t.mark();
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc, T_data > >
   block_vis_iter(cam, &scene, expected.ni(), expected.nj());
@@ -68,14 +67,20 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
+  
+      t.mark();
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
+	  vcl_cout<<"The time taken to read a block is "<<t.all()<<vcl_endl;
+
       boxm_block<tree_type> * curr_block=scene.get_active_block();
       vcl_cout<<"Block: "<<curr_block->bounding_box()<<vcl_endl
               <<"Tree: "<<curr_block->get_tree()->num_levels()
               << " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<vcl_endl;
 
-      // project vertices to the image determine which faces of the cell are visible
+      t.mark();
+	  // project vertices to the image determine which faces of the cell are visible
       boxm_cell_vis_graph_iterator<T_loc, T_data > frontier_it(cam,curr_block->get_tree(),ni,nj);
+	  vcl_cout<<"The time taken to build the vis graph is "<<t.all()<<vcl_endl;
 
       // for each frontier layer of each block
       tree_type * tree=curr_block->get_tree();
