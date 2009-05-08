@@ -1068,6 +1068,9 @@ SOURCE=.\vil_resample_nearest.h
 SOURCE=.\vil_resample_nearest.txx
 # End Source File
 # Begin Source File
+SOURCE=.\vil_round.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_config.h.in
 # End Source File
 # End Group
