@@ -23,7 +23,7 @@ boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_
   poly.push_back(verts_x[v3] * supersample_ratio_ - 0.5,
                  verts_y[v3] * supersample_ratio_ - 0.5);
 
-  super_it_=new vgl_polygon_scan_iterator<double>(poly,false);
+  super_it_= new vgl_polygon_scan_iterator<double>(poly,false);
 
   poly_bb_.update(verts_x[v0], verts_y[v0]);
   poly_bb_.update(verts_x[v1], verts_y[v1]);
@@ -33,7 +33,7 @@ boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_
   int poly_xmin = (int)vcl_floor(poly_bb_.xmin());
   int poly_xmax = (int)vcl_floor(poly_bb_.xmax()) + 1;
   poly_diameter_x_ = (poly_xmax - poly_xmin) + 1;
-  aa_vals_.resize(poly_diameter_x_);
+  aa_vals_ = new float[poly_diameter_x_];
   aa_vals_offset_ = -poly_xmin;
   next_return_ = false;
 }
@@ -66,7 +66,9 @@ bool boxm_quad_scan_iterator::next()
   endx_ =  int(poly_bb_.xmin()) - 1;
 
   // compute antialiasing values for each pixel in scanline
-  vcl_fill(aa_vals_.begin(), aa_vals_.end(), 0.0f);
+  //vcl_fill(aa_vals_.begin(), aa_vals_.end(), 0.0f);
+  for (unsigned int i=0; i<poly_diameter_x_; i++)
+    aa_vals_[i] = 0.0f;
 
   int super_scany_end = (scany_ + 1)*supersample_ratio_;
   static const float increment = 1.0f / (supersample_ratio_*supersample_ratio_);
@@ -141,4 +143,5 @@ float boxm_quad_scan_iterator::pix_coverage(int x)
 boxm_quad_scan_iterator::~boxm_quad_scan_iterator()
 {
   delete super_it_;
+  delete[] aa_vals_;
 }

@@ -50,7 +50,7 @@ class boxm_quad_scan_iterator : public vgl_region_scan_iterator
   bool next_return_;
 
   unsigned int poly_diameter_x_;
-  vcl_vector<float> aa_vals_;
+  float* aa_vals_;
   int aa_vals_offset_;
 
   vbl_bounding_box<double,2> poly_bb_;
