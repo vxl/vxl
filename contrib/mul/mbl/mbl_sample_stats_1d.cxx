@@ -1,47 +1,49 @@
-#include <mbl/mbl_sample_stats_1d.h>
 //:
 // \file
+#include <mbl/mbl_sample_stats_1d.h>
 #include <vsl/vsl_vector_io.h>
+#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_limits.h>
 #include <vcl_algorithm.h>
 
 
-// ============================================================
+//=========================================================================
 mbl_sample_stats_1d::mbl_sample_stats_1d(const vcl_vector<double> &samples)
 {
   clear();
-
-  for (unsigned i=0;i<samples.size();++i)
+  for (unsigned i=0, n=samples.size(); i<n; ++i)
   {
     add_sample(samples[i]);
   }
 }
 
 
-// ============================================================
+//=========================================================================
 mbl_sample_stats_1d::mbl_sample_stats_1d(const vnl_vector<double> &samples)
 {
   clear();
-
-  for (unsigned i=0;i<samples.size();++i)
+  for (unsigned i=0, n=samples.size(); i<n; ++i)
   {
     add_sample(samples[i]);
   }
 }
 
-// ============================================================
+
+//=========================================================================
 mbl_sample_stats_1d::mbl_sample_stats_1d()
 {
   clear();
 }
 
-// ============================================================
+
+//=========================================================================
 mbl_sample_stats_1d::~mbl_sample_stats_1d()
 {
 }
 
-// ============================================================
+
+//=========================================================================
 void mbl_sample_stats_1d::clear()
 {
   samples_.resize(0);
@@ -50,7 +52,7 @@ void mbl_sample_stats_1d::clear()
 }
 
 
-// ============================================================
+//=========================================================================
 void mbl_sample_stats_1d::add_sample(double v)
 {
   stats_1d_.obs(v);
@@ -58,33 +60,38 @@ void mbl_sample_stats_1d::add_sample(double v)
   return;
 }
 
-// ============================================================
-int mbl_sample_stats_1d::n_samples() const
+
+//=========================================================================
+unsigned mbl_sample_stats_1d::n_samples() const
 {
   return samples_.size();
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::mean() const
 {
   return stats_1d_.mean();
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::mean_of_absolutes() const
 {
   double abs_sum = 0;
-  for (int i=0;i<n_samples();++i) abs_sum+=vcl_fabs(samples_[i]);
-  return abs_sum/n_samples();
+  for (unsigned i=0, n=samples_.size(); i<n; ++i)
+    abs_sum+=vcl_fabs(samples_[i]);
+  return abs_sum/samples_.size();
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::median() const
 {
   //     return nth_percentile(50);
   double ret;
 
-  if (n_samples()>0)
+  if (samples_.size()>0)
   {
     if ( samples_.size() % 2 == 0 )
     {
@@ -118,48 +125,76 @@ double mbl_sample_stats_1d::median() const
 }
 
 
-// ============================================================
-double mbl_sample_stats_1d::nth_percentile(int n) const
+//=========================================================================
+double mbl_sample_stats_1d::quantile(double q) const
 {
-  double ret;
+  const unsigned n = samples_.size();
+  
+  // These checks are only asserts because client code is responsible for avoiding these errors.
+  assert(q>=0.0 && q<=1.0);
+  assert(n>0);
 
-  if (n_samples()>0)
-  {
-    double fact = double(n)/100.0;
-    int index=int(fact*(n_samples()-1));
+  // Map the specified quantile to a real-valued "index", i.e. a float lying between 2 integer indices
+  double float_index = (n-1)*q; 
 
-    vcl_vector<double> tmp=samples_;
-    vcl_vector<double>::iterator index_it = tmp.begin() + index;
-    vcl_nth_element(tmp.begin(),index_it,tmp.end(),vcl_less<double>());
+  // Get the integer index immediately below (and enforce the bounds)
+  double f0 = vcl_floor(float_index);
+  f0 = f0<0.0 ? 0.0 : f0>n-1.0 ? n-1.0 : f0;
+  unsigned i0 = static_cast<unsigned>(f0);
 
-    ret = *index_it;
-  }
-  else // crazy value if no samples
-  {
-    ret = vcl_numeric_limits<double>::max();
-  }
+  // Get the integer index immediately above (and enforce the bounds)
+  double f1 = vcl_ceil(float_index);
+  f1 = f1<0.0 ? 0.0 : f1>n-1.0 ? n-1.0 : f1;
+  unsigned i1 = static_cast<unsigned>(f1);
 
+  // Get the 2 values bracketing the specified quantile position
+  vcl_vector<double> tmp = samples_;
+  vcl_vector<double>::iterator index_it0 = tmp.begin() + i0;
+  vcl_nth_element(tmp.begin(), index_it0, tmp.end(), vcl_less<double>());
+  vcl_vector<double>::iterator index_it1 = tmp.begin() + i1;
+  vcl_nth_element(tmp.begin(), index_it1, tmp.end(), vcl_less<double>());
+
+  // Linearly interpolate between the 2 values
+  double f = float_index - f0;
+  double ret = (1.0-f)*(*index_it0) + (f)*(*index_it1);
   return ret;
 }
 
-// ============================================================
+
+//=========================================================================
+double mbl_sample_stats_1d::nth_percentile(int n) const
+{
+  if (samples_.size()==0)
+    return vcl_numeric_limits<double>::max();
+
+  double fact = double(n)/100.0;
+  int index=int(fact*(samples_.size()-1));
+  vcl_vector<double> tmp=samples_;
+  vcl_vector<double>::iterator index_it = tmp.begin() + index;
+  vcl_nth_element(tmp.begin(),index_it,tmp.end(),vcl_less<double>());
+  double ret = *index_it;
+  return ret;
+}
+
+
+//=========================================================================
 double mbl_sample_stats_1d::variance() const
 {
   double v=0;
 
-  if (n_samples()>1)
+  if (samples_.size()>1)
   {
     double mean_v = mean();
     double sum_sq = sum_squares();
-    v = sum_sq - n_samples()*(mean_v * mean_v);
+    v = sum_sq - samples_.size()*(mean_v * mean_v);
 
     if (use_mvue_)
     {
-      v /= (n_samples()-1);
+      v /= (samples_.size()-1);
     }
     else
     {
-      v /= n_samples();
+      v /= samples_.size();
     }
   }
 
@@ -167,31 +202,31 @@ double mbl_sample_stats_1d::variance() const
 }
 
 
-// ============================================================
+//=========================================================================
 double mbl_sample_stats_1d::sd() const
 {
   return vcl_sqrt(variance());
 }
 
 
-// ============================================================
+//=========================================================================
 double mbl_sample_stats_1d::stdError() const
 {
   double se = variance();
   if (use_mvue_)
   {
-    se /= n_samples()-1;
+    se /= samples_.size()-1;
   }
   else
   {
-    se /= n_samples();
+    se /= samples_.size();
   }
 
   return vcl_sqrt(se);
 }
 
 
-// ============================================================
+//=========================================================================
 double mbl_sample_stats_1d::skewness() const
 {
   double skew = 0;
@@ -202,24 +237,25 @@ double mbl_sample_stats_1d::skewness() const
   // where N is the number of samples
   // sigma is the standard deviation
 
-  if (n_samples()>1)
+  if (samples_.size()>1)
   {
     double s=sd();
     double m=mean();
 
-    for (int i=0;i<n_samples();++i)
+    for (unsigned i=0, n=samples_.size(); i<n; ++i)
     {
       double tmp=samples_[i]-m;
       skew += (tmp*tmp*tmp) ;
     }
 
-    skew /= ( (n_samples()-1) * s * s * s );
+    skew /= ( (samples_.size()-1) * s * s * s );
   }
 
   return skew;
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::kurtosis() const
 {
   double kurt = 0;
@@ -230,57 +266,63 @@ double mbl_sample_stats_1d::kurtosis() const
   // where N is the number of samples
   // sigma is the standard deviation
 
-  if (n_samples()>1)
+  if (samples_.size()>1)
   {
     double s=sd();
     double m=mean();
 
-    for (int i=0;i<n_samples();++i)
+    for (unsigned i=0, n=samples_.size(); i<n; ++i)
     {
       double tmp=samples_[i]-m;
       kurt += (tmp*tmp*tmp*tmp) ;
     }
 
-    kurt /= ( (n_samples()-1) * s * s * s *s);
+    kurt /= ( (samples_.size()-1) * s * s * s *s);
     kurt -= 3;
   }
   return kurt;
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::min() const
 {
-  if (n_samples()==0) return vcl_numeric_limits<double>::max();
+  if (samples_.size()==0) return vcl_numeric_limits<double>::max();
   else return stats_1d_.min();
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::max() const
 {
-  if (n_samples()==0) return vcl_numeric_limits<double>::min();
+  if (samples_.size()==0) return vcl_numeric_limits<double>::min();
   else return stats_1d_.max();
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::sum() const
 {
   return stats_1d_.sum();
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::sum_squares() const
 {
   return stats_1d_.sumSq();
 }
 
-// ============================================================
+
+//=========================================================================
 double mbl_sample_stats_1d::rms() const
 {
   double ms=sum_squares()/stats_1d_.nObs();
   return vcl_sqrt( ms );
 }
 
-// ============================================================
+
+//=========================================================================
 mbl_sample_stats_1d& mbl_sample_stats_1d::operator+=(const mbl_sample_stats_1d& s1)
 {
   // add new samples
@@ -292,7 +334,9 @@ mbl_sample_stats_1d& mbl_sample_stats_1d::operator+=(const mbl_sample_stats_1d& 
   return *this ;
 }
 
-//: Test for equality
+
+//=========================================================================
+// Test for equality
 bool mbl_sample_stats_1d::operator==(const mbl_sample_stats_1d& s) const
 {
   return samples_==s.samples_ && use_mvue_==s.use_mvue_;
@@ -304,7 +348,8 @@ short mbl_sample_stats_1d::version_no() const
   return 1;
 }
 
-// =============================================
+
+//=========================================================================
 void mbl_sample_stats_1d::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
@@ -313,7 +358,8 @@ void mbl_sample_stats_1d::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,use_mvue_);
 }
 
-// =============================================
+
+//=========================================================================
 void mbl_sample_stats_1d::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
@@ -323,37 +369,40 @@ void mbl_sample_stats_1d::b_read(vsl_b_istream& bfs)
 
   switch (file_version_no)
   {
-   case 1:
+  case 1:
     vsl_b_read(bfs,samples_);
     vsl_b_read(bfs,stats_1d_);
     vsl_b_read(bfs,use_mvue_);
     break;
-   default :
+  default :
     vcl_cerr << "I/O ERROR: mbl_sample_stats_1d::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< file_version_no << '\n';
+      << "           Unknown version number "<< file_version_no << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
+
+//=========================================================================
 void mbl_sample_stats_1d::print_summary(vcl_ostream& os) const
 {
   os << "mbl_sample_stats_1d: ";
-  if (n_samples()==0)
+  if (samples_.size()==0)
   {
     os << "No samples.";
   }
   else
   {
     os << "mean: "<< mean()
-       << " use MVUE: "<< use_mvue_
-       << " sd: "<< sd()
-       << " ["<<stats_1d_.min()<<','<<stats_1d_.max()<<"] N:"<<n_samples();
+      << " use MVUE: "<< use_mvue_
+      << " sd: "<< sd()
+      << " ["<<stats_1d_.min()<<','<<stats_1d_.max()<<"] N:"<<samples_.size();
   }
 }
 
 
-//: Print all data
+//=========================================================================
+// Print all data
 void mbl_sample_stats_1d::print_all(vcl_ostream& os,
                                     const vcl_string& delim/*="\n"*/) const
 {
@@ -365,26 +414,31 @@ void mbl_sample_stats_1d::print_all(vcl_ostream& os,
 }
 
 
+//=========================================================================
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_sample_stats_1d& stats)
 {
   stats.print_summary(os);
   return os;
 }
 
-//: Stream output operator for class reference
+
+//=========================================================================
+// Stream output operator for class reference
 void vsl_print_summary(vcl_ostream& os,const mbl_sample_stats_1d& stats)
 {
   stats.print_summary(os);
 }
 
 
-//: Print all data
+//=========================================================================
+// Print all data
 void vsl_print_all(vcl_ostream& os, const mbl_sample_stats_1d& stats)
 {
   stats.print_all(os);
 }
 
 
+//=========================================================================
 mbl_sample_stats_1d operator+(const mbl_sample_stats_1d& s1, const mbl_sample_stats_1d& s2)
 {
   mbl_sample_stats_1d r = s1;
@@ -393,14 +447,19 @@ mbl_sample_stats_1d operator+(const mbl_sample_stats_1d& s1, const mbl_sample_st
   return r;
 }
 
-//: Binary file stream output operator for class reference
+
+//=========================================================================
+// Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_sample_stats_1d& b)
 {
   b.b_write(bfs);
 }
 
-//: Binary file stream input operator for class reference
+
+//=========================================================================
+// Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mbl_sample_stats_1d& b)
 {
   b.b_read(bfs);
 }
+

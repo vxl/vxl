@@ -24,10 +24,10 @@ class mbl_sample_stats_1d
   //! Default ctor
   mbl_sample_stats_1d();
 
-  //! ctor with a vector of samples
+  //! ctor with a vcl_vector of samples
   mbl_sample_stats_1d(const vcl_vector<double> &samples);
 
-  //! ctror with a vector of samples
+  //! ctor with a vnl_vector of samples
   mbl_sample_stats_1d(const vnl_vector<double> &samples);
 
   ~mbl_sample_stats_1d();
@@ -44,7 +44,7 @@ class mbl_sample_stats_1d
   void add_sample(double v);
 
   //: Number of samples
-  int n_samples() const;
+  unsigned n_samples() const;
 
   //! vector of samples
   const vcl_vector<double>& samples() const { return samples_; }
@@ -60,10 +60,15 @@ class mbl_sample_stats_1d
   // Always check number of samples first
   double median() const;
 
-  //: The last value within the n_th percentile of the distribution
-  // Take care. if there are no samples, this method returns maxmimum double (a very large number)
-  // Always check number of samples first
+  //: The last value within the n_th percentile of the distribution.
+  // \note If there are no samples, this method returns maxmimum double (a very large number).
+  // \sa quantile().
   double nth_percentile(int n) const;
+
+  //: Calculate a value at a specified quantile \a q.
+  // \param q Required quantile 0.0 <= q <= 1.0 
+  // \note Linearly interpolates between the 2 sample values bracketing the specified quantile position.
+  double quantile(double q) const;
 
   //: Standard deviation of current samples
   double sd() const;

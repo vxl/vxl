@@ -54,6 +54,7 @@ int main2(int argc, char *argv[])
   vul_arg<bool> se("-se", "Specify this to record standard error", false);
   vul_arg<bool> med("-med", "Specify this to record median", false);
   vul_arg<vcl_vector<int> > pc("-pc", "Specify this switch with 1 or more comma-separated integers (e.g. 5,50,95) to record percentile(s)");
+  vul_arg<vcl_vector<double> > quant("-q", "Specify this switch with 1 or more comma-separated floats (e.g. 0.05,0.50,0.95) to record quantile(s)");
   vul_arg<vcl_string> sep("-sep", "String to use as a separator between output values, e.g. \", \" or \"  \" (default=TAB)", "\t");
   vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers", false);
   vul_arg_parse(argc, argv);
@@ -99,6 +100,14 @@ int main2(int argc, char *argv[])
     {
       vcl_string name = vul_sprintf("pc%02u", *it);
       stats[name] = data.nth_percentile(*it);
+    }
+  }
+  if (quant.set())
+  {
+    for (vcl_vector<double>::const_iterator it=quant().begin(); it!=quant().end(); ++it)
+    {
+      vcl_string name = vul_sprintf("q%f", *it);
+      stats[name] = data.quantile(*it);
     }
   }
 
