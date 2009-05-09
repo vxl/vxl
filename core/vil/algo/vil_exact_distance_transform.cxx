@@ -120,8 +120,7 @@ static vxl_uint_32 infty_;
 inline void
 maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, unsigned *g, unsigned *h)
 {
-   int l; 
-   unsigned ns;
+   int l, ns;
    unsigned i, nj, di, dmin, dnext;
    vxl_uint_32 fi;
 
@@ -167,8 +166,7 @@ maurer_voronoi_edt_2D_label(
     vil_image_view<vxl_uint_32> &imlabel,
     unsigned j1, unsigned *g, unsigned *h, unsigned *w)
 {
-   int l; 
-   unsigned ns;
+   int l, ns;
    unsigned i, ni, nj, di, dmin, dnext;
    vxl_uint_32 fi;
 
@@ -515,8 +513,9 @@ vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im)
 // \sa see documentation of vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 //
 bool
-vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, 
-    unsigned plane_idx, const vcl_vector<unsigned> &sq)
+vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
+                                   unsigned plane_idx,
+                                   const vcl_vector<unsigned> &sq)
 {
    if (!test_contiguous(im))
       return false;
