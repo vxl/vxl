@@ -80,12 +80,12 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
             alpha_int-=data.alpha*len.length();
             curr_cell=NULL;
 #if 0
-			vcl_cout<<"Lambda= "<<lambda<<" lambda0= "<<lambda0
+            vcl_cout<<"Lambda= "<<lambda<<" lambda0= "<<lambda0
                     <<" exit_point="<<exit_point<<"# of neighbors"<< neighbors.size()<<vcl_endl;
 #endif
             double min_dist=1e5;
-            double min_i=-1;
-            for (unsigned i=0;i<neighbors.size();i++)
+            int min_i=-1;
+            for (unsigned i=0;i<neighbors.size();++i)
             {
               vgl_box_3d<double> bbox=tree->cell_bounding_box(neighbors[i]);
               double dist=0;
