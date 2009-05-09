@@ -63,7 +63,7 @@ bool vil_interpolate_peak(const T* pixel,
                           vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep,
                           double& dx, double& dy, double& val)
 {
-  dx = 0; dy=0;
+  dx=dy=0;
   //extract the neighborhood
   // +-----+-----+-----+
   // | p00 | p10 | p20 |
@@ -81,7 +81,7 @@ bool vil_interpolate_peak(const T* pixel,
   const T& p20 = *(&p10+istep);
   const T& p02 = *(&p12-istep);
   const T& p22 = *(&p12+istep);
-  
+
   //Compute the 2nd order quadratic coefficients
   //      1/6 * [ -1  0 +1 ]
   // Ix =       [ -1  0 +1 ]
@@ -103,7 +103,7 @@ bool vil_interpolate_peak(const T* pixel,
   // Iyy =      [ -2 -2 -2 ]
   //            [ +1 +1 +1 ]
   double Iyy = ((p00+p10+p20 +p02+p12+p22)-2.0*(p01+p11+p21))/3.0;
-  
+
   //
   // The next bit is to find the extremum of the fitted surface by setting its
   // partial derivatives to zero. We need to solve the following linear system :
@@ -116,25 +116,25 @@ bool vil_interpolate_peak(const T* pixel,
   //
   double det = Ixx*Iyy - Ixy*Ixy;
   // det>0 corresponds to a true local extremum otherwise a saddle point
-  if(det<=0)
+  if (det<=0)
     return false;
-  
+
   dx = (Iy*Ixy - Ix*Iyy) / det;
   dy = (Ix*Ixy - Iy*Ixx) / det;
   // more than one pixel away
-  if (vcl_fabs(dx) > 1.0 || vcl_fabs(dy) > 1.0)
+  if (dx > 1.0 || dx < -1.0 || dy > 1.0 || dy < -1.0)
     return false;
-  
+
   double Io =(p00+p01+p02 +p10+p11+p12 +p20+p21+p22)/9.0;
-  
+
   val = Io + (Ix + 0.5*Ixx*dx + Ixy*dy)*dx + (Iy + 0.5*Iyy*dy)*dy;
-  
+
   return true;
 }
 
 
 //: Return sub-pixel (px,py,val) for all points in image strictly above their 8 neighbours
-//  Interpolation sub-pixel position of all local peaks (px[k],py[k]) 
+//  Interpolation sub-pixel position of all local peaks (px[k],py[k])
 //  above given threshold value by fitting a parabaloid.
 //  Interpolated peak values are returned in \a val.
 // \param clear_list  If true (the default) then empty lists before adding new examples.
@@ -161,9 +161,9 @@ inline void vil_find_peaks_3x3_subpixel(vcl_vector<double>& px,
     for (unsigned i=1;i<ni1;++i,pixel+=istep)
       if (*pixel>=min_thresh && vil_is_peak_3x3(pixel,istep,jstep) &&
           vil_interpolate_peak(pixel,istep,jstep,dx,dy,v))
-      { 
-        px.push_back(i+dx); 
-        py.push_back(j+dy); 
+      {
+        px.push_back(i+dx);
+        py.push_back(j+dy);
         val.push_back(v);
       }
   }
