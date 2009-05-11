@@ -11,6 +11,7 @@
 #include <vcl_fstream.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
+#include <boxm/io/boxm_scene_parser.h>
 
 namespace boxm_load_scene_process_globals
 {
@@ -52,19 +53,17 @@ bool boxm_load_scene_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   vcl_string scene_file = pro.get_input<vcl_string>(i++);
-  vcl_string apm_type = pro.get_input<vcl_string>(i++);
-
+  //vcl_string apm_type = pro.get_input<vcl_string>(i++);
+  
   //vsl_b_ifstream is(scene_file, vcl_ios_binary);
-  boxm_scene_base_sptr scene;
-
-  if (apm_type == "apm_mog_grey") {
+  boxm_scene_base_sptr scene= new boxm_scene_base();
+  boxm_scene_parser parser;
+  scene->load_scene(scene_file, parser);
+  if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = new boxm_scene<tree_type>();
-    s->load_scene(scene_file);
-    if (s->appearence_model() != BOXM_APM_MOG_GREY) {
-      vcl_cout << "boxm_load_scene_process: inconsistent APM type" << vcl_endl;
-      return false;
-    }
+    s->load_scene(parser);
+   // scene.unref(scene);
     scene = s;
   } else {
     vcl_cout << "boxm_load_scene_process: undefined APM type" << vcl_endl;

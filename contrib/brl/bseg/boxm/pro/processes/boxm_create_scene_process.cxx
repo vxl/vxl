@@ -32,29 +32,14 @@
 #include <vul/vul_file.h>
 
 #include <boxm/boxm_sample_multi_bin.h>
+#include <boxm/io/boxm_scene_parser.h>
 
 //:global variables
 namespace boxm_create_scene_process_globals
 {
   //this process takes no inputs
+  const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 1;
-  //Define parameters here
-  const vcl_string param_input_directory_ =  "scene_path";
-  const vcl_string param_apm_type_ =  "appearence_model";
-  const vcl_string param_bin_type_ =  "multi_bin";
-  const vcl_string param_origin_x_ = "origin_x";
-  const vcl_string param_origin_y_ = "origin_y";
-  const vcl_string param_origin_z_ = "origin_z";
-  const vcl_string param_block_dim_x_ = "block_dim_x";
-  const vcl_string param_block_dim_y_ = "block_dim_y";
-  const vcl_string param_block_dim_z_ = "block_dim_z";
-  const vcl_string param_scene_dim_x_ = "scene_dim_x";
-  const vcl_string param_scene_dim_y_ = "scene_dim_y";
-  const vcl_string param_scene_dim_z_ = "scene_dim_z";
-  const vcl_string param_lvcs_ = "lvcs";
-  const vcl_string param_block_pref_ = "block_pref";
-  const vcl_string param_max_octree_level_ = "max_octree_level";
-  const vcl_string param_init_octree_level_ = "init_octree_level";
 }
 
 //:sets input and output types
@@ -74,92 +59,26 @@ bool boxm_create_scene_process_cons(bprb_func_process& pro)
 bool boxm_create_scene_process(bprb_func_process& pro)
 {
   using namespace boxm_create_scene_process_globals;
+  vcl_string fname = pro.get_input<vcl_string>(0);
 
-  //define and read in the parameters
-  vcl_string scene_dir;
-  pro.parameters()->get_value(param_input_directory_, scene_dir);
-  if (!vul_file::is_directory(scene_dir) || !vul_file::exists(scene_dir)) {
-    vcl_cerr << "In boxm_create_scene_process::execute() -- input directory "<< vul_file::get_cwd() << '/' << scene_dir << "is not valid!\n";
-    return false;
-  }
-  vcl_cout << "In boxm_create_scene_process::execute() -- input directory is: " <<  vul_file::get_cwd() << scene_dir << vcl_endl;
+  boxm_scene_parser parser;
 
-  double origin_x = 0.0f;
-  pro.parameters()->get_value(param_origin_x_, origin_x);
-  double origin_y = 0.0f;
-  pro.parameters()->get_value(param_origin_y_, origin_y);
-  double origin_z = 0.0f;
-  pro.parameters()->get_value(param_origin_z_, origin_z);
-  vgl_point_3d<double> origin(origin_x, origin_y, origin_z);
-
-  double dimx = 10;
-  pro.parameters()->get_value(param_block_dim_x_, dimx);
-  double dimy = 10;
-  pro.parameters()->get_value(param_block_dim_y_, dimy);
-  double dimz = 10;
-  pro.parameters()->get_value(param_block_dim_z_, dimz);
-  vgl_vector_3d<double> block_dims(dimx, dimy, dimz);
-
-  double scene_dimx = 10;
-  pro.parameters()->get_value(param_scene_dim_x_, scene_dimx);
-  double scene_dimy = 10;
-  pro.parameters()->get_value(param_scene_dim_y_, scene_dimy);
-  double scene_dimz = 10;
-  pro.parameters()->get_value(param_scene_dim_z_, scene_dimz);
-
-  unsigned max_level = 10;
-  pro.parameters()->get_value(param_max_octree_level_, max_level);
-  unsigned init_level = 6;
-  pro.parameters()->get_value(param_init_octree_level_, init_level);
-
-  // world dimensions are computed from the block array dimensions which is given as paramaters
-  vgl_vector_3d<double> scene_dims(scene_dimx*dimx, scene_dimy*dimy, scene_dimz*dimz);
-
-  vcl_string lvcs_path;
-  pro.parameters()->get_value(param_lvcs_, lvcs_path);
-
-  bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
-  if (lvcs_path != "") {
-    vcl_ifstream is(lvcs_path.c_str());
-    if (!is)
-    {
-      vcl_cerr << " Error opening file  " << lvcs_path << vcl_endl;
-      return false;
-    }
-    lvcs->read(is);
-  }
-
-  vcl_string block_pref;
-  pro.parameters()->get_value(param_block_pref_, block_pref);
-
-  vcl_string apm_type;
-  pro.parameters()->get_value(param_apm_type_, apm_type);
-
-  bool multi_bin;
-  pro.parameters()->get_value(param_bin_type_, multi_bin);
-
-  boxm_scene_base_sptr scene_ptr=0;
-  if (apm_type == "apm_mog_grey") {
-	  if(!multi_bin)
+  boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
+  scene_ptr->load_scene(fname, parser);
+  if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
+	  if(!scene_ptr->multi_bin())
 	  {
-		typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-			boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(*lvcs, origin, block_dims, scene_dims, max_level, init_level);
-    
-	scene->set_appearence_model(boxm_apm_types::str_to_enum(apm_type.c_str()));
-	scene->set_bin_option(multi_bin);
-    scene->set_paths(scene_dir, block_pref);
-    scene_ptr = scene;
+		  typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+	    boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(); 
+      scene->load_scene(parser);
+      scene_ptr = scene;
 	  }
-	  else
-	  {
-		typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
-		boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(*lvcs, origin, block_dims, scene_dims, max_level, init_level);
-		vcl_cout<<"Multi Bin set"<<vcl_endl;
-		scene->set_bin_option(multi_bin);
-		scene->set_appearence_model(boxm_apm_types::str_to_enum(apm_type.c_str()));
-		scene->set_paths(scene_dir, block_pref);
-		scene_ptr = scene;
-
+	  else {
+		  typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
+		  boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      scene->load_scene(parser);
+		  vcl_cout<<"Multi Bin set"<<vcl_endl;
+		  scene_ptr = scene;
 	  }
 
   } else {
