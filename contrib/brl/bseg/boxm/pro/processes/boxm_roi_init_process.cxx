@@ -128,22 +128,15 @@ bool boxm_roi_init_process(bprb_func_process& pro)
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-    vcl_cout<<"hi1";vcl_cout.flush();
 
-    for (long k=0; k<1000000; ++k) ;
     if (!roi_init(image_path, rat_camera, s->get_world_bbox(),(s->lvcs()), uncertainty, img_ptr, local_camera)) {
-      vcl_cout<<"hi";vcl_cout.flush();
       vcl_cerr << "The process has failed!\n";
       return false;
     }
-    vcl_cout<<"hi";
-    vcl_cout.flush();
 
     if (img_ptr->ni() == 0 || img_ptr->nj() == 0)
       return false;
 
-    vcl_cout<<"hi";
-    vcl_cout.flush();
     //Store outputs
     unsigned j = 0;
     // update the camera and store

@@ -31,6 +31,7 @@
 
 #include <vul/vul_file.h>
 
+#include <boxm/boxm_sample_multi_bin.h>
 
 //:global variables
 namespace boxm_create_scene_process_globals
@@ -139,11 +140,28 @@ bool boxm_create_scene_process(bprb_func_process& pro)
 
   boxm_scene_base_sptr scene_ptr=0;
   if (apm_type == "apm_mog_grey") {
-    typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-    boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(*lvcs, origin, block_dims, scene_dims, max_level, init_level);
-    scene->set_appearence_model(boxm_apm_types::str_to_enum(apm_type.c_str()));
+	  if(!multi_bin)
+	  {
+		typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+			boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(*lvcs, origin, block_dims, scene_dims, max_level, init_level);
+    
+	scene->set_appearence_model(boxm_apm_types::str_to_enum(apm_type.c_str()));
+	scene->set_bin_option(multi_bin);
     scene->set_paths(scene_dir, block_pref);
     scene_ptr = scene;
+	  }
+	  else
+	  {
+		typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
+		boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(*lvcs, origin, block_dims, scene_dims, max_level, init_level);
+		vcl_cout<<"Multi Bin set"<<vcl_endl;
+		scene->set_bin_option(multi_bin);
+		scene->set_appearence_model(boxm_apm_types::str_to_enum(apm_type.c_str()));
+		scene->set_paths(scene_dir, block_pref);
+		scene_ptr = scene;
+
+	  }
+
   } else {
     vcl_cout << "boxm_create_scene_process: undefined APM type" << vcl_endl;
     return false;

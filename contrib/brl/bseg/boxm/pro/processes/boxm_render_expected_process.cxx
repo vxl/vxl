@@ -33,6 +33,7 @@ bool boxm_render_expected_process_cons(bprb_func_process& pro)
   //input[1]: camera
   //input[2]: ni of the expected image
   //input[3]: nj of the expected image
+  //input[4]: bin number
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
@@ -79,6 +80,7 @@ bool boxm_render_expected_process(bprb_func_process& pro)
     vil_image_view<float> mask(ni,nj);
     if (!scene_ptr->multi_bin())
     {
+
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       boxm_render_image_splatting<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
@@ -86,7 +88,7 @@ bool boxm_render_expected_process(bprb_func_process& pro)
     else
     {
       unsigned bin = pro.get_input<unsigned>(i++);
-
+	  vcl_cout<<"Multi Bin"<<vcl_endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       boxm_render_image_splatting<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,bin);

@@ -28,7 +28,8 @@ public:
   boxm_apm_type appearence_model() { return app_model_; }
 
   void set_appearence_model(boxm_apm_type model) { app_model_ = model; }
-
+  
+  void set_bin_option(bool multi_bin) { multi_bin_ = multi_bin; }
   void set_octree_levels(unsigned max, unsigned init) 
    { max_tree_level_=max; init_tree_level_=init; tree_level_set_=true; }
 
@@ -36,6 +37,7 @@ public:
    { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
   bool multi_bin(){return multi_bin_;}
+
  protected:
   boxm_apm_type app_model_;
 
