@@ -51,7 +51,7 @@ class boxm_scene :public boxm_scene_base
               const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<double>& world_dim);
 
-  ~boxm_scene() {}
+  ~boxm_scene();
 
   void load_block(unsigned i, unsigned j, unsigned k);
 
@@ -91,6 +91,8 @@ class boxm_scene :public boxm_scene_base
 
   void load_scene(vcl_string filename);
 
+  void load_scene(boxm_scene_parser& parser);
+
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
@@ -111,13 +113,16 @@ class boxm_scene :public boxm_scene_base
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 
-
+  void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
+ 
   vgl_box_3d<double> get_block_bbox(int x, int y, int z);
 
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
 
-  bool parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename=false);
+  bool parse_config(boxm_scene_parser& parser); 
+
+  bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);
 };
 
 template <class T>

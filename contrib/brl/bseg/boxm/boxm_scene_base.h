@@ -17,6 +17,8 @@
 
 #include "boxm_sample.h"
 
+class boxm_scene_parser;
+
 class boxm_scene_base : public vbl_ref_count
 {
 public:
@@ -24,6 +26,8 @@ public:
     : app_model_(BOXM_APM_UNKNOWN), tree_level_set_(false), scene_path_(""), block_pref_(""),multi_bin_(false) {}
 
   virtual ~boxm_scene_base(){}
+
+  bool load_scene(vcl_string filename, boxm_scene_parser& parser);
 
   boxm_apm_type appearence_model() { return app_model_; }
 
@@ -37,6 +41,8 @@ public:
    { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
   bool multi_bin(){return multi_bin_;}
+  
+  bool parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename);
 
  protected:
   boxm_apm_type app_model_;
