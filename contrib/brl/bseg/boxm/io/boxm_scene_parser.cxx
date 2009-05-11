@@ -172,5 +172,13 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
       if (vcl_strcmp(atts[i], "value") == 0)
         convert(atts[i+1], multi_bin_);
     }
+  } else if (vcl_strcmp(name, "octree_level")==0) {
+    for (int i=0; atts[i]; i+=2) {
+      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
+      if (vcl_strcmp(atts[i], "max") == 0)
+        convert(atts[i+1], max_tree_level_);
+      else if (vcl_strcmp(atts[i], "init") == 0)
+        convert(atts[i+1], init_tree_level_);
+    }
   }
 }

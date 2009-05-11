@@ -32,6 +32,7 @@ class boxm_scene_parser : public expatpp
    void paths(vcl_string& scene_path, vcl_string& block_pref) {scene_path=path_; block_pref=block_pref_;}
    vcl_string app_model() { return app_model_; }
    bool multi_bin() { return multi_bin_; }
+   void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
