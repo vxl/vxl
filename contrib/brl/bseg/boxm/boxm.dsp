@@ -105,6 +105,9 @@ SOURCE=.\boxm_apm_traits.cxx
 SOURCE=.\boxm_quad_scan_iterator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_scene_base.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File

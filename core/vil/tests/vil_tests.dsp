@@ -99,6 +99,9 @@ SOURCE=.\test_nearest_interp.cxx
 # Begin Source File
 SOURCE=.\test_resample_nearest.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_round.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
