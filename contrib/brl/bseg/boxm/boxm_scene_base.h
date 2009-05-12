@@ -21,9 +21,9 @@ class boxm_scene_parser;
 
 class boxm_scene_base : public vbl_ref_count
 {
-public:
-  boxm_scene_base() 
-    : app_model_(BOXM_APM_UNKNOWN), tree_level_set_(false), scene_path_(""), block_pref_(""),multi_bin_(false) {}
+ public:
+  boxm_scene_base()
+    : app_model_(BOXM_APM_UNKNOWN), multi_bin_(false), tree_level_set_(false), scene_path_(""), block_pref_("") {}
 
   virtual ~boxm_scene_base(){}
 
@@ -32,16 +32,16 @@ public:
   boxm_apm_type appearence_model() { return app_model_; }
 
   void set_appearence_model(boxm_apm_type model) { app_model_ = model; }
-  
+
   void set_bin_option(bool multi_bin) { multi_bin_ = multi_bin; }
-  void set_octree_levels(unsigned max, unsigned init) 
-   { max_tree_level_=max; init_tree_level_=init; tree_level_set_=true; }
+  void set_octree_levels(unsigned max, unsigned init)
+  { max_tree_level_=max; init_tree_level_=init; tree_level_set_=true; }
 
   void set_paths(vcl_string scene_path, vcl_string block_prefix)
-   { scene_path_ = scene_path;  block_pref_=block_prefix; }
+  { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
-  bool multi_bin(){return multi_bin_;}
-  
+  bool multi_bin() { return multi_bin_; }
+
   bool parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename);
 
  protected:
@@ -64,6 +64,5 @@ public:
 };
 
 typedef vbl_smart_ptr<boxm_scene_base> boxm_scene_base_sptr;
-
 
 #endif
