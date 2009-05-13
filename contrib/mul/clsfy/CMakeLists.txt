@@ -1,5 +1,11 @@
 # mul/clsfy/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/clsfy
+  DEPENDS contrib/mul/vpdfl contrib/mul/mbl core/vnl core/vbl
+  PACKAGE contrib/mul
+  DESCRIPTION "Various statistical classifiers"
+  )
+
 SET(clsfy_sources
  clsfy_binary_hyperplane.cxx                  clsfy_binary_hyperplane.h
  clsfy_binary_hyperplane_ls_builder.cxx       clsfy_binary_hyperplane_ls_builder.h

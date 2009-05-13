@@ -1,5 +1,11 @@
 # mul/mvl2/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/mvl2
+  DEPENDS core/vil core/vul
+  PACKAGE contrib/mul
+  DESCRIPTION "Classes for video file support"
+  )
+
 SET(mvl2_sources
     mvl2_video_writer.h
     mvl2_video_reader.h        mvl2_video_reader.cxx

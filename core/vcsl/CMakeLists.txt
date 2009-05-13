@@ -1,5 +1,11 @@
 # vxl/vcsl/CMakeLists.txt
 
+doxygen_add_library(core/vcsl
+  DEPENDS core/vnl core/vbl
+  PACKAGE core-L2
+  DESCRIPTION "Spatial Coordinate Systems and Manipulation"
+  )
+
   SET( vcsl_sources
     vcsl_dimension.h vcsl_dimension_sptr.h
     vcsl_length.cxx vcsl_length.h vcsl_length_sptr.h
@@ -58,6 +64,7 @@
 
   ADD_LIBRARY( vcsl ${vcsl_sources} )
   TARGET_LINK_LIBRARIES( vcsl vnl vbl )
+
   INSTALL_TARGETS(/lib vcsl)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vcsl ${vcsl_sources})
 

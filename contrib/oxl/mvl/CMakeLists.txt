@@ -1,5 +1,11 @@
 # oxl/mvl/CMakeLists.txt
 
+doxygen_add_library(contrib/oxl/mvl
+  DEPENDS core/vnl core/vbl core/vgl core/vul core/vil1
+  PACKAGE contrib/oxl
+  DESCRIPTION "Multi-view epipolar geometry"
+  )
+
 SET(mvl_sources
     AffineMetric.cxx                       AffineMetric.h
     ClosestImagePointFinder.cxx            ClosestImagePointFinder.h

@@ -1,5 +1,11 @@
 # mul/pdf1d/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/pdf1d
+  DEPENDS contrib/mul/mbl core/vbl core/vnl
+  PACKAGE contrib/mul
+  DESCRIPTION "Univariate Probability Density Function Library"
+  )
+
 SET(pdf1d_sources
   pdf1d_all.h                                      pdf1d_add_all_loaders.cxx
   pdf1d_pdf.cxx                                    pdf1d_pdf.h

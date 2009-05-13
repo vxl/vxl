@@ -1,5 +1,11 @@
 # vxl/vil1/CMakeLists.txt
 
+doxygen_add_library(core/vil1
+  DEPENDS core/vsl
+  PACKAGE core
+  DESCRIPTION "Imaging Library"
+  )
+
 SET( vil1_sources
   vil1_fwd.h
 

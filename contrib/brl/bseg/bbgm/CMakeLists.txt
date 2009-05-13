@@ -1,6 +1,11 @@
 # This is brl/bseg/bbgm/CMakeLists.txt
 # Brown background modeling Library
 
+doxygen_add_library(contrib/brl/bseg/bbgm
+  DEPENDS contrib/brl/bbas/bsta core/vil core/vsl
+  PACKAGE contrib/brl
+  )
+
 SET(bbgm_sources
 
   bbgm_planes_to_sample.h

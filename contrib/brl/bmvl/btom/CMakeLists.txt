@@ -1,5 +1,11 @@
 # library for tomography
 # brl/bmvl/btom/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bmvl/btom
+  DEPENDS contrib/gel/gevd
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )

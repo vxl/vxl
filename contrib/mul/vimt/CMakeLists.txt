@@ -1,5 +1,11 @@
 # mul/vimt/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/vimt
+  DEPENDS core/vil core/vnl core/vgl
+  PACKAGE contrib/mul
+  DESCRIPTION "Polymorphic image + transform library"
+  )
+
 SET(vimt_sources
     vimt_image.cxx                                vimt_image.h
     vimt_transform_2d.cxx                         vimt_transform_2d.h

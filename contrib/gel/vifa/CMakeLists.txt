@@ -1,5 +1,10 @@
 # gel/vifa/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/vifa
+  DEPENDS contrib/gel/gevd
+  PACKAGE contrib/gel
+  )
+
 SET(vifa_sources
  vifa_typedefs.h
  vifa_bbox.h

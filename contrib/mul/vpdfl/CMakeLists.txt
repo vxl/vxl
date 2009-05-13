@@ -1,5 +1,11 @@
 # mul/vpdfl/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/vpdfl
+  DEPENDS contrib/mul/mbl core/vnl
+  PACKAGE contrib/mul
+  DESCRIPTION "Multivariate Probability Density Function Library"
+  )
+
 SET(vpdfl_sources
  vpdfl_all.h
  vpdfl_resample.cxx                    vpdfl_resample.h

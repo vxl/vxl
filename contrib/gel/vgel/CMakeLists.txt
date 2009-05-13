@@ -1,5 +1,11 @@
 # gel/vgel/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/vgel
+  DEPENDS contrib/gel/vtol core/vidl1 core/vidl_vil1 contrib/oxl/mvl
+  PACKAGE contrib/gel
+  DESCRIPTION "Kanade-Lucas_Tomasi feature tracker"
+  )
+
 SET(vgel_sources
  vgel_kl.cxx              vgel_kl.h
  vgel_kl_params.cxx       vgel_kl_params.h

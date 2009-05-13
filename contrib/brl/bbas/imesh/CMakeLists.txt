@@ -1,6 +1,11 @@
 # brl/bbas/imesh/CMakeLists.txt
 # indexed mesh library
 
+doxygen_add_library(contrib/brl/bbas/imesh
+  DEPENDS core/vgl core/vul
+  PACKAGE contrib/brl
+  DESCRIPTION "Brown Indexed Mesh Library"
+  )
 
 SET(imesh_sources
   imesh_vertex.cxx             imesh_vertex.h

@@ -1,5 +1,11 @@
 # vxl/vbl/CMakeLists.txt
 
+doxygen_add_library(core/vbl
+  DEPENDS core/vsl
+  PACKAGE core
+  DESCRIPTION "Basic Template Library"
+  )
+
 SET( vbl_sources
   vbl_fwd.h
 

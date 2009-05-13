@@ -1,5 +1,11 @@
 # core/vul/CMakeLists.txt
 
+doxygen_add_library(core/vul
+  DEPENDS core/vsl
+  PACKAGE core
+  DESCRIPTION "Utility Library"
+  )
+
 SET(vul_sources
   vul_fwd.h
   vul_whereami.h

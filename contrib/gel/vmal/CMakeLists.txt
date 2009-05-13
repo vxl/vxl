@@ -1,5 +1,11 @@
 # gel/vmal/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/vmal
+  DEPENDS contrib/gel/vgel contrib/oxl/osl
+  PACKAGE contrib/gel
+  DESCRIPTION "Multi-View Line matching"
+  )
+
 SET(vmal_sources
  vmal_dense_matching.cxx    vmal_dense_matching.h
  vmal_homog2d.cxx           vmal_homog2d.h

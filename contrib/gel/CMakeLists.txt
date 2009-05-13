@@ -2,6 +2,8 @@
 
 PROJECT( gel )
 
+doxygen_add_package(contrib/gel "GE Libraries")
+
 SET( GEL_INCLUDE_DIR ${gel_SOURCE_DIR} CACHE STATIC "GE package include files" )
 SET( GEL_INSTALL_INCLUDE_DIR 
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/gel

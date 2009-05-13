@@ -1,5 +1,11 @@
 # gel/geml/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/geml
+  DEPENDS core/vil1 core/vnl
+  PACKAGE contrib/gel
+  DESCRIPTION "Match marked points in second image"
+  )
+
 SET(geml_sources
  geml_matcher.cxx             geml_matcher.h
  geml_matcher_correlation.cxx geml_matcher_correlation.h

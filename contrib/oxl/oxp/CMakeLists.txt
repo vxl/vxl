@@ -1,5 +1,10 @@
 # oxl/oxp/CMakeLists.txt
 
+doxygen_add_library(contrib/oxl/oxp
+  DEPENDS core/vnl core/vidl_vil1 core/vil1 core/vul core/vbl core/vpl
+  PACKAGE contrib/oxl
+  )
+
 SET(oxp_sources
  ByteConvertImage.cxx       ByteConvertImage.h
  GXFileVisitor.cxx          GXFileVisitor.h

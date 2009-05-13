@@ -1,5 +1,11 @@
 # segmentation detection library
 # brl/bseg/sdet/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bseg/sdet
+  DEPENDS contrib/brl/bseg/brip contrib/brl/bbas/btol core/vil1
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )

@@ -1,5 +1,11 @@
 # video processor library
 # brl/bseg/vpro/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bseg/vpro
+  DEPENDS contrib/brl/bseg/sdet core/vidl_vil1
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})

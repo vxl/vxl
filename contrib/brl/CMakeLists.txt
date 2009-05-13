@@ -3,6 +3,8 @@
 
 PROJECT( brl )
 
+doxygen_add_package(contrib/rpl "Brown University Libraries")
+
 # In contrib/brl there is sometimes an "extra" level in the directory structure
 # (.../contrib/brl/{bbas,bseg,bmvl}/foo/foo.h)
 # Setting BRL_INCLUDE_DIR in this way allows #include <foo/foo.h> without

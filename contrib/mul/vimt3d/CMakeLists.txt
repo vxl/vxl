@@ -1,5 +1,11 @@
 # mul/vimt3d/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/vimt3d
+  DEPENDS contrib/mul/vil3d contrib/mul/vimt core/vnl
+  PACKAGE contrib/mul
+  DESCRIPTION "Polymorphic 3D image + transform library"
+  )
+
 SET(vimt3d_sources
   vimt3d_transform_3d.cxx                vimt3d_transform_3d.h
   vimt3d_image_3d_of.txx                 vimt3d_image_3d_of.h

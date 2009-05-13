@@ -1,5 +1,11 @@
 # gel/gmvl/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/gmvl
+  DEPENDS contrib/gel/vtol core/vil1
+  PACKAGE contrib/gel
+  DESCRIPTION "Multi-View Database"
+  )
+
 SET(gmvl_sources
     gmvl_connection.cxx       gmvl_connection.h       gmvl_connection_sptr.h
     gmvl_connection_cache.cxx gmvl_connection_cache.h

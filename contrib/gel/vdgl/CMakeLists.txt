@@ -1,5 +1,11 @@
 # gel/vdgl/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/vdgl
+  DEPENDS contrib/gel/vsol
+  PACKAGE contrib/gel
+  DESCRIPTION "Digital Geometry"
+  )
+
 SET(vdgl_sources
  vdgl_digital_curve.cxx       vdgl_digital_curve.h     vdgl_digital_curve_sptr.h
  vdgl_digital_region.cxx      vdgl_digital_region.h    vdgl_digital_region_sptr.h

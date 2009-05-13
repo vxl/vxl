@@ -1,5 +1,11 @@
 # tbl/vepl2/CMakeLists.txt
 
+doxygen_add_library(contrib/tbl/vepl2
+  DEPENDS contrib/tbl/vipl core/vil
+  PACKAGE contrib/tbl
+  DESCRIPTION "Easy Image Processing Library"
+  )
+
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
 
 SET(vepl2_sources

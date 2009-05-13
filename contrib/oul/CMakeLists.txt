@@ -2,6 +2,8 @@
 
 PROJECT( oul )
 
+doxygen_add_package(contrib/oul "Otago University Libraries")
+
 SET( OUL_INCLUDE_DIR ${oul_SOURCE_DIR} CACHE INTERNAL "Otago University package include files" )
 SET( OUL_INSTALL_INCLUDE_DIR 
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/oul

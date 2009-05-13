@@ -1,5 +1,12 @@
 # basic vgui add-ons
 # brl/bbas/bgui/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bbas/bgui
+  DEPENDS contrib/brl/bbas/btol core/vgui
+  PACKAGE contrib/brl
+  DESCRIPTION "Brown VGUI Augmentation"
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )

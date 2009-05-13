@@ -1,5 +1,11 @@
 # ./oul/ouml/CMakeLists.txt
 
+doxygen_add_library(contrib/oul/ouml
+  DEPENDS core/vnl core/vil1 core/vpl
+  PACKAGE contrib/oul
+  DESCRIPTION "Miscellaneous things"
+  )
+
 SET(ouml_sources
   eigenfaces.h       eigenfaces.cxx
   image_database.h   image_database.cxx

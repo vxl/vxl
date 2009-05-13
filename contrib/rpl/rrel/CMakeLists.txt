@@ -1,5 +1,11 @@
 # rpl/rrel/CMakeLists.txt
 
+doxygen_add_library(contrib/rpl/rrel
+  DEPENDS core/vbl core/vgl core/vnl
+  PACKAGE contrib/rpl
+  DESCRIPTION "Robust Estimation Library"
+  )
+
 SET(rrel_sources
                                 rrel_fwd.h
  rrel_mlesac_obj.cxx            rrel_mlesac_obj.h

@@ -1,5 +1,11 @@
 # multi-view camera library
 # brl/bmvl/bcal/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bmvl/bcal
+  DEPENDS contrib/gel/vsol core/vcsl
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl)
 

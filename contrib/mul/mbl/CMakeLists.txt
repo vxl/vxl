@@ -1,5 +1,11 @@
 # mul/mbl/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/mbl
+  DEPENDS core/vnl core/vgl core/vsl
+  PACKAGE contrib/mul
+  DESCRIPTION "Manchester's Basics Library"
+  )
+
 SET( VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT  CACHE PATH "Where to store historical measurements")
 MARK_AS_ADVANCED(VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT)
 

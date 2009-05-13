@@ -2,6 +2,11 @@
 
 # 3D reconstruction from multiple views library
 
+doxygen_add_library(contrib/brl/bmvl/brct
+  DEPENDS contrib/brl/bseg/sdet contrib/brl/bbas/bugl
+  PACKAGE contrib/brl
+  )
+
 IF( BUILD_OXL )
 IF( BUILD_RPL )
 

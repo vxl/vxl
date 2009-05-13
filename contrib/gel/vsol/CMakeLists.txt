@@ -1,5 +1,11 @@
 # gel/vsol/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/vsol
+  DEPENDS core/vgl core/vnl core/vbl core/vul core/vsl
+  PACKAGE contrib/gel
+  DESCRIPTION "Connected Spatial Objects"
+  )
+
 SET(vsol_sources
  # adding generic vsol_spatial_object class
  vsol_spatial_object.cxx vsol_spatial_object.h vsol_spatial_object_sptr.h

@@ -1,5 +1,11 @@
 # This is brl/seg/bmdl/CMakeLists.txt
 
+doxygen_add_library(contrib/brl/bseg/bmdl
+  DEPENDS contrib/brl/bbas/imesh core/vil
+  PACKAGE contrib/brl
+  DESCRIPTION "Brown Lidar Mesh Modeling Library"
+  )
+
 ADD_DEFINITIONS(-DDEBUG_MEMORY=1)
 
 SET( bmdl_sources

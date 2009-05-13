@@ -1,5 +1,14 @@
 # segmentation view library
 # brl/bseg/segv/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bseg/segv
+  DEPENDS 
+    contrib/brl/bseg/strk
+    contrib/brl/bbas/bgui
+    contrib/brl/bbas/bxml
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})

@@ -1,5 +1,11 @@
 # mul/fhs/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/fhs
+  DEPENDS contrib/mul/vimt contrib/mul/mbl
+  PACKAGE contrib/mul
+  DESCRIPTION "Feature matching using Felzenszwalb and Huttenlocher's method"
+  )
+
 SET(fhs_sources
   fhs_arc.cxx       fhs_arc.h
   fhs_searcher.cxx  fhs_searcher.h

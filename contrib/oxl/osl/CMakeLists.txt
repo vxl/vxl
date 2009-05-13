@@ -1,5 +1,11 @@
 # oxl/osl/CMakeLists.txt
 
+doxygen_add_library(contrib/oxl/osl
+  DEPENDS core/vnl core/vil1 core/vbl
+  PACKAGE contrib/oxl
+  DESCRIPTION "Oxford's segmentation library"
+  )
+
 SET(osl_sources
     osl_topology.cxx                osl_topology.h
     osl_vertex.cxx                  osl_vertex.h

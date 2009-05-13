@@ -1,5 +1,11 @@
 # oul/oufgl/CMakeLists.txt
 
+doxygen_add_library(contrib/oul/oufgl
+  DEPENDS core/vil1
+  PACKAGE contrib/oul
+  DESCRIPTION "Frame grabber library (for linux)"
+  )
+
 SET(oufgl_sources
     frame_grabber_v4l.h    frame_grabber_v4l.cxx
     frame_grabber_vil.h    frame_grabber_vil.cxx

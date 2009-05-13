@@ -1,6 +1,11 @@
 # bbas/bsta/CMakeLists.txt
 # Brown statistics Library.
 
+doxygen_add_library(contrib/brl/bbas/bsta
+  DEPENDS core/vnl/algo core/vbl
+  PACKAGE contrib/brl
+  )
+
 IF (EXISTS ${lems_SOURCE_DIR}/basic )
 INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
 ENDIF (EXISTS ${lems_SOURCE_DIR}/basic )

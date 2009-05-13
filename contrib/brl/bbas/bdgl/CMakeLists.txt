@@ -1,5 +1,11 @@
 # Brown digital geometry library
 # brl/bbas/bdgl/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bbas/bdgl
+  DEPENDS contrib/gel/vtol contrib/oxl/mvl contrib/mul/mbl core/vbl
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )

@@ -1,5 +1,10 @@
 # ./vxl/vpl/CMakeLists.txt
 
+doxygen_add_library(core/vpl
+  PACKAGE core
+  DESCRIPTION "POSIX Compatability Library"
+  )
+
 SET( vpl_sources
   vpl.h         vpl.cxx
   vpl_fdopen.h  vpl_fdopen.cxx

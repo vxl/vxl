@@ -1,5 +1,11 @@
 # mul/ipts/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/ipts
+  DEPENDS contrib/mul/vimt contrib/mul/mbl
+  PACKAGE contrib/mul
+  DESCRIPTION "Interesting Points - Find interesting/salient image points"
+  )
+
 SET(ipts_sources
     ipts_scale_space_peaks.h
     ipts_draw.h

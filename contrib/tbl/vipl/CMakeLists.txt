@@ -1,5 +1,11 @@
 # tbl/vipl/CMakeLists.txt
 
+doxygen_add_library(contrib/tbl/vipl
+  DEPENDS core/vnl
+  PACKAGE contrib/tbl
+  DESCRIPTION "Templated Image Processing Library"
+  )
+
 SET(vipl_sources
  # A. Point operators:
  vipl_convert.txx              vipl_convert.h

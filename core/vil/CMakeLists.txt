@@ -1,5 +1,11 @@
 # core/vil/CMakeLists.txt
 
+doxygen_add_library(core/vil
+  DEPENDS core/vnl core/vsl
+  PACKAGE core
+  DESCRIPTION "Core image library"
+  )
+
 # avoid undefined macro in subsequent SETs:
 SET( vil_sources vil_config.h.in )
 

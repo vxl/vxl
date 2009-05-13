@@ -1,5 +1,11 @@
 # vxl/vidl_vil1/CMakeLists.txt
 
+doxygen_add_library(core/vidl_vil1
+  DEPENDS core/vbl core/vul core/vil1
+  PACKAGE core-L2
+  DESCRIPTION "Video Sequence Library (Old implementation relying on vil1)"
+  )
+
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
 IF( MPEG2_FOUND )

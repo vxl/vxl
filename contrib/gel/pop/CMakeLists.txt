@@ -1,5 +1,10 @@
 # gel/pop/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/pop
+  DEPENDS core/vgl core/vnl
+  PACKAGE contrib/gel
+  )
+
 IF(WIN32)
  ADD_DEFINITIONS(-D_AFXDLL)
  SET(CMAKE_MFC_FLAG 6)

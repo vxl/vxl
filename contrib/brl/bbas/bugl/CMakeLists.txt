@@ -1,5 +1,11 @@
 # brl/bbas/bugl/CMakeLists.txt
 # written by Kongbin Kang for creating a Brown uncertainty geometry library.
+
+doxygen_add_library(contrib/brl/bbas/bugl
+  DEPENDS contrib/gel/vdgl core/vnl core/vgl core/vbl
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 

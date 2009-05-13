@@ -1,5 +1,10 @@
 # brl/vvid/CMakeLists.txt
 
+doxygen_add_library(contrib/brl/vvid
+  DEPENDS contrib/brl/bbas/bgui contrib/brl/bseg/strk
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})

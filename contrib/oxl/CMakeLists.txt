@@ -2,6 +2,8 @@
 
 PROJECT( oxl )
 
+doxygen_add_package(contrib/oxl "Oxford University Libraries")
+
 SET( OXL_INCLUDE_DIR ${oxl_SOURCE_DIR} CACHE STATIC "Oxford University package include files" )
 SET( OXL_INSTALL_INCLUDE_DIR 
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/oxl

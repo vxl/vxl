@@ -1,5 +1,12 @@
 # Brown Graph Library
 # brl/bbas/bgrl/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bbas/bgrl
+  DEPENDS core/vbl core/vsl
+  PACKAGE contrib/brl
+  DESCRIPTION "Brown Graph Library"
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 

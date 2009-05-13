@@ -1,5 +1,11 @@
 # mul/mmn/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/mmn
+  DEPENDS contrib/mul/mbl
+  PACKAGE contrib/mul
+  DESCRIPTION "Manchester Markov Network library"
+  )
+
 SET(mmn_sources
   mmn_arc.h
   mmn_triplet.h

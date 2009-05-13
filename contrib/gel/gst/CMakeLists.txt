@@ -1,5 +1,11 @@
 # gel/gst/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/gst
+  DEPENDS core/vbl
+  PACKAGE contrib/gel
+  DESCRIPTION "Simplified 2D Topology representations"
+  )
+
 SET(gst_sources
  gst_edge_2d.cxx              gst_edge_2d.h              gst_edge_2d_sptr.h
  gst_face_2d.cxx              gst_face_2d.h

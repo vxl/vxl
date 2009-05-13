@@ -1,5 +1,11 @@
 # segmentation tracking library
 # brl/bseg/strk/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bseg/strk
+  DEPENDS contrib/brl/bseg/vpro
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )

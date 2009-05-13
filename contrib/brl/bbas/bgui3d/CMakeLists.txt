@@ -1,5 +1,11 @@
 # This is /brl/bbas/bgui3d
 
+doxygen_add_library(contrib/brl/bbas/bgui3d
+  DEPENDS core/vgui contrib/gel/mrc/vpgl core/vnl
+  PACKAGE contrib/brl
+  DESCRIPTION "Brown 3D VGUI Extention Library (using Coin3D)"
+  )
+
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 

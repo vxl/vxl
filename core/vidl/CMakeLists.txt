@@ -2,6 +2,12 @@
 
 PROJECT(vidl)
 
+doxygen_add_library(core/vidl
+  DEPENDS core/vul core/vil
+  PACKAGE core-L2
+  DESCRIPTION "Video Sequence Library"
+  )
+
 INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDC1394.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )

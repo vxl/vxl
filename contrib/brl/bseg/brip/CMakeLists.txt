@@ -1,5 +1,12 @@
 # Brown image processing library
 # brl/bseg/brip/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bseg/brip
+  DEPENDS contrib/brl/bbas/bsol core/vil1 core/vil core/vbl
+  PACKAGE contrib/brl
+  DESCRIPTION "Brown Image Processing Library"
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})

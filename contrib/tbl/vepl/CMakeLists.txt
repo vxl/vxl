@@ -1,5 +1,11 @@
 # tbl/vepl/CMakeLists.txt
 
+doxygen_add_library(contrib/tbl/vepl
+  DEPENDS contrib/tbl/vipl core/vil1
+  PACKAGE contrib/tbl
+  DESCRIPTION "Easy Image Processing Library"
+  )
+
 SET(vepl_sources
  vepl_threshold.cxx            vepl_threshold.h
  vepl_add_random_noise.cxx     vepl_add_random_noise.h

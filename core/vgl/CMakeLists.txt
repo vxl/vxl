@@ -64,6 +64,11 @@ AUX_SOURCE_DIRECTORY(Templates vgl_sources)
 
 ADD_LIBRARY(vgl ${vgl_sources})
 TARGET_LINK_LIBRARIES( vgl vcl )
+doxygen_add_library(core/vgl
+  #DEPENDS core/vsl core/vnl
+  PACKAGE core
+  DESCRIPTION "Geometry Library"
+  )
 
 INSTALL_TARGETS(/lib vgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})

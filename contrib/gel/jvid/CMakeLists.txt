@@ -1,5 +1,10 @@
 # gel/jvid/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/jvid
+  DEPENDS core/vgui core/vidl_vil1
+  PACKAGE contrib/gel
+  )
+
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 IF(HAS_VGUI)

@@ -1,5 +1,11 @@
 # mul/vil3d/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/vil3d
+  DEPENDS core/vil core/vul core/vsl
+  PACKAGE contrib/mul
+  DESCRIPTION "3D image library"
+  )
+
 SET(vil3d_sources
     vil3d_property.h
     vil3d_image_view_base.h

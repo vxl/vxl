@@ -1,5 +1,17 @@
 # gel/vsrl/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/vsrl
+  DEPENDS
+    contrib/brl/bseg/sdet
+    contrib/gel/vgel
+    contrib/tbl/vepl
+    core/vgui
+    core/vil1
+    contrib/rpl/rsdl
+  PACKAGE contrib/gel
+  DESCRIPTION "Dense image matcher"
+  )
+
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 
 SET(vsrl_sources

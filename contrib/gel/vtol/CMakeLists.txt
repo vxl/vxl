@@ -1,5 +1,11 @@
 # gel/vtol/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/vtol
+  DEPENDS contrib/gel/vdgl core/vil
+  PACKAGE contrib/gel
+  DESCRIPTION "1, 2 and 3D Topology representations"
+  )
+
 SET(vtol_sources
  vtol_topology_object.cxx vtol_topology_object.h vtol_topology_object_sptr.h
  vtol_topology_cache.cxx  vtol_topology_cache.h  vtol_topology_cache_sptr.h

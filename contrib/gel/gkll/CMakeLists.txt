@@ -1,5 +1,11 @@
 # gel/gkll/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/gkll
+  DEPENDS contrib/gel/vgel
+  PACKAGE contrib/gel
+  DESCRIPTION "Kanade-Lucas_Tomasi feature tracker"
+  )
+
 SET(gkll_sources
  gkll_kl.cxx              gkll_kl.h
  gkll_kl_params.cxx       gkll_kl_params.h

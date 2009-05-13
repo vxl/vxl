@@ -1,5 +1,11 @@
 # ./oul/ouel/CMakeLists.txt
 
+doxygen_add_library(contrib/oul/ouel
+  DEPENDS core/vnl
+  PACKAGE contrib/oul
+  DESCRIPTION "Estimation/filtering library"
+  )
+
 SET(ouel_sources
   kalman_filter.h    kalman_filter.cxx
 )

@@ -1,3 +1,9 @@
+doxygen_add_library(contrib/rpl/rgrl
+  DEPENDS contrib/rpl/rrel contrib/rpl/rsdl core/vnl core/vbl core/vil
+  PACKAGE contrib/rpl
+  DESCRIPTION "Rensselaer (Generalized) Registration Library"
+  )
+
 IF(vxl_SOURCE_DIR)
   SET(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
 ENDIF(vxl_SOURCE_DIR)

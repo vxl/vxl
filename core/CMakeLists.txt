@@ -2,6 +2,13 @@
 
 PROJECT( vxlcore )
 
+doxygen_add_book(core "VXL overview documentation")
+
+doxygen_add_package(core "Core Vision Libraries")
+doxygen_add_package(core-L2 "Level-2 Vision Libraries")
+doxygen_add_package(core-L2E "Level-2 Vision Libraries (Experimental)")
+doxygen_add_package(core-test "Test Framework")
+
 SET(global_sources
  vxl_copyright.h
  vxl_version.h

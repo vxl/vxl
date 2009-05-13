@@ -1,5 +1,14 @@
 # view library for multi-view gui
 # brl/bmvl/bmvv/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bmvl/bmvv
+  DEPENDS
+    contrib/brl/bmvl/brct
+    contrib/brl/bbas/bgui
+    contrib/brl/bbas/bxml
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bmvl )

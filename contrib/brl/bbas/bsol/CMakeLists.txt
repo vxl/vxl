@@ -1,5 +1,11 @@
 # Additional functions to support vsol
 # brl/bbas/bsol/CMakeLists.txt
+
+doxygen_add_library(contrib/brl/bbas/bsol
+  DEPENDS contrib/gel/vsol core/vul core/vbl
+  PACKAGE contrib/brl
+  )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )

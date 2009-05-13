@@ -2,6 +2,12 @@
 
 PROJECT(vgui)
 
+doxygen_add_library(core/vgui
+  DEPENDS core/vgl core/vpl core/vbl core/vul core/vnl core/vil core/vil1
+  PACKAGE core-L2
+  DESCRIPTION "Multi-platform user-interface using OpenGL"
+  )
+
 # Default the dashboard builds to "YES" so that
 # we have some clients that try to compile vgui
 OPTION( BUILD_VGUI "Build VGUI" ${YES_FOR_DASHBOARD} )

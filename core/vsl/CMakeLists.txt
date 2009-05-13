@@ -1,5 +1,10 @@
 # vxl/vsl/CMakeLists.txt
 
+doxygen_add_library(core/vsl
+  PACKAGE core
+  DESCRIPTION "Streaming Library for Binary I/O"
+  )
+
 SET(vsl_sources
   vsl_fwd.h
 

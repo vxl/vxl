@@ -1,6 +1,11 @@
 # vxl/contrib/brl/bbas/bxml/CMakeLists.txt
 # The Development Brown XML Parser
 
+doxygen_add_library(contrib/brl/bbas/bxml
+  DEPENDS contrib/brl/bbas/bdgl core/vbl
+  PACKAGE contrib/brl
+  )
+
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 
 IF(EXPAT_FOUND)

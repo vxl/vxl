@@ -1,5 +1,11 @@
 # gel/gevd/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/gevd
+  DEPENDS contrib/gel/vtol core/vil1
+  PACKAGE contrib/gel
+  DESCRIPTION "Van-duc region finder"
+  )
+
 SET(gevd_sources
                                 gevd_pixel.h
                                 gevd_xpixel.h

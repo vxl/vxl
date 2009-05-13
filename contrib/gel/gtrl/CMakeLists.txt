@@ -1,5 +1,11 @@
 # gel/gtrl/CMakeLists.txt
 
+doxygen_add_library(contrib/gel/gtrl
+  DEPENDS core/vbl v3p/netlib
+  PACKAGE contrib/gel
+  DESCRIPTION "Polygon triangulation"
+  )
+
 SET(gtrl_sources
   gtrl_triangle.cxx  gtrl_triangle.h
   gtrl_vertex.h

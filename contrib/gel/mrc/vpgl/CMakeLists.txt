@@ -1,6 +1,12 @@
 # gel/mrc/vpgl/CMakeLists.txt
 # Photogrammetry Library.
 
+doxygen_add_library(contrib/gel/mrc/vpgl
+  DEPENDS core/vcsl core/vgl core/vnl core/vbl
+  PACKAGE contrib/gel
+  DESCRIPTION "Photogrammetry Library"
+  )
+
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
 
 SET( vpgl_sources
