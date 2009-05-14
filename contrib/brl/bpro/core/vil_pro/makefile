@@ -26,6 +26,7 @@ SOURCES += processes/vil_image_pair_process.cxx
 SOURCES += processes/vil_crop_image_process.cxx
 SOURCES += processes/vil_threshold_image_process.cxx
 SOURCES += processes/vil_image_size_process.cxx
+SOURCES += processes/vil_two_planes_composite_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
