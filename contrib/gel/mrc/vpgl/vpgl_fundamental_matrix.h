@@ -23,8 +23,6 @@
 //  Modifications
 //   May 06, 2009  Ricardo Fabbri   Overloaded {l,r}_epipolar_line to take line as input
 // \endverbatim
-//
-
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
@@ -70,14 +68,14 @@ class vpgl_fundamental_matrix
   vgl_homg_line_2d<T> r_epipolar_line( const vgl_homg_point_2d<T>& pl ) const;
   vgl_homg_line_2d<T> l_epipolar_line( const vgl_homg_point_2d<T>& pr ) const;
 
-  //: Given an epipolar line in one image, find the corresponding epipolar line
-  // in the other image. H&Z 2nd ed p. 247
+  //: Given an epipolar line in one image, find the corresponding epipolar line in the other image.
+  // H&Z 2nd ed p. 247
   vgl_homg_line_2d<T> r_epipolar_line(const vgl_homg_line_2d<T> &epiline_l) const;
   vgl_homg_line_2d<T> l_epipolar_line(const vgl_homg_line_2d<T> &epiline_r) const;
 
-  //: Gives the left camera matrix corresponding to the fundamental matrix, when
-  // the right camera matrix is assumed to be identity.  The variables v, lambda
-  // are free parameters as described in H&Z 2nd ed p. 256.
+  //: Gives the left camera matrix corresponding to the fundamental matrix
+  // The right camera matrix is assumed to be identity.
+  // The variables v, lambda are free parameters as described in H&Z 2nd ed p. 256.
   vpgl_proj_camera<T> extract_left_camera(
     const vnl_vector_fixed<T,3>& v, T lambda ) const;
 
@@ -112,12 +110,11 @@ class vpgl_fundamental_matrix
   mutable vnl_svd<T>* cached_svd_;
 };
 
-//:vpgl_fundamental_matrix stream I/O
-
+//: Write vpgl_fundamental_matrix to stream
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p);
 
-//: Read vpgl_perspective_camera  from stream
+//: Read vpgl_fundamental_matrix from stream
 template <class T>
 vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p);
 
