@@ -62,6 +62,7 @@ class vidl_v4l2_device
   unsigned int n_buffers;
   int last_buffer; // last read buffer to enqueue again (-1 if none)
   struct v4l2_format fmt; // width=height=0 indicates not stablished
+  double frame_rate;
 
   vcl_string dev_name_;
   vcl_string card_name_;
@@ -121,7 +122,7 @@ class vidl_v4l2_device
   // \param height can be changed by drivers to the closest possible value
   // \return if successful
   // \see format_is_set
-  bool set_v4l2_format(unsigned int fourcode, int width, int height);
+  bool set_v4l2_format(unsigned int fourcode, int width, int height,double fps=0.0);
 
   //: Return if the format is set.
   // Normally, a format is automatically selected of user call set_v4l2_format. User can use this function to know if a format is selected before calling start_capturing.
@@ -145,7 +146,14 @@ class vidl_v4l2_device
   // \see set_v4l2_format
   int get_height() const { return fmt.fmt.pix.height; }
 
+  //: Return Current frame rate.
+  // \see set_v4l2_format
+  double get_frame_rate() const { return frame_rate; }
+
   // ----------------- Methods associated to controls -------------------
+
+  //: Reset controls to default
+  void reset_controls() ;
 
   //: Get number of controls
   // \return the number of detected controls (control not disabled and not inactive).

@@ -58,7 +58,7 @@ class vidl_v4l2_istream: public vidl_istream
     virtual vidl_pixel_format format() const { return v4l2_to_vidl(dev.get_v4l2_format()); }
 
     //: Return the frame rate (0.0 if unspecified)
-    virtual double frame_rate() const { return 0.0; }
+    virtual double frame_rate() const { return dev.get_frame_rate(); }
   
     //: Return the duration in seconds (0.0 if unknown)
     virtual double duration() const { return 0.0; }

@@ -20,6 +20,7 @@ extern "C" {
 #include <vcl_cstdlib.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
+#include <vcl_cmath.h>
 #include "vidl_pixel_format.h"
 #include "vidl_v4l2_device.h"
 #include "vidl_v4l2_pixel_format.h"
@@ -32,6 +33,21 @@ namespace {
     do { r = ioctl(fd, request, arg); }
     while (-1 == r && EINTR == errno);
     return r;
+  }
+
+  // To set frame rate
+  void double2fraction(double value, int& n, int& d) {
+    value= fabs(value);
+    int a= n= (int) (value*10000+0.5);
+    int b= d= 10000;
+    int resto= a%b;
+    while (resto!=0) {
+          a=b;
+          b=resto;
+          resto= a% b;
+    } 
+    n/=b;
+    d/=b;
   }
 }
 // --------------- end local functions -------------------
@@ -57,6 +73,26 @@ void vidl_v4l2_device::update_controls()
       if (pc) controls_.push_back(pc);
     } else  break;
   }
+
+  // Now, add extended controls
+  ctrl.id = V4L2_CTRL_FLAG_NEXT_CTRL;
+  while (0 == ioctl (fd, VIDIOC_QUERYCTRL, &ctrl)) {
+       if (!get_control_id(ctrl.id)) { // If not already included
+           vidl_v4l2_control *pc= vidl_v4l2_control::new_control(ctrl, fd);
+           if (pc) controls_.push_back(pc);
+       }
+       ctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL;
+   }
+}
+
+void vidl_v4l2_device::reset_controls()
+{
+   if (is_open()) { 
+    if (n_controls()==0) 
+      update_controls();
+    for (int i=0;i<n_controls();++i)
+      get_control(i)->reset();
+   }
 }
 
 vidl_v4l2_device::vidl_v4l2_device(const char *file)
@@ -234,7 +270,8 @@ bool vidl_v4l2_device::try_formats()
 
 
 // Width and height could be changed by driver
-bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int height)
+bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int height,
+                                       double fps)
 {
   fmt.fmt.pix.width = 0;
   fmt.fmt.pix.height= 0;
@@ -256,6 +293,26 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
       fmt.fmt.pix.width = 0;
       fmt.fmt.pix.height =0;
       return false;
+    }
+
+    // Now we can set frame rate
+    if (fps!=0.0) {
+        struct v4l2_streamparm sfrate;  
+        memset(&sfrate, 0, sizeof(sfrate));
+	sfrate.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+
+	// Convert the frame rate into a fraction for V4L2
+        frame_rate=0;
+	int n = 0, d = 0;
+        double2fraction(fps,n,d);
+	sfrate.parm.capture.timeperframe.numerator = d; // timeperframe instead of fps
+	sfrate.parm.capture.timeperframe.denominator = n;
+
+	if( xioctl(fd, VIDIOC_S_PARM, &sfrate)== 0) {
+	  if( xioctl(fd, VIDIOC_G_PARM, &sfrate)== 0) { // Confirm frame rate
+		frame_rate = (double)sfrate.parm.capture.timeperframe.denominator /  (double)sfrate.parm.capture.timeperframe.numerator;
+  	  }
+        }
     }
 
     if (init_mmap(pre_nbuffers)) // add to parameters?;
@@ -413,7 +470,7 @@ bool vidl_v4l2_device::read_frame()
     FD_SET (fd, &fds);
 
     /* Timeout. */
-    tv.tv_sec = 2;
+    tv.tv_sec = 5;
     tv.tv_usec = 0;
 
     r = select (fd + 1, &fds, NULL, NULL, &tv);
@@ -520,9 +577,9 @@ bool vidl_v4l2_device::set_input(unsigned int i)
     if (-1==xioctl(fd,VIDIOC_S_INPUT,&i))
       return false;
 
-  // fmt.fmt.pix.width = 0; // format unknown
-  //fmt.fmt.pix.height =0;
-  try_formats();
+  fmt.fmt.pix.width = 0; // format unknown
+  fmt.fmt.pix.height =0;
+  //try_formats();
   update_controls();
 
   return true;
