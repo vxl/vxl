@@ -21,13 +21,13 @@
 #include <vil/vil_convert.h>
 #include <vcl_iostream.h>
 
-template <class T_loc, boxm_apm_type APM>
-void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
+template <class T_loc, class T_data>
+void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                          vgl_point_3d<int> block_idx,
                          vcl_string filename,
                          unsigned int resolution_level)
 {
-  typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
+  typedef boct_tree<T_loc, T_data > tree_type;
 
   scene.load_block(block_idx);
   boxm_block<tree_type>* block = scene.get_block(block_idx);
@@ -65,7 +65,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene
   double out_cell_norm_volume = (tree->num_levels() - resolution_level + 1);
   out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
-  vcl_vector<boct_tree_cell<T_loc, boxm_sample<APM> > *> cells = tree->leaf_cells();
+  vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
   for (unsigned i=0; i<cells.size(); i++)
   {
     vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();

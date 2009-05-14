@@ -69,14 +69,14 @@ bool boxm_create_scene_process(bprb_func_process& pro)
 	  if(!scene_ptr->multi_bin())
 	  {
 		  typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-	    boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(); 
-      scene->load_scene(parser);
-      scene_ptr = scene;
+		  boxm_scene<tree_type>* scene = new boxm_scene<tree_type>(); 
+		  scene->load_scene(parser);
+		  scene_ptr = scene;
 	  }
 	  else {
 		  typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
 		  boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
-      scene->load_scene(parser);
+		  scene->load_scene(parser);
 		  vcl_cout<<"Multi Bin set"<<vcl_endl;
 		  scene_ptr = scene;
 	  }

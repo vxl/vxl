@@ -29,8 +29,8 @@ MAIN( test_quad_interpolate )
   img_max.fill(0.0);
   g_img_max.fill(0.0);
   // creating ground truth
-  g_img_max(10,10)=10.5;g_img_max(10,11)=10.5;
-  g_img_max(11,10)=11.5;g_img_max(11,11)=11.5;
+  g_img_max(10,10)=10;g_img_max(10,11)=10;
+  g_img_max(11,10)=11;g_img_max(11,11)=11;
 
   boxm_utils::quad_interpolate(poly_it, xvals, yvals, vals,img_max,0);
   for (unsigned i=10;i<=12;i++)

@@ -107,7 +107,7 @@ MAIN( test_save_raw )
     vcl_string str(strm.str());
     vcl_string s = "raw_" + str + ".raw";
     fnames.push_back(s);
-    boxm_save_block_raw<short,BOXM_APM_MOG_GREY>(scene, it.index(), s, 0);
+    boxm_save_block_raw<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene, it.index(), s, 0);
     it++;
   }
 

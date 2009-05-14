@@ -57,7 +57,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       vil_image_view<float> alphas(ni,nj,1);
       vil_image_view<float> vis_end(ni,nj,1);
       vil_image_view<float> temp_expected(ni,nj,1);
-
+	  int cnt=0;
       while (frontier_it.next())
       {
         vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
@@ -67,7 +67,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
-        vcl_cout<<".";
+        vcl_cout<<++cnt<<" ";
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
@@ -105,6 +105,8 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
         vil_math_image_difference(alpha_integral, alphas, alpha_integral);
+		
+
         // compute new vis image
         image_exp_functor exp_fun;
         vil_transform(alpha_integral,vis_end,exp_fun);
@@ -116,7 +118,12 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vil_math_image_sum(PI_img,pre,pre);
 
         vis.deep_copy(vis_end);
+
+
+		
       }
+    	
+
       scene.write_active_block();
     }
   }
@@ -127,6 +134,10 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       PI_background(i,j) = T_data::apm_processor::prob_density(background_model, img(i,j));
     }
   }
+  vcl_stringstream s;
+  s<<"d:/vj/scripts/boxm/exp1/bg.tiff";
+  vil_save(PI_background,s.str().c_str());
+
   vil_math_image_product(PI_background, vis, norm_img);
   vil_math_image_sum(pre,norm_img,norm_img);
   safe_inverse_functor inv_func(1e-8f);
@@ -149,6 +160,8 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
   vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
   vil_image_view<float> pix_weights(ni,nj,1);
+  double xverts[8];
+  double yverts[8];
 
   vul_timer t;
   t.mark();
@@ -156,8 +169,6 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   boxm_block_vis_graph_iterator<boct_tree<T_loc,T_data > > block_vis_iter(cam, &scene, ni,nj);
   while (block_vis_iter.next()) {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
-    double xverts[8];
-    double yverts[8];
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       boxm_block<tree_type> * curr_block=scene.get_active_block();
@@ -303,6 +314,7 @@ void boxm_update(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
   boxm_update_pass1<T_loc,T_data>(scene, cam,img,norm_img,background_apm,bin);
   vcl_cout << "update: pass1 completed" << vcl_endl;
+  vil_save(norm_img,"d:/vj/scripts/boxm/exp1/norm.tiff");
   boxm_update_pass2<T_loc,T_data>(scene, cam,img,norm_img,bin);
   vcl_cout << "update: pass2 completed" << vcl_endl;
   

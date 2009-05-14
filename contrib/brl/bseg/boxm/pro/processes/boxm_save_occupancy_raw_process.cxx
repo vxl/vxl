@@ -17,6 +17,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_save_block_raw.h>
 #include <boxm/boxm_apm_traits.h>
+#include <boxm/boxm_sample_multi_bin.h>
 
 namespace boxm_save_occupancy_raw_process_globals
 {
@@ -60,22 +61,41 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
 
-    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-    boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
-    boxm_block_iterator<type> it(scene);
-    it.begin();
-    while (!it.end()) {
-      vcl_stringstream strm;
-      vgl_point_3d<int> index = it.index();
-      strm << index.x() << '_' << index.y() << '_' << index.z();
-      vcl_string str(strm.str());
-      vcl_string s = filepath + str + ".raw";
-      boxm_save_block_raw<short,BOXM_APM_MOG_GREY>(*scene, it.index(), s, 0);
-      it++;
-    }
+	  if(scene_ptr->multi_bin())
+	  {
+		  typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
+		  boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+		  boxm_block_iterator<type> it(scene);
+		  it.begin();
+		  while (!it.end()) {
+			  vcl_stringstream strm;
+			  vgl_point_3d<int> index = it.index();
+			  strm << index.x() << '_' << index.y() << '_' << index.z();
+			  vcl_string str(strm.str());
+			  vcl_string s = filepath + str + ".raw";
+			  boxm_save_block_raw<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY>>(*scene, it.index(), s, 0);
+			  it++;
+		  }
+	  }
+	  else
+	  {
+		  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
+		  boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+		  boxm_block_iterator<type> it(scene);
+		  it.begin();
+		  while (!it.end()) {
+			  vcl_stringstream strm;
+			  vgl_point_3d<int> index = it.index();
+			  strm << index.x() << '_' << index.y() << '_' << index.z();
+			  vcl_string str(strm.str());
+			  vcl_string s = filepath + str + ".raw";
+			  boxm_save_block_raw<short,boxm_sample<BOXM_APM_MOG_GREY>>(*scene, it.index(), s, 0);
+			  it++;
+		  }
+	  }
   } else {
-    vcl_cout << "boxm_save_occupancy_raw_process: undefined APM type" << vcl_endl;
-    return false;
+	  vcl_cout << "boxm_save_occupancy_raw_process: undefined APM type" << vcl_endl;
+	  return false;
   }
   return true;
 }

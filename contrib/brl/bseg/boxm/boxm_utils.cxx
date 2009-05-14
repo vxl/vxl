@@ -416,21 +416,47 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
   // first compute s0, s1, s2, s3 such that  val = s0*x + s1*y + s2 for any point within the triangle
   // (no need to compute barycentric coordinates of a quadrilateral at each step)
   // subtract 0.5 from xvals and yvals, so that interpolated value at pixel x,y evaluates to coordinates x+0.5, y+0.5 (center of pixel)
-  double Acol0[] = {(xvals[v0]-0.5)*(yvals[v0]-0.5),
-            (xvals[v1]-0.5)*(yvals[v1]-0.5),
-            (xvals[v2]-0.5)*(yvals[v2]-0.5),
-            (xvals[v3]-0.5)*(yvals[v3]-0.5)};
-  double Acol1[] = {xvals[v0]-0.5, xvals[v1]-0.5, xvals[v2]-0.5,xvals[v3]-0.5};
-  double Acol2[] = {yvals[v0]-0.5, yvals[v1]-0.5, yvals[v2]-0.5,yvals[v3]-0.5};
-  double Acol3[] = {1.0, 1.0, 1.0,1.0};
+  //double Acol0[] = {(xvals[v0]-0.5)*(yvals[v0]-0.5),
+  //          (xvals[v1]-0.5)*(yvals[v1]-0.5),
+  //          (xvals[v2]-0.5)*(yvals[v2]-0.5),
+  //          (xvals[v3]-0.5)*(yvals[v3]-0.5)};
+  //double Acol1[] = {xvals[v0]-0.5, xvals[v1]-0.5, xvals[v2]-0.5,xvals[v3]-0.5};
+  //double Acol2[] = {yvals[v0]-0.5, yvals[v1]-0.5, yvals[v2]-0.5,yvals[v3]-0.5};
+  //double Acol3[] = {1.0, 1.0, 1.0,1.0};
 
-  double Z[] = {vals[v0], vals[v1], vals[v2],vals[v3]};
+  //double Z[] = {vals[v0], vals[v1], vals[v2],vals[v3]};
 
-  double detA = vnl_determinant(Acol0, Acol1, Acol2,Acol3);
-  double s0 = vnl_determinant(Z, Acol1, Acol2,Acol3) / detA;
-  double s1 = vnl_determinant(Acol0, Z, Acol2,Acol3) / detA;
-  double s2 = vnl_determinant(Acol0, Acol1, Z,Acol3) / detA;
-  double s3 = vnl_determinant(Acol0, Acol1, Acol2,Z) / detA;
+  //double detA = vnl_determinant(Acol0, Acol1, Acol2,Acol3);
+  //double s0 = vnl_determinant(Z, Acol1, Acol2,Acol3) / detA;
+  //double s1 = vnl_determinant(Acol0, Z, Acol2,Acol3) / detA;
+  //double s2 = vnl_determinant(Acol0, Acol1, Z,Acol3) / detA;
+  //double s3 = vnl_determinant(Acol0, Acol1, Acol2,Z) / detA;
+
+  //poly_it.reset();
+  //while (poly_it.next()) {
+  //  int y = poly_it.scany();
+  //  if (y < 0){
+  //    // not inside of image bounds yet. go to next scanline.
+  //    continue;
+  //  }
+  //  unsigned int yu = (unsigned int)y;
+  //  if (yu >= img.nj() ) {
+  //    // we have left the image bounds. no need to continue.
+  //    break;
+  //  }
+  //  if ( (poly_it.startx() >= (int)img.ni()) || (poly_it.endx() <= 0) ) {
+  //    // no part of this scanline is within the image bounds. go to next scanline.
+  //    continue;
+  //  }
+  //  unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
+  //  unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+
+  //  for (unsigned int x = startx; x < endx; ++x) {
+  //    float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
+  //    img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
+  // }
+  //}
+  //return;
 
   poly_it.reset();
   while (poly_it.next()) {
@@ -451,10 +477,18 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
     unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
     unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
-    for (unsigned int x = startx; x < endx; ++x) {
-      float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
-      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
-   }
+	double start_val=0;
+	double end_val=0;
+
+	if(poly_it.x_start_end_val(vals,start_val,end_val))
+	{
+
+		float rx=endx-startx;
+		for (unsigned int x = startx; x < endx; ++x) {
+			float interp_val = start_val+(x-startx)/rx*(end_val-start_val);
+			img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
+		}
+	}
   }
   return;
 }
@@ -612,6 +646,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 #endif // 0
 
     boxm_quad_scan_iterator poly_it(xs,ys);
+	vgl_polygon<double> p(xs,ys,4);
 
     double Xs[]={corners[1].x(),corners[0].x(),corners[3].x(),corners[2].x()};
     double Ys[]={corners[1].y(),corners[0].y(),corners[3].y(),corners[2].y()};
@@ -632,6 +667,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
     double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
     boxm_quad_scan_iterator poly_it(xs,ys);
+	vgl_polygon<double> p(xs,ys,4);
 
     double Xs[]={corners[4].x(),corners[5].x(),corners[6].x(),corners[7].x()};
     double Ys[]={corners[4].y(),corners[5].y(),corners[6].y(),corners[7].y()};
@@ -690,6 +726,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
     double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
     boxm_quad_scan_iterator poly_it(xs,ys);
+		vgl_polygon<double> p(xs,ys,4);
+
     double Xs[]={corners[0].x(),corners[1].x(),corners[5].x(),corners[4].x()};
     double Ys[]={corners[0].y(),corners[1].y(),corners[5].y(),corners[4].y()};
     double Zs[]={corners[0].z(),corners[1].z(),corners[5].z(),corners[4].z()};
@@ -710,6 +748,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
     double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
     boxm_quad_scan_iterator poly_it(xs,ys);
+	vgl_polygon<double> p(xs,ys,4);
+
     double Xs[]={corners[2].x(),corners[3].x(),corners[7].x(),corners[6].x()};
     double Ys[]={corners[2].y(),corners[3].y(),corners[7].y(),corners[6].y()};
     double Zs[]={corners[2].z(),corners[3].z(),corners[7].z(),corners[6].z()};
@@ -859,7 +899,7 @@ bool boxm_utils::cube_uniform_mean(boct_face_idx & vis_face_ids,
     double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
     double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
     boxm_quad_scan_iterator poly_it(xs,ys);
-        quad_mean(poly_it,img,val,count);
+    quad_mean(poly_it,img,val,count);
   }
   if (vis_face_ids & X_LOW){
     double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
