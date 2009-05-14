@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm/pro/processes/boxm_save_occupancy_raw_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for obtaining roc curve from change detection results.
@@ -9,8 +10,6 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm/boxm_scene_base.h>
@@ -59,43 +58,44 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
   /* unsigned resolution = */ pro.get_input<unsigned>(i++);
 
   // check the scene's app model
-  if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-
-	  if(scene_ptr->multi_bin())
-	  {
-		  typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
-		  boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
-		  boxm_block_iterator<type> it(scene);
-		  it.begin();
-		  while (!it.end()) {
-			  vcl_stringstream strm;
-			  vgl_point_3d<int> index = it.index();
-			  strm << index.x() << '_' << index.y() << '_' << index.z();
-			  vcl_string str(strm.str());
-			  vcl_string s = filepath + str + ".raw";
-			  boxm_save_block_raw<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY>>(*scene, it.index(), s, 0);
-			  it++;
-		  }
-	  }
-	  else
-	  {
-		  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-		  boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
-		  boxm_block_iterator<type> it(scene);
-		  it.begin();
-		  while (!it.end()) {
-			  vcl_stringstream strm;
-			  vgl_point_3d<int> index = it.index();
-			  strm << index.x() << '_' << index.y() << '_' << index.z();
-			  vcl_string str(strm.str());
-			  vcl_string s = filepath + str + ".raw";
-			  boxm_save_block_raw<short,boxm_sample<BOXM_APM_MOG_GREY>>(*scene, it.index(), s, 0);
-			  it++;
-		  }
-	  }
-  } else {
-	  vcl_cout << "boxm_save_occupancy_raw_process: undefined APM type" << vcl_endl;
-	  return false;
+  if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY)
+  {
+    if (scene_ptr->multi_bin())
+    {
+      typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
+      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+      boxm_block_iterator<type> it(scene);
+      it.begin();
+      while (!it.end()) {
+        vcl_stringstream strm;
+        vgl_point_3d<int> index = it.index();
+        strm << index.x() << '_' << index.y() << '_' << index.z();
+        vcl_string str(strm.str());
+        vcl_string s = filepath + str + ".raw";
+        boxm_save_block_raw<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, it.index(), s, 0);
+        it++;
+      }
+    }
+    else
+    {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
+      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+      boxm_block_iterator<type> it(scene);
+      it.begin();
+      while (!it.end()) {
+        vcl_stringstream strm;
+        vgl_point_3d<int> index = it.index();
+        strm << index.x() << '_' << index.y() << '_' << index.z();
+        vcl_string str(strm.str());
+        vcl_string s = filepath + str + ".raw";
+        boxm_save_block_raw<short,boxm_sample<BOXM_APM_MOG_GREY> >(*scene, it.index(), s, 0);
+        it++;
+      }
+    }
+  }
+  else {
+    vcl_cout << "boxm_save_occupancy_raw_process: undefined APM type" << vcl_endl;
+    return false;
   }
   return true;
 }
