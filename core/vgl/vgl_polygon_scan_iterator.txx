@@ -183,6 +183,7 @@ void vgl_polygon_scan_iterator<T>::init()
       y1 = (int)vcl_ceil( maxy - vgl_polygon_scan_iterator_offset);
     else
       y1 = (int)vcl_floor(  maxy - vgl_polygon_scan_iterator_offset);
+
   }
 }
 
@@ -260,7 +261,20 @@ static inline int irnd(T x)
 {
   return (int)vcl_floor(x + 0.5);
 }
-
+template <class T>
+void vgl_polygon_scan_iterator<T>::get_crossedge_vertices(int * &chainnum, int * &vertnum, int & num_crossedges)
+{
+	num_crossedges=numcrossedges;
+    int current=0;	
+    chainnum=new int[num_crossedges];
+	vertnum=new int[num_crossedges];    	
+    while ( current < numcrossedges )
+    {
+      chainnum[current] = crossedges[current].v.chainnum;
+      vertnum[current] = crossedges[current].v.vertnum;
+      current++;
+	}
+}
 //===============================================================
 // Moves iterator to the next scan segment.
 // Scanline y is at y+vgl_polygon_scan_iterator_offset.
@@ -302,6 +316,9 @@ bool vgl_polygon_scan_iterator<T>::next( )
         fxr = win.max_x() -1;
         xr =  irnd(fxr);
       }
+      
+      if(xr==crossedges[curcrossedge+1].x)
+		--xr;
 
       // adjust the x coord so that it is the intersection of
       // the edge with the scan line one above current

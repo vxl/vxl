@@ -114,6 +114,8 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
   //: Returns current scan line (floating point value)
   inline T fscany() const { return fy; }
 
+  // returns the vertices related to 
+  void get_crossedge_vertices(int * &chainnum, int * &vertnum, int & numcrossedges);
   //: Vertex index - uniquely identifies a vertex in the array chains
   struct vertind {
     int chainnum; //!< which chain the vertex is part of
