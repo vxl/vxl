@@ -11,7 +11,7 @@
 bool vil_two_planes_composite_process_cons(bprb_func_process& pro)
 {
   //this process takes two inputs:
-  // input(0): first  vil_image_view_base_sptr 
+  // input(0): first  vil_image_view_base_sptr
   // input(1): second image
   bool ok=false;
   vcl_vector<vcl_string> input_types;
@@ -45,21 +45,21 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> bimage1 = vil_convert_cast(vxl_byte(), img_1);
   vil_image_view<vxl_byte> bimage2 = vil_convert_cast(vxl_byte(), img_2);
 
-  if(!(img_1->ni()==img_2->ni() && img_1->nj()==img_2->nj()))
+  if (!(img_1->ni()==img_2->ni() && img_1->nj()==img_2->nj()))
   {
-	  vcl_cout<<"The images have different dimensions"<<vcl_endl;
-	  return false;
+    vcl_cout<<"The images have different dimensions"<<vcl_endl;
+    return false;
   }
   vil_image_view<unsigned char> *out_img=new vil_image_view<unsigned char>(img_1->ni(),img_1->nj(),3);
 
-  for(unsigned i=0;i<img_1->ni();i++)
+  for (unsigned i=0;i<img_1->ni();i++)
   {
-	for(unsigned j=0;j<img_1->nj();j++)
-	{
-		(*out_img)(i,j,0)=bimage1(i,j);
-		(*out_img)(i,j,1)=bimage2(i,j);
-		(*out_img)(i,j,2)=0.0;
-	}
+    for (unsigned j=0;j<img_1->nj();j++)
+    {
+      (*out_img)(i,j,0)=bimage1(i,j);
+      (*out_img)(i,j,1)=bimage2(i,j);
+      (*out_img)(i,j,2)=0.0;
+    }
   }
 
   vil_image_view_base_sptr out_img_ptr=out_img;

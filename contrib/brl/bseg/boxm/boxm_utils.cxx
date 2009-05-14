@@ -477,18 +477,17 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
     unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
     unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
-	double start_val=0;
-	double end_val=0;
+    double start_val=0;
+    double end_val=0;
 
-	if(poly_it.x_start_end_val(vals,start_val,end_val))
-	{
-
-		float rx=endx-startx;
-		for (unsigned int x = startx; x < endx; ++x) {
-			float interp_val = start_val+(x-startx)/rx*(end_val-start_val);
-			img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
-		}
-	}
+    if (poly_it.x_start_end_val(vals,start_val,end_val))
+    {
+      float rx=endx-startx;
+      for (unsigned int x = startx; x < endx; ++x) {
+        float interp_val = start_val+(x-startx)/rx*(end_val-start_val);
+        img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
+      }
+    }
   }
   return;
 }
@@ -626,7 +625,7 @@ bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3
     }
   }
 
- return true;
+  return true;
 }
 
 
@@ -646,7 +645,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 #endif // 0
 
     boxm_quad_scan_iterator poly_it(xs,ys);
-	vgl_polygon<double> p(xs,ys,4);
+    vgl_polygon<double> p(xs,ys,4);
 
     double Xs[]={corners[1].x(),corners[0].x(),corners[3].x(),corners[2].x()};
     double Ys[]={corners[1].y(),corners[0].y(),corners[3].y(),corners[2].y()};
@@ -667,7 +666,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
     double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
     boxm_quad_scan_iterator poly_it(xs,ys);
-	vgl_polygon<double> p(xs,ys,4);
+    vgl_polygon<double> p(xs,ys,4);
 
     double Xs[]={corners[4].x(),corners[5].x(),corners[6].x(),corners[7].x()};
     double Ys[]={corners[4].y(),corners[5].y(),corners[6].y(),corners[7].y()};
@@ -726,7 +725,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
     double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
     boxm_quad_scan_iterator poly_it(xs,ys);
-		vgl_polygon<double> p(xs,ys,4);
+        vgl_polygon<double> p(xs,ys,4);
 
     double Xs[]={corners[0].x(),corners[1].x(),corners[5].x(),corners[4].x()};
     double Ys[]={corners[0].y(),corners[1].y(),corners[5].y(),corners[4].y()};
@@ -748,7 +747,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
     double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
     boxm_quad_scan_iterator poly_it(xs,ys);
-	vgl_polygon<double> p(xs,ys,4);
+    vgl_polygon<double> p(xs,ys,4);
 
     double Xs[]={corners[2].x(),corners[3].x(),corners[7].x(),corners[6].x()};
     double Ys[]={corners[2].y(),corners[3].y(),corners[7].y(),corners[6].y()};

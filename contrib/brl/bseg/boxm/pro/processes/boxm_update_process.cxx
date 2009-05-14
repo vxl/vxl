@@ -63,7 +63,7 @@ bool boxm_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-   unsigned bin_index =  pro.get_input<unsigned>(i++);
+  unsigned bin_index =  pro.get_input<unsigned>(i++);
 
   // check the input validity
   if ((input_image == 0) || (camera == 0) || (scene == 0)) {
@@ -84,7 +84,7 @@ bool boxm_update_process(bprb_func_process& pro)
     }
     else
     {
-	  vcl_cout<<"Multi Bin Update"<<vcl_endl;
+      vcl_cout<<"Multi Bin Update"<<vcl_endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_update<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin_index,false);

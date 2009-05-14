@@ -57,7 +57,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       vil_image_view<float> alphas(ni,nj,1);
       vil_image_view<float> vis_end(ni,nj,1);
       vil_image_view<float> temp_expected(ni,nj,1);
-	  int cnt=0;
+      int cnt=0;
       while (frontier_it.next())
       {
         vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
@@ -67,7 +67,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
-        vcl_cout<<++cnt<<" ";
+        vcl_cout<<++cnt<<' ';
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
@@ -75,7 +75,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          double xverts[8]; 
+          double xverts[8];
           double yverts[8];
           boxm_utils::project_corners(corners,cam,xverts,yverts);
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
@@ -105,7 +105,6 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
         vil_math_image_difference(alpha_integral, alphas, alpha_integral);
-		
 
         // compute new vis image
         image_exp_functor exp_fun;
@@ -118,11 +117,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vil_math_image_sum(PI_img,pre,pre);
 
         vis.deep_copy(vis_end);
-
-
-		
       }
-    	
 
       scene.write_active_block();
     }
@@ -192,7 +187,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
-        vcl_cout<<".";
+        vcl_cout<<'.';
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
@@ -317,7 +312,7 @@ void boxm_update(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_save(norm_img,"d:/vj/scripts/boxm/exp1/norm.tiff");
   boxm_update_pass2<T_loc,T_data>(scene, cam,img,norm_img,bin);
   vcl_cout << "update: pass2 completed" << vcl_endl;
-  
+
   return;
 }
 

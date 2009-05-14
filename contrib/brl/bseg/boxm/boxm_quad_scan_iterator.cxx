@@ -9,19 +9,18 @@
 //: constructor
 boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_y,
                                                  unsigned int v0, unsigned int v1,
-												 unsigned int v2, unsigned int v3):poly_()
+                                                 unsigned int v2, unsigned int v3):poly_()
 {
- 
   poly_.new_sheet();
 
   poly_.push_back(verts_x[v0] * supersample_ratio_ - 0.5,
-                 verts_y[v0] * supersample_ratio_ - 0.5);
+                  verts_y[v0] * supersample_ratio_ - 0.5);
   poly_.push_back(verts_x[v1] * supersample_ratio_ - 0.5,
-                 verts_y[v1] * supersample_ratio_ - 0.5);
+                  verts_y[v1] * supersample_ratio_ - 0.5);
   poly_.push_back(verts_x[v2] * supersample_ratio_ - 0.5,
-                 verts_y[v2] * supersample_ratio_ - 0.5);
+                  verts_y[v2] * supersample_ratio_ - 0.5);
   poly_.push_back(verts_x[v3] * supersample_ratio_ - 0.5,
-                 verts_y[v3] * supersample_ratio_ - 0.5);
+                  verts_y[v3] * supersample_ratio_ - 0.5);
 
   super_it_= new vgl_polygon_scan_iterator<double>(poly_,false);
 
@@ -140,43 +139,42 @@ float boxm_quad_scan_iterator::pix_coverage(int x)
   return aa_vals_[aa_vals_offset_ + x];
 }
 
-bool 
+bool
 boxm_quad_scan_iterator:: x_start_end_val(double * vals,double & start_val,double & end_val)
 {
-
-	int * chainnum=0;
-	int * vertnum=0;
-	int numcrossedges=0;
-	super_it_->get_crossedge_vertices(chainnum,vertnum,numcrossedges);
-	if(numcrossedges==2)
-	{
-		for(unsigned i=0;i<numcrossedges;i++)
-		{
-			vgl_point_2d<double> p1=poly_[chainnum[i]][vertnum[i]];
-			double val1=vals[vertnum[i]];
-			double val2=0;
-			vgl_point_2d<double> p2;
-			if(vertnum[i]==3)
-			{
-				val2=vals[0];
-				p2=poly_[chainnum[i]][0];
-			}
-			else
-			{
-				val2=vals[vertnum[i]+1];
-				p2=poly_[chainnum[i]][vertnum[i]+1];
-			}
-			if(i==0)
-				start_val=val1+(val2-val1)*(super_it_->scany()-p1.y())/(p2.y()-p1.y());
-			else
-				end_val=val1+(val2-val1)*(super_it_->scany()-p1.y())/(p2.y()-p1.y());
-		}
-		delete [] vertnum;
-		delete [] chainnum;
-		return true;
-	}
-	else
-		return false;
+  int * chainnum=0;
+  int * vertnum=0;
+  int numcrossedges=0;
+  super_it_->get_crossedge_vertices(chainnum,vertnum,numcrossedges);
+  if (numcrossedges==2)
+  {
+    for (unsigned i=0;i<numcrossedges;i++)
+    {
+      vgl_point_2d<double> p1=poly_[chainnum[i]][vertnum[i]];
+      double val1=vals[vertnum[i]];
+      double val2=0;
+      vgl_point_2d<double> p2;
+      if (vertnum[i]==3)
+      {
+        val2=vals[0];
+        p2=poly_[chainnum[i]][0];
+      }
+      else
+      {
+        val2=vals[vertnum[i]+1];
+        p2=poly_[chainnum[i]][vertnum[i]+1];
+      }
+      if (i==0)
+        start_val=val1+(val2-val1)*(super_it_->scany()-p1.y())/(p2.y()-p1.y());
+      else
+        end_val=val1+(val2-val1)*(super_it_->scany()-p1.y())/(p2.y()-p1.y());
+    }
+    delete [] vertnum;
+    delete [] chainnum;
+    return true;
+  }
+  else
+    return false;
 }
 
 
