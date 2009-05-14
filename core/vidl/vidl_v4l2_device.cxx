@@ -36,7 +36,7 @@ namespace {
 
   // To set frame rate
   void double2fraction(double value, int& n, int& d) {
-    if (value < 0.0) value = =value;
+    if (value < 0.0) value = value;
     int a= n= (int)(value*10000+0.5);
     int b= d= 10000;
     int resto= a%b;
