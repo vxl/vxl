@@ -1,3 +1,4 @@
+#include <vidl/vidl_config.h> // needed for VIDL_HAS_FFMPEG etc.
 #include <vidl/vidl_v4l2_pixel_format.h>
 #include <vidl/vidl_color.h>
 #include <vidl/vidl_convert.h>
@@ -31,15 +32,15 @@
 #if VIDL_HAS_DC1394
 #include <vidl/vidl_dc1394_istream.h>
 #endif
-#if VIDL_HAS_DIRECTSHOW
+#if VIDL_HAS_DSHOW
 #include <vidl/vidl_dshow.h>
 #include <vidl/vidl_dshow_file_istream.h>
 #include <vidl/vidl_dshow_live_istream.h>
 #include <vidl/vidl_dshow_istream_params.h>
-#if VIDL_HAS_DIRECTSHOW_ESF
+#if VIDL_HAS_DSHOW_ESF
 #include <vidl/vidl_dshow_istream_params_esf.h>
-#endif // HAS_DIRECTSHOW_ESF
-#endif // HAS_DIRECTSHOW
+#endif // HAS_DSHOW_ESF
+#endif // HAS_DSHOW
 #if 0 // FIXME
 #include <vidl/vidl_v4l_istream.h>
 #include <vidl/vidl_v4l_params.h>
