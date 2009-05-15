@@ -197,7 +197,8 @@ foreach(book ${DOXYGEN_BOOK_LIST})
         elseif(ImageMagick_FOUND)
           execute_process(
             COMMAND ${ImageMagick_convert_EXECUTABLE}
-              "${image}" "${book_output_dir}/${output_image}.png"
+              "${image}" "${output_image}.png"
+            WORKING_DIRECTORY "${book_output_dir}"
             )
         endif()
       endif()
