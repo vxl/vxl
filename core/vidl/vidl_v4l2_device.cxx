@@ -73,6 +73,7 @@ void vidl_v4l2_device::update_controls()
     } else  break;
   }
 
+#ifdef V4L2_CTRL_FLAG_NEXT_CTRL // apparently, not all versions of V4L2 support extended controls ... (PVr)
   // Now, add extended controls
   ctrl.id = V4L2_CTRL_FLAG_NEXT_CTRL;
   while (0 == ioctl(fd, VIDIOC_QUERYCTRL, &ctrl)) {
@@ -82,6 +83,7 @@ void vidl_v4l2_device::update_controls()
     }
     ctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL;
   }
+#endif // V4L2_CTRL_FLAG_NEXT_CTRL
 }
 
 void vidl_v4l2_device::reset_controls()
