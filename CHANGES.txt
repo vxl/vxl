@@ -13,6 +13,8 @@ effect.  If you change something in VXL, please document it here.
         vpdl is a probability distribution library unifying and merging the
         functionality of the contrib libs brl/bbas/bsta, mul/vpdfl, mul/pdf1d.
 
+      - Doxygen based html or TeX output can now be generated through CMake
+
 ******************************
 VXL 1.12.0     - February 2009
 ******************************
