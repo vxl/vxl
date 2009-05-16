@@ -16,10 +16,10 @@ static const double tol=1e-9;
 //========================================================================
 static void test_point_inside()
 {
-  vcl_cout << "\n"
-           << "*******************************************\n"
-           << " Testing vgl_triangle_3d_test_inside       \n"
-           << "*******************************************\n";
+  vcl_cout << '\n'
+           << "*************************************\n"
+           << " Testing vgl_triangle_3d_test_inside\n"
+           << "*************************************\n";
 
   // Define a triangle - arbitrary choice
   vgl_point_3d<double>  p1(2,1,-1), p2(1,-2,0), p3(-1,2,2);
@@ -28,7 +28,7 @@ static void test_point_inside()
 
   vgl_point_3d<double> q;
   double a1, a2, a3;
-  
+
   // test centroid
   {
     a1=1.0/3.0; a2=1.0/3.0; a3=1.0/3.0;
@@ -89,9 +89,9 @@ static void test_point_inside()
 //========================================================================
 static void test_line_intersection()
 {
-  vcl_cout << "\n"
+  vcl_cout << '\n'
            << "*******************************************\n"
-           << " Testing vgl_triangle_3d_line_intersection \n"
+           << " Testing vgl_triangle_3d_line_intersection\n"
            << "*******************************************\n";
   {
     // Define a triangle - arbitrary choice
@@ -119,8 +119,8 @@ static void test_line_intersection()
       for (double a=-89.9; a<89.95; a+=0.1) // angle of triangle normal w.r.t to l1-l2
       {
         // Define a triangle that wobbles about p1-p2
-        vgl_point_3d<double>  p1(1000,1000,1000), p2(1002,1000,1000),
-          p3(1001, 1000+(20*vcl_sin(a*rad)), 1000-(20*vcl_cos(a*rad)));
+        vgl_point_3d<double> p1(1000,1000,1000), p2(1002,1000,1000),
+                             p3(1001, 1000+(20*vcl_sin(a*rad)), 1000-(20*vcl_cos(a*rad)));
         vgl_triangle_3d_intersection_t in_result1 = vgl_triangle_3d_line_intersection(l_in, p1, p2, p3, i_pnt);
         vgl_triangle_3d_intersection_t in_result2 = vgl_triangle_3d_line_intersection(l_in, p1, p3, p2, i_pnt);
         vgl_triangle_3d_intersection_t in_result3 = vgl_triangle_3d_line_intersection(l_in, p3, p1, p2, i_pnt);
@@ -135,9 +135,9 @@ static void test_line_intersection()
         vgl_triangle_3d_intersection_t out_result6 = vgl_triangle_3d_line_intersection(l_out, p2, p1, p3, i_pnt);
 
         if (in_result1 != Skew || in_result2 != Skew || in_result3 != Skew ||
-          in_result4 != Skew || in_result5 != Skew || in_result6 != Skew || 
-          out_result1 != None || out_result2 != None || out_result3 != None ||
-          out_result4 != None || out_result5 != None || out_result6 != None)
+            in_result4 != Skew || in_result5 != Skew || in_result6 != Skew ||
+            out_result1 != None || out_result2 != None || out_result3 != None ||
+            out_result4 != None || out_result5 != None || out_result6 != None)
         {
           vcl_cout << "normal_distance: " << e << " angle: " << a;
           if (out_result1 != None)
@@ -207,8 +207,6 @@ static void test_line_intersection()
     TEST ("All inside rays ok", inside_fail, false);
     TEST ("All outside rays ok", outside_fail, false);
   }
-
-
 }
 
 
@@ -216,7 +214,7 @@ static void test_line_intersection()
 // Main testing function
 //========================================================================
 void test_triangle_3d_line_intersection()
-{  
+{
   test_point_inside();
   test_line_intersection();
 }
