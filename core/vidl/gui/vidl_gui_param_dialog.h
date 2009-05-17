@@ -63,7 +63,7 @@ struct vidl_gui_param_dialog
   static vidl_v4l2_istream* v4l2_istream();
 
   static bool update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
-                                                feature_options>& features);
+                                     feature_options>& features);
 };
 
 

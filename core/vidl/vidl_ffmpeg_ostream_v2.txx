@@ -75,7 +75,7 @@ vidl_ffmpeg_ostream::
 //: Constructor - opens a stream
 vidl_ffmpeg_ostream::
 vidl_ffmpeg_ostream(const vcl_string& filename,
-                     const vidl_ffmpeg_ostream_params& params)
+                    const vidl_ffmpeg_ostream_params& params)
   : os_( new vidl_ffmpeg_ostream::pimpl ),
     filename_(filename), params_(params)
 {
@@ -127,10 +127,10 @@ open()
   AVCodecContext *video_enc = st->codec;
 
   if ( vcl_strcmp(file_oformat->name, "mp4") != 0 ||
-      vcl_strcmp(file_oformat->name, "mov") != 0 ||
-      vcl_strcmp(file_oformat->name, "3gp") != 0 )
+       vcl_strcmp(file_oformat->name, "mov") != 0 ||
+       vcl_strcmp(file_oformat->name, "3gp") != 0 )
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
-  
+
   video_enc->codec_type = CODEC_TYPE_VIDEO;
 
   switch ( params_.encoder_ )
@@ -488,7 +488,7 @@ bool
 vidl_ffmpeg_ostream::
 write_frame(const vidl_frame_sptr& frame)
 {
-  if (!is_open()){
+  if (!is_open()) {
     // resize to the first frame
     params_.size(frame->ni(),frame->nj());
     open();
@@ -497,7 +497,7 @@ write_frame(const vidl_frame_sptr& frame)
   AVCodecContext* codec = os_->fmt_cxt_->streams[0]->codec;
 
   if ( unsigned( codec->width ) != frame->ni() ||
-      unsigned( codec->height ) != frame->nj() ) {
+       unsigned( codec->height ) != frame->nj() ) {
     vcl_cerr << "ffmpeg: Input image has wrong size. Expecting ("
              << codec->width << 'x' << codec->height << "), got ("
              << frame->ni() << 'x' << frame->nj() << ")\n";
@@ -517,27 +517,27 @@ write_frame(const vidl_frame_sptr& frame)
   if ( codec->pix_fmt == fmt )
   {
     avpicture_fill((AVPicture*)&out_frame, (uint8_t*) frame->data(),
-                    fmt, frame->ni(), frame->nj());
+                   fmt, frame->ni(), frame->nj());
   }
   else
   {
-    if (!temp_frame->data()){
+    if (!temp_frame->data()) {
       unsigned ni = frame->ni();
       unsigned nj = frame->nj();
       unsigned out_size = vidl_pixel_format_buffer_size(ni,nj,target_fmt);
       temp_frame = new vidl_memory_chunk_frame(ni, nj, target_fmt,
-                                                new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
+                                               new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
     }
     // try conversion with FFMPEG functions
-    if (!vidl_ffmpeg_convert(frame, temp_frame)){
+    if (!vidl_ffmpeg_convert(frame, temp_frame)) {
       // try conversion with vidl functions
-      if (!vidl_convert_frame(*frame, *temp_frame)){
+      if (!vidl_convert_frame(*frame, *temp_frame)) {
         vcl_cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<vcl_endl;
         return false;
       }
     }
     avpicture_fill((AVPicture*)&out_frame, (uint8_t*) temp_frame->data(),
-                    codec->pix_fmt, frame->ni(), frame->nj());
+                   codec->pix_fmt, frame->ni(), frame->nj());
   }
 
   AVPacket pkt;

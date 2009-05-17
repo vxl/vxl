@@ -26,8 +26,8 @@
 // \param require_color restricts the color mode of the output
 //         if set to UNKNOWN (default) the input color mode is used
 bool vidl_convert_to_view(const vidl_frame& frame,
-                           vil_image_view_base& image,
-                           vidl_pixel_color require_color = VIDL_PIXEL_COLOR_UNKNOWN);
+                          vil_image_view_base& image,
+                          vidl_pixel_color require_color = VIDL_PIXEL_COLOR_UNKNOWN);
 
 
 //: Wrap the frame buffer in an image view if supported
@@ -40,13 +40,13 @@ vil_image_view_base_sptr vidl_convert_wrap_in_view(const vidl_frame& frame);
 // to \p out_frame.pixel_format() and stored in \p out_frame.data()
 // \returns false if the output frame data is not the correct size.
 bool vidl_convert_frame(const vidl_frame& in_frame,
-                               vidl_frame& out_frame);
+                              vidl_frame& out_frame);
 
 
 //: Convert the pixel format of a frame
 // Convert \p in_frame to a \p format by allocating a new frame buffer
 vidl_frame_sptr vidl_convert_frame(const vidl_frame_sptr& in_frame,
-                                     vidl_pixel_format format);
+                                   vidl_pixel_format format);
 
 //: Convert the image view to a frame
 // Will wrap the memory if possible, if not the image is converted to

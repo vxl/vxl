@@ -64,7 +64,7 @@ inline T vil_nearest_interp_safe(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)
 {
   return vil_nearest_interp_safe(x, y, &view(0,0,p), view.ni(), view.nj(),
-    view.istep(), view.jstep());
+                                 view.istep(), view.jstep());
 }
 
 
@@ -97,9 +97,8 @@ inline T vil_nearest_interp(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)
 {
   return vil_nearest_interp(x, y, &view(0,0,p), view.ni(), view.nj(),
-    view.istep(), view.jstep());
+                            view.istep(), view.jstep());
 }
-
 
 
 //: Compute nearest_neighbourear interpolation at (x,y), with bound checks

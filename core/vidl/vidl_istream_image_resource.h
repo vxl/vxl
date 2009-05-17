@@ -38,8 +38,8 @@ class vidl_istream_image_resource : public vil_image_resource
  public:
 
   vidl_istream_image_resource(const vidl_istream_sptr& stream, int frame,
-                               unsigned int ni, unsigned int nj, unsigned int np,
-                               vil_pixel_format format);
+                              unsigned int ni, unsigned int nj, unsigned int np,
+                              vil_pixel_format format);
   vidl_istream_image_resource(const vidl_istream_sptr& stream, int frame);
   vidl_istream_image_resource(const vidl_istream_sptr& stream);
   ~vidl_istream_image_resource();

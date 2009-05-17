@@ -17,8 +17,8 @@
 
 vidl_istream_image_resource::
     vidl_istream_image_resource(const vidl_istream_sptr& i_stream, int frame,
-                                 unsigned int ni, unsigned int nj, unsigned int np,
-                                 vil_pixel_format format)
+                                unsigned int ni, unsigned int nj, unsigned int np,
+                                vil_pixel_format format)
   : istream_(i_stream),
     frame_number_(frame),
     ni_(ni), nj_(nj), np_(np),
@@ -114,7 +114,7 @@ vidl_istream_image_resource::get_property(char const *key, void * value) const
 
 vil_image_view_base_sptr
 vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
-                                            unsigned j0, unsigned nj) const
+                                           unsigned j0, unsigned nj) const
 {
   if (!istream_)
     return NULL;
@@ -185,7 +185,7 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
 
 bool
 vidl_istream_image_resource::put_view(const vil_image_view_base &view,
-                              unsigned x0, unsigned y0)
+                                      unsigned x0, unsigned y0)
 {
   vcl_cerr << "vidl_istream_image_resource::put_view not supported\n";
   return false;

@@ -99,8 +99,8 @@ void sample_grabber_cb::advance(void)
 vidl_frame_sptr sample_grabber_cb::current_frame(void)
 {
   return new vidl_shared_frame(&buffer_[busy_index_][0],
-                                buffer_[busy_index_].size(), 1,
-                                VIDL_PIXEL_FORMAT_UNKNOWN);
+                               buffer_[busy_index_].size(), 1,
+                               VIDL_PIXEL_FORMAT_UNKNOWN);
 }
 
 //-------------------------------------------------------------------------
@@ -277,9 +277,9 @@ void vidl_dshow_live_istream<ParamsObject>::connect(void)
   DSHOW_ERROR_IF_FAILED(
     sample_grabber->GetConnectedMediaType(&media_type));
   vidl_dshow::get_media_info(media_type,
-                              buffer_width_,
-                              buffer_height_,
-                              buffer_pixel_format_);
+                             buffer_width_,
+                             buffer_height_,
+                             buffer_pixel_format_);
   vidl_dshow::delete_media_type(media_type);
 
   // ***** MSDN docs suggest turning the graph clock off (if not needed)

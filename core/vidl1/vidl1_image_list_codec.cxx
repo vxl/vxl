@@ -212,8 +212,8 @@ bool vidl1_image_list_codec::save(vidl1_movie* movie, vcl_string const& fname)
 
 //: Save the given video as a set of images of the type given.
 bool vidl1_image_list_codec::save(vidl1_movie* movie,
-                                 vcl_string const& fname,
-                                 vcl_string const& type)
+                                  vcl_string const& fname,
+                                  vcl_string const& type)
 {
   // The value to be returned
   bool ret = true;

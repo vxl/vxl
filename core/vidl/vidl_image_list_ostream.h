@@ -24,9 +24,9 @@ class vidl_image_list_ostream
 
   //: Constructor - opens a stream
   vidl_image_list_ostream(const vcl_string& directory,
-                           const vcl_string& name_format = "%05d",
-                           const vcl_string& file_format = "tiff",
-                           const unsigned int init_index = 0);
+                          const vcl_string& name_format = "%05d",
+                          const vcl_string& file_format = "tiff",
+                          const unsigned int init_index = 0);
 
   //: Destructor
   virtual ~vidl_image_list_ostream() { close(); }

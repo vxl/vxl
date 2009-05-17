@@ -187,8 +187,8 @@ class vidl1_mpegcodec_helper
 
  public:
   vidl1_mpegcodec_helper(vo_open_t * vopen,
-                        vcl_string filename,
-                        frame_buffer * buffers);
+                         vcl_string filename,
+                         frame_buffer * buffers);
   ~vidl1_mpegcodec_helper();
   bool init();
   int execute(decode_request * p);

@@ -22,15 +22,15 @@
 // \relates vil_image_view
 template <class sType, class dType>
 void vil_resample_nearest(const vil_image_view<sType>& src_image,
-                        vil_image_view<dType>& dest_image,
-                        double x0, double y0, double dx1, double dy1,
-                        double dx2, double dy2, int n1, int n2);
+                          vil_image_view<dType>& dest_image,
+                          double x0, double y0, double dx1, double dy1,
+                          double dx2, double dy2, int n1, int n2);
 
 //: Resample image to a specified width (n1) and height (n2)
 template <class sType, class dType>
 void vil_resample_nearest(const vil_image_view<sType>& src_image,
-                        vil_image_view<dType>& dest_image,
-                        int n1, int n2);
+                          vil_image_view<dType>& dest_image,
+                          int n1, int n2);
 
 //: Sample grid of points in one image and place in another, using nearest neighbour interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at
@@ -40,14 +40,14 @@ void vil_resample_nearest(const vil_image_view<sType>& src_image,
 // \relates vil_image_view
 template <class sType, class dType>
 void vil_resample_nearest_edge_extend(const vil_image_view<sType>& src_image,
-                                    vil_image_view<dType>& dest_image,
-                                    double x0, double y0, double dx1, double dy1,
-                                    double dx2, double dy2, int n1, int n2);
+                                      vil_image_view<dType>& dest_image,
+                                      double x0, double y0, double dx1, double dy1,
+                                      double dx2, double dy2, int n1, int n2);
 
 //: Resample image to a specified width (n1) and height (n2)
 template <class sType, class dType>
 void vil_resample_nearest_edge_extend(const vil_image_view<sType>& src_image,
-                                    vil_image_view<dType>& dest_image,
-                                    int n1, int n2);
+                                      vil_image_view<dType>& dest_image,
+                                      int n1, int n2);
 
 #endif // vil_resample_nearest_h_

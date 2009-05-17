@@ -72,7 +72,7 @@ vidl1_frame_resource::get_property(char const *key, void * value) const
 
 vil_image_view_base_sptr
 vidl1_frame_resource::get_copy_view(unsigned x0, unsigned nx,
-                                   unsigned y0, unsigned ny) const
+                                    unsigned y0, unsigned ny) const
 {
   return codec_->get_view(frame_number_, x0, nx, y0, ny);
 }
@@ -80,7 +80,7 @@ vidl1_frame_resource::get_copy_view(unsigned x0, unsigned nx,
 
 bool
 vidl1_frame_resource::put_view(const vil_image_view_base &view,
-                              unsigned x0, unsigned y0)
+                               unsigned x0, unsigned y0)
 {
   return codec_->put_view(frame_number_, view, x0, y0);
 }

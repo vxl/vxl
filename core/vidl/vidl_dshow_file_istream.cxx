@@ -125,9 +125,9 @@ void vidl_dshow_file_istream::open(const vcl_string& filename)
   DSHOW_ERROR_IF_FAILED(
     sample_grabber_->GetConnectedMediaType(&media_type));
   vidl_dshow::get_media_info(media_type,
-                              buffer_width_,
-                              buffer_height_,
-                              buffer_pixel_format_);
+                             buffer_width_,
+                             buffer_height_,
+                             buffer_pixel_format_);
   vidl_dshow::delete_media_type(media_type);
 
   // ***** MSDN docs suggest turning the graph clock off (if not needed)

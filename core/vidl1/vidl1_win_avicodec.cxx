@@ -173,7 +173,7 @@ vil_image_view_base_sptr vidl1_avicodec::get_view(
   } // end switch Bits per pixel
   //Note that istep and jstep are in bytes (not pixels)
 
-  vil_image_view_base_sptr 
+  vil_image_view_base_sptr
     image_sptr(new vil_image_view<vxl_byte>(chunk_db, ib, xs, ys, nplanes,
                                             bytes_pixel, bytes_pixel*xs, 1));
   return image_sptr;
@@ -184,8 +184,8 @@ vil_image_view_base_sptr vidl1_avicodec::get_view(
 // be able to put a section different
 // of the entire frame.
 bool vidl1_avicodec::put_view( int /*position*/,
-                              const vil_image_view_base &/*im*/,
-                              int /*x0*/, int /*y0*/)
+                               const vil_image_view_base &/*im*/,
+                               int /*x0*/, int /*y0*/)
 {
   vcl_cerr << "vidl1_avicodec::put_section not implemented\n";
   return false;
@@ -222,7 +222,7 @@ vidl1_codec_sptr vidl1_avicodec::load(vcl_string const& fname, char mode)
 {
   vidl1_avicodec *cloned_avi_codec = new vidl1_avicodec;
 
-  if (!cloned_avi_codec->load_avi(fname,mode)){
+  if (!cloned_avi_codec->load_avi(fname,mode)) {
     delete cloned_avi_codec;
     return NULL;
   }
@@ -591,8 +591,8 @@ HANDLE  vidl1_avicodec::make_dib(vidl1_frame_sptr frame, UINT bits)
       }
     }
   }
-  else{
-
+  else
+  {
     // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
 
     // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down

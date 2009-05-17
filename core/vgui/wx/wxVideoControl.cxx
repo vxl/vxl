@@ -59,11 +59,11 @@ wxVideoControl::wxVideoControl()
 
 //: Constructor
 wxVideoControl::wxVideoControl(wxWindow* parent,
-                             wxWindowID id,
-                             const wxPoint& pos,
-                             const wxSize& size,
-                             long style,
-                             const wxString& name)
+                               wxWindowID id,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxString& name)
   : send_messages_(true)
 {
   Init();
@@ -73,11 +73,11 @@ wxVideoControl::wxVideoControl(wxWindow* parent,
 
 //: Creator
 bool wxVideoControl::Create(wxWindow* parent,
-                           wxWindowID id,
-                           const wxPoint& pos,
-                           const wxSize& size,
-                           long style,
-                           const wxString& name)
+                            wxWindowID id,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxString& name)
 {
   wxPanel::Create(parent, id, pos, size, style, name);
   CreateControls();
@@ -97,48 +97,46 @@ void wxVideoControl::Init()
 }
 
 
-
 //: Create the controls
 void wxVideoControl::CreateControls()
 {
   wxBoxSizer* itemBoxSizer = new wxBoxSizer(wxHORIZONTAL);
   this->SetSizer(itemBoxSizer);
-  
+
   prev_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(prev_xpm, wxBITMAP_TYPE_XPM));
   itemBoxSizer->Add(prev_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3);
-  
+
   play_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(play_xpm, wxBITMAP_TYPE_XPM));
   itemBoxSizer->Add(play_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3);
-  
+
   next_button_ = new wxBitmapButton(this, wxNewId(), wxBitmap(next_xpm, wxBITMAP_TYPE_XPM));
   itemBoxSizer->Add(next_button_, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3);
-  
-  slider_ = new wxSlider(this, wxNewId(), 0, 0, num_frames_, 
+
+  slider_ = new wxSlider(this, wxNewId(), 0, 0, num_frames_,
                          wxDefaultPosition, wxSize(100, -1),
                          wxSL_HORIZONTAL );
   itemBoxSizer->Add(slider_, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 3);
-  
+
   frame_text_ = new wxTextCtrl(this, wxNewId(),
                                wxString::Format(wxT("%d"),frame_),
                                wxDefaultPosition, wxSize(50, -1), wxTE_PROCESS_ENTER );
   // count the number of digits in the maximum frame number
   int digits = 1;
   unsigned int num_frames = num_frames_-1;
-  while(num_frames/=10) 
+  while (num_frames/=10)
     ++digits;
   frame_text_->SetMaxLength(digits);
-  
+
   itemBoxSizer->Add(frame_text_, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3);
   // Numeric text validator
   frame_text_->SetValidator( wxTextValidator(wxFILTER_NUMERIC) );
-  
-  frame_text_->Connect(-1, wxEVT_KILL_FOCUS, 
-                       (wxObjectEventFunction)&wxVideoControl::OnKillTextFocus);
-  
-  
-  slider_->Connect(-1, wxEVT_KEY_DOWN, 
-                       (wxObjectEventFunction)&wxVideoControl::OnKeyDown);
 
+  frame_text_->Connect(-1, wxEVT_KILL_FOCUS,
+                       (wxObjectEventFunction)&wxVideoControl::OnKillTextFocus);
+
+
+  slider_->Connect(-1, wxEVT_KEY_DOWN,
+                   (wxObjectEventFunction)&wxVideoControl::OnKeyDown);
 }
 
 
@@ -149,11 +147,11 @@ void wxVideoControl::set_num_frames(unsigned int num_frames)
   // count the number of digits in the maximum frame number
   int digits = 1;
   --num_frames;
-  while(num_frames/=10) 
+  while (num_frames/=10)
     ++digits;
-  if(slider_)
+  if (slider_)
     slider_->SetRange(0,num_frames_-1);
-  if(frame_text_)
+  if (frame_text_)
     frame_text_->SetMaxLength(digits);
 }
 
@@ -162,7 +160,7 @@ void wxVideoControl::set_num_frames(unsigned int num_frames)
 void wxVideoControl::set_frame(unsigned int frame, bool send_message)
 {
   frame_ = frame;
-  if(slider_ && frame_text_){
+  if (slider_ && frame_text_) {
     send_messages_ = send_message;
     slider_->SetValue(frame_);
     frame_text_->SetValue(wxString::Format(wxT("%d"),frame_));
@@ -171,12 +169,10 @@ void wxVideoControl::set_frame(unsigned int frame, bool send_message)
 }
 
 
-
 bool wxVideoControl::ShowToolTips()
 {
   return true;
 }
-
 
 
 //: Handle Slider Tracking (dragging)
@@ -184,7 +180,7 @@ void wxVideoControl::OnSliderTrack( wxScrollEvent& event )
 {
   int spos = event.GetInt();
   frame_text_->SetValue(wxString::Format(wxT("%d"),spos));
-  
+
   if (send_messages_)
   {
     vgui_message m;
@@ -216,9 +212,9 @@ void wxVideoControl::OnEnterText( wxCommandEvent& event )
 {
   long fnum;
   event.GetString().ToLong(&fnum);
-  if(fnum < 0)
+  if (fnum < 0)
     fnum = 0;
-  if(fnum >= num_frames_)
+  if (fnum >= num_frames_)
     fnum = num_frames_-1;
   frame_text_->SetValue(wxString::Format(wxT("%d"),fnum));
   frame_ = fnum;
@@ -238,15 +234,15 @@ void wxVideoControl::OnEnterText( wxCommandEvent& event )
 void wxVideoControl::OnButton( wxCommandEvent& event )
 {
   int id = event.GetId();
-  if(id == next_button_->GetId())
+  if (id == next_button_->GetId())
     next();
-  else if(id == play_button_->GetId()){
-    if(is_playing_)
+  else if (id == play_button_->GetId()) {
+    if (is_playing_)
       pause();
     else
       play();
   }
-  else if(id == prev_button_->GetId())
+  else if (id == prev_button_->GetId())
     prev();
 }
 
@@ -260,7 +256,7 @@ void wxVideoControl::OnKeyDown( wxKeyEvent& event )
 //: Advance to next frame
 void wxVideoControl::next()
 {
-  if(frame_ >= num_frames_)
+  if (frame_ >= num_frames_)
     return;
   ++frame_;
   frame_text_->SetValue(wxString::Format(wxT("%d"),frame_));
@@ -278,7 +274,7 @@ void wxVideoControl::next()
 //: Step to previous frame
 void wxVideoControl::prev()
 {
-  if(frame_ <= 0)
+  if (frame_ <= 0)
     return;
   --frame_;
   frame_text_->SetValue(wxString::Format(wxT("%d"),frame_));
@@ -341,7 +337,4 @@ void wxVideoControl::OnKillTextFocus( wxCommandEvent& event )
   wxVideoControl* vc = dynamic_cast<wxVideoControl*>(text->GetParent());
   text->SetValue(wxString::Format(wxT("%d"),vc->frame_));
 }
-
-
-
 

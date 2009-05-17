@@ -31,9 +31,9 @@ vidl1_clip::vidl1_clip(
 
 //: Constructor. Create a clip from a vector of images. Start, end and increment frames are optional.
 vidl1_clip::vidl1_clip(vcl_vector<vil_image_resource_sptr> &images,
-                     int start,
-                     int end,
-                     int increment)
+                       int start,
+                       int end,
+                       int increment)
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
@@ -53,9 +53,9 @@ vidl1_clip::vidl1_clip(vcl_vector<vil_image_resource_sptr> &images,
 
 //: Constructor. Create a clip from a list of images. Start, end and increment frames are optional.
 vidl1_clip::vidl1_clip(vcl_list<vil_image_resource_sptr> &images,
-                     int start,
-                     int end,
-                     int increment)
+                       int start,
+                       int end,
+                       int increment)
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better

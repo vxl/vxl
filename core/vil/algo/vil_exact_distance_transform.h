@@ -69,7 +69,7 @@ bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigne
 // vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 //
 bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
-    unsigned plane_idx, const vcl_vector<unsigned > &sq);
+                                        unsigned plane_idx, const vcl_vector<unsigned > &sq);
 
 //: Exact 3D EDT
 //

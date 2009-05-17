@@ -128,7 +128,7 @@ inline void vidl_type_convert(const inT& in, outT& out)
 // ITU-R BT.601 (formerly CCIR 601) standard conversion
 template <class outT>
 inline void vidl_color_convert_yuv2rgb( double  y, double  u, double  v,
-                                         double& r, double& g, double& b )
+                                        double& r, double& g, double& b )
 {
   r = y + 1.1402 * v;
   g = y - 0.34413628620102 * u - 0.71413628620102 * v;
@@ -138,7 +138,7 @@ inline void vidl_color_convert_yuv2rgb( double  y, double  u, double  v,
 
 // ITU-R BT.601 (formerly CCIR 601) standard conversion
 inline void vidl_color_convert_yuv2rgb( vxl_byte y, vxl_byte u, vxl_byte v,
-                                         double&  r, double&  g, double&  b )
+                                        double&  r, double&  g, double&  b )
 {
   double dy = y/255.0;       // 0.0 to 1.0
   double du = (u-128)/255.0; //-0.5 to 0.5
@@ -152,7 +152,7 @@ inline void vidl_color_convert_yuv2rgb( vxl_byte y, vxl_byte u, vxl_byte v,
 //: faster integer-based conversion from YUV to RGB
 // Based on conversion used in libdc1394
 inline void vidl_color_convert_yuv2rgb( vxl_byte  y, vxl_byte  u, vxl_byte  v,
-                                         vxl_byte& r, vxl_byte& g, vxl_byte& b )
+                                        vxl_byte& r, vxl_byte& g, vxl_byte& b )
 {
   register int iy = y, iu = u-128, iv = v-128, ir, ib, ig;
   r = ir = iy + ((iv*1436) >> 10);
@@ -169,7 +169,7 @@ inline void vidl_color_convert_yuv2rgb( vxl_byte  y, vxl_byte  u, vxl_byte  v,
 
 // ITU-R BT.601 (formerly CCIR 601) standard conversion
 inline void vidl_color_convert_rgb2yuv( double r,  double g,  double b,
-                                         double& y, double& u, double& v )
+                                        double& y, double& u, double& v )
 {
   y = 0.299*r + 0.587*g + 0.114*b;
   u = (b-y)/1.772;
@@ -179,7 +179,7 @@ inline void vidl_color_convert_rgb2yuv( double r,  double g,  double b,
 
 // ITU-R BT.601 (formerly CCIR 601) standard conversion
 inline void vidl_color_convert_rgb2yuv( double r, double g, double b,
-                                         vxl_byte& y, vxl_byte& u, vxl_byte& v )
+                                        vxl_byte& y, vxl_byte& u, vxl_byte& v )
 {
   double dy = 0.299*r + 0.587*g + 0.114*b;
   double du = (b-dy)/1.772;
@@ -193,7 +193,7 @@ inline void vidl_color_convert_rgb2yuv( double r, double g, double b,
 //: faster integer-based conversion from RGB to YUV
 // Based on conversion used in libdc1394
 inline void vidl_color_convert_rgb2yuv( vxl_byte  r, vxl_byte  g, vxl_byte  b,
-                                         vxl_byte& y, vxl_byte& u, vxl_byte& v )
+                                        vxl_byte& y, vxl_byte& u, vxl_byte& v )
 {
   register int ir = r, ib = b, ig = g, iy, iu, iv;
   y = iy = (306*ir + 601*ig + 117*ib)  >> 10;
@@ -221,7 +221,7 @@ typedef void (*vidl_color_conv_fptr)(const vxl_byte* in, vxl_byte* out);
 // vxl_uint_16*) via reinterpret_cast
 vidl_color_conv_fptr
 vidl_color_converter_func( vidl_pixel_color in_C, const vcl_type_info& in_type,
-                            vidl_pixel_color out_C, const vcl_type_info& out_type);
+                           vidl_pixel_color out_C, const vcl_type_info& out_type);
 
 
 template <vidl_pixel_color in_C, vidl_pixel_color out_C>
@@ -368,13 +368,13 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_YUV>
     vidl_type_convert(in[1],b);
     vidl_type_convert(in[2],g);
     vidl_color_convert_rgb2yuv(r,g,b,
-                                out[0],out[1],out[2]);
+                               out[0],out[1],out[2]);
   }
 
   static inline void convert(const vxl_byte in[3], vxl_byte out[3])
   {
     vidl_color_convert_rgb2yuv(in[0],in[1],in[2],
-                                out[0],out[1],out[2]);
+                               out[0],out[1],out[2]);
   }
 };
 
@@ -386,7 +386,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_YUV>
   static inline void convert(const vxl_byte in[4], outT out[3])
   {
     vidl_color_convert_rgb2yuv(in[0],in[1],in[2],
-                                out[0],out[1],out[2]);
+                               out[0],out[1],out[2]);
   }
 };
 
@@ -413,7 +413,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGB>
   {
     double r,g,b;
     vidl_color_convert_yuv2rgb(in[0],in[1],in[2],
-                                r,g,b);
+                               r,g,b);
     vidl_type_convert(r,out[0]);
     vidl_type_convert(g,out[1]);
     vidl_type_convert(b,out[2]);
@@ -422,7 +422,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGB>
   static inline void convert(const vxl_byte in[3], vxl_byte out[3])
   {
     vidl_color_convert_yuv2rgb(in[0],in[1],in[2],
-                                out[0],out[1],out[2]);
+                               out[0],out[1],out[2]);
   }
 };
 
@@ -434,7 +434,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGBA>
   static inline void convert(const vxl_byte in[3], outT out[4])
   {
     vidl_color_convert_yuv2rgb(in[0],in[1],in[2],
-                                out[0],out[1],out[2]);
+                               out[0],out[1],out[2]);
     out[3] = vidl_pixel_limits<outT>::max();
   }
 };

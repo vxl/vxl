@@ -27,11 +27,11 @@ class wxVideoControl: public wxPanel, public vgui_observable
   // Constructors
   wxVideoControl();
   wxVideoControl(wxWindow* parent,
-                wxWindowID id = wxID_ANY,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxVSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL,
-                const wxString& name = wxT("wxVideoControl"));
+                 wxWindowID id = wxID_ANY,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxVSCROLL|wxSUNKEN_BORDER|wxTAB_TRAVERSAL,
+                 const wxString& name = wxT("wxVideoControl"));
 
   //: Creation
   bool Create(wxWindow* parent,
@@ -61,7 +61,7 @@ class wxVideoControl: public wxPanel, public vgui_observable
   void OnButton( wxCommandEvent& event );
   //: Event handler
   void OnKeyDown( wxKeyEvent& event );
-  
+
   //: Handle Textbox loss of focus
   // \note the "this" argument is invalid because this must be called from the wxTextCtrl itself
   void OnKillTextFocus( wxCommandEvent& event );
@@ -69,28 +69,28 @@ class wxVideoControl: public wxPanel, public vgui_observable
 
   //: Return the number of frames
   unsigned int num_frames() const { return num_frames_; }
-  
+
   //: Return the current frame
   unsigned int frame() const { return frame_; }
-  
+
   //: Set the number of frames
   void set_num_frames(unsigned int num_frames);
-  
+
   //: Set the current frame
   void set_frame(unsigned int frame, bool send_message = true);
-  
+
   //: Advance to next frame
   void next();
-  
+
   //: Step to previous frame
   void prev();
-  
+
   //: Start the video playing
   void play();
-  
+
   //: Pause the video
   void pause();
-  
+
   //: Return true if in play mode
   bool is_playing() { return is_playing_; }
 
@@ -105,19 +105,19 @@ class wxVideoControl: public wxPanel, public vgui_observable
   static const char m_play[];
   static const char m_pause[];
 
-private:
+ private:
   wxBitmapButton* prev_button_;
   wxBitmapButton* play_button_;
   wxBitmapButton* next_button_;
   wxSlider* slider_;
   wxTextCtrl* frame_text_;
-  
+
   unsigned int frame_;
   unsigned int num_frames_;
 
   //: used to disable sending of message
   bool send_messages_;
-  
+
   //: is the video playing
   bool is_playing_;
 };

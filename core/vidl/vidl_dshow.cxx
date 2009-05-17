@@ -286,7 +286,7 @@ void vidl_dshow::remove_from_rot(DWORD reg)
 
 //: Save filter graph to a *.grf file.
 void vidl_dshow::save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                     const vcl_string& filename)
+                                    const vcl_string& filename)
 {
   assert(filter_graph != 0);
 
@@ -316,7 +316,7 @@ void vidl_dshow::save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
 
 //: Load filter graph from a *.grf file.
 void vidl_dshow::load_graph_from_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                       const vcl_wstring& filename)
+                                      const vcl_wstring& filename)
 {
   assert(filter_graph != 0);
 
@@ -372,14 +372,14 @@ GUID vidl_dshow::get_guid_from_fourcc(const vcl_string& fourcc)
 
 //: Extract information from AM_MEDIA_TYPE object.
 void vidl_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
-                                 unsigned int& width,
-                                 unsigned int& height,
-                                 vidl_pixel_format& pixel_format)
+                                unsigned int& width,
+                                unsigned int& height,
+                                vidl_pixel_format& pixel_format)
 {
   // Examine the format block.
-  if ( (amt.formattype == FORMAT_VideoInfo)
-    && (amt.cbFormat >= sizeof(VIDEOINFOHEADER))
-    && (amt.pbFormat != 0) )
+  if ( (amt.formattype == FORMAT_VideoInfo) &&
+       (amt.cbFormat >= sizeof(VIDEOINFOHEADER)) &&
+       (amt.pbFormat != 0) )
   {
     VIDEOINFOHEADER *vih;
     vih = reinterpret_cast<VIDEOINFOHEADER*>(amt.pbFormat);
@@ -436,8 +436,8 @@ void vidl_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
   {
     pixel_format = VIDL_PIXEL_FORMAT_YVU_420P;
   }
-  else if (amt.subtype == MEDIASUBTYPE_IYUV
-        || amt.subtype == vidl_dshow::get_guid_from_fourcc("I420"))
+  else if (amt.subtype == MEDIASUBTYPE_IYUV ||
+           amt.subtype == vidl_dshow::get_guid_from_fourcc("I420"))
   {
     pixel_format = VIDL_PIXEL_FORMAT_YUV_420P;
   }
@@ -516,8 +516,8 @@ vidl_dshow::get_capture_device_moniker(const vcl_string& name)
 
 //: Connect two filters directly. ***** check this, might have errors
 void vidl_dshow::connect_filters(CComPtr<IFilterGraph2>& filter_graph,
-                                  CComPtr<IBaseFilter>& source,
-                                  CComPtr<IBaseFilter>& target)
+                                 CComPtr<IBaseFilter>& source,
+                                 CComPtr<IBaseFilter>& target)
 {
   //assert(!filter_graph);
   //assert(!source);

@@ -56,7 +56,7 @@ vidl_istream* vidl_gui_open_istream_dialog()
   if (!dlg.ask())
     return NULL;
 
-  switch(choice_codes[idx]){
+  switch (choice_codes[idx]) {
     case IMAGE_LIST:
       return vidl_gui_param_dialog::image_list_istream();
 #if VIDL_HAS_FFMPEG
@@ -99,7 +99,7 @@ vidl_ostream* vidl_gui_open_ostream_dialog()
   if (!dlg.ask())
     return NULL;
 
-  switch(choice_codes[idx]){
+  switch (choice_codes[idx]) {
     case IMAGE_LIST:
       return vidl_gui_param_dialog::image_list_ostream();
 #if VIDL_HAS_FFMPEG
@@ -172,9 +172,9 @@ vidl_image_list_ostream* vidl_gui_param_dialog::image_list_ostream()
     return NULL;
 
   vidl_image_list_ostream* o_stream = new vidl_image_list_ostream(directory,
-                                            name_format,
-                                            fmt_choices[fmt_idx],
-                                            start_index);
+                                                                  name_format,
+                                                                  fmt_choices[fmt_idx],
+                                                                  start_index);
 
   if (!o_stream || !o_stream->is_open()) {
     vgui_error_dialog("Failed to create output image list stream");
@@ -184,7 +184,6 @@ vidl_image_list_ostream* vidl_gui_param_dialog::image_list_ostream()
 
   return o_stream;
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -248,7 +247,7 @@ vidl_ffmpeg_ostream* vidl_gui_param_dialog::ffmpeg_ostream()
     return NULL;
 
   params.encoder(vidl_ffmpeg_ostream_params::
-      encoder_type(enc_choice));
+                 encoder_type(enc_choice));
 
   vidl_ffmpeg_ostream* o_stream = new vidl_ffmpeg_ostream(file, params);
 
@@ -277,15 +276,15 @@ vidl_v4l2_istream* vidl_gui_param_dialog::v4l2_istream()
   int device_id=0;
   if (devs.size()==0) {
     vgui_error_dialog("No video devices found");
-    return NULL;  
+    return NULL;
   }
-  else if (devs.size() > 1){
+  else if (devs.size() > 1) {
     vgui_dialog dlg("Select a video device");
     vcl_vector<vcl_string> video_names;
-    for (unsigned int i=0; i<devs.size(); ++i){
+    for (unsigned int i=0; i<devs.size(); ++i) {
       vcl_stringstream ss;
-      ss << devs(i).card_name() 
-         << " (" << devs(i).device_file() << ")";
+      ss << devs(i).card_name()
+         << " (" << devs(i).device_file() << ')';
       video_names.push_back(ss.str());
     }
     dlg.choice("Device",video_names,device_id);
@@ -297,7 +296,7 @@ vidl_v4l2_istream* vidl_gui_param_dialog::v4l2_istream()
   if (devs(device_id).n_inputs()>1) {
     vgui_dialog dlg("Select input");
     vcl_vector<vcl_string> input_names;
-    for (unsigned int i=0; i<devs(device_id).n_inputs(); ++i){
+    for (unsigned int i=0; i<devs(device_id).n_inputs(); ++i) {
       input_names.push_back(devs(device_id).card_name()+"->"+
                             devs(device_id).input(i).name());
     }
@@ -354,22 +353,22 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
   vidl_iidc1394_params::valid_options options;
   vidl_dc1394_istream::valid_params(options);
 
-  if (options.cameras.empty()){
+  if (options.cameras.empty()) {
     vgui_error_dialog("No cameras found");
     return NULL;
   }
 
 #ifndef NDEBUG
   vcl_cout << "Detected " << options.cameras.size() << " cameras\n";
-  for (unsigned int i=0; i<options.cameras.size(); ++i){
+  for (unsigned int i=0; i<options.cameras.size(); ++i) {
     const vidl_iidc1394_params::valid_options::camera& cam = options.cameras[i];
     vcl_cout << "Camera "<<i<<": "<< cam.vendor << " : " << cam.model
              << " : guid "<< vcl_hex << cam.guid << '\n';
-    for (unsigned int j=0; j<cam.modes.size(); ++j){
+    for (unsigned int j=0; j<cam.modes.size(); ++j) {
       const vidl_iidc1394_params::valid_options::valid_mode& m = cam.modes[j];
       vcl_cout << "\tmode "<<j<<" : "
                << vidl_iidc1394_params::video_mode_string(m.mode) << '\n';
-      for (unsigned int k=0; k<m.frame_rates.size(); ++k){
+      for (unsigned int k=0; k<m.frame_rates.size(); ++k) {
         vcl_cout << "\t\tframe rate : "
                  << vidl_iidc1394_params::frame_rate_val(m.frame_rates[k]) << '\n';
       }
@@ -386,14 +385,14 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
   if (options.cameras.size() <= camera_id)
     camera_id = 0;
 
-  if (options.cameras.size() > 1){
+  if (options.cameras.size() > 1) {
     vgui_dialog dlg("Select an IIDC 1394 camera");
     vcl_vector<vcl_string> camera_names;
-    for (unsigned int i=0; i<options.cameras.size(); ++i){
+    for (unsigned int i=0; i<options.cameras.size(); ++i) {
       vcl_stringstream ss;
-      ss << options.cameras[i].vendor << " "
+      ss << options.cameras[i].vendor << ' '
          << options.cameras[i].model
-         << " (guid "<< vcl_hex << options.cameras[i].guid << ")";
+         << " (guid "<< vcl_hex << options.cameras[i].guid << ')';
       camera_names.push_back(ss.str());
     }
     dlg.choice("Camera",camera_names,camera_id);
@@ -412,11 +411,11 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
   }
   static unsigned int mode_id = 0;
   bool use_1394b = cam.b_mode;
-  if (cam.modes.size() > 1){
+  if (cam.modes.size() > 1) {
     vgui_dialog dlg("Select a capture mode");
     vcl_vector<vcl_string> mode_names;
-    for (unsigned int i=0; i<cam.modes.size(); ++i){
-      if(cam.modes[i].mode ==  cam.curr_mode)
+    for (unsigned int i=0; i<cam.modes.size(); ++i) {
+      if (cam.modes[i].mode ==  cam.curr_mode)
         mode_id = i;
       mode_names.push_back(vidl_iidc1394_params::video_mode_string(cam.modes[i].mode));
     }
@@ -433,18 +432,18 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
 
   // Select the frame rate
   //-----------------------------------
-  if (vidl_iidc1394_params::video_format_val(m.mode) < 6){
+  if (vidl_iidc1394_params::video_format_val(m.mode) < 6) {
     if (m.frame_rates.empty())
     {
       vgui_error_dialog("No valid frame rates for this mode");
       return NULL;
     }
     static unsigned int fr_id = 0;
-    if (m.frame_rates.size() > 1){
+    if (m.frame_rates.size() > 1) {
       vgui_dialog dlg("Select a frame rate");
       vcl_vector<vcl_string> rate_names;
-      for (unsigned int i=0; i<m.frame_rates.size(); ++i){
-        if(m.frame_rates[i] == cam.curr_frame_rate)
+      for (unsigned int i=0; i<m.frame_rates.size(); ++i) {
+        if (m.frame_rates[i] == cam.curr_frame_rate)
           fr_id = i;
         vcl_stringstream name;
         name << vidl_iidc1394_params::frame_rate_val(m.frame_rates[i]) << " fps";
@@ -459,9 +458,9 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
 
   // Select the feature values
   //-------------------------------------
-  if(!cam.features.empty()){
+  if (!cam.features.empty()) {
     params.features_ = cam.features;
-    if(!update_iidc1394_params(params.features_))
+    if (!update_iidc1394_params(params.features_))
       return NULL;
   }
 
@@ -496,25 +495,25 @@ vidl_dc1394_istream* vidl_gui_param_dialog::dc1394_istream()
 //: Use a vgui dialog to update iidc1394 camera parameters
 //-----------------------------------------------------------------------------
 bool vidl_gui_param_dialog::update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
-                                                               feature_options>& features)
+                                                   feature_options>& features)
 {
   vgui_dialog dlg("Set feature values");
   vcl_vector<unsigned> choices(features.size(),0);
-  for(unsigned int i=0; i<features.size(); ++i){
+  for (unsigned int i=0; i<features.size(); ++i) {
     vidl_iidc1394_params::feature_options& f = features[i];
     vcl_stringstream ss;
 
     vcl_vector<vcl_string> modes;
-    for(unsigned int j=0; j<f.available_modes.size(); ++j){
+    for (unsigned int j=0; j<f.available_modes.size(); ++j) {
       modes.push_back(vidl_iidc1394_params::feature_mode_string(f.available_modes[j]));
-      if(f.active_mode == f.available_modes[j])
+      if (f.active_mode == f.available_modes[j])
         choices[i] = j;
     }
 
     ss << vidl_iidc1394_params::feature_string(f.id);
 
-    if( f.id == vidl_iidc1394_params::FEATURE_WHITE_BALANCE ){
-      if(modes.empty()){
+    if ( f.id == vidl_iidc1394_params::FEATURE_WHITE_BALANCE ) {
+      if (modes.empty()) {
         dlg.message(ss.str().c_str());
         ss.str("");
         ss << "Blue Value (U) [" << f.min << " - "<<f.max<<"] : " << f.BU_value;
@@ -523,58 +522,56 @@ bool vidl_gui_param_dialog::update_iidc1394_params(vcl_vector<vidl_iidc1394_para
         ss << " Red Value (V) [" << f.min << " - "<<f.max<<"] : " << f.RV_value;
         dlg.message(ss.str().c_str());
       }
-      else{
+      else {
         dlg.choice(ss.str().c_str(), modes, choices[i]);
 
         ss.str("");
-        ss << "Blue Value (U) [" << f.min << " - "<<f.max<<"]";
+        ss << "Blue Value (U) [" << f.min << " - "<<f.max<<']';
         dlg.field(ss.str().c_str(), f.BU_value);
 
         ss.str("");
-        ss << " Red Value (V) [" << f.min << " - "<<f.max<<"]";
+        ss << " Red Value (V) [" << f.min << " - "<<f.max<<']';
         dlg.field(ss.str().c_str(), f.RV_value);
-
       }
     }
-    else{
-
-      if(modes.empty()){
+    else
+    {
+      if (modes.empty()) {
         dlg.message(ss.str().c_str());
         ss.str("");
         ss << "Value [" << f.min << " - "<<f.max<<"] : " << f.value;
         dlg.message(ss.str().c_str());
       }
-      else{
-
+      else
+      {
         dlg.choice(ss.str().c_str(), modes, choices[i]);
 
         ss.str("");
-        ss << "Value [" << f.min << " - "<<f.max<<"]";
+        ss << "Value [" << f.min << " - "<<f.max<<']';
         dlg.field(ss.str().c_str(), f.value);
-        if(f.absolute_capable){
+        if (f.absolute_capable) {
           ss.str("");
-          ss << "Absolute Value [" << f.abs_min << " - "<<f.abs_max<<"]";
+          ss << "Absolute Value [" << f.abs_min << " - "<<f.abs_max<<']';
           dlg.field(ss.str().c_str(), f.abs_value);
         }
       }
     }
   }
 
-  if(!dlg.ask())
+  if (!dlg.ask())
     return false;
 
-  for(unsigned int i=0; i<features.size(); ++i){
+  for (unsigned int i=0; i<features.size(); ++i) {
     vidl_iidc1394_params::feature_options& f = features[i];
-    if(f.available_modes.empty())
+    if (f.available_modes.empty())
       continue;
 
     vcl_vector<vidl_iidc1394_params::feature_mode_t> modes;
-    for(unsigned int j=0; j<f.available_modes.size(); ++j){
+    for (unsigned int j=0; j<f.available_modes.size(); ++j) {
       modes.push_back(static_cast<vidl_iidc1394_params::feature_mode_t>
-                       (f.available_modes[j]) );
+                      (f.available_modes[j]) );
     }
     f.active_mode = modes[choices[i]];
-
   }
   return true;
 }

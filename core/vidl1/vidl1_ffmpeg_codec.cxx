@@ -113,7 +113,7 @@ vidl1_ffmpeg_codec::load(vcl_string const& fname, char mode)
 {
   vidl1_ffmpeg_codec *cloned_avi_codec = new vidl1_ffmpeg_codec;
 
-  if (!cloned_avi_codec->open(fname,mode)){
+  if (!cloned_avi_codec->open(fname,mode)) {
     delete cloned_avi_codec;
     return NULL;
   }
@@ -222,8 +222,8 @@ vidl1_ffmpeg_codec::close()
 
 vil_image_view_base_sptr
 vidl1_ffmpeg_codec::get_view( int position,
-                             int x0, int xs,
-                             int y0, int ys ) const
+                              int x0, int xs,
+                              int y0, int ys ) const
 {
   int current = cur_frame_num();
 
@@ -247,7 +247,7 @@ vidl1_ffmpeg_codec::cur_frame() const
   AVCodecContext* enc = fmt_cxt_->streams[vid_index_]->codec;
 #endif
   // If we've already converted this frame, try to convert it
-  if ( !cur_img_ && frame_->data[0] != 0 ){
+  if ( !cur_img_ && frame_->data[0] != 0 ) {
     int width = enc->width;
     int height = enc->height;
 
@@ -275,9 +275,9 @@ vidl1_ffmpeg_codec::cur_frame() const
                                      NULL, NULL, NULL );
     AVPicture* in_pict = (AVPicture*)frame_;
     sws_scale( ctx,
-              in_pict->data, in_pict->linesize,
-              0, height,
-              out_pict.data, out_pict.linesize );
+               in_pict->data, in_pict->linesize,
+               0, height,
+               out_pict.data, out_pict.linesize );
     sws_freeContext( ctx );
 #endif
   }
@@ -296,8 +296,8 @@ vidl1_ffmpeg_codec::cur_frame() const
 
 bool
 vidl1_ffmpeg_codec::put_view( int /*position*/,
-                             const vil_image_view_base &/*im*/,
-                             int /*x0*/, int /*y0*/)
+                              const vil_image_view_base &/*im*/,
+                              int /*x0*/, int /*y0*/)
 {
   vcl_cerr << "vidl1_ffmpeg_codec::put_view not implemented\n";
   return false;
@@ -368,7 +368,7 @@ vidl1_ffmpeg_codec::count_frames() const
   while ( av_read_frame( fmt_cxt_, &pkt ) >= 0) {
     got_picture = 0;
     last_dts = pkt.dts;
-    if (pkt.stream_index==vid_index_){
+    if (pkt.stream_index==vid_index_) {
       if ( enc->codec_id == CODEC_ID_RAWVIDEO ) {
         got_picture = 1;
       } else {

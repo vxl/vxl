@@ -28,7 +28,7 @@ vidl1_avicodec::vidl1_avicodec()
 //: Destructor
 vidl1_avicodec::~vidl1_avicodec()
 {
-  if (moviestream_){
+  if (moviestream_) {
     moviestream_->StopStreaming();
   }
   if (moviefile_) delete moviefile_;
@@ -44,9 +44,9 @@ bool vidl1_avicodec::probe(vcl_string const& fname)
   IAviReadFile* avi_file;
   IAviReadStream* avi_stream;
   avi_file = CreateIAviReadFile(fname.c_str());
-  if ( avi_file && avi_file->VideoStreamCount()!=0){
+  if ( avi_file && avi_file->VideoStreamCount()!=0) {
     avi_stream = avi_file->GetStream(0,AviStream::Video);
-    if ( avi_stream ){
+    if ( avi_stream ) {
       delete avi_file;
       return true;
     }
@@ -66,7 +66,7 @@ vidl1_avicodec::load(vcl_string const& fname, char mode)
 {
   vidl1_avicodec *cloned_avi_codec = new vidl1_avicodec;
 
-  if (!cloned_avi_codec->load_avi(fname,mode)){
+  if (!cloned_avi_codec->load_avi(fname,mode)) {
     delete cloned_avi_codec;
     return NULL;
   }
@@ -83,14 +83,14 @@ vidl1_avicodec::load_avi(vcl_string const& fname, char mode )
   moviefile_ = CreateIAviReadFile(fname.c_str());
   if ( !moviefile_ ) return false;
 
-  if ( moviefile_->VideoStreamCount() == 0 ){
+  if ( moviefile_->VideoStreamCount() == 0 ) {
     delete moviefile_;
     moviefile_ = NULL;
     return false;
   }
 
   moviestream_ = moviefile_->GetStream(0,AviStream::Video);
-  if ( !moviestream_ ){
+  if ( !moviestream_ ) {
     delete moviefile_;
     moviefile_ = NULL;
     return false;
@@ -116,8 +116,8 @@ vidl1_avicodec::load_avi(vcl_string const& fname, char mode )
 
 vil_image_view_base_sptr
 vidl1_avicodec::get_view( int position,
-                         int x0, int xs,
-                         int y0, int ys ) const
+                          int x0, int xs,
+                          int y0, int ys ) const
 {
   assert (moviestream_);
   if (!moviestream_) return NULL;
@@ -130,10 +130,11 @@ vidl1_avicodec::get_view( int position,
   if (cim==0) return NULL;
 
   CImage* im24;
-  if (cim->Depth()==24){
+  if (cim->Depth()==24) {
     im24=cim;
   }
-  else{
+  else
+  {
     im24=new CImage(cim,24);
   }
 
@@ -157,8 +158,8 @@ vidl1_avicodec::get_view( int position,
 
 bool
 vidl1_avicodec::put_view( int /*position*/,
-                         const vil_image_view_base &/*im*/,
-                         int /*x0*/, int /*y0*/)
+                          const vil_image_view_base &/*im*/,
+                          int /*x0*/, int /*y0*/)
 {
   vcl_cerr << "vidl1_avicodec::put_view not implemented\n";
   return false;
@@ -176,12 +177,12 @@ vidl1_avicodec::seek(int frame_number) const
   if (frame_number==current_frame_)
     return current_frame_;
 
-  if (frame_number==current_frame_+1){
+  if (frame_number==current_frame_+1) {
     current_frame_ = next_frame();
     return current_frame_;
   }
 
-  if (frame_number==0){
+  if (frame_number==0) {
     current_frame_=0;
     moviestream_->Seek(current_frame_);
     moviestream_->ReadFrame();

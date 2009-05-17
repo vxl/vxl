@@ -38,25 +38,25 @@ class vidl1_clip : public vbl_ref_count
 
   // Constructors
   vidl1_clip(vidl1_codec_sptr codec,
-            int start = 0,
-            int end = 0,
-            int increment = 1);
+             int start = 0,
+             int end = 0,
+             int increment = 1);
 
   vidl1_clip(vcl_list<vil_image_resource_sptr> &images,
-            int start = 0,
-            int end = 0,
-            int increment = 1);
+             int start = 0,
+             int end = 0,
+             int increment = 1);
 
   vidl1_clip(vcl_vector<vil_image_resource_sptr> &images,
-            int start = 0,
-            int end = 0,
-            int increment = 1);
+             int start = 0,
+             int end = 0,
+             int increment = 1);
 
   // Copy constructor.
   vidl1_clip(vidl1_clip const& x)
     : vbl_ref_count(), frames_(x.frames_),
-    startframe_(x.startframe_), endframe_(x.endframe_),
-    increment_(x.increment_), frame_rate_(x.frame_rate_), coder_(x.coder_) {}
+      startframe_(x.startframe_), endframe_(x.endframe_),
+      increment_(x.increment_), frame_rate_(x.frame_rate_), coder_(x.coder_) {}
 
   // Destructor
   ~vidl1_clip() {}

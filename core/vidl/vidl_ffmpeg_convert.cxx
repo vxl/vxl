@@ -35,7 +35,7 @@ extern "C" {
 // If the output frame data is not the correct size new memory
 // will be allocated
 bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
-                                vidl_frame_sptr& out_frame)
+                               vidl_frame_sptr& out_frame)
 {
   if (!in_frame || !out_frame)
     return false;
@@ -58,7 +58,7 @@ bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
       out_frame->nj() != nj ||
       !out_frame->data() )
     out_frame = new vidl_memory_chunk_frame(ni, nj, out_frame->pixel_format(),
-                                             new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
+                                            new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
 
   AVPicture in_pic;
   vcl_memset( &in_pic, 0, sizeof(in_pic) );

@@ -35,7 +35,7 @@ class vidl_ffmpeg_ostream
 
   //: Constructor - opens a stream
   vidl_ffmpeg_ostream(const vcl_string& filename,
-                       const vidl_ffmpeg_ostream_params& params);
+                      const vidl_ffmpeg_ostream_params& params);
 
   //: Destructor
   virtual ~vidl_ffmpeg_ostream();

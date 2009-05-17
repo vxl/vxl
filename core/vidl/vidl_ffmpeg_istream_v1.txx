@@ -361,7 +361,7 @@ vidl_ffmpeg_istream
 
 
 //: Return the duration in seconds (0.0 if unknown)
-double 
+double
 vidl_ffmpeg_istream
 ::duration() const
 {
@@ -517,7 +517,7 @@ vidl_ffmpeg_istream::current_frame()
       avpicture_fill(&rgb_frame, (uint8_t*)is_->contig_memory_->data(), PIX_FMT_RGB24, width, height);
       img_convert(&rgb_frame, PIX_FMT_RGB24, (AVPicture*)is_->frame_, enc->pix_fmt, width, height);
       is_->cur_frame_ = new vidl_shared_frame(is_->contig_memory_->data(),width,height,
-                                               VIDL_PIXEL_FORMAT_RGB_24);
+                                              VIDL_PIXEL_FORMAT_RGB_24);
     }
     else
     {
@@ -537,7 +537,7 @@ vidl_ffmpeg_istream::current_frame()
       // Copy the image into contiguous memory.
       else
       {
-        if (!is_->contig_memory_){
+        if (!is_->contig_memory_) {
           int size = avpicture_get_size( enc->pix_fmt, width, height );
           is_->contig_memory_ = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
         }

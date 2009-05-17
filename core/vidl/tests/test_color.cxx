@@ -19,46 +19,46 @@ typedef void (*vidl_color_conv_fptr_1_1)(const bool* in, bool* out);
 
 static void test_color()
 {
-  vcl_cout << "*********************\n"
+  vcl_cout << "********************\n"
            << " Testing vidl_color\n"
-           << "*********************\n";
+           << "********************\n";
 
   // Test vidl_color_converter_func to make sure it finds the
   // correct function pointers
   {
     bool same_func = true;
     vidl_color_conv_fptr cf = vidl_color_converter_func(VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte),
-                                                          VIDL_PIXEL_COLOR_RGBA, typeid(vxl_byte));
+                                                        VIDL_PIXEL_COLOR_RGBA, typeid(vxl_byte));
     vidl_color_conv_fptr cft = &vidl_color_converter<VIDL_PIXEL_COLOR_RGB,
-                                                       VIDL_PIXEL_COLOR_RGBA>::convert;
+                                                     VIDL_PIXEL_COLOR_RGBA>::convert;
     same_func = cf == cft;
     TEST("vidl_color_converter_func: RGB to RGBA", same_func, true);
 
     cf = vidl_color_converter_func(VIDL_PIXEL_COLOR_YUV, typeid(vxl_byte),
-                                    VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte));
+                                   VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte));
     vidl_color_conv_fptr cf2 = &vidl_color_converter<VIDL_PIXEL_COLOR_YUV,
-                                                       VIDL_PIXEL_COLOR_RGB>::convert;
-                                                       same_func = cf == cf2;
+                                                     VIDL_PIXEL_COLOR_RGB>::convert;
+    same_func = cf == cf2;
     TEST("vidl_color_converter_func: YUV to RGB", same_func, true);
 
     cf = vidl_color_converter_func(VIDL_PIXEL_COLOR_MONO, typeid(bool),
-                                    VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte));
+                                   VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte));
     vidl_color_conv_fptr_1_8 cf_1_8 = &vidl_color_converter<VIDL_PIXEL_COLOR_MONO,
-                                                              VIDL_PIXEL_COLOR_RGB>::convert;
+                                                            VIDL_PIXEL_COLOR_RGB>::convert;
     same_func = cf == reinterpret_cast<vidl_color_conv_fptr>(cf_1_8);
     TEST("vidl_color_converter_func: MONO_1 to RGB",same_func, true);
 
     cf = vidl_color_converter_func(VIDL_PIXEL_COLOR_MONO, typeid(vxl_uint_16),
-                                    VIDL_PIXEL_COLOR_MONO, typeid(bool));
+                                   VIDL_PIXEL_COLOR_MONO, typeid(bool));
     vidl_color_conv_fptr_16_1 cf_16_1 = &vidl_color_converter<VIDL_PIXEL_COLOR_MONO,
-                                                                VIDL_PIXEL_COLOR_MONO>::convert;
+                                                              VIDL_PIXEL_COLOR_MONO>::convert;
     same_func = cf == reinterpret_cast<vidl_color_conv_fptr>(cf_16_1);
     TEST("vidl_color_converter_func: MONO_16 to MONO_1",same_func, true);
   }
 
   {
     vidl_color_conv_fptr cf = vidl_color_converter_func(VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte),
-                                                          VIDL_PIXEL_COLOR_RGBA, typeid(vxl_byte));
+                                                        VIDL_PIXEL_COLOR_RGBA, typeid(vxl_byte));
     assert(cf);
 
     vxl_byte in[] = { 254, 131, 1 };
@@ -72,7 +72,7 @@ static void test_color()
 
   {
     vidl_color_conv_fptr cf = vidl_color_converter_func(VIDL_PIXEL_COLOR_RGBA, typeid(vxl_byte),
-                                                          VIDL_PIXEL_COLOR_YUV, typeid(vxl_byte));
+                                                        VIDL_PIXEL_COLOR_YUV, typeid(vxl_byte));
     assert(cf);
 
     vxl_byte rgb[] = { 128, 200, 95, 128 };
@@ -85,7 +85,7 @@ static void test_color()
 
   {
     vidl_color_conv_fptr cf = vidl_color_converter_func(VIDL_PIXEL_COLOR_RGB, typeid(vxl_byte),
-                                                          VIDL_PIXEL_COLOR_MONO, typeid(vxl_uint_16));
+                                                        VIDL_PIXEL_COLOR_MONO, typeid(vxl_uint_16));
     assert(cf);
 
     vxl_byte in[] = { 128, 200, 95 };

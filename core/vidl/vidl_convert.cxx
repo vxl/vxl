@@ -97,14 +97,14 @@ bool convert_generic(const vidl_frame& in_frame,
   // find the color conversion function
   vidl_color_conv_fptr color_conv =
       vidl_color_converter_func( in_t.color,  *in_t.type,
-                                  out_t.color, *out_t.type);
+                                 out_t.color, *out_t.type);
   if (!color_conv)
     return false;
 
   const unsigned int num_pix = in_frame.ni() * in_frame.nj();
   // assume pixels are no more than 32 bytes (that's 4 doubles)
-  vxl_byte in_pixel[32], out_pixel[32]; 
-  for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
+  vxl_byte in_pixel[32], out_pixel[32];
+  for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr) {
     in_itr.get_data(in_pixel);
     color_conv(in_pixel, out_pixel);
     out_itr.set_data(out_pixel);
@@ -130,7 +130,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_UYVY_422>
     const vxl_byte* rgb = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* uyvy = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       const vxl_byte& r1 = *(rgb++);
       const vxl_byte& g1 = *(rgb++);
       const vxl_byte& b1 = *(rgb++);
@@ -163,7 +163,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_RGB_24>
     const vxl_byte* uyvy = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* rgb = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       const vxl_byte& u1 = *(uyvy++);
       const vxl_byte& y1 = *(uyvy++);
       const vxl_byte& v1 = *(uyvy++);
@@ -196,7 +196,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_MONO_8>
     const vxl_byte* uyvy = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* mono = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       ++uyvy;
       const vxl_byte& y1 = *(uyvy++);
       ++uyvy;
@@ -222,7 +222,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_YUYV_422>
     const vxl_byte* rgb = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* yuyv = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       const vxl_byte& r1 = *(rgb++);
       const vxl_byte& g1 = *(rgb++);
       const vxl_byte& b1 = *(rgb++);
@@ -255,7 +255,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24>
     const vxl_byte* yuyv = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* rgb = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       const vxl_byte& y1 = *(yuyv++);
       const vxl_byte& u1 = *(yuyv++);
       const vxl_byte& y2 = *(yuyv++);
@@ -290,7 +290,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24P, VIDL_PIXEL_FORMAT_YUYV_422>
     const vxl_byte* blue= green+in_frame.ni() * in_frame.nj();
     vxl_byte* yuyv = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       const vxl_byte& r1 = *(red++);
       const vxl_byte& g1 = *(green++);
       const vxl_byte& b1 = *(blue++);
@@ -324,7 +324,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24P>
     vxl_byte* green = red+out_frame.ni()*out_frame.nj();
     vxl_byte* blue = green+out_frame.ni()*out_frame.nj();
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       const vxl_byte& y1 = *(yuyv++);
       const vxl_byte& u1 = *(yuyv++);
       const vxl_byte& y2 = *(yuyv++);
@@ -356,7 +356,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_MONO_8>
     const vxl_byte* yuyv = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* mono = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c) {
       const vxl_byte& y1 = *(yuyv++);
       ++yuyv;
       const vxl_byte& y2 = *(yuyv++);
@@ -387,7 +387,7 @@ struct table_entry_init
     else if (convert<in_Fmt,out_Fmt>::defined)
       table_entry = &convert<in_Fmt,out_Fmt>::apply;
     else if (vidl_pixel_iterator_valid<in_Fmt>::value &&
-            vidl_pixel_iterator_valid<out_Fmt>::value)
+             vidl_pixel_iterator_valid<out_Fmt>::value)
       table_entry = &convert_generic;
     else
       table_entry = &default_conversion;
@@ -466,13 +466,13 @@ bool intermediate_rgb24_conversion(const vidl_frame& in_frame, vidl_frame& out_f
 // to \p out_frame->pixel_format() and stored in \p out_frame->data()
 // \returns false if the output frame data is not the correct size.
 bool vidl_convert_frame(const vidl_frame& in_frame,
-                               vidl_frame& out_frame)
+                              vidl_frame& out_frame)
 {
   vidl_pixel_format in_fmt = in_frame.pixel_format();
   vidl_pixel_format out_fmt = out_frame.pixel_format();
 
-  if (in_fmt == VIDL_PIXEL_FORMAT_UNKNOWN ||
-     out_fmt == VIDL_PIXEL_FORMAT_UNKNOWN)
+  if (in_fmt  == VIDL_PIXEL_FORMAT_UNKNOWN ||
+      out_fmt == VIDL_PIXEL_FORMAT_UNKNOWN)
     return false;
 
   unsigned ni = in_frame.ni();
@@ -480,9 +480,9 @@ bool vidl_convert_frame(const vidl_frame& in_frame,
   unsigned out_size = vidl_pixel_format_buffer_size(ni,nj,out_fmt);
 
   if (out_frame.size() != out_size ||
-     out_frame.ni() != ni ||
-     out_frame.nj() != nj ||
-     !out_frame.data() )
+      out_frame.ni() != ni ||
+      out_frame.nj() != nj ||
+      !out_frame.data() )
     return false;
 
   // call the appropriate function in the conversion table
@@ -495,7 +495,7 @@ bool vidl_convert_frame(const vidl_frame& in_frame,
 // The convert \p in_frame to a \p format by allocating
 // a new frame buffer
 vidl_frame_sptr vidl_convert_frame(const vidl_frame_sptr& in_frame,
-                                     vidl_pixel_format format)
+                                   vidl_pixel_format format)
 {
   if (format == VIDL_PIXEL_FORMAT_UNKNOWN)
     return NULL;
@@ -537,7 +537,7 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base_sptr& image)
     vil_image_view<vxl_uint_16> img(ni,nj);
     img.deep_copy(vil_image_view<vxl_uint_16>(*image));
     return new vidl_memory_chunk_frame(ni, nj, VIDL_PIXEL_FORMAT_MONO_16,
-                                        img.memory_chunk());
+                                       img.memory_chunk());
   }
 
   vidl_pixel_format format = VIDL_PIXEL_FORMAT_UNKNOWN;
@@ -561,7 +561,7 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base_sptr& image)
     img = *bimage;
   }
   return new vidl_memory_chunk_frame(ni, nj, format,
-                                      img.memory_chunk());
+                                     img.memory_chunk());
 }
 
 
@@ -569,8 +569,8 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base_sptr& image)
 // possibly converts the pixel data type
 // always create a deep copy of the data
 bool vidl_convert_to_view(const vidl_frame& frame,
-                           vil_image_view_base& image,
-                           vidl_pixel_color require_color)
+                          vil_image_view_base& image,
+                          vidl_pixel_color require_color)
 {
   if (frame.pixel_format() == VIDL_PIXEL_FORMAT_UNKNOWN ||
       frame.data() == NULL)
@@ -587,16 +587,16 @@ bool vidl_convert_to_view(const vidl_frame& frame,
   image.set_size(ni,nj,np);
 
   // special case for MONO_16
-  if (frame.pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
+  if (frame.pixel_format() == VIDL_PIXEL_FORMAT_MONO_16) {
     vil_image_view<vxl_uint_16> wrapper(static_cast<const vxl_uint_16*>(frame.data()),
                                         ni,nj,1,1,ni,ni*nj);
-    if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16){
+    if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
       vil_image_view<vxl_uint_16>& img = static_cast<vil_image_view<vxl_uint_16>&>(image);
       img.deep_copy(vil_image_view<vxl_uint_16>(wrapper));
       return true;
     }
 
-    switch ( vil_pixel_format_component_format(image.pixel_format()) ){
+    switch ( vil_pixel_format_component_format(image.pixel_format()) ) {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(F , T) \
     case F: {\
@@ -648,7 +648,7 @@ bool vidl_convert_to_view(const vidl_frame& frame,
 
   vidl_frame_sptr out_frame = new vidl_memory_chunk_frame(image,default_format);
   // if the image can be wrapped as a frame
-  if (out_frame->pixel_format() != VIDL_PIXEL_FORMAT_UNKNOWN){
+  if (out_frame->pixel_format() != VIDL_PIXEL_FORMAT_UNKNOWN) {
     vidl_convert_frame(frame, *out_frame);
     return true;
   }
@@ -672,7 +672,7 @@ bool vidl_convert_to_view(const vidl_frame& frame,
   out_frame = new vidl_memory_chunk_frame(ni,nj,out_fmt,temp.memory_chunk());
   vidl_convert_frame(frame, *out_frame);
 
-  switch ( vil_pixel_format_component_format(image.pixel_format()) ){
+  switch ( vil_pixel_format_component_format(image.pixel_format()) ) {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(F , T) \
     case F: {\
@@ -732,7 +732,7 @@ vidl_convert_wrap_in_view(const vidl_frame& frame)
   }
   vcl_ptrdiff_t top_left_offset = 0;
 
-  if (format == VIDL_PIXEL_FORMAT_BGR_24){
+  if (format == VIDL_PIXEL_FORMAT_BGR_24) {
     top_left_offset = 3;
     p_step = -1;
   }
@@ -742,16 +742,16 @@ vidl_convert_wrap_in_view(const vidl_frame& frame)
        dynamic_cast<const vidl_memory_chunk_frame*>(&frame) )
   {
     vil_memory_chunk_sptr chunk = cf->memory_chunk();
-    if (format == VIDL_PIXEL_FORMAT_MONO_16){
+    if (format == VIDL_PIXEL_FORMAT_MONO_16) {
       const vxl_uint_16* top_left = static_cast<const vxl_uint_16*>(cf->data()) + top_left_offset;
       return new vil_image_view<vxl_uint_16>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     }
-    else if (format == VIDL_PIXEL_FORMAT_MONO_1){
+    else if (format == VIDL_PIXEL_FORMAT_MONO_1) {
       const bool* top_left = static_cast<const bool*>(cf->data()) + top_left_offset;
       return new vil_image_view<bool>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     }else if (format == VIDL_PIXEL_FORMAT_MONO_F32 ||
               format == VIDL_PIXEL_FORMAT_RGB_F32 ||
-              format == VIDL_PIXEL_FORMAT_RGB_F32P){
+              format == VIDL_PIXEL_FORMAT_RGB_F32P) {
       const vxl_ieee_32* top_left = static_cast<const vxl_ieee_32*>(cf->data()) + top_left_offset;
       return new vil_image_view<float>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     } else {
@@ -761,11 +761,11 @@ vidl_convert_wrap_in_view(const vidl_frame& frame)
   }
 
   // Create a view of a frame (without ownership of the data)
-  if (format == VIDL_PIXEL_FORMAT_MONO_16){
+  if (format == VIDL_PIXEL_FORMAT_MONO_16) {
     const vxl_uint_16* top_left = static_cast<const vxl_uint_16*>(frame.data()) + top_left_offset;
     return new vil_image_view<vxl_uint_16>(top_left, ni,nj,np, i_step,j_step,p_step);
   }
-  else if (format == VIDL_PIXEL_FORMAT_MONO_1){
+  else if (format == VIDL_PIXEL_FORMAT_MONO_1) {
     const bool* top_left = static_cast<const bool*>(frame.data()) + top_left_offset;
     return new vil_image_view<bool>(top_left, ni,nj,np, i_step,j_step,p_step);
   }

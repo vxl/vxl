@@ -34,9 +34,9 @@ vidl_image_list_ostream()
 //: Constructor - opens a stream
 vidl_image_list_ostream::
 vidl_image_list_ostream(const vcl_string& directory,
-                         const vcl_string& name_format,
-                         const vcl_string& file_format,
-                         const unsigned int init_index)
+                        const vcl_string& name_format,
+                        const vcl_string& file_format,
+                        const unsigned int init_index)
 {
   open(directory, name_format, file_format, init_index);
 }

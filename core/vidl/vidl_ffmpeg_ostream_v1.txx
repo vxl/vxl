@@ -71,7 +71,7 @@ vidl_ffmpeg_ostream::
 //: Constructor - opens a stream
 vidl_ffmpeg_ostream::
 vidl_ffmpeg_ostream(const vcl_string& filename,
-                     const vidl_ffmpeg_ostream_params& params)
+                    const vidl_ffmpeg_ostream_params& params)
   : os_( new vidl_ffmpeg_ostream::pimpl ),
     filename_(filename), params_(params)
 {
@@ -510,7 +510,7 @@ bool
 vidl_ffmpeg_ostream::
 write_frame(const vidl_frame_sptr& frame)
 {
-  if (!is_open()){
+  if (!is_open()) {
     // resize to the first frame
     params_.size(frame->ni(),frame->nj());
     open();
@@ -547,17 +547,17 @@ write_frame(const vidl_frame_sptr& frame)
   }
   else
   {
-    if (!temp_frame->data()){
+    if (!temp_frame->data()) {
       unsigned ni = frame->ni();
       unsigned nj = frame->nj();
       unsigned out_size = vidl_pixel_format_buffer_size(ni,nj,target_fmt);
       temp_frame = new vidl_memory_chunk_frame(ni, nj, target_fmt,
-                                                new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
+                                               new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
     }
     // try conversion with FFMPEG functions
-    if (!vidl_ffmpeg_convert(frame, temp_frame)){
+    if (!vidl_ffmpeg_convert(frame, temp_frame)) {
       // try conversion with vidl functions
-      if (!vidl_convert_frame(*frame, *temp_frame)){
+      if (!vidl_convert_frame(*frame, *temp_frame)) {
         vcl_cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<vcl_endl;
         return false;
       }

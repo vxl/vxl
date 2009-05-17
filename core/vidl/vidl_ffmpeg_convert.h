@@ -23,7 +23,7 @@ extern "C" {
 #include <ffmpeg/avcodec.h>
 #endif
 }
-    
+
 //: Convert the pixel format of a frame using FFMPEG
 //
 // The \p in_frame->data() is converted from \p in_frame->pixel_format()
@@ -31,7 +31,7 @@ extern "C" {
 // If the output frame data is not the correct size new memory
 // will be allocated
 bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
-                                vidl_frame_sptr& out_frame);
+                               vidl_frame_sptr& out_frame);
 
 
 //: Find the vidl pixel format that matches a FFMPEG one

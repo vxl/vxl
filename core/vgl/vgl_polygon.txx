@@ -272,10 +272,10 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
 #define VGL_POLYGON_INSTANTIATE(T) \
 template class vgl_polygon<T >; \
 template struct vgl_polygon_sheet_as_array<T >; \
-template vcl_ostream& operator<<(vcl_ostream&,vgl_polygon<T >const&); \
+template vcl_ostream& operator<<(vcl_ostream&,vgl_polygon<T > const&); \
 template void vgl_selfintersections(vgl_polygon<T > const& p, \
-                           vcl_vector<vcl_pair<unsigned,unsigned> >& e1, \
-                           vcl_vector<vcl_pair<unsigned,unsigned> >& e2, \
-                           vcl_vector<vgl_point_2d<T > >& ip)
+                                    vcl_vector<vcl_pair<unsigned,unsigned> >& e1, \
+                                    vcl_vector<vcl_pair<unsigned,unsigned> >& e2, \
+                                    vcl_vector<vgl_point_2d<T > >& ip)
 
 #endif // vgl_polygon_txx_

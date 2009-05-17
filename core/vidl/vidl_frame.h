@@ -122,14 +122,14 @@ class vidl_memory_chunk_frame : public vidl_frame
 
     //: Constructor - from a vil_memory_chunk_sptr
     vidl_memory_chunk_frame(unsigned ni, unsigned nj, vidl_pixel_format fmt,
-                             const vil_memory_chunk_sptr& memory):
+                            const vil_memory_chunk_sptr& memory):
       vidl_frame(ni,nj,fmt), memory_(memory) {}
 
     //: Constructor - from a vil_image_view
     // return an invalid frame if the image format can not be wrapped
     // \param fmt if not UNKNOWN, requires this pixel or fails
     vidl_memory_chunk_frame(const vil_image_view_base& image,
-                             vidl_pixel_format fmt = VIDL_PIXEL_FORMAT_UNKNOWN);
+                            vidl_pixel_format fmt = VIDL_PIXEL_FORMAT_UNKNOWN);
 
     //: Return the memory chunk
     // used in recreating a vil_image_view

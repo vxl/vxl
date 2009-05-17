@@ -27,11 +27,11 @@ dc1394_feature_to_vidl(const dc1394feature_info_t& f_old)
   vidl_iidc1394_params::feature_options f;
   f.id = static_cast<vidl_iidc1394_params::feature_t>(f_old.id - DC1394_FEATURE_MIN);
   f.active_mode = static_cast<vidl_iidc1394_params::feature_mode_t>
-                    (f_old.current_mode - DC1394_FEATURE_MODE_MIN);
+                  (f_old.current_mode - DC1394_FEATURE_MODE_MIN);
 
-  for(unsigned int i=0; i<f_old.modes.num; ++i){
+  for (unsigned int i=0; i<f_old.modes.num; ++i) {
     f.available_modes.push_back(static_cast<vidl_iidc1394_params::feature_mode_t>
-                                  (f_old.modes.modes[i] - DC1394_FEATURE_MODE_MIN) );
+                                (f_old.modes.modes[i] - DC1394_FEATURE_MODE_MIN) );
   }
 
   f.available = f_old.available;
@@ -67,7 +67,7 @@ vidl_feature_to_dc1394(const vidl_iidc1394_params::feature_options& f_old)
   f.current_mode = static_cast<dc1394feature_mode_t>
                     (f_old.active_mode + DC1394_FEATURE_MODE_MIN);
 
-  for(unsigned int i=0; i<f_old.available_modes.size(); ++i){
+  for (unsigned int i=0; i<f_old.available_modes.size(); ++i) {
     f.modes.modes[i] = static_cast<dc1394feature_mode_t>
                         (f_old.available_modes[i] + DC1394_FEATURE_MODE_MIN);
   }
@@ -178,17 +178,14 @@ open(unsigned int num_dma_buffers,
   // FIXME - where is this used in the new API?
   //dc1394ring_buffer_policy_t rb_policy = drop_frames? DC1394_RING_BUFFER_LAST: DC1394_RING_BUFFER_NEXT;
 
-
-
   is_->camera_info_ = dc1394_camera_new (is_->dc1394_data_, params.guid_);
-  if(!is_->camera_info_){
+  if (!is_->camera_info_) {
     vcl_cerr << "Warning, failed to initialize camera with guid " << vcl_hex << params.guid_ << vcl_endl;
     return false;
   }
 
-
   dc1394operation_mode_t op_mode = params.b_mode_ ? DC1394_OPERATION_MODE_1394B : DC1394_OPERATION_MODE_LEGACY;
-  if ( dc1394_video_set_operation_mode(is_->camera_info_, op_mode) != DC1394_SUCCESS){
+  if ( dc1394_video_set_operation_mode(is_->camera_info_, op_mode) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to set camera in b mode\n";
     close();
     return false;
@@ -219,9 +216,9 @@ open(unsigned int num_dma_buffers,
     dc1394feature_info_t f = vidl_feature_to_dc1394(params.features_[i]);
     // Enable/Disable a feature
     if ( dc1394_feature_set_power(is_->camera_info_, f.id, f.is_on?DC1394_ON:DC1394_OFF) != DC1394_SUCCESS) {
-      vcl_cerr << "Failed to "<< (f.is_on?"enable":"disable") <<" feature \""
-                << vidl_iidc1394_params::feature_string(params.features_[i].id)
-                << '\n';
+      vcl_cerr << "Failed to " << (f.is_on ? "enable" : "disable") <<" feature \""
+               << vidl_iidc1394_params::feature_string(params.features_[i].id)
+               << '\n';
       return false;
     }
 
@@ -231,8 +228,8 @@ open(unsigned int num_dma_buffers,
          old_mode != f.current_mode ) {
       if ( dc1394_feature_set_mode(is_->camera_info_, f.id, f.current_mode) != DC1394_SUCCESS) {
         vcl_cerr << "Failed to set mode of feature \""
-                  << vidl_iidc1394_params::feature_string(params.features_[i].id)
-                  << "\" to " << vidl_iidc1394_params::feature_mode_string(params.features_[i].active_mode) << '\n';
+                 << vidl_iidc1394_params::feature_string(params.features_[i].id)
+                 << "\" to " << vidl_iidc1394_params::feature_mode_string(params.features_[i].active_mode) << '\n';
         return false;
       }
     }
@@ -256,11 +253,11 @@ open(unsigned int num_dma_buffers,
       }
       break;
     default:
-      if ( f.abs_control ){
+      if ( f.abs_control ) {
         if ( dc1394_feature_set_absolute_value(is_->camera_info_, f.id, f.abs_value) != DC1394_SUCCESS) {
           vcl_cerr << "Failed to set feature \""
-                  << vidl_iidc1394_params::feature_string(params.features_[i].id)
-                  << "\" to absolute value "<< f.value <<'\n';
+                   << vidl_iidc1394_params::feature_string(params.features_[i].id)
+                   << "\" to absolute value "<< f.value <<'\n';
           close();
           return false;
         }
@@ -370,7 +367,7 @@ valid_params(vidl_iidc1394_params::valid_options& options)
   // create a list of cameras
   for (unsigned int i=0; i<list->num; ++i) {
     dc1394camera_t *camera = dc1394_camera_new (d, list->ids[i].guid);
-    if(!camera){
+    if (!camera) {
       vcl_cerr << "Warning, failed to initialize camera with guid " << vcl_hex << list->ids[i].guid << vcl_endl;
       continue;
     }
@@ -380,11 +377,11 @@ valid_params(vidl_iidc1394_params::valid_options& options)
     options.cameras[i].model = camera->model;
 
     dc1394video_mode_t video_mode;
-    if( dc1394_video_get_mode(camera,&video_mode) == DC1394_SUCCESS )
+    if ( dc1394_video_get_mode(camera,&video_mode) == DC1394_SUCCESS )
       options.cameras[i].curr_mode = static_cast<vidl_iidc1394_params::video_mode_t>(video_mode);
 
     dc1394framerate_t framerate;
-    if( dc1394_video_get_framerate(camera,&framerate) == DC1394_SUCCESS )
+    if ( dc1394_video_get_framerate(camera,&framerate) == DC1394_SUCCESS )
       options.cameras[i].curr_frame_rate = static_cast<vidl_iidc1394_params::frame_rate_t>(framerate);
 
     dc1394operation_mode_t op_mode;
@@ -418,7 +415,7 @@ valid_params(vidl_iidc1394_params::valid_options& options)
       }
     }
     dc1394featureset_t features;
-    if (dc1394_feature_get_all(camera, &features) < 0){
+    if (dc1394_feature_get_all(camera, &features) < 0) {
       vcl_cerr << "Could not find any camera control features\n";
       dc1394_camera_free_list (list);
       dc1394_free(d);
@@ -500,7 +497,7 @@ width() const
 
 
 //: Return the height of each frame
-unsigned int 
+unsigned int
 vidl_dc1394_istream::
 height() const
 {
@@ -509,7 +506,7 @@ height() const
 
 
 //: Return the pixel format
-vidl_pixel_format 
+vidl_pixel_format
 vidl_dc1394_istream::
 format() const
 {
@@ -518,7 +515,7 @@ format() const
 
 
 //: Return the frame rate (0.0 if unspecified)
-double 
+double
 vidl_dc1394_istream::
 frame_rate() const
 {
@@ -527,7 +524,7 @@ frame_rate() const
 
 
 //: Return the duration in seconds (0.0 if unknown)
-double 
+double
 vidl_dc1394_istream::
 duration() const
 {
@@ -579,9 +576,9 @@ vidl_dc1394_istream::current_frame()
       is_->cur_frame_->invalidate();
 
     is_->cur_frame_ = new vidl_shared_frame(is_->dc1394frame_->image,
-                                             is_->dc1394frame_->size[0],
-                                             is_->dc1394frame_->size[1],
-                                             is_->pixel_format_);
+                                            is_->dc1394frame_->size[0],
+                                            is_->dc1394frame_->size[1],
+                                            is_->pixel_format_);
 
     is_->cur_frame_valid_ = true;
   }

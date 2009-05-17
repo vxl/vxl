@@ -24,7 +24,7 @@ vidl_ffmpeg_ostream
 
 vidl_ffmpeg_ostream
 ::vidl_ffmpeg_ostream(const vcl_string&,
-                       const vidl_ffmpeg_ostream_params&)
+                      const vidl_ffmpeg_ostream_params&)
   : os_( 0 )
 {
   vcl_cerr << "vidl_ffmpeg_ostream: warning: ffmpeg support is not compiled in\n";

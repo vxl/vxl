@@ -106,9 +106,9 @@ static void internal_draw_frame(vidl1_mpegcodec_data* instance,
         int arg = (i>>1)*(wh)+(j>>1);
         // this is assuming the chroma channels are half-size in each direction.
         vidl1_yuv_2_rgb(Y[i*w+j],
-                       U[arg],
-                       V[arg],
-                       &(buf[c]));
+                        U[arg],
+                        V[arg],
+                        &(buf[c]));
       }
   }
   return;
@@ -155,7 +155,7 @@ static void vil_im_draw_frame(vo_frame_t * frame)
   decode_request * p = instance->pending_decode;
   if (!p)
   {
-    vcl_cerr << "vidl1_mpegcodec. vil_im_draw_frame."
+    vcl_cerr << "vidl1_mpegcodec.cxx, vil_im_draw_frame:"
              << " decode request was never set\n";
     return;
   }
@@ -242,8 +242,8 @@ vidl1_codec_sptr vidl1_mpegcodec::load(vcl_string const& fname, char  /*mode*/)
   if (this->probe(fname))
   {
     decoder_ = new vidl1_mpegcodec_helper(vo_vil_im_open,
-                                         fname,
-                                         buffers_);
+                                          fname,
+                                          buffers_);
     return this;
   }
   return 0;
@@ -251,8 +251,8 @@ vidl1_codec_sptr vidl1_mpegcodec::load(vcl_string const& fname, char  /*mode*/)
 
 vil_image_view_base_sptr
 vidl1_mpegcodec::get_view( int position,
-                          int x0, int width,
-                          int y0, int height) const
+                           int x0, int width,
+                           int y0, int height) const
 {
   assert(inited == true);
   assert(x0+width  <= this->width());
@@ -429,10 +429,10 @@ vidl1_mpegcodec::init()
 
 vil_image_resource *
 vidl1_mpegcodec::get_image(int frame_position,
-                          int x0,
-                          int y0,
-                          int width,
-                          int height)
+                           int x0,
+                           int y0,
+                           int width,
+                           int height)
 {
   vil_image_resource * frame = 0;
 

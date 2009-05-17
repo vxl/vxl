@@ -29,7 +29,7 @@ extern "C" {
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
 #include <ffmpeg/swscale.h>
-#endif 
+#endif
 }
 
 //--------------------------------------------------------------------------------
@@ -248,7 +248,7 @@ vidl_ffmpeg_istream::num_frames() const
   // to anywhere but the beginning.  There is logic in advance() to
   // ensure this.
   vidl_ffmpeg_istream* mutable_this = const_cast<vidl_ffmpeg_istream*>(this);
-  if( mutable_this->is_->num_frames_ == -2 ) {
+  if ( mutable_this->is_->num_frames_ == -2 ) {
     mutable_this->is_->num_frames_ = 0;
     while (mutable_this->advance()) {
       ++mutable_this->is_->num_frames_;
@@ -274,10 +274,10 @@ frame_number() const
   }
 
   return ((is_->last_dts - is_->start_time)
-      * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
-      * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
-          / is_->vid_str_->time_base.den
-      - is_->frame_number_offset_;
+          * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
+          * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
+         / is_->vid_str_->time_base.den
+         - is_->frame_number_offset_;
 }
 
 
@@ -296,7 +296,7 @@ vidl_ffmpeg_istream
 
 
 //: Return the height of each frame
-unsigned int 
+unsigned int
 vidl_ffmpeg_istream
 ::height() const
 {
@@ -310,7 +310,7 @@ vidl_ffmpeg_istream
 
 
 //: Return the pixel format
-vidl_pixel_format 
+vidl_pixel_format
 vidl_ffmpeg_istream
 ::format() const
 {
@@ -328,7 +328,7 @@ vidl_ffmpeg_istream
 
 
 //: Return the frame rate (0.0 if unspecified)
-double 
+double
 vidl_ffmpeg_istream
 ::frame_rate() const
 {
@@ -342,7 +342,7 @@ vidl_ffmpeg_istream
 
 
 //: Return the duration in seconds (0.0 if unknown)
-double 
+double
 vidl_ffmpeg_istream
 ::duration() const
 {
@@ -368,7 +368,7 @@ advance()
   // See the comment in num_frames().  This is to make sure that once
   // we start reading frames, we'll never try to march to the end to
   // figure out how many frames there are.
-  if( is_->num_frames_ == -2 ) {
+  if ( is_->num_frames_ == -2 ) {
     is_->num_frames_ = -1;
   }
 
@@ -485,7 +485,7 @@ vidl_ffmpeg_istream::current_frame()
                  rgb_frame.data, rgb_frame.linesize );
 
       is_->cur_frame_ = new vidl_shared_frame(is_->contig_memory_->data(),width,height,
-                                               VIDL_PIXEL_FORMAT_RGB_24);
+                                              VIDL_PIXEL_FORMAT_RGB_24);
     }
     else
     {
@@ -495,17 +495,17 @@ vidl_ffmpeg_istream::current_frame()
       AVPicture test_frame;
       avpicture_fill(&test_frame, is_->frame_->data[0], enc->pix_fmt, width, height);
       if (test_frame.data[1] == is_->frame_->data[1] &&
-         test_frame.data[2] == is_->frame_->data[2] &&
-         test_frame.linesize[0] == is_->frame_->linesize[0] &&
-         test_frame.linesize[1] == is_->frame_->linesize[1] &&
-         test_frame.linesize[2] == is_->frame_->linesize[2] )
+          test_frame.data[2] == is_->frame_->data[2] &&
+          test_frame.linesize[0] == is_->frame_->linesize[0] &&
+          test_frame.linesize[1] == is_->frame_->linesize[1] &&
+          test_frame.linesize[2] == is_->frame_->linesize[2] )
       {
         is_->cur_frame_ = new vidl_shared_frame(is_->frame_->data[0], width, height, fmt);
       }
       // Copy the image into contiguous memory.
       else
       {
-        if (!is_->contig_memory_){
+        if (!is_->contig_memory_) {
           int size = avpicture_get_size( enc->pix_fmt, width, height );
           is_->contig_memory_ = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
         }
