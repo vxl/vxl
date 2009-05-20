@@ -15,7 +15,7 @@
 
 namespace boxm_load_scene_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 1;
 }
 
@@ -27,7 +27,6 @@ bool boxm_load_scene_process_cons(bprb_func_process& pro)
   //input[1]: APM type
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
-  input_types_[1] = "vcl_string";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -53,9 +52,7 @@ bool boxm_load_scene_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   vcl_string scene_file = pro.get_input<vcl_string>(i++);
-  //vcl_string apm_type = pro.get_input<vcl_string>(i++);
   
-  //vsl_b_ifstream is(scene_file, vcl_ios_binary);
   boxm_scene_base_sptr scene= new boxm_scene_base();
   boxm_scene_parser parser;
   scene->load_scene(scene_file, parser);
