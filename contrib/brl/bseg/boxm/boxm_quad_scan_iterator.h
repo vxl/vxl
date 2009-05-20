@@ -44,7 +44,7 @@ class boxm_quad_scan_iterator : public vgl_region_scan_iterator
 
   
  protected:
-  static const unsigned int supersample_ratio_ = 4;
+  static const unsigned int supersample_ratio_ = 1;
   vgl_polygon_scan_iterator<double> * super_it_;
   vgl_polygon<double>  poly_;
 

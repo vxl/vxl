@@ -105,9 +105,14 @@ class boxm_utils
   static bool cube_uniform_mean(boct_face_idx & vis_face_ids,
                                 vil_image_view<float> &img,
                                 float & val, double *xverts,double * yverts);
+  static bool cube_sum(boct_face_idx & vis_face_ids,
+					  vil_image_view<float> &img,
+					  float & val, double *xverts,double * yverts);
 
   static void quad_mean(boxm_quad_scan_iterator &poly_it,
                         vil_image_view<float> &img, float &val,  float & count);
+  static void quad_sum(boxm_quad_scan_iterator &poly_it,
+                           vil_image_view<float> &img, float &val);
 
   static bool cube_entry_point(vgl_box_3d<double> box,vgl_point_3d<double> pt,
                                vgl_vector_3d<double> dir,

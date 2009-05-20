@@ -67,6 +67,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
+		PI_img.fill(0.0f);
         vcl_cout<<++cnt<<' ';
         for (;cell_it!=vis_cells.end();cell_it++)
         {
@@ -187,6 +188,8 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
+		PI_img.fill(0.0f);
+
         vcl_cout<<'.';
         for (;cell_it!=vis_cells.end();cell_it++)
         {
