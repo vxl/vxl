@@ -106,8 +106,8 @@ class boxm_utils
                                 vil_image_view<float> &img,
                                 float & val, double *xverts,double * yverts);
   static bool cube_sum(boct_face_idx & vis_face_ids,
-					  vil_image_view<float> &img,
-					  float & val, double *xverts,double * yverts);
+                       vil_image_view<float> &img,
+                       float & val, double *xverts,double * yverts);
 
   static void quad_mean(boxm_quad_scan_iterator &poly_it,
                         vil_image_view<float> &img, float &val,  float & count);

@@ -159,7 +159,6 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
     vs.push_back(vgl_point_2d<double>(u,v));
   }
 
-
   vgl_vector_2d<double> v0 = vs[1] - vs[0];
   vgl_vector_2d<double> v1 = vs[2] - vs[1];
   double normal = cross_product<double>(v0,v1);
@@ -261,7 +260,6 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
   return face_idx;
 }
 
-
 boct_face_idx
 boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera,
                           double *xverts, double *yverts)
@@ -292,13 +290,13 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
   }
   // for other cameras, use projection and normals
   else {
-    // fix the face normals so that the vertices are the counter clokwise order
-    //vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
-    //faces_of_box_3d(bbox, faces);
-  //double * xverts; double *yverts;
-  //project_corners(bbox,camera,xverts,yverts);
-
-
+    // fix the face normals so that the vertices are the counter clockwise order
+#if 0
+    vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
+    faces_of_box_3d(bbox, faces);
+    double * xverts; double *yverts;
+    project_corners(bbox,camera,xverts,yverts);
+#endif // 0
     if (is_face_visible(xverts,yverts,1,0,3,2)) {
       face_idx |= Z_LOW;
 #if DEBUG
@@ -486,7 +484,7 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
       for (unsigned int x = startx; x < endx; ++x) {
         float interp_val = start_val+(x-startx)/rx*(end_val-start_val);
         //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
-		img(x,yu,img_plane_num) =interp_val;
+        img(x,yu,img_plane_num) =interp_val;
       }
     }
   }
@@ -517,12 +515,14 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
     unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
-      //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
-      //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
-	  img(x,yu,img_plane_num) =val;
-      //if (poly_it.pix_coverage(x)>1)
-      //  vcl_cout<<"ERROR ALERT "<<poly_it.pix_coverage(x)<<vcl_endl;
-      //assert(poly_it.pix_coverage(x)>1);
+      img(x,yu,img_plane_num) = val;
+#if 0 // was:
+      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
+      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
+      if (poly_it.pix_coverage(x)>1)
+        vcl_cout<<"ERROR ALERT "<<poly_it.pix_coverage(x)<<vcl_endl;
+      assert(poly_it.pix_coverage(x)>1);
+#endif // 0
     }
   }
   return;
@@ -911,9 +911,10 @@ bool boxm_utils::project_cube_fill_val_aa(boct_face_idx & vis_face_ids,
   }
   return true;
 }
+
 bool boxm_utils::cube_sum(boct_face_idx & vis_face_ids,
-						  vil_image_view<float> &img,
-						  float & val, double *xverts,double * yverts)
+                          vil_image_view<float> &img,
+                          float & val, double *xverts,double * yverts)
 {
   val=0;
   float count=0;
@@ -956,7 +957,6 @@ bool boxm_utils::cube_sum(boct_face_idx & vis_face_ids,
 
   return true;
 }
-
 
 
 bool boxm_utils::cube_uniform_mean(boct_face_idx & vis_face_ids,
