@@ -36,9 +36,9 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
                             const vgl_vector_3d<double>& world_dim)
 {
   // compute the dimensions of 3D array
-  int x_dim = static_cast<int>(vcl_ceil(world_dim.x()/block_dim.x()));
-  int y_dim = static_cast<int>(vcl_ceil(world_dim.y()/block_dim.y()));
-  int z_dim = static_cast<int>(vcl_ceil(world_dim.z()/block_dim.z()));
+  int x_dim = static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
+  int y_dim = static_cast<int>(vcl_floor(world_dim.y()/block_dim.y()));
+  int z_dim = static_cast<int>(vcl_floor(world_dim.z()/block_dim.z()));
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
