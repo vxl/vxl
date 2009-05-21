@@ -18,6 +18,7 @@
 //   Peter Vanroose  6 July 2001: Added normal(); replaced data_[4] by a_ b_ c_ d_
 //   Peter Vanroose  6 July 2001: Added operator== and operator!=
 //   Peter Vanroose 19 Aug. 2004: implementation of both constructors corrected
+//   Peter Vanroose 21 May  2009: istream operator>> re-implemented
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -119,7 +120,11 @@ bool is_ideal(vgl_plane_3d<T> const&, T=(T)0) { return false; }
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vgl_plane_3d<T>& p);
 
-//: Read from stream
+//: Read in four plane parameters from stream
+//  Either just reads four blank-separated numbers,
+//  or reads four comma-separated numbers,
+//  or reads four numbers in parenthesized form "(123, 321, -456, 777)"
+//  or reads a formatted line equation "123x+321y-456z+777=0"
 // \relates vgl_plane_3d
 template <class T>
 vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p);

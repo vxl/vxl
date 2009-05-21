@@ -29,6 +29,7 @@ vgl_line_2d<Type>::vgl_line_2d (vgl_point_2d<Type> const& p, vgl_vector_2d<Type>
 , c_ ( -a_*p.x() - b_*p.y() )
 {
 }
+
 template <class Type>
 vgl_line_2d<Type>::vgl_line_2d (vgl_homg_line_2d<Type> const& l)
  : a_(l.a()) , b_(l.b()) , c_(l.c())
@@ -102,13 +103,48 @@ vcl_ostream&  operator<<(vcl_ostream& os, vgl_line_2d<Type> const& l)
 #undef vp
 
 //: Read in three line parameters from stream
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, 567)"
+//  or reads the formatted form "123x+321y+567=0"
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vgl_line_2d<Type>& line)
+vcl_istream&  operator>>(vcl_istream& is, vgl_line_2d<Type>& line)
 {
-  Type a,b,c;
-  s >> a >> b >> c;
+  if (! is.good()) return is; // (TODO: should throw an exception)
+  bool paren = false;
+  bool formatted = false;
+  Type a, b, c;
+  is >> vcl_ws; // jump over any leading whitespace
+  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
+  if (is.peek() == '(') { is.ignore(); paren=true; }
+  is >> vcl_ws >> a >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  else if (is.peek() == 'x') { is.ignore(); formatted=true; }
+  is >> vcl_ws >> b >> vcl_ws;
+  if (is.eof()) return is;
+  if (formatted) {
+    if (is.eof()) return is;
+    if (is.peek() == 'y') is.ignore();
+    else                  return is; // formatted input incorrect (TODO: throw an exception)
+  }
+  else if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> c >> vcl_ws;
+  if (paren) {
+    if (is.eof()) return is;
+    if (is.peek() == ')') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+  if (formatted) {
+    if (is.eof()) return is;
+    if (is.peek() == '=') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+    is >> vcl_ws;
+    if (is.peek() == '0') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
   line.set(a,b,c);
-  return s;
+  return is;
 }
 
 #undef VGL_LINE_2D_INSTANTIATE

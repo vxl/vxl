@@ -57,7 +57,6 @@ vgl_vector_2d<T>  rotated(vgl_vector_2d<T> const& a, double angle)
 }
 
 
-
 //: Write "<vgl_vector_2d x,y> " to stream
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_2d<T> const& p)
@@ -65,12 +64,37 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_2d<T> const& p)
   return s << "<vgl_vector_2d "<< p.x() << ',' << p.y() <<  "> ";
 }
 
+//: Read from stream, possibly with formatting
+//  Either just reads two blank-separated numbers,
+//  or reads two comma-separated numbers,
+//  or reads two numbers in parenthesized form "(123, 321)"
+template <class T>
+vcl_istream& vgl_vector_2d<T>::read(vcl_istream& is)
+{
+  if (! is.good()) return is; // (TODO: should throw an exception)
+  bool paren = false;
+  T x, y;
+  is >> vcl_ws; // jump over any leading whitespace
+  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
+  if (is.peek() == '(') { is.ignore(); paren=true; }
+  is >> vcl_ws >> x >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> y >> vcl_ws;
+  if (paren) {
+    if (is.eof()) return is;
+    if (is.peek() == ')') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+  set(x,y);
+  return is;
+}
+
 //: Read x y from stream
 template <class T>
-vcl_istream&  operator>>(vcl_istream& s, vgl_vector_2d<T>& p)
+vcl_istream&  operator>>(vcl_istream& is, vgl_vector_2d<T>& p)
 {
-  T x, y; s >> x >> y;
-  p.set(x,y); return s;
+  return p.read(is);
 }
 
 

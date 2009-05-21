@@ -19,6 +19,7 @@
 //   2001-06-27 Peter Vanroose    Added operator==
 //   2001-07-05 Peter Vanroose    direction, normal in terms of vgl_vector_2d
 //   2001-07-06 Peter Vanroose    Added concurrent(), added assertions
+//   2009-05-21 Peter Vanroose    istream operator>> re-implemented
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -149,6 +150,10 @@ template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, l const& line);
 
 //: Read in three line parameters from stream
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, -456)"
+//  or reads a formatted line equation "123x+321y-456=0"
 // \relates vgl_line_2d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, l& line);

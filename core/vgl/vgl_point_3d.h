@@ -13,6 +13,7 @@
 //  Modifications
 //   Peter Vanroose -  2 July 2001 - Added constructor from 3 planes
 //   Peter Vanroose - 24 Oct. 2002 - Added coplanar()
+//   Peter Vanroose - 21 May  2009 - istream operator>> re-implemented
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -87,6 +88,13 @@ class vgl_point_3d
   //: Return true iff the point is at infinity (an ideal point).
   //  Always returns false.
   inline bool ideal(Type = (Type)0) const { return false; }
+
+  //: Read from stream, possibly with formatting
+  //  Either just reads three blank-separated numbers,
+  //  or reads three comma-separated numbers,
+  //  or reads three numbers in parenthesized form "(123, 321, 567)"
+  // \relates vgl_point_3d
+  vcl_istream& read(vcl_istream& is);
 };
 
 //  +-+-+ point_3d simple I/O +-+-+
@@ -96,7 +104,10 @@ class vgl_point_3d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p);
 
-//: Read x y z from stream
+//: Read from stream, possibly with formatting
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relates vgl_point_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, vgl_point_3d<Type>& p);

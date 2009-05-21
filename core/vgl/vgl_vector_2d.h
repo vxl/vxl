@@ -13,6 +13,7 @@
 // \verbatim
 // Modifications
 // 2001-07-05 Peter Vanroose  Added orthogonal(); operator* now accepts double
+// 2009-05-21 Peter Vanroose  istream operator>> re-implemented
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -62,6 +63,12 @@ class vgl_vector_2d
 
   //: Return the squared length of this vector.
   inline T sqr_length() const { return x()*x()+y()*y(); }
+
+  //: Read from stream, possibly with formatting
+  //  Either just reads two blank-separated numbers,
+  //  or reads two comma-separated numbers,
+  //  or reads two numbers in parenthesized form "(123, 321)"
+  vcl_istream& read(vcl_istream& is);
 };
 
 #define v vgl_vector_2d<T>
@@ -72,7 +79,10 @@ class vgl_vector_2d
 // \relates vgl_vector_2d
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, v const& p);
 
-//: Read x y from stream
+//: Read from stream, possibly with formatting
+//  Either just reads two blank-separated numbers,
+//  or reads two comma-separated numbers,
+//  or reads two numbers in parenthesized form "(123, 321)"
 // \relates vgl_vector_2d
 template <class T> vcl_istream& operator>>(vcl_istream& s, v& p);
 
@@ -172,11 +182,11 @@ template <class T>        bool parallel(v const& a, v const& b, double eps=0.0);
 
 //: f=a/b: return the ratio of two vectors, if they are parallel.
 //  (If not, return a "least squares" approximation.)
-//  Note that the return type is double, not Type, since the ratio of e.g.
+//  Note that the return type is double, not T, since the ratio of e.g.
 //  two vgl_vector_2d<int> need not be an int.
 // \relates vgl_vector_2d
-template <class T> inline double operator/(v const& a, v const& b) {
-  return dot_product(a,b)/(double)dot_product(b,b); }
+template <class T> inline double operator/(v const& a, v const& b)
+{ return dot_product(a,b)/(double)dot_product(b,b); }
 
 //: Normalise by dividing through by the length, thus returning a length 1 vector.
 //  If a is zero length, return (0,0).

@@ -72,12 +72,51 @@ vcl_ostream& operator<<(vcl_ostream& os, const vgl_plane_3d<T>& p)
 #undef vp
 
 template <class T>
-vcl_istream& operator>>(vcl_istream& s, vgl_plane_3d<T>& p)
+vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p)
 {
+  if (! is.good()) return is; // (TODO: should throw an exception)
+  bool paren = false;
+  bool formatted = false;
   T a, b, c, d;
-  s >> a >> b >> c >> d;
+  is >> vcl_ws; // jump over any leading whitespace
+  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
+  if (is.peek() == '(') { is.ignore(); paren=true; }
+  is >> vcl_ws >> a >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  else if (is.peek() == 'x') { is.ignore(); formatted=true; }
+  is >> vcl_ws >> b >> vcl_ws;
+  if (is.eof()) return is;
+  if (formatted) {
+    if (is.eof()) return is;
+    if (is.peek() == 'y') is.ignore();
+    else                  return is; // formatted input incorrect (TODO: throw an exception)
+  }
+  else if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> c >> vcl_ws;
+  if (is.eof()) return is;
+  if (formatted) {
+    if (is.eof()) return is;
+    if (is.peek() == 'z') is.ignore();
+    else                  return is; // formatted input incorrect (TODO: throw an exception)
+  }
+  else if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> d >> vcl_ws;
+  if (paren) {
+    if (is.eof()) return is;
+    if (is.peek() == ')') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+  if (formatted) {
+    if (is.eof()) return is;
+    if (is.peek() == '=') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+    is >> vcl_ws;
+    if (is.peek() == '0') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
   p.set(a,b,c,d);
-  return s;
+  return is;
 }
 
 #undef VGL_PLANE_3D_INSTANTIATE

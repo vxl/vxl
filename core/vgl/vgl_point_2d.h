@@ -13,6 +13,7 @@
 //  Modifications
 //   29 June 2001 Peter Vanroose moved arithmetic operators to new vgl_vector_2d
 //    2 July 2001 Peter Vanroose implemented constructor from homg point
+//   21 May  2009 Peter Vanroose istream operator>> re-implemented
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -83,6 +84,12 @@ class vgl_point_2d
   //: Return true iff the point is at infinity (an ideal point).
   //  Always returns false.
   inline bool ideal(Type = (Type)0) const { return false; }
+
+  //: Read from stream, possibly with formatting
+  //  Either just reads two blank-separated numbers,
+  //  or reads two comma-separated numbers,
+  //  or reads two numbers in parenthesized form "(123, 321)"
+  vcl_istream& read(vcl_istream& is);
 };
 
 //  +-+-+ point_2d simple I/O +-+-+
@@ -92,7 +99,10 @@ class vgl_point_2d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p);
 
-//: Read x y from stream
+//: Read from stream, possibly with formatting
+//  Either just reads two blank-separated numbers,
+//  or reads two comma-separated numbers,
+//  or reads two numbers in parenthesized form "(123, 321)"
 // \relates vgl_point_2d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, vgl_point_2d<Type>& p);

@@ -10,6 +10,7 @@
 #include <vgl/vgl_homg_plane_3d.h>
 
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 
 //: Construct from homogeneous point
 template <class Type>
@@ -53,11 +54,45 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p)
   return s << "<vgl_point_3d "<< p.x() << ',' << p.y() << ',' << p.z() << "> ";
 }
 
-//: Read x y z from stream
+//: Read from stream, possibly with formatting
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, 567)"
+// \relates vgl_point_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_point_3d<Type>& p)
+vcl_istream& vgl_point_3d<Type>::read(vcl_istream& is)
 {
-  Type x, y, z; is >> x >> y >> z; p.set(x,y,z); return is;
+  if (! is.good()) return is; // (TODO: should throw an exception)
+  bool paren = false;
+  Type x, y, z;
+  is >> vcl_ws; // jump over any leading whitespace
+  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
+  if (is.peek() == '(') { is.ignore(); paren=true; }
+  is >> vcl_ws >> x >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> y >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> z >> vcl_ws;
+  if (paren) {
+    if (is.eof()) return is;
+    if (is.peek() == ')') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+  set(x,y,z);
+  return is;
+}
+
+//: Read from stream, possibly with formatting
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, 567)"
+// \relates vgl_point_3d
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& is, vgl_point_3d<Type>& p)
+{
+  return p.read(is);
 }
 
 #undef VGL_POINT_3D_INSTANTIATE

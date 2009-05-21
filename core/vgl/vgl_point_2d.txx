@@ -10,6 +10,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 
 //: Construct from homogeneous point
 template <class Type>
@@ -49,11 +50,37 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p)
   return s << "<vgl_point_2d "<< p.x() << ',' << p.y() << "> ";
 }
 
+//: Read from stream, possibly with formatting
+//  Either just reads two blank-separated numbers,
+//  or reads two comma-separated numbers,
+//  or reads two numbers in parenthesized form "(123, 321)"
+template <class Type>
+vcl_istream& vgl_point_2d<Type>::read(vcl_istream& is)
+{
+  if (! is.good()) return is; // (TODO: should throw an exception)
+  bool paren = false;
+  Type x, y;
+  is >> vcl_ws; // jump over any leading whitespace
+  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
+  if (is.peek() == '(') { is.ignore(); paren=true; }
+  is >> vcl_ws >> x >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> y >> vcl_ws;
+  if (paren) {
+    if (is.eof()) return is;
+    if (is.peek() == ')') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+  set(x,y);
+  return is;
+}
+
 //: Read x y from stream
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_point_2d<Type>& p)
 {
-  Type x, y; is >> x >> y; p.set(x,y); return is;
+  return p.read(is);
 }
 
 #undef VGL_POINT_2D_INSTANTIATE

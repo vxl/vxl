@@ -13,6 +13,7 @@
 // \verbatim
 // Modifications
 // 2001-07-05 Peter Vanroose  Added orthogonal(); operator* now accepts double
+// 2009-05-21 Peter Vanroose  istream operator>> re-implemented
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -79,6 +80,13 @@ class vgl_vector_3d
   // \note This function is not continuous near z==0. (Under the Hairy Ball
   // theorem no such smooth function can exist.)
   vgl_vector_3d<T> orthogonal_vectors(double s);// 0<=s<1, v(0)==v(1)
+
+  //: Read from stream, possibly with formatting
+  //  Either just reads three blank-separated numbers,
+  //  or reads three comma-separated numbers,
+  //  or reads three numbers in parenthesized form "(123, 321, 567)"
+  // \relates vgl_point_3d
+  vcl_istream& read(vcl_istream& is);
 };
 
 #define v vgl_vector_3d<T>
@@ -89,7 +97,10 @@ class vgl_vector_3d
 // \relates vgl_vector_3d
 template <class T> vcl_ostream&  operator<<(vcl_ostream& s, v const& p);
 
-//: Read x y z from stream
+//: Read from stream, possibly with formatting
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relates vgl_vector_3d
 template <class T> vcl_istream& operator>>(vcl_istream& s, v& p);
 
@@ -160,8 +171,8 @@ template <class T> inline T      inner_product(v const& a, v const& b) { return 
 
 //: cross product of two vectors (is orthogonal to both)
 // \relates vgl_vector_3d
-template <class T> inline v      cross_product(v const& a, v const& b) {
-  return v(a.y()*b.z()-a.z()*b.y(), a.z()*b.x()-a.x()*b.z(), a.x()*b.y()-a.y()*b.x()); }
+template <class T> inline v      cross_product(v const& a, v const& b)
+{ return v(a.y()*b.z()-a.z()*b.y(), a.z()*b.x()-a.x()*b.z(), a.x()*b.y()-a.y()*b.x()); }
 
 //: cosine of the angle between two vectors.
 // \relates vgl_vector_3d
@@ -185,11 +196,11 @@ template <class T>        bool parallel(v const& a, v const& b, double eps=0.0);
 
 //: f=a/b: return the ratio of two vectors, if they are parallel.
 //  (If not, return a "least squares" approximation.)
-//  Note that the return type is double, not Type, since the ratio of e.g.
+//  Note that the return type is double, not T, since the ratio of e.g.
 //  two vgl_vector_3d<int> need not be an int.
 // \relates vgl_vector_3d
-template <class T> inline double operator/(v const& a, v const& b) {
-  return dot_product(a,b)/(double)dot_product(b,b); }
+template <class T> inline double operator/(v const& a, v const& b)
+{ return dot_product(a,b)/(double)dot_product(b,b); }
 
 //: Normalise by dividing through by the length, thus returning a length 1 vector.
 //  If a is zero length, return (0,0).

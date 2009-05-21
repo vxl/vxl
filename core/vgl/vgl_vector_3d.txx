@@ -22,8 +22,8 @@ template <class T>
 vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s)
 {
   //enforce parameter range
-  if(s<0.0) s=0.0;
-  if(s>1.0) s = 1.0;
+  if (s<0.0) s=0.0;
+  if (s>1.0) s = 1.0;
   double tol = static_cast<double>(vgl_tolerance<T>::position);
   double nx = static_cast<double>(x_), ny = static_cast<double>(y_);
   double nz =  static_cast<double>(z_);
@@ -31,18 +31,18 @@ vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s)
   double two_pi = 2*3.14159265358979323846;
   double co = vcl_cos(two_pi*s), si = vcl_sin(two_pi*s);
   //General case
-  if(mnz>tol)
-    {
-      double co = vcl_cos(two_pi*s), si = vcl_sin(two_pi*s);
-      double rx = nx/nz, ry = ny/nz;
-      double q = co*rx +si*ry;
-      double a = 1.0/vcl_sqrt(1+q*q);
-      T vx = static_cast<T>(a*co), vy = static_cast<T>(a*si);
-      T vz = -static_cast<T>(rx*vx + ry*vy);
-      return vgl_vector_3d<T>(vx, vy, vz);
-    }
+  if (mnz>tol)
+  {
+    double co = vcl_cos(two_pi*s), si = vcl_sin(two_pi*s);
+    double rx = nx/nz, ry = ny/nz;
+    double q = co*rx +si*ry;
+    double a = 1.0/vcl_sqrt(1+q*q);
+    T vx = static_cast<T>(a*co), vy = static_cast<T>(a*si);
+    T vz = -static_cast<T>(rx*vx + ry*vy);
+    return vgl_vector_3d<T>(vx, vy, vz);
+  }
 
-  //Degenerate case, nz ~ 0
+  // Degenerate case, nz ~ 0
   double r = nx/ny;
   double a = 1/vcl_sqrt(1+co*co*r*r);
   T vx = static_cast<T>(a*co), vz = static_cast<T>(a*si);
@@ -92,14 +92,46 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_3d<T> const& p)
   return s << "<vgl_vector_3d "<< p.x() << ',' << p.y() << ',' << p.z() << "> ";
 }
 
-//: Read x y z from stream
+//: Read from stream, possibly with formatting
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, 567)"
+// \relates vgl_vector_3d
 template <class T>
-vcl_istream&  operator>>(vcl_istream& s, vgl_vector_3d<T>& p)
+vcl_istream& vgl_vector_3d<T>::read(vcl_istream& is)
 {
-  T x, y, z; s >> x >> y >> z;
-  p.set(x,y,z); return s;
+  if (! is.good()) return is; // (TODO: should throw an exception)
+  bool paren = false;
+  T x, y, z;
+  is >> vcl_ws; // jump over any leading whitespace
+  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
+  if (is.peek() == '(') { is.ignore(); paren=true; }
+  is >> vcl_ws >> x >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> y >> vcl_ws;
+  if (is.eof()) return is;
+  if (is.peek() == ',') is.ignore();
+  is >> vcl_ws >> z >> vcl_ws;
+  if (paren) {
+    if (is.eof()) return is;
+    if (is.peek() == ')') is.ignore();
+    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+  set(x,y,z);
+  return is;
 }
 
+//: Read from stream, possibly with formatting
+//  Either just reads three blank-separated numbers,
+//  or reads three comma-separated numbers,
+//  or reads three numbers in parenthesized form "(123, 321, 567)"
+// \relates vgl_vector_3d
+template <class T>
+vcl_istream&  operator>>(vcl_istream& is, vgl_vector_3d<T>& p)
+{
+  return p.read(is);
+}
 
 #undef VGL_VECTOR_3D_INSTANTIATE
 #define VGL_VECTOR_3D_INSTANTIATE(T) \
