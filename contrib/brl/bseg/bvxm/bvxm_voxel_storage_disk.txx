@@ -154,14 +154,13 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsi
   if (slice_pos != file_pos) {
     fio_->seek(slice_pos);
   }
-  // need to check that slab_buffer_ is right size if/when we start using thickness > 1 - DEC
-  if (slab_thickness > 1) {
-    vcl_cerr << "error: slab thickness > 1 not yet supported.\n";
-    bvxm_voxel_slab<T> dummy_slab(0,0,0);
-    return dummy_slab;
-  }
+
+  //check that buffer is the right size, if thickeness >1
+  if( slab_buffer_->size() != (this->grid_size_.x()* this->grid_size_.y() * slab_thickness *sizeof(T)))
+    slab_buffer_->set_size(this->grid_size_.x()* this->grid_size_.y() * slab_thickness *sizeof(T));
+
   fio_->read(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
-  bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(),1,slab_buffer_,reinterpret_cast<T*>(slab_buffer_->data()));
+  bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(),slab_thickness,slab_buffer_,reinterpret_cast<T*>(slab_buffer_->data()));
   active_slab_start_ = slice_idx;
   return slab;
 }

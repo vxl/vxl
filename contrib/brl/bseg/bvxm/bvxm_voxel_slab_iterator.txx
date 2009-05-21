@@ -16,10 +16,7 @@ template <class T>
 bvxm_voxel_slab_iterator_base<T>::bvxm_voxel_slab_iterator_base(bvxm_voxel_storage<T> *storage, vgl_vector_3d<unsigned int> grid_size, unsigned slice_idx, unsigned slab_thickness)
 : storage_(storage), slab_thickness_(slab_thickness), slice_idx_(slice_idx), end_slab_(0,0,0,0,0), grid_size_(grid_size)
 {
-  if (slab_thickness != 1) {
-    vcl_cerr << "error: only slabs of thickness 1 are currently supported.\n";
-    assert(slab_thickness == 1);
-  }
+
   if ( slice_idx >= grid_size_.z() ) {
     slab_ = this->end_slab_;
   }
@@ -73,6 +70,21 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator++()
   return *this;
 }
 
+template <class T>
+bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator+ (unsigned const &rhs)
+{
+  // commit prev slice to memory
+  this->storage_->put_slab();
+
+  slice_idx_+=rhs;
+  if (this->slice_idx_ >= static_cast<int>(this->grid_size_.z())) {
+    this->slab_ = this->end_slab_;
+  }
+  else {
+    this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
+  }
+  return *this;
+}
 
 template <class T>
 bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator--()

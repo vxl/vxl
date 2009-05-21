@@ -39,6 +39,7 @@ DECLARE_FUNC_CONS(bvxm_update_process);
 DECLARE_FUNC_CONS(bvxm_detect_scale_process);
 DECLARE_FUNC_CONS(bvxm_compare_3d_voxels_process);
 DECLARE_FUNC_CONS(bvxm_create_mog_image_process);
+DECLARE_FUNC_CONS(bvxm_locate_region_process);
 //the init functions
 
 #endif

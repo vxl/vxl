@@ -57,7 +57,8 @@ class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
   bool operator!=(const bvxm_voxel_slab_iterator<T>& that);
 
   bvxm_voxel_slab_iterator<T>& operator++();
-  //bvxm_voxel_slab_iterator& operator++(int); // postfix version
+  bvxm_voxel_slab_iterator<T>& operator+(unsigned const &rhs); // postfix version
+
 
   bvxm_voxel_slab_iterator<T>& operator--();
   //bvxm_voxel_slab_iterator& operator--(int); // postfix version

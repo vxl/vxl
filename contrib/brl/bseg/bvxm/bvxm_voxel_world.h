@@ -173,6 +173,14 @@ class bvxm_voxel_world: public vbl_ref_count
                                  vil_image_view<bool> &mask,
                                  unsigned bin_index = 0, unsigned scale_idx=0);
 
+  //: for each pixel in a region specified by mask , return the probability that the observation was produced by the voxel.
+  // The returned values are approximate samples of a probability density, with the pixel values being the independent value.
+  template<bvxm_voxel_type APM_T>
+  bool region_probability_density(bvxm_image_metadata const& observation,
+                                 vil_image_view_base_sptr const& mask,
+                                 bvxm_voxel_grid_base_sptr &pixel_probability, 
+                                 unsigned bin_index , unsigned scale_idx);
+
   //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool mixture_of_gaussians_image(bvxm_image_metadata const& camera,
@@ -1071,6 +1079,88 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   }
 
   return true;
+}
+
+template<bvxm_voxel_type APM_T>
+bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& observation,
+                                 vil_image_view_base_sptr const& mask,
+                                 bvxm_voxel_grid_base_sptr &pixel_probability, 
+                                 unsigned bin_index , unsigned scale_idx)
+{
+  // datatype for current appearance model
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
+
+  // the appearance model processor
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+
+  // check image sizes
+  if ( (observation.img->ni() != mask->ni()) || (observation.img->nj() != mask->nj()) ) {
+    vcl_cerr << "error: observation image size does not match input image size.\n";
+  }
+
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+    {
+      compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
+      H_plane_to_img.push_back(Hp2i);
+      H_img_to_plane.push_back(Hi2p);
+    }
+  }
+
+  // convert images to a voxel_slab
+  bvxm_voxel_slab<obs_datatype> image_slab(observation.img->ni(), observation.img->nj(), 1);
+  bvxm_voxel_slab<float> mask_slab(mask->ni(),mask->nj(),1);
+
+  bvxm_util::img_to_slab(observation.img,image_slab);
+  bvxm_util::img_to_slab(mask,mask_slab);
+
+  bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<obs_datatype> mask_backproj(grid_size.x(),grid_size.y(),1);
+
+  vcl_cout << "Pass 1: " << vcl_endl;
+
+  // get ocuppancy probability grid
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
+  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+
+  //get appereance model grid
+  bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
+  bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
+
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+  typename bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it = apm_grid->begin();
+  bvxm_voxel_grid<float> *PI_grid = static_cast<bvxm_voxel_grid<float>* >(pixel_probability.ptr());
+  PI_grid->initialize_data(0.0f);
+  typename bvxm_voxel_grid<float>::iterator PI_slab_it = PI_grid->begin();
+
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++PI_slab_it)
+  {
+    vcl_cout << '.';
+
+    if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      return false;
+    }
+
+    // backproject image onto voxel plane
+    bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[z], frame_backproj);
+    bvxm_util::warp_slab_bilinear(mask_slab, H_plane_to_img[z], mask_backproj);
+
+    // calculate PI(X)
+    *PI_slab_it = apm_processor.prob_density(*apm_slab_it, frame_backproj,mask_backproj);
+
+    // multiply to get PIPX
+   // bvxm_util::multiply_slabs(PI,*ocp_slab_it,PIPX);
+
+  }
 }
 
 //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
