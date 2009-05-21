@@ -13,7 +13,6 @@
 #include <vcl_algorithm.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <boxm/boxm_quad_scan_iterator.h>
-#define DEBUG 0
 
 bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
                             vpgl_camera_double_sptr const& camera,
@@ -215,45 +214,45 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 
     if (is_face_visible(faces.find(Z_LOW)->second, camera)) {
       face_idx |= Z_LOW;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Z_LOW " ;
 #endif
     }
     if (is_face_visible(faces.find(Z_HIGH)->second, camera)) {
       face_idx |= Z_HIGH;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Z_HIGH " ;
 #endif
     }
     if (is_face_visible(faces.find(X_LOW)->second, camera)) {
       face_idx |= X_LOW;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "X_LOW " ;
 #endif
     }
 
     if (is_face_visible(faces.find(X_HIGH)->second, camera)) {
       face_idx |= X_HIGH;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "X_HIGH " ;
 #endif
     }
 
     if (is_face_visible(faces.find(Y_LOW)->second, camera)) {
       face_idx |= Y_LOW;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Y_LOW " ;
 #endif
     }
 
     if (is_face_visible(faces.find(Y_HIGH)->second, camera)) {
       face_idx |= Y_HIGH;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Y_HIGH " ;
 #endif
     }
   }
-#if DEBUG
+#ifdef DEBUG
   vcl_cout << vcl_endl;
 #endif
 
@@ -299,45 +298,45 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 #endif // 0
     if (is_face_visible(xverts,yverts,1,0,3,2)) {
       face_idx |= Z_LOW;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Z_LOW " ;
 #endif
     }
     if (is_face_visible(xverts,yverts,4,5,6,7)) {
       face_idx |= Z_HIGH;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Z_HIGH " ;
 #endif
     }
     if (is_face_visible(xverts,yverts,7,3,0,4)) {
       face_idx |= X_LOW;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "X_LOW " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,1,2,6,5)) {
       face_idx |= X_HIGH;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "X_HIGH " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,0,1,5,4)) {
       face_idx |= Y_LOW;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Y_LOW " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,2,3,7,6)) {
       face_idx |= Y_HIGH;
-#if DEBUG
+#ifdef DEBUG
       vcl_cout << "Y_HIGH " ;
 #endif
     }
   }
-#if DEBUG
+#ifdef DEBUG
   vcl_cout << vcl_endl;
 #endif
 
@@ -917,7 +916,6 @@ bool boxm_utils::cube_sum(boct_face_idx & vis_face_ids,
                           float & val, double *xverts,double * yverts)
 {
   val=0;
-  float count=0;
   if (vis_face_ids & Z_LOW){
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
     double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
