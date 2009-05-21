@@ -148,7 +148,7 @@ boxm_quad_scan_iterator:: x_start_end_val(double * vals,double & start_val,doubl
   super_it_->get_crossedge_vertices(chainnum,vertnum,numcrossedges);
   if (numcrossedges==2)
   {
-    for (unsigned i=0;i<numcrossedges;i++)
+    for (int i=0;i<numcrossedges;++i)
     {
       vgl_point_2d<double> p1=poly_[chainnum[i]][vertnum[i]];
       double val1=vals[vertnum[i]];
