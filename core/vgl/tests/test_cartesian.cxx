@@ -7,7 +7,8 @@
 //
 // \verbatim
 //  Modifications
-//   PVr - 4 May 2009 - added tests for operator>>
+//   PVr -  4 May 2009 - added tests for operator>>
+//   PVr - 21 May 2009 - added more tests for operator>>
 
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
@@ -83,9 +84,24 @@ static void test_vector_2d()
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
   TEST("orthogonal", orthogonal(v,vgl_vector_2d<float>(0.625,-1.5)), true);
 
-  vcl_stringstream is; is << "4.4 -5 7e1";
-  vgl_vector_2d<double> p; is >> p;
-  TEST("istream", p, vgl_vector_2d<double>(4.4,-5));
+  {
+    vcl_stringstream is; is << "4.4 -5 7e1";
+    vgl_vector_2d<double> p(0.0,0.0); is >> p;
+    vcl_cout << p << vcl_endl;
+    TEST("istream vgl_vector_2d (blank-separated)", p, vgl_vector_2d<double>(4.4,-5));
+  }
+  {
+    vcl_stringstream is; is << "7e1, 11 , blabla";
+    vgl_vector_2d<double> p(0.0,0.0); is >> p;
+    vcl_cout << p << vcl_endl;
+    TEST("istream vgl_vector_2d (comma-separated)", p, vgl_vector_2d<double>(70,11));
+  }
+  {
+    vcl_stringstream is; is << " (12,13 ) !";
+    vgl_vector_2d<double> p(0.0,0.0); is >> p;
+    vcl_cout << p << vcl_endl;
+    TEST("istream vgl_vector_2d (parenthesized)", p, vgl_vector_2d<double>(12,13));
+  }
 }
 
 static void test_vector_3d()
@@ -186,9 +202,13 @@ static void test_vector_3d()
   }
   TEST_NEAR("orthogonal vectors case III", check, 0.0, 1e-8);
 
-  vcl_stringstream is; is << "4.4 -5 7e1";
+  vcl_stringstream is; is << "4.4 -5 7e1 10,11 , 12 (12 , 13,14 )";
   vgl_vector_3d<float> p; is >> p;
-  TEST("istream", p, vgl_vector_3d<float>(4.4f,-5,70));
+  TEST("istream vgl_vector_3d (blank-separated)", p, vgl_vector_3d<float>(4.4f,-5,70));
+  is >> p;
+  TEST("istream vgl_vector_3d (comma-separated)", p, vgl_vector_3d<float>(10,11,12));
+  is >> p;
+  TEST("istream vgl_vector_3d (parenthesized)", p, vgl_vector_3d<float>(12,13,14));
 }
 
 static void test_point_2d()
@@ -244,9 +264,24 @@ static void test_point_2d()
 
   TEST("vgl_distance_origin", vgl_distance_origin(l1), 1);
 
-  vcl_stringstream is; is << "4.4 -5 7e1";
-  vgl_point_2d<double> p; is >> p;
-  TEST("istream", p, vgl_point_2d<double>(4.4,-5));
+  {
+    vcl_stringstream is; is << "4.4 -5 7e1";
+    vgl_point_2d<double> p(0.0,0.0); is >> p;
+    vcl_cout << p << vcl_endl;
+    TEST("istream vgl_point_2d (blank-separated)", p, vgl_point_2d<double>(4.4,-5));
+  }
+  {
+    vcl_stringstream is; is << "7e1, 11 , blabla";
+    vgl_point_2d<double> p(0.0,0.0); is >> p;
+    vcl_cout << p << vcl_endl;
+    TEST("istream vgl_point_2d (comma-separated)", p, vgl_point_2d<double>(70,11));
+  }
+  {
+    vcl_stringstream is; is << " (12,13 ) !";
+    vgl_point_2d<double> p(0.0,0.0); is >> p;
+    vcl_cout << p << vcl_endl;
+    TEST("istream vgl_point_2d (parenthesized)", p, vgl_point_2d<double>(12,13));
+  }
 }
 
 static void test_point_3d()
@@ -291,9 +326,13 @@ static void test_point_3d()
   vgl_point_3d<double> pp(0,0,0);
   TEST("intersection", pi, pp);
 
-  vcl_stringstream is; is << "4.4 -5 7e1";
+  vcl_stringstream is; is << "4.4 -5 7e1 10,11 , 12 (12 , 13,14 )";
   vgl_point_3d<float> p; is >> p;
-  TEST("istream", p, vgl_point_3d<float>(4.4f,-5,70));
+  TEST("istream vgl_point_3d (blank-separated)", p, vgl_point_3d<float>(4.4f,-5,70));
+  is >> p;
+  TEST("istream vgl_point_3d (comma-separated)", p, vgl_point_3d<float>(10,11,12));
+  is >> p;
+  TEST("istream vgl_point_3d (parenthesized)", p, vgl_point_3d<float>(12,13,14));
 }
 
 static void test_line_2d()
@@ -432,13 +471,15 @@ static void test_line_2d()
   TEST_NEAR("normalize: b()", l2.b(), 0.8, 1e-12);
 
   {
-    vcl_stringstream is; is << "4.4 -5 7e1";
+    vcl_stringstream is; is << "4.5 -5 7e1  9x+7y-8=0";
     vgl_line_2d<float> l; is >> l;
-    TEST("istream line_2d", l, vgl_line_2d<float>(4.4f,-5,70));
+    TEST("istream vgl_line_2d", l, vgl_line_2d<float>(4.5f,-5,70));
+    is >> l;
+    TEST("istream vgl_line_2d formatted", l, vgl_line_2d<float>(9,7,-8));
   }
 
   vcl_stringstream is; is << "\n4 6 7 9";
-  vgl_line_segment_2d<float> l_s; is >> l_s; vcl_cout << l_s;
+  vgl_line_segment_2d<float> l_s; is >> l_s;
   TEST("istream line_segment_2d", l_s, vgl_line_segment_2d<float>(vgl_point_2d<float>(4,6), vgl_point_2d<float>(7,9)));
 }
 
@@ -475,9 +516,10 @@ static void test_line_3d()
   p2 = vgl_intersection(l,l2);
   TEST("intersection", p2, p1-dir*0.5);
 
-  vcl_stringstream is; is << "4 5 6 7 8 9";
+  vcl_stringstream is; is << "4 5 6  (7, 8, 9)";
   vgl_line_segment_3d<float> l_s; is >> l_s;
-  TEST("istream", l_s, vgl_line_segment_3d<float>(vgl_point_3d<float>(4,5,6), vgl_point_3d<float>(7,8,9)));
+  vcl_cout << l_s << vcl_endl;
+  TEST("istream vgl_line_segment_3d", l_s, vgl_line_segment_3d<float>(vgl_point_3d<float>(4,5,6), vgl_point_3d<float>(7,8,9)));
 }
 
 static void test_plane_3d()
@@ -561,9 +603,11 @@ static void test_plane_3d()
   TEST_NEAR("vgl_distance(plane,point)", vgl_distance(plane2,p2), 0.8, 1e-9);
   TEST("vgl_distance(point,plane)", vgl_distance(p3,plane2), 1);
 
-  vcl_stringstream is; is << "4.4 -5 7e1 5e-1";
+  vcl_stringstream is; is << "4.5 -5 7e1 5e-1   -6x+7y-8z+9=0";
   vgl_plane_3d<double> l; is >> l;
-  TEST("istream", l, vgl_plane_3d<double>(4.4,-5,70,0.5));
+  TEST("istream vgl_plane_3d", l, vgl_plane_3d<double>(4.5,-5,70,0.5));
+  is >> l;
+  TEST("istream vgl_plane_3d formatted", l, vgl_plane_3d<double>(-6,7,-8,9));
 }
 
 static void test_box_2d()
@@ -738,7 +782,7 @@ static void test_box_2d()
 
   vcl_stringstream is; is << "4.4 -5 7e1 5e-1";
   vgl_box_2d<double> l; is >> l;
-  TEST("istream", l, vgl_box_2d<double>(4.4,70,-5,0.5)); // note different order!!
+  TEST("istream vgl_box_2d", l, vgl_box_2d<double>(4.4,70,-5,0.5)); // note different order!!
 }
 
 static void test_box_3d()
@@ -908,8 +952,8 @@ static void test_box_3d()
   TEST("vgl_intersection(box2, box3) volume", 125.0, i2.volume());
 
   vcl_stringstream is; is << "4.4 -5 0 7e1 5e-1 0";
-  vgl_box_3d<float> bx; is >> bx; vcl_cout << bx;
-  TEST("istream", bx, vgl_box_3d<float>(4.4f,-5,0,70,0.5f,0));
+  vgl_box_3d<float> bx; is >> bx;
+  TEST("istream vgl_box_3d", bx, vgl_box_3d<float>(4.4f,-5,0,70,0.5f,0));
 }
 
 inline bool collinear(vgl_line_2d<int> const& l1,
