@@ -17,7 +17,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
   // get the leaf nodes of the block
   vcl_vector<boct_tree_cell<T_loc, T_data>*> leaf_nodes = tree->leaf_cells();
-  vcl_cout << /*iter.index() << */"  NUMBER OF LEAF NODES=" << leaf_nodes.size() << vcl_endl;
+  vcl_cout << "  NUMBER OF LEAF NODES=" << leaf_nodes.size() << vcl_endl;
   vcl_vector<boct_tree_cell<T_loc, T_data >*> split_list;
   for (unsigned i=0; i<leaf_nodes.size(); i++) {
     boct_tree_cell<T_loc, T_data>* cell = leaf_nodes[i];
@@ -31,7 +31,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
       split_list.push_back(cell);
       // make sure neighbor cells are not already coarser than this cell
       // get all the faces;
-#if 0
+#if 1
       boct_face_idx faces = ALL;
       vcl_vector<boct_tree_cell<T_loc, T_data >*> neighbors;
       cell->find_neighbors(faces, neighbors, cell->level()+1);
