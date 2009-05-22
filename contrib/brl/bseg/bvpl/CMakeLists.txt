@@ -1,0 +1,22 @@
+# This is contrib/brl/bseg/bvpl/CMakeLists.txt
+
+INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/ )
+
+SET(bvpl_sources
+    bvpl_voxel_subgrid.txx                bvpl_voxel_subgrid.h
+    bvpl_subgrid_iterator.cxx             bvpl_subgrid_iterator.h
+)
+
+AUX_SOURCE_DIRECTORY(Templates brec_sources)
+
+ADD_LIBRARY(bvpl ${bvpl_sources})
+
+TARGET_LINK_LIBRARIES(bvpl bvxm vgl)
+
+#IF( BUILD_TESTING )
+#  SUBDIRS(tests)
+#ENDIF( BUILD_TESTING )
+
+
+
