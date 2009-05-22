@@ -15,6 +15,7 @@
 #include <vcl_vector.h>
 #include <vpdl/vpdt/vpdt_enable_if.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
+#include <vpdl/vpdt/vpdt_mixture_accessors.h>
 
 //: A functor to return the probability density at a sample
 template <class dist_>
@@ -231,15 +232,55 @@ class bsta_det_covar_functor
 
 
 //: A functor to return the weight of the component with given index
+// "Disambiguate" is for compatibility with vpdl/vpdt.
+// \note the distribution must be a mixture
+template <class mixture_, class Disambiguate=void>
+class bsta_weight_functor
+{
+public:
+  typedef typename mixture_::math_type T;
+  typedef T return_T;
+  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  enum { return_dim = 1 };
+  //: is this functor valid for its distribution type
+  static const bool valid_functor = false;
+  
+  //: rebind this functor to another distribution type
+  template <class other_dist> 
+  struct rebind {
+    typedef bsta_weight_functor<other_dist> other;
+  };
+  
+  //: Constructor
+  bsta_weight_functor(unsigned int index = 0) {}
+  
+  //: The main function
+  bool operator() ( const mixture_& mix, return_T& retval ) const
+  {
+    return false;
+  }
+};
+
+
+//: A functor to return the weight of the component with given index
 // \note the distribution must be a mixture
 template <class mixture_>
-class bsta_weight_functor
+class bsta_weight_functor<mixture_,
+          typename vpdt_enable_if<vpdt_is_mixture<mixture_> >::type>
 {
  public:
   typedef typename mixture_::math_type T;
   typedef T return_T;
   typedef return_T return_type; // for compatiblity with vpdl/vdpt
   enum { return_dim = 1 };
+  //: is this functor valid for its distribution type
+  static const bool valid_functor = true;
+  
+  //: rebind this functor to another distribution type
+  template <class other_dist> 
+  struct rebind {
+    typedef bsta_weight_functor<other_dist> other;
+  };
 
   //: Constructor
   bsta_weight_functor(unsigned int index = 0) : idx(index) {}
@@ -254,6 +295,53 @@ class bsta_weight_functor
     return false;
   }
 
+  unsigned int idx;
+};
+
+
+//: A vpdt specialization to make the weight functor work as a mixture accessor
+// This is needed because weight is not a property of the mixture component,
+// it is a property on the mixture itself that is defined for each component.
+template <class mixture_>
+class vpdt_mixture_accessor<mixture_, 
+          bsta_weight_functor<typename mixture_::component_type>,
+          typename vpdt_enable_if<vpdt_is_mixture<mixture_> >::type>
+{
+public:
+  //: the accessor type
+  typedef bsta_weight_functor<typename mixture_::component_type> accessor_type;
+  //: the functor return type
+  typedef typename vpdt_dist_traits<mixture_>::scalar_type return_type;
+  //: the distribution operated on by the functor
+  typedef mixture_ distribution_type;
+  //: is this functor valid for its distribution type
+  static const bool valid_functor = true;
+  
+  //: rebind this functor to another distribution type
+  template <class other_dist, class other_accessor = accessor_type> 
+  struct rebind {
+    typedef vpdt_mixture_accessor<other_dist,other_accessor> other;
+  };
+
+  //: Constructor
+  vpdt_mixture_accessor(unsigned int index = 0) 
+  : idx(index) {}
+
+  //: Constructor
+  vpdt_mixture_accessor(const accessor_type& a, unsigned int index = 0) 
+  : idx(index) {}
+
+  //: The main function
+  bool operator() ( const mixture_& mix, return_type& retval ) const
+  {
+    if (idx < mix.num_components()){
+      retval = mix.weight(idx);
+      return true;
+    }
+    return false;
+  }
+
+  //: The component index
   unsigned int idx;
 };
 
