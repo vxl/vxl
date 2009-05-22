@@ -5,9 +5,6 @@
 #include "bvxm_voxel_storage.h"
 #include "bvxm_voxel_slab.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cassert.h>
-
 #include <vgl/vgl_vector_3d.h>
 
 ///////////////////// bvxm_voxel_slab_iterator_base methods //////////////////////////////
@@ -16,7 +13,6 @@ template <class T>
 bvxm_voxel_slab_iterator_base<T>::bvxm_voxel_slab_iterator_base(bvxm_voxel_storage<T> *storage, vgl_vector_3d<unsigned int> grid_size, unsigned slice_idx, unsigned slab_thickness)
 : storage_(storage), slab_thickness_(slab_thickness), slice_idx_(slice_idx), end_slab_(0,0,0,0,0), grid_size_(grid_size)
 {
-
   if ( slice_idx >= grid_size_.z() ) {
     slab_ = this->end_slab_;
   }
@@ -76,7 +72,7 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator+ (unsigned co
   // commit prev slice to memory
   this->storage_->put_slab();
 
-  slice_idx_+=rhs;
+  this->slice_idx_+=rhs;
   if (this->slice_idx_ >= static_cast<int>(this->grid_size_.z())) {
     this->slab_ = this->end_slab_;
   }
