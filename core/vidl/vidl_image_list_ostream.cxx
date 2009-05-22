@@ -122,15 +122,12 @@ write_frame(const vidl_frame_sptr& frame)
 {
   vcl_string file_name = next_file_name();
   ++index_;
-  // FIXME this does not account for all data types
-  vil_image_view<vxl_byte> image;
   if (!frame)
     return false;
-  if (!vidl_convert_to_view(*frame, image, VIDL_PIXEL_COLOR_RGB))
+  vil_image_view_base_sptr v = vidl_convert_wrap_in_view(*frame);
+  if (!v)
     return false;
 
-  return vil_save(image,
-                  file_name.c_str(),
-                  file_format_.c_str());
+  return vil_save(*v,file_name.c_str(),file_format_.c_str());                
 }
 
