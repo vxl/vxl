@@ -13,6 +13,8 @@
 // \endverbatim
 
 #include <vcl_vector.h>
+#include <bsta/bsta_attributes.h>
+#include <bsta/bsta_gaussian_indep.h>
 #include <vpdl/vpdt/vpdt_enable_if.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_mixture_accessors.h>
@@ -191,7 +193,8 @@ class bsta_var_functor
 
 
 //: A functor to return the variance of the Gaussian
-// \note the distribution must be spherical Gaussian
+// \note the distribution must be an independent Gaussian
+//       the default template does nothing
 template <class dist_>
 class bsta_diag_covar_functor
 {
@@ -201,7 +204,47 @@ class bsta_diag_covar_functor
   typedef vector_ return_T;
   typedef return_T return_type; // for compatiblity with vpdl/vdpt
   enum { return_dim = dist_::dimension };
+  //: is this functor valid for its distribution type
+  static const bool valid_functor = false;
+  
+  //: rebind this functor to another distribution type
+  template <class other_dist> 
+  struct rebind {
+    typedef bsta_diag_covar_functor<other_dist> other;
+  };
 
+  //: The main function
+  bool operator() ( const dist_& d, return_T& retval ) const
+  {
+    return false;
+  }
+};
+
+
+//: A functor to return the variance of the Gaussian
+// \note the distribution must be an independent Gaussian
+//       the default template does nothing.
+//       This solution is really just a hack.
+//       The correct solution requires is_base_of from Boost or TR1.
+//       This class should work for any derived class of bsta_gaussian_indep
+template <class T, unsigned n>
+class bsta_diag_covar_functor<bsta_num_obs<bsta_gaussian_indep<T,n> > >
+{
+public:
+  typedef bsta_gaussian_indep<T,n> dist_;
+  typedef typename dist_::vector_type vector_;
+  typedef vector_ return_T;
+  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  enum { return_dim = dist_::dimension };
+  //: is this functor valid for its distribution type
+  static const bool valid_functor = true;
+  
+  //: rebind this functor to another distribution type
+  template <class other_dist> 
+  struct rebind {
+    typedef bsta_diag_covar_functor<other_dist> other;
+  };
+  
   //: The main function
   bool operator() ( const dist_& d, return_T& retval ) const
   {
