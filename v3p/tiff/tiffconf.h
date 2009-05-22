@@ -18,10 +18,14 @@
 /* #undef HAVE_INT8 */
 
 /* The size of a `int', as computed by sizeof. */
-#define SIZEOF_INT 4
+#ifndef SIZEOF_INT
+# define SIZEOF_INT 4
+#endif
 
 /* The size of a `long', as computed by sizeof. */
-#define SIZEOF_LONG 4
+#ifndef SIZEOF_LONG
+# define SIZEOF_LONG 4
+#endif
 
 /* Compatibility stuff. */
 
