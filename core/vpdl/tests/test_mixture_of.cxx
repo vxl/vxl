@@ -95,9 +95,9 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
          true);
 
     vnl_vector_fixed<T,3> pt(T(0), T(1.5), T(1));
-    T prob = 0.1*gauss1.prob_density(pt)
-           + 0.6*gauss2.prob_density(pt)
-           + 0.3*gauss3.prob_density(pt);
+    T prob = T( 0.1*gauss1.prob_density(pt)
+              + 0.6*gauss2.prob_density(pt)
+              + 0.3*gauss3.prob_density(pt));
     TEST_NEAR(("probability density <"+type_name+">").c_str(),
               mixture2.prob_density(pt), prob, epsilon);
 
@@ -116,16 +116,16 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("density <"+type_name+">").c_str(),
               density, den, epsilon);
 
-    prob = 0.1*gauss1.cumulative_prob(pt)
-         + 0.6*gauss2.cumulative_prob(pt)
-         + 0.3*gauss3.cumulative_prob(pt);
+    prob = T( 0.1*gauss1.cumulative_prob(pt)
+            + 0.6*gauss2.cumulative_prob(pt)
+            + 0.3*gauss3.cumulative_prob(pt));
     TEST_NEAR(("cumulative probability <"+type_name+">").c_str(),
               mixture2.cumulative_prob(pt), prob, epsilon);
 
     vnl_vector_fixed<T,3> pt2(T(10), T(5), T(8));
-    prob = 0.1*gauss1.box_prob(pt,pt2)
-         + 0.6*gauss2.box_prob(pt,pt2)
-         + 0.3*gauss3.box_prob(pt,pt2);
+    prob = T( 0.1*gauss1.box_prob(pt,pt2)
+            + 0.6*gauss2.box_prob(pt,pt2)
+            + 0.3*gauss3.box_prob(pt,pt2));
     TEST_NEAR(("box probability <"+type_name+">").c_str(),
               mixture2.box_prob(pt,pt2), prob, epsilon);
 
@@ -191,9 +191,9 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
          true);
 
     T pt = T(1);
-    T prob = 0.1*gauss1.prob_density(pt)
-           + 0.6*gauss2.prob_density(pt)
-           + 0.3*gauss3.prob_density(pt);
+    T prob = T( 0.1*gauss1.prob_density(pt)
+              + 0.6*gauss2.prob_density(pt)
+              + 0.3*gauss3.prob_density(pt));
     TEST_NEAR(("probability density <"+type_name+">").c_str(),
               mixture2.prob_density(pt), prob, epsilon);
 
@@ -209,16 +209,16 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("density <"+type_name+">").c_str(),
               density, den, epsilon);
 
-    prob = 0.1*gauss1.cumulative_prob(pt)
-         + 0.6*gauss2.cumulative_prob(pt)
-         + 0.3*gauss3.cumulative_prob(pt);
+    prob = T( 0.1*gauss1.cumulative_prob(pt)
+            + 0.6*gauss2.cumulative_prob(pt)
+            + 0.3*gauss3.cumulative_prob(pt));
     TEST_NEAR(("cumulative probability <"+type_name+">").c_str(),
               mixture2.cumulative_prob(pt), prob, epsilon);
 
     T pt2 = T(10);
-    prob = 0.1*gauss1.box_prob(pt,pt2)
-         + 0.6*gauss2.box_prob(pt,pt2)
-         + 0.3*gauss3.box_prob(pt,pt2);
+    prob = T( 0.1*gauss1.box_prob(pt,pt2)
+            + 0.6*gauss2.box_prob(pt,pt2)
+            + 0.3*gauss3.box_prob(pt,pt2));
     TEST_NEAR(("box probability <"+type_name+">").c_str(),
               mixture2.box_prob(pt,pt2), prob, epsilon);
 
@@ -303,9 +303,9 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
          mixture2.dimension() == 3, true);
 
     vnl_vector_fixed<T,3> pt(T(0), T(1.5), T(1));
-    T prob = 0.1*gauss1.prob_density(pt)
-           + 0.6*gauss2.prob_density(pt)
-           + 0.3*gauss3.prob_density(pt);
+    T prob = T( 0.1*gauss1.prob_density(pt)
+              + 0.6*gauss2.prob_density(pt)
+              + 0.3*gauss3.prob_density(pt));
     TEST_NEAR(("probability density <"+type_name+">").c_str(),
               mixture2.prob_density(pt), prob, epsilon);
 
@@ -324,16 +324,16 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("density <"+type_name+">").c_str(),
               density, den, epsilon);
 
-    prob = 0.1*gauss1.cumulative_prob(pt)
-         + 0.6*gauss2.cumulative_prob(pt)
-         + 0.3*gauss3.cumulative_prob(pt);
+    prob = T( 0.1*gauss1.cumulative_prob(pt)
+            + 0.6*gauss2.cumulative_prob(pt)
+            + 0.3*gauss3.cumulative_prob(pt));
     TEST_NEAR(("cumulative probability <"+type_name+">").c_str(),
               mixture2.cumulative_prob(pt), prob, epsilon);
 
     vnl_vector_fixed<T,3> pt2(T(10), T(5), T(8));
-    prob = 0.1*gauss1.box_prob(pt,pt2)
-         + 0.6*gauss2.box_prob(pt,pt2)
-         + 0.3*gauss3.box_prob(pt,pt2);
+    prob = T( 0.1*gauss1.box_prob(pt,pt2)
+            + 0.6*gauss2.box_prob(pt,pt2)
+            + 0.3*gauss3.box_prob(pt,pt2));
     TEST_NEAR(("box probability <"+type_name+">").c_str(),
               mixture2.box_prob(pt,pt2), prob, epsilon);
 

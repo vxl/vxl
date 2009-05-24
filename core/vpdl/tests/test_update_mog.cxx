@@ -5,31 +5,31 @@
 #include <vcl_iostream.h>
 
 template <class T>
-void test_update_mog_type(T epsilon, const vcl_string& type_name)
+void test_update_mog_type(T epsilon, const vcl_string& type_name, T inf)
 {
   // an arbitrary collection of data points
-  vcl_cout << "************************\n"
+  vcl_cout << "*************************\n"
            << " testing for type " << type_name << '\n'
-           << "************************\n";
+           << "*************************\n";
   vcl_vector<vnl_vector_fixed<T,3> > data;
   data.push_back(vnl_vector_fixed<T,3>(1,1,1));
   data.push_back(vnl_vector_fixed<T,3>(2,2,2));
   data.push_back(vnl_vector_fixed<T,3>(3,1,4));
   data.push_back(vnl_vector_fixed<T,3>(-1,2,5));
   data.push_back(vnl_vector_fixed<T,3>(-10,5,0));
-  
+
   typedef vpdt_gaussian<vnl_vector_fixed<T,3>,T> gauss3_t;
   typedef vpdt_mixture_of<gauss3_t> mog_t;
-  
+
   vpdt_mog_sg_updater<mog_t> mog_updater(gauss3_t(vnl_vector_fixed<T,3>(0.0),1));
-  
+
   mog_t mixture;
   mog_updater(mixture, data[0]);
   TEST("dimension", mixture.dimension(), 3);
   TEST("# components", mixture.num_components(), 1);
   TEST("weight", mixture.weight(0), 1);
-  TEST_NEAR("cumulative prob at minus inf", mixture.cumulative_prob(vnl_vector_fixed<T,3>(-1e29,-1e29,-1e29)), 0, epsilon);
-  TEST_NEAR("cumulative prob at plus inf", mixture.cumulative_prob(vnl_vector_fixed<T,3>(1e29,1e29,1e29)), 1, epsilon);
+  TEST_NEAR("cumulative prob at minus inf", mixture.cumulative_prob(vnl_vector_fixed<T,3>(-inf,-inf,-inf)), 0, epsilon);
+  TEST_NEAR("cumulative prob at plus inf", mixture.cumulative_prob(vnl_vector_fixed<T,3>(inf,inf,inf)), 1, epsilon);
   TEST("norm_const", mixture.norm_const(), 1);
   vnl_vector_fixed<T,3> mean; mixture.compute_mean(mean);
   vnl_vector_fixed<T,3> exact_mean(1,1,1);
@@ -40,8 +40,8 @@ void test_update_mog_type(T epsilon, const vcl_string& type_name)
 MAIN( test_update_mog )
 {
   START ("update mixture of gaussians");
-  test_update_mog_type(float(1e-5),"float");
-  test_update_mog_type(double(1e-13),"double");
+  test_update_mog_type(1e-5f,"float", 1e29f);
+  test_update_mog_type(1e-13,"double",1e29);
   SUMMARY();
 }
 
