@@ -232,15 +232,16 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
          mixture2.weight(0) == T(0.1) && mixture2.weight(1) == T(0.3) &&
          mixture2.weight(2) == T(0.6), true);
 
-    T mean = 0.1*gauss1.mean() + 0.6*gauss2.mean() + 0.3*gauss3.mean();
+    T mean = T(0.1*gauss1.mean() + 0.6*gauss2.mean() + 0.3*gauss3.mean());
     T cmp_mean;
     mixture2.compute_mean(cmp_mean);
     TEST_NEAR(("compute_mean <"+type_name+">").c_str(),
               cmp_mean, mean, epsilon);
 
-    T var = 0.1*gauss1.covariance() + 0.6*gauss2.covariance() + 0.3*gauss3.covariance();
-    var += 0.1*gauss1.mean()*gauss1.mean() + 0.6*gauss2.mean()*gauss2.mean()
-         + 0.3*gauss3.mean()*gauss3.mean();
+    T var = T(0.1*gauss1.covariance() + 0.6*gauss2.covariance() + 0.3*gauss3.covariance());
+    var += T( 0.1*gauss1.mean()*gauss1.mean()
+            + 0.6*gauss2.mean()*gauss2.mean()
+            + 0.3*gauss3.mean()*gauss3.mean());
     var -= mean*mean;
     T cmp_var;
     mixture2.compute_covar(cmp_var);

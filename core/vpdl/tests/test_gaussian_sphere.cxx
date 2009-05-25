@@ -8,14 +8,13 @@
 template <class T>
 void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
 {
-  
   // test dimension, zero variance
   {
     vpdl_gaussian_sphere<T,3> gauss3;
     vpdl_gaussian_sphere<T,1> gauss1;
-    vpdl_gaussian_sphere<T> gauss_default, gauss(3), 
+    vpdl_gaussian_sphere<T> gauss_default, gauss(3),
                             gauss_init(vnl_vector<T>(10,T(1)),T(3));
-    
+
     TEST(("dimension <"+type_name+"> fixed").c_str(),
          gauss3.dimension(), 3);
     TEST(("dimension <"+type_name+"> scalar").c_str(),
@@ -26,14 +25,14 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
          gauss.dimension(), 3);
     TEST(("dimension <"+type_name+"> variable").c_str(),
          gauss_init.dimension(), 10);
-    
+
     TEST(("mean size <"+type_name+"> variable").c_str(),
          gauss_default.mean().size(), 0);
     TEST(("mean size <"+type_name+"> variable").c_str(),
          gauss.mean().size(), 3);
     TEST(("mean size <"+type_name+"> variable").c_str(),
          gauss_init.mean().size(), 10);
-    
+
     // test initialization to zero mean, zero variance
     vnl_vector_fixed<T,3> zero_vector(T(0));
     TEST(("zero default mean <"+type_name+"> fixed").c_str(),
@@ -42,14 +41,14 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
          gauss1.mean(), T(0));
     TEST(("zero default mean <"+type_name+"> variable").c_str(),
          gauss.mean(), zero_vector);
-    
+
     TEST(("zero default variance <"+type_name+"> fixed").c_str(),
          gauss3.covariance(), T(0));
     TEST(("zero default variance <"+type_name+"> scalar").c_str(),
          gauss1.covariance(), T(0));
     TEST(("zero default variance <"+type_name+"> variable").c_str(),
          gauss.covariance(), T(0));
-    
+
     // test zero variance evaluations
     vnl_vector_fixed<T,3> test_pt(T(1), T(1), T(1));
     TEST(("zero var mahalanobis dist <"+type_name+"> fixed").c_str(),
@@ -61,7 +60,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
     TEST(("zero var mahalanobis dist <"+type_name+"> variable").c_str(),
          gauss.sqr_mahal_dist(test_pt),
          vcl_numeric_limits<T>::infinity());
-    
+
     // test zero variance probability
     TEST(("zero var probability density<"+type_name+"> fixed").c_str(),
          gauss3.prob_density(test_pt), T(0));
@@ -69,19 +68,19 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
          gauss1.prob_density(test_pt[0]), T(0));
     TEST(("zero var probability density<"+type_name+"> variable").c_str(),
          gauss.prob_density(test_pt), T(0));
-    
+
     // test zero variance log probability
     TEST(("zero var log probability density<"+type_name+"> fixed").c_str(),
-         gauss3.log_prob_density(test_pt), 
+         gauss3.log_prob_density(test_pt),
          -vcl_numeric_limits<T>::infinity());
     TEST(("zero var log probability density<"+type_name+"> scalar").c_str(),
-         gauss1.log_prob_density(test_pt[0]), 
+         gauss1.log_prob_density(test_pt[0]),
          -vcl_numeric_limits<T>::infinity());
     TEST(("zero var log probability density<"+type_name+"> variable").c_str(),
-         gauss.log_prob_density(test_pt), 
+         gauss.log_prob_density(test_pt),
          -vcl_numeric_limits<T>::infinity());
   }
-  
+
   // test mean, covariance, square malanobis distance, probability density,
   // cumulative probability, box probability
   {
@@ -90,7 +89,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
     vpdl_gaussian_sphere<T,3> gauss3(mean,var);
     vpdl_gaussian_sphere<T,1> gauss1(mean[0],var);
     vpdl_gaussian_sphere<T> gauss(mean,var);
-    
+
     // test direct access to data member
     TEST(("mean <"+type_name+"> fixed").c_str(), gauss3.mean(), mean);
     TEST(("covar <"+type_name+"> fixed").c_str(), gauss3.covariance(), var);
@@ -98,47 +97,47 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
     TEST(("covar <"+type_name+"> scalar").c_str(), gauss1.covariance(), var);
     TEST(("mean <"+type_name+"> variable").c_str(), gauss.mean(), mean);
     TEST(("covar <"+type_name+"> variable").c_str(), gauss.covariance(), var);
-    
+
     // test virtual functions
-    const vpdl_distribution<T,3>& dist3 = gauss3; 
-    const vpdl_distribution<T,1>& dist1 = gauss1; 
-    const vpdl_distribution<T>& dist = gauss; 
-    
+    const vpdl_distribution<T,3>& dist3 = gauss3;
+    const vpdl_distribution<T,1>& dist1 = gauss1;
+    const vpdl_distribution<T>& dist = gauss;
+
     vnl_matrix_fixed<T,3,3> Strue;
     Strue.set_identity();
     Strue *= var;
-    
+
     // test indirect access to data members (compute full covariance)
     vnl_vector_fixed<T,3> m3;
     dist3.compute_mean(m3);
     TEST(("compute_mean <"+type_name+"> fixed").c_str(), m3, mean);
-    
+
     vnl_matrix_fixed<T,3,3> S3;
     dist3.compute_covar(S3);
     TEST(("compute_covar <"+type_name+"> fixed").c_str(), S3, Strue);
-    
+
     T m1;
     dist1.compute_mean(m1);
     TEST(("compute_mean <"+type_name+"> scalar").c_str(), m1, mean[0]);
-    
+
     T v1;
     dist1.compute_covar(v1);
     TEST(("compute_covar <"+type_name+"> scalar").c_str(), v1, var);
-    
+
     vnl_vector<T> m;
     dist.compute_mean(m);
     TEST(("compute_mean <"+type_name+"> variable").c_str(), m, mean);
-    
+
     vnl_matrix<T> S;
     dist.compute_covar(S);
     TEST(("compute_covar <"+type_name+"> variable").c_str(), S, Strue);
-    
+
     vnl_vector_fixed<T,3> test_pt(T(1.5), T(3.0), T(3.0));
     vnl_vector_fixed<T,3> d = mean - test_pt;
     T sqr_mahal_dist = d[0]*d[0]/var
                      + d[1]*d[1]/var
                      + d[2]*d[2]/var;
-    
+
     // test mahalanobis distance calculations
     TEST(("mahalanobis dist <"+type_name+"> fixed").c_str(),
          gauss3.sqr_mahal_dist(test_pt), sqr_mahal_dist);
@@ -146,13 +145,13 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
          gauss1.sqr_mahal_dist(test_pt[0]), d[0]*d[0]/var);
     TEST(("mahalanobis dist <"+type_name+"> variable").c_str(),
          gauss.sqr_mahal_dist(test_pt), sqr_mahal_dist);
-    
+
     T two_pi_var = static_cast<T>(2.0*vnl_math::pi*var);
-    T prob3 = static_cast<T>(1.0/vcl_sqrt(two_pi_var*two_pi_var*two_pi_var) 
+    T prob3 = static_cast<T>(1.0/vcl_sqrt(two_pi_var*two_pi_var*two_pi_var)
                              * vcl_exp(-sqr_mahal_dist/2) );
-    T prob1 = static_cast<T>(1.0/vcl_sqrt(two_pi_var) 
+    T prob1 = static_cast<T>(1.0/vcl_sqrt(two_pi_var)
                              * vcl_exp(-d[0]*d[0]/(2*var)) );
-    
+
     // test probability density virtual functions
     TEST_NEAR(("probability density <"+type_name+"> fixed").c_str(),
               dist3.prob_density(test_pt), prob3, epsilon);
@@ -160,7 +159,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
               dist1.prob_density(test_pt[0]), prob1, epsilon);
     TEST_NEAR(("probability density <"+type_name+"> variable").c_str(),
               dist.prob_density(test_pt), prob3, epsilon);
-    
+
     // test log probability density virtual functions
     TEST_NEAR(("probability density <"+type_name+"> fixed").c_str(),
               dist3.log_prob_density(test_pt), vcl_log(prob3), epsilon);
@@ -168,7 +167,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
               dist1.log_prob_density(test_pt[0]), vcl_log(prob1), epsilon);
     TEST_NEAR(("probability density <"+type_name+"> variable").c_str(),
               dist.log_prob_density(test_pt), vcl_log(prob3), epsilon);
-    
+
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T,3> g3;
     T dp = vcl_sqrt(epsilon);
@@ -196,18 +195,18 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
               (g-grad).inf_norm(), 0, dp);
     TEST_NEAR(("density <"+type_name+"> variable").c_str(),
               density, den, epsilon);
-    
+
     // test cumulative probability
     vnl_vector_fixed<T,3> test1(T(3), T(3), T(3));
     vnl_vector_fixed<T,3> cum_test1;
-    cum_test1[0] = (1+vnl_erf((test1[0]-mean[0])/vcl_sqrt(2*var)))/2;
-    cum_test1[1] = (1+vnl_erf((test1[1]-mean[1])/vcl_sqrt(2*var)))/2;
-    cum_test1[2] = (1+vnl_erf((test1[2]-mean[2])/vcl_sqrt(2*var)))/2;
+    cum_test1[0] = T((1+vnl_erf((test1[0]-mean[0])/vcl_sqrt(2*var)))/2);
+    cum_test1[1] = T((1+vnl_erf((test1[1]-mean[1])/vcl_sqrt(2*var)))/2);
+    cum_test1[2] = T((1+vnl_erf((test1[2]-mean[2])/vcl_sqrt(2*var)))/2);
     T joint_cum_test1 = cum_test1[0] * cum_test1[1] * cum_test1[2];
     TEST(("cumulative probability 1 <"+type_name+"> fixed").c_str(),
          gauss3.cumulative_prob(mean), T(0.125));
     TEST_NEAR(("cumulative probability 2 <"+type_name+"> fixed").c_str(),
-         gauss3.cumulative_prob(test1), joint_cum_test1, epsilon);
+              gauss3.cumulative_prob(test1), joint_cum_test1, epsilon);
     TEST(("cumulative probability 1 <"+type_name+"> scalar").c_str(),
          gauss1.cumulative_prob(mean[0]), T(0.5));
     TEST_NEAR(("cumulative probability 2 <"+type_name+"> scalar").c_str(),
@@ -216,29 +215,29 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
          gauss.cumulative_prob(mean), T(0.125));
     TEST_NEAR(("cumulative probability 2 <"+type_name+"> variable").c_str(),
               gauss.cumulative_prob(test1), joint_cum_test1, epsilon);
-    
+
     // test box probability
     vnl_vector_fixed<T,3> test2(T(-1), T(1), T(0));
     vnl_vector_fixed<T,3> cum_test2;
-    cum_test2[0] = (1+vnl_erf((test2[0]-mean[0])/vcl_sqrt(2*var)))/2;
-    cum_test2[1] = (1+vnl_erf((test2[1]-mean[1])/vcl_sqrt(2*var)))/2;
-    cum_test2[2] = (1+vnl_erf((test2[2]-mean[2])/vcl_sqrt(2*var)))/2;
-    T box_test = (cum_test1[0]-cum_test2[0]) 
-               * (cum_test1[1]-cum_test2[1]) 
+    cum_test2[0] = T((1+vnl_erf((test2[0]-mean[0])/vcl_sqrt(2*var)))/2);
+    cum_test2[1] = T((1+vnl_erf((test2[1]-mean[1])/vcl_sqrt(2*var)))/2);
+    cum_test2[2] = T((1+vnl_erf((test2[2]-mean[2])/vcl_sqrt(2*var)))/2);
+    T box_test = (cum_test1[0]-cum_test2[0])
+               * (cum_test1[1]-cum_test2[1])
                * (cum_test1[2]-cum_test2[2]);
     TEST_NEAR(("box probability <"+type_name+"> fixed").c_str(),
               gauss3.box_prob(test2,test1), box_test, epsilon);
     TEST_NEAR(("box probability <"+type_name+"> scalar").c_str(),
-              gauss1.box_prob(test2[0],test1[0]), 
+              gauss1.box_prob(test2[0],test1[0]),
               (cum_test1[0]-cum_test2[0]), epsilon);
     TEST_NEAR(("box probability <"+type_name+"> variable").c_str(),
               gauss.box_prob(test2,test1), box_test, epsilon);
-    
+
     TEST_NEAR(("box probability (base==derived) <"+type_name+">").c_str(),
               gauss.vpdl_distribution<T>::box_prob(test2,test1),
               gauss.box_prob(test2,test1), epsilon);
-    
-    
+
+
     // This is really a test of the base class box_prob function
     // An even dimension can have a create a sign error not seen in an odd one
     vnl_vector_fixed<T,2> mean2(mean[0],mean[1]);
@@ -249,7 +248,6 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
               gauss2.base2::box_prob(test2_2,test1_2),
               gauss2.box_prob(test2_2,test1_2), epsilon);
   }
-  
 }
 
 
@@ -260,5 +258,4 @@ MAIN( test_gaussian_sphere )
   test_gaussian_sphere_type(double(1e-14),"double");
   SUMMARY();
 }
-
 

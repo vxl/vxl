@@ -23,8 +23,8 @@ fit_gaussian(typename vcl_vector<vnl_vector_fixed<T,3> >::const_iterator begin,
     covar += outer_product(*i,*i);
     ++count;
   }
-  mean /= count;
-  covar /= count;
+  mean /= T(count);
+  covar /= T(count);
   covar -= outer_product(mean,mean);
   return vpdl_gaussian<T,3>(mean, covar);
 }
@@ -47,17 +47,17 @@ void test_covar_mean(T epsilon, const vcl_string& type_name)
   vcl_vector<vnl_vector_fixed<T,3> > data;
   vnl_random rnd;
   for (unsigned int i=0; i<10; ++i)
-    data.push_back(vnl_vector_fixed<T,3>(rnd.normal64()+1,
-                                         2*rnd.normal64(),
-                                         rnd.normal64()));
+    data.push_back(vnl_vector_fixed<T,3>(T(rnd.normal64()+1),
+                                         T(2*rnd.normal64()),
+                                         T(rnd.normal64())));
   for (unsigned int i=0; i<15; ++i)
-    data.push_back(vnl_vector_fixed<T,3>(3*rnd.normal64()-1,
-                                         rnd.normal64()+3,
-                                         1.5*rnd.normal64()));
+    data.push_back(vnl_vector_fixed<T,3>(T(3*rnd.normal64()-1),
+                                         T(rnd.normal64()+3),
+                                         T(1.5*rnd.normal64())));
   for (unsigned int i=0; i<10; ++i)
-    data.push_back(vnl_vector_fixed<T,3>(rnd.normal64(),
-                                         rnd.normal64()+3,
-                                         rnd.normal64()+3));
+    data.push_back(vnl_vector_fixed<T,3>(T(rnd.normal64()),
+                                         T(rnd.normal64()+3),
+                                         T(rnd.normal64()+3)));
 
   // make a gaussian for each group of data
   vpdl_gaussian<T,3> gauss1(fit_gaussian<T>(data.begin(),data.begin()+10));
@@ -67,9 +67,9 @@ void test_covar_mean(T epsilon, const vcl_string& type_name)
   vpdl_gaussian<T,3> gaussT(fit_gaussian<T>(data.begin(),data.begin()+35));
 
   vpdl_mixture<T,3> mixture;
-  mixture.insert(gauss1, 10.0/35);
-  mixture.insert(gauss2, 15.0/35);
-  mixture.insert(gauss3, 10.0/35);
+  mixture.insert(gauss1, T(10.0/35));
+  mixture.insert(gauss2, T(15.0/35));
+  mixture.insert(gauss3, T(10.0/35));
 
   vnl_vector_fixed<T,3> mean;
   mixture.compute_mean(mean);
@@ -290,15 +290,16 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
          mixture2.weight(0) == T(0.1) && mixture2.weight(1) == T(0.3) &&
          mixture2.weight(2) == T(0.6), true);
 
-    T mean = 0.1*gauss1.mean() + 0.6*gauss2.mean() + 0.3*gauss3.mean();
+    T mean = T(0.1*gauss1.mean() + 0.6*gauss2.mean() + 0.3*gauss3.mean());
     T cmp_mean;
     mixture2.compute_mean(cmp_mean);
     TEST_NEAR(("compute_mean <"+type_name+">").c_str(),
               cmp_mean, mean, epsilon);
 
-    T var = 0.1*gauss1.covariance() + 0.6*gauss2.covariance() + 0.3*gauss3.covariance();
-    var += 0.1*gauss1.mean()*gauss1.mean() + 0.6*gauss2.mean()*gauss2.mean()
-         + 0.3*gauss3.mean()*gauss3.mean();
+    T var = T(0.1*gauss1.covariance() + 0.6*gauss2.covariance() + 0.3*gauss3.covariance());
+    var += T( 0.1*gauss1.mean()*gauss1.mean()
+            + 0.6*gauss2.mean()*gauss2.mean()
+            + 0.3*gauss3.mean()*gauss3.mean());
     var -= mean*mean;
     T cmp_var;
     mixture2.compute_covar(cmp_var);
