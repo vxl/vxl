@@ -49,9 +49,10 @@ class  bvxm_mog_grey_processor
   bvxm_voxel_slab<float>  prob_density(bvxm_voxel_slab<mix_gauss_type> const& appear,
                                        bvxm_voxel_slab<float> const& obs);
 
-  bvxm_voxel_slab<float>  prob_density(bvxm_voxel_slab<mix_gauss_type> const& appear,
-                                      bvxm_voxel_slab<float> const& obs,
-                                      bvxm_voxel_slab<float> const& mask);
+  bool  region_prob_density(bvxm_voxel_slab<float> &probabilities,
+                            bvxm_voxel_slab<mix_gauss_type> const& appear,
+                            bvxm_voxel_slab<float> const& obs,
+                            bvxm_voxel_slab<float> const& mask);
 
   bvxm_voxel_slab<float> prob_range(bvxm_voxel_slab<mix_gauss_type> const& appear,
                                     bvxm_voxel_slab<float> const& obs_min,
