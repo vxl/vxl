@@ -30,32 +30,29 @@ bvxm_mog_grey_processor::prob_density(bvxm_voxel_slab<mix_gauss_type> const& app
 }
 
 //: Return probability density of observing pixel values in a region specified by a mask
-bvxm_voxel_slab<float>
-bvxm_mog_grey_processor::prob_density(bvxm_voxel_slab<mix_gauss_type> const& appear,
-                                      bvxm_voxel_slab<float> const& obs,
-                                      bvxm_voxel_slab<float> const& mask)
+bool
+bvxm_mog_grey_processor::region_prob_density(bvxm_voxel_slab<float> &probabilities,
+                                             bvxm_voxel_slab<mix_gauss_type> const& appear,
+                                             bvxm_voxel_slab<float> const& obs,
+                                             bvxm_voxel_slab<float> const& mask)
 {
-  //the output
-  bvxm_voxel_slab<float> probabilities(appear.nx(), appear.ny(), appear.nz());
+  
 
   //the slab iterators
-  bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it;
+  bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it=appear.begin();
   bvxm_voxel_slab<float>::const_iterator obs_it = obs.begin();
   bvxm_voxel_slab<float>::const_iterator mask_it = mask.begin();
   bvxm_voxel_slab<float>::iterator prob_it = probabilities.begin();
 
-  for (appear_it = appear.begin(); appear_it!= appear.end(); ++appear_it, ++obs_it, ++prob_it, ++mask_it)
+  for (; appear_it!= appear.end(); ++appear_it, ++obs_it, ++prob_it, ++mask_it)
   {
-    if(*mask_it)
+    if(*mask_it > 0.0)
     {
-      if ((*appear_it).num_components() ==0)
-        (*prob_it)= 1.00f;
-      else
-        (*prob_it) = (*appear_it).prob_density(*obs_it);
+     (*prob_it) = (*appear_it).prob_density(*obs_it);
     }
   }
 
-  return probabilities;
+  return true;
 }
 
 //: Return probabilities that pixels are in range [min,max]
