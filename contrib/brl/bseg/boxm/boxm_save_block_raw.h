@@ -93,7 +93,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
           for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
             int out_index = z*y_size + y*ncells + x;
-            vcl_cout << level << "  " << out_index << vcl_endl;
+            //vcl_cout << level << "  " << out_index << vcl_endl;
             if (out_index >= data_size)
               vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
             else 

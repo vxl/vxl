@@ -116,8 +116,6 @@ bool boxm_roi_init_process(bprb_func_process& pro)
   vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
   vpgl_rational_camera<double>* rat_camera =
     dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
-  vcl_cout<<(*rat_camera);
-  vcl_cout.flush();
 
   if (!rat_camera) {
     vcl_cerr << "The camera input is not a rational camera\n";
