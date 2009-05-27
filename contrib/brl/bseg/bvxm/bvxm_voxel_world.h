@@ -106,7 +106,7 @@
 
 class bvxm_voxel_world: public vbl_ref_count
 {
- public:
+public:
 
   //: default constructor
   bvxm_voxel_world() {}
@@ -135,16 +135,16 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: update voxel grid edge probabilities with data from LIDAR/camera pair
   bool update_edges_lidar(vil_image_view_base_sptr& lidar_height,
-                          vil_image_view_base_sptr& lidar_edges,
-                          vil_image_view_base_sptr& lidar_edges_prob,
-                          vpgl_camera_double_sptr& camera,
-                          unsigned scale_idx=0);
+    vil_image_view_base_sptr& lidar_edges,
+    vil_image_view_base_sptr& lidar_edges_prob,
+    vpgl_camera_double_sptr& camera,
+    unsigned scale_idx=0);
 
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool expected_image(bvxm_image_metadata const& camera,
-                      vil_image_view_base_sptr &expected,
-                      vil_image_view<float> &mask, unsigned bin_index = 0, unsigned scale_idx=0);
+    vil_image_view_base_sptr &expected,
+    vil_image_view<float> &mask, unsigned bin_index = 0, unsigned scale_idx=0);
 
   // initialize the voxel grid for edges
   bool init_edges(unsigned scale_idx=0);
@@ -160,40 +160,40 @@ class bvxm_voxel_world: public vbl_ref_count
   // Default value of 0.008 is approximately two 8-bit levels in either direction (assuming intensity is normalized 0-1)
   template<bvxm_voxel_type APM_T>
   bool inv_pixel_range_probability(bvxm_image_metadata const& observation,
-                                   vil_image_view<float> &inv_prob,
-                                   unsigned bin_index = 0,unsigned scale_idx=0,
-                                   float pixel_range = 0.008f);
+    vil_image_view<float> &inv_prob,
+    unsigned bin_index = 0,unsigned scale_idx=0,
+    float pixel_range = 0.008f);
 
   //: for each pixel, return the sum along the corresponding ray of voxels that the observation was produced by the voxel.
   // Based on algorithm published in Pollard + Mundy 06.
   // The returned values are approximate samples of a probability density, with the pixel values being the independent value.
   template<bvxm_voxel_type APM_T>
   bool pixel_probability_density(bvxm_image_metadata const& observation,
-                                 vil_image_view<float> &pixel_probability,
-                                 vil_image_view<bool> &mask,
-                                 unsigned bin_index = 0, unsigned scale_idx=0);
+    vil_image_view<float> &pixel_probability,
+    vil_image_view<bool> &mask,
+    unsigned bin_index = 0, unsigned scale_idx=0);
 
   //: for each pixel in a region specified by mask , return the probability that the observation was produced by the voxel.
   // The returned values are approximate samples of a probability density, with the pixel values being the independent value.
   template<bvxm_voxel_type APM_T>
   bool region_probability_density(bvxm_image_metadata const& observation,
-                                 vil_image_view_base_sptr const& mask,
-                                 bvxm_voxel_grid_base_sptr &pixel_probability, 
-                                 unsigned bin_index , unsigned scale_idx);
+    vil_image_view_base_sptr const& mask,
+    bvxm_voxel_grid_base_sptr &pixel_probability, 
+    unsigned bin_index , unsigned scale_idx);
 
   //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool mixture_of_gaussians_image(bvxm_image_metadata const& camera,
-                                  bvxm_voxel_slab_base_sptr& mog_image,
-                                  unsigned bin_index = 0, unsigned scale_idx=0);
+    bvxm_voxel_slab_base_sptr& mog_image,
+    unsigned bin_index = 0, unsigned scale_idx=0);
 
   //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
   //  generate samples from each voxel's distribution along the ray of a pixel to train a new mog at the pixel
   //  use a random ordering to select the voxels based on their visibility probabilities to avoid ordering problem
   template<bvxm_voxel_type APM_T>
   bool mog_image_with_random_order_sampling(bvxm_image_metadata const& camera, unsigned n_samples,
-                                            bvxm_voxel_slab_base_sptr& mog_image,
-                                            unsigned bin_index = 0, unsigned scale_idx=0);
+    bvxm_voxel_slab_base_sptr& mog_image,
+    unsigned bin_index = 0, unsigned scale_idx=0);
 
 
   //: generate the mixture of gaussians slab from the specified viewpoint
@@ -201,15 +201,15 @@ class bvxm_voxel_world: public vbl_ref_count
   //  The slab should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool mog_most_probable_image(bvxm_image_metadata const& camera,
-                               bvxm_voxel_slab_base_sptr& mog_image,
-                               unsigned bin_index = 0, unsigned scale_idx=0);
+    bvxm_voxel_slab_base_sptr& mog_image,
+    unsigned bin_index = 0, unsigned scale_idx=0);
 
   //: return the original image, viewed from a new viewpoint
   template<bvxm_voxel_type APM_T>
   bool virtual_view(bvxm_image_metadata const& original_view,
-                    const vpgl_camera_double_sptr virtual_camera,
-                    vil_image_view_base_sptr &virtual_view,
-                    vil_image_view<float> &vis_prob, unsigned bin_index = 0, unsigned scale_idx=0);
+    const vpgl_camera_double_sptr virtual_camera,
+    vil_image_view_base_sptr &virtual_view,
+    vil_image_view<float> &vis_prob, unsigned bin_index = 0, unsigned scale_idx=0);
 
   //: generate a heightmap from the viewpoint of a virtual camera
   // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
@@ -268,11 +268,11 @@ class bvxm_voxel_world: public vbl_ref_count
   vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k, unsigned scale=0);
 
   void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
-                             unsigned grid_k,
-                             vgl_h_matrix_2d<double> &H_plane_to_image,
-                             vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx=0);
+    unsigned grid_k,
+    vgl_h_matrix_2d<double> &H_plane_to_image,
+    vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx=0);
 
- protected:
+protected:
 
 #if 0
   //: appearance model voxel storage
@@ -285,19 +285,19 @@ class bvxm_voxel_world: public vbl_ref_count
   //: the world parameters
   bvxm_world_params_sptr params_;
 
- private:
+private:
 
   template <bvxm_voxel_type APM_T>
   bool update_impl(bvxm_image_metadata const& metadata,
-                   bool return_prob, vil_image_view<float> &pix_prob_density,
-                   bool return_mask, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx=0);
+    bool return_prob, vil_image_view<float> &pix_prob_density,
+    bool return_mask, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx=0);
 
   //: Update voxel grid with data from LIDAR image/camera pair and return probability density of pixel values.
   bool update_lidar_impl(bvxm_image_metadata const& metadata,
-                         bool return_prob,
-                         vil_image_view<float> &pix_prob_density,
-                         bool return_mask,
-                         vil_image_view<bool> &mask, unsigned scale_idx=0);
+    bool return_prob,
+    vil_image_view<float> &pix_prob_density,
+    bool return_mask,
+    vil_image_view<bool> &mask, unsigned scale_idx=0);
 };
 
 
@@ -817,7 +817,7 @@ template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& observation,
                                                    vil_image_view<float> &inv_prob,
                                                    unsigned bin_index,unsigned scale_idx, float pixel_range
-                                                  )
+                                                   )
 {
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
@@ -1083,10 +1083,11 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& observation,
-                                 vil_image_view_base_sptr const& mask,
-                                 bvxm_voxel_grid_base_sptr &pixel_probability, 
-                                 unsigned bin_index , unsigned scale_idx)
+                                                  vil_image_view_base_sptr const& mask,
+                                                  bvxm_voxel_grid_base_sptr &pixel_probability, 
+                                                  unsigned bin_index , unsigned scale_idx)
 {
+  bool debug = false;
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
   typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
@@ -1105,15 +1106,14 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
   vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
-  {
-    vgl_h_matrix_2d<double> Hp2i, Hi2p;
-    for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
-    {
-      compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
-      H_plane_to_img.push_back(Hp2i);
-      H_img_to_plane.push_back(Hi2p);
-    }
-  }
+
+  //for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  //{
+  //  vgl_h_matrix_2d<double> Hp2i, Hi2p;
+  //  compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
+  //  H_plane_to_img.push_back(Hp2i);
+  //  H_img_to_plane.push_back(Hi2p);
+  //}
 
   // convert images to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(observation.img->ni(), observation.img->nj(), 1);
@@ -1121,9 +1121,12 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
 
   bvxm_util::img_to_slab(observation.img,image_slab);
   bvxm_util::img_to_slab(mask,mask_slab);
-
+  if(debug){
+    vil_save(*mask, "./test_mask.png");
+    bvxm_util::write_slab_as_image(mask_slab, "./test_slab.tiff");
+  }
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
-  bvxm_voxel_slab<obs_datatype> mask_backproj(grid_size.x(),grid_size.y(),1);
+  bvxm_voxel_slab<float> mask_backproj(grid_size.x(),grid_size.y(),1);
 
   vcl_cout << "Pass 1: " << vcl_endl;
 
@@ -1141,9 +1144,12 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
   PI_grid->initialize_data(0.0f);
   typename bvxm_voxel_grid<float>::iterator PI_slab_it = PI_grid->begin();
 
+
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++PI_slab_it)
   {
     vcl_cout << '.';
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
       vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
@@ -1151,16 +1157,28 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
     }
 
     // backproject image onto voxel plane
-    bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[z], frame_backproj);
-    bvxm_util::warp_slab_bilinear(mask_slab, H_plane_to_img[z], mask_backproj);
+    bvxm_util::warp_slab_bilinear(image_slab, Hp2i, frame_backproj);
+    bvxm_util::warp_slab_bilinear(mask_slab, Hp2i, mask_backproj);
+
+    if (debug){
+      vcl_stringstream file;
+      file << "./warped" <<z << ".tif";
+      bvxm_util::write_slab_as_image( mask_backproj, file.str());
+    }
 
     // calculate PI(X)
-    *PI_slab_it = apm_processor.prob_density(*apm_slab_it, frame_backproj,mask_backproj);
+    apm_processor.region_prob_density(*PI_slab_it, *apm_slab_it, frame_backproj,mask_backproj);
 
+    if(debug){
+      vcl_stringstream file;
+      file << "./p_slab_" <<z << ".tif";
+      bvxm_util::write_slab_as_image( *PI_slab_it, file.str());
+    }
     // multiply to get PIPX
-   // bvxm_util::multiply_slabs(PI,*ocp_slab_it,PIPX);
+    // bvxm_util::multiply_slabs(PI,*ocp_slab_it,PIPX);
 
   }
+  return true;
 }
 
 //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
@@ -1457,7 +1475,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   }
 
   vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
-           << vcl_endl;
+    << vcl_endl;
 
   //: release column_probs
   for (unsigned i = 0; i < observation.img->ni(); i++)
@@ -1506,22 +1524,22 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     }
   }
 
- vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
-          << vcl_endl;
+  vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
+    << vcl_endl;
 
- //: now create the mixture image from the samples
- for (unsigned k = 0; k < n_samples; k++) {
-   bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
-   bvxm_voxel_slab<float>* w = (bvxm_voxel_slab<float>*)(weights[k].ptr());
-   if (!apm_processor.update(mog_slab, *obs_samples, *w)) {
+  //: now create the mixture image from the samples
+  for (unsigned k = 0; k < n_samples; k++) {
+    bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
+    bvxm_voxel_slab<float>* w = (bvxm_voxel_slab<float>*)(weights[k].ptr());
+    if (!apm_processor.update(mog_slab, *obs_samples, *w)) {
       vcl_cout << "In mog_image_with_random_order_sampling() -- problems in appearance update\n";
       return false;
-   }
- }
+    }
+  }
 
- mog_image = new bvxm_voxel_slab<apm_datatype>(mog_slab);
+  mog_image = new bvxm_voxel_slab<apm_datatype>(mog_slab);
 
- return true;
+  return true;
 }
 
 
@@ -1765,7 +1783,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   }
   vcl_cout << vcl_endl;
 
-//#define HMAP_DEBUG
+  //#define HMAP_DEBUG
 #ifdef  HMAP_DEBUG
   bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
 #endif
@@ -1850,7 +1868,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
 
 class bvxm_mog_image_creation_methods
 {
- public:
+public:
   enum mog_creation_methods {
     MOST_PROBABLE_MODE,   // use the mean value of most probable mode of the mixture at each voxel along the ray to update a mog image (Thom Pollard's original algo)
     EXPECTED_VALUE,       // use the expected value of the mixture at each voxel along the ray to update a mog image
