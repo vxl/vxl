@@ -201,6 +201,9 @@ SOURCE=.\processes/bvxm_detect_edges_process.cxx
 SOURCE=.\processes/bvxm_synth_world_generator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_locate_region_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File

@@ -251,6 +251,24 @@ SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_sphere+float.1--.3---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_f1--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gauss_f1--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gauss_f1--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_gauss_f1--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_gauss_f1--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gauss_f1--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
