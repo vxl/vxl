@@ -1,3 +1,6 @@
+#ifndef bvpl_subgrid_iterator_txx_
+#define bvpl_subgrid_iterator_txx_
+
 #include "bvpl_subgrid_iterator.h"
 
 template <class T>
@@ -70,3 +73,5 @@ bool bvpl_subgrid_iterator<T>::done()
   else
     return false;
 }
+
+#endif // bvpl_subgrid_iterator_txx_
