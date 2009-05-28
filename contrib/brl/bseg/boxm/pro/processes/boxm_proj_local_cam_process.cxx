@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_roi_init_process.cxx
+// This is brl/bseg/boxm/pro/processes/boxm_proj_local_cam_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -44,7 +44,6 @@ namespace boxm_proj_local_cam_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 2;
-
 }
 
 //: set input and output types
@@ -93,13 +92,12 @@ bool boxm_proj_local_cam_process(bprb_func_process& pro)
   X = pro.get_input<float>(i++);
   Y = pro.get_input<float>(i++);
   Z = pro.get_input<float>(i++);
-  
 
   vpgl_local_rational_camera<double>* rat_camera =
-	  dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer());
+    dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer());
   if (!rat_camera) {
-	  vcl_cerr << "The camera input is not a rational camera\n";
-	  return false;
+    vcl_cerr << "The camera input is not a rational camera\n";
+    return false;
   }
 
   double u=0,v=0;
@@ -110,7 +108,7 @@ bool boxm_proj_local_cam_process(bprb_func_process& pro)
   pro.set_output_val<float>(j++, u);
   pro.set_output_val<float>(j++, v);
 
-  vcl_cout<<"(u,v):"<<u<<","<<v<<"\n";
+  vcl_cout<<"(u,v):"<<u<<','<<v<<'\n';
   return true;
 }
 
