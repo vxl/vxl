@@ -4,36 +4,38 @@
 #include "bvpl_voxel_subgrid.h"
 
 template <class T>
-bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_grid_base_sptr grid,
-                                          vgl_point_3d<unsigned> center,
-                                          vgl_vector_3d<double> dimensions)
- : bvpl_subgrid_base(center, dimensions)
-
- {
-   box_(center, dim_.x(), dim_.x(), dim_.x(), point_type::centre);
-   iter_ = grid_.slab_iterator(box.min_z(), dim_.z());
-   slab_ = *iter_;
- }
-
-template <class T>
 bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
-                                          vgl_point_3d<unsigned> center,
-                                          vgl_vector_3d<double> dimensions)
- : bvpl_subgrid_base(center, dimensions), slab_(slab);
-
+                                          vgl_point_3d<int> center,
+                                          vgl_vector_3d<int> dimensions)
+ : bvpl_subgrid_base(center, dimensions), slab_(slab)
  {
-   box_(center, dim_.x(), dim_.x(), dim_.x(), point_type::centre);
+   box_=vgl_box_3d<int>(center, dim_.x(), dim_.y(), dim_.z(), vgl_box_3d<int>::centre);
  }
 
  template <class T>
- T& bvpl_voxel_subgrid<T>::voxel(unsigned x, unsigned y, unsigned z)
+ bool bvpl_voxel_subgrid<T>::voxel(int x, int y, int z, T& v)
  {
-   unsigned x_min = box.min_x();
-   unsigned y_min = box.min_y();
-   unsigned z_max = box.max_z();
-
-   T& v = iter_(x+x_min, y+y_min, z-m_mx);
-   return v;
+   vgl_point_3d<int> c = box_.centroid();
+   
+   x = c.x()+x;
+   y = c.y()+y;
+   z = c.z()+z;
+   
+   vgl_box_3d<int> slab_box(vgl_point_3d<int>(0,0,0), vgl_point_3d<int>(slab_.nx()-1,slab_.ny()-1,slab_.nz()-1));
+   // make sure that the point is inside the box
+   if (!box_.contains(x,y,z)){
+     //vcl_cerr << "bvpl_subgrid_voxel_iterator: The index is out of subgrid boundaries!" << vcl_endl;
+     return false;
+   } else if (!slab_box.contains(x,y,z)) {
+     //vcl_cerr << "bvpl_subgrid_voxel_iterator: The index is out of grid boundaries!" << vcl_endl;
+     return false;
+   } else {
+     v = slab_(x,y,z);
+     return true;
+   }
  }
+
+#define BVPL_SUBGRID_VOXEL_INSTANTIATE(T) \
+template class bvpl_voxel_subgrid<T>;
 
 #endif // bvpl_voxel_subgrid_txx_
