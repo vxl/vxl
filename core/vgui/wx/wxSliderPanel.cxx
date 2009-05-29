@@ -146,7 +146,10 @@ void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
   min_vals_ = min_vals;
   max_vals_ = max_vals;
 
+
   Freeze();
+  DestroyChildren();
+  wxScrolledWindow::Create(GetParent(), GetId(), GetPosition(), GetSize(), GetWindowStyleFlag(), GetName());
   CreateControls();
   FitInside();
   SetScrollRate(0,20);
