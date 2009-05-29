@@ -35,14 +35,14 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   tree_type* tree = block->get_tree();
 
   // query the finest level of the tree and do not make the resolution smaller than that
-  if (tree->finest_level() > resolution_level)
+  if (tree->finest_level() > (int)resolution_level)
     resolution_level = tree->finest_level();
 
   // get origin of block
   vgl_point_3d<double> min = block_bb.min_point();
 
-  const unsigned int ncells = 1 << (tree->num_levels() - 1 - resolution_level);
- 
+  const unsigned int ncells = 1 << (tree->num_levels() - 1 - (int)resolution_level);
+
   // assume that bounding box is a cube
   const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
 
@@ -63,7 +63,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     *dp = 0.0f;
   }
 
-  double out_cell_norm_volume = (tree->num_levels() - resolution_level + 1);
+  double out_cell_norm_volume = (tree->num_levels() - (int)resolution_level + 1);
   out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
   vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
@@ -80,15 +80,15 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       int out_index = static_cast<int>((node.x()/step_len)*ncells*ncells + (node.y()/step_len)*ncells + (node.z()/step_len));
       if (out_index >= data_size)
         vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
-      else 
+      else
         data[out_index] = cell_val;
     }
     else if (level > resolution_level) {
       // cell is bigger than output cells.  copy value to all contained output cells.
       const unsigned int us_factor = 1 << (level - resolution_level);
-      const unsigned int node_x_start = static_cast<unsigned int>(node.x()/step_len);  
-      const unsigned int node_y_start = static_cast<unsigned int>(node.y()/step_len);  
-      const unsigned int node_z_start = static_cast<unsigned int>(node.z()/step_len);  
+      const unsigned int node_x_start = static_cast<unsigned int>(node.x()/step_len);
+      const unsigned int node_y_start = static_cast<unsigned int>(node.y()/step_len);
+      const unsigned int node_z_start = static_cast<unsigned int>(node.z()/step_len);
       for (unsigned int z=node_z_start; z<node_z_start+us_factor; ++z) {
         for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
           for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
@@ -96,7 +96,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             //vcl_cout << level << "  " << out_index << vcl_endl;
             if (out_index >= data_size)
               vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
-            else 
+            else
               data[out_index] = cell_val;
           }
         }
@@ -106,9 +106,9 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       // cell is smaller than output cells. increment output cell value
       unsigned int ds_factor = 1 << (resolution_level - level);
       double update_weight = 1.0 / double(ds_factor*ds_factor*ds_factor);
-      const unsigned int node_x = static_cast<unsigned int>(node.x()/step_len);  
-      const unsigned int node_y = static_cast<unsigned int>(node.y()/step_len);  
-      const unsigned int node_z = static_cast<unsigned int>(node.z()/step_len); 
+      const unsigned int node_x = static_cast<unsigned int>(node.x()/step_len);
+      const unsigned int node_y = static_cast<unsigned int>(node.y()/step_len);
+      const unsigned int node_z = static_cast<unsigned int>(node.z()/step_len);
       unsigned int out_index = static_cast<unsigned int>((node_z)*y_size + (node_y)*ncells + (node_x));
       data[out_index] += float(cell_val*update_weight);
     }
@@ -135,7 +135,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vxl_uint_32 nx = ncells;
   vxl_uint_32 ny = ncells;
   vxl_uint_32 nz = ncells;
-  
+
   vcl_ofstream os(filename.c_str(),vcl_ios::binary);
   if (!os.good()) {
     vcl_cerr << "error opening " << filename << " for write!\n";
