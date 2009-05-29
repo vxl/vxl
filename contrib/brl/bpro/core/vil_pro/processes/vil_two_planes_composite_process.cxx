@@ -50,7 +50,7 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
     vcl_cout<<"The images have different dimensions"<<vcl_endl;
     return false;
   }
-  vil_image_view<unsigned char> *out_img=new vil_image_view<unsigned char>(img_1->ni(),img_1->nj(),3);
+  vil_image_view<vxl_byte> *out_img=new vil_image_view<vxl_byte>(img_1->ni(),img_1->nj(),3);
 
   for (unsigned i=0;i<img_1->ni();i++)
   {
@@ -58,7 +58,7 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
     {
       (*out_img)(i,j,0)=bimage1(i,j);
       (*out_img)(i,j,1)=bimage2(i,j);
-      (*out_img)(i,j,2)=0.0;
+      (*out_img)(i,j,2)=(vxl_byte)0;
     }
   }
 
