@@ -14,10 +14,13 @@ imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
   : imesh_mesh(meshes[0]), mean_verts_(this->vertices().clone())
 {
   vnl_matrix<double> M = compute_mean(meshes);
-  vnl_svd<double> A(M);
+  vnl_svd<double> A(M,-1e-8);
+  
+  // remove zero singular values
 
-  std_devs_ = A.W().diagonal();
-  pc_ = A.U().transpose();
+  std_devs_ = vnl_vector<double>(A.W().diagonal().data_block(), A.rank());
+  pc_.set_size(A.rank(),M.rows());
+  A.U().transpose().extract(pc_);
 
   params_.set_size(std_devs_.size());
   params_.fill(0.0);
@@ -135,9 +138,12 @@ void imesh_pca_mesh::init(const vnl_vector<double>& mean,
 void imesh_pca_mesh::set_params(const vnl_vector<double>& p)
 {
   assert(params_.size() >= p.size());
+  vnl_vector<double> sp(p.size(),0.0);
   unsigned int i=0;
-  for (; i<p.size(); ++i)
+  for (; i<p.size(); ++i){
     params_[i] = p[i];
+    sp[i] = std_devs_[i]*p[i];
+  }
   // fill the rest with zeros
   for (; i<params_.size(); ++i)
     params_[i] = 0.0;
@@ -148,10 +154,10 @@ void imesh_pca_mesh::set_params(const vnl_vector<double>& p)
     imesh_vertex<3>& v = verts[i];
     const imesh_vertex<3>& mv = mverts[i];
     v = mv;
-    for (unsigned j=0; j<p.size(); ++j) {
-      v[0] += pc_(j,3*i)  *params_[j];
-      v[1] += pc_(j,3*i+1)*params_[j];
-      v[2] += pc_(j,3*i+2)*params_[j];
+    for (unsigned j=0; j<sp.size(); ++j) {
+      v[0] += pc_(j,3*i)  *sp[j];
+      v[1] += pc_(j,3*i+1)*sp[j];
+      v[2] += pc_(j,3*i+2)*sp[j];
     }
   }
 }
@@ -161,7 +167,7 @@ void imesh_pca_mesh::set_params(const vnl_vector<double>& p)
 // over many calls.
 void imesh_pca_mesh::set_param(unsigned int idx, double param)
 {
-  double diff = param - params_[idx];
+  double diff = std_devs_[idx]*(param - params_[idx]);
   params_[idx] = param;
 
   imesh_vertex_array<3>& verts = this->vertices<3>();
@@ -209,7 +215,10 @@ imesh_pca_mesh::project(const imesh_vertex_array_base& vertices) const
     vals[3*i+2] = v[2] - mv[2];
   }
 
-  return pc_*vals;
+  vnl_vector<double> p = pc_*vals;
+  for(unsigned int i=0; i<p.size(); ++i)
+    p[i] /= std_devs_[i];
+  return p;
 }
 
 
@@ -236,11 +245,18 @@ imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
 
   // map the image Jacobians into PCA Jacobians
   const vnl_matrix<double>& pc = mesh.principal_comps();
+  const vnl_vector<double>& std = mesh.std_devs();
+  
   vcl_vector<vnl_matrix<double> > img_jac(num_verts);
   for (unsigned int i=0; i<num_verts; ++i)
   {
     vnl_matrix<double> dir_3d(pc.rows(),3);
     pc.extract(dir_3d,0,3*i);
+    for(unsigned int j=0; j<std.size(); ++j){
+      dir_3d(j,0) /= std[j];
+      dir_3d(j,1) /= std[j];
+      dir_3d(j,2) /= std[j];
+    }
 
     img_jac[i] = J[i]*dir_3d.transpose();
   }
