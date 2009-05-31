@@ -90,6 +90,18 @@ LIB32=link.exe -lib
 # Name "bvpl - Win32 Release"
 # Name "bvpl - Win32 Debug"
 
+# Begin Group "Source Files"
+# PROP Default_Filter "cxx"
+# Begin Source File
+SOURCE=.\dummy.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_subgrid_iterator+float-.cxx
+# End Source File
+# End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
@@ -103,6 +115,9 @@ SOURCE=.\bvpl_voxel_subgrid.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_subgrid_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_kernel_iterator.h
 # End Source File
 # End Group
 # End Target
