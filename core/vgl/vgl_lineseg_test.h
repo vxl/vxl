@@ -49,6 +49,8 @@ inline bool vgl_lineseg_test_line(vgl_line_2d<T> const& l1,
 }
 
 //: true if the point lies on the line segment and is between the endpoints
+// \relates vgl_point_2d
+// \relates vgl_line_segment_2d
 template <class T>
 inline bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
                                    vgl_line_segment_2d<T> const& lseg)

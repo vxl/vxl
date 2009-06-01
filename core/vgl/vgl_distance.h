@@ -185,11 +185,15 @@ double vgl_distance(vgl_point_2d<T> const& point,
 
 //: Return the perpendicular distance between two lines in 3D.
 //  See vgl_closest_point.h for more information.
+// \relates vgl_homg_line_3d_2_points
 
 template <class T>
 double vgl_distance(vgl_homg_line_3d_2_points<T> const& line1,
                     vgl_homg_line_3d_2_points<T> const& line2);
 
+//: Return the perpendicular distance from a point to a line in 3D.
+//  See vgl_closest_point.h for more information.
+// \relates vgl_homg_line_3d_2_points
 template <class T>
 double vgl_distance(vgl_homg_line_3d_2_points<T> const& l,
                     vgl_homg_point_3d<T> const& p);
@@ -198,6 +202,9 @@ template <class T> inline
 double vgl_distance(vgl_homg_point_3d<T> const& p,
                     vgl_homg_line_3d_2_points<T> const& l) { return vgl_distance(l,p); }
 
+//: Return the perpendicular distance from a point to a line in 3D.
+//  See vgl_closest_point.h for more information.
+// \relates vgl_line_3d_2_points
 template <class T>
 double vgl_distance(vgl_line_3d_2_points<T> const& l,
                     vgl_point_3d<T> const& p);

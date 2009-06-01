@@ -12,6 +12,7 @@
 #include <vgl/vgl_polygon.h>
 
 //: Return a single-sheet polygon which is the smallest one containing all given points
+// \relates vgl_polygon
 template <class T> vgl_polygon<T> vgl_convex_hull(vcl_vector<vgl_point_2d<T> > const& points);
 
 #endif // vgl_convex_h_

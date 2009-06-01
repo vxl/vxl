@@ -179,7 +179,8 @@ vgl_point_2d<T> vgl_closest_point(vgl_point_2d<T> const& point,
 // \param line1
 // \param line2
 //
-// \return vcl_pair<vgl_homg_point_3d<T>,vgl_homg_point_3d<T>>
+// \return vcl_pair<vgl_homg_point_3d<T>,vgl_homg_point_3d<T> >
+// \relates vgl_homg_line_3d_2_points
 //
 // \author Paul Bourke, modified for use in VXL by Brendan McCane
 //
@@ -194,6 +195,8 @@ vgl_closest_points(vgl_homg_line_3d_2_points<T> const& line1,
 
 //: Return the point on the given line which is closest to the given point.
 //  If the given point is at infinity, the point at infinity of the line is returned.
+// \relates vgl_homg_line_3d_2_points
+// \relates vgl_homg_point_3d
 template <class T>
 vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_line_3d_2_points<T> const& l,
                                        vgl_homg_point_3d<T> const& p);
@@ -204,6 +207,8 @@ vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_point_3d<T> const& p,
 { return vgl_closest_point(l,p); }
 
 //: Return the point on the given line which is closest to the given point.
+// \relates vgl_line_3d_2_points
+// \relates vgl_point_3d
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
                                   vgl_point_3d<T> const& p);
@@ -216,6 +221,8 @@ vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
 
 //: Return the point on the given line which is closest to the given point.
 // The closest point is expressed in parametric form.
+// \relates vgl_line_3d_2_points
+// \relates vgl_point_3d
 // \sa vgl_line_3d_2_points::point_t()
 // \sa vgl_closest_point(vgl_line_3d_2_points<T> const&, vgl_point_3d<T> const&)
 template <class T>
@@ -231,12 +238,13 @@ double vgl_closest_point_t(vgl_point_3d<T> const& p,
 //: Return the points of closest approach on 2 3D lines.
 // Uses non-homogeneous representations.
 // \return The pair of closest points, the first on \a l1, the second on \a l2.
-// \retval unique If provided, will be set to true if the returned points are unique, 
+// \retval unique If provided, will be set to true if the returned points are unique,
 // otherwise many solutions exist and the returned points are an arbitrary choice.
 // The distance between the points is still valid, however.
+// \relates vgl_line_3d_2_points
 template <class T>
-vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > 
-vgl_closest_points(const vgl_line_3d_2_points<T>& l1, 
+vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
                    const vgl_line_3d_2_points<T>& l2,
                    bool* unique=0);
 
@@ -244,12 +252,13 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
 //: Return the points of closest approach on 2 3D line segments.
 // Uses non-homogeneous representations.
 // \return The pair of closest points, the first on \a l1, the second on \a l2.
-// \retval unique If provided, will be set to true if the returned points are unique, 
+// \retval unique If provided, will be set to true if the returned points are unique,
 // otherwise many solutions exist and the returned points are an arbitrary choice.
 // The distance between the points is still valid, however.
+// \relates vgl_line_segment_3d
 template <class T>
-vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > 
-vgl_closest_points(const vgl_line_segment_3d<T>& l1, 
+vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+vgl_closest_points(const vgl_line_segment_3d<T>& l1,
                    const vgl_line_segment_3d<T>& l2,
                    bool* unique=0);
 
