@@ -5,11 +5,11 @@
 // \file
 // \author fsm
 // \verbatim
-// Modifications
-// 29 Apr 2002: Amitha Perera: added a polygon clipper (a wrap around for
-//                             Alan Murt's Generic Polygon Clipper)
-// 12 Oct 2002: Peter Vanroose: vgl_clip_line_to_box completely re-implemented
-// 14 Nov 2003: Peter Vanroose: made all functions templated
+//  Modifications
+//   29 Apr 2002: Amitha Perera: added a polygon clipper (a wrap around for
+//                               Alan Murt's Generic Polygon Clipper)
+//   12 Oct 2002: Peter Vanroose: vgl_clip_line_to_box completely re-implemented
+//   14 Nov 2003: Peter Vanroose: made all functions templated
 // \endverbatim
 
 #include <vgl/vgl_box_2d.h>
@@ -75,12 +75,15 @@ vgl_polygon<T>
 vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
           vgl_clip_type op = vgl_clip_type_intersect );
 
-//: Same as vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
-//          vgl_clip_type op = vgl_clip_type_intersect );
-//
-//  But where the fourth parameter is a return flag which is 1 if success, or 0 if the operation
-//  faced a geometric degeneracy which could not be handled. In this case, it might be necessary
+//: Clip a polygon against another polygon.
+//  Same as vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
+//                    vgl_clip_type op = vgl_clip_type_intersect );
+//  but where the fourth parameter is a return flag which is 1 if success,
+//  or 0 if the operation faced a geometric degeneracy which could not be
+//  handled. In this case, it might be necessary
 //  to perturb the input with a tiny ammount of random noise and try again.
+//
+// \relates vgl_polygon
 template <class T>
 vgl_polygon<T>
 vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval);
