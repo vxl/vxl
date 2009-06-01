@@ -4,10 +4,9 @@
 #include "bvpl_subgrid_iterator.h"
 
 template <class T>
-bvpl_subgrid_iterator<T>::bvpl_subgrid_iterator(bvxm_voxel_grid<T>& grid, 
+bvpl_subgrid_iterator<T>::bvpl_subgrid_iterator(bvxm_voxel_grid<T>& grid,
                                                 vgl_vector_3d<int> dimensions)
-
-    : bvpl_subgrid_iterator_base(dimensions), grid_(grid)
+  : bvpl_subgrid_iterator_base(dimensions), grid_(grid)
 {
   // start from the z radius top go towards the botton slab
   int x_r = dimensions.x()/2;
@@ -85,7 +84,7 @@ bool bvpl_subgrid_iterator<T>::done()
     return false;
 }
 
-#define BVPL_SUBGRID_ITER_INSTANTIATE(T) \
-template class bvpl_subgrid_iterator<T>;
+#define BVPL_SUBGRID_ITERATOR_INSTANTIATE(T) \
+template class bvpl_subgrid_iterator<T >
 
 #endif
