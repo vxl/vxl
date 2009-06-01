@@ -45,6 +45,7 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line equation ax+by+c=0.
 
 
 //: clip given line to given box, and return resulting line segment
+// \relates vgl_line_2d
 // \relates vgl_box_2d
 
 template <class T>
@@ -80,8 +81,8 @@ vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
 //                    vgl_clip_type op = vgl_clip_type_intersect );
 //  but where the fourth parameter is a return flag which is 1 if success,
 //  or 0 if the operation faced a geometric degeneracy which could not be
-//  handled. In this case, it might be necessary
-//  to perturb the input with a tiny ammount of random noise and try again.
+//  handled. In this case, it might be necessary to perturb the input with
+//  a tiny amount of random noise and try again.
 //
 // \relates vgl_polygon
 template <class T>
