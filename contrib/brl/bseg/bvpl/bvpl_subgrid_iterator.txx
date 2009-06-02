@@ -76,7 +76,7 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
 }
 
 template <class T>
-bool bvpl_subgrid_iterator<T>::done()
+bool bvpl_subgrid_iterator<T>::isDone()
 {
   if (iter_ == grid_.end())
     return true;

@@ -78,7 +78,7 @@ bvpl_edge2d_kernel::bvpl_edge2d_kernel(unsigned height, unsigned width,vnl_vecto
       //Now rotate the basic kernel according to user specifications
       vnl_rotation_matrix(rotations, R_);
       
-      if(rotations != vnl_vector_fixed<double,3>(0.0, 0.0, 0.0));
+      if(rotations != vnl_vector_fixed<double,3>(0.0, 0.0, 0.0))
       {
         this->warp_nearest_neighbor();
       }

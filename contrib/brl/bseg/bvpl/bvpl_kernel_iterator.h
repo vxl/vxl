@@ -1,7 +1,19 @@
 #ifndef bvpl_kernel_iterator_h_
 #define bvpl_kernel_iterator_h_
 
+//:
+// \file
+// \brief A class for iterating over the kernel values, paired with the position and value 
+//
+// \author Gamze Tunali
+// \date May 28, 2009
+// \verbatim
+//  Modifications
+//   
+// \endverbatim
+
 #include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
