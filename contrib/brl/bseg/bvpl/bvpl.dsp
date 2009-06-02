@@ -93,7 +93,10 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\dummy.cxx
+SOURCE=.\bvpl_kernel_base.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge2d_kernel.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
