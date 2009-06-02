@@ -104,6 +104,15 @@ SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvpl_subgrid_iterator+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_edge2d_functor+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_subgrid_iterator_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_kernel_iterator+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -127,6 +136,12 @@ SOURCE=.\bvpl_kernel_base.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_edge2d_kernel.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge2d_functor.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge2d_functor.h
 # End Source File
 # End Group
 # End Target
