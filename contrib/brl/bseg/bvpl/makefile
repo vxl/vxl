@@ -8,6 +8,7 @@ MANPAGE_SOURCES += bvpl_subgrid_iterator.txx
 MANPAGE_SOURCES += bvpl_kernel_iterator.h
 SOURCES += bvpl_kernel_base.cxx
 SOURCES += bvpl_edge2d_kernel.cxx
+MANPAGE_SOURCES += bvpl_edge2d_functor.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
