@@ -119,6 +119,12 @@ SOURCE=.\bvpl_subgrid_iterator.txx
 # Begin Source File
 SOURCE=.\bvpl_kernel_iterator.h
 # End Source File
+# Begin Source File
+SOURCE=.\bvpl_kernel_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge2d_kernel.h
+# End Source File
 # End Group
 # End Target
 # End Project
