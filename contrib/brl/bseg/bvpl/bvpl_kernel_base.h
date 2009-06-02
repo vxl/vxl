@@ -25,8 +25,8 @@ class bvpl_kernel_base
 {
 public:
   unsigned angular_resolution_x()  {return angular_resolution_x_;}
-  unsigned angular_resolution_y()  {return angular_resolution_x_;}
-  unsigned angular_resolution_z()  {return angular_resolution_x_;}
+  unsigned angular_resolution_y()  {return angular_resolution_y_;}
+  unsigned angular_resolution_z()  {return angular_resolution_z_;}
   virtual vcl_string name()=0;
   
   //:Return a map of symbols and it's 3d position
