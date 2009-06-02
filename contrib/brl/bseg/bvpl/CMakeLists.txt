@@ -8,6 +8,9 @@ SET(bvpl_sources
     bvpl_subgrid_iterator.txx        bvpl_subgrid_iterator.h
     bvpl_kernel_iterator.h
     dummy.cxx
+    bvpl_kernel_iterator.h
+    bvpl_kernel_base.h                    bvpl_kernel_base.cxx
+    bvpl_edge2d_kernel.h                  bvpl_edge2d_kernel.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_sources)
