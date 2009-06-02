@@ -1,3 +1,4 @@
+#include <bvpl/bvpl_edge2d_functor.h>
 #include <bvpl/bvpl_edge2d_kernel.h>
 #include <bvpl/bvpl_kernel_base.h>
 #include <bvpl/bvpl_kernel_iterator.h>
