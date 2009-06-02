@@ -6,6 +6,10 @@
 // \brief Various operators for templated vnl classes
 // \author Ian Scott
 
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 
 //: Define a complete ordering on vnl_vector
 // This is useful to create a set, or map of vectors.
@@ -14,12 +18,6 @@
 // on the meaning of less here.
 //
 // \relates vnl_vector
-
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
-
 
 template<class T>
 bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
@@ -37,7 +35,6 @@ bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
   return false;                                 // Else all same.
 }
 
-
 //: Define a complete ordering on vnl_matrix
 // This is useful to create a set, or map of matrices.
 //
@@ -45,6 +42,7 @@ bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
 // on the meaning of less here.
 //
 // \relates vnl_matrix
+
 template<class T>
 bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
 {
@@ -55,7 +53,6 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
   else if (lhs.cols() < rhs.cols())  return true;
   else if (lhs.cols() > rhs.cols()) return false;
 
-
   for (unsigned i = 0; i < lhs.size(); i++)         // For each index
   {
     if (lhs.data_block()[i] < rhs.data_block()[i]) return true; // Element different ?
@@ -64,22 +61,22 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
   return false;                                 // Else all same.
 }
 
-
 //: Define a complete ordering on vnl_vector_fixed
 // This is useful to create a set, or map of vectors.
 //
 // \relates vnl_vector_fixed
+
 template<class T, unsigned int n>
 bool operator<(vnl_vector_fixed<T,n> const& lhs, vnl_vector_fixed<T,n> const& rhs)
 {
   return lhs.as_ref() < rhs.as_ref();
 }
 
-
 //: Define a complete ordering on vnl_matrix_fixed
 // This is useful to create a set, or map of matrices.
 //
 // \relates vnl_matrix_fixed
+
 template<class T, unsigned int n, unsigned int m>
 bool operator<(vnl_matrix_fixed<T,n,m> const& lhs, vnl_matrix_fixed<T,n,m> const& rhs)
 {

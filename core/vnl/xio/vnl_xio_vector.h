@@ -11,6 +11,7 @@
 #include <vcl_iosfwd.h>
 
 //: XML save vnl_vector_fixed to stream.
+// \relates vnl_vector
 template <class T>
 void x_write(vcl_ostream & os, const vnl_vector<T> & v,
              vcl_string name="vnl_vector");
