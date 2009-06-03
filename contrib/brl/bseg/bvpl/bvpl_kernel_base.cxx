@@ -55,7 +55,6 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
  
   //TO DO: check the number of symbols is consistent
   //vcl_map< vgl_point_3d<int>, char >::iterator new_map_it = new_map.begin();
-  
     
   //swap maps
   kernel_.swap(new_map);
