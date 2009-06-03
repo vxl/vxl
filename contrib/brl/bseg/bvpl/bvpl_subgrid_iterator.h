@@ -12,6 +12,7 @@
 // \endverbatim
 
 #include <vcl_iterator.h>
+#include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_vector_3d.h>
 #include <bvxm/bvxm_voxel_grid.h>
@@ -19,7 +20,7 @@
 
 
 //: The base class for the iterators.
-class bvpl_subgrid_iterator_base
+class bvpl_subgrid_iterator_base : public vbl_ref_count
 {
  public:
    bvpl_subgrid_iterator_base() {}

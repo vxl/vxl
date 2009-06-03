@@ -34,7 +34,7 @@ public:
   virtual ~bvpl_voxel_subgrid(){}
 
   bool voxel(int x, int y, int z, T& v);
-
+  bool voxel(vgl_point_3d<int> p, T& v) { return voxel(p.x(), p.y(), p.z(), v); }
 protected:
   vgl_box_3d<int> box_;
   bvxm_voxel_slab<T> slab_;
