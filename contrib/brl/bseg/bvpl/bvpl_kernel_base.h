@@ -25,19 +25,23 @@ class bvpl_kernel_base
 {
 public:
   unsigned angular_resolution_x()  {return angular_resolution_x_;}
-  unsigned angular_resolution_y()  {return angular_resolution_y_;}
-  unsigned angular_resolution_z()  {return angular_resolution_z_;}
+  unsigned angular_resolution_y()  {return angular_resolution_x_;}
+  unsigned angular_resolution_z()  {return angular_resolution_x_;}
   virtual vcl_string name()=0;
   
   //:Return a map of symbols and it's 3d position
   bvpl_kernel_iterator iterator(){return kernel_;}
-
+  bool save_raw(vcl_string filename);
   
 protected:
   //The map of 3d positions and their symbols
   vcl_vector<vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> > kernel_;
+ 
   //The rotation matrix
   vnl_matrix_fixed<double,3,3> R_;
+  
+  //Dimensions of the 3D grid
+  vgl_point_3d<int> grid_dim_;
   
   //A map containing symbols and their total_number
   //vcl_map<char, unsigned> symbols_map_;
