@@ -10,7 +10,7 @@
 bool test_edge2d(vcl_string grid_path,unsigned height, unsigned width,vnl_vector_fixed<double,3> const& rotations )
 {
  //create a kernel and save it to a grid
-  bvpl_edge2d_kernel<SYMMETRIC> kernel; 
+  bvpl_edge2d_kernel kernel; 
   vcl_cout<< "alive \n";
   kernel.create(height, width, rotations);
   kernel.save_raw(grid_path);
