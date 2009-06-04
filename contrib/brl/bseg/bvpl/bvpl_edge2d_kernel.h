@@ -34,12 +34,13 @@ class bvpl_edge2d_kernel;
 
 //Template specialization of 2d_edge kernels
 template <>
-class bvpl_edge2d_kernel<SYMMETRIC> : public bvpl_kernel_base 
+class bvpl_edge2d_kernel<SYMMETRIC> : public bvpl_kernel_base
 {
 
 public: 
   //:Default Constructors
   bvpl_edge2d_kernel();
+
   //:Creates a 2d edge kernel of specified type
   bool create(unsigned height, unsigned width, vnl_vector_fixed<double,3> const& rotations);
   unsigned height() {return height_;}
@@ -106,7 +107,7 @@ bvpl_edge2d_kernel<SYMMETRIC>::create(unsigned height, unsigned width,vnl_vector
   typedef vgl_point_3d<int> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
   
-  int min= -(height/2);
+  int min= -1*(height/2);
   int max =(height/2);
   
     for(int r= min; r<= max; r++)

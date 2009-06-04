@@ -4,17 +4,6 @@
 #include "bvpl_edge2d_functor.h"
 
 template <class T>
-bvpl_edge2d_functor<T>::bvpl_edge2d_functor() 
-: result_(0)
-{
-}
-
-template <class T>
-bvpl_edge2d_functor<T>::~bvpl_edge2d_functor()
-{
-}
-
-template <class T>
 void bvpl_edge2d_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
   if (d.c_ == '+')
@@ -24,6 +13,6 @@ void bvpl_edge2d_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 }
 
 #define BVPL_EDGE2D_FUNC_INSTANTIATE(T) \
-template class bvpl_edge2d_functor<T>;
+template class bvpl_edge2d_functor<T>
 
 #endif

@@ -6,8 +6,8 @@
 template <class T>
 class bvpl_edge2d_functor {
 public:
-  bvpl_edge2d_functor();
-  ~bvpl_edge2d_functor();
+  bvpl_edge2d_functor(): result_(0) {}
+  ~bvpl_edge2d_functor() {}
   void apply(T& val, bvpl_kernel_dispatch& d);
   T result() { return result_; }
 private:
