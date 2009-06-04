@@ -218,6 +218,12 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_subgrid.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bvpl_kernels.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_neighb_oper.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
