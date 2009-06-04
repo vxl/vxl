@@ -55,3 +55,6 @@ SUBDIRS(boxm)
 
 #octree based modeling python interface
 SUBDIRS(boxm_batch)
+
+#voxel processing library
+SUBDIRS(bvpl)
