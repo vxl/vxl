@@ -103,9 +103,9 @@ bool bvpl_kernel_base::save_raw(vcl_string filename)
   // write header
   unsigned char data_type = 1; // 1 means signed byte
   
-  vxl_uint_32 nx = (max3d_.x() - min3d_.x()) + 100;
-  vxl_uint_32 ny = (max3d_.y() - min3d_.y()) + 100;
-  vxl_uint_32 nz = (max3d_.z() - min3d_.z()) + 100;
+  vxl_uint_32 nx = (max3d_.x() - min3d_.x()) + 1;
+  vxl_uint_32 ny = (max3d_.y() - min3d_.y()) + 1;
+  vxl_uint_32 nz = (max3d_.z() - min3d_.z()) + 1;
   
   ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
   ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
