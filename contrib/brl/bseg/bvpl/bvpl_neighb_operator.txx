@@ -2,9 +2,7 @@
 #define bvpl_neighb_operator_txx_
 
 #include "bvpl_neighb_operator.h"
-#include "bvpl_voxel_subgrid.h"
 
-#include <vgl/vgl_point_3d.h>
 
 template <class T, class F>
 void bvpl_neighb_operator<T,F>::operator()(bvpl_subgrid_iterator<T>& subgrid_iter, 

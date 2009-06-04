@@ -10,6 +10,49 @@
 #include <vul/vul_file.h>
 #include <vnl/vnl_math.h>
 
+bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
+{
+  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  if (!ofs.is_open()) {
+    vcl_cerr << "error opening file " << filename << " for write!\n";
+    return false;
+  }
+
+  // write header
+  unsigned char data_type = 0; // 0 means unsigned byte
+
+  vxl_uint_32 nx = grid->grid_size().x();
+  vxl_uint_32 ny = grid->grid_size().y();
+  vxl_uint_32 nz = grid->grid_size().z();
+
+  ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
+  ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
+  ofs.write(reinterpret_cast<char*>(&ny),sizeof(ny));
+  ofs.write(reinterpret_cast<char*>(&nz),sizeof(nz));
+
+  // write data
+  // iterate through slabs and fill in memory array
+  char *ocp_array = new char[nx*ny*nz];
+
+  bvxm_voxel_grid<float>::iterator ocp_it = grid->begin();
+  for (unsigned k=0; ocp_it != grid->end(); ++ocp_it, ++k) {
+    vcl_cout << '.';
+    for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
+      for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
+        ocp_array[i*ny*nz + j*nz + k] = (unsigned char)((*ocp_it)(i,j) * 255.0);
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(unsigned char)*nx*ny*nz);
+
+  ofs.close();
+
+  delete[] ocp_array;
+
+  return true;
+}
+
 //: Test changes
 static void test_neighb_oper()
 {
@@ -51,7 +94,7 @@ static void test_neighb_oper()
   //grid->increment_observations();
 
   // read in each slice, check that init_val was set, and fill with new value
-  unsigned count = 0;
+  unsigned count = 0.1f;
   vcl_cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
   for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
@@ -59,30 +102,30 @@ static void test_neighb_oper()
     bvxm_voxel_slab<float> vit=*slab_it;
     for (unsigned i=0; i<grid_x/2; i++) {
       for (unsigned j=0; j<grid_y; j++) {
-        for (unsigned k=0; k<grid_z; k++) {
-          float &v = vit(i,j,k);
-          v = 1.0f;
-        }
+        float &v = vit(i,j);
+        v = 0.9f;
       }
     }
   }
   vcl_cout << "done." << vcl_endl;
-
+  save_occupancy_raw("first.raw", grid);
   // get the subgrid iterator
   int kernel_x=11, kernel_y=11, kernel_z=11;
   bvpl_subgrid_iterator<float> iter(*grid, vgl_vector_3d<int> (kernel_x,kernel_y,kernel_z));
   bvpl_subgrid_iterator<float> out_iter(*grid_out, vgl_vector_3d<int> (kernel_x,kernel_y,kernel_z));
-  bvpl_edge2d_kernel<SYMMETRIC> kernel; 
+  bvpl_edge2d_kernel kernel; 
   kernel.create(5, 5, vnl_vector_fixed<double,3>(vnl_math::pi, 0.0, 0.0));
   bvpl_edge2d_functor<float> func;
   bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
   while (!iter.isDone()) {
+    bvpl_kernel_iterator kernel_iter = kernel.iterator();
     bvpl_voxel_subgrid<float> subgrid = *iter;
-    oper(iter, kernel.iterator(), out_iter);
+    oper.operate(iter, kernel_iter, out_iter);
     ++out_iter;
     ++iter;
   }
-  // go through the subgrid
+   save_occupancy_raw("out.raw", grid_out);
+
 }
 
 TESTMAIN( test_neighb_oper );

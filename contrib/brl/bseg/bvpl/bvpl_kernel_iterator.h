@@ -30,9 +30,9 @@ class bvpl_kernel_iterator: public vbl_ref_count
 public:
   typedef vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> kernel_pair;
 
-  bvpl_kernel_iterator(){}
+  bvpl_kernel_iterator() : cur_index_(0) {}
 
-  bvpl_kernel_iterator(vcl_vector<kernel_pair> kernel_vals):kernel_vals_(kernel_vals) {}
+  bvpl_kernel_iterator(vcl_vector<kernel_pair> kernel_vals):kernel_vals_(kernel_vals), cur_index_(0) {}
 
   ~bvpl_kernel_iterator(){}
 

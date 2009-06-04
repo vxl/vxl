@@ -61,7 +61,7 @@ bvpl_edge2d_kernel::create(unsigned height, unsigned width,vnl_vector_fixed<doub
       {
         if(c < 0)
           kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(c,r,0), dispatch(-1)));
-        if(c >  0)
+        else if(c >  0)
           kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(c,r,0), dispatch(1)));
       }
     }

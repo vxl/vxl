@@ -10,7 +10,7 @@ SET(bvpl_sources
     bvpl_edge2d_functor.txx          bvpl_edge2d_functor.h
     bvpl_kernel_base.h               bvpl_kernel_base.cxx
     bvpl_edge2d_kernel.h             bvpl_edge2d_kernel.cxx
-    bvpl_neighb_operator.h           bvpl_neighb_operator.txx
+    bvpl_neighb_operator.h           
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_sources)

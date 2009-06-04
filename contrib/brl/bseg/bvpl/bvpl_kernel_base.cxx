@@ -124,7 +124,8 @@ bool bvpl_kernel_base::save_raw(vcl_string filename)
   
   for (; it !=kernel_.end(); ++it) {
     vgl_point_3d<int> coord =( *it).first;
-    data_array[(coord.x()-min3d_.x())*ny*nz + (coord.y()-min3d_.y())*nz + (coord.z() - min3d_.z())] =(char)((*it).second.c_);
+    int index = (coord.x()-min3d_.x())*ny*nz + (coord.y()-min3d_.y())*nz + (coord.z() - min3d_.z());
+    data_array[index] =(char)((*it).second.c_);
   }
 
   vcl_cout << vcl_endl;
