@@ -4,6 +4,8 @@ include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_subgrid.cxx
+TESTS += test_bvpl_kernels.cxx
+TESTS += test_neighb_oper.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

@@ -46,11 +46,17 @@ SUBDIRS += bmdl_batch
 # recognition library - uses background models of bbgm and/or bvxm
 SUBDIRS += brec
 
+# octree
 SUBDIRS += boct
 
+# octree based modeling 
 SUBDIRS += boxm
 
+# octree based modeling python interface
 SUBDIRS += boxm_batch
+
+# voxel processing library
+SUBDIRS += bvpl
 
 ################################
 include ${VXLROOT}/config/top.mk
