@@ -68,6 +68,7 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
     
   //swap maps
   kernel_.swap(new_map);
+  return true;
 }
 
 
