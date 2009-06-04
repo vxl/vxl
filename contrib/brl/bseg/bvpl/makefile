@@ -9,7 +9,7 @@ MANPAGE_SOURCES += bvpl_kernel_iterator.h
 SOURCES += bvpl_kernel_base.cxx
 SOURCES += bvpl_edge2d_kernel.cxx
 MANPAGE_SOURCES += bvpl_edge2d_functor.txx
-MANPAGE_SOURCES += bvpl_neighb_operator.txx
+MANPAGE_SOURCES += bvpl_neighb_operator.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
