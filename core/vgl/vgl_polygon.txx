@@ -14,6 +14,7 @@
 #include <vcl_set.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -247,15 +248,27 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
             // use vgl_intersection to verify some degenerate false positives
             else if (vgl_intersection(v1,v2,v3,v4,tol)) {
               // make intersection point
+              vgl_point_2d<T> ipt;
+              if (!vgl_intersection(vgl_line_2d<T>(v1,v2),vgl_line_2d<T>(v3,v4),ipt) 
+                  || parallel(v2-v1,v4-v3,tol)) // vgl_intersection test is not accurate enough
+              {
+                // use the median point when lines are parallel
+                vgl_vector_2d<T> dir = v2-v1;
+                normalize(dir);
+                T t1 = 0;
+                T t2 = dot_product(dir,v2-v1);
+                T t3 = dot_product(dir,v3-v1);
+                T t4 = dot_product(dir,v4-v1);
+                T t = t1+t2+t3+t4;
+                t -= vcl_min(vcl_min(t1,t2),vcl_min(t3,t4));
+                t -= vcl_max(vcl_max(t1,t2),vcl_max(t3,t4));
+                t /= 2;
+                ipt = v1 + t*dir;
+              }
               e1.push_back(upair(s2,i2));
               e2.push_back(upair(s1,i1));
-              vgl_point_2d<T> ipt;
-              if (!vgl_intersection(vgl_line_2d<T>(v1,v2),vgl_line_2d<T>(v3,v4),ipt))
-              {
-                vcl_cerr<< "warning: ill-defined intersection, using mid-point\n";
-                ipt.set((v1.x()+v2.x()+v3.x()+v4.x())/4, (v1.y()+v2.y()+v3.y()+v4.y())/4);
-              }
               ip.push_back(ipt);
+              
             }
           }
           last_sign = sign;
