@@ -68,13 +68,14 @@ bvpl_edge2d_kernel<SYMMETRIC>::bvpl_edge2d_kernel()
 bool
 bvpl_edge2d_kernel<SYMMETRIC>::create(unsigned height, unsigned width,vnl_vector_fixed<double,3> const& rotations)
 {
+
   
-  if( width % 2)
+  if( !(height % 2))
   {
     vcl_cerr<< "Warning, height of kernel is even. It has been increased by one"<< vcl_endl;
     height = height++;
   }
-  if(height % 2)
+  if(!(width % 2))
   {
     vcl_cerr<< "Warning, width of kernel is even. It has been increased by one"<< vcl_endl;
     width =width++;
@@ -95,7 +96,7 @@ bvpl_edge2d_kernel<SYMMETRIC>::create(unsigned height, unsigned width,vnl_vector
   
   height_=height;
   width_ = width;
-  
+
   //create a basic centered edge with 1, 0, -1, if width is odd
   // 1 1 0 -1 -1
   // 1 1 0 -1 -1
@@ -105,18 +106,17 @@ bvpl_edge2d_kernel<SYMMETRIC>::create(unsigned height, unsigned width,vnl_vector
   typedef vgl_point_3d<int> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
   
-
+  int min= -(height/2);
+  int max =(height/2);
   
-    for(int r= -(height/2); r< (height/2); ++r)
+    for(int r= min; r<= max; r++)
     {
-      for (unsigned c=-(width/2); r <(width/2); ++c)
+      for (int c=min; c<= max; c++)
       {
         if(c < 0)
-          kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(c,r,0), dispatch('-')));
-        if(c == 0)
-          kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(c,r,0), dispatch('0')));
+          kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(c,r,0), dispatch(-1)));
         if(c >  0)
-          kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(c,r,0), dispatch('+')));
+          kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(c,r,0), dispatch(1)));
       }
     }
    

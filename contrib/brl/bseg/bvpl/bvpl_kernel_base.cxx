@@ -23,9 +23,13 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
    new_symbols_map.insert(vcl_make_pair( syms_it->first, 0)); 
   #endif
   
-  int max_x =0;
-  int max_y =0;
-  int max_z =0;
+  //Kernels shouldn't get any bigger than this, so this initial values work
+  int max_x =-20;
+  int max_y =-20;
+  int max_z =-20;
+  int min_x = 20;
+  int min_y =20;
+  int min_z = 20;
   
   for(; kernel_it != kernel_.end(); ++kernel_it)
   {
@@ -42,6 +46,11 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
     if(x0> max_x) max_x = x0;
     if(y0> max_y) max_y = y0;
     if(z0> max_z) max_z = z0;
+    
+    if(x0< min_x) min_x = x0;
+    if(y0< min_y) min_y = y0;
+    if(z0< min_z) min_z = z0;
+    
  
      new_map.push_back(vcl_make_pair(vgl_point_3d<int>(x0,y0,z0), (kernel_it->second)));
     
@@ -50,7 +59,8 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
     
   }
   //set the dimension of the 3-d grid
-  grid_dim_.set(max_x,max_y,max_z);
+  max3d_.set(max_x,max_y,max_z);
+  min3d_.set(min_x,min_y,min_z);
   
  
   //TO DO: check the number of symbols is consistent
@@ -58,8 +68,9 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
     
   //swap maps
   kernel_.swap(new_map);
-  
 }
+
+
 #if 0 
 //:Converts the kernel_map to a bvpl_kernel_iterator
 bvpl_kernel_iterator bvpl_kernel_base::iterator()
@@ -80,6 +91,7 @@ bvpl_kernel_iterator bvpl_kernel_base::iterator()
 
 bool bvpl_kernel_base::save_raw(vcl_string filename)
 {
+  vcl_cout << "still alive \n";
   
   vcl_fstream ofs(filename.c_str(), vcl_ios::binary | vcl_ios::out);
   if (!ofs.is_open()) {
@@ -88,11 +100,11 @@ bool bvpl_kernel_base::save_raw(vcl_string filename)
   }
    
   // write header
-  unsigned char data_type = 8; // 8 means float
+  unsigned char data_type = 1; // 1 means signed byte
   
-  vxl_uint_32 nx = grid_dim_.x();
-  vxl_uint_32 ny = grid_dim_.y();
-  vxl_uint_32 nz = grid_dim_.z();
+  vxl_uint_32 nx = (max3d_.x() - min3d_.x()) + 1;
+  vxl_uint_32 ny = (max3d_.y() - min3d_.y()) + 1;
+  vxl_uint_32 nz = (max3d_.z() - min3d_.z()) + 4;
   
   ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
   ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
@@ -101,16 +113,21 @@ bool bvpl_kernel_base::save_raw(vcl_string filename)
   
   // write data
   // iterate through slabs and fill in memory array
-  float *data_array = new float[nx*ny*nz];
+  unsigned size = nx*ny*nz;
+  char *data_array = new char[size];
   vcl_vector<vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> >::iterator it = kernel_.begin();
+  
+  //Since our kernel does not occupy the entire space we need to initialize our data
+  for(unsigned i = 0; i < size; i++)
+    data_array[i] = -1;
   
   for (; it !=kernel_.end(); ++it) {
     vgl_point_3d<int> coord =( *it).first;
-    data_array[coord.x()*ny*nz + coord.y()*nz + coord.z()] =float((*it).second.c_);
+    data_array[(coord.x()-min3d_.x())*ny*nz + (coord.y()-min3d_.y())*nz + (coord.z() - min3d_.z())] =(char)((*it).second.c_);
   }
 
   vcl_cout << vcl_endl;
-  ofs.write(reinterpret_cast<char*>(data_array),sizeof(float)*nx*ny*nz);
+  ofs.write(reinterpret_cast<char*>(data_array),sizeof(char)*nx*ny*nz);
   
   ofs.close();
   

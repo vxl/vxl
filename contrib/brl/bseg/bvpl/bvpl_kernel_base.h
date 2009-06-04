@@ -29,6 +29,14 @@ public:
   
   //:Return a map of symbols and it's 3d position
   bvpl_kernel_iterator iterator(){return kernel_;}
+  
+  //: Return x-y-z maximum coordinate values
+  vgl_point_3d<int> max_(){return max3d_;}
+  
+  //: Return x-y-z minimum coordinate values
+  vgl_point_3d<int> min_(){return min3d_;}
+  
+  //: Save kernel as a Drishti raw file
   bool save_raw(vcl_string filename);
   
 protected:
@@ -39,7 +47,10 @@ protected:
   vnl_matrix_fixed<double,3,3> R_;
   
   //Dimensions of the 3D grid
-  vgl_point_3d<int> grid_dim_;
+  vgl_point_3d<int> max3d_;
+  
+  //Dimensions of the 3D grid
+  vgl_point_3d<int> min3d_;
   
   //A map containing symbols and their total_number
   //vcl_map<char, unsigned> symbols_map_;
@@ -51,8 +62,8 @@ protected:
   unsigned angular_resolution_x_;
   unsigned angular_resolution_y_;
   unsigned angular_resolution_z_;
-};
 
+};
 
 #endif
 
