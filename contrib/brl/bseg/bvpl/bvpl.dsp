@@ -113,9 +113,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bvpl_subgrid_iterator_base-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvpl_kernel_iterator+float-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/bvpl_neighb_operator+float+bvpl_edge2d_functor--.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -148,9 +145,6 @@ SOURCE=.\bvpl_edge2d_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_neighb_operator.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvpl_neighb_operator.txx
 # End Source File
 # End Group
 # End Target
