@@ -50,6 +50,6 @@ void bvpl_voxel_subgrid<T>::set_voxel(const T& v)
 }
 
 #define BVPL_VOXEL_SUBGRID_INSTANTIATE(T) \
-template class bvpl_voxel_subgrid<T>
+template class bvpl_voxel_subgrid<T >
 
 #endif // bvpl_voxel_subgrid_txx_

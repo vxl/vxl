@@ -85,6 +85,6 @@ bool bvpl_subgrid_iterator<T>::isDone()
 }
 
 #define BVPL_SUBGRID_ITERATOR_INSTANTIATE(T) \
-template class bvpl_subgrid_iterator<T>
+template class bvpl_subgrid_iterator<T >
 
 #endif
