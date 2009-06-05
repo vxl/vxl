@@ -2,13 +2,13 @@
 #define bvpl_subgrid_iterator_h_
 //:
 // \file
-// \brief A class for iterating over the kernel values, paired with the position and value 
+// \brief A class for iterating over the kernel values, paired with the position and value
 //
 // \author   Gamze tunali
 // \date     May 28, 2009
 // \verbatim
 //  Modifications
-//   
+//   <None yet>
 // \endverbatim
 
 #include <vcl_iterator.h>
@@ -64,7 +64,7 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
   
   bool isDone();
 
-private:
+ private:
   bvxm_voxel_grid<T>* grid_;
   vgl_point_3d<int> cur_voxel_;
   bvxm_voxel_slab_iterator<T> iter_;

@@ -9,7 +9,7 @@
 
 class bvpl_subgrid_base
 {
-public:
+ public:
   bvpl_subgrid_base(vgl_point_3d<int> center, vgl_vector_3d<int> dimensions)
     : center_(center), dim_(dimensions) {}
 
@@ -25,10 +25,9 @@ public:
 template <class T>
 class bvpl_voxel_subgrid : public bvpl_subgrid_base
 {
-public:
-
-  bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab, 
-                     vgl_point_3d<int> center, 
+ public:
+  bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
+                     vgl_point_3d<int> center,
                      vgl_vector_3d<int> dimensions);
 
   virtual ~bvpl_voxel_subgrid(){}
@@ -36,7 +35,7 @@ public:
   bool voxel(int x, int y, int z, T& v);
   bool voxel(vgl_point_3d<int> p, T& v) { return voxel(p.x(), p.y(), p.z(), v); }
   void set_voxel(const T& v);
-protected:
+ protected:
   vgl_box_3d<int> box_;
   bvxm_voxel_slab<T> slab_;
 };

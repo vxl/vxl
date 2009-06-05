@@ -1,18 +1,17 @@
 #ifndef bvpl_neighb_operator_h_
 #define bvpl_neighb_operator_h_
-
 //:
 // \file
-// \brief A class for performing a neighborhood operations on a given voxel grid
+// \brief A class for performing neighborhood operations on a given voxel grid
 //
 // \author Gamze Tunali
 // \date June 3, 2009
 // \verbatim
-//  Modifications 
+//  Modifications
 //  Gamze Tunali June 5, 2009
-//      operate() method taking the girds instead of subgrid iterators, and carries out the 
-//      the opeartion at every possible voxel   
-//   
+//      operate() method taking the grids instead of subgrid iterators, and carries out the
+//      operation at every possible voxel
+//
 // \endverbatim
 
 #include "bvpl_subgrid_iterator.h"
@@ -24,7 +23,7 @@
 template <class T, class F>
 class bvpl_neighb_operator
 {
-public:
+ public:
   bvpl_neighb_operator(const F functor): func_(functor) {}
   ~bvpl_neighb_operator() {}
 
@@ -34,27 +33,27 @@ public:
     bvpl_subgrid_iterator<T> subgrid_iter(grid, kernel->dim());
     bvpl_subgrid_iterator<T> output_iter(out_grid, kernel->dim());
     while (!subgrid_iter.isDone()) {
-       bvpl_kernel_iterator kernel_iter = kernel->iterator();
-       bvpl_voxel_subgrid<float> subgrid = *subgrid_iter;
-       //reset the iterator
-       kernel_iter.begin();
-       while (!kernel_iter.isDone()) {
-         vgl_point_3d<int> idx = kernel_iter.index();
-         T val;
-         if (subgrid.voxel(idx, val)) {
-           bvpl_kernel_dispatch d = *kernel_iter;
-           func_.apply(val, d);
-          }
-         ++kernel_iter;
-       }
-       // set the result at the output grid
-       (*output_iter).set_voxel(func_.result());
-       ++subgrid_iter;
-       ++output_iter;
+      bvpl_kernel_iterator kernel_iter = kernel->iterator();
+      bvpl_voxel_subgrid<float> subgrid = *subgrid_iter;
+      //reset the iterator
+      kernel_iter.begin();
+      while (!kernel_iter.isDone()) {
+        vgl_point_3d<int> idx = kernel_iter.index();
+        T val;
+        if (subgrid.voxel(idx, val)) {
+          bvpl_kernel_dispatch d = *kernel_iter;
+          func_.apply(val, d);
+        }
+        ++kernel_iter;
+      }
+      // set the result at the output grid
+      (*output_iter).set_voxel(func_.result());
+      ++subgrid_iter;
+      ++output_iter;
     }
   }
 
-private:
+ private:
   F func_;
 };
 
