@@ -1,5 +1,18 @@
 #ifndef bvpl_edge2d_functor_h_
 #define bvpl_edge2d_functor_h_
+//
+//:
+// \file
+// \brief Functor to find the 2D edges
+//
+// \author Gamze Tunali (gamze_tunali@brown.edu)
+//
+// \date  6/02/09
+//
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include "bvpl_kernel_iterator.h"
 

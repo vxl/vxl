@@ -18,13 +18,14 @@
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vbl/vbl_ref_count.h>
 
-class bvpl_kernel_base
+class bvpl_kernel_base: public vbl_ref_count
 {
 public:
   unsigned angular_resolution_x()  {return angular_resolution_x_;}
-  unsigned angular_resolution_y()  {return angular_resolution_x_;}
-  unsigned angular_resolution_z()  {return angular_resolution_x_;}
+  unsigned angular_resolution_y()  {return angular_resolution_y_;}
+  unsigned angular_resolution_z()  {return angular_resolution_z_;}
   virtual vcl_string name()=0;
   
   //:Return a map of symbols and it's 3d position
@@ -35,6 +36,9 @@ public:
   
   //: Return x-y-z minimum coordinate values
   vgl_point_3d<int> min_(){return min3d_;}
+
+  //: returns the rectangular dimensions around the kernel center
+  vgl_vector_3d<int> dim();
   
   //: Save kernel as a Drishti raw file
   bool save_raw(vcl_string filename);
@@ -64,6 +68,8 @@ protected:
   unsigned angular_resolution_z_;
 
 };
+
+typedef vbl_smart_ptr<bvpl_kernel_base> bvpl_kernel_base_sptr;
 
 #endif
 

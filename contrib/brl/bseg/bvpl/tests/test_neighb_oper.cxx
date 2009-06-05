@@ -109,23 +109,14 @@ static void test_neighb_oper()
   }
   vcl_cout << "done." << vcl_endl;
   save_occupancy_raw("first.raw", grid);
-  // get the subgrid iterator
-  int kernel_x=11, kernel_y=11, kernel_z=11;
-  bvpl_subgrid_iterator<float> iter(*grid, vgl_vector_3d<int> (kernel_x,kernel_y,kernel_z));
-  bvpl_subgrid_iterator<float> out_iter(*grid_out, vgl_vector_3d<int> (kernel_x,kernel_y,kernel_z));
-  bvpl_edge2d_kernel kernel; 
-  kernel.create(5, 5, vnl_vector_fixed<double,3>(vnl_math::pi, 0.0, 0.0));
+  
+  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel(); 
+  kernel->create(5, 5, vnl_vector_fixed<double,3>(vnl_math::pi, 0.0, 0.0));
+  bvpl_kernel_base_sptr kernel_sptr = kernel;
   bvpl_edge2d_functor<float> func;
   bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
-  while (!iter.isDone()) {
-    bvpl_kernel_iterator kernel_iter = kernel.iterator();
-    bvpl_voxel_subgrid<float> subgrid = *iter;
-    oper.operate(iter, kernel_iter, out_iter);
-    ++out_iter;
-    ++iter;
-  }
-   save_occupancy_raw("out.raw", grid_out);
-
+  oper.operate(grid, kernel_sptr, grid_out); 
+  save_occupancy_raw("out.raw", grid_out);
 }
 
 TESTMAIN( test_neighb_oper );

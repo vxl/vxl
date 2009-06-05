@@ -136,3 +136,24 @@ bool bvpl_kernel_base::save_raw(vcl_string filename)
   return true;
 }
 
+vgl_vector_3d<int> bvpl_kernel_base::dim()
+{
+  int x,y,z;
+
+  if (vcl_abs(max3d_.x()) > vcl_abs(min3d_.x()))
+    x = vcl_abs(max3d_.x())*2+1;
+  else 
+    x = vcl_abs(min3d_.x())*2+1;
+
+  if (vcl_abs(max3d_.y()) > vcl_abs(min3d_.y()))
+    y = vcl_abs(max3d_.y())*2+1;
+  else 
+    y = vcl_abs(min3d_.y())*2+1;
+
+  if (vcl_abs(max3d_.z()) > vcl_abs(min3d_.z()))
+    z = vcl_abs(max3d_.z())*2+1;
+  else 
+    z = vcl_abs(min3d_.z())*2+1;
+
+  return vgl_vector_3d<int>(x,y,z);
+}

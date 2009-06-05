@@ -3,12 +3,15 @@
 
 //:
 // \file
-// \brief A class for performing a neighborhood operation on a given voxel world 
+// \brief A class for performing a neighborhood operations on a given voxel grid
 //
 // \author Gamze Tunali
 // \date June 3, 2009
 // \verbatim
-//  Modifications
+//  Modifications 
+//  Gamze Tunali June 5, 2009
+//      operate() method taking the girds instead of subgrid iterators, and carries out the 
+//      the opeartion at every possible voxel   
 //   
 // \endverbatim
 
@@ -26,28 +29,29 @@ public:
   ~bvpl_neighb_operator() {}
 
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
-  void operate(bvpl_subgrid_iterator<T>& subgrid_iter, bvpl_kernel_iterator& kernel_iter, bvpl_subgrid_iterator<T>& output_iter)
+  void operate(bvxm_voxel_grid<T>* grid, bvpl_kernel_base_sptr kernel, bvxm_voxel_grid<T>* out_grid)
   {
-    subgrid_iter.begin();
+    bvpl_subgrid_iterator<T> subgrid_iter(grid, kernel->dim());
+    bvpl_subgrid_iterator<T> output_iter(out_grid, kernel->dim());
     while (!subgrid_iter.isDone()) {
-      bvpl_voxel_subgrid<T> grid = *subgrid_iter;
-      //reset the iterator
-      kernel_iter.begin();
-      
-      while (!kernel_iter.isDone()) {
-        vgl_point_3d<int> idx = kernel_iter.index();
-        T val;
-        if (grid.voxel(idx, val)) {
-          bvpl_kernel_dispatch d = *kernel_iter;
-          func_.apply(val, d);
-        }
-        ++kernel_iter;
-      }
-      
-      (*output_iter).set_voxel(func_.result());
-      ++subgrid_iter;
+       bvpl_kernel_iterator kernel_iter = kernel->iterator();
+       bvpl_voxel_subgrid<float> subgrid = *subgrid_iter;
+       //reset the iterator
+       kernel_iter.begin();
+       while (!kernel_iter.isDone()) {
+         vgl_point_3d<int> idx = kernel_iter.index();
+         T val;
+         if (subgrid.voxel(idx, val)) {
+           bvpl_kernel_dispatch d = *kernel_iter;
+           func_.apply(val, d);
+          }
+         ++kernel_iter;
+       }
+       // set the result at the output grid
+       (*output_iter).set_voxel(func_.result());
+       ++subgrid_iter;
+       ++output_iter;
     }
-    
   }
 
 private:

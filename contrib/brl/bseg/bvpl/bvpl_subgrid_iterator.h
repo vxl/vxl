@@ -39,7 +39,7 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
   bvpl_subgrid_iterator()
     : bvpl_subgrid_iterator_base() {}
 
-  bvpl_subgrid_iterator(bvxm_voxel_grid<T>& grid, vgl_vector_3d<int> dimensions);
+  bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid, vgl_vector_3d<int> dimensions);
 
   ~bvpl_subgrid_iterator(){}
 
@@ -65,7 +65,7 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
   bool isDone();
 
 private:
-  bvxm_voxel_grid<T> grid_;
+  bvxm_voxel_grid<T>* grid_;
   vgl_point_3d<int> cur_voxel_;
   bvxm_voxel_slab_iterator<T> iter_;
 };

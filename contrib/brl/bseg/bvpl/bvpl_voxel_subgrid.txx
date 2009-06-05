@@ -3,6 +3,8 @@
 
 #include "bvpl_voxel_subgrid.h"
 
+#include <vcl_iostream.h>
+
 template <class T>
 bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
                                           vgl_point_3d<int> center,
@@ -45,6 +47,7 @@ template <class T>
 void bvpl_voxel_subgrid<T>::set_voxel(const T& v)
 {
   vgl_point_3d<int> c = box_.centroid();
+  //vcl_cout << "Setting " << c << vcl_endl;
   T& val = slab_(c.x(), c.y(), c.z());
   val = v;
 }
