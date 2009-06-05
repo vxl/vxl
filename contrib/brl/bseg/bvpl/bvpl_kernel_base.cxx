@@ -14,14 +14,13 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
   vcl_vector<vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> > new_map;
   vcl_map< char, unsigned int> new_symbols_map;
 
-
   //fill new_symbols_map to keep a new count for sympols
-  #if 0
+#if 0
   vcl_map< char, unsigned int>::iterator syms_it = symbols_map_.begin();
 
   for (; syms_it != symbols_map_.end(); ++syms_it)
    new_symbols_map.insert(vcl_make_pair( syms_it->first, 0));
-  #endif
+#endif
 
   //Kernels shouldn't get any bigger than this, so this initial values work
   int max_x =-20;
@@ -35,8 +34,8 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
   {
     //Rotate, mantain floating point values
     vnl_vector_fixed<double,3> new_coord = R_*vnl_vector_fixed<double,3>(double((*kernel_it).first.x()),
-                                                         double((*kernel_it).first.y()),
-                                                         double((*kernel_it).first.z()));
+                                                                         double((*kernel_it).first.y()),
+                                                                         double((*kernel_it).first.z()));
 
     // cast to the nearest integer value
     int x0 = (int)vcl_floor(new_coord[0]+0.5f);
@@ -50,7 +49,6 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
     if (x0< min_x) min_x = x0;
     if (y0< min_y) min_y = y0;
     if (z0< min_z) min_z = z0;
-
 
     new_map.push_back(vcl_make_pair(vgl_point_3d<int>(x0,y0,z0), (kernel_it->second)));
 
@@ -142,17 +140,17 @@ vgl_vector_3d<int> bvpl_kernel_base::dim()
 
   if (vcl_abs(max3d_.x()) > vcl_abs(min3d_.x()))
     x = vcl_abs(max3d_.x())*2+1;
-  else 
+  else
     x = vcl_abs(min3d_.x())*2+1;
 
   if (vcl_abs(max3d_.y()) > vcl_abs(min3d_.y()))
     y = vcl_abs(max3d_.y())*2+1;
-  else 
+  else
     y = vcl_abs(min3d_.y())*2+1;
 
   if (vcl_abs(max3d_.z()) > vcl_abs(min3d_.z()))
     z = vcl_abs(max3d_.z())*2+1;
-  else 
+  else
     z = vcl_abs(min3d_.z())*2+1;
 
   return vgl_vector_3d<int>(x,y,z);
