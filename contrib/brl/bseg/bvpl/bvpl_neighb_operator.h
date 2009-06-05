@@ -28,20 +28,26 @@ public:
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
   void operate(bvpl_subgrid_iterator<T>& subgrid_iter, bvpl_kernel_iterator& kernel_iter, bvpl_subgrid_iterator<T>& output_iter)
   {
-  while (!subgrid_iter.isDone()) {
-    bvpl_voxel_subgrid<T> grid = *subgrid_iter;
-    while (!kernel_iter.isDone()) {
-      vgl_point_3d<int> idx = kernel_iter.index();
-      T val;
-      if (grid.voxel(idx, val)) {
-        bvpl_kernel_dispatch d = *kernel_iter;
-        func_.apply(val, d);
+    subgrid_iter.begin();
+    while (!subgrid_iter.isDone()) {
+      bvpl_voxel_subgrid<T> grid = *subgrid_iter;
+      //reset the iterator
+      kernel_iter.begin();
+      
+      while (!kernel_iter.isDone()) {
+        vgl_point_3d<int> idx = kernel_iter.index();
+        T val;
+        if (grid.voxel(idx, val)) {
+          bvpl_kernel_dispatch d = *kernel_iter;
+          func_.apply(val, d);
+        }
+        ++kernel_iter;
       }
-      ++kernel_iter;
+      
+      (*output_iter).set_voxel(func_.result());
+      ++subgrid_iter;
     }
-    (*output_iter).set_voxel(func_.result());
-    ++subgrid_iter;
-   }
+    
   }
 
 private:

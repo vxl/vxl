@@ -60,6 +60,8 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
 
   bvpl_voxel_subgrid<T> operator->();
 
+  void begin();
+  
   bool isDone();
 
 private:
