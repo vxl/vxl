@@ -1,11 +1,12 @@
 #ifndef bvpl_edge2d_functor_txx_
 #define bvpl_edge2d_functor_txx_
-
+//:
+// \file
 #include "bvpl_edge2d_functor.h"
 #include <vcl_cmath.h>
 
 
-//:Default constructor
+// Default constructor
 template <class T>
 bvpl_edge2d_functor<T>::bvpl_edge2d_functor()
 {
@@ -25,7 +26,6 @@ void bvpl_edge2d_functor<T>::init()
   P1_norm = T(0);
   P05_norm = T(0);
   min_P_ = T(0.01);
-
 }
 
 template <class T>
@@ -62,18 +62,15 @@ T bvpl_edge2d_functor<T>::result()
   T t2 = vcl_exp(P0_ - P_);
   T t3 = vcl_exp(P05_ - P_);
 
-  
   T result = (T(1.0)/(T(1.0) + t1 + t2 + t3));
-  
+
   //reset all variables
   init();
-  
-  return  result;
 
+  return  result;
 }
 
 #define BVPL_EDGE2D_FUNCTOR_INSTANTIATE(T) \
-template class bvpl_edge2d_functor<T>
+template class bvpl_edge2d_functor<T >
 
 #endif
-
