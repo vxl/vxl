@@ -72,9 +72,9 @@ static void test_neighb_oper()
     vul_file::delete_file_glob(storage_cached_fname.c_str());
   }
 
-  int grid_x=50, grid_y=50, grid_z=20;
+  unsigned int grid_x=50, grid_y=50, grid_z=20;
   vgl_vector_3d<unsigned> grid_size(grid_x, grid_y, grid_z);
-  unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
+  //unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
 
   // try test with all types of underlying storage.
   bvxm_voxel_grid<float>* grid = new bvxm_voxel_grid<float>(storage_fname,grid_size); // disk storage;
@@ -83,18 +83,16 @@ static void test_neighb_oper()
 
   // check num_observations
   unsigned nobs = grid->num_observations();
+  vcl_cout << "num_observations = " << nobs << vcl_endl;
 
   // fill with test data
   float init_val = 0.0f;
   grid->initialize_data(init_val);
   grid_out->initialize_data(init_val);
-  bool init_check = true;
-  bool write_read_check = true;
 
   //grid->increment_observations();
 
   // read in each slice, check that init_val was set, and fill with new value
-  unsigned count = 0.1f;
   vcl_cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
   for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
@@ -109,13 +107,13 @@ static void test_neighb_oper()
   }
   vcl_cout << "done." << vcl_endl;
   save_occupancy_raw("first.raw", grid);
-  
-  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel(); 
+
+  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel();
   kernel->create(5, 5, vnl_vector_fixed<double,3>(vnl_math::pi, 0.0, 0.0));
   bvpl_kernel_base_sptr kernel_sptr = kernel;
   bvpl_edge2d_functor<float> func;
   bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
-  oper.operate(grid, kernel_sptr, grid_out); 
+  oper.operate(grid, kernel_sptr, grid_out);
   save_occupancy_raw("out.raw", grid_out);
 }
 
