@@ -4,13 +4,21 @@
 #include "bvpl_kernel_iterator.h"
 
 template <class T>
-class bvpl_edge2d_functor {
+class bvpl_edge2d_functor 
+{
 public:
-  bvpl_edge2d_functor(): P_(0), P1_(0), P0_(0), P05_(0), min_P_(T(0.01)),
-                         P_norm(0), P1_norm(0), P0_norm(0), P05_norm(0){}
+  //:Default constructor
+  bvpl_edge2d_functor();
+  
+  //: Destructor
   ~bvpl_edge2d_functor() {}
+  
+  //: Apply a given operation to value val, depending on the dispatch character
   void apply(T& val, bvpl_kernel_dispatch& d);
+  
+  //: Returns the final operation of this functor
   T result();
+  
 private:
   T min_P_;
   T P_;   // probability based on kernel
@@ -25,6 +33,9 @@ private:
   T P1_norm;
   T P0_norm;
   T P05_norm;
+  
+  //: Initilizes class variables
+  void init();
 
 };
 
