@@ -155,3 +155,13 @@ vgl_vector_3d<int> bvpl_kernel_base::dim()
 
   return vgl_vector_3d<int>(x,y,z);
 }
+
+void bvpl_kernel_base::print()
+{
+  vcl_vector<vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> >::iterator it = kernel_.begin();
+  for (; it !=kernel_.end(); ++it) {
+    vgl_point_3d<int> coord =( *it).first;
+    char c = (char)((*it).second.c_);
+    vcl_cout << coord << "  " << c << vcl_endl;
+  }
+}

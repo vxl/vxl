@@ -19,7 +19,7 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
   }
 
   // write header
-  unsigned char data_type = 0; // 0 means unsigned byte
+  unsigned char data_type = 8; // 8 means float
 
   vxl_uint_32 nx = grid->grid_size().x();
   vxl_uint_32 ny = grid->grid_size().y();
@@ -32,19 +32,19 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
 
   // write data
   // iterate through slabs and fill in memory array
-  char *ocp_array = new char[nx*ny*nz];
+  float *ocp_array = new float[nx*ny*nz];
 
   bvxm_voxel_grid<float>::iterator ocp_it = grid->begin();
   for (unsigned k=0; ocp_it != grid->end(); ++ocp_it, ++k) {
     vcl_cout << '.';
     for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
       for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
-        ocp_array[i*ny*nz + j*nz + k] = (unsigned char)((*ocp_it)(i,j) * 255.0);
+        ocp_array[i*ny*nz + j*nz + k] = (float)((*ocp_it)(i,j));
       }
     }
   }
   vcl_cout << vcl_endl;
-  ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(unsigned char)*nx*ny*nz);
+  ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(float)*nx*ny*nz);
 
   ofs.close();
 
@@ -72,7 +72,7 @@ static void test_neighb_oper()
     vul_file::delete_file_glob(storage_cached_fname.c_str());
   }
 
-  unsigned int grid_x=50, grid_y=50, grid_z=20;
+  int grid_x=50, grid_y=50, grid_z=50;
   vgl_vector_3d<unsigned> grid_size(grid_x, grid_y, grid_z);
   //unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
 
@@ -86,11 +86,9 @@ static void test_neighb_oper()
   vcl_cout << "num_observations = " << nobs << vcl_endl;
 
   // fill with test data
-  float init_val = 0.0f;
+  float init_val = 0.9f;
   grid->initialize_data(init_val);
-  grid_out->initialize_data(init_val);
-
-  //grid->increment_observations();
+  grid_out->initialize_data(0.0e-40);
 
   // read in each slice, check that init_val was set, and fill with new value
   vcl_cout << "read/write: ";
@@ -101,7 +99,7 @@ static void test_neighb_oper()
     for (unsigned i=0; i<grid_x/2; i++) {
       for (unsigned j=0; j<grid_y; j++) {
         float &v = vit(i,j);
-        v = 0.9f;
+        v = 0.1f;
       }
     }
   }

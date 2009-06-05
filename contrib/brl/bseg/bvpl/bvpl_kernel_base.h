@@ -42,6 +42,8 @@ public:
   
   //: Save kernel as a Drishti raw file
   bool save_raw(vcl_string filename);
+
+  void print();
   
 protected:
   //The map of 3d positions and their symbols

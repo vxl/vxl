@@ -32,24 +32,26 @@ class bvpl_neighb_operator
   {
     bvpl_subgrid_iterator<T> subgrid_iter(grid, kernel->dim());
     bvpl_subgrid_iterator<T> output_iter(out_grid, kernel->dim());
+    kernel->print();
     while (!subgrid_iter.isDone()) {
-      bvpl_kernel_iterator kernel_iter = kernel->iterator();
-      bvpl_voxel_subgrid<float> subgrid = *subgrid_iter;
-      //reset the iterator
-      kernel_iter.begin();
-      while (!kernel_iter.isDone()) {
-        vgl_point_3d<int> idx = kernel_iter.index();
-        T val;
-        if (subgrid.voxel(idx, val)) {
-          bvpl_kernel_dispatch d = *kernel_iter;
-          func_.apply(val, d);
-        }
-        ++kernel_iter;
-      }
-      // set the result at the output grid
-      (*output_iter).set_voxel(func_.result());
-      ++subgrid_iter;
-      ++output_iter;
+       bvpl_kernel_iterator kernel_iter = kernel->iterator();
+       bvpl_voxel_subgrid<float> subgrid = *subgrid_iter;
+       //reset the iterator
+       kernel_iter.begin();
+       while (!kernel_iter.isDone()) {
+         vgl_point_3d<int> idx = kernel_iter.index();
+         T val;
+         if (subgrid.voxel(idx, val)) {
+           //vcl_cout<< val << "at " << idx <<vcl_endl;
+           bvpl_kernel_dispatch d = *kernel_iter;
+           func_.apply(val, d);
+          }
+         ++kernel_iter;
+       }
+       // set the result at the output grid
+       (*output_iter).set_voxel(func_.result());
+       ++subgrid_iter;
+       ++output_iter;
     }
   }
 
