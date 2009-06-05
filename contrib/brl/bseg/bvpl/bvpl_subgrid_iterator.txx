@@ -84,6 +84,12 @@ bool bvpl_subgrid_iterator<T>::isDone()
     return false;
 }
 
+template <class T>
+void bvpl_subgrid_iterator<T>::begin()
+{
+  iter_ = grid_.begin();
+}
+
 #define BVPL_SUBGRID_ITERATOR_INSTANTIATE(T) \
 template class bvpl_subgrid_iterator<T >
 
