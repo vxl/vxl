@@ -111,7 +111,7 @@ SOURCE=.\Templates/bvpl_edge2d_functor+float-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_subgrid_iterator_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpl_kernel_iterator+float-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_kernel_base-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
