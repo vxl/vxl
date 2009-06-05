@@ -27,10 +27,12 @@ vxl_uint_64 vil_stream_read_little_endian_uint_64(vil_stream *);
 #endif
 
 //: Reads in a 4-byte big-endian float.
+// \relates vil_stream
 float vil_stream_read_big_endian_float(vil_stream* is);
 
 //: Reads in n 16 bit unsigned ints.
 // Caller is responsible for allocating enough space.
+// \relates vil_stream
 void vil_stream_read_big_endian_int_16(vil_stream* is,
                                        vxl_uint_16* data, unsigned n);
 

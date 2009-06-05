@@ -35,21 +35,24 @@ vil_image_resource_sptr vil_load_image_resource(char const* filename,
 
 //: Load from a stream.
 // Won't use plugins.
+// \relates vil_image_resource
 vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *,
                                                     bool verbose = true);
 
 //: Load an image resource object from a file.
 // Won't use plugins.
+// \relates vil_image_resource
 vil_image_resource_sptr vil_load_image_resource_raw(char const*,
                                                     bool verbose = true);
 
 //: Load from a filename with a plugin.
+// \relates vil_image_resource
 vil_image_resource_sptr vil_load_image_resource_plugin(char const*);
 
 
 //: Load a pyramid image resource object from a file or directory.
 // \relates vil_pyramid_image_resource
-vil_pyramid_image_resource_sptr 
+vil_pyramid_image_resource_sptr
 vil_load_pyramid_resource(char const* directory_or_file, bool verbose = true);
 
 //: Convenience function for loading an image into an image view.

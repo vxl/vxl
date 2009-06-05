@@ -39,7 +39,7 @@ vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigne
                                                vil_pixel_format format);
 
 //: Make a new image of given format with interleaved planes.
-// The format must be scalar. 
+// The format must be scalar.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource_interleaved(unsigned ni, unsigned nj,
                                                            unsigned nplanes,
@@ -160,6 +160,7 @@ vil_new_pyramid_image_list_from_base(char const* directory,
 //: Create a new image view whose plane step is 1.
 //  Pixel data type is the type of the last (dummy) argument.
 //  i_step will be nplanes, j_step will be nplanes x ni.
+//  \relates vil_image_view
 // \deprecated in favour of vil_image_view constructor
 template <class T>
 vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
@@ -175,6 +176,7 @@ vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigne
 //: Create a new image view whose j_step is 1.
 //  Pixel data type is the type of the last (dummy) argument.
 //  i_step will be nj, planestep will be ni x nj.
+//  \relates vil_image_view
 template <class T>
 vil_image_view<T> vil_new_image_view_plane_i_j(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
@@ -187,6 +189,7 @@ vil_image_view<T> vil_new_image_view_plane_i_j(unsigned ni, unsigned nj, unsigne
 //: Create a new image view whose plane step is 1 and whose j_step is nplanes.
 //  Pixel data type is the type of the last (dummy) argument.
 //  i_step will be nplanes x nj.
+//  \relates vil_image_view
 template <class T>
 vil_image_view<T> vil_new_image_view_i_j_plane(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
@@ -199,6 +202,7 @@ vil_image_view<T> vil_new_image_view_i_j_plane(unsigned ni, unsigned nj, unsigne
 //: Create a shallow copy of an image and wrap it in a vil_image_view_base_sptr
 // \note vil_image_view_base_sptr almost certainly doesn't behave as
 // you would expect, and this function should really only be used by experts.
+// \relates vil_image_view
 vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&);
 
 #endif // vil_new_h_

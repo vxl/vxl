@@ -20,6 +20,8 @@ inline T vil_greyscale_dilate(const T* im, const vcl_ptrdiff_t* offset, unsigned
 
 //: Return max of pixels under structuring element centred at (i0,j0)
 //  Checks boundary overlap.  Returns 0 if structuring element is empty.
+// \relates vil_image_view
+// \relates vil_structuring_element
 template <class T>
 inline T vil_greyscale_dilate(const vil_image_view<T>& image, unsigned plane,
                               const vil_structuring_element& element,

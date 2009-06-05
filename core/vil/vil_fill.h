@@ -16,7 +16,6 @@
 template<class T>
 void vil_fill(vil_image_view<T>& view, T value)
 {
-
   if (view.is_contiguous())
     vcl_fill(view.begin(), view.end(), value);
 
@@ -40,7 +39,7 @@ void vil_fill(vil_image_view<T>& view, T value)
 }
 
 //: Fill data[i*step] (i=0..n-1) with given value
-// \relates vil_image_view
+// \sa vil_fill_line(vil_image_view<T>)
 template<class T>
 void vil_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
 {
@@ -67,7 +66,7 @@ void vil_fill_line(vil_image_view<T> &im,
 
   int dx = bi-ai;
   int dy = bj-aj;
-  if (dy<0) 
+  if (dy<0)
   {
     dy=-dy;
     yinc=-1;
@@ -75,7 +74,7 @@ void vil_fill_line(vil_image_view<T> &im,
   else
     yinc=1;
 
-  if (dx<0) 
+  if (dx<0)
   {
     dx=-dx;
     xinc=-1;
@@ -86,17 +85,17 @@ void vil_fill_line(vil_image_view<T> &im,
   if (im.in_range(ai, aj)) im(ai, aj)=value;
   x=ai;
   y=aj;
-  if (dy<=dx) 
+  if (dy<=dx)
   {
     d=(dy<<1)-dx;
     incr1=dy<<1;
     incr2=-((dx-dy)<<1);
-    while (x!=bi) 
+    while (x!=bi)
     {
       x+=xinc;
-      if (d<0) 
+      if (d<0)
         d+=incr1;
-      else 
+      else
       {
         y+=yinc;
         d+=incr2;
@@ -104,17 +103,17 @@ void vil_fill_line(vil_image_view<T> &im,
       if (im.in_range(x, y)) im(x, y)=value;
     }
   }
-  else 
+  else
   {
     d=(dx<<1)-dy;
     incr1=dx<<1;
     incr2=-((dy-dx)<<1);
-    while (y!=bj) 
+    while (y!=bj)
     {
       y+=yinc;
       if (d<0)
         d+=incr1;
-      else 
+      else
       {
         x+=xinc;
         d+=incr2;
@@ -148,7 +147,7 @@ void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
   assert(i<view.ni());          vcl_ptrdiff_t istep=view.istep();
   unsigned nj = view.nj();      vcl_ptrdiff_t jstep=view.jstep();
   unsigned np = view.nplanes(); vcl_ptrdiff_t pstep=view.planestep();
- 
+
   T* col_top = view.top_left_ptr() + i*istep;
   for (unsigned p=0;p<np;++p,col_top += pstep)
     vil_fill_line(col_top,nj,jstep,value);
@@ -157,6 +156,7 @@ void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
 //: Writes given value into each pixel of image under the elements of the mask set to b
 //  If mask.nplanes()==1 then the same mask is applied to every image plane, otherwise
 //  there must be the same number of mask planes as image planes.
+//  \relates vil_image_view
 template<class srcT>
 inline
 void vil_fill_mask(vil_image_view<srcT>& image,
@@ -192,6 +192,7 @@ void vil_fill_mask(vil_image_view<srcT>& image,
 
 //: Fills pixels in disk with centre (ci,cj), radius r, with given value
 //  Fills all planes of image with the value.
+//  \relates vil_image_view
 template<class T>
 inline
 void vil_fill_disk(vil_image_view<T>& image, double ci, double cj, double r, T value)

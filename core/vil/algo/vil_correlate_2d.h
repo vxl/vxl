@@ -12,6 +12,7 @@
 
 //: Evaluate dot product between kernel and src_im
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
+// \relates vil_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
                                      vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,

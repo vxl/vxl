@@ -12,6 +12,7 @@
 #include <vil/vil_image_view.h>
 
 //: Rotate image by angle theta
+//  \relates vil_image_view
 template <class sType, class dType>
 void vil_rotate_image(const vil_image_view<sType>& src_image,
                       vil_image_view<dType>& dest_image,

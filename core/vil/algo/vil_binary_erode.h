@@ -18,6 +18,7 @@ inline bool vil_binary_erode(const bool* im, const vcl_ptrdiff_t* offset, unsign
 
 //: Return false if any image pixel under element centred at (i0,j0) is zero
 //  Checks boundary overlap
+// \relates vil_structuring_element
 template <class imAccessorT>
 inline bool vil_binary_erode(const imAccessorT& image, unsigned plane,
                              const vil_structuring_element& element, int i0, int j0)

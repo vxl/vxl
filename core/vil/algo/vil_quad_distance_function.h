@@ -153,7 +153,8 @@ inline void vil_quad_distance_function_1D(const srcT* src,vcl_ptrdiff_t s_step,
 
 //: Apply quadratic distance transform along each row of src
 //
-//  dest(x,y)=min_i,j (src(x+i,y+j)+ai(i^2)+aj(j^2))
+//  $ dest(x,y)=min_i,j (src(x+i,y+j)+ai(i^2)+aj(j^2)) $
+// \relates vil_image_view
 template<class srcT, class destT>
 inline void vil_quad_distance_function(const vil_image_view<srcT>& src,
                                        double ai, double aj,
@@ -190,8 +191,9 @@ inline void vil_quad_distance_function(const vil_image_view<srcT>& src,
 
 //: Apply quadratic distance transform along each row of src
 //
-//  dest(x,y)=min_i,j (src(x+i,y+j)+ai(i^2)+aj(j^2))
+//  $ dest(x,y)=min_i,j (src(x+i,y+j)+ai(i^2)+aj(j^2)) $
 //  (pos(x,y,0),pos(x,y,1)) gives the position (x+i,y+j) leading to minima
+// \relates vil_image_view
 template<class srcT, class destT, class posT>
 inline void vil_quad_distance_function(const vil_image_view<srcT>& src,
                                        double ai, double aj,

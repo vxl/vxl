@@ -1,6 +1,5 @@
 #ifndef vil_trace_8con_boundary_h_
 #define vil_trace_8con_boundary_h_
-
 //:
 // \file
 // \brief Function to trace 8-connected boundary around region in bool image
@@ -18,10 +17,11 @@
 // two regions, then the point will occur twice in the list, once as the first
 // point, then once in the middle of the list as we trace through it to get
 // to the other side of the blob.
+// \sa vil_trace_4con_boundary
+// \relates vil_image_view
 void vil_trace_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
                              const vil_image_view<bool>& image,
                              int i0, int j0);
-
 
 
 #endif // vil_trace_8con_boundary_h_

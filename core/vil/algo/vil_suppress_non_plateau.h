@@ -21,6 +21,7 @@
 //  negative values)
 //
 // \sa vil_suppress_non_max_3x3()
+// \relates vil_image_view
 template <class T>
 inline void vil_suppress_non_plateau_3x3(const vil_image_view<T>& src_im,
                                          vil_image_view<T>& dest_im,

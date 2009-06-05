@@ -9,13 +9,11 @@
 // \brief make a vil_stream from a filename, an URL, etc.
 //
 // \author fsm
-//
-// \verbatim
-//  Modifications
-//\endverbatim
 
 #include <vil/vil_stream.h>
 
+//: make a vil_stream from a filename, an URL, etc.
+// \relates vil_stream
 vil_stream *vil_open(char const* what, char const* how = "r");
 
 #endif // vil_open_h_

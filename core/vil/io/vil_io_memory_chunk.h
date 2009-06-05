@@ -10,21 +10,27 @@
 #include <vil/io/vil_io_smart_ptr.h> // for vsl_b_read(is, vil_memory_chunk_sptr)
 
 //: Binary save vil_memory_chunk to stream.
+// \relates vil_memory_chunk
 void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk& chunk);
 
 //: Binary load vil_memory_chunk from stream.
+// \relates vil_memory_chunk
 void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk);
 
 //: Binary save vil_memory_chunk to stream  by pointer
+// \relates vil_memory_chunk
 void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk* chunk);
 
 //: Binary load vil_memory_chunk from stream  onto the heap
+// \relates vil_memory_chunk
 void vsl_b_read(vsl_b_istream &is, vil_memory_chunk*& chunk);
 
 //: Print human readable summary of a vil_memory_chunk object to a stream
+// \relates vil_memory_chunk
 void vsl_print_summary(vcl_ostream& os,const vil_memory_chunk& chunk);
 
 //: Print human readable summary of a vil_memory_chunk object to a stream
+// \relates vil_memory_chunk
 inline void vsl_print_summary(vcl_ostream& os,const vil_memory_chunk* chunk)
 { vsl_print_summary(os, *chunk); }
 

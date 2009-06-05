@@ -14,6 +14,7 @@
 
 //: Apply a unary operation to each pixel in image.
 // \param functor should take a value of type T and return same type
+// \relates vil_image_view
 template <class T, class F >
 inline void vil_transform(vil_image_view<T >& image, F functor)
 {
@@ -68,6 +69,7 @@ inline void vil_transform(vil_image_view<T >& image, F functor)
 
 //: Apply a unary operation to each pixel in src to get dest.
 // \param functor should take a value of type inP, and return a value of type outP
+// \relates vil_image_view
 template <class inP, class outP, class Op >
 inline void vil_transform(const vil_image_view<inP >&src, vil_image_view<outP >&dest, Op functor)
 {
@@ -97,6 +99,7 @@ inline void vil_transform(const vil_image_view<inP >&src, vil_image_view<outP >&
 
 //: Apply a binary function to each pixel in src and dest that modifies dest.
 // \param functor should take two parameters (inP src, outP &dest);
+// \relates vil_image_view
 template <class inP, class outP, class Op >
 inline void vil_transform2(const vil_image_view<inP >&src, vil_image_view<outP >&dest, Op functor)
 {
@@ -126,6 +129,7 @@ inline void vil_transform2(const vil_image_view<inP >&src, vil_image_view<outP >
 
 
 //: Apply a binary operation to each pixel in srcA and srcB to get dest.
+// \relates vil_image_view
 template <class inA, class inB, class outP, class BinOp >
 inline void vil_transform(const vil_image_view<inA >&srcA,
                           const vil_image_view<inB >&srcB,
@@ -142,6 +146,7 @@ inline void vil_transform(const vil_image_view<inA >&srcA,
 
 //: Apply a binary operation to each pixel in srcA and srcB to get dest.
 // non-const dest version, assumes dest is already correct size.
+// \relates vil_image_view
 template <class inA, class inB, class outP, class BinOp >
 inline void vil_transform(const vil_image_view<inA >&srcA,
                           const vil_image_view<inB >&srcB,

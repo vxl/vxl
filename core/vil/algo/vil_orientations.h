@@ -11,6 +11,7 @@
 
 //: Compute orientation (in radians) and gradient magnitude at each pixel
 //  Images assumed to be single plane
+// \relates vil_image_view
 void vil_orientations(const vil_image_view<float>& grad_i,
                       const vil_image_view<float>& grad_j,
                       vil_image_view<float>& orient_im,
@@ -23,6 +24,7 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 //  where dA=2*pi/n_orientations.
 //
 //  Images assumed to be single plane
+// \relates vil_image_view
 void vil_orientations(const vil_image_view<float>& grad_i,
                       const vil_image_view<float>& grad_j,
                       vil_image_view<vxl_byte>& orient_im,
@@ -38,6 +40,7 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 //  where dA=2*pi/n_orientations.
 //
 //  Images assumed to be single plane
+// \relates vil_image_view
 void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
                                const vil_image_view<float>& grad_j,
                                vil_image_view<vxl_byte>& orient_im,
@@ -46,6 +49,7 @@ void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
                                unsigned n_orientations=255);
 
 //: Compute orientation and gradient magnitude using sobel to get gradients
+// \relates vil_image_view
 template <class T>
 inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
                                         vil_image_view<float>& orient_im,
@@ -63,6 +67,7 @@ inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
 //  where dA=2*pi/n_orientations.
 //
 //  Images assumed to be single plane
+// \relates vil_image_view
 template <class T>
 inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
                                         vil_image_view<vxl_byte>& orient_im,

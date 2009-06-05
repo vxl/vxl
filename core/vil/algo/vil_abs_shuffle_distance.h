@@ -26,6 +26,8 @@ inline double vil_abs_shuffle_distance(T1 v0, const T2* im,
 //: Return min difference of pixels under structuring element centred at (i0,j0)
 //  I.e., returns minimum of |v0-image(i,j,plane)| over (i,j) in element.
 //  Checks boundary overlap.
+//  \relates vil_image_view
+//  \relates vil_structuring_element
 template <class T1, class T2>
 inline double vil_abs_shuffle_distance(T1 v0, const vil_image_view<T2>& image,
                                        unsigned plane,
