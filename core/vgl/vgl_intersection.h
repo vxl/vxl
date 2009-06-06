@@ -12,6 +12,9 @@
 // and in some ordinary files if they only involve one type
 // (e.g. vgl_box2d& vgl_intersection(vgl_box_2d&, vgl_box_2d&) is in vgl_box_2d.h)
 //
+// For intersections of "homogeneous coordinates" objects like vgl_homg_line_2d<T>,
+// see the static methods of vgl/algo/vgl_homg_operators_2d<T> and _3d.
+//
 // \verbatim
 //  Modifications
 //   01 Mar 2007 - Gamze Tunali - split up into vgl/algo and vgl parts

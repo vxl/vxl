@@ -17,18 +17,21 @@ for both 2D and 3D.
 This includes classes for
 @itemize @bullet
 @item Points, lines and planes.
-@item 2D conics.
-@item Rectangular bounding boxes.
-@item Polygons.
 @item Direction vectors.
+@item 2D conics and 3D spheres, cones, cylinders and ellipsoids.
+@item Rectangular, axes-parallel bounding boxes (2D and 3D).
+@item Polygons.
 @item Region scan iterators.
 @end itemize
 
 In addition, the @code{vgl/algo} library contains functions to perform elementary
-geometric operations like intersecting two lines, finding the nearest point on
-a line or a conic, computing the cross ratio of four points, lines or planes, ...
-For convenience, this functionality is put in a "name space", separate for 2D and
-3D, and separate for Cartesian and homogeneous representations.
+geometric operations like intersecting a bundle of planes, finding the nearest
+point on a line or a conic, computing the cross ratio of four points or lines, ...
+For convenience, most of this functionality is put in a "name space", separate
+for 2D and 3D, and separate for Cartesian and homogeneous representations.
+Some of the most elementary operations like distance calculations and simple
+intersections are implemented in the @code{vgl} library, often through class
+methods.
 
 All representation classes are templated on the computational numeric type,
 typically @code{double} or @code{float}, but it could make sense to use other
@@ -48,13 +51,15 @@ The basic 2D classes using homogeneous (3-argument) representations are:
 @item @code{vgl_homg_line_2d<T>}
 @item @code{vgl_conic<T>}
 @end itemize
-Some useful functions can be found in @code{vgl_distance.h} and @code{vgl_closest_point.h}:
+Some useful functions can be found in @code{vgl_intersection.h}, @code{vgl_distance.h} and @code{vgl_closest_point.h}, like e.g.:
 @itemize @bullet
+@item @code{bool vgl_intersection(vgl_line_2d<T> const& line0, vgl_line_2d<T> const& l2, vgl_point_2d<T> & pt)}
+@item @code{vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1, vgl_line_3d_2_points<T> const& l2)}
 @item @code{double vgl_distance(vgl_homg_point_2d<T> const& p1, vgl_homg_point_2d<T> const& p2)}
 @item @code{double vgl_distance(vgl_homg_point_2d<T> const& p, vgl_homg_line_2d<T> const& l)}
 @item @code{vgl_homg_point_2d<T> vgl_closest_point(vgl_homg_line_2d<T> const& l, vgl_homg_point_2d<T> const& p)}
 @end itemize
-The most useful static functions in namespace @code{vgl_homg_operators_2d<T>} are:
+Some of the most useful static functions in namespace @code{vgl_homg_operators_2d<T>} are:
 @itemize @bullet
 @item @code{double distance_squared(vgl_homg_point_2d<T> const& point1, vgl_homg_point_2d<T> const& point2)}
 @item @code{vgl_homg_line_2d<T> join(vgl_homg_point_2d<T> const& point1, vgl_homg_point_2d<T> const& point2)}
@@ -94,15 +99,28 @@ The basic 2D classes using non-homogeneous (2-argument) representations are:
 
 @itemize @bullet
 @item @code{vgl_point_2d<T>}
-@item @code{vgl_line_2d<T>}
-@item @code{vgl_line_segment_2d<T>}
-@item @code{vgl_box_2d<T>}
 @item @code{vgl_vector_2d<T>}
+@item @code{vgl_line_2d<T>}
+@item @code{vgl_box_2d<T>}
+@end itemize
+
+A vector is a directional difference between two points, i.e., something having a direction and a length.
+
+A box is a rectangular bounding box, represented by two corner points: the "min" and the "max" coordinate points.
+All points inside the box have x coordinates between min-x and max-x, and y coordinates between min-y and max-y.
+
+There are also two ``composite'' 2D curve objects:
+
+@itemize @bullet
+@item @code{vgl_line_segment_2d<T>}
+@item @code{vgl_conic_segment_2d<T>}
 @end itemize
 
 A line segment is a bounded part of a line, between two end points.
-A vector is a directional difference between two points.
-A box is a rectangular bounding box.
+
+A conic segment is built on a @code{vgl_conic<T>} and two end points.
+This curve only consists of those points of the conic between the two given end points.
+(See the detailed documentation of this class for a precise definition of "between".)
 
 @subsection Homogeneous 3D classes and operations
 
@@ -150,10 +168,17 @@ The basic 3D classes using non-homogeneous (3-argument) representations are:
 
 @itemize @bullet
 @item @code{vgl_point_3d<T>}
-@item @code{vgl_plane_3d<T>}
-@item @code{vgl_line_segment_3d<T>}
-@item @code{vgl_box_3d<T>}
 @item @code{vgl_vector_3d<T>}
+@item @code{vgl_plane_3d<T>}
+@item @code{vgl_box_3d<T>}
+@end itemize
+
+``Non-basic'' 3D classes, i.e. those built from the basic ones, include:
+
+@itemize @bullet
+@item @code{vgl_line_segment_3d<T>}
+@item @code{vgl_line_3d_2_points<T>}
+@item @code{vgl_sphere_3d<T>}
 @end itemize
 
 @subsection Homogeneous 1D classes

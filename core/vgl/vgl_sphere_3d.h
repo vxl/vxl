@@ -9,15 +9,15 @@
 // \brief a sphere in 3D nonhomogeneous space
 // \author Ian Scott
 
-#include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d
+#include <vgl/vgl_fwd.h> // forward declare vgl_line_3d_2_points
 #include <vgl/vgl_point_3d.h>
 
 //: Represents a cartesian 3D point
 template <class Type>
 class vgl_sphere_3d
 {
-  vgl_point_3d<Type> c_;
-  Type r_;
+  vgl_point_3d<Type> c_; //!< centre
+  Type r_;               //!< radius
  public:
 
   // Constructors/Initializers/Destructor------------------------------------
@@ -25,13 +25,13 @@ class vgl_sphere_3d
   //: Default constructor
    inline vgl_sphere_3d (): c_(0.0, 0.0, 0.0), r_(-1) {}
 
-  //: Construct from four Types.
+  //: Construct from four scalars: centre and radius.
   inline vgl_sphere_3d(Type px, Type py, Type pz, Type radius) : c_(px, py, pz), r_(radius) {}
 
-  //: Construct from 4-array.
+  //: Construct from a 4-array, representing centre and radius.
   inline vgl_sphere_3d (const Type v[4]): c_(v[0], v[1], v[2]), r_(v[3]) {}
 
-  //: Construct from point and radius
+  //: Construct from centre point and radius.
   vgl_sphere_3d (vgl_point_3d<Type> const& centre, Type radius): c_(centre), r_(radius) {}
 
   //: Test for equality
