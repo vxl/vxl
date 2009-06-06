@@ -9,7 +9,8 @@
 template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_conic_segment_2d<Type> const & p)
 {
-  return s << "<vgl_conic_segment_2d " << p.point1() << " to " << p.point2() << "with " << p.conic() << " >";
+  return s << "<vgl_conic_segment_2d " << p.point1() << " to " << p.point2() << "with " << p.conic()
+           << (p.is_clockwise() ? ", clockwise" : ", counterclockwise") << " >";
 }
 
 template <class Type>
@@ -19,7 +20,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_conic_segment_2d<Type>& p)
   s >> p1 >> p2;
   vgl_conic<Type> conic;
   s >> conic;
-  p.set(p1, p2, conic);
+  p.set(p1, p2, conic, true);
   return s;
 }
 
