@@ -407,12 +407,12 @@ vcl_istream& operator>>(vcl_istream& is, vnl_bignum& x)
   vcl_istream* isp = &is;
   rt[0] = '\0';
 
-//delete[] x.data;                      // Delete existing data
+  x = 0L;
   if (is_plus_inf(rt,&isp))
     x.sign=1,x.count=1,x.data=new Data[1],x.data[0]=0;
   else if (is_minus_inf(rt,&isp))
     x.sign=-1,x.count=1,x.data=new Data[1],x.data[0]=0;
-  if (is_exponential(rt,&isp))          // If input stream string is exponential
+  else if (is_exponential(rt,&isp))     // If input stream string is exponential
     x.exptoBigNum(rt);                  // convert exp. to vnl_bignum
   else if (is_decimal(rt,&isp))         // If string is decimal
     x.dtoBigNum(rt);                    // convert decimal to vnl_bignum
@@ -422,7 +422,6 @@ vcl_istream& operator>>(vcl_istream& is, vnl_bignum& x)
     x.otoBigNum(rt);                    // convert octal to vnl_bignum
   else {                                // Otherwise
     vcl_cerr << "Cannot convert string " << rt << " to vnl_bignum\n";
-    x = 0L;
   }
   return is; // FIXME - should probably push back read characters to istream
 }
@@ -553,7 +552,7 @@ vnl_bignum& vnl_bignum::operator*=(const vnl_bignum& b)
   if (b.count == 0 || this->count == 0)
     return (*this)=0L;
   vnl_bignum prod;
-  prod.data = new Data[prod.count = this->count + b.count]; // allocate data for product
+  prod.resize(this->count + b.count);           //   allocate data for product
   for (Counter i = 0; i < b.count; i++)         //   multiply each b "digit"
     multiply_aux(*this, b.data[i], prod, i);    //   times b1 and add to total
   prod.sign = this->sign * b.sign;              //   determine correct sign
@@ -795,10 +794,15 @@ void vnl_bignum::dump(vcl_ostream& os) const
   //    {'%','0',char(2*2 + '0'),'X','%','s'};
   //  format_str[2] = char(2*2 + '0');
   if (this->count > 0) { // output data array
-    os << vcl_hex;
-    for (Counter i = this->count; i > 1; --i)
-      os << (this->data[i - 1]) << ',';
-    os << (this->data[0]) << vcl_dec;
+    os << vcl_hex << (this->data[this->count-1]);
+    for (Counter i = this->count - 1; i > 0; --i) {
+      os  << ',';
+      if (this->data[i-1] < 0x10) os << '0';
+      if (this->data[i-1] < 0x100) os << '0';
+      if (this->data[i-1] < 0x1000) os << '0';
+      os  << this->data[i-1];
+    }
+    os << vcl_dec;
   }
   os << "}}\n";                         // close brackets
 }
@@ -934,9 +938,7 @@ void add(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum)
     bmax = &b2;
     bmin = &b1;
   }
-//delete[] sum.data;                    // Delete existing data
-  sum.data = (sum.count = bmax->count) > 0 ?   // Allocate data for their sum
-             new Data[sum.count] : 0;
+  sum.resize(bmax->count);              // Allocate data for their sum
   unsigned long temp, carry = 0;
   Counter i = 0;
   while (i < bmin->count) {             // Add, element by element.
@@ -981,8 +983,7 @@ void increment(vnl_bignum& bnum)
 
 void subtract(const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff)
 {
-//delete[] diff.data;                           // Delete existing data
-  diff.data = new Data[diff.count = bmax.count];// Allocate data for difference
+  diff.resize(bmax.count);                      // Allocate data for difference
   unsigned long temp;
   int borrow = 0;
   Counter i = 0;
@@ -1083,10 +1084,8 @@ void multiply_aux(const vnl_bignum& b, Data d, vnl_bignum& prod, Counter i)
 Data normalize(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_bignum& v)
 {
   Data d = Data(0x10000L/(long(b2.data[b2.count - 1]) + 1)); // Calculate normalization factor.
-//delete[] u.data;                              // Delete existing data
-  u.data = new Data[u.count = b1.count + 1];    // Get data for u (plus extra)
-//delete[] v.data;                              // Delete existing data
-  v.data = new Data[v.count = b2.count];        // Get data for v
+  u.resize(b1.count + 1);                       // Get data for u (plus extra)
+  v.resize(b2.count);                           // Get data for v
   u.data[b1.count] = 0;                         // Set u's leading digit to 0
   multiply_aux(b1,d,u,0);                       // u = b1 * d
   multiply_aux(b2,d,v,0);                       // v = b2 * d
@@ -1186,8 +1185,7 @@ Data multiply_subtract(vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter j
   if (q_hat == 0) return q_hat;         // if q_hat 0, nothing to do
   vnl_bignum rslt;                      // create a temporary vnl_bignum
   Counter tmpcnt;
-  rslt.data =                           // allocate data for it
-     new Data[rslt.count = v.count + 1u];
+  rslt.resize(v.count + 1u);            // allocate data for it
 
   // simultaneous computation of u - v*q_hat
   unsigned long prod, diff;
@@ -1250,10 +1248,8 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
   else if (mag == 0)                 // if abs(b1) == abs(b2)
     q = 1L;                          //   quotient is 1, remainder is 0
   else {                             // otherwise abs(b1) > abs(b2), so divide
-//  delete[] q.data;                            // Delete existing data
-    q.data = new Data[q.count = b1.count + 1u - b2.count]; // Allocate quotient
-//  delete[] r.data;                            // Delete existing data
-    r.data = new Data[r.count = b2.count];      // Allocate remainder
+    q.resize(b1.count + 1u - b2.count); // Allocate quotient
+    r.resize(b2.count);              // Allocate remainder
     if (b2.count == 1) {                        // Single digit divisor?
       divide_aux(b1,b2.data[0],q,r.data[0]);    // Do single digit divide
     }
@@ -1261,13 +1257,13 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
       vnl_bignum u,v;
 #ifdef DEBUG
       vcl_cerr << "\nvnl_bignum::divide: b1 ="; b1.dump(vcl_cerr);
-      vcl_cerr << "\nvnl_bignum::divide: b2 ="; b2.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: b2 ="; b2.dump(vcl_cerr);
 #endif
       Data d = normalize(b1,b2,u,v);            // Set u = b1*d, v = b2*d
 #ifdef DEBUG
-      vcl_cerr << "\nvnl_bignum::divide: d = " << d;
-      vcl_cerr << "\nvnl_bignum::divide: u ="; u.dump(vcl_cerr);
-      vcl_cerr << "\nvnl_bignum::divide: v ="; v.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: d = " << d << '\n';
+      vcl_cerr << "vnl_bignum::divide: u ="; u.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: v ="; v.dump(vcl_cerr);
 #endif
       Counter j = 0;
       while (j <= b1.count - b2.count) {        // Main division loop
@@ -1281,22 +1277,26 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
 
       // Peter Vanroose - 2 March 2008 - clumsy bug fix (which solves 5 out of the 6 test errors):
       // remainder should never be larger than divisor; if still so, continue dividing...
+#ifdef DEBUG
+      vcl_cerr << "vnl_bignum::divide: start iterate remainder...\n";
+#endif
       while (r*r.sign >= b2*b2.sign) {
 #ifdef DEBUG
-      vcl_cerr << "\nvnl_bignum::divide: q ="; q.dump(vcl_cerr);
-      vcl_cerr << "\nvnl_bignum::divide: r ="; r.dump(vcl_cerr);
+        vcl_cerr << "vnl_bignum::divide: q ="; q.dump(vcl_cerr);
+        vcl_cerr << "vnl_bignum::divide: r ="; r.dump(vcl_cerr);
 #endif
         vnl_bignum r1, q1;
         divide(r*r.sign, b2*b2.sign, q1, r1);
         q += q1*r.sign*b2.sign; r = r1*r.sign*b2.sign;
 #ifdef DEBUG
-        vcl_cerr << "\nvnl_bignum::divide: q1 ="; q1.dump(vcl_cerr);
-        vcl_cerr << "\nvnl_bignum::divide: r1 ="; r1.dump(vcl_cerr);
+        vcl_cerr << "vnl_bignum::divide: q1 ="; q1.dump(vcl_cerr);
+        vcl_cerr << "vnl_bignum::divide: r1 ="; r1.dump(vcl_cerr);
 #endif
       }
 #ifdef DEBUG
-        vcl_cerr << "\nvnl_bignum::divide: q ="; q.dump(vcl_cerr);
-        vcl_cerr << "\nvnl_bignum::divide: r ="; r.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: end iterate remainder:\n";
+      vcl_cerr << "vnl_bignum::divide: q ="; q.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: r ="; r.dump(vcl_cerr);
 #endif
     }
     q.trim();                           // Trim leading zeros of quot.
@@ -1323,8 +1323,7 @@ vnl_bignum left_shift(const vnl_bignum& b1, int l)
   Data rshift = Data(16 - shift);       // amount to shift next word by
   Data carry = Data(                    // value that will be shifted
     b1.data[b1.count - 1] >> (16 - shift));// out end of current array
-  rslt.data =                              // allocate new data array
-    new Data[rslt.count = b1.count + growth + (carry != 0 ? 1u : 0u)];
+  rslt.resize(b1.count + growth + (carry ? 1u : 0u)); // allocate new data array
   Counter i = 0;
   while (i < growth)                            // zero out padded elements
     rslt.data[i++] = 0;
@@ -1358,8 +1357,7 @@ vnl_bignum right_shift(const vnl_bignum& b1, int l)
   Data dregs = Data(b1.data[b1.count-1] >> shift);// high end data to save
   if (shrinkage + (dregs == 0) < b1.count) {    // if not all data shifted out
     rslt.sign = b1.sign;                        // rslt follows sign of input
-                                                // allocate new data
-    rslt.data = new Data[rslt.count = b1.count - shrinkage - (dregs == 0 ? 1 : 0)];
+    rslt.resize(b1.count - shrinkage - (dregs == 0 ? 1 : 0)); // allocate new data
     Data lshift = Data(16 - shift);             // amount to shift high word
     Counter i = 0;
     while (i < rslt.count - 1) {                // shift current word
