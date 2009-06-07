@@ -159,7 +159,7 @@ class vgl_conic_segment_2d
   inline ~vgl_conic_segment_2d() {}
 
   //: Normalise the direction of the segment to counterclockwise.
-  //  This will also swap the end points is the direction is to be swapped.
+  //  This will also swap the end points if the direction is to be swapped.
   void normalize() { if (!counterclockwise_) { counterclockwise_=true; swap_endpoints(); } }
 
   //: Interchange the two endpoints but keep the direction.
