@@ -62,6 +62,7 @@
 //  Peter Vanroose, 7 September 2002: added "Infinity" (incl. all arithmetic)
 //  Ian Scott, 23 March 2004: made ++ and -- much more efficient.
 //  Peter Vanroose, March 2008: try to fix divide bug: partially succeeded
+//  Peter Vanroose, June 2009: finally fixed this long standing divide bug
 // \endverbatim
 
 #include <vcl_iostream.h>
