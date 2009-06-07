@@ -1146,19 +1146,11 @@ Data estimate_q_hat(const vnl_bignum& u, const vnl_bignum& v, Counter j)
     rhs = (unsigned long)u0 * 0x10000L +(unsigned long)u1;// Calculate part of right-hand side
     rhs -= ((unsigned long)q_hat * (unsigned long)v1);    // Now subtract off part
 
-    // DML:  My attempt to fix the overflow testing bug..
-    double temp_rhs = double(rhs);
-    double temp_radix_s = double(0x10000);
-    // OLD WAY: if (rhs > rhs * 0x10000)// if multiplication causes overflow
-    // NEW WAY: see if result won't fit into a long.
-    if ( temp_rhs * temp_radix_s > double(0x7fffffffL) )
+    if ( rhs >= 0x10000L )              // if multiplication with 0x10000L causes overflow
       break;                            //   then rhs > lhs, so test fails
     rhs *= 0x10000L;                    // No overflow:  ok to multiply
 
-    temp_rhs = double(rhs);
-    double temp_u2 = double(u2);
-    // OLD WAY: if (rhs > rhs + u2)     // if addition yields overflow
-    if ( temp_rhs + temp_u2 > double(0x7fffffffL) ) // NEW WAY.
+    if (rhs > rhs + (unsigned long)u2)  // if addition yields overflow
       break;                            //   then rhs > lhs, so test fails
     rhs += u2;                          // No overflow: ok to add.
     if (lhs <= rhs)                     // if lhs <= rhs
