@@ -1083,7 +1083,7 @@ void multiply_aux(const vnl_bignum& b, Data d, vnl_bignum& prod, Counter i)
 
 Data normalize(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_bignum& v)
 {
-  Data d = Data(0x10000L/(long(b2.data[b2.count - 1]) + 1L)); // Calculate normalization factor.
+  Data d = Data(0x10000L/((unsigned long)(b2.data[b2.count - 1]) + 1L)); // Calculate normalization factor.
   u.resize(b1.count + 1);                       // Get data for u (plus extra)
   v.resize(b2.count);                           // Get data for v
   u.data[b1.count] = 0;                         // Set u's leading digit to 0
@@ -1130,7 +1130,7 @@ Data estimate_q_hat(const vnl_bignum& u, const vnl_bignum& v, Counter j)
        u2 = u.data[u.count - 3 - j];
 
   // Initial Knuth estimate, usually correct
-  q_hat = (u0 == v1 ? Data(0xffff) : Data(long(u0 * 0x10000L + u1) / long(v1)));
+  q_hat = (u0 == v1 ? Data(0xffff) : Data(((unsigned long)u0 * 0x10000L + (unsigned long)u1) / (unsigned long)v1));
 
   // high speed test to determine most of the cases in which initial
   // estimate is too large.  Eliminates most cases in which q_hat is one too
@@ -1142,9 +1142,9 @@ Data estimate_q_hat(const vnl_bignum& u, const vnl_bignum& v, Counter j)
   // true, decrease q_hat again.
   unsigned long lhs, rhs;               // lhs, rhs of Knuth inequality
   for (Counter i = 0; i < 2; i++) {     // loop at most twice
-    lhs = v2 * q_hat;                   // Calculate left-hand side of ineq.
-    rhs = u0 * 0x10000L + u1;// Calculate part of right-hand side
-    rhs -= (q_hat * v1);                // Now subtract off part
+    lhs = (unsigned long)v2 * (unsigned long)q_hat;       // Calculate left-hand side of ineq.
+    rhs = (unsigned long)u0 * 0x10000L +(unsigned long)u1;// Calculate part of right-hand side
+    rhs -= ((unsigned long)q_hat * (unsigned long)v1);    // Now subtract off part
 
     // DML:  My attempt to fix the overflow testing bug..
     double temp_rhs = double(rhs);
@@ -1194,18 +1194,18 @@ Data multiply_subtract(vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter j
   for (; i < v.count; ++i) {
     // for each digit of v, multiply it by q_hat and subtract the result
     prod = (unsigned long)v.data[i] * (unsigned long)q_hat + carry;
-    diff = (unsigned long)u.data[u.count - v.count - 1 - j + i] + 0x10000L - borrow;
+    diff = (unsigned long)u.data[u.count - v.count - 1 - j + i] + (0x10000L - (unsigned long)borrow);
     diff -= (unsigned long)Data(prod);  //   form proper digit of u
     rslt.data[i] = Data(diff);          //   save the result
-    borrow = (diff/0x10000L == 0);      //   keep track of any borrows
+    borrow = (diff/0x10000L == 0) ? 1 : 0; //   keep track of any borrows
     carry = Data(prod/0x10000L);        //   keep track of carries
   }
   tmpcnt = Counter(u.count - v.count + i - j - 1);
-  diff = (unsigned long)u.data[tmpcnt]  //  special case for the last
-         + 0x10000L - borrow;           //  digit
-  diff -= carry;
+  diff = (unsigned long)u.data[tmpcnt]  //  special case for the last digit
+         + (0x10000L - (unsigned long)borrow);
+  diff -= (unsigned long)carry;
   rslt.data[i] = Data(diff);
-  borrow = (diff/0x10000L == 0);
+  borrow = (diff/0x10000L == 0) ? 1 : 0;
 
   // A leftover borrow indicates that u - v*q_hat is negative, i.e., that
   // q_hat was one too large.  So to get correct result, decrement q_hat and
