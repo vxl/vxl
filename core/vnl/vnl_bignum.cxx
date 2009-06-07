@@ -1083,7 +1083,7 @@ void multiply_aux(const vnl_bignum& b, Data d, vnl_bignum& prod, Counter i)
 
 Data normalize(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_bignum& v)
 {
-  Data d = Data(0x10000L/(long(b2.data[b2.count - 1]) + 1)); // Calculate normalization factor.
+  Data d = Data(0x10000L/(long(b2.data[b2.count - 1]) + 1L)); // Calculate normalization factor.
   u.resize(b1.count + 1);                       // Get data for u (plus extra)
   v.resize(b2.count);                           // Get data for v
   u.data[b1.count] = 0;                         // Set u's leading digit to 0
@@ -1261,9 +1261,9 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
 #endif
       Data d = normalize(b1,b2,u,v);            // Set u = b1*d, v = b2*d
 #ifdef DEBUG
-      vcl_cerr << "vnl_bignum::divide: d = " << d << '\n';
-      vcl_cerr << "vnl_bignum::divide: u ="; u.dump(vcl_cerr);
-      vcl_cerr << "vnl_bignum::divide: v ="; v.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: d = " << d << vcl_hex << " (0x" << d << ")\n" << vcl_dec;
+      vcl_cerr << "vnl_bignum::divide: u = "; u.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: v = "; v.dump(vcl_cerr);
 #endif
       Counter j = 0;
       while (j <= b1.count - b2.count) {        // Main division loop
@@ -1271,32 +1271,17 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
         q.data[q.count - 1 - j] =               // Do division, get true answ.
           multiply_subtract(u,v,q_hat,j);
         j++;
+#ifdef DEBUG
+        vcl_cerr << "vnl_bignum::divide: q_hat = " << q_hat << vcl_hex << " (0x" << q_hat << ")\n" << vcl_dec;
+        vcl_cerr << "vnl_bignum::divide: u = "; u.dump(vcl_cerr);
+#endif
       }
       static Data dufus;                // dummy variable
       divide_aux(u,d,r,dufus);          // Unnormalize u for remainder
 
-      // Peter Vanroose - 2 March 2008 - clumsy bug fix (which solves 5 out of the 6 test errors):
-      // remainder should never be larger than divisor; if still so, continue dividing...
 #ifdef DEBUG
-      vcl_cerr << "vnl_bignum::divide: start iterate remainder...\n";
-#endif
-      while (r*r.sign >= b2*b2.sign) {
-#ifdef DEBUG
-        vcl_cerr << "vnl_bignum::divide: q ="; q.dump(vcl_cerr);
-        vcl_cerr << "vnl_bignum::divide: r ="; r.dump(vcl_cerr);
-#endif
-        vnl_bignum r1, q1;
-        divide(r*r.sign, b2*b2.sign, q1, r1);
-        q += q1*r.sign*b2.sign; r = r1*r.sign*b2.sign;
-#ifdef DEBUG
-        vcl_cerr << "vnl_bignum::divide: q1 ="; q1.dump(vcl_cerr);
-        vcl_cerr << "vnl_bignum::divide: r1 ="; r1.dump(vcl_cerr);
-#endif
-      }
-#ifdef DEBUG
-      vcl_cerr << "vnl_bignum::divide: end iterate remainder:\n";
-      vcl_cerr << "vnl_bignum::divide: q ="; q.dump(vcl_cerr);
-      vcl_cerr << "vnl_bignum::divide: r ="; r.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: q = "; q.dump(vcl_cerr);
+      vcl_cerr << "vnl_bignum::divide: r = "; r.dump(vcl_cerr);
 #endif
     }
     q.trim();                           // Trim leading zeros of quot.
