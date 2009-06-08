@@ -40,6 +40,9 @@ public:
   //: returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();
   
+  //: Return the rotation matrix
+  vnl_matrix_fixed<double,3,3> rotation(){return R_;}
+  
   //: Save kernel as a Drishti raw file
   bool save_raw(vcl_string filename);
 
@@ -63,6 +66,9 @@ protected:
   
   //:Interpolation to find 3d integer position 
   bool warp_nearest_neighbor();
+  
+  //: Set the rotation matrix
+  bool set_rotation(vnl_vector_fixed<double,3> const& rotations);
   
   // Angular resolutions
   unsigned angular_resolution_x_;
