@@ -1,4 +1,6 @@
 #include "bvpl_kernel_base.h"
+//:
+// \file
 #include <vcl_map.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_algorithm.h>
@@ -79,7 +81,7 @@ bool bvpl_kernel_base::set_rotation(vnl_vector_fixed<double,3> const& rotations)
   double sin_x = vcl_sin(rotations[0]);
   double sin_y = vcl_sin(rotations[1]);
   double sin_z = vcl_sin(rotations[2]);
-  
+
   R_[0][0] = cos_y*cos_z;
   R_[0][1] = (sin_x*sin_y*cos_z) - (cos_x*sin_z);
   R_[0][2] = (cos_x*sin_y*cos_z) + (sin_x*sin_z);
@@ -89,7 +91,6 @@ bool bvpl_kernel_base::set_rotation(vnl_vector_fixed<double,3> const& rotations)
   R_[2][0] = -1.0 *sin_y;
   R_[2][1] = sin_x*cos_y;
   R_[2][2] = cos_x*cos_y;
-  
 }
 
 #if 0
