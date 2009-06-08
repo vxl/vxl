@@ -22,20 +22,29 @@
 class bvpl_edge2d_kernel : public bvpl_kernel_base
 {
  public:
-  //:Default Constructors
+  //:Default Constructor
   bvpl_edge2d_kernel();
+  
+  //: Constructor using rotation axis and angle
+  bvpl_edge2d_kernel(unsigned height, unsigned width, vnl_vector_fixed<double,3> axis, double angle);
+  
+  //: Constructor using rotation euler angles, where R = Rz*Ry*Rx
+  bvpl_edge2d_kernel(unsigned height, unsigned width, vnl_vector_fixed<double,3> rotation);
 
-  //:Creates a 2d edge kernel of specified type
-  bool create(unsigned height, unsigned width, vnl_vector_fixed<double,3> const& rotations);
+  //:Creates a 2d edge kernel
+  bool create();
+  
   unsigned height() {return height_;}
+  
   unsigned width() {return width_;}
+  
   virtual vcl_string name() {return "edge2d";};
 
  private:
 
   unsigned height_;
   unsigned width_;
-  static const unsigned max_size_ = 15;
+  static const unsigned max_size_ = 100;
 };
 
 #endif
