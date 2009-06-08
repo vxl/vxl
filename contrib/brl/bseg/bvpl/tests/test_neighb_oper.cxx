@@ -18,7 +18,7 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
     vcl_cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
-  
+
   //get the range of the grid
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
   float max = -1.0 * vcl_numeric_limits<float>::infinity();
@@ -36,7 +36,7 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
 
   vcl_cout << "max: " << max <<vcl_endl;
   vcl_cout << "min: " << min <<vcl_endl;
-  
+
   // write header
 
   unsigned char data_type = 8; // 0 means unsigned byte, 1 signed byte, 8 float
@@ -93,7 +93,7 @@ static void test_neighb_oper()
     vul_file::delete_file_glob(storage_cached_fname.c_str());
   }
 
-  int grid_x=50, grid_y=50, grid_z=50;
+  unsigned int grid_x=50, grid_y=50, grid_z=50;
   vgl_vector_3d<unsigned> grid_size(grid_x, grid_y, grid_z);
   //unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
 
@@ -127,7 +127,7 @@ static void test_neighb_oper()
   vcl_cout << "done." << vcl_endl;
   save_occupancy_raw("first.raw", grid);
 
-  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel(5, 5, vnl_vector_fixed<double,3>(1.0, 0.0, 0.0), vnl_math::pi); 
+  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel(5, 5, vnl_vector_fixed<double,3>(1.0, 0.0, 0.0), vnl_math::pi);
   kernel->create();
 
   bvpl_kernel_base_sptr kernel_sptr = kernel;
