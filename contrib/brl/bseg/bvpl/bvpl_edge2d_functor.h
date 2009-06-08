@@ -1,6 +1,5 @@
 #ifndef bvpl_edge2d_functor_h_
 #define bvpl_edge2d_functor_h_
-//
 //:
 // \file
 // \brief Functor to find the 2D edges
@@ -46,7 +45,7 @@ class bvpl_edge2d_functor
   T P0_norm;
   T P05_norm;
 
-  //: Initilizes class variables
+  //: Initializes class variables
   void init();
 };
 
