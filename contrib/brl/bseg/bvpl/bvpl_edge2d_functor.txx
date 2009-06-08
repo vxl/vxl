@@ -33,41 +33,44 @@ void bvpl_edge2d_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
   if (d.c_ == 1) {
     P_ += vcl_log(val);
-    P_norm += vcl_log(min_P_);
+    //P_norm += vcl_log(min_P_);
   }
   else if (d.c_ == -1){
     P_ += vcl_log(T(1.0)-val);
-    P_norm += vcl_log(T(1.0) - min_P_);
+    //P_norm += vcl_log(T(1.0) - min_P_);
   }
-
+  
   P1_ += vcl_log(val);
   P0_ += vcl_log(T(1.0)-val);
   P05_ += vcl_log(T(0.5));
-
-  P1_norm += vcl_log(min_P_);
-  P0_norm += vcl_log(T(1.0)-min_P_);
+  
+  //P1_norm += vcl_log(min_P_);
+  //P0_norm += vcl_log(T(1.0)-min_P_);
 }
 
 template <class T>
 T bvpl_edge2d_functor<T>::result()
 {
+#if 0
   //normalize probabilities w.r.t an empty region
   P_ -= P_norm;
   P1_ -= P1_norm;
   P0_ -= P0_norm;
-  //P05_ -= P_norm;
-
+  P05_ -= P_norm;
+#endif
+  
+  
   //normalize w.r.t other configurations
   T t1 = vcl_exp(P1_ - P_);
   T t2 = vcl_exp(P0_ - P_);
   T t3 = vcl_exp(P05_ - P_);
-
+  
   T result = (T(1.0)/(T(1.0) + t1 + t2 + t3));
-
+  
   //reset all variables
   init();
-
-  return  result;
+  
+  return result;
 }
 
 #define BVPL_EDGE2D_FUNCTOR_INSTANTIATE(T) \
