@@ -9,6 +9,7 @@
 
 #include <vul/vul_file.h>
 #include <vnl/vnl_math.h>
+#include <vcl_limits.h>
 
 bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
 {
@@ -17,9 +18,31 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
     vcl_cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
+  
+  //get the range of the grid
+  bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
+  float max = -1.0 * vcl_numeric_limits<float>::infinity();
+  float min = vcl_numeric_limits<float>::infinity();
+  for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
+    for (unsigned i=0; i<(*grid_it).nx(); ++i) {
+      for (unsigned j=0; j < (*grid_it).ny(); ++j) {
+        if ((*grid_it)(i,j)> max)
+          max = (*grid_it)(i,j);
+        if ((*grid_it)(i,j)< min)
+          min = (*grid_it)(i,j);
+      }
+    }
+  }
 
+  vcl_cout << "max: " << max <<vcl_endl;
+  vcl_cout << "min: " << min <<vcl_endl;
+  
   // write header
+<<<<<<< .mine
+  unsigned char data_type = 8; // 0 means unsigned byte, 1 signed byte, 8 float
+=======
   unsigned char data_type = 8; // 8 means float
+>>>>>>> .r25247
 
   vxl_uint_32 nx = grid->grid_size().x();
   vxl_uint_32 ny = grid->grid_size().y();
@@ -39,7 +62,11 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
     vcl_cout << '.';
     for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
       for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
+<<<<<<< .mine
+        ocp_array[i*ny*nz + j*nz + k] = (float)((*ocp_it)(i,j) );
+=======
         ocp_array[i*ny*nz + j*nz + k] = (float)((*ocp_it)(i,j));
+>>>>>>> .r25247
       }
     }
   }
@@ -86,7 +113,11 @@ static void test_neighb_oper()
   vcl_cout << "num_observations = " << nobs << vcl_endl;
 
   // fill with test data
+<<<<<<< .mine
+  float init_val = 0.1f;
+=======
   float init_val = 0.9f;
+>>>>>>> .r25247
   grid->initialize_data(init_val);
   grid_out->initialize_data(0.0e-40);
 
@@ -106,9 +137,11 @@ static void test_neighb_oper()
   vcl_cout << "done." << vcl_endl;
   save_occupancy_raw("first.raw", grid);
 
-  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel();
-  kernel->create(5, 5, vnl_vector_fixed<double,3>(vnl_math::pi, 0.0, 0.0));
+  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel(5, 5, vnl_vector_fixed<double,3>(1.0, 0.0, 0.0), vnl_math::pi); 
+  kernel->create();
+
   bvpl_kernel_base_sptr kernel_sptr = kernel;
+
   bvpl_edge2d_functor<float> func;
   bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
   oper.operate(grid, kernel_sptr, grid_out);
