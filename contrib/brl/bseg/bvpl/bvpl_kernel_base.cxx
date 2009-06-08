@@ -69,8 +69,32 @@ bool bvpl_kernel_base::warp_nearest_neighbor()
 }
 
 
+//: Calculates standard rotation matrix obtained as the product of rotation matrices R_z*R_y*R_x
+bool bvpl_kernel_base::set_rotation(vnl_vector_fixed<double,3> const& rotations)
+{
+  double cos_x = vcl_cos(rotations[0]);
+  double cos_y = vcl_cos(rotations[1]);
+  double cos_z = vcl_cos(rotations[2]);
+
+  double sin_x = vcl_sin(rotations[0]);
+  double sin_y = vcl_sin(rotations[1]);
+  double sin_z = vcl_sin(rotations[2]);
+  
+  R_[0][0] = cos_y*cos_z;
+  R_[0][1] = (sin_x*sin_y*cos_z) - (cos_x*sin_z);
+  R_[0][2] = (cos_x*sin_y*cos_z) + (sin_x*sin_z);
+  R_[1][0] = cos_y*sin_z;
+  R_[1][1] = (sin_x*sin_y*sin_z) + (cos_x*cos_z);
+  R_[2][2] = (cos_x*sin_y*sin_z) - (sin_x*cos_z);
+  R_[2][0] = -1.0 *sin_y;
+  R_[2][1] = sin_x*cos_y;
+  R_[2][2] = cos_x*cos_y;
+  
+}
+
 #if 0
 // Converts the kernel_map to a bvpl_kernel_iterator
+
 bvpl_kernel_iterator bvpl_kernel_base::iterator()
 {
   //the iterator
@@ -116,7 +140,7 @@ bool bvpl_kernel_base::save_raw(vcl_string filename)
 
   //Since our kernel does not occupy the entire space we need to initialize our data
   for (unsigned i = 0; i < size; i++)
-    data_array[i] = 1;
+    data_array[i] = 0;
 
   for (; it !=kernel_.end(); ++it) {
     vgl_point_3d<int> coord =( *it).first;
