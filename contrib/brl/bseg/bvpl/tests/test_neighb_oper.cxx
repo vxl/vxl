@@ -38,11 +38,8 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
   vcl_cout << "min: " << min <<vcl_endl;
   
   // write header
-<<<<<<< .mine
+
   unsigned char data_type = 8; // 0 means unsigned byte, 1 signed byte, 8 float
-=======
-  unsigned char data_type = 8; // 8 means float
->>>>>>> .r25247
 
   vxl_uint_32 nx = grid->grid_size().x();
   vxl_uint_32 ny = grid->grid_size().y();
@@ -62,11 +59,8 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
     vcl_cout << '.';
     for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
       for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
-<<<<<<< .mine
+
         ocp_array[i*ny*nz + j*nz + k] = (float)((*ocp_it)(i,j) );
-=======
-        ocp_array[i*ny*nz + j*nz + k] = (float)((*ocp_it)(i,j));
->>>>>>> .r25247
       }
     }
   }
@@ -113,11 +107,7 @@ static void test_neighb_oper()
   vcl_cout << "num_observations = " << nobs << vcl_endl;
 
   // fill with test data
-<<<<<<< .mine
-  float init_val = 0.1f;
-=======
   float init_val = 0.9f;
->>>>>>> .r25247
   grid->initialize_data(init_val);
   grid_out->initialize_data(0.0e-40);
 
