@@ -91,6 +91,7 @@ bool bvpl_kernel_base::set_rotation(vnl_vector_fixed<double,3> const& rotations)
   R_[2][0] = -1.0 *sin_y;
   R_[2][1] = sin_x*cos_y;
   R_[2][2] = cos_x*cos_y;
+  return true;
 }
 
 #if 0
