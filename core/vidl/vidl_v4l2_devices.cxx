@@ -17,6 +17,7 @@ extern "C" { // revisar los .h
 #include <dirent.h>
 };
 
+#include <vcl_cstdio.h> // for std::perror()
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include "vidl_pixel_format.h"
@@ -89,7 +90,7 @@ void vidl_v4l2_devices::load_devices(const char *dirname)
     closedir(dp);
   }
   else
-    perror("Couldn't open the directory");
+    vcl_perror("Couldn't open the directory");
 }
 
 

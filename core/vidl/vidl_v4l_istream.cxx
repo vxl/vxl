@@ -13,6 +13,7 @@
 #include "vidl_v4l_params.h"
 #include "vidl_pixel_format.h"
 #include "vidl_frame.h"
+#include <vcl_cstdio.h> // for std::perror()
 
 //: Destructor
 vidl_v4l_istream::~vidl_v4l_istream()
@@ -29,10 +30,10 @@ bool vidl_v4l_istream::open(const vcl_string &device_name)
     fd_ = ::open(device_name.c_str(), O_RDWR);
 
     if (fd_==-1)
-        perror("problem with v4l");
+        vcl_perror("problem with v4l");
 
     if (-1 == ioctl (fd_, VIDIOCGCAP, &vc)) {
-        perror ("VIDIOCGCAP");
+        vcl_perror ("VIDIOCGCAP");
         return false;
     }
     vcl_cout << "name = " << vc.name << vcl_endl
@@ -42,14 +43,14 @@ bool vidl_v4l_istream::open(const vcl_string &device_name)
              << "maxheight = " << vc.maxheight << vcl_endl;
 
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
-        perror ("VIDIOCGWIN");
+        vcl_perror ("VIDIOCGWIN");
         return false;
     }
     defaults_.ni_ = vw.width;
     defaults_.nj_ = vw.height;
 
     if (-1 == ioctl (fd_, VIDIOCGPICT, &vp)) {
-        perror ("VIDIOCGPICT");
+        vcl_perror ("VIDIOCGPICT");
         return false;
     }
 
@@ -64,14 +65,14 @@ bool vidl_v4l_istream::open(const vcl_string &device_name)
         defaults_.pixel_format_ = VIDL_PIXEL_FORMAT_YUV_420P;
 
     if (-1 == ioctl (fd_, VIDIOCGMBUF, &vm)) {
-        perror ("VIDIOCGMBUF");
+        vcl_perror ("VIDIOCGMBUF");
         return false;
     }
     // for the moment just use one mmapped frame
     buf = mmap(0, vm.size, PROT_READ|PROT_WRITE, MAP_SHARED, fd_,0);
     if (buf==(unsigned char *)-1)
     {
-        perror("problem with mmap");
+        vcl_perror("problem with mmap");
         close();
         return false;
     }
@@ -121,12 +122,12 @@ bool vidl_v4l_istream::set_params(const vidl_v4l_params &p)
     vw.height = p.nj_;
     if (-1 == ioctl (fd_, VIDIOCSWIN, &vw)) {
         vcl_cerr << "VIDIOCSWIN\n";
-        perror ("VIDIOCGWIN");
+        vcl_perror ("VIDIOCGWIN");
         return false;
     }
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
         vcl_cerr << "VIDIOCGWIN\n";
-        perror ("VIDIOCGWIN");
+        vcl_perror ("VIDIOCGWIN");
         return false;
     }
     if ((vw.width!=p.ni_)||(vw.height!=p.nj_))
@@ -144,12 +145,12 @@ bool vidl_v4l_istream::set_params(const vidl_v4l_params &p)
     vp.palette = vidl_v4l_params::vidlpf_to_v4lpf(p.pixel_format_);
     if (-1 == ioctl (fd_, VIDIOCSPICT, &vp)) {
         vcl_cerr << "VIDIOCSPICT\n";
-        perror ("VIDIOCSPICT");
+        vcl_perror ("VIDIOCSPICT");
         return false;
     }
     if (-1 == ioctl (fd_, VIDIOCGPICT, &vp)) {
         vcl_cerr << "VIDIOCGPICT\n";
-        perror ("VIDIOCGPICT");
+        vcl_perror ("VIDIOCGPICT");
         return false;
     }
 
@@ -215,7 +216,7 @@ bool vidl_v4l_istream::set_params(const vidl_v4l_params &p)
 bool vidl_v4l_istream::advance()
 {
     if (ioctl(fd_, VIDIOCMCAPTURE, &mm)<0) {
-        perror("VIDIOCMCAPTURE");
+        vcl_perror("VIDIOCMCAPTURE");
         return false;
     }
 
@@ -226,11 +227,11 @@ bool vidl_v4l_istream::advance()
     while (i < 0) {
         i = ioctl(fd_, VIDIOCSYNC, &mm.frame);
         if (i < 0 && errno == EINTR){
-            perror("VIDIOCSYNC problem");
+            vcl_perror("VIDIOCSYNC problem");
             continue;
         }
         if (i < 0) {
-            perror("VIDIOCSYNC");
+            vcl_perror("VIDIOCSYNC");
             // You may want to exit here, because something has gone
             // pretty badly wrong...
             return false;
@@ -256,7 +257,7 @@ vidl_frame_sptr vidl_v4l_istream::read_frame()
 //: Return the width of each frame
 unsigned int vidl_v4l_istream::width() const
 {
-  if(!is_open())
+  if (!is_open())
     return 0;
   return cur_frame_->ni();
 }
@@ -265,7 +266,7 @@ unsigned int vidl_v4l_istream::width() const
 //: Return the height of each frame
 unsigned int vidl_v4l_istream::height() const
 {
-  if(!is_open())
+  if (!is_open())
     return 0;
   return cur_frame_->nj();
 }
@@ -274,7 +275,7 @@ unsigned int vidl_v4l_istream::height() const
 //: Return the pixel format
 vidl_pixel_format vidl_v4l_istream::format() const
 {
-  if(!is_open())
+  if (!is_open())
     return VIDL_PIXEL_FORMAT_UNKNOWN;
   return cur_frame_->pixel_format();
 }
