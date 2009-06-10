@@ -19,6 +19,7 @@ bool bvpl_voxel_subgrid<T>::voxel(int x, int y, int z, T& v)
 {
   vgl_point_3d<int> c = center_;
 
+  //are the z coordinates of bvxm_voxel grid are
   x = c.x()+x;
   y = c.y()+y;
   z = c.z()+z;
@@ -38,7 +39,7 @@ bool bvpl_voxel_subgrid<T>::voxel(int x, int y, int z, T& v)
     return false;
   }
   else {
-    //vcl_cout << "Slab idx " << x << y << z << vcl_endl;
+    //vcl_cout << "Slab idx " << x <<" " << y  <<" "<< z << vcl_endl;
     v = slab_(x,y,z);
     return true;
   }
@@ -48,7 +49,7 @@ template <class T>
 void bvpl_voxel_subgrid<T>::set_voxel(const T& v)
 {
   vgl_point_3d<int> c = center_;
-  //vcl_cout << "Setting " << c << " " << v << vcl_endl;
+  vcl_cout << "Setting " << c << " " << v << vcl_endl;
   T& val = slab_(c.x(), c.y(), c.z());
   val = v;
 }
