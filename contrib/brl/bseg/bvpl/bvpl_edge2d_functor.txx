@@ -4,6 +4,7 @@
 // \file
 #include "bvpl_edge2d_functor.h"
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 
 // Default constructor
@@ -31,6 +32,7 @@ void bvpl_edge2d_functor<T>::init()
 template <class T>
 void bvpl_edge2d_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
+  
   if (d.c_ == 1) {
     P_ += vcl_log(val);
     //P_norm += vcl_log(min_P_);
@@ -44,6 +46,7 @@ void bvpl_edge2d_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
   P0_ += vcl_log(T(1.0)-val);
   P05_ += vcl_log(T(0.5));
   
+  //vcl_cerr << val << " and " << int(d.c_) <<" P " <<P_ << " P0 " <<P0_ << " P1 " <<P1_ << vcl_endl ;
   //P1_norm += vcl_log(min_P_);
   //P0_norm += vcl_log(T(1.0)-min_P_);
 }
