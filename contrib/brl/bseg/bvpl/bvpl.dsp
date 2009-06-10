@@ -93,10 +93,10 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bvpl_kernel_base.cxx
+SOURCE=.\bvpl_kernel_factory.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvpl_edge2d_kernel.cxx
+SOURCE=.\bvpl_edge2d_kernel_factory.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
@@ -111,7 +111,7 @@ SOURCE=.\Templates/bvpl_edge2d_functor+float-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_subgrid_iterator_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bvpl_kernel_base-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_kernel-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -132,12 +132,6 @@ SOURCE=.\bvpl_subgrid_iterator.txx
 SOURCE=.\bvpl_kernel_iterator.h
 # End Source File
 # Begin Source File
-SOURCE=.\bvpl_kernel_base.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvpl_edge2d_kernel.h
-# End Source File
-# Begin Source File
 SOURCE=.\bvpl_edge2d_functor.txx
 # End Source File
 # Begin Source File
@@ -145,6 +139,12 @@ SOURCE=.\bvpl_edge2d_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_neighb_operator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_kernel_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge2d_kernel_factory.h
 # End Source File
 # End Group
 # End Target
