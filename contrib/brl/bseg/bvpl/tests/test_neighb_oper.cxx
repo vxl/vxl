@@ -3,7 +3,7 @@
 #include <testlib/testlib_test.h>
 #include <bvpl/bvpl_subgrid_iterator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
-#include <bvpl/bvpl_edge2d_kernel.h>
+#include <bvpl/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/bvpl_edge2d_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 
@@ -93,7 +93,9 @@ static void test_neighb_oper()
     vul_file::delete_file_glob(storage_cached_fname.c_str());
   }
 
+
   unsigned int grid_x=50, grid_y=50, grid_z=50;
+
   vgl_vector_3d<unsigned> grid_size(grid_x, grid_y, grid_z);
   //unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
 
@@ -107,9 +109,9 @@ static void test_neighb_oper()
   vcl_cout << "num_observations = " << nobs << vcl_endl;
 
   // fill with test data
-  float init_val = 0.9f;
+  float init_val = 0.8f;
   grid->initialize_data(init_val);
-  grid_out->initialize_data(0.0e-40);
+  grid_out->initialize_data(1.0e-20);
 
   // read in each slice, check that init_val was set, and fill with new value
   vcl_cout << "read/write: ";
@@ -120,17 +122,17 @@ static void test_neighb_oper()
     for (unsigned i=0; i<grid_x/2; i++) {
       for (unsigned j=0; j<grid_y; j++) {
         float &v = vit(i,j);
-        v = 0.1f;
+        v = 0.01f;
       }
     }
   }
   vcl_cout << "done." << vcl_endl;
   save_occupancy_raw("first.raw", grid);
 
-  bvpl_edge2d_kernel* kernel = new bvpl_edge2d_kernel(5, 5, vnl_vector_fixed<double,3>(1.0, 0.0, 0.0), vnl_math::pi);
-  kernel->create();
 
-  bvpl_kernel_base_sptr kernel_sptr = kernel;
+  bvpl_edge2d_kernel_factory edge_factory(5, 5);
+
+  bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(edge_factory.create());
 
   bvpl_edge2d_functor<float> func;
   bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
