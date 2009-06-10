@@ -9,6 +9,9 @@ bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory()
   width_=0;
   angular_resolution_ = 0;
   canonical_rotation_axis_[0] = 0.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0; 
+  canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 0.0; canonical_parallel_axis_[2] = 0.0;
+  rotation_axis_ = canonical_rotation_axis_;
+  //parallel_axis_ = canonical_parallel_axis_;
   angle_ = 0.0f;
 }
 
@@ -31,6 +34,8 @@ bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory(unsigned height, unsigned
   canonical_rotation_axis_[0] = 1.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0; 
   canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 1.0; canonical_parallel_axis_[2] = 0.0;
   angle_ = 0.0f;
+  rotation_axis_ = canonical_rotation_axis_;
+  //parallel_axis_ = canonical_paralell_axis_;
   create_canonical();
 }
 

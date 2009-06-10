@@ -97,7 +97,7 @@ bvpl_kernel_factory::rotate(float angle)
     return this->rotate(vgl_rotation_3d<float>(q));
   }
   else {// identity rotation is a special case
-    vcl_cout << "Rotation axis magnitude is zero, returning withount modifycation of kernel \n";
+    vcl_cout << "magnitude of rotation axis is zero, returning withount modifying kernel \n";
     return kernel_;
   }
 
@@ -306,8 +306,8 @@ bool bvpl_kernel_factory::save_raw(vcl_string filename)
   }
 
   
-  vcl_cout << "max: " << max <<vcl_endl;
-  vcl_cout << "min: " << min <<vcl_endl;
+  vcl_cout << "max: " << int(max) <<vcl_endl;
+  vcl_cout << "min: " << int(min) <<vcl_endl;
   
   //Since our kernel does not occupy the entire space we need to initialize our data
   for (unsigned i = 0; i < size; i++)
