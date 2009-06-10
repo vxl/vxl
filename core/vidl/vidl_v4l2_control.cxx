@@ -9,6 +9,7 @@
 
 
 #include "vidl_v4l2_control.h"
+#include <vcl_cstdio.h> // for std::snprintf()
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
@@ -90,8 +91,8 @@ void vidl_v4l2_control_integer::set_100(int value) const
 vcl_string vidl_v4l2_control_integer::description() const
 {
   char cad[256];
-  snprintf(cad,256,"Control \"%s\": integer (min: %d, max: %d, step: %d, default: %d)",
-           (const char *) ctrl_.name, minimum(), maximum(), step(), default_value());
+  vcl_snprintf(cad,256,"Control \"%s\": integer (min: %d, max: %d, step: %d, default: %d)",
+               (const char *) ctrl_.name, minimum(), maximum(), step(), default_value());
   return cad;
 }
 
@@ -117,8 +118,8 @@ vidl_v4l2_control_menu::vidl_v4l2_control_menu(const v4l2_queryctrl& ctr, int f)
 vcl_string vidl_v4l2_control_menu::description() const
 {
   char cad[256];
-  snprintf(cad,256,"Control \"%s\": menu (%d items, default: %d)",
-           (const char *) ctrl_.name, n_items(), default_value());
+  vcl_snprintf(cad,256,"Control \"%s\": menu (%d items, default: %d)",
+               (const char *) ctrl_.name, n_items(), default_value());
   return cad;
 }
 
