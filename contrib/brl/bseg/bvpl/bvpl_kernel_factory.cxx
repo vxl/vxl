@@ -34,13 +34,33 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
   kernel_type::const_iterator kernel_it = kernel.begin();
   vcl_vector<vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> >  kernel_out;
   
+    //Kernels shouldn't get any bigger than this, so this initial values work
+  int max_x =-100;
+  int max_y =-100;
+  int max_z =-100;
+  int min_x = 100;
+  int min_y =100;
+  int min_z = 100;
+
   for (; kernel_it != kernel.end(); ++kernel_it)
   {
       int x0 = (int)vcl_floor((kernel_it->first).x()+0.5f);
       int y0 = (int)vcl_floor((kernel_it->first).y()+0.5f);
       int z0 = (int)vcl_floor((kernel_it->first).z()+0.5f);
       kernel_out.push_back(vcl_make_pair(vgl_point_3d<int>(x0,y0,z0), (kernel_it->second)));
+
+          
+    if ( x0 > max_x) max_x =  x0;
+    if ( y0 > max_y) max_y =  y0;
+    if ( z0 > max_z) max_z =  y0;
+    
+    if ( x0 < min_x) min_x =  x0;
+    if ( y0 < min_y) min_y =  y0;
+    if ( z0 < min_z) min_z =  z0;
   }
+  max3d_.set(max_x,max_y,max_z);
+  min3d_.set(min_x,min_y,min_z);
+  
   return kernel_out;
 }
 
@@ -71,6 +91,7 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   
   //rotate the parallel axis
   vnl_vector_fixed<float,3> parallerl_axis = r_align.as_matrix() * canonical_parallel_axis_;
+  
   //spherical coordinates of the parallel axis.
   float theta_p = vcl_atan2(parallerl_axis[1],parallerl_axis[0]); //azimuth
   float phi_p = vcl_acos(parallerl_axis[2]/radius); //elevation
@@ -107,13 +128,7 @@ bvpl_kernel_factory::rotate(float angle)
 bvpl_kernel_factory::kernel_type
 bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
 {
-  //Kernels shouldn't get any bigger than this, so this initial values work
-  float max_x =-50;
-  float max_y =-50;
-  float max_z =-50;
-  float min_x = 50;
-  float min_y =50;
-  float min_z = 50;
+
   
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kernel_it =this->kernel_.begin();
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel;
@@ -125,25 +140,13 @@ bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
     vgl_point_3d<float> new_coord = R* vgl_point_3d<float>(float((*kernel_it).first.x()),
                                                             float((*kernel_it).first.y()),
                                                             float((*kernel_it).first.z()));
-    
-    if ( new_coord.x() > max_x) max_x =  new_coord.x();
-    if ( new_coord.y() > max_y) max_y =  new_coord.y();
-    if ( new_coord.z() > max_z) max_z =  new_coord.z();
-    
-    if ( new_coord.x() < min_x) min_x =  new_coord.x();
-    if ( new_coord.y() < min_y) min_y =  new_coord.y();
-    if ( new_coord.z() < min_z) min_z =  new_coord.z();
    
     kernel.push_back(vcl_make_pair(new_coord, (kernel_it->second)));
     
     // As is is implemented now, if many point to round a sigle integer, then that integer is used multiple times
     // this may be a good solution, and avoids the problem of getting unequal number of symbols
   }
-  
-  //set the dimension of the 3-d grid
-  max3d_.set((int)vcl_floor(max_x +0.5),(int)vcl_floor(max_y+0.5),(int)vcl_floor(max_z+0.5));
-  min3d_.set((int)vcl_floor(min_x+0.5),(int)vcl_floor(min_y+0.5),(int)vcl_floor(min_z+0.5));
-  
+
 
   return kernel;
   
