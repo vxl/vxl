@@ -28,7 +28,7 @@ class bvpl_neighb_operator
   ~bvpl_neighb_operator() {}
 
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
-  void operate(bvxm_voxel_grid<T>* grid, bvpl_kernel_base_sptr kernel, bvxm_voxel_grid<T>* out_grid)
+  void operate(bvxm_voxel_grid<T>* grid, bvpl_kernel_sptr kernel, bvxm_voxel_grid<T>* out_grid)
   {
     bvpl_subgrid_iterator<T> subgrid_iter(grid, kernel->dim());
     bvpl_subgrid_iterator<T> output_iter(out_grid, kernel->dim());
