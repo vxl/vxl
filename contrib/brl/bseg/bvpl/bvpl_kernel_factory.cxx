@@ -293,8 +293,8 @@ bool bvpl_kernel_factory::save_raw(vcl_string filename)
 
   
   //get the range of the grid
-  double max = -1.0 * vcl_numeric_limits<float>::infinity();
-  double min = vcl_numeric_limits<float>::infinity();
+  char max = char(-1) * vcl_numeric_limits<char>::infinity();
+  char min = vcl_numeric_limits<char>::infinity();
 
   kernel_it.begin();
   while (!kernel_it.isDone()){ 
@@ -311,7 +311,7 @@ bool bvpl_kernel_factory::save_raw(vcl_string filename)
   
   //Since our kernel does not occupy the entire space we need to initialize our data
   for (unsigned i = 0; i < size; i++)
-    data_array[i] = float(min);
+    data_array[i] = min;
 
   kernel_it.begin();
   while (!kernel_it.isDone()){

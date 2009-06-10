@@ -130,7 +130,7 @@ protected:
   vnl_vector_fixed<float,3> canonical_parallel_axis_;
 
   //: Amounts rotation around rotation_axis_
-  double angle_;
+  float angle_;
   
   //: Dimensions of the 3D grid
   vgl_point_3d<int> max3d_;
