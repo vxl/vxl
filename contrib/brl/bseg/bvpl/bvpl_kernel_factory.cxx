@@ -34,7 +34,7 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
   kernel_type::const_iterator kernel_it = kernel.begin();
   vcl_vector<vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> >  kernel_out;
   
-  for (; kernel_it != kernel_.end(); ++kernel_it)
+  for (; kernel_it != kernel.end(); ++kernel_it)
   {
       int x0 = (int)vcl_floor((kernel_it->first).x()+0.5f);
       int y0 = (int)vcl_floor((kernel_it->first).y()+0.5f);
