@@ -5,6 +5,7 @@
 #include <vnl/vnl_math.h>
 
 #include <vul/vul_file.h>
+#include <vcl_sstream.h>
 
 // True rotation matrices
 static double R1_ [] =
@@ -52,28 +53,45 @@ static double R4_ [] =
 MAIN(test_bvpl_kernels)
 {
   //define variaty of heights, widths, and rotations
-  unsigned h1=51, h2=3, h3 = 12;
-  float a1=2.0*vnl_math::pi/3.0, a2=vnl_math::pi/4.0, a3=vnl_math::pi/2.0, a4=vnl_math::pi;
+  unsigned h1=5, h2=3, h3 = 12;
+  float a1=2.0*float(vnl_math::pi/3.0), a2=float(vnl_math::pi/4.0), a3=float(vnl_math::pi/2.0), a4=float(vnl_math::pi);
   
-  vnl_vector_fixed<double,3> axis1(0.0, 0.0, 0.0);
-  vnl_vector_fixed<double,3> axis2(1.0, 0.0, 0.0);
-  vnl_vector_fixed<double,3> axis3(1.0, 0.0, 1.0);
-  vnl_vector_fixed<double,3> axis4(1.0, 1.0 , 1.0);
+  vnl_vector_fixed<float,3> axis1(0.0, 0.0, 0.0);
+  vnl_vector_fixed<float,3> axis2(1.0, 0.0, 0.0);
+  vnl_vector_fixed<float,3> axis3(1.0, 0.0, 1.0);
+  vnl_vector_fixed<float,3> axis4(1.0, 1.0 , 1.0);
 
   //Create the factory
   bvpl_edge2d_kernel_factory factory1(h1, h1); 
   
   //Check that canonical edge looks ok
- factory1.save_raw("canonical.raw");
-  //
-//  factory1.set_rotation_axis(axis1);
-//  for(unsigned i=0; i=16; i++)
-//  {
-//    factory1.set_angle(float(i) * vnl_math::pi/8.0);
-//    kernel_factory.create()
-//    kernel_factory.save_raw(grid_path);
-//  }
-//  
+  vcl_cout << "Saving canonical.raw \n";
+  factory1.save_raw("canonical.raw");
+
+
+
+  //this should leave rotation axis untouched
+  factory1.set_rotation_axis(axis1);
+
+  vnl_vector_fixed<float,3> axis = factory1.axis();
+  vcl_cout <<axis << vcl_endl;
+  bool result = (vnl_vector_fixed<float,3>(1.0f, 0.0f, 0.0f)== axis);
+  TEST("Zero axis", result, true);
+
+  vcl_cout << "Rotating canonical\n";
+
+  
+  //for(unsigned i=0; i<1; i++)
+  {
+    unsigned i =1;
+    vcl_stringstream filename;
+    filename << "canonical_rotation_" << i <<".vox";
+    factory1.set_angle(float(i) * vnl_math::pi/2);
+    bvpl_kernel kernel = factory1.create();
+    kernel.print();
+    factory1.save_raw(filename.str());
+  }
+  
   //check the other creation method
   
  // 
