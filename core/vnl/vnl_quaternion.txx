@@ -63,7 +63,7 @@ template <class T>
 vnl_quaternion<T>::vnl_quaternion(vnl_vector_fixed<T,3> const& axis, double angle)
 {
   double a = angle * 0.5;  // half angle
-  double s = vcl_sin(a);
+  T s = T(vcl_sin(a));
   for (int i = 0; i < 3; i++)            // imaginary vector is sine of
     this->operator[](i) = T(s * axis(i));// half angle multiplied with axis
   this->operator[](3) = T(vcl_cos(a));   // real part is cosine of half angle
@@ -144,9 +144,9 @@ vnl_quaternion<T>::vnl_quaternion(vnl_matrix_fixed<T,3,3> const& rot)
 template <class T>
 vnl_quaternion<T>::vnl_quaternion(T theta_X, T theta_Y, T theta_Z)
 {
-  vnl_quaternion<T> Rx(T(vcl_sin(theta_X*0.5)), 0, 0, T(vcl_cos(theta_X*0.5)));
-  vnl_quaternion<T> Ry(0, T(vcl_sin(theta_Y*0.5)), 0, T(vcl_cos(theta_Y*0.5)));
-  vnl_quaternion<T> Rz(0, 0, T(vcl_sin(theta_Z*0.5)), T(vcl_cos(theta_Z*0.5)));
+  vnl_quaternion<T> Rx(T(vcl_sin(double(theta_X)*0.5)), 0, 0, T(vcl_cos(double(theta_X)*0.5)));
+  vnl_quaternion<T> Ry(0, T(vcl_sin(double(theta_Y)*0.5)), 0, T(vcl_cos(double(theta_Y)*0.5)));
+  vnl_quaternion<T> Rz(0, 0, T(vcl_sin(double(theta_Z)*0.5)), T(vcl_cos(double(theta_Z)*0.5)));
   *this = Rz * Ry * Rx;
 }
 
@@ -161,17 +161,17 @@ vnl_vector_fixed<T,3> vnl_quaternion<T>::rotation_euler_angles() const
   vnl_vector_fixed<T,3> angles;
 
   vnl_matrix_fixed<T,4,4> rotM = rotation_matrix_transpose_4();
-  T xy = T(vcl_sqrt(vnl_math_sqr(rotM(0,0)) + vnl_math_sqr(rotM(0,1))));
+  T xy = T(vcl_sqrt(double(vnl_math_sqr(rotM(0,0)) + vnl_math_sqr(rotM(0,1)))));
   if (xy > vcl_numeric_limits<T>::epsilon() * T(8))
   {
-    angles(0) = T(vcl_atan2(rotM(1,2), rotM(2,2)));
-    angles(1) = T(vcl_atan2(-rotM(0,2), xy));
-    angles(2) = T(vcl_atan2(rotM(0,1), rotM(0,0)));
+    angles(0) = T(vcl_atan2(double(rotM(1,2)), double(rotM(2,2))));
+    angles(1) = T(vcl_atan2(double(-rotM(0,2)), double(xy)));
+    angles(2) = T(vcl_atan2(double(rotM(0,1)), double(rotM(0,0))));
   }
   else
   {
-    angles(0) = T(vcl_atan2(-rotM(2,1), rotM(1,1)));
-    angles(1) = T(vcl_atan2(-rotM(0,2), xy));
+    angles(0) = T(vcl_atan2(double(-rotM(2,1)), double(rotM(1,1))));
+    angles(1) = T(vcl_atan2(double(-rotM(0,2)), double(xy)));
     angles(2) = T(0);
   }
   return angles;
@@ -183,8 +183,8 @@ vnl_vector_fixed<T,3> vnl_quaternion<T>::rotation_euler_angles() const
 template <class T>
 double vnl_quaternion<T>::angle() const
 {
-  return 2 * vcl_atan2(this->imaginary().magnitude(),
-                       this->real());            // angle is always positive
+  return 2 * vcl_atan2(double(this->imaginary().magnitude()),
+                       double(this->real()));    // angle is always positive
 }
 
 //: Queries the direction of the rotation axis of the quaternion.
