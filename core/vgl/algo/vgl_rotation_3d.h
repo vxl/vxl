@@ -70,18 +70,16 @@ class vgl_rotation_3d
   vgl_rotation_3d(const vnl_vector_fixed<T,3>& a,
                   const vnl_vector_fixed<T,3>& b)
   {
-    vnl_vector_fixed<T,3>  ua = a/a.magnitude(),ub = b/b.magnitude();
-    vnl_vector_fixed<T,3> c  = vnl_cross_3d(ua, ub);
-    double aa = 0.0;
-    if (dot_product(ua, ub)<0){aa = vnl_math::pi; c=-c;}
-    //cross product of unit vectors is at most a unit vector
-    double cmag = static_cast<double>(c.magnitude());
-    if (cmag>1.0) cmag = 1.0;
-    //if the vectors are the same, then set to identity rotation
-    if (cmag<vgl_tolerance<double>::position) {
-      q_ = vnl_quaternion<T>(0, 0, 0, 1); return; }
-    T angle = static_cast<T>(vcl_asin(cmag)+aa);
-    q_ = vnl_quaternion<T>(c/static_cast<T>(cmag), static_cast<T>(angle));
+    vnl_vector_fixed<T,3> c = vnl_cross_3d(a, b);
+    double aa = 0.0; if (dot_product(a, b) < 0) { aa = vnl_math::pi; c=-c; }
+    double cmag = static_cast<double>(c.magnitude())
+                / static_cast<double>(a.magnitude())
+                / static_cast<double>(b.magnitude());
+    if (cmag>1.0) cmag=1.0; // in case of extreme rounding errors in magnitude()
+    if (cmag<vgl_tolerance<double>::position) // if a & b almost equal direction
+    { q_ = vnl_quaternion<T>(0, 0, 0, 1); return; }
+    double angle = vcl_asin(cmag)+aa;
+    q_ = vnl_quaternion<T>(c/c.magnitude(), angle);
   }
 
   //: Construct to rotate (direction of) vector a to vector b
