@@ -151,41 +151,60 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
     return ;
   }
 
-  //set axis of rotation
-  rotation_axis_ = rotation_axis;
-
   //spherical coordinates of the rotation axis.
 
   float radius = 1.0,
         /* theta = vcl_atan2(rotation_axis[1],rotation_axis[0]), //azimuth, unused */
-        phi = vcl_acos(rotation_axis[2]/radius); //elevation
+        phi = vcl_acos(rotation_axis[2]/radius); //zenith
 
 
-  //construct a rotation to rotate vector a to vector b
+  //construct a rotation to rotate vector a to vector b; 
+  //if a and b are oposite, then this rotation is ambiguos(infinitely many axis of rotation)
+  //and we will choose to reflect
+  if (vnl_cross_3d(rotation_axis_, rotation_axis) == vnl_vector_fixed<float,3>(0.0f, 0.0f, 0.0f))
+  {
+    if (dot_product(rotation_axis_, rotation_axis) < 0) //opposite vectors
+    {
+      vgl_rotation_3d<float> r_align
+        (vnl_quaternion<float>(vnl_vector_fixed<float,3>(0.0f, 1.0f, 0.0f), float(vnl_math::pi)));  
+      rotation_axis_ = rotation_axis;
+      kernel_ = rotate(r_align);
+      return;
+    }
+    else //vectors are identical
+    {
+       vcl_cout << "Rotation axis magnitude is zero, returning withount modifycation of kernel\n";
+       return ;
+    }
+  }
+   
+  //roatete
+  rotation_axis_ = rotation_axis;
   vgl_rotation_3d<float> r_align(canonical_rotation_axis_, rotation_axis);
   kernel_= rotate(r_align);
 
-  //rotate the parallel axis. 
-  vnl_vector_fixed<float,3> parallerl_axis = r_align.as_matrix() * canonical_parallel_axis_;
+  //rotate parallel axis. 
+  vnl_vector_fixed<float,3> parallel_axis = r_align.as_matrix() * canonical_parallel_axis_;
 
   //spherical coordinates of the parallel axis.
-
   float /* theta_p = vcl_atan2(parallerl_axis[1],parallerl_axis[0]), //azimuth, unused */
-        phi_p = vcl_acos(parallerl_axis[2]/radius); //elevation
+        phi_p = vcl_acos(parallel_axis[2]/radius); //zenith
 
 
-  //parallel axis needs to be rotated to have same polar angle and rotation axis
+  //parallel axis needs to be rotated to have same polar angle as rotation axis
 
   //If the rotation axis is pointing to the poles, there is an exception
   if ((rotation_axis_ != vnl_vector_fixed<float, 3>(0.0f, 0.0f, 1.0f))&&
-      (rotation_axis_ != vnl_vector_fixed<float, 3>(0.0f, 0.0f, -1.0f))){
+      (rotation_axis_ != vnl_vector_fixed<float, 3>(0.0f, 0.0f, -1.0f)))
+  {
     float correction_phi = phi_p - phi; 
     vgl_rotation_3d<float> r_correct(vnl_quaternion<float>(rotation_axis, correction_phi));
      //rotate correction_phi around new axis of rotation. This position is the 0-rotation.
     kernel_ = rotate(r_correct);
   }
-  else { //make sure parallel axis is aligned with x-axis
-    if ((phi_p - float(vnl_math::pi_over_2))>vcl_numeric_limits<float>::epsilon()){
+  else 
+  { //make sure parallel axis is aligned with y-axis
+    if (parallel_axis != canonical_parallel_axis_){
       vcl_cerr << "Error when aligning rotation axis to the z axis\n" ;
       return;
     }
@@ -200,11 +219,21 @@ bvpl_kernel_factory::rotate(float angle)
 {
   //construct a quternion to represent the rotation
   float mag =rotation_axis_.magnitude();
-  if (mag > double(0)){
-    vnl_quaternion<float> q(rotation_axis_/mag,angle);
-    return this->rotate(vgl_rotation_3d<float>(q));
+  if(angle > 0.0f)
+  {
+    if (mag > double(0))
+    {
+      vnl_quaternion<float> q(rotation_axis_/mag,angle);
+      return this->rotate(vgl_rotation_3d<float>(q));
+    }
+    else 
+    {// identity rotation is a special case
+      vcl_cout << "magnitude of rotation axis is zero, returning withount modifying kernel\n";
+      return kernel_;
+    }
   }
-  else {// identity rotation is a special case
+  else
+  {// identity rotation is a special case
     vcl_cout << "magnitude of rotation axis is zero, returning withount modifying kernel\n";
     return kernel_;
   }
