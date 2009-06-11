@@ -98,10 +98,27 @@ static void test_infinite()
 
 static void test_frac()
 {
-  vnl_rational r(-15,-20);
+  vnl_rational r(-15,-20), s(1234321L,-1111111L), p;
   TEST("vnl_math_isfinite", vnl_math_isfinite(r), true);
   TEST("vnl_math_isnan", vnl_math_isnan(r), false);
   TEST("simplify", r.numerator() == 3 && r.denominator() == 4, true);
+  TEST("sign in numerator", s.numerator() == -1234321L && s.denominator() == 1111111L, true);
+  r = vnl_rational(46309L * 46349L, 46327L * 46337L);
+  s = vnl_rational(46337L * 46327L, 46309L * 46351L);
+  p = r * s;
+  TEST("large multiplication without overflow", p.numerator() == 46349L && p.denominator() == 46351L, true);
+  r = vnl_rational(46309L * 46349L, 46327L * 46337L);
+  s = vnl_rational(46309L * 46351L, 46337L * 46327L);
+  p = r * s;
+  TEST_NEAR("large multiplication with overflow", p, double(r) * double(s), 1e-12);
+  r = vnl_rational(46309L * 46349L, 46327L * 46337L);
+  s = vnl_rational(46309L * 46351L, 46337L * 46327L);
+  p = r / s;
+  TEST("large division without overflow", p.numerator() == 46349L && p.denominator() == 46351L, true);
+  r = vnl_rational(46309L * 46349L, 46327L * 46337L);
+  s = vnl_rational(46337L * 46327L, 46309L * 46351L);
+  p = r / s;
+  TEST_NEAR("large division with overflow", p, double(r) / double(s), 1e-12);
 }
 
 static void test_approx()
