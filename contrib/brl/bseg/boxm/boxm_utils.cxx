@@ -479,11 +479,11 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
 
     if (poly_it.x_start_end_val(vals,start_val,end_val))
     {
-      float rx=endx-startx;
+      double rx=double(endx-startx);
       for (unsigned int x = startx; x < endx; ++x) {
-        float interp_val = start_val+(x-startx)/rx*(end_val-start_val);
+        double interp_val = start_val+(x-startx)/rx*(end_val-start_val);
         //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
-        img(x,yu,img_plane_num) =interp_val;
+        img(x,yu,img_plane_num) = float(interp_val);
       }
     }
   }
@@ -595,7 +595,7 @@ void boxm_utils::quad_mean(boxm_quad_scan_iterator &poly_it,
 
 
 void boxm_utils::quad_sum(boxm_quad_scan_iterator &poly_it,
-                           vil_image_view<float> &img, float &val)
+                          vil_image_view<float> &img, float &val)
 {
   poly_it.reset();
   while (poly_it.next()) {
@@ -665,6 +665,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
                                   vil_image_view<float> &back_xyz,
                                   double *xverts,double * yverts)
 {
+  // open extra scope, to allow redeclaration of xs[], ys[]
   {
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
     double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
@@ -683,13 +684,13 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     if (vis_face_ids & Z_LOW){
       quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
       quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
-      quad_fill(poly_it,front_xyz,Zs[0],2);
+      quad_fill(poly_it,front_xyz,float(Zs[0]),2);
     }
     else
     {
       quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
       quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
-      quad_fill(poly_it,back_xyz,Zs[0],2);
+      quad_fill(poly_it,back_xyz,float(Zs[0]),2);
     }
   }
   {
@@ -704,13 +705,13 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     if (vis_face_ids & Z_HIGH){
       quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
       quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
-      quad_fill(poly_it,front_xyz,Zs[0],2);
+      quad_fill(poly_it,front_xyz,float(Zs[0]),2);
     }
     else
     {
       quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
       quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
-      quad_fill(poly_it,back_xyz,Zs[0],2);
+      quad_fill(poly_it,back_xyz,float(Zs[0]),2);
     }
   }
   {
@@ -721,13 +722,13 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double Ys[]={corners[7].y(),corners[3].y(),corners[0].y(),corners[4].y()};
     double Zs[]={corners[7].z(),corners[3].z(),corners[0].z(),corners[4].z()};
     if (vis_face_ids & X_LOW){
-      quad_fill(poly_it,front_xyz,Xs[0],0);
+      quad_fill(poly_it,front_xyz,float(Xs[0]),0);
       quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
       quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
     }
     else
     {
-      quad_fill(poly_it,back_xyz,Xs[0],0);
+      quad_fill(poly_it,back_xyz,float(Xs[0]),0);
       quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
       quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
     }
@@ -740,13 +741,13 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double Ys[]={corners[1].y(),corners[2].y(),corners[6].y(),corners[5].y()};
     double Zs[]={corners[1].z(),corners[2].z(),corners[6].z(),corners[5].z()};
     if (vis_face_ids & X_HIGH){
-      quad_fill(poly_it,front_xyz,Xs[0],0);
+      quad_fill(poly_it,front_xyz,float(Xs[0]),0);
       quad_interpolate(poly_it,xs,ys,Ys,front_xyz,1);
       quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
     }
     else
     {
-      quad_fill(poly_it,back_xyz,Xs[0],0);
+      quad_fill(poly_it,back_xyz,float(Xs[0]),0);
       quad_interpolate(poly_it,xs,ys,Ys,back_xyz,1);
       quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
     }
@@ -763,13 +764,13 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     if (vis_face_ids & Y_LOW){
       quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
 
-      quad_fill(poly_it,front_xyz,Ys[0],1);
+      quad_fill(poly_it,front_xyz,float(Ys[0]),1);
       quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
     }
     else
     {
       quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
-      quad_fill(poly_it,back_xyz,Ys[0],1);
+      quad_fill(poly_it,back_xyz,float(Ys[0]),1);
       quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
     }
   }
@@ -784,13 +785,13 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double Zs[]={corners[2].z(),corners[3].z(),corners[7].z(),corners[6].z()};
     if (vis_face_ids & Y_HIGH){
       quad_interpolate(poly_it,xs,ys,Xs,front_xyz,0);
-      quad_fill(poly_it,front_xyz,Ys[0],1);
+      quad_fill(poly_it,front_xyz,float(Ys[0]),1);
       quad_interpolate(poly_it,xs,ys,Zs,front_xyz,2);
     }
     else
     {
       quad_interpolate(poly_it,xs,ys,Xs,back_xyz,0);
-      quad_fill(poly_it,back_xyz,Ys[0],1);
+      quad_fill(poly_it,back_xyz,float(Ys[0]),1);
       quad_interpolate(poly_it,xs,ys,Zs,back_xyz,2);
     }
   }
