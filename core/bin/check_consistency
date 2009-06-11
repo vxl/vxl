@@ -988,7 +988,7 @@ foreach $f (@FILES)
     }
   }
 
-  foreach $wd (qw(complex real imag conj arg polar min max abs acos asin atan atan2 ceil cos cosh exp fabs floor fmod frexp ldexp log log10 modf pow sin sinh sqrt tan tanh printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite memchr memcpy memcmp memmove memset qsort strcat strncat strcpy strncpy strchr strcmp strncmp strcoll strcspn strerror strlen strpbrk strrchr strspn strstr strtok strxfrm isspace isprint iscntrl isupper islower isalpha isgraph isdigit ispunct isxdigit isalnum isgraph toupper tolower))
+  foreach $wd (qw(complex real imag conj arg polar min max abs acos asin atan atan2 ceil cos cosh exp fabs floor fmod frexp ldexp log log10 modf pow sin sinh sqrt tan tanh perror printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite memchr memcpy memcmp memmove memset qsort strcat strncat strcpy strncpy strchr strcmp strncmp strcoll strcspn strerror strlen strpbrk strrchr strspn strstr strtok strxfrm isspace isprint iscntrl isupper islower isalpha isgraph isdigit ispunct isxdigit isalnum isgraph toupper tolower))
   {
     &msg(1, "$wd$1() must be vcl_$wd()")
       if ($cpp_file &&
