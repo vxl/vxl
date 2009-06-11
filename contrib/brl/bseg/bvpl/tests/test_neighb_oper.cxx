@@ -74,6 +74,94 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
   return true;
 }
 
+void vertical_grid(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned grid_y)
+{
+  // fill with test data
+  float init_val = 0.9f;
+  grid->initialize_data(init_val);
+
+  // read in each slice, check that init_val was set, and fill with new value
+  vcl_cout << "read/write: ";
+  bvxm_voxel_slab_iterator<float> slab_it;
+  for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
+    vcl_cout << '.';
+    bvxm_voxel_slab<float> vit=*slab_it;
+    for (unsigned i=0; i<grid_x/2; i++) {
+      for (unsigned j=0; j<grid_y; j++) {
+        float &v = vit(i,j);
+        v = 0.1f;
+      }
+    }
+  }
+}
+
+void horizontal_grid(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned grid_y)
+{
+  // fill with test data
+  float init_val = 0.9f;
+  grid->initialize_data(init_val);
+
+  // read in each slice, check that init_val was set, and fill with new value
+  vcl_cout << "read/write: ";
+  bvxm_voxel_slab_iterator<float> slab_it;
+  for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
+    vcl_cout << '.';
+    bvxm_voxel_slab<float> vit=*slab_it;
+    for (unsigned i=0; i<grid_y/2; i++) {
+      for (unsigned j=0; j<grid_x; j++) {
+        float &v = vit(j,i);
+        v = 0.1f;
+      }
+    }
+  }
+}
+
+void diagonal_grid(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned grid_y)
+{
+  // fill with test data
+  float init_val = 0.9f;
+  grid->initialize_data(init_val);
+ 
+  // read in each slice, check that init_val was set, and fill with new value
+  vcl_cout << "read/write: ";
+  bvxm_voxel_slab_iterator<float> slab_it;
+  for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
+    vcl_cout << '.';
+    unsigned x = grid_x;
+    bvxm_voxel_slab<float> vit=*slab_it;
+    for (unsigned i=0; i<grid_y; i++) {
+      for (unsigned j=0; j<x; j++) {
+        float &v = vit(j,i);
+        v = 0.1f;
+      }
+      x--;
+    }
+  }
+}
+
+void diagonal_grid_z(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned grid_y)
+{
+  // fill with test data
+  float init_val = 0.9f;
+  grid->initialize_data(init_val);
+ 
+  // read in each slice, check that init_val was set, and fill with new value
+  vcl_cout << "read/write: ";
+  bvxm_voxel_slab_iterator<float> slab_it;
+  unsigned x = 0;
+  for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
+    vcl_cout << '.';
+    bvxm_voxel_slab<float> vit=*slab_it;
+    for (unsigned i=0; i<x; i++) {
+      for (unsigned j=0; j<grid_y; j++) {
+        float &v = vit(i,j);
+        v = 0.1f;
+      }
+    }
+    x++;
+  }
+}
+
 //: Test changes
 static void test_neighb_oper()
 {
@@ -102,38 +190,24 @@ static void test_neighb_oper()
   // try test with all types of underlying storage.
   bvxm_voxel_grid<float>* grid = new bvxm_voxel_grid<float>(storage_fname,grid_size); // disk storage;
   bvxm_voxel_grid<float>* grid_out = new bvxm_voxel_grid<float>(storage_fname2,grid_size);
+  grid_out->initialize_data(0.0e-40);
   vcl_string test_name;
 
   // check num_observations
   unsigned nobs = grid->num_observations();
   vcl_cout << "num_observations = " << nobs << vcl_endl;
 
-  // fill with test data
-  float init_val = 0.8f;
-  grid->initialize_data(init_val);
-  grid_out->initialize_data(1e-20f);
-
-  // read in each slice, check that init_val was set, and fill with new value
-  vcl_cout << "read/write: ";
-  bvxm_voxel_slab_iterator<float> slab_it;
-  for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
-    vcl_cout << '.';
-    bvxm_voxel_slab<float> vit=*slab_it;
-    for (unsigned i=0; i<grid_x/2; i++) {
-      for (unsigned j=0; j<grid_y; j++) {
-        float &v = vit(i,j);
-        v = 0.01f;
-      }
-    }
-  }
+  diagonal_grid_z(grid, grid_x, grid_y);
+  
   vcl_cout << "done." << vcl_endl;
   save_occupancy_raw("first.raw", grid);
 
-
   bvpl_edge2d_kernel_factory edge_factory(5, 5);
 
+  edge_factory.set_rotation_axis(vnl_vector_fixed<float,3>(1,0,0));
+  edge_factory.set_angle(vnl_math::pi_over_4);
   bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(edge_factory.create());
-
+  kernel_sptr->print();
   bvpl_edge2d_functor<float> func;
   bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
   oper.operate(grid, kernel_sptr, grid_out);
