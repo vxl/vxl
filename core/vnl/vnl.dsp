@@ -732,6 +732,18 @@ SOURCE=.\Templates/vnl_matrix_exp+vnl_matrix_fixed+double.3.3--.cxx
 SOURCE=.\Templates/vnl_matrix_exp+vnl_matrix_fixed+double.4.4--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+vnl_rational.4.4-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_file_matrix+vnl_rational-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+vnl_rational.4-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_quaternion+vnl_rational-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_erf.cxx
 # End Source File
 # Begin Source File
