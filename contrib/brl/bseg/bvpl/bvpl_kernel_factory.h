@@ -71,7 +71,6 @@ typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 //: A factory of bvpl_kernels
 class bvpl_kernel_factory
 {
-  virtual ~bvpl_kernel_factory() {}
  public:
 
   //: Returns a kernel described by class variables rotation_axis_ ,angle_
@@ -109,6 +108,7 @@ class bvpl_kernel_factory
   bool save_raw(vcl_string filename);
 
  protected:
+  virtual ~bvpl_kernel_factory() {}
 
   typedef vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_type;
 
