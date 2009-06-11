@@ -81,7 +81,7 @@ class vgl_rotation_3d
     if (cmag<vgl_tolerance<double>::position) {
       q_ = vnl_quaternion<T>(0, 0, 0, 1); return; }
     T angle = static_cast<T>(vcl_asin(cmag)+aa);
-    q_ = vnl_quaternion<T>(c/static_cast<T>(cmag), static_cast<T>(angle);
+    q_ = vnl_quaternion<T>(c/static_cast<T>(cmag), static_cast<T>(angle));
   }
 
   //: Construct to rotate (direction of) vector a to vector b
