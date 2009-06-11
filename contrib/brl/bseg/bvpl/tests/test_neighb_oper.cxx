@@ -21,7 +21,7 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
 
   //get the range of the grid
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
-  float max = -1.0 * vcl_numeric_limits<float>::infinity();
+  float max = -1.0f * vcl_numeric_limits<float>::infinity();
   float min = vcl_numeric_limits<float>::infinity();
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
@@ -34,8 +34,8 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
     }
   }
 
-  vcl_cout << "max: " << max <<vcl_endl;
-  vcl_cout << "min: " << min <<vcl_endl;
+  vcl_cout << "max: " << max <<vcl_endl
+           << "min: " << min <<vcl_endl;
 
   // write header
 
@@ -111,7 +111,7 @@ static void test_neighb_oper()
   // fill with test data
   float init_val = 0.8f;
   grid->initialize_data(init_val);
-  grid_out->initialize_data(1.0e-20);
+  grid_out->initialize_data(1e-20f);
 
   // read in each slice, check that init_val was set, and fill with new value
   vcl_cout << "read/write: ";
