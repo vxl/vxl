@@ -11,6 +11,8 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_rational.h>
+#include <vnl/vnl_rational_traits.h>
 
 static const double epsilon = 1e-11;
 
@@ -129,7 +131,6 @@ void test_rotation_3d()
            << " Testing vgl_rotation_3d\n"
            << "*************************\n";
 
-
   vcl_cout << "\n1. Rotation about the x axis over 90 degrees.\n";
   vgl_rotation_3d<double> rot_id;
   test_conversions(rot_id);
@@ -153,21 +154,30 @@ void test_rotation_3d()
   test_transpose(rot_rand);
   test_application(rot_rand);
   //test constructor from two vectors
-  vnl_double_3 ap(0.707107, 0.0, 0.707107), b(0.0, 0.0, 1.0);
-  vnl_double_3 am(-0.707107,0.0, -0.707107),a1(0.707107,0.0,-0.707107);
+  vnl_double_3 b(0.0, 0.0, 1.0),
+               ap(0.7071067811865475244, 0.0, 0.7071067811865475244), // vector of magnitude 1
+               am(-1.0,  0.0, -1.0), // magnitude > 1, to test robustified constructor
+               a1(0.5773502692, -0.5773502692, 0.5773502692); // magnitude 1
   vgl_rotation_3d<double> r_abp(ap, b);
   vgl_rotation_3d<double> r_abm(am, b);
   vgl_rotation_3d<double> r_ab1(a1, b);
   vnl_double_3 ap_to_b = r_abp*ap, am_to_b = r_abm*am, a1_to_b = r_ab1*a1;
-  double errorp = (b - ap_to_b).magnitude();
-  double errorm = (b - am_to_b).magnitude();
-  double error1 = (b - a1_to_b).magnitude();
-  TEST_NEAR("constructor from two vnl vectors", errorp+errorm+error1, 0.0, 1e-5);
-  vgl_vector_3d<double> ag(0.707107, 0.707107, 0.0), bg(0.0, 0.0, 1.0);
-  vgl_rotation_3d<double> r_abg(ag, bg);
-  vgl_vector_3d<double> ag_to_bg = r_abg*ag;
-  errorp = (bg - ag_to_bg).length();
-  TEST_NEAR("constructor from two vgl vectors", errorp, 0.0, 1e-6);
+  double errorp = (b - ap_to_b).squared_magnitude();
+  TEST_NEAR("constructor from 2 vectors: rotate 45° around Y axis", errorp, 0.0, 1e-16);
+  double errorm = (b*1.414213562373095 - am_to_b).squared_magnitude();
+  TEST_NEAR("constructor from 2 vectors: rotate 225° around Y axis", errorm, 0.0, 1e-16);
+  double error1 = (b - a1_to_b).squared_magnitude();
+  TEST_NEAR("constructor from 2 vectors: from arbitrary point", error1, 0.0, 1e-16);
+  vgl_vector_3d<float> ag(1.0f, 1.0f, 0.0f), bg(0.0f, 0.0f, 1.414213562f);
+  vgl_rotation_3d<float> r_abg(ag, bg);
+  vgl_vector_3d<float> ag_to_bg = r_abg*ag;
+  float errorf = (bg - ag_to_bg).sqr_length();
+  TEST_NEAR("constructor from two vgl vectors", errorf, 0.0f, 1e-6f);
+  vnl_vector_fixed<vnl_rational,3> ai(1L, 1L, 0L), bi(1L, -1L, 0L);
+  vgl_rotation_3d<vnl_rational> r_abi(ai, bi);
+  vnl_vector_fixed<vnl_rational,3> ai_to_bi = r_abi*ai;
+  vnl_rational errori = (bi - ai_to_bi).squared_magnitude();
+  TEST("constructor from two rational-coordinate vectors", errori, 0L);
 }
 
 TESTMAIN(test_rotation_3d);
