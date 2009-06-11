@@ -66,9 +66,9 @@ MAIN(test_bvpl_kernels)
 
 
 
-  for(unsigned i = 0; i<2; i++)
-    for(unsigned j = 0; j<2; j++)
-      for(unsigned k = 0; k<2; k++)
+  for(int i = -1; i<1; i++)
+    for(int j = 0; j<1; j++)
+      for(int k = 0; k<1; k++)
       {
         //this should leave rotation axis untouched
         factory1.set_rotation_axis(vnl_vector_fixed<float,3>(float(i), float(j), float(k)));
@@ -82,7 +82,7 @@ MAIN(test_bvpl_kernels)
         vcl_cout << "Rotating" <<i << j << k <<"\n";
         float angle = 0.0f;
 
-        for(unsigned r=0; r<8; r++)
+        for(unsigned r=0; r<1; r++)
         {
           vcl_stringstream filename;
           vcl_cout << "angle " << angle << vcl_endl;
@@ -91,7 +91,7 @@ MAIN(test_bvpl_kernels)
           bvpl_kernel kernel = factory1.create();
           kernel.print();
           kernel.save_raw(filename.str());
-          angle = angle +  float(vnl_math::pi/4.0);
+          angle = angle +  float(vnl_math::pi/2.0);
         }
       }
  
