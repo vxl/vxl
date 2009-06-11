@@ -78,7 +78,7 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
   // However, if you specify an angle in [-2pi, 0], then methods angle() and axis() will return values with opposite signs.
   // \sa vnl_quaternion::angle()
   // \sa vnl_quaternion::axis()
-  vnl_quaternion(vnl_vector_fixed<T,3> const& axis, T angle);
+  vnl_quaternion(vnl_vector_fixed<T,3> const& axis, double angle);
 
   //: Construct quaternion from from 3x3 row-major matrix
   explicit vnl_quaternion(vnl_matrix_fixed<T,3,3> const& transform);
@@ -136,7 +136,7 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
 
   //: Angle of rotation.
   // \note Returned angle lies in [0, 2*pi]
-  T angle() const;
+  double angle() const;
 
   //: 3x3 rotation matrix
   vnl_matrix_fixed<T,3,3> rotation_matrix_transpose() const;
