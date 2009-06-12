@@ -226,6 +226,9 @@ class vgl_rotation_3d
     return q_.rotate(v);
   }
 
+  //: comparison operator
+  bool operator==(vgl_rotation_3d<T> const& r) const { return q_ == r.as_quaternion(); }
+
 
  protected:
   //: The internal representation of the rotation is a quaternion.
