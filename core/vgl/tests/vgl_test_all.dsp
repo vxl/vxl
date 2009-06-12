@@ -179,6 +179,9 @@ SOURCE=.\test_triangle_3d_line_intersection.cxx
 # Begin Source File
 SOURCE=.\test_rtree.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_ellipsoid.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
