@@ -163,9 +163,9 @@ void test_rotation_3d()
   vgl_rotation_3d<double> r_ab1(a1, b);
   vnl_double_3 ap_to_b = r_abp*ap, am_to_b = r_abm*am, a1_to_b = r_ab1*a1;
   double errorp = (b - ap_to_b).squared_magnitude();
-  TEST_NEAR("constructor from 2 vectors: rotate 45° around Y axis", errorp, 0.0, 1e-16);
+  TEST_NEAR("constructor from 2 vectors: rotate 45d around Y axis", errorp, 0.0, 1e-16);
   double errorm = (b*1.414213562373095 - am_to_b).squared_magnitude();
-  TEST_NEAR("constructor from 2 vectors: rotate 225° around Y axis", errorm, 0.0, 1e-16);
+  TEST_NEAR("constructor from 2 vectors: rotate 225d around Y axis", errorm, 0.0, 1e-16);
   double error1 = (b - a1_to_b).squared_magnitude();
   TEST_NEAR("constructor from 2 vectors: from arbitrary point", error1, 0.0, 1e-16);
   vgl_vector_3d<float> ag(1.0f, 1.0f, 0.0f), bg(0.0f, 0.0f, 1.414213562f);
