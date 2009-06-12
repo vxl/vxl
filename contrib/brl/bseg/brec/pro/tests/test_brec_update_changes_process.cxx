@@ -36,206 +36,6 @@
 #include <brec/pro/brec_processes.h>
 #include <brec/pro/brec_register.h>
 
-#if 0
-//: create a synthetic slab to fill layers with
-void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, unsigned ny)
-{
-  for (unsigned i=0; i<nx; ++i)
-  {
-    for (unsigned j=0; j<ny; ++j) {
-      // mark the origin/x axis
-      if ( (i < 20) && (j < 5) ) {
-        plane_img(i,j) = 0.2f;
-      }
-      // just make some squares of constant color
-      else if ( (i > 50) && (i < 90) && (j > 50) && (j < 90) ) {
-        plane_img(i,j) = 0.7f;
-      }
-      else if ((i > 150) && (i < 190) && (j > 50) && (j < 90) ) {
-        plane_img(i,j) = 0.5f;
-      }
-      else if ((i > 50) && (i < 90) && (j > 150) && (j < 190) ) {
-        plane_img(i,j) = 0.3f;
-      }
-      else if ((i > 150) && (i < 190) && (j > 150) && (j < 190) ) {
-        plane_img(i,j) = 0.1f;
-      }
-      else {
-        plane_img(i,j) = 0.4f;
-      }
-      //plane_img(i,j) = plane_img(i,j) + 0.2f*i/nx + 0.2f*j/ny;
-    }
-  }
-}
-
-//:
-vpgl_camera_double_sptr create_camera()
-{
-// now create a couple of cameras and generate the expected images
-  vnl_double_3x3 K(0.0);
-  double f = 550.0;
-  double offx = 320.0;
-  double offy = 240.0;
-  K(0,0) = f; K(1,1) = f;
-  K(0,2) = offx; K(1,2) = offy;
-  K(2,2) = 1.0;
-  //vgl_point_3d<double> center1(100,100,150);
-  vgl_point_3d<double> center1(100,-100,275);
-  //vgl_rotation_3d<double> rot1(0.0,0.0,0.0);
-  vgl_rotation_3d<double> rot1(5*vnl_math::pi/6,0.0,0.0);
-
-  vpgl_camera_double_sptr cam1 = new vpgl_perspective_camera<double>(K,center1,rot1);
-  return cam1;
-}
-
-
-
-
-//:
-bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
-{
-  vul_file::make_directory(model_dir);
-
-  unsigned nx = 200;
-  unsigned ny = 200;
-  unsigned nz = 4;
-  vgl_point_3d<float> corner(0.f,0.f,0.f);
-  vgl_vector_3d<unsigned> num_voxels(nx,ny,nz);
-  float voxel_length = 1.0f;
-
-  // create a synthetic world
-  bvxm_world_params_sptr params = new bvxm_world_params();
-  params->set_params(model_dir, corner, num_voxels, voxel_length);
-  vox_world = new bvxm_voxel_world(params);
-
-  bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0,0);
-  bvxm_voxel_grid<float> *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
-  // fill in grid with zeros to start
-  ocp_grid->initialize_data(0.0f);
-  // now make a ground plane
-  bvxm_voxel_grid<float>::iterator ocp_it = ocp_grid->slab_iterator(nz-1);
-  (*ocp_it).fill(1.0f);
-  // data not written to disk until iterator is iterated
-  ++ocp_it;
-
-  bvxm_voxel_slab<float> plane_img(nx,ny,1);
-  create_a_synthetic_slab(plane_img, nx, ny);
-
-  typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
-
-  bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;
-
-  // create a slab of constant weights for update
-  bvxm_voxel_slab<float> ones(nx,ny,1);
-  ones.fill(1.0f);
-
-  // iterate through layers of apm grid and update each level with the same synthetic image
-  // if you want different levels to look different youll have to create a different image for each level
-  bvxm_voxel_grid_base_sptr apm_base = vox_world->get_grid<APM_MOG_GREY>(0,0);
-  bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
-  // initialize the appearance model data to get rid of any previous data on disk
-  apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
-
-  bvxm_voxel_grid<mog_type>::iterator apm_it = apm_grid->begin();
-  for (; apm_it != apm_grid->end(); ++apm_it) {
-    apm_processor.update(*apm_it, plane_img, ones);
-  }
-
-  vpgl_camera_double_sptr cam1 = create_camera();
-
-  vox_world->increment_observations<APM_MOG_GREY>(0);
-
-  expected_img = new vil_image_view<unsigned char>(640,480);
-  vil_image_view<float> mask(640,480);
-  bvxm_image_metadata meta1(expected_img,cam1);
-  vox_world->expected_image<APM_MOG_GREY>(meta1,expected_img, mask);
-
-  bvxm_image_metadata meta2(expected_img,cam1);  // image is passed to get ni and nj basically
-
-  bvxm_voxel_slab_base_sptr mog_image;
-  vox_world->mixture_of_gaussians_image<APM_MOG_GREY>(meta2, mog_image, 0);
-  return mog_image;
-}
-
-//: create a synthetic slab to fill layers with
-void create_a_synthetic_slab2(bvxm_voxel_slab<float>& plane_img, unsigned nx, unsigned ny)
-{
-  for (unsigned i=0; i<nx; ++i)
-  {
-    for (unsigned j=0; j<ny; ++j) {
-        plane_img(i,j) = 0.7f;
-    }
-  }
-}
-
-//:
-bvxm_voxel_slab_base_sptr create_mog_image2_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
-{
-  vul_file::make_directory(model_dir);
-
-  unsigned nx = 40;
-  unsigned ny = 40;
-  unsigned nz = 4;
-  vgl_point_3d<float> corner(0.f,0.f,0.f);
-  vgl_vector_3d<unsigned> num_voxels(nx,ny,nz);
-  float voxel_length = 1.0f;
-
-  // create a synthetic world
-  bvxm_world_params_sptr params = new bvxm_world_params();
-  params->set_params(model_dir, corner, num_voxels, voxel_length);
-  vox_world = new bvxm_voxel_world(params);
-
-  bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0,0);
-  bvxm_voxel_grid<float> *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
-  // fill in grid with zeros to start
-  ocp_grid->initialize_data(0.0f);
-  // now make a ground plane
-  bvxm_voxel_grid<float>::iterator ocp_it = ocp_grid->slab_iterator(nz-1);
-  (*ocp_it).fill(1.0f);
-  // data not written to disk until iterator is iterated
-  ++ocp_it;
-
-  bvxm_voxel_slab<float> plane_img(nx,ny,1);
-  create_a_synthetic_slab2(plane_img, nx, ny);
-
-  typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
-
-  bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;
-
-  // create a slab of constant weights for update
-  bvxm_voxel_slab<float> ones(nx,ny,1);
-  ones.fill(1.0f);
-
-  // iterate through layers of apm grid and update each level with the same synthetic image
-  // if you want different levels to look different youll have to create a different image for each level
-  bvxm_voxel_grid_base_sptr apm_base = vox_world->get_grid<APM_MOG_GREY>(0,0);
-  bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
-  // initialize the appearance model data to get rid of any previous data on disk
-  apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
-
-  bvxm_voxel_grid<mog_type>::iterator apm_it = apm_grid->begin();
-  for (; apm_it != apm_grid->end(); ++apm_it) {
-    apm_processor.update(*apm_it, plane_img, ones);
-  }
-
-  vpgl_camera_double_sptr cam1 = create_camera();
-
-  vox_world->increment_observations<APM_MOG_GREY>(0);
-
-  expected_img = new vil_image_view<unsigned char>(640,480);
-  vil_image_view<float> mask(640,480);
-  bvxm_image_metadata meta1(expected_img,cam1);
-  vox_world->expected_image<APM_MOG_GREY>(meta1,expected_img, mask);
-
-  bvxm_image_metadata meta2(expected_img,cam1);  // image is passed to get ni and nj basically
-
-  bvxm_voxel_slab_base_sptr mog_image;
-  vox_world->mixture_of_gaussians_image<APM_MOG_GREY>(meta2, mog_image, 0);
-  return mog_image;
-}
-
-#endif
-
 //:
 vpgl_rational_camera<double>
 perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
@@ -361,24 +161,8 @@ MAIN( test_brec_update_changes_process )
   REGISTER_DATATYPE(unsigned);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
-  bprb_parameters_sptr params = new bprb_parameters();
-  params->add("size world x", "nx", 100U);
-  params->add("size world y", "ny", 100U);
-  params->add("size world z", "nz", 50U);
-  params->add("box min x", "minx", 10U);
-  params->add("box min y", "miny", 10U);
-  params->add("box min z", "minz", 10U);
-  params->add("box dim x", "dimx", 40U);
-  params->add("box dim y", "dimy", 40U);
-  params->add("box dim z", "dimz", 20U);
-  params->add("generate 2 boxes", "gen2", true);
-  params->add("generate images", "genImages", true);
-  params->add("random texture on box1", "rand1", true);
-  params->add("random texture on box2", "rand2", false);
-  params->add("fixed appearance val", "appval", 0.7f);
   vcl_string world_dir("test_syn_world");
-  params->add("world_dir", "worlddir", world_dir);
-
+  
   // create an empty directory, or empty the directory if it exists
   vcl_string delete_str = world_dir+"/*.vox";
   if (vul_file::is_directory(world_dir))
@@ -389,9 +173,8 @@ MAIN( test_brec_update_changes_process )
     vul_file::make_directory(world_dir);
   }
 
- // good = good && bprb_batch_process_manager::instance()->set_params(params);
   good = good && bprb_batch_process_manager::instance()->run_process();
-/*
+
   unsigned id_world;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_world);
   TEST("run bvxmGenSyntheticWorldProcess", good ,true);
@@ -476,7 +259,7 @@ MAIN( test_brec_update_changes_process )
   unsigned id_img2;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img2);
   TEST("run brec update changes process", good ,true);
-*/
+
   SUMMARY();
 }
 
