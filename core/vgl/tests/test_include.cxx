@@ -44,6 +44,7 @@
 
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
+#include <vgl/algo/vgl_ellipsoid_3d.h>
 #include <vgl/algo/vgl_fit_conics_2d.h>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
