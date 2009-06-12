@@ -34,6 +34,8 @@
 #include <brec/pro/brec_processes.h>
 #include <brec/pro/brec_register.h>
 
+#include <bsta/bsta_basic_functors.h>
+
 #ifdef EXTRA_TESTS
 #include <bbgm/pro/bbgm_save_image_of_process.h>
 #include <bbgm/pro/bbgm_display_dist_image_process.h>
@@ -74,6 +76,7 @@ MAIN( test_brec_create_mog_image_process )
   mix_gauss.insert(tg_o, 0.3f);
   mix_gauss.insert(tg_o, 0.4f);
   bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > tg_mg(mix_gauss);
+  typedef bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > mix_type;
 
   bvxm_voxel_slab<mog_type> slab(100,100,1);
   slab.fill(tg_mg);
@@ -123,6 +126,8 @@ MAIN( test_brec_create_mog_image_process )
   TEST("output image is a valid bbgm image", !out_exp_img, false);
 
   bbgm_viewer_sptr viewer = new bbgm_mean_viewer();
+
+  bbgm_mean_viewer::register_view_maker(new bbgm_view_maker<mix_type, bsta_mean_functor<mix_type> >);
 
   TEST("output image is a valid bbgm image", viewer->probe(out_exp_img), true);
   viewer->set_active_component(0);

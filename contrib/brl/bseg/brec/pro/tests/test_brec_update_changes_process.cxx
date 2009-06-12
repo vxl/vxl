@@ -389,9 +389,9 @@ MAIN( test_brec_update_changes_process )
     vul_file::make_directory(world_dir);
   }
 
-  good = good && bprb_batch_process_manager::instance()->set_params(params);
+ // good = good && bprb_batch_process_manager::instance()->set_params(params);
   good = good && bprb_batch_process_manager::instance()->run_process();
-
+/*
   unsigned id_world;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_world);
   TEST("run bvxmGenSyntheticWorldProcess", good ,true);
@@ -476,7 +476,7 @@ MAIN( test_brec_update_changes_process )
   unsigned id_img2;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img2);
   TEST("run brec update changes process", good ,true);
-
+*/
   SUMMARY();
 }
 
