@@ -150,8 +150,11 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
 MAIN( test_bvxm_normalize_image_process )
 {
   DECLARE_FUNC_CONS(bvxm_normalize_image_process);
+  DECLARE_FUNC_CONS(bvxm_create_mog_image_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_normalize_image_process, "bvxmNormalizeImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_mog_image_process,"bvxmCreateMOGImageProcess");
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
+  REGISTER_DATATYPE( bvxm_voxel_slab_base_sptr );
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
   REGISTER_DATATYPE(vcl_string);
@@ -251,7 +254,7 @@ MAIN( test_bvxm_normalize_image_process )
     vul_file::make_directory(model_dir);
   }
 
-  vil_image_view_base_sptr expected_image = new vil_image_view<unsigned char>(640,480);
+  vil_image_view_base_sptr expected_image = new vil_image_view<unsigned char>(ni,nj);
   bvxm_voxel_world_sptr vox_world;
   bvxm_voxel_slab_base_sptr mog_image = create_mog_image_using_grey_processor(model_dir.c_str(), vox_world, expected_image);
   TEST("testing world creation", vox_world->get_params()->num_voxels().z(), 4);
@@ -290,16 +293,34 @@ MAIN( test_bvxm_normalize_image_process )
   brdb_value_sptr v3 = new brdb_value_t<vcl_string>("apm_mog_grey");
   brdb_value_sptr v4 = new brdb_value_t<unsigned>(0);
   brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
+  brdb_value_sptr v6 = new brdb_value_t<unsigned>(ni);
+  brdb_value_sptr v7 = new brdb_value_t<unsigned>(nj);
 
-  //: inits with the default params
-  bool good = bprb_batch_process_manager::instance()->init_process("bvxmNormalizeImageProcess");
+  bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateMOGImageProcess");
+  good = good && bprb_batch_process_manager::instance()->set_input(0, v2); // voxel world
+  good = good && bprb_batch_process_manager::instance()->set_input(1, v3); // apm type
+  good = good && bprb_batch_process_manager::instance()->set_input(2, v4); // scale and bin ids
+  good = good && bprb_batch_process_manager::instance()->set_input(3, v5);
+  good = good && bprb_batch_process_manager::instance()->set_input(4, v1);  // camera
+  good = good && bprb_batch_process_manager::instance()->set_input(5, v6);   // ni of MOG image
+  good = good && bprb_batch_process_manager::instance()->set_input(6, v7);   // n7 of MOG image
+
+  good = good && bprb_batch_process_manager::instance()->run_process();
+  unsigned id_slab;
+  good = good && bprb_batch_process_manager::instance()->commit_output(0, id_slab);
+  brdb_query_aptr Q_slab = brdb_query_comp_new("id", brdb_query::EQ, id_slab);
+  brdb_selection_sptr S_slab = DATABASE->select("bvxm_voxel_slab_base_sptr_data", Q_slab);
+  TEST("output slab is in db", S_slab->size(), 1);
+
+  brdb_value_sptr value_slab;
+  TEST("output slab is in db", S_slab->get_value(vcl_string("value"), value_slab), true);
+  TEST("output slab is non-null", (value_slab != 0) ,true);
+
+  good = bprb_batch_process_manager::instance()->init_process("bvxmNormalizeImageProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
-  good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
-  good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
-  good = good && bprb_batch_process_manager::instance()->set_input(4, v4);
- good = good && bprb_batch_process_manager::instance()->set_input(5, v5);
-
+  good = good && bprb_batch_process_manager::instance()->set_input(1, value_slab);
+  good = good && bprb_batch_process_manager::instance()->set_input(2, v3);
+  
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned id_img, id_a, id_b;
