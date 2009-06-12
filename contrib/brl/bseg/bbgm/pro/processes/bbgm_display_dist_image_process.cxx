@@ -11,6 +11,7 @@
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_mixture.h>
+#include <bsta/bsta_basic_functors.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <brdb/brdb_value.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
@@ -19,6 +20,33 @@
 #include <vil/vil_math.h>
 #include <bbgm/bbgm_viewer.h>
 #include <bbgm/bbgm_viewer_sptr.h>
+
+
+namespace type_definitions {
+  //: mixture of independent gaussian's of 3 dimensions
+  typedef bsta_num_obs<bsta_mixture<bsta_num_obs<bsta_gauss_if3> > > mix_gauss_type_if3;
+  typedef bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > mix_fixed_gauss_type_f1;
+}
+
+//: if the application needs to display different types than the ones already registered, then add them to this function
+void register_mean_viewers() {
+  using namespace type_definitions;
+  bbgm_mean_viewer::register_view_maker(new bbgm_view_maker<mix_gauss_type_if3, bsta_mean_functor<mix_gauss_type_if3> >);
+  bbgm_mean_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_mean_functor<mix_fixed_gauss_type_f1> >);
+}
+
+void register_variance_viewers() {
+  using namespace type_definitions;
+  bbgm_variance_viewer::register_view_maker(new bbgm_view_maker<mix_gauss_type_if3, bsta_diag_covar_functor<mix_gauss_type_if3> >);
+  bbgm_variance_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_var_functor<mix_fixed_gauss_type_f1> >);
+}
+
+void register_weight_viewers() {
+  using namespace type_definitions;
+  bbgm_weight_viewer::register_view_maker(new bbgm_view_maker<mix_gauss_type_if3, bsta_weight_functor<mix_gauss_type_if3> >);
+  bbgm_weight_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_weight_functor<mix_fixed_gauss_type_f1> >);
+}
+
 
 // constructor function
 bool bbgm_display_dist_image_process_cons(bprb_func_process& pro)
@@ -69,13 +97,16 @@ bool bbgm_display_dist_image_process(bprb_func_process& pro)
   pro.set_output_types(output_types);
 
   bbgm_viewer_sptr viewer;
-  if (attr=="mean")
+  if (attr=="mean") {
     viewer = new bbgm_mean_viewer();
-  else if (attr == "variance"||attr == "std_dev")
+    register_mean_viewers();
+  } else if (attr == "variance"||attr == "std_dev") {
     viewer = new bbgm_variance_viewer();
-  else if (attr == "weight")
+    register_variance_viewers();
+  } else if (attr == "weight") {
     viewer = new bbgm_weight_viewer();
-  else{
+    register_weight_viewers();
+  } else {
     vcl_cout << "In bbgm_display_dist_image_process::execute() -"
              << " display attribute not available\n";
     return false;
