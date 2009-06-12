@@ -124,13 +124,22 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
 //: output world_params to stream
 vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params)
 {
-  os << params.model_dir_ << vcl_endl
+  if (!params.lvcs_) {
+    os << params.model_dir_ << vcl_endl
+     << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
+     << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
+     << params.voxel_length_ << vcl_endl
+     << params.min_occupancy_prob_ << vcl_endl
+     << params.max_occupancy_prob_ << vcl_endl;
+  } else {
+    os << params.model_dir_ << vcl_endl
      << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
      << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
      << params.voxel_length_ << vcl_endl
      << *(params.lvcs_) << vcl_endl
      << params.min_occupancy_prob_ << vcl_endl
      << params.max_occupancy_prob_ << vcl_endl;
+  }
 
   return os;
 }
