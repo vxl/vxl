@@ -185,6 +185,9 @@ SOURCE=.\Templates/vgl_rtree+vgl_box_2d+float-.vgl_bbox_2d+float-.vgl_rtree_box_
 SOURCE=.\Templates/vgl_rtree+vgl_point_2d+float-.vgl_box_2d+float-.vgl_rtree_point_box_2d+float--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_ellipsoid_3d+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File
@@ -354,6 +357,12 @@ SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_rtree_c.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_ellipsoid_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_ellipsoid_3d.txx
 # End Source File
 # End Group
 # End Target
