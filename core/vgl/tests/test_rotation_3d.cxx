@@ -177,7 +177,7 @@ void test_rotation_3d()
   vgl_rotation_3d<vnl_rational> r_abi(ai, bi);
   vnl_vector_fixed<vnl_rational,3> ai_to_bi = r_abi*ai;
   vnl_rational errori = (bi - ai_to_bi).squared_magnitude();
-  TEST("constructor from two rational-coordinate vectors", errori, 0L);
+  TEST_NEAR("constructor from two rational-coordinate vectors", errori, 0L, 1e-8);
 }
 
 TESTMAIN(test_rotation_3d);
