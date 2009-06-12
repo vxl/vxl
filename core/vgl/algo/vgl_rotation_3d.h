@@ -75,8 +75,10 @@ class vgl_rotation_3d
     double cmag = static_cast<double>(c.magnitude())
                 / static_cast<double>(a.magnitude())
                 / static_cast<double>(b.magnitude());
-    if (cmag>1.0) cmag=1.0; // in case of extreme rounding errors in magnitude()
-    if (cmag<vgl_tolerance<double>::position) // if a & b almost equal direction
+    // cross product of unit vectors is at most a unit vector:
+    if (cmag>1.0) cmag=1.0;
+    // if the vectors have the same direction, then set to identity rotation:
+    if (cmag<vgl_tolerance<double>::position)
     { q_ = vnl_quaternion<T>(0, 0, 0, 1); return; }
     double angle = vcl_asin(cmag)+aa;
     q_ = vnl_quaternion<T>(c/c.magnitude(), angle);
