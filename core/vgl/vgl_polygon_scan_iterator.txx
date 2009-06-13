@@ -193,9 +193,9 @@ template <class T>
 void vgl_polygon_scan_iterator<T>::delete_edge( vertind v )
 {
     int j;
-    for ( j = 0; ( j < numcrossedges ) &&
-                 ( !( ( crossedges[j].v.chainnum == v.chainnum ) &&
-                      ( crossedges[j].v.vertnum == v.vertnum ) )); ++j )
+    for ( j = 0; j < numcrossedges &&
+                 !( crossedges[j].v.chainnum == v.chainnum &&
+                    crossedges[j].v.vertnum  == v.vertnum ); ++j )
       /*nothing*/;
 
     // edge not in cross edge list; happens at win->y0
@@ -316,10 +316,10 @@ bool vgl_polygon_scan_iterator<T>::next( )
         fxr = win.max_x() -1;
         xr =  irnd(fxr);
       }
-
+#if 0 // TODO: added by Vishal Jain (Brown U) but breaks the tests - please fix!
       if (xr==crossedges[curcrossedge+1].x)
         --xr;
-
+#endif // 0
       // adjust the x coord so that it is the intersection of
       // the edge with the scan line one above current
       crossedges[curcrossedge].x += crossedges[curcrossedge].dx;
