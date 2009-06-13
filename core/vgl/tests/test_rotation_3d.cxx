@@ -1,6 +1,5 @@
 // Test vgl_rotate_3d
 
-
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -163,11 +162,11 @@ void test_rotation_3d()
   vgl_rotation_3d<double> r_ab1(a1, b);
   vnl_double_3 ap_to_b = r_abp*ap, am_to_b = r_abm*am, a1_to_b = r_ab1*a1;
   double errorp = (b - ap_to_b).squared_magnitude();
-  TEST_NEAR("constructor from 2 vectors: rotate 45d around Y axis", errorp, 0.0, 1e-16);
+  TEST_NEAR("constructor from 2 vectors: rotate 45d around Y axis", errorp, 0.0, epsilon);
   double errorm = (b*1.414213562373095 - am_to_b).squared_magnitude();
-  TEST_NEAR("constructor from 2 vectors: rotate 225d around Y axis", errorm, 0.0, 1e-16);
+  TEST_NEAR("constructor from 2 vectors: rotate 225d around Y axis", errorm, 0.0, epsilon);
   double error1 = (b - a1_to_b).squared_magnitude();
-  TEST_NEAR("constructor from 2 vectors: from arbitrary point", error1, 0.0, 1e-16);
+  TEST_NEAR("constructor from 2 vectors: from arbitrary point", error1, 0.0, epsilon);
   vgl_vector_3d<float> ag(1.0f, 1.0f, 0.0f), bg(0.0f, 0.0f, 1.414213562f);
   vgl_rotation_3d<float> r_abg(ag, bg);
   vgl_vector_3d<float> ag_to_bg = r_abg*ag;
@@ -175,9 +174,11 @@ void test_rotation_3d()
   TEST_NEAR("constructor from two vgl vectors", errorf, 0.0f, 1e-6f);
   vnl_vector_fixed<vnl_rational,3> ai(1L, 1L, 0L), bi(1L, -1L, 0L);
   vgl_rotation_3d<vnl_rational> r_abi(ai, bi);
+  vcl_cerr << "rotation: " << r_abi << '\n';
   vnl_vector_fixed<vnl_rational,3> ai_to_bi = r_abi*ai;
+  vcl_cerr << "rotated point: " << ai_to_bi << '\n';
   vnl_rational errori = (bi - ai_to_bi).squared_magnitude();
-  TEST_NEAR("constructor from two rational-coordinate vectors", errori, 0L, 1e-8);
+  TEST_NEAR("constructor from two rational-coordinate vectors", errori, 0L, epsilon);
 }
 
 TESTMAIN(test_rotation_3d);
