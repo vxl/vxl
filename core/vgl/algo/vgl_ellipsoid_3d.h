@@ -74,7 +74,7 @@ class vgl_ellipsoid_3d
 
 //: Writes "<vgl_ellipsoid_3d center=(x0,y0,z0), orientation, size=(x_hl,y_hl,z_hl)" to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, vgl_ellipsoid_3d<T> const& e) { e.print(os); }
+vcl_ostream& operator<<(vcl_ostream& os, vgl_ellipsoid_3d<T> const& e) { e.print(os); return os; }
 
 #define VGL_ELLIPSOID_3D_INSTANTIATE(T) extern "please include vgl/vgl_ellipsoid_3d.txx first"
 
