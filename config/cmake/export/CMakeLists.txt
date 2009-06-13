@@ -16,7 +16,7 @@ INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake )
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 SET( EXPAT_FIND_QUIETLY "YES" )
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/FindEXPAT.cmake )
-UNSET( EXPAT_FIND_QUIETLY )
+SET( EXPAT_FIND_QUIETLY )
 
 # Save the compiler settings so another project can import them.
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
