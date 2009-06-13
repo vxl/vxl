@@ -64,7 +64,7 @@ class OFBitmanipTemplate
                         T *dest,
                         const unsigned long count)
     {
-#ifdef HAVE_MEMCPY
+#if defined(HAVE_MEMCPY)
         memcpy((void *)dest, (const void *)src, (size_t)count * sizeof(T));
 #elif HAVE_BCOPY
         bcopy((const void *)src, (void *)dest, (size_t)count * sizeof(T));
