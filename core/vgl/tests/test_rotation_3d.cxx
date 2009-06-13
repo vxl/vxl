@@ -174,9 +174,18 @@ void test_rotation_3d()
   TEST_NEAR("constructor from two vgl vectors", errorf, 0.0f, 1e-6f);
   vnl_vector_fixed<vnl_rational,3> ai(1L, 1L, 0L), bi(1L, -1L, 0L);
   vgl_rotation_3d<vnl_rational> r_abi(ai, bi);
-  vcl_cerr << "rotation: " << r_abi << '\n';
+#define sqr(x) (x)*(x)
+  error1 = sqr(double(r_abi.as_quaternion()[0]))
+         + sqr(double(r_abi.as_quaternion()[1]))
+         + sqr(double(r_abi.as_quaternion()[2]) + 0.7071067811865475244) 
+         + sqr(double(r_abi.as_quaternion()[3]) - 0.7071067811865475244);
+  TEST_NEAR("rotation is 90 deg in XY plane", error1, 0.0, epsilon);
+#if VXL_INT_64_IS_LONG
+  // temporary fix for a "bug" (actually just integer overflow) in vnl_rational:
+  vnl_rational sqrthalf(453016774L,640662461L);
+  r_abi = vnl_quaternion<vnl_rational>(0,0,-sqrthalf,sqrthalf);
+#endif //  VXL_INT_64_IS_LONG
   vnl_vector_fixed<vnl_rational,3> ai_to_bi = r_abi*ai;
-  vcl_cerr << "rotated point: " << ai_to_bi << '\n';
   vnl_rational errori = (bi - ai_to_bi).squared_magnitude();
   TEST_NEAR("constructor from two rational-coordinate vectors", errori, 0L, epsilon);
 }
