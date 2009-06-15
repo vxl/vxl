@@ -29,7 +29,7 @@ bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory(unsigned height, unsigned
   
   //Determine angular resolition based on size of kernel
   //If this was 2D, then the angular resolution would be 180/(2l -2) (Recusive Binary Dilation... Desikachari Nadadur)
-  angular_resolution_=180 / (2 * width - 2);
+  angular_resolution_=float( vnl_math::pi) / (2.0f * float(width) - 2.0f);
   //set canonical axis to x-axis
   canonical_rotation_axis_[0] = 1.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0; 
   canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 1.0; canonical_parallel_axis_[2] = 0.0;
