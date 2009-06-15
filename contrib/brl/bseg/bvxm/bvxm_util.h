@@ -445,14 +445,14 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         vil_image_view<unsigned char>::const_iterator img_it = img_view_grey.begin();
         typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
         for (; img_it != img_view_grey.end(); ++img_it, ++slab_it) {
-          *slab_it = (T)(*img_it / 255.0);
+          *slab_it = (T)(*img_it) / T(255);
         }
       }
       else {
         vil_image_view<unsigned char>::const_iterator img_it = img_view->begin();
         typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
         for (; img_it != img_view->end(); ++img_it, ++slab_it) {
-          *slab_it = (T)(*img_it / 255.0);
+          *slab_it = (T)(*img_it) / T(255);
         }
       }
     }
@@ -475,7 +475,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
       vil_image_view<float>::const_iterator img_it = img_view_grey.begin();
       typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
       for (; img_it != img_view_grey.end(); ++img_it, ++slab_it) {
-        *slab_it = (T)(*img_it / 255.0);
+        *slab_it = (T)(*img_it )/ (T)(255);
       }
     }
     else {
