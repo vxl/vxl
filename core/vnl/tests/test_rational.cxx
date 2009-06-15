@@ -142,7 +142,7 @@ static void test_long_64()
   r = vnl_rational(p1 * p2, p3 * p4);
   s = vnl_rational(p1 * p5, p4 * p3);
   p = r * s;
-  TEST_NEAR("large multiplication with overflow", p, double(r) * double(s), 1e-12);
+  TEST_NEAR("large multiplication with overflow", p, double(r) * double(s), 1e-7);
   r = vnl_rational(p1 * p2, p3 * p4);
   s = vnl_rational(p1 * p5, p4 * p3);
   p = r / s;
@@ -150,7 +150,7 @@ static void test_long_64()
   r = vnl_rational(p1 * p2, p3 * p4);
   s = vnl_rational(p4 * p3, p1 * p5);
   p = r / s;
-  TEST_NEAR("large division with overflow", p, double(r) / double(s), 1e-12);
+  TEST_NEAR("large division with overflow", p, double(r) / double(s), 1e-7);
 }
 #endif // VXL_INT_64_IS_LONG
 
