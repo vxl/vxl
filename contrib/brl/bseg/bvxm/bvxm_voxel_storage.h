@@ -11,7 +11,9 @@ class bvxm_voxel_storage
 {
  public:
   //: Constructor
+   bvxm_voxel_storage(){}
   bvxm_voxel_storage(vgl_vector_3d<unsigned int> grid_size) : grid_size_(grid_size) {}
+  
   virtual ~bvxm_voxel_storage() {}
 
   //: Initialize all data in the grid
