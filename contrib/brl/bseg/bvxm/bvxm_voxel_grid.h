@@ -22,6 +22,14 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
   //: Default Constructor
   bvxm_voxel_grid() : bvxm_voxel_grid_base(vgl_vector_3d<unsigned>(0,0,0)), storage_(0) {}
 
+    //: Constructor from existent disk-based voxel grid. Grid size is obtained from file
+  bvxm_voxel_grid(vcl_string storage_fname):bvxm_voxel_grid_base()
+  {
+ 
+    storage_ = new bvxm_voxel_storage_disk<T>(storage_fname);
+    this->grid_size_ = vgl_vector_3d<unsigned int>(storage_->nx(), storage_->ny(),storage_->nz());
+  }
+
   //: Constructor for disk-based voxel grid.
   bvxm_voxel_grid(vcl_string storage_fname, vgl_vector_3d<unsigned int> grid_size)
     : bvxm_voxel_grid_base(grid_size)
