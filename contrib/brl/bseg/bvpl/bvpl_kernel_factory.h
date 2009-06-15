@@ -94,7 +94,7 @@ public:
   float angle(){return angle_;}
   
   //: Returns angular resolution around rotation axis
-  unsigned angular_resolution()  {return angular_resolution_;}
+  float angular_resolution()  {return angular_resolution_;}
   
   //: Return x-y-z maximum coordinate values
   vgl_point_3d<int> max_(){return max3d_;}
@@ -138,7 +138,7 @@ protected:
   vgl_point_3d<int> min3d_;
   
   //: Angular resolutions
-  unsigned angular_resolution_;
+  float angular_resolution_;
   
   //: Creates canonical(default) kernel. It is decribed by a canonical axis of rotation and a canonical parallel axis
   //  This is the main function implemented by the children.
