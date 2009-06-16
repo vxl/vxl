@@ -10,15 +10,9 @@
 IF (WIN32)
   IF (CYGWIN)
 
-    FIND_PATH(COIN3D_INCLUDE_DIR Inventor/So.h
-      /usr/include
-      /usr/local/include
-    )
+    FIND_PATH(COIN3D_INCLUDE_DIR Inventor/So.h)
 
-    FIND_LIBRARY(COIN3D_LIBRARY Coin
-      /usr/lib
-      /usr/local/lib
-    )
+    FIND_LIBRARY(COIN3D_LIBRARY Coin)
 
   ELSE (CYGWIN)
 
@@ -48,8 +42,6 @@ IF (WIN32)
 
     IF (COIN3D_LIBRARY)
       ADD_DEFINITIONS ( -DCOIN_NOT_DLL )
-    #ELSE (COIN3D_LIBRARY)
-    #  SET (COIN3D_LIBRARY coin2d CACHE STRING "Coin3D Library (Debug) - Open Inventor API")
     ENDIF (COIN3D_LIBRARY)
 
   ENDIF (CYGWIN)
@@ -58,33 +50,25 @@ ELSE (WIN32)
   IF(APPLE)
     FIND_PATH(COIN3D_INCLUDE_DIR Inventor/So.h
      /Library/Frameworks/Inventor.framework/Headers 
-     /usr/local/include
-     /usr/include
     )
     FIND_LIBRARY(COIN3D_LIBRARY Coin
       /Library/Frameworks/Inventor.framework/Libraries
-      /usr/lib
-      /usr/local/lib
     )   
     SET(COIN3D_LIBRARY "-framework Coin3d" CACHE STRING "Coin3D library for OSX")
    ELSE(APPLE)
 
-  FIND_PATH(COIN3D_INCLUDE_DIR Inventor/So.h
-    /usr/include
-    /usr/local/include
-  )
+  FIND_PATH(COIN3D_INCLUDE_DIR Inventor/So.h)
 
-  FIND_LIBRARY(COIN3D_LIBRARY Coin
-    /usr/lib
-    /usr/local/lib
-  )   
+  FIND_LIBRARY(COIN3D_LIBRARY Coin)   
   ENDIF(APPLE)
 
 ENDIF (WIN32)
 
+# handle the QUIETLY and REQUIRED arguments and set COIN3D_FOUND to TRUE if 
+# all listed variables are TRUE
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Coin3D DEFAULT_MSG COIN3D_LIBRARY COIN3D_INCLUDE_DIR)
 
-SET( COIN3D_FOUND "NO" )
-IF(COIN3D_LIBRARY)
-  SET( COIN3D_FOUND "YES" )
-ENDIF(COIN3D_LIBRARY)
+MARK_AS_ADVANCED(COIN3D_INCLUDE_DIR COIN3D_LIBRARY )
+
 
