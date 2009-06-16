@@ -20,7 +20,6 @@ template <class T>
 bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename)
 : bvxm_voxel_storage<T>(), storage_fname_(storage_filename), fio_(0), active_slab_start_(-1)
 {
- 
   // check if file exsist already or not
   if (vul_file::exists(storage_fname_))  {
     // make sure filename is not a directory
@@ -42,20 +41,18 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename)
       return;
     }
     bvxm_voxel_storage_header<T> header;
-    
+
     fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
-    
+
     vgl_vector_3d<unsigned int> grid_size(header.nx_, header.ny_, header.nz_);
-    
-    grid_size_ = grid_size;
+
+    this->grid_size_ = grid_size;
 
      // assumes desired slab thickness is 1
     slab_buffer_ = new bvxm_memory_chunk(grid_size.x()*grid_size.y()*sizeof(T));
-
-    
   }
   else {
-    // file does not yet exist. 
+    // file does not yet exist.
     vcl_cerr << "error: grid file " << storage_fname_ << " passed to bvxm_voxel_storage_disk does not exist.\n";
   }
 }
@@ -98,7 +95,7 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
     }
   }
   else {
-    // file does not yet exist. 
+    // file does not yet exist.
     // open file for write and write header
 #ifdef BVXM_USE_FSTREAM64
     fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"w");
@@ -107,25 +104,24 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
 #endif
 
 
-  if (!fio_->ok()) {
-    vcl_cerr << " error opening file " << storage_fname_ << " for write.\n";
+    if (!fio_->ok()) {
+      vcl_cerr << " error opening file " << storage_fname_ << " for write.\n";
+      return;
+    }
+    // write the header
+    bvxm_voxel_storage_header<T> header(this->grid_size_);
+    fio_->write(reinterpret_cast<char*>(&header),sizeof(header));
+
+    // no longer have any active slabs
+    active_slab_start_ = -1;
+
+    // close output stream
+    // this will delete the stream object.
+    fio_->ref();
+    fio_->unref();
+    fio_ = 0;
+
     return;
-  }
-  // write the header
-  bvxm_voxel_storage_header<T> header(this->grid_size_);
-  fio_->write(reinterpret_cast<char*>(&header),sizeof(header));
-
-  // no longer have any active slabs
-  active_slab_start_ = -1;
-
-  // close output stream
-  // this will delete the stream object.
-  fio_->ref();
-  fio_->unref();
-  fio_ = 0;
-
-  return;
-
   }
 }
 
@@ -228,7 +224,7 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsi
   }
 
   //check that buffer is the right size, if thickeness >1
-  if( slab_buffer_->size() != (this->grid_size_.x()* this->grid_size_.y() * slab_thickness *sizeof(T)))
+  if ( slab_buffer_->size() != (this->grid_size_.x()* this->grid_size_.y() * slab_thickness *sizeof(T)))
     slab_buffer_->set_size(this->grid_size_.x()* this->grid_size_.y() * slab_thickness *sizeof(T));
 
   fio_->read(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
