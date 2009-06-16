@@ -6,7 +6,6 @@
 // \date 21 June 2007
 
 #include <vcl_limits.h>
-#include <vcl_iostream.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -216,12 +215,6 @@ static vgl_triangle_3d_intersection_t same_side(
       vcl_max(1.0e-100, vcl_max(vcl_sqrt(A.x()*A.x()+A.y()*A.y()+A.z()*A.z()),
                                 vcl_sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) ) ) )
   {
-    vcl_cout << "same side, coplanar" << vcl_endl;
-    vcl_cout << "A: " << vcl_sqrt(A.x()*A.x()+A.y()*A.y()+A.z()*A.z()) << vcl_endl;
-    vcl_cout << "D: " << vcl_sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) << vcl_endl;
-    vcl_cout << "max1: " <<  vcl_max(vcl_sqrt(A.x()*A.x()+A.y()*A.y()+A.z()*A.z()),
-                                     vcl_sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) ) << vcl_endl;
-    vcl_cout << "d_dot: " << d_dot << vcl_endl;
     return Coplanar;
   }
 
@@ -426,7 +419,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
     //special case of line completely contained within the triangle
     if (vgl_triangle_3d_test_inside(line_p2, p1, p2, p3))
     {
-      vcl_cout << "vgl_triangle: nan" << vcl_endl;
       i_pnt.set(vgl_nan, vgl_nan, vgl_nan);
       return Coplanar;
     }
