@@ -1,10 +1,10 @@
 #include <testlib/testlib_test.h>
-#include "bvxm_voxel_slab_base.h"
-#include "bvxm_voxel_slab.h"
+#include "grid/bvxm_voxel_slab_base.h"
+#include "grid/bvxm_voxel_slab.h"
 #include "bvxm_mog_grey_processor.h"
 #include "bvxm_mog_rgb_processor.h"
 #include "bvxm_mog_mc_processor.h"
-#include "bvxm_memory_chunk.h"
+#include "grid/bvxm_memory_chunk.h"
 
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture.h>
