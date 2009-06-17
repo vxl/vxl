@@ -33,19 +33,19 @@ namespace type_definitions {
 void register_mean_viewers() {
   using namespace type_definitions;
   bbgm_mean_viewer::register_view_maker(new bbgm_view_maker<mix_gauss_type_if3, bsta_mean_functor<mix_gauss_type_if3> >);
- // bbgm_mean_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_mean_functor<mix_fixed_gauss_type_f1> >);
+  bbgm_mean_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_mean_functor<mix_fixed_gauss_type_f1> >);
 }
 
 void register_variance_viewers() {
   using namespace type_definitions;
   bbgm_variance_viewer::register_view_maker(new bbgm_view_maker<mix_gauss_type_if3, bsta_diag_covar_functor<mix_gauss_type_if3> >);
-//  bbgm_variance_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_var_functor<mix_fixed_gauss_type_f1> >);
+  bbgm_variance_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_var_functor<mix_fixed_gauss_type_f1> >);
 }
 
 void register_weight_viewers() {
   using namespace type_definitions;
   bbgm_weight_viewer::register_view_maker(new bbgm_view_maker<mix_gauss_type_if3, bsta_weight_functor<mix_gauss_type_if3> >);
-//  bbgm_weight_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_weight_functor<mix_fixed_gauss_type_f1> >);
+  bbgm_weight_viewer::register_view_maker(new bbgm_view_maker<mix_fixed_gauss_type_f1, bsta_weight_functor<mix_fixed_gauss_type_f1> >);
 }
 
 
