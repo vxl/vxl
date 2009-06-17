@@ -4,7 +4,7 @@
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date October 01, 2008
 
-#include <bvxm/bvxm_voxel_slab.h>
+#include <bvxm/grid/bvxm_voxel_slab.h>
 #include <vcl_cassert.h>
 
 double brec_bg_pair_density::operator()(const double y0, const double y1)
