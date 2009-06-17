@@ -35,6 +35,13 @@ class bsta_num_obs : public dist_
 
   //: The number of observations
   T num_observations;
+
+  // ======= inherited functions ===========
+
+  typedef typename bsta_distribution<T,1>::vector_type vtype;
+  vtype & mean() const { return (dynamic_cast<contained_type*>(this))->mean(); }
+
+  T const& var() const { return (dynamic_cast<contained_type*>(this))->var(); }
 };
 
 template <class dist_>
