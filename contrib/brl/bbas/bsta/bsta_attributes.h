@@ -38,9 +38,9 @@ class bsta_num_obs : public dist_
 
   // ======= inherited functions ===========
 
-  vnl_vector<T> mean() const { return (dynamic_cast<contained_type const*>(this))->mean(); }
+ // vnl_vector<T> mean() const { return (dynamic_cast<contained_type const*>(this))->mean(); }
 
-  T var() const { return (dynamic_cast<contained_type const*>(this))->var(); }
+  //T var() const { return (dynamic_cast<contained_type const*>(this))->var(); }
 };
 
 template <class dist_>
