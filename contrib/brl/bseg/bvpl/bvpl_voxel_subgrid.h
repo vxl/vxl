@@ -1,7 +1,7 @@
 #ifndef bvpl_voxel_subgrid_h
 #define bvpl_voxel_subgrid_h
 
-#include <bvxm/bvxm_voxel_slab.h>
+#include <bvxm/grid/bvxm_voxel_slab.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>

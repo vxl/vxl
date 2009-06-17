@@ -15,7 +15,7 @@
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_vector_3d.h>
-#include <bvxm/bvxm_voxel_grid.h>
+#include <bvxm/grid/bvxm_voxel_grid.h>
 #include "bvpl_voxel_subgrid.h"
 
 
