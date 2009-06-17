@@ -118,6 +118,23 @@ boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
   for (unsigned i=0; i<corners.size(); ++i)
     camera->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
 }
+void
+boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
+                            vpgl_camera_double_sptr camera,
+                            double* xverts, double* yverts,
+							double* vertdist)
+{
+	if (camera->type_name().compare("vpgl_perspective_camera")==0) {
+		vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+		vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam->camera_center());
+
+		for (unsigned i=0; i<corners.size(); ++i)
+		{
+			cam->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
+			vertdist[i]=(float)(cam_center-corners[i]).length();
+		}
+	}
+}
 
 //: corners of the input face: visible?
 bool boxm_utils::is_face_visible(double * xverts, double *yverts,
@@ -413,47 +430,22 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
   // first compute s0, s1, s2, s3 such that  val = s0*x + s1*y + s2 for any point within the triangle
   // (no need to compute barycentric coordinates of a quadrilateral at each step)
   // subtract 0.5 from xvals and yvals, so that interpolated value at pixel x,y evaluates to coordinates x+0.5, y+0.5 (center of pixel)
-  //double Acol0[] = {(xvals[v0]-0.5)*(yvals[v0]-0.5),
-  //          (xvals[v1]-0.5)*(yvals[v1]-0.5),
-  //          (xvals[v2]-0.5)*(yvals[v2]-0.5),
-  //          (xvals[v3]-0.5)*(yvals[v3]-0.5)};
-  //double Acol1[] = {xvals[v0]-0.5, xvals[v1]-0.5, xvals[v2]-0.5,xvals[v3]-0.5};
-  //double Acol2[] = {yvals[v0]-0.5, yvals[v1]-0.5, yvals[v2]-0.5,yvals[v3]-0.5};
-  //double Acol3[] = {1.0, 1.0, 1.0,1.0};
+ 
+ double Acol0[] = {(xvals[v0]-0.5)*(yvals[v0]-0.5),
+            (xvals[v1]-0.5)*(yvals[v1]-0.5),
+            (xvals[v2]-0.5)*(yvals[v2]-0.5),
+            (xvals[v3]-0.5)*(yvals[v3]-0.5)};
+  double Acol1[] = {xvals[v0]-0.5, xvals[v1]-0.5, xvals[v2]-0.5,xvals[v3]-0.5};
+  double Acol2[] = {yvals[v0]-0.5, yvals[v1]-0.5, yvals[v2]-0.5,yvals[v3]-0.5};
+  double Acol3[] = {1.0, 1.0, 1.0,1.0};
 
-  //double Z[] = {vals[v0], vals[v1], vals[v2],vals[v3]};
+  double Z[] = {vals[v0], vals[v1], vals[v2],vals[v3]};
 
-  //double detA = vnl_determinant(Acol0, Acol1, Acol2,Acol3);
-  //double s0 = vnl_determinant(Z, Acol1, Acol2,Acol3) / detA;
-  //double s1 = vnl_determinant(Acol0, Z, Acol2,Acol3) / detA;
-  //double s2 = vnl_determinant(Acol0, Acol1, Z,Acol3) / detA;
-  //double s3 = vnl_determinant(Acol0, Acol1, Acol2,Z) / detA;
-
-  //poly_it.reset();
-  //while (poly_it.next()) {
-  //  int y = poly_it.scany();
-  //  if (y < 0){
-  //    // not inside of image bounds yet. go to next scanline.
-  //    continue;
-  //  }
-  //  unsigned int yu = (unsigned int)y;
-  //  if (yu >= img.nj() ) {
-  //    // we have left the image bounds. no need to continue.
-  //    break;
-  //  }
-  //  if ( (poly_it.startx() >= (int)img.ni()) || (poly_it.endx() <= 0) ) {
-  //    // no part of this scanline is within the image bounds. go to next scanline.
-  //    continue;
-  //  }
-  //  unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-  //  unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
-
-  //  for (unsigned int x = startx; x < endx; ++x) {
-  //    float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
-  //    img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
-  // }
-  //}
-  //return;
+  double detA = vnl_determinant(Acol0, Acol1, Acol2,Acol3);
+  double s0 = vnl_determinant(Z, Acol1, Acol2,Acol3) / detA;
+  double s1 = vnl_determinant(Acol0, Z, Acol2,Acol3) / detA;
+  double s2 = vnl_determinant(Acol0, Acol1, Z,Acol3) / detA;
+  double s3 = vnl_determinant(Acol0, Acol1, Acol2,Z) / detA;
 
   poly_it.reset();
   while (poly_it.next()) {
@@ -474,20 +466,46 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
     unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
     unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
-    double start_val=0;
-    double end_val=0;
-
-    if (poly_it.x_start_end_val(vals,start_val,end_val))
-    {
-      double rx=double(endx-startx);
-      for (unsigned int x = startx; x < endx; ++x) {
-        double interp_val = start_val+(x-startx)/rx*(end_val-start_val);
-        //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
-        img(x,yu,img_plane_num) = float(interp_val);
-      }
-    }
+    for (unsigned int x = startx; x < endx; ++x) {
+      float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
+      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
+   }
   }
   return;
+
+  //poly_it.reset();
+  //while (poly_it.next()) {
+  //  int y = poly_it.scany();
+  //  if (y < 0){
+  //    // not inside of image bounds yet. go to next scanline.
+  //    continue;
+  //  }
+  //  unsigned int yu = (unsigned int)y;
+  //  if (yu >= img.nj() ) {
+  //    // we have left the image bounds. no need to continue.
+  //    break;
+  //  }
+  //  if ( (poly_it.startx() >= (int)img.ni()) || (poly_it.endx() <= 0) ) {
+  //    // no part of this scanline is within the image bounds. go to next scanline.
+  //    continue;
+  //  }
+  //  unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
+  //  unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+
+  //  double start_val=0;
+  //  double end_val=0;
+
+  //  if (poly_it.x_start_end_val(vals,start_val,end_val))
+  //  {
+  //    float rx=endx-startx;
+  //    for (unsigned int x = startx; x < endx; ++x) {
+  //      float interp_val = start_val+(x-startx)/rx*(end_val-start_val);
+  //      img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
+  //      //img(x,yu,img_plane_num) =interp_val;
+  //    }
+  //  }
+  //}
+  //return;
 }
 
 void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
@@ -592,7 +610,40 @@ void boxm_utils::quad_mean(boxm_quad_scan_iterator &poly_it,
   }
   return;
 }
+void boxm_utils::quad_weighted_mean(boxm_quad_scan_iterator &poly_it,
+                                    vil_image_view<float> &img, 
+									vil_image_view<float> &weighted_img, 
+									float &numerator,  float & denominator)
+{
+  poly_it.reset();
+  while (poly_it.next()) {
+    int y = poly_it.scany();
+    if (y < 0){
+      // not inside of image bounds yet. go to next scanline.
+      continue;
+    }
+    unsigned int yu = (unsigned int)y;
+    if (yu >= img.nj() ) {
+      // we have left the image bounds. no need to continue.
+      break;
+    }
+    if ( (poly_it.startx() >= (int)img.ni()) || (poly_it.endx() <= 0) ) {
+      // no part of this scanline is within the image bounds. go to next scanline.
+      continue;
+    }
+    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
 
+    for (unsigned int x = startx; x < endx; ++x) {
+      numerator+=poly_it.pix_coverage(x)*img(x,yu)*weighted_img(x,yu);
+      denominator+=poly_it.pix_coverage(x)*weighted_img(x,yu);
+	  //numerator+=img(x,yu)*weighted_img(x,yu);
+	  //denominator+=weighted_img(x,yu);
+
+    }
+  }
+  return;
+}
 
 void boxm_utils::quad_sum(boxm_quad_scan_iterator &poly_it,
                           vil_image_view<float> &img, float &val)
@@ -798,6 +849,108 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 
  return true;
 }
+
+
+
+bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
+                                  boct_face_idx & vis_face_ids,
+                                  vil_image_view<float> &front_xyz,
+                                  vil_image_view<float> &back_xyz,
+                                  double *xverts,double * yverts,double * vertdist)
+{
+  {
+    double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
+    double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
+	double ds[]={vertdist[1],vertdist[0],vertdist[3],vertdist[2]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    vgl_polygon<double> p(xs,ys,4);
+    if (vis_face_ids & Z_LOW){
+      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
+    }
+  }
+  {
+    double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
+    double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
+	double ds[]={vertdist[4],vertdist[5],vertdist[6],vertdist[7]};
+
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    vgl_polygon<double> p(xs,ys,4);
+    if (vis_face_ids & Z_HIGH){
+      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
+    }
+  }
+  {
+    double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
+    double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
+	double ds[]={vertdist[7],vertdist[3],vertdist[0],vertdist[4]};
+
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    if (vis_face_ids & X_LOW){
+      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
+    }
+  }
+  {
+    double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
+    double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
+	double ds[]={vertdist[1],vertdist[2],vertdist[6],vertdist[5]};
+
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    if (vis_face_ids & X_HIGH){
+      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
+    }
+  }
+  {
+    double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
+    double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
+	double ds[]={vertdist[0],vertdist[1],vertdist[5],vertdist[4]};
+
+	boxm_quad_scan_iterator poly_it(xs,ys);
+	vgl_polygon<double> p(xs,ys,4);
+
+    if (vis_face_ids & Y_LOW){
+      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
+    }
+  }
+  {
+    double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
+    double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
+	double ds[]={vertdist[2],vertdist[3],vertdist[7],vertdist[6]};
+
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    vgl_polygon<double> p(xs,ys,4);
+
+    if (vis_face_ids & Y_HIGH){
+      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
+    }
+    else
+    {
+      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
+    }
+  }
+
+ return true;
+}
+
 
 
 bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
@@ -1009,6 +1162,61 @@ bool boxm_utils::cube_uniform_mean(boct_face_idx & vis_face_ids,
     return true;
   }
 }
+
+
+bool boxm_utils::cube_weighted_mean(boct_face_idx & vis_face_ids,
+                                   vil_image_view<float> &img,
+								   vil_image_view<float> &weight_img,
+                                   float & val, double *xverts,double * yverts)
+{
+  val=0;
+  float count=0;
+  if (vis_face_ids & Z_LOW){
+    double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
+    double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    quad_weighted_mean(poly_it,img,weight_img,val,count);
+  }
+  if (vis_face_ids & Z_HIGH){
+    double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
+    double ys[]={yverts[4],yverts[5],yverts[6],yverts[7]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    quad_weighted_mean(poly_it,img,weight_img,val,count);
+  }
+  if (vis_face_ids & X_LOW){
+    double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
+    double ys[]={yverts[7],yverts[3],yverts[0],yverts[4]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    quad_weighted_mean(poly_it,img,weight_img,val,count);
+  }
+  if (vis_face_ids & X_HIGH){
+    double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
+    double ys[]={yverts[1],yverts[2],yverts[6],yverts[5]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    quad_weighted_mean(poly_it,img,weight_img,val,count);
+  }
+  if (vis_face_ids & Y_LOW){
+    double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
+    double ys[]={yverts[0],yverts[1],yverts[5],yverts[4]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    quad_weighted_mean(poly_it,img,weight_img,val,count);
+  }
+  if (vis_face_ids & Y_HIGH){
+    double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
+    double ys[]={yverts[2],yverts[3],yverts[7],yverts[6]};
+    boxm_quad_scan_iterator poly_it(xs,ys);
+    quad_weighted_mean(poly_it,img,weight_img,val,count);
+  }
+
+  if (count > 0) {
+    val/=(float)count;
+    return true;
+  } else {
+    val = 0;
+    return true;
+  }
+}
+
 
 
 bool

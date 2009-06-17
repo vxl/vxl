@@ -35,6 +35,10 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   typedef boct_tree_cell<T_loc, T_data> cell_type;
   unsigned ni=img.ni();
   unsigned nj=img.nj();
+  double xverts[8];
+  double yverts[8];
+  double vertdists[8];
+
   vil_image_view<float> pre(ni,nj,1); pre.fill(0.0f);
   vil_image_view<float> vis(ni,nj,1); vis.fill(1.0f);
   vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
@@ -52,14 +56,15 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
       // for each frontier layer of each block
       tree_type * tree=curr_block->get_tree();
-      vil_image_view<float> front_xyz(ni,nj,3);
-      vil_image_view<float> back_xyz(ni,nj,3);
+      vil_image_view<float> front_xyz(ni,nj,1);
+      vil_image_view<float> back_xyz(ni,nj,1);
       vil_image_view<float> alphas(ni,nj,1);
       vil_image_view<float> vis_end(ni,nj,1);
       vil_image_view<float> temp_expected(ni,nj,1);
       int cnt=0;
       while (frontier_it.next())
       {
+		++cnt;
         vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
         typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
         front_xyz.fill(0.0f);
@@ -68,45 +73,51 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
         PI_img.fill(0.0f);
-        vcl_cout<<++cnt<<' ';
-        for (;cell_it!=vis_cells.end();cell_it++)
-        {
-          // for each cell
-          T_data sample=(*cell_it)->data();
-          // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
-          vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-          vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          double xverts[8];
-          double yverts[8];
-          boxm_utils::project_corners(corners,cam,xverts,yverts);
-          boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-          boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
-          // get  alpha
-          boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-          typename T_data::obs_datatype cell_mean_obs;
-          if (boxm_utils::cube_uniform_mean(vis_face_ids, img, cell_mean_obs,xverts,yverts)) {
-            // get probability density of mean observation
-            float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
-            if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
-              vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
-                       << "  cell_obs = " << cell_mean_obs << vcl_endl
-                       << "  cell id = " << *cell_it << vcl_endl;
-            }
-            // fill obs probability density image
-            boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,cell_PI, xverts,yverts);
-          }
-        }
-        // compute the length of ray segment at each pixel
-        vil_image_view<float> len_seg(ni,nj,1);
-        len_seg.fill(0.0f);
-        vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
-        vil_math_sum_sqr<float,float>(back_xyz,len_seg);
-        vil_math_sqrt<float>(len_seg);
+        vcl_cout<<cnt<<' ';
+		for (;cell_it!=vis_cells.end();cell_it++)
+		{
+			// for each cell
+			T_data sample=(*cell_it)->data();
+			// get vertices of cell in the form of a bounding box (cells are always axis-aligned))
+			vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
+			vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+			boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+			boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
+			boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
+			// get  alpha
+			boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
+		}
+		// compute the length of ray segment at each pixel
+		vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
+		vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
+		//vil_math_sum_sqr<float,float>(back_xyz,len_seg);
+		//vil_math_sqrt<float>(len_seg);
 
+        for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
+        {
+			T_data sample=(*cell_it)->data();
+			// get vertices of cell in the form of a bounding box (cells are always axis-aligned))
+			vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
+			vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+			boxm_utils::project_corners(corners,cam,xverts,yverts);
+			boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
+
+			typename T_data::obs_datatype cell_mean_obs;
+			if (boxm_utils::cube_weighted_mean(vis_face_ids, img, len_seg,cell_mean_obs,xverts,yverts)) {
+				// get probability density of mean observation
+				float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
+				if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
+					vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
+						<< "  cell_obs = " << cell_mean_obs << vcl_endl
+						<< "  cell id = " << *cell_it << vcl_endl;
+				}
+				// fill obs probability density image
+				boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,cell_PI, xverts,yverts);
+			}
+		}
         vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
         vil_math_image_difference(alpha_integral, alphas, alpha_integral);
-
         // compute new vis image
         image_exp_functor exp_fun;
         vil_transform(alpha_integral,vis_end,exp_fun);
@@ -118,6 +129,20 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vil_math_image_sum(PI_img,pre,pre);
 
         vis.deep_copy(vis_end);
+#if 0
+		if (cnt == 70) {
+			vcl_cout << "saving debug images" << vcl_endl;
+			vcl_string output_dir = "d:/vj/scripts/boxm/exp1/";
+			vil_save(len_seg,(output_dir + "len_seg.tiff").c_str());
+			vil_save(alphas,(output_dir + "alphas.tiff").c_str());
+			vil_save(alpha_integral,(output_dir + "alpha_integral.tiff").c_str());
+			vil_save(pre,(output_dir + "pre_img.tiff").c_str());
+			vil_save(PI_img,(output_dir + "PI_img.tiff").c_str());
+			vil_save(vis,(output_dir + "vis.tiff").c_str());
+			vil_save(vis_end,(output_dir + "vis_end.tiff").c_str());
+			vil_save(img,(output_dir + "obs.tiff").c_str());
+		}
+#endif
       }
 
       scene.write_active_block();
@@ -130,9 +155,9 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       PI_background(i,j) = T_data::apm_processor::prob_density(background_model, img(i,j));
     }
   }
-  vcl_stringstream s;
-  s<<"d:/vj/scripts/boxm/exp1/bg.tiff";
-  vil_save(PI_background,s.str().c_str());
+  //vcl_stringstream s;
+  //s<<"d:/vj/scripts/boxm/exp1/bg.tiff";
+  //vil_save(PI_background,s.str().c_str());
 
   vil_math_image_product(PI_background, vis, norm_img);
   vil_math_image_sum(pre,norm_img,norm_img);
@@ -158,9 +183,9 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> pix_weights(ni,nj,1);
   double xverts[8];
   double yverts[8];
+  double vertdists[8];
 
-  vul_timer t;
-  t.mark();
+  vul_timer t;  t.mark();
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc,T_data > > block_vis_iter(cam, &scene, ni,nj);
   while (block_vis_iter.next()) {
@@ -172,13 +197,13 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
       // for each frontier layer of each block
       tree_type * tree=curr_block->get_tree();
-      vil_image_view<float> front_xyz(ni,nj,3);
-      vil_image_view<float> back_xyz(ni,nj,3);
+      vil_image_view<float> front_xyz(ni,nj,1);
+      vil_image_view<float> back_xyz(ni,nj,1);
       vil_image_view<float> alphas(ni,nj,1);
       vil_image_view<float> vis_end(ni,nj,1);
       vil_image_view<float> temp_expected(ni,nj,1);
       vil_image_view<float> update_factor(ni,nj,1);
-
+	  unsigned count=0;
       while (frontier_it.next())
       {
         vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
@@ -191,21 +216,38 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         PI_img.fill(0.0f);
 
         vcl_cout<<'.';
-        for (;cell_it!=vis_cells.end();cell_it++)
+		for (;cell_it!=vis_cells.end();cell_it++)
+		{
+			// for each cell
+			T_data sample=(*cell_it)->data();
+			// get vertices of cell in the form of a bounding box (cells are always axis-aligned))
+			vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
+			vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+			boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+			boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
+			boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
+			// get  alpha
+			boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
+		}
+		// compute the length of ray segment at each pixel
+		vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
+		vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
+
+        for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
           T_data sample=(*cell_it)->data();
 
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
-          vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-          vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          boxm_utils::project_corners(corners,cam,xverts,yverts);
-          boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-          boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
-          // get  alpha
-          boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-          typename T_data::obs_datatype cell_mean_obs;
-          if (boxm_utils::cube_uniform_mean(vis_face_ids, img, cell_mean_obs,xverts,yverts)) {
+		  vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
+		  vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+		  boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+		  boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
+		  //boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
+		  //// get  alpha
+		  //boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
+		  typename T_data::obs_datatype cell_mean_obs;
+		  if (boxm_utils::cube_weighted_mean(vis_face_ids, img,len_seg, cell_mean_obs,xverts,yverts)) {
             // get probability density of mean observation
             float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
 #if 0
@@ -219,7 +261,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,(float)cell_PI, xverts,yverts);
           }
           float cell_mean_vis = 0.0f;
-          if (boxm_utils::cube_uniform_mean(vis_face_ids, vis, cell_mean_vis,xverts,yverts)) {
+          if (boxm_utils::cube_weighted_mean(vis_face_ids, vis, len_seg,cell_mean_vis,xverts,yverts)) {
             // update appearance model
             if (cell_mean_vis > 1e-6) {
               T_data::apm_processor::update(sample.appearance(bin), cell_mean_obs, cell_mean_vis);
@@ -228,11 +270,10 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           (*cell_it)->set_data(sample);
         }
         // compute the length of ray segment at each pixel
-        vil_image_view<float> len_seg(ni,nj,1);
-        len_seg.fill(0.0f);
-        vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
-        vil_math_sum_sqr<float,float>(back_xyz,len_seg);
-        vil_math_sqrt<float>(len_seg);
+        //vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
+        //vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
+        //vil_math_sum_sqr<float,float>(back_xyz,len_seg);
+        //vil_math_sqrt<float>(len_seg);
 
         vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
@@ -260,9 +301,9 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
           boxm_utils::project_corners(corners,cam,xverts,yverts);
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-          boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
+          //boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
           float mean_update_factor = 0.0f;
-          if (boxm_utils::cube_uniform_mean(vis_face_ids, update_factor, mean_update_factor,xverts,yverts))
+          if (boxm_utils::cube_weighted_mean(vis_face_ids, update_factor,len_seg, mean_update_factor,xverts,yverts))
           {  // update alpha value
             sample.alpha *= mean_update_factor;
             // do bounds check on new alpha value

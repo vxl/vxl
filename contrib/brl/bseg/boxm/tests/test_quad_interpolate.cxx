@@ -3,7 +3,18 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <boxm/boxm_quad_scan_iterator.h>
-
+#include <vgl/vgl_box_3d.h>
+#include <boct/boct_tree.h>
+#include <boct/boct_tree_cell.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vil/vil_save.h>
+#include <vil/vil_plane.h>
+#include <vcl_fstream.h>
+#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vgl/vgl_point_3d.h>
+#include <vpgl/vpgl_calibration_matrix.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 
 #include <vpl/vpl.h>
 
@@ -48,5 +59,62 @@ MAIN( test_quad_interpolate )
       flag=false;
 
   TEST("Interpolated image", true, flag);
+
+  vcl_vector<vgl_point_2d<double> > points1;
+  points.push_back(vgl_point_2d<double>(10.25,10.25));
+  points.push_back(vgl_point_2d<double>(10.25,12.25));
+  points.push_back(vgl_point_2d<double>(12.25,12.25));
+  points.push_back(vgl_point_2d<double>(12.25,10.25));
+
+  double xvals1[]={10.3,10.3,11.4,11.4};
+  double yvals1[]={10.3,11.4,11.4,10.3};
+  double vals1[]={10,10,12,12};
+  ////vgl_polygon<double> poly(points);
+  boxm_quad_scan_iterator poly_it_1(xvals1,yvals1);
+  //vil_image_view<float> img_min(40,40);
+  //vil_image_view<float> img_max(40,40);
+  
+  g_img_max.fill(0.0);
+  // creating ground truth
+  g_img_max(10,10)=10;g_img_max(10,11)=10;
+  g_img_max(11,10)=10;g_img_max(11,11)=10;
+
+  float val=0;
+  float count=0;
+  boxm_utils::quad_mean(poly_it_1,g_img_max,val,count);
+
+
+  //: code to test the projection of a cube .
+  vgl_box_3d<double> cell_bb(-0.8,19.2,-18.75,0.7625, 20.7625,-17.1875);
+  vcl_ifstream ifs("D:/vj/data/CapitolSite500/cameras_KRT/frame_00000.txt");
+  if (!ifs.is_open()) {
+    vcl_cerr << "Failed to open file "  << vcl_endl;
+    return false;
+  }
+  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
+  ifs >> *cam;
+  double xverts[8];
+  double yverts[8];
+  double vertdist[8];
+  unsigned int ni=1280;
+  unsigned int nj=720;
+
+  vpgl_camera_double_sptr cam_d(cam);
+  vil_image_view<float> front_xyz(ni,nj,1);front_xyz.fill(0.0f);
+  vil_image_view<float> back_xyz(ni,nj,1) ;back_xyz.fill(0.0f);
+
+  vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+  boxm_utils::project_corners(corners,cam_d,xverts,yverts,vertdist);
+  boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam_d,xverts,yverts);
+  boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdist);
+  
+  vil_save(vil_plane(front_xyz,0),"d:/vj/scripts/boxm/exp1/front.tiff");
+  //vil_save(vil_plane(front_xyz,1),"d:/vj/scripts/boxm/exp1/front_y.tiff");
+  //vil_save(vil_plane(front_xyz,2),"d:/vj/scripts/boxm/exp1/front_z.tiff");
+
+  vil_save(vil_plane(back_xyz,0),"d:/vj/scripts/boxm/exp1/back.tiff");
+  //vil_save(vil_plane(back_xyz,1),"d:/vj/scripts/boxm/exp1/back_y.tiff");
+  //vil_save(vil_plane(back_xyz,2),"d:/vj/scripts/boxm/exp1/back_z.tiff");
+
   SUMMARY();
 }
