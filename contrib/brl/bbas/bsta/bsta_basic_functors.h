@@ -182,7 +182,52 @@ class bsta_var_functor
   typedef T return_T;
   typedef return_T return_type; // for compatiblity with vpdl/vdpt
   enum { return_dim = 1 };
+  //: is this functor valid for its distribution type
+  static const bool valid_functor = false;
 
+  //: rebind this functor to another distribution type
+  template <class other_dist>
+  struct rebind {
+    typedef bsta_var_functor<other_dist> other;
+  };
+
+  //: The main function
+  //bool operator() ( const dist_& d, return_T& retval ) const
+  //{
+  //  retval = d.var();
+  //  return true;
+  //}
+  //: The main function
+  bool operator() ( const dist_& d, return_type& retval ) const
+  {
+    return false;
+  }
+};
+
+//: A functor to return the variance of the Gaussian
+// \note the distribution must be a spherical Gaussian with one dimensions
+//       the default template does nothing.
+//       This solution is really just a hack.
+//       The correct solution requires is_base_of from Boost or TR1.
+//       This class should work for any derived class of bsta_gaussian_indep
+template <class T>
+class bsta_var_functor<bsta_num_obs<bsta_gaussian_sphere<T,1> > >
+{
+public:
+  typedef bsta_gaussian_sphere<T,1> dist_;
+  typedef typename dist_::vector_type vector_;
+  typedef vector_ return_T;
+  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  enum { return_dim = dist_::dimension };
+  //: is this functor valid for its distribution type
+  static const bool valid_functor = true;
+  
+  //: rebind this functor to another distribution type
+  template <class other_dist> 
+  struct rebind {
+    typedef bsta_var_functor<other_dist> other;
+  };
+  
   //: The main function
   bool operator() ( const dist_& d, return_T& retval ) const
   {
