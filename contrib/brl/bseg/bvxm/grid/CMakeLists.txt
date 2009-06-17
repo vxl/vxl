@@ -1,0 +1,41 @@
+INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
+#INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
+#INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+#INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
+#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
+#INCLUDE( ${MODULE_PATH}/FindTIFF.cmake)
+
+IF (WIN32 AND VXL_USE_LFS)
+#This is a hack since win32 doesn't have transparent Large File Support.
+ADD_DEFINITIONS( -DBVXM_USE_FSTREAM64 )
+  # so we can include vil_stream_fstream64
+ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
+ENDIF (WIN32 AND VXL_USE_LFS)
+
+SET(bvxm_grid_sources
+    bvxm_memory_chunk.h               bvxm_memory_chunk.cxx
+    bvxm_voxel_slab_base.h
+    bvxm_voxel_slab.h                 bvxm_voxel_slab.txx
+    bvxm_voxel_storage.h
+    bvxm_voxel_storage_disk.h         bvxm_voxel_storage_disk.txx
+    bvxm_voxel_storage_disk_cached.h  bvxm_voxel_storage_disk_cached.txx
+    bvxm_voxel_storage_mem.h          bvxm_voxel_storage_mem.txx
+    bvxm_voxel_slab_iterator.h        bvxm_voxel_slab_iterator.txx
+    bvxm_voxel_grid_base.h
+    bvxm_voxel_grid.h                 bvxm_voxel_grid.txx
+)
+
+AUX_SOURCE_DIRECTORY(Templates bvxm_grid_sources)
+
+ADD_LIBRARY( bvxm_grid ${bvxm_grid_sources})
+
+
+TARGET_LINK_LIBRARIES( bvxm_grid bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vpgl_file_formats vul vbl vsl bgeo brip sdet bil_algo)
+
+SUBDIRS( io )
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
