@@ -126,14 +126,16 @@ void vul_arg_base::display_usage_and_exit(char const* msg)
 
 vul_arg_base::vul_arg_base(vul_arg_info_list& l, char const* option_string, char const* helpstring)
 : option_(option_string?option_string:"\0"),
-  help_(helpstring?helpstring:"\0")
+  help_(helpstring?helpstring:"\0"),
+  set_(false)
 {
   l.add(this);
 }
 
 vul_arg_base::vul_arg_base(char const* option_string, char const* helpstring)
 : option_(option_string?option_string:"\0"),
-  help_(helpstring?helpstring:"\0")
+  help_(helpstring?helpstring:"\0"),
+  set_(false)
 {
   current_list().add(this);
 }
