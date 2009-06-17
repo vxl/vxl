@@ -246,4 +246,12 @@ inline vcl_ostream& operator<< (vcl_ostream& os,
     os<<"Component #"<<i<<" weight=: "<<no.weight(i)<<"distribution: "<<no.distribution(i)<<vcl_endl;
   return os;
 }
+
+//: for compatibility with vpdl/vpdt
+template <class dist, unsigned s>
+struct vpdt_is_mixture<bsta_mixture_fixed<dist,s> >
+{
+  static const bool value = true;
+};
+
 #endif // bsta_mixture_fixed_h_
