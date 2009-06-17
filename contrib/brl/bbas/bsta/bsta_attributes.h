@@ -38,10 +38,9 @@ class bsta_num_obs : public dist_
 
   // ======= inherited functions ===========
 
-  typedef typename bsta_distribution<T,1>::vector_type vtype;
-  vtype & mean() const { return (dynamic_cast<contained_type*>(this))->mean(); }
+  vnl_vector<T> mean() const { return (dynamic_cast<contained_type const*>(this))->mean(); }
 
-  T const& var() const { return (dynamic_cast<contained_type*>(this))->var(); }
+  T var() const { return (dynamic_cast<contained_type const*>(this))->var(); }
 };
 
 template <class dist_>
