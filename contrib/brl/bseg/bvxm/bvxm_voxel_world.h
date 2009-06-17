@@ -83,7 +83,7 @@
 
 #include "bvxm_image_metadata.h"
 #include "bvxm_mog_grey_processor.h"
-#include "bvxm_voxel_grid.h"
+#include "grid/bvxm_voxel_grid.h"
 #include "bvxm_voxel_traits.h"
 #include "bvxm_world_params.h"
 #include "bvxm_util.h"

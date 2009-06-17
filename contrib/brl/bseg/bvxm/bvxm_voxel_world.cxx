@@ -29,11 +29,11 @@
 
 #include <vnl/algo/vnl_chi_squared.h>
 
-#include "bvxm_voxel_grid.h"
+#include "grid/bvxm_voxel_grid.h"
 #include "bvxm_voxel_traits.h"
 #include "bvxm_lidar_processor.h"
 #include "bvxm_world_params.h"
-#include "bvxm_voxel_slab.h"
+#include "grid/bvxm_voxel_slab.h"
 #include "bvxm_image_metadata.h"
 #include "bvxm_util.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
