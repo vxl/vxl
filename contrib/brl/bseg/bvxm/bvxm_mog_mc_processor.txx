@@ -4,9 +4,9 @@
 #include "bvxm_mog_mc_processor.h"
 //:
 // \file
-#include "bvxm_voxel_slab.h"
-#include "bvxm_voxel_slab.txx"
-#include "bvxm_voxel_slab_iterator.h"
+#include "grid/bvxm_voxel_slab.h"
+#include "grid/bvxm_voxel_slab.txx"
+#include "grid/bvxm_voxel_slab_iterator.h"
 #include <vcl_cassert.h>
 
 //: Return probability density of observing pixel values

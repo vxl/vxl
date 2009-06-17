@@ -25,7 +25,7 @@
 
 #include <vpgl/vpgl_camera.h>
 
-#include <bvxm/bvxm_voxel_grid_base.h>
+#include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/bvxm_image_metadata.h>
 
 #if 0

@@ -23,7 +23,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vnl/algo/vnl_chi_squared.h>
 
-#include "bvxm_voxel_slab.h"
+#include "grid/bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
 
 

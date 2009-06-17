@@ -1,8 +1,8 @@
 #include "bvxm_lidar_processor.h"
 //:
 // \file
-#include "bvxm_voxel_slab.h"
-#include "bvxm_voxel_slab_iterator.h"
+#include "grid/bvxm_voxel_slab.h"
+#include "grid/bvxm_voxel_slab_iterator.h"
 #ifdef OPTION2 // currently FALSE
 #include <vcl_cassert.h>
 #endif
@@ -64,7 +64,7 @@ bvxm_lidar_processor::prob_density(float z_dim,  bvxm_voxel_slab<float> const& o
 }
 
 float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
-                                         float z_dim,//vgl_point_3d<float>& mean,
+                                         float z_dim,
                                          vnl_vector_fixed<float,3>& covar,  // sigma vals
                                          vgl_box_2d<double> lidar_roi,
                                          float voxel_width)

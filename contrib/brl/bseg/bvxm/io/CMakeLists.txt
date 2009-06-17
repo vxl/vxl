@@ -2,7 +2,6 @@
 
 SET(bvxm_io_sources
     bvxm_io_voxel_world.h  bvxm_io_voxel_world.cxx
-    bvxm_io_voxel_slab_base.h  bvxm_io_voxel_slab_base.cxx
     bvxm_io_world_params.h bvxm_io_world_params.cxx
 )
 

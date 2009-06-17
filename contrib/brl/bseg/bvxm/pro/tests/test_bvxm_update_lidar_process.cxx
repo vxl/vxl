@@ -1,11 +1,5 @@
 #include <testlib/testlib_test.h>
-#if 0 // full function body commented out ...
-#include "../bvxm_update_lidar_process.h"
-#include "../bvxm_gen_synthetic_world_process.h"
-#include "../bvxm_create_voxel_world_process.h"
-#include "../bvxm_create_synth_lidar_data_process.h"
-#include "../bvxm_save_occupancy_raw_process.h"
-#endif // 0
+
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
@@ -26,18 +20,6 @@
 
 MAIN( test_bvxm_update_lidar_process )
 {
-#if 0 // full function body commented out ...
-  REG_PROCESS(bvxm_create_synth_lidar_data_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_create_voxel_world_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_save_occupancy_raw_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_gen_synthetic_world_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_lidar_init_process, bprb_batch_process_manager);
-  REG_PROCESS(bvxm_update_lidar_process, bprb_batch_process_manager);
-  REGISTER_DATATYPE(vil_image_view_base_sptr);
-  REGISTER_DATATYPE(bvxm_voxel_world_sptr);
-  REGISTER_DATATYPE(vpgl_camera_double_sptr);
-  REGISTER_DATATYPE(unsigned);
-
   //global variables
   vil_image_view_base_sptr lidar_img_;
   vil_image_view_base_sptr prob_map_;
@@ -338,7 +320,7 @@ MAIN( test_bvxm_update_lidar_process )
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr nitf_roi = result->value();
 
-#endif // 0
+//#endif // 0
 #else
   // do nothing ...
 #endif // full function body commented out

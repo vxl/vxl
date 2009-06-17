@@ -22,23 +22,12 @@ ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
 ENDIF (WIN32 AND VXL_USE_LFS)
 
 SET(bvxm_sources
-
-    bvxm_memory_chunk.h             bvxm_memory_chunk.cxx
     bvxm_float_processor.h
     bvxm_mog_grey_processor.h       bvxm_mog_grey_processor.cxx
     bvxm_mog_rgb_processor.h        bvxm_mog_rgb_processor.cxx
     bvxm_mog_mc_processor.h         bvxm_mog_mc_processor.txx
     bvxm_lidar_processor.h          bvxm_lidar_processor.cxx
     bvxm_world_params.h             bvxm_world_params.cxx
-    bvxm_voxel_slab_base.h
-    bvxm_voxel_slab.h               bvxm_voxel_slab.txx
-    bvxm_voxel_storage.h
-    bvxm_voxel_storage_disk.h       bvxm_voxel_storage_disk.txx
-    bvxm_voxel_storage_disk_cached.h  bvxm_voxel_storage_disk_cached.txx
-    bvxm_voxel_storage_mem.h        bvxm_voxel_storage_mem.txx
-    bvxm_voxel_slab_iterator.h      bvxm_voxel_slab_iterator.txx
-    bvxm_voxel_grid_base.h
-    bvxm_voxel_grid.h               bvxm_voxel_grid.txx
     bvxm_voxel_traits.h
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
@@ -52,8 +41,10 @@ ADD_LIBRARY( bvxm ${bvxm_sources})
 
 TARGET_LINK_LIBRARIES( bvxm bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vpgl_file_formats vul vbl vsl bgeo brip sdet bil_algo)
 
+SUBDIRS( grid )
 SUBDIRS( io )
 SUBDIRS( pro )
+
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

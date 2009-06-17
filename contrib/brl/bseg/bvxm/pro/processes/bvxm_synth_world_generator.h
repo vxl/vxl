@@ -32,8 +32,8 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 
 #include <bvxm/bvxm_util.h>
-#include <bvxm/bvxm_voxel_grid.h>
-#include <bvxm/bvxm_voxel_slab.h>
+#include <bvxm/grid/bvxm_voxel_grid.h>
+#include <bvxm/grid/bvxm_voxel_slab.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_mog_grey_processor.h>

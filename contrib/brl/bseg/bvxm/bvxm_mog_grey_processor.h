@@ -16,7 +16,7 @@
 //   to return the appropriate bin number from the lighting direction
 // \endverbatim
 
-#include "bvxm_voxel_slab.h"
+#include "grid/bvxm_voxel_slab.h"
 
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <bsta/bsta_distribution.h>

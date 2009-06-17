@@ -80,7 +80,6 @@ class bvxm_voxel_traits<OCCUPANCY>
   static inline voxel_datatype initial_val() { return 0.005f; }
 };
 
-
 //: Voxel traits for a mixture of gaussian appereance model of grey-scale images
 template<>
 class bvxm_voxel_traits<APM_MOG_GREY>
@@ -161,7 +160,6 @@ class bvxm_voxel_traits<LIDAR>
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return 0.0f; }
 };
-
 
 //: Voxel traits for an occupancy grid
 template<>

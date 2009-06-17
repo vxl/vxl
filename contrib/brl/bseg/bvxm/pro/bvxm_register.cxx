@@ -5,7 +5,7 @@
 #include <bprb/bprb_func_process.h>
 #include "bvxm_processes.h"
 #include <bvxm/bvxm_voxel_world.h>
-#include <bvxm/bvxm_voxel_slab_base.h>
+#include <bvxm/grid/bvxm_voxel_slab_base.h>
 
 
 void bvxm_register::register_datatype()
