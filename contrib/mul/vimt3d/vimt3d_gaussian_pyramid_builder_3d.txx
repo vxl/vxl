@@ -251,9 +251,6 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
 
   int max_levels=n_levels(base_image);
 
-  work_im1_.set_size(ni,nj,nk);
-  work_im2_.set_size(ni,nj,nk);
-
   // Set up image pyramid
   checkPyr(image_pyr,max_levels);
 
