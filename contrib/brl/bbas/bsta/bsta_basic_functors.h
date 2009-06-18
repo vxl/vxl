@@ -15,6 +15,7 @@
 #include <vcl_vector.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gaussian_indep.h>
+#include <bsta/bsta_gaussian_sphere.h>
 #include <vpdl/vpdt/vpdt_enable_if.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_mixture_accessors.h>
