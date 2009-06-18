@@ -86,6 +86,7 @@ static void test_v3i()
 
   vil3d_image_resource_sptr ir5 = vil3d_load_image_resource(fname3.c_str());
   TEST( "Successfully loaded complicated v3i image",!ir5, false);
+  TEST( "Got expected image size with just headers", ir5->ni()==3 && ir5->nj()==4 && ir5->nk()==5 && ir5->nplanes()==6, true);
   vil3d_image_view<float> im5(ir5->get_view());
   TEST("Loaded complicated image has correct pixel values",
     vil3d_image_view_deep_equality(im3.image(), im2), true);

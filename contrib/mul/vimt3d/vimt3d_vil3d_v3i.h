@@ -61,12 +61,10 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
   vcl_fstream *file_;
   //: Image cache.
   // Currently the whole image is cached im memory. This should be fixed.
-  vimt3d_image_3d *im_;
+  mutable vimt3d_image_3d *im_;
   //: If true, write image file on exit.
   bool dirty_;
 
-  //: Expected pixel type.
-  enum vil_pixel_format pixel_format_;
   //: Private constructor, use vil3d_load instead.
   // This object takes ownership of the image.
   vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> im);
@@ -74,6 +72,28 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
   // This object takes ownership of the file, for writing.
   vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file, unsigned ni, unsigned nj,
                          unsigned nk, unsigned nplanes, vil_pixel_format format);
+
+  //: Storage type for header information when the whole image has not yet been loaded.
+  struct header_t
+  {
+    unsigned ni, nj, nk, nplanes;
+    vimt3d_transform_3d w2i;
+    header_t(): ni(0), nj(0), nk(0), nplanes(0) {}
+    //: Expected pixel type.
+    enum vil_pixel_format pixel_format;
+    bool operator ==(const header_t& rhs) const;
+
+  };
+  
+  //: Storage for header information when the whole image has not yet been loaded.
+  mutable header_t header_;
+
+  //: Skip the reading of a vil_memory_chunk
+  // Return false if failed, and is error flag on stream if unrecoverable.
+  bool skip_b_read_vil_memory_chunk(vsl_b_istream& is, unsigned sizeof_T) const;
+    
+  //: Load full image on demand.
+  void vimt3d_vil3d_v3i_image::load_full_image() const;
 
  public:
   virtual ~vimt3d_vil3d_v3i_image();
