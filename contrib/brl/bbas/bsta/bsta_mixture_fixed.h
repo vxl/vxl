@@ -18,6 +18,7 @@
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
+#include <vpdl/vpdt/vpdt_dist_traits.h>
 
 //: A mixture of distributions with a fixed size of s components
 template <class dist_, unsigned s>
