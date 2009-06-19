@@ -25,6 +25,7 @@ SET(bvxm_grid_sources
     bvxm_voxel_slab_iterator.h        bvxm_voxel_slab_iterator.txx
     bvxm_voxel_grid_base.h
     bvxm_voxel_grid.h                 bvxm_voxel_grid.txx
+    bvxm_voxel_grid_basic_ops.h       
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_grid_sources)
@@ -32,7 +33,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_grid_sources)
 ADD_LIBRARY( bvxm_grid ${bvxm_grid_sources})
 
 
-TARGET_LINK_LIBRARIES( bvxm_grid bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vpgl_file_formats vul vbl vsl bgeo brip sdet bil_algo)
+TARGET_LINK_LIBRARIES( bvxm_grid  vnl vil  vil_algo vul vbl vsl)
 
 SUBDIRS( io )
 

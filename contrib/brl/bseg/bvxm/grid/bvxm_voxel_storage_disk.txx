@@ -15,6 +15,51 @@
 #include "bvxm_voxel_storage_disk.h"
 #include "bvxm_voxel_slab.h"
 
+
+template <class T>
+bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename)
+: bvxm_voxel_storage<T>(), storage_fname_(storage_filename), fio_(0), active_slab_start_(-1)
+{
+ 
+  // check if file exsist already or not
+  if (vul_file::exists(storage_fname_))  {
+    // make sure filename is not a directory
+    bool is_dir = vul_file::is_directory(storage_fname_);
+    if (is_dir) {
+      vcl_cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor.\n";
+      return;
+    }
+    // read header and make sure that it matches given dimensions
+    // open the file with in and out flags so we dont truncate
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
+#endif
+
+    if (!fio_->ok()) {
+      vcl_cerr << "error opening " << storage_fname_ << " for read/write\n";
+      return;
+    }
+    bvxm_voxel_storage_header<T> header;
+    
+    fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
+    
+    vgl_vector_3d<unsigned int> grid_size(header.nx_, header.ny_, header.nz_);
+    
+    this->grid_size_ = grid_size;
+
+     // assumes desired slab thickness is 1
+    slab_buffer_ = new bvxm_memory_chunk(grid_size.x()*grid_size.y()*sizeof(T));
+
+    
+  }
+  else {
+    // file does not yet exist. 
+    vcl_cerr << "error: grid file " << storage_fname_ << " passed to bvxm_voxel_storage_disk does not exist.\n";
+  }
+}
+
 template <class T>
 bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size)
 : bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), fio_(0), active_slab_start_(-1)
@@ -53,7 +98,34 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
     }
   }
   else {
-    // file does not yet exist. do nothing for now.
+    // file does not yet exist. 
+    // open file for write and write header
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"w");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"w");
+#endif
+
+
+  if (!fio_->ok()) {
+    vcl_cerr << " error opening file " << storage_fname_ << " for write.\n";
+    return;
+  }
+  // write the header
+  bvxm_voxel_storage_header<T> header(this->grid_size_);
+  fio_->write(reinterpret_cast<char*>(&header),sizeof(header));
+
+  // no longer have any active slabs
+  active_slab_start_ = -1;
+
+  // close output stream
+  // this will delete the stream object.
+  fio_->ref();
+  fio_->unref();
+  fio_ = 0;
+
+  return;
+
   }
 }
 
