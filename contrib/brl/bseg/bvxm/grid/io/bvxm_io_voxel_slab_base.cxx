@@ -1,5 +1,6 @@
 #include <bvxm/grid/io/bvxm_io_voxel_slab_base.h>
 #include <bvxm/grid/bvxm_voxel_slab.h>
+#include <bvxm/grid/bvxm_voxel_grid.h>
 //:
 // \file
 #include <vsl/vsl_binary_io.h>
