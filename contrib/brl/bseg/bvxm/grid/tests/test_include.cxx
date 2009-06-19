@@ -8,7 +8,9 @@
 #include <bvxm/grid/bvxm_voxel_storage_disk.h>
 #include <bvxm/grid/bvxm_voxel_storage_disk_cached.h>
 #include <bvxm/grid/bvxm_voxel_storage_mem.h>
+#include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 
 #include <bvxm/grid/io/bvxm_io_voxel_slab_base.h>
+#include <bvxm/grid/io/bvxm_io_voxel_grid.h>
 
 int main() { return 0; }
