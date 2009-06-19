@@ -96,9 +96,6 @@ LIB32=link.exe -lib
 SOURCE=.\bvxm_image_metadata.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_memory_chunk.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_mog_grey_processor.cxx
 # End Source File
 # Begin Source File
@@ -117,82 +114,10 @@ SOURCE=.\bvxm_world_params.cxx
 SOURCE=.\bvxm_lidar_processor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+uint-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bvxm_memory_chunk-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_grid_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_slab_base-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_world-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_world_params-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+vnl_vector_fixed+float.3--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_mog_mc_processor+2.3-.cxx
@@ -203,72 +128,6 @@ SOURCE=.\Templates/bvxm_mog_mc_processor+3.3-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvxm_mog_mc_processor+4.3-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+vnl_vector_fixed+float.2--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+vnl_vector_fixed+float.4--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.3--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_sphere+float.1--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_f1--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gauss_f1--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gauss_f1--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_gauss_f1--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_gauss_f1--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gauss_f1--.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -278,9 +137,6 @@ SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gauss_f1--.cxx
 SOURCE=.\bvxm_image_metadata.h
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_memory_chunk.h
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_mog_grey_processor.h
 # End Source File
 # Begin Source File
@@ -288,45 +144,6 @@ SOURCE=.\bvxm_mog_rgb_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_util.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_grid.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_grid.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_grid_base.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_slab.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_slab.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_slab_base.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_slab_iterator.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_slab_iterator.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_storage.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_storage_disk.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_storage_disk.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_storage_mem.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_storage_mem.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_voxel_traits.h
@@ -339,12 +156,6 @@ SOURCE=.\bvxm_world_params.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_lidar_processor.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_storage_disk_cached.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_storage_disk_cached.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_mog_mc_processor.txx

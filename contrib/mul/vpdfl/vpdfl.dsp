@@ -93,12 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_builder_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_pdf_base-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+vpdfl_builder_base-.cxx
 # End Source File
 # Begin Source File

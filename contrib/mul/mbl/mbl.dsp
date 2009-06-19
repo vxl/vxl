@@ -201,6 +201,9 @@ SOURCE=.\Templates/mbl_save_text_file+float-.cxx
 SOURCE=.\Templates/mbl_save_text_file+int-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+vgl_point_3d+double--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mbl_screen_counter.cxx
 # End Source File
 # Begin Source File
