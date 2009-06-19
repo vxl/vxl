@@ -3,8 +3,8 @@
 #define bvxm_mog_norm_h_
 //:
 // \file
-// \brief class to calculate norms between mixtures of gaussians and gaussians
-//        Methods support univariate Ting point distributions and mixture with 3 componets
+// \brief class to compute distances between mixtures of gaussians and gaussians
+//        Methods support univariate distributions and mixture with 3 componets
 //        The reason for these limitations is because that is what bvxm uses up to date. 
 // \author Isabel Restrepo
 // \date March 25, 2009
