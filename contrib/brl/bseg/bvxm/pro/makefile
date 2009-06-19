@@ -42,6 +42,7 @@ SOURCES += processes/bvxm_compare_3d_voxels_process.cxx # multiscale_pro/bvxm_co
 SOURCES += processes/bvxm_detect_scale_process.cxx      # multiscale_pro/bvxm_detect_scale_process.cxx
 SOURCES += processes/bvxm_synth_world_generator.cxx
 SOURCES += processes/bvxm_locate_region_process.cxx
+SOURCES += processes/bvxm_save_grid_raw_process.cxx
 
 MANPAGE_SOURCES += bvxm_processes.h
 
