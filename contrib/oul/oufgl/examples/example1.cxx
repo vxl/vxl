@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
   char * camera_name = new char[vcl_strlen(camera_name_default)+1];
   vcl_strcpy (camera_name, camera_name_default);
 
-  while ((opt=getopt(argc, argv, "x:y:n:c:d"))!=EOF)
+  while ((opt=getopt(argc, argv, "x:y:n:c:d")) != -1)
   {
     switch (opt)
     {
