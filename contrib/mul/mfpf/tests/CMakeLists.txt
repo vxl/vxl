@@ -22,10 +22,9 @@ ADD_TEST( mfpf_test_profile_pdf ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_pro
 ADD_TEST( mfpf_test_region_pdf  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_region_pdf)
 ADD_TEST( mfpf_test_region_finder  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_region_finder)
 ADD_TEST( mfpf_test_pose        ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_pose)
-ADD_TEST( test_mr_point_finder  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_mr_point_finder)
-ADD_TEST( test_patch_data  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_patch_data)
-
-ADD_TEST( test_dp_snake  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_dp_snake)
+ADD_TEST( mfpf_test_mr_point_finder  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_mr_point_finder)
+ADD_TEST( mfpf_test_patch_data  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_patch_data)
+ADD_TEST( mfpf_test_dp_snake    ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_dp_snake)
 
 ADD_EXECUTABLE( mfpf_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mfpf_test_include mfpf mipa)
