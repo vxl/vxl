@@ -220,15 +220,6 @@ SOURCE=.\test_apm_processors.cxx
 # Begin Source File
 # End Source File
 # Begin Source File
-SOURCE=.\test_voxel_grid.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_voxel_storage_disk.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_voxel_storage_mem.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_voxel_world.cxx
 # End Source File
 # Begin Source File
@@ -239,9 +230,6 @@ SOURCE=.\test_voxel_world_update.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_lidar_processor.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_voxel_storage_disk_cached.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_platform_computations.cxx
