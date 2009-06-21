@@ -43,7 +43,7 @@ bool multiply(bvxm_voxel_grid<T> const& grid1, bvxm_voxel_grid<T> const& grid2, 
 //: Thresholds a grid. This function returns the thresholded grid and a mask shuc that output grid = mask*input_grid
 template<class T>
 bool threshold(bvxm_voxel_grid<T> const& grid_in,bvxm_voxel_grid<T> const grid_out,
-               bvxm_voxel_grid<bool> const mask, float min_thresh)
+               bvxm_voxel_grid<bool> const mask_grid, float min_thresh)
 {
   //initialize grids
   grid_out->initialize_data(T(0));
@@ -52,9 +52,9 @@ bool threshold(bvxm_voxel_grid<T> const& grid_in,bvxm_voxel_grid<T> const grid_o
   // ierate though the grids
   typename bvxm_voxel_grid<T>::iterator in_slab_it = grid_in->begin();
   typename bvxm_voxel_grid<T>::iterator out_slab_it = grid_out->begin();
-  typename bvxm_voxel_grid<bool::iterator mask_slab_it = mask_grid->begin();
+  typename bvxm_voxel_grid<bool>::iterator mask_slab_it = mask_grid->begin();
 
-  vcl_cout << "Thresholding Grid: " << vcl_endl;
+  vcl_cout << "Thresholding Grid:\n";
   for (unsigned z=0; z<(unsigned)(grid_in->grid_size().z()); ++z, ++in_slab_it, ++mask_slab_it, ++out_slab_it)
   {
     vcl_cout << '.';
