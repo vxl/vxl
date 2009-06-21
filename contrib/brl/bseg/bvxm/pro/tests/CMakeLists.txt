@@ -37,7 +37,7 @@ ADD_TEST( bvxm_test_illum_index_process             ${EXECUTABLE_OUTPUT_PATH}/bv
 ADD_TEST( bvxm_test_create_voxel_world_process      ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_voxel_world_process )
 ADD_TEST( bvxm_test_bvxm_normalize_image_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_normalize_image_process )
 ADD_TEST( bvxm_test_bvxm_create_normalized_image_process ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_normalized_image_process )
-ADD_TEST( bvxm_test_rpc_registration_process        ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_rpc_registration_process )
+# ADD_TEST( bvxm_test_rpc_registration_process        ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_rpc_registration_process )
 ADD_TEST( bvxm_test_create_local_rpc_process        ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_local_rpc_process )
 ADD_TEST( bvxm_test_create_synth_lidar_data_process ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_synth_lidar_data_process )
 # ADD_TEST( bvxm_test_update_lidar_process            ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_update_lidar_process )
