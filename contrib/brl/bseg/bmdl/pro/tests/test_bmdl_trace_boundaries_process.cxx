@@ -16,14 +16,20 @@
 
 #include <vil/vil_load.h>
 
-MAIN( test_bmdl_trace_boundaries_process )
+MAIN_ARGS( test_bmdl_trace_boundaries_process )
 {
   REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_trace_boundaries_process, "bmdlTraceBoundariesProcess");
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
+  vcl_string image_base;
+  if ( argc >= 2 ) {
+    image_base = argv[1];
+    image_base += "/";
+  }
+
   //create vil_image_view_base_sptr
-  vcl_string label_img_path = "label.tif";
+  vcl_string label_img_path = image_base + "label.tif";
   vil_image_view_base_sptr label = vil_load(label_img_path.c_str());
 
   vcl_string polygons_path = "polygons.bin";

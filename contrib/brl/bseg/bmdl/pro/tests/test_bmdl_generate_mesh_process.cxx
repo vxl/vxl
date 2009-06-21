@@ -17,20 +17,26 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
-MAIN( test_bmdl_generate_mesh_process )
+MAIN_ARGS( test_bmdl_generate_mesh_process )
 {
   REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_generate_mesh_process, "bmdlGenerateMeshProcess");
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
+  vcl_string image_base;
+  if ( argc >= 2 ) {
+    image_base = argv[1];
+    image_base += "/";
+  }
+
   //create vil_image_view_base_sptr
-  vcl_string label_img_path = "label.tif";
+  vcl_string label_img_path = image_base + "label.tif";
   vil_image_view_base_sptr label = vil_load(label_img_path.c_str());
 
-  vcl_string height_img_path = "height.tif";
+  vcl_string height_img_path = image_base + "height.tif";
   vil_image_view_base_sptr height = vil_load(height_img_path.c_str());
 
-  vcl_string ground_img_path = "ground.tif";
+  vcl_string ground_img_path = image_base + "ground.tif";
   vil_image_view_base_sptr ground = vil_load(ground_img_path.c_str());
 
   vcl_string polygons_path = "polygons.bin";
