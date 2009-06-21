@@ -12,6 +12,9 @@
 #include <vul/vul_timer.h>
 #include <boxm/boxm_render_image.h>
 #include <vcl_iostream.h>
+#include <boxm/boxm_raytrace_operations.h>
+#include <boxm/boxm_rational_camera_utils.h>
+
 
 //: functor used for normalizing cell_expected image
 class safe_inverse_functor
@@ -23,7 +26,14 @@ class safe_inverse_functor
 
   float tol_;
 };
+class abs_functor
+{
+ public:
+	 abs_functor(){}
 
+  float operator()(float x) const { return vcl_fabs(x); }
+
+};
 template <class T_loc, class T_data>
 void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vpgl_camera_double_sptr cam,
@@ -39,18 +49,25 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   double yverts[8];
   float vertdists[8];
 
-  vil_image_view<float> pre(ni,nj,1); pre.fill(0.0f);
-  vil_image_view<float> vis(ni,nj,1); vis.fill(1.0f);
-  vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
-  vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
+  vil_image_view<float> pre(ni,nj,1); 
+  vil_image_view<float> vis(ni,nj,1); 
+  vil_image_view<float> alpha_integral(ni,nj,1); 
+  vil_image_view<float> PI_img(ni,nj,1);		 
+  vil_image_view<float> pix_weights_(ni,nj,1);
+  vil_image_view<float> alpha_img_(ni,nj,1); 
+
+  alpha_integral.fill(0.0f);
+  pre.fill(0.0f);
+  vis.fill(1.0f);
 
   vgl_plane_3d<double> projection_plane;
-  if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.ptr())) {
+  if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
 	  vgl_box_3d<double> bbox=scene.get_world_bbox();
-	  vgl_plane_3d<double> top(bbox.min_x(),bbox.min_y(),bbox.max_z());
-	  vgl_plane_3d<double> bottom(bbox.min_x(),bbox.min_y(),bbox.min_z());
-	  projection_plane=boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
+	  vgl_plane_3d<double> top(0,0,1,-bbox.max_z());
+	  vgl_plane_3d<double> bottom(0,0,1,-bbox.min_z());
+	  projection_plane=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
   }
+
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc, T_data > > block_vis_iter(cam, &scene, ni,nj);
   while (block_vis_iter.next()) {
@@ -69,18 +86,17 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       vil_image_view<float> vis_end(ni,nj,1);
       vil_image_view<float> temp_expected(ni,nj,1);
       int cnt=0;
+
       while (frontier_it.next())
       {
 		++cnt;
         vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
         typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
-        front_xyz.fill(0.0f);
-        back_xyz.fill(0.0f);
-        alphas.fill(0.0f);
+        alpha_img_.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
         PI_img.fill(0.0f);
-        vcl_cout<<cnt<<' ';
+		//vcl_cout<<vis_cells.size()<<' ';
 		for (;cell_it!=vis_cells.end();cell_it++)
 		{
 			// for each cell
@@ -88,36 +104,20 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 			// get vertices of cell in the form of a bounding box (cells are always axis-aligned))
 			vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
 			vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-			if (vpgl_perspective_camera<double> const* pcam = dynamic_cast<vpgl_perspective_camera<double> const*>(cam)) 
+			if (vpgl_perspective_camera<double> * pcam = dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr())) 
 			{	
 					boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
 			}
-			else if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam)) {
-					project_corners_rational_camera(corners,cam,xverts,yverts,vertdists
+			else if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
+				boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,projection_plane,xverts,yverts,vertdists);
 			}
-
 			boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-			boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
-			// get  alpha
-			boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-		}
-		// compute the length of ray segment at each pixel
-		vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
-		vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
-		//vil_math_sum_sqr<float,float>(back_xyz,len_seg);
-		//vil_math_sqrt<float>(len_seg);
+			//boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
+			boxm_alpha_seg_len(xverts, yverts, vertdists, vis_face_ids, sample.alpha, alpha_img_);       
 
-        for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
-        {
-			T_data sample=(*cell_it)->data();
-			// get vertices of cell in the form of a bounding box (cells are always axis-aligned))
-			vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-			vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-			boxm_utils::project_corners(corners,cam,xverts,yverts);
-			boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
 
 			typename T_data::obs_datatype cell_mean_obs;
-			if (boxm_utils::cube_weighted_mean(vis_face_ids, img, len_seg,cell_mean_obs,xverts,yverts)) {
+			if (cube_mean(xverts, yverts, vertdists, vis_face_ids,img,cell_mean_obs)) {
 				// get probability density of mean observation
 				float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
 				if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
@@ -126,29 +126,28 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 						<< "  cell id = " << *cell_it << vcl_endl;
 				}
 				// fill obs probability density image
-				boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,cell_PI, xverts,yverts);
+				cube_fill_value(xverts, yverts, vis_face_ids, PI_img, cell_PI);
 			}
 		}
-        vil_math_image_product(len_seg,alphas, alphas);
+		abs_functor abs_fun;
+		vil_transform(alpha_img_,alpha_img_,abs_fun);
         // compute visibility
-        vil_math_image_difference(alpha_integral, alphas, alpha_integral);
+        vil_math_image_difference(alpha_integral, alpha_img_, alpha_integral);
         // compute new vis image
         image_exp_functor exp_fun;
         vil_transform(alpha_integral,vis_end,exp_fun);
         // compute weights for each pixel
-        vil_math_image_difference(vis,vis_end,vis);
+        vil_math_image_difference(vis,vis_end,pix_weights_);
         // scale cell expected image by weighting function..
-        vil_math_image_product( PI_img,vis, PI_img);
+        vil_math_image_product( pix_weights_,PI_img, PI_img);
         // ..and use result to update final expected image
         vil_math_image_sum(PI_img,pre,pre);
-
         vis.deep_copy(vis_end);
 #if 0
-		if (cnt == 70) {
+		if (cnt == 10) {
 			vcl_cout << "saving debug images" << vcl_endl;
 			vcl_string output_dir = "d:/vj/scripts/boxm/exp1/";
-			vil_save(len_seg,(output_dir + "len_seg.tiff").c_str());
-			vil_save(alphas,(output_dir + "alphas.tiff").c_str());
+			vil_save(alpha_img_,(output_dir + "alpha_img.tiff").c_str());
 			vil_save(alpha_integral,(output_dir + "alpha_integral.tiff").c_str());
 			vil_save(pre,(output_dir + "pre_img.tiff").c_str());
 			vil_save(PI_img,(output_dir + "PI_img.tiff").c_str());
@@ -158,7 +157,6 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 		}
 #endif
       }
-
       scene.write_active_block();
     }
   }
@@ -192,13 +190,24 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   typedef boct_tree_cell<T_loc, T_data > cell_type;
   vil_image_view<float> pre_img(ni,nj,1); pre_img.fill(0.0f);
   vil_image_view<float> vis(ni,nj,1); vis.fill(1.0f);
-  vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
+  vil_image_view<float> alpha_integral(ni,nj,1); 
   vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
   vil_image_view<float> pix_weights(ni,nj,1);
+  alpha_integral.fill(0.0f);
+  pre_img.fill(0.0f);
+  vis.fill(1.0f);
+
   double xverts[8];
   double yverts[8];
   float vertdists[8];
-
+  vgl_plane_3d<double> projection_plane;
+  if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
+	  vgl_box_3d<double> bbox=scene.get_world_bbox();
+	  vgl_plane_3d<double> top(0,0,1,-bbox.max_z());
+	  vgl_plane_3d<double> bottom(0,0,1,-bbox.min_z());
+	  projection_plane=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
+	  vcl_cout<<"The plane is "<<projection_plane;
+  }
   vul_timer t;  t.mark();
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc,T_data > > block_vis_iter(cam, &scene, ni,nj);
@@ -211,23 +220,20 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
       // for each frontier layer of each block
       tree_type * tree=curr_block->get_tree();
-      vil_image_view<float> front_xyz(ni,nj,1);
-      vil_image_view<float> back_xyz(ni,nj,1);
-      vil_image_view<float> alphas(ni,nj,1);
+      vil_image_view<float> alpha_img_(ni,nj,1);
       vil_image_view<float> vis_end(ni,nj,1);
       vil_image_view<float> temp_expected(ni,nj,1);
       vil_image_view<float> update_factor(ni,nj,1);
+
 	  unsigned count=0;
       while (frontier_it.next())
       {
         vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
         typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
-        front_xyz.fill(0.0f);
-        back_xyz.fill(0.0f);
-        alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
         PI_img.fill(0.0f);
+        alpha_img_.fill(0.0f);
 
         vcl_cout<<'.';
 		for (;cell_it!=vis_cells.end();cell_it++)
@@ -237,31 +243,18 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 			// get vertices of cell in the form of a bounding box (cells are always axis-aligned))
 			vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
 			vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-			boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+			if (vpgl_perspective_camera<double> * pcam = dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr())) 
+			{	
+					boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+			}
+			else if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
+				boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,projection_plane,xverts,yverts,vertdists);
+			}
+
 			boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-			boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
-			// get  alpha
-			boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-		}
-		// compute the length of ray segment at each pixel
-		vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
-		vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
-
-        for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
-        {
-          // for each cell
-          T_data sample=(*cell_it)->data();
-
-          // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
-		  vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-		  vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-		  boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
-		  boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-		  //boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
-		  //// get  alpha
-		  //boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-		  typename T_data::obs_datatype cell_mean_obs;
-		  if (boxm_utils::cube_weighted_mean(vis_face_ids, img,len_seg, cell_mean_obs,xverts,yverts)) {
+			boxm_alpha_seg_len(xverts, yverts, vertdists, vis_face_ids, sample.alpha, alpha_img_);       
+			typename T_data::obs_datatype cell_mean_obs;
+		    if (cube_mean(xverts, yverts, vertdists, vis_face_ids,img,cell_mean_obs)) {
             // get probability density of mean observation
             float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
 #if 0
@@ -272,10 +265,10 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             }
 #endif // 0
             // fill obs probability density image
-            boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,(float)cell_PI, xverts,yverts);
+			cube_fill_value(xverts, yverts, vis_face_ids, PI_img, cell_PI);
           }
           float cell_mean_vis = 0.0f;
-          if (boxm_utils::cube_weighted_mean(vis_face_ids, vis, len_seg,cell_mean_vis,xverts,yverts)) {
+          if (cube_mean(xverts, yverts, vertdists, vis_face_ids,vis,cell_mean_vis)) {
             // update appearance model
             if (cell_mean_vis > 1e-6) {
               T_data::apm_processor::update(sample.appearance(bin), cell_mean_obs, cell_mean_vis);
@@ -283,15 +276,12 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           }
           (*cell_it)->set_data(sample);
         }
-        // compute the length of ray segment at each pixel
-        //vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
-        //vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
-        //vil_math_sum_sqr<float,float>(back_xyz,len_seg);
-        //vil_math_sqrt<float>(len_seg);
+		abs_functor abs_fun;
+		vil_transform(alpha_img_,alpha_img_,abs_fun);
 
-        vil_math_image_product(len_seg,alphas, alphas);
         // compute visibility
-        vil_math_image_difference(alpha_integral, alphas, alpha_integral);
+        vil_math_image_difference(alpha_integral, alpha_img_, alpha_integral);
+
         // compute new vis image
         image_exp_functor exp_fun;
         vil_transform(alpha_integral,vis_end,exp_fun);
@@ -303,6 +293,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vil_math_image_sum(pre_img, update_factor, update_factor);
         //.. and normalize
         vil_math_image_product(norm_img, update_factor, update_factor);
+ 
 
         float max_cell_P=0.99f;
         float min_cell_P=0.001f;
@@ -313,12 +304,19 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          boxm_utils::project_corners(corners,cam,xverts,yverts);
+		  if (vpgl_perspective_camera<double> * pcam = dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr())) 
+		  {	
+			  boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+		  }
+		  else if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
+			  boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,projection_plane,xverts,yverts,vertdists);
+		  }
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-          //boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
-          float mean_update_factor = 0.0f;
-          if (boxm_utils::cube_weighted_mean(vis_face_ids, update_factor,len_seg, mean_update_factor,xverts,yverts))
-          {  // update alpha value
+
+		  float mean_update_factor = 0.0f;
+          if (cube_mean(xverts,yverts,vertdists,vis_face_ids, update_factor, mean_update_factor))
+          {  
+			  // update alpha value
             sample.alpha *= mean_update_factor;
             // do bounds check on new alpha value
             float cell_len = float(cell_bb.max_x() - cell_bb.min_x());
@@ -341,7 +339,6 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vil_math_image_product(pix_weights, PI_img, PI_img);
         // update pre_img
         vil_math_image_sum(PI_img, pre_img, pre_img);
-
         vis.deep_copy(vis_end);
       }
       scene.write_active_block();
@@ -350,7 +347,7 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 }
 
 template <class T_loc, class T_data>
-void boxm_update(boxm_scene<boct_tree<T_loc, T_data > > &scene,
+void boxm_update_triangle(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                  vil_image_view<typename T_data::obs_datatype> &img,
                  vpgl_camera_double_sptr cam, int bin=-1,
                  bool black_background = false)

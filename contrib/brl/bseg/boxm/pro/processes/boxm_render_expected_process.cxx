@@ -16,6 +16,7 @@
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_render_image.h>
+#include <boxm/boxm_render_image_triangle.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_sample_multi_bin.h>
@@ -82,7 +83,7 @@ bool boxm_render_expected_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-      boxm_render_image_splatting<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
+      boxm_render_image_splatting_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
     }
     else
     {
@@ -90,7 +91,7 @@ bool boxm_render_expected_process(bprb_func_process& pro)
       vcl_cout<<"Multi Bin"<<vcl_endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-      boxm_render_image_splatting<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,bin);
+      boxm_render_image_splatting_triangle<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,bin);
     }
 
     //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);

@@ -10,11 +10,13 @@ DECLARE( test_render_image );
 DECLARE( test_update );
 DECLARE( test_compute_visibility );
 DECLARE( test_update_multi_bin );
-
+DECLARE( test_boxm_rational_camera_utils);
 
 void register_tests()
 {
-  REGISTER( test_binary_io );
+  REGISTER( test_boxm_rational_camera_utils);
+
+	REGISTER( test_binary_io );
   REGISTER( test_block_iter );
   REGISTER( test_block_vis_graph );
   REGISTER( test_cell_vis_graph );
@@ -24,7 +26,6 @@ void register_tests()
   REGISTER( test_update );
   REGISTER( test_compute_visibility );
   REGISTER( test_update_multi_bin );
-
 }
 
 

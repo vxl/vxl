@@ -56,7 +56,7 @@ class boxm_utils
   static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
                             vpgl_camera_double_sptr camera,
                             double* xverts, double* yverts,
-							double* vertdist);
+							float* vertdist);
   static void project_cube(vgl_box_3d<double> &bbox,
                            vpgl_camera_double_sptr camera,
                            vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > & faces,
@@ -96,7 +96,7 @@ class boxm_utils
                               boct_face_idx & vis_face_ids,
                               vil_image_view<float> &front_xyz,
                               vil_image_view<float> &back_xyz,
-                              double *xverts,double * yverts,double * vertdist);
+                              double *xverts,double * yverts,float * vertdist);
 
   static bool project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
                                      boct_face_idx & vis_face_ids,

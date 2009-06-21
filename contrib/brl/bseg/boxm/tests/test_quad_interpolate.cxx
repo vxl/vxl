@@ -95,7 +95,7 @@ MAIN( test_quad_interpolate )
   ifs >> *cam;
   double xverts[8];
   double yverts[8];
-  double vertdist[8];
+  float vertdist[8];
   unsigned int ni=1280;
   unsigned int nj=720;
 

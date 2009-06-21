@@ -17,7 +17,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
   // get the leaf nodes of the block
   vcl_vector<boct_tree_cell<T_loc, T_data>*> leaf_nodes = tree->leaf_cells();
-  vcl_cout << "  NUMBER OF LEAF NODES=" << leaf_nodes.size() << vcl_endl;
+  vcl_cout << "  NUMBER OF LEAF NODES=" << leaf_nodes.size();
   vcl_vector<boct_tree_cell<T_loc, T_data >*> split_list;
   for (unsigned i=0; i<leaf_nodes.size(); i++) {
     boct_tree_cell<T_loc, T_data>* cell = leaf_nodes[i];
@@ -40,6 +40,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
     }
   }
 
+  vcl_cout<<" Splitting "<<split_list.size()<<" cells" << vcl_endl;
   // splitting
   for (unsigned i=0; i<split_list.size(); i++) {
     boct_tree_cell<T_loc, T_data>* cell = split_list[i];

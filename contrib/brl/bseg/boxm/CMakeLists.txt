@@ -21,19 +21,24 @@ SET(boxm_sources
     boxm_cell_vis_graph_iterator.txx  boxm_cell_vis_graph_iterator.h
     boxm_neighb_graph_node.h
     boxm_utils.cxx                    boxm_utils.h
-    boxm_render_image.h
-    boxm_update.h
+    boxm_render_image.h				  boxm_render_image_triangle.h
+    boxm_update.h					  boxm_update_triangle.h
     boxm_refine.h
     boxm_save_block_raw.h
     boxm_quad_scan_iterator.h         boxm_quad_scan_iterator.cxx
     boxm_compute_volume_visibility.h
+    boxm_triangle_interpolation_iterator.h boxm_triangle_interpolation_iterator.txx
+    boxm_triangle_scan_iterator.h     boxm_triangle_scan_iterator.cxx
+	boxm_raytrace_operations.h		  boxm_raytrace_operations.cxx
+	
+	boxm_rational_camera_utils.h      boxm_rational_camera_utils.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vsol bgeo bsta bsta_algo vil)
+TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vpgl_algo vsol bgeo bsta bsta_algo vil)
 
 
 #processes 

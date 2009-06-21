@@ -81,8 +81,8 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
 //                    |           |  |
 //                    |           |  |
 //                    |    3      |  2
-//     Y              |           | /
-//     |   Z          |           |/
+//     Z              |           | /
+//     |   Y          |           |/
 //     |  /           0-----------1
 //     | /         MinPosition
 //     O-----X
@@ -122,7 +122,7 @@ void
 boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
                             vpgl_camera_double_sptr camera,
                             double* xverts, double* yverts,
-							double* vertdist)
+							float* vertdist)
 {
 	if (camera->type_name().compare("vpgl_perspective_camera")==0) {
 		vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
@@ -856,7 +856,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
                                   boct_face_idx & vis_face_ids,
                                   vil_image_view<float> &front_xyz,
                                   vil_image_view<float> &back_xyz,
-                                  double *xverts,double * yverts,double * vertdist)
+                                  double *xverts,double * yverts,float * vertdist)
 {
   {
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};

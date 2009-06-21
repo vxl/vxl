@@ -16,7 +16,7 @@
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/boxm_update.h>
+#include <boxm/boxm_update_triangle.h>
 
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
@@ -80,14 +80,15 @@ bool boxm_update_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
+      //boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
+	  boxm_update_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
     }
     else
     {
       vcl_cout<<"Multi Bin Update"<<vcl_endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_update<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin_index,false);
+      boxm_update_triangle<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin_index,false);
     }
     //vil_image_view<float> image = *vil_convert_cast(float(), input_image);
   }
