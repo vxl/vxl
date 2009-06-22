@@ -96,10 +96,10 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
           if (vpgl_perspective_camera<double> const* pcam = dynamic_cast<vpgl_perspective_camera<double> const*>(cam.as_pointer()))
           {
-              boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+              boxm_utils::project_corners(corners,pcam,xverts,yverts,vertdists);
           }
           else if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
-              project_corners_rational_camera(corners,cam,xverts,yverts,vertdists);
+              project_corners(corners,rcam,xverts,yverts,vertdists);
           }
 
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
