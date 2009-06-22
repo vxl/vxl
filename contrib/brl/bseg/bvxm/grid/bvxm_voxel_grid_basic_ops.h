@@ -27,6 +27,20 @@ bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_g
   bvxm_voxel_grid<T> *grid2 = dynamic_cast<bvxm_voxel_grid<T>* >(grid2_base.ptr());
   bvxm_voxel_grid<T> *grid_out = dynamic_cast<bvxm_voxel_grid<T>* >(grid_out_base.ptr());
   
+  //check the casting was successful
+  if( !grid1 || !grid2 || !grid_out)
+  {
+    vcl_cerr << "One of the input voxels is of the wrong type \n";
+    return false;
+  }
+  
+  //check sizes are the same
+  if( grid1->grid_size() != grid2->grid_size() ||  grid1->grid_size() != grid_out->grid_size() )
+  {
+    vcl_cerr<< "Grids are not of the same type \n";
+    return false;
+  }
+  
   //multipy
   typename bvxm_voxel_grid<T>::iterator grid1_it = grid1->begin();
   typename bvxm_voxel_grid<T>::iterator grid2_it = grid2->begin();
@@ -54,13 +68,28 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
                                          bvxm_voxel_grid_base_sptr mask_grid_base, T min_thresh)
 {
   //cast
-  bvxm_voxel_grid<T> *grid_in = dynamic_cast<bvxm_voxel_grid<T> * > (grid_in_base);
-  bvxm_voxel_grid<T> *grid_out = dynamic_cast<bvxm_voxel_grid<T> * > (grid_out_base);
-  bvxm_voxel_grid<T> *mask_grid = dynamic_cast<bvxm_voxel_grid<bool> * > (grid_out_base);
+  bvxm_voxel_grid<T> *grid_in = dynamic_cast<bvxm_voxel_grid<T> * > (grid_in_base.ptr());
+  bvxm_voxel_grid<T> *grid_out = dynamic_cast<bvxm_voxel_grid<T> * > (grid_out_base.ptr());
+  bvxm_voxel_grid<bool> *mask_grid = dynamic_cast<bvxm_voxel_grid<bool> * > (mask_grid_base.ptr());
+  
+  //check the casting was successful
+  if( !grid_in || !grid_out || !mask_grid)
+  {
+    vcl_cerr << "One of the input voxels is of the wrong type \n";
+    return false;
+  }
+  
+  //check sizes are the same
+  if( grid_in->grid_size() != grid_out->grid_size() ||  grid_in->grid_size() != mask_grid->grid_size() )
+  {
+    vcl_cerr<< "Grids are not of the same type \n";
+    return false;
+  }
+  
   
   //intitialize grids
   grid_out->initialize_data(T(0));
-  mask_grid->initialize_data(T(0));
+  mask_grid->initialize_data(false);
   
   
   // ierate though the grids
