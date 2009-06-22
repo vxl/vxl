@@ -47,14 +47,13 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
   vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
 
-#if 0 // TODO: boxm_find_parallel_image_plane() does not exist!!
-      //       moreover, vgl_plane_3d<double> has no constructor with 3 double params....???!!!
-      //       and finally, projection_plane is unused ..!!
+#if 0 // TODO: vgl_plane_3d<double> has no constructor with 3 double params....???!!!
+      //       and projection_plane is unused ..!!
   if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
     vgl_box_3d<double> bbox=scene.get_world_bbox();
     vgl_plane_3d<double> top(bbox.min_x(),bbox.min_y(),bbox.max_z());
     vgl_plane_3d<double> bottom(bbox.min_x(),bbox.min_y(),bbox.min_z());
-    vgl_plane_3d<double> projection_plane=boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
+    vgl_plane_3d<double> projection_plane=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
   }
 #endif // 0
   // code to iterate over the blocks in order of visibility
