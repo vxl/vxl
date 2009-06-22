@@ -70,12 +70,7 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
       t.mark();
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       vcl_cout<<"The time taken to read a block is "<<t.all()<<vcl_endl;
-
       boxm_block<tree_type> * curr_block=scene.get_active_block();
-      vcl_cout<<"Block: "<<curr_block->bounding_box()<<vcl_endl
-              <<"Tree: "<<curr_block->get_tree()->num_levels()
-              << " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<vcl_endl;
-
       t.mark();
       // project vertices to the image determine which faces of the cell are visible
       boxm_cell_vis_graph_iterator<T_loc, T_data > frontier_it(cam,curr_block->get_tree(),ni,nj);
@@ -83,9 +78,6 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
 
       // for each frontier layer of each block
       tree_type * tree=curr_block->get_tree();
-      vil_image_view<float> front_xyz(expected.ni(),expected.nj(),3);
-      vil_image_view<float> back_xyz(expected.ni(),expected.nj(),3);
-      vil_image_view<float> alphas(expected.ni(),expected.nj(),1);
       vil_image_view<float> vis_end(expected.ni(),expected.nj(),1);
       vil_image_view<float> temp_expected(expected.ni(),expected.nj(),1);
       vil_image_view<float> temp_weights(expected.ni(),expected.nj(),1);
@@ -133,42 +125,24 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
             //boxm_utils::project_cube_fill_val_aa( vis_face_ids,temp_expected,temp_weights,(float)cell_expected, xverts,yverts);
          }
         }
-        // compute the length of ray segment at each pixel
-        //vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);
-
-        //len_seg.fill(0.0f);
-        //vcl_stringstream s,s1;
-
-        //vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
-        //vil_math_sum_sqr<float,float>(back_xyz,len_seg);
-        //vil_math_sqrt<float>(len_seg);
-        //vil_math_image_product(len_seg,alphas, alphas);
-        //vil_transform2(temp_weights,temp_expected,norm_fn);
 		abs_functor abs_fun;
 		vil_transform(alpha_img_,alpha_img_,abs_fun);
 
         // compute visibility
         vil_math_image_difference(alpha_integral, alpha_img_, alpha_integral);
-    	vil_save(alpha_img_,"d:/vj/scripts/boxm/exp1/temp_alpha_img.tiff");
-  //  	vil_save(temp_expected,"d:/vj/scripts/boxm/exp1/pre_temp_expected.tiff");
-
-		vil_save(alpha_integral,"d:/vj/scripts/boxm/exp1/temp_alpha_integral.tiff");
         // compute new vis image
         image_exp_functor exp_fun;
         vil_transform(alpha_integral,vis_end,exp_fun);
         // compute weights for each pixel
         vil_math_image_difference(vis,vis_end,pix_weights_);
-		//vil_save(pix_weights_,"d:/vj/scripts/boxm/exp1/temp_pix_weights.tiff");
 
         // scale cell expected image by weighting function..
         vil_math_image_product( temp_expected,pix_weights_, temp_expected);
         // ..and use result to update final expected image
         vil_math_image_sum(temp_expected,expected,expected);
 
-		//vil_save(temp_expected,"d:/vj/scripts/boxm/exp1/temp.tiff");
         vis.deep_copy(vis_end);
       }
-      //scene.write_active_block();
     }
   }
   vcl_cout<<"\nThe time taken is"<< t.all()<<vcl_endl;

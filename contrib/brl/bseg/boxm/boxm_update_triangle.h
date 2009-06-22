@@ -96,7 +96,6 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
         PI_img.fill(0.0f);
-		//vcl_cout<<vis_cells.size()<<' ';
 		for (;cell_it!=vis_cells.end();cell_it++)
 		{
 			// for each cell
@@ -167,10 +166,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       PI_background(i,j) = T_data::apm_processor::prob_density(background_model, img(i,j));
     }
   }
-  //vcl_stringstream s;
-  //s<<"d:/vj/scripts/boxm/exp1/bg.tiff";
-  //vil_save(PI_background,s.str().c_str());
-
+ 
   vil_math_image_product(PI_background, vis, norm_img);
   vil_math_image_sum(pre,norm_img,norm_img);
   safe_inverse_functor inv_func(1e-8f);
@@ -206,7 +202,6 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 	  vgl_plane_3d<double> top(0,0,1,-bbox.max_z());
 	  vgl_plane_3d<double> bottom(0,0,1,-bbox.min_z());
 	  projection_plane=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
-	  vcl_cout<<"The plane is "<<projection_plane;
   }
   vul_timer t;  t.mark();
   // code to iterate over the blocks in order of visibility
@@ -364,7 +359,6 @@ void boxm_update_triangle(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
   boxm_update_pass1<T_loc,T_data>(scene, cam,img,norm_img,background_apm,bin);
   vcl_cout << "update: pass1 completed" << vcl_endl;
-  vil_save(norm_img,"d:/vj/scripts/boxm/exp1/norm.tiff");
   boxm_update_pass2<T_loc,T_data>(scene, cam,img,norm_img,bin);
   vcl_cout << "update: pass2 completed" << vcl_endl;
 
