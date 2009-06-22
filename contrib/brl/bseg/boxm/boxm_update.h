@@ -11,7 +11,9 @@
 #include <boxm/boxm_render_image.h>
 #include <vil/vil_math.h>
 #include <vul/vul_timer.h>
+#if 0 // currently unused
 #include <vgl/vgl_plane_3d.h>
+#endif // 0
 #include <vcl_iostream.h>
 
 //: functor used for normalizing cell_expected image
@@ -45,13 +47,16 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> alpha_integral(ni,nj,1); alpha_integral.fill(0.0f);
   vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
 
-  vgl_plane_3d<double> projection_plane;
+#if 0 // TODO: boxm_find_parallel_image_plane() does not exist!!
+      //       moreover, vgl_plane_3d<double> has no constructor with 3 double params....???!!!
+      //       and finally, projection_plane is unused ..!!
   if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
     vgl_box_3d<double> bbox=scene.get_world_bbox();
     vgl_plane_3d<double> top(bbox.min_x(),bbox.min_y(),bbox.max_z());
     vgl_plane_3d<double> bottom(bbox.min_x(),bbox.min_y(),bbox.min_z());
-    projection_plane=boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
+    vgl_plane_3d<double> projection_plane=boxm_find_parallel_image_plane(rcam, top, bottom,img.ni(),img.nj());
   }
+#endif // 0
   // code to iterate over the blocks in order of visibility
   boxm_block_vis_graph_iterator<boct_tree<T_loc, T_data > > block_vis_iter(cam, &scene, ni,nj);
   while (block_vis_iter.next()) {
@@ -82,81 +87,81 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         temp_expected.fill(0.0f);
         PI_img.fill(0.0f);
         vcl_cout<<cnt<<' ';
-    for (;cell_it!=vis_cells.end();cell_it++)
-    {
-      // for each cell
-      T_data sample=(*cell_it)->data();
-      // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
-      vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-      vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-      if (vpgl_perspective_camera<double> const* pcam = dynamic_cast<vpgl_perspective_camera<double> const*>(cam.as_pointer()))
-      {
-          boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
-      }
-      else if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
-          project_corners_rational_camera(corners,cam,xverts,yverts,vertdists);
-      }
+        for (;cell_it!=vis_cells.end();cell_it++)
+        {
+          // for each cell
+          T_data sample=(*cell_it)->data();
+          // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
+          vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
+          vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+          if (vpgl_perspective_camera<double> const* pcam = dynamic_cast<vpgl_perspective_camera<double> const*>(cam.as_pointer()))
+          {
+              boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+          }
+          else if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
+              project_corners_rational_camera(corners,cam,xverts,yverts,vertdists);
+          }
 
-      boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-      boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
-      // get  alpha
-      boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
-    }
-    // compute the length of ray segment at each pixel
-    vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
-    vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
-    //vil_math_sum_sqr<float,float>(back_xyz,len_seg);
-    //vil_math_sqrt<float>(len_seg);
-
-    for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
-    {
-      T_data sample=(*cell_it)->data();
-      // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
-      vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-      vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-      boxm_utils::project_corners(corners,cam,xverts,yverts);
-      boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
-
-      typename T_data::obs_datatype cell_mean_obs;
-      if (boxm_utils::cube_weighted_mean(vis_face_ids, img, len_seg,cell_mean_obs,xverts,yverts)) {
-        // get probability density of mean observation
-        float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
-        if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
-          vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
-                   << "  cell_obs = " << cell_mean_obs << vcl_endl
-                   << "  cell id = " << *cell_it << vcl_endl;
+          boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
+          boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
+          // get  alpha
+          boxm_utils::project_cube_fill_val( vis_face_ids,alphas,sample.alpha, xverts,yverts);
         }
-        // fill obs probability density image
-        boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,cell_PI, xverts,yverts);
-      }
-    }
-    vil_math_image_product(len_seg,alphas, alphas);
-    // compute visibility
-    vil_math_image_difference(alpha_integral, alphas, alpha_integral);
-    // compute new vis image
-    image_exp_functor exp_fun;
-    vil_transform(alpha_integral,vis_end,exp_fun);
-    // compute weights for each pixel
-    vil_math_image_difference(vis,vis_end,vis);
-    // scale cell expected image by weighting function..
-    vil_math_image_product( PI_img,vis, PI_img);
-    // ..and use result to update final expected image
-    vil_math_image_sum(PI_img,pre,pre);
+        // compute the length of ray segment at each pixel
+        vil_image_view<float> len_seg(ni,nj,1);len_seg.fill(0.0f);
+        vil_math_image_difference<float,float>(back_xyz,front_xyz,len_seg);
+        //vil_math_sum_sqr<float,float>(back_xyz,len_seg);
+        //vil_math_sqrt<float>(len_seg);
 
-    vis.deep_copy(vis_end);
+        for (cell_it=vis_cells.begin();cell_it!=vis_cells.end();cell_it++)
+        {
+          T_data sample=(*cell_it)->data();
+          // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
+          vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
+          vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+          boxm_utils::project_corners(corners,cam,xverts,yverts);
+          boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
+
+          typename T_data::obs_datatype cell_mean_obs;
+          if (boxm_utils::cube_weighted_mean(vis_face_ids, img, len_seg,cell_mean_obs,xverts,yverts)) {
+            // get probability density of mean observation
+            float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
+            if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
+              vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
+                       << "  cell_obs = " << cell_mean_obs << vcl_endl
+                       << "  cell id = " << *cell_it << vcl_endl;
+            }
+            // fill obs probability density image
+            boxm_utils::project_cube_fill_val(vis_face_ids,PI_img,cell_PI, xverts,yverts);
+          }
+        }
+        vil_math_image_product(len_seg,alphas, alphas);
+        // compute visibility
+        vil_math_image_difference(alpha_integral, alphas, alpha_integral);
+        // compute new vis image
+        image_exp_functor exp_fun;
+        vil_transform(alpha_integral,vis_end,exp_fun);
+        // compute weights for each pixel
+        vil_math_image_difference(vis,vis_end,vis);
+        // scale cell expected image by weighting function..
+        vil_math_image_product( PI_img,vis, PI_img);
+        // ..and use result to update final expected image
+        vil_math_image_sum(PI_img,pre,pre);
+
+        vis.deep_copy(vis_end);
 #if 0
-    if (cnt == 70) {
-      vcl_cout << "saving debug images" << vcl_endl;
-      vcl_string output_dir = "d:/vj/scripts/boxm/exp1/";
-      vil_save(len_seg,(output_dir + "len_seg.tiff").c_str());
-      vil_save(alphas,(output_dir + "alphas.tiff").c_str());
-      vil_save(alpha_integral,(output_dir + "alpha_integral.tiff").c_str());
-      vil_save(pre,(output_dir + "pre_img.tiff").c_str());
-      vil_save(PI_img,(output_dir + "PI_img.tiff").c_str());
-      vil_save(vis,(output_dir + "vis.tiff").c_str());
-      vil_save(vis_end,(output_dir + "vis_end.tiff").c_str());
-      vil_save(img,(output_dir + "obs.tiff").c_str());
-    }
+        if (cnt == 70) {
+          vcl_cout << "saving debug images" << vcl_endl;
+          vcl_string output_dir = "d:/vj/scripts/boxm/exp1/";
+          vil_save(len_seg,(output_dir + "len_seg.tiff").c_str());
+          vil_save(alphas,(output_dir + "alphas.tiff").c_str());
+          vil_save(alpha_integral,(output_dir + "alpha_integral.tiff").c_str());
+          vil_save(pre,(output_dir + "pre_img.tiff").c_str());
+          vil_save(PI_img,(output_dir + "PI_img.tiff").c_str());
+          vil_save(vis,(output_dir + "vis.tiff").c_str());
+          vil_save(vis_end,(output_dir + "vis_end.tiff").c_str());
+          vil_save(img,(output_dir + "obs.tiff").c_str());
+        }
 #endif
       }
 
@@ -376,4 +381,4 @@ void boxm_update(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   return;
 }
 
-#endif
+#endif // boxm_update_h_
