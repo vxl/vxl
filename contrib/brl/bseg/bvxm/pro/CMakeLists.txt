@@ -25,6 +25,7 @@ SET(bvxm_pro_sources
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
 AUX_SOURCE_DIRECTORY(processes bvxm_pro_sources)
+
 SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_normalization_util.h
    )
