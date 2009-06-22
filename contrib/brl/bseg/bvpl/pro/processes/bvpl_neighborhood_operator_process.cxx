@@ -94,11 +94,11 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       oper.operate(&grid, kernel, &grid_out);
     }
   } else if (ocp_type == "opinion") {
-    /*bvxm_voxel_grid<bvxm_opinion> grid(grid_path);
+    bvxm_voxel_grid<bvxm_opinion> grid(grid_path);
     bvxm_voxel_grid<bvxm_opinion> grid_out(out_grid_path, grid.grid_size());
     bvpl_opinion_functor func;
     bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
-    oper.operate(&grid, kernel, &grid_out);*/
+    oper.operate(&grid, kernel, &grid_out);
   }
 
   return true;
