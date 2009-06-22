@@ -246,6 +246,24 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk+bool-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bool-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bvxm_opinion-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bvxm_opinion-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+bvxm_opinion-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bvxm_opinion-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bvxm_opinion-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bvxm_opinion-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -296,9 +314,6 @@ SOURCE=.\bvxm_voxel_slab_iterator.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_voxel_slab.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_voxel_grid_basic_ops.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_voxel_grid_basic_ops.h

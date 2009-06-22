@@ -108,6 +108,15 @@ SOURCE=.\boxm_quad_scan_iterator.cxx
 SOURCE=.\boxm_scene_base.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_raytrace_operations.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_rational_camera_utils.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_triangle_scan_iterator.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
@@ -184,6 +193,9 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample_multi_bin+BOXM
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_sample_multi_bin+BOXM_APM_MOG_GREY---~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_traingle_interpolation_iterator+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -265,6 +277,27 @@ SOURCE=.\boxm_sample_multi_bin.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_sample_multi_bin.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_triangle_interpolation_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_update_triangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_triangle_interpolation_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_image_triangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_triangle_scan_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_rational_camera_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_raytrace_operations.h
 # End Source File
 # End Group
 # End Target

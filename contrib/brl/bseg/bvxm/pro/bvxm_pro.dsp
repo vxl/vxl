@@ -204,7 +204,10 @@ SOURCE=.\processes/bvxm_synth_world_generator.cxx
 SOURCE=.\processes/bvxm_locate_region_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_save_grid_raw_process.cxx
+SOURCE=.\processes/bvxm_mog_l2_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_merge_mog_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx

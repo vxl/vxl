@@ -248,6 +248,9 @@ SOURCE=.\test_compute_visibility.cxx
 SOURCE=.\test_update_multi_bin.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_boxm_rational_camera_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

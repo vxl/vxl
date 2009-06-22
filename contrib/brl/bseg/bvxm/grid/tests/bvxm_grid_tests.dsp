@@ -184,10 +184,13 @@ SOURCE=.\test_voxel_storage_disk_cached.cxx
 SOURCE=.\test_voxel_grid.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_voxel_storage_mem.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_voxel_storage_mem.cxx
+SOURCE=.\test_basic_ops.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

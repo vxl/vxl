@@ -166,6 +166,9 @@ SOURCE=.\bvxm_mog_mc_processor.h
 # Begin Source File
 SOURCE=.\bvxm_float_processor.h
 # End Source File
+# Begin Source File
+SOURCE=.\bvxm_opinion.h
+# End Source File
 # End Group
 # End Target
 # End Project
