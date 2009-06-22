@@ -6,6 +6,11 @@
 // \brief Methods for interpolating between cameras
 // \author J. L. Mundy
 // \date Dec 29, 2007
+//
+// \verbatim
+//  Modifications
+//   Jun 22, 2009  I. Eden Added the method: interpolate_next 
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vnl/vnl_double_3.h>
@@ -106,6 +111,12 @@ class vpgl_interpolate
   //:Linearly interpolate (or extrapolate if abs(alpha) > 1) a rotation 
   // Using the Lie algebra about R0, the interpolated rotation = R0 + alpha*(R1 - R0)
   static vnl_double_3x3 interpolateR(double alpha, vnl_double_3x3 R0, vnl_double_3x3 R1);
+
+  //:Interpolate the next perpspective camera with the same K given
+  static bool interpolate_next(vpgl_perspective_camera<double> const& prev,
+                               vpgl_perspective_camera<double> const& curr,
+                               double const& rel_step_size,
+                               vpgl_perspective_camera<double>& next);
 
  private:
   //: constructor private - static methods only

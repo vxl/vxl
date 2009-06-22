@@ -210,3 +210,49 @@ interpolate(vpgl_perspective_camera<double> const& cam0,
   }
   return true;
 }
+
+bool vpgl_interpolate::
+interpolate_next(vpgl_perspective_camera<double> const& cam_prev,
+                 vpgl_perspective_camera<double> const& cam_curr,
+                 double const& rel_step_size,
+                 vpgl_perspective_camera<double>& cam_next)
+{
+  vpgl_calibration_matrix<double> K_prev = cam_prev.get_calibration();
+  vpgl_calibration_matrix<double> K_curr = cam_curr.get_calibration();
+  if (K_prev != K_curr)
+    return false;
+    
+  vgl_point_3d<double> c_prev = cam_prev.get_camera_center();
+  vgl_point_3d<double> c_curr = cam_curr.get_camera_center();
+
+  vnl_double_3 t_prev(c_prev.x(), c_prev.y(), c_prev.z());
+  vnl_double_3 t_curr(c_curr.x(), c_curr.y(), c_curr.z());
+
+  vnl_double_3x3 R_prev = cam_prev.get_rotation().as_matrix();
+  vnl_double_3x3 R_curr = cam_curr.get_rotation().as_matrix();
+
+  // change in rotation
+  vnl_double_3x3 dR = R_prev.transpose()*R_curr;
+  // change in translation
+  vnl_double_3 dt = t_curr - t_prev;
+
+  vnl_double_3x3 log_dR = vpgl_interpolate::logR(dR);
+  vnl_double_3x3 dR_step = vpgl_interpolate::expr(log_dR*rel_step_size);
+  
+  vnl_double_3x3 R_next = R_curr*dR_step;
+  
+  vnl_double_3x3 a = vpgl_interpolate::A(log_dR*rel_step_size);
+  vnl_double_3x3 ainv = vpgl_interpolate::Ainv(log_dR*rel_step_size);
+  vnl_double_3 sadt = ainv*(rel_step_size*dt);
+  vnl_double_3 dlt = a*sadt;
+  vnl_double_3 t_next = t_curr + dlt;
+  
+  vgl_rotation_3d<double> rot_next(R_next);
+  vgl_point_3d<double> p_next(t_next[0],t_next[1],t_next[2]);
+  
+  cam_next.set_calibration(K_curr);
+  cam_next.set_camera_center(p_next);
+  cam_next.set_rotation(rot_next);
+
+  return true;
+}
