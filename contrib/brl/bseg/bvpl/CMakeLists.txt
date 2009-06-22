@@ -8,6 +8,7 @@ SET(bvpl_sources
     bvpl_subgrid_iterator.txx        bvpl_subgrid_iterator.h
     bvpl_kernel_iterator.h
     bvpl_edge2d_functor.txx          bvpl_edge2d_functor.h
+    bvpl_opinion_functor.cxx         bvpl_opinion_functor.h
     bvpl_kernel_factory.h            bvpl_kernel_factory.cxx
     bvpl_edge2d_kernel_factory.h     bvpl_edge2d_kernel_factory.cxx
     bvpl_neighb_operator.h           
@@ -18,6 +19,8 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_sources)
 ADD_LIBRARY(bvpl ${bvpl_sources})
 
 TARGET_LINK_LIBRARIES(bvpl bvxm_grid vgl)
+
+SUBDIRS( pro )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

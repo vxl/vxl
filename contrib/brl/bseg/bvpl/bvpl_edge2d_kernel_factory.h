@@ -33,6 +33,8 @@ class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
   // + + 0 - -
   bvpl_edge2d_kernel_factory(unsigned height, unsigned width);
     
+  ~bvpl_edge2d_kernel_factory() {}
+
   //Height of edge
   unsigned height() {return height_;}
 
