@@ -9,6 +9,7 @@
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_render_image.h>
+#include <boxm/boxm_rational_camera_utils.h>
 #include <vil/vil_math.h>
 #include <vul/vul_timer.h>
 #if 0 // currently unused
@@ -98,7 +99,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
               boxm_utils::project_corners(corners,pcam,xverts,yverts,vertdists);
           }
           else if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
-              project_corners(corners,rcam,xverts,yverts,vertdists);
+	    boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,xverts,yverts,vertdists);
           }
 
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
