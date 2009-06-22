@@ -25,6 +25,12 @@ MANPAGE_SOURCES += boxm_refine.h
 MANPAGE_SOURCES += boxm_compute_volume_visibility.h
 SOURCES += boxm_quad_scan_iterator.cxx
 MANPAGE_SOURCES += boxm_sample_multi_bin.txx
+SOURCES += boxm_raytrace_operations.cxx
+SOURCES += boxm_rational_camera_utils.cxx
+SOURCES += boxm_triangle_scan_iterator.cxx
+MANPAGE_SOURCES += boxm_triangle_interpolation_iterator.txx
+MANPAGE_SOURCES += boxm_update_triangle.h
+MANPAGE_SOURCES += boxm_render_image_triangle.h
 
 SUBDIRS += io pro
 

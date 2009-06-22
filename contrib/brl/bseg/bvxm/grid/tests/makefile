@@ -7,6 +7,7 @@ TESTS += test_voxel_storage_disk.cxx
 TESTS += test_voxel_storage_disk_cached.cxx
 TESTS += test_voxel_grid.cxx
 TESTS += test_voxel_storage_mem.cxx
+TESTS += test_basic_ops.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

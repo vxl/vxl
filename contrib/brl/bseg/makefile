@@ -57,6 +57,7 @@ SUBDIRS += boxm_batch
 
 # voxel processing library
 SUBDIRS += bvpl
+SUBDIRS += bvpl_batch
 
 ################################
 include ${VXLROOT}/config/top.mk

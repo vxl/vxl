@@ -10,6 +10,9 @@ MANPAGE_SOURCES += bvpl_edge2d_functor.txx
 MANPAGE_SOURCES += bvpl_neighb_operator.h
 SOURCES += bvpl_kernel_factory.cxx
 SOURCES += bvpl_edge2d_kernel_factory.cxx
+SOURCES += bvpl_opinion_functor.cxx
+
+SUBDIRS += pro
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
