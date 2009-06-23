@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   {
     if (re.find(s))
     {
-      vcl_cout << "MATCHED" << vcl_endl;
+      vcl_cout << "MATCHED chars " << re.start(0) << " to " << re.end(0) << " (0-start to end+1)"<< vcl_endl;
     }
     else
     {

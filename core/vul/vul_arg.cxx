@@ -442,7 +442,8 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 #endif
 
     // Remove this match from the front of string.
-    str.erase(0, endp + 1);
+    str.erase(0, endp);
+    if (str[0] == ',') str.erase(0, 1);
 
 #if 0
     vcl_cerr << "Range regexp matched [" << token <<  "]: parts ["
@@ -484,7 +485,11 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     }
   }
 
-  return 1; // success
+  if (str.empty())
+    return 1; // success
+
+  vcl_cerr << "vul_arg<vcl_list<int> >: Bad argument fragment  [" << str << "]\n";
+  return 0;
 }
 
 //------------------------------------------------------------------------------
