@@ -22,7 +22,7 @@
 
 
 //: set input and output types
-bool bvxm_merge_mixtures_process_cons(bprb_func_process& pro)
+bool bvxm_merge_mog_process_cons(bprb_func_process& pro)
 {
 
    // Inputs
@@ -47,7 +47,7 @@ bool bvxm_merge_mixtures_process_cons(bprb_func_process& pro)
 
 
 //: Execute the process
-bool bvxm_merge_mixtures_process(bprb_func_process& pro)
+bool bvxm_merge_mog_process(bprb_func_process& pro)
 {
   // check number of inputs
   if (pro.n_inputs() != 2)
