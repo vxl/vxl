@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\bvxm_merge_mog.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_mog_norm+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
