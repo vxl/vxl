@@ -14,18 +14,18 @@
 //  If no mixture is given as a reference, the first mixture in the grid is used
 template <class T>
 bool bvxm_mog_norm<T>::mog_l2_grid(bvxm_voxel_grid_base_sptr apm_base,
-                                bvxm_voxel_grid_base_sptr mask_base,
-                                bvxm_voxel_grid_base_sptr dist_base,
-                                bool reference_given,
-                                mix_gauss_type reference)
+                                   bvxm_voxel_grid_base_sptr mask_base,
+                                   bvxm_voxel_grid_base_sptr dist_base,
+                                   bool reference_given,
+                                   mix_gauss_type reference)
 {
  // cast grids
   bvxm_voxel_grid< mix_gauss_type>* apm_grid = static_cast<bvxm_voxel_grid< mix_gauss_type>* >(apm_base.ptr());
   bvxm_voxel_grid<bool>* mask_grid = static_cast<bvxm_voxel_grid< bool>* >(mask_base.ptr());
   bvxm_voxel_grid<T>* distance_grid = static_cast<bvxm_voxel_grid< T >* >(dist_base.ptr());
   distance_grid->initialize_data(float(0));
-   
-   if(!apm_grid ||!mask_grid || !distance_grid)
+
+   if (!apm_grid ||!mask_grid || !distance_grid)
     return false;
 
   vgl_vector_3d<unsigned> grid_size = apm_grid->grid_size();
@@ -36,11 +36,11 @@ bool bvxm_mog_norm<T>::mog_l2_grid(bvxm_voxel_grid_base_sptr apm_base,
   typename bvxm_voxel_grid<T>::iterator dist_slab_it = distance_grid->begin();
   bvxm_voxel_grid<bool>::iterator mask_slab_it = mask_grid->begin();
 
-  if(reference_given){
+  if (reference_given){
     for (unsigned i=0; i<reference.num_components(); i++)
-    {    
-      vcl_cout<<"Mean " <<reference.distribution(i).mean() << vcl_endl;
-      vcl_cout<<"Var " <<reference.distribution(i).var() << vcl_endl;
+    {
+      vcl_cout << "Mean " <<reference.distribution(i).mean() << vcl_endl
+               << "Var " <<reference.distribution(i).var() << vcl_endl;
     }
   }
 
@@ -54,27 +54,26 @@ bool bvxm_mog_norm<T>::mog_l2_grid(bvxm_voxel_grid_base_sptr apm_base,
     bvxm_voxel_slab<bool>::iterator mask_it = (*mask_slab_it).begin();
     typename bvxm_voxel_slab<T>::iterator dist_it = (*dist_slab_it).begin();
     bvxm_mog_norm<T> measure;
-    
+
     //If the reference is not given then it is the one in the first voxel
-    if(!reference_given){
+    if (!reference_given) {
       reference = *((*apm_slab_it).first_voxel());
-      vcl_cout << "Reference Mixture: \n ";
+      vcl_cout << "Reference Mixture:\n";
       reference_given = true;
       for (unsigned i=0; i<reference.num_components(); i++)
       {
-        vcl_cout<<"Mean " <<reference.distribution(i).mean() << vcl_endl;
-        vcl_cout<<"Var " <<reference.distribution(i).var() << vcl_endl;
+        vcl_cout << "Mean " <<reference.distribution(i).mean() << vcl_endl
+                 << "Var " <<reference.distribution(i).var() << vcl_endl;
       }
     }
-    
+
     for (; apm_it!= (*apm_slab_it).end(); ++apm_it, ++mask_it, ++dist_it)
     {
       T distance = measure.mog_l2(*apm_it, reference);
-      if(*mask_it == true)
+      if (*mask_it == true)
         ( *dist_it) = distance;
     }
-    
-      }
+  }
   return true;
 }
 
@@ -93,22 +92,22 @@ T bvxm_mog_norm<T>::mog_l2 (mix_gauss_type const& g, mix_gauss_type const& f)
   T t4 = 0;
   T t5 = 0;
 
-  //terms 1,2,3 
-  for(unsigned i = 0; i < g.num_components(); i++)
+  //terms 1,2,3
+  for (unsigned i = 0; i < g.num_components(); i++)
   {
     t1 = t1 + vcl_pow(g.weight(i),2 )* k1 * (T(1)/vcl_sqrt(g.distribution(i).var()));
 
-    for(unsigned j = i+1; j < g.num_components(); j++)
+    for (unsigned j = i+1; j < g.num_components(); j++)
     {
       T sum_var = g.distribution(i).var() +  g.distribution(j).var();
       t2 = t2 + g.weight(i)*g.weight(j)
-        * vnl_math::one_over_sqrt2pi 
-        * (T(1)/vcl_sqrt(sum_var)) 
+        * vnl_math::one_over_sqrt2pi
+        * (T(1)/vcl_sqrt(sum_var))
         * vcl_exp(-(T(1)/T(2)) * vcl_pow((g.distribution(i).mean()- g.distribution(j).mean()),2)
         * (T(1)/sum_var));
     }
 
-    for(unsigned j = 0; j < f.num_components(); j++)
+    for (unsigned j = 0; j < f.num_components(); j++)
     {
       T sum_var = g.distribution(i).var() + f.distribution(j).var();
       t3 = t3 + g.weight(i)*f.weight(j)
@@ -117,28 +116,26 @@ T bvxm_mog_norm<T>::mog_l2 (mix_gauss_type const& g, mix_gauss_type const& f)
         * vcl_exp(-(T(1)/T(2))* vcl_pow((g.distribution(i).mean() - f.distribution(j).mean()), 2)
         * (T(1)/sum_var));
     }
-
   }
 
   //terms 4,5
-  for(unsigned i = 0; i < f.num_components(); i++)
+  for (unsigned i = 0; i < f.num_components(); i++)
   {
     t4 = t4 + vcl_pow(f.weight(i),2)*k1*(T(1)/vcl_sqrt(f.distribution(i).var()));
 
-    for(unsigned j = i+1; j < f.num_components(); j++)
+    for (unsigned j = i+1; j < f.num_components(); j++)
     {
       T sum_var = f.distribution(i).var() + f.distribution(j).var();
 
       t5 = t5 + f.weight(i)*f.weight(j)
         * vnl_math::one_over_sqrt2pi
         * (T(1)/vcl_sqrt(sum_var))
-        *  vcl_exp(-(T(1)/T(2))*vcl_pow(f.distribution(i).mean() - f.distribution(j).mean(),2) 
+        *  vcl_exp(-(T(1)/T(2))*vcl_pow(f.distribution(i).mean() - f.distribution(j).mean(),2)
         * (T(1)/sum_var));
     }
   }
 
-  return vcl_sqrt(t1 +2*t2 - 2*t3 + t4 + 2*t5); 
-
+  return vcl_sqrt(t1 +2*t2 - 2*t3 + t4 + 2*t5);
 }
 
 //: Calculate l2-norm between two gaussian pdfs
@@ -156,12 +153,12 @@ T bvxm_mog_norm<T>::l2_gauss2mix(gauss_type const&g, mix_gauss_undef const&f, bo
   T t4 = 0;
   T t5 = 0;
 
-  //terms 1,2,3 
+  //terms 1,2,3
 
 
   t1 = k1 * (1/vcl_sqrt(g.var()));
 
-  for(unsigned j = 0; j < f.num_components(); j++)
+  for (unsigned j = 0; j < f.num_components(); j++)
   {
     T sum_var = g.var() + f.distribution(j).var();
     t3 = t3 + f.weight(j)
@@ -172,29 +169,26 @@ T bvxm_mog_norm<T>::l2_gauss2mix(gauss_type const&g, mix_gauss_undef const&f, bo
   }
 
 
-
   //terms 4,5
-  for(unsigned i = 0; i < f.num_components(); i++)
+  for (unsigned i = 0; i < f.num_components(); i++)
   {
     t4 = t4 + vcl_pow(f.weight(i),2)*k1*(T(1)/vcl_sqrt(f.distribution(i).var()));
 
-    for(unsigned j = i+1; j < f.num_components(); j++)
+    for (unsigned j = i+1; j < f.num_components(); j++)
     {
       T sum_var = f.distribution(i).var() + f.distribution(j).var();
 
       t5 = t5 + f.weight(i)*f.weight(j)
         * vnl_math::one_over_sqrt2pi
         * (T(1)/vcl_sqrt(sum_var))
-        *  vcl_exp(-(T(1)/T(2))*vcl_pow(f.distribution(i).mean() - f.distribution(j).mean(),2) 
+        *  vcl_exp(-(T(1)/T(2))*vcl_pow(f.distribution(i).mean() - f.distribution(j).mean(),2)
         * (T(1)/sum_var));
     }
   }
-  if(normalize)
-    return T(vcl_sqrt(t1 - 2*t3 + t4 + 2*t5))/T(vcl_sqrt(t1 + t4 + 2*t5)); 
+  if (normalize)
+    return T(vcl_sqrt(t1 - 2*t3 + t4 + 2*t5))/T(vcl_sqrt(t1 + t4 + 2*t5));
   else
     return T(vcl_sqrt(t1 - 2*t3 + t4 + 2*t5));
-
-
 }
 
 //: Calculate l2-norm between a mixture and gaussian pdfs
@@ -208,15 +202,14 @@ T bvxm_mog_norm<T>::l2_gauss(gauss_type const&g1, gauss_type const& g2, bool  no
   T t2 = k*(1.0f/vcl_sqrt(g2.var()));
   T t3 = T(vnl_math::one_over_sqrt2pi)
     * (1.0f/vcl_sqrt(g1.var() + g2.var()))
-    *  vcl_exp(-(1.0f/2.0f)*vcl_pow(g1.mean() - g2.mean(),2) 
+    *  vcl_exp(-(1.0f/2.0f)*vcl_pow(g1.mean() - g2.mean(),2)
     * (1.0f/(g1.var() + g2.var())));
 
   if (normalize)
     return vcl_sqrt(t1 + t2 - 2*t3)/vcl_sqrt(t1 + t2);
 
-  else 
+  else
     return vcl_sqrt(t1 + t2 - 2*t3);
-
 }
 
 
@@ -227,8 +220,8 @@ T bvxm_mog_norm<T>::kl_distance(gauss_type const&g1, gauss_type const& g2)
   T t1 = (2.0)*vcl_log(vcl_sqrt(T(g2.var())/T(g1.var())));
   T t2 = T(g1.var())/T(g2.var());
   T t3 = vcl_pow((T(g2.mean()) - T(g1.mean())),2);
-  if(t1+t2+t3 < T(1.0))
-    vcl_cout << "smaller than 0 \n";
+  if (t1+t2+t3 < T(1.0))
+    vcl_cout << "smaller than 0\n";
   return 0.5*(t1+t2+t3 -1.0);
 }
 
@@ -240,6 +233,6 @@ T bvxm_mog_norm<T>::kl_symmetric_distance(gauss_type const&g1, gauss_type const&
 }
 
 #define BVXM_MOG_NORM_INSTANTIATE(T) \
-template class bvxm_mog_norm<T>
+template class bvxm_mog_norm<T >
 
 #endif

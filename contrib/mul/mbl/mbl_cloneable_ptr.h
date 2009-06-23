@@ -235,15 +235,14 @@ template <class BaseClass>
 void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr<BaseClass>& p)
 { p.b_read(bfs); }
 
-#define MBL_CLONEABLE_PTR_INSTANTIATE(T);
-/*
-\
-VCL_DEFINE_SPECIALIZATION class mbl_cloneable_ptr< T >; \
-VCL_DEFINE_SPECIALIZATION void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr< T >& p);\
-VCL_DEFINE_SPECIALIZATION void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr< T >& p);\
-VCL_DEFINE_SPECIALIZATION class mbl_cloneable_nzptr< T >; \
-VCL_DEFINE_SPECIALIZATION void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_nzptr< T >& p);\
-VCL_DEFINE_SPECIALIZATION void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr< T >& p)
-*/
+#define MBL_CLONEABLE_PTR_INSTANTIATE(T) /* nothing */
+#if 0 // was:
+VCL_DEFINE_SPECIALIZATION class mbl_cloneable_ptr<T >; \
+VCL_DEFINE_SPECIALIZATION void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr<T >& p);\
+VCL_DEFINE_SPECIALIZATION void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr<T >& p);\
+VCL_DEFINE_SPECIALIZATION class mbl_cloneable_nzptr<T >; \
+VCL_DEFINE_SPECIALIZATION void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_nzptr<T >& p);\
+VCL_DEFINE_SPECIALIZATION void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr<T >& p)
+#endif // 0
 
 #endif  // mbl_cloneable_ptr_h
