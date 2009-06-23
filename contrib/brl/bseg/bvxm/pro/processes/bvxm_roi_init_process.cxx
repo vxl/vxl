@@ -21,8 +21,8 @@
 //   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
 // \endverbatim
 
-#include "bvxm_voxel_world.h"
-#include "bvxm_world_params.h"
+#include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_util.h>
 
 #include <vgl/vgl_point_2d.h>
