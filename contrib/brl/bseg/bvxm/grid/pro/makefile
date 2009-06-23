@@ -9,6 +9,7 @@ SOURCES += processes/bvxm_save_grid_raw_process.cxx
 SOURCES += processes/bvxm_crop_grid_process.cxx
 SOURCES += processes/bvxm_multiply_grids_process.cxx
 SOURCES += processes/bvxm_threshold_grid_process.cxx
+SOURCES += processes/bvxm_load_grid_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

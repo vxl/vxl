@@ -12,9 +12,8 @@ MANPAGE_SOURCES += bvxm_voxel_grid.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_disk_cached.txx
 MANPAGE_SOURCES += bvxm_voxel_slab_iterator.txx
 MANPAGE_SOURCES += bvxm_voxel_slab.txx
-MANPAGE_SOURCES += bvxm_voxel_grid_basic_ops.txx
 
-SUBDIRS += io
+SUBDIRS += io pro
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
