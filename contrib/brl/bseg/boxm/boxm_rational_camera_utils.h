@@ -10,23 +10,23 @@
 
 class boxm_rational_camera_utils
 {
-public:
-static vgl_plane_3d<double>  boxm_find_parallel_image_plane(vpgl_rational_camera<double> * rcam, 
-													 vgl_plane_3d<double> top,
-													 vgl_plane_3d<double> bottom,
-													 unsigned ni, unsigned nj);
-static void project_corners_rational_camera(vcl_vector<vgl_point_3d<double> > const& corners,
-									 vpgl_rational_camera<double> * rcam,vgl_plane_3d<double> plane,
-                                     double* xverts, double* yverts,
-							         float* vertdist);
+ public:
+  static vgl_plane_3d<double>  boxm_find_parallel_image_plane(vpgl_rational_camera<double> * rcam,
+                                                              vgl_plane_3d<double> top,
+                                                              vgl_plane_3d<double> bottom,
+                                                              unsigned ni, unsigned nj);
+  static void project_corners_rational_camera(vcl_vector<vgl_point_3d<double> > const& corners,
+                                              vpgl_rational_camera<double> * rcam,vgl_plane_3d<double> plane,
+                                              double* xverts, double* yverts,
+                                              float* vertdist);
 };
+
 class abs_functor
 {
  public:
-	 abs_functor(){}
+  abs_functor(){}
 
   float operator()(float x) const { return vcl_fabs(x); }
-
 };
 
 #endif

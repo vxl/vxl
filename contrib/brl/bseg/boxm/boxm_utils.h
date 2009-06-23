@@ -14,7 +14,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
-//#include <vsol/vsol_polygon_3d_sptr.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_quad_scan_iterator.h>
 #include <vil/vil_image_view.h>
@@ -54,9 +53,9 @@ class boxm_utils
   static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,vpgl_camera_double_sptr camera,
                               double * xverts, double *yerts);
   static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
-                            vpgl_camera_double_sptr camera,
-                            double* xverts, double* yverts,
-							float* vertdist);
+                              vpgl_camera_double_sptr camera,
+                              double* xverts, double* yverts,
+                              float* vertdist);
   static void project_cube(vgl_box_3d<double> &bbox,
                            vpgl_camera_double_sptr camera,
                            vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > & faces,
@@ -115,9 +114,9 @@ class boxm_utils
                                 vil_image_view<float> &img,
                                 float & val, double *xverts,double * yverts);
   static bool cube_weighted_mean(boct_face_idx & vis_face_ids,
-                                vil_image_view<float> &img,
-								vil_image_view<float> &weight_img,
-                                float & val, double *xverts,double * yverts);
+                                 vil_image_view<float> &img,
+                                 vil_image_view<float> &weight_img,
+                                 float & val, double *xverts,double * yverts);
 
   static bool cube_sum(boct_face_idx & vis_face_ids,
                        vil_image_view<float> &img,
@@ -126,11 +125,11 @@ class boxm_utils
   static void quad_mean(boxm_quad_scan_iterator &poly_it,
                         vil_image_view<float> &img, float &val,  float & count);
   static void quad_sum(boxm_quad_scan_iterator &poly_it,
-                           vil_image_view<float> &img, float &val);
+                       vil_image_view<float> &img, float &val);
   static void quad_weighted_mean(boxm_quad_scan_iterator &poly_it,
-                                 vil_image_view<float> &img, 
-								 vil_image_view<float> &weighted_img, 
-								 float &numerator,  float & denominator);
+                                 vil_image_view<float> &img,
+                                 vil_image_view<float> &weighted_img,
+                                 float &numerator,  float & denominator);
   static bool cube_entry_point(vgl_box_3d<double> box,vgl_point_3d<double> pt,
                                vgl_vector_3d<double> dir,
                                vgl_point_3d<double> & entry_point,

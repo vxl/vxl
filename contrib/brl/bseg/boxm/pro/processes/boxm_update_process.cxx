@@ -81,7 +81,7 @@ bool boxm_update_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       //boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
-	  boxm_update_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
+      boxm_update_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
     }
     else
     {
