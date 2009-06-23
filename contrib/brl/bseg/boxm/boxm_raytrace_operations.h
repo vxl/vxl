@@ -1,6 +1,7 @@
 #ifndef boxm_raytrace_operations_h_
 #define boxm_raytrace_operations_h_
-
+//:
+// \file
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/algo/vnl_determinant.h>
 
@@ -15,6 +16,10 @@
 
 #include "boxm_triangle_interpolation_iterator.h"
 #include "boxm_triangle_scan_iterator.h"
+#ifdef DEBUG
+#include <vcl_iostream.h>
+#endif
+
 bool cube_fill_value(double* xverts_2d, double* yverts_2d, boct_face_idx visible_faces, vil_image_view<float> &img, float const& val);
 
 bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distances, boct_face_idx visible_faces, float alpha, vil_image_view<float> &alpha_distance);
@@ -22,7 +27,7 @@ template<class T, class tri_int_it_t>
 bool tri_interpolated_weighted_sum(tri_int_it_t &tri_it, vil_image_view<T> const& values, T &val_sum, float &weight_sum, bool subtract)
 {
   tri_it.reset();
-  while(tri_it.next()) {
+  while (tri_it.next()) {
     int y = tri_it.scany();
     if (y < 0){
       // not inside of image bounds yet. go to next scanline.
@@ -62,7 +67,7 @@ template<class T1, class T2, class tri_it_t>
 bool tri_interpolated_weighted_sum(tri_it_t &tri_it, vil_image_view<T1> const& weights, vil_image_view<T2> const& values, T2 &val_sum, T1 &weight_sum, bool subtract=false)
 {
   tri_it.reset();
-  while(tri_it.next()) {
+  while (tri_it.next()) {
     int y = tri_it.scany();
     if (y < 0){
       // not inside of image bounds yet. go to next scanline.
@@ -98,12 +103,11 @@ bool tri_interpolated_weighted_sum(tri_it_t &tri_it, vil_image_view<T1> const& w
 }
 
 
-
 template<class T, class tri_it_t>
 void tri_interpolate_values(tri_it_t &tri_it, vil_image_view<T> &img, bool subtract = false)
 {
   tri_it.reset();
-  while(tri_it.next()) {
+  while (tri_it.next()) {
     int y = tri_it.scany();
     if (y < 0){
       // not inside of image bounds yet. go to next scanline.
@@ -155,7 +159,7 @@ void tri_interpolate_values(tri_it_T &tri_it, double* xvals, double* yvals, T* v
   double s2 = vnl_determinant(Acol0, Acol1, Z) / detA;
 
   tri_it.reset();
-  while(tri_it.next()) {
+  while (tri_it.next()) {
     int y = tri_it.scany();
     if (y < 0){
       // not inside of image bounds yet. go to next scanline.
@@ -184,7 +188,6 @@ void tri_interpolate_values(tri_it_T &tri_it, double* xvals, double* yvals, T* v
     }
   }
   return;
-
 }
 #endif
 
@@ -206,7 +209,7 @@ void tri_interpolate_min_max(tri_it_T &tri_it, double* xvals, double* yvals, T* 
   double s2 = vnl_determinant(Acol0, Acol1, Z) / detA;
 
   tri_it.reset();
-  while(tri_it.next()) {
+  while (tri_it.next()) {
     int y = tri_it.scany();
     if (y < 0){
       // not inside of image bounds yet. go to next scanline.
@@ -241,7 +244,7 @@ template<class T1, class T2>
 void tri_weighted_sum(vgl_triangle_scan_iterator<double> &tri_it, vil_image_view<T1> &img, vil_image_view<T2> &weights, T1 &val_sum, T2 &weight_sum)
 {
   tri_it.reset();
-  while(tri_it.next()) {
+  while (tri_it.next()) {
     int y = tri_it.scany();
     if (y < 0){
       // not inside of image bounds yet. go to next scanline.
@@ -265,14 +268,13 @@ void tri_weighted_sum(vgl_triangle_scan_iterator<double> &tri_it, vil_image_view
     }
   }
   return;
-
 }
 
 template<class T, class tri_it_T>
 void tri_fill_value(tri_it_T &tri_it, vil_image_view<T> &img, T val)
-{    
+{
   tri_it.reset();
-  while(tri_it.next()) {
+  while (tri_it.next()) {
     int y = tri_it.scany();
     if (y < 0){
       // not inside of image bounds yet. go to next scanline.
@@ -297,41 +299,43 @@ void tri_fill_value(tri_it_T &tri_it, vil_image_view<T> &img, T val)
   return;
 }
 
-//template<class T>
-//void tri_fill_value_aa(boxm_triangle_scan_iterator_aa &tri_it, vil_image_view<T> &img, vil_image_view<float> &aa_weights, T val)
-//{    
-//  tri_it.reset();
-//  while(tri_it.next()) {
-//    int y = tri_it.scany();
-//    if (y < 0){
-//      // not inside of image bounds yet. go to next scanline.
-//      continue;
-//    }
-//    unsigned int yu = (unsigned int)y;
-//    if (yu >= img.nj() ) {
-//      // we have left the image bounds. no need to continue.
-//      break;
-//    }
-//    if ( (tri_it.startx() >= (int)img.ni()) || (tri_it.endx() <= 0) ) {
-//      // no part of this scanline is within the image bounds. go to next scanline.
-//      continue;
-//    }
-//    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-//    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),tri_it.endx());
-//
-//    for (unsigned int x = startx; x < endx; ++x) {
-//      float pix_cov = tri_it.pix_coverage(x);
-//      if ((pix_cov < 0.0f) || (pix_cov > 1.0f)) {
-//        vcl_cerr << " error: pix_cov = " << pix_cov << vcl_endl;
-//      }
-//      aa_weights(x,yu) += tri_it.pix_coverage(x);
-//      img(x,yu) += val * pix_cov;
-//    }
-//  }
-//  return;
-//}
-//
-//
+#ifdef DEBUG // this function commented out
+template <class T>
+void tri_fill_value_aa(boxm_triangle_scan_iterator_aa &tri_it, vil_image_view<T> &img, vil_image_view<float> &aa_weights, T val)
+{
+  tri_it.reset();
+  while (tri_it.next())
+  {
+    int y = tri_it.scany();
+    if (y < 0){
+      // not inside of image bounds yet. go to next scanline.
+      continue;
+    }
+    unsigned int yu = (unsigned int)y;
+    if (yu >= img.nj() ) {
+      // we have left the image bounds. no need to continue.
+      break;
+    }
+    if ( (tri_it.startx() >= (int)img.ni()) || (tri_it.endx() <= 0) ) {
+      // no part of this scanline is within the image bounds. go to next scanline.
+      continue;
+    }
+    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),tri_it.endx());
+
+    for (unsigned int x = startx; x < endx; ++x) {
+      float pix_cov = tri_it.pix_coverage(x);
+      if ((pix_cov < 0.0f) || (pix_cov > 1.0f)) {
+        vcl_cerr << " error: pix_cov = " << pix_cov << vcl_endl;
+      }
+      aa_weights(x,yu) += tri_it.pix_coverage(x);
+      img(x,yu) += val * pix_cov;
+    }
+  }
+  return;
+}
+#endif // 0
+
 template<class T>
 bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_face_idx visible_faces, vil_image_view<T> const& values, T &mean)
 {
@@ -341,45 +345,43 @@ bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_fac
   // X_LOW
   // tri 0
   boxm_triangle_interpolation_iterator<float> tri_it(xverts_2d, yverts_2d, vert_dists, 0, 3, 4);
-  if (visible_faces & X_LOW) 
+  if (visible_faces & X_LOW)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
 
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 3, 4, 7);
-  if (visible_faces & X_LOW) 
+  if (visible_faces & X_LOW)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
 
-
   // X_HIGH
   // tri 0
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 1, 2, 5);
-  if (visible_faces & X_HIGH) 
+  if (visible_faces & X_HIGH)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
 
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 2, 5, 6);
-  if (visible_faces & X_HIGH) 
+  if (visible_faces & X_HIGH)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
 
-
   // Y_LOW
   // tri 0
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 0, 1, 5);
-  if (visible_faces & Y_LOW) 
+  if (visible_faces & Y_LOW)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 4, 0, 5);
-  if (visible_faces & Y_LOW) 
+  if (visible_faces & Y_LOW)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
@@ -387,13 +389,13 @@ bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_fac
   // Y_HIGH
   // tri 0
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 7, 3, 2);
-  if (visible_faces & Y_HIGH) 
+  if (visible_faces & Y_HIGH)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 2, 6, 7);
-  if (visible_faces & Y_HIGH) 
+  if (visible_faces & Y_HIGH)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
@@ -401,13 +403,13 @@ bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_fac
   // Z_LOW
   // tri 0
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 0, 2, 1);
-  if (visible_faces & Z_LOW) 
+  if (visible_faces & Z_LOW)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 0, 2, 3);
-  if (visible_faces & Z_LOW) 
+  if (visible_faces & Z_LOW)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
@@ -415,13 +417,13 @@ bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_fac
   // Z_HIGH
   // tri 0
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 4, 5, 6);
-  if (visible_faces & Z_HIGH) 
+  if (visible_faces & Z_HIGH)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_dists, 4, 7, 6);
-  if (visible_faces & Z_HIGH) 
+  if (visible_faces & Z_HIGH)
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, true);
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
@@ -434,7 +436,6 @@ bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_fac
     return false;
   }
   return true;
-
 }
 
 inline void init_triangle_scan_iterator(vgl_triangle_scan_iterator<double> &tri_it, const double* xverts, const double* yverts, unsigned int v0=0, unsigned int v1=1, unsigned int v2=2)
