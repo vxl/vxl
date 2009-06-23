@@ -20,6 +20,13 @@ static void project_corners_rational_camera(vcl_vector<vgl_point_3d<double> > co
                                      double* xverts, double* yverts,
 							         float* vertdist);
 };
+class abs_functor
+{
+ public:
+	 abs_functor(){}
 
+  float operator()(float x) const { return vcl_fabs(x); }
+
+};
 
 #endif

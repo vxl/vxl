@@ -1,5 +1,5 @@
-#ifndef boxm_update_h_
-#define boxm_update_h_
+#ifndef boxm_update_triangle_h_
+#define boxm_update_triangle_h_
 //:
 // \file
 #include <boct/boct_tree.h>
@@ -26,14 +26,7 @@ class safe_inverse_functor
 
   float tol_;
 };
-class abs_functor
-{
- public:
-	 abs_functor(){}
 
-  float operator()(float x) const { return vcl_fabs(x); }
-
-};
 template <class T_loc, class T_data>
 void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vpgl_camera_double_sptr cam,

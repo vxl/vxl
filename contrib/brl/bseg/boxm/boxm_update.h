@@ -176,9 +176,6 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       PI_background(i,j) = T_data::apm_processor::prob_density(background_model, img(i,j));
     }
   }
-  //vcl_stringstream s;
-  //s<<"d:/vj/scripts/boxm/exp1/bg.tiff";
-  //vil_save(PI_background,s.str().c_str());
 
   vil_math_image_product(PI_background, vis, norm_img);
   vil_math_image_sum(pre,norm_img,norm_img);

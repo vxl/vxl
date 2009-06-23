@@ -25,14 +25,7 @@
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_raytrace_operations.h>
 #include <boxm/boxm_rational_camera_utils.h>
-class abs_functor
-{
- public:
-	 abs_functor(){}
 
-  float operator()(float x) const { return vcl_fabs(x); }
-
-};
 
 template <class T_loc, class T_data>
 void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > &scene,

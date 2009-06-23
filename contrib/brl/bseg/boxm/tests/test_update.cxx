@@ -8,8 +8,8 @@
 #include <boxm/boxm_utils.h>
 #include <boct/boct_tree_cell.h>
 #include <vpl/vpl.h>
-#include <boxm/boxm_update.h>
-#include <boxm/boxm_render_image.h>
+#include <boxm/boxm_update_triangle.h>
+#include <boxm/boxm_render_image_triangle.h>
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -211,7 +211,7 @@ MAIN( test_update )
     expected.fill(0.0);
     mask.fill(0.0);
 
-    boxm_render_image_splatting<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask);
+    boxm_render_image_splatting_triangle<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask);
     vcl_stringstream ss;
     ss << "./boxm_scene2/img" << i << ".tif";
 #if 0
@@ -239,7 +239,7 @@ MAIN( test_update )
     vcl_stringstream ss;
     ss << "./boxm_scene2/img" << i << ".tif";
     expected = vil_load(ss.str().data());
-    boxm_update<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i] );
+    boxm_update_triangle<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i] );
   }
 
   // regenerate the images from world

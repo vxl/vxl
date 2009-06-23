@@ -22,7 +22,7 @@ SET(boxm_sources
     boxm_neighb_graph_node.h
     boxm_utils.cxx                    boxm_utils.h
     boxm_render_image.h				  boxm_render_image_triangle.h
-    boxm_update.h					  boxm_update_triangle.h
+    boxm_update_triangle.h
     boxm_refine.h
     boxm_save_block_raw.h
     boxm_quad_scan_iterator.h         boxm_quad_scan_iterator.cxx

@@ -8,8 +8,8 @@
 #include <boxm/boxm_utils.h>
 #include <boct/boct_tree_cell.h>
 #include <vpl/vpl.h>
-#include <boxm/boxm_update.h>
-#include <boxm/boxm_render_image.h>
+#include <boxm/boxm_update_triangle.h>
+#include <boxm/boxm_render_image_triangle.h>
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -217,7 +217,7 @@ MAIN( test_update_multi_bin )
     vil_save(expected, ss.str().data());
 
     expected.fill(0.0);
-    boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask,5);
+    boxm_render_image_splatting_triangle<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask,5);
     vcl_stringstream ss1;
     ss1 << "./boxm_scene2_mb/img5" << i << ".tif";
     vil_save(expected, ss1.str().data());
@@ -240,11 +240,11 @@ MAIN( test_update_multi_bin )
     vcl_stringstream ss;
     ss << "./boxm_scene2_mb/img3" << i << ".tif";
     expected = vil_load(ss.str().data());
-    boxm_update<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i],3 );
+    boxm_update_triangle<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i],3 );
     vcl_stringstream ss1;
     ss1 << "./boxm_scene2_mb/img5" << i << ".tif";
     expected = vil_load(ss1.str().data());
-    boxm_update<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i],5 );
+    boxm_update_triangle<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i],5 );
   }
 
   // regenerate the images from world
@@ -252,7 +252,7 @@ MAIN( test_update_multi_bin )
     vcl_stringstream ss;
     ss << "./boxm_scene2_mb/img_new" << i << ".tif";
     vil_image_view<float> expected_new(IMAGE_U,IMAGE_V);
-    boxm_render_image_splatting<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new,cameras[i],expected_new,mask,3);
+    boxm_render_image_splatting_triangle<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(scene_new,cameras[i],expected_new,mask,3);
     vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());
     vil_convert_stretch_range_limited(expected_new,expected_byte, 0.0f, 1.0f);
 
