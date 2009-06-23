@@ -4,9 +4,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include "../bvxm_voxel_world.h"
-#include "../bvxm_world_params.h"
-#include "../bvxm_mog_grey_processor.h"
+#include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_world_params.h>
+#include <bvxm/bvxm_mog_grey_processor.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_convert.h>

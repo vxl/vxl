@@ -1,10 +1,10 @@
 #include <testlib/testlib_test.h>
-#include "grid/bvxm_voxel_slab_base.h"
-#include "grid/bvxm_voxel_slab.h"
-#include "bvxm_mog_grey_processor.h"
-#include "bvxm_mog_rgb_processor.h"
-#include "bvxm_mog_mc_processor.h"
-#include "grid/bvxm_memory_chunk.h"
+#include <bvxm/grid/bvxm_voxel_slab_base.h>
+#include <bvxm/grid/bvxm_voxel_slab.h>
+#include <bvxm/bvxm_mog_grey_processor.h>
+#include <bvxm/bvxm_mog_rgb_processor.h>
+#include <bvxm/bvxm_mog_mc_processor.h>
+#include <bvxm/grid/bvxm_memory_chunk.h>
 
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture.h>
@@ -23,18 +23,18 @@ void test_mog_grey_processor()
   bvxm_mog_grey_processor processor;
   bool result = true;
 
-  vcl_cout << "Initializing slabs " << vcl_endl; 
+  vcl_cout << "Initializing slabs " << vcl_endl;
   bvxm_voxel_slab<float> obs(10,10,1);
   obs.fill(0.3f);
-  
+
   bvxm_voxel_slab<float> weight(10,10,1);
   weight.fill(0.01f);
-  
+
   bvxm_voxel_slab<mix_gauss_type> appear(10,10,1);
   appear.fill(mix_gauss_type());
 
-  // test the  update, expected_color and most_probable_mode_color methods   
-  vcl_cout << "Updating model " << vcl_endl; 
+  // test the  update, expected_color and most_probable_mode_color methods
+  vcl_cout << "Updating model " << vcl_endl;
   result= result & processor.update(appear, obs, weight);
   obs.fill(0.8f);
   result = result & processor.update(appear, obs, weight);
@@ -42,7 +42,7 @@ void test_mog_grey_processor()
   result = result & processor.update(appear, obs, weight);
   TEST("processor.update()", result, true);
 
-  vcl_cout << "Tetsting statistic methods" << vcl_endl; 
+  vcl_cout << "Tetsting statistic methods" << vcl_endl;
 
   bvxm_voxel_slab<float> mp_slab = processor.most_probable_mode_color(appear);
   TEST_NEAR("most probable", *(mp_slab.first_voxel()), 0.8f, 0.01f);
@@ -58,10 +58,10 @@ void test_mog_rgb_processor()
   bvxm_mog_rgb_processor processor;
   bool result = true;
 
-  vcl_cout << "Initializing slabs " << vcl_endl; 
+  vcl_cout << "Initializing slabs " << vcl_endl;
   bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> obs(10,10,1);
   obs.fill(bvxm_mog_rgb_processor::obs_datatype(0.3f));
-  
+
   bvxm_voxel_slab<float> weight(10,10,1);
   weight.fill(0.01f);
 
@@ -69,7 +69,7 @@ void test_mog_rgb_processor()
   appear.fill(mix_gauss_type());
 
   // test the  update, expected_color and most_probable_mode_color methods
-  vcl_cout << "Updating model " << vcl_endl; 
+  vcl_cout << "Updating model " << vcl_endl;
   result = result & processor.update(appear, obs, weight);
   obs.fill(bvxm_mog_rgb_processor::obs_datatype(0.8f));
   result = result & processor.update(appear, obs, weight);
@@ -77,18 +77,18 @@ void test_mog_rgb_processor()
   result = result & processor.update(appear, obs, weight);
   TEST("processor.update()", result, true);
 
-  vcl_cout << "Tetsting statistic methods" << vcl_endl; 
+  vcl_cout << "Tetsting statistic methods" << vcl_endl;
 
   bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> mp_slab  = processor.most_probable_mode_color(appear);
-  for(unsigned i=0; i<3; ++i)
+  for (unsigned i=0; i<3; ++i)
   {
     TEST_NEAR("most probable", (*mp_slab.first_voxel())[i], 0.8f,0.01f);
   }
-  
+
   bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> mean_slab = processor.expected_color(appear);
-  for(unsigned i=0; i<3; ++i)
+  for (unsigned i=0; i<3; ++i)
   {
-  TEST_NEAR("expected", (*mean_slab.first_voxel())[i],0.63f,0.01f);
+    TEST_NEAR("expected", (*mean_slab.first_voxel())[i],0.63f,0.01f);
   }
 }
 
@@ -101,38 +101,38 @@ void test_mog_mc_processor()
   bvxm_mog_mc_processor<dim,modes> processor;
   bool result = true;
 
-  vcl_cout << "Initializing slabs " << vcl_endl; 
+  vcl_cout << "Initializing slabs " << vcl_endl;
   bvxm_voxel_slab<data_type_> obs1(10,10,1);
   obs1.fill(data_type_(0.3f));
-  
+
   bvxm_voxel_slab<float> weight(10,10,1);
   weight.fill(0.01f);
 
   bvxm_voxel_slab<mix_gauss_type> appear(10,10,1);
   appear.fill(mix_gauss_type());
-  
+
    // test the  update, expected_color and most_probable_mode_color methods
-  vcl_cout << "Updating model observation 1" << vcl_endl; 
+  vcl_cout << "Updating model observation 1" << vcl_endl;
   result = result & processor.update(appear, obs1, weight);
   bvxm_voxel_slab<data_type_> obs2(10,10,1);
   obs2.fill(data_type_(0.8f));
-  vcl_cout << "Updating model observation 2" << vcl_endl; 
+  vcl_cout << "Updating model observation 2" << vcl_endl;
   result = result & processor.update(appear, obs2, weight);
   bvxm_voxel_slab<data_type_> obs3(10,10,1);
   obs3.fill(data_type_(0.81f));
-  vcl_cout << "Updating model observation 3" << vcl_endl; 
+  vcl_cout << "Updating model observation 3" << vcl_endl;
   result = result & processor.update(appear, obs3, weight);
   TEST("processor.update()", result, true);
 
   bvxm_voxel_slab<data_type_> mp_slab = processor.most_probable_mode_color(appear);
 
-  for(unsigned i=0; i<dim; i++)
+  for (unsigned i=0; i<dim; i++)
   {
     TEST_NEAR("most probable", (*mp_slab.first_voxel())[i], 0.8f,0.01f);
   }
-  
+
   bvxm_voxel_slab<data_type_> mean_slab = processor.expected_color(appear);
-  for(unsigned i=0; i<dim; i++)
+  for (unsigned i=0; i<dim; i++)
   {
     TEST_NEAR("expected", (*mean_slab.first_voxel())[i],0.63f,0.01f);
   }
@@ -142,24 +142,24 @@ void test_mog_mc_processor()
 MAIN( test_apm_processors )
 {
   vcl_cout << "-----------------------------------\n"
-          << " Starting mog_grey_processor TESTS\n"
-          << "-----------------------------------" <<vcl_endl;
+           << " Starting mog_grey_processor TESTS\n"
+           << "-----------------------------------" <<vcl_endl;
   test_mog_grey_processor();
   vcl_cout << "----------------------------------\n"
-          << " Starting mog_rgb_processor TESTS\n"
-          << "----------------------------------" <<vcl_endl;
+           << " Starting mog_rgb_processor TESTS\n"
+           << "----------------------------------" <<vcl_endl;
   test_mog_rgb_processor();
   vcl_cout << "-------------------------------------\n"
-          << " Starting mog_mc_2_3_processor TESTS\n"
-          << "-------------------------------------" <<vcl_endl;
+           << " Starting mog_mc_2_3_processor TESTS\n"
+           << "-------------------------------------" <<vcl_endl;
   test_mog_mc_processor<2,3>();
   vcl_cout << "-------------------------------------\n"
-          << " Starting mog_mc_3_3_processor TESTS\n"
-          << "-------------------------------------" <<vcl_endl;
+           << " Starting mog_mc_3_3_processor TESTS\n"
+           << "-------------------------------------" <<vcl_endl;
   test_mog_mc_processor<3,3>();
   vcl_cout << "-------------------------------------\n"
-          << " Starting mog_mc_4_3_processor TESTS\n"
-          << "-------------------------------------" <<vcl_endl;
+           << " Starting mog_mc_4_3_processor TESTS\n"
+           << "-------------------------------------" <<vcl_endl;
   test_mog_mc_processor<4,3>();
   SUMMARY();
 }

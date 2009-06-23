@@ -1,8 +1,8 @@
 #include <testlib/testlib_test.h>
-#include "grid/bvxm_voxel_slab_base.h"
-#include "grid/bvxm_voxel_slab.h"
-#include "bvxm_lidar_processor.h"
-#include "grid/bvxm_memory_chunk.h"
+#include <bvxm/grid/bvxm_voxel_slab_base.h>
+#include <bvxm/grid/bvxm_voxel_slab.h>
+#include <bvxm/bvxm_lidar_processor.h>
+#include <bvxm/grid/bvxm_memory_chunk.h>
 
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_gaussian_indep.h>
