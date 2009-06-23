@@ -4,9 +4,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-
-
-//: Main framework
+// Main framework
 DECLARE_FUNC_CONS(bvxm_render_expected_image_process);
 DECLARE_FUNC_CONS(bvxm_render_virtual_view_process);
 DECLARE_FUNC_CONS(bvxm_roc_process);
