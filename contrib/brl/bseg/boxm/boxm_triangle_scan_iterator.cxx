@@ -1,10 +1,11 @@
+#include "boxm_triangle_scan_iterator.h"
+//:
+// \file
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
-
-#include "boxm_triangle_scan_iterator.h"
 
 
 //: constructor

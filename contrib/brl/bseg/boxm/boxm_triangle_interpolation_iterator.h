@@ -1,6 +1,7 @@
 #ifndef boxm_triangle_interpolation_iterator_h_
 #define boxm_triangle_interpolation_iterator_h_
-
+//:
+// \file
 #include <vcl_vector.h>
 
 #include <vgl/vgl_region_scan_iterator.h>
@@ -10,7 +11,7 @@
 template<class T>
 class boxm_triangle_interpolation_iterator : public vgl_region_scan_iterator
 {
-public:
+ public:
   //: constructor
   boxm_triangle_interpolation_iterator(double *verts_x, double *verts_y, T *values, unsigned int v0 = 0, unsigned int v1 = 1, unsigned int v2 = 2);
 
@@ -37,18 +38,13 @@ public:
   //: returns the interpolated value at location x in the current scanline
   T value_at(int x);
 
-protected:
- 
+ protected:
+
   vgl_triangle_scan_iterator<double> tri_it_;
 
   double s0_;
   double s1_;
   double s2_;
-
 };
 
-
-
-
 #endif
-

@@ -1,4 +1,6 @@
 #include "bvpl_edge2d_kernel_factory.h"
+//:
+// \file
 #include <vcl_algorithm.h>
 #include <vnl/vnl_quaternion.h>
 
@@ -8,7 +10,7 @@ bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory()
   height_=0;
   width_=0;
   angular_resolution_ = 0;
-  canonical_rotation_axis_[0] = 0.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0; 
+  canonical_rotation_axis_[0] = 0.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0;
   canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 0.0; canonical_parallel_axis_[2] = 0.0;
   rotation_axis_ = canonical_rotation_axis_;
   //parallel_axis_ = canonical_parallel_axis_;
@@ -22,16 +24,16 @@ bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory()
 // + + 0 - -
 bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory(unsigned height, unsigned width)
 {
-  //set dimensions 
+  //set dimensions
   height_=height;
   width_=width;
-  
-  
+
+
   //Determine angular resolition based on size of kernel
   //If this was 2D, then the angular resolution would be 180/(2l -2) (Recusive Binary Dilation... Desikachari Nadadur)
   angular_resolution_=float( vnl_math::pi) / (2.0f * float(width) - 2.0f);
   //set canonical axis to x-axis
-  canonical_rotation_axis_[0] = 1.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0; 
+  canonical_rotation_axis_[0] = 1.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0;
   canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 1.0; canonical_parallel_axis_[2] = 0.0;
   angle_ = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
@@ -63,21 +65,21 @@ void bvpl_edge2d_kernel_factory::create_canonical()
     vcl_cerr<< "Warning, weight of kernel is too large. It  has been set to is max value of" << max_size_ << vcl_endl;
     width_ = max_size_;
   }
-    
+
   //create a basic centered edge with 1, 0, -1, if width is odd.  The edge is creates on the x-z plane
   // 1 1 0 -1 -1
   // 1 1 0 -1 -1
   // 1 1 0 -1 -1
   // 1 1 0 -1 -1
-  
+
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
-  
+
   int min_x= -1*(height_/2);
   int max_x =(height_/2);
   int min_y= -1*(width_/2);
   int max_y =(width_/2);
-  
+
   int z = 0;
   for (int x=min_x; x<= max_x; x++)
   {
@@ -88,14 +90,14 @@ void bvpl_edge2d_kernel_factory::create_canonical()
       else if (y >  0)
         canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
     }
-  }  
-  
+  }
+
   //set the dimension of the 3-d grid
   max3d_.set(max_x,max_y,z);
   min3d_.set(min_x,min_y,z);
-  
+
   //set the current kernel
   kernel_ = canonical_kernel_;
-  
+
   return;
 }

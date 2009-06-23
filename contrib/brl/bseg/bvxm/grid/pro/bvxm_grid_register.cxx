@@ -1,12 +1,11 @@
 #include "bvxm_grid_register.h"
+//:
+// \file
 #include "bvxm_grid_processes.h"
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_func_process.h>
-
-
-
 
 void bvxm_grid_register::register_datatype()
 {
@@ -19,6 +18,5 @@ void bvxm_grid_register::register_process()
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_save_grid_raw_process,"bvxmSaveGridRawProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_crop_grid_process, "bvxmCropGridProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_multiply_grids_process, "bvxmMutliplyGridsProcess");
-  REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_threshold_grid_process, "bvxmThresholdGridProcess"); 
-
+  REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_threshold_grid_process, "bvxmThresholdGridProcess");
 }

@@ -1,5 +1,7 @@
 #ifndef boxm_triangle_scan_iterator_h_
 #define boxm_triangle_scan_iterator_h_
+//:
+// \file
 
 #include <vcl_vector.h>
 
@@ -9,7 +11,7 @@
 
 class boxm_triangle_scan_iterator : public vgl_region_scan_iterator
 {
-public:
+ public:
   //: constructor
   boxm_triangle_scan_iterator(double *verts_x, double *verts_y, unsigned int v0 = 0, unsigned int v1 = 1, unsigned int v2 = 2);
 
@@ -33,15 +35,9 @@ public:
   //  endx() should be larger than startx(), unless the scan line is empty
   virtual int  endx() const;
 
-protected:
+ protected:
 
   vgl_triangle_scan_iterator<double> tri_it_;
-
-
 };
 
-
-
-
 #endif
-

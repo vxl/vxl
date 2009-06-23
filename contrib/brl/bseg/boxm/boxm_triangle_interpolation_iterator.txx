@@ -1,6 +1,7 @@
 #ifndef boxm_triangle_interpolation_iterator_txx_
 #define boxm_triangle_interpolation_iterator_txx_
-
+//:
+// \file
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
