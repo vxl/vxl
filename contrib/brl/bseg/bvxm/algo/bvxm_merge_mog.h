@@ -1,15 +1,15 @@
-// This is contrib/brl/bseg/bvxm/appearance/bvxm_merge_mog.h
+// This is brl/bseg/bvxm/algo/bvxm_merge_mog.h
 #ifndef bvxm_merge_mog_h_
 #define bvxm_merge_mog_h_
 //:
 // \file
-// \brief class with methods to merge gaussian mixtures. 
+// \brief class with methods to merge gaussian mixtures.
 // \author Isabel Restrepo
 // \date April 20, 2009
 //
-//
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <bsta/bsta_distribution.h>
@@ -21,30 +21,25 @@
 
 class bvxm_merge_mog
 {
-
-private:
+ private:
   //Only floating point are supported for now and mixtures with 3 components.
-  //This class can be further templated if neccesary
+  //This class can be further templated if necessary
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
 
-public:
-  
-  //Grid operations   
-  
-  //: Merges the components of the gaussian mixtures at each voxel into a single gaussian,
-  //  that minimizes KL divergence. The resulting grid contains unimodal gaussians
-  static bool kl_merge_grid(bvxm_voxel_grid_base_sptr app_grid,  bvxm_voxel_grid_base_sptr gauss_app) ;
-  
-  
-  //Distribution operations
-  
-  //:Merges all the components in the mixture into one component that minimizes the KL divergence
-  // between the two distributions
-  static void kl_merge(mix_gauss_type const& mixture,bsta_gauss_f1 &gaussian);
+ public:
 
+  //Grid operations
+
+  //: Merges the components of the gaussian mixtures at each voxel into a single gaussian, that minimizes KL divergence.
+  //  The resulting grid contains unimodal Gaussians.
+  static bool kl_merge_grid(bvxm_voxel_grid_base_sptr app_grid,  bvxm_voxel_grid_base_sptr gauss_app) ;
+
+  //Distribution operations
+
+  //:Merges all the components in the mixture into one component that minimizes the KL divergence between the two distributions
+  static void kl_merge(mix_gauss_type const& mixture,bsta_gauss_f1 &gaussian);
 };
 
 #endif
-

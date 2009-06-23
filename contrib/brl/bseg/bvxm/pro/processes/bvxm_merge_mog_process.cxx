@@ -1,14 +1,15 @@
-//This is brl/bvxm/algo/processes/bvxm_merge_mixtures_process.cxx
+// This is brl/bseg/bvxm/pro/processes/bvxm_merge_mog_process.cxx
+
 //:
 // \file
-// \brief A process for merging gaussian mixtures in a grid into a single gaussian. 
+// \brief A process for merging gaussian mixtures in a grid into a single gaussian.
 //        This process works with bsta_mixtures of 3 modes
 // \author Isabel Restrepo
-// \date 05/5/2009
+// \date May 5, 2009
 //
 // \verbatim
 //  Modifications
-//    
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
@@ -20,12 +21,10 @@
 #include <bsta/bsta_gauss_f1.h>
 
 
-
 //: set input and output types
 bool bvxm_merge_mog_process_cons(bprb_func_process& pro)
 {
-
-   // Inputs
+  // Inputs
   // 0. Path to input grid(the one with gaussian mixtures)
   // 1. Path to univariate gaussian grid
   vcl_vector<vcl_string> input_types_(2);
@@ -70,7 +69,7 @@ bool bvxm_merge_mog_process(bprb_func_process& pro)
 
   //merge mixtures
   bvxm_merge_mog::kl_merge_grid(apm_base, output_base);
-  
+
   return true;
 }
 

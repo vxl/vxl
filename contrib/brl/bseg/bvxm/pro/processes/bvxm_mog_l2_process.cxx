@@ -1,14 +1,15 @@
-//This is brl/bvxm/algo/processes/bvxm_l2distance_process.cxx
+// This is brl/bseg/bvxm/pro/processes/bvxm_mog_l2_process.cxx
+
 //:
 // \file
-// \brief A process for computing the l2 distance between mixtures of gaussians in a grid. At creation time
-//        the reference mixture is the first mixture encountered in the grid.
+// \brief A process for computing the l2 distance between mixtures of gaussians in a grid.
+//        At creation time the reference mixture is the first mixture encountered in the grid.
 // \author Isabel Restrepo
-// \date 03/11/2009
+// \date March 11, 2009
 //
 // \verbatim
 //  Modifications
-//    
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
@@ -21,12 +22,10 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
 
-
 //: set input and output types
 bool bvxm_mog_l2_process_cons(bprb_func_process& pro)
 {
-
-   // Inputs
+  // Inputs
   // 0. Path to mog grid, filr must exist
   // 1. Path to mask grid, if file doesn't exist a "ones" mask is created
   // 2. Path to output grid, if file exists it gets overwritten
@@ -35,8 +34,6 @@ bool bvxm_mog_l2_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
-
-
 
   // No outputs to the database. The resulting grid is stored on disk
   vcl_vector<vcl_string> output_types_(0);
@@ -66,7 +63,7 @@ bool bvxm_mog_l2_process(bprb_func_process& pro)
   vcl_string output_path = pro.get_input<vcl_string>(2);
 
  //get the grids
-  
+
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
@@ -76,7 +73,7 @@ bool bvxm_mog_l2_process(bprb_func_process& pro)
   //the mask path should still be specified as an input
 
   bool mask_exists = false;
-  if(vul_file::exists(mask_path))
+  if (vul_file::exists(mask_path))
     mask_exists = true;
 
   bvxm_voxel_grid<float> *mask_base = new bvxm_voxel_grid<float>(mask_path, apm_base->grid_size());
@@ -90,6 +87,6 @@ bool bvxm_mog_l2_process(bprb_func_process& pro)
 
   //calculate distances
   bvxm_mog_norm<float>::mog_l2_grid(apm_base, mask_base, output_base,false);
-  
+
   return true;
 }

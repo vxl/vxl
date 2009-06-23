@@ -1,14 +1,14 @@
+//This is brl/bseg/bvxm/grid/pro/processes/bvxm_threshold_grid_process.cxx
 
-//This is brl/bseg/bvxm/pro/processes/bvxm_threshold_grid_process.cxx
 //:
 // \file
 // \brief A process for thresholding the occupancy grid of a voxel world
 // \author Isabel Restrepo
-// \date 03/11/2009
+// \date March 11, 2009
 //
 // \verbatim
 //  Modifications
-//    
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
@@ -23,7 +23,6 @@
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 
 
-
 namespace bvxm_threshold_grid_process_globals
 {
   // Inputs
@@ -32,7 +31,6 @@ namespace bvxm_threshold_grid_process_globals
   //Outputs
   // This process has no outputs to the database because the outputs grids are disk based
   const unsigned int n_outputs_ = 0;
-  
 }
 
 
@@ -54,7 +52,7 @@ bool bvxm_threshold_grid_process_cons(bprb_func_process& pro)
   input_types_[3] = "float";
 
 
-  // 0. A voxel world 
+  // 0. A voxel world
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
   if (!pro.set_input_types(input_types_))
@@ -86,13 +84,11 @@ bool bvxm_threshold_grid_process(bprb_func_process& pro)
   vcl_string mask_path = pro.get_input<vcl_string>(2);
   float threshold = pro.get_input<float>(3);
 
-
- 
   bvxm_voxel_grid_base_sptr grid_in_base = new bvxm_voxel_grid<float>(grid_in_path);
   bvxm_voxel_grid_base_sptr grid_out_base = new bvxm_voxel_grid<float>(grid_out_path, grid_in_base->grid_size());
   bvxm_voxel_grid_base_sptr mask_base = new bvxm_voxel_grid<float>(mask_path);
 
-  // threshold 
+  // threshold
   bvxm_voxel_grid_threshold(grid_in_base,grid_out_base,mask_base,threshold);
 
   return true;
