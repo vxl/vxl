@@ -98,7 +98,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           {
               boxm_utils::project_corners(corners,pcam,xverts,yverts,vertdists);
           }
-          else if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
+          else if (vpgl_rational_camera<double>* rcam = dynamic_cast<vpgl_rational_camera<double>*>(cam.as_pointer())) {
 	    boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,vgl_plane_3d<double>(),xverts,yverts,vertdists);
             // TODO: 3rd argument should most likely be a "real" plane!!!
           }
