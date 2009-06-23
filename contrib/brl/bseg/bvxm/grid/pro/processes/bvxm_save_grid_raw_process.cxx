@@ -2,14 +2,14 @@
 
 //:
 // \file
-// \brief A process that saves a scalar grid in binary format
-// readable by the Drishti volume rendering program
-// (http://anusf.anu.edu.au/Vizlab/drishti/)
+// \brief A process that saves a scalar grid in binary format readable by the Drishti volume rendering program
+//        (http://anusf.anu.edu.au/Vizlab/drishti/)
 //
 // \author Isabel Restrepo
 // \date Jun 19, 2009
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 
@@ -49,17 +49,17 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
     vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
     return false;
   }
-  
-  
+
   vcl_string grid_path = pro.get_input<vcl_string>(0);
   vcl_string volume_path = pro.get_input<vcl_string>(1);
   vcl_string datatype = pro.get_input<vcl_string>(2);
-  
-  // create the grid from in memory file and save 
-  if(datatype == "float"){
+
+  // create the grid from in memory file and save
+  if (datatype == "float") {
     bvxm_voxel_grid_base_sptr grid_base = new bvxm_voxel_grid<float>(grid_path);
     bvxm_grid_save_raw<float>(grid_base,volume_path);
     return true;
-  }else  
-    vcl_cerr << "Grid type not supportted yet, but you can add one! \n";
+  }
+  else
+    vcl_cerr << "Grid type not supportted yet, but you can add one!\n";
 }
