@@ -94,12 +94,13 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          if (vpgl_perspective_camera<double> const* pcam = dynamic_cast<vpgl_perspective_camera<double> const*>(cam.as_pointer()))
+          if (vpgl_perspective_camera<double>* pcam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer()))
           {
               boxm_utils::project_corners(corners,pcam,xverts,yverts,vertdists);
           }
           else if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
-	    boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,xverts,yverts,vertdists);
+	    boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,vgl_plane_3d<double>(),xverts,yverts,vertdists);
+            // TODO: 3rd argument should most likely be a "real" plane!!!
           }
 
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
