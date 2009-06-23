@@ -14,4 +14,6 @@ void bvpl_register::register_datatype()
 void bvpl_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_neighborhood_operator_process, "bvplNeighborhoodOperatorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_edge2d_kernel_process, "bvplCreateEdge2dKernelProcess");
+
 }
