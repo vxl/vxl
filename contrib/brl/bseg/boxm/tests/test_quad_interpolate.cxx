@@ -6,7 +6,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_save.h>
 #include <vil/vil_plane.h>
 #include <vcl_fstream.h>
@@ -73,7 +72,7 @@ MAIN( test_quad_interpolate )
   boxm_quad_scan_iterator poly_it_1(xvals1,yvals1);
   //vil_image_view<float> img_min(40,40);
   //vil_image_view<float> img_max(40,40);
-  
+
   g_img_max.fill(0.0);
   // creating ground truth
   g_img_max(10,10)=10;g_img_max(10,11)=10;
@@ -84,11 +83,11 @@ MAIN( test_quad_interpolate )
   boxm_utils::quad_mean(poly_it_1,g_img_max,val,count);
 
 
-  //: code to test the projection of a cube .
+  // code to test the projection of a cube .
   vgl_box_3d<double> cell_bb(-0.8,19.2,-18.75,0.7625, 20.7625,-17.1875);
   vcl_ifstream ifs("D:/vj/data/CapitolSite500/cameras_KRT/frame_00000.txt");
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file "  << vcl_endl;
+    vcl_cerr << "Failed to open file D:/vj/data/CapitolSite500/cameras_KRT/frame_00000.txt\n";
     return false;
   }
   vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
@@ -107,7 +106,7 @@ MAIN( test_quad_interpolate )
   boxm_utils::project_corners(corners,cam_d,xverts,yverts,vertdist);
   boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam_d,xverts,yverts);
   boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdist);
-  
+
   vil_save(vil_plane(front_xyz,0),"d:/vj/scripts/boxm/exp1/front.tiff");
   //vil_save(vil_plane(front_xyz,1),"d:/vj/scripts/boxm/exp1/front_y.tiff");
   //vil_save(vil_plane(front_xyz,2),"d:/vj/scripts/boxm/exp1/front_z.tiff");
