@@ -19,4 +19,4 @@ ADD_TEST( bvxm_test_platform_computations     ${EXECUTABLE_OUTPUT_PATH}/bvxm_tes
 
 ADD_EXECUTABLE( bvxm_test_include test_include.cxx )
 
-TARGET_LINK_LIBRARIES( bvxm_test_include bvxm )
+TARGET_LINK_LIBRARIES( bvxm_test_include bvxm bvxm_io bvxm_grid )
