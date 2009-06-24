@@ -45,6 +45,7 @@ class bvpl_edge2d_functor
   T P0_norm;
   T P05_norm;
 
+  unsigned n_;
   //: Initializes class variables
   void init();
 };

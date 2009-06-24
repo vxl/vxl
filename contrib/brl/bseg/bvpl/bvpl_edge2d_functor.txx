@@ -27,6 +27,7 @@ void bvpl_edge2d_functor<T>::init()
   P1_norm = T(0);
   P05_norm = T(0);
   min_P_ = T(0.01);
+  n_=0;
 }
 
 template <class T>
@@ -42,13 +43,14 @@ void bvpl_edge2d_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
     //P_norm += vcl_log(T(1.0) - min_P_);
   }
   
-  P1_ += vcl_log(val);
-  P0_ += vcl_log(T(1.0)-val);
-  P05_ += vcl_log(T(0.5));
+  //P1_ += vcl_log(val);
+  //P0_ += vcl_log(T(1.0)-val);
+  //P05_ += vcl_log(T(0.5));
   
   //vcl_cerr << val << " and " << int(d.c_) <<" P " <<P_ << " P0 " <<P0_ << " P1 " <<P1_ << vcl_endl ;
   //P1_norm += vcl_log(min_P_);
   //P0_norm += vcl_log(T(1.0)-min_P_);
+  n_++;
 }
 
 template <class T>
@@ -62,13 +64,13 @@ T bvpl_edge2d_functor<T>::result()
   P05_ -= P_norm;
 #endif
   
-  
+  P_/=(T)n_;
   //normalize w.r.t other configurations
-  T t1 = vcl_exp(P1_ - P_);
-  T t2 = vcl_exp(P0_ - P_);
-  T t3 = vcl_exp(P05_ - P_);
+  //T t1 = vcl_exp(P1_ - P_);
+  //T t2 = vcl_exp(P0_ - P_);
+  //T t3 = vcl_exp(P05_ - P_);
   
-  T result = (T(1.0)/(T(1.0) + t1 + t2 + t3));
+  T result = vcl_exp(P_);
   
   //reset all variables
   init();
