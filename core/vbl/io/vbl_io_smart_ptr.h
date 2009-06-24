@@ -64,7 +64,7 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> & v);
 
-//: Binary load vbl_sparse_matrix from stream.
+//: Binary load vbl_smart_ptr from stream.
 template <class T>
 void vsl_b_read(vsl_b_istream & is, vbl_smart_ptr<T> & v);
 
