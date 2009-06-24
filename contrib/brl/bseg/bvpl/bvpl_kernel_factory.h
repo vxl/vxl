@@ -47,6 +47,8 @@ public:
   //: Constructor
   bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt):
   kernel_(kernel),dim_(dim),max_(max_pt),min_(min_pt) {}
+  //: Destructor 
+  ~ bvpl_kernel(){}
   bvpl_kernel_iterator iterator(){return kernel_;}
   vgl_vector_3d<int> dim(){return dim_;}
   vgl_point_3d<int> min() {return min_;}
@@ -71,6 +73,21 @@ private:
 };
 
 typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
+
+//: A simple class to hold a vector of kernels
+class bvpl_kernel_vector:public vbl_ref_count
+{
+    
+public:
+  //: Default constructor
+  bvpl_kernel_vector(){}
+  //: vector of kernel and their corresponding orientation axis. Note that the magnitude
+  // of the vector coresponds to the rotation angle around that axis
+  vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > > kernels_;
+};
+
+typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
+
 
 //: A factory of bvpl_kernels
 class bvpl_kernel_factory
@@ -107,6 +124,16 @@ public:
   
   //: returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();
+  
+  /******************Batch Methods ***********************/
+  //: Creates a vector of kernels with azimuthal and elevation resolutio equal to pi/4. And angle of rotation= angular_resolution_
+  virtual bvpl_kernel_vector_sptr create_kernel_vector()=0;
+  
+  //: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
+  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi)=0;
+  
+  //: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
+  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res)=0;
   
   
 protected:

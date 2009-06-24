@@ -295,3 +295,4 @@ vgl_vector_3d<int> bvpl_kernel_factory::dim()
   return vgl_vector_3d<int>(x,y,z);
 }
 
+

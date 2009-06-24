@@ -40,6 +40,16 @@ class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
 
   //Width of edge
   unsigned width() {return width_;}
+  
+  /******************Batch Methods ***********************/
+  //: Creates a vector of kernels with azimuthal and elevation resolutio equal to pi/4. And angle of rotation= angular_resolution_
+  virtual bvpl_kernel_vector_sptr create_kernel_vector();
+  
+  //: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
+  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi);
+  
+  //: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
+  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res);
 
  private:
 

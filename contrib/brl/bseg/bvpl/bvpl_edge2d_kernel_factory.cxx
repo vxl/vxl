@@ -101,3 +101,73 @@ void bvpl_edge2d_kernel_factory::create_canonical()
 
   return;
 }
+
+
+
+/******************Batch Methods ***********************/
+
+//: Creates a vector of kernels with azimuthal and elevation resolution equal to pi/4. And angle of rotation= angular_resolution_
+bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
+{
+  bvpl_kernel_vector_sptr kernels;
+  float theta_res = vnl_math::pi_over_4; //azimuth
+  float phi_res = vnl_math::pi_over_4;  //zenith  (from the pole)
+  vnl_vector_fixed<float, 3> axis;
+  
+  float theta = 0.0;
+  float phi = 0.0;
+  
+  //when zenith angle is 0
+  axis[0] =0.0f;
+  axis[1] =0.0f;
+  axis[2] =1.0f;
+  
+  //when zenith is pi/4 travers all hemisphere
+  phi = vnl_math::pi_over_4;
+  
+  for(;theta < 2.0f*vnl_math::pi; theta +=theta_res)
+  {
+    axis[0] = vcl_cos(theta) * vcl_sin(phi);
+    axis[1] = vcl_sin(theta) * vcl_sin(phi);
+    axis[2] = vcl_cos(phi);
+    this->set_rotation_axis(axis);
+    for (float angle = 0.0f; angle < 2.0 * vnl_math::pi; angle+=this->angular_resolution_)
+    {
+      this->set_angle(angle);
+      kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+    }
+    
+  }
+  
+  //when zenith is pi/2 we only traverse half a hemisphere
+  phi = vnl_math::pi_over_2;
+  theta = 0.0;
+  for(;theta < vnl_math::pi; theta +=theta_res)
+  {
+    axis[0] = vcl_cos(theta) * vcl_sin(phi);
+    axis[1] = vcl_sin(theta) * vcl_sin(phi);
+    axis[2] = vcl_cos(phi);
+    this->set_rotation_axis(axis);
+    for (float angle = 0.0f; angle < 2.0 * vnl_math::pi; angle+=this->angular_resolution_)
+    {
+      this->set_angle(angle);
+      kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+    }
+    
+  }
+  return kernels;
+}
+
+//: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
+bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector(float pi, float phi)
+{
+  //to be implemented
+  return 0;
+}
+
+//: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
+bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector(float pi, float phi, float angular_res)
+{
+  //to be impemented
+  return 0;
+}
