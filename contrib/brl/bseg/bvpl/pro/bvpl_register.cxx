@@ -9,11 +9,12 @@
 void bvpl_register::register_datatype()
 {
   REGISTER_DATATYPE( bvpl_kernel_sptr );
+  REGISTER_DATATYPE( bvpl_kernel_vector_sptr );
 }
 
 void bvpl_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_neighborhood_operator_process, "bvplNeighborhoodOperatorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_edge2d_kernel_process, "bvplCreateEdge2dKernelProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_edge2d_kernel_vector_process, "bvplCreateEdge2dKernelVectorProcess");
 }

@@ -4,3 +4,4 @@
 #include <bvpl/bvpl_kernel_factory.h>
 
 BRDB_VALUE_INSTANTIATE(bvpl_kernel_sptr, "bvpl_kernel_sptr");
+BRDB_VALUE_INSTANTIATE(bvpl_kernel_vector_sptr, "bvpl_kernel_vector_sptr");
