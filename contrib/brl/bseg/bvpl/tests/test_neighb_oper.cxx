@@ -121,7 +121,7 @@ void diagonal_grid(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned grid_
   // fill with test data
   float init_val = 0.9f;
   grid->initialize_data(init_val);
- 
+
   // read in each slice, check that init_val was set, and fill with new value
   vcl_cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
@@ -144,7 +144,7 @@ void diagonal_grid_z(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned gri
   // fill with test data
   float init_val = 0.9f;
   grid->initialize_data(init_val);
- 
+
   // read in each slice, check that init_val was set, and fill with new value
   vcl_cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
@@ -181,7 +181,6 @@ static void test_neighb_oper()
     vul_file::delete_file_glob(storage_cached_fname.c_str());
   }
 
-
   unsigned int grid_x=50, grid_y=50, grid_z=50;
 
   vgl_vector_3d<unsigned> grid_size(grid_x, grid_y, grid_z);
@@ -198,14 +197,14 @@ static void test_neighb_oper()
   vcl_cout << "num_observations = " << nobs << vcl_endl;
 
   diagonal_grid_z(grid, grid_x, grid_y);
-  
+
   vcl_cout << "done." << vcl_endl;
   save_occupancy_raw("first.raw", grid);
 
   bvpl_edge2d_kernel_factory edge_factory(5, 5);
 
   edge_factory.set_rotation_axis(vnl_vector_fixed<float,3>(1,0,0));
-  edge_factory.set_angle(vnl_math::pi_over_4);
+  edge_factory.set_angle(float(vnl_math::pi_over_4));
   bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(edge_factory.create());
   kernel_sptr->print();
   bvpl_edge2d_functor<float> func;
