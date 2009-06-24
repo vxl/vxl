@@ -117,10 +117,10 @@ class vgl_rotation_3d
   //  The length of this vector is the angle of rotation in radians
   vnl_vector_fixed<T,3> as_rodrigues() const
   {
-    T ang = q_.angle();
-    if (ang == T(0))
+    double ang = q_.angle();
+    if (ang == 0.0)
       return vnl_vector_fixed<T,3>(T(0));
-    return q_.axis()*ang;
+    return q_.axis()*T(ang);
   }
 
   //: Output the matrix representation of this rotation in 3x3 form.
@@ -136,16 +136,10 @@ class vgl_rotation_3d
   }
 
   //: Returns the axis of rotation (unit vector)
-  vnl_vector_fixed<T,3> axis() const
-  {
-    return q_.axis();
-  }
+  vnl_vector_fixed<T,3> axis() const { return q_.axis(); }
 
   //: Returns the magnitude of the angle of rotation
-  T angle() const
-  {
-    return q_.angle();
-  }
+  double angle() const { return q_.angle(); }
 
   // Operations:----------------------------------------
 
