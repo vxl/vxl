@@ -77,6 +77,7 @@ typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 class bvpl_kernel_vector:public vbl_ref_count
 {
  public:
+  typedef vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iterator;
   //: Default constructor
   bvpl_kernel_vector(){}
   //: vector of kernel and their corresponding orientation axis.
