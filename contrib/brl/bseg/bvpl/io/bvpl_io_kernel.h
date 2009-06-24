@@ -39,4 +39,11 @@ void vsl_b_read(vsl_b_istream& is, bvpl_kernel* k);
 void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel* &k);
 
 void vsl_print_summary(vcl_ostream& os, const bvpl_kernel* &k);
+
+void vsl_b_read(vsl_b_istream& is, bvpl_kernel_sptr k);
+
+
+void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel_sptr &k);
+
+void vsl_print_summary(vcl_ostream& os, const bvpl_kernel_sptr &k);
 #endif
