@@ -18,6 +18,7 @@
 #include <vul/vul_file.h>
 
 
+
 //: set input and output types
 bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
 {
@@ -97,5 +98,6 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
       for (unsigned y = corner_y; y < corner_y + dimy; y++)
         (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
   }
+
   return true;
 }

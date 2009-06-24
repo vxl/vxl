@@ -15,6 +15,7 @@ void bvxm_grid_register::register_datatype()
 void bvxm_grid_register::register_process()
 {
   //: Grid Processes
+  REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_load_grid_process,"bvxmLoadGridProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_save_grid_raw_process,"bvxmSaveGridRawProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_crop_grid_process, "bvxmCropGridProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_multiply_grids_process, "bvxmMutliplyGridsProcess");

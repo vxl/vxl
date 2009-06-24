@@ -24,19 +24,28 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_gaussian_indep.h>
+namespace bvxm_load_grid_process_globals
+{
+  const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 1;
+}
 
 
 //: set input and output types
 bool bvxm_load_grid_process_cons(bprb_func_process& pro)
 {
+  using namespace bvxm_load_grid_process_globals;
   //This process has no inputs nor outputs only parameters
-  vcl_vector<vcl_string> input_types_(2);
-  input_types_.push_back("vcl_string"); //the input path
-  input_types_.push_back("vcl_string"); //the type e.g. "float","double"...
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  unsigned i=0;
+  input_types_[i++]="vcl_string"; //the input path
+  input_types_[i++]="vcl_string";//the type e.g. "float","double"...
 
-  vcl_vector<vcl_string> output_types_(1);
-  output_types_.push_back("bvxm_voxel_grid_base_sptr");  // The resulting grid
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  i=0;
+  output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting grid
 
+  vcl_cout<<input_types_.size();
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -51,9 +60,9 @@ bool bvxm_load_grid_process_cons(bprb_func_process& pro)
 bool bvxm_load_grid_process(bprb_func_process& pro)
 {
   // check number of inputs
-  if (pro.n_inputs() != 1)
+  if (pro.input_types().size() != 2)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << 1 << vcl_endl;
+    vcl_cout << pro.name() << "The number of inputs should be " << 2 << vcl_endl;
     return false;
   }
 
