@@ -40,14 +40,13 @@
 //: A simple class to hold bvpl_kernel_iterator and its bounding cube
 class bvpl_kernel:public vbl_ref_count
 {
-  
-public:
+ public:
   //: Default constructor
   bvpl_kernel(){}
   //: Constructor
   bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt):
   kernel_(kernel),dim_(dim),max_(max_pt),min_(min_pt) {}
-  //: Destructor 
+  //: Destructor
   ~ bvpl_kernel(){}
   bvpl_kernel_iterator iterator(){return kernel_;}
   vgl_vector_3d<int> dim(){return dim_;}
@@ -64,8 +63,8 @@ public:
     }
   }
   bool save_raw(vcl_string filename);
-  
-private:
+
+ private:
   bvpl_kernel_iterator kernel_;
   vgl_vector_3d<int> dim_;
   vgl_point_3d<int> min_;
@@ -77,12 +76,11 @@ typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 //: A simple class to hold a vector of kernels
 class bvpl_kernel_vector:public vbl_ref_count
 {
-    
-public:
+ public:
   //: Default constructor
   bvpl_kernel_vector(){}
-  //: vector of kernel and their corresponding orientation axis. Note that the magnitude
-  // of the vector coresponds to the rotation angle around that axis
+  //: vector of kernel and their corresponding orientation axis.
+  // Note that the magnitude of the vector corresponds to the rotation angle around that axis
   vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > > kernels_;
 };
 
@@ -92,97 +90,94 @@ typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
 //: A factory of bvpl_kernels
 class bvpl_kernel_factory
 {
-public:
-  
-  //: Returns a kernel described by class variables rotation_axis_ ,angle_
+ public:
+  //: Returns a kernel described by class variables rotation_axis_, \p angle_
   //  The user can modified the axis and angle using set_rotation_axis() and set_angle()
   bvpl_kernel create();
-  
+
   //: Returns a kernel described by inputs; rotation_axis and angle
   bvpl_kernel create(vnl_vector_fixed<float,3> rotation_axis, float angle);
-  
+
   //: Sets the toration axis of this kernel
   void set_rotation_axis( vnl_vector_fixed<float,3> rotation_axis);
-  
+
   //: Sets rotation angle of this kernel
   void set_angle(float angle){angle_ =angle;}
-  
+
   //: Returns the current aligments axis
   vnl_vector_fixed<float,3> axis(){return rotation_axis_;}
-  
+
   //: Return current rotation angle around axis()
   float angle(){return angle_;}
-  
+
   //: Returns angular resolution around rotation axis
   float angular_resolution()  {return angular_resolution_;}
-  
+
   //: Return x-y-z maximum coordinate values
   vgl_point_3d<int> max_(){return max3d_;}
-  
+
   //: Return x-y-z minimum coordinate values
   vgl_point_3d<int> min_(){return min3d_;}
-  
+
   //: returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();
-  
+
   /******************Batch Methods ***********************/
   //: Creates a vector of kernels with azimuthal and elevation resolutio equal to pi/4. And angle of rotation= angular_resolution_
   virtual bvpl_kernel_vector_sptr create_kernel_vector()=0;
-  
+
   //: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
   virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi)=0;
-  
+
   //: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
   virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res)=0;
-  
-  
-protected:
-  
+
+ protected:
+
   typedef vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_type;
-  
+
   //:The map of 3d positions and their symbols. This kernel has an axis of rotation, but it is always on zero-rotation position
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_;
-  
+
   //:The map of 3d positions and their symbols in their cacnonical form (As specified by children)
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > canonical_kernel_;
-  
+
   //:The rotation axis for canonical edge
   vnl_vector_fixed<float,3> canonical_rotation_axis_;
-  
+
   //:Rotation axis of kernel_
   vnl_vector_fixed<float,3> rotation_axis_;
-  
-  
-  // Paralles_axis_ define a coordinate system for each kernel.
+
+  // parallel_axis_ define a coordinate system for each kernel.
   // The vector (parallel_axis_ - rotation_axis_) defines the direction of the minor axis of the kernel
   // The zero-rotation for any rotation axis is that for which parallel_axis_ and rotation_axis_ have constant polar angle
   vnl_vector_fixed<float,3> canonical_parallel_axis_;
-  
+
   //: Amounts rotation around rotation_axis_
   float angle_;
-  
+
   //: Dimensions of the 3D grid
   vgl_point_3d<int> max3d_;
-  
+
   //: Dimensions of the 3D grid
   vgl_point_3d<int> min3d_;
-  
+
   //: Angular resolutions
   float angular_resolution_;
-  
-  //: Creates canonical(default) kernel. It is decribed by a canonical axis of rotation and a canonical parallel axis
+
+  //: Creates canonical(default) kernel.
+  //  It is decribed by a canonical axis of rotation and a canonical parallel axis
   //  This is the main function implemented by the children.
   virtual void create_canonical()=0;
-  
+
   //: Rounds coordinates of kernel to the nearest integer
   bvpl_kernel_iterator interpolate(kernel_type const& kernel);
-  
+
   //: Rotates "class-kernel_" around "class-rotation_axis_"  by an "angle"
   kernel_type rotate(float angle);
-  
+
   //: Rotates "class-kernel_" using the given rotation matrix
   kernel_type rotate(vgl_rotation_3d<float> R);
 };
 
 #endif
-
