@@ -10,4 +10,6 @@
 #include <bvpl/pro/bvpl_processes.h>
 #include <bvpl/pro/bvpl_register.h>
 
+#include <bvpl/io/bvpl_io_kernel.h>
+
 int main() { return 0; }
