@@ -30,7 +30,7 @@ bool bvxm_save_grid_raw_process_cons(bprb_func_process& pro)
   //input[1]: The filename to write to
   //input[2]: String identyfying datatype
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string";
+  input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
   if (!pro.set_input_types(input_types_))
@@ -50,13 +50,12 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
     return false;
   }
 
-  vcl_string grid_path = pro.get_input<vcl_string>(0);
   vcl_string volume_path = pro.get_input<vcl_string>(1);
   vcl_string datatype = pro.get_input<vcl_string>(2);
 
   // create the grid from in memory file and save
   if (datatype == "float") {
-    bvxm_voxel_grid_base_sptr grid_base = new bvxm_voxel_grid<float>(grid_path);
+    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
     bvxm_grid_save_raw<float>(grid_base,volume_path);
     return true;
   }
