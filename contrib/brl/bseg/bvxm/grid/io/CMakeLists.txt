@@ -2,6 +2,7 @@
 
 SET(bvxm_grid_io_sources
     bvxm_io_voxel_slab_base.h  bvxm_io_voxel_slab_base.cxx
+    bvxm_io_voxel_grid_base.h  bvxm_io_voxel_grid_base.cxx
     bvxm_io_voxel_grid.h
 )
 

@@ -19,7 +19,7 @@ SET(bvxm_grid_pro_sources
     bvxm_grid_processes.h
     bvxm_grid_register.h    bvxm_grid_register.cxx
    )
-
+AUX_SOURCE_DIRECTORY(Templates bvxm_grid_pro_sources)
 AUX_SOURCE_DIRECTORY(processes bvxm_grid_pro_sources)
 
 SET(bvxm_grid_pro_sources ${bvxm_grid_pro_sources})
