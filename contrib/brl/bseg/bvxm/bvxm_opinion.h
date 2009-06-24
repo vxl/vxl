@@ -18,11 +18,11 @@
 class bvxm_opinion
 {
  public:
-  bvxm_opinion() : u_(1.0), b_(0.0) {}
+  bvxm_opinion() : u_(1.0f), b_(0.0f) {}
   bvxm_opinion(float u, float b) : u_(u), b_(b) {}
 
   //: constructor where uncertinity is assumed to go away when a belief value is set
-  bvxm_opinion(float b) { u_=1.0-b; b_=b; }
+  bvxm_opinion(float b) { u_=1.0f-b; b_=b; }
 
   ~bvxm_opinion() {}
 
@@ -30,9 +30,9 @@ class bvxm_opinion
   float b() { return b_; }
   float d() { return d_; }
   float a() { return a_; }
-  void set(float u, float b) { u_=u; b_=b; a_=0.5; d_=1-b_; }
+  void set(float u, float b) { u_=u; b_=b; a_=0.5f; d_=1-b_; }
   void set_u(float u) { u_=u; }
-  void set_b(float b) { b_=b; u_=1.0-b; }
+  void set_b(float b) { b_=b; u_=1.0f-b; }
   void set_d(float d) { d_=d; }
   void set_a(float a) { a_=a; }
   float operator()(){ return b_; }
