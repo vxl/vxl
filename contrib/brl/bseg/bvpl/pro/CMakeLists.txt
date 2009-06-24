@@ -17,7 +17,7 @@ AUX_SOURCE_DIRECTORY(processes bvpl_pro_sources)
 
 ADD_LIBRARY(bvpl_pro ${bvpl_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvpl_pro bprb bvpl bvxm bvxm_grid sdet vil_io vil_pro vnl_io brdb)
+TARGET_LINK_LIBRARIES(bvpl_pro bprb bvpl bvpl_io bvxm_grid brdb)
 
 #IF( BUILD_TESTING )
 #  SUBDIRS(tests)
