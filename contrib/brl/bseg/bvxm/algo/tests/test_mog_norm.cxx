@@ -1,11 +1,11 @@
 #include <testlib/testlib_test.h>
-#include "../bvxm_mog_norm.h">
+#include "../bvxm_mog_norm.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 
 void test_l2_mog_norm()
 {
- //define some known mixtures
+  //define some known mixtures
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
@@ -16,7 +16,7 @@ void test_l2_mog_norm()
 
   bsta_gauss_f1 fc2(4,1);
   f.insert(fc2,0.4f);
- 
+
   bsta_gauss_f1 fc3(12,3);
   f.insert(fc3,0.1f);
 
@@ -26,7 +26,7 @@ void test_l2_mog_norm()
 
   bsta_gauss_f1 gc2(3,1);
   g.insert(gc2,0.35f);
- 
+
   bsta_gauss_f1 gc3(15,4);
   g.insert(gc3,0.05f);
 
@@ -36,7 +36,7 @@ void test_l2_mog_norm()
 
   bsta_gauss_f1 hc2(95,1);
   h.insert(hc2,0.1f);
- 
+
   bsta_gauss_f1 hc3(105,1);
   h.insert(hc3,0.1f);
 
@@ -46,11 +46,9 @@ void test_l2_mog_norm()
 
   bsta_gauss_f1 jc2(95,1);
   j.insert(jc2,0.35f);
- 
+
   bsta_gauss_f1 jc3(105,1);
   j.insert(jc3,0.3f);
-
-
 
 
   double dist1 =bvxm_mog_norm<float>::mog_l2(g,f);
@@ -71,23 +69,22 @@ void test_l2_mog_norm()
   mask_grid->initialize_data(true);
 
   bvxm_voxel_grid_base_sptr dist_base  = new bvxm_voxel_grid<float>(grid_size);
-  
+
   bvxm_mog_norm<float>::mog_l2_grid(apm_grid,mask_grid,dist_base,true,f);
 
   bvxm_voxel_grid<float>* dist_grid = static_cast<bvxm_voxel_grid< float>* >(dist_base.ptr());
   //check that the distances are as expected
- bvxm_voxel_grid<float>::iterator dist_grid_it = dist_grid->begin();
+  bvxm_voxel_grid<float>::iterator dist_grid_it = dist_grid->begin();
 
-  for(; dist_grid_it != dist_grid->end(); ++dist_grid_it)
+  for (; dist_grid_it != dist_grid->end(); ++dist_grid_it)
   {
     bvxm_voxel_slab<float>::iterator dist_slab_it = (*dist_grid_it).begin();
-    for(; dist_slab_it != (*dist_grid_it).end(); ++dist_slab_it)
+    for (; dist_slab_it != (*dist_grid_it).end(); ++dist_slab_it)
     {
       float dist = (*dist_slab_it);
       TEST_NEAR("Grid",dist, 0.1602,0.01);
     }
   }
-
 }
 
 
@@ -104,7 +101,7 @@ void test_gauss2mix()
 
   bsta_gauss_f1 fc2(3,2);
   f.insert(fc2,(1.0f/3.0f));
- 
+
   bsta_gauss_f1 fc3(15,1);
   f.insert(fc3,(1.0f/3.0f));
 
@@ -114,10 +111,9 @@ void test_gauss2mix()
   bvxm_mog_norm<float> measure;
 
   double dist1 = measure.l2_gauss2mix(g,f,0);
- 
+
 
   TEST_NEAR("G-F",dist1, 0.2719,0.01);
- 
 }
 
 MAIN( test_mog_norm)
