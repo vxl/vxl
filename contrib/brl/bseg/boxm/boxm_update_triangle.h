@@ -28,7 +28,7 @@ class safe_inverse_functor
 };
 
 template <class T_loc, class T_data>
-void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
+void boxm_update_triangle_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vpgl_camera_double_sptr cam,
                        vil_image_view<typename T_data::obs_mathtype> &img,
                        vil_image_view<float> &norm_img,
@@ -170,7 +170,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
 
 template <class T_loc, class T_data>
-void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
+void boxm_update_triangle_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vpgl_camera_double_sptr cam,
                        vil_image_view<typename T_data::obs_mathtype> &img,
                        vil_image_view<float> &norm_img, int bin)
@@ -352,9 +352,9 @@ void boxm_update_triangle(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     }
   }
   vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
-  boxm_update_pass1<T_loc,T_data>(scene, cam,img,norm_img,background_apm,bin);
+  boxm_update_triangle_pass1<T_loc,T_data>(scene, cam,img,norm_img,background_apm,bin);
   vcl_cout << "update: pass1 completed" << vcl_endl;
-  boxm_update_pass2<T_loc,T_data>(scene, cam,img,norm_img,bin);
+  boxm_update_triangle_pass2<T_loc,T_data>(scene, cam,img,norm_img,bin);
   vcl_cout << "update: pass2 completed" << vcl_endl;
 
   return;
