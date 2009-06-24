@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="bvxm_grid_pro" - Package Owner=<4>
+
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
+#
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# bvxm_grid_pro  == name of output library
+# bvpl_io  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=bvxm_grid_pro - Win32 Debug
+CFG=bvpl_io - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
-!MESSAGE NMAKE /f "bvxm_grid_pro.mak".
-!MESSAGE 
+!MESSAGE
+!MESSAGE NMAKE /f "bvpl_io.mak".
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
-!MESSAGE NMAKE /f "bvxm_grid_pro.mak" CFG="bvxm_grid_pro - Win32 Debug"
-!MESSAGE 
+!MESSAGE
+!MESSAGE NMAKE /f "bvpl_io.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
-!MESSAGE "bvxm_grid_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "bvxm_grid_pro - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE
+!MESSAGE "bvpl_io - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "bvpl_io - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=bvxm_grid_pro - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bvxm_grid_pro - Win32 Release"
+!IF  "$(CFG)" == "bvpl_io - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvxm_grid_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvpl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "bvxm_grid_pro - Win32 Debug"
+!ELSEIF  "$(CFG)" == "bvpl_io - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvxm_grid_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvpl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -83,42 +83,26 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
-# Name "bvxm_grid_pro - Win32 Release"
-# Name "bvxm_grid_pro - Win32 Debug"
+
+# Name "bvpl_io - Win32 Release"
+# Name "bvpl_io - Win32 Debug"
+
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bvxm_grid_register.cxx
+SOURCE=.\bvpl_io_kernel.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_save_grid_raw_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_crop_grid_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_multiply_grids_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_threshold_grid_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_load_grid_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+bvxm_voxel_grid_base_sptr-.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_kernel-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bvxm_grid_register.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_grid_processes.h
+SOURCE=.\bvpl_io_kernel.h
 # End Source File
 # End Group
 # End Target

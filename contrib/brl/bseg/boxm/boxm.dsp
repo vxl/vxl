@@ -195,7 +195,7 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample_multi_bin+BOXM
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_sample_multi_bin+BOXM_APM_MOG_GREY---~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_traingle_interpolation_iterator+float-.cxx
+SOURCE=.\Templates/boxm_triangle_interpolation_iterator+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

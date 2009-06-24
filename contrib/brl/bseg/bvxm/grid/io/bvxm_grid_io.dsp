@@ -94,6 +94,9 @@ LIB32=link.exe -lib
 SOURCE=.\bvxm_io_voxel_slab_base.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_io_voxel_grid_base.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvxm_voxel_slab_base-.cxx
 # End Source File
 # End Group
@@ -104,6 +107,9 @@ SOURCE=.\bvxm_io_voxel_slab_base.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_io_voxel_grid.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_io_voxel_grid_base.h
 # End Source File
 # End Group
 # End Target
