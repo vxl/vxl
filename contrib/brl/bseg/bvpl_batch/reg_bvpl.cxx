@@ -31,7 +31,7 @@ register_datatypes(PyObject *self, PyObject *args)
 }
 
 PyMODINIT_FUNC
-initbvxm_batch(void)
+initbvpl_batch(void)
 {
   PyMethodDef reg_pro;
   reg_pro.ml_name = "register_processes";
@@ -46,12 +46,12 @@ initbvxm_batch(void)
   reg_data.ml_doc = "register_datatypes() insert tables in the database for each type";
   reg_data.ml_flags = METH_VARARGS;
 
-  bvxm_batch_methods[0]=reg_pro;
-  bvxm_batch_methods[1]=reg_data;
+  bvpl_batch_methods[0]=reg_pro;
+  bvpl_batch_methods[1]=reg_data;
 
   for (int i=0; i<METHOD_NUM; ++i) {
-    bvxm_batch_methods[i+2]=batch_methods[i];
+    bvpl_batch_methods[i+2]=batch_methods[i];
   }
 
-  Py_InitModule("bvxm_batch", bvxm_batch_methods);
+  Py_InitModule("bvpl_batch", bvpl_batch_methods);
 }
