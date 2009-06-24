@@ -5,17 +5,19 @@
 #pragma interface
 #endif
 
-/*#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000*/
+#if 0
+#if _MSC_VER > 1000
+# pragma once
+#endif // _MSC_VER > 1000
+#endif // 0
 
 #include "bwm_process.h"
 #include "bwm/io/bwm_site_sptr.h"
 #include <vul/vul_timer.h>
 
-class bwm_site_process : public bwm_process {
-
-public:
+class bwm_site_process : public bwm_process
+{
+ public:
   bwm_site_process() : bwm_process() { site_ = 0; timer_.mark();}
   ~bwm_site_process() {}
 
@@ -24,7 +26,7 @@ public:
   // overridable
   void RunBackgroundTask();
 
-private:
+ private:
   bwm_site_sptr site_;
   static double version_num;
   vul_timer timer_;

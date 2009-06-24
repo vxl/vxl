@@ -1,30 +1,27 @@
 #include "bvpl_io_kernel.h"
-
+//:
+// \file
 #include <vsl/vsl_binary_io.h>
-
 
 
 //: Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream & os, bvpl_kernel const &kernel)
-
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented \n";
+  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
 
 //: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & is, bvpl_kernel &kernel)
-
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented \n";
+  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
 void vsl_print_summary(vcl_ostream &os, const bvpl_kernel &kernel)
-
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented \n";
+  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -69,25 +66,22 @@ void vsl_print_summary(vcl_ostream& os, const bvpl_kernel* &p)
 /******************bvpl_kernel_vector**************************/
 //: Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream & os, bvpl_kernel_vector const &kernel)
-
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented \n";
+  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
 
 //: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & is, bvpl_kernel_vector &kernel)
-
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented \n";
+  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
 void vsl_print_summary(vcl_ostream &os, const bvpl_kernel_vector &kernel)
-
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented \n";
+  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 

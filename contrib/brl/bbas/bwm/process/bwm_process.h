@@ -5,14 +5,17 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-/*#ifndef __AFXWIN_H__
-        #error include 'StdAfx.h' before including this file for PCH
-#endif*/
+#if 0
+#ifndef __AFXWIN_H__
+   #error include 'StdAfx.h' before including this file for PCH
+#endif
+#endif // 0
+
 class CWinThread;
 
-class bwm_process {
-
-public:
+class bwm_process
+{
+ public:
   bwm_process();
   ~bwm_process();
 
@@ -26,11 +29,10 @@ public:
 
   /////////////////////////////////////////////////////////////////////////////
   // Internal data
-public:
+ public:
   CWinThread *lpBackgroundThread;
   void* hKillBackgroundThreadEvent;
   void* hDoneBackgroundThreadEvent;
-
 };
 
 #endif

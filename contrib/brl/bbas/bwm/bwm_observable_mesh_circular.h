@@ -5,11 +5,11 @@
 
 class bwm_observable_mesh_circular : public bwm_observable_mesh
 {
-public:
+ public:
   virtual vcl_string type_name() const {return "bwm_observable_mesh_circular"; }
 
-  bwm_observable_mesh_circular(bwm_observable_mesh const &mesh, 
-    double r, vgl_point_2d<double> center)
+  bwm_observable_mesh_circular(bwm_observable_mesh const &mesh,
+                               double r, vgl_point_2d<double> center)
     : bwm_observable_mesh(mesh), r_(r), center_(center) {}
 
   bwm_observable_mesh_circular(bwm_observable_mesh const &mesh)
@@ -25,7 +25,7 @@ public:
   void decrease_radius(double p);
   void increase_radius(double p);
 
-private:
+ private:
   double r_;
   vgl_point_2d<double> center_;
 };

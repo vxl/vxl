@@ -7,7 +7,7 @@
 
 class bwm_tableau : public vbl_ref_count
 {
-public:
+ public:
   bwm_tableau(){}
 
   ~bwm_tableau(){}
@@ -18,7 +18,7 @@ public:
 
   void set_grid_location(unsigned row, unsigned col) { row_=row; col_=col; }
 
-protected:
+ protected:
   unsigned row_, col_;
 };
 
