@@ -21,6 +21,7 @@ ADD_LIBRARY(bvpl ${bvpl_sources})
 TARGET_LINK_LIBRARIES(bvpl bvxm_grid vgl)
 
 SUBDIRS( pro )
+SUBDIRS( io )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
