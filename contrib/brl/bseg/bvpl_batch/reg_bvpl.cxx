@@ -3,16 +3,14 @@
 #include <bprb/bprb_batch_process_manager.h>
 
 // processes
-#include <vil_pro/vil_register.h>
-#include <vpgl_pro/vpgl_register.h>
-#include <bvxm/pro/bvxm_register.h>
+#include <bvpl/pro/bvpl_register.h>
+//#include <bvxm/grid/pro/bvxm_grid_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
-  vil_register::register_process();
-  vpgl_register::register_process();
-  bvxm_register::register_process();
+  bvpl_register::register_process();
+  //bvxm_grid_register::register_process();
   
   Py_INCREF(Py_None);
   return Py_None;
@@ -22,9 +20,8 @@ PyObject *
 register_datatypes(PyObject *self, PyObject *args)
 {
   register_basic_datatypes();
-  vil_register::register_datatype();
-  vpgl_register::register_datatype();
-  bvxm_register::register_datatype();
+  bvpl_register::register_datatype();
+  //bvxm_grid_register::register_datatype();
 
   Py_INCREF(Py_None);
   return Py_None;

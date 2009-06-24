@@ -28,7 +28,7 @@ IF( PYTHON_FOUND )
     SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES PREFIX "")
 
 
-    TARGET_LINK_LIBRARIES(bvpl_batch bprb brdb bpro_batch vbl bvpl bvpl_pro bvxm_pro)
+    TARGET_LINK_LIBRARIES(bvpl_batch bprb brdb bpro_batch vbl bvpl bvpl_pro bvpl_io bvxm_grid_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( bvpl_batch debug ${PYTHON_DEBUG_LIBRARY})
