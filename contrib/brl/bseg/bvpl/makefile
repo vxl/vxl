@@ -12,7 +12,7 @@ SOURCES += bvpl_kernel_factory.cxx
 SOURCES += bvpl_edge2d_kernel_factory.cxx
 SOURCES += bvpl_opinion_functor.cxx
 
-SUBDIRS += pro
+SUBDIRS += pro io
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
