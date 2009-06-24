@@ -4,7 +4,7 @@
 
 // processes
 #include <bvpl/pro/bvpl_register.h>
-//#include <bvxm/grid/pro/bvxm_grid_register.h>
+#include <bvxm/grid/pro/bvxm_grid_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -21,7 +21,7 @@ register_datatypes(PyObject *self, PyObject *args)
 {
   register_basic_datatypes();
   bvpl_register::register_datatype();
-  //bvxm_grid_register::register_datatype();
+  bvxm_grid_register::register_datatype();
 
   Py_INCREF(Py_None);
   return Py_None;
