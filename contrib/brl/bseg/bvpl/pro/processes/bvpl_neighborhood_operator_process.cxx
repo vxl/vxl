@@ -1,5 +1,5 @@
 // This is brl/bseg/bvpl/pro/processes/bvpl_neighborhood_operator_process.cxx
-
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for applying a kernel on a voxel world.
@@ -8,10 +8,9 @@
 // \date June 19, 2009
 // \verbatim
 //  Modifications
-//   
+//  <none yet>
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
@@ -89,28 +88,28 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
       return false;
   }
-  
+
   if (ocp_type == "float") {
     bvxm_voxel_grid<float> *grid_out= new bvxm_voxel_grid<float>(out_grid_path, input_grid->grid_size());
-	if(bvxm_voxel_grid<float> * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
-	{
-		if (functor_name == "edge2d") {
-			bvpl_edge2d_functor<float> func;
-			bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
-			oper.operate(float_input_grid, kernel, grid_out);
-		}
-		pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-	}
-  } else if (ocp_type == "opinion") {
-	  if(bvxm_voxel_grid<bvxm_opinion> * bvxm_opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
-	  {
-
-		  bvxm_voxel_grid<bvxm_opinion> * grid_out= new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, bvxm_opinion_input_grid->grid_size());
-		  bvpl_opinion_functor func;
-		  bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
-		  oper.operate(bvxm_opinion_input_grid, kernel, grid_out);
-		  pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-	  }
+    if (bvxm_voxel_grid<float> * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
+    {
+      if (functor_name == "edge2d") {
+        bvpl_edge2d_functor<float> func;
+        bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
+        oper.operate(float_input_grid, kernel, grid_out);
+      }
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    }
+  }
+  else if (ocp_type == "opinion") {
+    if (bvxm_voxel_grid<bvxm_opinion> * bvxm_opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
+    {
+      bvxm_voxel_grid<bvxm_opinion> * grid_out= new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, bvxm_opinion_input_grid->grid_size());
+      bvpl_opinion_functor func;
+      bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
+      oper.operate(bvxm_opinion_input_grid, kernel, grid_out);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    }
   }
 
   return true;
