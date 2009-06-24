@@ -4,7 +4,7 @@
 
 //:
 // \file
-// \brief 
+// \brief Binary io for kernel and kernel_vector
 //
 // \author Isabel Restrepo mir@lems.brown.edu
 //
@@ -39,5 +39,26 @@ void vsl_b_read(vsl_b_istream& is, bvpl_kernel* k);
 void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel* &k);
 
 void vsl_print_summary(vcl_ostream& os, const bvpl_kernel* &k);
+
+
+/******************bvpl_kernel_vector**************************/
+
+//: Binary save parameters to stream.
+void vsl_b_write(vsl_b_ostream & os, bvpl_kernel_vector const &kernel);
+
+
+//: Binary load parameters from stream.
+void vsl_b_read(vsl_b_istream & is, bvpl_kernel_vector &k);
+
+
+void vsl_print_summary(vcl_ostream &os, const bvpl_kernel_vector &k);
+
+
+void vsl_b_read(vsl_b_istream& is, bvpl_kernel_vector* k);
+
+
+void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel_vector* &k);
+
+void vsl_print_summary(vcl_ostream& os, const bvpl_kernel_vector* &k);
 
 #endif
