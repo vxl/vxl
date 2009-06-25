@@ -28,7 +28,7 @@
 
 namespace bvpl_vector_operator_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 1;
 }
 
