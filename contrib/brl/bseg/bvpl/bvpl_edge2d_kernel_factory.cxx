@@ -108,7 +108,7 @@ void bvpl_edge2d_kernel_factory::create_canonical()
 //: Creates a vector of kernels with azimuthal and elevation resolution equal to pi/4. And angle of rotation= angular_resolution_
 bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
 {
-  bvpl_kernel_vector_sptr kernels;
+  bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
   float theta_res = float(vnl_math::pi_over_4); //azimuth
   float phi_res = float(vnl_math::pi_over_4);   //zenith  (from the pole)
   vnl_vector_fixed<float, 3> axis;
