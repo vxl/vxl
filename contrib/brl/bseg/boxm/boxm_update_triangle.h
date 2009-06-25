@@ -17,15 +17,7 @@
 
 
 //: functor used for normalizing cell_expected image
-class safe_inverse_functor
-{
- public:
-  safe_inverse_functor(float tol = 0.0f) : tol_(tol) {}
 
-  float operator()(float x) const { return (x > tol_)? 1.0f/x : 0.0f; }
-
-  float tol_;
-};
 
 template <class T_loc, class T_data>
 void boxm_update_triangle_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,

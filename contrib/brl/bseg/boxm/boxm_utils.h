@@ -17,7 +17,15 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_quad_scan_iterator.h>
 #include <vil/vil_image_view.h>
+class safe_inverse_functor
+{
+ public:
+  safe_inverse_functor(float tol = 0.0f) : tol_(tol) {}
 
+  float operator()(float x) const { return (x > tol_)? 1.0f/x : 0.0f; }
+
+  float tol_;
+};
 class boxm_utils
 {
  public:

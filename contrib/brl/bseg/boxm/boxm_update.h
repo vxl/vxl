@@ -12,21 +12,11 @@
 #include <boxm/boxm_rational_camera_utils.h>
 #include <vil/vil_math.h>
 #include <vul/vul_timer.h>
-#if 0 // currently unused
-#include <vgl/vgl_plane_3d.h>
-#endif // 0
+
 #include <vcl_iostream.h>
 
 //: functor used for normalizing cell_expected image
-class safe_inverse_functor
-{
- public:
-  safe_inverse_functor(float tol = 0.0f) : tol_(tol) {}
 
-  float operator()(float x) const { return (x > tol_)? 1.0f/x : 0.0f; }
-
-  float tol_;
-};
 
 template <class T_loc, class T_data>
 void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
