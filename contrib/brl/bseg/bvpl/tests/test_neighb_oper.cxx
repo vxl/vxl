@@ -169,7 +169,6 @@ static void test_neighb_oper()
   // we need temporary disk storage for this test.
   vcl_string storage_fname("bvxm_voxel_grid_test_temp1a.vox");
   vcl_string storage_fname2("bvxm_voxel_grid_test_temp1b.vox");
-  //vcl_string storage_cached_fname("bvxm_voxel_grid_cached_test_temp.vox");
   // remove file if exists from previous test.
   if (vul_file::exists(storage_fname.c_str())) {
     vul_file::delete_file_glob(storage_fname.c_str());
@@ -177,9 +176,11 @@ static void test_neighb_oper()
   if (vul_file::exists(storage_fname2.c_str())) {
     vul_file::delete_file_glob(storage_fname2.c_str());
   }
-  //if (vul_file::exists(storage_cached_fname.c_str())) {
-  //  vul_file::delete_file_glob(storage_cached_fname.c_str());
-  //}
+#if 0
+  if (vul_file::exists(storage_cached_fname.c_str())) {
+    vul_file::delete_file_glob(storage_cached_fname.c_str());
+  }
+#endif
 
   unsigned int grid_x=50, grid_y=50, grid_z=50;
 
@@ -204,8 +205,7 @@ static void test_neighb_oper()
   bvpl_edge2d_kernel_factory edge_factory(5, 5);
 
   edge_factory.set_rotation_axis(vnl_vector_fixed<float,3>(1,0,1));
-  //edge_factory.set_angle(float(3*vnl_math::pi_over_4));
-  edge_factory.set_angle(vnl_math::pi);
+  edge_factory.set_angle(float(vnl_math::pi)); // was float(3*vnl_math::pi_over_4)
 
   bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(edge_factory.create());
   kernel_sptr->print();
