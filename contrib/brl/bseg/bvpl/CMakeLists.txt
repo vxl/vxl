@@ -11,6 +11,8 @@ SET(bvpl_sources
     bvpl_opinion_functor.cxx         bvpl_opinion_functor.h
     bvpl_kernel_factory.h            bvpl_kernel_factory.cxx
     bvpl_edge2d_kernel_factory.h     bvpl_edge2d_kernel_factory.cxx
+    bvpl_edge3d_kernel_factory.h     bvpl_edge3d_kernel_factory.cxx
+
     bvpl_neighb_operator.h  
     bvpl_vector_operator.h         
 )
