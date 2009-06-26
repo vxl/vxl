@@ -224,7 +224,7 @@ vsol_polygon_2d_sptr bsol_algs::poly_from_box(vsol_box_2d_sptr const& box)
   vsol_point_2d_sptr pc = new vsol_point_2d(box->get_max_x(), box->get_max_y());
   vsol_point_2d_sptr pd = new vsol_point_2d(box->get_min_x(), box->get_max_y());
   pts.push_back(pa);   pts.push_back(pb);
-  pts.push_back(pc);   pts.push_back(pd); pts.push_back(pa);
+  pts.push_back(pc);   pts.push_back(pd); //pts.push_back(pa);
   return new vsol_polygon_2d(pts);
 }
 
