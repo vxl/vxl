@@ -180,10 +180,19 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
    
   //roatete
   rotation_axis_ = rotation_axis;
+  
+  //set kernel back to its caninical form , since the rotation is calculated from its canonical position
+  kernel_ = canonical_kernel_;
+  
   vgl_rotation_3d<float> r_align(canonical_rotation_axis_, rotation_axis);
+  
   kernel_= rotate(r_align);
 
-  //rotate parallel axis. 
+  // Rotate parallel axis to determine the zero rotation along rotation axis
+  // This makes no sense if the angular resolution is zero
+  if(angular_resolution_ < vcl_numeric_limits<float>::epsilon())
+    return;
+  
   vnl_vector_fixed<float,3> parallel_axis = r_align.as_matrix() * canonical_parallel_axis_;
 
   //spherical coordinates of the parallel axis.
@@ -198,9 +207,12 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
       (rotation_axis_ != vnl_vector_fixed<float, 3>(0.0f, 0.0f, -1.0f)))
   {
     float correction_phi = phi_p - phi; 
+    if(correction_phi <  vcl_numeric_limits<float>::epsilon())
+      return;
     vgl_rotation_3d<float> r_correct(vnl_quaternion<float>(rotation_axis, correction_phi));
      //rotate correction_phi around new axis of rotation. This position is the 0-rotation.
     kernel_ = rotate(r_correct);
+    return;
   }
   else 
   { //make sure parallel axis is aligned with y-axis
