@@ -111,55 +111,63 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
   bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
   float theta_res = float(vnl_math::pi_over_4); //azimuth
   float phi_res = float(vnl_math::pi_over_4);   //zenith  (from the pole)
+  
+  vcl_cout << "Crating and vector of 2d-edge kernels \n";
+  vcl_cout << "phi_res: "<< phi_res << vcl_endl;
+  vcl_cout << "theta_res: "<< theta_res << vcl_endl;
+  vcl_cout << "angle_res: "<< angular_resolution_ << vcl_endl;
   vnl_vector_fixed<float, 3> axis;
 
   float theta = 0.0f;
   float phi = 0.0f;
 
   //when zenith angle is 0
-  //axis[0] =0.0f;
-  //axis[1] =0.0f;
-  //axis[2] =1.0f;
-
+  axis[0] =0.0f;
+  axis[1] =0.0f;
+  axis[2] =1.0f;
+  this->set_rotation_axis(axis);
+  for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
+  {
+    this->set_angle(angle);
+    kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+  }
+  
   //when zenith is pi/4 travers all hemisphere
-  //phi = float(vnl_math::pi_over_4);
 
-  //for (;theta < 2.0f*float(vnl_math::pi); theta +=theta_res)
-  //{
-  //  axis[0] = vcl_cos(theta) * vcl_sin(phi);
-  //  axis[1] = vcl_sin(theta) * vcl_sin(phi);
-  //  axis[2] = vcl_cos(phi);
-  //  this->set_rotation_axis(axis);
-  //  //for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
-  //  {
-	 // float angle=0.0f;
-  //    this->set_angle(angle);
-  //    kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
-  //  }
-  //}
+  phi = float(vnl_math::pi_over_4);
+  for (;theta < 2.0f*float(vnl_math::pi); theta +=theta_res)
+  {
+    axis[0] = vcl_cos(theta) * vcl_sin(phi);
+    axis[1] = vcl_sin(theta) * vcl_sin(phi);
+    axis[2] = vcl_cos(phi);
+    this->set_rotation_axis(axis);
+    for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
+    {
+      this->set_angle(angle);
+      kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+    }
+  }
 
-  vcl_cout<<"Phase I done";
 
   //when zenith is pi/2 we only traverse half a hemisphere
   phi = float(vnl_math::pi_over_2);
-  theta = 0.0f;
+  theta =float(vnl_math::pi_over_2);
   for (;theta < float(vnl_math::pi_over_2); theta +=theta_res)
   {
     axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
     axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
     axis[2] = float(vcl_cos(phi));
     this->set_rotation_axis(axis);
-    //for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
-    {
-	  float angle = 0.0f;
+    for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
+    { 
       this->set_angle(angle);
-      kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+      kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
     }
   }
   return kernels;
 }
 
-//: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
+//: Creates a vector of kernels according to given  azimuthal and elevation resolution, and angle of rotation= angular_resolution_
 bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector(float pi, float phi)
 {
   //to be implemented
