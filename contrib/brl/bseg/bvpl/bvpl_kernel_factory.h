@@ -42,12 +42,12 @@ class bvpl_kernel:public vbl_ref_count
 {
  public:
   //: Default constructor
-  bvpl_kernel(){}
+  bvpl_kernel() {}
   //: Constructor
-  bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt):
-  kernel_(kernel),dim_(dim),max_(max_pt),min_(min_pt) {}
+  bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt)
+  : kernel_(kernel),dim_(dim),min_(min_pt),max_(max_pt) {}
   //: Destructor
-  ~ bvpl_kernel(){}
+  ~bvpl_kernel() {}
   bvpl_kernel_iterator iterator(){return kernel_;}
   vgl_vector_3d<int> dim(){return dim_;}
   vgl_point_3d<int> min() {return min_;}
