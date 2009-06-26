@@ -157,6 +157,8 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
         /* theta = vcl_atan2(rotation_axis[1],rotation_axis[0]), //azimuth, unused */
         phi = vcl_acos(rotation_axis[2]/radius); //zenith
 
+  //set kernel back to its caninical form , since the rotation is calculated from its canonical position
+  kernel_ = canonical_kernel_;
 
   //construct a rotation to rotate vector a to vector b; 
   //if a and b are oposite, then this rotation is ambiguos(infinitely many axis of rotation)
@@ -181,8 +183,6 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   //roatete
   rotation_axis_ = rotation_axis;
   
-  //set kernel back to its caninical form , since the rotation is calculated from its canonical position
-  kernel_ = canonical_kernel_;
   
   vgl_rotation_3d<float> r_align(canonical_rotation_axis_, rotation_axis);
   
@@ -255,13 +255,15 @@ bvpl_kernel_factory::rotate(float angle)
 bvpl_kernel_factory::kernel_type
 bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
 {
-
+  
+#ifdef DEBUG
+  vcl_cout << "Rotating kernel using the following matrix" << vcl_endl;
   vcl_cout << R.as_matrix() << vcl_endl;
-  vcl_cout << R.as_rodrigues() << vcl_endl;
+#endif
+  
 
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kernel_it =this->kernel_.begin();
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel;
-
 
   //for efficiency and accuracy, get the rotation matrix of R and use the matrix for multiplicatiom
   vnl_matrix_fixed<float,3,3> R_as_matrix = R.as_matrix() ;
