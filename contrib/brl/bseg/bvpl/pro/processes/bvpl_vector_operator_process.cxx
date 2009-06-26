@@ -110,12 +110,14 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
     }
   } else if (datatype == "opinion") {
    bvxm_voxel_grid<bvxm_opinion> *grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (grid_base.ptr());;
-   bvxm_voxel_grid<bvxm_opinion> grid_out(out_grid_path, grid->grid_size());
+   bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
+   bvxm_voxel_grid<vnl_vector_fixed<float,3> > *orientation_grid=new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(orientation_grid_path, grid->grid_size());
    bvpl_opinion_functor func;
    bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
-  // bvpl_vector_operator operator;
-    
-    
+   bvpl_vector_operator<bvxm_opinion,  bvpl_opinion_functor> vector_oper;
+   vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+   pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+   pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);   
   }
   
   return true;
