@@ -29,7 +29,7 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
   }
 
   // failed.
-  if(verbose){
+  if (verbose) {
     vcl_cerr << __FILE__ ": Unable to load image;\ntried";
     for (vil_file_format** p = vil_file_format::all(); *p; ++p)
     // 'flush' in case of segfault next time through loop. Else, we
@@ -46,12 +46,13 @@ vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
                                                     bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
+  vil_image_resource_sptr isp = 0;
   if (is)
-    return vil_load_image_resource_raw(is.as_pointer(), verbose);
-  else {
-    if(verbose)
+    isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
+  if (!isp) {
+    if (verbose)
       vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
-    return vil_image_resource_sptr(0);
+    return isp;
   }
 }
 
@@ -61,6 +62,8 @@ vil_image_resource_sptr vil_load_image_resource(char const* filename,
   vil_image_resource_sptr im = vil_load_image_resource_plugin(filename);
   if (!im)
     im=vil_load_image_resource_raw(filename, verbose);
+  if (!im && verbose)
+    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
   return im;
 }
 
@@ -100,7 +103,7 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
       return pir;
   }
   // failed.
-  if(verbose){
+  if (verbose) {
     vcl_cerr << __FILE__ ": Unable to load pyramid image;\ntried";
     for (vil_file_format** p = vil_file_format::all(); *p; ++p)
       // 'flush' in case of segfault next time through loop. Else, we
