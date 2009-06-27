@@ -1,0 +1,104 @@
+satId = "????";
+bandId = "RGB";
+SpecId = "RPC00B";
+BEGIN_GROUP = IMAGE
+
+
+  lineOffset = 0.0
+  sampOffset = 0.0
+  latOffset = 0.0
+  longOffset = 0.0
+  heightOffset = 0.0
+  lineScale = 1.0
+  sampScale = 1.0
+  latScale = 1.0
+  longScale = 1.0
+  heightScale = 1.0
+  lineNumCoef = (
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1);
+  lineDenCoef = (
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1);
+  sampNumCoef = (
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1);
+  sampDenCoef = (
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1);
+END_GROUP = IMAGE
+END;
+lvcs
+47.550493 35.395931 664.186757 
