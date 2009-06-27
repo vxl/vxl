@@ -5,21 +5,20 @@
 #include <vpl/vpl.h>
 
 
-MAIN( test_boxm_rational_camera_utils )
+MAIN_ARGS( test_boxm_rational_camera_utils )
 {
   START ("BOXM RATIONAL CAMERA UTILS");
-  vcl_string filename="d:/vj/projects/vxl/contrib/brl/bseg/boxm/tests/camera0.txt";
-  vpgl_local_rational_camera<double>* rcam=read_local_rational_camera<double>(filename);
+  vcl_string filename="camera0.txt";
+  vcl_string image_path = argv[1];
+  vpgl_local_rational_camera<double>* rcam=read_local_rational_camera<double>(image_path + "/" + filename);
   vgl_plane_3d<double> top(0,0,1,-200);
   vgl_plane_3d<double> bottom(0,0,1,0);
 
-  unsigned ni=800;
-  unsigned nj=800;
-
-  double u; double v;
+  unsigned ni=800,
+           nj=800;
+  double u, v;
 
   rcam->project(495,431,200,u,v);
-
   vgl_plane_3d<double>  plane_parallel=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam,top,bottom,ni,nj);
   SUMMARY();
 }
