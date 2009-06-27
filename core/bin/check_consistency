@@ -105,10 +105,14 @@ foreach $f (@FILES)
   &msg(1, "contains non-standard ascii characters")
     if ($file =~ m![\000-\010\013\014\016-\037\177-\257\261-\277\320\327\336\360\367\376]!);
 
-# 2. spaces (more than 1) at end of line
+# 2. no end-of-line at end-of-file
+  &msg(10000, "has no final end-of-line")
+    unless ($file eq '' || substr($file,-1) eq "\n");
+
+# 3. spaces (more than 1) at end of line
   $has_end_spaces = ($file =~ m!  +\n!);
 
-# 3. Lines longer than 132 characters, continuation ostream, single-char strings
+# 4. Lines longer than 132 characters, continuation ostream, single-char strings
   if ($file =~ m!^[^#].{132,}! && $f !~ m!\.dsp$!)
   {
     $tmp=$file; $tmp =~ s!.{133,}[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+1;
@@ -127,7 +131,7 @@ foreach $f (@FILES)
   &msg(1, "consider removing space before \\n")
     if ($printed && $file =~ m!(\s|\\t)\\n\b!);
 
-# 4. Consecutive comment blocks, separated by blank lines
+# 5. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n(\s*)//:.*\n(\1//.*\n)*\s*\n\1// *[^:=*-]! &&
       $f !~ m!\bvcl_config_(compiler|headers)\.h$!)
   {
@@ -135,7 +139,7 @@ foreach $f (@FILES)
     &msg($tmp, "contains comment blocks separated by a blank line; consider joining");
   }
 
-# 5. Quick consistency check of Doxygen structured comments
+# 6. Quick consistency check of Doxygen structured comments, including ambiguous \date
   &msg(1, "doxygen comments will not be shown without \\file")
     if ($file =~ m!\n\s*//:! && $file !~ m!\n\s*//:(\s*\n\s*//)?\s*\\file\b! &&
                                 $file !~ m!^\s*//:(\s*\n\s*//)?\s*\\file\b!);
@@ -155,8 +159,10 @@ foreach $f (@FILES)
     $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)[^\000]*!!i; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
     &msg($tmp, "brief comment possibly continued on next line");
   }
+  &msg(1, "Ambiguous \\date $1")
+    if ($file =~ m!\n\s*//\s*\\date\s+\b((\d\d)?[/.-](\d\d?)[/.-](\d\d+))! && (($2 <= 12 && $3 <= 12 && $2 != $3) || $printed));
 
-# 6. Unnecessary #include files and missing #include files.
+# 7. Unnecessary #include files and missing #include files.
 #   Unnecessary includes are in principle anything which is not
 #   used or directly referred to in the current file.
 #   Missing includes is currently only vcl_cassert.h and vcl_iostream.h
@@ -594,14 +600,14 @@ foreach $f (@FILES)
   &msg(1, "local $2 should come before global $1")
     if ($file =~ m!(\#\s*include\s*\<[^\>]*\>).*(\#\s*include\s*\"[^\"]*\")!);
 
-# 7. //: inside a comment block, or \file not after //:
+# 8. //: inside a comment block, or \file not after //:
   &msg(1, "\\file is not preceded by //:")
     if ($file =~ m!\n\s*(//[^:]|[^\s/]).*\n *// *\\file\b!);
   $file =~ s!//\s*[-=_]{40,}\n!//\n!g;
   &msg(1, "contains //: inside a comment block")
     if ($file =~ m!\n\s*//[ :].*\n *//:!);
 
-# 8. Comments: long /* ... */ and old-style // -- docs; RCS indications; mistypings
+# 9. Comments: long /* ... */ and old-style // -- docs; RCS indications; mistypings
   $file =~ s! +\n!\n!g;
   $file =~ s!/\*!\001!g; $file =~ s!/\001!//\*!g;
   $file =~ s!\*/!\002!g;
@@ -843,7 +849,7 @@ foreach $f (@FILES)
                     )!ix
         && $1 ne 'valush' && $1 ne 'appicon' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'ssss' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
 
-# 9. spurious #pragma interface or #pragma implementation
+# 10. spurious #pragma interface or #pragma implementation
   &msg(1, "contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE")
     if ($file !~ m!\#ifdef VCL_NEEDS_PRAGMA_INTERFACE\n(\#pragma (interface|implementation)).*\n\#endif\n! &&
         $file =~ m!(\#\s*pragma\s+(interface|implementation))\b!);
@@ -867,11 +873,11 @@ foreach $f (@FILES)
 # &msg(1, "contains nested comments")
 #   if ($file_s =~ m![\001\002]!);
 
-# 10. Multi-line string constant
+# 11. Multi-line string constant
   &msg(1, "contains multi-line string constant")
     if ($file_s =~ m!\"!);
 
-# 11. Inclusion guard and file name
+# 12. Inclusion guard and file name
   if ($file_s =~ m!^\s*\#ifndef\s+(\S+)\s*\n\#define\s+\1\s*(\s.*)?\n!)
   {
     $guard = $1;
@@ -911,12 +917,12 @@ foreach $f (@FILES)
               ("$filename" eq "contrib/$file_" && !$printed));
   }
 
-# 12. Constant pi written as 3.1415...
+# 13. Constant pi written as 3.1415...
   &msg(1, "should maybe use vnl_math::pi instead of $1")
     if ($f !~ m!\b(v[cuibg]l|v3p)/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
         $cpp_file && $file_s =~ m!\b(3\.14159\d*)!);
 
-# 13. Instantiation macro stuff
+# 14. Instantiation macro stuff
   &msg(1, "definition of $1 ends with ;")
     if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+;\s*\n!);
   &msg(1, "definition of $1 does not start with a space")
@@ -976,7 +982,7 @@ foreach $f (@FILES)
           $f !~ m!/$class_s\.(cxx|cc|C)$!);
   }
 
-# 14. Missing vcl_
+# 15. Missing vcl_
   foreach $wd (qw(abort exit))
   {
     if ($cpp_file && $file_s =~ m!\b$wd\s*(\s*)\(!)
@@ -1111,7 +1117,7 @@ foreach $f (@FILES)
       if ($cpp_file && $f !~ m!\bvcl/.*\bvcl_iterator\.(h|txx)$! && $file_s =~ m!\b$wd\b!);
   }
 
-# 15. Multiple empty lines, empty line before } or after {, return (...), indentation,
+# 16. Multiple empty lines, empty line before } or after {, return (...), indentation,
 #   if/for/while without space, variable names starting with underscore
 #   (mentioned only if something else is already printed, or when -f given)
   &msg(1, "contains multiple (>2) empty lines")
@@ -1166,14 +1172,9 @@ foreach $f (@FILES)
   &msg("/$2", "$2 starts with underscore")
     if ($cpp_file && $printed && $file_s =~ m!([^\"\# ] *\b|^)(_[a-z]\w*)(.)! && "$2$3" ne "_fmemset(" && "$2$3" ne "_declspec(" && $2 ne "_finddata_t");
 
-# 16. too long { ... } section with the "{" not on the start of a line
+# 17. too long { ... } section with the "{" not on the start of a line
   &msg(1, "has a block of more than 24 lines with the opening brace not on a line by itself")
     if ($printed && $file =~ m!\S *\{ *\n( +)\S.*\n(\1.*\n){24}!);
-
-# 17. no end-of-line at end-of-file
-  $file =~ s!.*\n!!g;
-  &msg(10000, "has no final end-of-line")
-    unless ($file eq "");
 }
 
 sub msg
