@@ -88,17 +88,16 @@ void bvpl_edge3d_kernel_factory::create_canonical()
   int z = 0;
   for (int x=min_x; x<= max_x; x++)
   {
-	  for (int y= min_y; y<= max_y; y++)
-	  {
-		  for (int z= min_z; z<= max_z; z++)
-		  {
-
-			  if (x < 0)
-				  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
-			  else if (x >  0)
-				  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
-		  }
-	  }
+    for (int y= min_y; y<= max_y; y++)
+    {
+      for (int z= min_z; z<= max_z; z++)
+      {
+        if (x < 0)
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
+        else if (x >  0)
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
+      }
+    }
   }
   //set the dimension of the 3-d grid
   max3d_.set(max_x,max_y,max_z);
@@ -117,51 +116,53 @@ void bvpl_edge3d_kernel_factory::create_canonical()
 bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
 {
   bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
-  //float theta_res = float(vnl_math::pi_over_4); //azimuth
-  //float phi_res = float(vnl_math::pi_over_4);   //zenith  (from the pole)
-  //vnl_vector_fixed<float, 3> axis;
+#if 0 // whole body commented out
+  float theta_res = float(vnl_math::pi_over_4); //azimuth
+  float phi_res = float(vnl_math::pi_over_4);   //zenith  (from the pole)
+  vnl_vector_fixed<float, 3> axis;
 
-  //float theta = 0.0f;
-  //float phi = 0.0f;
+  float theta = 0.0f;
+  float phi = 0.0f;
 
-  ////when zenith angle is 0
-  //axis[0] =0.0f;
-  //axis[1] =0.0f;
-  //axis[2] =1.0f;
+  //when zenith angle is 0
+  axis[0] =0.0f;
+  axis[1] =0.0f;
+  axis[2] =1.0f;
 
-  ////when zenith is pi/4 travers all hemisphere
-  //phi = float(vnl_math::pi_over_4);
+  //when zenith is pi/4 travers all hemisphere
+  phi = float(vnl_math::pi_over_4);
 
-  //for (;theta < 2.0f*float(vnl_math::pi); theta +=theta_res)
-  //{
-  //  axis[0] = vcl_cos(theta) * vcl_sin(phi);
-  //  axis[1] = vcl_sin(theta) * vcl_sin(phi);
-  //  axis[2] = vcl_cos(phi);
-  //  this->set_rotation_axis(axis);
-  //  for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
-  //  {
-  //    this->set_angle(angle);
-  //    kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
-  //  }
-  //}
+  for (;theta < 2.0f*float(vnl_math::pi); theta +=theta_res)
+  {
+    axis[0] = vcl_cos(theta) * vcl_sin(phi);
+    axis[1] = vcl_sin(theta) * vcl_sin(phi);
+    axis[2] = vcl_cos(phi);
+    this->set_rotation_axis(axis);
+    for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
+    {
+      this->set_angle(angle);
+      kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+    }
+  }
 
-  //vcl_cout<<"Phase I done";
+  vcl_cout<<"Phase I done";
 
-  ////when zenith is pi/2 we only traverse half a hemisphere
-  //phi = float(vnl_math::pi_over_2);
-  //theta = 0.0f;
-  //for (;theta < float(vnl_math::pi); theta +=theta_res)
-  //{
-  //  axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-  //  axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-  //  axis[2] = float(vcl_cos(phi));
-  //  this->set_rotation_axis(axis);
-  //  for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
-  //  {
-  //    this->set_angle(angle);
-  //    kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
-  //  }
-  //}
+  //when zenith is pi/2 we only traverse half a hemisphere
+  phi = float(vnl_math::pi_over_2);
+  theta = 0.0f;
+  for (;theta < float(vnl_math::pi); theta +=theta_res)
+  {
+    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
+    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
+    axis[2] = float(vcl_cos(phi));
+    this->set_rotation_axis(axis);
+    for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
+    {
+      this->set_angle(angle);
+      kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+    }
+  }
+#endif // 0
   return kernels;
 }
 
