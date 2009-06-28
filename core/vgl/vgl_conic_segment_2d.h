@@ -246,14 +246,14 @@ class vgl_conic_segment_2d
   //  Note that the methods swap_endpoints() and swap_direction() always swaps
   //  finiteness of a parabolic segment (unless the endpoints coincide). For
   //  hyperbolic segments this is not necessarily the case: both can be infinite.
-  bool is_finite() const;
+  bool is_finite() const { return true; } // TODO: NYI
 
   //: Finds out whether the given point lies on the conic segment.
   //  More specifically, lying on the segment implies lying on the conic.
   //  Moreover, the two endpoints (if effectively on the conic) will always
   //  lie on the segment. All other points of the conic lie either on this
   //  segment, or on the "swapped" segment, but never on both.
-  bool contains(vgl_homg_point_2d<Type> const& pt) const;
+  bool contains(vgl_homg_point_2d<Type> const& pt) const { return true; } // TODO: NYI
 };
 
 //: Write to stream
