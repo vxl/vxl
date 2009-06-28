@@ -15,7 +15,7 @@ class test_base_class
 {
  public:
   //: Destructor
-  virtual ~test_base_class() {};
+  virtual ~test_base_class() {}
 
   virtual int data() const { return 0; }
 

@@ -16,7 +16,7 @@ class test2_base_class
   void vtable_hack();
  public:
   //: Destructor
-  virtual ~test2_base_class() {};
+  virtual ~test2_base_class() {}
 
   virtual int data() const { return 0; }
 
