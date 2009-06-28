@@ -15,7 +15,7 @@
 #include <vil/vil_image_resource_plugin.h>
 #include <vil/vil_image_view.h>
 
-vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is, 
+vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
                                                     bool verbose)
 {
   for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
@@ -32,9 +32,8 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
   if (verbose) {
     vcl_cerr << __FILE__ ": Unable to load image;\ntried";
     for (vil_file_format** p = vil_file_format::all(); *p; ++p)
-    // 'flush' in case of segfault next time through loop. Else, we
-    // will not see those printed tags still in the stream buffer.
-    
+      // 'flush' in case of segfault next time through loop. Else, we
+      // will not see those printed tags still in the stream buffer.
       vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
     vcl_cerr << vcl_endl;
   }
@@ -49,11 +48,9 @@ vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
   vil_image_resource_sptr isp = 0;
   if (is)
     isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
-  if (!isp) {
-    if (verbose)
-      vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
-    return isp;
-  }
+  if (!isp && verbose)
+    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
+  return isp;
 }
 
 vil_image_resource_sptr vil_load_image_resource(char const* filename,
@@ -87,7 +84,7 @@ vil_image_resource_sptr vil_load_image_resource_plugin(char const* filename)
   return vil_image_resource_sptr(0);
 }
 
-vil_pyramid_image_resource_sptr 
+vil_pyramid_image_resource_sptr
 vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
 {
   for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
