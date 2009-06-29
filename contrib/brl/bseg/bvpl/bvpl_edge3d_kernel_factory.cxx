@@ -112,18 +112,17 @@ void bvpl_edge3d_kernel_factory::create_canonical()
 
 /******************Batch Methods ***********************/
 
-//: Creates a vector of kernels with azimuthal(\phi) and elevation(\theta) resolution equal to pi/4. 
-//: This uses spherical coordinates where \theta \in  [0,\pi) and \phi \in [0,2\pi)
+//: Creates a vector of kernels with azimuthal(\phi) and elevation(\theta) resolution equal to pi/4.
+//  This uses spherical coordinates where \theta \in  [0,\pi) and \phi \in [0,2\pi)
 bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
 {
   bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
-  float theta_res = float(vnl_math::pi_over_4); 
-  float phi_res = float(vnl_math::pi_over_4);  
+  float theta_res = float(vnl_math::pi_over_4);
+  float phi_res = float(vnl_math::pi_over_4);
   vnl_vector_fixed<float, 3> axis;
 
-  float theta = 0.0f;
-  float phi = 0.0f;
-
+  float theta = 0.0f,
+        phi = 0.0f;
 
   //polar theta=0,pi
   axis[0] =0.0f;
@@ -131,7 +130,6 @@ bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
   axis[2] =1.0f;
   this->set_rotation_axis(axis);
   kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
-	
 
   axis[0] =0.0f;
   axis[1] =0.0f;
@@ -142,15 +140,15 @@ bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
   // theta=pi/4,pi/2,3pi/4
   for (theta=vnl_math::pi_over_4;theta <= 3*float(vnl_math::pi_over_4); )
   {
-	  for (phi=0.0;phi<2*vnl_math::pi;phi+=phi_res)
-	  {
-		  axis[0] = vcl_cos(phi) * vcl_sin(theta);
-		  axis[1] = vcl_sin(phi) * vcl_sin(theta);
-		  axis[2] = vcl_cos(theta);
-		  this->set_rotation_axis(axis);
-		  kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
-	  }
-	  theta +=theta_res;
+    for (phi=0.0;phi<2*vnl_math::pi;phi+=phi_res)
+    {
+      axis[0] = vcl_cos(phi) * vcl_sin(theta);
+      axis[1] = vcl_sin(phi) * vcl_sin(theta);
+      axis[2] = vcl_cos(theta);
+      this->set_rotation_axis(axis);
+      kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
+    }
+    theta +=theta_res;
   }
   return kernels;
 }
