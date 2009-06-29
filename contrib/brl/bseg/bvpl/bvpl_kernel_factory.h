@@ -80,6 +80,9 @@ class bvpl_kernel_vector:public vbl_ref_count
   typedef vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iterator;
   //: Default constructor
   bvpl_kernel_vector(){}
+
+  iterator begin(){return kernels_.begin();}
+  iterator end(){return kernels_.end();}
   //: vector of kernel and their corresponding orientation axis.
   // Note that the magnitude of the vector corresponds to the rotation angle around that axis
   vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > > kernels_;

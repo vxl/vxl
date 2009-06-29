@@ -62,7 +62,7 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   
   //Since our kernel does not occupy the entire space we need to initialize our data
   for (unsigned i = 0; i < size; i++)
-    data_array[i] = min;
+    data_array[i] = 0;
 
   kernel_.begin();
   while (!kernel_.isDone()){
