@@ -8,7 +8,7 @@ include $(VXLROOT)/core/vpl/config.mk
 
 MINI_PROG_SOURCES += vobgetframe.cxx
 
-PROGRAM = glmovie
+PROGRAM = oxl_glmovie
 SOURCES += glmovie.cxx
 SOURCES += make_index.cxx
 
