@@ -1,9 +1,10 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_clean_world_process.cxx
-
+//This is brl/bseg/bvxm/pro/processes/bvxm_get_grid_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A process that deletes all voxel storage files in the world directory. use with caution!
-//        Inputs
+// \brief A process that deletes all voxel storage files in the world directory.
+//        use with caution!
+//        Inputs:
 //             0: The voxel world
 //        No outputs
 //
@@ -14,11 +15,8 @@
 //   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
 #include <brdb/brdb_value.h>
-
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 
@@ -32,7 +30,7 @@ namespace bvxm_get_grid_process_globals
 //:sets input and output types for bvxm_clean_world_process
 
 bool bvxm_get_grid_process_cons(bprb_func_process& pro)
-{  
+{
   using namespace bvxm_get_grid_process_globals;
   //input[0]: The voxel world
   //input[1]: the grid type
@@ -91,7 +89,7 @@ bool bvxm_get_grid_process(bprb_func_process& pro)
   }
   else if (voxeltype == "ocp_opinion"){
     bvxm_voxel_grid_base_sptr grid = world->get_grid<OCCUPANCY_OPINION>(index, scale);
-  } 
+  }
   else if (voxeltype == "apm_mog_grey"){
     bvxm_voxel_grid_base_sptr grid = world->get_grid<APM_MOG_GREY>(index, scale);
   }
