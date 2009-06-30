@@ -11,11 +11,15 @@
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Jun 29, 2009  Gamze Tunali
+//                 Added a datatype member to bvxm_drishti_header class. It is the datatype
+//                 to fill the drishti grid. It is needen specifically for bvxm_opinion 
+//                 because that type as T cannot be used to fill the resulting grid.
 // \endverbatim
 
 #include "../bvxm_voxel_grid.h"
 #include "../bvxm_voxel_grid_base.h"
+#include "../bvxm_opinion.h"
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
 
@@ -38,6 +42,7 @@ class bvxm_dristhi_traits<float>
 {
  public:
   static unsigned char dristhi_header() {return 8;}
+  typedef float datatype;
 };
 
 template<>
@@ -45,6 +50,7 @@ class bvxm_dristhi_traits<unsigned char>
 {
  public:
   static unsigned char dristhi_header() {return 0;}
+  typedef unsigned char datatype;
 };
 
 template<>
@@ -52,6 +58,16 @@ class bvxm_dristhi_traits<char>
 {
  public:
   static unsigned char dristhi_header() {return 1;}
+  typedef char datatype;
+};
+
+//opinion values will be written as float
+template<>
+class bvxm_dristhi_traits<bvxm_opinion>
+{
+ public:
+  static unsigned char dristhi_header() {return 8;}
+  typedef float datatype;
 };
 
 //: Save to dristi raw file
@@ -80,10 +96,10 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
 
     // write data
     // iterate through slabs and fill in memory array
-    T *data_array = new T[nx*ny*nz];
+    bvxm_dristhi_traits<T>::datatype *data_array = new bvxm_dristhi_traits<T>::datatype[nx*ny*nz];
 
     //get the range
-    bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
+    bvxm_voxel_grid<T>::iterator grid_it = grid->begin();
     T max = vcl_numeric_limits<T>::min();
     T min = vcl_numeric_limits<T>::max();
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
@@ -103,12 +119,13 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
       vcl_cout << '.';
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-          data_array[i*ny*nz + j*nz + k] =(*grid_it)(i,j);
+          vcl_cout << (*grid_it)(i,j) << vcl_endl;
+          data_array[i*ny*nz + j*nz + k] =(*grid_it)(i,j)-bvxm_dristhi_traits<T>::datatype(0);  // +0 is needed for bvxm_opinion, do not delete
         }
       }
     }
     vcl_cout << vcl_endl;
-    ofs.write(reinterpret_cast<char*>(data_array),sizeof(T)*nx*ny*nz);
+    ofs.write(reinterpret_cast<char*>(data_array),sizeof(bvxm_dristhi_traits<T>::datatype)*nx*ny*nz);
 
     ofs.close();
 

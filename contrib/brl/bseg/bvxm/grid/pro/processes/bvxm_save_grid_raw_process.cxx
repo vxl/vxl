@@ -9,17 +9,19 @@
 // \date Jun 19, 2009
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Jun 25, 2009  Gamze Tunali
+//       Added the type bvxm_opinion for grid  
 // \endverbatim
 
 
 #include <bprb/bprb_func_process.h>
 #include <bvxm/grid/io/bvxm_io_voxel_grid.h>
-
+#include <bvxm/grid/bvxm_opinion.h>
 
 namespace bvxm_save_grid_raw_process_globals
 {
   const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 0;
 }
 
 bool bvxm_save_grid_raw_process_cons(bprb_func_process& pro)
@@ -28,7 +30,7 @@ bool bvxm_save_grid_raw_process_cons(bprb_func_process& pro)
   // process takes 3 inputs:
   //input[0]: The filename of input grid
   //input[1]: The filename to write to
-  //input[2]: String identyfying datatype
+  //input[2]: String identifying datatype
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "vcl_string";
@@ -59,6 +61,12 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
     bvxm_grid_save_raw<float>(grid_base,volume_path);
     return true;
   }
+  else if (datatype == "ocp_opinion") {
+    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
+    bvxm_grid_save_raw<bvxm_opinion>(grid_base,volume_path);
+    return true;
+  }
   else
     vcl_cerr << "Grid type not supportted yet, but you can add one!\n";
+  return false;
 }

@@ -26,6 +26,7 @@ SET(bvxm_grid_sources
     bvxm_voxel_grid_base.h
     bvxm_voxel_grid.h                 bvxm_voxel_grid.txx
     bvxm_voxel_grid_basic_ops.h       
+    bvxm_opinion.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_grid_sources)
