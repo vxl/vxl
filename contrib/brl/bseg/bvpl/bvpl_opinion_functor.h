@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include "bvpl_kernel_iterator.h"
-#include <bvxm/bvxm_opinion.h>
+#include <bvxm/grid/bvxm_opinion.h>
 
 class bvpl_opinion_functor
 {
@@ -33,8 +33,8 @@ class bvpl_opinion_functor
  private:
   float b_;  // accumulates belief
   float u_;  // accumulates uncertainity
-  float n_;  // accumulates the number of apply called
-
+  float n_m_;  // accumulates the number of apply called
+  float n_p_;  // accumulates uncertainity
   //: Initializes class variables
   void init();
 };

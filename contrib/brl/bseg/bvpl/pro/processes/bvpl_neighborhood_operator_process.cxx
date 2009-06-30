@@ -16,7 +16,7 @@
 #include <brdb/brdb_value.h>
 
 #include <bvxm/grid/bvxm_voxel_grid.h>
-#include <bvxm/bvxm_opinion.h>
+#include <bvxm/grid/bvxm_opinion.h>
 #include <bvpl/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_edge2d_functor.h>
 #include <bvpl/bvpl_opinion_functor.h>
