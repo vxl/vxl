@@ -21,9 +21,7 @@
 #include <vgl/vgl_point_2d.h>
 #endif
 
-class bwm_observer_lsf;
-
-vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path)
+static vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path)
 {
   vcl_ifstream cam_stream(cam_path.data());
   vpgl_proj_camera<double> cam;
@@ -31,16 +29,17 @@ vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path)
   return cam;
 }
 
-void test_move_proj_plane()
+void test_move_proj_plane(int argc, char* argv[])
 {
   vgl_homg_plane_3d<double> plane1(0,0,1,10);
   vgl_homg_plane_3d<double> plane2(0,0,1,50);
-  vpgl_proj_camera<double> master_cam = read_projective_camera("C:\\test_images\\Jeep\\jcp1_042799_0930.txt");
+  vcl_string camera_path = argc < 2 ? "." : argv[1];
+  vpgl_proj_camera<double> master_cam = read_projective_camera(camera_path + "/jcp1_042799_0930.txt");
   vsol_point_2d_sptr master_img_pt = new vsol_point_2d(100, 100);
   bwm_observer_proj_cam master_obs(0);
   master_obs.set_camera(&master_cam, "");
 #if 0
-  vpgl_proj_camera<double> second_cam = read_projective_camera("C:\\test_images\\Jeep\\jcp4_042799_1030.txt");
+  vpgl_proj_camera<double> second_cam = read_projective_camera(camera_path + "/jcp4_042799_1030.txt");
   bwm_observer_cam_proj sec_obs;
   sec_obs.set_camera(&second_cam, "");
 
@@ -85,4 +84,4 @@ void test_move_proj_plane()
 #endif // 0
 }
 
-TESTMAIN(test_move_proj_plane);
+TESTMAIN_ARGS(test_move_proj_plane);
