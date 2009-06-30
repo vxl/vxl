@@ -22,7 +22,7 @@ ADD_TEST( boxm_test_binary_io          ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all t
 ADD_TEST( boxm_test_block_iter         ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_block_iter  )
 ADD_TEST( boxm_block_vis_graph         ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_block_vis_graph  )
 # ADD_TEST( boxm_test_cell_vis_graph     ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_cell_vis_graph  )
-ADD_TEST( boxm_test_quad_interpolate   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_quad_interpolate  )
+ADD_TEST( boxm_test_quad_interpolate   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_quad_interpolate ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 # ADD_TEST( boxm_test_render_image       ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_render_image  )
 # ADD_TEST( boxm_test_save_raw           ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_save_raw  )
 # ADD_TEST( boxm_test_update             ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_update  )

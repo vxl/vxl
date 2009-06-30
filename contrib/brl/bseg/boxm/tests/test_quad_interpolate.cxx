@@ -18,7 +18,7 @@
 #include <vpl/vpl.h>
 
 
-MAIN( test_quad_interpolate )
+MAIN_ARGS( test_quad_interpolate )
 {
   START ("QUAD INTERPOLATE");
   vcl_vector<vgl_point_2d<double> > points;
@@ -36,11 +36,11 @@ MAIN( test_quad_interpolate )
   vil_image_view<float> img_max(40,40);
   vil_image_view<float> g_img_max(40,40);
 
-  img_max.fill(0.0);
-  g_img_max.fill(0.0);
+  img_max.fill(0.0f);
+  g_img_max.fill(0.0f);
   // creating ground truth
-  g_img_max(10,10)=10;g_img_max(10,11)=10;
-  g_img_max(11,10)=11;g_img_max(11,11)=11;
+  g_img_max(10,10)=10.5f; g_img_max(10,11)=10.5f;
+  g_img_max(11,10)=11.5f; g_img_max(11,11)=11.5f;
 
   boxm_utils::quad_interpolate(poly_it, xvals, yvals, vals,img_max,0);
   for (unsigned i=10;i<=12;i++)
@@ -52,8 +52,8 @@ MAIN( test_quad_interpolate )
     vcl_cout << '\n';
   }
   bool flag=true;
-  for (unsigned i=0;i<g_img_max.ni();i++)
-  for (unsigned j=0;j<g_img_max.ni();j++)
+  for (unsigned i=0; i<g_img_max.ni() && flag; ++i)
+  for (unsigned j=0; j<g_img_max.nj() && flag; ++j)
     if (g_img_max(i,j)!=img_max(i,j))
       flag=false;
 
@@ -73,7 +73,7 @@ MAIN( test_quad_interpolate )
   //vil_image_view<float> img_min(40,40);
   //vil_image_view<float> img_max(40,40);
 
-  g_img_max.fill(0.0);
+  g_img_max.fill(0.0f);
   // creating ground truth
   g_img_max(10,10)=10;g_img_max(10,11)=10;
   g_img_max(11,10)=10;g_img_max(11,11)=10;
@@ -82,12 +82,12 @@ MAIN( test_quad_interpolate )
   float count=0;
   boxm_utils::quad_mean(poly_it_1,g_img_max,val,count);
 
-
   // code to test the projection of a cube .
   vgl_box_3d<double> cell_bb(-0.8,19.2,-18.75,0.7625, 20.7625,-17.1875);
-  vcl_ifstream ifs("D:/vj/data/CapitolSite500/cameras_KRT/frame_00000.txt");
+  vcl_string camera_input_path = (argc < 2) ? "." : argv[1];
+  vcl_ifstream ifs((camera_input_path + "/frame_00000.txt").c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file D:/vj/data/CapitolSite500/cameras_KRT/frame_00000.txt\n";
+    vcl_cerr << "Failed to open file " << camera_input_path << "/frame_00000.txt\n";
     return false;
   }
   vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
@@ -107,13 +107,10 @@ MAIN( test_quad_interpolate )
   boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam_d,xverts,yverts);
   boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdist);
 
-  vil_save(vil_plane(front_xyz,0),"d:/vj/scripts/boxm/exp1/front.tiff");
-  //vil_save(vil_plane(front_xyz,1),"d:/vj/scripts/boxm/exp1/front_y.tiff");
-  //vil_save(vil_plane(front_xyz,2),"d:/vj/scripts/boxm/exp1/front_z.tiff");
-
-  vil_save(vil_plane(back_xyz,0),"d:/vj/scripts/boxm/exp1/back.tiff");
-  //vil_save(vil_plane(back_xyz,1),"d:/vj/scripts/boxm/exp1/back_y.tiff");
-  //vil_save(vil_plane(back_xyz,2),"d:/vj/scripts/boxm/exp1/back_z.tiff");
+  vcl_string image_output_path = (argc < 3) ? "." : argv[2];
+  vcl_cout << "Saving two TIFF files to directory " << image_output_path << '\n';
+  vil_save(vil_plane(front_xyz,0),(image_output_path + "/front.tiff").c_str());
+  vil_save(vil_plane(back_xyz,0), (image_output_path + "/back.tiff").c_str());
 
   SUMMARY();
 }
