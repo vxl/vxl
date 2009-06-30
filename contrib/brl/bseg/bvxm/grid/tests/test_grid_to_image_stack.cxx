@@ -11,10 +11,10 @@ template<class T>
 T test_value();
 
 template<>
-float test_value<float>(){return 0.3f;}
+float test_value<float>() { return 0.3f; }
 
 template<>
-unsigned char test_value<unsigned char>(){return (unsigned char)25;}
+unsigned char test_value<unsigned char>() { return (unsigned char)25; }
 
 
 template<class T>
@@ -25,7 +25,7 @@ void save_grid()
   bvxm_voxel_grid<T> *grid = new bvxm_voxel_grid<T>(grid_size);
   grid->initialize_data(T(test_value<T>()));
   bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, dir);
-  
+
   //read images back in
   vcl_stringstream grid_glob;
   grid_glob << dir << "/*" << bvxm_extension<T>();
@@ -41,7 +41,7 @@ void save_grid()
     }
     vul_file::delete_file_glob(file_it());
   }
-  
+
   //make sure images were deleted
   if (vul_file::is_directory(dir))
     vpl_rmdir(dir.c_str());
@@ -56,7 +56,7 @@ void save_grid()
   bvxm_voxel_grid<vnl_vector_fixed<T,N> > *grid = new  bvxm_voxel_grid<vnl_vector_fixed<T,N> >(grid_size);
   grid->initialize_data(vnl_vector_fixed<T,N>(test_value<T>()));
   bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, dir);
-  
+
   //read images back in
   vcl_stringstream grid_glob;
   grid_glob << dir << "/*" << bvxm_extension<T>();
@@ -65,17 +65,17 @@ void save_grid()
     vcl_stringstream grid_glob;
     vil_image_view_base_sptr img_base = vil_load(file_it());
     vil_image_view<T> *img_view = dynamic_cast<vil_image_view<T>*>(img_base.ptr());
-   
+
       for (unsigned p=0; p < N; ++p) {
-        for(unsigned ni = 0; ni<2; ni++)
-          for(unsigned nj=0; nj<2; nj++){
+        for (unsigned ni = 0; ni<2; ni++)
+          for (unsigned nj=0; nj<2; nj++){
             bool result = (*img_view)(ni,nj,p) == test_value<T>();
             TEST("Threshold",result, true);
           }
       }
     vul_file::delete_file_glob(file_it());
     }
-  
+
   //make sure images were deleted
   if (vul_file::is_directory(dir))
     vpl_rmdir(dir.c_str());
@@ -84,10 +84,9 @@ void save_grid()
 MAIN( test_grid_to_image_stack )
 {
   START("grid image stack test");
-  vcl_cout << "Float \n";
+  vcl_cout << "Float\n";
   save_grid<float>();
-  vcl_cout << "Vector Float \n";
-  save_grid<float, 3>();
+  vcl_cout << "Vector Float\n";
+  save_grid<float,3>();
   SUMMARY();
-  
 }
