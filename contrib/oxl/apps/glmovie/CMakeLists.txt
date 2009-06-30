@@ -23,9 +23,9 @@ IF(OPENGL_FOUND)
 
   IF (GLUT_FOUND)
     INCLUDE_DIRECTORIES( ${GLUT_INCLUDE_DIR} )
-    ADD_EXECUTABLE( glmovie glmovie.cxx make_index.cxx )
-    INSTALL_TARGETS( /bin glmovie )
-    TARGET_LINK_LIBRARIES( glmovie ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES} )
+    ADD_EXECUTABLE( oxl_glmovie glmovie.cxx make_index.cxx )
+    INSTALL_TARGETS( /bin oxl_glmovie )
+    TARGET_LINK_LIBRARIES( oxl_glmovie ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES} )
   ENDIF (GLUT_FOUND)
 
 ENDIF(OPENGL_FOUND)
