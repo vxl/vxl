@@ -66,7 +66,11 @@ MAIN(test_bvpl_kernels)
   for (;iter!=kernel_3d_vecs->end();iter++)
   {
     vnl_vector_fixed<float,3> axis=iter->first;
+<<<<<<< .mine
+	//iter->second->print();
+=======
     iter->second->print();
+>>>>>>> .r25567
 #if 0
     vcl_ostringstream s;
     s.precision(2);

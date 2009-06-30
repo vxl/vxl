@@ -12,7 +12,8 @@ SET(bvpl_sources
     bvpl_kernel_factory.h            bvpl_kernel_factory.cxx
     bvpl_edge2d_kernel_factory.h     bvpl_edge2d_kernel_factory.cxx
     bvpl_edge3d_kernel_factory.h     bvpl_edge3d_kernel_factory.cxx
-
+	bvpl_edge_algebraic_mean_functor.h bvpl_edge_algebraic_mean_functor.txx
+	bvpl_edge_geometric_mean_functor.h bvpl_edge_geometric_mean_functor.txx
     bvpl_neighb_operator.h  
     bvpl_vector_operator.h         
 )
