@@ -14,8 +14,8 @@
 //   <none yet>
 // \endverbatim
 
-#include "../bvxm_voxel_grid.h"
-#include "bvxm_slab_to_image.h"
+#include <bvxm/bvxm_voxel_grid.h>
+#include <bvxm/bvxm_slab_to_image.h>
 #include <vul/vul_file.h>
 #include <vcl_iostream.h>
 #include <vil/vil_save.h>

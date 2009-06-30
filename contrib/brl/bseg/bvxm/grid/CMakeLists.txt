@@ -4,7 +4,6 @@ INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 #INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 #INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
 #INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 #INCLUDE( ${MODULE_PATH}/FindTIFF.cmake)
 
 IF (WIN32 AND VXL_USE_LFS)
@@ -25,7 +24,7 @@ SET(bvxm_grid_sources
     bvxm_voxel_slab_iterator.h        bvxm_voxel_slab_iterator.txx
     bvxm_voxel_grid_base.h
     bvxm_voxel_grid.h                 bvxm_voxel_grid.txx
-    bvxm_voxel_grid_basic_ops.h       
+    bvxm_voxel_grid_basic_ops.h
     bvxm_opinion.h
 )
 
