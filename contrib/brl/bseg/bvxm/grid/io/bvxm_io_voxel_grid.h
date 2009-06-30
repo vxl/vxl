@@ -83,7 +83,7 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
     T *data_array = new T[nx*ny*nz];
 
     //get the range
-    bvxm_voxel_grid<float>::const_iterator grid_it = grid->begin();
+    bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
     T max = vcl_numeric_limits<T>::min();
     T min = vcl_numeric_limits<T>::max();
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
