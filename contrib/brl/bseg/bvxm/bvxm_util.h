@@ -75,8 +75,8 @@ class bvxm_util
                           bvxm_voxel_slab<bool> const& s2,
                           bvxm_voxel_slab<bool> &result);
 
-  template<class T>
-  static void warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
+  template<class T, class M>
+  static void warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
                                  vgl_h_matrix_2d<double> invH,
                                  bvxm_voxel_slab<T> &slab_out);
 
@@ -101,8 +101,8 @@ class bvxm_util
   static bool slab_to_img(bvxm_voxel_slab<T> const& slab,
                           vil_image_view_base_sptr image);
 
-  template<class T>
-  static void multiply_slabs(bvxm_voxel_slab<T> const& s1,
+  template<class T, class M>
+  static void multiply_slabs(bvxm_voxel_slab<M> const& s1,
                              bvxm_voxel_slab<T> const& s2,
                              bvxm_voxel_slab<T> &product);
 
@@ -164,8 +164,8 @@ class bvxm_util
                                vnl_matrix<float> &weights);
 };
 
-template<class T>
-void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
+template<class T, class M>
+void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
                                    vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out)
 {
   vnl_matrix_fixed<double,3,3> Hd = invH.get_matrix();
@@ -194,7 +194,7 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
   vcl_cout << "xsize = " << xsize << " ysize = " << ysize << vcl_endl;
 #endif // 0
 
-  bvxm_voxel_slab<T> slab_in_smooth;
+  bvxm_voxel_slab<M> slab_in_smooth;
   slab_in_smooth.deep_copy(slab_in);
   smooth_gaussian(slab_in_smooth, xstd, ystd);
 
@@ -736,8 +736,8 @@ void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const
   return;
 }
 
-template<class T>
-void bvxm_util::multiply_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &product)
+template<class T, class M>
+void bvxm_util::multiply_slabs(bvxm_voxel_slab<M> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &product)
 {
   // check sizes
   if ( (product.nx() != s1.nx()) || (product.nx() != s2.nx()) ||
@@ -747,7 +747,8 @@ void bvxm_util::multiply_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> 
     return;
   }
 
-  typename bvxm_voxel_slab<T>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
+  typename bvxm_voxel_slab<M>::const_iterator s1_it = s1.begin();
+  typename bvxm_voxel_slab<T>::const_iterator s2_it = s2.begin();
   typename bvxm_voxel_slab<T>::iterator prod_it = product.begin();
   for (; prod_it != product.end(); ++s1_it, ++s2_it, ++prod_it) {
     *prod_it = *s1_it * *s2_it;
@@ -814,8 +815,10 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
     for (unsigned y=0; y<slab.ny(); ++y)
     {
       for (unsigned x=0; x<=slab.nx() - kernel_size_x; ++x) {
+        T xx=slab(x,y);
         T sum = slab(x,y) * kernel_1dx[0];
         for (unsigned k=1; k<kernel_size_x; ++k) {
+          T yy=slab(x+k,y);
           sum += slab(x+k,y) * kernel_1dx[k];
         }
         slab_work(x+kernel_radius_x,y) = sum;
@@ -886,7 +889,7 @@ void bvxm_util::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string
   typename vil_image_view<T>::iterator img_it = img.begin();
   typename bvxm_voxel_slab<T>::const_iterator slab_it = slab_in.begin();
   for (; img_it != img.end(); ++img_it, ++slab_it) {
-    *img_it = *slab_it;
+    *img_it = (*slab_it) + 0;
   }
   vil_save(img,filename.c_str());
 
