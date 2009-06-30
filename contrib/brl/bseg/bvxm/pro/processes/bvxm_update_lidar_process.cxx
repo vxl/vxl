@@ -23,7 +23,7 @@
 
 namespace bvxm_update_lidar_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 2;
 }
 
@@ -43,6 +43,7 @@ bool bvxm_update_lidar_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
   input_types_[3] = "unsigned";
+  input_types_[4] = "bool";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -75,6 +76,7 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   unsigned scale_idx = pro.get_input<unsigned>(i++);
+  bool use_opinion = pro.get_input<bool>(i++);
 
   if ( !img ) {
     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
@@ -91,6 +93,10 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
     return false;
   }
 
+  if ( !use_opinion ) {
+    use_opinion = false;
+  }
+
   //create metadata:
   bvxm_image_metadata observation(img,camera);
 
@@ -102,8 +108,12 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
 
   for (unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
   {
-    result =result && world->update_lidar(observation, prob_map, mask,curr_scale);
-    if (curr_scale==scale_idx)
+    if (!use_opinion)
+      result =result && world->update_lidar<OCCUPANCY>(observation, prob_map, mask,curr_scale);
+    else {
+      vcl_cout << "WOrking with opinion!" << vcl_endl;
+      result =result && world->update_lidar<OCCUPANCY_OPINION>(observation, prob_map, mask,curr_scale);
+    } if (curr_scale==scale_idx)
     {
       //Set and store outputs
       unsigned j = 0;

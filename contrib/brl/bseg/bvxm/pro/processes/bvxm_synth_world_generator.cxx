@@ -569,7 +569,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
   update(grid_size, world, intensity_grid, ocp_grid, apm_grid,
                cameras, image_set_1, bin);
 
-  world->save_occupancy_raw(world_dir_ + "/ocp.raw");
+  //world->save_occupancy_raw(world_dir_ + "/ocp.raw");
   return world;
 }
 

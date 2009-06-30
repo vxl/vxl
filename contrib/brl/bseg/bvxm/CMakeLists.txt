@@ -31,7 +31,6 @@ SET(bvxm_sources
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
     bvxm_util.h                     bvxm_util.cxx
-    bvxm_opinion.h
 )
 AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 

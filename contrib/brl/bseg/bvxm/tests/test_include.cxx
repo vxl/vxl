@@ -4,7 +4,6 @@
 #include <bvxm/bvxm_mog_grey_processor.h>
 #include <bvxm/bvxm_mog_mc_processor.h>
 #include <bvxm/bvxm_mog_rgb_processor.h>
-#include <bvxm/bvxm_opinion.h>
 #include <bvxm/bvxm_util.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_voxel_world.h>
