@@ -4,11 +4,14 @@ SET(bvxm_grid_io_sources
     bvxm_io_voxel_slab_base.h  bvxm_io_voxel_slab_base.cxx
     bvxm_io_voxel_grid_base.h  bvxm_io_voxel_grid_base.cxx
     bvxm_io_voxel_grid.h
+    bvxm_slab_to_image.h
+    bvxm_grid_to_image_stack.h
+    
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_grid_io_sources)
 
 ADD_LIBRARY(bvxm_grid_io ${bvxm_grid_io_sources})
-TARGET_LINK_LIBRARIES(bvxm_grid_io bvxm_grid vsl vbl vil vil_io)
+TARGET_LINK_LIBRARIES(bvxm_grid_io bvxm_grid vsl vbl vil vil_io vul)
 
 
