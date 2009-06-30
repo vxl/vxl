@@ -154,7 +154,7 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   //spherical coordinates of the rotation axis.
 
   float radius = 1.0,
-        /* theta = vcl_atan2(rotation_axis[1],rotation_axis[0]), //azimuth, unused */
+        theta = vcl_atan2(rotation_axis[1],rotation_axis[0]), //azimuth,
         phi = vcl_acos(rotation_axis[2]/radius); //zenith
 
   //set kernel back to its caninical form , since the rotation is calculated from its canonical position
@@ -163,12 +163,14 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   //construct a rotation to rotate vector a to vector b; 
   //if a and b are oposite, then this rotation is ambiguos(infinitely many axis of rotation)
   //and we will choose to reflect
-  if (vnl_cross_3d(rotation_axis_, rotation_axis) == vnl_vector_fixed<float,3>(0.0f, 0.0f, 0.0f))
+  if (vnl_cross_3d(canonical_rotation_axis_, rotation_axis) == vnl_vector_fixed<float,3>(0.0f, 0.0f, 0.0f))
   {
-    if (dot_product(rotation_axis_, rotation_axis) < 0) //opposite vectors
+    if (dot_product(canonical_rotation_axis_, rotation_axis) < 0) //opposite vectors
     {
-      vgl_rotation_3d<float> r_align
-        (vnl_quaternion<float>(vnl_vector_fixed<float,3>(0.0f, 1.0f, 0.0f), float(vnl_math::pi)));  
+		vnl_vector_fixed<float,3> axis_perp(vcl_cos(theta)*vcl_sin(phi+vnl_math::pi_over_2),
+											vcl_sin(theta)*vcl_sin(phi+vnl_math::pi_over_2),
+											vcl_cos(phi+vnl_math::pi_over_2));
+	  vgl_rotation_3d<float> r_align(vnl_quaternion<float>(axis_perp, float(vnl_math::pi)));  
       rotation_axis_ = rotation_axis;
       kernel_ = rotate(r_align);
       return;

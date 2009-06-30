@@ -124,7 +124,7 @@ bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
   float theta = 0.0f,
         phi = 0.0f;
 
-  //polar theta=0,pi
+  //polar phi=0,pi
   axis[0] =0.0f;
   axis[1] =0.0f;
   axis[2] =1.0f;
@@ -138,17 +138,20 @@ bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
   kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
 
   // theta=pi/4,pi/2,3pi/4
-  for (theta=vnl_math::pi_over_4;theta <= 3*float(vnl_math::pi_over_4); )
+  for (phi=vnl_math::pi_over_4;phi <= 3*float(vnl_math::pi_over_4);)
   {
-    for (phi=0.0;phi<2*vnl_math::pi;phi+=phi_res)
-    {
-      axis[0] = vcl_cos(phi) * vcl_sin(theta);
-      axis[1] = vcl_sin(phi) * vcl_sin(theta);
-      axis[2] = vcl_cos(theta);
-      this->set_rotation_axis(axis);
-      kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
-    }
-    theta +=theta_res;
+	  for (theta=0.0;theta<2*vnl_math::pi-theta_res/2; )
+	  {
+
+		  axis[0] = vcl_cos(theta) * vcl_sin(phi);
+		  axis[1] = vcl_sin(theta) * vcl_sin(phi);
+		  axis[2] = vcl_cos(phi);
+		  this->set_rotation_axis(axis);
+		  kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
+		  theta +=theta_res;
+	  }
+
+	  phi+=phi_res;
   }
   return kernels;
 }
