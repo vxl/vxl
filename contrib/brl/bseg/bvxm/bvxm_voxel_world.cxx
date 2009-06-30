@@ -269,7 +269,8 @@ bool bvxm_voxel_world::clean_grids()
 
   return result;
 }
-/*
+
+#if 0 // the following three methods commented out:
 // Update a voxel grid with data from lidar/camera pair
 bool bvxm_voxel_world::update_lidar(bvxm_image_metadata const& observation, unsigned scale)
 {
@@ -342,7 +343,6 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   vil_save(*metadata.img, "lidar_img.tiff");
   bvxm_util::write_slab_as_image(image_slab,"lidar_slab.tiff");
 #endif
-
 
   // temporary voxel grids to hold preX and PL*visX values
   bvxm_voxel_grid<float> preX(grid_size);
@@ -583,8 +583,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   return true;
 }
+#endif // 0
 
-*/
 bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height,
                                           vil_image_view_base_sptr& lidar_edges,
                                           vil_image_view_base_sptr& lidar_edges_prob,
