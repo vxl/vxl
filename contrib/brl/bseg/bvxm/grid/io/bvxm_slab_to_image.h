@@ -1,14 +1,13 @@
-// This is brl/bseg/bvxm/grid/io/bvxm_io_voxel_slab.h
+// This is brl/bseg/bvxm/grid/io/bvxm_slab_to_image.h
 #ifndef bvxm_io_voxel_slab_h
 #define bvxm_io_voxel_slab_h
-
 //:
 // \file
-// \brief 
+// \brief
 //
 // \author Isabel Restrepo mir@lems.brown.edu
 //
-// \date  6/26/09
+// \date  June 26, 2009
 //
 // \verbatim
 //  Modifications
@@ -22,6 +21,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
+#include <vcl_iostream.h>
 
 class bvxm_slab_to_image
 {
@@ -29,21 +29,20 @@ class bvxm_slab_to_image
   //:Converts slab to a vil_image. Datatype is a vnl_vector_fixed
   template<class T, unsigned N>
   static bool slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab, vil_image_view_base_sptr image);
-  
+
   //Converts slab to a vil_image. Datatype is a scalar
   template<class T>
   static bool slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image_view_base_sptr image);
-  
+
   //: Simple function to save a slab into an image. Used for debugging where the type of output image is not so important
   template<class T>
   static void write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string filename);
-  
+
   //: Simple function to save a slab into an image. Used for debugging where the type of output image is not so important
   template<class T, unsigned N>
   static void write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,vcl_string filename);
-
 };
-  
+
 
 //:Saves slab to a vil_image. Datatype is a vnl_vector_fixed
 template<class T, unsigned N>
@@ -55,7 +54,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
     vcl_cerr << "error: slab and image are different sizes.\n";
     return false;
   }
-  
+
   // take care of pixel format issues. might want to specialize this function for rgb, etc
   switch (image->pixel_format())
   {
@@ -70,7 +69,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
             vil_image_view<unsigned char>::iterator plane_it = img_view->begin() + (p*img_view->planestep());
             img_its.push_back(plane_it);
           }
-          
+
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
           for (; slab_it != slab.end(); ++slab_it)
           {
@@ -93,7 +92,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
         return false;
       }
       break;
-      
+
     case VIL_PIXEL_FORMAT_FLOAT:
       if (image->nplanes() ==N)
       {
@@ -105,7 +104,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
             vil_image_view<float>::iterator plane_it = img_view->begin() + (p*img_view->planestep());
             img_its.push_back(plane_it);
           }
-          
+
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
           for (; slab_it != slab.end(); ++slab_it)
           {
@@ -128,13 +127,13 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
         return false;
       }
       break;
-      
+
     case VIL_PIXEL_FORMAT_RGB_BYTE:
-      
+
       if (vil_image_view<vil_rgb<unsigned char> > *img_view = dynamic_cast<vil_image_view< vil_rgb<unsigned char> >*>(image.ptr()))
       {
         vil_image_view<vxl_byte> plane_view = vil_view_as_planes(*img_view);
-        
+
         if (img_view->nplanes() == 1)
         {
           vcl_vector<vil_image_view<unsigned char>::iterator> img_its;
@@ -164,15 +163,15 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
         vcl_cerr << "error: failed to cast image_view_base to image_view\n";
         return false;
       }
-      
+
       break;
-      
+
     default:
       vcl_cerr << "img_to_slab: unsupported pixel type\n";
       return false;
       break;
   }
-  
+
   return true;
 }
 
@@ -185,7 +184,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
     vcl_cerr << "error: slab and image are different sizes.\n";
     return false;
   }
-  
+
   // take care of pixel format issues. might want to specialize this function for rgb, etc
   switch (image->pixel_format())
   {
@@ -204,7 +203,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
         return false;
       }
       break;
-      
+
     case VIL_PIXEL_FORMAT_FLOAT:
       if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(image.ptr()))
       {
@@ -220,13 +219,13 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
         return false;
       }
       break;
-      
+
     default:
       vcl_cerr << "img_to_slab: unsupported pixel type\n";
       return false;
       break;
   }
-  
+
   return true;
 }
 
@@ -248,10 +247,10 @@ void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,
     }
   }
   vil_save(img,filename.c_str());
-  
+
   return;
-}          
-          
+}
+
 // used for debugging
 template<class T>
 void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string filename)
@@ -263,7 +262,7 @@ void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,v
     *img_it = *slab_it;
   }
   vil_save(img,filename.c_str());
-  
+
   return;
 }
 
