@@ -27,10 +27,12 @@
 #include "bvxm_mog_mc_processor.h"
 #include "bvxm_lidar_processor.h"
 #include "bvxm_float_processor.h"
+#include "grid/bvxm_opinion.h"
 
 enum bvxm_voxel_type
 {
   OCCUPANCY = 0,
+  OCCUPANCY_OPINION,
   APM_MOG_GREY,
   APM_MOG_RGB,
   APM_MOG_MC_2_3,
@@ -80,6 +82,18 @@ class bvxm_voxel_traits<OCCUPANCY>
   static inline voxel_datatype initial_val() { return 0.005f; }
 };
 
+//: Voxel traits for an occupancy grid
+template<>
+class bvxm_voxel_traits<OCCUPANCY_OPINION>
+{
+ public:
+  //:Datatype of the occupancy probabilities
+  typedef bvxm_opinion voxel_datatype;
+
+  static inline vcl_string filename_prefix(){ return "ocp_opinion"; }
+  static inline bool is_multibin() { return false; }
+  static inline voxel_datatype initial_val() { return bvxm_opinion(0.005f);}
+};
 //: Voxel traits for a mixture of gaussian appereance model of grey-scale images
 template<>
 class bvxm_voxel_traits<APM_MOG_GREY>
