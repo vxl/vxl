@@ -1,6 +1,7 @@
 #include "bvpl_edge3d_kernel_factory.h"
 //:
 // \file
+
 #include <vcl_algorithm.h>
 #include <vnl/vnl_quaternion.h>
 
@@ -11,8 +12,8 @@ bvpl_edge3d_kernel_factory::bvpl_edge3d_kernel_factory()
   width_=0;
   length_=0;
   angular_resolution_ = 0;
-  canonical_rotation_axis_[0] = 0.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0;
-  canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 0.0; canonical_parallel_axis_[2] = 0.0;
+  canonical_rotation_axis_[0] = 0.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
+  canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 0.0f; canonical_parallel_axis_[2] = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
   //parallel_axis_ = canonical_parallel_axis_;
   angle_ = 0.0f;
@@ -35,9 +36,9 @@ bvpl_edge3d_kernel_factory::bvpl_edge3d_kernel_factory(unsigned length, unsigned
   //If this was 2D, then the angular resolution would be 180/(2l -2) (Recusive Binary Dilation... Desikachari Nadadur)
   angular_resolution_=0;
   //set canonical axis to x-axis
-  canonical_rotation_axis_[0] = 1.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0;
+  canonical_rotation_axis_[0] = 1.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
 
-  canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 1.0; canonical_parallel_axis_[2] = 0.0;
+  canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 1.0f; canonical_parallel_axis_[2] = 0.0f;
   angle_ = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
   //parallel_axis_ = canonical_paralell_axis_;
@@ -140,18 +141,17 @@ bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
   // theta=pi/4,pi/2,3pi/4
   for (phi=vnl_math::pi_over_4;phi <= 3*float(vnl_math::pi_over_4);)
   {
-	  for (theta=0.0;theta<2*vnl_math::pi-theta_res/2; )
-	  {
+    for (theta=0.0f;theta<float(2.0*vnl_math::pi-theta_res/2.0); )
+    {
+      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
+      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
+      axis[2] = float(vcl_cos(phi));
+      this->set_rotation_axis(axis);
+      kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
+      theta +=theta_res;
+    }
 
-		  axis[0] = vcl_cos(theta) * vcl_sin(phi);
-		  axis[1] = vcl_sin(theta) * vcl_sin(phi);
-		  axis[2] = vcl_cos(phi);
-		  this->set_rotation_axis(axis);
-		  kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
-		  theta +=theta_res;
-	  }
-
-	  phi+=phi_res;
+    phi+=phi_res;
   }
   return kernels;
 }
