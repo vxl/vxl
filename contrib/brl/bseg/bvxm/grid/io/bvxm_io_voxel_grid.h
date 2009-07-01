@@ -106,9 +106,9 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
           if ((*grid_it)(i,j)> max)
-            max = (*grid_it)(i,j);
+            max = (*grid_it)(i,j)-0; // -0 is for bvxm_opinion voxel type
           if ((*grid_it)(i,j)< min)
-            min = (*grid_it)(i,j);
+            min = (*grid_it)(i,j)-0;
         }
       }
     }
@@ -119,7 +119,6 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
       vcl_cout << '.';
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-          vcl_cout << (*grid_it)(i,j) << vcl_endl;
           data_array[i*ny*nz + j*nz + k] =(*grid_it)(i,j)-bvxm_dristhi_traits<T>::datatype(0);  // +0 is needed for bvxm_opinion, do not delete
         }
       }
