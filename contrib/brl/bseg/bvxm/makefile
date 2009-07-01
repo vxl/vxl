@@ -13,7 +13,6 @@ SOURCES += bvxm_lidar_processor.cxx
 MANPAGE_SOURCES += bvxm_voxel_traits.h
 MANPAGE_SOURCES += bvxm_mog_mc_processor.txx
 MANPAGE_SOURCES += bvxm_float_processor.h
-MANPAGE_SOURCES += bvxm_opinion.h
 
 SUBDIRS += io pro algo grid
 

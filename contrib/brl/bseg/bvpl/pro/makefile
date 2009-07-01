@@ -8,6 +8,9 @@ MANPAGE_SOURCES += bvpl_processes.h
 SOURCES += processes/bvpl_neighborhood_operator_process.cxx
 SOURCES += processes/bvpl_create_edge2d_kernel_process.cxx
 SOURCES += processes/bvpl_create_edge2d_kernel_vector_process.cxx
+SOURCES += processes/bvpl_create_edge3d_kernel_vector_process.cxx
+SOURCES += processes/bvpl_vector_operator_process.cxx
+SOURCES += processes/bvpl_create_edge3d_kernel_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

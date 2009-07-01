@@ -11,6 +11,10 @@ MANPAGE_SOURCES += bvpl_neighb_operator.h
 SOURCES += bvpl_kernel_factory.cxx
 SOURCES += bvpl_edge2d_kernel_factory.cxx
 SOURCES += bvpl_opinion_functor.cxx
+SOURCES += bvpl_edge3d_kernel_factory.cxx
+MANPAGE_SOURCES += bvpl_vector_operator.h
+MANPAGE_SOURCES += bvpl_edge_algebraic_mean_functor.txx
+MANPAGE_SOURCES += bvpl_edge_geometric_mean_functor.txx
 
 SUBDIRS += pro io
 
