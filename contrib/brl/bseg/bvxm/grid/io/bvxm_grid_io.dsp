@@ -99,6 +99,9 @@ SOURCE=.\bvxm_io_voxel_grid_base.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvxm_voxel_slab_base-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bvxm_voxel_grid_base-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -110,6 +113,12 @@ SOURCE=.\bvxm_io_voxel_grid.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_io_voxel_grid_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_slab_to_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_grid_to_image_stack.h
 # End Source File
 # End Group
 # End Target

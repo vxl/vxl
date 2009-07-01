@@ -102,6 +102,9 @@ SOURCE=.\bvpl_edge2d_kernel_factory.cxx
 SOURCE=.\bvpl_opinion_functor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_edge3d_kernel_factory.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 # End Source File
 # Begin Source File
@@ -121,6 +124,9 @@ SOURCE=.\Templates/bvpl_subgrid_iterator+bvxm_opinion-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+bvxm_opinion-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_edge_algebraic_mean_functor+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -157,6 +163,24 @@ SOURCE=.\bvpl_edge2d_kernel_factory.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_opinion_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge3d_kernel_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge_algebraic_mean_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_vector_operator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge_algebraic_mean_functor.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge_geometric_mean_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_edge_geometric_mean_functor.txx
 # End Source File
 # End Group
 # End Target

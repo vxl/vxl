@@ -264,6 +264,9 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bvxm_opinion-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_mem+bvxm_opinion-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+vnl_vector_fixed+float.3--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -317,6 +320,9 @@ SOURCE=.\bvxm_voxel_slab.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_voxel_grid_basic_ops.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_opinion.h
 # End Source File
 # End Group
 # End Target

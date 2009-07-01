@@ -105,6 +105,15 @@ SOURCE=.\processes/bvpl_create_edge2d_kernel_process.cxx
 SOURCE=.\processes/bvpl_create_edge2d_kernel_vector_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_create_edge3d_kernel_vector_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_vector_operator_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_create_edge3d_kernel_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # End Group
