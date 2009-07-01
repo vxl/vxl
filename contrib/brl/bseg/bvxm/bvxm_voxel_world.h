@@ -737,8 +737,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
                                          bool return_mask,
                                          vil_image_view<bool> &mask, unsigned scale)
 {
-  typedef bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
 
   vpgl_camera_double_sptr dummy_cam = metadata.camera;
   double lidar_pixel_size = 1.0;
