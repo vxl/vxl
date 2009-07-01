@@ -66,6 +66,7 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_vec
     bvxm_slab_to_image::write_slab_as_image((*grid_it), filename.str());
     // vil_save(*img.ptr(), filename.str().c_str());
   }
+  return true;
 }
 
 
@@ -93,6 +94,7 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<T> *gri
     bvxm_slab_to_image::write_slab_as_image(*grid_it, filename.str());
     //  vil_save(*img.ptr(), filename.str().c_str());
   }
+  return true;
 }
 
 #endif
