@@ -1,4 +1,5 @@
 #include <bvxm/grid/bvxm_memory_chunk.h>
+#include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
@@ -13,8 +14,10 @@
 #include <bvxm/grid/pro/bvxm_grid_processes.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
 
+#include <bvxm/grid/io/bvxm_grid_to_image_stack.h>
 #include <bvxm/grid/io/bvxm_io_voxel_grid.h>
 #include <bvxm/grid/io/bvxm_io_voxel_grid_base.h>
 #include <bvxm/grid/io/bvxm_io_voxel_slab_base.h>
+#include <bvxm/grid/io/bvxm_slab_to_image.h>
 
 int main() { return 0; }
