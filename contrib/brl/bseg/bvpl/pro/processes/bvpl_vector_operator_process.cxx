@@ -21,6 +21,8 @@
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvpl/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_edge2d_functor.h>
+#include <bvpl/bvpl_edge_algebraic_mean_functor.h>
+#include <bvpl/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
@@ -108,6 +110,23 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
     }
+    if (functor_name == "edge_algebraic_mean"){
+      bvpl_edge_algebraic_mean_functor<float> func;
+      bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
+      bvpl_vector_operator<float, bvpl_edge_algebraic_mean_functor<float> > vector_oper;
+      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+    }
+    if (functor_name == "edge_geometric_mean"){
+      bvpl_edge_geometric_mean_functor<float> func;
+      bvpl_neighb_operator<float, bvpl_edge_geometric_mean_functor<float> > oper(func);
+      bvpl_vector_operator<float, bvpl_edge_geometric_mean_functor<float> > vector_oper;
+      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+    }
+    
   } else if (datatype == "opinion") {
    bvxm_voxel_grid<bvxm_opinion> *grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (grid_base.ptr());;
    bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
