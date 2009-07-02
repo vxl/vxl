@@ -61,10 +61,11 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_vec
   for (; grid_it != grid->end(); ++grid_it, i++)
   {
     vcl_stringstream filename;
-    filename << directory << "/slab_" << i << bvxm_extension<T>();
-    // vil_image_view_base_sptr img = new vil_image_view<T>(ni, nj, N);
-    bvxm_slab_to_image::write_slab_as_image((*grid_it), filename.str());
-    // vil_save(*img.ptr(), filename.str().c_str());
+    filename << directory << "/slab_" << i << bvxm_extension<unsigned char>();
+    vil_image_view_base_sptr img = new vil_image_view<unsigned char>(ni, nj, N);
+    bvxm_slab_to_image::slab_to_image((*grid_it), img);
+    vil_save(*img.ptr(), filename.str().c_str());
+
   }
   return true;
 }
@@ -89,10 +90,10 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<T> *gri
   for (; grid_it != grid->end(); ++grid_it, i++)
   {
     vcl_stringstream filename;
-    filename << directory << "/slab_" << i << bvxm_extension<T>();
-    //  vil_image_view_base_sptr img = new vil_image_view<T>(ni, nj, 1);
-    bvxm_slab_to_image::write_slab_as_image(*grid_it, filename.str());
-    //  vil_save(*img.ptr(), filename.str().c_str());
+    filename << directory << "/slab_" << i << bvxm_extension<unsigned char>();
+    vil_image_view_base_sptr img = new vil_image_view<unsigned char>(ni, nj, 1);
+    bvxm_slab_to_image::slab_to_image(*grid_it, img);
+    vil_save(*img.ptr(), filename.str().c_str());
   }
   return true;
 }

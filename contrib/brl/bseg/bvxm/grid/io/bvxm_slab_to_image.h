@@ -75,7 +75,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           {
             for (unsigned p=0; p<N; ++p)
             {
-              *(img_its[p]) = (unsigned char)((*slab_it)[p]);
+              *(img_its[p]) =  (unsigned char)(((*slab_it)[p] * 127.0) + 0.5) + 127;
               ++(img_its[p]);
             }
           }
@@ -147,7 +147,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           {
             for (unsigned p=0; p<N; ++p)
             {
-              *(img_its[p]) = (unsigned char)((*slab_it)[p]);
+              *(img_its[p]) =  (unsigned char)(((*slab_it)[p] * 255.0) + 0.5);;
               ++(img_its[p]);
             }
           }
@@ -194,7 +194,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
         vil_image_view<unsigned char>::iterator img_it = img_view->begin();
         typename bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
         for (; img_it != img_view->end(); ++img_it, ++slab_it) {
-          *img_it = (unsigned char)((*slab_it));
+          *img_it =  (unsigned char)(((*slab_it) * 255.0) + 0.5);
         }
       }
       else
