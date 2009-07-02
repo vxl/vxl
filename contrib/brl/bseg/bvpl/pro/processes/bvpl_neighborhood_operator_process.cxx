@@ -19,6 +19,8 @@
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvpl/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_edge2d_functor.h>
+#include <bvpl/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 #include <vul/vul_file.h>
@@ -96,6 +98,16 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       if (functor_name == "edge2d") {
         bvpl_edge2d_functor<float> func;
         bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
+        oper.operate(float_input_grid, kernel, grid_out);
+      }
+      if (functor_name == "edge_algebraic_mean") {
+        bvpl_edge_algebraic_mean_functor<float> func;
+        bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
+        oper.operate(float_input_grid, kernel, grid_out);
+      }
+      if (functor_name == "edge_geometric_mean") {
+        bvpl_edge_geometric_mean_functor<float> func;
+        bvpl_neighb_operator<float, bvpl_edge_geometric_mean_functor<float> > oper(func);
         oper.operate(float_input_grid, kernel, grid_out);
       }
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
