@@ -21,4 +21,5 @@ void bvxm_grid_register::register_process()
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_multiply_grids_process, "bvxmMutliplyGridsProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_threshold_grid_process, "bvxmThresholdGridProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_grid_to_image_stack_process, "bvxmGridToImageStackProcess");
+  REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_combine_grids_process, "bvxmCombineGridsProcess");
 }

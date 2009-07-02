@@ -13,4 +13,5 @@ DECLARE_FUNC_CONS(bvxm_crop_grid_process);
 DECLARE_FUNC_CONS(bvxm_multiply_grids_process);
 DECLARE_FUNC_CONS(bvxm_threshold_grid_process);
 DECLARE_FUNC_CONS(bvxm_grid_to_image_stack_process);
+DECLARE_FUNC_CONS(bvxm_combine_grids_process);
 #endif
