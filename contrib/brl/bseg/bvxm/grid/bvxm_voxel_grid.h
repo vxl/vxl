@@ -52,7 +52,7 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
   }
 
   //: Destructor
-  ~bvxm_voxel_grid()
+  virtual ~bvxm_voxel_grid()
   {
     if (storage_) {
       delete storage_;
