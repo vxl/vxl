@@ -2204,7 +2204,7 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename,unsigned scale)
     vcl_cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
 
   // write header
   unsigned char data_type = 0; // 0 means unsigned byte
