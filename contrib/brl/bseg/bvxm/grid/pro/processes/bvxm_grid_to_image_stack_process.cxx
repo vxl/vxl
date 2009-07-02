@@ -72,8 +72,10 @@ bool bvxm_grid_to_image_stack_process(bprb_func_process& pro)
     bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, output_dir);
     return true;
   }
-  else if (datatype == "vnl_vector_fixed_float_3"){
-    bvxm_voxel_grid<vnl_vector_fixed<float,3> > *grid = dynamic_cast< bvxm_voxel_grid<vnl_vector_fixed<float,3> >* > (grid_base.ptr());
+
+  else if (datatype == "vnl_vector_fixed_float_4"){
+     bvxm_voxel_grid<vnl_vector_fixed<float,4> > *grid = dynamic_cast< bvxm_voxel_grid<vnl_vector_fixed<float,4> >* > (grid_base.ptr());
+
     bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, output_dir);
     return true;
   }
