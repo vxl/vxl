@@ -113,15 +113,12 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
 
 MAIN(test_bvpl_kernel_functors)
 {
-  vbl_array_3d<float> data(100.0f,100.0f,100.0f);
+  vbl_array_3d<float> data(100,100,100);
   data.fill(0.0f);
 
   bool result=false;
   float min_p=0.1f;
   float max_p=0.9f;
-
-  float theta_res=float(vnl_math::pi_over_4);
-  float phi_res=float(vnl_math::pi_over_4);
 
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
   //: get vector of kernel
