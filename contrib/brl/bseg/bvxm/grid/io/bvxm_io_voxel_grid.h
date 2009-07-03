@@ -100,7 +100,7 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
     DataType *data_array = new DataType[nx*ny*nz];
 
     //get the range
-    bvxm_voxel_grid<T>::iterator grid_it = grid->begin();
+    typename bvxm_voxel_grid<T>::iterator grid_it = grid->begin();
     T max = vcl_numeric_limits<T>::min();
     T min = vcl_numeric_limits<T>::max();
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
