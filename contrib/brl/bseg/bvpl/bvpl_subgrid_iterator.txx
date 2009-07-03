@@ -35,7 +35,6 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
 {
   int x_r = dim_.x()/2;
   int y_r = dim_.y()/2;
-  int z_r = dim_.z()/2;
   // move to the next voxel
   unsigned x = cur_voxel_.x();
   unsigned y = cur_voxel_.y();
@@ -58,7 +57,6 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
 {
   int x_r = dim_.x()/2;
   int y_r = dim_.y()/2;
-  int z_r = dim_.z()/2;
   // move to the next voxel
   int x = cur_voxel_.x();
   int y = cur_voxel_.y();
