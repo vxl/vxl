@@ -33,7 +33,7 @@
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
@@ -47,11 +47,11 @@ class bvpl_kernel:public vbl_ref_count
   bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt)
   : kernel_(kernel),dim_(dim),min_(min_pt),max_(max_pt) {}
   //: Destructor
-  virtual ~bvpl_kernel() {}
+  ~bvpl_kernel() {}
   bvpl_kernel_iterator iterator(){return kernel_;}
-  vgl_vector_3d<int> dim(){return dim_;}
-  vgl_point_3d<int> min() {return min_;}
-  vgl_point_3d<int> max() {return max_;}
+  vgl_vector_3d<int> dim()const {return dim_;}
+  vgl_point_3d<int> min() const {return min_;}
+  vgl_point_3d<int> max() const {return max_;}
   void print()
   {
     kernel_.begin();
@@ -74,15 +74,15 @@ class bvpl_kernel:public vbl_ref_count
 typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 
 //: A simple class to hold a vector of kernels
-class bvpl_kernel_vector:public vbl_ref_count
+class bvpl_kernel_vector : public vbl_ref_count
 {
  public:
-  typedef vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iterator;
+  typedef typename vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iterator;
   //: Default constructor
-  bvpl_kernel_vector(){}
+  bvpl_kernel_vector() {}
 
-  iterator begin(){return kernels_.begin();}
-  iterator end(){return kernels_.end();}
+  iterator begin() { return kernels_.begin(); }
+  iterator end()   { return kernels_.end(); }
   //: vector of kernel and their corresponding orientation axis.
   // Note that the magnitude of the vector corresponds to the rotation angle around that axis
   vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > > kernels_;
@@ -95,6 +95,8 @@ typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
 class bvpl_kernel_factory
 {
  public:
+  virtual ~bvpl_kernel_factory() {}
+
   //: Returns a kernel described by class variables rotation_axis_, \p angle_
   //  The user can modified the axis and angle using set_rotation_axis() and set_angle()
   bvpl_kernel create();
@@ -106,22 +108,22 @@ class bvpl_kernel_factory
   void set_rotation_axis( vnl_vector_fixed<float,3> rotation_axis);
 
   //: Sets rotation angle of this kernel
-  void set_angle(float angle){angle_ =angle;}
+  void set_angle(float angle) { angle_ =angle; }
 
   //: Returns the current aligments axis
-  vnl_vector_fixed<float,3> axis(){return rotation_axis_;}
+  vnl_vector_fixed<float,3> axis() const { return rotation_axis_; }
 
   //: Return current rotation angle around axis()
-  float angle(){return angle_;}
+  float angle() const { return angle_; }
 
   //: Returns angular resolution around rotation axis
-  float angular_resolution()  {return angular_resolution_;}
+  float angular_resolution() const { return angular_resolution_; }
 
   //: Return x-y-z maximum coordinate values
-  vgl_point_3d<int> max_(){return max3d_;}
+  vgl_point_3d<int> max_() const { return max3d_; }
 
   //: Return x-y-z minimum coordinate values
-  vgl_point_3d<int> min_(){return min3d_;}
+  vgl_point_3d<int> min_() const { return min3d_; }
 
   //: returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();

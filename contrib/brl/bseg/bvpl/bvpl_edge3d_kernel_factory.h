@@ -4,9 +4,6 @@
 //:
 // \file
 #include "bvpl_kernel_factory.h"
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_rotation_matrix.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 
 
@@ -23,16 +20,16 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
   // + + 0 - -
   bvpl_edge3d_kernel_factory(unsigned length, unsigned width, unsigned height);
 
-  ~bvpl_edge3d_kernel_factory() {}
+  virtual ~bvpl_edge3d_kernel_factory() {}
 
   //Height of edge
-  unsigned height() {return height_;}
+  unsigned height() const { return height_; }
 
   //Width of edge
-  unsigned width() {return width_;}
+  unsigned width() const { return width_; }
 
   //Length of edge
-  unsigned length() {return length_;}
+  unsigned length() const { return length_; }
 
 
   /******************Batch Methods ***********************/
