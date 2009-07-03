@@ -181,7 +181,6 @@ open(const vcl_string& filename)
     is_->frame_number_offset_ = 1;
   }
 
-  av_seek_frame( is_->fmt_cxt_, is_->vid_index_, 0, AVSEEK_FLAG_BACKWARD );
 
   return true;
 }
