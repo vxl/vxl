@@ -6,7 +6,7 @@
 // \       When there is no data to support the value b_ available yet, u_ is 1.0 and it
 //         starts to decrease when some observations builds up some belief and goes to 0.0
 //         when certainity achieved.
-// \
+//
 // \author Gamze Tunali
 // \date   June 12, 2009
 //
