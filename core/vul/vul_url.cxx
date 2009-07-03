@@ -172,15 +172,20 @@ vcl_istream * vul_http_open(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_sprintf(buffer, "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
-              url, host.c_str());
+  vcl_snprintf(buffer, 4090-vcl_strlen(buffer),
+    "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
+    url, host.c_str());
 
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer),
+    vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
                 "Authorization: Basic %s\r\n",
                 vul_url::encode_base64(auth).c_str());
 
-  vcl_sprintf(buffer+vcl_strlen(buffer), "\r\n");
+  if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
+  {
+    vcl_cerr << "ERROR: vul_http_open buffer overflow.";
+    vcl_abort();
+  }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
@@ -197,12 +202,6 @@ vcl_istream * vul_http_open(char const *url)
     return 0;
   }
 
-  // force the data to be sent.
-#if 1
-  shutdown(tcp_socket, 1); // disallow further sends.
-#else
-  for (int i=0; i<4096; ++i) ::write(tcp_socket, "\n\n\n\n", 4);
-#endif
 
   // read from socket into memory.
   vcl_string contents;
@@ -371,12 +370,19 @@ bool vul_http_exists(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_sprintf(buffer, "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
-              url, host.c_str());
+  vcl_snprintf(buffer, 4090,
+    "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
+    url, host.c_str());
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization: Basic %s\r\n",
-                vul_url::encode_base64(auth).c_str());
-  vcl_sprintf(buffer+vcl_strlen(buffer),"\r\n");
+    vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
+      "Authorization: Basic %s\r\n",
+      vul_url::encode_base64(auth).c_str() );
+
+  if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
+  {
+    vcl_cerr << "ERROR: vul_http_exists buffer overflow.";
+    vcl_abort();
+  }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
@@ -393,12 +399,6 @@ bool vul_http_exists(char const *url)
     return false;
   }
 
-  // force the data to be sent.
-#if 1
-  shutdown(tcp_socket, 1); // disallow further sends.
-#else
-  for (int i=0; i<4096; ++i) ::write(tcp_socket, "\n\n\n\n", 4);
-#endif
 
   // read from socket into memory.
   vcl_string contents;

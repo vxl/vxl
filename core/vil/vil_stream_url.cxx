@@ -227,13 +227,20 @@ vil_stream_url::vil_stream_url(char const *url)
   }
 
   // buffer for data transfers over socket.
+
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
+  vcl_snprintf(buffer, 4090, "GET /%s / HTTP/1.1\r\n", path.c_str());
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
-//  vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user  testuser:testuser\n");
+    vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
+      "Authorization:  Basic %s\n", encode_base64(auth).c_str());
+
+  if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
+  {
+    vcl_cerr << "ERROR: vil_stream_url buffer overflow.";
+    vcl_abort();
+  }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0)
@@ -251,12 +258,6 @@ vil_stream_url::vil_stream_url(char const *url)
   }
 #endif
 
-  // force the data to be sent.
-#if 1
-  shutdown(tcp_socket, 1); // disallow further sends.
-#else
-  for (int i=0; i<4096; ++i) ::write(tcp_socket, "\n\n\n\n", 4);
-#endif
 
 //  vcl_ofstream test2("/test2.jpg", vcl_ios_binary);
 
