@@ -815,10 +815,8 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
     for (unsigned y=0; y<slab.ny(); ++y)
     {
       for (unsigned x=0; x<=slab.nx() - kernel_size_x; ++x) {
-        T xx=slab(x,y);
         T sum = slab(x,y) * kernel_1dx[0];
         for (unsigned k=1; k<kernel_size_x; ++k) {
-          T yy=slab(x+k,y);
           sum += slab(x+k,y) * kernel_1dx[k];
         }
         slab_work(x+kernel_radius_x,y) = sum;
