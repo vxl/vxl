@@ -22,9 +22,9 @@ void fill_in_data(vbl_array_3d<float> & data, float min_p, float max_p, vnl_vect
   unsigned nj=data.get_row1_count();
   unsigned nk=data.get_row1_count();
 
-  float ci=(float)ni/2;
-  float cj=(float)nj/2;
-  float ck=(float)nk/2;
+  float ci=ni*0.5f;
+  float cj=nj*0.5f;
+  float ck=nk*0.5f;
   for (unsigned i=0;i<ni;i++)
   {
     for (unsigned j=0;j<nj;j++)
@@ -73,19 +73,19 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
 {
   vnl_vector_fixed<float,3> axis;
   bool flag=true;
-  float entropy_sum=0.0;
+  float entropy_sum=0.0f;
 
   vnl_random rand;
   for (unsigned j=0;j<kernel_vec->kernels_.size();j++)
   {
     axis=kernel_vec->kernels_[j].first;
-    axis[0]+=rand.normal()*sigma_noise;
-    axis[1]+=rand.normal()*sigma_noise;
-    axis[2]+=rand.normal()*sigma_noise;
+    axis[0]+=float(rand.normal()*sigma_noise);
+    axis[1]+=float(rand.normal()*sigma_noise);
+    axis[2]+=float(rand.normal()*sigma_noise);
 
     fill_in_data(data,min_p,max_p,axis);
 
-    float max_val=0.0;
+    float max_val=0.0f;
     unsigned axis_result=0;
     for (unsigned i=0;i<kernel_vec->kernels_.size();i++)
     {
@@ -113,15 +113,15 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
 
 MAIN(test_bvpl_kernel_functors)
 {
-  vbl_array_3d<float> data(100,100,100);
+  vbl_array_3d<float> data(100.0f,100.0f,100.0f);
   data.fill(0.0f);
 
   bool result=false;
-  float min_p=0.1;
-  float max_p=0.9;
+  float min_p=0.1f;
+  float max_p=0.9f;
 
-  float theta_res=vnl_math::pi_over_4;
-  float phi_res=vnl_math::pi_over_4;
+  float theta_res=float(vnl_math::pi_over_4);
+  float phi_res=float(vnl_math::pi_over_4);
 
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
   //: get vector of kernel
