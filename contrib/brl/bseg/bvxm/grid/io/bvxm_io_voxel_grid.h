@@ -13,7 +13,7 @@
 //  Modifications
 //   Jun 29, 2009  Gamze Tunali
 //                 Added a datatype member to bvxm_drishti_header class. It is the datatype
-//                 to fill the drishti grid. It is needen specifically for bvxm_opinion 
+//                 to fill the drishti grid. It is needen specifically for bvxm_opinion
 //                 because that type as T cannot be used to fill the resulting grid.
 // \endverbatim
 
@@ -96,7 +96,8 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
 
     // write data
     // iterate through slabs and fill in memory array
-    bvxm_dristhi_traits<T>::datatype *data_array = new bvxm_dristhi_traits<T>::datatype[nx*ny*nz];
+    typedef typename bvxm_dristhi_traits<T>::datatype DataType;
+    DataType *data_array = new DataType[nx*ny*nz];
 
     //get the range
     bvxm_voxel_grid<T>::iterator grid_it = grid->begin();
@@ -119,12 +120,12 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
       vcl_cout << '.';
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-          data_array[i*ny*nz + j*nz + k] =(*grid_it)(i,j)-bvxm_dristhi_traits<T>::datatype(0);  // +0 is needed for bvxm_opinion, do not delete
+          data_array[i*ny*nz + j*nz + k] =(*grid_it)(i,j)-DataType(0);  // +0 is needed for bvxm_opinion, do not delete
         }
       }
     }
     vcl_cout << vcl_endl;
-    ofs.write(reinterpret_cast<char*>(data_array),sizeof(bvxm_dristhi_traits<T>::datatype)*nx*ny*nz);
+    ofs.write(reinterpret_cast<char*>(data_array),sizeof(DataType)*nx*ny*nz);
 
     ofs.close();
 
