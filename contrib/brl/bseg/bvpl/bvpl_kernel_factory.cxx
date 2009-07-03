@@ -140,7 +140,7 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
 void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_axis)
 {
   // rotation axis should be unit vector
-  float mag =rotation_axis.magnitude();
+  float mag = rotation_axis.magnitude();
   if (mag > vcl_numeric_limits<float>::epsilon())
     rotation_axis /= mag;
   else {
@@ -164,9 +164,9 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   {
     if (dot_product(canonical_rotation_axis_, rotation_axis) < 0) //opposite vectors
     {
-      vnl_vector_fixed<float,3> axis_perp(vcl_cos(theta)*vcl_sin(phi+vnl_math::pi_over_2),
-                                          vcl_sin(theta)*vcl_sin(phi+vnl_math::pi_over_2),
-                                          vcl_cos(phi+vnl_math::pi_over_2));
+      vnl_vector_fixed<float,3> axis_perp(float(vcl_cos(theta)*vcl_sin(phi+vnl_math::pi_over_2)),
+                                          float(vcl_sin(theta)*vcl_sin(phi+vnl_math::pi_over_2)),
+                                          float(vcl_cos(phi+vnl_math::pi_over_2)));
       vgl_rotation_3d<float> r_align(vnl_quaternion<float>(axis_perp, float(vnl_math::pi)));
       rotation_axis_ = rotation_axis;
       kernel_ = rotate(r_align);
@@ -228,7 +228,7 @@ bvpl_kernel_factory::kernel_type
 bvpl_kernel_factory::rotate(float angle)
 {
   //construct a quternion to represent the rotation
-  float mag =rotation_axis_.magnitude();
+  float mag = rotation_axis_.magnitude();
   if (angle > 0.0f)
   {
     if (mag > double(0))
