@@ -16,7 +16,6 @@
 
 #include <bprb/bprb_parameters.h>
 
-#include <vil/vil_image_view_base.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bbgm/bbgm_image_sptr.h>
 

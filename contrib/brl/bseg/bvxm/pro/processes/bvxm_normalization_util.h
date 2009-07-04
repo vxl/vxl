@@ -11,7 +11,6 @@
 //   <none yet>
 // \endverbatim
 
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 
 class bvxm_normalization_util
