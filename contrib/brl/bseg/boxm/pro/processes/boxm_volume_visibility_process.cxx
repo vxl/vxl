@@ -19,6 +19,7 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_compute_volume_visibility.h>
 #include <boxm/boxm_sample_multi_bin.h>
+#include <vil/vil_convert.h>
 
 namespace boxm_volume_visibility_process_globals
 {

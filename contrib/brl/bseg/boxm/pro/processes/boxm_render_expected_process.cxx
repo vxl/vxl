@@ -20,6 +20,8 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_sample_multi_bin.h>
+#include <vil/vil_convert.h>
+
 namespace boxm_render_expected_process_globals
 {
   const unsigned n_inputs_ = 5;
