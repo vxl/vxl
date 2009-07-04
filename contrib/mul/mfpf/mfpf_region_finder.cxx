@@ -17,7 +17,8 @@
 #include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
-#include <vnl/vnl_vector_ref.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_c_vector.h>
 
 //=======================================================================
 // Dflt ctor
@@ -332,7 +333,7 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
 
   double min1=1.0E30;
   double max1=-1.0E30;
-  if(nplanes==1)
+  if (nplanes==1)
   {
     min1=mean.min_value();
     max1=mean.max_value();
@@ -341,7 +342,7 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
   {
       double* pData=mean.data_block();
       double* pDataEnd=mean.data_block()+mean.size();
-      while(pData != pDataEnd)
+      while (pData != pDataEnd)
       {
           double z=*pData;
           min1=vcl_min(z,min1);
@@ -355,11 +356,11 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
       double* pData=mean.data_block();
       double* pDataEnd=mean.data_block()+mean.size();
       unsigned i=0;
-     
-      while(pData != pDataEnd)
+
+      while (pData != pDataEnd)
       {
           double z = vnl_c_vector<double>::two_norm(pData, nplanes);
-          
+
           min1=vcl_min(z,min1);
           max1=vcl_max(z,max1);
           meanL2[i++]=z;
@@ -372,7 +373,7 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
   image.image().set_size(roi_ni_,roi_nj_);
   image.image().fill(0);
   unsigned q=0;
-  if(nplanes==1)
+  if (nplanes==1)
   {
     for (unsigned k=0;k<roi_.size();++k)
     {
@@ -386,7 +387,6 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
     {
       for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,q+=nplanes)
         image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
-      
     }
   }
   else
@@ -398,7 +398,7 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
         image.image()(i,roi_[k].y())=vxl_byte(s*(meanL2[q]-min1));
     }
   }
-    
+
   vimt_transform_2d ref2im;
   ref2im.set_zoom_only(1.0/step_size_,ref_x_,ref_y_);
   image.set_world2im(ref2im);
