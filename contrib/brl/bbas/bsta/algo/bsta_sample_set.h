@@ -13,13 +13,14 @@
 //   (none yet)
 // \endverbatim
 //
-#include <vcl_fstream.h>
 #include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_gaussian_full.h>
-#include <vnl/vnl_random.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vcl_fstream.h>
 #include <vcl_utility.h>
 
 #define MIN_VAR_  0.0001
