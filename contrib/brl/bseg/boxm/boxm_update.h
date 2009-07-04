@@ -11,6 +11,7 @@
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_rational_camera_utils.h>
 #include <vil/vil_math.h>
+#include <vil/vil_save.h>
 #include <vul/vul_timer.h>
 
 #include <vcl_iostream.h>
