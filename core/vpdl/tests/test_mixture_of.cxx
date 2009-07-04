@@ -3,7 +3,8 @@
 #include <vpdl/vpdl_gaussian.h>
 #include <vpdl/vpdl_gaussian_sphere.h>
 #include <vpdl/vpdl_gaussian_indep.h>
-#include <vnl/vnl_random.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_vector.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -358,5 +359,4 @@ MAIN( test_mixture_of )
   test_mixture_of_type(double(1e-13),"double");
   SUMMARY();
 }
-
 

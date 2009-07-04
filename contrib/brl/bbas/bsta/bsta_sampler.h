@@ -13,9 +13,6 @@
 // \endverbatim
 
 #include <vcl_vector.h>
-#include <vnl/vnl_random.h>
-#include <vcl_set.h>
-#include <vcl_utility.h>
 
 template <class T>
 class bsta_sampler

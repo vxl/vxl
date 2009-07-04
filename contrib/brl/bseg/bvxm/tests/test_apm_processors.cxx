@@ -13,8 +13,6 @@
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 
-#include <vnl/vnl_random.h>
-
 
 void test_mog_grey_processor()
 {

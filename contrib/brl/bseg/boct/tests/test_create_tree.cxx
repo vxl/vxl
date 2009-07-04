@@ -2,7 +2,6 @@
 #include <testlib/testlib_test.h>
 
 #include <boct/boct_tree.h>
-#include <vnl/vnl_random.h>
 
 MAIN( test_create_tree )
 {
@@ -10,9 +9,8 @@ MAIN( test_create_tree )
   short nlevels=5;
   boct_tree<short,vgl_point_3d<double> > * block=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   TEST("No of Max levels of tree",nlevels, block->num_levels());
-  
-  block->split();
-  //block->print();
+
+  block->split(); //block->print();
 
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves = block->leaf_cells();
   TEST("No of Leaf Cells", 8, leaves.size());
@@ -27,6 +25,4 @@ MAIN( test_create_tree )
   delete block;
   delete init_tree;
   SUMMARY();
-
-  
 }
