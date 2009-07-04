@@ -36,7 +36,7 @@ IF(HAS_VGUI)
  INSTALL_TARGETS(/lib segv)
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/segv ${segv_sources})
 
- TARGET_LINK_LIBRARIES(segv bgui vgui strk sdet bsol bvgl brip vpgl_file_formats vpgl vtol vdgl vsol vil vil_algo vil1 vnl vbl)
+ TARGET_LINK_LIBRARIES(segv bgui vgui strk sdet bsol bvgl brip vpgl_file_formats vpgl vtol vdgl vsol vil vil_algo vil1 vnl vul vbl)
 
  IF (BUILD_TESTING)
   SUBDIRS(tests)

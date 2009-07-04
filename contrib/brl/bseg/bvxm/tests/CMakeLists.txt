@@ -8,7 +8,7 @@ ADD_EXECUTABLE( bvxm_test_all
   test_platform_computations.cxx
 )
 
-TARGET_LINK_LIBRARIES( bvxm_test_all bvxm bvxm_grid testlib vcl vbl vpgl bsta bsta_algo vpl)
+TARGET_LINK_LIBRARIES( bvxm_test_all bvxm bvxm_grid testlib vcl vbl vpgl bsta bsta_algo vul vpl)
 
 ADD_TEST( bvxm_test_apm_processors            ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_apm_processors )
 ADD_TEST( bvxm_test_lidar_processor           ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_lidar_processor )

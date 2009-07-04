@@ -35,7 +35,7 @@ IF(EXPAT_FOUND)
       ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
       TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb vil vil_io vpgl_file_formats vgl_io
-                            bgeo vsol brip vpgl_pro vpl imesh_algo minizip)
+                            bgeo vsol brip vpgl_pro vul vpl imesh_algo minizip)
 
                             
       IF(ZLIB_FOUND)

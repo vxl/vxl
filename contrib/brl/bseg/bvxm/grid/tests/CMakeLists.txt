@@ -8,7 +8,7 @@ ADD_EXECUTABLE( bvxm_grid_test_all
   test_grid_to_image_stack.cxx
 )
 
-TARGET_LINK_LIBRARIES( bvxm_grid_test_all bvxm_grid bvxm_grid_io testlib vcl vbl vpgl bsta bsta_algo vpl)
+TARGET_LINK_LIBRARIES( bvxm_grid_test_all bvxm_grid bvxm_grid_io testlib vcl vbl vpgl bsta bsta_algo vul vpl)
 
 ADD_TEST( bvxm_test_voxel_storage_mem         ${EXECUTABLE_OUTPUT_PATH}/bvxm_grid_test_all   test_voxel_storage_mem )
 ADD_TEST( bvxm_test_voxel_storage_disk        ${EXECUTABLE_OUTPUT_PATH}/bvxm_grid_test_all   test_voxel_storage_disk )

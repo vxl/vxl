@@ -12,7 +12,7 @@ ADD_EXECUTABLE( brec_test_all
   test_brec_part_hierarchy_learner.cxx
 )
 
-TARGET_LINK_LIBRARIES( brec_test_all brec testlib vcl vbl vpgl vil_pro )
+TARGET_LINK_LIBRARIES( brec_test_all brec testlib vul vbl vpgl vil_pro )
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digits_small.png    ${CMAKE_CURRENT_BINARY_DIR}/digits_small.png COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/normalized0_cropped.png    ${CMAKE_CURRENT_BINARY_DIR}/normalized0_cropped.png COPYONLY )

@@ -16,7 +16,7 @@ ADD_EXECUTABLE( bvxm_pro_test_all
   test_bvxm_update_lidar_process.cxx
 )
 
-TARGET_LINK_LIBRARIES( bvxm_pro_test_all testlib bvxm_pro bvxm bvxm_grid_io vcl vbl vpgl_algo vpgl vpgl_io vpgl_pro bprb brdb vil vil_io vil_pro)
+TARGET_LINK_LIBRARIES( bvxm_pro_test_all testlib bvxm_pro bvxm bvxm_grid_io vcl vbl vpgl_algo vpgl vpgl_io vpgl_pro bprb brdb vul vil vil_io vil_pro)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/roi_params.xml ${CMAKE_CURRENT_BINARY_DIR}/roi_params.xml COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/world_model_params.xml ${CMAKE_CURRENT_BINARY_DIR}/world_model_params.xml COPYONLY )

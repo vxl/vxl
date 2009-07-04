@@ -34,8 +34,8 @@ ADD_EXECUTABLE (generate_tiff_pyramids generate_tiff_pyramids.cxx)
 TARGET_LINK_LIBRARIES(generate_tiff_pyramids vpl vul vil)
 
 ADD_EXECUTABLE (generate_tiff_rset generate_tiff_rset.cxx)
-TARGET_LINK_LIBRARIES(generate_tiff_rset vpl vul vil)
+TARGET_LINK_LIBRARIES(generate_tiff_rset vul vil)
 
 #New executable to generate rsets for all files in directory
 ADD_EXECUTABLE (gen_tiff_rset_dir gen_tiff_rset_dir.cxx)
-TARGET_LINK_LIBRARIES(gen_tiff_rset_dir vpl vul vil)
+TARGET_LINK_LIBRARIES(gen_tiff_rset_dir vul vil)

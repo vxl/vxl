@@ -32,7 +32,7 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_algo bvxm_io bvxm_grid bvxm_grid_io sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vnl_io bgeo brdb)
+TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_algo bvxm_io bvxm_grid bvxm_grid_io sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vnl_io vul bgeo brdb)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
