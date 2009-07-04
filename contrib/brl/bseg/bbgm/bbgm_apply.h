@@ -14,7 +14,6 @@
 
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
-#include <vnl/vnl_vector_fixed.h>
 
 #include "bbgm_image_of.h"
 #include "bbgm_planes_to_sample.h"
