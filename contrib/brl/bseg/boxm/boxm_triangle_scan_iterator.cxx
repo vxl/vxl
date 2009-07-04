@@ -5,7 +5,6 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
-#include <vgl/vgl_triangle_scan_iterator.h>
 
 
 //: constructor

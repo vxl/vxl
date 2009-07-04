@@ -5,7 +5,6 @@
 #include <vcl_vector.h>
 
 #include <vgl/vgl_region_scan_iterator.h>
-#include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
 #include <vbl/vbl_bounding_box.h>
@@ -42,7 +41,7 @@ class boxm_quad_scan_iterator : public vgl_region_scan_iterator
 
   bool x_start_end_val(double * vals,double & start_val,double & end_val);
 
-  
+
  protected:
   static const unsigned int supersample_ratio_ = 1;
   vgl_polygon_scan_iterator<double> * super_it_;

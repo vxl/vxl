@@ -2,15 +2,14 @@
 #define boxm_triangle_interpolation_iterator_txx_
 //:
 // \file
+
+#include "boxm_triangle_interpolation_iterator.h"
+
+#include <vnl/algo/vnl_determinant.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
-
-#include <vnl/algo/vnl_determinant.h>
-#include <vgl/vgl_triangle_scan_iterator.h>
-
-#include "boxm_triangle_interpolation_iterator.h"
 
 
 //: constructor
