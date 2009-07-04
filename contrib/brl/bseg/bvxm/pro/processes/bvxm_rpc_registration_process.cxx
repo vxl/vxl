@@ -30,7 +30,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 
-#include <vil/vil_load.h>
 #include <vcl_cstdio.h>
 
 //: globals
