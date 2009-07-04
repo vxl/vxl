@@ -2,7 +2,6 @@
 
 #include <boxm/boxm_scene.h>
 #include <boct/boct_tree.h>
-#include <vpl/vpl.h>
 
 typedef boct_tree<short,vgl_point_3d<double> > tree_type;
 

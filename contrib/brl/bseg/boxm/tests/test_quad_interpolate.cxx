@@ -15,8 +15,6 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include <vpl/vpl.h>
-
 
 MAIN_ARGS( test_quad_interpolate )
 {

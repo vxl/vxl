@@ -1,8 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <boxm/boxm_rational_camera_utils.h>
-#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vpl/vpl.h>
 
 
 MAIN_ARGS( test_boxm_rational_camera_utils )
