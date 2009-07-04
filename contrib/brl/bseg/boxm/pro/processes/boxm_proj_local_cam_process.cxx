@@ -22,17 +22,8 @@
 // \endverbatim
 
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_vector_3d.h>
-
-#include <vsol/vsol_box_2d_sptr.h>
-#include <vsol/vsol_box_2d.h>
-
 #include <brip/brip_roi.h>
 
-#include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_local_rational_camera.h>

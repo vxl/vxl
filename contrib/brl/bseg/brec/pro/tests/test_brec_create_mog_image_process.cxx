@@ -14,21 +14,16 @@
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_parameters_sptr.h>
 #include <bprb/bprb_parameters.h>
+
 #include <vil/vil_image_view.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_3d.h>
 
 #include <brip/brip_vil_float_ops.h>
-#include <vul/vul_file.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vgl/vgl_box_2d.h>
 
 #include <brec/brec_bg_pair_density.h>
 #include <brec/pro/brec_processes.h>
