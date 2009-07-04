@@ -2,7 +2,7 @@
 #define boct_tree_cell_h_
 //:
 // \file
-#include <vbl/vbl_ref_count.h>
+
 #include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
 
@@ -52,7 +52,7 @@ class boct_tree_cell
   // TODO: not yet implemented -- currently just returns false
   bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
 
-  short level() { return code_.level; }
+  short level() const { return code_.level; }
   void set_level(short level) { code_.level=level; }
   boct_tree_cell<T_loc,T_data>* children() { return children_; }
   boct_tree_cell<T_loc,T_data>* parent() { return parent_; }

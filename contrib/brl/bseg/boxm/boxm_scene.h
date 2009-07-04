@@ -15,14 +15,12 @@
 #include "boxm_block.h"
 #include "boxm_sample.h"
 
-#include <vcl_string.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
 #include <boct/boct_tree.h>
+#include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
 
@@ -43,7 +41,7 @@ class boxm_scene :public boxm_scene_base
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
-             const vgl_vector_3d<double>& world_dim, 
+             const vgl_vector_3d<double>& world_dim,
              unsigned max_level, unsigned init_level);
 
   //: when lvcs is not avialable
@@ -59,21 +57,21 @@ class boxm_scene :public boxm_scene_base
 
   void write_active_block();
 
-  bgeo_lvcs lvcs() { return lvcs_;}
+  bgeo_lvcs lvcs() const { return lvcs_;}
 
   boxm_block<T>* get_active_block();
 
-  vgl_point_3d<double> origin() {return origin_;}
+  vgl_point_3d<double> origin() const {return origin_;}
 
-  vgl_vector_3d<double> block_dim() {return block_dim_;}
+  vgl_vector_3d<double> block_dim() const {return block_dim_;}
 
   void block_num(int &x, int &y, int &z) {x=(int) blocks_.get_row1_count();
                                           y=(int) blocks_.get_row2_count();
                                           z=(int) blocks_.get_row3_count();}
 
-  vcl_string path() { return scene_path_; }
+  vcl_string path() const { return scene_path_; }
 
-  vcl_string block_prefix() { return block_pref_; }
+  vcl_string block_prefix() const { return block_pref_; }
 
   void b_read(vsl_b_istream & s);
 
@@ -114,13 +112,13 @@ class boxm_scene :public boxm_scene_base
   void create_block(unsigned i, unsigned j, unsigned k);
 
   void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
- 
+
   vgl_box_3d<double> get_block_bbox(int x, int y, int z);
 
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
 
-  bool parse_config(boxm_scene_parser& parser); 
+  bool parse_config(boxm_scene_parser& parser);
 
   bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);
 };
@@ -153,7 +151,7 @@ class boxm_block_iterator
 
   boxm_block<T>* operator->();
 
-  vgl_point_3d<int> index(){return vgl_point_3d<int>(i_,j_,k_);}
+  vgl_point_3d<int> index() const {return vgl_point_3d<int>(i_,j_,k_);}
 
  private:
 
