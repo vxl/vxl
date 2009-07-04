@@ -11,7 +11,8 @@
 #include <brec/brec_part_hierarchy.h>
 #include <brec/brec_part_hierarchy_detector.h>
 
-#include <vil/vil_math.h>
+#include <vil/vil_image_view.h>
+#include <vcl_algorithm.h> // for std::sort()
 
 void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, float lambda_range, float lambda_inc)
 {
