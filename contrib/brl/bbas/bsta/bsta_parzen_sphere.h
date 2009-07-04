@@ -16,22 +16,21 @@
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
 
-
 #include "bsta_parzen.h"
-#include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
-//: forward declare vnl_matrix_fixed
+//: forward declare vnl_matrix_fixed and vnl_vector_fixed
 template<class T, unsigned n, unsigned m> class vnl_matrix_fixed;
+template<class T, unsigned n>             class vnl_vector_fixed;
 
-//: A parzen distribution 
+//: A parzen distribution
 // the Gaussian sphere is used as a component of the mixture
 template <class T, unsigned n>
 class bsta_parzen_sphere : public bsta_parzen<T,n>
 {
  public:
-  
+
   //: the covariance type
   typedef vnl_matrix_fixed<T,n,n> covar_type;
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
@@ -66,7 +65,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
 
   //: The probability density integrated over a box (returns a probability)
   T probability(vect_t const& min_pt,
-                        vect_t const& max_pt) const;
+                vect_t const& max_pt) const;
 
   //: The distance and index of the nearest sample
   T nearest_sample(const vect_t& pt, unsigned & index) const;

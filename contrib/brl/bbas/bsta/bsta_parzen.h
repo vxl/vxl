@@ -17,9 +17,9 @@
 //
 
 #include "bsta_distribution.h"
-#include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
+
 //: forward declare vnl_vector_fixed
 template<class T, unsigned n> class vnl_vector_fixed;
 
@@ -106,7 +106,6 @@ class bsta_parzen : public bsta_distribution<T,n>
 
   //: number of samples
   unsigned size() const { return samples_.size(); }
-
 };
 
 #endif // bsta_parzen_h_

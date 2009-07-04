@@ -8,7 +8,6 @@
 
 #include <vimt/vimt_image_pyramid.h>
 #include <vil/vil_save.h>
-#include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for std::abort()
@@ -55,7 +54,7 @@ unsigned mfpf_mr_point_finder::image_level(
 
 // Find non-empty image in pyramid closest to given level
 static unsigned nearest_valid_level(const vimt_image_pyramid& im_pyr,
-                             unsigned level)
+                                    unsigned level)
 {
   int L0=int(level);
   int bestL=0;

@@ -1,7 +1,7 @@
 #include "bvxm_merge_mog.h"
 //:
 // \file
-#include <vnl/vnl_math.h>
+
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
