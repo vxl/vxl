@@ -18,16 +18,11 @@
 #include <vil/vil_convert.h>
 #include <core/vil_pro/vil_io_image_view_base.h>
 
-#include <brip/brip_vil_float_ops.h>
+#include <vul/vul_file.h>
 
+#include <brip/brip_vil_float_ops.h>
 #include <brec/brec_part_gaussian.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
-
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_float_2.h>
-#include <vnl/vnl_float_3.h>
-#include <vul/vul_file.h>
 #include <bsta/bsta_histogram.h>
 
 static void test_brec_hierarchy_detector_w_models()
