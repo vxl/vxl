@@ -8,9 +8,7 @@
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
 
 //: initialization
 bool vpgl_save_perspective_camera_process_cons(bprb_func_process& pro)
@@ -19,8 +17,8 @@ bool vpgl_save_perspective_camera_process_cons(bprb_func_process& pro)
   //input[0]: the camera
   //input[1]: the filename
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr"); 
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vpgl_camera_double_sptr");
+  input_types.push_back("vcl_string");
   return pro.set_input_types(input_types);
 }
 
@@ -38,7 +36,7 @@ bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
   vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
 
   if (!cam) {
-    vcl_cerr << "error: could not convert camera input to a vpgl_perspective_camera" << vcl_endl;
+    vcl_cerr << "error: could not convert camera input to a vpgl_perspective_camera\n";
     return false;
   }
 
