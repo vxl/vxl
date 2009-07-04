@@ -10,7 +10,6 @@
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_stats_1d.h>
 
 #include <vul/vul_string.h>
 
