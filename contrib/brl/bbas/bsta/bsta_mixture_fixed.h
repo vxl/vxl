@@ -19,6 +19,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
+#include <vnl/vnl_random.h>
 
 //: A mixture of distributions with a fixed size of s components
 template <class dist_, unsigned s>

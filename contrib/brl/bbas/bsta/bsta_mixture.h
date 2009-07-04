@@ -20,6 +20,7 @@
 #include <vcl_iostream.h>
 #include "bsta_sampler.h"
 #include <vpdl/vpdt/vpdt_dist_traits.h>
+#include <vnl/vnl_random.h>
 
 //: A mixture of distributions
 template <class dist_>

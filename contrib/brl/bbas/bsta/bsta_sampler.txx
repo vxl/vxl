@@ -5,7 +5,10 @@
 // \file
 
 #include "bsta_sampler.h"
+#include <vnl/vnl_random.h>
 #include <vcl_cstdlib.h>
+#include <vcl_set.h>
+#include <vcl_utility.h>
 
 //: For sorting pairs by their first element
 class first_less

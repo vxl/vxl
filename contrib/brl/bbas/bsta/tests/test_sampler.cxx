@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_sampler.h>
+#include <vnl/vnl_random.h>
 #include <vcl_string.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
@@ -21,14 +22,14 @@ void test_sampler_helper(void)
   vcl_vector<unsigned> out;
   bool done = bsta_sampler<unsigned>::sample(inp, inp_p, 50, out);
   TEST("sampler works", done, true);
-  vcl_cout << " samples: \n";
+  vcl_cout << " samples:\n";
   for (unsigned i = 0; i < inp.size(); i++) {
-    vcl_cout << inp[i] << " " << inp_p[i] << "\n";
+    vcl_cout << inp[i] << ' ' << inp_p[i] << vcl_endl;
   }
 
-  vcl_cout << "\n selected: \n";
+  vcl_cout << "\n selected:\n";
   for (unsigned i = 0; i < out.size(); i++) {
-    vcl_cout << out[i] << "\n";
+    vcl_cout << out[i] << vcl_endl;
   }
 }
 
@@ -53,14 +54,14 @@ void test_sampler_helper2(void)
   vcl_vector<unsigned> out;
   bool done = bsta_sampler<unsigned>::sample(inp, inp_p, 50, out);
   TEST("sampler works", done, true);
-  vcl_cout << " samples: \n";
+  vcl_cout << " samples:\n";
   for (unsigned i = 0; i < inp.size(); i++) {
-    vcl_cout << inp[i] << " " << inp_p[i] << "\n";
+    vcl_cout << inp[i] << ' ' << inp_p[i] << vcl_endl;
   }
 
-  vcl_cout << "\n selected: \n";
+  vcl_cout << "\n selected:\n";
   for (unsigned i = 0; i < out.size(); i++) {
-    vcl_cout << out[i] << "\n";
+    vcl_cout << out[i] << vcl_endl;
   }
 }
 
