@@ -1,7 +1,6 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstdlib.h>
-// not used? #include <vcl_sstream.h>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
@@ -88,9 +87,9 @@ int main(int argc,char * argv[])
       vcl_string image_outdir(argv[2]);
 
       unsigned nlevels = vcl_atoi(argv[3]);
-      vcl_cout << image_indir << vcl_endl;
-      vcl_cout << image_outdir << vcl_endl;
-      vcl_cout << nlevels << vcl_endl;
+      vcl_cout << image_indir << vcl_endl
+               << image_outdir << vcl_endl
+               << nlevels << vcl_endl;
       if (nlevels<2)
       {
         vcl_cout << "Must have at least 2 levels\n";
