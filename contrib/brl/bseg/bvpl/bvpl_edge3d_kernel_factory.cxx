@@ -3,7 +3,8 @@
 // \file
 
 #include <vcl_algorithm.h>
-#include <vnl/vnl_quaternion.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_float_3.h>
 
 // Default Constructor
 bvpl_edge3d_kernel_factory::bvpl_edge3d_kernel_factory()
@@ -120,7 +121,7 @@ bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
   bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
   float theta_res = float(vnl_math::pi_over_4);
   float phi_res = float(vnl_math::pi_over_4);
-  vnl_vector_fixed<float, 3> axis;
+  vnl_float_3 axis;
 
   float theta = 0.0f,
         phi = 0.0f;

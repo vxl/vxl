@@ -2,7 +2,8 @@
 //:
 // \file
 #include <vcl_algorithm.h>
-#include <vnl/vnl_quaternion.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_float_3.h>
 
 // Default Constructor
 bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory()
@@ -111,12 +112,12 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
   bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
   float theta_res = float(vnl_math::pi_over_4); //azimuth
   float phi_res = float(vnl_math::pi_over_4);   //zenith  (from the pole)
-  
-  vcl_cout << "Crating and vector of 2d-edge kernels \n";
-  vcl_cout << "phi_res: "<< phi_res << vcl_endl;
-  vcl_cout << "theta_res: "<< theta_res << vcl_endl;
-  vcl_cout << "angle_res: "<< angular_resolution_ << vcl_endl;
-  vnl_vector_fixed<float, 3> axis;
+
+  vcl_cout << "Crating and vector of 2d-edge kernels\n"
+           << "phi_res: "<< phi_res << vcl_endl
+           << "theta_res: "<< theta_res << vcl_endl
+           << "angle_res: "<< angular_resolution_ << vcl_endl;
+  vnl_float_3 axis;
 
   float theta = 0.0f;
   float phi = 0.0f;
@@ -131,7 +132,7 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
     this->set_angle(angle);
     kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
   }
-  
+
   //when zenith is pi/4 travers all hemisphere
 
   phi = float(vnl_math::pi_over_4);
@@ -159,7 +160,7 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
     axis[2] = float(vcl_cos(phi));
     this->set_rotation_axis(axis);
     for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
-    { 
+    {
       this->set_angle(angle);
       kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
     }
