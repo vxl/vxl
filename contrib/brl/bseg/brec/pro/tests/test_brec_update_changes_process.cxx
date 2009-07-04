@@ -23,14 +23,16 @@
 #include <bprb/bprb_parameters_sptr.h>
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
-#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_math.h>
-#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 
 #include <brip/brip_vil_float_ops.h>
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vgl/vgl_box_2d.h>
 
 #include <brec/brec_bg_pair_density.h>
 #include <brec/pro/brec_processes.h>
@@ -40,7 +42,7 @@
 vpgl_rational_camera<double>
 perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 {
-  vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
+  vnl_double_3x4 cam_pers_matrix = cam_pers.get_matrix();
   vcl_vector<double> neu_u,den_u,neu_v,den_v;
   double x_scale = 1.0,
          x_off = 0.0,
@@ -152,7 +154,7 @@ MAIN( test_brec_update_changes_process )
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_gen_synthetic_world_process, "bvxmGenSyntheticWorldProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_update_changes_process, "brecUpdateChangesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_changes_process, "bvxmDetectChangesProcess");
-  
+
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
@@ -162,7 +164,7 @@ MAIN( test_brec_update_changes_process )
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
   vcl_string world_dir("test_syn_world");
-  
+
   // create an empty directory, or empty the directory if it exists
   vcl_string delete_str = world_dir+"/*.vox";
   if (vul_file::is_directory(world_dir))
