@@ -3,7 +3,6 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 
-#include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
@@ -12,7 +11,6 @@
 #include <brec/brec_part_hierarchy_learner.h>
 #include <brec/brec_part_hierarchy_learner_sptr.h>
 
-#include <vul/vul_file.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_random.h>
 

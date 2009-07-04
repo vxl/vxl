@@ -15,7 +15,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
-#include <vul/vul_file.h>
 
 #include <bvxm/grid/io/bvxm_grid_to_image_stack.h>
 

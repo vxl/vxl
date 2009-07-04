@@ -1,5 +1,5 @@
 // This is brl/bseg/bvpl/pro/processes/bvpl_vector_operator_process.cxx
-
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for applying a vector of kernels on a voxel grid.
@@ -8,10 +8,9 @@
 // \date June 24, 2009
 // \verbatim
 //  Modifications
-//   
+//
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
@@ -26,7 +25,6 @@
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
-#include <vul/vul_file.h>
 
 namespace bvpl_vector_operator_process_globals
 {
@@ -57,7 +55,7 @@ bool bvpl_vector_operator_process_cons(bprb_func_process& pro)
   input_types_[5] = "vcl_string";
   if (!pro.set_input_types(input_types_))
     return false;
-  
+
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
@@ -70,13 +68,13 @@ bool bvpl_vector_operator_process_cons(bprb_func_process& pro)
 bool bvpl_vector_operator_process(bprb_func_process& pro)
 {
   using namespace bvpl_vector_operator_process_globals;
-  
+
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get inputs:
   unsigned i = 0;
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
@@ -85,20 +83,21 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
   vcl_string functor_name = pro.get_input<vcl_string>(i++);
   vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
   vcl_string orientation_grid_path = pro.get_input<vcl_string>(i++);
-  
+
   //check input's validity
   i=0;
   if (!grid_base.ptr()) {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
   }
-  
+
   if ( !kernel ){
     vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
     return false;
   }
-  
-  if (datatype == "float") {
+
+  if (datatype == "float")
+  {
     bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr());
     bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(out_grid_path, grid->grid_size());
     bvxm_voxel_grid<vnl_vector_fixed<float,3> > *orientation_grid=new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(orientation_grid_path, grid->grid_size());
@@ -126,8 +125,8 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
     }
-    
-  } else if (datatype == "opinion") {
+  }
+  else if (datatype == "opinion") {
    bvxm_voxel_grid<bvxm_opinion> *grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (grid_base.ptr());;
    bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
    bvxm_voxel_grid<vnl_vector_fixed<float,3> > *orientation_grid=new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(orientation_grid_path, grid->grid_size());
@@ -136,11 +135,9 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
    bvpl_vector_operator<bvxm_opinion,  bvpl_opinion_functor> vector_oper;
    vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-   pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);   
+   pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
   }
-  
+
   return true;
 }
-
-
 

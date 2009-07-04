@@ -26,11 +26,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-
-#include <vul/vul_file.h>
-
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/io/boxm_scene_parser.h>
 

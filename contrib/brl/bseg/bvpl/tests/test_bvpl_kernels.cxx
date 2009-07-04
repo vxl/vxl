@@ -6,7 +6,6 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vul/vul_file.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
@@ -33,10 +32,8 @@ MAIN(test_bvpl_kernels)
         factory1.set_rotation_axis(vnl_vector_fixed<float,3>(float(i), float(j), float(k)));
 
         vnl_vector_fixed<float,3> axis = factory1.axis();
-        vcl_cout << axis << vcl_endl;
-
-
-        vcl_cout << "-----------------------------------\n"
+        vcl_cout << axis << vcl_endl
+                 << "-----------------------------------\n"
                  << "Rotating" <<i << j << k << '\n';
         float angle = 0.0f;
 

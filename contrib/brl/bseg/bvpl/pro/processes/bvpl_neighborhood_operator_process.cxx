@@ -23,7 +23,6 @@
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
-#include <vul/vul_file.h>
 
 namespace bvpl_neighborhood_operator_process_globals
 {

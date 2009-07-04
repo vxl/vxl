@@ -6,10 +6,9 @@
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
 
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_random.h>
 
-#include <vul/vul_file.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
