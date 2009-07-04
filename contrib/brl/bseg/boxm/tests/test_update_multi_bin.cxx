@@ -1,13 +1,14 @@
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include "test_utils.h"
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_utils.h>
 #include <boct/boct_tree_cell.h>
-#include <vpl/vpl.h>
 #include <boxm/boxm_update_triangle.h>
 #include <boxm/boxm_render_image_triangle.h>
 #include <vul/vul_file.h>
@@ -17,7 +18,10 @@
 #include <vcl_sstream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-
+#include <vil/vil_convert.h>
+#if 0
+#include <vpl/vpl.h>
+#endif
 
 vcl_vector<vpgl_camera_double_sptr > generate_cameras_z_multi_bin(vgl_box_3d<double>& world)
 {
@@ -227,7 +231,7 @@ MAIN( test_update_multi_bin )
   vpl_unlink("./scene1.xml");
 #endif
   boxm_scene<boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > > scene_new(lvcs, origin,
-                                                                          block_dim, world_dim, 4, 3);
+                                                                                    block_dim, world_dim, 4, 3);
   scene_new.set_appearence_model(BOXM_APM_MOG_GREY);
   scene_new.set_paths("./boxm_scene_update", "block");
   vul_file::make_directory("./boxm_scene_update");

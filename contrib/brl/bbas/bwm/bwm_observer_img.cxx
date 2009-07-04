@@ -5,17 +5,14 @@
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/algo/bwm_utils.h>
 #include <bwm/algo/bwm_image_processor.h>
-
 #include <bwm/bwm_tableau_mgr.h>
-#include <vcl_cmath.h>
+
 #include <bgui/bgui_image_tableau.h>
+#include <bgui/bgui_image_utils.h>
 #include <vgui/vgui_section_render.h>
-
 #include <vgui/vgui_projection_inspector.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <bsol/bsol_algs.h>
 
+#include <bsol/bsol_algs.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -23,13 +20,15 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
 
-#include <vil/vil_load.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
+
 #include <vil/vil_image_view.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
+//#include <vil/vil_blocked_image_resource.h> // unused?
+//#include <vil/vil_pyramid_image_resource.h> // unused?
 #include <vil/file_formats/vil_nitf2_image.h>
-#include <vul/vul_file.h>
-#include <bgui/bgui_image_utils.h>
+
+#include <vcl_cmath.h>
 
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, vcl_string image_path, bool display_image_path)
 : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),

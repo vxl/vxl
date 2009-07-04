@@ -1,7 +1,8 @@
 #include <testlib/testlib_test.h>
 #include <boxm/boxm_utils.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <boxm/boxm_compute_volume_visibility.h>
 #include <boxm/boxm_scene.h>
 #include "test_utils.h"
