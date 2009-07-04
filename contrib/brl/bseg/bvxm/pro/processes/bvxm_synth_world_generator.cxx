@@ -1,4 +1,5 @@
 #include "bvxm_synth_world_generator.h"
+#include <vul/vul_file.h>
 #include <vcl_cassert.h>
 
 // Default constructor
@@ -233,13 +234,13 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
 }
 
 bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
-                                                          bvxm_voxel_world_sptr world,
-                                                          bvxm_voxel_grid<float>* intensity_grid,
-                                                          bvxm_voxel_grid<float>* ocp_grid,
-                                                          bvxm_voxel_grid<apm_datatype>* apm_grid,
-                                                          vcl_vector<vpgl_camera_double_sptr>& cameras,
-                                                          vcl_vector <vil_image_view_base_sptr>& image_set,
-                                                          unsigned int bin_num)
+                                        bvxm_voxel_world_sptr world,
+                                        bvxm_voxel_grid<float>* intensity_grid,
+                                        bvxm_voxel_grid<float>* ocp_grid,
+                                        bvxm_voxel_grid<apm_datatype>* apm_grid,
+                                        vcl_vector<vpgl_camera_double_sptr>& cameras,
+                                        vcl_vector <vil_image_view_base_sptr>& image_set,
+                                        unsigned int bin_num)
 {
   apm_datatype sample;
   apm_grid->initialize_data(sample);
@@ -277,10 +278,10 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
 
 
 void bvxm_synth_world_generator::gen_texture_map(vgl_box_3d<double> box,
-                                                               vcl_vector<vcl_vector<float> >& intens_map_bt,
-                                                               vcl_vector<vcl_vector<float> >& intens_map_side1,
-                                                               vcl_vector<vcl_vector<float> >& intens_map_side2,
-                                                               bool gen_rand, float app_val)
+                                                 vcl_vector<vcl_vector<float> >& intens_map_bt,
+                                                 vcl_vector<vcl_vector<float> >& intens_map_side1,
+                                                 vcl_vector<vcl_vector<float> >& intens_map_side2,
+                                                 bool gen_rand, float app_val)
 {
   // generate intensity maps
   unsigned upw = (unsigned)vcl_ceil(box.width()/8)+1;
@@ -344,13 +345,13 @@ void bvxm_synth_world_generator::gen_texture_map(vgl_box_3d<double> box,
 }
 
 void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
-                                                                    vgl_box_3d<double> voxel_world,
-                                                                    bvxm_voxel_grid<float>* ocp_grid,
-                                                                    bvxm_voxel_grid<float>* intensity_grid,
-                                                                    unsigned minx, unsigned miny, unsigned minz,
-                                                                    unsigned dimx, unsigned dimy, unsigned dimz,
-                                                                    unsigned nx, unsigned ny, unsigned nz,
-                                                                    bool gen_2box)
+                                                      vgl_box_3d<double> voxel_world,
+                                                      bvxm_voxel_grid<float>* ocp_grid,
+                                                      bvxm_voxel_grid<float>* intensity_grid,
+                                                      unsigned minx, unsigned miny, unsigned minz,
+                                                      unsigned dimx, unsigned dimy, unsigned dimz,
+                                                      unsigned nx, unsigned ny, unsigned nz,
+                                                      bool gen_2box)
 {
   boxes_vector.clear();
 
@@ -456,10 +457,10 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> gr
 }
 
 void bvxm_synth_world_generator::gen_voxel_world_plane( vgl_vector_3d<unsigned> grid_size,
-                                                                      vgl_box_3d<double> voxel_world,
-                                                                      bvxm_voxel_grid<float>* ocp_grid,
-                                                                      bvxm_voxel_grid<float>* intensity_grid,
-                                                                      unsigned nx, unsigned ny, unsigned nz)
+                                                        vgl_box_3d<double> voxel_world,
+                                                        bvxm_voxel_grid<float>* ocp_grid,
+                                                        bvxm_voxel_grid<float>* intensity_grid,
+                                                        unsigned nx, unsigned ny, unsigned nz)
 {
   // fill with test data
   float init_val = 0.0;
@@ -500,7 +501,7 @@ void bvxm_synth_world_generator::gen_voxel_world_plane( vgl_vector_3d<unsigned> 
 
 bool
 bvxm_synth_world_generator::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
-                                                         bvxm_voxel_world_sptr world)
+                                           bvxm_voxel_world_sptr world)
 {
   vil_image_view<unsigned char> lidar(grid_size.x(), grid_size.y());
   lidar.fill((unsigned char)0);
@@ -567,7 +568,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
   vcl_vector <vil_image_view_base_sptr> image_set_1;
 
   update(grid_size, world, intensity_grid, ocp_grid, apm_grid,
-               cameras, image_set_1, bin);
+         cameras, image_set_1, bin);
 
   //world->save_occupancy_raw(world_dir_ + "/ocp.raw");
   return world;
