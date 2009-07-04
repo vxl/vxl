@@ -5,8 +5,6 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
 #include <mbl/mbl_log.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
@@ -59,25 +57,23 @@ static unsigned load_image_2d(const vcl_string& filename,
                               vil_image_view<vil_rgb<vxl_byte> >& img_rgb)
 {
   vil_image_resource_sptr ir = vil_load_image_resource(filename.c_str());
-  if (!ir) 
+  if (!ir)
     return 1;
 
   MBL_LOG(DEBUG, logger(), "pixel_type: " << ir->pixel_format());
-  MBL_LOG(DEBUG, logger(), "size: " << ir->ni() << 'x' 
-    << ir->nj() << " pixels x " << ir->nplanes() << "planes");
+  MBL_LOG(DEBUG, logger(), "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes");
 
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE &&  ir->nplanes()==3)
   {
     vil_image_view<vxl_byte> img = vil_convert_cast(vxl_byte(), ir->get_view());
     img_rgb = vil_view_as_rgb(img);
-    MBL_LOG(DEBUG, logger(), "Loaded " << filename 
-      << " 3-plane image<byte> into image<vil_rgb<byte> >");
+    MBL_LOG(DEBUG, logger(), "Loaded " << filename << " 3-plane image<byte> into image<vil_rgb<byte> >");
   }
   else
   {
-    vcl_cerr << "Image type not supported: " 
-      << "format=" << ir->pixel_format() 
-      << ", nplanes=" << ir->nplanes() << vcl_endl;
+    vcl_cerr << "Image type not supported: "
+             << "format=" << ir->pixel_format()
+             << ", nplanes=" << ir->nplanes() << vcl_endl;
     return 2;
   }
 
@@ -101,7 +97,7 @@ int main2(int argc, char*argv[])
   vcl_vector<vcl_string> image_list;
   if (!load_file_list(image_list_file(), image_list))
   {
-    vcl_cerr << "Failed to load image list file" << vcl_endl;
+    vcl_cerr << "Failed to load image list file\n";
     return 1;
   }
 
@@ -120,9 +116,9 @@ int main2(int argc, char*argv[])
   const unsigned np = imgs[0].nplanes();
   for (unsigned t=1; t<nimgs; ++t)
   {
-    if (imgs[t].ni()!=ni || imgs[t].nj()!=nj || imgs[t].nplanes()!=np) 
+    if (imgs[t].ni()!=ni || imgs[t].nj()!=nj || imgs[t].nplanes()!=np)
     {
-      vcl_cerr << "ERROR: Images are not all the same size" << vcl_endl;
+      vcl_cerr << "ERROR: Images are not all the same size\n";
       return 2;
     }
   }
