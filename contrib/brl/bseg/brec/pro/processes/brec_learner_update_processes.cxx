@@ -18,7 +18,7 @@
 #include <brec/brec_part_hierarchy_learner_sptr.h>
 #include <brec/brec_part_hierarchy_learner.h>
 
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
 //: Constructor
