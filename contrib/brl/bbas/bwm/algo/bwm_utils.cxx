@@ -6,11 +6,9 @@
 #include <bgui/bgui_image_utils.h>
 
 #include <vil/vil_load.h>
-#include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 
 #include <vul/vul_file.h>
-
 #if 0
 #include <vgl/vgl_point_3d.h>
 #endif
