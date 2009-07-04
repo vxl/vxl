@@ -3,8 +3,9 @@
 #define bsta_parzen_sphere_txx_
 //:
 // \file
-#include <vnl/vnl_matrix_fixed.h>
+
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h> // needed for bsta_parzen_sphere<T,n>::covar_type
 #include <vnl/vnl_numeric_traits.h>
 #include "bsta_parzen_sphere.h"
 #include "bsta_gaussian_sphere.h"
