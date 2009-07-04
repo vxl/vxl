@@ -2,11 +2,9 @@
 #define boxm_raytrace_operations_h_
 //:
 // \file
-#include <vbl/vbl_bounding_box.h>
+
 #include <vnl/algo/vnl_determinant.h>
 
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
 
 #include <boct/boct_tree.h>

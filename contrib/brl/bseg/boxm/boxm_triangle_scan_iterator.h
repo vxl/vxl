@@ -7,7 +7,6 @@
 
 #include <vgl/vgl_region_scan_iterator.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
-#include <vbl/vbl_bounding_box.h>
 
 class boxm_triangle_scan_iterator : public vgl_region_scan_iterator
 {

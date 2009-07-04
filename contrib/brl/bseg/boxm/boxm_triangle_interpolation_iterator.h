@@ -6,7 +6,6 @@
 
 #include <vgl/vgl_region_scan_iterator.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
-#include <vbl/vbl_bounding_box.h>
 
 template<class T>
 class boxm_triangle_interpolation_iterator : public vgl_region_scan_iterator
