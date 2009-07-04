@@ -1,4 +1,6 @@
-#include <boxm/boxm_rational_camera_utils.h>
+#include "boxm_rational_camera_utils.h"
+#include <vgl/vgl_point_2d.h>
+
 vgl_plane_3d<double>
 boxm_rational_camera_utils::boxm_find_parallel_image_plane(vpgl_rational_camera<double> * rcam,
                                                            vgl_plane_3d<double> top,
