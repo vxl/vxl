@@ -13,7 +13,6 @@
 // \endverbatim
 
 #include <vpdl/vpdl_gaussian_base.h>
-#include <vnl/vnl_erf.h>
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
 

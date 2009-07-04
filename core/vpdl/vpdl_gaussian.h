@@ -13,12 +13,10 @@
 // \endverbatim
 
 #include <vpdl/vpdl_gaussian_base.h>
-#include <vcl_limits.h>
-#include <vnl/vnl_erf.h>
-
 #include <vpdl/vpdt/vpdt_gaussian.h>
 #include <vpdl/vpdt/vpdt_probability.h>
 #include <vpdl/vpdt/vpdt_log_probability.h>
+#include <vcl_limits.h>
 
 //: A Gaussian with variance independent in each dimension
 template<class T, unsigned int n=0>
