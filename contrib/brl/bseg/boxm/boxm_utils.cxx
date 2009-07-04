@@ -6,7 +6,6 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_polygon.h>
-#include <vgl/vgl_clip.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
