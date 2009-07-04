@@ -16,11 +16,12 @@
 
 #include "../bvxm_voxel_slab.h"
 #include <vnl/vnl_vector_fixed.h>
-#include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_view_as.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
+#include <vcl_vector.h>
 #include <vcl_iostream.h>
 
 class bvxm_slab_to_image

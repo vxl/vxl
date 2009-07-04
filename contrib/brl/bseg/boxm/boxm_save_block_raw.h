@@ -13,12 +13,6 @@
 #include <boxm/boxm_mog_grey_processor.h>
 #include <vpgl/vpgl_camera.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_transform.h>
-#include <vil/vil_view_as.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
 #include <vcl_iostream.h>
 
 template <class T_loc, class T_data>

@@ -19,7 +19,6 @@
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
 
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_world.h>

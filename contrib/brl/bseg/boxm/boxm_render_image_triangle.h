@@ -16,10 +16,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_transform.h>
-#include <vil/vil_save.h>
-#include <vil/vil_view_as.h>
 #include <vcl_iostream.h>
-#include <vil/vil_convert.h>
 #include <vul/vul_timer.h>
 
 #include <boxm/boxm_render_image.h>
