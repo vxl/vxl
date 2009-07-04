@@ -11,7 +11,6 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_image_resource.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol_soview2D.h>
@@ -57,7 +56,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   virtual void set_tab_name(vcl_string name) { tab_name_.assign(name); }
 
-  vcl_string tab_name() { return tab_name_; }
+  vcl_string tab_name() const { return tab_name_; }
 
   bool handle(const vgui_event &);
 
@@ -111,8 +110,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void toggle_show_image_path();
 
   void set_grid_location(unsigned col, unsigned row){col_=col; row_ = row;}
-  unsigned row(){return row_;}
-  unsigned col(){return col_;}
+  unsigned row() const {return row_;}
+  unsigned col() const {return col_;}
 
   vcl_vector<vsol_digital_curve_2d_sptr> edges(unsigned id)
     {return edge_list[id];}
@@ -121,7 +120,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
                        vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges);
   void clear_reg_segmentation();
 
-  vcl_string image_path(){return img_tab_->file_name();}
+  vcl_string image_path() const {return img_tab_->file_name();}
 
   void init_mask();
   //: sets the change type for ground truth areas
@@ -137,10 +136,10 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //: lock/unlock the status display
   void lock_vgui_status(bool lock){lock_vgui_status_ = lock;}
   //: is status locked?
-  bool vgui_status_locked(){return lock_vgui_status_;}
+  bool vgui_status_locked() const {return lock_vgui_status_;}
 
   //is vgui status being displayed by *this observer?
-  bool vgui_status_on(){return vgui_status_on_;}
+  bool vgui_status_on() const {return vgui_status_on_;}
 
   void set_vgui_status_on(bool status_on){vgui_status_on_ = status_on;}
 
