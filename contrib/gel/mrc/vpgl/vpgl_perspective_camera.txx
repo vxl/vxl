@@ -14,9 +14,7 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vnl/vnl_det.h>
 #include <vnl/algo/vnl_qr.h>
-#include <vnl/vnl_inverse.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_matrix_fixed.h>
 
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
@@ -144,7 +142,7 @@ void vpgl_perspective_camera<T>::set_camera_center(
 template <class T>
 void vpgl_perspective_camera<T>::set_translation(const vgl_vector_3d<T>& t)
 {
-  vgl_rotation_3d<T> Rt = R_.transpose(); 
+  vgl_rotation_3d<T> Rt = R_.transpose();
   vgl_vector_3d<T> cv = -(Rt * t);
   camera_center_.set(cv.x(), cv.y(), cv.z());
   recompute_matrix();
@@ -365,16 +363,16 @@ vcl_ostream&  operator<<(vcl_ostream& s,
   vgl_rotation_3d<Type> rot = p.get_rotation();
   vnl_matrix_fixed<Type, 3, 3> Rm = rot.as_matrix();
   vgl_vector_3d<Type> t = p.get_translation();
-  s << k << '\n';
-  s << Rm << '\n';
-  s << t.x() << ' ' << t.y() << ' ' << t.z() << '\n';
+  s << k << '\n'
+    << Rm << '\n'
+    << t.x() << ' ' << t.y() << ' ' << t.z() << '\n';
   return s ;
 }
 
 //: Read camera from stream
 template <class Type>
 vcl_istream&  operator >>(vcl_istream& s,
-                         vpgl_perspective_camera<Type>& p)
+                          vpgl_perspective_camera<Type>& p)
 {
   vnl_matrix_fixed<Type, 3, 3> k, Rm;
   vnl_vector_fixed<Type, 3> tv;
@@ -473,12 +471,12 @@ vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T>* &p)
 #undef vpgl_PERSPECTIVE_CAMERA_INSTANTIATE
 #define vpgl_PERSPECTIVE_CAMERA_INSTANTIATE(T) \
 template class vpgl_perspective_camera<T >; \
-template bool vpgl_perspective_decomposition( \
-  const vnl_matrix_fixed<T,3,4>& camera_matrix, vpgl_perspective_camera<T >& p_camera ); \
-template vpgl_perspective_camera<T > vpgl_align_down( \
-  const vpgl_perspective_camera<T >& p0, const vpgl_perspective_camera<T >& p1 ); \
-template vpgl_perspective_camera<T > vpgl_align_up( \
-  const vpgl_perspective_camera<T >& p0, const vpgl_perspective_camera<T >& p1 ); \
+template bool vpgl_perspective_decomposition(const vnl_matrix_fixed<T,3,4>& camera_matrix, \
+                                             vpgl_perspective_camera<T >& p_camera ); \
+template vpgl_perspective_camera<T > vpgl_align_down(const vpgl_perspective_camera<T >& p0, \
+                                                     const vpgl_perspective_camera<T >& p1 ); \
+template vpgl_perspective_camera<T > vpgl_align_up(const vpgl_perspective_camera<T >& p0, \
+                                                   const vpgl_perspective_camera<T >& p1 ); \
 template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T >* &p); \
 template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T > * p); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \
