@@ -65,7 +65,7 @@ MAIN_ARGS( test_quad_interpolate )
 
   double xvals1[]={10.3,10.3,11.4,11.4};
   double yvals1[]={10.3,11.4,11.4,10.3};
-  double vals1[]={10,10,12,12};
+  //double vals1[]={10,10,12,12};
   ////vgl_polygon<double> poly(points);
   boxm_quad_scan_iterator poly_it_1(xvals1,yvals1);
   //vil_image_view<float> img_min(40,40);

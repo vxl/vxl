@@ -87,7 +87,6 @@ void bvpl_edge3d_kernel_factory::create_canonical()
   int min_z= -1*(height_/2);
   int max_z =(height_/2);
 
-  int z = 0;
   for (int x=min_x; x<= max_x; x++)
   {
     for (int y= min_y; y<= max_y; y++)

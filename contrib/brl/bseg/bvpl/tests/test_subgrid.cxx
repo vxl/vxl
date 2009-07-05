@@ -23,19 +23,19 @@ static void test_subgrid()
 
   vgl_vector_3d<unsigned> grid_size(50,50,20);
   unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
+  TEST("max_cache_size", max_cache_size, 45000);
 
   // try test with all types of underlying storage.
   bvxm_voxel_grid<float>* grid = new bvxm_voxel_grid<float>(storage_fname,grid_size); // disk storage;
   vcl_string test_name;
 
   // check num_observations
-  unsigned nobs = grid->num_observations();
+  TEST("num_observations()", grid->num_observations(), 0);
 
   // fill with test data
   float init_val = 0.5f;
   grid->initialize_data(init_val);
   bool init_check = true;
-  bool write_read_check = true;
 
   grid->increment_observations();
 

@@ -12,18 +12,14 @@
 
 MAIN(test_bvpl_kernels)
 {
-  //define variaty of heights, widths, and rotations
-  unsigned h1=5, h2=3, h3 = 12;
-  float a1=2.0f*float(vnl_math::pi/3.0), a2=float(vnl_math::pi/4.0), a3=float(vnl_math::pi/2.0), a4=float(vnl_math::pi);
-
   vnl_vector_fixed<float,3> axis1(0.0, 0.0, 0.0);
   vnl_vector_fixed<float,3> axis2(1.0, 0.0, 0.0);
   vnl_vector_fixed<float,3> axis3(1.0, 0.0, 1.0);
-  vnl_vector_fixed<float,3> axis4(1.0, 1.0 , 1.0);
+  vnl_vector_fixed<float,3> axis4(1.0, 1.0, 1.0);
 
   //Create the factory
+  unsigned h1=5;
   bvpl_edge2d_kernel_factory factory1(h1, h1);
-
 
   for (int i = -1; i<1; i++)
     for (int j = -1; j<1; j++)
@@ -53,9 +49,8 @@ MAIN(test_bvpl_kernels)
         }
       }
 
-  unsigned l=11,w=21,h=31;
+  unsigned h=31;
   bvpl_edge3d_kernel_factory kernel_3d(h,h,h);
-
 
   bvpl_kernel_vector_sptr kernel_3d_vecs=kernel_3d.create_kernel_vector();
   vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iter=kernel_3d_vecs->begin();

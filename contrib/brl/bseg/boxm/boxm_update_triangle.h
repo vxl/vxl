@@ -21,10 +21,10 @@
 
 template <class T_loc, class T_data>
 void boxm_update_triangle_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                       vpgl_camera_double_sptr cam,
-                       vil_image_view<typename T_data::obs_mathtype> &img,
-                       vil_image_view<float> &norm_img,
-                       typename T_data::apm_datatype background_model, int bin)
+                                vpgl_camera_double_sptr cam,
+                                vil_image_view<typename T_data::obs_mathtype> &img,
+                                vil_image_view<float> &norm_img,
+                                typename T_data::apm_datatype background_model, int bin)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc, T_data> cell_type;
@@ -90,12 +90,12 @@ void boxm_update_triangle_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          if (vpgl_perspective_camera<double> * pcam = dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
+          if (dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
           {
-                  boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+            boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
           }
           else if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
-              boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,projection_plane,xverts,yverts,vertdists);
+            boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,projection_plane,xverts,yverts,vertdists);
           }
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
           //boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdists);
@@ -163,9 +163,9 @@ void boxm_update_triangle_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
 template <class T_loc, class T_data>
 void boxm_update_triangle_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                       vpgl_camera_double_sptr cam,
-                       vil_image_view<typename T_data::obs_mathtype> &img,
-                       vil_image_view<float> &norm_img, int bin)
+                                vpgl_camera_double_sptr cam,
+                                vil_image_view<typename T_data::obs_mathtype> &img,
+                                vil_image_view<float> &norm_img, int bin)
 {
   unsigned ni=img.ni();
   unsigned nj=img.nj();
@@ -207,7 +207,6 @@ void boxm_update_triangle_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       vil_image_view<float> temp_expected(ni,nj,1);
       vil_image_view<float> update_factor(ni,nj,1);
 
-      unsigned count=0;
       while (frontier_it.next())
       {
         vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
@@ -225,7 +224,7 @@ void boxm_update_triangle_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          if (vpgl_perspective_camera<double> * pcam = dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
+          if (dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
           {
             boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
           }
@@ -286,7 +285,7 @@ void boxm_update_triangle_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          if (vpgl_perspective_camera<double> * pcam = dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
+          if (dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
           {
               boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
           }

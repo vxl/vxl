@@ -19,13 +19,13 @@ bool bvxm_mog_norm<T>::mog_l2_grid(bvxm_voxel_grid_base_sptr apm_base,
                                    bool reference_given,
                                    mix_gauss_type reference)
 {
- // cast grids
+  // cast grids
   bvxm_voxel_grid< mix_gauss_type>* apm_grid = static_cast<bvxm_voxel_grid< mix_gauss_type>* >(apm_base.ptr());
   bvxm_voxel_grid<bool>* mask_grid = static_cast<bvxm_voxel_grid< bool>* >(mask_base.ptr());
   bvxm_voxel_grid<T>* distance_grid = static_cast<bvxm_voxel_grid< T >* >(dist_base.ptr());
   distance_grid->initialize_data(float(0));
 
-   if (!apm_grid ||!mask_grid || !distance_grid)
+  if (!apm_grid ||!mask_grid || !distance_grid)
     return false;
 
   vgl_vector_3d<unsigned> grid_size = apm_grid->grid_size();
@@ -143,20 +143,14 @@ template <class T>
 T bvxm_mog_norm<T>::l2_gauss2mix(gauss_type const&g, mix_gauss_undef const&f, bool normalize)
 {
   //define some constants so that they are only calculated once
-  //srqt(4*pi)
-  T k1 = (T(1.0)/T(4.0)) * vnl_math::two_over_sqrtpi;
+  //sqrt(4*pi)
+  T k1 = T(vnl_math::two_over_sqrtpi * 0.25);
 
   // This distance is composed of 5 terms
-  T t1 = 0;
-  T t2 = 0;
+
+  //terms 1,3
+  T t1 = k1 * (1.0/vcl_sqrt(g.var()));
   T t3 = 0;
-  T t4 = 0;
-  T t5 = 0;
-
-  //terms 1,2,3
-
-
-  t1 = k1 * (1/vcl_sqrt(g.var()));
 
   for (unsigned j = 0; j < f.num_components(); j++)
   {
@@ -170,6 +164,9 @@ T bvxm_mog_norm<T>::l2_gauss2mix(gauss_type const&g, mix_gauss_undef const&f, bo
 
 
   //terms 4,5
+  T t4 = 0;
+  T t5 = 0;
+
   for (unsigned i = 0; i < f.num_components(); i++)
   {
     t4 = t4 + vcl_pow(f.weight(i),2)*k1*(T(1)/vcl_sqrt(f.distribution(i).var()));
