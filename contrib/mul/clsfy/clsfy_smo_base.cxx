@@ -142,10 +142,10 @@ double clsfy_smo_base::error_rate()
 {
     int n_total = 0;
     int n_error = 0;
-    for (unsigned int i=0; i<data_->size(); i++) {
-       if (learned_func(i) > 0 != target_[i] > 0)
-           n_error++;
-       n_total++;
+    for (unsigned int i=0; i<data_->size(); ++i) {
+      if ((learned_func(i) > 0) != (target_[i] > 0)) // meaning: signs are different
+        ++n_error;
+      ++n_total;
     }
     return double(n_error)/double(n_total);
 }
