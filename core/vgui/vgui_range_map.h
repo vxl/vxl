@@ -61,9 +61,8 @@
 //
 //   The current scheme can easily be extended to full color support if the
 //   need arises. The number of maps has to be extended to three
-//   (four with an alpha channel or multi-spectras) as well as 
-//   increasing the number of
-//   mapping parameters.
+//   (four with an alpha channel or multi-spectras) as well as
+//   increasing the number of mapping parameters.
 //
 // \verbatim
 //  Modifications
@@ -81,39 +80,39 @@ class vgui_range_map : public vgui_range_map_params
   ~vgui_range_map();
 
   //: Is the pixel type mapable at all
-  bool mapable() {return mapable_;}
+  bool mapable() const {return mapable_;}
 
   //: Is the pixel type mapable by a lookup table
-  bool table_mapable() {return table_mapable_;}
+  bool table_mapable() const {return table_mapable_;}
 
   //: Get the number of elements in the mapping tables
-  unsigned map_size() {return size_;}
+  unsigned map_size() const {return size_;}
 
   // get the software range maps (byte range)
 
   //: Luminance map
-  vbl_array_1d<vxl_byte> Lmap(){return this->compute_byte_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
+  vbl_array_1d<vxl_byte> Lmap() {return this->compute_byte_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
   //: Red Channel map
-  vbl_array_1d<vxl_byte> Rmap(){return this->compute_byte_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
+  vbl_array_1d<vxl_byte> Rmap() {return this->compute_byte_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
   //: Green Channel map
-  vbl_array_1d<vxl_byte> Gmap(){return this->compute_byte_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
+  vbl_array_1d<vxl_byte> Gmap() {return this->compute_byte_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
   //: Blue Channel map
-  vbl_array_1d<vxl_byte> Bmap(){return this->compute_byte_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
+  vbl_array_1d<vxl_byte> Bmap() {return this->compute_byte_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
   //: Alpha or Infrared Channel map
-  vbl_array_1d<vxl_byte> Xmap(){return this->compute_byte_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
+  vbl_array_1d<vxl_byte> Xmap() {return this->compute_byte_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
 
   // get the OpenGL hardware range maps (float [0, 1] range)
 
   //: Luminance hardware map
-  vbl_array_1d<float> fLmap(){return this->compute_float_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
+  vbl_array_1d<float> fLmap() {return this->compute_float_table(Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
   //: Red channel hardware map
-  vbl_array_1d<float> fRmap(){return this->compute_float_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
+  vbl_array_1d<float> fRmap() {return this->compute_float_table(Type(min_R_), Type(max_R_), gamma_R_, ratio_R_);}
   //: Green channel hardware map
-  vbl_array_1d<float> fGmap(){return this->compute_float_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
+  vbl_array_1d<float> fGmap() {return this->compute_float_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
   //: Blue channel hardware map
-  vbl_array_1d<float> fBmap(){return this->compute_float_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
+  vbl_array_1d<float> fBmap() {return this->compute_float_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
   //: Alpha or Infrared channel hardware map
-  vbl_array_1d<float> fXmap(){return this->compute_float_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
+  vbl_array_1d<float> fXmap() {return this->compute_float_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
 
   //: Luminance computed map
   vxl_byte map_L_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}

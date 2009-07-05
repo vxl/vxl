@@ -34,7 +34,7 @@ class vil_geotiff_header
   // destructor frees up gtif
   virtual ~vil_geotiff_header() { GTIFFree(gtif_); }
 
-  int gtif_number_of_keys() { return number_of_geokeys_; }
+  int gtif_number_of_keys() const { return number_of_geokeys_; }
 
   bool gtif_tiepoints(vcl_vector<vcl_vector<double> > &tiepoints);
 

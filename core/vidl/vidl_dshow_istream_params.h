@@ -88,12 +88,12 @@ class vidl_dshow_istream_params //: public vidl_iostream_params
 
   // Read accessor functions
   // - general params (all dshow_params should have)
-  bool register_in_rot()       { return register_in_rot_;      }
-  bool run_when_ready()        { return run_when_ready_;       }
-  vcl_string save_graph_to()   { return save_graph_to_;        }
-  vcl_string device_name()     { return device_name_;          }
-  vcl_string output_filename() { return output_filename_;      }
-  GUID target_output_format()  { return target_output_format_; }
+  bool register_in_rot()       const { return register_in_rot_;      }
+  bool run_when_ready()        const { return run_when_ready_;       }
+  vcl_string save_graph_to()   const { return save_graph_to_;        }
+  vcl_string device_name()     const { return device_name_;          }
+  vcl_string output_filename() const { return output_filename_;      }
+  GUID target_output_format()  const { return target_output_format_; }
 
   // Write accessor functions.
   // - general params (all dshow_params should have)
