@@ -24,7 +24,7 @@ class ComputeGRIC
   HMatrix2D* get_H() const { return H_.get(); }
 
   // Is Degenerate ?
-  bool degenerate() { return degenerate_; }
+  bool degenerate() const { return degenerate_; }
 
   // Return inliers after the computation
   vcl_vector<bool>& get_inliers() { return degenerate_ ? inliersH_ : inliersF_; }

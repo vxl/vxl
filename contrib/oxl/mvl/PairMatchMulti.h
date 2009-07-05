@@ -75,13 +75,13 @@ class PairMatchMulti
   int count() const { return matches12_.size(); }
 
   //: Return the number of matches for i1.
-  unsigned count_matches_12(int i1) { return matches12_.count(i1); }
+  unsigned count_matches_12(int i1) const { return matches12_.count(i1); }
 
   //: Return an iterator which will run through the list of matches for feature index i1.
   //  Example usage: to print all matches for "target"
   // \code
   //   for (PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
-  //     vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
+  //     vcl_cout << p.get_i1() << ' ' << p.get_i2() << vcl_endl;
   // \endcode
   // Complexity is O(log n).
   PairMatchMultiIterator get_match_12(int i1)

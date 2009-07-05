@@ -117,9 +117,9 @@ class KalmanFilter
 
   // accessor functions
   // return the current signal estimate
-  inline vnl_matrix<double> estimate(){return x;}
+  inline vnl_matrix<double> estimate() const {return x;}
   // return the current signal prediction
-  inline vnl_matrix<double> prediction(){return x_pred;}
+  inline vnl_matrix<double> prediction() const {return x_pred;}
 
   friend vcl_ostream &operator<<(vcl_ostream &os, const KalmanFilter &kf);
 };

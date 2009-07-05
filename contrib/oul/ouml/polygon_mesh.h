@@ -37,8 +37,8 @@ class PolygonMesh
   DVector3D get_face_normal(int face_index,
                             int vertex_index);
   bool read_file(char *filename);
-  inline int num_faces(){return face_list.size();}
-  inline int num_vertices(){return vertex_list.size();}
+  inline int num_faces() const {return face_list.size();}
+  inline int num_vertices() const {return vertex_list.size();}
 };
 
 vcl_ostream &operator <<(vcl_ostream &os, PolygonMesh &pmesh);

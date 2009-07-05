@@ -57,7 +57,7 @@ class EigenFace
   vnl_vector<double>* encode(Image *im);
   vnl_vector<double>* encode(vnl_vector<double> *im);
   vnl_vector<double>* decode(vnl_vector<double> *wts);
-  inline int num_vectors(){return training_images.size();}
+  inline int num_vectors() const {return training_images.size();}
   char *classify(Image *im, double threshold=DBL_MAX, int k=3, int dim=10);
   void check_training();
   void output_xgobi(char *basefile);
@@ -66,7 +66,7 @@ class EigenFace
 // a helper class
 class EigenSort
 {
-public:
+ public:
   int eigenindex;
   double weight;
   bool operator<(const EigenSort o1) const

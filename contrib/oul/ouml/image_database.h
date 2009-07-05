@@ -60,7 +60,7 @@ class ImageDatabase
     {return image_db.equal_range(label);}
   inline vcl_pair<const_iterator, const_iterator> equal_range(const char *&label)
     const {return image_db.equal_range(label);}
-  inline bool label_exists(const char *label)
+  inline bool label_exists(const char *label) const
     {return image_db.count(label)>0;}
   void clear();
 

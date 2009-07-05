@@ -25,7 +25,7 @@ struct oxp_bunch_of_files
   bool seek(offset_t to);
   offset_t tell() const;
   offset_t read(void*, offset_t);
-  bool ok() { return current_file_index != -1; }
+  bool ok() const { return current_file_index != -1; }
 
  private:
   bool fix_sizes(); // filenames has been filled

@@ -30,16 +30,16 @@ class mvl2_video_to_avi: public mvl2_video_writer
   void  close();
  
     //: Check whether camera is initialised
-  bool  is_opened() {return is_initialized_;}
+  bool  is_opened() const {return is_initialized_;}
  
     //: Return width of image (in pixels)
-  int get_width();
+  int get_width() const;
  
     //: Return height of image (in pixels)
-  int get_height();
+  int get_height() const;
  
     //: Return the frame rate in frames per second
-  double get_frame_rate () {return frame_rate_;}
+  double get_frame_rate() const {return frame_rate_;}
  
     //: Set the frame rate in frames per second
   void set_frame_rate(double frame_rate);

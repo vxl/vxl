@@ -111,7 +111,7 @@ bool mvl2_video_from_avi::get_frame(vil_image_view<vxl_byte>& image)
     image.set_size(im24->Width(),im24->Height(),3);
     vcl_memcpy(buffer_,im24->At(0,0),sizeof(vxl_byte)*im24->Bytes());
     image.set_to_memory(buffer_+2,im24->Width(),im24->Height(),3,
-        3,3*im24->Width(),-1);
+                        3,3*im24->Width(),-1);
     }
   else
     {
@@ -139,17 +139,17 @@ void mvl2_video_from_avi::set_frame_rate(double frame_rate)
 {
 }
 
-double mvl2_video_from_avi::get_frame_rate()
+double mvl2_video_from_avi::get_frame_rate() const
 {
   return frame_rate_;
 }
 
-int mvl2_video_from_avi::get_width()
+int mvl2_video_from_avi::get_width() const
 {
    return width_;
 }
 
-int mvl2_video_from_avi::get_height()
+int mvl2_video_from_avi::get_height() const
 {
    return height_;
 }

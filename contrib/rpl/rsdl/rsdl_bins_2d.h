@@ -8,8 +8,9 @@
 #include <vbl/vbl_array_2d.h>
 
 template < class COORD_T, class VALUE_T >
-class rsdl_bins_2d_entry {
-public:
+class rsdl_bins_2d_entry
+{
+ public:
   rsdl_bins_2d_entry() {}
   rsdl_bins_2d_entry( const vnl_vector_fixed< COORD_T, 2 > & pt,
                       const VALUE_T& val )
@@ -26,12 +27,13 @@ vcl_ostream& operator<< ( vcl_ostream& ostr,
 
 
 template  < class COORD_T, class VALUE_T >
-class rsdl_bins_2d {
-public:
+class rsdl_bins_2d
+{
+ public:
   typedef vnl_vector_fixed< COORD_T, 2 >  point_type;
   typedef VALUE_T value_type;
 
-public:
+ public:
   rsdl_bins_2d();
   rsdl_bins_2d( const point_type & min_pt,
                 const point_type & max_pt,
@@ -88,23 +90,23 @@ public:
 
   void change_value( const value_type& old_val, const value_type& new_val );
 
-  point_type max_pt() {return max_pt_ ;}
-  
-  point_type min_pt() {return min_pt_ ;}
-  
-  point_type bin_sizes() {return bin_sizes_;}
+  point_type max_pt() const {return max_pt_ ;}
+
+  point_type min_pt() const {return min_pt_ ;}
+
+  point_type bin_sizes() const {return bin_sizes_;}
 
   unsigned num_pts() const;
 
-private:
+ private:
   void point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const;
   COORD_T min_sq_distance_to_bin( COORD_T x, COORD_T y, int bin_x, int bin_y ) const;
 
-public:
+ public:
   typedef rsdl_bins_2d_entry< COORD_T, VALUE_T > bin_entry_type_;
   typedef vcl_vector< bin_entry_type_ > bin_vector_type_;
 
-private:
+ private:
   vbl_array_2d< bin_vector_type_ > bins_;
 
   point_type min_pt_;

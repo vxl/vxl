@@ -39,12 +39,12 @@ void mvl2_video_to_avi::close()
   vcl_cerr << "mvl2_video_to_avi::close() NYI\n";
 }
  
-int mvl2_video_to_avi::get_width()
+int mvl2_video_to_avi::get_width() const
 {
   return width_; 
 }
  
-int mvl2_video_to_avi::get_height()
+int mvl2_video_to_avi::get_height() const
 {
   return height_; 
 }

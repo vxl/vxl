@@ -77,7 +77,7 @@ class vgui_roi_tableau_make_roi : public vgui_rubberband_client
   void add_circle(float,float,float) {}
   void add_linestrip(int,float const *,float const *) {}
   void add_infinite_line(float,float,float) {}
-  bool is_done() { return done_; }
+  bool is_done() const { return done_; }
 };
 
 #endif // xcv_image_tableau_h_

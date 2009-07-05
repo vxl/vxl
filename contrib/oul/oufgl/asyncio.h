@@ -98,7 +98,7 @@ class AsyncIO : protected AsyncIO_Shared_State
 
   // Test if operation complete. You still need to call wait_for_completion()
   // to tidy up and get final status
-  bool is_complete() { return complete; }
+  bool is_complete() const { return complete; }
 };
 
 #endif // OTAGO_Asyncio_IO__h_INCLUDED

@@ -1,7 +1,5 @@
-
 #ifndef rsdl_point_h_
 #define rsdl_point_h_
-
 //:
 // \file
 // \brief A point with mixed Cartesian and angular coordinates.
@@ -20,12 +18,13 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
-class rsdl_point {
-public:
+class rsdl_point
+{
+ public:
   //: Used until we support member templates.
   typedef vcl_vector<double>::const_iterator const_iterator;
 
-public:
+ public:
   //: Provided only for STL.
   //  Creates a point without any data.
   rsdl_point( );
@@ -76,29 +75,29 @@ public:
   void set_angular( const_iterator a );
 
   //: Constant access to the indexed cartesian coordinate.
-  inline const double& cartesian( unsigned int i ) const { return data_[i]; }
+  inline double cartesian( unsigned int i ) const { return data_[i]; }
 
   //: Mutable access to the indexed cartesian coordinate.
   inline double& cartesian( unsigned int i ) { return data_[i]; }
 
   //: Constant access to the indexed angular coordinate.
-  inline const double& angular( unsigned int i ) const { return data_[Nc_+i]; }
+  inline double angular( unsigned int i ) const { return data_[Nc_+i]; }
 
   //: Mutable access to the indexed angular coordinate.
   inline double& angular ( unsigned int i ) { return data_[Nc_+i]; }
-  
+
   //: Assignment operator.
   rsdl_point&  operator= ( const rsdl_point& old );
 
   //: Resize both the cartesian and angular dimensions.
   void resize( unsigned int Nc, unsigned int Na );
 
-private:
+ private:
   unsigned int Nc_;
   unsigned int Na_;
   double *data_;
 };
-  
+
 vcl_ostream& operator<< ( vcl_ostream& ostr, const rsdl_point& pt );
 
 #endif

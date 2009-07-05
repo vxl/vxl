@@ -49,7 +49,7 @@ class MovieFile
   void GetFrame(int frame_index, vil1_memory_image_of<vxl_byte>& frame);
   void GetFrameRGB(int frame_index, vxl_byte* frame);
 
-  bool ok() { return qt != 0; }
+  bool ok() const { return qt != 0; }
 
  protected:
   vcl_string filename_;

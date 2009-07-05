@@ -31,13 +31,13 @@ class mvl2_video_from_sequence: public mvl2_video_reader
   virtual void  set_capture_size(int width,int height);
 
   //: Return width of image (in pixels)
-  virtual int get_width();
+  virtual int get_width() const;
 
   //: Return height of image (in pixels)
-  virtual int get_height();
+  virtual int get_height() const;
 
   //: Return the frame rate in frames per second
-  virtual double get_frame_rate ();
+  virtual double get_frame_rate() const;
 
   //: Set the frame rate in frames per second
   virtual void set_frame_rate(double frame_rate);

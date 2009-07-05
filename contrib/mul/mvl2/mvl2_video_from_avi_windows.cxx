@@ -154,7 +154,7 @@ void mvl2_video_from_avi::set_frame_rate(double /*frame_rate*/)
   vcl_cerr << "mvl2_video_from_avi::set_frame_rate() NYI\n";
 }
 
-double mvl2_video_from_avi::get_frame_rate()
+double mvl2_video_from_avi::get_frame_rate() const
 {
   AVISTREAMINFO avis;
   AVIStreamInfo(ppavi_, &avis, sizeof(avis));
@@ -162,7 +162,7 @@ double mvl2_video_from_avi::get_frame_rate()
   return frame_rate_;
 }
 
-int mvl2_video_from_avi::get_width()
+int mvl2_video_from_avi::get_width() const
 {
   BITMAPINFO bmp_info;
   getVideoFormat(bmp_info);
@@ -170,7 +170,7 @@ int mvl2_video_from_avi::get_width()
   return width_;
 }
 
-int mvl2_video_from_avi::get_height()
+int mvl2_video_from_avi::get_height() const
 {
   BITMAPINFO bmp_info;
   getVideoFormat(bmp_info);

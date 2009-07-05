@@ -44,22 +44,22 @@ class mvl2_video_reader
   virtual void  uninitialize() {}
 
   //: Check whether camera is initialised
-  virtual bool  is_initialized() {return is_initialized_;}
+  virtual bool  is_initialized() const {return is_initialized_;}
 
   //: Set the size of image captured
   virtual void  set_capture_size(int width, int height)=0;
 
   //: Return width of image (in pixels)
-  virtual int get_width() {return width_;}
+  virtual int get_width() const {return width_;}
 
   //: Return height of image (in pixels)
-  virtual int get_height() {return height_;}
+  virtual int get_height() const {return height_;}
 
   //: Return the current frame number
-  virtual int get_frame_number() {return current_frame_;}
+  virtual int get_frame_number() const {return current_frame_;}
 
   //: Return the frame rate in frames per second
-  virtual double get_frame_rate ()=0;
+  virtual double get_frame_rate () const = 0;
 
   //: Set the frame rate in frames per second
   virtual void set_frame_rate(double frame_rate)=0;

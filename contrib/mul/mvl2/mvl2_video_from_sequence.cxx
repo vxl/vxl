@@ -158,17 +158,17 @@ void mvl2_video_from_sequence::set_frame_rate(double /*frame_rate*/)
   vcl_cerr << "mvl2_video_from_sequence::set_frame_rate() NYI\n";
 }
 
-double mvl2_video_from_sequence::get_frame_rate()
+double mvl2_video_from_sequence::get_frame_rate() const
 {
   return frame_rate_;
 }
 
-int mvl2_video_from_sequence::get_width()
+int mvl2_video_from_sequence::get_width() const
 {
   return width_;
 }
 
-int mvl2_video_from_sequence::get_height()
+int mvl2_video_from_sequence::get_height() const
 {
   return height_;
 }

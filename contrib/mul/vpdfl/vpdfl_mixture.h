@@ -75,7 +75,7 @@ class vpdfl_mixture : public vpdfl_pdf_base
   unsigned n_components() const { return component_.size(); }
 
   //: Get i<I>th</I> weight.
-  double weight(unsigned i) { return weight_[i]; }
+  double weight(unsigned i) const { return weight_[i]; }
 
   //: Array of weights
   // Use weight(i) where possible

@@ -51,8 +51,8 @@ class mvl_multi_view_matches
   //: Merge-in a whole set of matches (possibly from a different set of views)
   void add_matches(mvl_multi_view_matches const& matches);
 
-  int num_views() { return views_.size(); }
-  int num_tracks() { return tracks_.size(); }
+  int num_views() const { return views_.size(); }
+  int num_tracks() const { return tracks_.size(); }
 
   //: Get the <frame,corner> map for track i (frame = track.first, corner = track.second)
   Map& get_track(int i) { return tracks_[i]; }
