@@ -158,24 +158,21 @@ double mvl2_video_from_avi::get_frame_rate() const
 {
   AVISTREAMINFO avis;
   AVIStreamInfo(ppavi_, &avis, sizeof(avis));
-  frame_rate_=(avis.dwRate)/(avis.dwScale);
-  return frame_rate_;
+  return frame_rate_=(avis.dwRate)/(avis.dwScale);
 }
 
 int mvl2_video_from_avi::get_width() const
 {
   BITMAPINFO bmp_info;
   getVideoFormat(bmp_info);
-  width_=bmp_info.bmiHeader.biWidth;
-  return width_;
+  return width_=bmp_info.bmiHeader.biWidth;
 }
 
 int mvl2_video_from_avi::get_height() const
 {
   BITMAPINFO bmp_info;
   getVideoFormat(bmp_info);
-  width_=bmp_info.bmiHeader.biHeight;
-  return height_;
+  return height_=bmp_info.bmiHeader.biHeight;
 }
 
 void mvl2_video_from_avi::set_capture_size(int /*width*/,int /*height*/)
