@@ -128,11 +128,12 @@ void test_original()
 //=============================================================================
 void test_quantile()
 {
+  // using "{}" blocks for higher autonomy and reusablility of variables
   {
     vcl_cout << "test_quantile(): odd number of samples (nsamples=5)\n";
     const unsigned ns=5;
     mbl_sample_stats_1d stats;
-    for (int i=0; i<ns; ++i)
+    for (unsigned int i=0; i<ns; ++i)
       stats.add_sample(i);
 
     const unsigned nq = 10; // will actually calculate nq+1 quantiles
@@ -141,19 +142,19 @@ void test_quantile()
     {
       double q = static_cast<double>(j)/static_cast<double>(nq);
       quantiles.push_back(stats.quantile(q));
-      //vcl_cout << "quantile(" << q << ")= " << quantiles[j] << "\n";
+      //vcl_cout << "quantile(" << q << ")= " << quantiles[j] << vcl_endl;
     }
 
-    TEST("quantile(0.0)==ordered_sample(0)?", quantiles[0]==stats.samples()[0], true);
-    TEST("quantile(1.0)==ordered_sample(n-1)?", quantiles[nq]==stats.samples()[ns-1], true);
-    TEST("quantile(0.5)==ordered_sample((n-1)/2)?", quantiles[nq/2]==stats.samples()[(ns-1)/2], true);
-    TEST("median()==quantile(0.5)?", stats.median()==stats.quantile(0.5), true);
+    TEST("quantile(0.0)==ordered_sample[0]?", quantiles[0], stats.samples()[0]);
+    TEST("quantile(1.0)==ordered_sample[n-1]?", quantiles[nq], stats.samples()[ns-1]);
+    TEST("quantile(0.5)==ordered_sample[(n-1)/2]?", quantiles[nq/2], stats.samples()[(ns-1)/2]);
+    TEST("median()==quantile(0.5)?", stats.median(), stats.quantile(0.5));
   }
   {
     vcl_cout << "test_quantile(): even number of samples (nsamples=6)\n";
     const unsigned ns=6;
     mbl_sample_stats_1d stats;
-    for (int i=0; i<ns; ++i)
+    for (unsigned int i=0; i<ns; ++i)
       stats.add_sample(i);
 
     const unsigned nq = 10; // will actually calculate nq+1 quantiles
@@ -162,7 +163,7 @@ void test_quantile()
     {
       double q = static_cast<double>(j)/static_cast<double>(nq);
       quantiles.push_back(stats.quantile(q));
-      //vcl_cout << "quantile(" << q << ")= " << quantiles[j] << "\n";
+      //vcl_cout << "quantile(" << q << ")= " << quantiles[j] << vcl_endl;
     }
 
     TEST("quantile(0.0)==ordered_sample(0)?", quantiles[0]==stats.samples()[0], true);
@@ -178,8 +179,8 @@ void test_quantile()
 void test_sample_stats_1d()
 {
   vcl_cout << "*****************************\n"
-    << " Testing mbl_sample_stats_1d \n"
-    << "*****************************\n";
+           << " Testing mbl_sample_stats_1d\n"
+           << "*****************************\n";
 
   test_original();
   test_quantile();
