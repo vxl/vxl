@@ -26,7 +26,7 @@ class test_edge : public bgrl2_edge<test_node>
   test_edge(int id, test_node_sptr v1, test_node_sptr v2) : bgrl2_edge<test_node>(v1,v2), id_(id){}
   virtual ~test_edge(){}
 
-  int id(){return id_;}
+  int id() const {return id_;}
   void set_id(int id){id_ = id;}
 
   //: Print an ascii summary to the stream

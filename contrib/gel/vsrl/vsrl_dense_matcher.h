@@ -34,7 +34,7 @@ class vsrl_dense_matcher
 
   // get the correlation range
 
-  int get_correlation_range() { return correlation_range_; }
+  int get_correlation_range() const { return correlation_range_; }
 
   // get the assigned coordinate
 
@@ -46,8 +46,8 @@ class vsrl_dense_matcher
 
   // get the width and height of image1
 
-  int get_width() { return image1_.width(); }
-  int get_height() { return image1_.height(); }
+  int get_width() const { return image1_.width(); }
+  int get_height() const { return image1_.height(); }
 };
 
 #endif

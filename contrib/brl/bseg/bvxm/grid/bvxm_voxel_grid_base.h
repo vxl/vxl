@@ -23,7 +23,7 @@ class bvxm_voxel_grid_base : public vbl_ref_count
   bvxm_voxel_grid_base(){}
   virtual ~bvxm_voxel_grid_base(){}
   bvxm_voxel_grid_base(vgl_vector_3d<unsigned> grid_size) : grid_size_(grid_size) {}
-  vgl_vector_3d<unsigned> grid_size() { return grid_size_; }
+  vgl_vector_3d<unsigned> grid_size() const { return grid_size_; }
 
  protected:
   vgl_vector_3d<unsigned> grid_size_;

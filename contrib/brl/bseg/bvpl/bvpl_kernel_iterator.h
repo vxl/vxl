@@ -38,7 +38,7 @@ class bvpl_kernel_iterator: public vbl_ref_count
 
   void insert(vgl_point_3d<int> index, bvpl_kernel_dispatch val) {kernel_vals_.push_back(vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch>(index,val)); }
 
-  vgl_point_3d<int> index() { return kernel_vals_[cur_index_].first; }
+  vgl_point_3d<int> index() const { return kernel_vals_[cur_index_].first; }
 
   bvpl_kernel_iterator& begin() { cur_index_ = 0; return *this;}
 
@@ -46,7 +46,7 @@ class bvpl_kernel_iterator: public vbl_ref_count
 
   bvpl_kernel_iterator& operator--() { if (cur_index_ != 0) --cur_index_; return *this;}
 
-  bvpl_kernel_dispatch operator*() { return kernel_vals_[cur_index_].second; }
+  bvpl_kernel_dispatch operator*() const { return kernel_vals_[cur_index_].second; }
 
   bool isDone() { if (cur_index_ == kernel_vals_.size()) return true; return false; }
 

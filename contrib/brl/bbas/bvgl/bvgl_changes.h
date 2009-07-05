@@ -25,7 +25,7 @@ class bvgl_changes : public vbl_ref_count
 
   ~bvgl_changes() {}
 
-  unsigned size() { return objs_.size(); }
+  unsigned size() const { return objs_.size(); }
 
   bvgl_change_obj_sptr obj(unsigned int i);
 

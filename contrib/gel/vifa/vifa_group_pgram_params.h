@@ -34,13 +34,13 @@ class vifa_group_pgram_params : public gevd_param_mixin,
 
  public:
   //: Granularity in the angle bins.
-  float  angle_increment() { return angle_increment_; }
+  float  angle_increment() const { return angle_increment_; }
 
   //: Radius of maximum suppression kernel.
-  int    max_suppress_radius() { return max_suppress_radius_; }
+  int    max_suppress_radius() const { return max_suppress_radius_; }
 
   //: Relative length of sorter side of parallelogram.
-  float  length_ratio() { return length_ratio_; }
+  float  length_ratio() const { return length_ratio_; }
 
   //: Default constructor.
   vifa_group_pgram_params(float  angle_increment = 5.0f,

@@ -22,7 +22,7 @@ class strk_info_tracker_process : public vpro_video_process
  public:
   strk_info_tracker_process(strk_info_tracker_params & tp);
   ~strk_info_tracker_process();
-  virtual process_data_type get_output_type() { return TOPOLOGY; }
+  virtual process_data_type get_output_type() const { return TOPOLOGY; }
 
   //: track to next frame
   virtual bool execute();
@@ -32,7 +32,7 @@ class strk_info_tracker_process : public vpro_video_process
 
   //: special methods
   // for display
-  vcl_vector<unsigned char> color_index(){return color_index_;}
+  vcl_vector<unsigned char> color_index() const {return color_index_;}
  private:
   //members
   bool write_tracked_faces_;

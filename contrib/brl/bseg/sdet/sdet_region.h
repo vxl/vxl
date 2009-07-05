@@ -28,7 +28,7 @@ class sdet_region : public vdgl_digital_region
   ~sdet_region() {}
   //:accessors
   void set_label(const unsigned int label){region_label_ = label;}
-  unsigned int label(){return region_label_;}
+  unsigned int label() const {return region_label_;}
 
   void set_boundary(vsol_polygon_2d_sptr const& boundary){boundary_ = boundary;}
   vsol_polygon_2d_sptr boundary();

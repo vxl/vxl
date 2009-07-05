@@ -41,7 +41,7 @@ class bwm_video_corr_lsqr_cost_func : public vnl_least_squares_function
   bwm_video_corr_lsqr_cost_func(vil_image_view<float> const& base_image,
                                 unsigned match_radius,
                                 vcl_vector<float> corr_window_ab
-                                );
+                               );
 
   void set_base_image(vil_image_view<float> const& base){base_image_ = base;}
 
@@ -57,8 +57,8 @@ class bwm_video_corr_cost_function: public vnl_cost_function
  public:
   //: Constructor - rcam pointer is not deleted by this class
   bwm_video_corr_cost_function(vil_image_view<float> const& base_image,
-                                unsigned match_radius,
-                                vcl_vector<float> corr_window_ab);
+                               unsigned match_radius,
+                               vcl_vector<float> corr_window_ab);
   ~bwm_video_corr_cost_function(){}
 
   //: The cost function. x is a 2-element vector holding the corr position
@@ -96,9 +96,9 @@ class bwm_video_corr_processor
   void set_correspondences(vcl_vector<bwm_video_corr_sptr> const& corrs);
   vcl_vector<bwm_video_corr_sptr> correspondences(){return corrs_;}
 
-  vcl_string site_name() {return site_name_;}
-  vcl_string video_path() {return video_path_;}
-  vcl_string camera_path() {return camera_path_;}
+  vcl_string site_name() const {return site_name_;}
+  vcl_string video_path() const {return video_path_;}
+  vcl_string camera_path() const {return camera_path_;}
   //: Data input Methods
   bool open_video_site(vcl_string const& site_path, bool cameras_exist = true);
   bool open_video_stream(vcl_string const& video_path);
@@ -119,7 +119,7 @@ class bwm_video_corr_processor
   bool initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
                                         double initial_depth);
   //:get the resulting cameras
-  vcl_vector<vpgl_perspective_camera<double> >cameras(){return cameras_;}
+  vcl_vector<vpgl_perspective_camera<double> >cameras() const {return cameras_;}
 
   //: save cameras to output stream
   bool write_cameras_to_stream();

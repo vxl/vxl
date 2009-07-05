@@ -23,13 +23,13 @@ class bwm_shape_file
   bool load(vcl_string filename);
 
   //: only one shape type is included, no MIX types
-  int shape_type(){ return nShapeType_; }
+  int shape_type() const{ return nShapeType_; }
 
   //: number of entities in the file
-  int num_items() { return nEntities_; }
+  int num_items() const { return nEntities_; }
 
   //: returns the bounding box of the items included in the shape file
-  vsol_box_3d bounding_box() { return bb_; }
+  vsol_box_3d bounding_box() const { return bb_; }
 
   vcl_vector<vcl_vector<vsol_point_3d_sptr> > vertices() {return vertices_; }
 

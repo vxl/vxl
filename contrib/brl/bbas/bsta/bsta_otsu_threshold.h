@@ -27,9 +27,9 @@ template <class T> class bsta_otsu_threshold
   // destructor
   ~bsta_otsu_threshold();
 
-  unsigned bin_threshold();
+  unsigned bin_threshold() const;
 
-  T threshold() {return distribution_1d_.avg_bin_value(this->bin_threshold());}
+  T threshold() const {return distribution_1d_.avg_bin_value(this->bin_threshold());}
 
  protected:
   //: default constructor doesn't make sense

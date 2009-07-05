@@ -20,13 +20,13 @@
 class vpro_roi_process : public vpro_vil_video_process
 {
  public:
-  vpro_roi_process(vcl_string const & video_file, 
+  vpro_roi_process(vcl_string const & video_file,
                    const unsigned x0,
                    const unsigned y0,
                    const unsigned xsize,
                    const unsigned ysize);
   ~vpro_roi_process();
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
   virtual bool execute();
   virtual bool finish();
  private:

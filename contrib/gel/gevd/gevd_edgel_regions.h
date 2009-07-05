@@ -77,11 +77,11 @@ class gevd_edgel_regions
   void ClearDebug() {debug_ = false;}
   void set_magnification(float magnification){magnification_=magnification;}
   unsigned int BaseLabel(unsigned int label);
-  unsigned int GetMaxRegionLabel(){return max_region_label_;}
+  unsigned int GetMaxRegionLabel() const {return max_region_label_;}
   void SetMaxRegionLabel(unsigned int label){max_region_label_ = label;}
   unsigned int** GetRegionArray(){return region_label_array_;}
-  int GetXSize(){return xend_ - xo_ + 1;}
-  int GetYSize(){return yend_ - yo_ + 1;}
+  int GetXSize() const {return xend_ - xo_ + 1;}
+  int GetYSize() const {return yend_ - yo_ + 1;}
   vil1_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
 #if 0
   topo_debug_data_ref get_topo_debug_data() {return debug_data_;}

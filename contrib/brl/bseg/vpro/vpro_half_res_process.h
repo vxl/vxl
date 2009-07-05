@@ -22,7 +22,7 @@ class vpro_half_res_process : public vpro_video_process
  public:
   vpro_half_res_process(vcl_string const & video_file);
   ~vpro_half_res_process();
-  virtual process_data_type get_output_type() { return NOTYPE; }
+  virtual process_data_type get_output_type() const { return NOTYPE; }
   virtual bool execute();
   virtual bool finish();
  private:

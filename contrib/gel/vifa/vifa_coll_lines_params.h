@@ -35,16 +35,16 @@ class vifa_coll_lines_params : public gevd_param_mixin,
 
  public:
   //: Distance of midpoint of qualified edge segment to projected line.
-  float midpt_distance() { return midpt_distance_; }
+  float midpt_distance() const { return midpt_distance_; }
 
   //: Maximum angluar difference (in degrees).
-  float angle_tolerance() { return angle_tolerance_; }
+  float angle_tolerance() const { return angle_tolerance_; }
 
   //: Minimum of supported to spanning length.
-  float discard_threshold() { return discard_threshold_; }
+  float discard_threshold() const { return discard_threshold_; }
 
   //: Endpoints within this distance are accepted no matter what the angular difference is.
-  float endpt_distance() { return endpt_distance_; }
+  float endpt_distance() const { return endpt_distance_; }
 
   //: Default constructor
   vifa_coll_lines_params(float midpt_distance = 1.0f,

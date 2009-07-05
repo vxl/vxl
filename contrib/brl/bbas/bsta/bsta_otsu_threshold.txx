@@ -21,7 +21,7 @@ bsta_otsu_threshold<T>::~bsta_otsu_threshold()
 }
 
 template <class T>
-unsigned bsta_otsu_threshold<T>::bin_threshold()
+unsigned bsta_otsu_threshold<T>::bin_threshold() const
 {
   T no_of_pixels_in_class1=0;
   int threshold =0;

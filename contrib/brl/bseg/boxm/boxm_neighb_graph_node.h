@@ -21,7 +21,7 @@ class boxm_neighb_graph_node
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> neighbors(boct_face_idx face)
   { return neighbors_[face]; }
 
-  int num_neighbors() { return neighbors_.size(); }
+  int num_neighbors() const { return neighbors_.size(); }
 
  private:
   vcl_map<boct_face_idx, vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> > neighbors_;

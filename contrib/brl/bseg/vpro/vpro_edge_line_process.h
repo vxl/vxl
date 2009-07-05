@@ -23,8 +23,8 @@ class vpro_edge_line_process : public vpro_video_process, public sdet_detector_p
  public:
   vpro_edge_line_process(sdet_detector_params & dp, sdet_fit_lines_params& flp);
  ~vpro_edge_line_process();
-  virtual process_data_type get_input_type() { return IMAGE; }
-  virtual process_data_type get_output_type() { return SPATIAL_OBJECT; }
+  virtual process_data_type get_input_type() const { return IMAGE; }
+  virtual process_data_type get_output_type() const { return SPATIAL_OBJECT; }
 
   //: compute van duc edges and then line segments
   virtual bool execute();

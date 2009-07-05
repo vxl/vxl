@@ -20,7 +20,7 @@ class vpro_region_process : public vpro_video_process, public sdet_detector_para
  public:
   vpro_region_process(sdet_detector_params & dp);
   ~vpro_region_process();
-  virtual process_data_type get_output_type() { return TOPOLOGY; }
+  virtual process_data_type get_output_type() const { return TOPOLOGY; }
   //: compute edges on the input image
   virtual bool execute();
   virtual bool finish() { return true; }

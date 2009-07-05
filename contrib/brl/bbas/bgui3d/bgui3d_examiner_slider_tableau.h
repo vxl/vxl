@@ -40,8 +40,8 @@ class bgui3d_examiner_slider_tableau: public bgui3d_examiner_tableau
 
   bool handle(const vgui_event& e);
 
-  int minValue() { return min; }
-  int maxValue() { return max; }
+  int minValue() const { return min; }
+  int maxValue() const { return max; }
 
  protected:
   //: Render the scene graph (called on draw events)

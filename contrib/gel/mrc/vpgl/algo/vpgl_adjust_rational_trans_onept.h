@@ -40,8 +40,8 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
   //  fx has been sized appropriately before the call.
   virtual void f(vnl_vector<double> const& elevation,
                  vnl_vector<double>& projection_error);
-  double xm() {return xm_;}
-  double ym() {return ym_;}
+  double xm() const {return xm_;}
+  double ym() const {return ym_;}
  protected:
   vpgl_z_search_lsqr();//not valid
   vgl_point_3d<double> initial_pt_;
@@ -54,8 +54,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
 class vpgl_adjust_rational_trans_onept
 {
  public:
-
-  ~vpgl_adjust_rational_trans_onept(){}
+  ~vpgl_adjust_rational_trans_onept() {}
 
   static bool adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
                      vcl_vector<vgl_point_2d<double> > const& corrs,
@@ -63,7 +62,6 @@ class vpgl_adjust_rational_trans_onept
                      vgl_point_3d<double>& intersection);
 
  protected:
-
   vpgl_adjust_rational_trans_onept();
 };
 

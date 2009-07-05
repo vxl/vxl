@@ -35,7 +35,7 @@ class vpgl_ortho_procrustes
   double residual_mean_sq_error();
 
   //: successful computation
-  bool compute_ok() { return !cannot_compute_; }
+  bool compute_ok() const { return !cannot_compute_; }
 
  protected:
   //: No default constructor

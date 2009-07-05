@@ -24,7 +24,7 @@ class strk_track_display_process : public vpro_video_process
  public:
   strk_track_display_process();
   ~strk_track_display_process();
-  virtual process_data_type get_output_type() { return TOPOLOGY; }
+  virtual process_data_type get_output_type() const { return TOPOLOGY; }
 
   //: track to next frame
   virtual bool execute();

@@ -30,11 +30,11 @@ class bdgl_curve_region
 
   void init(vdgl_edgel_chain_sptr curve);
 
-  vgl_point_2d<double> get_center(){ return center_ ;}
-  double get_radius(){ return radius_ ;}
-  double x(){ return center_.x() ;}
-  double y(){ return center_.y() ;}
-  double r(){ return radius_ ;}
+  vgl_point_2d<double> get_center() const { return center_ ;}
+  double get_radius() const { return radius_ ;}
+  double x() const { return center_.x() ;}
+  double y() const { return center_.y() ;}
+  double r() const { return radius_ ;}
 };
 
 #endif // bdgl_curve_region_h_

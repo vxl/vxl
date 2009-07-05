@@ -27,7 +27,7 @@ class bnl_parabolic_interpolator
   //: Solve linear regression for the parabola
   bool solve();
   //:the peak/valley of the parabola
-  double extremum(){return p_ext_;}
+  double extremum() const {return p_ext_;}
   //: Print the data
   void print();
  private:

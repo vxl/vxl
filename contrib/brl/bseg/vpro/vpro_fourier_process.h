@@ -23,7 +23,7 @@ class vpro_fourier_process : public vpro_video_process, public vpro_fourier_para
  public:
   vpro_fourier_process(vpro_fourier_params vfp) : vpro_fourier_params(vfp) {}
  ~vpro_fourier_process() {}
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
   //: difference sequential frames
   virtual bool execute();
   virtual bool finish() { return true; }

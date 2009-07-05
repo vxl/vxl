@@ -31,8 +31,8 @@ class bwm_rat_proj_camera
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
   //vgl_homg_line_3d_2_points<double> backproject( const vgl_homg_point_2d<double>& image_point ) const;
-  vpgl_perspective_camera<double> get_persp_cam() { return persp_cam_;}
-  vgl_h_matrix_3d<double> norm_trans() { return t_; }
+  vpgl_perspective_camera<double> get_persp_cam() const { return persp_cam_;}
+  vgl_h_matrix_3d<double> norm_trans() const { return t_; }
 
   void shift_camera(vgl_point_3d<double> center);
 

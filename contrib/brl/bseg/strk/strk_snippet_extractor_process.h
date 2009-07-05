@@ -24,7 +24,7 @@ class strk_snippet_extractor_process : public vpro_video_process
  public:
   strk_snippet_extractor_process();
   ~strk_snippet_extractor_process();
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
 
   //: track to next frame
   virtual bool execute();

@@ -23,7 +23,7 @@ class vpro_epipolar_space_process : public vpro_video_process
  public:
   vpro_epipolar_space_process();
   ~vpro_epipolar_space_process();
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
   //: We assume that two grey scale images are in the input list
   virtual bool execute();
   virtual bool finish() { return true; }

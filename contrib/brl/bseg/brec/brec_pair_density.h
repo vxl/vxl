@@ -22,7 +22,7 @@ class brec_pair_density
   virtual ~brec_pair_density() {}
 
   void set_sigma(double s) { sigma_ = s; }
-  double sigma() { return sigma_; }
+  double sigma() const { return sigma_; }
   virtual double operator()(const double y0, const double y1) = 0;
 
   virtual vil_image_view<float> prob_density(vil_image_view<float>& obs);

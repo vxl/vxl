@@ -24,10 +24,10 @@ class bil_cedt
 
     bool compute_cedt();
 
-    double closest_point_x(int i, int j){return dx_(i,j);}
-    double closest_point_y(int i, int j){return dy_(i,j);}
+    double closest_point_x(int i, int j) const {return dx_(i,j);}
+    double closest_point_y(int i, int j) const {return dy_(i,j);}
 
-    vil_image_view<float> cedtimg(){return dist_;}
+    vil_image_view<float> cedtimg() const {return dist_;}
 
  private:
     vil_image_view<unsigned char> img_;

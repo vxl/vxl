@@ -19,10 +19,10 @@ class bdpg_node : public vbl_ref_count
   bdpg_node();
   ~bdpg_node();
   //: previous row on path
-  int previous_row() { return previous_row_; }
+  int previous_row() const { return previous_row_; }
 
   //: previous col on previous row that optimizes the path
-  int previous_col() { return previous_col_; }
+  int previous_col() const { return previous_col_; }
 
   //: set previous row on path
   void set_previous_row(const int row) { previous_row_ = row; }
@@ -43,7 +43,7 @@ class bdpg_node : public vbl_ref_count
   double p();
 
   //:the current log probability
-  double log_p() { return log_prob_; }
+  double log_p() const { return log_prob_; }
 
  private:
   int previous_row_;//!< the previous row in the path to this node

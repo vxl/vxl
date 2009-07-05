@@ -22,7 +22,7 @@ class vpro_frame_diff_process : public vpro_video_process,
  public:
   vpro_frame_diff_process(vpro_frame_diff_params fdp);
   ~vpro_frame_diff_process();
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
   //: difference sequential frames
   virtual bool execute();
   virtual bool finish();

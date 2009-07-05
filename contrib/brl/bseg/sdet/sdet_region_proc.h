@@ -51,12 +51,12 @@ class sdet_region_proc : public sdet_region_proc_params
   vil_image_view<float> get_residual_image_view();
 
   //Debug methods
-  vil1_image get_edge_image(){return edge_image_;}
+  vil1_image get_edge_image() const {return edge_image_;}
   vil_image_view<unsigned char> get_edge_image_view();
   vil_image_resource_sptr get_edge_image_resource();
  protected:
   //protected methods
-  bool set_detector_image_vil(sdet_detector& d); 
+  bool set_detector_image_vil(sdet_detector& d);
   bool set_detector_image_vil1(sdet_detector& d);
 
   //members

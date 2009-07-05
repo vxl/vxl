@@ -23,8 +23,8 @@ class brct_plane_corr : public brct_corr
                   const int index);
   ~brct_plane_corr();
   //:Accessors
-  int plane(){return plane_;}
-  int index(){return index_;}
+  int plane() const {return plane_;}
+  int index() const {return index_;}
 
               // --- Mutators ---
 

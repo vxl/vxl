@@ -27,7 +27,7 @@ class bwm_command : public vgui_command
  public:
   bwm_command() {}
   virtual ~bwm_command() {}
-  virtual vcl_string name() { return "bwm_command"; }
+  virtual vcl_string name() const { return "bwm_command"; }
   void execute() {}
 };
 
@@ -36,7 +36,7 @@ class bwm_tab_process_command : public bwm_command
  public:
   bwm_tab_process_command() {}
   virtual ~bwm_tab_process_command() {}
-  virtual vcl_string name() { return "bwm_tab_process_command"; }
+  virtual vcl_string name() const { return "bwm_tab_process_command"; }
 
   void set_tableau(vgui_tableau_sptr tab) {tableau_ = tab; }
 
@@ -49,7 +49,7 @@ class bwm_menu_process_command : public bwm_command
  public:
   bwm_menu_process_command() {}
   virtual ~bwm_menu_process_command() {}
-  virtual vcl_string name() { return "bwm_tab_process_command"; }
+  virtual vcl_string name() const { return "bwm_tab_process_command"; }
 
   virtual void set_menu(vgui_menu& menu) {menu_ = menu; }
 

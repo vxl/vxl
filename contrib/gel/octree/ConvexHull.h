@@ -25,9 +25,9 @@ class ConvexHull
   // Data Access---------------------------------------------------------------
 
   void set_point( int n, double x, double y);
-  double get_pointx( int n) { return P[n][0]; }
-  double get_pointy( int n) { return P[n][1]; }
-  inline int get_npoints() { return hullsize; }
+  double get_pointx( int n) const { return P[n][0]; }
+  double get_pointy( int n) const { return P[n][1]; }
+  inline int get_npoints() const { return hullsize; }
 
  protected:
   // Data Members--------------------------------------------------------------

@@ -23,7 +23,7 @@ class vpro_capture_process : public vpro_video_process
  public:
   vpro_capture_process(vcl_string const & video_file);
   ~vpro_capture_process();
-  virtual process_data_type get_output_type() { return NOTYPE; }
+  virtual process_data_type get_output_type() const { return NOTYPE; }
   //: compute edges on the input image
   virtual bool execute();
   virtual bool finish();

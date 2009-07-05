@@ -3,7 +3,7 @@
 #define bgui_graph_tableau_h_
 //:
 // \file
-// \author  K. Kang 
+// \author  K. Kang
 // \brief   intended to be general graph tableau
 // \verbatim
 // modified extensively by J.L. Mundy June 3, 2006
@@ -21,7 +21,7 @@ class bgui_graph_tableau : public  vgui_tableau
 {
  public:
 
-  //: Constructors 
+  //: Constructors
   bgui_graph_tableau(const unsigned graph_width,
                      const unsigned graph_height);
 
@@ -32,7 +32,7 @@ class bgui_graph_tableau : public  vgui_tableau
   //  Single plot
   void update(vcl_vector<double> const& pos, vcl_vector<double> const & vals);
   void update(vcl_vector<float> const& pos, vcl_vector<float> const & vals);
-  //: multiple plots. The current implementation requires pos to contain the same horizontal axis values. 
+  //: multiple plots. The current implementation requires pos to contain the same horizontal axis values.
   // Future plans are to have this class handle multiple position ranges
   void update(vcl_vector<vcl_vector<double> > const& pos,
               vcl_vector<vcl_vector<double> >const & vals);
@@ -40,15 +40,15 @@ class bgui_graph_tableau : public  vgui_tableau
   void clear();
 
   //: Accessors
-  float xmin(){return xmin_;}
-  float xmax(){return xmax_;}
-  float ymin(){return ymin_;}
-  float ymax(){return ymax_;}
+  float xmin() const {return xmin_;}
+  float xmax() const {return xmax_;}
+  float ymin() const {return ymin_;}
+  float ymax() const {return ymax_;}
 
   //: Get a conveniently wrapped popup dialog
   vgui_dialog* popup_graph(vcl_string const& info,
-                          const unsigned sizex =0,
-                          const unsigned sizey=0);
+                           const unsigned sizex =0,
+                           const unsigned sizey=0);
 
   //: Handles all events for this tableau.
   virtual bool handle(const vgui_event&);

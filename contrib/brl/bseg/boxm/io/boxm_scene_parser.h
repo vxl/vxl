@@ -25,13 +25,13 @@ class boxm_scene_parser : public expatpp
 
   ~boxm_scene_parser(void) {}
 
-   bool lvcs(bgeo_lvcs& lvcs); 
-   vgl_point_3d<double> origin() { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_);}
-   vgl_vector_3d<double> block_dim() { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_);}
-   vgl_vector_3d<unsigned> block_nums() { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_);}
+   bool lvcs(bgeo_lvcs& lvcs);
+   vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_);}
+   vgl_vector_3d<double> block_dim() const { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_);}
+   vgl_vector_3d<unsigned> block_nums() const { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_);}
    void paths(vcl_string& scene_path, vcl_string& block_pref) {scene_path=path_; block_pref=block_pref_;}
-   vcl_string app_model() { return app_model_; }
-   bool multi_bin() { return multi_bin_; }
+   vcl_string app_model() const { return app_model_; }
+   bool multi_bin() const { return multi_bin_; }
    void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
 
  private:

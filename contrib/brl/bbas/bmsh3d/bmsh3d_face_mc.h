@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_face_mc.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_face_mc_h_
-#define _bmsh3d_face_mc_h_
+#ifndef bmsh3d_face_mc_h_
+#define bmsh3d_face_mc_h_
 //:
 // \file
 // \brief Multiply Connected Face Class. A face contains inner faces.
@@ -48,7 +48,7 @@ class bmsh3d_face_mc : public bmsh3d_face
 
   bool face_mc_id(bmsh3d_halfedge* he, int& i);
 
-  int size() {return set_he_.size(); }
+  int size() const {return set_he_.size(); }
 
   vcl_map<int, bmsh3d_halfedge*> get_mc_halfedges() { return set_he_; }
 

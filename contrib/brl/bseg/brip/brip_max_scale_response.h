@@ -12,16 +12,16 @@
 // is invariant to feature orientation
 // The input can be either an image pyramid or a base image
 // In the latter case a pyramid is generated as input to the scale max response
-// search. The interval between scales is uniform on according to the 
-// logarithm of scale ratios. For example if the scale range is 
+// search. The interval between scales is uniform on according to the
+// logarithm of scale ratios. For example if the scale range is
 // from 1 to 8 and the scale ratio is sqrt(2), the scale intervals are:
 // 1, 1.4, 2, 2.8, 4, 5.6, 8, i.e.,
 // 8/4 = 2, 2^(0.5) = 1.4, 4*1.4 = 5.6
-// 
+//
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
 
-template <class T> 
+template <class T>
 class brip_max_scale_response
 {
  public:
@@ -33,7 +33,7 @@ class brip_max_scale_response
   brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid);
 
   //: The vector of image scales
-  vcl_vector<float> scales() {return pyramid_scales_;}
+  vcl_vector<float> scales() const {return pyramid_scales_;}
 
   //: A pyramid from a base image with scales according to this->scales()
   vcl_vector<vil_image_view<T> > image_pyramid(vil_image_view<T> const& base);
@@ -48,7 +48,7 @@ class brip_max_scale_response
   vcl_vector<vil_image_view<vxl_byte> > mask_pyramid();
 
   //: for debugging purposes -- not normally used
-  vcl_vector<vil_image_view<float> > trace_pyramid(){return trace_;}
+  vcl_vector<vil_image_view<float> > trace_pyramid() const {return trace_;}
  protected:
   //internal functions
   brip_max_scale_response(): trace_valid_(false){}

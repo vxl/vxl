@@ -54,10 +54,10 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
 
   //: name will be used to create training directories
   void set_name(vcl_string name) { name_ = name; }
-  vcl_string name() { return name_; }
+  vcl_string name() const { return name_; }
 
   void set_model_dir(vcl_string dir) { model_dir_ = dir; }
-  vcl_string model_dir() { return model_dir_; }
+  vcl_string model_dir() const { return model_dir_; }
 
   void write_xml(vcl_ostream& os);
   bool read_xml(vcl_istream& is);

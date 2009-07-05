@@ -34,9 +34,9 @@ class bvgl_change_obj: public vbl_ref_count
   //: Return IO version number;
   unsigned char version() const;
 
-  vgl_polygon<double> poly() {return poly_; }
+  vgl_polygon<double> poly() const {return poly_; }
 
-  vcl_string type() { return class_; }
+  vcl_string type() const { return class_; }
   //void xml_read();
   //void xml_write();
  private:

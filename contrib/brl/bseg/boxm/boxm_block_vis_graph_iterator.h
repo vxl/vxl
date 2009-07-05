@@ -13,7 +13,7 @@ class boxm_block_vis_graph_iterator
 {
  public:
   boxm_block_vis_graph_iterator(vpgl_camera_double_sptr cam, boxm_scene<T>* scene,
-    unsigned img_ni, unsigned img_nj, bool rev_iter=false);
+                                unsigned img_ni, unsigned img_nj, bool rev_iter=false);
 
   ~boxm_block_vis_graph_iterator(){}
 
@@ -21,7 +21,7 @@ class boxm_block_vis_graph_iterator
 
   vcl_vector<boxm_block<T>*> frontier_blocks();
 
-  vcl_vector<vgl_point_3d<int> > frontier_indices() {return to_process_indices_; }
+  vcl_vector<vgl_point_3d<int> > frontier_indices() const {return to_process_indices_; }
 
   void set_reverse_iter(bool reverse) { reverse_it_ = reverse; }
 

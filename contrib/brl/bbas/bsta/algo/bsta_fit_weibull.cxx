@@ -8,7 +8,7 @@
 #include <vcl_cassert.h>
 
 
-//this function computes the model value for (mean/standard_dev)^2 as 
+//this function computes the model value for (mean/standard_dev)^2 as
 //a function of Weibull parameter k.
 static double mean_sigma_sq(double k)
 {
@@ -30,7 +30,7 @@ double bsta_weibull_cost_function::f(vnl_vector<double> const& x)
 }
 
 void bsta_weibull_cost_function::gradf(vnl_vector<double> const& x,
-                             vnl_vector<double>& gradient)
+                                       vnl_vector<double>& gradient)
 {
   double k = x[0];
   assert(k>0);
@@ -47,7 +47,7 @@ void bsta_weibull_cost_function::gradf(vnl_vector<double> const& x,
   gradient[0]=2*res*neu/den;
 }
 
-double bsta_weibull_cost_function::lambda(double k)
+double bsta_weibull_cost_function::lambda(double k) const
 {
   assert(k>0);
   return mean_/vnl_gamma((1+k)/k);

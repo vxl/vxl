@@ -53,7 +53,7 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
 
   //:the projection camera
   void set_camera(vgl_p_matrix<double> const& camera) { camera_=camera; }
-  vgl_p_matrix<double> get_camera() { return camera_; }
+  vgl_p_matrix<double> get_camera() const { return camera_; }
 
   //: display for projected vsol_point_3d
   bgui_vsol_soview2D_point*

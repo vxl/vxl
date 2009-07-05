@@ -22,7 +22,7 @@ class strk_info_model_tracker_process : public vpro_video_process
  public:
   strk_info_model_tracker_process(strk_info_model_tracker_params & tp);
   ~strk_info_model_tracker_process();
-  virtual process_data_type get_output_type(){return TOPOLOGY;}
+  virtual process_data_type get_output_type() const {return TOPOLOGY;}
 
   virtual bool execute();
   virtual bool finish();

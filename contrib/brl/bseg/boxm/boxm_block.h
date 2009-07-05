@@ -25,12 +25,12 @@ class boxm_block
   boxm_block(vgl_box_3d<double> bbox, T* tree) : bbox_(bbox), octree_(tree) {}
   void init_tree(T * octree);
   void set_tree(T * octree){octree_=octree;}
-  vgl_box_3d<double> bounding_box() { return bbox_; }
+  vgl_box_3d<double> bounding_box() const { return bbox_; }
   T* get_tree(){return octree_;}
   void delete_tree() { if (octree_) delete octree_; octree_ = 0; }
   void b_read(vsl_b_istream &s);
   void b_write(vsl_b_ostream &s);
-  short version_no() { return 1; }
+  static short version_no() { return 1; }
 
  private:
   vgl_box_3d<double> bbox_;

@@ -17,7 +17,7 @@ class bvxm_voxel_storage_mem : public bvxm_voxel_storage<T>
   virtual void put_slab();
 
   //: return number of observations
-  virtual unsigned num_observations(){return nobservations_;}
+  virtual unsigned num_observations() const {return nobservations_;}
   //: increment the number of observations
   virtual void increment_observations(){++nobservations_;}
 

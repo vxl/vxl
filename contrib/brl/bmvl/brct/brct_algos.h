@@ -42,8 +42,8 @@ struct brct_error_index
 {
   brct_error_index(int i, double error){i_ = i; e_ = error;}
   ~brct_error_index() {}
-  int i(){return i_;}
-  double error() {return e_;}
+  int i() const {return i_;}
+  double error() const {return e_;}
  private:
   int i_;
   double e_;

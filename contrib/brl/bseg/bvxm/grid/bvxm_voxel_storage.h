@@ -13,7 +13,7 @@ class bvxm_voxel_storage
   //: Constructor
    bvxm_voxel_storage(){}
   bvxm_voxel_storage(vgl_vector_3d<unsigned int> grid_size) : grid_size_(grid_size) {}
-  
+
   virtual ~bvxm_voxel_storage() {}
 
   //: Initialize all data in the grid
@@ -24,16 +24,16 @@ class bvxm_voxel_storage
   virtual void put_slab() = 0;
 
   //: return number of observations
-  virtual unsigned num_observations() = 0;
+  virtual unsigned num_observations() const = 0;
   //: increment the number of observations
   virtual void increment_observations() = 0;
 
   //: return grid length in x dimension
-  inline unsigned nx(){return grid_size_.x();}
+  inline unsigned nx() const {return grid_size_.x();}
   //: return grid length in y dimension
-  inline unsigned ny(){return grid_size_.y();}
+  inline unsigned ny() const {return grid_size_.y();}
   //: return grid length in z dimension
-  inline unsigned nz(){return grid_size_.z();}
+  inline unsigned nz() const {return grid_size_.z();}
 
  protected:
   vgl_vector_3d<unsigned int> grid_size_;

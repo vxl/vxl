@@ -28,10 +28,10 @@ class bsol_point_index_2d
                       vcl_vector<vsol_point_2d_sptr> const& points);
   ~bsol_point_index_2d();
   //:accessors
-  int ncols() { return ncols_; }
-  int nrows() { return nrows_; }
-  double row_spacing() { return row_spacing_; }
-  double col_spacing() { return col_spacing_; }
+  int ncols() const { return ncols_; }
+  int nrows() const { return nrows_; }
+  double row_spacing() const { return row_spacing_; }
+  double col_spacing() const { return col_spacing_; }
 
   //: origin of the index space
   void origin(double& x0, double& y0);

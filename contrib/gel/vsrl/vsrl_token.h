@@ -41,7 +41,7 @@ class vsrl_token
   virtual double incremental_cost(vsrl_token * /*tok2*/, vsrl_token * /*tok_p*/, vsrl_token * /*tok_2p*/) { return 0; }
 
   //: get the index of this token
-  int get_index() { return index_; }
+  int get_index() const { return index_; }
 
   //: set the index of this token
   void set_index(int index) { index_ = index; }
@@ -58,8 +58,8 @@ class vsrl_token
   //: get the x and y position
   void get_position(double &x, double &y) { x= x_; y= y_; }
 
-  double get_x() { return x_; }
-  double get_y() { return y_; }
+  double get_x() const { return x_; }
+  double get_y() const { return y_; }
 };
 
 #endif // vsrl_token_h

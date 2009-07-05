@@ -123,8 +123,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   float GetSDAttr(int attr_index); // sd of indexed histogrammed attribute
   float GetMinAttr(int attr_index); // min of indexed histogrammed attribute
   float GetMaxAttr(int attr_index); // max of indexed histogrammed attribute
-  int NumHistAttributes()
-    { return NUM_HIST_ATTRIBUTES; }
+  static int NumHistAttributes() { return NUM_HIST_ATTRIBUTES; }
 
   // non-histogrammed attributes (one value per vifa_int_faces_attr).
   float Area();                 // area of all faces

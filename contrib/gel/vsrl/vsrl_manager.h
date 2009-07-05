@@ -62,9 +62,9 @@ class vsrl_manager : public vgui_wrapper_tableau
   vcl_vector<vdgl_digital_region*> run_jseg(vil1_image image_in);
   void show_jseg_boundaries(vil1_memory_image_of<unsigned char>* jseg_out, vgui_easy2D_tableau_sptr tab);
   float* show_correlations(int x, int y);
-  inline vil1_image get_left_image() {return imgL_;}
-  inline vil1_image get_right_image() {return imgR_;}
-  inline vil1_image get_disparity_image() {return disp_img_;}
+  inline vil1_image get_left_image() const {return imgL_;}
+  inline vil1_image get_right_image() const {return imgR_;}
+  inline vil1_image get_disparity_image() const {return disp_img_;}
   void raw_correlation();
   vil1_image* make_jseg_image(vil1_memory_image_of<unsigned char>* jseg_out);
   void boundary_matching();

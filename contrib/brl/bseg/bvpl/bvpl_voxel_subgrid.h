@@ -15,7 +15,7 @@ class bvpl_subgrid_base
 
   virtual ~bvpl_subgrid_base(){}
 
-  vgl_point_3d<int> center() { return center_; }
+  vgl_point_3d<int> center() const { return center_; }
 
  protected:
    vgl_point_3d<int> center_;

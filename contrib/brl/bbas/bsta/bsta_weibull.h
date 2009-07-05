@@ -49,13 +49,13 @@ class bsta_weibull : public bsta_distribution<T,1>
   ~bsta_weibull(){}
 
   //: the scale parameter
-  vector_ lambda(){return lambda_;}
+  vector_ lambda() const {return lambda_;}
 
   //: the shape parameter
-  vector_ k(){return k_;}
+  vector_ k() const {return k_;}
 
   //: the location parameter
-  vector_ mu(){return mu_;}
+  vector_ mu() const {return mu_;}
 
   //: The mean of the distribution, for 1-d the vector_ is typedefed to T
   vector_ mean() const

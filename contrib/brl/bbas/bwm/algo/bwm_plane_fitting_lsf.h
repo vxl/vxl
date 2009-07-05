@@ -37,7 +37,7 @@ class bwm_plane_fitting_lsf : public vnl_least_squares_function
 
   virtual void f(vnl_vector<double> const &x, vnl_vector< double > &fx);
 
-  vgl_homg_plane_3d<double> plane() { return plane_; }
+  vgl_homg_plane_3d<double> plane() const { return plane_; }
 
  private:
   double a_, b_, c_, d_;              //parameters of the projection plane

@@ -49,7 +49,7 @@ class bwm_reg_image : public vbl_ref_count
   vgl_point_2d<double> proj_world_pt();
 
   //: The region of interest for computing edges
-  brip_roi roi(){return roi_;}
+  brip_roi roi() const {return roi_;}
 
   //: Compute edges
   bool compute_edges(float sigma, float noise_thresh,

@@ -22,7 +22,7 @@ class vpro_basis_generator_process : public vpro_video_process
  public:
   vpro_basis_generator_process(vcl_string const & video_file);
   ~vpro_basis_generator_process();
-  virtual process_data_type get_output_type() { return NOTYPE; }
+  virtual process_data_type get_output_type() const { return NOTYPE; }
   //: compute edges on the input image
   virtual bool execute();
   virtual bool finish();

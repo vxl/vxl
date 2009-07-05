@@ -47,13 +47,14 @@ class gevd_param_mixin
   virtual ~gevd_param_mixin() {}
   //=====================================================
   virtual bool SanityCheck();
-  bool Valid() { return valid_; }
-  const char* GetErrorMsg() { return error_msg_.c_str(); }
+  bool Valid() const { return valid_; }
+  const char* GetErrorMsg() const { return error_msg_.c_str(); }
   void SetErrorMsg(const char* msg);
 #if 0// not implemented in vxl
   virtual void Describe(ParamModifier&) {}
 #endif
 };
+
 #if 0 // not implemented in vxl
 class ParamModifier
 {

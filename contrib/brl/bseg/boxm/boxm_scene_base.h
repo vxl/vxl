@@ -40,7 +40,7 @@ class boxm_scene_base : public vbl_ref_count
   void set_paths(vcl_string scene_path, vcl_string block_prefix)
   { scene_path_ = scene_path;  block_pref_=block_prefix; }
 
-  bool multi_bin() { return multi_bin_; }
+  bool multi_bin() const { return multi_bin_; }
 
   bool parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename);
 

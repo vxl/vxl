@@ -23,7 +23,7 @@ class test_node : public bgrl2_vertex<test_edge>
   test_node(int id): bgrl2_vertex<test_edge>(), id_(id) {}
   virtual ~test_node(){}
 
-  int id(){return id_;}
+  int id() const {return id_;}
   void set_id(int id){id_ = id;}
 
   //: Print an ascii summary to the stream

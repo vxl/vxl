@@ -22,8 +22,8 @@ class vpro_line_fit_process : public vpro_video_process, public sdet_fit_lines_p
  public:
   vpro_line_fit_process(sdet_fit_lines_params & flp);
  ~vpro_line_fit_process();
-  virtual process_data_type get_input_type() { return TOPOLOGY; }
-  virtual process_data_type get_output_type() { return SPATIAL_OBJECT; }
+  virtual process_data_type get_input_type() const { return TOPOLOGY; }
+  virtual process_data_type get_output_type() const { return SPATIAL_OBJECT; }
   //: compute line_fits on a set of input vtol_edges
   virtual bool execute();
   virtual bool finish() { return true; }

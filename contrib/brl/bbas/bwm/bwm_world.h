@@ -20,12 +20,12 @@ class bwm_world
   bool world_pt(vgl_point_3d<double>& world_pt)
   { if (!world_pt_valid_) return false; world_pt=world_pt_; return true; }
 
-  bool world_pt_valid() { return world_pt_valid_; }
+  bool world_pt_valid() const { return world_pt_valid_; }
 
-  vgl_point_3d<double> world_pt() { return world_pt_; }
+  vgl_point_3d<double> world_pt() const { return world_pt_; }
 
   //: A horizontal plane through the world point
-  vgl_plane_3d<double> world_plane() { return world_plane_; }
+  vgl_plane_3d<double> world_plane() const { return world_plane_; }
 
   //: the set of observable objects in the world such as feature meshes
   vcl_vector<bwm_observable_sptr> objects() { return objects_; }
@@ -44,7 +44,7 @@ class bwm_world
   // are consistent - leave for now
   void set_world_plane(vgl_plane_3d<double> const& plane) { world_plane_=plane; }
 
-  bool lvcs_valid(){return lvcs_valid_;}
+  bool lvcs_valid() const {return lvcs_valid_;}
 
   void set_lvcs(double lat, double lon, double elev);
 

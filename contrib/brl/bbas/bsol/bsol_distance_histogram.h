@@ -29,7 +29,7 @@ class bsol_distance_histogram
                           vcl_vector<vsol_line_2d_sptr> const& lines);
   ~bsol_distance_histogram();
   //:accessors
-  int n_bins(){return bin_counts_.size();}
+  int n_bins() const {return bin_counts_.size();}
   vcl_vector<double>& counts() {return bin_counts_;}
   vcl_vector<double>& values() {return bin_values_;}
   vcl_vector<double>& weights() {return weights_;}

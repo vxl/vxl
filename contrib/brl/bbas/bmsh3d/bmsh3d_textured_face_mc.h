@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_textured_face_mc.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_textured_face_mc_h_
-#define _bmsh3d_textured_face_mc_h_
+#ifndef bmsh3d_textured_face_mc_h_
+#define bmsh3d_textured_face_mc_h_
 //:
 // \file
 // \brief A Multiply Connected Face with an associated texture map.
@@ -38,7 +38,7 @@ class bmsh3d_textured_face_mc : public bmsh3d_face_mc
   //: converts an untextured face to a textured face
   bmsh3d_textured_face_mc (const bmsh3d_face* face, vcl_string tex_map_uri);
 
-  vcl_string tex_map_uri(){return tex_map_uri_;}
+  vcl_string tex_map_uri() const {return tex_map_uri_;}
   void set_tex_map_uri(vcl_string uri){tex_map_uri_ = uri;}
 
 #if 0

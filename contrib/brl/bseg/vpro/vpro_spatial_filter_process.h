@@ -23,7 +23,7 @@ class vpro_spatial_filter_process : public vpro_video_process, public vpro_spati
  public:
   vpro_spatial_filter_process(vpro_spatial_filter_params vfp) : vpro_spatial_filter_params(vfp) {}
  ~vpro_spatial_filter_process() {}
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
   //: difference sequential frames
   virtual bool execute();
   virtual bool finish() { return true; }

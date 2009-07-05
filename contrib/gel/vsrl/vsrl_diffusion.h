@@ -36,8 +36,8 @@ class vsrl_diffusion
   double get_disparity(int x, int y);
 
   // get the width and height of image1
-  int get_width() { return width_; }
-  int get_height() { return height_; }
+  int get_width() const { return width_; }
+  int get_height() const { return height_; }
 
   void write_disparity_image(const char *filename);
 

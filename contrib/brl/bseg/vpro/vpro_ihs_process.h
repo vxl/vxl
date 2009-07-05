@@ -20,7 +20,7 @@ class vpro_ihs_process : public vpro_video_process
  public:
   vpro_ihs_process();
   ~vpro_ihs_process();
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
 
   //: track to next frame
   virtual bool execute();

@@ -28,7 +28,7 @@ class bcal_camera_node : public vcsl_spatial
   vnl_double_3x3 get_intrinsic() const;
   void set_intrinsic(vnl_double_3x3 k);
   int get_id() const;
-  int num_views() { return num_views_; }
+  int num_views() const { return num_views_; }
 };
 
 #endif // AFX_CAMERANODE_H__72E24F49_51C3_4792_A5E8_A670182B472F__INCLUDED_

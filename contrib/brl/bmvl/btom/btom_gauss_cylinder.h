@@ -47,15 +47,15 @@ class btom_gauss_cylinder : public vbl_ref_count
   ~btom_gauss_cylinder();
 
   // Data Access---------------------------------------------------------------
-  float get_xy_sigma() {return xy_sigma_;}
-  float get_z_sigma() {return z_sigma_;}
-  float get_length_sigma() {return length_sigma_;}
-  float get_density() {return density_;}
-  float get_x_origin() {return x_origin_;}
-  float get_y_origin() {return y_origin_;}
-  float get_z_position() {return z_position_;}
-  float get_elevation() {return elevation_;}
-  float get_azimuth() {return azimuth_;}
+  float get_xy_sigma() const {return xy_sigma_;}
+  float get_z_sigma() const {return z_sigma_;}
+  float get_length_sigma() const {return length_sigma_;}
+  float get_density() const {return density_;}
+  float get_x_origin() const {return x_origin_;}
+  float get_y_origin() const {return y_origin_;}
+  float get_z_position() const {return z_position_;}
+  float get_elevation() const {return elevation_;}
+  float get_azimuth() const {return azimuth_;}
 
   void set_xy_sigma(float xy_sigma) {xy_sigma_=xy_sigma;}
   void set_z_sigma(float z_sigma) {z_sigma_=z_sigma;}

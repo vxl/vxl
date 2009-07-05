@@ -277,7 +277,7 @@ void bvxm_voxel_storage_disk_cached<T>::put_slab()
 }
 
 template <class T>
-unsigned bvxm_voxel_storage_disk_cached<T>::num_observations()
+unsigned bvxm_voxel_storage_disk_cached<T>::num_observations() const
 {
   // read header from disk
   // check to see if file is already open

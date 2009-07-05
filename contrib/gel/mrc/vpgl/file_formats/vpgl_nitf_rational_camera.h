@@ -41,15 +41,15 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   vpgl_nitf_rational_camera(vil_nitf2_image* nift_image,
                             bool verbose = false);
 
-  vcl_string rational_extension_type() {return nitf_rational_type_;}
+  vcl_string rational_extension_type() const {return nitf_rational_type_;}
 
-  vcl_string image_id() {return image_id_;}
+  vcl_string image_id() const {return image_id_;}
 
   //: Geographic coordinates of image corners
-  vnl_double_2 upper_left(){return ul_;}
-  vnl_double_2 upper_right(){return ur_;}
-  vnl_double_2 lower_left(){return ll_;}
-  vnl_double_2 lower_right(){return lr_;}
+  vnl_double_2 upper_left() const {return ul_;}
+  vnl_double_2 upper_right() const {return ur_;}
+  vnl_double_2 lower_left() const {return ll_;}
+  vnl_double_2 lower_right() const {return lr_;}
 
  private:
   //internal functions

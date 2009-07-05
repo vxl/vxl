@@ -52,7 +52,7 @@ class bsta_int_histogram_1d
   ~bsta_int_histogram_1d();
 
   // The number of bins in the histogram
-  unsigned int get_nbins() { return nbins_;}
+  unsigned int get_nbins() const { return nbins_;}
 
   //: min,max of total range
   unsigned int get_min_bin();

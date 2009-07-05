@@ -5,7 +5,7 @@
 // \file
 // \brief Classes to run mean shift algorithm on data distributions to find its modes
 //        Implements mean shift with a flat kernel of fixed bandwidth_
-// 
+//
 // \author Ozge C. Ozcanli
 // \date February 10, 2009
 //
@@ -38,7 +38,7 @@ class bsta_mean_shift
   //  \p epsilon : the difference required for updating to come to a halt
   //  \p percentage: the percentage of the sample set to initialize as seed
   bool find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, float percentage = 10.0f, T epsilon = 10e-3);
-  
+
   //: use all the samples to get its mode, no need for random seed picking
   bool find_modes(bsta_sample_set<T,n>& set, T epsilon = 10e-3);
 
@@ -51,7 +51,7 @@ class bsta_mean_shift
 
   void clear() { modes_.clear(); }
 
-  unsigned size() { return modes_.size(); }
+  unsigned size() const { return modes_.size(); }
   vcl_vector<vector_ >& modes() { return modes_; }
 
   //: the default for maximum iterations to quit search starting from a seed is 1000

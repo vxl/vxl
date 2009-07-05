@@ -23,7 +23,7 @@ class vsrl_raster_dp_setup
   // accessors
 
   //: get the raster line that this dynamic program is processing
-  int get_raster_line() { return raster_line_; }
+  int get_raster_line() const { return raster_line_; }
   //: get the assignment of pixel x
   int get_assignment(int x);
   //: the width of image1

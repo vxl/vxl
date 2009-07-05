@@ -49,7 +49,7 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
   virtual void put_slab();
 
   //: return number of observations
-  virtual unsigned num_observations();
+  virtual unsigned num_observations() const;
   //: increment the number of observations
   virtual void increment_observations();
 
@@ -59,9 +59,9 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
 
   // input and output file stream
 #ifdef BVXM_USE_FSTREAM64
-  vil_stream_fstream64 *fio_;
+  mutable vil_stream_fstream64 *fio_;
 #else //BVXM_USE_FSTREAM64
-  vil_stream_fstream *fio_;
+  mutable vil_stream_fstream *fio_;
 #endif //BVXM_USE_FSTREAM64
 
   //vcl_fstream fio_;

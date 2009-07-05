@@ -47,8 +47,8 @@ class brip_watershed : public brip_watershed_params
   ~brip_watershed();
   //: Accessors/Mutators
   void set_image(vil1_memory_image_of<float> const& image);
-  unsigned int min_region_label(){return BOUNDARY + 1;}
-  unsigned int max_region_label(){return max_region_label_;}
+  static unsigned int min_region_label() {return BOUNDARY + 1;}
+  unsigned int max_region_label() const {return max_region_label_;}
   vil1_image overlay_image();
   vbl_array_2d<unsigned int>& region_label_array(){return region_label_array_;}
   bool adjacent_regions(const unsigned int region,

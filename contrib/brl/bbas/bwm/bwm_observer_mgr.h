@@ -62,9 +62,9 @@ class bwm_observer_mgr
   void update_corr(bwm_observer_cam* obs,vgl_point_2d<double> old_pt,vgl_point_2d<double> new_pt);
   void delete_last_corr();
   void delete_all_corr();
-  BWM_CORR_MODE corr_mode() { return corr_mode_; }
-  BWM_CORR_TYPE corr_type() { return corr_type_; }
-  BWM_N_CORRS n_corrs() { return n_corrs_; }
+  BWM_CORR_MODE corr_mode() const { return corr_mode_; }
+  BWM_CORR_TYPE corr_type() const { return corr_type_; }
+  BWM_N_CORRS n_corrs() const { return n_corrs_; }
   void set_corr_mode();
   void set_corr_mode(BWM_CORR_MODE mode){corr_mode_ = mode;}
   void set_n_corrs(BWM_N_CORRS n){n_corrs_ = n;}
@@ -74,7 +74,7 @@ class bwm_observer_mgr
   void start_corr() { start_corr_ = true; }
   void stop_corr() { start_corr_ = false; }
   //: returns true if the correspondence picking started by the main corr menu
-  bool in_corr_picking() { return start_corr_; }
+  bool in_corr_picking() const { return start_corr_; }
 
   void print_observers();
 

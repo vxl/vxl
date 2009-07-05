@@ -45,7 +45,7 @@ class gkll_multi_view_data : public vbl_ref_count
            vcl_vector<T> &);
 
   bool get_pred_match(int view_num,T obj,T & res);
-  int get_nb_views() { return nbviews_; }
+  int get_nb_views() const { return nbviews_; }
 
   void remove(int view_num, T match);
 

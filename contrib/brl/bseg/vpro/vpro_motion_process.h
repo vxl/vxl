@@ -22,7 +22,7 @@ class vpro_motion_process: public vpro_video_process, public vpro_motion_params
   enum state_symbol {NO_IMAGE=0, FIRST_IMAGE, IN_PROCESS};
   vpro_motion_process(vpro_motion_params& vmp);
   ~vpro_motion_process();
-  virtual process_data_type get_output_type() { return IMAGE; }
+  virtual process_data_type get_output_type() const { return IMAGE; }
   //: compute motion
   virtual bool execute();
   virtual bool finish();

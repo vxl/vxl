@@ -22,7 +22,7 @@ class strk_corr_tracker_process : public vpro_video_process
  public:
   strk_corr_tracker_process(strk_tracker_params & tp);
   ~strk_corr_tracker_process();
-  virtual process_data_type get_output_type(){return TOPOLOGY;}
+  virtual process_data_type get_output_type() const {return TOPOLOGY;}
 
   //: track to next frame
   virtual bool execute();

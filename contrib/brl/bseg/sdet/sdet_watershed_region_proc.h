@@ -37,7 +37,7 @@ class sdet_watershed_region_proc : public sdet_watershed_region_proc_params
   ~sdet_watershed_region_proc();
   //Accessors
   //:set image and potentially clip
-  void set_image(vil1_image const& image, 
+  void set_image(vil1_image const& image,
                  vsol_box_2d_sptr const& box = vsol_box_2d_sptr());
   //:set image roi
   void set_roi(brip_roi_sptr const& roi);
@@ -46,8 +46,8 @@ class sdet_watershed_region_proc : public sdet_watershed_region_proc_params
   //:clip image assuming image and roi are set
   void clip_image();
 
-  vil1_memory_image_of<float> image(){return image_;}
-  vil1_memory_image_of<float> clip(){return clip_;}
+  vil1_memory_image_of<float> image() const {return image_;}
+  vil1_memory_image_of<float> clip() const {return clip_;}
 
   //clear region array
   void clear();

@@ -30,8 +30,8 @@ class vpro_grid_finder_process : public vpro_video_process,
   vpro_grid_finder_process(sdet_detector_params & dp, sdet_fit_lines_params& flp, sdet_grid_finder_params& gfp);
   ~vpro_grid_finder_process();
   void set_output_file(vcl_string filename);
-  virtual process_data_type get_input_type(){return IMAGE;}
-  virtual process_data_type get_output_type(){return SPATIAL_OBJECT;}
+  virtual process_data_type get_input_type() const {return IMAGE;}
+  virtual process_data_type get_output_type() const {return SPATIAL_OBJECT;}
 
   //: compute van duc edges, line segments, and then match the grid
   virtual bool execute();

@@ -25,7 +25,6 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
     //: Constructor from existent disk-based voxel grid. Grid size is obtained from file
   bvxm_voxel_grid(vcl_string storage_fname):bvxm_voxel_grid_base()
   {
- 
     storage_ = new bvxm_voxel_storage_disk<T>(storage_fname);
     this->grid_size_ = vgl_vector_3d<unsigned int>(storage_->nx(), storage_->ny(),storage_->nz());
   }
@@ -64,7 +63,7 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
   bool initialize_data(T const& val) {return storage_->initialize_data(val); }
 
   //: return number of observations
-  unsigned num_observations(){return storage_->num_observations();}
+  unsigned num_observations() const {return storage_->num_observations();}
   //: increment the number of observations
   void increment_observations(){storage_->increment_observations();}
 

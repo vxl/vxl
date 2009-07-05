@@ -21,10 +21,10 @@ class bwm_io_config_parser : public expatpp
 
   bwm_site_sptr site() { return site_; }
 #if 0
-  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
-  vcl_string corresp_mode() {return corr_mode_; }
-  vcl_string corresp_type() {return corr_type_; }
-  vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() const { return corresp_; }
+  vcl_string corresp_mode() const {return corr_mode_; }
+  vcl_string corresp_type() const {return corr_type_; }
+  vcl_vector<vsol_point_3d> corresp_world_pts() const {return corresp_world_pts_; }
 #endif
 
  private:

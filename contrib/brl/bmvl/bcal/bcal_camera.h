@@ -37,7 +37,7 @@ class bcal_lens_model
   }
 
   double& operator[](int i) {return kc_[i];}
-  bool is_on(int i) { return flags_[i];}
+  bool is_on(int i) const { return flags_[i];}
   inline void turn_on(int i) { flags_[i] = true;}
   inline void turn_off(int i) { flags_[i] = false;}
 };
@@ -51,8 +51,8 @@ class bcal_camera
   vnl_double_3x3 k_;
   bcal_lens_model lm_;
  public:
-   int getID() { return id_;}
-  vnl_double_3x3 get_intrisic_matrix(){ return k_;}
+  int getID() const { return id_;}
+  vnl_double_3x3 get_intrisic_matrix() const { return k_;}
   void set_lens_model(vcl_vector<bool> flags);
 
   void set_intrisic_matrix(vnl_double_3x3 k) {k_ = k;}

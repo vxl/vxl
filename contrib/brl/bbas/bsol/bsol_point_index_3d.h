@@ -30,12 +30,12 @@ class bsol_point_index_3d
                       vcl_vector<vsol_point_3d_sptr> const& points);
   ~bsol_point_index_3d();
   //:accessors
-  int ncols(){return ncols_;}
-  int nrows(){return nrows_;}
-  int nslabs(){return nrows_;}
-  double row_spacing(){return row_spacing_;}
-  double col_spacing(){return col_spacing_;}
-  double slab_spacing(){return slab_spacing_;}
+  int ncols() const {return ncols_;}
+  int nrows() const {return nrows_;}
+  int nslabs() const {return nrows_;}
+  double row_spacing() const {return row_spacing_;}
+  double col_spacing() const {return col_spacing_;}
+  double slab_spacing() const {return slab_spacing_;}
   //: origin of the index space
   void origin(double& x0, double& y0, double& z0);
   //: number of points in a cell at r, c, s

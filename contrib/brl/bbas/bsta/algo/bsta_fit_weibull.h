@@ -36,13 +36,13 @@ class bsta_weibull_cost_function : public vnl_cost_function
   //:  Calculate the gradient of f at parameter vector x.
   virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
   //: sample mean
-  double mean(){return mean_;}
+  double mean() const {return mean_;}
 
   //: sample standard deviation
-  double std_dev(){return std_dev_;}
+  double std_dev() const {return std_dev_;}
 
   //: Weibull scale parameter from sample mean and k
-  double lambda(double k);
+  double lambda(double k) const;
 
  private:
   double mean_;
@@ -72,7 +72,7 @@ class bsta_fit_weibull
         ki = 1.0001;  // we need it to be ki > 1.0
       k = static_cast<T>(ki);
       return true;
-    } else 
+    } else
       return false;
   }
 
@@ -87,10 +87,10 @@ class bsta_fit_weibull
     residual_ = static_cast<T>(res);
   }
   //: the residual after solving
-  T residual(){return residual_;}
+  T residual() const {return residual_;}
 
   //: the Weibull scale parameter
-  T lambda(T const& k)
+  T lambda(T const& k) const
   {
     if (wcf_)
       return static_cast<T>(wcf_->lambda(k));

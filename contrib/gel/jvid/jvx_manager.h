@@ -64,8 +64,8 @@ class jvx_manager : public vgui_grid_tableau
   jvx_manager();
   ~jvx_manager();
   virtual bool handle(const vgui_event&);
-  unsigned get_height(){return height_;}
-  unsigned get_width(){return width_;}
+  unsigned get_height() const {return height_;}
+  unsigned get_width() const {return width_;}
   void load_video_file();
   void play();
   void play_video();

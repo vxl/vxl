@@ -28,9 +28,9 @@ class brct_plane_calibrator
 
   //Accessors
 
-  int n_points(int plane){return pts_3d_[plane].size();}
+  int n_points(int plane) const {return pts_3d_[plane].size();}
   vcl_vector<vgl_homg_point_2d<double> >
-    points_3d(int plane){return pts_3d_[plane];}
+    points_3d(int plane) const {return pts_3d_[plane];}
   vgl_homg_point_2d<double> p3d(const int plane, const int i)
     {return pts_3d_[plane][i];}
   brct_plane_corr_sptr corr(const int plane, const int i){return corrs_[plane][i];}
