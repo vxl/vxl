@@ -14,7 +14,7 @@ void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,
   //A few checks on the map range parameters
   assert(max<=vcl_numeric_limits<Type>::max());
   Type mymin;
-  if (!vcl_numeric_limits<Type>::is_integer && !vcl_numeric_limits<Type>::is_exact())
+  if (!vcl_numeric_limits<Type>::is_integer && !vcl_numeric_limits<Type>::is_exact)
     mymin = -vcl_numeric_limits<Type>::max();
   else
     mymin = vcl_numeric_limits<Type>::min();
