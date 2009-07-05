@@ -76,9 +76,9 @@ class mvl2_video_writer
   bool use_colour_;
   bool is_initialized_;
   int  current_frame_;
-  double frame_rate_;
-  int width_;
-  int height_;
+  mutable double frame_rate_;
+  mutable int width_;
+  mutable int height_;
   int quality_;
   bool firstcall_;
 };
