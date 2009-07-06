@@ -485,6 +485,7 @@ main( int argc, char* argv[] )
   {
     vnl_matrix<double> A( 2, 2, vnl_matrix_identity );
     vnl_vector<double> t( 2, 0.0 );
+    vcl_cerr << "A =\n" << A << ", T = " << t << vcl_endl;
     if ( trans_file.set() )
       read_affine_trans_2d( trans_file(), A, t );
     vcl_cout << "A =\n" << A << ", T = " << t << vcl_endl;
