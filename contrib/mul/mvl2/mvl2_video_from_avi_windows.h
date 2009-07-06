@@ -21,56 +21,56 @@ class mvl2_video_from_avi: public mvl2_video_reader
 {
  public:
 
-    //: Dflt ctor
+  //: Dflt ctor
   mvl2_video_from_avi();
- 
-    //: Destructor
+
+  //: Destructor
   virtual ~mvl2_video_from_avi();
- 
-    //: Initialize the file (format can by Grey, RGB, or more complex)
-  virtual bool initialize( int width, int height, 
+
+  //: Initialize the file (format can by Grey, RGB, or more complex)
+  virtual bool initialize( int width, int height,
                            vcl_string format, vcl_string file_name);
- 
-    //: Tidy up
+
+  //: Tidy up
   virtual void uninitialize();
- 
-    //: Set the size of image captured
+
+  //: Set the size of image captured
   virtual void  set_capture_size(int width,int height);
- 
-    //: Return width of image (in pixels)
+
+  //: Return width of image (in pixels)
   virtual int get_width() const;
 
-    //: Return height of image (in pixels)
+  //: Return height of image (in pixels)
   virtual int get_height() const;
- 
-    //: Return the frame rate in frames per second
+
+  //: Return the frame rate in frames per second
   virtual double get_frame_rate() const;
- 
-    //: Set the frame rate in frames per second
+
+  //: Set the frame rate in frames per second
   virtual void set_frame_rate(double frame_rate);
- 
-    //: Move frame counter on to next frame
+
+  //: Move frame counter on to next frame
   virtual int next_frame();
   virtual int seek(int frame_number);
- 
-    //: Reset frame counter to zero
+
+  //: Reset frame counter to zero
   virtual void reset_frame();
- 
-    //: Put frame data into the given image
+
+  //: Put frame data into the given image
   virtual bool get_frame(vil_image_view<vxl_byte>& image);
- 
-    //: Name of the class
+
+  //: Name of the class
   virtual vcl_string is_a() const;
- 
-    //: Create a copy on the heap and return base class pointer
+
+  //: Create a copy on the heap and return base class pointer
   virtual mvl2_video_reader* clone() const;
 
  private:
 
-// Windows specific handle to stream
-    PAVISTREAM ppavi_;
-// Windows specific format handling
-   void getVideoFormat(BITMAPINFO& bmp_info); 
+  // Windows specific handle to stream
+  PAVISTREAM ppavi_;
+  // Windows specific format handling
+  void getVideoFormat(BITMAPINFO& bmp_info) const;
 };
 
 #endif // mvl2_video_from_avi_windows_h_

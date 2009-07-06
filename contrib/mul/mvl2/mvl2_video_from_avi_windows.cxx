@@ -180,7 +180,7 @@ void mvl2_video_from_avi::set_capture_size(int /*width*/,int /*height*/)
   vcl_cerr << "mvl2_video_from_avi::set_capture_size() NYI\n";
 }
 
-void mvl2_video_from_avi::getVideoFormat(BITMAPINFO& bmp_info )
+void mvl2_video_from_avi::getVideoFormat(BITMAPINFO& bmp_info ) const
 {
   long lStreamSize;
   AVIStreamFormatSize(ppavi_, 0, &lStreamSize);
