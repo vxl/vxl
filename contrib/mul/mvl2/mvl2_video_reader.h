@@ -108,9 +108,9 @@ class mvl2_video_reader
   bool use_colour_;
   bool is_initialized_;
   unsigned int current_frame_;
-  double frame_rate_;
-  int width_;
-  int height_;
+  mutable double frame_rate_;
+  mutable int width_;
+  mutable int height_;
   bool firstcall_;
   vcl_vector<vcl_string> config_names_;
   vcl_vector<vcl_pair<int,int > > config_sizes_;
