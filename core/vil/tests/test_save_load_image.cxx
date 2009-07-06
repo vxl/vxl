@@ -128,13 +128,14 @@ bool test_image_equal(char const* type_name,
 #endif
   vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
            << ", planestep()=" << image2.planestep() << vcl_endl;
-  TEST("istep is non-zero", image2.istep()==0, false);
-  TEST_NEAR("|istep| is at most 3 x height", image2.istep(), 0.0, 3*sizey2);
-  TEST("jstep is non-zero", image2.jstep()==0, false);
-  TEST_NEAR("|jstep| is at most 3 x width",  image2.jstep(), 0.0, 3+3*sizex2);
+  int i = image2.istep(); if (i<0) i = -i;
+  TEST("|istep| is either 1, or np or height or np*height", i==1||i==planes2||i==sizey2||i==planes2*sizey2, true);
+  int j = image2.jstep(); if (j<0) j = -j;
+  TEST("|jstep| is either 1, or np or width or np*width",
+       j==1||j==planes2||j==sizex2||j==4*((sizex2+3)/4)||j==planes2*sizex2||j==4*((planes2*sizex2+3)/4), true);
   // The "+3" is there to allow for "row word alignment", e.g. with the BMP format.
-  TEST("planestep is non-zero", image2.planestep()==0, false);
-  TEST_NEAR("|planestep| is at most width x height", image2.planestep(), 0.0, (3+sizex2)*sizey2);
+  int p = image2.planestep(); if (p<0) p = -p;
+  TEST("|planestep| is either 1 or width or height or width x height", p==1||p==sizex2||p==sizey2||p==sizex2*sizey2, true);
 
   if (100*sizex2+image2.jstep()<0 || 100*sizex2-image2.jstep()<0)
   {
@@ -488,42 +489,6 @@ static void test_save_load_image()
 #endif
 
 
-  // JPEG
-#if HAS_JPEG
-  // lossy format ==> not guaranteed to be identical hence arg 3 and 4 set
-  // to large tolerance.
-  vil_test_image_type("jpeg", image8, vxl_byte(40), 5);
-  vil_test_image_type("jpeg", image3p, vxl_byte(65), 300);
-  vil_test_image_type("jpeg", vil_plane(image3c, 0), vxl_byte(4), 5);
-#if 0
-  vil_test_image_type("jpeg", image16, false);
-  vil_test_image_type("jpeg", image3p, false);
-#endif
-
-  // Test small image
-  {
-    unsigned ni =30, nj=29;
-    vil_image_view<vxl_byte> small_greyscale_image(ni,nj);
-    for (unsigned j=0;j<nj;++j)
-      for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
-//    vil_print_all(vcl_cout, small_greyscale_image);
-    vil_test_image_type("jpeg", small_greyscale_image, vxl_byte(5));
-    vcl_string out_path("test_save_load_jpeg.jpg");
-    TEST("Saving JPEG",vil_save(small_greyscale_image, out_path.c_str()),true);
-
-    vil_image_view<vxl_byte> new_image = vil_load(out_path.c_str());
-    TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
-    double sum2 = 0;
-    for (unsigned i=0;i<ni;++i)
-    { double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
-    TEST_NEAR("Loaded image close to original",sum2,0.0,2*ni);
-#if !LEAVE_IMAGES_BEHIND
-    vpl_unlink(out_path.c_str());
-#endif
-  }
-#endif
-
-
   // pnm ( = PBM / PGM / PPM )
 #if 1
   vil_test_image_type("pnm", image1);
@@ -603,6 +568,42 @@ static void test_save_load_image()
   vil_test_image_type("NITF v2.0", image3p);
   vil_test_image_type("NITF v2.0", imagefloat);
   vil_test_image_type("NITF v2.0", imagedouble);
+#endif
+
+
+  // JPEG
+#if HAS_JPEG
+  // lossy format ==> not guaranteed to be identical hence arg 3 and 4 set
+  // to large tolerance.
+  vil_test_image_type("jpeg", image8, vxl_byte(40), 5);
+  vil_test_image_type("jpeg", image3p, vxl_byte(65), 300);
+  vil_test_image_type("jpeg", vil_plane(image3c, 0), vxl_byte(4), 5);
+#if 0
+  vil_test_image_type("jpeg", image16, false);
+  vil_test_image_type("jpeg", image3p, false);
+#endif
+
+  // Test small image
+  {
+    unsigned ni =30, nj=29;
+    vil_image_view<vxl_byte> small_greyscale_image(ni,nj);
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
+//    vil_print_all(vcl_cout, small_greyscale_image);
+    vil_test_image_type("jpeg", small_greyscale_image, vxl_byte(5));
+    vcl_string out_path("test_save_load_jpeg.jpg");
+    TEST("Saving JPEG",vil_save(small_greyscale_image, out_path.c_str()),true);
+
+    vil_image_view<vxl_byte> new_image = vil_load(out_path.c_str());
+    TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
+    double sum2 = 0;
+    for (unsigned i=0;i<ni;++i)
+    { double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
+    TEST_NEAR("Loaded image close to original",sum2,0.0,2*ni);
+#if !LEAVE_IMAGES_BEHIND
+    vpl_unlink(out_path.c_str());
+#endif
+  }
 #endif
 
 
