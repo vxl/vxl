@@ -105,7 +105,7 @@ inline void vil_correlate_1d(const vil_image_view<srcT>& src_im,
 }
 
 template <class destT, class kernelT, class accumT>
-inline vil_image_resource_sptr vil_correlate_1d(
+vil_image_resource_sptr vil_correlate_1d(
                const vil_image_resource_sptr& src_im,
                const destT dt,
                const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,

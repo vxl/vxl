@@ -6,7 +6,7 @@
 // \brief 1D Convolution with cunning boundary options
 // \author Tim Cootes, Ian Scott (based on work by fsm)
 //
-// Note. The convolution operation is defined by
+// \note  The convolution operation is defined by
 //    $(f*g)(x) = \int f(x-y) g(y) dy$
 // i.e. the kernel g is reflected before the integration is performed.
 // If you don't want this to happen, the behaviour you want is not
@@ -294,7 +294,7 @@ inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
 }
 
 template <class destT, class kernelT, class accumT>
-inline vil_image_resource_sptr vil_convolve_1d(
+vil_image_resource_sptr vil_convolve_1d(
                const vil_image_resource_sptr& src_im,
                const destT dt,
                const kernelT* kernel, int k_lo, int k_hi,
