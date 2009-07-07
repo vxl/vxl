@@ -1,3 +1,4 @@
+#include <bvpl/bvpl_direction_to_color_map.h>
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_edge2d_functor.h>
