@@ -156,6 +156,9 @@ SOURCE=.\Templates/bsta_sample_set+double.1-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_sample_set+float.3-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_sample_set+double.2-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
