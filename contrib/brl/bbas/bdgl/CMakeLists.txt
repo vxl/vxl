@@ -16,6 +16,7 @@ SET(bdgl_sources
     bdgl_curve_algs.cxx   bdgl_curve_algs.h
     bdgl_region_algs.cxx   bdgl_region_algs.h
     bdgl_curve_region.cxx bdgl_curve_region.h
+    bdgl_peano_curve.cxx	  bdgl_peano_curve.h
 )
 
 ADD_LIBRARY(bdgl ${bdgl_sources})
