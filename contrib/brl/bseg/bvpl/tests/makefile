@@ -7,6 +7,7 @@ TESTS += test_subgrid.cxx
 TESTS += test_bvpl_kernels.cxx
 TESTS += test_neighb_oper.cxx
 TESTS += test_bvpl_kernel_functors.cxx
+TESTS += test_direction_to_color_map.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

@@ -8,6 +8,7 @@ TESTMAIN := test_driver.cxx
 
 TESTS += test_curve_algs.cxx
 TESTS += test_region_algs.cxx
+TESTS += test_peano_curve.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

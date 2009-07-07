@@ -9,6 +9,7 @@ MANPAGE_SOURCES += dll.h
 SOURCES += bdgl_curve_algs.cxx
 SOURCES += bdgl_curve_region.cxx
 SOURCES += bdgl_region_algs.cxx
+SOURCES += bdgl_peano_curve.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
