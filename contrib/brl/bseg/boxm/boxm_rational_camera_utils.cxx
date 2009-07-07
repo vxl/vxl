@@ -27,11 +27,10 @@ boxm_rational_camera_utils::project_corners_rational_camera(vcl_vector<vgl_point
   double b=plane.b();
   double c=plane.c();
   double d=plane.d();
-
   double denom=vcl_sqrt(a*a+b*b+c*c);
   for (unsigned i=0; i<corners.size(); ++i)
   {
     rcam->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
-    vertdist[i]=(float)(corners[i].x()*a+corners[i].y()*b+corners[i].z()*c+d)/denom;
+    vertdist[i]=float((corners[i].x()*a+corners[i].y()*b+corners[i].z()*c+d)/denom);
   }
 }

@@ -110,11 +110,10 @@ T bvxm_mog_norm<T>::mog_l2 (mix_gauss_type const& g, mix_gauss_type const& f)
     for (unsigned j = 0; j < f.num_components(); j++)
     {
       T sum_var = g.distribution(i).var() + f.distribution(j).var();
-      t3 = t3 + g.weight(i)*f.weight(j)
-        * vnl_math::one_over_sqrt2pi
-        * (T(1)/vcl_sqrt(sum_var))
-        * vcl_exp(-(T(1)/T(2))* vcl_pow((g.distribution(i).mean() - f.distribution(j).mean()), 2)
-        * (T(1)/sum_var));
+      t3 += g.weight(i) * f.weight(j)
+          * T(vnl_math::one_over_sqrt2pi)
+          / T(vcl_sqrt(sum_var))
+          * T(vcl_exp(-0.5 * vcl_pow(g.distribution(i).mean()-f.distribution(j).mean(), 2) / sum_var));
     }
   }
 
@@ -126,12 +125,10 @@ T bvxm_mog_norm<T>::mog_l2 (mix_gauss_type const& g, mix_gauss_type const& f)
     for (unsigned j = i+1; j < f.num_components(); j++)
     {
       T sum_var = f.distribution(i).var() + f.distribution(j).var();
-
-      t5 = t5 + f.weight(i)*f.weight(j)
-        * vnl_math::one_over_sqrt2pi
-        * (T(1)/vcl_sqrt(sum_var))
-        *  vcl_exp(-(T(1)/T(2))*vcl_pow(f.distribution(i).mean() - f.distribution(j).mean(),2)
-        * (T(1)/sum_var));
+      t5 += f.weight(i) * f.weight(j)
+          * T(vnl_math::one_over_sqrt2pi)
+          / T(vcl_sqrt(sum_var))
+          * T(vcl_exp(-0.5 * vcl_pow(f.distribution(i).mean()-f.distribution(j).mean(), 2) / sum_var));
     }
   }
 
