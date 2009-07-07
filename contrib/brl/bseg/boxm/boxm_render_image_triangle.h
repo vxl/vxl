@@ -1,6 +1,7 @@
 #ifndef boxm_render_image_triangle_h_
 #define boxm_render_image_triangle_h_
-
+//:
+// \file
 #include <vcl_vector.h>
 
 #include <boct/boct_tree.h>
@@ -22,11 +23,12 @@
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_raytrace_operations.h>
 #include <boxm/boxm_rational_camera_utils.h>
+
 //: Functor class to normalize expected image
 template<class T_data>
 class normalize_expected_functor_splatting
 {
-public:
+ public:
   normalize_expected_functor_splatting(bool use_black_background) : use_black_background_(use_black_background) {}
 
   void operator()(float mask, typename T_data::obs_datatype &pix) const 
