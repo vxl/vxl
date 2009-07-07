@@ -22,7 +22,21 @@
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_raytrace_operations.h>
 #include <boxm/boxm_rational_camera_utils.h>
+//: Functor class to normalize expected image
+template<class T_data>
+class normalize_expected_functor_splatting
+{
+public:
+  normalize_expected_functor_splatting(bool use_black_background) : use_black_background_(use_black_background) {}
 
+  void operator()(float mask, typename T_data::obs_datatype &pix) const 
+  {
+    if (!use_black_background_) {
+      pix += mask*0.5f;
+    }
+  }
+  bool use_black_background_;
+};
 
 template <class T_loc, class T_data>
 void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > &scene,
@@ -135,6 +149,9 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
       }
     }
   }
+  normalize_expected_functor_splatting<T_data> norm_fn(use_black_background);
+  vil_transform2<float,typename T_data::obs_datatype, normalize_expected_functor_splatting<T_data> >(vis,expected,norm_fn);
+
   vcl_cout<<"\nThe time taken is"<< t.all()<<vcl_endl;
   return;
 }
