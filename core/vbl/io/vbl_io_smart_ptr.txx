@@ -169,7 +169,7 @@ void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & p)
     // If you get an error in the next line, it could be because your type T
     // has no vsl_print_summary(vsl_b_ostream &, const T*)  defined on it.
     // See the documentation in the .h file to see how to add it.
-    vsl_print_summary(os, (p.ptr()));
+    vsl_print_summary(os, p.ptr());
   }
   else
     os << "NULL";
