@@ -214,7 +214,7 @@ bool
 vidl_ffmpeg_istream::
 is_open() const
 {
-  return is_->frame_;
+  return ! ! is_->frame_;
 }
 
 
