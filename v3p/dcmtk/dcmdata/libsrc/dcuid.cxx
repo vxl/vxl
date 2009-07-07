@@ -1044,7 +1044,7 @@ char* dcmGenerateUniqueIdentifier(char* uid, const char* prefix)
     sprintf(buf, ".%lu", forcePositive(getpid()));
     addUIDComponent(uid, buf);
 
-    sprintf(buf, ".%lu", forcePositive(time(NULL)));
+    sprintf(buf, ".%lu", forcePositive(long(time(NULL))));
     addUIDComponent(uid, buf);
 
     sprintf(buf, ".%u", counter);
