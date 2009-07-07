@@ -32,7 +32,7 @@ class bvpl_neighb_operator
   {
     bvpl_subgrid_iterator<T> subgrid_iter(grid, kernel->dim());
     bvpl_subgrid_iterator<T> output_iter(out_grid, kernel->dim());
-    kernel->print();
+    //kernel->print();
     while (!subgrid_iter.isDone()) {
        bvpl_kernel_iterator kernel_iter = kernel->iterator();
        bvpl_voxel_subgrid<T> subgrid = *subgrid_iter;

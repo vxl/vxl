@@ -131,6 +131,15 @@ MAIN(test_bvpl_kernel_functors)
   result=is_correct_solution< bvpl_edge_geometric_mean_functor<float> >(kernel_vec,data,geom_functor,min_p,max_p,sigma_noise);
   TEST("Test Geometric Mean functor with no noise ", true,result);
 
+  //: add noise 
+  sigma_noise=0.1f;
+  result=is_correct_solution< bvpl_edge_algebraic_mean_functor<float> >(kernel_vec,data,mean_functor,min_p,max_p,sigma_noise);
+  TEST("Test Algebraic mean functor with  noise ", true,result);
+  result=is_correct_solution< bvpl_edge_geometric_mean_functor<float> >(kernel_vec,data,geom_functor,min_p,max_p,sigma_noise);
+  TEST("Test Geometric Mean functor with  noise ", true,result);
+
+
+
   return 0;
 }
 

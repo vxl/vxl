@@ -44,7 +44,7 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
     if (++y == grid_->grid_size().y()-y_r) {
       y=y_r;
       // time to move to the next slab
-      vcl_cout << ". " ;
+      //vcl_cout << ". " ;
       ++iter_;
     }
   }
