@@ -276,7 +276,7 @@ frame_number() const
           * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
           * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
          / is_->vid_str_->time_base.den
-         - is_->frame_number_offset_;
+         - int(is_->frame_number_offset_);
 }
 
 

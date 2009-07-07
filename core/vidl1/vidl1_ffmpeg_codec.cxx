@@ -319,10 +319,7 @@ vidl1_ffmpeg_codec::cur_frame_num() const
           * vid_str_->time_base.num + vid_str_->time_base.den/2)
           / vid_str_->time_base.den
 #endif
-          - frame_number_offset_;
-//  return int( last_dts * vid_str_->r_frame_rate /
-//              vid_str_->r_frame_rate_base + AV_TIME_BASE/2 ) /
-//         AV_TIME_BASE - frame_number_offset_;
+          - int(frame_number_offset_);
 }
 
 
