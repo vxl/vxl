@@ -211,7 +211,7 @@ class vil_correlate_1d_resource : public vil_image_resource
 // \param kernel should point to tap 0.
 // \relates vil_image_resource
 template <class destT, class kernelT, class accumT>
-inline vil_image_resource_sptr vil_correlate_1d(
+vil_image_resource_sptr vil_correlate_1d(
                          const vil_image_resource_sptr& src_im,
                          const destT  /*dt*/,
                          const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
