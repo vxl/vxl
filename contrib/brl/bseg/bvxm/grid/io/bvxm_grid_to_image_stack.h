@@ -19,6 +19,9 @@
 #include <vul/vul_file.h>
 #include <vcl_iostream.h>
 #include <vil/vil_save.h>
+#include<vnl/vnl_vector_fixed.h>
+#include <vcl_iomanip.h>
+#include <vcl_sstream.h>
 
 template<class T>
 vcl_string bvxm_extension();
@@ -27,7 +30,18 @@ template<>
 vcl_string bvxm_extension<float>() { return ".tiff"; }
 
 template<>
-vcl_string bvxm_extension<unsigned char>() { return ".png"; }
+vcl_string bvxm_extension<unsigned char>() { return ".tiff"; }
+
+template<class T>
+class bvxm_image_traits;
+
+template<>
+class bvxm_image_traits<vnl_vector_fixed<float,4> >
+{
+ public:
+  typedef vil_rgba<unsigned char> pixel_type;
+  static vcl_string extension() { return ".tiff"; }
+};
 
 
 class bvxm_grid_to_image_stack
@@ -41,7 +55,7 @@ class bvxm_grid_to_image_stack
 };
 
 
-// saves a voxel grid of a 3-d vnl_vectors. The world is saved as a stack of RGB images that can ble loaded by dristhi
+// saves a voxel grid as a stack of images that can ble loaded by dristhi
 template<class T, unsigned N>
 bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_vector_fixed<T, N> > *grid, vcl_string directory)
 {
@@ -61,8 +75,8 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_vec
   for (; grid_it != grid->end(); ++grid_it, i++)
   {
     vcl_stringstream filename;
-    filename << directory << "/slab_" << i << bvxm_extension<unsigned char>();
-    vil_image_view_base_sptr img = new vil_image_view<unsigned char>(ni, nj, N);
+    filename << directory << "/slab_" <<vcl_setw(4) << vcl_setfill('0') <<  i << bvxm_image_traits<vnl_vector_fixed<T, N> >::extension();
+    vil_image_view_base_sptr img = new vil_image_view< typename bvxm_image_traits<vnl_vector_fixed<T, N> >::pixel_type>(ni, nj);
     bvxm_slab_to_image::slab_to_image((*grid_it), img);
     vil_save(*img.ptr(), filename.str().c_str());
 
@@ -90,7 +104,7 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<T> *gri
   for (; grid_it != grid->end(); ++grid_it, i++)
   {
     vcl_stringstream filename;
-    filename << directory << "/slab_" << i << bvxm_extension<unsigned char>();
+    filename << directory << vcl_setw(4) << vcl_setfill('0') << i << bvxm_extension<unsigned char>();
     vil_image_view_base_sptr img = new vil_image_view<unsigned char>(ni, nj, 1);
     bvxm_slab_to_image::slab_to_image(*grid_it, img);
     vil_save(*img.ptr(), filename.str().c_str());
