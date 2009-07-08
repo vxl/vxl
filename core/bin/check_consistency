@@ -22,9 +22,10 @@ exec perl -w -l012 -x $0 ${1+"$@"}
 # ESC-x compile
 
 undef $/;
-$full = "";
-$emacs = "";
-$vim = "";
+$full = '';
+$emacs = '';
+$vim = '';
+$check_includes = '';
 
 while (defined($ARGV[0]) && $ARGV[0] =~ m!^-!)
 {
@@ -32,6 +33,7 @@ while (defined($ARGV[0]) && $ARGV[0] =~ m!^-!)
   if (m/^-f$/) { $full = 1; }
   elsif (m/^-e$/) { $emacs = 1; }
   elsif (m/^-v$/) { $vim = 1; }
+  elsif (m/^-i$/) { $check_includes = 1; }
   else { print STDERR "Unrecognised command line option $_ ignored"; }
 }
 
@@ -133,7 +135,8 @@ foreach $f (@FILES)
 
 # 5. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n(\s*)//:.*\n(\1//.*\n)*\s*\n\1// *[^:=*-]! &&
-      $f !~ m!\bvcl_config_(compiler|headers)\.h$!)
+      $f !~ m!\bvcl_config_(compiler|headers)\.h$! &&
+      $f !~ m!\bvnl/vnl_error\.h$!)
   {
     $tmp=$file; $tmp =~ s!\n\s*//:.*\n( *//.*\n)*\s*\n\s*[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
     &msg($tmp, "contains comment blocks separated by a blank line; consider joining");
@@ -166,8 +169,9 @@ foreach $f (@FILES)
 #   Unnecessary includes are in principle anything which is not
 #   used or directly referred to in the current file.
 #   Missing includes is currently only vcl_cassert.h and vcl_iostream.h
+#   unless the command line switch "-i" was given (variable "$check_includes")
 
-# if ($printed)
+# if ($check_includes)
 # {
 #   @class_list = map {s!^\s*\#\s*include\s*[<\"](.*?)[>\"].*!$1!; $_} grep {m!^\s*\#\s*include!} split /\n/,$file;
 #   $file =~ s!\#\s*include\s*[<\"].*?[>\"]\s*!!g;
@@ -242,7 +246,7 @@ foreach $f (@FILES)
     $i =~ s!^([vb]gui.*)!$1\(\|_sptr\|_new\)!;
     $i =~ s!^(v(so|to|dg|cs)l.*)!$1\(\|_sptr\)! unless ($f =~ m!\.h$!);
     # CURRENTLY NOT YET WELL TESTED, HENCE IGNORED:
-    next if ($j =~ m!^(vsl/|vidl_vil1/|vidl1/|vgui/|bgui/|vsol/|vtol/|vdgl/|v.l/io/|rgrl/|rsdl/|rrel/)!);
+    next if (!$check_includes && $j =~ m!^(vsl/|vidl_vil1/|vidl1/|vgui/|bgui/|vsol/|vtol/|vdgl/|v.l/io/|rgrl/|rsdl/|rrel/)!);
     # VCL
     if ($j eq 'vcl_algorithm.h') { $i='vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|stable_partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)'; }
     elsif ($j eq 'vxl_config.h') { $i='VXL_\w+|vxl_([su]?(int|ieee)_(8|16|32|64)|s?byte)'; }
@@ -1017,6 +1021,8 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bbdgl_curve_clustering\.(cxx|h)\.(min|max)$! &&
           "$f.$wd" !~ m!\bbsta_histogram\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bbvxm_lidar_processor\.cxx\.(min|max)$! &&
+          "$f.$wd" !~ m!\bbbgm_view_maker\.h\.(min|max)$! &&
+          "$f.$wd" !~ m!\bbvpl_kernel_factory\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bvidl_pixel_format\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bmbl_sample_stats_1d\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bmbl/tools/sample_stats\.cxx\.(min|max)$! &&
@@ -1068,6 +1074,8 @@ foreach $f (@FILES)
             $f !~ m!\brsdl_(bins_2d|kd_tree)\.h$! &&
             $f !~ m!\bbgui3d_algo\.(h|cxx)$! &&
             $f !~ m!\bbgui3d_examiner_tableau\.cxx$! &&
+            $f !~ m!\brgtl_octree_objects\.txx$! &&
+            $f !~ m!\brgtl_sqt_objects\.txx$! &&
             $f !~ m!\brsdl/(rsdl_kd_tree|tests/test_bins_2d|tests/test_kd_tree)\.cxx$! ) ) &&
             $f !~ m!\bimesh/algo/imesh_kd_tree\.h$! &&
           $file_s =~ m![^ .>]\s*\b$wd\s*[|),]! );
