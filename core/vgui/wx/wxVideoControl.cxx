@@ -214,8 +214,8 @@ void wxVideoControl::OnEnterText( wxCommandEvent& event )
   event.GetString().ToLong(&fnum);
   if (fnum < 0)
     fnum = 0;
-  if (fnum >= num_frames_)
-    fnum = num_frames_-1;
+  if (fnum >= (long)num_frames_)
+    fnum = num_frames_-1L;
   frame_text_->SetValue(wxString::Format(wxT("%d"),fnum));
   frame_ = fnum;
   slider_->SetValue(frame_);
