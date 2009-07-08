@@ -67,27 +67,22 @@ bool bvpl_convert_direction_to_hue_process(bprb_func_process& pro)
     vcl_cerr << "In bvpl_convert_direction_to_hue_process -- input grid is not valid!\n";
     return false;
   }
-  if(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *grid
-	  = dynamic_cast< bvxm_voxel_grid<vnl_vector_fixed<float,4> >* > (grid_base.ptr()))
+  if ((bvxm_voxel_grid<vnl_vector_fixed<float,4> > *grid
+       = dynamic_cast< bvxm_voxel_grid<vnl_vector_fixed<float,4> >* >(grid_base.ptr())))
   {
-	  
-	  vcl_vector<vgl_point_3d<double> > direction_samples;
-	  bvpl_generate_direction_samples_from_kernels(kernel,direction_samples);
-	  vcl_map<vgl_point_3d<double>,float,point_3d_cmp>  colors;
-	  bvpl_direction_to_color_map(direction_samples,colors);
-	  bvxm_voxel_grid<vnl_vector_fixed<float,4> > * out_grid 
-		  = new bvxm_voxel_grid<vnl_vector_fixed<float,4> >(output_dir, grid->grid_size());
+    vcl_vector<vgl_point_3d<double> > direction_samples;
+    bvpl_generate_direction_samples_from_kernels(kernel,direction_samples);
+    vcl_map<vgl_point_3d<double>,float,point_3d_cmp>  colors;
+    bvpl_direction_to_color_map(direction_samples,colors);
+    bvxm_voxel_grid<vnl_vector_fixed<float,4> > * out_grid
+      = new bvxm_voxel_grid<vnl_vector_fixed<float,4> >(output_dir, grid->grid_size());
 
-	  bvpl_convert_grid_to_hsv_grid(grid,out_grid,colors );
-	  pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, out_grid);
-	  return true;
-
+    bvpl_convert_grid_to_hsv_grid(grid,out_grid,colors );
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, out_grid);
+    return true;
   }
-
-
-
   else {
-	  vcl_cerr << "datatype not supported\n";
+    vcl_cerr << "datatype not supported\n";
   }
 
   return false;
