@@ -1,5 +1,6 @@
 SOURCES += imesh_detect.cxx
 SOURCES += imesh_imls_surface.cxx
+MANPAGE_SOURCES += imesh_imls_surface.txx
 SOURCES += imesh_intersect.cxx
 SOURCES += imesh_kd_tree.cxx
 MANPAGE_SOURCES += imesh_kd_tree.txx
