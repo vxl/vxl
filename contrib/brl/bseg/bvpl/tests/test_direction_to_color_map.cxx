@@ -31,7 +31,7 @@ static void test_direction_to_color_map()
   vcl_vector<vgl_point_3d<double> >  proj_on_cube;
   project_sphereical_samples_to_cubes(samples,proj_on_cube);
   vcl_vector<vgl_point_3d<double> > p3d=peano_curve_on_cube(2);
-  vcl_vector<float> indices=find_closest_points_from_cube_to_peano_curve(p3d,proj_on_cube);
+  vcl_vector<float> indices=find_closest_points_from_cube_to_peano_curve(samples,p3d,proj_on_cube);
 #if 0
   vcl_ofstream ofile("d:/vj/test_proj_samples.txt");
   for (unsigned i=0;i<proj_on_cube.size();i++)
