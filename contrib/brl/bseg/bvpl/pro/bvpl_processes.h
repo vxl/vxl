@@ -10,7 +10,7 @@ DECLARE_FUNC_CONS(bvpl_create_edge2d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_edge3d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_edge2d_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_create_edge3d_kernel_vector_process);
-
+DECLARE_FUNC_CONS(bvpl_convert_direction_to_hue_process);
 //the init functions
 
 #endif
