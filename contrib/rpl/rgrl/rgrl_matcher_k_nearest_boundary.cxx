@@ -51,8 +51,7 @@ compute_matches( rgrl_feature_set const&       from_set,
 
   if ( cp_matches->from_size() == 0 ) return bd_matches;
 
-  int m = cp_matches->from_begin().from_feature()->location().size();
-  assert( m == 2 ); //For now, only deal with 2D
+  assert( cp_matches->from_begin().from_feature()->location().size() == 2 ); //For now, only deal with 2D
 
   //2. For each center-point match, compute the bounary matches
   //
