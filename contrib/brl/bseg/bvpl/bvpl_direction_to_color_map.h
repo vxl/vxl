@@ -2,12 +2,13 @@
 #define bvpl_direction_to_color_map_h_
 //:
 // \file
+#include <bvxm/grid/bvxm_voxel_grid.h>
+#include <bvpl/bvpl_kernel_factory.h>
+#include <bdgl/bdgl_peano_curve.h>
 #include <vgl/vgl_vector_3d.h>
-#include <bbas/bdgl/bdgl_peano_curve.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_line_3d_2_points.h>
-#include <bvpl/bvpl_kernel_factory.h>
 #include <vil/algo/vil_colour_space.h>
 
 struct point_3d_cmp
@@ -16,23 +17,17 @@ struct point_3d_cmp
   {
     if (p1.x()<p2.x())
       return true;
-    if (p1.x()==p2.x())
+    else if (p1.x()==p2.x())
     {
       if (p1.y()<p2.y())
-      {
         return true;
-      }
-      if (p1.y()==p2.y())
-      {
-        if (p1.z()<p2.z())
-        {
-          return true;
-        }
+      else if (p1.y()==p2.y())
+        return p1.z()<p2.z();
+      else
         return false;
-      }
-      return false;
     }
-    return false;
+    else
+      return false;
   }
 };
 
