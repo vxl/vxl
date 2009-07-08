@@ -1,0 +1,127 @@
+// This is bsvg/tests/test_svg.cxx
+//:
+// \file
+// \brief Various tests for SVG library
+// \author Ozge C. Ozcanli (Brown)
+// \date   April 21, 2009
+//
+#include <testlib/testlib_test.h>
+#include <bxml/bsvg/bsvg_document.h>
+#include <bxml/bsvg/bsvg_element.h>
+#include <bxml/bsvg/bsvg_plot.h>
+#include <bxml/bxml_find.h>
+#include <bxml/bxml_write.h>
+
+bsvg_document make_simple_doc()
+{
+  bsvg_document doc(200, 200);
+  doc.add_description("test SVG");
+    
+  bsvg_text* t = new bsvg_text("some message");
+  t->set_font_size(15);
+  t->set_location(10, 10);
+  t->set_rotation(90);
+
+  doc.add_element(t);
+
+  bsvg_group* g = new bsvg_group();
+  g->set_fill_color("red");
+  g->set_stroke_color("black");
+  //g->set_rotation(90);
+
+  bsvg_ellipse* e1 = new bsvg_ellipse(25, 10);
+  e1->set_location(50, 20);
+  e1->set_rotation(45);
+  bsvg_ellipse* e2 = new bsvg_ellipse(25, 10);
+  e2->set_location(100, 20);
+  e2->set_rotation(90);
+
+  bsvg_ellipse* e3 = new bsvg_ellipse(25, 25);
+  e3->set_location(150, 20);
+
+  g->add_element(e1);
+  g->add_element(e2);
+  g->add_element(e3);
+
+  doc.add_element(g);
+
+  bsvg_line* l = new bsvg_line(90, 115, 125, 115);
+  l->set_stroke_color("black");
+  l->set_stroke_width(10);
+
+  doc.add_element(l);
+
+  bsvg_rectangle* r = new bsvg_rectangle(100, 100, 15, 30);
+  r->set_fill_color("blue");
+  r->set_stroke_color("black");
+  r->set_fill_opacity(0.5f);
+
+  doc.add_element(r);
+
+  
+  return doc;
+}
+
+bsvg_plot make_simple_plot()
+{
+  bsvg_plot p(1200, 600);
+  p.set_margin(40);
+  p.set_font_size(30);
+  //bsvg_plot p(600, 300, 0, 0, 300, 150);
+  p.add_axes(0, 1, 0, 1);
+  p.add_title("ROC Plot");
+  //p.add_x_increments(0.1f);
+  p.add_y_increments(0.1f);
+
+  float fpr[] = {0.1f, 0.2f, 0.4f, 0.8f};
+  float tpr[] = {0.4f, 0.8f, 0.9f, 0.99f};
+
+  vcl_vector<float> xs, ys;
+  for (unsigned i = 0; i < 4; i++) {
+    xs.push_back(fpr[i]); ys.push_back(tpr[i]);
+  }
+
+  p.add_line(xs, ys, "red");
+  return p;
+}
+
+bsvg_plot make_simple_histogram()
+{
+  bsvg_plot p(1200, 600);
+  p.set_margin(40);
+  p.set_font_size(30);
+  //bsvg_plot p(600, 300, 0, 0, 300, 150);
+  p.add_axes(0, 1, 0, 1);
+  p.add_title("Bar Plot");
+  p.add_y_increments(0.1f);
+
+  float heights[] = {0.1f, 0.2f, 0.0f, 0.8f, 0.9f, 0.0f, 0.3f};
+
+  vcl_vector<float> hs; vcl_vector<float> labels;
+  for (unsigned i = 0; i < 7; i++) {
+    hs.push_back(heights[i]);
+    labels.push_back(float(i));
+  }
+  p.add_bars(hs, labels, true, "red");
+  return p;
+}
+
+
+static void test_svg()
+{
+  bsvg_document doc = make_simple_doc();
+  vcl_string out_file = "./test.svg";
+  bxml_write(out_file, doc);
+
+  bsvg_plot p = make_simple_plot();
+  out_file = "./test_plot.svg";
+  bxml_write(out_file, p);
+ 
+  bsvg_plot h = make_simple_histogram();
+  out_file = "./test_histogram.svg";
+  bxml_write(out_file, h);
+ 
+  //TEST("testing test", true, true);
+}
+
+TESTMAIN( test_svg );

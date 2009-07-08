@@ -1,0 +1,65 @@
+//:
+// \file
+// \brief Various plots - as SVG documents
+//           
+// \author Ozge C. Ozcanli (Brown)
+// \date   April 21, 2009
+//
+// \verbatim
+//  Modifications
+//   Ozge C. Ozcanli - July 08, 09 - ported to vxl from local repository - minor fixes
+// \endverbatim
+
+#if !defined(_bsvg_plot_h)
+#define _bsvg_plot_h
+
+#include "bsvg_document.h"
+#include "bsvg_element.h"
+
+//: Coordinate system of SVG is the same as an image coordinate system: upper left corner of the browser page is the origin
+//  Plot axes will be placed so that lower_left corner of the browser page will be the plot origin
+//  Plot only draws lines of x and y axes if they are added to the plot.
+//  scales the x and y axes according to x_min, x_max values so that it spans the document area
+
+const float default_stroke_width = 2.0f;
+const int default_font_size = 15;
+const float default_margin = 20.0f;
+
+class bsvg_plot : public bsvg_document
+{
+public:
+
+    bsvg_plot(float w, float h) : bsvg_document(w, h), margin_(default_margin), font_size_(default_font_size) {}
+    bsvg_plot(float w, float h, float viewBox_x, float viewBox_y, float viewBox_w, float viewBox_h) : bsvg_document(w,h,viewBox_x, viewBox_y, viewBox_w, viewBox_h), margin_(default_margin), font_size_(default_font_size) {}
+    
+    void add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width = default_stroke_width);
+    //: assumes add_axes have been called
+    void add_x_increments(float x_inc, float stroke_width = default_stroke_width);
+    void add_y_increments(float y_inc, float stroke_width = default_stroke_width);
+
+    void set_margin(float m) { margin_ = m; }
+    void set_font_size(int s) { font_size_ = s; }
+    void add_title(const vcl_string& t);
+
+    void add_line(const vcl_vector<float>& xs, const vcl_vector<float>& ys, const vcl_string& color, float stroke_width = default_stroke_width);
+    
+    //: add equally spaced and equal width bars with the given heights 
+    void add_bars(const vcl_vector<float>& heights, const vcl_string& color);
+    void add_bars(const vcl_vector<float>& heights, const vcl_vector<float>& x_labels, bool vertical_labels, const vcl_string& color);
+    void add_bars(const vcl_vector<float>& heights, const vcl_vector<vcl_string>& x_labels, bool vertical_labels, const vcl_string& color);
+
+    bsvg_group* add_bars_helper(const vcl_vector<float>& heights, const vcl_string& color);
+    bsvg_group* add_x_labels_helper(const vcl_vector<vcl_string>& x_labels, const vcl_string& color, bool vertical_labels);
+
+protected:
+
+    float margin_;
+    int font_size_;
+
+    float scale_factor_;
+    float axes_orig_x_;
+    float axes_orig_y_;
+    float h2_x, h2_y;
+};
+
+#endif  //_bsvg_plot_h
