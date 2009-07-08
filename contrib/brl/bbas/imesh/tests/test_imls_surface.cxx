@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_imls_surface.h>
+#include <imesh/algo/imesh_imls_surface.txx> // needed for the template definition of imesh_imls_surface::triangle_quadrature()
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
 #include <vcl_iostream.h>

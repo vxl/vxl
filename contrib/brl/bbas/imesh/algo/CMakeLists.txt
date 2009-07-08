@@ -12,8 +12,7 @@ SET( imesh_algo_sources
   imesh_detect.cxx             imesh_detect.h
   imesh_kd_tree.cxx            imesh_kd_tree.h      imesh_kd_tree.txx
                                imesh_render.h
-
-  imesh_imls_surface.cxx       imesh_imls_surface.h
+  imesh_imls_surface.cxx       imesh_imls_surface.h imesh_imls_surface.txx
 )
 
 ADD_LIBRARY( imesh_algo ${imesh_algo_sources} )
