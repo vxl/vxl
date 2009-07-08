@@ -62,8 +62,18 @@ class mil3d_transform_3d
               Affine,
               Projective};
 
-  //: Constructor
-  mil3d_transform_3d() : form_(Undefined), inv_uptodate_(false) { set_identity(); }
+  //: Constructor: set to identify transformation
+  mil3d_transform_3d()
+  : xx_(1), xy_(0), xz_(0), xt_(0),
+    yx_(0), yy_(1), yz_(0), yt_(0),
+    zx_(0), zy_(0), zz_(1), zt_(0),
+    tx_(0), ty_(0), tz_(0), tt_(1),
+    form_(Identity),
+    xx2_(1), xy2_(0), xz2_(0), xt2_(0),
+    yx2_(0), yy2_(1), yz2_(0), yt2_(0),
+    zx2_(0), zy2_(0), zz2_(1), zt2_(0),
+    tx2_(0), ty2_(0), tz2_(0), tt2_(1),
+    inv_uptodate_(true) {}
 
   //: Destructor
   virtual ~mil3d_transform_3d() {}
@@ -225,7 +235,7 @@ class mil3d_transform_3d
 
  private:
 
-  double xx_,xy_,xz_,xt_,yx_,yy_,yz_,yt_,zx_, zy_, zz_, zt_, tx_,ty_,tz_,tt_;
+  double xx_,xy_,xz_,xt_,yx_,yy_,yz_,yt_,zx_,zy_,zz_,zt_,tx_,ty_,tz_,tt_;
   Form form_;
 
   // This is all the inverse data
