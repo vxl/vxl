@@ -126,6 +126,9 @@ SOURCE=.\imesh_detect.h
 SOURCE=.\imesh_imls_surface.h
 # End Source File
 # Begin Source File
+SOURCE=.\imesh_imls_surface.txx
+# End Source File
+# Begin Source File
 SOURCE=.\imesh_intersect.h
 # End Source File
 # Begin Source File
