@@ -565,14 +565,13 @@ void bmdl_classify<T>::threshold_building_area()
 template <class T>
 void bmdl_classify<T>::refine_buildings()
 {
-  unsigned int ni=first_return_.ni();
-  unsigned int nj=first_return_.nj();
   // test that all inputs have been set
-  assert(ni>0 && nj>0);
-  assert(last_return_.ni() == ni);
-  assert(last_return_.nj() == nj);
-  assert(labels_.ni() == ni);
-  assert(labels_.nj() == nj);
+  assert(first_return_.ni() > 0);
+  assert(first_return_.nj() > 0);
+  assert(last_return_.ni() == first_return_.ni());
+  assert(last_return_.nj() == first_return_.nj());
+  assert(labels_.ni() == first_return_.ni());
+  assert(labels_.nj() == first_return_.nj());
   assert(hgt_stdev_ > 0.0);
 
   expand_buildings(building_mean_hgt_, building_area_);
