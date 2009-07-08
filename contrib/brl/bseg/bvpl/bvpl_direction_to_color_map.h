@@ -102,28 +102,6 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
 										     vcl_vector<vgl_point_3d<double> > peano_curve, 
 											 vcl_vector<vgl_point_3d<double> > proj_on_cube)
 {
-  vcl_vector<float> indices_of_cube_projs;
-  for (unsigned i=0;i<proj_on_cube.size();i++)
-  {
-    float dmin=1e5;
-    int indexj=-1;
-    //: find the closest index point
-    for (unsigned j=0;j<peano_curve.size();j++)
-    {
-      double d=vgl_distance<double>(proj_on_cube[i],peano_curve[j]);
-      if (d<dmin)
-      {
-        dmin=d;
-        indexj=j;
-      }
-    }
-    //: find the closest point on the two line segments emanating from the index point
-    if (indexj==0)
-    {
-      vgl_line_3d_2_points<double> l1(peano_curve[indexj],peano_curve[indexj+1]);
-      float t1=vgl_closest_point_t(l1,proj_on_cube[i]);
-      if (t1<0)
-        t1=0;
 
 	vcl_map<vgl_point_3d<double>, float,point_3d_cmp> indices_of_cube_projs;
 	for(unsigned i=0;i<proj_on_cube.size();i++)
