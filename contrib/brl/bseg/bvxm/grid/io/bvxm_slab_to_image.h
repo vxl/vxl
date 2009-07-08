@@ -93,6 +93,41 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
         return false;
       }
       break;
+      
+    case VIL_PIXEL_FORMAT_RGBA_BYTE:
+      if (image->nplanes() ==1)
+      {
+        if (vil_image_view<vil_rgba<unsigned char> > *img_view = dynamic_cast<vil_image_view<vil_rgba<unsigned char> >*>(image.ptr()))
+        {
+          vil_image_view<vil_rgba<unsigned char> >::iterator img_it = img_view->begin();
+         // for (unsigned p=0; p<N; ++p)
+//          {
+          // vil_image_view<vil_rgba<unsigned char> >::iterator plane_it = img_view->begin();
+//            img_its.push_back(plane_it);
+          //}
+          
+          typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
+          for (; slab_it != slab.end(); ++slab_it)
+          {
+            (*img_it) = vil_rgba<unsigned char>( (unsigned char)(*slab_it)[0],(unsigned char)(*slab_it)[1],
+                                                (unsigned char)(*slab_it)[2], (unsigned char)(*slab_it)[3]);
+             // *(img_its[p]) =  (unsigned char)(((*slab_it)[p] * 127.0) + 0.5) + 127;
+              ++(img_it);
+          }
+
+        }
+        else
+        {
+          vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
+          return false;
+        }
+      }
+      else
+      {
+        vcl_cerr << "error in slab_to_image: incorrect number of image planes\n";
+        return false;
+      }
+      break;
 
     case VIL_PIXEL_FORMAT_FLOAT:
       if (image->nplanes() ==N)
