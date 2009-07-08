@@ -30,6 +30,8 @@ template<class T, unsigned int n=0>
 class vpdl_distribution 
 {
  public:
+  virtual ~vpdl_distribution() {}
+
   //: the data type used for vectors
   typedef typename vpdt_field_default<T,n>::type field_type;
 
@@ -144,8 +146,6 @@ inline T vpdt_log_prob_density(const vpdl_distribution<T,n>& d,
 {
   return d.log_prob_density(pt);
 }
-
-
 
 
 #endif // vpdl_distribution_h_
