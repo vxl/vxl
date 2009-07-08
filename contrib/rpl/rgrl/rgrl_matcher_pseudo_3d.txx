@@ -292,8 +292,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   // check # of pixels
   if ( pixel_locations.empty() )  return;
 
-  unsigned dim = feature_sptr -> location() . size();
-  assert ( dim == 3 ); // so far vil3d force it to be 3D
+  assert (feature_sptr->location().size() == 3); // so far vil3d force it to be 3D
   vnl_double_3 physical_loc;
   vnl_int_3    current_pixel_loc;
   rgrl_mapped_pixel_type  mapped_pixel;
@@ -310,6 +309,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
       continue;
 
 //  //  Copy the int pixel locations to doubles.  Yuck.
+//  unsigned dim = feature_sptr -> location() . size();
 //  for ( unsigned j=0; j<dim; ++j )  physical_loc_dbl[j] = pixel_locations[i][j];
     pixel_to_physical( current_pixel_loc, physical_loc, from_spacing_ratio_ );
 
@@ -379,10 +379,10 @@ template <class PixelType>
 void
 rgrl_matcher_pseudo_3d<PixelType> ::
 match_mapped_region( rgrl_feature_sptr         mapped_feature,
-         rgrl_mapped_pixel_vector_type const & mapped_pixels,
-         rgrl_scale                    const & current_scale,
-         vcl_vector< rgrl_feature_sptr >     & matched_to_features,
-         vcl_vector< double >                & match_weights ) const
+                     rgrl_mapped_pixel_vector_type const & mapped_pixels,
+                     rgrl_scale                    const & current_scale,
+                     vcl_vector< rgrl_feature_sptr >     & matched_to_features,
+                     vcl_vector< double >                & match_weights ) const
 {
   //  At this point, find the most similar feature within the given
   //  scale.
@@ -443,7 +443,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
         responses[i] = this -> compute_response( mapped_location, mapped_pixels, basis * offset );
         DBG( vcl_cout << " response at offset " << offset
                       << " ( i = " << i << " ) : " << responses[ i ] << vcl_endl
-        );
+           );
 
         // We don't want to use the responses of the offsets that shift
         // the box across the boundary.
@@ -478,7 +478,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
     // calculate the sub_offset.
     double sub_offset = 0;
     if ( best_offset != max_offset &&
-        best_offset != -max_offset )
+         best_offset != -max_offset )
       {
         // If one neighbor's response is not valid, calculate the second
         // derivative value of the other neighbor
@@ -548,7 +548,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
       for ( int off2 = -max_offset, j=0; off2 <= max_offset; ++off2, ++j )
       {
         responses[i][j] = this -> compute_response( mapped_location, mapped_pixels,
-          basis1 * off1 + basis2 * off2 );
+                                                    basis1 * off1 + basis2 * off2 );
 
         if ( ( !is_best_initialized || responses[i][j] < min_response )
              && responses[i][j] != max_response_value )
@@ -583,7 +583,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
     if ( best_off1 == max_offset || best_off1 == -max_offset )
   sub_offset1 = best_off1;
     else if ( responses[ idx1 - 1 ][ idx2 ] == max_response_value ||
-        responses[ idx1 + 1 ][ idx2 ] == max_response_value )
+              responses[ idx1 + 1 ][ idx2 ] == max_response_value )
     {
       sub_offset1 = idx1 - max_offset;
     }
@@ -614,7 +614,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
     if ( best_off2 == max_offset || best_off2 == -max_offset )
   sub_offset2 = best_off2;
     else if ( responses[ idx1 ][ idx2 - 1 ] == max_response_value ||
-        responses[ idx1 ][ idx2 + 1 ] == max_response_value )
+              responses[ idx1 ][ idx2 + 1 ] == max_response_value )
     {
       sub_offset2 = idx2 - max_offset;
     }
