@@ -106,6 +106,11 @@ bool bvxm_load_grid_process(bprb_func_process& pro)
     bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<vnl_vector_fixed<float, 3> >(input_path);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
+  }
+  else if (datatype == "vnl_vector_fixed_float_4"){
+    bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<vnl_vector_fixed<float,4> >(input_path);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
+    return true;
   }else{
     vcl_cerr << "datatype not supported\n";
   }
