@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bxml/bsvg/pro/processes/bsvg_plot_roc_process.cxx
+// This is brl/bbas/bxml/bsvg/pro/processes/bsvg_plot_roc_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -26,9 +26,9 @@
 //  #line 1: threshold values
 //  #line 2: FPR values for thresholds
 //  #line 3: TPR values (The number of values in all the lines have to be equal)
-//  0	0.0001	0.0002	0.0003	0.0004	. . .
-//  0	0.00728813	0.0078134	0.0078134	0.0078134	. . .
-//  0	0.416157	0.519584	0.519584	0.519584	. . . 
+//  0  0.0001      0.0002     0.0003     0.0004     . . .
+//  0  0.00728813  0.0078134  0.0078134  0.0078134  . . .
+//  0  0.416157    0.519584   0.519584   0.519584   . . .
 //    input 1: the path to the output SVG plot ( x.svg )
 //
 
@@ -72,7 +72,7 @@ bool bsvg_plot_roc_process(bprb_func_process& pro)
   p.add_y_increments(0.1f);
 
   vcl_vector<float> xs, ys;
-  
+
   vcl_ifstream ifs(roc_path.c_str());
   int line_cnt = 0;
   for (vul_awk awk(ifs); awk; ++awk) {
