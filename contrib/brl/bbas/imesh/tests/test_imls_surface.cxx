@@ -10,6 +10,8 @@
 #include <vnl/vnl_matlab_filewrite.h>
 #include <vnl/vnl_matrix.h>
 
+IMESH_IMLS_SURFACE_INSTANTATE(vgl_vector_2d<double>,vgl_point_3d<double>);
+IMESH_IMLS_SURFACE_INSTANTATE(imesh_imls_surface::integral_data,vgl_point_3d<double>);
 
 double approx_deriv(const imesh_imls_surface& f,
                     const vgl_point_3d<double>& p,
