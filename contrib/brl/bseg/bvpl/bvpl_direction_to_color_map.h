@@ -205,7 +205,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
       vgl_point_3d<double> v((*slab1_it)[0],(*slab1_it)[1],(*slab1_it)[2]);
       col=colors[v]*360;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      vnl_vector_fixed<float,4> this_feature(r,g,b,1-(*slab1_it)[3]);
+      vnl_vector_fixed<float,4> this_feature(r,g,b,(*slab1_it)[3]*255.0);
       (*slab2_it)=this_feature;
     }
   }
