@@ -15,6 +15,11 @@
 # include <GL/gl.h>
 # undef min
 # undef max
+// Fix wxWidgets incompatibility with windows.h. Some macros defined by
+// windows.h have the same name as wxWidgets classes.
+# ifdef __WXMSW__
+#  include <wx/msw/winundef.h>
+# endif
 #elif defined(__APPLE__)
 #include <OpenGL/gl.h>
 #else
