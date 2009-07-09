@@ -1,4 +1,4 @@
-// This is bsvg/tests/test_svg.cxx
+// This is brl/bbas/bxml/bsvg/tests/test_svg.cxx
 //:
 // \file
 // \brief Various tests for SVG library
@@ -16,7 +16,7 @@ bsvg_document make_simple_doc()
 {
   bsvg_document doc(200, 200);
   doc.add_description("test SVG");
-    
+
   bsvg_text* t = new bsvg_text("some message");
   t->set_font_size(15);
   t->set_location(10, 10);
@@ -58,7 +58,6 @@ bsvg_document make_simple_doc()
 
   doc.add_element(r);
 
-  
   return doc;
 }
 
@@ -116,12 +115,12 @@ static void test_svg()
   bsvg_plot p = make_simple_plot();
   out_file = "./test_plot.svg";
   bxml_write(out_file, p);
- 
+
   bsvg_plot h = make_simple_histogram();
   out_file = "./test_histogram.svg";
   bxml_write(out_file, h);
- 
-  //TEST("testing test", true, true);
+
+  TEST("testing bsvg", true, true);
 }
 
 TESTMAIN( test_svg );
