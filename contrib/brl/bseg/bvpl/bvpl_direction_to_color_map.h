@@ -124,7 +124,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
       float length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
       indices_of_cube_projs[samples[i]]=(float)indexj+t1/length;
     }
-    else if (indexj==proj_on_cube.size()-1)
+    else if (indexj+1==proj_on_cube.size())
     {
       vgl_line_3d_2_points<double> l2(peano_curve[indexj-1],peano_curve[indexj]);
       float t2=vgl_closest_point_t(l2,proj_on_cube[i]);
