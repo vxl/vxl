@@ -1,4 +1,6 @@
 // This is brl/bbas/imesh/algo/imesh_imls_surface.txx
+#ifndef imesh_imls_surface_txx_
+#define imesh_imls_surface_txx_
 #include "imesh_imls_surface.h"
 //:
 // \file
@@ -78,10 +80,12 @@ imesh_imls_surface::triangle_quadrature(F quad_func,
 
 #define IMESH_IMLS_SURFACE_INSTANTATE(T1,T2) \
 template T1 imesh_imls_surface::triangle_quadrature(T1(*)(T2 const&, T2 const&, T2 const&, T2 const&, double, double, double, double), \
-                                                          const vgl_point_3d<double>& x, \
-                                                          const vgl_point_3d<double>& p0, \
-                                                          const vgl_point_3d<double>& p1, \
-                                                          const vgl_point_3d<double>& p2, \
-                                                          const vgl_vector_3d<double>& n, \
-                                                          double v0, double v1, double v2, \
-                                                          double eps)
+                                                    const vgl_point_3d<double>& x, \
+                                                    const vgl_point_3d<double>& p0, \
+                                                    const vgl_point_3d<double>& p1, \
+                                                    const vgl_point_3d<double>& p2, \
+                                                    const vgl_vector_3d<double>& n, \
+                                                    double v0, double v1, double v2, \
+                                                    double eps)
+
+#endif // imesh_imls_surface_txx_
