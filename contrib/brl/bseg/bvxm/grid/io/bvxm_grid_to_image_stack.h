@@ -19,7 +19,7 @@
 #include <vul/vul_file.h>
 #include <vcl_iostream.h>
 #include <vil/vil_save.h>
-#include<vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iomanip.h>
 #include <vcl_sstream.h>
 
@@ -34,6 +34,14 @@ vcl_string bvxm_extension<unsigned char>() { return ".tiff"; }
 
 template<class T>
 class bvxm_image_traits;
+
+template<>
+class bvxm_image_traits<vnl_vector_fixed<float,3> >
+{
+ public:
+  typedef vil_rgb<unsigned char> pixel_type;
+  static vcl_string extension() { return ".tiff"; }
+};
 
 template<>
 class bvxm_image_traits<vnl_vector_fixed<float,4> >
