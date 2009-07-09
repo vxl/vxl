@@ -1,22 +1,20 @@
-USES += contrib/brl contrib/gel contrib/brl/bbas core
+USES += contrib/brl contrib/brl/bbas core
 
-LIBRARY := bxml
+LIBRARY := bsvg
 VERSION := 1.0
-DEFINES += -DBUILDING_BXML_DLL
 
-SOURCES += bxml_document.cxx
-SOURCES += bxml_find.cxx
-SOURCES += bxml_read.cxx
-SOURCES += bxml_write.cxx
+SOURCES += bsvg_element.cxx
+SOURCES += bsvg_document.cxx
+SOURCES += bsvg_plot.cxx
 
-SUBDIRS += bsvg
+SUBDIRS += pro
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
- SUBDIRS += tests
+SUBDIRS += tests
 endif
 
 ######################################
