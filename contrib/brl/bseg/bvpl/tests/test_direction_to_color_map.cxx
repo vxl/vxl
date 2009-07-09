@@ -8,25 +8,20 @@
 //: Test changes
 static void test_direction_to_color_map()
 {
-  float theta_res = float(vnl_math::pi_over_4);
-  float phi_res = float(vnl_math::pi_over_4);
+  double theta_res = vnl_math::pi_over_4;
+  double phi_res = vnl_math::pi_over_4;
 
   vcl_vector<vgl_point_3d<double> >  samples;
-  float theta = 0.0f, phi = 0.0f;
-
   samples.push_back(vgl_point_3d<double>(0.0,0.0,1.0));
   samples.push_back(vgl_point_3d<double>(0.0,0.0,-1.0));
 
   // theta=pi/4,pi/2,3pi/4
-  for (phi=vnl_math::pi_over_4;phi <= 3*float(vnl_math::pi_over_4);)
+  for (double phi=vnl_math::pi_over_4;phi <= 3*vnl_math::pi_over_4;phi+=phi_res)
   {
-    for (theta=0.0f;theta<float(2.0*vnl_math::pi-theta_res/2.0); )
+    for (double theta=0.0;theta<2.0*vnl_math::pi-theta_res*0.5;theta+=theta_res)
     {
       samples.push_back(vgl_point_3d<double>(vcl_cos(theta) * vcl_sin(phi),vcl_sin(theta) * vcl_sin(phi),vcl_cos(phi)));
-      theta +=theta_res;
     }
-
-    phi+=phi_res;
   }
   vcl_vector<vgl_point_3d<double> >  proj_on_cube;
   project_sphereical_samples_to_cubes(samples,proj_on_cube);
