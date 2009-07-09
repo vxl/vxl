@@ -34,7 +34,7 @@ bool bvpl_convert_direction_to_hue_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the inpud grid
-  input_types_[i++]="bvpl_kernel_vector_sptr"; //the datatype e.g. "float","double", "vnl_vector_fixed_float_3"...
+  input_types_[i++]="bvpl_kernel_vector_sptr"; // a vector of kernels
   input_types_[i++]="vcl_string"; //output directory
 
   if (!pro.set_input_types(input_types_))
