@@ -50,14 +50,14 @@ void project_sphereical_samples_to_cubes(vcl_vector<vgl_point_3d<double> > sampl
   //: iterate over all the spherical samples
   for (unsigned i=0;i<samples.size();++i)
   {
-    float tmax=-10.0f;
+    double tmax=-10.0;
     int jmax=-1;
     for (unsigned j=0;j<normals.size();++j)
     {
-      float t=samples[i].x()*normals[j].x()+
-              samples[i].y()*normals[j].y()+
-              samples[i].z()*normals[j].z();
-      if (t>tmax)
+      double t=samples[i].x()*normals[j].x()+
+               samples[i].y()*normals[j].y()+
+               samples[i].z()*normals[j].z();
+      if (t>tmax || j==0)
       {
         tmax=t;
         jmax=j;
@@ -67,27 +67,27 @@ void project_sphereical_samples_to_cubes(vcl_vector<vgl_point_3d<double> > sampl
     switch (jmax) {
       case 0:
         proj_on_cube.push_back(vgl_point_3d<double>
-                               (1,samples[i].y()/samples[i].x(),samples[i].z()/samples[i].x()));
+                               (1.0,samples[i].y()/samples[i].x(),samples[i].z()/samples[i].x()));
         break;
       case 1:
         proj_on_cube.push_back(vgl_point_3d<double>
-                               (samples[i].x()/samples[i].y(),1,samples[i].z()/samples[i].y()));
+                               (samples[i].x()/samples[i].y(),1.0,samples[i].z()/samples[i].y()));
         break;
       case 2:
         proj_on_cube.push_back(vgl_point_3d<double>
-                               (samples[i].x()/samples[i].z(),samples[i].y()/samples[i].z(),1));
+                               (samples[i].x()/samples[i].z(),samples[i].y()/samples[i].z(),1.0));
         break;
       case 3:
         proj_on_cube.push_back(vgl_point_3d<double>
-                               (-1,-samples[i].y()/samples[i].x(),-samples[i].z()/samples[i].x()));
+                               (-1.0,-samples[i].y()/samples[i].x(),-samples[i].z()/samples[i].x()));
         break;
       case 4:
         proj_on_cube.push_back(vgl_point_3d<double>
-                               (-samples[i].x()/samples[i].y(),-1,-samples[i].z()/samples[i].y()));
+                               (-samples[i].x()/samples[i].y(),-1.0,-samples[i].z()/samples[i].y()));
         break;
       case 5:
         proj_on_cube.push_back(vgl_point_3d<double>
-                               (-samples[i].x()/samples[i].z(),-samples[i].y()/samples[i].z(),-1));
+                               (-samples[i].x()/samples[i].z(),-samples[i].y()/samples[i].z(),-1.0));
         break;
     }
   }
@@ -101,13 +101,13 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
   vcl_map<vgl_point_3d<double>, float,point_3d_cmp> indices_of_cube_projs;
   for (unsigned i=0;i<proj_on_cube.size();++i)
   {
-    float dmin=1e5f;
+    double dmin=1e5;
     int indexj=-1;
     //: find the closest index point
     for (unsigned j=0;j<peano_curve.size();++j)
     {
       double d=vgl_distance<double>(proj_on_cube[i],peano_curve[j]);
-      if (d<dmin)
+      if (d<dmin || j==0)
       {
         dmin=d;
         indexj=j;
@@ -117,44 +117,44 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
     if (indexj==0)
     {
       vgl_line_3d_2_points<double> l1(peano_curve[indexj],peano_curve[indexj+1]);
-      float t1=vgl_closest_point_t(l1,proj_on_cube[i]);
+      double t1=vgl_closest_point_t(l1,proj_on_cube[i]);
       if (t1<0)
         t1=0;
 
-      float length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
-      indices_of_cube_projs[samples[i]]=(float)indexj+t1/length;
+      double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
+      indices_of_cube_projs[samples[i]]=float(indexj+t1/length);
     }
     else if (indexj+1==proj_on_cube.size())
     {
       vgl_line_3d_2_points<double> l2(peano_curve[indexj-1],peano_curve[indexj]);
-      float t2=vgl_closest_point_t(l2,proj_on_cube[i]);
+      double t2=vgl_closest_point_t(l2,proj_on_cube[i]);
       if (t2<0)
         t2=0;
-      float length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
-      indices_of_cube_projs[samples[i]]=((float)indexj-1+t2/length);
+      double length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
+      indices_of_cube_projs[samples[i]]=float(indexj-1+t2/length);
     }
     else
     {
       vgl_line_3d_2_points<double> l1(peano_curve[indexj],peano_curve[indexj+1]);
       vgl_line_3d_2_points<double> l2(peano_curve[indexj-1],peano_curve[indexj]);
 
-      float t1=vgl_closest_point_t(l1,proj_on_cube[i]);
-      float t2=vgl_closest_point_t(l2,proj_on_cube[i]);
+      double t1=vgl_closest_point_t(l1,proj_on_cube[i]);
+      double t2=vgl_closest_point_t(l2,proj_on_cube[i]);
 
       if (vcl_fabs(t1)<vcl_fabs(t2))
       {
         if (t1<0)
           t1=0;
-        float length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
-        indices_of_cube_projs[samples[i]]=((float)indexj+t1/length);
+        double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
+        indices_of_cube_projs[samples[i]]=float(indexj+t1/length);
       }
       else
       {
         if (t2<0)
           t2=0;
 
-        float length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
-        indices_of_cube_projs[samples[i]]=(float)indexj-1+t2/length;
+        double length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
+        indices_of_cube_projs[samples[i]]=float(indexj-1+t2/length);
       }
     }
     //indices_of_cube_projs.push_back(indexj);
@@ -205,9 +205,10 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
       vgl_point_3d<double> v((*slab1_it)[0],(*slab1_it)[1],(*slab1_it)[2]);
       col=colors[v]*360;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      vnl_vector_fixed<float,4> this_feature(r,g,b,(*slab1_it)[3]*255.0);
+      vnl_vector_fixed<float,4> this_feature(r,g,b,(*slab1_it)[3]*255.0f);
       (*slab2_it)=this_feature;
     }
   }
 }
-#endif
+
+#endif // bvpl_direction_to_color_map_h_
