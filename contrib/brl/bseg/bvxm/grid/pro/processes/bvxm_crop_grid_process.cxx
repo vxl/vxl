@@ -14,7 +14,9 @@
 #include <vcl_string.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
+#include <bvxm/grid/bvxm_opinion.h>
 #include <vul/vul_file.h>
+
 namespace bvpl_neighborhood_operator_process_globals
 {
   const unsigned n_inputs_ = 1;
@@ -99,6 +101,24 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     unsigned slab_idx = corner_z;
     bvxm_voxel_grid<float>::iterator grid_in_it = float_input_grid->slab_iterator(slab_idx);
     bvxm_voxel_grid<float>::iterator grid_out_it = grid_out->slab_iterator(slab_idx - corner_z);
+
+    for (; slab_idx < (corner_z + dimz); ++grid_in_it, ++grid_out_it, ++slab_idx)
+    {
+      for (unsigned x = corner_x; x < corner_x + dimx; x++)
+        for (unsigned y = corner_y; y < corner_y + dimy; y++)
+          (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
+    }
+
+    vcl_cout<<"Cropping done."<<vcl_endl;
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+  }
+  else if(bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
+  {
+    bvxm_voxel_grid<bvxm_opinion> * grid_out=new bvxm_voxel_grid<bvxm_opinion>(output_path, out_grid_dim);
+
+    unsigned slab_idx = corner_z;
+    bvxm_voxel_grid<bvxm_opinion>::iterator grid_in_it = opinion_input_grid->slab_iterator(slab_idx);
+    bvxm_voxel_grid<bvxm_opinion>::iterator grid_out_it = grid_out->slab_iterator(slab_idx - corner_z);
 
     for (; slab_idx < (corner_z + dimz); ++grid_in_it, ++grid_out_it, ++slab_idx)
     {
