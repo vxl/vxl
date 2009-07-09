@@ -1,7 +1,9 @@
+#ifndef bsvg_plot_h_
+#define bsvg_plot_h_
 //:
 // \file
 // \brief Various plots - as SVG documents
-//           
+//
 // \author Ozge C. Ozcanli (Brown)
 // \date   April 21, 2009
 //
@@ -9,9 +11,6 @@
 //  Modifications
 //   Ozge C. Ozcanli - July 08, 09 - ported to vxl from local repository - minor fixes
 // \endverbatim
-
-#if !defined(_bsvg_plot_h)
-#define _bsvg_plot_h
 
 #include "bsvg_document.h"
 #include "bsvg_element.h"
@@ -27,11 +26,11 @@ const float default_margin = 20.0f;
 
 class bsvg_plot : public bsvg_document
 {
-public:
+ public:
 
     bsvg_plot(float w, float h) : bsvg_document(w, h), margin_(default_margin), font_size_(default_font_size) {}
     bsvg_plot(float w, float h, float viewBox_x, float viewBox_y, float viewBox_w, float viewBox_h) : bsvg_document(w,h,viewBox_x, viewBox_y, viewBox_w, viewBox_h), margin_(default_margin), font_size_(default_font_size) {}
-    
+
     void add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width = default_stroke_width);
     //: assumes add_axes have been called
     void add_x_increments(float x_inc, float stroke_width = default_stroke_width);
@@ -42,8 +41,8 @@ public:
     void add_title(const vcl_string& t);
 
     void add_line(const vcl_vector<float>& xs, const vcl_vector<float>& ys, const vcl_string& color, float stroke_width = default_stroke_width);
-    
-    //: add equally spaced and equal width bars with the given heights 
+
+    //: add equally spaced and equal width bars with the given heights
     void add_bars(const vcl_vector<float>& heights, const vcl_string& color);
     void add_bars(const vcl_vector<float>& heights, const vcl_vector<float>& x_labels, bool vertical_labels, const vcl_string& color);
     void add_bars(const vcl_vector<float>& heights, const vcl_vector<vcl_string>& x_labels, bool vertical_labels, const vcl_string& color);
@@ -51,7 +50,7 @@ public:
     bsvg_group* add_bars_helper(const vcl_vector<float>& heights, const vcl_string& color);
     bsvg_group* add_x_labels_helper(const vcl_vector<vcl_string>& x_labels, const vcl_string& color, bool vertical_labels);
 
-protected:
+ protected:
 
     float margin_;
     int font_size_;
@@ -62,4 +61,4 @@ protected:
     float h2_x, h2_y;
 };
 
-#endif  //_bsvg_plot_h
+#endif // bsvg_plot_h_
