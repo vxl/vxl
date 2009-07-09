@@ -15,7 +15,6 @@
 # include <GL/gl.h>
 # undef min
 # undef max
-// #define glDrawBuffer mb_glDrawBufferWrapper
 #elif defined(__APPLE__)
 #include <OpenGL/gl.h>
 #else
