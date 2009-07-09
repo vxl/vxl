@@ -12,6 +12,7 @@
 #include <avm_default.h>
 #include <avm_fourcc.h>
 #include <vcl_cstring.h>
+#include <vcl_cstdlib.h> // malloc()
 
 mvl2_video_from_avi::mvl2_video_from_avi()
 {
