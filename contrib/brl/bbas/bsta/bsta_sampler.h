@@ -13,6 +13,8 @@
 // \endverbatim
 
 #include <vcl_vector.h>
+#include <vcl_utility.h>
+#include <bsta/bsta_joint_histogram.h>
 
 template <class T>
 class bsta_sampler
@@ -22,6 +24,9 @@ class bsta_sampler
   //  The sum of probabilities should sum to 1 otherwise return false
   static bool sample(vcl_vector<T>& samples, vcl_vector<float>& p,
                      unsigned cnt, vcl_vector<T>& out);
+
+  //: sample from a joint histogram treating it as a discrete prob distribution
+  static bool sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out);
 };
 
 #endif // bsta_sampler_h_
