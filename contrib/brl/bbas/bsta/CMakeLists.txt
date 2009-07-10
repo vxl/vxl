@@ -66,3 +66,6 @@ SUBDIRS( algo )
 # Binary I/O clip on library
 SUBDIRS( io )
 
+# Visualization Tools for various bsta constructs
+SUBDIRS( vis )
+
