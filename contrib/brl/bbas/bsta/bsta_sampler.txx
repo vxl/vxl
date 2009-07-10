@@ -11,18 +11,7 @@
 #include <vcl_utility.h>
 
 //: For sorting pairs by their first element
-/*
-class first_less
-{
- public:
-  bool
-  operator()( const vcl_pair<float,unsigned>& left_pair,
-              const vcl_pair<float,unsigned>& right_pair ) const
-  {
-    return left_pair.first < right_pair.first;
-  }
-};
-*/
+
 template<class T>
 class first_less
 {
