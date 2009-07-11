@@ -138,7 +138,7 @@ void test_bsta_histogram()
   vsl_b_read(jis, jh_in);
   double nbinsj_in = jh_in.nbins();
   double rangej_in = jh_in.range();
-  double pj_in = jh_in.p(1,1);
+  double pj_in = jh_in.p(1u,1u);
   double jerror = vcl_fabs(nbinsj_in-nbinsjd)+
     vcl_fabs(rangej-rangej_in)+vcl_fabs(pj-pj_in);
 
