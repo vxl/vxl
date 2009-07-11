@@ -127,7 +127,7 @@ void test_bsta_histogram()
 
   // joint histogram
   double nbinsjd = jh.nbins();
-  double pj = jh.p(1,1);
+  double pj = jh.p(1u,1u);
   double rangej = jh.range();
   vsl_b_ofstream jos("./temp.bin");
   vsl_b_write(jos, jh);
