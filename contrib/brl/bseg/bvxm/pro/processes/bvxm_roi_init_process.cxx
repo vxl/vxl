@@ -1,26 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_roi_init_process.cxx
-#include <bprb/bprb_func_process.h>
+#include "bvxm_roi_init_process.h"
 //:
 // \file
-// \brief A class for clipping and image based on a 3D bounding box.
-//        -  Input:
-//             - Image path (string)
-//             - bvxm_voxel_world_sptr
-//
-//        -  Output:
-//             - modified rational camera "vpgl_camera_double_sptr"
-//             - clipped image area (NITF) "vil_image_view_base_sptr"
-//
-//        -  Params:
-//             -geographic uncertainty (error) in meters
-//
-// \author  Gamze D. Tunali
-// \date    Feb 19, 2008
-// \verbatim
-//  Modifications
-//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
-// \endverbatim
-
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_util.h>
@@ -41,27 +22,6 @@
 #include <vpgl/vpgl_local_rational_camera.h>
 
 #include <bprb/bprb_parameters.h>
-
-//: globals variables and functions
-namespace bvxm_roi_init_process_globals
-{
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 3;
-
-  //functions
-  bool roi_init(vcl_string const& image_path,
-                vpgl_rational_camera<double>* camera,
-                bvxm_world_params_sptr world_params,
-                float uncertainty,
-                vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                vpgl_local_rational_camera<double>& local_camera);
-
-  //: projects the box on the image by taking the union of all the projected corners
-  vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
-                                  bgeo_lvcs_sptr lvcs,
-                                  vgl_box_3d<double> box,
-                                  float r);
-}
 
 //: set input and output types
 bool bvxm_roi_init_process_cons(bprb_func_process& pro)

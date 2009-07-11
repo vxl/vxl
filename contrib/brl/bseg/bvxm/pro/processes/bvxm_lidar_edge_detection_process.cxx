@@ -1,39 +1,12 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_lidar_edge_detection_process.cxx
-
+#include "bvxm_lidar_edge_detection_process.h"
 //:
 // \file
-// \brief A class for generating LiDAR edges given a LiDAR image pair.
-//        -  Input:
-//             - First return path (string)
-//             - Second return path (string)
-//
-//        -  Output:
-//             - clipped image area (first ret) "vil_image_view_base_sptr"
-//             - clipped image area (second ret) "vil_image_view_base_sptr"
-//             - mask "vil_image_view_base_sptr"
-//
-// \author  Ibrahim Eden
-// \date    July 31, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_convert.h>
-
-//: global variables/functions
-namespace bvxm_lidar_edge_detection_process_globals
-{
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ =3;
-
-  //set parameter identifying strings
-  const vcl_string param_thresh_diff_ =  "threshold_edge_difference";
-}
 
 //: set input and output types
 bool bvxm_lidar_edge_detection_process_cons(bprb_func_process& pro)
@@ -55,10 +28,7 @@ bool bvxm_lidar_edge_detection_process_cons(bprb_func_process& pro)
   output_types_[j++]= "vil_image_view_base_sptr";  // lidar height image
   output_types_[j++]= "vil_image_view_base_sptr";  // lidar edge image
   output_types_[j++]= "vil_image_view_base_sptr";  // lidar edge probability image
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)

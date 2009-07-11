@@ -1,18 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_occupancy_vff_process.cxx
-
+#include "bvxm_save_occupancy_vff_process.h"
 //:
 // \file
-// \brief Save the voxel world occupancy grid in binary format
-// A process that saves the voxel world occupancy grid in a binary format
-// readable by GE MicroView and other volume renderers
-//
-// \author Daniel Crispell
-// \date May 01, 2008
-// \verbatim
-//  Modifications
-//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with bvxm_process architecture.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -22,11 +11,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
-namespace bvxm_save_occupancy_vff_process_globals
-{
-  const unsigned n_inputs_ = 3;
-}
 
 bool bvxm_save_occupancy_vff_process_cons(bprb_func_process& pro)
 {
@@ -40,10 +24,7 @@ bool bvxm_save_occupancy_vff_process_cons(bprb_func_process& pro)
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 bool bvxm_save_occupancy_vff_process(bprb_func_process& pro)

@@ -1,31 +1,10 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_heightmap_process.cxx
-
+#include "bvxm_heightmap_process.h"
 //:
 // \file
-// \brief A class for generating a height map from a given camera viewpoint
-//        -  Input:
-//             - bvxm_voxel_world_sptr
-//             - vpgl_camera_double_sptr
-//
-//        -  Output:
-//             - vil_image_view_base_sptr   generated image
-//
-// \author  Gamze D. Tunali
-// \date    Apr 17, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
 #include <bprb/bprb_func_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <vil/vil_image_view.h>
-
-//: gloabal variables
-namespace bvxm_heightmap_process_globals
-{
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
-}
 
 //: set input and output types
 bool bvxm_heightmap_process_cons(bprb_func_process& pro)
@@ -48,10 +27,7 @@ bool bvxm_heightmap_process_cons(bprb_func_process& pro)
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 // generates a height map from a given camera viewpoint

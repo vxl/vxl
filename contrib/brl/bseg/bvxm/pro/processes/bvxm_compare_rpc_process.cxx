@@ -1,27 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_compare_rpc_process.cxx
-#include <bprb/bprb_func_process.h>
+#include "bvxm_compare_rpc_process.h"
 //:
 // \file
-// \brief A process for comparing rational cameras.
-//        -  Input:
-//             * Rational Camera 1
-//             * Rational Camera 2
-//             * Path
-//
-//        -  Output:
-//             * modified rational camera "vpgl_camera_double_sptr"
-//             * clipped image area (NITF) "vil_image_view_base_sptr"
-//
-//        -  Params:
-//             *geographic uncertainty (error) in meters
-//
-// \author  Ibrahim? -Please remove hard coded paths and complete input/output description
-// \date    Feb 19, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_string.h>
@@ -30,14 +10,6 @@
 #include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-
-//: global variables
-namespace bvxm_compare_rpc_process_globals
-{
-  // process takes 3 inputs and 0 outputs:
-  unsigned n_inputs_ = 3;
-  unsigned n_outputs_ = 0;
-}
 
 //:sets input and output types for  bvxm_compare_rpc_process
 bool bvxm_compare_rpc_process_cons(bprb_func_process& pro)

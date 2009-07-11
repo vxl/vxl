@@ -1,22 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_pmap_hist_process.cxx
-
+#include "bvxm_pmap_hist_process.h"
 //:
 // \file
-// \brief A class for generating a histogram out of occupancy probability grid
-//        -  Input:
-//             * bvxm_voxel_world_sptr
-//             * vcl_string             --path for the text file of the histogram
-//        -  Output:
-//             * none
-//
-// \author  Gamze D. Tunali
-// \date    May 22, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
-// \endverbatim
-
-
 #include <bprb/bprb_func_process.h>
 
 #include <bvxm/bvxm_world_params.h>
@@ -25,16 +10,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_view_base.h>
 #include <bsta/bsta_histogram.h>
-
-//: globals
-namespace bvxm_pmap_hist_process_globals
-{
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
-
-  //functions
-  bool compute(vcl_string pmap,  vcl_string path);
-}
 
 //: set input and output types
 bool bvxm_pmap_hist_process_cons(bprb_func_process& pro)
@@ -48,10 +23,7 @@ bool bvxm_pmap_hist_process_cons(bprb_func_process& pro)
   int i=0;
   input_types_[i++] = "vcl_string";    // path to the prob. map image
   input_types_[i++] = "vcl_string";    // output path
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 bool bvxm_pmap_hist_process(bprb_func_process& pro)

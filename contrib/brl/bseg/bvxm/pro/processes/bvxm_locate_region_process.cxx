@@ -1,15 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_locate_region_process.cxx
+#include "bvxm_locate_region_process.h"
 //:
 // \file
-// \brief A class for update process of a voxel world.
-//
-// \author Isabel Restrepo
-// \date 01/30/2008
-// \verbatim
-//  Modifications
-//   Brandon Mayer - 1/28/09 - converted process-class to function to conform with new bvxm_process architecture.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -21,13 +13,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
-namespace bvxm_locate_region_process_globals
-{
-  const unsigned n_inputs_ = 6;
-
-}
-
 
 bool bvxm_locate_region_process_cons(bprb_func_process& pro)
 {
@@ -111,7 +96,7 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
   if (voxel_type == "apm_mog_grey")
     result = world->region_probability_density<APM_MOG_GREY>(observation,mask,grid_out, bin_index,scale);
   else
-    vcl_cerr << "Error in: bvxm_locate_region_processor: Unsuppported appereance model" << vcl_endl;
+    vcl_cerr << "Error in: bvxm_locate_region_processor: Unsuppported appereance model\n";
 
   vcl_cout.flush();
   return true;

@@ -1,25 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_ocp_compare_process.cxx
-
+#include "bvxm_ocp_compare_process.h"
 //:
 // \file
-// \brief A class for comparing to occupancy grid for the probability values.
-//
-// It makes a search in the kxkxk neighborhood and returns the higher value.
-// If the value is higher, the similarity is bigger.
-//   -  Input:
-//      * bvxm_voxel_world_sptr
-//      * bvxm_voxel_world_sptr
-//   -  Output:
-//      * double    the similarity measureboolbool
-//
-// \author  Gamze D. Tunali
-// \date    May 15, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
-// \endverbatim
-
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vgl/vgl_vector_3d.h>
@@ -30,17 +12,6 @@
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
-
-//: globals
-namespace bvxm_ocp_compare_process_gloabals
-{
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
-
-  //functions
-  bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename);
-  double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n, unsigned scale);
-}
 
 //: set input and output types
 bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
@@ -60,10 +31,7 @@ bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
   // This process has 1 output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "double";  // the sum of ocp prob product
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 

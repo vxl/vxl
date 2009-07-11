@@ -1,18 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_mog_image_process.cxx
-#include <bprb/bprb_func_process.h>
+#include "bvxm_create_mog_image_process.h"
 //:
 // \file
-// \brief A process to create a Mixture of Gaussian (MOG) image of a voxel world from a given view point
-//        MOG is the 2D appearance model (background model) of the 3D scene
-//        the view point is given by the input camera
-//        the size of the output MOG is given by the input ni and nj
-//
-// \author Gamze Tunali
-// \date Feb. 10, 2009
-// \verbatim
-//  Modifications
-//   Ozge C Ozcanli - Feb 10, 2009 - change input/output signature
-// \endverbatim
 
 #include <bprb/bprb_parameters.h>
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
@@ -56,41 +45,7 @@ bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
   //output
   vcl_vector<vcl_string> output_types_;
   output_types_.push_back("bvxm_voxel_slab_base_sptr");
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
-}
-
-template <bvxm_voxel_type APM_T>
-bool mix_gaussian(bvxm_voxel_world_sptr world,
-                  unsigned mog_creation_method_,
-                  unsigned bin_index, unsigned scale_index,unsigned n_samples,
-                  bvxm_image_metadata observation,
-                  bvxm_voxel_slab_base_sptr& mog_image)
-{
-  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
-  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
-
-  bool done = false;
-  switch (mog_creation_method_) {
-    case bvxm_mog_image_creation_methods::MOST_PROBABLE_MODE:
-    { done = world->mog_most_probable_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
-    case bvxm_mog_image_creation_methods::EXPECTED_VALUE:
-    { done = world->mixture_of_gaussians_image<APM_T>(observation, mog_image, bin_index,scale_index); } break;
-    case bvxm_mog_image_creation_methods::SAMPLING:
-    {
-      done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples, mog_image, bin_index, scale_index);
-    } break;
-    default:
-    { vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - unrecognized option: " << mog_creation_method_ << " to create mog image\n"; return false; }
-  }
-
-  if (!done) {
-    vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - problems in creating mixture of gaussian image!\n";
-    return false;
-  }
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 bool bvxm_create_mog_image_process(bprb_func_process& pro)

@@ -1,38 +1,10 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.cxx
-
+// This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.cxx
+#include "bvxm_create_local_rpc_process.h"
 //:
 // \file
-// \brief // A process that takes a world model and rational camera and returns a local rational camera
-//           Inputs:
-//              0: The voxel world
-//              1: The current camera
-//           Outputs:
-//              0: The local camera
-//
-// \author Ibrahim Eden
-// \date March 14, 2008
-// \verbatim
-//
-// \Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-
-#include <bprb/bprb_func_process.h>
-#include <bprb/bprb_parameters.h>
-
-#include <brdb/brdb_value.h>
 
 #include <bvxm/bvxm_voxel_world.h>
-#include <bvxm/bvxm_image_metadata.h>
-
 #include <vpgl/vpgl_local_rational_camera.h>
-
-//: global variables
-namespace bvxm_create_local_rpc_process_globals
-{
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
-}
 
 //: initialize input and output types
 bool bvxm_create_local_rpc_process_cons(bprb_func_process& pro)
@@ -46,17 +18,13 @@ bool bvxm_create_local_rpc_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";
   if (!pro.set_input_types(input_types_))
     return false;
-      
 
   // process has 1 output:
   // output[0]: The local camera
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
-  
-  if (!pro.set_output_types(output_types_))
-    return false;
-  
-  return true;
+
+  return pro.set_output_types(output_types_);
 }
 
 //: process that takes a world model and rational camera and returns a local rational camera

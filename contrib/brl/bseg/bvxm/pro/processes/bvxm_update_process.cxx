@@ -1,16 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_process.cxx
-
+#include "bvxm_update_process.h"
 //:
 // \file
-// \brief A class for update process of a voxel world.
-//
-// \author Isabel Restrepo
-// \date January 30, 2008
-// \verbatim
-//  Modifications
-//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -22,13 +13,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
-namespace bvxm_update_process_globals
-{
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 2;
-}
-
 
 bool bvxm_update_process_cons(bprb_func_process& pro)
 {
@@ -62,10 +46,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[j++] = "vil_image_view_base_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 bool bvxm_update_process(bprb_func_process& pro)

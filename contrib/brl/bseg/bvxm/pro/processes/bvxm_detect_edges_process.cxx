@@ -1,16 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_detect_edges_process.cxx
-
+#include "bvxm_detect_edges_process.h"
 //:
 // \file
-// \brief A process that takes a grayscale image and returns the corresponding edge map
-//
-// \author Ibrahim Eden
-// \date March 05, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
@@ -29,20 +20,6 @@
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 
-//: global variables
-namespace bvxm_detect_edges_process_globals
-{
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_=1;
-
-  //parameter strings
-  const vcl_string param_noise_multiplier_ =  "noise_multiplier";
-  const vcl_string param_smooth_ =  "smooth";
-  const vcl_string param_automatic_threshold_ =  "automatic_threshold";
-  const vcl_string param_junctionp_ =  "junctionp";
-  const vcl_string param_aggressive_junction_closure_ =  "aggressive_junction_closure";
-}
-
 //: initialize input and output types
 bool bvxm_detect_edges_process_cons(bprb_func_process& pro)
 {
@@ -58,10 +35,7 @@ bool bvxm_detect_edges_process_cons(bprb_func_process& pro)
   // output[0]: output edge image
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 //: generates the edge map

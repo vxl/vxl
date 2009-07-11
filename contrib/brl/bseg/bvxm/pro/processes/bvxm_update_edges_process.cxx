@@ -1,12 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_process.cxx
-
+#include "bvxm_update_edges_process.h"
 //:
 // \file
-// \brief A process that updates voxel world edge probabilities
-//
-// \author Ibrahim Eden
-// \date February 11, 2009
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -21,17 +16,6 @@
 #include <brip/brip_vil_float_ops.h>
 
 #include <vcl_cstdio.h>
-
-//: globals
-namespace bvxm_update_edges_process_globals
-{
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
-
-  //parameter strings
-  const vcl_string param_edt_gaussian_sigma_ =  "edt_gaussian_sigma";
-  const vcl_string param_edt_image_mean_scale_ =  "edt_image_mean_scale";
-}
 
 //: set input and output types
 bool bvxm_update_edges_process_cons(bprb_func_process& pro)
@@ -61,10 +45,7 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "float";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 //:  optimizes rpc camera parameters based on edges

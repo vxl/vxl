@@ -1,26 +1,15 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_mog_l2_process.cxx
-
+#include "bvxm_mog_l2_process.h"
 //:
 // \file
-// \brief A process for computing the l2 distance between mixtures of gaussians in a grid.
-//        At creation time the reference mixture is the first mixture encountered in the grid.
-// \author Isabel Restrepo
-// \date March 11, 2009
-//
-// \verbatim
-//  Modifications
-//   <none yet>
-// \endverbatim
 
 #include <vcl_string.h>
 #include <vul/vul_file.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
-#include <bprb/bprb_func_process.h>
 #include <bvxm/algo/bvxm_mog_norm.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
-
 
 //: set input and output types
 bool bvxm_mog_l2_process_cons(bprb_func_process& pro)
@@ -41,10 +30,7 @@ bool bvxm_mog_l2_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types_))
     return false;
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 

@@ -1,31 +1,11 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_get_grid_process.cxx
-#include <bprb/bprb_func_process.h>
+#include "bvxm_get_grid_process.h"
 //:
 // \file
-// \brief A process that deletes all voxel storage files in the world directory.
-//        use with caution!
-//        Inputs:
-//             0: The voxel world
-//        No outputs
-//
-// \author Daniel Crispell
-// \date March 9, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
-
-//:global variables for bvxm_clean_world_process
-namespace bvxm_get_grid_process_globals
-{
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
-}
 
 //:sets input and output types for bvxm_clean_world_process
 
@@ -48,10 +28,7 @@ bool bvxm_get_grid_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types_))
     return false;
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 };
 
 //:cleans the voxel world

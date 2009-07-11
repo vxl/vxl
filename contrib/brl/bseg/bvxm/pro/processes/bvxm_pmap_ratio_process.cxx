@@ -1,22 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_pmap_ratio_process.cxx
-
+#include "bvxm_pmap_ratio_process.h"
 //:
 // \file
-// \brief A class for generating a ratio histogram out of occupancy probability grid
-//        -  Input:
-//             * 0 path to the prob. map image of LIDAR
-//             * 1 path to the prob. map image of NON_LIDAR
-//             * 2 output path
-//        -  Output:
-//             * none
-//
-// \author  Gamze D. Tunali
-// \date    May 22, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -24,17 +9,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
-
-
-//: globals variables/functions
-namespace bvxm_pmap_ratio_process_globals
-{
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
-
-  //functions
-  bool compute(vcl_string pmap1,vcl_string pmap2, vcl_string path);
-}
 
 //: set input and output types
 bool bvxm_pmap_ratio_process_cons(bprb_func_process& pro)

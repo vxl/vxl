@@ -1,16 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_process.cxx
-
+#include "bvxm_illum_index_process.h"
 //:
 // \file
-// \brief A class for illum_index process of a voxel world .
-//
-// \author Isabel Restrepo
-// \date Feb 20, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-#include <bprb/bprb_func_process.h>
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
@@ -18,16 +9,8 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <vcl_cmath.h>
-
-//: global variables
-namespace bvxm_illum_index_process_globals
-{
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
-
-  unsigned bin_index(vcl_string map_type, double sun_el, double sun_az,
-                     unsigned num_lat, unsigned num_long);
-}
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
 
 //: set input and output types
 bool bvxm_illum_index_process_cons(bprb_func_process& pro)
@@ -53,10 +36,7 @@ bool bvxm_illum_index_process_cons(bprb_func_process& pro)
    //0: bin index
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "unsigned";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 bool bvxm_illum_index_process(bprb_func_process& pro)

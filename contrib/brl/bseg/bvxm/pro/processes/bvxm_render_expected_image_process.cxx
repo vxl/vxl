@@ -1,16 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_render_expected_image_process.cxx
-
+#include "bvxm_render_expected_image_process.h"
 //:
 // \file
-// \brief A process that renders a video frame from a new viewpoint (used for 3-D registration)
-//
-// \author Daniel Crispell
-// \date Feb 10, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -19,13 +10,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
-//: globals
-namespace bvxm_render_expected_image_process_globals
-{
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
-}
 
 //: set input and output types
 bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
@@ -61,10 +45,7 @@ bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
   unsigned j = 0;
   output_types_[j++]= "vil_image_view_base_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 //: renders the expected image
@@ -127,7 +108,7 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,4);
     result = world->expected_image<APM_MOG_MC_4_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
-  else if (voxel_type == "edges"){  
+  else if (voxel_type == "edges") {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
     result = world->expected_edge_image(camera_metadata,expected_img,1.0f,scale_index);
   }

@@ -1,16 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_roc_process.cxx
-
+#include "bvxm_roc_process.h"
 //:
 // \file
-// \brief A class for obtaining roc curve from change detection results.
-//
-// \author Isabel Restrepo
-// \date April 19, 2008
-// \verbatim
-//  Modifications
-//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
@@ -26,11 +17,6 @@
 #include <vcl_vector.h>
 #include <vcl_sstream.h>
 
-namespace bvxm_roc_process_globals
-{
-  const unsigned n_inputs_ = 3;
-}
-
 bool bvxm_roc_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_roc_process_globals;
@@ -42,10 +28,7 @@ bool bvxm_roc_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 bool bvxm_roc_process(bprb_func_process& pro)

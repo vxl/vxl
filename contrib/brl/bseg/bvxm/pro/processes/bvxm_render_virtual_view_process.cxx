@@ -1,17 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_render_virtual_view_process.cxx
-
+#include "bvxm_render_virtual_view_process.h"
 //:
 // \file
-// \brief A process that renders a video frame from a new viewpoint (used for 3-D registration)
-//
-// \author Daniel Crispell
-// \date Feb 10, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
-// \endverbatim
-
-
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -24,13 +14,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
-//: global variables
-namespace bvxm_render_virtual_view_process_globals
-{
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
-}
 
 //: set input and output types
 bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro)
@@ -64,10 +47,7 @@ bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 //: renders a video frame from a new viewpoint (used for 3-D registration)

@@ -1,21 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.cxx
-#include <bprb/bprb_func_process.h>
+#include "bvxm_change_detection_display_process.h"
 //:
 // \file
-// \brief process to threshold the changes for foreground detection.
-//     -  Inputs
-//            * original image
-//            * probability image
-//            * mask image
-//     -  Outputs
-//            * red changes image
-//            * probability image in range 0-255
-//
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
@@ -33,16 +19,6 @@
 #endif
 
 #include <vcl_cmath.h>
-
-//:global variables
-namespace bvxm_change_detection_display_process_globals
-{
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 2;
-  //The parameters strings
-  const vcl_string param_prob_thresh_ = "prob_thresh";
-  const vcl_string param_prob_image_scale_ = "prob_image_scale";
-}
 
 //:sets input and output types for  bvxm_change_detection_display_process
 bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
@@ -69,10 +45,7 @@ bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
   // probability image in range 0-255
   output_types_[j++]= "vil_image_view_base_sptr";
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 //: process to threshold the changes for foreground detection.

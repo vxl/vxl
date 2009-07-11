@@ -1,16 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_lidar_process.cxx
-
+#include "bvxm_update_edges_lidar_process.h"
 //:
 // \file
-// \brief A class for update process of edge probabilities in a voxel world using LiDAR data.
-//
-// \author Ibrahim Eden
-// \date July 29, 2008
-// \verbatim
-//  Modifications
-//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with bvxm_process architecture.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -21,11 +12,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
-namespace bvxm_update_edges_lidar_process_globals
-{
-  const unsigned n_inputs_ = 6;
-}
 
 bool bvxm_update_edges_lidar_process_cons(bprb_func_process& pro)
 {
@@ -44,10 +30,7 @@ bool bvxm_update_edges_lidar_process_cons(bprb_func_process& pro)
   input_types_[4] = "bvxm_voxel_world_sptr";
   input_types_[5] = "unsigned";
 
-  if (pro.set_input_types(input_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 bool bvxm_update_edges_lidar_process(bprb_func_process& pro)

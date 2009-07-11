@@ -1,17 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_normalized_image_process.cxx
-
+#include "bvxm_create_normalized_image_process.h"
 //:
 // \file
-// \brief A class to create a contrast normalized image using the input gain and offset values
-//
-// \author Ozge Can Ozcanli
-// \date February 17, 2008
-// \verbatim
-//
-// \Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for bvxm_processes.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
@@ -27,13 +17,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_util.h>
-
-//:global variables
-namespace bvxm_create_normalized_image_process_globals
-{
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
-}
 
 //:sets input and output types for bvxm_create_normalized_image_process
 bool bvxm_create_normalized_image_process_cons(bprb_func_process& pro)
@@ -53,10 +36,7 @@ bool bvxm_create_normalized_image_process_cons(bprb_func_process& pro)
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]= "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 //: create a normalize image

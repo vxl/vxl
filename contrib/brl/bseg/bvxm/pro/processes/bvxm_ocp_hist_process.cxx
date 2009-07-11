@@ -1,37 +1,13 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_ocp_hist_process.cxx
-
+#include "bvxm_ocp_hist_process.h"
 //:
 // \file
-// \brief A class for generating a histogram out of occupancy probability grid
-//        -  Input:
-//             * bvxm_voxel_world_sptr
-//             * vcl_string             --path for the text file of the histogram
-//        -  Output:
-//             * none
-//
-// \author  Gamze D. Tunali
-// \date    May 22, 2008
-// \verbatim
-//  Modifications
-//   Isabel Restrepo - Jan 27, 2009 - converted process-class to functions which is the new design for processes.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
 #include <vgl/vgl_vector_3d.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
-
-//: global variables for this process
-namespace bvxm_ocp_hist_process_globals
-{
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
-
-  //functions
-  bool compute(bvxm_voxel_world_sptr w, unsigned scale, vcl_string path);
-}
 
 //: set input and output types
 bool bvxm_ocp_hist_process_cons(bprb_func_process& pro)
@@ -47,10 +23,7 @@ bool bvxm_ocp_hist_process_cons(bprb_func_process& pro)
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
   input_types_[i++] = "vcl_string";
   input_types_[i++] = "unsigned";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 //: generates a histogram out of occupancy probability grid

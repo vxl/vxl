@@ -1,16 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_rpc_registration_process.cxx
-
+#include "bvxm_rpc_registration_process.h"
 //:
 // \file
-// \brief A process that optimizes rpc camera parameters based on edges in images and the voxel world
-//
-// \author Ibrahim Eden
-// \date March 02, 2008
-// \verbatim
-//  Modifications
-//   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new bvxm_process architecture.
-// \endverbatim
-
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -31,13 +22,6 @@
 #include <vgl/vgl_plane_3d.h>
 
 #include <vcl_cstdio.h>
-
-//: globals
-namespace bvxm_rpc_registration_process_globals
-{
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
-}
 
 //: set input and output types
 bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
@@ -73,10 +57,7 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 //:  optimizes rpc camera parameters based on edges
