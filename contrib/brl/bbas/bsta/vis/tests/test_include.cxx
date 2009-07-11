@@ -1,4 +1,3 @@
-#include <dbsvg/dbsvg_document.h>
-#include <dbsvg/dbsvg_element.h>
+#include <bsta/vis/bsta_svg_tools.h>
 
 int main() { return 0; }
