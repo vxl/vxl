@@ -45,7 +45,7 @@ MANPAGE_SOURCES += bsta_parzen.h
 MANPAGE_SOURCES += bsta_parzen_sf1.h
 MANPAGE_SOURCES += bsta_parzen_sf3.h
 
-SUBDIRS += algo io
+SUBDIRS += algo io vis
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
