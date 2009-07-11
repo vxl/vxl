@@ -5,7 +5,7 @@
 // \date   March 14, 2008
 //
 #include <testlib/testlib_test.h>
-#include <bvxm/pro/processes/bvxm_create_local_rpc_process.cxx>
+#include <bvxm/pro/processes/bvxm_create_local_rpc_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
