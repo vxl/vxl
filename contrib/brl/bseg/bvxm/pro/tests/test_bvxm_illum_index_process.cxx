@@ -5,7 +5,7 @@
 // \date   February 29, 2008
 
 #include <testlib/testlib_test.h>
-#include <bvxm/pro/processes/bvxm_illum_index_process.cxx>
+#include <bvxm/pro/processes/bvxm_illum_index_process.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
