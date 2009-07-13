@@ -16,6 +16,7 @@
 
 #include "bvxm_voxel_grid_base.h"
 #include "bvxm_voxel_grid.h"
+#include <bvxm/grid/bvxm_opinion.h>
 #include <vcl_iostream.h>
 
 //: Multiplies 2 grids. The types of input grids must have a * operator
@@ -116,6 +117,8 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
   }
   return true;
 }
+
+
 
 
 #endif

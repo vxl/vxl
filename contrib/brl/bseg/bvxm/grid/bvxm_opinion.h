@@ -36,6 +36,8 @@ class bvxm_opinion
 
   float b() const {return b_; }
 
+  float expectation(){return b_+u_*0.5f;}
+
   void set(float u, float b) { u_=u; b_=b;}
 
   void set_u(float u) { u_=u; }

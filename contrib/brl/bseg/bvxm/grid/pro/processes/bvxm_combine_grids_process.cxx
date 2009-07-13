@@ -23,22 +23,23 @@ bool bvxm_combine_grids_process_cons(bprb_func_process& pro)
   // 0. grid 1
   // 1. grid2
   // 2. Path to output grid
-
+  
   vcl_vector<vcl_string> input_types_(3);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvxm_voxel_grid_base_sptr";
   input_types_[2] = "vcl_string";
-
+  
+  
   // Outputs
   // 0. grid
   vcl_vector<vcl_string> output_types_(1);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
   if (!pro.set_input_types(input_types_))
     return false;
-
+  
   if (!pro.set_output_types(output_types_))
     return false;
-
+  
   return true;
 }
 
@@ -52,7 +53,7 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
     vcl_cout << pro.name() << "The number of inputs should be " << 3<< vcl_endl;
     return false;
   }
-
+  
   bvxm_voxel_grid_base_sptr grid1_base = pro.get_input< bvxm_voxel_grid_base_sptr>(0);
   bvxm_voxel_grid_base_sptr grid2_base = pro.get_input< bvxm_voxel_grid_base_sptr>(1);
   vcl_string output_path = pro.get_input<vcl_string>(2);
@@ -66,7 +67,6 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
     vcl_cerr << "Input grids must be of same size\n";
     return false;
   }
-
   bvxm_voxel_grid<vnl_vector_fixed<float, 4> > *grid_out = new bvxm_voxel_grid<vnl_vector_fixed<float, 4> >(output_path, grid1->grid_size());
 
   //combine response grid and orientation grid. the result is a vnl_vector<4> where the first 3-numbers correspond to orientation
@@ -86,8 +86,11 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
       *out_slab_it = this_feature;
     }
   }
-
+  
   pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-  return true;
 }
+
+
+
+
 

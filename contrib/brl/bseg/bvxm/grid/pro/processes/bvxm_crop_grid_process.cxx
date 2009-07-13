@@ -17,7 +17,7 @@
 #include <bvxm/grid/bvxm_opinion.h>
 #include <vul/vul_file.h>
 
-namespace bvpl_neighborhood_operator_process_globals
+namespace bvpl_crop_grid_process_globals
 {
   const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 1;
@@ -27,7 +27,7 @@ namespace bvpl_neighborhood_operator_process_globals
 //: set input and output types
 bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
 {
-    using namespace bvpl_neighborhood_operator_process_globals;
+    using namespace bvpl_crop_grid_process_globals;
   //This process has no inputs nor outputs only parameters
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0]="bvxm_voxel_grid_base_sptr";

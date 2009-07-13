@@ -86,7 +86,7 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_vec
     filename << directory << "/slab_" <<vcl_setw(4) << vcl_setfill('0') <<  i << bvxm_image_traits<vnl_vector_fixed<T, N> >::extension();
     vil_image_view_base_sptr img = new vil_image_view< typename bvxm_image_traits<vnl_vector_fixed<T, N> >::pixel_type>(ni, nj);
     bvxm_slab_to_image::slab_to_image((*grid_it), img);
-    vil_save(*img.ptr(), filename.str().c_str());
+	vil_save(*img.ptr(), filename.str().c_str());
 
   }
   return true;
