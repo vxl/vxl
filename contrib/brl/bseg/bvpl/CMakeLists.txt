@@ -23,7 +23,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_sources)
 
 ADD_LIBRARY(bvpl ${bvpl_sources})
 
-TARGET_LINK_LIBRARIES(bvpl bvxm_grid vgl bdgl)
+TARGET_LINK_LIBRARIES(bvpl bvxm_grid vgl bdgl bxml bsvg)
 
 SUBDIRS( pro )
 SUBDIRS( io )

@@ -21,7 +21,7 @@
 
 namespace bvpl_convert_direction_to_hue_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
 }
 
@@ -36,6 +36,7 @@ bool bvpl_convert_direction_to_hue_process_cons(bprb_func_process& pro)
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the inpud grid
   input_types_[i++]="bvpl_kernel_vector_sptr"; // a vector of kernels
   input_types_[i++]="vcl_string"; //output directory
+  input_types_[i++]="vcl_string"; //output file for map
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -63,6 +64,7 @@ bool bvpl_convert_direction_to_hue_process(bprb_func_process& pro)
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(1);
   vcl_string output_dir = pro.get_input<vcl_string>(2);
+  vcl_string map_output_file = pro.get_input<vcl_string>(3);
 
   if (!grid_base.ptr())  {
     vcl_cerr << "In bvpl_convert_direction_to_hue_process -- input grid is not valid!\n";
@@ -81,6 +83,8 @@ bool bvpl_convert_direction_to_hue_process(bprb_func_process& pro)
 
     bvpl_convert_grid_to_hsv_grid(grid,out_grid,colors );
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, out_grid);
+
+	bvpl_make_svg_color_map(colors,map_output_file);
     return true;
   }
   else {

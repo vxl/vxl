@@ -11,6 +11,12 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vil/algo/vil_colour_space.h>
 
+#include <bxml/bsvg/bsvg_document.h>
+#include <bxml/bsvg/bsvg_element.h>
+#include <bxml/bsvg/bsvg_plot.h>
+#include <bxml/bxml_find.h>
+#include <bxml/bxml_write.h>
+#include <vcl_iomanip.h>
 struct point_3d_cmp
 {
   bool operator()(vgl_point_3d<double> p1, vgl_point_3d<double> p2) const
@@ -171,7 +177,7 @@ bool bvpl_direction_to_color_map(vcl_vector<vgl_point_3d<double> > samples, vcl_
   vcl_vector<vgl_point_3d<double> > peano_curve=peano_curve_on_cube(2);
   color=find_closest_points_from_cube_to_peano_curve(samples,peano_curve,proj_on_cube);
   //: linear mapping of peano curve to color values (0,1);
-  float tot_len=(float)color.size();
+  float tot_len=(float)peano_curve.size();
   for (unsigned i=0;i<samples.size();++i)
     color[samples[i]]/=tot_len;
 
@@ -209,6 +215,48 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
       (*slab2_it)=this_feature;
     }
   }
+}
+
+void bvpl_make_svg_color_map(vcl_map<vgl_point_3d<double>,float,point_3d_cmp>  colors,
+							 vcl_string outfile)
+{
+  bsvg_document doc(400, 400);
+
+  vcl_map<vgl_point_3d<double>,float,point_3d_cmp>::iterator iter=colors.begin();
+  vcl_map<float,vgl_point_3d<double> > colors_ordered_by_index;
+  for(;iter!=colors.end();iter++)
+  {
+	  colors_ordered_by_index[iter->second]=iter->first;
+  }
+  int i=0;  float r,g,b;
+  vcl_map<float,vgl_point_3d<double> >::iterator iter1=colors_ordered_by_index.begin();
+  for(;iter1!=colors_ordered_by_index.end();iter1++,i++)
+  {
+	  float col=iter1->first*360;
+	  vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
+
+	  vcl_ostringstream os;
+	  os<<"#"<<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)r
+		     <<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)g
+		     <<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)b;
+
+	  vcl_ostringstream os_dir;
+	  os_dir.precision(2);
+	  os_dir<<"["<<vcl_setw(5)<<iter1->second.x()<<","<<vcl_setw(5)<<iter1->second.y()<<","<<vcl_setw(5)<<iter1->second.z()<<"]";
+	  bsvg_text* t = new bsvg_text(os_dir.str());
+	  t->set_font_size(15);
+	  t->set_location(10, 15*(i+1));
+
+	  bsvg_ellipse* e1 = new bsvg_ellipse(25, 7);
+	  e1->set_location(250, 15*(i+1));
+	  e1->set_fill_color(os.str());
+	  doc.add_element(e1);
+	  doc.add_element(t);
+  }
+  
+  bxml_write(outfile, doc);
+
+
 }
 
 #endif // bvpl_direction_to_color_map_h_
