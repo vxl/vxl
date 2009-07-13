@@ -7,6 +7,11 @@
 // \file
 // \brief A pyramid image resource based on multiple file-based image resources
 // \author J.L. Mundy March 20, 2006
+// \verbatim
+//   Modifications:
+//     Nhon Trinh  07/11/2009  Changed definition of difference in scale to be log-based
+//                             New definition: diff(a,b) = abs(log(a/b))
+// \endverbatim 
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>

@@ -287,7 +287,7 @@ pyramid_level* vil_pyramid_image_list::closest(const float scale) const
   unsigned lmin = 0;
   for (unsigned i = 0; i<nlevels; ++i)
   {
-    float ds = vcl_fabs(scale - levels_[i]->scale_);
+    float ds = vcl_fabs(vcl_log(levels_[i]->scale_ / scale));
     if (ds<mind)
     {
       mind = ds;
