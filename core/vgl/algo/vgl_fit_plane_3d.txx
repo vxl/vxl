@@ -92,7 +92,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   // check if the error_margin is achieved
   T min = svd.sigma_min();
   if (min > error_marg) {
-    vcl_cerr << "Error Margin " << error_marg << '>' << min << ". Could not fit the points to a plane\n";
+    vcl_cerr << "Error Margin " << error_marg << '<' << min << ". Could not fit the points to a plane\n";
     return false;
   }
 
