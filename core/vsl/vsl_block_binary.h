@@ -217,6 +217,51 @@ inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, vcl_s
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
+/////////////////////////////////////////////////////////////////////////
+
+// Internal implementation
+template <class T>
+  void vsl_block_binary_write_byte_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
+
+// Internal implementation
+template <class T>
+  void vsl_block_binary_read_byte_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems);
+
+  /////////////////////////////////////////////////////////////////////////
+
+//: Write a block of unsigned chars to a vsl_b_ostream
+// This function is very speed and space efficient.
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned char* begin, vcl_size_t nelems)
+{
+  vsl_block_binary_write_byte_impl(os, begin, nelems);
+}
+
+//: Read a block of unsigned chars from a vsl_b_istream
+// This function is very speed and space efficient.
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned char* begin, vcl_size_t nelems)
+{
+  vsl_block_binary_read_byte_impl(is, begin, nelems);
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+//: Write a block of signed chars to a vsl_b_ostream
+// This function is very speed and space efficient.
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_write(vsl_b_ostream &os, const signed char* begin, vcl_size_t nelems)
+{
+  vsl_block_binary_write_byte_impl(os, begin, nelems);
+}
+
+//: Read a block of signed chars from a vsl_b_istream
+// This function is very speed and space efficient.
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_read(vsl_b_istream &is, signed char* begin, vcl_size_t nelems)
+{
+  vsl_block_binary_read_byte_impl(is, begin, nelems);
+}
 
 /////////////////////////////////////////////////////////////////////////
 

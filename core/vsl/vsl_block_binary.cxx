@@ -93,7 +93,7 @@ void vsl_block_binary_write_float_impl(vsl_b_ostream &os, const T* begin, vcl_si
 #endif
 }
 
-//: Write a block of floats to a vsl_b_ostream
+//: Read a block of floats from a vsl_b_ostream
 template <class T>
 void vsl_block_binary_read_float_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems)
 {
@@ -249,6 +249,27 @@ void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nele
 #endif
 }
 
+/////////////////////////////////////////////////////////////////////////
+
+//: Write a block of bytes to a vsl_b_ostream
+template <class T>
+void vsl_block_binary_write_byte_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems)
+{
+  vsl_b_write(os, true); // Error check that this is a specialised version
+  os.os().write((char*) begin, nelems);
+}
+
+//: Read a block of bytes from a vsl_b_ostream
+template <class T>
+void vsl_block_binary_read_byte_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems)
+{
+  // There are no complications here, to deal with low memory,
+  // because the load is done in place.
+  vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
+  is.is().read((char*) begin, nelems);
+}
+
 
 // Instantiate templates for POD types.
 
@@ -271,4 +292,10 @@ template void vsl_block_binary_read_int_impl(vsl_b_istream &, int*, vcl_size_t);
 template void vsl_block_binary_read_int_impl(vsl_b_istream &, unsigned int*, vcl_size_t);
 template void vsl_block_binary_read_int_impl(vsl_b_istream &, short*, vcl_size_t);
 template void vsl_block_binary_read_int_impl(vsl_b_istream &, unsigned short*, vcl_size_t);
+
+template void vsl_block_binary_write_byte_impl(vsl_b_ostream &, const signed char*, vcl_size_t);
+template void vsl_block_binary_write_byte_impl(vsl_b_ostream &, const unsigned char*, vcl_size_t);
+
+template void vsl_block_binary_read_byte_impl(vsl_b_istream &, signed char*, vcl_size_t);
+template void vsl_block_binary_read_byte_impl(vsl_b_istream &, unsigned char*, vcl_size_t);
 
