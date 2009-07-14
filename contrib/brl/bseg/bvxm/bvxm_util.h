@@ -28,6 +28,9 @@
 //
 //   02/12/2009 - Ibrahim Eden - Added the method
 //                                  static void convert_edge_statistics_to_probability ...
+//
+//   07/14/2009 - Ibrahim Eden - Moved edge related functions to bvxm_edge_util
+//
 // \endverbatim
 
 #include <vcl_string.h>
@@ -144,17 +147,7 @@ class bvxm_util
 
   static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
 
-  static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
-
-  static vil_image_view<vxl_byte> detect_edges(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth, bool automatic_threshold, bool junctionp, bool aggressive_junction_closure);
-
-  static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
-
-  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
-
-  static float convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof);
-
- protected:
+protected:
 
   static void bilinear_weights(vgl_h_matrix_2d<double> invH,
                                unsigned nx_out,

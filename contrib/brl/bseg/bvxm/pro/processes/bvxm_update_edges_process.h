@@ -22,8 +22,8 @@ namespace bvxm_update_edges_process_globals
   const unsigned n_outputs_ = 1;
 
   // parameter strings
-  const vcl_string param_edt_gaussian_sigma_ =  "edt_gaussian_sigma";
-  const vcl_string param_edt_image_mean_scale_ =  "edt_image_mean_scale";
+  const vcl_string param_edge_prob_mask_size_ =  "edge_prob_mask_size";
+  const vcl_string param_edge_prob_mask_sigma_ =  "edge_prob_mask_sigma";
 }
 
 //: set input and output types

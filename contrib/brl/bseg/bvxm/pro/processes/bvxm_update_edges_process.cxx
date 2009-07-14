@@ -1,11 +1,21 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_process.cxx
-#include "bvxm_update_edges_process.h"
 //:
 // \file
+// \brief A process that updates voxel world edge probabilities
+//
+// \author Ibrahim Eden
+// \date 02/11/2009
+// \verbatim
+// \endverbatim
+
+#include "bvxm_update_edges_process.h"
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
+
+#include <bvxm/bvxm_edge_util.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
@@ -15,6 +25,13 @@
 
 #include <brip/brip_vil_float_ops.h>
 
+#include <vpgl/algo/vpgl_backproject.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
+
+#include <vil/vil_load.h>
 #include <vcl_cstdio.h>
 
 //: set input and output types
@@ -28,7 +45,6 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
   //input[2]: The current image
   //input[3]: n_normal
   //input[4]: Scale of the image
-
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvxm_voxel_world_sptr";
@@ -41,7 +57,6 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
 
   // process has 1 outputs:
   // output[0]: New n_normal
-
   vcl_vector<vcl_string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "float";
@@ -74,41 +89,29 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   unsigned scale = pro.get_input<unsigned>(i++);
 
   // get parameters
-  double edt_gaussian_sigma=3.0, edt_image_mean_scale=1.0;
-
-  pro.parameters()->get_value(param_edt_gaussian_sigma_, edt_gaussian_sigma);
-  pro.parameters()->get_value(param_edt_image_mean_scale_, edt_image_mean_scale);
-
-  //local variables
-  vcl_ifstream file_inp;
-  vcl_ofstream file_out;
-
+  int edge_prob_mask_size = 21;
+  pro.parameters()->get_value(param_edge_prob_mask_size_, edge_prob_mask_size);
+  float edge_prob_mask_sigma = 1.0f;
+  pro.parameters()->get_value(param_edge_prob_mask_sigma_, edge_prob_mask_sigma);
+  
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
-  vcl_cout << "Number of observations before the update: " << num_observations << vcl_endl;
 
-  // update part work if the input camera parameters are not correct or the online algorithm flag
-  // "use_online_algorithm" is set to 1 (true) in the input parameter file
+  vcl_cout << "number of observations before the update: " << num_observations << "\n";
+  vcl_cout << "edge_prob_mask_size: " << edge_prob_mask_size << "\n";
+  vcl_cout << "edge_prob_mask_sigma: " << edge_prob_mask_sigma << "\n";
+
   float new_n_normal = n_normal;
-  vil_image_view<float> edge_image_float;
-  vil_convert_cast(edge_image,edge_image_float);
-  vil_math_scale_and_offset_values(edge_image_float,1.0/255.0,0.0);
-  float edge_image_mean;
-  vil_math_mean(edge_image_mean,edge_image_float,0);
 
-  vil_image_view<float> edt_image;
-  bvxm_util::edge_distance_transform(edge_image,edt_image);
-  edt_image = bvxm_util::multiply_image_with_gaussian_kernel(edt_image,edt_gaussian_sigma);
-  float edt_image_mean;
-  vil_math_mean(edt_image_mean,edt_image,0);
+  vil_image_view<float> edge_prob_image;
+  bvxm_edge_util::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
+  float edge_prob_image_mean;
+  vil_math_mean(edge_prob_image_mean,edge_prob_image,0);
 
-  vil_math_scale_and_offset_values(edt_image,edge_image_mean/edt_image_mean,0.0f);
-  vil_math_mean(edt_image_mean,edt_image,0);
+  new_n_normal = n_normal + edge_prob_image_mean;
 
-  new_n_normal = n_normal + (((float)edt_image_mean_scale)*edt_image_mean);
+  vil_image_view_base_sptr edge_prob_image_sptr = new vil_image_view<float>(edge_prob_image);
 
-  vil_image_view_base_sptr edt_image_sptr = new vil_image_view<float>(edt_image);
-
-  bvxm_image_metadata camera_metadata_out(edt_image_sptr,camera_inp);
+  bvxm_image_metadata camera_metadata_out(edge_prob_image_sptr,camera_inp);
   bool result = vox_world->update_edges(camera_metadata_out,0);
 
   if (!result){

@@ -2,6 +2,9 @@
 #include "bvxm_detect_edges_process.h"
 //:
 // \file
+
+#include <bvxm/bvxm_edge_util.h>
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
@@ -70,7 +73,7 @@ bool bvxm_detect_edges_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_aggressive_junction_closure_, aggressive_junction_closure);
 
   vil_image_view<vxl_byte> input_image(input_image_sptr);
-  vil_image_view<vxl_byte> edge_image = bvxm_util::detect_edges(input_image,noise_multiplier,smooth,automatic_threshold,junctionp,aggressive_junction_closure);
+  vil_image_view<vxl_byte> edge_image = bvxm_edge_util::detect_edges(input_image,noise_multiplier,smooth,automatic_threshold,junctionp,aggressive_junction_closure);
 
   // return the output edge image
   pro.set_output_val<vil_image_view_base_sptr>(0,new vil_image_view<vxl_byte>(edge_image));

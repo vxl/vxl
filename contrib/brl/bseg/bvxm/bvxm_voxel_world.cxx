@@ -36,6 +36,7 @@
 #include "grid/bvxm_voxel_slab.h"
 #include "bvxm_image_metadata.h"
 #include "bvxm_util.h"
+#include "bvxm_edge_util.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 //#define DEBUG
 
@@ -241,7 +242,7 @@ bool bvxm_voxel_world::save_edges_raw(vcl_string filename, float n_normal, unsig
     vcl_cout << '.';
     for (unsigned i=0; i<(*edges_it).nx(); ++i) {
       for (unsigned j=0; j < (*edges_it).ny(); ++j) {
-        edges_array[i*ny*nz + j*nz + k] = (unsigned char)(255.0*bvxm_util::convert_edge_statistics_to_probability((*edges_it)(i,j),n_normal,dof));
+        edges_array[i*ny*nz + j*nz + k] = (unsigned char)(255.0*bvxm_edge_util::convert_edge_statistics_to_probability((*edges_it)(i,j),n_normal,dof));
       }
     }
   }
@@ -843,7 +844,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
   int dof = (int)this->num_observations<EDGES>(0,scale)-1;
   bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
-    (*expected_edge_image_it) = bvxm_util::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
+    (*expected_edge_image_it) = bvxm_edge_util::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
   }
 
   // convert back to vil_image_view
