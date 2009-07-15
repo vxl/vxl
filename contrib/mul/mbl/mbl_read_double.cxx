@@ -35,7 +35,7 @@
 const int MAX_LEN = 40;
 
 // If min_d != 0 or max_d != 0 then prints range but doesn't check that reply is in range
-double RD_ReadDouble1(char *q_str, double default_d,
+double RD_ReadDouble1(const char *q_str, double default_d,
                       double min_d, double max_d)
 {
   char reply[MAX_LEN];
@@ -57,12 +57,12 @@ double RD_ReadDouble1(char *q_str, double default_d,
   }
 }
 
-double mbl_read_double(char *q_str, double default_d)
+double mbl_read_double(const char *q_str, double default_d)
 {
   return RD_ReadDouble1(q_str,default_d,0,0);
 }
 
-double mbl_read_double( char *q_str, double default_d,
+double mbl_read_double( const char *q_str, double default_d,
                         double min_d, double max_d)
 {
   while (true)

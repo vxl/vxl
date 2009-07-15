@@ -35,7 +35,7 @@
 const int MAX_LEN = 20;
 
 // If min_int != 0 or max_int != 0 then prints range but doesn't check that reply is in range
-int RD_ReadInt1(char* q_str, int default_int,
+int RD_ReadInt1(const char* q_str, int default_int,
                 int min_int, int max_int)
 {
   char reply[MAX_LEN];
@@ -57,12 +57,12 @@ int RD_ReadInt1(char* q_str, int default_int,
   }
 }
 
-int mbl_read_int(char* q_str, int default_int)
+int mbl_read_int(const char* q_str, int default_int)
 {
   return RD_ReadInt1(q_str,default_int,0,0);
 }
 
-int mbl_read_int(char* q_str, int default_int,
+int mbl_read_int(const char* q_str, int default_int,
                  int min_int, int max_int)
 {
   while (true)
