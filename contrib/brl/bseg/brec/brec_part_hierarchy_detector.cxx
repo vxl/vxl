@@ -13,6 +13,7 @@
 #include <vil/vil_image_resource.h>
 
 #include <vcl_utility.h>
+#include <vcl_algorithm.h>
 
 brec_part_hierarchy_detector::~brec_part_hierarchy_detector()
 {
@@ -99,10 +100,8 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
       }
     }
   }
-
   map_instance_[0] = parts_prims;
   vcl_cout << "extracted " << parts_prims.size() << " parts of layer 0\n";
-
   // create an rtree
   Rtree_type *tr = new Rtree_type();
   map_rtree_.insert(vcl_pair<unsigned, Rtree_type*> (0, tr));
@@ -139,12 +138,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
   return true;
 }
 
-//: extracts instances of each layer in the given image, by rotating the detector with the given amount
-//  Assumes that training is complete and a training directory path is set accordingly in h_
-//  Reads response model parameters for each primitive from this training directory
-bool brec_part_hierarchy_detector::detect_using_trained_response_models(vil_image_view<float>& img,
-                                                                        vil_image_view<float>& fg_prob_img,
-                                                                        float angle)
+bool brec_part_hierarchy_detector::detect_primitives_using_trained_response_models(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float angle, float prior_class)
 {
   // start from the primitives
   vcl_vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
@@ -152,7 +146,7 @@ bool brec_part_hierarchy_detector::detect_using_trained_response_models(vil_imag
   for (unsigned i = 0; i < dumm_ins.size(); i++) {
     if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
       brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
-      if (!p->extract(img, fg_prob_img, angle, h_->model_dir(), parts_prims)) {
+      if (!p->extract(img, fg_prob_img, angle, h_->model_dir(), parts_prims, prior_class)) {
         vcl_cout << "problems in extracting gaussian primitives!!\n";
         return false;
       }
@@ -168,13 +162,65 @@ bool brec_part_hierarchy_detector::detect_using_trained_response_models(vil_imag
     tr->add(parts_prims[i]);
   }
 
+  return true;
+}
+
+//:  sets rho parameter of the primitives differently during training
+//   rotates the detector with the given amount
+bool brec_part_hierarchy_detector::detect_primitives_for_training(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, float angle)
+{
+  // start from the primitives
+  vcl_vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
+  vcl_vector<brec_part_instance_sptr> parts_prims;
+  for (unsigned i = 0; i < dumm_ins.size(); i++) {
+    if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
+      brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
+      if (!p->extract(inp, fg_prob_img, angle, parts_prims)) {
+        vcl_cout << "problems in extracting gaussian primitives!!\n";
+        return false;
+      }
+    }
+  }
+  map_instance_[0] = parts_prims;
+  vcl_cout << "extracted " << parts_prims.size() << " primitives\n";
+
+  // create an rtree
+  Rtree_type *tr = new Rtree_type();
+  map_rtree_.insert(vcl_pair<unsigned, Rtree_type*> (0, tr));
+  for (unsigned i = 0; i < parts_prims.size(); i++) {
+    tr->add(parts_prims[i]);
+  }
+
+  return true;
+}
+
+bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float angle, unsigned rho_calculation_method, double radius, float prior_class, unsigned layer_id)
+{
+  switch(rho_calculation_method) {
+      case brec_detector_methods::POSTERIOR_NUMERATOR : 
+      case brec_detector_methods::POSTERIOR : {
+        if (!detect_primitives_using_trained_response_models(img, fg_prob_img, angle, prior_class))
+          return false;
+        break;
+                                              }
+      case brec_detector_methods::DENSITY_FOR_TRAINING : {
+        if (!detect_primitives_for_training(img, fg_prob_img, angle))
+          return false;
+                                                         }
+  }
+  
+  vcl_cout << "extracted " << map_instance_[0].size() << " primitive parts." << vcl_endl;
+
   unsigned highest = h_->highest_layer_id();
-  vcl_vector<brec_part_instance_sptr> parts_upper_most(parts_prims);
-  Rtree_type *rtree_upper_most = tr;
+  if (layer_id < highest)
+    highest = layer_id;
+
+  vcl_vector<brec_part_instance_sptr> parts_upper_most(map_instance_[0]);
+  Rtree_type *rtree_upper_most = map_rtree_[0];
   for (unsigned l = 1; l <= highest; l++) {
     vcl_vector<brec_part_instance_sptr> parts_current;
 
-    extract_upper_layer(parts_upper_most, rtree_upper_most, parts_current);
+    extract_upper_layer(parts_upper_most, rtree_upper_most, parts_current, rho_calculation_method, l*radius);
     vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << vcl_endl;
 
     map_instance_[l] = parts_current;
@@ -211,22 +257,22 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
   }
 
   brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
-  brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base());
+  brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base(), true);
   pi->add_outgoing_edge(e1);
 
   // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
   brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
-  float strength = 1.0f;
+  double strength = 1.0;
 
   for ( ; eit != upper_p->out_edges_end(); eit++) {
     vgl_box_2d<float> probe = (*eit)->get_probe_box(central_p);
     vcl_vector<brec_part_instance_sptr> found;
     lower_rtree->get(probe, found);
 
-    float best_fit = 0.0f;
-    float best_fit_str = 1.0f;
+    double best_fit = 0.0;
+    double best_fit_str = 1.0;
     brec_part_instance_sptr best_part;
     for (unsigned i = 0; i < found.size(); i++) {
       if (found[i]->strength_ > det_threshold && found[i]->type_ == (*eit)->target()->type_)
@@ -234,9 +280,9 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
         vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
         float dist, angle;
         (*eit)->calculate_dist_angle(central_p, v, dist, angle);
-        float str = (*eit)->prob_density(dist, angle);
+        double str = (*eit)->prob_density(dist, angle);
 
-        if (str < det_threshold)
+        if (str < double(det_threshold))
           continue;
         if (best_fit < str) {
           best_fit = str;
@@ -250,14 +296,14 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
       return 0;  // this sub-part not found
     strength *= best_fit*best_fit_str;
     if (best_part) {
-      brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base());
+      brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
       pi->add_outgoing_edge(e2);
     }
   }
   strength *= central_p->strength_;
 
   // if all of them have been detected then declare existence at the central parts location
-  pi->strength_ = strength;
+  pi->strength_ = float(strength);
 
   return pi;
 }
@@ -276,28 +322,28 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
   }
 
   brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
-  brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base());
+  brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base(), true);
   pi->add_outgoing_edge(e1);
 
   // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
   brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
-  float strength = 1.0f;
+  double strength = 1.0;
   for ( ; eit != upper_p->out_edges_end(); eit++) {
     vgl_box_2d<float> probe = (*eit)->get_probe_box(central_p);
     vcl_vector<brec_part_instance_sptr> found;
     lower_rtree->get(probe, found);
 
-    float best_fit = 0.0f;
-    float best_fit_str = 1.0f;
+    double best_fit = 0.0;
+    double best_fit_str = 1.0;
     brec_part_instance_sptr best_part;
     for (unsigned i = 0; i < found.size(); i++) {
       if (found[i]->type_ == (*eit)->target()->type_) {
         vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
         float dist, angle;
         (*eit)->calculate_dist_angle(central_p, v, dist, angle);
-        float str = (*eit)->prob_density(dist, angle);
+        double str = (*eit)->prob_density(dist, angle);
         if (best_fit < str) {
           best_fit = str;
           best_fit_str = found[i]->strength_;
@@ -309,14 +355,14 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
     if (best_fit <= 0 || !best_part)
       return 0;  // this sub-part not found
 
-    brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base());
+    brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
     pi->add_outgoing_edge(e2);
     strength *= best_fit*best_fit_str;
   }
   strength *= central_p->strength_;
 
   // if all of them have been detected then declare existence at the central parts location
-  pi->strength_ = strength;
+  pi->strength_ = float(strength);
 
   return pi;
 }
@@ -351,11 +397,183 @@ void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_inst
   }
 }
 
+//: check for existence of \p upper_p with \p central_p as its central part and map will tell if all the other parts exist
+//  No thresholding, \return a probabilistic score
+brec_part_instance_sptr
+brec_part_hierarchy_detector::exists_for_training(brec_part_base_sptr upper_p,
+                                                  brec_part_instance_sptr central_p,
+                                                  Rtree_type* lower_rtree)
+{
+  // first check if types and layers of central_p instance matches with upper_p's info
+  if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
+    vcl_cout << "central_p instance passed is not compatible with the upper layer part passes\n";
+    return 0;
+  }
+
+  brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
+  brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base(), true);
+  pi->add_outgoing_edge(e1);
+
+  // now for each other part of upper_p, check whether they exist in the map
+  float cx = central_p->x_; float cy = central_p->y_;
+  brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
+  eit++;  // skip the central part
+  double rho = 1.0;
+  for ( ; eit != upper_p->out_edges_end(); eit++) {
+    vgl_box_2d<float> probe = (*eit)->get_probe_box(central_p);
+    vcl_vector<brec_part_instance_sptr> found;
+    lower_rtree->get(probe, found);
+
+    double best_fit = -100000.0;
+    brec_part_instance_sptr best_part;
+    for (unsigned i = 0; i < found.size(); i++) {
+      if (found[i]->type_ == (*eit)->target()->type_) {
+        vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
+        float dist, angle;
+        (*eit)->calculate_dist_angle(central_p, v, dist, angle);
+        double rho = (*eit)->prob_density(dist, angle)*found[i]->rho_c_f_;
+        if (best_fit < rho) {
+          best_fit = rho;
+          best_part = found[i];
+        }
+      }
+    }
+
+    if (best_fit <= 0 || !best_part)
+      return 0;  // this sub-part not found
+
+    brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
+    pi->add_outgoing_edge(e2);
+    rho *= best_fit;
+  }
+  rho *= central_p->rho_c_f_;
+
+  // if all of them have been detected then declare existence at the central parts location
+  pi->rho_c_f_ = rho;
+  pi->strength_ = float(rho);
+
+  return pi;
+}
+
+//: check for existence of \p upper_p with \p central_p as its central part and map will tell if all the other parts exist
+//  No thresholding, \return a probabilistic score
+brec_part_instance_sptr
+brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper_p,
+                                                       brec_part_instance_sptr central_p,
+                                                       Rtree_type* lower_rtree, double radius)
+{
+  // first check if types and layers of central_p instance matches with upper_p's info
+  if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
+    vcl_cout << "central_p instance passed is not compatible with the upper layer part passes\n";
+    return 0;
+  }
+
+  double uniform = 1.0/radius * 1.0/8.0;
+
+  brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
+  brec_hierarchy_edge_sptr e1 = new brec_hierarchy_edge(pi->cast_to_base(), central_p->cast_to_base(), true);
+  pi->add_outgoing_edge(e1);
+
+  // now for each other part of upper_p, check whether they exist in the map
+  float cx = central_p->x_; float cy = central_p->y_;
+
+  brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
+  eit++;  // skip the central part
+  
+  float prior_non_c_b = 1.0f - (prior_c_f_ + prior_non_c_f_ + prior_c_b_);
+
+  double rho_c_f = central_p->rho_c_f_ * prior_c_f_;
+  double rho_c_b = central_p->rho_c_b_ * prior_c_b_;
+  double rho_nc_f = central_p->rho_nc_f_ * prior_non_c_f_;
+  double rho_nc_b = central_p->rho_nc_b_ * prior_non_c_b;
+  
+  for ( ; eit != upper_p->out_edges_end(); eit++) {
+    vgl_box_2d<float> probe = (*eit)->get_probe_box(central_p);
+    vcl_vector<brec_part_instance_sptr> found;
+    lower_rtree->get(probe, found);
+
+    double best_score = -100000.0;
+    brec_part_instance_sptr best_part;
+    brec_hierarchy_edge_sptr best_edge;
+    for (unsigned i = 0; i < found.size(); i++) {
+      if (found[i] == central_p)  // skip itself
+        continue;
+      if (found[i]->type_ == (*eit)->target()->type_) {
+        vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
+        float dist, angle;
+        (*eit)->calculate_dist_angle(central_p, v, dist, angle);
+        double dens = (*eit)->prob_density(dist, angle);
+        double rho_c_f_i = dens*found[i]->rho_c_f_*rho_c_f;
+        double rho_c_b_i = dens*found[i]->rho_c_b_*rho_c_b;
+        double rho_nc_f_i = uniform*found[i]->rho_nc_f_*rho_nc_f;
+        double rho_nc_b_i = uniform*found[i]->rho_nc_b_*rho_nc_b;
+
+        double s = vcl_min(rho_c_f_i/rho_c_b_i,rho_c_f_i/rho_nc_f_i);
+        s = vcl_min(s, rho_c_f_i/rho_nc_b_i);
+        
+        if (best_score < s) {
+          best_score = s;
+          best_part = found[i];
+          best_edge = (*eit);
+        }
+      }
+    }
+
+    if (best_score <= 0 || !best_part)
+      return 0;  // this sub-part not found
+
+    brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
+    e2->set_model(best_edge->dist_model_, best_edge->angle_model_, best_edge->weight_);
+    pi->add_outgoing_edge(e2);
+  }
+
+  //: now compute the score for the part with a second pass 
+  eit = pi->out_edges_begin();
+  eit++;  // skip the central part
+  for ( ; eit != pi->out_edges_end(); eit++) {
+    brec_part_instance_sptr pi2 = (*eit)->target()->cast_to_instance();
+    vnl_vector_fixed<float, 2> v(pi2->x_-cx, pi2->y_-cy);
+    float dist, angle;
+    (*eit)->calculate_dist_angle(central_p, v, dist, angle);
+    double dens = (*eit)->prob_density(dist, angle);
+    rho_c_f *= dens*pi2->rho_c_f_;
+    rho_c_b *= dens*pi2->rho_c_b_;
+    rho_nc_f *= uniform*pi2->rho_nc_f_;
+    rho_nc_b *= uniform*pi2->rho_nc_b_;
+  }
+
+  /* OZGE TODO: implement the contributions from the other classes 
+  //: compute the denominator by locating a part with the same primitives with this one in each hierarchy in the list
+  double sum = 0.0;
+  for (unsigned i = 0; i < class_hierarchies_.size(); i++) {
+    vcl_vector<double> scores;
+    if (class_hierarchies_[i]->get_score(pi, scores))
+      for (unsigned k = 0; k < scores.size(); k++)
+        sum += scores[k];
+  }
+*/
+
+  // if all of them have been detected then declare existence at the central parts location
+  double den = (rho_c_f+rho_c_b+rho_nc_f+rho_nc_b);
+  pi->rho_c_f_ = rho_c_f/den;
+  pi->rho_c_b_ = rho_c_b/den;
+  pi->rho_nc_f_ = rho_nc_f/den;
+  pi->rho_nc_b_ = rho_nc_b/den;
+
+  pi->strength_ = float(pi->rho_c_f_);
+
+  return pi;
+}
+
+
 //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
 //  No thresholding, \return a probabilistic score
+//  rho_calculation_method = 0 if probabilistic score
+//  rho_calculation_method = 1 if training
+//  rho_calculation_method = 2 if using other hierarchies to compute a posterior
 void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts,
                                                        Rtree_type* extracted_parts_rtree,
-                                                       vcl_vector<brec_part_instance_sptr>& extracted_upper_parts)
+                                                       vcl_vector<brec_part_instance_sptr>& extracted_upper_parts, unsigned rho_calculation_method, double radius)
 {
   // for each detected part, check for the existence of each upper layer part that uses it as a central part
   for (unsigned i = 0; i < extracted_parts.size(); i++) {
@@ -365,17 +583,26 @@ void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_inst
     if (!hp)
       continue;
 
-    if (p->x_ == 229 && p->y_ == 366) {
+    if (p->layer_ == 1 && p->x_ == 165 && p->y_ == 189) {
       vcl_cout << "here!\n";
     }
+
     // find the all the upper layer parts that use hp as a central part
     // check the incoming edges of hp
     for (brec_part_hierarchy::edge_iterator eit = hp->in_edges_begin(); eit != hp->in_edges_end(); eit++) {
-      if (hp == (*eit)->source()->central_part()) {
+      if ((*eit)->to_central() && hp == (*eit)->source()->central_part()) {
         brec_part_base_sptr hp_upper = (*eit)->source();
 
         // now check for the existence of other primitives wrt to the central part and initiate an instance of it if so
-        brec_part_instance_sptr hp_upper_instance = exists(hp_upper, p, extracted_parts_rtree); // p will be its central part and map will tell if all the other parts exist
+        brec_part_instance_sptr hp_upper_instance;
+        
+        // p will be its central part and map will tell if all the other parts exist
+        switch (rho_calculation_method) {
+          case brec_detector_methods::POSTERIOR_NUMERATOR : { hp_upper_instance = exists(hp_upper, p, extracted_parts_rtree); break; }
+          case brec_detector_methods::DENSITY_FOR_TRAINING : { hp_upper_instance = exists_for_training(hp_upper, p, extracted_parts_rtree); break; }
+          case brec_detector_methods::POSTERIOR : { hp_upper_instance = exists_using_hierarchies(hp_upper, p, extracted_parts_rtree, radius); break; }
+        }
+          
         if (!hp_upper_instance)
           continue;
         extracted_upper_parts.push_back(hp_upper_instance);
@@ -385,14 +612,14 @@ void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_inst
 }
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
-void vsl_b_write(vsl_b_ostream & /*os*/, brec_part_hierarchy_detector const & /*ph*/)
+void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy_detector const &ph)
 {
   vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
   return;
 }
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
-void vsl_b_read(vsl_b_istream & /*is*/, brec_part_hierarchy_detector & /*ph*/)
+void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy_detector &ph)
 {
   vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
   return;
@@ -425,4 +652,5 @@ void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_detector* &ph)
     vsl_b_write(os,*ph);
   }
 }
+
 

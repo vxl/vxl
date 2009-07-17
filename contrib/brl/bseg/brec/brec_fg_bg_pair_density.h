@@ -24,3 +24,4 @@ class brec_fg_bg_pair_density : public brec_pair_density
 };
 
 #endif // brec_fg_bg_pair_density_h_
+

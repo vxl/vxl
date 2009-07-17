@@ -33,6 +33,7 @@
 
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
+#include <vil/algo/vil_threshold.h>
 
 //: Constructor
 bool brec_construct_bg_op_models_process_cons(bprb_func_process& pro)
@@ -146,19 +147,16 @@ bool brec_construct_bg_op_models_process(bprb_func_process& pro)
 }
 
 //: Constructor
-bool brec_construct_fg_op_models_process_cons(bprb_func_process& pro)
+bool brec_construct_class_op_models_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("brec_part_hierarchy_sptr");      // h
   input_types.push_back("vcl_string");                    // output directory to save the response model parameters for the foreground, will save a file with two parameters k and lambda
-  input_types.push_back("vil_image_view_base_sptr");      // a training image to construct response models, byte image
-  input_types.push_back("vil_image_view_base_sptr");      // a probability img for the input training image, float img with values in [0,1] range
-  input_types.push_back("bool");                          // whether to convert the input prob img or not,
-                                                          // if a background prob map is passed, it should be converted so pass true,
-                                                          // but if a foreground ground-truth mask is passed for instance, it should not be converted so pass false
-  input_types.push_back("vil_image_view_base_sptr");      // a mask img for the input training image, float img with values in [0,1] range, stats will be collected from the pixels with mask == true
+  input_types.push_back("vil_image_view_base_sptr");      // a training image to construct response models, 
+  input_types.push_back("vil_image_view_base_sptr");      // a class probability img for the input training image, float img with values in [0,1] range, it could be a byte image, class regions are assumed to be true
+  input_types.push_back("vil_image_view_base_sptr");      // a mask img for the input training image, stats will be collected from the pixels with mask == true
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -170,10 +168,19 @@ bool brec_construct_fg_op_models_process_cons(bprb_func_process& pro)
   return true;
 }
 
-bool brec_construct_fg_op_models_process(bprb_func_process& pro)
+//: use the init method if want to pass a mask image which is true for all the image pixels (all the image is used)
+bool brec_construct_class_op_models_process_init(bprb_func_process& pro)
+{
+  // initialize an empty pointer
+  vil_image_view_base_sptr m_ptr;
+  pro.set_input(4, new brdb_value_t<vil_image_view_base_sptr>(m_ptr));
+  return true;
+}
+
+bool brec_construct_class_op_models_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 6) {
+  if (pro.n_inputs() < 5) {
     vcl_cerr << "brec_construct_fg_op_models_process - invalid inputs\n";
     return false;
   }
@@ -199,13 +206,17 @@ bool brec_construct_fg_op_models_process(bprb_func_process& pro)
     return false;
   }
 
-  bool convert_prob_map = pro.get_input<bool>(i++);
-
   vil_image_view_base_sptr inp_mask = pro.get_input<vil_image_view_base_sptr>(i++);
 
   vil_image_view<bool> mask_img(img.ni(), img.nj());
   if (!inp_mask) {  // if mask is passed as zero make a bool img with all pixels true, i.e. use the whole input img
+    vcl_cout << "Made a mask image which is true everywhere!\n";
     mask_img.fill(true);
+  } else if (inp_mask->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {  // assume white pixels are true
+    vcl_cout << "converting white pixels to true to create a BOOL mask image\n";
+    vil_image_view<float> m_prob = *vil_convert_cast(float(), inp_mask);
+    vil_threshold_above<float>(m_prob, mask_img, 128);
+    vil_save(mask_img, "./thresholded_mask.tiff");
   } else {
     if (inp_mask->pixel_format() != VIL_PIXEL_FORMAT_BOOL) {
       vcl_cout << "In brec_construct_fg_op_models_process::execute() -- ERROR: input mask image is not of type BOOL!!\n";
@@ -221,8 +232,8 @@ bool brec_construct_fg_op_models_process(bprb_func_process& pro)
   for (unsigned i = 0; i < ins.size(); i++) {
     if (ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
       brec_part_gaussian_sptr p = ins[i]->cast_to_gaussian();
-      double lambda, k;
-      if (!p->construct_fg_response_model(img, prob, mask_img, convert_prob_map, lambda, k)) {
+      double lambda, k, lambda_non_class, k_non_class;
+      if (!p->construct_class_response_models(img, prob, mask_img, lambda, k, lambda_non_class, k_non_class)) {
         vcl_cout << "problems in constructing foreground response model parameters for gaussian primitives!!\n";
         return false;
       }
@@ -230,6 +241,7 @@ bool brec_construct_fg_op_models_process(bprb_func_process& pro)
       vcl_string name = output_dir+p->string_identifier()+"_fg_params.txt";
       vcl_ofstream of(name.c_str());
       of << k << ' ' << lambda << vcl_endl;
+      of << k_non_class << ' ' << lambda_non_class << vcl_endl;
       of.close();
     }
   }

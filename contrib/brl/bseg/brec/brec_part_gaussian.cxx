@@ -104,15 +104,26 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
   return true;
 }
 
-brec_part_gaussian::brec_part_gaussian(float x, float y, float strength, float lambda0, float lambda1, float theta, bool bright, unsigned type)
-  : brec_part_instance(0, type, brec_part_instance_kind::GAUSSIAN, x, y, strength),
-    lambda0_(lambda0), lambda1_(lambda1), theta_(theta), bright_(bright), cutoff_percentage_(0.01f), lambda_(0.0f), k_(0.0f) , fitted_weibull_(false)
+void brec_part_gaussian::initialize_mask()
 {
   vbl_array_2d<float> fa;
   brip_vil_float_ops::extrema_kernel_mask(lambda0_, lambda1_, theta_, fa, mask_);
   unsigned nrows = fa.rows(), ncols = fa.cols();
   rj_ = (nrows-1)/2;
   ri_ = (ncols-1)/2;
+}
+brec_part_gaussian::brec_part_gaussian(float x, float y, float strength, float lambda0, float lambda1, float theta, bool bright, unsigned type)
+  : brec_part_instance(0, type, brec_part_instance_kind::GAUSSIAN, x, y, strength),
+    lambda0_(lambda0), lambda1_(lambda1), theta_(theta), bright_(bright), cutoff_percentage_(0.01f), fitted_weibull_(false), lambda_(0.0f), k_(0.0f) 
+{
+  initialize_mask();
+}
+
+//: the following constructor should only be used during parsing
+//: mask should be initialize after lambda values are parsed
+brec_part_gaussian::brec_part_gaussian() : brec_part_instance(0, 0, brec_part_instance_kind::GAUSSIAN, 0.0f, 0.0f, 0.0f),
+    lambda0_(0), lambda1_(0), theta_(0), bright_(true), cutoff_percentage_(0.0f), fitted_weibull_(false), lambda_(0.0f), k_(0.0f)  
+{
 }
 
 brec_part_gaussian* brec_part_gaussian::cast_to_gaussian(void)
@@ -147,7 +158,7 @@ bool brec_part_gaussian::mark_receptive_field(vil_image_view<vxl_byte>& img, uns
         if (((int)img(i, j, plane) + strength_*255) > 255)
           img(i, j, plane) = 255;
         else
-          img(i, j, plane) += static_cast<vxl_byte>(strength_*255);
+          img(i, j, plane) += (vxl_byte)(strength_*255);
       }
     }
 
@@ -175,12 +186,28 @@ bool brec_part_gaussian::mark_receptive_field(vil_image_view<float>& img, float 
       int mask_i = i - is;
       int mask_j = j - js;
       if (mask[mask_j][mask_i] && i >= 0 && j >= 0 && i < ni && j < nj) {
-        if ((img(i, j) + val) > 1.0f)
+        /*if ((img(i, j) + val) > 1.0f)
           img(i, j) = 1.0f;
         else
-          img(i, j) += val;
+          img(i, j) += val;*/
+        if (img(i,j) < val)
+          img(i,j) = val;
       }
     }
+  return true;
+}
+
+bool brec_part_gaussian::mark_center(vil_image_view<float>& img, float val)
+{
+  int ni = (int)img.ni();
+  int nj = (int)img.nj();
+
+  int ic = (int)vcl_floor(x_ + 0.5f);
+  int jc = (int)vcl_floor(y_ + 0.5f);
+  if (ic >= 0 && jc >= 0 && ic < ni && jc < nj)
+    if (img(ic, jc) < val)
+      img(ic, jc) = val;
+  
   return true;
 }
 
@@ -232,6 +259,8 @@ bxml_data_sptr brec_part_gaussian::xml_element()
     data->set_attribute("fitted_weibull", 0);
   data->set_attribute("lambda",lambda_);
   data->set_attribute("k",k_);
+  data->set_attribute("lambda_nc",lambda_non_class_);
+  data->set_attribute("k_nc",k_non_class_);
 
   data->append_text("\n ");
   data->append_data(data_super);
@@ -250,7 +279,12 @@ bool brec_part_gaussian::xml_parse_element(bxml_data_sptr data)
   if (!g_root)
     return false;
 
+
   if (g_root->type() == bxml_data::ELEMENT) {
+    
+    ((bxml_element*)g_root.ptr())->get_attribute("lambda_nc", lambda_non_class_);
+    ((bxml_element*)g_root.ptr())->get_attribute("k_nc", k_non_class_);
+                  
     bool found = (((bxml_element*)g_root.ptr())->get_attribute("lambda0", lambda0_) &&
                   ((bxml_element*)g_root.ptr())->get_attribute("lambda1", lambda1_) &&
                   ((bxml_element*)g_root.ptr())->get_attribute("theta", theta_) &&
@@ -270,6 +304,8 @@ bool brec_part_gaussian::xml_parse_element(bxml_data_sptr data)
     int fitted_w_int;
     found = found && ((bxml_element*)g_root.ptr())->get_attribute("fitted_weibull", fitted_w_int);
     fitted_weibull_ = fitted_w_int == 0 ? false : true;
+
+    initialize_mask();
 
     return brec_part_instance::xml_parse_element(g_root);
   } else
@@ -345,7 +381,7 @@ bool brec_part_gaussian::construct_bg_response_model_gauss(vil_image_view<float>
   //: find the sd dev of the operator at every pixel
   vbl_array_2d<float> kernel; vbl_array_2d<bool> mask;
   brip_vil_float_ops::extrema_kernel_mask(lambda0_, lambda1_, theta_, kernel, mask);
-  vil_image_view<float> std_dev_res = brip_vil_float_ops::std_dev_operator(std_dev_img, kernel);
+  vil_image_view<float> std_dev_res = brip_vil_float_ops::std_dev_operator_method2(std_dev_img, kernel);
 
   if (mean_res.ni() != ni || mean_res.nj() != nj)
     return false;
@@ -370,64 +406,84 @@ bool brec_part_gaussian::construct_bg_response_model_gauss(vil_image_view<float>
   return true;
 }
 
-//: collect operator responses from the input image's foreground regions to estimate lambda and k for the foreground response model
-//  the input img and the fg_prob_img (foreground probability image) are float images with values in [0,1] range
-//  convert_prob_img: set to true if fg_prob_img is indeed the background probability image and it needs to be inverted to get foreground probabilities
-bool brec_part_gaussian::construct_fg_response_model(vil_image_view<float>& img,
-                                                     vil_image_view<float>& fg_prob_img,
-                                                     vil_image_view<bool>& mask_img,
-                                                     bool convert_prob_img, double &lambda, double &k)
+//: collect operator responses from the input image
+//  use responses from class regions to estimate lambda and k for the class response model
+//  use responses from non-class regions to estimate lambda and k for the non-class response model
+//  class and non-class regions are specified by the class_prob_img which is a float image with values in [0,1] range
+bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& img,
+                                                        vil_image_view<float>& class_prob_img,
+                                                        vil_image_view<bool>& mask_img,
+                                                        double &lambda, double &k, double &lambda_non_class, double &k_non_class)
 {
   unsigned ni = img.ni();
   unsigned nj = img.nj();
 
   //: find the response img for this operator
-  //vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false);
   vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, true);
   if (res.ni() != ni || res.nj() != nj)
     return false;
 
-  // if the input prob img needs to be converted to get foreground probabilities, do the conversion
-  vil_image_view<float> prob_image(fg_prob_img);
-  if (convert_prob_img) {
-    vil_image_view<float> dummy_img(fg_prob_img.ni(), fg_prob_img.nj());
-    dummy_img.fill(1.0f);
-    vil_math_image_difference(dummy_img, fg_prob_img, prob_image);
-  }
-
   bsta_histogram<float> h(-7.0f, 1.0f, 32);
   double x_sum = 0.0, xsq_sum = 0.0, p_sum = 0.0;
+  double x_sum_non_class = 0.0, xsq_sum_non_class = 0.0, p_sum_non_class = 0.0;
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i)
     {
       if (mask_img(i,j)) {
-        //float op_res  = res(i,j);
-        float op_res  = res(i,j,1);
-        if (op_res==0)
+        //float op_res  = res(i,j,1);
+        float op_res  = res(i,j,0);
+        if (op_res < 1.0e-3f)
           continue;
-        float prob_fore = prob_image(i,j);
-        x_sum += prob_fore*op_res;
-        xsq_sum += prob_fore*op_res*op_res;
-        p_sum += prob_fore;
-        if (prob_fore>0.9)
+
+        float prob_class = fg_prob_operator(class_prob_img, i,j);
+        float prob_non_class = 1.0f - prob_class;
+
+        x_sum += prob_class*op_res;
+        xsq_sum += prob_class*op_res*op_res;
+        p_sum += prob_class;
+
+        x_sum_non_class += prob_non_class*op_res;
+        xsq_sum_non_class += prob_non_class*op_res*op_res;
+        p_sum_non_class += prob_non_class;
+        
+        if (prob_class>0.9)
           h.upcount(vcl_log10(op_res), 1.0f);
       }
     }
+
+  //: calculate class parameters
   double mean = x_sum/p_sum; // estimate of mean
   double total_var = xsq_sum/p_sum; //estimate of total variance
   double var = total_var - mean*mean;
   double std_dev = vcl_sqrt(var);
-  vcl_cout << "mean = " << mean << "  std_dev = " << std_dev << '\n'
-           << "Foreground operator response histogram\n";
-  h.print();
+  vcl_cout << "Class mean = " << mean << "  std_dev = " << std_dev << '\n';
+  //h.print();
   bsta_weibull_cost_function wcf(mean, std_dev);
   bsta_fit_weibull<double> fw(&wcf);
-  k =1;
+  k = 1.001;
   fw.init(k);
   fw.solve(k);
-  vcl_cout << "Weibull k fit with residual " << fw.residual() << '\n';
+  
+  vcl_cout << "Class Weibull k fit with residual " << fw.residual() << '\n';
   lambda = fw.lambda(k);
-  vcl_cout << "k = " << k << "  lambda = " << lambda << '\n';
+  vcl_cout << "Class k = " << k << "  lambda = " << lambda << '\n';
+
+  //: calculate non-class parameters
+  mean = x_sum_non_class/p_sum_non_class; // estimate of mean
+  total_var = xsq_sum_non_class/p_sum_non_class; //estimate of total variance
+  var = total_var - mean*mean;
+  std_dev = vcl_sqrt(var);
+  vcl_cout << "Non-class mean = " << mean << "  std_dev = " << std_dev << '\n';
+  //h.print();
+  bsta_weibull_cost_function wcfn(mean, std_dev);
+  bsta_fit_weibull<double> fwn(&wcfn);
+  k_non_class = 1.001;
+  fwn.init(k_non_class);
+  fwn.solve(k_non_class);
+  
+  vcl_cout << "Class Weibull k fit with residual " << fwn.residual() << '\n';
+  lambda_non_class = fwn.lambda(k_non_class);
+  vcl_cout << "Class k = " << k_non_class << "  lambda = " << lambda_non_class << '\n';
 
   return true;
 }
@@ -520,7 +576,7 @@ bool brec_part_gaussian::update_response_hist(vil_image_view<float>& img, vil_im
 //  fg_prob_image is the probability of being foreground for each pixel
 //  pb_zero is the constant required for the background response model (probability of zero response)
 bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_image,
-                                 float rot_angle, vcl_string model_dir, vcl_vector<brec_part_instance_sptr>& instances)
+                                 float rot_angle, vcl_string model_dir, vcl_vector<brec_part_instance_sptr>& instances, float prior_class)
 {
   unsigned ni = img.ni();
   unsigned nj = img.nj();
@@ -555,11 +611,11 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
   }
   vil_image_view<float> sigma_img = vil_load(name.c_str());
 
-  double lambda_fore, k_fore;
+  double lambda, k, lambda_non_class, k_non_class;
   if (fitted_weibull_) {
-    vcl_cout << "using fitted weibull parameters of the part for the foreground response model!\n";
-    lambda_fore = lambda_;
-    k_fore = k_;
+    vcl_cout << "using fitted weibull parameters lambda: " << lambda_ << " k: " << k_ << " lambda_nc: " << lambda_non_class_ << " k_nc: " << k_non_class_ << " of the part for the foreground response model!\n";
+    lambda = lambda_;  lambda_non_class = lambda_non_class_;
+    k = k_;  k_non_class = k_non_class_;
   } else {
     name = model_dir+str_id+"_fg_params.txt";
 
@@ -571,11 +627,14 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
     }
 
     vcl_ifstream ifs(name.c_str(), vcl_ios::in);
-    ifs >> k_fore; ifs >> lambda_fore;
+    ifs >> k; ifs >> lambda;
+    ifs >> k_non_class; ifs >> lambda_non_class;
     ifs.close();
   }
 
-  bsta_weibull<float> pdfg((float)lambda_fore, (float)k_fore);
+  bsta_weibull<float> pd_class((float)lambda, (float)k);
+  bsta_weibull<float> pd_non_class((float)lambda_non_class, (float)k_non_class);
+  float prior_non_class = 1.0f - prior_class;
 
   //: extract all the parts from the responses
   for (unsigned j = 0; j<nj; ++j)
@@ -591,36 +650,45 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
       if (res<1.0e-3f)
         continue;
 
-      float posterior = 0.0f;
+      float pos_c_f = 0.0f;
+      float pos_nc_f = 0.0f;
+      float pos_c_b = 0.0f;
+      float pos_nc_b = 0.0f;
+
+      if (i == 459 && j == 735)
+        vcl_cout << "here!\n";
 
       float pf = fg_prob_operator(fg_prob_image, i, j);
+      //float pf = fg_prob_image(i, j);
+      
       float pdb = 0.0f;
-#if 0 // using weibull distribution for background response model
-      //: find the posterior
-      if (k_bk<1.0e-5f&&lambda_bk<1.0e-5f) {
-        pdb = pb_zero;
-        //bsta_weibull<float> pdbg(0.026f, 1.0f);
-        //pdb = pdbg.prob_density(res);
-      } else {
-        //otherwise construct bg response model with its parameters
-        bsta_weibull<float> pdbg(lambda_bk, k_bk);
-        pdb = pdbg.prob_density(res);// prob density background
-        //pdb = pdb < pb_zero ? pb_zero : pdb;
-      }
-#endif // use a truncated gaussian as the response model at every pixel
       bsta_gauss_f1 pdbg(mu_bk, sigma_bk*sigma_bk);
       pdb = pdbg.prob_density(res);
 
-      float pdf = pdfg.prob_density(res); // prob density foreground
-      float den = pdf*pf+ pdb*(1.0f-pf);
-      float neu = pdf*pf;
-      posterior = neu/den; //posterior foreground probability
+      float pd_c = pd_class.prob_density(res); // prob density class
+      float pd_nc = pd_non_class.prob_density(res); // prob density non_class
 
-      if (posterior > 0.0f) {
-        brec_part_gaussian_sptr dp = new brec_part_gaussian((float)i, (float)j, posterior, lambda0_, lambda1_, theta_+rot_angle, bright_, type_);
-        dp->cutoff_percentage_ = cutoff_percentage_;
-        instances.push_back(dp->cast_to_instance());
-      }
+      pos_c_f = pd_c*pf*prior_class;
+      pos_nc_f = pd_nc*pf*prior_non_class;
+
+      pos_c_b = pdb*(1-pf)*prior_class;
+      pos_nc_b = pdb*(1-pf)*prior_non_class;
+
+      float den = pos_c_f + pos_nc_f + pos_c_b + pos_nc_b;
+      if (den <= 0.0f)
+        continue;  // not a valid part, no detections
+
+      pos_c_f /= den; pos_nc_f /= den; pos_c_b /= den; pos_nc_b /= den;
+
+      //vcl_cout << "i: " << i << " j: " << j << " response: " << res << " pf: " << pf << " pdf: " << pdf << " pdb: " << pdb << " neu: " << neu << " den: " << den << " post: " << posterior << vcl_endl;
+      brec_part_gaussian_sptr dp = new brec_part_gaussian((float)i, (float)j, res, lambda0_, lambda1_, theta_+rot_angle, bright_, type_);
+      dp->rho_c_f_ = pos_c_f;
+      dp->rho_nc_f_ = pos_nc_f;
+      dp->rho_c_b_ = pos_c_b;
+      dp->rho_nc_b_ = pos_nc_b;
+      dp->cutoff_percentage_ = cutoff_percentage_;
+      instances.push_back(dp->cast_to_instance());
+      
 #if 0
       if ((i == 375 && j == 204) || (i == 348 && j == 221) || (i == 374 && j == 193) ||
           (i == 229 && j == 366) || (i == 223 && j == 358) || (i == 230 && j == 368) || (i == 227 && j == 364) ||
@@ -635,6 +703,58 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
 
   return true;
 }
+
+//: extract and set rho to class probability density of the response 
+//  assumes weibull parameters have already been fitted (i.e. fitted_weibull_ = true)
+//  this method is to be used during training and it returns an instance if class_prob >= 0.9
+bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<float>& class_prob_image, float rot_angle, vcl_vector<brec_part_instance_sptr>& instances)
+{
+  unsigned ni = img.ni();
+  unsigned nj = img.nj();
+
+  //: find the response img for this operator
+  vil_image_view<float> op_res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_+rot_angle, bright_, false);
+  if (op_res.ni() != ni || op_res.nj() != nj)
+    return false;
+
+  if (!fitted_weibull_) {
+    vcl_cout << "ERROR: Foreground response model's parameters have not been set! Run parameter fitting routine first!\n";
+    return false;
+  } 
+
+  bsta_weibull<float> pd_class(lambda_, k_);  bsta_weibull<float> pd_non_class(lambda_non_class_, k_non_class_);
+
+  //: extract all the parts from the responses
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
+    {
+      float res = op_res(i,j);
+      //if the operator response is small we can't tell
+      if (res<1.0e-3f)
+        continue;
+
+      float pf = fg_prob_operator(class_prob_image, i, j);
+      if (pf < 0.9f)
+        continue;
+
+      float pd_c = pd_class.prob_density(res); // prob density class
+      float pd_nc = pd_non_class.prob_density(res); // prob density class
+
+      if (pd_c > 0.0f) {
+        brec_part_gaussian_sptr dp = new brec_part_gaussian((float)i, (float)j, res, lambda0_, lambda1_, theta_+rot_angle, bright_, type_);
+        dp->rho_c_f_ = pd_c;
+        dp->rho_nc_f_ = pd_nc;
+        dp->rho_c_b_ = 0.0f;
+        dp->rho_nc_b_ = 0.0f;
+
+        dp->cutoff_percentage_ = cutoff_percentage_;
+        instances.push_back(dp->cast_to_instance());
+      }
+    }
+
+  return true;
+}
+
 
 //: use the background mean and std_dev imgs to construct response model for background and calculate posterior ratio's expected value
 //  assumes that k_ and lambda_ for the foreground response model has already been set
@@ -701,7 +821,7 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
 
       if (rho > 0.0f) {
         cnt_ = cnt_ + 1;
-        rho_ = ((cnt_-1)*rho_ + rho)/cnt_;
+        rho_c_f_ = ((cnt_-1)*rho_c_f_ + rho)/cnt_;
         //vcl_cout << "after update, instance rho_: " << rho_ << " cnt_: " << cnt_ << " rho: " << rho << " neu: " << neu << " den: " << den << '\n';
       }
     }
@@ -709,4 +829,15 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
   //vcl_cout << "after update, instance cnt_: " << cnt_ << '\n';
   return true;
 }
+
+bool draw_gauss_to_ps(vul_psfile& ps, brec_part_gaussian_sptr pi, float x, float y, float cr, float cg, float cb)
+{
+  ps.set_fg_color(cr,cg,cb);
+  ps.set_line_width(1.f);
+  //: convert image coordinate system (origin at the top left corner) to ps coordinate system (origin at the bottom left corner)
+  ps.ellipse(x*4, -y*4, pi->lambda0_*4, pi->lambda1_*4, int(-pi->theta_));
+  return true;
+}
+
+
 

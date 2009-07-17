@@ -61,7 +61,7 @@ struct fg_pair_density_est : public vnl_least_squares_function
 class fg_pair_density_est_amoeba : public vnl_cost_function
 {
  public:
-  fg_pair_density_est_amoeba(vcl_vector<vcl_pair<float, float> > const& /*pairs*/): vnl_cost_function(1) {}
+  fg_pair_density_est_amoeba(vcl_vector<vcl_pair<float, float> > const& pairs): vnl_cost_function(1) {}
 
   double f(const vnl_vector<double>& x)
   {
@@ -95,3 +95,4 @@ class brec_param_estimation
 };
 
 #endif // brec_param_estimation_H_
+

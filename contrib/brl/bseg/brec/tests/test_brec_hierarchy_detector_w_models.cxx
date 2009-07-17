@@ -128,7 +128,7 @@ static void test_brec_hierarchy_detector_w_models()
   vcl_cout << "h: # of nodes: " << h->number_of_vertices() << " # of edges: " << h->number_of_edges() << " # of prims: " << h->get_dummy_primitive_instances().size() << vcl_endl;
 
   // train the response models
-  vcl_string model_dir("./train_dir/");
+  vcl_string model_dir(".\\train_dir\\");
   vul_file::make_directory(model_dir);
   h->set_model_dir(model_dir);
 
@@ -195,7 +195,7 @@ static void test_brec_hierarchy_detector_w_models()
   }
 
   brec_part_hierarchy_detector hd(h);
-  hd.detect_using_trained_response_models(inp_img, back_prob_map, 0.0f);
+  hd.detect(inp_img, back_prob_map, 0.0f, brec_detector_methods::POSTERIOR, 3.0);
 
   vcl_vector<brec_part_instance_sptr> parts_prims = hd.get_parts(0);
 

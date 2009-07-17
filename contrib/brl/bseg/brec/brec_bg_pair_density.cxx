@@ -221,3 +221,4 @@ brec_bg_pair_density::initialize_bg_map(vil_image_view<float>& prob_density, vil
   return true;
 }
 
+

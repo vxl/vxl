@@ -38,6 +38,7 @@ SET(brec_sources
     brec_glitch.h    brec_glitch.cxx
     brec_part_hierarchy_learner.h    brec_part_hierarchy_learner.cxx
     brec_part_hierarchy_learner_sptr.h
+
 )
 
 AUX_SOURCE_DIRECTORY(Templates brec_sources)

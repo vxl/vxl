@@ -38,6 +38,7 @@ bool brec_prob_map_roc_compute_process_cons(bprb_func_process& pro)
   //output
   vcl_vector<vcl_string> output_types;
   output_types.push_back("float");  // return the threshold at the best operating point
+  output_types.push_back("float");  // return a threshold
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -120,8 +121,9 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
     }
   }
 
-  pro.set_output_val<float>(0, (float)pa[best_id]);
-
+  pro.set_output_val<float>(0, (float)pa[best_id]); 
+  pro.set_output_val<float>(1, (float)pa[18]); 
+  
   vcl_ofstream of(out_file.c_str());
   of << "# brec_prob_map_roc_compute_process\n#line 1: threshold values\n#line 2: FPR values for thresholds\n#line 3: TPR values\n";
   for (unsigned ip = 0; ip<N; ++ip)

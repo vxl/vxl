@@ -16,3 +16,4 @@ typedef vbl_smart_ptr<brec_part_base> brec_part_base_sptr;
 typedef vbl_smart_ptr<brec_part_instance> brec_part_instance_sptr;
 
 #endif // brec_part_base_sptr_h_
+

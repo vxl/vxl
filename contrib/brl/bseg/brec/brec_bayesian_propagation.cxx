@@ -484,3 +484,4 @@ brec_bayesian_propagation::run_area(vil_image_view<float>& area_map, float lambd
   return true;
 }
 
+

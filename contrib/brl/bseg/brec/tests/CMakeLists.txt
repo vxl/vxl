@@ -1,5 +1,5 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
+INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/bvxm )
+INCLUDE_DIRECTORIES( ${BRL_SOURCE_DIR}/bseg/brec )
 
 ADD_EXECUTABLE( brec_test_all
   test_driver.cxx
@@ -10,6 +10,9 @@ ADD_EXECUTABLE( brec_test_all
   test_brec_hierarchy_detector.cxx
   test_brec_hierarchy_detector_w_models.cxx
   test_brec_part_hierarchy_learner.cxx
+  test_brec_hierarchy_edge.cxx
+  test_brec_hierarchy.cxx
+  test_brec_hierarchy_detector2.cxx
 )
 
 TARGET_LINK_LIBRARIES( brec_test_all brec testlib vul vbl vpgl vil_pro )
@@ -30,6 +33,9 @@ ADD_TEST( brec_test_hierarchy_builder     ${EXECUTABLE_OUTPUT_PATH}/brec_test_al
 ADD_TEST( brec_test_hierarchy_detector     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_brec_hierarchy_detector )
 ADD_TEST( brec_test_hierarchy_detector_w_models     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_brec_hierarchy_detector_w_models )
 ADD_TEST( brec_test_part_hierarchy_learner     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_brec_part_hierarchy_learner )
+ADD_TEST( brec_test_hierarchy_edge     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_brec_hierarchy_edge )
+ADD_TEST( brec_test_hierarchy     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_brec_hierarchy )
+ADD_TEST( brec_test_hierarchy_detector2     ${EXECUTABLE_OUTPUT_PATH}/brec_test_all test_brec_hierarchy_detector2 )
 
 ADD_EXECUTABLE( brec_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brec_test_include brec )

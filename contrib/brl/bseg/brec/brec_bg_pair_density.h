@@ -86,3 +86,4 @@ class brec_bg_pair_density : public brec_pair_density
 };
 
 #endif // brec_bg_pair_density_H_
+

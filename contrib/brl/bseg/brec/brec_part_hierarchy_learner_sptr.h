@@ -13,3 +13,4 @@ class brec_part_hierarchy_learner;
 typedef vbl_smart_ptr<brec_part_hierarchy_learner> brec_part_hierarchy_learner_sptr;
 
 #endif // brec_part_hierarchy_learner_sptr_h_
+

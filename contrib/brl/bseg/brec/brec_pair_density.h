@@ -32,3 +32,4 @@ class brec_pair_density
 };
 
 #endif // brec_pair_density_h_
+

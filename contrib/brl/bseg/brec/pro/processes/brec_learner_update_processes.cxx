@@ -199,3 +199,46 @@ bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
   return true;
 }
 
+//: Constructor
+bool brec_learner_layer_n_update_stats_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("brec_part_hierarchy_learner_sptr");      // learner instance
+  input_types.push_back("brec_part_hierarchy_detector_sptr");      // a detector instance 
+  input_types.push_back("unsigned");      // n: layer id
+  input_types.push_back("unsigned");      // k: class id
+  input_types.push_back("vcl_string");      // output file to save histograms in matlab .m file format
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  //output
+  vcl_vector<vcl_string> output_types;
+  ok = pro.set_output_types(output_types);
+  return ok;
+}
+
+bool brec_learner_layer_n_update_stats_process(bprb_func_process& pro)
+{
+  // Sanity check
+  if (pro.n_inputs() < 4){
+    vcl_cerr << "  brec_learner_layer_n_update_stats_process - invalid inputs\n";
+    return false;
+  }
+
+  //: get input
+  unsigned i = 0;
+  brec_part_hierarchy_learner_sptr hl = pro.get_input<brec_part_hierarchy_learner_sptr>(i++);
+  brec_part_hierarchy_detector_sptr hd = pro.get_input<brec_part_hierarchy_detector_sptr>(i++);
+  unsigned n = pro.get_input<unsigned>(i++);
+  unsigned k = pro.get_input<unsigned>(i++);
+  vcl_string output_file = pro.get_input<vcl_string>(i++);
+
+  hl->layer_n_collect_stats(hd, n, k);
+  hl->print_to_m_file_layer_n(output_file, k, false);
+  
+  return true;
+}
+
+

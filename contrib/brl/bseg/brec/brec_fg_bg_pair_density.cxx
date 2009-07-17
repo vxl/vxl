@@ -25,3 +25,4 @@ double brec_fg_bg_pair_density::operator()(const double y0, const double y1)
   return (1.0/A)*(1-B);
 }
 
+

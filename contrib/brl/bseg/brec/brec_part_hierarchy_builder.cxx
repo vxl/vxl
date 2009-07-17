@@ -23,114 +23,6 @@ strength_more( const brec_part_instance_sptr& left_val,
   return left_val->strength_ > right_val->strength_;
 }
 
-#if 0
-brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_candidates_from_one_image(vil_image_resource_sptr img, float min_strength)
-{
-  // extract all the primitives
-  float lambda0 = 2.0f;
-  float lambda1 = 1.0f;
-  float theta = 0.0f;
-  bool bright = false;
-  vcl_vector<brec_part_instance_sptr> parts;
-  extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 0, parts);
-  theta = 90.0f;
-  extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 1, parts);
-  theta = 45.0f;
-  extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 2, parts);
-  theta = 135.0f;
-  extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.1f, 3, parts);
-
-  // now sort primitives wrt strength
-  vcl_sort(parts.begin(), parts.end(), strength_more);
-  // erase the ones with less than min_strength
-  vcl_vector<brec_part_instance_sptr>::reverse_iterator it = parts.rbegin();
-  for ( ; it != parts.rend(); it++) {
-    if ((*it)->strength_ > min_strength)
-      break;
-  }
-  parts.erase(it.base(), parts.end());
-
-  brec_part_hierarchy_sptr h = new brec_part_hierarchy();
-  // add the primitive types
-  brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);
-  brec_part_base_sptr p_0_1 = new brec_part_base(0, 1);
-  brec_part_base_sptr p_0_2 = new brec_part_base(0, 2);
-  brec_part_base_sptr p_0_3 = new brec_part_base(0, 3);
-  h->add_vertex(p_0_0);
-  h->add_vertex(p_0_1);
-  h->add_vertex(p_0_2);
-  h->add_vertex(p_0_3);
-
-  construct_layer_candidates(1, h, parts); // pairs
-
-  // now detect layer 1 instances and construct the second layer
-
-  // given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
-  vcl_vector<brec_part_instance_sptr> upper_parts;
-  h->extract_upper_layer(parts, img->ni(), img->nj(), 0.1f, upper_parts);
-
-  // now sort primitives wrt strength
-  vcl_sort(upper_parts.begin(), upper_parts.end(), strength_more);
-  // erase the ones with less than min_strength
-  it = upper_parts.rbegin();
-  for ( ; it != upper_parts.rend(); it++) {
-    if ((*it)->strength_ > min_strength)
-      break;
-  }
-  upper_parts.erase(it.base(), upper_parts.end());
-
-  construct_layer_candidates(2, h, upper_parts); // pairs of pairs
-
-  return h;
-}
-#endif // 0
-
-#if 0
-//: Construct \a layer_n from all pairwise combinations of detected parts of \a layer_n-1
-//  Assuming parts array contains detected parts of layer n-1
-bool brec_part_hierarchy_builder::construct_layer_candidates(unsigned layer_n, brec_part_hierarchy_sptr& h, vcl_vector<brec_part_instance_sptr>& parts)
-{
-  if (layer_n-1 < 0)
-    return false;
-
-  unsigned layer_below = layer_n-1;
-
-  // make pairs from all combinations
-  unsigned k = 0;
-  for (unsigned i = 0; i < parts.size(); i++) {
-    brec_part_instance_sptr pi = parts[i];
-    brec_part_base_sptr p_0_c = h->get_node(layer_below, pi->type_);
-
-    for (unsigned j = i+1; j < parts.size(); j++) {
-      brec_part_instance_sptr pj = parts[j];
-      brec_part_base_sptr p_0_s = h->get_node(layer_below, pj->type_);
-      vnl_vector_fixed<float,2> sample(pj->x_ - pi->x_, pj->y_ - pi->y_);
-
-      // LAYER 1:
-      brec_part_base_sptr p_1_k = new brec_part_base(layer_n, k);
-      k++;
-      h->add_vertex(p_1_k);
-
-      // the first child becomes the central part, create an edge to the central part
-      brec_hierarchy_edge_sptr e_1_k_to_central = new brec_hierarchy_edge(p_1_k, p_0_c);
-      p_1_k->add_outgoing_edge(e_1_k_to_central);
-      p_0_c->add_incoming_edge(e_1_k_to_central);
-      h->add_edge_no_check(e_1_k_to_central);
-
-      // create an edge to the second part of p_1_k
-      brec_hierarchy_edge_sptr e_1_k_to_second = new brec_hierarchy_edge(p_1_k, p_0_s);
-      p_1_k->add_outgoing_edge(e_1_k_to_second);    //
-      p_0_s->add_incoming_edge(e_1_k_to_second);
-      // train this edge with the sample
-      e_1_k_to_second->update_model(sample);
-      h->add_edge_no_check(e_1_k_to_second);
-    }
-  }
-
-  return true;
-}
-#endif // 0
-
 //: construct a hierarchy manually
 brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_vehicle_detector()
 {
@@ -152,13 +44,13 @@ brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_vehicle_detector
   brec_part_base_sptr p_1_0 = new brec_part_base(1, 0);
   h->add_vertex(p_1_0);
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0);
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0, true);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
   p_0_0->add_incoming_edge(e_1_0_to_central);
   h->add_edge_no_check(e_1_0_to_central);
 
   // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1, false);
   p_1_0->add_outgoing_edge(e_1_0_to_second);
   p_0_1->add_incoming_edge(e_1_0_to_second);
 
@@ -209,13 +101,13 @@ brec_part_hierarchy_builder::construct_detector_roi1_0()
   h->add_vertex(p_1_0);
   p_1_0->detection_threshold_ = 0.00001f;
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0);
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0, true);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
   p_0_0->add_incoming_edge(e_1_0_to_central);
   h->add_edge_no_check(e_1_0_to_central);
 
   // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1, false);
   p_1_0->add_outgoing_edge(e_1_0_to_second);
   p_0_1->add_incoming_edge(e_1_0_to_second);
 
@@ -237,7 +129,7 @@ brec_part_hierarchy_builder::construct_detector_roi1_0()
   h->add_edge_no_check(e_1_0_to_second);
 
   // create an edge to the third part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_third = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_third = new brec_hierarchy_edge(p_1_0, p_0_1, false);
   p_1_0->add_outgoing_edge(e_1_0_to_third);
   p_0_1->add_incoming_edge(e_1_0_to_third);
 
@@ -286,13 +178,13 @@ brec_part_hierarchy_builder::construct_detector_roi1_1()
   brec_part_base_sptr p_1_0 = new brec_part_base(1, 0);
   h->add_vertex(p_1_0);
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0);
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0, true);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
   p_0_0->add_incoming_edge(e_1_0_to_central);
   h->add_edge_no_check(e_1_0_to_central);
 
   // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1, false);
   p_1_0->add_outgoing_edge(e_1_0_to_second);
   p_0_1->add_incoming_edge(e_1_0_to_second);
 
@@ -338,7 +230,7 @@ brec_part_hierarchy_builder::construct_detector_roi1_1()
   h->add_edge_no_check(e_1_0_to_second);
 
   // create an edge to the third part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_third = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_third = new brec_hierarchy_edge(p_1_0, p_0_1, false);
   p_1_0->add_outgoing_edge(e_1_0_to_third);
   p_0_1->add_incoming_edge(e_1_0_to_third);
 
@@ -388,13 +280,13 @@ brec_part_hierarchy_builder::construct_detector_roi1_2()
   brec_part_base_sptr p_1_0 = new brec_part_base(1, 0);
   h->add_vertex(p_1_0);
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0);
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0, true);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
   p_0_0->add_incoming_edge(e_1_0_to_central);
   h->add_edge_no_check(e_1_0_to_central);
 
   // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_0);
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_0, false);
   p_1_0->add_outgoing_edge(e_1_0_to_second);
   p_0_0->add_incoming_edge(e_1_0_to_second);
 
@@ -435,13 +327,13 @@ brec_part_hierarchy_builder::construct_detector_roi1_2()
   brec_part_base_sptr p_2_0 = new brec_part_base(2, 0);
   h->add_vertex(p_2_0);
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_2_0_to_central = new brec_hierarchy_edge(p_2_0, p_1_0);
+  brec_hierarchy_edge_sptr e_2_0_to_central = new brec_hierarchy_edge(p_2_0, p_1_0, true);
   p_2_0->add_outgoing_edge(e_2_0_to_central);
   p_1_0->add_incoming_edge(e_2_0_to_central);
   h->add_edge_no_check(e_2_0_to_central);
 
   // create an edge to the second part of p_2_0
-  brec_hierarchy_edge_sptr e_2_0_to_second = new brec_hierarchy_edge(p_2_0, p_1_0);
+  brec_hierarchy_edge_sptr e_2_0_to_second = new brec_hierarchy_edge(p_2_0, p_1_0, false);
   p_2_0->add_outgoing_edge(e_2_0_to_second);
   p_1_0->add_incoming_edge(e_2_0_to_second);
 
@@ -463,13 +355,13 @@ brec_part_hierarchy_builder::construct_detector_roi1_2()
   brec_part_base_sptr p_3_0 = new brec_part_base(3, 0);
   h->add_vertex(p_3_0);
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_3_0_to_central = new brec_hierarchy_edge(p_3_0, p_2_0);
+  brec_hierarchy_edge_sptr e_3_0_to_central = new brec_hierarchy_edge(p_3_0, p_2_0, true);
   p_3_0->add_outgoing_edge(e_3_0_to_central);
   p_2_0->add_incoming_edge(e_3_0_to_central);
   h->add_edge_no_check(e_3_0_to_central);
 
   // create an edge to the second part of p_3_0
-  brec_hierarchy_edge_sptr e_3_0_to_second = new brec_hierarchy_edge(p_3_0, p_2_0);
+  brec_hierarchy_edge_sptr e_3_0_to_second = new brec_hierarchy_edge(p_3_0, p_2_0, false);
   p_3_0->add_outgoing_edge(e_3_0_to_second);
   p_2_0->add_incoming_edge(e_3_0_to_second);
 
@@ -517,13 +409,13 @@ brec_part_hierarchy_builder::construct_detector_roi1_3()
   h->add_vertex(p_1_0);
   p_1_0->detection_threshold_ = 0.001f;
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_2);
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_2, true);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
   p_0_2->add_incoming_edge(e_1_0_to_central);
   h->add_edge_no_check(e_1_0_to_central);
 
   // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_0);
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_0, false);
   p_1_0->add_outgoing_edge(e_1_0_to_second);
   p_0_0->add_incoming_edge(e_1_0_to_second);
 
@@ -545,7 +437,7 @@ brec_part_hierarchy_builder::construct_detector_roi1_3()
   h->add_edge_no_check(e_1_0_to_second);
 
   // create an edge to the third part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_third = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_third = new brec_hierarchy_edge(p_1_0, p_0_1, false);
   p_1_0->add_outgoing_edge(e_1_0_to_third);
   p_0_1->add_incoming_edge(e_1_0_to_third);
 
@@ -595,13 +487,13 @@ brec_part_hierarchy_builder::construct_detector_roi1_4()
   h->add_vertex(p_1_0);
   p_1_0->detection_threshold_ = 0.0000001f;
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_1, true);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
   p_0_1->add_incoming_edge(e_1_0_to_central);
   h->add_edge_no_check(e_1_0_to_central);
 
   // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_0);
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_0, false);
   p_1_0->add_outgoing_edge(e_1_0_to_second);
   p_0_0->add_incoming_edge(e_1_0_to_second);
 
@@ -622,7 +514,7 @@ brec_part_hierarchy_builder::construct_detector_roi1_4()
   h->add_edge_no_check(e_1_0_to_second);
 
   // create an edge to the third part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_t = new brec_hierarchy_edge(p_1_0, p_0_2);
+  brec_hierarchy_edge_sptr e_1_0_to_t = new brec_hierarchy_edge(p_1_0, p_0_2, false);
   p_1_0->add_outgoing_edge(e_1_0_to_t);
   p_0_2->add_incoming_edge(e_1_0_to_t);
 
@@ -660,13 +552,13 @@ brec_part_hierarchy_builder::construct_eight_detector()
   brec_part_base_sptr p_1_0 = new brec_part_base(1, 0);
   h_8->add_vertex(p_1_0);
   // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_1);
+  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_1, true);
   p_1_0->add_outgoing_edge(e_1_0_to_central);
   p_0_1->add_incoming_edge(e_1_0_to_central);
   h_8->add_edge_no_check(e_1_0_to_central);
 
   // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1);     //  p_1_0
+  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1, false);     //  p_1_0
   p_1_0->add_outgoing_edge(e_1_0_to_second);    //                                             / \.
                                                //                                             p_0_1
   p_0_1->add_incoming_edge(e_1_0_to_second);
@@ -689,13 +581,13 @@ brec_part_hierarchy_builder::construct_eight_detector()
   brec_part_base_sptr p_2_0 = new brec_part_base(2, 0);
   h_8->add_vertex(p_2_0);
   // create an edge to the central part
-  brec_hierarchy_edge_sptr e_2_0_to_central = new brec_hierarchy_edge(p_2_0, p_1_0);
+  brec_hierarchy_edge_sptr e_2_0_to_central = new brec_hierarchy_edge(p_2_0, p_1_0, true);
   p_2_0->add_outgoing_edge(e_2_0_to_central);
   p_1_0->add_incoming_edge(e_2_0_to_central);
   h_8->add_edge_no_check(e_2_0_to_central);
 
   // create an edge to the second part
-  brec_hierarchy_edge_sptr e_2_0_to_second = new brec_hierarchy_edge(p_2_0, p_1_0);
+  brec_hierarchy_edge_sptr e_2_0_to_second = new brec_hierarchy_edge(p_2_0, p_1_0, false);
   p_2_0->add_outgoing_edge(e_2_0_to_second);
   p_1_0->add_incoming_edge(e_2_0_to_second);
   h_8->add_edge(e_2_0_to_second);
@@ -728,98 +620,6 @@ brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_test_detector()
   return h;
 }
 
-brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_mi_detector()
-{
-  brec_part_hierarchy_sptr h = new brec_part_hierarchy();
-  h->set_name("mi_detector");
 
-  //: LAYER 0: two primitive:
-  brec_part_base_sptr p_0_0 = new brec_part_base(0, 0);  // (lambda0=2.0,lambda1=2.0,theta=0,bright=false)
-  h->add_vertex(p_0_0);
-  
-  brec_part_base_sptr p_0_1 = new brec_part_base(0, 1);  // (lambda0=5.0,lambda1=1.0,theta=0,bright=false)
-  h->add_vertex(p_0_1);
-  
-  //: create a dummy instance from each and add to h
-  brec_part_gaussian_sptr pi_0_0 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 2.0f, 0.0f, false, 0);
-  brec_part_gaussian_sptr pi_0_1 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 5.0f, 1.0f, 0.0f, false, 1);
-  
-  pi_0_0->detection_threshold_ = 0.6f;
-  pi_0_1->detection_threshold_ = 0.6f;
-  h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
-  h->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
-
-  // LAYER 1: two layer 1 parts
-  brec_part_base_sptr p_1_0 = new brec_part_base(1, 0);
-  h->add_vertex(p_1_0);
-  p_1_0->detection_threshold_ = 0.1f;
-  // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_0_to_central = new brec_hierarchy_edge(p_1_0, p_0_0);
-  p_1_0->add_outgoing_edge(e_1_0_to_central);
-  p_0_0->add_incoming_edge(e_1_0_to_central);
-  h->add_edge_no_check(e_1_0_to_central);
-
-  // create an edge to the second part of p_1_0
-  brec_hierarchy_edge_sptr e_1_0_to_second = new brec_hierarchy_edge(p_1_0, p_0_1);
-  p_1_0->add_outgoing_edge(e_1_0_to_second);
-  p_0_1->add_incoming_edge(e_1_0_to_second);
-
-  vnl_vector_fixed<float,2> c_0_0(59.0f,41.0f); // center measured from the image
-  vnl_vector_fixed<float,2> c_0_1_0(54.0f,15.0f); // center measured from the image
-
-  // train this edge
-  vnl_vector_fixed<float,2> sample1 = c_0_1_0 - c_0_0; // center difference measured from the image
-  
-  c_0_0 = vnl_vector_fixed<float,2>(274.0f,41.0f); // center measured from the image
-  c_0_1_0 = vnl_vector_fixed<float,2>(259.0f,15.0f); // center measured from the image
-  vnl_vector_fixed<float,2> sample2 = c_0_1_0 - c_0_0; // center difference measured from the image
-
-  // calculate angle and dists
-  float a1, d1;
-  e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample1, d1, a1);
-  e_1_0_to_second->set_min_stand_dev_dist(2.0f);
-  e_1_0_to_second->set_min_stand_dev_angle(5.0f);
-  e_1_0_to_second->update_dist_model(d1);
-  e_1_0_to_second->update_angle_model(a1);
-  
-  e_1_0_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample2, d1, a1);
-  e_1_0_to_second->update_dist_model(d1);
-  e_1_0_to_second->update_angle_model(a1);
-
-  h->add_edge_no_check(e_1_0_to_second);
-
-  // LAYER 1: two layer 1 parts
-  brec_part_base_sptr p_1_1 = new brec_part_base(1, 1);
-  h->add_vertex(p_1_1);
-  p_1_1->detection_threshold_ = 0.5f;
-  // the first child becomes the central part, create an edge to the central part
-  brec_hierarchy_edge_sptr e_1_1_to_central = new brec_hierarchy_edge(p_1_1, p_0_0);
-  p_1_1->add_outgoing_edge(e_1_1_to_central);
-  p_0_0->add_incoming_edge(e_1_1_to_central);
-  h->add_edge_no_check(e_1_1_to_central);
-
-  // create an edge to the second part of p_1_1
-  brec_hierarchy_edge_sptr e_1_1_to_second = new brec_hierarchy_edge(p_1_1, p_0_1);
-  p_1_1->add_outgoing_edge(e_1_1_to_second);
-  p_0_1->add_incoming_edge(e_1_1_to_second);
-
-  c_0_0 = vnl_vector_fixed<float,2>(59.0f,41.0f); // center measured from the image
-  c_0_1_0 = vnl_vector_fixed<float,2>(54.0f,15.0f); // center measured from the image
-
-  // train this edge
-  sample1 = c_0_1_0 - c_0_0; // center difference measured from the image
-  
-  // calculate angle and dists
-  e_1_1_to_second->calculate_dist_angle(pi_0_0->cast_to_instance(), sample1, d1, a1);
-  e_1_1_to_second->set_min_stand_dev_dist(2.0f);
-  e_1_1_to_second->set_min_stand_dev_angle(5.0f);
-  e_1_1_to_second->update_dist_model(d1);
-  e_1_1_to_second->update_angle_model(a1);
-  
-  h->add_edge_no_check(e_1_1_to_second);
-  
-  return h;
-
-}
 
   

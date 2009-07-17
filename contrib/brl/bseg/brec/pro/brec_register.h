@@ -9,3 +9,4 @@ class brec_register
 };
 
 #endif  // brec_register_h_
+

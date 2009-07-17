@@ -87,7 +87,7 @@ bool brec_create_mog_image_process(bprb_func_process& pro)
   }
 
   // return the output img
-  pro.set_output_val<bbgm_image_sptr>(1, out_img);
+  pro.set_output_val<bbgm_image_sptr>(0, out_img);
 
   return true;
 }

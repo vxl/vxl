@@ -20,7 +20,7 @@ DECLARE_FUNC_CONS(brec_recognize_structure_process);
 
 DECLARE_FUNC_CONS(brec_recognize_structure2_process);
 DECLARE_FUNC_CONS(brec_construct_bg_op_models_process);
-DECLARE_FUNC_CONS(brec_construct_fg_op_models_process);
+DECLARE_FUNC_CONS_INIT(brec_construct_class_op_models_process);
 DECLARE_FUNC_CONS(brec_create_hierarchy_process);
 DECLARE_FUNC_CONS(brec_load_hierarchy_process);
 DECLARE_FUNC_CONS(brec_save_hierarchy_process);
@@ -31,4 +31,17 @@ DECLARE_FUNC_CONS(brec_learner_layer0_rank_process);
 DECLARE_FUNC_CONS_INIT(brec_learner_layer0_update_posterior_stats_process);
 DECLARE_FUNC_CONS_INIT(brec_learner_layer0_update_stats_process);
 
+DECLARE_FUNC_CONS(brec_learner_layer_n_init_process);
+DECLARE_FUNC_CONS(brec_learner_layer_n_update_stats_process);
+DECLARE_FUNC_CONS(brec_learner_layer_n_fit_process);
+
+DECLARE_FUNC_CONS(brec_draw_hierarchy_process);
+
+DECLARE_FUNC_CONS(brec_initialize_detector_process);
+DECLARE_FUNC_CONS(brec_add_hierarchy_to_detector_process);
+DECLARE_FUNC_CONS_INIT(brec_detect_hierarchy_process);
+
+DECLARE_FUNC_CONS(brec_set_hierarchy_model_dir_process);
+
 #endif  // brec_processes_h_
+

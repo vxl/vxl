@@ -14,35 +14,36 @@
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/vnl_double_3.h>
 
-float
+double
 //brec_hierarchy_edge::prob_density(const vnl_vector_fixed<float,2>& pt)
 brec_hierarchy_edge::prob_density(const float dist, const float angle)
 {
   //: return non-normalized value
   //return float(loc_model_.var()*2*vnl_math::pi*loc_model_.prob_density(pt));
-  float d_dens = dist_model_.prob_density(dist);
-  float d_var = dist_model_.var();
-  d_dens = d_var*2.0f*((float)vnl_math::pi)*d_dens;
+  double d_dens = dist_model_.prob_density(dist);
+  double d_var = dist_model_.var();
+  d_dens = d_var*2.0f*vnl_math::pi*d_dens;
 
-  float a_dens = angle_model_.prob_density(angle);
-  float a_var = angle_model_.var();
-  a_dens = a_var*2.0f*((float)vnl_math::pi)*a_dens;
+  double a_dens = angle_model_.prob_density(angle);
+  double a_var = angle_model_.var();
+  a_dens = a_var*2.0f*(vnl_math::pi)*a_dens;
 
-  return d_dens*a_dens;
+  //return weight_*d_dens*a_dens;
+  return d_dens*a_dens;  // not using weighted density (weights were given by mean-shit mode finding for 1D angle and distance distributions separately)
 }
 
-float
+double
 brec_hierarchy_edge::prob_density_dist(const float dist)
 {
   //: return non-normalized value
-  return float(dist_model_.var()*2*vnl_math::pi*dist_model_.prob_density(dist));
+  return dist_model_.var()*2*vnl_math::pi*dist_model_.prob_density(dist);
 }
 
-float
+double
 brec_hierarchy_edge::prob_density_angle(const float angle)
 {
   //: return non-normalized value
-  return float(angle_model_.var()*2*vnl_math::pi*angle_model_.prob_density(angle));
+  return angle_model_.var()*2*vnl_math::pi*angle_model_.prob_density(angle);
 }
 
 #if 0
@@ -118,11 +119,14 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
   vnl_vector_fixed<float, 2> v = pp->direction_vector();  // get orientation vector of central part: pi
 
   //: define a rotation about z axis (in the image plane)
-  vnl_quaternion<float> q(0.0f, 0.0f, mean_angle()-var_angle());
+  double mean_angle = this->mean_angle();
+  double var_angle = this->var_angle();
+  vnl_quaternion<float> q(0.0f, 0.0f, float(mean_angle-var_angle));
 
+  double mean_dist = this->mean_dist();
   vnl_vector_fixed<float,3> v3d(v[0], v[1], 0.0f);
   vnl_vector_fixed<float,3> out = q.rotate(v3d);
-  vnl_vector_fixed<float,3> out_dist = out*mean_dist();
+  vnl_vector_fixed<float,3> out_dist = out*float(mean_dist);
 
   float mx = cx + out_dist[0];
   float my = cy + out_dist[1];
@@ -137,9 +141,9 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
   probe.add(pr0); probe.add(pr1); probe.add(pr2); probe.add(pr3);
 
   //: create these boxes for each var_angle() and take union of all boxes
-  vnl_quaternion<float> q2(0.0f, 0.0f, mean_angle()+var_angle());
+  vnl_quaternion<float> q2(0.0f, 0.0f, float(mean_angle+var_angle));
   vnl_vector_fixed<float,3> out2 = q2.rotate(v3d);
-  vnl_vector_fixed<float,3> out_dist2 = out2*mean_dist();
+  vnl_vector_fixed<float,3> out_dist2 = out2*float(mean_dist);
 
   mx = cx + out_dist2[0];
   my = cy + out_dist2[1];
@@ -153,6 +157,50 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
   return probe;
 }
 
+//: samples the position of the part linked with this edge wrt to the position (x,y)
+vnl_vector_fixed<float,2> brec_hierarchy_edge::sample_position(brec_part_instance_sptr central_p, float x, float y, vnl_random& rng)
+{
+  // if central_p is a composed part we need to get its central part
+  brec_part_instance_sptr pp = central_p;
+  while (pp->kind_ == brec_part_instance_kind::COMPOSED) {
+    pp = pp->central_part()->cast_to_instance();
+  } 
+  vnl_vector_fixed<float, 2> v = pp->direction_vector();  // get orientation vector of central part
+
+  //: define a rotation about z axis (in the image plane)
+  vnl_quaternion<float> q(0.0f, 0.0f, float(angle_model_.sample(rng)));
+  
+  vnl_vector_fixed<float,3> v3d(v[0], v[1], 0.0f);
+  vnl_vector_fixed<float,3> out = q.rotate(v3d);
+  vnl_vector_fixed<float,3> out_dist = out*float(dist_model_.sample(rng));
+
+  float mx = x + out_dist[0];
+  float my = y + out_dist[1];
+  vnl_vector_fixed<float, 2> out_v(mx, my);
+  return out_v;
+}
+vnl_vector_fixed<float,2> brec_hierarchy_edge::mean_position(brec_part_instance_sptr central_p, float x, float y)
+{
+  // if central_p is a composed part we need to get its central part
+  brec_part_instance_sptr pp = central_p;
+  while (pp->kind_ == brec_part_instance_kind::COMPOSED) {
+    pp = pp->central_part()->cast_to_instance();
+  } 
+  vnl_vector_fixed<float, 2> v = pp->direction_vector();  // get orientation vector of central part
+
+  //: define a rotation about z axis (in the image plane)
+  vnl_quaternion<float> q(0.0f, 0.0f, float(angle_model_.mean()));
+  
+  vnl_vector_fixed<float,3> v3d(v[0], v[1], 0.0f);
+  vnl_vector_fixed<float,3> out = q.rotate(v3d);
+  vnl_vector_fixed<float,3> out_dist = out*float(dist_model_.mean());
+
+  float mx = x + out_dist[0];
+  float my = y + out_dist[1];
+  vnl_vector_fixed<float, 2> out_v(mx, my);
+  return out_v;
+}
+
 bxml_data_sptr brec_hierarchy_edge::xml_element()
 {
   bxml_element* data = new bxml_element("edge");
@@ -164,6 +212,12 @@ bxml_data_sptr brec_hierarchy_edge::xml_element()
 
   data->set_attribute("min_stad_dev_dist",min_stad_dev_dist_);
   data->set_attribute("min_stad_dev_angle",min_stad_dev_angle_);
+  data->set_attribute("weight",weight_);
+
+  if (to_central_)
+    data->set_attribute("to_central",1);
+  else
+    data->set_attribute("to_central",0);
 
   data->append_text("\n ");
   return data;
@@ -183,10 +237,17 @@ bool brec_hierarchy_edge::xml_parse_element(bxml_data_sptr data)
              ((bxml_element*)base_root.ptr())->get_attribute("dist_var", dist_var) &&
              ((bxml_element*)base_root.ptr())->get_attribute("angle_mean", angle_mean) &&
              ((bxml_element*)base_root.ptr())->get_attribute("angle_var", angle_var) &&
+             ((bxml_element*)base_root.ptr())->get_attribute("weight", weight_) &&
              ((bxml_element*)base_root.ptr())->get_attribute("min_stad_dev_dist", min_stad_dev_dist_) &&
              ((bxml_element*)base_root.ptr())->get_attribute("min_stad_dev_angle", min_stad_dev_angle_));
+
+    int to_central_int;
+    o = o && ((bxml_element*)base_root.ptr())->get_attribute("to_central", to_central_int);
+
     if (!o)
       return false;
+
+    to_central_ = to_central_int == 0 ? false : true;
 
     dist_model_.set_mean(dist_mean);
     dist_model_.set_var(dist_var);

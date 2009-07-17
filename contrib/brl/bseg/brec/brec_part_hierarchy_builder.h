@@ -44,10 +44,9 @@ class brec_part_hierarchy_builder
 
   //: for debugging purposes
   static brec_part_hierarchy_sptr construct_eight_detector(); // recognize digit 8
-  static brec_part_hierarchy_sptr construct_test_detector();  // a detector with one primitive part only
+  static brec_part_hierarchy_sptr construct_test_detector();  // a detector with one primitive part only  
 
-  //: for note recognition
-  static brec_part_hierarchy_sptr construct_mi_detector();
 };
 
 #endif // brec_part_hierarchy_builder_h_
+

@@ -65,7 +65,7 @@ static void test_brec_part_hierarchy_learner()
 
   brec_part_hierarchy_learner_sptr collector = new brec_part_hierarchy_learner();
   // 4 directions, lambda's start from 1.0 and increase to 2 with increments of 1
-  collector->initialize_layer0_as_gaussians(4, 2.0f, 1.0f);
+  collector->initialize_layer0_as_gaussians(4, 2.0f, 1.0f, 2);
   TEST("collector created", !collector, false);
   TEST("collector created", collector->stats_layer0().size(), 4*4*2);
 

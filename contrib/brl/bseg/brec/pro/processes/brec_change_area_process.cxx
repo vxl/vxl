@@ -17,8 +17,6 @@
 #include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
-#include <brip/brip_vil_float_ops.h>
-#include <core/vidl_pro/vidl_pro_utils.h>
 
 //: Constructor
 bool brec_change_area_process_cons(bprb_func_process& pro)

@@ -80,7 +80,6 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
     case 2: { h = brec_part_hierarchy_builder::construct_detector_roi1_2(); } break;
     case 3: { h = brec_part_hierarchy_builder::construct_detector_roi1_3(); } break;
     case 4: { h = brec_part_hierarchy_builder::construct_detector_roi1_4(); } break;
-    case 5: { h = brec_part_hierarchy_builder::construct_mi_detector(); } break;
     default: { vcl_cout << "In brec_recognize_structure_process::execute() -- Unrecognized detector type!!\n"; return false; }
   }
 
@@ -123,7 +122,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
   brec_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);
 
   vil_image_view<vxl_byte> output_img(ni, nj, 3);
-  brec_part_hierarchy::generate_output_img(parts_upper_most, orig_img, output_img);
+  brec_part_hierarchy::generate_output_img(parts_upper_most, orig_img, output_img, brec_posterior_types::CLASS_FOREGROUND);
 
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(output_map_float);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_map_sptr);
@@ -136,25 +135,29 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
   return true;
 }
 
+// To be used for training mainly, or when detector is not needed to be passed as an input
 //: Constructor
 bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input orig view
-  input_types.push_back("vil_image_view_base_sptr"); // input view's background probability map, float img with values in [0,1] range
-  input_types.push_back("brec_part_hierarchy_sptr"); // detector for the type of structure to be recognized (needs to be loaded a priori)
+  input_types.push_back("vil_image_view_base_sptr");      // input orig view
+  input_types.push_back("vil_image_view_base_sptr");      // input view's "foreground" probability map, float img with values in [0,1] range, 
+                                                          // CAUTION: Convert it before passing to this process if necessary, e.g. if only the background map is available
+  input_types.push_back("brec_part_hierarchy_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
   input_types.push_back("float");      // angle to rotate detector for the type of structure to be recognized
-                                  // should be passed zero if the original orientation of the detector will be used
-  if (pro.set_input_types(input_types))
-  { //output
+                                  // should be passed zero if the original orientation of the detector will be used                                
+  input_types.push_back("bool");  // set to true if detecting instances during training (sets rho value of the primitives differently during training)
+  input_types.push_back("double");
+
+  if (pro.set_input_types(input_types)) {
+    //output
     vcl_vector<vcl_string> output_types;
-    output_types.push_back("vil_image_view_base_sptr"); // output prob map
-    output_types.push_back("vil_image_view_base_sptr"); // output map overlayed on orig view as a byte image
-    output_types.push_back("brec_part_hierarchy_detector_sptr"); // output map overlayed on orig view as a byte image
+    output_types.push_back("vil_image_view_base_sptr");      // output prob map
+    output_types.push_back("vil_image_view_base_sptr");      // output map overlayed on orig view as a byte image
+    output_types.push_back("brec_part_hierarchy_detector_sptr");      // output map overlayed on orig view as a byte image
     return pro.set_output_types(output_types);
-  }
-  else
+  } else
     return false;
 }
 
@@ -162,7 +165,7 @@ bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
 bool brec_recognize_structure2_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 4) {
+  if (pro.n_inputs() < 6) {
     vcl_cerr << " brec_recognize_structure2_process - invalid inputs\n";
     return false;
   }
@@ -180,10 +183,19 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
   unsigned nj = img.nj();
 
   vil_image_view_base_sptr inp_prob_map = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<float> prob_map = *vil_convert_cast(float(), inp_prob_map);
+  vil_image_view<float> fg_prob_map = *vil_convert_cast(float(), inp_prob_map);
+  vcl_cout << "CAUTION: Input prob map is assumed to be a \"foreground\" probability map, convert it before passing to this process if necessary! (e.g. if only the background map is available)\n";
+
+  if (inp_prob_map->pixel_format() == VIL_PIXEL_FORMAT_BOOL) {
+    float min, max;
+    vil_math_value_range(fg_prob_map, min, max);
+    vcl_cout << "checking proper conversion of bool to float: min val in the image: " << min << " max: " << max << vcl_endl;
+  }
 
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
   float angle = pro.get_input<float>(i++);
+  bool training = pro.get_input<bool>(i++);
+  double detection_radius = pro.get_input<double>(i++);
 
   vul_timer t2;
   t2.mark();
@@ -191,19 +203,22 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
   vcl_cout << "Hierarchy Detector will use the response models at: " << h->model_dir() << vcl_endl;
 
   brec_part_hierarchy_detector_sptr hd = new brec_part_hierarchy_detector(h);
-  //: convert the background map into a foreground map
-  vil_image_view<float> dummy(prob_map.ni(), prob_map.nj());
-  dummy.fill(1.0f);
-  vil_image_view<float> fg_prob_map(prob_map.ni(), prob_map.nj());
-  vil_math_image_difference(dummy, prob_map, fg_prob_map);
-  hd->detect_using_trained_response_models(img, fg_prob_map, angle);
+
+  if (training) {
+    vcl_cout << "detect instances for training\n";
+    hd->detect(img, fg_prob_map, angle, brec_detector_methods::DENSITY_FOR_TRAINING);
+  } else {
+    vcl_cout << "detect instances for testing\n";
+    hd->detect(img, fg_prob_map, angle, brec_detector_methods::POSTERIOR, detection_radius);
+  }
+
   vcl_vector<brec_part_instance_sptr>& parts_upper_most = hd->get_parts(h->highest_layer_id());
 
   vil_image_view<float> output_map_float(ni, nj);
   brec_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);
 
   vil_image_view<vxl_byte> output_img(ni, nj, 3);
-  brec_part_hierarchy::generate_output_img(parts_upper_most, orig_img, output_img);
+  brec_part_hierarchy::generate_output_img(parts_upper_most, orig_img, output_img, brec_posterior_types::CLASS_FOREGROUND);
 
   vil_image_view_base_sptr out_map_sptr = new vil_image_view<float>(output_map_float);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_map_sptr);
@@ -217,3 +232,4 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
 
   return true;
 }
+

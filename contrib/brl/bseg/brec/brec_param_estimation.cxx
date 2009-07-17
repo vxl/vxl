@@ -146,3 +146,4 @@ brec_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes
 
   return true;
 }
+

@@ -149,3 +149,74 @@ bool brec_save_hierarchy_process(bprb_func_process& pro)
   return true;
 }
 
+bool brec_draw_hierarchy_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("brec_part_hierarchy_sptr");      // h
+  input_types.push_back("vcl_string");      // name of output ps file
+  input_types.push_back("float");  // drawing radius for the primitive parts, this radius is doubled as we go up in the hierarchy
+  input_types.push_back("int");  // number of samples to sample from edge distributions
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  //output
+  vcl_vector<vcl_string> output_types;
+  ok = pro.set_output_types(output_types);
+  return ok;
+}
+
+bool brec_draw_hierarchy_process(bprb_func_process& pro)
+{
+  // Sanity check
+  if (pro.n_inputs() < 4) {
+    vcl_cerr << " brec_load_hierarchy_process - invalid inputs\n";
+    return false;
+  }
+
+  // get input
+  unsigned i = 0;
+  brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
+  vcl_string name = pro.get_input<vcl_string>(i++);
+  float drawing_radius = pro.get_input<float>(i++);
+  int N = pro.get_input<int>(i++);
+
+  h->draw_to_ps(N, name, drawing_radius);
+  
+  return true;
+}
+
+bool brec_set_hierarchy_model_dir_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("brec_part_hierarchy_sptr");      // h
+  input_types.push_back("vcl_string");      // model dir
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  //output
+  vcl_vector<vcl_string> output_types;
+  ok = pro.set_output_types(output_types);
+  return ok;
+}
+
+bool brec_set_hierarchy_model_dir_process(bprb_func_process& pro)
+{
+  // Sanity check
+  if (pro.n_inputs() < 2) {
+    vcl_cerr << " brec_set_hierarchy_model_dir_process - invalid inputs\n";
+    return false;
+  }
+
+  // get input
+  unsigned i = 0;
+  brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
+  vcl_string name = pro.get_input<vcl_string>(i++);
+  h->set_model_dir(name);
+  return true;
+}
+
+
