@@ -5,6 +5,7 @@
 #include <bprb/bprb_func_process.h>
 
 DECLARE_FUNC_CONS(bsvg_plot_roc_process);
+DECLARE_FUNC_CONS(bsvg_bar_plot_initialize_process);
 
 #endif  // bsvg_processes_h_
 

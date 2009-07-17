@@ -6,6 +6,7 @@
 #include "bsvg_plot.h"
 #include "bsvg_element.h"
 #include <vcl_iostream.h>
+#include <bxml/bxml_find.h>
 
 void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width)
 {
@@ -218,6 +219,76 @@ void bsvg_plot::add_bars(const vcl_vector<float>& heights, const vcl_vector<floa
   bsvg_group* tg = add_x_labels_helper(x_ls, color, vertical_labels);
   this->add_element(tg);
 }
-    
+
+//: recursive helper to find number of bars
+int number_of_bars_helper(bxml_data_sptr d) {
+  bxml_element* r_elm = dynamic_cast<bxml_element*>(d.ptr());
+  if (!r_elm)
+    return 0;
+  
+  int cnt = 0;
+  for (bxml_element::const_data_iterator it = r_elm->data_begin(); it != r_elm->data_end(); it++) {
+    if ((*it)->type() != bxml_element::ELEMENT)
+      continue;
+    bxml_element* it_elm = dynamic_cast<bxml_element*>((*it).ptr());
+    if (it_elm->name() == "rect")
+      cnt++;
+    else if (it_elm->name() == "g") {
+      cnt += number_of_bars_helper(*it);
+    }
+  }
+  return cnt;
+}
+
+int bsvg_plot::number_of_bars() {
+  //: get the root
+  bxml_element query("svg");
+  bxml_data_sptr root = bxml_find_by_name(this->root_element(), query);
+  if (!root)
+    return -1;
+  return number_of_bars_helper(root);
+}
+
+//: add bars sequentially with a fixed interval and width, use margin_ as the width of each bar and leave margin_/3 intervals in between
+//  the total width of the plot needs to be adjusted during initialization to contain all desired number of bars    
+int bsvg_plot::add_bar(const float height, const vcl_string& color)
+{
+  //: first find the next available bar location (count the number of rects in the document)
+  int cnt = this->number_of_bars();
+  if (cnt < 0) {
+    vcl_cerr << "In bsvg_plot::add_bar() -- problems with the plot document!\n"; 
+    return -1;
+  }
+  float x = axes_orig_x_ + margin_/3.0f; // left-point of first bar
+  x += cnt*(margin_/3.0f + margin_);  // left-point of next bar, margin + bar width
+  float h = height*scale_factor_;
+  bsvg_rectangle *r = new bsvg_rectangle(x, axes_orig_y_-h, margin_, h); 
+  r->set_fill_color(color);
+  this->add_element(r);
+  return cnt;
+}
+int bsvg_plot::add_bar(const float height, const vcl_string& label, bool vertical_label, const vcl_string& color)
+{
+  int cnt = add_bar(height, color);
+  if (cnt < 0) {
+    vcl_cerr << "In bsvg_plot::add_bar() -- problems with the plot document!\n"; 
+    return -1;
+  }
+  float x = axes_orig_x_ + margin_/2.0f + margin_/3.0f; // mid-point of first text
+  x += cnt*(margin_/3.0f + margin_);
+  bsvg_text *t = new bsvg_text(label);
+  t->set_font_size(font_size_);
+  t->set_location(x, axes_orig_y_+margin_);
+  if (vertical_label)
+    t->set_rotation(90);
+  this->add_element(t);
+  return cnt;
+}
+int bsvg_plot::add_bar(const float height, const float x_label, bool vertical_label, const vcl_string& color)
+{
+  vcl_stringstream ss; ss << x_label;
+  return add_bar(height, ss.str(), vertical_label, color);
+}
+
 
 

@@ -119,8 +119,7 @@ static void test_svg()
   bsvg_plot h = make_simple_histogram();
   out_file = "./test_histogram.svg";
   bxml_write(out_file, h);
-
-  TEST("testing bsvg", true, true);
+  TEST("testing number of bars", h.number_of_bars(), 7);
 }
 
 TESTMAIN( test_svg );
