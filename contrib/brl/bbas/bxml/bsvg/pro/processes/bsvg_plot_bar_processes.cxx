@@ -56,7 +56,7 @@ bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
   bsvg_plot* p = new bsvg_plot(w, h);
   bxml_document_sptr pd = p;
   p->set_margin(40);
-  p->set_font_size(30);
+  p->set_font_size(15);
   p->add_axes(0, 1, 0, 1);
   p->add_title(title);
   //p->add_x_increments(0.1f);

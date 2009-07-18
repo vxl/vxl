@@ -92,7 +92,8 @@ void bsvg_plot::add_title(const vcl_string& t)
 {
   bsvg_text* title = new bsvg_text(t);
   float w = float(font_size_*t.size());
-  title->set_location((h2_x+3*margin_-w)/2, margin_);
+  title->set_location((this->w_-margin_)/2.0f - w/2, margin_);
+  //title->set_location((h2_x+3*margin_-w)/2, margin_);
   title->set_font_size(font_size_);
   this->add_element(title);
 }
