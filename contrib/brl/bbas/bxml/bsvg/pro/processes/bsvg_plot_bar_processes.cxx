@@ -125,7 +125,7 @@ bool bsvg_bar_plot_write_process(bprb_func_process& pro)
   bxml_document_sptr doc = pro.get_input<bxml_document_sptr>(i++);
   vcl_string out_file = pro.get_input<vcl_string>(i++);
 
-  bxml_write(out_name, *doc);
+  bxml_write(out_file, *doc);
   return true;
 }
 
