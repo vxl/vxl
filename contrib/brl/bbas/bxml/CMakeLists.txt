@@ -2,7 +2,7 @@
 # The Development Brown XML Parser
 
 doxygen_add_library(contrib/brl/bbas/bxml
-  DEPENDS contrib/brl/bbas/bdgl core/vbl
+  DEPENDS contrib/brl/bbas/bdgl core/vbl_io
   PACKAGE contrib/brl
   )
 
@@ -23,7 +23,7 @@ AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
 ADD_LIBRARY(bxml ${bxml_sources})
 
-TARGET_LINK_LIBRARIES( bxml expatpp vbl vul)
+TARGET_LINK_LIBRARIES( bxml expatpp vbl_io vul)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

@@ -12,7 +12,7 @@
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Ozge C. Ozcanli (Brown) - July 15, 2009 - enabled smart pointer for bxml_document
 // \endverbatim
 
 #include <vcl_string.h>
@@ -21,7 +21,7 @@
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-
+#include <vsl/vsl_binary_io.h>
 
 //: A block of character data found within XML tags
 // This is a base class and can be either plain text or
@@ -157,7 +157,7 @@ bool operator==(const bxml_element& e1, const bxml_element& e2);
 
 
 //: Represents a full XML document stored as a tree
-class bxml_document
+class bxml_document : public vbl_ref_count
 {
  public:
   //: Constructor - default
@@ -200,9 +200,16 @@ class bxml_document
   bool standalone_;
 };
 
+typedef vbl_smart_ptr<bxml_document> bxml_document_sptr;
 
 //: compare two XML documents
 bool operator==(const bxml_document& d1, const bxml_document& d2);
+
+// Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value
+void vsl_b_write(vsl_b_ostream & os, bxml_document const &ph);
+void vsl_b_read(vsl_b_istream & is, bxml_document &ph);
+void vsl_b_read(vsl_b_istream& is, bxml_document* ph);
+void vsl_b_write(vsl_b_ostream& os, const bxml_document* &ph);
 
 
 #endif // bxml_document_h_
