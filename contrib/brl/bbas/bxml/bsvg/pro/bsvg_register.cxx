@@ -16,4 +16,6 @@ void bsvg_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsvg_plot_roc_process, "bsvgPlotROCProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsvg_bar_plot_initialize_process, "bsvgBarPlotInitializeProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsvg_bar_plot_add_process, "bsvgBarPlotAddProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsvg_bar_plot_write_process, "bsvgBarPlotWriteProcess"); 
 }

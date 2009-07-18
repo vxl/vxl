@@ -102,5 +102,31 @@ bool bsvg_bar_plot_add_process(bprb_func_process& pro)
   p->add_bar(h, label, true, color);
   return true;
 }
+//: Constructor
+bool bsvg_bar_plot_write_process_cons(bprb_func_process& pro)
+{
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("bxml_document_sptr");  
+  input_types.push_back("vcl_string");  // out file
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+  vcl_vector<vcl_string> output_types;
+  ok = pro.set_output_types(output_types);
+  return ok;
+}
+bool bsvg_bar_plot_write_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() < 2) {
+    vcl_cerr << "dbrec_image_parse_process - invalid inputs\n";
+    return false;
+  }
+  unsigned i = 0;
+  bxml_document_sptr doc = pro.get_input<bxml_document_sptr>(i++);
+  vcl_string out_file = pro.get_input<vcl_string>(i++);
+
+  bxml_write(out_name, *doc);
+  return true;
+}
 
 
