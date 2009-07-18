@@ -29,6 +29,7 @@ bool bsvg_bar_plot_initialize_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types;
   input_types.push_back("float");  // width of the drawing region in the svg file
   input_types.push_back("float");  // height
+  input_types.push_back("vcl_string");  // title of the plot
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -41,7 +42,7 @@ bool bsvg_bar_plot_initialize_process_cons(bprb_func_process& pro)
 bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 2) {
+  if (pro.n_inputs() < 3) {
     vcl_cerr << "dbrec_image_parse_process - invalid inputs\n";
     return false;
   }
@@ -50,13 +51,14 @@ bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
   unsigned i = 0;
   float w = pro.get_input<float>(i++);
   float h = pro.get_input<float>(i++);
+  vcl_string title = pro.get_input<vcl_string>(i++);
 
   bsvg_plot* p = new bsvg_plot(w, h);
   bxml_document_sptr pd = p;
   p->set_margin(40);
   p->set_font_size(30);
   p->add_axes(0, 1, 0, 1);
-  p->add_title("Bar Plot");
+  p->add_title(title);
   //p->add_x_increments(0.1f);
   p->add_y_increments(0.1f);
 
