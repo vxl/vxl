@@ -91,7 +91,7 @@ class brec_part_instance : public brec_part_base
  public:
 
   brec_part_instance(unsigned layer, unsigned type, unsigned kind, float x, float y, float strength) : brec_part_base(layer, type),
-    x_(x), y_(y), strength_(strength), kind_(kind), rho_c_f_(0.0), rho_c_b_(0.0), rho_nc_b_(0.0), rho_nc_f_(0.0), cnt_(0) {}
+    x_(x), y_(y), strength_(strength), kind_(kind), rho_c_f_(0.0), rho_c_b_(0.0), rho_nc_f_(0.0), rho_nc_b_(0.0), cnt_(0) {}
 
   //: this constructor should only be used during parsing
   brec_part_instance() : brec_part_base(0, 0), x_(0), y_(0), strength_(0), kind_(0) {}
@@ -136,7 +136,7 @@ class brec_part_instance : public brec_part_base
                //
                // each instance should have a foreground probability p(alpha in foreground) (for some operators, this may be calculated from a kernel region, e.g. for gaussian operators)
                // p(alpha in background) = 1 - p(alpha in foreground) by convention
-  
+
   //: there are 4 possibilities regarding existence of a part: class instance in the foreground, class instance in the background, non-class instance in the foreground, non-class instance in the background
   double rho_c_f_;  //posterior of class, fore
   double rho_c_b_;  // posterior of class, back
@@ -147,4 +147,3 @@ class brec_part_instance : public brec_part_base
 };
 
 #endif  //brec_part_base_h_
-
