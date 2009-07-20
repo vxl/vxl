@@ -43,7 +43,7 @@ static void test_brec_hierarchy_detector2_simple()
   brec_part_base_sptr p_0_1 = new brec_part_base(0, 1);
   brec_part_gaussian_sptr pi_0_1 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 3.0f, 1.0f, 45.0f, false, 1);
   h1->add_vertex(p_0_0); h1->add_vertex(p_0_1); h2->add_vertex(p_0_0); h2->add_vertex(p_0_1);
-  h1->add_dummy_primitive_instance(pi_0_0->cast_to_instance()); h2->add_dummy_primitive_instance(pi_0_0->cast_to_instance()); 
+  h1->add_dummy_primitive_instance(pi_0_0->cast_to_instance()); h2->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
   h1->add_dummy_primitive_instance(pi_0_1->cast_to_instance()); h2->add_dummy_primitive_instance(pi_0_1->cast_to_instance());
 
   brec_part_base_sptr p_1_1 = new brec_part_base(1, 1); p_1_1->prior_prob_ = 10.0;
@@ -53,28 +53,28 @@ static void test_brec_hierarchy_detector2_simple()
   double n_b_0 = 50;
   double n_f_0 = 50;
   double radius = 10;
-  
+
   h1->add_vertex(p_1_1); h1->add_vertex(p_1_2); h2->add_vertex(p_1_3);
 
   brec_hierarchy_edge_sptr e;  bsta_gaussian_sphere<double, 1> dm(5.0, 0.5);
-  
-  e = new brec_hierarchy_edge(p_1_1, p_0_0, true); 
+
+  e = new brec_hierarchy_edge(p_1_1, p_0_0, true);
   h1->add_edge_no_check(e); p_1_1->add_outgoing_edge(e); p_0_0->add_incoming_edge(e);
-  e = new brec_hierarchy_edge(p_1_1, p_0_1, false); 
+  e = new brec_hierarchy_edge(p_1_1, p_0_1, false);
   h1->add_edge_no_check(e); p_1_1->add_outgoing_edge(e); p_0_1->add_incoming_edge(e);
   bsta_gaussian_sphere<double, 1> am(0.0, 0.5);
-  e->set_model(dm, am, 1.0); 
+  e->set_model(dm, am, 1.0);
 
-  e = new brec_hierarchy_edge(p_1_2, p_0_0, true); 
+  e = new brec_hierarchy_edge(p_1_2, p_0_0, true);
   h1->add_edge_no_check(e); p_1_2->add_outgoing_edge(e); p_0_0->add_incoming_edge(e);
-  e = new brec_hierarchy_edge(p_1_2, p_0_1, false); 
+  e = new brec_hierarchy_edge(p_1_2, p_0_1, false);
   h1->add_edge_no_check(e); p_1_2->add_outgoing_edge(e); p_0_1->add_incoming_edge(e);
   am.set_mean(vnl_math::pi/2.0);
   e->set_model(dm, am, 1.0);
 
-  e = new brec_hierarchy_edge(p_1_3, p_0_0, true); 
+  e = new brec_hierarchy_edge(p_1_3, p_0_0, true);
   h2->add_edge_no_check(e); p_1_3->add_outgoing_edge(e); p_0_0->add_incoming_edge(e);
-  e = new brec_hierarchy_edge(p_1_3, p_0_1, false); 
+  e = new brec_hierarchy_edge(p_1_3, p_0_1, false);
   h2->add_edge_no_check(e); p_1_3->add_outgoing_edge(e); p_0_1->add_incoming_edge(e);
   am.set_mean(vnl_math::pi);
   e->set_model(dm, am, 1.0);
@@ -87,33 +87,33 @@ static void test_brec_hierarchy_detector2_simple()
   d->add_to_class_hierarchies(h1);
   d->add_to_class_hierarchies(h2);
 
-  d->N_bg_0_ = n_b_0;
-  d->N_fg_0_ = n_f_0;
-  
+  d->prior_non_c_f_ = n_f_0;
+  //d->prior_non_c_b_ = n_b_0;
+  d->prior_c_b_ = 1.0f - n_b_0 - n_f_0 - d->prior_c_f_;
+
   vcl_vector<brec_part_instance_sptr> prims;
   brec_part_gaussian_sptr p_img = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, false, 0);
-  p_img->rho_ = 1.0f;  prims.push_back(p_img->cast_to_instance());
-  
+  p_img->rho_c_b_ = 1.0f;  prims.push_back(p_img->cast_to_instance());
+
   brec_part_gaussian_sptr p_img2 = new brec_part_gaussian(5.0f, 1.0f, 0.0f, 3.0f, 1.0f, 45.0f, false, 1);
-  p_img2->rho_ = 1.0f;  prims.push_back(p_img2->cast_to_instance());
+  p_img2->rho_c_b_ = 1.0f;  prims.push_back(p_img2->cast_to_instance());
 
   brec_part_gaussian_sptr p_img3 = new brec_part_gaussian(1.0f, 5.0f, 0.0f, 3.0f, 1.0f, 45.0f, false, 1);
-  p_img3->rho_ = 0.7f;  prims.push_back(p_img3->cast_to_instance());
-  
+  p_img3->rho_c_b_ = 0.7f;  prims.push_back(p_img3->cast_to_instance());
+
   //brec_part_gaussian_sptr p_img4 = new brec_part_gaussian(5.0f, 2.0f, 0.0f, 3.0f, 1.0f, 45.0f, false, 1);
-  //p_img4->rho_ = 1.0f;  prims.push_back(p_img4->cast_to_instance());
-  
-  
+  //p_img4->rho_c_b_ = 1.0f;  prims.push_back(p_img4->cast_to_instance());
+
+
   Rtree_type *rt = new Rtree_type();
-  for (unsigned i = 0; i < prims.size(); i++) 
+  for (unsigned i = 0; i < prims.size(); i++)
     rt->add(prims[i]);
 
   vcl_vector<brec_part_instance_sptr> upper_parts;
   d->extract_upper_layer(prims, rt, upper_parts, brec_detector_methods::POSTERIOR, radius);
 
   for (unsigned i = 0; i < upper_parts.size(); i++)
-    vcl_cout << "detected a part at center: (" << upper_parts[i]->x_ << ", " << upper_parts[i]->y_ << ") type: " << upper_parts[i]->type_ << " posterior: " << upper_parts[i]->rho_ << vcl_endl;
-
+    vcl_cout << "detected a part at center: (" << upper_parts[i]->x_ << ", " << upper_parts[i]->y_ << ") type: " << upper_parts[i]->type_ << " posterior: " << upper_parts[i]->rho_c_b_ << vcl_endl;
 }
 
 static void test_brec_hierarchy_detector2_img()
@@ -159,11 +159,9 @@ static void test_brec_hierarchy_detector2_img()
   is.close();
 
   h->set_model_dir(model_dir);
-   
+
   brec_part_hierarchy_detector_sptr hd = new brec_part_hierarchy_detector(h);
   hd->detect(img_v, fg_prob_map, 0.0f, brec_detector_methods::POSTERIOR, 5.0);
-
-
 }
 
 static void test_brec_hierarchy_detector2()
