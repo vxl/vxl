@@ -31,7 +31,7 @@ static void test_brec_hierarchy_builder()
     return;
 
   unsigned ni = img->ni(); unsigned nj = img->nj();
-  
+
   vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
 
   brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_detector_roi1_0();
@@ -85,7 +85,7 @@ static void test_brec_hierarchy_builder()
 
   vil_image_view<vxl_byte> output_img(ni, nj, 3);
   vil_image_view<vxl_byte> input_img = img->get_view(0, ni, 0, nj);
-  brec_part_hierarchy::generate_output_img(parts_upper_most, input_img, output_img);
+  brec_part_hierarchy::generate_output_img(parts_upper_most, input_img, output_img, brec_posterior_types::CLASS_FOREGROUND);
   vil_save(output_img, "./img_output_receptive_field_highest.png");
 }
 

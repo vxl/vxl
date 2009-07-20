@@ -205,26 +205,26 @@ static void test_brec_hierarchy_detector_w_models()
   vil_image_view<vxl_byte> input_img = img->get_view(0, ni, 0, nj);
 
   float min, max;
-  brec_part_hierarchy::generate_output_map2(parts_prims, output_map_float);
+  brec_part_hierarchy::generate_output_map3(parts_prims, output_map_float);
   vil_math_value_range(output_map_float, min, max);
   vcl_cout << "\toutput map for layer 0, float value range, min: " << min << " max: " << max << vcl_endl;
   vil_save(output_map_float, "./map_output_receptive_field_layer_0.tiff");
   vil_convert_stretch_range_limited(output_map_float, output_map_byte, 0.0f, 1.0f);
   vil_save(output_map_byte, "./map_output_receptive_field_layer_0.png");
-  brec_part_hierarchy::generate_output_img(parts_prims, input_img, output_img);
+  brec_part_hierarchy::generate_output_img(parts_prims, input_img, output_img, brec_posterior_types::CLASS_FOREGROUND);
   vil_save(output_img, "./img_output_receptive_field_layer_0.png");
 
   unsigned highest = h->highest_layer_id();
   vcl_vector<brec_part_instance_sptr> parts_upper_most = hd.get_parts(highest);
 
-  brec_part_hierarchy::generate_output_map2(parts_upper_most, output_map_float);
+  brec_part_hierarchy::generate_output_map3(parts_upper_most, output_map_float);
   vil_math_value_range(output_map_float, min, max);
   vcl_cout << "\toutput map highest layer, float value range, min: " << min << " max: " << max << vcl_endl;
   vil_save(output_map_float, "./map_output_receptive_field_highest_detector.tiff");
   vil_convert_stretch_range_limited(output_map_float, output_map_byte, 0.0f, 1.0f);
   vil_save(output_map_byte, "./map_output_receptive_field_highest_detector.png");
 
-  brec_part_hierarchy::generate_output_img(parts_upper_most, input_img, output_img);
+  brec_part_hierarchy::generate_output_img(parts_upper_most, input_img, output_img, brec_posterior_types::CLASS_FOREGROUND);
   vil_save(output_img, "./img_output_receptive_field_highest_detector.png");
 }
 
