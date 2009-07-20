@@ -34,7 +34,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_grid_sources)
 ADD_LIBRARY( bvxm_grid ${bvxm_grid_sources})
 
 
-TARGET_LINK_LIBRARIES( bvxm_grid  vnl vil  vil_algo vul vbl vsl)
+TARGET_LINK_LIBRARIES( bvxm_grid  vnl vil  vil_algo vul vbl vsl vgl bgeo)
 
 SUBDIRS( io )
 SUBDIRS( pro )
