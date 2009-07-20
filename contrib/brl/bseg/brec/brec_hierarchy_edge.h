@@ -30,10 +30,10 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   //: edge between v1 in layer i to v2 in layer i-1
   //  If no relative spatial arrangement model then this is an edge to the central part in the previous layer.
   //  Default is the central
-  brec_hierarchy_edge(brec_part_base_sptr v1, brec_part_base_sptr v2, bool to_central = true) : bgrl2_edge<brec_part_base>(v1, v2), to_central_(to_central), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f), weight_(1.0) {};
+  brec_hierarchy_edge(brec_part_base_sptr v1, brec_part_base_sptr v2, bool to_central = true) : bgrl2_edge<brec_part_base>(v1, v2), to_central_(to_central), weight_(1.0), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {}
 
   //: this constructor should only be used during parsing
-  brec_hierarchy_edge() : bgrl2_edge<brec_part_base>(), to_central_(true), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f), weight_(1.0) {};
+  brec_hierarchy_edge() : bgrl2_edge<brec_part_base>(), to_central_(true), weight_(1.0), min_stad_dev_dist_(2.0f), min_stad_dev_angle_(10.0f) {}
 
   //: if the model is updated then the to_central flag is made false since the edge becomes a non-central edge
   void update_dist_model(const float dist);
@@ -58,7 +58,7 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   void set_min_stand_dev_angle(float a) { min_stad_dev_angle_ = a; }
 
   vgl_box_2d<float> get_probe_box(brec_part_instance_sptr central_p);
-  
+
   //: samples the position of the part linked with this edge wrt to the position (x,y)
   vnl_vector_fixed<float,2> sample_position(brec_part_instance_sptr central_p, float x, float y, vnl_random& rng);
   vnl_vector_fixed<float,2> mean_position(brec_part_instance_sptr central_p, float x, float y);
@@ -66,21 +66,22 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   virtual bxml_data_sptr xml_element();
   virtual bool xml_parse_element(bxml_data_sptr data);
 
-public:
+ public:
   bool to_central_;
 
   //: 2 1D gaussian models to model location of v2 wrt central part in v1
-  //bsta_gauss_f1 dist_model_; // distance between the centers
+  // (distance between the centers)
   bsta_gaussian_sphere<double, 1> dist_model_;
+
   //: model angle in radians
-  //bsta_gauss_f1 angle_model_;  // angle between the centers wrt the orientation of the central model
+  // (angle between the centers wrt the orientation of the central model)
   bsta_gaussian_sphere<double, 1> angle_model_;
 
-  double weight_;  // the weight/prior prob of the densities
+  //: the weight/prior prob of the densities
+  double weight_;
 
-  float min_stad_dev_dist_; // default 2 pixels
+  float min_stad_dev_dist_;  // default 2 pixels
   float min_stad_dev_angle_; // default 10 degrees
 };
 
 #endif  //brec_hierarchy_edge_h_
-
