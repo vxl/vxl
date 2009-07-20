@@ -2,8 +2,8 @@
 
 //:
 // \file
-// \brief  A process for populating the grid with meshes. Meshes are in ply format and 
-//         the grid will be filled with 0's at the faces of the mesh.
+// \brief  A process for populating the grid with meshes.
+//         Meshes are in ply format and the grid will be filled with 0's at the faces of the mesh.
 // \author Gamze D. Tunali
 // \date   July 14, 2009
 //
@@ -50,7 +50,7 @@ bool bvxm_fill_mesh_grid_process_cons(bprb_func_process& pro)
   i=0;
   output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting grid
 
-  vcl_cout<<input_types_.size();
+  vcl_cout << input_types_.size();
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -106,17 +106,17 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
     vcl_string file = file_it.filename();
     vcl_string file_format = vul_file::extension(file);
     vul_string_upcase(file_format);
-    
 
-    vcl_cout << "format = " << file_format << '\n';
-    vcl_cout << "file = " << file << '\n';
+
+    vcl_cout << "format = " << file_format << '\n'
+             << "file = " << file << '\n';
     // call appropriate load functions to load the M
     imesh_mesh mesh;
     if (file_format == ".PLY")
-      imesh_read_ply(file, mesh);
+      imesh_read(file, mesh);
     else if (file_format == ".PLY2")
       imesh_read_ply2(file, mesh);
-    
+
     bvxm_voxel_grid<float>* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
     bvxm_load_mesh_into_grid<float>(g, mesh, lvcs);
   }
