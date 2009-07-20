@@ -121,8 +121,7 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
         masks.push_back(p->mask_);
 
         // create histogram for foreground stats
-        //bsta_histogram<float>* h = new bsta_histogram<float>(-7.0f, 1.0f, 32);
-        bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100);
+        bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100); // was (-7.0f, 1.0f, 32)
         vcl_pair<brec_part_instance_sptr, bsta_histogram<float>* > pa(p->cast_to_instance(), h);
         stats_layer0_.push_back(pa);
         type_cnt++;
@@ -335,7 +334,7 @@ void map_to_cartesian(float angle, float radius, float max_radius, float& x, flo
 }
 
 //: collect joint stats to construct parts of layer with layer_id using detected parts of layer_id-1
-//  collect stats for a pair if they exist within radius pixels of each other
+//  Collect stats for a pair if they exist within radius pixels of each other
 bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_detector_sptr hd, unsigned layer_id, unsigned class_id)
 {
   if (!layer_id) {
@@ -428,8 +427,8 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
 }
 
 //: uses the joint histograms to fit Gaussian distributions to distance for 8 orientations.
-//  replaces the histograms with the fitted distributions' histograms
-//  populate layer_n of current hierarchy of the class with parts which have models that have highest data log-likelihood
+//  Replaces the histograms with the fitted distributions' histograms
+//  Populate layer_n of current hierarchy of the class with parts which have models that have highest data log-likelihood
 bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, unsigned layer_id, unsigned M)
 {
   class_map* map;
