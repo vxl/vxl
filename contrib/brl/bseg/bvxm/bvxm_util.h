@@ -37,6 +37,7 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -50,6 +51,9 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>
 #include <vnl/vnl_vector_fixed.h>
+
+#include <vnl/vnl_matrix.h>
+#include <vnl/algo/vnl_matrix_inverse.h>
 
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
@@ -141,7 +145,7 @@ class bvxm_util
   template<class T>
   static vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box);
 
-  //: finds out if a given box intersect the polygon
+  // finds out if a given box intersect the polygon
   template<class T>
   static bool intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& poly);
 
@@ -151,7 +155,7 @@ class bvxm_util
 
   static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
 
-protected:
+ protected:
 
   static void bilinear_weights(vgl_h_matrix_2d<double> invH,
                                unsigned nx_out,
@@ -978,35 +982,35 @@ bvxm_util::corners_of_box_3d(vgl_box_3d<T> box)
 }
 
 template <class T>
-bool bvxm_util::intersection(vgl_box_3d<T> const& b, 
+bool bvxm_util::intersection(vgl_box_3d<T> const& b,
                              vcl_vector<vgl_point_3d<T> > const& poly)
 {
   // check if two bounding boxes intersect
   // find the bounding box of the polygon
   assert(poly.size() >= 3);
-  
+
   vgl_box_3d<T> bb;
-  for (unsigned i=0; i<poly.size(); i++) 
+  for (unsigned i=0; i<poly.size(); i++)
     bb.add(poly[i]);
-    
+
   vgl_box_3d<T> inters = vgl_intersection(b, bb);
   if (inters.is_empty())
    return false;
-  
-  // check if the polygon corners inside the box 
+
+  // check if the polygon corners inside the box
   bool hit=false;
   for (unsigned i=0; i<poly.size()&&!hit; i++) {
     if (b.contains(poly[i]))
       return true;
   }
-  
+
   // create a plane from polygon
   vgl_plane_3d<T> poly_plane(poly[0],poly[1], poly[2]);
-  
+
   // find the box corners
   vcl_vector<vgl_point_3d<T> > corners;
   corners=corners_of_box_3d(b);
-  
+
   // find the signed distance from the box corners to the plane
   int pos=0, neg=0;
   for (unsigned c=0; c<corners.size(); c++) {
@@ -1024,19 +1028,19 @@ bool bvxm_util::intersection(vgl_box_3d<T> const& b,
       ;//return true;
   }
   //vcl_cout << "Negatives=" << neg << " Positives=" << pos << vcl_endl;
-  if (neg==8 || pos==8) // completely out of ploygon plane
+  if (neg==8 || pos==8) // completely out of polygon plane
     return false;
  // else {                // plane go through the box but box maybe polygon boundaries
- //   return true;  
-  
-  //: now we do a 3D transformation of the polygon and the box center to the plane 
+ //   return true;
+
+  // now we do a 3D transformation of the polygon and the box center to the plane
   // where polygon resides, so that we can do 2D poly-point test
   vgl_vector_3d<T> n = poly_plane.normal();
   n=normalize(n);
   vgl_vector_3d<T> u(poly[1]-poly[0]);
   u=normalize(u);
   vgl_vector_3d<T> v = cross_product(n,u);
-  
+
   vnl_matrix<T> M(3,3);
   M.put(0,0,u.x());
   M.put(1,0,u.y());
@@ -1047,11 +1051,11 @@ bool bvxm_util::intersection(vgl_box_3d<T> const& b,
   M.put(0,2,n.x());
   M.put(1,2,n.y());
   M.put(2,2,n.z());
-  
+
   vnl_matrix_inverse<T> R(M);
   //vnl_matrix<T> R=inv();
-  //vgl_point_3d<T> p0=poly[0]; // translation 
-  
+  //vgl_point_3d<T> p0=poly[0]; // translation
+
   // transform the polygon
   vgl_polygon<T> poly2d(1);  // with one sheet
   for (unsigned i=0; i<poly.size(); i++) {
@@ -1063,18 +1067,14 @@ bool bvxm_util::intersection(vgl_box_3d<T> const& b,
     vnl_matrix<T> pi = R*tv;
     poly2d.push_back(pi.get(0,0), pi.get(1,0));
   }
-  
+
   vgl_point_3d<T> c=b.centroid();
   vnl_matrix<T> tv(3,1);
   tv.put(0,0,c.x()-poly[0].x());
   tv.put(1,0,c.y()-poly[0].y());
   tv.put(2,0,c.z()-poly[0].z());
   vnl_matrix<T> ci(R*tv);
-  if (poly2d.contains(ci.get(0,0),ci.get(1,0)))
-    return true;
-    
-    
-  return false;
+  return poly2d.contains(ci.get(0,0),ci.get(1,0));
 }
 
 #endif // bvxm_util_h_
