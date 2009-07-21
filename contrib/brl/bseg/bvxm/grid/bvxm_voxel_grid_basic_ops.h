@@ -24,7 +24,8 @@
 #include <vgl/vgl_intersection.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vcl_iostream.h>
-#include <vcl_limits.h> 
+#include <vcl_limits.h>
+
 //: Multiplies 2 grids. The types of input grids must have a * operator
 template<class T>
 bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_grid_base_sptr grid2_base, bvxm_voxel_grid_base_sptr grid_out_base)
@@ -114,7 +115,7 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
 
     for (; in_it!= (*in_slab_it).end(); ++in_it, ++out_it, ++mask_it)
     {
-      if (*in_it > min_thresh){
+      if (*in_it > min_thresh) {
         (*mask_it) = true;
         //if point is above threshold leave unchanged, otherwise set to 0
         (*out_it) = (*in_it);
@@ -125,22 +126,23 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
 }
 
 template<class T>
-bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid, 
+bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
                               imesh_mesh& mesh,
                               bgeo_lvcs& lvcs)
 {
   // initialize grid with big values
   imesh_face_array_base& fs = mesh.faces();
-  
-  for (unsigned i=0; i < fs.size(); i++) {
+
+  for (unsigned i=0; i < fs.size(); ++i)
+  {
     vcl_vector<vgl_point_3d<double> > v_list;
     imesh_vertex_array<3>& vertices = mesh.vertices<3>();
     vgl_box_3d<double> bb;
-    for(unsigned j=0; j<fs.num_verts(i); j++) {
+    for (unsigned j=0; j<fs.num_verts(i); ++j) {
       unsigned int v_id = fs(i,j);
       double lx, ly, lz;
       lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
-      bgeo_lvcs::wgs84,lx,ly,lz);
+                           bgeo_lvcs::wgs84,lx,ly,lz);
       vgl_point_3d<double> v(lx,ly,lz);
       bb.add(v);
       v_list.push_back(v);
@@ -151,19 +153,19 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
     grid_box.set_max_point(vgl_point_3d<double>(grid_size.x()-1,grid_size.y()-1,grid_size.z()-1));
     vgl_point_3d<double> min = bb.min_point();
     vgl_point_3d<double> max = bb.max_point();
-    for (int z=(int)min.z(); z<=max.z(); z++) {
-      for (int y=(int)min.y(); y<=max.y(); y++) {
-        for (int x=(int)min.x(); x<=max.x(); x++) {
+    for (int z=(int)min.z(); z<=max.z(); ++z) {
+      for (int y=(int)min.y(); y<=max.y(); ++y) {
+        for (int x=(int)min.x(); x<=max.x(); ++x) {
           //check if the voxel position is valid
           if (grid_box.contains(x,y,z)) {
             vgl_box_3d<double> voxel_box;
             voxel_box.set_min_point(vgl_point_3d<double>(x,y,z));
             voxel_box.set_max_point(vgl_point_3d<double>(x+1,y+1,z+1));
-            if (vgl_intersection<double>(voxel_box, v_list)) {
+            if (vgl_intersection(voxel_box, v_list).size() > 0) {
               bvxm_voxel_slab_iterator<float> slab_it = grid->slab_iterator(grid_size.z()-z);
               bvxm_voxel_slab<float>& slab = *slab_it;
               float& val = slab(x,y);
-              val=0.0;
+              val=0.0f;
               ++slab_it;
             }
           }
