@@ -635,20 +635,6 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const
   return r;
 }
 
-#undef VGL_INTERSECTION_INSTANTIATE
-#define VGL_INTERSECTION_INSTANTIATE(T) \
-template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
-template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
-template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
-template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
-template bool vgl_intersection(vgl_line_segment_3d<T > const&, vgl_plane_3d<T > const&, vgl_point_3d<T > &); \
-template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
-template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
-template unsigned vgl_intersection(const vgl_box_2d<T >& , const vgl_line_segment_2d<T >& , vgl_point_2d<T >& , vgl_point_2d<T >& ); \
-template bool vgl_intersection(const vgl_line_2d<T >&, const vgl_line_2d<T >&, vgl_point_2d<T >&); \
-template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
-template bool vgl_intersection(vgl_box_2d<T > const&, vgl_polygon<T > const&)
-
 //: Instantiate those functions which are suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
@@ -658,6 +644,20 @@ template vcl_vector<vgl_point_2d<T > > vgl_intersection(vgl_box_2d<T > const& b,
 template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<T > > const& p, vgl_box_2d<T > const& b); \
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const& b, vcl_vector<vgl_point_3d<T > > const& p); \
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const& p, vgl_box_3d<T > const& b); \
-template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
+template bool vgl_intersection(vgl_box_2d<T > const&, vgl_line_2d<T > const& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
+
+#undef VGL_INTERSECTION_INSTANTIATE
+#define VGL_INTERSECTION_INSTANTIATE(T) \
+template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
+template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
+template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
+template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
+template bool vgl_intersection(vgl_line_segment_3d<T > const&, vgl_plane_3d<T > const&, vgl_point_3d<T > &); \
+template vgl_point_3d<T > vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_plane_3d<T > const&); \
+template unsigned vgl_intersection(vgl_box_2d<T > const& , vgl_line_segment_2d<T > const& , vgl_point_2d<T >& , vgl_point_2d<T >& ); \
+template bool vgl_intersection(vgl_line_2d<T > const&, vgl_line_2d<T > const&, vgl_point_2d<T >&); \
+template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
+template bool vgl_intersection(vgl_box_2d<T > const&, vgl_polygon<T > const&); \
+VGL_INTERSECTION_BOX_INSTANTIATE(T)
 
 #endif // vgl_intersection_txx_
