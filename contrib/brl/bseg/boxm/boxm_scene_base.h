@@ -34,7 +34,7 @@ class boxm_scene_base : public vbl_ref_count
   void set_appearence_model(boxm_apm_type model) { app_model_ = model; }
 
   void set_bin_option(bool multi_bin) { multi_bin_ = multi_bin; }
-  void set_octree_levels(unsigned max, unsigned init)
+  void set_octree_levels(unsigned max, unsigned init, bool tree_level_set_=true)
   { max_tree_level_=max; init_tree_level_=init; tree_level_set_=true; }
 
   void set_paths(vcl_string scene_path, vcl_string block_prefix)
