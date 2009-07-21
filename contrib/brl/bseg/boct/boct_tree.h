@@ -17,6 +17,7 @@ class boct_tree
   boct_tree(short max_level, short init_levels=1);
   boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels=1);
   ~boct_tree();
+  void init_cells(T_data val);
   boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p);
   boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p);
   boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level);

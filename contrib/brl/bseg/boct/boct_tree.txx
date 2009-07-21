@@ -73,6 +73,15 @@ boct_tree<T_loc,T_data>::~boct_tree()
 }
 
 template <class T_loc,class T_data>
+void boct_tree<T_loc,T_data>::init_cells(T_data val)
+{
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
+  for (unsigned i=0; i<cells.size(); i++) {
+    cells[i]->set_data(val);
+  }
+}
+
+template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_point_3d<double>& p)
 {
   short curr_level=max_level_-1;
