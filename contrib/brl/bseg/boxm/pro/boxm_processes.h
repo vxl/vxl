@@ -14,5 +14,6 @@ DECLARE_FUNC_CONS(boxm_refine_scene_process);
 DECLARE_FUNC_CONS(boxm_roi_init_process);
 DECLARE_FUNC_CONS(boxm_volume_visibility_process);
 DECLARE_FUNC_CONS(boxm_proj_local_cam_process);
+DECLARE_FUNC_CONS(boxm_upload_mesh_process);
 
 #endif
