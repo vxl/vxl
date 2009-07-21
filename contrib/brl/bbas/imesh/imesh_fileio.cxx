@@ -57,6 +57,55 @@ bool imesh_read_ply2(vcl_istream& is, imesh_mesh& mesh)
   return true;
 }
 
+//: Read a mesh from a PLY2 file
+bool imesh_read_ply(const vcl_string& filename, imesh_mesh& mesh)
+{
+  vcl_ifstream fh(filename.c_str());
+  bool retval = imesh_read_ply(fh,mesh);
+  fh.close();
+  return retval;
+}
+
+
+//: Read a mesh from a PLY2 stream
+bool imesh_read_ply(vcl_istream& is, imesh_mesh& mesh)
+{
+  unsigned int num_verts, num_faces;
+  vcl_string str;
+  is >> str;
+  bool done=false;
+  while (!done) {
+    is >> str;
+    if (str.compare("element")==0)  {
+      is >> str;
+      if (str.compare("vertex")==0) {
+        is >> num_verts; 
+      } else if (str.compare("face")==0) {
+        is >> num_faces; 
+      } 
+    } else if (str.compare("end_header")==0)  {
+      done = true;
+    }
+  }
+  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
+  vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  for (unsigned int v=0; v<num_verts; ++v) {
+    imesh_vertex<3>& vert = (*verts)[v];
+    is >> vert[0] >> vert[1] >> vert[2];
+  }
+  for (unsigned int f=0; f<num_faces; ++f) {
+    vcl_vector<unsigned int>& face = (*faces)[f];
+    unsigned int cnt;
+    is >> cnt;
+    face.resize(cnt,0);
+    for (unsigned int v=0; v<cnt; ++v)
+      is >> face[v];
+  }
+
+  mesh.set_vertices(vcl_auto_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(vcl_auto_ptr<imesh_face_array_base>(faces));
+  return true;
+}
 
 //: Write a mesh to a PLY2 file
 void imesh_write_ply2(const vcl_string& filename, const imesh_mesh& mesh)

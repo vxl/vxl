@@ -21,6 +21,12 @@ bool imesh_read_ply2(vcl_istream& is, imesh_mesh& mesh);
 //: Read a mesh from a PLY2 file
 bool imesh_read_ply2(const vcl_string& filename, imesh_mesh& mesh);
 
+//: Read a mesh from a PLY file
+bool imesh_read_ply(const vcl_string& filename, imesh_mesh& mesh);
+
+//: Read a mesh from a PLY file
+bool imesh_read_ply(vcl_istream& is, imesh_mesh& mesh);
+
 //: Write a mesh to a PLY2 stream
 void imesh_write_ply2(vcl_ostream& os, const imesh_mesh& mesh);
 
