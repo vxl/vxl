@@ -32,13 +32,14 @@ SET(boxm_sources
     boxm_raytrace_operations.h             boxm_raytrace_operations.cxx
 
     boxm_rational_camera_utils.h           boxm_rational_camera_utils.cxx
+    boxm_upload_mesh.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vpgl_algo vsol bgeo bsta bsta_algo vul vil)
+TARGET_LINK_LIBRARIES(boxm boct boxm_io vcl vgl vgl_io vgl_xio vbl vsl vpgl vpgl_algo vsol bgeo bsta bsta_algo vul vil imesh)
 
 #processes
 SUBDIRS(pro)
