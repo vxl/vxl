@@ -160,7 +160,8 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   //construct a rotation to rotate vector a to vector b;
   //if a and b are oposite, then this rotation is ambiguos(infinitely many axis of rotation)
   //and we will choose to reflect
-  if (vnl_cross_3d(canonical_rotation_axis_, rotation_axis) == vnl_vector_fixed<float,3>(0.0f, 0.0f, 0.0f))
+ if (vnl_cross_3d(canonical_rotation_axis_, rotation_axis).two_norm()<1e-2)
+
   {
     if (dot_product(canonical_rotation_axis_, rotation_axis) < 0) //opposite vectors
     {
