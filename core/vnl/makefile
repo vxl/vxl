@@ -29,6 +29,7 @@ MANPAGE_SOURCES += vnl_fortran_copy.txx
 MANPAGE_SOURCES += vnl_det.txx
 MANPAGE_SOURCES += vnl_transpose.h
 MANPAGE_SOURCES += vnl_inverse.h
+MANPAGE_SOURCES += vnl_power.h
 MANPAGE_SOURCES += vnl_trace.h
 MANPAGE_SOURCES += vnl_rank.txx
 MANPAGE_SOURCES += vnl_scalar_join_iterator.txx

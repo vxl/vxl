@@ -19,6 +19,7 @@ TESTS += test_random.cxx
 TESTS += test_numeric_traits.cxx
 TESTS += test_complex.cxx
 TESTS += test_inverse.cxx
+TESTS += test_power.cxx
 TESTS += test_matrix_exp.cxx
 TESTS += test_transpose.cxx
 TESTS += test_fastops.cxx
