@@ -30,6 +30,11 @@
 //    evaluation of the polynomial $p(x)$ at given values of $x$,
 //    or of its derivative $p'(x)$.
 //
+//    The coefficients (coeffs_) are stored as a vnl_vector, where
+//    coeffs_[n] is the coefficient of the x^(d-n) term,
+//    where d is the degree of the polynomial.  Otherwise said,
+//    the coefficients are stored starting with the highest degree term.
+//
 //    Roots may be extracted using the roots() method.
 class vnl_real_polynomial
 {
