@@ -103,6 +103,7 @@ SET( vnl_sources
   vnl_det.txx                  vnl_det.h
                                vnl_transpose.h
                                vnl_inverse.h
+                               vnl_power.h
                                vnl_trace.h
   vnl_rank.txx                 vnl_rank.h
   vnl_scalar_join_iterator.txx vnl_scalar_join_iterator.h

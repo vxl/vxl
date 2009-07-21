@@ -89,6 +89,7 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_operators.h>
+#include <vnl/vnl_power.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_rank.h>
 #include <vnl/vnl_random.h>

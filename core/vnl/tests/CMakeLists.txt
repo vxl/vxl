@@ -19,6 +19,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_vector_fixed_ref.cxx
   test_matrix_fixed_ref.cxx
   test_numeric_traits.cxx
+  test_power.cxx
   test_quaternion.cxx
   test_rational.cxx
   test_real_polynomial.cxx
@@ -86,6 +87,7 @@ ADD_TEST( vnl_test_bessel               ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all t
 ADD_TEST( vnl_test_quaternion           ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_quaternion           )
 ADD_TEST( vnl_test_crs_index            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_crs_index            )
 ADD_TEST(vnl_test_sparse_lst_sqr_function ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sparse_lst_sqr_function)
+ADD_TEST( vnl_test_power                ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_power                )
 
 ADD_EXECUTABLE(vnl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vnl_test_include vnl)
