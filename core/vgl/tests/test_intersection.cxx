@@ -62,7 +62,6 @@ static void test_plane_intersection()
   vgl_point_3d<double> pt8;
   bool rv8 = vgl_intersection(l8, pl1, pt8);
   TEST("Found no intersection(l8,pl1)", rv8, false);
-
 }
 
 static void test_three_planes()
@@ -98,110 +97,169 @@ static void test_lines_intersection()
 }
 
 static void test_lines_intersect_in_tol()
-{ 
-  vcl_cout<<"Testing intersection of two line segments with tolerance."<<vcl_endl;
+{
+  vcl_cout<<"Testing intersection of two line segments with tolerance.\n";
 
-  // intersection: should return true, 
+  // intersection: should return true
   vgl_point_2d<double> p1(0,0), p2(2,2), q1(2,1), q2(1,2);
-  TEST("Line Intersection 1a", vgl_intersection(p1,p2,q1,q2),true);
-  TEST("Line Intersection 1b", vgl_intersection(p2,p1,q1,q2),true);
-  TEST("Line Intersection 1c", vgl_intersection(p1,p2,q2,q1),true);
-  TEST("Line Intersection 1d", vgl_intersection(p2,p1,q2,q1),true);
+  TEST("Line Intersection 1a", vgl_intersection(p1,p2,q1,q2), true);
+  TEST("Line Intersection 1b", vgl_intersection(p2,p1,q1,q2), true);
+  TEST("Line Intersection 1c", vgl_intersection(p1,p2,q2,q1), true);
+  TEST("Line Intersection 1d", vgl_intersection(p2,p1,q2,q1), true);
   // q1 or q2 lies within tolerance of line (p1,p2)
   p1.set(0,0);
   p2.set(2,2);
   q1.set(1,1 + 1e-7);
   q2.set(0,2);
-  TEST("Line Intersection 2a", vgl_intersection(p1,p2,q1,q2),true);
-  TEST("Line Intersection 2b", vgl_intersection(p2,p1,q1,q2),true);
-  TEST("Line Intersection 2c", vgl_intersection(p1,p2,q2,q1),true);
-  TEST("Line Intersection 2d", vgl_intersection(p2,p1,q2,q1),true);
+  TEST("Line Intersection 2a", vgl_intersection(p1,p2,q1,q2), true);
+  TEST("Line Intersection 2b", vgl_intersection(p2,p1,q1,q2), true);
+  TEST("Line Intersection 2c", vgl_intersection(p1,p2,q2,q1), true);
+  TEST("Line Intersection 2d", vgl_intersection(p2,p1,q2,q1), true);
   // p1 or p2 lies within tolerance of line (q1,q2)
   p1.set(0,0);
   p2.set(2,2);
   q1.set(-1,-1+1e-7);
   q2.set(2.5,2.5+1e-7);
-  TEST("Line Intersection 3a", vgl_intersection(p1,p2,q1,q2),true);
-  TEST("Line Intersection 3b", vgl_intersection(p2,p1,q1,q2),true);
-  TEST("Line Intersection 3c", vgl_intersection(p1,p2,q2,q1),true);
-  TEST("Line Intersection 3d", vgl_intersection(p2,p1,q2,q1),true);
+  TEST("Line Intersection 3a", vgl_intersection(p1,p2,q1,q2), true);
+  TEST("Line Intersection 3b", vgl_intersection(p2,p1,q1,q2), true);
+  TEST("Line Intersection 3c", vgl_intersection(p1,p2,q2,q1), true);
+  TEST("Line Intersection 3d", vgl_intersection(p2,p1,q2,q1), true);
   // lines have 1 common point, should return false : no intersection
   p1.set(0,0);
   p2.set(2,2);
   q1.set(2,2);
   q2.set(4,4);
-  TEST("Line Intersection 4a", vgl_intersection(p1,p2,q1,q2),true);
-  TEST("Line Intersection 4b", vgl_intersection(p2,p1,q1,q2),true);
-  TEST("Line Intersection 4c", vgl_intersection(p1,p2,q2,q1),true);
-  TEST("Line Intersection 4d", vgl_intersection(p2,p1,q2,q1),true);
+  TEST("Line Intersection 4a", vgl_intersection(p1,p2,q1,q2), true);
+  TEST("Line Intersection 4b", vgl_intersection(p2,p1,q1,q2), true);
+  TEST("Line Intersection 4c", vgl_intersection(p1,p2,q2,q1), true);
+  TEST("Line Intersection 4d", vgl_intersection(p2,p1,q2,q1), true);
   // should return intersection
   p1.set(0,0);
   p2.set(2,2);
   q1.set(0,0);
   q2.set(4,4);
-  TEST("Line Intersection 5a", vgl_intersection(p1,p2,q1,q2),true);
-  TEST("Line Intersection 5b", vgl_intersection(p2,p1,q1,q2),true);
-  TEST("Line Intersection 5c", vgl_intersection(p1,p2,q2,q1),true);
-  TEST("Line Intersection 5d", vgl_intersection(p2,p1,q2,q1),true);
+  TEST("Line Intersection 5a", vgl_intersection(p1,p2,q1,q2), true);
+  TEST("Line Intersection 5b", vgl_intersection(p2,p1,q1,q2), true);
+  TEST("Line Intersection 5c", vgl_intersection(p1,p2,q2,q1), true);
+  TEST("Line Intersection 5d", vgl_intersection(p2,p1,q2,q1), true);
   // should return intersection
   p1.set(0,0);
   p2.set(2.25,2.25);
   q1.set(0,0);
   q2.set(2,2);
-  TEST("Line Intersection 6a", vgl_intersection(p1,p2,q1,q2),true);
-  TEST("Line Intersection 6b", vgl_intersection(p2,p1,q1,q2),true);
-  TEST("Line Intersection 6c", vgl_intersection(p1,p2,q2,q1),true);
-  TEST("Line Intersection 6d", vgl_intersection(p2,p1,q2,q1),true);
-  
+  TEST("Line Intersection 6a", vgl_intersection(p1,p2,q1,q2), true);
+  TEST("Line Intersection 6b", vgl_intersection(p2,p1,q1,q2), true);
+  TEST("Line Intersection 6c", vgl_intersection(p1,p2,q2,q1), true);
+  TEST("Line Intersection 6d", vgl_intersection(p2,p1,q2,q1), true);
+}
+
+static void test_box_2d_intersection()
+{
+  vcl_cout<<"Testing intersection of 2d box and point.\n";
+  vgl_point_2d<double> p0(0.3, 0.3), p1(0.7, 0.3), p2(0.6, 0.7), p3(0.7, 0.7), p4(0.8, 0.6);
+  vgl_point_2d<double> bp0(0.6, 0.6), bp1(0.8, 0.8);
+  vgl_box_2d<double> b1; b1.add(bp0); b1.add(bp1);
+  //Case I: point inside box
+  TEST("point inside box", vgl_intersection(b1, p3), true);
+  //Case II: point outside box
+  TEST("point outside box", vgl_intersection(b1, p0), false);
+  TEST("point outside box", vgl_intersection(b1, p1), false);
+  //Case III: point on boundary of box
+  TEST("point on boundary of box", vgl_intersection(b1, p2), true);
+  TEST("point on corner of box", vgl_intersection(b1, p4), true);
+
+  vcl_cout<<"Testing intersection of two 2d boxes.\n";
+  vgl_box_2d<double> b2;
+  //Case I: one box inside other box
+  b2.add(vgl_point_2d<double>(0.6,0.7)); b2.add(vgl_point_2d<double>(0.7,0.8));
+  TEST("one box inside other box", vgl_intersection(b1, b2), b2);
+  TEST("one box inside other box", vgl_intersection(b2, b1), b2);
+  //Case II: no intersection
+  b2.empty(); b2.add(vgl_point_2d<double>(0.3,0.3)); b2.add(vgl_point_2d<double>(0.5,0.5));
+  TEST("no intersection", vgl_intersection(b1, b2), vgl_box_2d<double>());
+  //Case III: corner point touching
+  b2.empty(); b2.add(vgl_point_2d<double>(0.3,0.3)); b2.add(vgl_point_2d<double>(0.6,0.6));
+  TEST("corner point touching", vgl_intersection(b1, b2), vgl_box_2d<double>(0.6,0.6,0.6,0.6));
+}
+
+static void test_box_3d_intersection()
+{
+  vcl_cout<<"Testing intersection of 3d box and point.\n";
+  vgl_point_3d<int> p0(3,3,3), p1(7,3,5), p2(6,7,7), p3(7,7,7), p4(6,7,8), p5(6,8,8);
+  vgl_point_3d<int> bp0(6,6,6), bp1(8,8,8);
+  vgl_box_3d<int> b1; b1.add(bp0); b1.add(bp1);
+  //Case I: point inside box
+  TEST("point inside box", vgl_intersection(b1, p3), true);
+  //Case II: point outside box
+  TEST("point outside box", vgl_intersection(b1, p0), false);
+  TEST("point outside box", vgl_intersection(b1, p1), false);
+  //Case III: point on boundary of box
+  TEST("point on face of box", vgl_intersection(b1, p2), true);
+  TEST("point on edge of box", vgl_intersection(b1, p4), true);
+  TEST("point on corner of box", vgl_intersection(b1, p5), true);
+
+  vcl_cout<<"Testing intersection of two 3d boxes.\n";
+  vgl_box_3d<int> b2;
+  //Case I: one box inside other box
+  b2.add(vgl_point_3d<int>(6,7,7)); b2.add(vgl_point_3d<int>(7,7,8));
+  TEST("one box inside other box", vgl_intersection(b1, b2), b2);
+  TEST("one box inside other box", vgl_intersection(b2, b1), b2);
+  //Case II: no intersection
+  b2.empty(); b2.add(vgl_point_3d<int>(3,3,3)); b2.add(vgl_point_3d<int>(5,5,5));
+  TEST("no intersection", vgl_intersection(b1, b2), vgl_box_3d<int>());
+  //Case III: corner point touching
+  b2.empty(); b2.add(vgl_point_3d<int>(3,3,3)); b2.add(vgl_point_3d<int>(6,6,6));
+  TEST("corner point touching", vgl_intersection(b1, b2), vgl_box_3d<int>(6,6,6,6,6,6));
 }
 
 static void test_box_poly_intersection()
-{ 
-  vcl_cout<<"Testing intersection of box and polygon."<<vcl_endl;
+{
+  vcl_cout<<"Testing intersection of box and polygon.\n";
   //test polygon probe
   //a rectangle at 45 degrees (oriented box)
   vgl_point_2d<float> pr0(0.3f, 0.7f), pr1(0.7f, 0.3f), pr2(0.5f, 0.9f),
     pr3(0.9f, 0.5f);
   vgl_polygon<float> poly(1);
-  poly.push_back(pr0); poly.push_back(pr1); 
+  poly.push_back(pr0); poly.push_back(pr1);
   poly.push_back(pr2); poly.push_back(pr3);
   //Case I: box entirely inside polygon
   vgl_point_2d<float> bp0(0.6f, 0.6f), bp1(0.65f, 0.65f);
   vgl_box_2d<float> b1;
   b1.add(bp0); b1.add(bp1);
-  bool good = vgl_intersection<float>(b1, poly);
+  TEST("box entirely inside polygon", vgl_intersection(b1, poly), true);
   //Case II: poly entirely inside box
   vgl_point_2d<float> bp2(0.0f, 0.0f), bp3(1.0f, 1.0f);
   vgl_box_2d<float> b2;
   b2.add(bp2); b2.add(bp3);
-  good = good && vgl_intersection<float>(b2, poly);
+  TEST("poly entirely inside box", vgl_intersection(b2, poly), true);
   //Case III: poly and box touch at a vertex
   vgl_point_2d<float> bp4(0.5f, 0.5f);
   vgl_box_2d<float> b3;
   b3.add(bp2); b3.add(bp4);
-  good = good && vgl_intersection<float>(b3, poly);
+  TEST("poly and box touch at a vertex", vgl_intersection(b3, poly), true);
   //Case IV: poly vertex and box touch on a box edge
   vgl_point_2d<float> bp5(0.5f, 0.1f), bp6(0.9f, 0.3f);
   vgl_box_2d<float> b4;
   b4.add(bp5); b4.add(bp6);
-  good = good && vgl_intersection<float>(b4, poly);
+  TEST("poly vertex and box touch on a box edge", vgl_intersection(b4, poly), true);
   //Case V: only poly edges intersect box
   vgl_box_2d<float> b5;
   b5.add(bp4); b5.add(bp3);
   vgl_point_2d<float> pr4(0.6f, 0.1f), pr5(0.7f, 0.1f), pr6(0.65f, 0.9f);
   vgl_polygon<float> poly2(1);
   poly2.push_back(pr4);   poly2.push_back(pr5);   poly2.push_back(pr6);
-  good = good && vgl_intersection<float>(b5, poly2);
+  TEST("only poly edges intersect box", vgl_intersection(b5, poly2), true);
   //Case VI: no intersection
   vgl_box_2d<float> b6;
   b6.add(pr4); b6.add(bp2);
-  good = good && !vgl_intersection<float>(b6, poly);
+  TEST("no intersection", vgl_intersection(b6, poly), false);
   //Case VII: box with a single point
   vgl_point_2d<float> ps(1.0f,0.0f);
   vgl_box_2d<float> b7;
   b7.add(ps);
-  good = good && !vgl_intersection<float>(b7, poly);
+  TEST("box with a single point", vgl_intersection(b7, poly), false);
 }
+
 void test_intersection()
 {
   vcl_cout << "**************************\n"
@@ -211,6 +269,8 @@ void test_intersection()
   test_three_planes();
   test_lines_intersection();
   test_lines_intersect_in_tol();
+  test_box_2d_intersection();
+  test_box_3d_intersection();
   test_box_poly_intersection();
 }
 
