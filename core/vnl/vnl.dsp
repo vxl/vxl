@@ -1181,6 +1181,9 @@ SOURCE=.\vnl_crs_index.h
 # Begin Source File
 SOURCE=.\vnl_sparse_lst_sqr_function.h
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_power.h
+# End Source File
 # End Group
 # End Target
 # End Project
