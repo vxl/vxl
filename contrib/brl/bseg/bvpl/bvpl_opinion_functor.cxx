@@ -45,7 +45,7 @@ bvxm_opinion bvpl_opinion_functor::result()
 {
   float b = b_*u_;
   float u = 1 - b;
-  bvxm_opinion result(b,u);
+  bvxm_opinion result(u,b);
   
   //reset all variables
   init();
