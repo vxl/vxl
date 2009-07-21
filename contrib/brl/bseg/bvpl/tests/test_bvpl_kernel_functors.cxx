@@ -75,7 +75,9 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
 {
   vnl_vector_fixed<float,3> axis;
   bool flag=true;
+#ifdef DEBUG
   float entropy_sum=0.0f;
+#endif
 
   vnl_random rand;
   for (unsigned j=0;j<kernel_vec->kernels_.size();j++)
@@ -93,9 +95,10 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     for (unsigned i=0;i<kernel_vec->kernels_.size();i++)
     {
       data_type val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i].second,func);
-      //if (val>0)
-      //  entropy_sum-=val*vcl_log(val);
-
+#ifdef DEBUG
+      if (val>0)
+        entropy_sum-=val*vcl_log(val);
+#endif
       if (val>max_val)
       {
         max_val=val;
@@ -108,8 +111,9 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
               <<"Orig axis: "<<axis<<vcl_endl;
       flag=false;
     }
-
-   // vcl_cout<<"Entropy Sum "<<entropy_sum<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"Entropy Sum "<<entropy_sum<<vcl_endl;
+#endif
   }
   return flag;
 }
@@ -151,7 +155,6 @@ MAIN(test_bvpl_kernel_functors)
   bvxm_opinion max_val_opinion(1.0,0.0);
 
   opinion_data.fill(minp);
-  bool result_opinion=false;
   sigma_noise=0.0f;
 
   bvpl_opinion_functor opinion_functor;
