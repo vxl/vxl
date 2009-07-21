@@ -1,9 +1,9 @@
-//This is brl/bseg/bvxm/grid/pro/processes/boxm_upload_mesh_grid_process.cxx
-
+//This is brl/bseg/boxm/pro/processes/boxm_upload_mesh_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for populating the octree with meshes.
-//         Meshes are in ply format and the grid will be filled with 0's at the faces 
+//         Meshes are in ply format and the grid will be filled with 0's at the faces
 //         of the meshes.
 // \author Gamze D. Tunali
 // \date   July 14, 2009
@@ -14,8 +14,11 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
+#include <boxm/boxm_apm_traits.h>
+#include <boxm/boxm_scene_base.h>
+#include <boxm/boxm_scene.h>
+#include <boct/boct_tree.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
@@ -60,7 +63,7 @@ bool boxm_upload_mesh_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool boxm_upload_mesh_grid_process(bprb_func_process& pro)
 {
-  using namespace boxm_upload_mesh_grid_process_globals;
+  using namespace boxm_upload_mesh_process_globals;
   // check number of inputs
   if (pro.input_types().size() != n_inputs_)
   {
@@ -104,7 +107,7 @@ bool boxm_upload_mesh_grid_process(bprb_func_process& pro)
         boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
         boxm_sample<BOXM_APM_MOG_GREY> val;
         val.alpha=0;
-        boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, val);
+        //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, val);
       }
       else
         vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
