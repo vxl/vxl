@@ -15,6 +15,7 @@
 
 #include <vbl/vbl_array_3d.h>
 #include <bvxm/grid/bvxm_opinion.h>
+
 template<class data_type>
 void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_p, vnl_vector_fixed<float,3> axis)
 {
@@ -84,10 +85,10 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     axis[1]+=float(rand.normal()*sigma_noise);
     axis[2]+=float(rand.normal()*sigma_noise);
 
-	data.fill(min_p);
+    data.fill(min_p);
     fill_in_data<data_type> (data,min_p,max_p,axis);
 
-	data_type max_val=maxval;
+    data_type max_val=maxval;
     unsigned axis_result=0;
     for (unsigned i=0;i<kernel_vec->kernels_.size();i++)
     {
@@ -136,7 +137,7 @@ MAIN(test_bvpl_kernel_functors)
   result=is_correct_solution< bvpl_edge_geometric_mean_functor<float>, float  >(kernel_vec,data,geom_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Geometric Mean functor with no noise ", true,result);
 
-  //: add noise 
+  //: add noise
   sigma_noise=0.1f;
   result=is_correct_solution< bvpl_edge_algebraic_mean_functor<float>, float  >(kernel_vec,data,mean_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Algebraic mean functor with  noise ", true,result);
@@ -157,7 +158,9 @@ MAIN(test_bvpl_kernel_functors)
   result=is_correct_solution< bvpl_opinion_functor, bvxm_opinion >(kernel_vec,opinion_data,opinion_functor,minp,maxp,sigma_noise,max_val_opinion);
   TEST("Test Opinion functor with no noise ", true,result);
 
-
   return 0;
 }
 
+// Template instantiation, only used in this test file:
+#include <vbl/vbl_array_3d.txx>
+VBL_ARRAY_3D_INSTANTIATE(bvxm_opinion);
