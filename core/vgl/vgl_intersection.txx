@@ -17,14 +17,42 @@
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_lineseg_test.h>
+#include <vcl_vector.h>
 
 inline bool vgl_near_zero(double x) { return x < 1e-8 && x > -1e-8; }
 inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
+
+//: Return the intersection of two boxes (which is itself either a box, or empty)
+// \relates vgl_box_2d
+template <class T>
+vgl_box_2d<T> vgl_intersection(vgl_box_2d<T> const& b1,vgl_box_2d<T> const& b2)
+{
+  T xmin = b1.min_x() > b2.min_x() ? b1.min_x() : b2.min_x();
+  T ymin = b1.min_y() > b2.min_y() ? b1.min_y() : b2.min_y();
+  T xmax = b1.max_x() < b2.max_x() ? b1.max_x() : b2.max_x();
+  T ymax = b1.max_y() < b2.max_y() ? b1.max_y() : b2.max_y();
+  return vgl_box_2d<T>(xmin,xmax,ymin,ymax);
+}
+
+//: Return the intersection of two boxes (which is itself either a box, or empty)
+// \relates vgl_box_3d
+template <class T>
+vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& b1,vgl_box_3d<T> const& b2)
+{
+  T xmin = b1.min_x() > b2.min_x() ? b1.min_x() : b2.min_x();
+  T ymin = b1.min_y() > b2.min_y() ? b1.min_y() : b2.min_y();
+  T zmin = b1.min_z() > b2.min_z() ? b1.min_z() : b2.min_z();
+  T xmax = b1.max_x() < b2.max_x() ? b1.max_x() : b2.max_x();
+  T ymax = b1.max_y() < b2.max_y() ? b1.max_y() : b2.max_y();
+  T zmax = b1.max_z() < b2.max_z() ? b1.max_z() : b2.max_z();
+  return vgl_box_3d<T>(xmin,ymin,zmin,xmax,ymax,zmax);
+}
 
 //: compute the intersection of an infinite line with *this box.
 //  p0 and p1 are the intersection points
@@ -551,6 +579,62 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
   return hit;
 }
 
+//: Return the points from the list that lie inside the box
+// \relates vgl_point_2d
+// \relates vgl_box_2d
+template <class T>
+vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, vcl_vector<vgl_point_2d<T> > const& p)
+{
+  vcl_vector<vgl_point_2d<T> > r;
+  typename vcl_vector<vgl_point_2d<T> >::const_iterator i;
+  for (i = p.begin(); i != p.end(); ++i)
+    if (vgl_intersection(b, *i))
+      r.push_back(*i);
+  return r;
+}
+
+//: Return the points from the list that lie inside the box
+// \relates vgl_point_2d
+// \relates vgl_box_2d
+template <class T>
+vcl_vector<vgl_point_2d<T> > vgl_intersection(vcl_vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b)
+{
+  vcl_vector<vgl_point_2d<T> > r;
+  typename vcl_vector<vgl_point_2d<T> >::const_iterator i;
+  for (i = p.begin(); i != p.end(); ++i)
+    if (vgl_intersection(b, *i))
+      r.push_back(*i);
+  return r;
+}
+
+//: Return the points from the list that lie inside the box
+// \relates vgl_point_3d
+// \relates vgl_box_3d
+template <class T>
+vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& p)
+{
+  vcl_vector<vgl_point_3d<T> > r;
+  typename vcl_vector<vgl_point_3d<T> >::const_iterator i;
+  for (i = p.begin(); i != p.end(); ++i)
+    if (vgl_intersection(b, *i))
+      r.push_back(*i);
+  return r;
+}
+
+//: Return the points from the list that lie inside the box
+// \relates vgl_point_3d
+// \relates vgl_box_3d
+template <class T>
+vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b)
+{
+  vcl_vector<vgl_point_3d<T> > r;
+  typename vcl_vector<vgl_point_3d<T> >::const_iterator i;
+  for (i = p.begin(); i != p.end(); ++i)
+    if (vgl_intersection(b, *i))
+      r.push_back(*i);
+  return r;
+}
+
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
@@ -565,9 +649,15 @@ template bool vgl_intersection(const vgl_line_2d<T >&, const vgl_line_2d<T >&, v
 template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
 template bool vgl_intersection(vgl_box_2d<T > const&, vgl_polygon<T > const&)
 
-//: Instantiate only functions suitable for integer instantiation.
+//: Instantiate those functions which are suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
+template vgl_box_2d<T > vgl_intersection(vgl_box_2d<T > const&,vgl_box_2d<T > const&); \
+template vgl_box_3d<T > vgl_intersection(vgl_box_3d<T > const&,vgl_box_3d<T > const&); \
+template vcl_vector<vgl_point_2d<T > > vgl_intersection(vgl_box_2d<T > const& b, vcl_vector<vgl_point_2d<T > > const& p); \
+template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<T > > const& p, vgl_box_2d<T > const& b); \
+template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const& b, vcl_vector<vgl_point_3d<T > > const& p); \
+template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const& p, vgl_box_3d<T > const& b); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
 
 #endif // vgl_intersection_txx_
