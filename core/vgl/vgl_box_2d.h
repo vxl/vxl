@@ -25,6 +25,7 @@
 //   Peter Vanroose  16 Oct 2003: Corner pts given to constructor may now be in any order
 //   Gamze Tunali    25 Jan 2007: Moved intersect(box1,box2) to vgl_intersection
 //   Peter Vanroose  30 Mar 2007: Commented out deprecated intersect() function
+//   Peter Vanroose  22 Jul 2009: Moved vgl_intersection() to vgl_intersection.h
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -179,15 +180,6 @@ class vgl_box_2d
     return x >= min_x() && x <= max_x() && y >= min_y() && y <= max_y();
   }
 
-#if 0 // deprecated
-  //: Return true if line intersects box. If so, compute intersection points.
-  // \deprecated in favour of vgl_intersection()
-  // Can be removed after the release of VXL 1.8
-  bool intersect(const vgl_line_2d<Type>& line,
-                 vgl_point_2d<Type>& p0, vgl_point_2d<Type>& p1)
-  { return vgl_intersection(*this, line, p0, p1); }
-#endif // 0
-
   //: Make the box empty
   void empty();
 
@@ -260,28 +252,11 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_2d<Type> const& p);
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
 
-#if 0 // deprecated
-//: Return box defining intersection between boxes a and b.
-//  Empty box returned if no intersection.
-// \relates vgl_box_2d
-// \deprecated in favour of vgl_intersection
-// Can be removed after the release of VXL 1.8
-template <class Type>
-vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
-{ return vgl_intersection(a, b); }
-#endif // 0
-
-//: Return box defining intersection between boxes a and b.
-//  Empty box returned if no intersection.
-// \relates vgl_box_2d
-template <class Type>
-vgl_box_2d<Type> vgl_intersection(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b);
-
 //: Calculate the bounding box of a sequence of points or boxes.
 template <class T, class ITER>
 void vgl_box_2d_bounds(ITER begin, ITER end, vgl_box_2d<T>& bounding_box)
 {
-  for (;begin != end; ++begin)
+  for (; begin != end; ++begin)
     bounding_box.add(*begin);
 }
 

@@ -309,20 +309,6 @@ vcl_istream& vgl_box_2d<Type>::read(vcl_istream& s)
            >> max_pos_[0] >> max_pos_[1];
 }
 
-template <class Type>
-vgl_box_2d<Type> vgl_intersection(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
-{
-  Type x0 = vcl_max(a.min_x(), b.min_x());
-  Type y0 = vcl_max(a.min_y(), b.min_y());
-  Type x1 = vcl_min(a.max_x(), b.max_x());
-  Type y1 = vcl_min(a.max_y(), b.max_y());
-
-  if (x1 >= x0 && y1 >= y0)
-    return vgl_box_2d<Type>(x0, x1, y0, y1);
-  else
-    return vgl_box_2d<Type>(); // empty box
-}
-
 //: Add a point to this box.
 // Do this by possibly enlarging the box so that the point just falls within the box.
 // Adding a point to an empty box makes it a size zero box only containing p.
@@ -397,7 +383,6 @@ vcl_istream& operator>>(vcl_istream& is, vgl_box_2d<Type>& p)
 #define VGL_BOX_2D_INSTANTIATE(Type) \
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > vgl_intersection(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&)
+template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&)
 
 #endif // vgl_box_2d_txx_
