@@ -49,6 +49,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_intersection.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
