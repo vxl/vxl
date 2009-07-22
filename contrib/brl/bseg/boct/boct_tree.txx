@@ -175,6 +175,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_b
   while (!(xorcode->y_loc_&(1<<level_y))&& level_y>level_x) level_y--;
   while (!(xorcode->z_loc_&(1<<level_z))&& level_z>level_y) level_z--;
 
+  level_z++;
   return locate_point_at_level(r.min_point(),level_z);
 }
 
