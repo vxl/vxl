@@ -7,6 +7,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -108,8 +109,7 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
 void
 boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
                             vpgl_camera_double_sptr camera,
-                            double* xverts, double* yverts
-                           )
+                            double* xverts, double* yverts)
 {
 #if 0
   vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
@@ -433,7 +433,7 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
   // (no need to compute barycentric coordinates of a quadrilateral at each step)
   // subtract 0.5 from xvals and yvals, so that interpolated value at pixel x,y evaluates to coordinates x+0.5, y+0.5 (center of pixel)
 
- double Acol0[] = {(xvals[v0]-0.5)*(yvals[v0]-0.5),
+  double Acol0[] = {(xvals[v0]-0.5)*(yvals[v0]-0.5),
             (xvals[v1]-0.5)*(yvals[v1]-0.5),
             (xvals[v2]-0.5)*(yvals[v2]-0.5),
             (xvals[v3]-0.5)*(yvals[v3]-0.5)};
@@ -471,7 +471,7 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
     for (unsigned int x = startx; x < endx; ++x) {
       float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
       img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
-   }
+    }
   }
   return;
 #if 0 // commented out
@@ -850,7 +850,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     }
   }
 
- return true;
+  return true;
 }
 
 
@@ -951,7 +951,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     }
   }
 
- return true;
+  return true;
 }
 
 
@@ -1362,7 +1362,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
 
 //: checks if a box and a polygon (given as an ordered set of vertices) intersects
 bool boxm_utils::intersection(vgl_box_3d<double> const& b,
-                             vcl_vector<vgl_point_3d<double> > const& poly)
+                              vcl_vector<vgl_point_3d<double> > const& poly)
 {
   // check if two bounding boxes intersect
   // find the bounding box of the polygon
@@ -1374,7 +1374,7 @@ bool boxm_utils::intersection(vgl_box_3d<double> const& b,
 
   vgl_box_3d<double> inters = vgl_intersection(b, bb);
   if (inters.is_empty())
-   return false;
+    return false;
 
   // check if the polygon corners inside the box
   bool hit=false;
@@ -1398,7 +1398,7 @@ bool boxm_utils::intersection(vgl_box_3d<double> const& b,
     d+=(poly_plane.b()*corner.y());
     d+=(poly_plane.c()*corner.z());
     d+=poly_plane.d();
-   //vcl_sqrt(poly_plane.a()*poly_plane.a()+poly_plane.b()*poly_plane.b()+poly_plane.c()*poly_plane.c());
+    //vcl_sqrt(poly_plane.a()*poly_plane.a()+poly_plane.b()*poly_plane.b()+poly_plane.c()*poly_plane.c());
     if (d > 0)
       pos++;
     else if (d<0)
@@ -1409,9 +1409,10 @@ bool boxm_utils::intersection(vgl_box_3d<double> const& b,
   //vcl_cout << "Negatives=" << neg << " Positives=" << pos << vcl_endl;
   if (neg==8 || pos==8) // completely out of polygon plane
     return false;
- // else {                // plane go through the box but box maybe polygon boundaries
- //   return true;
-
+#if 0
+  else                  // plane go through the box but box maybe polygon boundaries
+    return true;
+#endif
   // now we do a 3D transformation of the polygon and the box center to the plane
   // where polygon resides, so that we can do 2D poly-point test
   vgl_vector_3d<double> n = poly_plane.normal();
