@@ -21,27 +21,23 @@ vgl_box_3d<Type>::vgl_box_3d()
 }
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(Type const min_pos[3],
-                             Type const max_pos[3])
+vgl_box_3d<Type>::vgl_box_3d(Type const corner1[3],
+                             Type const corner2[3])
 {
-  min_pos_[0]=max_pos_[0]=min_pos[0];
-  min_pos_[1]=max_pos_[1]=min_pos[1];
-  min_pos_[2]=max_pos_[2]=min_pos[2];
-  this->add(max_pos);
-  if (min_pos[0]>max_pos[0] || min_pos[1]>max_pos[1] || min_pos[2]>max_pos[2])
-    this->empty();
+  min_pos_[0]=max_pos_[0]=corner1[0];
+  min_pos_[1]=max_pos_[1]=corner1[1];
+  min_pos_[2]=max_pos_[2]=corner1[2];
+  this->add(corner2);
 }
 
 template <class Type>
-vgl_box_3d<Type>::vgl_box_3d(vgl_point_3d<Type> const& min_pos,
-                             vgl_point_3d<Type> const& max_pos)
+vgl_box_3d<Type>::vgl_box_3d(vgl_point_3d<Type> const& corner1,
+                             vgl_point_3d<Type> const& corner2)
 {
-  min_pos_[0]=max_pos_[0]=min_pos.x();
-  min_pos_[1]=max_pos_[1]=min_pos.y();
-  min_pos_[2]=max_pos_[2]=min_pos.z();
-  this->add(max_pos);
-  if (min_pos.x()>max_pos.x() || min_pos.y()>max_pos.y() || min_pos.z()>max_pos.z())
-    this->empty();
+  min_pos_[0]=max_pos_[0]=corner1.x();
+  min_pos_[1]=max_pos_[1]=corner1.y();
+  min_pos_[2]=max_pos_[2]=corner1.z();
+  this->add(corner2);
 }
 
 template <class Type>

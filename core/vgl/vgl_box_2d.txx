@@ -21,23 +21,21 @@ vgl_box_2d<Type>::vgl_box_2d()
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(Type const min_pos[2],
-                             Type const max_pos[2])
+vgl_box_2d<Type>::vgl_box_2d(Type const corner1[2],
+                             Type const corner2[2])
 {
-  min_pos_[0]=max_pos_[0]=min_pos[0];
-  min_pos_[1]=max_pos_[1]=min_pos[1];
-  this->add(max_pos);
-  if (min_pos[0] > max_pos[0] || min_pos[1] > max_pos[1]) this->empty();
+  min_pos_[0]=max_pos_[0]=corner1[0];
+  min_pos_[1]=max_pos_[1]=corner1[1];
+  this->add(corner2);
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(vgl_point_2d<Type> const& min_pos,
-                             vgl_point_2d<Type> const& max_pos)
+vgl_box_2d<Type>::vgl_box_2d(vgl_point_2d<Type> const& corner1,
+                             vgl_point_2d<Type> const& corner2)
 {
-  min_pos_[0]=max_pos_[0]=min_pos.x();
-  min_pos_[1]=max_pos_[1]=min_pos.y();
-  this->add(max_pos);
-  if (min_pos.x() > max_pos.x() || min_pos.y() > max_pos.y()) this->empty();
+  min_pos_[0]=max_pos_[0]=corner1.x();
+  min_pos_[1]=max_pos_[1]=corner1.y();
+  this->add(corner2);
 }
 
 template <class Type>

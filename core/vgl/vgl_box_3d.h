@@ -69,12 +69,12 @@ class vgl_box_3d
   vgl_box_3d();
 
   //: Construct using two corner points
-  vgl_box_3d(Type const min_position[3],
-             Type const max_position[3]);
+  vgl_box_3d(Type const corner1[3],
+             Type const corner2[3]);
 
   //: Construct using two corner points
-  vgl_box_3d(vgl_point_3d<Type> const& min_pos,
-             vgl_point_3d<Type> const& max_pos);
+  vgl_box_3d(vgl_point_3d<Type> const& corner1,
+             vgl_point_3d<Type> const& corner2);
 
   //: Construct from ranges in \a x,y,z (take care with order of inputs).
   //  The \a x range is given by the 1st and 4th coordinates,

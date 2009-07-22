@@ -83,12 +83,12 @@ class vgl_box_2d
   vgl_box_2d();
 
   //: Construct using two corner points
-  vgl_box_2d(Type const min_position[2],
-             Type const max_position[2]);
+  vgl_box_2d(Type const corner1[2],
+             Type const corner2[2]);
 
   //: Construct using two corner points
-  vgl_box_2d(vgl_point_2d<Type> const& min_pos,
-             vgl_point_2d<Type> const& max_pos);
+  vgl_box_2d(vgl_point_2d<Type> const& corner1,
+             vgl_point_2d<Type> const& corner2);
 
   //: Construct using ranges in \a x (first two args) and \a y (last two)
   vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax);
