@@ -71,7 +71,7 @@ void boxm_upload_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   for (; !iter.end(); iter++) {
     scene.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
-    boxm_upload_mesh_into_block(block, lvcs, mesh, val);
+    boxm_upload_mesh_into_block(block, mesh, lvcs, val);
     scene.write_active_block();
   }
 }
