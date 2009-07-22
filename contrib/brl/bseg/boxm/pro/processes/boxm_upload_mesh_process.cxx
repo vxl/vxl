@@ -17,6 +17,7 @@
 #include <bprb/bprb_parameters.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene_base.h>
+#include <boxm/boxm_upload_mesh.h>
 #include <boxm/boxm_scene.h>
 #include <boct/boct_tree.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
@@ -31,7 +32,7 @@
 
 namespace boxm_upload_mesh_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 0;
 }
 
@@ -45,7 +46,7 @@ bool boxm_upload_mesh_process_cons(bprb_func_process& pro)
   unsigned i=0;
   input_types_[i++]="vcl_string";           //the directory for ply files
   input_types_[i++]="boxm_scene_base_sptr"; //scene to be uploaded
-
+  input_types_[i++]="bool";                 //true, if mesh vertices are in geo coordinates
   vcl_vector<vcl_string> output_types_(n_outputs_);
   i=0;
 
@@ -74,6 +75,7 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
   unsigned i=0;
   vcl_string input_path = pro.get_input<vcl_string>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
+  bool use_lvcs = pro.get_input<bool>(i++);
 
   if (!vul_file::is_directory(input_path)) {
     vcl_cerr << "In boxm_upload_mesh_process -- input path " << input_path<< "is not valid!\n";
@@ -107,7 +109,7 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
         boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
         boxm_sample<BOXM_APM_MOG_GREY> val;
         val.alpha=0;
-        //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, val);
+        boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
       }
       else
         vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
