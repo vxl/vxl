@@ -61,7 +61,7 @@ bool boxm_upload_mesh_process_cons(bprb_func_process& pro)
 
 
 //: Execute the process
-bool boxm_upload_mesh_grid_process(bprb_func_process& pro)
+bool boxm_upload_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm_upload_mesh_process_globals;
   // check number of inputs
