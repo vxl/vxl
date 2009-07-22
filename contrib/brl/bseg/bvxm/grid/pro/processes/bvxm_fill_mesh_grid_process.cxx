@@ -113,7 +113,7 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
     // call appropriate load functions to load the M
     imesh_mesh mesh;
     if (file_format == ".PLY")
-      imesh_read(file, mesh);
+      imesh_read_ply(file, mesh);
     else if (file_format == ".PLY2")
       imesh_read_ply2(file, mesh);
 
