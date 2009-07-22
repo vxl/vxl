@@ -8,6 +8,8 @@
 //
 // \verbatim
 //  Modifications
+//   07/20/2009  - Gamze D. Tunali - Added a method that tests the intersection between a 3d box and a polygon
+//
 //   07 Mar.2008 - Ozge C. Ozcanli - Added support for VIL_PIXEL_FORMAT_RGB_FLOAT and VIL_PIXEL_FORMAT_FLOAT to the img_to_slab method
 //                                   Assumes the float image is already scaled to [0,1] range
 //
@@ -45,6 +47,8 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_polygon.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
