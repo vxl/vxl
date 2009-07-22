@@ -1,17 +1,19 @@
-#ifndef boxm_upload_mesh_h_
-#define boxm_upload_mesh_h_
+#ifndef boxm_render_mesh_h_
+#define boxm_render_mesh_h_
 //:
 // \file
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
-#include <boxm/boxm_sample.h>
-#include <boxm/boxm_scene.h>
+#include <boxm/boxm_block.h>
 #include <vgl/vgl_intersection.h>
+
+#include <imesh/imesh_mesh.h>
+
 #include <vcl_iostream.h>
 
 template <class T_loc, class T_data>
-void boxm_upload_mesh(boxm_block<boct_tree<T_loc, T_data> > *block,
-                      imesh_mesh& mesh, T_data val)
+void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
+                                 imesh_mesh& mesh, T_data val)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
@@ -60,4 +62,18 @@ void boxm_upload_mesh(boxm_block<boct_tree<T_loc, T_data> > *block,
   }
 }
 
+template <class T_loc, class T_data>
+void boxm_upload_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
+                                 imesh_mesh& mesh, T_data val)
+{
+  typedef boct_tree<T_loc, T_data > tree_type;
+
+  boxm_block_iterator<tree_type> iter(&scene);
+  for (; !iter.end(); iter++) {
+    scene.load_block(iter.index());
+    boxm_block<tree_type>* block = *iter;
+    boxm_upload_mesh_into_block(block, mesh, val);
+    scene.write_active_block();
+  }
+}
 #endif // boxm_upload_mesh_h_
