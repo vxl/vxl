@@ -89,7 +89,7 @@ void vul_debug_core_dump(const char * filename)
   _set_se_translator(current);
 }
 
-#ifdef VCL_HAS_EXCEPTIONS
+#if VCL_HAS_EXCEPTIONS
 //: Windows structured exception code.
 unsigned vul_debug_windows_structured_exception::code() const
 {
