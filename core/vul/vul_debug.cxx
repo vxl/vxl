@@ -116,7 +116,7 @@ void vul_debug_set_coredump_and_throw_on_windows_se_handler(
   unsigned code, EXCEPTION_POINTERS * ex_ptr)
 {
   vul_debug_core_dump_in_windows_seh(se_coredump_filename, ex_ptr);
-#ifdef VCL_HAS_EXCEPTIONS
+#if VCL_HAS_EXCEPTIONS
   throw vul_debug_windows_structured_exception(ex_ptr);
 #else
   vcl_cerr << static_cast<char*>(ex_ptr) << '\n';
