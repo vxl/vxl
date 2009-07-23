@@ -6,12 +6,12 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/boxm_utils.h>
 
 #include <imesh/imesh_mesh.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/algo/vgl_intersection.h>
 #include <vcl_iostream.h>
 
 template <class T_loc, class T_data>
@@ -21,15 +21,13 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
   vgl_box_3d<double> block_bb = block->bounding_box();
-
-  // initialize grid with big values
   imesh_face_array_base& fs = mesh.faces();
   
   for (unsigned i=0; i < fs.size(); ++i)
   {
-    vcl_vector<vgl_point_3d<double> > v_list;
+    vcl_list<vgl_point_3d<double> > v_list;
     imesh_vertex_array<3>& vertices = mesh.vertices<3>();
-    vgl_box_3d<double> bb;
+    vgl_box_3d<double> bb_scale, bb_global;
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
       unsigned int v_id = fs(i,j);
       vgl_point_3d<double> v;
@@ -40,22 +38,24 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
         v=vgl_point_3d<double>(lx,ly,lz);
       } else
         v=vgl_point_3d<double>(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2));
-
+      bb_global.add(v);
       vgl_vector_3d<double> diff = v-block_bb.min_point();   // get the value according to the block origin
-      //convert the values into [0,1] range
-      v.set(diff.x()/block_bb.width(),diff.y()/ block_bb.height(),diff.y()/ block_bb.depth());
-      bb.add(v);
+      v.set(diff.x(), diff.y(), diff.z());
+      // the local coordinates inside the box region
       v_list.push_back(v);
+      //convert the values into [0,1] range
+      v.set(diff.x()/block_bb.width(),diff.y()/ block_bb.height(),diff.z()/ block_bb.depth());
+      bb_scale.add(v);
+      
     }
   
-
     // check if polygon's bounding box intersects with the block
-    vgl_box_3d<double> inters = vgl_intersection(block_bb, bb);
+    vgl_box_3d<double> inters = vgl_intersection(block_bb, bb_global);
     if (inters.is_empty())
       return;
 
     // locate the polygon bounding box in tree
-    boct_tree_cell<T_loc,T_data>* region=tree->locate_region(bb);
+    boct_tree_cell<T_loc,T_data>* region=tree->locate_region(bb_scale);
     if (region) {
       // test all the children for intersection
       vcl_vector<boct_tree_cell<T_loc,T_data>*> children;
@@ -65,8 +65,8 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
         children.push_back(region);
       for (unsigned i=0; i<children.size(); i++) {
         boct_tree_cell<T_loc,T_data>* cell=children[i];
-        vgl_box_3d<double> cell_bb=tree->cell_bounding_box(cell);
-        if (boxm_utils::intersection(cell_bb, v_list)) {
+        vgl_box_3d<double> cell_bb=tree->cell_bounding_box_local(cell);
+        if (vgl_intersection<double>(cell_bb, v_list)) {
           cell->set_data(val);
         }
       }
