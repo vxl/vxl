@@ -89,6 +89,7 @@ void vul_debug_core_dump(const char * filename)
   _set_se_translator(current);
 }
 
+#ifdef VCL_HAS_EXCEPTIONS
 //: Windows structured exception code.
 unsigned vul_debug_windows_structured_exception::code() const
 {
@@ -107,6 +108,7 @@ const char *vul_debug_windows_structured_exception::what() const throw()
   vcl_sprintf(buf, "Caught Windows Structured Exception. Code %lx. Address %lx", code(), address());
   return buf;
 }
+#endif
 
 static const char* se_coredump_filename = 0;
 
@@ -117,7 +119,7 @@ void vul_debug_set_coredump_and_throw_on_windows_se_handler(
 #ifdef VCL_HAS_EXCEPTIONS
   throw vul_debug_windows_structured_exception(ex_ptr);
 #else
-  vcl_cerr << vul_debug_windows_structured_exception(ex_ptr).what();
+  vcl_cerr << static_cast<char*>(ex_ptr) << '\n';
   vcl_abort();
 #endif
 }
