@@ -10,7 +10,6 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
-#include <vgl/algo/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
 
