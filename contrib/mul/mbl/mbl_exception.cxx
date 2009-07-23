@@ -79,7 +79,7 @@ mbl_exception_os_error::mbl_exception_os_error(int errnum, const vcl_string &fil
   const vcl_string &comment/*=""*/):
 #if !VCL_HAS_EXCEPTIONS
   msg_(file_name + " " + vcl_strerror(errnum) + "\n" + comment), 
-    err_no(errnum), error_message(vcl_strerror(errnum)), filename(file_name),
+    errno(errnum), error_message(vcl_strerror(errnum)), filename(file_name),
     additional_comment(comment) {}
 #else
   vcl_runtime_error(vcl_string("\"") + file_name + "\" " + vcl_strerror(errnum) + "\n" + comment), 
