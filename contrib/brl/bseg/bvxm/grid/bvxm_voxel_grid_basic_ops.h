@@ -19,9 +19,10 @@
 #include "bvxm_voxel_slab_iterator.h"
 #include "bvxm_voxel_slab.h"
 #include "bvxm_opinion.h"
-#include <bvxm/bvxm_util.h>
+
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/algo/vgl_intersection.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
@@ -135,7 +136,7 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
 
   for (unsigned i=0; i < fs.size(); ++i)
   {
-    vcl_vector<vgl_point_3d<double> > v_list;
+    vcl_list<vgl_point_3d<double> > v_list;
     imesh_vertex_array<3>& vertices = mesh.vertices<3>();
     vgl_box_3d<double> bb;
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
@@ -161,7 +162,7 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
             vgl_box_3d<double> voxel_box;
             voxel_box.set_min_point(vgl_point_3d<double>(x,y,z));
             voxel_box.set_max_point(vgl_point_3d<double>(x+1,y+1,z+1));
-            if (bvxm_util::intersection(voxel_box, v_list)) {
+            if (vgl_intersection<double>(voxel_box, v_list)) {
               bvxm_voxel_slab_iterator<float> slab_it = grid->slab_iterator(grid_size.z()-z);
               bvxm_voxel_slab<float>& slab = *slab_it;
               float& val = slab(x,y);
