@@ -160,7 +160,7 @@ void mbl_exception_warning(T exception)
     vcl_string msg_;
    public:
     mbl_exception_missing_property(const vcl_string &missing)
-      : msg_(vcl_string("Couldn't find expected property label: \""+missing+'\"') {}
+      : msg_(vcl_string("Couldn't find expected property label: \""+missing+'\"')) {}
     const char * what() const {return msg_.c_str();}
   };
 
