@@ -146,9 +146,6 @@ class boxm_utils
                               vgl_vector_3d<double> dir, vgl_point_3d<double> & exit_point,
                               double & lambda,boct_face_idx & face_id);
 
-  static bool intersection(vgl_box_3d<double> const& b,
-                           vcl_vector<vgl_point_3d<double> > const& poly);
-
 };
 
 #endif
