@@ -51,6 +51,10 @@ void test_parse_block()
     vcl_istringstream ss("{ a\n {b\n  // wibble }\n}c }");
     TEST("Comment case 1", mbl_parse_block(ss) == "{ a\n {b\n}c }" && !ss.fail(), true);
   }
+  {
+    vcl_istringstream ss("// { a\n {b\n  // wibble }\n}\n //c }");
+    TEST("Comment case 2", mbl_parse_block(ss) == "{b\n}" && !ss.fail(), true);
+  }
 
   vcl_cout << "\n\n";
 #else // VCL_HAS_WORKING_STRINGSTREAM

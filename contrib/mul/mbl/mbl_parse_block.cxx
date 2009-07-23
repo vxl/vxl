@@ -30,6 +30,10 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
   if (!afs) return "{}";
   //: The last character to be read from the stream
   char c;
+
+  // length of the comment token;
+  const unsigned comment_length = vcl_strlen(comment);
+
   if (!open_already)
   {
     if (afs.eof())
@@ -37,6 +41,25 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
     afs >> c;
 
     if (!afs) return "{}";
+    if (comment_length && c == *comment)
+    {
+      for (unsigned comment_pos=1; comment_pos < comment_length; ++comment_pos)
+      {
+        if (afs.eof())
+          return "{}";
+        afs >> c;
+        if (c != comment[comment_pos])
+        {
+          afs.putback(c); // push c back into stream.
+          return "{}";
+        }
+      }
+      vcl_string dummy;
+      vcl_getline(afs, dummy);
+      if (afs.eof())
+        return "{}";
+      afs >> vcl_ws >> c;
+    }
     if (c != '{')
     {
       afs.putback(c); // push c back into stream.
@@ -52,8 +75,6 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
   unsigned level=1;
   // The current position in a comment token.
   unsigned comment_position=0;
-  // length of the comment token;
-  const unsigned comment_length = vcl_strlen(comment);
   // true if we are currently in the whitespace at the beggining of a line
   bool newline=true;
 
