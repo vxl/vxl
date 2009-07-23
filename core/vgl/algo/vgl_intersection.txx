@@ -30,38 +30,7 @@ vgl_point_3d<T> vgl_intersection(vcl_vector<vgl_plane_3d<T> > const& p)
 
   return vgl_homg_operators_3d<T>::intersection(planes);
 }
-template <class T>
-bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
-{
-  
-  // find the box corners
-  vcl_vector<vgl_point_3d<T> > corners;
-  corners.push_back(b.min_point());
-  corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y(), b.min_z()));
-  corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y()+b.height(), b.min_z()));
-  corners.push_back(vgl_point_3d<T> (b.min_x(), b.min_y()+b.height(), b.min_z()));
-  corners.push_back(vgl_point_3d<T> (b.min_x(), b.min_y(), b.max_z()));
-  corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y(), b.max_z()));
-  corners.push_back(b.max_point());
-  corners.push_back(vgl_point_3d<T> (b.min_x(), b.min_y()+b.height(), b.max_z()));
-  
-  // find the signed distance from the box corners to the plane
-  int pos=0, neg=0;
-  for (unsigned c=0; c<corners.size(); c++) {
-    vgl_point_3d<T> corner=corners[c];
-    double d=(plane.a()*corner.x());
-    d+=(plane.b()*corner.y());
-    d+=(plane.c()*corner.z());
-    d+=plane.d();
-    if (d > 0)
-      pos++;
-    else if (d<0)
-      neg++;
-  }
-  if (neg==8 || pos==8) // completely out of ploygon plane
-    return false;
-  return true;
-}
+
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 {
