@@ -40,6 +40,42 @@ vgl_box_2d<T> vgl_intersection(vgl_box_2d<T> const& b1,vgl_box_2d<T> const& b2)
   return vgl_box_2d<T>(xmin,xmax,ymin,ymax);
 }
 
+//: Return true if a box and plane intersect in 3D
+// \relates vgl_plane_3d
+// \relates vgl_box_3d
+template <class T>
+bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
+{
+  
+  // find the box corners
+  vcl_vector<vgl_point_3d<T> > corners;
+  corners.push_back(b.min_point());
+  corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y(), b.min_z()));
+  corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y()+b.height(), b.min_z()));
+  corners.push_back(vgl_point_3d<T> (b.min_x(), b.min_y()+b.height(), b.min_z()));
+  corners.push_back(vgl_point_3d<T> (b.min_x(), b.min_y(), b.max_z()));
+  corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y(), b.max_z()));
+  corners.push_back(b.max_point());
+  corners.push_back(vgl_point_3d<T> (b.min_x(), b.min_y()+b.height(), b.max_z()));
+  
+  // find the signed distance from the box corners to the plane
+  int pos=0, neg=0;
+  for (unsigned c=0; c<corners.size(); c++) {
+    vgl_point_3d<T> corner=corners[c];
+    double d=(plane.a()*corner.x());
+    d+=(plane.b()*corner.y());
+    d+=(plane.c()*corner.z());
+    d+=plane.d();
+    if (d > 0)
+      pos++;
+    else if (d<0)
+      neg++;
+  }
+  if (neg==8 || pos==8) // completely out of ploygon plane
+    return false;
+  return true;
+}
+
 //: Return the intersection of two boxes (which is itself either a box, or empty)
 // \relates vgl_box_3d
 template <class T>
@@ -644,8 +680,8 @@ template vcl_vector<vgl_point_2d<T > > vgl_intersection(vgl_box_2d<T > const& b,
 template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<T > > const& p, vgl_box_2d<T > const& b); \
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const& b, vcl_vector<vgl_point_3d<T > > const& p); \
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const& p, vgl_box_3d<T > const& b); \
-template bool vgl_intersection(vgl_box_2d<T > const&, vgl_line_2d<T > const& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
-
+template bool vgl_intersection(vgl_box_2d<T > const&, vgl_line_2d<T > const& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
+template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T> const&)
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \

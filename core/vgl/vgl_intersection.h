@@ -157,6 +157,13 @@ template <class T>
 inline bool vgl_intersection(vgl_point_3d<T> const& p, vgl_box_3d<T> const& b)
 { return b.contains(p); }
 
+//: Return true if a box and plane intersect in 3D
+// \relates vgl_plane_3d
+// \relates vgl_box_3d
+template <class T>
+bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane);
+
+
 //: Return the intersection of two boxes (which is itself either a box, or empty)
 // \relates vgl_box_2d
 template <class T>
