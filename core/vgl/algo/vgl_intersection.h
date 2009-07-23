@@ -13,16 +13,27 @@
 //
 // \verbatim
 //  Modifications
+//   23 Jul 2009 - Gamze Tunali - added a 3D box-polygon intersection method
+//
 //   01 Mar 2007 - Gamze Tunali - split up into vgl/algo and vgl parts
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vcl_vector.h>
+#include <vcl_list.h>
 
 //: Return the intersection point of vector of planes.
 // \relates vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p);
+
+//: Return true if the box and polygon intersect in 3D, regions include boundaries
+//: Polygon is represented as an ordered vector of points in #D
+// \relates vgl_point_3d
+// \relates vgl_box_3d
+template <class T>
+bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& p);
+
 
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.txx first"
 
