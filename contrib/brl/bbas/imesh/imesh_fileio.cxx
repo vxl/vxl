@@ -15,6 +15,8 @@ bool imesh_read(const vcl_string& filename, imesh_mesh& mesh)
   vcl_string ext = vul_file::extension(filename);
   if (ext == ".ply2")
     return imesh_read_ply2(filename,mesh);
+  if (ext == ".ply")
+    return imesh_read_ply(filename,mesh);
   else if (ext == ".obj")
     return imesh_read_obj(filename,mesh);
 
