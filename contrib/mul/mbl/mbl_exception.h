@@ -98,7 +98,6 @@ void mbl_exception_warning(T exception)
 #endif
 
 
-
 #if !VCL_HAS_EXCEPTIONS
 
   //: Indicates a problem whilst parsing text configuration data.
@@ -161,8 +160,8 @@ void mbl_exception_warning(T exception)
     vcl_string msg_;
    public:
     mbl_exception_missing_property(const vcl_string &missing)
-      : missing_(vcl_string("Couldn't find expected property label: \""+missing+'\"') {}
-    const char * what() const {return missing_.c_str();}
+      : msg_(vcl_string("Couldn't find expected property label: \""+missing+'\"') {}
+    const char * what() const {return msg_.c_str();}
   };
 
 #else
@@ -210,7 +209,6 @@ void mbl_exception_warning(T exception)
 #endif
 
 
-
 #if !VCL_HAS_EXCEPTIONS
 
   //: Indicates a problem whilst parsing text configuration data into an mbl_read_props object.
@@ -246,7 +244,7 @@ void mbl_exception_warning(T exception)
     mbl_exception_parse_block_parse_error(const vcl_string &msg,
       const vcl_string &contents)
     : msg_(vcl_string("mbl_parse_block: ") + msg +
-      "Contents of block: \n" + contents) {}
+      "Contents of block:\n" + contents) {}
     const char * what() const {return msg_.c_str();}
   };
 
@@ -255,7 +253,7 @@ void mbl_exception_warning(T exception)
   //: Indicates a problem whilst parsing a block of text configuration data.
   class mbl_exception_parse_block_parse_error: public mbl_exception_parse_error
   {
-  public:
+   public:
     //: Description of problem
     vcl_string msg;
     //: Contents of string which failed to be parsed.
@@ -263,7 +261,7 @@ void mbl_exception_warning(T exception)
     mbl_exception_parse_block_parse_error(const vcl_string &msg,
       const vcl_string &contents)
     : mbl_exception_parse_error(vcl_string("mbl_parse_block: ") + msg +
-      "Contents of block: \n" + contents), msg(msg), contents(contents) {}
+      "Contents of block:\n" + contents), msg(msg), contents(contents) {}
     virtual ~mbl_exception_parse_block_parse_error() throw() {}
   };
 
@@ -281,8 +279,7 @@ void mbl_exception_throw_os_error(const vcl_string& filename,
   class mbl_exception_os_error
   {
     vcl_string msg_;
-
-  public:
+   public:
     //: Reported errno
     int errno;
     //: System supplied error message.
@@ -302,7 +299,7 @@ void mbl_exception_throw_os_error(const vcl_string& filename,
   //: Indicates a problem reported during an OS call.
   class mbl_exception_os_error: public vcl_runtime_error
   {
-  public:
+   public:
     //: Reported errno
     int err_no;
     //: System supplied error message.
@@ -322,7 +319,7 @@ void mbl_exception_throw_os_error(const vcl_string& filename,
 #define MACRO( E ) \
 class E : public mbl_exception_os_error{ public: \
   E (int err_no, const vcl_string &file_name, const vcl_string &comment=""): \
-    mbl_exception_os_error(err_no, file_name, comment) {} }; 
+    mbl_exception_os_error(err_no, file_name, comment) {} }
 
 MACRO(mbl_exception_os_no_such_file_or_directory);
 MACRO(mbl_exception_os_permission_denied);
