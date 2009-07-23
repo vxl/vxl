@@ -13,7 +13,7 @@ ADD_EXECUTABLE( boxm_test_all
   test_update_multi_bin.cxx
   test_compute_visibility.cxx
   test_boxm_rational_camera_utils.cxx
-  
+  test_upload_mesh.cxx
  )
 
 TARGET_LINK_LIBRARIES( boxm_test_all boxm boct testlib vnl vgl_xio vpl vul vpgl)
@@ -29,6 +29,7 @@ ADD_TEST( boxm_test_quad_interpolate   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all t
 # ADD_TEST( boxm_test_update_multi_bin   ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_update_multi_bin  )
 # ADD_TEST( boxm_test_compute_visibility ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_compute_visibility  )
 ADD_TEST( boxm_test_boxm_rational_camera_utils ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_boxm_rational_camera_utils ${CMAKE_CURRENT_SOURCE_DIR} )
+ADD_TEST( boxm_test_upload_mesh ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all test_upload_mesh  )
 
 ADD_EXECUTABLE( boxm_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_test_include boxm boct)
