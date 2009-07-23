@@ -10,6 +10,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/algo/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
 
@@ -210,6 +211,16 @@ static void test_box_3d_intersection()
   //Case III: corner point touching
   b2.empty(); b2.add(vgl_point_3d<int>(3,3,3)); b2.add(vgl_point_3d<int>(6,6,6));
   TEST("corner point touching", vgl_intersection(b1, b2), vgl_box_3d<int>(6,6,6,6,6,6));
+  //unit cube in 3-d
+  vgl_point_3d<double> pd0(0.0, 0.0, 0.0), pd1(1.0, 1.0, 1.0);
+  vgl_box_3d<double> bd0;
+  bd0.add(pd0); bd0.add(pd1);
+  //x-y plane at z=2
+  vgl_plane_3d<double> plane2(0.0, 0.0, 1.0, -2.0);
+  TEST("x-y plane intersect box z=2", vgl_intersection<double>(bd0, plane2), false);
+  //x-y plane at z=0.5
+  vgl_plane_3d<double> plane_5(0.0, 0.0, 1.0, -0.5);
+  TEST("x-y plane intersect box z=0.5", vgl_intersection<double>(bd0, plane_5), true);
 }
 
 static void test_box_poly_intersection()
