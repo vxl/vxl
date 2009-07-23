@@ -109,14 +109,24 @@ bwm_video_cam_istream::current_camera()
 {
   if (is_valid()){
     if (!current_camera_){
-      vsl_b_ifstream bp_in(cam_paths_[index_].c_str());
-      vpgl_perspective_camera<double>* P_in =
-        new vpgl_perspective_camera<double>();
-      P_in->b_read(bp_in);
-      bp_in.close();
-      current_camera_ = P_in;
-    }
+		  current_camera_=new vpgl_perspective_camera<double>();
+
+		  vcl_string ext = vul_file_extension(cam_paths_[index_].c_str());
+		  if(ext == ".vsl") // binary form
+		  {
+			  vsl_b_ifstream bp_in(cam_paths_[index_].c_str());
+			  current_camera_->b_read(bp_in);
+			  bp_in.close();
+			  return current_camera_;
+		  }
+		  //An ASCII stream for perspective camera
+		  vcl_ifstream cam_stream(cam_paths_[index_].data());
+		  
+		  cam_stream >> (*current_camera_);
     return current_camera_;
+
+    }
+    return NULL;
   }
   return NULL;
 }
