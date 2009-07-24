@@ -17,7 +17,7 @@ MAIN( test_locate_region )
   block->split();
   vgl_box_3d<double> box1(vgl_point_3d<double>(0.05,0.05,0.05),vgl_point_3d<double>(0.1,0.1,0.1));
   cell=block->locate_region(box1);
-  TEST("Returns the correct level",nlevels-2, cell->level());
+  TEST("Returns the correct level",6, cell->level());
 
   SUMMARY();
 }
