@@ -36,7 +36,7 @@ MAIN( test_upload_mesh )
   os.close();
 
   // create a mesh
-  int num_faces=1;
+  unsigned int num_faces=1;
   vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(4));
   vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   imesh_vertex<3>& vert0 = (*verts)[0];
@@ -51,7 +51,7 @@ MAIN( test_upload_mesh )
   vert2[0]=8;
   vert2[1]=8;
   vert2[2]=4;
-  
+
   for (unsigned int f=0; f<num_faces; ++f) {
     vcl_vector<unsigned int>& face = (*faces)[f];
     unsigned int cnt=3;
@@ -77,7 +77,7 @@ MAIN( test_upload_mesh )
     scene.write_active_block();
     iter++;
   }
-  
+
   boxm_sample<BOXM_APM_MOG_GREY> val;
   val.alpha=0;
   boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, mesh, false, val);
@@ -91,13 +91,13 @@ MAIN( test_upload_mesh )
   boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=block->get_tree();
 
   boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell0 = tree->locate_point_global(vert0.operator vgl_point_3d<double>());
-  TEST_EQUAL("Vertex 0 is in the octree", cell0->data().alpha, 0.0f);
- 
+  TEST("Vertex 0 is in the octree", cell0->data().alpha, 0.0f);
+
   boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell1 = tree->locate_point_global(vert1.operator vgl_point_3d<double>());
-  TEST_EQUAL("Vertex 1 is in the octree", cell1->data().alpha, 0.0f);
- 
+  TEST("Vertex 1 is in the octree", cell1->data().alpha, 0.0f);
+
   boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2 = tree->locate_point_global(vert2.operator vgl_point_3d<double>());
-  TEST_EQUAL("Vertex 2 is in the octree", cell2->data().alpha, 0.0f);
+  TEST("Vertex 2 is in the octree", cell2->data().alpha, 0.0f);
 
   boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell = tree->locate_point_global(vgl_point_3d<double>(1,1,1));
   TEST_NEAR("A non-polygon point should be non-zero", cell->data().alpha, vcl_numeric_limits<float>::max(), 1e-6);
