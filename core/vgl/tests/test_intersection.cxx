@@ -75,7 +75,26 @@ static void test_three_planes()
    TEST("three planes intersecting", pj, pi);
   }
 }
-
+static void test_plane_plane()
+{
+  vgl_plane_3d<double> planex(1,0,0,-2),planey(0,1,0,-3), planez(0,0,1,-1);
+  vgl_line_segment_3d<double> linexy, linexz, lineyz;
+  // intersecting x-y
+  bool good = vgl_intersection(planex, planey, linexy);
+  // intersecting x-z
+  good = good && vgl_intersection(planez, planex, linexz);
+  //intersecting y-z
+  good = good && vgl_intersection(planey, planez, lineyz);
+  TEST("plane-plane intersections", good, true);
+  if(good){
+    TEST("x-y intersection", linexy.point1()==vgl_point_3d<double>(2,3,0)&&
+         linexy.point2()==vgl_point_3d<double>(2,3,1), true);
+    TEST("x-z intersection", linexz.point1()==vgl_point_3d<double>(2,0,1)&&
+         linexz.point2()==vgl_point_3d<double>(2,1,1), true);
+    TEST("y-z intersection", lineyz.point1()==vgl_point_3d<double>(0,3,1)&&
+         lineyz.point2()==vgl_point_3d<double>(1,3,1), true);
+  }
+}
 static void test_lines_intersection()
 {
   bool is_intersection;
@@ -277,6 +296,7 @@ void test_intersection()
            << "**************************\n\n";
   test_plane_intersection();
   test_three_planes();
+  test_plane_plane();
   test_lines_intersection();
   test_lines_intersect_in_tol();
   test_box_2d_intersection();
