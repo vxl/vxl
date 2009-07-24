@@ -111,9 +111,9 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filena
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
 vil3d_image_resource_sptr vil3d_gipl_format::make_output_image(const char* filename,
-                                 unsigned ni, unsigned nj,
-                                 unsigned nk, unsigned nplanes,
-                                 enum vil_pixel_format format) const
+                                                               unsigned ni, unsigned nj,
+                                                               unsigned nk, unsigned nplanes,
+                                                               enum vil_pixel_format format) const
 {
   if (format != VIL_PIXEL_FORMAT_BOOL   && format != VIL_PIXEL_FORMAT_SBYTE &&
       format != VIL_PIXEL_FORMAT_BYTE   && format != VIL_PIXEL_FORMAT_UINT_16 &&
@@ -352,27 +352,27 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
 }
 
 vil3d_gipl_image::vil3d_gipl_image(vil_stream* os,
-                   unsigned ni,
-                   unsigned nj,
-                   unsigned nk,
-                   unsigned nplanes,
-                   enum vil_pixel_format format,
-                   float vox_width1,
-                   float vox_width2,
-                   float vox_width3,
-                   char orientation_flag,
-                   double min_val,
-                   double max_val,
-                   double origin1,
-                   double origin2,
-                   double origin3,
-                   float interslice_gap
-                   ) : os_(os), dim1_(ni), dim2_(nj), dim3_(nk), nplanes_(nplanes),
-                   vox_width1_(vox_width1), vox_width2_(vox_width2), vox_width3_(vox_width3),
-                   pixel_format_(format), orientation_flag_(orientation_flag),
-                   min_val_(min_val), max_val_(max_val),
-                   origin1_(origin1), origin2_(origin2), origin3_(origin3),
-                   interslice_gap_(interslice_gap)
+                                   unsigned ni,
+                                   unsigned nj,
+                                   unsigned nk,
+                                   unsigned nplanes,
+                                   enum vil_pixel_format format,
+                                   float vox_width1,
+                                   float vox_width2,
+                                   float vox_width3,
+                                   char orientation_flag,
+                                   double min_val,
+                                   double max_val,
+                                   double origin1,
+                                   double origin2,
+                                   double origin3,
+                                   float interslice_gap)
+: os_(os), dim1_(ni), dim2_(nj), dim3_(nk), nplanes_(nplanes),
+  vox_width1_(vox_width1), vox_width2_(vox_width2), vox_width3_(vox_width3),
+  pixel_format_(format), orientation_flag_(orientation_flag),
+  min_val_(min_val), max_val_(max_val),
+  origin1_(origin1), origin2_(origin2), origin3_(origin3),
+  interslice_gap_(interslice_gap)
 {
   os_->ref();
 
@@ -456,18 +456,20 @@ bool vil3d_gipl_image::write_header(void)
   switch (pixel_format_)
   {
   case VIL_PIXEL_FORMAT_BOOL   : temp = GIPL_BINARY;  break;
-  case VIL_PIXEL_FORMAT_SBYTE  : temp = GIPL_CHAR;  break;
+  case VIL_PIXEL_FORMAT_SBYTE  : temp = GIPL_CHAR;    break;
   case VIL_PIXEL_FORMAT_BYTE   : temp = GIPL_U_CHAR;  break;
-  case VIL_PIXEL_FORMAT_UINT_16: temp = GIPL_U_SHORT;  break;
-  case VIL_PIXEL_FORMAT_INT_16 : temp = GIPL_SHORT;  break;
-  case VIL_PIXEL_FORMAT_UINT_32: temp = GIPL_U_INT;  break;
-  case VIL_PIXEL_FORMAT_INT_32 : temp = GIPL_INT;    break;
-  case VIL_PIXEL_FORMAT_FLOAT  : temp = GIPL_FLOAT;  break;
+  case VIL_PIXEL_FORMAT_UINT_16: temp = GIPL_U_SHORT; break;
+  case VIL_PIXEL_FORMAT_INT_16 : temp = GIPL_SHORT;   break;
+  case VIL_PIXEL_FORMAT_UINT_32: temp = GIPL_U_INT;   break;
+  case VIL_PIXEL_FORMAT_INT_32 : temp = GIPL_INT;     break;
+  case VIL_PIXEL_FORMAT_FLOAT  : temp = GIPL_FLOAT;   break;
   case VIL_PIXEL_FORMAT_DOUBLE : temp = GIPL_DOUBLE;  break;
-  case 144: // C.Short We don't want to support complex types.
-  case 160: // C.Int   Could maybe reimplement them as a 2-plane image
-  case 192: // C.Float
-  case 193: // C.Double
+  // We don't want to support complex types.
+  // Could maybe reimplement them as a 2-plane image
+  case VIL_PIXEL_FORMAT_COMPLEX_FLOAT  /* temp = 192 */:
+  case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE /* temp = 193 */:
+  /* case COMPLEX_SHORT: temp = 144 */
+  /* case COMPLEX_INT:   temp = 160 */
   default :
     vcl_cerr << "vil3d_gipl_format::write_header() WARNING\n"
              << "  Unable to deal with file format : " << pixel_format_ << vcl_endl;
@@ -626,7 +628,6 @@ bool vil3d_gipl_image::write_header(void)
 //
 bool vil3d_gipl_image::set_voxel_size(float i,float j,float k)
 {
-  
   vox_width1_=i;
   vox_width2_=j;
   vox_width3_=k;
@@ -638,7 +639,7 @@ bool vil3d_gipl_image::set_voxel_size(float i,float j,float k)
 
 //: Set the contents of the volume.
 bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
-                unsigned i0=0, unsigned j0=0, unsigned k0=0)
+                                unsigned i0=0, unsigned j0=0, unsigned k0=0)
 {
   if (!view_fits(view, i0, j0, k0))
   {
