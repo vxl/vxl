@@ -22,6 +22,7 @@
 #include <boxm/boxm_triangle_scan_iterator.h>
 #include <boxm/boxm_update.h>
 #include <boxm/boxm_update_triangle.h>
+#include <boxm/boxm_upload_mesh.h>
 #include <boxm/boxm_utils.h>
 
 #include <boxm/pro/boxm_processes.h>

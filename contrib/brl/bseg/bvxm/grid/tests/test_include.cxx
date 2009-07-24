@@ -3,6 +3,7 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
+#include <bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h>
 #include <bvxm/grid/bvxm_voxel_slab.h>
 #include <bvxm/grid/bvxm_voxel_slab_base.h>
 #include <bvxm/grid/bvxm_voxel_slab_iterator.h>
