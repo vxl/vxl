@@ -251,6 +251,9 @@ SOURCE=.\test_update_multi_bin.cxx
 SOURCE=.\test_boxm_rational_camera_utils.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_upload_mesh.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

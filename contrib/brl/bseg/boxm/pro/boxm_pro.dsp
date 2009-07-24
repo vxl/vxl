@@ -123,6 +123,9 @@ SOURCE=.\processes/boxm_roi_init_process.cxx
 SOURCE=.\processes/boxm_proj_local_cam_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_upload_mesh_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+boxm_scene_base--.cxx
 # End Source File
 # End Group

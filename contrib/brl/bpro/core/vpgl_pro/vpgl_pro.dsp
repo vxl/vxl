@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vpgl_register.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\processes/vpgl_load_proj_camera_process.cxx
 # End Source File
 # Begin Source File
@@ -114,7 +117,7 @@ SOURCE=.\processes/vpgl_save_rational_camera_process.cxx
 SOURCE=.\processes/vpgl_nitf_camera_coverage_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_register.cxx
+SOURCE=.\processes/vpgl_load_local_rational_camera_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+vpgl_camera+double---.cxx

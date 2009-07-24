@@ -93,117 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_array_wrapper+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_array_wrapper+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_collector+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_collector_list+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_wrapper+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+mbl_chord-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+mbl_stats_1d-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+mbl_sum_1d-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_array_ptr_wrapper+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_selected_data_wrapper+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_selected_data_wrapper+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_file_data_collector+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_file_data_wrapper+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_file_data_wrapper+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_file_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_file_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_array_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_data_collector_list+vcl_vector+vbl_triple+double.int.int---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_ar_process+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+mbl_chord_3d-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_cluster_tree+vnl_vector+double-+dist-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_clusters+vnl_vector+double-+dist-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_load_text_file+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_load_text_file+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_load_text_file+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_load_text_file+int-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_save_text_file+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_save_text_file+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_save_text_file+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_save_text_file+int-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/mbl_load_text_file+vgl_point_3d+double--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\mbl_screen_counter.cxx
 # End Source File
 # Begin Source File
@@ -337,6 +226,120 @@ SOURCE=.\mbl_progress_time.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_sample_stats_1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_array_wrapper+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_array_wrapper+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_collector+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_collector_list+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_wrapper+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+mbl_chord-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+mbl_stats_1d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+mbl_sum_1d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_array_ptr_wrapper+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_selected_data_wrapper+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_selected_data_wrapper+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_file_data_collector+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_file_data_wrapper+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_file_data_wrapper+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_file_data_collector+vcl_vector+vbl_triple+double.int.int---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_file_data_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_array_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_collector_list+vcl_vector+vbl_triple+double.int.int---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_ar_process+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+mbl_chord_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cluster_tree+vnl_vector+double-+dist-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_clusters+vnl_vector+double-+dist-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+vgl_point_3d+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+vgl_point_3d+double--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\brec_register.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\processes/brec_prob_map_threshold_process.cxx
 # End Source File
 # Begin Source File
@@ -141,7 +144,7 @@ SOURCE=.\processes/brec_hierarchy_processes.cxx
 SOURCE=.\processes/brec_learner_update_processes.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brec_register.cxx
+SOURCE=.\processes/brec_detector_processes.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+brec_part_hierarchy_sptr-.cxx

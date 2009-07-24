@@ -299,6 +299,9 @@ SOURCE=.\boxm_rational_camera_utils.h
 # Begin Source File
 SOURCE=.\boxm_raytrace_operations.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_upload_mesh.h
+# End Source File
 # End Group
 # End Target
 # End Project

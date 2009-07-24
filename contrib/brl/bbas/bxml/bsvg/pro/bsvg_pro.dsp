@@ -91,10 +91,16 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\bsvg_register.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\processes/bsvg_plot_roc_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bsvg_register.cxx
+SOURCE=.\processes/bsvg_plot_bar_processes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bxml_document_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

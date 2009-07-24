@@ -94,6 +94,9 @@ LIB32=link.exe -lib
 SOURCE=.\bvxm_memory_chunk.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_voxel_grid_opinion_basic_ops.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
 # End Source File
 # Begin Source File
@@ -338,6 +341,9 @@ SOURCE=.\bvxm_voxel_grid_basic_ops.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_opinion.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_voxel_grid_opinion_basic_ops.h
 # End Source File
 # End Group
 # End Target
