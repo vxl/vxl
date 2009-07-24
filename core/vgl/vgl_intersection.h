@@ -110,6 +110,16 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& line,
                       vgl_plane_3d<T> const& plane,
                       vgl_point_3d<T> & i_pt);
 
+//: Return the intersection line of two planes. Returns false if planes
+// are effectively parallel
+// \relates vgl_line_segment_3d
+// \relates vgl_plane_3d
+template <class T>
+bool vgl_intersection(vgl_plane_3d<T> const& plane0,
+                      vgl_plane_3d<T> const& plane1,
+                      vgl_line_segment_3d<T> & line);
+
+
 //: Return the intersection point of three planes.
 // \relates vgl_plane_3d
 template <class T>
