@@ -22,7 +22,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   tree_type* tree = block->get_tree();
   vgl_box_3d<double> block_bb = block->bounding_box();
   imesh_face_array_base& fs = mesh.faces();
-  
+
   for (unsigned i=0; i < fs.size(); ++i)
   {
     vcl_list<vgl_point_3d<double> > v_list;
@@ -46,9 +46,8 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
       //convert the values into [0,1] range
       v.set(diff.x()/block_bb.width(),diff.y()/ block_bb.height(),diff.z()/ block_bb.depth());
       bb_scale.add(v);
-      
     }
-  
+
     // check if polygon's bounding box intersects with the block
     vgl_box_3d<double> inters = vgl_intersection(block_bb, bb_global);
     if (inters.is_empty())
@@ -88,4 +87,5 @@ void boxm_upload_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     scene.write_active_block();
   }
 }
-#endif // boxm_upload_mesh_h_
+
+#endif // boxm_render_mesh_h_
