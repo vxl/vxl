@@ -10,6 +10,9 @@ TESTS += test_brec_parts.cxx
 TESTS += test_brec_densities.cxx
 TESTS += test_brec_part_hierarchy_learner.cxx
 TESTS += test_brec_hierarchy_detector_w_models.cxx
+TESTS += test_brec_hierarchy_edge.cxx
+TESTS += test_brec_hierarchy.cxx
+TESTS += test_brec_hierarchy_detector2.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

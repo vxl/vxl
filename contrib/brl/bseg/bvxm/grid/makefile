@@ -14,6 +14,7 @@ MANPAGE_SOURCES += bvxm_voxel_slab_iterator.txx
 MANPAGE_SOURCES += bvxm_voxel_slab.txx
 MANPAGE_SOURCES += bvxm_voxel_grid_basic_ops.h
 MANPAGE_SOURCES += bvxm_opinion.h
+SOURCES += bvxm_voxel_grid_opinion_basic_ops.cxx
 
 SUBDIRS += io pro
 

@@ -21,6 +21,7 @@ SOURCES += processes/brec_construct_op_models_processes.cxx
 SOURCES += processes/brec_learner_processes.cxx
 SOURCES += processes/brec_hierarchy_processes.cxx
 SOURCES += processes/brec_learner_update_processes.cxx
+SOURCES += processes/brec_detector_processes.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

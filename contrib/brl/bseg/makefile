@@ -45,6 +45,7 @@ SUBDIRS += bmdl_batch
 
 # recognition library - uses background models of bbgm and/or bvxm
 SUBDIRS += brec
+SUBDIRS += brec_batch
 
 # octree
 SUBDIRS += boct
