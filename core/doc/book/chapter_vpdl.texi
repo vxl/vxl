@@ -78,6 +78,68 @@ In particular:
       @code{vnl_matrix_fixed<T,n,n>} (fixed dimension of @code{n})
 @end itemize
 
+The distribution class is an abstract base class.
+The most important functions it defines are:
+@table @code
+@item virtual T density (const vector &pt) const=0;
+Evaluate the unnormalized density at a point. 
+
+@item virtual T norm_const () const=0;
+The normalization constant for the density. 
+
+@item virtual T prob_density (const vector &pt) const;
+Evaluate the probability density at a point.
+Defaults to @code{density(pt) * norm_const()}.
+@end table
+
+These functions allow the density of the distribution to be evaluated 
+independently from the normalization constant.
+This is important because the normalization constant is sometimes 
+expensive to compute and not required for some calculations.
+Furthermore, the normalization constant is independent of the evaluation point
+so it can be computed once in advance and reused.
+Alternatively, the function @code{prob_density} returns the normalized density directly.
+
+The type @code{vector} is a typedef defined in the class that selects the
+appropriate vector class depending on @code{T} and @code{n}.
+Similarly, the type @code{matrix} is defined to the appropriate matrix type.
+
+Several other functions are defined on the distribution base class including:
+@code{gradient_density}, @code{cumulative_prob}, @code{compute_mean},
+and @code{compute_covar}.
+All of these functions provide a polymorphic interface to probability distributions.
+However, in most cases, the @code{vpdl} classes are simply light wrappers around
+generic @code{vpdt} implementations that do the real work. 
+
+One additional component of the polymorphic wrappers is a class hierarchy.
+In @code{vpdt}, the distribution classes need not have any inheritance relations,
+but in @code{vpdl} the currently implemented distributions are arranged into 
+the following class hierarchy.  Each top level class below is derived directly 
+from @code{vpdl_distribution} (template arguments are omitted). 
+
+@itemize @bullet
+@item @code{vpdl_gaussian_base} - a base class for all Gaussian varieties.
+@itemize @bullet
+@item @code{vpdl_gaussian}  - a general Gaussian with full covariance.
+@item @code{vpdl_gaussian_indep}  - a Gaussian with independent (i.e. diagonal) covariance.
+@item @code{vpdl_gaussian_sphere}  - a Gaussian with spherical (i.e. scaled identity) covariance.
+@end itemize
+@item @code{vpdl_muli_cmp_dist} - a base class for all multi-component distributions
+@itemize @bullet
+@item @code{vpdl_kernel_base}  - a base class for kernel density distributions.
+@itemize @bullet
+@item @code{vpdl_kernel_fbw_base} - a base class for fixed bandwidth  kernel densities
+@itemize @bullet
+@item @code{vpdl_kernel_gaussian_sfbw} - a fixed bandwidth spherical Gaussian kernel distribution
+@end itemize
+@item @code{vpdl_kernel_vbw_base} - a base class for variable bandwidth kernel densities
+@end itemize
+@item @code{vpdl_mixture}  - a mixture distribution (linear combination of arbitrary distributions).
+@item @code{vpdl_mixture_of}  - a mixture distribution where each component has the same type
+(but may have different parameters).
+@end itemize
+@end itemize
+
 @section Generic Probability (@code{vpdt})
 
 The subdirectory @code{vpdl/vpdt} contains the
@@ -86,6 +148,9 @@ generic programming components of this library.
 that does not depended on the rest of @code{vpdl}.
 However, there is nothing to stop @code{vpdl} distribution classes from being
 used as @code{vpdt} distribution types as long as they meet the requirements.
+Whenever possible, @code{vpdl} distributions should be wrappers around
+a generic @code{vpdt} implementation.
+This strategy allows the code to be used both in generic and polymorphic designs.
 
 Generic programming uses @emph{concepts}
 to implement compile time type polymorphism rather than inheritance
@@ -142,7 +207,7 @@ The Matrix type associated with the Field type
 @end table
 
 In the special case of univariate distributions,
-all four of these type become equal, and @code{dimension==1}.
+all four of these types become equal, and @code{dimension==1}.
 There is also a special typedef @code{vpdt_field_traits<F>::type_is_scalar}
 defined to @code{void} that only exists if @code{F} is scalar.
 Similarly, @code{vpdt_field_traits<F>::type_is_vector} is defined to
@@ -266,11 +331,11 @@ A few arithmetic operations are also needed:
 
 The Distribution concept is the central concept in @code{vpdt}.
 The Distribution is a probability distribution class that is analogous
-to @code{vpdt_distribution<T,n>}.
-In fact, @code{vpdt_distribution<T,n>} and all its subclasses satisfy
+to @code{vpdl_distribution<T,n>}.
+In fact, @code{vpdl_distribution<T,n>} and all its subclasses satisfy
 the Distribution concept.
 The Distribution requires a subset of the functions that are
-declared virtual on @code{vpdt_distribution<T,n>}.
+declared virtual on @code{vpdl_distribution<T,n>}.
 The following example lays out the required API that
 a Distribution is required to have.
 In this example, it is assumed that a consistent set of basic types
@@ -313,7 +378,7 @@ class vpdt_distribution
 @};
 @end example
 
-The other member functions that are defined in @code{vpdt_distribution<T,n>}
+The other member functions that are defined in @code{vpdl_distribution<T,n>}
 are not needed for a @code{vpdt} Distribution because they can be
 implemented in terms of the required functions.
 These extra functions are provided as global functions instead.
