@@ -53,7 +53,10 @@ class vpdl_distribution
   virtual T density(const vector& pt) const = 0;
 
   //: Evaluate the probability density at a point
-  virtual T prob_density(const vector& pt) const = 0;
+  virtual T prob_density(const vector& pt) const
+  {
+    return density(pt) * norm_const();
+  }
 
   //: Evaluate the log probability density at a point
   virtual T log_prob_density(const vector& pt) const
