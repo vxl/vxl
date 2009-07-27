@@ -6,12 +6,6 @@
 // \brief Set of intersection functions
 // \author Jan 25, 2007 Gamze Tunali
 //
-// This file aims to gather all the intersection methods involving two or more types
-// into one place. You will also find overloads of vgl_intersection in
-// vgl/algo/vgl_intersection if they require significant computation,
-// and in some ordinary files if they only involve one type
-// (e.g. vgl_box2d& vgl_intersection(vgl_box_2d&, vgl_box_2d&) is in vgl_box_2d.h)
-//
 // For intersections of "homogeneous coordinates" objects like vgl_homg_line_2d<T>,
 // see the static methods of vgl/algo/vgl_homg_operators_2d<T> and _3d.
 //
