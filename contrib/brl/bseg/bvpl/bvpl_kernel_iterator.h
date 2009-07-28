@@ -20,9 +20,9 @@
 class bvpl_kernel_dispatch
 {
  public:
-  bvpl_kernel_dispatch(char c) { c_=c; }
+  bvpl_kernel_dispatch(float c) { c_=c; }
   ~bvpl_kernel_dispatch() {}
-  char c_;
+  float c_;
 };
 
 class bvpl_kernel_iterator: public vbl_ref_count

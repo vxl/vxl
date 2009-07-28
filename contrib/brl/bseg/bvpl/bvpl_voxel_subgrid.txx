@@ -53,7 +53,12 @@ void bvpl_voxel_subgrid<T>::set_voxel(const T& v)
   T& val = slab_(c.x(), c.y(), c.z());
   val = v;
 }
-
+template <class T>
+T bvpl_voxel_subgrid<T>::get_voxel()
+{
+  vgl_point_3d<int> c = center_;
+  return slab_(c.x(), c.y(), c.z());
+}
 #define BVPL_VOXEL_SUBGRID_INSTANTIATE(T) \
 template class bvpl_voxel_subgrid<T >
 

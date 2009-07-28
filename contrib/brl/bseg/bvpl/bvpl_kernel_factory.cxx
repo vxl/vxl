@@ -10,7 +10,7 @@
 #include <vcl_string.h>
 #include <vcl_limits.h>
 #include <vcl_cmath.h>
-
+unsigned bvpl_kernel::id_cnt=0;
 //: Saves the kernel to Dristhi .raw data format.
 // The kernel does not occupy the entire volume, so the empty voxels at set to 0.
 // The size of the box is max(x,y,z) * max(x,y,z) * max(x,y,z)

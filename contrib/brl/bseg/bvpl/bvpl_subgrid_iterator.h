@@ -64,6 +64,7 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
   
   bool isDone();
 
+  vgl_point_3d<int> cur_voxel(){return cur_voxel_;}
  private:
   bvxm_voxel_grid<T>* grid_;
   vgl_point_3d<int> cur_voxel_;

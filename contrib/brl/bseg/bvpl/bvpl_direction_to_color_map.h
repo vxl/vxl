@@ -177,9 +177,21 @@ bool bvpl_direction_to_color_map(vcl_vector<vgl_point_3d<double> > samples, vcl_
   vcl_vector<vgl_point_3d<double> > peano_curve=peano_curve_on_cube(2);
   color=find_closest_points_from_cube_to_peano_curve(samples,peano_curve,proj_on_cube);
   //: linear mapping of peano curve to color values (0,1);
+  vcl_map<float,vgl_point_3d<double> > color_samples;
+  for (unsigned i=0;i<samples.size();++i)
+    color_samples[color[samples[i]]]=samples[i];
+  vcl_map<float, vgl_point_3d<double> >::iterator iter=color_samples.begin();
+
+  float j=0;
+  for (;iter!=color_samples.end();iter++,++j)
+	  color[iter->second]=j;
+
+  
+
+
   float tot_len=(float)peano_curve.size();
   for (unsigned i=0;i<samples.size();++i)
-    color[samples[i]]/=tot_len;
+    color[samples[i]]/=samples.size();
 
   return true;
 }

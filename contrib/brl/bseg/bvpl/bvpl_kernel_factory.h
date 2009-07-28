@@ -42,10 +42,10 @@ class bvpl_kernel:public vbl_ref_count
 {
  public:
   //: Default constructor
-  bvpl_kernel() {}
+  bvpl_kernel() {id_=++id_cnt;}
   //: Constructor
   bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt)
-  : kernel_(kernel),dim_(dim),min_(min_pt),max_(max_pt) {}
+  : kernel_(kernel),dim_(dim),min_(min_pt),max_(max_pt) {id_=++id_cnt;}
   //: Destructor
   ~bvpl_kernel() {}
   bvpl_kernel_iterator iterator(){return kernel_;}
@@ -64,11 +64,14 @@ class bvpl_kernel:public vbl_ref_count
   }
   bool save_raw(vcl_string filename);
 
+  unsigned id(){return id_;}
+  static unsigned id_cnt;
  private:
   bvpl_kernel_iterator kernel_;
   vgl_vector_3d<int> dim_;
   vgl_point_3d<int> min_;
   vgl_point_3d<int> max_;
+  unsigned int id_;
 };
 
 typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
