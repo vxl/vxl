@@ -66,7 +66,7 @@ class OFBitmanipTemplate
     {
 #if defined(HAVE_MEMCPY)
         memcpy((void *)dest, (const void *)src, (size_t)count * sizeof(T));
-#elif HAVE_BCOPY
+#elif defined(HAVE_BCOPY)
         bcopy((const void *)src, (void *)dest, (size_t)count * sizeof(T));
 #else
         register unsigned long i;
