@@ -236,6 +236,117 @@ SOURCE=.\processes/bvxm_normalization_util.h
 # Begin Source File
 SOURCE=.\processes/bvxm_synth_world_generator.h
 # End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_get_grid_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_render_expected_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_mog_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_lidar_edge_detection_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_save_occupancy_raw_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_pmap_hist_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_save_edges_raw_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_voxel_world_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_normalize_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_pmap_ratio_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_ocp_compare_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_roc_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_change_detection_display_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_changes_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_render_virtual_view_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_rpc_registration_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_ocp_hist_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_gen_synthetic_world_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_normalized_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_heightmap_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_illum_index_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_edges_lidar_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_compare_rpc_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_save_occupancy_vff_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_lidar_init_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_mog_l2_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_edges_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_roi_init_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_edges_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_merge_mog_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_locate_region_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_clean_world_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_lidar_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_create_local_rpc_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_compare_3d_voxels_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_scale_process.h
+# End Source File
 # End Group
 # End Target
 # End Project

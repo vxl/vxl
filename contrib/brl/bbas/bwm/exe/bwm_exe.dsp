@@ -8,6 +8,9 @@ SOURCE=.\bwm_main.cxx
 # Begin Source File
 SOURCE=.\bwm_batch_project.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_batch_project_meshes_to_perspective_video.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
