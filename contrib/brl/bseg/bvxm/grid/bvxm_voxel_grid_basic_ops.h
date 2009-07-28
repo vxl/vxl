@@ -130,9 +130,10 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
 }
 
 template<class T>
-bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
+bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,
                               imesh_mesh& mesh,
-                              bgeo_lvcs& lvcs)
+                              bgeo_lvcs& lvcs,
+							  T val)
 {
   // initialize grid with big values
   imesh_face_array_base& fs = mesh.faces();
@@ -166,10 +167,10 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
             voxel_box.set_min_point(vgl_point_3d<double>(x,y,z));
             voxel_box.set_max_point(vgl_point_3d<double>(x+1,y+1,z+1));
             if (vgl_intersection<double>(voxel_box, v_list)) {
-              bvxm_voxel_slab_iterator<float> slab_it = grid->slab_iterator(grid_size.z()-z);
-              bvxm_voxel_slab<float>& slab = *slab_it;
-              float& val = slab(x,y);
-              val=0.0f;
+              bvxm_voxel_slab_iterator<T> slab_it = grid->slab_iterator(grid_size.z()-z);
+              bvxm_voxel_slab<T>& slab = *slab_it;
+              T& tempval = slab(x,y);
+              tempval=val;
               ++slab_it;
             }
           }
@@ -180,6 +181,46 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
 
   return true;
 }
+
+//: Digitize a simple polygon in local coordinates i.e. the same coordinate system of the grid.
+template<class T>
+bool bvxm_load_polygon_into_grid(bvxm_voxel_grid<T>* grid,
+                              vcl_vector<vgl_point_3d<double> > v_list,
+							  T val)
+{
+	vgl_box_3d<double> bb;
+	for (unsigned i=0; i < v_list.size(); ++i)
+		bb.add(v_list[i]);
+
+	vgl_vector_3d<unsigned int> grid_size = grid->grid_size();
+    vgl_box_3d<double> grid_box;
+    grid_box.set_min_point(vgl_point_3d<double>(0,0,0));
+    grid_box.set_max_point(vgl_point_3d<double>(grid_size.x()-1,grid_size.y()-1,grid_size.z()-1));
+    vgl_point_3d<double> min = bb.min_point();
+    vgl_point_3d<double> max = bb.max_point();
+    for (int z=(int)min.z(); z<=max.z(); ++z) {
+      for (int y=(int)min.y(); y<=max.y(); ++y) {
+        for (int x=(int)min.x(); x<=max.x(); ++x) {
+          //check if the voxel position is valid
+          if (grid_box.contains(x,y,z)) {
+            vgl_box_3d<double> voxel_box;
+            voxel_box.set_min_point(vgl_point_3d<double>(x,y,z));
+            voxel_box.set_max_point(vgl_point_3d<double>(x+1,y+1,z+1));
+            if (bvxm_util::intersection(voxel_box, v_list)) {
+              bvxm_voxel_slab_iterator<T> slab_it = grid->slab_iterator(grid_size.z()-z);
+              bvxm_voxel_slab<T>& slab = *slab_it;
+              T& tempval = slab(x,y);
+              tempval=val;
+              ++slab_it;
+            }
+          }
+        }
+      }
+    }
+
+  return true;
+}
+
 
 template<class T>
 bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
@@ -237,5 +278,6 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   }
   return true;
 }
+
 
 #endif

@@ -109,10 +109,14 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
           for (; slab_it != slab.end(); ++slab_it)
           {
-            (*img_it) = vil_rgba<unsigned char>( (unsigned char)(*slab_it)[0],(unsigned char)(*slab_it)[1],
-                                                (unsigned char)(*slab_it)[2], (unsigned char)(*slab_it)[3]);
+			  
+            (*img_it) = vil_rgba<unsigned char>((unsigned char)(*slab_it)[0],
+												(unsigned char)(*slab_it)[1],
+                                                (unsigned char)(*slab_it)[2], 
+												(unsigned char)vcl_floor((*slab_it)[3]));
              // *(img_its[p]) =  (unsigned char)(((*slab_it)[p] * 127.0) + 0.5) + 127;
-              ++(img_it);
+			//vcl_cout<<(int)(*img_it).R()<<" "<<(int)((unsigned char)(*slab_it)[3])<<vcl_endl;
+			++(img_it);
           }
 
         }

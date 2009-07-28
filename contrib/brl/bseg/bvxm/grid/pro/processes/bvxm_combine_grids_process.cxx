@@ -76,15 +76,15 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
   bvxm_voxel_grid<vnl_vector_fixed<float,4> >::iterator grid_out_it = grid_out->begin();
   for (; grid_out_it!=grid_out->end(); ++grid_out_it, ++grid2_it, ++grid1_it)
   {
-    bvxm_voxel_slab<float>::iterator slab2_it =(*grid2_it).begin();
-    bvxm_voxel_slab<vnl_vector_fixed<float,3> >::iterator slab1_it= (*grid1_it).begin();
-    bvxm_voxel_slab<vnl_vector_fixed<float,4> >::iterator out_slab_it = (*grid_out_it).begin();
+	  bvxm_voxel_slab<float>::iterator slab2_it =(*grid2_it).begin();
+	  bvxm_voxel_slab<vnl_vector_fixed<float,3> >::iterator slab1_it= (*grid1_it).begin();
+	  bvxm_voxel_slab<vnl_vector_fixed<float,4> >::iterator out_slab_it = (*grid_out_it).begin();
 
-    for (; out_slab_it!=(*grid_out_it).end(); ++out_slab_it, ++slab2_it, ++slab1_it)
-    {
-      vnl_vector_fixed<float,4> this_feature( (*slab1_it)[0], (*slab1_it)[1], (*slab1_it)[2], *slab2_it);
-      *out_slab_it = this_feature;
-    }
+	  for (; out_slab_it!=(*grid_out_it).end(); ++out_slab_it, ++slab2_it, ++slab1_it)
+	  {
+		  vnl_vector_fixed<float,4> this_feature( (*slab1_it)[0], (*slab1_it)[1], (*slab1_it)[2], *slab2_it);
+		  *out_slab_it = this_feature;
+	  }
   }
 
   pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);

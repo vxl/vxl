@@ -66,6 +66,11 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
     bvxm_grid_save_raw<bvxm_opinion>(grid_base,volume_path);
     return true;
   }
+  else if (datatype == "unsigned") {
+    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
+    bvxm_grid_save_raw<unsigned int>(grid_base,volume_path);
+    return true;
+  }
   else
     vcl_cerr << "Grid type not supportted yet, but you can add one!\n";
   return false;

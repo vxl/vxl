@@ -75,6 +75,7 @@ class bvxm_opinion
 };
 
 inline bool operator>(bvxm_opinion lhs, bvxm_opinion rhs) { return lhs.b() > rhs.b(); }
+inline bool operator>=(bvxm_opinion lhs, bvxm_opinion rhs) { return lhs.b() >= rhs.b(); }
 
 inline bool operator<(bvxm_opinion lhs, bvxm_opinion rhs) { return lhs.b() < rhs.b(); }
 

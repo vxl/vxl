@@ -60,7 +60,13 @@ class bvxm_dristhi_traits<char>
   static unsigned char dristhi_header() {return 1;}
   typedef char datatype;
 };
-
+template<>
+class bvxm_dristhi_traits<unsigned int>
+{
+ public:
+  static unsigned char dristhi_header() {return 4;}
+  typedef unsigned int datatype;
+};
 //opinion values will be written as float
 template<>
 class bvxm_dristhi_traits<bvxm_opinion>
