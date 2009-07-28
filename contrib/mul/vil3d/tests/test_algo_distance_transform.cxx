@@ -2,9 +2,14 @@
 // not used? #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
+#include <vcl_limits.h>
+#include <vcl_vector.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vil3d/vil3d_print.h>
-
+#include <vil/vil_rgb.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_distance.h>
 
 void test_signed_distance_transform()
 {
@@ -79,9 +84,84 @@ void test_signed_distance_transform()
   }
 }
 
+void test_distance_transform()
+{
+  vcl_cout << "*****************************************\n"
+           << " Testing vil3d_distance_transform\n"
+           << "*****************************************\n";
+
+  vil3d_image_view<float> image, gt_image;
+  int dim=10,b1=2,b2=7;
+  image.set_size(dim,dim,dim);
+  gt_image.set_size(dim,dim,dim);
+
+  vil3d_image_view<vil_rgb<float> > orients;
+  // ground truth orientations
+  vil3d_image_view<vil_rgb<float> > gt_orients;
+  orients.set_size(dim,dim,dim);
+  gt_orients.set_size(dim,dim,dim);
+  
+  image.fill(vcl_numeric_limits<float>::max());
+  gt_image.fill(vcl_numeric_limits<float>::max());
+  vcl_vector<int> planes;
+  planes.push_back(3);
+  planes.push_back(7);
+
+  // create two rectangular planes
+  for (unsigned num=0; num<planes.size(); num++) {
+    for(unsigned i=b1; i<=b2; i++) {
+      for(unsigned j=b1; j<=b2; j++) {
+        image(i,j,planes[num])=0;
+      }
+    }
+  }
+
+  for(unsigned k=0; k<dim; k++) {
+    for(unsigned j=0; j<dim; j++) {
+      for(unsigned i=0; i<dim; i++) {
+        float min = vcl_numeric_limits<float>::max();
+        vgl_point_3d<float> v1(i,j,k); 
+        
+        // find the distance to the planes
+        for (int num=0; num<planes.size(); num++) {
+          for(unsigned i1=b1; i1<=b2; i1++) {
+            for(unsigned j1=b1; j1<=b2; j1++) {
+              vgl_point_3d<float> v2(i1,j1,planes[num]); 
+              float diff=vgl_distance(v1,v2);
+              if (diff < min) {
+                min=diff;
+                vgl_vector_3d<float> d=v2-v1;
+                gt_image(i,j,k)=diff;
+                gt_orients(i,j,k)=vil_rgb<float>(d.x(),d.y(),d.z());
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  orients.fill(vil_rgb<float>(0,0,0));
+  vil3d_distance_transform_with_dir(image,orients,1,1,1);
+
+  bool equal, img_eq=true, result=true;
+  for (unsigned k=0; k<dim; k++){
+    for (unsigned j=0; j<dim; j++) {
+      for (unsigned i=0; i<dim; i++) {
+        equal= (orients(i,j,k).R()==gt_orients(i,j,k).R() && 
+          orients(i,j,k).G()==gt_orients(i,j,k).G() &&
+          orients(i,j,k).B()==gt_orients(i,j,k).B());
+        if (!equal)  result=false;
+      }
+    }
+  }
+  TEST_EQUAL("The vectors are equal to ground truth vectors", equal, true);
+}
+
 MAIN( test_algo_distance_transform )
 {
   START( "test_distance_transform" );
   test_signed_distance_transform();
+  test_distance_transform();
   SUMMARY();
 }
