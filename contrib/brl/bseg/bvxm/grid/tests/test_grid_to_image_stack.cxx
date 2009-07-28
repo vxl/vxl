@@ -62,10 +62,9 @@ void save_grid()
   grid_glob << dir << "/*" << bvxm_extension<T>();
   for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it)
   {
-    vcl_stringstream grid_glob;
     vil_image_view_base_sptr img_base = vil_load(file_it());
+#if 0  // TODO fix this test: currently commented out so that it does not show up on dashboard.
     vil_image_view<T> *img_view = dynamic_cast<vil_image_view<T>*>(img_base.ptr());
-#if 0  // TODO fix this test: currently commented out so that it does nto show up on dashboard.
   for (unsigned p=0; p < N; ++p) {
     for (unsigned ni = 0; ni<2; ni++)
       for (unsigned nj=0; nj<2; nj++){
@@ -75,7 +74,7 @@ void save_grid()
   }
 #endif
     vul_file::delete_file_glob(file_it());
-    }
+  }
 
   //make sure images were deleted
   if (vul_file::is_directory(dir))
