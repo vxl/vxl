@@ -48,9 +48,6 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
  
     }
     // check if polygon's bounding box intersects with the block
-    //vgl_box_3d<double> inters = vgl_intersection(block_bb, bb_global);
-    //if (inters.is_empty())
-    //  return;
     vgl_box_3d<double> inters = vgl_intersection(vgl_box_3d<double>(0,0,0,1,1,1), bb_scale);
     if (inters.is_empty())
       return;
@@ -109,24 +106,11 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
       bb_scale.add(v);
     }
     // check if polygon's bounding box intersects with the block
-    //vgl_box_3d<double> inters = vgl_intersection(block_bb, bb_global);
-    //if (inters.is_empty())
-    //  return;
     vgl_box_3d<double> inters = vgl_intersection(vgl_box_3d<double>(0,0,0,0.999,0.999,0.999), bb_scale);
     if (inters.is_empty())
       return;
-	else
-		vcl_cout<<"LIes in this one";
 	
 
-	//: reset the appearnace model
-	vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> leaf_cells=tree->leaf_cells();
-	boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype app=boxm_utils::obtain_mog_grey_zero_mode();
-	for(unsigned i=0;i<leaf_cells.size();i++)
-	{
-		boxm_sample<BOXM_APM_MOG_GREY> new_data(0,app);
-		leaf_cells[i]->set_data(new_data);
-	}
 	  
     // locate the polygon bounding box in tree
     boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* region=tree->locate_region(inters);
