@@ -3,7 +3,7 @@
 
 PROJECT( brl )
 
-doxygen_add_package(contrib/rpl "Brown University Libraries")
+doxygen_add_package(contrib/brl "Brown University Libraries")
 
 # In contrib/brl there is sometimes an "extra" level in the directory structure
 # (.../contrib/brl/{bbas,bseg,bmvl}/foo/foo.h)
