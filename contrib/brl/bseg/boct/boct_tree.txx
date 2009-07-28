@@ -141,11 +141,11 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
   short curr_level=max_level_-1;
   // convert point to location code.
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, max_level_);
-
+#if 0
   // check to see if point is contained in the octree
   if (!root_->code_.isequal(loccode_,curr_level))
     return NULL;
-
+#endif
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
 
