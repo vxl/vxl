@@ -15,7 +15,7 @@
 
 #include "imesh_mesh.h"
 #include <vcl_set.h>
-
+#include <vgl/vgl_point_3d.h>
 
 //: Subdivide mesh faces into triangle
 vcl_auto_ptr<imesh_regular_face_array<3> >
@@ -60,5 +60,6 @@ void imesh_flip_faces( imesh_mesh& mesh, const vcl_set<unsigned int>& sel_faces)
 //: Compute the dual mesh using face centroids for vertices
 imesh_mesh dual_mesh(const imesh_mesh& mesh);
 
+bool contains_point(const imesh_mesh& mesh,vgl_point_3d<double> p);
 
 #endif // imesh_operations_h_

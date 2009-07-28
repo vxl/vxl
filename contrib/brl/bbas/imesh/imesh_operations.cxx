@@ -468,3 +468,36 @@ imesh_mesh dual_mesh(const imesh_mesh& mesh)
   return imesh_mesh(nv,nf);
 }
 
+//: Contains a 3d point in convex polygon
+bool contains_point(const imesh_mesh& mesh,vgl_point_3d<double> p)
+{
+  const unsigned int num_verts = mesh.num_verts();
+  const unsigned int num_faces = mesh.num_faces();
+
+  vcl_auto_ptr<imesh_face_array> new_faces(new imesh_face_array);
+  vcl_auto_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
+
+  for (unsigned int i=0; i<num_faces; ++i)
+  {
+    vcl_vector<vgl_point_3d<double> > pts;
+    for (unsigned int j=0; j<mesh.faces().num_verts(i); ++j)
+    {
+      unsigned int v = mesh.faces()(i,j);
+      pts.push_back(mesh.vertices<3>()[v]);
+    }
+    new_verts->push_back(centre(pts));
+  }
+  if (mesh.faces().has_normals())
+    new_verts->set_normals(mesh.faces().normals());
+  vcl_vector<vgl_vector_3d<double> > normals=  new_verts->normals();
+  imesh_vertex_array<3>::const_iterator iter=new_verts->begin();
+  unsigned int i=0;
+  for(;iter!=new_verts->end();iter++,i++)
+  {
+		vgl_point_3d<double> new_vert((*iter)[0],(*iter)[1],(*iter)[2]);
+		double dotprod=dot_product<double>(new_vert-p,normals[i]);
+		if(dotprod<0)
+			return false;
+  }
+  return true;
+}
