@@ -15,7 +15,16 @@ effect.  If you change something in VXL, please document it here.
 
       - Doxygen based html or TeX output can now be generated through CMake
 
+      - Consistent, HW-accelerated vnl_math_round for half-integers.
+
       - A long-standing bug in vnl_bignum has been fixed
+
+      - more tolerant constructor from istream for several vgl classes
+        (e.g. parentheses, commas).
+
+      - Added class vgl_ellipsoid_3d to vgl/algo.
+
+      - Added vnl_power.h : function to raise square matrix to integer power.
 
 ******************************
 VXL 1.12.0     - February 2009
