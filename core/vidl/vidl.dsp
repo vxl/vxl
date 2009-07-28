@@ -315,6 +315,9 @@ SOURCE=.\vidl_v4l2_control.h
 SOURCE=.\vidl_ffmpeg_ostream_v3.txx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl_v4l_ulong_fix.h
+# End Source File
+# Begin Source File
 SOURCE=.\vidl_config.h.in
 # End Source File
 # End Group
