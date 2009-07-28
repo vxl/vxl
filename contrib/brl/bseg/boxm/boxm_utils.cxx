@@ -1360,3 +1360,50 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
   return false;
 }
 
+
+boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype 
+boxm_utils::obtain_mog_grey_unit_mode()
+{
+  bsta_gauss_f1 simple_gauss_f1(1.0f,0.1f);
+  bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  simple_mix_gauss_val_f1;
+
+  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,1.0f);
+
+  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  simple_bsta_mixture_fixed_f1_3;
+  bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
+
+  return simple_obs_mix_gauss_val_f1;
+
+}
+
+boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype 
+boxm_utils::obtain_mog_grey_zero_mode()
+{
+  bsta_gauss_f1 simple_gauss_f1(0.0f,0.1f);
+  bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  simple_mix_gauss_val_f1;
+
+  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,1.0f);
+
+  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  simple_bsta_mixture_fixed_f1_3;
+  bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
+
+  return simple_obs_mix_gauss_val_f1;
+}
+
+boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype 
+boxm_utils::obtain_mog_grey_single_mode(float  mean)
+{
+  bsta_gauss_f1 simple_gauss_f1(mean,0.1f);
+  bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  simple_mix_gauss_val_f1;
+
+  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,1.0f);
+
+  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  simple_bsta_mixture_fixed_f1_3;
+  bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
+
+  return simple_obs_mix_gauss_val_f1;
+
+}

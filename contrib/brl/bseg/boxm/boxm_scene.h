@@ -99,6 +99,8 @@ class boxm_scene :public boxm_scene_base
 
   bool valid_index(vgl_point_3d<int> idx);
 
+  vgl_box_3d<double> get_block_bbox(int x, int y, int z);
+
  private:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
@@ -113,7 +115,6 @@ class boxm_scene :public boxm_scene_base
 
   void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
 
-  vgl_box_3d<double> get_block_bbox(int x, int y, int z);
 
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);

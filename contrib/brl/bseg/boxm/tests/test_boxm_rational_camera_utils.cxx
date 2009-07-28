@@ -8,8 +8,8 @@ MAIN_ARGS( test_boxm_rational_camera_utils )
 {
   START ("BOXM RATIONAL CAMERA UTILS");
   vcl_string filename="camera0.txt";
-  vcl_string image_path = argv[1];
-  vpgl_local_rational_camera<double>* rcam=read_local_rational_camera<double>(image_path + "/" + filename);
+  
+  vpgl_local_rational_camera<double>* rcam=read_local_rational_camera<double>( "./" + filename);
   vgl_plane_3d<double> top(0,0,1,-200);
   vgl_plane_3d<double> bottom(0,0,1,0);
 

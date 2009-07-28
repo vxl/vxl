@@ -33,6 +33,7 @@ SET(boxm_sources
 
     boxm_rational_camera_utils.h           boxm_rational_camera_utils.cxx
     boxm_upload_mesh.h
+    boxm_fill_in_mesh.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)

@@ -12,6 +12,7 @@ DECLARE( test_compute_visibility );
 DECLARE( test_update_multi_bin );
 DECLARE( test_boxm_rational_camera_utils);
 DECLARE(  test_upload_mesh );
+DECLARE(  test_fill_in_mesh );
 
 void register_tests()
 {
@@ -26,7 +27,7 @@ void register_tests()
   REGISTER( test_update );
   REGISTER( test_compute_visibility );
   REGISTER( test_update_multi_bin );
-  REGISTER( test_upload_mesh );
+  REGISTER( test_fill_in_mesh );
 }
 
 

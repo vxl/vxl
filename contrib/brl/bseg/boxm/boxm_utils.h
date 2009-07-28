@@ -16,6 +16,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_quad_scan_iterator.h>
+#include <boxm/boxm_apm_traits.h>
 #include <vil/vil_image_view.h>
 class safe_inverse_functor
 {
@@ -145,6 +146,13 @@ class boxm_utils
   static bool cube_exit_point(vgl_box_3d<double> box,vgl_point_3d<double> pt,
                               vgl_vector_3d<double> dir, vgl_point_3d<double> & exit_point,
                               double & lambda,boct_face_idx & face_id);
+
+
+  static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_unit_mode();
+
+  static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_zero_mode();
+
+  static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_single_mode(float  mean);
 
 };
 

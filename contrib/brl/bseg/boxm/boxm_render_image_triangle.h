@@ -70,6 +70,7 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
 
   while (block_vis_iter.next())
   {
+	  
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) // code for each block
     {
