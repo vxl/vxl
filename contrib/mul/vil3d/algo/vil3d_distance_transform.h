@@ -6,6 +6,8 @@
 // \author Kola Babalola
 
 #include <vil3d/vil3d_image_view.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vil/vil_rgb.h>
 
 //: Compute 3d distance transform from zeros in original image.
 //  Image is assumed to be filled with max_dist where there is
@@ -45,7 +47,24 @@ void vil_distance_transform(const vil3d_image_view<bool>& mask,
 // \param distance_link_i use when calculating connected distance between i and i+1
 // \param distance_link_j use when calculating connected distance between j and j+1
 // \param distance_link_k use when calculating connected distance between k and k+1
-void vil3d_signed_distance_transform(vil3d_image_view<float>& image, const float distance_link_i=1, const float distance_link_j=1, const float distance_link_k=1);
+void vil3d_signed_distance_transform(vil3d_image_view<float>& image, 
+                                     const float distance_link_i=1, 
+                                     const float distance_link_j=1, 
+                                     const float distance_link_k=1);
+
+float vil3d_min_equal(float const& a, float const& b, bool& eq);
+
+void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image, 
+                                               vil3d_image_view<vil_rgb<float> >& orient, 
+                                               const float distance_link_i=1, 
+                                               const float distance_link_j=1, 
+                                               const float distance_link_k=1);
+
+void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
+                                       vil3d_image_view<vil_rgb<float> >& orient,
+                                       const float distance_link_i, 
+                                       const float distance_link_j, 
+                                       const float distance_link_k);
 
 //: Compute 3d signed distance transform from true elements in mask.
 //  On exit, values are 26 connected distance from the 'true' boundary.
