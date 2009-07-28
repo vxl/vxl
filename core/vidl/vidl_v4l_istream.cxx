@@ -9,6 +9,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "vidl_v4l_ulong_fix.h" // include first to fix linux/videodev.h ulong problem
 #include "vidl_v4l_istream.h"
 #include "vidl_v4l_params.h"
 #include "vidl_pixel_format.h"
