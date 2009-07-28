@@ -24,6 +24,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_intersection.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vil3d/vil3d_image_view.h>
+#include <vil3d/algo/vil3d_distance_transform.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
 
@@ -175,6 +178,63 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<float>* grid,
     }
   }
 
+  return true;
+}
+
+template<class T>
+bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
+                              bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dir)
+{
+  // convert grid to a vil3d_image_view
+  int k=0;
+  vil3d_image_view<float> image(grid->grid_size().x(),grid->grid_size().y(),grid->grid_size().z());
+
+  // create the image
+  bvxm_voxel_slab_iterator<float> slab=grid->slab_iterator(k,1);
+  while (slab != grid->end()) {
+    bvxm_voxel_slab<float>& s = *slab;
+    for(unsigned i=0; i<grid->grid_size().x(); i++) {
+      for(unsigned j=0; j<grid->grid_size().y(); j++) {
+        image(i,j,k)=s(i,j);
+      }
+    }
+    k++;
+    ++slab;
+  }
+
+  // create the direction vector
+  vil3d_image_view<vil_rgb<float> > directions(grid->grid_size().x(),grid->grid_size().y(),grid->grid_size().z());
+  directions.fill(vil_rgb<float> (0,0,0));
+  vil3d_distance_transform_with_dir(image, directions,1,1,1);
+  
+  // put back the image into the grid
+  k=0;
+  slab=grid->slab_iterator(k,1);
+  while (slab != grid->end()) {
+    bvxm_voxel_slab<float>& s = *slab;
+    for(unsigned i=0; i<grid->grid_size().x(); i++) {
+        for(unsigned j=0; j<grid->grid_size().y(); j++) {
+          s(i,j)=image(i,j,k);
+        }
+    }
+    ++slab;
+    k++;
+  }
+
+  // create a directions grid
+  // put back the image into the grid
+  k=0;
+  bvxm_voxel_slab_iterator<vnl_vector_fixed<float,3> > dir_slab=dir->slab_iterator(k,1);
+  while (dir_slab != dir->end()) {
+    bvxm_voxel_slab<vnl_vector_fixed<float,3> >& d = *dir_slab;
+    for(unsigned i=0; i<dir->grid_size().x(); i++) {
+        for(unsigned j=0; j<dir->grid_size().y(); j++) {
+          d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
+        }
+    }
+    ++dir_slab;
+    k++;
+  }
   return true;
 }
 
