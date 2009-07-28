@@ -55,6 +55,7 @@ SOURCES += vidl_v4l2_devices.cxx
 SOURCES += vidl_v4l2_istream.cxx
 MANPAGE_SOURCES += vidl_v4l2_device_sptr.h
 SOURCES += vidl_v4l2_control.cxx
+MANPAGE_SOURCES += vidl_v4l_ulong_fix.h
 
 # vgui add-on library
 SUBDIRS += gui
