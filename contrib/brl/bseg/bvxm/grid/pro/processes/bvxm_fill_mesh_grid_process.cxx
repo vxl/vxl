@@ -112,17 +112,17 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
              << "file = " << file << '\n';
     // call appropriate load functions to load the M
     imesh_mesh mesh;
-    if (file_format == ".PLY")
-      imesh_read_ply(file, mesh);
-    else if (file_format == ".PLY2")
-      imesh_read_ply2(file, mesh);
+    imesh_read(file, mesh);
 
     bvxm_voxel_grid<float>* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
     bvxm_load_mesh_into_grid<float>(g, mesh, lvcs);
   }
-  //This is temporary. What should happen is that we can read the type from the file header.
-  //Also the header should be such that we can check if the file is not currupt
-  //bvxm_voxel_grid_base_sptr grid_sptr = new bvxm_voxel_grid<float>(grid);
+
+  bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dir = new bvxm_voxel_grid<vnl_vector_fixed<float,3> >("dirs.vox",grid->grid_size());
+  dir->initialize_data(vnl_vector_fixed<float,3>(0,0,0));
+  g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
+  bvxm_grid_dist_transform<float>(g,dir);
+
   pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
   return true;
 }
