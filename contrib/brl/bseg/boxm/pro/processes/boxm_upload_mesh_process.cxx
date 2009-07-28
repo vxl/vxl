@@ -23,9 +23,6 @@
 #include <boxm/boxm_fill_in_mesh.h>
 #include <boxm/boxm_scene.h>
 #include <boct/boct_tree.h>
-#include <bvxm/grid/bvxm_voxel_grid_base.h>
-#include <bvxm/grid/bvxm_voxel_grid.h>
-#include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
