@@ -16,6 +16,7 @@ TESTS += test_compute_visibility.cxx
 TESTS += test_update_multi_bin.cxx
 TESTS += test_boxm_rational_camera_utils.cxx
 TESTS += test_upload_mesh.cxx
+TESTS += test_fill_in_mesh.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

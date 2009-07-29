@@ -32,6 +32,7 @@ MANPAGE_SOURCES += boxm_triangle_interpolation_iterator.txx
 MANPAGE_SOURCES += boxm_update_triangle.h
 MANPAGE_SOURCES += boxm_render_image_triangle.h
 MANPAGE_SOURCES += boxm_upload_mesh.h
+MANPAGE_SOURCES += boxm_fill_in_mesh.h
 
 SUBDIRS += io pro
 

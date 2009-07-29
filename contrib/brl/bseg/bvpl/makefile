@@ -16,6 +16,7 @@ MANPAGE_SOURCES += bvpl_vector_operator.h
 MANPAGE_SOURCES += bvpl_edge_algebraic_mean_functor.txx
 MANPAGE_SOURCES += bvpl_edge_geometric_mean_functor.txx
 MANPAGE_SOURCES += bvpl_direction_to_color_map.h
+MANPAGE_SOURCES += bvpl_local_max_functor.h
 
 SUBDIRS += pro io
 

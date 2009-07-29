@@ -10,6 +10,8 @@ TESTS += test_adaboost.cxx
 TESTS += test_binary_threshold_1d.cxx
 TESTS += test_direct_boost.cxx
 TESTS += test_mean_square_1d.cxx
+TESTS += test_binary_hyperplane_logit.cxx
+TESTS += test_logit_loss_function.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

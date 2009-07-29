@@ -48,6 +48,8 @@ SOURCES += mfpf_patch_data.cxx
 SOURCES += mfpf_region_about_pt.cxx
 SOURCES += mfpf_grad_corr2d_builder.cxx
 SOURCES += mfpf_grad_corr2d.cxx
+SOURCES += mfpf_log_lin_class_cost.cxx
+SOURCES += mfpf_lin_clsfy_finder_builder.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

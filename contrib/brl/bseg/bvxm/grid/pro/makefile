@@ -13,6 +13,7 @@ SOURCES += processes/bvxm_grid_to_image_stack_process.cxx
 SOURCES += processes/bvxm_combine_grids_process.cxx
 SOURCES += processes/bvxm_fill_mesh_grid_process.cxx
 SOURCES += processes/bvxm_expectation_opinion_grid_process.cxx
+SOURCES += processes/bvxm_grid_distance_trasform_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
