@@ -107,22 +107,16 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
     vcl_string file_format = vul_file::extension(file);
     vul_string_upcase(file_format);
 
-
     vcl_cout << "format = " << file_format << '\n'
              << "file = " << file << '\n';
     // call appropriate load functions to load the M
     imesh_mesh mesh;
     imesh_read(file, mesh);
 
-	float val=0.0f;
+	  float val=0.0f;
     bvxm_voxel_grid<float>* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
     bvxm_load_mesh_into_grid<float>(g, mesh, lvcs,val);
   }
-
-  bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dir = new bvxm_voxel_grid<vnl_vector_fixed<float,3> >("dirs.vox",grid->grid_size());
-  dir->initialize_data(vnl_vector_fixed<float,3>(0,0,0));
-  g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
-  bvxm_grid_dist_transform<float>(g,dir);
 
   pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
   return true;
