@@ -191,6 +191,12 @@ SOURCE=.\clsfy_mean_square_1d_builder.cxx
 # Begin Source File
 SOURCE=.\clsfy_binary_hyperplane_gmrho_builder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_hyperplane_logit_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_logit_loss_function.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -275,6 +281,12 @@ SOURCE=.\clsfy_mean_square_1d_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\clsfy_binary_hyperplane_gmrho_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_hyperplane_logit_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_logit_loss_function.h
 # End Source File
 # End Group
 # End Target

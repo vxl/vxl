@@ -131,6 +131,15 @@ SOURCE=.\Templates/bvpl_edge_algebraic_mean_functor+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvpl_edge_geometric_mean_functor+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+bvxm_opinion-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_voxel_subgrid+uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_subgrid_iterator+uint-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -187,6 +196,9 @@ SOURCE=.\bvpl_edge_geometric_mean_functor.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_direction_to_color_map.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_local_max_functor.h
 # End Source File
 # End Group
 # End Target

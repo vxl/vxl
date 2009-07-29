@@ -302,6 +302,9 @@ SOURCE=.\boxm_raytrace_operations.h
 # Begin Source File
 SOURCE=.\boxm_upload_mesh.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_fill_in_mesh.h
+# End Source File
 # End Group
 # End Target
 # End Project

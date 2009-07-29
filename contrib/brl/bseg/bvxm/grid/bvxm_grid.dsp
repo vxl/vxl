@@ -285,6 +285,21 @@ SOURCE=.\Templates/bvxm_voxel_grid+vnl_vector_fixed+float.4--.cxx
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+vnl_float_4-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+uint-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

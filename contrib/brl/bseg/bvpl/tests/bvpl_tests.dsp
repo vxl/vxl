@@ -230,6 +230,9 @@ SOURCE=.\test_bvpl_kernel_functors.cxx
 SOURCE=.\test_direction_to_color_map.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bvpl_vector_operator.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

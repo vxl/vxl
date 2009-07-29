@@ -208,6 +208,12 @@ SOURCE=.\mfpf_grad_corr2d_builder.cxx
 SOURCE=.\mfpf_grad_corr2d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mfpf_log_lin_class_cost.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_lin_clsfy_finder_builder.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder-.cxx
 # End Source File
 # Begin Source File
@@ -371,6 +377,12 @@ SOURCE=.\mfpf_grad_corr2d_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_grad_corr2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_log_lin_class_cost.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_lin_clsfy_finder_builder.h
 # End Source File
 # End Group
 # End Target
