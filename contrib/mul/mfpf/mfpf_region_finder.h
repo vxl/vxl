@@ -12,10 +12,11 @@
 #include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
-//: Searches with a PDF of an arbitrary region.
-//  Records a PDF of the normalised intensities in a
-//  region of interest, defined by the set of mbl_chords roi_.
+//: Searches to minimise a cost of pixels in an arbitrary region.
+//  Samples intensities in a region of interest, defined by the set of mbl_chords roi_.
 //  These are in the bounding box [0,roi_ni_)x[0,roi_nj_).
+//  These are optionally normalised, then fed into a mfpf_vec_cost function to
+//  evaluate the quality.
 class mfpf_region_finder : public mfpf_point_finder
 {
  private:
@@ -62,7 +63,7 @@ class mfpf_region_finder : public mfpf_point_finder
   // Destructor
   virtual ~mfpf_region_finder();
 
-  //: Define region and PDF of region
+  //: Define region and cost function to be used
   void set(const vcl_vector<mbl_chord>& roi,
            double ref_x, double ref_y,
            const mfpf_vec_cost& cost,
@@ -72,7 +73,10 @@ class mfpf_region_finder : public mfpf_point_finder
   //  If 0.5, then overlap requires pt inside central 50% of region.
   void set_overlap_f(double);
 
+  //: Minimum variance used when normalising patch
   void set_var_min(double var_min) {var_min_=var_min;}
+
+  //: Minimum variance used when normalising patch
   double var_min() const {return var_min_;}
 
   //: Radius of circle containing modelled region
@@ -85,13 +89,13 @@ class mfpf_region_finder : public mfpf_point_finder
   mfpf_vec_cost& cost() { return cost_; }
 
   //: Evaluate match at p, using u to define scale and orientation
-  // Returns -1*log(p(region)) at p along direction u
+  // Returns cost()(region_sample) at p along direction u
   virtual double evaluate(const vimt_image_2d_of<float>& image,
                           const vgl_point_2d<double>& p,
                           const vgl_vector_2d<double>& u);
 
   //: Evaluate match at in a region around p
-  // Returns a qualtity of fit at a set of positions.
+  // Returns a quality of fit at a set of positions.
   // response image (whose size and transform is set inside the
   // function), indicates the points at which the function was
   // evaluated.  response(i,j) is the fit at the point

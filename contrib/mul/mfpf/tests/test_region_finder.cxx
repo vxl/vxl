@@ -20,11 +20,13 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
+#include <mfpf/mfpf_lin_clsfy_finder_builder.h>
+
 //=======================================================================
 
 void test_region_finder_search(mfpf_point_finder_builder& b)
 {
-  vcl_cout<<"Testing building and search."<<vcl_endl;
+  vcl_cout<<"Testing building and search for: "<<b.is_a()<<vcl_endl;
 
   mfpf_point_finder* pf = b.new_finder();
 
@@ -52,7 +54,7 @@ void test_region_finder_search(mfpf_point_finder_builder& b)
   pf->set_search_area(0,0);
   pf->search(image,p0,u,new_p,new_u);
   vcl_cout<<"search(): Found point: "<<new_p<<vcl_endl;
-  TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
+  TEST_NEAR("Correct location (in 1x1)",(new_p-p0).length(),0.0,1e-6);
 
   pf->set_search_area(3,3);
   pf->search(image,p1,u,new_p,new_u);
@@ -60,7 +62,7 @@ void test_region_finder_search(mfpf_point_finder_builder& b)
           <<"Should be : "<<p0<<vcl_endl;
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
-  TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
+  TEST_NEAR("Correct location (in 7x7)",(new_p-p0).length(),0.0,1e-6);
 
   vimt_image_2d_of<double> response;
   pf->evaluate_region(image,p1,u,response);
@@ -107,6 +109,18 @@ void test_region_finder()
   r_builder.print_shape(vcl_cout);
 
   test_region_finder_search(r_builder);
+
+  {
+    // ========================================
+    // Test mfpf_lin_clsfy_finder_builder
+    // ========================================
+    mfpf_lin_clsfy_finder_builder lin_clsfy_builder;
+    lin_clsfy_builder.set_as_ellipse(5,5);
+    lin_clsfy_builder.set_norm_method(0);
+
+    test_region_finder_search(lin_clsfy_builder);
+
+  }
 
   // -------------------------------------------
   //  Test configuring from stream

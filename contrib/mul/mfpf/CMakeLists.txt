@@ -23,12 +23,14 @@ SET(mfpf_sources
   mfpf_region_pdf_builder.h      mfpf_region_pdf_builder.cxx
   mfpf_region_finder.h           mfpf_region_finder.cxx
   mfpf_region_finder_builder.h   mfpf_region_finder_builder.cxx
+  mfpf_lin_clsfy_finder_builder.h mfpf_lin_clsfy_finder_builder.cxx
   mfpf_hog_box_finder.h          mfpf_hog_box_finder.cxx
   mfpf_hog_box_finder_builder.h  mfpf_hog_box_finder_builder.cxx
 
   mfpf_vec_cost.h                mfpf_vec_cost.cxx
   mfpf_sad_vec_cost.h            mfpf_sad_vec_cost.cxx
   mfpf_ssd_vec_cost.h            mfpf_ssd_vec_cost.cxx
+  mfpf_log_lin_class_cost.h      mfpf_log_lin_class_cost.cxx
   mfpf_vec_cost_builder.h        mfpf_vec_cost_builder.cxx
   mfpf_sad_vec_cost_builder.h    mfpf_sad_vec_cost_builder.cxx
   mfpf_ssd_vec_cost_builder.h    mfpf_ssd_vec_cost_builder.cxx
@@ -60,7 +62,7 @@ SET(mfpf_sources
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)
 ADD_LIBRARY(mfpf ${mfpf_sources} )
-TARGET_LINK_LIBRARIES(mfpf mipa vimt vpdfl mbl)
+TARGET_LINK_LIBRARIES(mfpf clsfy mipa vimt vpdfl mbl)
 
 #SUBDIRS(tools)
 
