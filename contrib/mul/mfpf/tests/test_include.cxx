@@ -10,6 +10,8 @@
 #include <mfpf/mfpf_grad_corr2d.h>
 #include <mfpf/mfpf_hog_box_finder.h>
 #include <mfpf/mfpf_hog_box_finder_builder.h>
+#include <mfpf/mfpf_lin_clsfy_finder_builder.h>
+#include <mfpf/mfpf_log_lin_class_cost.h>
 #include <mfpf/mfpf_max_finder.h>
 #include <mfpf/mfpf_mr_point_finder.h>
 #include <mfpf/mfpf_mr_point_finder_builder.h>

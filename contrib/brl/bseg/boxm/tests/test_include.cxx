@@ -5,6 +5,7 @@
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_cell_vis_graph_node.h>
 #include <boxm/boxm_compute_volume_visibility.h>
+#include <boxm/boxm_fill_in_mesh.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_neighb_graph_node.h>
 #include <boxm/boxm_quad_scan_iterator.h>

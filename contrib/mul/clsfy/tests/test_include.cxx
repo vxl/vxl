@@ -2,6 +2,7 @@
 #include <clsfy/clsfy_adaboost_trainer.h>
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_binary_hyperplane_gmrho_builder.h>
+#include <clsfy/clsfy_binary_hyperplane_logit_builder.h>
 #include <clsfy/clsfy_binary_hyperplane_ls_builder.h>
 #include <clsfy/clsfy_binary_pdf_classifier.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
@@ -14,6 +15,7 @@
 #include <clsfy/clsfy_direct_boost.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_knn_builder.h>
+#include <clsfy/clsfy_logit_loss_function.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
 #include <clsfy/clsfy_mean_square_1d.h>
 #include <clsfy/clsfy_parzen_builder.h>

@@ -44,6 +44,7 @@
 #if 0 // FIXME
 #include <vidl/vidl_v4l_istream.h>
 #include <vidl/vidl_v4l_params.h>
+#include <vidl/vidl_v4l_ulong_fix.h>
 #endif // 0
 
 #include <vidl/gui/vidl_gui_param_dialog.h>
