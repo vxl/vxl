@@ -10,6 +10,7 @@ SET(clsfy_sources
  clsfy_binary_hyperplane.cxx                  clsfy_binary_hyperplane.h
  clsfy_binary_hyperplane_ls_builder.cxx       clsfy_binary_hyperplane_ls_builder.h
  clsfy_binary_hyperplane_gmrho_builder.cxx    clsfy_binary_hyperplane_gmrho_builder.h
+ clsfy_binary_hyperplane_logit_builder.cxx    clsfy_binary_hyperplane_logit_builder.h
  clsfy_binary_pdf_classifier.cxx              clsfy_binary_pdf_classifier.h
  clsfy_builder_base.cxx                       clsfy_builder_base.h
  clsfy_classifier_base.cxx                    clsfy_classifier_base.h
@@ -35,6 +36,8 @@ SET(clsfy_sources
  clsfy_mean_square_1d_builder.cxx             clsfy_mean_square_1d_builder.h
  clsfy_direct_boost.cxx                       clsfy_direct_boost.h
  clsfy_direct_boost_builder.cxx               clsfy_direct_boost_builder.h
+
+  clsfy_logit_loss_function.cxx   clsfy_logit_loss_function.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)

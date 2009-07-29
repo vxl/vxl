@@ -11,6 +11,8 @@ ADD_EXECUTABLE (clsfy_test_adaboost              test_adaboost.cxx)
 ADD_EXECUTABLE (clsfy_test_direct_boost          test_direct_boost.cxx)
 ADD_EXECUTABLE (clsfy_test_binary_threshold_1d   test_binary_threshold_1d.cxx)
 ADD_EXECUTABLE (clsfy_test_mean_square_1d        test_mean_square_1d.cxx)
+ADD_EXECUTABLE (clsfy_test_logit_loss_function   test_logit_loss_function.cxx)
+ADD_EXECUTABLE (clsfy_test_binary_hyperplane_logit test_binary_hyperplane_logit.cxx)
 
 ADD_TEST (clsfy_test_binary_hyperplane     ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_binary_hyperplane)
 ADD_TEST (clsfy_test_binary_pdf_classifier ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_binary_pdf_classifier)
@@ -21,6 +23,9 @@ ADD_TEST (clsfy_test_adaboost              ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_
 ADD_TEST (clsfy_test_direct_boost          ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_direct_boost)
 ADD_TEST (clsfy_test_binary_threshold_1d   ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_binary_threshold_1d)
 ADD_TEST (clsfy_test_mean_square_1d        ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_mean_square_1d)
+ADD_TEST (clsfy_test_logit_loss_function        ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_logit_loss_function)
+ADD_TEST (clsfy_test_binary_hyperplane_logit        ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_binary_hyperplane_logit)
+
 
 ADD_EXECUTABLE( clsfy_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( clsfy_test_include clsfy )
