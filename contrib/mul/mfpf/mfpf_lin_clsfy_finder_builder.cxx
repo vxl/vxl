@@ -225,7 +225,7 @@ void mfpf_lin_clsfy_finder_builder::add_one_example(
     const float *sp = s;
     for (int i=-r;i<=r;++i,sp+=s_istep)
     {
-      double d = vcl_sqrt(i*i+j*j);
+      double d = vcl_sqrt(static_cast<double>(i*i+j*j));
       if (d<=r3_)
       {
         mfpf_sample_region(sp,sample.jstep(),np,roi_,v);
