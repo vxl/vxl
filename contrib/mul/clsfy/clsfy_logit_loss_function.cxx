@@ -5,7 +5,7 @@
 // \author TFC
 
 #include "clsfy_logit_loss_function.h"
-
+#include <vcl_cassert.h>
 
 clsfy_logit_loss_function::clsfy_logit_loss_function(
             mbl_data_wrapper<vnl_vector<double> >& x,
