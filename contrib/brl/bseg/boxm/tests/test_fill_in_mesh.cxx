@@ -39,23 +39,23 @@ MAIN( test_fill_in_mesh )
   unsigned int num_faces=6;
   vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(8));
   vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
-  imesh_vertex<3>& vert0 = (*verts)[0];  imesh_vertex<3>& vert4 = (*verts)[4];
-  vert0[0]=2;						     vert4[0]=2;
-  vert0[1]=2;						     vert4[1]=2;
-  vert0[2]=4;						     vert4[2]=8;
-  imesh_vertex<3>& vert1 = (*verts)[1];  imesh_vertex<3>& vert5 = (*verts)[5];
-  vert1[0]=4;						     vert5[0]=4;
-  vert1[1]=2;						     vert5[1]=2;
-  vert1[2]=4;						     vert5[2]=8;
-  imesh_vertex<3>& vert2 = (*verts)[2];  imesh_vertex<3>& vert6 = (*verts)[6];
-  vert2[0]=4;						     vert6[0]=4;
-  vert2[1]=4;						     vert6[1]=4;
-  vert2[2]=4;						     vert6[2]=8;
-									   
-  imesh_vertex<3>& vert3 = (*verts)[3];  imesh_vertex<3>& vert7 = (*verts)[7];
-  vert3[0]=2;						     vert7[0]=2;
-  vert3[1]=4;						     vert7[1]=4;
-  vert3[2]=4;						     vert7[2]=8;
+  imesh_vertex<3>& vert0 = (*verts)[0]; imesh_vertex<3>& vert4 = (*verts)[4];
+  vert0[0]=2;                           vert4[0]=2;
+  vert0[1]=2;                           vert4[1]=2;
+  vert0[2]=4;                           vert4[2]=8;
+  imesh_vertex<3>& vert1 = (*verts)[1]; imesh_vertex<3>& vert5 = (*verts)[5];
+  vert1[0]=4;                           vert5[0]=4;
+  vert1[1]=2;                           vert5[1]=2;
+  vert1[2]=4;                           vert5[2]=8;
+  imesh_vertex<3>& vert2 = (*verts)[2]; imesh_vertex<3>& vert6 = (*verts)[6];
+  vert2[0]=4;                           vert6[0]=4;
+  vert2[1]=4;                           vert6[1]=4;
+  vert2[2]=4;                           vert6[2]=8;
+
+  imesh_vertex<3>& vert3 = (*verts)[3]; imesh_vertex<3>& vert7 = (*verts)[7];
+  vert3[0]=2;                           vert7[0]=2;
+  vert3[1]=4;                           vert7[1]=4;
+  vert3[2]=4;                           vert7[2]=8;
 
   vcl_vector<unsigned int> face(4,0);
   face[0]=4;face[1]=5;face[2]=6;face[3]=7;
@@ -93,7 +93,8 @@ MAIN( test_fill_in_mesh )
 
   boxm_sample<BOXM_APM_MOG_GREY> val;
   val.alpha=0;
-  boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, mesh, false, val);
+  vcl_vector<imesh_mesh> meshes; meshes.push(mesh);
+  boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, meshes, false, val);
 
   vcl_vector<vcl_string> fnames;
   boxm_block_iterator<tree_type> it(&scene);
