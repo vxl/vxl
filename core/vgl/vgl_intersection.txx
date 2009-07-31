@@ -46,7 +46,6 @@ vgl_box_2d<T> vgl_intersection(vgl_box_2d<T> const& b1,vgl_box_2d<T> const& b2)
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
 {
-  
   // find the box corners
   vcl_vector<vgl_point_3d<T> > corners;
   corners.push_back(b.min_point());
@@ -57,7 +56,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
   corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y(), b.max_z()));
   corners.push_back(b.max_point());
   corners.push_back(vgl_point_3d<T> (b.min_x(), b.min_y()+b.height(), b.max_z()));
-  
+
   // find the signed distance from the box corners to the plane
   int pos=0, neg=0;
   for (unsigned c=0; c<corners.size(); c++) {
@@ -470,17 +469,17 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   //t is the direction vector of the line
   vgl_vector_3d<T> t = cross_product(n0, n1);
   T mag = static_cast<T>(t.length());
-  if(vgl_near_zero(static_cast<double>(mag)))
+  if (vgl_near_zero(static_cast<double>(mag)))
     return false;
   t/=mag; //create unit vector
   double tx = vcl_fabs(static_cast<double>(t.x_));
-  double ty = vcl_fabs(static_cast<double>(t.y_)); 
+  double ty = vcl_fabs(static_cast<double>(t.y_));
   double tz = vcl_fabs(static_cast<double>(t.z_));
   //determine maximum component of t
   char component = 'x';
-  if(ty>tx&&ty>tz)
+  if (ty>tx&&ty>tz)
     component = 'y';
-  if(tz>tx&&tz>ty)
+  if (tz>tx&&tz>ty)
     component = 'z';
   double n0x = static_cast<double>(n0.x_), n0y = static_cast<double>(n0.y_);
   double n0z = static_cast<double>(n0.z_), n1x = static_cast<double>(n1.x_);
@@ -488,47 +487,48 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   double d0 = static_cast<double>(plane0.d());
   double d1 = static_cast<double>(plane1.d());
   vgl_point_3d<double> p0d;
-  switch(component)
-    {
-      //x is the largest component of t
+  switch (component)
+  {
+    // x is the largest component of t
     case 'x':
-      {
-        double det = n0y*n1z-n1y*n0z;
-        if(vgl_near_zero(det))
-          return false;
-        double neuy = d1*n0z - d0*n1z;
-        double neuz = d0*n1y - d1*n0y;
-        p0d.set(0.0, neuy/det, neuz/det);
-        break;
-      }
-    case 'y':
-      {
-        double det = n0x*n1z-n1x*n0z;
-        if(vgl_near_zero(det))
-          return false;
-        double neux = d1*n0z - d0*n1z;
-        double neuz = d0*n1x - d1*n0x;
-        p0d.set(neux/det, 0.0, neuz/det);
-        break;
-      }
-    case 'z':
-      {
-        double det = n0x*n1y-n1x*n0y;
-        if(vgl_near_zero(det))
-          return false;
-        double neux = d1*n0y - d0*n1y;
-        double neuy = d0*n1x - d1*n0x;
-        p0d.set(neux/det, neuy/det, 0.0);
-        break;
-      }
+    {
+      double det = n0y*n1z-n1y*n0z;
+      if (vgl_near_zero(det))
+        return false;
+      double neuy = d1*n0z - d0*n1z;
+      double neuz = d0*n1y - d1*n0y;
+      p0d.set(0.0, neuy/det, neuz/det);
+      break;
     }
-      vgl_point_3d<T> p0(static_cast<T>(p0d.x()),
-                         static_cast<T>(p0d.y()),
-                         static_cast<T>(p0d.z()));
-      vgl_point_3d<T> p1 = p0+t;
-      line = vgl_line_segment_3d<T>(p0, p1);
-      return true;
+    case 'y':
+    {
+      double det = n0x*n1z-n1x*n0z;
+      if (vgl_near_zero(det))
+        return false;
+      double neux = d1*n0z - d0*n1z;
+      double neuz = d0*n1x - d1*n0x;
+      p0d.set(neux/det, 0.0, neuz/det);
+      break;
+    }
+    case 'z':
+    {
+      double det = n0x*n1y-n1x*n0y;
+      if (vgl_near_zero(det))
+        return false;
+      double neux = d1*n0y - d0*n1y;
+      double neuy = d0*n1x - d1*n0x;
+      p0d.set(neux/det, neuy/det, 0.0);
+      break;
+    }
+  }
+  vgl_point_3d<T> p0(static_cast<T>(p0d.x()),
+                     static_cast<T>(p0d.y()),
+                     static_cast<T>(p0d.z()));
+  vgl_point_3d<T> p1 = p0+t;
+  line = vgl_line_segment_3d<T>(p0, p1);
+  return true;
 }
+
 //: Return the intersection point of three planes.
 // \relates vgl_plane_3d
 template <class T>
@@ -753,7 +753,7 @@ template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const& b, vcl_vector<vgl_point_3d<T > > const& p); \
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const& p, vgl_box_3d<T > const& b); \
 template bool vgl_intersection(vgl_box_2d<T > const&, vgl_line_2d<T > const& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
-template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T> const&)
+template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T > const&)
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
@@ -766,7 +766,7 @@ template unsigned vgl_intersection(vgl_box_2d<T > const& , vgl_line_segment_2d<T
 template bool vgl_intersection(vgl_line_2d<T > const&, vgl_line_2d<T > const&, vgl_point_2d<T >&); \
 template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
 template bool vgl_intersection(vgl_box_2d<T > const&, vgl_polygon<T > const&); \
-template bool vgl_intersection(vgl_plane_3d<T> const&, vgl_plane_3d<T> const&,vgl_line_segment_3d<T> & ); \
+template bool vgl_intersection(vgl_plane_3d<T > const&, vgl_plane_3d<T > const&,vgl_line_segment_3d<T > & ); \
 VGL_INTERSECTION_BOX_INSTANTIATE(T)
 
 #endif // vgl_intersection_txx_
