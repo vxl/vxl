@@ -86,72 +86,73 @@ class bvxm_util
                           bvxm_voxel_slab<bool> const& s2,
                           bvxm_voxel_slab<bool> &result);
 
-  template<class T, class M>
+  template <class T, class M>
   static void warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
                                  vgl_h_matrix_2d<double> invH,
                                  bvxm_voxel_slab<T> &slab_out);
 
-  template<class T>
+  template <class T>
   static void warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
                                          vgl_h_matrix_2d<double> invH,
                                          bvxm_voxel_slab<T> &slab_out);
 
-  template<class T, unsigned N>
+  template <class T, unsigned N>
   static bool img_to_slab(vil_image_view_base_sptr image,
                           bvxm_voxel_slab<vnl_vector_fixed<T,N> > &slab);
 
-  template<class T>
+  template <class T>
   static bool img_to_slab(vil_image_view_base_sptr image,
                           bvxm_voxel_slab<T> &slab);
 
-  template<class T, unsigned N>
+  template <class T, unsigned N>
   static bool slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab,
                           vil_image_view_base_sptr image);
 
-  template<class T>
+  template <class T>
   static bool slab_to_img(bvxm_voxel_slab<T> const& slab,
                           vil_image_view_base_sptr image);
 
-  template<class T, class M>
+  template <class T, class M>
   static void multiply_slabs(bvxm_voxel_slab<M> const& s1,
                              bvxm_voxel_slab<T> const& s2,
                              bvxm_voxel_slab<T> &product);
 
-  template<class T>
+  template <class T>
   static void add_slabs(bvxm_voxel_slab<T> const& s1,
                         bvxm_voxel_slab<T> const& s2,
                         bvxm_voxel_slab<T> &sum);
 
-  template<class T>
+  template <class T>
   static void threshold_slab_above(bvxm_voxel_slab<T> const& slab,
                                    T const& thresh,
                                    bvxm_voxel_slab<bool> &mask);
 
-  template<class T>
+  template <class T>
   static void smooth_gaussian(bvxm_voxel_slab<T> &slab,
                               float stdx, float stdy);
 
-  template<class T>
+  template <class T>
   static void write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string filename);
 
-  template<class T, unsigned N>
+  template <class T, unsigned N>
   static void write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,vcl_string filename);
 
-  template<class T>
+  template <class T>
   static T sum_slab(bvxm_voxel_slab<T> const& slab);
 
-  template<class T>
+  template <class T>
   static bool generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
                                   T box_dim_x, T box_dim_y, T box_dim_z,
                                   T world_dim_x, T world_dim_y, T world_dim_z,
                                   vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box);
 
-  template<class T>
+  template <class T>
   static vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box);
 
   // finds out if a given box intersect the polygon
-  template<class T>
-  static bool intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& poly);
+  template <class T>
+  static bool intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& poly)
+  { return vgl_intersection(b,poly).size() > 0; }
 
   static vil_image_view_base_sptr downsample_image_by_two(vil_image_view_base_sptr img);
 
@@ -169,7 +170,7 @@ class bvxm_util
                                vnl_matrix<float> &weights);
 };
 
-template<class T, class M>
+template <class T, class M>
 void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
                                    vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out)
 {
@@ -258,7 +259,7 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
   return;
 }
 
-template<class T>
+template <class T>
 void bvxm_util::warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
                                            vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out)
 {
@@ -301,7 +302,7 @@ void bvxm_util::warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
 
 //: img_to_slab for a multi-band (eg color) image.
 //  if input image is a float image, assumes that it is already scaled to [0,1] range
-template<class T, unsigned N>
+template <class T, unsigned N>
 bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_slab<vnl_vector_fixed<T,N> > &slab)
 {
   // check slab is preallocated to correct size
@@ -431,7 +432,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
 }
 
 //:  if input image is a float image, assumes that it is already scaled to [0,1] range
-template<class T>
+template <class T>
 bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_slab<T> &slab)
 {
   // check slab is preallocated to correct size
@@ -527,7 +528,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
   return true;
 }
 
-template<class T, unsigned N>
+template <class T, unsigned N>
 bool bvxm_util::slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab, vil_image_view_base_sptr image)
 {
   // check image is preallocated to correct size
@@ -657,7 +658,7 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab,
   return true;
 }
 
-template<class T>
+template <class T>
 bool bvxm_util::slab_to_img(bvxm_voxel_slab<T> const& slab, vil_image_view_base_sptr image)
 {
   // check image is preallocated to correct size
@@ -711,7 +712,7 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<T> const& slab, vil_image_view_base_
   return true;
 }
 
-template<class T>
+template <class T>
 T bvxm_util::sum_slab(bvxm_voxel_slab<T> const& slab)
 {
   T sum = 0;
@@ -722,7 +723,7 @@ T bvxm_util::sum_slab(bvxm_voxel_slab<T> const& slab)
   return sum;
 }
 
-template<class T>
+template <class T>
 void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &sum)
 {
   // check sizes
@@ -741,7 +742,7 @@ void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const
   return;
 }
 
-template<class T, class M>
+template <class T, class M>
 void bvxm_util::multiply_slabs(bvxm_voxel_slab<M> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &product)
 {
   // check sizes
@@ -761,7 +762,7 @@ void bvxm_util::multiply_slabs(bvxm_voxel_slab<M> const& s1, bvxm_voxel_slab<T> 
   return;
 }
 
-template<class T>
+template <class T>
 void bvxm_util::threshold_slab_above(bvxm_voxel_slab<T> const& slab, T const& thresh, bvxm_voxel_slab<bool> &mask)
 {
   // check sizes
@@ -778,7 +779,7 @@ void bvxm_util::threshold_slab_above(bvxm_voxel_slab<T> const& slab, T const& th
   return;
 }
 
-template<class T>
+template <class T>
 void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy)
 {
   if ( (stdx < 0) || (stdy < 0) ) {
@@ -885,7 +886,7 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
 }
 
 // used for debugging
-template<class T>
+template <class T>
 void bvxm_util::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),1);
@@ -900,7 +901,7 @@ void bvxm_util::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string
 }
 
 // used for debugging
-template<class T, unsigned N>
+template <class T, unsigned N>
 void bvxm_util::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,vcl_string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),N);
@@ -921,7 +922,7 @@ void bvxm_util::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > cons
   return;
 }
 
-template<class T>
+template <class T>
 bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
                                     T box_dim_x, T box_dim_y, T box_dim_z,
                                     T world_dim_x, T world_dim_y, T world_dim_z,
@@ -968,7 +969,7 @@ bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
   return true;
 }
 
-template<class T>
+template <class T>
 vcl_vector<vgl_point_3d<T> >
 bvxm_util::corners_of_box_3d(vgl_box_3d<T> box)
 {
