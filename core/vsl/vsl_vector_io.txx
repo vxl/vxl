@@ -33,6 +33,15 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
     vsl_block_binary_write(s, &v.front(), n);
 }
 
+
+template <class T> bool vsl_is_char(const T&);
+
+VCL_DEFINE_SPECIALIZATION inline bool vsl_is_char(const unsigned char &)
+{ return true; }
+VCL_DEFINE_SPECIALIZATION inline bool vsl_is_char(const signed char &)
+{ return true; }
+template <class T> bool vsl_is_char(const T&) { return false; }
+
 //====================================================================================
 //: Read vector from binary stream
 template <class T>
@@ -65,7 +74,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
    case 2:
     if (n!=0)
     {
-      if (sizeof(T) == sizeof(unsigned char)) // signed char or unsigned char
+      if (vsl_is_char(T())) // signed char or unsigned char
       {
         vsl_block_binary_read_confirm_specialisation(is, false);
         vsl_b_read_block_old(is, &v.front(), n);
