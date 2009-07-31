@@ -26,7 +26,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
   // Check this assumption holds.
   assert(n == 0 || &v[n-1] + 1 == &v[0] + n);
 
-  const short version_no = 2;
+  const short version_no = 3;
   vsl_b_write(s, version_no);
   vsl_b_write(s,n);
   if (n!=0)
@@ -65,9 +65,22 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
    case 2:
     if (n!=0)
     {
+      if (typeid(T) == typeid(unsigned char) || typeid(T) == typeid(signed char))
+      {
+        vsl_block_binary_read_confirm_specialisation(is, false);
+        vsl_b_read_block_old(is, &v.front(), n);
+      }
+      else
+        vsl_block_binary_read(is, &v.front(), n);
+    }
+    break;
+   case 3:
+    if (n!=0)
+    {
       vsl_block_binary_read(is, &v.front(), n);
     }
     break;
+
 
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<T>&)\n"
