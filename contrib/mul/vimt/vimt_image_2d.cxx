@@ -58,3 +58,16 @@ void vimt_centre_image_at_origin(vimt_image_2d& image)
   vimt_transform_2d& w2i = image.world2im();
   w2i.set_origin(w2i(c));
 }
+
+// Calculate the pixel dimensions from the image transform
+// NEEDS A TEST PROGRAM
+vgl_vector_2d<double> vimt_pixel_size_from_transform(const vimt_image_2d& image)
+{
+  const vimt_transform_2d& i2w = image.world2im().inverse();
+  vgl_point_2d<double> p(0,0);
+  vgl_vector_2d<double> i(1,0);
+  vgl_vector_2d<double> j(0,1);
+  double dx = i2w.delta(p, i).length();
+  double dy = i2w.delta(p, j).length();
+  return vgl_vector_2d<double>(dx, dy);
+}

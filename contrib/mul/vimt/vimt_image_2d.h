@@ -74,4 +74,8 @@ vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img);
 void vimt_centre_image_at_origin(vimt_image_2d& image);
 
 
+//: Calculate the pixel dimensions from the image transform
+vgl_vector_2d<double> vimt_pixel_size_from_transform(const vimt_image_2d& image);
+
+
 #endif // vimt_image_2d_h_
