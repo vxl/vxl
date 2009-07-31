@@ -30,7 +30,7 @@
 #include <vul/vul_file.h>
 
 
-MAIN( test_bvxm_rpc_registration_process )
+MAIN_ARGS( test_bvxm_rpc_registration_process )
 {
   DECLARE_FUNC_CONS(bvxm_rpc_registration_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_rpc_registration_process,"bvxmRpcRegistrationProcess");
@@ -49,96 +49,104 @@ MAIN( test_bvxm_rpc_registration_process )
   bvxm_voxel_world_sptr voxel_world = new bvxm_voxel_world();
   voxel_world->set_params(voxel_world_params);
 
-  vpgl_rational_camera<double>* camera_rational = read_rational_camera<double>("rpc_registration_camera.rpb");
+  vcl_string rpb = vcl_string(argv[1]) + "/" + "rpc_registration_camera.rpb";
+  vpgl_rational_camera<double>* camera_rational = read_rational_camera<double>(rpb);
   vpgl_camera<double>* camera = new vpgl_local_rational_camera<double>(*lvcs,*camera_rational);
-  vil_image_view_base_sptr img = vil_load("rpc_registration_image.png");
+  vcl_string png = vcl_string(argv[1]) + "/" + "rpc_registration_image.png";
+  vil_image_view_base_sptr img = vil_load(png.c_str());
 
-  bool good = bprb_batch_process_manager::instance()->init_process("bvxmRpcRegistrationProcess");
-  good = good && bprb_batch_process_manager::instance()->set_params("rpc_registration_parameters.xml");
+  for (int dummy = 0; dummy == 0; ++dummy)
+  {
+    bool good = bprb_batch_process_manager::instance()->init_process("bvxmRpcRegistrationProcess");
+    TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
+    if (!good) break;
+    vcl_string xml = vcl_string(argv[1]) + "/" + "rpc_registration_parameters.xml";
+    good = bprb_batch_process_manager::instance()->set_params(xml);
+    TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
 
-  brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(voxel_world);
-  brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(camera);
-  brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(img);
-  brdb_value_sptr v3 = new brdb_value_t<bool>(true);
-  brdb_value_sptr v4 = new brdb_value_t<float>(10.0);
-  brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
+    brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(voxel_world);
+    brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(camera);
+    brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(img);
+    brdb_value_sptr v3 = new brdb_value_t<bool>(true);
+    brdb_value_sptr v4 = new brdb_value_t<float>(10.0);
+    brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
 
-  good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
-  good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
-  good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
-  good = good && bprb_batch_process_manager::instance()->set_input(4, v4);
-  good = good && bprb_batch_process_manager::instance()->set_input(5, v5);
-  good = good && bprb_batch_process_manager::instance()->run_process();
+    good = bprb_batch_process_manager::instance()->set_input(0, v0)
+        && bprb_batch_process_manager::instance()->set_input(1, v1)
+        && bprb_batch_process_manager::instance()->set_input(2, v2)
+        && bprb_batch_process_manager::instance()->set_input(3, v3)
+        && bprb_batch_process_manager::instance()->set_input(4, v4)
+        && bprb_batch_process_manager::instance()->set_input(5, v5);
+    TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
+    good = bprb_batch_process_manager::instance()->run_process();
+    TEST("run bvxm_rpc_registration_process", good ,true);
+    if (!good) break;
 
-  unsigned id_cam, id_edge_img, id_expected_edge_img;
-  good = good && bprb_batch_process_manager::instance()->commit_output(0, id_cam);
-  good = good && bprb_batch_process_manager::instance()->commit_output(1, id_edge_img);
-  good = good && bprb_batch_process_manager::instance()->commit_output(2, id_expected_edge_img);
-  TEST("run bvxm_rpc_registration_process", good ,true);
+    unsigned id_cam, id_edge_img, id_expected_edge_img;
+    good = bprb_batch_process_manager::instance()->commit_output(0, id_cam)
+        && bprb_batch_process_manager::instance()->commit_output(1, id_edge_img)
+        && bprb_batch_process_manager::instance()->commit_output(2, id_expected_edge_img);
+    TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
+    if (!good) break;
 
-  // check if the results are in DB
-  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
-  brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", Q);
-  if (S->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " no selections\n";
+    // check if the results are in DB
+    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
+    brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", Q);
+    if (S->size()!=1) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
+    }
+
+    brdb_value_sptr value;
+    if (!S->get_value(vcl_string("value"), value)) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+               << " didn't get value\n";
+    }
+    TEST("vpgl_camera_double_sptr non-null", !value, true);
+
+    brdb_value_t<vpgl_camera_double_sptr>* result =
+      static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value.ptr());
+    vpgl_camera_double_sptr cam = result->value();
+
+    brdb_query_aptr Q_edge_img = brdb_query_comp_new("id", brdb_query::EQ, id_edge_img);
+    brdb_selection_sptr S_edge_img = DATABASE->select("vil_image_view_base_sptr_data", Q_edge_img);
+    if (S_edge_img->size()!=1) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+               << " no selections\n";
+    }
+
+    brdb_value_sptr value_edge_img;
+    if (!S_edge_img->get_value(vcl_string("value"), value_edge_img)) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+               << " didn't get value\n";
+    }
+    TEST("image output non-null", !value_edge_img, true);
+
+    brdb_value_t<vil_image_view_base_sptr>* result_edge_img =
+      static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_edge_img.ptr());
+    vil_image_view_base_sptr edge_img_out = result_edge_img->value();
+    bool saved = vil_save(*edge_img_out, "edge_image.tif");
+    TEST("image saved", saved ,true);
+
+    brdb_query_aptr Q_expected_edge_img = brdb_query_comp_new("id", brdb_query::EQ, id_expected_edge_img);
+    brdb_selection_sptr S_expected_edge_img = DATABASE->select("vil_image_view_base_sptr_data", Q_expected_edge_img);
+    if (S_expected_edge_img->size()!=1) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+               << " no selections\n";
+    }
+
+    brdb_value_sptr value_expected_edge_img;
+    if (!S_expected_edge_img->get_value(vcl_string("value"), value_expected_edge_img)) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+               << " didn't get value\n";
+    }
+    TEST("image output non-null", !value_expected_edge_img, true);
+
+    brdb_value_t<vil_image_view_base_sptr>* result_expected_edge_img =
+      static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_expected_edge_img.ptr());
+    vil_image_view_base_sptr expected_edge_img_out = result_expected_edge_img->value();
+    saved = vil_save(*expected_edge_img_out, "expected_edge_image.tif");
+    TEST("image saved", saved ,true);
   }
-
-  brdb_value_sptr value;
-  if (!S->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " didn't get value\n";
-  }
-  bool non_null = (value != 0);
-  TEST("vpgl_camera_double_sptr non-null", non_null ,true);
-
-  brdb_value_t<vpgl_camera_double_sptr>* result =
-    static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value.ptr());
-  vpgl_camera_double_sptr cam = result->value();
-
-  brdb_query_aptr Q_edge_img = brdb_query_comp_new("id", brdb_query::EQ, id_edge_img);
-  brdb_selection_sptr S_edge_img = DATABASE->select("vil_image_view_base_sptr_data", Q_edge_img);
-  if (S_edge_img->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " no selections\n";
-  }
-
-  brdb_value_sptr value_edge_img;
-  if (!S_edge_img->get_value(vcl_string("value"), value_edge_img)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " didn't get value\n";
-  }
-  non_null = (value_edge_img != 0);
-  TEST("image output non-null", non_null ,true);
-
-  brdb_value_t<vil_image_view_base_sptr>* result_edge_img =
-    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_edge_img.ptr());
-  vil_image_view_base_sptr edge_img_out = result_edge_img->value();
-  bool saved = vil_save(*edge_img_out, "edge_image.tif");
-  TEST("image saved", saved ,true);
-
-
-  brdb_query_aptr Q_expected_edge_img = brdb_query_comp_new("id", brdb_query::EQ, id_expected_edge_img);
-  brdb_selection_sptr S_expected_edge_img = DATABASE->select("vil_image_view_base_sptr_data", Q_expected_edge_img);
-  if (S_expected_edge_img->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " no selections\n";
-  }
-
-  brdb_value_sptr value_expected_edge_img;
-  if (!S_expected_edge_img->get_value(vcl_string("value"), value_expected_edge_img)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " didn't get value\n";
-  }
-  non_null = (value_expected_edge_img != 0);
-  TEST("image output non-null", non_null ,true);
-
-  brdb_value_t<vil_image_view_base_sptr>* result_expected_edge_img =
-    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_expected_edge_img.ptr());
-  vil_image_view_base_sptr expected_edge_img_out = result_expected_edge_img->value();
-  saved = vil_save(*expected_edge_img_out, "expected_edge_image.tif");
-  TEST("image saved", saved ,true);
 
   SUMMARY();
 }
