@@ -3,11 +3,6 @@
 //:
 // \file
 // \brief Process to replace the appearance model for the whole scene by a constant appearance model
-//        
-//        
-//        
-//        
-//
 // \author Vishal Jain
 // \date July 28, 2009
 
@@ -19,13 +14,13 @@
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/boxm_utils.h>
+
 void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene,
-						 float mean);
+                               float mean);
 namespace boxm_replace_const_app_process_globals
 {
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
-
 }
 
 bool boxm_replace_const_app_process_cons(bprb_func_process& pro)
@@ -78,22 +73,21 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
 }
 
 void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene,
-						 float mean)
+                               float mean)
 {
-
   boxm_block_iterator<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
   boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype app=boxm_utils::obtain_mog_grey_single_mode(mean);
   for (; !iter.end(); iter++) {
     scene.load_block(iter.index());
-	boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >>* block = *iter;
-	boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >* tree = block->get_tree();
+    boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >* block = *iter;
+    boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >* tree = block->get_tree();
 
-	vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> leaf_cells=tree->leaf_cells();
-	for(unsigned i=0;i<leaf_cells.size();i++)
-	{
-		boxm_sample<BOXM_APM_MOG_GREY> new_data(leaf_cells[i]->data().alpha,app);
-		leaf_cells[i]->set_data(new_data);
-	}
+    vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> leaf_cells=tree->leaf_cells();
+    for (unsigned i=0;i<leaf_cells.size();i++)
+    {
+      boxm_sample<BOXM_APM_MOG_GREY> new_data(leaf_cells[i]->data().alpha,app);
+      leaf_cells[i]->set_data(new_data);
+    }
     scene.write_active_block();
   }
 }
