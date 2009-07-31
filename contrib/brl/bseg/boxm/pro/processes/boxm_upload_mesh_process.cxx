@@ -87,6 +87,7 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
   vcl_stringstream glob;
   glob << input_path << "/*.ply*";
 
+  vcl_vector<imesh_mesh> meshes;
   for (vul_file_iterator file_it = glob.str().c_str(); file_it; ++file_it)
   {
     vcl_string file(file_it());
@@ -103,25 +104,28 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
     else if (file_format == ".PLY2")
       imesh_read_ply2(file, mesh);
 
-     if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-      if (!scene->multi_bin())
-      {
-        typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-        boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-
-		boxm_sample<BOXM_APM_MOG_GREY> val(0,boxm_utils::obtain_mog_grey_unit_mode());
-		if(draw_or_fill=="draw")
-			boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
-		else if(draw_or_fill=="fill")
-			boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
-      }
-      else
-        vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
-    }
-    else {
-      vcl_cout << "boxm_upload_mesh_process: undefined APM type" << vcl_endl;
-      return false;
-    }
+	meshes.push_back(mesh);
   }
+  if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
+	  if (!scene->multi_bin())
+	  {
+		  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+		  boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+
+		  boxm_sample<BOXM_APM_MOG_GREY> val(0,boxm_utils::obtain_mog_grey_unit_mode());
+		  if(draw_or_fill=="draw")
+			  vcl_cout<<"Not yet";
+			  //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
+		  else if(draw_or_fill=="fill")
+			  boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, meshes, use_lvcs, val);
+	  }
+	  else
+		  vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
+  }
+  else {
+	  vcl_cout << "boxm_upload_mesh_process: undefined APM type" << vcl_endl;
+	  return false;
+  }
+  
   return true;
 }
