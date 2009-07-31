@@ -6,6 +6,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
+void fill_composite(vil_image_view<vxl_byte> & outimg,vil_image_view<vxl_byte> & inimg, vcl_string tag);
 
 //: Constructor
 bool vil_two_planes_composite_process_cons(bprb_func_process& pro)
@@ -16,7 +17,9 @@ bool vil_two_planes_composite_process_cons(bprb_func_process& pro)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vcl_string");
   input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -32,7 +35,7 @@ bool vil_two_planes_composite_process_cons(bprb_func_process& pro)
 bool vil_two_planes_composite_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()< 2) {
+  if (pro.n_inputs()< 4) {
     vcl_cout << "vil_two_planes_composite_process: The input number should be 2" << vcl_endl;
     return false;
   }
@@ -40,7 +43,10 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
   unsigned i=0;
   //Retrieve image from input
   vil_image_view_base_sptr img_1 = pro.get_input<vil_image_view_base_sptr>(i++);
+  vcl_string tag1 = pro.get_input<vcl_string>(i++);
+
   vil_image_view_base_sptr img_2 = pro.get_input<vil_image_view_base_sptr>(i++);
+  vcl_string tag2 = pro.get_input<vcl_string>(i++);
 
   vil_image_view<vxl_byte> bimage1 = vil_convert_cast(vxl_byte(), img_1);
   vil_image_view<vxl_byte> bimage2 = vil_convert_cast(vxl_byte(), img_2);
@@ -50,17 +56,16 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
     vcl_cout<<"The images have different dimensions"<<vcl_endl;
     return false;
   }
-  vil_image_view<vxl_byte> *out_img=new vil_image_view<vxl_byte>(img_1->ni(),img_1->nj(),3);
-
-  for (unsigned i=0;i<img_1->ni();i++)
+  if(tag1==tag2)
   {
-    for (unsigned j=0;j<img_1->nj();j++)
-    {
-      (*out_img)(i,j,0)=bimage1(i,j);
-      (*out_img)(i,j,1)=bimage2(i,j);
-      (*out_img)(i,j,2)=(vxl_byte)0;
-    }
-  }
+	  vcl_cout<<"Error:Cannot be of the same plane"<<vcl_endl;
+	  return false;
+  }		
+  vil_image_view<vxl_byte> *out_img=new vil_image_view<vxl_byte>(img_1->ni(),img_1->nj(),3);
+  out_img->fill(0);
+
+  fill_composite(*out_img,bimage1,tag1);
+  fill_composite(*out_img,bimage2,tag2);
 
   vil_image_view_base_sptr out_img_ptr=out_img;
 
@@ -68,3 +73,41 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
   return true;
 }
 
+
+void fill_composite(vil_image_view<vxl_byte> & out_img,vil_image_view<vxl_byte> & inimg, vcl_string tag)
+{
+	if(tag=="grey")
+	{
+		for (unsigned i=0;i<out_img.ni();i++)
+		{
+			for (unsigned j=0;j<out_img.nj();j++)
+			{
+				out_img(i,j,0)=out_img(i,j,0)+inimg(i,j)>255?255:out_img(i,j,0)+inimg(i,j);
+				out_img(i,j,1)=out_img(i,j,1)+inimg(i,j)>255?255:out_img(i,j,1)+inimg(i,j);
+				out_img(i,j,2)=out_img(i,j,2)+inimg(i,j)>255?255:out_img(i,j,2)+inimg(i,j);
+			}
+		}
+	}
+	else if(tag=="red")
+	{
+		for (unsigned i=0;i<out_img.ni();i++)
+			for (unsigned j=0;j<out_img.nj();j++)
+				out_img(i,j,0)=out_img(i,j,0)+inimg(i,j)>255?255:out_img(i,j,0)+inimg(i,j);
+	}
+	else if(tag=="green")
+	{
+		for (unsigned i=0;i<out_img.ni();i++)
+			for (unsigned j=0;j<out_img.nj();j++)
+				out_img(i,j,1)=out_img(i,j,1)+inimg(i,j)>255?255:out_img(i,j,1)+inimg(i,j);
+	}
+	else if(tag=="blue")
+	{
+		for (unsigned i=0;i<out_img.ni();i++)
+			for (unsigned j=0;j<out_img.nj();j++)
+				out_img(i,j,2)=out_img(i,j,2)+inimg(i,j)>255?255:out_img(i,j,2)+inimg(i,j);
+	}
+	else
+	{
+		vcl_cout<<"Type not found"<<vcl_endl;
+	}
+}
