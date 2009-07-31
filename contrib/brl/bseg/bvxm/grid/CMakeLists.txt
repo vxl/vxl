@@ -1,7 +1,5 @@
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-#INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-#INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-#INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 #INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
 #INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 #INCLUDE( ${MODULE_PATH}/FindTIFF.cmake)
@@ -33,8 +31,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_grid_sources)
 
 ADD_LIBRARY( bvxm_grid ${bvxm_grid_sources})
 
-
-TARGET_LINK_LIBRARIES( bvxm_grid  vnl vil  vil_algo vul vbl vsl vgl bgeo)
+TARGET_LINK_LIBRARIES( bvxm_grid  vnl vil  vil_algo vul vbl vsl vgl bgeo vil3d vil3d_algo)
 
 SUBDIRS( io )
 SUBDIRS( pro )
