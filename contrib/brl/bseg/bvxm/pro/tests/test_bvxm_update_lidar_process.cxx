@@ -27,18 +27,26 @@ MAIN( test_bvxm_update_lidar_process )
   vpgl_camera_double_sptr lidar_cam_;
 
   // 1. Set inputs for bvxm_create_synth_lidar_data_process
+  for (int dummy = 0; dummy == 0; ++dummy)
   {
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
+    TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
+    if (!good) break;
     good = bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
-    good = good && bprb_batch_process_manager::instance()->run_process();
+    TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
+    good = bprb_batch_process_manager::instance()->run_process();
+    TEST("run create synthetic lidar data process", good ,true);
+    if (!good) break;
 
     unsigned id_lidar_img;
     unsigned id_cam;
 
-    good = good && bprb_batch_process_manager::instance()->commit_output(0, id_lidar_img);
-    good = good && bprb_batch_process_manager::instance()->commit_output(1, id_cam);
-
-    TEST("run create syhtnetic lidar data process", good ,true);
+    good = bprb_batch_process_manager::instance()->commit_output(0, id_lidar_img);
+    TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
+    if (!good) break;
+    good = bprb_batch_process_manager::instance()->commit_output(1, id_cam);
+    TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
+    if (!good) break;
 
     //retrieve lidar image
     brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_lidar_img);
@@ -96,18 +104,24 @@ MAIN( test_bvxm_update_lidar_process )
 
 #if 0
   /***********************Generate Synthetic World*********************************/
+  for (int dummy = 0; dummy == 0; ++dummy)
   {
     // Set output for bvxm_gen_synthetic_world_process
 
-    bool   good  = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
-//  good = good && bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
-    good = good && bprb_batch_process_manager::instance()->run_process();
+    bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
+    TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
+    if (!good) break;
+//  good = bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
+    TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
+    good = bprb_batch_process_manager::instance()->run_process();
+    TEST("run gen synthetic world process", good ,true);
+    if (!good) break;
 
     unsigned id_world;
 
-    good = good && bprb_batch_process_manager::instance()->commit_output(0, id_world);
-
-    TEST("run gen synthetic world process", good ,true);
+    good = bprb_batch_process_manager::instance()->commit_output(0, id_world);
+    TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
+    if (!good) break;
 
     //retrieve world
     brdb_query_aptr Q_world = brdb_query_comp_new("id", brdb_query::EQ, id_world);
@@ -134,20 +148,26 @@ MAIN( test_bvxm_update_lidar_process )
 #endif // 0
 
   /***********************Generate Empty World*********************************/
+  for (int dummy = 0; dummy == 0; ++dummy)
   {
     // Set output for bvxm_gen_synthetic_world_process
     vcl_string test_dir("./create_world_test");
     vul_file::make_directory(test_dir);
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateVoxelWorldProcess");
+    TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
+    if (!good) break;
     good = bprb_batch_process_manager::instance()->set_params("world_model_params.xml");
-    good = good && bprb_batch_process_manager::instance()->run_process();
+    TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
+    good = bprb_batch_process_manager::instance()->run_process();
+    TEST("run gen synthetic world process", good, true);
+    if (!good) break;
 
     unsigned id_world;
 
-    good = good && bprb_batch_process_manager::instance()->commit_output(0, id_world);
-
-    TEST("run gen synthetic world process", good ,true);
+    good = bprb_batch_process_manager::instance()->commit_output(0, id_world);
+    TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
+    if (!good) break;
 
     //retrieve world
     brdb_query_aptr Q_world = brdb_query_comp_new("id", brdb_query::EQ, id_world);
@@ -173,6 +193,7 @@ MAIN( test_bvxm_update_lidar_process )
   }
 
   /***************************** Save Raw data**************************************/
+  for (int dummy = 0; dummy == 0; ++dummy)
   {
     // 3. Run save raw process
      vcl_string empty_world("empty.raw");
@@ -183,16 +204,20 @@ MAIN( test_bvxm_update_lidar_process )
     brdb_value_sptr v2 = new brdb_value_t<unsigned> (0);
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmSaveOccupancyRaw");
-    good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-    good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
-        good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
+    TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
+    if (!good) break;
+    good = bprb_batch_process_manager::instance()->set_input(0, v0)
+        && bprb_batch_process_manager::instance()->set_input(1, v1)
+        && bprb_batch_process_manager::instance()->set_input(2, v2);
+    TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
 
-    good = good && bprb_batch_process_manager::instance()->run_process();
-
-    TEST("run save occupancy empty wolrd process", good ,true);
+    good = bprb_batch_process_manager::instance()->run_process();
+    TEST("run save occupancy empty wolrd process", good, true);
+    if (!good) break;
   }
 
   /***************************** Update World with lidar data**************************************/
+  for (int dummy = 0; dummy == 0; ++dummy)
   {
     // 3. Run update lidar process
 
@@ -203,18 +228,26 @@ MAIN( test_bvxm_update_lidar_process )
     brdb_value_sptr v3 = new brdb_value_t<unsigned>(0);
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmUpdateLidarProcess");
-    good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-    good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
-    good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
-        good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
-    good = good && bprb_batch_process_manager::instance()->run_process();
+    TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
+    if (!good) break;
+    good = bprb_batch_process_manager::instance()->set_input(0, v0)
+        && bprb_batch_process_manager::instance()->set_input(1, v1)
+        && bprb_batch_process_manager::instance()->set_input(2, v2)
+        && bprb_batch_process_manager::instance()->set_input(3, v3);
+    TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
+    good = bprb_batch_process_manager::instance()->run_process();
+    TEST("run init lidar process", good, true);
+    if (!good) break;
 
     unsigned id_prob_map;
     unsigned id_mask;
 
-    good = good && bprb_batch_process_manager::instance()->commit_output(0, id_prob_map);
-    good = good && bprb_batch_process_manager::instance()->commit_output(1, id_mask);
-    TEST("run init lidar process", good ,true);
+    good = bprb_batch_process_manager::instance()->commit_output(0, id_prob_map);
+    TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
+    if (!good) break;
+    good = bprb_batch_process_manager::instance()->commit_output(1, id_mask);
+    TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
+    if (!good) break;
 
     //retrieve prob_map
     brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_prob_map);
@@ -241,6 +274,7 @@ MAIN( test_bvxm_update_lidar_process )
   }
 
   /***************************** Save Raw data**************************************/
+  for (int dummy = 0; dummy == 0; ++dummy)
   {
     // 3. Run save raw process
     vcl_string updated_world("updated_world.raw");
@@ -251,12 +285,15 @@ MAIN( test_bvxm_update_lidar_process )
     brdb_value_sptr v2 = new brdb_value_t<unsigned>(0);
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmSaveOccupancyRaw");
-    good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-    good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
-    good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
-    good = good && bprb_batch_process_manager::instance()->run_process();
-
+    TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
+    if (!good) break;
+    good = bprb_batch_process_manager::instance()->set_input(0, v0)
+        && bprb_batch_process_manager::instance()->set_input(1, v1)
+        && bprb_batch_process_manager::instance()->set_input(2, v2);
+    TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
+    good = bprb_batch_process_manager::instance()->run_process();
     TEST("run save occupancy empty world process", good ,true);
+    if (!good) break;
   }
 
 #if 0
@@ -282,22 +319,26 @@ MAIN( test_bvxm_update_lidar_process )
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(new voxel_world_sptr(wolrd));
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmLidarInitProcess");
+  TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
   good = bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
-  good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
-  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
-  good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
-  good = good && bprb_batch_process_manager::instance()->run_process();
+    TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
+  good = bprb_batch_process_manager::instance()->set_input(0, v0)
+      && bprb_batch_process_manager::instance()->set_input(1, v1)
+      && bprb_batch_process_manager::instance()->set_input(2, v2);
+  TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
+  good = bprb_batch_process_manager::instance()->run_process();
+  TEST("run init lidar process", good, true);
 
   unsigned id_cam;
   unsigned id_1ret;
   unsigned id_2ret;
   unsigned id_mask;
 
-  good = good && bprb_batch_process_manager::instance()->commit_output(0, id_cam);
-  good = good && bprb_batch_process_manager::instance()->commit_output(1, id_1ret);
-  good = good && bprb_batch_process_manager::instance()->commit_output(2, id_2ret);
-  good = good && bprb_batch_process_manager::instance()->commit_output(3, id_mask);
-  TEST("run init lidar process", good ,true);
+  good = bprb_batch_process_manager::instance()->commit_output(0, id_cam)
+      && bprb_batch_process_manager::instance()->commit_output(1, id_1ret)
+      && bprb_batch_process_manager::instance()->commit_output(2, id_2ret)
+      && bprb_batch_process_manager::instance()->commit_output(3, id_mask);
+  TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
 
   //retrieve camera
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
