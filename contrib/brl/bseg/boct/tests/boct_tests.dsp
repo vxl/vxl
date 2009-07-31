@@ -232,6 +232,9 @@ SOURCE=.\test_locate_region.cxx
 # Begin Source File
 SOURCE=.\test_binary_io.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_clone_tree.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
