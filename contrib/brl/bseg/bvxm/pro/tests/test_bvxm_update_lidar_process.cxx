@@ -18,8 +18,11 @@
 
 #include <vul/vul_file.h>
 
-MAIN( test_bvxm_update_lidar_process )
+MAIN_ARGS( test_bvxm_update_lidar_process )
 {
+  DECLARE_FUNC_CONS(bvxm_update_lidar_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_lidar_process, "bvxmCreateSynthLidarDataProcess");
+
   //global variables
   vil_image_view_base_sptr lidar_img_;
   vil_image_view_base_sptr prob_map_;
@@ -32,7 +35,8 @@ MAIN( test_bvxm_update_lidar_process )
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-    good = bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
+    vcl_string xml = vcl_string(argv[1]) + "/" + "synth_test_params.xml";
+    good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
     TEST("run create synthetic lidar data process", good ,true);
@@ -111,7 +115,8 @@ MAIN( test_bvxm_update_lidar_process )
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-//  good = bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
+    vcl_string xml = vcl_string(argv[1]) + "/" + "change_display_params.xml";
+//  good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
     TEST("run gen synthetic world process", good ,true);
@@ -157,7 +162,8 @@ MAIN( test_bvxm_update_lidar_process )
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateVoxelWorldProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-    good = bprb_batch_process_manager::instance()->set_params("world_model_params.xml");
+    vcl_string xml = vcl_string(argv[1]) + "/" + "world_model_params.xml";
+    good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
     TEST("run gen synthetic world process", good, true);
@@ -320,7 +326,8 @@ MAIN( test_bvxm_update_lidar_process )
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmLidarInitProcess");
   TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
-  good = bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
+  vcl_string xml = vcl_string(argv[1]) + "/" + "change_display_params.xml";
+  good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
   good = bprb_batch_process_manager::instance()->set_input(0, v0)
       && bprb_batch_process_manager::instance()->set_input(1, v1)
