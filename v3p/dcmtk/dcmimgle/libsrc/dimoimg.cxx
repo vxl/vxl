@@ -343,27 +343,27 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
         {
             case EPR_Uint8:
                 InterData = new DiMonoScaleTemplate<Uint8>(image->InterData, image->Columns, image->Rows,
-                    left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
+                                                           left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
                 break;
             case EPR_Sint8:
                 InterData = new DiMonoScaleTemplate<Sint8>(image->InterData, image->Columns, image->Rows,
-                    left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
+                                                           left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
                 break;
             case EPR_Uint16:
                 InterData = new DiMonoScaleTemplate<Uint16>(image->InterData, image->Columns, image->Rows,
-                    left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
+                                                            left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
                 break;
             case EPR_Sint16:
                 InterData = new DiMonoScaleTemplate<Sint16>(image->InterData, image->Columns, image->Rows,
-                    left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
+                                                            left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
                 break;
             case EPR_Uint32:
                 InterData = new DiMonoScaleTemplate<Uint32>(image->InterData, image->Columns, image->Rows,
-                    left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
+                                                            left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
                 break;
             case EPR_Sint32:
                 InterData = new DiMonoScaleTemplate<Sint32>(image->InterData, image->Columns, image->Rows,
-                    left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
+                                                            left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames, interpolate, pvalue);
                 break;
         }
     }
@@ -374,7 +374,7 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
             if ((image->Overlays[i] != NULL) && (image->Overlays[i]->getCount() > 0))
             {
                 Overlays[i] = new DiOverlay(image->Overlays[i], left_pos, top_pos,
-                    (double)dest_cols / (double)src_cols, (double)dest_rows / (double)src_rows);
+                                            (double)dest_cols / (double)src_cols, (double)dest_rows / (double)src_rows);
             }
         }
     }
@@ -485,27 +485,27 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
         {
             case EPR_Uint8:
                 InterData = new DiMonoRotateTemplate<Uint8>(image->InterData, image->Columns, image->Rows, Columns, Rows,
-                    NumberOfFrames, degree);
+                                                            NumberOfFrames, degree);
                 break;
             case EPR_Sint8:
                 InterData = new DiMonoRotateTemplate<Sint8>(image->InterData, image->Columns, image->Rows, Columns, Rows,
-                    NumberOfFrames, degree);
+                                                            NumberOfFrames, degree);
                 break;
             case EPR_Uint16:
                 InterData = new DiMonoRotateTemplate<Uint16>(image->InterData, image->Columns, image->Rows, Columns, Rows,
-                    NumberOfFrames, degree);
+                                                             NumberOfFrames, degree);
                 break;
             case EPR_Sint16:
                 InterData = new DiMonoRotateTemplate<Sint16>(image->InterData, image->Columns, image->Rows, Columns, Rows,
-                    NumberOfFrames, degree);
+                                                             NumberOfFrames, degree);
                 break;
             case EPR_Uint32:
                 InterData = new DiMonoRotateTemplate<Uint32>(image->InterData, image->Columns, image->Rows, Columns, Rows,
-                    NumberOfFrames, degree);
+                                                             NumberOfFrames, degree);
                 break;
             case EPR_Sint32:
                 InterData = new DiMonoRotateTemplate<Sint32>(image->InterData, image->Columns, image->Rows, Columns, Rows,
-                    NumberOfFrames, degree);
+                                                             NumberOfFrames, degree);
                 break;
         }
     }
@@ -1140,7 +1140,7 @@ int DiMonoImage::setVoiLut(const unsigned long pos)
         if (VoiLutData != NULL)
             VoiLutData->removeReference();
         VoiLutData = new DiLookupTable(Document, DCM_VOILUTSequence, DCM_LUTDescriptor, DCM_LUTData,
-            DCM_LUTExplanation, pos, &VoiLutCount);
+                                       DCM_LUTExplanation, pos, &VoiLutCount);
         if (VoiLutData != NULL)
         {
             VoiExplanation = VoiLutData->getExplanation();
@@ -1437,7 +1437,7 @@ void *DiMonoImage::getData(void *buffer,
             Uint32 low;
             Uint32 high;
             if ((PresLutData == NULL) &&
-               ((PresLutShape == ESP_Inverse) || (negative && (PresLutShape == ESP_Default))))
+                (PresLutShape == ESP_Inverse || (negative && (PresLutShape == ESP_Default))))
             {
                 low = DicomImageClass::maxval(bits);        // inverse/negative: white to black
                 high = 0;
@@ -1546,7 +1546,7 @@ const void *DiMonoImage::getOverlayData(const unsigned long frame,
             {
                 deleteOverlayData();
                 OverlayData = Overlays[i]->getPlaneData(frame, plane, left_pos, top_pos, width, height,
-                    mode, Columns, Rows, bits, fore, back);
+                                                        mode, Columns, Rows, bits, fore, back);
                 return (const void *)OverlayData;
             }
         }
@@ -1626,7 +1626,7 @@ unsigned long DiMonoImage::createDIB(void *&data,
             if (bits == 8)                                  // -- for idx color model (byte)
             {
                 // each line has to start at 32-bit-address, if 'padding' is true
-                const int gap = (padding) ? (4 - Columns & 0x3) & 0x3 : 0;
+                const int gap = (padding) ? (4 - (Columns & 0x3)) & 0x3 : 0;
                 const unsigned long count = (unsigned long)(Columns + gap) * (unsigned long)Rows;
                 if ((gap > 0) || (nextRow != 0) || (data != NULL))
                 {
@@ -1659,7 +1659,7 @@ unsigned long DiMonoImage::createDIB(void *&data,
             {
                 const unsigned long col3 = (unsigned long)Columns * 3;
                 // each line has to start at 32-bit-address, if 'padding' is true
-                const int gap = (padding) ? (int)((4 - col3 & 0x3) & 0x3) : 0;
+                const int gap = (padding) ? (int)((4 - (col3 & 0x3)) & 0x3) : 0;
                 const unsigned long count = (col3 + gap) * (unsigned long)Rows;
                 if ((data == NULL) || (size >= count))
                 {
