@@ -65,7 +65,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
    case 2:
     if (n!=0)
     {
-      if (typeid(T) == typeid(unsigned char) || typeid(T) == typeid(signed char))
+      if (sizeof(T) == sizeof(unsigned char)) // signed char or unsigned char
       {
         vsl_block_binary_read_confirm_specialisation(is, false);
         vsl_b_read_block_old(is, &v.front(), n);
