@@ -132,7 +132,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
     }
   }
 }
-
+//: calls all the blocks for drawing meshes
 template <class T_loc, class T_data>
 void boxm_upload_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                  imesh_mesh& mesh, bool use_lvcs, T_data val)

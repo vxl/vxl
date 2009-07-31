@@ -85,7 +85,6 @@ bool are_meshes_in_block(vcl_vector<imesh_mesh>  meshes, vgl_box_3d<double> bloc
 template <class T_loc, class T_data>
 void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
                                  vcl_vector<imesh_mesh> meshes, bgeo_lvcs& lvcs, bool use_lvcs, T_data val)
-                                  imesh_mesh& mesh, bgeo_lvcs& lvcs, bool use_lvcs, T_data val)
 {
 	typedef boct_tree<T_loc, T_data> tree_type;
 	tree_type* tree = block->get_tree();
