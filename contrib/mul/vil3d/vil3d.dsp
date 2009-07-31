@@ -236,6 +236,9 @@ SOURCE=.\Templates/vil3d_resample_trilinear+double.double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil3d_sample_profile_trilin+double.double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_image_view+vil_rgb+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
