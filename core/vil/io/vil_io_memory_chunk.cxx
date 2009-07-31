@@ -20,7 +20,7 @@ vsl_block_binary_write(os,(const T*) chunk.const_data(),chunk.size()/sizeof(T))
 //: Binary save vil_memory_chunk to stream.
 void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk& chunk)
 {
-  const short io_version_no = 2;
+  const short io_version_no = 3;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, int(chunk.pixel_format()));
 
@@ -86,7 +86,13 @@ chunk.set_size(n*sizeof(T ),pixel_format); \
 
 #define read_case_macro_v2(T)\
 chunk.set_size(n*sizeof(T ),pixel_format); \
+vsl_block_binary_read_confirm_specialisation(is, false); \
 vsl_block_binary_read(is,static_cast<T *>(chunk.data()),n)
+
+#define read_case_macro_v3(T)\
+chunk.set_size(n*sizeof(T ),pixel_format); \
+vsl_block_binary_read(is,static_cast<T *>(chunk.data()),n)
+
 
 //: Binary load vil_memory_chunk from stream.
 void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
@@ -156,23 +162,23 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
     {
 #if VXL_HAS_INT_64
      case VIL_PIXEL_FORMAT_UINT_64:
-      read_case_macro_v2(vxl_uint_64);
+      read_case_macro_v3(vxl_uint_64);
       break;
      case VIL_PIXEL_FORMAT_INT_64:
-      read_case_macro_v2(vxl_int_64);
+      read_case_macro_v3(vxl_int_64);
       break;
 #endif
      case VIL_PIXEL_FORMAT_UINT_32:
-      read_case_macro_v2(vxl_uint_32);
+      read_case_macro_v3(vxl_uint_32);
       break;
      case VIL_PIXEL_FORMAT_INT_32:
-      read_case_macro_v2(vxl_int_32);
+      read_case_macro_v3(vxl_int_32);
       break;
      case VIL_PIXEL_FORMAT_UINT_16:
-      read_case_macro_v2(vxl_uint_16);
+      read_case_macro_v3(vxl_uint_16);
       break;
      case VIL_PIXEL_FORMAT_INT_16:
-      read_case_macro_v2(vxl_int_16);
+      read_case_macro_v3(vxl_int_16);
       break;
      case VIL_PIXEL_FORMAT_BYTE:
       read_case_macro_v2(vxl_byte);
@@ -181,19 +187,73 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
       read_case_macro_v2(vxl_sbyte);
       break;
      case VIL_PIXEL_FORMAT_FLOAT:
-      read_case_macro_v2(float);
+      read_case_macro_v3(float);
       break;
      case VIL_PIXEL_FORMAT_DOUBLE:
-      read_case_macro_v2(double);
+      read_case_macro_v3(double);
       break;
      case VIL_PIXEL_FORMAT_BOOL:
-      read_case_macro_v2(bool);
+      read_case_macro_v3(bool);
       break;
      case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-      read_case_macro_v2(vcl_complex<float>);
+      read_case_macro_v3(vcl_complex<float>);
       break;
      case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-      read_case_macro_v2(vcl_complex<double>);
+      read_case_macro_v3(vcl_complex<double>);
+      break;
+     default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
+               << "           Unknown pixel format "<< format << '\n';
+       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+    break;
+
+   case 3:
+    vsl_b_read(is, format); pixel_format=vil_pixel_format(format);
+    vsl_b_read(is, n);
+    switch (pixel_format)
+    {
+#if VXL_HAS_INT_64
+     case VIL_PIXEL_FORMAT_UINT_64:
+      read_case_macro_v3(vxl_uint_64);
+      break;
+     case VIL_PIXEL_FORMAT_INT_64:
+      read_case_macro_v3(vxl_int_64);
+      break;
+#endif
+     case VIL_PIXEL_FORMAT_UINT_32:
+      read_case_macro_v3(vxl_uint_32);
+      break;
+     case VIL_PIXEL_FORMAT_INT_32:
+      read_case_macro_v3(vxl_int_32);
+      break;
+     case VIL_PIXEL_FORMAT_UINT_16:
+      read_case_macro_v3(vxl_uint_16);
+      break;
+     case VIL_PIXEL_FORMAT_INT_16:
+      read_case_macro_v3(vxl_int_16);
+      break;
+     case VIL_PIXEL_FORMAT_BYTE:
+      read_case_macro_v3(vxl_byte);
+      break;
+     case VIL_PIXEL_FORMAT_SBYTE:
+      read_case_macro_v3(vxl_sbyte);
+      break;
+     case VIL_PIXEL_FORMAT_FLOAT:
+      read_case_macro_v3(float);
+      break;
+     case VIL_PIXEL_FORMAT_DOUBLE:
+      read_case_macro_v3(double);
+      break;
+     case VIL_PIXEL_FORMAT_BOOL:
+      read_case_macro_v3(bool);
+      break;
+     case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
+      read_case_macro_v3(vcl_complex<float>);
+      break;
+     case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
+      read_case_macro_v3(vcl_complex<double>);
       break;
      default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"

@@ -107,10 +107,31 @@ bool vimt3d_vil3d_v3i_image::skip_b_read_vil_memory_chunk(vsl_b_istream& is, uns
       return false;
     break;
    case 2:
+    if (vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_SBYTE ||
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_BYTE )
+      vsl_block_binary_read_confirm_specialisation(is, false);
+    else
+      vsl_block_binary_read_confirm_specialisation(is, true);
+    if (!is) return false;
+    if (vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_DOUBLE ||
+      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT ||
+      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_SBYTE ||
+      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_BYTE )
+      is.is().seekg(n*sizeof_T, vcl_ios_cur); // skip image pixel data.
+    else
+    {
+      vcl_size_t n_bytes;
+      vsl_b_read(is, n_bytes);
+      is.is().seekg(n_bytes, vcl_ios_cur); // skip image pixel data.
+    }
+    break;
+   case 3:
     vsl_block_binary_read_confirm_specialisation(is, true);
     if (!is) return false;
     if (vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_DOUBLE ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT)
+      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT ||
+      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_SBYTE ||
+      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_BYTE )
       is.is().seekg(n*sizeof_T, vcl_ios_cur); // skip image pixel data.
     else
     {
