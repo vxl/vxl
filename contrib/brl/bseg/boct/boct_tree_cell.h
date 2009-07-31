@@ -36,6 +36,10 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code);
 
   ~boct_tree_cell<T_loc,T_data>();
+
+  // creates a new cell with the same data
+  boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
+
   void set_parent(boct_tree_cell<T_loc,T_data>* p) {parent_ = p; }
   bool is_leaf();
 
@@ -50,7 +54,7 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
 
   // TODO: not yet implemented -- currently just returns false
-  bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
+  //bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
 
   short level() const { return code_.level; }
   void set_level(short level) { code_.level=level; }

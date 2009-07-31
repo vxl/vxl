@@ -42,6 +42,25 @@ boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
 }
 
 template<class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell<T_loc,T_data>* parent)
+{
+  boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(this->code_);
+  cell->data_ = this->data();
+  cell->parent_ = parent;
+  //TODO: clone the vis_nodes, do we need that?
+  //cell->vis_node_ = vis_node_->clone();
+  if (this->is_leaf())
+    cell->children_=NULL;
+  else {
+    cell->split();
+    for (unsigned i=0; i<8; i++) {
+      cell->children_[i] = *(this->children_[i].clone(cell));
+    }
+  }
+  return cell;
+}
+
+template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::delete_children()
 {
   if (!is_leaf()) {
@@ -381,9 +400,10 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
 {
+  // the cell itself is a leaf
   if (!children_)
     return;
-
+  
   for (unsigned i=0; i<8; i++) {
     if (children_[i].is_leaf()) {
       v.push_back(&children_[i]);
