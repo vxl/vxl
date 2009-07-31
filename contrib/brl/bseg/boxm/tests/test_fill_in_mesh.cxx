@@ -93,7 +93,7 @@ MAIN( test_fill_in_mesh )
 
   boxm_sample<BOXM_APM_MOG_GREY> val;
   val.alpha=0;
-  vcl_vector<imesh_mesh> meshes; meshes.push(mesh);
+  vcl_vector<imesh_mesh> meshes; meshes.push_back(mesh);
   boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, meshes, false, val);
 
   vcl_vector<vcl_string> fnames;
