@@ -87,7 +87,8 @@ chunk.set_size(n*sizeof(T ),pixel_format); \
 #define read_case_macro_v2(T)\
 chunk.set_size(n*sizeof(T ),pixel_format); \
 vsl_block_binary_read_confirm_specialisation(is, false); \
-vsl_block_binary_read(is,static_cast<T *>(chunk.data()),n)
+  for (unsigned i=0; i<n; ++i)\
+    vsl_b_read(is, static_cast<T *>(chunk.data())[i]);
 
 #define read_case_macro_v3(T)\
 chunk.set_size(n*sizeof(T ),pixel_format); \
