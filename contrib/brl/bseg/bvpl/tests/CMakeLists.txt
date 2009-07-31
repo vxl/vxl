@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+
 ADD_EXECUTABLE( bvpl_test_all
   test_driver.cxx
   test_subgrid.cxx
