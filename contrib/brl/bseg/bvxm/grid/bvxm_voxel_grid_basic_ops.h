@@ -19,6 +19,7 @@
 #include "bvxm_voxel_slab_iterator.h"
 #include "bvxm_voxel_slab.h"
 #include "bvxm_opinion.h"
+#include <bvxm/bvxm_util.h>
 
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_box_3d.h>
@@ -31,7 +32,7 @@
 #include <vcl_limits.h>
 
 //: Multiplies 2 grids. The types of input grids must have a * operator
-template<class T>
+template <class T>
 bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_grid_base_sptr grid2_base, bvxm_voxel_grid_base_sptr grid_out_base)
 {
   //cast
@@ -73,7 +74,7 @@ bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_g
 }
 
 //: Thresholds a grid. This function returns the thresholded grid and a mask shuch that output grid = mask*input_grid
-template<class T>
+template <class T>
 bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel_grid_base_sptr grid_out_base,
                                bvxm_voxel_grid_base_sptr mask_grid_base, T min_thresh)
 {
@@ -129,11 +130,11 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
   return true;
 }
 
-template<class T>
+template <class T>
 bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,
                               imesh_mesh& mesh,
                               bgeo_lvcs& lvcs,
-							  T val)
+                              T val)
 {
   // initialize grid with big values
   imesh_face_array_base& fs = mesh.faces();
@@ -183,46 +184,46 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,
 }
 
 //: Digitize a simple polygon in local coordinates i.e. the same coordinate system of the grid.
-template<class T>
+template <class T>
 bool bvxm_load_polygon_into_grid(bvxm_voxel_grid<T>* grid,
-                              vcl_vector<vgl_point_3d<double> > v_list,
-							  T val)
+                                 vcl_vector<vgl_point_3d<double> > v_list,
+                                 T val)
 {
-	vgl_box_3d<double> bb;
-	for (unsigned i=0; i < v_list.size(); ++i)
-		bb.add(v_list[i]);
+  vgl_box_3d<double> bb;
+  for (unsigned i=0; i < v_list.size(); ++i)
+    bb.add(v_list[i]);
 
-	vgl_vector_3d<unsigned int> grid_size = grid->grid_size();
-    vgl_box_3d<double> grid_box;
-    grid_box.set_min_point(vgl_point_3d<double>(0,0,0));
-    grid_box.set_max_point(vgl_point_3d<double>(grid_size.x()-1,grid_size.y()-1,grid_size.z()-1));
-    vgl_point_3d<double> min = bb.min_point();
-    vgl_point_3d<double> max = bb.max_point();
-    for (int z=(int)min.z(); z<=max.z(); ++z) {
-      for (int y=(int)min.y(); y<=max.y(); ++y) {
-        for (int x=(int)min.x(); x<=max.x(); ++x) {
-          //check if the voxel position is valid
-          if (grid_box.contains(x,y,z)) {
-            vgl_box_3d<double> voxel_box;
-            voxel_box.set_min_point(vgl_point_3d<double>(x,y,z));
-            voxel_box.set_max_point(vgl_point_3d<double>(x+1,y+1,z+1));
-            if (bvxm_util::intersection(voxel_box, v_list)) {
-              bvxm_voxel_slab_iterator<T> slab_it = grid->slab_iterator(grid_size.z()-z);
-              bvxm_voxel_slab<T>& slab = *slab_it;
-              T& tempval = slab(x,y);
-              tempval=val;
-              ++slab_it;
-            }
+  vgl_vector_3d<unsigned int> grid_size = grid->grid_size();
+  vgl_box_3d<double> grid_box;
+  grid_box.set_min_point(vgl_point_3d<double>(0,0,0));
+  grid_box.set_max_point(vgl_point_3d<double>(grid_size.x()-1,grid_size.y()-1,grid_size.z()-1));
+  vgl_point_3d<double> min = bb.min_point();
+  vgl_point_3d<double> max = bb.max_point();
+  for (int z=(int)min.z(); z<=max.z(); ++z) {
+    for (int y=(int)min.y(); y<=max.y(); ++y) {
+      for (int x=(int)min.x(); x<=max.x(); ++x) {
+        //check if the voxel position is valid
+        if (grid_box.contains(x,y,z)) {
+          vgl_box_3d<double> voxel_box;
+          voxel_box.set_min_point(vgl_point_3d<double>(x,y,z));
+          voxel_box.set_max_point(vgl_point_3d<double>(x+1,y+1,z+1));
+          if (bvxm_util::intersection(voxel_box, v_list)) {
+            bvxm_voxel_slab_iterator<T> slab_it = grid->slab_iterator(grid_size.z()-z);
+            bvxm_voxel_slab<T>& slab = *slab_it;
+            T& tempval = slab(x,y);
+            tempval=val;
+            ++slab_it;
           }
         }
       }
     }
+  }
 
   return true;
 }
 
 
-template<class T>
+template <class T>
 bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
                               bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dir)
 {
@@ -234,8 +235,8 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   bvxm_voxel_slab_iterator<float> slab=grid->slab_iterator(k,1);
   while (slab != grid->end()) {
     bvxm_voxel_slab<float>& s = *slab;
-    for(unsigned i=0; i<grid->grid_size().x(); i++) {
-      for(unsigned j=0; j<grid->grid_size().y(); j++) {
+    for (unsigned i=0; i<grid->grid_size().x(); i++) {
+      for (unsigned j=0; j<grid->grid_size().y(); j++) {
         image(i,j,k)=s(i,j);
       }
     }
@@ -247,16 +248,16 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   vil3d_image_view<vil_rgb<float> > directions(grid->grid_size().x(),grid->grid_size().y(),grid->grid_size().z());
   directions.fill(vil_rgb<float> (0,0,0));
   vil3d_distance_transform_with_dir(image, directions,1,1,1);
-  
+
   // put back the image into the grid
   k=0;
   slab=grid->slab_iterator(k,1);
   while (slab != grid->end()) {
     bvxm_voxel_slab<float>& s = *slab;
-    for(unsigned i=0; i<grid->grid_size().x(); i++) {
-        for(unsigned j=0; j<grid->grid_size().y(); j++) {
-          s(i,j)=image(i,j,k);
-        }
+    for (unsigned i=0; i<grid->grid_size().x(); i++) {
+      for (unsigned j=0; j<grid->grid_size().y(); j++) {
+        s(i,j)=image(i,j,k);
+      }
     }
     ++slab;
     k++;
@@ -268,10 +269,10 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   bvxm_voxel_slab_iterator<vnl_vector_fixed<float,3> > dir_slab=dir->slab_iterator(k,1);
   while (dir_slab != dir->end()) {
     bvxm_voxel_slab<vnl_vector_fixed<float,3> >& d = *dir_slab;
-    for(unsigned i=0; i<dir->grid_size().x(); i++) {
-        for(unsigned j=0; j<dir->grid_size().y(); j++) {
-          d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
-        }
+    for (unsigned i=0; i<dir->grid_size().x(); i++) {
+      for (unsigned j=0; j<dir->grid_size().y(); j++) {
+        d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
+      }
     }
     ++dir_slab;
     k++;
