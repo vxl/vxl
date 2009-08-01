@@ -26,6 +26,7 @@
 #include <vnl/algo/vnl_chi_squared.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <brip/brip_vil_float_ops.h>
+#include <vcl_cassert.h>
 
 vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
 {
@@ -167,12 +168,13 @@ int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty,
   return vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty->width(),roi_uncertainty->height()));
 }
 
-float bvxm_edge_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof){
-  if(dof<1){
+float bvxm_edge_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
+{
+  if (dof<1) {
     return edge_statistic;
   }
 
-  if((edge_statistic-n_normal)>0.0f){
+  if ((edge_statistic-n_normal)>0.0f) {
     double chi_sq_stat = (double)vnl_math_sqr((edge_statistic-n_normal))/n_normal;
     return (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
   }
@@ -180,21 +182,22 @@ float bvxm_edge_util::convert_edge_statistics_to_probability(float edge_statisti
   return 0.0f;
 }
 
-vbl_array_2d<float> bvxm_edge_util::get_spherical_gaussian_kernel(const int size, const float sigma){
+vbl_array_2d<float> bvxm_edge_util::get_spherical_gaussian_kernel(const int size, const float sigma)
+{
   assert(size>=3 && size%2==1);
 
   vbl_array_2d<float> kernel(size,size,0.0f);
-  
+
   vnl_vector_fixed<float,2> mean(0.0f);
   float variance = (sigma*sigma);
   bsta_gaussian_sphere<float,2> gaussian(mean,variance);
 
   int center = (size-1)/2;
-  
+
   vnl_vector_fixed<float,2> min_pt;
   vnl_vector_fixed<float,2> max_pt;
-  for(int i=0; i<size; i++){
-    for(int j=0; j<size; j++){
+  for (int i=0; i<size; i++) {
+    for (int j=0; j<size; j++) {
       min_pt[0] = ((float)(i-center))-0.5f;
       min_pt[1] = ((float)(j-center))-0.5f;
       max_pt[0] = ((float)(i-center))+0.5f;
@@ -206,22 +209,22 @@ vbl_array_2d<float> bvxm_edge_util::get_spherical_gaussian_kernel(const int size
   return kernel;
 }
 
-void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& img_edge, vil_image_view<float>& img_edgeness, const int mask_size, const float mask_sigma){
+void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& img_edge, vil_image_view<float>& img_edgeness, const int mask_size, const float mask_sigma)
+{
   vbl_array_2d<float> kernel = get_spherical_gaussian_kernel(mask_size,mask_sigma);
 
-  for(unsigned i=0; i<kernel.rows(); i++){
-    for(unsigned j=0; j<kernel.columns(); j++){
+  for (unsigned i=0; i<kernel.rows(); i++) {
+    for (unsigned j=0; j<kernel.columns(); j++) {
       kernel(i,j) = vcl_log(1.0f - kernel(i,j));
     }
   }
-  
+
   convert_image_types(img_edge,img_edgeness,1.0f/255.0f,0.0);
-  
   img_edgeness = brip_vil_float_ops::convolve(img_edgeness,kernel);
 
-  for(unsigned i=0; i<img_edgeness.ni(); i++){
-    for(unsigned j=0; j<img_edgeness.nj(); j++){
+  for (unsigned i=0; i<img_edgeness.ni(); i++) {
+    for (unsigned j=0; j<img_edgeness.nj(); j++) {
       img_edgeness(i,j) = 1.0f - vcl_exp(img_edgeness(i,j));
     }
-  }  
+  }
 }
