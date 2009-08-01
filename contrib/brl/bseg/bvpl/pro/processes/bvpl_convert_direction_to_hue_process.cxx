@@ -84,7 +84,7 @@ bool bvpl_convert_direction_to_hue_process(bprb_func_process& pro)
     bvpl_convert_grid_to_hsv_grid(grid,out_grid,colors );
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, out_grid);
 
-	bvpl_make_svg_color_map(colors,map_output_file);
+  bvpl_make_svg_color_map(colors,map_output_file);
     return true;
   }
   else {

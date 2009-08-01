@@ -55,48 +55,50 @@ void bvpl_local_max_functor<T>::init()
 template <class T>
 void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
-	if(d.c_==0)
-		cur_val_=val;
-	else
-	{
-	if(val>max_)
-		max_=val;
-	}
+  if (d.c_==0)
+    cur_val_=val;
+  else
+  {
+  if (val>max_)
+    max_=val;
+  }
 }
 
 template <class T>
 T bvpl_local_max_functor<T>::result()
 {
   T result = cur_val_>=max_?cur_val_:0;
-    
+
   //reset all variables
   init();
-  
+
   return result;
 }
+
 template <>
 void bvpl_local_max_functor<bvxm_opinion>::init()
 {
   max_=bvxm_opinion(1.0,0.0);
 }
+
 template <>
 bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result()
 {
-	if(cur_val_>=max_)
-	{
-		bvxm_opinion result =    cur_val_;
-		init();
+  if (cur_val_>=max_)
+  {
+    bvxm_opinion result =    cur_val_;
+    init();
 
-		return result;
-	}
-	else
-	{
-		bvxm_opinion result =bvxm_opinion(1.0,0.0); 
-		init();
+    return result;
+  }
+  else
+  {
+    bvxm_opinion result =bvxm_opinion(1.0,0.0);
+    init();
 
-		return result;
-	}
+    return result;
+  }
   //reset all variables
-  
 }
+
 #endif

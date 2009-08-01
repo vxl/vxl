@@ -113,7 +113,7 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
     imesh_mesh mesh;
     imesh_read(file, mesh);
 
-	  float val=0.0f;
+    float val=0.0f;
     bvxm_voxel_grid<float>* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
     bvxm_load_mesh_into_grid<float>(g, mesh, lvcs,val);
   }

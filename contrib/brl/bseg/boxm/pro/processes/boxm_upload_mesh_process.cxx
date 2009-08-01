@@ -29,6 +29,7 @@
 
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
+
 namespace boxm_upload_mesh_process_globals
 {
   const unsigned n_inputs_ = 4;
@@ -104,28 +105,28 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
     else if (file_format == ".PLY2")
       imesh_read_ply2(file, mesh);
 
-	meshes.push_back(mesh);
+    meshes.push_back(mesh);
   }
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-	  if (!scene->multi_bin())
-	  {
-		  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-		  boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+    if (!scene->multi_bin())
+    {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
 
-		  boxm_sample<BOXM_APM_MOG_GREY> val(0,boxm_utils::obtain_mog_grey_unit_mode());
-		  if(draw_or_fill=="draw")
-			  vcl_cout<<"Not yet";
-			  //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
-		  else if(draw_or_fill=="fill")
-			  boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, meshes, use_lvcs, val);
-	  }
-	  else
-		  vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
+      boxm_sample<BOXM_APM_MOG_GREY> val(0,boxm_utils::obtain_mog_grey_unit_mode());
+      if (draw_or_fill=="draw")
+        vcl_cout<<"Not yet";
+        //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
+      else if (draw_or_fill=="fill")
+        boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, meshes, use_lvcs, val);
+    }
+    else
+      vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
   }
   else {
-	  vcl_cout << "boxm_upload_mesh_process: undefined APM type" << vcl_endl;
-	  return false;
+    vcl_cout << "boxm_upload_mesh_process: undefined APM type" << vcl_endl;
+    return false;
   }
-  
+
   return true;
 }

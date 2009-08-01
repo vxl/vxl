@@ -97,12 +97,12 @@ void bvpl_edge3d_kernel_factory::create_canonical()
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
         else if (x >  0)
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
-		//: cnetral voxel
-		else if (x==0 && y==0 && z==0)
-		  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0)));
-		//: dont care 
-		else if (x==0)
-		  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-100)));
+        // central voxel
+        else if (x==0 && y==0 && z==0)
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0)));
+        // dont care
+        else if (x==0)
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-100)));
       }
     }
   }

@@ -74,20 +74,20 @@ int main(int argc, char** argv)
 
     vil_image_view_base_sptr img_base = vil_load(img_file.c_str());
     vil_image_view<unsigned char> img(img_base->ni(),img_base->nj());
-	img.fill(0);
+    img.fill(0);
 
-	// read projection matrix from the file.
-	vcl_ifstream ifs(cam_file.c_str());
-	if (!ifs.is_open()) {
-		vcl_cerr << "Failed to open file " << cam_file << vcl_endl;
-		return false;
-	}
+    // read projection matrix from the file.
+    vcl_ifstream ifs(cam_file.c_str());
+    if (!ifs.is_open()) {
+      vcl_cerr << "Failed to open file " << cam_file << vcl_endl;
+      return false;
+    }
 
-	vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
+    vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
 
-	ifs >> *cam;
-	ifs.close();
- 
+    ifs >> *cam;
+    ifs.close();
+
     bwm_observer_cam::project_meshes(poly_paths, cam, poly_2d_list);
 
     //scan through polygons, retrieve contained pixels
@@ -103,19 +103,17 @@ int main(int argc, char** argv)
         int y = psi.scany();
         for (int x = psi.startx(); x<= psi.endx(); ++x)
         {
-          if(x>=0 && y>=0 && x<img.ni() && y<img.nj())
-		  {
-			img(x,y)=255;
-		  }
+          if (x>=0 && y>=0 && x<img.ni() && y<img.nj())
+          {
+            img(x,y)=255;
+          }
         }
       }
-	
     }
-	vcl_stringstream polyfile_out;
-	polyfile_out.clear();
-	polyfile_out << output_dir() << "/image_" << img_idx << ".png";
-	vil_save(img,polyfile_out.str().c_str());
-	poly_2d_list.clear();
-
+    vcl_stringstream polyfile_out;
+    polyfile_out.clear();
+    polyfile_out << output_dir() << "/image_" << img_idx << ".png";
+    vil_save(img,polyfile_out.str().c_str());
+    poly_2d_list.clear();
   }
 }

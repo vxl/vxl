@@ -38,8 +38,8 @@ class bvpl_vector_operator
   void get_max_orientation_grid(bvxm_voxel_grid<T>* out_grid, bvxm_voxel_grid<T>* temp_grid,
                                 bvxm_voxel_grid<vnl_vector_fixed<float,3> >* orientation_grid,
                                 vnl_vector_fixed<float,3> temp_orientation,
-								bvxm_voxel_grid<unsigned int>* kernel_index_grid,
-								unsigned i);
+                bvxm_voxel_grid<unsigned int>* kernel_index_grid,
+                unsigned i);
 };
 
 template<class T, class F>
@@ -65,45 +65,43 @@ void bvpl_vector_operator<T,F>::apply_and_suppress(bvxm_voxel_grid<T>* grid, bvp
     get_max_orientation_grid(out_grid, &temp_grid, orientation_grid, axis,&kernel_index_grid,i);
   }
   vit = kernel_vector->kernels_.begin();
-  //: code for local max suppression 
+  //: code for local max suppression
   bvpl_subgrid_iterator<T> response_grid_iter(out_grid, (*vit).second->dim());
   bvpl_subgrid_iterator<unsigned int> kernel_id_iter(&kernel_index_grid, (*vit).second->dim());
 
   bvpl_local_max_functor<T> func_max;
   //kernel->print();
   while (!response_grid_iter.isDone()) {
-	  unsigned index=(*kernel_id_iter).get_voxel();
-	  //: get the kernel according to the 
-	  bvpl_kernel_iterator kernel_iter = kernel_vector->kernels_[index].second->iterator();
-	  bvpl_voxel_subgrid<T> subgrid = *response_grid_iter;
-	  //reset the iterator
-	  kernel_iter.begin();
-	  while (!kernel_iter.isDone()) {
-		  vgl_point_3d<int> idx = kernel_iter.index();
-		  T val;
-		  if (subgrid.voxel(idx, val)) {
-			  //vcl_cout<< val << "at " << idx <<vcl_endl;
-			  bvpl_kernel_dispatch d = *kernel_iter;
-			  func_max.apply(val, d);
-		  }
-		  ++kernel_iter;
-	  }
+    unsigned index=(*kernel_id_iter).get_voxel();
+    //: get the kernel according to the
+    bvpl_kernel_iterator kernel_iter = kernel_vector->kernels_[index].second->iterator();
+    bvpl_voxel_subgrid<T> subgrid = *response_grid_iter;
+    //reset the iterator
+    kernel_iter.begin();
+    while (!kernel_iter.isDone()) {
+      vgl_point_3d<int> idx = kernel_iter.index();
+      T val;
+      if (subgrid.voxel(idx, val)) {
+        //vcl_cout<< val << "at " << idx <<vcl_endl;
+        bvpl_kernel_dispatch d = *kernel_iter;
+        func_max.apply(val, d);
+      }
+      ++kernel_iter;
+    }
 
-	  // set the result at the output grid
-	  (*response_grid_iter).set_voxel(func_max.result());
-	  ++response_grid_iter;
-	  ++kernel_id_iter;
+    // set the result at the output grid
+    (*response_grid_iter).set_voxel(func_max.result());
+    ++response_grid_iter;
+    ++kernel_id_iter;
   }
-
-  
 }
 
 template<class T, class F>
 void bvpl_vector_operator<T,F>::get_max_orientation_grid(bvxm_voxel_grid<T>* out_grid, bvxm_voxel_grid<T>* temp_grid,
-														bvxm_voxel_grid<vnl_vector_fixed<float,3> >* orientation_grid,
-														vnl_vector_fixed<float,3> temp_orientation,
-														bvxm_voxel_grid<unsigned int>* kernel_index_grid,
-														unsigned i)
+                            bvxm_voxel_grid<vnl_vector_fixed<float,3> >* orientation_grid,
+                            vnl_vector_fixed<float,3> temp_orientation,
+                            bvxm_voxel_grid<unsigned int>* kernel_index_grid,
+                            unsigned i)
 {
   typename bvxm_voxel_grid<T>::iterator out_grid_it = out_grid->begin();
   typename bvxm_voxel_grid<T>::iterator temp_grid_it = temp_grid->begin();
@@ -115,7 +113,7 @@ void bvpl_vector_operator<T,F>::get_max_orientation_grid(bvxm_voxel_grid<T>* out
   {
     typename bvxm_voxel_slab<T>::iterator out_slab_it = (*out_grid_it).begin();
     typename bvxm_voxel_slab<T>::iterator temp_slab_it= (*temp_grid_it).begin();
-	typename bvxm_voxel_slab<unsigned int>::iterator kernel_index_slab_it= (*kernel_index_it).begin();
+  typename bvxm_voxel_slab<unsigned int>::iterator kernel_index_slab_it= (*kernel_index_it).begin();
     bvxm_voxel_slab<vnl_vector_fixed<float,3> >::iterator or_slab_it = or_grid_it->begin();
 
     for (; out_slab_it!=(*out_grid_it).end(); ++out_slab_it, ++temp_slab_it, ++or_slab_it,++kernel_index_slab_it)
@@ -124,7 +122,7 @@ void bvpl_vector_operator<T,F>::get_max_orientation_grid(bvxm_voxel_grid<T>* out
       {
         (*out_slab_it) =  (* temp_slab_it);
         (*or_slab_it) = temp_orientation;
-		(*kernel_index_slab_it) = i;
+    (*kernel_index_slab_it) = i;
       }
     }
   }

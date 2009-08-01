@@ -57,23 +57,22 @@ bool bvxm_expectation_opinion_grid_process(bprb_func_process& pro)
     return false;
   }
 
- 
   unsigned i=0;
   bvxm_voxel_grid_base_sptr input_grid = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   vcl_string output_path= pro.get_input<vcl_string>(i++);
 
-  if(bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
+  if (bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
   {
-	  bvxm_voxel_grid<float> * grid_out=new bvxm_voxel_grid<float>(output_path, opinion_input_grid->grid_size());
+    bvxm_voxel_grid<float> * grid_out=new bvxm_voxel_grid<float>(output_path, opinion_input_grid->grid_size());
 
-	bvxm_expectation_opinion_voxel_grid(opinion_input_grid, grid_out);
+  bvxm_expectation_opinion_voxel_grid(opinion_input_grid, grid_out);
 
     vcl_cout<<"Expectation computed done."<<vcl_endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
   }
   else
   {
-	vcl_cout<<"Error! Input grid type is Wrong!"<<vcl_endl;
+  vcl_cout<<"Error! Input grid type is Wrong!"<<vcl_endl;
   }
   return true;
 }

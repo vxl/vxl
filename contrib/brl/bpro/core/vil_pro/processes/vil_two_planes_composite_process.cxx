@@ -56,11 +56,11 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
     vcl_cout<<"The images have different dimensions"<<vcl_endl;
     return false;
   }
-  if(tag1==tag2)
+  if (tag1==tag2)
   {
-	  vcl_cout<<"Error:Cannot be of the same plane"<<vcl_endl;
-	  return false;
-  }		
+    vcl_cout<<"Error:Cannot be of the same plane"<<vcl_endl;
+    return false;
+  }
   vil_image_view<vxl_byte> *out_img=new vil_image_view<vxl_byte>(img_1->ni(),img_1->nj(),3);
   out_img->fill(0);
 
@@ -76,38 +76,38 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
 
 void fill_composite(vil_image_view<vxl_byte> & out_img,vil_image_view<vxl_byte> & inimg, vcl_string tag)
 {
-	if(tag=="grey")
-	{
-		for (unsigned i=0;i<out_img.ni();i++)
-		{
-			for (unsigned j=0;j<out_img.nj();j++)
-			{
-				out_img(i,j,0)=out_img(i,j,0)+inimg(i,j)>255?255:out_img(i,j,0)+inimg(i,j);
-				out_img(i,j,1)=out_img(i,j,1)+inimg(i,j)>255?255:out_img(i,j,1)+inimg(i,j);
-				out_img(i,j,2)=out_img(i,j,2)+inimg(i,j)>255?255:out_img(i,j,2)+inimg(i,j);
-			}
-		}
-	}
-	else if(tag=="red")
-	{
-		for (unsigned i=0;i<out_img.ni();i++)
-			for (unsigned j=0;j<out_img.nj();j++)
-				out_img(i,j,0)=out_img(i,j,0)+inimg(i,j)>255?255:out_img(i,j,0)+inimg(i,j);
-	}
-	else if(tag=="green")
-	{
-		for (unsigned i=0;i<out_img.ni();i++)
-			for (unsigned j=0;j<out_img.nj();j++)
-				out_img(i,j,1)=out_img(i,j,1)+inimg(i,j)>255?255:out_img(i,j,1)+inimg(i,j);
-	}
-	else if(tag=="blue")
-	{
-		for (unsigned i=0;i<out_img.ni();i++)
-			for (unsigned j=0;j<out_img.nj();j++)
-				out_img(i,j,2)=out_img(i,j,2)+inimg(i,j)>255?255:out_img(i,j,2)+inimg(i,j);
-	}
-	else
-	{
-		vcl_cout<<"Type not found"<<vcl_endl;
-	}
+  if (tag=="grey")
+  {
+    for (unsigned i=0;i<out_img.ni();i++)
+    {
+      for (unsigned j=0;j<out_img.nj();j++)
+      {
+        out_img(i,j,0)=out_img(i,j,0)+inimg(i,j)>255?255:out_img(i,j,0)+inimg(i,j);
+        out_img(i,j,1)=out_img(i,j,1)+inimg(i,j)>255?255:out_img(i,j,1)+inimg(i,j);
+        out_img(i,j,2)=out_img(i,j,2)+inimg(i,j)>255?255:out_img(i,j,2)+inimg(i,j);
+      }
+    }
+  }
+  else if (tag=="red")
+  {
+    for (unsigned i=0;i<out_img.ni();i++)
+      for (unsigned j=0;j<out_img.nj();j++)
+        out_img(i,j,0)=out_img(i,j,0)+inimg(i,j)>255?255:out_img(i,j,0)+inimg(i,j);
+  }
+  else if (tag=="green")
+  {
+    for (unsigned i=0;i<out_img.ni();i++)
+      for (unsigned j=0;j<out_img.nj();j++)
+        out_img(i,j,1)=out_img(i,j,1)+inimg(i,j)>255?255:out_img(i,j,1)+inimg(i,j);
+  }
+  else if (tag=="blue")
+  {
+    for (unsigned i=0;i<out_img.ni();i++)
+      for (unsigned j=0;j<out_img.nj();j++)
+        out_img(i,j,2)=out_img(i,j,2)+inimg(i,j)>255?255:out_img(i,j,2)+inimg(i,j);
+  }
+  else
+  {
+    vcl_cout<<"Type not found"<<vcl_endl;
+  }
 }

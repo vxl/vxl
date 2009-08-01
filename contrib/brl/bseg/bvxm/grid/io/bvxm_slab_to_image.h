@@ -93,32 +93,33 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
         return false;
       }
       break;
-      
+
     case VIL_PIXEL_FORMAT_RGBA_BYTE:
       if (image->nplanes() ==1)
       {
         if (vil_image_view<vil_rgba<unsigned char> > *img_view = dynamic_cast<vil_image_view<vil_rgba<unsigned char> >*>(image.ptr()))
         {
           vil_image_view<vil_rgba<unsigned char> >::iterator img_it = img_view->begin();
-         // for (unsigned p=0; p<N; ++p)
-//          {
-          // vil_image_view<vil_rgba<unsigned char> >::iterator plane_it = img_view->begin();
-//            img_its.push_back(plane_it);
-          //}
-          
+#if 0
+          for (unsigned p=0; p<N; ++p)
+          {
+            vil_image_view<vil_rgba<unsigned char> >::iterator plane_it = img_view->begin();
+            img_its.push_back(plane_it);
+          }
+#endif
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
           for (; slab_it != slab.end(); ++slab_it)
           {
-			  
             (*img_it) = vil_rgba<unsigned char>((unsigned char)(*slab_it)[0],
-												(unsigned char)(*slab_it)[1],
-                                                (unsigned char)(*slab_it)[2], 
-												(unsigned char)vcl_floor((*slab_it)[3]));
-             // *(img_its[p]) =  (unsigned char)(((*slab_it)[p] * 127.0) + 0.5) + 127;
-			//vcl_cout<<(int)(*img_it).R()<<" "<<(int)((unsigned char)(*slab_it)[3])<<vcl_endl;
-			++(img_it);
+                                                (unsigned char)(*slab_it)[1],
+                                                (unsigned char)(*slab_it)[2],
+                                                (unsigned char)vcl_floor((*slab_it)[3]));
+#if 0
+            *(img_its[p]) = (unsigned char)(((*slab_it)[p] * 127.0) + 0.5) + 127;
+            vcl_cout<<(int)(*img_it).R()<<' '<<(int)((unsigned char)(*slab_it)[3])<<vcl_endl;
+#endif
+            ++(img_it);
           }
-
         }
         else
         {

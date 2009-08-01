@@ -107,24 +107,23 @@ bwm_video_cam_istream::read_camera()
 vpgl_perspective_camera<double>*
 bwm_video_cam_istream::current_camera()
 {
-  if (is_valid()){
-    if (!current_camera_){
-		  current_camera_=new vpgl_perspective_camera<double>();
+  if (is_valid()) {
+    if (!current_camera_) {
+      current_camera_=new vpgl_perspective_camera<double>();
 
-		  vcl_string ext = vul_file_extension(cam_paths_[index_].c_str());
-		  if(ext == ".vsl") // binary form
-		  {
-			  vsl_b_ifstream bp_in(cam_paths_[index_].c_str());
-			  current_camera_->b_read(bp_in);
-			  bp_in.close();
-			  return current_camera_;
-		  }
-		  //An ASCII stream for perspective camera
-		  vcl_ifstream cam_stream(cam_paths_[index_].data());
-		  
-		  cam_stream >> (*current_camera_);
-    return current_camera_;
+      vcl_string ext = vul_file_extension(cam_paths_[index_].c_str());
+      if (ext == ".vsl") // binary form
+      {
+        vsl_b_ifstream bp_in(cam_paths_[index_].c_str());
+        current_camera_->b_read(bp_in);
+        bp_in.close();
+        return current_camera_;
+      }
+      //An ASCII stream for perspective camera
+      vcl_ifstream cam_stream(cam_paths_[index_].data());
 
+      cam_stream >> (*current_camera_);
+      return current_camera_;
     }
     return NULL;
   }
@@ -138,9 +137,9 @@ bool
 bwm_video_cam_istream::
 seek_camera(unsigned int camera_number)
 {
-  if (is_open() && camera_number < cam_paths_.size()){
+  if (is_open() && camera_number < cam_paths_.size()) {
     if (index_ != camera_number)
-      if (current_camera_){
+      if (current_camera_) {
         delete current_camera_;
         current_camera_ = NULL;
       }

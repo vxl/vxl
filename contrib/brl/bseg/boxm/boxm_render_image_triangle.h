@@ -31,7 +31,7 @@ class normalize_expected_functor_splatting
  public:
   normalize_expected_functor_splatting(bool use_black_background) : use_black_background_(use_black_background) {}
 
-  void operator()(float mask, typename T_data::obs_datatype &pix) const 
+  void operator()(float mask, typename T_data::obs_datatype &pix) const
   {
     if (!use_black_background_) {
       pix += mask*0.5f;
@@ -52,10 +52,10 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
   expected.fill(0.0f);
   vgl_plane_3d<double> projection_plane;
   if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
-      vgl_box_3d<double> bbox=scene.get_world_bbox();
-      vgl_plane_3d<double> top(0,0,1,-bbox.max_z());
-      vgl_plane_3d<double> bottom(0,0,1,-bbox.min_z());
-      projection_plane=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam, top, bottom,expected.ni(),expected.nj());
+    vgl_box_3d<double> bbox=scene.get_world_bbox();
+    vgl_plane_3d<double> top(0,0,1,-bbox.max_z());
+    vgl_plane_3d<double> bottom(0,0,1,-bbox.min_z());
+    projection_plane=boxm_rational_camera_utils::boxm_find_parallel_image_plane(rcam, top, bottom,expected.ni(),expected.nj());
   }
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc, T_data> cell_type;
@@ -70,16 +70,13 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
 
   while (block_vis_iter.next())
   {
-
-  
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) // code for each block
     {
       t.mark();
-	  if(!(block_indices[i].x()==2 &&
-		   block_indices[i].z()==0))
-		   continue;
-	  scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
+      if (block_indices[i].x()!=2 || block_indices[i].z()!=0)
+        continue;
+      scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       vcl_cout<<"The time taken to read a block is "<<t.all()<<vcl_endl;
       boxm_block<tree_type> * curr_block=scene.get_active_block();
       t.mark();
