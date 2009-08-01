@@ -165,8 +165,8 @@ bool brec_part_hierarchy_detector::detect_primitives_using_trained_response_mode
   return true;
 }
 
-//:  sets rho parameter of the primitives differently during training
-//   rotates the detector with the given amount
+//: sets rho parameter of the primitives differently during training
+//  Rotates the detector with the given amount
 bool brec_part_hierarchy_detector::detect_primitives_for_training(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, float angle)
 {
   // start from the primitives
@@ -196,8 +196,8 @@ bool brec_part_hierarchy_detector::detect_primitives_for_training(vil_image_view
 
 bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float angle, unsigned rho_calculation_method, double radius, float prior_class, unsigned layer_id)
 {
-  switch(rho_calculation_method) {
-      case brec_detector_methods::POSTERIOR_NUMERATOR : 
+  switch (rho_calculation_method) {
+      case brec_detector_methods::POSTERIOR_NUMERATOR :
       case brec_detector_methods::POSTERIOR : {
         if (!detect_primitives_using_trained_response_models(img, fg_prob_img, angle, prior_class))
           return false;
@@ -208,7 +208,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_
           return false;
                                                          }
   }
-  
+
   vcl_cout << "extracted " << map_instance_[0].size() << " primitive parts." << vcl_endl;
 
   unsigned highest = h_->highest_layer_id();
@@ -479,14 +479,14 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
 
   brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
-  
+
   float prior_non_c_b = 1.0f - (prior_c_f_ + prior_non_c_f_ + prior_c_b_);
 
   double rho_c_f = central_p->rho_c_f_ * prior_c_f_;
   double rho_c_b = central_p->rho_c_b_ * prior_c_b_;
   double rho_nc_f = central_p->rho_nc_f_ * prior_non_c_f_;
   double rho_nc_b = central_p->rho_nc_b_ * prior_non_c_b;
-  
+
   for ( ; eit != upper_p->out_edges_end(); eit++) {
     vgl_box_2d<float> probe = (*eit)->get_probe_box(central_p);
     vcl_vector<brec_part_instance_sptr> found;
@@ -510,7 +510,7 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
 
         double s = vcl_min(rho_c_f_i/rho_c_b_i,rho_c_f_i/rho_nc_f_i);
         s = vcl_min(s, rho_c_f_i/rho_nc_b_i);
-        
+
         if (best_score < s) {
           best_score = s;
           best_part = found[i];
@@ -527,7 +527,7 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
     pi->add_outgoing_edge(e2);
   }
 
-  //: now compute the score for the part with a second pass 
+  // now compute the score for the part with a second pass
   eit = pi->out_edges_begin();
   eit++;  // skip the central part
   for ( ; eit != pi->out_edges_end(); eit++) {
@@ -542,8 +542,8 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
     rho_nc_b *= uniform*pi2->rho_nc_b_;
   }
 
-  /* OZGE TODO: implement the contributions from the other classes 
-  //: compute the denominator by locating a part with the same primitives with this one in each hierarchy in the list
+#if 0 // OZGE TODO: implement the contributions from the other classes
+  // compute the denominator by locating a part with the same primitives with this one in each hierarchy in the list
   double sum = 0.0;
   for (unsigned i = 0; i < class_hierarchies_.size(); i++) {
     vcl_vector<double> scores;
@@ -551,7 +551,7 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
       for (unsigned k = 0; k < scores.size(); k++)
         sum += scores[k];
   }
-*/
+#endif // 0
 
   // if all of them have been detected then declare existence at the central parts location
   double den = (rho_c_f+rho_c_b+rho_nc_f+rho_nc_b);
@@ -595,14 +595,14 @@ void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_inst
 
         // now check for the existence of other primitives wrt to the central part and initiate an instance of it if so
         brec_part_instance_sptr hp_upper_instance;
-        
+
         // p will be its central part and map will tell if all the other parts exist
         switch (rho_calculation_method) {
           case brec_detector_methods::POSTERIOR_NUMERATOR : { hp_upper_instance = exists(hp_upper, p, extracted_parts_rtree); break; }
           case brec_detector_methods::DENSITY_FOR_TRAINING : { hp_upper_instance = exists_for_training(hp_upper, p, extracted_parts_rtree); break; }
           case brec_detector_methods::POSTERIOR : { hp_upper_instance = exists_using_hierarchies(hp_upper, p, extracted_parts_rtree, radius); break; }
         }
-          
+
         if (!hp_upper_instance)
           continue;
         extracted_upper_parts.push_back(hp_upper_instance);
