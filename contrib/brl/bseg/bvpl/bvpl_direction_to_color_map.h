@@ -181,13 +181,11 @@ bool bvpl_direction_to_color_map(vcl_vector<vgl_point_3d<double> > samples, vcl_
   vcl_map<float,vgl_point_3d<double> > color_samples;
   for (unsigned i=0;i<samples.size();++i)
     color_samples[color[samples[i]]]=samples[i];
+
   vcl_map<float, vgl_point_3d<double> >::iterator iter=color_samples.begin();
+  for (float j=0; iter!=color_samples.end(); ++iter)
+    color[iter->second]=++j;
 
-  float j=0;
-  for (;iter!=color_samples.end();iter++,++j)
-    color[iter->second]=j;
-
-  float tot_len=(float)peano_curve.size();
   for (unsigned i=0;i<samples.size();++i)
     color[samples[i]]/=samples.size();
 
@@ -228,7 +226,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
 }
 
 void bvpl_make_svg_color_map(vcl_map<vgl_point_3d<double>,float,point_3d_cmp>  colors,
-               vcl_string outfile)
+                             vcl_string outfile)
 {
   bsvg_document doc(400, 400);
 
