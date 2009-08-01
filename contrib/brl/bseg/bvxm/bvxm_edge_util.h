@@ -60,12 +60,13 @@ class bvxm_edge_util
 };
 
 template <class T_from,class T_to>
-void bvxm_edge_util::convert_image_types(const vil_image_view<T_from>& inp_image, vil_image_view<T_to>& out_image, float scale, float offset){
+void bvxm_edge_util::convert_image_types(const vil_image_view<T_from>& inp_image, vil_image_view<T_to>& out_image, float scale, float offset)
+{
   out_image.set_size(inp_image.ni(),inp_image.nj(),inp_image.nplanes());
 
-  for(unsigned i=0; i<inp_image.ni(); i++){
-    for(unsigned j=0; j<inp_image.nj(); j++){
-      for(unsigned k=0; k<inp_image.nplanes(); k++){
+  for (unsigned i=0; i<inp_image.ni(); i++) {
+    for (unsigned j=0; j<inp_image.nj(); j++) {
+      for (unsigned k=0; k<inp_image.nplanes(); k++) {
         float curr_pixel = (float)inp_image(i,j,k);
         out_image(i,j,k) = (T_to)((curr_pixel*scale) + offset);
       }
@@ -73,4 +74,4 @@ void bvxm_edge_util::convert_image_types(const vil_image_view<T_from>& inp_image
   }
 }
 
-#endif // bvxm_util_h_
+#endif // bvxm_edge_util_h_
