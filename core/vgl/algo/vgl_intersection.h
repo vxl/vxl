@@ -29,7 +29,7 @@ vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p);
 
 
 //: Return true if the box and polygon intersect in 3D, regions include boundaries
-//: Polygon is represented as an ordered vector of points in #D
+// Polygon is represented as an ordered vector of points in #D
 // \relates vgl_point_3d
 // \relates vgl_box_3d
 template <class T>

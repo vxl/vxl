@@ -21,7 +21,7 @@
 #include <bxml/bxml_write.h>
 
 //: Constructor
-//: initialize a bar plot with no bars, new bars will be added by the add_bar process
+//  initialize a bar plot with no bars, new bars will be added by the add_bar process
 bool bsvg_bar_plot_initialize_process_cons(bprb_func_process& pro)
 {
   //inputs
@@ -39,6 +39,7 @@ bool bsvg_bar_plot_initialize_process_cons(bprb_func_process& pro)
   ok = pro.set_output_types(output_types);
   return ok;
 }
+
 bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
 {
   // Sanity check
@@ -67,13 +68,13 @@ bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
 }
 
 //: Constructor
-//: Add a bar to the plot
+//  Add a bar to the plot
 bool bsvg_bar_plot_add_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("bxml_document_sptr");  
+  input_types.push_back("bxml_document_sptr");
   input_types.push_back("float");  // height
   input_types.push_back("vcl_string");  // label
   input_types.push_back("vcl_string");  // color
@@ -85,6 +86,7 @@ bool bsvg_bar_plot_add_process_cons(bprb_func_process& pro)
   ok = pro.set_output_types(output_types);
   return ok;
 }
+
 bool bsvg_bar_plot_add_process(bprb_func_process& pro)
 {
   // Sanity check
@@ -104,12 +106,13 @@ bool bsvg_bar_plot_add_process(bprb_func_process& pro)
   p->add_bar(h, label, true, color);
   return true;
 }
+
 //: Constructor
 bool bsvg_bar_plot_write_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("bxml_document_sptr");  
+  input_types.push_back("bxml_document_sptr");
   input_types.push_back("vcl_string");  // out file
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -117,6 +120,7 @@ bool bsvg_bar_plot_write_process_cons(bprb_func_process& pro)
   ok = pro.set_output_types(output_types);
   return ok;
 }
+
 bool bsvg_bar_plot_write_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() < 2) {
@@ -130,5 +134,4 @@ bool bsvg_bar_plot_write_process(bprb_func_process& pro)
   bxml_write(out_file, *doc);
   return true;
 }
-
 
