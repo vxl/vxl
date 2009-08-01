@@ -1,14 +1,10 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_process.cxx
+#include "bvxm_update_edges_process.h"
 //:
 // \file
 // \brief A process that updates voxel world edge probabilities
-//
 // \author Ibrahim Eden
-// \date 02/11/2009
-// \verbatim
-// \endverbatim
-
-#include "bvxm_update_edges_process.h"
+// \date Feb 11, 2009
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
@@ -69,7 +65,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   using namespace bvxm_update_edges_process_globals;
 
   //check number of inputs
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -93,12 +89,12 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_edge_prob_mask_size_, edge_prob_mask_size);
   float edge_prob_mask_sigma = 1.0f;
   pro.parameters()->get_value(param_edge_prob_mask_sigma_, edge_prob_mask_sigma);
-  
+
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
 
-  vcl_cout << "number of observations before the update: " << num_observations << "\n";
-  vcl_cout << "edge_prob_mask_size: " << edge_prob_mask_size << "\n";
-  vcl_cout << "edge_prob_mask_sigma: " << edge_prob_mask_sigma << "\n";
+  vcl_cout << "number of observations before the update: " << num_observations << '\n'
+           << "edge_prob_mask_size: " << edge_prob_mask_size << '\n'
+           << "edge_prob_mask_sigma: " << edge_prob_mask_sigma << '\n';
 
   float new_n_normal = n_normal;
 
@@ -114,7 +110,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   bvxm_image_metadata camera_metadata_out(edge_prob_image_sptr,camera_inp);
   bool result = vox_world->update_edges(camera_metadata_out,0);
 
-  if (!result){
+  if (!result) {
     vcl_cerr << "error bvxm_rpc_registration: failed to update edge image\n";
     return false;
   }
