@@ -22,7 +22,7 @@
 //        Layer n: stages:
 //                 1) construction of parts as compositions of two layer_n-1 parts
 //                 2) construction of parts as compositions of one layer_n-1 part and one layer_n-2 parts
-//                 
+//
 //                 Implementation
 //                 1) a) Initialize N*N pairs for each class
 //                    b) collect stats for angle and distance distributions for each pair of each class
@@ -67,7 +67,7 @@ class brec_part_hierarchy_learner : public vbl_ref_count
    //typedef vcl_map<unsigned, vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr_pair> > >* > layer_n_map;
    typedef vcl_map<unsigned, vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > >* > layer_n_map;
    typedef vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > > class_map;
-   
+
    brec_part_hierarchy_learner() : n_(10) {}
 
    void initialize_layer0_as_gaussians(int ndirs, float lambda_range, float lambda_inc, int n);
@@ -112,16 +112,16 @@ class brec_part_hierarchy_learner : public vbl_ref_count
   brec_part_hierarchy_sptr layer0_rank_and_create_hierarchy(int N);
 
   //: initialize learner to construct layer_n as pairs of layer_n-1 of the given hieararchy
-  //  radius is used to initialize the histograms
-  //  we use 8 bins for angle in [0, 2*pi] range and 8 bins for distance in [0,radius] range
+  //  Radius is used to initialize the histograms
+  //  We use 8 bins for angle in [0, 2*pi] range and 8 bins for distance in [0,radius] range
   bool initialize_layer_n_as_pairs(brec_part_hierarchy_sptr h, unsigned layer_id, unsigned nclasses, float radius);
 
   //: collect stats to construct parts of layer with layer_id using detected parts of layer_id-1
-  //  collect stats for a pair if they exist within radius pixels of each other
+  //  Collect stats for a pair if they exist within radius pixels of each other
   bool layer_n_collect_stats(brec_part_hierarchy_detector_sptr hd, unsigned layer_id, unsigned class_id);
 
   //: uses the joint histograms to fit gaussian distributions to distance for 8 orientations
-  //  replaces the histograms with the fitted distributions' histograms
+  //  Replaces the histograms with the fitted distributions' histograms
   bool layer_n_fit_distributions(unsigned class_id, unsigned layer_id, unsigned M);
 
   vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*> >& stats_layer0() { return stats_layer0_; }
@@ -132,12 +132,12 @@ class brec_part_hierarchy_learner : public vbl_ref_count
 
   void print_to_m_file_layer_n(vcl_string file_name, unsigned class_id, bool print_set);
 
-public:
+ public:
 
   // collect stats for each type of primitive part types
   vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*> > stats_layer0_;
 
-  //: for each class, collect stats 
+  //: for each class, collect stats
   layer_n_map stats_layer_n_;
   float radius_;  // radius to search for pair compositions for layer_n
   float d_bandwidth_;  // bandwidth to run mean-shift on 1D distance sample set

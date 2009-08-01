@@ -34,11 +34,11 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
   static void generate_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vcl_vector<vcl_vector<brec_part_instance_sptr> >& map);
   //: generate a float map with normalized strengths and receptive fields marked
   static void generate_output_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
-  
+
   //: generate a float map with various posterior
   static void generate_output_map_posterior(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, unsigned type = brec_posterior_types::CLASS_FOREGROUND);
   static void generate_output_map_posterior_centers(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, unsigned type = brec_posterior_types::CLASS_FOREGROUND);
-  
+
   //: stretch the values to be used for imaging
   static void generate_output_map3(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map);
 
@@ -55,12 +55,13 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
   void add_dummy_primitive_instance(brec_part_instance_sptr p) { dummy_primitive_instances_.push_back(p); }
   vcl_vector<brec_part_instance_sptr>& get_dummy_primitive_instances() { return dummy_primitive_instances_; }
 
-  /* Ozge TODO: adapt to different posterior types */
+#if 0 // Ozge TODO: adapt to different posterior types
   //: compute the probabilistic existence score for a given part (upper_p) if this one or equivalent ones exist in this hierarchy
-  //  equivalence is determined by the types of the primitive layer parts
+  //  Equivalence is determined by the types of the primitive layer parts
   //  (i.e. all layer 1 parts with alpha and alpha_prime as primitive parts are equivalent)
-  //bool get_score(brec_part_instance_sptr upper_p, vcl_vector<double>& scores);
-  //bool get_score_helper(brec_part_instance_sptr ins_p, brec_part_base_sptr p, double& score);
+  bool get_score(brec_part_instance_sptr upper_p, vcl_vector<double>& scores);
+  bool get_score_helper(brec_part_instance_sptr ins_p, brec_part_base_sptr p, double& score);
+#endif
 
   unsigned highest_layer_id();
   //: number of vertices in the layer
@@ -78,11 +79,11 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
 
   //: draw a ps image with sampled parts, draw N samples from the distributions
   bool draw_to_ps(unsigned N, vcl_string output_img, float drawing_radius);
-  
+
   //: draw the nodes of the given layer side by side to the output image
   bool draw_to_image(unsigned N, unsigned layer_id, float drawing_radius, vcl_string output_img);
 
-public:
+ public:
   //: a map to store dummy instances of primitive parts, so that they could be extracted properly for a constructed hierarchy
   vcl_vector<brec_part_instance_sptr> dummy_primitive_instances_;
 

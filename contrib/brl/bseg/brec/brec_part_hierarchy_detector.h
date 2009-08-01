@@ -99,9 +99,9 @@ class brec_detector_methods
 {
  public:
   enum possible_methods {
-    POSTERIOR_NUMERATOR,   // uses posterior for the primitives (given fg and bg app models) but does not divide posterior with a denominator 
+    POSTERIOR_NUMERATOR,   // uses posterior for the primitives (given fg and bg app models) but does not divide posterior with a denominator
     DENSITY_FOR_TRAINING,        // uses the density given by the appearance models of primitives  p(d,angle | ci)
-    POSTERIOR,   // calculates the posterior probability, the denominator is calculated using other class hierarchies 
+    POSTERIOR,   // calculates the posterior probability, the denominator is calculated using other class hierarchies
                  // background geometry model is also required for the denominator, we assume uniform distributions for the distance and angle
   };
 };
@@ -149,7 +149,7 @@ class brec_part_hierarchy_detector : public vbl_ref_count
   bool detect(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float angle = 0.0f, unsigned rho_calculation_method = brec_detector_methods::POSTERIOR_NUMERATOR, double radius = 10.0, float prior_class = 0.1f, unsigned layer_id = 0);
 
   //: extracts instances of each layer in the given image, by rotating the detector with the given amount
-  //  sets rho parameter of the primitives differently during training
+  //  Sets rho parameter of the primitives differently during training
   bool detect_primitives_for_training(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, float angle);
 
   vcl_vector<brec_part_instance_sptr>& get_parts(unsigned layer) { return map_instance_[layer]; }
@@ -169,7 +169,7 @@ class brec_part_hierarchy_detector : public vbl_ref_count
   vcl_map<unsigned, Rtree_type*> map_rtree_;
 
   //: hierarchies of other classes if any
-  //  required for posterior computation for compositions during testing
+  //  Required for posterior computation for compositions during testing
   vcl_vector<brec_part_hierarchy_sptr> class_hierarchies_;
 
   double radius_;
@@ -178,7 +178,6 @@ class brec_part_hierarchy_detector : public vbl_ref_count
   float prior_c_f_;
   float prior_non_c_f_;
   float prior_c_b_;     // prior_non_c_b_ = 1.0f - (prior_c_f_ + prior_non_c_f_ + prior_c_b);
-
 };
 
 // Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_detector as a brdb_value

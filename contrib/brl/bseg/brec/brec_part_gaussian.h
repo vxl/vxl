@@ -62,10 +62,10 @@ class brec_part_gaussian : public brec_part_instance
   bool construct_bg_response_model_gauss(vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img, vil_image_view<float> &mu_img, vil_image_view<float> &sigma_img);
 
   //: collect operator responses from the input image
-  //  use responses from class regions to estimate lambda and k for the class response model
-  //  use responses from non-class regions to estimate lambda and k for the non-class response model
-  //  class and non-class regions are specified by the class_prob_img which is a float image with values in [0,1] range
-  bool construct_class_response_models(vil_image_view<float>& img, vil_image_view<float>& class_prob_img, 
+  //  Use responses from class regions to estimate lambda and k for the class response model
+  //  Use responses from non-class regions to estimate lambda and k for the non-class response model
+  //  Class and non-class regions are specified by the class_prob_img which is a float image with values in [0,1] range
+  bool construct_class_response_models(vil_image_view<float>& img, vil_image_view<float>& class_prob_img,
     vil_image_view<bool>& mask_img, double &lambda, double &k, double &lambda_non_class, double &k_non_class);
 
   //: collect operator responses from the input image's foreground regions
@@ -91,9 +91,9 @@ class brec_part_gaussian : public brec_part_instance
   //  \p pb_zero is the constant required for the background response model (probability of zero response)
   bool extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float rot_angle, vcl_string model_dir, vcl_vector<brec_part_instance_sptr>& instances, float prior_class);
 
-  //: extract and set rho to class probability density of the response 
-  //  assumes weibull parameters have already been fitted (i.e. fitted_weibull_ = true)
-  //  this method is to be used during training and it returns an instance if class_prob >= 0.9
+  //: extract and set rho to class probability density of the response
+  //  Assumes weibull parameters have already been fitted (i.e. fitted_weibull_ = true)
+  //  This method is to be used during training and it returns an instance if class_prob >= 0.9
   bool extract(vil_image_view<float>& img, vil_image_view<float>& class_prob_image, float rot_angle, vcl_vector<brec_part_instance_sptr>& instances);
 
   //: find P(alpha in foreground): the probability that this operator alpha is in foreground
@@ -105,7 +105,7 @@ class brec_part_gaussian : public brec_part_instance
 
   vcl_string string_identifier();
 
-public:
+ public:
   float lambda0_;  // axis
   float lambda1_;
   float theta_;    // orientation angle (in degrees)
@@ -129,4 +129,3 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
 bool draw_gauss_to_ps(vul_psfile& ps, brec_part_gaussian_sptr pi, float x, float y, float cr, float cg, float cb);
 
 #endif // brec_part_gaussian_h_
-

@@ -46,11 +46,12 @@ class bsvg_plot : public bsvg_document
     void add_bars(const vcl_vector<float>& heights, const vcl_string& color);
     void add_bars(const vcl_vector<float>& heights, const vcl_vector<float>& x_labels, bool vertical_labels, const vcl_string& color);
     void add_bars(const vcl_vector<float>& heights, const vcl_vector<vcl_string>& x_labels, bool vertical_labels, const vcl_string& color);
-    
+
     //:return the number of bars in the plot (counts the number of element with name "rect")
     int number_of_bars();
-    
-    //: add bars sequentially with a fixed interval and width, use margin_ as the width of each bar and leave margin_/3 intervals in between
+
+    //: add bars sequentially with a fixed interval and width.
+    //  use margin_ as the width of each bar and leave margin_/3 intervals in between
     //  the total width of the plot needs to be adjusted during initialization to contain all desired number of bars
     int add_bar(const float height, const vcl_string& color);
     int add_bar(const float height, const float x_label, bool vertical_label, const vcl_string& color);
