@@ -1,11 +1,10 @@
-//This is brl/bseg/bvxm/grid/pro/processes/bvxm_grid_distance_transform_process.cxx
-
+// This is brl/bseg/bvxm/grid/pro/processes/bvxm_grid_distance_trasform_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for computing the distance transform and the distance vectors
-//         on a grid. The surface is indicated by voxel with value 0, the rest is a max 
-//         value. The direction grid contains the direction vectors to the closest surface
-//         voxel.
+// \brief  A process for computing the distance transform and the distance vectors on a grid.
+//         The surface is indicated by voxel with value 0, the rest is a max value.
+//         The direction grid contains the direction vectors to the closest surface voxel.
 // \author Gamze D. Tunali
 // \date   July 29, 2009
 //
@@ -15,12 +14,10 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
-
 
 namespace bvxm_grid_distance_transform_process_globals
 {

@@ -1,4 +1,4 @@
-// This is mul/clsfy/tests/test_binary_hyperplane_logit_builder.cxx
+// This is mul/clsfy/tests/test_binary_hyperplane_logit.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
