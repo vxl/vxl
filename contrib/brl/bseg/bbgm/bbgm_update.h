@@ -37,10 +37,9 @@ void update(bbgm_image_of<dist_>& dimg,
             const updater_& updater)
 {
   typedef typename updater_::field_type F;
-  const unsigned int data_dim = vpdt_field_traits<F>::dimension;
   assert(dimg.ni() == image.ni());
   assert(dimg.nj() == image.nj());
-  assert(data_dim == image.nplanes());
+  assert(vpdt_field_traits<F>::dimension == image.nplanes());
 
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
@@ -71,12 +70,11 @@ void update_masked(bbgm_image_of<dist_>& dimg,
                    const vil_image_view<bool>& mask)
 {
   typedef typename updater_::field_type F;
-  const unsigned int data_dim = vpdt_field_traits<F>::dimension;
   assert(dimg.ni() == image.ni());
   assert(dimg.nj() == image.nj());
   assert(dimg.ni() == mask.ni());
   assert(dimg.nj() == mask.nj());
-  assert(data_dim == image.nplanes());
+  assert(vpdt_field_traits<F>::dimension == image.nplanes());
 
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
