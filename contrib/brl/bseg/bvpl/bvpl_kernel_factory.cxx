@@ -10,9 +10,11 @@
 #include <vcl_string.h>
 #include <vcl_limits.h>
 #include <vcl_cmath.h>
+
 unsigned bvpl_kernel::id_cnt=0;
+
 //: Saves the kernel to Dristhi .raw data format.
-// The kernel does not occupy the entire volume, so the empty voxels at set to 0.
+// The kernel does not occupy the entire volume, so the empty voxels are set to 0.
 // The size of the box is max(x,y,z) * max(x,y,z) * max(x,y,z)
 bool bvpl_kernel::save_raw(vcl_string filename)
 {
@@ -29,7 +31,6 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   vxl_uint_32 ny = (max_.y() - min_.y()) + 1;
   vxl_uint_32 nz = (max_.z() - min_.z()) + 1;
 
-
   ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
   ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
   ofs.write(reinterpret_cast<char*>(&ny),sizeof(ny));
@@ -40,23 +41,23 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   unsigned size = nx*ny*nz;
   char *data_array = new char[size];
 
-
-  //get the range of the grid
-  char max = char(-1) * vcl_numeric_limits<char>::infinity();
-  char min = vcl_numeric_limits<char>::infinity();
-
   kernel_.begin();
-  while (!kernel_.isDone()){
-    if ((*kernel_).c_> max)
-      max = (*kernel_).c_;
-    if ((*kernel_).c_< min)
-      min =(*kernel_).c_;
+  if (!kernel_.isDone())
+  {
+    float max = (*kernel_).c_,
+          min = (*kernel_).c_;
     ++kernel_;
+
+    while (!kernel_.isDone()) {
+      if ((*kernel_).c_> max)
+        max = (*kernel_).c_;
+      if ((*kernel_).c_< min)
+        min = (*kernel_).c_;
+      ++kernel_;
+    }
+    vcl_cout << "max: " << max <<vcl_endl
+             << "min: " << min <<vcl_endl;
   }
-
-
-  vcl_cout << "max: " << int(max) <<vcl_endl;
-  vcl_cout << "min: " << int(min) <<vcl_endl;
 
   //Since our kernel does not occupy the entire space we need to initialize our data
   for (unsigned i = 0; i < size; i++)
@@ -66,17 +67,15 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   while (!kernel_.isDone()){
     vgl_point_3d<int> coord = kernel_.index();
     int index = (coord.x()-min_.x())*ny*nz + (coord.y()-min_.y())*nz + (coord.z() - min_.z());
-    data_array[index] =(char)((*kernel_).c_);
+    data_array[index] = (char)((*kernel_).c_);
     ++kernel_;
   }
-
   vcl_cout << vcl_endl;
-  ofs.write(reinterpret_cast<char*>(data_array),sizeof(char)*nx*ny*nz);
 
+  ofs.write(reinterpret_cast<char*>(data_array),sizeof(char)*nx*ny*nz);
   ofs.close();
 
   delete[] data_array;
-
   return true;
 }
 
@@ -255,8 +254,8 @@ bvpl_kernel_factory::kernel_type
 bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
 {
 #ifdef DEBUG
-  vcl_cout << "Rotating kernel using the following matrix" << vcl_endl;
-  vcl_cout << R.as_matrix() << vcl_endl;
+  vcl_cout << "Rotating kernel using the following matrix" << vcl_endl
+           << R.as_matrix() << vcl_endl;
 #endif
 
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kernel_it =this->kernel_.begin();
