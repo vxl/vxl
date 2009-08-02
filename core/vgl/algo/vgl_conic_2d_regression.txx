@@ -3,6 +3,8 @@
 #define vgl_conic_2d_regression_txx_
 //:
 // \file
+
+#include "vgl_conic_2d_regression.h"
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -11,7 +13,6 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include "vgl_conic_2d_regression.h"
 
 template <class T>
 void vgl_conic_2d_regression<T>::init()
