@@ -4,10 +4,14 @@
 //:
 // \file
 
-#include <vnl/vnl_fwd.h>
+#include "vpgl_fundamental_matrix.h"
+//
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
+#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -15,9 +19,6 @@
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
-
-#include "vpgl_fundamental_matrix.h"
-
 
 //---------------------------------
 template <class T>

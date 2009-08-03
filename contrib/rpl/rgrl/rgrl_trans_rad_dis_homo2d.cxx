@@ -1,7 +1,9 @@
+// This is rpl/rgrl/rgrl_trans_rad_dis_homo2d.cxx
+#include "rgrl_trans_rad_dis_homo2d.h"
 //:
 // \file
-#include <vcl_cassert.h>
 
+#include <vcl_cassert.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_2.h>
@@ -9,7 +11,6 @@
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_transpose.h>
 
-#include "rgrl_trans_rad_dis_homo2d.h"
 #include "rgrl_util.h"
 
 // NOTE: the first parameters of all functions in this file

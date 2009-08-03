@@ -1,8 +1,9 @@
 #ifndef bvxm_voxel_storage_mem_txx_
 #define bvxm_voxel_storage_mem_txx_
 
-#include "bvxm_voxel_storage.h"
 #include "bvxm_voxel_storage_mem.h"
+//
+#include "bvxm_voxel_storage.h"
 #include "bvxm_memory_chunk.h"
 
 #include <vgl/vgl_vector_3d.h>

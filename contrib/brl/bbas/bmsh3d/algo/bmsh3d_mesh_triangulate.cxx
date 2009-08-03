@@ -1,10 +1,11 @@
+// This is brl/bbas/bmsh3d/algo/bmsh3d_mesh_triangulate.cxx
+#include "bmsh3d_mesh_triangulate.h"
 //:
 // \file
 // \date Sep 25, 2005
 // \author MingChing Chang
 
 #include "bmsh3d_mesh_tri.h"
-#include "bmsh3d_mesh_triangulate.h"
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

@@ -4,8 +4,9 @@
 //:
 // \file
 
-#include <vnl/vnl_fwd.h>
 #include "vpgl_affine_fundamental_matrix.h"
+//
+#include <vnl/vnl_matrix_fixed.h>
 
 //---------------------------------
 template <class T>

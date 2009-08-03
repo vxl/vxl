@@ -1,10 +1,9 @@
 // This is oxl/mvl/LineSeg.cxx
-
+#include "LineSeg.h"
 //:
 //  \file
 
 #include <vcl_iostream.h>
-#include "LineSeg.h"
 
 //: Constructor
 LineSeg::LineSeg(float x0, float y0, float x1, float y1, float theta, float grad_mean)
@@ -20,11 +19,11 @@ LineSeg::LineSeg(float x0, float y0, float x1, float y1, float theta, float grad
 //: Save to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const LineSeg& l)
 {
-  return s << l._x0 << " "
-           << l._y0 << " "
-           << l._x1 << " "
-           << l._y1 << " "
-           << l._theta << " "
+  return s << l._x0 << ' '
+           << l._y0 << ' '
+           << l._x1 << ' '
+           << l._y1 << ' '
+           << l._theta << ' '
            << l._grad_mean << vcl_endl;
 }
 

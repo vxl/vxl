@@ -1,5 +1,6 @@
 // This is brl/bseg/strk/strk_io.cxx
-// not used? #include <vcl_iostream.h>
+#include "strk_io.h"
+//
 #include <vcl_string.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print2.h>
@@ -8,7 +9,6 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_face_2d.h>
 #include <strk/strk_tracking_face_2d.h>
-#include "strk_io.h"
 
 bool strk_io::write_frame_data(const unsigned int start_frame,
                                const unsigned int n_frames,
@@ -41,7 +41,7 @@ bool strk_io::write_histogram_data(const unsigned int start_frame,
                                    const unsigned int n_int_bins,
                                    const unsigned int n_grad_dir_bins,
                                    const unsigned int n_color_bins,
-                                   vcl_vector<vcl_vector<float> >const& data, 
+                                   vcl_vector<vcl_vector<float> >const& data,
                                    vcl_ofstream& strm)
 {
   unsigned int n_frames = data.size();
@@ -150,7 +150,7 @@ bool strk_io::read_region_data(vcl_ifstream& strm,
   return true;
 }
 
-bool strk_io::read_histogram_data(vcl_ifstream& strm, 
+bool strk_io::read_histogram_data(vcl_ifstream& strm,
                                   unsigned int& start_frame,
                                   unsigned int& n_frames,
                                   unsigned int& n_pixels,

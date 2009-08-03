@@ -2,6 +2,9 @@
 #define bvxm_voxel_storage_disk_cached_txx_
 //:
 // \file
+
+#include "bvxm_voxel_storage_disk_cached.h"
+//
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #ifdef BVXM_USE_FSTREAM64
@@ -11,8 +14,6 @@
 #endif
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_3d.h>
-
-#include "bvxm_voxel_storage_disk_cached.h"
 
 #include "bvxm_voxel_storage.h" // base class
 #include "bvxm_voxel_storage_disk.h" // for header
@@ -103,7 +104,8 @@ bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
       vcl_cerr << "error: base directory " << base_dir << " does not exist.\n";
       return false;
     }
-  }else {
+  }
+  else {
     // make sure filename is not a directory
     bool is_dir = vul_file::is_directory(storage_fname_);
     if (is_dir) {

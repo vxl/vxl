@@ -1,3 +1,5 @@
+// This is rpl/rgrl/rgrl_initializer_ran_sam.cxx
+#include "rgrl_initializer_ran_sam.h"
 //:
 // \file
 // \author Charlene Tsai
@@ -6,7 +8,6 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
-#include "rgrl_initializer_ran_sam.h"
 #include "rgrl_match_set.h"
 #include "rgrl_estimator.h"
 #include "rgrl_scale_estimator.h"
@@ -218,7 +219,8 @@ estimate()
   //  correctly for probabilistic sampling because the possibility
   //  is rare.
   //
-  for ( unsigned int s = 0; s<samples_to_take_; ++s ) {
+  for ( unsigned int s = 0; s<samples_to_take_; ++s )
+  {
     this->next_sample( s, total_num_matches, point_indices, points_per );
     rgrl_match_set_sptr
       sub_match_set = this->get_matches(point_indices,total_num_matches );
@@ -318,34 +320,33 @@ next_sample( unsigned int taken, unsigned int num_points,
         sample[i]=k;
     }
   }
-
-  else {
-    if ( num_points == 1 ) {
-      sample[0] = 0;
-    } else {
-      unsigned int k=0, counter=0;
-      while ( k<points_per_sample ) // This might be an infinite loop!
+  else if ( num_points == 1 ) {
+    sample[0] = 0;
+  }
+  else
+  {
+    unsigned int k=0, counter=0;
+    while ( k<points_per_sample ) // This might be an infinite loop!
+    {
+      int id = generator_->lrand32( 0, num_points-1 );
+      if ( id >= int(num_points) ) {   //  safety check
+        vcl_cerr << "rrel_ran_sam_search::next_sample --- "
+                 << "WARNING: random value out of range\n";
+      }
+      else
       {
-        int id = generator_->lrand32( 0, num_points-1 );
-        if ( id >= int(num_points) ) {   //  safety check
-          vcl_cerr << "rrel_ran_sam_search::next_sample --- "
-                   << "WARNING: random value out of range\n";
-        }
-        else
+        ++counter;
+        bool different = true;
+        for ( int i=k-1; i>=0 && different; --i )
+          different = (id != sample[i]);
+        if ( different )
+          sample[k++] = id, counter = 0;
+        else if (counter > 100)
         {
-          ++counter;
-          bool different = true;
-          for ( int i=k-1; i>=0 && different; --i )
-            different = (id != sample[i]);
-          if ( different )
-            sample[k++] = id, counter = 0;
-          else if (counter > 100)
-          {
-            vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: "
-                     << "lrand32() generated 100x the same value "<< id
-                     << " from the range [0," << num_points-1 << "]\n";
-            sample[k++] = id+1;
-          }
+          vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: "
+                   << "lrand32() generated 100x the same value "<< id
+                   << " from the range [0," << num_points-1 << "]\n";
+          sample[k++] = id+1;
         }
       }
     }

@@ -5,10 +5,11 @@
 //:
 // \file
 
+#include "TripleMatchSet.h"
+//
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
-#include "TripleMatchSet.h"
 #include <mvl/PairMatchSet.h>
 
 //: Initialize a TripleMatchSet from a pair of PairMatchSets.
@@ -129,14 +130,14 @@ bool TripleMatchSet::add_match(int i1, int i2, int i3)
     vcl_cerr << "TripleMatchSet::add_match(" <<i1<< ", "<<i2<<", "<<i3<<")\n";
     int old_i1 = get_match_21(i2);
     int old_i3 = get_match_23(i2);
-    vcl_cerr<<"*** i2 is already in a match ("<<old_i1<<"/"<<i2<<"/"<<old_i3<<")\n";
+    vcl_cerr<<"*** i2 is already in a match ("<<old_i1<<'/'<<i2<<'/'<<old_i3<<")\n";
   }
 
   if (get_match_12(i1) != MatchSet::NoMatch) {
     vcl_cerr<<"TripleMatchSet::add_match("<<i1<<", "<<i2<<", "<<i3<<")\n";
     int old_i2 = get_match_12(i1);
     int old_i3 = get_match_23(old_i2);
-    vcl_cerr<<"*** i1 is already in a match ("<<i1<<"/"<<old_i2<<"/"<<old_i3<<")\n";
+    vcl_cerr<<"*** i1 is already in a match ("<<i1<<'/'<<old_i2<<'/'<<old_i3<<")\n";
   }
 
   return match12_->add_match(i1, i2) && match23_->add_match(i2, i3);
@@ -261,7 +262,8 @@ void TripleMatchSet::clear_nontriplets()
       if (i3 == NoMatch) {
         match12_->add_match(i1, NoMatch);
         ++cleared_count;
-      } else
+      }
+      else
         accept[i2] = true;
     }
   }
@@ -280,12 +282,12 @@ bool TripleMatchSet::delete_match(int i1, int i2, int i3)
 {
   int old_12 = match12_->get_match_12(i1);
   if (old_12 != i2) {
-    vcl_cerr << "TripleMatchSet::delete_match - old/new i2 = " << old_12 << "/" << i2 << vcl_endl;
+    vcl_cerr << "TripleMatchSet::delete_match - old/new i2 = " << old_12 << '/' << i2 << vcl_endl;
     match23_->clear_match_1(old_12);
   }
   int old_23 = match23_->get_match_12(i2);
   if (old_23 != i3) {
-    vcl_cerr << "TripleMatchSet::delete_match - old/new i3 = " << old_23 << "/" << i3 << vcl_endl;
+    vcl_cerr << "TripleMatchSet::delete_match - old/new i3 = " << old_23 << '/' << i3 << vcl_endl;
   }
 
   match12_->clear_match_1(i1);

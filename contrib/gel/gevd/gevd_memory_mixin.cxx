@@ -1,3 +1,7 @@
+// This is gel/gevd/gevd_memory_mixin.cxx
+#include "gevd_memory_mixin.h"
+//:
+// \file
 // <begin copyright notice>
 // ---------------------------------------------------------------------------
 //
@@ -31,15 +35,8 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
-//:
-// \file
-
 #include <vcl_cstring.h>   // memset() and memcpy() live here
-//#include <vcl_memory.h>
 #include <vcl_algorithm.h>
-
-#include "gevd_memory_mixin.h"
-
 
 //=========================================================================
 //=========================================================================

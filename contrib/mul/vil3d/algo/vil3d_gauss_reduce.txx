@@ -10,9 +10,9 @@
 //  - Let's not have too many templates.
 // \author Tim Cootes
 
-#include <vil/algo/vil_gauss_reduce.h>
 #include "vil3d_gauss_reduce.h"
-
+//
+#include <vil/algo/vil_gauss_reduce.h>
 
 //: Smooth and subsample single plane src_im in i to produce dest_im
 //  Applies 1-5-8-5-1 filter in i, then samples
@@ -27,7 +27,7 @@ void vil3d_gauss_reduce_i(const T* src_im,
                           vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,
                           vcl_ptrdiff_t s_k_step,
                           T* dest_im,
-                          vcl_ptrdiff_t d_i_step, vcl_ptrdiff_t d_j_step, 
+                          vcl_ptrdiff_t d_i_step, vcl_ptrdiff_t d_j_step,
                           vcl_ptrdiff_t d_k_step)
 {
   for (unsigned k=0;k<src_nk;++k)
@@ -79,7 +79,6 @@ void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
       work_im1.origin_ptr(),nj,ni2,nk,
       work_im1.jstep(),work_im1.istep(),work_im1.kstep(),
       work_im2.origin_ptr(),work_im2.jstep(),work_im2.istep(),work_im2.kstep());
- 
 
   // Can resize output now, in case it is the same as the input.
   dest_im.set_size(ni2, nj2, nk2, n_planes);

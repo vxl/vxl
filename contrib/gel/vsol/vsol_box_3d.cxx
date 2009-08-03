@@ -1,8 +1,9 @@
 // This is gel/vsol/vsol_box_3d.cxx
-#include <vbl/io/vbl_io_bounding_box.h>
 #include "vsol_box_3d.h"
 //:
 // \file
+
+#include <vbl/io/vbl_io_bounding_box.h>
 #include <vcl_cassert.h>
 
 double vsol_box_3d::get_min_x() const

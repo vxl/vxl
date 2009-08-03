@@ -1,15 +1,14 @@
+// This is mul/mbl/mbl_exception.cxx
+#include "mbl_exception.h"
 //:
 // \file
 // \brief Exceptions thrown by mbl, and a mechanism for turning them off.
 // \author Ian Scott.
 
-// not used? #include <vcl_sstream.h>
-#include "mbl_exception.h"
 #include <vcl_cerrno.h>
 #include <vcl_cstring.h>
 
-
-#if 0 // should be #ifdef VCL_VC, but it soesn;twork yet - I can;t get it to link
+#if 0 // should be #ifdef VCL_VC, but it doesn't work yet - I can't get it to link
 #pragma comment(lib, "user32")
 #pragma comment (lib, "dbghelp")
 #include <vxl_config.h>
@@ -43,23 +42,26 @@ static vcl_string LotsOfInfo()
   ::AfxDumpStack(AFX_STACK_DUMP_TARGET_CLIPBOARD);
   if ( !::OpenClipboard(0) )
     text += "Failed to open clipboard to retrieve stack trace.\n";
-  HANDLE hglb = ::GetClipboardData(CF_OEMTEXT); 
-  if (hglb == NULL) 
+  HANDLE hglb = ::GetClipboardData(CF_OEMTEXT);
+  if (hglb == NULL)
     text += "Failed to retrieve stack trace from clipboard.\n";
-  const char* str = static_cast<const char *>(::GlobalLock(hglb)); 
-  if (str == NULL) 
+  const char* str = static_cast<const char *>(::GlobalLock(hglb));
+  if (str == NULL)
     text += "Failed to convert stack trace from clipboard.\n";
   else
     text += str;
   ::CloseClipboard();
   return text;
 }
-#else
+
+#else // 0, should be VCL_VC
+
 static vcl_string LotsOfInfo()
 {
   return "";
 }
-#endif 
+
+#endif // 0, should be VCL_VC
 
 #if !VCL_HAS_EXCEPTIONS
 
@@ -73,20 +75,17 @@ mbl_exception_abort::mbl_exception_abort(const vcl_string& comment):
 
 #endif
 
-
-
 mbl_exception_os_error::mbl_exception_os_error(int errnum, const vcl_string &file_name,
-  const vcl_string &comment/*=""*/):
+                                               const vcl_string &comment/*=""*/):
 #if !VCL_HAS_EXCEPTIONS
-  msg_(file_name + " " + vcl_strerror(errnum) + "\n" + comment), 
+  msg_(file_name + " " + vcl_strerror(errnum) + "\n" + comment),
     errno(errnum), error_message(vcl_strerror(errnum)), filename(file_name),
     additional_comment(comment) {}
 #else
-  vcl_runtime_error(vcl_string("\"") + file_name + "\" " + vcl_strerror(errnum) + "\n" + comment), 
+  vcl_runtime_error(vcl_string("\"") + file_name + "\" " + vcl_strerror(errnum) + "\n" + comment),
     err_no(errnum), error_message(vcl_strerror(errnum)), filename(file_name),
     additional_comment(comment) {}
 #endif
-
 
 void mbl_exception_throw_os_error(const vcl_string& filename,
                                   const vcl_string& additional_comment /*=""*/)
@@ -116,5 +115,4 @@ void mbl_exception_throw_os_error(const vcl_string& filename,
     break;
   }
 }
-
 

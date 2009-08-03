@@ -11,10 +11,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "VoxmapImagePoints.h"
+//
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgPoint3D.h>
 
-#include "VoxmapImagePoints.h"
 typedef PMatrix * PMatrix_ptr;
 typedef vbl_sparse_array_3d<vnl_double_2> * Array_ptr;
 
@@ -53,10 +54,12 @@ vnl_double_2 VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int 
 
 vnl_double_2 VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im) const
 {
-  //  cout << x << " " << y << " " << z << endl;
+#if 0
+  vcl_cout << x << ' ' << y << ' ' << z << vcl_endl;
 
-  //  if (d!= depth)
-  //    return GetCornerImage( (x+dx)*2, (y+dy)*2, (z+dz)*2, 0, 0, 0, d+1, im);
+  if (d!= depth)
+    return GetCornerImage( (x+dx)*2, (y+dy)*2, (z+dz)*2, 0, 0, 0, d+1, im);
+#endif // 0
 
   int dd= 1<<(depth-d);
 

@@ -1,3 +1,5 @@
+// This is gel/gevd/gevd_bufferxy.cxx
+#include "gevd_bufferxy.h"
 //:
 // \file
 
@@ -7,7 +9,6 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
-#include "gevd_bufferxy.h"
 
 #include <vcl_compiler.h>
 #if defined(VCL_VC) || defined(VCL_SUNPRO_CC_5) || defined(VCL_SGI_CC) || defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(__INTEL_COMPILER)

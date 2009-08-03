@@ -1,8 +1,7 @@
 // This is mul/pdf1d/pdf1d_gaussian_kernel_pdf_builder.cxx
-
-
-#include <vnl/vnl_fwd.h> // Leave this hack here to avoid a MSVC internal compiler error.
 #include "pdf1d_gaussian_kernel_pdf_builder.h"
+//
+//MAYBE NO LONGER NEEDED: #include <vnl/vnl_fwd.h> // Leave this hack here to avoid a MSVC internal compiler error.
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>

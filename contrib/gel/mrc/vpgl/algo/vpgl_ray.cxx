@@ -1,10 +1,12 @@
+// This is gel/mrc/vpgl/algo/vpgl_ray.cxx
+#include "vpgl_ray.h"
+//
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
-#include "vpgl_ray.h"
 #include "vpgl_backproject.h"
 
 bool vpgl_ray::ray(const vpgl_camera<double>* cam,

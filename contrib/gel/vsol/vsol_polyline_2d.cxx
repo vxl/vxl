@@ -1,10 +1,11 @@
 // This is gel/vsol/vsol_polyline_2d.cxx
-#include <vsl/vsl_vector_io.h>
 #include "vsol_polyline_2d.h"
 //:
 // \file
+
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vsl/vsl_vector_io.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 

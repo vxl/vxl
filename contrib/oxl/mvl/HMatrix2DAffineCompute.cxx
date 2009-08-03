@@ -5,6 +5,8 @@
 //:
 //  \file
 
+#include "HMatrix2DAffineCompute.h"
+//
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
@@ -17,11 +19,6 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>
 
-#include "HMatrix2DAffineCompute.h"
-
-//
-//
-//
 #include <mvl/PairMatchSetCorner.h>
 
 // Compute the 2D affine transformation (the actual implementation)
@@ -120,6 +117,7 @@ HMatrix2DAffineCompute::compute(const PairMatchSetCorner &matches)
  tmp_fun(pts1,pts2,H);
  return H;
 }
+
 HMatrix2D
 HMatrix2DAffineCompute::compute(const vcl_vector<vgl_homg_point_2d<double> >&p1,
                                 const vcl_vector<vgl_homg_point_2d<double> >&p2)
@@ -128,6 +126,7 @@ HMatrix2DAffineCompute::compute(const vcl_vector<vgl_homg_point_2d<double> >&p1,
   tmp_fun(p1,p2,H);
   return H;
 }
+
 HMatrix2D
 HMatrix2DAffineCompute::compute(const vcl_vector<HomgPoint2D>&p1,
                                 const vcl_vector<HomgPoint2D>&p2)
@@ -136,6 +135,7 @@ HMatrix2DAffineCompute::compute(const vcl_vector<HomgPoint2D>&p1,
   tmp_fun(p1,p2,H);
   return H;
 }
+
 bool
 HMatrix2DAffineCompute::compute_p(const vcl_vector<HomgPoint2D> &pts1,
                                   const vcl_vector<HomgPoint2D> &pts2,
@@ -165,7 +165,8 @@ NonHomg::NonHomg(const vcl_vector<HomgPoint2D> &A)
     A[i].get_nonhomogeneous(X(i,0),X(i,1));
 }
 
-vnl_double_2 mean2(const vnl_matrix<double> &A) {
+vnl_double_2 mean2(const vnl_matrix<double> &A)
+{
   assert(A.columns() == 2);
   vnl_double_2 mean(0,0);
   int n = A.rows();
@@ -177,7 +178,8 @@ vnl_double_2 mean2(const vnl_matrix<double> &A) {
   return mean;
 }
 
-vnl_matrix<double>& sub_rows(vnl_matrix<double> &A, const vnl_double_2 a) {
+vnl_matrix<double>& sub_rows(vnl_matrix<double> &A, const vnl_double_2 a)
+{
   unsigned c = A.columns();
   unsigned r = A.rows();
   assert(c == a.size());

@@ -1,14 +1,16 @@
-// vsrl_menus.cxx
-// Menus for use with the vgui_dense_matcher_test program(s)
+// This is gel/vsrl/vsrl_menus.cxx
+#include "vsrl_menus.h"
+//:
+// \file
+// \brief Menus for use with the vgui_dense_matcher_test program(s)
 //
-// G.W. Brooksby
-// 2/13/03
+// \author G.W. Brooksby
+// \date Feb 13, 2003
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 #include "vsrl_manager.h"
-#include "vsrl_menus.h"
 
 // Static menu callback functions
 

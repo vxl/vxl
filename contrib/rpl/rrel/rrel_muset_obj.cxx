@@ -1,14 +1,13 @@
 // This is rpl/rrel/rrel_muset_obj.cxx
-#include <vcl_limits.h>
 #include "rrel_muset_obj.h"
-
+//
+#include <vcl_limits.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_muse_table.h>
-
 
 rrel_muset_obj::rrel_muset_obj( int max_n,
                                 bool use_sk_refine )
@@ -109,20 +108,21 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     int prev_k = 0;
 
     //  Find the best k
-    for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
+    for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ )
+    {
       unsigned int k = vnl_math_rnd( frac*num_residuals );
       if ( k>num_residuals ) k=num_residuals;
       if ( k<=0 ) k=1;
       if ( table_->expected_kth(k, num_residuals) /
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
-        {
-          if ( notwarned ) {
-            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
-                     << "value of k that lead to unstable estimates\n";
-            notwarned = false;
-          }
-          continue;
+      {
+        if ( notwarned ) {
+          vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn "
+                   << "attempted evaluation at value of k that lead to unstable estimates\n";
+          notwarned = false;
         }
+        continue;
+      }
 
       for ( unsigned int i=prev_k; i<k; ++i ) {
         sum_residuals += abs_residuals[i];
