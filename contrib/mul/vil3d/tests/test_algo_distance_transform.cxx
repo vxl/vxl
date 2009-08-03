@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-// not used? #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
@@ -86,12 +85,12 @@ void test_signed_distance_transform()
 
 void test_distance_transform()
 {
-  vcl_cout << "*****************************************\n"
+  vcl_cout << "**********************************\n"
            << " Testing vil3d_distance_transform\n"
-           << "*****************************************\n";
+           << "**********************************\n";
 
   vil3d_image_view<float> image, gt_image;
-  int dim=10,b1=2,b2=7;
+  const unsigned int dim=10, b1=2, b2=7;
   image.set_size(dim,dim,dim);
   gt_image.set_size(dim,dim,dim);
 
@@ -100,7 +99,7 @@ void test_distance_transform()
   vil3d_image_view<vil_rgb<float> > gt_orients;
   orients.set_size(dim,dim,dim);
   gt_orients.set_size(dim,dim,dim);
-  
+
   image.fill(vcl_numeric_limits<float>::max());
   gt_image.fill(vcl_numeric_limits<float>::max());
   vcl_vector<int> planes;
@@ -108,26 +107,26 @@ void test_distance_transform()
   planes.push_back(7);
 
   // create two rectangular planes
-  for (unsigned num=0; num<planes.size(); num++) {
-    for(unsigned i=b1; i<=b2; i++) {
-      for(unsigned j=b1; j<=b2; j++) {
+  for (unsigned num=0; num<planes.size(); ++num) {
+    for (unsigned i=b1; i<=b2; ++i) {
+      for (unsigned j=b1; j<=b2; ++j) {
         image(i,j,planes[num])=0;
       }
     }
   }
 
-  for(unsigned k=0; k<dim; k++) {
-    for(unsigned j=0; j<dim; j++) {
-      for(unsigned i=0; i<dim; i++) {
-        float min = vcl_numeric_limits<float>::max();
-        vgl_point_3d<float> v1(i,j,k); 
-        
+  for (unsigned k=0; k<dim; ++k) {
+    for (unsigned j=0; j<dim; ++j) {
+      for (unsigned i=0; i<dim; ++i) {
+        double min = vcl_numeric_limits<double>::max();
+        vgl_point_3d<float> v1(float(i),float(j),float(k));
+
         // find the distance to the planes
-        for (int num=0; num<planes.size(); num++) {
-          for(unsigned i1=b1; i1<=b2; i1++) {
-            for(unsigned j1=b1; j1<=b2; j1++) {
-              vgl_point_3d<float> v2(i1,j1,planes[num]); 
-              float diff=vgl_distance(v1,v2);
+        for (unsigned num=0; num<planes.size(); ++num) {
+          for (unsigned i1=b1; i1<=b2; ++i1) {
+            for (unsigned j1=b1; j1<=b2; ++j1) {
+              vgl_point_3d<float> v2(float(i1),float(j1),float(planes[num]));
+              double diff=vgl_distance(v1,v2);
               if (diff < min) {
                 min=diff;
                 vgl_vector_3d<float> d=v2-v1;
@@ -144,18 +143,18 @@ void test_distance_transform()
   orients.fill(vil_rgb<float>(0,0,0));
   vil3d_distance_transform_with_dir(image,orients,1,1,1);
 
-  bool equal, img_eq=true, result=true;
-  for (unsigned k=0; k<dim; k++){
-    for (unsigned j=0; j<dim; j++) {
-      for (unsigned i=0; i<dim; i++) {
-        equal= (orients(i,j,k).R()==gt_orients(i,j,k).R() && 
-          orients(i,j,k).G()==gt_orients(i,j,k).G() &&
-          orients(i,j,k).B()==gt_orients(i,j,k).B());
-        if (!equal)  result=false;
+  bool img_eq=true, result=true;
+  for (unsigned k=0; k<dim; ++k){
+    for (unsigned j=0; j<dim; ++j) {
+      for (unsigned i=0; i<dim; ++i) {
+        if (orients(i,j,k).R()!=gt_orients(i,j,k).R() ||
+            orients(i,j,k).G()!=gt_orients(i,j,k).G() ||
+            orients(i,j,k).B()!=gt_orients(i,j,k).B())
+          result=false;
       }
     }
   }
-  TEST_EQUAL("The vectors are equal to ground truth vectors", equal, true);
+  TEST_EQUAL("The vectors are equal to ground truth vectors", result, true);
 }
 
 MAIN( test_algo_distance_transform )
