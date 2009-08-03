@@ -18,6 +18,7 @@
 
 class boxm_mog_grey_processor;
 class boxm_mog_rgb_processor;
+class boxm_simple_grey_processor;
 
 enum boxm_apm_type
 {
@@ -78,7 +79,7 @@ class boxm_apm_traits<BOXM_APM_MOG_RGB>
   typedef boxm_mog_rgb_processor apm_processor;
 };
 
-#if 0
+
 //: traits for a simple one-valued appearance model of grey-scale images
 class boxm_simple_grey
 {
@@ -126,7 +127,7 @@ class boxm_apm_traits<BOXM_APM_SIMPLE_GREY>
   typedef boxm_simple_grey_processor apm_processor;
 };
 
-
+#if 0
 //: traits for a simple one-valued appearance model of rgb images
 class boxm_simple_rgb
 {

@@ -16,6 +16,7 @@ SET(boxm_sources
 
     boxm_apm_traits.cxx                    boxm_apm_traits.h
     boxm_mog_grey_processor.cxx            boxm_mog_grey_processor.h
+    boxm_simple_grey_processor.cxx         boxm_simple_grey_processor.h
     boxm_block_vis_graph_node.h
     boxm_block_vis_graph_iterator.txx      boxm_block_vis_graph_iterator.h
     boxm_cell_vis_graph_iterator.txx       boxm_cell_vis_graph_iterator.h
@@ -50,5 +51,8 @@ SUBDIRS(io)
 
 #tests
 SUBDIRS(tests)
+
+#opt
+SUBDIRS(opt)
 
 ENDIF(EXPAT_FOUND)
