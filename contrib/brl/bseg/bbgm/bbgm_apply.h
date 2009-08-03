@@ -28,7 +28,7 @@ struct bbgm_apply_no_data
   static inline void apply(const bbgm_image_of<dist_>& dimg,
                            const functor_& functor,
                            vil_image_view<T>& result,
-                           const T* fail_val = NULL )
+                           const T* fail_val = 0 )
   {
     typedef typename functor_::return_type return_T;
 
@@ -48,19 +48,19 @@ struct bbgm_apply_no_data
     return_T temp_val;
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
     T* row = result.top_left_ptr();
-    for (unsigned int j=0; j<nj; ++j, row+=jstep){
+    for (unsigned int j=0; j<nj; ++j, row+=jstep) {
       T* col = row;
-      for (unsigned int i=0; i<ni; ++i, col+=istep, ++itr){
+      for (unsigned int i=0; i<ni; ++i, col+=istep, ++itr) {
         T* data = col;
         if ( functor(*itr,temp_val) ) {
           typename return_T::iterator v_itr = temp_val.begin();
-          for (unsigned int p=0; p<np; ++p, data += planestep, ++v_itr){
+          for (unsigned int p=0; p<np; ++p, data += planestep, ++v_itr) {
             *data = *v_itr;
           }
         }
-        else if (fail_val){
+        else if (fail_val) {
           const T* v_itr = fail_val;
-          for (unsigned int p=0; p<np; ++p, data += planestep, ++v_itr){
+          for (unsigned int p=0; p<np; ++p, data += planestep, ++v_itr) {
             *data = *v_itr;
           }
         }
@@ -76,7 +76,7 @@ struct bbgm_apply_no_data<dist_,functor_,T,true>
   static inline void apply(const bbgm_image_of<dist_>& dimg,
                            const functor_& functor,
                            vil_image_view<T>& result,
-                           const T* fail_val = NULL )
+                           const T* fail_val = 0 )
   {
     typedef typename functor_::return_type return_T;
 
@@ -90,12 +90,12 @@ struct bbgm_apply_no_data<dist_,functor_,T,true>
     const vcl_ptrdiff_t istep = result.istep();
     const vcl_ptrdiff_t jstep = result.jstep();
 
-    return_T temp_val;
+    return_T temp_val = return_T(0); // dummy initialisation, to avoid compiler warning; return_T could be bool, though...
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
     T* row = result.top_left_ptr();
-    for (unsigned int j=0; j<nj; ++j, row+=jstep){
+    for (unsigned int j=0; j<nj; ++j, row+=jstep) {
       T* col = row;
-      for (unsigned int i=0; i<ni; ++i, col+=istep, ++itr){
+      for (unsigned int i=0; i<ni; ++i, col+=istep, ++itr) {
         if (functor(*itr, temp_val))
           *col = static_cast<T>(temp_val);
         else if (fail_val)
@@ -110,7 +110,7 @@ template <class dist_, class functor_, class T>
 void bbgm_apply(const bbgm_image_of<dist_>& dimg,
                 const functor_& functor,
                 vil_image_view<T>& result,
-                const T* fail_val = NULL )
+                const T* fail_val = 0 )
 {
   typedef vpdt_field_traits<typename functor_::return_type> return_traits;
   bbgm_apply_no_data<dist_,functor_,T,return_traits::dimension == 1>::
@@ -128,7 +128,7 @@ struct bbgm_apply_data
                            const functor_& functor,
                            const vil_image_view<dT>& data,
                            vil_image_view<rT>& result,
-                           const rT* fail_val = NULL )
+                           const rT* fail_val = 0 )
   {
     typedef typename functor_::return_type return_T;
     typedef typename dist_::field_type F;
@@ -154,19 +154,19 @@ struct bbgm_apply_data
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
     rT* r_row = result.top_left_ptr();
     const dT* d_row = data.top_left_ptr();
-    for (unsigned int j=0; j<nj; ++j, d_row+=d_jstep, r_row+=r_jstep){
+    for (unsigned int j=0; j<nj; ++j, d_row+=d_jstep, r_row+=r_jstep) {
       rT* r_col = r_row;
       const dT* d_col = d_row;
-      for (unsigned int i=0; i<ni; ++i, d_col+=d_istep, r_col+=r_istep, ++itr){
+      for (unsigned int i=0; i<ni; ++i, d_col+=d_istep, r_col+=r_istep, ++itr) {
         rT* r_plane = r_col;
         const dT* d_plane = d_col;
         for (unsigned int k=0; k<d_np; ++k, d_plane+=d_pstep)
           sample[k] = *d_plane;
-        if (functor(*itr, sample, temp_val)){
+        if (functor(*itr, sample, temp_val)) {
           for (unsigned int k=0; k<r_np; ++k, r_plane+=r_pstep)
             *r_plane = temp_val[k];
         }
-        else if ( fail_val ){
+        else if ( fail_val ) {
           for (unsigned int k=0; k<r_np; ++k, r_plane+=r_pstep)
             *r_plane = fail_val[k];
         }
@@ -183,7 +183,7 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
                            const functor_& functor,
                            const vil_image_view<dT>& data,
                            vil_image_view<rT>& result,
-                           const rT* fail_val = NULL )
+                           const rT* fail_val = 0 )
   {
     typedef typename functor_::return_type return_T;
     typedef typename dist_::field_type F;
@@ -208,10 +208,10 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
     rT* r_row = result.top_left_ptr();
     const dT* d_row = data.top_left_ptr();
-    for (unsigned int j=0; j<nj; ++j, d_row+=d_jstep, r_row+=r_jstep){
+    for (unsigned int j=0; j<nj; ++j, d_row+=d_jstep, r_row+=r_jstep) {
       rT* r_col = r_row;
       const dT* d_col = d_row;
-      for (unsigned int i=0; i<ni; ++i, d_col+=d_istep, r_col+=r_istep, ++itr){
+      for (unsigned int i=0; i<ni; ++i, d_col+=d_istep, r_col+=r_istep, ++itr) {
         const dT* d_plane = d_col;
         bbgm_planes_to_sample<dT,F,vpdt_field_traits<F>::dimension>::apply(d_plane,sample,d_pstep);
         if (functor(*itr, sample, temp_val))
@@ -230,7 +230,7 @@ void bbgm_apply(const bbgm_image_of<dist_>& dimg,
                 const functor_& functor,
                 const vil_image_view<dT>& data,
                 vil_image_view<rT>& result,
-                const rT* fail_val = NULL )
+                const rT* fail_val = 0 )
 {
   typedef vpdt_field_traits<typename functor_::return_type> return_traits;
   bbgm_apply_data<dist_,functor_,dT,rT,return_traits::dimension == 1>::
