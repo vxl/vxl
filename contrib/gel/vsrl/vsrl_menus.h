@@ -1,11 +1,14 @@
 // vsrl_menus.h
-// Menus for use with the vgui_dense_matcher_test program(s)
-//
-// G.W. Brooksby
-// 2/13/03
-
 #ifndef vsrl_menus_h_
 #define vsrl_menus_h_
+//:
+// \file
+// \brief Menus for use with the vgui_dense_matcher_test program(s)
+//
+// \author G.W. Brooksby
+// \date Feb 13, 2003
+
+#include <vgui/vgui_menu.h>
 
 class vsrl_menus
 {
