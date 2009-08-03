@@ -1,10 +1,10 @@
+#include "mfpf_draw_matches.h"
 //:
 // \file
 // \brief Function to draw a feature point on an image
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder.h>
-#include <mfpf/mfpf_draw_matches.h>
 #include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_pose_set.h>
 #include <vgl/vgl_point_2d.h>

@@ -1,14 +1,13 @@
+#include "mfpf_prune_overlaps.h"
 //:
 // \file
 // \brief Function to remove any overlapping matching responses
 // \author Tim Cootes
 
-#include <mfpf/mfpf_prune_overlaps.h>
-
 //: Find list of poses overlapping given pose
 void mfpf_find_overlaps(mfpf_point_finder& pf,
                         const vcl_vector<mfpf_pose>& poses,
-                        const mfpf_pose& pose, 
+                        const mfpf_pose& pose,
                         vcl_vector<unsigned>& overlaps)
 {
   overlaps.resize(0);
@@ -23,9 +22,9 @@ void mfpf_find_overlaps(mfpf_point_finder& pf,
 //  If it is near one, and its fit is better, then replace it.
 //  Uses pf.overlap() function to check for proximity
 bool mfpf_find_near_pose(mfpf_point_finder& pf,
-                      vcl_vector<mfpf_pose>& poses,
-                      vcl_vector<double>& fits,
-                      const mfpf_pose& pose, double fit)
+                         vcl_vector<mfpf_pose>& poses,
+                         vcl_vector<double>& fits,
+                         const mfpf_pose& pose, double fit)
 {
   vcl_vector<unsigned> index;
   mfpf_find_overlaps(pf,poses,pose,index);
@@ -48,7 +47,7 @@ bool mfpf_find_near_pose(mfpf_point_finder& pf,
   // If new one is worse than all of them, ignore it.
   // If new one is better than all of them, replace them all
   // Otherwise we have a potentially ambiguous situation
-  // eg three overlapping objects in a row A-B-C with A not 
+  // eg three overlapping objects in a row A-B-C with A not
   // overlapping with C, but f(A)<f(B)<f(C)
   // In this case elliminate all overlapping poses except the best one.
   // There's a danger that this might loose some weaker local
@@ -62,7 +61,7 @@ bool mfpf_find_near_pose(mfpf_point_finder& pf,
   for (unsigned i=0;i<index.size();++i)
   {
     if (fits[index[i]]>fit) { n_worse++;}
-    if (fits[index[i]]<best_fit) 
+    if (fits[index[i]]<best_fit)
     { best_i=index[i]; best_fit=fits[index[i]]; }
   }
 

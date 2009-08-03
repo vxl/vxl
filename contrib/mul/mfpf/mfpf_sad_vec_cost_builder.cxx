@@ -1,10 +1,10 @@
+#include "mfpf_sad_vec_cost_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_sad_vec_cost objects.
 // \author Tim Cootes
 
 
-#include <mfpf/mfpf_sad_vec_cost_builder.h>
 #include <mfpf/mfpf_sad_vec_cost.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -64,8 +64,8 @@ void mfpf_sad_vec_cost_builder::add_example(const vnl_vector<double>& v)
 
 //: dv[i] = |v1[i]-v2[i]|
 inline void abs_diff(const vnl_vector<double>& v1,
-              const vnl_vector<double>& v2,
-              vnl_vector<double>& dv)
+                     const vnl_vector<double>& v2,
+                     vnl_vector<double>& dv)
 {
   unsigned n = v1.size();
   dv.set_size(n);
@@ -96,7 +96,7 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
   // Now compute mean absolute difference from mean
   vnl_vector<double> dv, dv_sum;
   abs_diff(mean,data_[0],dv_sum);
-  for (unsigned i=1;i<n;++i) 
+  for (unsigned i=1;i<n;++i)
   {
     abs_diff(mean,data_[i],dv);
     dv_sum+=dv;
@@ -104,13 +104,13 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
 
   vnl_vector<double> wts(mean.size());
   double dn=double(n);
-  if(impose_robust_min_mad_)
+  if (impose_robust_min_mad_)
   {
       //May impose stricter min_mad as per typical robust kernel fitting (see /isbe_apm/rpca)
       //If we were using SD this would be the median of the MAD (taken over each pixel)
       //As we are using MAD not SD, downscale the median MAD by 1.4826 (MAD to SD conversion for Gaussian)
       //Note this prevents attaching an exaggerated importance to low variance pixels in flat sub-regions of the patch
-      
+
       vcl_vector<double> mads;
       mads.reserve(mean.size());
 
@@ -123,7 +123,7 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
       const double kMADtoSD=1.4826;
       min_mad_ = vcl_max(min_mad_,(*medIter/kMADtoSD));
   }
-  
+
   for (unsigned i=0;i<mean.size();++i)
   {
     wts[i]=1.0/vcl_max(min_mad_,dv_sum[i]/dn);
@@ -166,14 +166,14 @@ bool mfpf_sad_vec_cost_builder::set_from_stream(vcl_istream &is)
     props.erase("min_mad");
   }
 
-  if(props.find("impose_robust_min_mad") !=props.end())
+  if (props.find("impose_robust_min_mad") !=props.end())
   {
     vcl_string strImpose=props["impose_robust_min_mad"];
-    if(strImpose[0]=='f' || strImpose[0]=='F' || strImpose[0]=='0')
+    if (strImpose[0]=='f' || strImpose[0]=='F' || strImpose[0]=='0')
         impose_robust_min_mad_=false;
     else
         impose_robust_min_mad_=true;
-      
+
     props.erase("impose_robust_min_mad");
   }
 
@@ -204,8 +204,7 @@ mfpf_vec_cost_builder* mfpf_sad_vec_cost_builder::clone() const
 
 void mfpf_sad_vec_cost_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ min_mad: " << min_mad_;
-  os << " }";
+  os << "{ min_mad: " << min_mad_ << " }";
 }
 
 //: Version number for I/O

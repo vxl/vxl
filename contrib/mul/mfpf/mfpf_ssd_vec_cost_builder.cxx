@@ -1,10 +1,10 @@
+#include "mfpf_ssd_vec_cost_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_ssd_vec_cost objects.
 // \author Tim Cootes
 
 
-#include <mfpf/mfpf_ssd_vec_cost_builder.h>
 #include <mfpf/mfpf_ssd_vec_cost.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -63,8 +63,8 @@ void mfpf_ssd_vec_cost_builder::add_example(const vnl_vector<double>& v)
 
 //: dv[i] = |v1[i]-v2[i]|
 inline void abs_diff(const vnl_vector<double>& v1,
-              const vnl_vector<double>& v2,
-              vnl_vector<double>& dv)
+                     const vnl_vector<double>& v2,
+                     vnl_vector<double>& dv)
 {
   unsigned n = v1.size();
   dv.set_size(n);
@@ -95,7 +95,7 @@ void mfpf_ssd_vec_cost_builder::build(mfpf_vec_cost& pf)
   // Now compute mean absolute difference from mean
   vnl_vector<double> dv, dv_sum;
   abs_diff(mean,data_[0],dv_sum);
-  for (unsigned i=1;i<n;++i) 
+  for (unsigned i=1;i<n;++i)
   {
     abs_diff(mean,data_[i],dv);
     dv_sum+=dv;
@@ -173,8 +173,7 @@ mfpf_vec_cost_builder* mfpf_ssd_vec_cost_builder::clone() const
 
 void mfpf_ssd_vec_cost_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ min_var: " << min_var_;
-  os << " }";
+  os << "{ min_var: " << min_var_ << " }";
 }
 
 //: Version number for I/O

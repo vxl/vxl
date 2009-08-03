@@ -1,3 +1,4 @@
+#include "brdb_database_manager.h"
 //:
 // \file
 // \brief A database manager
@@ -6,10 +7,9 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-
-#include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_query.h>
 #include <brdb/brdb_tuple.h>
@@ -29,19 +29,16 @@ brdb_database_sptr brdb_database_manager::instance()
 }
 
 
-
-
 //: clear all relations except
-bool 
-brdb_database_manager::clear_all_except(const vcl_set<vcl_string>& relation_names) 
+bool
+brdb_database_manager::clear_all_except(const vcl_set<vcl_string>& relation_names)
 {
-
   vcl_set<vcl_string> all_relation_names = instance()->get_all_relation_names();
 
   // check whether all those relation exist
-  for(vcl_set<vcl_string>::const_iterator itr = relation_names.begin(); itr != relation_names.end(); ++itr)
+  for (vcl_set<vcl_string>::const_iterator itr = relation_names.begin(); itr != relation_names.end(); ++itr)
   {
-    if(!instance()->exists((*itr)))
+    if (!instance()->exists((*itr)))
     {
       vcl_cout << "Database manager warning: clear_all_except() failed, some relation does not exist." << vcl_endl;
       return false;
@@ -49,9 +46,9 @@ brdb_database_manager::clear_all_except(const vcl_set<vcl_string>& relation_name
   }
 
   // go through all names, if not in relation_names, remove them
-  for(vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  for (vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
   {
-    if(relation_names.find((*itr)) == relation_names.end())
+    if (relation_names.find((*itr)) == relation_names.end())
     {
       instance()->clear_relation((*itr));
     }
@@ -61,16 +58,15 @@ brdb_database_manager::clear_all_except(const vcl_set<vcl_string>& relation_name
 }
 
 //: remove all relations except
-bool 
-brdb_database_manager::remove_all_except(const vcl_set<vcl_string>& relation_names) 
+bool
+brdb_database_manager::remove_all_except(const vcl_set<vcl_string>& relation_names)
 {
-
   vcl_set<vcl_string> all_relation_names = instance()->get_all_relation_names();
 
   // check whether all those relation exist
-  for(vcl_set<vcl_string>::const_iterator itr = relation_names.begin(); itr != relation_names.end(); ++itr)
+  for (vcl_set<vcl_string>::const_iterator itr = relation_names.begin(); itr != relation_names.end(); ++itr)
   {
-    if(!instance()->exists((*itr)))
+    if (!instance()->exists((*itr)))
     {
       vcl_cout << "Database manager warning: clear_all_except() failed, some relation does not exist." << vcl_endl;
       return false;
@@ -78,9 +74,9 @@ brdb_database_manager::remove_all_except(const vcl_set<vcl_string>& relation_nam
   }
 
   // go through all names, if not in relation_names, remove them
-  for(vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  for (vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
   {
-    if(relation_names.find((*itr)) == relation_names.end())
+    if (relation_names.find((*itr)) == relation_names.end())
     {
       instance()->remove_relation((*itr));
     }
@@ -90,15 +86,13 @@ brdb_database_manager::remove_all_except(const vcl_set<vcl_string>& relation_nam
 }
 
 
-
-
 //: save the current database into a file
 bool
-brdb_database_manager::save_database(const vcl_string& path) 
+brdb_database_manager::save_database(const vcl_string& path)
 {
   vsl_b_ofstream out_stream(path);
   if (!out_stream){
-    vcl_cerr<<"Failed to open " << path << " for binary IO output." << vcl_endl;
+    vcl_cerr<<"Failed to open " << path << " for binary IO output.\n";
     return false;
   }
   vcl_cout << "Opened binary IO file "<< path << " successfully." << vcl_endl;
@@ -110,18 +104,18 @@ brdb_database_manager::save_database(const vcl_string& path)
 
 //: load database from file
 bool
-brdb_database_manager::load_database(const vcl_string& path) 
+brdb_database_manager::load_database(const vcl_string& path)
 {
   vsl_b_ifstream in_stream(path);
   if (!in_stream){
-    vcl_cerr<<"Failed to open " << path << " for binary IO input." << vcl_endl;
+    vcl_cerr<<"Failed to open " << path << " for binary IO input.\n";
     return false;
   }
   vcl_cout << "Opened binary IO file " << path << " successfully." << vcl_endl;
 
   instance()->b_read(in_stream);
   in_stream.close();
-  
+
   return true;
 }
 
@@ -132,7 +126,7 @@ brdb_database_manager::merge_database(const vcl_string& path)
 {
   vsl_b_ifstream in_stream(path);
   if (!in_stream){
-    vcl_cerr<<"Failed to open " << path << " for binary IO input." << vcl_endl;
+    vcl_cerr<<"Failed to open " << path << " for binary IO input.\n";
     return false;
   }
   vcl_cout << "Opened binary IO file " << path << " successfully." << vcl_endl;
@@ -143,6 +137,4 @@ brdb_database_manager::merge_database(const vcl_string& path)
 
   return instance()->merge(from_file);
 }
-
-
 

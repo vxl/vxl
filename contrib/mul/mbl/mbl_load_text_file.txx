@@ -5,14 +5,14 @@
 // \brief Functions to load objects from text file
 // \author dac
 
-#include <mbl/mbl_load_text_file.h>
+#include "mbl_load_text_file.h"
+
 #include <mbl/mbl_exception.h>
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vcl_iterator.h>
 #include <vcl_algorithm.h>
-
 
 //: Load vector from file with format "v1 v2 .. vn"
 template <class T>
@@ -26,11 +26,11 @@ bool mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
     return false;
   }
 
-  vcl_copy (vcl_istream_iterator<T> (ifs), vcl_istream_iterator<T>(),
-        vcl_back_insert_iterator< vcl_vector<T> > (v) );
+  vcl_copy(vcl_istream_iterator<T> (ifs), vcl_istream_iterator<T>(),
+           vcl_back_insert_iterator< vcl_vector<T> > (v) );
   if (ifs.eof())
     return true;
-  
+
   mbl_exception_warning( mbl_exception_parse_file_error(
     "mbl_load_text_file: parse failure before end of file", path ) );
   return true;

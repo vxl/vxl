@@ -1,4 +1,5 @@
-#include <brip/brip_rect_mask.h>
+#include "brip_rect_mask.h"
+
 #include <vcl_iostream.h>
 
 //        0 0 - 0 0

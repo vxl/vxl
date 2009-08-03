@@ -1,9 +1,9 @@
+#include "mfpf_sort_matches.h"
 //:
 // \file
 // \brief Sorts matches so first has smallest fit
 // \author Tim Cootes
 
-#include <mfpf/mfpf_sort_matches.h>
 #include <mbl/mbl_index_sort.h>
 
 //: Sorts matches so first has smallest fit

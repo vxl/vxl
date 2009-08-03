@@ -1,4 +1,5 @@
-#include <bwm/video/bwm_video_corr_processor.h>
+#include "bwm_video_corr_processor.h"
+
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <vcl_cmath.h>
@@ -418,8 +419,8 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
   // exectute the bundle adjustment
   vpgl_bundle_adjust adj;
   bool success = adj.optimize(unknown_cameras,
-                                              unknown_world, cimage_points,
-                                              cmask);
+                              unknown_world, cimage_points,
+                              cmask);
   //save the solved world points in the correspondences
   for (unsigned w = 0; w<npoints; ++w)
   {
@@ -854,8 +855,8 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
   // exectute the bundle adjustment
   vpgl_bundle_adjust adj;
   bool success = adj.optimize(unknown_cameras,
-                                              unknown_world, cimage_points,
-                                              cmask);
+                              unknown_world, cimage_points,
+                              cmask);
   //save the solved world points in the correspondences
   for (unsigned w = 0; w<npoints; ++w)
   {

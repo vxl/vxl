@@ -1,6 +1,6 @@
+#include "mbl_sample_stats_1d.h"
 //:
 // \file
-#include <mbl/mbl_sample_stats_1d.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -129,13 +129,13 @@ double mbl_sample_stats_1d::median() const
 double mbl_sample_stats_1d::quantile(double q) const
 {
   const unsigned n = samples_.size();
-  
+
   // These checks are only asserts because client code is responsible for avoiding these errors.
   assert(q>=0.0 && q<=1.0);
   assert(n>0);
 
   // Map the specified quantile to a real-valued "index", i.e. a float lying between 2 integer indices
-  double float_index = (n-1)*q; 
+  double float_index = (n-1)*q;
 
   // Get the integer index immediately below (and enforce the bounds)
   double f0 = vcl_floor(float_index);
@@ -376,7 +376,7 @@ void mbl_sample_stats_1d::b_read(vsl_b_istream& bfs)
     break;
   default :
     vcl_cerr << "I/O ERROR: mbl_sample_stats_1d::b_read(vsl_b_istream&)\n"
-      << "           Unknown version number "<< file_version_no << '\n';
+             << "           Unknown version number "<< file_version_no << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -394,9 +394,9 @@ void mbl_sample_stats_1d::print_summary(vcl_ostream& os) const
   else
   {
     os << "mean: "<< mean()
-      << " use MVUE: "<< use_mvue_
-      << " sd: "<< sd()
-      << " ["<<stats_1d_.min()<<','<<stats_1d_.max()<<"] N:"<<samples_.size();
+       << " use MVUE: "<< use_mvue_
+       << " sd: "<< sd()
+       << " ["<<stats_1d_.min()<<','<<stats_1d_.max()<<"] N:"<<samples_.size();
   }
 }
 

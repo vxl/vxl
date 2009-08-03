@@ -1,8 +1,8 @@
+#include "vidl_io_istream.h"
 //:
 // \file
 #include <vsl/vsl_binary_io.h>
 #include <vidl/vidl_istream.h>
-#include <core/vidl_pro/vidl_io_istream.h>
 #include <vcl_iostream.h>
 
 

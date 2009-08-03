@@ -1,3 +1,4 @@
+#include "brdb_query.h"
 //:
 // \file
 // \brief a brdb_query to be submitted to brdb_database_manager
@@ -9,9 +10,7 @@
 //   (none yet)
 // \endverbatim
 
-#include <brdb/brdb_query.h>
 #include <vcl_cassert.h>
-
 
 //: Return the complement query comparison type
 brdb_query::comp_type operator ~(brdb_query::comp_type type)

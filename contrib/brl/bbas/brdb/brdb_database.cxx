@@ -1,3 +1,4 @@
+#include "brdb_database.h"
 //:
 // \file
 // \brief A database
@@ -6,11 +7,9 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-
-
-#include <brdb/brdb_database.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <brdb/brdb_tuple.h>
@@ -19,12 +18,12 @@
 #include <brdb/brdb_query.h>
 
 //: Constructor - create an empty database;
-brdb_database::brdb_database() 
-{ 
+brdb_database::brdb_database()
+{
 }
 
 //: Constructor - create a database populated with relations
-brdb_database::brdb_database(vcl_vector<brdb_relation_sptr> relations, vcl_vector<vcl_string> relation_names) 
+brdb_database::brdb_database(vcl_vector<brdb_relation_sptr> relations, vcl_vector<vcl_string> relation_names)
 {
   // make sure the size of relations is same with size of names;
   assert(relations.size() == relation_names.size());
@@ -35,17 +34,16 @@ brdb_database::brdb_database(vcl_vector<brdb_relation_sptr> relations, vcl_vecto
   // fill the relations_
   vcl_vector<brdb_relation_sptr>::iterator relations_itr = relations.begin();
   vcl_vector<vcl_string>::iterator relation_name_itr = relation_names.begin();
-  for(; (relations_itr != relations.end()) && (relation_name_itr != relation_names.end()); ++relations_itr, ++relation_name_itr)
+  for (; (relations_itr != relations.end()) && (relation_name_itr != relation_names.end()); ++relations_itr, ++relation_name_itr)
   {
     relations_[*relation_name_itr] = *relations_itr;
   }
 
   // check the final relations size;
   assert(relations_.size() == relation_names.size());
-
 }
 
-//: get the number of relations 
+//: get the number of relations
 int
 brdb_database::size() const
 {
@@ -64,11 +62,11 @@ brdb_database::clear()
 bool
 brdb_database::exists(const vcl_string& name) const
 {
-  if(empty())
+  if (empty())
     return false;
 
   vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.find(name);
-  return (itr != relations_.end());
+  return itr != relations_.end();
 }
 
 
@@ -77,7 +75,7 @@ bool
 brdb_database::exists(const vcl_string& relation_name,
                       const vcl_string& attribute_name) const
 {
-  if(empty())
+  if (empty())
     return false;
 
   vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.find(relation_name);
@@ -89,11 +87,11 @@ brdb_database::exists(const vcl_string& relation_name,
 
 
 //: add a tuple into a relation
-bool 
+bool
 brdb_database::add_tuple(const vcl_string& name, const brdb_tuple_sptr& new_tuple)
 {
   vcl_map<vcl_string, brdb_relation_sptr>::iterator itr = relations_.find(name);
-  if(itr == relations_.end())
+  if (itr == relations_.end())
   {
     vcl_cerr << "Database warning: trying to add new tuple to an unknown relation: "
              << name << vcl_endl;
@@ -109,7 +107,7 @@ bool
 brdb_database::remove_relation(const vcl_string& name)
 {
   vcl_map<vcl_string, brdb_relation_sptr>::iterator itr = relations_.find(name);
-  if(itr == relations_.end())
+  if (itr == relations_.end())
   {
     vcl_cerr << "Database warning: trying to delete a relation that does not exist: "
              << name << vcl_endl;
@@ -126,7 +124,7 @@ bool
 brdb_database::clear_relation(const vcl_string& name)
 {
   vcl_map<vcl_string, brdb_relation_sptr>::iterator itr = relations_.find(name);
-  if(itr == relations_.end())
+  if (itr == relations_.end())
   {
     vcl_cerr << "Database warning: trying to clear a relation that does not exist: "
              << name << vcl_endl;
@@ -139,13 +137,13 @@ brdb_database::clear_relation(const vcl_string& name)
 
 
 //: add new relation to database
-bool 
+bool
 brdb_database::add_relation(const vcl_string& name, const brdb_relation_sptr& new_relation)
 {
   vcl_cout << "Adding relation " << name << '\n';
 
   vcl_map<vcl_string, brdb_relation_sptr>::iterator itr = relations_.find(name);
-  if(itr != relations_.end())
+  if (itr != relations_.end())
   {
     vcl_cerr << "Database warning: trying to add a new relation "
              << "which has an conflicting name with an existinig relation. "
@@ -158,26 +156,26 @@ brdb_database::add_relation(const vcl_string& name, const brdb_relation_sptr& ne
 
 
 //: get a relation by name
-brdb_relation_sptr 
+brdb_relation_sptr
 brdb_database::get_relation(const vcl_string& name) const
 {
   vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.find(name);
-  if(itr == relations_.end())
+  if (itr == relations_.end())
     return NULL;
   return itr->second;
 }
 
 
 //: print the whole database
-void 
+void
 brdb_database::print() const
 {
   vcl_cout << "\n<<<<<<<<<<<<<<<<<<<<---- Printing database ---->>>>>>>>>>>>>>>>>>>>>>>\n";
   vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.begin();
-  for(; itr != relations_.end(); itr++)
+  for (; itr != relations_.end(); itr++)
   {
-    vcl_cout << "______________________________________________________________________\n";
-    vcl_cout << "Relation name: " << (*itr).first << vcl_endl;
+    vcl_cout << "______________________________________________________________________\n"
+             << "Relation name: " << (*itr).first << vcl_endl;
     (*itr).second->print();
   }
   vcl_cout << "\n<<<<<<<<<<<<<<<<<<<<<<<<<<---- end ---->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
@@ -185,12 +183,12 @@ brdb_database::print() const
 
 
 //: get all the relation names
-vcl_set<vcl_string> 
+vcl_set<vcl_string>
 brdb_database::get_all_relation_names() const
 {
   vcl_set<vcl_string> names;
 
-  for(vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.begin(); itr != relations_.end(); ++itr)
+  for (vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.begin(); itr != relations_.end(); ++itr)
   {
     names.insert((*itr).first);
   }
@@ -206,7 +204,7 @@ brdb_database::join(const vcl_string& r1, const vcl_string& r2) const
   vcl_map<vcl_string, brdb_relation_sptr>::const_iterator find_r1 = relations_.find(r1);
   vcl_map<vcl_string, brdb_relation_sptr>::const_iterator find_r2 = relations_.find(r2);
 
-  if(find_r1 == relations_.end() || find_r2 == relations_.end())
+  if (find_r1 == relations_.end() || find_r2 == relations_.end())
   {
     vcl_cerr << "Database warning: trying to join relation that does not exist in database:" << r1 << " or " << r2 << vcl_endl;
     return NULL;
@@ -221,12 +219,12 @@ bool
 brdb_database::join(const vcl_string& r1, const vcl_string& r2, const vcl_string& result )
 {
   vcl_map<vcl_string, brdb_relation_sptr>::iterator itr = relations_.find(result);
-  if(itr != relations_.end()){
+  if (itr != relations_.end()){
     return false;
   }
 
   brdb_relation_sptr new_relation = this->join(r1,r2);
-  if(!new_relation)
+  if (!new_relation)
     return false;
 
   return this->add_relation(result, new_relation);
@@ -237,7 +235,7 @@ brdb_database::join(const vcl_string& r1, const vcl_string& r2, const vcl_string
 brdb_selection_sptr
 brdb_database::select(const vcl_string& relation_name, brdb_query_aptr q) const
 {
-  if(!exists(relation_name)){
+  if (!exists(relation_name)){
     vcl_cerr << "Database warning: trying to select in an unexisting "
              << "relation: " << relation_name << vcl_endl;
     return NULL;
@@ -258,7 +256,7 @@ brdb_database::merge(const brdb_database_sptr& other)
     return false;
 
   // simple copying case
-  if(this->empty())
+  if (this->empty())
   {
     this->relations_ = other->relations_;
     return true;
@@ -271,26 +269,26 @@ brdb_database::merge(const brdb_database_sptr& other)
   r_map new_relations(this->relations_);
 
   // for each relation in the other database
-  for(r_map::iterator oi = other->relations_.begin();
-      oi!=other->relations_.end(); ++oi)
+  for (r_map::iterator oi = other->relations_.begin();
+       oi!=other->relations_.end(); ++oi)
   {
     // look for a relation with the same name in this database
     r_map::iterator ti = new_relations.find(oi->first);
     // if not found
-    if(ti == this->relations_.end())
+    if (ti == this->relations_.end())
     {
       new_relations.insert(*oi);
       continue;
     }
 
     // test for compatiblity of relations
-    if(!ti->second->is_compatible(oi->second))
+    if (!ti->second->is_compatible(oi->second))
       return false;
 
     // copy the old relation and merge tuples
     // if later merging fails, the original tuple is not modified
     brdb_relation_sptr new_relation = new brdb_relation(*ti->second);
-    if(!new_relation->merge(oi->second))
+    if (!new_relation->merge(oi->second))
       return false;
 
     new_relations[ti->first] = new_relation;
@@ -299,12 +297,11 @@ brdb_database::merge(const brdb_database_sptr& other)
   // everything has succeeded so make the new relations official
   this->relations_ = new_relations;
   return true;
-
 }
 
 
 //: binary IO write
-void brdb_database::b_write(vsl_b_ostream os) 
+void brdb_database::b_write(vsl_b_ostream os)
 {
   // first write the version number;
   unsigned int ver = 1;
@@ -315,10 +312,10 @@ void brdb_database::b_write(vsl_b_ostream os)
   vsl_b_write(os, database_size);
 
   // the write each relation and it name
-  if(database_size != 0)
+  if (database_size != 0)
   {
-    for(vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.begin();
-        itr != relations_.end(); ++itr)
+    for (vcl_map<vcl_string, brdb_relation_sptr>::const_iterator itr = relations_.begin();
+         itr != relations_.end(); ++itr)
     {
       // first write the relation name
       vcl_string relation_name((*itr).first);
@@ -333,7 +330,7 @@ void brdb_database::b_write(vsl_b_ostream os)
 
 
 //: binary IO read
-void brdb_database::b_read(vsl_b_istream is) 
+void brdb_database::b_read(vsl_b_istream is)
 {
   // first clear the database;
   this->clear();
@@ -347,9 +344,9 @@ void brdb_database::b_read(vsl_b_istream is)
   vsl_b_read(is, database_size);
 
   // the write each relation and it name
-  if(database_size != 0)
+  if (database_size != 0)
   {
-    for(unsigned int i=0; i<database_size; i++)
+    for (unsigned int i=0; i<database_size; i++)
     {
       // first read the relation name
       vcl_string relation_name;

@@ -1,9 +1,8 @@
+#include "mfpf_patch_data.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Defines region size, shape, and form of model to use
-
-#include <mfpf/mfpf_patch_data.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -82,13 +81,13 @@ vcl_string mfpf_patch_data::is_a() const
 //: Print class to os
 void mfpf_patch_data::print_summary(vcl_ostream& os) const
 {
-  os<<" { \n";
+  os<<" {\n";
   vsl_indent_inc(os);
-  os<<vsl_indent()<<"name: "<<name_<<"\n";
-  os<<vsl_indent()<<"min_width: "<<min_width_<<"\n";
-  os<<vsl_indent()<<"max_width: "<<max_width_<<"\n";
-  os<<vsl_indent()<<"region: "<<definer_<<"\n";
-  os<<vsl_indent()<<"builder: "<<builder_<<"\n";
+  os<<vsl_indent()<<"name: "<<name_<<'\n'
+    <<vsl_indent()<<"min_width: "<<min_width_<<'\n'
+    <<vsl_indent()<<"max_width: "<<max_width_<<'\n'
+    <<vsl_indent()<<"region: "<<definer_<<'\n'
+    <<vsl_indent()<<"builder: "<<builder_<<'\n';
   vsl_indent_dec(os);
   os<<"} ";
 }
@@ -126,12 +125,11 @@ void mfpf_patch_data::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,builder_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n";
       vcl_cerr << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
-
 }
 
 //=======================================================================
@@ -195,6 +193,5 @@ void mfpf_read_from_stream(vcl_istream &is,
     patch.set_from_stream(ss2);
     data.push_back(patch);
   }
-
 }
 

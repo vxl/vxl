@@ -1,9 +1,9 @@
+#include "mfpf_region_pdf_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_region_pdf objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_region_pdf_builder.h>
 #include <mfpf/mfpf_region_pdf.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>

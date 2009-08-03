@@ -1,9 +1,9 @@
+#include "mfpf_edge_finder_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_edge_finder objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_edge_finder_builder.h>
 #include <mfpf/mfpf_edge_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>

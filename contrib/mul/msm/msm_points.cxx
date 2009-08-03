@@ -1,9 +1,9 @@
+#include "msm_points.h"
 //:
 // \file
 // \brief Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
 // \author Tim Cootes
 
-#include <msm/msm_points.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>

@@ -1,6 +1,7 @@
-#include <bdgl/bdgl_peano_curve.h>
+#include "bdgl_peano_curve.h"
 //:
 // \file
+
 #include<vcl_cmath.h>
 
 vcl_vector<vgl_point_2d<double> > rotate_2d(vcl_vector<vgl_point_2d<double> > in, double angle)

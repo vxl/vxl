@@ -4,7 +4,7 @@
 //:
 // \file
 
-#include <bgrl2/bgrl2_vertex.h>
+#include "bgrl2_vertex.h"
 
 //: delete an edge incident on this node
 template <class E>

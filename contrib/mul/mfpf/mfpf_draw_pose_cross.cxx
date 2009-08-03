@@ -1,9 +1,9 @@
+#include "mfpf_draw_pose_cross.h"
 //:
 // \file
 // \brief Function to draw a feature point on an image
 // \author Tim Cootes
 
-#include <mfpf/mfpf_draw_pose_cross.h>
 #include <mbl/mbl_draw_line.h>
 #include <vgl/vgl_point_2d.h>
 

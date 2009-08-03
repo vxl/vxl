@@ -1,9 +1,9 @@
+#include "mfpf_grad_corr2d_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_grad_corr2d objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_grad_corr2d_builder.h>
 #include <mfpf/mfpf_grad_corr2d.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -85,9 +85,9 @@ void mfpf_grad_corr2d_builder::set_region_size(double wi, double wj)
 }
 
 //: Number of dimensions in the model
-unsigned mfpf_grad_corr2d_builder::model_dim() 
-{ 
-  return 2*ni_*nj_; 
+unsigned mfpf_grad_corr2d_builder::model_dim()
+{
+  return 2*ni_*nj_;
 }
 
 
@@ -110,7 +110,7 @@ static void normalize(vil_image_view<double>& im)
 
   assert(!vnl_math_isnan(sum));
 
-  if (ss<1e-6) 
+  if (ss<1e-6)
   {
     vcl_cerr<<"Warning: Almost flat region in mfpf_grad_corr2d_builder\n"
             <<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
@@ -146,9 +146,9 @@ void mfpf_grad_corr2d_builder::diff_image(const vimt_image_2d_of<float>& image,
   im_p0 = s_w2i(p0);
   im_u = s_w2i.delta(p0, u1);
   im_v = s_w2i.delta(p0, v1);
-  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),  
+  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),
                      im_u.x(),im_u.y(), im_v.x(),im_v.y(), ni_+1,nj_);
-  
+
   // take differences across x
   grad_x.set_size(ni_,nj_);
 
@@ -169,7 +169,7 @@ void mfpf_grad_corr2d_builder::diff_image(const vimt_image_2d_of<float>& image,
   im_p0 = s_w2i(p0);
   im_u = s_w2i.delta(p0, u1);
   im_v = s_w2i.delta(p0, v1);
-  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),  
+  vil_resample_bilin(image.image(),sample, im_p0.x(),im_p0.y(),
                      im_u.x(),im_u.y(), im_v.x(),im_v.y(), ni_,nj_+1);
 
   // take differences across y
@@ -261,12 +261,12 @@ void mfpf_grad_corr2d_builder::build(mfpf_point_finder& pf)
   assert(n_added_>0);
   assert(pf.is_a()=="mfpf_grad_corr2d");
   mfpf_grad_corr2d& nc = static_cast<mfpf_grad_corr2d&>(pf);
-  
+
   vil_image_view<double> mean_x;
   mean_x.deep_copy(sum_x_);
   vil_math_scale_values(mean_x,1.0/n_added_);
   normalize(mean_x);
-  
+
   vil_image_view<double> mean_y;
   mean_y.deep_copy(sum_y_);
   vil_math_scale_values(mean_y,1.0/n_added_);

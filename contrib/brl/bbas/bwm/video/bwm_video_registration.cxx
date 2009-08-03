@@ -1,4 +1,5 @@
-#include <bwm/video/bwm_video_registration.h>
+#include "bwm_video_registration.h"
+
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <vcl_cmath.h>
 #include <vul/vul_timer.h>
@@ -36,7 +37,7 @@ output_frame_bounds_planar(bwm_video_cam_istream_sptr& cam_istream,
                            vsol_box_2d_sptr& bounds,
                            double& world_sample_distance,
                            unsigned skip_frames
-                           )
+                          )
 {
   vsol_polygon_2d_sptr input_poly = poly_from_image_region(input_ni, input_nj);
   bounds = new vsol_box_2d();
@@ -155,7 +156,7 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
                              double world_sample_distance,
                              vidl_ostream_sptr& out_stream,
                              unsigned skip_frames
-                             )
+                            )
 {
   if (!in_stream || !cam_istream || !out_stream)
     return false;
@@ -218,7 +219,7 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
                              double world_sample_distance,
                              vcl_string const& homg_out_dir,
                              unsigned skip_frames
-                             )
+                            )
 {
   if (vul_file::exists(homg_out_dir)&&!vul_file::is_directory(homg_out_dir)){
     vcl_cerr << "In bwm_video_registration:: -"

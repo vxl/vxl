@@ -1,9 +1,9 @@
+#include "mfpf_norm_corr2d_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_norm_corr2d objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_norm_corr2d_builder.h>
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -85,9 +85,9 @@ void mfpf_norm_corr2d_builder::set_region_size(double wi, double wj)
 }
 
 //: Number of dimensions in the model
-unsigned mfpf_norm_corr2d_builder::model_dim() 
-{ 
-  return ni_*nj_; 
+unsigned mfpf_norm_corr2d_builder::model_dim()
+{
+  return ni_*nj_;
 }
 
 
@@ -110,7 +110,7 @@ static void normalize(vil_image_view<double>& im)
 
   assert(!vnl_math_isnan(sum));
 
-  if (ss<1e-6) 
+  if (ss<1e-6)
   {
     vcl_cerr<<"Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
             <<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
@@ -135,7 +135,7 @@ void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& im
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
 
   vil_image_view<double> sample;
-  
+
   const vgl_point_2d<double> p0 = p-ref_x_*u1-ref_y_*v1;
 
   const vimt_transform_2d& s_w2i = image.world2im();

@@ -1,9 +1,9 @@
+#include "mfpf_region_finder_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_region_finder objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_region_finder_builder.h>
 #include <mfpf/mfpf_region_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -35,7 +35,6 @@ mfpf_region_finder_builder::mfpf_region_finder_builder()
 //: Define default values
 void mfpf_region_finder_builder::set_defaults()
 {
-
   step_size_=1.0;
   search_ni_=5;
   search_nj_=5;
@@ -177,7 +176,7 @@ void mfpf_region_finder_builder::set_as_ellipse(double ri, double rj)
 //: Number of dimensions in the model
 unsigned mfpf_region_finder_builder::model_dim()
 {
-  return n_pixels_; 
+  return n_pixels_;
 }
 
 //: Initialise building
@@ -220,7 +219,7 @@ void mfpf_region_finder_builder::add_one_example(
   {
       double var=var_min_;
       mfpf_norm_vec(v,var_min_,&var);
-      if(var<tvar_min_)
+      if (var<tvar_min_)
           tvar_min_ = var;
   }
   cost_builder().add_example(v);
@@ -261,16 +260,16 @@ void mfpf_region_finder_builder::build(mfpf_point_finder& pf)
   set_base_parameters(rp);
   rp.set_overlap_f(overlap_f_);
 
-  if(estimate_var_min_ && norm_method_==1 && num_examples_>0)
+  if (estimate_var_min_ && norm_method_==1 && num_examples_>0)
   {
     //Assume applied var_min is r* min in training set, where r->1 as n->infinity
     //Set r=0.98 for n around 50
     double dn=double(num_examples_);
-    if(dn>0.0)
+    if (dn>0.0)
     {
       double r=0.925; //so r attains 0.98 around n=50
       double alpha=1.0;
-      if(dn>50.0)
+      if (dn>50.0)
         alpha=0.98;
       else
       {
@@ -407,14 +406,14 @@ bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
 
     props.erase("norm");
   }
-  if(props.find("estimate_var_min") !=props.end())
+  if (props.find("estimate_var_min") !=props.end())
   {
     vcl_string strEstimate=props["estimate_var_min"];
-    if(strEstimate[0]=='f' || strEstimate[0]=='F' || strEstimate[0]=='0')
+    if (strEstimate[0]=='f' || strEstimate[0]=='F' || strEstimate[0]=='0')
         estimate_var_min_=false;
     else
         estimate_var_min_=true;
-      
+
     props.erase("estimate_var_min");
   }
 
@@ -523,7 +522,7 @@ void mfpf_region_finder_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,cost_builder_);
   vsl_b_write(bfs,norm_method_);
   vsl_b_write(bfs,overlap_f_);
-  if(version_no()>2)
+  if (version_no()>2)
       vsl_b_write(bfs,var_min_);
 }
 

@@ -1,10 +1,9 @@
+#include "mmn_solver.h"
 //:
 // \file
 // \brief Base for classes which solve Markov Random Field problems
 // \author Tim Cootes
 
-
-#include <mmn/mmn_solver.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
@@ -40,7 +39,7 @@ bool mmn_solver::set_from_stream(vcl_istream &is)
 
   if (props.size()!=0)
   {
-    vcl_cerr<<is_a()<<" does not expect any extra arguments."<<vcl_endl;
+    vcl_cerr<<is_a()<<" does not expect any extra arguments.\n";
     mbl_read_props_look_for_unused_props(
       "mmn_solver::set_from_stream", props, mbl_read_props_type());
   }
@@ -99,7 +98,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mmn_solver& b)
 }
 
 //=======================================================================
-// Associated function: operator>> 
+// Associated function: operator>>
 //=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, mmn_solver& b)
@@ -108,7 +107,7 @@ void vsl_b_read(vsl_b_istream& bfs, mmn_solver& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mmn_solver& b)
@@ -121,12 +120,12 @@ vcl_ostream& operator<<(vcl_ostream& os,const mmn_solver& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mmn_solver* b)
 {
-  if (b)  
+  if (b)
     return os << *b;
   else
     return os << "No mmn_solver defined.";

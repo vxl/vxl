@@ -1,12 +1,11 @@
 // This is brl/bbas/brdb/brdb_relation.cxx
+#include "brdb_relation.h"
 //:
 // \file
 //
 // updated by Yong Zhao
 // Apr 4th, 2007
 // Make it work with the whole database initially based on Matt's sketch.
-
-#include <brdb/brdb_relation.h>
 
 #include <vcl_set.h>
 #include <vcl_cassert.h>
@@ -46,14 +45,14 @@ brdb_relation::brdb_relation( const vcl_vector<vcl_string>& names,
  : names_(names), types_(types), tuples_(tuples)
 {
   // if no types are specified infer them from the data
-  if(types_.empty())
+  if (types_.empty())
   {
     types_.resize(names.size(),"");
-    for(unsigned int i=0; i<types_.size(); ++i)
+    for (unsigned int i=0; i<types_.size(); ++i)
     {
-      for(unsigned int j=0; j<tuples_.size(); ++j)
+      for (unsigned int j=0; j<tuples_.size(); ++j)
       {
-        if(!tuples_[j]->is_null(i))
+        if (!tuples_[j]->is_null(i))
         {
           types_[i] = (*tuples_[j])[i].is_a();
           break;
@@ -76,20 +75,20 @@ brdb_relation::~brdb_relation()
 bool
 brdb_relation::is_valid() const
 {
-  if(names_.size() != types_.size())
+  if (names_.size() != types_.size())
     return false;
   // check that all names are unique
-  if(vcl_set<vcl_string>(names_.begin(), names_.end()).size() != names_.size())
+  if (vcl_set<vcl_string>(names_.begin(), names_.end()).size() != names_.size())
     return false;
 
   // check for valid type names
-  for(unsigned int i=0; i<types_.size(); ++i)
-    if(brdb_value::registry().count(types_[i]) <= 0)
+  for (unsigned int i=0; i<types_.size(); ++i)
+    if (brdb_value::registry().count(types_[i]) <= 0)
       return false;
 
   // check that each tuple matches the arity and types of the relation
-  for(unsigned int i=0; i<tuples_.size(); ++i){
-    if(!is_valid(tuples_[i]))
+  for (unsigned int i=0; i<tuples_.size(); ++i){
+    if (!is_valid(tuples_[i]))
       return false;
   }
 
@@ -103,11 +102,11 @@ bool
 brdb_relation::is_valid(const brdb_tuple_sptr& tuple) const
 {
   // tuple arity must match that of this relation
-  if(tuple->arity() != types_.size())
+  if (tuple->arity() != types_.size())
     return false;
   // the tuple's types must match those of this relation
-  for(unsigned int i=0; i<types_.size(); ++i)
-    if(types_[i] != (*tuple)[i].is_a())
+  for (unsigned int i=0; i<types_.size(); ++i)
+    if (types_[i] != (*tuple)[i].is_a())
       return false;
   return true;
 }
@@ -124,7 +123,7 @@ brdb_relation::set_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_st
 
 //: Convenience function for setting a value by name
 template<class T>
-bool 
+bool
 brdb_relation::set( vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name , const T& value )
 {
   return set_value(pos, name, brdb_value_t<T>(value) );
@@ -141,8 +140,8 @@ brdb_relation::get_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_st
 
 //: Convenience function for getting a value by name
 template<class T>
-bool 
-brdb_relation::get(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name, const T& value) 
+bool
+brdb_relation::get(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name, const T& value)
 {
   return get_value(pos, name, brdb_value_t<T>(value) );
 }
@@ -156,7 +155,7 @@ brdb_relation::get(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& 
 vcl_string
 brdb_relation::name(unsigned int index) const
 {
-  if(index < names_.size())
+  if (index < names_.size())
     return names_[index];
   return "";
 }
@@ -172,29 +171,28 @@ brdb_relation::index(const vcl_string& name) const
 }
 
 //: Return the type by attribute name
-vcl_string 
+vcl_string
 brdb_relation::type(const vcl_string& name) const
 {
   return types_[index(name)];
 }
 
 //: Return the type by index
-vcl_string 
+vcl_string
 brdb_relation::type(unsigned int index) const
 {
   return types_[index];
 }
 
 //: Return true if there is an attribute in the relation with such a name
-bool 
+bool
 brdb_relation::exists(const vcl_string& name) const
 {
-  if(vcl_find(names_.begin(), names_.end(), name) == names_.end())
+  if (vcl_find(names_.begin(), names_.end(), name) == names_.end())
     return false;
   else
     return true;
 }
-
 
 
 //: Sort the tuples by a certain attribute name
@@ -211,8 +209,8 @@ brdb_relation::order_by(unsigned int index, bool ascending)
 {
   update_timestamp();
 
-  if(index < names_.size()){
-    if(ascending)
+  if (index < names_.size()){
+    if (ascending)
       vcl_sort(tuples_.begin(), tuples_.end(), brdb_tuple_less(index));
     else
       vcl_sort(tuples_.begin(), tuples_.end(), brdb_tuple_greater(index));
@@ -223,12 +221,12 @@ brdb_relation::order_by(unsigned int index, bool ascending)
 
 
 //: Add one tuple to relation
-bool 
+bool
 brdb_relation::add_tuple(const brdb_tuple_sptr& new_tuple)
 {
   update_timestamp();
 
-  if(is_valid(new_tuple))
+  if (is_valid(new_tuple))
   {
     tuples_.push_back(new brdb_tuple(*new_tuple));
 
@@ -240,12 +238,12 @@ brdb_relation::add_tuple(const brdb_tuple_sptr& new_tuple)
 
 
 //: Add one tuple to relation
-bool 
+bool
 brdb_relation::insert_tuple(const brdb_tuple_sptr& new_tuple, const vcl_vector<brdb_tuple_sptr>::iterator& pos)
 {
   update_timestamp();
 
-  if(is_valid(new_tuple))
+  if (is_valid(new_tuple))
   {
     brdb_tuple_sptr ins_tuple = new brdb_tuple(*new_tuple);
     tuples_.insert(pos, ins_tuple);
@@ -270,17 +268,17 @@ brdb_relation::remove_tuple(const vcl_vector<brdb_tuple_sptr>::iterator& pos)
 }
 
 //: print out the relation
-void 
+void
 brdb_relation::print() const
 {
   // print the attributes name and type
-  for(unsigned int i=0; i<arity(); i++)
+  for (unsigned int i=0; i<arity(); i++)
   {
-    vcl_cout << name(i) << "(" << type(i) << ")   "; 
+    vcl_cout << name(i) << '(' << type(i) << ")   ";
   }
   vcl_cout << vcl_endl;
 
-  for(unsigned int i=0; i<size(); i++)
+  for (unsigned int i=0; i<size(); i++)
   {
     tuples_[i]->print();
   }
@@ -302,11 +300,10 @@ brdb_relation::b_read(vsl_b_istream &is)
   unsigned int ver;
   vsl_b_read(is, ver);
 
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+    case 1:
     {
-
       // then write the names
       vsl_b_read(is, this->names_);
 
@@ -320,18 +317,16 @@ brdb_relation::b_read(vsl_b_istream &is)
       brdb_tuple_sptr proto_tuple = brdb_tuple::make_prototype(this->types_);
 
       // then write all the tuples
-      for(unsigned int i=0; i<relation_size; i++)
+      for (unsigned int i=0; i<relation_size; i++)
       {
         brdb_tuple_sptr new_tuple = new brdb_tuple(*proto_tuple);
         new_tuple->b_read_values(is);
         this->add_tuple(new_tuple);
       }
-
     }
     break;
 
-  default:
-    break;
+    default: break;
   }
 }
 
@@ -355,16 +350,15 @@ brdb_relation::b_write(vsl_b_ostream &os) const
   vsl_b_write(os, relation_size);
 
   // then write all the tuples
-  for(unsigned int i=0; i<relation_size; i++)
+  for (unsigned int i=0; i<relation_size; i++)
   {
     tuples_[i]->b_write_values(os);
   }
-
 }
 
 
 //: update the timestamp of this relation
-void 
+void
 brdb_relation::update_timestamp()
 {
   this->time_stamp_++;
@@ -374,39 +368,38 @@ brdb_relation::update_timestamp()
 bool
 brdb_relation::check_timestamp(const unsigned& time_stamp_check) const
 {
-  return (time_stamp_check == this->time_stamp_);
+  return time_stamp_check == this->time_stamp_;
 }
 
 //: clear the relation
 // \keep the names and types, but remove all the tuples
 void
 brdb_relation::clear()
-{ 
-  this->update_timestamp(); 
-  return tuples_.clear(); 
+{
+  this->update_timestamp();
+  return tuples_.clear();
 }
 
 //: check whether another relation is compatible with this relation;
-bool 
+bool
 brdb_relation::is_compatible(const brdb_relation_sptr& other) const
 {
-  if(!other)
+  if (!other)
     return false;
 
   // check whether they have same number of attributes
-  if(this->arity() != other->arity())
+  if (this->arity() != other->arity())
   {
 #ifndef NDEBUG
-    vcl_cerr << "Relations are not compatible because they have different "
-             << "arity." << vcl_endl;
+    vcl_cerr << "Relations are not compatible because they have different arity.\n";
 #endif
     return false;
   }
 
   // in the order, check the name of the attributes and types are compatible
-  for(unsigned int attribute_itr = 0; attribute_itr < this->arity(); attribute_itr++)
+  for (unsigned int attribute_itr = 0; attribute_itr < this->arity(); attribute_itr++)
   {
-    if(this->name(attribute_itr) != other->name(attribute_itr))
+    if (this->name(attribute_itr) != other->name(attribute_itr))
     {
 #ifndef NDEBUG
       vcl_cerr << "Relations are not compatible because they have different "
@@ -416,7 +409,7 @@ brdb_relation::is_compatible(const brdb_relation_sptr& other) const
       return false;
     }
 
-    if(this->type(attribute_itr) != other->type(attribute_itr))
+    if (this->type(attribute_itr) != other->type(attribute_itr))
     {
 #ifndef NDEBUG
       vcl_cerr << "Relations are not compatible because they have different "
@@ -434,11 +427,11 @@ brdb_relation::is_compatible(const brdb_relation_sptr& other) const
 bool
 brdb_relation::merge(const brdb_relation_sptr& other)
 {
-  if(!other || !this->is_compatible(other))
+  if (!other || !this->is_compatible(other))
     return false;
 
-  for(vcl_vector<brdb_tuple_sptr>::const_iterator itr = other->tuples_.begin();
-      itr != other->tuples_.end(); ++itr)
+  for (vcl_vector<brdb_tuple_sptr>::const_iterator itr = other->tuples_.begin();
+       itr != other->tuples_.end(); ++itr)
   {
     tuples_.push_back(new brdb_tuple(**itr));
   }
@@ -449,7 +442,7 @@ brdb_relation::merge(const brdb_relation_sptr& other)
 //========================= External Functions ===========================
 
 //: SQL join of two generic relations
-brdb_relation_sptr 
+brdb_relation_sptr
 brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
 {
     // compose name and type list;
@@ -457,7 +450,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     vcl_vector<vcl_string> types;
 
     // first add all r1 attributes
-    for(unsigned int i=0; i<r1->arity(); i++)
+    for (unsigned int i=0; i<r1->arity(); i++)
     {
       names.push_back(r1->name(i));
       types.push_back(r1->type(i));
@@ -471,20 +464,20 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     vcl_vector<unsigned int> r2_non_common_attribute_index;
 
     // add the non-common attributes from r2;
-    for(unsigned int i=0; i<r2->arity(); i++)
+    for (unsigned int i=0; i<r2->arity(); i++)
     {
       vcl_string name = r2->name(i);
       vcl_string type = r2->type(i);
 
-      if(r1->exists(name))
+      if (r1->exists(name))
       {
         // check whether the type matches
         vcl_string type1 = r1->type(name);
         vcl_string type2 = r2->type(name);
-        if(type1 != type2)
+        if (type1 != type2)
         {
           vcl_cerr << "join: trying to join relations which having same name "
-                   << "attributes with different types!" << vcl_endl;
+                   << "attributes with different types!\n";
           return NULL;
         }
 
@@ -503,27 +496,27 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     }
 
     // get r1_non_common_attribute_index
-    for(unsigned int i=0; i<r1->arity(); i++)
+    for (unsigned int i=0; i<r1->arity(); i++)
     {
       bool isCommon = false;
-      for(unsigned int j=0; j<r1_common_attribute_index.size(); j++)
+      for (unsigned int j=0; j<r1_common_attribute_index.size(); j++)
       {
-        if(i == r1_common_attribute_index[j])
+        if (i == r1_common_attribute_index[j])
           isCommon = true;
       }
 
-      if(!isCommon)
+      if (!isCommon)
        r1_non_common_attribute_index.push_back(i);
     }
 
     // check if there is any common attributes
-    if(common_attribute_count == 0 || 
-      (r1_common_attribute_index.size() != r2_common_attribute_index.size()) || 
-      ((r1_non_common_attribute_index.size() + r1_common_attribute_index.size()) != r1->arity()) ||
-      ((r2_non_common_attribute_index.size() + r2_common_attribute_index.size()) != r2->arity()))
+    if (common_attribute_count == 0 ||
+        (r1_common_attribute_index.size() != r2_common_attribute_index.size()) ||
+        ((r1_non_common_attribute_index.size() + r1_common_attribute_index.size()) != r1->arity()) ||
+        ((r2_non_common_attribute_index.size() + r2_common_attribute_index.size()) != r2->arity()))
     {
       vcl_cerr << "join: trying to join relations which don't have any "
-               << "common attributes." << vcl_endl;
+               << "common attributes.\n";
       return NULL;
     }
 
@@ -535,15 +528,15 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     unsigned int arity2 = r2->arity();
 
     // go through all tuples in r1
-    for(vcl_vector<brdb_tuple_sptr>::iterator itr_1 = r1->begin(); itr_1<r1->end(); ++itr_1)
+    for (vcl_vector<brdb_tuple_sptr>::iterator itr_1 = r1->begin(); itr_1<r1->end(); ++itr_1)
     {
       // go through all touples in r2
-      for(vcl_vector<brdb_tuple_sptr>::iterator itr_2 = r2->begin(); itr_2<r2->end(); ++itr_2)
+      for (vcl_vector<brdb_tuple_sptr>::iterator itr_2 = r2->begin(); itr_2<r2->end(); ++itr_2)
       {
         bool isMatched = true;
-        for(unsigned int k=0; k<common_attribute_count; k++)
+        for (unsigned int k=0; k<common_attribute_count; k++)
         {
-          if( (*(*itr_1))[r1_common_attribute_index[k]] != (*(*itr_2))[r2_common_attribute_index[k]])
+          if ( (*(*itr_1))[r1_common_attribute_index[k]] != (*(*itr_2))[r2_common_attribute_index[k]])
           {
             isMatched = false;
             break;
@@ -551,33 +544,33 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
         }
 
         // find a matched tuple
-        if(isMatched == true)
+        if (isMatched == true)
         {
           // create a new empty tuple and add into the resulting relation.
           brdb_tuple_sptr new_tup = new brdb_tuple();
 
           // add all values of tuple in r1 first
-          for(unsigned int m=0; m<arity1; m++)
+          for (unsigned int m=0; m<arity1; m++)
           {
-            if(!new_tup->add_value((*(*itr_1))[m]))
+            if (!new_tup->add_value((*(*itr_1))[m]))
               return NULL;
           }
 
           // add all non-comming values of tuple in r2;
-          for(unsigned int m=0; m<r2_non_common_attribute_index.size(); m++)
+          for (unsigned int m=0; m<r2_non_common_attribute_index.size(); m++)
           {
-            if(!new_tup->add_value((*(*itr_2))[r2_non_common_attribute_index[m]]))
+            if (!new_tup->add_value((*(*itr_2))[r2_non_common_attribute_index[m]]))
               return NULL;
           }
 
           // check the size of the new tuple
-          if(new_tup->arity() != (arity1+arity2-common_attribute_count))
+          if (new_tup->arity() != (arity1+arity2-common_attribute_count))
             return NULL;
 
           // add the new tuple into the resulting relation
-          if(!new_relation->add_tuple(new_tup))
+          if (!new_relation->add_tuple(new_tup))
           {
-            vcl_cerr << "join: failed to add tuple. " << vcl_endl;
+            vcl_cerr << "join: failed to add tuple.\n";
             return NULL;
           }
         }

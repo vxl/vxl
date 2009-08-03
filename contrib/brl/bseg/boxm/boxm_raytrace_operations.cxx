@@ -1,4 +1,4 @@
-#include <boxm/boxm_raytrace_operations.h>
+#include "boxm_raytrace_operations.h"
 
 bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distances, boct_face_idx visible_faces, float alpha, vil_image_view<float> &alpha_distance)
 {
@@ -14,7 +14,7 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
   // X_LOW
   // tri 0
   boxm_triangle_interpolation_iterator<float> tri_it(xverts_2d, yverts_2d, vert_alpha_distances, 0, 4, 3);
-  if (visible_faces & X_LOW) 
+  if (visible_faces & X_LOW)
     tri_interpolate_values(tri_it, alpha_distance, true);
   else
     tri_interpolate_values(tri_it, alpha_distance, false);
@@ -23,7 +23,7 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 4, 7, 3);
   if (visible_faces & X_LOW)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
 
 
@@ -32,14 +32,14 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 1, 2, 5);
   if (visible_faces & X_HIGH)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
 
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 2, 6, 5);
   if (visible_faces & X_HIGH)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
 
 
@@ -48,13 +48,13 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 0, 1, 5);
   if (visible_faces & Y_LOW)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 0, 5, 4);
   if (visible_faces & Y_LOW)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
 
   // Y_HIGH
@@ -62,13 +62,13 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 3, 2, 6);
   if (visible_faces & Y_HIGH)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
-    tri_interpolate_values(tri_it, alpha_distance, false);  
+  else
+    tri_interpolate_values(tri_it, alpha_distance, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 3, 6, 7);
   if (visible_faces & Y_HIGH)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
 
   // Z_LOW
@@ -76,13 +76,13 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 0, 1, 2);
   if (visible_faces & Z_LOW)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
-    tri_interpolate_values(tri_it, alpha_distance, false);  
+  else
+    tri_interpolate_values(tri_it, alpha_distance, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 0, 2, 3);
   if (visible_faces & Z_LOW)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
 
   // Z_HIGH
@@ -90,13 +90,13 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 4, 5, 6);
   if (visible_faces & Z_HIGH)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
-    tri_interpolate_values(tri_it, alpha_distance, false); 
+  else
+    tri_interpolate_values(tri_it, alpha_distance, false);
   // tri 1
   tri_it = boxm_triangle_interpolation_iterator<float>(xverts_2d, yverts_2d, vert_alpha_distances, 4, 7, 6);
   if (visible_faces & Z_HIGH)
     tri_interpolate_values(tri_it, alpha_distance, true);
-  else 
+  else
     tri_interpolate_values(tri_it, alpha_distance, false);
 
   return true;
@@ -104,7 +104,6 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
 
 bool cube_fill_value(double* xverts_2d, double* yverts_2d, boct_face_idx visible_faces, vil_image_view<float> &img, float const& val)
 {
-
   // for each face, create two triangle iterators and fill in pixel data
   boxm_triangle_scan_iterator tri_it(xverts_2d, yverts_2d, 0,4,3);
   if (visible_faces & X_LOW) {
@@ -154,6 +153,6 @@ bool cube_fill_value(double* xverts_2d, double* yverts_2d, boct_face_idx visible
     // tri 1
     tri_it = boxm_triangle_scan_iterator(xverts_2d, yverts_2d, 4, 7, 6);
     tri_fill_value(tri_it, img, val);
-  }  
+  }
   return true;
 }

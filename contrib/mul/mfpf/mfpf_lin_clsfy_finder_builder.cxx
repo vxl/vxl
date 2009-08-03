@@ -1,9 +1,9 @@
+#include "mfpf_lin_clsfy_finder_builder.h"
 //:
 // \file
 // \brief Builds mfpf_region_finder objects which use a linear classifier
 // \author Tim Cootes
 
-#include <mfpf/mfpf_lin_clsfy_finder_builder.h>
 #include <mfpf/mfpf_region_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -125,7 +125,7 @@ void mfpf_lin_clsfy_finder_builder::set_as_box(unsigned ni, unsigned nj)
 
 //: Define model region as an ni x nj box
 void mfpf_lin_clsfy_finder_builder::set_as_box(unsigned ni, unsigned nj,
-                                            double ref_x, double ref_y)
+                                               double ref_x, double ref_y)
 {
   roi_ni_=ni; roi_nj_=nj;
   n_pixels_ = ni*nj;
@@ -170,7 +170,7 @@ void mfpf_lin_clsfy_finder_builder::set_norm_method(short norm_method)
 //: Number of dimensions in the model
 unsigned mfpf_lin_clsfy_finder_builder::model_dim()
 {
-  return n_pixels_; 
+  return n_pixels_;
 }
 
 //: Initialise building
@@ -233,7 +233,7 @@ void mfpf_lin_clsfy_finder_builder::add_one_example(
         {
             double var=var_min_;
             mfpf_norm_vec(v,var_min_,&var);
-            if(var<tvar_min_) tvar_min_ = var;
+            if (var<tvar_min_) tvar_min_ = var;
         }
 
         if (d<=r1_)
@@ -254,8 +254,8 @@ void mfpf_lin_clsfy_finder_builder::add_one_example(
 
 //: Add one example to the model
 void mfpf_lin_clsfy_finder_builder::add_example(const vimt_image_2d_of<float>& image,
-                                             const vgl_point_2d<double>& p,
-                                             const vgl_vector_2d<double>& u)
+                                                const vgl_point_2d<double>& p,
+                                                const vgl_vector_2d<double>& u)
 {
   if (nA_==0)
   {
@@ -293,16 +293,16 @@ void mfpf_lin_clsfy_finder_builder::build(mfpf_point_finder& pf)
   set_base_parameters(rp);
   rp.set_overlap_f(overlap_f_);
 
-  if(estimate_var_min_ && norm_method_==1 && num_examples_>0)
+  if (estimate_var_min_ && norm_method_==1 && num_examples_>0)
   {
     //Assume applied var_min is r* min in training set, where r->1 as n->infinity
     //Set r=0.98 for n around 50
     double dn=double(num_examples_);
-    if(dn>0.0)
+    if (dn>0.0)
     {
       double r=0.925; //so r attains 0.98 around n=50
       double alpha=1.0;
-      if(dn>50.0)
+      if (dn>50.0)
         alpha=0.98;
       else
       {
@@ -436,14 +436,14 @@ bool mfpf_lin_clsfy_finder_builder::set_from_stream(vcl_istream &is)
 
     props.erase("norm");
   }
-  if(props.find("estimate_var_min") !=props.end())
+  if (props.find("estimate_var_min") !=props.end())
   {
     vcl_string strEstimate=props["estimate_var_min"];
-    if(strEstimate[0]=='f' || strEstimate[0]=='F' || strEstimate[0]=='0')
+    if (strEstimate[0]=='f' || strEstimate[0]=='F' || strEstimate[0]=='0')
         estimate_var_min_=false;
     else
         estimate_var_min_=true;
-      
+
     props.erase("estimate_var_min");
   }
 
@@ -498,8 +498,8 @@ void mfpf_lin_clsfy_finder_builder::print_summary(vcl_ostream& os) const
   vsl_indent_inc(os);
   if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
   else                 os<<vsl_indent()<<"norm: linear"<<'\n';
-  os <<vsl_indent()<< "r1: "<<r1_<<" r2: "<<r2_<<" r3: "<<r3_<<'\n';
-  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<'\n'
+  os <<vsl_indent()<< "r1: "<<r1_<<" r2: "<<r2_<<" r3: "<<r3_<<'\n'
+     <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<'\n'
      <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
   os <<'\n' <<vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';

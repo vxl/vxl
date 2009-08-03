@@ -1,6 +1,7 @@
-#include <brip/brip_label_equivalence.h>
+#include "brip_label_equivalence.h"
 //:
 // \file
+
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
 

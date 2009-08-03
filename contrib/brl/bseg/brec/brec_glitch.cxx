@@ -1,9 +1,9 @@
+#include "brec_glitch.h"
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date October 16, 2008
 
-#include <brec/brec_glitch.h>
 #include <vcl_cmath.h>
 #include <vil/vil_save.h>
 

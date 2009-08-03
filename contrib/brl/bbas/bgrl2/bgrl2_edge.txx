@@ -4,7 +4,7 @@
 //:
 // \file
 
-#include <bgrl2/bgrl2_edge.h>
+#include "bgrl2_edge.h"
 
 //: Returns target(edge) if v = source(edge) and source(edge) otherwise.
 template <class V>

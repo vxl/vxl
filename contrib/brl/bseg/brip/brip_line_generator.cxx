@@ -1,6 +1,7 @@
+#include "brip_line_generator.h"
+
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <brip/brip_line_generator.h>
 
 bool brip_line_generator::generate(bool& init, float xs, float ys,
                                    float xe, float ye,

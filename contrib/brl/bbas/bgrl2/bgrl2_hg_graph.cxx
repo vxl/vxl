@@ -1,5 +1,5 @@
 // This is brl/bbas/bgrl2/bgrl2_hg_graph.cxx
-#include <bgrl2/bgrl2_hg_graph.h>
+#include "bgrl2_hg_graph.h"
 //:
 // \file
 // author: Ming-Ching Chang

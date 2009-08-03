@@ -1,5 +1,5 @@
 // This is brl/bbas/brdb/brdb_value.cxx
-#include <brdb/brdb_value.h>
+#include "brdb_value.h"
 //:
 // \file
 // \author updated by Yong Zhao

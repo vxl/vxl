@@ -1,5 +1,5 @@
 // This is brl/bbas/bgrl2/bgrl2_hg_hypergraph.cxx
-#include <bgrl2/bgrl2_hg_hypergraph.h>
+#include "bgrl2_hg_hypergraph.h"
 //:
 // \file
 // author: Ming-Ching Chang

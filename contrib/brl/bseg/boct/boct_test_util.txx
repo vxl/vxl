@@ -1,7 +1,8 @@
 #ifndef boct_test_util_txx_
 #define boct_test_util_txx_
 
-#include <boct/boct_test_util.h>
+#include "boct_test_util.h"
+
 #include <boct/boct_tree_cell.h>
 #include <vnl/vnl_random.h>
 
