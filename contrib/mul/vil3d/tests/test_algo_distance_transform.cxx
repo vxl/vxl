@@ -130,7 +130,7 @@ void test_distance_transform()
               if (diff < min) {
                 min=diff;
                 vgl_vector_3d<float> d=v2-v1;
-                gt_image(i,j,k)=diff;
+                gt_image(i,j,k)=(float)diff;
                 gt_orients(i,j,k)=vil_rgb<float>(d.x(),d.y(),d.z());
               }
             }
