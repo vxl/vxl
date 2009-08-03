@@ -119,13 +119,13 @@ void test_distance_transform()
     for (unsigned j=0; j<dim; ++j) {
       for (unsigned i=0; i<dim; ++i) {
         double min = vcl_numeric_limits<double>::max();
-        vgl_point_3d<float> v1(float(i),float(j),float(k));
+        vgl_point_3d<float> v1((float)(i),(float)(j),(float)(k));
 
         // find the distance to the planes
         for (unsigned num=0; num<planes.size(); ++num) {
           for (unsigned i1=b1; i1<=b2; ++i1) {
             for (unsigned j1=b1; j1<=b2; ++j1) {
-              vgl_point_3d<float> v2(float(i1),float(j1),float(planes[num]));
+              vgl_point_3d<float> v2((float)(i1),(float)(j1),(float)(planes[num]));
               double diff=vgl_distance(v1,v2);
               if (diff < min) {
                 min=diff;
@@ -143,7 +143,7 @@ void test_distance_transform()
   orients.fill(vil_rgb<float>(0,0,0));
   vil3d_distance_transform_with_dir(image,orients,1,1,1);
 
-  bool img_eq=true, result=true;
+  bool result=true;
   for (unsigned k=0; k<dim; ++k){
     for (unsigned j=0; j<dim; ++j) {
       for (unsigned i=0; i<dim; ++i) {
