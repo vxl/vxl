@@ -15,7 +15,7 @@
 * - vnl_matrix_ref<T> : Wrap user-supplied memory chunk as a matrix
 *
 * Functions to generate special matrixes:
-* - vnl_identity
+* - vnl_identity_3x3
 * - vnl_rotation_matrix
 * - vnl_cross_product_matrix
 *
@@ -63,7 +63,6 @@
 * - vnl_adjugate : return the adjugate matrix
 * - vnl_rank, vnl_rank_row_reduce and vnl_rank_column_reduce
 * - vnl_trace
-* - vnl_unary_function
 * - vnl_cross
 * - vnl_det and vnl_determinant
 * - vnl_inverse, vnl_inverse_transpose and vnl_matrix_inverse
@@ -75,6 +74,10 @@
 * - vnl_rational
 * - vnl_bignum
 * - vnl_finite
+*
+* Mapping functionality
+* - vnl_unary_function
+* - vnl_identity
 *
 * \section Lead Developer
 * Amitha Perera is responsible for co-ordinating significant changes to vnl.
