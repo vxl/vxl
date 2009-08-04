@@ -33,8 +33,9 @@ MANPAGE_SOURCES += boxm_update_triangle.h
 MANPAGE_SOURCES += boxm_render_image_triangle.h
 MANPAGE_SOURCES += boxm_upload_mesh.h
 MANPAGE_SOURCES += boxm_fill_in_mesh.h
+SOURCES += boxm_simple_grey_processor.cxx
 
-SUBDIRS += io pro
+SUBDIRS += io pro opt
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
