@@ -6,7 +6,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>
 
 #include <testlib/testlib_test.h>
@@ -66,7 +65,8 @@ static void test_bins_2D()
   //  test  "is_any_point_within_radius" and "points_with_radius"
 
     const int num_tests = 5;
-    for ( int t=0; t<num_tests; ++t ) {
+    for ( int t=0; t<num_tests; ++t )
+    {
       vnl_vector_fixed< double, 2 > q;
       q[0] = (max_pt[0] - min_pt[0]) * mz_rand.drand32() + min_pt[0];
       q[1] = (max_pt[1] - min_pt[1]) * mz_rand.drand32() + min_pt[1];
@@ -76,7 +76,7 @@ static void test_bins_2D()
 
       vcl_vector< int > all_close_indices;
       for ( int i=0; i<M; ++i ) {
-        if ( vnl_vector_ssd( points[ i ], q ) < vnl_math_sqr( radius ) ) {
+        if ( vnl_vector_ssd( points[ i ], q ) < radius * radius ) {
           all_close_indices.push_back( i );
         }
       }
@@ -90,8 +90,10 @@ static void test_bins_2D()
       vcl_sort( all_close_indices.begin(), all_close_indices.end() );
       vcl_sort( bin_close_indices.begin(), bin_close_indices.end() );
 
-      for ( unsigned int i=0; correct &&
-              i < vnl_math_min(all_close_indices.size(), bin_close_indices.size()); ++i )
+      for ( unsigned int i=0;
+            correct &&
+            i < all_close_indices.size() &&
+            i < bin_close_indices.size(); ++i )
         correct = all_close_indices[ i ] == bin_close_indices[ i ];
 
       testlib_test_begin( "points_within_radius" );
@@ -212,7 +214,8 @@ static void test_bins_3D()
     }
 
     const int num_tests = 5;
-    for ( int t=0; t<num_tests; ++t ) {
+    for ( int t=0; t<num_tests; ++t )
+    {
       vnl_vector_fixed< double, 3 > q;
       q[0] = (max_pt[0] - min_pt[0]) * mz_rand.drand32() + min_pt[0];
       q[1] = (max_pt[1] - min_pt[1]) * mz_rand.drand32() + min_pt[1];
@@ -223,7 +226,7 @@ static void test_bins_3D()
 
       vcl_vector< int > all_close_indices;
       for ( int i=0; i<M; ++i ) {
-        if ( vnl_vector_ssd( points[ i ], q ) < vnl_math_sqr( radius ) ) {
+        if ( vnl_vector_ssd( points[ i ], q ) < radius * radius ) {
           all_close_indices.push_back( i );
         }
       }
@@ -237,8 +240,10 @@ static void test_bins_3D()
       vcl_sort( all_close_indices.begin(), all_close_indices.end() );
       vcl_sort( bin_close_indices.begin(), bin_close_indices.end() );
 
-      for ( unsigned int i=0; correct &&
-              i < vnl_math_min(all_close_indices.size(), bin_close_indices.size()); ++i )
+      for ( unsigned int i=0;
+            correct &&
+            i < all_close_indices.size() &&
+            i < bin_close_indices.size(); ++i )
         correct = all_close_indices[ i ] == bin_close_indices[ i ];
 
       testlib_test_begin( "points_within_radius" );
@@ -330,20 +335,20 @@ test_bins_nearest ( unsigned n,
   vnl_vector_fixed< CoordType, N > bin_size;
   vnl_vector_fixed< CoordType, N > min_test_pt, max_test_pt; // range of test points
 
-  for( unsigned dim=0; dim<N; ++dim ) {
+  for ( unsigned dim=0; dim<N; ++dim ) {
       min_pt[dim] = CoordType(mz_rand.drand32());
       max_pt[dim] = min_pt[dim] + CoordType(10.0*mz_rand.drand32());
       bin_size[dim] = CoordType(0.5+mz_rand.drand32());
   }
 
   // force the bins to be square
-  if( square_bins )
-      for( unsigned dim=1; dim<N; ++dim )
+  if ( square_bins )
+      for ( unsigned dim=1; dim<N; ++dim )
           bin_size[dim] = bin_size[0];
 
   // optionally extend the bins size in one dimension so there will be
   // only one bin in that dimension (for edge testing)
-  if( single_bin_dim >=0 && single_bin_dim<int(N) )
+  if ( single_bin_dim >=0 && single_bin_dim<int(N) )
       bin_size[single_bin_dim] = CoordType( max_pt[single_bin_dim] - min_pt[single_bin_dim] + 1.0 );
 
   rsdl_bins< N, CoordType, ValueType > bins( min_pt, max_pt, bin_size  ) ;
@@ -356,16 +361,16 @@ test_bins_nearest ( unsigned n,
 
   // optionally make the test point range greater than the range
   // covered by the bins data structure
-  if( ! bound_points )
-      for( unsigned dim=0; dim<N; ++dim ) {
+  if ( ! bound_points )
+      for ( unsigned dim=0; dim<N; ++dim ) {
           min_test_pt[dim] -= CoordType( mz_rand.drand32() );
           max_test_pt[dim] += CoordType( mz_rand.drand32() );
       }
 
   // add points to the data structure
-  for( unsigned i=0; i<npoints; ++i ) {
+  for ( unsigned i=0; i<npoints; ++i ) {
       vnl_vector_fixed< CoordType, N > pt;
-      for( unsigned dim=0; dim<N; ++dim )
+      for ( unsigned dim=0; dim<N; ++dim )
           pt[dim] = CoordType( min_test_pt[dim] + (max_test_pt[dim] - min_test_pt[dim]) * mz_rand.drand32() );
       bins.add_point( pt, ValueType(i) );
   }
@@ -374,52 +379,49 @@ test_bins_nearest ( unsigned n,
   bool pass_match_all = true;
 
   const unsigned num_trials = 64;
-  for( unsigned tn=0; tn<num_trials; ++tn ) {
+  for ( unsigned tn=0; tn<num_trials; ++tn )
+  {
+    // pick a random test point
+    vnl_vector_fixed< CoordType, N > pt;
+    for ( unsigned dim=0; dim<N; ++dim )
+        pt[dim] = CoordType( min_test_pt[dim] + (max_test_pt[dim] - min_test_pt[dim]) * mz_rand.drand32() );
 
-      // pick a random test point
-      vnl_vector_fixed< CoordType, N > pt;
-      for( unsigned dim=0; dim<N; ++dim )
-          pt[dim] = CoordType( min_test_pt[dim] + (max_test_pt[dim] - min_test_pt[dim]) * mz_rand.drand32() );
+    // get n nearest points with both fast and exhaustive methods
 
-      // get n nearest points with both fast and exhaustive methods
+    vcl_vector< ValueType > vals_fst;
+    bins.n_nearest( pt, n, vals_fst );
+    vcl_vector< ValueType > vals_exh;
+    bins.n_nearest_exhaustive( pt, n, vals_exh );
 
-      vcl_vector< ValueType > vals_fst;
-      bins.n_nearest( pt, n, vals_fst );
-      vcl_vector< ValueType > vals_exh;
-      bins.n_nearest_exhaustive( pt, n, vals_exh );
+    // Sort the sets of returned values so we can compare them to
+    // make sure they are the same set of values, even if they are
+    // returned in different orders.
+    vcl_sort( vals_fst.begin(), vals_fst.end() );
+    vcl_sort( vals_exh.begin(), vals_exh.end() );
 
-      // Sort the sets of returned values so we can compare them to
-      // make sure they are the same set of values, even if they are
-      // returned in different orders.
-      vcl_sort( vals_fst.begin(), vals_fst.end() );
-      vcl_sort( vals_exh.begin(), vals_exh.end() );
+    // If the bins have repeated points, each method may return a
+    // different instance of the same closest point, and testing the
+    // vectors for equality will fail, even though the results are
+    // correct.
 
-      // If the bins have repeated points, each method may return a
-      // different instance of the same closest point, and testing the
-      // vectors for equality will fail, even though the results are
-      // correct.
+    bool pass_size = vals_fst.size() == vals_exh.size();
+    bool pass_match = vals_fst == vals_exh;
 
-      bool pass_size = vals_fst.size() == vals_exh.size();
-      bool pass_match = vals_fst == vals_exh;
-
-      pass_size_all  = pass_size_all  && pass_size;
-      pass_match_all = pass_match_all && pass_match;
+    pass_size_all  = pass_size_all  && pass_size;
+    pass_match_all = pass_match_all && pass_match;
 
 #if 0
-      if ( ! pass_match ) {
-
-          vcl_cout << "debug vals_fst and vals_exh do not match" << vcl_endl;
-          vcl_cout << "debug tn: " << tn << vcl_endl;
-          vcl_cout << "debug vals_fst (" << vals_fst.size() << ")";
-          for( typename vcl_vector<ValueType>::iterator i=vals_fst.begin(); i!=vals_fst.end(); ++i )
-              vcl_cout << ' ' << *i;
-          vcl_cout << vcl_endl;
-          vcl_cout << "debug vals_exh (" << vals_exh.size() << ")";
-          for( typename vcl_vector<ValueType>::iterator i=vals_exh.begin(); i!=vals_exh.end(); ++i )
-              vcl_cout << ' ' << *i;
-          vcl_cout << vcl_endl;
-
-      }
+    if ( ! pass_match ) {
+      vcl_cout << "debug vals_fst and vals_exh do not match\n"
+               << "debug tn: " << tn << '\n'
+               << "debug vals_fst (" << vals_fst.size() << ')';
+      for ( typename vcl_vector<ValueType>::iterator i=vals_fst.begin(); i!=vals_fst.end(); ++i )
+        vcl_cout << ' ' << *i;
+      vcl_cout << "\ndebug vals_exh (" << vals_exh.size() << ')';
+      for ( typename vcl_vector<ValueType>::iterator i=vals_exh.begin(); i!=vals_exh.end(); ++i )
+        vcl_cout << ' ' << *i;
+      vcl_cout << vcl_endl;
+    }
 #endif
   }
 
@@ -470,17 +472,16 @@ static void test_bins_nearest_all()
   single_bin_dim_s.push_back (-1);
   single_bin_dim_s.push_back (0);
 
-  for( n_i=n_s.begin(); n_i!=n_s.end(); ++n_i )
-  for( npoints_i=npoints_s.begin(); npoints_i!=npoints_s.end(); ++npoints_i )
-  for( single_bin_dim_i=single_bin_dim_s.begin(); single_bin_dim_i!=single_bin_dim_s.end(); ++single_bin_dim_i )
-  {
-      vcl_ostringstream oss;
-      oss << "n=" << *n_i
-          << ",npoints=" << *npoints_i
-          << ",single_bin_dim=" << *single_bin_dim_i;
-      test_bins_nearest_all_inst( *n_i, *npoints_i, square_bins, bound_points, *single_bin_dim_i, oss.str() );
-  }
-
+  for ( n_i=n_s.begin(); n_i!=n_s.end(); ++n_i )
+    for ( npoints_i=npoints_s.begin(); npoints_i!=npoints_s.end(); ++npoints_i )
+      for ( single_bin_dim_i=single_bin_dim_s.begin(); single_bin_dim_i!=single_bin_dim_s.end(); ++single_bin_dim_i )
+      {
+        vcl_ostringstream oss;
+        oss << "n=" << *n_i
+            << ",npoints=" << *npoints_i
+            << ",single_bin_dim=" << *single_bin_dim_i;
+        test_bins_nearest_all_inst( *n_i, *npoints_i, square_bins, bound_points, *single_bin_dim_i, oss.str() );
+      }
 }
 
 static void test_bins()
