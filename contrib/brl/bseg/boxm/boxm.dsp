@@ -117,6 +117,9 @@ SOURCE=.\boxm_rational_camera_utils.cxx
 SOURCE=.\boxm_triangle_scan_iterator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_simple_grey_processor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
@@ -304,6 +307,9 @@ SOURCE=.\boxm_upload_mesh.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_fill_in_mesh.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_simple_grey_processor.h
 # End Source File
 # End Group
 # End Target
