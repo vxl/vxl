@@ -63,6 +63,7 @@ class bsvg_plot : public bsvg_document
     //: add splices for a pie chart 
     //  angle is zero at the x-axis and is positive counter-clockwise, use angles in range [0,2*pi]
     void add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const vcl_string& color);
+    //  angle is zero at the x-axis and is positive counter-clockwise, use angles in range [0,2*pi], colors red, green, blue are each in range [0,255]
     void add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, unsigned red, unsigned green, unsigned blue);
     
  protected:

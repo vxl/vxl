@@ -29,10 +29,10 @@ class bsvg_element : public bxml_element
   //: adds rotation to an existing translation if any angle is specified in degrees, e.g. 90
   void set_rotation(float rot_angle);
   void set_fill_color(const vcl_string& c);
-  //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) four bytes for each color
+  //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) for each color
   void set_fill_color(unsigned red, unsigned green, unsigned blue);
   void set_stroke_color(const vcl_string& c);
-  //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) four bytes for each color
+  //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) for each color
   void set_stroke_color(unsigned red, unsigned green, unsigned blue);
   void set_stroke_width(float w);
   //: 0 <= opacity <= 1
