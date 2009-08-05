@@ -6,6 +6,7 @@
 #include <vil_pro/vil_register.h>
 #include <vpgl_pro/vpgl_register.h>
 #include <boxm/pro/boxm_register.h>
+#include <boxm/opt/pro/boxm_opt_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -13,7 +14,8 @@ register_processes(PyObject *self, PyObject *args)
   vil_register::register_process();
   vpgl_register::register_process();
   boxm_register::register_process();
-  
+  boxm_opt_register::register_process();
+
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -25,7 +27,7 @@ register_datatypes(PyObject *self, PyObject *args)
   vil_register::register_datatype();
   vpgl_register::register_datatype();
   boxm_register::register_datatype();
-
+  boxm_opt_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }

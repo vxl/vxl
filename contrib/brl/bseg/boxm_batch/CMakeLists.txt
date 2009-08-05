@@ -13,6 +13,7 @@ IF( PYTHON_FOUND )
     INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
     INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/boxm )
+    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/boxm/opt )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
   
      SET(boxm_batch_sources
@@ -28,7 +29,7 @@ IF( PYTHON_FOUND )
     SET_TARGET_PROPERTIES(boxm_batch PROPERTIES PREFIX "")
 
 
-    TARGET_LINK_LIBRARIES(boxm_batch bprb brdb bpro_batch vbl boxm boxm_pro boxm_io vpgl_io vpgl_pro vil_io vil_pro)
+    TARGET_LINK_LIBRARIES(boxm_batch bprb brdb bpro_batch vbl boxm boxm_pro boxm_io boxm_opt boxm_opt_pro vpgl_io vpgl_pro vil_io vil_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm_batch debug ${PYTHON_DEBUG_LIBRARY})
