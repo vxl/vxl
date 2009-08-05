@@ -13,6 +13,7 @@
 #include <vil/vil_property.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_exception.h>
 
 #define where (vcl_cerr << __FILE__ " : " << __LINE__ << " : ")
 
@@ -61,7 +62,8 @@ vil_bmp_image::vil_bmp_image(vil_stream* is)
   //, local_color_map_(0)
 {
   is_->ref();
-  read_header();
+  if (!read_header())
+    vil_exception_error(vil_exception_image_io("vil_bmp_image::read_header", "BMP", ""));
 }
 
 bool vil_bmp_image::get_property(char const * tag, void * value) const
@@ -267,7 +269,8 @@ bool vil_bmp_image::read_header()
 #ifdef DEBUG
   where << "bit_map_start = " << bit_map_start << '\n'; // blather
 #endif
-  assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
+  //assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
+  if (bit_map_start != (int)file_hdr.bitmap_offset) return false;
 
   return true;
 }
@@ -323,7 +326,11 @@ bool vil_bmp_image::write_header()
 vil_image_view_base_sptr vil_bmp_image::get_copy_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
-  if (x0+nx > ni() || y0+ny > nj()) return 0;
+  if (x0+nx > ni() || y0+ny > nj())
+  {
+    vil_exception_warning(vil_exception_out_of_bounds("vil_bmp_image::get_copy_view"));
+    return 0;
+  }
   //
   unsigned bytes_per_pixel = core_hdr.bitsperpixel / 8;
   assert(core_hdr.bitsperpixel == 8 || core_hdr.bitsperpixel == 24);
@@ -348,18 +355,27 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
   // be faster to read() it all in one chunk, so long as the number of bytes
   // per image raster is divisible by four (because the file rasters are
   // padded at the ends).
+  vil_streampos bytes_read = 0;
   if (nx == ni())
   {
     is_->seek(bit_map_start + have_bytes_per_raster*y0);
-    is_->read(reinterpret_cast<vxl_byte *>(buf->data()), want_bytes_per_raster *ny);
+    bytes_read = is_->read(reinterpret_cast<vxl_byte *>(buf->data()), want_bytes_per_raster *ny);
   }
   else
   {
     for (unsigned i=0; i<ny; ++i)
     {
       is_->seek(bit_map_start + have_bytes_per_raster*(i+y0) + x0*bytes_per_pixel);
-      is_->read(reinterpret_cast<vxl_byte *>(buf->data()) + want_bytes_per_raster*i, want_bytes_per_raster);
+      bytes_read += is_->read(reinterpret_cast<vxl_byte *>(buf->data()) + want_bytes_per_raster*i, want_bytes_per_raster);
     }
+  }
+  if (bytes_read != ny * want_bytes_per_raster)
+  {
+    vil_exception_warning(
+      vil_exception_corrupt_image_file("vil_bmp_image::get_copy_view", "BMP", "",
+                                            ny * want_bytes_per_raster,
+                                            (unsigned)bytes_read));
+    return 0;
   }
 
   return new vil_image_view<vxl_byte>(
@@ -375,7 +391,7 @@ bool vil_bmp_image::put_view(const vil_image_view_base& view,
 {
   if (!view_fits(view, x0, y0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_bmp_image::put_view"));
     return false;
   }
 

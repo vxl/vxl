@@ -25,6 +25,7 @@
 #include <vil/vil_copy.h>
 #include <vil/vil_image_list.h>
 #include "vil_tiff_header.h"
+#include <vil/vil_exception.h>
 //#define DEBUG
 
 // Constants
@@ -1081,7 +1082,10 @@ bool vil_tiff_image::put_view(const vil_image_view_base& im,
                               unsigned i0, unsigned j0)
 {
   if (!vil_image_resource::view_fits(im, i0, j0))
+  {
+    vil_exception_warning(vil_exception_out_of_bounds("vil_tiff_image::put_view"));
     return false;
+  }
 
   unsigned tw = size_block_i(), tl = size_block_j();
   if (tw==0||tl==0)

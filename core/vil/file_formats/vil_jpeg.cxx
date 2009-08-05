@@ -25,6 +25,7 @@
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_exception.h>
 
 //: the file probe, as a C function.
 bool vil_jpeg_file_probe(vil_stream *vs)
@@ -177,6 +178,13 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
 bool vil_jpeg_image::put_view(const vil_image_view_base &view,
                               unsigned x0, unsigned y0)
 {
+
+  if (!view_fits(view, x0, y0))
+  {
+    vil_exception_warning(vil_exception_out_of_bounds("vil_jpeg_image::put_view"));
+    return false;
+  }
+
   if (!jc) {
     vcl_cerr << "attempted put_view() failed -- no jpeg compressor\n";
     return false;

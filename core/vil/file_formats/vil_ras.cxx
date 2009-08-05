@@ -15,6 +15,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_memory_chunk.h>
+#include <vil/vil_exception.h>
 
 #include <vxl_config.h>
 
@@ -443,7 +444,7 @@ put_view( const vil_image_view_base& view, unsigned i0, unsigned j0 )
   vil_image_view<vxl_uint_8> section( view );
 
   if ( ! this->view_fits( section, i0, j0 ) ) {
-    vcl_cerr << "ERROR: " << __FILE__ << ": view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_ras_image::put_view"));
     return false;
   }
 

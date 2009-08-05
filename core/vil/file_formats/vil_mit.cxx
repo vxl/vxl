@@ -19,6 +19,7 @@ static char const* vil_mit_format_tag = "mit";
 #include <vil/vil_image_view.h>
 #include <vil/vil_stream_read.h>
 #include <vil/vil_stream_write.h>
+#include <vil/vil_exception.h>
 
 #define MIT_UNSIGNED    0x0001
 #define MIT_RGB         0x0002
@@ -295,7 +296,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
   assert(buf.pixel_format() == format_); // pixel formats of image and buffer must match
   if (!view_fits(buf, x0, y0) || buf.nplanes() != components_)
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_mit_image::put_view"));
     return false;
   }
   unsigned int ni = buf.ni();

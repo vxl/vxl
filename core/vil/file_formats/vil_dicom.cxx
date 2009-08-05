@@ -25,6 +25,7 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
+#include <vil/vil_exception.h>
 #ifdef __BORLANDC__
 // We do not want to fix small problems in external maintained code.
 # pragma warn -8004 // 'smask' is assigned a value that is never used in function
@@ -315,9 +316,10 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
 
   if (!view_fits(view, x0, y0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ": view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_dicom_image::put_view"));
     return false;
   }
+
   return false;
 }
 

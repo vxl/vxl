@@ -21,6 +21,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_memory_chunk.h>
+#include <vil/vil_exception.h>
 
 #if 0 // see comment below
 # include <vil/vil_rgb.h>
@@ -473,7 +474,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
 {
   if (!view_fits(view, x0, y0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_pnm_image::put_view"));
     return false;
   }
 

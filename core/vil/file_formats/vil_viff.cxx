@@ -14,6 +14,7 @@ static char const* vil_viff_format_tag = "viff";
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_exception.h>
 
 static inline void swap(void* p,int length)
 {
@@ -290,7 +291,7 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
   assert(buf.pixel_format() == format_); // pixel formats of image and buffer must match
   if (!view_fits(buf, x0, y0) || buf.nplanes() != nplanes())
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_viff_image::put_view"));
     return false;
   }
   unsigned int ni = buf.ni();

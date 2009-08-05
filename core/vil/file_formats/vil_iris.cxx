@@ -23,6 +23,7 @@
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_exception.h>
 
 #include <vxl_config.h> // for vxl_byte, vxl_uint_32, ...
 
@@ -353,7 +354,7 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
   assert(buf.pixel_format() == format_); // pixel formats of image and buffer must match
   if (!view_fits(buf, x0, y0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_iris_generic_image::put_view"));
     return false;
   }
 #ifdef DEBUG

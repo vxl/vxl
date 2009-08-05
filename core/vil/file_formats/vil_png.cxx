@@ -16,6 +16,7 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_property.h>
+#include <vil/vil_exception.h>
 
 #include <png.h>
 #if (PNG_LIBPNG_VER_MAJOR == 0)
@@ -488,7 +489,7 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
 {
   if (!view_fits(view, x0, y0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    vil_exception_warning(vil_exception_out_of_bounds("vil_png_image::put_view"));
     return false;
   }
 
