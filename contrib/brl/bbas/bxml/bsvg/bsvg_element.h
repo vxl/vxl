@@ -29,7 +29,11 @@ class bsvg_element : public bxml_element
   //: adds rotation to an existing translation if any angle is specified in degrees, e.g. 90
   void set_rotation(float rot_angle);
   void set_fill_color(const vcl_string& c);
+  //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) four bytes for each color
+  void set_fill_color(unsigned red, unsigned green, unsigned blue);
   void set_stroke_color(const vcl_string& c);
+  //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) four bytes for each color
+  void set_stroke_color(unsigned red, unsigned green, unsigned blue);
   void set_stroke_width(float w);
   //: 0 <= opacity <= 1
   void set_fill_opacity(float o);
@@ -85,5 +89,13 @@ class bsvg_polyline : public bsvg_element
   bsvg_polyline(const vcl_vector<float>& xs, const vcl_vector<float>& ys);
 };
 
+//: draw a splice e.g. for a "pie chart". A splice is an arc of a full circle given by start and end angles and the arc is closed at the ends by lines from and to the center of the circle
+//  pass the angles in radians in range [0,2pi]
+//  when long_arc = true plots the arc (end_angle, start_angle) (so goes the other way around the circle)
+class bsvg_splice : public bsvg_group
+{
+public: 
+  bsvg_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, bool long_arc = false);
+};
 
 #endif  // bsvg_element_h_

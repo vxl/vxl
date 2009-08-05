@@ -105,6 +105,18 @@ bsvg_plot make_simple_histogram()
   return p;
 }
 
+bsvg_plot make_simple_pie_chart()
+{
+  bsvg_plot p(500, 500);
+  p.set_margin(40);
+  p.set_font_size(30);
+  double pi = 3.14;
+  p.add_splice(200.0f, 200.0f, 180.0f, 0.0f, (float)(pi*(80.0/180.0)), "red");
+  p.add_splice(200.0f, 200.0f, 180.0f, (float)(pi*(100.0/180.0)), (float)(pi*(150.0/180.0)), "blue");
+  p.add_splice(200.0f, 200.0f, 180.0f, (float)(pi*(190.0/180.0)), (float)(pi*(270.0/180.0)), 255, 255, 0);
+  p.add_splice(200.0f, 200.0f, 90.0f, (float)(pi*(190.0/180.0)), (float)(pi*(270.0/180.0)), 255, 255, 200);
+  return p;
+}
 
 static void test_svg()
 {
@@ -120,6 +132,10 @@ static void test_svg()
   out_file = "./test_histogram.svg";
   bxml_write(out_file, h);
   TEST("testing number of bars", h.number_of_bars(), 7);
+
+  bsvg_plot pie = make_simple_pie_chart();
+  out_file = "./test_pie_chart.svg";
+  bxml_write(out_file, pie);
 }
 
 TESTMAIN( test_svg );

@@ -295,3 +295,19 @@ int bsvg_plot::add_bar(const float height, const float x_label, bool vertical_la
   return add_bar(height, ss.str(), vertical_label, color);
 }
 
+//: add splices for a pie chart 
+void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const vcl_string& color)
+{
+  bsvg_splice* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
+  splice_g->set_fill_color(color);
+  splice_g->set_stroke_color("black");
+  this->add_element(splice_g);
+}
+void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, unsigned red, unsigned green, unsigned blue)
+{
+  bsvg_splice* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
+  splice_g->set_fill_color(red, green, blue);
+  splice_g->set_stroke_color("black");
+  this->add_element(splice_g);
+}
+
