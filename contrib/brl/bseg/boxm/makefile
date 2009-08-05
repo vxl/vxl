@@ -34,6 +34,8 @@ MANPAGE_SOURCES += boxm_render_image_triangle.h
 MANPAGE_SOURCES += boxm_upload_mesh.h
 MANPAGE_SOURCES += boxm_fill_in_mesh.h
 SOURCES += boxm_simple_grey_processor.cxx
+MANPAGE_SOURCES += boxm_update_sample.h
+MANPAGE_SOURCES += boxm_vis_implicit_sample.h
 
 SUBDIRS += io pro opt
 

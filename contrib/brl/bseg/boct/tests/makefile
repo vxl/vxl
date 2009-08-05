@@ -10,6 +10,7 @@ TESTS += test_create_tree.cxx
 TESTS += test_locate_region.cxx
 TESTS += test_binary_io.cxx
 TESTS += test_clone_tree.cxx
+TESTS += test_tree_cell_reader.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
