@@ -235,6 +235,9 @@ SOURCE=.\test_binary_io.cxx
 # Begin Source File
 SOURCE=.\test_clone_tree.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_tree_cell_reader.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

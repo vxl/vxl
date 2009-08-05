@@ -311,6 +311,12 @@ SOURCE=.\boxm_fill_in_mesh.h
 # Begin Source File
 SOURCE=.\boxm_simple_grey_processor.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_update_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_vis_implicit_sample.h
+# End Source File
 # End Group
 # End Target
 # End Project
