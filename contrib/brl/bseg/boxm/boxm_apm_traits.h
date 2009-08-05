@@ -13,7 +13,7 @@
 #include <bsta/bsta_gauss_if3.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_rgb.h>
-
+#include <vsl/vsl_binary_io.h>
 #include <vcl_ostream.h>
 
 class boxm_mog_grey_processor;
@@ -87,7 +87,7 @@ class boxm_simple_grey
   boxm_simple_grey() : color_(0.5f), one_over_sigma_(1.0f), gauss_weight_(0.0f) {}
   boxm_simple_grey(float color, float std_dev, float gauss_weight) : color_(color), one_over_sigma_(1/std_dev), gauss_weight_(gauss_weight) { check_vals(); }
   boxm_simple_grey(vnl_vector_fixed<float,3> const& params) : color_(params[0]), one_over_sigma_(1.0f/params[1]), gauss_weight_(params[2]) { check_vals(); }
-
+  short version_no() const { return 1; }
   inline float color() const {return color_;}
   inline float sigma() const {return 1.0f/one_over_sigma_;}
   inline float gauss_weight() const {return gauss_weight_;}
@@ -109,7 +109,7 @@ class boxm_simple_grey
     if (!(gauss_weight_ < 1.0f))
       gauss_weight_ = 1.0f;
   }
-
+public:
   float color_;
   float one_over_sigma_;
   float gauss_weight_;
@@ -174,5 +174,11 @@ class boxm_apm_traits<BOXM_APM_SIMPLE_RGB>
 };
 
 #endif // 0
+
+void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const &sample);
+void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const * &sample);
+void vsl_b_read(vsl_b_istream & is, boxm_simple_grey &sample);
+void vsl_b_read(vsl_b_istream & is, boxm_simple_grey *&sample);
+vcl_ostream& operator << (vcl_ostream& os, const boxm_simple_grey& sample);
 
 #endif

@@ -69,9 +69,16 @@ class boxm_scene :public boxm_scene_base
                                           y=(int) blocks_.get_row2_count();
                                           z=(int) blocks_.get_row3_count();}
 
+  vgl_vector_3d<double> world_dim() {double x, y, z; 
+                                     x=(int) blocks_.get_row1_count()*block_dim_.x();
+                                     y=(int) blocks_.get_row2_count()*block_dim_.y();
+                                     z=(int) blocks_.get_row3_count()*block_dim_.z();
+                                     return vgl_vector_3d<double>(x,y,z); }
   vcl_string path() const { return scene_path_; }
 
   vcl_string block_prefix() const { return block_pref_; }
+
+  void set_path(vcl_string path, vcl_string block_prefix) { scene_path_=path; block_pref_= block_prefix; }
 
   void b_read(vsl_b_istream & s);
 
@@ -84,6 +91,8 @@ class boxm_scene :public boxm_scene_base
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
   boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
+
+  void set_block(vgl_point_3d<int>& idx, boxm_block<T>* block) { blocks_(idx.x(),idx.y(),idx.z()) = block; }
 
   void write_scene();
 
@@ -101,7 +110,10 @@ class boxm_scene :public boxm_scene_base
 
   vgl_box_3d<double> get_block_bbox(int x, int y, int z);
 
- private:
+  //: generates a name for the block binary file based on the 3D vector index
+  vcl_string gen_block_path(int x, int y, int z);
+
+ protected:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
   vgl_vector_3d<double> block_dim_;
@@ -114,10 +126,6 @@ class boxm_scene :public boxm_scene_base
   void create_block(unsigned i, unsigned j, unsigned k);
 
   void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
-
-
-  //: generates a name for the block binary file based on the 3D vector index
-  vcl_string gen_block_path(int x, int y, int z);
 
   bool parse_config(boxm_scene_parser& parser);
 

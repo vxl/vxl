@@ -279,9 +279,5 @@ float boxm_simple_grey_processor::sigma_norm_factor(unsigned int nobs)
 }
     
   
-vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm) 
-{ 
-  os << "color: " << apm.color() << ", one_over_sigma: " << apm.one_over_sigma() << vcl_endl;
-  return os;
-}
+
 

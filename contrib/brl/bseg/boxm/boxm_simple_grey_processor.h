@@ -60,7 +60,7 @@ private:
 
 };
 
-vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm);
+//vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm);
 
 
 #endif // boxm_simple_grey_processor_h_
