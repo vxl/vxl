@@ -19,7 +19,7 @@ MAIN( test_clone_tree )
   // compare the codes
   bool eq=true;
   for (unsigned i=0; i<cloned_leaves.size(); i++) {
-    if (!cloned_leaves[i]->code_.isequal(&(leaves[i]->code_), leaves[i]->level()))
+    if (!cloned_leaves[i]->code_.isequal(&(leaves[i]->code_)))
       eq=false;
   }
   TEST("Leaf nodes' Code equality", true, eq);

@@ -14,7 +14,7 @@ boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(vcl_vector
 
  for (unsigned i=0; i<leafcells.size(); ++i)
  {
-   if (leafcells[i]->code_.isequal(&code,leafcells[i]->level()))
+   if (leafcells[i]->code_.isequal(&code))
      point_container=leafcells[i];
  }
  return point_container;
@@ -51,7 +51,7 @@ MAIN( test_locate_point )
 
     boct_tree_cell<short,vgl_point_3d<double> >* cell_found_brute_force=brute_force_locate_point(leaves,p,nlevels);
 
-    if (curr_cell_using_point_locate->code_.isequal(&cell_found_brute_force->code_,cell_found_brute_force->level()))
+    if (curr_cell_using_point_locate->code_.isequal(&cell_found_brute_force->code_))
       ++cnt;
   }
   TEST("Returns the correct Point for 100 points", cnt, 100);

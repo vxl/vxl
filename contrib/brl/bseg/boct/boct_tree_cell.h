@@ -40,7 +40,22 @@ class boct_tree_cell
   // creates a new cell with the same data
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
+  template <class T_data_to>
+  boct_tree_cell<T_loc,T_data_to>* clone_to_type(boct_tree_cell<T_loc,T_data_to>* parent)
+  {
+    boct_tree_cell<T_loc,T_data_to>* cell = new boct_tree_cell<T_loc,T_data_to>(this->code_);
+    cell->set_parent(parent);
+    if (!this->is_leaf()) {
+      cell->split();
+      for (unsigned i=0; i<8; i++) {
+        cell->set_children(i,this->children_[i].clone_to_type<T_data_to>(cell));
+      }
+    }
+    return cell;
+  }
+
   void set_parent(boct_tree_cell<T_loc,T_data>* p) {parent_ = p; }
+  void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) {if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl;}
   bool is_leaf();
 
   //: adds a pointer for each leaf children to v

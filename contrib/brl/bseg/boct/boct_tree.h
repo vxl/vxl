@@ -16,8 +16,23 @@ class boct_tree
   boct_tree(): root_(0),global_bbox_(){}
   boct_tree(short max_level, short init_levels=1);
   boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels=1);
+  boct_tree(boct_tree_cell<T_loc, T_data>* root, short max_level) { root_=root; max_level_=max_level;}
   ~boct_tree();
+
+  //clones with the same data
   boct_tree<T_loc,T_data>* clone();
+
+  //: clones the tree structure with a different data type
+  template <class T_data_to>
+  boct_tree<T_loc,T_data_to>* clone_to_type() {
+    // clone the tree
+    boct_tree_cell<T_loc, T_data_to>* root = root_->clone_to_type<T_data_to>(0);
+    // create a new tree tree only with the root node
+    boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(root,max_level_);
+  
+    return tree;
+  }
+
   void init_cells(T_data val);
   boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p);
   boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p);

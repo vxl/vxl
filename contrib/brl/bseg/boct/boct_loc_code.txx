@@ -82,9 +82,11 @@ vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T>& code)
 }
 
 template <class T>
-bool boct_loc_code<T>::isequal(const boct_loc_code<T> * test,short level)
+bool boct_loc_code<T>::isequal(const boct_loc_code<T> * test)
 {
-  T relevantbit = 1 << (level-1);
+  if (test->level != level)
+    return false;
+  T relevantbit = 1 << (test->level-1);
   if ( (x_loc_ & relevantbit) == (test->x_loc_ & relevantbit)&&
        (y_loc_ & relevantbit) == (test->y_loc_ & relevantbit)&&
        (z_loc_ & relevantbit) == (test->z_loc_ & relevantbit) )

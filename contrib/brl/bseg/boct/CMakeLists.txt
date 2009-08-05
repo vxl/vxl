@@ -1,10 +1,11 @@
 # contrib/brl/bseg/boct/CMakeLists.txt
 
 SET(boct_sources
-    boct_loc_code.txx   boct_loc_code.h
-    boct_tree_cell.txx  boct_tree_cell.h
-    boct_tree.txx       boct_tree.h
-    boct_test_util.txx  boct_test_util.h
+    boct_loc_code.txx         boct_loc_code.h
+    boct_tree_cell.txx        boct_tree_cell.h
+    boct_tree.txx             boct_tree.h
+    boct_test_util.txx        boct_test_util.h
+    boct_tree_cell_reader.txx boct_tree_cell_reader.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boct_sources)
