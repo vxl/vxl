@@ -125,8 +125,11 @@ write_frame(const vidl_frame_sptr& frame)
   if (!frame)
     return false;
   vil_image_view_base_sptr v = vidl_convert_wrap_in_view(*frame);
-  if (!v)
-    return false;
+  if (!v){
+    vil_image_view<vxl_byte> image;
+    vidl_convert_to_view(*frame,image,VIDL_PIXEL_COLOR_RGB);
+    return vil_save(image,file_name.c_str(),file_format_.c_str()); 
+  }
 
   return vil_save(*v,file_name.c_str(),file_format_.c_str());                
 }
