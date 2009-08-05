@@ -175,6 +175,31 @@ void vil_exception_warning(T exception)
 
 
 
+  //: Indicates that an image file does not contain the anticipated amount of data
+  // Generally thrown when an image file's header suggests an image size or
+  // file length that is not matched by the actual data present in the file
+  class vil_exception_corrupt_image_file
+#if VCL_HAS_EXCEPTIONS
+  : public vil_exception_image_io
+#endif
+  {
+   public:
+    unsigned bytes_expected, bytes_found;
+    vil_exception_corrupt_image_file(const vcl_string& function,
+                           const vcl_string& type,
+                           const vcl_string& name,
+                           unsigned expected, unsigned found) :
+#if VCL_HAS_EXCEPTIONS
+    vil_exception_image_io(function, type, name),
+#endif
+    bytes_expected(expected), bytes_found(found) {}
+#if VCL_HAS_EXCEPTIONS
+    virtual ~vil_exception_corrupt_image_file() throw() {}
+#else
+    const char * what() const {return "File does not contain the amount of image data expected.";}
+#endif
+  };
+
 
 
 #endif // vil_exception_h_
