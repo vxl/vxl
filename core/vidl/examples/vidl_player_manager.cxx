@@ -173,17 +173,31 @@ void vidl_player_manager::pipe_streams()
     istream_->advance();
 
   vidl_frame_sptr frame;
-  if (num_frames < 0)
-    while (bool(frame = istream_->current_frame()) &&
-           ostream_->write_frame(frame) )
+  if (num_frames < 0){
+    vcl_cout <<"streaming all frames"<<vcl_endl;
+    frame = istream_->current_frame();
+    while (bool(frame)){
+      if(!ostream_->write_frame(frame))
+        break;
       if (!istream_->advance())
         break;
-  else
-    for (int i=0; i<num_frames &&
-         bool(frame = istream_->current_frame()) &&
-         ostream_->write_frame(frame); ++i)
+      frame = istream_->current_frame();
+    }
+  }
+  else{
+    vcl_cout <<"streaming "<<num_frames<<" frames"<<vcl_endl;
+    for (int i=0; i<num_frames; ++i){
+      frame = istream_->current_frame();
+      if(!frame)
+        break;
+      if(!ostream_->write_frame(frame))
+        break;
       if (!istream_->advance())
         break;
+    }
+  }
+
+ 
   ostream_->close();
 
   if (istream_->is_seekable())
