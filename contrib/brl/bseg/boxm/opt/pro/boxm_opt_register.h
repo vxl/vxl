@@ -8,4 +8,4 @@ class boxm_opt_register
   static void register_process();
 };
 
-#endif // boxm_register_h_
+#endif // boxm_opt_register_h_
