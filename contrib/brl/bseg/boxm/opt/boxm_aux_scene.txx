@@ -11,7 +11,7 @@
 #include "boxm_aux_scene.h"
 
 template <class T_loc, class T, class T_AUX>
-boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string storage_suffix = "") 
+boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string storage_suffix = "")
 {
   vcl_string aux_storage_dir(scene->path() + "/" + "aux");//boxm_aux_traits<T_AUX>::storage_subdir());
   vul_file::make_directory(aux_storage_dir);
@@ -20,7 +20,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_
   //boxm_aux_scene<T_AUX> *aux_scene = dynamic_cast<psm_aux_scene<T_AUX>*>(aux_scene_base.ptr());
   aux_scene_ = new boxm_scene<aux_tree_type>(scene->lvcs(), scene->origin(), scene->block_dim(), scene->world_dim());
   aux_scene_->set_path(aux_storage_dir_,  storage_suffix);
-  
+
   // loop through valid blocks and init same blocks in aux scene
   boxm_block_iterator<tree_type> iter(scene);
   iter.begin();
@@ -44,7 +44,6 @@ boct_tree_cell_reader<T_loc, T_AUX>* boxm_aux_scene<T_loc,T,T_AUX>::get_block_in
 }
 
 #define BOXM_AUX_SCENE_INSTANTIATE(T1,T2,T3) \
-template class boxm_aux_scene<T1,T2,T3>
-
+template class boxm_aux_scene<T1,T2,T3 >
 
 #endif
