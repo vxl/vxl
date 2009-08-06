@@ -37,37 +37,35 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
 {
   if (!is_)
     return false;
-   
+
   bool leaf=false;
   while (!leaf) {
     short version;
     vsl_b_read(is_,version);
     switch (version)
     {
-	 case 1: {
-	   vsl_b_read(is_, c.code_);
-	   T_data data;
-	   vsl_b_read(is_, data);
-	   c.set_data(data);
-	   c.set_vis_node(NULL);
-	   vsl_b_read(is_, leaf);
-	   if (leaf) {
-         return true;
-	   }
-	   break;
-	 }
-	default:
-	 vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
-			  << "           Unknown version number "<< version << '\n';
-	 is_.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-	 return false;
+     case 1: {
+      vsl_b_read(is_, c.code_);
+      T_data data;
+      vsl_b_read(is_, data);
+      c.set_data(data);
+      c.set_vis_node(NULL);
+      vsl_b_read(is_, leaf);
+      if (leaf)
+        return true;
+      break;
+     }
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
+               << "           Unknown version number "<< version << '\n';
+      is_.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return false;
    }
   }
   return leaf;
 }
-  
+
 #define BOCT_TREE_CELL_READER_INSTANTIATE(T_loc,T_data) \
 template class boct_tree_cell_reader<T_loc,T_data >
+
 #endif // boct_tree_cell_reader_txx_
-  
- 
