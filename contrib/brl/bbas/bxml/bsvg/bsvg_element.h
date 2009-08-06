@@ -89,12 +89,14 @@ class bsvg_polyline : public bsvg_element
   bsvg_polyline(const vcl_vector<float>& xs, const vcl_vector<float>& ys);
 };
 
-//: draw a splice e.g. for a "pie chart". A splice is an arc of a full circle given by start and end angles and the arc is closed at the ends by lines from and to the center of the circle
-//  pass the angles in radians in range [0,2pi]
+//: draw a splice e.g. for a "pie chart".
+//  A splice is an arc of a full circle given by start and end angles and the
+//  arc is closed at the ends by lines from and to the center of the circle pass
+//  the angles in radians in range [0,2pi]
 //  when long_arc = true plots the arc (end_angle, start_angle) (so goes the other way around the circle)
 class bsvg_splice : public bsvg_group
 {
-public: 
+ public: 
   bsvg_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, bool long_arc = false);
 };
 

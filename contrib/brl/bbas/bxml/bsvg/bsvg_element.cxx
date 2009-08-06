@@ -9,14 +9,14 @@
 void bsvg_element::set_transformation(float trans_x, float trans_y, float rot)
 {
   vcl_stringstream trans;
-  trans << "translate(" << trans_x << "," << trans_y << ") rotate(" << rot << ")";
+  trans << "translate(" << trans_x << ',' << trans_y << ") rotate(" << rot << ')';
   this->set_attribute("transform", trans.str());
 }
 
 void bsvg_element::set_location(float trans_x, float trans_y)
 {
   vcl_stringstream trans;
-  trans << "translate(" << trans_x << "," << trans_y << ") ";
+  trans << "translate(" << trans_x << ',' << trans_y << ") ";
   this->set_attribute("transform", trans.str());
 }
 
@@ -24,7 +24,7 @@ void bsvg_element::set_location(float trans_x, float trans_y)
 void bsvg_element::set_rotation(float rot)
 {
   vcl_stringstream trans;
-  trans << "rotate(" << rot << ")";
+  trans << "rotate(" << rot << ')';
 
   vcl_string val;
   if (this->get_attribute("transform", val))
@@ -39,7 +39,9 @@ void bsvg_element::set_fill_color(const vcl_string& c)
 {
   this->set_attribute("fill", c);
 }
-vcl_string hex_value(unsigned red, unsigned green, unsigned blue) {
+
+vcl_string hex_value(unsigned red, unsigned green, unsigned blue)
+{
   vcl_stringstream out; out << '#';
   unsigned first = red%16;
   unsigned second = red/16;
@@ -68,33 +70,39 @@ vcl_string hex_value(unsigned red, unsigned green, unsigned blue) {
   out << fc;
   return out.str();
 }
+
 //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) four bytes for each color
 void bsvg_element::set_fill_color(unsigned red, unsigned green, unsigned blue)
 {
-  vcl_string hex = hex_value(red, green, blue);
-  this->set_attribute("fill", hex);
+  vcl_string hexval = hex_value(red, green, blue);
+  this->set_attribute("fill", hexval);
 }
+
 void bsvg_element::set_stroke_color(const vcl_string& c)
 {
   this->set_attribute("stroke", c);
 }
+
 //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) four bytes for each color
 void bsvg_element::set_stroke_color(unsigned red, unsigned green, unsigned blue)
 {
-  vcl_string hex = hex_value(red, green, blue);
-  this->set_attribute("stroke", hex);
+  vcl_string hexval = hex_value(red, green, blue);
+  this->set_attribute("stroke", hexval);
 }
+
 void bsvg_element::set_stroke_width(float w)
 {
   vcl_stringstream sw; sw << w;
   this->set_attribute("stroke-width", sw.str());
 }
+
 //: 0 <= opacity <= 1
 void bsvg_element::set_fill_opacity(float o)
 {
   vcl_stringstream os; os << o;
   this->set_attribute("fill-opacity", os.str());
 }
+
 //: 0 <= opacity <= 1
 void bsvg_element::set_stroke_opacity(float o)
 {
@@ -148,7 +156,6 @@ bsvg_arrow_head::bsvg_arrow_head(float x, float y, float l) : bsvg_group()
   bsvg_line* l2 = new bsvg_line(0, 0, 0, l);
   l2->set_rotation(45);
   this->add_element(l2);
-
 }
 
 bsvg_polyline::bsvg_polyline(const vcl_vector<float>& xs, const vcl_vector<float>& ys) : bsvg_element("polyline") 
@@ -156,16 +163,19 @@ bsvg_polyline::bsvg_polyline(const vcl_vector<float>& xs, const vcl_vector<float
   if (xs.size() == ys.size()) {
     vcl_stringstream ss;
     for (unsigned i = 0; i < xs.size(); i++) {
-      ss << xs[i] << "," << ys[i] << " ";
+      ss << xs[i] << ',' << ys[i] << ' ';
     }
     this->set_attribute("points", ss.str());
   }
 }
-//: draw a splice e.g. for a "pie chart". A splice is an arc of a full circle given by start and end angles and the arc is closed at the ends by lines from and to the center of the circle
-//  pass the angles in radians in range [0,2pi]
+
+//: draw a splice e.g. for a "pie chart".
+//  A splice is an arc of a full circle given by start and end angles and the
+//  arc is closed at the ends by lines from and to the center of the circle pass
+//  the angles in radians in range [0,2pi]
 bsvg_splice::bsvg_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, bool long_arc) : bsvg_group()
 {
-  //: compute the first and second points on the arc using the start_angle and end_angle
+  // compute the first and second points on the arc using the start_angle and end_angle
   float first_point_x = radius*vcl_cos(start_angle)+center_x;
   float first_point_y = radius*-vcl_sin(start_angle)+center_y; // invert the y value 
   float second_point_x = radius*vcl_cos(end_angle)+center_x;
@@ -173,14 +183,13 @@ bsvg_splice::bsvg_splice(float center_x, float center_y, float radius, float sta
 
   bsvg_element* el = new bsvg_element("path");
   vcl_stringstream attr;
-  attr << "M" << center_x << "," << center_y << " " << first_point_x << "," << first_point_y << " A" << radius << "," << radius << " 0 ";
+  attr << 'M' << center_x << ',' << center_y << ' ' << first_point_x << ',' << first_point_y << " A" << radius << ',' << radius << " 0 ";
   if (long_arc)
     attr << "1,0 ";
   else 
     attr << "0,0 ";
-  attr << second_point_x << "," << second_point_y << " z";
+  attr << second_point_x << ',' << second_point_y << " z";
   el->set_attribute("d", attr.str());
   this->add_element(el);
 }
-
 
