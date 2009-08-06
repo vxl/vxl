@@ -4,6 +4,4 @@
 
 #include "../boxm_opt_rt_bayesian_optimizer.txx"
 
-
 BOXM_OPT_RT_BAYESIAN_OPTIMIZER_INSTANTIATE(short, BOXM_APM_SIMPLE_GREY, BOXM_AUX_OPT_RT_GREY);
-
