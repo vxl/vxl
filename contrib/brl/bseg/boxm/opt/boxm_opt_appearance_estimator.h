@@ -3,12 +3,15 @@
 
 #include <vcl_vector.h>
 #include <boxm/boxm_apm_traits.h>
+#if 0
+#include <vcl_iostream.h>
+#endif
 
 template <boxm_apm_type APM>
 void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_datatype> const& obs, 
-    vcl_vector<float> const& pre, 
-    vcl_vector<float> const& vis,
-    typename boxm_apm_traits<APM>::apm_datatype &model)
+                                 vcl_vector<float> const& pre, 
+                                 vcl_vector<float> const& vis,
+                                 typename boxm_apm_traits<APM>::apm_datatype &model)
 {
   // initialize appearance model estimate using visibility probabilities as weights.
   boxm_apm_traits<APM>::apm_processor::compute_appearance(obs,pre,model,0.02f);
@@ -50,15 +53,17 @@ void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_d
     }
     // check for convergence
     if (max_weight_change < min_weight_change) {
-      //if (nobs > 1) {
-        //vcl_cout << "EM converged in " << i << " iterations." << vcl_endl;
-        //float total_prob = 0.0f;
-        //for (unsigned int n=0; n<nobs; ++n) {
-        //  total_prob += obs_weights[n];
-        //}
-        //vcl_cout << "total prob for " << nobs << " observations = " << total_prob << vcl_endl;
-        //vcl_cout << "sigma = " << model.sigma() << ",  gauss_weight = " << model.gauss_weight() << vcl_endl;
-      //}
+#if 0
+    if (nobs > 1) {
+      vcl_cout << "EM converged in " << i << " iterations." << vcl_endl;
+      float total_prob = 0.0f;
+      for (unsigned int n=0; n<nobs; ++n) {
+        total_prob += obs_weights[n];
+      }
+      vcl_cout << "total prob for " << nobs << " observations = " << total_prob << vcl_endl;
+      vcl_cout << "sigma = " << model.sigma() << ",  gauss_weight = " << model.gauss_weight() << vcl_endl;
+    }
+#endif
       break;
     }
     // MAXIMIZATION
@@ -71,6 +76,4 @@ void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_d
   return;
 }
 
-
-#endif
-
+#endif // boxm_opt_appearance_estimator_h_
