@@ -1,5 +1,7 @@
 #ifndef boxm_aux_traits_h_
 #define boxm_aux_traits_h_
+//:
+// \file
 
 #include <vcl_string.h>
 #include <boxm/boxm_vis_implicit_sample.h>
@@ -21,40 +23,33 @@ enum boxm_aux_type
 template <boxm_aux_type>
 class boxm_aux_traits;
 
-
 //: traits for a visibility-based implicit surface sample
 template<>
 class boxm_aux_traits<BOXM_AUX_VIS_IMPLICIT>
 {
-public:
+ public:
   typedef boxm_vis_implicit_sample sample_datatype;
 
   static vcl_string storage_subdir() { return "vis_implicit"; }
-
 };
 
 template<>
 class boxm_aux_traits<BOXM_AUX_UPDATE>
 {
-public:
+ public:
   typedef boxm_update_sample sample_datatype;
 
   static vcl_string storage_subdir() { return "update_work";}
 };
 
-
-
 //: traits for a null sample
 template<>
 class boxm_aux_traits<BOXM_AUX_NULL>
 {
-public:
+ public:
   typedef float sample_datatype;
 
   static vcl_string storage_subdir() { return "null"; }
-
 };
 
-
-#endif
-
+#endif // boxm_aux_traits_h_

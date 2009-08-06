@@ -1,10 +1,11 @@
 #ifndef boxm_vis_implicit_sample_h_
 #define boxm_vis_implicit_sample_h_
-
+//:
+// \file
 
 class boxm_vis_implicit_sample
 {
-public:
+ public:
   //: default constructor
   boxm_vis_implicit_sample() : max_vis(0.0f), n_obs(0) {}
 
@@ -12,5 +13,4 @@ public:
   unsigned int n_obs;
 };
 
-#endif
-
+#endif // boxm_vis_implicit_sample_h_

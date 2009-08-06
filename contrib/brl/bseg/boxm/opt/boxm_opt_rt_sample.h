@@ -1,5 +1,7 @@
 #ifndef boxm_opt_rt_sample_h_
 #define boxm_opt_rt_sample_h_
+//:
+// \file
 
 #include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
@@ -9,7 +11,7 @@
 template<class OBS_T>
 class boxm_opt_rt_sample
 {
-public:
+ public:
   boxm_opt_rt_sample() : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), seg_len_(0.0f), Beta_(0.0f) {}
   ~boxm_opt_rt_sample(){}
   short version_no() const { return 1; }
@@ -27,22 +29,20 @@ public:
 template<>
 class boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>
 {
-public:
+ public:
   typedef boxm_opt_rt_sample<float> sample_datatype;
 
   static vcl_string storage_subdir() { return "opt_rt_grey_work"; }
-
 };
 
 //: traits for an rgb optimization sample
 template<>
 class boxm_aux_traits<BOXM_AUX_OPT_RT_RGB>
 {
-public:
+ public:
   typedef boxm_opt_rt_sample<vil_rgb<float> > sample_datatype;
 
   static vcl_string storage_subdir() { return "opt_rt_rgb_work"; }
-
 };
 
 template <class T>
@@ -60,5 +60,4 @@ void vsl_b_read(vsl_b_istream & is, boxm_opt_rt_sample<T> *&sample);
 template <class T>
 vcl_ostream& operator << (vcl_ostream& os, const boxm_opt_rt_sample<T>& sample);
 
-#endif
-
+#endif // boxm_opt_rt_sample_h_
