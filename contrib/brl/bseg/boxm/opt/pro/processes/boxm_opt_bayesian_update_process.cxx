@@ -1,15 +1,14 @@
-//This is vxl/contrib/brl/bseg/boxm/pro/processes/boxm_opt_bayesian_update_process.cxx
+//This is brl/bseg/boxm/opt/pro/processes/boxm_opt_bayesian_update_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for updating a boxm_scene with a set of images, 
-//         using a damped version of bayes' rule
+// \brief  A process for updating a boxm_scene with a set of images, using a damped version of Bayes' rule
 // \author Daniel Crispell
-// \date   04/02/2009
+// \date   April 2, 2009
 //
 // \verbatim
 //  Modifications
-//    Aug 3, 2009   Gamze Tunali
-//                  Moved from lemsvxl/psm_opt to vxl
+//   Aug 3, 2009  Gamze Tunali - Moved from lemsvxl/psm_opt to vxl
 // \endverbatim
 
 #include <vcl_string.h>
@@ -17,7 +16,6 @@
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
-#include <bprb/bprb_func_process.h>
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -70,7 +68,6 @@ bool boxm_opt_bayesian_update_process_cons(bprb_func_process& pro)
   return true;
 }
 
-
 //: Execute the process
 bool boxm_opt_bayesian_update_process(bprb_func_process& pro)
 {
@@ -83,7 +80,7 @@ bool boxm_opt_bayesian_update_process(bprb_func_process& pro)
     return false;
   }
 
-  // get the parameters 
+  // get the parameters
   // (none)
 
   // get the inputs
@@ -110,32 +107,35 @@ bool boxm_opt_bayesian_update_process(bprb_func_process& pro)
   }
   ifs.close();
 
-  switch (apm_type) {
+  switch (apm_type)
+  {
     case BOXM_APM_SIMPLE_GREY:
-      {
-        typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-        boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
-        if (!scene) {
-          vcl_cerr << "error casting scene_base to scene" << vcl_endl;
-          return false;
-        }
-        boxm_opt_rt_bayesian_optimizer<short,BOXM_APM_SIMPLE_GREY,BOXM_AUX_OPT_RT_GREY> optimizer(*scene, image_ids);
-        optimizer.optimize_cells(damping_factor);
-
-        break;
+    {
+      typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
+      boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+      if (!scene) {
+        vcl_cerr << "error casting scene_base to scene\n";
+        return false;
       }
-    /*case BOXM_APM_SIMPLE_RGB:
-      {     
-        boxm_scene<BOXM_APM_SIMPLE_RGB> *scene = dynamic_cast<boxm_scene<BOXM_APM_SIMPLE_RGB>*>(scene_base.ptr());
-        if (!scene) {
-          vcl_cerr << "error casting scene_base to scene" << vcl_endl;
-          return false;
-        }
-        boxm_opt_rt_bayesian_optimizer<BOXM_APM_SIMPLE_RGB, BOXM_AUX_OPT_RT_RGB> optimizer(*scene, image_ids);
-        optimizer.optimize_cells(damping_factor);
+      boxm_opt_rt_bayesian_optimizer<short,BOXM_APM_SIMPLE_GREY,BOXM_AUX_OPT_RT_GREY> optimizer(*scene, image_ids);
+      optimizer.optimize_cells(damping_factor);
 
-        break;
-      }*/
+      break;
+    }
+#if 0 // commented out
+    case BOXM_APM_SIMPLE_RGB:
+    {
+      boxm_scene<BOXM_APM_SIMPLE_RGB> *scene = dynamic_cast<boxm_scene<BOXM_APM_SIMPLE_RGB>*>(scene_base.ptr());
+      if (!scene) {
+        vcl_cerr << "error casting scene_base to scene\n";
+        return false;
+      }
+      boxm_opt_rt_bayesian_optimizer<BOXM_APM_SIMPLE_RGB, BOXM_AUX_OPT_RT_RGB> optimizer(*scene, image_ids);
+      optimizer.optimize_cells(damping_factor);
+
+      break;
+    }
+#endif // 0
     default:
       vcl_cerr << "error - boxm_opt_bayesian_update_process: unsupported appearance model type " << apm_type << vcl_endl;
       return false;
