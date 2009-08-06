@@ -2,7 +2,7 @@
 #define boxm_aux_scene_h_
 //:
 // \file
-// \brief  an auxilary scene keeps a set of octrees for a given main scene
+// \brief  an auxiliary scene keeps a set of octrees for a given main scene
 //
 // \author Gamze Tunali
 // \date   July 31, 2009
@@ -36,8 +36,8 @@ class boxm_aux_scene
 
   //: get an incremental reader for a scene block
   boct_tree_cell_reader<T_loc, T_AUX >* get_block_incremental(vgl_point_3d<int> block_idx);
-  
-private:
+
+ private:
   boxm_scene<aux_tree_type>* aux_scene_;
   vcl_string aux_storage_dir_;
 };
