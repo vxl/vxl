@@ -693,7 +693,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
 
   return true;
 }
-
+#if 0
 // initialize the voxel grid for edges
 bool bvxm_voxel_world::init_edges(unsigned scale)
 {
@@ -852,7 +852,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
 
   return true;
 }
-
+#endif
 //: generate a heightmap from the viewpoint of a virtual camera
 // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
 bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap,unsigned scale_idx)
