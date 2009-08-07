@@ -32,6 +32,7 @@ SET(bvxm_sources
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
     bvxm_util.h                     bvxm_util.cxx
     bvxm_edge_util.h                bvxm_edge_util.cxx
+    bvxm_edge_ray_processor.h       bvxm_edge_ray_processor.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 
