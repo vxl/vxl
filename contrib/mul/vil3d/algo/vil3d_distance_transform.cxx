@@ -177,7 +177,7 @@ void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
                     orient.nplanes());
 
   
-  vil3d_distance_transform_one_way_with_dir(flip_image,flip_orient,distance_link_i,distance_link_j,distance_link_k);
+ vil3d_distance_transform_one_way_with_dir(flip_image,flip_orient,distance_link_i,distance_link_j,distance_link_k);
 }
 
 //: Compute directed 3D distance function from zeros in original image.
@@ -394,6 +394,7 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
 
   vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep(), kstep = image.kstep();
   vcl_ptrdiff_t orient_istep = orient.istep(), orient_jstep = orient.jstep(), orient_kstep = orient.kstep();
+
   vcl_ptrdiff_t o1 = -istep, o2 = -jstep-istep, o3 = -jstep, o4 = -jstep+istep;
   vcl_ptrdiff_t o5 = -kstep, o6 = -kstep-istep, o7 = -kstep-jstep-istep;
   vcl_ptrdiff_t o8 = -kstep-jstep, o9 = -kstep-jstep+istep, o10 = -kstep+istep;
@@ -413,6 +414,8 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
   vcl_ptrdiff_t oo12 = -orient_kstep+orient_jstep; 
   vcl_ptrdiff_t oo13 = -orient_kstep+orient_jstep-orient_istep;
 
+
+  
   // distance vectors to the neighbors of a pixel
   vil_rgb<float> v1(1,0,0);
   vil_rgb<float> v2(1,1,0);
@@ -457,10 +460,10 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
   {
     // for first column - special case
     *row0 = vil3d_min_comp(row0[o3]+distance_link_j,*row0,found);
-    if (found) *orient_row0+=orient_row0[oo3]+v3;
+    if (found) *orient_row0=orient_row0[oo3]+v3;
 
     *row0 = vil3d_min_comp(row0[o4]+distance_link_ij,*row0,found);
-    if (found) *orient_row0+=orient_row0[oo4]+v4;
+    if (found) *orient_row0=orient_row0[oo4]+v4;
 
     // for subsequent columns
     float *p0 = row0+istep;
@@ -475,6 +478,7 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
       if (found) *orient_p0=orient_p0[oo3]+v3;
       *p0 = vil3d_min_comp(p0[o4]+distance_link_ij,*p0,found);  // (1,-1)
       if (found) *orient_p0=orient_p0[oo4]+v4;
+
     }
 
     // for last column - special case
@@ -672,6 +676,7 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
     *p0 = vil3d_min_comp(p0[o8] +distance_link_jk,*p0,found);
     if (found) *orient_p0=orient_p0[oo8]+v8;
   }
+
 }
 
 
