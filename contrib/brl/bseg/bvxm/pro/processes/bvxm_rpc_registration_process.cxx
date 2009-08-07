@@ -21,6 +21,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <bvxm/bvxm_edge_ray_processor.h>
 
 #include <vcl_cstdio.h>
 
@@ -81,7 +82,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   // image
   vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vxl_byte> edge_image(edge_image_sptr);
-
+  bvxm_edge_ray_processor edge_proc(vox_world);
   // boolean parameter specifying the voxel world alignment state
   bool rpc_shift_3d_flag = pro.get_input<bool>(i++);
   // uncertainty in meters
@@ -113,7 +114,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera_inp);
   vil_image_view_base_sptr expected_edge_image_sptr = new vil_image_view<float>(ni,nj,1);
-  vox_world->expected_edge_image(camera_metadata_inp, expected_edge_image_sptr,n_normal,scale);
+  edge_proc.expected_edge_image(camera_metadata_inp, expected_edge_image_sptr,n_normal,scale);
   vil_image_view<float> expected_edge_image(expected_edge_image_sptr);
   //float eei_min = vcl_numeric_limits<float>::max();
   //float eei_max = vcl_numeric_limits<float>::min();

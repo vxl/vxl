@@ -10,7 +10,7 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-
+#include <bvxm/bvxm_edge_ray_processor.h>
 //: set input and output types
 bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
 {
@@ -109,8 +109,9 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
     result = world->expected_image<APM_MOG_MC_4_3>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
   else if (voxel_type == "edges") {
+    bvxm_edge_ray_processor edge_proc(world);
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
-    result = world->expected_edge_image(camera_metadata,expected_img,1.0f,scale_index);
+    result = edge_proc.expected_edge_image(camera_metadata,expected_img,1.0f,scale_index);
   }
   else if (voxel_type == "apm_float"){
     expected_img = new vil_image_view<float>(npixels_x,npixels_y,1);

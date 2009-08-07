@@ -12,6 +12,7 @@
 #include <brdb/brdb_value.h>
 
 #include <bvxm/bvxm_edge_util.h>
+#include <bvxm/bvxm_edge_ray_processor.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
@@ -97,7 +98,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
            << "edge_prob_mask_sigma: " << edge_prob_mask_sigma << '\n';
 
   float new_n_normal = n_normal;
-
+  bvxm_edge_ray_processor edge_ray_proc(vox_world);
   vil_image_view<float> edge_prob_image;
   bvxm_edge_util::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
   float edge_prob_image_mean;
@@ -108,7 +109,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   vil_image_view_base_sptr edge_prob_image_sptr = new vil_image_view<float>(edge_prob_image);
 
   bvxm_image_metadata camera_metadata_out(edge_prob_image_sptr,camera_inp);
-  bool result = vox_world->update_edges(camera_metadata_out,0);
+  bool result = edge_ray_proc.update_edges(camera_metadata_out,0);
 
   if (!result) {
     vcl_cerr << "error bvxm_rpc_registration: failed to update edge image\n";
