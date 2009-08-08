@@ -151,17 +151,6 @@ class bvxm_voxel_world: public vbl_ref_count
                       vil_image_view_base_sptr &expected,
                       vil_image_view<float> &mask, unsigned bin_index = 0, unsigned scale_idx=0);
 
-#if 0
-  // initialize the voxel grid for edges
-  bool init_edges(unsigned scale_idx=0);
-
-  //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
-  bool update_edges(bvxm_image_metadata const& metadata, unsigned scale_idx=0);
-
-
-  //: generate the expected edge image from the specified viewpoint. the expected image should be allocated by the caller.
-  bool expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, float n_normal, unsigned scale_idx=0);
-#endif
   //: probability that the observed pixels were _not_ produced by a voxel in the grid.
   // The range determines how much tolerance to allow the (continuous) pixel values in order to convert from a density to a discrete probability.
   // Default value of 0.008 is approximately two 8-bit levels in either direction (assuming intensity is normalized 0-1)
@@ -248,14 +237,6 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type VOX_T>
   bvxm_voxel_grid_base_sptr get_grid(unsigned bin_index, unsigned scale);
 
-#if 1
-  //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
-  bool save_edges_raw(vcl_string filename, float n_normal, unsigned scale_idx=0);
-
-  //: save the edge probability grid as a 3-d tiff image
-  bool save_edges_vff(vcl_string filename, unsigned scale_idx=0);
-
-#endif
   //: save the occupancy grid as a 3-d tiff image
   bool save_occupancy_vff(vcl_string filename, unsigned scale_idx=0);
 

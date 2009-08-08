@@ -3,7 +3,7 @@
 #define bvxm_edge_ray_processor_h_
 //:
 // \file
-// \brief A class for a edge_ray processor
+// \brief A class for an edge_ray processor
 //
 // \author Joseph Mundy
 // \date August 7, 2009

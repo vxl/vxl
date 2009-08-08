@@ -167,3 +167,117 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
 
   return true;
 }
+
+//: save the edge probability grid as an 8-bit 3-d vff image
+bool bvxm_edge_ray_processor::save_edges_vff(vcl_string filename,unsigned scale)
+{
+  // open file for binary writing
+  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  if (!ofs.is_open()) {
+    vcl_cerr << "error opening file " << filename << " for write!\n";
+    return false;
+  }
+  bvxm_world_params_sptr params = world_->get_params();
+
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
+
+  bvxm_voxel_grid<edges_datatype> *edges_grid =
+    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(world_->get_grid<EDGES>(0,scale).ptr());
+
+  vxl_uint_32 nx = edges_grid->grid_size().x();
+  vxl_uint_32 ny = edges_grid->grid_size().y();
+  vxl_uint_32 nz = edges_grid->grid_size().z();
+
+  // write header
+  vcl_stringstream header;
+  header << "ncaa\n"
+         << "title=bvxm edge probabilities;\n"
+         << "rank=3;\n"
+         << "type=raster;\n"
+         << "format=slice;\n"
+         << "bits=8;\n"
+         << "bands=1;\n"
+         << "extent=" << nx << ' ' << ny << ' ' << nz << ";\n"
+         << "size=" << nx << ' ' << ny << ' ' << nz << ";\n"
+         << "aspect=1.0 1.0 1.0;\n"
+         << "origin=0 0 0;\n"
+         << "rawsize=" << nx*ny*nz << ";\n\f\n";
+
+  vcl_string header_string = header.str();
+  unsigned header_len = header_string.size();
+
+  ofs.write(header_string.c_str(),header_len);
+
+  // write data
+  // iterate through slabs and fill in memory array
+  char *edges_array = new char[nx*ny*nz];
+
+  bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
+  for (unsigned k=nz-1; edges_it != edges_grid->end(); ++edges_it, --k) {
+    vcl_cout << '.';
+    for (unsigned i=0; i<(*edges_it).nx(); ++i) {
+      for (unsigned j=0; j < (*edges_it).ny(); ++j) {
+        edges_array[k*nx*ny + j*nx + i] = (unsigned char)((*edges_it)(i,j) * 255.0);;
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  ofs.write(reinterpret_cast<char*>(edges_array),sizeof(unsigned char)*nx*ny*nz);
+
+  ofs.close();
+
+  delete[] edges_array;
+
+  return true;
+}
+
+//: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
+bool bvxm_edge_ray_processor::save_edges_raw(vcl_string filename, float n_normal, unsigned scale)
+{
+  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  if (!ofs.is_open()) {
+    vcl_cerr << "error opening file " << filename << " for write!\n";
+    return false;
+  }
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
+
+  // write header
+  unsigned char data_type = 0; // 0 means unsigned byte
+
+  bvxm_voxel_grid<edges_datatype> *edges_grid =
+    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(world_->get_grid<EDGES>(0,scale).ptr());
+
+  vxl_uint_32 nx = edges_grid->grid_size().x();
+  vxl_uint_32 ny = edges_grid->grid_size().y();
+  vxl_uint_32 nz = edges_grid->grid_size().z();
+
+  ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
+  ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
+  ofs.write(reinterpret_cast<char*>(&ny),sizeof(ny));
+  ofs.write(reinterpret_cast<char*>(&nz),sizeof(nz));
+
+  // write data
+  // iterate through slabs and fill in memory array
+  char *edges_array = new char[nx*ny*nz];
+
+  int dof = (int)world_->num_observations<EDGES>(0,scale)-1;
+
+  vcl_cout << "Saving edges to RAW file:" << vcl_endl;
+  bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
+  for (unsigned k=0; edges_it != edges_grid->end(); ++edges_it, ++k) {
+    vcl_cout << '.';
+    for (unsigned i=0; i<(*edges_it).nx(); ++i) {
+      for (unsigned j=0; j < (*edges_it).ny(); ++j) {
+        edges_array[i*ny*nz + j*nz + k] = (unsigned char)(255.0*bvxm_edge_util::convert_edge_statistics_to_probability((*edges_it)(i,j),n_normal,dof));
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  ofs.write(reinterpret_cast<char*>(edges_array),sizeof(unsigned char)*nx*ny*nz);
+
+  ofs.close();
+
+  delete[] edges_array;
+
+  return true;
+}

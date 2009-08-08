@@ -11,6 +11,7 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
+#include <bvxm/bvxm_edge_ray_processor.h>
 
 bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
 {
@@ -41,6 +42,7 @@ bool bvxm_save_edges_raw_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  bvxm_edge_ray_processor edge_proc(world);
   vcl_string filename = pro.get_input<vcl_string>(i++);
   float n_normal = pro.get_input<float>(i++);
   unsigned scale = pro.get_input<unsigned>(i++);
@@ -50,5 +52,5 @@ bool bvxm_save_edges_raw_process(bprb_func_process& pro)
     return false;
   }
 
-  return world->save_edges_raw(filename,n_normal,scale);
+  return edge_proc.save_edges_raw(filename,n_normal,scale);
 }
