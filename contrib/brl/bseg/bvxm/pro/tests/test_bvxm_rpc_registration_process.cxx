@@ -104,14 +104,6 @@ MAIN_ARGS( test_bvxm_rpc_registration_process )
     TEST("float non-null", value_n_normal>0, true);
   }
 
-
-  bprb_batch_process_manager::instance()->remove_data(0);
-  bprb_batch_process_manager::instance()->remove_data(1);
-  bprb_batch_process_manager::instance()->remove_data(2);
-  bprb_batch_process_manager::instance()->remove_data(3);
-  bprb_batch_process_manager::instance()->remove_data(4);
-//  bprb_batch_process_manager::instance()->delete_last_process();
-
   for (int dummy = 0; dummy == 0; ++dummy)
   {
     vcl_string rpb = "./rpc_registration_camera.rpb";
