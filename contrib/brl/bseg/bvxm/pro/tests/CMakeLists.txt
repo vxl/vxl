@@ -27,7 +27,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/po_39928_pan_0000000_chip_700_700_noI
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/po_39928_pan_0000000_chip_700_700_withICHIPB.nitf ${CMAKE_CURRENT_BINARY_DIR}/po_39928_pan_0000000_chip_700_700_withICHIPB.nitf COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/rpc_registration_image.png ${CMAKE_CURRENT_BINARY_DIR}/rpc_registration_image.png COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/rpc_registration_camera.rpb ${CMAKE_CURRENT_BINARY_DIR}/rpc_registration_camera.rpb COPYONLY )
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/rpc_registration_parameters.xml ${CMAKE_CURRENT_BINARY_DIR}/rpc_registration_parameters.xml )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/update_edges_parameters.xml ${CMAKE_CURRENT_BINARY_DIR}/update_edges_parameters.xml )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/lidar_params.xml ${CMAKE_CURRENT_BINARY_DIR}/lidar_params.xml COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/synth_test_params.xml ${CMAKE_CURRENT_BINARY_DIR}/synth_test_params.xml COPYONLY )
 
