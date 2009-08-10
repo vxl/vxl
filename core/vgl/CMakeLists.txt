@@ -25,6 +25,7 @@ SET( vgl_sources
   vgl_line_3d_2_points.h         vgl_line_3d_2_points.txx
   vgl_line_segment_2d.h          vgl_line_segment_2d.txx
   vgl_line_segment_3d.h          vgl_line_segment_3d.txx
+  vgl_infinite_line_3d.h         vgl_infinite_line_3d.txx
 
   # Other curves
   vgl_conic.h                    vgl_conic.txx

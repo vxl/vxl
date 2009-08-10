@@ -239,6 +239,21 @@ static void test_box_3d_intersection()
   //x-y plane at z=0.5
   vgl_plane_3d<double> plane_5(0.0, 0.0, 1.0, -0.5);
   TEST("x-y plane intersect box z=0.5", vgl_intersection<double>(bd0, plane_5), true);
+  //Test intersection of infinite line with box_3d.
+  vgl_infinite_line_3d<double> l3da(vgl_point_3d<double>(-1, 0.5, 0.5),
+                                   vgl_vector_3d<double>(1, 0, 0));
+  vgl_point_3d<double> ip0, ip1;
+  bool good = vgl_intersection<double>(bd0, l3da, ip0, ip1);
+  TEST_NEAR("box_inf_line_xdir", ip0.x()+ip1.x(), 1.0, 1.0e-7);
+  vgl_infinite_line_3d<double> l3db(vgl_point_3d<double>(0.5, -1.0, 0.5),
+                                   vgl_vector_3d<double>(0, 1.0, 0));
+  good = vgl_intersection<double>(bd0, l3db, ip0, ip1);
+  TEST_NEAR("box_inf_line_ydir", ip0.y()+ip1.y(), 1.0, 1.0e-7);
+  vgl_infinite_line_3d<double> l3dc(vgl_point_3d<double>(0.5, 0.5, -1.0),
+                                   vgl_vector_3d<double>(0, 0, 1.0));
+  good = vgl_intersection<double>(bd0, l3dc, ip0, ip1);
+  TEST_NEAR("box_inf_line_zdir", ip0.z()+ip1.z(), 1.0, 1.0e-7);
+
 }
 
 static void test_box_poly_intersection()

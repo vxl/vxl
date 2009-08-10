@@ -21,6 +21,9 @@
 #include <vgl/vgl_box_3d.h> // method "contains()"
 #include <vgl/vgl_point_2d.h> // method "operator==()"
 #include <vgl/vgl_point_3d.h> // method "operator==()"
+#include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_infinite_line_3d.h>
 #include <vcl_vector.h>
 
 //: Return true if the two points intersect, i.e., coincide
@@ -104,15 +107,43 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& line,
                       vgl_plane_3d<T> const& plane,
                       vgl_point_3d<T> & i_pt);
 
-//: Return the intersection line of two planes.
-// Returns false if planes are effectively parallel
+
+//: Return the intersection point of a line and a plane.
+// \relates vgl_line_segment_3d
+// \relates vgl_plane_3d
+template <class T>
+bool vgl_intersection(vgl_infinite_line_3d<T> const& line,
+                      vgl_plane_3d<T> const& plane,
+                      vgl_point_3d<T> & i_pt);
+
+//: Return the intersection line of two planes. Returns false if planes
+// are effectively parallel
 // \relates vgl_line_segment_3d
 // \relates vgl_plane_3d
 template <class T>
 bool vgl_intersection(vgl_plane_3d<T> const& plane0,
                       vgl_plane_3d<T> const& plane1,
-                      vgl_line_segment_3d<T> & line);
-
+                      vgl_line_segment_3d<T> & line){
+  vgl_infinite_line_3d<T> inf_l;
+  bool status = vgl_intersection(plane0, plane1, inf_l);
+  if(status)
+    line.set(inf_l.point_t(T(0)), inf_l.point_t(T(1)));
+  return status;
+}
+template <class T>
+bool vgl_intersection(vgl_plane_3d<T> const& plane0,
+                      vgl_plane_3d<T> const& plane1,
+                      vgl_line_3d_2_points<T> & line){
+  vgl_infinite_line_3d<T> inf_l;
+  bool status = vgl_intersection(plane0, plane1, inf_l);
+  if(status)
+    line.set(inf_l.point_t(T(0)), inf_l.point_t(T(1)));
+  return status;
+}
+template <class T>
+bool vgl_intersection(vgl_plane_3d<T> const& plane0,
+                      vgl_plane_3d<T> const& plane1,
+                      vgl_infinite_line_3d<T> & line);
 
 //: Return the intersection point of three planes.
 // \relates vgl_plane_3d
@@ -160,6 +191,14 @@ inline bool vgl_intersection(vgl_box_3d<T> const& b, vgl_point_3d<T> const& p)
 template <class T>
 inline bool vgl_intersection(vgl_point_3d<T> const& p, vgl_box_3d<T> const& b)
 { return b.contains(p); }
+
+//: Return true if line intersects box. If so, compute intersection points.
+// \relates vgl_infinite_line_3d
+template <class T>
+bool vgl_intersection(vgl_box_3d<T> const& box,
+                      vgl_infinite_line_3d<T> const& line,
+                      vgl_point_3d<T>& p0,
+                      vgl_point_3d<T>& p1);
 
 //: Return true if a box and plane intersect in 3D
 // \relates vgl_plane_3d

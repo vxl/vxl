@@ -25,6 +25,7 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_lineseg_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_2d.h>
