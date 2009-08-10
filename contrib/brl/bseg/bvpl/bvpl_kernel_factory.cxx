@@ -13,6 +13,27 @@
 
 unsigned bvpl_kernel::id_cnt=0;
 
+
+//: Saves the kernel to ascii file
+void bvpl_kernel::print_to_file(vcl_string filename)
+{
+  vcl_fstream ofs(filename.c_str(), vcl_ios::out);
+  if (!ofs.is_open()) {
+    vcl_cerr << "error opening file " << filename << " for write!\n";
+    return;
+  }
+  
+  kernel_.begin();
+  while (!kernel_.isDone()){
+    vgl_point_3d<int> coord = kernel_.index();
+    ofs.precision(2);
+    ofs << coord.x() << ' ' << coord.y() << ' ' << coord.z() << ' ' << (*kernel_).c_ << "\n" ; 
+    ++kernel_;
+  }
+  
+  ofs.close();
+}
+
 //: Saves the kernel to Dristhi .raw data format.
 // The kernel does not occupy the entire volume, so the empty voxels are set to 0.
 // The size of the box is max(x,y,z) * max(x,y,z) * max(x,y,z)
@@ -25,7 +46,8 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   }
 
   // write header
-  unsigned char data_type = 1; // 1 means signed byte
+  //unsigned char data_type = 1; // 1 means signed byte
+  unsigned char data_type = 8; // 8 means float
 
   vxl_uint_32 nx = (max_.x() - min_.x()) + 1;
   vxl_uint_32 ny = (max_.y() - min_.y()) + 1;
@@ -39,7 +61,7 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   // write data
   // iterate through slabs and fill in memory array
   unsigned size = nx*ny*nz;
-  char *data_array = new char[size];
+  float *data_array = new float[size];
 
   kernel_.begin();
   if (!kernel_.isDone())
@@ -67,12 +89,12 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   while (!kernel_.isDone()){
     vgl_point_3d<int> coord = kernel_.index();
     int index = (coord.x()-min_.x())*ny*nz + (coord.y()-min_.y())*nz + (coord.z() - min_.z());
-    data_array[index] = (char)((*kernel_).c_);
+    data_array[index] = (float)((*kernel_).c_);
     ++kernel_;
   }
   vcl_cout << vcl_endl;
 
-  ofs.write(reinterpret_cast<char*>(data_array),sizeof(char)*nx*ny*nz);
+  ofs.write(reinterpret_cast<char*>(data_array),sizeof(float)*nx*ny*nz);
   ofs.close();
 
   delete[] data_array;

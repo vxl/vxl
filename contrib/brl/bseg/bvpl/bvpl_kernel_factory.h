@@ -57,11 +57,16 @@ class bvpl_kernel:public vbl_ref_count
     kernel_.begin();
     while (!kernel_.isDone()) {
       vgl_point_3d<int> coord =kernel_.index();
-      char c = (char)((*kernel_).c_);
-      vcl_cout << coord << "  " << int(c) << vcl_endl;
+      float val= ((*kernel_).c_);
+     
+      vcl_cout.precision(2);
+      vcl_cout << coord << "  " << val<< vcl_endl;
       ++kernel_;
     }
   }
+  
+  void print_to_file(vcl_string filename);
+  
   bool save_raw(vcl_string filename);
 
   unsigned id(){return id_;}
