@@ -27,7 +27,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_
   while (!iter.end()) {
     boxm_block<boct_tree<T_loc,T> >* block = *iter;
     boct_tree<T_loc,T>* tree=block->get_tree();
-    boct_tree<T_loc, T_AUX>* aux_tree = tree->clone_to_type<T_AUX>();
+    boct_tree<T_loc, T_AUX>* aux_tree = tree->template clone_to_type<T_AUX>();
     boxm_block<boct_tree<T_loc,T_AUX> >* aux_block = new boxm_block<boct_tree<T_loc,T_AUX> >(block->bounding_box(), aux_tree);
     aux_scene_->set_block(iter.index(), aux_block);
   }
