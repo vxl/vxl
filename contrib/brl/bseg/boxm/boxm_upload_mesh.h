@@ -126,7 +126,6 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
           boxm_sample<BOXM_APM_MOG_GREY> tempdata=cell->data();
           tempdata.set_appearance(val.appearance());
           cell->set_data(tempdata);
-          vcl_cout<<cell->data().appearance()<<' ';
         }
       }
     }
