@@ -24,8 +24,8 @@ class boxm_aux_scene
  public:
    //typedef boct_tree<T_loc, boxm_sample<T> > scene_type;
   //: when lvcs is not avialable
-   typename typedef boct_tree<T_loc, T> tree_type;
-   typename typedef boct_tree<T_loc, T_AUX> aux_tree_type;
+   typedef boct_tree<T_loc, T> tree_type;
+   typedef boct_tree<T_loc, T_AUX> aux_tree_type;
    boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string suffix);
 
    ~boxm_aux_scene(){delete aux_scene_;}
