@@ -18,7 +18,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<boct_tree<T_loc, T> >* 
   aux_storage_dir_ = aux_storage_dir;
   //boxm_aux_scene_base_sptr aux_scene_base = get_aux_scene<T_AUX>(storage_suffix);
   //boxm_aux_scene<T_AUX> *aux_scene = dynamic_cast<psm_aux_scene<T_AUX>*>(aux_scene_base.ptr());
-  aux_scene_ = new boxm_scene<aux_tree_type>(scene->lvcs(), scene->origin(), scene->block_dim(), scene->world_dim());
+  aux_scene_ = new boxm_scene<boct_tree<T_loc, T_AUX>>(scene->lvcs(), scene->origin(), scene->block_dim(), scene->world_dim());
   aux_scene_->set_path(aux_storage_dir_,  storage_suffix);
 
   // loop through valid blocks and init same blocks in aux scene
