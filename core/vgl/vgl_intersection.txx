@@ -51,17 +51,17 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
   vgl_point_3d<T> lpt = line_3d.point();
   vgl_vector_3d<T> di = line_3d.direction();
   vgl_point_3d<double> dpt(static_cast<double>(lpt.x()),
-	 static_cast<double>(lpt.y()), static_cast<double>(lpt.z()));
+  static_cast<double>(lpt.y()), static_cast<double>(lpt.z()));
   vgl_vector_3d<double> dir(static_cast<double>(di.x()),
-	static_cast<double>(di.y()),
-	static_cast<double>(di.z()));
+  static_cast<double>(di.y()),
+  static_cast<double>(di.z()));
   vgl_infinite_line_3d<double> dline_3d(dpt, dir);
   vgl_point_3d<double> dp0, dp1;
   //expand box by epsilon tolerance
   double xmin = box.min_x()-eps, xmax = box.max_x()+eps;
   double ymin = box.min_y()-eps, ymax = box.max_y()+eps;
   double zmin = box.min_z()-eps, zmax = box.max_z()+eps;
-  vgl_point_3d<double> minp(xmin, ymin, zmin), maxp(xmax, ymax, zmax); 
+  vgl_point_3d<double> minp(xmin, ymin, zmin), maxp(xmax, ymax, zmax);
   //find intersection point of the line with each of the six box planes
   vgl_vector_3d<double> vxmin(-1.0, 0.0, 0.0), vxmax(1.0, 0.0, 0.0);
   vgl_vector_3d<double> vymin(0.0, -1.0, 0.0), vymax(0.0, 1.0, 0.0);
@@ -84,50 +84,50 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
   //go through the six cases and return the first two intersections
   //that lie inside the face
   unsigned npts = 0;
-  if(xmin_good&&pt_xmin.x()>=xmin&&pt_xmin.x()<=xmax){
+  if (xmin_good&&pt_xmin.x()>=xmin&&pt_xmin.x()<=xmax){
     dp0 = pt_xmin;
     ++npts;
   }
-  if(xmax_good&&pt_xmax.x()>=xmin&&pt_xmax.x()<=xmax)
-    if(npts==1){
+  if (xmax_good&&pt_xmax.x()>=xmin&&pt_xmax.x()<=xmax)
+    if (npts==1) {
       dp1 = pt_xmax;
       ++npts;
     }else{
       dp0 = pt_xmax;
       ++npts;
     }
-  if(ymin_good&&pt_ymin.y()>=ymin&&pt_ymin.y()<=ymax)
-    if(npts==1){
+  if (ymin_good&&pt_ymin.y()>=ymin&&pt_ymin.y()<=ymax)
+    if (npts==1) {
       ++npts;
       dp1 = pt_ymin;
     }else{
       dp0 = pt_ymin;
       ++npts;
     }
-  if(ymax_good&&pt_ymax.y()>=ymin&&pt_ymax.y()<=ymax)
-    if(npts==1){
+  if (ymax_good&&pt_ymax.y()>=ymin&&pt_ymax.y()<=ymax)
+    if (npts==1) {
       ++npts;
       dp1 = pt_ymax;
     }else{
       dp0 = pt_ymax;
       ++npts;
     }
-  if(zmin_good&&pt_zmin.z()>=zmin&&pt_zmin.z()<=zmax)
-    if(npts==1){
+  if (zmin_good&&pt_zmin.z()>=zmin&&pt_zmin.z()<=zmax)
+    if (npts==1) {
       dp1 = pt_zmin;
       ++npts;
     }else{
       dp0 = pt_zmin;
       ++npts;
     }
-  if(zmax_good&&pt_zmax.z()>=zmin&&pt_zmax.z()<=zmax)
-    if(npts==1){
+  if (zmax_good&&pt_zmax.z()>=zmin&&pt_zmax.z()<=zmax)
+    if (npts==1) {
       dp1 = pt_zmax;
     }else{
       dp0 = pt_zmax;
       ++npts;
     }
-  if(npts==2){
+  if (npts==2) {
     p0.set(static_cast<T>(dp0.x()),
            static_cast<T>(dp0.y()),
            static_cast<T>(dp0.z()));
@@ -138,6 +138,7 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
   }
   return false;
 }
+
 //: Return true if a box and plane intersect in 3D
 // \relates vgl_plane_3d
 // \relates vgl_box_3d
@@ -369,6 +370,7 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
   }
   return false;
 }
+
 //: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.
 template <class Type>
 unsigned vgl_intersection(const vgl_box_2d<Type>& box,
@@ -569,6 +571,7 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& line,
   i_pt = pt + t * dir;
   return true;
 }
+
 template <class T>
 bool vgl_intersection( const vgl_line_2d<T> &line0,
                        const vgl_line_2d<T> &line1,
@@ -589,6 +592,7 @@ bool vgl_intersection( const vgl_line_2d<T> &line0,
   intersection_point.set( x, y );
   return true;
 }
+
 //: Return the intersection line of two planes. Returns false if planes
 // are effectively parallel
 // \relates vgl_infinite_line_3d
@@ -661,6 +665,7 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   line = vgl_infinite_line_3d<T>(p0, t);
   return true;
 }
+
 //: Return the intersection point of three planes.
 // \relates vgl_plane_3d
 template <class T>
@@ -885,8 +890,9 @@ template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const& b, vcl_vector<vgl_point_3d<T > > const& p); \
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const& p, vgl_box_3d<T > const& b); \
 template bool vgl_intersection(vgl_box_2d<T > const&, vgl_line_2d<T > const& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
-template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T> const&); \
-template bool vgl_intersection(vgl_box_3d<T> const&, vgl_infinite_line_3d<T> const&, vgl_point_3d<T>&, vgl_point_3d<T>&)
+template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T > const&); \
+template bool vgl_intersection(vgl_box_3d<T > const&, vgl_infinite_line_3d<T > const&, vgl_point_3d<T >&, vgl_point_3d<T >&)
+
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \

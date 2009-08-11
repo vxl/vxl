@@ -14,19 +14,20 @@ vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
   vgl_infinite_line_3d<Type> l(p1, dir);
   x0_ = l.x0();
   t_ = dir;
-}	
+}
+
 template <class Type>
 void vgl_infinite_line_3d<Type>::
 compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const
-{ 
+{
   // define the plane coordinate system (u, v)
-  // v is given by the cross product of t with x, unless t is nearly 
+  // v is given by the cross product of t with x, unless t is nearly
   // parallel to x, in which case v is given by z X t.
   vgl_vector_3d<Type> x(Type(1), Type(0), Type(0));
   v = cross_product(t_,x);
   Type vmag = static_cast<Type>(v.length());
   double vmagd = static_cast<double>(vmag);
-  if(vmagd < 1.0e-8){
+  if (vmagd < 1.0e-8) {
     vgl_vector_3d<Type> z(Type(0), Type(0), Type(1));
     v = cross_product(z, t_);
     vmag = static_cast<Type>(v.length());
@@ -38,6 +39,7 @@ compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const
   Type umag = static_cast<Type>(u.length());
   u/=umag;
 }
+
 template <class Type>
 vgl_infinite_line_3d<Type>::
 vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
@@ -55,11 +57,11 @@ vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
   //The intersection point
   vgl_vector_3d<Type> p0 = pv + k*t_, u, v;
   this->compute_uv_vectors(u, v);
-  //The location of the itersection point in plane coordinates can now be 
-  //computed
+  //The location of the itersection point in plane coordinates can now be computed
   Type u0 = dot_product(u, p0), v0 = dot_product(v, p0);
   x0_.set(u0, v0);
 }
+
 // the point on the line closest to the origin
 template <class Type>
 vgl_point_3d<Type> vgl_infinite_line_3d<Type>::point() const
@@ -70,6 +72,7 @@ vgl_point_3d<Type> vgl_infinite_line_3d<Type>::point() const
   pv = x0_.x()*u + x0_.y()*v;
   return vgl_point_3d<Type>(pv.x(), pv.y(), pv.z());
 }
+
 template <class Type>
 bool vgl_infinite_line_3d<Type>::contains(const vgl_point_3d<Type>& p ) const
 {
@@ -81,10 +84,11 @@ bool vgl_infinite_line_3d<Type>::contains(const vgl_point_3d<Type>& p ) const
   // two cases: point inside (point1, point2) segment;
   //            point outside (point1, point2) segment
   double r = seg -(len1 + len2);
-  if(len1>seg||len2>seg)
+  if (len1>seg||len2>seg)
     r = seg - vcl_fabs(len1-len2);
   return r < 1e-8 && r > -1e-8;
 }
+
 // stream operators
 template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_infinite_line_3d<Type> const & p)
