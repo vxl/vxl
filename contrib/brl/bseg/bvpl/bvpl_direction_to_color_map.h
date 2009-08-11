@@ -253,10 +253,10 @@ void bvpl_make_svg_color_map(vcl_map<vgl_point_3d<double>,float,point_3d_cmp>  c
     os_dir<<'['<<vcl_setw(5)<<iter1->second.x()<<','<<vcl_setw(5)<<iter1->second.y()<<','<<vcl_setw(5)<<iter1->second.z()<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
-    t->set_location(10, 15*(i+1));
+    t->set_location(10.0f, 15.0f*(i+1));
 
     bsvg_ellipse* e1 = new bsvg_ellipse(25, 7);
-    e1->set_location(250, 15*(i+1));
+    e1->set_location(250.0f, 15.0f*(i+1));
     e1->set_fill_color(os.str());
     doc.add_element(e1);
     doc.add_element(t);
