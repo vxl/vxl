@@ -182,6 +182,9 @@ SOURCE=.\test_rtree.cxx
 # Begin Source File
 SOURCE=.\test_ellipsoid.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_infinite_line_3d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

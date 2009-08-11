@@ -377,6 +377,15 @@ SOURCE=.\Templates/vgl_tolerance+int-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_tolerance+unsigned-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_infinite_line_3d+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_infinite_line_3d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_infinite_line_3d+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -616,6 +625,12 @@ SOURCE=.\vgl_tolerance.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_triangle_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_infinite_line_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_infinite_line_3d.h
 # End Source File
 # End Group
 # End Target

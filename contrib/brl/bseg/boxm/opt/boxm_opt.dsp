@@ -93,7 +93,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/boxm_aux_scene+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT_RT_GREY_---.cxx
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_opt_rt_sample+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_opt_rt_sample+float---.cxx
@@ -102,13 +102,13 @@ SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_opt_rt_sample+float---.cxx
 SOURCE=.\Templates/boct_tree_cell+short.boxm_opt_rt_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT_RT_GREY_---.cxx
+SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT_RT_GREY-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_opt_rt_sample+float---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt_rt_sample+float----.cxx
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt_rt_sample+float---~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
