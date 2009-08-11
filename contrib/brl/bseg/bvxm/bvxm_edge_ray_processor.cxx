@@ -1,4 +1,6 @@
-#include <bvxm/bvxm_edge_ray_processor.h>
+#include "bvxm_edge_ray_processor.h"
+//:
+// \file
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_world_params.h>
@@ -7,10 +9,10 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_util.h>
 #include <bvxm/bvxm_edge_util.h>
+
 // initialize the voxel grid for edges
 bool bvxm_edge_ray_processor::init_edges(unsigned scale)
 {
-
   if (world_->num_observations<EDGES>(0,scale)!=0){
     return false;
   }
