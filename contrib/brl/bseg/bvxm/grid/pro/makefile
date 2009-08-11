@@ -18,3 +18,5 @@ SOURCES += processes/bvxm_grid_distance_trasform_process.cxx
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
+SOURCES += processes/bvxm_create_grid_process.cxx
+SOURCES += processes/bvxm_fill_mesh_normals_grid_process.cxx
