@@ -30,7 +30,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
-#include <vnl/vnl_vector_fixed.h>
 
 //: Multiplies 2 grids. The types of input grids must have a * operator
 template <class T>
@@ -144,9 +143,9 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,imesh_mesh& mesh,T val)
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
       unsigned int v_id = fs(i,j);
       double lx, ly, lz;
-      vgl_point_3d<double> v(vertices(v_id,0), 
-                              vertices(v_id,1), 
-                              vertices(v_id,2));
+      vgl_point_3d<double> v(vertices(v_id,0),
+                             vertices(v_id,1),
+                             vertices(v_id,2));
       bb.add(v);
       v_list.push_back(v);
     }
@@ -241,7 +240,7 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
     bvxm_voxel_slab<float>& s = *slab;
     for (unsigned i=0; i<grid->grid_size().x(); i++) {
       for (unsigned j=0; j<grid->grid_size().y(); j++) {
-          if(s(i,j)>0)
+          if (s(i,j)>0)
             image(i,j,k)=0;
           else
             image(i,j,k)=vcl_numeric_limits<float>::max();
@@ -282,13 +281,12 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
     bvxm_voxel_slab<float>& d_mag = *mag_slab;
     for (unsigned i=0; i<dir->grid_size().x(); i++) {
       for (unsigned j=0; j<dir->grid_size().y(); j++) {
-          d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
-          d_mag(i,j)=vcl_sqrt(directions(i,j,k).R()*directions(i,j,k).R()
-                             +directions(i,j,k).G()*directions(i,j,k).G()
-                             +directions(i,j,k).B()*directions(i,j,k).B());
-          if(d_mag(i,j)>d_max)
-              d_max=d_mag(i,j);
-
+        d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
+        d_mag(i,j)=vcl_sqrt(directions(i,j,k).R()*directions(i,j,k).R()
+                           +directions(i,j,k).G()*directions(i,j,k).G()
+                           +directions(i,j,k).B()*directions(i,j,k).B());
+        if (d_mag(i,j)>d_max)
+          d_max=d_mag(i,j);
       }
     }
     ++dir_slab;
