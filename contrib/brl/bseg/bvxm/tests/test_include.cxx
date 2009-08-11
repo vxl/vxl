@@ -1,3 +1,6 @@
+#include <bvxm/bvxm_voxel_world_sptr.h>
+
+#include <bvxm/bvxm_edge_ray_processor.h>
 #include <bvxm/bvxm_edge_util.h>
 #include <bvxm/bvxm_float_processor.h>
 #include <bvxm/bvxm_image_metadata.h>

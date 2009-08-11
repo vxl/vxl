@@ -4,6 +4,7 @@
 #include <bvpl/bvpl_edge2d_functor.h>
 #include <bvpl/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
+#include <bvpl/bvpl_gauss3d_xx_kernel_factory.h>
 #include <bvpl/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_kernel_iterator.h>
 #include <bvpl/bvpl_local_max_functor.h>
