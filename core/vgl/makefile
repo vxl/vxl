@@ -29,6 +29,7 @@ MANPAGE_SOURCES += vgl_homg_line_3d_2_points.txx
 MANPAGE_SOURCES += vgl_line_3d_2_points.txx
 MANPAGE_SOURCES += vgl_line_segment_2d.txx
 MANPAGE_SOURCES += vgl_line_segment_3d.txx
+MANPAGE_SOURCES += vgl_infinite_line_3d.txx
 
 # Other curves
 MANPAGE_SOURCES += vgl_conic.txx
