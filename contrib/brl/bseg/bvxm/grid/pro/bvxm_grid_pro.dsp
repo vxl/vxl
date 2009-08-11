@@ -138,3 +138,9 @@ SOURCE=.\bvxm_grid_processes.h
 # End Group
 # End Target
 # End Project
+# Begin Source File
+SOURCE=.\processes/bvxm_create_grid_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_fill_mesh_normals_grid_process.cxx
+# End Source File
