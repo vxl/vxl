@@ -13,8 +13,8 @@
 template <class T_loc, class T, class T_AUX>
 boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string storage_suffix = "")
 {
-  
-  /*vcl_string aux_storage_dir(scene->path() + "/" + "aux");//boxm_aux_traits<T_AUX>::storage_subdir());
+#if 0
+  vcl_string aux_storage_dir(scene->path() + "/" + "aux");//boxm_aux_traits<T_AUX>::storage_subdir());
   vul_file::make_directory(aux_storage_dir);
   aux_storage_dir_ = aux_storage_dir;
   //boxm_aux_scene_base_sptr aux_scene_base = get_aux_scene<T_AUX>(storage_suffix);
@@ -32,7 +32,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_
     boxm_block<aux_tree_type >* aux_block = new boxm_block<aux_tree_type >(block->bounding_box(), aux_tree);
     aux_scene_->set_block(iter.index(), aux_block);
   }
-  */
+#endif // 0
 }
 
 template <class T_loc, class T, class T_AUX>
