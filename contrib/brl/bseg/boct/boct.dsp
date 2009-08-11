@@ -104,6 +104,15 @@ SOURCE=.\Templates/boct_test_util+short.vgl_point_3d+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.vgl_point_3d+double--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell_reader+short.float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
