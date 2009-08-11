@@ -124,6 +124,12 @@ SOURCE=.\processes/bvxm_expectation_opinion_grid_process.cxx
 SOURCE=.\processes/bvxm_grid_distance_trasform_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_create_grid_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_fill_mesh_normals_grid_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_grid_base_sptr-.cxx
 # End Source File
 # End Group
@@ -138,9 +144,3 @@ SOURCE=.\bvxm_grid_processes.h
 # End Group
 # End Target
 # End Project
-# Begin Source File
-SOURCE=.\processes/bvxm_create_grid_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_fill_mesh_normals_grid_process.cxx
-# End Source File
