@@ -22,7 +22,7 @@ SET(bvxm_grid_sources
     bvxm_voxel_slab_iterator.h        bvxm_voxel_slab_iterator.txx
     bvxm_voxel_grid_base.h
     bvxm_voxel_grid.h                 bvxm_voxel_grid.txx
-    bvxm_voxel_grid_basic_ops.h
+    bvxm_voxel_grid_basic_ops.h		  bvxm_voxel_grid_basic_ops.cxx
     bvxm_opinion.h
     bvxm_voxel_grid_opinion_basic_ops.h bvxm_voxel_grid_opinion_basic_ops.cxx
 )

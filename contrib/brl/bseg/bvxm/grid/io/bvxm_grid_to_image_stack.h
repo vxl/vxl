@@ -40,7 +40,7 @@ class bvxm_image_traits<vnl_vector_fixed<float,3> >
 {
  public:
   typedef vil_rgb<unsigned char> pixel_type;
-  static vcl_string extension() { return ".tiff"; }
+  static vcl_string extension() { return ".png"; }
 };
 
 template<>

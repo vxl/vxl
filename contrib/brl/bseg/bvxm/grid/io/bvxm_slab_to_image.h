@@ -137,23 +137,52 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
     case VIL_PIXEL_FORMAT_FLOAT:
       if (image->nplanes() ==N)
       {
-        if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(image.ptr()))
-        {
-          vcl_vector<vil_image_view<float>::iterator> img_its;
-          for (unsigned p=0; p<N; ++p)
+          if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(image.ptr()))
           {
-            vil_image_view<float>::iterator plane_it = img_view->begin() + (p*img_view->planestep());
-            img_its.push_back(plane_it);
+              vcl_vector<vil_image_view<float>::iterator> img_its;
+              for (unsigned p=0; p<N; ++p)
+              {
+                  vil_image_view<float>::iterator plane_it = img_view->begin() + (p*img_view->planestep());
+                  img_its.push_back(plane_it);
+              }
+
+              typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
+              for (; slab_it != slab.end(); ++slab_it)
+              {
+                  for (unsigned p=0; p<N; ++p)
+                  {
+                      *(img_its[p]) = (float)((*slab_it)[p]);
+                      ++(img_its[p]);
+                  }
+              }
           }
+        else
+        {
+          vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
+          return false;
+        }
+      }
+      else
+      {
+        vcl_cerr << "error in slab_to_image: incorrect number of image planes\n";
+        return false;
+      }
+      break;
+
+    case VIL_PIXEL_FORMAT_RGB_BYTE:
+      if (image->nplanes() ==1)
+      {
+        if (vil_image_view<vil_rgb<unsigned char> > *img_view = dynamic_cast<vil_image_view<vil_rgb<unsigned char> >*>(image.ptr()))
+        {
+          vil_image_view<vil_rgb<unsigned char> >::iterator img_it = img_view->begin();
 
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
           for (; slab_it != slab.end(); ++slab_it)
           {
-            for (unsigned p=0; p<N; ++p)
-            {
-              *(img_its[p]) = (float)((*slab_it)[p]);
-              ++(img_its[p]);
-            }
+            (*img_it) = vil_rgb<unsigned char>((unsigned char)((*slab_it)[0]*127+127),
+                                                (unsigned char)((*slab_it)[1]*127+127),
+                                                (unsigned char)((*slab_it)[2]*127+127));
+            ++(img_it);
           }
         }
         else
@@ -169,43 +198,6 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
       }
       break;
 
-    case VIL_PIXEL_FORMAT_RGB_BYTE:
-
-      if (vil_image_view<vil_rgb<unsigned char> > *img_view = dynamic_cast<vil_image_view< vil_rgb<unsigned char> >*>(image.ptr()))
-      {
-        vil_image_view<vxl_byte> plane_view = vil_view_as_planes(*img_view);
-
-        if (img_view->nplanes() == 1)
-        {
-          vcl_vector<vil_image_view<unsigned char>::iterator> img_its;
-          for (unsigned p=0; p<N; ++p)
-          {
-            vil_image_view<unsigned char>::iterator plane_it = plane_view.begin() + (p*plane_view.planestep());
-            img_its.push_back(plane_it);
-          }
-          typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
-          for (; slab_it != slab.end(); ++slab_it)
-          {
-            for (unsigned p=0; p<N; ++p)
-            {
-              *(img_its[p]) =  (unsigned char)(((*slab_it)[p] * 255.0) + 0.5);;
-              ++(img_its[p]);
-            }
-          }
-        }
-        else
-        {
-          vcl_cerr << "error: slab_to_img (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = 1\n";
-          return false;
-        }
-      }
-      else
-      {
-        vcl_cerr << "error: failed to cast image_view_base to image_view\n";
-        return false;
-      }
-
-      break;
 
     default:
       vcl_cerr << "img_to_slab: unsupported pixel type\n";
@@ -235,7 +227,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
         vil_image_view<unsigned char>::iterator img_it = img_view->begin();
         typename bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
         for (; img_it != img_view->end(); ++img_it, ++slab_it) {
-          *img_it =  (unsigned char)(((*slab_it) * 255.0) + 0.5);
+          *img_it =  (unsigned char)((*slab_it));
         }
       }
       else

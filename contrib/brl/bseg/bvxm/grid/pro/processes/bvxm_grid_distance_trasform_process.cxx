@@ -21,8 +21,8 @@
 
 namespace bvxm_grid_distance_transform_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 2;
 }
 
 
@@ -35,10 +35,12 @@ bool bvxm_grid_distance_transform_process_cons(bprb_func_process& pro)
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; // the grid, it will be updtaed with distance values
   input_types_[i++]="vcl_string";                // voxel storage path for direction grid
+  input_types_[i++]="vcl_string";                // voxel storage path for direction grid
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   i=0;
   output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting direction grid
+  output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting distance transform as magnitude of direciton grid
 
   vcl_cout << input_types_.size();
   if (!pro.set_input_types(input_types_))
@@ -66,6 +68,8 @@ bool bvxm_grid_distance_transform_process(bprb_func_process& pro)
   unsigned i=0;
   bvxm_voxel_grid_base_sptr grid = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   vcl_string vox_path = pro.get_input<vcl_string>(i++);
+  vcl_string mag_path = pro.get_input<vcl_string>(i++);
+
 
   if (!grid) {
     vcl_cout << pro.name() << "--The input grid is not valid " << vcl_endl;
@@ -73,10 +77,14 @@ bool bvxm_grid_distance_transform_process(bprb_func_process& pro)
   }
 
   bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dir = new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(vox_path,grid->grid_size());
+  bvxm_voxel_grid<float>* mag = new bvxm_voxel_grid<float>(mag_path,grid->grid_size());
+
   dir->initialize_data(vnl_vector_fixed<float,3>(0,0,0));
   bvxm_voxel_grid<float>* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
-  bvxm_grid_dist_transform<float>(g,dir);
+  bvxm_grid_dist_transform<float>(g,dir,mag);
 
   pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, dir);
+  pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, mag);
+
   return true;
 }

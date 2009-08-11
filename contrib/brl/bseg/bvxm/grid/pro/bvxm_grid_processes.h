@@ -8,6 +8,7 @@
 
 //:Grid processes
 DECLARE_FUNC_CONS(bvxm_load_grid_process);
+DECLARE_FUNC_CONS(bvxm_create_grid_process);
 DECLARE_FUNC_CONS(bvxm_save_grid_raw_process);
 DECLARE_FUNC_CONS(bvxm_crop_grid_process);
 DECLARE_FUNC_CONS(bvxm_multiply_grids_process);
@@ -16,6 +17,7 @@ DECLARE_FUNC_CONS(bvxm_grid_to_image_stack_process);
 DECLARE_FUNC_CONS(bvxm_combine_grids_process);
 DECLARE_FUNC_CONS(bvxm_expectation_opinion_grid_process);
 DECLARE_FUNC_CONS(bvxm_fill_mesh_grid_process);
+DECLARE_FUNC_CONS(bvxm_fill_mesh_normals_grid_process);
 DECLARE_FUNC_CONS(bvxm_grid_distance_transform_process);
 
 #endif

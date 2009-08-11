@@ -30,6 +30,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
+#include <vnl/vnl_vector_fixed.h>
 
 //: Multiplies 2 grids. The types of input grids must have a * operator
 template <class T>
@@ -131,14 +132,10 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
 }
 
 template <class T>
-bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,
-                              imesh_mesh& mesh,
-                              bgeo_lvcs& lvcs,
-                              T val)
+bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,imesh_mesh& mesh,T val)
 {
   // initialize grid with big values
   imesh_face_array_base& fs = mesh.faces();
-
   for (unsigned i=0; i < fs.size(); ++i)
   {
     vcl_list<vgl_point_3d<double> > v_list;
@@ -147,12 +144,13 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
       unsigned int v_id = fs(i,j);
       double lx, ly, lz;
-      lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
-                           bgeo_lvcs::wgs84,lx,ly,lz);
-      vgl_point_3d<double> v(lx,ly,lz);
+      vgl_point_3d<double> v(vertices(v_id,0), 
+                              vertices(v_id,1), 
+                              vertices(v_id,2));
       bb.add(v);
       v_list.push_back(v);
     }
+
     vgl_vector_3d<unsigned int> grid_size = grid->grid_size();
     vgl_box_3d<double> grid_box;
     grid_box.set_min_point(vgl_point_3d<double>(0,0,0));
@@ -182,6 +180,11 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,
 
   return true;
 }
+
+//: function to convert a mesh in global coordinates to a mesh in local coordinates
+void covert_global_mesh_to_local(imesh_mesh & inmesh,bgeo_lvcs& lvcs);
+
+bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> >* grid,imesh_mesh& mesh);
 
 //: Digitize a simple polygon in local coordinates i.e. the same coordinate system of the grid.
 template <class T>
@@ -225,7 +228,8 @@ bool bvxm_load_polygon_into_grid(bvxm_voxel_grid<T>* grid,
 
 template <class T>
 bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
-                              bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dir)
+                              bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dir,
+                              bvxm_voxel_grid<float>* mag)
 {
   // convert grid to a vil3d_image_view
   int k=0;
@@ -237,7 +241,10 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
     bvxm_voxel_slab<float>& s = *slab;
     for (unsigned i=0; i<grid->grid_size().x(); i++) {
       for (unsigned j=0; j<grid->grid_size().y(); j++) {
-        image(i,j,k)=s(i,j);
+          if(s(i,j)>0)
+            image(i,j,k)=0;
+          else
+            image(i,j,k)=vcl_numeric_limits<float>::max();
       }
     }
     k++;
@@ -267,14 +274,40 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   // put back the image into the grid
   k=0;
   bvxm_voxel_slab_iterator<vnl_vector_fixed<float,3> > dir_slab=dir->slab_iterator(k,1);
+  bvxm_voxel_slab_iterator<float> mag_slab=mag->slab_iterator(k,1);
+
+  float d_max=0;
   while (dir_slab != dir->end()) {
     bvxm_voxel_slab<vnl_vector_fixed<float,3> >& d = *dir_slab;
+    bvxm_voxel_slab<float>& d_mag = *mag_slab;
     for (unsigned i=0; i<dir->grid_size().x(); i++) {
       for (unsigned j=0; j<dir->grid_size().y(); j++) {
-        d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
+          d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
+          d_mag(i,j)=vcl_sqrt(directions(i,j,k).R()*directions(i,j,k).R()
+                             +directions(i,j,k).G()*directions(i,j,k).G()
+                             +directions(i,j,k).B()*directions(i,j,k).B());
+          if(d_mag(i,j)>d_max)
+              d_max=d_mag(i,j);
+
       }
     }
     ++dir_slab;
+    ++mag_slab;
+    k++;
+  }
+  k=0;
+  dir_slab=dir->slab_iterator(k,1);
+  mag_slab=mag->slab_iterator(k,1);
+  while (dir_slab != dir->end()) {
+    bvxm_voxel_slab<vnl_vector_fixed<float,3> >& d = *dir_slab;
+    bvxm_voxel_slab<float>& d_mag = *mag_slab;
+    for (unsigned i=0; i<dir->grid_size().x(); i++) {
+      for (unsigned j=0; j<dir->grid_size().y(); j++) {
+          d_mag(i,j)/=d_max;
+      }
+    }
+    ++dir_slab;
+    ++mag_slab;
     k++;
   }
   return true;
