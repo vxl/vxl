@@ -1,4 +1,4 @@
-// This is vgl/bvgl_infinite_line_3d.h
+// This is core/vgl/vgl_infinite_line_3d.h
 #ifndef vgl_infinite_line_3d_h_
 #define vgl_infinite_line_3d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief A 3-d infinite line with position parameterized by orthogonal plane coordinates
-// \author  J.L. Mundy 
+// \author  J.L. Mundy
 //
 // \verbatim
 // Modifications
@@ -17,18 +17,19 @@
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h> 
-#include <vgl/vgl_line_segment_3d.h> 
-#include <vgl/vgl_line_3d_2_points.h> 
-//: Represents a 3-d line with position defined in the orthogonal plane
-//  passing through the origin. The line direction is t. The 2-d plane
-//  coordinate system (u, v) is aligned with the 3-d coordinate system
-//  (X, Y, X),  where v = t x X and u = v x t.
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_line_3d_2_points.h>
+
+//: Represents a 3-d line with position defined in the orthogonal plane passing through the origin.
+//  The line direction is t_.
+//  The 2-d plane coordinate system (u, v) is aligned with the 3-d coordinate
+//  system (X, Y, X), where v = t x X and u = v x t.
 template <class Type>
 class vgl_infinite_line_3d
 {
-  vgl_vector_2d<Type> x0_;//line position vector
-  vgl_vector_3d<Type> t_;//line direction vector (tangent)
+  vgl_vector_2d<Type> x0_; //!< line position vector
+  vgl_vector_3d<Type> t_;  //!< line direction vector (tangent)
  public:
   //: Default constructor - does not initialise!
   inline vgl_infinite_line_3d() {}
@@ -40,43 +41,48 @@ class vgl_infinite_line_3d
   //: Construct from x0 and direction
   inline vgl_infinite_line_3d(vgl_vector_2d<Type> const& x0,
                               vgl_vector_3d<Type> const& direction)
-                             
     : x0_(x0), t_(direction) {}
 
   //: Construct from two points
-  inline vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
-                              vgl_point_3d<Type> const& p2);
+  vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
+                       vgl_point_3d<Type> const& p2);
 
   //: Construct from a point and direction
-  inline vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
-                              vgl_vector_3d<Type> const& direction);
+  vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
+                       vgl_vector_3d<Type> const& direction);
 
   //: Construct from a line segment
-  inline vgl_infinite_line_3d(vgl_line_segment_3d<Type> const& ls){
+  inline vgl_infinite_line_3d(vgl_line_segment_3d<Type> const& ls)
+  {
     vgl_infinite_line_3d<Type> inf_l(ls.point1(), ls.point2());
-    x0_ = inf_l.x0(); t_ = inf_l.direction();}
+    x0_ = inf_l.x0(); t_ = inf_l.direction();
+  }
 
   //: Construct from a line 2 points
-  inline vgl_infinite_line_3d(vgl_line_3d_2_points<Type> const& ls){
+  inline vgl_infinite_line_3d(vgl_line_3d_2_points<Type> const& ls)
+  {
     vgl_infinite_line_3d<Type> inf_l(ls.point1(), ls.point2());
-    x0_ = inf_l.x0(); t_ = inf_l.direction();}
+    x0_ = inf_l.x0(); t_ = inf_l.direction();
+  }
 
   //: Destructor
   inline ~vgl_infinite_line_3d() {}
 
   //: Accessors
   inline vgl_vector_2d<Type> x0() const { return x0_; } // return a copy
-  inline vgl_vector_3d<Type> direction() const 
-    { return t_/static_cast<Type>(t_.length()); } // return a copy
+  inline vgl_vector_3d<Type> direction() const
+  { return t_/static_cast<Type>(t_.length()); } // return a copy
 
   //: The comparison operator
-  inline bool operator==(vgl_infinite_line_3d<Type> const& l) const {
-    return (this==&l) || (direction() == l.direction() && x0() == l.x0());}
+  inline bool operator==(vgl_infinite_line_3d<Type> const& l) const
+  { return (this==&l) || (direction() == l.direction() && x0() == l.x0()); }
 
-  inline bool operator!=(vgl_infinite_line_3d<Type>const& other)const{return !operator==(other);}
+  inline bool operator!=(vgl_infinite_line_3d<Type>const& other) const
+  { return !operator==(other); }
 
   //: Assignment
-  inline void set(vgl_vector_2d<Type> const& x0, vgl_vector_3d<Type> const& direction) { x0_ = x0; t_ = direction; }
+  inline void set(vgl_vector_2d<Type> const& x0, vgl_vector_3d<Type> const& direction)
+  { x0_ = x0; t_ = direction; }
 
   //: Return the point on the line closest to the origin
   vgl_point_3d<Type> point() const;
@@ -88,9 +94,8 @@ class vgl_infinite_line_3d
   //: Check if point \a p is on the line
   bool contains(const vgl_point_3d<Type>& p ) const;
 
-
  protected:
-  void compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const; 
+  void compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const;
 };
 
 //: Write to stream
