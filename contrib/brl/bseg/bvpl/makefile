@@ -18,6 +18,7 @@ MANPAGE_SOURCES += bvpl_edge_geometric_mean_functor.txx
 MANPAGE_SOURCES += bvpl_direction_to_color_map.h
 MANPAGE_SOURCES += bvpl_local_max_functor.h
 SOURCES += bvpl_gauss3d_xx_kernel_factory.cxx
+SOURCES += bvpl_gauss_convolution_functor.cxx
 
 SUBDIRS += pro io
 
