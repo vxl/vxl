@@ -236,9 +236,13 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   }
   else
   { //make sure parallel axis is aligned with y-axis
-    if (parallel_axis != canonical_parallel_axis_){
-      vcl_cerr << "Error when aligning rotation axis to the z axis\n" ;
-      return;
+    for ( unsigned i = 0; i < 3; ++i ){
+      if ( vcl_abs(parallel_axis[i] - canonical_parallel_axis_[i]) >  vcl_numeric_limits<float>::epsilon() ){
+        vcl_cerr << "Error when aligning rotation axis to the z axis\n" ;
+        vcl_cout << "Parallel axis: "<< parallel_axis << vcl_endl; 
+        vcl_cout << "Canonical parallel axis " << canonical_parallel_axis_ << vcl_endl;
+        return;
+      }
     }
   }
 
@@ -251,24 +255,20 @@ bvpl_kernel_factory::rotate(float angle)
 {
   //construct a quternion to represent the rotation
   float mag = rotation_axis_.magnitude();
-  if (angle > 0.0f)
+  if (angle > vcl_numeric_limits<float>::epsilon())
   {
     if (mag > double(0))
     {
       vnl_quaternion<float> q(rotation_axis_/mag,angle);
       return this->rotate(vgl_rotation_3d<float>(q));
     }
-    else
-    {// identity rotation is a special case
+    else 
       vcl_cout << "magnitude of rotation axis is zero, returning withount modifying kernel\n";
-      return kernel_;
-    }
-  }
-  else
-  {// identity rotation is a special case
-    vcl_cout << "magnitude of rotation axis is zero, returning withount modifying kernel\n";
+    
     return kernel_;
   }
+  else
+    return kernel_;
 }
 
 //: Rotates "class-kernel_" using the given rotation matrix
