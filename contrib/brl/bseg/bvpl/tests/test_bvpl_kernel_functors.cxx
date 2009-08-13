@@ -28,6 +28,32 @@ void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_
   unsigned ni=data.get_row1_count();
   unsigned nj=data.get_row1_count();
   unsigned nk=data.get_row1_count();
+  
+  float ci=ni*0.5f;
+  float cj=nj*0.5f;
+  float ck=nk*0.5f;
+  for (unsigned i=0;i<ni;i++)
+  {
+    for (unsigned j=0;j<nj;j++)
+    {
+      for (unsigned k=0;k<nk;k++)
+      {
+        if ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=0)
+          data(i,j,k)=max_p;
+        else
+          data(i,j,k)=min_p;
+      }
+    }
+  }
+}
+
+// Specialization for gaussian second derivative. Here we want a wall or blob rather than an edge
+template<>
+void fill_in_data(vbl_array_3d<bsta_gauss_f1> & data,bsta_gauss_f1 min_p, bsta_gauss_f1 max_p, vnl_vector_fixed<float,3> axis)
+{
+  unsigned ni=data.get_row1_count();
+  unsigned nj=data.get_row1_count();
+  unsigned nk=data.get_row1_count();
 
   float ci=ni*0.5f;
   float cj=nj*0.5f;
@@ -289,14 +315,12 @@ void test_gauss_convolve()
   
   TEST_NEAR("Mean test", result.mean(), 0.0f, 0.001f);
   TEST_NEAR("Var test", result.var(), 48.0f, 0.001f);
-  
-  
 }
 
 MAIN(test_bvpl_kernel_functors)
 {
   //test algebraic, geometric and opinion functors
-  //test_edge_functors();
+  test_edge_functors();
   
   //test gaussian convolution functor
   test_gauss_convolve();
