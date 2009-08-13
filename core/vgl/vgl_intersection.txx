@@ -24,6 +24,7 @@
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_lineseg_test.h>
 #include <vcl_vector.h>
+
 static double eps = 1.0e-8;//tolerance for intersections
 inline bool vgl_near_zero(double x) { return x < eps && x > -eps; }
 inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
@@ -82,93 +83,58 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
   bool ymax_good = vgl_intersection<double>(dline_3d, pl_ymax, pt_ymax);
   bool zmin_good = vgl_intersection<double>(dline_3d, pl_zmin, pt_zmin);
   bool zmax_good = vgl_intersection<double>(dline_3d, pl_zmax, pt_zmax);
-  //go through the six cases and return the two itersection points
-  //that that lie on box faces. Find the pair that are farthest apart.
-  //There could be multiple itersections if the line passes through the
-  //corners of the box.
+  // Go through the six cases and return the two intersection points
+  // that that lie on box faces. Find the pair that are farthest apart.
+  // There could be multiple intersections if the line passes through the
+  // corners of the box.
   unsigned npts = 0;
 
   // y-z face at xmin
-  if(xmin_good && pt_xmin.y()>=ymin&&pt_xmin.y()<=ymax &&
-     pt_xmin.z()>=zmin&&pt_xmin.z()<=zmax){
+  if (xmin_good && pt_xmin.y()>=ymin&&pt_xmin.y()<=ymax &&
+      pt_xmin.z()>=zmin&&pt_xmin.z()<=zmax)
+  {
     dp0 = pt_xmin;
     ++npts;
   }
   // y-z face at xmax
-  if(xmax_good && pt_xmax.y()>=ymin&&pt_xmax.y()<=ymax &&
-     pt_xmax.z()>=zmin&&pt_xmax.z()<=zmax)
-    if(npts==1){
-      dp1 = pt_xmax;
-      ++npts;
-    }else if(npts == 0){
-      dp0 = pt_xmax;
-      ++npts;
-    }
-
-  // x-z face at ymin
-  if(ymin_good && pt_ymin.x()>=xmin&&pt_ymin.x()<=xmax &&
-     pt_ymin.z()>=zmin&&pt_ymin.z()<=zmax)
-    if(npts==1){
-      dp1 = pt_ymin;
-      ++npts;
-    }else if(npts == 0)
-      {
-      dp0 = pt_ymin;
-      ++npts;
-      }else if(npts == 2)
-    {
-    double leny = length(pt_ymin-dp0);
-    double len = length(dp1-dp0);
-    if(leny>len)
-      dp1 = pt_ymin;
-    }
-  // x-z face at ymax
-  if(ymax_good&&pt_ymax.x()>=xmin&&pt_ymax.x()<=xmax && 
-     pt_ymax.z()>=zmin&&pt_ymax.z()<=zmax)
-    if(npts==1){
-      dp1 = pt_ymax;
-      ++npts;
-    }else if(npts == 0){
-      dp0 = pt_ymax;
-      ++npts;
-
-    }else if(npts == 2){
-    double leny = length(pt_ymax-dp0);
-    double len = length(dp1-dp0);
-    if(leny>len)
-      dp1 = pt_ymax;
+  if (xmax_good && pt_xmax.y()>=ymin&&pt_xmax.y()<=ymax &&
+      pt_xmax.z()>=zmin&&pt_xmax.z()<=zmax)
+  {
+    if      (npts == 0) { dp0 = pt_xmax; ++npts; }
+    else if (npts == 1) { dp1 = pt_xmax; ++npts; }
   }
-
+  // x-z face at ymin
+  if (ymin_good && pt_ymin.x()>=xmin&&pt_ymin.x()<=xmax &&
+      pt_ymin.z()>=zmin&&pt_ymin.z()<=zmax)
+  {
+    if      (npts == 0) { dp0 = pt_ymin; ++npts; }
+    else if (npts == 1) { dp1 = pt_ymin; ++npts; }
+    else if (npts == 2) { if (sqr_length(pt_ymin-dp0)>sqr_length(dp1-dp0)) dp1 = pt_ymin; }
+  }
+  // x-z face at ymax
+  if (ymax_good&&pt_ymax.x()>=xmin&&pt_ymax.x()<=xmax &&
+      pt_ymax.z()>=zmin&&pt_ymax.z()<=zmax)
+  {
+    if      (npts == 0) { dp0 = pt_ymax; ++npts; }
+    else if (npts == 1) { dp1 = pt_ymax; ++npts; }
+    else if (npts == 2) { if (sqr_length(pt_ymax-dp0)>sqr_length(dp1-dp0)) dp1 = pt_ymax; }
+  }
   // x-y face at zmin
-  if(zmin_good && pt_zmin.x()>=xmin&&pt_zmin.x()<=xmax &&
-     pt_zmin.y()>=ymin&&pt_zmin.y()<=ymax)
-    if(npts==1){
-      dp1 = pt_zmin;
-      ++npts;
-    }else if(npts == 0){
-      dp0 = pt_zmin;
-      ++npts;
-    }else if(npts == 2){
-    double lenz = length(pt_zmin-dp0);
-    double len = length(dp1-dp0);
-    if(lenz>len)
-      dp1 = pt_zmin;
+  if (zmin_good && pt_zmin.x()>=xmin&&pt_zmin.x()<=xmax &&
+      pt_zmin.y()>=ymin&&pt_zmin.y()<=ymax)
+  {
+    if      (npts == 0) { dp0 = pt_zmin; ++npts; }
+    else if (npts == 1) { dp1 = pt_zmin; ++npts; }
+    else if (npts == 2) { if (sqr_length(pt_zmin-dp0)>sqr_length(dp1-dp0)) dp1 = pt_zmin; }
   }
 
   // x-y face at zmax
-  if(zmax_good && pt_zmax.x()>=xmin&&pt_zmax.x()<=xmax &&
-     pt_zmax.y()>=ymin&&pt_zmax.y()<=ymax)
-    if(npts==1){
-      dp1 = pt_zmax;
-      ++npts;
-    }else if(npts == 0){
-      dp0 = pt_zmax;
-      ++npts;
-    }else if(npts == 2){
-    double lenz = length(pt_zmax-dp0);
-    double len = length(dp1-dp0);
-    if(lenz>len)
-      dp1 = pt_zmax;
+  if (zmax_good && pt_zmax.x()>=xmin&&pt_zmax.x()<=xmax &&
+      pt_zmax.y()>=ymin&&pt_zmax.y()<=ymax)
+  {
+    if      (npts == 0) { dp0 = pt_zmax; ++npts; }
+    else if (npts == 1) { dp1 = pt_zmax; ++npts; }
+    else if (npts == 2) { if (sqr_length(pt_zmax-dp0)>sqr_length(dp1-dp0)) dp1 = pt_zmax; }
   }
 
   if (npts==2) {
@@ -234,6 +200,31 @@ vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& b1,vgl_box_3d<T> const& b2)
 
 //: compute the intersection of an infinite line with *this box.
 //  p0 and p1 are the intersection points
+// In the normal case (no degeneracies) there are six possible intersection combinations:
+// \verbatim
+//
+//                C01 /    CY     \ C11
+//                   /     |       \           .
+//       ymax  -----/------|--------\-----
+//            |    /       |         \    |
+//            |   /        |          \   |
+//            |  /         |           \  | \  .
+//            | /          |            \ |  \_ Bounding Box
+//            |/           |             \|
+//            /            |              \    .
+//           /|            |              |\   .
+//           ---------------------------------- CX
+//          \ |            |              /
+//           \|            |             /|
+//            \            |            / |
+//            |\           |           /  |
+//            | \          |          /   |
+//            |  \         |         /    |
+//       xmin  ---\--------|--------/-----   xmax
+//       ymin      \       |       /
+//              C00 \             / C10
+// \endverbatim
+
 template <class Type>
 bool vgl_intersection(const vgl_box_2d<Type>& box,
                       const vgl_line_2d<Type>& line,
@@ -247,86 +238,61 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
   //Run through the cases
   //
   if (vgl_near_zero(a))// The line is y = -c/b
+  {
+    float y0 = static_cast<float>(-c/b);
+    // The box edge is collinear with line?
+    if (vgl_near_eq(ymin,y0))
     {
-      float y0 = static_cast<float>(-c/b);
-      // The box edge is collinear with line?
-      if (vgl_near_eq(ymin,y0))
-        {
-          p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
-          p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
-          return true;
-        }
-      if (vgl_near_eq(ymax,y0))
-        {
-          p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
-          p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
-          return true;
-        }
-
-      if ((ymin > y0) || (y0 > ymax)) // The line does not intersect the box
-        return false;
-      else // The line does intersect
-        {
-          p0.set(static_cast<Type>(xmin), static_cast<Type>(y0));
-          p1.set(static_cast<Type>(xmax), static_cast<Type>(y0));
-          return true;
-        }
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
+      return true;
     }
+    if (vgl_near_eq(ymax,y0))
+    {
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
+      return true;
+    }
+
+    if ((ymin > y0) || (y0 > ymax)) // The line does not intersect the box
+      return false;
+    else // The line does intersect
+    {
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(y0));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(y0));
+      return true;
+    }
+  }
 
   if (vgl_near_zero(b))// The line is x = -c/a
+  {
+    float x0 = static_cast<float>(-c/a);
+    // The box edge is collinar with l?
+    if (vgl_near_eq(xmin,x0))
     {
-      float x0 = static_cast<float>(-c/a);
-      // The box edge is collinar with l?
-      if (vgl_near_eq(xmin,x0))
-        {
-          p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
-          p1.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
-          return true;
-        }
-      if (vgl_near_eq(xmax,x0))
-        {
-          p0.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
-          p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
-          return true;
-        }
-
-      if ((xmin > x0) || (x0 > xmax)) // The line does not intersect the box
-        return false;
-      else // The line does intersect
-        {
-          p0.set(static_cast<Type>(x0), static_cast<Type>(ymin));
-          p1.set(static_cast<Type>(x0), static_cast<Type>(ymax));
-          return true;
-        }
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
+      return true;
+    }
+    if (vgl_near_eq(xmax,x0))
+    {
+      p0.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
+      return true;
     }
 
+    if ((xmin > x0) || (x0 > xmax)) // The line does not intersect the box
+      return false;
+    else // The line does intersect
+    {
+      p0.set(static_cast<Type>(x0), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(x0), static_cast<Type>(ymax));
+      return true;
+    }
+  }
+
   // The normal case with no degeneracies
-
-  //: There are six possible intersection combinations:
-  // \verbatim
   //
-  //                C01 /    CY     \ C11
-  //                   /     |       \           .
-  //       ymax  -----/------|--------\-----
-  //            |    /       |         \    |
-  //            |   /        |          \   |
-  //            |  /         |           \  | \  .
-  //            | /          |            \ |  \_ Bounding Box
-  //            |/           |             \|
-  //            /            |              \    .
-  //           /|            |              |\   .
-  //           ---------------------------------- CX
-  //          \ |            |              /
-  //           \|            |             /|
-  //            \            |            / |
-  //            |\           |           /  |
-  //            | \          |          /   |
-  //            |  \         |         /    |
-  //       xmin  ---\--------|--------/-----   xmax
-  //       ymin      \       |       /
-  //              C00 \             / C10
-  // \endverbatim
-
   // Intersection with x = xmin
   float y_xmin_int = static_cast<float>(-(c + a*xmin)/b);
   bool inside_xmin = (y_xmin_int >= ymin) && (y_xmin_int <= ymax);
@@ -346,72 +312,72 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
   // Case CX
   if (inside_xmin && inside_xmax &&
       !(vgl_near_eq(y_xmin_int,ymin) && vgl_near_eq(y_xmax_int,ymax)))
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
-      return true;
-    }
+  {
+    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
+    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
+    return true;
+  }
 
   // Case CY
   if (inside_ymin && inside_ymax &&
       !(vgl_near_eq(x_ymin_int,xmin) && vgl_near_eq(x_ymax_int,xmax)))
-    {
-      p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
-      p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
-      return true;
-    }
+  {
+    p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
+    p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
+    return true;
+  }
 
   // Case C00
   if (inside_xmin && inside_ymin &&
       !(inside_xmax && inside_ymax))
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
-      p1.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
-      return true;
-    }
+  {
+    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
+    p1.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
+    return true;
+  }
 
   // Case C01
   if (inside_xmin && inside_ymax &&
       !(inside_xmax && inside_ymin))
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
-      p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
-      return true;
-    }
+  {
+    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
+    p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
+    return true;
+  }
 
   // Case C10
   if (inside_ymin && inside_xmax &&
       !(inside_xmin && inside_ymax))
-    {
-      p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
-      return true;
-    }
+  {
+    p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
+    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
+    return true;
+  }
 
   // Case C11
   if (inside_ymax && inside_xmax &&
       !(inside_xmin && inside_ymin))
+  {
+    p0.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
+    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
+    return true;
+  }
+  //Exactly passing through diagonal of BB
+  if (inside_xmin && inside_xmax && inside_ymin && inside_ymax)
+  {
+    if (a>0) // 45 degrees
     {
-      p0.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
       return true;
     }
-  //Exactly p0ssing through diagonal of BB
-  if (inside_xmin && inside_xmax && inside_ymin && inside_ymax)
+    else // 135 degrees
     {
-      if (a>0) // 45 degrees
-        {
-          p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
-          p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
-          return true;
-        }
-      else // 135 degrees
-        {
-          p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
-          p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
-          return true;
-        }
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
+      return true;
     }
+  }
   return false;
 }
 
@@ -468,7 +434,7 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
 {
   vgl_line_3d_2_points<T> l21(l1.point1(),l1.point2());
   vgl_line_3d_2_points<T> l22(l2.point1(),l2.point2());
-  if(!concurrent(l21, l22))
+  if (!concurrent(l21, l22))
     return false;
   i_pnt = vgl_intersection(l21, l22);
 
@@ -487,18 +453,18 @@ bool vgl_intersection(vgl_line_3d_2_points<T> const& l1,
                       vgl_point_3d<T>& i_pnt)
 {
   vgl_line_3d_2_points<T> l22(l2.point1(),l2.point2());
-  if(!concurrent(l1, l22))
+  if (!concurrent(l1, l22))
     return false;
   i_pnt = vgl_intersection(l1, l22);
 
   double l1_len =   length(l1.point1() - l1.point2());
   double l1_idist = length(l1.point1() - i_pnt) + length(l1.point2() - i_pnt);
-
   double l2_len =   length(l2.point1() - l2.point2());
   double l2_idist = length(l2.point1() - i_pnt) + length(l2.point2() - i_pnt);
 
-  return vgl_near_zero(l2_len - l2_idist) && vgl_near_zero(l2_len - l2_idist);
+  return vgl_near_zero(l1_len - l1_idist) && vgl_near_zero(l2_len - l2_idist);
 }
+
 //: Return the intersection point of infinite lines, if concurrent.
 // \relates vgl_infinite_line_3d
 template <class T>
@@ -508,13 +474,14 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& l1,
 {
   vgl_line_3d_2_points<T> l21(l1.point(),l1.point_t(T(1)));
   vgl_line_3d_2_points<T> l22(l2.point(),l2.point_t(T(1)));
-  if(!concurrent(l21, l22))
+  if (!concurrent(l21, l22))
     return false;
   i_pnt = vgl_intersection(l21, l22);
-  if(!l1.contains(i_pnt) || !l2.contains(i_pnt))
+  if (!l1.contains(i_pnt) || !l2.contains(i_pnt))
     return false;
   return true;
 }
+
 //: Return the intersection point of a line and a plane.
 // \relates vgl_line_3d_2_points
 // \relates vgl_plane_3d
@@ -526,31 +493,31 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
 
   vgl_point_3d<T> pt;
 
-  double denom = plane.a()*(dir.x()) +
-    plane.b()*(dir.y()) +
-    plane.c()*(dir.z());
+  double denom = plane.a()*dir.x() +
+                 plane.b()*dir.y() +
+                 plane.c()*dir.z();
 
   if (denom == 0)
-    {
-      const T inf = vcl_numeric_limits<T>::infinity();
-      // Line is either parallel or coplanar
-      // If the distance from a line endpoint to the plane is zero, coplanar
-      if (vgl_distance(line.point1(), plane)==0.0)
-        pt.set(inf,inf,inf);
-      else
-        pt.set(inf,0,0);
-    }
+  {
+    const T inf = vcl_numeric_limits<T>::infinity();
+    // Line is either parallel or coplanar
+    // If the distance from a line endpoint to the plane is zero, coplanar
+    if (vgl_distance(line.point1(), plane)==0.0)
+      pt.set(inf,inf,inf);
+    else
+      pt.set(inf,0,0);
+  }
   else
-    {
-      // Infinite line intersects plane
-      double numer = -(plane.a()*line.point1().x() +
-                       plane.b()*line.point1().y() +
-                       plane.c()*line.point1().z() +
-                       plane.d());
+  {
+    // Infinite line intersects plane
+    double numer = - plane.a()*line.point1().x()
+                   - plane.b()*line.point1().y()
+                   - plane.c()*line.point1().z()
+                   - plane.d();
 
-      dir *= numer/denom;
-      pt = line.point1() + dir;
-    }
+    dir *= numer/denom;
+    pt = line.point1() + dir;
+  }
 
   return pt;
 }
@@ -571,26 +538,26 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& line,
   // numerically stable solution. IMS.
   const double tol = vcl_numeric_limits<T>::epsilon() * 10e3;
 
-  double denom = plane.a()*(dir.x()) +
-    plane.b()*(dir.y()) +
-    plane.c()*(dir.z());
+  double denom = plane.a()*dir.x() +
+                 plane.b()*dir.y() +
+                 plane.c()*dir.z();
 
   if (vcl_abs(denom) < tol)
-    {
-      const T inf = vcl_numeric_limits<T>::infinity();
-      // Line is either parallel or coplanar
-      // If the distance from a line endpoint to the plane is zero, coplanar
-      if (vgl_distance(line.point1(), plane)!=0.0)
-        return false;
+  {
+    const T inf = vcl_numeric_limits<T>::infinity();
+    // Line is either parallel or coplanar
+    // If the distance from a line endpoint to the plane is zero, coplanar
+    if (vgl_distance(line.point1(), plane)!=0.0)
+      return false;
 
-      i_pt.set(inf,inf,inf);
-      return true;
-    }
+    i_pt.set(inf,inf,inf);
+    return true;
+  }
 
-  double numer = -(plane.a()*line.point1().x() +
-                   plane.b()*line.point1().y() +
-                   plane.c()*line.point1().z() +
-                   plane.d());
+  double numer = - plane.a()*line.point1().x()
+                 - plane.b()*line.point1().y()
+                 - plane.c()*line.point1().z()
+                 - plane.d();
 
   double t = numer/denom; // 0<t<1 between two points
   if (t < 0 || t > 1.0) return false;
@@ -612,26 +579,26 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& line,
   // numerically stable solution. IMS.
   const double tol = vcl_numeric_limits<T>::epsilon() * 10e3;
 
-  double denom = plane.a()*(dir.x()) +
-    plane.b()*(dir.y()) +
-    plane.c()*(dir.z());
+  double denom = plane.a()*dir.x() +
+                 plane.b()*dir.y() +
+                 plane.c()*dir.z();
 
   if (vcl_abs(denom) < tol)
-    {
-      const T inf = vcl_numeric_limits<T>::infinity();
-      // Line is either parallel or coplanar
-      // If the distance from a line endpoint to the plane is zero, coplanar
-      if (vgl_distance(pt, plane)!=0.0)
-        return false;
+  {
+    const T inf = vcl_numeric_limits<T>::infinity();
+    // Line is either parallel or coplanar
+    // If the distance from a line endpoint to the plane is zero, coplanar
+    if (vgl_distance(pt, plane)!=0.0)
+      return false;
 
-      i_pt.set(inf,inf,inf);
-      return true;
-    }
+    i_pt.set(inf,inf,inf);
+    return true;
+  }
 
-  double numer = -(plane.a()*pt.x() +
-                   plane.b()*pt.y() +
-                   plane.c()*pt.z() +
-                   plane.d());
+  double numer = - plane.a()*pt.x()
+                 - plane.b()*pt.y()
+                 - plane.c()*pt.z()
+                 - plane.d();
 
   double t = numer/denom;
   i_pt = pt + t * dir;
@@ -666,7 +633,7 @@ bool vgl_intersection( const vgl_line_2d<T> &line0,
 template <class T>
 bool vgl_intersection(vgl_plane_3d<T> const& plane0,
                       vgl_plane_3d<T> const& plane1,
-                      vgl_infinite_line_3d<T> & line)
+                      vgl_infinite_line_3d<T>& line)
 {
   double n0x = static_cast<double>(plane0.a());
   double n0y = static_cast<double>(plane0.b());
@@ -695,39 +662,39 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   double d1 = static_cast<double>(plane1.d());
   vgl_point_3d<double> p0d;
   switch (component)
-    {
-      // x is the largest component of t
+  {
+    // x is the largest component of t
     case 'x':
-      {
-        double det = n0y*n1z-n1y*n0z;
-        if (vgl_near_zero(det))
-          return false;
-        double neuy = d1*n0z - d0*n1z;
-        double neuz = d0*n1y - d1*n0y;
-        p0d.set(0.0, neuy/det, neuz/det);
-        break;
-      }
-    case 'y':
-      {
-        double det = n0x*n1z-n1x*n0z;
-        if (vgl_near_zero(det))
-          return false;
-        double neux = d1*n0z - d0*n1z;
-        double neuz = d0*n1x - d1*n0x;
-        p0d.set(neux/det, 0.0, neuz/det);
-        break;
-      }
-    case 'z':
-      {
-        double det = n0x*n1y-n1x*n0y;
-        if (vgl_near_zero(det))
-          return false;
-        double neux = d1*n0y - d0*n1y;
-        double neuy = d0*n1x - d1*n0x;
-        p0d.set(neux/det, neuy/det, 0.0);
-        break;
-      }
+    {
+      double det = n0y*n1z-n1y*n0z;
+      if (vgl_near_zero(det))
+        return false;
+      double neuy = d1*n0z - d0*n1z;
+      double neuz = d0*n1y - d1*n0y;
+      p0d.set(0.0, neuy/det, neuz/det);
+      break;
     }
+    case 'y':
+    {
+      double det = n0x*n1z-n1x*n0z;
+      if (vgl_near_zero(det))
+        return false;
+      double neux = d1*n0z - d0*n1z;
+      double neuz = d0*n1x - d1*n0x;
+      p0d.set(neux/det, 0.0, neuz/det);
+      break;
+    }
+    case 'z':
+    {
+      double det = n0x*n1y-n1x*n0y;
+      if (vgl_near_zero(det))
+        return false;
+      double neux = d1*n0y - d0*n1y;
+      double neuy = d0*n1x - d1*n0x;
+      p0d.set(neux/det, neuy/det, 0.0);
+      break;
+    }
+  }
   vgl_point_3d<T> p0(static_cast<T>(p0d.x()),
                      static_cast<T>(p0d.y()),
                      static_cast<T>(p0d.z()));
@@ -761,25 +728,24 @@ bool vgl_intersection(vgl_point_2d<T> const& p1,
                       double tol)
 {
   vgl_vector_2d<T> u = p2 - p1;
-  double L2 = u.x()*u.x() + u.y()*u.y();  // Square of length p1-p2
   vgl_vector_2d<T> v(-u.y(),u.x());
-
   double uq1 = dot_product(q1 - p1,u);
   double vq1 = dot_product(q1 - p1,v);
   double tol2 = tol*tol;
+  double L2 = sqr_length(u);
 
   // Check if q1 is in central band (either side of line p1-p2
   if (uq1 > 0 && uq1 < L2)
-    {
-      // Check if q1 is within tol of the line, ie |vq1/L| < tol
-      if (vq1*vq1 <=tol2*L2) return true;
-    }
+  {
+    // Check if q1 is within tol of the line, ie |vq1/L| < tol
+    if (vq1*vq1 <=tol2*L2) return true;
+  }
   else
-    {
-      // Check if q1 is within tol of either end of line
-      if ( (q1-p1).sqr_length() <= tol2 || (q1-p2).sqr_length() <= tol2 )
-        return true;
-    }
+  {
+    // Check if q1 is within tol of either end of line
+    if ( (q1-p1).sqr_length() <= tol2 || (q1-p2).sqr_length() <= tol2 )
+      return true;
+  }
 
   // Repeat test for q2
   double uq2 = dot_product(q2 - p1,u);
@@ -787,17 +753,17 @@ bool vgl_intersection(vgl_point_2d<T> const& p1,
 
   // Check if q2 is in central band (either side of line p1-p2
   if (uq2 > 0 && uq2 < L2)
-    {
-      // Check if q1 is within tol of the line, ie |vq1/L| < tol
-      if (vq2*vq2 <=tol2*L2)
-        return true;
-    }
+  {
+    // Check if q1 is within tol of the line, ie |vq1/L| < tol
+    if (vq2*vq2 <=tol2*L2)
+      return true;
+  }
   else
-    {
-      // Check if q1 is within tol of either end of line
-      if ( (q2-p1).sqr_length() <= tol2 || (q2-p2).sqr_length() <= tol2 )
-        return true;
-    }
+  {
+    // Check if q1 is within tol of either end of line
+    if ( (q2-p1).sqr_length() <= tol2 || (q2-p2).sqr_length() <= tol2 )
+      return true;
+  }
 
   // The points q1 and q2 do not lie within the tolerance region
   // around line segment (p1,p2)
@@ -806,50 +772,45 @@ bool vgl_intersection(vgl_point_2d<T> const& p1,
   // of line (q1,q2)
 
   u = q2 - q1;
-  L2 = u.x()*u.x() + u.y()*u.y();  // Square of length p1-p2
   v.set(-u.y(),u.x());
+  L2 = sqr_length(u);
 
   double up1 = dot_product(p1 - q1,u);
   double vp1 = dot_product(p1 - q1,v);
 
   // Check if p1 is in central band either side of line q1-q2
   if (up1 > 0 && up1 < L2)
-    {
-      // Check if p1 is within tol of the line, ie |vp1/L| < tol
-      if (vp1*vp1 <=tol2*L2)
-        return true;
-    }
+  {
+    // Check if p1 is within tol of the line, ie |vp1/L| < tol
+    if (vp1*vp1 <=tol2*L2)
+      return true;
+  }
   else
-    {
-      // Check if p1 is within tol of either end of line
-      if ( (p1-q1).sqr_length() <= tol2 || (p1-q2).sqr_length() <= tol2 )
-        return true;
-    }
+  {
+    // Check if p1 is within tol of either end of line
+    if ( (p1-q1).sqr_length() <= tol2 || (p1-q2).sqr_length() <= tol2 )
+      return true;
+  }
 
   double up2 = dot_product(p2 - q1,u);
   double vp2 = dot_product(p2 - q1,v);
 
   // Check if p2 is in central band either side of line q1-q2
   if (up2 > 0 && up2 < L2)
-    {
-      // Check if p1 is within tol of the line, ie |vp1/L| < tol
-      if (vp2*vp2 <=tol2*L2)
-        return true;
-    }
+  {
+    // Check if p1 is within tol of the line, ie |vp1/L| < tol
+    if (vp2*vp2 <=tol2*L2)
+      return true;
+  }
   else
-    {
-      // Check if p2 is within tol of either end of line
-      if ( (p2-q1).sqr_length() <= tol2 || (p2-q2).sqr_length() <= tol2)
-        return true;
-    }
+  {
+    // Check if p2 is within tol of either end of line
+    if ( (p2-q1).sqr_length() <= tol2 || (p2-q2).sqr_length() <= tol2)
+      return true;
+  }
 
   // Now check for actual intersection
-  if (vq1*vq2 >= 0)
-    return false;
-  else if (vp1*vp2 >= 0)
-    return false;
-  else
-    return true;
+  return vq1*vq2 < 0 && vp1*vp2 < 0;
 }
 
 template <class T>
@@ -876,23 +837,23 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
   if (hit) return true;
   //check if any polygon edges intersect the box
   for (unsigned s = 0; s<ns&&!hit; ++s)
+  {
+    unsigned n = poly[s].size();
+    vgl_point_2d<T> ia, ib;
+    vgl_point_2d<T> last = poly[s][0];
+    for (unsigned i = 1; i<n&&!hit; ++i)
     {
-      unsigned n = poly[s].size();
-      vgl_point_2d<T> ia, ib;
-      vgl_point_2d<T> last = poly[s][0];
-      for (unsigned i = 1; i<n&&!hit; ++i)
-        {
-          vgl_point_2d<T> p = poly[s][i];
-          vgl_line_segment_2d<T> l(last, p);
-          hit = vgl_intersection<T>(b, l, ia, ib)>0;
-          last = p;
-        }
-      if (!hit) {
-        vgl_point_2d<T> start = poly[s][0];
-        vgl_line_segment_2d<T> ll(last, start);
-        hit = vgl_intersection<T>(b,ll, ia, ib)>0;
-      }
+      vgl_point_2d<T> p = poly[s][i];
+      vgl_line_segment_2d<T> l(last, p);
+      hit = vgl_intersection<T>(b, l, ia, ib)>0;
+      last = p;
     }
+    if (!hit) {
+      vgl_point_2d<T> start = poly[s][0];
+      vgl_line_segment_2d<T> ll(last, start);
+      hit = vgl_intersection<T>(b,ll, ia, ib)>0;
+    }
+  }
   return hit;
 }
 
@@ -957,13 +918,13 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
 template vgl_box_2d<T > vgl_intersection(vgl_box_2d<T > const&,vgl_box_2d<T > const&); \
 template vgl_box_3d<T > vgl_intersection(vgl_box_3d<T > const&,vgl_box_3d<T > const&); \
-template vcl_vector<vgl_point_2d<T > > vgl_intersection(vgl_box_2d<T > const& b, vcl_vector<vgl_point_2d<T > > const& p); \
-template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<T > > const& p, vgl_box_2d<T > const& b); \
-template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const& b, vcl_vector<vgl_point_3d<T > > const& p); \
-template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const& p, vgl_box_3d<T > const& b); \
-template bool vgl_intersection(vgl_box_2d<T > const&, vgl_line_2d<T > const& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
+template vcl_vector<vgl_point_2d<T > > vgl_intersection(vgl_box_2d<T > const&,vcl_vector<vgl_point_2d<T > > const&); \
+template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<T > > const&,vgl_box_2d<T > const&); \
+template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const&,vcl_vector<vgl_point_3d<T > > const&); \
+template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const&,vgl_box_3d<T > const&); \
+template bool vgl_intersection(vgl_box_2d<T > const&,vgl_line_2d<T > const&,vgl_point_2d<T >&,vgl_point_2d<T >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T > const&); \
-template bool vgl_intersection(vgl_box_3d<T > const&, vgl_infinite_line_3d<T > const&, vgl_point_3d<T >&, vgl_point_3d<T >&)
+template bool vgl_intersection(vgl_box_3d<T > const&,vgl_infinite_line_3d<T > const&,vgl_point_3d<T >&,vgl_point_3d<T >&)
 
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
@@ -971,15 +932,15 @@ template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_l
 template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
-template bool vgl_intersection(vgl_infinite_line_3d<T> const&,vgl_infinite_line_3d<T> const&,vgl_point_3d<T>& i_pnt); \
-template bool vgl_intersection(vgl_line_segment_3d<T > const&, vgl_plane_3d<T > const&, vgl_point_3d<T > &); \
-template bool vgl_intersection(vgl_infinite_line_3d<T > const&, vgl_plane_3d<T > const&, vgl_point_3d<T > &); \
+template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_plane_3d<T > const&,vgl_point_3d<T >&); \
+template bool vgl_intersection(vgl_infinite_line_3d<T > const&,vgl_plane_3d<T > const&,vgl_point_3d<T >&); \
+template bool vgl_intersection(vgl_infinite_line_3d<T > const&,vgl_infinite_line_3d<T > const&,vgl_point_3d<T >&); \
 template vgl_point_3d<T > vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_plane_3d<T > const&); \
-template unsigned vgl_intersection(vgl_box_2d<T > const& , vgl_line_segment_2d<T > const& , vgl_point_2d<T >& , vgl_point_2d<T >& ); \
-template bool vgl_intersection(vgl_line_2d<T > const&, vgl_line_2d<T > const&, vgl_point_2d<T >&); \
+template unsigned vgl_intersection(vgl_box_2d<T > const&,vgl_line_segment_2d<T > const&,vgl_point_2d<T >&,vgl_point_2d<T >&); \
+template bool vgl_intersection(vgl_line_2d<T > const&,vgl_line_2d<T > const&,vgl_point_2d<T >&); \
 template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
-template bool vgl_intersection(vgl_box_2d<T > const&, vgl_polygon<T > const&); \
-template bool vgl_intersection(vgl_plane_3d<T > const&, vgl_plane_3d<T > const&,vgl_line_segment_3d<T > & ); \
+template bool vgl_intersection(vgl_box_2d<T > const&,vgl_polygon<T > const&); \
+template bool vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_line_segment_3d<T > &); \
 VGL_INTERSECTION_BOX_INSTANTIATE(T)
 
 #endif // vgl_intersection_txx_
