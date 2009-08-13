@@ -16,6 +16,7 @@ SET(bvpl_sources
     bvpl_gauss3d_xx_kernel_factory.h   bvpl_gauss3d_xx_kernel_factory.cxx
     bvpl_edge_algebraic_mean_functor.h bvpl_edge_algebraic_mean_functor.txx
     bvpl_edge_geometric_mean_functor.h bvpl_edge_geometric_mean_functor.txx
+    bvpl_gauss_convolution_functor.h   bvpl_gauss_convolution_functor.cxx
     bvpl_local_max_functor.h           
     bvpl_neighb_operator.h
     bvpl_vector_operator.h
