@@ -68,7 +68,20 @@ class bvpl_kernel:public vbl_ref_count
   void print_to_file(vcl_string filename);
   
   bool save_raw(vcl_string filename);
-
+  
+  // Returns a sum of kernel values. Useful to check if they add up to zero
+  float cum_sum()
+  {
+    float val = 0.0f;
+    kernel_.begin();
+    while (!kernel_.isDone()) {
+      val += ((*kernel_).c_);
+      ++kernel_;
+    }
+    vcl_cout << "Kernel sums to : " << val << vcl_endl;
+    
+  }
+  
   unsigned id(){return id_;}
   static unsigned id_cnt;
  private:
