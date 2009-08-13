@@ -1,0 +1,50 @@
+// This is /brl/bseg/bvpl/bvpl_gauss_convolution_functor.h
+#ifndef bvpl_gauss_convolution_functor_h
+#define bvpl_gauss_convolution_functor_h
+
+//:
+// \file
+// \brief A functor that convolves a kernel with gaussian distributions 
+//
+// \author Isabel Restrepo mir@lems.brown.edu
+//
+// \date  8/10/09
+//
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
+
+#include "bvpl_kernel_iterator.h"
+#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_attributes.h>
+
+//: This class convolves a kernel with gaussian distributions. Therefore, the response of the kernel 
+// is a gaussian distribution obteined as a linear combination of input gaussians weighted by the kernel value
+class bvpl_gauss_convolution_functor
+{
+public:
+  //: Default constructor
+  bvpl_gauss_convolution_functor();
+  
+  //: Destructor
+  ~bvpl_gauss_convolution_functor() {}
+  
+  //: Multiply the dispatch and the input gaussians together
+  void apply(bsta_gauss_f1& val, bvpl_kernel_dispatch& d);
+  
+  //: Returns the final operation of this functor
+  bsta_gauss_f1 result();
+  
+private:
+
+
+  float mean_;  
+  float var_; 
+  
+  //: Initializes class variables
+  void init();
+  
+ 
+};
+#endif
