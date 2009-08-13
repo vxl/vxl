@@ -128,39 +128,57 @@ void bvpl_gauss3d_xx_kernel_factory::create_canonical()
 
 /******************Batch Methods ***********************/
 
-//: Creates a vector of kernels with azimuthal(\phi) and elevation(\theta) resolution equal to pi/4.
-//  This uses spherical coordinates where \theta \in  [0,\pi) and \phi \in [0,2\pi)
+//: Creates a vector of kernels with azimuthal(\theta) and elevation(\phi) resolution equal to pi/4.
+//  This uses spherical coordinates where \theta \in  [0,2\pi) and \phi \in [0,pi/2)
+//  This batch method is specific to a kernel with two equal sides. the reason for this is that in current
+//  applications there is no preference in direction other that the orientation of the kernel. 
+//  A batch method for a "scalene" kernel requires rotation around its main axis.
 bvpl_kernel_vector_sptr bvpl_gauss3d_xx_kernel_factory::create_kernel_vector()
 {
-#if 0
-  bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
-  vnl_float_3 axis(0.0f, 0.0f, 1.0f);
-  //polar phi=0,pi
-  this->set_rotation_axis(axis);
-  kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
-  axis = -axis;
-  this->set_rotation_axis(axis);
-  kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
 
-  double theta_res = vnl_math::pi_over_4;
-  double phi_res   = vnl_math::pi_over_4;
-  // phi=pi/4,pi/2,3pi/4
-  for (double phi=vnl_math::pi_over_4; phi<vnl_math::pi-1e-5; phi+=phi_res)
+  bvpl_kernel_vector_sptr kernels = new bvpl_kernel_vector();
+  float theta_res = float(vnl_math::pi_over_4); //azimuth
+  float phi_res = float(vnl_math::pi_over_4);   //zenith  (from the pole)
+ 
+  vnl_float_3 axis;
+  
+  float theta = 0.0f;
+  float phi = 0.0f;
+  
+  //when zenith angle is 0
+  axis[0] =0.0f;
+  axis[1] =0.0f;
+  axis[2] =1.0f;
+  this->set_rotation_axis(axis);
+  kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
+ 
+  
+  //when zenith is pi/4 traverse all hemisphere
+  phi = float(vnl_math::pi_over_4);
+  for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    // theta=0,pi/4,pi/2,3pi/4,pi,5pi/4,3pi/2,7pi/4
-    for (double theta=0.0; theta<2.0*vnl_math::pi-1e-5; theta+=theta_res)
-    {
-      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-      axis[2] = float(vcl_cos(phi));
-      this->set_rotation_axis(axis);
-      kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
-    }
+    axis[0] = vcl_cos(theta) * vcl_sin(phi);
+    axis[1] = vcl_sin(theta) * vcl_sin(phi);
+    axis[2] = vcl_cos(phi);
+    this->set_rotation_axis(axis);
+    kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
   }
+  
+  
+  //when zenith is pi/2 we only traverse half a hemisphere
+  phi = float(vnl_math::pi_over_2);
+  theta =0.0f;
+  for (;theta < float(vnl_math::pi)-1e-5; theta +=theta_res)
+  {
+    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
+    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
+    axis[2] = float(vcl_cos(phi));
+    this->set_rotation_axis(axis);
+    kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
+   }
+  
   return kernels;
-#else
-  return 0; // to be implemented
-#endif
+  
 }
 
 //: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
