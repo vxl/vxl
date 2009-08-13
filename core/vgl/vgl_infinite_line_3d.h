@@ -94,7 +94,8 @@ class vgl_infinite_line_3d
   //: Check if point \a p is on the line
   bool contains(const vgl_point_3d<Type>& p ) const;
 
- protected:
+
+  //: The unit vectors perpendicular to the line direction
   void compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const;
 };
 

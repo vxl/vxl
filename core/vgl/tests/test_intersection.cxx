@@ -254,6 +254,17 @@ static void test_box_3d_intersection()
   good = vgl_intersection<double>(bd0, l3dc, ip0, ip1);
   TEST_NEAR("box_inf_line_zdir", ip0.z()+ip1.z(), 1.0, 1.0e-7);
 
+  //A more generic test case
+  vgl_point_3d<double> pg0(-1, -1, -1), pg1(1, 1, 1);
+  vgl_box_3d<double> bg0;
+  bg0.add(pg0); bg0.add(pg1);
+  vgl_infinite_line_3d<double> l3g(vgl_point_3d<double>(0.0, 0.0, 0.0),
+                                   vgl_vector_3d<double>(0.5773502691896257,
+                                                         0.5773502691896257,
+                                                         0.5773502691896257));
+  good = vgl_intersection<double>(bg0, l3g, ip0, ip1);
+  TEST("generic line intersect box", good, true);
+  if(good) TEST_NEAR("generic line interesection points",length(ip0-ip1),3.464101615137,1.0e-6);
 }
 
 static void test_box_poly_intersection()
