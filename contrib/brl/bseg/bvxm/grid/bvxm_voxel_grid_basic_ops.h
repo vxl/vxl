@@ -72,6 +72,11 @@ bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_g
   }
   return true;
 }
+//: Multiplies 2 grids. The types of input grids must have a * operator
+bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid, 
+                              bvxm_voxel_grid<bvxm_opinion> * op_grid, 
+                              bvxm_voxel_grid<float> * out_grid);
+
 
 //: Thresholds a grid. This function returns the thresholded grid and a mask shuch that output grid = mask*input_grid
 template <class T>
@@ -281,33 +286,18 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
     bvxm_voxel_slab<float>& d_mag = *mag_slab;
     for (unsigned i=0; i<dir->grid_size().x(); i++) {
       for (unsigned j=0; j<dir->grid_size().y(); j++) {
-        d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
-        d_mag(i,j)=vcl_sqrt(directions(i,j,k).R()*directions(i,j,k).R()
-                           +directions(i,j,k).G()*directions(i,j,k).G()
-                           +directions(i,j,k).B()*directions(i,j,k).B());
-        if (d_mag(i,j)>d_max)
-          d_max=d_mag(i,j);
+          d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
+          d_mag(i,j)=vcl_sqrt(directions(i,j,k).R()*directions(i,j,k).R()
+                             +directions(i,j,k).G()*directions(i,j,k).G()
+                             +directions(i,j,k).B()*directions(i,j,k).B());
+
       }
     }
     ++dir_slab;
     ++mag_slab;
     k++;
   }
-  k=0;
-  dir_slab=dir->slab_iterator(k,1);
-  mag_slab=mag->slab_iterator(k,1);
-  while (dir_slab != dir->end()) {
-    bvxm_voxel_slab<vnl_vector_fixed<float,3> >& d = *dir_slab;
-    bvxm_voxel_slab<float>& d_mag = *mag_slab;
-    for (unsigned i=0; i<dir->grid_size().x(); i++) {
-      for (unsigned j=0; j<dir->grid_size().y(); j++) {
-          d_mag(i,j)/=d_max;
-      }
-    }
-    ++dir_slab;
-    ++mag_slab;
-    k++;
-  }
+
   return true;
 }
 

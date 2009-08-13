@@ -63,12 +63,10 @@ bool bvxm_expectation_opinion_grid_process(bprb_func_process& pro)
 
   if (bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
   {
-    bvxm_voxel_grid<float> * grid_out=new bvxm_voxel_grid<float>(output_path, opinion_input_grid->grid_size());
-
-  bvxm_expectation_opinion_voxel_grid(opinion_input_grid, grid_out);
-
-    vcl_cout<<"Expectation computed done."<<vcl_endl;
-    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+      bvxm_voxel_grid<float> * grid_out=new bvxm_voxel_grid<float>(output_path, opinion_input_grid->grid_size());
+      bvxm_expectation_opinion_voxel_grid(opinion_input_grid, grid_out);
+      vcl_cout<<"Expectation computed done."<<vcl_endl;
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
   }
   else
   {

@@ -12,6 +12,6 @@ void bvxm_expectation_opinion_voxel_grid(bvxm_voxel_grid<bvxm_opinion> * grid_in
     bvxm_voxel_slab<bvxm_opinion>::iterator in_it = (*grid_in_it).begin();
     bvxm_voxel_slab<float>::iterator out_it = (*grid_out_it).begin();
     for (; in_it!= (*grid_in_it).end(); ++in_it, ++out_it)
-      *out_it=(*in_it).expectation();
+        *out_it=(*in_it).expectation();
     }
 }

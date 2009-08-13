@@ -57,7 +57,7 @@ bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> 
             voxel_box.set_min_point(vgl_point_3d<double>(x,y,z));
             voxel_box.set_max_point(vgl_point_3d<double>(x+1,y+1,z+1));
             if (vgl_intersection<double>(voxel_box, v_list)) {
-              bvxm_voxel_slab_iterator<vnl_vector_fixed<float,3>> slab_it = grid->slab_iterator(grid_size.z()-z);
+              bvxm_voxel_slab_iterator<vnl_vector_fixed<float,3> > slab_it = grid->slab_iterator(grid_size.z()-z);
               (*slab_it)(x,y)=vnl_normal;
               ++slab_it;
             }
@@ -67,5 +67,46 @@ bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> 
     }
   }
 
+  return true;
+}
+
+bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid, 
+                              bvxm_voxel_grid<bvxm_opinion> * op_grid, 
+                              bvxm_voxel_grid<float> * grid_out)
+{
+  //check the grids exist 
+  if ( !dt_grid || !op_grid || !grid_out)
+  {
+    vcl_cerr << "One of the input voxels is of the wrong type\n";
+    return false;
+  }
+
+  //check sizes are the same
+  if ( dt_grid->grid_size() != op_grid->grid_size() ||  dt_grid->grid_size() != grid_out->grid_size() )
+  {
+    vcl_cerr << "Grids are not of the same size\n";
+    return false;
+  }
+
+  //multipy
+  bvxm_voxel_grid<float>::iterator dt_grid_it = dt_grid->begin();
+  bvxm_voxel_grid<bvxm_opinion>::iterator op_grid_it = op_grid->begin();
+  bvxm_voxel_grid<float>::iterator grid_out_it = grid_out->begin();
+
+  for (; dt_grid_it != dt_grid->end(); ++dt_grid_it, ++op_grid_it, ++grid_out_it)
+  {
+    bvxm_voxel_slab<float>::iterator slab1_it = (*dt_grid_it).begin();
+    bvxm_voxel_slab<bvxm_opinion>::iterator slab2_it = (*op_grid_it).begin();
+    bvxm_voxel_slab<float>::iterator slab_out_it = (*grid_out_it).begin();
+
+    for (; slab1_it!=(*dt_grid_it).end(); ++slab1_it ,++slab2_it, ++slab_out_it)
+    {
+        if((*slab1_it)<7)
+            (*slab_out_it) =(*slab2_it).b();      
+            //(*slab_out_it) =(*slab1_it)*(*slab2_it).b();      
+        else
+            (*slab_out_it) =0;
+    }
+  }
   return true;
 }
