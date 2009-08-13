@@ -108,6 +108,9 @@ SOURCE=.\bvpl_edge3d_kernel_factory.cxx
 SOURCE=.\bvpl_gauss3d_xx_kernel_factory.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_gauss_convolution_functor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 # End Source File
 # Begin Source File
@@ -205,6 +208,9 @@ SOURCE=.\bvpl_local_max_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_gauss3d_xx_kernel_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.vpl_gauss_convolution_functor.h
 # End Source File
 # End Group
 # End Target
