@@ -1,4 +1,6 @@
 #include "bvpl_gauss_convolution_functor.h"
+//:
+// \file
 
 //: Constructor
 bvpl_gauss_convolution_functor::bvpl_gauss_convolution_functor()
@@ -18,7 +20,6 @@ void bvpl_gauss_convolution_functor::apply(bsta_gauss_f1& gauss, bvpl_kernel_dis
 {
   mean_+= d.c_*gauss.mean();
   var_+= d.c_*d.c_*gauss.var();
-  
 }
 
 //: Return the final result
