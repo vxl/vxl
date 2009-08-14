@@ -52,23 +52,24 @@ class bvpl_kernel:public vbl_ref_count
   vgl_vector_3d<int> dim()const {return dim_;}
   vgl_point_3d<int> min() const {return min_;}
   vgl_point_3d<int> max() const {return max_;}
+
   void print()
   {
     kernel_.begin();
     while (!kernel_.isDone()) {
       vgl_point_3d<int> coord =kernel_.index();
       float val= ((*kernel_).c_);
-     
+
       vcl_cout.precision(2);
       vcl_cout << coord << "  " << val<< vcl_endl;
       ++kernel_;
     }
   }
-  
+
   void print_to_file(vcl_string filename);
-  
+
   bool save_raw(vcl_string filename);
-  
+
   // Returns a sum of kernel values. Useful to check if they add up to zero
   float cum_sum()
   {
@@ -79,9 +80,9 @@ class bvpl_kernel:public vbl_ref_count
       ++kernel_;
     }
     vcl_cout << "Kernel sums to : " << val << vcl_endl;
-    
+    return val;
   }
-  
+
   unsigned id(){return id_;}
   static unsigned id_cnt;
  private:
