@@ -1,8 +1,5 @@
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
-#INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-#INCLUDE( ${MODULE_PATH}/FindTIFF.cmake)
 
 IF (WIN32 AND VXL_USE_LFS)
 #This is a hack since win32 doesn't have transparent Large File Support.
@@ -22,7 +19,7 @@ SET(bvxm_grid_sources
     bvxm_voxel_slab_iterator.h        bvxm_voxel_slab_iterator.txx
     bvxm_voxel_grid_base.h
     bvxm_voxel_grid.h                 bvxm_voxel_grid.txx
-    bvxm_voxel_grid_basic_ops.h		  bvxm_voxel_grid_basic_ops.cxx
+    bvxm_voxel_grid_basic_ops.h       bvxm_voxel_grid_basic_ops.cxx
     bvxm_opinion.h
     bvxm_voxel_grid_opinion_basic_ops.h bvxm_voxel_grid_opinion_basic_ops.cxx
 )
@@ -31,7 +28,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_grid_sources)
 
 ADD_LIBRARY( bvxm_grid ${bvxm_grid_sources})
 
-TARGET_LINK_LIBRARIES( bvxm_grid  vnl vil  vil_algo vul vbl vsl vgl bgeo vil3d vil3d_algo)
+TARGET_LINK_LIBRARIES( bvxm_grid  vnl vil  vil_algo vul vbl vsl vgl vgl_algo bgeo vil3d vil3d_algo)
 
 SUBDIRS( io )
 SUBDIRS( pro )
