@@ -83,7 +83,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
   vsl_b_read(vslstream, v_b);  // vil_memory_chunk*.nonnull
   if (!v_b) return 0; // can't handle empty images.
   vsl_b_read(vslstream, v_i);  // vil_memory_chunk.version
-  if (v_i != 2) return 0; // can only handle version 2.
+  if (v_i != 2 && v_i != 3) return 0; // can only handle version 2.
   vsl_b_read(vslstream, v_i);  //  chunk.pixel_format
 
   vil_pixel_format f = static_cast<vil_pixel_format>(v_i);
