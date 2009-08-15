@@ -24,8 +24,6 @@ boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::boxm_opt_rt_bayesian_optimizer(bo
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_factor)
 {
-  unsigned int c = 0;
-  const unsigned int debug_c = 1509732;
   // get auxiliary scenes associated with each imput image
   typedef typename boxm_aux_traits<AUX>::sample_datatype aux_type;
 
@@ -135,4 +133,4 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
 #define BOXM_OPT_RT_BAYESIAN_OPTIMIZER_INSTANTIATE(T1,T2,T3) \
 template class boxm_opt_rt_bayesian_optimizer<T1,T2,T3 >
 
-#endif
+#endif // boxm_opt_rt_bayesian_optimizer_txx_
