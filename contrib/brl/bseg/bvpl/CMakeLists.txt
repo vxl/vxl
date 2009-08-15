@@ -17,7 +17,7 @@ SET(bvpl_sources
     bvpl_edge_algebraic_mean_functor.h bvpl_edge_algebraic_mean_functor.txx
     bvpl_edge_geometric_mean_functor.h bvpl_edge_geometric_mean_functor.txx
     bvpl_gauss_convolution_functor.h   bvpl_gauss_convolution_functor.cxx
-    bvpl_local_max_functor.h           
+    bvpl_local_max_functor.h
     bvpl_neighb_operator.h
     bvpl_vector_operator.h
     bvpl_direction_to_color_map.h
@@ -27,7 +27,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_sources)
 
 ADD_LIBRARY(bvpl ${bvpl_sources})
 
-TARGET_LINK_LIBRARIES(bvpl bvxm_grid vgl bdgl bxml bsvg)
+TARGET_LINK_LIBRARIES(bvpl bvxm_grid vgl bdgl bxml bsvg bsta)
 
 SUBDIRS( pro )
 SUBDIRS( io )
