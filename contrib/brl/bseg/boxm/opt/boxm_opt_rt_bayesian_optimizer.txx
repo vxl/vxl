@@ -1,27 +1,23 @@
 #ifndef boxm_opt_rt_bayesian_optimizer_txx_
 #define boxm_opt_rt_bayesian_optimizer_txx_
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_set.h>
-#include <vcl_map.h>
-
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
+#include "boxm_opt_rt_bayesian_optimizer.h"
+//
+#include "boxm_opt_rt_sample.h"
+#include "boxm_opt_appearance_estimator.h"
 
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/opt/boxm_aux_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/opt/boxm_aux_scene.h>
 
-#include "boxm_opt_rt_sample.h"
-#include "boxm_opt_rt_bayesian_optimizer.h"
-#include "boxm_opt_appearance_estimator.h"
+#include <vcl_vector.h>
+#include <vcl_string.h>
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::boxm_opt_rt_bayesian_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                                                                               vcl_vector<vcl_string> const& image_ids)
-: scene_(scene), image_ids_(image_ids), min_cell_P_(0.0001f), max_cell_P_(0.995f)
+: image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f)
 {}
 
 
