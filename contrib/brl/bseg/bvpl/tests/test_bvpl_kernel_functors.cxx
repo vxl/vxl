@@ -28,7 +28,7 @@ void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_
   unsigned ni=data.get_row1_count();
   unsigned nj=data.get_row1_count();
   unsigned nk=data.get_row1_count();
-  
+
   float ci=ni*0.5f;
   float cj=nj*0.5f;
   float ck=nk*0.5f;
@@ -162,7 +162,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
 #ifdef DEBUG
   float entropy_sum=0.0f;
 #endif
-  
+
   vnl_random rand;
   for (unsigned j=0;j<kernel_vec->kernels_.size();j++)
   {
@@ -170,10 +170,10 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     axis[0]+=float(rand.normal()*sigma_noise);
     axis[1]+=float(rand.normal()*sigma_noise);
     axis[2]+=float(rand.normal()*sigma_noise);
-    
+
     data.fill(min_p);
     fill_in_data<bsta_gauss_f1> (data,min_p,max_p,axis);
-    
+
     bsta_gauss_f1 max_val=maxval;
     unsigned axis_result=0;
     for (unsigned i=0;i<kernel_vec->kernels_.size();i++)
@@ -193,7 +193,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     if (axis_result!=j)
     {
       vcl_cout<<"Val: "<<max_val.mean()/max_val.var()<<" Result axis: "<<kernel_vec->kernels_[axis_result].first
-      <<"Orig axis: "<<axis<<vcl_endl;
+              <<"Orig axis: "<<axis<<vcl_endl;
       flag=false;
     }
 #ifdef DEBUG
@@ -207,80 +207,69 @@ void test_edge_functors()
 {
   vbl_array_3d<float> data(100,100,100);
   data.fill(0.0f);
-  
+
   bool result=false;
   float min_p=0.1f;
   float max_p=0.9f;
-  
+
   float max_val=0.0f;
-  
+
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
   //: get vector of kernel
   bvpl_kernel_vector_sptr kernel_vec=kernels_3d.create_kernel_vector();
   bvpl_edge_algebraic_mean_functor<float> mean_functor;
   bvpl_edge_geometric_mean_functor<float> geom_functor;
-  
+
   float sigma_noise=0.0f;
   result=is_correct_solution< bvpl_edge_algebraic_mean_functor<float>, float >(kernel_vec,data,mean_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Algebraic mean functor with no noise ", true,result);
   result=is_correct_solution< bvpl_edge_geometric_mean_functor<float>, float  >(kernel_vec,data,geom_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Geometric Mean functor with no noise ", true,result);
-  
+
   //: add noise
   sigma_noise=0.1f;
   result=is_correct_solution< bvpl_edge_algebraic_mean_functor<float>, float  >(kernel_vec,data,mean_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Algebraic mean functor with  noise ", true,result);
   result=is_correct_solution< bvpl_edge_geometric_mean_functor<float>, float  >(kernel_vec,data,geom_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Geometric Mean functor with  noise ", true,result);
-  
-  
+
   vbl_array_3d<bvxm_opinion> opinion_data(100,100,100);
   bvxm_opinion minp(1.0,0.0);
   bvxm_opinion maxp(0.0,1.0);
   bvxm_opinion max_val_opinion(1.0,0.0);
-  
+
   opinion_data.fill(minp);
   sigma_noise=0.0f;
-  
+
   bvpl_opinion_functor opinion_functor;
   result=is_correct_solution< bvpl_opinion_functor, bvxm_opinion >(kernel_vec,opinion_data,opinion_functor,minp,maxp,sigma_noise,max_val_opinion);
   TEST("Test Opinion functor with no noise ", true,result);
-  
 }
 
 void test_gaussian_kernels()
 {
- 
-  
   bool result=false;
   bsta_gauss_f1 edge(200,1);
   bsta_gauss_f1 empty(10,1);
-  
+
   vbl_array_3d<bsta_gauss_f1> data(100,100,100);
   data.fill(empty);
-  
-  float min_p=0.1f;
-  float max_p=0.9f;
-  
-  float max_val=0.0f;
-  
+
   float var[3] ={1.0, 1.5, 2};
-  
-  for(unsigned i=0; i<3; i++)
+
+  for (unsigned i=0; i<3; i++)
   {
-    
     bvpl_gauss3d_xx_kernel_factory factory(var[i], 1.5);
     //: get vector of kernel
     bvpl_kernel_vector_sptr kernel_vec = factory.create_kernel_vector();
     bvpl_gauss_convolution_functor functor;
-    
-    
+
     float sigma_noise=0.0f;
     vnl_vector<float> response(13);
-    
+
     result=is_correct_solution< bvpl_gauss_convolution_functor>(kernel_vec,data,functor,empty,edge,sigma_noise,empty,response);
     TEST("Test gaussian functor with no noise ", true,result);
-    
+
 #if 0
     vcl_stringstream file;
     file << "response" << i << ".txt";
@@ -302,7 +291,7 @@ void test_gauss_convolve()
   bsta_gauss_f1 f1(0,1);
   bsta_gauss_f1 f2(4,1);
   bsta_gauss_f1 f3(12,3);
- 
+
   bvpl_gauss_convolution_functor functor;
   bvpl_kernel_dispatch d(-6.0f);
   functor.apply(f1, d);
@@ -310,9 +299,9 @@ void test_gauss_convolve()
   functor.apply(f2, d);
   d=-1.0f;
   functor.apply(f3, d);
-  
+
   bsta_gauss_f1 result = functor.result();
-  
+
   TEST_NEAR("Mean test", result.mean(), 0.0f, 0.001f);
   TEST_NEAR("Var test", result.var(), 48.0f, 0.001f);
 }
@@ -321,10 +310,10 @@ MAIN(test_bvpl_kernel_functors)
 {
   //test algebraic, geometric and opinion functors
   test_edge_functors();
-  
+
   //test gaussian convolution functor
   test_gauss_convolve();
-  
+
   //test that kernels detect max response at appropiate plane direction
   test_gaussian_kernels();
   return 0;
