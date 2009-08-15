@@ -52,6 +52,7 @@ BEGIN_EXTERN_C
 #ifdef HAVE_LIBC_H
 #include <libc.h>
 #endif
+#ifndef _WIN32
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
@@ -63,6 +64,7 @@ BEGIN_EXTERN_C
 #define DCOMPAT_SYS_SOCKET_H_
 /* some systems don't protect sys/socket.h (e.g. DEC Ultrix) */
 #include <sys/socket.h>
+#endif
 #endif
 #endif
 #ifdef HAVE_NETINET_IN_H

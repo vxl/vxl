@@ -31,11 +31,11 @@
 #include "ofstdinc.h"
 
 BEGIN_EXTERN_C
+#ifndef HAVE_WINDOWS_H
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>     /* for struct timeval on Linux */
 #endif
 
-#ifndef HAVE_WINDOWS_H
 #ifndef HAVE_PROTOTYPE_GETTIMEOFDAY
  /* Ultrix has gettimeofday() but no prototype in the header files */
  int gettimeofday(struct timeval *tp, void *);
