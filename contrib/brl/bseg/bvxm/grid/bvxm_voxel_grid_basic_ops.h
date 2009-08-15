@@ -65,20 +65,20 @@ bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_g
     typename bvxm_voxel_slab<T>::iterator slab2_it = (*grid2_it).begin();
     typename bvxm_voxel_slab<T>::iterator slab_out_it = (*grid_out_it).begin();
 
-    for (; slab1_it!=(*grid1_it).end(); ++slab1_it ,++slab2_it, ++slab_out_it)
+    for (; slab1_it!=(*grid1_it).end(); ++slab1_it, ++slab2_it, ++slab_out_it)
     {
       (*slab_out_it) =(*slab1_it)*(*slab2_it);
     }
   }
   return true;
 }
+
 //: Multiplies 2 grids. The types of input grids must have a * operator
-bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid, 
-                              bvxm_voxel_grid<bvxm_opinion> * op_grid, 
-                              bvxm_voxel_grid<float> * out_grid);
+bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid,
+                             bvxm_voxel_grid<bvxm_opinion> * op_grid,
+                             bvxm_voxel_grid<float> * out_grid);
 
-
-//: Thresholds a grid. This function returns the thresholded grid and a mask shuch that output grid = mask*input_grid
+//: Thresholds a grid. This function returns the thresholded grid and a mask such that output grid = mask*input_grid
 template <class T>
 bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel_grid_base_sptr grid_out_base,
                                bvxm_voxel_grid_base_sptr mask_grid_base, T min_thresh)
@@ -107,8 +107,7 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
   grid_out->initialize_data(T(0));
   mask_grid->initialize_data(false);
 
-
-  // ierate though the grids
+  // iterate through the grids
   typename bvxm_voxel_grid<T>::iterator in_slab_it = grid_in->begin();
   typename bvxm_voxel_grid<T>::iterator out_slab_it = grid_out->begin();
   bvxm_voxel_grid<bool>::iterator mask_slab_it = mask_grid->begin();
@@ -147,7 +146,6 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,imesh_mesh& mesh,T val)
     vgl_box_3d<double> bb;
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
       unsigned int v_id = fs(i,j);
-      double lx, ly, lz;
       vgl_point_3d<double> v(vertices(v_id,0),
                              vertices(v_id,1),
                              vertices(v_id,2));
@@ -243,15 +241,15 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   bvxm_voxel_slab_iterator<float> slab=grid->slab_iterator(k,1);
   while (slab != grid->end()) {
     bvxm_voxel_slab<float>& s = *slab;
-    for (unsigned i=0; i<grid->grid_size().x(); i++) {
-      for (unsigned j=0; j<grid->grid_size().y(); j++) {
+    for (unsigned i=0; i<grid->grid_size().x(); ++i) {
+      for (unsigned j=0; j<grid->grid_size().y(); ++j) {
           if (s(i,j)>0)
             image(i,j,k)=0;
           else
             image(i,j,k)=vcl_numeric_limits<float>::max();
       }
     }
-    k++;
+    ++k;
     ++slab;
   }
 
@@ -265,13 +263,13 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   slab=grid->slab_iterator(k,1);
   while (slab != grid->end()) {
     bvxm_voxel_slab<float>& s = *slab;
-    for (unsigned i=0; i<grid->grid_size().x(); i++) {
-      for (unsigned j=0; j<grid->grid_size().y(); j++) {
+    for (unsigned i=0; i<grid->grid_size().x(); ++i) {
+      for (unsigned j=0; j<grid->grid_size().y(); ++j) {
         s(i,j)=image(i,j,k);
       }
     }
     ++slab;
-    k++;
+    ++k;
   }
 
   // create a directions grid
@@ -280,26 +278,23 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
   bvxm_voxel_slab_iterator<vnl_vector_fixed<float,3> > dir_slab=dir->slab_iterator(k,1);
   bvxm_voxel_slab_iterator<float> mag_slab=mag->slab_iterator(k,1);
 
-  float d_max=0;
   while (dir_slab != dir->end()) {
     bvxm_voxel_slab<vnl_vector_fixed<float,3> >& d = *dir_slab;
     bvxm_voxel_slab<float>& d_mag = *mag_slab;
-    for (unsigned i=0; i<dir->grid_size().x(); i++) {
-      for (unsigned j=0; j<dir->grid_size().y(); j++) {
+    for (unsigned i=0; i<dir->grid_size().x(); ++i) {
+      for (unsigned j=0; j<dir->grid_size().y(); ++j) {
           d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
           d_mag(i,j)=vcl_sqrt(directions(i,j,k).R()*directions(i,j,k).R()
                              +directions(i,j,k).G()*directions(i,j,k).G()
                              +directions(i,j,k).B()*directions(i,j,k).B());
-
       }
     }
     ++dir_slab;
     ++mag_slab;
-    k++;
+    ++k;
   }
 
   return true;
 }
 
-
-#endif
+#endif // bvxm_voxel_grid_basic_ops_h_
