@@ -14,6 +14,9 @@
 // 970517 AWF Initial version.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // Peter Vanroose   27/05/2001: Corrected the documentation
+// Eric Moyer       15/07/2009: Modified the documentation to reflect
+//                              working strip_comments and non-working
+//                              backslash_continuation
 // \endverbatim
 
 
@@ -31,6 +34,24 @@
 //    for (vul_awk awk=cin; awk; ++awk)
 //      vcl_cout << awk[2] << vcl_endl;
 // \endcode
+//
+// The constructor takes an integer mode-flag variable.  Right now,
+// only the strip_comments flag has any effect, though the ModeFlags
+// enumeration contains other potential flags.
+//
+// When the strip_comments flag is set then everything from the first
+// '#' character to the end of the line is replaced with a single
+// space.  As a special feature, lines that contain an # as the first
+// character are skipped entirely by the next() routine, no attempt
+// will be made to extract fields from them.  They will be counted in
+// the line numbering so that error messages can easily refer to the
+// correct line in the file.  To extend the above example to handle
+// comments in the file, write:
+// \code
+//    for (vul_awk awk(cin, vul_awk::strip_comments); awk; ++awk)
+//      vcl_cout << awk[2] << vcl_endl;
+// \endcode
+//
 
 class vul_awk
 {

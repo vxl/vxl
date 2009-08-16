@@ -12,6 +12,7 @@ SET(vul_test_sources
   test_string.cxx
   test_sleep_timer.cxx
   test_get_time_as_string.cxx
+  test_awk.cxx
 )
 
 IF (NOT APPLE)
