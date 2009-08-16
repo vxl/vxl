@@ -1,10 +1,10 @@
-#include <vnl/vnl_erf.h>
-
 #include "boxm_simple_grey_processor.h"
 //:
 // \file
 
-//const float boxm_simple_grey_processor::one_over_sigma_ = 1.0f/0.04f;
+#include <vnl/vnl_erf.h>
+
+//const float boxm_simple_grey_processor::one_over_sigma_ = 25.0f;
 const static bool USE_UNIFORM_COMPONENT = false;
 
 //: Return probability density of observing pixel values
@@ -36,7 +36,7 @@ float boxm_simple_grey_processor::prob_range(apm_datatype const& appear, obs_dat
   return P * appear.gauss_weight() + (1.0f - appear.gauss_weight())*(obs_max - obs_min);
 }
 
-//: Return probabilities that pixels are in range [0,1] - used for normalizing 
+//: Return probabilities that pixels are in range [0,1] - used for normalizing
 float boxm_simple_grey_processor::total_prob(apm_datatype const& appear)
 {
   const float diff_low =  -appear.color();
@@ -44,7 +44,7 @@ float boxm_simple_grey_processor::total_prob(apm_datatype const& appear)
   const float norm = float(appear.one_over_sigma()*vnl_math::sqrt1_2);
   const float double_cdf_low_minus_1 = (float)vnl_erf(diff_low*norm);
   const float double_cdf_high_minus_1 = (float)vnl_erf(diff_high*norm);
-  return (0.5f * (double_cdf_high_minus_1 - double_cdf_low_minus_1));
+  return 0.5f * (double_cdf_high_minus_1 - double_cdf_low_minus_1);
 }
 
 
@@ -57,7 +57,7 @@ bool boxm_simple_grey_processor::update( apm_datatype &appear, obs_datatype cons
 
 
 //: Expected value
-boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype boxm_simple_grey_processor::expected_color(boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype const& appear) 
+boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype boxm_simple_grey_processor::expected_color(boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype const& appear)
 {
   return appear.color() * appear.gauss_weight() + 0.5f * (1.0f - appear.gauss_weight());
 }
@@ -83,7 +83,7 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
     // one observation: Just return the value as the mean, and a big sigma.
     model = boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype(obs[0], big_sigma, weights[0]);
     return;
-  } 
+  }
   else {
     // compute estimate of gaussian parameters
     // Initialize the estimates
@@ -101,7 +101,7 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
     }
     // or too big
     if (sigma_est > big_sigma) {
-      sigma_est = big_sigma; 
+      sigma_est = big_sigma;
     }
 
     // compute estimate of gaussian weight by summing probabilities
@@ -117,14 +117,13 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
       if (weight_sum > 0.0f) {
         gauss_weight /= weight_sum;
       }
-    } 
+    }
     else {
       gauss_weight = 1.0f;
     }
 
     model = boxm_simple_grey(mean_est, sigma_est, gauss_weight);
   }
-  return;
 }
 
 
@@ -141,7 +140,7 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
     // one observation: Just return the value as the mean, and a big sigma.
     model = boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype(obs[0], big_sigma, 0.5);
     return;
-  } 
+  }
   else {
     // compute estimate of gaussian weight by summing probabilities
     vcl_vector<float> obs_gauss_weights = weights;
@@ -164,7 +163,7 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
       if (weight_sum > 0.0f) {
         gauss_weight /= weight_sum;
       }
-    } 
+    }
     else {
       gauss_weight = 1.0f;
     }
@@ -182,12 +181,11 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
     }
     // or too big
     if (sigma_est > big_sigma) {
-      sigma_est = big_sigma; 
+      sigma_est = big_sigma;
     }
 
     model = boxm_simple_grey(mean_est, sigma_est, gauss_weight);
   }
-  return;
 }
 
 void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model)
@@ -200,17 +198,15 @@ void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<
   for (; wit != weights.end(); ++wit) {
     expected_nobs += *wit;
   }
-  
+
   float unbiased_sigma = model.sigma() * sigma_norm_factor(expected_nobs);
-  
+
   if (unbiased_sigma > big_sigma) {
     unbiased_sigma = big_sigma;
   }
 
   model = boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype(model.color(), unbiased_sigma, model.gauss_weight());
-  return;
 }
-
 
 
 void boxm_simple_grey_processor::compute_gaussian_params(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> obs, vcl_vector<float> weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype &mean, float &sigma)
@@ -226,7 +222,7 @@ void boxm_simple_grey_processor::compute_gaussian_params(vcl_vector<boxm_apm_tra
     obs_sum += obs[i] * weights[i];
   }
   double mean_obs = 0.5f;
-  if(w_sum > 0) {
+  if (w_sum > 0) {
     mean_obs = obs_sum / w_sum;
   }
 
@@ -246,7 +242,6 @@ void boxm_simple_grey_processor::compute_gaussian_params(vcl_vector<boxm_apm_tra
 
 float boxm_simple_grey_processor::sigma_norm_factor(float nobs)
 {
- 
   if (nobs <= 1.0f) {
     return sigma_norm_factor((unsigned int)1);
   }
@@ -267,7 +262,7 @@ float boxm_simple_grey_processor::sigma_norm_factor(unsigned int nobs)
   if (nobs < 2) {
     return unbias_const[1];
   }
-  
+
   if (nobs < 36) {
     return unbias_const[nobs];
   }
@@ -277,7 +272,4 @@ float boxm_simple_grey_processor::sigma_norm_factor(unsigned int nobs)
   static const float b = unbias_const[35]  - m*(1.0f/35.0f);
   return m/nobs + b;
 }
-    
-  
-
 
