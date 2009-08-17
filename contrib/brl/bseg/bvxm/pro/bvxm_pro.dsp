@@ -213,6 +213,9 @@ SOURCE=.\processes/bvxm_merge_mog_process.cxx
 SOURCE=.\processes/bvxm_get_grid_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_mog_to_mpm_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
