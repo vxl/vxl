@@ -45,6 +45,7 @@ SOURCES += processes/bvxm_locate_region_process.cxx
 SOURCES += processes/bvxm_mog_l2_process.cxx
 SOURCES += processes/bvxm_merge_mog_process.cxx
 SOURCES += processes/bvxm_get_grid_process.cxx
+SOURCES += processes/bvxm_mog_to_mpm_process.cxx
 
 MANPAGE_SOURCES += bvxm_processes.h
 
