@@ -65,6 +65,7 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_merge_mog_process.h                processes/bvxm_merge_mog_process.cxx
     processes/bvxm_gen_synthetic_world_process.h      processes/bvxm_gen_synthetic_world_process.cxx
     processes/bvxm_save_edges_raw_process.h           processes/bvxm_save_edges_raw_process.cxx
+    processes/bvxm_mog_to_mpm_process.cxx
    )
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})

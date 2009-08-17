@@ -50,6 +50,7 @@ DECLARE_FUNC_CONS(bvxm_save_edges_raw_process);
 
 //algo
 DECLARE_FUNC_CONS(bvxm_merge_mog_process);
+DECLARE_FUNC_CONS(bvxm_mog_to_mpm_process);
 DECLARE_FUNC_CONS(bvxm_mog_l2_distance);
 
 #endif
