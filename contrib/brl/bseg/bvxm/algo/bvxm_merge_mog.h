@@ -35,6 +35,9 @@ class bvxm_merge_mog
   //: Merges the components of the gaussian mixtures at each voxel into a single gaussian, that minimizes KL divergence.
   //  The resulting grid contains unimodal Gaussians.
   static bool kl_merge_grid(bvxm_voxel_grid_base_sptr app_grid,  bvxm_voxel_grid_base_sptr gauss_app) ;
+  
+  //: Converts a mixture of gaussians grid into an unimodal gaussian grid corresponding to the most probable mode
+  static bool mpm_grid(bvxm_voxel_grid_base_sptr app_grid,  bvxm_voxel_grid_base_sptr gauss_app) ;
 
   //Distribution operations
 
