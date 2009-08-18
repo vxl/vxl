@@ -146,6 +146,12 @@ SOURCE=.\Templates/bvpl_voxel_subgrid+uint-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvpl_subgrid_iterator+uint-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_subgrid_iterator+bsta_gauss_f1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_voxel_subgrid+bsta_gauss_f1-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -210,7 +216,7 @@ SOURCE=.\bvpl_local_max_functor.h
 SOURCE=.\bvpl_gauss3d_xx_kernel_factory.h
 # End Source File
 # Begin Source File
-SOURCE=.vpl_gauss_convolution_functor.h
+SOURCE=.\bvpl_gauss_convolution_functor.h
 # End Source File
 # End Group
 # End Target
