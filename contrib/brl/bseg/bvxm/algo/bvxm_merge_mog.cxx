@@ -62,7 +62,6 @@ bool bvxm_merge_mog::kl_merge_grid(bvxm_voxel_grid_base_sptr apm_base,
 
     for (; apm_slab_it!=(*apm_it).end(); apm_slab_it++, gauss_slab_it++)
     {
-      mix_gauss_type temp = *apm_slab_it;
       kl_merge(*apm_slab_it, *gauss_slab_it);
     }
   }
