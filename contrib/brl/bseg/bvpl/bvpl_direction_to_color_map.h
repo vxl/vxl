@@ -17,19 +17,20 @@
 #include <bxml/bxml_find.h>
 #include <bxml/bxml_write.h>
 #include <vcl_iomanip.h>
+#include <vcl_limits.h>
 
 struct point_3d_cmp
 {
   bool operator()(vgl_point_3d<double> p1, vgl_point_3d<double> p2) const
   {
-    if (p1.x()<p2.x())
+    if (p2.x()- p1.x()> vcl_numeric_limits<double>::epsilon() )
       return true;
-    else if (p1.x()==p2.x())
+    else if (p2.x()- p1.x() < vcl_numeric_limits<double>::epsilon() )
     {
-      if (p1.y()<p2.y())
+      if (p2.y()- p1.y()> vcl_numeric_limits<double>::epsilon() )
         return true;
-      else if (p1.y()==p2.y())
-        return p1.z()<p2.z();
+      else if (p2.y()-p1.y() <vcl_numeric_limits<double>::epsilon())
+        return (p2.z()- p1.z()>vcl_numeric_limits<double>::epsilon());
       else
         return false;
     }
