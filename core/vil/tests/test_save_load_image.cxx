@@ -37,6 +37,7 @@
 #include <vil/vil_new.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
+#include <vil/vil_crop.h>
 #include <vil/vil_print.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_image_view.h>
@@ -268,12 +269,15 @@ static bool create_grey_gif(const char* filename)
 template<class T>
 void vil_test_image_type(char const* type_name, // type for image to read and write
                          vil_image_view<T> const & image, // test image to save and restore
+                         bool test_cropped_image = true, // set to false for non-"crop"-safe formats (viz. mit and viff)
                          T tolerance = 0,  // require read back image identical
                          unsigned max_bad_pixels = 0,  // require read back image identical
                          bool fail_save = false) // expect fail on save if true
 {
+  int np = image.nplanes();
   vcl_cout << "=== Start testing " << type_name << " (" << sizeof(T)
-           << " bpp) ===\n" << vcl_flush;
+           << " bpp, " << np << " plane" << (np==1?"":"s") << ") ===\n"
+           << vcl_flush;
 
   // Step 1) Write the image out to disk
   //
@@ -304,16 +308,16 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
     if (!tst) return;
   }
 
-  // STEP 2) Read the image that was just saved to file
+  // Step 2) Read the image that was just saved to file
   vil_image_view_base_sptr image2 = vil_load(fname.c_str());
   TEST("load image", !image2, false);
   if (!image2)
     return; // fatal error
 
-  // STEP 3) Sanity check on the image that was read in
+  // Step 3) Sanity check on the image that was read in
   test_image_equal(type_name, image, image2, tolerance, max_bad_pixels);
 
-  // STEP 4) Load image as vil_image_resource + sanity check
+  // Step 4) Load image as vil_image_resource + sanity check
   vil_image_resource_sptr image3 = vil_load_image_resource(fname.c_str());
   TEST("get_property(\"memory\")", image3->get_property("memory"), false);
   TEST("get_property(\"read-only\")", image3->get_property("read-only"), false);
@@ -338,8 +342,43 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
     TEST("get_property(\"quantisation_depth\")", qd, depth);
   }
 
+  // Step 5) Write cropped image out to disk
+  if (!test_cropped_image)
+    return;
+  //
+  // create a 3x3 cropped image with offsets (5,5)
+  vil_image_view<T> cropped_image = vil_crop(image, 5, 3, 5, 3);
+
+  // Write cropped image to disk, overwriting the previous file
+  if (vcl_strcmp(type_name, "gif") == 0 &&
+      vil_pixel_format_num_components( cropped_image.pixel_format() ) == 3)
+  {
+    if (!create_colour_gif(fname.c_str()))
+      return; // fatal error
+  }
+  else if (vcl_strcmp(type_name, "gif") == 0)
+  {
+    if (!create_grey_gif(fname.c_str()))
+      return; // fatal error
+  }
+  else
+  {
+    bool tst = vil_save(cropped_image, fname.c_str(), type_name);
+    TEST("write cropped image to disk", tst, !fail_save);
+    if (!tst) return;
+  }
+
+  // STEP 6) Read the image that was just saved to file
+  image2 = vil_load(fname.c_str());
+  TEST("load image", !image2, false);
+  if (!image2)
+    return; // fatal error
+
+  // STEP 7) Sanity check on the image that was read in
+  test_image_equal(type_name, cropped_image, image2, tolerance, max_bad_pixels);
+
 #if !LEAVE_IMAGES_BEHIND
-  // STEP 5) Remove the temporarily written file
+  // STEP 8) Remove the temporarily written file
   vpl_unlink(fname.c_str());
 #endif
 }
@@ -511,21 +550,21 @@ static void test_save_load_image()
 
   // VIFF image (Khoros 1.0)
 #if 1
-//vil_test_image_type("viff", image1); // boolean doesn't work (yet)
-  vil_test_image_type("viff", image8);
-  vil_test_image_type("viff", image16);
-  vil_test_image_type("viff", image32);
-  vil_test_image_type("viff", image3p);
-  vil_test_image_type("viff", imagefloat);
-  vil_test_image_type("viff", imagedouble);
+//vil_test_image_type("viff", image1, false); // boolean doesn't work (yet)
+  vil_test_image_type("viff", image8, false);
+  vil_test_image_type("viff", image16, false);
+  vil_test_image_type("viff", image32, false);
+  vil_test_image_type("viff", image3p, false);
+  vil_test_image_type("viff", imagefloat, false);
+  vil_test_image_type("viff", imagedouble, false);
 #endif
 
 
   // TIFF
+#if 1
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image3p);
-  vil_test_image_type("tiff", image1); // boolean works now! - PVr, Dec. 2003
-#if 1 // >1 byte pixels don't work (yet): Should work now JLM Jan. 2006
+  vil_test_image_type("tiff", image1);
   vil_test_image_type("tiff", image16);
   vil_test_image_type("tiff", image32);
   vil_test_image_type("tiff", imagefloat);
@@ -534,10 +573,10 @@ static void test_save_load_image()
 
 
   // GIF (read-only)
-#if 0
-  // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil_test_image_type("gif", image8, false);
-  vil_test_image_type("gif", image3p, false);
+#if HAS_GIF
+  // lossy format ==> not guaranteed to be identical (hence arg 4 and 5 set to large tolerance)
+  vil_test_image_type("gif", image8, true, vxl_byte(40), 100);
+  vil_test_image_type("gif", image3p, true, vxl_byte(40), 100);
 #endif
 
 
@@ -551,36 +590,35 @@ static void test_save_load_image()
 
   // mit
 #if 1
-//vil_test_image_type("mit", image1); // boolean doesn't work (yet)
-  vil_test_image_type("mit", image8);
-  vil_test_image_type("mit", image16);
-  vil_test_image_type("mit", image32);
-  vil_test_image_type("mit", image3p);
+//vil_test_image_type("mit", image1, false); // boolean doesn't work (yet)
+  vil_test_image_type("mit", image8, false);
+  vil_test_image_type("mit", image16, false);
+  vil_test_image_type("mit", image32, false);
+  vil_test_image_type("mit", image3p, false);
 #endif
 
 
   // NITF (read-only for the time being)
-#if 0
-  vil_test_image_type("NITF v2.0", image1);
-  vil_test_image_type("NITF v2.0", image8);
-  vil_test_image_type("NITF v2.0", image16);
-  vil_test_image_type("NITF v2.0", image32);
-  vil_test_image_type("NITF v2.0", image3p);
-  vil_test_image_type("NITF v2.0", imagefloat);
-  vil_test_image_type("NITF v2.0", imagedouble);
+#if HAS_NITF && 0 // nitf write doesn't seem to work, currently (Aug.2009)
+  vil_test_image_type("nitf", image1);
+  vil_test_image_type("nitf", image8);
+  vil_test_image_type("nitf", image16);
+  vil_test_image_type("nitf", image32);
+  vil_test_image_type("nitf", image3p);
+  vil_test_image_type("nitf", imagefloat);
+  vil_test_image_type("nitf", imagedouble);
 #endif
 
 
   // JPEG
 #if HAS_JPEG
-  // lossy format ==> not guaranteed to be identical hence arg 3 and 4 set
+  // lossy format ==> not guaranteed to be identical hence arg 4 and 5 set
   // to large tolerance.
-  vil_test_image_type("jpeg", image8, vxl_byte(40), 5);
-  vil_test_image_type("jpeg", image3p, vxl_byte(65), 300);
-  vil_test_image_type("jpeg", vil_plane(image3c, 0), vxl_byte(4), 5);
-#if 0
-  vil_test_image_type("jpeg", image16, false);
-  vil_test_image_type("jpeg", image3p, false);
+  vil_test_image_type("jpeg", image8, true, vxl_byte(40), 5);
+  vil_test_image_type("jpeg", image3p, true, vxl_byte(65), 300);
+  vil_test_image_type("jpeg", vil_plane(image3c, 0), true, vxl_byte(4), 5);
+#if 0 // 16-bit JPEG not yet implemented:
+  vil_test_image_type("jpeg", image16, true, vxl_uint_16(65), 300);
 #endif
 
   // Test small image
@@ -589,8 +627,10 @@ static void test_save_load_image()
     vil_image_view<vxl_byte> small_greyscale_image(ni,nj);
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
-//    vil_print_all(vcl_cout, small_greyscale_image);
-    vil_test_image_type("jpeg", small_greyscale_image, vxl_byte(5));
+#ifdef DEBUG
+    vil_print_all(vcl_cout, small_greyscale_image);
+#endif
+    vil_test_image_type("jpeg", small_greyscale_image, true, vxl_byte(5));
     vcl_string out_path("test_save_load_jpeg.jpg");
     TEST("Saving JPEG",vil_save(small_greyscale_image, out_path.c_str()),true);
 
