@@ -35,7 +35,7 @@ bool bvpl_convert_direction_to_hue_process_cons(bprb_func_process& pro)
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the inpud grid
   input_types_[i++]="bvpl_kernel_vector_sptr"; // a vector of kernels
-  input_types_[i++]="vcl_string"; //output directory
+  input_types_[i++]="vcl_string"; //path to output grid
   input_types_[i++]="vcl_string"; //output file for map
 
   if (!pro.set_input_types(input_types_))
@@ -63,7 +63,7 @@ bool bvpl_convert_direction_to_hue_process(bprb_func_process& pro)
 
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(1);
-  vcl_string output_dir = pro.get_input<vcl_string>(2);
+  vcl_string output_world_dir = pro.get_input<vcl_string>(2);
   vcl_string map_output_file = pro.get_input<vcl_string>(3);
 
   if (!grid_base.ptr())  {
@@ -79,7 +79,7 @@ bool bvpl_convert_direction_to_hue_process(bprb_func_process& pro)
     vcl_map<vgl_point_3d<double>,float,point_3d_cmp>  colors;
     bvpl_direction_to_color_map(direction_samples,colors);
     bvxm_voxel_grid<vnl_vector_fixed<float,4> > * out_grid
-      = new bvxm_voxel_grid<vnl_vector_fixed<float,4> >(output_dir, grid->grid_size());
+      = new bvxm_voxel_grid<vnl_vector_fixed<float,4> >(output_world_dir, grid->grid_size());
 
     bvpl_convert_grid_to_hsv_grid(grid,out_grid,colors );
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, out_grid);
