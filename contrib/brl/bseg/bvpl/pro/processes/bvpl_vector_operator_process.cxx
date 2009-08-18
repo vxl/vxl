@@ -26,6 +26,8 @@
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
 
+#include <bsta/bsta_gaussf1.h>
+
 namespace bvpl_vector_operator_process_globals
 {
   const unsigned n_inputs_ = 6;
@@ -137,7 +139,20 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
    pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
   }
-
+  else if(datatype == "bsta_gauss_f1"){
+    
+    if (bvxm_voxel_grid<bsta_gauss_f1> * grid=dynamic_cast<bvxm_voxel_grid<bsta_gauss_f1> *>(grid_base.ptr())){
+      bvxm_voxel_grid<bsta_gauss_f1> *grid_out= new bvxm_voxel_grid<bsta_gauss_f1>(out_grid_path, grid->grid_size());
+      bvxm_voxel_grid<vnl_vector_fixed<float,3> > *orientation_grid=new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(orientation_grid_path, grid->grid_size());      
+      if(functor_name == "gauss_convolution"){
+        bvpl_gauss_convolution_functor func;
+        bvpl_neighb_operator<bsta_gauss_f1, bvpl_gauss_convolution_functor> oper(func);
+        bvpl_vector_operator<bsta_gauss_f1, bvpl_gauss_convolution_functor> vector_oper;
+        vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+      }
+    }
   return true;
 }
 
