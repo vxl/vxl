@@ -8,7 +8,7 @@
 // \date June 19, 2009
 // \verbatim
 //  Modifications
-//  <none yet>
+//  8/13/09 Isabel Restrepo: Added support for apperance grid of unimodal gaussians
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>
@@ -17,10 +17,14 @@
 
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
+
+#include <bsta/bsta_gauss_f1.h>
+
 #include <bvpl/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_edge2d_functor.h>
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
+#include <bvpl/bvpl_gauss_convolution_functor.h>
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 
@@ -121,6 +125,18 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       oper.operate(bvxm_opinion_input_grid, kernel, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     }
+  }
+  else if(ocp_type == "gaussian"){
+    bvxm_voxel_grid<bsta_gauss_f1> *grid_out= new bvxm_voxel_grid<bsta_gauss_f1>(out_grid_path, input_grid->grid_size());
+    if (bvxm_voxel_grid<bsta_gauss_f1> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<bsta_gauss_f1> *>(input_grid.ptr())){
+      if(functor_name == "gauss_convolution"){
+        bvpl_gauss_convolution_functor func;
+        bvpl_neighb_operator<bsta_gauss_f1, bvpl_gauss_convolution_functor> oper(func);
+        oper.operate(gauss_input_grid, kernel, grid_out);
+      }
+    }
+  
+  
   }
 
   return true;
