@@ -102,6 +102,12 @@ bool bvxm_load_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
+  else if (datatype == "bsta_gauss_f1"){
+    typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+    bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<gauss_type>(input_path);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
+    return true;
+  }
   else if (datatype == "vnl_vector_fixed_float_3"){
     bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<vnl_vector_fixed<float, 3> >(input_path);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
