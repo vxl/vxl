@@ -113,9 +113,9 @@ void mfpf_mr_point_finder_builder::set(
     dA*=0.7;
     ds = 1.0+0.7*(ds-1.0);
     builder(i).set_search_area(dx,dx);
-    if (builder0.search_nA()>0)
-      builder(i).set_search_scale_range(1,ds);
     if (builder0.search_ns()>0)
+      builder(i).set_search_scale_range(1,ds);
+    if (builder0.search_nA()>0)
       builder(i).set_search_angle_range(1,dA);
   }
 }
