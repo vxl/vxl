@@ -6,3 +6,4 @@
 
 typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
 BVXM_VOXEL_GRID_INSTANTIATE(gauss_type);
+BVXM_VOXEL_GRID_INSTANTIATE(bsta_gauss_f1);

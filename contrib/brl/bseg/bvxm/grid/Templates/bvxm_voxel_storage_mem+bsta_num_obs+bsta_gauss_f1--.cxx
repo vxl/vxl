@@ -8,3 +8,4 @@
 
 typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
 BVXM_VOXEL_STORAGE_MEM_INSTANTIATE(gauss_type);
+BVXM_VOXEL_STORAGE_MEM_INSTANTIATE(bsta_gauss_f1);
