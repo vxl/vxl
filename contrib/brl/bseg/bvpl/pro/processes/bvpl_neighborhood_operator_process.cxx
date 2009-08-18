@@ -126,12 +126,13 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     }
   }
-  else if(ocp_type == "gaussian"){
-    bvxm_voxel_grid<bsta_gauss_f1> *grid_out= new bvxm_voxel_grid<bsta_gauss_f1>(out_grid_path, input_grid->grid_size());
-    if (bvxm_voxel_grid<bsta_gauss_f1> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<bsta_gauss_f1> *>(input_grid.ptr())){
+  else if(ocp_type == "bsta_gauss_f1"){
+    typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+    bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, input_grid->grid_size());
+    if (bvxm_voxel_grid<gauss_type> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr())){
       if(functor_name == "gauss_convolution"){
         bvpl_gauss_convolution_functor func;
-        bvpl_neighb_operator<bsta_gauss_f1, bvpl_gauss_convolution_functor> oper(func);
+        bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
         oper.operate(gauss_input_grid, kernel, grid_out);
       }
     }
