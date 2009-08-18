@@ -526,7 +526,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
-        vs_->write(ob->top_left_ptr() + y * view.ni(), byte_out_width);
+        vs_->write(ob->top_left_ptr() + y * ob->jstep(), byte_out_width);
         byte_start += byte_width;
       }
     } else if ( bytes_per_sample==2 && VXL_BIG_ENDIAN )
@@ -535,7 +535,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
-        vs_->write(pb->top_left_ptr() + y * view.ni(), byte_out_width);
+        vs_->write(pb->top_left_ptr() + y * pb->jstep(), byte_out_width);
         byte_start += byte_width;
       }
     } else if ( bytes_per_sample==2 )
@@ -548,7 +548,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
-        vcl_memcpy(&tempbuf[0], pb->top_left_ptr() + y * view.ni(), byte_out_width);
+        vcl_memcpy(&tempbuf[0], pb->top_left_ptr() + y * pb->jstep(), byte_out_width);
 #if VXL_LITTLE_ENDIAN
         ConvertHostToMSB(&tempbuf[0], view.ni());
 #endif

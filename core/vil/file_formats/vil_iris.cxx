@@ -362,10 +362,13 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
            << buf.ni()<<'x'<<buf.nj()<<'x'<< buf.nplanes()<<'p'
            << " at ("<<x0<<','<<y0<<")\n";
 #endif
-  const unsigned char* ob = static_cast<vil_image_view<unsigned char> const&>(buf).top_left_ptr();
+  const vil_image_view<unsigned char>& buff = static_cast<vil_image_view<unsigned char> const&>(buf);
+  const unsigned char* ob = buff.top_left_ptr();
   unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
 
   vxl_uint_32 rowsize = pix_size*buf.ni();
+  vxl_uint_32 rowskip = pix_size*buff.jstep();
+  vxl_uint_32 planeskip = pix_size*buff.planestep();
 
   if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
   {
@@ -373,10 +376,10 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
     vxl_byte* tempbuf = new vxl_byte[rowsize];
     // for each channel
     for (unsigned int channel = 0; channel<nplanes_; ++channel) {
-      ob += rowsize*buf.nj();
+      ob += rowskip*buff.nj();
       // number of rows to write
       for (unsigned int y = nj_-y0-buf.nj(); y < nj_-y0; ++y) {
-        ob -= rowsize;
+        ob -= rowskip;
         // skip to start of section
         is_->seek(512L + (channel * ni_*nj_ + y * ni_ + x0) * pix_size);
         // swap bytes before writing
@@ -393,7 +396,7 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
           vcl_cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
 #endif
       }
-      ob += rowsize*buf.nj();
+      ob += planeskip;
     }
     delete[] tempbuf;
   }
@@ -401,10 +404,10 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
   {
     // for each channel
     for (unsigned int channel = 0; channel<nplanes_; ++channel) {
-      ob += rowsize*buf.nj();
+      ob += rowskip*buff.nj();
       // number of rows to write
       for (unsigned int y = nj_-y0-buf.nj(); y < nj_-y0; ++y) {
-        ob -= rowsize;
+        ob -= rowskip;
         // skip to start of section
         is_->seek(512L + (channel * ni_*nj_ + y * ni_ + x0) * pix_size);
         if ((vil_streampos)rowsize != is_->write(ob, rowsize))
@@ -416,7 +419,7 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
           vcl_cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
 #endif
       }
-      ob += rowsize*buf.nj();
+      ob += planeskip;
     }
   }
   return true;
