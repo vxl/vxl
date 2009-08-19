@@ -25,7 +25,7 @@
 
 namespace boxm_update_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 1;
 }
 
@@ -42,6 +42,7 @@ bool boxm_update_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "unsigned";
+  input_types_[4] = "bool";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -64,6 +65,7 @@ bool boxm_update_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
   unsigned bin_index =  pro.get_input<unsigned>(i++);
+  bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
   if ((input_image == 0) || (camera == 0) || (scene == 0)) {
@@ -81,14 +83,14 @@ bool boxm_update_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       //boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
-      boxm_update_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
+      boxm_update_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, use_black_background);
     }
     else
     {
       vcl_cout<<"Multi Bin Update"<<vcl_endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_update_triangle<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin_index,false);
+      boxm_update_triangle<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin_index,use_black_background);
     }
     //vil_image_view<float> image = *vil_convert_cast(float(), input_image);
   }
