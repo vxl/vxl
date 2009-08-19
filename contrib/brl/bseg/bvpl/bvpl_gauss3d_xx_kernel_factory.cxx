@@ -86,12 +86,12 @@ void bvpl_gauss3d_xx_kernel_factory::create_canonical()
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
 
-  int min_x= -1*(4.0*sigma1_);
-  int max_x =(4.0*sigma1_);
-  int min_y= -1*(4.0*sigma2_);
-  int max_y =(4.0*sigma2_);
-  int min_z=  -1*(4.0*sigma3_);
-  int max_z =(4.0*sigma3_);
+  int min_x = -int(4.0f*sigma1_+0.01f);
+  int max_x =  int(4.0f*sigma1_+0.01f);
+  int min_y = -int(4.0f*sigma2_+0.01f);
+  int max_y =  int(4.0f*sigma2_+0.01f);
+  int min_z = -int(4.0f*sigma3_+0.01f);
+  int max_z =  int(4.0f*sigma3_+0.01f);
 
   //Compute the first entry on the Hessian of a independent gaussian with variances (v1, v, v)
 
