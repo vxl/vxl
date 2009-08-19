@@ -26,6 +26,9 @@ effect.  If you change something in VXL, please document it here.
 
       - Added vnl_power.h : function to raise square matrix to integer power.
 
+      - Bug fixes in the TIFF, PNM and IRIS image file format writers which
+        allows them now to correctly write cropped images.
+
 ******************************
 VXL 1.12.0     - February 2009
 ******************************
