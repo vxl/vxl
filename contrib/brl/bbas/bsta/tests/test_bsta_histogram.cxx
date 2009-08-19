@@ -105,6 +105,17 @@ void test_bsta_histogram()
 
   TEST_NEAR("test joint histogram uniform distribution entropy", jent, 31.0/4, 1e-9);
   test_int_hist();
+
+  // Test joint histogram with different range and granularity in a and b
+  double min_a = -10.0, max_a = 10.0, min_b = -20.0, max_b = 20.0;
+  unsigned nbins_a = 11, nbins_b = 21, r0 = 5, c0 = 10;
+  bsta_joint_histogram<double> jh_m(min_a, max_a, nbins_a, 
+                                    min_b, max_b, nbins_b);
+  jh_m.upcount(0.0, 0.5, 0.0, 0.5);
+  double vol = jh_m.volume();
+  double pv = jh_m.p(0.0, 0.0);
+  double pb = jh_m.p(r0, c0);
+  TEST_NEAR("test min, max joint histogram ", (vol-1.0)+(pv-pb), 0.0, 0.0001);
  //=================================================
   // test binary io for histogram classes
   // 1-d histogram
@@ -127,7 +138,8 @@ void test_bsta_histogram()
 
   // joint histogram
   double nbinsjd = jh.nbins();
-  double pj = jh.p(1u,1u);
+  unsigned ia= 1, ib = 1;
+  double pj = jh.p(ia,ib);
   double rangej = jh.range();
   vsl_b_ofstream jos("./temp.bin");
   vsl_b_write(jos, jh);
@@ -138,7 +150,7 @@ void test_bsta_histogram()
   vsl_b_read(jis, jh_in);
   double nbinsj_in = jh_in.nbins();
   double rangej_in = jh_in.range();
-  double pj_in = jh_in.p(1u,1u);
+  double pj_in = jh_in.p(ia,ib);
   double jerror = vcl_fabs(nbinsj_in-nbinsjd)+
     vcl_fabs(rangej-rangej_in)+vcl_fabs(pj-pj_in);
 

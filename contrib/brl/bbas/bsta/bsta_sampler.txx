@@ -9,6 +9,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_set.h>
 #include <vcl_utility.h>
+#include <vcl_algorithm.h>
 
 //: For sorting pairs by their first element
 
@@ -101,18 +102,79 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
     float r = (float)(rand.drand32());
     if (r >= last_val) {
       //: push the last sample in the histogram
-      vcl_pair<float, float> out_sample(jh.min_a() + (na-1)*jh.delta_a(), jh.min_b() + (nb-1)*jh.delta_b());
+      vcl_pair<float, float> out_sample(jh.min_a() + na*jh.delta_a(), jh.min_b() + nb*jh.delta_b());
       out.push_back(out_sample);
     } else {
       vcl_pair<float, vcl_pair<unsigned, unsigned> > search_key(r, vcl_pair<unsigned, unsigned>(0, 0));
       vcl_pair<unsigned, unsigned> r_id = (*(accum_p.upper_bound(search_key))).second;
-      vcl_pair<float, float> out_sample(jh.min_a() + r_id.first*jh.delta_a(), jh.min_b() + r_id.second*jh.delta_b());
+      vcl_pair<float, float> out_sample(jh.min_a() + (r_id.first+1)*jh.delta_a(), jh.min_b() + (r_id.second+1)*jh.delta_b());
       out.push_back(out_sample);
     }
   }
 
   return true;
 }
+
+bool first_greater(const vcl_pair<float,vcl_pair<unsigned, unsigned> >& left_pair,
+                 const vcl_pair<float,vcl_pair<unsigned, unsigned> >& right_pair )
+{
+  return left_pair.first > right_pair.first;
+}
+
+//: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
+template <class T>
+bool bsta_sampler<T>::sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out)
+{
+  unsigned int na = jh.nbins_a();
+  unsigned int nb = jh.nbins_b();
+
+  vcl_vector<vcl_pair<float, vcl_pair<unsigned, unsigned> > > arr;
+  for (unsigned ia = 0; ia < na; ia++) {
+    for (unsigned ib = 0; ib < nb; ib++) {
+      vcl_pair<unsigned, unsigned> ind(ia, ib);
+      vcl_pair<float, vcl_pair<unsigned, unsigned> > val(jh.p(ia, ib), ind);
+      arr.push_back(val);
+    }
+  }
+ 
+  vcl_sort(arr.begin(), arr.end(), first_greater);
+  unsigned size = arr.size() < cnt ? arr.size() : cnt;
+  for (unsigned i = 0; i < size; i++) {
+    //vcl_cout << "sampled from bina: " << arr[i].second.first << " binb: " << arr[i].second.second << "!\n";
+    vcl_pair<float, float> out_p(jh.min_a() + (arr[i].second.first+1)*jh.delta_a(), jh.min_b() + (arr[i].second.second+1)*jh.delta_b());
+    out.push_back(out_p);
+  }
+  
+  return true;
+}
+//: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
+template <class T>
+bool bsta_sampler<T>::sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<unsigned, unsigned> >& out_indices)
+{
+  unsigned int na = jh.nbins_a();
+  unsigned int nb = jh.nbins_b();
+
+  vcl_vector<vcl_pair<float, vcl_pair<unsigned, unsigned> > > arr;
+  for (unsigned ia = 0; ia < na; ia++) {
+    for (unsigned ib = 0; ib < nb; ib++) {
+      vcl_pair<unsigned, unsigned> ind(ia, ib);
+      vcl_pair<float, vcl_pair<unsigned, unsigned> > val(jh.p(ia, ib), ind);
+      arr.push_back(val);
+    }
+  }
+ 
+  vcl_sort(arr.begin(), arr.end(), first_greater);
+  unsigned size = arr.size() < cnt ? arr.size() : cnt;
+  for (unsigned i = 0; i < size; i++) {
+    //vcl_cout << "sampled from bina: " << arr[i].second.first << " binb: " << arr[i].second.second << "!\n";
+    vcl_pair<unsigned, unsigned> out_p(arr[i].second.first, arr[i].second.second);
+    out_indices.push_back(out_p);
+  }
+  
+  return true;
+}
+
+
 
 #undef BSTA_SAMPLER_INSTANTIATE
 #define BSTA_SAMPLER_INSTANTIATE(T) \

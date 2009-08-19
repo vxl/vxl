@@ -73,12 +73,20 @@ template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram<T>& h)
 {
-  int nbins = h.nbins();
-  T range = h.range();
+  int nbins_a = h.nbins_a();
+  int nbins_b = h.nbins_b();
+  T min_a = h.min_a();
+  T max_a = h.max_a();
+  T min_b = h.min_b();
+  T max_b = h.max_b();
   T min_prob = h.min_prob();
   vbl_array_2d<T> counts = h.counts();
-  vsl_b_write(os, nbins);
-  vsl_b_write(os, range);
+  vsl_b_write(os, nbins_a);
+  vsl_b_write(os, min_a);
+  vsl_b_write(os, max_a);
+  vsl_b_write(os, nbins_b);
+  vsl_b_write(os, min_b);
+  vsl_b_write(os, max_b);
   vsl_b_write(os, min_prob);
   vsl_b_write(os, counts);
 }
@@ -88,14 +96,18 @@ template <class T>
 void
 vsl_b_read(vsl_b_istream &is, bsta_joint_histogram<T>& h)
 {
-  int nbins;
-  T range, min_prob;
+  int nbins_a, nbins_b;
+  T min_a, max_a, min_b, max_b, min_prob;
   vbl_array_2d<T> counts;
-  vsl_b_read(is, nbins);
-  vsl_b_read(is, range);
+  vsl_b_read(is, nbins_a);
+  vsl_b_read(is, min_a);
+  vsl_b_read(is, max_a);
+  vsl_b_read(is, nbins_b);
+  vsl_b_read(is, min_b);
+  vsl_b_read(is, max_b);
   vsl_b_read(is, min_prob);
   vsl_b_read(is, counts);
-  bsta_joint_histogram<T> temp(range, nbins, min_prob);
+  bsta_joint_histogram<T> temp(min_a, max_a, nbins_a, min_b, max_b, nbins_b, min_prob);
   unsigned nr = counts.rows(), nc = counts.cols();
   for (unsigned r = 0; r<nr; ++r)
     for (unsigned c = 0; c<nc; ++c)
@@ -111,25 +123,16 @@ vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram<T>& h)
   os << "bsta_joint_histogram\n";
   h.print(os);
 }
+//: not implemented, requires binary loader mechanism
+void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& /*hptr*/);
 
-void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& /*hptr*/)
-{
-  //not implemented yet
-}
 
-void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& /*hptr*/)
-{
-  //not implemented yet
-}
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& /*hptr*/);
 
-void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& /*hptr*/)
-{
-  //not implemented yet
-}
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_sptr& /*hptr*/)
-{
-  //not implemented yet
-}
+void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& /*hptr*/);
+
+
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_sptr& /*hptr*/);
 
 #endif // bsta_io_histogram_h_

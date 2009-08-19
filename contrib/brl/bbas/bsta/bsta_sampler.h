@@ -27,6 +27,13 @@ class bsta_sampler
 
   //: sample from a joint histogram treating it as a discrete prob distribution
   static bool sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out);
+  
+  //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
+  static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out);
+
+  //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
+  static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<unsigned, unsigned> >& out_indices);
+
 };
 
 #endif // bsta_sampler_h_
