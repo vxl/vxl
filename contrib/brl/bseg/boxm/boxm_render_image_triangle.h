@@ -74,8 +74,8 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
     for (unsigned i=0; i<block_indices.size(); i++) // code for each block
     {
       t.mark();
-      if (block_indices[i].x()!=2 || block_indices[i].z()!=0)
-        continue;
+      //if (block_indices[i].x()!=2 || block_indices[i].z()!=0)
+      //  continue;
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
       vcl_cout<<"The time taken to read a block is "<<t.all()<<vcl_endl;
       boxm_block<tree_type> * curr_block=scene.get_active_block();
@@ -105,6 +105,7 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
         alpha_img_.fill(0.0f);
 
         vcl_cout<<'.';
+
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
