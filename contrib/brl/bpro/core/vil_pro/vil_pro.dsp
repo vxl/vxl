@@ -156,6 +156,12 @@ SOURCE=.\processes/vil_image_size_process.cxx
 SOURCE=.\processes/vil_two_planes_composite_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_filter_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_resample_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
