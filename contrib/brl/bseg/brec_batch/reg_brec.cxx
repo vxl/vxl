@@ -16,6 +16,8 @@
 #include <bvgl_pro/bvgl_processes.h>
 #include <bvgl_pro/bvgl_register.h>
 #include <brip_pro/brip_register.h>
+#include <bxml/bsvg/pro/bsvg_register.h>
+#include <bxml/bsvg/pro/bsvg_processes.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -28,6 +30,7 @@ register_processes(PyObject *self, PyObject *args)
   vidl_register::register_process();
   bvgl_register::register_process();
   brip_register::register_process();
+  bsvg_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -44,6 +47,7 @@ register_datatypes(PyObject *self, PyObject *args)
   vidl_register::register_datatype();
   bvgl_register::register_datatype();
   brip_register::register_datatype();
+  bsvg_register::register_datatype();
 
   Py_INCREF(Py_None);
   return Py_None;
