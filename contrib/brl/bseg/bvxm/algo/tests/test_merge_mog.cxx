@@ -60,16 +60,15 @@ void merge()
   bvxm_merge_mog::kl_merge(h,gauss3);
   bvxm_merge_mog::kl_merge(j,gauss4);
 
-  test_near("mean1",gauss1.mean(), 1.8,0.01);
-  test_near("mean2",gauss2.mean(), 2.8,0.01);
-  test_near("mean3",gauss3.mean(), 100.0,0.01);
-  test_near("mean4",gauss4.mean(), 99.75,0.01);
+  TEST_NEAR("mean1",gauss1.mean(), 1.8,0.01);
+  TEST_NEAR("mean2",gauss2.mean(), 2.8,0.01);
+  TEST_NEAR("mean3",gauss3.mean(), 100.0,0.01);
+  TEST_NEAR("mean4",gauss4.mean(), 99.75,0.01);
 
-  test_near("var1",gauss1.var(), 12.61,0.01);
-  test_near("var2",gauss2.var(), 14.16,0.01);
-  test_near("var3",gauss3.var(), 5.6,0.01);
-  test_near("var4",gauss4.var(), 17.0125,0.01);
-
+  TEST_NEAR("var1",gauss1.var(), 12.61,0.01);
+  TEST_NEAR("var2",gauss2.var(), 14.16,0.01);
+  TEST_NEAR("var3",gauss3.var(), 5.6,0.01);
+  TEST_NEAR("var4",gauss4.var(), 17.0125,0.01);
 
   //the sencond part of this test is to test that bvxm_merge_mog::kl_merge_grid work
 
