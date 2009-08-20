@@ -133,7 +133,7 @@ bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result()
 template <>
 bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(bsta_num_obs<bsta_gauss_f1>& g1, bsta_num_obs<bsta_gauss_f1>& g2)
 {
-  return g1.mean() > g2.mean();
+  return vcl_abs(g1.mean()) > (g2.mean());
 }
 
 template <>
