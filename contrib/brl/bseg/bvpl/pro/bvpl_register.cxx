@@ -18,8 +18,10 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_vector_operator_process, "bvplVectorOperatorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_edge2d_kernel_process, "bvplCreateEdge2dKernelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_edge3d_kernel_process, "bvplCreateEdge3dKernelProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_gauss3d_xx_kernel_process, "bvplCreateGauss3dXXKernelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_edge2d_kernel_vector_process, "bvplCreateEdge2dKernelVectorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_edge3d_kernel_vector_process, "bvplCreateEdge3dKernelVectorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_gauss3d_xx_kernel_vector_process, "bvplCreateGauss3dXXKernelVectorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_convert_direction_to_hue_process, "bvplConvertDirectionToHueProcess");
 
 }
