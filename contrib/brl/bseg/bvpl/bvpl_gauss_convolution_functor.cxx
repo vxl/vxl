@@ -25,6 +25,7 @@ void bvpl_gauss_convolution_functor::apply(bsta_gauss_f1& gauss, bvpl_kernel_dis
 //: Return the final result
 bsta_gauss_f1 bvpl_gauss_convolution_functor::result()
 {
-  return bsta_gauss_f1(mean_, var_);
+  bsta_gauss_f1 final_gauss(mean_, var_);
   init();
+  return final_gauss;
 }
