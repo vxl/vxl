@@ -72,7 +72,7 @@ class vil_image_view : public vil_image_view_base
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
-  //  there's no way of knowing until its too late - so take care!
+  //  there's no way of knowing until it's too late - so take care!
   vil_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                  vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
 
@@ -152,7 +152,7 @@ class vil_image_view : public vil_image_view_base
   inline vcl_ptrdiff_t planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
-  operator safe_bool () const
+  operator safe_bool() const
     { return (top_left_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Return false if pointing at some data.
@@ -179,14 +179,14 @@ class vil_image_view : public vil_image_view_base
   // Ordinary image indexing stuff.
 
   //: Return true if (i,j) is a valid index into this buffer.
-  inline bool in_range (int i, int j) const 
+  inline bool in_range(int i, int j) const
   { return (i>-1) && (i<(int)ni_) && (j>-1) && (j<(int)nj_); }
- 
+
   //: Return true if (i,j,p) is a valid index into this buffer.
-  inline bool in_range (int i, int j, int p) const 
-  { return (i>-1) && (i<(int)ni_) && (j>-1) && (j<(int)nj_) 
-      && (p>-1) && (p<(int)nplanes_); }
-  
+  inline bool in_range(int i, int j, int p) const
+  { return (i>-1) && (i<(int)ni_) && (j>-1) && (j<(int)nj_)
+           && (p>-1) && (p<(int)nplanes_); }
+
   //: Return read-only reference to pixel at (i,j) in plane 0.
   inline const T& operator()(unsigned i, unsigned j) const {
     assert(i<ni_); assert(j<nj_);
