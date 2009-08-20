@@ -6,13 +6,10 @@
 // \brief Visualization of bsta_histograms using bsvg
 // \author Ozge C. Ozcanli
 // \date April 22, 2009
-//
-// \verbatim
-//
-// \endverbatim
 
 #include <vcl_iostream.h>
 #include <bsta/bsta_histogram.h>
+#include <bsta/bsta_joint_histogram.h>
 #include <bxml/bsvg/bsvg_plot.h>
 #include <bxml/bxml_write.h>
 
@@ -23,8 +20,10 @@ void write_svg(const bsta_histogram<T>& h, const vcl_string& outfile,
                float width = 600.0f, float height = 600.0f, float margin = 40.0f, int font_size = 30)
 {
   bsvg_plot pl(width, height);
-  //pl.set_margin(margin);
-  //pl.set_font_size(font_size);
+#if 0
+  pl.set_margin(margin);
+  pl.set_font_size(font_size);
+#endif
 
   float min = float(h.min());
   float delta = float(h.delta());
@@ -46,12 +45,12 @@ void write_svg(const bsta_histogram<T>& h, const vcl_string& outfile,
 
 //: Create a polar style pie chart from the joint histogram, assuming that the first dimension is the angle, and it is in radius
 template <class T>
-void write_svg_angle_distance(const bsta_joint_histogram<T>& h, const vcl_string& out_file, 
-               float width = 600.0f, float height = 600.0f, float margin = 40.0f, int font_size = 30)
+void write_svg_angle_distance(const bsta_joint_histogram<T>& h, const vcl_string& out_file,
+                              float width = 600.0f, float height = 600.0f, float margin = 40.0f, int font_size = 30)
 {
   bsvg_plot pl(width, height);
-  T mina = h.min_a();  
-  T maxa = h.max_a(); 
+  T mina = h.min_a();
+  T maxa = h.max_a();
   T minb = h.min_b();
   T maxb = h.max_b();
   T delta_a = h.delta_a();
@@ -74,10 +73,10 @@ void write_svg_angle_distance(const bsta_joint_histogram<T>& h, const vcl_string
   pl.add_element(tmm2);
 
 
-  //: scale the distances to the scale of the plot
+  // scale the distances to the scale of the plot
   float factor = (height - 2*margin) / (2*maxb);
 
-  //: now add the splices starting from the outer most bins 
+  // now add the splices starting from the outer most bins
   for (float valb = maxb; valb >= minb; valb -= delta_b) {
     float radius = valb*factor; vcl_stringstream rs; rs << (int)(valb);
     bsvg_text* t = new bsvg_text(rs.str());
@@ -85,12 +84,15 @@ void write_svg_angle_distance(const bsta_joint_histogram<T>& h, const vcl_string
     pl.add_element(t);
     for (float vala = (float)mina; vala < maxa; vala += delta_a) {
       float mag = (h.p(vala+0.005f, valb)/max)*255;
-      //vcl_cout << " " << mag << " ";
-      //unsigned red_channel = (unsigned)(255*mag);
+#ifdef DEBUG
+      vcl_cout << ' ' << mag << ' ';
+#endif
       unsigned channel = (unsigned)mag;
       pl.add_splice(300.0f, 300.0f, radius, vala, vala+delta_a, 255, 255-channel, 255-channel);
     }
-    //vcl_cout << "\n";
+#ifdef DEBUG
+    vcl_cout << "\n";
+#endif
   }
 
   for (float vala = (float)mina; vala < maxa; vala += delta_a) {
@@ -105,8 +107,8 @@ void write_svg_angle_distance(const bsta_joint_histogram<T>& h, const vcl_string
     pl.add_splice(300.0f, 300.0f, factor*minb, 0, (float)(vnl_math::pi), "gray");
     pl.add_splice(300.0f, 300.0f, factor*minb, (float)(-vnl_math::pi), 0, "gray");
   }
-  
+
   bxml_write(out_file, pl);
 }
 
-#endif // 
+#endif // bsta_svg_tools_h_
