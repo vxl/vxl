@@ -2,7 +2,7 @@
 #include "../bvxm_merge_mog.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
-//void merge()
+void merge()
 {
  //define some known mixtures
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
@@ -15,7 +15,7 @@
 
   bsta_gauss_f1 fc2(4,1);
   f.insert(fc2,0.4f);
- 
+
   bsta_gauss_f1 fc3(12,3);
   f.insert(fc3,0.1f);
 
@@ -25,7 +25,7 @@
 
   bsta_gauss_f1 gc2(3,1);
   g.insert(gc2,0.35f);
- 
+
   bsta_gauss_f1 gc3(15,4);
   g.insert(gc3,0.05f);
 
@@ -35,7 +35,7 @@
 
   bsta_gauss_f1 hc2(95,1);
   h.insert(hc2,0.1f);
- 
+
   bsta_gauss_f1 hc3(105,1);
   h.insert(hc3,0.1f);
 
@@ -45,7 +45,7 @@
 
   bsta_gauss_f1 jc2(95,1);
   j.insert(jc2,0.35f);
- 
+
   bsta_gauss_f1 jc3(105,1);
   j.insert(jc3,0.3f);
 
@@ -53,7 +53,7 @@
   bsta_gauss_f1 gauss2;
   bsta_gauss_f1 gauss3;
   bsta_gauss_f1 gauss4;
-  
+
 
   bvxm_merge_mog::kl_merge(g,gauss1);
   bvxm_merge_mog::kl_merge(f,gauss2);
@@ -81,24 +81,22 @@
   apm_grid->initialize_data(g);
 
   bvxm_voxel_grid_base_sptr merged_base= new bvxm_voxel_grid<gauss_type>(grid_size);
- 
+
   bvxm_merge_mog::kl_merge_grid(apm_grid, merged_base);
 
   bvxm_voxel_grid<gauss_type>* merged_grid = static_cast<bvxm_voxel_grid<gauss_type>* >(merged_base.ptr());
-  //check that the distances are as expected
-  bvxm_voxel_grid<gauss_type>::iterator grid_it = merged_grid->begin();
 
-  for(; grid_it != merged_grid->end(); ++grid_it)
+  //check that the distances are as expected
+  for (bvxm_voxel_grid<gauss_type>::iterator grid_it = merged_grid->begin();
+       grid_it != merged_grid->end(); ++grid_it)
   {
-    bvxm_voxel_slab<gauss_type>::iterator slab_it = (*grid_it).begin();
-    for(; slab_it != (*grid_it).end(); ++slab_it)
+    for (bvxm_voxel_slab<gauss_type>::iterator slab_it = (*grid_it).begin();
+         slab_it != (*grid_it).end(); ++slab_it)
     {
-       test_near("mean1",(*slab_it).mean(), 1.8,0.01);
-       test_near("var1",(*slab_it).var(), 12.61,0.01);
+       test_near("mean1",(*slab_it).mean(), 1.8,   0.01);
+       test_near("var1", (*slab_it).var(),  12.61, 0.01);
     }
   }
-
-
 }
 
 
