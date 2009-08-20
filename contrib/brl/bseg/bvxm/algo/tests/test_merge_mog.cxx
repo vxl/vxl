@@ -92,8 +92,8 @@ void merge()
     for (bvxm_voxel_slab<gauss_type>::iterator slab_it = (*grid_it).begin();
          slab_it != (*grid_it).end(); ++slab_it)
     {
-       test_near("mean1",(*slab_it).mean(), 1.8,   0.01);
-       test_near("var1", (*slab_it).var(),  12.61, 0.01);
+       TEST_NEAR("mean1",(*slab_it).mean(), 1.8,   0.01);
+       TEST_NEAR("var1", (*slab_it).var(),  12.61, 0.01);
     }
   }
 }
