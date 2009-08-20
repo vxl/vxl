@@ -24,5 +24,6 @@ DECLARE_FUNC_CONS(vil_crop_image_process);
 DECLARE_FUNC_CONS(vil_threshold_image_process);
 DECLARE_FUNC_CONS(vil_image_size_process);
 DECLARE_FUNC_CONS(vil_two_planes_composite_process);
+DECLARE_FUNC_CONS(vil_resample_process);
 
 #endif
