@@ -316,8 +316,8 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
      << "      material Material { diffuseColor 0.8 0.8 0.8 }\n"
      << "    }\n"
      << "  }\n"
-     << "}\n"
-     
+     << "}\n";
+
   //: draw a red thin box to designate a axis
   os << "Transform {\n"
      << "  translation " << (nbins_a_-1)/2.0f << ' ' << (nbins_b_-1)/2.0f << " 0\n"
@@ -327,7 +327,7 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
      << "      material Material { diffuseColor 1.0 0.0 0.0 }\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
+     << "}\n"
 
      << "Background { skyColor 1 1 1 }\n"
      << "NavigationInfo { type \"EXAMINE\" }\n"
