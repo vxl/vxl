@@ -12,6 +12,7 @@
 #include <bsta/bsta_joint_histogram.h>
 #include <bxml/bsvg/bsvg_plot.h>
 #include <bxml/bxml_write.h>
+#include <vnl/vnl_math.h>
 
 //: Create SVG document from histogram
 // \relates bsta_histogram
@@ -91,21 +92,21 @@ void write_svg_angle_distance(const bsta_joint_histogram<T>& h, const vcl_string
       pl.add_splice(300.0f, 300.0f, radius, vala, vala+delta_a, 255, 255-channel, 255-channel);
     }
 #ifdef DEBUG
-    vcl_cout << "\n";
+    vcl_cout << '\n';
 #endif
   }
 
   for (float vala = (float)mina; vala < maxa; vala += delta_a) {
-    vcl_stringstream rs; rs << (int)(vala*180.0/vnl_math::pi);
+    vcl_stringstream rs; rs << (int)(vala*180.0*vnl_math::one_over_pi);
     bsvg_text* t = new bsvg_text(rs.str());
     float radius = maxb*factor+font_size;
-    t->set_location((float)(300.0f+(radius)*vcl_cos(vala+vnl_math::pi/100.0)), (float)(300.0f+(radius)*-vcl_sin(vala+vnl_math::pi/100.0)));
+    t->set_location((float)(300.0f+(radius)*vcl_cos(vala+vnl_math::pi*0.01)), (float)(300.0f+(radius)*-vcl_sin(vala+vnl_math::pi*0.01)));
     pl.add_element(t);
   }
 
   if (minb > 0) {
-    pl.add_splice(300.0f, 300.0f, factor*minb, 0, (float)(vnl_math::pi), "gray");
-    pl.add_splice(300.0f, 300.0f, factor*minb, (float)(-vnl_math::pi), 0, "gray");
+    pl.add_splice(300.0f, 300.0f, factor*minb, 0, float(vnl_math::pi), "gray");
+    pl.add_splice(300.0f, 300.0f, factor*minb, -float(vnl_math::pi), 0, "gray");
   }
 
   bxml_write(out_file, pl);
