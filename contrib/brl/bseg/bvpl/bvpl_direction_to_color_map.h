@@ -23,19 +23,15 @@ struct point_3d_cmp
 {
   bool operator()(vgl_point_3d<double> p1, vgl_point_3d<double> p2) const
   {
-    if (p2.x()- p1.x()> vcl_numeric_limits<double>::epsilon() )
-      return true;
-    else if (p2.x()- p1.x() < vcl_numeric_limits<double>::epsilon() )
+    if (vcl_abs(p2.x()- p1.x())> vcl_numeric_limits<double>::epsilon() )
+      return p1.x() < p2.x();
+    else 
     {
-      if (p2.y()- p1.y()> vcl_numeric_limits<double>::epsilon() )
-        return true;
-      else if (p2.y()-p1.y() <vcl_numeric_limits<double>::epsilon())
+      if (vcl_abs(p2.y()- p1.y())> vcl_numeric_limits<double>::epsilon() )
+        return p1.y()< p2.y();
+      else 
         return (p2.z()- p1.z()>vcl_numeric_limits<double>::epsilon());
-      else
-        return false;
     }
-    else
-      return false;
   }
 };
 
@@ -130,7 +126,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
         t1=0;
 
       double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
-      indices_of_cube_projs[samples[i]]=float(indexj+t1/length);
+      indices_of_cube_projs[samples[i]]=float(indexj)+t1/length;
     }
     else if (unsigned(indexj+1)==proj_on_cube.size())
     {
@@ -139,7 +135,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
       if (t2<0)
         t2=0;
       double length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
-      indices_of_cube_projs[samples[i]]=float(indexj-1+t2/length);
+      indices_of_cube_projs[samples[i]]=float(indexj-1)+t2/length;
     }
     else
     {
@@ -154,7 +150,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
         if (t1<0)
           t1=0;
         double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
-        indices_of_cube_projs[samples[i]]=float(indexj+t1/length);
+        indices_of_cube_projs[samples[i]]=float(indexj)+t1/length;
       }
       else
       {
@@ -162,7 +158,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
           t2=0;
 
         double length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
-        indices_of_cube_projs[samples[i]]=float(indexj-1+t2/length);
+        indices_of_cube_projs[samples[i]]=float(indexj-1)+t2/length;
       }
     }
     //indices_of_cube_projs.push_back(indexj);
@@ -182,6 +178,7 @@ bool bvpl_direction_to_color_map(vcl_vector<vgl_point_3d<double> > samples, vcl_
   vcl_map<float,vgl_point_3d<double> > color_samples;
   for (unsigned i=0;i<samples.size();++i)
     color_samples[color[samples[i]]]=samples[i];
+
 
   vcl_map<float, vgl_point_3d<double> >::iterator iter=color_samples.begin();
   for (float j=0; iter!=color_samples.end(); ++iter)
@@ -209,6 +206,27 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
   bvxm_voxel_grid<vnl_vector_fixed<float,4> >::iterator grid1_it = grid->begin();
   bvxm_voxel_grid<vnl_vector_fixed<float,4> >::iterator grid2_it = out_grid->begin();
 
+  //calculate max response and normalize the range from 0-1
+  float min = vcl_numeric_limits<float>::max();
+  float max = vcl_numeric_limits<float>::min();
+  for (; grid1_it != grid->end(); ++grid1_it)
+  {
+    bvxm_voxel_slab<vnl_vector_fixed<float,4> >::iterator slab1_it = (*grid1_it).begin();
+    for (; slab1_it!=(*grid1_it).end(); ++slab1_it )
+    {
+     if ((*slab1_it)[3] > max)
+       max = (*slab1_it)[3];
+     if ((*slab1_it)[3] < min)
+       min = (*slab1_it)[3];
+      }
+  }
+
+  vcl_cout << "Maximum response: " << max << " Minimun response: " << min << vcl_endl;
+
+  //reset iterator
+  grid1_it = grid->begin();
+
+  //convert to hsv grid
   float r,g,b;
   float col;
   for (; grid1_it != grid->end(); ++grid1_it, ++grid2_it)
@@ -220,7 +238,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
       vgl_point_3d<double> v((*slab1_it)[0],(*slab1_it)[1],(*slab1_it)[2]);
       col=colors[v]*360;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      vnl_vector_fixed<float,4> this_feature(r,g,b,(*slab1_it)[3]*255.0f);
+      vnl_vector_fixed<float,4> this_feature(r,g,b,(((*slab1_it)[3]-min)/(max - min))*255.0f);
       (*slab2_it)=this_feature;
     }
   }
