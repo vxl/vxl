@@ -28,7 +28,7 @@ IF( PYTHON_FOUND )
     ENDIF(WIN32)
     SET_TARGET_PROPERTIES(brec_batch PROPERTIES PREFIX "")
 
-    TARGET_LINK_LIBRARIES(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro vbl vpgl_io vidl_pro vpgl_pro vil_io vil_pro) 
+    TARGET_LINK_LIBRARIES(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro vbl vpgl_io vidl_pro vpgl_pro vil_io vil_pro) 
       
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( brec_batch debug ${PYTHON_DEBUG_LIBRARY})
