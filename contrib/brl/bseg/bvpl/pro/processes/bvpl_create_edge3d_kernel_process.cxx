@@ -4,7 +4,7 @@
 // \file
 // \brief A class for creating an volume edge kernel
 //
-// \author Vishal Jain Restrepo
+// \author Vishal Jain 
 // \date June 26, 2009
 // \verbatim
 //  Modifications
