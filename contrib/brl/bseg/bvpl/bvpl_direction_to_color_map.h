@@ -18,20 +18,18 @@
 #include <bxml/bxml_write.h>
 #include <vcl_iomanip.h>
 #include <vcl_limits.h>
+#include <vcl_iostream.h>
 
 struct point_3d_cmp
 {
   bool operator()(vgl_point_3d<double> p1, vgl_point_3d<double> p2) const
   {
-    if (vcl_abs(p2.x()- p1.x())> vcl_numeric_limits<double>::epsilon() )
+    if (vcl_abs(p2.x()-p1.x()) > vcl_numeric_limits<double>::epsilon())
       return p1.x() < p2.x();
-    else 
-    {
-      if (vcl_abs(p2.y()- p1.y())> vcl_numeric_limits<double>::epsilon() )
-        return p1.y()< p2.y();
-      else 
-        return (p2.z()- p1.z()>vcl_numeric_limits<double>::epsilon());
-    }
+    else if (vcl_abs(p2.y()-p1.y()) > vcl_numeric_limits<double>::epsilon())
+      return p1.y() < p2.y();
+    else
+      return p2.z()-p1.z() > vcl_numeric_limits<double>::epsilon();
   }
 };
 
