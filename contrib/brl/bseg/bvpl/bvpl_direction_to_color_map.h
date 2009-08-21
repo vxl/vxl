@@ -124,7 +124,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
         t1=0;
 
       double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
-      indices_of_cube_projs[samples[i]]=float(indexj)+t1/length;
+      indices_of_cube_projs[samples[i]]=float(indexj+t1/length);
     }
     else if (unsigned(indexj+1)==proj_on_cube.size())
     {
@@ -133,7 +133,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
       if (t2<0)
         t2=0;
       double length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
-      indices_of_cube_projs[samples[i]]=float(indexj-1)+t2/length;
+      indices_of_cube_projs[samples[i]]=float((indexj-1)+t2/length);
     }
     else
     {
@@ -148,7 +148,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
         if (t1<0)
           t1=0;
         double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
-        indices_of_cube_projs[samples[i]]=float(indexj)+t1/length;
+        indices_of_cube_projs[samples[i]]=float(indexj+t1/length);
       }
       else
       {
@@ -156,7 +156,7 @@ find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > s
           t2=0;
 
         double length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
-        indices_of_cube_projs[samples[i]]=float(indexj-1)+t2/length;
+        indices_of_cube_projs[samples[i]]=float((indexj-1)+t2/length);
       }
     }
     //indices_of_cube_projs.push_back(indexj);
