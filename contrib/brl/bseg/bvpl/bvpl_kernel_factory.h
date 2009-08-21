@@ -152,13 +152,14 @@ class bvpl_kernel_factory
 
   /******************Batch Methods ***********************/
   //: Creates a vector of kernels with azimuthal and elevation resolutio equal to pi/4. And angle of rotation= angular_resolution_
-  virtual bvpl_kernel_vector_sptr create_kernel_vector()=0;
+  template <class F>
+  bvpl_kernel_vector_sptr create_kernel_vector(F func);
 
-  //: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
-  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi)=0;
+  ////: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
+  //virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi)=0;
 
-  //: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
-  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res)=0;
+  ////: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
+  //virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res)=0;
 
  protected:
 
@@ -207,5 +208,20 @@ class bvpl_kernel_factory
   //: Rotates "class-kernel_" using the given rotation matrix
   kernel_type rotate(vgl_rotation_3d<float> R);
 };
+template <class F>
+bvpl_kernel_vector_sptr bvpl_kernel_factory::create_kernel_vector(F func)
+{
+    vcl_vector<vnl_float_3> axes=func.get_axes();
+    bvpl_kernel_vector_sptr vec_kernel=new bvpl_kernel_vector();
+
+    for(unsigned i=0;i<axes.size();i++)
+    {
+        this->set_rotation_axis(axes[i]);
+        vec_kernel->kernels_.push_back(vcl_make_pair(axes[i], new bvpl_kernel(this->create())));
+    }
+    return vec_kernel;
+}
+
+
 
 #endif

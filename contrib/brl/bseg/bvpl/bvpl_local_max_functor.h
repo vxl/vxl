@@ -1,3 +1,5 @@
+// This is brl/bseg/bvpl/bvpl_local_max_functor.h
+
 #ifndef bvpl_local_max_functor_h_
 #define bvpl_local_max_functor_h_
 //:
