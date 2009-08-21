@@ -5,7 +5,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
-#include <omp.h>
 
 //: Test changes
 static void test_direction_to_color_map()
@@ -27,10 +26,8 @@ static void test_direction_to_color_map()
   }
   bvpl_direction_to_color_map color_map(samples,"random");
   color_map.make_svg_color_map("d:/cmap.svg");
-  
+
   int a;vcl_cin>>a;
 }
-
-
 
 TESTMAIN( test_direction_to_color_map );
