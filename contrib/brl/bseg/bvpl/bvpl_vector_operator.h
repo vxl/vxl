@@ -43,8 +43,10 @@ private:
 };
 
 template<class T, class F>
-void bvpl_vector_operator<T,F>::apply_and_suppress(bvxm_voxel_grid<T>* grid, bvpl_kernel_vector_sptr kernel_vector,
-                                                   bvpl_neighb_operator<T,F>* oper, bvxm_voxel_grid<T>* out_grid,
+void bvpl_vector_operator<T,F>::apply_and_suppress(bvxm_voxel_grid<T>* grid, 
+                                                   bvpl_kernel_vector_sptr kernel_vector,
+                                                   bvpl_neighb_operator<T,F>* oper, 
+                                                   bvxm_voxel_grid<T>* out_grid,
                                                    bvxm_voxel_grid<vnl_vector_fixed<float, 3> >* orientation_grid)
 {
   bvxm_voxel_grid<T> temp_grid("temp_grid.vox",grid->grid_size());
@@ -66,34 +68,34 @@ void bvpl_vector_operator<T,F>::apply_and_suppress(bvxm_voxel_grid<T>* grid, bvp
 
 #if 0
   //: code for local max suppression
-  bvpl_subgrid_iterator<T> response_grid_iter(out_grid, (*vit).second->dim());
-  bvpl_subgrid_iterator<unsigned int> kernel_id_iter(&kernel_index_grid, (*vit).second->dim());
+  //bvpl_subgrid_iterator<T> response_grid_iter(out_grid, (*vit).second->dim());
+  //bvpl_subgrid_iterator<unsigned int> kernel_id_iter(&kernel_index_grid, (*vit).second->dim());
 
-  bvpl_local_max_functor<T> func_max;
-  //kernel->print();
-  while (!response_grid_iter.isDone()) {
-    unsigned index=(*kernel_id_iter).get_voxel();
-    //: get the kernel according to the
-    bvpl_kernel_iterator kernel_iter = kernel_vector->kernels_[index].second->iterator();
-    bvpl_voxel_subgrid<T> subgrid = *response_grid_iter;
-    //reset the iterator
-    kernel_iter.begin();
-    while (!kernel_iter.isDone()) {
-      vgl_point_3d<int> idx = kernel_iter.index();
-      T val;
-      if (subgrid.voxel(idx, val)) {
-        //vcl_cout<< val << "at " << idx <<vcl_endl;
-        bvpl_kernel_dispatch d = *kernel_iter;
-        func_max.apply(val, d);
-      }
-      ++kernel_iter;
-    }
+  //bvpl_local_max_functor<T> func_max;
+  ////kernel->print();
+  //while (!response_grid_iter.isDone()) {
+  //  unsigned index=(*kernel_id_iter).get_voxel();
+  //  //: get the kernel according to the
+  //  bvpl_kernel_iterator kernel_iter = kernel_vector->kernels_[index].second->iterator();
+  //  bvpl_voxel_subgrid<T> subgrid = *response_grid_iter;
+  //  //reset the iterator
+  //  kernel_iter.begin();
+  //  while (!kernel_iter.isDone()) {
+  //    vgl_point_3d<int> idx = kernel_iter.index();
+  //    T val;
+  //    if (subgrid.voxel(idx, val)) {
+  //      //vcl_cout<< val << "at " << idx <<vcl_endl;
+  //      bvpl_kernel_dispatch d = *kernel_iter;
+  //      func_max.apply(val, d);
+  //    }
+  //    ++kernel_iter;
+  //  }
 
-    // set the result at the output grid
-    (*response_grid_iter).set_voxel(func_max.result());
-    ++response_grid_iter;
-    ++kernel_id_iter;
-  }
+  //  // set the result at the output grid
+  //  (*response_grid_iter).set_voxel(func_max.result());
+  //  ++response_grid_iter;
+  //  ++kernel_id_iter;
+  //}
 #endif
 }
 

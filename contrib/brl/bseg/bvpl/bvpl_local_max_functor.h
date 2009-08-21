@@ -64,13 +64,13 @@ void bvpl_local_max_functor<T>::init()
 template <class T>
 void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
-  if (d.c_==0)
-    cur_val_=val;
-  else
-  {
-  if (val>max_)
-    max_=val;
-  }
+	if(d.c_==0)
+		cur_val_=val;
+	else
+	{
+	if( val>max_)
+		max_=val;
+	}
 }
 
 template <class T>

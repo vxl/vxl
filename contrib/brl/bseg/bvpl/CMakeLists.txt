@@ -21,6 +21,7 @@ SET(bvpl_sources
     bvpl_neighb_operator.h
     bvpl_vector_operator.h
     bvpl_direction_to_color_map.h
+    bvpl_susan_opinion_operator.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_sources)

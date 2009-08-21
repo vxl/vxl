@@ -128,14 +128,15 @@ bvpl_kernel_vector_sptr bvpl_edge3d_kernel_factory::create_kernel_vector()
   //polar phi=0,pi
   this->set_rotation_axis(axis);
   kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
-  axis = -axis;
-  this->set_rotation_axis(axis);
-  kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
+  
+  //axis = -axis;
+  //this->set_rotation_axis(axis);
+  //kernels->kernels_.push_back(vcl_make_pair(axis, new bvpl_kernel(this->create())));
 
   double theta_res = vnl_math::pi_over_4;
   double phi_res   = vnl_math::pi_over_4;
-  // phi=pi/4,pi/2,3pi/4
-  for (double phi=vnl_math::pi_over_4; phi<vnl_math::pi-1e-5; phi+=phi_res)
+  // phi=pi/4,pi/2,
+  for (double phi=vnl_math::pi_over_4; phi<3*vnl_math::pi/4-1e-5; phi+=phi_res)
   {
     // theta=0,pi/4,pi/2,3pi/4,pi,5pi/4,3pi/2,7pi/4
     for (double theta=0.0; theta<2.0*vnl_math::pi-1e-5; theta+=theta_res)

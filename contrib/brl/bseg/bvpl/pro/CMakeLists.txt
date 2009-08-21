@@ -7,6 +7,7 @@ IF(EXPAT_FOUND)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 SET(bvpl_pro_sources
     bvpl_processes.h
     bvpl_register.h    bvpl_register.cxx
