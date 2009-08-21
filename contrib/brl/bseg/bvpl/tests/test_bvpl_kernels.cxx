@@ -4,6 +4,7 @@
 #include <bvpl/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
 #include <bvpl/bvpl_gauss3d_xx_kernel_factory.h>
+#include <bvpl/bvpl_create_directions.h> 
 
 #include <vnl/vnl_math.h>
 
@@ -59,8 +60,9 @@ bool test_edge3d()
 {
   unsigned h=31;
   bvpl_edge3d_kernel_factory kernel_3d(h,h,h);
-  
-  bvpl_kernel_vector_sptr kernel_3d_vecs=kernel_3d.create_kernel_vector();
+  bvpl_create_directions_b dir;
+  bvpl_kernel_vector_sptr kernel_3d_vecs = kernel_3d.create_kernel_vector(dir);
+
   vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iter=kernel_3d_vecs->begin();
   
   for (;iter!=kernel_3d_vecs->end();iter++)
@@ -164,7 +166,8 @@ bool test_gaussian()
   
   // test the kernel vector
   
-  bvpl_kernel_vector_sptr kernel_vector = factory.create_kernel_vector();
+  bvpl_create_directions_b dir;
+  bvpl_kernel_vector_sptr kernel_3d_vecs = factory.create_kernel_vector(dir);
   
 #if 0   //Comment this out if you whish to print kernels directions  for vizualization
   print_directions(kernel_vector);

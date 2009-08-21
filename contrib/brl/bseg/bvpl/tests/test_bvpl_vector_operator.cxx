@@ -8,7 +8,7 @@
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
-
+#include <bvpl/bvpl_create_directions.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
@@ -55,7 +55,8 @@ MAIN(test_bvpl_vector_operator)
   bvxm_grid_save_raw<float>(surface_grid_expectation,"grid_plane_expectation.raw");
   //: get vector of kernel
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
-  bvpl_kernel_vector_sptr kernel_vec=kernels_3d.create_kernel_vector();
+  bvpl_create_directions_a dir;
+  bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
   vcl_string out_grid_path="out_grid.vox";
   vcl_string orientation_grid_path="orientation_grid.vox";

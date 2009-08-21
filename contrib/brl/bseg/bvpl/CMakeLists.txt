@@ -20,7 +20,7 @@ SET(bvpl_sources
     bvpl_local_max_functor.h
     bvpl_neighb_operator.h
     bvpl_vector_operator.h
-    bvpl_direction_to_color_map.h
+    bvpl_direction_to_color_map.h	   bvpl_direction_to_color_map.cxx
     bvpl_susan_opinion_operator.h
     bvpl_create_directions.h		   bvpl_create_directions.cxx
    )

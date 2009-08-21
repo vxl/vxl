@@ -8,6 +8,7 @@
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
+#include <bvpl/bvpl_create_directions.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_random.h>
 
@@ -216,7 +217,8 @@ void test_edge_functors()
 
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
   //: get vector of kernel
-  bvpl_kernel_vector_sptr kernel_vec=kernels_3d.create_kernel_vector();
+  bvpl_create_directions_a dir;
+  bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
   bvpl_edge_algebraic_mean_functor<float> mean_functor;
   bvpl_edge_geometric_mean_functor<float> geom_functor;
 
@@ -261,7 +263,8 @@ void test_gaussian_kernels()
   {
     bvpl_gauss3d_xx_kernel_factory factory(var[i], 1.5);
     //: get vector of kernel
-    bvpl_kernel_vector_sptr kernel_vec = factory.create_kernel_vector();
+  bvpl_create_directions_b dir;
+  bvpl_kernel_vector_sptr kernel_vec = factory.create_kernel_vector(dir);
     bvpl_gauss_convolution_functor functor;
 
     float sigma_noise=0.0f;
