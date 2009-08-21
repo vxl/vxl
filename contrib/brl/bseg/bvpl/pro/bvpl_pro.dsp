@@ -123,6 +123,12 @@ SOURCE=.\processes/bvpl_create_gauss3d_xx_kernel_process.cxx
 SOURCE=.\processes/bvpl_create_gauss3d_xx_kernel_vector_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_compare_surface_and_normal_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_susan_opinion_operator_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # End Group

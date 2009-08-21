@@ -152,6 +152,12 @@ SOURCE=.\Templates/bvpl_subgrid_iterator+bsta_gauss_f1-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+bsta_gauss_f1-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_subgrid_iterator+vnl_vector_fixed+float.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_voxel_subgrid+vnl_vector_fixed+float.3--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -217,6 +223,9 @@ SOURCE=.\bvpl_gauss3d_xx_kernel_factory.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_gauss_convolution_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_susan_opinion_operator.h
 # End Source File
 # End Group
 # End Target
