@@ -14,6 +14,8 @@ SOURCES += processes/bvpl_create_edge3d_kernel_process.cxx
 SOURCES += processes/bvpl_convert_direction_to_hue_process.cxx
 SOURCES += processes/bvpl_create_gauss3d_xx_kernel_process.cxx
 SOURCES += processes/bvpl_create_gauss3d_xx_kernel_vector_process.cxx
+SOURCES += processes/bvpl_compare_surface_and_normal_process.cxx
+SOURCES += processes/bvpl_susan_opinion_operator_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
