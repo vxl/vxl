@@ -33,6 +33,7 @@
 #include "ofstream.h"
 #include "ofstd.h"
 
+#include "dcdefine.h"    /* for memzero() */
 #include "dcmetinf.h"
 #include "dcitem.h"
 #include "dcxfer.h"

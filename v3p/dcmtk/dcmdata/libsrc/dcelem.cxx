@@ -31,6 +31,7 @@
 #include "ofstdinc.h"
 
 #include "ofstd.h"
+#include "dcdefine.h"    /* for memzero() */
 #include "dcelem.h"
 #include "dcobject.h"
 #include "dcdefine.h"
