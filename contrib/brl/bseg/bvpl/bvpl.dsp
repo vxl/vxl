@@ -111,6 +111,12 @@ SOURCE=.\bvpl_gauss3d_xx_kernel_factory.cxx
 SOURCE=.\bvpl_gauss_convolution_functor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_create_directions.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_direction_to_color_map.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 # End Source File
 # Begin Source File
@@ -226,6 +232,9 @@ SOURCE=.\bvpl_gauss_convolution_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_susan_opinion_operator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_create_directions.h
 # End Source File
 # End Group
 # End Target
