@@ -28,16 +28,16 @@ class vsrl_parameters
 
   // ****** used in dynamic_program ******
 
-  // the largest amount of allowable disparity -  default 10
+  //: the largest amount of allowable disparity -  default 10
   int correlation_range;
 
-  // the cost of not assigning an inner pixel - default 1.0
+  //: the cost of not assigning an inner pixel - default 1.0
   double inner_cost;
 
-  // the cost of not assigning an inner pixel - default 0.5
+  //: the cost of not assigning an inner pixel - default 0.5
   double outer_cost;
 
-  // the cost for discontinuous pixel assignments  - default 0.1
+  //: the cost for discontinuous pixel assignments  - default 0.1
   double continuity_cost;
 
   // **** used in image correlation *****
@@ -52,8 +52,8 @@ class vsrl_parameters
 
   double common_intensity_diff; //!< the difference in intensity which defines a common region - default 0.0
 
-  // a method to read in the parameters
-  void load(char *filename);
+  //: a method to read in the parameters
+  void load(const char *filename);
 };
 
 #endif

@@ -25,8 +25,8 @@ vsrl_parameters* vsrl_parameters::instance()
 
 // constructor
 
-vsrl_parameters::vsrl_parameters(){
-
+vsrl_parameters::vsrl_parameters()
+{
   // set default values
 
   // ***** used in many classes ******
@@ -69,7 +69,7 @@ vsrl_parameters::vsrl_parameters(){
 // destructor
 vsrl_parameters::~vsrl_parameters() {}
 
-void vsrl_parameters::load(char *filename)
+void vsrl_parameters::load(const char *filename)
 {
   // read in the parameters
 
@@ -80,8 +80,8 @@ void vsrl_parameters::load(char *filename)
   char tag[512];
   float val;
 
-  while (!file.eof()){
-
+  while (!file.eof())
+  {
     file >> tag;
     file >> val;
 
