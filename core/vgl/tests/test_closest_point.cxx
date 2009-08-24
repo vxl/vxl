@@ -13,6 +13,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for sqrt()
@@ -467,7 +468,24 @@ static void testLineSegment3DClosestPoints()
     TEST("Collinear, overlapping", success, true);
   }
 }
+// Test for closest points on two 3D line segments
+static void test_infinite_line_3d_closest_points()
+{
+  vcl_cout << "-----------------------------------------------\n"
+           << " Testing vgl_closest_points(3-d infinite lines):\n"
+           << "-----------------------------------------------\n";
 
+  // Test general case of non-parallel, non-intersecting lines, with internal points closest
+
+    vgl_infinite_line_3d<double> l1(vgl_point_3d<double>(-1,0,0), vgl_point_3d<double>(1,0,0));
+    vgl_infinite_line_3d<double> l2(vgl_point_3d<double>(0,2,1), vgl_point_3d<double>(0,3,1));
+    bool u=false;
+    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
+                    c.second==vgl_point_3d<double>(0,0,1) &&
+                    u==true);
+    TEST("Non-parallel, non-intersecting infinite lines", success, true);    
+}
 static void test_closest_point()
 {
   testHomgLine2DClosestPoint();
@@ -481,6 +499,7 @@ static void test_closest_point()
   testPoly3DClosestPoint();
   testLine3DClosestPoints();
   testLineSegment3DClosestPoints();
+  test_infinite_line_3d_closest_points();
 }
 
 TESTMAIN(test_closest_point);

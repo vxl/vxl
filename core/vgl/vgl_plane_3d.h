@@ -108,12 +108,17 @@ class vgl_plane_3d
   //: Return the normal direction, i.e., a unit vector orthogonal to this plane
   inline vgl_vector_3d<T> normal() const
   { return normalized(vgl_vector_3d<T>(a(),b(),c())); }
+ 
+  //: Return true if p is on the plane
+  bool contains(vgl_point_3d<T> const& p, T tol = (T)0);
+
 };
 
 //: Return true iff p is the plane at infinity
 //  Always returns false
 template <class T> inline
-bool is_ideal(vgl_plane_3d<T> const&, T=(T)0) { return false; }
+bool is_ideal(vgl_plane_3d<T> const&, T tol=(T)0) { return false; }
+
 
 //: Write to stream
 // \relates vgl_plane_3d

@@ -249,6 +249,24 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
                    bool* unique=0);
 
 
+//: Return the points of closest approach on two infinite 3D lines.
+// Uses non-homogeneous representations.
+// \return The pair of closest points, the first on \a l1, the second on \a l2.
+// \retval unique If provided, will be set to true if the returned points are unique,
+// otherwise many solutions exist and the returned points are an arbitrary choice.
+// The distance between the points is still valid, however.
+// \relates vgl_line_3d_2_points
+template <class T>
+vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+vgl_closest_points(const vgl_infinite_line_3d<T>& l1,
+                   const vgl_infinite_line_3d<T>& l2,
+                   bool* unique=0)
+{
+  vgl_line_3d_2_points<T> l21(l1.point(), l1.point_t(T(1)));
+  vgl_line_3d_2_points<T> l22(l2.point(), l2.point_t(T(1)));
+  return vgl_closest_points(l21, l22, unique);
+}
+
 //: Return the points of closest approach on 2 3D line segments.
 // Uses non-homogeneous representations.
 // \return The pair of closest points, the first on \a l1, the second on \a l2.

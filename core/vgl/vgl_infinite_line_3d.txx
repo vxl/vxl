@@ -43,8 +43,27 @@ compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const
 template <class Type>
 vgl_infinite_line_3d<Type>::
 vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
-                     vgl_vector_3d<Type> const& direction) : t_(direction)
+                     vgl_vector_3d<Type> const& direction)
 {
+  vgl_vector_3d<Type> tt = direction;
+  //reconcile direction so that tangent is in the positive hemisphere
+  double ttx = vcl_fabs(static_cast<double>(tt.x()));
+  double tty = vcl_fabs(static_cast<double>(tt.y()));
+  double ttz = vcl_fabs(static_cast<double>(tt.z()));
+  double max_comp = ttx;
+  double sign = static_cast<double>(tt.x());
+  if(max_comp < tty){
+    max_comp = tty;
+    sign = static_cast<double>(tt.y());
+  }
+  if(max_comp < ttz){
+    max_comp = ttz;
+    sign = static_cast<double>(tt.z());
+  }
+  //switch sense if max component is negative
+  Type sense = static_cast<Type>(sign/max_comp);
+  tt *= sense;
+  t_ = normalized(tt);
   //Define the plane perpendicular to the line passing through the origin
   // the plane normal is t_ the distance of the plane from the origin is 0
   // it follows that the intersection of the line with the perpendicular plane

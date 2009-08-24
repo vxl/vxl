@@ -17,6 +17,7 @@ template <class T> class vgl_line_2d;
 template <class T> class vgl_line_3d_2_points;
 template <class T> class vgl_line_segment_2d;
 template <class T> class vgl_line_segment_3d;
+template <class T> class vgl_infinite_line_3d;
 template <class T> class vgl_homg_plane_3d;
 template <class T> class vgl_plane_3d;
 template <class T> class vgl_box_2d;

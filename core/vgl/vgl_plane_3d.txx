@@ -9,7 +9,7 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
-
+#include <vgl/vgl_intersection.h>
 //: Construct from homogeneous plane
 template <class T>
 vgl_plane_3d<T>::vgl_plane_3d(vgl_homg_plane_3d<T> const& p)
@@ -43,6 +43,18 @@ vgl_plane_3d<T>::vgl_plane_3d(vgl_vector_3d<T> const& n,
  : a_(n.x()), b_(n.y()), c_(n.z()), d_(-(n.x()*p.x()+n.y()*p.y()+n.z()*p.z()))
 {
   assert(a_||b_||c_); // normal vector should not be the null vector
+}
+
+//: Return true if p is on the plane
+template <class T>
+bool vgl_plane_3d<T>::contains(vgl_point_3d<T> const& p, T tol)
+{
+  //to maintain a consistent distance metric the plane should be normalized
+  vgl_vector_3d<T> n(a_, b_, c_), pv(p.x(), p.y(), p.z());
+  T len = static_cast<T>(length(n));
+  T dist = dot_product(n,pv);
+  dist = (dist + d_)/len;
+  return (dist<-tol || dist>tol);
 }
 
 template <class T>
