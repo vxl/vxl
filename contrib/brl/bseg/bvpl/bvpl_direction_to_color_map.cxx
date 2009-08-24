@@ -1,5 +1,8 @@
-#include <bvpl/bvpl_direction_to_color_map.h>
+#include "bvpl_direction_to_color_map.h"
+//:
+// \file
 #include <vnl/vnl_random.h>
+
 //: project a unit radius sphere onto the cube circumscribing it using gnomonic projection
 void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector<vgl_point_3d<double> > & proj_on_cube)
 {
@@ -11,7 +14,7 @@ void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector
   normals.push_back(vgl_vector_3d<double>(0,-1,0)); // Y low
   normals.push_back(vgl_vector_3d<double>(0,0,-1)); // Z low
 
-  //: iterate over all the spherical samples
+  // iterate over all the spherical samples
   for (unsigned i=0;i<samples_.size();++i)
   {
     //find the face which has a normal closest to the sample direction.
@@ -57,29 +60,25 @@ void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector
 }
 
 
-
-
 vcl_vector< float>
 bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > peano_curve,
                                                                           vcl_vector<vgl_point_3d<double> > proj_on_cube)
 {
- 
-  //: store indices of the directions in (0,1) range
+  // store indices of the directions in (0,1) range
   vcl_vector<float> indices_of_cube_projs;
   vcl_map<int,float> index_to_length;
   for (unsigned j=0;j<peano_curve.size();++j)
   {
-      if(j==0)
-        index_to_length[j]=0;
-      else
-        index_to_length[j]=index_to_length[j-1]+(peano_curve[j]-peano_curve[j-1]).length();
+    if (j==0)
+      index_to_length[j]=0;
+    else
+      index_to_length[j]=index_to_length[j-1]+(peano_curve[j]-peano_curve[j-1]).length();
   }
-  float running_length=0;
   for (unsigned i=0;i<proj_on_cube.size();++i)
   {
     double dmin=1e5;
     int indexj=-1;
-    //: find the closest index point
+    // find the closest index point
     for (unsigned j=0;j<peano_curve.size();++j)
     {
       double d=vgl_distance<double>(proj_on_cube[i],peano_curve[j]);
@@ -89,10 +88,9 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
         indexj=j;
       }
     }
-    //: find the closest point on the two line segments emanating from the index point
+    // find the closest point on the two line segments emanating from the index point
 
-    //: first point
-    if (indexj==0)
+    if (indexj==0) // first point
     {
       vgl_line_3d_2_points<double> l1(peano_curve[indexj],peano_curve[indexj+1]);
       double t1=vgl_closest_point_t(l1,proj_on_cube[i]);
@@ -100,8 +98,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
       double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
       indices_of_cube_projs.push_back(float(index_to_length[indexj]+t1/length));
     }
-    //: last point
-    else if (unsigned(indexj+1)==proj_on_cube.size())
+    else if (unsigned(indexj+1)==proj_on_cube.size()) // last point
     {
       vgl_line_3d_2_points<double> l2(peano_curve[indexj-1],peano_curve[indexj]);
       double t2=vgl_closest_point_t(l2,proj_on_cube[i]);
@@ -109,7 +106,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
       double length=index_to_length[indexj]-index_to_length[indexj-1];
       indices_of_cube_projs.push_back(float(index_to_length[indexj])+t2/length);
     }
-    else //: rest of the points
+    else // rest of the points
     {
       vgl_line_3d_2_points<double> l1(peano_curve[indexj],peano_curve[indexj+1]);
       vgl_line_3d_2_points<double> l2(peano_curve[indexj-1],peano_curve[indexj]);
@@ -134,7 +131,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
 
   for (unsigned j=0;j<indices_of_cube_projs.size();++j)
   {
-      vcl_cout<<indices_of_cube_projs[j]<<" ";
+      vcl_cout<<indices_of_cube_projs[j]<<' ';
       indices_of_cube_projs[j]/=index_to_length[index_to_length.size()-1];
   }
 
@@ -142,10 +139,8 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
 }
 
 
-
 void bvpl_direction_to_color_map::make_svg_color_map(vcl_string outfile)
 {
-
   bsvg_document doc(400, 400);
 
   vcl_map<vgl_point_3d<double>,float,point_3d_cmp>::iterator iter=colors_.begin();
@@ -186,31 +181,27 @@ void bvpl_direction_to_color_map::make_svg_color_map(vcl_string outfile)
 
 bvpl_direction_to_color_map::bvpl_direction_to_color_map(vcl_vector<vgl_point_3d<double> > samples, vcl_string type)
 {
+  samples_=samples;
+  vcl_vector<float> oneparam;
+  if (type=="peano")
+  {
+    vcl_vector<vgl_point_3d<double> >  proj_on_cube;
+    project_sphereical_samples_to_cubes(proj_on_cube);
+    // level 2 peano curve
+    vcl_vector<vgl_point_3d<double> > peano_curve=peano_curve_on_cube(2);
+    // mapping of samples to 1-d curve between 0-1
+    oneparam=find_closest_points_from_cube_to_peano_curve(peano_curve,proj_on_cube);
+  }
+  else if (type=="random")
+  {
+    vnl_random rand;
+    for (unsigned i=0;i<samples_.size();i++)
+      oneparam.push_back(rand.drand32(1.0));
+  }
 
-    samples_=samples;
-    vcl_vector<float> oneparam;
-    if(type=="peano")
-    {
-        vcl_vector<vgl_point_3d<double> >  proj_on_cube;
-        project_sphereical_samples_to_cubes(proj_on_cube);
-        //: level 2 peano curve
-        vcl_vector<vgl_point_3d<double> > peano_curve=peano_curve_on_cube(2);
-        //: mapping of samples to 1-d curve between 0-1
-        oneparam=find_closest_points_from_cube_to_peano_curve(peano_curve,proj_on_cube);
-    }
-    else if(type=="random")
-    {
-        vnl_random rand;
-        for(unsigned i=0;i<samples_.size();i++)
-            oneparam.push_back(rand.drand32(1.0));
-    }
-
-    for(unsigned i=0;i<samples_.size();i++)
-        colors_[samples[i]]=oneparam[i];
-
+  for (unsigned i=0;i<samples_.size();i++)
+    colors_[samples[i]]=oneparam[i];
 }
-
-
 
 
 void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel_vector,
@@ -241,7 +232,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
        max = (*slab1_it)[3];
      if ((*slab1_it)[3] < min)
        min = (*slab1_it)[3];
-      }
+    }
   }
 
   vcl_cout << "Maximum response: " << max << " Minimun response: " << min << vcl_endl;
