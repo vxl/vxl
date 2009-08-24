@@ -114,7 +114,7 @@ bvpl_kernel_factory::create()
 
 //: Returns a kernel along the rotation_axis and rotated around this axis an amount angle
 bvpl_kernel
-bvpl_kernel_factory::create(vnl_vector_fixed<float,3> rotation_axis, float angle)
+bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
 {
   this->set_rotation_axis(rotation_axis);
   return bvpl_kernel(interpolate(rotate(angle)), dim(), max3d_, min3d_);
@@ -158,7 +158,7 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
 }
 
 //: Aligns the edge along direction of "axis"
-void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_axis)
+void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
 {
   // rotation axis should be unit vector
   float mag = rotation_axis.magnitude();
@@ -186,7 +186,7 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   {
     if (dot_product(canonical_rotation_axis_, rotation_axis) < 0) //opposite vectors
     {
-      vnl_vector_fixed<float,3> axis_perp(float(vcl_cos(theta)*vcl_sin(phi+vnl_math::pi_over_2)),
+      vnl_float_3 axis_perp(float(vcl_cos(theta)*vcl_sin(phi+vnl_math::pi_over_2)),
                                           float(vcl_sin(theta)*vcl_sin(phi+vnl_math::pi_over_2)),
                                           float(vcl_cos(phi+vnl_math::pi_over_2)));
       vgl_rotation_3d<float> r_align(vnl_quaternion<float>(axis_perp, float(vnl_math::pi)));
@@ -214,7 +214,7 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_vector_fixed<float,3> rotation_
   if (angular_resolution_ < vcl_numeric_limits<float>::epsilon())
     return;
 
-  vnl_vector_fixed<float,3> parallel_axis = r_align.as_matrix() * canonical_parallel_axis_;
+  vnl_float_3 parallel_axis = r_align.as_matrix() * canonical_parallel_axis_;
 
   //spherical coordinates of the parallel axis.
   float /* theta_p = vcl_atan2(parallerl_axis[1],parallerl_axis[0]), //azimuth, unused */
@@ -290,7 +290,7 @@ bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
   for (; kernel_it != kernel_.end(); ++kernel_it)
   {
     //Rotate, mantaing floating point values
-    vnl_vector_fixed<float,3> new_coord = R_as_matrix* vnl_vector_fixed<float,3>(float((*kernel_it).first.x()),
+    vnl_float_3 new_coord = R_as_matrix* vnl_float_3(float((*kernel_it).first.x()),
                                                                            float((*kernel_it).first.y()),
                                                                            float((*kernel_it).first.z()));
 

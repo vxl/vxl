@@ -24,7 +24,7 @@
 #include<bsta/bsta_gauss_f1.h>
 
 template<class data_type>
-void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_p, vnl_vector_fixed<float,3> axis)
+void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_p, vnl_float_3 axis)
 {
   unsigned ni=data.get_row1_count();
   unsigned nj=data.get_row1_count();
@@ -50,7 +50,7 @@ void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_
 
 // Specialization for gaussian second derivative. Here we want a wall or blob rather than an edge
 template<>
-void fill_in_data(vbl_array_3d<bsta_gauss_f1> & data,bsta_gauss_f1 min_p, bsta_gauss_f1 max_p, vnl_vector_fixed<float,3> axis)
+void fill_in_data(vbl_array_3d<bsta_gauss_f1> & data,bsta_gauss_f1 min_p, bsta_gauss_f1 max_p, vnl_float_3 axis)
 {
   unsigned ni=data.get_row1_count();
   unsigned nj=data.get_row1_count();
@@ -107,7 +107,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
                          vbl_array_3d<data_type> & data, F func,
                          data_type min_p, data_type max_p, float sigma_noise, data_type maxval)
 {
-  vnl_vector_fixed<float,3> axis;
+  vnl_float_3 axis;
   bool flag=true;
 #ifdef DEBUG
   float entropy_sum=0.0f;
@@ -158,7 +158,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
                          bsta_gauss_f1 min_p, bsta_gauss_f1 max_p, float sigma_noise, bsta_gauss_f1 maxval,
                          vnl_vector<float> &response)
 {
-  vnl_vector_fixed<float,3> axis;
+  vnl_float_3 axis;
   bool flag=true;
 #ifdef DEBUG
   float entropy_sum=0.0f;

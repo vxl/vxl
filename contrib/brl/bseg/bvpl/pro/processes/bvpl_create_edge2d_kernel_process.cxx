@@ -62,7 +62,7 @@ bool bvpl_create_edge2d_kernel_process(bprb_func_process& pro)
   float angle= 0.0f;
   pro.parameters()->get_value("angle", angle);
 
-  vnl_vector_fixed<float,3> axis(axis_x,axis_y, axis_z);
+  vnl_float_3 axis(axis_x,axis_y, axis_z);
 
   //Create the factory
   bvpl_edge2d_kernel_factory factory(height, width);

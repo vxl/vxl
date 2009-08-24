@@ -216,7 +216,7 @@ bvpl_direction_to_color_map::bvpl_direction_to_color_map(vcl_vector<vgl_point_3d
 void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel_vector,
                                                   vcl_vector<vgl_point_3d<double> > & samples)
 {
-  vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iter;
+  vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > >::iterator iter;
   for (iter=kernel_vector->begin();iter!=kernel_vector->end();++iter)
     samples.push_back(vgl_point_3d<double>(iter->first[0],iter->first[1],iter->first[2]));
 }

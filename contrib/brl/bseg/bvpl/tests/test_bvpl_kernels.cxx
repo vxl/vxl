@@ -16,10 +16,10 @@
 
 bool test_edge2d()
 {
-  vnl_vector_fixed<float,3> axis1(0.0, 0.0, 0.0);
-  vnl_vector_fixed<float,3> axis2(1.0, 0.0, 0.0);
-  vnl_vector_fixed<float,3> axis3(1.0, 0.0, 1.0);
-  vnl_vector_fixed<float,3> axis4(1.0, 1.0, 1.0);
+  vnl_float_3 axis1(0.0, 0.0, 0.0);
+  vnl_float_3 axis2(1.0, 0.0, 0.0);
+  vnl_float_3 axis3(1.0, 0.0, 1.0);
+  vnl_float_3 axis4(1.0, 1.0, 1.0);
   
   //Create the factory
   unsigned h1=5;
@@ -29,9 +29,9 @@ bool test_edge2d()
     for (int j = -1; j<1; j++)
       for (int k = -1; k<1; k++)
       {
-        factory1.set_rotation_axis(vnl_vector_fixed<float,3>(float(i), float(j), float(k)));
+        factory1.set_rotation_axis(vnl_float_3(float(i), float(j), float(k)));
         
-        vnl_vector_fixed<float,3> axis = factory1.axis();
+        vnl_float_3 axis = factory1.axis();
         vcl_cout << axis << vcl_endl
         << "-----------------------------------\n"
         << "Rotating" <<i << j << k << '\n';
@@ -63,11 +63,11 @@ bool test_edge3d()
   bvpl_create_directions_b dir;
   bvpl_kernel_vector_sptr kernel_3d_vecs = kernel_3d.create_kernel_vector(dir);
 
-  vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iter=kernel_3d_vecs->begin();
+  vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > >::iterator iter=kernel_3d_vecs->begin();
   
   for (;iter!=kernel_3d_vecs->end();iter++)
   {
-    vnl_vector_fixed<float,3> axis=iter->first;
+    vnl_float_3 axis=iter->first;
 #if 0
     vcl_ostringstream s;
     s.precision(2);
@@ -92,7 +92,7 @@ void print_kernels()
   bvpl_gauss3d_xx_kernel_factory factory(sigma1, sigma2, sigma3);
   
   {
-    factory.set_rotation_axis( vnl_vector_fixed<float,3>(1, 1, 1));
+    factory.set_rotation_axis( vnl_float_3(1, 1, 1));
     bvpl_kernel kernel = factory.create();
     
     kernel.save_raw("gauss_111_kernel.raw");
@@ -102,7 +102,7 @@ void print_kernels()
   }
   
   {
-    factory.set_rotation_axis( vnl_vector_fixed<float,3>(0, 0, 1));
+    factory.set_rotation_axis( vnl_float_3(0, 0, 1));
     bvpl_kernel kernel = factory.create();
     kernel.save_raw("gauss_001_kernel.raw");
     //kernel.print_to_file("gauss_001_kernel.txt");
@@ -111,7 +111,7 @@ void print_kernels()
   }
   
   {
-    factory.set_rotation_axis( vnl_vector_fixed<float,3>(0, 0, 1));
+    factory.set_rotation_axis( vnl_float_3(0, 0, 1));
     factory.set_angle(vnl_math::pi/2.0);
     bvpl_kernel kernel = factory.create();
     kernel.save_raw("gauss_001_90_kernel.raw");
@@ -177,14 +177,14 @@ bool test_gaussian()
   // 1. if kernel has two equal sigmas and it is aligned in the
   // direction of unequal sigma, then it is symmetric around that axis.
   bvpl_gauss3d_xx_kernel_factory factory2(1, 1.5);
-  factory2.set_rotation_axis( vnl_vector_fixed<float,3>(1, 0, 0));
+  factory2.set_rotation_axis( vnl_float_3(1, 0, 0));
   bvpl_kernel kernel1 = factory2.create();
                              
-  factory2.set_rotation_axis( vnl_vector_fixed<float,3>(1, 0, 0));
+  factory2.set_rotation_axis( vnl_float_3(1, 0, 0));
   factory2.set_angle(vnl_math::pi_over_2);
   bvpl_kernel kernel2 = factory2.create();
   
-  factory2.set_rotation_axis( vnl_vector_fixed<float,3>(-1, 0, 0));
+  factory2.set_rotation_axis( vnl_float_3(-1, 0, 0));
   bvpl_kernel kernel3 = factory2.create();
   
   //kernel1.save_raw("kernel1.raw");
@@ -243,7 +243,7 @@ bool test_gaussian()
   TEST("Symmetry test", symmetric, true);
                              
                              
-  factory2.set_rotation_axis( vnl_vector_fixed<float,3>(-1, 0, 0));
+  factory2.set_rotation_axis( vnl_float_3(-1, 0, 0));
   
   return true;
 }

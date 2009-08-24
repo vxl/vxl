@@ -63,8 +63,8 @@ MAIN(test_bvpl_vector_operator)
   vcl_string out_grid_expectation_path="out_grid_expectation.vox";
 
   bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
-  bvxm_voxel_grid<vnl_vector_fixed<float,3> > *orientation_grid
-    =new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(orientation_grid_path, grid->grid_size());
+  bvxm_voxel_grid<vnl_float_3 > *orientation_grid
+    =new bvxm_voxel_grid<vnl_float_3 >(orientation_grid_path, grid->grid_size());
   bvpl_opinion_functor func;
   bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
   bvpl_vector_operator<bvxm_opinion,  bvpl_opinion_functor> vector_oper;

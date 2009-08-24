@@ -33,7 +33,7 @@
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_float_3.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
@@ -99,7 +99,7 @@ typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 class bvpl_kernel_vector : public vbl_ref_count
 {
  public:
-  typedef vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > >::iterator iterator;
+  typedef vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > >::iterator iterator;
   //: Default constructor
   bvpl_kernel_vector() {}
 
@@ -107,7 +107,7 @@ class bvpl_kernel_vector : public vbl_ref_count
   iterator end()   { return kernels_.end(); }
   //: vector of kernel and their corresponding orientation axis.
   // Note that the magnitude of the vector corresponds to the rotation angle around that axis
-  vcl_vector< vcl_pair<vnl_vector_fixed<float,3>, bvpl_kernel_sptr > > kernels_;
+  vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > > kernels_;
 };
 
 typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
@@ -124,16 +124,16 @@ class bvpl_kernel_factory
   bvpl_kernel create();
 
   //: Returns a kernel described by inputs; rotation_axis and angle
-  bvpl_kernel create(vnl_vector_fixed<float,3> rotation_axis, float angle);
+  bvpl_kernel create(vnl_float_3 rotation_axis, float angle);
 
   //: Sets the toration axis of this kernel
-  void set_rotation_axis( vnl_vector_fixed<float,3> rotation_axis);
+  void set_rotation_axis( vnl_float_3 rotation_axis);
 
   //: Sets rotation angle of this kernel
   void set_angle(float angle) { angle_ =angle; }
 
   //: Returns the current aligments axis
-  vnl_vector_fixed<float,3> axis() const { return rotation_axis_; }
+  vnl_float_3 axis() const { return rotation_axis_; }
 
   //: Return current rotation angle around axis()
   float angle() const { return angle_; }
@@ -172,15 +172,15 @@ class bvpl_kernel_factory
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > canonical_kernel_;
 
   //:The rotation axis for canonical edge
-  vnl_vector_fixed<float,3> canonical_rotation_axis_;
+  vnl_float_3 canonical_rotation_axis_;
 
   //:Rotation axis of kernel_
-  vnl_vector_fixed<float,3> rotation_axis_;
+  vnl_float_3 rotation_axis_;
 
   // parallel_axis_ define a coordinate system for each kernel.
   // The vector (parallel_axis_ - rotation_axis_) defines the direction of the minor axis of the kernel
   // The zero-rotation for any rotation axis is that for which parallel_axis_ and rotation_axis_ have constant polar angle
-  vnl_vector_fixed<float,3> canonical_parallel_axis_;
+  vnl_float_3 canonical_parallel_axis_;
 
   //: Amounts rotation around rotation_axis_
   float angle_;

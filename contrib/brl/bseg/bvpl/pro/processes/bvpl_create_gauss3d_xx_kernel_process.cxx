@@ -65,7 +65,7 @@ bool bvpl_create_gauss3d_xx_kernel_process(bprb_func_process& pro)
   float angle= 0.0f;
   pro.parameters()->get_value("angle", angle);
   
-  vnl_vector_fixed<float,3> axis(axis_x,axis_y, axis_z);
+  vnl_float_3 axis(axis_x,axis_y, axis_z);
   
   //Create the factory
   bvpl_gauss3d_xx_kernel_factory factory(sigma1, sigma2, sigma3);

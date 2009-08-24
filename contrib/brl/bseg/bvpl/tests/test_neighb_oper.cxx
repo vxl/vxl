@@ -204,7 +204,7 @@ static void test_neighb_oper()
 
   bvpl_edge2d_kernel_factory edge_factory(5, 5);
 
-  edge_factory.set_rotation_axis(vnl_vector_fixed<float,3>(1,0,1));
+  edge_factory.set_rotation_axis(vnl_float_3(1,0,1));
   edge_factory.set_angle(float(vnl_math::pi)); // was float(3*vnl_math::pi_over_4)
 
   bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(edge_factory.create());

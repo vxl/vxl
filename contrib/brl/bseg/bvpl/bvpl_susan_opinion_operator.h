@@ -29,19 +29,19 @@ class bvpl_susan_opinion_operator
   ~bvpl_susan_opinion_operator() {}
 
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
-  void operate(bvxm_voxel_grid<vnl_vector_fixed<float,3> >* dirgrid,
+  void operate(bvxm_voxel_grid<vnl_float_3 >* dirgrid,
                bvxm_voxel_grid<bvxm_opinion>* opngrid,
                bvpl_kernel_sptr kernel, bvxm_voxel_grid<bvxm_opinion>* out_grid)
   {
-    bvpl_subgrid_iterator<vnl_vector_fixed<float,3> > sub_dir_iter(dirgrid, kernel->dim());
+    bvpl_subgrid_iterator<vnl_float_3 > sub_dir_iter(dirgrid, kernel->dim());
     bvpl_subgrid_iterator<bvxm_opinion> sub_opn_iter(opngrid, kernel->dim());
     bvpl_subgrid_iterator<bvxm_opinion> output_iter(out_grid, kernel->dim());
     while (!sub_dir_iter.isDone()) {
        bvpl_kernel_iterator kernel_iter = kernel->iterator();
-       bvpl_voxel_subgrid<vnl_vector_fixed<float,3> > dirsubgrid = *sub_dir_iter;
+       bvpl_voxel_subgrid<vnl_float_3> dirsubgrid = *sub_dir_iter;
        bvpl_voxel_subgrid<bvxm_opinion> opnsubgrid = *sub_opn_iter;
 
-       vnl_vector_fixed<float,3> cur_normal=(*sub_dir_iter).get_voxel();
+       vnl_float_3 cur_normal=(*sub_dir_iter).get_voxel();
        bvxm_opinion cur_opn=(*sub_opn_iter).get_voxel();
 
        vgl_plane_3d<double> p(cur_normal[0],cur_normal[1],cur_normal[2],0);
@@ -54,7 +54,7 @@ class bvpl_susan_opinion_operator
        float mu=0;
        while (!kernel_iter.isDone()) {
          vgl_point_3d<int> idx = kernel_iter.index();
-         vnl_vector_fixed<float,3> normal;
+         vnl_float_3 normal;
          bvxm_opinion opn;
          if (dirsubgrid.voxel(idx, normal) && opnsubgrid.voxel(idx,opn))
          {
