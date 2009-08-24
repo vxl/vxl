@@ -198,15 +198,8 @@ void vsrl_manager::load_params_file()
   static vcl_string ext = "*.*";
   load_params_dlg.file("Dense Matcher Parameter Filename:", ext, params_filename);
   if (!load_params_dlg.ask()) return;
-
-  // Due to the need for a non-const char* being fed to the .load function
-  // we have to construct a filename that is NOT const!
-  char* filename = new char[params_filename.length()+1]; // get a new char* array
-  params_filename.copy(filename,params_filename.length()); // copy the string into it
-  filename[params_filename.length()]=0; //add null terminator
-  params_->load(filename); // load the parameters file
+  params_->load(params_filename); // load the parameters file
   disparity_bias_ = params_->correlation_range;
-  delete [] filename;  // delete the filename
 }
 
 void vsrl_manager::point_pick()
