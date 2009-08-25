@@ -198,7 +198,7 @@ void vsrl_manager::load_params_file()
   static vcl_string ext = "*.*";
   load_params_dlg.file("Dense Matcher Parameter Filename:", ext, params_filename);
   if (!load_params_dlg.ask()) return;
-  params_->load(params_filename); // load the parameters file
+  params_->load(params_filename.c_str()); // load the parameters file
   disparity_bias_ = params_->correlation_range;
 }
 
