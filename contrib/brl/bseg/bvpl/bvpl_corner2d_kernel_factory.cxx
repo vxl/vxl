@@ -23,72 +23,69 @@ bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory()
 bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory(unsigned length, unsigned width , unsigned thickness)
 {
   //set variables
-  length_ = length;
-  width_ = width;
-  thickness_ = thickness;
-  
+  length_ = float(length);
+  width_ = float(width);
+  thickness_ = float(thickness);
+
   //this kernel is not symmetric around main axis
-  angular_resolution_=vnl_math::pi_over_4;
-  
+  angular_resolution_= float(vnl_math::pi_over_4);
+
   //set canonical axis to x-axis. The rotation axis is normal to the plane containing the edge
   canonical_rotation_axis_[0] = 1.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
-  
+
   //used to define 0-rotation
   canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 1.0f; canonical_parallel_axis_[2] = 0.0f;
-  
+
   //initialize variables
   angle_ = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
-  
+
   //create the default kernel
   create_canonical();
 }
 
 void bvpl_corner2d_kernel_factory::create_canonical()
 {
-
-  
   //The size of the kernel is limited. If width or height of the kernel is too large,
   //the user should subsample the image/grid
   if ( (length_ > max_size_) || (width_ > max_size_) || (thickness_ > max_size_) )
   {
     vcl_cerr<< "Warning, kernel is too large. You should subsample world. Processing may take a long time.\n";
   }
-  
+
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
-  
-  int min_x = -1*(thickness_/2);
-  int max_x =  thickness_/2;
-  int min_y = -1*(width_/2);
-  int max_y =  width_/2;
-  int min_z = -1*(length_/2);
-  int max_z =  length_/2;
-  
-  
-  for (int x=min_x; x<= max_x; x++)
+
+  int min_x = -int(thickness_*0.5f);
+  int max_x =  int(thickness_*0.5f);
+  int min_y = -int(width_    *0.5f);
+  int max_y =  int(width_    *0.5f);
+  int min_z = -int(length_   *0.5f);
+  int max_z =  int(length_   *0.5f);
+
+  for (int x=min_x; x<=max_x; x++)
   {
-    for(int z = min_z; z<=max_z; z++)
+    for (int z=min_z; z<=max_z; z++)
     {
-      for (int y= min_y; y<= max_y; y++)
+      for (int y=min_y; y<=max_y; y++)
       {
         if (z < 0)
         canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
-        else if(y < 0)
+        else if (y < 0)
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
         else
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1))); 
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
       }
     }
   }
-  
+
   //set the dimension of the 3-d grid
   max3d_.set(max_x,max_y,max_z);
   min3d_.set(min_x,min_y,min_z);
-  
+
   //set the current kernel
   kernel_ = canonical_kernel_;
-  
+
   return;
 }
 
