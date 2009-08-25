@@ -28,89 +28,12 @@
 //   <none yet>
 // \endverbatim
 
+#include "bvpl_kernel.h"
 #include "bvpl_kernel_iterator.h"
-#include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
-#include <vcl_iostream.h>
 #include <vnl/vnl_float_3.h>
-#include <vbl/vbl_ref_count.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-
-//: A simple class to hold bvpl_kernel_iterator and its bounding cube
-class bvpl_kernel:public vbl_ref_count
-{
- public:
-  //: Default constructor
-  bvpl_kernel() {id_=++id_cnt;}
-  //: Constructor
-  bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt)
-  : kernel_(kernel),dim_(dim),min_(min_pt),max_(max_pt) {id_=++id_cnt;}
-  //: Destructor
-  ~bvpl_kernel() {}
-  bvpl_kernel_iterator iterator(){return kernel_;}
-  vgl_vector_3d<int> dim()const {return dim_;}
-  vgl_point_3d<int> min() const {return min_;}
-  vgl_point_3d<int> max() const {return max_;}
-
-  void print()
-  {
-    kernel_.begin();
-    while (!kernel_.isDone()) {
-      vgl_point_3d<int> coord =kernel_.index();
-      float val= ((*kernel_).c_);
-
-      vcl_cout.precision(2);
-      vcl_cout << coord << "  " << val<< vcl_endl;
-      ++kernel_;
-    }
-  }
-
-  void print_to_file(vcl_string filename);
-
-  bool save_raw(vcl_string filename);
-
-  // Returns a sum of kernel values. Useful to check if they add up to zero
-  float cum_sum()
-  {
-    float val = 0.0f;
-    kernel_.begin();
-    while (!kernel_.isDone()) {
-      val += ((*kernel_).c_);
-      ++kernel_;
-    }
-    vcl_cout << "Kernel sums to : " << val << vcl_endl;
-    return val;
-  }
-
-  unsigned id(){return id_;}
-  static unsigned id_cnt;
- private:
-  bvpl_kernel_iterator kernel_;
-  vgl_vector_3d<int> dim_;
-  vgl_point_3d<int> min_;
-  vgl_point_3d<int> max_;
-  unsigned int id_;
-};
-
-typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
-
-//: A simple class to hold a vector of kernels
-class bvpl_kernel_vector : public vbl_ref_count
-{
- public:
-  typedef vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > >::iterator iterator;
-  //: Default constructor
-  bvpl_kernel_vector() {}
-
-  iterator begin() { return kernels_.begin(); }
-  iterator end()   { return kernels_.end(); }
-  //: vector of kernel and their corresponding orientation axis.
-  // Note that the magnitude of the vector corresponds to the rotation angle around that axis
-  vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > > kernels_;
-};
-
-typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
 
 
 //: A factory of bvpl_kernels
@@ -150,16 +73,11 @@ class bvpl_kernel_factory
   //: returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();
 
-  /******************Batch Methods ***********************/
-  //: Creates a vector of kernels with azimuthal and elevation resolutio equal to pi/4. And angle of rotation= angular_resolution_
+  /******************Batch Method ***********************/
+  //: Creates a vector of kernels as specified by func
   template <class F>
   bvpl_kernel_vector_sptr create_kernel_vector(F func);
 
-  ////: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
-  //virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi)=0;
-
-  ////: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
-  //virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res)=0;
 
  protected:
 
@@ -208,20 +126,22 @@ class bvpl_kernel_factory
   //: Rotates "class-kernel_" using the given rotation matrix
   kernel_type rotate(vgl_rotation_3d<float> R);
 };
+
 template <class F>
 bvpl_kernel_vector_sptr bvpl_kernel_factory::create_kernel_vector(F func)
 {
-    vcl_vector<vnl_float_3> axes=func.get_axes();
-    bvpl_kernel_vector_sptr vec_kernel=new bvpl_kernel_vector();
-
-    for(unsigned i=0;i<axes.size();i++)
-    {
-        this->set_rotation_axis(axes[i]);
-        vec_kernel->kernels_.push_back(vcl_make_pair(axes[i], new bvpl_kernel(this->create())));
-    }
-    return vec_kernel;
+  vcl_vector<vnl_float_3> axes=func.get_axes();
+  vcl_vector<float> angles = func.get_angles();
+  
+  bvpl_kernel_vector_sptr vec_kernel=new bvpl_kernel_vector();
+  
+  for(unsigned i=0;i<axes.size();i++)
+  {
+    this->set_rotation_axis(axes[i]);
+    this->set_angle(angles[i]);
+    vec_kernel->kernels_.push_back(vcl_make_pair(axes[i], new bvpl_kernel(this->create())));
+  }
+  return vec_kernel;
 }
-
-
 
 #endif
