@@ -139,7 +139,7 @@ bvpl_kernel_vector_sptr bvpl_kernel_factory::create_kernel_vector(F func)
   {
     this->set_rotation_axis(axes[i]);
     this->set_angle(angles[i]);
-    vec_kernel->kernels_.push_back(vcl_make_pair(axes[i], new bvpl_kernel(this->create())));
+    vec_kernel->kernels_.push_back(new bvpl_kernel(this->create()));
   }
   return vec_kernel;
 }

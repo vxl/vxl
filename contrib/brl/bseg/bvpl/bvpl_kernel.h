@@ -28,11 +28,13 @@ class bvpl_kernel: public vbl_ref_count
     //: Default constructor
     bvpl_kernel() {id_=++id_cnt;}
     //: Constructor
-    bvpl_kernel(bvpl_kernel_iterator kernel, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt)
-    : kernel_(kernel),dim_(dim),min_(min_pt),max_(max_pt) {id_=++id_cnt;}
+    bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt)
+    : kernel_(kernel),axis_(axis), angle_(angle),dim_(dim),min_(min_pt),max_(max_pt) {id_=++id_cnt;}
     //: Destructor
     ~bvpl_kernel() {}
     bvpl_kernel_iterator iterator(){return kernel_;}
+    vnl_float_3 axis(){return axis_;}
+    float angle(){return angle_;}
     vgl_vector_3d<int> dim()const {return dim_;}
     vgl_point_3d<int> min() const {return min_;}
     vgl_point_3d<int> max() const {return max_;}
@@ -69,14 +71,16 @@ class bvpl_kernel: public vbl_ref_count
     
     unsigned id(){return id_;}
     static unsigned id_cnt;
-  
+    
   private:
     bvpl_kernel_iterator kernel_;
+    vnl_float_3 axis_;
+    float angle_;
     vgl_vector_3d<int> dim_;
     vgl_point_3d<int> min_;
     vgl_point_3d<int> max_;
     unsigned int id_;
-  };
+};
 
 typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 
@@ -84,15 +88,14 @@ typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 class bvpl_kernel_vector : public vbl_ref_count
 {
   public:
-    typedef vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > >::iterator iterator;
+    typedef vcl_vector< bvpl_kernel_sptr >::iterator iterator;
     //: Default constructor
     bvpl_kernel_vector() {}
     
     iterator begin() { return kernels_.begin(); }
     iterator end()   { return kernels_.end(); }
-    //: vector of kernel and their corresponding orientation axis.
-    // Note that the magnitude of the vector corresponds to the rotation angle around that axis
-    vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > > kernels_;
+    //: vector of kernel 
+    vcl_vector< bvpl_kernel_sptr> kernels_;
 };
 
 typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;

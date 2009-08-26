@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 SET(bvpl_sources
     bvpl_voxel_subgrid.h               bvpl_voxel_subgrid.txx
     bvpl_subgrid_iterator.h            bvpl_subgrid_iterator.txx
+    bvpl_kernel.h                      bvpl_kernel.cxx
     bvpl_kernel_iterator.h
     bvpl_edge2d_functor.h              bvpl_edge2d_functor.txx
     bvpl_opinion_functor.h             bvpl_opinion_functor.cxx

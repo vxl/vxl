@@ -17,6 +17,7 @@
 #include <brdb/brdb_value.h>
 
 #include <bvpl/bvpl_edge2d_kernel_factory.h>
+#include <bvpl/bvpl_create_directions.h>
 
 
 
@@ -67,9 +68,10 @@ bool bvpl_create_edge2d_kernel_vector_process(bprb_func_process& pro)
   
   //Create the factory and get the vector of kernels
   bvpl_edge2d_kernel_factory factory(height, width);
-  bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector();
-  
+  bvpl_create_directions_c dir;
+  bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
   pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
+  
   
   
   return true;

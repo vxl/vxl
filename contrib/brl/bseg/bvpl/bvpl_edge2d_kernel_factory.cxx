@@ -103,6 +103,7 @@ void bvpl_edge2d_kernel_factory::create_canonical()
   return;
 }
 
+#if 0
 
 /******************Batch Methods ***********************/
 
@@ -181,3 +182,4 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector(float p
   //to be impemented
   return 0;
 }
+#endif

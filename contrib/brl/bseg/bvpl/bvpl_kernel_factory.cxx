@@ -14,7 +14,7 @@ bvpl_kernel
 bvpl_kernel_factory::create()
 {
   bvpl_kernel_iterator iter = interpolate(rotate(angle_));
-  bvpl_kernel kernel(iter, dim(), max3d_, min3d_);
+  bvpl_kernel kernel(iter, rotation_axis_, angle_,dim(), max3d_, min3d_);
 
   return kernel;
 }
@@ -24,7 +24,7 @@ bvpl_kernel
 bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
 {
   this->set_rotation_axis(rotation_axis);
-  return bvpl_kernel(interpolate(rotate(angle)), dim(), max3d_, min3d_);
+  return bvpl_kernel(interpolate(rotate(angle)), rotation_axis_, angle_, dim(), max3d_, min3d_);
 }
 
 //: Rounds coordinates of kernel to the nearest integer
@@ -75,12 +75,13 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
     vcl_cout << "Rotation axis magnitude is zero, returning withount modifycation of kernel\n";
     return ;
   }
-
+  
+  rotation_axis_ = rotation_axis;
+  
   //spherical coordinates of the rotation axis.
-
   float radius = 1.0f,
-        theta = vcl_atan2(rotation_axis[1],rotation_axis[0]), //azimuth,
-        phi = vcl_acos(rotation_axis[2]/radius); //zenith
+        theta = vcl_atan2(rotation_axis_[1],rotation_axis_[0]), //azimuth,
+        phi = vcl_acos(rotation_axis_[2]/radius); //zenith
 
   //set kernel back to its caninical form , since the rotation is calculated from its canonical position
   kernel_ = canonical_kernel_;
@@ -88,31 +89,22 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
   //construct a rotation to rotate vector a to vector b;
   //if a and b are oposite, then this rotation is ambiguos(infinitely many axis of rotation)
   //and we will choose to reflect
- if (vnl_cross_3d(canonical_rotation_axis_, rotation_axis).two_norm()<1e-2)
-
-  {
-    if (dot_product(canonical_rotation_axis_, rotation_axis) < 0) //opposite vectors
+ if (vnl_cross_3d(canonical_rotation_axis_, rotation_axis_).two_norm()<1e-2)
+ {
+    if (dot_product(canonical_rotation_axis_, rotation_axis_) < 0) //opposite vectors
     {
       vnl_float_3 axis_perp(float(vcl_cos(theta)*vcl_sin(phi+vnl_math::pi_over_2)),
                                           float(vcl_sin(theta)*vcl_sin(phi+vnl_math::pi_over_2)),
                                           float(vcl_cos(phi+vnl_math::pi_over_2)));
       vgl_rotation_3d<float> r_align(vnl_quaternion<float>(axis_perp, float(vnl_math::pi)));
-      rotation_axis_ = rotation_axis;
       kernel_ = rotate(r_align);
       return;
     }
     else //vectors are identical
-    {
-      vcl_cout << "Rotation axis magnitude is zero, returning withount modifycation of kernel\n";
-      return ;
-    }
+      return;  
   }
 
-  //roatete
-  rotation_axis_ = rotation_axis;
-
-
-  vgl_rotation_3d<float> r_align(canonical_rotation_axis_, rotation_axis);
+  vgl_rotation_3d<float> r_align(canonical_rotation_axis_, rotation_axis_);
 
   kernel_= rotate(r_align);
 

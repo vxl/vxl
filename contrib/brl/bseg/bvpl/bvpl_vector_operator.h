@@ -58,8 +58,8 @@ void bvpl_vector_operator<T,F>::apply_and_suppress(bvxm_voxel_grid<T>* grid,
 
   for (; vit!=kernel_vector->kernels_.end(); ++vit)
   {
-    bvpl_kernel_sptr kernel = (*vit).second;
-    vnl_vector_fixed<float, 3> axis = vit->first;
+    bvpl_kernel_sptr kernel = *vit;
+    vnl_float_3 axis = (*vit)->axis();
     vcl_cout << "Processing axis: " << axis << vcl_endl;
     oper->operate(grid, kernel, &temp_grid);
     get_max_orientation_grid(out_grid, &temp_grid, orientation_grid, axis);
