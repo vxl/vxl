@@ -7,6 +7,7 @@ doxygen_add_library(contrib/mul/clsfy
   )
 
 SET(clsfy_sources
+ clsfy_add_all_loaders.cxx                    clsfy_add_all_loaders.h
  clsfy_binary_hyperplane.cxx                  clsfy_binary_hyperplane.h
  clsfy_binary_hyperplane_ls_builder.cxx       clsfy_binary_hyperplane_ls_builder.h
  clsfy_binary_hyperplane_gmrho_builder.cxx    clsfy_binary_hyperplane_gmrho_builder.h
@@ -21,6 +22,7 @@ SET(clsfy_sources
  clsfy_parzen_builder.cxx                     clsfy_parzen_builder.h
  clsfy_random_builder.cxx                     clsfy_random_builder.h
  clsfy_random_classifier.cxx                  clsfy_random_classifier.h
+ clsfy_null_classifier.cxx                    clsfy_null_classifier.h
  clsfy_classifier_1d.cxx                      clsfy_classifier_1d.h
  clsfy_binary_threshold_1d.cxx                clsfy_binary_threshold_1d.h
  clsfy_binary_threshold_1d_builder.cxx        clsfy_binary_threshold_1d_builder.h

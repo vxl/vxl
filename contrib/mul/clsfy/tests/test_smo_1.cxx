@@ -21,7 +21,7 @@
 
 //=======================================================================
 
-void test_smo()
+void test_smo_1()
 {
   vcl_cout << "\n\n\n"
            << "*************************\n"
@@ -189,4 +189,4 @@ void test_smo()
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
 
-TESTLIB_DEFINE_MAIN(test_smo);
+TESTMAIN(test_smo_1);

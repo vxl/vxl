@@ -441,5 +441,5 @@ void test_clsfy_geman_mcclure_build()
     delete pClassifier;
 }
 
-TESTLIB_DEFINE_MAIN(test_binary_hyperplane);
+TESTMAIN(test_binary_hyperplane);
 

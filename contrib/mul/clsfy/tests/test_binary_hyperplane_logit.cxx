@@ -14,7 +14,7 @@
 #include <mbl/mbl_data_array_wrapper.h>
 
 //: Tests the clsfy_binary_hyperplane_logit_builder class
-void test_binary_hyperplane_logit_builder()
+void test_binary_hyperplane_logit()
 {
   vcl_cout << "**************************************\n"
            << " Testing clsfy_binary_hyperplane_logit_builder_builder\n"
@@ -59,4 +59,4 @@ void test_binary_hyperplane_logit_builder()
   vcl_cout<<"Mean error: "<<mean_error<<vcl_endl;
 }
 
-TESTLIB_DEFINE_MAIN(test_binary_hyperplane_logit_builder);
+TESTMAIN(test_binary_hyperplane_logit);

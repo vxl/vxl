@@ -21,7 +21,7 @@
 #endif
 
 //: Tests the clsfy_binary_threshold_1d class
-void test_adaboost()
+void test_binary_threshold_1d()
 {
   vcl_cout << "*******************************************\n"
            << " Testing clsfy_binary_threshold_1d_builder\n"
@@ -235,4 +235,4 @@ void test_adaboost()
   vsl_delete_all_loaders();
 }
 
-TESTLIB_DEFINE_MAIN(test_adaboost);
+TESTMAIN(test_binary_threshold_1d);

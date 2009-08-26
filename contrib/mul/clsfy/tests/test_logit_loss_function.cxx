@@ -81,4 +81,4 @@ void test_logit_loss_function()
   TEST_NEAR("compute g",(gradient-g2).rms(),0,1e-5);
 }
 
-TESTLIB_DEFINE_MAIN(test_logit_loss_function);
+TESTMAIN(test_logit_loss_function);

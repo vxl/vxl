@@ -113,4 +113,4 @@ void test_binary_pdf_classifier()
 
 }
 
-TESTLIB_DEFINE_MAIN(test_binary_pdf_classifier);
+TESTMAIN(test_binary_pdf_classifier);

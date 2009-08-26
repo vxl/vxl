@@ -273,4 +273,4 @@ void test_adaboost()
   vsl_delete_all_loaders();
 }
 
-TESTLIB_DEFINE_MAIN(test_adaboost);
+TESTMAIN(test_adaboost);

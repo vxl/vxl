@@ -16,17 +16,48 @@
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
+#include <mbl/mbl_cloneables_factory.h>
+#include <mbl/mbl_read_props.h>
 
-//=======================================================================
 
-clsfy_builder_base::clsfy_builder_base()
+
+//: Initialise the parameters from a text stream.
+// Default case accepts no parameters.
+void clsfy_builder_base::config(vcl_istream &as)
 {
+  mbl_read_props_type props = mbl_read_props_ws(as);
+    
+  // Check there are no unused properties
+  mbl_read_props_look_for_unused_props("clsfy_builder_base::config",
+                                       props, mbl_read_props_type());
 }
 
 //=======================================================================
-
-clsfy_builder_base::~clsfy_builder_base()
+//: Load description from a text stream
+// The stream should contain the name of the feature extractor
+// class that will be used, followed by a brace-enclosed list of
+// parameters for the builder. This function will construct
+// the appropriate seg3d_feature_extractor derivative and return that.
+// \throws if the parse fails.
+vcl_auto_ptr<clsfy_builder_base> clsfy_builder_base::new_builder(
+  vcl_istream &as)
 {
+  vcl_string name;
+  as >> name;
+
+  vcl_auto_ptr<clsfy_builder_base> ps;
+  try
+  {
+    ps = mbl_cloneables_factory<clsfy_builder_base>::get_clone(name);
+  }
+  catch (const mbl_exception_no_name_in_factory & e)
+  {
+    throw (mbl_exception_parse_error( e.what() ));
+  }
+
+  ps->config(as);
+  
+  return ps;
 }
 
 

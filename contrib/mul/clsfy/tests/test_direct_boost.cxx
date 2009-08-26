@@ -25,18 +25,9 @@
 #endif
 
 //: Extracts the j-th element of each vector in data and puts into v
+// Defined in test_adaboost;
 void get_1d_inputs(vnl_vector<double>& v,
-                   mbl_data_wrapper<vnl_vector<double> >& data, int j)
-{
-  unsigned long n = data.size();
-  v.set_size(n);
-  data.reset();
-  for (unsigned long i=0;i<n;++i)
-  {
-    v[i] = data.current()[j];
-    data.next();
-  }
-}
+                   mbl_data_wrapper<vnl_vector<double> >& data, int j);
 
 
 //: Tests the clsfy_direct_boost and clsfy_direct_boost_builder classes
@@ -205,4 +196,4 @@ void test_direct_boost()
   vsl_delete_all_loaders();
 }
 
-TESTLIB_DEFINE_MAIN(test_direct_boost);
+TESTMAIN(test_direct_boost);

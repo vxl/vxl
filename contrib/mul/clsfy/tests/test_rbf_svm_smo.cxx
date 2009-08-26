@@ -29,7 +29,7 @@
 #endif
 
 //=======================================================================
-void test_rbf_svm()
+void test_rbf_svm_smo()
 {
   vcl_cout << "*************************************\n"
            << " Testing clsfy_rbf_svm_smo_1_builder\n"
@@ -271,4 +271,4 @@ void test_rbf_svm()
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
 
-TESTLIB_DEFINE_MAIN(test_rbf_svm);
+TESTMAIN(test_rbf_svm_smo);

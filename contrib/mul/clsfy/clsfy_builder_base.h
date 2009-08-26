@@ -14,6 +14,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_memory.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 
@@ -23,12 +24,8 @@ class clsfy_classifier_base;
 class clsfy_builder_base
 {
  public:
-
-  // Dflt ctor
-  clsfy_builder_base();
-
   // Destructor
-  virtual ~clsfy_builder_base();
+  virtual ~clsfy_builder_base() {}
 
   //: Create empty model
   virtual clsfy_classifier_base* new_classifier() const = 0;
@@ -59,6 +56,15 @@ class clsfy_builder_base
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs) = 0;
+
+  //: Load description from a text stream
+  static vcl_auto_ptr<clsfy_builder_base> new_builder(
+    vcl_istream &as);
+
+  //: Initialise the parameters from a text stream.
+  // Default case accepts no parameters.
+  virtual void config(vcl_istream &as);
+
 };
 
 //: Allows derived class to be loaded by base-class pointer

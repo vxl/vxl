@@ -346,4 +346,4 @@ void test_k_nearest_neighbour()
   vsl_delete_all_loaders();
 }
 
-TESTLIB_DEFINE_MAIN(test_k_nearest_neighbour);
+TESTMAIN(test_k_nearest_neighbour);

@@ -21,7 +21,7 @@
 #endif
 
 //: Tests the clsfy_mean_square_1d class
-void test_adaboost()
+void test_mean_square_1d()
 {
   vcl_cout << "**************************************\n"
            << " Testing clsfy_mean_square_1d_builder\n"
@@ -187,4 +187,4 @@ void test_adaboost()
   vsl_delete_all_loaders();
 }
 
-TESTLIB_DEFINE_MAIN(test_adaboost);
+TESTMAIN(test_mean_square_1d);
