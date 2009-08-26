@@ -6,6 +6,7 @@ DECLARE( test_neighb_oper );
 DECLARE( test_bvpl_kernel_functors );
 DECLARE( test_direction_to_color_map );
 DECLARE( test_bvpl_vector_operator );
+DECLARE( test_vector_directions );
 
 void register_tests()
 {
@@ -15,6 +16,7 @@ void register_tests()
   REGISTER( test_bvpl_kernel_functors);
   REGISTER( test_direction_to_color_map);
   REGISTER( test_bvpl_vector_operator);
+  REGISTER( test_vector_directions);
 
 }
 

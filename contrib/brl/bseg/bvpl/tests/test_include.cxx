@@ -14,7 +14,7 @@
 #include <bvpl/bvpl_subgrid_iterator.h>
 #include <bvpl/bvpl_vector_operator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
-
+#include <bvpl/bvpl_kernel.h>
 #include <bvpl/pro/bvpl_processes.h>
 #include <bvpl/pro/bvpl_register.h>
 

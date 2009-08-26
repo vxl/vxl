@@ -116,7 +116,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
   vnl_random rand;
   for (unsigned j=0;j<kernel_vec->kernels_.size();j++)
   {
-    axis=kernel_vec->kernels_[j].first;
+    axis=kernel_vec->kernels_[j]->axis();
     axis[0]+=float(rand.normal()*sigma_noise);
     axis[1]+=float(rand.normal()*sigma_noise);
     axis[2]+=float(rand.normal()*sigma_noise);
@@ -128,7 +128,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     unsigned axis_result=0;
     for (unsigned i=0;i<kernel_vec->kernels_.size();i++)
     {
-      data_type val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i].second,func);
+      data_type val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i],func);
 #ifdef DEBUG
       if (val>0)
         entropy_sum-=val*vcl_log(val);
@@ -141,7 +141,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     }
     if (axis_result!=j)
     {
-      vcl_cout<<"Val: "<<max_val<<" Result axis: "<<kernel_vec->kernels_[axis_result].first
+      vcl_cout<<"Val: "<<max_val<<" Result axis: "<<kernel_vec->kernels_[axis_result]->axis()
               <<"Orig axis: "<<axis<<vcl_endl;
       flag=false;
     }
@@ -167,7 +167,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
   vnl_random rand;
   for (unsigned j=0;j<kernel_vec->kernels_.size();j++)
   {
-    axis=kernel_vec->kernels_[j].first;
+    axis=kernel_vec->kernels_[j]->axis();
     axis[0]+=float(rand.normal()*sigma_noise);
     axis[1]+=float(rand.normal()*sigma_noise);
     axis[2]+=float(rand.normal()*sigma_noise);
@@ -179,21 +179,21 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     unsigned axis_result=0;
     for (unsigned i=0;i<kernel_vec->kernels_.size();i++)
     {
-      bsta_gauss_f1 val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i].second,func);
+      bsta_gauss_f1 val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i],func);
 #ifdef DEBUG
       if (val>0)
         entropy_sum-=val*vcl_log(val);
 #endif
-      if (vcl_abs(val.mean()/val.var())>vcl_abs(max_val.mean()/max_val.var()))
+      if (vcl_abs(val.mean())>vcl_abs(max_val.mean()))
       {
         max_val=val;
         axis_result=i;
       }
     }
-    response[j] = max_val.mean()/max_val.var();
+    response[j] = max_val.mean();
     if (axis_result!=j)
     {
-      vcl_cout<<"Val: "<<max_val.mean()/max_val.var()<<" Result axis: "<<kernel_vec->kernels_[axis_result].first
+      vcl_cout<<"Val: "<<max_val.mean() <<" Result axis: "<<kernel_vec->kernels_[axis_result]->axis()
               <<"Orig axis: "<<axis<<vcl_endl;
       flag=false;
     }
@@ -312,9 +312,13 @@ void test_gauss_convolve()
 MAIN(test_bvpl_kernel_functors)
 {
   //test algebraic, geometric and opinion functors
+  vcl_cout << "-------------------------\n";
+  vcl_cout << "Testing edged functors \n";
   test_edge_functors();
 
   //test gaussian convolution functor
+  vcl_cout << "-------------------------\n";
+  vcl_cout << "Testing gaussian functors \n";
   test_gauss_convolve();
 
   //test that kernels detect max response at appropiate plane direction

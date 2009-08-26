@@ -25,9 +25,8 @@ static void test_direction_to_color_map()
     }
   }
   bvpl_direction_to_color_map color_map(samples,"random");
-  color_map.make_svg_color_map("d:/cmap.svg");
+  color_map.make_svg_color_map("cmap.svg");
 
-  int a;vcl_cin>>a;
 }
 
 TESTMAIN( test_direction_to_color_map );

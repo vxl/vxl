@@ -3,6 +3,7 @@
 #include <testlib/testlib_test.h>
 #include <bvpl/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
+#include <bvpl/bvpl_corner2d_kernel_factory.h>
 #include <bvpl/bvpl_gauss3d_xx_kernel_factory.h>
 #include <bvpl/bvpl_create_directions.h> 
 
@@ -63,11 +64,11 @@ bool test_edge3d()
   bvpl_create_directions_b dir;
   bvpl_kernel_vector_sptr kernel_3d_vecs = kernel_3d.create_kernel_vector(dir);
 
-  vcl_vector< vcl_pair<vnl_float_3, bvpl_kernel_sptr > >::iterator iter=kernel_3d_vecs->begin();
+  vcl_vector< bvpl_kernel_sptr >::iterator iter=kernel_3d_vecs->begin();
   
   for (;iter!=kernel_3d_vecs->end();iter++)
   {
-    vnl_float_3 axis=iter->first;
+    vnl_float_3 axis=(*iter)->axis();
 #if 0
     vcl_ostringstream s;
     s.precision(2);
@@ -76,7 +77,7 @@ bool test_edge3d()
     << axis[1] << '_'
     << axis[2] << ".raw";
     
-    iter->second->save_raw(s.str());
+    (*iter)->save_raw(s.str());
 #endif
   }
   return true;
@@ -140,7 +141,7 @@ void print_directions( bvpl_kernel_vector_sptr kernel_vector)
   
   for (; vit!=kernel_vector->kernels_.end(); ++vit)
   {
-    vnl_vector_fixed<float, 3> coord = vit->first;
+    vnl_float_3 coord = (*vit)->axis();
     ofs.precision(2);
     ofs << coord[0] << ' ' << coord[1] << ' ' << coord[2] << "\n" ; 
   }
@@ -248,11 +249,52 @@ bool test_gaussian()
   return true;
 }
 
+bool test_corner2d()
+{
+  unsigned length = 5;
+  unsigned width = 7;
+  unsigned thickness = 3;
+  
+  {
+    bvpl_corner2d_kernel_factory factory(length, width, thickness);
+    factory.set_angle(vnl_math::pi_over_4);
+    bvpl_kernel kernel = factory.create();
+    vcl_cout << "Canonical kernel " ;
+    kernel.cum_sum();
+  }
+  
+#if 0  //Comment this out if you whish to print kernels to raw file for vizualization
+  {
+    bvpl_corner2d_kernel_factory factory1(50,35,25);
+    factory1.set_rotation_axis( vnl_float_3(0, 1, 0));
+    bvpl_kernel kernel = factory1.create();
+    
+    kernel.save_raw("corner_010_kernel.raw");
+    kernel.print_to_file("cornel_010_kernel.txt");
+    vcl_cout << "0 1 0 kernel " ;
+    kernel.cum_sum();
+  }
+#endif
+  
+  // test the kernel vector
+  
+//  bvpl_create_directions_b dir;
+//  bvpl_kernel_vector_sptr kernel_3d_vecs = factory.create_kernel_vector(dir);
+  
+#if 0   //Comment this out if you whish to print kernels directions  for vizualization
+  print_directions(kernel_vector);
+#endif
+  
+    return true;
+}
+
+
 MAIN(test_bvpl_kernels)
 {
   TEST("Test edge2d kernel", true, test_edge2d());
   TEST("Test edge3d kernel", true, test_edge3d());
   TEST("Test gauss kernel", true,  test_gaussian());
+  TEST("Test corner2d kernel", true,  test_corner2d());
   SUMMARY();
 }
 
