@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief File to store different functor to sample 3D directions on a sphere.
-//        The sphere is modeled by two angles azimuthal(\theta) and elevation(\phi)
+//        The sphere is modeled by two angles azimuthal(\theta) and elevation(\phi from pole)
 //
 // \author Vishal Jain (vj@lems.brown.edu)
 // \date June 29, 2009
@@ -23,7 +23,6 @@
 // phi=0, theta=0;
 // phi=pi/4 theta = [0, 2\pi)
 // phi=pi/2 theta = [0, 2\pi)
-
 class bvpl_create_directions_a
 {
  public:
@@ -34,11 +33,18 @@ class bvpl_create_directions_a
   ~bvpl_create_directions_a() {}
 
   vcl_vector<vnl_float_3> get_axes(){ return axes_;}
+  vcl_vector<float> get_angles(){ return angles_;}
 
+  
  private:
   vcl_vector<vnl_float_3> axes_;
+  vcl_vector<float> angles_;
 };
 
+//: This class samples
+// phi = 0, theta= 0;
+// phi = pi/4 theta =[0, 2*pi)
+// phi = pi/2 theta = [0, 3*pi/2)
 class bvpl_create_directions_b
 {
  public:
@@ -49,9 +55,33 @@ class bvpl_create_directions_b
   ~bvpl_create_directions_b() {}
 
   vcl_vector<vnl_float_3> get_axes(){ return axes_;}
+  vcl_vector<float> get_angles(){ return angles_;}
 
  private:
   vcl_vector<vnl_float_3> axes_;
+  vcl_vector<float> angles_;
 };
 
+
+//: This class samples
+// phi = 0, theta= 0;
+// phi = pi/4 theta =[0, 2*pi)
+// phi = pi/2 theta = [0, 2*pi)
+// rotation around the axis with resolution pi/4
+class bvpl_create_directions_c
+  {
+  public:
+    //: Default constructor
+    bvpl_create_directions_c();
+    
+    //: Destructor
+    ~bvpl_create_directions_c() {}
+    
+    vcl_vector<vnl_float_3> get_axes(){ return axes_;}
+    vcl_vector<float> get_angles(){ return angles_;}
+    
+  private:
+    vcl_vector<vnl_float_3> axes_;
+    vcl_vector<float> angles_;
+  };
 #endif //bvpl_create_directions_h_
