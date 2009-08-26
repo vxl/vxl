@@ -15,6 +15,7 @@
 #include <vcl_string.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
+#include <clsfy/clsfy_add_all_loaders.h>
 #include <clsfy/clsfy_knn_builder.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_rbf_parzen.h>
@@ -23,6 +24,7 @@
 #include <vnl/vnl_random.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_data_array_wrapper.h>
+#include <mbl/mbl_test.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 
@@ -48,6 +50,8 @@ void test_k_nearest_neighbour()
 
   vcl_cout<<"\n======== TESTING CONSTRUCTION ===========\n";
 
+
+  clsfy_add_all_loaders();
 
   vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
   const unsigned nDims = 2;
@@ -242,6 +246,18 @@ void test_k_nearest_neighbour()
   TEST_NEAR("test error on clsfy_random_classifier close to 0.5",
             clsfy_test_error(rc, test_set_inputs, testLabels), 0.5, 0.05);
 
+  vcl_cout << "****************Testing builder configuration**************\n";
+  {
+    clsfy_knn_builder knn_build;
+    knn_build.set_k(5);
+
+    vcl_istringstream ss("clsfy_knn_builder { k: 5 }\n");
+    vcl_auto_ptr<clsfy_builder_base> knn_build_conf =
+      clsfy_builder_base::new_builder(ss);
+
+    TEST("Builder config knn", mbl_test_summaries_are_equal(knn_build_conf.get(),
+      static_cast<clsfy_builder_base*>(&knn_build) ), true);
+  }
   vcl_cout << "****************Testing builder**************\n";
 
   rc.class_probabilities(out, x);
@@ -253,8 +269,6 @@ void test_k_nearest_neighbour()
 
   vcl_string test_path = "test_k_nearest_neighbour.bvl.tmp";
 
-  vsl_add_to_binary_loader(clsfy_k_nearest_neighbour());
-  vsl_add_to_binary_loader(clsfy_rbf_parzen());
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
 

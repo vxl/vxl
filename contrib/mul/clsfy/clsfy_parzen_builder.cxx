@@ -15,6 +15,9 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vul/vul_string.h>
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
 #include <clsfy/clsfy_rbf_parzen.h>
 
 //=======================================================================
@@ -156,3 +159,29 @@ clsfy_classifier_base* clsfy_parzen_builder::new_classifier() const
   return new clsfy_rbf_parzen();
 }
 
+//=======================================================================
+//: Initialise the parameters from a text stream.
+// The next non-ws character in the stream should be a '{'
+// \verbatim
+// {
+//   sigma: 1.0  (optional, width of RBF)
+//   power: 2.0  (optional, exponent of RBF)
+// }
+// \endverbatim
+// \throw mbl_exception_parse_error if the parse fails.
+void clsfy_parzen_builder::config(vcl_istream &as)
+{
+ vcl_string s = mbl_parse_block(as);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  {
+    sigma_= vul_string_atof(props.get_optional_property("sigma", "1.0"));
+    power_= vul_string_atof(props.get_optional_property("k", "2.0"));
+  }
+
+  // Check for unused props
+  mbl_read_props_look_for_unused_props(
+    "clsfy_knn_builder::config", props, mbl_read_props_type());
+}

@@ -69,15 +69,9 @@ class clsfy_knn_builder : public clsfy_builder_base
 
   //: Set the number of nearest neighbours to look for.
   void set_k(unsigned);
+
+  //: Initialise the parameters from a text stream.
+  void config(vcl_istream &as);
 };
-
-//: Binary file stream output operator for class reference
-void vsl_b_write(vsl_b_ostream& bfs, const clsfy_knn_builder& b);
-
-//: Binary file stream input operator for class reference
-void vsl_b_read(vsl_b_istream& bfs, clsfy_knn_builder& b);
-
-//: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_knn_builder& b);
 
 #endif // clsfy_knn_builder_h_

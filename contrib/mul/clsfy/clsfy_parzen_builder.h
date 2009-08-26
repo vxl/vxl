@@ -86,15 +86,10 @@ class clsfy_parzen_builder : public clsfy_builder_base
   // Toward +inf gives a broader peak, and shorter tail.
   // The default value is 2, giving a Gaussian distribution.
   void set_power(double p);
+
+  //: Initialise the parameters from a text stream.
+  void config(vcl_istream &as);
 };
 
-//: Binary file stream output operator for class reference
-void vsl_b_write(vsl_b_ostream& bfs, const clsfy_parzen_builder& b);
-
-//: Binary file stream input operator for class reference
-void vsl_b_read(vsl_b_istream& bfs, clsfy_parzen_builder& b);
-
-//: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_parzen_builder& b);
 
 #endif // clsfy_parzen_builder_h_

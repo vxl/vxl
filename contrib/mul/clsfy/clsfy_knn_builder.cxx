@@ -15,6 +15,9 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vul/vul_string.h>
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 
 //=======================================================================
@@ -143,3 +146,27 @@ clsfy_classifier_base* clsfy_knn_builder::new_classifier() const
   return new clsfy_k_nearest_neighbour();
 }
 
+//=======================================================================
+//: Initialise the parameters from a text stream.
+// The next non-ws character in the stream should be a '{'
+// \verbatim
+// {
+//   k: 3  (default 1)
+// }
+// \endverbatim
+// \throw mbl_exception_parse_error if the parse fails.
+void clsfy_knn_builder::config(vcl_istream &as)
+{
+ vcl_string s = mbl_parse_block(as);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  {
+    k_= vul_string_atoi(props.get_optional_property("k", "1"));
+  }
+
+  // Check for unused props
+  mbl_read_props_look_for_unused_props(
+    "clsfy_knn_builder::config", props, mbl_read_props_type());
+}
