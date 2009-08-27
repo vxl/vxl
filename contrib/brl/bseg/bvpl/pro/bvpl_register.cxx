@@ -27,5 +27,6 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compare_surface_and_normal_process, "bvplCompareSurfaceAndNormalProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_susan_opinion_operator_process, "bvplSusanOpinionOperatorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_kernel_id_to_axis_process, "bvplKernelIdToAxisProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_non_max_suppression_process, "bvplNonMaxSuppressionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_visualize_response_process, "bvplVisualizeResponseProcess");
 }

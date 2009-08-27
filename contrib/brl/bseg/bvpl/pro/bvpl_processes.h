@@ -17,6 +17,8 @@ DECLARE_FUNC_CONS(bvpl_convert_direction_to_hue_process);
 DECLARE_FUNC_CONS(bvpl_compare_surface_and_normal_process);
 DECLARE_FUNC_CONS(bvpl_susan_opinion_operator_process);
 DECLARE_FUNC_CONS(bvpl_kernel_id_to_axis_process);
+DECLARE_FUNC_CONS(bvpl_non_max_suppression_process);
+DECLARE_FUNC_CONS(bvpl_visualize_response_process);
 //the init functions
 
 #endif

@@ -106,7 +106,7 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
     if (functor_name == "edge2d") {
       bvpl_edge2d_functor<float> func;
       bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
-      bvpl_vector_operator<float, bvpl_edge2d_functor<float> > vector_oper;
+      bvpl_vector_operator vector_oper;
       vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
@@ -115,7 +115,7 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
     if (functor_name == "edge_algebraic_mean") {
       bvpl_edge_algebraic_mean_functor<float> func;
       bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
-      bvpl_vector_operator<float, bvpl_edge_algebraic_mean_functor<float> > vector_oper;
+      bvpl_vector_operator vector_oper;
       vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
@@ -124,7 +124,7 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
     if (functor_name == "edge_geometric_mean") {
       bvpl_edge_geometric_mean_functor<float> func;
       bvpl_neighb_operator<float, bvpl_edge_geometric_mean_functor<float> > oper(func);
-      bvpl_vector_operator<float, bvpl_edge_geometric_mean_functor<float> > vector_oper;
+      bvpl_vector_operator vector_oper;
       vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
@@ -137,7 +137,7 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
     bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
     bvpl_opinion_functor func;
     bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
-    bvpl_vector_operator<bvxm_opinion,  bvpl_opinion_functor> vector_oper;
+    bvpl_vector_operator vector_oper;
     vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
@@ -151,7 +151,7 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
       if (functor_name == "gauss_convolution") {
         bvpl_gauss_convolution_functor func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
-        bvpl_vector_operator<gauss_type, bvpl_gauss_convolution_functor> vector_oper;
+        bvpl_vector_operator vector_oper;
         vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
