@@ -59,16 +59,16 @@ MAIN(test_bvpl_vector_operator)
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
   vcl_string out_grid_path="out_grid.vox";
-  vcl_string orientation_grid_path="orientation_grid.vox";
+  vcl_string id_grid_path="orientation_grid.vox";
   vcl_string out_grid_expectation_path="out_grid_expectation.vox";
 
   bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
-  bvxm_voxel_grid<vnl_float_3 > *orientation_grid
-    =new bvxm_voxel_grid<vnl_float_3 >(orientation_grid_path, grid->grid_size());
+  bvxm_voxel_grid<unsigned > *id_grid
+    =new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
   bvpl_opinion_functor func;
   bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
   bvpl_vector_operator<bvxm_opinion,  bvpl_opinion_functor> vector_oper;
-  vector_oper.apply_and_suppress(grid,kernel_vec,&oper,grid_out, orientation_grid);
+  vector_oper.apply_and_suppress(grid,kernel_vec,&oper,grid_out, id_grid);
 
   bvxm_voxel_grid<float> *out_grid_expectation=new bvxm_voxel_grid<float>(out_grid_expectation_path,grid->grid_size());
   bvxm_expectation_opinion_voxel_grid(grid_out,out_grid_expectation);
