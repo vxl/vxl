@@ -23,6 +23,7 @@ SET(clsfy_sources
  clsfy_random_builder.cxx                     clsfy_random_builder.h
  clsfy_random_classifier.cxx                  clsfy_random_classifier.h
  clsfy_null_classifier.cxx                    clsfy_null_classifier.h
+ clsfy_null_builder.cxx                       clsfy_null_builder.h
  clsfy_classifier_1d.cxx                      clsfy_classifier_1d.h
  clsfy_binary_threshold_1d.cxx                clsfy_binary_threshold_1d.h
  clsfy_binary_threshold_1d_builder.cxx        clsfy_binary_threshold_1d_builder.h

@@ -16,6 +16,7 @@
 #include <clsfy/clsfy_random_classifier.h>
 #include <clsfy/clsfy_random_builder.h>
 #include <clsfy/clsfy_null_classifier.h>
+#include <clsfy/clsfy_null_builder.h>
 
 void clsfy_add_all_loaders()
 {
@@ -40,5 +41,7 @@ void clsfy_add_all_loaders()
   mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_random_builder());
   
   vsl_add_to_binary_loader(clsfy_null_classifier());
+  vsl_add_to_binary_loader(clsfy_null_builder());
+  mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_null_builder());
 }
 
