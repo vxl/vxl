@@ -67,7 +67,7 @@ MAIN(test_bvpl_vector_operator)
     =new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
   bvpl_opinion_functor func;
   bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
-  bvpl_vector_operator<bvxm_opinion,  bvpl_opinion_functor> vector_oper;
+  bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vec,&oper,grid_out, id_grid);
 
   bvxm_voxel_grid<float> *out_grid_expectation=new bvxm_voxel_grid<float>(out_grid_expectation_path,grid->grid_size());
