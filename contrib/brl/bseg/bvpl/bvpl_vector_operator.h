@@ -159,7 +159,7 @@ void  bvpl_vector_operator::filter_response(bvxm_voxel_grid<T>* grid_in, bvxm_vo
     
     for (; out_slab_it!=(*out_grid_it).end(); ++out_slab_it, ++in_slab_it, ++id_slab_it)
     {
-      *out_slab_it = func_max.filter_response(*id_grid_it, targed_id, *in_slab_it);
+      *out_slab_it = func_max.filter_response(*id_slab_it, targed_id, *in_slab_it);
 
     }
   }
