@@ -98,10 +98,9 @@ inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* 
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
-//: Compute trilinear interpolation at (x,y), with bound checks
+//: Compute trilinear interpolation at (x,y), with bounds checks.
 //  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
-//  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
-//  The safe interpolatable region is [0,nx)*[0,ny).
+//  If (x,y,z) is outside safe interpolatable image region, nearest pixel value is returned.
 template<class T>
 inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, const T* data,
                                               unsigned nx, unsigned ny, unsigned nz,
@@ -115,5 +114,18 @@ inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, cons
   if (z>=nz-1) z=(double)nz-1.00000001;
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
+
+//: Compute trilinear interpolation at (x,y), using the nearest valid value if out of bounds
+//  If (x,y,z) is outside safe interpolatable image region, nearest pixel value is returned.
+template<class T>
+inline double vil3d_trilin_interp_safe_extend(const vil3d_image_view<T>& image,
+                                              double x, double y, double z,
+                                              unsigned p=0)
+{
+  return vil3d_trilin_interp_safe_extend(x, y, z, &image(0,0,0,p),
+    image.ni(), image.nj(), image.nk(),
+    image.istep(), image.jstep(), image.kstep());
+}
+
 
 #endif // vil3d_trilin_interp_h_
