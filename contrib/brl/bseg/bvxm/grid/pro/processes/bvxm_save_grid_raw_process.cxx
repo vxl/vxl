@@ -28,7 +28,7 @@ bool bvxm_save_grid_raw_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_save_grid_raw_process_globals;
   // process takes 3 inputs:
-  //input[0]: The filename of input grid
+  //input[0]: The voxel_grid
   //input[1]: The filename to write to
   //input[2]: String identifying datatype
   vcl_vector<vcl_string> input_types_(n_inputs_);
