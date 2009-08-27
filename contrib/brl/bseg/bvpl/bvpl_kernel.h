@@ -96,6 +96,25 @@ class bvpl_kernel_vector : public vbl_ref_count
     
     iterator begin() { return kernels_.begin(); }
     iterator end()   { return kernels_.end(); }
+  
+    vgl_vector_3d<int> max_dim(){
+      iterator it =  kernels_.begin(); 
+      int max_x = (*it)->dim().x();
+      int max_y = (*it)->dim().y();
+      int max_z = (*it)->dim().z();
+      for(; it!= kernels_.end(); ++it)
+      {
+        vgl_vector_3d<int> dim = (*it)->dim();
+        if(dim.x() > max_x)
+          max_x = dim.x();
+        if(dim.y() > max_y)
+          max_y = dim.y();
+        if(dim.z() > max_z)
+          max_z = dim.z();
+      }
+      return vgl_vector_3d<int>(max_x, max_y, max_z);
+    }
+    
     //: vector of kernel 
     vcl_vector< bvpl_kernel_sptr> kernels_;
 };
