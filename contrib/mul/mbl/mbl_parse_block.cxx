@@ -41,7 +41,7 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
     afs >> c;
 
     if (!afs) return "{}";
-    if (comment_length && c == *comment)
+    while (comment && comment_length && c == *comment)
     {
       for (unsigned comment_pos=1; comment_pos < comment_length; ++comment_pos)
       {
