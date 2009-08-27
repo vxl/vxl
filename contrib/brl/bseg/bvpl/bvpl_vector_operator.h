@@ -32,12 +32,12 @@ class bvpl_vector_operator
   //  i.e. the direction is the rotation axis, the magnitude is the angle
   void apply_and_suppress(bvxm_voxel_grid<T>* grid, bvpl_kernel_vector_sptr kernel_vector,
                           bvpl_neighb_operator<T,F>* oper, bvxm_voxel_grid<T>* out_grid,
-                          bvxm_voxel_grid<vnl_float_3 >* orientation_grid);
+                          bvxm_voxel_grid<unsigned >* orientation_grid);
 
   //
   void get_max_orientation_grid(bvxm_voxel_grid<T>* out_grid, bvxm_voxel_grid<T>* temp_grid,
-                                bvxm_voxel_grid<vnl_float_3 >* orientation_grid,
-                                vnl_float_3 temp_orientation);
+                                bvxm_voxel_grid<unsigned >* orientation_grid,
+                                unsigned temp_orientation);
 private:
   bvpl_local_max_functor<T> func_max_;
 };
@@ -47,25 +47,26 @@ void bvpl_vector_operator<T,F>::apply_and_suppress(bvxm_voxel_grid<T>* grid,
                                                    bvpl_kernel_vector_sptr kernel_vector,
                                                    bvpl_neighb_operator<T,F>* oper, 
                                                    bvxm_voxel_grid<T>* out_grid,
-                                                   bvxm_voxel_grid<vnl_float_3>* orientation_grid)
+                                                   bvxm_voxel_grid<unsigned>* id_grid)
 {
   bvxm_voxel_grid<T> temp_grid("temp_grid.vox",grid->grid_size());
   temp_grid.initialize_data(func_max_.min_response());
   out_grid->initialize_data(func_max_.min_response());
-  orientation_grid->initialize_data(vnl_float_3(0.0f,0.0f,0.0f));
+  id_grid->initialize_data(0);
   bvpl_kernel_vector::iterator vit = kernel_vector->kernels_.begin();
-  vnl_float_3 curr_axis(0.0f, 0.0f, 0.0f);
-
-  for (; vit!=kernel_vector->kernels_.end(); ++vit)
+ 
+  
+  //for (; vit!=kernel_vector->kernels_.end(); ++vit)
+  for(unsigned id = 0; id < kernel_vector->kernels_.size(); ++id)
   {
-    bvpl_kernel_sptr kernel = *vit;
-    vnl_float_3 axis = (*vit)->axis();
-    vcl_cout << "Processing axis: " << axis << vcl_endl;
+    bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
+    vcl_cout << "Processing axis: "  << kernel->axis() << vcl_endl;
+    vcl_cout << "Processing angle: " << kernel->angle() << vcl_endl;
+    vcl_cout << "Processing scale: " << kernel->scale() << vcl_endl;
     oper->operate(grid, kernel, &temp_grid);
-    get_max_orientation_grid(out_grid, &temp_grid, orientation_grid, axis);
+    get_max_orientation_grid(out_grid, &temp_grid, id_grid, id);
   }
-  vit = kernel_vector->kernels_.begin();
-
+ 
 #if 0
   //: code for local max suppression
   //bvpl_subgrid_iterator<T> response_grid_iter(out_grid, (*vit).second->dim());
@@ -101,25 +102,25 @@ void bvpl_vector_operator<T,F>::apply_and_suppress(bvxm_voxel_grid<T>* grid,
 
 template<class T, class F>
 void bvpl_vector_operator<T,F>::get_max_orientation_grid(bvxm_voxel_grid<T>* out_grid, bvxm_voxel_grid<T>* temp_grid,
-                            bvxm_voxel_grid<vnl_float_3 >* orientation_grid,
-                            vnl_float_3 temp_orientation)
+                            bvxm_voxel_grid<unsigned>* id_grid,
+                            unsigned id)
 {
   typename bvxm_voxel_grid<T>::iterator out_grid_it = out_grid->begin();
   typename bvxm_voxel_grid<T>::iterator temp_grid_it = temp_grid->begin();
-  bvxm_voxel_grid<vnl_float_3 >::iterator or_grid_it = orientation_grid->begin();
+  bvxm_voxel_grid<unsigned >::iterator id_grid_it = id_grid->begin();
   
-  for (; out_grid_it!=out_grid->end(); ++out_grid_it, ++temp_grid_it, ++or_grid_it)
+  for (; out_grid_it!=out_grid->end(); ++out_grid_it, ++temp_grid_it, ++id_grid_it)
   {
     typename bvxm_voxel_slab<T>::iterator out_slab_it = (*out_grid_it).begin();
     typename bvxm_voxel_slab<T>::iterator temp_slab_it= (*temp_grid_it).begin();
-     bvxm_voxel_slab<vnl_float_3 >::iterator or_slab_it = or_grid_it->begin();
+    bvxm_voxel_slab<unsigned>::iterator id_slab_it = id_grid_it->begin();
 
-    for (; out_slab_it!=(*out_grid_it).end(); ++out_slab_it, ++temp_slab_it, ++or_slab_it)
+    for (; out_slab_it!=(*out_grid_it).end(); ++out_slab_it, ++temp_slab_it, ++id_slab_it)
     {
       if(func_max_.greater_than((* temp_slab_it), (*out_slab_it)))
       {
         (*out_slab_it) =  (* temp_slab_it);
-        (*or_slab_it) = temp_orientation;
+        (*id_slab_it) = id;
       }
     }
   }

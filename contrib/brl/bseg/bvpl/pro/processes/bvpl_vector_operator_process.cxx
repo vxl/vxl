@@ -45,10 +45,10 @@ namespace bvpl_vector_operator_process_globals
 //           - ...
 // input[3]: The functor type
 // input[4]: Output grid path to hold response
-// input[5]: Output grid path to hold orientations
+// input[5]: Output grid path to hold ids
 //
 // output[0]: Output grid with response
-// output[1]: Output grid with orientations
+// output[1]: Output grid with ids
 bool bvpl_vector_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_vector_operator_process_globals;
@@ -85,7 +85,7 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
   vcl_string datatype = pro.get_input<vcl_string>(i++);
   vcl_string functor_name = pro.get_input<vcl_string>(i++);
   vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
-  vcl_string orientation_grid_path = pro.get_input<vcl_string>(i++);
+  vcl_string id_grid_path = pro.get_input<vcl_string>(i++);
 
   //check input's validity
   if (!grid_base.ptr()) {
@@ -102,61 +102,59 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
   {
     bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr());
     bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(out_grid_path, grid->grid_size());
-    bvxm_voxel_grid<vnl_float_3 > *orientation_grid=new bvxm_voxel_grid<vnl_float_3 >(orientation_grid_path, grid->grid_size());
+    bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
     if (functor_name == "edge2d") {
       bvpl_edge2d_functor<float> func;
       bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
       bvpl_vector_operator<float, bvpl_edge2d_functor<float> > vector_oper;
-      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
       return true;
     }
     if (functor_name == "edge_algebraic_mean") {
       bvpl_edge_algebraic_mean_functor<float> func;
       bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
       bvpl_vector_operator<float, bvpl_edge_algebraic_mean_functor<float> > vector_oper;
-      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
       return true;
     }
     if (functor_name == "edge_geometric_mean") {
       bvpl_edge_geometric_mean_functor<float> func;
       bvpl_neighb_operator<float, bvpl_edge_geometric_mean_functor<float> > oper(func);
       bvpl_vector_operator<float, bvpl_edge_geometric_mean_functor<float> > vector_oper;
-      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+      vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
       return true;
     }
   }
   else if (datatype == "opinion") {
     bvxm_voxel_grid<bvxm_opinion> *grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (grid_base.ptr());;
     bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
-    bvxm_voxel_grid<vnl_float_3 > *orientation_grid=new bvxm_voxel_grid<vnl_float_3 >(orientation_grid_path, grid->grid_size());
+    bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
     bvpl_opinion_functor func;
     bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
     bvpl_vector_operator<bvxm_opinion,  bvpl_opinion_functor> vector_oper;
-    vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
+    vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-    pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
     return true;
   }
   else if (datatype == "bsta_gauss_f1") {
     typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
     if (bvxm_voxel_grid<gauss_type>* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
       bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, grid->grid_size());
-      bvxm_voxel_grid<vnl_float_3 > *orientation_grid=new bvxm_voxel_grid<vnl_float_3 >(orientation_grid_path, grid->grid_size());
+      bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
       if (functor_name == "gauss_convolution") {
-#if 0 // commented out for now
         bvpl_gauss_convolution_functor func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
         bvpl_vector_operator<gauss_type, bvpl_gauss_convolution_functor> vector_oper;
-        vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, orientation_grid);
-#endif // 0
+        vector_oper.apply_and_suppress(grid,kernel,&oper,grid_out, id_grid);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-        pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, orientation_grid);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
       }
       return true;
     }

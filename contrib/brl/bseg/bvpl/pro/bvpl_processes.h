@@ -11,10 +11,12 @@ DECLARE_FUNC_CONS(bvpl_create_edge3d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_gauss3d_xx_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_edge2d_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_create_edge3d_kernel_vector_process);
+DECLARE_FUNC_CONS(bvpl_create_corner2d_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_create_gauss3d_xx_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_convert_direction_to_hue_process);
 DECLARE_FUNC_CONS(bvpl_compare_surface_and_normal_process);
 DECLARE_FUNC_CONS(bvpl_susan_opinion_operator_process);
+DECLARE_FUNC_CONS(bvpl_kernel_id_to_axis_process);
 //the init functions
 
 #endif

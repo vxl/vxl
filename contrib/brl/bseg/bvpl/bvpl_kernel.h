@@ -35,6 +35,7 @@ class bvpl_kernel: public vbl_ref_count
     bvpl_kernel_iterator iterator(){return kernel_;}
     vnl_float_3 axis(){return axis_;}
     float angle(){return angle_;}
+    vnl_float_3 scale(){return scale_;}
     vgl_vector_3d<int> dim()const {return dim_;}
     vgl_point_3d<int> min() const {return min_;}
     vgl_point_3d<int> max() const {return max_;}
@@ -76,6 +77,7 @@ class bvpl_kernel: public vbl_ref_count
     bvpl_kernel_iterator kernel_;
     vnl_float_3 axis_;
     float angle_;
+    vnl_float_3 scale_;
     vgl_vector_3d<int> dim_;
     vgl_point_3d<int> min_;
     vgl_point_3d<int> max_;
