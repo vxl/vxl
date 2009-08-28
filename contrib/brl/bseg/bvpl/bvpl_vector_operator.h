@@ -80,7 +80,7 @@ void bvpl_vector_operator::non_maxima_suppression(bvxm_voxel_grid<T>* grid_in, b
     
     // set the result at the output grid
     
-    (*out_grid_iter).set_voxel(func_max.result());
+    (*out_grid_iter).set_voxel(func_max.result(subgrid.get_voxel()));
     ++out_grid_iter;
     ++response_grid_iter;
     ++kernel_id_iter;
