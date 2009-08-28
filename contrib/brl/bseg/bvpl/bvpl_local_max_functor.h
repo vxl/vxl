@@ -28,12 +28,12 @@ class bvpl_local_max_functor
 
   //: Destructor
   ~bvpl_local_max_functor() {}
-
-  //: Apply a given operation to value val, depending on the dispatch character
+  
+   //: Apply a given operation to value val, depending on the dispatch character
   void apply(T& val, bvpl_kernel_dispatch& d);
 
   //: Returns the final operation of this functor
-  T result();
+  T result(T cur_val);
 
   // Some additional functionalities
 
@@ -62,19 +62,15 @@ bvpl_local_max_functor<T>::bvpl_local_max_functor()
 template <class T>
 void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
-  if (d.c_==0)
-    cur_val_=val;
-  else
-  {
-  if ( val>max_)
-    max_=val;
-  }
+
+	if( val>max_)
+		max_=val;
 }
 
 template <class T>
-T bvpl_local_max_functor<T>::result()
+T bvpl_local_max_functor<T>::result( T cur_val)
 {
-  T result = cur_val_>=max_?cur_val_:0;
+  T result = cur_val>=max_?cur_val:0;
 
   //reset all variables
   init();
@@ -128,11 +124,13 @@ void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::apply(bsta_num_obs<bs
 }
 
 template <>
-bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result()
+bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result(bvxm_opinion cur_val)
 {
-  if (cur_val_>=max_)
+  if (cur_val>max_)
   {
-    bvxm_opinion result = cur_val_;
+
+    bvxm_opinion result =    cur_val;
+
     init();
     return result;
   }
@@ -145,12 +143,13 @@ bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result()
 }
 
 template <>
-bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::result()
+bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::result(bsta_num_obs<bsta_gauss_f1> cur_val)
 {
   bsta_num_obs<bsta_gauss_f1> result;
 
-  if ( (vcl_abs(cur_val_.mean()))>=(vcl_abs(max_.mean() - 1e-5)))
-    result = cur_val_;
+  
+  if( (vcl_abs(cur_val.mean()))>=(vcl_abs(max_.mean() - 1e-5)))
+    result = cur_val;
 
   result =  bsta_gauss_f1(0.0f, 1.0f);
   //reset all variables
