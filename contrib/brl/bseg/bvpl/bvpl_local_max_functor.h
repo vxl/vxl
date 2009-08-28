@@ -34,21 +34,22 @@ class bvpl_local_max_functor
 
   //: Returns the final operation of this functor
   T result();
- 
-  // Some additional functionalities 
+
+  // Some additional functionalities
 
   bool greater_than(T& val1, T& val2);
- 
+
   static T min_response();
-  
+
   float filter_response(unsigned id, unsigned target_id, T curr_val);
 
  private:
-  
-  T max_;  // max_value over neighborhood
-  T cur_val_;  // max_value over neighborhood
-  //: Initializes class variables
-  void init();
+  //: max_value over neighborhood
+  T max_;
+  //: cur_value over neighborhood
+  T cur_val_;
+  //: Initializes all local class variables
+  void init() { max_=T(0); }
 };
 
 // Default constructor
@@ -58,23 +59,16 @@ bvpl_local_max_functor<T>::bvpl_local_max_functor()
   this->init();
 }
 
-//:Initializes all local variables
-template <class T>
-void bvpl_local_max_functor<T>::init()
-{
-  max_=T(0);
-}
-
 template <class T>
 void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
-	if(d.c_==0)
-		cur_val_=val;
-	else
-	{
-	if( val>max_)
-		max_=val;
-	}
+  if (d.c_==0)
+    cur_val_=val;
+  else
+  {
+  if ( val>max_)
+    max_=val;
+  }
 }
 
 template <class T>
@@ -103,9 +97,9 @@ T bvpl_local_max_functor<T>::min_response()
 template <class T>
 float bvpl_local_max_functor<T>::filter_response(unsigned id, unsigned target_id, T curr_val)
 {
-  if(id !=target_id)
+  if (id !=target_id)
     return 0.0f;
-  
+
   return (float)curr_val;
 }
 
@@ -124,13 +118,13 @@ void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init()
 template <>
 void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::apply(bsta_num_obs<bsta_gauss_f1>& val, bvpl_kernel_dispatch& d)
 {
-	if(d.c_==0)
-		cur_val_=val;
-	else
-	{
-    if( vcl_abs(val.mean()) > vcl_abs(max_.mean()) )
+  if (d.c_==0)
+    cur_val_=val;
+  else
+  {
+    if ( vcl_abs(val.mean()) > vcl_abs(max_.mean()) )
       max_=val;
-	}
+  }
 }
 
 template <>
@@ -138,33 +132,30 @@ bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result()
 {
   if (cur_val_>=max_)
   {
-    bvxm_opinion result =    cur_val_;
+    bvxm_opinion result = cur_val_;
     init();
-
     return result;
   }
   else
   {
-    bvxm_opinion result =bvxm_opinion(1.0,0.0);
+    bvxm_opinion result = bvxm_opinion(1.0,0.0);
     init();
-
     return result;
   }
-  //reset all variables
 }
 
 template <>
 bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::result()
 {
   bsta_num_obs<bsta_gauss_f1> result;
-  
-  if( (vcl_abs(cur_val_.mean()))>=(vcl_abs(max_.mean() - 1e-5)))
+
+  if ( (vcl_abs(cur_val_.mean()))>=(vcl_abs(max_.mean() - 1e-5)))
     result = cur_val_;
-  
+
   result =  bsta_gauss_f1(0.0f, 1.0f);
   //reset all variables
   init();
-  
+
   return result;
 }
 
@@ -184,9 +175,9 @@ bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >
 template <>
 float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_f1> curr_val)
 {
-  if(id !=target_id)
+  if (id !=target_id)
     return 0.0f;
-  
+
   return vcl_abs(curr_val.mean());
 }
 
