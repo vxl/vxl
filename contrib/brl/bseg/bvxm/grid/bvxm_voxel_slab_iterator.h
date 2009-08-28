@@ -22,7 +22,9 @@ class bvxm_voxel_slab_iterator_base
                                 unsigned slice_idx, unsigned slab_thickness);
 
   ~bvxm_voxel_slab_iterator_base() {}
-
+   
+  int slice_idx() {return slice_idx_;}
+  
  protected:
   bvxm_voxel_storage<T> *storage_;
 
