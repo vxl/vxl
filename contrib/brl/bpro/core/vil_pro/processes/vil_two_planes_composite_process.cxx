@@ -64,45 +64,40 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
 
   vil_image_view<float> *out_img=new vil_image_view<float>(img_1->ni(),img_1->nj(),3);
   unsigned nplanes1 = img_1->nplanes(), nplanes2 = img_2->nplanes();
-  if(!(nplanes1==1&&nplanes2==1||nplanes1==1&&nplanes2==3||
-       nplanes1==3&&nplanes2==1||nplanes1==3&&nplanes2==3))
+  if ((nplanes1!=1 && nplanes1!=3) ||
+      (nplanes2!=1 && nplanes2!=3))
     return false;
 
   for (unsigned i=0;i<img_1->ni();i++)
     for (unsigned j=0;j<img_1->nj();j++)
     {
-      if(nplanes1==1&&nplanes2==1){
+      if (nplanes1==1&&nplanes2==1) {
         float v = fimage2(i,j);
-        if(comp) v = 1.0f-v;
-      (*out_img)(i,j,0)=fimage1(i,j);
-      (*out_img)(i,j,1)=scale*v;
-      (*out_img)(i,j,2)=0;
+        if (comp) v = 1.0f-v;
+        (*out_img)(i,j,0)=fimage1(i,j);
+        (*out_img)(i,j,1)=scale*v;
+        (*out_img)(i,j,2)=0;
       }
-      if(nplanes1==1&&nplanes2==3){
+      if (nplanes1==1&&nplanes2==3) {
         float v = fimage1(i,j);
-        if(comp) v = 1.0f-v;
-      (*out_img)(i,j,0)=
-        static_cast<float>((fimage2(i,j,0)+ scale*v)/2.0);
-      (*out_img)(i,j,1)=fimage2(i,j,1);
-      (*out_img)(i,j,2)=fimage2(i,j,2);
+        if (comp) v = 1.0f-v;
+        (*out_img)(i,j,0)=static_cast<float>((fimage2(i,j,0)+ scale*v)/2.0);
+        (*out_img)(i,j,1)=fimage2(i,j,1);
+        (*out_img)(i,j,2)=fimage2(i,j,2);
       }
-      if(nplanes1==3&&nplanes2==1){
+      if (nplanes1==3&&nplanes2==1) {
         float v = fimage2(i,j);
-        if(comp) v = 1.0f-v;
-      (*out_img)(i,j,0)=
-        static_cast<float>((scale*v+ fimage1(i,j,0))/2.0);
-      (*out_img)(i,j,1)=fimage1(i,j,1);
-      (*out_img)(i,j,2)=fimage1(i,j,2);
+        if (comp) v = 1.0f-v;
+        (*out_img)(i,j,0)=static_cast<float>((scale*v+ fimage1(i,j,0))/2.0);
+        (*out_img)(i,j,1)=fimage1(i,j,1);
+        (*out_img)(i,j,2)=fimage1(i,j,2);
       }
-      if(nplanes1==3&&nplanes2==3){
+      if (nplanes1==3&&nplanes2==3) {
         float v0 = fimage2(i,j,0), v1 = fimage2(i,j,1), v2 = fimage2(i,j,2);
-        if(comp){v0 = 1.0f-v0; v1 = 1.0f-v1; v2 = 1.0f-v2;}
-      (*out_img)(i,j,0)=
-        static_cast<float>((scale*v0+ fimage1(i,j,0))/2.0);
-      (*out_img)(i,j,1)=
-        static_cast<float>((scale*v1+ fimage1(i,j,1))/2.0);
-      (*out_img)(i,j,2)=
-        static_cast<float>((scale*v2+ fimage1(i,j,2))/2.0);
+        if (comp) { v0 = 1.0f-v0; v1 = 1.0f-v1; v2 = 1.0f-v2; }
+        (*out_img)(i,j,0)=static_cast<float>((scale*v0+ fimage1(i,j,0))/2.0);
+        (*out_img)(i,j,1)=static_cast<float>((scale*v1+ fimage1(i,j,1))/2.0);
+        (*out_img)(i,j,2)=static_cast<float>((scale*v2+ fimage1(i,j,2))/2.0);
       }
     }
 
