@@ -72,7 +72,7 @@ void clsfy_null_classifier::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_null_classifier&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
@@ -94,7 +94,7 @@ void clsfy_null_classifier::class_probabilities(vcl_vector<double> &outputs, con
   unsigned n=n_classes();
   outputs.resize(n);
   for (unsigned i=0; i<n; ++i)
-    outputs[i]==default_class_?1.0:0.0;
+    outputs[i] = default_class_?1.0:0.0;
 }
 
 //=======================================================================
