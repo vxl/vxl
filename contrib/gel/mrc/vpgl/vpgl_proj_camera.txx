@@ -124,7 +124,17 @@ vgl_line_segment_2d<T> vpgl_proj_camera<T>::project(
   vgl_line_segment_2d<T> image_line( point1_im, point2_im );
   return image_line;
 }
-
+  //: Project an infinite line in the world onto an infinite line in the image plane.
+template <class T>
+vgl_line_2d<T> vpgl_proj_camera<T>::project( const vgl_infinite_line_3d<T>& world_line ) const
+{
+  vgl_homg_point_3d<T> point1_w( world_line.point() );
+  vgl_homg_point_3d<T> point2_w( world_line.point_t(T(1)) );
+  vgl_point_2d<T> point1_im( project( point1_w ) );
+  vgl_point_2d<T> point2_im( project( point2_w ) );
+  vgl_line_2d<T> image_line( point1_im, point2_im );
+  return image_line;
+}
 //------------------------------------
 template <class T>
 vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
@@ -140,6 +150,7 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
     return vgl_homg_line_3d_2_points<T>( camera_center(), wp );
   return vgl_homg_line_3d_2_points<T>( wp, camera_center() );
 }
+
 
 //------------------------------------
 template <class T>

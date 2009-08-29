@@ -77,3 +77,24 @@ bool vpgl_backproject::bproj_plane(vpgl_rational_camera<double> const& rcam,
   const vpgl_camera<double>* const cam = static_cast<const vpgl_camera<double>* >(&rcam);
   return bproj_plane(cam, image_point, plane, initial_guess, world_point);
 }
+//Only the direction of the vector is important so it can be 
+//normalized to a unit vector. Two rays can be constructed, one through
+//point and one through a point formed by adding the vector to the point
+bool 
+vpgl_backproject::bproj_point_vector(vpgl_proj_camera<double> const& cam,
+                               vgl_point_2d<double> const& point,
+                               vgl_vector_2d<double> const& vect,
+                               vgl_plane_3d<double>& plane)
+{
+  vgl_homg_point_2d<double> hp(point);
+  //get a second point
+  vgl_vector_2d<double> vu = vect/vect.length();
+  vgl_point_2d<double> point_plus_vect = point + vu;
+  vgl_homg_point_2d<double> hp1(point_plus_vect);
+  vgl_homg_line_2d<double> hline(hp, hp1);
+  vgl_homg_plane_3d<double> hpl = cam.backproject(hline);
+  plane = vgl_plane_3d<double>(hpl);
+  //might add checks for ideal plane later
+  return true;
+}
+

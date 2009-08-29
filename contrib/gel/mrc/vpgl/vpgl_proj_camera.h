@@ -44,7 +44,9 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
@@ -111,8 +113,16 @@ class vpgl_proj_camera : public vpgl_camera<T>
   vgl_line_segment_2d<T> operator()( const vgl_line_segment_3d<T>& world_line ) const
   { return project( world_line ); }
 
+  //: Project an infinite line in the world onto an infinite line in the image plane.
+  vgl_line_2d<T> project( const vgl_infinite_line_3d<T>& world_line ) const;
+
+  //: Standard () forward projection operator
+  vgl_line_2d<T> operator()( const vgl_infinite_line_3d<T>& world_line ) const
+  { return project( world_line ); }
+
   //: Find the 3d ray that goes through the camera center and the provided image point.
   vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
+
 
   //: Find the 3d plane that contains the camera center and the provided line in the image plane.
   vgl_homg_plane_3d<T> backproject( const vgl_homg_line_2d<T>& image_line ) const;

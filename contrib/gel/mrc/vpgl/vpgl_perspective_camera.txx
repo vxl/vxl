@@ -175,7 +175,9 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
   vgl_vector_3d<T> u = normalized(up);
   vgl_vector_3d<T> look = point - camera_center();
   normalize(look);
-
+  T dp = dot_product(look, up);
+  bool singularity = vcl_fabs(vcl_fabs(static_cast<double>(dp))-1.0)<1e-08;
+  assert(!singularity);
   vgl_vector_3d<T> z = look;
   vgl_vector_3d<T> x = cross_product(-u,z);
   vgl_vector_3d<T> y = cross_product(z,x);

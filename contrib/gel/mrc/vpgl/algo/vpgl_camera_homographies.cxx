@@ -12,9 +12,12 @@ homography_to_camera(vpgl_proj_camera<double> const& cam,
                      vgl_plane_3d<double> const& plane)
 {
   // get the translation that moves the plane to intersect with the origin
-  vgl_vector_3d<double> n = plane.normal();
+  // note that calling plane.normal() pre-normalizes the vector so 
+  // scale factor is lost, so form normal directly
+  vgl_vector_3d<double> n(plane.a(), plane.b(), plane.c());
   double mag = n.length();
-  double trans = plane.d()/(mag*mag);//translate the plane to the origin
+  n/=mag;
+  double trans = plane.d()/mag;//translate the plane to the origin
   // find the rotation needed to align the normal with the positive z axis
   vgl_vector_3d<double> z(0, 0, 1.0);
   vgl_rotation_3d<double> R(n, z);

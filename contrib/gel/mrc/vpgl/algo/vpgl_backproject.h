@@ -8,6 +8,7 @@
 // \date Oct 29, 2006
 
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_proj_camera.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
@@ -57,6 +58,15 @@ class vpgl_backproject
                           vgl_plane_3d<double> const& plane,
                           vgl_point_3d<double> const& initial_guess,
                           vgl_point_3d<double>& world_point);
+
+  //:Backproject a point with associated direction vector in the 
+  // image to a plane in 3-d, passing through the center of projection 
+  // and containing the point and vector. 
+  //  ** Defined only for a projective camera **
+  static bool bproj_point_vector(vpgl_proj_camera<double> const& cam,
+                                 vgl_point_2d<double> const& point,
+                                 vgl_vector_2d<double> const& vect,
+                                 vgl_plane_3d<double>& plane);
 
  private:
   //: constructor private - static methods only
