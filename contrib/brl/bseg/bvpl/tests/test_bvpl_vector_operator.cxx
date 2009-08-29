@@ -26,7 +26,7 @@ void create_grid(vcl_string grid_filename)
   if (vul_file_exists(grid_filename))
     vul_file::delete_file_glob(grid_filename);
 
-    bvxm_voxel_grid<bvxm_opinion> surface_grid(grid_filename,vgl_vector_3d<unsigned int>(32,32,32));
+  bvxm_voxel_grid<bvxm_opinion> surface_grid(grid_filename,vgl_vector_3d<unsigned int>(32,32,32));
   bvxm_opinion bnonsurf(0.9,0.1);
   surface_grid.initialize_data(bnonsurf);
 
@@ -42,16 +42,15 @@ void create_grid(vcl_string grid_filename)
 
 void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_float_3 axis)
 {
-  
   vgl_vector_3d<unsigned> grid_dim = grid->grid_size();
   unsigned ni=grid_dim.x();
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
-  
+
   float ci=ni*0.5f;
   float cj=nj*0.5f;
   float ck=nk*0.5f;
-  
+
   unsigned slab_idx = 0;
   bvxm_voxel_grid<float>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
   for (unsigned i=0;i<ni;i++)
@@ -64,7 +63,6 @@ void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_fl
           (*grid_it)(i,j,k)=max_p;
         else
           (*grid_it)(i,j,k)=min_p;
-         
       }
     }
   }
@@ -72,18 +70,17 @@ void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_fl
 
 bool check_data(bvxm_voxel_grid<unsigned> *grid, vnl_float_3 axis, unsigned id, int margin)
 {
-  
   vgl_vector_3d<unsigned> grid_dim = grid->grid_size();
   unsigned ni=grid_dim.x();
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
-  
+
   float ci=ni*0.5f;
   float cj=nj*0.5f;
   float ck=nk*0.5f;
-  
+
   bool result = true;
-  
+
   unsigned slab_idx = 0;
   bvxm_voxel_grid<unsigned>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
   for (unsigned i=margin;i<ni-margin;i++)
@@ -92,7 +89,6 @@ bool check_data(bvxm_voxel_grid<unsigned> *grid, vnl_float_3 axis, unsigned id, 
     {
       for (unsigned k=margin;k<nk-margin;k++)
       {
-        
         if (((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=-1) && ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2] <=1))
         {
           result = result && (*grid_it)(i,j,k)==id;
@@ -110,13 +106,13 @@ bool check_non_max(bvxm_voxel_grid<float> *grid)
   unsigned ni=grid_dim.x();
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
-  
+
   float ci=ni*0.5f ;
   float cj=nj*0.5f ;
   float ck=nk*0.5f ;
-  
+
   bool result = true;
-  
+
   unsigned slab_idx = 0;
   bvxm_voxel_grid<float>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
   for (unsigned i=0;i<ni;i++)
@@ -125,7 +121,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid)
     {
       for (unsigned k=0;k<nk;k++)
       {
-        if ( (i== int(ci)) && (j == int(cj)) && (k == int(ck)))
+        if ( i == (unsigned int)ci && j == (unsigned int)cj && k == (unsigned int)ck)
         {
           //vcl_cout << "Response at center " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
           result = result && ((*grid_it)(i,j,k) > 1e-2);
@@ -150,19 +146,19 @@ void test_vector_operator()
   //: output to verify if the digitization of the plane is correct.
   bvxm_voxel_grid<float> * surface_grid_expectation
   =new bvxm_voxel_grid<float>(grid_expectation_filename,vgl_vector_3d<unsigned int>(32,32,32));
-  
+
   bvxm_expectation_opinion_voxel_grid(grid,surface_grid_expectation);
-  
+
   bvxm_grid_save_raw<float>(surface_grid_expectation,"grid_plane_expectation.raw");
   //: get vector of kernel
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
-  
+
   vcl_string out_grid_path="out_grid.vox";
   vcl_string id_grid_path="orientation_grid.vox";
   vcl_string out_grid_expectation_path="out_grid_expectation.vox";
-  
+
   bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
   bvxm_voxel_grid<unsigned > *id_grid
   =new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
@@ -170,31 +166,28 @@ void test_vector_operator()
   bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
   bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vec,&oper,grid_out, id_grid);
-  
+
   bvxm_voxel_grid<float> *out_grid_expectation=new bvxm_voxel_grid<float>(out_grid_expectation_path,grid->grid_size());
   bvxm_expectation_opinion_voxel_grid(grid_out,out_grid_expectation);
   bvxm_grid_save_raw<float>(out_grid_expectation,"grid_out_expectation.raw");
-  
 }
-
 
 
 bool test_non_max_suppression()
 {
-  
   //Create vector of kernels
   bvpl_edge3d_kernel_factory kernels_3d(3,3,3);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
-  
-  
+
+
   //Create an in memory grid and filled it with a plane
   bvxm_voxel_grid<float> *grid = new bvxm_voxel_grid<float> (vgl_vector_3d<unsigned>(5,5,5));
   unsigned target_id = 9;
   vnl_float_3 target_axis = kernel_vec->kernels_[target_id]->axis();
   vcl_cout << "taget axis " << target_axis << vcl_endl;
   fill_in_data(grid, 0.01f, 0.99f, target_axis);
-    
+
   //Run all the kernels
   bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(grid->grid_size());
   bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(grid->grid_size());
@@ -203,24 +196,22 @@ bool test_non_max_suppression()
   bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
   bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vec,&oper,grid_out, id_grid);
-  
+
   //along the plane the winner should be the target axis
   TEST("Directions", true,  check_data(id_grid, target_axis, target_id, 1));
- 
-  
+
+
   bvxm_voxel_grid<float> *grid_non_max=new bvxm_voxel_grid<float>(grid->grid_size());
   grid_non_max->initialize_data(0.0f);
   vector_oper.non_maxima_suppression(grid_out, id_grid, kernel_vec, grid_non_max);
-                             
+
   //after non-maxima suppression the center voxel should be the winner
   TEST("Non-max suppressions", true, check_non_max(grid_non_max));
-  
 }
 
 MAIN(test_bvpl_vector_operator)
 {
   //test_vector_operator();
   test_non_max_suppression();
-  
   return 0;
 }
