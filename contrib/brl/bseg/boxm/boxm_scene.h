@@ -126,7 +126,7 @@ class boxm_scene :public boxm_scene_base
   void create_block(unsigned i, unsigned j, unsigned k);
 
   void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
-
+  void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim);
   bool parse_config(boxm_scene_parser& parser);
 
   bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);
