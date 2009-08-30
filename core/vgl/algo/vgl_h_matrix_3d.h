@@ -81,6 +81,7 @@ class vgl_h_matrix_3d
   void set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
   void set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
   void set_rotation_euler(T rz1, T ry, T rz2);
+  void set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R);
 
   bool is_rotation() const;
   bool is_euclidean() const;

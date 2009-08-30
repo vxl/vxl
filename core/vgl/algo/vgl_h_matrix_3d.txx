@@ -352,7 +352,14 @@ set_rotation_euler(T rz1, T ry, T rz2)
     for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
 }
-
+template <class T>
+void 
+vgl_h_matrix_3d<T>::set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R)
+{
+  for(unsigned r = 0; r<3; ++r)
+    for(unsigned c = 0; c<3; ++c)
+      t12_matrix_[r][c] = R[r][c];
+}
 
 template <class T>
 bool vgl_h_matrix_3d<T>::is_rotation() const

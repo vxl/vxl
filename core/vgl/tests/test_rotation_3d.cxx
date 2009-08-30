@@ -52,6 +52,13 @@ static void test_conversions(const vgl_rotation_3d<double>& rot)
   TEST_NEAR("Euler conversion", diff4, 0.0, epsilon);
   if (diff4 > epsilon)
     vcl_cout << "Euler:  Rx=" << er[0]<< " Ry="<<er[1]<<" Rz="<<er[2] << vcl_endl;
+  //Test the case of flipping the orientation of a vector (rotation by pi)
+  vgl_vector_3d<double> a(1.0, 1.0, 1.0), aflip(-1.0, -1.0, -1.0);  
+  vgl_rotation_3d<double> flip(a, aflip);
+  vgl_vector_3d<double> v = flip*a;
+  vgl_vector_3d<double> null = v+a;
+  double err = vcl_fabs(null.x())+vcl_fabs(null.y())+vcl_fabs(null.z());
+  TEST_NEAR("Flip vector",err , 0.0, epsilon);
 }
 
 

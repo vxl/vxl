@@ -443,7 +443,7 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
 
   // Calculate the parameters s,t for the closest point on each line
   double denom = a*c - b*b; // should always be non-negative
-  assert(denom>=0.0);
+  if(denom<0.0) denom = 0.0;
   if (denom>SMALL_DOUBLE)
   {
     double s = (b*e - c*d) / denom;
