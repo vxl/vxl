@@ -485,6 +485,40 @@ void load_from_mat__string(opstack_t& s)
   }
 }
 
+
+//: Save an int image to a ascii matlab format
+void save_to_mat__image_3d_of_int__string(opstack_t& s)
+{
+  assert(s.size() >= 2);
+
+  vcl_string o1(s[0].as_string());
+  vimt3d_image_3d_of<int> o2(s[1].as_image_3d_of_int());
+  const vil3d_image_view<int>& o2_image = o2.image();;
+
+  vcl_ofstream output(o1.c_str());
+
+  if (!output)
+    mbl_exception_throw_os_error(o1);
+
+  //copy precision length from console to output file
+  output.precision(vcl_cout.precision());
+
+  output <<
+    "# Created by vxl/image3d_math\n"
+    "# name: image3d\n"
+    "# type: matrix\n"
+    "# ndims: 3\n"
+    << o2.image().ni() << ' ' << o2.image().nj() << ' ' << o2.image().nk() << '\n';
+
+  for (unsigned k=0;k<o2_image.nk();++k)
+    for (unsigned j=0;j<o2_image.nj();++j)
+      for (unsigned i=0;i<o2_image.ni();++i)
+        output <<  o2_image(i,j,k) << '\n';
+
+  s.pop_front();
+  s.pop_front();
+}
+
 //: Save a float image to a ascii matlab format
 void save_to_mat__image_3d_of_float__string(opstack_t& s)
 {
@@ -729,7 +763,7 @@ void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
 
   double gTanamoto_num=0, gTanamoto_den=0;
   double sum1=0, sum2=0;
-  bool dodgy=false; // Falg if image isn;t really a partial volume/label mask.
+  bool dodgy=false; // True if image isn't really a partial volume/label mask.
   for (unsigned k=0, nk=o1.image().nk(); k<nk; ++k)
     for (unsigned j=0, nj=o1.image().nj(); j<nj; ++j)
       for (unsigned i=0, ni=o1.image().ni(); i<ni; ++i)
@@ -772,15 +806,12 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
 
   unsigned long Tanamoto_num=0, Tanamoto_den=0;
   unsigned long sum1=0, sum2=0;
-  bool dodgy=false; // Falg if image isn;t really a partial volume/label mask.
   for (unsigned k=0, nk=o1.image().nk(); k<nk; ++k)
     for (unsigned j=0, nj=o1.image().nj(); j<nj; ++j)
       for (unsigned i=0, ni=o1.image().ni(); i<ni; ++i)
       {
         int p1 = i1(i,j,k);
         int p2 = i2(i,j,k);
-        if (p1<0 || p1>1 || p2<0 || p2>1)
-          dodgy=true;
         Tanamoto_num += (p1 && p2)?1:0;
         Tanamoto_den += (p1 || p2)?1:0;
         sum1 += p1;
@@ -793,8 +824,6 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
 
   vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den << " Volumes: "
     << sum1*vox_volume << ' ' << sum2*vox_volume << vcl_endl;
-  if (dodgy)
-    vcl_cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
 
   s.pop_front();
   s.pop_front();
@@ -1058,7 +1087,7 @@ class operations
                   "", "", "Display help");
     add_operation("--load_from_mat", &load_from_mat__string,
                   function_type_t() << operand::e_string,
-                  "filename", "image", "Explicitly load float image from ASCII Matlab file");
+                  "filename", "image", "Explicitly load image from ASCII Matlab file ");
     add_operation("--load_image_double", &load_image_double__string,
                   function_type_t() << operand::e_string,
                   "filename", "image", "Explicitly load into double image.");
@@ -1113,6 +1142,9 @@ class operations
     add_operation("--save", &save__image_3d_of_int__string,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_string,
                   "image filename", "", "Save image to filename");
+    add_operation("--save_to_mat", &save_to_mat__image_3d_of_int__string,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_string,
+                  "image filename", "", "Save image to text 3D array Matlab format");
     add_operation("--save_to_mat", &save_to_mat__image_3d_of_float__string,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_string,
                   "image filename", "", "Save image to text 3D array Matlab format");
