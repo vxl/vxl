@@ -36,18 +36,18 @@ class boxm_scene :public boxm_scene_base
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
-             const vgl_vector_3d<double>& world_dim);
+             const vgl_vector_3d<unsigned>& world_dim);
 
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
-             const vgl_vector_3d<double>& world_dim,
+             const vgl_vector_3d<unsigned>& world_dim,
              unsigned max_level, unsigned init_level);
 
   //: when lvcs is not avialable
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
-              const vgl_vector_3d<double>& world_dim);
+              const vgl_vector_3d<unsigned>& world_dim);
 
   ~boxm_scene();
 
@@ -125,8 +125,8 @@ class boxm_scene :public boxm_scene_base
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 
-  void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim);
   void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim);
+ // void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim);
   bool parse_config(boxm_scene_parser& parser);
 
   bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);

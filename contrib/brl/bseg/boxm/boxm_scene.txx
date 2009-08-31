@@ -16,7 +16,7 @@
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
-                          const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<double>& world_dim)
+                          const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim)
 : lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   create_blocks(block_dim, world_dim);
@@ -25,7 +25,7 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& ori
 template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
-                           const vgl_vector_3d<double>& world_dim)
+                           const vgl_vector_3d<unsigned>& world_dim)
 : origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   create_blocks(block_dim, world_dim);
@@ -33,12 +33,12 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
 
 template <class T>
 void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
-                            const vgl_vector_3d<double>& world_dim)
+                                  const vgl_vector_3d<unsigned>& world_dim)
 {
   // compute the dimensions of 3D array
-  int x_dim = static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
-  int y_dim = static_cast<int>(vcl_floor(world_dim.y()/block_dim.y()));
-  int z_dim = static_cast<int>(vcl_floor(world_dim.z()/block_dim.z()));
+  int x_dim = world_dim.x(); //static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
+  int y_dim = world_dim.y(); //static_cast<int>(vcl_floor(world_dim.y()/block_dim.y()));
+  int z_dim = world_dim.z(); //static_cast<int>(vcl_floor(world_dim.z()/block_dim.z()));
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
@@ -51,9 +51,9 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
   }
 }
 
-template <class T>
+/*template <class T>
 void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
-                            const vgl_vector_3d<unsigned>& world_dim)
+                            const vgl_vector_3d<int>& world_dim)
 {
   // compute the dimensions of 3D array
   //int x_dim = static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
@@ -69,12 +69,13 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
       }
     }
   }
-}
+}*/
+
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
-                          const vgl_vector_3d<double>& world_dim,
+                          const vgl_vector_3d<unsigned>& world_dim,
                           unsigned max_level, unsigned init_level)
 : lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))                          
 {
@@ -367,14 +368,13 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
 {
   bgeo_lvcs lvcs;
   parser.lvcs(lvcs);
-  vgl_vector_3d<unsigned> nums = parser.block_nums();
-  vgl_vector_3d<double> world(nums.x() * parser.block_dim().x(),
-                              nums.y() * parser.block_dim().y(),
-                              nums.z() * parser.block_dim().z());
+  vgl_vector_3d<unsigned> dims = parser.block_nums();
+  //vgl_vector_3d<int> world(nums.x(), nums.y(), nums.z() );
+  
   lvcs_ = lvcs;
   origin_ =  parser.origin();
   block_dim_ = parser.block_dim();
-  create_blocks(block_dim_, nums);
+  create_blocks(block_dim_, dims);
   
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
@@ -402,13 +402,11 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
   bgeo_lvcs lvcs;
   parser.lvcs(lvcs);
   vgl_vector_3d<unsigned> nums = parser.block_nums();
-  vgl_vector_3d<double> world(nums.x() * parser.block_dim().x(),
-                              nums.y() * parser.block_dim().y(),
-                              nums.z() * parser.block_dim().z());
+  
   lvcs_ = lvcs;
   origin_ =  parser.origin();
   block_dim_ = parser.block_dim();
-  create_blocks(block_dim_, world);
+  create_blocks(block_dim_, nums);
   
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
