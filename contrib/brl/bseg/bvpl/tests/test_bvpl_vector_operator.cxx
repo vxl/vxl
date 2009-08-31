@@ -40,9 +40,10 @@ void create_grid(vcl_string grid_filename)
   bvxm_load_polygon_into_grid<bvxm_opinion>(&surface_grid,poly_points,bsurf);
 }
 
-void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_float_3 axis)
+void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_float_3 axis, int margin)
 {
   vgl_vector_3d<unsigned> grid_dim = grid->grid_size();
+  grid->initialize_data(0.01f);
   unsigned ni=grid_dim.x();
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
@@ -53,11 +54,11 @@ void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_fl
 
   unsigned slab_idx = 0;
   bvxm_voxel_grid<float>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
-  for (unsigned i=0;i<ni;i++)
+  for (unsigned i=margin;i<ni-margin;i++)
   {
-    for (unsigned j=0;j<nj;j++)
+    for (unsigned j=margin;j<nj-margin;j++)
     {
-      for (unsigned k=0;k<nk;k++)
+      for (unsigned k=margin;k<nk-margin;k++)
       {
         if ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=0)
           (*grid_it)(i,j,k)=max_p;
@@ -92,7 +93,7 @@ bool check_data(bvxm_voxel_grid<unsigned> *grid, vnl_float_3 axis, unsigned id, 
         if (((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=-1) && ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2] <=1))
         {
           result = result && (*grid_it)(i,j,k)==id;
-          //vcl_cout << "id at center " << i << j << k << " is " <<(*grid_it)(i,j,k) << vcl_endl;
+          vcl_cout << "id at center " << i << j << k << " is " <<(*grid_it)(i,j,k) << vcl_endl;
         }
       }
     }
@@ -112,7 +113,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid)
   float ck=nk*0.5f ;
 
   bool result = true;
-
+  
   unsigned slab_idx = 0;
   bvxm_voxel_grid<float>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
   for (unsigned i=0;i<ni;i++)
@@ -131,6 +132,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid)
           result = false;
           //vcl_cout <<  "Response at " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
         }
+        vcl_cout <<  "Response at " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
       }
     }
   }
@@ -173,7 +175,7 @@ void test_vector_operator()
 }
 
 
-bool test_non_max_suppression()
+void test_non_max_suppression()
 {
   //Create vector of kernels
   bvpl_edge3d_kernel_factory kernels_3d(3,3,3);
@@ -186,7 +188,7 @@ bool test_non_max_suppression()
   unsigned target_id = 9;
   vnl_float_3 target_axis = kernel_vec->kernels_[target_id]->axis();
   vcl_cout << "taget axis " << target_axis << vcl_endl;
-  fill_in_data(grid, 0.01f, 0.99f, target_axis);
+  fill_in_data(grid, 0.01f, 0.99f, target_axis,1);
 
   //Run all the kernels
   bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(grid->grid_size());
@@ -198,7 +200,7 @@ bool test_non_max_suppression()
   vector_oper.apply_and_suppress(grid,kernel_vec,&oper,grid_out, id_grid);
 
   //along the plane the winner should be the target axis
-  TEST("Directions", true,  check_data(id_grid, target_axis, target_id, 1));
+  TEST("Directions", true,  check_data(id_grid, target_axis, target_id, 2));
 
 
   bvxm_voxel_grid<float> *grid_non_max=new bvxm_voxel_grid<float>(grid->grid_size());
@@ -206,12 +208,12 @@ bool test_non_max_suppression()
   vector_oper.non_maxima_suppression(grid_out, id_grid, kernel_vec, grid_non_max);
 
   //after non-maxima suppression the center voxel should be the winner
-  TEST("Non-max suppressions", true, check_non_max(grid_non_max));
+  TEST("Non-max suppression", true, check_non_max(grid_non_max));
 }
 
 MAIN(test_bvpl_vector_operator)
 {
-  //test_vector_operator();
+  test_vector_operator();
   test_non_max_suppression();
   return 0;
 }
