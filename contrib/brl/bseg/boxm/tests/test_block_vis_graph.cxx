@@ -15,7 +15,7 @@ MAIN( test_block_vis_graph )
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
-  vgl_vector_3d<double> world_dim(20,20,30);
+  vgl_vector_3d<unsigned> world_dim(2,2,3);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
   vul_file::make_directory("boxm_scene");
   scene.set_paths("boxm_scene", "block");
