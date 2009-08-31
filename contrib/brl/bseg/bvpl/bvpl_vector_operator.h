@@ -70,11 +70,13 @@ void bvpl_vector_operator::non_maxima_suppression(bvxm_voxel_grid<T>* grid_in, b
     while (!kernel_iter.isDone()) {
       vgl_point_3d<int> idx = kernel_iter.index();
       T val;
-      if (subgrid.voxel(idx, val)) {
-        //vcl_cout<< val << "at " << idx <<vcl_endl;
-        bvpl_kernel_dispatch d = *kernel_iter;
-        func_max.apply(val, d);
-      }
+     //we don't want to apply to the current center voxels
+      if(!((idx.x() == 0) && (idx.y() == 0) && (idx.z() == 0)))
+        if (subgrid.voxel(idx, val)) {
+          //vcl_cout<< val << "at " << idx <<vcl_endl;
+          bvpl_kernel_dispatch d = *kernel_iter;
+          func_max.apply(val, d);
+        }
       ++kernel_iter;
     }
     
