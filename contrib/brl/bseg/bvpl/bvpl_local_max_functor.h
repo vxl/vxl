@@ -49,27 +49,60 @@ class bvpl_local_max_functor
   //: cur_value over neighborhood
   T cur_val_;
   //: Initializes all local class variables
-  void init() { max_=T(0); }
+  void init();
 };
 
-// Default constructor
+
+//Template specializations. They are forward declared here and implemented in the .cxx file to avoid redefinitions
+template <>
+void bvpl_local_max_functor<bvxm_opinion>::init();
+template <>
+void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init();
+//template <>
+//void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::apply(bsta_num_obs<bsta_gauss_f1>& val, bvpl_kernel_dispatch& d);
+//template <>
+//bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result(bvxm_opinion cur_val);
+//template <>
+//bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::result(bsta_num_obs<bsta_gauss_f1> cur_val);
+template <>
+bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(bsta_num_obs<bsta_gauss_f1>& g1, bsta_num_obs<bsta_gauss_f1>& g2);
+template <>
+bvxm_opinion bvpl_local_max_functor<bvxm_opinion >::min_response();
+template <>
+bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::min_response();
+template <>
+float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_f1> curr_val);
+
+
+
+//: Default constructor
 template <class T>
 bvpl_local_max_functor<T>::bvpl_local_max_functor()
 {
   this->init();
 }
+ 
+//: Init class variables
+template <class T>
+void bvpl_local_max_functor<T>::init() 
+{ 
+  max_=T(0); 
+}
 
+
+//: Apply functor
 template <class T>
 void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
-  if (val>max_)
+  if (greater_than(val,max_))
     max_=val;
 }
 
+//: Retreive result
 template <class T>
 T bvpl_local_max_functor<T>::result( T cur_val)
 {
-  T result = cur_val>=max_?cur_val:0;
+  T result = greater_than(cur_val, max_)?cur_val:min_response();
 
   //reset all variables
   init();
@@ -77,18 +110,21 @@ T bvpl_local_max_functor<T>::result( T cur_val)
   return result;
 }
 
+//: Comparison function
 template <class T>
 bool bvpl_local_max_functor<T>::greater_than(T& val1, T& val2)
 {
   return val1 > val2;
 }
 
+//: Min value
 template <class T>
 T bvpl_local_max_functor<T>::min_response()
 {
   return T(0);
 }
 
+//Filter used by non-max suppression
 template <class T>
 float bvpl_local_max_functor<T>::filter_response(unsigned id, unsigned target_id, T curr_val)
 {
@@ -98,83 +134,6 @@ float bvpl_local_max_functor<T>::filter_response(unsigned id, unsigned target_id
   return (float)curr_val;
 }
 
-template <>
-void bvpl_local_max_functor<bvxm_opinion>::init()
-{
-  max_=bvxm_opinion(1.0,0.0);
-}
 
-template <>
-void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init()
-{
-  max_= bsta_gauss_f1(0.0f, 1.0f);
-}
-
-template <>
-void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::apply(bsta_num_obs<bsta_gauss_f1>& val, bvpl_kernel_dispatch& d)
-{
-  if (d.c_==0)
-    cur_val_=val;
-  else
-  {
-    if ( vcl_abs(val.mean()) > vcl_abs(max_.mean()) )
-      max_=val;
-  }
-}
-
-template <>
-bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result(bvxm_opinion cur_val)
-{
-  if (cur_val>max_)
-  {
-    bvxm_opinion result =    cur_val;
-
-    init();
-    return result;
-  }
-  else
-  {
-    bvxm_opinion result = bvxm_opinion(1.0,0.0);
-    init();
-    return result;
-  }
-}
-
-template <>
-bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::result(bsta_num_obs<bsta_gauss_f1> cur_val)
-{
-  bsta_num_obs<bsta_gauss_f1> result;
-
-  if ( vcl_abs(cur_val.mean()) >= vcl_abs(max_.mean()) - 1e-5 )
-    result = cur_val;
-  else
-    result =  bsta_gauss_f1(0.0f, 1.0f);
-  //reset all variables
-  init();
-
-  return result;
-}
-
-
-template <>
-bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(bsta_num_obs<bsta_gauss_f1>& g1, bsta_num_obs<bsta_gauss_f1>& g2)
-{
-  return vcl_abs(g1.mean()) > (g2.mean());
-}
-
-template <>
-bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::min_response()
-{
-  return bsta_gauss_f1(0.0f, 1.0f);
-}
-
-template <>
-float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_f1> curr_val)
-{
-  if (id !=target_id)
-    return 0.0f;
-
-  return vcl_abs(curr_val.mean());
-}
 
 #endif
