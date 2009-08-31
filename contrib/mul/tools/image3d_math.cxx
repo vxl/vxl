@@ -714,6 +714,92 @@ void copy__image_3d_of_int(opstack_t& s)
   s.push_front(operand(result));
 }
 
+void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 2);
+
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
+  const vil3d_image_view<float>& i1 = o1.image();
+  const vil3d_image_view<float>& i2 = o2.image();
+
+  // Partial volume generalised Tanamoto, as per  	
+  // "Generalized Overlap Measures for Evaluation and Validation in Medical Image Analysis"
+  // Crum et al. , IEEE Trans Medical Imaging, Vol 25, Iss 11,  Nov. 2006, 1451 - 1461 
+
+  double gTanamoto_num=0, gTanamoto_den=0;
+  double sum1=0, sum2=0;
+  bool dodgy=false; // Falg if image isn;t really a partial volume/label mask.
+  for (unsigned k=0, nk=o1.image().nk(); k<nk; ++k)
+    for (unsigned j=0, nj=o1.image().nj(); j<nj; ++j)
+      for (unsigned i=0, ni=o1.image().ni(); i<ni; ++i)
+      {
+        double p1 = i1(i,j,k);
+        double p2 = i2(i,j,k);
+        if (p1<0.0 || p1>1.0 || p2<0.0 || p2>1.0)
+          dodgy=true;
+        gTanamoto_num += vcl_min(p1, p2);
+        gTanamoto_den += vcl_max(p1, p2);
+        sum1 += p1;
+        sum2 += p2;
+      }
+
+  vgl_vector_3d<double> voxel_size=o2.world2im().inverse().delta(
+    vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
+  double vox_volume = voxel_size.x() * voxel_size.y() * voxel_size.z();
+
+  vcl_cout << "Tanamoto: " << gTanamoto_num/gTanamoto_den << " Volumes: "
+    << sum1*vox_volume << ' ' << sum2*vox_volume << vcl_endl;
+  if (dodgy)
+    vcl_cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
+
+  s.pop_front();
+  s.pop_front();
+}
+
+void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  const vil3d_image_view<int>& i1 = o1.image();
+  const vil3d_image_view<int>& i2 = o2.image();
+
+  // Partial volume generalised Tanamoto, as per  	
+  // "Generalized Overlap Measures for Evaluation and Validation in Medical Image Analysis"
+  // Crum et al. , IEEE Trans Medical Imaging, Vol 25, Iss 11,  Nov. 2006, 1451 - 1461 
+
+  unsigned long Tanamoto_num=0, Tanamoto_den=0;
+  unsigned long sum1=0, sum2=0;
+  bool dodgy=false; // Falg if image isn;t really a partial volume/label mask.
+  for (unsigned k=0, nk=o1.image().nk(); k<nk; ++k)
+    for (unsigned j=0, nj=o1.image().nj(); j<nj; ++j)
+      for (unsigned i=0, ni=o1.image().ni(); i<ni; ++i)
+      {
+        int p1 = i1(i,j,k);
+        int p2 = i2(i,j,k);
+        if (p1<0 || p1>1 || p2<0 || p2>1)
+          dodgy=true;
+        Tanamoto_num += (p1 && p2)?1:0;
+        Tanamoto_den += (p1 || p2)?1:0;
+        sum1 += p1;
+        sum2 += p2;
+      }
+
+  vgl_vector_3d<double> voxel_size=o2.world2im().inverse().delta(
+    vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
+  double vox_volume = voxel_size.x() * voxel_size.y() * voxel_size.z();
+
+  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den << " Volumes: "
+    << sum1*vox_volume << ' ' << sum2*vox_volume << vcl_endl;
+  if (dodgy)
+    vcl_cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
+
+  s.pop_front();
+  s.pop_front();
+}
+
 void print_quantiles__image_3d_of_float__double(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -997,6 +1083,12 @@ class operations
     add_operation("--option_precision", &option_precision__double,
                   function_type_t() << operand::e_double,
                   "n", "", "Set precision of floating point numbers on the console to n digits");
+    add_operation("--print_overlap", &print_overlap__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
+                  "image image", "", "Print overlap measures and volumes of two binary mask images.");
+    add_operation("--print_overlap", &print_overlap__image_3d_of_float__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
+                  "image image", "", "Print generalised overlap measures and volumes of two partial volume mask images.");
     add_operation("--print_quantiles", &print_quantiles__image_3d_of_int__double,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double,
                   "image n", "", "Print n evenly space quantiles of image's voxel values");
