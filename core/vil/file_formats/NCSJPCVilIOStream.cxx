@@ -1,11 +1,17 @@
 #include "NCSJPCVilIOStream.h"
-
+#include <vcl_sstream.h>
 #include <vil/vil_stream.h>
+#include <vcl_string.h>
 #include <vcl_limits.h>
 #undef max
 #undef min
+// Do not remove the following notice
+// Modifications approved for public release, distribution unlimited 
+// DISTAR Case 14074
+//
+
 unsigned short CNCSJPCVilIOStream::mId = 0;//initialize static id variable
-  //vil_streams can only hand 32 bit offsets
+  //vil_streams can only hand 32 bit offsets (unless large file support is on)
   static const vil_streampos maxVilStreamPos = vcl_numeric_limits< vil_streampos >::max();
   static const vil_streampos minVilStreamPos = vcl_numeric_limits< vil_streampos >::min();
 
@@ -13,22 +19,27 @@ CNCSJPCVilIOStream::CNCSJPCVilIOStream()
   : mVilStream( 0 ),
     mHomePos( -1 )
 { 
-  mName = new wchar_t[1];
 }
 
 CNCSJPCVilIOStream::~CNCSJPCVilIOStream()
 {
-  delete [] mName;
 }
-CNCSError CNCSJPCVilIOStream::Open( vil_stream* stream)
+CNCSError CNCSJPCVilIOStream::Open( vil_stream* stream, bool bWrite)
 {
   mVilStream = stream;
   mVilStream->ref();
   mHomePos = stream->tell();
-  bool ProgressiveDisplay = false;
-  mName[0]=mId++;
-  *(CNCSError*)this = CNCSJPCIOStream::Open(mName,ProgressiveDisplay );
-
+  vcl_stringstream str;
+  str << "name " << mId++;
+  vcl_string nm = str.str();
+  unsigned n = nm.size();
+  char* name = new char[n+1];
+  unsigned i = 0;
+  for(vcl_string::iterator sit = nm.begin(); sit !=nm.end(); ++sit, ++i)
+    name[i]=*sit;
+  name[n]='\0';
+  *(CNCSError*)this = CNCSJPCIOStream::Open(name, bWrite);
+  delete [] name;
   return *(CNCSError*)this;
 }
 

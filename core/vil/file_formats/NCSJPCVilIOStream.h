@@ -1,7 +1,10 @@
 // vil_j2k: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for 
 // Air Force Research Laboratory, 2005.
-
+// Do not remove the following notice
+// Modifications approved for public release, distribution unlimited 
+// DISTAR Case 14074
+//
 #ifndef NCSJPCVILIOSTREAM_H
 #define NCSJPCVILIOSTREAM_H
 
@@ -21,12 +24,13 @@
   * 1) As of 2/24/05, the writing capability of this class has not been tested.  In
   * theory it should work just fine though.
   *
-  * 2) It is necessary to provide a unique string name to an open stream.
-  * The original code always used the same name "VIL", and so all resources
-  * would access the same J2K data, since the ecw library accesses streams 
-  * by name. Only one stream with the same name can exist, which is the first
-  * one opened with that name. To provide a unique name, a static integer
-  * is maintained and appended to the stream name prefix. JLM April 13, 2009
+  * 2) It is necessary to provide a unique string name to an open CNCSJPCIO
+  *  stream. The original code always used the same name "VIL". The result is
+  * that all resources access the same J2K data, since the ecw library 
+  * accesses streams by name. Only one stream with the same name can exist, 
+  * which is the first one opened with that name. The fix is to provide a 
+  * unique name, based on a static unsigned short integer that is maintained 
+  * and appended to the stream name prefix. JLM April 13, 2009
   */
 class CNCSJPCVilIOStream : public CNCSJPCIOStream
 {
@@ -39,7 +43,7 @@ public:
     * of this function call will become my home position.  see \sa mHomePos for
     * more details on what that means.
     */
-  virtual CNCSError Open( vil_stream* stream );
+  virtual CNCSError Open( vil_stream* stream, bool bWrite = false );
 
   virtual CNCSError Close();
 
@@ -67,8 +71,7 @@ protected:
     */
   vil_streampos mHomePos;
   
-  static unsigned short mId; /*unique id*/
-  wchar_t* mName; /*wide character name array*/
+  static unsigned short mId; /*unique id */
 };
 
 #endif //NCSJPCVILIOSTREAM_H

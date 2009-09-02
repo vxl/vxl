@@ -92,7 +92,7 @@ ADD_TEST( vil_test_blocked_image_resource   ${EXECUTABLE_OUTPUT_PATH}/vil_test_a
 
 # Pyramid images
 ADD_TEST( vil_test_image_list ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_list )
-ADD_TEST( vil_test_pyramid_image_resource   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_pyramid_image_resource )
+ADD_TEST( vil_test_pyramid_image_resource   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_pyramid_image_resource ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)

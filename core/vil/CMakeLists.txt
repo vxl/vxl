@@ -44,7 +44,11 @@ INCLUDE( ${MODULE_PATH}/NewCMake/FindECW.cmake )
 IF(ECW_FOUND)
   SET( vil_sources ${vil_sources}
     file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
-    file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx )
+    file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx 
+    file_formats/vil_j2k_nitf2_pyramid_image_resource.h
+    file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
+    file_formats/vil_j2k_pyramid_image_resource.h
+    file_formats/vil_j2k_pyramid_image_resource.cxx)
   INCLUDE_DIRECTORIES(${ECW_INCLUDE_DIR})
   SET( HAS_J2K 1 )
 ELSE(ECW_FOUND)
