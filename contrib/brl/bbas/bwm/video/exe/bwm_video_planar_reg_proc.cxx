@@ -15,10 +15,11 @@ static bool planar_reg(vcl_string const& video_input_glob,
                        vcl_string const& camera_input_glob,
                        vcl_string const& video_output_dir,
                        vcl_string const& world_plane_path,
-                       vcl_string const& homography_path)
+                       vcl_string const& homography_path,
+                       vcl_string const& preserve_float)
 {
   vnl_double_4 pv;
-
+  unsigned skip_frames = 0;
   if (world_plane_path == "")
     return false;
   vcl_ifstream wis(world_plane_path.c_str());
@@ -29,7 +30,9 @@ static bool planar_reg(vcl_string const& video_input_glob,
       camera_input_glob == ""||
       video_output_dir == "")
     return false;
-
+  bool pre_flt = true;
+  if(preserve_float == "false")
+    pre_flt = false;
   if (!vul_file::exists(video_output_dir))
     if (!vul_file::make_directory_path(video_output_dir))
       return false;
@@ -73,7 +76,9 @@ static bool planar_reg(vcl_string const& video_input_glob,
                                                               world_plane,
                                                               bounds,
                                                               sample_distance,
-                                                              video_ostr))
+                                                              video_ostr,
+                                                              skip_frames,
+                                                              pre_flt))
       return false;
 
   if(homography_path != "")
@@ -81,7 +86,8 @@ static bool planar_reg(vcl_string const& video_input_glob,
                                                             world_plane,
                                                             bounds,
                                                             sample_distance,
-                                                            homography_path))
+                                                            homography_path,
+                                                             skip_frames))
       return false;
   return true;
 }
@@ -98,12 +104,12 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> world_plane_path(arglist, "-world_plane",
                                        "world plane (4 element vector)", "");
   vul_arg<vcl_string> homography_path(arglist, "-homg_dir", "homgraphy dir", "");
-
+  vul_arg<vcl_string> preserve_float(arglist, "-preserve_float", "keep float format", "");
   arglist.parse(argc, argv, true);
 
   if (!planar_reg(video_input_glob(), camera_input_glob(),
                   video_output_dir(), world_plane_path(),
-                  homography_path()))
+                  homography_path(), preserve_float()))
     return -1;
   return 0;
 }
