@@ -47,6 +47,24 @@ class vpgl_camera_homographies
     homography_to_camera(vpgl_perspective_camera<double> const& cam,
                          vgl_plane_3d<double> const& plane);
 
+  //: transform a camera so that its world coordinate system has the specified
+  // plane as the world X-Y plane
+  static vpgl_perspective_camera<double> 
+    transform_camera_to_plane(vpgl_perspective_camera<double> const& cam,
+                              vgl_plane_3d<double> const& plane);
+                                                                   
+  //: transform a camera so that its world coordinate system has the specified
+  // plane as the world X-Y plane
+  static vpgl_proj_camera<double> 
+    transform_camera_to_plane(vpgl_proj_camera<double> const& cam,
+                              vgl_plane_3d<double> const& plane);
+
+  //: transform a point cloud so that its coordinate system has the 
+  // specified plane as the world X-Y plane
+static vcl_vector<vgl_point_3d<double> >
+  transform_points_to_plane(vgl_plane_3d<double> const& plane,
+                          vgl_point_3d<double> const& ref_point,
+                            vcl_vector<vgl_point_3d<double> > const& pts );
 
  private:
 
