@@ -70,7 +70,6 @@
 #include <vil/file_formats/vil_bmp_file_header.h>
 #include <vil/file_formats/vil_bmp_info_header.h>
 #include <vil/file_formats/vil_iris.h>
-#include <vil/file_formats/vil_j2k_image.h>
 #include <vil/file_formats/vil_jpeg.h>
 #include <vil/file_formats/vil_jpeg_compressor.h>
 #include <vil/file_formats/vil_jpeg_decompressor.h>
@@ -108,6 +107,9 @@
 #include <vil/file_formats/vil_viffheader.h>
 // Only the following ones need library-specific #includes:
 #if HAS_JPEG2000
+#include <vil/file_formats/vil_j2k_image.h>
+#include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
+#include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
 #include <vil/file_formats/NCSJPCVilIOStream.h>
 #endif
 #if HAS_DCMTK
