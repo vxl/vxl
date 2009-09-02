@@ -39,8 +39,11 @@ SET(clsfy_sources
  clsfy_mean_square_1d_builder.cxx             clsfy_mean_square_1d_builder.h
  clsfy_direct_boost.cxx                       clsfy_direct_boost.h
  clsfy_direct_boost_builder.cxx               clsfy_direct_boost_builder.h
+ clsfy_binary_1d_wrapper.cxx                  clsfy_binary_1d_wrapper.h
+ clsfy_binary_1d_wrapper_builder.cxx          clsfy_binary_1d_wrapper_builder.h
+ 
 
-  clsfy_logit_loss_function.cxx   clsfy_logit_loss_function.h
+ clsfy_logit_loss_function.cxx               clsfy_logit_loss_function.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)

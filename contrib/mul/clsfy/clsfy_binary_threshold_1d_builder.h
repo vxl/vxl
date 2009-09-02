@@ -11,7 +11,7 @@
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_triple.h>
-//#include <clsfy/clsfy_classifier_1d.h>
+
 class clsfy_classifier_1d;
 
 //: Base for classes to build clsfy_classifier_1d objects

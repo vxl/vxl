@@ -37,7 +37,7 @@ void clsfy_builder_base::config(vcl_istream &as)
 // The stream should contain the name of the feature extractor
 // class that will be used, followed by a brace-enclosed list of
 // parameters for the builder. This function will construct
-// the appropriate seg3d_feature_extractor derivative and return that.
+// the appropriate clsfy_builder_base derivative and return that.
 // \throws if the parse fails.
 vcl_auto_ptr<clsfy_builder_base> clsfy_builder_base::new_builder(
   vcl_istream &as)

@@ -33,13 +33,6 @@ bool clsfy_binary_hyperplane_ls_builder::is_class(vcl_string const& s) const
 
 //=======================================================================
 
-short clsfy_binary_hyperplane_ls_builder::version_no() const
-{
-  return 1;
-}
-
-//=======================================================================
-
 void clsfy_binary_hyperplane_ls_builder::print_summary(vcl_ostream& os) const
 {
   os << is_a();
@@ -139,7 +132,7 @@ double clsfy_binary_hyperplane_ls_builder::build(
 
 void clsfy_binary_hyperplane_ls_builder::b_write(vsl_b_ostream &bfs) const
 {
-  const int version_no=1;
+  const short version_no=1;
   vsl_b_write(bfs, version_no);
 }
 

@@ -73,7 +73,7 @@ vcl_string clsfy_binary_threshold_1d::is_a() const
 bool clsfy_binary_threshold_1d::is_class(vcl_string const& s) const
 {
   return s == clsfy_binary_threshold_1d::is_a() || clsfy_classifier_1d::is_class(s);
-}
+}                 
 
 //=======================================================================
 

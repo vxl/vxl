@@ -6,7 +6,6 @@
 // \brief Describe an abstract classifier of 1D data
 // \author Tim Cootes
 
-#include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>

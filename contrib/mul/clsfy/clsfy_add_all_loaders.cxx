@@ -17,6 +17,10 @@
 #include <clsfy/clsfy_random_builder.h>
 #include <clsfy/clsfy_null_classifier.h>
 #include <clsfy/clsfy_null_builder.h>
+#include <clsfy/clsfy_binary_1d_wrapper.h>
+#include <clsfy/clsfy_binary_1d_wrapper_builder.h>
+#include <clsfy/clsfy_binary_threshold_1d.h>
+#include <clsfy/clsfy_binary_threshold_1d_builder.h>
 
 void clsfy_add_all_loaders()
 {
@@ -31,17 +35,27 @@ void clsfy_add_all_loaders()
   vsl_add_to_binary_loader(clsfy_rbf_parzen());
   vsl_add_to_binary_loader(clsfy_parzen_builder());
   mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_parzen_builder());
-  
+
   vsl_add_to_binary_loader(clsfy_rbf_svm());
   vsl_add_to_binary_loader(clsfy_rbf_svm_smo_1_builder());
   mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_rbf_svm_smo_1_builder());
-  
+
   vsl_add_to_binary_loader(clsfy_random_classifier());
   vsl_add_to_binary_loader(clsfy_random_builder());
   mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_random_builder());
-  
+
   vsl_add_to_binary_loader(clsfy_null_classifier());
   vsl_add_to_binary_loader(clsfy_null_builder());
   mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_null_builder());
+
+  vsl_add_to_binary_loader(clsfy_binary_1d_wrapper());
+  vsl_add_to_binary_loader(clsfy_binary_1d_wrapper_builder());
+  mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_binary_1d_wrapper_builder());
+
+
+  vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
+  vsl_add_to_binary_loader(clsfy_binary_threshold_1d_builder());
+  mbl_cloneables_factory<clsfy_builder_1d>::add(clsfy_binary_threshold_1d_builder());
+
 }
 

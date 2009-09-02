@@ -54,7 +54,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
                                                 const vcl_vector<unsigned> &outputs) const
 {
   // this method sorts the data and passes it to the method below
-  assert(classifier.is_class("clsfy_mean_square_1d"));
+  assert(classifier.is_class("clsfy_binary_threshold_1d"));
 
   unsigned int n= egs.size();
   assert ( wts.size() == n );
@@ -211,40 +211,6 @@ bool clsfy_binary_threshold_1d_builder::is_class(vcl_string const& s) const
 
 //=======================================================================
 
-#if 0
-
-// required if data stored on the heap is present in this derived class
-clsfy_binary_threshold_1d_builder::clsfy_binary_threshold_1d_builder(
-                             const clsfy_binary_threshold_1d_builder& new_b) :
-  data_ptr_(0)
-{
-  *this = new_b;
-}
-
-//=======================================================================
-
-// required if data stored on the heap is present in this derived class
-clsfy_binary_threshold_1d_builder&
-clsfy_binary_threshold_1d_builder::operator=(const clsfy_binary_threshold_1d_builder& new_b)
-{
-  if (&new_b==this) return *this;
-
-  // Copy heap member variables.
-  delete data_ptr_; data_ptr_=0;
-
-  if (new_b.data_ptr_)
-    data_ptr_ = new_b.data_ptr_->clone();
-
-  // Copy normal member variables
-  data_ = new_b.data_;
-
-  return *this;
-}
-
-#endif // 0
-
-//=======================================================================
-
 clsfy_builder_1d* clsfy_binary_threshold_1d_builder::clone() const
 {
   return new clsfy_binary_threshold_1d_builder(*this);
@@ -255,39 +221,29 @@ clsfy_builder_1d* clsfy_binary_threshold_1d_builder::clone() const
 // required if data is present in this base class
 void clsfy_binary_threshold_1d_builder::print_summary(vcl_ostream& /*os*/) const
 {
-  // clsfy_builder_1d::print_summary(os); // Uncomment this line if it has one.
-  // vsl_print_summary(os, data_); // Example of data output
-
-  vcl_cerr << "clsfy_binary_threshold_1d_builder::print_summary() NYI\n";
 }
 
 //=======================================================================
 
 // required if data is present in this base class
-void clsfy_binary_threshold_1d_builder::b_write(vsl_b_ostream& /*bfs*/) const
+void clsfy_binary_threshold_1d_builder::b_write(vsl_b_ostream& bfs) const
 {
-  //vsl_b_write(bfs, version_no());
-  //clsfy_builder_1d::b_write(bfs);  // Needed if base has any data
-  //vsl_b_write(bfs, data_);
-  vcl_cerr << "clsfy_binary_threshold_1d_builder::b_write() NYI\n";
+  short version_no=1;
+  vsl_b_write(bfs, version_no);
 }
 
 //=======================================================================
 
   // required if data is present in this base class
-void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& /*bfs*/)
+void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& bfs)
 {
-  vcl_cerr << "clsfy_binary_threshold_1d_builder::b_read() NYI\n";
-#if 0
   if (!bfs) return;
 
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
-  case (1):
-    //clsfy_builder_1d::b_read(bfs);  // Needed if base has any data
-    vsl_b_read(bfs,data_);
+  case 1:
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&)\n"
@@ -295,5 +251,4 @@ void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& /*bfs*/)
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
-#endif // 0
 }

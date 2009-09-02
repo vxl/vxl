@@ -183,5 +183,5 @@ void clsfy_parzen_builder::config(vcl_istream &as)
 
   // Check for unused props
   mbl_read_props_look_for_unused_props(
-    "clsfy_knn_builder::config", props, mbl_read_props_type());
+    "clsfy_parzen_builder::config", props, mbl_read_props_type());
 }

@@ -11,6 +11,7 @@ DECLARE( test_rbf_svm_smo );
 DECLARE( test_smo_1 );
 DECLARE( test_logit_loss_function );
 DECLARE( test_binary_hyperplane_logit );
+DECLARE( test_binary_1d_wrapper );
 
 void
 register_tests()
@@ -26,6 +27,7 @@ register_tests()
   REGISTER( test_smo_1 );
   REGISTER( test_logit_loss_function );
   REGISTER( test_binary_hyperplane_logit );
+  REGISTER( test_binary_1d_wrapper );
 }
 
 DEFINE_MAIN;

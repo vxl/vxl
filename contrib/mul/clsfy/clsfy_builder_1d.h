@@ -6,24 +6,22 @@
 // \brief Describe an abstract classifier builder for scalar data
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
-#include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
+#include <vcl_memory.h>
+#include <vbl/vbl_triple.h>
+#include <vsl/vsl_binary_io.h>
+#include <vnl/vnl_vector.h>
 
 class clsfy_classifier_1d;
-#include <vbl/vbl_triple.h>
 
 //: Base for classes to build clsfy_classifier_1d objects
 class clsfy_builder_1d
 {
  public:
 
-  // Dflt ctor
-  clsfy_builder_1d();
-
   // Destructor
-  virtual ~clsfy_builder_1d();
+  virtual ~clsfy_builder_1d() {}
 
   //: Create empty model
   virtual clsfy_classifier_1d* new_classifier() const = 0;
@@ -79,7 +77,15 @@ class clsfy_builder_1d
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
   //: Load class from binary file stream
+
   virtual void b_read(vsl_b_istream& bfs) = 0;
+  //: Initialise the parameters from a text stream.
+  // Default case accepts no parameters.
+  virtual void config(vcl_istream &as);
+
+  //: Load description from a text stream
+  static vcl_auto_ptr<clsfy_builder_1d> new_builder(
+    vcl_istream &as);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -96,5 +102,16 @@ vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d& b);
 
 //: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d* b);
+
+//: Stream output operator for class pointer
+vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d* b);
+
+//! Stream output operator for class reference
+inline void vsl_print_summary(vcl_ostream& os, const clsfy_builder_1d& b)
+{ os << b; }
+
+//! Stream output operator for class pointer
+inline void vsl_print_summary(vcl_ostream& os, const clsfy_builder_1d* b)
+{ os << b; }
 
 #endif // clsfy_builder_1d_h_

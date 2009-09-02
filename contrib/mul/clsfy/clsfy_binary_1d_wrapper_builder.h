@@ -1,27 +1,40 @@
-// This is mul/clsfy/clsfy_binary_hyperplane_ls_builder.h
+// This is mul/clsfy/clsfy_binary_1d_wrapper_builder.h
 // Copyright: (C) 2000 British Telecommunications PLC
-#ifndef clsfy_binary_hyperplane_ls_builder_h_
-#define clsfy_binary_hyperplane_ls_builder_h_
+#ifndef clsfy_binary_1d_wrapper_builder_h_
+#define clsfy_binary_1d_wrapper_builder_h_
 //:
 // \file
-// \brief Describe a binary linear classifier builder
+// \brief Wrap a builder_1d in general builder_base derivative.
 // \author Ian Scott
-// \date 2000-05-26
+// \date 2 Sep 2009
 
-#include <clsfy/clsfy_binary_hyperplane.h>
-#include <clsfy/clsfy_builder_base.h>
 #include <vcl_iosfwd.h>
+#include <mbl/mbl_cloneable_ptr.h>
+#include <clsfy/clsfy_binary_1d_wrapper.h>
+#include <clsfy/clsfy_builder_1d.h>
+#include <clsfy/clsfy_builder_base.h>
 
-//: Build a binary linear classifier using least squares
-class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base
+//: Wrap a builder_1d in general builder_base derivative.
+class clsfy_binary_1d_wrapper_builder : public clsfy_builder_base
 {
+  mbl_cloneable_nzptr<clsfy_builder_1d> builder_1d_;
+
  public:
   // Dflt ctor
-  clsfy_binary_hyperplane_ls_builder() {}
+  clsfy_binary_1d_wrapper_builder();
+
+  //: Set the underlying builder.
+  // The object will take and maintain its own deep copy of the data.
+  // This method should only be used by builders.
+  void set_builder_1d(const clsfy_builder_1d &builder)
+  { builder_1d_ = builder; }
+
+  //: Get the underlying builder.
+  const clsfy_builder_1d &builder_1d() const
+  { return *builder_1d_; }
 
   //: Create a new untrained linear classifier with binary output
-  virtual clsfy_classifier_base* new_classifier() const
-  { return new clsfy_binary_hyperplane; }
+  virtual clsfy_classifier_base* new_classifier() const;
 
   //: Build a linear classifier, with the given data.
   // Return the mean error over the training set.
@@ -36,6 +49,7 @@ class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base
                mbl_data_wrapper<vnl_vector<double> > &inputs,
                unsigned n_classes, const vcl_vector<unsigned> &outputs) const;
 
+
   //: Name of the class
   vcl_string is_a() const;
 
@@ -48,10 +62,14 @@ class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base
   //: Create a deep copy.
   // client is responsible for deleting returned object.
   virtual clsfy_builder_base* clone() const
-  { return new clsfy_binary_hyperplane_ls_builder(*this); }
+  { return new clsfy_binary_1d_wrapper_builder(*this); }
 
   virtual void b_write(vsl_b_ostream &) const;
   virtual void b_read(vsl_b_istream &);
+
+  //: Initialise the parameters from a text stream.
+  void config(vcl_istream &as);
+
 };
 
-#endif // clsfy_binary_hyperplane_ls_builder_h_
+#endif // clsfy_binary_1d_wrapper_builder_h_
