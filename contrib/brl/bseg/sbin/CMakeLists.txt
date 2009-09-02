@@ -38,4 +38,14 @@ TARGET_LINK_LIBRARIES(generate_tiff_rset vul vil)
 
 #New executable to generate rsets for all files in directory
 ADD_EXECUTABLE (gen_tiff_rset_dir gen_tiff_rset_dir.cxx)
-TARGET_LINK_LIBRARIES(gen_tiff_rset_dir vul vil)
+
+TARGET_LINK_LIBRARIES(gen_tiff_rset_dir vpl vul vil)
+
+#Executable to jpeg2000 compress images in a directory if ermapper is installed
+INCLUDE( ${MODULE_PATH}/NewCMake/FindECW.cmake )
+IF(ECW_FOUND)
+ INCLUDE_DIRECTORIES(${ECW_INCLUDE_DIR})	
+ADD_EXECUTABLE (compress_j2k_dir compress_j2k_dir.cxx)
+TARGET_LINK_LIBRARIES(compress_j2k_dir vpl vul vil)
+ENDIF(ECW_FOUND)
+
