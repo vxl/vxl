@@ -795,8 +795,8 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 2);
 
-  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
-  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int()); // golden
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int()); // predicited
   const vil3d_image_view<int>& i1 = o1.image();
   const vil3d_image_view<int>& i2 = o2.image();
 
@@ -806,6 +806,7 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
 
   unsigned long Tanamoto_num=0, Tanamoto_den=0;
   unsigned long sum1=0, sum2=0;
+  unsigned long TP=0, FN=0, FP=0, TN=0;
   for (unsigned k=0, nk=o1.image().nk(); k<nk; ++k)
     for (unsigned j=0, nj=o1.image().nj(); j<nj; ++j)
       for (unsigned i=0, ni=o1.image().ni(); i<ni; ++i)
@@ -816,14 +817,27 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
         Tanamoto_den += (p1 || p2)?1:0;
         sum1 += p1;
         sum2 += p2;
+        if (p1)
+        {
+          if (p2) TP++;
+          else    FN++;
+        }
+        else
+        {
+          if (p2) FP++;
+          else    TN++;
+        }
       }
 
   vgl_vector_3d<double> voxel_size=o2.world2im().inverse().delta(
     vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
   double vox_volume = voxel_size.x() * voxel_size.y() * voxel_size.z();
 
-  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den << " Volumes: "
-    << sum1*vox_volume << ' ' << sum2*vox_volume << vcl_endl;
+  double FPR = static_cast<double>(FP) / (FP+TN);
+  double FNR = static_cast<double>(FN) / (FN+TP);
+  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den <<
+    " Volumes: " << sum1*vox_volume << ' ' << sum2*vox_volume <<
+    " FPR: " << FPR << " FNR: " << FNR << vcl_endl;
 
   s.pop_front();
   s.pop_front();
@@ -1114,7 +1128,7 @@ class operations
                   "n", "", "Set precision of floating point numbers on the console to n digits");
     add_operation("--print_overlap", &print_overlap__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
-                  "image image", "", "Print overlap measures and volumes of two binary mask images.");
+                  "image image", "", "Print overlap measures and volumes of two binary mask images. Assuming the first image is the golden data, it prints the error rates.");
     add_operation("--print_overlap", &print_overlap__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "image image", "", "Print generalised overlap measures and volumes of two partial volume mask images.");
