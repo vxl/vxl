@@ -26,6 +26,11 @@
 #include <vil/vil_flip.h>
 #include <vil/vil_resample_bicub.h>
 #include <vil/vil_convert.h>
+#include <vil/vil_config.h>
+#if HAS_J2K
+#include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
+#include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
+#endif // HAS_J2K
 #include <vil/algo/vil_sobel_1x3.h>
 #include <vgl/vgl_vector_2d.h>
 #include <sdet/sdet_detector_params.h>
@@ -546,7 +551,28 @@ void segv_vil_segmentation_manager::load_image()
     vcl_cout << "Failed to load image path " << image_filename << '\n';
     return;
   }
-
+#if HAS_J2K
+  // determine if the image can be made into a J2K-nitf pyramid
+  char const* fmtp = image->file_format();
+  vcl_string file_fmt = "";
+  if(fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
+  if(file_fmt == "nitf21")
+    {
+      vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(image.ptr());
+      if(nitf_resc->is_jpeg_2000_compressed())
+        {
+          vil_j2k_nitf2_pyramid_image_resource* j2k_nitf = 
+            new vil_j2k_nitf2_pyramid_image_resource(image);
+          image = j2k_nitf;
+          pyrm = true;
+        }
+    }else if(file_fmt == "j2k"){
+      vil_j2k_pyramid_image_resource* j2k_pyr = 
+        new vil_j2k_pyramid_image_resource(image);     
+      image = j2k_pyr;
+      pyrm = true;
+    }
+#endif //HAS_J2K
   if (greyscale&&!pyrm)
   {
     vil_image_view<unsigned char> grey_view =
@@ -590,7 +616,28 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
     vcl_cout << "Failed to load image path " << path << '\n';
     return;
   }
-
+#if HAS_J2K
+// determine if the image can be made into a J2K-nitf pyramid
+  char const* fmtp = image->file_format();
+  vcl_string file_fmt = "";
+  if(fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
+  if(file_fmt == "nitf21")
+    {
+      vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(image.ptr());
+      if(nitf_resc->is_jpeg_2000_compressed())
+        {
+          vil_j2k_nitf2_pyramid_image_resource* j2k_nitf = 
+            new vil_j2k_nitf2_pyramid_image_resource(image);
+          image = j2k_nitf;
+          pyrm = true;
+        }
+    }else if(file_fmt == "j2k"){
+      vil_j2k_pyramid_image_resource* j2k_pyr = 
+        new vil_j2k_pyramid_image_resource(image);
+      image = j2k_pyr;
+      pyrm = true;
+    }
+#endif //HAS_J2K
   vgui_range_map_params_sptr rmps = range_params(image);
 
   if (first_)
