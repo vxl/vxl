@@ -9,21 +9,17 @@
 
 //=======================================================================
 
-#include <clsfy/clsfy_smo_1.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
+#include <vul/vul_string.h>
 
 #include <mbl/mbl_data_wrapper.h>
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
 
-//=======================================================================
-
-clsfy_rbf_svm_smo_1_builder::clsfy_rbf_svm_smo_1_builder()
-{
-  boundC_ = 0;
-  rbf_width_ = 1.0;
-}
+#include <clsfy/clsfy_smo_1.h>
 
 //=======================================================================
 
@@ -171,4 +167,35 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
+}
+
+
+//=======================================================================
+//: Initialise the parameters from a text stream.
+// The next non-ws character in the stream should be a '{'
+// \verbatim
+// {
+//   boundC: 3  (default 0 meaning no bound) Upper bound on the Lagrange multiplies.
+//              Smaller non-zero values result in a osftening of the boundary.
+//
+//   rbf_width: 3.0  (required) - A good guess is the mean euclidean distance
+//                    to every examples nearest neighbour.
+// }
+// \endverbatim
+// \throw mbl_exception_parse_error if the parse fails.
+void clsfy_rbf_svm_smo_1_builder::config(vcl_istream &as)
+{
+ vcl_string s = mbl_parse_block(as);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  {
+    boundC_= vul_string_atof(props.get_optional_property("boundC", "0.0"));
+    rbf_width_= vul_string_atof(props.get_optional_property("rbf_width", "0.0"));
+  }
+
+  // Check for unused props
+  mbl_read_props_look_for_unused_props(
+    "clsfy_rbf_svm_smo_1_builder::config", props, mbl_read_props_type());
 }

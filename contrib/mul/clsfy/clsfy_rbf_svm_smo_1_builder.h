@@ -27,29 +27,25 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
  public:
 
   //: Dflt ctor
-  clsfy_rbf_svm_smo_1_builder();
-
-  //: Destructor
-  virtual ~clsfy_rbf_svm_smo_1_builder() {}
+   clsfy_rbf_svm_smo_1_builder(): boundC_(0), rbf_width_(1.0) {}
 
   //: Create empty model
-  virtual clsfy_classifier_base* new_classifier() const{return new clsfy_rbf_svm();}
+  clsfy_classifier_base* new_classifier() const{return new clsfy_rbf_svm();}
 
   //: Build model from data
   // returns the empirical error, or +INF if there is an error.
   // nclasses should be 1. The members of outputs() should be 0 or 1.
-  // An appropriate RBF width is chosen by the algorithm.
-  virtual double build(clsfy_classifier_base& classifier,
-                       mbl_data_wrapper<vnl_vector<double> >& inputs,
-                       unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const;
+  double build(clsfy_classifier_base& classifier,
+               mbl_data_wrapper<vnl_vector<double> >& inputs,
+               unsigned nClasses,
+               const vcl_vector<unsigned> &outputs) const;
 
   //: Build a classifier from data.
   // returns the empirical error rate, or +INF if there is an error.
   // The members of outputs() should be 0 or 1.
-  virtual double build(clsfy_classifier_base& classifier,
-                       mbl_data_wrapper<vnl_vector<double> >& inputs,
-                       const vcl_vector<unsigned> &outputs) const;
+  double build(clsfy_classifier_base& classifier,
+               mbl_data_wrapper<vnl_vector<double> >& inputs,
+               const vcl_vector<unsigned> &outputs) const;
 
   //: Radius of Gaussian function
   double rbf_width() const;
@@ -73,25 +69,28 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   { return boundC_; }
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  vcl_string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  bool is_class(vcl_string const& s) const;
 
   //: Return the class's IO version number
   short version_no() const;
 
   //: Create a copy on the heap and return base class pointer
-  virtual clsfy_builder_base* clone() const;
+  clsfy_builder_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  void print_summary(vcl_ostream& os) const;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs);
+
+  //: Config from a stream.
+  void config(vcl_istream&);
 };
 
 #endif // clsfy_rbf_svm_smo_1_builder_h_
