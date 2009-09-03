@@ -1,5 +1,4 @@
 // This is brl/bseg/bvpl/bvpl_local_max_functor.h
-
 #ifndef bvpl_local_max_functor_h_
 #define bvpl_local_max_functor_h_
 //:
@@ -74,19 +73,18 @@ template <>
 float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_f1> curr_val);
 
 
-
 //: Default constructor
 template <class T>
 bvpl_local_max_functor<T>::bvpl_local_max_functor()
 {
   this->init();
 }
- 
+
 //: Init class variables
 template <class T>
-void bvpl_local_max_functor<T>::init() 
-{ 
-  max_=T(0); 
+void bvpl_local_max_functor<T>::init()
+{
+  max_=T(0);
 }
 
 
@@ -98,7 +96,7 @@ void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
     max_=val;
 }
 
-//: Retreive result
+//: Retrieve result
 template <class T>
 T bvpl_local_max_functor<T>::result( T cur_val)
 {
@@ -134,6 +132,4 @@ float bvpl_local_max_functor<T>::filter_response(unsigned id, unsigned target_id
   return (float)curr_val;
 }
 
-
-
-#endif
+#endif // bvpl_local_max_functor_h_

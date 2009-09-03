@@ -42,7 +42,7 @@ bool bvpl_compare_surface_and_normal_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr"; // distance transform of the gt
   input_types_[1] = "bvxm_voxel_grid_base_sptr"; // estimated response
-  input_types_[2] = "vcl_string"; // path for the ouput grid
+  input_types_[2] = "vcl_string"; // path for the output grid
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -75,7 +75,7 @@ bool bvpl_compare_surface_and_normal_process(bprb_func_process& pro)
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
   }
-  
+
   bvxm_voxel_grid<float> *dt_grid = dynamic_cast<bvxm_voxel_grid<float>* > (dt_grid_base.ptr());
   bvxm_voxel_grid<bvxm_opinion> *est_grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (est_grid_base.ptr());
 
