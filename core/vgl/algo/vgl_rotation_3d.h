@@ -79,21 +79,25 @@ class vgl_rotation_3d
     if (cmag>1.0) cmag=1.0;
     // if the vectors have the same direction, then set to identity rotation:
     if (cmag<vgl_tolerance<double>::position)
-      if(aa!=vnl_math::pi)
-        { q_ = vnl_quaternion<T>(0, 0, 0, 1);
-        return; }else{// rotation axis not defined for rotation of pi
-          //construct a vector v along the min component axis of a
-          double ax = static_cast<double>(a[0]),ay = static_cast<double>(a[1]),
-            az = static_cast<double>(a[2]); 
-          vnl_vector_fixed<T,3> v(T(0));
-          double amin = ax; v[0]=T(1);
-          if(ay<amin){amin = ay; v[0]=T(0); v[1]=T(1);}
-          if(az<amin){v[0]=T(0); v[1]=T(0); v[2]=T(1);}
-          //define the pi rotation axis perpendicular to both v and a
-          vnl_vector_fixed<T,3> pi_axis = vnl_cross_3d(v, a);
-          q_ = vnl_quaternion<T>(pi_axis/pi_axis.magnitude(), aa);
-          return;
-        }
+    {
+      if (aa!=vnl_math::pi) {
+        q_ = vnl_quaternion<T>(0, 0, 0, 1);
+        return;
+      }
+      else {// rotation axis not defined for rotation of pi
+        //construct a vector v along the min component axis of a
+        double ax = static_cast<double>(a[0]),ay = static_cast<double>(a[1]),
+               az = static_cast<double>(a[2]);
+        vnl_vector_fixed<T,3> v(T(0));
+        double amin = ax; v[0]=T(1);
+        if (ay<amin){amin = ay; v[0]=T(0); v[1]=T(1);}
+        if (az<amin){v[0]=T(0); v[1]=T(0); v[2]=T(1);}
+        //define the pi rotation axis perpendicular to both v and a
+        vnl_vector_fixed<T,3> pi_axis = vnl_cross_3d(v, a);
+        q_ = vnl_quaternion<T>(pi_axis/pi_axis.magnitude(), aa);
+        return;
+      }
+    }
     double angle = vcl_asin(cmag)+aa;
     q_ = vnl_quaternion<T>(c/c.magnitude(), angle);
   }
