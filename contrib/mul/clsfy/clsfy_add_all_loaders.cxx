@@ -7,6 +7,8 @@
 
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_binary_hyperplane_ls_builder.h>
+#include <clsfy/clsfy_binary_hyperplane_logit_builder.h>
+#include <clsfy/clsfy_binary_hyperplane_gmrho_builder.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_knn_builder.h>
 #include <clsfy/clsfy_rbf_parzen.h>
@@ -27,6 +29,12 @@ void clsfy_add_all_loaders()
   vsl_add_to_binary_loader(clsfy_binary_hyperplane());
   vsl_add_to_binary_loader(clsfy_binary_hyperplane_ls_builder());
   mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_binary_hyperplane_ls_builder());
+
+  vsl_add_to_binary_loader(clsfy_binary_hyperplane_logit_builder());
+  mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_binary_hyperplane_logit_builder());
+
+  vsl_add_to_binary_loader(clsfy_binary_hyperplane_gmrho_builder());
+  mbl_cloneables_factory<clsfy_builder_base>::add(clsfy_binary_hyperplane_gmrho_builder());
 
   vsl_add_to_binary_loader(clsfy_k_nearest_neighbour());
   vsl_add_to_binary_loader(clsfy_knn_builder());
