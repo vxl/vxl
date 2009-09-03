@@ -59,9 +59,7 @@ class vpgl_backproject
                           vgl_point_3d<double> const& initial_guess,
                           vgl_point_3d<double>& world_point);
 
-  //:Backproject a point with associated direction vector in the 
-  // image to a plane in 3-d, passing through the center of projection 
-  // and containing the point and vector. 
+  //:Backproject a point with associated direction vector in the image to a plane in 3-d, passing through the center of projection and containing the point and vector.
   //  ** Defined only for a projective camera **
   static bool bproj_point_vector(vpgl_proj_camera<double> const& cam,
                                  vgl_point_2d<double> const& point,
