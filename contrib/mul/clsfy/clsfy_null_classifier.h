@@ -14,6 +14,7 @@
 #include "clsfy_classifier_base.h"
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
+#include <vcl_iosfwd.h>
 
 //:  A classifier that always returns the same answer.
 class clsfy_null_classifier : public clsfy_classifier_base
