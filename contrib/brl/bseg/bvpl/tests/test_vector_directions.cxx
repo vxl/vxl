@@ -1,8 +1,8 @@
 //:
 // \file
 // Created by Isabel Restrepo on 8/26/09.
-// 
-// 
+//
+//
 #include <testlib/testlib_test.h>
 #include <bvpl/bvpl_create_directions.h>
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
@@ -12,21 +12,20 @@ bool test_directions(FUNC dir)
 {
   bvpl_edge3d_kernel_factory kernels_3d(3,3,3);
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
-  
+
   vcl_vector<vnl_float_3> axes1= dir.get_axes();
-  
+
   vcl_vector<vnl_float_3>::iterator iter1 = axes1.begin();
   bvpl_kernel_vector::iterator iter2 = kernel_vec->begin();
   bool result = true;
-  for(; iter1!=axes1.end(); ++iter1, ++iter2)
+  for (; iter1!=axes1.end(); ++iter1, ++iter2)
   {
     result = result && ((*iter1 -(*iter2)->axis()).two_norm() < 1e-2f);
     if (!result)
       vcl_cout << *iter1 << "  should be  " << (*iter2)->axis() << vcl_endl;
   }
-  
+
   return result;
-  
 }
 
 //: Test that directions created by functores are in fact stored in the kernels

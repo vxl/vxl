@@ -22,12 +22,10 @@ bvpl_create_directions_a::bvpl_create_directions_a()
       angles_.push_back(0.0f);
     }
   }
-  
 }
 
 bvpl_create_directions_b::bvpl_create_directions_b()
 {
-
   double theta = 0.0;
   double phi = 0.0;
 
@@ -35,7 +33,7 @@ bvpl_create_directions_b::bvpl_create_directions_b()
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   axes_.push_back(axis);
   angles_.push_back(0.0f);
-  
+
   //when zenith is pi/4 traverse all hemisphere
   phi = vnl_math::pi_over_4;
   double theta_res = vnl_math::pi_over_4; //azimuth; phi_res = zenith (from the pole)
@@ -65,7 +63,7 @@ bvpl_create_directions_c::bvpl_create_directions_c()
 {
   double theta = 0.0;
   double phi = 0.0;
-  
+
   //polar phi=0
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   double angle_res = vnl_math::pi_over_4;
@@ -74,9 +72,9 @@ bvpl_create_directions_c::bvpl_create_directions_c()
     axes_.push_back(axis);
     angles_.push_back(angle);
   }
-  
+
   double theta_res = vnl_math::pi_over_4;
- 
+
   //when phi is pi/4 traverse all hemisphere
   phi = (vnl_math::pi_over_4);
   for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
@@ -90,7 +88,7 @@ bvpl_create_directions_c::bvpl_create_directions_c()
       angles_.push_back(angle);
     }
   }
-  
+
   //when zenith is pi/2 we only traverse half a hemisphere
   phi = double(vnl_math::pi_over_2);
   theta =0.0;
@@ -103,6 +101,6 @@ bvpl_create_directions_c::bvpl_create_directions_c()
       axis[2] = float(vcl_cos(phi));
       axes_.push_back(axis);
       angles_.push_back(angle);
-    }  
+    }
   }
 }

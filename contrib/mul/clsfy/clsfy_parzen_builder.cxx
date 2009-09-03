@@ -169,6 +169,7 @@ clsfy_classifier_base* clsfy_parzen_builder::new_classifier() const
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
+
 void clsfy_parzen_builder::config(vcl_istream &as)
 {
  vcl_string s = mbl_parse_block(as);

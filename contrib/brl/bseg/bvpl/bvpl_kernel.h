@@ -1,18 +1,16 @@
 // This is//Projects/vxl/src/contrib/brl/bseg/bvpl/bvpl_kernel.h
 #ifndef bvpl_kernel_h
 #define bvpl_kernel_h
-
 //:
 // \file
 // \brief A class to hold a kernel created by bvpl_kernel_factory
 // \author Isabel Restrepo mir@lems.brown.edu
-// \date  8/25/09
+// \date  August 25, 2009
 //
 // \verbatim
 //  Modifications
-//   8/25/09 Moved out of bvpl_kernel_factory.h
+//   August 25, 2009 Moved out of bvpl_kernel_factory.h
 // \endverbatim
-
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -39,24 +37,24 @@ class bvpl_kernel: public vbl_ref_count
     vgl_vector_3d<int> dim()const {return dim_;}
     vgl_point_3d<int> min() const {return min_;}
     vgl_point_3d<int> max() const {return max_;}
-    
+
     void print()
     {
       kernel_.begin();
       while (!kernel_.isDone()) {
         vgl_point_3d<int> coord =kernel_.index();
         float val= ((*kernel_).c_);
-        
+
         vcl_cout.precision(2);
         vcl_cout << coord << "  " << val<< vcl_endl;
         ++kernel_;
       }
     }
-    
+
     void print_to_file(vcl_string filename);
-    
+
     bool save_raw(vcl_string filename);
-    
+
     // Returns a sum of kernel values. Useful to check if they add up to zero
     float cum_sum()
     {
@@ -69,10 +67,10 @@ class bvpl_kernel: public vbl_ref_count
       vcl_cout << "Kernel sums to : " << val << vcl_endl;
       return val;
     }
-    
+
     unsigned id(){return id_;}
     static unsigned id_cnt;
-    
+
   private:
     bvpl_kernel_iterator kernel_;
     vnl_float_3 axis_;
@@ -93,32 +91,32 @@ class bvpl_kernel_vector : public vbl_ref_count
     typedef vcl_vector< bvpl_kernel_sptr >::iterator iterator;
     //: Default constructor
     bvpl_kernel_vector() {}
-    
+
     iterator begin() { return kernels_.begin(); }
     iterator end()   { return kernels_.end(); }
-  
+
     vgl_vector_3d<int> max_dim(){
-      iterator it =  kernels_.begin(); 
+      iterator it =  kernels_.begin();
       int max_x = (*it)->dim().x();
       int max_y = (*it)->dim().y();
       int max_z = (*it)->dim().z();
-      for(; it!= kernels_.end(); ++it)
+      for (; it!= kernels_.end(); ++it)
       {
         vgl_vector_3d<int> dim = (*it)->dim();
-        if(dim.x() > max_x)
+        if (dim.x() > max_x)
           max_x = dim.x();
-        if(dim.y() > max_y)
+        if (dim.y() > max_y)
           max_y = dim.y();
-        if(dim.z() > max_z)
+        if (dim.z() > max_z)
           max_z = dim.z();
       }
       return vgl_vector_3d<int>(max_x, max_y, max_z);
     }
-    
-    //: vector of kernel 
+
+    //: vector of kernel
     vcl_vector< bvpl_kernel_sptr> kernels_;
 };
 
 typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
 
-#endif
+#endif // bvpl_kernel_h
