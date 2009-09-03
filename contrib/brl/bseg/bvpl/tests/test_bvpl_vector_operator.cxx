@@ -27,7 +27,7 @@ void create_grid(vcl_string grid_filename)
     vul_file::delete_file_glob(grid_filename);
 
   bvxm_voxel_grid<bvxm_opinion> surface_grid(grid_filename,vgl_vector_3d<unsigned int>(32,32,32));
-  bvxm_opinion bnonsurf(0.9,0.1);
+  bvxm_opinion bnonsurf(0.9f,0.1f);
   surface_grid.initialize_data(bnonsurf);
 
   vcl_vector<vgl_point_3d<double> > poly_points;
@@ -36,7 +36,7 @@ void create_grid(vcl_string grid_filename)
   poly_points.push_back(vgl_point_3d<double>(20.0,20.0,10.0));
   poly_points.push_back(vgl_point_3d<double>(20.0,10.0,10.0));
 
-  bvxm_opinion bsurf(0.1,0.9);
+  bvxm_opinion bsurf(0.1f,0.9f);
   bvxm_load_polygon_into_grid<bvxm_opinion>(&surface_grid,poly_points,bsurf);
 }
 
@@ -113,7 +113,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid)
   float ck=nk*0.5f ;
 
   bool result = true;
-  
+
   unsigned slab_idx = 0;
   bvxm_voxel_grid<float>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
   for (unsigned i=0;i<ni;i++)
