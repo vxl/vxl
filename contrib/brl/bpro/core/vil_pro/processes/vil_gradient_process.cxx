@@ -83,8 +83,8 @@ bool vil_gradient_process(bprb_func_process& pro)
   }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(Ix));
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(Iy));
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(mag));
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<float>(Iy));
+  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<float>(mag));
 
   return true;
 }
