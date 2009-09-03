@@ -16,10 +16,12 @@
 #include <vcl_stdexcept.h>
 #include <vcl_sstream.h>
 #include <vcl_deque.h>
+#include <vcl_map.h>
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vsl/vsl_deque_io.txx>
+#include <vsl/vsl_map_io.txx>
 #include <vsl/vsl_stream.h>
 #include <vnl/vnl_math.h>
 #include <vul/vul_string.h>
@@ -101,8 +103,10 @@ class operand
   double double_;
 
  public:
-  enum operand_type_t { e_string, e_image_3d_of_double, e_image_3d_of_float, e_image_3d_of_int, e_double };
+  enum operand_type_t { e_string, e_image_3d_of_double, e_image_3d_of_float, e_image_3d_of_int, e_double, e_never };
   operand_type_t operand_type_;
+
+  operand(): operand_type_(e_never) {} // if used with this value - should throw.
 
   explicit operand(const vcl_string& s):
     string_(s), operand_type_(e_string) {}
@@ -256,6 +260,42 @@ class operand
     }
     return false;
   }
+
+
+  operand deep_copy() const
+  {
+    switch (operand_type_)
+    {
+     // Simple cases with types that deep copy by default.
+     case e_string:
+     case e_double:
+       return *this;
+     case e_image_3d_of_double:
+      {
+        vimt3d_image_3d_of<double> im;
+        im.deep_copy(this->image_3d_of_double_);
+        return operand(im);
+      }
+     case e_image_3d_of_float:
+      {
+        vimt3d_image_3d_of<float> im;
+        im.deep_copy(this->image_3d_of_float_);
+        return operand(im);
+      }
+     case e_image_3d_of_int:
+      {
+        vimt3d_image_3d_of<int> im;
+        im.deep_copy(this->image_3d_of_int_);
+        return operand(im);
+      }
+     default: {
+      vcl_ostringstream ss;
+      ss << "Unknown operand_type: " << operand_type_;
+      throw mbl_exception_abort(ss.str()); }
+    }
+    return operand();
+  }
+
 };
 
 void vsl_print_summary( vcl_ostream&ss, const operand& p) { p.print_summary(ss); }
@@ -298,6 +338,9 @@ vcl_ostream& operator <<( vcl_ostream&ss, const operand::operand_type_t& t)
 
 typedef vcl_deque<operand> opstack_t;
 
+typedef vcl_map<vcl_string, operand> named_store_t;
+
+static named_store_t named_store;
 
 void print_operations(vcl_ostream&);
 
@@ -312,6 +355,98 @@ void help(opstack_t& s)
   vcl_exit(3);
 }
 
+
+//: Add all voxel values together.
+void voxel_sum__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+
+  double result = 0;
+  vil3d_math_sum(result, o1.image(), 0);
+
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+//: Add all voxel values together.
+void voxel_sum__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+
+  unsigned long result = 0;
+  vil3d_math_sum(result, o1.image(), 0);
+
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+//: Add all voxel values together.
+void voxel_product__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+  const vil3d_image_view<int>& o1_image = o1.image();
+
+  double result = 0.0;
+  for (unsigned k=0,nk=o1_image.nk(); k<nk; ++k)
+    for (unsigned j=0,nj=o1_image.nj(); j<nj; ++j)
+      for (unsigned i=0,ni=o1_image.ni(); i<ni; ++i)
+        result *= o1_image(i,j,k);
+
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+//: Add all voxel values together.
+void voxel_product__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+  const vil3d_image_view<int>& o1_image = o1.image();
+
+  double result = 0;
+  for (unsigned k=0,nk=o1_image.nk(); k<nk; ++k)
+    for (unsigned j=0,nj=o1_image.nj(); j<nj; ++j)
+      for (unsigned i=0,ni=o1_image.ni(); i<ni; ++i)
+        result *= o1_image(i,j,k);
+
+  s.pop_front();
+  s.push_front(operand(static_cast<double>(result)));
+}
+
+
+//: Calculate the x, y and z sizes of the central voxel.
+void voxel_size__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+
+  vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
+    vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
+
+  s.pop_front();
+  s.push_front(operand(voxel_size.x()));
+  s.push_front(operand(voxel_size.y()));
+  s.push_front(operand(voxel_size.z()));
+}
+
+
+//: Calculate the x, y and z sizes of the central voxel.
+void voxel_size__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+
+  vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
+    vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
+
+  s.pop_front();
+  s.push_front(operand(voxel_size.x()));
+  s.push_front(operand(voxel_size.y()));
+  s.push_front(operand(voxel_size.z()));
+}
 //: Add voxels of two images together
 void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
@@ -322,6 +457,55 @@ void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vimt3d_image_3d_of<float> result;
   vil3d_math_image_sum(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+//: And voxels of two images together
+void and__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  const vil3d_image_view<int>& o1_image = o1.image();
+  const vil3d_image_view<int>& o2_image = o2.image();
+
+  vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+    1, o1.world2im());
+  vil3d_image_view<int> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = 
+          (o1_image(i,j,k) && o2_image(i,j,k)) ? 1 : 0;
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+
+//: Or voxels of two images together
+void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  const vil3d_image_view<int>& o1_image = o1.image();
+  const vil3d_image_view<int>& o2_image = o2.image();
+
+  vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+    1, o1.world2im());
+  vil3d_image_view<int> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = 
+          (o1_image(i,j,k) || o2_image(i,j,k)) ? 1 : 0;
 
   s.pop_front();
   s.pop_front();
@@ -368,6 +552,36 @@ void resample__image_3d_of_float__image_3d_of_float(opstack_t& s)
   s.pop_front();
   s.pop_front();
   s.push_front(operand(result));
+}
+
+
+
+void store__poly__string(opstack_t& s)
+{
+  assert(s.size() >= 2);
+
+  named_store[s[0].as_string()] = s[1];
+
+  s.pop_front();
+  s.pop_front();
+}
+
+
+void recall__string(opstack_t& s)
+{
+  assert(s.size() >= 2);
+
+  const vcl_string& o1 = s[0].as_string();
+  named_store_t::const_iterator it = named_store.find(o1);
+  if (it == named_store.end())
+  {
+    vcl_ostringstream ss;
+    ss << "RECALL could not find a store called " << o1
+       << "\n Store is :\n" << vsl_stream_summary(named_store);
+    throw vcl_runtime_error(ss.str());
+  }
+  s.pop_front();
+  s.push_front(it->second.deep_copy());
 }
 
 
@@ -631,6 +845,46 @@ void scale_and_offset__image_3d_of_float__double__double(opstack_t& s)
   s.push_front(operand(o1));
 }
 
+
+void not__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1=s[0].as_image_3d_of_int();
+  const vil3d_image_view<int>& o1_image = o1.image();;
+
+  vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+    1, o1.world2im());
+  vil3d_image_view<int> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
+
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+
+void not__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1=s[0].as_image_3d_of_float();
+  const vil3d_image_view<float>& o1_image = o1.image();
+
+  vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+    1, o1.world2im());
+  vil3d_image_view<int> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
+
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
 void convert_to_int__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -746,6 +1000,14 @@ void copy__image_3d_of_int(opstack_t& s)
   result.deep_copy(o1);
 
   s.push_front(operand(result));
+}
+
+
+void copy__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+
+  s.push_front(s[0]);
 }
 
 void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
@@ -925,6 +1187,42 @@ void print_stats__image_3d_of_int(opstack_t& s)
   s.pop_front();
 }
 
+void print__double__double(opstack_t& s)
+{
+  assert(s.size() > 2);
+  unsigned n = static_cast<unsigned>(s[0].as_double());
+  // variable number of parameters, so check types now
+
+  if (s.size() < n+1)
+  {
+    vcl_ostringstream ss;
+    ss << "PRINT command could not find " << n << " doubles to print.\n"
+       << "Stack is :\n" << vsl_stream_summary(s);
+    throw vcl_runtime_error(ss.str());
+  }
+  for (unsigned i=1;i<=n; ++i)
+  {
+    if (!s[i].is_double())
+    {
+      vcl_ostringstream ss;
+      ss << "PRINT command could not find " << n << " doubles to print.\n"
+         << "Stack is :\n" << vsl_stream_summary(s);
+      throw vcl_runtime_error(ss.str());
+    }
+  }
+
+
+  vcl_cout << s[n].as_double();
+  for (unsigned i=n-1;i>=1; --i)
+  {
+    vcl_cout << ' ' << s[i].as_double();
+  }
+  vcl_cout << vcl_endl;
+  
+  for (unsigned i=0;i<=n; ++i)
+    s.pop_front();
+
+}
 void signed_distance_transform__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -945,6 +1243,77 @@ void signed_distance_transform__image_3d_of_int(opstack_t& s)
 
   s.pop_front();
   s.push_front(operand(result));
+}
+
+
+void sum__double__double(opstack_t& s)
+{
+  assert(s.size() > 1);
+  double o1(s[1].as_double());
+  double o2(s[0].as_double());
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1+o2));
+}
+
+void diff__double__double(opstack_t& s)
+{
+  assert(s.size() > 1);
+  double o1(s[1].as_double());
+  double o2(s[0].as_double());
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1-o2));
+}
+
+void product__double__double(opstack_t& s)
+{
+  assert(s.size() > 1);
+  double o1(s[1].as_double());
+  double o2(s[0].as_double());
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1*o2));
+}
+
+void quotient__double__double(opstack_t& s)
+{
+  assert(s.size() > 1);
+  double o1(s[1].as_double());
+  double o2(s[0].as_double());
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1/o2));
+}
+
+
+void fill__image_3d_of_float__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  double o2(s[0].as_double());
+
+  o1.image().fill(static_cast<float>(o2));
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1));
+}
+
+
+void fill__image_3d_of_int__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  double o2(s[0].as_double());
+
+  o1.image().fill(static_cast<int>(o2));
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(o1));
 }
 
 void local_z_normalise__image_3d_of_float__double(opstack_t& s)
@@ -1063,6 +1432,9 @@ class operations
   {
     function_type_t no_operands;
 
+    add_operation("--and",  &and__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
+                  "im_A im_B", "image", "Logical AND over corresponding voxels in im_B and im_B");
     add_operation("--clamp_above", &clamp_above__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
                   "image threshold value", "image", "Set all voxels in image at or above threshold to value");
@@ -1087,15 +1459,27 @@ class operations
     add_operation("--convert_to_int", &convert_to_int__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "image", "Round voxel values from float to int");
+    add_operation("--copy", &copy__double,
+                  function_type_t() << operand::e_double,
+                  "value", "value value", "Duplicate value onto stack");
     add_operation("--copy", &copy__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image image", "Duplicate image onto stack");
     add_operation("--copy", &copy__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "image image", "Duplicate image onto stack");
+    add_operation("--diff", &diff__double__double,
+                  function_type_t() << operand::e_double << operand::e_double,
+                  "A B", "A-B", "Subtract values A minus B");
     add_operation("--diff", &diff__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "im_A im_B", "im_A-B", "Subtract corresponding voxels of im_B from im_A");
+    add_operation("--fill", &fill__image_3d_of_float__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_double,
+                  "image v", "image", "Fill all voxels with value v");
+    add_operation("--fill", &fill__image_3d_of_int__double,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_double,
+                  "image n", "image", "Fill all voxels with value v");
     add_operation("--help", &help,
                   no_operands,
                   "", "", "Display help");
@@ -1114,6 +1498,12 @@ class operations
     add_operation("--local_z_normalise", &local_z_normalise__image_3d_of_float__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double,
                   "image half_radius", "image", "Normalise each voxel by mean and stddev measured over half_radius window");
+    add_operation("--not", &not__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int,
+                  "image", "image", "Apply logical NOT to voxels");
+    add_operation("--not", &not__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "image", "Apply logical NOT to voxels");
     add_operation("--option_load_as_image_double", &option_load_as_image_double,
                   no_operands,
                   "", "", "Load future image files as double voxel-type");
@@ -1126,6 +1516,12 @@ class operations
     add_operation("--option_precision", &option_precision__double,
                   function_type_t() << operand::e_double,
                   "n", "", "Set precision of floating point numbers on the console to n digits");
+    add_operation("--or",  &or__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
+                  "im_A im_B", "image", "Logical OR over corresponding voxels in im_B and im_B");
+    add_operation("--print", &print__double__double,
+                  function_type_t() << operand::e_double << operand::e_double,
+                  "value ... n", "", "Print the previous n values");
     add_operation("--print_overlap", &print_overlap__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "image image", "", "Print overlap measures and volumes of two binary mask images. Assuming the first image is the golden data, it prints the error rates.");
@@ -1144,9 +1540,18 @@ class operations
     add_operation("--print_stats", &print_stats__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "", "Print basic statistics of image's voxel values");
+    add_operation("--product", &product__double__double,
+                  function_type_t() << operand::e_double << operand::e_double,
+                  "A B", "A*B", "Multiply values A plus B");
     add_operation("--product", &product__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "im_A im_B", "im_A*B", "Multiply corresponding voxels of im_A and im_B");
+    add_operation("--quotient", &quotient__double__double,
+                  function_type_t() << operand::e_double << operand::e_double,
+                  "A B", "A/B", "Divide value A by B");
+    add_operation("--recall", &recall__string,
+                  function_type_t() << operand::e_string,
+                  "image name", "", "Recall image or value from local store \"name\"");
     add_operation("--resample", &resample__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "image im_template", "image", "Resample image to same size and transform as im_template");
@@ -1171,9 +1576,39 @@ class operations
     add_operation("--signed_distance_transform", &signed_distance_transform__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Calculate SDT from zero/non-zero boundary in image");
+    add_operation("--store", &store__poly__string,
+                  function_type_t() << operand::e_double << operand::e_string,
+                  "value name", "", "Store value locally as variable \"name\"");
+    add_operation("--store", &store__poly__string,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_string,
+                  "image name", "", "Store image locally as variable \"name\"");
+    add_operation("--store", &store__poly__string,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_string,
+                  "image name", "", "Store image locally as variable \"name\"");
+    add_operation("--sum", &sum__double__double,
+                  function_type_t() << operand::e_double << operand::e_double,
+                  "A B", "A+B", "Add values A plus B");
     add_operation("--sum", &sum__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "im_A im_B", "im_A+B", "Add corresponding voxels of im_A and im_B");
+    add_operation("--voxel_product", &voxel_product__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "value", "Product of all the voxel values.");
+    add_operation("--voxel_product", &voxel_product__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int,
+                  "image", "value", "Product of all the voxel values.");
+    add_operation("--voxel_size", &voxel_size__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int,
+                  "image", "value", "Sum of all the voxel values.");
+    add_operation("--voxel_size", &voxel_size__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "value", "Sum of all the voxel values.");
+    add_operation("--voxel_sum", &voxel_sum__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "value", "Sum of all the voxel values.");
+    add_operation("--voxel_sum", &voxel_sum__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int,
+                  "image", "value", "Sum of all the voxel values.");
 
     // Check they are correctly sorted.
     vcl_vector<vcl_string>::iterator it=names_.begin(), end=names_.end();
