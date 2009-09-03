@@ -51,9 +51,10 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
   }
 }
 
-/*template <class T>
+#if 0 // commented out
+template <class T>
 void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
-                            const vgl_vector_3d<int>& world_dim)
+                                  const vgl_vector_3d<int>& world_dim)
 {
   // compute the dimensions of 3D array
   //int x_dim = static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
@@ -69,7 +70,8 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
       }
     }
   }
-}*/
+}
+#endif // 0
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
@@ -77,7 +79,7 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
                           unsigned max_level, unsigned init_level)
-: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))                          
+: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
 {
   create_blocks(block_dim, world_dim);
   set_octree_levels(max_level, init_level);
@@ -93,7 +95,7 @@ void boxm_scene<T>::create_block(unsigned i, unsigned j, unsigned k)
 }
 
 template <class T>
-boxm_scene<T>::~boxm_scene() 
+boxm_scene<T>::~boxm_scene()
 {
   // delete the blocks
   int x_dim, y_dim, z_dim;
@@ -370,12 +372,12 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
   parser.lvcs(lvcs);
   vgl_vector_3d<unsigned> dims = parser.block_nums();
   //vgl_vector_3d<int> world(nums.x(), nums.y(), nums.z() );
-  
+
   lvcs_ = lvcs;
   origin_ =  parser.origin();
   block_dim_ = parser.block_dim();
   create_blocks(block_dim_, dims);
-  
+
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
@@ -386,7 +388,6 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
 template <class T>
 bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
 {
-
   if (xml.size() == 0) {
     vcl_cerr << "XML string is empty\n";
     return 0;
@@ -402,12 +403,12 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
   bgeo_lvcs lvcs;
   parser.lvcs(lvcs);
   vgl_vector_3d<unsigned> nums = parser.block_nums();
-  
+
   lvcs_ = lvcs;
   origin_ =  parser.origin();
   block_dim_ = parser.block_dim();
   create_blocks(block_dim_, nums);
-  
+
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
