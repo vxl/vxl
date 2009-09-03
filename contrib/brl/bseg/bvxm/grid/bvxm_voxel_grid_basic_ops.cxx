@@ -40,7 +40,7 @@ bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> 
     }
 
     vgl_vector_3d<double> normal=fs.normal(i);
-    vnl_vector_fixed<float,3> vnl_normal(normal.x(),normal.y(),normal.z());
+    vnl_vector_fixed<float,3> vnl_normal(float(normal.x()),float(normal.y()),float(normal.z()));
 
     vgl_vector_3d<unsigned int> grid_size = grid->grid_size();
     vgl_box_3d<double> grid_box;
@@ -70,11 +70,11 @@ bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> 
   return true;
 }
 
-bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid, 
-                              bvxm_voxel_grid<bvxm_opinion> * op_grid, 
-                              bvxm_voxel_grid<float> * grid_out)
+bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid,
+                             bvxm_voxel_grid<bvxm_opinion> * op_grid,
+                             bvxm_voxel_grid<float> * grid_out)
 {
-  //check the grids exist 
+  //check the grids exist
   if ( !dt_grid || !op_grid || !grid_out)
   {
     vcl_cerr << "One of the input voxels is of the wrong type\n";
@@ -101,11 +101,10 @@ bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid,
 
     for (; slab1_it!=(*dt_grid_it).end(); ++slab1_it ,++slab2_it, ++slab_out_it)
     {
-        if((*slab1_it)<7)
-            (*slab_out_it) =(*slab2_it).b();      
-            //(*slab_out_it) =(*slab1_it)*(*slab2_it).b();      
-        else
-            (*slab_out_it) =0;
+      if ((*slab1_it)<7)
+        (*slab_out_it) =(*slab2_it).b(); // * (*slab1_it)
+      else
+        (*slab_out_it) =0;
     }
   }
   return true;
