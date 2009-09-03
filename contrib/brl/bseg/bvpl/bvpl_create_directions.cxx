@@ -39,9 +39,9 @@ bvpl_create_directions_b::bvpl_create_directions_b()
   double theta_res = vnl_math::pi_over_4; //azimuth; phi_res = zenith (from the pole)
   for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = vcl_cos(theta) * vcl_sin(phi);
-    axis[1] = vcl_sin(theta) * vcl_sin(phi);
-    axis[2] = vcl_cos(phi);
+    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
+    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
+    axis[2] = float(vcl_cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
   }
@@ -67,7 +67,7 @@ bvpl_create_directions_c::bvpl_create_directions_c()
   //polar phi=0
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   double angle_res = vnl_math::pi_over_4;
-  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  for (float angle=0.0f; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
   {
     axes_.push_back(axis);
     angles_.push_back(angle);
@@ -77,13 +77,13 @@ bvpl_create_directions_c::bvpl_create_directions_c()
 
   //when phi is pi/4 traverse all hemisphere
   phi = (vnl_math::pi_over_4);
-  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  for (float angle =0.0f; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
   {
     for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
     {
-      axis[0] = vcl_cos(theta) * vcl_sin(phi);
-      axis[1] = vcl_sin(theta) * vcl_sin(phi);
-      axis[2] = vcl_cos(phi);
+      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
+      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
+      axis[2] = float(vcl_cos(phi));
       axes_.push_back(axis);
       angles_.push_back(angle);
     }
@@ -92,7 +92,7 @@ bvpl_create_directions_c::bvpl_create_directions_c()
   //when zenith is pi/2 we only traverse half a hemisphere
   phi = double(vnl_math::pi_over_2);
   theta =0.0;
-  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  for (float angle =0.0f; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
   {
     for (;theta < (vnl_math::pi)-1e-5; theta +=theta_res)
     {

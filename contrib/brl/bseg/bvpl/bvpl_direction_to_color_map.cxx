@@ -72,7 +72,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
     if (j==0)
       index_to_length[j]=0;
     else
-      index_to_length[j]=index_to_length[j-1]+(peano_curve[j]-peano_curve[j-1]).length();
+      index_to_length[j]=index_to_length[j-1]+float((peano_curve[j]-peano_curve[j-1]).length());
   }
   for (unsigned i=0;i<proj_on_cube.size();++i)
   {
@@ -104,7 +104,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
       double t2=vgl_closest_point_t(l2,proj_on_cube[i]);
       if (t2>0)t2=0;
       double length=index_to_length[indexj]-index_to_length[indexj-1];
-      indices_of_cube_projs.push_back(float(index_to_length[indexj])+t2/length);
+      indices_of_cube_projs.push_back(float(index_to_length[indexj]+t2/length));
     }
     else // rest of the points
     {
@@ -118,13 +118,13 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
       {
         //if (t1<0)t1=0;
         double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
-        indices_of_cube_projs.push_back(float(index_to_length[indexj])+t1/length);
+        indices_of_cube_projs.push_back(float(index_to_length[indexj]+t1/length));
       }
       else
       {
         //if (t2<0)t2=0;
         double length=(peano_curve[indexj-1]-peano_curve[indexj]).length();
-        indices_of_cube_projs.push_back(float(index_to_length[indexj-1])+t2/length);
+        indices_of_cube_projs.push_back(float(index_to_length[indexj-1]+t2/length));
       }
     }
   }
@@ -196,7 +196,7 @@ bvpl_direction_to_color_map::bvpl_direction_to_color_map(vcl_vector<vgl_point_3d
   {
     vnl_random rand;
     for (unsigned i=0;i<samples_.size();i++)
-      oneparam.push_back(rand.drand32(1.0));
+      oneparam.push_back(float(rand.drand32(1.0)));
   }
 
   for (unsigned i=0;i<samples_.size();i++)
