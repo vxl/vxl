@@ -271,31 +271,31 @@ class operand
      case e_double:
        return *this;
      case e_image_3d_of_double:
-      {
-        vimt3d_image_3d_of<double> im;
-        im.deep_copy(this->image_3d_of_double_);
-        return operand(im);
-      }
+     {
+       vimt3d_image_3d_of<double> im;
+       im.deep_copy(this->image_3d_of_double_);
+       return operand(im);
+     }
      case e_image_3d_of_float:
-      {
-        vimt3d_image_3d_of<float> im;
-        im.deep_copy(this->image_3d_of_float_);
-        return operand(im);
-      }
+     {
+       vimt3d_image_3d_of<float> im;
+       im.deep_copy(this->image_3d_of_float_);
+       return operand(im);
+     }
      case e_image_3d_of_int:
-      {
-        vimt3d_image_3d_of<int> im;
-        im.deep_copy(this->image_3d_of_int_);
-        return operand(im);
-      }
-     default: {
-      vcl_ostringstream ss;
-      ss << "Unknown operand_type: " << operand_type_;
-      throw mbl_exception_abort(ss.str()); }
+     {
+       vimt3d_image_3d_of<int> im;
+       im.deep_copy(this->image_3d_of_int_);
+       return operand(im);
+     }
+     default:
+     {
+       vcl_ostringstream ss;
+       ss << "Unknown operand_type: " << operand_type_;
+       throw mbl_exception_abort(ss.str()); }
     }
     return operand();
   }
-
 };
 
 void vsl_print_summary( vcl_ostream&ss, const operand& p) { p.print_summary(ss); }
@@ -473,13 +473,13 @@ void and__image_3d_of_int__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o2_image = o2.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-    1, o1.world2im());
+                                 1, o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
   for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
     for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = 
+        result_image(i,j,k) =
           (o1_image(i,j,k) && o2_image(i,j,k)) ? 1 : 0;
 
   s.pop_front();
@@ -498,13 +498,13 @@ void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o2_image = o2.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-    1, o1.world2im());
+                                 1, o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
   for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
     for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = 
+        result_image(i,j,k) =
           (o1_image(i,j,k) || o2_image(i,j,k)) ? 1 : 0;
 
   s.pop_front();
@@ -553,7 +553,6 @@ void resample__image_3d_of_float__image_3d_of_float(opstack_t& s)
   s.pop_front();
   s.push_front(operand(result));
 }
-
 
 
 void store__poly__string(opstack_t& s)
@@ -853,7 +852,7 @@ void not__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o1_image = o1.image();;
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-    1, o1.world2im());
+                                 1, o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
   for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
@@ -873,7 +872,7 @@ void not__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<float>& o1_image = o1.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-    1, o1.world2im());
+                                 1, o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
   for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
@@ -1019,9 +1018,9 @@ void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<float>& i1 = o1.image();
   const vil3d_image_view<float>& i2 = o2.image();
 
-  // Partial volume generalised Tanamoto, as per  	
+  // Partial volume generalised Tanamoto, as per
   // "Generalized Overlap Measures for Evaluation and Validation in Medical Image Analysis"
-  // Crum et al. , IEEE Trans Medical Imaging, Vol 25, Iss 11,  Nov. 2006, 1451 - 1461 
+  // Crum et al. , IEEE Trans Medical Imaging, Vol 25, Iss 11,  Nov. 2006, 1451 - 1461
 
   double gTanamoto_num=0, gTanamoto_den=0;
   double sum1=0, sum2=0;
@@ -1045,7 +1044,7 @@ void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
   double vox_volume = voxel_size.x() * voxel_size.y() * voxel_size.z();
 
   vcl_cout << "Tanamoto: " << gTanamoto_num/gTanamoto_den << " Volumes: "
-    << sum1*vox_volume << ' ' << sum2*vox_volume << vcl_endl;
+           << sum1*vox_volume << ' ' << sum2*vox_volume << vcl_endl;
   if (dodgy)
     vcl_cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
 
@@ -1062,9 +1061,9 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& i1 = o1.image();
   const vil3d_image_view<int>& i2 = o2.image();
 
-  // Partial volume generalised Tanamoto, as per  	
+  // Partial volume generalised Tanamoto, as per
   // "Generalized Overlap Measures for Evaluation and Validation in Medical Image Analysis"
-  // Crum et al. , IEEE Trans Medical Imaging, Vol 25, Iss 11,  Nov. 2006, 1451 - 1461 
+  // Crum et al. , IEEE Trans Medical Imaging, Vol 25, Iss 11,  Nov. 2006, 1451 - 1461
 
   unsigned long Tanamoto_num=0, Tanamoto_den=0;
   unsigned long sum1=0, sum2=0;
@@ -1097,9 +1096,9 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
 
   double FPR = static_cast<double>(FP) / (FP+TN);
   double FNR = static_cast<double>(FN) / (FN+TP);
-  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den <<
-    " Volumes: " << sum1*vox_volume << ' ' << sum2*vox_volume <<
-    " FPR: " << FPR << " FNR: " << FNR << vcl_endl;
+  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den
+           << " Volumes: " << sum1*vox_volume << ' ' << sum2*vox_volume
+           << " FPR: " << FPR << " FNR: " << FNR << vcl_endl;
 
   s.pop_front();
   s.pop_front();
@@ -1115,7 +1114,6 @@ void print_quantiles__image_3d_of_float__double(opstack_t& s)
 
   double nsteps = vnl_math_floor(s[0].as_double());
   double step = storage.size() / nsteps;
-
 
   vcl_nth_element(storage.begin(), storage.begin() + vnl_math_rnd(step), storage.end());
 
@@ -1211,18 +1209,17 @@ void print__double__double(opstack_t& s)
     }
   }
 
-
   vcl_cout << s[n].as_double();
   for (unsigned i=n-1;i>=1; --i)
   {
     vcl_cout << ' ' << s[i].as_double();
   }
   vcl_cout << vcl_endl;
-  
+
   for (unsigned i=0;i<=n; ++i)
     s.pop_front();
-
 }
+
 void signed_distance_transform__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
