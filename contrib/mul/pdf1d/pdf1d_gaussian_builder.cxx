@@ -1,9 +1,7 @@
 // This is mul/pdf1d/pdf1d_gaussian_builder.cxx
-
+#include "pdf1d_gaussian_builder.h"
 //:
 // \file
-
-#include "pdf1d_gaussian_builder.h"
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
@@ -77,8 +75,7 @@ void pdf1d_gaussian_builder::build_from_array(pdf1d_pdf& model, const double* da
 {
   if (n<2)
   {
-    vcl_cerr<<"pdf1d_gaussian_builder::build_from_array()"
-            <<" Too few examples available.\n";
+    vcl_cerr<<"pdf1d_gaussian_builder::build_from_array() Too few samples available.\n";
     vcl_abort();
   }
 
@@ -99,34 +96,32 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_gaussian_builder::build() Too few examples available.\n";
+    vcl_cerr<<"pdf1d_gaussian_builder::build() Too few samples available.\n";
     vcl_abort();
   }
 
-    if (data.is_class("mbl_data_array_wrapper<T>"))
-    {
-      // Use more efficient build_from_array algorithm
-      mbl_data_array_wrapper<double>& data_array =
-                       static_cast<mbl_data_array_wrapper<double>&>(data);
-      build_from_array(model,data_array.data(),n_samples);
-      return;
-    }
-
+  if (data.is_class("mbl_data_array_wrapper<T>"))
+  {
+    // Use more efficient build_from_array algorithm
+    mbl_data_array_wrapper<double>& data_array =
+                     static_cast<mbl_data_array_wrapper<double>&>(data);
+    build_from_array(model,data_array.data(),n_samples);
+    return;
+  }
 
   double sum = 0;
   double sum_sq = 0;
 
   data.reset();
-  for (int i=0;i<n_samples;i++)
+  for (int i=0; i++<n_samples; data.next())
   {
     double x = data.current();
     sum += x;
     sum_sq += x*x;
-    data.next();
   }
 
   double m = sum/n_samples;
-  double v = sum_sq/(n_samples-1) - m*m;
+  double v = (sum_sq - m*sum)/(n_samples-1);
   if (v<min_var_) v=min_var_;
 
   g.set(m,v);
@@ -142,7 +137,7 @@ void pdf1d_gaussian_builder::weighted_build(pdf1d_pdf& model,
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_gaussian_builder::build() Too few examples available.\n";
+    vcl_cerr<<"pdf1d_gaussian_builder::build() Too few samples available.\n";
     vcl_abort();
   }
 
@@ -156,23 +151,23 @@ void pdf1d_gaussian_builder::weighted_build(pdf1d_pdf& model,
   // Fix this one day.
 
   data.reset();
-  for (int i=0;i<n_samples;i++)
+  for (int i=0;i<n_samples;++i,data.next())
   {
     double x = data.current();
     double wi = w[i];
     sum += wi*x;
     sum_sq += wi*x*x;
     w_sum += wi;
-    data.next();
   }
 
   double m = sum/w_sum;
   double v = sum_sq/w_sum -m*m;
-  v *= double(n_samples-1)/n_samples;
+  v *= n_samples/double(n_samples-1);
   if (v<min_var_) v=min_var_;
 
   g.set(m,v);
 }
+
 //=======================================================================
 // Method: is_a
 //=======================================================================
@@ -245,7 +240,7 @@ void pdf1d_gaussian_builder::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian_builder &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
