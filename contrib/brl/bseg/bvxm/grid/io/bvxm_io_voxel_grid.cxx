@@ -3,9 +3,10 @@
 // \file
 // \brief This file contains template instantiations of functions
 
+#include <vcl_config_compiler.h>
 
 //: Save to dristi raw file
-template<>
+VCL_DEFINE_SPECIALIZATION
 bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filename)
 {
     vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
@@ -15,8 +16,8 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid_base_sptr 
     }
 
     //cast grid
-    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1>> *grid = 
-      dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1>>* >(grid_base.ptr());
+    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid =
+      dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* >(grid_base.ptr());
     // write header
     unsigned char data_type = bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >::dristhi_header();
 
@@ -36,13 +37,13 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid_base_sptr 
 
     //get the range
     bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator grid_it = grid->begin();
-    float max=vcl_abs(((*grid_it)(0,0)).mean()); 
-    float min=vcl_abs(((*grid_it)(0,0)).mean()); 
+    float max=vcl_abs(((*grid_it)(0,0)).mean());
+    float min=vcl_abs(((*grid_it)(0,0)).mean());
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
           if (vcl_abs(((*grid_it)(i,j)).mean())> max)
-            max = vcl_abs(((*grid_it)(i,j)).mean()); 
+            max = vcl_abs(((*grid_it)(i,j)).mean());
           if (vcl_abs(((*grid_it)(i,j)).mean())< min)
             min = vcl_abs(((*grid_it)(i,j)).mean());
         }
@@ -55,7 +56,7 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid_base_sptr 
       vcl_cout << '.';
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-          data_array[i*ny*nz + j*nz + k] =vcl_abs(((*grid_it)(i,j)).mean());  
+          data_array[i*ny*nz + j*nz + k] =vcl_abs(((*grid_it)(i,j)).mean());
         }
       }
     }
