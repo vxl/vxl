@@ -17,6 +17,8 @@
 #include <bprb/bprb_func_process.h>
 #include <bvxm/grid/io/bvxm_io_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
+#include <bsta/bsta_attributes.h>
+#include <bsta/bsta_gauss_f1.h>
 
 namespace bvxm_save_grid_raw_process_globals
 {
@@ -69,6 +71,11 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
   else if (datatype == "unsigned") {
     bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
     bvxm_grid_save_raw<unsigned int>(grid_base,volume_path);
+    return true;
+  }
+    else if (datatype == "bsta_gauss_f1") {
+    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
+    bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(grid_base,volume_path);
     return true;
   }
   else
