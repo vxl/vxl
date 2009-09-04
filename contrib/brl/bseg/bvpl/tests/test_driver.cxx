@@ -7,6 +7,7 @@ DECLARE( test_bvpl_kernel_functors );
 DECLARE( test_direction_to_color_map );
 DECLARE( test_bvpl_vector_operator );
 DECLARE( test_vector_directions );
+DECLARE( test_detect_corner);
 
 void register_tests()
 {
@@ -17,7 +18,7 @@ void register_tests()
   REGISTER( test_direction_to_color_map);
   REGISTER( test_bvpl_vector_operator);
   REGISTER( test_vector_directions);
-
+  REGISTER( test_detect_corner);
 }
 
 

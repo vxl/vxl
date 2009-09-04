@@ -9,6 +9,7 @@ ADD_EXECUTABLE( bvpl_test_all
   test_direction_to_color_map.cxx
   test_bvpl_vector_operator.cxx
   test_vector_directions.cxx
+  test_detect_corner.cxx
  )
 
 TARGET_LINK_LIBRARIES( bvpl_test_all bvpl bvxm testlib vgl vul)
@@ -20,6 +21,7 @@ ADD_TEST( bvpl_test_bvpl_kernel_functors   ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_a
 ADD_TEST( bvpl_test_direction_to_color_map   ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_direction_to_color_map  )
 ADD_TEST( test_bvpl_vector_operator   ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_bvpl_vector_operator  )
 ADD_TEST( test_vector_directions ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_vector_directions  )
+ADD_TEST( test_detect_corner ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_detect_corner  )
 
 ADD_EXECUTABLE( bvpl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvpl_test_include bvpl)
