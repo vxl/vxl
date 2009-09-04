@@ -68,7 +68,7 @@ double clsfy_binary_1d_wrapper_builder::build(
   assert(classifier.is_class("clsfy_binary_1d_wrapper"));
 
   clsfy_binary_1d_wrapper &c_wrap = (clsfy_binary_1d_wrapper &) classifier;
-  
+
   vcl_auto_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
 
   vnl_vector<double> inputs_1d(inputs.size());
@@ -130,7 +130,6 @@ void clsfy_binary_1d_wrapper_builder::b_read(vsl_b_istream &bfs)
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
-
 
 
 //=======================================================================
