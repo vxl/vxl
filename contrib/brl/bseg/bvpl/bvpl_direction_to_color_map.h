@@ -58,7 +58,7 @@ void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel
                                                   vcl_vector<vgl_point_3d<double> > & samples);
 
 
-void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *grid,
-                                   bvxm_voxel_grid<vnl_vector_fixed<float,4> > *out_grid,
+void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4 > *grid,
+                                   bvxm_voxel_grid<vnl_float_4 > *out_grid,
                                    bvpl_direction_to_color_map & color_map);
 #endif // bvpl_direction_to_color_map_h_

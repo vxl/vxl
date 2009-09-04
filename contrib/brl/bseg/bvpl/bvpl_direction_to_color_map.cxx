@@ -2,7 +2,7 @@
 //:
 // \file
 #include <vnl/vnl_random.h>
-
+#include <vnl/vnl_float_4.h>
 //: project a unit radius sphere onto the cube circumscribing it using gnomonic projection
 void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector<vgl_point_3d<double> > & proj_on_cube)
 {
@@ -213,19 +213,19 @@ void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel
 }
 
 
-void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *grid,
-                                   bvxm_voxel_grid<vnl_vector_fixed<float,4> > *out_grid,
+void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4> *grid,
+                                   bvxm_voxel_grid<vnl_float_4> *out_grid,
                                    bvpl_direction_to_color_map & color_map)
 {
-  bvxm_voxel_grid<vnl_vector_fixed<float,4> >::iterator grid1_it = grid->begin();
-  bvxm_voxel_grid<vnl_vector_fixed<float,4> >::iterator grid2_it = out_grid->begin();
+  bvxm_voxel_grid<vnl_float_4 >::iterator grid1_it = grid->begin();
+  bvxm_voxel_grid<vnl_float_4>::iterator grid2_it = out_grid->begin();
 
   //calculate max response and normalize the range from 0-1
   float min = vcl_numeric_limits<float>::max();
   float max = vcl_numeric_limits<float>::min();
   for (; grid1_it != grid->end(); ++grid1_it)
   {
-    bvxm_voxel_slab<vnl_vector_fixed<float,4> >::iterator slab1_it = (*grid1_it).begin();
+    bvxm_voxel_slab<vnl_float_4>::iterator slab1_it = (*grid1_it).begin();
     for (; slab1_it!=(*grid1_it).end(); ++slab1_it )
     {
      if ((*slab1_it)[3] > max)
@@ -245,14 +245,14 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_vector_fixed<float,4> > *
   float col;
   for (; grid1_it != grid->end(); ++grid1_it, ++grid2_it)
   {
-    bvxm_voxel_slab<vnl_vector_fixed<float,4> >::iterator slab1_it = (*grid1_it).begin();
-    bvxm_voxel_slab<vnl_vector_fixed<float,4> >::iterator slab2_it = (*grid2_it).begin();
+    bvxm_voxel_slab<vnl_float_4>::iterator slab1_it = (*grid1_it).begin();
+    bvxm_voxel_slab<vnl_float_4>::iterator slab2_it = (*grid2_it).begin();
     for (; slab1_it!=(*grid1_it).end(); ++slab1_it ,++slab2_it)
     {
       vgl_point_3d<double> v((*slab1_it)[0],(*slab1_it)[1],(*slab1_it)[2]);
       col=color_map.get_color(v)*360;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      vnl_vector_fixed<float,4> this_feature(r,g,b,(((*slab1_it)[3]-min)/(max - min))*255.0f);
+      vnl_float_4 this_feature(r,g,b,(((*slab1_it)[3]-min)/(max - min))*255.0f);
       (*slab2_it)=this_feature;
     }
   }

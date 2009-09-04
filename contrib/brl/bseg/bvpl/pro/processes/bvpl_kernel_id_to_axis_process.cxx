@@ -93,7 +93,7 @@ bool bvpl_kernel_id_to_axis_process(bprb_func_process& pro)
   else {
     vcl_cerr << "datatype not supported\n";
   }
-  
+
   return false;
 }
 

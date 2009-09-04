@@ -77,11 +77,12 @@ class bvpl_susan_opinion_operator
            cnt+=wi[i]*wi[i];
        }    
        float sig=0.0;
-       if(cnt!=0.0)
+       if(cnt>0.0)
            sig=tot/cnt;
 
        // set the result at the output grid
-       (*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*sig));
+       (*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*vcl_sqrt(sig)));
+       //(*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*mu));
        ++sub_dir_iter;
        ++sub_opn_iter;
        ++output_iter;
