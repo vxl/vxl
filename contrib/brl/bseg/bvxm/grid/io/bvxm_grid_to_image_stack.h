@@ -27,10 +27,10 @@ template<class T>
 vcl_string bvxm_extension();
 
 template<>
-vcl_string bvxm_extension<float>() { return ".tiff"; }
+vcl_string bvxm_extension<float>();
 
 template<>
-vcl_string bvxm_extension<unsigned char>() { return ".tiff"; }
+vcl_string bvxm_extension<unsigned char>() ;
 
 template<class T>
 class bvxm_image_traits;
@@ -119,4 +119,8 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<T> *gri
   return true;
 }
 
+template<>
+bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_float_3> *grid, vcl_string directory);
+template<>
+bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_float_4> *grid, vcl_string directory);
 #endif
