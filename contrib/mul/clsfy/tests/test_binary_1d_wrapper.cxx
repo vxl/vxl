@@ -25,8 +25,7 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
-//: Tests the clsfy_binary_1d_wrapper and builder using
-// the clsfy_binary_threshold_1d class
+//: Tests the clsfy_binary_1d_wrapper and builder using the clsfy_binary_threshold_1d class
 void test_binary_1d_wrapper()
 {
   vcl_cout << "*****************************************\n"
@@ -103,11 +102,11 @@ void test_binary_1d_wrapper()
 
   vcl_auto_ptr<clsfy_classifier_base> b_thresh_clsfr(
     b_thresh_builder.new_classifier());
-  
+
   double error1= b_thresh_builder.build(*b_thresh_clsfr,
-    training_samples.data_wrapper(), 
-    training_outputs);
- 
+                                        training_samples.data_wrapper(),
+                                        training_outputs);
+
   vcl_cout << *b_thresh_clsfr<<vcl_endl;
   //b_thresh_clsfr->print_summary(vcl_cout);
   vcl_cout<<"error1= "<<error1<<vcl_endl;
@@ -126,15 +125,12 @@ void test_binary_1d_wrapper()
   vcl_cout<<"True positives= "<<tpr<<vcl_endl
           <<"False positives= "<<fpr<<vcl_endl;
 
-
   double te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
   vcl_cout<<"te= "<<te<<vcl_endl;
-
 
   // simple test for binary threshold
   TEST("tpr>0.7", tpr>0.7, true);
   TEST("fpr<0.3", fpr<0.3, true);
-
 
   vcl_cout<<"======== TESTING I/O ===========\n";
 
@@ -165,7 +161,6 @@ void test_binary_1d_wrapper()
 
   TEST("saved classifier = loaded classifier",
        mbl_test_summaries_are_equal(b_thresh_clsfr.get(), classifier_in), true);
-
 
   vcl_istringstream ss(
     "clsfy_binary_1d_wrapper_builder { builder_1d: clsfy_binary_threshold_1d_builder }\n" );

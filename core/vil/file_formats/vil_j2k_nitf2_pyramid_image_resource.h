@@ -11,7 +11,7 @@
 // \author J. L. Mundy
 // \date April 9 2009
 // Do not remove the following notice
-// Approved for public Release, distribution unlimited 
+// Approved for public Release, distribution unlimited
 // DISTAR Case 14074
 //
 #include <vcl_vector.h>
@@ -68,9 +68,10 @@ class vil_j2k_nitf2_pyramid_image_resource : public vil_pyramid_image_resource
 
   // === Methods particular to pyramid resource ===
 
-  //: Number of pyramid levels. In principle, the number of levels is
+  //: Number of pyramid levels.
+  // In principle, the number of levels is
   // undefined since the j2k decoder can uncompress to any window size.
-  // A reasonable strategy is to define the number of levels so that 
+  // A reasonable strategy is to define the number of levels so that
   // the lowest scale produces a smallest image dimension of 1K pixels
   virtual unsigned nlevels() const;
 
@@ -113,7 +114,5 @@ class vil_j2k_nitf2_pyramid_image_resource : public vil_pyramid_image_resource
   vil_image_resource_sptr nitf2_sptr_;
   vil_nitf2_image* ptr_;
 };
-
-
 
 #endif // vil_j2k_nitf2_pyramid_image_resource_h_
