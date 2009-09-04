@@ -32,6 +32,11 @@ SOURCES += clsfy_mean_square_1d_builder.cxx
 SOURCES += clsfy_binary_hyperplane_gmrho_builder.cxx
 SOURCES += clsfy_binary_hyperplane_logit_builder.cxx
 SOURCES += clsfy_logit_loss_function.cxx
+SOURCES += clsfy_null_classifier.cxx
+SOURCES += clsfy_add_all_loaders.cxx
+SOURCES += clsfy_null_builder.cxx
+SOURCES += clsfy_binary_1d_wrapper_builder.cxx
+SOURCES += clsfy_binary_1d_wrapper.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

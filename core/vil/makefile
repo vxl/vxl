@@ -33,6 +33,8 @@ MANPAGE_SOURCES += vil_border.h
 
 # file format readers/writers
 SOURCES += file_formats/vil_pyramid_image_list.cxx
+SOURCES += file_formats/vil_j2k_pyramid_image_resource.cxx
+SOURCES += file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_ras.cxx
 SOURCES += file_formats/vil_iris.cxx

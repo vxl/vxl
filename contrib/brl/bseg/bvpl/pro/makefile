@@ -16,6 +16,10 @@ SOURCES += processes/bvpl_create_gauss3d_xx_kernel_process.cxx
 SOURCES += processes/bvpl_create_gauss3d_xx_kernel_vector_process.cxx
 SOURCES += processes/bvpl_compare_surface_and_normal_process.cxx
 SOURCES += processes/bvpl_susan_opinion_operator_process.cxx
+SOURCES += processes/bvpl_kernel_id_to_axis_process.cxx
+SOURCES += processes/bvpl_create_corner2d_kernel_vector_process.cxx
+SOURCES += processes/bvpl_non_max_suppression_process.cxx
+SOURCES += processes/bvpl_visualize_response_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

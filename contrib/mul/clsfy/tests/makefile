@@ -1,6 +1,8 @@
 USES += contrib/mul core
 include ../config.mk
+include ${VXLROOT}/core/testlib/config.mk
 
+TESTMAIN := test_driver.cxx
 TESTS += test_binary_hyperplane.cxx
 TESTS += test_binary_pdf_classifier.cxx
 TESTS += test_k_nearest_neighbour.cxx
@@ -12,6 +14,7 @@ TESTS += test_direct_boost.cxx
 TESTS += test_mean_square_1d.cxx
 TESTS += test_binary_hyperplane_logit.cxx
 TESTS += test_logit_loss_function.cxx
+TESTS += test_binary_1d_wrapper.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

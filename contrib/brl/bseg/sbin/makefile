@@ -13,6 +13,7 @@ MINI_PROG_SOURCES += vil_convert.cxx
 MINI_PROG_SOURCES += generate_tiff_pyramids.cxx
 MINI_PROG_SOURCES += generate_tiff_rset.cxx
 MINI_PROG_SOURCES += gen_tiff_rset_dir.cxx
+MINI_PROG_SOURCES += compress_j2k_dir.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

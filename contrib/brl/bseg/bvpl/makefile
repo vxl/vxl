@@ -16,12 +16,14 @@ MANPAGE_SOURCES += bvpl_vector_operator.h
 MANPAGE_SOURCES += bvpl_edge_algebraic_mean_functor.txx
 MANPAGE_SOURCES += bvpl_edge_geometric_mean_functor.txx
 MANPAGE_SOURCES += bvpl_direction_to_color_map.h
-MANPAGE_SOURCES += bvpl_local_max_functor.h
+SOURCES += bvpl_local_max_functor.cxx
 SOURCES += bvpl_gauss3d_xx_kernel_factory.cxx
 SOURCES += bvpl_gauss_convolution_functor.cxx
 MANPAGE_SOURCES += bvpl_susan_opinion_operator.h
 SOURCES += bvpl_create_directions.cxx
 SOURCES += bvpl_direction_to_color_map.cxx
+SOURCES += bvpl_kernel.cxx
+SOURCES += bvpl_corner2d_kernel_factory.cxx
 
 SUBDIRS += pro io
 
