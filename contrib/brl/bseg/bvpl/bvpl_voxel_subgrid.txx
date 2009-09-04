@@ -22,7 +22,7 @@ bool bvpl_voxel_subgrid<T>::voxel(int x, int y, int z, T& v)
   //are the z coordinates of bvxm_voxel grid are
   x = c.x()+x;
   y = c.y()+y;
-  z = c.z()+z;
+  z = c.z()-z;
 
   vgl_box_3d<int> slab_box(vgl_point_3d<int>(0,0,0), vgl_point_3d<int>(slab_.nx()-1,slab_.ny()-1,slab_.nz()-1));
   // make sure that the point is inside the box
