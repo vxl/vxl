@@ -87,7 +87,7 @@ bool bvpl_kernel_id_to_axis_process(bprb_func_process& pro)
         (*axes_slab_it) = kernel->kernels_[(*slab_it)]->axis();
       }
     }
-
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, axes_grid);
     return true;
   }
   else {
