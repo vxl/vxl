@@ -52,7 +52,6 @@ bool bvxm_grid_distance_transform_process_cons(bprb_func_process& pro)
   return true;
 }
 
-
 //: Execute the process
 bool bvxm_grid_distance_transform_process(bprb_func_process& pro)
 {

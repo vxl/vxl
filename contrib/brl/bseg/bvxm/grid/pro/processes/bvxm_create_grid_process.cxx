@@ -95,7 +95,7 @@ bool bvxm_create_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-  else if (datatype == "ocp_opinion"){
+  else if (datatype == "opinion"){
     bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<bvxm_opinion>(input_path,vgl_vector_3d<unsigned>(dim_x,dim_y,dim_z));
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;

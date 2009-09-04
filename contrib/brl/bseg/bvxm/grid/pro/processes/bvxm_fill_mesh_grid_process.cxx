@@ -127,6 +127,37 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
           return false;
       }
   }
+  else if(grid_type=="opinion")
+  {
+      if(bvxm_voxel_grid<bvxm_opinion>* g = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>*>(grid.as_pointer()))
+      {
+          //g->initialize_data(vcl_numeric_limits<float>::max());
+          g->initialize_data(bvxm_opinion(0.0f));
+          for (vul_file_iterator file_it = glob.str().c_str(); file_it; ++file_it)
+          {
+              vcl_string file = input_path+"/"+file_it.filename();
+              vcl_string file_format = vul_file::extension(file);
+              vul_string_upcase(file_format);
+
+              vcl_cout << "format = " << file_format << '\n'
+                       << "file = " << file << '\n';
+              // call appropriate load functions to load the M
+              imesh_mesh mesh;
+              imesh_read(file, mesh);
+              if(use_lvcs)
+                covert_global_mesh_to_local(mesh,lvcs);
+              bvxm_opinion val(1.0f);
+              bvxm_load_mesh_into_grid<bvxm_opinion>(g,mesh,val);
+          }
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, g);
+          return true;
+      }
+      else
+      {
+          vcl_cout<<"Grid Type Mismatch"<<vcl_endl;
+          return false;
+      }
+  }
   else
   {
     vcl_cout<<"Unknown type "<< grid_type<<vcl_endl;
