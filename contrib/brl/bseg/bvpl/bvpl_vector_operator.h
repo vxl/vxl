@@ -20,7 +20,7 @@
 #include <bvpl/bvpl_local_max_functor.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
-
+#include <vpl/vpl.h>
 
 class bvpl_vector_operator
 {
@@ -109,12 +109,12 @@ void bvpl_vector_operator::apply_and_suppress(bvxm_voxel_grid<T>* grid,
     bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
     vcl_cout << "Processing axis: "  << kernel->axis() << vcl_endl;
     vcl_cout << "Processing angle: " << kernel->angle() << vcl_endl;
-    vcl_cout << "Processing scale: " << kernel->scale() << vcl_endl;
+    //vcl_cout << "Processing scale: " << kernel->scale() << vcl_endl;
     oper->operate(grid, kernel, &temp_grid);
     get_max_orientation_grid(out_grid, &temp_grid, id_grid, id);
   }
  
-
+  vpl_unlink("temp_grid.vox");
 }
 
 template<class T>
