@@ -341,6 +341,9 @@ SOURCE=.\Templates/mbl_load_text_file+vgl_point_3d+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/mbl_save_text_file+vgl_point_3d+double--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+vcl_string-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"

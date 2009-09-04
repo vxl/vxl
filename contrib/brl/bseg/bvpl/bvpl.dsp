@@ -117,6 +117,15 @@ SOURCE=.\bvpl_create_directions.cxx
 SOURCE=.\bvpl_direction_to_color_map.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_kernel.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_local_max_functor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_corner2d_kernel_factory.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 # End Source File
 # Begin Source File
@@ -159,10 +168,10 @@ SOURCE=.\Templates/bvpl_subgrid_iterator+bsta_gauss_f1-.cxx
 SOURCE=.\Templates/bvpl_voxel_subgrid+bsta_gauss_f1-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpl_subgrid_iterator+vnl_vector_fixed+float.3--.cxx
+SOURCE=.\Templates/bvpl_voxel_subgrid+vnl_float_3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpl_voxel_subgrid+vnl_vector_fixed+float.3--.cxx
+SOURCE=.\Templates/bvpl_subgrid_iterator+vnl_float_3-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -235,6 +244,12 @@ SOURCE=.\bvpl_susan_opinion_operator.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_create_directions.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_corner2d_kernel_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_kernel.h
 # End Source File
 # End Group
 # End Target

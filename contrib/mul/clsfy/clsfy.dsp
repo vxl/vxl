@@ -142,24 +142,6 @@ SOURCE=.\clsfy_simple_adaboost.cxx
 SOURCE=.\clsfy_adaboost_sorted_builder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+clsfy_builder_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+clsfy_classifier_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+clsfy_builder_1d-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+clsfy_classifier_1d-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+clsfy_classifier_1d~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_2d+clsfy_binary_threshold_1d-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\clsfy_rbf_svm.cxx
 # End Source File
 # Begin Source File
@@ -196,6 +178,45 @@ SOURCE=.\clsfy_binary_hyperplane_logit_builder.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\clsfy_logit_loss_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_null_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_null_classifier.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_add_all_loaders.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_1d_wrapper_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_1d_wrapper.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+clsfy_builder_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+clsfy_classifier_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+clsfy_builder_1d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+clsfy_classifier_1d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+clsfy_classifier_1d~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_2d+clsfy_binary_threshold_1d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+clsfy_builder_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+clsfy_builder_1d-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -287,6 +308,21 @@ SOURCE=.\clsfy_binary_hyperplane_logit_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\clsfy_logit_loss_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_null_classifier.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_null_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_add_all_loaders.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_1d_wrapper_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_1d_wrapper.h
 # End Source File
 # End Group
 # End Target

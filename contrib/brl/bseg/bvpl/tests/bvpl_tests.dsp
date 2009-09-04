@@ -233,6 +233,12 @@ SOURCE=.\test_direction_to_color_map.cxx
 SOURCE=.\test_bvpl_vector_operator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_vector_directions.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_detect_corner.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

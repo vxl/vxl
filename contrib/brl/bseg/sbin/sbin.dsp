@@ -184,6 +184,9 @@ SOURCE=.\generate_tiff_rset.cxx
 # Begin Source File
 SOURCE=.\gen_tiff_rset_dir.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\compress_j2k_dir.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

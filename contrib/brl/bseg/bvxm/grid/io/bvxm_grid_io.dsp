@@ -97,6 +97,15 @@ SOURCE=.\bvxm_io_voxel_slab_base.cxx
 SOURCE=.\bvxm_io_voxel_grid_base.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_io_voxel_grid.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_slab_to_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_grid_to_image_stack.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvxm_voxel_slab_base-.cxx
 # End Source File
 # Begin Source File

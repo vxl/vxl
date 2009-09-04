@@ -528,6 +528,12 @@ SOURCE=.\vil_math.cxx
 SOURCE=.\file_formats/vil_geotiff_header.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_j2k_pyramid_image_resource.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_rotate+byte.byte-.cxx
 # End Source File
 # Begin Source File
@@ -685,6 +691,18 @@ SOURCE=.\Templates/vil_sample_profile_bicub+double.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_sample_profile_bilin+double.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+bool--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+bool--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+bool-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -1069,6 +1087,12 @@ SOURCE=.\vil_resample_nearest.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_round.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_j2k_nitf2_pyramid_image_resource.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_j2k_pyramid_image_resource.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_config.h.in
