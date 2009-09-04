@@ -129,6 +129,18 @@ SOURCE=.\processes/bvpl_compare_surface_and_normal_process.cxx
 SOURCE=.\processes/bvpl_susan_opinion_operator_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_kernel_id_to_axis_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_create_corner2d_kernel_vector_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_non_max_suppression_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_visualize_response_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # End Group
