@@ -25,26 +25,28 @@
 // The weights are not normalized. i.e minimun response is not zero
 class bvpl_corner2d_kernel_factory : public bvpl_kernel_factory
 {
- public:
 
-  //:Default Constructor
-  bvpl_corner2d_kernel_factory();
-
-  //: Constructs a kernel form three values, lenght, widht and thickness
-  bvpl_corner2d_kernel_factory(unsigned lenght, unsigned widht, unsigned thickness);
-
-  virtual ~bvpl_corner2d_kernel_factory() {}
-
- private:
-
-  //:Creates a 2d edge kernel
-  virtual void create_canonical();
-
-  float length_;
-  float width_;
-  float thickness_;
-
-  static const unsigned max_size_ = 71;
-};
-
+  public:
+    
+    //:Default Constructor
+    bvpl_corner2d_kernel_factory();
+    
+    //: Constructs a kernel form three values, lenght, widht and thickness
+    bvpl_corner2d_kernel_factory(unsigned lenght, unsigned width, unsigned thickness);
+    
+    virtual ~bvpl_corner2d_kernel_factory() {}
+    
+  private:
+    
+    //:Creates a 2d edge kernel
+    virtual void create_canonical();
+    
+    unsigned length_;
+    unsigned width_;
+    unsigned thickness_;
+    
+    static const unsigned max_size_ = 71;
+    
+    
+  };
 #endif
