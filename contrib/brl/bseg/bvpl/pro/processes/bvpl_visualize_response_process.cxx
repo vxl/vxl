@@ -94,7 +94,7 @@ bool bvpl_visualize_response_process(bprb_func_process& pro)
   
   bvxm_grid_save_raw<float>(temp_grid,raw_path);
   //clean temporary files
-  vpl_unlink("temp.vox");
+  vpl_unlink("filter_temp.vox");
   
   
   return true;
