@@ -1,12 +1,14 @@
+#include "vil_j2k_image.h"
+//:
+// \file
 // vil_j2k: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 // Write capability added by J. Mundy, April 2009
 // Do not remove the following notice
-// Modifications approved for public Release, distribution unlimited 
+// Modifications approved for public Release, distribution unlimited
 // DISTAR Case 14074
 //
-#include "vil_j2k_image.h"
 
 #include <NCSFile.h>
 
@@ -29,66 +31,67 @@
 NCSFileBandInfo bandInfo( const vil_pixel_format& vilType )
 {
   NCSFileBandInfo info;
-  switch ( vil_pixel_format_component_format( vilType ) ) {
-  case VIL_PIXEL_FORMAT_UINT_32:{
-	  info.nBits = sizeof(vxl_uint_32)*8;
-    info.bSigned = vcl_numeric_limits<vxl_uint_32>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_INT_32:{
-    info.nBits = sizeof(vxl_int_32)*8;
-    info.bSigned = vcl_numeric_limits<vxl_int_32>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_UINT_16:{
-    info.nBits =  sizeof(vxl_uint_16)*8;
-    info.bSigned =  vcl_numeric_limits<vxl_uint_16>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_INT_16:{
-    info.nBits = sizeof(vxl_int_16)*8;
-    info.bSigned = vcl_numeric_limits<vxl_int_16>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_BYTE:{
-    info.nBits = sizeof(vxl_byte)*8;
-    info.bSigned = vcl_numeric_limits<vxl_byte>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_SBYTE:{
-    info.nBits = sizeof(vxl_sbyte)*8;
-    info.bSigned = vcl_numeric_limits<vxl_sbyte>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_FLOAT:{
-    info.nBits = sizeof(float)*8;
-    info.bSigned = vcl_numeric_limits<float>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_DOUBLE:{
-    info.nBits = sizeof(double)*8;
-    info.bSigned = vcl_numeric_limits<double>::is_signed;
-    info.szDesc = 0;
-    return info;
-  }
-  case VIL_PIXEL_FORMAT_BOOL:
-  case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-  case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-  case VIL_PIXEL_FORMAT_UINT_64:
-  case VIL_PIXEL_FORMAT_INT_64:
-  case VIL_PIXEL_FORMAT_UNKNOWN:
-  default:{
-    assert( 0 );
-    info.nBits = 0; info.bSigned = false; info.szDesc = 0;
-    return info;
-  }
+  switch ( vil_pixel_format_component_format( vilType ) )
+  {
+    case VIL_PIXEL_FORMAT_UINT_32:{
+      info.nBits = sizeof(vxl_uint_32)*8;
+      info.bSigned = vcl_numeric_limits<vxl_uint_32>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_INT_32:{
+      info.nBits = sizeof(vxl_int_32)*8;
+      info.bSigned = vcl_numeric_limits<vxl_int_32>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_UINT_16:{
+      info.nBits =  sizeof(vxl_uint_16)*8;
+      info.bSigned =  vcl_numeric_limits<vxl_uint_16>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_INT_16:{
+      info.nBits = sizeof(vxl_int_16)*8;
+      info.bSigned = vcl_numeric_limits<vxl_int_16>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_BYTE:{
+      info.nBits = sizeof(vxl_byte)*8;
+      info.bSigned = vcl_numeric_limits<vxl_byte>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_SBYTE:{
+      info.nBits = sizeof(vxl_sbyte)*8;
+      info.bSigned = vcl_numeric_limits<vxl_sbyte>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_FLOAT:{
+      info.nBits = sizeof(float)*8;
+      info.bSigned = vcl_numeric_limits<float>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_DOUBLE:{
+      info.nBits = sizeof(double)*8;
+      info.bSigned = vcl_numeric_limits<double>::is_signed;
+      info.szDesc = 0;
+      return info;
+    }
+    case VIL_PIXEL_FORMAT_BOOL:
+    case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
+    case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
+    case VIL_PIXEL_FORMAT_UINT_64:
+    case VIL_PIXEL_FORMAT_INT_64:
+    case VIL_PIXEL_FORMAT_UNKNOWN:
+    default:{
+      assert( 0 );
+      info.nBits = 0; info.bSigned = false; info.szDesc = 0;
+      return info;
+    }
   }
 }
 
@@ -113,17 +116,16 @@ vil_image_resource_sptr  vil_j2k_file_format::make_input_image(vil_stream *vs)
 }
 
 
-vil_image_resource_sptr 
+vil_image_resource_sptr
 vil_j2k_file_format::make_output_image(vil_stream* vs,
                                        unsigned ni,
                                        unsigned nj,
                                        unsigned nplanes,
                                        enum vil_pixel_format format)
 {
-  
   vil_j2k_image* j2k_img = new vil_j2k_image(vs, ni, nj, nplanes, format,
                                              compression_ratio_);
-  if(j2k_img->is_valid())
+  if (j2k_img->is_valid())
     return static_cast<vil_image_resource*>(j2k_img);
   return 0;
 }
@@ -131,43 +133,42 @@ vil_j2k_file_format::make_output_image(vil_stream* vs,
 NCSEcwCellType convertType( const vil_pixel_format& vilType )
 {
   switch ( vil_pixel_format_component_format( vilType ) ) {
-  case VIL_PIXEL_FORMAT_UINT_64: return NCSCT_UINT64;
-  case VIL_PIXEL_FORMAT_INT_64: return NCSCT_INT64;
-  case VIL_PIXEL_FORMAT_UINT_32: return NCSCT_UINT32;
-  case VIL_PIXEL_FORMAT_INT_32: return NCSCT_INT32;
-  case VIL_PIXEL_FORMAT_UINT_16: return NCSCT_UINT16;
-  case VIL_PIXEL_FORMAT_INT_16: return NCSCT_INT16;
-  case VIL_PIXEL_FORMAT_BYTE: return NCSCT_UINT8;
-  case VIL_PIXEL_FORMAT_SBYTE: return NCSCT_INT8;
-  case VIL_PIXEL_FORMAT_FLOAT: return NCSCT_IEEE4;
-  case VIL_PIXEL_FORMAT_DOUBLE: return NCSCT_IEEE8;
-  case VIL_PIXEL_FORMAT_BOOL:
-  case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-  case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-  case VIL_PIXEL_FORMAT_UNKNOWN:
-  default:
-    assert( 0 );
-    return NCSCT_UINT8;
+    case VIL_PIXEL_FORMAT_UINT_64: return NCSCT_UINT64;
+    case VIL_PIXEL_FORMAT_INT_64: return NCSCT_INT64;
+    case VIL_PIXEL_FORMAT_UINT_32: return NCSCT_UINT32;
+    case VIL_PIXEL_FORMAT_INT_32: return NCSCT_INT32;
+    case VIL_PIXEL_FORMAT_UINT_16: return NCSCT_UINT16;
+    case VIL_PIXEL_FORMAT_INT_16: return NCSCT_INT16;
+    case VIL_PIXEL_FORMAT_BYTE: return NCSCT_UINT8;
+    case VIL_PIXEL_FORMAT_SBYTE: return NCSCT_INT8;
+    case VIL_PIXEL_FORMAT_FLOAT: return NCSCT_IEEE4;
+    case VIL_PIXEL_FORMAT_DOUBLE: return NCSCT_IEEE8;
+    case VIL_PIXEL_FORMAT_BOOL:
+    case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
+    case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
+    case VIL_PIXEL_FORMAT_UNKNOWN:
+    default:
+      assert(0); return NCSCT_UINT8;
   }
 }
+
 // Note the J2K SDK defines IEEE4 and IEEE8 but they are not
 // handled as float or double, they are reinterpreted as INT32 and INT64
 vil_pixel_format convertType( const NCSEcwCellType& ecwType )
 {
   switch ( ecwType ) {
-  case NCSCT_UINT64: return VIL_PIXEL_FORMAT_UINT_64;
-  case NCSCT_INT64: return VIL_PIXEL_FORMAT_INT_64;
-  case NCSCT_UINT32: return VIL_PIXEL_FORMAT_UINT_32;
-  case NCSCT_INT32: return VIL_PIXEL_FORMAT_INT_32;
-  case NCSCT_UINT16: return VIL_PIXEL_FORMAT_UINT_16;
-  case NCSCT_INT16: return VIL_PIXEL_FORMAT_INT_16;
-  case NCSCT_UINT8: return VIL_PIXEL_FORMAT_BYTE;
-  case NCSCT_INT8: return VIL_PIXEL_FORMAT_SBYTE;
-  case NCSCT_IEEE4: return VIL_PIXEL_FORMAT_FLOAT;
-  case NCSCT_IEEE8: return VIL_PIXEL_FORMAT_DOUBLE;
-  default:
-    assert( 0 );
-    return VIL_PIXEL_FORMAT_UNKNOWN;
+    case NCSCT_UINT64: return VIL_PIXEL_FORMAT_UINT_64;
+    case NCSCT_INT64: return VIL_PIXEL_FORMAT_INT_64;
+    case NCSCT_UINT32: return VIL_PIXEL_FORMAT_UINT_32;
+    case NCSCT_INT32: return VIL_PIXEL_FORMAT_INT_32;
+    case NCSCT_UINT16: return VIL_PIXEL_FORMAT_UINT_16;
+    case NCSCT_INT16: return VIL_PIXEL_FORMAT_INT_16;
+    case NCSCT_UINT8: return VIL_PIXEL_FORMAT_BYTE;
+    case NCSCT_INT8: return VIL_PIXEL_FORMAT_SBYTE;
+    case NCSCT_IEEE4: return VIL_PIXEL_FORMAT_FLOAT;
+    case NCSCT_IEEE8: return VIL_PIXEL_FORMAT_DOUBLE;
+    default:
+      assert(0); return VIL_PIXEL_FORMAT_UNKNOWN;
   }
 }
 
@@ -215,6 +216,7 @@ vil_j2k_image::vil_j2k_image( vil_stream* is )
     return;
   }
 }
+
 vil_j2k_image::vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
                               unsigned nplanes, enum vil_pixel_format format,
                               unsigned compression_ratio)
@@ -228,18 +230,18 @@ vil_j2k_image::vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
     line_index_(0)
 {
   mBandinfo = new NCSFileBandInfo[nplanes];
-	CNCSError Error;
-  for(unsigned i = 0; i<nplanes; ++i)
+  CNCSError Error;
+  for (unsigned i = 0; i<nplanes; ++i)
     mBandinfo[i] = bandInfo(format);
 
   //String names for each band, should specialize according to color space
   mBandinfo[0].szDesc ="grey";
-  if(nplanes==3){
+  if (nplanes==3){
     mBandinfo[0].szDesc = "Red";
     mBandinfo[1].szDesc = "Green";
     mBandinfo[2].szDesc = "Blue";
   }
-  NCSEcwCellType t = convertType(format);  
+  NCSEcwCellType t = convertType(format);
   NCSFileViewFileInfoEx finfo=*mFinfo;
   finfo.pBands = mBandinfo;
   finfo.nSizeX = ni;
@@ -255,7 +257,7 @@ vil_j2k_image::vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
   finfo.szDatum = "RAW";
   finfo.szProjection = "RAW";
   finfo.fCWRotationDegrees = 0.0;
-  if(nplanes ==1)
+  if (nplanes ==1)
     finfo.eColorSpace = NCSCS_GREYSCALE;
   else if (nplanes ==3)
     finfo.eColorSpace = NCSCS_sRGB;
@@ -264,36 +266,37 @@ vil_j2k_image::vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
     mFileResource = 0;
   }
   Error = mFileResource->SetFileInfo(finfo);
-  if(Error != NCS_SUCCESS){
-    if(mFileResource)
+  if (Error != NCS_SUCCESS){
+    if (mFileResource)
       delete mFileResource;
     mFileResource = 0;
   }
   Error = mStr->Open(vs, true);
-  if(Error != NCS_SUCCESS){
-    if(mFileResource)
+  if (Error != NCS_SUCCESS){
+    if (mFileResource)
       delete mFileResource;
     mFileResource = 0;
   }
   CNCSJP2FileView* fview = static_cast<CNCSJP2FileView*>(mFileResource);
   Error = fview->Open(static_cast<CNCSJPCIOStream*>(mStr));
-  if(Error != NCS_SUCCESS){
-    if(mFileResource)
+  if (Error != NCS_SUCCESS){
+    if (mFileResource)
       delete mFileResource;
     mFileResource = 0;
-    return; 
+    return;
   }
 }
+
 vil_j2k_image::~vil_j2k_image()
 {
   if ( mFileResource ){
     mFileResource->Close( true );
   }
-  if(mStr)
+  if (mStr)
     delete mStr;
-  if(mBandinfo)
+  if (mBandinfo)
     delete mBandinfo;
-  if(mFinfo)
+  if (mFinfo)
     delete mFinfo;
 }
 
@@ -326,7 +329,7 @@ char const* vil_j2k_image::file_format() const
   return "j2k";
 }
 
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 vil_j2k_image::get_copy_view_decimated(unsigned sample0,
                                        unsigned num_samples,
                                        unsigned line0,
@@ -342,7 +345,7 @@ vil_j2k_image::get_copy_view_decimated(unsigned sample0,
                                          (unsigned int)(((double)numLines)/j_factor));
 }
 
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
                                                unsigned num_samples,
                                                unsigned line0,
@@ -353,9 +356,9 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   if ( !( mFileResource ) ||
        !( ( sample0 + num_samples - 1 ) < ni() &&
           ( line0 + numLines - 1 ) < nj() ) )
-    {
-      return 0;
-    }
+  {
+    return 0;
+  }
 
   //we want all bands mapped in the same order as they come in the input file
   //eg. bandMap = {0,1,2,3...nBands}
@@ -475,11 +478,11 @@ vil_image_view_base_sptr vil_j2k_image::s_decode_jpeg_2000( vil_stream* vs,
   return view;
 }
 
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 vil_j2k_image::s_decode_jpeg_2000_by_size( vil_stream* vs,
                                            unsigned i0, unsigned ni,
                                            unsigned j0, unsigned nj,
-                                           unsigned int output_width, 
+                                           unsigned int output_width,
                                            unsigned int output_height )
 {
   vil_j2k_image* j2k_image = new vil_j2k_image(vs);
@@ -487,50 +490,50 @@ vil_j2k_image::s_decode_jpeg_2000_by_size( vil_stream* vs,
   delete j2k_image;
   return view;
 }
+
 template < class T >
 static bool write_line_BIL(vil_memory_chunk_sptr& chunk,
                            unsigned ni, unsigned nplanes, unsigned istep,
                            unsigned planestep, unsigned bytes_per_pixel,
                            CNCSFile* f_resource, NCSEcwCellType t)
 {
-  T* cdata = reinterpret_cast<T*>(chunk->data()); 
-  T** line_ptr = new T*[nplanes]; 
-  for(unsigned p = 0; p<nplanes; ++p) 
-    line_ptr[p] = new T[ni*bytes_per_pixel]; 
+  T* cdata = reinterpret_cast<T*>(chunk->data());
+  T** line_ptr = new T*[nplanes];
+  for (unsigned p = 0; p<nplanes; ++p)
+    line_ptr[p] = new T[ni*bytes_per_pixel];
 
-  for(unsigned p = 0; p<nplanes; ++p){ 
-    T* wline = line_ptr[p]; 
-	for(unsigned i = 0; i<ni; ++i) {
+  for (unsigned p = 0; p<nplanes; ++p) {
+    T* wline = line_ptr[p];
+    for (unsigned i = 0; i<ni; ++i) {
       *(wline+i) = *(cdata+ i*istep + p*planestep);
-	}
-  } 
+    }
+  }
   bool good = true;
-  void ** outbuf = reinterpret_cast<void**>(line_ptr); 
-  CNCSError writeError  = f_resource->WriteLineBIL(t, nplanes, outbuf); 
+  void ** outbuf = reinterpret_cast<void**>(line_ptr);
+  CNCSError writeError  = f_resource->WriteLineBIL(t, nplanes, outbuf);
   if ( writeError != NCS_SUCCESS ) good = false;
-  
-  for(unsigned p = 0; p<nplanes; ++p) 
-    delete [] line_ptr[p]; 
-  delete [] line_ptr; 
+
+  for (unsigned p = 0; p<nplanes; ++p)
+    delete [] line_ptr[p];
+  delete [] line_ptr;
   return good;
 }
 
 
-
 //: JPEG2K compress by inserting an image row (line) at a time
-//  When the full image has been inserted, call put_line with 
+//  When the full image has been inserted, call put_line with
 // image_row == nj(). This call causes the resource to be closed
 // and is no longer valid. The lines must be inserted in strict row order.
 bool
 vil_j2k_image::put_line(const vil_image_view_base& im)
-{ 
-  if(!mFileResource)
+{
+  if (!mFileResource)
     return false;
   vil_pixel_format format = this->pixel_format();
   unsigned ni = this->ni(), nj = this->nj(), nplanes = this->nplanes();
-  if(line_index_>=nj){
+  if (line_index_>=nj){
     mFileResource->Close(true);
-    if(mFileResource)
+    if (mFileResource)
       delete mFileResource;
     mFileResource = 0;
     return true;
@@ -548,7 +551,7 @@ vil_j2k_image::put_line(const vil_image_view_base& im)
    bytes_per_pixel = sizeof(T); \
    const vil_image_view<T>& view = static_cast<const vil_image_view<T>&>(im); \
    chunk = view.memory_chunk(); \
-   if(!write_line_BIL<T>(chunk, ni, nplanes, view.istep(), view.planestep(),\
+   if (!write_line_BIL<T>(chunk, ni, nplanes, view.istep(), view.planestep(),\
                          bytes_per_pixel, mFileResource, t)) \
     return false; \
   } \
@@ -570,23 +573,23 @@ vil_j2k_image::put_line(const vil_image_view_base& im)
   return true;
 }
 
-//: JPEG2K compress the view and of the full image and insert in resource 
-//  the file is closed after putting the view into the resource 
+//: JPEG2K compress the view and of the full image and insert in resource
+//  The file is closed after putting the view into the resource
 //  and becomes an invalid resource.
 bool vil_j2k_image::
 put_view(const vil_image_view_base& im)
 {
-  if(!this->view_fits(im, 0, 0))
+  if (!this->view_fits(im, 0, 0))
     return false;
-  if(!mFileResource)
+  if (!mFileResource)
     return false;
   unsigned ni= im.ni(), nj = im.nj();
-  vil_image_resource_sptr mem_res = 
+  vil_image_resource_sptr mem_res =
     vil_new_image_resource_of_view(im);
     vil_image_view_base_sptr view;
-  for(unsigned j = 0; j<nj; ++j){
+  for (unsigned j = 0; j<nj; ++j){
     view = mem_res->get_copy_view(0, ni, j, 1);
-    if(!this->put_line(*view)) return false;
+    if (!this->put_line(*view)) return false;
   }
   return true;
 }
@@ -596,81 +599,84 @@ bool vil_j2k_image::
 view_fits(const vil_image_view_base& im, unsigned i0, unsigned j0)
 {
   unsigned ni_view = im.ni(), nj_view = im.nj(), nplanes_view = im.nplanes();
-  if(i0>=ni_view-1||j0>=nj_view-1)
+  if (i0>=ni_view-1||j0>=nj_view-1)
     return false;
-  if(ni_view > this->ni() || nj_view > this->nj() ||
+  if (ni_view > this->ni() || nj_view > this->nj() ||
      nplanes_view > this->nplanes())
     return false;
   return true;
 }
 
-//: Encode an entire image by loading the input resource from stream
+//:
+//  Encode an entire image by loading the input resource from stream
 //  and compressing the input line by line by extracting an image view
 //  of a block of lines at a time, thus works for arbitrarily large images.
 //  The num_lines_block parameter is the number of image rows in the
 //  block which is read into memory from the resource
-bool vil_j2k_image::s_encode_jpeg2000(vil_stream* vs, 
+bool vil_j2k_image::s_encode_jpeg2000(vil_stream* vs,
                                       const char* out_filename,
                                       unsigned compression_ratio,
                                       unsigned num_lines_block,
                                       bool verbose)
 {
   vil_image_resource_sptr in_res = vil_load_image_resource_raw(vs);
-  if(!in_res)
+  if (!in_res)
     return false;
   unsigned ni = in_res->ni(), nj = in_res->nj(), nplanes = in_res->nplanes();
   vil_pixel_format format = in_res->pixel_format();
   vil_stream* os = vil_open(out_filename, "w");
-  if(!vs) return false;
+  if (!vs) return false;
   vil_j2k_file_format fmt;
   fmt.set_compression_ratio(compression_ratio);
   vil_image_resource_sptr res = fmt.make_output_image(os, ni, nj, nplanes,
                                                       format);
-  if(!res) return false;
+  if (!res) return false;
   vil_j2k_image* j2k_img = reinterpret_cast<vil_j2k_image*>(res.ptr());
-  
+
   //number of full blocks in image height
   unsigned n_blocks = nj/num_lines_block;
   unsigned jb = 0;
-  for(unsigned b = 0; b<n_blocks; b++, jb += num_lines_block){
+  for (unsigned b = 0; b<n_blocks; b++, jb += num_lines_block)
+  {
     // read a block from the file: width = ni, height = num_lines_block
     vil_image_view_base_sptr block_view = in_res->get_view(0, ni, jb, num_lines_block);
-    if(!block_view) return false;
-    
+    if (!block_view) return false;
+
     //wrap the view in a memory resident resource
-    vil_image_resource_sptr block_res = 
+    vil_image_resource_sptr block_res =
       vil_new_image_resource_of_view(*block_view);
-    
+
     //compress the block, line by line
-    for(unsigned j = 0; j<num_lines_block; ++j){
-      vil_image_view_base_sptr line_view = 
+    for (unsigned j = 0; j<num_lines_block; ++j){
+      vil_image_view_base_sptr line_view =
         block_res->get_copy_view(0, ni, j, 1);
-      if(!j2k_img->put_line(*line_view)) return false;
-      if(verbose)
-        if(j%100 == 0) //output a dot every 100 lines
+      if (!j2k_img->put_line(*line_view)) return false;
+      if (verbose)
+        if (j%100 == 0) //output a dot every 100 lines
           vcl_cout << '.';
     }
   }
   //output the remaining lines left over after loading block-sized chunks
   unsigned remaining_lines = nj-jb;
-  if(remaining_lines){
-  vil_image_view_base_sptr residual_view = 
-    in_res->get_view(0, ni, jb, remaining_lines);
-  vil_image_resource_sptr residual_res = 
+  if (remaining_lines){
+    vil_image_view_base_sptr residual_view =
+      in_res->get_view(0, ni, jb, remaining_lines);
+    vil_image_resource_sptr residual_res =
       vil_new_image_resource_of_view(*residual_view);
-  vil_image_view_base_sptr view;
-  for(unsigned j = 0; j<remaining_lines; ++j){
-    view = residual_res->get_copy_view(0, ni, j, 1);
-    if(!j2k_img->put_line(*view)) return false;
-    if(verbose)
-      if(j%100 == 0) //output a dot every 100 lines
-        vcl_cout << '.';
+    vil_image_view_base_sptr view;
+    for (unsigned j = 0; j<remaining_lines; ++j) {
+      view = residual_res->get_copy_view(0, ni, j, 1);
+      if (!j2k_img->put_line(*view)) return false;
+      if (verbose)
+        if (j%100 == 0) //output a dot every 100 lines
+          vcl_cout << '.';
+    }
   }
-  }
-  if(verbose) vcl_cout << '\n';
+  if (verbose) vcl_cout << '\n';
   return true;
 }
-bool vil_j2k_image::s_encode_jpeg2000(const char* in_filename, 
+
+bool vil_j2k_image::s_encode_jpeg2000(const char* in_filename,
                                       const char* out_filename,
                                       unsigned compression_ratio,
                                       unsigned num_lines_block,
@@ -678,7 +684,7 @@ bool vil_j2k_image::s_encode_jpeg2000(const char* in_filename,
 {
   vil_stream* vs = vil_open(in_filename);
   vs->ref();
-  bool success =  
+  bool success =
     vil_j2k_image::s_encode_jpeg2000(vs, out_filename,
                                      compression_ratio,
                                      num_lines_block,
