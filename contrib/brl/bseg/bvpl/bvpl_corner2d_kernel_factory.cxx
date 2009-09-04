@@ -9,9 +9,9 @@
 // Default Constructor
 bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory()
 {
-  length_ = 0.0f;
-  width_ = 0.0f;
-  thickness_ = 0.0f;
+  length_ = 0;
+  width_ = 0;
+  thickness_ = 0;
   angular_resolution_ = 0;
   canonical_rotation_axis_[0] = 0.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
   canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 0.0f; canonical_parallel_axis_[2] = 0.0f;
@@ -23,9 +23,9 @@ bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory()
 bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory(unsigned length, unsigned width , unsigned thickness)
 {
   //set variables
-  length_ = float(length);
-  width_ = float(width);
-  thickness_ = float(thickness);
+  length_ = length;
+  width_ = width;
+  thickness_ = thickness;
 
   //this kernel is not symmetric around main axis
   angular_resolution_= float(vnl_math::pi_over_4);
@@ -56,25 +56,46 @@ void bvpl_corner2d_kernel_factory::create_canonical()
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
 
-  int min_x = -int(thickness_*0.5f);
-  int max_x =  int(thickness_*0.5f);
-  int min_y = -int(width_    *0.5f);
-  int max_y =  int(width_    *0.5f);
-  int min_z = -int(length_   *0.5f);
-  int max_z =  int(length_   *0.5f);
+  int min_x = -1 * int(thickness_);
+  int max_x =  int(thickness_);
+  int min_y = -1 * int(width_);
+  int max_y =  int(width_);
+  int min_z = -1 * int(length_);
+  int max_z =  int(length_);
 
+  int n0=0;
+  int n1=0;
+   for (int x=min_x; x<=max_x; x++)
+  {
+    for (int z=min_z; z<=max_z; z++)
+    {
+      for (int y=min_y; y<=max_y; y++)
+      { 
+        if ((y==0) && (z==0));
+        else if (z < 0)
+          n1++;
+        else if (y < 0)
+          n1++;
+        else
+          n0++;
+      }
+    }
+  }
+  
   for (int x=min_x; x<=max_x; x++)
   {
     for (int z=min_z; z<=max_z; z++)
     {
       for (int y=min_y; y<=max_y; y++)
-      {
-        if (z < 0)
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
+      { 
+        if ((y==0) && (z==0))
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0.0f)));
+        else if (z < 0)
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
         else if (y < 0)
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
         else
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1.0f/float(n0))));
       }
     }
   }
