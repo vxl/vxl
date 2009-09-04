@@ -1,5 +1,8 @@
 #include <clsfy/clsfy_adaboost_sorted_builder.h>
 #include <clsfy/clsfy_adaboost_trainer.h>
+#include <clsfy/clsfy_add_all_loaders.h>
+#include <clsfy/clsfy_binary_1d_wrapper.h>
+#include <clsfy/clsfy_binary_1d_wrapper_builder.h>
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_binary_hyperplane_gmrho_builder.h>
 #include <clsfy/clsfy_binary_hyperplane_logit_builder.h>
@@ -18,6 +21,8 @@
 #include <clsfy/clsfy_logit_loss_function.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
 #include <clsfy/clsfy_mean_square_1d.h>
+#include <clsfy/clsfy_null_builder.h>
+#include <clsfy/clsfy_null_classifier.h>
 #include <clsfy/clsfy_parzen_builder.h>
 #include <clsfy/clsfy_random_builder.h>
 #include <clsfy/clsfy_random_classifier.h>
