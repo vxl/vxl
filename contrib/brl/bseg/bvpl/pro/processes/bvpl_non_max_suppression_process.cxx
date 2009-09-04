@@ -26,7 +26,7 @@ namespace bvpl_non_max_suppression_process_globals
   const unsigned n_outputs_ = 1;
 }
 
-//: process takes 6 inputs and has 2 outputs.
+//: process takes 4 inputs and has 1 outputs.
 // input[0]: The respose grid
 // input[1]: The id grid
 // input[2]: The vector of kernels
