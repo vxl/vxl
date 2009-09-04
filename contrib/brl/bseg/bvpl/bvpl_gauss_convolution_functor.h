@@ -25,6 +25,9 @@ class bvpl_gauss_convolution_functor
   //: Default constructor
   bvpl_gauss_convolution_functor();
 
+  //: contructor that passes kernel to find normalization constant
+  bvpl_gauss_convolution_functor(bvpl_kernel_iterator kernel);
+
   //: Destructor
   ~bvpl_gauss_convolution_functor() {}
 
@@ -34,12 +37,16 @@ class bvpl_gauss_convolution_functor
   //: Returns the final operation of this functor
   bsta_gauss_f1 result();
 
+  
+
  private:
   float mean_;
   float var_;
+  float max_;
 
   //: Initializes class variables
   void init();
+  void max(bvpl_kernel_iterator kernel);
 };
 
 #endif
