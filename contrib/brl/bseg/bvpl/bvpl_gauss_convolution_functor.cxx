@@ -2,9 +2,19 @@
 //:
 // \file
 
-//: Constructor
+
+//: Default Constructor
 bvpl_gauss_convolution_functor::bvpl_gauss_convolution_functor()
 {
+  max_ =0.0;
+  init();
+}
+
+//: Constructor
+bvpl_gauss_convolution_functor::bvpl_gauss_convolution_functor(bvpl_kernel_iterator kernel)
+{
+  //compute max
+  max(kernel);
   init();
 }
 
@@ -25,7 +35,35 @@ void bvpl_gauss_convolution_functor::apply(bsta_gauss_f1& gauss, bvpl_kernel_dis
 //: Return the final result
 bsta_gauss_f1 bvpl_gauss_convolution_functor::result()
 {
-  bsta_gauss_f1 final_gauss(mean_, var_);
+   bsta_gauss_f1 final_gauss;
+   //if(max_ > 1.0e-10){
+   // final_gauss.set_mean(mean_/max_);
+   // final_gauss.set_var(var_);
+   //}
+   //else{ // this case is happens when max_ is not initialized
+     final_gauss.set_mean(mean_);
+     final_gauss.set_var(var_); 
+   //}
   init();
   return final_gauss;
+}
+
+void bvpl_gauss_convolution_functor::max(bvpl_kernel_iterator kernel_iter)
+{
+  float max = 0.0f;
+  kernel_iter.begin();
+  while (!kernel_iter.isDone()) {
+    vgl_point_3d<int> idx = kernel_iter.index();
+    bvpl_kernel_dispatch d = *kernel_iter;
+    if( d.c_>0.0f)
+      max += d.c_ * 0.99f;
+    else
+      max += d.c_ *0.01f;
+    
+    ++kernel_iter;
+  }
+  
+
+  vcl_cout << "max response : " << max << vcl_endl;
+  max_ = max;
 }
