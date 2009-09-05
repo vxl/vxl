@@ -24,15 +24,15 @@ static void test_camera_homographies()
   vgl_h_matrix_2d<double> Ht =vpgl_camera_homographies::homography_to_camera(pc, pl);
 
   TEST_NEAR("test plane to image",Ht.get(2,2), 3.0, 0.001);
-  vgl_plane_3d<double> p2(0.707107,0, 0.707107,-1.414);
+  vgl_plane_3d<double> p2(0.707107,0, 0.707107, -1.414);
   vgl_h_matrix_2d<double> Ht2 =
     vpgl_camera_homographies::homography_to_camera(pc, p2);
-  vgl_homg_point_2d<double> pt1(-1.414, 0,1), pt2(-4,0,1), pt3(0,0,1);
+  vgl_homg_point_2d<double> pt1(-1.414, 0,1), pt2(0,1,1), pt3(0,0,1);
 
   vgl_point_2d<double> ptp1 = Ht2(pt1);
-  TEST_NEAR("test plane to image 45degrees point1",ptp1.x(), 0, 0.001);
+  TEST_NEAR("test plane to image 45degrees point1",ptp1.x(), 0.9998, 0.001);
   vgl_point_2d<double> ptp2 = Ht2(pt2);
-  TEST_NEAR("test plane to image 45degrees point2",ptp2.x(), -0.31374, 0.0001);
+  TEST_NEAR("test plane to image 45degrees point2",ptp2.x(), 0.3333, 0.001);
   vpgl_perspective_camera<double> psc;
   //starts with identity rotation and center at (0, 0, 0)
   vgl_point_3d<double> center(0, 0, -2);
@@ -41,11 +41,11 @@ static void test_camera_homographies()
     vpgl_camera_homographies::homography_to_camera(psc, p2);
   vgl_point_2d<double> ptp3 = Ht3(pt1);
   TEST_NEAR("test plane to image 45degrees perspective point1",
-            ptp3.x(), 0, 0.001);
+            ptp3.x(), 0.9998, 0.001);
   vgl_h_matrix_2d<double> Ht4 =vpgl_camera_homographies::homography_from_camera(psc, p2);
   vgl_point_2d<double> ptp4 = Ht4(pt3);
   TEST_NEAR("test plane from image 45degrees perspective point1",
-            ptp4.x(), -1.414, 0.001);
+            ptp4.x(), 1.414, 0.001);
 // An  set of data corresponding to an actual image sequence
   //World plane derived from 3 world points
   vgl_plane_3d<double> world_plane(+0.0585478, -0.685533, -0.725683, +10.9752);

@@ -63,7 +63,7 @@ static void test_bundle_adjust()
 
   // make default cameras
   vpgl_perspective_camera<double> init_cam(K,vgl_homg_point_3d<double>(0.0, 0.0, -10.0),I);
-  init_cam.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
+  init_cam.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0),vgl_vector_3d<double>(0,-1,0));
   vcl_vector<vpgl_perspective_camera<double> >
     unknown_cameras(cameras.size(),init_cam);
 
@@ -74,23 +74,19 @@ static void test_bundle_adjust()
   // make the mask (using all the points)
   vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
 
-
   // remove several correspondences
   mask[0][1] = false;
   mask[0][2] = false;
   mask[1][0] = false;
   mask[1][1] = false;
-  mask[1][3] = false;
+
   mask[2][3] = false;
   mask[2][5] = false;
   mask[2][6] = false;
-  mask[3][7] = false;
-  mask[3][8] = false;
+
   mask[4][0] = false;
   mask[4][1] = false;
   mask[4][6] = false;
-  mask[4][8] = false;
-
 
   // create a subset of projections based on the mask
   vnl_crs_index crs(mask);
