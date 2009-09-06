@@ -369,12 +369,12 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
       bytes_read += is_->read(reinterpret_cast<vxl_byte *>(buf->data()) + want_bytes_per_raster*i, want_bytes_per_raster);
     }
   }
-  if (bytes_read != ny * want_bytes_per_raster)
+  if (bytes_read != vil_streampos(ny * want_bytes_per_raster))
   {
     vil_exception_warning(
       vil_exception_corrupt_image_file("vil_bmp_image::get_copy_view", "BMP", "",
-                                            ny * want_bytes_per_raster,
-                                            (unsigned)bytes_read));
+                                       ny * want_bytes_per_raster,
+                                       (unsigned)bytes_read));
     return 0;
   }
 
