@@ -47,6 +47,12 @@ struct vil_rgba
   vil_rgba(T red, T green, T blue, T alpha = 1):
     r(red), g(green), b(blue), a(alpha) {}
 
+  //: equality
+  inline bool operator==(vil_rgba<T> const& o) const
+  {
+    return r==o.r && g==o.g && b==o.b && a==o.a;
+  }
+
   // VC50 bombs with INTERNAL COMPILER ERROR on template member functions
 #if VCL_HAS_MEMBER_TEMPLATES
   template <class S>
@@ -113,8 +119,9 @@ struct vil_rgba
   //: Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
   T grey() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
 
-  //: Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
+#if 0 // deprecated -- use .grey() instead
   operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
+#endif
 };
 
 #define VIL_RGBA_INSTANTIATE \
