@@ -76,10 +76,7 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
 template <class T>
 bool bvpl_subgrid_iterator<T>::isDone()
 {
-  if ((iter_.slice_idx() +dim_.z()) > grid_->grid_size().z())
-    return true;
-  else
-    return false;
+  return iter_.slice_idx() + dim_.z() > int(grid_->grid_size().z());
 }
 
 template <class T>
