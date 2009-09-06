@@ -74,7 +74,7 @@ struct vil_rgb
 #endif
 
   //: equality
-  inline bool operator== (vil_rgb<T> const&) const;
+  inline bool operator== (vil_rgb<T> const& o) const { return r==o.r && g==o.g && b==o.b; }
 
   // operators
   inline vil_rgb<T>  operator+  (vil_rgb<T> const& A) const { return vil_rgb<T>(r+A.r,g+A.g,b+A.b); }
@@ -154,13 +154,6 @@ vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<unsigned char> const& rgb);
 
 
 // ** Arithmetic operators
-
-template <class T>
-inline
-bool vil_rgb<T>::operator== (vil_rgb<T> const& o) const
-{
-  return r==o.r && g==o.g && b==o.b;
-}
 
 template <class T>
 inline
