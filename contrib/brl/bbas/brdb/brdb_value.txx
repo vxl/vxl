@@ -14,7 +14,7 @@
 
 #include "brdb_value.h"
 #include <vcl_cassert.h>
-
+#include <vbl/io/vbl_io_smart_ptr.h>
 
 //: Test for equality under polymorphism
 template< class T >
