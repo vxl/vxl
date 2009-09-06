@@ -69,10 +69,7 @@ struct vil_rgb
   //:Convert vil_rgb to gray using standard (.299, .587, .114) weighting.
   inline T grey() const { return T(r*0.299+0.587*g+0.114*b); }
 
-  // Who wants this? It's a pain in the ass.
-  // ImageProcessing/IIFOperators use this a lot!
-  // Why can we not use .gray()?  This adds ambiguities.
-#if 0
+#if 0 // deprecated -- use .grey() instead
   inline operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
 #endif
 
