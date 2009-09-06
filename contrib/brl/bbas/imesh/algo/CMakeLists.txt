@@ -14,6 +14,7 @@ SET( imesh_algo_sources
                                imesh_render.h
   imesh_imls_surface.cxx       imesh_imls_surface.h imesh_imls_surface.txx
 )
+AUX_SOURCE_DIRECTORY(Templates imesh_algo_sources)
 
 ADD_LIBRARY( imesh_algo ${imesh_algo_sources} )
 
