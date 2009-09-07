@@ -126,6 +126,9 @@ SOURCE=.\vil3d_make_edt_filter.cxx
 SOURCE=.\vil3d_overlap.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_find_blobs.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_grad_1x3+byte.float-.cxx
 # End Source File
 # Begin Source File
@@ -274,6 +277,9 @@ SOURCE=.\vil3d_overlap.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_locally_z_normalise.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_find_blobs.h
 # End Source File
 # End Group
 # End Target

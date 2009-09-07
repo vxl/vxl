@@ -344,6 +344,21 @@ SOURCE=.\Templates/mbl_save_text_file+vgl_point_3d+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/mbl_load_text_file+vcl_string-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_array_wrapper+unsigned-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_collector_list+unsigned-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_collector+unsigned-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_data_wrapper+unsigned-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_stochastic_data_collector+unsigned-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"

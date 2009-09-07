@@ -339,6 +339,9 @@ SOURCE=.\test_save_load_image.cxx
 # Begin Source File
 SOURCE=.\test_tricub_interp.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_find_blobs.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

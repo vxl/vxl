@@ -116,6 +116,12 @@ SOURCE=.\imesh_project.cxx
 # Begin Source File
 SOURCE=.\imesh_transform.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/imesh_imls_surface+vgl_vector_2d+double-.vgl_point_3d+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/imesh_imls_surface+imesh_imls_surface+-integral_data.vgl_point_3d+double--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
