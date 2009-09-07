@@ -10,6 +10,7 @@
 #include <vil3d/algo/vil3d_exp_distance_transform.h>
 #include <vil3d/algo/vil3d_exp_filter.h>
 #include <vil3d/algo/vil3d_fill_boundary.h>
+#include <vil3d/algo/vil3d_find_blobs.h>
 #include <vil3d/algo/vil3d_find_peaks.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vil3d/algo/vil3d_grad_1x3.h>

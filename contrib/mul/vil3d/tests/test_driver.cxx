@@ -36,6 +36,7 @@ DECLARE( test_algo_distance_transform );
 DECLARE( test_algo_abs_shuffle_distance );
 DECLARE( test_algo_make_distance_filter );
 DECLARE( test_algo_exp_distance_transform );
+DECLARE( test_algo_find_blobs );
 
 
 void
@@ -76,6 +77,7 @@ register_tests()
   REGISTER( test_algo_abs_shuffle_distance );
   REGISTER( test_algo_make_distance_filter );
   REGISTER( test_algo_exp_distance_transform );
+  REGISTER( test_algo_find_blobs );
 }
 
 DEFINE_MAIN;
