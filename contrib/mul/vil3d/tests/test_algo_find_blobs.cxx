@@ -2,9 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vil3d/algo/vil3d_find_blobs.h>
 
-
-
-/*
+#if 0
 static inline void print_binary_image(const vil_image_view<bool>& im)
 {
   for (unsigned j=0;j<im.nj();++j)
@@ -15,7 +13,7 @@ static inline void print_binary_image(const vil_image_view<bool>& im)
     vcl_cout<<vcl_endl;
   }
 }
-*/
+#endif // 0
 
 static void test_algo_find_blobs()
 {
@@ -23,7 +21,7 @@ static void test_algo_find_blobs()
 
   TEST("Dummy test", true, true);
 
-/*  
+#if 0 // temporarily commented out -- this means that no tests are performed!!
   vil_image_view<bool> image(10,11);
 
   // Create 3 x 3 square
@@ -90,8 +88,7 @@ static void test_algo_find_blobs()
   TEST("Length of boundary (Square)",bi.size(),20);
   TEST("Got internal blob",finder.next_4con_region(bi,bj),true);
   TEST("Length of boundary (Square)",bi.size(),4);
-*/
+#endif // 0
 }
-
 
 TESTMAIN(test_algo_find_blobs);
