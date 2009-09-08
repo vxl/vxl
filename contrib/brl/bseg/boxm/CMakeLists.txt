@@ -37,6 +37,7 @@ SET(boxm_sources
     boxm_fill_in_mesh.h
     boxm_vis_implicit_sample.h
     boxm_update_sample.h
+    boxm_rt_sample.h                       boxm_rt_sample.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
