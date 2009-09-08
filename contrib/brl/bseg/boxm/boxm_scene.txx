@@ -37,8 +37,8 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
 {
   // compute the dimensions of 3D array
   unsigned x_dim = world_dim.x();
-  unsigned y_dim = world_dim.y(); 
-  unsigned z_dim = world_dim.z(); 
+  unsigned y_dim = world_dim.y();
+  unsigned z_dim = world_dim.z();
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>(x_dim, y_dim, z_dim, (boxm_block<T>*)NULL);
@@ -153,7 +153,7 @@ bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> &
     unsigned i = static_cast<unsigned>((p.x()-origin_.x())/block_dim_.x());
     unsigned j = static_cast<unsigned>((p.y()-origin_.y())/block_dim_.y());
     unsigned k = static_cast<unsigned>((p.z()-origin_.z())/block_dim_.z());
-    //: boundary case
+    // boundary case
     if (p.x()==world.max_x())
       i-=1;
     if (p.y()==world.max_y())
@@ -216,8 +216,8 @@ vcl_string boxm_scene<T>::gen_block_path(int x, int y, int z)
   return s;
 }
 
-//: returns true if the block bin file is found on disc, false otherwise. If false, 
-// a new tree is create for the block
+//: returns true if the block bin file is found on disc, false otherwise.
+// If false, a new tree is create for the block
 template <class T>
 bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 {
