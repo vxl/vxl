@@ -10,7 +10,7 @@
 // \author Ian Scott, Kevin de Souza
 
 
-#include <vil3d/vil3d_image_view.h>
+#include <vil3d/vil3d_fwd.h>
 
 
 //: Specify 6- or 26- neighbour connectivity
