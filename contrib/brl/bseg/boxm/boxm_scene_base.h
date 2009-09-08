@@ -23,7 +23,8 @@ class boxm_scene_base : public vbl_ref_count
 {
  public:
   boxm_scene_base()
-    : app_model_(BOXM_APM_UNKNOWN), multi_bin_(false), tree_level_set_(false), scene_path_(""), block_pref_("") {}
+    : app_model_(BOXM_APM_UNKNOWN), multi_bin_(false), tree_level_set_(false), 
+	scene_path_(""), block_pref_(""), max_tree_level_(0), init_tree_level_(0) {}
 
   virtual ~boxm_scene_base(){}
 
@@ -55,7 +56,7 @@ class boxm_scene_base : public vbl_ref_count
   //: number of initial octree levels created at the tree creation step
   unsigned init_tree_level_;
 
-  //: it is set to treu when max and init tree levels are given
+  //: it is set to true when max and init tree levels are given
   bool tree_level_set_;
 
   vcl_string scene_path_;
