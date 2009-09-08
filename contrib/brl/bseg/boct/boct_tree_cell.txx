@@ -434,7 +434,6 @@ template<class T_loc,class T_data>
 void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data>& cell)
 {
   vsl_b_write(os, boct_tree_cell<T_loc,T_data>::version_no());
-  //vsl_b_write(os, cell.level());
   vsl_b_write(os, cell.code_);
   T_data data = cell.data();
   vsl_b_write(os, data);

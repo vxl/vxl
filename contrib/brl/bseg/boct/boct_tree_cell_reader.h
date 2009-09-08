@@ -19,8 +19,8 @@ template <class T_loc,class T_data>
 class boct_tree_cell_reader
 {
  public:
-  boct_tree_cell_reader(vsl_b_istream* s) : is_(*s) {}
-
+  //boct_tree_cell_reader(vsl_b_istream* s) : is_(*s) {}
+	 boct_tree_cell_reader(vcl_string path): is_(new vsl_b_ifstream(path)) { }
   ~boct_tree_cell_reader() {}
 
   //boct_tree_cell_reader(boct_tree_cell_reader const &r) { is_= r.is_; }
@@ -35,7 +35,7 @@ class boct_tree_cell_reader
 
  private:
   //: input binary stream of octree
-  vsl_b_istream is_;
+  vsl_b_istream* is_;
 };
 
 

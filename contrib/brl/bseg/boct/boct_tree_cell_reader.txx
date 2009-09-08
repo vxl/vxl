@@ -15,19 +15,22 @@ void boct_tree_cell_reader<T_loc,T_data>::begin()
 
   short v;
   short max_level;
-  vgl_box_3d<double> global_bbox;
-  vsl_b_read(is_, v);
+  vgl_box_3d<double> global_bbox, tree_bb;
+  vsl_b_read(*is_, v);
   switch (v)
   {
    case (1):
-     //short max_level;
-     vsl_b_read(is_, max_level);
-     vsl_b_read(is_, global_bbox);
+     vsl_b_read(*is_, global_bbox);
+     
+     // read the treee header
+     vsl_b_read(*is_, v);
+     vsl_b_read(*is_, max_level);
+     vsl_b_read(*is_, tree_bb);
      break;
    default:
      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
               << "           Unknown version number "<< v << '\n';
-     is_.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+//     *is_.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
      return;
   }
 }
@@ -41,16 +44,16 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
   bool leaf=false;
   while (!leaf) {
     short version;
-    vsl_b_read(is_,version);
+    vsl_b_read(*is_,version);
     switch (version)
     {
      case 1: {
-      vsl_b_read(is_, c.code_);
+      vsl_b_read(*is_, c.code_);
       T_data data;
-      vsl_b_read(is_, data);
+      vsl_b_read(*is_, data);
       c.set_data(data);
       c.set_vis_node(NULL);
-      vsl_b_read(is_, leaf);
+      vsl_b_read(*is_, leaf);
       if (leaf)
         return true;
       break;
@@ -58,7 +61,7 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
                << "           Unknown version number "<< version << '\n';
-      is_.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+ //     *is_.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return false;
    }
   }
