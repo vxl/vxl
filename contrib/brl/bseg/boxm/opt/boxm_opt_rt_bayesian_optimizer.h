@@ -8,7 +8,7 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene.h>
 
-#include "boxm_opt_rt_sample.h"
+#include <boxm/boxm_rt_sample.h>
 
 template<class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 class boxm_opt_rt_bayesian_optimizer

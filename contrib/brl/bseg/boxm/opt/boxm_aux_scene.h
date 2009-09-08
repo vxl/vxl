@@ -22,20 +22,18 @@ template <class T_loc, class T, class T_AUX>
 class boxm_aux_scene
 {
  public:
-   //typedef boct_tree<T_loc, boxm_sample<T> > scene_type;
-  //: when lvcs is not avialable
    typedef  boct_tree<T_loc, T> tree_type;
    typedef  boct_tree<T_loc, T_AUX> aux_tree_type;
    boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string suffix);
 
-   ~boxm_aux_scene(){delete aux_scene_;}
+   ~boxm_aux_scene(){/*delete aux_scene_;*/}
 
    void init_scene(){}
 
- // boxm_block<aux_tree_type> get_block(vgl_point_3d<int> block_idx) {return aux_scene_->load_block(block_idx); }
+   //: get an incremental reader for a scene block
+   boct_tree_cell_reader<T_loc, T_AUX >* get_block_incremental(vgl_point_3d<int> block_idx);
 
-  //: get an incremental reader for a scene block
-  boct_tree_cell_reader<T_loc, T_AUX >* get_block_incremental(vgl_point_3d<int> block_idx);
+   void write_active_block() { aux_scene_->write_active_block(); }
 
  private:
   boxm_scene<aux_tree_type>* aux_scene_;

@@ -2,8 +2,6 @@
 #define boxm_opt_rt_bayesian_optimizer_txx_
 
 #include "boxm_opt_rt_bayesian_optimizer.h"
-//
-#include "boxm_opt_rt_sample.h"
 #include "boxm_opt_appearance_estimator.h"
 
 #include <boxm/boxm_apm_traits.h>
@@ -24,7 +22,7 @@ boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::boxm_opt_rt_bayesian_optimizer(bo
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_factor)
 {
-  // get auxiliary scenes associated with each imput image
+  // get auxiliary scenes associated with each input image
   typedef typename boxm_aux_traits<AUX>::sample_datatype aux_type;
 
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
@@ -36,13 +34,14 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
     aux_scenes.push_back(aux_scene);
   }
 
-  vcl_vector<boxm_opt_rt_sample<typename boxm_apm_traits<APM>::obs_datatype> > aux_samples;
+  vcl_vector<boxm_rt_sample<typename boxm_apm_traits<APM>::obs_datatype> > aux_samples;
 
   // for each block
   boxm_block_iterator<tree_type> iter(&scene_);
   iter.begin();
   while (!iter.end())
   {
+    scene_.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_sample<APM> >* tree = block->get_tree();
     vcl_vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
@@ -120,8 +119,8 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
       for (unsigned int i=0; i<aux_readers.size(); ++i) {
         aux_readers[i]->close();
       }
-      ++iter;
     }
+    iter++;
   }
 #ifdef DEBUG
   vcl_cout << "done with all cells" << vcl_endl;
