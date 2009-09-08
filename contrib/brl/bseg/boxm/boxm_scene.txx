@@ -12,7 +12,7 @@
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsl/vsl_binary_io.h>
-
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
@@ -36,15 +36,15 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
                                   const vgl_vector_3d<unsigned>& world_dim)
 {
   // compute the dimensions of 3D array
-  int x_dim = world_dim.x(); //static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
-  int y_dim = world_dim.y(); //static_cast<int>(vcl_floor(world_dim.y()/block_dim.y()));
-  int z_dim = world_dim.z(); //static_cast<int>(vcl_floor(world_dim.z()/block_dim.z()));
+  unsigned x_dim = world_dim.x();
+  unsigned y_dim = world_dim.y(); 
+  unsigned z_dim = world_dim.z(); 
 
   // pointers are initialized to NULL
-  blocks_ =  vbl_array_3d<boxm_block<T>*>((unsigned)x_dim, (unsigned)y_dim, (unsigned)z_dim, (boxm_block<T>*)NULL);
-  for (int i=0; i<x_dim; i++) {
-    for (int j=0; j<y_dim; j++) {
-      for (int k=0; k<z_dim; k++) {
+  blocks_ =  vbl_array_3d<boxm_block<T>*>(x_dim, y_dim, z_dim, (boxm_block<T>*)NULL);
+  for (unsigned i=0; i<x_dim; i++) {
+    for (unsigned j=0; j<y_dim; j++) {
+      for (unsigned k=0; k<z_dim; k++) {
         create_block(i,j,k);
       }
     }
@@ -109,6 +109,7 @@ boxm_scene<T>::~boxm_scene()
   }
 }
 
+
 template <class T>
 void boxm_scene<T>::write_active_block()
 {
@@ -122,6 +123,7 @@ void boxm_scene<T>::write_active_block()
     boxm_block<T>* block = blocks_(x,y,z);
     block->delete_tree();
     active_block_.set(-1,-1,-1);
+    os.close();
   }
 }
 
@@ -214,21 +216,24 @@ vcl_string boxm_scene<T>::gen_block_path(int x, int y, int z)
   return s;
 }
 
+//: returns true if the block bin file is found on disc, false otherwise. If false, 
+// a new tree is create for the block
 template <class T>
-void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
+bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 {
+  bool exist=false;
   if (!valid_index(vgl_point_3d<int>(i,j,k)))
-    return;
+    return false;
 
   // make sure the active one is saved first
   if (valid_index(active_block_)) {
     if (active_block_ == vgl_point_3d<int>(i,j,k))
-      return;
+      return true;
     else {
       int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
       boxm_block<T>* block = blocks_(x,y,z);
       block->delete_tree();
-    block->set_tree(0);
+      block->set_tree(0);
     }
   }
   active_block_.set(i,j,k);
@@ -239,20 +244,15 @@ void boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
   //if the binary block file is not found
   if (!os) {
     if (blocks_(i,j,k)->get_tree()==NULL) {
+      exist = false;
       T* tree= new T(max_tree_level_,init_tree_level_);
       blocks_(i,j,k)->init_tree(tree);
     }
-    return;
+    return false;
   }
   blocks_(i,j,k)->b_read(os);
   os.close();
-#if 0
-  if (blocks_(i,j,k)->get_tree()==NULL)
-  {
-    T* tree= new T(max_tree_level_,init_tree_level_);
-    blocks_(i,j,k)->init_tree(tree);
-  }
-#endif // 0
+  return true;
 }
 
 template <class T>
@@ -299,7 +299,7 @@ void boxm_scene<T>::b_write(vsl_b_ostream & s) const
 {
   // create an XML stream for the parameters
   vcl_stringstream strm;
-  boxm_scene<T> scene = *this;
+  boxm_scene<T> scene(this->lvcs(), this->origin(), this->block_dim(), this->world_dim());
   x_write(strm, scene, "scene");
   vcl_string str(strm.str());
 
@@ -314,7 +314,7 @@ void boxm_scene<T>::write_scene()
 {
   vcl_string filename=scene_path_+"/scene.xml";
   vcl_ofstream os(filename.c_str());
-  x_write(os, *this);
+  x_write(os, *this, "boxm_scene");
   os.close();
 }
 
@@ -333,7 +333,7 @@ void boxm_scene<T>::load_scene(boxm_scene_parser& parser)
 }
 
 template <class T>
-void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
+void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
 {
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
@@ -342,8 +342,10 @@ void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name)
   app_model.add_attribute("type", boxm_apm_types::app_model_strings[scene.appearence_model()]);
   app_model.x_write(os);
 
-  vsl_basic_xml_element bin(MULTI_BIN_TAG);
-  bin.add_attribute("value", scene.multi_bin()? 1 : 0);
+  vsl_basic_xml_element bin(SAMPLE_TAG);
+  if (scene.multi_bin()) {
+    bin.add_attribute("value", "multibin");
+  else if (scene.
   bin.x_write(os);
 
   bgeo_lvcs lvcs=scene.lvcs();

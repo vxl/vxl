@@ -51,7 +51,9 @@ class boxm_scene :public boxm_scene_base
 
   ~boxm_scene();
 
-  void load_block(unsigned i, unsigned j, unsigned k);
+  //void delete_blocks();
+
+  bool load_block(unsigned i, unsigned j, unsigned k);
 
   void load_block(vgl_point_3d<int> i) { load_block(i.x(), i.y(), i.z()); }
 
@@ -69,11 +71,12 @@ class boxm_scene :public boxm_scene_base
                                           y=(int) blocks_.get_row2_count();
                                           z=(int) blocks_.get_row3_count();}
 
-  vgl_vector_3d<double> world_dim() {double x, y, z; 
-                                     x=(int) blocks_.get_row1_count()*block_dim_.x();
-                                     y=(int) blocks_.get_row2_count()*block_dim_.y();
-                                     z=(int) blocks_.get_row3_count()*block_dim_.z();
-                                     return vgl_vector_3d<double>(x,y,z); }
+  vgl_vector_3d<unsigned> world_dim() const {unsigned x, y, z; 
+                                     x=(unsigned) blocks_.get_row1_count();
+                                     y=(unsigned) blocks_.get_row2_count();
+                                     z=(unsigned) blocks_.get_row3_count();
+                                     return vgl_vector_3d<unsigned>(x,y,z); }
+
   vcl_string path() const { return scene_path_; }
 
   vcl_string block_prefix() const { return block_pref_; }
@@ -92,7 +95,8 @@ class boxm_scene :public boxm_scene_base
 
   boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
 
-  void set_block(vgl_point_3d<int>& idx, boxm_block<T>* block) { blocks_(idx.x(),idx.y(),idx.z()) = block; }
+  void set_block(vgl_point_3d<int>& idx, boxm_block<T>* block) 
+    { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx;}
 
   void write_scene();
 
@@ -173,7 +177,7 @@ class boxm_block_iterator
 
 //: generates an XML file from the member variables
 template <class T>
-void x_write(vcl_ostream &os, boxm_scene<T> &scene, vcl_string name="boxm_scene");
+void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name="boxm_scene");
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene);
