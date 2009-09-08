@@ -20,4 +20,4 @@ TARGET_LINK_LIBRARIES(boxm_opt boxm vcl vgl)
 SUBDIRS(pro)
 
 #tests
-SUBDIRS(tests)
+#SUBDIRS(tests)
