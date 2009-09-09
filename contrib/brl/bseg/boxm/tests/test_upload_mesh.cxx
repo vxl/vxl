@@ -22,13 +22,26 @@
 
 MAIN( test_upload_mesh )
 {
-  START ("SAVE RAW");
+
+  START ("TEST upload mesh");
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(2,2,1);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY>  > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
+
+  //if(vul_file_is_directory("./boxm_upload"))
+  //{
+  //    vul_file_iterator fiter("./boxm_upload/*");
+  //    while(!fiter)
+  //    {
+  //      vpl_unlink(fiter());
+  //      fiter++;
+  //    }
+  //    vpl_rmdir("./boxm_upload");
+  //}
+
   scene.set_paths("./boxm_upload", "block");
   vul_file::make_directory("./boxm_upload");
   vcl_ofstream os("scene.xml");
@@ -37,7 +50,7 @@ MAIN( test_upload_mesh )
 
   // create a mesh
   unsigned int num_faces=1;
-  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(4));
+  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(3));
   vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   imesh_vertex<3>& vert0 = (*verts)[0];
   vert0[0]=2;
