@@ -121,10 +121,11 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
         children.push_back(region);
       for (unsigned i=0; i<children.size(); i++) {
         boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell=children[i];
-        vgl_box_3d<double> cell_bb=tree->cell_bounding_box_local(cell);
+        vgl_box_3d<double> cell_bb=tree->cell_bounding_box(cell);
         if (vgl_intersection<double>(cell_bb, v_list)) {
           boxm_sample<BOXM_APM_MOG_GREY> tempdata=cell->data();
           tempdata.set_appearance(val.appearance());
+          tempdata.alpha*=val.alpha;
           cell->set_data(tempdata);
         }
       }
