@@ -1457,7 +1457,7 @@ void bwm_observer_cam::create_terrain()
   int ntri;
   tri.triangulate(points_3d, v, ntri);
   vcl_cout << "Number of Triangles:" << ntri << vcl_endl;
-  for (unsigned i=0; i<ntri; i++) {
+  for (int i=0; i<ntri; i++) {
     vcl_cout << i << "==>" << v[i] << vcl_endl;
   }
 

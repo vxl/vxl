@@ -6,6 +6,7 @@
 #include "bwm_observer_cam.h"
 #include "video/bwm_video_corr_sptr.h"
 #include <vcl_map.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vgui/vgui_style.h>
 #include <vpgl/vpgl_camera.h>
 #include <vidl/vidl_istream_sptr.h>
@@ -84,6 +85,20 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: turn on/off world point display
   void toggle_world_pt_display(){display_world_pts_ = !display_world_pts_;}
+
+  //: extract a 3-d plane from three selected correspondences with world pts
+  bool extract_world_plane(vgl_plane_3d<double>&  plane);
+
+  //: get the video stream
+  vidl_istream_sptr video_stream() {return  video_istr_;}
+
+  //: get the camera stream
+  bwm_video_cam_istream_sptr camera_stream() {return  cam_istr_;}
+
+  //: extract two-class neigborhoods from a video stream
+  bool extract_neighborhoods(unsigned nbd_radius,
+                             vcl_vector<vnl_matrix<float> > & c0_nhd,
+                             vcl_vector<vnl_matrix<float> > & c1_nhd);
 
   //Internals --------------------------------------- -------------------------
  protected:

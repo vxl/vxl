@@ -107,6 +107,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   image_submenu.add( "Clear Segmentation Display",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_box));
 
+
   if (bwm_tableau_mgr::is_registered("bwm_tableau_video"))
   {
     vgui_menu mask_menu;
@@ -423,6 +424,16 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     video_corr_submenu.add( "Toggle World Point Display",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
                        &bwm_tableau_video::toggle_world_pt_display));
+    video_corr_submenu.separator();
+
+    video_corr_submenu.add( "Extract World Plane",
+                       new vgui_command_simple<bwm_tableau_video>(video_tab,
+                       &bwm_tableau_video::extract_world_plane));
+    video_corr_submenu.separator();
+
+    video_corr_submenu.add( "Extract Neigborhoods",
+                       new vgui_command_simple<bwm_tableau_video>(video_tab,
+                       &bwm_tableau_video::extract_neighborhoods));
     menu.add("Video Correspondence", video_corr_submenu);
   }
 }

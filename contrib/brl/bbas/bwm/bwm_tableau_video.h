@@ -38,6 +38,8 @@ class bwm_tableau_video : public bwm_tableau_cam
   void display_current_video_corrs();
   void clear_video_corrs_display();
   void toggle_world_pt_display();
+  void extract_world_plane();
+  void extract_neighborhoods();
   void set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs) { my_observer_->set_corrs(corrs); }
 protected:
   bwm_observer_video* my_observer_;

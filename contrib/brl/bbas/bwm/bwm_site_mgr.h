@@ -32,7 +32,9 @@ public:
   void load_img_tableau();
   void load_cam_tableau();
   void load_video_tableau();
-
+  void save_video_world_points_vrml();
+  void save_video_cameras_vrml();
+  void save_video_cams_and_world_pts_vrml();
 private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;

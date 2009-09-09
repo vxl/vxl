@@ -2,7 +2,7 @@
 #include "bwm_popup_menu.h"
 #include <vsol/vsol_point_2d.h>
 #include <vgui/vgui_dialog.h>
-
+#include <vnl/vnl_double_4.h>
 bool bwm_tableau_video::handle(const vgui_event &e)
 {
   return bwm_tableau_cam::handle(e);
@@ -98,4 +98,58 @@ void bwm_tableau_video::clear_video_corrs_display()
 void bwm_tableau_video::toggle_world_pt_display()
 {
   my_observer_->toggle_world_pt_display();
+}
+void bwm_tableau_video::extract_world_plane()
+{
+  vcl_string path = "";
+  vcl_string ext = "*.pl3d";
+  vgui_dialog plane_dlg("Extract World Plane(3 Sel. Corrs.)");
+  plane_dlg.file("Plane file", ext, path);
+  if (!plane_dlg.ask())
+    return;
+  vgl_plane_3d<double> plane;
+  if(!my_observer_->extract_world_plane(plane)){
+    vcl_cerr << "extract plane failed \n";    
+    return;
+  }
+  vnl_double_4 pv;
+  pv[0]=plane.a();   pv[1]=plane.b();   pv[2]=plane.c();   pv[3]=plane.d(); 
+  vcl_ofstream os(path.c_str());
+  if(!os.is_open()){
+    vcl_cerr << "invalid output path for plane \n";    
+    return;
+  }
+  os << pv;
+  os.close();
+}
+void bwm_tableau_video::extract_neighborhoods()
+{
+  static unsigned radius = 1;
+  vcl_string path = "";
+  vcl_string ext = "*.nbh";
+  vgui_dialog nbh_dlg("2-class neighborhoods (select 2 corrs)");
+  nbh_dlg.file("Neighborhood file", ext, path);
+  nbh_dlg.field("Nbhd radius", radius);
+  if (!nbh_dlg.ask())
+    return;
+  vcl_vector<vnl_matrix<float> > c0_nhd, c1_nhd;
+  if(!my_observer_->extract_neighborhoods(radius, c0_nhd, c1_nhd)){
+    vcl_cerr << "extract neighborhoods failed \n";    
+    return;
+  }
+  unsigned n0 = c0_nhd.size(), n1 = c1_nhd.size();
+  unsigned dim = 2*radius+1;
+  vcl_ofstream os(path.c_str());
+  if(!os.is_open()){
+    vcl_cerr << "invalid output path for neighborhoods \n";    
+    return;
+  }
+  os << "dim: " << dim << '\n';
+  os << "n0: " << n0 << '\n';
+  os << "n1: " << n1 << '\n';
+  for(unsigned i = 0; i< n0; ++i)
+    os << c0_nhd[i] << '\n';
+  for(unsigned i = 0; i< n1; ++i)
+    os << c1_nhd[i] << '\n';
+  os.close();
 }

@@ -50,14 +50,14 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
   else if (t->type_name.compare(VIDEO_TABLEAU_TAG) == 0) {
     bwm_io_tab_config_video* tab = static_cast<bwm_io_tab_config_video* > (t);
     vcl_string name = tab->name;
-    vcl_string frame_glob = tab->frame_glob;
+    vcl_string video_path = tab->video_path;
     vcl_string camera_glob = tab->camera_glob;
 
-    if (frame_glob == "")
+    if (video_path == "")
       return 0;
 
     bgui_image_tableau_sptr img = bgui_image_tableau_new();
-    img->set_file_name(frame_glob);
+    img->set_file_name(video_path);
     bwm_observer_video* obs = new bwm_observer_video(img);
     bwm_tableau_video* t = new bwm_tableau_video(obs);
     vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
@@ -65,8 +65,7 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
     obs->set_viewer(viewer);
     obs->set_camera_path(camera_glob);
     bwm_observer_mgr::instance()->add(obs);
-    bool open = obs->open_video_stream(frame_glob);
-
+    bool open = obs->open_video_stream(video_path);
     if (camera_glob != ""){
       open = open && obs->open_camera_stream(camera_glob);
       if (open)

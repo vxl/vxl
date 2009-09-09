@@ -94,11 +94,11 @@ struct bwm_io_tab_config_proj2d: public bwm_io_tab_config {
 
 struct bwm_io_tab_config_video: public bwm_io_tab_config {
   bwm_io_tab_config_video(vcl_string name, bool status,
-    vcl_string frames, vcl_string cameras)
-    : bwm_io_tab_config(VIDEO_TABLEAU_TAG, name, status), frame_glob(frames), camera_glob(cameras) {}
+    vcl_string frames,  vcl_string cameras)
+    : bwm_io_tab_config(VIDEO_TABLEAU_TAG, name, status), video_path(frames), camera_glob(cameras) {}
 
-  bwm_io_tab_config_video* clone() { return new bwm_io_tab_config_video(name, status, frame_glob, camera_glob); }
-  vcl_string frame_glob;
+  bwm_io_tab_config_video* clone() { return new bwm_io_tab_config_video(name, status, video_path, camera_glob); }
+  vcl_string video_path;
   vcl_string camera_glob;
 };
 

@@ -30,6 +30,9 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   file_menu.add("Save (kml)", save_kml);
   file_menu.add("Save (kml collada)", save_kml_collada);
   file_menu.add("Save (x3d)", save_x3d);
+  file_menu.add("Save Video World Points (vrml)", save_world_points_vrml);
+  file_menu.add("Save Video Cameras (vrml)", save_video_cameras_vrml);
+  file_menu.add("Save Video Cams and Points (vrml)", save_video_cams_and_world_pts_vrml);
   top_menu.add("FILE   ", file_menu);
 
   vgui_menu corr_menu;

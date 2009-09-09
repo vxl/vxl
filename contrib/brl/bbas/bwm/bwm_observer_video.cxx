@@ -10,9 +10,16 @@
 #include <vgl/vgl_distance.h>
 #include <vgui/vgui.h>
 #include <vul/vul_timer.h>
+#include <vul/vul_file.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_load.h>
+#include <vil/vil_convert.h>
+#include <vidl/vidl_config.h>
 #include <vidl/vidl_image_list_istream.h>
+#if VIDL_HAS_DSHOW
+#include <vidl/vidl_dshow_file_istream.h>
+#endif
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
@@ -63,13 +70,41 @@ void bwm_observer_video::init()
 }
 
 
-bool bwm_observer_video::open_video_stream(vcl_string const& video_glob)
+bool bwm_observer_video::open_video_stream(vcl_string const& video_path)
+ 
 {
-  //for now assume we are opening an image_list codec
-  video_istr_ = new vidl_image_list_istream(video_glob);
+  vcl_string vpath = video_path;
+  if(video_path=="")
+    return false;
+  bool glob = false;
+  if(vul_file::is_directory(video_path)) glob = true;
+  else
+    for(vcl_string::const_iterator cit = video_path.begin(); 
+      cit != video_path.end()&&!glob; ++cit)
+      if(*cit=='*')
+        glob = true;
+  //try to open the path as an image 
+  //if successful, then open the directory as an image list
+  if(!glob){
+    vil_image_resource_sptr resc = vil_load_image_resource(video_path.c_str());
+    if(resc){
+      vpath = vul_file::dirname(video_path);
+      vcl_string ex = vul_file::extension(video_path);
+      vpath = vpath + "/*" + ex;
+      glob = true;
+    }
+  }
+  //assume we are opening an image_list codec
+  if(glob)
+    video_istr_ = new vidl_image_list_istream(vpath);
+#if VIDL_HAS_DSHOW
+  else  video_istr_ = new vidl_dshow_file_istream(video_path);
+#endif
+  if(!video_istr_) return false;
   bool open = video_istr_->is_open();
-  if  (open)
+  if  (open&&video_istr_->is_seekable())
     this->seek(0);
+  this->range_map();
   return open;
 }
 
@@ -128,6 +163,8 @@ void bwm_observer_video::display_current_frame()
     vidl_frame_sptr frame = video_istr_->current_frame();
     if (!frame)
       img_tab_->set_image_resource(NULL);
+    else {
+#if 0  // Now not needed since vidl handles these types
     else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
       static vil_image_view<vxl_uint_16> img;
       if (vidl_convert_to_view(*frame,img))
@@ -141,6 +178,11 @@ void bwm_observer_video::display_current_frame()
         img_tab_->set_image_view(img);
       else
         img_tab_->set_image_resource(NULL);
+    }
+#endif
+    vil_image_view_base_sptr vb = vidl_convert_wrap_in_view(*frame);
+    if(vb) 
+      img_tab_->set_image_view(*vb);
     }
   }
   img_tab_->post_redraw();
@@ -258,6 +300,7 @@ bool bwm_observer_video::find_selected_video_corr(unsigned& frame,
         frame = (*fit).first;
         corr_index = (*mit).first;
       }
+
   return found;
 }
 
@@ -583,4 +626,132 @@ bwm_observer_video::set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs)
   for (vcl_vector<bwm_video_corr_sptr>::const_iterator cit = corrs.begin();
        cit != corrs.end(); ++cit)
     video_corrs_[(*cit)->id()] = (*cit);
+}
+
+bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
+{
+  vcl_vector<vgui_soview2D*> selected = 
+    this->get_selected_objects("bwm_soview2D_cross");
+  if(selected.size()!=3){
+    vcl_cerr << "Select exactly 3 correspondences to specify the vertices of a triangle\n";
+    return false;
+  }
+  vcl_vector<bwm_video_corr_sptr> corrs;
+  unsigned frame;
+  unsigned corr_index;
+  for(vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
+      cit != selected.end(); ++cit)
+    {
+      bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
+      if(!cross) return false;
+     vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
+       corr_soview_map_.begin();
+      bool found = false;
+      for (; fit != corr_soview_map_.end()&&!found; ++fit)
+        for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit =
+               (*fit).second.begin();
+             mit != (*fit).second.end()&&!found; ++mit)
+      if ((*mit).second == cross)
+      {
+        found = true;
+        frame = (*fit).first;
+        corr_index = (*mit).first;
+      }
+      if(!found)
+        return false;
+      bwm_video_corr_sptr corr = video_corrs_[corr_index];
+      if(!corr)
+        return false;
+      corrs.push_back(corr);
+    }
+  vgl_point_3d<double> pt0 = corrs[0]->world_pt();
+  vgl_point_3d<double> pt1 = corrs[1]->world_pt();
+  vgl_point_3d<double> pt2 = corrs[2]->world_pt();
+  vgl_plane_3d<double> pl(pt0, pt1, pt2);
+  plane = pl;
+  return true;
+}
+//: extract two-class neigborhoods from a video stream
+bool bwm_observer_video::
+extract_neighborhoods(unsigned nhd_radius,
+                      vcl_vector<vnl_matrix<float> >& c0_nhd,
+                      vcl_vector<vnl_matrix<float> >& c1_nhd)
+{
+  vcl_vector<vgui_soview2D*> selected = 
+    this->get_selected_objects("bwm_soview2D_cross");
+  if(selected.size()!=2){
+    vcl_cerr << "Select exactly 2 correspondences to specify the c0 and c1 "
+             << " neighborhood center\n";
+    return false;
+  }
+  c0_nhd.clear();
+  c1_nhd.clear();
+  int rd = nhd_radius;
+  vcl_vector<bwm_video_corr_sptr> corrs;
+  unsigned frame;
+  unsigned corr_index;
+  for(vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
+      cit != selected.end(); ++cit)
+    {
+      bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
+      if(!cross) return false;
+     vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
+       corr_soview_map_.begin();
+      bool found = false;
+      for (; fit != corr_soview_map_.end()&&!found; ++fit)
+        for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit =
+               (*fit).second.begin();
+             mit != (*fit).second.end()&&!found; ++mit)
+      if ((*mit).second == cross)
+      {
+        found = true;
+        frame = (*fit).first;
+        corr_index = (*mit).first;
+      }
+      if(!found)
+        return false;
+      bwm_video_corr_sptr corr = video_corrs_[corr_index];
+      if(!corr)
+        return false;
+      corrs.push_back(corr);
+    }
+  if(corrs.size()!=2)
+    return false;
+  if(!video_istr_||!video_istr_->is_open()||!video_istr_->is_seekable())
+    return false;
+  unsigned dim = 2*nhd_radius +1;
+
+  for(unsigned i = 0; i<2; ++i){
+    bwm_video_corr_sptr corr = corrs[i];
+    video_istr_->seek_frame(0);
+    unsigned index = 0;
+    while(true){
+      vidl_frame_sptr frame = video_istr_->current_frame();
+      if(!frame)
+        return false;
+    vil_image_view_base_sptr fb = vidl_convert_wrap_in_view(*frame);
+    vil_image_view<float> fimg = *vil_convert_cast(float(), fb);    
+    //assume for now there are no problems with image boundaries
+    vgl_point_2d<double> pt;
+    if(corr->match(index, pt)){
+      int u = static_cast<unsigned>(pt.x()), 
+        v = static_cast<unsigned>(pt.y());
+      vnl_matrix<float> nb(dim, dim);
+      for(int ir = -rd; ir<= rd; ++ir)
+        for(int ic = -rd; ic<= rd; ++ic)
+          {
+            int r = nhd_radius+ir, c = nhd_radius+ic;
+            nb[r][c]=fimg(u+ic, v+ir);
+          }
+      if(i==0)
+        c0_nhd.push_back(nb);
+      else if(i==1)
+        c1_nhd.push_back(nb);
+    }
+    if(!video_istr_->advance())
+      break;
+    index++;
+    }
+  }
+  return true;
 }
