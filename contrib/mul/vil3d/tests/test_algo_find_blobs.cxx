@@ -246,8 +246,6 @@ static void test_merging_diagonal_line()
     tru(ni-i-1, i, i) = 1;
   }  
 
-  test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test merging diagonal line");
   test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
     "Test merging diagonal line");
 }
