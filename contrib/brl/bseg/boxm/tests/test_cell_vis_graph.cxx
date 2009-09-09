@@ -21,7 +21,9 @@ MAIN( test_cell_vis_graph )
 
   vgl_box_3d<double> world;
   world.add(origin);
-  world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
+  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(), 
+                                 origin.y()+block_dim.y()*world_dim.y(), 
+                                 origin.z()+block_dim.z()*world_dim.z()));
 
   vpgl_camera_double_sptr camera = generate_camera_top(world);
   boxm_block_iterator<boct_tree<short,vgl_point_3d<double> > > iter(&scene);
