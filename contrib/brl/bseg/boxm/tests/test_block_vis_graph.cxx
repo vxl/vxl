@@ -19,17 +19,13 @@ MAIN( test_block_vis_graph )
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
   vul_file::make_directory("boxm_scene");
   scene.set_paths("boxm_scene", "block");
-#if 0 // TODO: XML write doesn't work !!
-  vcl_ofstream os("scene.xml");
-  x_write(os, scene, "scene");
-  os.close();
-  TEST("XML write scene", 1, 1);
-  vpl_unlink("scene.xml");
-#endif // 0
+
 
   vgl_box_3d<double> world;
   world.add(origin);
-  world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
+  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(), 
+                                 origin.y()+block_dim.y()*world_dim.y(), 
+                                 origin.z()+block_dim.z()*world_dim.z()));
   vpgl_camera_double_sptr camera = generate_camera_top(world);
   boxm_block_vis_graph_iterator<tree_type> block_vis_iter(camera, &scene, IMAGE_U, IMAGE_V);
 
