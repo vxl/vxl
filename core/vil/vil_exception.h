@@ -154,18 +154,19 @@ void vil_exception_warning(T exception)
 #if !VCL_HAS_EXCEPTIONS
     vcl_string full_what;
 #endif
-    vcl_string function_name, file_type, filename;
+    vcl_string function_name, file_type, filename, details;
     vil_exception_image_io(const vcl_string& function,
                            const vcl_string& type,
-                           const vcl_string& name) :
+                           const vcl_string& file_name,
+                           const vcl_string& description = "") :
 #if VCL_HAS_EXCEPTIONS
       vcl_runtime_error
 #else
       full_what
 #endif
       ("Unrecoverable failure in " + function + " while loading "
-       + name + " using " + type + " loader."),
-      function_name(function), file_type(type), filename(name) {}
+      + file_name + " using " + type + " loader.  Error description: " + description),
+      function_name(function), file_type(type), filename(file_name), details(description) {}
 #if VCL_HAS_EXCEPTIONS
     virtual ~vil_exception_image_io() throw() {}
 #else
@@ -184,23 +185,44 @@ void vil_exception_warning(T exception)
 #endif
   {
    public:
-    unsigned bytes_expected, bytes_found;
     vil_exception_corrupt_image_file(const vcl_string& function,
                            const vcl_string& type,
-                           const vcl_string& name,
-                           unsigned expected, unsigned found) :
+                           const vcl_string& file_name,
+                           const vcl_string& description = "") :
 #if VCL_HAS_EXCEPTIONS
-    vil_exception_image_io(function, type, name),
+    vil_exception_image_io(function, type, file_name, description)
 #endif
-    bytes_expected(expected), bytes_found(found) {}
+    {}
 #if VCL_HAS_EXCEPTIONS
     virtual ~vil_exception_corrupt_image_file() throw() {}
 #else
-    const char * what() const {return "File does not contain the amount of image data expected.";}
+    const char * what() const {return "Image file is corrupt.";}
 #endif
   };
 
 
+  //: Indicates that an image file (or subsection thereof) contains data
+  // indicating an object with an unknown version number
+  class vil_exception_invalid_version
+#if VCL_HAS_EXCEPTIONS
+  : public vil_exception_image_io
+#endif
+  {
+  public:
+    vil_exception_invalid_version(const vcl_string& function,
+                           const vcl_string& type,
+                           const vcl_string& file_name,
+                           const vcl_string& description = "") :
+#if VCL_HAS_EXCEPTIONS
+    vil_exception_image_io(function, type, file_name, description)
+#endif
+    {}
+#if VCL_HAS_EXCEPTIONS
+    virtual ~vil_exception_invalid_version() throw() {}
+#else
+    const char * what() const {return "Unknown version number detected in file";}
+#endif
+  };
 
 #endif // vil_exception_h_
 
