@@ -121,11 +121,10 @@ bwm_video_cam_istream::current_camera()
       }
       //An ASCII stream for perspective camera
       vcl_ifstream cam_stream(cam_paths_[index_].data());
-
       cam_stream >> (*current_camera_);
       return current_camera_;
     }
-    return NULL;
+    return current_camera_;
   }
   return NULL;
 }

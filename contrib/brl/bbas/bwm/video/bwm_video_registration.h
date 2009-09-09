@@ -54,7 +54,8 @@ class bwm_video_registration
                                vsol_box_2d_sptr const& bounds,
                                double world_sample_distance,
                                vidl_ostream_sptr& out_stream,
-                               unsigned skip_frames = 1
+                               unsigned skip_frames = 0,
+                               bool preserve_float = true
                               );
 
   //: Map input stream onto world plane and write out the homographies
@@ -64,7 +65,7 @@ bool register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
                                   vsol_box_2d_sptr const& bounds,
                                   double world_sample_distance,
                                   vcl_string const& homg_out_dir,
-                                  unsigned skip_frames = 1
+                                  unsigned skip_frames = 0
                                   );
  private:
   // only static methods

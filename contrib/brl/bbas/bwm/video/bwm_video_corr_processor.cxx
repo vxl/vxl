@@ -183,7 +183,23 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
   this->set_correspondences(corrs);
   return true;
 }
-
+void bwm_video_corr_processor::
+set_world_pts(vcl_vector<vgl_point_3d<double> > const& pts)
+{
+  vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+  for(vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+      cit != corrs_.end()&&pit!=pts.end(); ++cit, ++pit)
+    (*cit)->set_world_pt(*pit);
+}
+vcl_vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
+{
+  vcl_vector<vgl_point_3d<double> > pts;
+  for(vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+      cit != corrs_.end(); ++cit)
+    if((*cit)->world_pt_valid())
+      pts.push_back((*cit)->world_pt());
+  return pts;
+}
 bool bwm_video_corr_processor::write_video_site(vcl_string const& site_path)
 {
   if (site_name_ == "")

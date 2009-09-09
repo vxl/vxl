@@ -86,15 +86,19 @@ bool convert_from_frame(vidl_frame_sptr const& frame,
                         vcl_vector<vil_image_view<float> >& views)
 {
   if (!frame) return false;
-
-  if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
+  if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_F32){
+    static vil_image_view<float> img;
+    if (vidl_convert_to_view(*frame,img))
+      views.push_back(img);
+    else
+      return false;
+  }else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
     static vil_image_view<vxl_uint_16> img;
     if (vidl_convert_to_view(*frame,img))
       views.push_back(brip_vil_float_ops::convert_to_float(img));
     else
       return false;
-  }
-  else{
+  }else if(frame->pixel_format() == VIDL_PIXEL_COLOR_RGB){
     static vil_image_view<vxl_byte> img;
     if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB)) {
       unsigned ni = img.ni(), nj = img.nj();
@@ -106,30 +110,39 @@ bool convert_from_frame(vidl_frame_sptr const& frame,
             view(i,j) = img(i,j,p);
         views.push_back(view);
       }
-    }
-    else
+    }else
       return false;
   }
   return true;
 }
 
 static vidl_frame_sptr
-convert_to_frame(vcl_vector<vil_image_view<float> >const&  views)
+convert_to_frame(vcl_vector<vil_image_view<float> >const&  views,
+                 bool preserve_float = false)
 {
   unsigned np = views.size();
   if (!np)
     return 0;
   unsigned ni = views[0].ni(), nj = views[0].nj();
-  vcl_vector<vil_image_view<unsigned char> > cviews;
+  if(!preserve_float){
+    vcl_vector<vil_image_view<unsigned char> > cviews;
+    for (unsigned p = 0; p<np; ++p)
+      cviews.push_back(brip_vil_float_ops::convert_to_byte(views[p]));
+    vil_image_view<unsigned char> out_view(ni, nj, np);
+    for (unsigned j = 0; j<nj; ++j)
+      for (unsigned i = 0; i<ni; ++i)
+        for (unsigned p = 0; p<np; ++p)
+          out_view(i, j, p) = cviews[p](i,j);
+    return  new vidl_memory_chunk_frame(out_view);
+  }
+  vcl_vector<vil_image_view<float> > cviews;
   for (unsigned p = 0; p<np; ++p)
-    cviews.push_back(brip_vil_float_ops::convert_to_byte(views[p]));
-
-  vil_image_view<unsigned char> out_view(ni, nj, np);
+    cviews.push_back(views[p]);
+  vil_image_view<float> out_view(ni, nj, np);
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i)
       for (unsigned p = 0; p<np; ++p)
         out_view(i, j, p) = cviews[p](i,j);
-
   return  new vidl_memory_chunk_frame(out_view);
 }
 
@@ -155,7 +168,8 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
                              vsol_box_2d_sptr const& bounds,
                              double world_sample_distance,
                              vidl_ostream_sptr& out_stream,
-                             unsigned skip_frames
+                             unsigned skip_frames,
+                             bool preserve_float
                             )
 {
   if (!in_stream || !cam_istream || !out_stream)
@@ -197,12 +211,12 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
         return false;
       out_vs.push_back(out_view);
     }
-    vidl_frame_sptr oframe = convert_to_frame(out_vs);
+    vidl_frame_sptr oframe = convert_to_frame(out_vs, preserve_float);
     if (!oframe)
       return false;
     if (!out_stream->write_frame(oframe))
       return false;
-    current_frame +=skip_frames;
+    current_frame +=skip_frames+1;
     vcl_cout << "Registered frame[" << current_frame << "](" << out_ni
              << " x " << out_nj << ") in " << tim.real() << " milliseconds\n"
              << vcl_flush;
@@ -272,7 +286,7 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
     vcl_ofstream os(save_path.c_str());
     os << Hsh;
     os.close();
-    current_frame +=skip_frames;
+    current_frame +=skip_frames+1;
   }
   while (cam_istream->seek_camera(current_frame));
   return true;

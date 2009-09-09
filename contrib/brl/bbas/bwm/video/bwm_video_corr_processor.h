@@ -93,8 +93,12 @@ class bwm_video_corr_processor
   void set_camera_path(vcl_string const& cam_path) {camera_path_=cam_path;}
 
   void set_verbose(bool verbose){verbose_ = verbose;}
+
   void set_correspondences(vcl_vector<bwm_video_corr_sptr> const& corrs);
   vcl_vector<bwm_video_corr_sptr> correspondences(){return corrs_;}
+
+  void set_world_pts(vcl_vector<vgl_point_3d<double> > const& pts);
+  vcl_vector<vgl_point_3d<double> > world_pts();
 
   vcl_string site_name() const {return site_name_;}
   vcl_string video_path() const {return video_path_;}
