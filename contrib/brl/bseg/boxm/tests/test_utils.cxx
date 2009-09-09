@@ -61,7 +61,7 @@ vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world)
 
   vpgl_perspective_camera<double> persp_cam;
   generate_persp_camera(boxm_focal_length,principal_point, boxm_x_scale, boxm_y_scale, camera_center, persp_cam);
-  persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
+  //persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
   vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
   return rat_cam;
 }
