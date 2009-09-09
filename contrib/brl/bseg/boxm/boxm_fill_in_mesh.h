@@ -211,6 +211,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
           if (contains_point(meshes[k],cell_bb.centroid())) {
             boxm_sample<BOXM_APM_MOG_GREY> tempdata=cell->data();
             tempdata.set_appearance(val.appearance());
+            tempdata.alpha*=val.alpha;
             cell->set_data(tempdata);
           }
         }
