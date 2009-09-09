@@ -13,7 +13,7 @@ boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels): max_leve
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
-  if (max_level_>0)
+  if (init_levels>0)
   {
     code.set_code(0,0,0);
     code.set_level(max_level_-1);
