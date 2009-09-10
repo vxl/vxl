@@ -27,12 +27,13 @@ void bvpl_edge_algebraic_mean_functor<T>::init()
 template <class T>
 void bvpl_edge_algebraic_mean_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
-  
-  if (d.c_ == 1) {
+  // All positive values are treated the same way
+  if (d.c_ > 0) {
     P1_ += (val);
     n1_++;
   }
-  else if (d.c_ == -1){
+  // All negative values are treated the same way
+  else if (d.c_ < 0){
     P0_ += (T(1.0)-val);
     n0_++;
   }
