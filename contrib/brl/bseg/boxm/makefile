@@ -36,6 +36,7 @@ MANPAGE_SOURCES += boxm_fill_in_mesh.h
 SOURCES += boxm_simple_grey_processor.cxx
 MANPAGE_SOURCES += boxm_update_sample.h
 MANPAGE_SOURCES += boxm_vis_implicit_sample.h
+MANPAGE_SOURCES += boxm_rt_sample.txx
 
 SUBDIRS += io pro opt
 
