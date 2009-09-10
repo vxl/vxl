@@ -122,6 +122,7 @@ void boxm_scene<T>::write_active_block()
     // delete the block's data
     boxm_block<T>* block = blocks_(x,y,z);
     block->delete_tree();
+    block->set_tree(0);
     active_block_.set(-1,-1,-1);
     os.close();
   }
@@ -215,7 +216,22 @@ vcl_string boxm_scene<T>::gen_block_path(int x, int y, int z)
   vcl_string s = scene_path_ + '/' + block_pref_+ '_' + str + ".bin";
   return s;
 }
+template <class T>
+bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
+{
+  if (!valid_index(vgl_point_3d<int>(i,j,k)))
+    return false;
+  vcl_string block_path = gen_block_path(i,j,k);
+  vsl_b_ifstream os(block_path);
 
+  //if the binary block file is not found
+  if (!os) {
+    return false;
+  }
+  
+  return true;;
+
+}
 //: returns true if the block bin file is found on disc, false otherwise.
 // If false, a new tree is create for the block
 template <class T>
@@ -250,6 +266,7 @@ bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     }
     return false;
   }
+  vcl_cout<<"BLOCK READING OFF THE DISK"<<vcl_endl;
   blocks_(i,j,k)->b_read(os);
   os.close();
   return true;

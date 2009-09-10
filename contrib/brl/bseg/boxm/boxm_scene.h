@@ -52,6 +52,7 @@ class boxm_scene :public boxm_scene_base
   ~boxm_scene();
 
   //void delete_blocks();
+  bool discover_block(unsigned i, unsigned j, unsigned k);
 
   bool load_block(unsigned i, unsigned j, unsigned k);
 
