@@ -1,0 +1,510 @@
+#ifndef boxm_raytrace_function_h_
+#define boxm_raytrace_function_h_
+
+#include <vcl_cassert.h>
+
+
+#include <boxm/boxm_apm_traits.h>
+#include <boxm/boxm_scene.h>
+#include <boxm/boxm_utils.h>
+#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/algo/vpgl_backproject.h>
+
+
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_intersection.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_line_3d_2_points.h>
+
+#include <boxm/boxm_raytrace_operations.h>
+#include <boxm/boxm_block_vis_graph_iterator.h>
+#include <boxm/opt/boxm_aux_scene.h>
+
+template<class F, class T_loc, class T_data, class T_aux>
+class boxm_raytrace_function
+{
+
+public:
+    typedef boct_tree<T_loc,T_data> tree_type;
+    typedef boct_tree<T_loc,T_aux> aux_tree_type;
+    typedef boct_tree_cell<T_loc,T_data> cell_type;
+    //: constructor
+    boxm_raytrace_function(boxm_scene<tree_type> &scene, 
+                           vpgl_camera_double_sptr cam, 
+                           unsigned int ni, unsigned int nj, 
+                           bool reverse_traversal = false, 
+                           unsigned int i0 = 0, unsigned int j0 = 0)
+        :scene_(scene), aux_scene_(boxm_aux_scene<T_loc,T_data,T_aux>()), cam_(cam), img_ni_(ni), img_nj_(nj),  reverse_traversal_(reverse_traversal), img_i0_(i0), img_j0_(j0) 
+    {debug_lvl_=2;}
+    boxm_raytrace_function(boxm_scene<tree_type> &scene,
+                           boxm_aux_scene<T_loc, T_data,  T_aux> &aux_scene, 
+                           vpgl_camera_double_sptr cam, 
+                           unsigned int ni, unsigned int nj, 
+                           bool reverse_traversal = false, 
+                           unsigned int i0 = 0, unsigned int j0 = 0)
+        :scene_(scene), cam_(cam),aux_scene_(aux_scene), img_ni_(ni), img_nj_(nj),  reverse_traversal_(reverse_traversal), img_i0_(i0), img_j0_(j0) 
+    {debug_lvl_=2;}
+
+
+    //: run for a single floating (sub) pixel
+    //bool run_single(F& step_functor, float i, float j)
+    //{
+    //    boxm_block_vis_graph_iterator<tree_type> block_vis_it(scene_, cam_, (unsigned int)i, (unsigned int)j, 1, 1, reverse_traversal_);
+
+    //    bool continue_trace = true;
+    //    while(block_vis_it.next())
+    //    {
+    //        vcl_vector<vgl_point_3d<int> > vis_blocks;
+    //        block_vis_it.current_blocks(vis_blocks);
+    //        // traverse each visible block one at a time
+    //        vcl_vector<vgl_point_3d<int> >::iterator block_it = vis_blocks.begin();
+    //        for (; block_it != vis_blocks.end(); ++block_it) {
+
+    //            if (debug_lvl_ > 0) vcl_cout << "processing block at index (" << block_it->x() << ", " << block_it->y() << ", " << block_it->z() << ")" << vcl_endl;
+    //            // make sure block projects to inside of image
+    //            vbl_bounding_box<double,3> block_bb = scene_.block_bounding_box(*block_it);
+    //            if (!boxm_utils::is_visible(block_bb, cam_, (unsigned int)i, (unsigned int)j, 1, 1, false)) {
+    //                continue;
+    //            }
+
+    //            hsds_fd_tree<psm_sample<APM>,3> &block = scene_.get_block(*block_it);
+    //            hsds_fd_tree<typename psm_aux_traits<AUX_T>::sample_datatype,3> &aux_block = aux_scene->get_block(*block_it);
+
+    //            vbl_bounding_box<unsigned int,2> img_bb;
+
+    //            // initialize ray_origin() function for this block
+    //            if (!generate_ray_init(block_bb, img_bb)) {
+    //                continue;
+    //            }
+
+    //            // get direction of vector and enter point - this depends on which camera type we have
+    //            vgl_point_3d<double> ray_origin;
+    //            vgl_vector_3d<double> direction;
+    //            vgl_point_3d<double> enter_pt(0.0,0.0,0.0);
+    //            vcl_vector<vgl_point_3d<double> > plane_intersections(6);
+    //            generate_ray(i,j,block_bb, ray_origin, direction);
+
+    //            // compute intersection of each plane with ray
+    //            double lambda[6];
+    //            lambda[0] = (block_bb.xmin() - ray_origin.x())/direction.x();
+    //            lambda[1] = (block_bb.xmax() - ray_origin.x())/direction.x();
+    //            lambda[2] = (block_bb.ymin() - ray_origin.y())/direction.y();
+    //            lambda[3] = (block_bb.ymax() - ray_origin.y())/direction.y();
+    //            lambda[4] = (block_bb.zmin() - ray_origin.z())/direction.z();
+    //            lambda[5] = (block_bb.zmax() - ray_origin.z())/direction.z();
+    //            for (unsigned int face=0; face<6; ++face) {
+    //                plane_intersections[face] = ray_origin + (direction * lambda[face]);
+    //            }
+
+    //            // determine which point is the entrance point based on direction
+    //            const double epsilon = 1e-6; // use in place of zero to avoid badly conditioned lambdas
+    //            if ( (plane_intersections[5].x() >= block_bb.xmin()) && (plane_intersections[5].x() <= block_bb.xmax()) &&
+    //                (plane_intersections[5].y() >= block_bb.ymin()) && (plane_intersections[5].y() <= block_bb.ymax()) &&
+    //                (direction.z() < -epsilon) )
+    //            {
+    //                // ray intersects the zmax plane
+    //                // check zmax first since it is probably the most common 
+    //                enter_pt = plane_intersections[5];
+    //            }
+    //            else if ( (plane_intersections[0].y() >= block_bb.ymin()) && (plane_intersections[0].y() <= block_bb.ymax()) &&
+    //                (plane_intersections[0].z() >= block_bb.zmin()) && (plane_intersections[0].z() <= block_bb.zmax()) &&
+    //                (direction.x() > epsilon) )
+    //            {
+    //                // ray intersects the xmin plane
+    //                enter_pt = plane_intersections[0];
+    //            }
+    //            else if ( (plane_intersections[1].y() >= block_bb.ymin()) && (plane_intersections[1].y() <= block_bb.ymax()) &&
+    //                (plane_intersections[1].z() >= block_bb.zmin()) && (plane_intersections[1].z() <= block_bb.zmax()) &&
+    //                (direction.x() < -epsilon) )
+    //            {
+    //                // ray intersects the xmax plane
+    //                enter_pt = plane_intersections[1];
+    //            }
+    //            else if ( (plane_intersections[2].x() >= block_bb.xmin()) && (plane_intersections[2].x() <= block_bb.xmax()) &&
+    //                (plane_intersections[2].z() >= block_bb.zmin()) && (plane_intersections[2].z() <= block_bb.zmax()) &&
+    //                (direction.y() > epsilon) ) 
+    //            {
+    //                // ray intersects the ymin plane
+    //                enter_pt = plane_intersections[2];
+    //            }
+    //            else if ( (plane_intersections[3].x() >= block_bb.xmin()) && (plane_intersections[3].x() <= block_bb.xmax()) &&
+    //                (plane_intersections[3].z() >= block_bb.zmin()) && (plane_intersections[3].z() <= block_bb.zmax()) &&
+    //                (direction.y() < -epsilon) ) 
+    //            {
+    //                // ray intersects the ymax plane
+    //                enter_pt = plane_intersections[3];
+    //            }
+    //            else if ( (plane_intersections[4].x() >= block_bb.xmin()) && (plane_intersections[4].x() <= block_bb.xmax()) &&
+    //                (plane_intersections[4].y() >= block_bb.ymin()) && (plane_intersections[4].y() <= block_bb.ymax()) &&
+    //                (direction.z() > epsilon) ) 
+    //            {
+    //                // ray intersects the zmin plane
+    //                enter_pt = plane_intersections[4];
+    //            }
+    //            else {
+    //                // no entry point into this block found
+    //                continue;
+    //            }
+    //            // step through cells, starting at enter_pt
+    //            hsds_fd_tree_node_index<3> cell_index = block.index_at(vnl_vector_fixed<double,3>(enter_pt.x(),enter_pt.y(),enter_pt.z()));
+
+    //            while (continue_trace) {
+    //                vbl_bounding_box<double,3> cell_bb = block.cell_bounding_box(cell_index);
+    //                // find exit point of cell
+    //                vgl_point_3d<double> exit_pt;
+    //                unsigned int step_dim = 0;
+    //                bool step_positive = false;
+    //                bool found_exit = cube_exit_point(cell_bb, enter_pt, direction, exit_pt, step_dim, step_positive);
+    //                if (!found_exit) {
+    //                    vcl_cerr << "error: could not find cell exit point" << vcl_endl;
+    //                    vcl_cerr << "   enter_pt = [" << enter_pt.x() << ", " << enter_pt.y() << ", " << enter_pt.z() << "]" << vcl_endl;
+    //                    vcl_cerr << "   direction = [" << direction.x() << ", " << direction.y() << ", " << direction.z() << "] " << vcl_endl;
+    //                    vcl_cerr << "   cell_bb = [" << cell_bb.xmin() <<", " << cell_bb.xmax() << "]  [" << cell_bb.ymin() << ", " << cell_bb.ymax() << "]  [" << cell_bb.zmin() << ", " << cell_bb.zmax() <<"] " << vcl_endl;
+    //                    assert(found_exit);
+    //                    break;
+    //                }
+    //                psm_sample<APM> &cell_val = block[cell_index];
+    //                psm_aux_traits<AUX_T>::sample_datatype &aux_val = aux_block[cell_index];
+    //                continue_trace = step_functor.step_cell(i,j, enter_pt, exit_pt, cell_val, aux_val, cell_index);
+
+    //                // determine next cell
+    //                hsds_fd_tree_node_index<3> exit_idx = block.full_index_at(cell_index,vnl_vector_fixed<double,3>(exit_pt.x(),exit_pt.y(),exit_pt.z()));
+    //                hsds_fd_tree_node_index<3> neighbor;
+    //                bool found_neighbor = block.neighbor_cell(exit_idx,step_dim,step_positive,neighbor);
+    //                if (!found_neighbor) {
+    //                    // we have reached the boundary of this block. stop trace.
+    //                    break;
+    //                }
+    //                enter_pt = exit_pt;
+    //                cell_index = neighbor;
+    //            }
+    //        }
+    //    }
+    //    return true;
+
+    //}
+
+
+
+    //: run the function
+    bool run(F& step_functor) 
+    {
+        vil_image_view<bool> continue_trace(img_ni_, img_nj_);
+        continue_trace.fill(true);
+        // code to iterate over the blocks in order of visibility
+        boxm_block_vis_graph_iterator<tree_type > block_vis_iter(cam_, &scene_, img_ni_,img_nj_);
+        while(block_vis_iter.next())
+        {
+            vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
+            for (unsigned i=0; i<block_indices.size(); i++) // code for each block
+            {
+                scene_.load_block(block_indices[i]);
+                boxm_block<tree_type> * curr_block=scene_.get_active_block();
+                boxm_block<aux_tree_type> * curr_aux_block=NULL;
+                if(step_functor.is_aux_)
+                   curr_aux_block=aux_scene_.get_block(block_indices[i]);
+
+                if (debug_lvl_ > 0) vcl_cout << "processing block at index (" <<block_indices[i] << ")" << vcl_endl;
+                // make sure block projects to inside of image
+                vgl_box_3d<double> block_bb = curr_block->bounding_box();
+
+                if(!boxm_utils::is_visible(block_bb,cam_,img_ni_,img_nj_))
+                    continue;
+
+
+                vgl_box_2d<double> img_bb;
+
+                // initialize ray_origin() function for this block
+                if (!generate_ray_init(block_bb, img_bb)) {
+                    continue;
+                }
+                tree_type * tree=curr_block->get_tree();
+                aux_tree_type * aux_tree=NULL;
+                if(step_functor.is_aux_)
+                {
+                    aux_tree=curr_aux_block->get_tree();
+                    if(aux_tree->root()->vis_node())
+                        vcl_cout<<"WHY?";
+                }
+
+                // for each image pixel
+                for (unsigned int i=img_bb.min_x(); i < img_bb.max_x(); ++i) {
+                    if (debug_lvl_ > 1) {
+                        if (!(i % 10))
+                            vcl_cout << ".";
+                    }
+                    for (unsigned int j=img_bb.min_y(); j < img_bb.max_y(); ++j) {
+                        if (!continue_trace(i - img_i0_ , j - img_j0_)) {
+                            continue;
+                        }
+                        // get direction of vector and enter point - this depends on which camera type we have
+                        vgl_point_3d<double> ray_origin;
+                        vgl_vector_3d<double> direction;
+                        vgl_point_3d<double> enter_pt(0.0,0.0,0.0);
+                        vcl_vector<vgl_point_3d<double> > plane_intersections(6);
+                        // add 0.5 to get center of pixel
+                        generate_ray(i + 0.5f, j + 0.5f, block_bb, ray_origin, direction);
+
+                        // compute intersection of each plane with ray
+                        double lambda[6];
+                        lambda[0] = (block_bb.min_x() - ray_origin.x())/direction.x();
+                        lambda[1] = (block_bb.max_x() - ray_origin.x())/direction.x();
+                        lambda[2] = (block_bb.min_y() - ray_origin.y())/direction.y();
+                        lambda[3] = (block_bb.max_y() - ray_origin.y())/direction.y();
+                        lambda[4] = (block_bb.min_z() - ray_origin.z())/direction.z();
+                        lambda[5] = (block_bb.max_z() - ray_origin.z())/direction.z();
+
+                        if(block_bb.contains(ray_origin))
+                            enter_pt=ray_origin;
+                        else
+                        {
+                            for (unsigned int face=0; face<6; ++face) {
+                                plane_intersections[face] = ray_origin + (direction * lambda[face]);
+                            }
+
+                            // determine which point is the entrance point based on direction
+                            const double epsilon = 1e-6; // use in place of zero to avoid badly conditioned lambdas
+                            if ( (plane_intersections[5].x() >= block_bb.min_x()) && (plane_intersections[5].x() <= block_bb.max_x()) &&
+                                (plane_intersections[5].y() >= block_bb.min_y()) && (plane_intersections[5].y() <= block_bb.max_y()) &&
+                                (direction.z() < -epsilon) )
+                            {
+                                // ray intersects the zmax plane
+                                // check zmax first since it is probably the most common 
+                                enter_pt = plane_intersections[5];
+                            }
+                            else if ( (plane_intersections[0].y() >= block_bb.min_y()) && (plane_intersections[0].y() <= block_bb.max_y()) &&
+                                (plane_intersections[0].z() >= block_bb.min_z()) && (plane_intersections[0].z() <= block_bb.max_z()) &&
+                                (direction.x() > epsilon) )
+                            {
+                                // ray intersects the xmin plane
+                                enter_pt = plane_intersections[0];
+                            }
+                            else if ( (plane_intersections[1].y() >= block_bb.min_y()) && (plane_intersections[1].y() <= block_bb.max_y()) &&
+                                (plane_intersections[1].z() >= block_bb.min_z()) && (plane_intersections[1].z() <= block_bb.max_z()) &&
+                                (direction.x() < -epsilon) )
+                            {
+                                // ray intersects the xmax plane
+                                enter_pt = plane_intersections[1];
+                            }
+                            else if ( (plane_intersections[2].x() >= block_bb.min_x()) && (plane_intersections[2].x() <= block_bb.max_x()) &&
+                                (plane_intersections[2].z() >= block_bb.min_z()) && (plane_intersections[2].z() <= block_bb.max_z()) &&
+                                (direction.y() > epsilon) ) 
+                            {
+                                // ray intersects the ymin plane
+                                enter_pt = plane_intersections[2];
+                            }
+                            else if ( (plane_intersections[3].x() >= block_bb.min_x()) && (plane_intersections[3].x() <= block_bb.max_x()) &&
+                                (plane_intersections[3].z() >= block_bb.min_z()) && (plane_intersections[3].z() <= block_bb.max_z()) &&
+                                (direction.y() < -epsilon) ) 
+                            {
+                                // ray intersects the ymax plane
+                                enter_pt = plane_intersections[3];
+                            }
+                            else if ( (plane_intersections[4].x() >= block_bb.min_x()) && (plane_intersections[4].x() <= block_bb.max_x()) &&
+                                (plane_intersections[4].y() >= block_bb.min_y()) && (plane_intersections[4].y() <= block_bb.max_y()) &&
+                                (direction.z() > epsilon) ) 
+                            {
+                                // ray intersects the zmin plane
+                                enter_pt = plane_intersections[4];
+                            }
+                            else {
+                                // no entry point into this block found
+                                continue;
+                            }
+                        }
+
+                        boct_tree_cell<T_loc,T_data > * curr_cell=tree->locate_point_global(enter_pt);
+                        while (continue_trace(i-img_i0_, j-img_j0_)) {
+                            boct_loc_code<T_loc> cell_code(curr_cell->get_code());
+                            boct_tree_cell<T_loc,T_aux > * curr_aux_cell=NULL;
+                            if(step_functor.is_aux_)
+                                curr_aux_cell=aux_tree->get_cell(cell_code);
+                            vgl_box_3d<double> cell_bb = tree->cell_bounding_box(curr_cell);
+                            // find exit point of cell
+                            vgl_point_3d<double> exit_pt;
+                            unsigned int step_dim = 0;
+                            double lambda=0;
+                            bool step_positive = false;
+                            boct_face_idx face_id=NONE;
+
+                            //vcl_cout<<"Enter point "<<enter_pt<<vcl_endl;
+                            
+                            bool found_exit =boxm_utils::cube_exit_point(cell_bb,enter_pt,direction, exit_pt,lambda,face_id);
+                            //vcl_cout<<"Exit point "<<exit_pt<<vcl_endl;
+                            if (!found_exit) {
+                                vcl_cerr << "error: could not find cell exit point" << vcl_endl;
+                                vcl_cerr << "   enter_pt = [" << enter_pt.x() << ", " << enter_pt.y() << ", " << enter_pt.z() << "]" << vcl_endl;
+                                vcl_cerr << "   direction = [" << direction.x() << ", " << direction.y() << ", " << direction.z() << "] " << vcl_endl;
+                                vcl_cerr << "   cell_bb = [" << cell_bb.min_x() <<", " << cell_bb.max_x() << "]  [" << cell_bb.min_y() << ", " << cell_bb.max_y() << "]  [" << cell_bb.min_z() << ", " << cell_bb.max_z() <<"] " << vcl_endl;
+                                assert(found_exit);
+                                break;
+                            }
+                            T_data cell_val=curr_cell->data();
+                            T_aux aux_val;
+                            //vcl_cout<<aux_val.update_factor_<<" ";
+                            if(step_functor.is_aux_)
+                                aux_val=curr_aux_cell->data();
+                               
+
+                            continue_trace(i-img_i0_, j-img_j0_) = step_functor.step_cell(i,j, enter_pt, exit_pt, cell_val,aux_val);
+                            curr_cell->set_data(cell_val);
+                            if(step_functor.is_aux_)
+                                curr_aux_cell->set_data(aux_val);
+                            //: normalize the point to [0-1]to obtain the index.
+                            vgl_point_3d<double> exit_pt_norm((exit_pt.x()-block_bb.min_x())/block_bb.width(),
+                                                              (exit_pt.y()-block_bb.min_y())/block_bb.height(),
+                                                              (exit_pt.z()-block_bb.min_z())/block_bb.depth());
+                            //: obtian the code for the exit point
+                            boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->num_levels());
+                            cell_type *neighborcell=NULL;
+                            if(curr_cell->find_neighbor(face_id,neighborcell,tree->num_levels()))
+                                curr_cell=neighborcell->traverse_force(exit_loc_code);
+                            else
+                                break;
+                            enter_pt=exit_pt;
+                        }
+                    }
+                }
+                if(!step_functor.scene_read_only_)
+                    scene_.write_active_block();
+                if(step_functor.is_aux_)
+                    aux_scene_.write_active_block();
+            }
+        }
+        return true;
+    }
+
+protected:
+
+    bool generate_ray_init(vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb)
+    {
+        // determine intersection of block bounding box projection and image bounds
+        vgl_box_2d<double> img_bounds;
+        img_bounds.add(vgl_point_2d<double>(img_i0_,img_j0_));
+        img_bounds.add(vgl_point_2d<double>(img_i0_ + img_ni_ - 1, img_j0_ + img_nj_ - 1));
+
+        vgl_box_2d<double> block_projection;
+        double u,v;
+        cam_->project(block_bb.min_x(),block_bb.min_y(),block_bb.min_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+        cam_->project(block_bb.min_x(),block_bb.min_y(),block_bb.max_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+        cam_->project(block_bb.min_x(),block_bb.max_y(),block_bb.min_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+        cam_->project(block_bb.min_x(),block_bb.max_y(),block_bb.max_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+        cam_->project(block_bb.max_x(),block_bb.min_y(),block_bb.min_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+        cam_->project(block_bb.max_x(),block_bb.min_y(),block_bb.max_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+        cam_->project(block_bb.max_x(),block_bb.max_y(),block_bb.min_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+        cam_->project(block_bb.max_x(),block_bb.max_y(),block_bb.max_z(),u,v);
+        block_projection.add(vgl_point_2d<double>(u,v));
+
+        img_bb=vgl_intersection(img_bounds,block_projection);
+
+        if(img_bb.is_empty())
+            return false;
+        else
+            return true;
+    }
+
+    void generate_ray(float i, float j, vgl_box_3d<double> const& block_bb, vgl_point_3d<double> &ray_origin, vgl_vector_3d<double> &direction)
+    {
+        vpgl_perspective_camera<double> const* pcam = static_cast<vpgl_perspective_camera<double> const*>(cam_.ptr());
+        // backproject image point to a ray
+        ray_origin = pcam->camera_center();
+        vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
+        direction = normalize(cam_ray.direction());
+    }
+
+
+    boxm_scene<tree_type> &scene_;
+    boxm_aux_scene<T_loc,  T_data,  T_aux> &aux_scene_;
+
+    bool reverse_traversal_;
+
+    const vpgl_camera_double_sptr cam_;
+    unsigned int img_i0_;
+    unsigned int img_j0_;
+    unsigned int img_ni_;
+    unsigned int img_nj_;
+
+    unsigned int debug_lvl_;
+
+
+};
+
+template<class F, class T_loc, class T_data, class T_aux>
+class boxm_iterate_cells_function
+{
+
+public:
+    typedef boct_tree<T_loc,T_data> tree_type;
+    typedef boct_tree<T_loc,T_aux> aux_tree_type;
+    typedef boct_tree_cell<T_loc,T_data> cell_type;
+    typedef boct_tree_cell<T_loc,T_aux> aux_cell_type;
+    //: constructor
+    boxm_iterate_cells_function(boxm_scene<tree_type> &scene, 
+                                boxm_aux_scene<T_loc,  T_data,  T_aux> &aux_scene,
+                                vpgl_camera_double_sptr cam,
+                                unsigned int ni, unsigned int nj )
+        :scene_(scene),aux_scene_(aux_scene),cam_(cam), img_ni_(ni), img_nj_(nj)
+    {}
+
+
+    bool run(F& step_functor) 
+    {
+        // code to iterate over the blocks in order of visibility
+        boxm_block_vis_graph_iterator<tree_type > block_vis_iter(cam_, &scene_, img_ni_,img_nj_);
+        while(block_vis_iter.next())
+        {
+            vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
+            for (unsigned i=0; i<block_indices.size(); i++) // code for each block
+            {
+                scene_.load_block(block_indices[i]);
+                boxm_block<tree_type> * curr_block=scene_.get_active_block();
+                boxm_block<aux_tree_type> * curr_aux_block=aux_scene_.get_block(block_indices[i]);
+                tree_type * tree=curr_block->get_tree();
+                aux_tree_type * aux_tree=curr_aux_block->get_tree();
+
+                vcl_vector<cell_type*> leaves=tree->leaf_cells();
+                for(unsigned i=0;i<leaves.size();i++)
+                {
+                    T_data cell_val=leaves[i]->data();
+                    boct_loc_code<T_loc> cell_code(leaves[i]->get_code());
+                    aux_cell_type * aux_cell=aux_tree->get_cell(cell_code);
+                    T_aux aux_val=aux_cell->data();
+                    step_functor.step_cell(cell_val,aux_val);
+                    leaves[i]->set_data(cell_val);
+                    aux_cell->set_data(aux_val);
+                }
+                scene_.write_active_block();
+                aux_scene_.write_active_block();
+            }
+        }
+        return true;
+    }
+
+protected:
+
+    boxm_scene<tree_type> &scene_;
+    boxm_aux_scene<T_loc,  T_data,  T_aux> &aux_scene_;
+    bool reverse_traversal_;
+
+    unsigned img_ni_;
+        unsigned img_nj_;
+    
+    const vpgl_camera_double_sptr cam_;
+};
+
+
+#endif
