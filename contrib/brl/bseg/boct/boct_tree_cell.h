@@ -50,7 +50,7 @@ class boct_tree_cell
       for (unsigned i=0; i<8; i++) {
         boct_tree_cell<T_loc,T_data_to>* c=this->children_[i].clone_to_type<T_data_to>(cell);
         cell->set_children(i,c);
-        c->children_=NULL;
+        c->set_children_null();
         delete c;
       }
     }
@@ -59,6 +59,7 @@ class boct_tree_cell
 
   void set_parent(boct_tree_cell<T_loc,T_data>* p) {parent_ = p; }
   void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) {if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl;}
+  void set_children_null() { children_=0; }
   bool is_leaf();
 
   //: adds a pointer for each leaf children to v
