@@ -33,7 +33,7 @@ MAIN( test_bayesian_optimizer )
   //vsl_b_ofstream os("scene.bin");
   //scene.b_write(os);
   //os.close();
-  
+
   boxm_block_iterator<boct_tree<short,data_type> > iter(&scene);
   // default model
   boxm_simple_grey apm(0.3, 0.4, 0.5);
@@ -62,12 +62,12 @@ MAIN( test_bayesian_optimizer )
     boct_tree_cell<short,data_type>* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
     cell2->set_data(s1_sample);
     block->init_tree(tree);
-	  block->get_tree()->print();
+    block->get_tree()->print();
     scene.write_active_block();
     iter++;
   }
 
-  //create the auxilary scenes for each image
+  // create the auxiliary scenes for each image
   vcl_vector<vcl_string> image_names;
   image_names.push_back("image1");
   image_names.push_back("image2");
@@ -79,25 +79,25 @@ MAIN( test_bayesian_optimizer )
     aux_scenes[i] = new boxm_scene<boct_tree<short,aux_type> >(scene.lvcs(), scene.origin(), scene.block_dim(), scene.world_dim());
     aux_scenes[i]->set_path(scene.path(),  image_names[i]);
     iter.begin();
-	while (!iter.end()) {
-		scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
-		boxm_block<boct_tree<short,data_type> > * block=scene.get_active_block();
-		boct_tree<short,data_type>* tree=block->get_tree();
-		boct_tree<short,aux_type>* aux_tree = tree->template clone_to_type<aux_type>();
-    boct_tree_cell<short,aux_type>* cell1=aux_tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
-    boxm_rt_sample<float> rt;
-	  rt.seg_len_=1.0;
-    cell1->set_data(rt);
-    boct_tree_cell<short,aux_type>* cell2=aux_tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
-	  rt.seg_len_=0.5;
-    cell2->set_data(rt);
-		boxm_block<boct_tree<short,aux_type> >* aux_block = new boxm_block<boct_tree<short,aux_type> >(block->bounding_box(), aux_tree);
-		aux_scenes[i]->set_block(iter.index(), aux_block);
-		aux_scenes[i]->write_active_block();
-		++iter;
- 	}
+    while (!iter.end()) {
+      scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
+      boxm_block<boct_tree<short,data_type> > * block=scene.get_active_block();
+      boct_tree<short,data_type>* tree=block->get_tree();
+      boct_tree<short,aux_type>* aux_tree = tree->clone_to_type<aux_type>();
+      boct_tree_cell<short,aux_type>* cell1=aux_tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
+      boxm_rt_sample<float> rt;
+      rt.seg_len_=1.0;
+      cell1->set_data(rt);
+      boct_tree_cell<short,aux_type>* cell2=aux_tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
+      rt.seg_len_=0.5;
+      cell2->set_data(rt);
+      boxm_block<boct_tree<short,aux_type> >* aux_block = new boxm_block<boct_tree<short,aux_type> >(block->bounding_box(), aux_tree);
+      aux_scenes[i]->set_block(iter.index(), aux_block);
+      aux_scenes[i]->write_active_block();
+      ++iter;
+    }
   }
-  
+
   boxm_opt_rt_bayesian_optimizer<short,BOXM_APM_SIMPLE_GREY,BOXM_AUX_OPT_RT_GREY> opt(scene, image_names);
   opt.optimize_cells(0.01);
 
