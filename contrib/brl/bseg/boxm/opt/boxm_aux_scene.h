@@ -16,7 +16,7 @@
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell_reader.h>
 #include <boxm/boxm_scene.h>
-#include "boxm_opt_sample.h"
+//#include "boxm_opt_sample.h"
 
 template <class T_loc, class T, class T_AUX>
 class boxm_aux_scene
