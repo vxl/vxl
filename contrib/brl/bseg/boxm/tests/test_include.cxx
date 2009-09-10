@@ -14,6 +14,7 @@
 #include <boxm/boxm_refine.h>
 #include <boxm/boxm_render_image.h>
 #include <boxm/boxm_render_image_triangle.h>
+#include <boxm/boxm_rt_sample.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/boxm_save_block_raw.h>
