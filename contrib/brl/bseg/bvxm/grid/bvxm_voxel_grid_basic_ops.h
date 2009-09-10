@@ -73,6 +73,42 @@ bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_g
   return true;
 }
 
+//: Copies grid1 into grid2
+template <class T>
+bool bvxm_voxel_grid_copy(bvxm_voxel_grid<T> *grid1,  bvxm_voxel_grid<T> *grid2)
+{
+    //check the pointers
+  if ( !grid1 || !grid2 )
+  {
+    vcl_cerr << "One of the input voxels is of the wrong type\n";
+    return false;
+  }
+
+  //check sizes are the same
+  if ( grid1->grid_size() != grid2->grid_size() )
+  {
+    vcl_cerr << "Grids are not of the same type\n";
+    return false;
+  }
+
+  //copy
+  typename bvxm_voxel_grid<T>::iterator grid1_it = grid1->begin();
+  typename bvxm_voxel_grid<T>::iterator grid2_it = grid2->begin();
+
+
+  for (; grid1_it != grid1->end(); ++grid1_it, ++grid2_it)
+  {
+    typename bvxm_voxel_slab<T>::iterator slab1_it = (*grid1_it).begin();
+    typename bvxm_voxel_slab<T>::iterator slab2_it = (*grid2_it).begin();
+
+    for (; slab1_it!=(*grid1_it).end(); ++slab1_it, ++slab2_it)
+    {
+      (*slab2_it)=(*slab1_it);
+    }
+  }
+  return true;
+}
+
 //: Multiplies 2 grids. The types of input grids must have a * operator
 bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid,
                              bvxm_voxel_grid<bvxm_opinion> * op_grid,
