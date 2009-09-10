@@ -24,7 +24,7 @@ MAIN( test_tree_cell_reader )
   os.close();
 
   vsl_b_ifstream is("tree.bin", vcl_ios_binary);
-  boct_tree_cell_reader<short,float> reader(&is);
+  boct_tree_cell_reader<short,float> reader("tree.bin");//&is);
   boct_tree_cell<short,float> cell;
   vcl_vector<boct_tree_cell<short,float> > cells;
   reader.begin();

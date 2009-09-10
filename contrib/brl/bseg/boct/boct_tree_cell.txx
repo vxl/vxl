@@ -56,7 +56,8 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
     for (unsigned i=0; i<8; i++) {
       boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone(cell);
       cell->children_[i] = *c;
-      //delete c;
+      c->children_=NULL;
+      delete c;
     }
   }
   return cell;

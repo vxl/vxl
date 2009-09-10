@@ -27,9 +27,7 @@ class boct_tree
   boct_tree<T_loc,T_data_to>* clone_to_type() {
     // clone the tree
     boct_tree_cell<T_loc, T_data_to>* root = root_->clone_to_type<T_data_to>(0);
-    // create a new tree tree only with the root node
     boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(root,max_level_);
-  
     return tree;
   }
 

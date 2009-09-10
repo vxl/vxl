@@ -73,11 +73,8 @@ boct_tree<T_loc,T_data>::~boct_tree()
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
 {
-  // create a new tree tree only with the root node
-  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(max_level_, 0);
-  
-  // clone the rest of the tree
-  tree->root_ = root_->clone(0);
+  boct_tree_cell<T_loc, T_data>* root = root_->clone(0);
+  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root,max_level_);
   return tree;
 }
 
