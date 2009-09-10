@@ -102,7 +102,7 @@ void bwm_image_processor::range_map(bgui_image_tableau_sptr img)
   {
     bgui_image_utils biu(img->get_image_resource());
     biu.default_range_map(rmp);
-	img->set_mapping(rmp);
+    img->set_mapping(rmp);
     return;
   }
   vgui_range_map_params_sptr new_rmp = new vgui_range_map_params(*rmp);
