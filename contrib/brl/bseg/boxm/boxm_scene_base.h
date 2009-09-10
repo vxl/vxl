@@ -45,6 +45,9 @@ class boxm_scene_base : public vbl_ref_count
 
   bool parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename);
 
+  unsigned max_level(){return max_tree_level_;}
+
+  unsigned init_level(){return init_tree_level_;}
  protected:
   boxm_apm_type app_model_;
 
