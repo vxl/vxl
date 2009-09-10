@@ -28,7 +28,7 @@
 // Formats are year=CCYY, month=MM, day=DD
 #define VXL_VERSION_DATE_YEAR 2009
 #define VXL_VERSION_DATE_MONTH 09
-#define VXL_VERSION_DATE_DAY 09
+#define VXL_VERSION_DATE_DAY 10
 
 //: Helper macros to create strings with the preprocessor.
 #define VXL_VERSION_TO_STRING(s) VXL_VERSION_TO_STRING0(s)
