@@ -71,7 +71,7 @@ class boxm_scene :public boxm_scene_base
                                           y=(int) blocks_.get_row2_count();
                                           z=(int) blocks_.get_row3_count();}
 
-  vgl_vector_3d<unsigned> world_dim() const {unsigned x, y, z; 
+  vgl_vector_3d<unsigned> world_dim() const {unsigned x, y, z;
                                      x=(unsigned) blocks_.get_row1_count();
                                      y=(unsigned) blocks_.get_row2_count();
                                      z=(unsigned) blocks_.get_row3_count();
@@ -95,8 +95,8 @@ class boxm_scene :public boxm_scene_base
 
   boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
 
-  void set_block(vgl_point_3d<int>& idx, boxm_block<T>* block) 
-    { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx;}
+  void set_block(vgl_point_3d<int> const& idx, boxm_block<T>* block)
+  { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx; }
 
   void write_scene();
 
@@ -192,4 +192,4 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene);
 
 
-#endif
+#endif // boxm_scene_h_
