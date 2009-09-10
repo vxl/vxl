@@ -21,6 +21,9 @@
 bool cube_fill_value(double* xverts_2d, double* yverts_2d, boct_face_idx visible_faces, vil_image_view<float> &img, float const& val);
 
 bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distances, boct_face_idx visible_faces, float alpha, vil_image_view<float> &alpha_distance);
+bool boxm_depth_fill(double *xverts_2d, double* yverts_2d, 
+                     float* vert_distances, boct_face_idx visible_faces,
+                     vil_image_view<float> &depth_image);
 template<class T, class tri_int_it_t>
 bool tri_interpolated_weighted_sum(tri_int_it_t &tri_it, vil_image_view<T> const& values, T &val_sum, float &weight_sum, bool subtract)
 {
