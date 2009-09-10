@@ -50,18 +50,18 @@ class boxm_scene_base : public vbl_ref_count
 
   bool multi_bin_;
 
-  //: maximum octree levels allowed
-  unsigned max_tree_level_;
-
-  //: number of initial octree levels created at the tree creation step
-  unsigned init_tree_level_;
-
   //: it is set to true when max and init tree levels are given
   bool tree_level_set_;
 
   vcl_string scene_path_;
 
   vcl_string block_pref_;
+
+  //: maximum octree levels allowed
+  unsigned max_tree_level_;
+
+  //: number of initial octree levels created at the tree creation step
+  unsigned init_tree_level_;
 };
 
 typedef vbl_smart_ptr<boxm_scene_base> boxm_scene_base_sptr;
