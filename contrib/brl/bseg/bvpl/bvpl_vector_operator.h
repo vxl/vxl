@@ -33,8 +33,7 @@ public:
                           bvxm_voxel_grid<unsigned >* id_grid);
   template<class T>
   void non_maxima_suppression(bvxm_voxel_grid<T>* grid_in, bvxm_voxel_grid<unsigned >* id_grid,
-                              bvpl_kernel_vector_sptr kernel_vector,
-                              bvxm_voxel_grid<T>* out_grid);
+                              bvpl_kernel_vector_sptr kernel_vectors);
   template<class T> 
   void filter_response(bvxm_voxel_grid<T>* grid_in, bvxm_voxel_grid<unsigned >* id_grid,
                        unsigned targed_id, bvxm_voxel_grid<float>* out_grid);
@@ -49,14 +48,15 @@ private:
 };
 
 
-//: local non-max suppression
+//: local non-max suppression, the result is stored in the input grid, as previous results are 
+//  necessary
 template<class T>
-void bvpl_vector_operator::non_maxima_suppression(bvxm_voxel_grid<T>* grid_in, bvxm_voxel_grid<unsigned >* id_grid,
-                                                        bvpl_kernel_vector_sptr kernel_vector,
-                                                        bvxm_voxel_grid<T>* grid_out)
+void bvpl_vector_operator::non_maxima_suppression(bvxm_voxel_grid<T>* grid_in, 
+                                                  bvxm_voxel_grid<unsigned >* id_grid,
+                                                  bvpl_kernel_vector_sptr kernel_vector)
 {
   bvpl_subgrid_iterator<T> response_grid_iter(grid_in, kernel_vector->max_dim());
-  bvpl_subgrid_iterator<T> out_grid_iter(grid_out, kernel_vector->max_dim());
+  //bvpl_subgrid_iterator<T> out_grid_iter(grid_out, kernel_vector->max_dim());
   bvpl_subgrid_iterator<unsigned int> kernel_id_iter(id_grid, kernel_vector->max_dim());
   
   bvpl_local_max_functor<T> func_max;
@@ -80,15 +80,11 @@ void bvpl_vector_operator::non_maxima_suppression(bvxm_voxel_grid<T>* grid_in, b
       ++kernel_iter;
     }
     
-    // set the result at the output grid
-    
-    (*out_grid_iter).set_voxel(func_max.result(subgrid.get_voxel()));
-    ++out_grid_iter;
+    // set the result at the input grid
+    subgrid.set_voxel(func_max.result(subgrid.get_voxel()));
     ++response_grid_iter;
     ++kernel_id_iter;
   }
-
-    
 }
 
 template<class T, class F>
@@ -122,7 +118,7 @@ void bvpl_vector_operator::get_max_orientation_grid(bvxm_voxel_grid<T>* out_grid
                             bvxm_voxel_grid<unsigned>* id_grid,
                             unsigned id)
 {
-   bvpl_local_max_functor<T> func_max;
+  bvpl_local_max_functor<T> func_max;
   typename bvxm_voxel_grid<T>::iterator out_grid_it = out_grid->begin();
   typename bvxm_voxel_grid<T>::iterator temp_grid_it = temp_grid->begin();
   bvxm_voxel_grid<unsigned >::iterator id_grid_it = id_grid->begin();
@@ -149,6 +145,7 @@ void  bvpl_vector_operator::filter_response(bvxm_voxel_grid<T>* grid_in, bvxm_vo
                      unsigned targed_id, bvxm_voxel_grid<float>* out_grid)
 {
   bvpl_local_max_functor<T> func_max;
+  out_grid->initialize_data(0.0f);
   bvxm_voxel_grid<float>::iterator out_grid_it = out_grid->begin();
   typename bvxm_voxel_grid<T>::iterator in_grid_it = grid_in->begin();
   bvxm_voxel_grid<unsigned >::iterator id_grid_it = id_grid->begin();
