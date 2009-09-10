@@ -31,7 +31,7 @@ MAIN( test_block_vis_graph )
 
   int vis_count = -1;
   vcl_vector<boxm_block<tree_type>*> blocks;
-  int counts[] = {2, 4, 4, 2};
+  int counts[] = {4,4,4};
   while (block_vis_iter.next()) {
     int block_count = 0;
     ++vis_count;
@@ -44,7 +44,7 @@ MAIN( test_block_vis_graph )
     TEST("block count", block_count, counts[vis_count]);
   }
   vpl_rmdir("boxm_scene");
-  TEST("vis count", ++vis_count, 4);
+  TEST("vis count", ++vis_count, 3);
 
   SUMMARY();
 }
