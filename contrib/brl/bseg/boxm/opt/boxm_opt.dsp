@@ -104,6 +104,27 @@ SOURCE=.\Templates/boxm_aux_scene+short+boxm_sample.BOXM_APM_SIMPLE_GREY+boxm_rt
 # Begin Source File
 SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short+BOXM_APM_SIMPLE_GREY+BOXM_AUX_OPT_RT_GREY---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_rt_sample+float---~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.boxm_rt_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_rt_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_rt_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.boxm_rt_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_rt_sample+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_rt_sample+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -112,9 +133,6 @@ SOURCE=.\boxm_aux_scene.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_opt_appearance_estimator.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_opt_sample.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_opt_rt_bayesian_optimizer.h
@@ -127,6 +145,24 @@ SOURCE=.\boxm_opt_rt_bayesian_optimizer.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_aux_scene.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_rt_sample.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_rt_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_update_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_raytrace_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_depth_functor.h
 # End Source File
 # End Group
 # End Target

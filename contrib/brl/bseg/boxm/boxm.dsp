@@ -224,27 +224,6 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_SIMPL
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_sample+BOXM_APM_SIMPLE_GREY---~-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_rt_sample+float---~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.boxm_rt_sample+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_rt_sample+float---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_rt_sample+float---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boct_tree+short.boxm_rt_sample+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_rt_sample+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_rt_sample+float--.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -363,10 +342,7 @@ SOURCE=.\boxm_update_sample.h
 SOURCE=.\boxm_vis_implicit_sample.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_rt_sample.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_rt_sample.h
+SOURCE=.\boxm_depth_image_triangle.h
 # End Source File
 # End Group
 # End Target

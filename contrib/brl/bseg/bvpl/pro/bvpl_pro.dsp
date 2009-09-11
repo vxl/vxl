@@ -141,6 +141,9 @@ SOURCE=.\processes/bvpl_non_max_suppression_process.cxx
 SOURCE=.\processes/bvpl_visualize_response_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_convert_id_to_hue_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # End Group

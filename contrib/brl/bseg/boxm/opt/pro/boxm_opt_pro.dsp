@@ -98,6 +98,15 @@ SOURCE=.\boxm_opt_register.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_opt_bayesian_update_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_render_expected_depth_rt_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_update_rt_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_render_expected_rt_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
