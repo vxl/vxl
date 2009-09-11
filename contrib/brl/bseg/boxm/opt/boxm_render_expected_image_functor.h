@@ -1,6 +1,7 @@
 #ifndef boxm_render_expected_image_functor_h
 #define boxm_render_expected_image_functor_h
-
+//:
+// \file
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/opt/boxm_raytrace_function.h>
 #include <boxm/opt/boxm_rt_sample.h>
@@ -9,16 +10,17 @@
 template <boxm_apm_type APM, class T_aux>
 class boxm_render_expected_image_functor
 {
-public:
-  //: default constructor
+ public:
+  //: "default" constructor
   boxm_render_expected_image_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
                                      vil_image_view<float> &mask_vis,
                                      unsigned int ni,unsigned nj,
-                                     bool scene_read_only=false,bool is_aux=true) 
+                                     bool scene_read_only=false,bool is_aux=true)
     : expected_(expected), vis_img_(mask_vis), alpha_integral_(ni,nj, 1)
   {
     alpha_integral_.fill(0.0f);
-    expected_.fill(boxm_apm_traits<APM>::obs_datatype(0));
+    typename boxm_apm_traits<APM>::obs_datatype nil(0);
+    expected_.fill(nil);
     vis_img_.fill(1.0f);
     scene_read_only_=scene_read_only;
     is_aux_=is_aux;
@@ -37,7 +39,7 @@ public:
     const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
     // compute weight for this cell
     const float Omega = vis_img_(i,j) - vis_prob_end;
-    // and update expected image 
+    // and update expected image
     expected_(i,j) +=  exp* Omega;
     // update visibility probabilty
     vis_img_(i,j) = vis_prob_end;
@@ -47,9 +49,8 @@ public:
 
   bool scene_read_only_;
   bool is_aux_;
-  
-private:
 
+ private:
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected_;
   vil_image_view<float> &vis_img_;
   vil_image_view<float> alpha_integral_;
@@ -75,19 +76,20 @@ class normalize_expected_functor_rt
 
 template <class T_loc, class T_data>
 void boxm_render_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                          vpgl_camera_double_sptr cam,
-                                          vil_image_view<typename T_data::obs_datatype> &expected,
-                                          vil_image_view<float> & mask,int bin=-1,
-                                          bool use_black_background = false)
+                          vpgl_camera_double_sptr cam,
+                          vil_image_view<typename T_data::obs_datatype> &expected,
+                          vil_image_view<float> & mask,
+                          int bin = -1,
+                          bool use_black_background = false)
 {
-    boxm_aux_scene<T_loc, T_data,boxm_rt_sample<boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir());
-    typedef boxm_render_expected_image_functor<T_data::apm_type,boxm_rt_sample<boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> > expfunctor;
-     boxm_raytrace_function<expfunctor,T_loc, T_data,boxm_rt_sample<boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> > raytracer(scene,aux_scene,cam.ptr(),expected.ni(),expected.nj()); 
-     expfunctor exp_functor(expected,mask,expected.ni(),expected.nj(),true,false);
-     raytracer.run(exp_functor);
+  boxm_aux_scene<T_loc, T_data,boxm_rt_sample<boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir());
+  typedef boxm_render_expected_image_functor<T_data::apm_type,boxm_rt_sample<boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> > expfunctor;
+  boxm_raytrace_function<expfunctor,T_loc, T_data,boxm_rt_sample<boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> > raytracer(scene,aux_scene,cam.ptr(),expected.ni(),expected.nj());
+  expfunctor exp_functor(expected,mask,expected.ni(),expected.nj(),true,false);
+  raytracer.run(exp_functor);
 
-     normalize_expected_functor_rt<T_data> norm_fn(use_black_background);
-     vil_transform2<float,typename T_data::obs_datatype, normalize_expected_functor_rt<T_data> >(mask,expected,norm_fn);
- 
+  normalize_expected_functor_rt<T_data> norm_fn(use_black_background);
+  vil_transform2<float,typename T_data::obs_datatype, normalize_expected_functor_rt<T_data> >(mask,expected,norm_fn);
 }
+
 #endif
