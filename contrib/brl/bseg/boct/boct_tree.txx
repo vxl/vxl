@@ -58,13 +58,12 @@ boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, sho
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>::~boct_tree()
 {
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> v;
   if (root_)
   {
     if (root_->is_leaf()) {
       delete root_;
     } else {
-      //root_->delete_children();
+      root_->delete_children();
       delete root_;
     }
   }
@@ -120,6 +119,10 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
                               (p.y()-global_bbox_.min_y())/global_bbox_.height(),
                               (p.z()-global_bbox_.min_z())/global_bbox_.depth());
 
+ 
+//  if(norm_p.x()>=1.0 ||norm_p.y()>=1.0||norm_p.z()>=1.0
+//     ||norm_p.x()<0.0 ||norm_p.y()<0.0||norm_p.z()<0.0)
+//     return 0;
   // convert point to location code.
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, max_level_);
 #if 0
