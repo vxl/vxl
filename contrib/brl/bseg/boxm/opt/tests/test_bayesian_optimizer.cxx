@@ -12,11 +12,8 @@ MAIN( test_bayesian_optimizer )
 {
   START ("CREATE SCENE");
 
-  short nlevels=5;
-  short init_levels=3;
   typedef boxm_sample<BOXM_APM_SIMPLE_GREY> data_type;
   typedef boxm_rt_sample<float> aux_type;
-  boct_tree<short, data_type> * block = new boct_tree<short,data_type>(nlevels, init_levels);
 
   // create the main scene
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
@@ -36,7 +33,7 @@ MAIN( test_bayesian_optimizer )
 
   boxm_block_iterator<boct_tree<short,data_type> > iter(&scene);
   // default model
-  boxm_simple_grey apm(0.3, 0.4, 0.5);
+  boxm_simple_grey apm(0.3f, 0.4f, 0.5f);
 
   boxm_sample<BOXM_APM_SIMPLE_GREY> default_sample;
   default_sample.alpha=0.001f;
@@ -91,8 +88,7 @@ MAIN( test_bayesian_optimizer )
       boct_tree_cell<short,aux_type>* cell2=aux_tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));
       rt.seg_len_=0.5;
       cell2->set_data(rt);
-      boxm_block<boct_tree<short,aux_type> >* aux_block = new boxm_block<boct_tree<short,aux_type> >(block->bounding_box(), aux_tree);
-      aux_scenes[i]->set_block(iter.index(), aux_block);
+      aux_scenes[i]->set_block(iter.index(), new boxm_block<boct_tree<short,aux_type> >(block->bounding_box(), aux_tree));
       aux_scenes[i]->write_active_block();
       ++iter;
     }

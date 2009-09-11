@@ -50,9 +50,9 @@ static void test_brec_hierarchy_detector2_simple()
   brec_part_base_sptr p_1_2 = new brec_part_base(1, 2); p_1_2->prior_prob_ = 10.0;
   brec_part_base_sptr p_1_3 = new brec_part_base(1, 3); p_1_3->prior_prob_ = 10.0;
 
-  double n_b_0 = 50;
-  double n_f_0 = 50;
-  double radius = 10;
+  float n_b_0 = 50.0f;
+  float n_f_0 = 50.0f;
+  float radius = 10.0f;
 
   h1->add_vertex(p_1_1); h1->add_vertex(p_1_2); h2->add_vertex(p_1_3);
 
