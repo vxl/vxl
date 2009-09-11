@@ -344,6 +344,9 @@ SOURCE=.\boxm_vis_implicit_sample.h
 # Begin Source File
 SOURCE=.\boxm_depth_image_triangle.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_save_scene_raw.h
+# End Source File
 # End Group
 # End Target
 # End Project

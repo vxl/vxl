@@ -257,6 +257,9 @@ SOURCE=.\test_upload_mesh.cxx
 SOURCE=.\test_fill_in_mesh.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_save_scene_raw.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
