@@ -1,4 +1,5 @@
-// This is brl/bseg/boxm/pro/processes/boxm_render_expected_rt_process.cxx
+// This is brl/bseg/boxm/opt/pro/processes/boxm_render_expected_rt_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for obtaining roc curve from change detection results.
@@ -9,8 +10,6 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm/boxm_scene_base.h>
