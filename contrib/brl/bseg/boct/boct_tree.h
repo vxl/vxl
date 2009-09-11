@@ -27,18 +27,21 @@ class boct_tree
   boct_tree<T_loc,T_data_to>* clone_to_type() {
     // clone the tree
     boct_tree_cell<T_loc, T_data_to>* root = root_->clone_to_type<T_data_to>(0);
+    // create a new tree tree only with the root node
     boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(root,max_level_);
+  
     return tree;
   }
 
   void init_cells(T_data val);
   boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p);
+  
   boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p);
   boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level);
 
   //: box dimension should be scaled to [0,1], TODO: accept local coordinates in meters
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r);
-  boct_tree_cell<T_loc,T_data>* get_cell( boct_loc_code<T_loc>& code) { return root_->traverse(code); }
+  boct_tree_cell<T_loc,T_data>* get_cell(  boct_loc_code<T_loc>& code) { return root_->traverse(code); }
   boct_tree_cell<T_loc,T_data>* root(){return root_;}
   bool split();
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
