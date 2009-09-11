@@ -233,6 +233,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         strm << filename << x << '_' << y << '_' << z << ".bin";
         vcl_string fn(strm.str());
         vpl_unlink(fn.data());
+        delete s;
       }
     }
   }
@@ -240,5 +241,4 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   return;
 }
 
-
-#endif
+#endif // boxm_save_scene_raw_h_
