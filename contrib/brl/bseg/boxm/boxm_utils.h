@@ -53,6 +53,9 @@ class boxm_utils
   static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox,
                                      vpgl_camera_double_sptr camera,
                                      double *xverts, double *yerts);
+  static boct_face_idx visible_faces_cell(vgl_box_3d<double> const& bbox, 
+                                          vpgl_camera_double_sptr camera,
+                                          double *xverts, double *yverts);
 
   static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera);
 
@@ -61,6 +64,10 @@ class boxm_utils
 
   static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,vpgl_camera_double_sptr camera,
                               double * xverts, double *yerts);
+  static void project_point3d(vgl_point_3d<double> const& point,
+                              vpgl_camera_double_sptr camera,
+                              double & xvert, double &yert, double & vertdist);
+
   static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
                               vpgl_camera_double_sptr camera,
                               double* xverts, double* yverts,
@@ -148,6 +155,7 @@ class boxm_utils
                               double & lambda,boct_face_idx & face_id);
 
   static double max_point_to_box_dist(vgl_box_3d<double> box,vgl_point_3d<double> pt);
+
   static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_unit_mode();
 
   static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_zero_mode();

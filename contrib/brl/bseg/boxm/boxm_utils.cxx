@@ -25,24 +25,19 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
     // make a test for vertices for behind-front case
     vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     if (do_front_test) {
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.min_y(),bbox.min_z())))
-        return false;
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.min_y(),bbox.max_z())))
-        return false;
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.max_y(),bbox.min_z())))
-        return false;
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.max_y(),bbox.max_z())))
-        return false;
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.min_y(),bbox.min_z())))
-        return false;
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.min_y(),bbox.max_z())))
-        return false;
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.max_y(),bbox.min_z())))
-        return false;
-      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.max_y(),bbox.max_z())))
+      if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.min_y(),bbox.min_z()))&&
+          cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.min_y(),bbox.max_z()))&&
+          cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.max_y(),bbox.min_z()))&&
+          cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.max_y(),bbox.max_z()))&&
+          cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.min_y(),bbox.min_z()))&&
+          cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.min_y(),bbox.max_z()))&&
+          cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.max_y(),bbox.min_z()))&&
+          cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.max_x(),bbox.max_y(),bbox.max_z())))
         return false;
     }
   }
+
+  
 
   // make sure corners project into image bounds
   vgl_box_2d<double> cube_proj_bb;
@@ -129,12 +124,26 @@ boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
     if (camera->type_name().compare("vpgl_perspective_camera")==0) {
         vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
         vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam->camera_center());
-
+        vcl_cout<<"center cam"<<cam_center;
         for (unsigned i=0; i<corners.size(); ++i)
         {
             cam->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
             vertdist[i]=(float)(cam_center-corners[i]).length();
         }
+    }
+}
+
+void 
+boxm_utils::project_point3d(vgl_point_3d<double> const& point,
+                            vpgl_camera_double_sptr camera,
+                            double & xvert, double &yvert, 
+                            double & vertdist)
+{
+    if (camera->type_name().compare("vpgl_perspective_camera")==0) {
+        vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+        vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam->camera_center());
+        cam->project(point.x(), point.y(), point.z(), xvert,yvert);
+        vertdist=(float)(cam_center-point).length();
     }
 }
 
@@ -202,31 +211,32 @@ boct_face_idx
 boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera)
 {
   boct_face_idx face_idx = NONE;
-  if (camera->type_name().compare("vpgl_perspective_camera")==0) {
-    vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
-    vgl_point_3d<double> const& cam_center = cam->camera_center();
+  //if (camera->type_name().compare("vpgl_perspective_camera")==0) {
+  //  vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+  //  vgl_point_3d<double> const& cam_center = cam->camera_center();
 
-    if (cam_center.x() > bbox.max_x()) {
-      face_idx |= X_HIGH;
-    }
-    else if (cam_center.x() < bbox.min_x()) {
-      face_idx |= X_LOW;
-    }
-    if (cam_center.y() > bbox.max_y()) {
-      face_idx |= Y_HIGH;
-    }
-    else if (cam_center.y() < bbox.min_y()) {
-      face_idx |= Y_LOW;
-    }
-    if (cam_center.z() > bbox.max_x()) {
-      face_idx |= Z_HIGH;
-    }
-    else if (cam_center.z() < bbox.min_z()) {
-      face_idx |= Z_LOW;
-    }
-  }
-  // for other cameras, use projection and normals
-  else {
+  //  if (cam_center.x() > bbox.max_x()) {
+  //    face_idx |= X_HIGH;
+  //  }
+  //  else if (cam_center.x() < bbox.min_x()) {
+  //    face_idx |= X_LOW;
+  //  }
+  //  if (cam_center.y() > bbox.max_y()) {
+  //    face_idx |= Y_HIGH;
+  //  }
+  //  else if (cam_center.y() < bbox.min_y()) {
+  //    face_idx |= Y_LOW;
+  //  }
+  //  if (cam_center.z() > bbox.max_x()) {
+  //    face_idx |= Z_HIGH;
+  //  }
+  //  else if (cam_center.z() < bbox.min_z()) {
+  //    face_idx |= Z_LOW;
+  //  }
+  //}
+  //// for other cameras, use projection and normals
+  //else 
+  {
     // fix the face normals so that the vertices are the counter clokwise order
     vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
     faces_of_box_3d(bbox, faces);
@@ -283,31 +293,32 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
                           double *xverts, double *yverts)
 {
   boct_face_idx face_idx = NONE;
-  if (camera->type_name().compare("vpgl_perspective_camera")==0) {
-    vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
-    vgl_point_3d<double> const& cam_center = cam->camera_center();
+  //if (camera->type_name().compare("vpgl_perspective_camera")==0) {
+  //  vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+  //  vgl_point_3d<double> const& cam_center = cam->camera_center();
 
-    if (cam_center.x() > bbox.max_x()) {
-      face_idx |= X_HIGH;
-    }
-    else if (cam_center.x() < bbox.min_x()) {
-      face_idx |= X_LOW;
-    }
-    if (cam_center.y() > bbox.max_y()) {
-      face_idx |= Y_HIGH;
-    }
-    else if (cam_center.y() < bbox.min_y()) {
-      face_idx |= Y_LOW;
-    }
-    if (cam_center.z() > bbox.max_x()) {
-      face_idx |= Z_HIGH;
-    }
-    else if (cam_center.z() < bbox.min_z()) {
-      face_idx |= Z_LOW;
-    }
-  }
+  //  if (cam_center.x() > bbox.max_x()) {
+  //    face_idx |= X_HIGH;
+  //  }
+  //  else if (cam_center.x() < bbox.min_x()) {
+  //    face_idx |= X_LOW;
+  //  }
+  //  if (cam_center.y() > bbox.max_y()) {
+  //    face_idx |= Y_HIGH;
+  //  }
+  //  else if (cam_center.y() < bbox.min_y()) {
+  //    face_idx |= Y_LOW;
+  //  }
+  //  if (cam_center.z() > bbox.max_x()) {
+  //    face_idx |= Z_HIGH;
+  //  }
+  //  else if (cam_center.z() < bbox.min_z()) {
+  //    face_idx |= Z_LOW;
+  //  }
+  //}
   // for other cameras, use projection and normals
-  else {
+  //else 
+  {
     // fix the face normals so that the vertices are the counter clockwise order
 #if 0
     vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
@@ -361,7 +372,90 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 
   return face_idx;
 }
+boct_face_idx
+boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera,
+                          double *xverts, double *yverts)
+{
+  boct_face_idx face_idx = NONE;
+  if (camera->type_name().compare("vpgl_perspective_camera")==0) {
+    vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+    vgl_point_3d<double> const& cam_center = cam->camera_center();
 
+    if (cam_center.x() > bbox.max_x()) {
+      face_idx |= X_HIGH;
+    }
+    else if (cam_center.x() < bbox.min_x()) {
+      face_idx |= X_LOW;
+    }
+    if (cam_center.y() > bbox.max_y()) {
+      face_idx |= Y_HIGH;
+    }
+    else if (cam_center.y() < bbox.min_y()) {
+      face_idx |= Y_LOW;
+    }
+    if (cam_center.z() > bbox.max_x()) {
+      face_idx |= Z_HIGH;
+    }
+    else if (cam_center.z() < bbox.min_z()) {
+      face_idx |= Z_LOW;
+    }
+  }
+  // for other cameras, use projection and normals
+  else 
+  {
+    // fix the face normals so that the vertices are the counter clockwise order
+#if 0
+    vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
+    faces_of_box_3d(bbox, faces);
+    double * xverts; double *yverts;
+    project_corners(bbox,camera,xverts,yverts);
+#endif // 0
+    if (is_face_visible(xverts,yverts,1,0,3,2)) {
+      face_idx |= Z_LOW;
+#ifdef DEBUG
+      vcl_cout << "Z_LOW " ;
+#endif
+    }
+    if (is_face_visible(xverts,yverts,4,5,6,7)) {
+      face_idx |= Z_HIGH;
+#ifdef DEBUG
+      vcl_cout << "Z_HIGH " ;
+#endif
+    }
+    if (is_face_visible(xverts,yverts,7,3,0,4)) {
+      face_idx |= X_LOW;
+#ifdef DEBUG
+      vcl_cout << "X_LOW " ;
+#endif
+    }
+
+    if (is_face_visible(xverts,yverts,1,2,6,5)) {
+      face_idx |= X_HIGH;
+#ifdef DEBUG
+      vcl_cout << "X_HIGH " ;
+#endif
+    }
+
+    if (is_face_visible(xverts,yverts,0,1,5,4)) {
+      face_idx |= Y_LOW;
+#ifdef DEBUG
+      vcl_cout << "Y_LOW " ;
+#endif
+    }
+
+    if (is_face_visible(xverts,yverts,2,3,7,6)) {
+      face_idx |= Y_HIGH;
+#ifdef DEBUG
+      vcl_cout << "Y_HIGH " ;
+#endif
+    }
+  }
+#ifdef DEBUG
+  vcl_cout << vcl_endl;
+#endif
+
+  return face_idx;
+}
 //: returns the faces of a box, the vertices are ordered in the normal direction
 void boxm_utils::faces_of_box_3d(vgl_box_3d<double> const& bbox,
                                  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >& faces)
@@ -1297,7 +1391,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
                                  double & lambda,boct_face_idx & face_id)
 {
   // check each face
-  if (direction.x() < 0 && pt.x()>=cube.min_x()) {
+  if (direction.x() < 0 ) {
     // intersect with low x plane
     lambda = (cube.min_x() - pt.x()) / direction.x();
     exit_pt = pt + direction * lambda;
@@ -1307,7 +1401,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
       return true;
     }
   }
-  else if (direction.x() > 0 && pt.x()<=cube.max_x()) {
+  else if (direction.x() > 0 ) {
     // intersect with high x plane
     lambda = (cube.max_x() - pt.x()) / direction.x();
     exit_pt = pt + direction * lambda;
@@ -1317,7 +1411,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
       return true;
     }
   }
-  if (direction.y() < 0 && pt.y()>=cube.min_y()) {
+  if (direction.y() < 0 ) {
     // intersect with low y plane
     lambda = (cube.min_y() - pt.y()) / direction.y();
     exit_pt = pt + direction * lambda;
@@ -1327,7 +1421,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
       return true;
     }
   }
-  else if (direction.y() > 0 && pt.y()<=cube.max_y()) {
+  else if (direction.y() > 0 ) {
     // intersect with high y plane
     lambda = (cube.max_y() - pt.y()) / direction.y();
     exit_pt = pt + direction * lambda;
@@ -1337,7 +1431,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
       return true;
     }
   }
-  if (direction.z() < 0 && pt.z()>=cube.min_z()) {
+  if (direction.z() < 0 ) {
     // intersect with low z plane
     lambda = (cube.min_z() - pt.z()) / direction.z();
     exit_pt = pt + direction * lambda;
@@ -1347,7 +1441,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
       return true;
     }
   }
-  else if (direction.z() > 0 && pt.z()<=cube.max_z()) {
+  else if (direction.z() > 0 ) {
     // intersect with high z plane
     lambda = (cube.max_z() - pt.z()) / direction.z();
     exit_pt = pt + direction * lambda;
@@ -1407,6 +1501,7 @@ boxm_utils::obtain_mog_grey_single_mode(float  mean)
   return simple_obs_mix_gauss_val_f1;
 
 }
+
 double boxm_utils::max_point_to_box_dist(vgl_box_3d<double> box,vgl_point_3d<double> pt)
 {
 
