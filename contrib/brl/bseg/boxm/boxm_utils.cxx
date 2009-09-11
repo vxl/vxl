@@ -1407,3 +1407,16 @@ boxm_utils::obtain_mog_grey_single_mode(float  mean)
   return simple_obs_mix_gauss_val_f1;
 
 }
+double boxm_utils::max_point_to_box_dist(vgl_box_3d<double> box,vgl_point_3d<double> pt)
+{
+
+    double dist_max=0;
+
+    vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(box);
+    for(unsigned i=0;i<corners.size();i++)
+    {
+        if(dist_max<(corners[i]-pt).length())
+            dist_max=(corners[i]-pt).length();
+    }
+    return dist_max;
+}

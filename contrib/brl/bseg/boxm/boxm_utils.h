@@ -147,7 +147,7 @@ class boxm_utils
                               vgl_vector_3d<double> dir, vgl_point_3d<double> & exit_point,
                               double & lambda,boct_face_idx & face_id);
 
-
+  static double max_point_to_box_dist(vgl_box_3d<double> box,vgl_point_3d<double> pt);
   static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_unit_mode();
 
   static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_zero_mode();
