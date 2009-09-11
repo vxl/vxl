@@ -41,16 +41,14 @@ class boxm_raytrace_function
                            unsigned int ni, unsigned int nj,
                            bool reverse_traversal = false,
                            unsigned int i0 = 0, unsigned int j0 = 0)
-        :scene_(scene), aux_scene_(boxm_aux_scene<T_loc,T_data,T_aux>()), cam_(cam), img_ni_(ni), img_nj_(nj),  reverse_traversal_(reverse_traversal), img_i0_(i0), img_j0_(j0)
-    {debug_lvl_=2;}
+    : scene_(scene), aux_scene_(boxm_aux_scene<T_loc,T_data,T_aux>()), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
     boxm_raytrace_function(boxm_scene<tree_type> &scene,
                            boxm_aux_scene<T_loc, T_data,  T_aux> &aux_scene,
                            vpgl_camera_double_sptr cam,
                            unsigned int ni, unsigned int nj,
                            bool reverse_traversal = false,
                            unsigned int i0 = 0, unsigned int j0 = 0)
-        :scene_(scene), cam_(cam),aux_scene_(aux_scene), img_ni_(ni), img_nj_(nj),  reverse_traversal_(reverse_traversal), img_i0_(i0), img_j0_(j0)
-    {debug_lvl_=2;}
+    : scene_(scene), aux_scene_(aux_scene), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
 
 
     bool run(F& step_functor)
@@ -95,12 +93,12 @@ class boxm_raytrace_function
                 }
 
                 // for each image pixel
-                for (unsigned int i=img_bb.min_x(); i < img_bb.max_x(); ++i) {
+                for (unsigned int i = int(img_bb.min_x()+0.99); i <= img_bb.max_x(); ++i) {
                     if (debug_lvl_ > 1) {
                         if (!(i % 10))
                             vcl_cout << '.';
                     }
-                    for (unsigned int j=img_bb.min_y(); j < img_bb.max_y(); ++j) {
+                    for (unsigned int j = int(img_bb.min_y()+0.99); j <= img_bb.max_y(); ++j) {
                         if (!continue_trace(i - img_i0_ , j - img_j0_)) {
                             continue;
                         }
@@ -189,15 +187,15 @@ class boxm_raytrace_function
                             vgl_box_3d<double> cell_bb = tree->cell_bounding_box(curr_cell);
                             // find exit point of cell
                             vgl_point_3d<double> exit_pt;
-                            unsigned int step_dim = 0;
                             double lambda=0;
-                            bool step_positive = false;
                             boct_face_idx face_id=NONE;
-
-                            //vcl_cout<<"Enter point "<<enter_pt<<vcl_endl;
-
+#ifdef DEBUG
+                            vcl_cout<<"Enter point "<<enter_pt<<vcl_endl;
+#endif
                             bool found_exit =boxm_utils::cube_exit_point(cell_bb,enter_pt,direction, exit_pt,lambda,face_id);
-                            //vcl_cout<<"Exit point "<<exit_pt<<vcl_endl;
+#ifdef DEBUG
+                            vcl_cout<<"Exit point "<<exit_pt<<vcl_endl;
+#endif
                             if (!found_exit) {
                                 vcl_cerr << "error: could not find cell exit point\n"
                                          << "   enter_pt = [" << enter_pt.x() << ", " << enter_pt.y() << ", " << enter_pt.z() << "]\n"
@@ -209,7 +207,9 @@ class boxm_raytrace_function
                             }
                             T_data cell_val=curr_cell->data();
                             T_aux aux_val;
-                            //vcl_cout<<aux_val.update_factor_<<' ';
+#ifdef DEBUG
+                            vcl_cout<<aux_val.update_factor_<<' ';
+#endif
                             if (step_functor.is_aux_)
                                 aux_val=curr_aux_cell->data();
 
@@ -365,5 +365,4 @@ class boxm_iterate_cells_function
     const vpgl_camera_double_sptr cam_;
 };
 
-
-#endif
+#endif // boxm_raytrace_function_h_

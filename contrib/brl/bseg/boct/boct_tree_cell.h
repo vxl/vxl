@@ -40,7 +40,6 @@ class boct_tree_cell
   // creates a new cell with the same data
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
- 
   template <class T_data_to>
   boct_tree_cell<T_loc,T_data_to>*  clone_to_type(boct_tree_cell<T_loc,T_data_to>* parent)
   {
@@ -130,9 +129,9 @@ template<class T_loc,class T_data>
 class boct_cell_vis_graph_node
 {
  public:
-  boct_cell_vis_graph_node():incoming_count(0),visible(false),outgoing_links() {}
-  ~boct_cell_vis_graph_node(){
-    for (unsigned i=0;i<outgoing_links.size();i++)
+  boct_cell_vis_graph_node() : incoming_count(0), visible(false) {}
+  ~boct_cell_vis_graph_node() {
+    for (unsigned i=0;i<outgoing_links.size();++i)
       outgoing_links[i]=0;
   }
   unsigned int incoming_count;
