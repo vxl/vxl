@@ -12,9 +12,10 @@ template<class OBS_T>
 class boxm_rt_sample
 {
  public:
-  boxm_rt_sample() : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), 
-	  seg_len_(0.0f), Beta_(0.0f){updatefactor_=0.0f;}
-  ~boxm_rt_sample(){}
+  boxm_rt_sample()
+  : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), seg_len_(0.0f), Beta_(0.0f)
+  { updatefactor_=0.0f; }
+  ~boxm_rt_sample() {}
   short version_no() const { return 1; }
   void print(vcl_ostream& os) const;
 

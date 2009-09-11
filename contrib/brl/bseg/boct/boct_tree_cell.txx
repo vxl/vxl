@@ -35,8 +35,10 @@ boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
 {
   delete_children();
   if (vis_node_) {
-    //vcl_cout << "Deleting vis node" << vcl_endl;
-    //delete vis_node_;
+#if 0
+    vcl_cout << "Deleting vis node" << vcl_endl;
+    delete vis_node_;
+#endif
     vis_node_ = NULL;
   }
 }
@@ -68,13 +70,17 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
     // first delete all non-leaf children before deleting the cell
     for (unsigned i=0; i<8; i++) {
       children_[i].delete_children();
-      //vcl_cout << "Deleting children" << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "Deleting children" << vcl_endl;
+#endif
     }
     delete [] children_;
     children_=NULL;
     if (vis_node_) {
-      //vcl_cout << "Deleting vis node" << vcl_endl;
-      //delete vis_node_;
+#if 0
+      vcl_cout << "Deleting vis node" << vcl_endl;
+      delete vis_node_;
+#endif
       vis_node_ = NULL;
     }
   }
@@ -122,21 +128,24 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::traverse_force(boct_
   while (code.level<curr_cell->level() && !curr_cell->is_leaf())
   {
     boct_loc_code<T_loc> curr_code=curr_cell->get_code();
-    
+
     short child_bit= 1 << (curr_cell->level()-1);
 
     short index=0;
-    if(code.x_loc_-curr_code.x_loc_>=child_bit)
-			index+=1;
-    if(code.y_loc_-curr_code.y_loc_>=child_bit)
-			index+=2;
-    if(code.z_loc_-curr_code.z_loc_>=child_bit)
-			index+=4;
-    //short child_index=code.child_index(curr_cell->level());
+    if (code.x_loc_-curr_code.x_loc_>=child_bit)
+      index+=1;
+    if (code.y_loc_-curr_code.y_loc_>=child_bit)
+      index+=2;
+    if (code.z_loc_-curr_code.z_loc_>=child_bit)
+      index+=4;
+#if 0
+    short child_index=code.child_index(curr_cell->level());
+#endif
     curr_cell=curr_cell->children()+index;
   }
   return curr_cell;
 }
+
 template<class T_loc,class T_data>
 bool boct_tree_cell<T_loc,T_data>::split()
 {
@@ -422,6 +431,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
       break;
   }
 }
+
 template<class T_loc,class T_data>
 bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
                                                    boct_tree_cell<T_loc,T_data>* &neighbor,
@@ -451,7 +461,6 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
 
-	  
       break;
     }
     case X_HIGH:
@@ -556,17 +565,19 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
   }
   return true;
 }
+
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
 {
   // the cell itself is a leaf
   if (!children_)
     return;
-  
+
   for (unsigned i=0; i<8; i++) {
     if (children_[i].is_leaf()) {
       v.push_back(&children_[i]);
-    } else {
+    }
+    else {
       children_[i].leaf_children(v);
     }
   }
@@ -578,7 +589,9 @@ void boct_tree_cell<T_loc,T_data>::print()
   vcl_cout << "LEVEL=" << this->level()
            << " code=" << code_
            << " parent=" << parent_;
-//           << " data=" << data_;
+#if 0
+  vcl_cout << " data=" << data_;
+#endif
   if (is_leaf())
     vcl_cout << " LEAF" << vcl_endl;
   else {
@@ -603,7 +616,8 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data>& cell)
     vsl_b_write(os, leaf);
     for (unsigned i=0; i<8; i++)
       vsl_b_write(os, children[i]);
-  } else // no children
+  }
+  else // no children
       {
       vsl_b_write(os, leaf);
       }
