@@ -5,6 +5,8 @@
 #include <boxm/opt/boxm_raytrace_function.h>
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_mog_grey_processor.h>
+#include <vil/vil_math.h>
+
 template <boxm_apm_type APM, class T_aux>
 class boxm_update_image_functor_pass_0
 {
@@ -242,9 +244,9 @@ void boxm_update_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
          }
 
        vil_image_view<float> inf_term(obs.ni(), obs.nj());
-       vil_math_image_product(vis_inf,PI_inf,inf_term);
+       vil_math_image_product<float,float,float>(vis_inf,PI_inf,inf_term);
        vil_image_view<float> norm_img(obs.ni(), obs.nj());
-       vil_math_image_sum<float>(pre_inf,inf_term,norm_img);
+       vil_math_image_sum<float,float,float>(pre_inf,inf_term,norm_img);
        vcl_cout<<"PASS 2"<<vcl_endl;
        typedef boxm_update_image_functor_pass_2<T_data::apm_type,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype> pass_2;
        boxm_raytrace_function<pass_2,T_loc, T_data,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype> raytracer_2(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj()); 
