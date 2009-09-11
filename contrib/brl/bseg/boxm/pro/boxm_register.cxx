@@ -26,5 +26,5 @@ void boxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_proj_local_cam_process,"boxmProjLocalCamProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_upload_mesh_process,"boxmUploadMeshProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_replace_const_app_process,"boxmReplaceConstAppProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_opt_bayesian_update_process,"boxmOptGenerateOptSamplesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_opt_bayesian_update_process,"boxmOptBayesianUpdateProcess");
 }
