@@ -103,13 +103,10 @@ bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distan
 }
 
 
-bool boxm_depth_fill(double *xverts_2d, double* yverts_2d, 
+bool boxm_depth_fill(double *xverts_2d, double* yverts_2d,
                      float* vert_distances, boct_face_idx visible_faces,
                      vil_image_view<float> &depth_image)
 {
-  // multiply each vertex distance by alpha
-  float *vert_dist_ptr = vert_distances;
-
   // for each face, create two triangle iterators and fill in pixel data
   // X_LOW
   // tri 0
