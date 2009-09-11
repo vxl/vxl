@@ -18,6 +18,7 @@
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/boxm_save_block_raw.h>
+#include <boxm/boxm_save_scene_raw.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_simple_grey_processor.h>
