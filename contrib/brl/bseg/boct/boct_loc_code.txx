@@ -21,17 +21,25 @@ boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short max_level)
 
   x_loc_ = (T) (p.x()*max_val);
   //: boundary case
-  if (p.x()==1)
-    x_loc_-=1;
-
+  if (p.x()>=1)
+    x_loc_=(T) (max_val-1);
+  if (p.x()<0)
+    x_loc_=(T) (0);
+    
   y_loc_ = (T) (p.y()*max_val);
-  if (p.y()==1)
-    y_loc_-=1;
+  if (p.y()>=1)
+    y_loc_=(T) (max_val-1);
+  if (p.y()<0)
+    y_loc_=(T) (0);
 
   z_loc_ = (T) (p.z()*max_val);
+  if (p.z()<0)
+    z_loc_=(T) (0);
 
-  if (p.z()==1)
-    z_loc_-=1;
+  if (p.z()>=1)
+    z_loc_=(T) (max_val-1);
+    
+  level=0;
 }
 
 template <class T>
