@@ -8,7 +8,7 @@ SET(boxm_opt_sources
    boxm_opt_rt_bayesian_optimizer.txx   boxm_opt_rt_bayesian_optimizer.h
    boxm_opt_appearance_estimator.h
    boxm_raytrace_function.h
-   boxm_generate_opt_sample_functor.h
+#  boxm_generate_opt_sample_functor.h
    boxm_render_expected_depth_functor.h
    boxm_render_expected_image_functor.h
    boxm_rt_sample.h					   boxm_rt_sample.txx
