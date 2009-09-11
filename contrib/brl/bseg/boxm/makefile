@@ -37,6 +37,7 @@ SOURCES += boxm_simple_grey_processor.cxx
 MANPAGE_SOURCES += boxm_update_sample.h
 MANPAGE_SOURCES += boxm_vis_implicit_sample.h
 MANPAGE_SOURCES += boxm_depth_image_triangle.h
+MANPAGE_SOURCES += boxm_save_scene_raw.h
 
 SUBDIRS += io pro opt
 
