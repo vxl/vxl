@@ -67,14 +67,14 @@ void bvpl_corner2d_kernel_factory::create_canonical()
   int n1=0;
    for (int x=min_x; x<=max_x; x++)
   {
-    for (int z=min_z; z<=max_z; z++)
+    for (int z=min_z+1; z<=max_z; z++)
     {
-      for (int y=min_y; y<=max_y; y++)
+      for (int y=min_y+1; y<=max_y; y++)
       { 
-        if ((y==0) && (z==0));
-        else if (z < 0)
+        //if ((y==0) && (z==0));
+        if (z <= 0)
           n1++;
-        else if (y < 0)
+        else if (y <= 0)
           n1++;
         else
           n0++;
@@ -84,15 +84,15 @@ void bvpl_corner2d_kernel_factory::create_canonical()
   
   for (int x=min_x; x<=max_x; x++)
   {
-    for (int z=min_z; z<=max_z; z++)
+    for (int z=min_z+1; z<=max_z; z++)
     {
-      for (int y=min_y; y<=max_y; y++)
+      for (int y=min_y+1; y<=max_y; y++)
       { 
-        if ((y==0) && (z==0))
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0.0f)));
-        else if (z < 0)
+        //if ((y==0) && (z==0))
+        //  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0.0f)));
+        if (z <= 0)
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
-        else if (y < 0)
+        else if (y <= 0)
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
         else
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1.0f/float(n0))));
