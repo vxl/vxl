@@ -8,7 +8,7 @@
 //
 // \verbatim
 //  Modifications
-//  <none yet>
+//   <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
@@ -75,16 +75,18 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
   }
   if (bvxm_voxel_grid<unsigned> *id_grid = dynamic_cast< bvxm_voxel_grid<unsigned >* >(id_base.ptr()))
   {
-    if( bvxm_voxel_grid<float> *response_grid = dynamic_cast< bvxm_voxel_grid<float >* >(response_base.ptr()))
+    if (bvxm_voxel_grid<float> *response_grid = dynamic_cast< bvxm_voxel_grid<float >* >(response_base.ptr()))
     {
       //assign hue values evenly dristributed on the color wheel
       //the wheel starts and ends on red, so we don't want to get back to the end
       vcl_vector<float> colors;
       float hue = 0.0f;
-  /*    colors.push_back(0.0f);
+#if 0
+      colors.push_back(0.0f);
       colors.push_back(0.167f);
       colors.push_back(0.33f);
-      colors.push_back(0.67f);*/
+      colors.push_back(0.67f);
+#endif // 0
       for ( unsigned i = 0; i < kernel_vector->kernels_.size(); ++i){
         colors.push_back(hue);
         hue+=1.0f/float(kernel_vector->kernels_.size());
@@ -95,7 +97,7 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
       bvpl_write_colors_to_svg(kernel_vector,colors,map_output_file);
       return true;
     }
-    if( bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1 > > *response_grid = dynamic_cast< bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1 > >* >(response_base.ptr()))
+    if (bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1 > > *response_grid = dynamic_cast< bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1 > >* >(response_base.ptr()))
     {
       //assign hue values evenly dristributed on the color wheel
       //the wheel starts and ends on red, so we don't want to get back to the end
