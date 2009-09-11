@@ -1,4 +1,4 @@
-// This is contrib/mul/vil3d/tests/test_algo_find_blobs.h
+// This is mul/vil3d/tests/test_algo_find_blobs.cxx
 
 #include <vcl_iostream.h>
 #include <vcl_map.h>
@@ -44,7 +44,7 @@ static void test_blob_image(const vil3d_image_view<bool>& src,
 {
   vil3d_image_view<unsigned> dst;
   vil3d_find_blobs(src, conn, dst);
-  
+
   // Check first voxels
   vcl_map<unsigned, vgl_point_3d<unsigned> > blob_vox;
   first_voxel_of_blobs(src, blob_vox);
@@ -55,31 +55,31 @@ static void test_blob_image(const vil3d_image_view<bool>& src,
 
 #if 0
 //#ifndef NDEBUG
-  vcl_cout << "--------------------------------------------------\n";
-  vcl_cout << testname << "\n\n";
+  vcl_cout << "--------------------------------------------------\n"
+           << testname << "\n\n";
 
   vcl_cout << "src image:\n";
   vil3d_print_all(vcl_cout, src);
-  vcl_cout << "\n";
-  
+  vcl_cout << '\n';
+
   vcl_cout << "dst image:\n";
   vil3d_print_all(vcl_cout, dst);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   vcl_cout << "tru image:\n";
   vil3d_print_all(vcl_cout, tru);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
-  vcl_cout << "first voxels: \n";
+  vcl_cout << "first voxels:\n";
   for (vcl_map<unsigned, vgl_point_3d<unsigned> >::const_iterator it=blob_vox.begin();
        it!=blob_vox.end(); ++it)
   {
-    vcl_cout << it->first << ": " 
-             << it->second.x() << " " 
-             << it->second.y() << " " 
-             << it->second.z() << "\n"; 
+    vcl_cout << it->first << ": "
+             << it->second.x() << ' '
+             << it->second.y() << ' '
+             << it->second.z() << '\n';
   }
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   vcl_cout << "--------------------------------------------------\n";
 //#endif // NDEBUG
@@ -96,7 +96,7 @@ static void test_all_background()
 
   vil3d_image_view<bool> src(ni, nj, nk, np);
   src.fill(false);
-  
+
   vil3d_image_view<unsigned> tru(ni, nj, nk, np);
   tru.fill(0);
 
@@ -116,7 +116,7 @@ static void test_all_foreground()
 
   vil3d_image_view<bool> src(ni, nj, nk, np);
   src.fill(true);
-  
+
   vil3d_image_view<unsigned> tru(ni, nj, nk, np);
   tru.fill(1);
 
@@ -137,12 +137,12 @@ static void test_single_central()
 
   vil3d_image_view<bool> src(ni, nj, nk, np);
   src.fill(false);
-  vil3d_crop(src, 3,3, 3,4, 3,5).fill(true); 
+  vil3d_crop(src, 3,3, 3,4, 3,5).fill(true);
   src(6,5,4)=true; src(4,7,5)=true; src(5,6,8)=true;
-  
+
   vil3d_image_view<unsigned> tru(ni, nj, nk, np);
   tru.fill(0);
-  vil3d_crop(tru, 3,3, 3,4, 3,5).fill(1); 
+  vil3d_crop(tru, 3,3, 3,4, 3,5).fill(1);
   tru(6,5,4)=1; tru(4,7,5)=1; tru(5,6,8)=1;
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
@@ -161,11 +161,11 @@ static void test_single_edge()
 
   vil3d_image_view<bool> src(ni, nj, nk, np);
   src.fill(false);
-  vil3d_crop(src, 0,3, 3,4, 3,5).fill(true); 
-  
+  vil3d_crop(src, 0,3, 3,4, 3,5).fill(true);
+
   vil3d_image_view<unsigned> tru(ni, nj, nk, np);
   tru.fill(0);
-  vil3d_crop(tru, 0,3, 3,4, 3,5).fill(1); 
+  vil3d_crop(tru, 0,3, 3,4, 3,5).fill(1);
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
     "Test single edge blob");
@@ -185,17 +185,17 @@ static void test_multiple_separate()
 
   vil3d_image_view<bool> src(ni, nj, nk, np);
   src.fill(false);
-  vil3d_crop(src, 1,3, 1,4, 1,5).fill(true); 
-  vil3d_crop(src, 6,3, 2,4, 2,4).fill(true); 
-  vil3d_crop(src, 2,4, 7,3, 3,3).fill(true); 
-  vil3d_crop(src, 2,5, 2,5, 7,3).fill(true); 
-  
+  vil3d_crop(src, 1,3, 1,4, 1,5).fill(true);
+  vil3d_crop(src, 6,3, 2,4, 2,4).fill(true);
+  vil3d_crop(src, 2,4, 7,3, 3,3).fill(true);
+  vil3d_crop(src, 2,5, 2,5, 7,3).fill(true);
+
   vil3d_image_view<unsigned> tru(ni, nj, nk, np);
   tru.fill(0);
-  vil3d_crop(tru, 1,3, 1,4, 1,5).fill(1); 
-  vil3d_crop(tru, 6,3, 2,4, 2,4).fill(2); 
-  vil3d_crop(tru, 2,4, 7,3, 3,3).fill(3); 
-  vil3d_crop(tru, 2,5, 2,5, 7,3).fill(4); 
+  vil3d_crop(tru, 1,3, 1,4, 1,5).fill(1);
+  vil3d_crop(tru, 6,3, 2,4, 2,4).fill(2);
+  vil3d_crop(tru, 2,4, 7,3, 3,3).fill(3);
+  vil3d_crop(tru, 2,5, 2,5, 7,3).fill(4);
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
     "Test multiple separate blobs");
@@ -212,15 +212,15 @@ static void test_merging_blocks()
 
   vil3d_image_view<bool> src(ni, nj, nk, np);
   src.fill(false);
-  vil3d_crop(src, 1,7, 1,7, 1,7).fill(true); 
-  vil3d_crop(src, 1,6, 1,6, 1,6).fill(false); 
-  vil3d_crop(src, 1,3, 1,3, 1,3).fill(true); 
-  
+  vil3d_crop(src, 1,7, 1,7, 1,7).fill(true);
+  vil3d_crop(src, 1,6, 1,6, 1,6).fill(false);
+  vil3d_crop(src, 1,3, 1,3, 1,3).fill(true);
+
   vil3d_image_view<unsigned> tru(ni, nj, nk, np);
   tru.fill(0);
-  vil3d_crop(tru, 1,7, 1,7, 1,7).fill(2); 
-  vil3d_crop(tru, 1,6, 1,6, 1,6).fill(0); 
-  vil3d_crop(tru, 1,3, 1,3, 1,3).fill(1); 
+  vil3d_crop(tru, 1,7, 1,7, 1,7).fill(2);
+  vil3d_crop(tru, 1,6, 1,6, 1,6).fill(0);
+  vil3d_crop(tru, 1,3, 1,3, 1,3).fill(1);
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
     "Test simple merging case");
@@ -244,16 +244,16 @@ static void test_merging_diagonal_line()
   {
     src(ni-i-1, i, i) = true;
     tru(ni-i-1, i, i) = 1;
-  }  
+  }
 
   test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
     "Test merging diagonal line");
 }
 
-//========================================================================
+//=============================================================================
 // lots of limbs in a single blob that exercises the merging code.
-// Check that renumber also makes label set comact.
-//========================================================================
+// Check that renumber also makes label set compact.
+//=============================================================================
 static void test_multilimb_merging()
 {
   const unsigned ni=9, nj=9, nk=9, np=1;
@@ -277,7 +277,7 @@ static void test_multilimb_merging()
       tru(i,  2, k+1)=1;
       tru(i+1,2, k+1)=1;
     }
-  }  
+  }
 
   src(5, 5, 5)=true;
   tru(5, 5, 5)=2;
@@ -286,10 +286,10 @@ static void test_multilimb_merging()
     "Test multilimb blob merging");
 }
 
-//========================================================================
+//=============================================================================
 // lots of long awkward limbs in a single blob that exercises the merging code.
-// Check that renumber also makes label set comact.
-//========================================================================
+// Check that renumber also makes label set compact.
+//=============================================================================
 static void test_multilimb_merging2()
 {
   const unsigned ni=9, nj=9, nk=9, np=1;
@@ -300,15 +300,15 @@ static void test_multilimb_merging2()
   tru.fill(0);
   for (unsigned i=1; i<ni-2; i+=2)
   {
-    vil3d_crop(src, 1,ni-i-1, 2,1, i,1).fill(true); 
-    vil3d_crop(tru, 1,ni-i-1, 2,1, i,1).fill(1); 
+    vil3d_crop(src, 1,ni-i-1, 2,1, i,1).fill(true);
+    vil3d_crop(tru, 1,ni-i-1, 2,1, i,1).fill(1);
     src(ni-i-1, 2, i+1)=true;
     src(ni-i-1, 2, i+2)=true;
     src(ni-i-2, 2, i+2)=true;
     tru(ni-i-1, 2, i+1)=1;
     tru(ni-i-1, 2, i+2)=1;
     tru(ni-i-2, 2, i+2)=1;
-  }  
+  }
 
   src(5, 4, 5)=true;
   tru(5, 4, 5)=2;
@@ -320,10 +320,10 @@ static void test_multilimb_merging2()
 }
 
 
-//========================================================================
+//=============================================================================
 // lots of long awkward limbs in a single blob that exercises the merging code.
-// Check that renumber also makes label set comact.
-//========================================================================
+// Check that renumber also makes label set compact.
+//=============================================================================
 static void test_multilimb_merging3()
 {
   const unsigned ni=9, nj=9, nk=9, np=1;
@@ -334,15 +334,15 @@ static void test_multilimb_merging3()
   tru.fill(0);
   for (unsigned i=1; i<ni-2; i+=2)
   {
-    vil3d_crop(src, 1,ni-i-1, 2,1, i,1).fill(true); 
-    vil3d_crop(tru, 1,ni-i-1, 2,1, i,1).fill(1); 
+    vil3d_crop(src, 1,ni-i-1, 2,1, i,1).fill(true);
+    vil3d_crop(tru, 1,ni-i-1, 2,1, i,1).fill(1);
     src(ni-i,   2, i+1)=true;
     src(ni-i-1, 2, i+2)=true;
     src(ni-i-2, 2, i+2)=true;
     tru(ni-i,   2, i+1)=1;
     tru(ni-i-1, 2, i+2)=1;
     tru(ni-i-2, 2, i+2)=1;
-  }  
+  }
 
   src(5, 4, 5)=true;
   tru(5, 4, 5)=2;
@@ -357,7 +357,7 @@ static void test_multilimb_merging3()
 static void test_algo_find_blobs()
 {
   vcl_cout << "**************************\n"
-           << " Testing vil3d_find_blobs \n"
+           << " Testing vil3d_find_blobs\n"
            << "**************************\n";
 
   test_all_background();
