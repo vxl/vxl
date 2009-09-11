@@ -121,11 +121,8 @@ class boxm_update_image_functor_pass_2
 
     // compute new visibility probability with updated alpha_integral
     const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
-    // grab this cell's pre and vis value
-    const float pre = pre_img_(i,j);
-    const float vis = vis_img_(i,j);
     // compute weight for this cell
-    const float Omega = vis - vis_prob_end;
+    const float Omega = vis_img_(i,j) - vis_prob_end;
     // update vis and pre
     pre_img_(i,j) +=  PI * Omega;
     vis_img_(i,j) = vis_prob_end;
