@@ -11,7 +11,6 @@
 //   <none yet>
 // \endverbatim
 
-
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <bvxm/grid/bvxm_opinion.h>
@@ -32,8 +31,6 @@ namespace bvpl_non_max_suppression_process_globals
 // input[1]: The id grid
 // input[2]: The vector of kernels
 // input[3]: Output grid path to hold suppressed response
-
-
 // output[0]: Output grid
 bool bvpl_non_max_suppression_process_cons(bprb_func_process& pro)
 {
@@ -47,21 +44,21 @@ bool bvpl_non_max_suppression_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
 
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_non_max_suppression_process(bprb_func_process& pro)
 {
   using namespace bvpl_non_max_suppression_process_globals;
-  
+
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cout << pro.name() << ": the input number should be " << n_inputs_
-    << " but instead it is " << pro.n_inputs() << vcl_endl;
+             << " but instead it is " << pro.n_inputs() << vcl_endl;
     return false;
   }
-  
+
   //get inputs:
   unsigned i = 0;
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
@@ -69,51 +66,50 @@ bool bvpl_non_max_suppression_process(bprb_func_process& pro)
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(i++);
   vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
-  
+
   //check input's validity
   if (!grid_base.ptr()) {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
   }
-  
+
   if ( !kernel ) {
     vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
     return false;
   }
-  
+
   bvxm_voxel_grid<unsigned > *id_grid=dynamic_cast<bvxm_voxel_grid<unsigned >* >(id_grid_base.ptr());
-  
-  if(bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr())){
-     bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(out_grid_path, grid->grid_size());
-     bvpl_vector_operator  vector_oper;
-     //copy one grid into another:
-     bvxm_voxel_grid_copy<float>(grid, grid_out);
-     vector_oper.non_maxima_suppression(grid_out,id_grid, kernel);
-     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-     return true;
-   }
-   else if (bvxm_voxel_grid<bvxm_opinion> *grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (grid_base.ptr())){
-     bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
-     //copy one grid into another:
-     bvxm_voxel_grid_copy<bvxm_opinion> (grid, grid_out);
-     bvpl_vector_operator vector_oper;
-     vector_oper.non_maxima_suppression(grid_out, id_grid, kernel);
-     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-     return true;
-   }
-   
-   else if (bvxm_voxel_grid<gauss_type>* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
-     bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, grid->grid_size());
-     //copy one grid into another:
-     bvxm_voxel_grid_copy<gauss_type> (grid, grid_out);
-     bvpl_vector_operator vector_oper;
-     vector_oper.non_maxima_suppression(grid_out,id_grid, kernel);
-     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
-     return true;
-   }
-   else
-      return false;
-  
+
+  if (bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr())) {
+    bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(out_grid_path, grid->grid_size());
+    bvpl_vector_operator  vector_oper;
+    //copy one grid into another:
+    bvxm_voxel_grid_copy<float>(grid, grid_out);
+    vector_oper.non_maxima_suppression(grid_out,id_grid, kernel);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    return true;
+  }
+  else if (bvxm_voxel_grid<bvxm_opinion> *grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (grid_base.ptr())){
+    bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
+    //copy one grid into another:
+    bvxm_voxel_grid_copy<bvxm_opinion> (grid, grid_out);
+    bvpl_vector_operator vector_oper;
+    vector_oper.non_maxima_suppression(grid_out, id_grid, kernel);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    return true;
+  }
+  else if (bvxm_voxel_grid<gauss_type>* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
+    bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, grid->grid_size());
+    //copy one grid into another:
+    bvxm_voxel_grid_copy<gauss_type> (grid, grid_out);
+    bvpl_vector_operator vector_oper;
+    vector_oper.non_maxima_suppression(grid_out,id_grid, kernel);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    return true;
+  }
+  else
+    return false;
+
   return false;
 }
 
