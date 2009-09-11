@@ -5,7 +5,6 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 bprb_process_ext::bprb_process_ext()
 : bprb_process()
@@ -21,13 +20,9 @@ bool bprb_process_ext::set_output_types(vcl_vector<vcl_string> const& types)
 
 bool bprb_process_ext::set_output(unsigned i, brdb_value_sptr val)
 {
-  // use assert, because the boolean output doesn't seem to be checked
-  assert(output_data_.size() > i);
-  if (output_data_.size() <= i)
-    return false;
-
-  output_data_[i] = val;
-  return true;
+  if (i < output_data_.size())
+    output_data_[i] = val;
+  return i < output_data_.size();
 }
 
 bool bprb_process_ext::set_input_types(vcl_vector<vcl_string> const& types)
