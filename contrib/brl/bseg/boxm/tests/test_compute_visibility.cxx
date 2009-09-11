@@ -77,7 +77,9 @@ MAIN( test_compute_visibility )
   }
   vgl_box_3d<double> world;
   world.add(origin);
-  world.add(vgl_point_3d<double>(origin.x()+world_dim.x(), origin.y()+world_dim.y(), origin.z()+world_dim.z()));
+  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(), 
+                                 origin.y()+block_dim.y()*world_dim.y(), 
+                                 origin.z()+block_dim.z()*world_dim.z()));
   vpgl_camera_double_sptr camera = generate_camera_top_persp(world);
 
   double X=5,Y=5,Z;

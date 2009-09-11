@@ -45,17 +45,15 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z_multi_bin(vgl_box_3d<dou
   for (unsigned i=0; i<centers.size(); i++)
   {
     vgl_point_3d<double> camera_center  = centers[i];
-    vpgl_perspective_camera<double> persp_cam;
-    generate_persp_camera(boxm_focal_length,principal_point, boxm_x_scale, boxm_y_scale, camera_center, persp_cam);
-    persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
-    vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
+    vpgl_camera_double_sptr persp_cam=generate_camera_top_persp(world);
+    vpgl_camera_double_sptr rat_cam = generate_camera_top(world);
     rat_cameras.push_back(rat_cam);
 
     vcl_vector<vgl_point_3d<double> > corners = boxm_utils::corners_of_box_3d(world);
     for (unsigned i=0; i<corners.size(); i++) {
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
-      persp_cam.project(c.x(), c.y() ,c.z(), u, v);
+      persp_cam->project(c.x(), c.y() ,c.z(), u, v);
       rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
       bb.add(vgl_point_2d<double> (u,v));
 
