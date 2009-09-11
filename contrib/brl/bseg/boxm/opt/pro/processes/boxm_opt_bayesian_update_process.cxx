@@ -29,7 +29,7 @@
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 
-#include <boxm/opt/boxm_opt_sample.h>
+#include <boxm/boxm_rt_sample.h>
 #include <boxm/opt/boxm_aux_traits.h>
 #include <boxm/opt/boxm_opt_rt_bayesian_optimizer.h>
 
