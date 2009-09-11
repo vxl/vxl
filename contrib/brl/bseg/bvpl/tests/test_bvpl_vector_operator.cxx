@@ -203,12 +203,10 @@ void test_non_max_suppression()
   TEST("Directions", true,  check_data(id_grid, target_axis, target_id, 2));
 
 
-  bvxm_voxel_grid<float> *grid_non_max=new bvxm_voxel_grid<float>(grid->grid_size());
-  grid_non_max->initialize_data(0.0f);
-  vector_oper.non_maxima_suppression(grid_out, id_grid, kernel_vec, grid_non_max);
+  vector_oper.non_maxima_suppression(grid_out, id_grid, kernel_vec);
 
   //after non-maxima suppression the center voxel should be the winner
-  TEST("Non-max suppression", true, check_non_max(grid_non_max));
+  TEST("Non-max suppression", true, check_non_max(grid_out));
 }
 
 MAIN(test_bvpl_vector_operator)
