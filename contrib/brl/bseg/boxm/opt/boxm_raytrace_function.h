@@ -53,147 +53,6 @@ public:
     {debug_lvl_=2;}
 
 
-    //: run for a single floating (sub) pixel
-    //bool run_single(F& step_functor, float i, float j)
-    //{
-    //    boxm_block_vis_graph_iterator<tree_type> block_vis_it(scene_, cam_, (unsigned int)i, (unsigned int)j, 1, 1, reverse_traversal_);
-
-    //    bool continue_trace = true;
-    //    while(block_vis_it.next())
-    //    {
-    //        vcl_vector<vgl_point_3d<int> > vis_blocks;
-    //        block_vis_it.current_blocks(vis_blocks);
-    //        // traverse each visible block one at a time
-    //        vcl_vector<vgl_point_3d<int> >::iterator block_it = vis_blocks.begin();
-    //        for (; block_it != vis_blocks.end(); ++block_it) {
-
-    //            if (debug_lvl_ > 0) vcl_cout << "processing block at index (" << block_it->x() << ", " << block_it->y() << ", " << block_it->z() << ")" << vcl_endl;
-    //            // make sure block projects to inside of image
-    //            vbl_bounding_box<double,3> block_bb = scene_.block_bounding_box(*block_it);
-    //            if (!boxm_utils::is_visible(block_bb, cam_, (unsigned int)i, (unsigned int)j, 1, 1, false)) {
-    //                continue;
-    //            }
-
-    //            hsds_fd_tree<psm_sample<APM>,3> &block = scene_.get_block(*block_it);
-    //            hsds_fd_tree<typename psm_aux_traits<AUX_T>::sample_datatype,3> &aux_block = aux_scene->get_block(*block_it);
-
-    //            vbl_bounding_box<unsigned int,2> img_bb;
-
-    //            // initialize ray_origin() function for this block
-    //            if (!generate_ray_init(block_bb, img_bb)) {
-    //                continue;
-    //            }
-
-    //            // get direction of vector and enter point - this depends on which camera type we have
-    //            vgl_point_3d<double> ray_origin;
-    //            vgl_vector_3d<double> direction;
-    //            vgl_point_3d<double> enter_pt(0.0,0.0,0.0);
-    //            vcl_vector<vgl_point_3d<double> > plane_intersections(6);
-    //            generate_ray(i,j,block_bb, ray_origin, direction);
-
-    //            // compute intersection of each plane with ray
-    //            double lambda[6];
-    //            lambda[0] = (block_bb.xmin() - ray_origin.x())/direction.x();
-    //            lambda[1] = (block_bb.xmax() - ray_origin.x())/direction.x();
-    //            lambda[2] = (block_bb.ymin() - ray_origin.y())/direction.y();
-    //            lambda[3] = (block_bb.ymax() - ray_origin.y())/direction.y();
-    //            lambda[4] = (block_bb.zmin() - ray_origin.z())/direction.z();
-    //            lambda[5] = (block_bb.zmax() - ray_origin.z())/direction.z();
-    //            for (unsigned int face=0; face<6; ++face) {
-    //                plane_intersections[face] = ray_origin + (direction * lambda[face]);
-    //            }
-
-    //            // determine which point is the entrance point based on direction
-    //            const double epsilon = 1e-6; // use in place of zero to avoid badly conditioned lambdas
-    //            if ( (plane_intersections[5].x() >= block_bb.xmin()) && (plane_intersections[5].x() <= block_bb.xmax()) &&
-    //                (plane_intersections[5].y() >= block_bb.ymin()) && (plane_intersections[5].y() <= block_bb.ymax()) &&
-    //                (direction.z() < -epsilon) )
-    //            {
-    //                // ray intersects the zmax plane
-    //                // check zmax first since it is probably the most common 
-    //                enter_pt = plane_intersections[5];
-    //            }
-    //            else if ( (plane_intersections[0].y() >= block_bb.ymin()) && (plane_intersections[0].y() <= block_bb.ymax()) &&
-    //                (plane_intersections[0].z() >= block_bb.zmin()) && (plane_intersections[0].z() <= block_bb.zmax()) &&
-    //                (direction.x() > epsilon) )
-    //            {
-    //                // ray intersects the xmin plane
-    //                enter_pt = plane_intersections[0];
-    //            }
-    //            else if ( (plane_intersections[1].y() >= block_bb.ymin()) && (plane_intersections[1].y() <= block_bb.ymax()) &&
-    //                (plane_intersections[1].z() >= block_bb.zmin()) && (plane_intersections[1].z() <= block_bb.zmax()) &&
-    //                (direction.x() < -epsilon) )
-    //            {
-    //                // ray intersects the xmax plane
-    //                enter_pt = plane_intersections[1];
-    //            }
-    //            else if ( (plane_intersections[2].x() >= block_bb.xmin()) && (plane_intersections[2].x() <= block_bb.xmax()) &&
-    //                (plane_intersections[2].z() >= block_bb.zmin()) && (plane_intersections[2].z() <= block_bb.zmax()) &&
-    //                (direction.y() > epsilon) ) 
-    //            {
-    //                // ray intersects the ymin plane
-    //                enter_pt = plane_intersections[2];
-    //            }
-    //            else if ( (plane_intersections[3].x() >= block_bb.xmin()) && (plane_intersections[3].x() <= block_bb.xmax()) &&
-    //                (plane_intersections[3].z() >= block_bb.zmin()) && (plane_intersections[3].z() <= block_bb.zmax()) &&
-    //                (direction.y() < -epsilon) ) 
-    //            {
-    //                // ray intersects the ymax plane
-    //                enter_pt = plane_intersections[3];
-    //            }
-    //            else if ( (plane_intersections[4].x() >= block_bb.xmin()) && (plane_intersections[4].x() <= block_bb.xmax()) &&
-    //                (plane_intersections[4].y() >= block_bb.ymin()) && (plane_intersections[4].y() <= block_bb.ymax()) &&
-    //                (direction.z() > epsilon) ) 
-    //            {
-    //                // ray intersects the zmin plane
-    //                enter_pt = plane_intersections[4];
-    //            }
-    //            else {
-    //                // no entry point into this block found
-    //                continue;
-    //            }
-    //            // step through cells, starting at enter_pt
-    //            hsds_fd_tree_node_index<3> cell_index = block.index_at(vnl_vector_fixed<double,3>(enter_pt.x(),enter_pt.y(),enter_pt.z()));
-
-    //            while (continue_trace) {
-    //                vbl_bounding_box<double,3> cell_bb = block.cell_bounding_box(cell_index);
-    //                // find exit point of cell
-    //                vgl_point_3d<double> exit_pt;
-    //                unsigned int step_dim = 0;
-    //                bool step_positive = false;
-    //                bool found_exit = cube_exit_point(cell_bb, enter_pt, direction, exit_pt, step_dim, step_positive);
-    //                if (!found_exit) {
-    //                    vcl_cerr << "error: could not find cell exit point" << vcl_endl;
-    //                    vcl_cerr << "   enter_pt = [" << enter_pt.x() << ", " << enter_pt.y() << ", " << enter_pt.z() << "]" << vcl_endl;
-    //                    vcl_cerr << "   direction = [" << direction.x() << ", " << direction.y() << ", " << direction.z() << "] " << vcl_endl;
-    //                    vcl_cerr << "   cell_bb = [" << cell_bb.xmin() <<", " << cell_bb.xmax() << "]  [" << cell_bb.ymin() << ", " << cell_bb.ymax() << "]  [" << cell_bb.zmin() << ", " << cell_bb.zmax() <<"] " << vcl_endl;
-    //                    assert(found_exit);
-    //                    break;
-    //                }
-    //                psm_sample<APM> &cell_val = block[cell_index];
-    //                psm_aux_traits<AUX_T>::sample_datatype &aux_val = aux_block[cell_index];
-    //                continue_trace = step_functor.step_cell(i,j, enter_pt, exit_pt, cell_val, aux_val, cell_index);
-
-    //                // determine next cell
-    //                hsds_fd_tree_node_index<3> exit_idx = block.full_index_at(cell_index,vnl_vector_fixed<double,3>(exit_pt.x(),exit_pt.y(),exit_pt.z()));
-    //                hsds_fd_tree_node_index<3> neighbor;
-    //                bool found_neighbor = block.neighbor_cell(exit_idx,step_dim,step_positive,neighbor);
-    //                if (!found_neighbor) {
-    //                    // we have reached the boundary of this block. stop trace.
-    //                    break;
-    //                }
-    //                enter_pt = exit_pt;
-    //                cell_index = neighbor;
-    //            }
-    //        }
-    //    }
-    //    return true;
-
-    //}
-
-
-
-    //: run the function
     bool run(F& step_functor) 
     {
         vil_image_view<bool> continue_trace(img_ni_, img_nj_);
@@ -417,13 +276,14 @@ protected:
             return true;
     }
 
-    void generate_ray(float i, float j, vgl_box_3d<double> const& block_bb, vgl_point_3d<double> &ray_origin, vgl_vector_3d<double> &direction)
+    void generate_ray(float i, float j, vgl_box_3d<double> const& block_bb, vgl_point_3d<double> &ray_origin, vgl_vector_3d<double> &norm_direction)
     {
         vpgl_perspective_camera<double> const* pcam = static_cast<vpgl_perspective_camera<double> const*>(cam_.ptr());
         // backproject image point to a ray
         ray_origin = pcam->camera_center();
         vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
-        direction = normalize(cam_ray.direction());
+        vgl_vector_3d<double> direction=cam_ray.direction();
+        norm_direction = normalize<double>(direction);
     }
 
 
