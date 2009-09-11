@@ -21,7 +21,6 @@ class boxm_update_image_functor_pass_0
     is_aux_=true;
   }
 
-
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1,
                         boxm_sample<APM> &cell_value,T_aux &aux_val)
   {
@@ -30,6 +29,8 @@ class boxm_update_image_functor_pass_0
     aux_val.seg_len_ += seg_len;
     return true;
   }
+
+ public:
   bool scene_read_only_;
   bool is_aux_;
 
@@ -78,6 +79,8 @@ class boxm_update_image_functor_pass_1
     aux_val.vis_+=seg_len*vis_img_(i,j);
     return true;
   }
+
+ public:
   bool scene_read_only_;
   bool is_aux_;
 
@@ -130,6 +133,8 @@ class boxm_update_image_functor_pass_2
     aux_val.updatefactor_+=(((pre_img_(i,j)+vis_img_(i,j)*PI)/norm_(i,j))* seg_len);
     return true;
   }
+
+ public:
   bool scene_read_only_;
   bool is_aux_;
 
@@ -171,24 +176,10 @@ class boxm_update_image_functor_pass_3
     }
     return true;
   }
+
+ public:
   bool scene_read_only_;
   bool is_aux_;
-};
-
-//: Functor class to normalize expected image
-template<class T_data>
-class normalize_expected_functor_rt
-{
- public:
-  normalize_expected_functor_rt(bool use_black_background) : use_black_background_(use_black_background) {}
-
-  void operator()(float mask, typename T_data::obs_datatype &pix) const
-  {
-    if (!use_black_background_) {
-      pix += mask*0.5f;
-    }
-  }
-  bool use_black_background_;
 };
 
 template <class T_loc, class T_data>
@@ -230,7 +221,6 @@ void boxm_update_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             *PI_it = T_data::apm_processor::prob_density(background_apm,*img_it);
         }
     }
-
     else {
         PI_inf.fill(0.5f);
     }
