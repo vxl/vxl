@@ -7,6 +7,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/opt/boxm_aux_scene.h>
+#include <vil/vil_transform.h>
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_render_expected_depth_functor

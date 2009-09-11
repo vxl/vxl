@@ -4,6 +4,8 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/opt/boxm_raytrace_function.h>
 #include <boxm/opt/boxm_rt_sample.h>
+#include <vil/vil_transform.h>
+
 template <boxm_apm_type APM, class T_aux>
 class boxm_render_expected_image_functor
 {
