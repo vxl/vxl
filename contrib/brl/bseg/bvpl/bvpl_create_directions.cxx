@@ -31,7 +31,6 @@ bvpl_create_directions_a::bvpl_create_directions_a()
 
 bvpl_create_directions_b::bvpl_create_directions_b()
 {
-
   double theta = 0.0;
   double phi = 0.0;
 
@@ -39,7 +38,7 @@ bvpl_create_directions_b::bvpl_create_directions_b()
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   axes_.push_back(axis);
   angles_.push_back(0.0f);
-  
+
   //when zenith is pi/4 traverse all hemisphere
   phi = vnl_math::pi_over_4;
   double theta_res = vnl_math::pi_over_4; //azimuth; phi_res = zenith (from the pole)
@@ -69,7 +68,6 @@ bvpl_create_directions_b::bvpl_create_directions_b()
 
 bvpl_create_directions_c::bvpl_create_directions_c()
 {
-
   vnl_float_3 axis(0.0f, 1.0f, 0.0f);
   double angle_res = vnl_math::pi_over_4;
   for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
@@ -77,60 +75,60 @@ bvpl_create_directions_c::bvpl_create_directions_c()
     axes_.push_back(axis);
     angles_.push_back(float(angle));
   }
+#if 0 // commented out
+  This is for 4 main angles
+  axes_.push_back(axis);
+  angles_.push_back(float(0.0f));
+  axes_.push_back(axis);
+  angles_.push_back(float(vnl_math::pi_over_2 + vnl_math::pi_over_4));
+  axes_.push_back(axis);
+  angles_.push_back(float(vnl_math::pi));
+  axes_.push_back(axis);
+  angles_.push_back(3.0f *float(vnl_math::pi_over_2));*/
 
-  //This is for 4 main angles
-  //axes_.push_back(axis);
-  //angles_.push_back(float(0.0f));
- // axes_.push_back(axis);
- // angles_.push_back(float(vnl_math::pi_over_2 + vnl_math::pi_over_4));
- // axes_.push_back(axis);
-  //angles_.push_back(float(vnl_math::pi));
- // axes_.push_back(axis);
- // angles_.push_back(3.0f *float(vnl_math::pi_over_2));*/
+  double theta = 0.0;
+  double phi = 0.0;
 
+  //polar phi=0
+  vnl_float_3 axis(0.0f, 0.0f, 1.0f);
+  double angle_res = vnl_math::pi_over_4;
+  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  {
+    axes_.push_back(axis);
+    angles_.push_back(float(angle));
+  }
 
-  //double theta = 0.0;
-  //double phi = 0.0;
-  //
-  ////polar phi=0
-  //vnl_float_3 axis(0.0f, 0.0f, 1.0f);
-  //double angle_res = vnl_math::pi_over_4;
-  //for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
-  //{
-  //  axes_.push_back(axis);
-  //  angles_.push_back(float(angle));
-  //}
-  //
-  //double theta_res = vnl_math::pi_over_4;
- 
-  ////when phi is pi/4 traverse all hemisphere
-  ////phi = (vnl_math::pi_over_4);
-  ////for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
-  ////{
-  ////  for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
-  ////  {
-  ////    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-  ////    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-  ////    axis[2] = float(vcl_cos(phi));
-  ////    axes_.push_back(axis);
-  ////    angles_.push_back(float(angle));
-  ////  }
-  ////}
-  //
-  ////when zenith is pi/2 we only traverse half a hemisphere
-  //phi = double(vnl_math::pi_over_2);
-  //for (theta =0.0;theta < (vnl_math::pi)-1e-5; theta +=theta_res)
-  //{
-  //  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
-  //  {
-  //    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-  //    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-  //    axis[2] = float(vcl_cos(phi));
-  //    axes_.push_back(axis);
-  //    angles_.push_back(float(angle));
-  //  }  
-  //}
+  double theta_res = vnl_math::pi_over_4;
 
+  //when phi is pi/4 traverse all hemisphere
+#if 0
+  phi = (vnl_math::pi_over_4);
+  for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+  {
+    for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
+    {
+      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
+      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
+      axis[2] = float(vcl_cos(phi));
+      axes_.push_back(axis);
+      angles_.push_back(float(angle));
+    }
+  }
+#endif // 0
+  //when zenith is pi/2 we only traverse half a hemisphere
+  phi = double(vnl_math::pi_over_2);
+  for (theta =0.0;theta < (vnl_math::pi)-1e-5; theta +=theta_res)
+  {
+    for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
+    {
+      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
+      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
+      axis[2] = float(vcl_cos(phi));
+      axes_.push_back(axis);
+      angles_.push_back(float(angle));
+    }
+  }
+#endif // 0
   save_directions_map("directions_c.svg");
 }
 
