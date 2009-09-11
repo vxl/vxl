@@ -2,7 +2,7 @@
 
 #include <boxm/boxm_scene.h>
 #include <boxm/opt/boxm_aux_scene.h>
-#include <boxm/boxm_rt_sample.h>
+#include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/opt/boxm_opt_rt_bayesian_optimizer.h>
 #include <boct/boct_tree.h>
 #include <vpl/vpl.h>
