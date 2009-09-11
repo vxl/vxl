@@ -168,9 +168,9 @@ MAIN(test_detect_corner)
   TEST("Id at Corner 4", true, test_id_grid(id_grid,6,2,4,3));
 
   //test non-maxima suppression
-  bvxm_voxel_grid<gauss_f1> *non_max_grid= new bvxm_voxel_grid<gauss_f1>(grid->grid_size());
-  non_max_grid->initialize_data(bsta_gauss_f1(0.0f, 1.0f));
-  vector_oper.non_maxima_suppression(grid_out,id_grid,kernel_vector,non_max_grid);
-  TEST("Number of corners after non_max", true, test_non_max_grid(non_max_grid));
+  //bvxm_voxel_grid<gauss_f1> *non_max_grid= new bvxm_voxel_grid<gauss_f1>(grid->grid_size());
+  //bvxm_voxel_grid_copy<gauss_f1> (grid_out, non_max_grid);
+  vector_oper.non_maxima_suppression(grid_out,id_grid,kernel_vector);
+  TEST("Number of corners after non_max", true, test_non_max_grid(grid_out));
   return 0;
 }
