@@ -12,7 +12,7 @@ boct_tree_cell<T_loc,T_data>::boct_tree_cell(const boct_loc_code<T_loc>& code)
   code_=code;
   parent_=NULL;
   children_=NULL;
-  vis_node_=NULL;
+  vis_node_=0;
 }
 
 template<class T_loc,class T_data>
@@ -24,7 +24,7 @@ bool boct_tree_cell<T_loc,T_data>::is_leaf()
 }
 
 template<class T_loc,class T_data>
-const boct_loc_code<T_loc>&
+const boct_loc_code<T_loc>
 boct_tree_cell<T_loc,T_data>::get_code()
 {
   return code_;
@@ -36,7 +36,7 @@ boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
   delete_children();
   if (vis_node_) {
     //vcl_cout << "Deleting vis node" << vcl_endl;
-    delete vis_node_;
+    //delete vis_node_;
     vis_node_ = NULL;
   }
 }
@@ -47,8 +47,6 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
   boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(this->code_);
   cell->data_ = this->data();
   cell->parent_ = parent;
-  //TODO: clone the vis_nodes, do we need that?
-  //cell->vis_node_ = vis_node_->clone();
   if (this->is_leaf())
     cell->children_=NULL;
   else {
@@ -72,11 +70,11 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
       children_[i].delete_children();
       //vcl_cout << "Deleting children" << vcl_endl;
     }
-    delete[] children_;
+    delete [] children_;
     children_=NULL;
     if (vis_node_) {
       //vcl_cout << "Deleting vis node" << vcl_endl;
-      delete vis_node_;
+      //delete vis_node_;
       vis_node_ = NULL;
     }
   }
@@ -114,6 +112,31 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::traverse(boct_loc_co
   return curr_cell;
 }
 
+// this is always going down the tree
+template<class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::traverse_force(boct_loc_code<T_loc> & code)
+{
+  if (code.level<0)
+    return NULL;
+  boct_tree_cell<T_loc,T_data>* curr_cell=this;
+  while (code.level<curr_cell->level() && !curr_cell->is_leaf())
+  {
+    boct_loc_code<T_loc> curr_code=curr_cell->get_code();
+    
+    short child_bit= 1 << (curr_cell->level()-1);
+
+    short index=0;
+    if(code.x_loc_-curr_code.x_loc_>=child_bit)
+			index+=1;
+    if(code.y_loc_-curr_code.y_loc_>=child_bit)
+			index+=2;
+    if(code.z_loc_-curr_code.z_loc_>=child_bit)
+			index+=4;
+    //short child_index=code.child_index(curr_cell->level());
+    curr_cell=curr_cell->children()+index;
+  }
+  return curr_cell;
+}
 template<class T_loc,class T_data>
 bool boct_tree_cell<T_loc,T_data>::split()
 {
@@ -399,7 +422,140 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
       break;
   }
 }
+template<class T_loc,class T_data>
+bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
+                                                   boct_tree_cell<T_loc,T_data>* &neighbor,
+                                                   short max_level)
+{
+  short cellsize=1<<this->level();
 
+  switch (face)
+  {
+    case NONE:
+      break;
+
+    case X_LOW:
+    {
+      short xlowcode=this->code_.x_loc_-(short)(1);
+      if (xlowcode<0)
+        return false;
+      short diff=this->code_.x_loc_^xlowcode;
+
+      boct_loc_code<T_loc> neighborcode;
+      neighborcode.set_code(xlowcode,this->code_.y_loc_,this->code_.z_loc_);
+
+      boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
+
+      if (commonancestor==NULL)
+        return false;
+      // at the same or greater level ( towards the root)
+      neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
+
+	  
+      break;
+    }
+    case X_HIGH:
+    {
+      if ((this->code_.x_loc_+cellsize)>=(1<<(max_level-1)))
+        return false ;
+      short xhighcode=this->code_.x_loc_+cellsize;
+      short diff=this->code_.x_loc_^xhighcode;
+      // set the code for the neighboring point
+      boct_loc_code<T_loc> neighborcode;
+      neighborcode.set_code(xhighcode,this->code_.y_loc_,this->code_.z_loc_);
+
+      boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
+
+      if (commonancestor==NULL)
+        return false;
+      // at the same or greater level ( towards the root)
+      neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
+
+
+      break;
+    }
+    case Y_LOW:
+    {
+      short ylowcode=this->code_.y_loc_-(short)(1);
+      if (ylowcode<0)
+        return false;
+      short diff=this->code_.y_loc_^ylowcode;
+
+      boct_loc_code<T_loc> neighborcode;
+      neighborcode.set_code(this->code_.x_loc_,ylowcode,this->code_.z_loc_);
+
+      boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
+
+      if (commonancestor==NULL)
+        return false;
+      // at the same or greater level ( towards the root)
+      neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
+
+      break;
+    }
+    case Y_HIGH:
+    {
+      if ((this->code_.y_loc_+cellsize)>=(1<<(max_level-1)))
+        return false ;
+      short yhighcode=this->code_.y_loc_+cellsize;
+      short diff=this->code_.y_loc_^yhighcode;
+      // set the code for the neighboring point
+      boct_loc_code<T_loc> neighborcode;
+      neighborcode.set_code(this->code_.x_loc_,yhighcode,this->code_.z_loc_);
+
+      boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
+
+      if (commonancestor==NULL)
+        return false;
+      // at the same or greater level ( towards the root)
+      neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
+
+      break;
+    }
+    case Z_LOW:
+    {
+      short zlowcode=this->code_.z_loc_-(short)(1);
+      if (zlowcode<0)
+        return false;
+      short diff=this->code_.z_loc_^zlowcode;
+
+      boct_loc_code<T_loc> neighborcode;
+      neighborcode.set_code(this->code_.x_loc_,this->code_.y_loc_,zlowcode);
+
+      boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
+
+      if (commonancestor==NULL)
+        return false;
+      // at the same or greater level ( towards the root)
+      neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
+
+      break;
+    }
+    case Z_HIGH:
+    {
+      if ((this->code_.z_loc_+cellsize)>=(1<<(max_level-1)))
+        return false ;
+      short zhighcode=this->code_.z_loc_+cellsize;
+      short diff=this->code_.z_loc_^zhighcode;
+      // set the code for the neighboring point
+      boct_loc_code<T_loc> neighborcode;
+      neighborcode.set_code(this->code_.x_loc_,this->code_.y_loc_,zhighcode);
+
+      boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
+
+      if (commonancestor==NULL)
+        return false;
+      // at the same or greater level ( towards the root)
+      neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
+
+
+      break;
+    }
+    default:
+      break;
+  }
+  return true;
+}
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
 {
@@ -438,8 +594,8 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data>& cell)
 {
   vsl_b_write(os, boct_tree_cell<T_loc,T_data>::version_no());
   vsl_b_write(os, cell.code_);
-  T_data data = cell.data();
-  vsl_b_write(os, data);
+  //T_data data = cell.data();
+  vsl_b_write(os, cell.data());
   boct_tree_cell<T_loc,T_data>* children = cell.children();
   bool leaf=true;
   if (!cell.is_leaf()) {
@@ -448,7 +604,9 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data>& cell)
     for (unsigned i=0; i<8; i++)
       vsl_b_write(os, children[i]);
   } else // no children
+      {
       vsl_b_write(os, leaf);
+      }
 }
 
 template<class T_loc,class T_data>

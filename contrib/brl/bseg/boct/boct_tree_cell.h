@@ -40,10 +40,12 @@ class boct_tree_cell
   // creates a new cell with the same data
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
+ 
   template <class T_data_to>
-  boct_tree_cell<T_loc,T_data_to>* clone_to_type(boct_tree_cell<T_loc,T_data_to>* parent)
+  boct_tree_cell<T_loc,T_data_to>*  clone_to_type(boct_tree_cell<T_loc,T_data_to>* parent)
   {
-    boct_tree_cell<T_loc,T_data_to>* cell = new boct_tree_cell<T_loc,T_data_to>(this->code_);
+    vis_node_=0;
+    boct_tree_cell<T_loc,T_data_to>* cell = new boct_tree_cell<T_loc,T_data_to>(this->get_code());
     cell->set_parent(parent);
     if (!this->is_leaf()) {
       cell->split();
@@ -65,12 +67,13 @@ class boct_tree_cell
   //: adds a pointer for each leaf children to v
   void leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
 
-  const boct_loc_code<T_loc>& get_code();
+  const boct_loc_code<T_loc> get_code();
 
   //: currently this function just goes down the tree
   //  TODO: make it flexible and go from one node to another.
   boct_tree_cell<T_loc,T_data>* traverse(boct_loc_code<T_loc> &code);
   boct_tree_cell<T_loc,T_data>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
+  boct_tree_cell<T_loc,T_data>* traverse_force(boct_loc_code<T_loc> & code);
 
   // TODO: not yet implemented -- currently just returns false
   //bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
@@ -81,6 +84,9 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>* parent() { return parent_; }
 
   void  find_neighbors(boct_face_idx face,vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,short max_level);
+  //: at the same level or coarser level
+  bool  find_neighbor(boct_face_idx face, boct_tree_cell<T_loc,T_data>* &neighbor,short max_level);
+
   boct_tree_cell<T_loc,T_data>* get_common_ancestor(short binarydiff);
 
   void set_data(T_data const& data) {data_=data; }
@@ -102,9 +108,10 @@ class boct_tree_cell
   static short version_no() { return 1; }
 
   boct_loc_code<T_loc> code_;
+   boct_tree_cell<T_loc,T_data>* children_;
+
  protected:
   boct_tree_cell<T_loc,T_data>* parent_;
-  boct_tree_cell<T_loc,T_data>* children_;
   T_data data_;
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node_;
 };
@@ -123,7 +130,7 @@ template<class T_loc,class T_data>
 class boct_cell_vis_graph_node
 {
  public:
-  boct_cell_vis_graph_node():incoming_count(0),visible(false) {}
+  boct_cell_vis_graph_node():incoming_count(0),visible(false),outgoing_links() {}
   ~boct_cell_vis_graph_node(){
     for (unsigned i=0;i<outgoing_links.size();i++)
       outgoing_links[i]=0;
