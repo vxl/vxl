@@ -24,20 +24,19 @@ template <class T_loc,class T_data>
 class boct_tree_cell
 {
  public:
-
-  //constructors
+             //constructors
   boct_tree_cell<T_loc,T_data>()
-  : parent_(0), children_(0), vis_node_(0) {}
+  : children_(0), parent_(0), vis_node_(0) {}
 
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T_data>* p)
-  : code_(code), parent_(p), children_(0), vis_node_(0) {}
+  : code_(code), children_(0), parent_(p), vis_node_(0) {}
 
-  //constructor given code and level
+  //: constructor given code and level
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code);
 
   ~boct_tree_cell<T_loc,T_data>();
 
-  // creates a new cell with the same data
+  //: creates a new cell with the same data
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
   template <class T_data_to>
@@ -73,10 +72,10 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>* traverse(boct_loc_code<T_loc> &code);
   boct_tree_cell<T_loc,T_data>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
   boct_tree_cell<T_loc,T_data>* traverse_force(boct_loc_code<T_loc> & code);
-
+#if 0
   // TODO: not yet implemented -- currently just returns false
-  //bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
-
+  bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
+#endif
   short level() const { return code_.level; }
   void set_level(short level) { code_.level=level; }
   boct_tree_cell<T_loc,T_data>* children() { return children_; }
@@ -107,7 +106,7 @@ class boct_tree_cell
   static short version_no() { return 1; }
 
   boct_loc_code<T_loc> code_;
-   boct_tree_cell<T_loc,T_data>* children_;
+  boct_tree_cell<T_loc,T_data>* children_;
 
  protected:
   boct_tree_cell<T_loc,T_data>* parent_;
