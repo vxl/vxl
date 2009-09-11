@@ -1,12 +1,10 @@
 #ifndef boxm_save_scene_raw_h_
 #define boxm_save_scene_raw_h_
-
 //:
 // \file
-// \brief  Writes the 3D scene into a raw file by combining all the spatial data 
-//         in a set of octrees. The octree data mapped to a 3D regular grid and 
-//         kept in binary files temporarily. And then these sets of data combined 
-//         and saved in a raw file.
+// \brief  Writes the 3D scene into a raw file by combining all the spatial data in a set of octrees.
+//         The octree data mapped to a 3D regular grid and kept in binary files temporarily.
+//         And then these sets of data combined and saved in a raw file.
 //
 // \author Gamze Tunali
 // \date   September 9, 2009
@@ -14,7 +12,6 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-
 
 #include <vcl_vector.h>
 #include <vcl_new.h>
@@ -28,7 +25,7 @@
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <vpgl/vpgl_camera.h>
-#include <vbl/vbl_array_3d.h>
+#include <vbl/vbl_array_3d.txx>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
 
@@ -41,95 +38,95 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // create an array for each block, and save in a binary file
 
-  // number of cells for each block should be the same, because they have the 
+  // number of cells for each block should be the same, because they have the
   // same tree max_level definitions
   unsigned int ncells;
   boxm_block_iterator<tree_type> iter(&scene);
   while (!iter.end()) {
     vgl_point_3d<int> idx = iter.index();
-	  scene.load_block(idx);
-	  boxm_block<tree_type>* block = scene.get_block(idx);
-	  vgl_box_3d<double> block_bb = block->bounding_box();
-	  tree_type* tree = block->get_tree();
+    scene.load_block(idx);
+    boxm_block<tree_type>* block = scene.get_block(idx);
+    vgl_box_3d<double> block_bb = block->bounding_box();
+    tree_type* tree = block->get_tree();
 
-	  // query the finest level of the tree and do not make the resolution 
+    // query the finest level of the tree and do not make the resolution
     // smaller than that
-	  if (tree->finest_level() > (int)resolution_level)
-		resolution_level = tree->finest_level();
+    if (tree->finest_level() > (int)resolution_level)
+    resolution_level = tree->finest_level();
 
-	  // get origin of block
-	  vgl_point_3d<double> min = block_bb.min_point();
+    // get origin of block
+    vgl_point_3d<double> min = block_bb.min_point();
 
-	  ncells = 1 << (tree->num_levels() - 1 - (int)resolution_level);
+    ncells = 1 << (tree->num_levels() - 1 - (int)resolution_level);
 
-	  // assume that bounding box is a cube
-	  const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
+    // assume that bounding box is a cube
+    const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
 
-	  // origin should specify center of first cell
-	  vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
+    // origin should specify center of first cell
+    vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
-	  int data_size = ncells*ncells*ncells;
-	  int y_size = ncells*ncells;
-	  float *data = 0;
-	  data = new (std::nothrow)float[data_size];
+    int data_size = ncells*ncells*ncells;
+    int y_size = ncells*ncells;
+    float *data = 0;
+    data = new (std::nothrow)float[data_size];
 
-	  if (data == 0) {
-		  vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
-		  return;
-	  }
-	  // init to zero
-	    for (float* dp = data; dp < data + ncells*ncells*ncells; ++dp) {
-		  *dp = 0.0f;
-	  }
+    if (data == 0) {
+      vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
+      return;
+    }
+    // init to zero
+      for (float* dp = data; dp < data + ncells*ncells*ncells; ++dp) {
+      *dp = 0.0f;
+    }
 
-	  double out_cell_norm_volume = (tree->num_levels() - (int)resolution_level + 1);
-	  out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
+    double out_cell_norm_volume = (tree->num_levels() - (int)resolution_level + 1);
+    out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
-	  vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
-	  for (unsigned i=0; i<cells.size(); i++)
-	  {
-		  vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
+    vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
+    for (unsigned i=0; i<cells.size(); i++)
+    {
+      vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
 
-		  float cell_val = cells[i]->data().alpha;
+      float cell_val = cells[i]->data().alpha;
 
-		  unsigned int level = cells[i]->get_code().level;
+      unsigned int level = cells[i]->get_code().level;
 
-		  if (level == resolution_level) {
-		    // just copy value to output array
-		    int out_index = static_cast<int>((node.x()/step_len)*ncells*ncells + (node.y()/step_len)*ncells + (node.z()/step_len));
-		    if (out_index >= data_size)
-			    vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
-		    else
-			    data[out_index] = cell_val;
-		  }
-		  else if (level > resolution_level) {
-		    // cell is bigger than output cells.  copy value to all contained output cells.
-		    const unsigned int us_factor = 1 << (level - resolution_level);
-		    const unsigned int node_x_start = static_cast<unsigned int>(node.x()/step_len);
-		    const unsigned int node_y_start = static_cast<unsigned int>(node.y()/step_len);
-		    const unsigned int node_z_start = static_cast<unsigned int>(node.z()/step_len);
-		    for (unsigned int z=node_z_start; z<node_z_start+us_factor; ++z) {
-			  for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
-			    for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
-				  int out_index = z*y_size + y*ncells + x;
-				  if (out_index >= data_size)
-				    vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
-				  else
-				    data[out_index] = cell_val;
-			    }
-			  }
-		    }
-		  }
-		  else {
-		    // cell is smaller than output cells. increment output cell value
-		    unsigned int ds_factor = 1 << (resolution_level - level);
-		    double update_weight = 1.0 / double(ds_factor*ds_factor*ds_factor);
-		    const unsigned int node_x = static_cast<unsigned int>(node.x()/step_len);
-		    const unsigned int node_y = static_cast<unsigned int>(node.y()/step_len);
-		    const unsigned int node_z = static_cast<unsigned int>(node.z()/step_len);
-		    unsigned int out_index = static_cast<unsigned int>((node_z)*y_size + (node_y)*ncells + (node_x));
-		    data[out_index] += float(cell_val*update_weight);
-		  }
+      if (level == resolution_level) {
+        // just copy value to output array
+        int out_index = static_cast<int>((node.x()/step_len)*ncells*ncells + (node.y()/step_len)*ncells + (node.z()/step_len));
+        if (out_index >= data_size)
+          vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+        else
+          data[out_index] = cell_val;
+      }
+      else if (level > resolution_level) {
+        // cell is bigger than output cells.  copy value to all contained output cells.
+        const unsigned int us_factor = 1 << (level - resolution_level);
+        const unsigned int node_x_start = static_cast<unsigned int>(node.x()/step_len);
+        const unsigned int node_y_start = static_cast<unsigned int>(node.y()/step_len);
+        const unsigned int node_z_start = static_cast<unsigned int>(node.z()/step_len);
+        for (unsigned int z=node_z_start; z<node_z_start+us_factor; ++z) {
+        for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
+          for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
+          int out_index = z*y_size + y*ncells + x;
+          if (out_index >= data_size)
+            vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+          else
+            data[out_index] = cell_val;
+          }
+        }
+        }
+      }
+      else {
+        // cell is smaller than output cells. increment output cell value
+        unsigned int ds_factor = 1 << (resolution_level - level);
+        double update_weight = 1.0 / double(ds_factor*ds_factor*ds_factor);
+        const unsigned int node_x = static_cast<unsigned int>(node.x()/step_len);
+        const unsigned int node_y = static_cast<unsigned int>(node.y()/step_len);
+        const unsigned int node_z = static_cast<unsigned int>(node.z()/step_len);
+        unsigned int out_index = static_cast<unsigned int>((node_z)*y_size + (node_y)*ncells + (node_x));
+        data[out_index] += float(cell_val*update_weight);
+      }
     }
 
     // write the data into a bin file, generate a file name
@@ -150,7 +147,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     for (; dp < data + data_size; ++dp) {
       double P = 1.0 - vcl_exp(-*dp*step_len);
       // always positive so this is an ok way to round
-      unsigned char c = (unsigned char)(vcl_floor((255.0 * P) + 0.5)); 
+      unsigned char c = (unsigned char)(vcl_floor((255.0 * P) + 0.5));
       vsl_b_write(os, (char) c);
     }
     delete[] data;
@@ -173,7 +170,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // open the binary files streams, saved earlier
   unsigned int nx,ny,nz;
-	int y_size = ncells*ncells;
+  int y_size = ncells*ncells;
   vbl_array_3d<vsl_b_ifstream*> streams(dimx, dimy, dimz);
   for (unsigned z=0; z<dim.z(); z++) {
     for (unsigned y=0; y<dim.y(); y++) {
@@ -206,7 +203,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   os.write(reinterpret_cast<char*>(&ny_uint),sizeof(ny_uint));
   os.write(reinterpret_cast<char*>(&nz_uint),sizeof(nz_uint));
 
-  // combine the columnd from streams to generate one raw file 
+  // combine the columnd from streams to generate one raw file
   for (unsigned x=0; x<dim.x(); x++) {
     unsigned i=0;
     while (i<dim.z()*dim.y()*ncells*ncells*ncells) {
@@ -224,7 +221,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       }
     }
   }
-  os.close();    
+  os.close();
   delete[] byte_data;
 
   // remove the intermediate bin files
