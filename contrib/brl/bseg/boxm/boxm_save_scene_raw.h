@@ -170,7 +170,6 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // open the binary files streams, saved earlier
   unsigned int nx,ny,nz;
-  int y_size = ncells*ncells;
   vbl_array_3d<vsl_b_ifstream*> streams(dimx, dimy, dimz);
   for (unsigned z=0; z<dim.z(); z++) {
     for (unsigned y=0; y<dim.y(); y++) {
