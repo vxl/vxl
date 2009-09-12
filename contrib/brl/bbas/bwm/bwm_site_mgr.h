@@ -1,6 +1,7 @@
 #ifndef bwm_site_mgr_h_
 #define bwm_site_mgr_h_
-
+//:
+// \file
 #include "bwm_tableau_factory.h"
 #include "io/bwm_io_config_parser.h"
 #include "process/bwm_site_process.h"
@@ -13,7 +14,7 @@
 
 class bwm_site_mgr
 {
-public: 
+ public:
   typedef enum {MESH_FEATURE, MESH_IMAGE_PROCESSING, MESH_TERRAIN, VSOL, OBJ_UNDEF} BWM_OBJECT_TYPES;
 
   static bwm_site_mgr* instance();
@@ -36,7 +37,7 @@ public:
   void save_video_cams_and_world_pts_vrml();
   //: compute 3-d parameters, site bounding box and GSD
   void compute_3d_world_params();
-private:
+ private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;
 
@@ -45,7 +46,7 @@ private:
 
   bwm_tableau_factory tableau_factory_;
 
-  // object files are mapped to the file paths
+  //: object files are mapped to the file paths
   vcl_map<vcl_string, vcl_vector<vcl_string> > site_objs_;
   vcl_vector<vcl_string> object_types_;
   bwm_site_process* site_create_process_;
@@ -54,18 +55,17 @@ private:
   vul_timer timer_;
 
   void create_site_dialog(vgui_dialog_extensions &site_dialog,
-                               vcl_string &site_name,
-                               vcl_string &site_dir,
-                               vcl_string &pyr_exe_dir,
-                               vcl_vector<vcl_string> &files,
-                               bool* pyr_v, bool* act_v,
-                               vcl_vector<vcl_string> &pyr_levels,
-                               vcl_vector<vcl_string> &objs,
-                               int *choices,
-                               double &lat, double &lon, double &elev);
+                          vcl_string &site_name,
+                          vcl_string &site_dir,
+                          vcl_string &pyr_exe_dir,
+                          vcl_vector<vcl_string> &files,
+                          bool* pyr_v, bool* act_v,
+                          vcl_vector<vcl_string> &pyr_levels,
+                          vcl_vector<vcl_string> &objs,
+                          int *choices,
+                          double &lat, double &lon, double &elev);
 
   bwm_io_config_parser* parse_config();
 };
 
-#endif
-
+#endif // bwm_site_mgr_h_
