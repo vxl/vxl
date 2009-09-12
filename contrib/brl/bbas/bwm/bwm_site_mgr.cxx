@@ -15,8 +15,10 @@
 #include "video/bwm_video_corr.h"
 #include "video/bwm_video_cam_istream.h"
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/algo/vpgl_project.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
@@ -1129,4 +1131,86 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
   write_vrml_header(os);
   save_video_world_points_vrml_impl(os);  
   save_video_cameras_vrml_impl(os);
+}
+//: compute 3-d parameters, site bounding box and GSD
+void bwm_site_mgr::compute_3d_world_params()
+{
+  vcl_string path = "";
+  vcl_string ext = "*.txt";
+  vgui_dialog par_dlg("World Params");
+  par_dlg.file("Param File", ext, path);
+  if (!par_dlg.ask())
+    return;
+  vgl_box_3d<double> bb;
+  double gsd = 0;
+
+  bool found = false;
+  vcl_vector<bwm_observer_cam*> obsvs =
+    bwm_observer_mgr::instance()->observers_cam();
+  bwm_observer_video* obv = 0;
+
+  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+       oit != obsvs.end()&&!found; ++oit)
+    if ((*oit)->type_name()=="bwm_observer_video")
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
+
+  if (!found)
+  {
+    vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
+             << " no observer of type video\n";
+    return;
+  }
+  vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
+   if (!corrs.size()){
+     vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
+       << "no correspondences\n";
+     return;
+   }
+   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
+   if(!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()){
+     vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
+       << "no correspondences\n";
+     return;
+   }
+  //Add world points to bounding box
+  vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
+  for (; cit != corrs.end(); ++cit)
+  {
+    bwm_video_corr_sptr c = *cit;
+    if(!c) continue;
+    if(c->world_pt_valid())
+      bb.add(c->world_pt());
+  }
+  //to resore cam stream state
+  unsigned cam_number = cam_istr->camera_number();
+  cam_istr->seek_camera(0);
+  vpgl_perspective_camera<double>* cam = cam_istr->current_camera();  
+  //project the bounding box
+  vgl_box_2d<double> bb_2d = vpgl_project::project_bounding_box(*cam, bb);
+  //get the number of pixels on the diagonal
+  double w = bb_2d.width(), h = bb_2d.height();
+  double diag2 = vcl_sqrt(w*w + h*h);
+  //get the length of the 3-d bb diagonal
+  double w3 = bb.width(), h3 = bb.height(), d3 = bb.depth();
+  double diag3 = vcl_sqrt(w3*w3 + h3*h3 + d3*d3);
+  gsd = diag3/diag2;
+  vcl_ofstream os(path.c_str());
+  if(!os.is_open()){
+     vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
+       << "invalid parameter output path\n";
+     return;
+   }
+  os << "World Bounding Box\n";
+  os << bb << '\n';
+  os << "Ground Sample Distance(GSD): " << gsd << '\n';
+  os << "Bounding box size in GSD units\n"
+     << "Xsize:" << static_cast<unsigned>(bb.width()/gsd) 
+     << " Ysize:" << static_cast<unsigned>(bb.height()/gsd)
+     << " Zsize:" << static_cast<unsigned>(bb.depth()/gsd) << '\n';
+  os.close();
+  //restore camera stream state
+  cam_istr->seek_camera(cam_number);
 }

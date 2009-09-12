@@ -23,7 +23,6 @@
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
-
 bool bwm_observer_video::handle(const vgui_event &e)
 {
   if (!video_istr_) return bwm_observer_cam::handle(e);
@@ -557,7 +556,6 @@ void bwm_observer_video::display_video_corrs(unsigned frame_index)
     this->display_video_corr(c, frame_index, style);
   }
 }
-
 // display correspondences defined for current frame
 void bwm_observer_video::display_current_video_corrs()
 {
@@ -668,7 +666,9 @@ bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
   vgl_point_3d<double> pt1 = corrs[1]->world_pt();
   vgl_point_3d<double> pt2 = corrs[2]->world_pt();
   vgl_plane_3d<double> pl(pt0, pt1, pt2);
-  plane = pl;
+  double a = pl.a(), b= pl.b(), c=pl.c();
+  double norm = vcl_sqrt(a*a + b*b +c*c);
+  plane = vgl_plane_3d<double>(a/norm, b/norm, c/norm, pl.d()/norm);
   return true;
 }
 //: extract two-class neigborhoods from a video stream

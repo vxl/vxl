@@ -8,7 +8,6 @@
 #include <vcl_map.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_dialog_extensions.h>
 
@@ -35,6 +34,8 @@ public:
   void save_video_world_points_vrml();
   void save_video_cameras_vrml();
   void save_video_cams_and_world_pts_vrml();
+  //: compute 3-d parameters, site bounding box and GSD
+  void compute_3d_world_params();
 private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;

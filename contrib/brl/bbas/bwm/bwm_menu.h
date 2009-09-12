@@ -44,6 +44,7 @@ class bwm_menu
   static void exit() {bwm_tableau_mgr::instance()->exit(); }
   static void load_video_tableau(){bwm_site_mgr::instance()->load_video_tableau(); }
   static void save_cameras(){bwm_tableau_mgr::instance()->save_cameras(); }
+  static void save_world_params(){bwm_site_mgr::instance()->compute_3d_world_params();}
 };
 
 #endif
