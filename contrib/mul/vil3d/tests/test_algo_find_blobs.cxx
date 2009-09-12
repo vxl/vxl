@@ -101,9 +101,9 @@ static void test_all_background()
   tru.fill(0);
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test all-background image");
+                  "Test all-background image");
   test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test all-background image");
+                  "Test all-background image");
 }
 
 
@@ -121,9 +121,9 @@ static void test_all_foreground()
   tru.fill(1);
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test all-foreground image");
+                  "Test all-foreground image");
   test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test all-foreground image");
+                  "Test all-foreground image");
 }
 
 
@@ -132,7 +132,6 @@ static void test_all_foreground()
 //========================================================================
 static void test_single_central()
 {
-  const vil3d_find_blob_connectivity conn = vil3d_find_blob_connectivity_6_conn;
   const unsigned ni=9, nj=10, nk=11, np=1;
 
   vil3d_image_view<bool> src(ni, nj, nk, np);
@@ -145,10 +144,8 @@ static void test_single_central()
   vil3d_crop(tru, 3,3, 3,4, 3,5).fill(1);
   tru(6,5,4)=1; tru(4,7,5)=1; tru(5,6,8)=1;
 
-  test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test single central blob");
-  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test single central blob");
+  test_blob_image(src, vil3d_find_blob_connectivity_6_conn,  tru, "Test single central blob");
+  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru, "Test single central blob");
 }
 
 
@@ -167,10 +164,8 @@ static void test_single_edge()
   tru.fill(0);
   vil3d_crop(tru, 0,3, 3,4, 3,5).fill(1);
 
-  test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test single edge blob");
-  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test single edge blob");
+  test_blob_image(src, vil3d_find_blob_connectivity_6_conn,  tru, "Test single edge blob");
+  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru, "Test single edge blob");
 }
 
 
@@ -197,10 +192,8 @@ static void test_multiple_separate()
   vil3d_crop(tru, 2,4, 7,3, 3,3).fill(3);
   vil3d_crop(tru, 2,5, 2,5, 7,3).fill(4);
 
-  test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test multiple separate blobs");
-  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test multiple separate blobs");
+  test_blob_image(src, vil3d_find_blob_connectivity_6_conn,  tru, "Test multiple separate blobs");
+  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru, "Test multiple separate blobs");
 }
 
 //========================================================================
@@ -222,10 +215,8 @@ static void test_merging_blocks()
   vil3d_crop(tru, 1,6, 1,6, 1,6).fill(0);
   vil3d_crop(tru, 1,3, 1,3, 1,3).fill(1);
 
-  test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test simple merging case");
-  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test simple merging case");
+  test_blob_image(src, vil3d_find_blob_connectivity_6_conn,  tru, "Test simple merging case");
+  test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru, "Test simple merging case");
 }
 
 
@@ -283,7 +274,7 @@ static void test_multilimb_merging()
   tru(5, 5, 5)=2;
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test multilimb blob merging");
+                  "Test multilimb blob merging");
 }
 
 //=============================================================================
@@ -314,9 +305,9 @@ static void test_multilimb_merging2()
   tru(5, 4, 5)=2;
 
   test_blob_image(src, vil3d_find_blob_connectivity_6_conn, tru,
-    "Test multilimb blob merging2");
+                  "Test multilimb blob merging2");
   test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test multilimb blob merging2");
+                  "Test multilimb blob merging2");
 }
 
 
@@ -348,7 +339,7 @@ static void test_multilimb_merging3()
   tru(5, 4, 5)=2;
 
   test_blob_image(src, vil3d_find_blob_connectivity_26_conn, tru,
-    "Test multilimb blob merging3");
+                  "Test multilimb blob merging3");
 }
 
 //========================================================================
