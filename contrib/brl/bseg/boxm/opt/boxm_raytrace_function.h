@@ -93,12 +93,14 @@ class boxm_raytrace_function
                 }
 
                 // for each image pixel
-                for (unsigned int i = int(img_bb.min_x()+0.99); i <= img_bb.max_x(); ++i) {
+                for (unsigned int i = int(img_bb.min_x()+0.99); i <= img_bb.max_x(); ++i)
+                {
                     if (debug_lvl_ > 1) {
                         if (!(i % 10))
                             vcl_cout << '.';
                     }
-                    for (unsigned int j = int(img_bb.min_y()+0.99); j <= img_bb.max_y(); ++j) {
+                    for (unsigned int j = int(img_bb.min_y()+0.99); j <= img_bb.max_y(); ++j)
+                    {
                         if (!continue_trace(i - img_i0_ , j - img_j0_)) {
                             continue;
                         }
@@ -179,7 +181,8 @@ class boxm_raytrace_function
                         }
 
                         boct_tree_cell<T_loc,T_data > * curr_cell=tree->locate_point_global(enter_pt);
-                        while (continue_trace(i-img_i0_, j-img_j0_)) {
+                        while (continue_trace(i-img_i0_, j-img_j0_))
+                        {
                             boct_loc_code<T_loc> cell_code(curr_cell->get_code());
                             boct_tree_cell<T_loc,T_aux > * curr_aux_cell=NULL;
                             if (step_functor.is_aux_)
@@ -316,7 +319,7 @@ class boxm_iterate_cells_function
                                 boxm_aux_scene<T_loc,  T_data,  T_aux> &aux_scene,
                                 vpgl_camera_double_sptr cam,
                                 unsigned int ni, unsigned int nj )
-        :scene_(scene),aux_scene_(aux_scene),cam_(cam), img_ni_(ni), img_nj_(nj)
+    : scene_(scene), aux_scene_(aux_scene), img_ni_(ni), img_nj_(nj), cam_(cam)
     {}
 
 
@@ -354,13 +357,12 @@ class boxm_iterate_cells_function
     }
 
  protected:
-
     boxm_scene<tree_type> &scene_;
     boxm_aux_scene<T_loc,  T_data,  T_aux> &aux_scene_;
     bool reverse_traversal_;
 
     unsigned img_ni_;
-        unsigned img_nj_;
+    unsigned img_nj_;
 
     const vpgl_camera_double_sptr cam_;
 };

@@ -45,7 +45,7 @@ class boxm_update_image_functor_pass_1
   //: "default" constructor
   boxm_update_image_functor_pass_1(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
                                    vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
-    : obs_(image), pre_img_(pre_inf), vis_img_(vis_inf), alpha_integral_(image.ni(), image.nj(), 1)
+    : obs_(image), vis_img_(vis_inf), pre_img_(pre_inf), alpha_integral_(image.ni(), image.nj(), 1)
   {
     alpha_integral_.fill(0.0f);
     pre_img_.fill(0.0f);

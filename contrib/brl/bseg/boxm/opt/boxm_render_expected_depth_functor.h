@@ -21,7 +21,7 @@ class boxm_render_expected_depth_functor
                                      unsigned int ni,unsigned nj,
                                      bool scene_read_only=false,
                                      bool is_aux=true)
-  : expected_(expected), alpha_integral_(ni,nj, 1), vis_img_(mask_vis), center_(cam_center)
+  : expected_(expected), vis_img_(mask_vis), alpha_integral_(ni,nj,1), center_(cam_center)
   {
     alpha_integral_.fill(0.0f);
     expected_.fill(0.0f);
