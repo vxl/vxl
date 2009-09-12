@@ -136,7 +136,7 @@ MAIN( test_imls_surface )
       imesh_imls_surface::split_triangle_quadrature_with_deriv(x,p0,p1,p2,v0,v1,v2,eps2);
   vcl_cout << "integral 2 dx = "<<id.dI_phi<<vcl_endl;
 
-  TEST_NEAR("Same with and without deriv (phi)", ii.x(), id.I_phi, 1e-10);
+  TEST_NEAR("Same with and without deriv (phi)", ii.x(), id.I_phi, 2e-10);
   TEST_NEAR("Same with and without deriv ", ii.y(), id.I, 1e-10);
 
   n = cross_product(p1-p0,p2-p0)/2.0;
