@@ -142,10 +142,10 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
     mixture.remove_last();
     mixture.remove_last();
     mixture.remove_last();
-    valid = dynamic_cast<const vpdl_gaussian_indep<T,3>*>(&mixture2.distribution(0));
+    const vpdl_gaussian_indep<T,3>* gauss_indep = dynamic_cast<const vpdl_gaussian_indep<T,3>*>(&mixture2.distribution(0));
     TEST(("copy constructor <"+type_name+">").c_str(),
          mixture2.num_components() == 3 && mixture2.weight(1) == T(0.15) &&
-         valid, true);
+         gauss_indep != 0, true);
 
     vnl_vector_fixed<T,3> pt(T(0), T(1.5), T(1));
     T prob = T( 0.1*gauss1.prob_density(pt)
