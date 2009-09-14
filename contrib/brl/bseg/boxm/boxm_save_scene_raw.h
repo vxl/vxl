@@ -16,6 +16,7 @@
 #include <vcl_vector.h>
 #include <vcl_new.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
@@ -40,7 +41,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // number of cells for each block should be the same, because they have the
   // same tree max_level definitions
-  unsigned int ncells;
+  unsigned int ncells = 0;
   boxm_block_iterator<tree_type> iter(&scene);
   while (!iter.end()) {
     vgl_point_3d<int> idx = iter.index();
@@ -65,11 +66,11 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     // origin should specify center of first cell
     vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
-	  int data_size = ncells*ncells*ncells;
-	  int y_size = ncells*ncells;
-	  float *data = 0;
+    int data_size = ncells*ncells*ncells;
+    int y_size = ncells*ncells;
+    float *data = 0;
     vcl_cout << "Data Size=" << data_size << vcl_endl;
-	  data = new (std::nothrow)float[data_size];
+    data = new (std::nothrow)float[data_size];
 
     if (data == 0) {
       vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
@@ -155,6 +156,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     os.close();
     iter++;
   }
+  assert(ncells > 0);
 
   // combine the blocks
   vgl_vector_3d<unsigned> dim = scene.world_dim();
@@ -202,7 +204,6 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   os.write(reinterpret_cast<char*>(&nx_uint),sizeof(nx_uint));
   os.write(reinterpret_cast<char*>(&ny_uint),sizeof(ny_uint));
   os.write(reinterpret_cast<char*>(&nz_uint),sizeof(nz_uint));
- 
 
   // combine the column from streams to generate one raw file
   for (unsigned x=0; x<dim.x(); x++) {
