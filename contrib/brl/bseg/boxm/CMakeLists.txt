@@ -27,6 +27,7 @@ SET(boxm_sources
     boxm_update_triangle.h
     boxm_refine.h
     boxm_save_block_raw.h
+    boxm_save_scene_raw.h
     boxm_quad_scan_iterator.h              boxm_quad_scan_iterator.cxx
     boxm_compute_volume_visibility.h
     boxm_triangle_interpolation_iterator.h boxm_triangle_interpolation_iterator.txx
