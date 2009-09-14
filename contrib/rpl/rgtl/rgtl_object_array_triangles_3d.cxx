@@ -1,3 +1,5 @@
+//:
+// \file
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
@@ -560,6 +562,20 @@ rgtl_object_array_triangles_3d
 }
 
 //----------------------------------------------------------------------------
+//: Compute the center, c0, of the smallest possible sphere touching the three points.
+// This center will be in the plane of the triangle and in the bisecting planes
+// of the edges of the triangle.
+// \verbatim
+//                  |
+//                  |m02
+//         x0 O-----o----O x2
+//             \    |
+//              \   O c0
+//         m01___\_/
+//              _/\.
+//             /   \.
+//                  O  x1
+// \endverbatim
 bool
 rgtl_object_array_triangles_3d::pimpl
 ::compute_minimum_ball(double const x0[3],
@@ -568,22 +584,6 @@ rgtl_object_array_triangles_3d::pimpl
                        double c0[3],
                        double& radius_squared)
 {
-  // Compute the center, c0, of the smallest possible sphere touching
-  // the three points.  This center will be in the plane of the
-  // triangle and in the bisecting planes of the edges of the
-  // triangle.
-  // \verbatim
-  //                  |
-  //                  |m02
-  //         x0 O-----o----O x2
-  //             \    |
-  //              \   O c0
-  //         m01___\_/
-  //              _/\
-  //             /   \
-  //                  O  x1
-  // \endverbatim
-
   // Normals to two of the bisecting planes.
   double n01[3] = {x1[0]-x0[0], x1[1]-x0[1], x1[2]-x0[2]};
   double n02[3] = {x2[0]-x0[0], x2[1]-x0[1], x2[2]-x0[2]};
