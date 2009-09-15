@@ -1,5 +1,6 @@
 #include <boxm/opt/boxm_aux_scene.h>
 #include <boxm/opt/boxm_aux_traits.h>
+#include <boxm/opt/boxm_generate_opt_sample_functor.h>
 #include <boxm/opt/boxm_opt_appearance_estimator.h>
 #include <boxm/opt/boxm_opt_rt_bayesian_optimizer.h>
 #include <boxm/opt/boxm_raytrace_function.h>
