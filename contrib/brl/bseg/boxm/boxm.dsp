@@ -224,6 +224,9 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_SIMPL
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_sample+BOXM_APM_SIMPLE_GREY---~-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+vsl_b_ifstream.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

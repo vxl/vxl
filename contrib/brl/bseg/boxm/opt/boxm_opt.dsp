@@ -99,10 +99,10 @@ SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_SIMPLE_GREY.BOX
 SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_aux_scene+short+boxm_sample.BOXM_APM_SIMPLE_GREY+boxm_rt_sample.float---.cxx
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.boxm_rt_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short+BOXM_APM_SIMPLE_GREY+BOXM_AUX_OPT_RT_GREY---.cxx
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_rt_sample+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_rt_sample+float---~-.cxx
@@ -163,6 +163,9 @@ SOURCE=.\boxm_raytrace_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_render_expected_depth_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_opt_sample_functor.h
 # End Source File
 # End Group
 # End Target
