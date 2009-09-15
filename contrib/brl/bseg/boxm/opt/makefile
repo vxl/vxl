@@ -11,6 +11,7 @@ MANPAGE_SOURCES += boxm_update_image_functor.h
 MANPAGE_SOURCES += boxm_render_expected_image_functor.h
 MANPAGE_SOURCES += boxm_raytrace_function.h
 MANPAGE_SOURCES += boxm_render_expected_depth_functor.h
+MANPAGE_SOURCES += boxm_generate_opt_sample_functor.h
 
 SUBDIRS += pro
 
