@@ -80,7 +80,7 @@ MAIN( test_compute_visibility )
   world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(), 
                                  origin.y()+block_dim.y()*world_dim.y(), 
                                  origin.z()+block_dim.z()*world_dim.z()));
-  vpgl_camera_double_sptr camera = generate_camera_top_persp(world);
+  vpgl_camera_double_sptr camera = generate_camera_top(world);
 
   double X=5,Y=5,Z;
   for (Z=40; Z>-10; --Z)
