@@ -14,7 +14,7 @@ class boxm_generate_opt_sample_functor_pass_0
 {
  public:
   boxm_generate_opt_sample_functor_pass_0(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &observation,
-                                   unsigned int ni,unsigned nj)
+                                          unsigned int ni,unsigned nj)
     : obs_(observation)
   {
     scene_read_only_=true;
@@ -44,7 +44,7 @@ class boxm_generate_opt_sample_functor_pass_1
  public:
   //: "default" constructor
   boxm_generate_opt_sample_functor_pass_1(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
-                                   vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
+                                          vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
     : obs_(image), pre_img_(pre_inf), vis_img_(vis_inf), alpha_integral_(image.ni(), image.nj(), 1)
   {
     alpha_integral_.fill(0.0f);
@@ -96,7 +96,7 @@ class boxm_generate_opt_sample_functor_pass_2
  public:
   //: "default" constructor
   boxm_generate_opt_sample_functor_pass_2(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
-                                   vil_image_view<float> const& Beta_denom)
+                                          vil_image_view<float> const& Beta_denom)
   : obs_(image), Beta_denom_(Beta_denom), vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1)
   {
     alpha_integral_.fill(0.0f);
@@ -130,9 +130,9 @@ class boxm_generate_opt_sample_functor_pass_2
     pre_img_(i,j) +=  PI * Omega;
     vis_img_(i,j) = vis_prob_end;
 
-    aux_value.pre_ += pre * seg_len;
-    aux_value.vis_ = vis * seg_len;
- 
+    aux_val.pre_ += pre * seg_len;
+    aux_val.vis_ = vis * seg_len;
+
     const float Beta_num = pre + vis*PI;
     float Beta = 1.0f;
     if (Beta_denom_(i,j) < 1e-6) {
@@ -147,8 +147,9 @@ class boxm_generate_opt_sample_functor_pass_2
       vcl_cerr << " error: beta = " << Beta << "  setting to 0. " << vcl_endl;
       Beta = 0;
     }
-    aux_value.Beta_ += Beta * seg_len;
-    //aux_value.seg_len_ += seg_len;    return true;
+    aux_val.Beta_ += Beta * seg_len;
+    //aux_val.seg_len_ += seg_len;
+    return true;
   }
 
  public:
@@ -167,9 +168,9 @@ class boxm_generate_opt_sample_functor_pass_2
 
 template <class T_loc, class T_data>
 void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                          vpgl_camera_double_sptr cam,
-                          vil_image_view<typename T_data::obs_datatype> &obs,
-                          bool black_background = false)
+                                 vpgl_camera_double_sptr cam,
+                                 vil_image_view<typename T_data::obs_datatype> &obs,
+                                 bool black_background = false)
 {
     boxm_aux_scene<T_loc, T_data, boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir());
     typedef boxm_generate_opt_sample_functor_pass_0<T_data::apm_type,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype>  pass_0;
@@ -222,4 +223,4 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_cout<<"DONE."<<vcl_endl;
 }
 
-#endif // boxm_update_image_functor_h
+#endif // boxm_generate_opt_sample_functor_h
