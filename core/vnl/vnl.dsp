@@ -744,6 +744,9 @@ SOURCE=.\Templates/vnl_vector_fixed+vnl_rational.4-.cxx
 SOURCE=.\Templates/vnl_quaternion+vnl_rational-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+double.5-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_erf.cxx
 # End Source File
 # Begin Source File
