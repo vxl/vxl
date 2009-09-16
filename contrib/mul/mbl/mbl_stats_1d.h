@@ -21,7 +21,7 @@
 //   mbl_stats_1d stats,odd_stats,even_stats,sum_stats;
 //
 //   const int n = 10;
-//   for (int i=0;i<n;i++)
+//   for (unsigned i=0;i<n;i++)
 //   {
 //     stats.obs(i);
 //     if (i%2) even_stats.obs(i);
@@ -40,7 +40,8 @@ class mbl_stats_1d
   double sum_sq_;
   double min_v_;
   double max_v_;
-  int n_obs_;
+  unsigned n_obs_;
+  double w_obs_;
 
 
 public:
@@ -57,8 +58,15 @@ public:
     //: Add given observation
   void obs(double v);
 
-    //: Number of observations
-  int nObs() const;
+    //: Add given weighted observation
+    // \p weight doesn't affect the max or min records.
+  void obs(double v, double weight);
+
+    //: Number of discrete observations.
+  int nObs() const { return n_obs_; }
+
+    //: Weight of all observations
+  double wObs() const { return w_obs_; }
 
     //: Mean of current observations
   double mean() const ;
@@ -87,7 +95,6 @@ public:
   mbl_stats_1d& operator+=(const mbl_stats_1d& s1);
   void print_summary(vcl_ostream& os) const;
     //: Version number for I/O
-  short version_no() const;
   void b_write(vsl_b_ostream& bfs) const;
   void b_read(vsl_b_istream& bfs);
 

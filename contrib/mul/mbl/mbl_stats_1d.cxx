@@ -26,6 +26,7 @@ mbl_stats_1d::mbl_stats_1d(const vcl_vector<double>& observations)
 void mbl_stats_1d::clear()
 {
   n_obs_ = 0;
+  w_obs_ = 0;
   sum_ = 0;
   sum_sq_ = 0;
 }
@@ -38,7 +39,8 @@ void mbl_stats_1d::obs(double v)
     max_v_ = v;
     sum_ = v;
     sum_sq_ = v * v;
-    n_obs_++;
+    w_obs_=1.0;
+    n_obs_=1;
     return;
   }
 
@@ -47,17 +49,34 @@ void mbl_stats_1d::obs(double v)
   sum_ += v;
   sum_sq_ += v * v;
   n_obs_++;
+  w_obs_++;
 }
 
-int mbl_stats_1d::nObs() const
+void mbl_stats_1d::obs(double v, double weight)
 {
-  return n_obs_;
+  if (n_obs_ == 0)
+  {
+    min_v_ = v;
+    max_v_ = v;
+    sum_ = v * weight;
+    sum_sq_ = v * v * weight;
+    w_obs_=weight;
+    n_obs_=1;
+    return;
+  }
+
+  if (v<min_v_) min_v_ = v;
+  if (v>max_v_) max_v_ = v;
+  sum_ += v * weight;
+  sum_sq_ += v * v * weight;
+  w_obs_+=weight;
+  n_obs_++;
 }
 
 double mbl_stats_1d::mean() const
 {
   if (n_obs_==0) return 0;
-  else return sum_/n_obs_;
+  else return sum_/w_obs_;
 }
 
 double mbl_stats_1d::variance() const
@@ -65,7 +84,7 @@ double mbl_stats_1d::variance() const
   if (n_obs_==0) return 0;
 
   double mean_v = mean();
-  return sum_sq_/n_obs_ - mean_v * mean_v;
+  return sum_sq_/w_obs_ - mean_v * mean_v;
 }
 
 
@@ -82,7 +101,7 @@ double mbl_stats_1d::stdError() const
   if (n_obs_==0) return 0;
 
   double var_v = variance();
-  return vcl_sqrt(var_v/n_obs_);
+  return vcl_sqrt(var_v/w_obs_);
 }
 
 double mbl_stats_1d::min() const
@@ -109,17 +128,18 @@ double mbl_stats_1d::sumSq() const
 
 double mbl_stats_1d::rms() const
 {
-  return n_obs_==0 ? -1.0 : vcl_sqrt(sum_sq_/n_obs_);
+  return n_obs_==0 ? -1.0 : vcl_sqrt(sum_sq_/w_obs_);
 }
 
 
 mbl_stats_1d& mbl_stats_1d::operator+=(const mbl_stats_1d& s1)
 {
-  sum_ += s1.sum();
-  sum_sq_ += s1.sumSq();
-  n_obs_ += s1.nObs();
-  if (s1.min()<min_v_) min_v_ = s1.min();
-  if (s1.max()>max_v_) max_v_ = s1.max();
+  sum_ += s1.sum_;
+  sum_sq_ += s1.sum_sq_;
+  n_obs_ += s1.n_obs_;
+  w_obs_ += s1.w_obs_;
+  if (s1.min()<min_v_) min_v_ = s1.min_v_;
+  if (s1.max()>max_v_) max_v_ = s1.max_v_;
   return *this ;
 }
 
@@ -128,26 +148,24 @@ const double MAX_ERROR = 1.0e-8;
 //: Test for equality
 bool mbl_stats_1d::operator==(const mbl_stats_1d& s) const
 {
-  return n_obs_==s.nObs() &&
-         vcl_fabs(sum_-s.sum())<MAX_ERROR &&
-         vcl_fabs(sum_sq_-s.sumSq())<MAX_ERROR &&
-         vcl_fabs(min_v_-s.min())<MAX_ERROR &&
-         vcl_fabs(max_v_-s.max())<MAX_ERROR;
+  return n_obs_==s.n_obs_ &&
+         vcl_fabs(w_obs_-s.w_obs_)<MAX_ERROR &&
+         vcl_fabs(sum_-s.sum_)<MAX_ERROR &&
+         vcl_fabs(sum_sq_-s.sum_sq_)<MAX_ERROR &&
+         vcl_fabs(min_v_-s.min_v_)<MAX_ERROR &&
+         vcl_fabs(max_v_-s.max_v_)<MAX_ERROR;
 }
 
-//: Version number for I/O
-short mbl_stats_1d::version_no() const
-{
-  return 1;
-}
 
 void mbl_stats_1d::b_write(vsl_b_ostream& bfs) const
 {
-  vsl_b_write(bfs,version_no());
+  const short version = 2;
+  vsl_b_write(bfs,version);
   vsl_b_write(bfs,n_obs_);
   if (n_obs_==0) return;
   vsl_b_write(bfs,min_v_); vsl_b_write(bfs,max_v_);
   vsl_b_write(bfs,sum_); vsl_b_write(bfs,sum_sq_);
+  vsl_b_write(bfs,w_obs_);
 }
 
 void mbl_stats_1d::b_read(vsl_b_istream& bfs)
@@ -160,7 +178,11 @@ void mbl_stats_1d::b_read(vsl_b_istream& bfs)
   switch (file_version_no)
   {
    case 1:
-    vsl_b_read(bfs,n_obs_);
+    {
+      int tmp;
+      vsl_b_read(bfs, tmp);
+      n_obs_ = static_cast<unsigned>(tmp);
+    }
     if (n_obs_<=0) clear();
     else
     {
@@ -168,6 +190,19 @@ void mbl_stats_1d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,max_v_);
       vsl_b_read(bfs,sum_);
       vsl_b_read(bfs,sum_sq_);
+    }
+    w_obs_ = n_obs_;
+    break;
+   case 2:
+    vsl_b_read(bfs, n_obs_);
+    if (n_obs_<=0) clear();
+    else
+    {
+      vsl_b_read(bfs,min_v_);
+      vsl_b_read(bfs,max_v_);
+      vsl_b_read(bfs,sum_);
+      vsl_b_read(bfs,sum_sq_);
+      vsl_b_read(bfs,w_obs_);
     }
     break;
    default:

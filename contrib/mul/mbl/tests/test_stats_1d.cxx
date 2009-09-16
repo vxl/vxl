@@ -26,6 +26,23 @@ void test_stats_1d()
 
   mbl_stats_1d stats2 = stats;
   TEST("Equality operator",stats, stats2);
+
+  stats.clear();
+  mbl_stats_1d stats_slow;
+  for (int i=0;i<5;++i)
+  {
+    stats.obs(i, i);
+    for (int j=0;j<i;++j)
+      stats_slow.obs(i);
+  }
+
+  TEST_NEAR("weights", stats.wObs(), stats_slow.wObs(), 1e-9);
+  TEST_NEAR("mean", stats.mean(), stats_slow.mean(), 1e-9);
+  TEST_NEAR("std error", stats.stdError(), stats_slow.stdError(), 1e-9);
+
+
+
+
 }
 
 TESTMAIN(test_stats_1d);
