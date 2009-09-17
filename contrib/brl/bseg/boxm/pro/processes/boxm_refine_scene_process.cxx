@@ -74,6 +74,16 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_refine_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
     }
+  } else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+    if (scene->multi_bin()) {
+      vcl_cout << "boxm_refine_scene_process: multibin case is not implemented for BOXM_APM_SIMPLE_GREY yet" << vcl_endl;
+      return false;
+    }
+    else {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      boxm_refine_scene<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, thresh, reset);
+    }
   }
   else {
     vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
