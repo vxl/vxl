@@ -1,10 +1,10 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_update_rt_process.cxx
+// This is brl/bseg/boxm/opt/pro/processes/boxm_generate_opt_samples_process.cxx
 //:
 // \file
 // \brief Process to update the scene from an image and camera pair
 //
 // \author Gamze Tunali
-// \date Apr 21, 2009
+// \date Sep 15, 2009
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -16,33 +16,33 @@
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/opt/boxm_update_image_functor.h>
+#include <boxm/opt/boxm_generate_opt_sample_functor.h>
 
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <boxm/boxm_sample.h>
 
-namespace boxm_update_rt_process_globals
+namespace boxm_generate_opt_samples_process_globals
 {
   const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 1;
 }
 
-bool boxm_update_rt_process_cons(bprb_func_process& pro)
+bool boxm_generate_opt_samples_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm_update_rt_process_globals;
+  using namespace boxm_generate_opt_samples_process_globals;
   //process takes 4inputs
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The scene
-  //input[3]: The bin index to be updated
-  //input[4]: Use black background?
+  //input[3]: image name for saving scene
+  //input[4]: use black background 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
-  input_types_[3] = "unsigned";
+  input_types_[3] = "vcl_string";
   input_types_[4] = "bool";
   if (!pro.set_input_types(input_types_))
     return false;
@@ -51,12 +51,12 @@ bool boxm_update_rt_process_cons(bprb_func_process& pro)
   return true;
 }
 
-bool boxm_update_rt_process(bprb_func_process& pro)
+bool boxm_generate_opt_samples_process(bprb_func_process& pro)
 {
-  using namespace boxm_update_rt_process_globals;
+  using namespace boxm_generate_opt_samples_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << "boxm_update_rt_process: The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << "boxm_generate_opt_samples_process: The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
@@ -65,32 +65,16 @@ bool boxm_update_rt_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  unsigned bin_index =  pro.get_input<unsigned>(i++);
+  vcl_string img_name =  pro.get_input<vcl_string>(i++);
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
   if ((input_image == 0) || (camera == 0) || (scene == 0)) {
-     vcl_cout << "boxm_update_rt_process: null input value, cannot run" << vcl_endl;
+     vcl_cout << "boxm_generate_opt_samples_process: null input value, cannot run" << vcl_endl;
      return false;
   }
 
-  if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-    vil_image_view<vxl_byte> *img_byte
-        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
-    vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
-    vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-    if (!scene->multi_bin())
-    {
-      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      //boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
-      boxm_update_image_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, camera,img, use_black_background);
-    }
-    else
-    {
-      vcl_cout<<"Not yet implemented"<<vcl_endl;
-    }
-  } else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+  if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     vil_image_view<vxl_byte> *img_byte
         = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
@@ -99,14 +83,15 @@ bool boxm_update_rt_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_update_image_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, camera,img, use_black_background);
+      boxm_generate_opt_sample_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, camera,img,img_name,use_black_background);
     }
     else
     {
       vcl_cout<<"Not yet implemented"<<vcl_endl;
     }
-  } else {
-    vcl_cout << "boxm_update_rt_process: undefined APM type" << vcl_endl;
+  }
+  else {
+    vcl_cout << "boxm_generate_opt_samples_process: undefined APM type" << vcl_endl;
     return false;
   }
 

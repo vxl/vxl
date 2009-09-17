@@ -76,7 +76,6 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr img;
   vil_image_view_base_sptr img_mask;
-
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
@@ -93,18 +92,41 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
        vcl_cout<<"Ray tracing version not yet implemented"<<vcl_endl;
        return false;
     }
-
-    //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
+  //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
     img_mask = new vil_image_view<float>(mask);
 
     vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
     vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
     img = expected_byte;
-  }
-  else {
+  } else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+    vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> expected(ni,nj);
+    vil_image_view<float> mask(ni,nj);
+    if (!scene_ptr->multi_bin())
+    {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
+      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      //boxm_render_image_splatting_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,-1,true);
+      boxm_render_image_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, camera, expected, mask,-1,true);
+    }
+    else
+    {
+       vcl_cout<<"Ray tracing version not yet implemented"<<vcl_endl;
+       return false;
+    }
+  //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
+    img_mask = new vil_image_view<float>(mask);
+
+    vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
+    vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
+    img = expected_byte;
+  } else {
     vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;
     return false;
   }
+
+  
+  
+  
 
   unsigned j = 0;
   pro.set_output_val<vil_image_view_base_sptr>(j++, img);
