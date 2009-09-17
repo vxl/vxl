@@ -5,6 +5,7 @@ DECLARE( test_parse_block );
 DECLARE( test_parse_sequence );
 DECLARE( test_parse_tuple );
 DECLARE( test_parse_int_list );
+DECLARE( test_parse_colon_pairs_list );
 DECLARE( test_lda );
 DECLARE( test_file_data_wrapper );
 DECLARE( test_selected_data_wrapper );
@@ -60,6 +61,7 @@ register_tests()
   REGISTER( test_parse_sequence );
   REGISTER( test_parse_tuple );
   REGISTER( test_parse_int_list );
+  REGISTER( test_parse_colon_pairs_list );
   REGISTER( test_lda );
   REGISTER( test_file_data_wrapper );
   REGISTER( test_selected_data_wrapper );
