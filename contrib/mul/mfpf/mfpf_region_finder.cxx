@@ -329,7 +329,6 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
   // Just copy first plane
   vnl_vector<double> meanL2;
   unsigned nplanes=mean.size()/n_pixels_;
-  vcl_cout<<"mfpf_region_finder::get_image_of_model - nplanes= "<<nplanes<<vcl_endl;
 
   double min1=1.0E30;
   double max1=-1.0E30;
@@ -369,7 +368,6 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
   }
 
   double s =255/(max1-min1);
-  vcl_cout<<"Rescaling factors are min1="<<min1<<"\tmax1="<<max1<<"\ts="<<s<<vcl_endl;
   image.image().set_size(roi_ni_,roi_nj_);
   image.image().fill(0);
   unsigned q=0;

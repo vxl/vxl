@@ -16,6 +16,7 @@
 #include <mfpf/mfpf_region_pdf_builder.h>
 #include <mfpf/mfpf_region_finder.h>
 #include <mfpf/mfpf_region_finder_builder.h>
+#include <mfpf/mfpf_lin_clsfy_finder_builder.h>
 #include <mfpf/mfpf_sad_vec_cost.h>
 #include <mfpf/mfpf_sad_vec_cost_builder.h>
 #include <mfpf/mfpf_ssd_vec_cost.h>
@@ -43,6 +44,8 @@ void mfpf_add_all_loaders()
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_region_pdf_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_region_finder_builder());
   mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_hog_box_finder_builder());
+  mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_lin_clsfy_finder_builder());
+
   vsl_add_to_binary_loader(mfpf_edge_finder_builder());
   vsl_add_to_binary_loader(mfpf_norm_corr1d_builder());
   vsl_add_to_binary_loader(mfpf_grad_corr2d_builder());
@@ -50,6 +53,7 @@ void mfpf_add_all_loaders()
   vsl_add_to_binary_loader(mfpf_region_pdf_builder());
   vsl_add_to_binary_loader(mfpf_region_finder_builder());
   vsl_add_to_binary_loader(mfpf_hog_box_finder_builder());
+  vsl_add_to_binary_loader(mfpf_lin_clsfy_finder_builder());
 
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_edge_finder());
   mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_norm_corr1d());
