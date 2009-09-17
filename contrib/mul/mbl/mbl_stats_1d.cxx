@@ -93,6 +93,9 @@ double mbl_stats_1d::sd() const
   if (n_obs_==0) return 0;
 
   double var_v = variance();
+  // Use of numerically dodgy Sum{x^2} - {Sum x}^2
+  // can return negative numbers.
+  if (var_v<0) var_v=0;
   return vcl_sqrt(var_v);
 }
 
