@@ -37,7 +37,7 @@ bool boxm_generate_opt_samples_process_cons(bprb_func_process& pro)
   //input[1]: The camera of the observation
   //input[2]: The scene
   //input[3]: image name for saving scene
-  //input[4]: use black background 
+  //input[4]: use black background
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
@@ -65,7 +65,7 @@ bool boxm_generate_opt_samples_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  vcl_string img_name =  pro.get_input<vcl_string>(i++);
+  vcl_string img_name =  pro.get_input<vcl_string>(i++); // TODO - unused!!
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
@@ -83,7 +83,7 @@ bool boxm_generate_opt_samples_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_generate_opt_sample_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, camera,img,img_name,use_black_background);
+      boxm_generate_opt_sample_rt(*s, camera,img,use_black_background);
     }
     else
     {
