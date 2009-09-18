@@ -35,6 +35,7 @@
 #include <mbl/mbl_minimum_spanning_tree.h>
 #include <mbl/mbl_mod_gram_schmidt.h>
 #include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_sequence.h>
 #include <mbl/mbl_parse_tuple.h>
