@@ -275,6 +275,9 @@ SOURCE=.\test_parse_int_list.cxx
 SOURCE=.\test_sample_stats_1d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_parse_colon_pairs_list.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

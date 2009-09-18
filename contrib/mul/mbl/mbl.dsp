@@ -228,6 +228,9 @@ SOURCE=.\mbl_progress_time.cxx
 SOURCE=.\mbl_sample_stats_1d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_parse_colon_pairs_list.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 # End Source File
 # Begin Source File
@@ -643,6 +646,9 @@ SOURCE=.\mbl_parse_int_list.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_sample_stats_1d.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_colon_pairs_list.h
 # End Source File
 # End Group
 # End Target
