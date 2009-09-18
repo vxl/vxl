@@ -169,11 +169,12 @@ class boxm_generate_opt_sample_functor_pass_2
 
 template <class T_loc, class T_data>
 void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                 vpgl_camera_double_sptr cam,
-                                 vil_image_view<typename T_data::obs_datatype> &obs,
-                                 bool black_background = false)
+                          vpgl_camera_double_sptr cam,
+                          vil_image_view<typename T_data::obs_datatype> &obs,
+                          vcl_string iname,
+                          bool black_background = false)
 {
-    boxm_aux_scene<T_loc, T_data, boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir());
+    boxm_aux_scene<T_loc, T_data, boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype > aux_scene(&scene,iname); //boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir());
     typedef boxm_generate_opt_sample_functor_pass_0<T_data::apm_type,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype>  pass_0;
     boxm_raytrace_function<pass_0,T_loc, T_data,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
     vcl_cout<<"PASS 0"<<vcl_endl;
@@ -220,7 +221,7 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     pass_2 pass_2_functor(obs,Beta_denom_img);
     raytracer_2.run(pass_2_functor);
 
-    aux_scene.clean_scene();
+    //aux_scene.clean_scene();
     vcl_cout<<"DONE."<<vcl_endl;
 }
 

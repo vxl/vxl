@@ -6,6 +6,7 @@
 #include <boxm/opt/boxm_raytrace_function.h>
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_mog_grey_processor.h>
+#include <boxm/boxm_simple_grey_processor.h>
 #include <vil/vil_math.h>
 #include <vcl_iostream.h>
 
