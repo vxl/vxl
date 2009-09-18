@@ -9,6 +9,7 @@ SOURCES += processes/boxm_opt_bayesian_update_process.cxx
 SOURCES += processes/boxm_render_expected_depth_rt_process.cxx
 SOURCES += processes/boxm_update_rt_process.cxx
 SOURCES += processes/boxm_render_expected_rt_process.cxx
+SOURCES += processes/boxm_generate_opt_samples_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

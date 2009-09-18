@@ -49,6 +49,7 @@ SOURCES += mbl_wt_histogram.cxx
 SOURCES += mbl_dyn_prog.cxx
 SOURCES += mbl_progress_hierarchy.cxx
 SOURCES += mbl_sample_stats_1d.cxx
+SOURCES += mbl_parse_colon_pairs_list.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
