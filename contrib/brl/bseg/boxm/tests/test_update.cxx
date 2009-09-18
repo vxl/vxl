@@ -45,7 +45,6 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& worl
   for (unsigned i=0; i<centers.size(); i++)
   {
     vgl_point_3d<double> camera_center  = centers[i];
-    vpgl_camera_double_sptr persp_cam=generate_camera_top_persp(world);
     vpgl_camera_double_sptr rat_cam = generate_camera_top(world);
     rat_cameras.push_back(rat_cam);
 
