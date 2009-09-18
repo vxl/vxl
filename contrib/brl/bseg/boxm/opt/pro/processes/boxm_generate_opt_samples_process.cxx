@@ -83,7 +83,7 @@ bool boxm_generate_opt_samples_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_generate_opt_sample_rt(*s, camera,img,use_black_background);
+      boxm_generate_opt_sample_rt(*s, camera,img,img_name,use_black_background);
     }
     else
     {
