@@ -116,15 +116,22 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
       }
       // update with new appearance
       boxm_opt_compute_appearance<APM>(obs_vector, pre_vector, vis_vector, data.appearance_);
-      for (unsigned int i=0; i<aux_readers.size(); ++i) {
-        aux_readers[i]->close();
-      }
+      cell->set_data(data);
+    }
+    scene_.write_active_block();
+    for (unsigned int i=0; i<aux_readers.size(); ++i) {
+      aux_readers[i]->close();
     }
     iter++;
   }
 #ifdef DEBUG
   vcl_cout << "done with all cells" << vcl_endl;
 #endif
+  // clear the aux scenes so that its starts with the refined scene next time
+  for (unsigned i=0; i<aux_scenes.size(); i++) {
+    aux_scenes[i].clean_scene();
+  }
+  
   return true;
 }
 
