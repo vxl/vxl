@@ -5,19 +5,19 @@
 // Builds a model of patch around a given point.
 // For simplicity, assumes fixed scale and orientation across all data.
 // Input data file format:
-/*
-patch_builder: mfpf_norm_corr2d_builder { ni: 11 nj: 11 }
-pt_index: 31 // Which point to use
-res_level: 1
-model_path: patch_model.bfs
-
-image_dir: ../images/
-points_dir: ../points/
-images: {
-  image1.pts : image1.jpg 
-  image2.pts : image2.jpg 
-}
-*/
+// \code
+// patch_builder: mfpf_norm_corr2d_builder { ni: 11 nj: 11 }
+// pt_index: 31 // Which point to use
+// res_level: 1
+// model_path: patch_model.bfs
+//
+// image_dir: ../images/
+// points_dir: ../points/
+// images: {
+//   image1.pts : image1.jpg
+//   image2.pts : image2.jpg
+// }
+// \endcode
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
@@ -43,6 +43,7 @@ images: {
 
 #include <msm/msm_points.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 //: Structure to hold parameters
 struct tool_params
@@ -124,9 +125,9 @@ void tool_params::read_from_file(const vcl_string& path)
 
 void print_usage()
 {
-  vcl_cout<<"mfpf_build_finder -p param_file\n";
-  vcl_cout<<"Tool to build a finder from a set of training images\n";
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"mfpf_build_finder -p param_file\n"
+          <<"Tool to build a finder from a set of training images\n"
+          <<vcl_endl;
 }
 
 int main(int argc, char** argv)
