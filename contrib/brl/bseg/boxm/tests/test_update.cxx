@@ -52,6 +52,7 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& worl
     for (unsigned i=0; i<corners.size(); i++) {
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
+      vpgl_perspective_camera<double> persp_cam;
       persp_cam->project(c.x(), c.y() ,c.z(), u, v);
       rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
       bb.add(vgl_point_2d<double> (u,v));
@@ -199,8 +200,8 @@ MAIN( test_update )
   }
   vgl_box_3d<double> world;
   world.add(origin);
-  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(), 
-                                 origin.y()+block_dim.y()*world_dim.y(), 
+  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(),
+                                 origin.y()+block_dim.y()*world_dim.y(),
                                  origin.z()+block_dim.z()*world_dim.z()));
 #if 0
   vpgl_camera_double_sptr camera = generate_camera_top(world);
