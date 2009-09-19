@@ -11,15 +11,10 @@ template <class Type>
 void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,
                                            long double& ratio)
 {
-  //A few checks on the map range parameters
-  assert(max<=vcl_numeric_limits<Type>::max());
-  Type mymin;
-  if (!vcl_numeric_limits<Type>::is_integer && !vcl_numeric_limits<Type>::is_exact)
-    mymin = -vcl_numeric_limits<Type>::max();
-  else
-    mymin = vcl_numeric_limits<Type>::min();
-  assert(min>=mymin);
   assert(max>=min);
+  assert(!vcl_numeric_limits<Type>::has_infinity ||
+         (-min != vcl_numeric_limits<Type>::infinity() &&
+           max != vcl_numeric_limits<Type>::infinity()));
   ratio = 1.0;
   if (max!=min)
     ratio = 1.0/(max - min);
