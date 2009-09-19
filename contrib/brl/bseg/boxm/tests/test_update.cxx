@@ -53,7 +53,7 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& worl
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
       vpgl_perspective_camera<double> persp_cam;
-      persp_cam->project(c.x(), c.y() ,c.z(), u, v);
+      persp_cam.project(c.x(), c.y() ,c.z(), u, v);
       rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
       bb.add(vgl_point_2d<double> (u,v));
 
