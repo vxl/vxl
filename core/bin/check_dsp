@@ -586,7 +586,7 @@ foreach my $dir (@DIRS)
 
 sub missing_message
 {
-  my ($txt, $file) = @_;
+  my ($txt, $file) = @_; $txt =~ s/\\/\\\\/g if ($shell);
   my $dsp = ($file =~ m/\.dsp$/) ? 1 : '';
   if ($shell && $dsp) { print "echo '# Begin Source File\r' >>\t$file\necho '$txt\r' >>\t$file\necho '# End Source File\r' >>\t$file"; }
   elsif ($shell) { print "echo '$txt' >>\t$file"; }
@@ -595,7 +595,7 @@ sub missing_message
 
 sub removing_message
 {
-  my ($txt, $file, $comment) = @_;
+  my ($txt, $file, $comment) = @_; $txt =~ s/\\/\\\\/g if ($shell);
   my $eoln = ($file =~ m/\.dsp$/) ? "\r" : '';
   if ($shell) { print "echo '$comment remove $txt$eoln' >>\t$file"; }
   else { print "$txt\tmust be removed from $file"; }
@@ -603,7 +603,7 @@ sub removing_message
 
 sub duplicate_message
 {
-  my ($txt, $file, $comment) = @_;
+  my ($txt, $file, $comment) = @_; $txt =~ s/\\/\\\\/g if ($shell);
   my $eoln = ($file =~ m/\.dsp$/) ? "\r" : '';
   if ($shell) { print "echo '$comment remove duplicate $txt$eoln' >>\t$file"; }
   else { print "$txt\t(duplicate) must be removed from $file"; }
