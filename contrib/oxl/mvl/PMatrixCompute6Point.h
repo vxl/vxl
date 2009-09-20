@@ -13,6 +13,6 @@
 
 #include <mvl/PMatrixComputeLinear.h>
 
-typedef PMatrixCompute6Point PMatrixComputeLinear;
+typedef PMatrixComputeLinear PMatrixCompute6Point;
 
 #endif // PMatrixCompute6Point_h_

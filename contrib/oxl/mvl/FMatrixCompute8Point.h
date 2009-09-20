@@ -13,6 +13,6 @@
 
 #include <mvl/FMatrixComputeLinear.h>
 
-typedef FMatrixCompute8Point FMatrixComputeLinear;
+typedef FMatrixComputeLinear FMatrixCompute8Point;
 
 #endif // FMatrixCompute8Point_h_
