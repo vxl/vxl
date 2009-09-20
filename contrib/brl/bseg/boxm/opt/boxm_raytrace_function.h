@@ -6,24 +6,23 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_utils.h>
+#include <boxm/boxm_raytrace_operations.h>
+#include <boxm/boxm_block_vis_graph_iterator.h>
+#include <boxm/opt/boxm_aux_scene.h>
+
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
 
-#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
-
-#include <boxm/boxm_raytrace_operations.h>
-#include <boxm/boxm_block_vis_graph_iterator.h>
-#include <boxm/opt/boxm_aux_scene.h>
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
