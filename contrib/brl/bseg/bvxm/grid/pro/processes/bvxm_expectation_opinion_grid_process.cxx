@@ -11,12 +11,11 @@
 //  <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h>
-#include <vul/vul_file.h>
+#include <vcl_string.h>
 
 namespace bvxm_expectation_opinion_grid_process_globals
 {
@@ -53,7 +52,7 @@ bool bvxm_expectation_opinion_grid_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() != 2)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " <<0 << vcl_endl;
+    vcl_cout << pro.name() << "The number of inputs should be 2" << vcl_endl;
     return false;
   }
 
