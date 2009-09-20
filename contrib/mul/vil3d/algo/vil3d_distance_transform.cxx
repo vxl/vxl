@@ -5,14 +5,12 @@
 // \author Kola Babalola
 
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_cassert.h>
-#include <vcl_algorithm.h>
 #include <vil3d/algo/vil3d_fill_boundary.h>
 #include <vil3d/algo/vil3d_threshold.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil/vil_fill.h>
-#include <vbl/vbl_array_3d.h>
-
+#include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 
 //: Compute signed distance transform in 3d from zeros in original image.
 //  Image is assumed to be filled with max_dist
@@ -78,11 +76,11 @@ template<class T> void print_values(const vil3d_image_view<T> &img)
 //  thin edge of the true and false regions of the mask. The values inside
 //  the mask are negative and those outside are positive
 void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
-                   vil3d_image_view<float>& image,
-                   float max_dist,
-                   const float distance_link_i,
-                   const float distance_link_j,
-                   const float distance_link_k)
+                                     vil3d_image_view<float>& image,
+                                     float max_dist,
+                                     const float distance_link_i,
+                                     const float distance_link_j,
+                                     const float distance_link_k)
 {
   image.set_size(mask.ni(),mask.nj(),mask.nk(),mask.nplanes());
   image.fill(max_dist);
@@ -135,9 +133,9 @@ void vil3d_distance_transform(vil3d_image_view<float>& image, const float distan
   // Flip to achieve high to low pass
   unsigned ni = image.ni(), nj = image.nj(), nk = image.nk();
   vil3d_image_view<float> flip_image(image.memory_chunk(),
-                    &image(ni-1,nj-1,nk-1), ni,nj,nk,1,
-                    -image.istep(), -image.jstep(), -image.kstep(),
-                    image.nplanes());
+                                     &image(ni-1,nj-1,nk-1), ni,nj,nk,1,
+                                     -image.istep(), -image.jstep(), -image.kstep(),
+                                     image.nplanes());
   vil3d_distance_transform_one_way(flip_image,distance_link_i,distance_link_j,distance_link_k);
 }
 
@@ -148,8 +146,8 @@ void vil3d_distance_transform(vil3d_image_view<float>& image, const float distan
 //  nearest original zero region.
 void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
                                        vil3d_image_view<vil_rgb<float> >& orient,
-                                       const float distance_link_i, 
-                                       const float distance_link_j, 
+                                       const float distance_link_i,
+                                       const float distance_link_j,
                                        const float distance_link_k)
 {
   // Low to high pass
@@ -158,9 +156,9 @@ void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
   // Flip to achieve high to low pass
   unsigned ni = image.ni(), nj = image.nj(), nk = image.nk();
   vil3d_image_view<float> flip_image(image.memory_chunk(),
-                    &image(ni-1,nj-1,nk-1), ni,nj,nk,1,
-                    -image.istep(), -image.jstep(), -image.kstep(),
-                    image.nplanes());
+                                     &image(ni-1,nj-1,nk-1), ni,nj,nk,1,
+                                     -image.istep(), -image.jstep(), -image.kstep(),
+                                     image.nplanes());
 
   // reverse the directions
   vil3d_image_view<vil_rgb<float> >::iterator it = orient.begin();
@@ -172,11 +170,11 @@ void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
 
   //Flip the directions too
   vil3d_image_view<vil_rgb<float> > flip_orient(orient.memory_chunk(),
-                    &orient(ni-1,nj-1,nk-1), ni,nj,nk,1,
-                    -orient.istep(), -orient.jstep(), -orient.kstep(),
-                    orient.nplanes());
+                                                &orient(ni-1,nj-1,nk-1), ni,nj,nk,1,
+                                                -orient.istep(), -orient.jstep(), -orient.kstep(),
+                                                orient.nplanes());
 
-  
+
  vil3d_distance_transform_one_way_with_dir(flip_image,flip_orient,distance_link_i,distance_link_j,distance_link_k);
 }
 
@@ -186,9 +184,9 @@ void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
 //  On exit, the values are the 8-connected distance to the nearest
 //  original zero region above or to the left of current point.
 //  One pass of distance transform, going from low to high i,j,k.
-void vil3d_distance_transform_one_way(vil3d_image_view<float>& image, 
-                                      const float distance_link_i, 
-                                      const float distance_link_j, 
+void vil3d_distance_transform_one_way(vil3d_image_view<float>& image,
+                                      const float distance_link_i,
+                                      const float distance_link_j,
                                       const float distance_link_k)
 {
   assert(image.nplanes()==1);
@@ -374,15 +372,15 @@ float vil3d_min_comp(float const& a, float const& b, bool& comp)
 //  background, and zero at the places of interest.
 //  Directions are assumed to be filled with max_dist.
 //  On exit, the values are the 8-connected distance to the nearest
-//  original zero region above or to the left of current point. The 
+//  original zero region above or to the left of current point. The
 //  direction shows the relative position of the closest pixel with value 0.
 //  e.g. pixel (10,10,10) has vector (-2,-2,-2), so the closest 0 is at (8,8,8).
 //  One pass of distance transform, going from low to high i,j,k.
-void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image, 
-                                      vil3d_image_view<vil_rgb<float> >& orient, 
-                                      const float distance_link_i, 
-                                      const float distance_link_j, 
-                                      const float distance_link_k)
+void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
+                                               vil3d_image_view<vil_rgb<float> >& orient,
+                                               const float distance_link_i,
+                                               const float distance_link_j,
+                                               const float distance_link_k)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -400,22 +398,21 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
   vcl_ptrdiff_t o8 = -kstep-jstep, o9 = -kstep-jstep+istep, o10 = -kstep+istep;
   vcl_ptrdiff_t o11 = -kstep+jstep+istep, o12 = -kstep+jstep, o13 = -kstep+jstep-istep;
 
-  vcl_ptrdiff_t oo1 = -orient_istep; 
-  vcl_ptrdiff_t oo2 = -orient_jstep-orient_istep; 
-  vcl_ptrdiff_t oo3 = -orient_jstep; 
+  vcl_ptrdiff_t oo1 = -orient_istep;
+  vcl_ptrdiff_t oo2 = -orient_jstep-orient_istep;
+  vcl_ptrdiff_t oo3 = -orient_jstep;
   vcl_ptrdiff_t oo4 = -orient_jstep+orient_istep;
-  vcl_ptrdiff_t oo5 = -orient_kstep; 
-  vcl_ptrdiff_t oo6 = -orient_kstep-orient_istep; 
+  vcl_ptrdiff_t oo5 = -orient_kstep;
+  vcl_ptrdiff_t oo6 = -orient_kstep-orient_istep;
   vcl_ptrdiff_t oo7 = -orient_kstep-orient_jstep-orient_istep;
-  vcl_ptrdiff_t oo8 = -orient_kstep-orient_jstep; 
-  vcl_ptrdiff_t oo9 = -orient_kstep-orient_jstep+orient_istep; 
+  vcl_ptrdiff_t oo8 = -orient_kstep-orient_jstep;
+  vcl_ptrdiff_t oo9 = -orient_kstep-orient_jstep+orient_istep;
   vcl_ptrdiff_t oo10 = -orient_kstep+orient_istep;
-  vcl_ptrdiff_t oo11 = -orient_kstep+orient_jstep+orient_istep; 
-  vcl_ptrdiff_t oo12 = -orient_kstep+orient_jstep; 
+  vcl_ptrdiff_t oo11 = -orient_kstep+orient_jstep+orient_istep;
+  vcl_ptrdiff_t oo12 = -orient_kstep+orient_jstep;
   vcl_ptrdiff_t oo13 = -orient_kstep+orient_jstep-orient_istep;
 
 
-  
   // distance vectors to the neighbors of a pixel
   vil_rgb<float> v1(1,0,0);
   vil_rgb<float> v2(1,1,0);
@@ -478,7 +475,6 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
       if (found) *orient_p0=orient_p0[oo3]+v3;
       *p0 = vil3d_min_comp(p0[o4]+distance_link_ij,*p0,found);  // (1,-1)
       if (found) *orient_p0=orient_p0[oo4]+v4;
-
     }
 
     // for last column - special case
@@ -676,7 +672,6 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
     *p0 = vil3d_min_comp(p0[o8] +distance_link_jk,*p0,found);
     if (found) *orient_p0=orient_p0[oo8]+v8;
   }
-
 }
 
 
@@ -684,8 +679,8 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
 //  On exit, the values are the 8-connected distance to the
 //  nearest original zero region (or max_dist, if that is smaller).
 void vil3d_distance_transform(const vil3d_image_view<bool>& mask,
-                vil3d_image_view<float>& distance_image,
-                float max_dist)
+                              vil3d_image_view<float>& distance_image,
+                              float max_dist)
 {
   distance_image.set_size(mask.ni(),mask.nj(),mask.nk());
   distance_image.fill(max_dist);
