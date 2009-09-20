@@ -1,4 +1,5 @@
 // This is core/vidl/vidl_ffmpeg_istream.cxx
+#include "vidl_ffmpeg_istream.h"
 
 #include <vidl/vidl_config.h>
 
@@ -8,8 +9,6 @@
 
 // The ffmpeg API keeps changing, so we use different implementations
 // depending on which version of ffmpeg we have.
-
-#include "vidl_ffmpeg_istream.h"
 
 extern "C" {
 // some versions of FFMPEG require this definition before including 

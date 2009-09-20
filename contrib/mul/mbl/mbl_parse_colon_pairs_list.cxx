@@ -1,9 +1,8 @@
+#include "mbl_parse_colon_pairs_list.h"
 //:
 // \file
 // \brief Parse list of string pairs separated by colons
 // \author Tim Cootes
-
-#include <mbl/mbl_parse_colon_pairs_list.h>
 
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_block.h>
@@ -23,8 +22,8 @@
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_colon_pairs_list(const vcl_string& data,
-                          vcl_vector<vcl_string>& item1,
-                          vcl_vector<vcl_string>& item2)
+                                vcl_vector<vcl_string>& item1,
+                                vcl_vector<vcl_string>& item2)
 {
   vcl_istringstream data_stream(data);
   mbl_parse_colon_pairs_list(data_stream,item1,item2);
@@ -42,8 +41,8 @@ void mbl_parse_colon_pairs_list(const vcl_string& data,
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_colon_pairs_list(vcl_istream& is,
-                          vcl_vector<vcl_string>& item1,
-                          vcl_vector<vcl_string>& item2)
+                                vcl_vector<vcl_string>& item1,
+                                vcl_vector<vcl_string>& item2)
 {
   char c;
   is >> vcl_ws>>c;
@@ -101,7 +100,6 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
     is.clear(vcl_ios::failbit);  // Set error flag
     throw (mbl_exception_parse_error(error_msg));
   }
-
 }
 
 //: Writes pairs to a stream, separated by colons
@@ -113,17 +111,17 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
 // }
 // \endverbatim
 void mbl_write_colon_pairs_list(vcl_ostream& os,
-                          const vcl_vector<vcl_string>& item1,
-                          const vcl_vector<vcl_string>& item2)
+                                const vcl_vector<vcl_string>& item1,
+                                const vcl_vector<vcl_string>& item2)
 {
   assert(item1.size()==item2.size());
-  os<<vsl_indent()<<"{"<<vcl_endl;
+  os<<vsl_indent()<<'{'<<vcl_endl;
   vsl_indent_inc(os);
   for (unsigned i=0;i<item1.size();++i)
   {
     os<<vsl_indent()<<item1[i]<<" : "<<item2[i]<<vcl_endl;
   }
   vsl_indent_dec(os);
-  os<<"}"<<vcl_endl;
+  os<<'}'<<vcl_endl;
 }
 

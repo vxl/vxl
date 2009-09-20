@@ -1,6 +1,5 @@
-#include <vtol/vtol_intensity_face.h>
 #include "test_ifa_factory.h"
-
+#include <vtol/vtol_intensity_face.h>
 
 test_ifa_factory::
 test_ifa_factory()

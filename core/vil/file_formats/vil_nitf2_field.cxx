@@ -2,17 +2,18 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for 
 // Air Force Research Laboratory, 2005.
 
-#include "vil_nitf2.h"
 #include "vil_nitf2_field.h"
+#include "vil_nitf2.h"
 #include "vil_nitf2_field_formatter.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_index_vector.h"
 
-vil_nitf2::enum_field_type vil_nitf2_field::type() const 
+vil_nitf2::enum_field_type vil_nitf2_field::type() const
 { 
   if (m_definition && m_definition->formatter) {
     return m_definition->formatter->field_type;
-  } else { 
+  }
+  else { 
     return vil_nitf2::type_undefined;
   }
 }
@@ -42,7 +43,7 @@ vil_nitf2_field::field_tree* vil_nitf2_field::get_tree( ) const
 
 vil_nitf2_field::field_tree::~field_tree()
 {
-  for( unsigned int i = 0 ; i < children.size() ; i++ ){
+  for ( unsigned int i = 0 ; i < children.size() ; i++ ) {
     delete children[i];
   }
   children.clear();

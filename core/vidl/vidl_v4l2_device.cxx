@@ -1,3 +1,4 @@
+#include "vidl_v4l2_device.h"
 //:
 // \file
 //
@@ -6,6 +7,9 @@
 //  Modifications
 //   15 Apr 2009 Created (A. Garrido)
 //\endverbatim
+
+#include "vidl_pixel_format.h"
+#include "vidl_v4l2_pixel_format.h"
 
 extern "C" {
 #include <sys/types.h>
@@ -20,9 +24,6 @@ extern "C" {
 #include <vcl_cstdlib.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
-#include "vidl_pixel_format.h"
-#include "vidl_v4l2_device.h"
-#include "vidl_v4l2_pixel_format.h"
 
 // ----------------- local functions ---------------
 namespace {

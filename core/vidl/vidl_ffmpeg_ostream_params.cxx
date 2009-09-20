@@ -2,6 +2,7 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include "vidl_ffmpeg_ostream_params.h"
 //:
 // \file
 // \author Matt Leotta
@@ -16,8 +17,6 @@
 // the headers for C++ compatibility
 #define __STDC_CONSTANT_MACROS
 #endif // VIDL_HAS_FFMPEG
-
-#include "vidl_ffmpeg_ostream_params.h"
 
 #if VIDL_HAS_FFMPEG
 

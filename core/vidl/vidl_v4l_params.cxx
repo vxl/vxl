@@ -10,9 +10,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vidl_v4l_ulong_fix.h" // include first to fix linux/videodev.h ulong problem
-#include "vidl_pixel_format.h"
 #include "vidl_v4l_params.h"
-
+#include "vidl_pixel_format.h"
 
 //: convert from vidl pixel format to v4l pixel format
 int vidl_v4l_params::vidlpf_to_v4lpf(vidl_pixel_format vid_pf)
@@ -41,7 +40,7 @@ int vidl_v4l_params::vidlpf_to_v4lpf(vidl_pixel_format vid_pf)
     case VIDL_PIXEL_FORMAT_MONO_8: return VIDEO_PALETTE_GREY;
     case VIDL_PIXEL_FORMAT_MONO_16: return -1;
     default: return -1;
-    };
+    }
 }
 
 //: convert from v4l pixel format to vidl pixel format
@@ -61,6 +60,6 @@ vidl_pixel_format vidl_v4l_params::v4lpf_to_vidlpf(int v4l_pf)
     case VIDEO_PALETTE_UYVY: return VIDL_PIXEL_FORMAT_UYVY_422;
     case VIDEO_PALETTE_GREY: return VIDL_PIXEL_FORMAT_MONO_8;
     default: return VIDL_PIXEL_FORMAT_UNKNOWN;
-    };
+    }
 }
 

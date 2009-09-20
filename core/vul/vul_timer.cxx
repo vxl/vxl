@@ -1,14 +1,5 @@
 // This is core/vul/vul_timer.cxx
-
-#include <vcl_ctime.h>
-#if defined(como4301) && defined(__linux__)
-# include <sys/types.h>
-# include <sys/select.h>
-# define __USE_BSD
-#endif
-#include <vcl_sys/time.h>
-# undef __USE_BSD
-
+#include "vul_timer.h"
 //:
 // \file
 //
@@ -39,7 +30,14 @@
 //    what you get from a stop watch timer.
 //
 
-#include "vul_timer.h"
+#include <vcl_ctime.h>
+#if defined(como4301) && defined(__linux__)
+# include <sys/types.h>
+# include <sys/select.h>
+# define __USE_BSD
+#endif
+#include <vcl_sys/time.h>
+# undef __USE_BSD
 
 struct vul_timer_data
 {

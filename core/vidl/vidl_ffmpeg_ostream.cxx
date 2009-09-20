@@ -1,10 +1,9 @@
 // This is core/vidl/vidl_ffmpeg_ostream.cxx
+#include "vidl_ffmpeg_ostream.h"
 
 #include <vidl/vidl_config.h>
 
 #if VIDL_HAS_FFMPEG
-
-#include "vidl_ffmpeg_ostream.h"
 
 // The ffmpeg API keeps changing, so we use different implementations
 // depending on which version of ffmpeg we have.
