@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>
@@ -10,15 +8,13 @@
 #include <brec/brec_hierarchy_edge_sptr.h>
 #include <brec/brec_part_hierarchy_builder.h>
 
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
-#include <vil/vil_math.h>
-#include <vil/vil_convert.h>
-
 #include <brip/brip_vil_float_ops.h>
 
 #include <brec/brec_part_gaussian.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
+
+#include <vcl_iostream.h>
+#include <vcl_vector.h>
 
 static void test_brec_hierarchy()
 {
