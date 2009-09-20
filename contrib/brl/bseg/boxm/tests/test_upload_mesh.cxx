@@ -1,28 +1,25 @@
 #include <testlib/testlib_test.h>
-#include <boxm/boxm_utils.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
 #include "test_utils.h"
+
+#include <boxm/boxm_utils.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_upload_mesh.h>
 #include <boct/boct_tree_cell.h>
-#include <vpl/vpl.h>
 #include <boxm/boxm_save_block_raw.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_string.h>
 #include <vcl_limits.h>
 
 MAIN( test_upload_mesh )
 {
-
   START ("TEST upload mesh");
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
@@ -31,16 +28,18 @@ MAIN( test_upload_mesh )
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY>  > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
 
-  //if(vul_file_is_directory("./boxm_upload"))
-  //{
-  //    vul_file_iterator fiter("./boxm_upload/*");
-  //    while(!fiter)
-  //    {
-  //      vpl_unlink(fiter());
-  //      fiter++;
-  //    }
-  //    vpl_rmdir("./boxm_upload");
-  //}
+#if 0
+  if (vul_file_is_directory("./boxm_upload"))
+  {
+    vul_file_iterator fiter("./boxm_upload/*");
+    while (!fiter)
+    {
+      vpl_unlink(fiter());
+      fiter++;
+    }
+    vpl_rmdir("./boxm_upload");
+  }
+#endif // 0
 
   scene.set_paths("./boxm_upload", "block");
   vul_file::make_directory("./boxm_upload");
