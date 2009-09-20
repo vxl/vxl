@@ -1,12 +1,11 @@
-#include <vcl_string.h>
-#include <vcl_cstdlib.h>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
 #include <vil/file_formats/vil_j2k_image.h>
+#include <vcl_string.h>
+#include <vcl_cstdlib.h>
+
 //assumes that the base image is in the dir and the dir is
 //named for the image without the extension.
 static bool compress_images(vcl_string const& in_image_dir,
