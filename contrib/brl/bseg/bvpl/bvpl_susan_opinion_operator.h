@@ -9,7 +9,7 @@
 // \verbatim
 //  Modifications
 //  Gamze Tunali June 5, 2009
-//      operate() method taking the normal and response grids  and finds out voxels with 
+//      operate() method taking the normal and response grids  and finds out voxels with
 //
 // \endverbatim
 
@@ -19,8 +19,6 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_intersection.h>
 
 class bvpl_susan_opinion_operator
 {
@@ -67,17 +65,17 @@ class bvpl_susan_opinion_operator
          }
          ++kernel_iter;
        }
-       if(tot!=0)
-           mu/=tot;
+       if (tot!=0)
+         mu/=tot;
        tot=0.0;
        float cnt=0.0;
-       for(unsigned i=0;i<thetai.size();i++)
+       for (unsigned i=0;i<thetai.size();++i)
        {
-           tot+=wi[i]*wi[i]*(thetai[i]-mu)*(thetai[i]-mu);
-           cnt+=wi[i]*wi[i];
-       }    
+         tot+=wi[i]*wi[i]*(thetai[i]-mu)*(thetai[i]-mu);
+         cnt+=wi[i]*wi[i];
+       }
        float sig=0.0;
-       if(cnt>0.0)
+       if (cnt>0.0)
            sig=tot/cnt;
 
        // set the result at the output grid
@@ -86,13 +84,8 @@ class bvpl_susan_opinion_operator
        ++sub_dir_iter;
        ++sub_opn_iter;
        ++output_iter;
-
-
     }
-    
   }
-
- private:
 };
 
-#endif
+#endif // bvpl_susan_opinion_operator_h_
