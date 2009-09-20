@@ -2,7 +2,8 @@
 //:
 // \file
 
-#include<vcl_cmath.h>
+#include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 
 vcl_vector<vgl_point_2d<double> > rotate_2d(vcl_vector<vgl_point_2d<double> > in, double angle)
 {
