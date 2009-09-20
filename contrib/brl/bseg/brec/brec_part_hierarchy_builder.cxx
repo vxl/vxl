@@ -1,14 +1,11 @@
+#include "brec_part_hierarchy_builder.h"
 //:
 // \file
 // \author Ozge C Ozcanli (ozge at lems dot brown dot edu)
 // \date Oct. 16, 2008
 
-#include "brec_part_hierarchy_builder.h"
-
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-
-#include <vil/vil_image_resource.h>
 
 #include "brec_part_hierarchy.h"
 #include "brec_part_base_sptr.h"
@@ -616,10 +613,7 @@ brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_test_detector()
   //brec_part_gaussian_sptr pi_0_0 = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 2.0f, 1.0f, -45.0f, false, 0);
   pi_0_0->detection_threshold_ = 0.0001f;
   h->add_dummy_primitive_instance(pi_0_0->cast_to_instance());
-  
+
   return h;
 }
 
-
-
-  
