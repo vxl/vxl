@@ -13,21 +13,17 @@
 //   <none yet>
 // \endverbatim
 
-#include <bgrl2/bgrl2_vertex.h>
-
 #include "brec_part_base_sptr.h"
 #include "brec_hierarchy_edge_sptr.h"
+class brec_part_gaussian;
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vul/vul_psfile.h>
-
-#include <vil/vil_image_view.h>
+#include <bgrl2/bgrl2_vertex.h>
 #include <bsta/bsta_histogram.h>
 #include <bxml/bxml_document.h>
-#include <vgl/vgl_box_2d.h>
 
-class brec_hierarchy_edge;
-class brec_part_gaussian;
+#include <vnl/vnl_vector_fixed.h>
+#include <vil/vil_image_view.h>
+#include <vgl/vgl_box_2d.h>
 
 class brec_part_base : public bgrl2_vertex<brec_hierarchy_edge>
 {
