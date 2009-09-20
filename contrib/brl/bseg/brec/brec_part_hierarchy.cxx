@@ -10,6 +10,7 @@
 #include "brec_part_gaussian.h"
 
 #include <vil/vil_image_view.h>
+#include <vul/vul_psfile.h>
 
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_write.h>

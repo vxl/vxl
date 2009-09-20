@@ -26,6 +26,8 @@
 #include <bsta/bsta_weibull.h>
 #include <bsta/bsta_gauss_f1.h>
 
+#include <vul/vul_psfile.h>
+
 class brec_part_gaussian : public brec_part_instance
 {
  public:

@@ -24,6 +24,7 @@
 #include <bsta/bsta_gauss_f1.h>
 
 #include <vul/vul_file.h>
+#include <vul/vul_psfile.h>
 
 //strength_threshold in [0,1] - min strength to declare the part as detected
 bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<brec_part_instance_sptr>& parts)
