@@ -1,23 +1,21 @@
 #include <testlib/testlib_test.h>
-#include <boxm/boxm_utils.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
 #include "test_utils.h"
+
+#include <boxm/boxm_utils.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_fill_in_mesh.h>
 #include <boct/boct_tree_cell.h>
-#include <vpl/vpl.h>
 #include <boxm/boxm_save_block_raw.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_string.h>
 #include <vcl_limits.h>
 
 MAIN( test_fill_in_mesh )
