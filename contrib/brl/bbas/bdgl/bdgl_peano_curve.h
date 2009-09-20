@@ -14,7 +14,6 @@
 //-----------------------------------------------------------------------------
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_math.h>
 #include <vcl_algorithm.h>
 
 vcl_vector<vgl_point_2d<double> > rotate_2d(vcl_vector<vgl_point_2d<double> > in, double angle);
