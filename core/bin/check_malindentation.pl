@@ -13,6 +13,7 @@ next if (m/^\s*$/);
 m/^( *)(.?)(.?)/; $indent=length($1); $in_cout = '' unless ($2.$3 eq '<<');
 ++$indent if ($2 eq ')');
 print "vi +$. $ARGV\n" if (($in_paren && $paren_indent != $indent) || ($in_cout && $cout_indent != $indent));
+$paren_indent=$indent;
 
 if ($in_paren)
 {
