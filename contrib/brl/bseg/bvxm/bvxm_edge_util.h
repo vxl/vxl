@@ -9,33 +9,18 @@
 // \verbatim
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-
-#include <vbl/vbl_array_2d.h>
-
+#include "bvxm_world_params.h"
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
-
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x1.h>
-#include <vnl/vnl_vector_fixed.h>
-
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
+#include <vbl/vbl_array_2d.h>
 
-#include "bvxm_world_params.h"
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 class bvxm_edge_util
 {
