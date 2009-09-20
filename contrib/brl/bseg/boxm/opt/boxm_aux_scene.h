@@ -11,14 +11,14 @@
 //   <none yet>
 // \endverbatim
 
-#include <vgl/vgl_box_3d.h>
-
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell_reader.h>
 #include <boxm/boxm_scene.h>
 
 #include <boxm/boxm_block.h>
 #include <boxm/opt/boxm_rt_sample.h>
+
+#include <vgl/vgl_point_3d.h>
 
 template <class T_loc, class T, class T_AUX>
 class boxm_aux_scene
