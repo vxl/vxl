@@ -120,3 +120,7 @@ TARGET_LINK_LIBRARIES(mvl vil1 vnl_algo vnl vbl vgl vgl_algo vul)
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
 ENDIF (BUILD_EXAMPLES)
+
+IF (BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF (BUILD_TESTING)
