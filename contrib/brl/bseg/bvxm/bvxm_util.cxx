@@ -1,31 +1,29 @@
 #include "bvxm_util.h"
+#include "bvxm_world_params.h"
+
+#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_edgel.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vtol/vtol_edge_2d.h>
+#include <sdet/sdet_detector.h>
+#include <vnl/algo/vnl_gaussian_kernel_1d.h>
+#include <vnl/algo/vnl_chi_squared.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_3x1.h>
+#include <vil/vil_resample_bilin.h>
+#include <vil/vil_math.h>
+#include <bil/algo/bil_edt.h>
+
+#include "grid/bvxm_voxel_slab.h"
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vpgl/vpgl_camera.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x1.h>
-#include <vnl/algo/vnl_gaussian_kernel_1d.h>
-#include <vil/vil_resample_bilin.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <sdet/sdet_detector.h>
-#include <vtol/vtol_edge_2d.h>
-#include <vil/vil_new.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_edgel.h>
-#include <vdgl/vdgl_edgel_chain.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <bil/algo/bil_edt.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/algo/vnl_chi_squared.h>
-
-#include "grid/bvxm_voxel_slab.h"
-#include "bvxm_world_params.h"
-
 
 bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> &Ks, vcl_vector<vnl_double_3x3> &Rs, vcl_vector<vnl_double_3x1> &Ts)
 {
