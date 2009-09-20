@@ -3,6 +3,11 @@
 // \file
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_float_4.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_distance.h>
+#include <vgl/vgl_closest_point.h>
+
 //: project a unit radius sphere onto the cube circumscribing it using gnomonic projection
 void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector<vgl_point_3d<double> > & proj_on_cube)
 {
@@ -264,7 +269,6 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
                                    bvxm_voxel_grid<vnl_float_4> *out_grid,
                                    vcl_vector<float> colors)
 {
-  
   bvxm_voxel_grid<float>::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
   float min = *(response_grid_it->begin());
@@ -311,7 +315,6 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
                                    bvxm_voxel_grid<vnl_float_4> *out_grid,
                                    vcl_vector<float> colors)
 {
-  
   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
   float min = vcl_abs((*(response_grid_it->begin())).mean());
