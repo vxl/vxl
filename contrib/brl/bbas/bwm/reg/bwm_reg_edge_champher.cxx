@@ -4,8 +4,6 @@
 #include <vcl_cmath.h>
 #include <vsol/vsol_point_2d.h>
 #include <bsol/bsol_algs.h>
-#include "bwm_reg_edge_champher.h"
-
 
 //--------------------------------------------------------------
 //
@@ -280,7 +278,5 @@ bool bwm_reg_edge_champher::match_tangent(unsigned col, unsigned row,
   //compute the angle between the tangents
   double angle = vcl_acos(dot);
   //determine match
-  if(vcl_fabs(angle)> angle_tolerance)
-    return false;
-  return true;
+  return vcl_fabs(angle) <= angle_tolerance;
 }
