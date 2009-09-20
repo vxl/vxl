@@ -8,7 +8,6 @@
 
 #include <vil/vil_load.h>
 #include <vil/vil_property.h>
-#include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 #if HAS_J2K
@@ -16,9 +15,8 @@
 #include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
 #endif //HAS_J2K
 
-
 #include <vul/vul_file.h>
-#if 0
+#if 0 // ony used inside commented-out section
 #include <vgl/vgl_point_3d.h>
 #endif
 
@@ -243,7 +241,7 @@ void bwm_utils::load_from_txt(vcl_string filename,
             is >> wy;
             is >> wz;
             corr->set_mode(false);
-            corr->set_world_pt(vgl_point_3d<double> (wx, wy, wz));
+            corr->set_world_pt(vgl_point_3d<double>(wx, wy, wz));
           }
           vcl_string tab_name;
           double X, Y;
@@ -279,7 +277,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
 {
   vil_image_resource_sptr res;
 
-    // if filename is a directory, assume pyramid image
+  // if filename is a directory, assume pyramid image
   if (vul_file::is_directory(filename))
   {
     // if filename is a directory, assume pyramid image  if (vul_file::is_directory(filename)) {
@@ -299,21 +297,22 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
     // determine if the image can be made into a J2K-nitf pyramid
     char const* fmtp = res->file_format();
     vcl_string file_fmt = "";
-    if(fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
-      if(file_fmt == "nitf21")
+    if (fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
+      if (file_fmt == "nitf21")
+      {
+        vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(res.ptr());
+        if (nitf_resc->is_jpeg_2000_compressed())
         {
-          vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(res.ptr());
-          if(nitf_resc->is_jpeg_2000_compressed())
-            {
-              vil_j2k_nitf2_pyramid_image_resource* j2k_nitf = 
-                new vil_j2k_nitf2_pyramid_image_resource(res);
-              res = j2k_nitf;
-            }
-        }else if(file_fmt == "j2k"){
-          vil_j2k_pyramid_image_resource* j2k_pyr = 
-            new vil_j2k_pyramid_image_resource(res);     
-          res = j2k_pyr;
+          vil_j2k_nitf2_pyramid_image_resource* j2k_nitf =
+            new vil_j2k_nitf2_pyramid_image_resource(res);
+          res = j2k_nitf;
         }
+      }
+      else if (file_fmt == "j2k"){
+        vil_j2k_pyramid_image_resource* j2k_pyr =
+          new vil_j2k_pyramid_image_resource(res);
+        res = j2k_pyr;
+      }
 #endif //HAS_J2K
   }
   float gamma = 1.0f;
@@ -326,7 +325,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
   { gl_map = true; cache = true;}
 
   bgui_image_utils biu(res);
-  
+
   if (biu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
     return res;
   if (biu.default_range_map(rmps, gamma, invert, gl_map, cache))
