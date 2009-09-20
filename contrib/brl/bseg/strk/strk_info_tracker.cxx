@@ -9,7 +9,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <brip/brip_vil1_float_ops.h>
-#include <bbas/bsta/bsta_histogram.h>
+#include <bsta/bsta_histogram.h>
 #include <strk/strk_tracking_face_2d.h>
 
 //Gives a sort on mutual information decreasing order
@@ -152,7 +152,7 @@ bool strk_info_tracker::init()
                                  intensity_hist_bins_,
                                  gradient_dir_hist_bins_,
                                  color_hist_bins_
-                                 );
+                                );
 
   initial_tf_ = tf;
   if (renyi_joint_entropy_)
@@ -266,7 +266,7 @@ clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample)
                                  intensity_hist_bins_,
                                  gradient_dir_hist_bins_,
                                  color_hist_bins_
-                                 );
+                                );
   if (renyi_joint_entropy_)
     tf->set_renyi_joint_entropy();
   return tf;
@@ -398,7 +398,7 @@ void strk_info_tracker::evaluate_info()
                               intensity_hist_bins_,
                               gradient_dir_hist_bins_,
                               color_hist_bins_
-                              );
+                             );
 
   if (renyi_joint_entropy_)
     tf->set_renyi_joint_entropy();
@@ -488,7 +488,7 @@ construct_background_faces(vtol_face_2d_sptr const& current_model,
                                      intensity_hist_bins_,
                                      gradient_dir_hist_bins_,
                                      color_hist_bins_
-                                     );
+                                    );
     else
       tf = new strk_tracking_face_2d(f, image_i_,
                                      Ix_i_, Iy_i_,
@@ -498,7 +498,7 @@ construct_background_faces(vtol_face_2d_sptr const& current_model,
                                      intensity_hist_bins_,
                                      gradient_dir_hist_bins_,
                                      color_hist_bins_
-                                     );
+                                    );
     if (!tf->Npix())
       continue;
 
@@ -596,7 +596,7 @@ void strk_info_tracker::set_capture_face(vtol_face_2d_sptr const& face,
                                             intensity_hist_bins_,
                                             gradient_dir_hist_bins_,
                                             color_hist_bins_
-                                            );
+                                           );
   else
     capture_tf_ = new strk_tracking_face_2d(face, image_i_,
                                             Ix_i_, Iy_i_,
@@ -606,5 +606,5 @@ void strk_info_tracker::set_capture_face(vtol_face_2d_sptr const& face,
                                             intensity_hist_bins_,
                                             gradient_dir_hist_bins_,
                                             color_hist_bins_
-                                            );
+                                           );
 }

@@ -30,9 +30,9 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <bbas/bsol/bsol_algs.h>
-#include <bbas/bsta/bsta_histogram.h>
-#include <bbas/bsta/bsta_joint_histogram.h>
+#include <bsol/bsol_algs.h>
+#include <bsta/bsta_histogram.h>
+#include <bsta/bsta_joint_histogram.h>
 #include <brip/brip_roi.h>
 
 //Local utility functions
@@ -3770,7 +3770,7 @@ std_dev_operator(vil_image_view<float> const& sd_image,
 // uses a modified formula to compute std_dev
 vil_image_view<float> brip_vil_float_ops::
 std_dev_operator_method2(vil_image_view<float> const& sd_image,
-                 vbl_array_2d<float> const& kernel)
+                         vbl_array_2d<float> const& kernel)
 {
   unsigned ni = sd_image.ni(), nj = sd_image.nj();
   unsigned nrows = kernel.rows(), ncols = kernel.cols();

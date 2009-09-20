@@ -3,7 +3,7 @@
 // \file
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <bbas/bsol/bsol_algs.h>
+#include <bsol/bsol_algs.h>
 #include <btol/btol_face_algs.h>
 #include <sdet/sdet_region.h>
 #include <brip/brip_roi.h>
@@ -68,7 +68,7 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
     {
       bool found = false;
       for (vcl_vector<sdet_region_sptr>::iterator nit = n_regions.begin();
-          nit != n_regions.end()&&!found; nit++)
+           nit != n_regions.end()&&!found; nit++)
         if (*nit == *rit)
           found = true;
       if (found)

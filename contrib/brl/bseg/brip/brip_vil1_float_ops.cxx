@@ -15,7 +15,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <bbas/bsol/bsol_algs.h>
+#include <bsol/bsol_algs.h>
 #include <brip/brip_roi.h>
 
 //------------------------------------------------------------

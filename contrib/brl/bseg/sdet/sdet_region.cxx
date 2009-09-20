@@ -6,7 +6,7 @@
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <bbas/bsol/bsol_algs.h>
+#include <bsol/bsol_algs.h>
 
 sdet_region::sdet_region()
 {

@@ -15,7 +15,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vsol/vsol_box_3d_sptr.h>
-#include <bbas/bsol/bsol_point_index_3d.h>
+#include <bsol/bsol_point_index_3d.h>
 #include <brct/brct_volume_processor_params.h>
 
 class brct_volume_processor : public brct_volume_processor_params

@@ -10,11 +10,10 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
-#include <bbas/bsta/bsta_joint_histogram.h>
+#include <bsta/bsta_joint_histogram.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <bbas/btol/btol_face_algs.h>
-
+#include <btol/btol_face_algs.h>
 
 //#define DEBUG
 
@@ -1287,8 +1286,8 @@ color_mutual_info_diff(strk_tracking_face_2d_sptr const& other,
 
 float strk_tracking_face_2d::
 intensity_mutual_info_diff(vcl_vector<strk_tracking_face_2d_sptr> const& others,
-                                   vil1_memory_image_of<float> const& image,
-                                   bool verbose)
+                           vil1_memory_image_of<float> const& image,
+                           bool verbose)
 {
   if (!others.size()||!image)
     return 0;
@@ -1524,7 +1523,7 @@ gradient_histogram(vil1_memory_image_of<float> const& Ix,
 
 bsta_histogram<float> strk_tracking_face_2d::
 color_histogram(vil1_memory_image_of<float> const& hue,
-                   vil1_memory_image_of<float> const& sat)
+                vil1_memory_image_of<float> const& sat)
 {
   bsta_histogram<float> color_hist(360, color_hist_bins_);
   if (!intf_||!hue||!sat)

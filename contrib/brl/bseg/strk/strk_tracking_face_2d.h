@@ -30,7 +30,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_intensity_face.h>
-#include <bbas/bsta/bsta_histogram.h>
+#include <bsta/bsta_histogram.h>
 #include <vgl/vgl_point_2d.h>
 
 #include "strk_tracking_face_2d_sptr.h"
@@ -53,14 +53,14 @@ class strk_tracking_face_2d : public vbl_ref_count
                         const unsigned int gradient_dir_hist_bins,
                         const unsigned int color_hist_bins,
                         const float max_intensity = 255.0f
-                        );
+                       );
 
   strk_tracking_face_2d(vtol_intensity_face_sptr const& intf,
                         const unsigned int intensity_hist_bins,
                         const unsigned int gradient_dir_hist_bins,
                         const unsigned int color_hist_bins,
                         const float max_intensity = 255.0f
-                        );
+                       );
   strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf);
   strk_tracking_face_2d(strk_tracking_face_2d const& tf);
   ~strk_tracking_face_2d();
@@ -194,7 +194,7 @@ class strk_tracking_face_2d : public vbl_ref_count
 
   void print_intensity_histograms(vil1_memory_image_of<float> const& image);
   void print_gradient_histograms(vil1_memory_image_of<float> const& Ix,
-                                  vil1_memory_image_of<float> const& Iy);
+                                 vil1_memory_image_of<float> const& Iy);
   void print_color_histograms(vil1_memory_image_of<float> const& hue,
                               vil1_memory_image_of<float> const& sat);
   bsta_histogram<float>
@@ -259,8 +259,8 @@ float
   compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other);
 
  float compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
-                                    vil1_memory_image_of<float> const& hue,
-                                    vil1_memory_image_of<float> const& sat);
+                                   vil1_memory_image_of<float> const& hue,
+                                   vil1_memory_image_of<float> const& sat);
 
   //: helper function for transform(): transformation: rotate gradients by theta
   void transform_gradients(double theta);

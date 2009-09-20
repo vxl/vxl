@@ -30,9 +30,9 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
-#include <bbas/bsol/bsol_hough_line_index.h>
-#include <bbas/bsol/bsol_algs.h>
-#include <bbas/bsol/bsol_distance_histogram.h>
+#include <bsol/bsol_hough_line_index.h>
+#include <bsol/bsol_algs.h>
+#include <bsol/bsol_distance_histogram.h>
 #include <vnl/algo/vnl_convolve.h>
 #include <gevd/gevd_bufferxy.h>
 static const double collection_grid_radius = 15;
