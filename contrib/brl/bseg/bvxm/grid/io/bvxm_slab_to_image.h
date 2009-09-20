@@ -3,12 +3,9 @@
 #define bvxm_io_voxel_slab_h
 //:
 // \file
-// \brief
-//
+// \brief Converts slab to a vil_image
 // \author Isabel Restrepo mir@lems.brown.edu
-//
 // \date  June 26, 2009
-//
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -16,16 +13,15 @@
 
 #include "../bvxm_voxel_slab.h"
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_float_3.h>
+#include <vnl/vnl_float_4.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_view_as.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_float_3.h>
-#include <vnl/vnl_float_4.h>
 class bvxm_slab_to_image
 {
  public:
@@ -209,10 +205,13 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
 
   return true;
 }
+
 template<>
 bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_3> const& slab, vil_image_view_base_sptr image);
+
 template<>
 bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_4> const& slab, vil_image_view_base_sptr image);
+
 template<class T>
 bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image_view_base_sptr image)
 {
