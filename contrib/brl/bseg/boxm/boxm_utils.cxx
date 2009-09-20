@@ -6,15 +6,14 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_polygon.h>
-#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <boxm/boxm_quad_scan_iterator.h>
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
+#include <vcl_algorithm.h>
 
 bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
                             vpgl_camera_double_sptr const& camera,
@@ -36,8 +35,6 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
         return false;
     }
   }
-
-  
 
   // make sure corners project into image bounds
   vgl_box_2d<double> cube_proj_bb;
@@ -133,10 +130,10 @@ boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
     }
 }
 
-void 
+void
 boxm_utils::project_point3d(vgl_point_3d<double> const& point,
                             vpgl_camera_double_sptr camera,
-                            double & xvert, double &yvert, 
+                            double & xvert, double &yvert,
                             double & vertdist)
 {
     if (camera->type_name().compare("vpgl_perspective_camera")==0) {
@@ -235,7 +232,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
   //  }
   //}
   //// for other cameras, use projection and normals
-  //else 
+  //else
   {
     // fix the face normals so that the vertices are the counter clokwise order
     vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
@@ -293,31 +290,33 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
                           double *xverts, double *yverts)
 {
   boct_face_idx face_idx = NONE;
-  //if (camera->type_name().compare("vpgl_perspective_camera")==0) {
-  //  vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
-  //  vgl_point_3d<double> const& cam_center = cam->camera_center();
+#if 0
+  if (camera->type_name().compare("vpgl_perspective_camera")==0) {
+    vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+    vgl_point_3d<double> const& cam_center = cam->camera_center();
 
-  //  if (cam_center.x() > bbox.max_x()) {
-  //    face_idx |= X_HIGH;
-  //  }
-  //  else if (cam_center.x() < bbox.min_x()) {
-  //    face_idx |= X_LOW;
-  //  }
-  //  if (cam_center.y() > bbox.max_y()) {
-  //    face_idx |= Y_HIGH;
-  //  }
-  //  else if (cam_center.y() < bbox.min_y()) {
-  //    face_idx |= Y_LOW;
-  //  }
-  //  if (cam_center.z() > bbox.max_x()) {
-  //    face_idx |= Z_HIGH;
-  //  }
-  //  else if (cam_center.z() < bbox.min_z()) {
-  //    face_idx |= Z_LOW;
-  //  }
-  //}
+    if (cam_center.x() > bbox.max_x()) {
+      face_idx |= X_HIGH;
+    }
+    else if (cam_center.x() < bbox.min_x()) {
+      face_idx |= X_LOW;
+    }
+    if (cam_center.y() > bbox.max_y()) {
+      face_idx |= Y_HIGH;
+    }
+    else if (cam_center.y() < bbox.min_y()) {
+      face_idx |= Y_LOW;
+    }
+    if (cam_center.z() > bbox.max_x()) {
+      face_idx |= Z_HIGH;
+    }
+    else if (cam_center.z() < bbox.min_z()) {
+      face_idx |= Z_LOW;
+    }
+  }
   // for other cameras, use projection and normals
-  //else 
+  else
+#endif // 0
   {
     // fix the face normals so that the vertices are the counter clockwise order
 #if 0
@@ -372,9 +371,10 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 
   return face_idx;
 }
+
 boct_face_idx
 boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera,
-                          double *xverts, double *yverts)
+                               double *xverts, double *yverts)
 {
   boct_face_idx face_idx = NONE;
   if (camera->type_name().compare("vpgl_perspective_camera")==0) {
@@ -401,7 +401,7 @@ boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_doubl
     }
   }
   // for other cameras, use projection and normals
-  else 
+  else
   {
     // fix the face normals so that the vertices are the counter clockwise order
 #if 0
@@ -456,6 +456,7 @@ boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_doubl
 
   return face_idx;
 }
+
 //: returns the faces of a box, the vertices are ordered in the normal direction
 void boxm_utils::faces_of_box_3d(vgl_box_3d<double> const& bbox,
                                  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >& faces)
@@ -1455,7 +1456,7 @@ bool boxm_utils::cube_exit_point(vgl_box_3d<double> cube,vgl_point_3d<double> pt
 }
 
 
-boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype 
+boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype
 boxm_utils::obtain_mog_grey_unit_mode()
 {
   bsta_gauss_f1 simple_gauss_f1(1.0f,0.1f);
@@ -1468,10 +1469,9 @@ boxm_utils::obtain_mog_grey_unit_mode()
   bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
 
   return simple_obs_mix_gauss_val_f1;
-
 }
 
-boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype 
+boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype
 boxm_utils::obtain_mog_grey_zero_mode()
 {
   bsta_gauss_f1 simple_gauss_f1(0.0f,0.1f);
@@ -1486,7 +1486,7 @@ boxm_utils::obtain_mog_grey_zero_mode()
   return simple_obs_mix_gauss_val_f1;
 }
 
-boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype 
+boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype
 boxm_utils::obtain_mog_grey_single_mode(float  mean)
 {
   bsta_gauss_f1 simple_gauss_f1(mean,0.1f);
@@ -1499,19 +1499,17 @@ boxm_utils::obtain_mog_grey_single_mode(float  mean)
   bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
 
   return simple_obs_mix_gauss_val_f1;
-
 }
 
 double boxm_utils::max_point_to_box_dist(vgl_box_3d<double> box,vgl_point_3d<double> pt)
 {
+  double dist_max=0;
 
-    double dist_max=0;
-
-    vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(box);
-    for(unsigned i=0;i<corners.size();i++)
-    {
-        if(dist_max<(corners[i]-pt).length())
-            dist_max=(corners[i]-pt).length();
-    }
-    return dist_max;
+  vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(box);
+  for (unsigned i=0;i<corners.size();i++)
+  {
+    if (dist_max<(corners[i]-pt).length())
+      dist_max=(corners[i]-pt).length();
+  }
+  return dist_max;
 }
