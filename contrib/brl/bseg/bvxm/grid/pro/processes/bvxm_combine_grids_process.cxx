@@ -11,14 +11,14 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <bvxm/grid/bvxm_voxel_slab.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_f1.h>
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
+#include <vcl_string.h>
+
 //: set input and output types
 bool bvxm_combine_grids_process_cons(bprb_func_process& pro)
 {
@@ -63,26 +63,26 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
 
   //get  and create the grids
 
-  bvxm_voxel_grid<vnl_float_3 > *grid1 =dynamic_cast<bvxm_voxel_grid<vnl_float_3>* > (grid1_base.ptr());
-  
-  if(bvxm_voxel_grid<float> *grid2 =dynamic_cast<bvxm_voxel_grid<float >* > (grid2_base.ptr()))
+  bvxm_voxel_grid<vnl_float_3> *grid1 =dynamic_cast<bvxm_voxel_grid<vnl_float_3>* > (grid1_base.ptr());
+
+  if (bvxm_voxel_grid<float> *grid2 =dynamic_cast<bvxm_voxel_grid<float >* > (grid2_base.ptr()))
   {
     if (grid1->grid_size()!=grid2->grid_size()) {
       vcl_cerr << "Input grids must be of same size\n";
       return false;
     }
-    bvxm_voxel_grid<vnl_float_4 > *grid_out = new bvxm_voxel_grid<vnl_float_4 >(output_path, grid1->grid_size());
+    bvxm_voxel_grid<vnl_float_4> *grid_out = new bvxm_voxel_grid<vnl_float_4>(output_path, grid1->grid_size());
 
-    //combine response grid and orientation grid. the result is a vnl_vector<4> where the first 3-numbers correspond to orientation
+    //combine response grid and orientation grid. the result is a vnl_float_4 where the first 3-numbers correspond to orientation
     // and the last number corresponds to kernel response
     bvxm_voxel_grid<float>::iterator grid2_it = grid2->begin();
-    bvxm_voxel_grid<vnl_float_3 >::iterator grid1_it = grid1->begin();
-    bvxm_voxel_grid<vnl_float_4 >::iterator grid_out_it = grid_out->begin();
+    bvxm_voxel_grid<vnl_float_3>::iterator grid1_it = grid1->begin();
+    bvxm_voxel_grid<vnl_float_4>::iterator grid_out_it = grid_out->begin();
     for (; grid_out_it!=grid_out->end(); ++grid_out_it, ++grid2_it, ++grid1_it)
     {
       bvxm_voxel_slab<float>::iterator slab2_it =(*grid2_it).begin();
-      bvxm_voxel_slab<vnl_float_3 >::iterator slab1_it= (*grid1_it).begin();
-      bvxm_voxel_slab<vnl_float_4 >::iterator out_slab_it = (*grid_out_it).begin();
+      bvxm_voxel_slab<vnl_float_3>::iterator slab1_it= (*grid1_it).begin();
+      bvxm_voxel_slab<vnl_float_4>::iterator out_slab_it = (*grid_out_it).begin();
 
       for (; out_slab_it!=(*grid_out_it).end(); ++out_slab_it, ++slab2_it, ++slab1_it)
       {
@@ -93,24 +93,25 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
 
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
-  }else if(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid2 =dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* > (grid2_base.ptr()))
+  }
+  else if (bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid2 =dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* > (grid2_base.ptr()))
   {
     if (grid1->grid_size()!=grid2->grid_size()) {
       vcl_cerr << "Input grids must be of same size\n";
       return false;
     }
-    bvxm_voxel_grid<vnl_float_4 > *grid_out = new bvxm_voxel_grid<vnl_float_4 >(output_path, grid1->grid_size());
+    bvxm_voxel_grid<vnl_float_4> *grid_out = new bvxm_voxel_grid<vnl_float_4>(output_path, grid1->grid_size());
 
-    //combine response grid and orientation grid. the result is a vnl_vector<4> where the first 3-numbers correspond to orientation
+    //combine response grid and orientation grid. the result is a vnl_float_4 where the first 3-numbers correspond to orientation
     // and the last number corresponds to kernel response
     bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator grid2_it = grid2->begin();
-    bvxm_voxel_grid<vnl_float_3  >::iterator grid1_it = grid1->begin();
-    bvxm_voxel_grid<vnl_float_4 >::iterator grid_out_it = grid_out->begin();
+    bvxm_voxel_grid<vnl_float_3>::iterator grid1_it = grid1->begin();
+    bvxm_voxel_grid<vnl_float_4>::iterator grid_out_it = grid_out->begin();
     for (; grid_out_it!=grid_out->end(); ++grid_out_it, ++grid2_it, ++grid1_it)
     {
       bvxm_voxel_slab<bsta_num_obs<bsta_gauss_f1> >::iterator slab2_it =(*grid2_it).begin();
       bvxm_voxel_slab<vnl_float_3>::iterator slab1_it= (*grid1_it).begin();
-      bvxm_voxel_slab<vnl_float_4 >::iterator out_slab_it = (*grid_out_it).begin();
+      bvxm_voxel_slab<vnl_float_4>::iterator out_slab_it = (*grid_out_it).begin();
 
       for (; out_slab_it!=(*grid_out_it).end(); ++out_slab_it, ++slab2_it, ++slab1_it)
       {
