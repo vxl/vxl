@@ -1,5 +1,3 @@
-//:
-// \file
 #include <testlib/testlib_test.h>
 
 #include <bvpl/bvpl_corner2d_kernel_factory.h>
@@ -10,17 +8,17 @@
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
 #include <bvpl/bvpl_create_directions.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h>
 #include <bvxm/grid/io/bvxm_io_voxel_grid.h>
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vul/vul_file.h>
+#include <vnl/vnl_float_3.h>
+#include <vnl/vnl_math.h>
+#include <vcl_sstream.h>
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 
 typedef bsta_num_obs<bsta_gauss_f1> gauss_f1;
 
