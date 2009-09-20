@@ -1,6 +1,12 @@
 # core/vpdl/CMakeLists.txt
 # Vision Probability Distribution Library
 
+doxygen_add_library(core/vpdl
+  DEPENDS core/vnl/algo core/vnl
+  PACKAGE core-L2
+  DESCRIPTION "Probability Distribution Library"
+  )
+
 SET( vpdl_sources
   vpdl_distribution.h      vpdl_distribution.txx
 
@@ -32,7 +38,7 @@ SET( vpdl_sources
   vpdt/vpdt_update_gaussian.h
   vpdt/vpdt_update_mog.h
   vpdt/vpdt_mog_fitness.h
-  
+
   vpdt/vpdt_distribution_accessors.h
   vpdt/vpdt_mixture_accessors.h
   vpdt/vpdt_gaussian_detector.h

@@ -1,11 +1,5 @@
 # vxl/vidl1/CMakeLists.txt
 
-doxygen_add_library(core/vidl1
-  DEPENDS core/vbl core/vul core/vil
-  PACKAGE core-L2
-  DESCRIPTION "Video Sequence Library"
-  )
-
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
 

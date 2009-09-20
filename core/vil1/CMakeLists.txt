@@ -1,11 +1,5 @@
 # vxl/vil1/CMakeLists.txt
 
-doxygen_add_library(core/vil1
-  DEPENDS core/vsl
-  PACKAGE core
-  DESCRIPTION "Imaging Library"
-  )
-
 SET( vil1_sources
   vil1_fwd.h
 
@@ -112,7 +106,7 @@ SET( vil1_sources
 # link nsl before this vil1_network.
 #
 SET( vil1_network_sources
-   # load image from URL
+  # load image from URL
   vil1_stream_url.cxx                        vil1_stream_url.h
 )
 
@@ -137,7 +131,7 @@ IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
   ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG=1 )
   SET( vil1_sources ${vil1_sources}
-       file_formats/vil1_png.cxx             file_formats/vil1_png.h
+    file_formats/vil1_png.cxx                  file_formats/vil1_png.h
   )
 ELSE(PNG_FOUND)
   ADD_DEFINITIONS( -DHAS_PNG=0 )
@@ -162,7 +156,7 @@ IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
   ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF=1 )
   SET( vil1_sources ${vil1_sources}
-       file_formats/vil1_tiff.cxx            file_formats/vil1_tiff.h
+    file_formats/vil1_tiff.cxx                  file_formats/vil1_tiff.h
   )
 ELSE(TIFF_FOUND)
   ADD_DEFINITIONS( -DHAS_TIFF=0 )

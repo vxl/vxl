@@ -1,5 +1,13 @@
 # vxl/vnl/algo/CMakeLists.txt
 
+PROJECT(vnl_algo)
+
+doxygen_add_library(core/vnl/algo
+  DEPENDS core/vnl
+  PACKAGE core-L2
+  DESCRIPTION "Computational Numerics Library"
+  )
+
 INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
 
 # most of vnl_algo is simply a wrapper around netlib, so we must have netlib.

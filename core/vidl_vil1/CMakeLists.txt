@@ -1,11 +1,5 @@
 # vxl/vidl_vil1/CMakeLists.txt
 
-doxygen_add_library(core/vidl_vil1
-  DEPENDS core/vbl core/vul core/vil1
-  PACKAGE core-L2
-  DESCRIPTION "Video Sequence Library (Old implementation relying on vil1)"
-  )
-
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
 IF( MPEG2_FOUND )
@@ -37,13 +31,13 @@ ENDIF( MPEG2_FOUND )
 
 AUX_SOURCE_DIRECTORY(Templates vidl_vil1_sources)
 
-IF(WIN32)
-  IF (NOT CYGWIN)
+IF( WIN32 )
+  IF( NOT CYGWIN )
     SET(vidl_vil1_sources ${vidl_vil1_sources}
       vidl_vil1_avicodec.cxx vidl_vil1_avicodec.h vidl_vil1_avicodec_sptr.h
     )
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
+  ENDIF( NOT CYGWIN )
+ENDIF( WIN32 )
 
 ADD_LIBRARY(vidl_vil1 ${vidl_vil1_sources})
 INSTALL_TARGETS(/lib vidl_vil1)
@@ -53,15 +47,15 @@ IF( MPEG2_FOUND )
   TARGET_LINK_LIBRARIES( vidl_vil1 ${MPEG2_LIBRARIES} )
 ENDIF( MPEG2_FOUND )
 
-IF (WIN32)
-  IF (NOT CYGWIN)
+IF( WIN32 )
+  IF( NOT CYGWIN )
     # Borland compilers may fail to link vfw32.lib if they are not
     # installed correctly.  Make sure the ilink32.cfg file
     # lists the directory containing the library in the -L option.
     # For example: -L"c:\Borland\BCC55\Lib";"c:\Borland\BCC55\Lib\PSDK"
     TARGET_LINK_LIBRARIES( vidl_vil1 vfw32 gdi32 )
-  ENDIF (NOT CYGWIN)
-ENDIF (WIN32)
+  ENDIF( NOT CYGWIN )
+ENDIF( WIN32 )
 
 IF( BUILD_TESTING )
   SUBDIRS( tests )
