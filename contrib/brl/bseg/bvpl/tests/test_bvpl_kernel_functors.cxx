@@ -1,6 +1,5 @@
-//:
-// \file
 #include <testlib/testlib_test.h>
+
 #include <bvpl/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
 #include <bvpl/bvpl_gauss3d_xx_kernel_factory.h>
@@ -9,19 +8,19 @@
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
 #include <bvpl/bvpl_create_directions.h>
-#include <vnl/vnl_vector_fixed.h>
+
+#include <bvxm/grid/bvxm_opinion.h>
+#include <bsta/bsta_gauss_f1.h>
+
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
+#include <vbl/vbl_array_3d.h>
 
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cmath.h>
-
-#include <vbl/vbl_array_3d.h>
-#include <bvxm/grid/bvxm_opinion.h>
-
-#include<bsta/bsta_gauss_f1.h>
 
 template<class data_type>
 void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_p, vnl_float_3 axis)
@@ -216,7 +215,7 @@ void test_edge_functors()
   float max_val=0.0f;
 
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
-  //: get vector of kernel
+  // get vector of kernel
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
   bvpl_edge_algebraic_mean_functor<float> mean_functor;
@@ -228,7 +227,7 @@ void test_edge_functors()
   result=is_correct_solution< bvpl_edge_geometric_mean_functor<float>, float  >(kernel_vec,data,geom_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Geometric Mean functor with no noise ", true,result);
 
-  //: add noise
+  // add noise
   sigma_noise=0.1f;
   result=is_correct_solution< bvpl_edge_algebraic_mean_functor<float>, float  >(kernel_vec,data,mean_functor,min_p,max_p,sigma_noise,max_val);
   TEST("Test Algebraic mean functor with  noise ", true,result);
@@ -262,7 +261,7 @@ void test_gaussian_kernels()
   for (unsigned i=0; i<3; i++)
   {
     bvpl_gauss3d_xx_kernel_factory factory(var[i], 1.5);
-    //: get vector of kernel
+    // get vector of kernel
   bvpl_create_directions_b dir;
   bvpl_kernel_vector_sptr kernel_vec = factory.create_kernel_vector(dir);
     bvpl_gauss_convolution_functor functor;
@@ -312,13 +311,13 @@ void test_gauss_convolve()
 MAIN(test_bvpl_kernel_functors)
 {
   //test algebraic, geometric and opinion functors
-  vcl_cout << "-------------------------\n";
-  vcl_cout << "Testing edged functors \n";
+  vcl_cout << "-------------------------\n"
+           << "Testing edged functors\n";
   test_edge_functors();
 
   //test gaussian convolution functor
-  vcl_cout << "-------------------------\n";
-  vcl_cout << "Testing gaussian functors \n";
+  vcl_cout << "-------------------------\n"
+           << "Testing gaussian functors\n";
   test_gauss_convolve();
 
   //test that kernels detect max response at appropiate plane direction
