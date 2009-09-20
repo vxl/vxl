@@ -8,37 +8,19 @@
 //
 // \verbatim
 //  Modifications
-//
 //   07 Mar.2008 - Ozge C. Ozcanli - Added support for VIL_PIXEL_FORMAT_RGB_FLOAT and VIL_PIXEL_FORMAT_FLOAT to the img_to_slab method
 //                                   Assumes the float image is already scaled to [0,1] range
-//
-//   08/20/2008 - Ibrahim Eden - Added the method
-//                               static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
-//
-//   09/03/2008 - Ibrahim Eden - Added the method
-//                               static vil_image_view<vxl_byte> detect_edges ...
-//
-//   09/11/2008 - Ibrahim Eden - Added the method
-//                               static void edge_distance_transform ...
-//
-//   09/12/2008 - Ibrahim Eden - Added the method
-//                               static int convert_uncertainty_from_meters_to_pixels ...
-//
-//   12/12/2008 - Ozge C. Ozcanli - Added the method
-//                                  static void warp_slab_nearest_neighbor ...
-//
-//   02/12/2009 - Ibrahim Eden - Added the method
-//                                  static void convert_edge_statistics_to_probability ...
-//
-//   07/14/2009 - Ibrahim Eden - Moved edge related functions to bvxm_edge_util
-//
+//   Aug. 20, 2008 - Ibrahim Eden - Added the method static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
+//   Sept 03, 2008 - Ibrahim Eden - Added the method static vil_image_view<vxl_byte> detect_edges ...
+//   Sept 11, 2008 - Ibrahim Eden - Added the method static void edge_distance_transform ...
+//   Sept 12, 2008 - Ibrahim Eden - Added the method static int convert_uncertainty_from_meters_to_pixels ...
+//   Dec. 12, 2008 - Ozge C. Ozcanli - Added the method static void warp_slab_nearest_neighbor ...
+//   Febr 12, 2009 - Ibrahim Eden - Added the method static void convert_edge_statistics_to_probability ...
+//   July 14, 2009 - Ibrahim Eden - Moved edge related functions to bvxm_edge_util
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cassert.h>
+#include "grid/bvxm_voxel_slab.h"
+#include "bvxm_world_params.h"
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -46,8 +28,6 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
 
 #include <vnl/vnl_math.h>
@@ -65,8 +45,11 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
 
-#include "grid/bvxm_voxel_slab.h"
-#include "bvxm_world_params.h"
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 class bvxm_util
 {
