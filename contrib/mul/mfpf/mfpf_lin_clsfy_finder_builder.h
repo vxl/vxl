@@ -7,11 +7,10 @@
 
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_vec_cost_builder.h>
-#include <mbl/mbl_cloneable_ptr.h>
-#include <mbl/mbl_chord.h>
-#include <vcl_iosfwd.h>
 #include <mfpf/mfpf_region_form.h>
+#include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
+#include <vcl_iosfwd.h>
 
 //: Builds mfpf_region_finder objects which use a linear classifier.
 //  Resulting mfpf_region_finder is set up with a mfpf_log_lin_class_cost
@@ -83,7 +82,7 @@ class mfpf_lin_clsfy_finder_builder : public mfpf_point_finder_builder
   //: lower bound on variance used in normalisation
   double var_min_;
 
-  //: lowest variance found so far in training set 
+  //: lowest variance found so far in training set
   double tvar_min_;
 
   //: If true reset var_min based on min in training set
@@ -193,4 +192,4 @@ class mfpf_lin_clsfy_finder_builder : public mfpf_point_finder_builder
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // mfpf_lin_clsfy_finder_builder_h_
