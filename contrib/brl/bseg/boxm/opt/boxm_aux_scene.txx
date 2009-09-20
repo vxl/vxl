@@ -4,12 +4,6 @@
 #include "boxm_aux_scene.h"
 #include "boxm_aux_traits.h"
 
-#include <vbl/vbl_bounding_box.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_file.h>
-#include <vul/vul_expand_path.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h>
 #include <vpl/vpl.h>
 #include <vcl_cassert.h>
 
