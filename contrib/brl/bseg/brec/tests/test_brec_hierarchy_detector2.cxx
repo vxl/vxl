@@ -1,7 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>
@@ -12,25 +9,21 @@
 #include <brec/brec_part_hierarchy_builder.h>
 #include <brec/brec_part_hierarchy_detector.h>
 #include <brec/brec_part_hierarchy_detector_sptr.h>
+#include <brec/brec_part_gaussian.h>
 
-#include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
 #include <core/vil_pro/vil_io_image_view_base.h>
 
 #include <brip/brip_vil_float_ops.h>
-
-#include <brec/brec_part_gaussian.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
-
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_float_2.h>
-#include <vnl/vnl_float_3.h>
-#include <vul/vul_file.h>
 #include <bsta/bsta_histogram.h>
 
+#include <vnl/vnl_math.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vcl_vector.h>
 
 static void test_brec_hierarchy_detector2_simple()
 {
