@@ -16,8 +16,6 @@
 #include <bprb/bprb_parameters.h>
 
 #include <bxml/bsvg/bsvg_plot.h>
-#include <vul/vul_awk.h>
-#include <vul/vul_string.h>
 #include <bxml/bxml_write.h>
 
 //: Constructor
