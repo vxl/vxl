@@ -1,5 +1,11 @@
 # mul/m23d/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/m23d
+  DEPENDS core/vnl/algo core/vnl core/vgl contrib/mul/mbl
+  PACKAGE contrib/mul
+  DESCRIPTION "Manchester's 2D/3D Library"
+)
+
 SET(m23d_sources
   m23d_rotation_from_ortho_projection.cxx m23d_rotation_from_ortho_projection.h
   m23d_pure_ortho_projection.cxx          m23d_pure_ortho_projection.h

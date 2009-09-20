@@ -1,5 +1,11 @@
 # mul/mcal/CMakeLists.txt
 
+doxygen_add_library(contrib/mul/mcal
+  DEPENDS core/vnl/algo core/vnl contrib/mul/mbl
+  PACKAGE contrib/mul
+  DESCRIPTION "Manchester's Component Analysis Library"
+)
+
 SET(mcal_sources
   mcal_component_analyzer.cxx       mcal_component_analyzer.h
   mcal_pca.cxx                      mcal_pca.h

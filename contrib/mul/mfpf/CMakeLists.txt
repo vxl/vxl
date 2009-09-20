@@ -4,6 +4,12 @@
 #   Tim Cootes
 #
 
+doxygen_add_library(contrib/mul/mfpf
+  DEPENDS contrib/mul/clsfy contrib/mul/mipa contrib/mul/vimt contrib/mul/vpdfl contrib/mul/mbl
+  PACKAGE contrib/mul
+  DESCRIPTION "Manchester's Point Finder Library"
+)
+
 SET(mfpf_sources
   mfpf_add_all_loaders.h         mfpf_add_all_loaders.cxx
   mfpf_point_finder_builder.h    mfpf_point_finder_builder.cxx
