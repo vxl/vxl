@@ -146,7 +146,8 @@ include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-SUBDIRS = examples # tests
+SUBDIRS += tests
+SUBDIRS += examples
 endif
 
 ######################################
