@@ -26,7 +26,6 @@
 #include <mbl/mbl_exception.h>
 
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vsl/vsl_quick_file.h>
 #include <vsl/vsl_binary_loader.h>
@@ -37,7 +36,6 @@
 #include <mfpf/mfpf_sort_matches.h>
 
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid.h>
