@@ -5,7 +5,6 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
 #include <vil/algo/vil_threshold.h>
 
 //: Constructor
@@ -47,14 +46,12 @@ bool vil_filter_image_process(bprb_func_process& pro)
   }
   vil_image_view<bool> mask(mask_inp);
   vil_image_view<vxl_byte> out_img(image);
-  
+
   for (unsigned i = 0; i < image->ni(); i++)
     for (unsigned j = 0; j < image->nj(); j++)
       if (!mask(i,j))
         out_img(i, j) = 0;
-  
+
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(out_img));
   return true;
 }
-
-
