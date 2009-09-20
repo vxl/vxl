@@ -1,10 +1,11 @@
-#include <bvpl/bvpl_create_directions.h>
+#include "bvpl_create_directions.h"
 #include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <bxml/bsvg/bsvg_document.h>
 #include <bxml/bsvg/bsvg_element.h>
 #include <bxml/bxml_write.h>
+
 bvpl_create_directions_a::bvpl_create_directions_a()
 {
   //polar phi=0

@@ -1,4 +1,4 @@
-#include <bvxm/grid/io/bvxm_grid_to_image_stack.h>
+#include "bvxm_grid_to_image_stack.h"
 
 template<>
 bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_float_3> *grid, vcl_string directory)
@@ -25,6 +25,7 @@ bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_flo
   }
   return true;
 }
+
 template<>
 bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_float_4> *grid, vcl_string directory)
 {
