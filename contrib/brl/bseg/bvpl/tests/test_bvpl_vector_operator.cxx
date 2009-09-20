@@ -1,6 +1,5 @@
-//:
-// \file
 #include <testlib/testlib_test.h>
+
 #include <bvpl/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
@@ -9,17 +8,17 @@
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
 #include <bvpl/bvpl_create_directions.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h>
 #include <bvxm/grid/io/bvxm_io_voxel_grid.h>
 
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_float_3.h>
 #include <vul/vul_file.h>
+#include <vcl_sstream.h>
+#include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 
 void create_grid(vcl_string grid_filename)
 {
@@ -145,14 +144,14 @@ void test_vector_operator()
   create_grid(grid_filename);
   bvxm_voxel_grid<bvxm_opinion>* grid = new bvxm_voxel_grid<bvxm_opinion>(grid_filename);
   vcl_string grid_expectation_filename="grid_plane_expectation.vox";
-  //: output to verify if the digitization of the plane is correct.
+  // output to verify if the digitization of the plane is correct.
   bvxm_voxel_grid<float> * surface_grid_expectation
   =new bvxm_voxel_grid<float>(grid_expectation_filename,vgl_vector_3d<unsigned int>(32,32,32));
 
   bvxm_expectation_opinion_voxel_grid(grid,surface_grid_expectation);
 
   bvxm_grid_save_raw<float>(surface_grid_expectation,"grid_plane_expectation.raw");
-  //: get vector of kernel
+  // get vector of kernel
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
