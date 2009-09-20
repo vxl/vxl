@@ -1,10 +1,5 @@
 # rpl/rsdl/CMakeLists.txt
 
-doxygen_add_library(contrib/rpl/rsdl
-  DEPENDS core/vnl core/vbl
-  PACKAGE contrib/rpl
-  )
-
 SET(rsdl_sources
  rsdl_fwd.h
 
