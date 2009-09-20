@@ -2,30 +2,30 @@
 
 #include "bvxm_util.h"
 
+#include <bsta/bsta_gaussian_sphere.h>
+#include <brip/brip_vil_float_ops.h>
+#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_edgel.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vtol/vtol_edge_2d.h>
+#include <sdet/sdet_detector.h>
+#include <bil/algo/bil_edt.h>
+#include <vnl/algo/vnl_gaussian_kernel_1d.h>
+#include <vnl/algo/vnl_chi_squared.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vil/vil_resample_bilin.h>
+#include <vil/vil_new.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vpgl/vpgl_camera.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x1.h>
-#include <vnl/algo/vnl_gaussian_kernel_1d.h>
-#include <vil/vil_resample_bilin.h>
-#include <vpgl/vpgl_local_rational_camera.h>
-#include <sdet/sdet_detector.h>
-#include <vtol/vtol_edge_2d.h>
-#include <vil/vil_new.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_edgel.h>
-#include <vdgl/vdgl_edgel_chain.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <bil/algo/bil_edt.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/algo/vnl_chi_squared.h>
-#include <bsta/bsta_gaussian_sphere.h>
-#include <brip/brip_vil_float_ops.h>
 #include <vcl_cassert.h>
 
 vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
@@ -44,11 +44,11 @@ vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_im
 }
 
 vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> img,
-                                                 double noise_multiplier,
-                                                 double smooth,
-                                                 bool automatic_threshold,
-                                                 bool junctionp,
-                                                 bool aggressive_junction_closure)
+                                                      double noise_multiplier,
+                                                      double smooth,
+                                                      bool automatic_threshold,
+                                                      bool junctionp,
+                                                      bool aggressive_junction_closure)
 {
   if ( img.nplanes() >= 3 )
   {
@@ -153,7 +153,7 @@ int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty,
     else if (camera->type_name()=="vpgl_rational_camera") {
       double lon, lat, gz;
       lvcs->local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
-                          bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                            bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
       curr_pt.set(lon, lat, gz);
     }
     else // dummy initialisation, to avoid compiler warning
