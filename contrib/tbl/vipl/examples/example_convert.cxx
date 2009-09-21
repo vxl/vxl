@@ -14,7 +14,7 @@
 // \verbatim
 // Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
-//   Peter Vanroose, Feb.2004 - replaced vil1_image by vil2_image_view<T>
+//   Peter Vanroose, Feb.2004 - replaced vil1_image by vil_image_view<T>
 // \endverbatim
 //
 #include <vil/vil_rgb.h>

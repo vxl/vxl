@@ -19,7 +19,7 @@
 // \verbatim
 // Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
-//   Peter Vanroose, Feb.2004 - replaced vil1_load by vil2_load
+//   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
 #include <section/section.h>

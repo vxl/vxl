@@ -15,8 +15,8 @@
 //
 // \verbatim
 // Modifications:
-//   Peter Vanroose, Feb.2004 - replaced mil_image by vil2_image_view<T>
-//   Peter Vanroose, Feb.2004 - replaced vil1_load by vil2_load
+//   Peter Vanroose, Feb.2004 - replaced mil_image by vil_image_view<T>
+//   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
 #include <vnl/vnl_matrix.h>
