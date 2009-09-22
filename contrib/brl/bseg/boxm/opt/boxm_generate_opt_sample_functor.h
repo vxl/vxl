@@ -134,6 +134,7 @@ class boxm_generate_opt_sample_functor_pass_2
     aux_val.pre_ += pre * seg_len;
     aux_val.vis_ = vis * seg_len;
 
+    
     const float Beta_num = pre + vis*PI;
     float Beta = 1.0f;
     if (Beta_denom_(i,j) < 1e-6) {
@@ -192,15 +193,15 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
     vil_image_view<float> PI_inf(obs.ni(), obs.nj(),1);
 
-    typename T_data::apm_datatype background_apm;
 
     if (black_background) {
         vcl_cout << "using black background model" << vcl_endl;
-        for (unsigned int i=0; i<4; ++i) {
-            T_data::apm_processor::update(background_apm, 0.0f, 1.0f);
-            float peak=T_data::apm_processor::prob_density(background_apm,0.0f);
-            vcl_cout<<"Peak: "<<peak<<vcl_endl;
-        }
+        typename T_data::obs_datatype black(0.0f);
+        float background_std_dev = 4.0f/255;
+        typename T_data::apm_datatype background_apm(black, background_std_dev,1.0f);
+        
+        float peak=T_data::apm_processor::expected_color(background_apm);
+        vcl_cout<<"Peak: "<<peak<<vcl_endl;
         typename vil_image_view<typename T_data::obs_datatype>::const_iterator img_it = obs.begin();
         typename vil_image_view<float>::iterator PI_it = PI_inf.begin();
         for (; img_it != obs.end(); ++img_it, ++PI_it) {
