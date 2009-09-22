@@ -36,7 +36,7 @@ ADD_TEST( vil1_test_resample          ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all te
 ADD_TEST( vil1_test_vil               ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_vil ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 #ADD_EXECUTABLE( vil_vil1_compare_access_timings vil_vil1_compare_access_timings.cxx)
-#TARGET_LINK_LIBRARIES( vil_vil1_compare_access_timings vil mbl vcl )
+#TARGET_LINK_LIBRARIES( vil_vil1_compare_access_timings vil_algo vil mbl vcl )
 #ADD_TEST( vil_vil1_compare_access_timings ${EXECUTABLE_OUTPUT_PATH}/vil_vil1_compare_access_timings )
 
 #ADD_EXECUTABLE( vil_vil1_compare_function_timings vil_vil1_compare_function_timings.cxx)
