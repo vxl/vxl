@@ -84,7 +84,7 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
         float seg_len = aux_samples[s].seg_len_;
         if (seg_len > 1e-5) {
           Beta *= aux_samples[s].Beta_ / seg_len;
-          obs_vector[s] = aux_samples[s].obs_; // / seg_len;
+          obs_vector[s] = aux_samples[s].obs_ / seg_len;
           pre_vector[s] = aux_samples[s].pre_ / seg_len;
           vis_vector[s] = aux_samples[s].vis_ / seg_len;
           //post_prob_vector[s] = aux_samples[s].post_prob_ / seg_len;
@@ -97,7 +97,10 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
         }
       }
       double damped_Beta = (Beta + damping_factor)/(damping_factor*Beta + 1.0);
-
+      
+      if ((damped_Beta < 0.00000001) && (damped_Beta > -0.00000001))
+        vcl_cout << "ERROR: damped_Beta is:" << damped_Beta << vcl_endl;
+        
       data.alpha *= (float)damped_Beta;
       // do bounds check on new alpha value
       vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
