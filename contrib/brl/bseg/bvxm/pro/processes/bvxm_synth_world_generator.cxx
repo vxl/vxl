@@ -12,11 +12,13 @@ bvxm_synth_world_generator::bvxm_synth_world_generator()
   minx_=10;
   miny_=10;
   minz_=10;
-  dimx_=89;
-  dimy_=89;
-  dimz_=23;
-  gen_images_=false;
-  gen2_box_=true;
+  dimx_=50;//89;
+  dimy_=50;//89;
+  dimz_=20;//23;
+  gen_images_=true;
+  gen2_box_=false;
+  // texture is a checkerboard pattern if true, else it is plain white
+  texture_map_=true;
   world_dir_ = "./synth_world";
   num_train_images_ = 30;
   rand1_=true;
@@ -25,8 +27,8 @@ bvxm_synth_world_generator::bvxm_synth_world_generator()
   vox_length = 1.0f;
 
   //could be as a parameter class
-  IMAGE_U = 200;
-  IMAGE_V = 200;
+  IMAGE_U = 250;
+  IMAGE_V = 250;
   x_scale = 900;
   y_scale = 900;
   focal_length = 1.;
@@ -214,7 +216,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
     //save the camera to file
     vcl_stringstream cam_file;
     vul_file::make_directory("./cams");
-    cam_file <<world_dir_ << "./cams/cam_" << i << ".txt";
+    cam_file <<world_dir_ << "/cam_" << i << ".txt";
     vcl_ofstream cam_out(cam_file.str().c_str());
     cam_out << persp_cam;
 
@@ -399,57 +401,52 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> gr
       {
         int face1 = on_box_surface(box, vgl_point_3d<double>(i,j,z));
         int face2 = on_box_surface(top_box, vgl_point_3d<double>(i,j,z));
-        // create a checkerboard intensity
-        if ((face1 != -1) || (face2 != -1))
-        {
-          if (face1 != -1) {
-            if (face1 == 0) {
-              int a = int(i-box.min_x())/8;
-              int b = int(j-box.min_y())/8;
-              (*intensity_slab_it)(i,j,0) = intens_map_bt[a][b];
-            }
-            else if (face1 == 1) {
-              int a = int(i-box.min_x())/8;
-              int b = int(z-box.min_z())/8;
-              (*intensity_slab_it)(i,j,0) = intens_map_side1[a][b];
-            }
-            else {
-              int a = int(j-box.min_y())/8;
-              int b = int(z-box.min_z())/8;
-              (*intensity_slab_it)(i,j,0) = intens_map_side2[a][b];
-            }
-          }
-          else {
-            //(*intensity_slab_it)(i,j,0) = face_intens[5-face2];
-            if (face2 == 0) {
-              int a = int(i-top_box.min_x())/8;
-              int b = int(j-top_box.min_y())/8;
-              (*intensity_slab_it)(i,j,0) = top_intens_map_bt[a][b];
-            }
-            else if (face2 == 1) {
-              int a = int(i-top_box.min_x())/8;
-              int b = int(z-top_box.min_z())/8;
-              (*intensity_slab_it)(i,j,0) = top_intens_map_side1[a][b];
+        
+        if ((face1 != -1) || (face2 != -1)) {
+          if (texture_map_ == false) {
+            (*intensity_slab_it)(i,j,0) = 1.0f; 
+          } else { // texture map set to true
+            // create a checkerboard intensity
+            if (face1 != -1) {
+              if (face1 == 0) {
+                int a = int(i-box.min_x())/8;
+                int b = int(j-box.min_y())/8;
+                (*intensity_slab_it)(i,j,0) = intens_map_bt[a][b];
+              }
+              else if (face1 == 1) {
+                int a = int(i-box.min_x())/8;
+                int b = int(z-box.min_z())/8;
+                (*intensity_slab_it)(i,j,0) = intens_map_side1[a][b];
+              }
+              else {
+                int a = int(j-box.min_y())/8;
+                int b = int(z-box.min_z())/8;
+                (*intensity_slab_it)(i,j,0) = intens_map_side2[a][b];
+              }
             }
             else {
-              int a = int(j-top_box.min_y())/8;
-              int b = int(z-top_box.min_z())/8;
-              (*intensity_slab_it)(i,j,0) = top_intens_map_side2[a][b];
+              if (face2 == 0) {
+                int a = int(i-top_box.min_x())/8;
+                int b = int(j-top_box.min_y())/8;
+                (*intensity_slab_it)(i,j,0) = top_intens_map_bt[a][b];
+              }
+              else if (face2 == 1) {
+                int a = int(i-top_box.min_x())/8;
+                int b = int(z-top_box.min_z())/8;
+                (*intensity_slab_it)(i,j,0) = top_intens_map_side1[a][b];
+              }
+              else {
+                int a = int(j-top_box.min_y())/8;
+                int b = int(z-top_box.min_z())/8;
+                (*intensity_slab_it)(i,j,0) = top_intens_map_side2[a][b];
+              }
             }
           }
-#if 0
-          // generate a random intensity
-          float r = (rand() % 256)/255.0;    // float face_intens[6] = {0.3, 0.45, 0.6, 0.75, 0.85, 1.0};
-          if (face1 != -1)
-            (*intensity_slab_it)(i,j,0) = r; // face_intens[face1];
-          else
-            (*intensity_slab_it)(i,j,0) = r; // face_intens[5-face2];
-#endif
           (*ocp_slab_it)(i,j,0) = 1.0f;
           is << " x" ;
-        }
-        else
-          is << " 0";
+          }
+         else
+           is << " 0";
       }
     }
   }
@@ -571,6 +568,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
          cameras, image_set_1, bin);
 
   //world->save_occupancy_raw(world_dir_ + "/ocp.raw");
+
   return world;
 }
 

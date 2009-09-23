@@ -65,6 +65,7 @@ class bvxm_synth_world_generator
   unsigned num_train_images_;
   bool gen_images_;
   bool gen2_box_;
+  bool texture_map_;
   vcl_string world_dir_;
   vcl_string recon_world_dir_;
   bool rand1_;
