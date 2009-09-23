@@ -59,12 +59,12 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4 > *grid,
                                    bvxm_voxel_grid<vnl_float_4 > *out_grid,
                                    bvpl_direction_to_color_map & color_map);
 
-void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
+void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
                                       bvxm_voxel_grid<float> *response_grid,
                                       bvxm_voxel_grid<vnl_float_4> *out_grid,
                                       vcl_vector<float> colors);
 
-void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
+void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
                                       bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *response_grid,
                                       bvxm_voxel_grid<vnl_float_4> *out_grid,
                                       vcl_vector<float> colors);
