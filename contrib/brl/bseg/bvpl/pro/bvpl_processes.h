@@ -12,6 +12,7 @@ DECLARE_FUNC_CONS(bvpl_create_gauss3d_xx_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_edge2d_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_create_edge3d_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_create_corner2d_kernel_vector_process);
+DECLARE_FUNC_CONS(bvpl_create_corner2d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_gauss3d_xx_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_convert_direction_to_hue_process);
 DECLARE_FUNC_CONS(bvpl_convert_id_to_hue_process);
@@ -20,6 +21,8 @@ DECLARE_FUNC_CONS(bvpl_susan_opinion_operator_process);
 DECLARE_FUNC_CONS(bvpl_kernel_id_to_axis_process);
 DECLARE_FUNC_CONS(bvpl_non_max_suppression_process);
 DECLARE_FUNC_CONS(bvpl_visualize_response_process);
-//the init functions
+DECLARE_FUNC_CONS(bvpl_suppress_and_combine_process);
+DECLARE_FUNC_CONS(bvpl_extract_top_response_process);
+DECLARE_FUNC_CONS(bvpl_operate_ocp_and_app_process);
 
 #endif
