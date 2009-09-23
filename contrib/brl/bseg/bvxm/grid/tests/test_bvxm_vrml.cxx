@@ -1,0 +1,72 @@
+//  This is brl/bvxm/grid/tests/bvxm_vrml_tests.cxx
+// 
+//  \:file
+//  \brief  Tests fro vmrl functions defined for voxel grid
+//  \author Isabel Restrepo  
+//  \date   9/22/09.
+
+#include <testlib/testlib_test.h>
+#include <bvxm/grid/io/bvxm_vrml_voxel_grid.h>
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
+#include <vpl/vpl.h>
+
+bool grid_to_vrml()
+{
+  //Fill in the grid
+  vgl_vector_3d<unsigned> grid_size(4, 4, 4);
+  bvxm_voxel_grid<float> *grid = new bvxm_voxel_grid<float>(grid_size);
+  grid->initialize_data(0.5f);
+  
+  bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
+  
+  for (unsigned k=0; grid_it != grid->end(); ++grid_it, k++) 
+    for (unsigned i=0; i<(*grid_it).nx(); i=i+2)
+      for (unsigned j=0; j < (*grid_it).ny(); j=j+2) 
+        (*grid_it)(i,j)=1.0f;
+
+  
+  //Write to VRML file
+  vcl_ofstream os("point_set.wrl");
+  bvxm_vrml_voxel_grid::write_vrml_header(os);
+  bvxm_vrml_voxel_grid::write_vrml_grid(os, grid, 0.2f);
+  
+  vcl_ofstream os2("spheres.wrl");
+  bvxm_vrml_voxel_grid::write_vrml_header(os2);
+  bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os2, grid, 0.2f);
+  
+  return true;
+}
+
+bool color_grid_to_vrml()
+{
+  //Fill in the grid
+  vgl_vector_3d<unsigned> grid_size(8, 8, 8);
+  bvxm_voxel_grid<vnl_float_4> *grid = new bvxm_voxel_grid<vnl_float_4>(grid_size);
+  grid->initialize_data(vnl_float_4(255.0f, 255.0f, 252.0f, 225.0f));
+  
+  bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
+  
+  for (unsigned k=0; grid_it != grid->end(); ++grid_it, k++) 
+    for (unsigned i=0; i<(*grid_it).nx(); i=i+2)
+      for (unsigned j=0; j < (*grid_it).ny(); j=j+2) 
+        (*grid_it)(i,j)=vnl_float_4(255.0f, 0.0f, 0.0f, 255.0f);
+  
+    
+  vcl_ofstream os("color_spheres.wrl");
+  bvxm_vrml_voxel_grid::write_vrml_header(os);
+  bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os, grid, 0.2f);
+  
+  return true;
+}
+
+MAIN( test_bvxm_vrml )
+{
+  START("Test vrml");
+  vcl_cout << "Grid to vrml\n";
+  //grid_to_vrml();
+  vcl_cout << "Color Grid to vrml\n";
+  color_grid_to_vrml();
+  SUMMARY();
+
+}
