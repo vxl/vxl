@@ -22,21 +22,19 @@
 
 namespace bvxm_save_grid_raw_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
 }
 
 bool bvxm_save_grid_raw_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_save_grid_raw_process_globals;
-  // process takes 3 inputs:
+  // process takes 2 inputs:
   //input[0]: The voxel_grid
   //input[1]: The filename to write to
-  //input[2]: String identifying datatype
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "vcl_string";
-  input_types_[2] = "vcl_string";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -53,29 +51,24 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
     vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
     return false;
   }
-
+  bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   vcl_string volume_path = pro.get_input<vcl_string>(1);
-  vcl_string datatype = pro.get_input<vcl_string>(2);
-
+  
   // create the grid from in memory file and save
-  if (datatype == "float") {
-    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
-    bvxm_grid_save_raw<float>(grid_base,volume_path);
+  if ( bvxm_voxel_grid<float > *grid = dynamic_cast<bvxm_voxel_grid<float >* >(grid_base.ptr())) {    
+    bvxm_grid_save_raw(grid,volume_path);
     return true;
   }
-  else if (datatype == "ocp_opinion") {
-    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
-    bvxm_grid_save_raw<bvxm_opinion>(grid_base,volume_path);
+  else if ( bvxm_voxel_grid<bvxm_opinion > *grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion >* >(grid_base.ptr())) {
+     bvxm_grid_save_raw(grid,volume_path);
     return true;
   }
-  else if (datatype == "unsigned") {
-    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
-    bvxm_grid_save_raw<unsigned int>(grid_base,volume_path);
+  else if ( bvxm_voxel_grid<unsigned> *grid = dynamic_cast<bvxm_voxel_grid<unsigned>* >(grid_base.ptr())) {
+    bvxm_grid_save_raw(grid,volume_path);
     return true;
   }
-    else if (datatype == "bsta_gauss_f1") {
-    bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
-    bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(grid_base,volume_path);
+  else if ( bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid = dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* >(grid_base.ptr())) {
+    bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(grid,volume_path);
     return true;
   }
   else
