@@ -264,7 +264,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4> *grid,
 }
 
 
-void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
+void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
                                    bvxm_voxel_grid<float> *response_grid,
                                    bvxm_voxel_grid<vnl_float_4> *out_grid,
                                    vcl_vector<float> colors)
@@ -289,7 +289,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
 
   //reset iterator
   bvxm_voxel_grid<vnl_float_4>::iterator out_grid_it = out_grid->begin();
-  bvxm_voxel_grid<unsigned>::iterator id_grid_it = id_grid->begin();
+  bvxm_voxel_grid<int>::iterator id_grid_it = id_grid->begin();
   response_grid_it = response_grid->begin();
 
   //convert to hsv grid
@@ -297,20 +297,22 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
   float col;
   for (; id_grid_it != id_grid->end(); ++id_grid_it, ++response_grid_it, ++out_grid_it)
   {
-    bvxm_voxel_slab<unsigned>::iterator id_slab_it = (*id_grid_it).begin();
+    bvxm_voxel_slab<int>::iterator id_slab_it = (*id_grid_it).begin();
     bvxm_voxel_slab<float>::iterator response_slab_it = (*response_grid_it).begin();
     bvxm_voxel_slab<vnl_float_4>::iterator out_slab_it = (*out_grid_it).begin();
     for (; id_slab_it!=(*id_grid_it).end(); ++id_slab_it ,++response_slab_it, ++ out_slab_it)
     {
       col=colors[*id_slab_it]*360.0f;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      vnl_float_4 this_feature(r,g,b,(((*response_slab_it)-min)/(max - min))*255.0f);
+      vnl_float_4 this_feature(r,g,b,(((*response_slab_it)-min)/(max - min))*500.0f);
+      //float alpha = (*response_slab_it) > 1e-15 ? 255.0f:0.0f;
+      //vnl_float_4 this_feature(r,g,b,alpha);
       (*out_slab_it)=this_feature;
     }
   }
 }
 
-void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
+void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
                                    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *response_grid,
                                    bvxm_voxel_grid<vnl_float_4> *out_grid,
                                    vcl_vector<float> colors)
@@ -335,7 +337,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
 
   //reset iterator
   bvxm_voxel_grid<vnl_float_4>::iterator out_grid_it = out_grid->begin();
-  bvxm_voxel_grid<unsigned>::iterator id_grid_it = id_grid->begin();
+  bvxm_voxel_grid<int>::iterator id_grid_it = id_grid->begin();
   response_grid_it = response_grid->begin();
 
   //convert to hsv grid
@@ -343,14 +345,16 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<unsigned> *id_grid,
   float col;
   for (; id_grid_it != id_grid->end(); ++id_grid_it, ++response_grid_it, ++out_grid_it)
   {
-    bvxm_voxel_slab<unsigned>::iterator id_slab_it = (*id_grid_it).begin();
+    bvxm_voxel_slab<int>::iterator id_slab_it = (*id_grid_it).begin();
     bvxm_voxel_slab<bsta_num_obs<bsta_gauss_f1> >::iterator response_slab_it = (*response_grid_it).begin();
     bvxm_voxel_slab<vnl_float_4>::iterator out_slab_it = (*out_grid_it).begin();
     for (; id_slab_it!=(*id_grid_it).end(); ++id_slab_it ,++response_slab_it, ++ out_slab_it)
     {
       col=colors[*id_slab_it]*360.0f;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      vnl_float_4 this_feature(r,g,b,((vcl_abs((*response_slab_it).mean())-min)/(max - min))*1000.0f);
+      //float alpha = vcl_abs((*response_slab_it).mean())>1e-15 ? 255.0f:0.0f;
+      //vnl_float_4 this_feature(r,g,b,alpha);
+      vnl_float_4 this_feature(r,g,b,((vcl_abs((*response_slab_it).mean())-min)/(max - min))*500.0f);
       (*out_slab_it)=this_feature;
     }
   }
@@ -376,7 +380,7 @@ void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<
 
     vcl_ostringstream os_dir;
     os_dir.precision(2);
-    os_dir<<'['<<i<<']'<< '['<<kernel_vector->kernels_[i]->axis()<<']'<<'['<<kernel_vector->kernels_[i]->angle()<<']';
+    os_dir<<'['<<i<<']'<< '['<<kernel_vector->kernels_[i]->axis()<<']'<<'['<<kernel_vector->kernels_[i]->angle()<<']' << '['<<(int)r << ',' << (int)g<< ',' << (int)b<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
     t->set_location(10.0f, 15.0f*(i+1));
