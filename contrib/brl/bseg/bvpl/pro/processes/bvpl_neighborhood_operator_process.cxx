@@ -102,19 +102,30 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
         bvpl_edge2d_functor<float> func;
         bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
         oper.operate(float_input_grid, kernel, grid_out);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+        return true;
       }
-      if (functor_name == "edge_algebraic_mean") {
+      else if (functor_name == "edge_algebraic_mean") {
         bvpl_edge_algebraic_mean_functor<float> func;
         bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
         oper.operate(float_input_grid, kernel, grid_out);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+        return true;
       }
-      if (functor_name == "edge_geometric_mean") {
+      else if (functor_name == "edge_geometric_mean") {
         bvpl_edge_geometric_mean_functor<float> func;
         bvpl_neighb_operator<float, bvpl_edge_geometric_mean_functor<float> > oper(func);
         oper.operate(float_input_grid, kernel, grid_out);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+        return true;
       }
-      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+      else{
+        vcl_cout << "Unsupported data type or functor type \n";
+        return false;        
+      }
     }
+    vcl_cout << "Input grid is invalid \n";
+    return false;
   }
   else if (ocp_type == "opinion") {
     if (bvxm_voxel_grid<bvxm_opinion> * bvxm_opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
@@ -124,7 +135,10 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
       oper.operate(bvxm_opinion_input_grid, kernel, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+      return true;
     }
+    vcl_cout << "Input grid is invalid \n";
+    return false;
   }
   else if(ocp_type == "bsta_gauss_f1"){
     typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
@@ -134,11 +148,17 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
         bvpl_gauss_convolution_functor func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
         oper.operate(gauss_input_grid, kernel, grid_out);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+        return true;
+      }
+      else{
+        vcl_cout << "Unsupported functor \n";
+        return false;
       }
     }
-  
-  
+    vcl_cout << "Input grid is invalid \n";
+    return false;
   }
-
-  return true;
+  vcl_cout << "Unsupported data type or functor type \n";
+  return false;
 }
