@@ -21,7 +21,7 @@
 
 namespace bvpl_crop_grid_process_globals
 {
-  const unsigned n_inputs_ = 1;
+  const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 1;
 }
 
@@ -29,12 +29,14 @@ namespace bvpl_crop_grid_process_globals
 //: set input and output types
 bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
 {
-    using namespace bvpl_crop_grid_process_globals;
+  using namespace bvpl_crop_grid_process_globals;
   //This process has no inputs nor outputs only parameters
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0]="bvxm_voxel_grid_base_sptr";
+  input_types_[0]="bvxm_voxel_grid_base_sptr"; //the input grid
+  input_types_[1]="vcl_string"; //the path for output grid
+	
 
-  // No outputs to the database. The resulting grid is stored on disk
+  //The ouput grid
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr";
   if (!pro.set_input_types(input_types_))
@@ -50,27 +52,15 @@ bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool bvxm_crop_grid_process(bprb_func_process& pro)
 {
+  using namespace bvpl_crop_grid_process_globals;
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
   
   // check number of inputs
-  if (pro.n_inputs() != 1)
+  if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " <<0 << vcl_endl;
+    vcl_cout << pro.name() << "The number of inputs should be " <<n_inputs_ << vcl_endl;
     return false;
   }
-
-  vcl_string output_path;
-  pro.parameters()->get_value("output_path", output_path);
-
-  if (vul_file::is_directory(output_path)) {
-    vcl_cerr << "In bvxm_crop_grid_process -- output directory "<< vul_file::get_cwd() << '/' << output_path<< "is not valid!\n";
-    return false;
-  }
-
-  //if the output file exits, delete it
-  if (vul_file::exists(output_path))
-    vul_file::delete_file_glob(output_path);
-
 
   unsigned corner_x = 0;
   pro.parameters()->get_value("corner_x", corner_x);
@@ -89,7 +79,19 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
 
   unsigned i=0;
   bvxm_voxel_grid_base_sptr input_grid = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
+  vcl_string output_path = pro.get_input<vcl_string>(i++);
+ 
+  if (vul_file::is_directory(output_path)) {
+    vcl_cerr << "In bvxm_crop_grid_process -- output directory "<< output_path << "is not valid!\n";
+    return false;
+  }
 
+  //if the output file exits, delete it
+  if (vul_file::exists(output_path))
+    vul_file::delete_file_glob(output_path);
+	
+	
+	
   vgl_vector_3d<unsigned int> out_grid_dim(dimx, dimy, dimz);
   if (bvxm_voxel_grid<float> * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
   {
