@@ -90,7 +90,7 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
     fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
 
     if ((header.nx_ != grid_size.x()) || (header.ny_ != grid_size.y()) || (header.nz_ != grid_size.z())) {
-      vcl_cerr << "error: file on disk has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << vcl_endl
+      vcl_cerr << "error: file on disk: " << storage_fname_<< " has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << vcl_endl
                << "       size passed to constructor = " << grid_size << vcl_endl;
       return;
     }
