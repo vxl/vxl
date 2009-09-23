@@ -19,5 +19,6 @@ DECLARE_FUNC_CONS(bvxm_expectation_opinion_grid_process);
 DECLARE_FUNC_CONS(bvxm_fill_mesh_grid_process);
 DECLARE_FUNC_CONS(bvxm_fill_mesh_normals_grid_process);
 DECLARE_FUNC_CONS(bvxm_grid_distance_transform_process);
+DECLARE_FUNC_CONS(bvxm_save_rgba_grid_vrml_process);
 
 #endif

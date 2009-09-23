@@ -27,4 +27,5 @@ void bvxm_grid_register::register_process()
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_fill_mesh_grid_process, "bvxmFillMeshGridProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_fill_mesh_normals_grid_process, "bvxmFillMeshNormalsGridProcess");
   REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_grid_distance_transform_process, "bvxmGridDistanceTransformProcess");
+  REG_PROCESS_FUNC_CONS( bprb_func_process, bprb_batch_process_manager, bvxm_save_rgba_grid_vrml_process, "bvxmSaveRGBAGridVrmlProcess");
 }
