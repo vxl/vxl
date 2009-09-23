@@ -73,7 +73,7 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
     vcl_cerr << "In bvpl_convert_id_to_hue_process -- one of the input grids is not valid!\n";
     return false;
   }
-  if (bvxm_voxel_grid<unsigned> *id_grid = dynamic_cast< bvxm_voxel_grid<unsigned >* >(id_base.ptr()))
+  if (bvxm_voxel_grid<int> *id_grid = dynamic_cast< bvxm_voxel_grid<int >* >(id_base.ptr()))
   {
     if (bvxm_voxel_grid<float> *response_grid = dynamic_cast< bvxm_voxel_grid<float >* >(response_base.ptr()))
     {
@@ -103,10 +103,6 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
       //the wheel starts and ends on red, so we don't want to get back to the end
       vcl_vector<float> colors;
       float hue = 0.0f;
-     // colors.push_back(0.0f);
-      //colors.push_back(0.167f);
-      //colors.push_back(0.33f);
-      //colors.push_back(0.67f);
       for ( unsigned i = 0; i < kernel_vector->kernels_.size(); ++i){
         colors.push_back(hue);
         hue+=1.0f/float(kernel_vector->kernels_.size());
