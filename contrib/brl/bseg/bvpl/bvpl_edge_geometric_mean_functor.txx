@@ -28,11 +28,11 @@ template <class T>
 void bvpl_edge_geometric_mean_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
   
-  if (d.c_ == 1) {
+  if (d.c_ > 0) {
     P1_ += vcl_log(val);
     n1_++;
   }
-  else if (d.c_ == -1){
+  else if (d.c_ < 0 ){
     P0_ += vcl_log(T(1.0)-val);
     n0_++;
   }
