@@ -7,7 +7,7 @@
 
 //: Save to dristi raw file
 VCL_DEFINE_SPECIALIZATION
-bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filename)
+bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid,  vcl_string filename)
 {
     vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
     if (!ofs.is_open()) {
@@ -15,9 +15,6 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid_base_sptr 
       return false;
     }
 
-    //cast grid
-    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid =
-      dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* >(grid_base.ptr());
     // write header
     unsigned char data_type = bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >::dristhi_header();
 
