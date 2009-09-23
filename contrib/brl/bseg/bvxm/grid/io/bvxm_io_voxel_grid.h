@@ -89,7 +89,7 @@ class bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >
 
 //: Save to dristi raw file
 template<class T>
-bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filename)
+bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
 {
     vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
     if (!ofs.is_open()) {
@@ -97,8 +97,6 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
       return false;
     }
 
-    //cast grid
-    bvxm_voxel_grid<T> *grid = dynamic_cast<bvxm_voxel_grid<T>* >(grid_base.ptr());
     // write header
     unsigned char data_type = bvxm_dristhi_traits<T>::dristhi_header();
 
@@ -152,6 +150,6 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filenam
 }
 
 template <>
-bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid_base_sptr grid_base,  vcl_string filename);
+bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid,  vcl_string filename);
 
 #endif // bvxm_io_voxel_grid_h
