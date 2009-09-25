@@ -21,33 +21,54 @@ double vgl_vector_3d<T>::length() const
 template <class T>
 vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s)
 {
+  assert(this->length()>0.0);
+
   //enforce parameter range
   if (s<0.0) s=0.0;
   if (s>1.0) s = 1.0;
   double tol = static_cast<double>(vgl_tolerance<T>::position);
-  double nx = static_cast<double>(x_), ny = static_cast<double>(y_);
-  double nz =  static_cast<double>(z_);
-  double mnz = vcl_fabs(nz);
+  double nx = static_cast<double>(x_);
+  double ny = static_cast<double>(y_);
+  double nz = static_cast<double>(z_);
   double two_pi = 2*3.14159265358979323846;
-  double co = vcl_cos(two_pi*s), si = vcl_sin(two_pi*s);
-  //General case
-  if (mnz>tol)
+  double co = vcl_cos(two_pi*s);
+  double si = vcl_sin(two_pi*s);
+  
+  double mnz = vcl_fabs(nz);
+  if (mnz>tol)  // General case
   {
-    double co = vcl_cos(two_pi*s), si = vcl_sin(two_pi*s);
-    double rx = nx/nz, ry = ny/nz;
+    double rx = nx/nz;
+    double ry = ny/nz;
     double q = co*rx +si*ry;
     double a = 1.0/vcl_sqrt(1+q*q);
-    T vx = static_cast<T>(a*co), vy = static_cast<T>(a*si);
+    T vx = static_cast<T>(a*co);
+    T vy = static_cast<T>(a*si);
     T vz = -static_cast<T>(rx*vx + ry*vy);
     return vgl_vector_3d<T>(vx, vy, vz);
   }
-
-  // Degenerate case, nz ~ 0
-  double r = nx/ny;
-  double a = 1/vcl_sqrt(1+co*co*r*r);
-  T vx = static_cast<T>(a*co), vz = static_cast<T>(a*si);
-  T vy = -static_cast<T>(a*co*r);
-  return vgl_vector_3d<T>(vx, vy, vz);
+  else  // Special cases, nz ~ 0
+  {  
+    double mny = vcl_fabs(ny);
+    if (mny>tol)
+    {
+      double r = nx/ny;
+      double a = 1/vcl_sqrt(1+co*co*r*r);
+      T vx = static_cast<T>(a*co);
+      T vz = static_cast<T>(a*si);
+      T vy = -static_cast<T>(a*co*r);
+      return vgl_vector_3d<T>(vx, vy, vz);
+    }
+    else
+    {
+      // assume mnx>tol provided that input vector was not null
+      double r = ny/nx;
+      double a = 1/vcl_sqrt(1+co*co*r*r);
+      T vy = static_cast<T>(a*co);
+      T vz = static_cast<T>(a*si);
+      T vx = -static_cast<T>(a*co*r);
+      return vgl_vector_3d<T>(vx, vy, vz);
+    }
+  }
 }
 
 template<class T>
@@ -136,28 +157,28 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_vector_3d<T>& p)
 #undef VGL_VECTOR_3D_INSTANTIATE
 #define VGL_VECTOR_3D_INSTANTIATE(T) \
 template class vgl_vector_3d<T >;\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator+    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator-    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     operator+=   (vgl_vector_3d<T >&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     operator-=   (vgl_vector_3d<T >&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator+    (vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator-    (vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator*    (double, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator*    (vgl_vector_3d<T > const&, double));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      operator/    (vgl_vector_3d<T > const&, double));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     operator*=   (vgl_vector_3d<T >&, double));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     operator/=   (vgl_vector_3d<T >&, double));\
-VCL_INSTANTIATE_INLINE(T      dot_product  (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(T      inner_product(vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      cross_product(vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(double cos_angle    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-template               double angle        (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&);\
-template               bool   orthogonal   (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
-template               bool   parallel     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
-VCL_INSTANTIATE_INLINE(double operator/    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >&     normalize    (vgl_vector_3d<T >&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >      normalized   (vgl_vector_3d<T > const&));\
-template        vcl_ostream&  operator<<   (vcl_ostream&, vgl_vector_3d<T >const&);\
-template        vcl_istream&  operator>>   (vcl_istream&, vgl_vector_3d<T >&)
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator+     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator-     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator+=    (vgl_vector_3d<T >&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator-=    (vgl_vector_3d<T >&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator+     (vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator-     (vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator*     (double, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator*     (vgl_vector_3d<T > const&, double));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator/     (vgl_vector_3d<T > const&, double));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator*=    (vgl_vector_3d<T >&, double));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator/=    (vgl_vector_3d<T >&, double));\
+VCL_INSTANTIATE_INLINE(T                  dot_product   (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(T                  inner_product (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  cross_product (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(double             cos_angle     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+template               double             angle         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&);\
+template               bool               orthogonal    (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
+template               bool               parallel      (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
+VCL_INSTANTIATE_INLINE(double             operator/     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& normalize     (vgl_vector_3d<T >&));\
+VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  normalized    (vgl_vector_3d<T > const&));\
+template               vcl_ostream&       operator<<    (vcl_ostream&, vgl_vector_3d<T >const&);\
+template               vcl_istream&       operator>>    (vcl_istream&, vgl_vector_3d<T >&)
 
 #endif // vgl_vector_3d_txx_
