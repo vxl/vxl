@@ -218,6 +218,16 @@ vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
                                   vgl_line_3d_2_points<T> const& l)
 { return vgl_closest_point(l,p); }
 
+template <class T> inline
+vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
+                                  vgl_infinite_line_3d<T> const& l){
+  vgl_line_3d_2_points<T> l2(l.point(), l.point_t(T(1)));
+  return vgl_closest_point(p,l2);}
+
+template <class T> inline
+vgl_point_3d<T> vgl_closest_point(vgl_infinite_line_3d<T> const& l,
+                                  vgl_point_3d<T> const& p){
+  return vgl_closest_point(p,l);}
 
 //: Return the point on the given line which is closest to the given point.
 // The closest point is expressed in parametric form.
