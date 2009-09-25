@@ -9,6 +9,7 @@
 
 #include <vcl_cmath.h> // sqrt() , acos()
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 template <class T>
 double vgl_vector_3d<T>::length() const
