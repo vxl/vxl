@@ -193,6 +193,9 @@ SOURCE=.\test_basic_ops.cxx
 SOURCE=.\test_grid_to_image_stack.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bvxm_vrml.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -106,6 +106,9 @@ SOURCE=.\bvxm_slab_to_image.cxx
 SOURCE=.\bvxm_grid_to_image_stack.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_vrml_voxel_grid.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvxm_voxel_slab_base-.cxx
 # End Source File
 # Begin Source File
@@ -128,6 +131,9 @@ SOURCE=.\bvxm_slab_to_image.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_grid_to_image_stack.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_vrml_voxel_grid.h
 # End Source File
 # End Group
 # End Target

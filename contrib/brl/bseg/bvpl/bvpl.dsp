@@ -126,6 +126,9 @@ SOURCE=.\bvpl_local_max_functor.cxx
 SOURCE=.\bvpl_corner2d_kernel_factory.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_find_surface_functor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 # End Source File
 # Begin Source File
@@ -250,6 +253,12 @@ SOURCE=.\bvpl_corner2d_kernel_factory.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_kernel.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_find_surface_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_combined_neighb_operator.h
 # End Source File
 # End Group
 # End Target

@@ -303,6 +303,12 @@ SOURCE=.\Templates/bvxm_voxel_slab_iterator+uint-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk+uint-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_x+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_x+vnl_vector_fixed+int.3--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -130,6 +130,9 @@ SOURCE=.\processes/bvxm_create_grid_process.cxx
 SOURCE=.\processes/bvxm_fill_mesh_normals_grid_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_save_rgba_grid_vrml_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_grid_base_sptr-.cxx
 # End Source File
 # End Group

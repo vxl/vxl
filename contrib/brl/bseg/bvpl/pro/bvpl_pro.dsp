@@ -144,6 +144,18 @@ SOURCE=.\processes/bvpl_visualize_response_process.cxx
 SOURCE=.\processes/bvpl_convert_id_to_hue_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_extract_top_response_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_operate_ocp_and_app_proccess.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_create_corner2d_kernel_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_suppress_and_combine_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # End Group
