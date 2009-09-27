@@ -8,6 +8,7 @@ SOURCES += bvxm_io_voxel_grid.cxx
 SOURCES += bvxm_io_voxel_grid_base.cxx
 SOURCES += bvxm_slab_to_image.cxx
 SOURCES += bvxm_grid_to_image_stack.cxx
+SOURCES += bvxm_vrml_voxel_grid.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

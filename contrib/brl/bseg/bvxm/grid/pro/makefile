@@ -16,6 +16,7 @@ SOURCES += processes/bvxm_expectation_opinion_grid_process.cxx
 SOURCES += processes/bvxm_grid_distance_trasform_process.cxx
 SOURCES += processes/bvxm_create_grid_process.cxx
 SOURCES += processes/bvxm_fill_mesh_normals_grid_process.cxx
+SOURCES += processes/bvxm_save_rgba_grid_vrml_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

@@ -24,6 +24,8 @@ SOURCES += bvpl_create_directions.cxx
 SOURCES += bvpl_direction_to_color_map.cxx
 SOURCES += bvpl_kernel.cxx
 SOURCES += bvpl_corner2d_kernel_factory.cxx
+SOURCES += bvpl_find_surface_functor.cxx
+MANPAGE_SOURCES += bvpl_combined_neighb_operator.h
 
 SUBDIRS += pro io
 
