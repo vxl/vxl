@@ -29,9 +29,9 @@ void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_
   unsigned nj=data.get_row1_count();
   unsigned nk=data.get_row1_count();
 
-  float ci=ni*0.5f;
-  float cj=nj*0.5f;
-  float ck=nk*0.5f;
+  float ci=(float)ni*0.5f;
+  float cj=(float)nj*0.5f;
+  float ck=(float)nk*0.5f;
   for (unsigned i=0;i<ni;i++)
   {
     for (unsigned j=0;j<nj;j++)
@@ -52,8 +52,8 @@ template<>
 void fill_in_data(vbl_array_3d<bsta_gauss_f1> & data,bsta_gauss_f1 min_p, bsta_gauss_f1 max_p, vnl_float_3 axis)
 {
   unsigned ni=data.get_row1_count();
-  unsigned nj=data.get_row1_count();
-  unsigned nk=data.get_row1_count();
+  unsigned nj=data.get_row2_count();
+  unsigned nk=data.get_row3_count();
 
   float ci=ni*0.5f;
   float cj=nj*0.5f;
@@ -78,8 +78,8 @@ template <class F, class data_type>
 data_type run_kernel_at_the_center(vbl_array_3d<data_type> & data, bvpl_kernel_sptr kernel, F func)
 {
   unsigned ni=data.get_row1_count();
-  unsigned nj=data.get_row1_count();
-  unsigned nk=data.get_row1_count();
+  unsigned nj=data.get_row2_count();
+  unsigned nk=data.get_row3_count();
 
   unsigned ci=ni/2;
   unsigned cj=nj/2;
@@ -205,7 +205,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
 
 void test_edge_functors()
 {
-  vbl_array_3d<float> data(100,100,100);
+  vbl_array_3d<float> data(20,20,20);
   data.fill(0.0f);
 
   bool result=false;
@@ -262,8 +262,8 @@ void test_gaussian_kernels()
   {
     bvpl_gauss3d_xx_kernel_factory factory(var[i], 1.5);
     // get vector of kernel
-  bvpl_create_directions_b dir;
-  bvpl_kernel_vector_sptr kernel_vec = factory.create_kernel_vector(dir);
+    bvpl_create_directions_b dir;
+    bvpl_kernel_vector_sptr kernel_vec = factory.create_kernel_vector(dir);
     bvpl_gauss_convolution_functor functor;
 
     float sigma_noise=0.0f;
