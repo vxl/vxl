@@ -69,12 +69,12 @@ bool bvpl_create_wc_kernel_vector_process(bprb_func_process& pro)
   unsigned int width = 5;
   width = pro.get_input<unsigned int>(1);
   unsigned int thickness = 5;
-  height = pro.get_input<unsigned int>(2);
+  thickness = pro.get_input<unsigned int>(2);
   vcl_string dir_type = pro.get_input<vcl_string>(3);
   
   
   //Create the factory and get the vector of kernels
-  bvpl_weighted_cube_kernel_factory factory(length,width,height);
+  bvpl_weighted_cube_kernel_factory factory(length,width,thickness);
   if(dir_type == "main_corners"){
     bvpl_main_corner_dirs dir;
     bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
