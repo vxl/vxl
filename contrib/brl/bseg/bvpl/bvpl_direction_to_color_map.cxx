@@ -302,12 +302,22 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
     bvxm_voxel_slab<vnl_float_4>::iterator out_slab_it = (*out_grid_it).begin();
     for (; id_slab_it!=(*id_grid_it).end(); ++id_slab_it ,++response_slab_it, ++ out_slab_it)
     {
-      col=colors[*id_slab_it]*360.0f;
-      vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      vnl_float_4 this_feature(r,g,b,(((*response_slab_it)-min)/(max - min))*500.0f);
-      //float alpha = (*response_slab_it) > 1e-15 ? 255.0f:0.0f;
-      //vnl_float_4 this_feature(r,g,b,alpha);
-      (*out_slab_it)=this_feature;
+      if(*id_slab_it<0){//negative ids are unitialized voxels
+        (*out_slab_it)=vnl_float_4(0,0,0,0);
+      } 
+      else{
+         col=colors[*id_slab_it]*360.0f;
+        vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
+        float alpha;
+        if(max -min < 1e-15)
+          alpha = (*response_slab_it)/max *255.0;
+        else
+          alpha=(((*response_slab_it)-min)/(max - min))*255.0f;
+        //float alpha = (*response_slab_it) > 1e-15 ? 255.0f:0.0f;
+        //vnl_float_4 this_feature(r,g,b,alpha);
+        (*out_slab_it)=vnl_float_4(r,g,b,alpha);
+      }
+      
     }
   }
 }
