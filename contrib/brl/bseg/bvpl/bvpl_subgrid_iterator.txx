@@ -5,15 +5,13 @@
 
 template <class T>
 bvpl_subgrid_iterator<T>::bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid,
-                                                vgl_vector_3d<int> dimensions)
-  : bvpl_subgrid_iterator_base(dimensions), grid_(grid)
+                                                vgl_point_3d<int> max, vgl_point_3d<int> min)
+  : bvpl_subgrid_iterator_base(max, min), grid_(grid)
 {
   // start from the z radius top go towards the botton slab
-  int x_r = dimensions.x()/2;
-  int y_r = dimensions.y()/2;
-  int z_r = dimensions.z()/2;
-  iter_ = grid->slab_iterator(0, dimensions.z());
-  cur_voxel_ = vgl_point_3d<int>(x_r, y_r, z_r);
+  iter_ = grid->slab_iterator(0, dim_.z());
+  cur_voxel_ = offset_;
+  global_cur_voxel_=offset_;
 }
 
 template <class T>
@@ -33,43 +31,55 @@ bvpl_voxel_subgrid<T> bvpl_subgrid_iterator<T>::operator->()
 template <class T>
 bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
 {
-  int x_r = dim_.x()/2;
-  int y_r = dim_.y()/2;
+  int x_r = (max_.x()>0)?max_.x():0;
+  int y_r = (max_.y()>0)?max_.y():0;
   // move to the next voxel
-  unsigned x = cur_voxel_.x();
-  unsigned y = cur_voxel_.y();
-  unsigned z = cur_voxel_.z();
+  int x = cur_voxel_.x();
+  int y = cur_voxel_.y();
+  int z = cur_voxel_.z();
+  int global_z = global_cur_voxel_.z();
+  
   if (++x == grid_->grid_size().x()-x_r) {
-    x=x_r;
+    x=offset_.x();
     if (++y == grid_->grid_size().y()-y_r) {
-      y=y_r;
+      y=offset_.y();
       // time to move to the next slab
-      //vcl_cout << ". " ;
+      vcl_cout << ". " ;
       ++iter_;
+      ++ global_z;
     }
   }
   cur_voxel_.set(x, y, z);
+  global_cur_voxel_.set(x,y,global_z);
   return *this;
 }
 
 template <class T>
 bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
 {
-  int x_r = dim_.x()/2;
-  int y_r = dim_.y()/2;
+  vcl_cout << "Warning in  bvpl_subgrid_iterator::operator--: this operator has not been tested \n";
+  
+  int x_r = (min_.x()<0)?min_.x():0;
+  int y_r = (min_.y()<0)?min_.y():0;
+  int offset_x = (max_.x()>0)?max_.x():0;
+  int offset_y = (max_.y()>0)?max_.y():0;
   // move to the next voxel
   int x = cur_voxel_.x();
   int y = cur_voxel_.y();
   int z = cur_voxel_.z();
+  int global_z = global_cur_voxel_.z();
   if (--x < x_r) {
-    x=grid_->grid_size().x();
+    x=grid_->grid_size().x()- offset_x;
     if (--y < y_r) {
-      y=grid_->grid_size().y();
+      y=grid_->grid_size().y()- offset_y;
       // time to move to the next slab
       --iter_;
+      --global_z;
     }
   }
   cur_voxel_.set(x, y, z);
+  global_cur_voxel_.set(x,y,global_z);
+  
   return *this;
 }
 
