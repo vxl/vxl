@@ -35,7 +35,7 @@ MAIN(test_vector_directions)
   TEST("Direction a", true, test_directions(dir1));
   bvpl_create_directions_b dir2;
   TEST("Direction b", true, test_directions(dir2));
-  bvpl_create_directions_c dir3;
+  bvpl_all_corner_dirs dir3;
   TEST("Direction c", true, test_directions(dir3));
   SUMMARY();
 }
