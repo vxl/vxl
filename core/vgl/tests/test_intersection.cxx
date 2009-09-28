@@ -12,7 +12,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
-
+#include <vgl/algo/vgl_intersection.h>
 
 static void test_plane_intersection()
 {
@@ -94,6 +94,23 @@ static void test_plane_plane()
     TEST("y-z intersection", lineyz.point1()==vgl_point_3d<double>(0,3,1)&&
          lineyz.point2()==vgl_point_3d<double>(1,3,1), true);
   }
+}
+static void test_multiple_planes()
+{
+  //The line passes through (2,1,1), with direction (0.577, 0.577, 0.577)
+  double s3 = 0.577350269;
+  vgl_plane_3d<double> pl0(0,s3,-s3,0.0);
+
+  vgl_plane_3d<double> pl1(-s3,0,s3, s3);
+
+  vgl_plane_3d<double> pl2(s3,-s3,0,-s3);
+
+  vcl_list<vgl_plane_3d<double> > planes;
+  planes.push_back(pl0);   planes.push_back(pl1); planes.push_back(pl2);
+  vgl_infinite_line_3d<double> line = vgl_intersection(planes);
+  vgl_point_3d<double> p0(2, 1, 1);
+  bool is_on = line.contains(p0);
+  TEST("intersection of multiple planes -> line", is_on, true );
 }
 static void test_lines_intersection()
 {
@@ -323,6 +340,7 @@ void test_intersection()
   test_plane_intersection();
   test_three_planes();
   test_plane_plane();
+  test_multiple_planes();
   test_lines_intersection();
   test_lines_intersect_in_tol();
   test_box_2d_intersection();
