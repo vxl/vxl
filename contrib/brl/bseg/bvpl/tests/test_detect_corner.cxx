@@ -34,9 +34,9 @@ void create_window(bvxm_voxel_grid<gauss_f1> *grid)
   unsigned slab_idx = 0;
   bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
 
-  for (unsigned y= 0; y<grid_dim.y(); y++)
+  for (unsigned x= 0; x<grid_dim.x(); x++)
     for (unsigned z = grid_dim.z()/3 + 1; z < 2*grid_dim.z()/3 + 1; z++)
-      for (unsigned x = grid_dim.x()/3 + 1; x < 2*grid_dim.x()/3 + 1; x++)
+      for (unsigned y = grid_dim.y()/3 + 1; y < 2*grid_dim.y()/3 + 1; y++)
         (*grid_it)(x,y,z)=bsta_gauss_f1(0.01f, 1.0f);
 }
 
@@ -52,7 +52,7 @@ bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsign
     unsigned max_z =0;
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
-        for (unsigned j=0; j < (*grid_it).ny(); ++j) {
+        for (unsigned j=0; j < (*grid_it).ny() -3 ; ++j) {
           if (vcl_abs(((*grid_it)(i,j)).mean())> max){
             max = vcl_abs(((*grid_it)(i,j)).mean());
             max_x = i; max_y = j; max_z = k;
@@ -62,7 +62,7 @@ bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsign
     }
     vcl_cout << "Location of max = " << max_x << max_y << max_z << vcl_endl;
     if ((x!=max_x)||(y!=max_y) || (z!=max_z))
-      return false;
+       return false;
 
     bvxm_voxel_grid<gauss_f1>::iterator grid_it2 = grid->slab_iterator(0,grid->grid_size().z());
     vcl_cout << "Max response= " << vcl_abs(((*grid_it2)(max_x,max_y, max_z)).mean()) << vcl_endl;
@@ -91,9 +91,9 @@ bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
   unsigned max_y =0;
   unsigned max_z =0;
   unsigned count = 0;
-  for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
+  for (unsigned k=0; k <grid->grid_size().z()-2; ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
-      for (unsigned j=0; j < (*grid_it).ny(); ++j) {
+      for (unsigned j=0; j < (*grid_it).ny() -2; ++j) {
         if (vcl_abs(((*grid_it)(i,j)).mean())> 1.0e-15){
           vcl_cout << "Response at " << i << ',' << j << ',' << k << " is " <<vcl_abs(((*grid_it)(i,j)).mean())
                    << vcl_endl;
@@ -102,7 +102,7 @@ bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
       }
     }
   }
-  if (count!=4)
+ if (count!=4)
     return false;
   return true;
 }
@@ -111,22 +111,22 @@ bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
 MAIN(test_detect_corner)
 {
   //Create vector of kernels
-  unsigned length = 1;
-  unsigned width = 1;
+  unsigned length = 2;
+  unsigned width = 2;
   unsigned thickness = 2;
 
   bvpl_kernel_vector_sptr kernel_vector= new bvpl_kernel_vector();
   bvpl_corner2d_kernel_factory factory(length, width, thickness);
-  factory.set_rotation_axis( vnl_float_3(0, 1, 0));
+  factory.set_rotation_axis( vnl_float_3(1.0f, 0.0f, 0.0f));
   factory.set_angle(0.0f);
   bvpl_kernel_sptr kernel = new bvpl_kernel(factory.create());
   kernel_vector->kernels_.push_back(kernel);
 
   //Create a synthetic world, with a window
-  bvxm_voxel_grid<gauss_f1> *grid = new bvxm_voxel_grid<gauss_f1> (vgl_vector_3d<unsigned>(9,5,9));
+  bvxm_voxel_grid<gauss_f1> *grid = new bvxm_voxel_grid<gauss_f1> (vgl_vector_3d<unsigned>(5,12,12));
   create_window(grid);
 
-  bvxm_voxel_grid<gauss_f1> *grid_out = new bvxm_voxel_grid<gauss_f1> (vgl_vector_3d<unsigned>(9,5,9));
+  bvxm_voxel_grid<gauss_f1> *grid_out = new bvxm_voxel_grid<gauss_f1> (vgl_vector_3d<unsigned>(5,12,12));
   grid_out->initialize_data(bsta_gauss_f1(0.0f,1.0f));
 
   //Run apply kernel to world
@@ -160,10 +160,10 @@ MAIN(test_detect_corner)
   bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(grid->grid_size());
   bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vector,&oper,grid_out,id_grid);
-  TEST("Id at Corner 1", true, test_id_grid(id_grid,6,2,6,0));
-  TEST("Id at Corner 2", true, test_id_grid(id_grid,4,2,6,1));
-  TEST("Id at Corner 3", true, test_id_grid(id_grid,4,2,4,2));
-  TEST("Id at Corner 4", true, test_id_grid(id_grid,6,2,4,3));
+  TEST("Id at Corner 1", true, test_id_grid(id_grid,2,4,9,0));
+  TEST("Id at Corner 2", true, test_id_grid(id_grid,2,9,9,1));
+  TEST("Id at Corner 3", true, test_id_grid(id_grid,2,9,4,2));
+  TEST("Id at Corner 4", true, test_id_grid(id_grid,2,4,4,3));
 
   //test non-maxima suppression
   //bvxm_voxel_grid<gauss_f1> *non_max_grid= new bvxm_voxel_grid<gauss_f1>(grid->grid_size());
