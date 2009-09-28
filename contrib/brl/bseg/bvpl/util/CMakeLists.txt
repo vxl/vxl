@@ -13,7 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_util_sources)
 
 ADD_LIBRARY(bvpl_util ${bvpl_util_sources})
 
-TARGET_LINK_LIBRARIES(bvpl_util bvpl)
+TARGET_LINK_LIBRARIES(bvpl_util bvpl brdb)
 
 SUBDIRS(io)
 
