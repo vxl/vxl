@@ -107,9 +107,8 @@ void bvpl_vector_operator::non_maxima_suppression(bvxm_voxel_grid<T>* grid_in,
                                                   bvxm_voxel_grid<unsigned >* id_grid,
                                                   bvpl_kernel_vector_sptr kernel_vector)
 {
-  bvpl_subgrid_iterator<T> response_grid_iter(grid_in, kernel_vector->max_dim());
-  //bvpl_subgrid_iterator<T> out_grid_iter(grid_out, kernel_vector->max_dim());
-  bvpl_subgrid_iterator<unsigned int> kernel_id_iter(id_grid, kernel_vector->max_dim());
+  bvpl_subgrid_iterator<T> response_grid_iter(grid_in, kernel_vector->max(), kernel_vector->min());
+   bvpl_subgrid_iterator<unsigned int> kernel_id_iter(id_grid, kernel_vector->max(), kernel_vector->min());
   bvpl_local_max_functor<T> func_max;
   //kernel->print();
   while (!response_grid_iter.isDone()) {
@@ -359,7 +358,7 @@ void bvpl_vector_operator::local_non_maxima_suppression(bvxm_voxel_grid<T>* grid
                                                         bvpl_kernel_sptr kernel)
 {
   bvpl_kernel_iterator kernel_iter = kernel->iterator();
-  bvpl_subgrid_iterator<T> response_grid_iter(grid_in, kernel->dim());
+  bvpl_subgrid_iterator<T> response_grid_iter(grid_in, kernel->max(), kernel->min());
   bvpl_local_max_functor<T> func_max;
   
   while (!response_grid_iter.isDone()) {
