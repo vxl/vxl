@@ -34,4 +34,9 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_suppress_and_combine_process, "bvplSuppressAndCombineProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_extract_top_response_process, "bvplExtractTopResponseProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_operate_ocp_and_app_process, "bvplOperateOcpAndAppProcess");
+  
+  //util
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_find_corner_pairs_process,"bvplFindCornerPairsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_visualize_corner_pairs_process, "bvplVisualizeCornerPairsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_wc_kernel_vector_process, "bvplCreateWcKernelVectorProcess");
 }

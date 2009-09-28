@@ -15,6 +15,7 @@ SET(bvpl_pro_sources
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes bvpl_pro_sources)
+AUX_SOURCE_DIRECTORY(processes/util bvpl_pro_sources)
 
 ADD_LIBRARY(bvpl_pro ${bvpl_pro_sources})
 

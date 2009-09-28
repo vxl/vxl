@@ -25,4 +25,8 @@ DECLARE_FUNC_CONS(bvpl_suppress_and_combine_process);
 DECLARE_FUNC_CONS(bvpl_extract_top_response_process);
 DECLARE_FUNC_CONS(bvpl_operate_ocp_and_app_process);
 
+//util
+DECLARE_FUNC_CONS(bvpl_find_corner_pairs_process);
+DECLARE_FUNC_CONS(bvpl_visualize_corner_pairs_process);
+DECLARE_FUNC_CONS(bvpl_create_wc_kernel_vector_process);
 #endif
