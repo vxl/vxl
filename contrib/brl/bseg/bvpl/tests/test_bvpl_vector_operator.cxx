@@ -100,38 +100,37 @@ bool check_data(bvxm_voxel_grid<unsigned> *grid, vnl_float_3 axis, unsigned id, 
   return result;
 }
 
-bool check_non_max(bvxm_voxel_grid<float> *grid)
+bool check_non_max(bvxm_voxel_grid<float> *grid, int margin)
 {
   vgl_vector_3d<unsigned> grid_dim = grid->grid_size();
   unsigned ni=grid_dim.x();
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
 
-  float ci=ni*0.5f ;
-  float cj=nj*0.5f ;
-  float ck=nk*0.5f ;
+  float ci=ni*0.5f;
+  float cj=nj*0.5f;
+  float ck=nk*0.5f;
 
   bool result = true;
 
   unsigned slab_idx = 0;
   bvxm_voxel_grid<float>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
-  for (unsigned i=0;i<ni;i++)
+  for (unsigned i=margin;i<ni-margin;i++)
   {
-    for (unsigned j=0;j<nj;j++)
+    for (unsigned j=margin;j<nj-margin;j++)
     {
-      for (unsigned k=0;k<nk;k++)
+      for (unsigned k=margin;k<nk-margin;k++)
       {
         if ( i == (unsigned int)ci && j == (unsigned int)cj && k == (unsigned int)ck)
         {
-          //vcl_cout << "Response at center " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
+          vcl_cout << "Response at center " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
           result = result && ((*grid_it)(i,j,k) > 1e-2);
         }
         else if (!((*grid_it)(i,j,k) < 1e-2) )
         {
           result = false;
-          //vcl_cout <<  "Response at " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
+          vcl_cout <<  "Response at " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
         }
-        vcl_cout <<  "Response at " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
       }
     }
   }
@@ -205,12 +204,61 @@ void test_non_max_suppression()
   vector_oper.non_maxima_suppression(grid_out, id_grid, kernel_vec);
 
   //after non-maxima suppression the center voxel should be the winner
-  TEST("Non-max suppression", true, check_non_max(grid_out));
+  TEST("Non-max suppression", true, check_non_max(grid_out,2));
+}
+
+void test_keep_top_responses()
+{
+  vgl_vector_3d<unsigned> grid_size(2,2,2);
+  bvxm_voxel_grid<float> *grid1=new bvxm_voxel_grid<float>(grid_size);
+  grid1->initialize_data(1.0f);
+  bvxm_voxel_grid<float> *grid2=new bvxm_voxel_grid<float>(grid_size);
+  grid2->initialize_data(2.0f);
+  bvxm_voxel_grid<float> *grid3=new bvxm_voxel_grid<float>(grid_size);
+  grid3->initialize_data(3.0f);
+  bvxm_voxel_grid<float> *grid4=new bvxm_voxel_grid<float>(grid_size);
+  grid4->initialize_data(4.0f);
+  
+  bvxm_voxel_grid<vnl_vector_fixed<float,3> > *resp = new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(grid_size);
+  bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid = new bvxm_voxel_grid<vnl_vector_fixed<int,3> >(grid_size);
+  
+  bvpl_vector_operator vec_oper;
+  vec_oper.keep_top_responses(resp, grid1,id_grid, 1);
+  vec_oper.keep_top_responses(resp, grid2,id_grid, 2);
+  vec_oper.keep_top_responses(resp, grid3,id_grid, 3);
+  vec_oper.keep_top_responses(resp, grid4,id_grid, 4);
+  
+  //check top responses
+  bvxm_voxel_grid<vnl_vector_fixed<float,3> >::iterator resp_it= resp->begin();
+  bvxm_voxel_grid<vnl_vector_fixed<int,3> >::iterator id_it= id_grid->begin();
+  bool result = true;
+  vnl_vector_fixed<float,3> sample_resp(4.0f, 3.0f,2.0f);
+  vnl_vector_fixed<int,3> sample_id(4,3,2);
+  for(; resp_it!=resp->end(); ++resp_it, ++ id_it)
+  {
+    bvxm_voxel_slab<vnl_vector_fixed<float,3> >::iterator resp_slab_it= resp_it->begin();
+    bvxm_voxel_slab<vnl_vector_fixed<int,3> >::iterator id_slab_it= id_it->begin();
+    for(; resp_slab_it!=resp_it->end(); ++resp_slab_it, ++ id_slab_it)
+    {
+      result = result && (*resp_slab_it == sample_resp) && (*id_slab_it == sample_id);
+    }
+  }
+
+  TEST("Keep top responses", true, result);
+  
+}
+
+void test_local_non_max()
+{
+
+  
 }
 
 MAIN(test_bvpl_vector_operator)
 {
   test_vector_operator();
   test_non_max_suppression();
+  test_keep_top_responses();
+  test_local_non_max();
   return 0;
 }
