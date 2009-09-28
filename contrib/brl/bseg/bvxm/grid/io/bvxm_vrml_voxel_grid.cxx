@@ -90,9 +90,9 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i){
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-        //float temp = (*grid_it)(i,j)[3]/255.0;
+        float temp = (*grid_it)(i,j)[3]/255.0;
         if((*grid_it)(i,j)[3]/255.0 > threshold){
-          //  vcl_cout<< (*grid_it)(i,j)[3]<< ' '<< temp << vcl_endl;
+          vcl_cout<< (*grid_it)(i,j)[3]<< ' '<< temp << vcl_endl;
           vgl_sphere_3d<float> sphere((float)i,(float)j,(float)k,0.1f);
           write_vrml_sphere(str, sphere, (*grid_it)(i,j)[0]/255.0f,(*grid_it)(i,j)[1]/255.0f,(*grid_it)(i,j)[2]/255.0f,1.0 - (*grid_it)(i,j)[3]/255.0f);
         }
@@ -128,4 +128,26 @@ void bvxm_vrml_voxel_grid::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<fl
   <<  "  }\n"
   <<  " ]\n"
   << "}\n";
+}
+
+void bvxm_vrml_voxel_grid::write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<int> &line)
+{
+  str << "Shape {\n"
+  << " appearance Appearance{\n"
+  << "   material Material\n"
+  << "    {\n"
+  << "      emissiveColor " << 1 << ' ' << 0 << ' ' << 0 << '\n'
+  << "    }\n"
+  << "  }\n"
+  << " geometry IndexedLineSet\n"
+  <<   "{\n"
+  << "      coord Coordinate{\n"
+  << "       point[\n";
+  str <<line.point1().x() << ' ' << line.point1().y() << ' ' <<line.point1().z() << '\n';
+  str <<line.point2().x() << ' ' << line.point2().y() << ' ' <<line.point2().z() << '\n';
+  str << "   ]\n\n }"
+  << "   coordIndex [\n";
+  str << 0 << ',';
+  str << 1 << "   ]\n  }\n}";
+
 }
