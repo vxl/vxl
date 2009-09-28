@@ -62,18 +62,36 @@ class bvpl_create_directions_b: public bvpl_create_directions_base
 
 };
 
+/**********************Corner directions************************/
+class bvpl_main_corner_dirs: public bvpl_create_directions_base
+{
+public:
+  //: Default constructor
+  bvpl_main_corner_dirs();
+  
+};
+ 
+class bvpl_main_plane_corner_dirs: public bvpl_create_directions_base
+{
+public:
+  //: Default constructor
+  bvpl_main_plane_corner_dirs();
+  
+};
 
 //: This class samples
 // phi = 0, theta= 0;
 // phi = pi/4 theta =[0, 2*pi)
 // phi = pi/2 theta = [0, 2*pi)
 // rotation around the axis with resolution pi/4
-class bvpl_create_directions_c: public bvpl_create_directions_base
+class bvpl_all_corner_dirs: public bvpl_create_directions_base
 {
-  public:
+public:
   //: Default constructor
-  bvpl_create_directions_c();
-
+  bvpl_all_corner_dirs();
+  
 };
- 
+
+
+
 #endif //bvpl_create_directions_h_
