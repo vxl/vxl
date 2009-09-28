@@ -16,6 +16,7 @@
 #include "../bvxm_voxel_grid.h"
 #include <vcl_fstream.h>
 #include <vgl/vgl_sphere_3d.h>
+#include <vgl/vgl_line_segment_3d.h>
 #include <vnl/vnl_float_4.h>
 class bvxm_vrml_voxel_grid
 {
@@ -30,7 +31,8 @@ public:
   static void write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold);
   
   static void write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold);
-
+  
+  static void write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<int>& line);
 
    
  // //static void write_vrml_trailer(vcl_ofstream& str);
