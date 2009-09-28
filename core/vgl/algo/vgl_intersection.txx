@@ -42,7 +42,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
   vnl_matrix<double> Q(3,3,0.0);
   vnl_vector<double> vd(3,0.0);
   unsigned n = planes.size();
-  for(vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
+  for(typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
       pit != planes.end(); ++pit)
     {
       double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(),
