@@ -15,10 +15,10 @@ void test_real_polynomial()
     f1.print(testStream);
     vcl_string expected = " X^3 +2 X^2 +3 X +4";
     TEST("f1 prints as X^3 +2 X^2 +3 X +4", testStream.str(), expected);
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << "\"" << vcl_endl
-	     << "Expected:\t\"" << expected << "\"" << vcl_endl;
+    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
+             << "Expected:\t\"" << expected << '"' << vcl_endl;
   }
-  
+
   for (int i=0;i<=f2.degree();++i) f2[i]=2*i+1; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
   f2.print(vcl_cout); vcl_cout << vcl_endl;
 
@@ -64,8 +64,8 @@ void test_real_polynomial()
     f6.print(testStream);
     vcl_string expected = " X +1";
     TEST("f6 prints as X +1", testStream.str(), expected);
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << "\"" << vcl_endl
-	     << "Expected:\t\"" << expected << "\"" << vcl_endl;
+    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
+             << "Expected:\t\"" << expected << '"' << vcl_endl;
   }
 
   vnl_real_polynomial f7(1); //f7 = X - 1
@@ -75,8 +75,8 @@ void test_real_polynomial()
     f7.print(testStream);
     vcl_string expected = " X -1";
     TEST("f7 prints as X -1", testStream.str(), expected);
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << "\"" << vcl_endl
-	     << "Expected:\t\"" << expected << "\"" << vcl_endl;
+    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
+             << "Expected:\t\"" << expected << '"' << vcl_endl;
   }
 
   vnl_real_polynomial f8(1); //f8 = 0
@@ -86,8 +86,8 @@ void test_real_polynomial()
     f8.print(testStream);
     vcl_string expected = "0 ";
     TEST("f8 prints as 0", testStream.str(), expected);
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << "\"" << vcl_endl
-	     << "Expected:\t\"" << expected << "\"" << vcl_endl;
+    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
+             << "Expected:\t\"" << expected << '"' << vcl_endl;
   }
 }
 
