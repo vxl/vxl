@@ -38,8 +38,15 @@ vidl_memory_chunk_frame(const vil_image_view_base& image,
 {
   ni_ = image.ni();
   nj_ = image.nj();
-  if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16 &&
-      image.nplanes() == 1)
+  // use the pixel component format to account for 
+  // images of type vil_rgb<T>, vil_rgba<T>, etc.
+  vil_pixel_format cmp_format =
+      vil_pixel_format_component_format(image.pixel_format());
+  unsigned int num_cmp = vil_pixel_format_num_components(image.pixel_format());
+  unsigned int num_channels = image.nplanes() * num_cmp;
+
+  if (cmp_format == VIL_PIXEL_FORMAT_UINT_16 &&
+      num_channels == 1)
   {
     vil_image_view<vxl_uint_16> img = image;
     if (!img.is_contiguous())
@@ -47,7 +54,7 @@ vidl_memory_chunk_frame(const vil_image_view_base& image,
     memory_ = img.memory_chunk();
     format_ = VIDL_PIXEL_FORMAT_MONO_16;
   }
-  else if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  else if (cmp_format == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<vxl_byte> img = image;
     if (!img.is_contiguous())
@@ -81,7 +88,7 @@ vidl_memory_chunk_frame(const vil_image_view_base& image,
         format_ = VIDL_PIXEL_FORMAT_RGBA_32P;
     }
   }
-  else if ( image.pixel_format() == VIL_PIXEL_FORMAT_FLOAT )
+  else if ( cmp_format == VIL_PIXEL_FORMAT_FLOAT )
   {
     vil_image_view<vxl_ieee_32> img = image;
     if (!img.is_contiguous())

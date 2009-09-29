@@ -20,6 +20,7 @@
 #include "vidl_pixel_iterator.txx"
 #include "vidl_color.h"
 #include <vil/vil_convert.h>
+#include <vil/vil_new.h>
 #include <vil/vil_memory_chunk.h>
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
@@ -520,42 +521,76 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base_sptr& image)
 {
   if (!image)
     return NULL;
+  vidl_convert_to_frame(*image);
+}
 
+
+//: Convert the image view to a frame
+// Will wrap the memory if possible, if not the image is converted to
+// the closest vidl_pixel_format
+vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base& image)
+{
   // try to wrap the image memory in a frame
-  vidl_frame_sptr frame = new vidl_memory_chunk_frame(*image);
+  vidl_frame_sptr frame = new vidl_memory_chunk_frame(image);
   if (frame->pixel_format() != VIDL_PIXEL_FORMAT_UNKNOWN)
     return frame;
 
   // if the image could not be wrapped convert it
-  unsigned ni = image->ni(), nj = image->nj(), np = image->nplanes();
+  unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
+
+  // use the pixel component format to account for 
+  // images of type vil_rgb<T>, vil_rgba<T>, etc.
+  vil_pixel_format cmp_format =
+      vil_pixel_format_component_format(image.pixel_format());
+  unsigned int num_cmp = vil_pixel_format_num_components(image.pixel_format());
+  unsigned int num_channels = np * num_cmp;
 
   // special case for 16 bit images
-  if (image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+  if (cmp_format == VIL_PIXEL_FORMAT_UINT_16)
   {
-    if (np != 1)
-      return NULL;
-    vil_image_view<vxl_uint_16> img(ni,nj);
-    img.deep_copy(vil_image_view<vxl_uint_16>(*image));
-    return new vidl_memory_chunk_frame(ni, nj, VIDL_PIXEL_FORMAT_MONO_16,
-                                       img.memory_chunk());
+    if (num_channels == 1)
+    {
+      vil_image_view<vxl_uint_16> img(ni,nj);
+      img.deep_copy(vil_image_view<vxl_uint_16>(image));
+      return new vidl_memory_chunk_frame(ni, nj, VIDL_PIXEL_FORMAT_MONO_16,
+                                        img.memory_chunk());
+    }
+  }
+  // special case for 32 bit float images
+  else if (cmp_format == VIL_PIXEL_FORMAT_FLOAT)
+  {
+    if(num_channels == 1 || num_channels == 3)
+    {
+      vidl_pixel_format format = VIDL_PIXEL_FORMAT_UNKNOWN;
+      if (num_channels == 1)
+        format = VIDL_PIXEL_FORMAT_MONO_F32;
+      else
+        format = VIDL_PIXEL_FORMAT_RGB_F32P;
+
+      vil_image_view<vxl_ieee_32> img(ni,nj,num_channels);
+      img.deep_copy(vil_image_view<vxl_ieee_32>(image));
+      return new vidl_memory_chunk_frame(ni, nj, format,
+                                         img.memory_chunk());
+    }
   }
 
   vidl_pixel_format format = VIDL_PIXEL_FORMAT_UNKNOWN;
-  if (np == 1)
+  if (num_channels == 1)
     format = VIDL_PIXEL_FORMAT_MONO_8;
-  else if (np == 3)
+  else if (num_channels == 3)
     format = VIDL_PIXEL_FORMAT_RGB_24P;
-  else if (np == 4)
+  else if (num_channels == 4)
     format = VIDL_PIXEL_FORMAT_RGBA_32P;
   else
     return NULL;
 
   vil_image_view<vxl_byte> img;
-  if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
-    img.deep_copy(vil_image_view<vxl_byte>(*image));
+  if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+    img.deep_copy(vil_image_view<vxl_byte>(image));
   else
   {
-    vil_image_view_base_sptr bimage = vil_convert_cast(vxl_byte(),image);
+    vil_image_resource_sptr resrc = vil_new_image_resource_of_view(image);
+    vil_image_view_base_sptr bimage = vil_convert_cast(vxl_byte(),resrc->get_view());
     if (!bimage)
       return NULL;
     img = *bimage;

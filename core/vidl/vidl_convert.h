@@ -48,9 +48,14 @@ bool vidl_convert_frame(const vidl_frame& in_frame,
 vidl_frame_sptr vidl_convert_frame(const vidl_frame_sptr& in_frame,
                                    vidl_pixel_format format);
 
-//: Convert the image view to a frame
+//: Convert the image view smart pointer to a frame
 // Will wrap the memory if possible, if not the image is converted to
 // the closest vidl_pixel_format
 vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base_sptr& image);
+
+//: Convert the image view to a frame
+// Will wrap the memory if possible, if not the image is converted to
+// the closest vidl_pixel_format
+vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base& image);
 
 #endif // vidl_convert_h_

@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_crop.h>
 #include <vidl/vidl_config.h>
 #include <vidl/vidl_convert.h>
 #include <vul/vul_timer.h>
@@ -54,8 +55,96 @@ static void test_convert()
     TEST("vidl_convert_to_view (UYVY_422)", success, true);
   }
 
+  // test conversion from image_views to frames
   {
-    vxl_byte buffer1[16], buffer2[16];
+    vil_image_view<vxl_byte> img8(16,16,3);
+    img8.fill(100);
+    vidl_frame_sptr frame = vidl_convert_to_frame(img8);
+    bool valid = frame;
+    if(valid)
+    {
+      valid = valid && frame->ni() == img8.ni() && frame->nj() == img8.nj();
+      const vxl_byte * data8 = static_cast<const vxl_byte*>(frame->data());
+      // test that the image is wrapped into a frame
+      valid = valid && data8 == img8.top_left_ptr();
+      valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_RGB_24P;
+    }
+    TEST("vidl_convert_to_frame (vxl_byte)", valid, true);
+
+    vil_image_view<vxl_byte> img8nc = vil_crop(img8,3,2,5,3);
+    frame = vidl_convert_to_frame(img8nc);
+    valid = frame;
+    if(valid)
+    {
+      valid = valid && frame->ni() == img8nc.ni() && frame->nj() == img8nc.nj();
+      const vxl_byte * data8 = static_cast<const vxl_byte*>(frame->data());
+      // test that the image is copied (not wrapped) into a frame
+      valid = valid && data8 != img8nc.top_left_ptr();
+      valid = valid && data8[0] == img8nc(0,0);
+      valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_RGB_24P;
+    }
+    TEST("vidl_convert_to_frame (vxl_byte) non-contiguous", valid, true);
+
+    vil_image_view<vxl_uint_16> img16(10,20,1);
+    img16.fill(150);
+    frame = vidl_convert_to_frame(img16);
+    valid = frame;
+    if(valid)
+    {
+      valid = valid && frame->ni() == img16.ni() && frame->nj() == img16.nj();
+      const vxl_uint_16 * data16 = static_cast<const vxl_uint_16*>(frame->data());
+      // test that the image is wrapped into a frame
+      valid = valid && data16 == img16.top_left_ptr();
+      valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16;
+    }
+    TEST("vidl_convert_to_frame (vxl_uint16)", valid, true);
+
+    vil_image_view<vxl_uint_16> img16nc = vil_crop(img16,0,5,0,10);
+    frame = vidl_convert_to_frame(img16nc);
+    valid = frame;
+    if(valid)
+    {
+      valid = valid && frame->ni() == img16nc.ni() && frame->nj() == img16nc.nj();
+      const vxl_uint_16 * data16 = static_cast<const vxl_uint_16*>(frame->data());
+      // test that the image is copied (not wrapped) into a frame
+      valid = valid && data16 != img16nc.top_left_ptr();
+      valid = valid && data16[0] == img16nc(0,0);
+      valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16;
+    }
+    TEST("vidl_convert_to_frame (vxl_uint16) non-contiguous", valid, true);
+
+    vil_image_view<vil_rgb<vxl_ieee_32> > imgf(25,25);
+    imgf.fill(3.14159f);
+    frame = vidl_convert_to_frame(imgf);
+    valid = frame;
+    if(valid)
+    {
+      valid = valid && frame->ni() == imgf.ni() && frame->nj() == imgf.nj();
+      const vil_rgb<vxl_ieee_32> * dataf = static_cast<const vil_rgb<vxl_ieee_32>*>(frame->data());
+      // test that the image is wrapped into a frame
+      valid = valid && dataf == imgf.top_left_ptr();
+      valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_RGB_F32;
+    }
+    TEST("vidl_convert_to_frame (vil_rgb<float>)", valid, true);
+
+    vil_image_view<vil_rgb<vxl_ieee_32> > imgfnc = vil_crop(imgf,5,5,5,5);
+    frame = vidl_convert_to_frame(imgfnc);
+    valid = frame;
+    if(valid)
+    {
+      valid = valid && frame->ni() == imgfnc.ni() && frame->nj() == imgfnc.nj();
+      const vil_rgb<vxl_ieee_32> * dataf = static_cast<const vil_rgb<vxl_ieee_32>*>(frame->data());
+      // test that the image is copied (not wrapped) into a frame
+      valid = valid && dataf != imgfnc.top_left_ptr();
+      valid = valid && dataf[0] == imgfnc(0,0);
+      valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_RGB_F32P;
+    }
+    TEST("vidl_convert_to_frame (vil_rgb<float>) non-contiguous", valid, true);
+  }
+
+  // test conversions
+  {
+    vxl_byte buffer1[64], buffer2[64];
     int num_unsupported = 0;
     for (int i=0; i<VIDL_PIXEL_FORMAT_ENUM_END; ++i){
       vidl_shared_frame frame1(buffer1, 2, 2, vidl_pixel_format(i));
