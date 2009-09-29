@@ -1,7 +1,7 @@
 #include "mfpf_pose_predictor.h"
 //:
 // \file
-//: Uses regression to predict new pose from current sample.
+// \brief Uses regression to predict new pose from current sample.
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
@@ -65,7 +65,7 @@ void mfpf_pose_predictor::set_as_box(unsigned ni, unsigned nj,
 //: Define model region as an ellipse with radii ri, rj
 //  Ref. point in centre.
 void mfpf_pose_predictor::set_as_ellipse(double ri, double rj,
-                                     short norm_method)
+                                         short norm_method)
 {
   vcl_vector<mbl_chord> roi;
 
@@ -95,8 +95,8 @@ mfpf_pose_predictor::~mfpf_pose_predictor()
 
 //: Define region and cost of region
 void mfpf_pose_predictor::set(const vcl_vector<mbl_chord>& roi,
-                             double ref_x, double ref_y,
-                             short norm_method)
+                              double ref_x, double ref_y,
+                              short norm_method)
 {
   ref_x_ = ref_x;
   ref_y_ = ref_y;
@@ -157,9 +157,9 @@ double mfpf_pose_predictor::radius() const
 
 //: Get sample of region around specified point in image
 void mfpf_pose_predictor::get_sample_vector(const vimt_image_2d_of<float>& image,
-                                    const vgl_point_2d<double>& p,
-                                    const vgl_vector_2d<double>& u,
-                                    vnl_vector<double>& vec)
+                                            const vgl_point_2d<double>& p,
+                                            const vgl_vector_2d<double>& u,
+                                            vnl_vector<double>& vec)
 {
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
@@ -222,7 +222,7 @@ void mfpf_pose_predictor::new_pose(
       break;
   }
 
-  new_pose=pose0*dpose.inverse();   
+  new_pose=pose0*dpose.inverse();
    // ie Apply inverse of dpose, then pose0
 }
 
@@ -406,5 +406,4 @@ vcl_ostream& operator<<(vcl_ostream& os ,const mfpf_pose_type& pt)
   }
   return os;
 }
-
 
