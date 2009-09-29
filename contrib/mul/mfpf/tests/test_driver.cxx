@@ -10,6 +10,7 @@ DECLARE( test_pose );
 DECLARE( test_mr_point_finder );
 DECLARE( test_dp_snake );
 DECLARE( test_patch_data );
+DECLARE( test_pose_predictor );
 
 void register_tests()
 {
@@ -24,6 +25,7 @@ void register_tests()
   REGISTER( test_mr_point_finder );
   REGISTER( test_dp_snake );
   REGISTER( test_patch_data );
+  REGISTER( test_pose_predictor );
 }
 
 

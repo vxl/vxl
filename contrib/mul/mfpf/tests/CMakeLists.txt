@@ -12,7 +12,9 @@ ADD_EXECUTABLE( mfpf_test_all
   test_mr_point_finder.cxx
   test_dp_snake.cxx
   test_patch_data.cxx
+  test_pose_predictor.cxx
   )
+
 TARGET_LINK_LIBRARIES( mfpf_test_all mfpf mipa testlib )
 
 ADD_TEST( mfpf_test_edge_finder ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_edge_finder)
@@ -25,6 +27,7 @@ ADD_TEST( mfpf_test_pose        ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_pos
 ADD_TEST( mfpf_test_mr_point_finder  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_mr_point_finder)
 ADD_TEST( mfpf_test_patch_data  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_patch_data)
 ADD_TEST( mfpf_test_dp_snake    ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_dp_snake)
+ADD_TEST( mfpf_test_pose_predictor    ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_pose_predictor)
 
 ADD_EXECUTABLE( mfpf_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mfpf_test_include mfpf mipa)

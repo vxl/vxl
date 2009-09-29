@@ -64,6 +64,9 @@ SET(mfpf_sources
   mfpf_region_definer.h          mfpf_region_definer.cxx
   mfpf_region_about_pt.h         mfpf_region_about_pt.cxx
   mfpf_region_about_lineseg.h    mfpf_region_about_lineseg.cxx
+
+  mfpf_pose_predictor.h          mfpf_pose_predictor.cxx
+  mfpf_pose_predictor_builder.h  mfpf_pose_predictor_builder.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)
