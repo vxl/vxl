@@ -3,7 +3,7 @@
 doxygen_add_library(contrib/tbl/vepl
   DEPENDS contrib/tbl/vipl core/vil1
   PACKAGE contrib/tbl
-  DESCRIPTION "Easy Image Processing Library"
+  DESCRIPTION "Easy Image Processing Library using vil1 (deprecated)"
   )
 
 SET(vepl_sources

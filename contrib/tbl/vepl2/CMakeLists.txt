@@ -3,7 +3,7 @@
 doxygen_add_library(contrib/tbl/vepl2
   DEPENDS contrib/tbl/vipl core/vil
   PACKAGE contrib/tbl
-  DESCRIPTION "Easy Image Processing Library"
+  DESCRIPTION "Easy Image Processing Library using vil"
   )
 
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
