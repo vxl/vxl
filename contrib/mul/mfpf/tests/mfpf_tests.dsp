@@ -97,9 +97,6 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_edge_finder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_norm_corr1d.cxx
 # End Source File
 # Begin Source File
@@ -125,6 +122,12 @@ SOURCE=.\test_dp_snake.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_patch_data.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_pose_predictor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target
