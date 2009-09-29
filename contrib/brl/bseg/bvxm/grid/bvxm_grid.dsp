@@ -304,10 +304,40 @@ SOURCE=.\Templates/bvxm_voxel_slab_iterator+uint-.cxx
 SOURCE=.\Templates/bvxm_voxel_storage_disk+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_x+int-.cxx
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+vnl_vector_fixed+int.3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_x+vnl_vector_fixed+int.3--.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_mem+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+vnl_vector_fixed+int.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+vnl_vector_fixed+int.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+vnl_vector_fixed+int.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+vnl_vector_fixed+int.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+vnl_vector_fixed+int.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+int-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

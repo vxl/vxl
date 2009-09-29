@@ -93,10 +93,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bvpl_util_corner_pairs-.cxx
+SOURCE=.\bvpl_corner_pair_finder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvpl_corner_pair_finder.cxx
+SOURCE=.\bvpl_corner_search_functor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_corner_pairs-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
