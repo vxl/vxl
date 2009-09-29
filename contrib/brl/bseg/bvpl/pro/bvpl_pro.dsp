@@ -156,7 +156,19 @@ SOURCE=.\processes/bvpl_create_corner2d_kernel_process.cxx
 SOURCE=.\processes/bvpl_suppress_and_combine_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/util/bvpl_visualize_corner_pairs_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/util/bvpl_create_wc_kernel_vector.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/util/bvpl_find_corner_pairs_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_corner_pairs_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

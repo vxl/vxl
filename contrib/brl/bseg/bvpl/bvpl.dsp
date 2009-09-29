@@ -129,6 +129,12 @@ SOURCE=.\bvpl_corner2d_kernel_factory.cxx
 SOURCE=.\bvpl_find_surface_functor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_weighted_cube_kernel_factory.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_voxel_subgrid+int-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 # End Source File
 # Begin Source File
@@ -259,6 +265,9 @@ SOURCE=.\bvpl_find_surface_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_combined_neighb_operator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_weighted_cube_kernel_factory.h
 # End Source File
 # End Group
 # End Target
