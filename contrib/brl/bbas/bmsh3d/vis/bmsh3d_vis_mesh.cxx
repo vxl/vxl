@@ -290,7 +290,7 @@ void draw_M_ifs_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   }
 
   //Assign faces
-  unsigned int k = 0;
+  int k = 0;
 
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
@@ -301,17 +301,17 @@ void draw_M_ifs_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
       //Note the asssumption about the vid
       const bmsh3d_vertex* v = (const bmsh3d_vertex*) F->vertices(j);
       ind[k] = v->vid();
-      k++;
+      ++k;
     }
     //Add the final '-1'
     ind[k] = -1;
-    k++;
+    ++k;
   }
   assert (k == n_ind);
 
   vp->vertex.setValues(0, nVertices, xyz);
 
-  delete []xyz;
+  delete[] xyz;
 }
 
 void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
@@ -331,7 +331,7 @@ void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   }
 
   //Assign faces
-  unsigned int k = 0;
+  int k = 0;
 
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
@@ -344,17 +344,17 @@ void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
       //Note the asssumption about the vid
       const bmsh3d_vertex* v = (const bmsh3d_vertex*) vertices[j];
       ind[k] = v->vid();
-      k++;
+      ++k;
     }
     //Add the final '-1'
     ind[k] = -1;
-    k++;
+    ++k;
   }
   assert (k == n_ind);
 
   vp->vertex.setValues(0, nVertices, xyz);
 
-  delete []xyz;
+  delete[] xyz;
 }
 
 void draw_M_ifs_geom(SoGroup* root, bmsh3d_mesh* M)

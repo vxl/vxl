@@ -38,10 +38,10 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
   int y = cur_voxel_.y();
   int z = cur_voxel_.z();
   int global_z = global_cur_voxel_.z();
-  
-  if (++x == grid_->grid_size().x()-x_r) {
+
+  if (++x + x_r == int(grid_->grid_size().x())) {
     x=offset_.x();
-    if (++y == grid_->grid_size().y()-y_r) {
+    if (++y + y_r == int(grid_->grid_size().y())) {
       y=offset_.y();
       // time to move to the next slab
       vcl_cout << ". " ;
@@ -57,8 +57,8 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
 template <class T>
 bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
 {
-  vcl_cout << "Warning in  bvpl_subgrid_iterator::operator--: this operator has not been tested \n";
-  
+  vcl_cout << "Warning in  bvpl_subgrid_iterator::operator--: this operator has not been tested\n";
+
   int x_r = (min_.x()<0)?min_.x():0;
   int y_r = (min_.y()<0)?min_.y():0;
   int offset_x = (max_.x()>0)?max_.x():0;
@@ -79,7 +79,7 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
   }
   cur_voxel_.set(x, y, z);
   global_cur_voxel_.set(x,y,global_z);
-  
+
   return *this;
 }
 
