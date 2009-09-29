@@ -20,6 +20,7 @@
 #include <bvpl/bvpl_susan_opinion_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
+#include <bvpl/bvpl_weighted_cube_kernel_factory.h>
 
 #include <bvpl/pro/bvpl_processes.h>
 #include <bvpl/pro/bvpl_register.h>
