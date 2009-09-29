@@ -1,10 +1,11 @@
-#include "bvpl_corner_search_kernel.h"
-//
-//:\File
+#include "bvpl_corner_search_functor.h"
+//:
+// \file
 
-#include <vcl_algorithm.h>
+#include <bvpl/bvpl_corner2d_kernel_factory.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_float_3.h>
+#include <vcl_algorithm.h>
 
 // Default Constructor
 bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory()
@@ -26,20 +27,20 @@ bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory(unsigned length, unsi
   length_ = length;
   width_ = width;
   thickness_ = thickness;
-  
+
   //this kernel is not symmetric around main axis
   angular_resolution_= float(vnl_math::pi_over_4);
-  
+
   //set canonical axis to x-axis. The rotation axis is normal to the plane containing the edge
   canonical_rotation_axis_[0] = 1.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
-  
+
   //used to define 0-rotation
   canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 1.0f; canonical_parallel_axis_[2] = 0.0f;
-  
+
   //initialize variables
   angle_ = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
-  
+
   //create the default kernel
   create_canonical();
 }
@@ -52,17 +53,17 @@ void bvpl_corner2d_kernel_factory::create_canonical()
   {
     vcl_cerr<< "Warning, kernel is too large. You should subsample world. Processing may take a long time.\n";
   }
-  
+
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
-  
+
   int min_x = -1 * int(thickness_);
   int max_x =  int(thickness_);
   int min_y = -1 * int(width_);
   int max_y =  int(width_);
   int min_z = -1 * int(length_);
   int max_z =  int(length_);
-  
+
   int n0=0;
   int n1=0;
   for (int x=min_x; x<=max_x; x++)
@@ -70,7 +71,7 @@ void bvpl_corner2d_kernel_factory::create_canonical()
     for (int z=min_z+1; z<=max_z; z++)
     {
       for (int y=min_y+1; y<=max_y; y++)
-      { 
+      {
         //if ((y==0) && (z==0));
         if (z <= 0)
           n1++;
@@ -81,13 +82,13 @@ void bvpl_corner2d_kernel_factory::create_canonical()
       }
     }
   }
-  
+
   for (int x=min_x; x<=max_x; x++)
   {
     for (int z=min_z+1; z<=max_z; z++)
     {
       for (int y=min_y+1; y<=max_y; y++)
-      { 
+      {
         //if ((y==0) && (z==0))
         //  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0.0f)));
         if (z <= 0)
@@ -99,14 +100,14 @@ void bvpl_corner2d_kernel_factory::create_canonical()
       }
     }
   }
-  
+
   //set the dimension of the 3-d grid
   max3d_.set(max_x,max_y,max_z);
   min3d_.set(min_x,min_y,min_z);
-  
+
   //set the current kernel
   kernel_ = canonical_kernel_;
-  
+
   return;
 }
 
