@@ -35,23 +35,23 @@ vgl_point_3d<T> vgl_intersection(vcl_vector<vgl_plane_3d<T> > const& p)
 
 
 template <class T>
-vgl_infinite_line_3d<T> 
+vgl_infinite_line_3d<T>
 vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
 {
   //form the matrix of plane normal monomials
   vnl_matrix<double> Q(3,3,0.0);
   vnl_vector<double> vd(3,0.0);
   unsigned n = planes.size();
-  for(typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
-      pit != planes.end(); ++pit)
-    {
-      double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(),
-        d = (*pit).d();
-      Q[0][0] += a*a; Q[0][1] += a*b; Q[0][2] += a*c;
-      Q[1][1] += b*b; Q[1][2] += b*c;
-      Q[2][2] += c*c;
-      vd[0]-=a*d; vd[1]-=b*d; vd[2]-=c*d;
-    }
+  for (typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
+       pit != planes.end(); ++pit)
+  {
+    double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(),
+      d = (*pit).d();
+    Q[0][0] += a*a; Q[0][1] += a*b; Q[0][2] += a*c;
+    Q[1][1] += b*b; Q[1][2] += b*c;
+    Q[2][2] += c*c;
+    vd[0]-=a*d; vd[1]-=b*d; vd[2]-=c*d;
+  }
   Q[1][0]=  Q[0][1];   Q[2][0]= Q[0][2];   Q[2][1]=  Q[1][2];
   Q/=n;
   vd/=n;
@@ -100,7 +100,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
   vgl_vector_3d<T> tv(static_cast<T>(tx),
                       static_cast<T>(ty),
                       static_cast<T>(tz));
-                     
+
   return vgl_infinite_line_3d<T>(pt, tv);
 }
 
@@ -133,7 +133,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
   vgl_point_3d<T> p2=*it; ++it;
   // create a plane from polygon
   vgl_plane_3d<T> poly_plane(p0,p1,p2);
-  if(!vgl_intersection<T>(b, poly_plane))
+  if (!vgl_intersection<T>(b, poly_plane))
     return false;
 
   // now we do a 3D transformation of the polygon and the box center to the plane
@@ -182,6 +182,6 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, vcl_list<vgl_point_3d<T > >&); \
-template vgl_infinite_line_3d<T> vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes)
 
 #endif // vgl_algo_intersection_txx_
