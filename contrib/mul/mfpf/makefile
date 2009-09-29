@@ -50,6 +50,8 @@ SOURCES += mfpf_grad_corr2d_builder.cxx
 SOURCES += mfpf_grad_corr2d.cxx
 SOURCES += mfpf_log_lin_class_cost.cxx
 SOURCES += mfpf_lin_clsfy_finder_builder.cxx
+SOURCES += mfpf_pose_predictor_builder.cxx
+SOURCES += mfpf_pose_predictor.cxx
 
 SUBDIRS += tools
 
