@@ -8,7 +8,7 @@
 //
 // \verbatim
 //  Modifications
-//  8/13/09 added support for gaussian grids
+//   Aug 13 2009 added support for Gaussian grids
 // \endverbatim
 
 #include <vcl_string.h>
@@ -34,9 +34,8 @@ bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0]="bvxm_voxel_grid_base_sptr"; //the input grid
   input_types_[1]="vcl_string"; //the path for output grid
-	
 
-  //The ouput grid
+  //The output grid
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr";
   if (!pro.set_input_types(input_types_))
@@ -54,7 +53,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
 {
   using namespace bvpl_crop_grid_process_globals;
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
-  
+
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
   {
@@ -80,7 +79,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
   unsigned i=0;
   bvxm_voxel_grid_base_sptr input_grid = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   vcl_string output_path = pro.get_input<vcl_string>(i++);
- 
+
   if (vul_file::is_directory(output_path)) {
     vcl_cerr << "In bvxm_crop_grid_process -- output directory "<< output_path << "is not valid!\n";
     return false;
@@ -89,9 +88,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
   //if the output file exits, delete it
   if (vul_file::exists(output_path))
     vul_file::delete_file_glob(output_path);
-	
-	
-	
+
   vgl_vector_3d<unsigned int> out_grid_dim(dimx, dimy, dimz);
   if (bvxm_voxel_grid<float> * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
   {
@@ -108,11 +105,11 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
 
-    vcl_cout<<"Cropping done."<<vcl_endl;
+    vcl_cout << "Cropping done." << vcl_endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-  else if(bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
+  else if (bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
   {
     bvxm_voxel_grid<bvxm_opinion> * grid_out=new bvxm_voxel_grid<bvxm_opinion>(output_path, out_grid_dim);
 
@@ -127,31 +124,29 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
 
-    vcl_cout<<"Cropping done."<<vcl_endl;
+    vcl_cout << "Cropping done." << vcl_endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
   else if (bvxm_voxel_grid<gauss_type> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr()))
   {
-    
-
     bvxm_voxel_grid<gauss_type> * grid_out=new bvxm_voxel_grid<gauss_type>(output_path, out_grid_dim);
-    
+
     unsigned slab_idx = corner_z;
     bvxm_voxel_grid<gauss_type>::iterator grid_in_it = gauss_input_grid->slab_iterator(slab_idx);
     bvxm_voxel_grid<gauss_type>::iterator grid_out_it = grid_out->slab_iterator(slab_idx - corner_z);
-    
+
     for (; slab_idx < (corner_z + dimz); ++grid_in_it, ++grid_out_it, ++slab_idx)
     {
       for (unsigned x = corner_x; x < corner_x + dimx; x++)
         for (unsigned y = corner_y; y < corner_y + dimy; y++)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
-    
-    vcl_cout<<"Cropping done."<<vcl_endl;
+
+    vcl_cout << "Cropping done." << vcl_endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-  
+
   return true;
 }

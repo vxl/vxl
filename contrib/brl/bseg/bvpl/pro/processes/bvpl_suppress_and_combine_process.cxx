@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A class for succesively running a kernel(of a vector), applying non-max suppression and combining with previous result
+// \brief A class for successively running a kernel(of a vector), applying non-max suppression and combining with previous result
 // \author Isabel Restrepo
 // \date September 17, 2009
 // \verbatim
@@ -36,18 +36,18 @@ namespace bvpl_suppress_and_combine_process_globals
 }
 
 //: process takes 6 inputs and has 2 outputs.
-// input[0]: The grid
-// input[1]: The kernel vector
-// input[2]: The grid type:
+// * input[0]: The grid
+// * input[1]: The kernel vector
+// * input[2]: The grid type:
 //           - float
 //           - opinion
 //           - ...
-// input[3]: The functor type
-// input[4]: Output grid path to hold response
-// input[5]: Output grid path to hold ids
+// * input[3]: The functor type
+// * input[4]: Output grid path to hold response
+// * input[5]: Output grid path to hold ids
 //
-// output[0]: Output grid with response
-// output[1]: Output grid with ids
+// * output[0]: Output grid with response
+// * output[1]: Output grid with ids
 bool bvpl_suppress_and_combine_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_suppress_and_combine_process_globals;
@@ -58,25 +58,25 @@ bool bvpl_suppress_and_combine_process_cons(bprb_func_process& pro)
   input_types_[3] = "vcl_string";
   input_types_[4] = "vcl_string";
   input_types_[5] = "vcl_string";
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
   output_types_[1] = "bvxm_voxel_grid_base_sptr";
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_suppress_and_combine_process(bprb_func_process& pro)
 {
   using namespace bvpl_suppress_and_combine_process_globals;
-  
+
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cout << pro.name() << ": the input number should be " << n_inputs_
-    << " but instead it is " << pro.n_inputs() << vcl_endl;
+             << " but instead it is " << pro.n_inputs() << vcl_endl;
     return false;
   }
-  
+
   //get inputs:
   unsigned i = 0;
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
@@ -85,18 +85,18 @@ bool bvpl_suppress_and_combine_process(bprb_func_process& pro)
   vcl_string functor_name = pro.get_input<vcl_string>(i++);
   vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
   vcl_string id_grid_path = pro.get_input<vcl_string>(i++);
-  
+
   //check input's validity
   if (!grid_base.ptr()) {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
   }
-  
+
   if ( !kernel ) {
     vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
     return false;
   }
-  
+
   if (datatype == "float")
   {
     bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr());
