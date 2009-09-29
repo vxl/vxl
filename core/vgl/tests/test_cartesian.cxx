@@ -27,8 +27,6 @@
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_lineseg_test.h>
-//#include <vgl/vgl_polygon_test.h>
-//#include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_1d_basis.h>
 #include <vgl/vgl_intersection.h>
 
@@ -159,7 +157,7 @@ static void test_vector_3d()
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
   TEST("orthogonal", orthogonal(v,cross_product(v1,v)), true);
   TEST("orthogonal", orthogonal(v1,cross_product(v1,v)), true);
-  
+
   vgl_vector_3d<double> tr[4];
   double check = 0.0;
 
@@ -210,7 +208,7 @@ static void test_vector_3d()
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 3", check, 0.0, 1e-8);
-  
+
   // Orthogonal vectors test case 4
   vgl_vector_3d<double> n4(0.0, 1.0, 1.0); // NB input vector not normalized
   check = 0.0;
@@ -226,7 +224,7 @@ static void test_vector_3d()
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 4", check, 0.0, 1e-8);
-  
+
   // Orthogonal vectors test case 5
   vgl_vector_3d<double> n5(1.0, 1.0, 0.0); // NB input vector not normalized
   check = 0.0;
@@ -242,7 +240,7 @@ static void test_vector_3d()
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 5", check, 0.0, 1e-8);
-  
+
   vcl_stringstream is; is << "4.4 -5 7e1 10,11 , 12 (12 , 13,14 )";
   vgl_vector_3d<float> p; is >> p;
   TEST("istream vgl_vector_3d (blank-separated)", p, vgl_vector_3d<float>(4.4f,-5,70));
@@ -1096,30 +1094,16 @@ static void test_1d_basis()
 
 static void test_cartesian()
 {
-  /*
-  vcl_cout << "--- test_vector_2d ---\n";
-  test_vector_2d();
-  */
-  vcl_cout << "--- test_vector_3d ---\n";
-  test_vector_3d();
-  /*
-  vcl_cout << "--- test_point_2d ---\n";
-  test_point_2d();
-  vcl_cout << "--- test_point_3d ---\n";
-  test_point_3d();
-  vcl_cout << "--- test_line_2d ---\n";
-  test_line_2d();
-  vcl_cout << "--- test_line_3d ---\n";
-  test_line_3d();
-  vcl_cout << "--- test_plane_3d ---\n";
-  test_plane_3d();
-  vcl_cout << "--- test_box_2d ---\n";
-  test_box_2d();
-  vcl_cout << "--- test_box_3d ---\n";
-  test_box_3d();
-  vcl_cout << "-- Testing vgl_1d_basis --\n";
-  test_1d_basis();
-  */
+  vcl_cout << "--- test_vector_2d ---\n";     test_vector_2d();
+  vcl_cout << "--- test_vector_3d ---\n";     test_vector_3d();
+  vcl_cout << "--- test_point_2d ---\n";      test_point_2d();
+  vcl_cout << "--- test_point_3d ---\n";      test_point_3d();
+  vcl_cout << "--- test_line_2d ---\n";       test_line_2d();
+  vcl_cout << "--- test_line_3d ---\n";       test_line_3d();
+  vcl_cout << "--- test_plane_3d ---\n";      test_plane_3d();
+  vcl_cout << "--- test_box_2d ---\n";        test_box_2d();
+  vcl_cout << "--- test_box_3d ---\n";        test_box_3d();
+  vcl_cout << "-- Testing vgl_1d_basis --\n"; test_1d_basis();
 }
 
 TESTMAIN(test_cartesian);
