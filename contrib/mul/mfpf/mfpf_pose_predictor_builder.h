@@ -7,6 +7,7 @@
 
 #include <mfpf/mfpf_pose_predictor.h>
 #include <vnl/vnl_random.h>
+#include <vcl_iosfwd.h>
 
 //: Trains regressor in an mfpf_pose_predictor.
 //  Object set up with a pose predictor which has been
@@ -91,12 +92,13 @@ class mfpf_pose_predictor_builder
   //: Test equality
   bool operator==(const mfpf_pose_predictor_builder& nc) const;
 };
+
 //: Binary file stream output operator for class reference
-void vsl_b_write(vsl_b_ostream& bfs, 
+void vsl_b_write(vsl_b_ostream& bfs,
                  const mfpf_pose_predictor_builder& b);
 
 //: Binary file stream input operator for class reference
-void vsl_b_read(vsl_b_istream& bfs, 
+void vsl_b_read(vsl_b_istream& bfs,
                 mfpf_pose_predictor_builder& b);
 
 //: Stream output operator for class reference
