@@ -24,6 +24,8 @@
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_pose.h>
+#include <mfpf/mfpf_pose_predictor.h>
+#include <mfpf/mfpf_pose_predictor_builder.h>
 #include <mfpf/mfpf_pose_set.h>
 #include <mfpf/mfpf_profile_pdf.h>
 #include <mfpf/mfpf_profile_pdf_builder.h>
