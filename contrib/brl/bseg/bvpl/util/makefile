@@ -4,7 +4,7 @@ LIBRARY := bvpl_util
 VERSION := 1.0
 
 SOURCES += bvpl_corner_pair_finder.cxx
-MANPAGE_SOURCES += bvpl_corner_search_functor.h
+SOURCES += bvpl_corner_search_functor.cxx
 
 SUBDIRS += io
 
