@@ -5,8 +5,8 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvpl )
 
 
 SET(bvpl_util_sources
-    #bvpl_corner_search_kernel.h bvpl_corner_search_kernel.cxx
     bvpl_corner_pair_finder.h    bvpl_corner_pair_finder.cxx
+    bvpl_corner_search_functor.h bvpl_corner_search_functor.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_util_sources)
