@@ -34,9 +34,9 @@ void create_window(bvxm_voxel_grid<gauss_f1> *grid)
   unsigned slab_idx = 0;
   bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
 
-  for (unsigned x= 0; x<grid_dim.x(); x++)
-    for (unsigned z = grid_dim.z()/3 + 1; z < 2*grid_dim.z()/3 + 1; z++)
-      for (unsigned y = grid_dim.y()/3 + 1; y < 2*grid_dim.y()/3 + 1; y++)
+  for (unsigned x= 0; x<ni; x++)
+    for (unsigned z = nk/3 + 1; z < 2*nk/3 + 1; z++)
+      for (unsigned y = nj/3 + 1; y < 2*nj/3 + 1; y++)
         (*grid_it)(x,y,z)=bsta_gauss_f1(0.01f, 1.0f);
 }
 
@@ -46,7 +46,6 @@ bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsign
 
     bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->begin();
     float max =  vcl_abs(((*grid_it)(0,0)).mean());
-    float min =  vcl_abs(((*grid_it)(0,0)).mean());
     unsigned max_x =0;
     unsigned max_y =0;
     unsigned max_z =0;
@@ -62,7 +61,7 @@ bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsign
     }
     vcl_cout << "Location of max = " << max_x << max_y << max_z << vcl_endl;
     if ((x!=max_x)||(y!=max_y) || (z!=max_z))
-       return false;
+      return false;
 
     bvxm_voxel_grid<gauss_f1>::iterator grid_it2 = grid->slab_iterator(0,grid->grid_size().z());
     vcl_cout << "Max response= " << vcl_abs(((*grid_it2)(max_x,max_y, max_z)).mean()) << vcl_endl;
@@ -76,20 +75,12 @@ bool test_id_grid(bvxm_voxel_grid<unsigned> *grid,unsigned x, unsigned y, unsign
   unsigned slab_idx = 0;
   bvxm_voxel_grid<unsigned>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
 
-  if ((*grid_it)(x,y,z)==id)
-    return true;
-
-  return false;
+  return (*grid_it)(x,y,z)==id;
 }
 
 bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
 {
   bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->begin();
-  float max =  vcl_abs(((*grid_it)(0,0)).mean());
-  float min =  vcl_abs(((*grid_it)(0,0)).mean());
-  unsigned max_x =0;
-  unsigned max_y =0;
-  unsigned max_z =0;
   unsigned count = 0;
   for (unsigned k=0; k <grid->grid_size().z()-2; ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
@@ -97,14 +88,12 @@ bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
         if (vcl_abs(((*grid_it)(i,j)).mean())> 1.0e-15){
           vcl_cout << "Response at " << i << ',' << j << ',' << k << " is " <<vcl_abs(((*grid_it)(i,j)).mean())
                    << vcl_endl;
-          count++;
+          ++count;
         }
       }
     }
   }
- if (count!=4)
-    return false;
-  return true;
+  return count==4;
 }
 
 
