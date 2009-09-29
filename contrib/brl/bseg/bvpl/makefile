@@ -26,8 +26,9 @@ SOURCES += bvpl_kernel.cxx
 SOURCES += bvpl_corner2d_kernel_factory.cxx
 SOURCES += bvpl_find_surface_functor.cxx
 MANPAGE_SOURCES += bvpl_combined_neighb_operator.h
+SOURCES += bvpl_weighted_cube_kernel_factory.cxx
 
-SUBDIRS += pro io
+SUBDIRS += pro io util
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
