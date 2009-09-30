@@ -14,7 +14,6 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
-#include <vidl_vil1/vidl_vil1_frame.h>
 #include <vvid/cmu_1394_camera_params.h>
 #include <vpro/vpro_video_process.h>
 #include <vpro/vpro_epipolar_space_process.h>
