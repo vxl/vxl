@@ -29,15 +29,24 @@ SET(brct_sources
     brct_plane_sweeper.h          brct_plane_sweeper.cxx
     brct_volume_processor_params.h    brct_volume_processor_params.cxx
     brct_volume_processor.h       brct_volume_processor.cxx
-    brct_dense_reconstructor.h    brct_dense_reconstructor.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brct_sources)
+
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+SET(brct_sources ${brct_sources}
+    brct_dense_reconstructor.h    brct_dense_reconstructor.cxx
+)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 ADD_LIBRARY(brct ${brct_sources})
 INSTALL_TARGETS(/lib brct)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bmvl/brct ${brct_sources})
 
-TARGET_LINK_LIBRARIES(brct sdet brip rrel vsrl bsol vpgl gevd vdgl vsol mvl vil vil1 vgl_algo vgl vnl vbl bdgl bugl)
+TARGET_LINK_LIBRARIES(brct sdet brip rrel bsol vpgl gevd vdgl vsol mvl vil vil1 vgl_algo vgl vnl vbl bdgl bugl)
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+  # vsrl is only used by brct_dense_reconstructor
+  TARGET_LINK_LIBRARIES(brct vsrl)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

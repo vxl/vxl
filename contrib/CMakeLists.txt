@@ -64,19 +64,18 @@ ENDIF(BUILD_GEL)
 
 IF(BUILD_BRL)
   SUBDIRS(brl)
-  # since gel/vifa/tests depends on brl/bseg/sdet, it must be built after brl:
   IF(BUILD_GEL)
+  # since gel/vsrl depends on brl/bseg/sdet, it cannot be built before brl:
+  IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+    # Dense matcher
+    SUBDIRS(gel/vsrl)
+  ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
   IF (BUILD_TESTING)
+    # since gel/vifa/tests depends on brl/bseg/sdet, it must be built after brl:
     SUBDIRS(gel/vifa/tests)
   ENDIF (BUILD_TESTING)
   ENDIF(BUILD_GEL)
 ENDIF(BUILD_BRL)
-
-# since gel/vsrl depends on brl/bseg/sdet, it cannot be built before brl:
-IF(BUILD_GEL)
-  # Dense matcher
-  SUBDIRS(gel/vsrl)
-ENDIF(BUILD_GEL)
 
 IF(BUILD_PRIP)
   SUBDIRS(prip)

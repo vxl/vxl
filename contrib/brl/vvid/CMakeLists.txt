@@ -16,10 +16,15 @@ IF(HAS_VGUI)
  # sources that don't depend on the camera being present
  SET(vvid_sources
      vvid_frame_trail.cxx          vvid_frame_trail.h
-     vvid_file_manager.cxx         vvid_file_manager.h
-     vvid_vil_file_manager.cxx     vvid_vil_file_manager.h
-     vvid_command_line_player.cxx  vvid_command_line_player.h
  )
+ IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+  # source files depending on vidl1 or vidl_vil1
+  SET(vvid_sources ${vvid_sources}
+      vvid_file_manager.cxx         vvid_file_manager.h
+      vvid_vil_file_manager.cxx     vvid_vil_file_manager.h
+      vvid_command_line_player.cxx  vvid_command_line_player.h
+  )
+ ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
  # find the path to the cmu camera libraries and includes
  INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_cmu_camera.cmake )
@@ -48,7 +53,10 @@ IF(HAS_VGUI)
  INSTALL_TARGETS(/lib vvid)
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/vvid ${vvid_sources})
 
- TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol bsol vtol vsol brip bgui vgui vidl1 vidl_vil1 vul vil vil1)
+ TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol bsol vtol vsol brip bgui vgui vul vil vil1)
+ IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+   TARGET_LINK_LIBRARIES(vvid vidl1 vidl_vil1)
+ ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
  # the main executables
  SUBDIRS(bin)

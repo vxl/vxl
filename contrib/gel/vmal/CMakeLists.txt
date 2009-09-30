@@ -9,8 +9,6 @@ doxygen_add_library(contrib/gel/vmal
 SET(vmal_sources
  vmal_dense_matching.cxx    vmal_dense_matching.h
  vmal_homog2d.cxx           vmal_homog2d.h
- vmal_kl.cxx                vmal_kl.h
- vmal_kl_params.cxx         vmal_kl_params.h
  vmal_lines_correlation.cxx vmal_lines_correlation.h
  vmal_operators.cxx         vmal_operators.h
  vmal_refine_lines.cxx      vmal_refine_lines.h
@@ -18,6 +16,13 @@ SET(vmal_sources
  vmal_convert_vtol.cxx      vmal_convert_vtol.h
 )
 AUX_SOURCE_DIRECTORY(Templates vmal_sources)
+
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+SET(vmal_sources ${vmal_sources}
+ vmal_kl.cxx                vmal_kl.h
+ vmal_kl_params.cxx         vmal_kl_params.h
+)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 IF(BUILD_OXL)
 SET(vmal_sources ${vmal_sources}
@@ -38,4 +43,8 @@ IF(BUILD_OXL)
  TARGET_LINK_LIBRARIES(vmal mvl osl vil)
 ENDIF(BUILD_OXL)
 
-TARGET_LINK_LIBRARIES(vmal vgel_kl vtol vidl_vil1 vil1 vnl_algo vnl vbl)
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+ TARGET_LINK_LIBRARIES(vmal vgel_kl vidl_vil1)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+
+TARGET_LINK_LIBRARIES(vmal vtol vnl_algo vil1 vnl vbl)

@@ -31,8 +31,10 @@ SUBDIRS(geml)
 # Multi-view database
 SUBDIRS(gmvl)
 
-# Kanade-Lucas-Tomasi feature tracker
-SUBDIRS(vgel/kl vgel gkll)
+# Kanade-Lucas-Tomasi feature tracker; uses vidl_vil1
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+  SUBDIRS(vgel/kl vgel gkll)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 # Dense matcher
 SUBDIRS(vmal)
@@ -50,7 +52,9 @@ ENDIF(BUILD_OXL)
 SUBDIRS(mrc)
 
 # Experiments with the vidl library and vgui (JLM)
-SUBDIRS(jvid)
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+  SUBDIRS(jvid)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 # Intensity face attributes (MPP)
 SUBDIRS(vifa)

@@ -29,18 +29,25 @@ SET(strk_sources
     strk_region_info.cxx                 strk_region_info.h
     strk_io.cxx                          strk_io.h
     strk_feature_capture_process.cxx     strk_feature_capture_process.h
-    strk_snippet_extractor_process.cxx   strk_snippet_extractor_process.h
 )
 AUX_SOURCE_DIRECTORY(Templates strk_sources)
+
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+SET(strk_sources ${strk_sources}
+    strk_snippet_extractor_process.cxx   strk_snippet_extractor_process.h
+)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 ADD_LIBRARY(strk ${strk_sources})
 INSTALL_TARGETS(/lib strk)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/strk ${strk_sources})
 
-TARGET_LINK_LIBRARIES(strk bsta brip vpro bsol btol gevd vtol vsol vidl_vil1 vil1 vgl_algo vgl vnl vbl vul)
-
+TARGET_LINK_LIBRARIES(strk bsta brip vpro bsol btol gevd vtol vsol vil1 vgl_algo vgl vnl vbl vul)
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+  # vidl_vil1 is only used by strk_snippet_extractor_process
+  TARGET_LINK_LIBRARIES(strk vidl_vil1)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF (BUILD_TESTING)
-
