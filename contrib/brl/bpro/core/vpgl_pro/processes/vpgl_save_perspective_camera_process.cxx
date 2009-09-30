@@ -9,6 +9,8 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
+#include <vsl/vsl_binary_io.h>
+#include <vul/vul_file.h>
 
 //: initialization
 bool vpgl_save_perspective_camera_process_cons(bprb_func_process& pro)
@@ -39,7 +41,14 @@ bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
     vcl_cerr << "error: could not convert camera input to a vpgl_perspective_camera\n";
     return false;
   }
-
+ 
+  vcl_string ext = vul_file_extension(camera_filename);
+  if(ext == ".vsl") // binary form
+    {
+      vsl_b_ofstream bp_out(camera_filename.c_str());
+      cam->b_write(bp_out);
+      bp_out.close();
+  }else{
   // write matrices to the text file.
   vcl_ofstream ofs(camera_filename.c_str());
   if (!ofs.is_open()) {
@@ -48,7 +57,7 @@ bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
   }
   ofs << *cam;
   ofs.close();
-
+  }
   return true;
 }
 

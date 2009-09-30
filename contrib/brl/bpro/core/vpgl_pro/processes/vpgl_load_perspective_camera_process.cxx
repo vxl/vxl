@@ -8,6 +8,8 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
+#include <vsl/vsl_binary_io.h>
+#include <vul/vul_file.h>
 
 //: Init function
 bool vpgl_load_perspective_camera_process_cons(bprb_func_process& pro)
@@ -44,12 +46,17 @@ bool vpgl_load_perspective_camera_process(bprb_func_process& pro)
     vcl_cerr << "Failed to open file " << camera_filename << vcl_endl;
     return false;
   }
-
-  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
-
-  ifs >> *cam;
-
-  pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
+  vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+  vcl_string ext = vul_file_extension(camera_filename);
+  if(ext == ".vsl") // binary form
+    {
+      vsl_b_ifstream bp_in(camera_filename.c_str());
+      pcam->b_read(bp_in);
+      bp_in.close();
+  }else{
+   ifs >> *pcam;
+  }
+  pro.set_output_val<vpgl_camera_double_sptr>(0, pcam);
 
   return true;
 }

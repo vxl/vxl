@@ -11,6 +11,7 @@ DECLARE_FUNC_CONS(vpgl_load_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_load_rational_camera_nitf_process);
 DECLARE_FUNC_CONS(vpgl_load_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_save_perspective_camera_process);
+DECLARE_FUNC_CONS(vpgl_scale_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_save_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_nitf_camera_coverage_process);
 
