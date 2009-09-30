@@ -47,16 +47,16 @@ bool vidl_open_ostream_process(bprb_func_process& pro)
     //directory not present
     if (create_directory)
     {
-      if (!vul_file::make_directory_path(ostream_path)) {
+      if (!vul_file::make_directory_path(ostream_path)) 
+        {
         vcl_cerr << "In vidl_open_ostream_process::execute() - "
                  << " can't make directory with path " << ostream_path << '\n';
         return false;
-      }
-      else{
-        vcl_cerr << "In vidl_open_ostream_process::execute() - "
-                 << " directory doesn't exist with path " << ostream_path << '\n';
-        return false;
-      }
+        }
+    }else{
+      vcl_cerr << "In vidl_open_ostream_process::execute() - "
+               << " directory doesn't exist with path " << ostream_path << '\n';
+      return false;
     }
   }
   vidl_ostream_sptr vostr = new vidl_image_list_ostream(ostream_path);

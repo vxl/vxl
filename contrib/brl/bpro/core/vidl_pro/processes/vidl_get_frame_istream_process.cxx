@@ -2,9 +2,8 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-
-#include <vidl/vidl_image_list_istream.h>
 #include <vidl/vidl_istream_sptr.h>
+#include <vidl/vidl_istream.h>
 #include <vidl/vidl_convert.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
@@ -28,7 +27,6 @@ bool vidl_get_frame_istream_process_cons(bprb_func_process& pro)
 }
 
 //: Execute the process
-// NOTE! currently only implemented for image list istream
 bool vidl_get_frame_istream_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 2) {
