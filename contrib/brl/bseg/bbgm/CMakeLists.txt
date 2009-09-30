@@ -17,6 +17,9 @@ SET(bbgm_sources
   bbgm_view_maker.h                        bbgm_view_maker_sptr.h
   bbgm_loader.h        bbgm_loader.cxx
   bbgm_measure.h
+  bbgm_feature_image.h    bbgm_feature_image.cxx   bbgm_feature_image.txx  
+  bbgm_feature_image_sptr.h
+  bbgm_features.h         bbgm_features.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bbgm_sources)
