@@ -50,6 +50,8 @@ bool vil_gaussian_process(bprb_func_process& pro)
   vil_image_view<float> fimage = *vil_convert_cast(float(), input_image);
   if (input_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(fimage,1.0/255.0);
+  if (input_image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+    vil_math_scale_values(fimage,1.0/65536);
   unsigned ni = fimage.ni(), nj = fimage.nj(), np = fimage.nplanes();
 
   vil_image_view<float> G(ni, nj, np);

@@ -50,6 +50,8 @@ bool vil_resample_process(bprb_func_process& pro)
   vil_image_view<float> fimage = *vil_convert_cast(float(), input_image);
   if (input_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(fimage,1.0/255.0);
+  if (input_image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+    vil_math_scale_values(fimage,1.0/65536);
   unsigned nplanes = fimage.nplanes();
   vil_image_view<float>* out_img = new vil_image_view<float>(tni, tnj, nplanes);
   vil_resample_bilin(fimage, *out_img, tni, tnj);
