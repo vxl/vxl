@@ -64,39 +64,39 @@ boct_tree<T_loc,T_data>::boct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& l
   boct_loc_code<T_loc> code;
   if (max_level_>0) {
     code.set_code(0,0,0);
-    code.set_level(max_level_-1); 
+    code.set_level(max_level_-1);
     root_=new boct_tree_cell<T_loc,T_data>( code);
   } else {
-    vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!" << vcl_endl;
+    vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
     return;
   }
-  
+
   // we have to find out max_level at the end
   //unsigned max_level=0;
   for (unsigned i=0; i<leaf_nodes.size(); i++) {
     boct_tree_cell<T_loc, T_data>& cell = leaf_nodes[i];
     boct_loc_code<T_loc> loccode=cell.code_;
     int level=loccode.level;
-  
+
     // temporary pointer to traverse
     boct_tree_cell<T_loc,T_data>* curr_cell=root_;
     short curr_level=max_level_-1;
-    
-	while (curr_level>level)
-	{
-	  if (curr_cell->is_leaf()) {
-	    curr_cell->split();
-	  }
-	  short child_index=loccode.child_index(curr_level);
-	  curr_cell=curr_cell->children()+child_index;
-	  --curr_level;
+
+    while (curr_level>level)
+    {
+      if (curr_cell->is_leaf()) {
+        curr_cell->split();
+      }
+      short child_index=loccode.child_index(curr_level);
+      curr_cell=curr_cell->children()+child_index;
+      --curr_level;
     }
-  
+
    if (curr_cell->code_.isequal(&loccode))
       // the place of the cell is found, put the data in
       curr_cell->set_data(cell.data());
    else
-     vcl_cout << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
+     vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
    }
 }
 
@@ -140,7 +140,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
 #if 0
   // check to see if point is contained in the octree
   if (!root_->code_.isequal(loccode_,curr_level))
-    return NULL;
+    return 0;
 #endif
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
@@ -164,16 +164,19 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
                               (p.y()-global_bbox_.min_y())/global_bbox_.height(),
                               (p.z()-global_bbox_.min_z())/global_bbox_.depth());
 
- 
-//  if(norm_p.x()>=1.0 ||norm_p.y()>=1.0||norm_p.z()>=1.0
-//     ||norm_p.x()<0.0 ||norm_p.y()<0.0||norm_p.z()<0.0)
-//     return 0;
+
+#if 0
+  // make sure that coordinates of norm_p lie between 0 (inclusive) and 1 (exclusive)
+  if (norm_p.x()>=1.0||norm_p.y()>=1.0||norm_p.z()>=1.0||
+      norm_p.x() <0.0||norm_p.y() <0.0||norm_p.z() <0.0)
+    return 0;
+#endif // 0
   // convert point to location code.
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, max_level_);
 #if 0
   // check to see if point is contained in the octree
   if (!root_->code_.isequal(loccode_,curr_level))
-    return NULL;
+    return 0;
 #endif
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
@@ -197,8 +200,8 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, max_level_);
 #if 0
   // check to see if point is contained in the octree
-  //if (!root_->code_.isequal(loccode_,curr_level))
-  //  return NULL;
+  if (!root_->code_.isequal(loccode_,curr_level))
+    return 0;
 #endif
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
@@ -266,7 +269,7 @@ short boct_tree<T_loc,T_data>::finest_level()
   }
   return min_level;
 }
- 
+
 template <class T_loc,class T_data>
 vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box(boct_tree_cell<T_loc,T_data>* const cell)
 {
