@@ -56,6 +56,51 @@ boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, sho
 }
 
 template <class T_loc,class T_data>
+boct_tree<T_loc,T_data>::boct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes,
+                                   unsigned max_level)
+                                   : max_level_(max_level)
+{
+  // create an empty tree
+  boct_loc_code<T_loc> code;
+  if (max_level_>0) {
+    code.set_code(0,0,0);
+    code.set_level(max_level_-1); 
+    root_=new boct_tree_cell<T_loc,T_data>( code);
+  } else {
+    vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!" << vcl_endl;
+    return;
+  }
+  
+  // we have to find out max_level at the end
+  //unsigned max_level=0;
+  for (unsigned i=0; i<leaf_nodes.size(); i++) {
+    boct_tree_cell<T_loc, T_data>& cell = leaf_nodes[i];
+    boct_loc_code<T_loc> loccode=cell.code_;
+    int level=loccode.level;
+  
+    // temporary pointer to traverse
+    boct_tree_cell<T_loc,T_data>* curr_cell=root_;
+    short curr_level=max_level_-1;
+    
+	while (curr_level>level)
+	{
+	  if (curr_cell->is_leaf()) {
+	    curr_cell->split();
+	  }
+	  short child_index=loccode.child_index(curr_level);
+	  curr_cell=curr_cell->children()+child_index;
+	  --curr_level;
+    }
+  
+   if (curr_cell->code_.isequal(&loccode))
+      // the place of the cell is found, put the data in
+      curr_cell->set_data(cell.data());
+   else
+     vcl_cout << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
+   }
+}
+
+template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>::~boct_tree()
 {
   if (root_)
