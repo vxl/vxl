@@ -33,11 +33,11 @@ class boct_tree_cell_reader
   //: returns the next leaf cell read from the binary file
   bool next(boct_tree_cell<T_loc,T_data>& c);
 
-  void close() {/*is_.close(); */}
+  void close() {is_->close(); }
 
  private:
   //: input binary stream of octree
-  vsl_b_istream* is_;
+  vsl_b_ifstream* is_;
 };
 
 
