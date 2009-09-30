@@ -1,7 +1,7 @@
 # brl/bmvl/CMakeLists.txt
 # main package for multi-view related code, .e.g. 3-d reconstruction
 # All libraries are mutually independent, except for bmvv <-- btom 
-# Also, bcal and btom are independent of the rest of brl; brct depends on bbas.
+# Also, bcal and btom are independent of the rest of brl; brct depends on bbas and vsrl.
 
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 
