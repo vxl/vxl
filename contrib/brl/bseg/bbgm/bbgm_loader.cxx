@@ -1,17 +1,16 @@
 #include "bbgm_loader.h"
 #include "bbgm_image_of.h"
+#include "bbgm_feature_image.h"
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_gauss_f1.h>
-#include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_mixture_fixed.h>
-
+#include <bbgm/bbgm_features.h>
 bool bbgm_loader::registered_ = false;
 
 void bbgm_loader::register_loaders(){
   if(registered_) return;
-
   typedef bsta_num_obs<bsta_gauss_f1> sph_gauss_type;
   typedef bsta_num_obs<bsta_mixture<sph_gauss_type> > sph_mix_gauss_type;
   vsl_add_to_binary_loader(bbgm_image_of<sph_mix_gauss_type>());
@@ -27,13 +26,17 @@ void bbgm_loader::register_loaders(){
   bbgm_image_of<mix_gauss_type> bi;
   vsl_add_to_binary_loader(bi);
 
-  typedef bsta_parzen_sphere<float, 3> parsen_f3_t;
-  bbgm_image_of<parsen_f3_t> bip;
-  vsl_add_to_binary_loader(bip);
+  //bbgm_image_of<bsta_gauss_f1> bf1;
+  //vsl_add_to_binary_loader(bf1);
 
-  typedef bsta_num_obs<bsta_mixture_fixed<sph_gauss_type, 3> > sph_mix_gauss_type_fixed;
-  bbgm_image_of<sph_mix_gauss_type_fixed> bifs;
-  vsl_add_to_binary_loader(bifs);
+  bbgm_feature_image<bbgm_mask_feature> mf;
+  vsl_add_to_binary_loader(mf);
+
+  bbgm_feature_image<bbgm_mask_pair_feature> mfp;
+  vsl_add_to_binary_loader(mfp);
+
+  bbgm_feature_image<bbgm_pair_group_feature> pgf;
+  vsl_add_to_binary_loader(pgf);
 
   registered_ = true;
 }
