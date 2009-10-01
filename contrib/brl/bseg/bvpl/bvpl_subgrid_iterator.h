@@ -25,15 +25,15 @@ class bvpl_subgrid_iterator_base : public vbl_ref_count
  public:
   bvpl_subgrid_iterator_base() {}
   
-  bvpl_subgrid_iterator_base(vgl_point_3d<int> max,  vgl_point_3d<int> min){
+  bvpl_subgrid_iterator_base(vgl_point_3d<int> min,  vgl_point_3d<int> max){
     
-    max_=max;
-    min_=min; 
+    max_point_=max;
+    min_point_=min; 
     
     int x,y,z;
-    x=(min.x() > 0)? max.x()+1:max.x()-min.x()+1;
-    y=(min.y() > 0)? max.y()+1:max.y()-min.y()+1;
-    z= max.z() - min.z() +1;   //no need to check min this coordinate is inverted
+    x= max.x()-min.x()+1;
+    y= max.y()-min.y()+1;
+    z= max.z()-min.z()+1;   //no need to check min this coordinate is inverted
   
     dim_ = vgl_vector_3d<int>(x,y,z);
     
@@ -49,8 +49,8 @@ class bvpl_subgrid_iterator_base : public vbl_ref_count
  protected:
   vgl_vector_3d<int> dim_;
   vgl_point_3d<int> offset_;
-  vgl_point_3d<int> max_;
-  vgl_point_3d<int> min_;
+  vgl_point_3d<int> max_point_;
+  vgl_point_3d<int> min_point_;
   
 };
 
@@ -62,23 +62,14 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
   bvpl_subgrid_iterator()
     : bvpl_subgrid_iterator_base() {}
 
-  bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid, vgl_point_3d<int> max,  vgl_point_3d<int> min);
+  bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid, vgl_point_3d<int> min_point,  vgl_point_3d<int> max_point);
 
   ~bvpl_subgrid_iterator(){}
 
-  //bvpl_subgrid_iterator<T>& operator=(const bvpl_subgrid_iterator<T>& that);
-
-  //bool operator==(const bvpl_subgrid_iterator<T>& that);
-
-  //bool operator!=(const bvpl_subgrid_iterator<T>& that);
-
   bvpl_subgrid_iterator<T>& operator++();
-  //bvpl_subgrid_iterator<T>& operator+(unsigned const &rhs); // postfix version
-
-
+ 
   bvpl_subgrid_iterator<T>& operator--();
-  //bvpl_subgrid_iterator& operator--(int); // postfix version
-
+  
   bvpl_voxel_subgrid<T> operator*();
 
   bvpl_voxel_subgrid<T> operator->();

@@ -4,14 +4,17 @@
 #include "bvpl_voxel_subgrid.h"
 
 #include <vcl_iostream.h>
-
+#define DEBUG
 template <class T>
 bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
                                           vgl_point_3d<int> center,
-                                          vgl_vector_3d<int> dimensions)
-: bvpl_subgrid_base(center, dimensions), slab_(slab)
+                                          vgl_point_3d<int> min_point,
+                                          vgl_point_3d<int> max_point)
+: bvpl_subgrid_base(center), slab_(slab)
 {
-  box_=vgl_box_3d<int>(center, dim_.x(), dim_.y(), dim_.z(), vgl_box_3d<int>::centre);
+  vgl_point_3d<int> min(center.x() + min_point.x(), center.y()+min_point.y(), center.z()-max_point.z());
+  vgl_point_3d<int> max(center.x() + max_point.x(), center.y()+max_point.y(), center.z()-min_point.z());
+  box_=(vgl_box_3d<int>(min, max));
 }
 
 template <class T>

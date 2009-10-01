@@ -5,8 +5,8 @@
 
 template <class T>
 bvpl_subgrid_iterator<T>::bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid,
-                                                vgl_point_3d<int> max, vgl_point_3d<int> min)
-  : bvpl_subgrid_iterator_base(max, min), grid_(grid)
+                                                vgl_point_3d<int> min, vgl_point_3d<int> max)
+  : bvpl_subgrid_iterator_base(min, max), grid_(grid)
 {
   // start from the z radius top go towards the botton slab
   iter_ = grid->slab_iterator(0, dim_.z());
@@ -17,22 +17,22 @@ bvpl_subgrid_iterator<T>::bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid,
 template <class T>
 bvpl_voxel_subgrid<T> bvpl_subgrid_iterator<T>::operator*()
 {
-  bvpl_voxel_subgrid<T> subgrid(*iter_, cur_voxel_, dim_);
+  bvpl_voxel_subgrid<T> subgrid(*iter_, cur_voxel_, min_point_,max_point_);
   return subgrid;
 }
 
 template <class T>
 bvpl_voxel_subgrid<T> bvpl_subgrid_iterator<T>::operator->()
 {
-  bvpl_voxel_subgrid<T> subgrid(*iter_, cur_voxel_, dim_);
+  bvpl_voxel_subgrid<T> subgrid(*iter_, cur_voxel_, min_point_, max_point_);
   return subgrid;
 }
 
 template <class T>
 bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
 {
-  int x_r = (max_.x()>0)?max_.x():0;
-  int y_r = (max_.y()>0)?max_.y():0;
+  int x_r = (max_point_.x()>0)?max_point_.x():0;
+  int y_r = (max_point_.y()>0)?max_point_.y():0;
   // move to the next voxel
   int x = cur_voxel_.x();
   int y = cur_voxel_.y();
@@ -59,10 +59,10 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
 {
   vcl_cout << "Warning in  bvpl_subgrid_iterator::operator--: this operator has not been tested\n";
 
-  int x_r = (min_.x()<0)?min_.x():0;
-  int y_r = (min_.y()<0)?min_.y():0;
-  int offset_x = (max_.x()>0)?max_.x():0;
-  int offset_y = (max_.y()>0)?max_.y():0;
+  int x_r = (min_point_.x()<0)?min_point_.x():0;
+  int y_r = (min_point_.y()<0)?min_point_.y():0;
+  int offset_x = (max_point_.x()>0)?max_point_.x():0;
+  int offset_y = (max_point_.y()>0)?max_point_.y():0;
   // move to the next voxel
   int x = cur_voxel_.x();
   int y = cur_voxel_.y();

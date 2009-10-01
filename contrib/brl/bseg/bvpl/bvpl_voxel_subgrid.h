@@ -1,17 +1,56 @@
 #ifndef bvpl_voxel_subgrid_h
 #define bvpl_voxel_subgrid_h
 
+//:
+// \file
+// \brief A class to retreive a subgrid withing a bigger grid
+// \author Gamze Tunali
+// \date  June 24, 2009
+//
+// \verbatim
+//  Modifications
+//   9/30/09 Isabel Restrepo: Changed coordinate system to match that of kernels.
+//           Within a subgrid the ceontroid is placed at the origin.The maximun 
+//           and minum position as as shown bellow. The methods in this class must take care
+//           of retreiving the appropiate index of the big grid(where z is inverted)
+//                             
+// \endverbatim
+//  \verbatim
+//                                 MaxPosition
+//                       |<--width-->|
+//                       O-----------O  ---
+//                      /           /|   ^
+//                     /           / |   |
+//                    O-----------O  | height
+//                    |       o   |  |   |
+//                    |  centroid |  |   v
+//                    |   (0,0,0) |  O  ---
+//     Y              |           | /   /_____depth
+//     |   Z          |           |/   /
+//     |  /           O-----------O  ---
+//     | /         MinPosition
+//     O-----X
+// \endverbatim
+
+
+
+
 #include <bvxm/grid/bvxm_voxel_slab.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
+
+
+
+
+
 class bvpl_subgrid_base
 {
  public:
-  bvpl_subgrid_base(vgl_point_3d<int> center, vgl_vector_3d<int> dimensions)
-    : center_(center), dim_(dimensions) {}
+  bvpl_subgrid_base(vgl_point_3d<int> center)
+    : center_(center){}
 
   virtual ~bvpl_subgrid_base(){}
 
@@ -19,7 +58,7 @@ class bvpl_subgrid_base
 
  protected:
    vgl_point_3d<int> center_;
-   vgl_vector_3d<int> dim_;
+ 
 };
 
 template <class T>
@@ -28,7 +67,8 @@ class bvpl_voxel_subgrid : public bvpl_subgrid_base
  public:
   bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
                      vgl_point_3d<int> center,
-                     vgl_vector_3d<int> dimensions);
+                     vgl_point_3d<int> max_point,
+                     vgl_point_3d<int> min_point);
 
   virtual ~bvpl_voxel_subgrid(){}
 
