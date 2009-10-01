@@ -59,7 +59,7 @@ static void test_subgrid()
 
   // get the subgrid iterator
   int kernel_x=11, kernel_y=11, kernel_z=11;
-  bvpl_subgrid_iterator<float> iter(grid, vgl_point_3d<int> (kernel_x,kernel_y,kernel_z), vgl_point_3d<int>(0,0,0));
+  bvpl_subgrid_iterator<float> iter(grid, vgl_point_3d<int>(0,0,0), vgl_point_3d<int> (kernel_x,kernel_y,kernel_z));
   while (!iter.isDone()) {
     bvpl_voxel_subgrid<float> subgrid = *iter;
     ++iter;
