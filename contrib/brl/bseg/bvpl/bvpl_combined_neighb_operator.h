@@ -39,9 +39,9 @@ class bvpl_combined_neighb_operator
                bvpl_kernel_sptr kernel,
                bvxm_voxel_grid<float>* out_grid)
   {
-    bvpl_subgrid_iterator<float> ocp_iter(ocp_grid, kernel->max(), kernel->min());
-    bvpl_subgrid_iterator<bsta_num_obs<bsta_gauss_f1> > app_iter(app_grid, kernel->max(), kernel->min());
-    bvpl_subgrid_iterator<float> output_iter(out_grid, kernel->max(), kernel->min());
+    bvpl_subgrid_iterator<float> ocp_iter(ocp_grid, kernel->min_point(), kernel->max_point());
+    bvpl_subgrid_iterator<bsta_num_obs<bsta_gauss_f1> > app_iter(app_grid, kernel->min_point(), kernel->max_point());
+    bvpl_subgrid_iterator<float> output_iter(out_grid, kernel->min_point(), kernel->max_point());
 
     //kernel->print();
     while (!ocp_iter.isDone() && !app_iter.isDone()) {
