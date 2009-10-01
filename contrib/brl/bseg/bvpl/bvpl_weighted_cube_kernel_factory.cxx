@@ -69,20 +69,16 @@ void bvpl_weighted_cube_kernel_factory::create_canonical()
     {
       for (int y=min_y; y<=max_y; y++)
       { 
-        //if (z < length_)
-//          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
-//        else if (y < width_)
-//          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
-//        else
-         canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
+       canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
       }
     }
   }
   
   //set the dimension of the 3-d grid
-  max3d_.set(max_x,max_y,max_z);
-  min3d_.set(min_x,min_y,min_z);
-  
+  max_point_.set(max_x,max_y,max_z);
+  min_point_.set(min_x,min_y,min_z);
+	
+ 
   //set the current kernel
   kernel_ = canonical_kernel_;
   
