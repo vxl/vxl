@@ -4,12 +4,14 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_func_process.h>
 #include "bvpl_processes.h"
-#include <bvpl/bvpl_kernel_factory.h>
+#include <bvpl/bvpl_kernel.h>
+#include <bvpl/util/bvpl_corner_pair_finder.h>
 
 void bvpl_register::register_datatype()
 {
   REGISTER_DATATYPE( bvpl_kernel_sptr );
   REGISTER_DATATYPE( bvpl_kernel_vector_sptr );
+  REGISTER_DATATYPE( bvpl_corner_pairs_sptr );	
 }
 
 void bvpl_register::register_process()
@@ -38,5 +40,5 @@ void bvpl_register::register_process()
   //util
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_find_corner_pairs_process,"bvplFindCornerPairsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_visualize_corner_pairs_process, "bvplVisualizeCornerPairsProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_wc_kernel_vector_process, "bvplCreateWcKernelVectorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_wc_kernel_vector_process, "bvplCreateWCKernelVectorProcess");
 }
