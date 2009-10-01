@@ -199,9 +199,11 @@ template <class T>
 bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsigned slab_thickness)
 {
   if (slice_idx + slab_thickness > this->grid_size_.z()) {
+#ifdef DEBUG   
     vcl_cerr << "error: tried to get slab " << slice_idx
              << " with thickness " << slab_thickness
              << "; grid_size_.z() = " << this->grid_size_.z() << vcl_endl;
+#endif
     bvxm_voxel_slab<T> slab;
     return slab;
   }
