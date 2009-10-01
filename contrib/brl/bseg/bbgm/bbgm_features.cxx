@@ -341,7 +341,7 @@ vcl_vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
   vcl_set<bbgm_mask_pair_feature, fless >::iterator pit = pairs_.begin();
   for (; pit!=pairs_.end(); ++pit)
   {
-    bbgm_mask_pair_feature& mpf = *pit;
+    bbgm_mask_pair_feature mpf = *pit;
     vcl_vector<vgl_point_2d<unsigned short> > pixp = mpf.pixels();
     for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pxt = pixp.begin();
       pxt!= pixp.end(); ++pxt) {
