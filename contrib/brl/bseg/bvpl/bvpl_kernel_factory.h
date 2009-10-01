@@ -65,10 +65,10 @@ class bvpl_kernel_factory
   float angular_resolution() const { return angular_resolution_; }
 
   //: Return x-y-z maximum coordinate values
-  vgl_point_3d<int> max_() const { return max3d_; }
+  vgl_point_3d<int> max_point() const { return max_point_; }
 
   //: Return x-y-z minimum coordinate values
-  vgl_point_3d<int> min_() const { return min3d_; }
+  vgl_point_3d<int> min_point() const { return min_point_; }
 
   //: returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();
@@ -104,10 +104,10 @@ class bvpl_kernel_factory
   float angle_;
 
   //: Dimensions of the 3D grid
-  vgl_point_3d<int> max3d_;
+  vgl_point_3d<int> max_point_;
 
   //: Dimensions of the 3D grid
-  vgl_point_3d<int> min3d_;
+  vgl_point_3d<int> min_point_;
 
   //: Angular resolutions
   float angular_resolution_;

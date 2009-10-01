@@ -14,7 +14,7 @@ bvpl_kernel
 bvpl_kernel_factory::create()
 {
   bvpl_kernel_iterator iter = interpolate(rotate(angle_));
-  bvpl_kernel kernel(iter, rotation_axis_, angle_,dim(), max3d_, min3d_);
+  bvpl_kernel kernel(iter, rotation_axis_, angle_,dim(), min_point_, max_point_);
 
   return kernel;
 }
@@ -24,7 +24,7 @@ bvpl_kernel
 bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
 {
   this->set_rotation_axis(rotation_axis);
-  return bvpl_kernel(interpolate(rotate(angle)), rotation_axis_, angle_, dim(), max3d_, min3d_);
+  return bvpl_kernel(interpolate(rotate(angle)), rotation_axis_, angle_, dim(), min_point_, max_point_);
 }
 
 //: Rounds coordinates of kernel to the nearest integer
@@ -58,8 +58,8 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
     if ( z0 < min_z) min_z =  z0;
   }
 
-  max3d_.set(max_x,max_y,max_z);
-  min3d_.set(min_x,min_y,min_z);
+  max_point_.set(max_x,max_y,max_z);
+  min_point_.set(min_x,min_y,min_z);
 
   return kernel_out;
 }
@@ -207,20 +207,9 @@ vgl_vector_3d<int> bvpl_kernel_factory::dim()
 {
   int x,y,z;
 
-  if (vcl_abs(max3d_.x()) > vcl_abs(min3d_.x()))
-    x = vcl_abs(max3d_.x())*2+1;
-  else
-    x = vcl_abs(min3d_.x())*2+1;
-
-  if (vcl_abs(max3d_.y()) > vcl_abs(min3d_.y()))
-    y = vcl_abs(max3d_.y())*2+1;
-  else
-    y = vcl_abs(min3d_.y())*2+1;
-
-  if (vcl_abs(max3d_.z()) > vcl_abs(min3d_.z()))
-    z = vcl_abs(max3d_.z())*2+1;
-  else
-    z = vcl_abs(min3d_.z())*2+1;
+  x = max_point_.x()-min_point_.x() + 1;
+  y = max_point_.y()-min_point_.y() + 1;
+  z = max_point_.z()-min_point_.z() + 1;
 
   return vgl_vector_3d<int>(x,y,z);
 }

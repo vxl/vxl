@@ -44,9 +44,9 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   //unsigned char data_type = 1; // 1 means signed byte
   unsigned char data_type = 8; // 8 means float
   
-  vxl_uint_32 nx = (max_.x() - min_.x()) + 1;
-  vxl_uint_32 ny = (max_.y() - min_.y()) + 1;
-  vxl_uint_32 nz = (max_.z() - min_.z()) + 1;
+  vxl_uint_32 nx = (max_point_.x() - min_point_.x()) + 1;
+  vxl_uint_32 ny = (max_point_.y() - min_point_.y()) + 1;
+  vxl_uint_32 nz = (max_point_.z() - min_point_.z()) + 1;
   
   ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
   ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
@@ -83,7 +83,7 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   kernel_.begin();
   while (!kernel_.isDone()){
     vgl_point_3d<int> coord = kernel_.index();
-    int index = (coord.x()-min_.x())*ny*nz + (coord.y()-min_.y())*nz + (coord.z() - min_.z());
+    int index = (coord.x()-min_point_.x())*ny*nz + (coord.y()-min_point_.y())*nz + (coord.z() - min_point_.z());
     data_array[index] = (float)((*kernel_).c_);
     ++kernel_;
   }

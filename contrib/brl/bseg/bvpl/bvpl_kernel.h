@@ -26,8 +26,12 @@ class bvpl_kernel: public vbl_ref_count
     //: Default constructor
     bvpl_kernel() {id_=++id_cnt;}
     //: Constructor
-    bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> max_pt, vgl_point_3d<int> min_pt)
-    : kernel_(kernel),axis_(axis), angle_(angle),dim_(dim),min_(min_pt),max_(max_pt) {id_=++id_cnt;}
+    bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt)
+    : kernel_(kernel),axis_(axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt) 
+	{
+		vcl_cout << "Creating kernel with axis, anle, dim, max, min = \n" << axis_ <<"\n" << angle_<<"\n"<< dim_<<"\n"<<max_point_<<"\n"<< min_point_ <<"\n";
+		id_=++id_cnt;
+	}
     //: Destructor
     ~bvpl_kernel() {}
     bvpl_kernel_iterator iterator(){return kernel_;}
@@ -35,19 +39,19 @@ class bvpl_kernel: public vbl_ref_count
     float angle(){return angle_;}
     vnl_float_3 scale(){return scale_;}
     vgl_vector_3d<int> dim()const {return dim_;}
-    vgl_point_3d<int> min() const {return min_;}
-    vgl_point_3d<int> max() const {return max_;}
+    vgl_point_3d<int> min_point() const {return min_point_;}
+    vgl_point_3d<int> max_point() const {return max_point_;}
     vgl_vector_3d<int> offset() 
     {
       int x=0;
-      if (min_.x() < 0)
-        x = -1 *min_.x();
+      if (min_point_.x() < 0)
+        x = -1 *min_point_.x();
         
       int y=0;
-      if (min_.y() < 0)
-        y=-1*min_.y();
+      if (min_point_.y() < 0)
+        y=-1*min_point_.y();
       
-      int z=max_.z();
+      int z=max_point_.z();
     
       return vgl_vector_3d<int>(x,y,z);
     }
@@ -91,8 +95,8 @@ class bvpl_kernel: public vbl_ref_count
     float angle_;
     vnl_float_3 scale_;
     vgl_vector_3d<int> dim_;
-    vgl_point_3d<int> min_;
-    vgl_point_3d<int> max_;
+    vgl_point_3d<int> min_point_;
+    vgl_point_3d<int> max_point_;
     unsigned int id_;
 };
 
@@ -131,12 +135,12 @@ class bvpl_kernel_vector : public vbl_ref_count
   
    vgl_point_3d<int> max(){
     iterator it =  kernels_.begin();
-    int max_x = (*it)->max().x();
-    int max_y = (*it)->max().y();
-    int max_z = (*it)->max().z();
+    int max_x = (*it)->max_point().x();
+    int max_y = (*it)->max_point().y();
+    int max_z = (*it)->max_point().z();
     for (; it!= kernels_.end(); ++it)
     {
-      vgl_point_3d<int> max = (*it)->max();
+      vgl_point_3d<int> max = (*it)->max_point();
       if (max.x() > max_x)
         max_x = max.x();
       if (max.y() > max_y)
@@ -149,12 +153,12 @@ class bvpl_kernel_vector : public vbl_ref_count
   
   vgl_point_3d<int> min(){
     iterator it =  kernels_.begin();
-    int min_x = (*it)->min().x();
-    int min_y = (*it)->min().y();
-    int min_z = (*it)->min().z();
+    int min_x = (*it)->min_point().x();
+    int min_y = (*it)->min_point().y();
+    int min_z = (*it)->min_point().z();
     for (; it!= kernels_.end(); ++it)
     {
-      vgl_point_3d<int> min = (*it)->min();
+      vgl_point_3d<int> min = (*it)->min_point();
       if (min.x() < min_x)
         min_x = min.x();
       if (min.y() < min_y)
