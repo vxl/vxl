@@ -21,10 +21,11 @@
 
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
+#include <vil/algo/vil_colour_space.h>
 
-namespace bvpl_find_corner_pairs_globals
+namespace bvpl_visualize_corner_pairs_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 0;
 }
 
@@ -35,12 +36,11 @@ namespace bvpl_find_corner_pairs_globals
 // * input[2]: The path for output vrml file
 // * input[3]: A flag to write vrml header and delete previous file or add info
 // * input[4]: Hue value for the lines -a float in [0 1]
-// Outputs:
-// * output[0]: A vector containing the lines connecting corners found
+
 
 bool bvpl_visualize_corner_pairs_process_cons(bprb_func_process& pro)
 {
-  using namespace bvpl_find_corner_pairs_globals;
+  using namespace bvpl_visualize_corner_pairs_process_globals;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvpl_corner_pairs_sptr";
   input_types_[1] = "unsigned";
@@ -55,7 +55,7 @@ bool bvpl_visualize_corner_pairs_process_cons(bprb_func_process& pro)
 
 bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
 {
-  using namespace bvpl_find_corner_pairs_globals;
+  using namespace bvpl_visualize_corner_pairs_process_globals;
 
   if (pro.n_inputs() != n_inputs_)
   {
@@ -69,7 +69,9 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
   unsigned lines_id = pro.get_input<unsigned>(i++);
   vcl_string vrml_path =pro.get_input<vcl_string>(i++);
   bool write_header = pro.get_input<bool>(i++);
-  float hue = pro.get_input<float>(i++);
+  float hue = pro.get_input<float>(i++)*360;
+  
+  
 
   vcl_ofstream os;
 
@@ -82,9 +84,13 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
   else {
     os.open(vrml_path.c_str(), vcl_ios::app);
   }
-
+   float r, g, b;
+   vil_colour_space_HSV_to_RGB<float>(hue,1.0f,255.0f,&r,&g,&b);
    for (unsigned j=0; j<pairs->pairs_[lines_id].size(); ++j)
-     bvxm_vrml_voxel_grid::write_vrml_line_segment(os, pairs->pairs_[lines_id][j]);
+     bvxm_vrml_voxel_grid::write_vrml_line_segment(os, pairs->pairs_[lines_id][j],r,g,b,0);
+  
+   //for (unsigned j=0; j<pairs->boxes_[lines_id].size(); ++j)
+     //bvxm_vrml_voxel_grid::write_vrml_box(os, pairs->boxes_[lines_id][j],r,g,b,0.8);
 
   return true;
 }

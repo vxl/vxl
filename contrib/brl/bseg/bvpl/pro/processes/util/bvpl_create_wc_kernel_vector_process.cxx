@@ -60,11 +60,11 @@ bool bvpl_create_wc_kernel_vector_process(bprb_func_process& pro)
   }
 
   //get inputs:
-  unsigned int length = 5;
+  unsigned int length = 0;
   length = pro.get_input<unsigned int>(0);
-  unsigned int width = 5;
+  unsigned int width = 0;
   width = pro.get_input<unsigned int>(1);
-  unsigned int thickness = 5;
+  unsigned int thickness = 0;
   thickness = pro.get_input<unsigned int>(2);
   vcl_string dir_type = pro.get_input<vcl_string>(3);
 

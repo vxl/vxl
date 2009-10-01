@@ -19,15 +19,16 @@
 
 namespace bvpl_find_corner_pairs_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
 }
 
 //:
 // Inputs
 // * input[0]: The id grid
-// * input[1]: A vector of searching kernels
-// * input[2]: A vector with the corner kernel
+// * input[1]: The response grid
+// * input[2]: A vector of searching kernels
+// * input[3]: A vector with the corner kernel
 // Outputs:
 // * output[0]: A vector containing the lines connecting corners found
 
@@ -36,8 +37,9 @@ bool bvpl_find_corner_pairs_process_cons(bprb_func_process& pro)
   using namespace bvpl_find_corner_pairs_globals;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
-  input_types_[1] = "bvpl_kernel_vector_sptr";
+  input_types_[1] = "bvxm_voxel_grid_base_sptr";
   input_types_[2] = "bvpl_kernel_vector_sptr";
+  input_types_[3] = "bvpl_kernel_vector_sptr";
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_corner_pairs_sptr";
@@ -56,20 +58,23 @@ bool bvpl_find_corner_pairs_process(bprb_func_process& pro)
   }
 
   //get inputs:
-  unsigned i = 0;
-  bvxm_voxel_grid_base_sptr id_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  bvpl_kernel_vector_sptr search_kernels = pro.get_input<bvpl_kernel_vector_sptr>(i++);
-  bvpl_kernel_vector_sptr corner_kernels = pro.get_input<bvpl_kernel_vector_sptr>(i++);
-
-  if (!id_grid_base.ptr() || !search_kernels.ptr() || !corner_kernels.ptr()) {
+    bvxm_voxel_grid_base_sptr id_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
+  bvxm_voxel_grid_base_sptr response_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(1);
+  bvpl_kernel_vector_sptr search_kernels = pro.get_input<bvpl_kernel_vector_sptr>(2);
+  bvpl_kernel_vector_sptr corner_kernels = pro.get_input<bvpl_kernel_vector_sptr>(3);
+ 
+  vcl_cout << "No of Corner Kernels : " << corner_kernels->kernels_.size() << vcl_endl;
+  if (!id_grid_base.ptr() || !response_grid_base.ptr() || !search_kernels.ptr() || !corner_kernels.ptr()) {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
   }
   //cast grid
   bvxm_voxel_grid<int> *id_grid = dynamic_cast<bvxm_voxel_grid<int>* > (id_grid_base.ptr());
+  bvxm_voxel_grid<float> *response_grid = dynamic_cast<bvxm_voxel_grid<float>* > (response_grid_base.ptr());
+
 
   bvpl_corner_pairs_sptr pairs =
-    bvpl_corner_pair_finder::find_pairs(id_grid, search_kernels, corner_kernels);
+    bvpl_corner_pair_finder::find_pairs(id_grid, response_grid, search_kernels, corner_kernels);
 
   pro.set_output_val<bvpl_corner_pairs_sptr>(0, pairs);
   return true;
