@@ -73,8 +73,7 @@ bbgm_feature_image<f_type_>::b_read(vsl_b_istream &is)
 #include <vsl/vsl_vector_io.txx>
 #define BBGM_FEATURE_IMAGE_INSTANTIATE(T) \
 template class bbgm_feature_image<T >; \
-VBL_IO_ARRAY_2D_INSTANTIATE(T); 
-
+VBL_IO_ARRAY_2D_INSTANTIATE(T)
 
 
 #endif // bbgm_feature_image_txx_
