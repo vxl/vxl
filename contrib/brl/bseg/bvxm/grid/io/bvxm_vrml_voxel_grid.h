@@ -16,8 +16,10 @@
 #include "../bvxm_voxel_grid.h"
 #include <vcl_fstream.h>
 #include <vgl/vgl_sphere_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vnl/vnl_float_4.h>
+
 class bvxm_vrml_voxel_grid
 {
 public:
@@ -32,7 +34,9 @@ public:
   
   static void write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold);
   
-  static void write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<int>& line);
+  static void write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<int>& line,
+                                      const float r, const float g, const float b,
+                                      const float transparency);
 
    
  // //static void write_vrml_trailer(vcl_ofstream& str);
@@ -50,10 +54,10 @@ public:
 //                                  const float g,
 //                                  const float b);
 //  
-//  static void write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
-//                             const float r = 1.0, const float g = 1.0,
-//                             const float b = 1.0,
-//                             const float transparency = 0.0);
+  static void write_vrml_box(vcl_ofstream& str, vgl_box_3d<int> const& box,
+                             const float r = 1.0, const float g = 1.0,
+                             const float b = 1.0,
+                             const float transparency = 0.0);
 //  
   static void write_vrml_sphere(vcl_ofstream& str,
                                 vgl_sphere_3d<float> const& sphere,
