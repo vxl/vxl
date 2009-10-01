@@ -107,8 +107,8 @@ void bvpl_edge3d_kernel_factory::create_canonical()
     }
   }
   //set the dimension of the 3-d grid
-  max3d_.set(max_x,max_y,max_z);
-  min3d_.set(min_x,min_y,min_z);
+  max_point_.set(max_x,max_y,max_z);
+  min_point_.set(min_x,min_y,min_z);
 
   //set the current kernel
   kernel_ = canonical_kernel_;
