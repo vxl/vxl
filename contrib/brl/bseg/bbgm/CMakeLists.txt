@@ -12,12 +12,12 @@ SET(bbgm_sources
   bbgm_update.h
   bbgm_apply.h
   bbgm_detect.h
-  bbgm_image_of.h      bbgm_image_of.cxx   bbgm_image_of.txx  bbgm_image_sptr.h
-  bbgm_viewer.h        bbgm_viewer.cxx     bbgm_viewer_sptr.h
-  bbgm_view_maker.h                        bbgm_view_maker_sptr.h
-  bbgm_loader.h        bbgm_loader.cxx
+  bbgm_image_of.h         bbgm_image_of.cxx      bbgm_image_of.txx  bbgm_image_sptr.h
+  bbgm_viewer.h           bbgm_viewer.cxx        bbgm_viewer_sptr.h
+  bbgm_view_maker.h                              bbgm_view_maker_sptr.h
+  bbgm_loader.h           bbgm_loader.cxx
   bbgm_measure.h
-  bbgm_feature_image.h    bbgm_feature_image.cxx   bbgm_feature_image.txx  
+  bbgm_feature_image.h    bbgm_feature_image.cxx bbgm_feature_image.txx
   bbgm_feature_image_sptr.h
   bbgm_features.h         bbgm_features.cxx
 )
@@ -27,7 +27,7 @@ AUX_SOURCE_DIRECTORY(Templates bbgm_sources)
 ADD_LIBRARY(bbgm  ${bbgm_sources})
 
 # add the required libraries into this list
-TARGET_LINK_LIBRARIES(bbgm bsta bsta_algo vnl_io vbl_io vsl vnl vil vbl)
+TARGET_LINK_LIBRARIES(bbgm bsta bsta_algo vnl_io vbl_io vsl vnl vil vgl vbl)
 
 SUBDIRS(pro)
 
