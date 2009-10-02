@@ -64,13 +64,14 @@
 #define vnl_vector_alloc_blah(size) \
 do { \
   this->num_elmts = (size); \
-  this->data = vnl_c_vector<T>::allocate_T(size); \
+  this->data = size ? vnl_c_vector<T>::allocate_T(size) : 0; \
 } while (false)
 
 // This macro deallocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_free_blah \
 do { \
-  vnl_c_vector<T>::deallocate(this->data, this->num_elmts); \
+  if (this->data) \
+    vnl_c_vector<T>::deallocate(this->data, this->num_elmts); \
 } while (false)
 
 
