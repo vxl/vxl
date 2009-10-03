@@ -135,7 +135,11 @@ class frame_buffer
       vcl_cout << (*vmiucit).first << vcl_endl;
   }
 
-  int first_frame_num() const { return (*buffers_->begin()).first;}
+  int first_frame_num() const {
+	if(buffers_->size())
+	  return (*buffers_->begin()).first;
+    else return -1; 
+  }
 
   bool reset()
   {
