@@ -423,8 +423,12 @@ void vgui_mfc_adaptor::service_redraws()
     CWnd* wnd;
     if (m_pCWnd)
       wnd = m_pCWnd;
-    else
-      wnd = AfxGetApp()->GetMainWnd();
+	else{
+		CWinApp* ap = AfxGetApp();
+		if(ap)
+          wnd = ap->GetMainWnd();
+		else return;
+	}
     CDC *win_dc = wnd->GetDC();
     RECT r;
     wnd->GetClientRect(&r);
