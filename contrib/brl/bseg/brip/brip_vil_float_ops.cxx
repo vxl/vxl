@@ -680,7 +680,7 @@ void brip_vil_float_ops::hessian_3x3(vil_image_view<float> const& input,
   for (unsigned y = 1; y+1<h; ++y)
     for (unsigned x = 1; x+1<w; ++x)
     {
-      float xx = input(x-1,y-1)+input(x-1,y)+input(x+1,y)+
+      float xx = input(x-1,y-1)+input(x-1,y)+input(x+1,y+1)+
                  input(x+1,y-1)+input(x+1,y)+input(x+1,y+1)-
            2.0f*(input(x,y-1)+input(x,y)+input(x,y+1));
 
@@ -709,7 +709,8 @@ void brip_vil_float_ops::hessian_3x3(vil_image_view<float> const& input,
 vil_image_view<float>
 brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
                             vil_image_view<float> const& Ixy,
-                            vil_image_view<float> const& Iyy)
+                            vil_image_view<float> const& Iyy,
+                            bool determinant)
 {
   unsigned w = Ixx.ni(), h = Ixx.nj();
   vil_image_view<float> output;
@@ -728,7 +729,10 @@ brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
         lambda0 = tr+vcl_sqrt(arg);
         lambda1 = tr-vcl_sqrt(arg);
       }
-      output(x,y) = lambda0*lambda1; //just det for now
+      if(determinant)
+        output(x,y) = det;
+      else
+        output(x,y) = tr;
     }
   return output;
 }

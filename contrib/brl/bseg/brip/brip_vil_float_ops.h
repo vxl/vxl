@@ -108,7 +108,8 @@ class brip_vil_float_ops
   static vil_image_view<float>
     beaudet(vil_image_view<float> const& Ixx,
             vil_image_view<float> const& Ixy,
-            vil_image_view<float> const& Iyy);
+            vil_image_view<float> const& Iyy,
+            bool determinant = true);
 
   static void extrema_kernel_mask(float lambda0, float lambda1, float theta,
                                   vbl_array_2d<float>& kernel, 

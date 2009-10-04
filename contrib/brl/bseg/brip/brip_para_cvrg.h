@@ -27,13 +27,15 @@
 // \verbatim
 // Modifications:
 //   Ported to vxl July 01, 2004
+//   Converted to vil October 3, 2009
 // \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <brip/brip_para_cvrg_params.h>
-#include <vil1/vil1_rgb.h>
-#include <vil1/vil1_image.h>
-#include <vil1/vil1_memory_image_of.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_resource_sptr.h>
+#include <vil/vil_rgb.h>
+#include <vcl_vector.h>
 class brip_para_cvrg : public brip_para_cvrg_params
 {
   // PUBLIC INTERFACE----------------------------------------------------------
@@ -42,71 +44,71 @@ class brip_para_cvrg : public brip_para_cvrg_params
 
   // Constructors/Initializers/Destructors-------------------------------------
   brip_para_cvrg(float sigma = 1.0, float low = 6,
-               float gauss_tail = .05,
-               int proj_width = 7, int proj_height=1,
-               int sup_radius = 1,
-               bool verbose = true);
+                 float gauss_tail = .05,
+                 int proj_width = 7, int proj_height=1,
+                 int sup_radius = 1,
+                 bool verbose = true);
 
   brip_para_cvrg(brip_para_cvrg_params& pdp);
   ~brip_para_cvrg();
-  void do_coverage(vil1_image const& image);
+  void do_coverage(vil_image_resource_sptr const& image);
 
   // Data Access---------------------------------------------------------------
-  vil1_memory_image_of<float> get_float_detection_image(const float max = 255);
-  vil1_memory_image_of<unsigned char> get_detection_image();
-  vil1_memory_image_of<unsigned char> get_dir_image();
-  vil1_memory_image_of<vil1_rgb<unsigned char> > get_combined_image();
+  vil_image_view<float> get_float_detection_image(const float max = 255);
+  vil_image_view<unsigned char> get_detection_image();
+  vil_image_view<unsigned char> get_dir_image();
+  vil_image_view<vil_rgb<unsigned char> > get_combined_image();
   // Utility Methods
  private:
-  void init(vil1_image const& image);
+  void init(vil_image_resource_sptr const & image);
   void init_variables();
-  float **make_float_image(int m , int n); //A m x n array m = xsize;
-  void free_float_image(float** image);
-  float *make_float_vector(int size);
-  void set_float_vector(float* vector, int size, float val);
-  void set_float_image(float**,float);
-  void copy_image(float**,float**);
   void set_kernel();
   void smooth_image();
-  void avg(int x, int y, vil1_memory_image_of<float> const& smooth, float** avg);
-  void grad0(int x, int y, vil1_memory_image_of<float> const& smooth, float** grad0);
-  void grad45(int x, int y, vil1_memory_image_of<float> const& smooth, float** grad45);
-  void grad90(int x, int y, vil1_memory_image_of<float> const& smooth, float** grad90);
-  void grad135(int x, int y, vil1_memory_image_of<float> const& smooth, float** grad135);
+  void avg(int x, int y, vil_image_view<float> const& smooth,
+           vil_image_view<float>& avg);
+  void grad0(int x, int y, vil_image_view<float> const& smooth,
+             vil_image_view<float>& grad0);
+  void grad45(int x, int y, vil_image_view<float> const& smooth,
+              vil_image_view<float>& grad45);
+  void grad90(int x, int y, vil_image_view<float> const& smooth,
+              vil_image_view<float>& grad90);
+  void grad135(int x, int y, vil_image_view<float> const& smooth,
+               vil_image_view<float>& grad135);
   void compute_gradients();
-  float project(int x, int y, int dir, float* projection);
-  void remove_flat_peaks(int n, float* array);
-  void non_maximum_supress(float* array, float* sup_array);
-  float parallel_coverage(float* sup_array);
+  float project(int x, int y, int dir, vcl_vector<float>& projection);
+  void remove_flat_peaks(int n, vcl_vector<float>& array);
+  void non_maximum_supress(vcl_vector<float> const& array, vcl_vector<float>& sup_array);
+  float parallel_coverage(vcl_vector<float> const& sup_array);
   void compute_parallel_coverage();
-  void compute_image(float** data, vil1_memory_image_of<unsigned char>& image);
+  void compute_image(vil_image_view<float> const& data,
+                     vil_image_view<unsigned char>& image);
   //
   // Members
   int proj_n_;         // Number of pixels in the projection array
   int width_;          // The smoothing kernel width
   int k_size_;         // The kernel is 2*_width+1
-  float *kernel_;      // 1-Dimensional convolution kernel of size k_size
+  vcl_vector<float> kernel_;      // 1-Dimensional convolution kernel of size k_size
 
   int xstart_, ystart_; // The origin of the buffer in the image
   int xsize_, ysize_;   // The width of the image buffer
-  vil1_memory_image_of<float> smooth_;       // The smoothed image
-  float **avg_;       // average intensity
-  float **grad0_;       // Derivative images in 45 degree increments
-  float **grad45_;
-  float **grad90_;
-  float **grad135_;
-  float **det_;        //The resulting detector value
-  float **dir_;        //The direction of maximum detection amplitude
+  vil_image_view<float> smooth_;       // The smoothed image
+  vil_image_view<float> avg_;       // average intensity
+  vil_image_view<float> grad0_;       // Derivative images in 45 degree increments
+  vil_image_view<float> grad45_;
+  vil_image_view<float> grad90_;
+  vil_image_view<float> grad135_;
+  vil_image_view<float> det_;        //The resulting detector value
+  vil_image_view<float> dir_;        //The direction of maximum detection amplitude
   //A memory image of the detected pattern
-  vil1_memory_image_of<unsigned char> det_image_;
+  vil_image_view<unsigned char> det_image_;
   //A memory image of the max pattern orientation
-  vil1_memory_image_of<unsigned char> dir_image_;
-  vil1_memory_image_of<float> image_;
-  float* sup_proj_;     //A 1-d array for maximal suppression
-  float* proj_0_;       //1d arrays for projecting the gradient magnitude
-  float* proj_45_;
-  float* proj_90_;
-  float* proj_135_;
+  vil_image_view<unsigned char> dir_image_;
+  vil_image_view<float> image_; //original image converted to float
+  vcl_vector<float> sup_proj_;     //A 1-d array for maximal suppression
+  vcl_vector<float> proj_0_;       //1d arrays for projecting the gradient magnitude
+  vcl_vector<float> proj_45_;
+  vcl_vector<float> proj_90_;
+  vcl_vector<float> proj_135_;
 };
 
 #endif
