@@ -75,11 +75,11 @@
 #include <brip/brip_para_cvrg_params.h>
 #include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
+#include <brip/brip_para_cvrg_params.h>
+#include <brip/brip_para_cvrg.h>
 #include <brip/brip_max_scale_response.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
-#include <sdet/sdet_vehicle_finder_params.h>
-#include <sdet/sdet_vehicle_finder.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_region_info_params.h>
@@ -1862,4 +1862,50 @@ void segv_vil_segmentation_manager::extrema()
       this->add_image(vil_new_image_resource_of_view(mask));
     }
   }
+}
+void segv_vil_segmentation_manager::beaudet()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout<< "In segv_vil_segmentation_manager::beaudet - no image\n";
+    return;
+  }
+  static float sigma = 1.0f;
+  static bool determinant = true;
+  vgui_dialog beaudet_dialog("beaudet");
+  beaudet_dialog.field("sigma", sigma);
+  beaudet_dialog.checkbox("Determinant(or Trace)", determinant);
+  if (!beaudet_dialog.ask())
+    return;
+  int ni = img->ni(), nj = img->nj();
+  vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
+  vil_image_view<float> smooth = brip_vil_float_ops::gaussian(fimg, sigma);
+  vil_image_view<float> Ixx(ni,nj), Ixy(ni, nj), Iyy(ni, nj);
+  brip_vil_float_ops::hessian_3x3(smooth, Ixx, Ixy, Iyy);
+  vil_image_view<float> beau = 
+    brip_vil_float_ops::beaudet(Ixx, Ixy, Iyy, determinant);
+  this->add_image(vil_new_image_resource_of_view(beau));
+}
+void segv_vil_segmentation_manager::parallel_coverage()
+{
+  static brip_para_cvrg_params pcp;
+  static bool combined=true;
+  vgui_dialog para_dialog("Parallel Coverage");
+  para_dialog.field("Sigma", pcp.sigma_);
+  para_dialog.field("Projection Width", pcp.proj_width_);
+  para_dialog.field("Projection Height", pcp.proj_height_);
+  para_dialog.checkbox("Display Coverage and Direction Combined", combined);
+  para_dialog.checkbox("Verbose", pcp.verbose_);
+  if (!para_dialog.ask())
+    return;
+  vil_image_resource_sptr img = selected_image();
+  brip_para_cvrg pc(pcp);
+  pc.do_coverage(img);
+  vil_image_resource_sptr cov_res;
+  if (combined)
+    cov_res = vil_new_image_resource_of_view(pc.get_combined_image());
+  else
+    cov_res = vil_new_image_resource_of_view(pc.get_detection_image());
+  this->add_image(cov_res);
 }

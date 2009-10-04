@@ -151,6 +151,16 @@ void segv_vil_menus::extrema_callback()
   segv_vil_segmentation_manager::instance()->extrema();
 }
 
+void segv_vil_menus::beaudet_callback()
+{
+  segv_vil_segmentation_manager::instance()->beaudet();
+}
+
+void segv_vil_menus::parallel_coverage_callback()
+{
+  segv_vil_segmentation_manager::instance()->parallel_coverage();
+}
+
 void segv_vil_menus::entropy_callback()
 {
   segv_vil_segmentation_manager::instance()->entropy();
@@ -233,6 +243,9 @@ vgui_menu segv_vil_menus::get_menu()
 
   menuedit.add("Threshold", threshold_image_callback);
   menuedit.add("Harris", harris_corners_callback);
+  menuedit.add("Beaudet", beaudet_callback);
+  menuedit.add("Parallel Coverage", parallel_coverage_callback);
+
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("Conic Segments", fit_conics_callback);

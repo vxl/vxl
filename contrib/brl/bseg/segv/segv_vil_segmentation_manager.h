@@ -74,6 +74,8 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void max_trace_scale();
   void color_order();
   void extrema();
+  void beaudet();
+  void parallel_coverage();
   //: segmentation
   void threshold_image();
   void harris_corners();
