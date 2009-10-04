@@ -41,8 +41,6 @@
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_grid_finder_params.h>
-#include <sdet/sdet_vehicle_finder_params.h>
-#include <sdet/sdet_vehicle_finder.h>
 #include <strk/strk_tracker_params.h>
 #include <strk/strk_info_tracker_params.h>
 #include <strk/strk_info_model_tracker_params.h>
@@ -1172,55 +1170,7 @@ void vvid_file_manager::save_half_res()
   this->play_video();
 }
 
-void vvid_file_manager::create_c_and_g_tracking_face()
-{
-  easy0_->clear_all();
-  static bool show_region_boxes = false;
-  static sdet_vehicle_finder_params vfp;
-  vgui_dialog vehicle_finder_dialog("Click and Go(Not Ready for Prime Time!)");
-  vehicle_finder_dialog.field("Watershed Sigma", vfp.wrpp_.wp_.sigma_);
-  vehicle_finder_dialog.field("Watershed Grad Diff Thresh",
-                              vfp.wrpp_.wp_.thresh_);
-  vehicle_finder_dialog.field("Region Merge Tolerance",
-                              vfp.wrpp_.merge_tol_);
-  vehicle_finder_dialog.field("Para proj width", vfp.pcp_.proj_width_);
-  vehicle_finder_dialog.field("Para proj height", vfp.pcp_.proj_height_);
-  vehicle_finder_dialog.field("Min Region Area", vfp.wrpp_.min_area_);
-  vehicle_finder_dialog.checkbox("Watershed Verbose", vfp.wrpp_.wp_.verbose_);
-  vehicle_finder_dialog.field("Vehicle Search Radius", vfp.search_radius_);
-  vehicle_finder_dialog.field("Shadow Thresh", vfp.shadow_thresh_);
-  vehicle_finder_dialog.field("Para Cvrg Thresh", vfp.para_thresh_);
-  vehicle_finder_dialog.field("Region Distance Scale", vfp.distance_scale_);
-  vehicle_finder_dialog.checkbox("Show Para and Shadow Boxes",
-                                 show_region_boxes);
-  vehicle_finder_dialog.checkbox("Verbose", vfp.verbose_);
 
-  if (!vehicle_finder_dialog.ask())
-    return;
-  vil1_image image = itab0_->get_image();
-  sdet_vehicle_finder vf(vfp);
-  vf.set_image(image);
-  //User picks point
-  vcl_cout << "\nPick vehicle...\n";
-  float x0=0, y0=0;
-  picktab0_->pick_point(&x0,&y0);
-  vcl_cout << "Pick(" << x0 << ' ' << y0 << ")\n";
-  //Display the search box
-  vf.set_pick((int)x0, (int)y0);
-  vsol_box_2d_sptr box = vf.search_box();
-  vsol_polygon_2d_sptr poly = bsol_algs::poly_from_box(box);
-  easy0_->add_vsol_polygon_2d(poly);
-  //Get the tracking face
-  if (!vf.detect_vehicle())
-  {
-    vcl_cout << "Vehicle Detection Failed\n";
-    return;
-  }
-  vtol_face_2d_sptr f = vf.vehicle_track_face();
-  easy0_->set_temp(f->cast_to_topology_object());
-  easy0_->add_face(f);
-  easy0_->post_redraw();
-}
 // Display an image of tracked histogram data
 void vvid_file_manager::display_tracked_hist_data()
 {

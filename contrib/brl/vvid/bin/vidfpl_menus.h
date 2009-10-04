@@ -60,7 +60,6 @@ class vidfpl_menus
   static void display_ihs_callback();
   static void save_frame_callback();
   static void save_half_res_callback();
-  static void create_c_and_g_tracking_face_callback();
   static void display_tracked_hist_data_callback();
   static void capture_feature_data_callback();
   static void capture_snippets_callback();

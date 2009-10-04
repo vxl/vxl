@@ -179,9 +179,6 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: save half resolution version of the current video
   void save_half_res();
 
-  //: click and go tracking face
-  void create_c_and_g_tracking_face();
-
   //: display tracked histogram feature data
   void display_tracked_hist_data();
 

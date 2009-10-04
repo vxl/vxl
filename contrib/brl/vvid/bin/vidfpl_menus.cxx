@@ -240,10 +240,6 @@ void vidfpl_menus::save_half_res_callback()
   vvid_file_manager::instance()->save_half_res();
 }
 
-void vidfpl_menus::create_c_and_g_tracking_face_callback()
-{
-  vvid_file_manager::instance()->create_c_and_g_tracking_face();
-}
 
 void vidfpl_menus::display_tracked_hist_data_callback()
 {
@@ -305,7 +301,6 @@ vgui_menu vidfpl_menus::get_menu()
   //edit menu entries
   menuedit.add( "Create Box", create_box_callback);
   menuedit.add( "Create Polygon", create_polygon_callback,(vgui_key)'a', vgui_CTRL);
-  menuedit.add( "Click and Go Polygon", create_c_and_g_tracking_face_callback);
 
   menuedit.add( "Create Background Model", create_background_model_callback,
                 (vgui_key)'4', vgui_CTRL);
