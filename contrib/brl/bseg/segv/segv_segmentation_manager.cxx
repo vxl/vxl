@@ -51,13 +51,9 @@
 #include <vtol/vtol_intensity_face.h>
 #include <bsol/bsol_algs.h>
 #include <brip/brip_vil1_float_ops.h>
-#include <brip/brip_para_cvrg_params.h>
-#include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
-#include <sdet/sdet_vehicle_finder_params.h>
-#include <sdet/sdet_vehicle_finder.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_region_info_params.h>
@@ -1251,30 +1247,6 @@ void segv_segmentation_manager::set_background_face()
   background_face_ = face_at(col, row);
 }
 
-void segv_segmentation_manager::compute_parallel_coverage()
-{
-  static brip_para_cvrg_params pcp;
-  static bool combined=true;
-  vgui_dialog para_dialog("Parallel Coverage");
-  para_dialog.field("Sigma", pcp.sigma_);
-  para_dialog.field("Projection Width", pcp.proj_width_);
-  para_dialog.field("Projection Height", pcp.proj_height_);
-  para_dialog.checkbox("Display Coverage and Direction Combined", combined);
-  para_dialog.checkbox("Verbose", pcp.verbose_);
-  if (!para_dialog.ask())
-    return;
-  unsigned row= 0, col=0;
-  grid_->get_last_selected_position(&col, &row);
-  vil1_image image = this->image_at(col, row);
-  brip_para_cvrg pc(pcp);
-  pc.do_coverage(image);
-  vil1_image cov_image;
-  if (combined)
-    cov_image = pc.get_combined_image();
-  else
-    cov_image = pc.get_detection_image();
-  this->add_image(cov_image);
-}
 
 void segv_segmentation_manager::compute_watershed_regions()
 {
@@ -1320,67 +1292,6 @@ void segv_segmentation_manager::compute_watershed_regions()
   t2D->post_redraw();
 }
 
-void segv_segmentation_manager::find_vehicle()
-{
-  static bool show_region_boxes = false;
-  static sdet_vehicle_finder_params vfp;
-  vgui_dialog vehicle_finder_dialog("Vehicle_Finder Regions");
-  vehicle_finder_dialog.field("Watershed Sigma", vfp.wrpp_.wp_.sigma_);
-  vehicle_finder_dialog.field("Watershed Grad Diff Thresh",
-                              vfp.wrpp_.wp_.thresh_);
-  vehicle_finder_dialog.field("Region Merge Tolerance",
-                              vfp.wrpp_.merge_tol_);
-  vehicle_finder_dialog.field("Para proj width", vfp.pcp_.proj_width_);
-  vehicle_finder_dialog.field("Para proj height", vfp.pcp_.proj_height_);
-  vehicle_finder_dialog.field("Min Region Area", vfp.wrpp_.min_area_);
-  vehicle_finder_dialog.checkbox("Watershed Verbose", vfp.wrpp_.wp_.verbose_);
-  vehicle_finder_dialog.field("Vehicle Search Radius", vfp.search_radius_);
-  vehicle_finder_dialog.field("Shadow Thresh", vfp.shadow_thresh_);
-  vehicle_finder_dialog.field("Para Cvrg Thresh", vfp.para_thresh_);
-  vehicle_finder_dialog.field("Region Distance Scale", vfp.distance_scale_);
-  vehicle_finder_dialog.checkbox("Show Para and Shadow Boxes",
-                                 show_region_boxes);
-  vehicle_finder_dialog.checkbox("Verbose", vfp.verbose_);
-
-  if (!vehicle_finder_dialog.ask())
-    return;
-  unsigned row= 0, col=0;
-  grid_->get_last_selected_position(&col, &row);
-  vil1_image image = this->image_at(col, row);
-  sdet_vehicle_finder vf(vfp);
-  vf.set_image(image);
-  bgui_picker_tableau_sptr picktab = this->selected_picker_tab();
-  vcl_cout << "\nPick vehicle...\n";
-  float x0=0, y0=0;
-  picktab->pick_point(&x0,&y0);
-  vcl_cout << "Pick(" << x0 << ' ' << y0 << ")\n";
-  vf.set_pick((int)x0, (int)y0);
-  vsol_box_2d_sptr box = vf.search_box();
-  vsol_polygon_2d_sptr poly = bsol_algs::poly_from_box(box);
-  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
-  if (!t2D)
-    return;
-  t2D->add_vsol_polygon_2d(poly);
-  vf.detect_shadow_regions();
-  vsol_polygon_2d_sptr hull = vf.shadow_hull();
-
-  if (hull&&show_region_boxes)
-  {
-    t2D->add_vsol_polygon_2d(hull);
-  }
-  vf.detect_para_regions();
-  hull = vf.para_hull();
-  if (hull&&show_region_boxes)
-  {
-    t2D->add_vsol_polygon_2d(hull);
-  }
-  if (vf.compute_track_boundary())
-  {
-    poly = vf.vehicle_track_poly();
-    t2D->add_vsol_polygon_2d(poly);
-  }
-  t2D->post_redraw();
-}
 
 void segv_segmentation_manager::display_histogram_track()
 {

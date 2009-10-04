@@ -44,9 +44,7 @@ class segv_menus
   SEGV_DLL_DATA static void create_polygon_callback();
   SEGV_DLL_DATA static void set_foreground_face_callback();
   SEGV_DLL_DATA static void set_background_face_callback();
-  SEGV_DLL_DATA static void compute_parallel_coverage_callback();
   SEGV_DLL_DATA static void compute_watershed_regions_callback();
-  SEGV_DLL_DATA static void find_vehicle_callback();
   SEGV_DLL_DATA static void display_histogram_track_callback();
   SEGV_DLL_DATA static void set_range_params_callback();
   SEGV_DLL_DATA static void intensity_profile_callback();

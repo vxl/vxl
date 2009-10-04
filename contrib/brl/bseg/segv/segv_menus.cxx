@@ -139,20 +139,12 @@ void segv_menus::set_background_face_callback()
   segv_segmentation_manager::instance()->set_background_face();
 }
 
-void segv_menus::compute_parallel_coverage_callback()
-{
-segv_segmentation_manager::instance()->compute_parallel_coverage();
-}
 
 void segv_menus::compute_watershed_regions_callback()
 {
   segv_segmentation_manager::instance()->compute_watershed_regions();
 }
 
-void segv_menus::find_vehicle_callback()
-{
-  segv_segmentation_manager::instance()->find_vehicle();
-}
 
 void segv_menus::display_histogram_track_callback()
 {
@@ -208,8 +200,6 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("Set Background Face", set_background_face_callback);
 
   menuedit.add("Set Foreground Face", set_foreground_face_callback);
-  menuedit.add("Compute parallel coverage",compute_parallel_coverage_callback);
-  menuedit.add("Find Vehicle", find_vehicle_callback);
 
   //Top level menu layout
   menubar.add( "File", menufile);

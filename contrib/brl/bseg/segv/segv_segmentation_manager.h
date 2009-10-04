@@ -61,9 +61,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void compute_background_info();
   void set_foreground_face();
   void set_background_face();
-  void compute_parallel_coverage();
   void compute_watershed_regions();
-  void find_vehicle();
   void display_histogram_track();
   void set_range_params();
 
