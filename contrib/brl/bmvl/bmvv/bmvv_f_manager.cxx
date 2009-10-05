@@ -63,13 +63,9 @@
 #include <vtol/vtol_intensity_face.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_vil_float_ops.h>
-#include <brip/brip_para_cvrg_params.h>
-#include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
-#include <sdet/sdet_vehicle_finder_params.h>
-#include <sdet/sdet_vehicle_finder.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_region_info_params.h>
