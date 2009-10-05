@@ -521,7 +521,7 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base_sptr& image)
 {
   if (!image)
     return NULL;
-  vidl_convert_to_frame(*image);
+  return vidl_convert_to_frame(*image);
 }
 
 
