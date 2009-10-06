@@ -11,6 +11,7 @@
 // \author Thomas Pollard
 // \date March 05, 2005
 
+#include <vcl_string.h>
 #include <vcl_vector.h>
 
 template <class T>
