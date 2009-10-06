@@ -18,7 +18,7 @@ class boct_tree
   boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels=1);
   boct_tree(boct_tree_cell<T_loc, T_data>* root, short max_level) {root_=root; max_level_=max_level;}
   //: constructs the tree from leaf nodes
-  boct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes, unsigned max_level);
+  boct_tree_cell<T_loc, T_data>* construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes, unsigned max_level);
   ~boct_tree();
 
   //clones with the same data
