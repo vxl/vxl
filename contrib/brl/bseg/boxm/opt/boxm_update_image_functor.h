@@ -186,9 +186,10 @@ void boxm_update_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                           vil_image_view<typename T_data::obs_datatype> &obs,
                           bool black_background = false)
 {
-    boxm_aux_scene<T_loc, T_data, boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir());
-    typedef boxm_update_image_functor_pass_0<T_data::apm_type,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype>  pass_0;
-    boxm_raytrace_function<pass_0,T_loc, T_data,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
+    typedef boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype sample_datatype;
+    boxm_aux_scene<T_loc, T_data, sample_datatype > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir(), boxm_aux_scene<T_loc, T_data, sample_datatype>::CLONE);
+    typedef boxm_update_image_functor_pass_0<T_data::apm_type,sample_datatype>  pass_0;
+    boxm_raytrace_function<pass_0,T_loc, T_data,sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
     vcl_cout<<"PASS 0"<<vcl_endl;
     pass_0 pass_0_functor(obs,obs.ni(),obs.nj());
     raytracer_0.run(pass_0_functor);
@@ -196,8 +197,8 @@ void boxm_update_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vil_image_view<float> pre_inf(obs.ni(),obs.nj(),1);
     vil_image_view<float> vis_inf(obs.ni(),obs.nj(),1);
 
-    typedef boxm_update_image_functor_pass_1<T_data::apm_type,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype> pass_1;
-    boxm_raytrace_function<pass_1,T_loc, T_data,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype> raytracer_1(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
+    typedef boxm_update_image_functor_pass_1<T_data::apm_type,sample_datatype> pass_1;
+    boxm_raytrace_function<pass_1,T_loc, T_data,sample_datatype> raytracer_1(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
     vcl_cout<<"PASS 1"<<vcl_endl;
     pass_1 pass_1_functor(obs,pre_inf,vis_inf);
     raytracer_1.run(pass_1_functor);

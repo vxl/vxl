@@ -63,6 +63,7 @@ class boxm_raytrace_function
             {
                 scene_.load_block(block_indices[i]);
                 boxm_block<tree_type> * curr_block=scene_.get_active_block();
+//                curr_block->get_tree()->print();
                 boxm_block<aux_tree_type> * curr_aux_block=NULL;
                 if (step_functor.is_aux_)
                     curr_aux_block=aux_scene_.get_block(block_indices[i]);
@@ -94,10 +95,10 @@ class boxm_raytrace_function
                 // for each image pixel
                 for (unsigned int i = int(img_bb.min_x()+0.99); i <= img_bb.max_x(); ++i)
                 {
-                    if (debug_lvl_ > 1) {
+                   /* if (debug_lvl_ > 1) {
                         if (!(i % 10))
                             vcl_cout << '.';
-                    }
+                    }*/
                     for (unsigned int j = int(img_bb.min_y()+0.99); j <= img_bb.max_y(); ++j)
                     {
                         if (!continue_trace(i - img_i0_ , j - img_j0_)) {

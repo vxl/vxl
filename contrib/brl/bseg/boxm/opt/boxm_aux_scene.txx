@@ -9,30 +9,33 @@
 
 template <class T_loc, class T, class T_AUX>
 boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
-                                              vcl_string storage_suffix = "")
+                                              vcl_string storage_suffix, 
+                                              tree_creation_type type)
 : aux_scene_(0)
 {
   vcl_string aux_storage_dir;
   aux_storage_dir_ = scene->path();
   aux_scene_ = new boxm_scene<aux_tree_type >(scene->lvcs(), scene->origin(), scene->block_dim(), scene->world_dim());
   aux_scene_->set_path(aux_storage_dir_,  storage_suffix);
+
   aux_scene_->set_octree_levels(scene->max_level(),scene->init_level());
-  if (storage_suffix!="null")
+  if (type != EMPTY)
   {
     // loop through valid blocks and init same blocks in aux scene
     boxm_block_iterator<tree_type > iter(scene);
     iter.begin();
     while (!iter.end()) {
       if (scene->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
-        if (aux_scene_->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
-#if 0
-          // auxiliary block file exist
-          aux_scene_->load_block(iter.index());
-          boxm_block<boct_tree<T_loc,T_AUX> > * block=aux_scene_->get_active_block();
-          assert(block->get_tree() != 0);
-#endif
-        }
-        else {  //clone from the primary block
+        if (type == LOAD) {
+			if (aux_scene_->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
+	#if 0
+			  // auxiliary block file exist
+			  aux_scene_->load_block(iter.index());
+			  boxm_block<boct_tree<T_loc,T_AUX> > * block=aux_scene_->get_active_block();
+			  assert(block->get_tree() != 0);
+	#endif
+			}
+        } else if (type==CLONE) {  //clone from the primary block
           scene->load_block(iter.index().x(),iter.index().y(),iter.index().z());
           boxm_block<boct_tree<T_loc,T> > * block=scene->get_active_block();
           boct_tree<T_loc,T>* tree=block->get_tree();
