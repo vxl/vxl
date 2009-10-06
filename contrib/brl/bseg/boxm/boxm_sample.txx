@@ -4,8 +4,6 @@
 #include "boxm_sample.h"
 #include <bsta/bsta_mixture_fixed.h>
 
-
-
 template <boxm_apm_type APM_MODEL>
 void boxm_sample<APM_MODEL>::print(vcl_ostream& os) const
 {
