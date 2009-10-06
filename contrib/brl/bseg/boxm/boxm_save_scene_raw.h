@@ -29,6 +29,7 @@
 #include <vbl/vbl_array_3d.txx>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
+#include <vul/vul_file.h>
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
@@ -43,17 +44,33 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   // same tree max_level definitions
   unsigned int ncells = 0;
   boxm_block_iterator<tree_type> iter(&scene);
+
+  int finest_level=100000;
+  // find the finest levels in the blocks
   while (!iter.end()) {
     vgl_point_3d<int> idx = iter.index();
     scene.load_block(idx);
     boxm_block<tree_type>* block = scene.get_block(idx);
     vgl_box_3d<double> block_bb = block->bounding_box();
     tree_type* tree = block->get_tree();
+    if (tree->finest_level() < finest_level) {
+      finest_level = tree->finest_level();
+    }
+    iter++;
+  }
 
-    // query the finest level of the tree and do not make the resolution
-    // smaller than that
-    if (tree->finest_level() > (int)resolution_level)
-    resolution_level = tree->finest_level();
+  // query the finest level of the tree and do not make the resolution
+  // smaller than that
+  if (resolution_level < finest_level)
+    resolution_level=finest_level;
+
+  iter.begin();
+  while (!iter.end()) {
+    vgl_point_3d<int> idx = iter.index();
+    scene.load_block(idx);
+    boxm_block<tree_type>* block = scene.get_block(idx);
+    vgl_box_3d<double> block_bb = block->bounding_box();
+    tree_type* tree = block->get_tree();
 
     // get origin of block
     vgl_point_3d<double> min = block_bb.min_point();
@@ -231,9 +248,11 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     for (unsigned y=0; y<dim.y(); y++) {
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
+        s->close();
         vcl_stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
         vcl_string fn(strm.str());
+        vcl_cout << "Deleting " << fn << vcl_endl;
         vpl_unlink(fn.data());
         delete s;
       }
