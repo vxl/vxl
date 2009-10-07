@@ -15,6 +15,9 @@ void bbgm_loader::register_loaders(){
   typedef bsta_num_obs<bsta_mixture<sph_gauss_type> > sph_mix_gauss_type;
   vsl_add_to_binary_loader(bbgm_image_of<sph_mix_gauss_type>());
 
+  typedef bsta_num_obs<bsta_mixture_fixed<sph_gauss_type,3> > sph_mix_gauss_fixed_type;
+  vsl_add_to_binary_loader(bbgm_image_of<sph_mix_gauss_fixed_type>());
+
   typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
   typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type_fixed;
   typedef bsta_num_obs<mix_gauss_type_fixed> obs_mix_gauss_type_fixed;
