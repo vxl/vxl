@@ -341,7 +341,8 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
       lvcs_submenu.add( "Define LVCS",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::define_lvcs));
-      //lvcs_submenu.add( "Convert File to LVCS", new bwm_convert_to_lvcs_command(this));
+      lvcs_submenu.add( "Adjust Camera to World Point", new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
+        &bwm_tableau_rat_cam::adjust_camera_offset));
       lvcs_submenu.separator();
       lvcs_submenu.add( "Adjust Camera To LVCS",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,

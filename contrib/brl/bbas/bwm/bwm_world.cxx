@@ -59,7 +59,7 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
   vgl_point_3d<double> center;
 
   // if lvcs is set get that
-  if (lvcs_valid_) {
+ /* if (lvcs_valid_) {
     lvcs = lvcs_;
     return true;
   }
@@ -74,7 +74,7 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
   else if (bwm_observer_mgr::instance()->comp_avg_camera_center(center)) {
     lvcs = bgeo_lvcs(center.x(), center.y(), center.z());
     return true;
-  }
+  }*/
 
   // else, request from user
   double lat, lon, elev;
