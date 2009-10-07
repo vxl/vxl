@@ -41,9 +41,6 @@ vul_awk::~vul_awk()
 void vul_awk::next()
 {
   bool do_strip_comments = ( ((int)mode_) & ((int)strip_comments) ) != 0;
-  if (!do_strip_comments) {
-    vcl_cerr << "Strip comments is true\n";
-  }
 #if 0
   bool do_backslash_continuations = (int(mode_) & int(backslash_continuations)) != 0;
 #endif
