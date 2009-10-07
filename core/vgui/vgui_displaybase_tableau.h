@@ -18,6 +18,7 @@
 //   14-SEP-1999 P.Pritchett - Initial version.
 //   01-OCT-2002 K.Y.McGaul - Moved displaybase to displaybase_tableau.
 //   25-AUG-2003 M.Johnson - Altered to allow named groupings of soviews
+//   06-OCT-2009 Ricardo Fabbri - add soview doesn't check for duplicates anymore
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -96,7 +97,7 @@ class vgui_displaybase_tableau : public vgui_tableau
   vgui_soview* get_highlighted_soview();
   bool highlight(unsigned id) { highlighted = id; return true; }
 
-  // add soview
+  // add soview. The user is responsible for avoiding duplicates.
   virtual void add(vgui_soview*);
 
   // remove soview (deletes the soview and sets the pointer to null)

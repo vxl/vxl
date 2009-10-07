@@ -62,6 +62,11 @@ void vgui_displaybase_tableau::set_selection_callback(vgui_displaybase_tableau_s
 
 void vgui_displaybase_tableau::add(vgui_soview* object)
 {
+#ifndef NDEBUG
+  vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
+  if (i == objects.end())
+  {
+#endif
     objects.push_back(object);
     vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( current_grouping );
     if ( it == groupings.end() )
@@ -77,6 +82,9 @@ void vgui_displaybase_tableau::add(vgui_soview* object)
     }
     else
       it->second.objects.push_back( object );
+#ifndef NDEBUG
+  }
+#endif
 }
 
 void vgui_displaybase_tableau::remove(vgui_soview*& object)
