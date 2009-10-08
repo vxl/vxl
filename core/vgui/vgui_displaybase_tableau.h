@@ -97,7 +97,9 @@ class vgui_displaybase_tableau : public vgui_tableau
   vgui_soview* get_highlighted_soview();
   bool highlight(unsigned id) { highlighted = id; return true; }
 
-  // add soview. The user is responsible for avoiding duplicates.
+  // Add soview. The user is responsible for avoiding duplicates.
+  // In a Debug mode build, a warning is issued when the soview has already been
+  // added in a previous call.
   virtual void add(vgui_soview*);
 
   // remove soview (deletes the soview and sets the pointer to null)

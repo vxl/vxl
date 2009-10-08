@@ -83,7 +83,8 @@ void vgui_displaybase_tableau::add(vgui_soview* object)
     else
       it->second.objects.push_back( object );
 #ifndef NDEBUG
-  }
+  } else
+    vcl_cerr << "Warning: attempt to add an soview twice.\n";
 #endif
 }
 
