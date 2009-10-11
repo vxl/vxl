@@ -11,6 +11,7 @@
 #include "vgui_displaybase_tableau.h"
 #include "vgui_macro.h"
 
+#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_utility.h> // for vcl_pair<,>
