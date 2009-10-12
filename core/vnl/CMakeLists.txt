@@ -93,6 +93,7 @@ SET( vnl_sources
   vnl_matrix_fixed.txx         vnl_matrix_fixed.h
   vnl_matrix_fixed_ref.txx     vnl_matrix_fixed_ref.h
   vnl_diag_matrix.txx          vnl_diag_matrix.h
+  vnl_diag_matrix_fixed.txx    vnl_diag_matrix_fixed.h
   vnl_sparse_matrix.txx        vnl_sparse_matrix.h
   vnl_matrix_exp.txx           vnl_matrix_exp.h
   vnl_file_matrix.txx          vnl_file_matrix.h

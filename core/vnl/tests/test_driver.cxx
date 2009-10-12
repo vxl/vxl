@@ -4,6 +4,7 @@ DECLARE( test_bignum );
 DECLARE( test_complex );
 DECLARE( test_inverse );
 DECLARE( test_diag_matrix );
+DECLARE( test_diag_matrix_fixed );
 DECLARE( test_file_matrix );
 DECLARE( test_finite );
 DECLARE( test_math );
@@ -43,6 +44,7 @@ register_tests()
   REGISTER( test_complex );
   REGISTER( test_inverse );
   REGISTER( test_diag_matrix );
+  REGISTER( test_diag_matrix_fixed );
   REGISTER( test_file_matrix );
   REGISTER( test_finite );
   REGISTER( test_math );

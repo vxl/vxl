@@ -19,6 +19,7 @@
 #include <vnl/vnl_definite_integral.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_diag_matrix.h>
+#include <vnl/vnl_diag_matrix_fixed.h>
 #include <vnl/vnl_double_1x1.h>
 #include <vnl/vnl_double_1x2.h>
 #include <vnl/vnl_double_1x3.h>
