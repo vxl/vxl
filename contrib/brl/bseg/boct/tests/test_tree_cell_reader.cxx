@@ -5,6 +5,8 @@
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_tree_cell_reader.h>
 
+#include <vgl/io/vgl_io_box_3d.h>
+
 MAIN( test_tree_cell_reader )
 {
   START ("TREE CELL READER");
@@ -20,7 +22,11 @@ MAIN( test_tree_cell_reader )
   }
  
   vsl_b_ofstream os("tree.bin");
-  block->b_write(os);
+  // mimic writing the block info first, then the tree
+  vsl_b_write(os, 1);  //version
+  vgl_box_3d<double> bbox;
+  vsl_b_write(os, bbox);  //global bbox of the block
+  vsl_b_write(os, *block);
   os.close();
 
   vsl_b_ifstream is("tree.bin", vcl_ios_binary);
