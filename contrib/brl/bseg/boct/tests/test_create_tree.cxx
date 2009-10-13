@@ -30,7 +30,8 @@ MAIN( test_create_tree )
     leaf_nodes[i].set_data(vgl_point_3d<double>(i,i,i));
   }
     
-  boct_tree<short,vgl_point_3d<double> > new_tree(leaf_nodes, init_tree->num_levels());
+  boct_tree<short,vgl_point_3d<double> > new_tree;
+  new_tree.construct_tree(leaf_nodes, init_tree->num_levels());
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> new_leaves=new_tree.leaf_cells();
   bool good=true;
   for (unsigned i=0; i<leaves2.size(); i++) {
@@ -40,7 +41,7 @@ MAIN( test_create_tree )
       good=false;
   }
   TEST("Constructiong a tree from leaf nodes", true, good);
-  new_tree.print();
+  //new_tree.print();
 
   delete tree;
   delete init_tree;
