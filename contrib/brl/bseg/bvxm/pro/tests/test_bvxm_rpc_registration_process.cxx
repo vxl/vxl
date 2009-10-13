@@ -40,6 +40,7 @@ MAIN_ARGS( test_bvxm_rpc_registration_process )
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
+  REGISTER_DATATYPE(float);
 
   vgl_vector_3d<unsigned int> num_voxels(50,50,5);
   float voxel_length = 1.0f;
