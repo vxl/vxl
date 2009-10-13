@@ -32,6 +32,7 @@ IF(NETLIB_FOUND)
 # vnl_sparse_symmetric_eigensystem dnlaso_
 # vnl_svd                          csvdc_ dsvdc_ ssvdc_ zsvdc_
 # vnl_svd_economy                  csvdc_ dsvdc_ ssvdc_ zsvdc_
+# vnl_svd_fixed                    csvdc_ dsvdc_ ssvdc_ zsvdc_
 # vnl_symmetric_eigensystem        rs_
 
   INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
@@ -45,6 +46,7 @@ IF(NETLIB_FOUND)
     # matrix decompositions
     vnl_svd.txx vnl_svd.h
     vnl_svd_economy.txx vnl_svd_economy.h
+    vnl_svd_fixed.txx vnl_svd_fixed.h
     vnl_matrix_inverse.txx vnl_matrix_inverse.h
     vnl_qr.txx vnl_qr.h
     vnl_scatter_3x3.txx vnl_scatter_3x3.h

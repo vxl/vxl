@@ -788,6 +788,24 @@ vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M, N>& a,
   return out;
 }
 
+template <class T, unsigned M, unsigned N>
+inline
+vnl_vector_fixed<T, N>
+vnl_matrix_fixed_vec_mat_mult(const vnl_vector_fixed<T, M>& a,
+                              const vnl_matrix_fixed<T, M, N>& b
+                              )
+{
+  vnl_vector_fixed<T, N> out;
+  for (unsigned i = 0; i < N; ++i)
+  {
+    T accum = a(0) * b(0,i);
+    for (unsigned k = 1; k < M; ++k)
+      accum += a(k) * b(k,i);
+    out(i) = accum;
+  }
+  return out;
+}
+
 // see comment above
 template <class T, unsigned M, unsigned N, unsigned O>
 inline
@@ -817,7 +835,17 @@ template <class T, unsigned M, unsigned N>
 inline
 vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
 {
-  return vnl_matrix_fixed_mat_vec_mult(a,b);
+  return vnl_matrix_fixed_mat_vec_mult(a, b);
+}
+
+//: Multiply  conformant vector_fixed (M) and vnl_matrix_fixed (M x N)
+// \relates vnl_vector_fixed
+// \relates vnl_matrix_fixed
+template <class T, unsigned M, unsigned N>
+inline
+vnl_vector_fixed<T, N> operator*(const vnl_vector_fixed<T, M>& a, const vnl_matrix_fixed<T, M, N>& b)
+{
+  return vnl_matrix_fixed_vec_mat_mult(a, b);
 }
 
 //: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
@@ -826,7 +854,7 @@ template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
 {
-  return vnl_matrix_fixed_mat_mat_mult(a,b);
+  return vnl_matrix_fixed_mat_mat_mult(a, b);
 }
 #endif // VCL_VC_6
 

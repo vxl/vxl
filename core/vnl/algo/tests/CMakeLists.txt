@@ -38,6 +38,7 @@ IF(NETLIB_FOUND)
     test_rpoly_roots.cxx
     test_sparse_matrix.cxx
     test_svd.cxx
+    test_svd_fixed.cxx
     test_symmetric_eigensystem.cxx
     test_integral.cxx
     test_solve_qp.cxx
@@ -79,14 +80,9 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_bracket_minimum          ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_bracket_minimum         )
   ADD_TEST( vnl_test_brent_minimizer          ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_brent_minimizer         )
   ADD_TEST( vnl_test_sparse_lm                ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_sparse_lm               )
-
-  IF ( SITE MATCHES "isbe.man.ac.uk" )
-    # For some reason my box (linux-gcc-3.2) has a problem with the optimisation
-    # settings for dnlaso.c in netlib. It cannot be fixed until > CMAKE 1.8.3
-  ELSE ( SITE MATCHES "isbe.man.ac.uk" )
-    ADD_TEST( vnl_test_sparse_matrix            ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_sparse_matrix           )
-  ENDIF ( SITE MATCHES "isbe.man.ac.uk" )
+  ADD_TEST( vnl_test_sparse_matrix            ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_sparse_matrix           )
   ADD_TEST( vnl_test_svd                      ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_svd                     )
+  ADD_TEST( vnl_test_svd_fixed                ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_svd_fixed               )
   ADD_TEST( vnl_test_symmetric_eigensystem    ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_symmetric_eigensystem   )
 ENDIF(NETLIB_FOUND)
 
