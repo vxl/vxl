@@ -147,9 +147,9 @@ static void test_speed(vnl_random& rng)
   {
     double sum=0;
     timer.mark();
+    vnl_matrix<double> A(3,3);
     for (unsigned count=0; count<10000; ++count)
     {
-      vnl_matrix<double> A(3,3);
       test_util_fill_random(A.begin(), A.end(), rng);
       vnl_svd<double> svd(A);
       sum += svd.inverse().fro_norm();
@@ -160,9 +160,9 @@ static void test_speed(vnl_random& rng)
   {
     double sum=0;
     timer.mark();
+    vnl_matrix_fixed<double,3,3> A;
     for (unsigned count=0; count<10000; ++count)
     {
-      vnl_matrix_fixed<double,3,3> A;
       test_util_fill_random(A.begin(), A.end(), rng);
       vnl_svd_fixed<double,3,3> svd(A);
       sum += svd.inverse().fro_norm();
