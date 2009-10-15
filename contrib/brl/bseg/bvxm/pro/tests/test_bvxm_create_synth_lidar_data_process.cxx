@@ -14,10 +14,10 @@
 #include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_camera.h>
 
+#include <bvxm/pro/processes/bvxm_synth_world_generator.h>
 
 MAIN( test_bvxm_create_synth_lidar_data_process)
 {
-#if 0
   DECLARE_FUNC_CONS(bvxm_create_synth_lidar_data_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bvxm_create_synth_lidar_data_process, "bvxmCreateSynthLidarDataProcess");
   REGISTER_DATATYPE(vil_image_view_base_sptr);
@@ -74,7 +74,4 @@ MAIN( test_bvxm_create_synth_lidar_data_process)
 
 
   SUMMARY();
-#else
-  return 0;
-#endif // 0
 }

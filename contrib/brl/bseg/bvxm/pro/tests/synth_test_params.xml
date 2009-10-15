@@ -9,4 +9,5 @@
   <box_dim_x type="unsigned" value="79"></box_dim_x>
   <box_dim_y type="unsigned" value="79"></box_dim_y>
   <box_dim_z type="unsigned" value="23"></box_dim_z>
+  <lvcs type="string" value="./world_model_params_lvcs.txt"></lvcs>
 </bvxmCreateSynthLidarDataProcess>

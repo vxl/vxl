@@ -21,7 +21,7 @@ bool bvxm_update_lidar_process_cons(bprb_func_process& pro)
   //input[1]: The camera of the observation
   //input[2]: The voxel world
   //input[3]: scale index
-
+  //input[4]: use opinion ?
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";

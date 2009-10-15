@@ -17,11 +17,21 @@
 #include <vil/vil_image_view.h>
 
 #include <vul/vul_file.h>
+#include <bvxm/pro/processes/bvxm_create_synth_lidar_data_process.h>
+#include <bvxm/pro/processes/bvxm_create_voxel_world_process.h>
+#include <bvxm/pro/processes/bvxm_update_lidar_process.h>
+#include <bvxm/pro/processes/bvxm_save_occupancy_raw_process.h>
 
 MAIN_ARGS( test_bvxm_update_lidar_process )
 {
-  DECLARE_FUNC_CONS(bvxm_update_lidar_process);
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_lidar_process, "bvxmCreateSynthLidarDataProcess");
+  //DECLARE_FUNC_CONS(bvxm_update_lidar_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_lidar_process, "bvxmUpdateLidarProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_synth_lidar_data_process, "bvxmCreateSynthLidarDataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_save_occupancy_raw_process,"bvxmSaveOccupancyRaw");
+  REGISTER_DATATYPE(vil_image_view_base_sptr);
+  REGISTER_DATATYPE(vpgl_camera_double_sptr);
+  REGISTER_DATATYPE(bvxm_voxel_world_sptr);
 
   //global variables
   vil_image_view_base_sptr lidar_img_;
@@ -35,7 +45,7 @@ MAIN_ARGS( test_bvxm_update_lidar_process )
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-    vcl_string xml = vcl_string(argv[1]) + "/" + "synth_test_params.xml";
+    vcl_string xml = "./synth_test_params.xml";
     good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
@@ -162,7 +172,7 @@ MAIN_ARGS( test_bvxm_update_lidar_process )
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateVoxelWorldProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-    vcl_string xml = vcl_string(argv[1]) + "/" + "world_model_params.xml";
+    vcl_string xml = "./world_model_params.xml";
     good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
@@ -208,13 +218,15 @@ MAIN_ARGS( test_bvxm_update_lidar_process )
     brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(world_);
     brdb_value_sptr v1 = new brdb_value_t<vcl_string> (empty_world);
     brdb_value_sptr v2 = new brdb_value_t<unsigned> (0);
+    brdb_value_sptr v3 = new brdb_value_t<vcl_string> ("float");
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmSaveOccupancyRaw");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
     good = bprb_batch_process_manager::instance()->set_input(0, v0)
         && bprb_batch_process_manager::instance()->set_input(1, v1)
-        && bprb_batch_process_manager::instance()->set_input(2, v2);
+        && bprb_batch_process_manager::instance()->set_input(2, v2)
+        && bprb_batch_process_manager::instance()->set_input(3, v3);
     TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
 
     good = bprb_batch_process_manager::instance()->run_process();
@@ -232,6 +244,7 @@ MAIN_ARGS( test_bvxm_update_lidar_process )
     brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr> (lidar_cam_);
     brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(world_);
     brdb_value_sptr v3 = new brdb_value_t<unsigned>(0);
+    brdb_value_sptr v4 = new brdb_value_t<bool>(false);
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmUpdateLidarProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
@@ -239,7 +252,8 @@ MAIN_ARGS( test_bvxm_update_lidar_process )
     good = bprb_batch_process_manager::instance()->set_input(0, v0)
         && bprb_batch_process_manager::instance()->set_input(1, v1)
         && bprb_batch_process_manager::instance()->set_input(2, v2)
-        && bprb_batch_process_manager::instance()->set_input(3, v3);
+        && bprb_batch_process_manager::instance()->set_input(3, v3)
+        && bprb_batch_process_manager::instance()->set_input(4, v4);
     TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
     TEST("run init lidar process", good, true);
@@ -289,13 +303,15 @@ MAIN_ARGS( test_bvxm_update_lidar_process )
     brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(world_);
     brdb_value_sptr v1 = new brdb_value_t<vcl_string> (updated_world);
     brdb_value_sptr v2 = new brdb_value_t<unsigned>(0);
+    brdb_value_sptr v3 = new brdb_value_t<vcl_string>("float");
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmSaveOccupancyRaw");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
     good = bprb_batch_process_manager::instance()->set_input(0, v0)
         && bprb_batch_process_manager::instance()->set_input(1, v1)
-        && bprb_batch_process_manager::instance()->set_input(2, v2);
+        && bprb_batch_process_manager::instance()->set_input(2, v2)
+        && bprb_batch_process_manager::instance()->set_input(3, v3);
     TEST("bprb_batch_process_manager::instance()->set_input()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
     TEST("run save occupancy empty world process", good ,true);
