@@ -1,9 +1,12 @@
+#include <bbgm/bbgm_feature_image_sptr.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_view_maker_sptr.h>
 #include <bbgm/bbgm_viewer_sptr.h>
 
 #include <bbgm/bbgm_apply.h>
 #include <bbgm/bbgm_detect.h>
+#include <bbgm/bbgm_feature_image.h>
+#include <bbgm/bbgm_features.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_loader.h>
 #include <bbgm/bbgm_measure.h>
