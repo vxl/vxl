@@ -16,6 +16,10 @@ SOURCES += bbgm_loader.cxx
 MANPAGE_SOURCES += bbgm_measure.h
 MANPAGE_SOURCES += bbgm_view_maker.h
 MANPAGE_SOURCES += bbgm_view_maker_sptr.h
+SOURCES += bbgm_features.cxx
+MANPAGE_SOURCES += bbgm_feature_image_sptr.h
+SOURCES += bbgm_feature_image.cxx
+MANPAGE_SOURCES += bbgm_feature_image.txx
 
 SUBDIRS += pro
 

@@ -45,6 +45,7 @@ SOURCES += vnl_sparse_symmetric_eigensystem.cxx
 SOURCES += vnl_generalized_schur.cxx
 #SOURCES += $(wildcard vnl_jordan_normal_form.cxx)
 MANPAGE_SOURCES += vnl_svd_economy.txx
+MANPAGE_SOURCES += vnl_svd_fixed.txx
 
 # optimization
 SOURCES += vnl_discrete_diff.cxx

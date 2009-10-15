@@ -37,7 +37,6 @@ SOURCES += processes/bvxm_normalization_util.cxx
 SOURCES += processes/bvxm_update_edges_process.cxx
 SOURCES += processes/bvxm_create_mog_image_process.cxx
 SOURCES += processes/bvxm_detect_edges_process.cxx
-
 SOURCES += processes/bvxm_compare_3d_voxels_process.cxx # multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 SOURCES += processes/bvxm_detect_scale_process.cxx      # multiscale_pro/bvxm_detect_scale_process.cxx
 SOURCES += processes/bvxm_synth_world_generator.cxx
@@ -46,6 +45,7 @@ SOURCES += processes/bvxm_mog_l2_process.cxx
 SOURCES += processes/bvxm_merge_mog_process.cxx
 SOURCES += processes/bvxm_get_grid_process.cxx
 SOURCES += processes/bvxm_mog_to_mpm_process.cxx
+SOURCES += processes/bvxm_create_synth_lidar_data_process.cxx
 
 MANPAGE_SOURCES += bvxm_processes.h
 

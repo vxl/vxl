@@ -40,6 +40,7 @@ TESTS += test_rotation_matrix.cxx
 TESTS += test_alignment.cxx
 TESTS += test_crs_index.cxx
 TESTS += test_sparse_lst_sqr_function.cxx
+TESTS += test_diag_matrix_fixed.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 

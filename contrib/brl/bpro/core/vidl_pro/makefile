@@ -14,6 +14,8 @@ SOURCES += processes/vidl_get_frame_istream_process.cxx
 SOURCES += processes/vidl_close_istream_process.cxx
 SOURCES += processes/vidl_open_istream_process.cxx
 SOURCES += processes/vidl_open_dshow_istream_process.cxx
+SOURCES += processes/vidl_put_frame_ostream_process.cxx
+SOURCES += processes/vidl_close_ostream_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

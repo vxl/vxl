@@ -20,12 +20,14 @@ MANPAGE_SOURCES += vnl_matrix_ref.h
 MANPAGE_SOURCES += vnl_matrix_fixed.txx
 MANPAGE_SOURCES += vnl_matrix_fixed_ref.txx
 MANPAGE_SOURCES += vnl_diag_matrix.txx
+MANPAGE_SOURCES += vnl_diag_matrix_fixed.txx
 MANPAGE_SOURCES += vnl_sparse_matrix.txx
 MANPAGE_SOURCES += vnl_matrix_exp.txx
 MANPAGE_SOURCES += vnl_file_matrix.txx
 MANPAGE_SOURCES += vnl_sym_matrix.txx
 # matrix operators
 MANPAGE_SOURCES += vnl_fortran_copy.txx
+MANPAGE_SOURCES += vnl_fortran_copy_fixed.txx
 MANPAGE_SOURCES += vnl_det.txx
 MANPAGE_SOURCES += vnl_transpose.h
 MANPAGE_SOURCES += vnl_inverse.h
