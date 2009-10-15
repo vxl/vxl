@@ -93,13 +93,121 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/vnl_c_vector+double-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_bignum.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_bignum_traits.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_erf.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_gamma.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_hungarian_algorithm.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_definite_integral.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_bessel.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_crs_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sparse_lst_sqr_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_alloc.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_block.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_copy.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_cost_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_error.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_fastops.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_int_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_least_squares_cost_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_least_squares_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_linear_system.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_math.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_matlab_filewrite.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_matlab_print_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_matlab_print_scalar.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_matlab_read.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_matlab_write.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_matops.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_nonlinear_minimizer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_numeric_traits.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_rank+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_rank+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_rational.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_rational_traits.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_real_npolynomial.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_real_polynomial.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_rotation_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sample.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_random.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sparse_matrix_linear_system.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_c_vector+double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_c_vector+double_complex-.cxx
@@ -522,93 +630,6 @@ SOURCE=.\Templates/vnl_vector_fixed+int.3-.cxx
 SOURCE=.\Templates/vnl_vector_fixed+int.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_alloc.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_block.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_copy.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_cost_function.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_error.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_fastops.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_int_matrix.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_least_squares_cost_function.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_least_squares_function.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_linear_system.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_math.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_filewrite.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_print_format.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_print_scalar.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_read.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_write.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matops.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_nonlinear_minimizer.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_numeric_traits.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_rank+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_rank+int-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_rational.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_rational_traits.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_real_npolynomial.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_real_polynomial.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_rotation_matrix.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_sample.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_random.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_sparse_matrix_linear_system.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_unary_function+int.int-.cxx
 # End Source File
 # Begin Source File
@@ -744,25 +765,16 @@ SOURCE=.\Templates/vnl_vector_fixed+vnl_rational.4-.cxx
 SOURCE=.\Templates/vnl_quaternion+vnl_rational-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_erf.cxx
+SOURCE=.\Templates/vnl_fortran_copy_fixed+double.3.3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_gamma.cxx
+SOURCE=.\Templates/vnl_fortran_copy_fixed+double.3.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_hungarian_algorithm.cxx
+SOURCE=.\Templates/vnl_diag_matrix_fixed+double.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_definite_integral.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_bessel.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_crs_index.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_sparse_lst_sqr_function.cxx
+SOURCE=.\Templates/vnl_diag_matrix_fixed+double.3-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -1183,6 +1195,18 @@ SOURCE=.\vnl_sparse_lst_sqr_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_power.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_diag_matrix_fixed.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_diag_matrix_fixed.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_fortran_copy_fixed.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_fortran_copy_fixed.txx
 # End Source File
 # End Group
 # End Target

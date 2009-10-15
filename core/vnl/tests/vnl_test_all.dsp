@@ -198,6 +198,9 @@ SOURCE=.\test_sparse_lst_sqr_function.cxx
 # Begin Source File
 SOURCE=.\test_power.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_diag_matrix_fixed.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

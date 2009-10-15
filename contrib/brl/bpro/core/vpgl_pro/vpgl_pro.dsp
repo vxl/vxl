@@ -120,6 +120,9 @@ SOURCE=.\processes/vpgl_nitf_camera_coverage_process.cxx
 SOURCE=.\processes/vpgl_load_local_rational_camera_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vpgl_scale_perspective_camera_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+vpgl_camera+double---.cxx
 # End Source File
 # End Group

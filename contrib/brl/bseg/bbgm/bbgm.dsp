@@ -102,6 +102,12 @@ SOURCE=.\bbgm_image_of.cxx
 SOURCE=.\bbgm_loader.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bbgm_features.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_feature_image.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bbgm_image_of+bsta_mixture+bsta_num_obs+bsta_gauss_if3---.cxx
 # End Source File
 # Begin Source File
@@ -155,6 +161,24 @@ SOURCE=.\Templates/bbgm_image_of+bsta_parzen_sphere+float.3--.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bbgm_view_maker_base-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bbgm_feature_image_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bbgm_feature_image+bbgm_pair_group_feature-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bbgm_feature_image+bbgm_mask_pair_feature-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bbgm_feature_image_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+bbgm_feature_image_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bbgm_feature_image+bbgm_mask_feature-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -196,6 +220,18 @@ SOURCE=.\bbgm_view_maker.h
 # End Source File
 # Begin Source File
 SOURCE=.\bbgm_view_maker_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_feature_image_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_features.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_feature_image.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_feature_image.h
 # End Source File
 # End Group
 # End Target

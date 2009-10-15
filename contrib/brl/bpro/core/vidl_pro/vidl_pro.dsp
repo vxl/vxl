@@ -93,6 +93,12 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vidl_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_pro_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vidl_io_istream.cxx
 # End Source File
 # Begin Source File
@@ -105,9 +111,6 @@ SOURCE=.\processes/vidl_open_istream_process.cxx
 SOURCE=.\processes/vidl_open_ostream_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_pro_utils.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/vidl_close_istream_process.cxx
 # End Source File
 # Begin Source File
@@ -117,7 +120,10 @@ SOURCE=.\processes/vidl_get_frame_istream_process.cxx
 SOURCE=.\processes/vidl_open_dshow_istream_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_register.cxx
+SOURCE=.\processes/vidl_put_frame_ostream_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vidl_close_ostream_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+vidl_istream_sptr-.cxx
@@ -129,19 +135,19 @@ SOURCE=.\Templates/brdb_value_t+vidl_ostream_sptr-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\vidl_io_istream.h
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_io_ostream.h
+SOURCE=.\vidl_register.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_pro_utils.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_register.h
+SOURCE=.\vidl_processes.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_processes.h
+SOURCE=.\vidl_io_istream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_io_ostream.h
 # End Source File
 # End Group
 # End Target
