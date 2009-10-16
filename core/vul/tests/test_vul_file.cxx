@@ -101,7 +101,7 @@ int test_vul_file(int, char*[])
 
   test_vul_file();
 
-#if defined(VCL_WIN32) && defined(BUILD_WIN_UNICODE_SUPPORT)
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
   test_vul_file_wchar_ext();
 #endif
 
