@@ -41,6 +41,7 @@ SET( vgl_algo_sources
   vgl_intersection.txx                     vgl_intersection.h
                                            vgl_rotation_3d.h
                                            vgl_rtree_c.h
+  vgl_orient_box_3d_operators.txx          vgl_orient_box_3d_operators.h
 )
 AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
 
