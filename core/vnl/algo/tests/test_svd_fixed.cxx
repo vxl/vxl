@@ -9,6 +9,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -143,7 +144,7 @@ void test_nullvector(char const *type, double max_err, T *, vnl_random &rng)
 static void test_speed(vnl_random& rng)
 {
   vul_timer timer;
-  int ms_heap, ms_stack;
+  int ms_heap, ms_stack, ms_nosvd;
   {
     double sum=0;
     timer.mark();
@@ -169,6 +170,18 @@ static void test_speed(vnl_random& rng)
     }
     ms_stack = timer.user();
     vcl_cout << "vnl_svd_fixed time for 10000 3x3 inversions: " << ms_stack << "ms." << vcl_endl;
+  }
+  {
+    double sum=0;
+    timer.mark();
+    vnl_matrix_fixed<double,3,3> A;
+    for (unsigned count=0; count<10000; ++count)
+    {
+      test_util_fill_random(A.begin(), A.end(), rng);
+      sum += vnl_inverse(A).fro_norm();
+    }
+    ms_nosvd = timer.user();
+    vcl_cout << "(c.f. vnl_inverse no-SVD time for 10000 3x3 inversions: " << ms_nosvd << "ms.)" << vcl_endl;
   }
   TEST("Stack memory SVD is faster than heap memory SVD", ms_stack < ms_heap, true);
 }
