@@ -93,6 +93,92 @@ vcl_string vul_expand_path(vcl_string path)
   return vul_expand_path_internal(path);
 }
 
+
+#if defined(VXL_SUPPORT_WIN_UNICODE)
+//:
+// \note This Windows version only performs some of the operations done by the Unix version.
+std::wstring vul_expand_path_internal(std::wstring path)
+{
+  if (path == L"/")
+    return path; // FIXME: without this something breaks; not sure why.
+
+  { // main processing and reduction goes here.
+    vcl_vector<std::wstring> bits;
+
+    // split the path into bits. a "bit" is either a single slash or a
+    // sequence of non-slash characters.
+    for (unsigned int i=0; i<path.size(); ) {
+      if (path[i] == L'/') {
+        bits.push_back(L"/");
+        ++i;
+      }
+      else {
+        unsigned int j=i;
+        while (j<path.size() && path[j]!=L'/')
+          ++j;
+        bits.push_back(std::wstring(path.c_str()+i, path.c_str()+j));
+        i = j;
+      }
+    }
+
+    // process the bits
+    while (true)
+    {
+      bool again = false;
+      for (unsigned int i=0; i<bits.size(); ++i)
+      {
+        // remove repeated / unless it is initial '//' as used in windows UNC names
+        if (i>0 && i+1<bits.size() && bits[i] == L"/" && bits[i+1] == L"/") {
+          bits.erase(bits.begin() + i);
+          again = true;
+        }
+
+        // remove trailing /
+        if (i+1 == bits.size() && bits[i] == L"/") {
+          bits.pop_back();
+          again = true;
+        }
+
+        // collapse foo/.. into /
+        if (i+2<bits.size() && !(bits[i]==L"/") && bits[i+1]==L"/" && bits[i+2]==L"..") {
+          bits.erase(bits.begin() + i+2); // ..
+          bits.erase(bits.begin() + i);   // foo
+          again = true;
+        }
+
+        // remove /. altogether
+        if (i+1<bits.size() && bits[i]==L"/" && bits[i+1]==L".") {
+          bits.erase(bits.begin() + i+1); // /
+          bits.erase(bits.begin() + i);   // .
+          again = true;
+        }
+      }
+      if (!again)
+        break;
+    }
+
+    // recompose the path from its bits
+    path = L"";
+    for (unsigned int i=0; i<bits.size(); ++i)
+      path += bits[i];
+#ifdef DEBUG
+    vcl_cerr << "recomposed : " << path << '\n';
+#endif
+  }
+
+  // no more ideas
+  return path;
+}
+
+//:
+// Note: this Windows version in similar to the uncached Unix version
+std::wstring vul_expand_path(std::wstring path)
+{
+  return vul_expand_path_internal(path);
+}
+
+#endif  //defined(VXL_SUPPORT_WIN_UNICODE)
+
 #else // #if defined(VCL_WIN32) || defined(como4301)
 
 #include <vcl_functional.h>

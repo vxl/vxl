@@ -35,4 +35,14 @@ vcl_string vul_expand_path/*cached*/(vcl_string path);
 //: Expand given path.
 vcl_string vul_expand_path_uncached (vcl_string path);
 
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
+//: Expand given path.
+std::wstring vul_expand_path/*cached*/(std::wstring path);
+
+//: Expand given path.
+std::wstring vul_expand_path_uncached (std::wstring path);
+
+#endif 
+
 #endif // vul_expand_path_h_
