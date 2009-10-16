@@ -3657,7 +3657,7 @@ static double brip_vil_rot_gauss(double x, double y,
 }
 
 //revert angle to the range [-90, 90]
-static float revert_angle(float angle)
+float brip_vil_float_ops::extrema_revert_angle(float angle)
 {
   if (angle>=0.0f) {
     if (angle>90.0f&&angle<=270.0f)
@@ -3679,7 +3679,7 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
                                              vbl_array_2d<float>& kernel,
                                              vbl_array_2d<bool>& mask, float cutoff_percentage)
 {
-  theta = revert_angle(theta);//in range [-90, 90]
+  theta = extrema_revert_angle(theta);//in range [-90, 90]
   //convert theta to radians
   double theta_rad = theta*vnl_math::pi/180.0;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);

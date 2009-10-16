@@ -127,6 +127,9 @@ class brip_vil_float_ops
     std_dev_operator_method2(vil_image_view<float> const& sd_image,
                              vbl_array_2d<float> const& kernel);
 
+  //: a helper function for the extrema method, revert angle to the range [-90, 90]
+  static float extrema_revert_angle(float angle);
+
   //: Find ansiotropic intensity extrema. Theta is in degrees
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
