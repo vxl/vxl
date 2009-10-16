@@ -140,10 +140,6 @@ class vil_exception_unsupported_operation
 
 
 //: Indicates that an image load or save operation failed.
-// Generally this should be thrown, only after checks on the image type
-// have been passed by the file format object, and while an
-// unrecoverable error is detected inside the image_resource constructor,
-// or similar.
 class vil_exception_image_io
 #if VCL_HAS_EXCEPTIONS
   : public vcl_runtime_error
@@ -174,9 +170,13 @@ class vil_exception_image_io
 };
 
 
-//: Indicates that an image file does not contain the anticipated amount of data
-// Generally thrown when an image file's header suggests an image size or
+//: Indicates unexpected problems image file's data.
+// For example, can be thrown when an image file's header suggests an image size or
 // file length that is not matched by the actual data present in the file
+// Generally this should be thrown, only after checks on the image type
+// have been passed by the file format object, and while an
+// unrecoverable error is detected inside the image_resource constructor,
+// get_view(), etc.
 class vil_exception_corrupt_image_file
 #if VCL_HAS_EXCEPTIONS
   : public vil_exception_image_io
