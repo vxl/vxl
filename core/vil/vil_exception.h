@@ -200,7 +200,8 @@ class vil_exception_corrupt_image_file
 
 
 //: Indicating an object with an unknown version number
-// Indicates that an image file (or subsection thereof) contains data
+// Indicates that an image file (or subsection thereof) contains data marked as
+// a version which iss unknown to the loading code.
 class vil_exception_invalid_version
 #if VCL_HAS_EXCEPTIONS
   : public vil_exception_image_io
