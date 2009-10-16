@@ -119,6 +119,13 @@ ENDIF (VXL_LEGACY_ERROR_REPORTING)
 # but no-one is likely to work on improving test coverage or fixing memory leaks.
 OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" ${YES_FOR_DASHBOARD} )
 
+# Option to build Windows Unicode support, the string
+# type of which is wchar_t, each character is a 16-bit unsigned integer. 
+# 
+IF(WIN32 AND VXL_WIN_HAS_WCHAR_T)
+  OPTION( VXL_SUPPORT_WIN_UNICODE "Build overloading functions that accept Windows wide char strings?" YES )
+ENDIF(WIN32 AND VXL_WIN_HAS_WCHAR_T)
+
 # Build the core vxl + support libraries
 SUBDIRS(vcl v3p core)
 

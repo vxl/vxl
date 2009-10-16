@@ -114,6 +114,101 @@ struct vul_file
   static bool delete_file_glob(vcl_string const& file_glob);
   static bool delete_file_glob(char const* file_glob)
   { return delete_file_glob(vcl_string(file_glob)); }
+
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
+  //: Return current working directory
+  //  This function is provided as an overloading 
+  static vcl_string get_cwd(char* /*dummy*/)
+  { return get_cwd(); }
+
+  //: Return current working directory
+  static std::wstring get_cwd(wchar_t* dummy);
+
+  //: change current working directory
+  static bool change_directory(wchar_t const* dirname);
+  static bool change_directory(std::wstring const& dirname) {
+    return change_directory(dirname.c_str());
+  }
+
+  //: Make a writable directory.
+  // You might imagine mkdir would be a better name,
+  // and then you might imagine a world w/out ms.
+  static bool make_directory(wchar_t const* filename);
+  static bool make_directory(std::wstring const& filename) {
+    return make_directory(filename.c_str());
+  }
+
+  //: Make a writable directory, including any necessary parents.
+  // Returns true if successful, or if the directory alredy exists.
+  static bool make_directory_path(wchar_t const* filename);
+  static bool make_directory_path(std::wstring const& filename) {
+    return make_directory_path(filename.c_str());
+  }
+
+  //: Return true iff filename is a directory.
+  static bool is_directory(wchar_t const* filename);
+  static bool is_directory(const std::wstring& filename) {
+    return is_directory(filename.c_str());
+  }
+
+  //: Return true iff filename is a drive, e.g., "c:" or "Z:".
+  static bool is_drive(wchar_t const* filename);
+  static bool is_drive(const std::wstring& filename) {
+    return is_drive(filename.c_str());
+  }
+
+  ////: Expand any leading ~ escapes in filename
+  static std::wstring expand_tilde(wchar_t const* filename) {
+    // ~ meaningless on win32
+    return std::wstring(filename);
+  }
+  static std::wstring expand_tilde(std::wstring const& filename) {
+    // ~ meaningless on win32
+    return filename;
+  }
+
+  //: Return true iff filename exists.  It may be any sort of file.
+  static bool exists(wchar_t const* filename);
+  static bool exists(std::wstring const& filename) {
+    return exists(filename.c_str());
+  }
+
+  ////: Return size of vul_file
+  //static unsigned long size(wchar_t const* filename);
+  //static unsigned long size(std::wstring filename) { return size(filename.c_str()); }
+
+  //: Return dirname
+  static std::wstring dirname(wchar_t const* filename);
+  static std::wstring dirname(std::wstring const& filename) {
+    return dirname(filename.c_str());
+  }
+
+  //: Return extension (including the '.').
+  static std::wstring extension(wchar_t const* filename);
+  static std::wstring extension(std::wstring const& filename) {
+    return extension( filename.c_str() );
+  }
+
+  //: Return basename
+  static std::wstring basename(wchar_t const* filename, wchar_t const* suffix = 0);
+  static std::wstring basename(std::wstring const& filename, wchar_t const* suffix = 0) {
+    return basename(filename.c_str(), suffix );
+  }
+
+  //: Strips away directory of the filename
+  static std::wstring strip_directory(wchar_t const* filename);
+  static std::wstring strip_directory(std::wstring const &filename)
+  { return strip_directory(filename.c_str()); }
+
+  //: Strips away extension of the filename
+  static std::wstring strip_extension(wchar_t const* filename);
+  static std::wstring strip_extension(std::wstring const &filename)
+  { return strip_extension(filename.c_str()); }
+
+#endif
+
 };
 
 inline bool vul_file_exists(char const *f) { return vul_file::exists(f); }

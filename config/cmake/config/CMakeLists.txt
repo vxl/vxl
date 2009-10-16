@@ -126,6 +126,12 @@ IF(APPLE)
   ENDIF(NOT ${VXL_APPLE_HAS_ISNAND})
 ENDIF(APPLE)
 
+# Check if Windows have wchar_t defined
+IF(WIN32)
+  PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_WIN_HAS_WCHAR_T)
+ENDIF(WIN32)
+
+
 # Test the ability of shared libraries to link to static vxl libriares
 PERFORM_CMAKE_TEST_CUSTOM(vxl_shared_link_test VXL_PIC_COMPATIBLE)
 

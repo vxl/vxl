@@ -47,12 +47,63 @@ void test_vul_file()
 
 }
 
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
+void test_vul_file_wchar_ext()
+{
+  // vul_file::basename
+  TEST("wide char basename 1", vul_file::basename(L"fred¨¢.txt"), L"fred¨¢.txt");
+  TEST("wide char basename 2", vul_file::basename(L"/awf/fred¨¢.txt"), L"fred¨¢.txt");
+  TEST("wide char basename 3", vul_file::basename(L"¨¢fred.txt", L".txt"), L"¨¢fred");
+  TEST("wide char basename 4", vul_file::basename(L"/awf/fred.txt", L".txt"), L"fred");
+  TEST("wide char basename 5", vul_file::basename(L"t", L".txt"), L"t");
+  TEST("wide char basename 6", vul_file::basename(L".txt", L".txt"), L"");
+  TEST("wide char basename 7", vul_file::basename(L"¨¢.txt", L".txt"), L"¨¢");
+  TEST("wide char basename 8", vul_file::basename(L".ttt", L".txt"), L".ttt");
+  TEST("wide char basename 9", vul_file::basename(L"/awf/t", L".txt"), L"t");
+
+  // vul_file::dirname
+  TEST("wide char dirname 1", vul_file::dirname(L"fred.txt"), L".");
+  TEST("wide char dirname 2", vul_file::dirname(L"/¨¢wf/fred.txt"), L"/¨¢wf");
+
+  // vul_file::make_directory_path
+  vcl_wstring rootdir = vul_file::get_cwd((wchar_t*)0);
+
+  _wrmdir((rootdir+L"/test_make_dir_path/¨¢/b").c_str());
+  _wrmdir((rootdir+L"/test_make_dir_path/¨¢").c_str());
+  _wrmdir((rootdir+L"/test_make_dir_path").c_str());
+
+  TEST("Directory doesn't exist", vul_file::exists(rootdir+L"/test_make_dir_path"), false);
+  TEST("wide char make_directory_path", vul_file::make_directory_path(rootdir+L"/test_make_dir_path/¨¢/b"), true);
+  TEST("Directory does exist", vul_file::is_directory(rootdir+L"/test_make_dir_path/¨¢/b"), true);
+
+  _wrmdir((rootdir+L"/test_make_dir_path/¨¢/b").c_str());
+  {
+    vcl_ofstream x((rootdir+L"/test_make_dir_path/¨¢/b").c_str()); x << ' ';
+  }
+  TEST("File exists ...", vul_file::exists(rootdir+L"/test_make_dir_path/¨¢/b"), true);
+  TEST("... but isn't a directory", vul_file::is_directory(rootdir+L"/test_make_dir_path/¨¢/b"), false);
+
+  _wunlink((rootdir+L"/test_make_dir_path/¨¢/b").c_str());
+  _wrmdir((rootdir+L"/test_make_dir_path/¨¢").c_str());
+  _wrmdir((rootdir+L"/test_make_dir_path").c_str());
+  TEST("Directory doesn't exist", vul_file::exists(rootdir+L"/test_make_dir_path"), false);
+
+}
+
+#endif
+
 //TESTMAIN(test_vul_file);
 int test_vul_file(int, char*[])
 {
   testlib_test_start("test_vul_file");
 
   test_vul_file();
+
+#if defined(VCL_WIN32) && defined(BUILD_WIN_UNICODE_SUPPORT)
+  test_vul_file_wchar_ext();
+#endif
 
   return testlib_test_summary();
 }

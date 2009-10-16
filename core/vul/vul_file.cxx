@@ -269,3 +269,124 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
   return user.home_directory + fn;
 #endif
 }
+
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#  include <wchar.h>
+
+std::wstring 
+vul_file::get_cwd(wchar_t* /*dummy*/)
+{
+  const int BIG = 65536;
+  wchar_t buf[BIG];
+  buf[0] = L'\0';
+  _wgetcwd(buf,BIG-1);
+  return buf;
+}
+
+bool vul_file::change_directory(wchar_t const* dirname)
+{
+  return 0 == _wchdir(dirname);
+}
+
+bool vul_file::make_directory(wchar_t const* name)
+{
+  return -1 != _wmkdir(name);
+}
+
+bool vul_file::is_directory(wchar_t const* fn)
+{
+  struct _stat fs;
+  return _wstat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
+}
+
+bool vul_file::is_drive(wchar_t const* fn)
+{
+  // a drive string looks like "c:", "z:"
+  return fn && iswalpha(fn[0]) && fn[1]==L':' && fn[2]==L'\0';
+}
+
+//: Make a writable directory, including any necessary parents.
+// Returns true if successful, or if the directory alredy exists.
+bool vul_file::make_directory_path(wchar_t const* filename)
+{
+  if (is_directory(filename) || is_drive(filename)) return true;
+
+  if (!make_directory_path(dirname(filename))) return false;
+  return make_directory(filename);
+}
+
+bool vul_file::exists(wchar_t const* fn)
+{
+  struct _stat fs;
+  return _wstat(fn, &fs) == 0;
+}
+
+std::wstring vul_file::dirname(wchar_t const* fn)
+{
+  std::wstring self(fn);
+
+  std::wstring::size_type slash_index = self.find_last_of(L"\\/");
+  if (slash_index == std::wstring::npos)
+    return L".";
+
+  return self.substr(0, slash_index);
+}
+
+std::wstring vul_file::extension(wchar_t const* fn)
+{
+  std::wstring self(fn);
+
+  std::wstring::size_type dot_index = self.rfind(L'.');
+  if (dot_index != std::wstring::npos)
+    return self.substr(dot_index, std::wstring::npos);
+  else
+    return std::wstring();
+}
+
+std::wstring vul_file::strip_directory(wchar_t const* fn)
+{
+   std::wstring self(fn);
+
+   std::wstring::size_type slash_index = self.find_last_of(L"\\/");
+   if (slash_index != std::wstring::npos)
+     self.erase(0, slash_index+1);
+
+   return self;
+}
+
+std::wstring vul_file::strip_extension(wchar_t const* fn)
+{
+  std::wstring self(fn);
+
+  std::wstring::size_type dot_index = self.rfind(L'.');
+  if (dot_index != std::wstring::npos)
+    self.erase(dot_index, std::wstring::npos);
+
+  return self;
+}
+
+std::wstring vul_file::basename(wchar_t const* fn, wchar_t const * suffix)
+{
+  // First strip dir
+  std::wstring self(fn);
+
+  std::wstring::size_type slash_index = self.find_last_of(L"\\/");
+
+  if (slash_index != std::wstring::npos)
+    self.erase(0, slash_index+1);
+
+  // Now strip suffix if any
+  if (suffix) {
+    int start = (int)self.size() - (int)wcslen(suffix);
+    if (start >= 0)
+      // egcs, 2.95, 2.96 have no method which can do
+      //   self.compare(start, std::wstring::npos, suffix) == 0
+      if (std::wstring(self.begin()+start, self.end()) == suffix)
+        self.erase(start, std::wstring::npos);
+  }
+  return self;
+}
+
+#endif
+
