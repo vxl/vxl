@@ -5,6 +5,7 @@
 
 #include "vimt3d_image_3d.h"
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 //: Return vector indicating size of image in pixels
 //  3D image is v[0] x v[1] x v[2]
@@ -16,6 +17,21 @@ vcl_vector<unsigned> vimt3d_image_3d::image_size() const
   d[2]=image_base().nk();
   return d;
 }
+
+
+//: Return 3 element vector indicating the size of a pixel
+vcl_vector<double> vimt3d_image_3d::pixel_size() const
+{
+  vcl_vector<double> d(3);
+  vgl_vector_3d<double> v =world2im_.inverse().
+    delta(vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0));
+
+  d[0] = v.x();
+  d[1] = v.y();
+  d[2] = v.z();
+  return d;
+}
+
 
 //: Return vectors defining bounding box containing image in world co-ords
 void vimt3d_image_3d::world_bounds(vcl_vector<double>& b_lo,

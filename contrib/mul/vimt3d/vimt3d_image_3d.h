@@ -10,8 +10,6 @@
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vil3d/vil3d_image_view_base.h>
 
-class mil_transform_2d;
-
 //: A base class for arbitrary 3D images
 //  world2im() gives transformation from world to image co-ordinates
 class vimt3d_image_3d : public vimt_image
@@ -38,8 +36,15 @@ class vimt3d_image_3d : public vimt_image
   virtual vcl_vector<unsigned> image_size() const;
 
   //: Return 3D vectors defining bounding box containing image in world co-ords
+  //  Somewhat inefficient: Only use when you absolutely have to.
+  //  Usually one only needs to know the size once one knows the exact type.
   virtual void world_bounds(vcl_vector<double>& b_lo,
                             vcl_vector<double>& b_hi) const;
+
+  //: Return 3 element vector indicating the size of a pixel
+  //  Somewhat inefficient: Only use when you absolutely have to.
+  //  Usually one only needs to know the size once one knows the exact type.
+  virtual vcl_vector<double> pixel_size() const;
 
   //: Current world-to-image transformation
   const vimt3d_transform_3d& world2im() const { return world2im_; }

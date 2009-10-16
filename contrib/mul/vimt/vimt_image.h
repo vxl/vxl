@@ -44,8 +44,15 @@ class vimt_image
   virtual vcl_vector<unsigned> image_size() const = 0;
 
     //: Return vectors defining bounding box containing image in world co-ords
+    //  Somewhat inefficient: Only use when you absolutely have to.
+    //  Usually one only needs to know the size once one knows the exact type.
   virtual void world_bounds(vcl_vector<double>& b_lo,
                             vcl_vector<double>& b_hi) const = 0;
+
+
+    //: Return vector indicating the size of a pixel
+    //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]
+  virtual vcl_vector<double> pixel_size() const = 0;
 
     //: Version number for I/O
   short version_no() const;
