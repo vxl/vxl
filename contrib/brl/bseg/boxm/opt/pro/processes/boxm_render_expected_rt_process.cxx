@@ -36,13 +36,13 @@ bool boxm_render_expected_rt_process_cons(bprb_func_process& pro)
   //input[1]: camera
   //input[2]: ni of the expected image
   //input[3]: nj of the expected image
-  //input[4]: bin number
+  //input[4]: black background?
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
-  input_types_[4] = "unsigned";
+  input_types_[4] = "bool";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -73,6 +73,7 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned ni = pro.get_input<unsigned>(i++);
   unsigned nj = pro.get_input<unsigned>(i++);
+  bool use_black_background =  pro.get_input<bool>(i++);
 
   vil_image_view_base_sptr img;
   vil_image_view_base_sptr img_mask;
@@ -85,7 +86,7 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       //boxm_render_image_splatting_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,-1,true);
-      boxm_render_image_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,-1,true);
+      boxm_render_image_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,-1,use_black_background);
     }
     else
     {
@@ -106,7 +107,7 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       //boxm_render_image_splatting_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,-1,true);
-      boxm_render_image_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, camera, expected, mask,-1,true);
+      boxm_render_image_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, camera, expected, mask,-1,use_black_background);
     }
     else
     {
