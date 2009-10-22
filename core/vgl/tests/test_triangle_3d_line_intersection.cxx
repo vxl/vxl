@@ -5,7 +5,6 @@
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_line_3d_2_points.h>
 #include <vnl/vnl_math.h>
 
 static const double tol=1e-9;
@@ -115,7 +114,7 @@ static void test_line_intersection()
     {
       vgl_point_3d<double>  l1_in(1001,900,1000 - e), l2_in(1001,1100,1000 - e);
       vgl_point_3d<double>  l1_out(1001,900,1000 + e), l2_out(1001,1100,1000 + e);
-      vgl_line_3d_2_points<double> l_in(l1_in, l2_in), l_out(l1_out, l2_out);
+      vgl_line_segment_3d<double> l_in(l1_in, l2_in), l_out(l1_out, l2_out);
       for (double a=-89.9; a<89.95; a+=0.1) // angle of triangle normal w.r.t to l1-l2
       {
         // Define a triangle that wobbles about p1-p2

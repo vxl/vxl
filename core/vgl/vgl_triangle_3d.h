@@ -61,17 +61,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   vgl_point_3d<double>& i_pnt,
   bool ignore_coplanar = false);
 
-//: Compute the intersection point between the line and triangle
-//  The triangle is represented by its vertices \a p1, \a p2, \a p3
-//  \return true if line intersects triangle
-vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
-  const vgl_line_3d_2_points<double>& line,
-  const vgl_point_3d<double>& p1,
-  const vgl_point_3d<double>& p2,
-  const vgl_point_3d<double>& p3,
-  vgl_point_3d<double>& i_pnt,
-  bool ignore_coplanar = false);
-
 //: Compute if the given triangles a and b intersect
 //  The triangles are represented by their respective vertices \a a_p1, \a a_p2, \a a_p3
 //  and \a b_p1, \a b_p2, \a b_p3
