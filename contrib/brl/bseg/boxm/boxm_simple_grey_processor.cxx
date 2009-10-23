@@ -145,6 +145,7 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
     // compute estimate of gaussian weight by summing probabilities
     vcl_vector<float> obs_gauss_weights = weights;
     float gauss_weight = 0.0f;
+    float expected_nobs = 0.0f;
     if (USE_UNIFORM_COMPONENT) {
       float weight_sum = 0.0f;
 
@@ -163,8 +164,13 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
       if (weight_sum > 0.0f) {
         gauss_weight /= weight_sum;
       }
+      expected_nobs = weight_sum;
     }
     else {
+      vcl_vector<float>::const_iterator wit = weights.begin();
+      for (; wit != weights.end(); ++wit) {
+        expected_nobs += *wit;
+      }
       gauss_weight = 1.0f;
     }
     // Initialize the estimates
@@ -173,7 +179,7 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
 
     compute_gaussian_params(obs, obs_gauss_weights, mean_est, sigma_est);
 
-    sigma_est *= sigma_norm_factor(nobs);
+    //sigma_est *= sigma_norm_factor(nobs);
 
     // make sure standard deviation is not too small
     if (sigma_est < min_sigma) {
@@ -186,13 +192,16 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
 
     model = boxm_simple_grey(mean_est, sigma_est, gauss_weight);
   }
+  return;
 }
 
-void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model)
+void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, 
+                                                     vcl_vector<float> const& weights, 
+                                                     boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model)
 {
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
-  //unsigned int nobs = obs.size();
+  unsigned int nobs = obs.size();
   float expected_nobs = 0.0f;
   vcl_vector<float>::const_iterator wit = weights.begin();
   for (; wit != weights.end(); ++wit) {
