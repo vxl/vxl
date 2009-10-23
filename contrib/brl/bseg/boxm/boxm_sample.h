@@ -18,7 +18,7 @@ class boxm_sample
   typedef typename boxm_apm_traits<APM_MODEL>::apm_processor apm_processor;
 
   //: default constructor
-  boxm_sample() : alpha(8.8f), appearance_() {}
+  boxm_sample() : alpha(0.0015f), appearance_() {}
   //: constructor
   boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance_(apm_val) {}
 
