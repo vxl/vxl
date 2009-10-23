@@ -20,12 +20,6 @@ bool mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
 {
   v.resize(0);
 
-  if (!vul_file::exists(path))
-  {
-    mbl_exception_throw_os_error( path, "mbl_load_text_file: file does not exist" );
-    return false;
-  }
-
   vcl_ifstream ifs(path.c_str());
   if (!ifs)
   {
