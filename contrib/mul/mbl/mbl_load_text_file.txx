@@ -6,19 +6,26 @@
 // \author dac
 
 #include "mbl_load_text_file.h"
-
-#include <mbl/mbl_exception.h>
-
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vcl_iterator.h>
 #include <vcl_algorithm.h>
+#include <vul/vul_file.h>
+#include <mbl/mbl_exception.h>
+
 
 //: Load vector from file with format "v1 v2 .. vn"
 template <class T>
 bool mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
 {
   v.resize(0);
+
+  if (!vul_file::exists(path))
+  {
+    mbl_exception_throw_os_error( path, "mbl_load_text_file: file does not exist" );
+    return false;
+  }
+
   vcl_ifstream ifs(path.c_str());
   if (!ifs)
   {
