@@ -13,9 +13,10 @@ void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_d
                                  vcl_vector<float> const& pre, 
                                  vcl_vector<float> const& vis,
                                  typename boxm_apm_traits<APM>::apm_datatype &model)
-{
+{ 
+  const float min_sigma=0.1f;
   // initialize appearance model estimate using visibility probabilities as weights.
-  boxm_apm_traits<APM>::apm_processor::compute_appearance(obs,pre,model,0.02f);
+  boxm_apm_traits<APM>::apm_processor::compute_appearance(obs,pre,model,min_sigma);
 #if 1
   // use EM to refine estimate until convergence.
   unsigned int nobs= obs.size();
@@ -68,7 +69,7 @@ void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_d
       break;
     }
     // MAXIMIZATION
-    boxm_apm_traits<APM>::apm_processor::update_appearance(obs,obs_weights,model,0.02f);
+    boxm_apm_traits<APM>::apm_processor::update_appearance(obs,obs_weights,model,min_sigma);
   }
 
   // adjust model to account for small sample sizes.
