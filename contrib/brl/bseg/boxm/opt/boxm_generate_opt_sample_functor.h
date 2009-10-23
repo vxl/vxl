@@ -8,6 +8,7 @@
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <vil/vil_math.h>
+#include <vil/vil_save.h>
 #include <vcl_iostream.h>
 
 template <boxm_apm_type APM, class T_aux>
@@ -66,7 +67,7 @@ class boxm_generate_opt_sample_functor_pass_1
     // compute average intensity for the cell
     const float mean_obs_ =aux_val.obs_/aux_val.seg_len_;
     // compute appearance probability of observation
-    const float PI  = boxm_apm_traits<APM>::apm_processor::prob_density(cell_value.appearance(),mean_obs_);
+    const float PI  = boxm_apm_traits<APM>::apm_processor::prob_density(cell_value.appearance(),mean_obs_); // aux_val.PI_;
     // update alpha integral
     alpha_integral_(i,j) += cell_value.alpha * seg_len;
     // compute new visibility probability with updated alpha_integral
@@ -83,12 +84,12 @@ class boxm_generate_opt_sample_functor_pass_1
  public:
   bool scene_read_only_;
   bool is_aux_;
-
+  vil_image_view<float> alpha_integral_;
  private:
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& obs_;
   vil_image_view<float> &vis_img_;
   vil_image_view<float> &pre_img_;
-  vil_image_view<float> alpha_integral_;
+  
 };
 
 template <boxm_apm_type APM, class T_aux>
@@ -121,16 +122,16 @@ class boxm_generate_opt_sample_functor_pass_2
 
     // compute new visibility probability with updated alpha_integral
     const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
-    // compute weight for this cell
-    const float Omega = vis_img_(i,j) - vis_prob_end;
-
+    // grab this cell's pre and vis value
     const float pre = pre_img_(i,j);
     const float vis = vis_img_(i,j);
+    // compute weight for this cell
+    const float Omega = vis - vis_prob_end;
 
     // update vis and pre
     pre_img_(i,j) +=  PI * Omega;
     vis_img_(i,j) = vis_prob_end;
-
+    // accumulate aux sample values
     aux_val.pre_ += pre * seg_len;
     aux_val.vis_ = vis * seg_len;
 
@@ -145,8 +146,10 @@ class boxm_generate_opt_sample_functor_pass_2
     else {
       Beta = Beta_num / Beta_denom_(i,j);
     }
-    if (Beta < -1e-5) {
-      vcl_cerr << " error: beta = " << Beta << "  setting to 0. " << vcl_endl;
+    if (Beta < 0) {
+      if (Beta < -1e-5) {
+        vcl_cerr << " error: beta = " << Beta << "  setting to 0. " << vcl_endl;
+      }
       Beta = 0;
     }
     aux_val.Beta_ += Beta * seg_len;
@@ -198,8 +201,8 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     if (black_background) {
         vcl_cout << "using black background model" << vcl_endl;
         typename T_data::obs_datatype black(0.0f);
-        float background_std_dev = 4.0f/255;
-        typename T_data::apm_datatype background_apm(black, background_std_dev,1.0f);
+        float background_std_dev = 8.0f/255;//???????????? 4/255 Vishal's
+        typename T_data::apm_datatype background_apm(black, background_std_dev*background_std_dev,1.0f);
         
         float peak=T_data::apm_processor::expected_color(background_apm);
         vcl_cout<<"Peak: "<<peak<<vcl_endl;
@@ -210,13 +213,17 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         }
     }
     else {
-        PI_inf.fill(0.5f);
+        PI_inf.fill(1.0f);
     }
 
     vil_image_view<float> inf_term(obs.ni(), obs.nj());
     vil_math_image_product<float,float,float>(vis_inf,PI_inf,inf_term);
     vil_image_view<float> Beta_denom_img(obs.ni(), obs.nj());
     vil_math_image_sum<float,float,float>(pre_inf,inf_term,Beta_denom_img);
+    vil_save(vis_inf, "e:\\tests\\capitol\\vis_inf.tiff");
+    vil_save(pre_inf, "e:\\tests\\capitol\\pre_inf.tiff");
+    vil_save(Beta_denom_img, "e:\\tests\\capitol\\Beta_denom_img.tiff");
+    vil_save(pass_1_functor.alpha_integral_, "e:\\tests\\capitol\\alpha_integr.tiff");
     vcl_cout<<"PASS 2"<<vcl_endl;
     typedef boxm_generate_opt_sample_functor_pass_2<T_data::apm_type, sample_datatype> pass_2;
     boxm_raytrace_function<pass_2,T_loc, T_data, sample_datatype> raytracer_2(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
