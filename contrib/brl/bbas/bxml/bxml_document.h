@@ -13,6 +13,7 @@
 // \verbatim
 //  Modifications
 //   Ozge C. Ozcanli (Brown) - July 15, 2009 - enabled smart pointer for bxml_document
+//   Ricardo Fabbri (Brown) - October 18, 2009 - specialized get_attribute for strings
 // \endverbatim
 
 #include <vcl_string.h>
@@ -93,7 +94,15 @@ class bxml_element : public bxml_data
   //: Return the value of an attribute
   vcl_string attribute(const vcl_string& attr_name) const;
 
-  //: Return the value of an attribute
+  //: Specialization for vcl_string.
+  bool get_attribute(const vcl_string& attr_name, vcl_string& value) const
+  {
+    value = this->attribute(attr_name);
+    return true;
+  }
+
+  //: Return the value of an attribute.
+  // \see specialization for vcl_string.
   template <class T>
   bool get_attribute(const vcl_string& attr_name, T& value) const
   {
@@ -132,6 +141,7 @@ class bxml_element : public bxml_data
   void set_attribute(const vcl_string& attr_name, const vcl_string& attr_value)
   { attributes_[attr_name] = attr_value; }
 
+  //: \see specialization for vcl_string below.
   template <class T>
   void set_attribute(const vcl_string& attr_name, const T& attr_value)
   {
@@ -199,6 +209,8 @@ class bxml_document : public vbl_ref_count
   vcl_string encoding_;
   bool standalone_;
 };
+
+
 
 typedef vbl_smart_ptr<bxml_document> bxml_document_sptr;
 
