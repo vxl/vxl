@@ -205,4 +205,32 @@ vil_image_view<T> vil_new_image_view_i_j_plane(unsigned ni, unsigned nj, unsigne
 // \relates vil_image_view
 vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&);
 
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+//: Make a new image.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_pixel_format format,
+                                               wchar_t const* file_format = 0);
+//: Make a new image.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_pixel_format format,
+                                               wchar_t const* file_format = 0);
+
+//: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_image_resource_sptr const &prototype,
+                                               wchar_t const* format = 0);
+
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
+
 #endif // vil_new_h_

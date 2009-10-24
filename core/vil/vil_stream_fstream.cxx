@@ -50,6 +50,16 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
 #endif // 0
 }
 
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+vil_stream_fstream::vil_stream_fstream(wchar_t const* fn, char const* mode):
+  flags_(modeflags(mode)),
+  f_(fn, flags_ | vcl_ios_binary), // need ios::binary on windows.
+  end_( -1 )
+{
+  id_ = ++id;
+}
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
 #if 0
 vil_stream_fstream::vil_stream_fstream(vcl_fstream& f):
   f_(f.rdbuf()->fd()),

@@ -5,6 +5,10 @@
 
 #include <vil/vil_stream_fstream.h>
 
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+# include <windows.h>
+#endif
+
 int
 test_stream_main( int argc, char* argv[] )
 {
@@ -31,6 +35,33 @@ test_stream_main( int argc, char* argv[] )
     TEST( "Size file 2", fs->file_size(), 1069 );
     fs->unref();
   }
+
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+  const unsigned int size = 4096;  // should be enough
+  std::wstring wdir;
+  wdir.resize(size);  
+  const int ret = MultiByteToWideChar(CP_ACP, 0, dir.c_str(), dir.size(), &wdir[0], size);
+  TEST( "dir name converts to wchart_t type", ret>0, true );
+  wdir.resize(ret);
+
+  {
+    vil_stream* fs = new vil_stream_fstream( (wdir+L"/ff_grey8bit_compressed.jpg").c_str(), "r" );
+    fs->ref();
+    TEST( "[wchar_t] Open file 1", fs->ok(), true );
+    TEST( "[wchar_t] Size file 1", fs->file_size(), 421 );
+    fs->unref();
+  }
+
+  {
+    vil_stream* fs = new vil_stream_fstream( (wdir+L"/ff_rgb8bit_littleendian.viff").c_str(), "r" );
+    fs->ref();
+    TEST( "[wchar_t] Open file 2", fs->ok(), true );
+    TEST( "[wchar_t] Size file 2", fs->file_size(), 1069 );
+    fs->unref();
+  }
+  
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
 
   return testlib_test_summary();
 }

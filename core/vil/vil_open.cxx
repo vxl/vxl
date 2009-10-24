@@ -94,3 +94,77 @@ vil_stream *vil_open(char const* what, char const* how)
 
   return is;
 }
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+//  --------------------------------------------------------------------------------
+//  Windows' wchar_t overloading version
+//
+//
+vil_stream *vil_open(wchar_t const* what, char const* how)
+{
+  // check for null pointer or empty strings.
+  if (!what || !*what)
+    return 0;
+
+  // try to open as file first.
+#ifdef VIL_USE_FSTREAM64
+  vil_stream *is = new vil_stream_fstream64(what, how);
+#else //VIL_USE_FSTREAM64
+  vil_stream *is = new vil_stream_fstream(what, how);
+#endif //VIL_USE_FSTREAM64
+
+  if (!is->ok()) {
+    // this will delete the stream object.
+    is->ref();
+    is->unref();
+    is = 0;
+  }
+
+#if 0  // TODO: add wchar_t support in vil_stream_core
+  if (!is) {
+    // hacked check for filenames beginning "gen:".
+    int l = wcslen(what);
+    if (l > 4 && wcsncmp(what, L"gen:", 4) == 0) {
+      if (vcl_strcmp(how, "r") == 0) {
+        // Make an in-core stream...
+        vil_stream_core *cis = new vil_stream_core();
+        cis->write(what, l+1);
+        is = cis;
+      }
+      else {
+        vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
+      }
+    }
+  }
+  if (is && !is->ok()) {
+    // this will delete the stream object.
+    is->ref();
+    is->unref();
+    is = 0;
+  }
+#endif
+
+#if 0  // TODO: add wchar_t support in vil_stream_url
+  if (!is) {
+    // maybe it's a URL?
+    int l = vcl_strlen(what);
+    if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
+      if (vcl_strcmp(how, "r") == 0) {
+        is = new vil_stream_url(what);
+      }
+      else
+        vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+    }
+  }
+  if (is && !is->ok()) {
+    // this will delete the stream object.
+    is->ref();
+    is->unref();
+    is = 0;
+  }
+#endif
+
+  return is;
+}
+
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)

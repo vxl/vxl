@@ -304,3 +304,79 @@ vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&
   }
   return dest;
 }
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#include <windows.h>
+
+//: Make a new image.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_pixel_format format,
+                                               wchar_t const* file_format)
+{
+  if (!file_format) // avoid segfault in strcmp()
+    file_format = L"pnm";
+
+  const unsigned int size = 200;
+  char fmt_buffer[size];  // should be enough
+  BOOL useless;
+  // ret indicates the number of characters successfully converted
+  const int ret = WideCharToMultiByte(CP_ACP, 0, file_format, wcslen(file_format), fmt_buffer, size, 0, &useless );
+  fmt_buffer[ret] = '\0';
+  if(!ret)   return 0;  
+
+  return vil_new_image_resource(os, ni, nj, nplanes, format, fmt_buffer);
+}
+
+//: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
+                                               unsigned ni, unsigned nj,
+                                               vil_image_resource_sptr const& prototype,
+                                               wchar_t const* file_format)
+{
+#ifdef VIL_USE_FSTREAM64
+  vil_stream_fstream64* os = new vil_stream_fstream64(filename, "w");
+#else //VIL_USE_FSTREAM64
+  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+#endif //VIL_USE_FSTREAM64
+
+  const unsigned int size = 200;  // should be enough
+  wchar_t tag_buffer[size];  
+  if( !file_format )
+    {
+      char const* tag = prototype->file_format();
+      const int ret = MultiByteToWideChar(CP_ACP, 0, tag, strlen(tag), tag_buffer, size);
+      assert(ret);
+      file_format = tag_buffer;  // use the file format of the given resource
+    }
+
+  return vil_new_image_resource(os,
+                                ni, nj,
+                                prototype->nplanes(),
+                                prototype->pixel_format(),
+                                file_format );
+}
+
+//: Make a new image.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_pixel_format format,
+                                               wchar_t const* file_format)
+{
+#ifdef VIL_USE_FSTREAM64
+  vil_stream_fstream64* os = new vil_stream_fstream64(filename, "w");
+#else //VIL_USE_FSTREAM64
+  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+#endif //VIL_USE_FSTREAM64
+
+  if (!file_format || !*file_format)
+    file_format = vil_save_guess_file_format(filename);
+  return vil_new_image_resource(os, ni, nj, nplanes, format, file_format);
+}
+
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)

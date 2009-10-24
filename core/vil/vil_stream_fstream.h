@@ -24,6 +24,10 @@ class vil_stream_fstream : public vil_stream
  public:
   vil_stream_fstream(char const* filename, char const* mode);
 
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+  vil_stream_fstream(wchar_t const* filename, char const* mode);
+#endif
+
   // implement virtual vil_stream interface:
   bool ok() const { return f_.good(); }
   vil_streampos write(void const* buf, vil_streampos n);

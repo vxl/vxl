@@ -16,4 +16,11 @@
 // \relates vil_stream
 vil_stream *vil_open(char const* what, char const* how = "r");
 
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+//: make a vil_stream from a filename, an URL, etc.
+// \relates vil_stream
+vil_stream *vil_open(wchar_t const* what, char const* how = "r");
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
 #endif // vil_open_h_

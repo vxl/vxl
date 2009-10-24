@@ -59,4 +59,21 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose = true);
 // \relates vil_image_view
 vil_image_view_base_sptr vil_load(const char *, bool verbose = true);
 
+
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+//: Load an image resource object from a file.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename);
+
+//: Load an image resource object from a file.
+// Won't use plugins.
+vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const*);
+
+//: Convenience function for loading an image into an image view.
+// \relates vil_image_view
+vil_image_view_base_sptr vil_load(const wchar_t *);
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
+
 #endif // vil_load_h_

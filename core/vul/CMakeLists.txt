@@ -48,8 +48,8 @@ SET( vul_network_sources
 )
 
 
-# Signal to build the Windows overloading functions that support wide 
-# char strings?
+# Signal to build the overloading functions that support wide 
+# char strings on Windows platform?
 IF(VXL_SUPPORT_WIN_UNICODE)
   ADD_DEFINITIONS(-DVXL_SUPPORT_WIN_UNICODE)
 ENDIF(VXL_SUPPORT_WIN_UNICODE)

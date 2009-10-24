@@ -21,6 +21,7 @@
 //   26 Aug 2002 - Ian Scott - Started conversion to vil
 //    2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
 //      Jun 2003 - Peter Vanroose - added viff, iris, mit tests for vil
+//   20 Oct 2009 - Gehua Yang     - added tests for wchar_t overloading functions on Windows
 // \endverbatim
 
 #include <vcl_cstring.h>
@@ -501,6 +502,21 @@ static void test_vil_save_image_resource()
 #endif
 }
 
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+static void test_vil_save_image_resource_wchar()
+{
+  vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
+  vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
+  const wchar_t* out_path = L"wchar_test_save_image_resource.pgm";
+  TEST("[wchar_t] Saving image resource",vil_save_image_resource(mem, out_path), true);
+  vil_image_view<vxl_byte> loaded_view = vil_load(out_path);
+  TEST("[wchar_t] Loaded correct image", vil_image_view_deep_equality(view, loaded_view),true);
+#if !LEAVE_IMAGES_BEHIND
+    _wunlink(out_path);
+#endif
+}
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
 
 static void test_save_load_image()
 {
@@ -631,18 +647,39 @@ static void test_save_load_image()
     vil_print_all(vcl_cout, small_greyscale_image);
 #endif
     vil_test_image_type("jpeg", small_greyscale_image, true, vxl_byte(5));
-    vcl_string out_path("test_save_load_jpeg.jpg");
-    TEST("Saving JPEG",vil_save(small_greyscale_image, out_path.c_str()),true);
+    {
+      vcl_string out_path("test_save_load_jpeg.jpg");
+      TEST("Saving JPEG",vil_save(small_greyscale_image, out_path.c_str()),true);
 
-    vil_image_view<vxl_byte> new_image = vil_load(out_path.c_str());
-    TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
-    double sum2 = 0;
-    for (unsigned i=0;i<ni;++i)
-    { double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
-    TEST_NEAR("Loaded image close to original",sum2,0.0,2*ni);
+      vil_image_view<vxl_byte> new_image = vil_load(out_path.c_str());
+      TEST("JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
+      double sum2 = 0;
+      for (unsigned i=0;i<ni;++i)
+      { double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
+      TEST_NEAR("Loaded image close to original",sum2,0.0,2*ni);
 #if !LEAVE_IMAGES_BEHIND
-    vpl_unlink(out_path.c_str());
+      vpl_unlink(out_path.c_str());
 #endif
+    }
+
+#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+    {
+      std::wstring out_wpath(L"wchar_test_save_load_jpeg.jpg");
+      TEST("[wchar_t] Saving JPEG",vil_save(small_greyscale_image, out_wpath.c_str()),true);
+
+      vil_image_view<vxl_byte> new_image = vil_load(out_wpath.c_str());
+      TEST("[wchar_t] JPEG Size correct",new_image.ni()==ni && new_image.nj()==nj, true);
+      double sum2 = 0;
+      for (unsigned i=0;i<ni;++i)
+      { double d=double(small_greyscale_image(i,17))-new_image(i,17); sum2+=d*d; }
+      TEST_NEAR("[wchar_t] Loaded image close to original",sum2,0.0,2*ni);
+#if !LEAVE_IMAGES_BEHIND
+      _wunlink(out_wpath.c_str());
+#endif
+    }
+#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
+
   }
 #endif
 
@@ -650,6 +687,11 @@ static void test_save_load_image()
   // requires rnm support
 #if 1
   test_vil_save_image_resource();
+
+# if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+  test_vil_save_image_resource_wchar();
+# endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+
 #endif
 }
 
