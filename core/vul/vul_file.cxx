@@ -271,7 +271,7 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
 }
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 #  include <wchar.h>
 
 std::wstring 

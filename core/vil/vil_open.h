@@ -11,16 +11,17 @@
 // \author fsm
 
 #include <vil/vil_stream.h>
+#include <vxl_config.h>
 
 //: make a vil_stream from a filename, an URL, etc.
 // \relates vil_stream
 vil_stream *vil_open(char const* what, char const* how = "r");
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 //: make a vil_stream from a filename, an URL, etc.
 // \relates vil_stream
 vil_stream *vil_open(wchar_t const* what, char const* how = "r");
-#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #endif // vil_open_h_

@@ -4,8 +4,9 @@
 #include <vcl_string.h>
 
 #include <vil/vil_stream_fstream.h>
+#include <vxl_config.h>
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 # include <windows.h>
 #endif
 
@@ -37,7 +38,7 @@ test_stream_main( int argc, char* argv[] )
   }
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   const unsigned int size = 4096;  // should be enough
   std::wstring wdir;
   wdir.resize(size);  
@@ -61,7 +62,7 @@ test_stream_main( int argc, char* argv[] )
     fs->unref();
   }
   
-#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
   return testlib_test_summary();
 }

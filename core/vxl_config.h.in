@@ -207,4 +207,7 @@
 /* true if memalign is defined */
 #define VXL_HAS_POSIX_MEMALIGN @VXL_HAS_POSIX_MEMALIGN@
 
+/* true if wchar_t overloading functions are supported on Windows */
+#define VXL_USE_WIN_WCHAR_T @VXL_USE_WIN_WCHAR_T@
+
 #endif /* vxl_config_h_ */

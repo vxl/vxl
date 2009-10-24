@@ -94,7 +94,7 @@ vcl_string vul_expand_path(vcl_string path)
 }
 
 
-#if defined(VXL_SUPPORT_WIN_UNICODE)
+#if VXL_USE_WIN_WCHAR_T
 //:
 // \note This Windows version only performs some of the operations done by the Unix version.
 std::wstring vul_expand_path_internal(std::wstring path)
@@ -177,7 +177,7 @@ std::wstring vul_expand_path(std::wstring path)
   return vul_expand_path_internal(path);
 }
 
-#endif  //defined(VXL_SUPPORT_WIN_UNICODE)
+#endif  //VXL_USE_WIN_WCHAR_T
 
 #else // #if defined(VCL_WIN32) || defined(como4301)
 

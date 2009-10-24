@@ -95,7 +95,7 @@ vil_stream *vil_open(char const* what, char const* how)
   return is;
 }
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 //  --------------------------------------------------------------------------------
 //  Windows' wchar_t overloading version
 //
@@ -167,4 +167,4 @@ vil_stream *vil_open(wchar_t const* what, char const* how)
   return is;
 }
 
-#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T

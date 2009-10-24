@@ -128,7 +128,7 @@ ENDIF(APPLE)
 
 # Check if Windows have wchar_t defined
 IF(WIN32)
-  PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_WIN_HAS_WCHAR_T)
+  PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_WIN_WCHAR_T)
 ENDIF(WIN32)
 
 

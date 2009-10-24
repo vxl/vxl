@@ -28,6 +28,8 @@
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
+#include <vxl_config.h>
+
 //: Load an image resource object from a file.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_load_image_resource(char const* filename,
@@ -61,7 +63,7 @@ vil_image_view_base_sptr vil_load(const char *, bool verbose = true);
 
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 //: Load an image resource object from a file.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename);
@@ -73,7 +75,7 @@ vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const*);
 //: Convenience function for loading an image into an image view.
 // \relates vil_image_view
 vil_image_view_base_sptr vil_load(const wchar_t *);
-#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 
 #endif // vil_load_h_

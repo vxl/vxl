@@ -17,6 +17,7 @@
 
 #include <vcl_fstream.h>
 #include <vil/vil_stream.h>
+#include <vxl_config.h>
 
 //: A vil_stream implementation using vcl_fstream
 class vil_stream_fstream : public vil_stream
@@ -24,7 +25,7 @@ class vil_stream_fstream : public vil_stream
  public:
   vil_stream_fstream(char const* filename, char const* mode);
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   vil_stream_fstream(wchar_t const* filename, char const* mode);
 #endif
 

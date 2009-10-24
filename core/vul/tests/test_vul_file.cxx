@@ -48,7 +48,7 @@ void test_vul_file()
 }
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 void test_vul_file_wchar_ext()
 {
@@ -101,7 +101,7 @@ int test_vul_file(int, char*[])
 
   test_vul_file();
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   test_vul_file_wchar_ext();
 #endif
 

@@ -28,6 +28,7 @@
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_image_view.h>
+#include <vxl_config.h>
 
 //: Make a new image of given format.
 // If the format is not scalar, the number of planes must be 1. When you create
@@ -206,7 +207,7 @@ vil_image_view<T> vil_new_image_view_i_j_plane(unsigned ni, unsigned nj, unsigne
 vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&);
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 //: Make a new image.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
@@ -230,7 +231,7 @@ vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
                                                vil_image_resource_sptr const &prototype,
                                                wchar_t const* format = 0);
 
-#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 
 #endif // vil_new_h_

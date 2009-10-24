@@ -28,6 +28,7 @@
 // \endverbatim
 
 #include <vcl_string.h>
+#include <vxl_config.h>
 
 //: Expand given path.
 vcl_string vul_expand_path/*cached*/(vcl_string path);
@@ -35,7 +36,7 @@ vcl_string vul_expand_path/*cached*/(vcl_string path);
 //: Expand given path.
 vcl_string vul_expand_path_uncached (vcl_string path);
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 //: Expand given path.
 std::wstring vul_expand_path/*cached*/(std::wstring path);

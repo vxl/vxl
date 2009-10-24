@@ -19,6 +19,7 @@
 // \endverbatim
 
 #include <vcl_string.h>
+#include <vxl_config.h>
 
 //: A collection of miscellaneous filesystem-type utilities
 //
@@ -116,7 +117,7 @@ struct vul_file
   { return delete_file_glob(vcl_string(file_glob)); }
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
   //: Return current working directory
   //  This function is provided as an overloading 

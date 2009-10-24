@@ -12,7 +12,7 @@ void test_expand_path()
 }
 
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 void test_expand_path_wchar_ext()
 {
@@ -29,7 +29,7 @@ int test_expand_path(int, char*[])
 
   test_expand_path();
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   test_expand_path_wchar_ext();
 #endif
 

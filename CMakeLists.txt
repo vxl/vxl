@@ -122,9 +122,18 @@ OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer activel
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer. 
 # 
-IF(WIN32 AND VXL_WIN_HAS_WCHAR_T)
-  OPTION( VXL_SUPPORT_WIN_UNICODE "Build overloading functions that accept Windows wide char strings?" YES )
-ENDIF(WIN32 AND VXL_WIN_HAS_WCHAR_T)
+IF(WIN32)
+  IF(VXL_HAS_WIN_WCHAR_T)
+    OPTION( VXL_USE_WIN_WCHAR_T "Build overloading functions that accept Windows wide char strings?" YES )
+    IF(VXL_USE_WIN_WCHAR_T)   # Force it to be 0/1
+      SET(VXL_USE_WIN_WCHAR_T 1)
+    ELSE(VXL_USE_WIN_WCHAR_T)
+      SET(VXL_USE_WIN_WCHAR_T 0)
+    ENDIF(VXL_USE_WIN_WCHAR_T)
+  ELSE(VXL_HAS_WIN_WCHAR_T)
+    SET(VXL_USE_WIN_WCHAR_T 0)
+  ENDIF(VXL_HAS_WIN_WCHAR_T)
+ENDIF(WIN32)
 
 # Build the core vxl + support libraries
 SUBDIRS(vcl v3p core)

@@ -259,12 +259,6 @@ IF (WIN32 AND VXL_USE_LFS)
     vil_stream_fstream64.cxx        vil_stream_fstream64.h )
 ENDIF (WIN32 AND VXL_USE_LFS)
 
-# Signal to build the overloading functions that support wide 
-# char strings on Windows platform?
-IF(VXL_SUPPORT_WIN_UNICODE)
-  ADD_DEFINITIONS(-DVXL_SUPPORT_WIN_UNICODE)
-ENDIF(VXL_SUPPORT_WIN_UNICODE)
-
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
 # Some versions of Solaris (at least 5.8) has a brain-dead mechanism

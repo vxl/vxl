@@ -1125,7 +1125,7 @@ int main()
 #endif // VXL_APPLE_HAS_INLINE_ISNAND
 
 //-------------------------------------
-#ifdef VXL_WIN_HAS_WCHAR_T
+#ifdef VXL_HAS_WIN_WCHAR_T
 
 #ifdef _WCHAR_T_DEFINED
 #include <wchar.h>

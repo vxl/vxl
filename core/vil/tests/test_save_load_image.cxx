@@ -502,7 +502,7 @@ static void test_vil_save_image_resource()
 #endif
 }
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 static void test_vil_save_image_resource_wchar()
 {
   vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
@@ -515,7 +515,7 @@ static void test_vil_save_image_resource_wchar()
     _wunlink(out_path);
 #endif
 }
-#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 
 static void test_save_load_image()
@@ -662,7 +662,7 @@ static void test_save_load_image()
 #endif
     }
 
-#if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
     {
       std::wstring out_wpath(L"wchar_test_save_load_jpeg.jpg");
       TEST("[wchar_t] Saving JPEG",vil_save(small_greyscale_image, out_wpath.c_str()),true);
@@ -677,7 +677,7 @@ static void test_save_load_image()
       _wunlink(out_wpath.c_str());
 #endif
     }
-#endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 
   }
@@ -688,9 +688,9 @@ static void test_save_load_image()
 #if 1
   test_vil_save_image_resource();
 
-# if defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+# if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   test_vil_save_image_resource_wchar();
-# endif //defined(VCL_WIN32) && defined(VXL_SUPPORT_WIN_UNICODE)
+# endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #endif
 }
