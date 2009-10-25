@@ -66,15 +66,15 @@ vil_image_view_base_sptr vil_load(const char *, bool verbose = true);
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 //: Load an image resource object from a file.
 // \relates vil_image_resource
-vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename);
+vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename, bool verbose = true);
 
 //: Load an image resource object from a file.
 // Won't use plugins.
-vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const*);
+vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const*, bool verbose = true);
 
 //: Convenience function for loading an image into an image view.
 // \relates vil_image_view
-vil_image_view_base_sptr vil_load(const wchar_t *);
+vil_image_view_base_sptr vil_load(const wchar_t *, bool verbose = true);
 #endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 

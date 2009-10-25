@@ -125,18 +125,18 @@ vil_image_view_base_sptr vil_load(const char *file, bool verbose)
 //  Windows' wchar_t overloading version
 //
 //
-vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const* filename)
+vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const* filename, bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
+  vil_image_resource_sptr isp = 0;
   if (is)
-    return vil_load_image_resource_raw(is.as_pointer());
-  else {
+    isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
+  if (!isp && verbose)
     std::wcerr << __FILE__ << L": Failed to load [" << filename << L"]\n";
-    return vil_image_resource_sptr(0);
-  }
+  return isp;
 }
 
-vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename)
+vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename, bool verbose)
 {
   // do not support image resource plugin for the time being
   //vil_image_resource_sptr im = vil_load_image_resource_plugin(filename);
@@ -146,12 +146,10 @@ vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename)
   return im;
 }
 
-
-
 //: Convenience function for loading an image into an image view.
-vil_image_view_base_sptr vil_load(const wchar_t *file)
+vil_image_view_base_sptr vil_load(const wchar_t *file, bool verbose)
 {
-  vil_image_resource_sptr data = vil_load_image_resource(file);
+  vil_image_resource_sptr data = vil_load_image_resource(file, verbose);
   if (!data) return 0;
   return data -> get_view();
 }
