@@ -418,7 +418,7 @@ main( int argc, char* argv[] )
     // make next_iteration_it pointed to next resolution
     next_iteration_it = it;
     ++next_iteration_it;
-    ++next_iteration_it;
+    if( next_iteration_it !=  feature_sets.end() )  ++next_iteration_it;   // do not go beyond the end of list.
 
     double scaling_factor = 1.0 / double(1<<i);
     from_features.reserve( 3* it->size()  );
