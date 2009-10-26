@@ -152,6 +152,9 @@ SOURCE=.\try_reg_exp.cxx
 # Begin Source File
 SOURCE=.\test_awk.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_expand_path.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
