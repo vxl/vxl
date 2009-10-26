@@ -133,6 +133,9 @@ IF(WIN32)
   ELSE(VXL_HAS_WIN_WCHAR_T)
     SET(VXL_USE_WIN_WCHAR_T 0)
   ENDIF(VXL_HAS_WIN_WCHAR_T)
+ELSE(WIN32)
+  # avoid empty macro definition
+  SET(VXL_USE_WIN_WCHAR_T 0)
 ENDIF(WIN32)
 
 # Build the core vxl + support libraries
