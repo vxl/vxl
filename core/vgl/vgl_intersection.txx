@@ -416,10 +416,13 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
     b0=l1.point1().y(),b1=l1.point2().y(),b2=l2.point1().y(),b3=l2.point2().y(),
     c0=l1.point1().z(),c1=l1.point2().z(),c2=l2.point1().z(),c3=l2.point2().z();
   T t1 = (b3-b2)*(a1-a0)-(a3-a2)*(b1-b0), t2 = (b0-b2)*(a1-a0)-(a0-a2)*(b1-b0);
-  if (t1 == 0)
+  if (vcl_abs(t1) < 0.000001)
+  {
     t1 = (c3-c2)*(a1-a0)-(a3-a2)*(c1-c0), t2 = (c0-c2)*(a1-a0)-(a0-a2)*(c1-c0);
-  if (t1 == 0)
-    t1 = (c3-c2)*(b1-b0)-(b3-b2)*(c1-c0), t2 = (c0-c2)*(b1-b0)-(b0-b2)*(c1-c0);
+    if (vcl_abs(t1) < 0.000001)
+      t1 = (c3-c2)*(b1-b0)-(b3-b2)*(c1-c0), t2 = (c0-c2)*(b1-b0)-(b0-b2)*(c1-c0);
+  }
+
   return vgl_point_3d<T>(((t1-t2)*a2+t2*a3)/t1,
                          ((t1-t2)*b2+t2*b3)/t1,
                          ((t1-t2)*c2+t2*c3)/t1);
