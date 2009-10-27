@@ -5,7 +5,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
-#include <float.h>
+#include <vcl_cfloat.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
@@ -84,7 +84,7 @@ static void test_ls()
   TEST_NEAR("Least squares residual", (A - T).squared_magnitude(), 0, 0.005);
 }
 
-// temporarily unused
+#if 0 // temporarily unused
 static double test_fmatrix()
 {
   double pdata[] = {
@@ -100,6 +100,7 @@ static double test_fmatrix()
 
   return dot_product(P*N, P*N);
 }
+#endif // 0
 
 //: Test nullspace extraction of rank=2 3x4 matrix.
 static void test_pmatrix()
@@ -170,7 +171,8 @@ void test_svd_recomposition(char const *type, double maxres, T* /* tag */, vnl_r
 }
 
 #include <vnl/vnl_matlab_print.h>
-template <class T> static 
+
+template <class T> static
 void test_nullvector(char const *type, double max_err, T *, vnl_random &rng)
 {
   int n = 5;
