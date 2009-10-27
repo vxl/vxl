@@ -195,13 +195,12 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
   return;
 }
 
-void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, 
-                                                     vcl_vector<float> const& weights, 
+void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs,
+                                                     vcl_vector<float> const& weights,
                                                      boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model)
 {
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
-  unsigned int nobs = obs.size();
   float expected_nobs = 0.0f;
   vcl_vector<float>::const_iterator wit = weights.begin();
   for (; wit != weights.end(); ++wit) {
