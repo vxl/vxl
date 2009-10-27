@@ -47,7 +47,7 @@ class boxm_generate_opt_sample_functor_pass_1
   //: "default" constructor
   boxm_generate_opt_sample_functor_pass_1(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
                                           vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
-    : obs_(image), vis_img_(vis_inf), pre_img_(pre_inf), alpha_integral_(image.ni(),image.nj(),1)
+    : alpha_integral_(image.ni(),image.nj(),1), obs_(image), vis_img_(vis_inf), pre_img_(pre_inf)
   {
     alpha_integral_.fill(0.0f);
     pre_img_.fill(0.0f);
@@ -89,7 +89,6 @@ class boxm_generate_opt_sample_functor_pass_1
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& obs_;
   vil_image_view<float> &vis_img_;
   vil_image_view<float> &pre_img_;
-  
 };
 
 template <boxm_apm_type APM, class T_aux>
@@ -135,7 +134,6 @@ class boxm_generate_opt_sample_functor_pass_2
     aux_val.pre_ += pre * seg_len;
     aux_val.vis_ = vis * seg_len;
 
-    
     const float Beta_num = pre + vis*PI;
     float Beta = 1.0f;
     if (Beta_denom_(i,j) < 1e-6) {
@@ -173,13 +171,13 @@ class boxm_generate_opt_sample_functor_pass_2
 
 template <class T_loc, class T_data>
 void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                          vpgl_camera_double_sptr cam,
-                          vil_image_view<typename T_data::obs_datatype> &obs,
-                          vcl_string iname,
-                          bool black_background = false)
+                                 vpgl_camera_double_sptr cam,
+                                 vil_image_view<typename T_data::obs_datatype> &obs,
+                                 vcl_string iname,
+                                 bool black_background = false)
 {
     typedef boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype sample_datatype;
-    boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE); 
+    boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
     typedef boxm_generate_opt_sample_functor_pass_0<T_data::apm_type,sample_datatype>  pass_0;
     boxm_raytrace_function<pass_0,T_loc, T_data, sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
     vcl_cout<<"PASS 0"<<vcl_endl;
@@ -203,7 +201,7 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         typename T_data::obs_datatype black(0.0f);
         float background_std_dev = 8.0f/255;//???????????? 4/255 Vishal's
         typename T_data::apm_datatype background_apm(black, background_std_dev*background_std_dev,1.0f);
-        
+
         float peak=T_data::apm_processor::expected_color(background_apm);
         vcl_cout<<"Peak: "<<peak<<vcl_endl;
         typename vil_image_view<typename T_data::obs_datatype>::const_iterator img_it = obs.begin();
