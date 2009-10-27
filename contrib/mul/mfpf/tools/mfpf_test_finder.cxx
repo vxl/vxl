@@ -209,7 +209,7 @@ int main(int argc, char** argv)
     vgl_vector_2d<double> new_u;
 
     // Slight fudge since it searches around the true point
-    double fit = finder->search(imageL,p,u,new_p,new_u);
+    /* double fit = */ finder->search(imageL,p,u,new_p,new_u);
 
     d_stats.obs((new_p-p).length());
 
