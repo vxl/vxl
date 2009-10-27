@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm/opt/pro/processes/boxm_update_rt_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief Process to update the scene from an image and camera pair
@@ -9,8 +10,6 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 
@@ -67,7 +66,7 @@ bool boxm_update_rt_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  unsigned bin_index =  pro.get_input<unsigned>(i++);
+  /* unsigned bin_index = */   pro.get_input<unsigned>(i++);
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
