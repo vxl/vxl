@@ -1015,6 +1015,8 @@ brip_rect_mask::brip_rect_mask(mask_id mid)
     }
     case b7:{
       vnl_matrix<int> b7a0(b7a0_7x7, 7, 7);
+      vnl_matrix<int> b7a1(b7a1_7x7, 7, 7);
+      masks_[a0] =    b7a1; // unused
       masks_[a0] =    b7a0;
       break;
     }
@@ -1151,10 +1153,10 @@ bool brip_rect_mask::intersect(mask_id mid,
 }
 
 bool brip_rect_mask::intersect_domain(mask_id mid,
-                      ang_id aid0,
-                      unsigned short i0, unsigned short j0,
-                      ang_id aid1,
-                      unsigned short i1, unsigned short j1)
+                                      ang_id aid0,
+                                      unsigned short i0, unsigned short j0,
+                                      ang_id aid1,
+                                      unsigned short i1, unsigned short j1)
 {
   brip_rect_mask m0(mid), m1(mid);
   m0.set_angle_id(aid0);
