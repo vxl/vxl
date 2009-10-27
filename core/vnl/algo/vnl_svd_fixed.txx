@@ -34,7 +34,6 @@ static bool test_heavily = false;
 template <class T, unsigned int R, unsigned int C>
 vnl_svd_fixed<T,R,C>::vnl_svd_fixed(vnl_matrix_fixed<T,R,C> const& M, double zero_out_tol)
 {
-
   {
     const long n=R, p=C;
     const unsigned mm = vcl_min(R+1u,C);
@@ -103,8 +102,8 @@ vnl_svd_fixed<T,R,C>::vnl_svd_fixed(vnl_matrix_fixed<T,R,C> const& M, double zer
     // Copy fortran outputs into our storage
     {
       const T *d = uspace.data_block();
-      for (unsigned j = 0; j < p; ++j)
-        for (unsigned i = 0; i < n; ++i)
+      for (long j = 0; j < p; ++j)
+        for (long i = 0; i < n; ++i)
           U_(i,j) = *d++;
     }
 
@@ -280,7 +279,6 @@ vnl_matrix<T> vnl_svd_fixed<T,R,C>::solve(vnl_matrix<T> const& B)  const
 template <class T, unsigned int R, unsigned int C>
 vnl_vector_fixed<T, C> vnl_svd_fixed<T,R,C>::solve(vnl_vector_fixed<T, R> const& y)  const
 {
-
   vnl_vector_fixed<T, C> x;                   // Solution matrix.
   x = U_.conjugate_transpose() * y;
 
