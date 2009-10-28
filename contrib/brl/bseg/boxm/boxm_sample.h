@@ -19,6 +19,8 @@ class boxm_sample
 
   //: default constructor
   boxm_sample() : alpha(0.0015f), appearance_() {}
+
+  boxm_sample(float alpha_val): alpha(alpha_val), appearance_() {}
   //: constructor
   boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance_(apm_val) {}
 
