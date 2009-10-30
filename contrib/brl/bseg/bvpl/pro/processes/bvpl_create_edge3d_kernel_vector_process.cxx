@@ -74,7 +74,7 @@ bool bvpl_create_edge3d_kernel_vector_process(bprb_func_process& pro)
   
   //Create the factory and get the vector of kernels
   bvpl_edge3d_kernel_factory factory(length,width,height);
-  bvpl_create_directions_a dir;
+  bvpl_create_directions_c dir;
   bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
   pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
   
