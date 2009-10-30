@@ -272,9 +272,9 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
 
 
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
-#  include <wchar.h>
+#  include <vcl_cwchar.h>
 
-std::wstring 
+std::wstring
 vul_file::get_cwd(wchar_t* /*dummy*/)
 {
   const int BIG = 65536;
