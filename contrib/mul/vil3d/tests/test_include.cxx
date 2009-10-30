@@ -7,6 +7,7 @@
 #include <vil3d/algo/vil3d_convolve_1d.h>
 #include <vil3d/algo/vil3d_corners.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
+#include <vil3d/algo/vil3d_erode.h>
 #include <vil3d/algo/vil3d_exp_distance_transform.h>
 #include <vil3d/algo/vil3d_exp_filter.h>
 #include <vil3d/algo/vil3d_fill_boundary.h>
