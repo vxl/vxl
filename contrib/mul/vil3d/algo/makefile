@@ -34,6 +34,7 @@ SOURCES += vil3d_make_edt_filter.cxx
 SOURCES += vil3d_overlap.cxx
 MANPAGE_SOURCES += vil3d_locally_z_normalise.h
 SOURCES += vil3d_find_blobs.cxx
+MANPAGE_SOURCES += vil3d_erode.h
 
 ################################
 include ${VXLROOT}/config/top.mk

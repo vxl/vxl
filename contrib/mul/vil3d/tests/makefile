@@ -49,6 +49,7 @@ TESTS += test_algo_abs_shuffle_distance.cxx
 TESTS += test_algo_exp_distance_transform.cxx
 TESTS += test_algo_make_distance_filter.cxx
 TESTS += test_algo_find_blobs.cxx
+TESTS += test_algo_erode.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
