@@ -325,7 +325,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
   // ret indicates the number of characters successfully converted
   const int ret = WideCharToMultiByte(CP_ACP, 0, file_format, wcslen(file_format), fmt_buffer, size, 0, &useless );
   fmt_buffer[ret] = '\0';
-  if(!ret)   return 0;  
+  if (!ret)   return 0;
 
   return vil_new_image_resource(os, ni, nj, nplanes, format, fmt_buffer);
 }
@@ -344,14 +344,14 @@ vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
 #endif //VIL_USE_FSTREAM64
 
   const unsigned int size = 200;  // should be enough
-  wchar_t tag_buffer[size];  
-  if( !file_format )
-    {
-      char const* tag = prototype->file_format();
-      const int ret = MultiByteToWideChar(CP_ACP, 0, tag, strlen(tag), tag_buffer, size);
-      assert(ret);
-      file_format = tag_buffer;  // use the file format of the given resource
-    }
+  wchar_t tag_buffer[size];
+  if ( !file_format )
+  {
+    char const* tag = prototype->file_format();
+    const int ret = MultiByteToWideChar(CP_ACP, 0, tag, vcl_strlen(tag), tag_buffer, size);
+    assert(ret);
+    file_format = tag_buffer;  // use the file format of the given resource
+  }
 
   return vil_new_image_resource(os,
                                 ni, nj,
