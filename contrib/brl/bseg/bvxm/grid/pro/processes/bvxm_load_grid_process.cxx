@@ -26,7 +26,7 @@
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <vnl/vnl_float_3.h>
-
+#include <vnl/vnl_float_4.h>
 namespace bvxm_load_grid_process_globals
 {
   const unsigned n_inputs_ = 2;
@@ -125,6 +125,12 @@ bool bvxm_load_grid_process(bprb_func_process& pro)
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
       return true;
   }
+    else if (datatype == "vnl_float_4"){
+      bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<vnl_float_4>(input_path);
+      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
+      return true;
+  }
+
   else if (datatype == "vnl_vector_fixed_float_4"){
     bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<vnl_vector_fixed<float,4> >(input_path);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);

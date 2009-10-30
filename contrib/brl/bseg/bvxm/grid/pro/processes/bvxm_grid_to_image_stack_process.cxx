@@ -63,12 +63,12 @@ bool bvxm_grid_to_image_stack_process(bprb_func_process& pro)
     vcl_cerr << "In bvxm_grid_to_image_stack_process -- input grid is not valid!\n";
     return false;
   }
-
   //This is temporary. What should happen is that we can read the type from the file header.
   //Also the header should be such that we can check if the file is not currupt
   if (datatype == "float"){
     bvxm_voxel_grid<float> *grid = dynamic_cast< bvxm_voxel_grid<float>* > (grid_base.ptr());
-    bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, output_dir);
+    bvxm_grid_to_image_stack::write_grid_to_image_stack<float>(grid, output_dir);
+
     return true;
   }
   else if (datatype == "vnl_float_3"){

@@ -18,6 +18,7 @@
 #include <vul/vul_file.h>
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_attributes.h>
+#include <vnl/vnl_float_4.h>
 
 namespace bvpl_crop_grid_process_globals
 {
@@ -109,6 +110,25 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
+  else  if (bvxm_voxel_grid<unsigned> * float_input_grid=dynamic_cast<bvxm_voxel_grid<unsigned> *>(input_grid.ptr()))
+  {
+    bvxm_voxel_grid<unsigned> * grid_out=new bvxm_voxel_grid<unsigned>(output_path, out_grid_dim);
+
+    unsigned slab_idx = corner_z;
+    bvxm_voxel_grid<unsigned>::iterator grid_in_it = float_input_grid->slab_iterator(slab_idx);
+    bvxm_voxel_grid<unsigned>::iterator grid_out_it = grid_out->slab_iterator(slab_idx - corner_z);
+
+    for (; slab_idx < (corner_z + dimz); ++grid_in_it, ++grid_out_it, ++slab_idx)
+    {
+      for (unsigned x = corner_x; x < corner_x + dimx; x++)
+        for (unsigned y = corner_y; y < corner_y + dimy; y++)
+          (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
+    }
+
+    vcl_cout << "Cropping done." << vcl_endl;
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    return true;
+  }
   else if (bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
   {
     bvxm_voxel_grid<bvxm_opinion> * grid_out=new bvxm_voxel_grid<bvxm_opinion>(output_path, out_grid_dim);
@@ -147,6 +167,23 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-
+  else if (bvxm_voxel_grid<vnl_float_4> * four_input_grid=dynamic_cast<bvxm_voxel_grid<vnl_float_4> *>(input_grid.ptr()))
+  {
+    bvxm_voxel_grid<vnl_float_4> * grid_out=new bvxm_voxel_grid<vnl_float_4>(output_path, out_grid_dim);
+    unsigned slab_idx = corner_z;
+    bvxm_voxel_grid<vnl_float_4>::iterator grid_in_it = four_input_grid->slab_iterator(slab_idx);
+    bvxm_voxel_grid<vnl_float_4>::iterator grid_out_it = grid_out->slab_iterator(slab_idx - corner_z);
+    
+    for (; slab_idx < (corner_z + dimz); ++grid_in_it, ++grid_out_it, ++slab_idx)
+    {
+      for (unsigned x = corner_x; x < corner_x + dimx; x++)
+        for (unsigned y = corner_y; y < corner_y + dimy; y++)
+          (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
+    }
+    
+    vcl_cout<<"Cropping done."<<vcl_endl;
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    return true;
+  }
   return true;
 }
