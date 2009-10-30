@@ -16,6 +16,7 @@
 #include "bvpl_subgrid_iterator.h"
 #include "bvpl_kernel_iterator.h"
 #include "bvpl_voxel_subgrid.h"
+#include <bvpl/bvpl_kernel.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -27,22 +28,24 @@ class bvpl_susan_opinion_operator
   ~bvpl_susan_opinion_operator() {}
 
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
-  void operate(bvxm_voxel_grid<vnl_float_3 >* dirgrid,
+  void operate(bvxm_voxel_grid<unsigned >* dirgrid,
                bvxm_voxel_grid<bvxm_opinion>* opngrid,
-               bvpl_kernel_sptr kernel, bvxm_voxel_grid<bvxm_opinion>* out_grid)
+               bvpl_kernel_vector_sptr kernel, 
+               bvxm_voxel_grid<bvxm_opinion>* out_grid)
   {
-    bvpl_subgrid_iterator<vnl_float_3 > sub_dir_iter(dirgrid, kernel->min_point(), kernel->max_point());
-    bvpl_subgrid_iterator<bvxm_opinion> sub_opn_iter(opngrid, kernel->min_point(), kernel->max_point());
-    bvpl_subgrid_iterator<bvxm_opinion> output_iter(out_grid, kernel->min_point(), kernel->max_point());
+    bvpl_subgrid_iterator<unsigned > sub_dir_iter(dirgrid, kernel->max(), kernel->min());
+    bvpl_subgrid_iterator<bvxm_opinion> sub_opn_iter(opngrid, kernel->max(), kernel->min());
+    bvpl_subgrid_iterator<bvxm_opinion> output_iter(out_grid, kernel->max(), kernel->min());
     while (!sub_dir_iter.isDone()) {
-       bvpl_kernel_iterator kernel_iter = kernel->iterator();
-       bvpl_voxel_subgrid<vnl_float_3> dirsubgrid = *sub_dir_iter;
+       bvpl_voxel_subgrid<unsigned> dirsubgrid = *sub_dir_iter;
        bvpl_voxel_subgrid<bvxm_opinion> opnsubgrid = *sub_opn_iter;
 
-       vnl_float_3 cur_normal=(*sub_dir_iter).get_voxel();
-       bvxm_opinion cur_opn=(*sub_opn_iter).get_voxel();
+       unsigned id=(*sub_dir_iter).get_voxel();
+       bvpl_kernel_sptr cur_kernel=kernel->kernels_[id];
+       vnl_float_3 cur_normal=cur_kernel->axis();
+       bvpl_kernel_iterator kernel_iter = cur_kernel->iterator();
 
-       vgl_plane_3d<double> p(cur_normal[0],cur_normal[1],cur_normal[2],0);
+       bvxm_opinion cur_opn=(*sub_opn_iter).get_voxel();
        vcl_vector<float> thetai;
        vcl_vector<float> wi;
 
@@ -52,35 +55,42 @@ class bvpl_susan_opinion_operator
        float mu=0;
        while (!kernel_iter.isDone()) {
          vgl_point_3d<int> idx = kernel_iter.index();
-         vnl_float_3 normal;
+         unsigned kernel_id;
          bvxm_opinion opn;
-         if (dirsubgrid.voxel(idx, normal) && opnsubgrid.voxel(idx,opn))
+         if (dirsubgrid.voxel(idx, kernel_id) && opnsubgrid.voxel(idx,opn))
          {
              bvpl_kernel_dispatch d = *kernel_iter;
-             float theta=vcl_acos(dot_product<float,3>(cur_normal,normal));
-             thetai.push_back(theta);
+
+             vnl_float_3 normal=kernel->kernels_[kernel_id]->axis();
+             float dot_prod=dot_product<float,3>(cur_normal,normal);
+             float measure_dot_prod=1-vcl_fabs(dot_prod);
+
+             thetai.push_back(measure_dot_prod);
              wi.push_back(opn.b());
-             mu+=theta*opn.b();
+             mu+=measure_dot_prod*opn.b();
              tot+=opn.b();
          }
          ++kernel_iter;
        }
-       if (tot!=0)
-         mu/=tot;
+       if (tot!=0) mu/=tot;
+       // reset tot variable
        tot=0.0;
        float cnt=0.0;
        for (unsigned i=0;i<thetai.size();++i)
        {
-         tot+=wi[i]*wi[i]*(thetai[i]-mu)*(thetai[i]-mu);
-         cnt+=wi[i]*wi[i];
+         tot+=wi[i]*(thetai[i]-mu)*(thetai[i]-mu);
+         cnt+=wi[i];
+
        }
+
        float sig=0.0;
        if (cnt>0.0)
            sig=tot/cnt;
-
+       float weight_sig=0.0;
+       if(sig!=0.0)
+        weight_sig=1-vcl_exp(-mu*mu/(sig));
        // set the result at the output grid
-       (*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*vcl_sqrt(sig)));
-       //(*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*mu));
+       (*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*weight_sig));
        ++sub_dir_iter;
        ++sub_opn_iter;
        ++output_iter;
