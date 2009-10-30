@@ -32,7 +32,7 @@ public:
   
   static void write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold);
   
-  static void write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold);
+  static void write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s=1);
   
   //static void write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<int>& line,
   //                                    const float r, const float g, const float b,
@@ -44,7 +44,7 @@ public:
                                            const float g,
                                            const float b);
 
- static void write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold);
+ static void write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s=1);
 
  // //static void write_vrml_trailer(vcl_ofstream& str);
 //  

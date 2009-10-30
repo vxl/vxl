@@ -83,7 +83,7 @@ unsigned s=3;
   }
 }
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s=1)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
   bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
   //write the colors
@@ -101,7 +101,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
 }
 
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s=1)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
     
     bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
