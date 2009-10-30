@@ -1,5 +1,5 @@
-#ifndef vil3d_binary_erode_h_
-#define vil3d_binary_erode_h_
+#ifndef vil3d_erode_h_
+#define vil3d_erode_h_
 //:
 // \file
 // \brief Perform greyscale erosion on 3D images
@@ -8,7 +8,7 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_crop.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
-
+#include <vcl_cassert.h>
 
 //: Return minimum of im[offset[k]], k=0..n;
 template <class T>
@@ -71,5 +71,4 @@ void vil3d_erode(const vil3d_image_view<T>& src_image,
     }
 }
 
-
-#endif // vil3d_binary_erode_h_
+#endif // vil3d_erode_h_
