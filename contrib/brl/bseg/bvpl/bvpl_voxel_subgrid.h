@@ -3,17 +3,16 @@
 
 //:
 // \file
-// \brief A class to retreive a subgrid withing a bigger grid
+// \brief A class to retrieve a subgrid withing a bigger grid
 // \author Gamze Tunali
 // \date  June 24, 2009
 //
 // \verbatim
 //  Modifications
 //   9/30/09 Isabel Restrepo: Changed coordinate system to match that of kernels.
-//           Within a subgrid the ceontroid is placed at the origin.The maximun 
-//           and minum position as as shown bellow. The methods in this class must take care
-//           of retreiving the appropiate index of the big grid(where z is inverted)
-//                             
+//           Within a subgrid the centroid is placed at the origin. The maximum
+//           and minimum position are as shown below. The methods in this class must take care
+//           of retrieving the appropiate index of the big grid (where z is inverted).
 // \endverbatim
 //  \verbatim
 //                                 MaxPosition
@@ -32,18 +31,11 @@
 //     O-----X
 // \endverbatim
 
-
-
-
 #include <bvxm/grid/bvxm_voxel_slab.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
-
-
-
-
 
 
 class bvpl_subgrid_base
@@ -57,8 +49,7 @@ class bvpl_subgrid_base
   vgl_point_3d<int> center() const { return center_; }
 
  protected:
-   vgl_point_3d<int> center_;
- 
+  vgl_point_3d<int> center_;
 };
 
 template <class T>
