@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_diag_matrix.cxx
+// This is core/vnl/tests/test_diag_matrix_fixed.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
