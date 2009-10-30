@@ -75,8 +75,6 @@
 #include <brip/brip_para_cvrg_params.h>
 #include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
-#include <brip/brip_para_cvrg_params.h>
-#include <brip/brip_para_cvrg.h>
 #include <brip/brip_max_scale_response.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
@@ -555,23 +553,24 @@ void segv_vil_segmentation_manager::load_image()
   // determine if the image can be made into a J2K-nitf pyramid
   char const* fmtp = image->file_format();
   vcl_string file_fmt = "";
-  if(fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
-  if(file_fmt == "nitf21")
+  if (fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
+  if (file_fmt == "nitf21")
+  {
+    vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(image.ptr());
+    if (nitf_resc->is_jpeg_2000_compressed())
     {
-      vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(image.ptr());
-      if(nitf_resc->is_jpeg_2000_compressed())
-        {
-          vil_j2k_nitf2_pyramid_image_resource* j2k_nitf = 
-            new vil_j2k_nitf2_pyramid_image_resource(image);
-          image = j2k_nitf;
-          pyrm = true;
-        }
-    }else if(file_fmt == "j2k"){
-      vil_j2k_pyramid_image_resource* j2k_pyr = 
-        new vil_j2k_pyramid_image_resource(image);     
-      image = j2k_pyr;
+      vil_j2k_nitf2_pyramid_image_resource* j2k_nitf =
+        new vil_j2k_nitf2_pyramid_image_resource(image);
+      image = j2k_nitf;
       pyrm = true;
     }
+  }
+  else if (file_fmt == "j2k") {
+    vil_j2k_pyramid_image_resource* j2k_pyr =
+      new vil_j2k_pyramid_image_resource(image);
+    image = j2k_pyr;
+    pyrm = true;
+  }
 #endif //HAS_J2K
   if (greyscale&&!pyrm)
   {
@@ -620,23 +619,24 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
 // determine if the image can be made into a J2K-nitf pyramid
   char const* fmtp = image->file_format();
   vcl_string file_fmt = "";
-  if(fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
-  if(file_fmt == "nitf21")
+  if (fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
+  if (file_fmt == "nitf21")
+  {
+    vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(image.ptr());
+    if (nitf_resc->is_jpeg_2000_compressed())
     {
-      vil_nitf2_image* nitf_resc = static_cast<vil_nitf2_image*>(image.ptr());
-      if(nitf_resc->is_jpeg_2000_compressed())
-        {
-          vil_j2k_nitf2_pyramid_image_resource* j2k_nitf = 
-            new vil_j2k_nitf2_pyramid_image_resource(image);
-          image = j2k_nitf;
-          pyrm = true;
-        }
-    }else if(file_fmt == "j2k"){
-      vil_j2k_pyramid_image_resource* j2k_pyr = 
-        new vil_j2k_pyramid_image_resource(image);
-      image = j2k_pyr;
+      vil_j2k_nitf2_pyramid_image_resource* j2k_nitf =
+        new vil_j2k_nitf2_pyramid_image_resource(image);
+      image = j2k_nitf;
       pyrm = true;
     }
+  }
+  else if (file_fmt == "j2k") {
+    vil_j2k_pyramid_image_resource* j2k_pyr =
+      new vil_j2k_pyramid_image_resource(image);
+    image = j2k_pyr;
+    pyrm = true;
+  }
 #endif //HAS_J2K
   vgui_range_map_params_sptr rmps = range_params(image);
 
@@ -1863,6 +1863,7 @@ void segv_vil_segmentation_manager::extrema()
     }
   }
 }
+
 void segv_vil_segmentation_manager::beaudet()
 {
   vil_image_resource_sptr img = selected_image();
@@ -1883,10 +1884,11 @@ void segv_vil_segmentation_manager::beaudet()
   vil_image_view<float> smooth = brip_vil_float_ops::gaussian(fimg, sigma);
   vil_image_view<float> Ixx(ni,nj), Ixy(ni, nj), Iyy(ni, nj);
   brip_vil_float_ops::hessian_3x3(smooth, Ixx, Ixy, Iyy);
-  vil_image_view<float> beau = 
+  vil_image_view<float> beau =
     brip_vil_float_ops::beaudet(Ixx, Ixy, Iyy, determinant);
   this->add_image(vil_new_image_resource_of_view(beau));
 }
+
 void segv_vil_segmentation_manager::parallel_coverage()
 {
   static brip_para_cvrg_params pcp;
