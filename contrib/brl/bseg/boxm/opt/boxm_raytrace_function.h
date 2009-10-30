@@ -88,17 +88,15 @@ class boxm_raytrace_function
                 if (step_functor.is_aux_)
                 {
                     aux_tree=curr_aux_block->get_tree();
-                    if (aux_tree->root()->vis_node())
-                        vcl_cout<<"WHY?";
                 }
 
                 // for each image pixel
                 for (unsigned int i = int(img_bb.min_x()+0.99); i <= img_bb.max_x(); ++i)
                 {
-                   /* if (debug_lvl_ > 1) {
+                    if (debug_lvl_ > 1) {
                         if (!(i % 10))
                             vcl_cout << '.';
-                    }*/
+                    }
                     for (unsigned int j = int(img_bb.min_y()+0.99); j <= img_bb.max_y(); ++j)
                     {
                         if (!continue_trace(i - img_i0_ , j - img_j0_)) {
@@ -179,7 +177,6 @@ class boxm_raytrace_function
                                 continue;
                             }
                         }
-
                         boct_tree_cell<T_loc,T_data > * curr_cell=tree->locate_point_global(enter_pt);
                         while (continue_trace(i-img_i0_, j-img_j0_))
                         {
