@@ -27,15 +27,16 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
     while (!iter.end()) {
       if (scene->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
         if (type == LOAD) {
-			if (aux_scene_->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
-	#if 0
-			  // auxiliary block file exist
-			  aux_scene_->load_block(iter.index());
-			  boxm_block<boct_tree<T_loc,T_AUX> > * block=aux_scene_->get_active_block();
-			  assert(block->get_tree() != 0);
-	#endif
-			}
-        } else if (type==CLONE) {  //clone from the primary block
+          if (aux_scene_->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
+#if 0
+            // auxiliary block file exist
+            aux_scene_->load_block(iter.index());
+            boxm_block<boct_tree<T_loc,T_AUX> > * block=aux_scene_->get_active_block();
+            assert(block->get_tree() != 0);
+#endif
+          }
+        }
+        else if (type==CLONE) {  //clone from the primary block
           scene->load_block(iter.index().x(),iter.index().y(),iter.index().z());
           boxm_block<boct_tree<T_loc,T> > * block=scene->get_active_block();
           boct_tree<T_loc,T>* tree=block->get_tree();
@@ -45,7 +46,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
           aux_scene_->write_active_block();
         }
       }
-      iter++;
+      ++iter;
     }
   }
 }

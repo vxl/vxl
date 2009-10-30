@@ -342,11 +342,11 @@ void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
     ::AfxMessageBox( "Failed to select bitmap into DC" );
     return;
   }
-  
+
   if (defaultBitmapForDC == 0)
     defaultBitmapForDC = old_hbmp;
   else
-    if( !DeleteObject(old_hbmp) ) // Our object - delete it
+    if ( !DeleteObject(old_hbmp) ) // Our object - delete it
     {
       ::AfxMessageBox( "Failed to delete old bitmap" );
       return;
@@ -423,12 +423,12 @@ void vgui_mfc_adaptor::service_redraws()
     CWnd* wnd;
     if (m_pCWnd)
       wnd = m_pCWnd;
-	else{
-		CWinApp* ap = AfxGetApp();
-		if(ap)
-          wnd = ap->GetMainWnd();
-		else return;
-	}
+    else {
+      CWinApp* ap = AfxGetApp();
+      if (ap)
+        wnd = ap->GetMainWnd();
+      else return;
+    }
     CDC *win_dc = wnd->GetDC();
     RECT r;
     wnd->GetClientRect(&r);

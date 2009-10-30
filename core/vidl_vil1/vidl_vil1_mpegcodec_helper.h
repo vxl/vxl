@@ -136,9 +136,9 @@ class frame_buffer
   }
 
   int first_frame_num() const {
-	if(buffers_->size())
-	  return (*buffers_->begin()).first;
-    else return -1; 
+    if (buffers_->size())
+      return (*buffers_->begin()).first;
+    else return -1;
   }
 
   bool reset()

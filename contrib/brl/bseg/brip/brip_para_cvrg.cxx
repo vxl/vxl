@@ -99,9 +99,9 @@ void brip_para_cvrg::avg(int x, int y, vil_image_view<float> const& smooth, vil_
   float sum =0;
   for (int i = -3; i<=3; i++)
     for (int j = -3; j<=3; j++)
-      {
-        sum += smooth(x+i, y+j);
-      }
+    {
+      sum += smooth(x+i, y+j);
+    }
 
   avg(x,y) = sum/49.0f;
 }
@@ -177,13 +177,13 @@ void brip_para_cvrg::compute_gradients()
   grad135_.fill(0.0f);
   for (y=radius;y<ysize_ - radius;y++)
     for (x=radius;x<xsize_ - radius;x++)
-      {
-        this->avg(x, y, smooth_, avg_);
-        this->grad0(x, y, smooth_, grad0_);
-        this->grad45(x, y, smooth_, grad45_);
-        this->grad90(x, y, smooth_, grad90_);
-        this->grad135(x, y, smooth_, grad135_);
-      }
+    {
+      this->avg(x, y, smooth_, avg_);
+      this->grad0(x, y, smooth_, grad0_);
+      this->grad45(x, y, smooth_, grad45_);
+      this->grad90(x, y, smooth_, grad90_);
+      this->grad135(x, y, smooth_, grad135_);
+    }
   vcl_cout << "Compute gradients in " << t.real() << " msecs\n"
            << vcl_flush;
 }
@@ -211,30 +211,30 @@ float brip_para_cvrg::project(int x, int y, int dir,
   for (h=-proj_height_; h<=proj_height_; h++)
     for (w=-w0; w<=w0; w++)
       switch (dir)
-        {
-        case 0:
-          projection[w+w0] += grad0_(x+w,y+h);
-          break;
-        case 45:
-          projection[w+w0] += grad45_(x+h+w,y+w-h);
-          break;
-        case 90:
-          projection[w+w0] += grad90_(x+h,y+w);
-          break;
-        case 135:
-          projection[w+w0] += grad135_(x+h-w,y+w+h);
-          break;
-        default:
-          projection[w+w0] += 0;
-          break;
-        }
+      {
+      case 0:
+        projection[w+w0] += grad0_(x+w,y+h);
+        break;
+      case 45:
+        projection[w+w0] += grad45_(x+h+w,y+w-h);
+        break;
+      case 90:
+        projection[w+w0] += grad90_(x+h,y+w);
+        break;
+      case 135:
+        projection[w+w0] += grad135_(x+h-w,y+w+h);
+        break;
+      default:
+        projection[w+w0] += 0;
+        break;
+      }
   float max_energy = 0;
   for (int i =0; i<proj_n_; i++)
-    {
-      float val = vcl_fabs(projection[i]);
-      if (val>max_energy)
-        max_energy = val;
-    }
+  {
+    float val = vcl_fabs(projection[i]);
+    if (val>max_energy)
+      max_energy = val;
+  }
   return max_energy;
 }
 
@@ -258,56 +258,56 @@ void brip_para_cvrg::remove_flat_peaks(int n, vcl_vector<float>& array)
 
   //The scan of the state machine
   for (int i = 0; i < n; i++)
+  {
+    float v = array[i];
+
+    //State init: a string of non-zeroes at the beginning.
+    if (init&&v!=0)
+      continue;
+
+    if (init&&v==0)
     {
-      float v = array[i];
-
-      //State init: a string of non-zeroes at the beginning.
-      if (init&&v!=0)
-        continue;
-
-      if (init&&v==0)
-        {
-          init_end = i;
-          init = false;
-          continue;
-        }
-
-      //State !init&&!start: a string of "0s"
-      if (!start&&v==0)
-        continue;
-
-      //State !init&&start: the first non-zero value
-      if (!start&&v!=0)
-        {
-          start_index = i;
-          start = true;
-          continue;
-        }
-      //State ending flat peak: encountered a subsequent zero after starting
-      if (start&&v==0)
-        {
-          int peak_location = (start_index+i-1)/2;//The middle of the run
-          for (int k = start_index; k<=(i-1); k++)
-            if (k!=peak_location)
-              array[k] = 0;
-          start = false;
-        }
+      init_end = i;
+      init = false;
+      continue;
     }
+
+    //State !init&&!start: a string of "0s"
+    if (!start&&v==0)
+      continue;
+
+    //State !init&&start: the first non-zero value
+    if (!start&&v!=0)
+    {
+      start_index = i;
+      start = true;
+      continue;
+    }
+    //State ending flat peak: encountered a subsequent zero after starting
+    if (start&&v==0)
+    {
+      int peak_location = (start_index+i-1)/2;//The middle of the run
+      for (int k = start_index; k<=(i-1); k++)
+        if (k!=peak_location)
+          array[k] = 0;
+      start = false;
+    }
+  }
   //Now handle the boundary conditions
   if (init_end!=0)  //Was there an initial run of peaks?
-    {
-      int init_location = (init_end-1)/2;
-      for (int k = 0; k<init_end; k++)
-        if (k!=init_location)
-          array[k] = 0;
-    }
+  {
+    int init_location = (init_end-1)/2;
+    for (int k = 0; k<init_end; k++)
+      if (k!=init_location)
+        array[k] = 0;
+  }
   if (start)       // Did we reach the end of the array in a run of pks?
-    {
-      int end_location = (start_index + nbm)/2;
-      for (int k = start_index; k<n; k++)
-        if (k!=end_location)
-          array[k] = 0;
-    }
+  {
+    int end_location = (start_index + nbm)/2;
+    for (int k = start_index; k<n; k++)
+      if (k!=end_location)
+        array[k] = 0;
+  }
 }
 
 
@@ -317,9 +317,9 @@ void brip_para_cvrg::non_maximum_supress(vcl_vector<float> const& input_array,
                                          vcl_vector<float>& sup_array)
 {
   if ((2*sup_radius_ +1)> proj_width_)
-    {
-      vcl_cout << "In brip_para_cvrg::NonMaximumSupress(..) the kernel is too large\n";
-    }
+  {
+    vcl_cout << "In brip_para_cvrg::NonMaximumSupress(..) the kernel is too large\n";
+  }
   vcl_vector<float> tmp(proj_n_);
   for (int i=0; i<proj_n_; i++)
     tmp[i]=vcl_fabs(input_array[i]);
@@ -327,19 +327,19 @@ void brip_para_cvrg::non_maximum_supress(vcl_vector<float> const& input_array,
   //Make a new Histogram for the suppressed
 
   for (int i = sup_radius_; i < (proj_n_-sup_radius_); i++)
+  {
+    //find the maximum value in the current kernel
+    float max_val = 0;
+    for (int k = -sup_radius_; k <= sup_radius_ ;k++)
     {
-      //find the maximum value in the current kernel
-      float max_val = 0;
-      for (int k = -sup_radius_; k <= sup_radius_ ;k++)
-        {
-          int index = i+k;
-          if (tmp[index] > max_val)
-            max_val = tmp[index];
-        }
-      //Is position i a local maximum?
-      if (vcl_fabs(max_val-tmp[i])<1e-03)
-        sup_array[i] = max_val; //Yes. So set the counts to the max value
+      int index = i+k;
+      if (tmp[index] > max_val)
+        max_val = tmp[index];
     }
+    //Is position i a local maximum?
+    if (vcl_fabs(max_val-tmp[i])<1e-03)
+      sup_array[i] = max_val; //Yes. So set the counts to the max value
+  }
   this->remove_flat_peaks(proj_n_, sup_array);
 }
 
@@ -355,10 +355,10 @@ float brip_para_cvrg::parallel_coverage(vcl_vector<float> const& input_array)
   float proj_sum = 0;
   for (int i = 0; i<proj_n_; i++)
     if (sup_proj_[i]>0)
-      {
-        n_peaks++;
-        proj_sum += sup_proj_[i];
-      }
+    {
+      n_peaks++;
+      proj_sum += sup_proj_[i];
+    }
   if (n_peaks<2)
     return 0;
   return proj_sum/(n_peaks);
@@ -375,53 +375,53 @@ void brip_para_cvrg::compute_parallel_coverage()
   dir_.fill(0.0f);
   float direct;
   int radius = proj_width_+proj_height_ + 3;
-	  
+
   for (int y=radius; y<(ysize_-radius);y++)
     for (int x=radius ;x<(xsize_-radius);x++)
+    {
+      //zero arrays
+      proj_0_ = vcl_vector<float>(proj_n_, 0.0f);
+      proj_45_ = vcl_vector<float>(proj_n_, 0.0f);
+      proj_90_ = vcl_vector<float>(proj_n_, 0.0f);
+      proj_135_ = vcl_vector<float>(proj_n_, 0.0f);
+      float coverage[4];
+      this->project(x, y, 0, proj_0_);
+      coverage[0] = this->parallel_coverage(proj_0_);
+      float max_coverage = coverage[0];
+      direct = 0.f;
+      this->project(x, y, 45, proj_45_);
+      coverage[1] = this->parallel_coverage(proj_45_);
+      if (coverage[1]>max_coverage)
       {
-        //zero arrays
-        proj_0_ = vcl_vector<float>(proj_n_, 0.0f);
-        proj_45_ = vcl_vector<float>(proj_n_, 0.0f);
-        proj_90_ = vcl_vector<float>(proj_n_, 0.0f);
-        proj_135_ = vcl_vector<float>(proj_n_, 0.0f);
-        float coverage[4];
-        this->project(x, y, 0, proj_0_);
-        coverage[0] = this->parallel_coverage(proj_0_);
-        float max_coverage = coverage[0];
-        direct = 0.f;
-        this->project(x, y, 45, proj_45_);
-        coverage[1] = this->parallel_coverage(proj_45_);
-        if (coverage[1]>max_coverage)
-          {
-            max_coverage = coverage[1];
-            direct = 45.f;
-          }
-        this->project(x, y, 90, proj_90_);
-        coverage[2] = this->parallel_coverage(proj_90_);
-        if (coverage[2]>max_coverage)
-          {
-            max_coverage = coverage[2];
-            direct = 90.f;
-          }
-        this->project(x, y, 135, proj_135_);
-        coverage[3] = this->parallel_coverage(proj_135_);
-        if (coverage[3]>max_coverage)
-          {
-            max_coverage = coverage[3];
-            direct = 135.f;
-          }
+        max_coverage = coverage[1];
+        direct = 45.f;
+      }
+      this->project(x, y, 90, proj_90_);
+      coverage[2] = this->parallel_coverage(proj_90_);
+      if (coverage[2]>max_coverage)
+      {
+        max_coverage = coverage[2];
+        direct = 90.f;
+      }
+      this->project(x, y, 135, proj_135_);
+      coverage[3] = this->parallel_coverage(proj_135_);
+      if (coverage[3]>max_coverage)
+      {
+        max_coverage = coverage[3];
+        direct = 135.f;
+      }
 #ifdef DEBUG
-        vcl_cout << '(' << x << ',' << y << ") coverage:\n"
-                 << "   O degrees = " << coverage[0] << '\n'
-                 << "  45 degrees = " << coverage[1] << '\n'
-                 << "  90 degrees = " << coverage[2] << '\n'
-                 << " 135 degrees = " << coverage[3] << '\n'
-                 << "max_coverage = " << max_coverage << '\n';
+      vcl_cout << '(' << x << ',' << y << ") coverage:\n"
+               << "   O degrees = " << coverage[0] << '\n'
+               << "  45 degrees = " << coverage[1] << '\n'
+               << "  90 degrees = " << coverage[2] << '\n'
+               << " 135 degrees = " << coverage[3] << '\n'
+               << "max_coverage = " << max_coverage << '\n';
 #endif
 
-        det_(x,y) = max_coverage;
-        dir_(x,y) = direct;
-      }
+      det_(x,y) = max_coverage;
+      dir_(x,y) = direct;
+    }
   vcl_cout << "Do parallel coverage in " << t.real() << " msecs\n"
            << vcl_flush;
 }
@@ -445,12 +445,12 @@ void brip_para_cvrg::compute_image(vil_image_view<float> const& data,
   //Normalize the data and load the image
   for (int y = 0; y<ysize_; y++)
     for (int x = 0; x<xsize_; x++)
-      {
-        float temp = 255*data(x,y)/max_val;
-        unsigned char val;
-        val = (unsigned char)temp;
-        image(x, y)=val;
-      }
+    {
+      float temp = 255*data(x,y)/max_val;
+      unsigned char val;
+      val = (unsigned char)temp;
+      image(x, y)=val;
+    }
 }
 
 
@@ -527,15 +527,15 @@ brip_para_cvrg::get_combined_image()
   vil_image_view<vil_rgb<unsigned char> > out(xsize_, ysize_);
   for (int y = 0; y<ysize_; y++)
     for (int x = 0; x<xsize_; x++)
-      {
-        unsigned int direct = ((unsigned int)dir_image(x,y))/45;
-        //      assert (direct<=3);
-        if(direct>3) continue;
-        unsigned char c = cvrg_image(x,y),
-          red  = r[direct]*c,
-          green= g[direct]*c,
-          blue = b[direct]*c;
-        out(x, y) = vil_rgb<unsigned char>(red, green, blue);
-      }
+    {
+      unsigned int direct = ((unsigned int)dir_image(x,y))/45;
+      //      assert (direct<=3);
+      if (direct>3) continue;
+      unsigned char c = cvrg_image(x,y),
+        red  = r[direct]*c,
+        green= g[direct]*c,
+        blue = b[direct]*c;
+      out(x, y) = vil_rgb<unsigned char>(red, green, blue);
+    }
   return out;
 }

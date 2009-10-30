@@ -11,7 +11,7 @@ void bvpl_register::register_datatype()
 {
   REGISTER_DATATYPE( bvpl_kernel_sptr );
   REGISTER_DATATYPE( bvpl_kernel_vector_sptr );
-  REGISTER_DATATYPE( bvpl_corner_pairs_sptr );	
+  REGISTER_DATATYPE( bvpl_corner_pairs_sptr );
 }
 
 void bvpl_register::register_process()
@@ -36,7 +36,7 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_suppress_and_combine_process, "bvplSuppressAndCombineProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_extract_top_response_process, "bvplExtractTopResponseProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_operate_ocp_and_app_process, "bvplOperateOcpAndAppProcess");
-  
+
   //util
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_find_corner_pairs_process,"bvplFindCornerPairsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_visualize_corner_pairs_process, "bvplVisualizeCornerPairsProcess");
