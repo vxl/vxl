@@ -35,10 +35,8 @@ boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
 {
   delete_children();
   if (vis_node_) {
-#if 0
-    vcl_cout << "Deleting vis node" << vcl_endl;
+
     delete vis_node_;
-#endif
     vis_node_ = NULL;
   }
 }
@@ -77,10 +75,7 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
     delete [] children_;
     children_=NULL;
     if (vis_node_) {
-#if 0
-      vcl_cout << "Deleting vis node" << vcl_endl;
       delete vis_node_;
-#endif
       vis_node_ = NULL;
     }
   }
