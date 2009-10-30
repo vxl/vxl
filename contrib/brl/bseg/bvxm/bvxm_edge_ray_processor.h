@@ -29,6 +29,9 @@ class  bvxm_edge_ray_processor
   //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
   bool update_edges(bvxm_image_metadata const& metadata, unsigned scale_idx=0);
 
+  //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
+  bool update_edges_with_Lidar_surface(bvxm_image_metadata const& metadata, unsigned scale_idx=0);
+
   //: generate the expected edge image from the specified viewpoint. the expected image should be allocated by the caller.
   bool expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, float n_normal, unsigned scale_idx=0);
 
