@@ -342,6 +342,9 @@ SOURCE=.\test_tricub_interp.cxx
 # Begin Source File
 SOURCE=.\test_algo_find_blobs.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_erode.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

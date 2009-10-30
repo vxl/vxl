@@ -281,6 +281,9 @@ SOURCE=.\vil3d_locally_z_normalise.h
 # Begin Source File
 SOURCE=.\vil3d_find_blobs.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_erode.h
+# End Source File
 # End Group
 # End Target
 # End Project
