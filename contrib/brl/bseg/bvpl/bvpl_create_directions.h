@@ -40,8 +40,8 @@ class bvpl_create_directions_base
 //:
 // this class samples the
 // phi=0, theta=0;
-// phi=pi/4 theta = [0, 2\pi)
-// phi=pi/2 theta = [0, 2\pi)
+// phi=pi/4 theta = [0, 2pi)
+// phi=pi/2 theta = [0, 2pi)
 class bvpl_create_directions_a: public bvpl_create_directions_base
 {
  public:
@@ -61,7 +61,19 @@ class bvpl_create_directions_b: public bvpl_create_directions_base
   bvpl_create_directions_b();
 
 };
+//: This class samples
+// phi = 0, theta= 0;
+// phi = pi/4 theta =[0, 2*pi)
+// phi = pi/2 theta = [0, 3*pi/2)
+// phi = pi/3 theta = [0, 2pi)
+// phi = pi/6 theta = [0, 2pi)
+class bvpl_create_directions_c: public bvpl_create_directions_base
+{
+ public:
+  //: Default constructor
+  bvpl_create_directions_c();
 
+};
 /**********************Corner directions************************/
 class bvpl_main_corner_dirs: public bvpl_create_directions_base
 {
