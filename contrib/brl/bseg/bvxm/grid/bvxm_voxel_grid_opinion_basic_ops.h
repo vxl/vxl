@@ -20,6 +20,7 @@
 #include <vcl_iostream.h>
 
 void bvxm_expectation_opinion_voxel_grid(bvxm_voxel_grid<bvxm_opinion> * grid_in_base,
-                 bvxm_voxel_grid<float> * grid_out_base);
-
+                                         bvxm_voxel_grid<float> * grid_out_base);
+void bvxm_belief_opinion_voxel_grid(bvxm_voxel_grid<bvxm_opinion> * grid_in_base,
+                                    bvxm_voxel_grid<float> * grid_out_base);
 #endif
