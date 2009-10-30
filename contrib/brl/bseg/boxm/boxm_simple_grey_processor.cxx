@@ -138,7 +138,7 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
   }
   if (nobs == 1) {
     // one observation: Just return the value as the mean, and a big sigma.
-    model = boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype(obs[0], big_sigma, 0.5);
+    model = boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype(obs[0], big_sigma);
     return;
   }
   else {
@@ -202,16 +202,19 @@ void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
   float expected_nobs = 0.0f;
+    const unsigned int nobs = obs.size();
+
   vcl_vector<float>::const_iterator wit = weights.begin();
   for (; wit != weights.end(); ++wit) {
     expected_nobs += *wit;
   }
 
-  float unbiased_sigma = model.sigma() * sigma_norm_factor(expected_nobs);
-
+  //float unbiased_sigma = model.sigma() * sigma_norm_factor(expected_nobs);
+  float unbiased_sigma = model.sigma() * sigma_norm_factor(nobs);
   if (unbiased_sigma > big_sigma) {
     unbiased_sigma = big_sigma;
   }
+
 
   model = boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype(model.color(), unbiased_sigma, model.gauss_weight());
 }

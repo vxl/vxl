@@ -84,13 +84,13 @@ class boxm_apm_traits<BOXM_APM_MOG_RGB>
 class boxm_simple_grey
 {
  public:
-  boxm_simple_grey() : color_(0.5f), one_over_sigma_(1.0f), gauss_weight_(0.0f) {}
-  boxm_simple_grey(float color, float std_dev, float gauss_weight) : color_(color), one_over_sigma_(1/std_dev), gauss_weight_(gauss_weight) { check_vals(); }
-  boxm_simple_grey(vnl_vector_fixed<float,3> const& params) : color_(params[0]), one_over_sigma_(1.0f/params[1]), gauss_weight_(params[2]) { check_vals(); }
+  boxm_simple_grey() : color_(0.5f), one_over_sigma_(1.0f) {}
+  boxm_simple_grey(float color, float std_dev, float gauss_weight=1.0f) : color_(color), one_over_sigma_(1/std_dev)  { check_vals(); }
+  boxm_simple_grey(vnl_vector_fixed<float,3> const& params) : color_(params[0]), one_over_sigma_(1.0f/params[1])  { check_vals(); }
   short version_no() const { return 1; }
   inline float color() const {return color_;}
   inline float sigma() const {return 1.0f/one_over_sigma_;}
-  inline float gauss_weight() const {return gauss_weight_;}
+  inline float gauss_weight() const {return 1.0f;}
   inline float one_over_sigma() const {return one_over_sigma_;}
 
  protected:
@@ -104,15 +104,11 @@ class boxm_simple_grey
       one_over_sigma_ = 1e4f;
     if (!(one_over_sigma_ > 1e-4))
       one_over_sigma_ = 1e-4f;
-    if (!(gauss_weight_ > 0.0f))
-      gauss_weight_ = 0.0f;
-    if (!(gauss_weight_ < 1.0f))
-      gauss_weight_ = 1.0f;
+
   }
 public:
   float color_;
   float one_over_sigma_;
-  float gauss_weight_;
 };
 
 template<>

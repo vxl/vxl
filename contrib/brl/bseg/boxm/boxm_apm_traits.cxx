@@ -15,7 +15,7 @@ void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const &sample)
   vsl_b_write(os, sample.version_no());
   vsl_b_write(os, sample.color_);
   vsl_b_write(os, sample.one_over_sigma_);
-  vsl_b_write(os, sample.gauss_weight_);
+  //vsl_b_write(os, sample.gauss_weight_);
 }
 
 void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const * &sample)
@@ -36,7 +36,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_simple_grey &sample)
     case 1:
       vsl_b_read(is, sample.color_);
       vsl_b_read(is, sample.one_over_sigma_);
-      vsl_b_read(is, sample.gauss_weight_);
+      //vsl_b_read(is, sample.gauss_weight_);
       
       break;
     default:
