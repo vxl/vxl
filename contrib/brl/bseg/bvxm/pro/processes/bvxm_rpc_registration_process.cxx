@@ -149,14 +149,19 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
     for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
       // for each offset pair (u,v)
       double prob = 0.0;
+      double norm = 0.0;
       // find the total probability of the edge image given the expected edge image
       for (int m=offset_search_size; m<ni-offset_search_size; m++) {
         for (int n=offset_search_size; n<nj-offset_search_size; n++) {
           if (edge_image(m,n)==255) {
             prob += expected_edge_image(m-u,n-v);
           }
+          norm += expected_edge_image(m-u,n-v);
         }
       }
+
+      if(norm>0.0)
+          prob/=norm;
 
       // if maximum is found
       if (prob > max_prob) {
