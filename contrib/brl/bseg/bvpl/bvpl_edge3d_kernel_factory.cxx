@@ -48,16 +48,16 @@ bvpl_edge3d_kernel_factory::bvpl_edge3d_kernel_factory(unsigned length, unsigned
 
 void bvpl_edge3d_kernel_factory::create_canonical()
 {
-  if ( !(height_ % 2))
-  {
-    vcl_cerr << "Warning, height of kernel is even. It has been increased by one\n";
-    height_++;
-  }
-  if (!(width_ % 2))
-  {
-    vcl_cerr << "Warning, width of kernel is even. It has been increased by one\n";
-    width_++;
-  }
+  //if ( !(length_ % 2))
+  //{
+  //  vcl_cerr << "Warning, length of kernel is even. It has been increased by one\n";
+  //  length_++;
+  //}
+  //if (!(width_ % 2))
+  //{
+  //  vcl_cerr << "Warning, width of kernel is even. It has been increased by one\n";
+  //  width_++;
+  //}
   //The size of the kernel is limited. If widht or height of the kernel is too large,
   //the user should subsample the image/grid
   if (height_ > max_size_)
@@ -81,28 +81,24 @@ void bvpl_edge3d_kernel_factory::create_canonical()
   typedef bvpl_kernel_dispatch dispatch;
 
   int min_x= -1*(length_/2);
-  int max_x =(length_/2);
+  int max_x =length_/2;
   int min_y= -1*(width_/2);
-  int max_y =(width_/2);
+  int max_y =vcl_ceil((float)width_/2);
   int min_z= -1*(height_/2);
-  int max_z =(height_/2);
+  int max_z =vcl_ceil((float)height_/2);
 
-  for (int x=min_x; x<= max_x; x++)
+  for (int x=min_x; x< max_x; x++)
   {
-    for (int y= min_y; y<= max_y; y++)
+    for (int y= min_y; y< max_y; y++)
     {
-      for (int z= min_z; z<= max_z; z++)
+      for (int z= min_z; z< max_z; z++)
       {
         if (x < 0)
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
-        else if (x >  0)
+        else if (x >=  0)
           canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
         // central voxel
-        // else if (x==0 && y==0 && z==0)
-        // canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0)));
-        // dont care
-        // else if (x==0)
-          //  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-100)));
+
       }
     }
   }
