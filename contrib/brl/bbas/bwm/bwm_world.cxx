@@ -58,8 +58,9 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
 {
   vgl_point_3d<double> center;
 
+#if 0 // commented out
   // if lvcs is set get that
- /* if (lvcs_valid_) {
+  if (lvcs_valid_) {
     lvcs = lvcs_;
     return true;
   }
@@ -74,7 +75,8 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
   else if (bwm_observer_mgr::instance()->comp_avg_camera_center(center)) {
     lvcs = bgeo_lvcs(center.x(), center.y(), center.z());
     return true;
-  }*/
+  }
+#endif // 0
 
   // else, request from user
   double lat, lon, elev;
@@ -225,10 +227,10 @@ void bwm_world::save_gml()
 
   vcl_ofstream os(gml_filename.c_str());
 
-  os << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n";
-  os << "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n";
-  os << "<gml:description>" << model_name.c_str() << "</gml:description>\n";
-  os << "<gml:name>" << model_name.c_str() << "</gml:name>\n";
+  os << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n"
+     << "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n"
+     << "<gml:description>" << model_name.c_str() << "</gml:description>\n"
+     << "<gml:name>" << model_name.c_str() << "</gml:name>\n";
 
   int obj_count = 0;
   for (unsigned idx=0; idx<objects_.size(); idx++) {
@@ -236,8 +238,8 @@ void bwm_world::save_gml()
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_gml(os, obj_count, &lvcs_);
-      os << "   </Building>";
-      os << "  </cityObjectMember>";
+      os << "   </Building>"
+         << "  </cityObjectMember>";
     }
   }
   os << " </CityModel>";
@@ -275,16 +277,15 @@ void bwm_world::save_kml()
 
   vcl_ofstream os(kml_filename.c_str());
 
-  os << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-  os << "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n";
-  os << "<Document>\n";
-  os << "  <name>" << vul_file::strip_directory(kml_filename.c_str()) << "</name>\n";
-  os << "  <open>1</open>\n";
-  os << "  <Placemark>\n";
-  os << "    <name>" << model_name.c_str() << "</name>\n";
-  os << "    <visibility>1</visibility>\n";
-
-  os << "    <MultiGeometry>\n";
+  os << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+     << "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n"
+     << "<Document>\n"
+     << "  <name>" << vul_file::strip_directory(kml_filename.c_str()) << "</name>\n"
+     << "  <open>1</open>\n"
+     << "  <Placemark>\n"
+     << "    <name>" << model_name.c_str() << "</name>\n"
+     << "    <visibility>1</visibility>\n"
+     << "    <MultiGeometry>\n";
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
     bwm_observable_sptr obj = objects_[idx];
@@ -294,10 +295,10 @@ void bwm_world::save_kml()
     }
   }
 
-  os << "    </MultiGeometry>\n";
-  os << "  </Placemark>\n";
-  os << "</Document>\n";
-  os << "</kml>\n";
+  os << "    </MultiGeometry>\n"
+     << "  </Placemark>\n"
+     << "</Document>\n"
+     << "</kml>\n";
 
   os.close();
 }
@@ -324,21 +325,21 @@ void bwm_world::save_x3d()
 
   vcl_ofstream os(x3d_filename.c_str());
 
-  os << "#VRML V2.0 utf8\n";
-  os << "PROFILE Immersive\n\n";
+  os << "#VRML V2.0 utf8\n"
+     << "PROFILE Immersive\n\n";
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
     bwm_observable_sptr obj = objects_[idx];
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*> (obj.as_pointer());
       tm_obj->save_x3d(os, &lvcs);
-      os << "      ]\n\n";
-      os << "      solid TRUE\n";
-      os << "      convex FALSE\n";
-      os << "      creaseAngle 0\n";
-      os << "    }\n";
-      os << "  }\n";
-      os << "}\n\n\n";
+      os << "      ]\n\n"
+         << "      solid TRUE\n"
+         << "      convex FALSE\n"
+         << "      creaseAngle 0\n"
+         << "    }\n"
+         << "  }\n"
+         << "}\n\n\n";
     }
   }
 
@@ -485,78 +486,78 @@ void bwm_world::save_kml_collada()
     }
   }
 
-  os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-  os << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n";
+  os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+     << "<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n"
 
-  os << "  <asset>\n";
-  os << "    <contributor>\n";
-  os << "      <authoring_tool> Brown University World Modeler </authoring_tool>\n";
-  os << "    </contributor>\n";
-  os << "    <unit name=\"meters\" meter=\"1\"/>\n";
-  os << "    <up_axis>Z_UP</up_axis>\n";
-  os << "  </asset>\n";
+     << "  <asset>\n"
+     << "    <contributor>\n"
+     << "      <authoring_tool> Brown University World Modeler </authoring_tool>\n"
+     << "    </contributor>\n"
+     << "    <unit name=\"meters\" meter=\"1\"/>\n"
+     << "    <up_axis>Z_UP</up_axis>\n"
+     << "  </asset>\n"
+     << "  <library_images>\n";
 
-  os << "  <library_images>\n";
   for (int i=0; i<nobjects; i++) {
-    os << "    <image id=\"" << image_names[i].c_str() << "\" name=\"" << image_names[i].c_str() << "\">\n";
-    os << "      <init_from>" << image_fnames[i].c_str() << "</init_from>\n";
-    os << "    </image>\n";
+    os << "    <image id=\"" << image_names[i].c_str() << "\" name=\"" << image_names[i].c_str() << "\">\n"
+       << "      <init_from>" << image_fnames[i].c_str() << "</init_from>\n"
+       << "    </image>\n";
   }
   os << "  </library_images>\n";
 
   os << "  <library_materials>\n";
   for (int i=0; i<nobjects; i++) {
-    os << "    <material id=\"" << material_ids[i].c_str() << "\" name=\"" << material_names[i].c_str() << "\">\n";
-    os << "      <instance_effect url=\"#" << effect_ids[i].c_str() << "\"/>\n";
-    os << "    </material>\n";
+    os << "    <material id=\"" << material_ids[i].c_str() << "\" name=\"" << material_names[i].c_str() << "\">\n"
+       << "      <instance_effect url=\"#" << effect_ids[i].c_str() << "\"/>\n"
+       << "    </material>\n";
   }
   os << "  </library_materials>\n";
 
   os << "  <library_effects>\n";
   for (int i=0; i<nobjects; i++)
   {
-    os << "    <effect id=\"" << effect_ids[i].c_str() << "\" name=\"" << effect_ids[i].c_str() << "\">\n";
-    os << "      <profile_COMMON>\n";
-    os << "        <newparam sid=\"" << surface_ids[i].c_str() << "\">\n";
-    os << "          <surface type=\"2D\">\n";
-    os << "            <init_from>" << image_names[i].c_str() << "</init_from>\n";
-    os << "          </surface>\n";
-    os << "        </newparam>\n";
-    os << "        <newparam sid=\"" << image_sampler_ids[i].c_str() << "\">\n";
-    os << "          <sampler2D>\n";
-    os << "            <source>" << surface_ids[i].c_str() << "</source>\n";
-    os << "          </sampler2D>\n";
-    os << "        </newparam>\n";
-    os << "        <technique sid=\"COMMON\">\n";
-    os << "          <phong>\n";
-    os << "            <emission>\n";
-    os << "              <color>0.0 0.0 0.0 1</color>\n";
-    os << "            </emission>\n";
-    os << "            <ambient>\n";
-    os << "              <color>0.0 0.0 0.0 1</color>\n";
-    os << "            </ambient>\n";
-    os << "            <diffuse>\n";
-    os << "              <texture texture=\"" << image_sampler_ids[i].c_str() << "\" texcoord=\"UVSET0\"/>\n";
-    os << "            </diffuse>\n";
-    os << "            <specular>\n";
-    os << "              <color>0.33 0.33 0.33 1</color>\n";
-    os << "            </specular>\n";
-    os << "            <shininess>\n";
-    os << "              <float>20.0</float>\n";
-    os << "            </shininess>\n";
-    os << "            <reflectivity>\n";
-    os << "              <float>0.1</float>\n";
-    os << "            </reflectivity>\n";
-    os << "            <transparent>\n";
-    os << "              <color>1 1 1 1</color>\n";
-    os << "            </transparent>\n";
-    os << "            <transparency>\n";
-    os << "              <float>0.0</float>\n";
-    os << "            </transparency>\n";
-    os << "          </phong>\n";
-    os << "        </technique>\n";
-    os << "      </profile_COMMON>\n";
-    os << "    </effect>\n";
+    os << "    <effect id=\"" << effect_ids[i].c_str() << "\" name=\"" << effect_ids[i].c_str() << "\">\n"
+       << "      <profile_COMMON>\n"
+       << "        <newparam sid=\"" << surface_ids[i].c_str() << "\">\n"
+       << "          <surface type=\"2D\">\n"
+       << "            <init_from>" << image_names[i].c_str() << "</init_from>\n"
+       << "          </surface>\n"
+       << "        </newparam>\n"
+       << "        <newparam sid=\"" << image_sampler_ids[i].c_str() << "\">\n"
+       << "          <sampler2D>\n"
+       << "            <source>" << surface_ids[i].c_str() << "</source>\n"
+       << "          </sampler2D>\n"
+       << "        </newparam>\n"
+       << "        <technique sid=\"COMMON\">\n"
+       << "          <phong>\n"
+       << "            <emission>\n"
+       << "              <color>0.0 0.0 0.0 1</color>\n"
+       << "            </emission>\n"
+       << "            <ambient>\n"
+       << "              <color>0.0 0.0 0.0 1</color>\n"
+       << "            </ambient>\n"
+       << "            <diffuse>\n"
+       << "              <texture texture=\"" << image_sampler_ids[i].c_str() << "\" texcoord=\"UVSET0\"/>\n"
+       << "            </diffuse>\n"
+       << "            <specular>\n"
+       << "              <color>0.33 0.33 0.33 1</color>\n"
+       << "            </specular>\n"
+       << "            <shininess>\n"
+       << "              <float>20.0</float>\n"
+       << "            </shininess>\n"
+       << "            <reflectivity>\n"
+       << "              <float>0.1</float>\n"
+       << "            </reflectivity>\n"
+       << "            <transparent>\n"
+       << "              <color>1 1 1 1</color>\n"
+       << "            </transparent>\n"
+       << "            <transparency>\n"
+       << "              <float>0.0</float>\n"
+       << "            </transparency>\n"
+       << "          </phong>\n"
+       << "        </technique>\n"
+       << "      </profile_COMMON>\n"
+       << "    </effect>\n";
   }
   os << "  </library_effects>\n";
 
@@ -582,48 +583,48 @@ void bwm_world::save_kml_collada()
                                material_names[idx]);
     }
 
-    os << "</p>\n";
-    os << "      </triangles>\n";
-    os << "    </mesh>\n";
-    os << "  </geometry>\n";
+    os << "</p>\n"
+       << "      </triangles>\n"
+       << "    </mesh>\n"
+       << "  </geometry>\n";
     idx++;
   }
-
   os << "</library_geometries>\n";
+
   os << "<library_nodes>\n";
   for (int i=0; i<nobjects; i++) {
-    os << "  <node id=\"Component_" << i << "\" name=\"Component_" << i << "\">\n";
-    os << "    <node id=\"" << mesh_ids[i].c_str() << "\" name=\"" << mesh_ids[i].c_str() << "\">\n";
-    os << "      <instance_geometry url=\"#" << geometry_ids[i].c_str() << "\">\n";
-    os << "        <bind_material>\n";
-    os << "          <technique_common>\n";
-    os << "            <instance_material symbol=\"" <<material_names[i].c_str() << "\" target=\"#" << material_ids[i].c_str()<< "\">\n";
-    os << "              <bind_vertex_input semantic=\"UVSET0\" input_semantic=\"TEXCOORD\" input_set=\"0\"/>\n";
-    os << "            </instance_material>\n";
-    os << "          </technique_common>\n";
-    os << "        </bind_material>\n";
-    os << "      </instance_geometry>\n";
-    os << "    </node>\n";
-    os << "  </node>\n";
+    os << "  <node id=\"Component_" << i << "\" name=\"Component_" << i << "\">\n"
+       << "    <node id=\"" << mesh_ids[i].c_str() << "\" name=\"" << mesh_ids[i].c_str() << "\">\n"
+       << "      <instance_geometry url=\"#" << geometry_ids[i].c_str() << "\">\n"
+       << "        <bind_material>\n"
+       << "          <technique_common>\n"
+       << "            <instance_material symbol=\"" <<material_names[i].c_str() << "\" target=\"#" << material_ids[i].c_str()<< "\">\n"
+       << "              <bind_vertex_input semantic=\"UVSET0\" input_semantic=\"TEXCOORD\" input_set=\"0\"/>\n"
+       << "            </instance_material>\n"
+       << "          </technique_common>\n"
+       << "        </bind_material>\n"
+       << "      </instance_geometry>\n"
+       << "    </node>\n"
+       << "  </node>\n";
   }
   os << "</library_nodes>\n";
 
-  os << "<library_visual_scenes>\n";
-  os << "  <visual_scene id=\"WorldModelerScene\" name=\"WorldModelerScene\">\n";
-  os << "    <node id=\"Model\" name=\"Model\">\n";
+  os << "<library_visual_scenes>\n"
+     << "  <visual_scene id=\"WorldModelerScene\" name=\"WorldModelerScene\">\n"
+     << "    <node id=\"Model\" name=\"Model\">\n";
   for (int i=0; i<nobjects; i++) {
-    os << "      <node id=\"Component_" << i << "_1\" name=\"Component_" << i << "_1\">\n";
-    os << "        <instance_node url=\"#Component_" << i << "\"/>\n";
-    os << "      </node>\n";
+    os << "      <node id=\"Component_" << i << "_1\" name=\"Component_" << i << "_1\">\n"
+       << "        <instance_node url=\"#Component_" << i << "\"/>\n"
+       << "      </node>\n";
   }
-  os << "    </node>\n";
-  os << "  </visual_scene>\n";
-  os << "</library_visual_scenes>\n";
+  os << "    </node>\n"
+     << "  </visual_scene>\n"
+     << "</library_visual_scenes>\n";
 
-  os << "<scene>\n";
-  os << "  <instance_visual_scene url=\"#WorldModelerScene\"/>\n";
-  os << "</scene>\n";
-  os << "</COLLADA>\n";
+  os << "<scene>\n"
+     << "  <instance_visual_scene url=\"#WorldModelerScene\"/>\n"
+     << "</scene>\n"
+     << "</COLLADA>\n";
 
   os.close();
 
@@ -633,66 +634,65 @@ void bwm_world::save_kml_collada()
   vcl_ofstream ost(textures_fname.str().data());
 
   for (int i=0; i<nobjects; i++) {
-    ost << "<" << image_fnames[i].c_str() << "> <" << image_fnames[i].c_str() << ">\n";
+    ost << '<' << image_fnames[i].c_str() << "> <" << image_fnames[i].c_str() << ">\n";
   }
 
   vcl_ostringstream kml_fname;
   kml_fname << kmz_dir << "/doc.kml";
-  
+
   vcl_ofstream oskml(kml_fname.str().data());
 
-  oskml << "<?xml version='1.0' encoding='UTF-8'?>\n";
-  oskml << "<kml xmlns='http://earth.google.com/kml/2.1'>\n";
-  oskml << "<Folder>\n";
-  oskml << "  <name>" << model_name.c_str() << "</name>\n";
-  oskml << "  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">CrossCut</a>]]></description>\n";
-  oskml << "  <DocumentSource>CrossCut 1.0</DocumentSource>\n";
-  oskml << "  <visibility>1</visibility>\n";
-  oskml << "  <LookAt>\n";
-  oskml << "    <heading>0</heading>\n";
-  oskml << "    <tilt>45</tilt>\n";
-  oskml << "    <longitude>" << origin_lon << "</longitude>\n";
-  oskml << "    <latitude>" << origin_lat << "</latitude>\n";
-  oskml << "    <range>200</range>\n";
-  oskml << "    <altitude>" << 0.0f << "</altitude>\n";
-  oskml << "  </LookAt>\n";
-  oskml << "  <Folder>\n";
-  oskml << "    <name>Tour</name>\n";
-  oskml << "    <Placemark>\n";
-  oskml << "      <name>Camera</name>\n";
-  oskml << "      <visibility>1</visibility>\n";
-  oskml << "    </Placemark>\n";
-  oskml << "  </Folder>\n";
-  oskml << "  <Placemark>\n";
-  oskml << "    <name>Model</name>\n";
-  oskml << "    <description><![CDATA[]]></description>\n";
-  oskml << "    <Style id='default'>\n";
-  oskml << "    </Style>\n";
-  oskml << "    <Model>\n";
-  oskml << "      <altitudeMode>relativeToGround</altitudeMode>\n";
-  oskml << "      <Location>\n";
-  oskml << "        <longitude>" << origin_lon + lon_offset << "</longitude>\n";
-  oskml << "        <latitude>" << origin_lat + lat_offset << "</latitude>\n";
-  oskml << "        <altitude>" << origin_elev - ground_height << "</altitude>\n";
-  oskml << "      </Location>\n";
-  oskml << "      <Orientation>\n";
-  oskml << "        <heading>0</heading>\n";
-  oskml << "        <tilt>0</tilt>\n";
-  oskml << "        <roll>0</roll>\n";
-  oskml << "      </Orientation>\n";
-  oskml << "      <Scale>\n";
-  oskml << "        <x>1.0</x>\n";
-  oskml << "        <y>1.0</y>\n";
-  oskml << "        <z>1.0</z>\n";
-  oskml << "      </Scale>\n";
-  oskml << "      <Link>\n";
-  oskml << "        <href>models/mesh.dae</href>\n";
-  oskml << "      </Link>\n";
-  oskml << "    </Model>\n";
-  oskml << "  </Placemark>\n";
-  oskml << "</Folder>\n";
-  oskml << "</kml>\n";
-
+  oskml << "<?xml version='1.0' encoding='UTF-8'?>\n"
+        << "<kml xmlns='http://earth.google.com/kml/2.1'>\n"
+        << "<Folder>\n"
+        << "  <name>" << model_name.c_str() << "</name>\n"
+        << "  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">CrossCut</a>]]></description>\n"
+        << "  <DocumentSource>CrossCut 1.0</DocumentSource>\n"
+        << "  <visibility>1</visibility>\n"
+        << "  <LookAt>\n"
+        << "    <heading>0</heading>\n"
+        << "    <tilt>45</tilt>\n"
+        << "    <longitude>" << origin_lon << "</longitude>\n"
+        << "    <latitude>" << origin_lat << "</latitude>\n"
+        << "    <range>200</range>\n"
+        << "    <altitude>" << 0.0f << "</altitude>\n"
+        << "  </LookAt>\n"
+        << "  <Folder>\n"
+        << "    <name>Tour</name>\n"
+        << "    <Placemark>\n"
+        << "      <name>Camera</name>\n"
+        << "      <visibility>1</visibility>\n"
+        << "    </Placemark>\n"
+        << "  </Folder>\n"
+        << "  <Placemark>\n"
+        << "    <name>Model</name>\n"
+        << "    <description><![CDATA[]]></description>\n"
+        << "    <Style id='default'>\n"
+        << "    </Style>\n"
+        << "    <Model>\n"
+        << "      <altitudeMode>relativeToGround</altitudeMode>\n"
+        << "      <Location>\n"
+        << "        <longitude>" << origin_lon + lon_offset << "</longitude>\n"
+        << "        <latitude>" << origin_lat + lat_offset << "</latitude>\n"
+        << "        <altitude>" << origin_elev - ground_height << "</altitude>\n"
+        << "      </Location>\n"
+        << "      <Orientation>\n"
+        << "        <heading>0</heading>\n"
+        << "        <tilt>0</tilt>\n"
+        << "        <roll>0</roll>\n"
+        << "      </Orientation>\n"
+        << "      <Scale>\n"
+        << "        <x>1.0</x>\n"
+        << "        <y>1.0</y>\n"
+        << "        <z>1.0</z>\n"
+        << "      </Scale>\n"
+        << "      <Link>\n"
+        << "        <href>models/mesh.dae</href>\n"
+        << "      </Link>\n"
+        << "    </Model>\n"
+        << "  </Placemark>\n"
+        << "</Folder>\n"
+        << "</kml>\n";
 }
 
 void bwm_world::clear()
