@@ -103,11 +103,6 @@ boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
                             vpgl_camera_double_sptr camera,
                             double* xverts, double* yverts)
 {
-#if 0
-  vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
-  xverts= new double[8];
-  yverts= new double[8];
-#endif // 0
   for (unsigned i=0; i<corners.size(); ++i)
     camera->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
 }
@@ -121,7 +116,6 @@ boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
     if (camera->type_name().compare("vpgl_perspective_camera")==0) {
         vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
         vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam->camera_center());
-        vcl_cout<<"center cam"<<cam_center;
         for (unsigned i=0; i<corners.size(); ++i)
         {
             cam->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);
@@ -148,23 +142,6 @@ boxm_utils::project_point3d(vgl_point_3d<double> const& point,
 bool boxm_utils::is_face_visible(double * xverts, double *yverts,
                                  unsigned id1,unsigned id2,unsigned id3,unsigned id4)
 {
-#if 0
-  vgl_box_2d<double> face;
-  vcl_vector<vgl_point_2d<double> > vs;
-
-  assert(face.size() >= 3);
-
-  for (unsigned i=0; i<face.size(); ++i) {
-    double u,v;
-    camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
-    vs.push_back(vgl_point_2d<double>(u,v));
-  }
-
-  vgl_vector_2d<double> v0 (xverts[id2]-xverts[id1],yverts[id2]-yverts[id1]);
-  vgl_vector_2d<double> v1 (xverts[id3]-xverts[id2],yverts[id3]-yverts[id2]);
-  vgl_vector_2d<double> v1 = vs[2] - vs[1];
-  double normal = cross_product(v0,v1);
-#endif // 0
 
   double normal=(xverts[id2]-xverts[id1])*(yverts[id3]-yverts[id2])-(yverts[id2]-yverts[id1])*(xverts[id3]-xverts[id2]);
   return normal < 0;
@@ -186,7 +163,9 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
   vgl_vector_2d<double> v0 = vs[1] - vs[0];
   vgl_vector_2d<double> v1 = vs[2] - vs[1];
   double normal = cross_product<double>(v0,v1);
-  return normal < 0;
+  //if(normal>-1e-4 && normal<0.0)
+  //    vcl_cout<<"+";
+  return normal < -1e-5;
 }
 
 vcl_vector<vgl_point_2d<double> >
