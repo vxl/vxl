@@ -75,8 +75,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       vcl_cout<<"Multi Bin set"<<vcl_endl;
       scene_ptr = scene;
     }
-  }
-  if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+  } else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
