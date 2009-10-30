@@ -51,6 +51,13 @@ class vil3d_structuring_element
   //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
   void set_to_sphere(double r);
 
+  //: Set to 6 axis-aligned neighbours plus self
+  void set_to_7();
+
+  //: Set to 26 touching neighbours plus self
+  void set_to_27();
+
+
   //: Set to sphere of radius r, but with non isotropic voxel sizes
   //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
   void set_to_sphere_noniso(double r, double sx, double sy, double sz);

@@ -44,6 +44,37 @@ void vil3d_structuring_element::set(const vcl_vector<int>& p_i,
   }
 }
 
+
+
+
+//: Set to 6 axis-aligned neighbours plus self
+void vil3d_structuring_element::set_to_7()
+{
+  vcl_vector<int> px,py,pz;
+  for (int i=-1;i<=1;i+=2)
+  {
+    px.push_back(i);  py.push_back(0);  pz.push_back(0);
+    px.push_back(0);  py.push_back(i);  pz.push_back(0);
+    px.push_back(0);  py.push_back(0);  pz.push_back(i);
+  }
+  px.push_back(0);  py.push_back(0);  pz.push_back(0);
+  set(px,py,pz);
+}
+
+  //: Set to 26 touching neighbours plus self
+void vil3d_structuring_element::set_to_27()
+{
+  vcl_vector<int> px,py,pz;
+  for (int k=-1;k<=1;++k)
+    for (int j=-1;j<=1;++j)
+      for (int i=-1;i<=1;++i)
+      {
+        px.push_back(i);  py.push_back(j);  pz.push_back(k);
+      }
+  set(px,py,pz);
+}
+
+
 //: Set to sphere of radius r
 //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
 void vil3d_structuring_element::set_to_sphere(double r)

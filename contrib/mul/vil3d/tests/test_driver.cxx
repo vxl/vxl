@@ -22,6 +22,7 @@ DECLARE( test_algo_threshold );
 DECLARE( test_algo_structuring_element );
 DECLARE( test_algo_binary_dilate );
 DECLARE( test_algo_binary_erode );
+DECLARE( test_algo_erode );
 DECLARE( test_algo_exp_filter );
 DECLARE( test_algo_grad_1x3 );
 DECLARE( test_algo_normalised_correlation_3d );
@@ -63,6 +64,7 @@ register_tests()
   REGISTER( test_algo_structuring_element );
   REGISTER( test_algo_binary_dilate );
   REGISTER( test_algo_binary_erode );
+  REGISTER( test_algo_erode );
   REGISTER( test_algo_exp_filter );
   REGISTER( test_algo_grad_1x3 );
   REGISTER( test_algo_normalised_correlation_3d );

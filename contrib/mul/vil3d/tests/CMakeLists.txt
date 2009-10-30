@@ -24,6 +24,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_algo_structuring_element.cxx
   test_algo_binary_dilate.cxx
   test_algo_binary_erode.cxx
+  test_algo_erode.cxx
   test_algo_exp_filter.cxx
   test_algo_grad_1x3.cxx
   test_algo_normalised_correlation_3d.cxx
@@ -64,6 +65,7 @@ ADD_TEST( vil3d_test_algo_threshold                   ${EXECUTABLE_OUTPUT_PATH}/
 ADD_TEST( vil3d_test_algo_structuring_element         ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_structuring_element )
 ADD_TEST( vil3d_test_algo_binary_dilate               ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_binary_dilate )
 ADD_TEST( vil3d_test_algo_binary_erode                ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_binary_erode )
+ADD_TEST( vil3d_test_algo_erode                       ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_erode )
 ADD_TEST( vil3d_test_algo_exp_filter                  ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_exp_filter )
 ADD_TEST( vil3d_test_algo_grad_1x3                    ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_grad_1x3 )
 ADD_TEST( vil3d_test_algo_normalised_correlation_3d   ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_normalised_correlation_3d )
