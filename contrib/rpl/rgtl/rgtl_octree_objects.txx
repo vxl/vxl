@@ -183,8 +183,8 @@ class rgtl_octree_objects_distance_transform
   int k_;
   vcl_vector<double> squared_distances_;
 
-  rgtl_octree_objects_distance_transform(objects_type* internal, int k):
-    objects_(*internal), tree_(internal->tree_), k_(k),
+  rgtl_octree_objects_distance_transform(objects_type* intern, int k):
+    objects_(*intern), tree_(intern->tree_), k_(k),
     squared_distances_(k) {}
   void initialize_front(cell_location_type const& cell, cell_index_type cidx);
   bool execute_transform();
@@ -207,7 +207,7 @@ class rgtl_octree_objects_query_closest
  public:
   // Construct with a reference to the main representation.
   typedef rgtl_octree_objects_internal<D> internal_type;
-  rgtl_octree_objects_query_closest(internal_type const& internal, int k);
+  rgtl_octree_objects_query_closest(internal_type const& intern, int k);
 
   // Get useful types from the main representation.
   typedef typename internal_type::cell_location_type cell_location_type;
@@ -794,7 +794,7 @@ rgtl_octree_objects_distance_transform<D>
     }
   }
   else if (leaf_data_type const* leaf_data =
-          this->tree_.get_leaf_data(cidx))
+           this->tree_.get_leaf_data(cidx))
   {
     // The front is initialized with non-empty leaves.
     if (leaf_data->index_begin != leaf_data->index_end)
@@ -1104,8 +1104,8 @@ rgtl_octree_objects_distance_transform<D>
 //----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_octree_objects_query_closest<D>
-::rgtl_octree_objects_query_closest(internal_type const& internal, int k):
-  internal_(internal), best_(k), bound_(0)
+::rgtl_octree_objects_query_closest(internal_type const& intern, int k):
+  internal_(intern), best_(k), bound_(0)
 {
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
   this->checked_count_ = 0;
@@ -1233,7 +1233,7 @@ rgtl_octree_objects_query_closest<D>
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
     // Check if this node center provides a distance.
     if (node_data_type const* nd =
-       this->internal_.tree_.get_node_data(cell_index))
+        this->internal_.tree_.get_node_data(cell_index))
     {
       center_distance = nd->distance;
     }

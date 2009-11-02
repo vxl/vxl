@@ -153,7 +153,7 @@ class rgtl_sqt_objects_face_base
   typedef vcl_auto_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
 
   // Construct with reference to main internal representation.
-  rgtl_sqt_objects_face_base(internal_type& internal): internal_(internal) {}
+  rgtl_sqt_objects_face_base(internal_type& intern): internal_(intern) {}
 
   // Build the spatial structure in this face.
   virtual void build(sqt_object_set_ptr&) = 0;
@@ -216,7 +216,7 @@ class rgtl_sqt_objects_face: public rgtl_sqt_objects_face_base<D>
 
   // Construct empty tree with reference to full spatial structure
   // instance holding this per-face instance.
-  rgtl_sqt_objects_face(internal_type& internal): derived(internal) {}
+  rgtl_sqt_objects_face(internal_type& intern): derived(intern) {}
 
   // Pointer type for object set base class.
   typedef vcl_auto_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
@@ -257,7 +257,7 @@ class rgtl_sqt_objects_face: public rgtl_sqt_objects_face_base<D>
       if (std::uncaught_exception())
       {
         vcl_cerr << "  " << cell_ << " (" << this->sz1_
-                 << ") " << this->msg_ << vcl_endl;
+                 << ") " << this->msg_ << '\n';
       }
     }
    private:
@@ -335,9 +335,9 @@ class rgtl_sqt_objects_faces
   rgtl_sqt_objects_face_next<Face>::template get<D>::type derived;
 
   // Construct a face and provide a pointer to it.
-  rgtl_sqt_objects_faces(rgtl_sqt_objects_internal<D>& internal,
+  rgtl_sqt_objects_faces(rgtl_sqt_objects_internal<D>& intern,
                          rgtl_sqt_objects_face_base<D>* p[(D<<1)])
-  : derived(internal, p), face_(internal)
+  : derived(intern, p), face_(intern)
   {
     p[Face] = &face_;
   }
@@ -536,11 +536,11 @@ class rgtl_sqt_objects_query_closest
 {
  public:
   typedef rgtl_sqt_objects_internal<D> internal_type;
-  rgtl_sqt_objects_query_closest(internal_type const& internal,
+  rgtl_sqt_objects_query_closest(internal_type const& intern,
                                  double const p[D], int k,
-                                 double bound_squared):
-    internal_(internal), best_(k)
-    {
+                                 double bound_squared)
+  : internal_(intern), best_(k)
+  {
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
     this->checked_count_ = 0;
 #endif
@@ -570,7 +570,7 @@ class rgtl_sqt_objects_query_closest
       vcl_cout << ") with initial bound " << this->bound_ << vcl_endl;
     }
 #endif
-    }
+  }
 
   void check_object(double const p[D], int k, int id);
   int get_result(int k, int* ids, double* squared_distances, double* points);
@@ -837,7 +837,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
     // not intersect the cell bounding cone.
     double nearest_squared;
     if (node_data_type const* nd =
-       this->face_.tree().get_node_data(cell_index))
+        this->face_.tree().get_node_data(cell_index))
     {
       if (this->disjoint(nd, nearest_squared))
       {
