@@ -105,7 +105,8 @@ foreach $f (@FILES)
   &msg(1, "contains carriage returns (ascii 13)")
     if ($file =~ m!\r! && $f !~ m!\.ds[pw]$!);
   &msg(1, "contains non-standard ascii characters")
-    if ($file =~ m![\000-\010\013\014\016-\037\177-\257\261-\277\320\327\336\360\367\376]!);
+    if ($f !~ m!test_vul_file\.cxx! &&
+        $file =~ m![\000-\010\013\014\016-\037\177-\257\261-\277\320\327\336\360\367\376]!);
 
 # 2. no end-of-line at end-of-file
   &msg(10000, "has no final end-of-line")
@@ -171,22 +172,22 @@ foreach $f (@FILES)
 #   Missing includes is currently only vcl_cassert.h and vcl_iostream.h
 #   unless the command line switch "-i" was given (variable "$check_includes")
 
-# if ($check_includes)
-# {
-#   @class_list = map {s!^\s*\#\s*include\s*[<\"](.*?)[>\"].*!$1!; $_} grep {m!^\s*\#\s*include!} split /\n/,$file;
-#   $file =~ s!\#\s*include\s*[<\"].*?[>\"]\s*!!g;
-#   $file =~ s!\bvnl_huge_val\b!vnl_math_huge!g;
-#   foreach $pref (qw(vul vbl vpl vil vnl vgl vidl1 vcsl mbl))
-#   {
-#     foreach $class (map {s!^$pref/(${pref}_[^/]+)\.h$!$1!; s!(vul_get_time)stamp!$1!; s!(mbl_matrix_product)s!$1!; s!(vnl_matlab_print)2!$1!; $_}
-#                     grep {!m!_traits\.h$! && m!^$pref/${pref}_([^/]+)\.h$! && $1 ne 'fwd' } @class_list)
-#     {
-#       my $x = $class; $x =~ s!_sptr$!!;
-#       &msg(1,"unnecessary #include <$pref/$class.h>")
-#         unless ($class =~ m!^${pref}_config$! || $f =~ m!/test_include\.cxx$! || $f =~ m!/Templates/! || $file =~ m!\b$class! || $f =~ m!$x\.h$!);
-#     }
-#   }
-# }
+  if ($check_includes)
+  {
+    @class_list = map {s!^\s*\#\s*include\s*[<\"](.*?)[>\"].*!$1!; $_} grep {m!^\s*\#\s*include!} split /\n/,$file;
+    $file =~ s!\#\s*include\s*[<\"].*?[>\"]\s*!!g;
+    $file =~ s!\bvnl_huge_val\b!vnl_math_huge!g;
+    foreach $pref (qw(vul vbl vpl vil vnl vgl vidl vidl1 vcsl vpdl mbl))
+    {
+      foreach $class (map {s!^$pref/(${pref}_[^/]+)\.h$!$1!; s!(vul_get_time)stamp!$1!; s!(mbl_matrix_product)s!$1!; s!(vnl_matlab_print)2!$1!; $_}
+                      grep {!m!_traits\.h$! && m!^$pref/${pref}_([^/]+)\.h$! && $1 ne 'fwd' } @class_list)
+      {
+        my $x = $class; $x =~ s!_sptr$!!;
+        &msg(1,"unnecessary #include <$pref/$class.h>")
+          unless ($class =~ m!^${pref}_config$! || $f =~ m!/test_include\.cxx$! || $f =~ m!/Templates/! || $file =~ m!\b$class! || $f =~ m!$x\.h$!);
+      }
+    }
+  }
   $fl = $file; $fl =~ s!//.*!!g;
   $includes = "\004\n$fl\003";
   $includes =~ s!\n\s*\#\s*include\s\<([^>]+)\>.*!\003$1\004!g;
@@ -225,7 +226,7 @@ foreach $f (@FILES)
          "$f-$j" !~ m!\bbgui3d_file_io\.cxx-Inventor/! &&
           $j !~ m!^(stdlib|varargs|sys/types|stdio|windows|GL/glu?t?)\.h$!);
     $jj = $j; $i = $j;
-    next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl1|vidl_vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s!^(v[cx]l_[a-z]+)\.h$!$1!);
+    next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl|vidl1|vidl_vil1|vpdl|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s!^(v[cx]l_[a-z]+)\.h$!$1!);
 #   next if ("$f-$j" =~ m!(.*)\.h-\1_sptr\.h!);
     next if ($j eq 'vcl_compiler.h' || $j eq 'vcl_new.h');
     next if ($j eq 'vcl_cstdio.h' && $f =~ m!/StdAfx\.h$!);
@@ -246,7 +247,7 @@ foreach $f (@FILES)
     $i =~ s!^([vb]gui.*)!$1\(\|_sptr\|_new\)!;
     $i =~ s!^(v(so|to|dg|cs)l.*)!$1\(\|_sptr\)! unless ($f =~ m!\.h$!);
     # CURRENTLY NOT YET WELL TESTED, HENCE IGNORED:
-    next if (!$check_includes && $j =~ m!^(vsl/|vidl_vil1/|vidl1/|vgui/|bgui/|vsol/|vtol/|vdgl/|v.l/io/|rgrl/|rsdl/|rrel/)!);
+    next if (!$check_includes && $j =~ m!^(vsl/|vidl_vil1/|vidl/|vidl1/|vgui/|bgui/|vsol/|vtol/|vdgl/|vpdl/|v.l/io/|rgrl/|rsdl/|rrel/)!);
     # VCL
     if ($j eq 'vcl_algorithm.h') { $i='vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|stable_partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)'; }
     elsif ($j eq 'vxl_config.h') { $i='VXL_\w+|vxl_([su]?(int|ieee)_(8|16|32|64)|s?byte)'; }
@@ -367,7 +368,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vil/vil_nearest_neighbour_interp.h') { $i.='(|_safe|_safe_extend)'; }
     elsif ($j eq 'vil/vil_new.h') { $i.='(_blocked|_cached|_pyramid)?_image_(resource(|_of_view|_interleaved)|facade|(list_)?from_base|view_i_j_plane|view_plane_i_j)'; }
     elsif ($j =~ m'vil1?/vil1?_pixel\.h$') { $i.='_format(|_t|_component_format)'; }
-    elsif ($j =~ m'vil1?/vil1?_pixel_format\.h$') { $i.='(|_of|_component_format|_sizeof_components|_num_components)|VIL_PIXEL_FORMAT_\S+'; }
+    elsif ($j =~ m'vil1?/vil1?_pixel_format\.h$') { $i.='(|_of|_component_format|_sizeof_components|_num_components)|\w+(\.|-\>)pixel_format\(|VIL_PIXEL_FORMAT_\w+'; }
     elsif ($j =~ m'vil1?/vil1?_property\.h$') { $i.='(|_[a-z_]+)'; }
     elsif ($j eq 'vil/vil_print.h') { $i.='(|_value|_all)'; }
     elsif ($j eq 'vil/vil_rotate.h') { $i.='(_image)'; }
@@ -923,7 +924,7 @@ foreach $f (@FILES)
 
 # 13. Constant pi written as 3.1415...
   &msg(1, "should maybe use vnl_math::pi instead of $1")
-    if ($f !~ m!\b(v[cuibg]l|v3p)/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
+    if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
         $cpp_file && $file_s =~ m!\b(3\.14159\d*)!);
 
 # 14. Instantiation macro stuff
