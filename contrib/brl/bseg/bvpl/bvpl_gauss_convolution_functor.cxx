@@ -50,19 +50,19 @@ bsta_gauss_f1 bvpl_gauss_convolution_functor::result()
 
 void bvpl_gauss_convolution_functor::max(bvpl_kernel_iterator kernel_iter)
 {
-  float max = 0.0f;
+  float max_val = 0.0f;
   kernel_iter.begin();
   while (!kernel_iter.isDone()) {
     vgl_point_3d<int> idx = kernel_iter.index();
     bvpl_kernel_dispatch d = *kernel_iter;
     if ( d.c_>0.0f)
-      max += d.c_ * 0.99f;
+      max_val += d.c_ * 0.99f;
     else
-      max += d.c_ *0.01f;
+      max_val += d.c_ *0.01f;
 
     ++kernel_iter;
   }
 
-  vcl_cout << "max response : " << max << vcl_endl;
-  max_ = max;
+  vcl_cout << "max response : " << max_val << vcl_endl;
+  max_ = max_val;
 }
