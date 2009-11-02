@@ -257,6 +257,9 @@ SOURCE=.\Templates/vsl_vector_io+vnl_vector_fixed+float.3--.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vnl_matrix_fixed+double.3.3--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_vector_fixed+float.2-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
