@@ -17,22 +17,22 @@
 #include <vcl_cmath.h> // for std::cos() and std::sin()
 
 //: check the "true" part of the mask
-bool check_equal(vbl_array_2d<bool>& left, vbl_array_2d<bool>& right)
+bool check_equal(vbl_array_2d<bool>& left_array, vbl_array_2d<bool>& right_array)
 {
   vbl_array_2d<bool>::size_type i1, j1;
 
   // first check if they have the same number of true pixels
   int cnt_left = 0;
-  for (i1 = 0; i1 < left.rows(); i1++) {
-    for (j1 = 0; j1 < left.cols(); j1++) {
-      if (left.get_rows()[i1][j1])
+  for (i1 = 0; i1 < left_array.rows(); i1++) {
+    for (j1 = 0; j1 < left_array.cols(); j1++) {
+      if (left_array.get_rows()[i1][j1])
         cnt_left++;
     }
   }
   int cnt_right = 0;
-  for (i1 = 0; i1 < right.rows(); i1++) {
-    for (j1 = 0; j1 < right.cols(); j1++) {
-      if (right.get_rows()[i1][j1])
+  for (i1 = 0; i1 < right_array.rows(); i1++) {
+    for (j1 = 0; j1 < right_array.cols(); j1++) {
+      if (right_array.get_rows()[i1][j1])
         cnt_right++;
     }
   }
@@ -41,9 +41,9 @@ bool check_equal(vbl_array_2d<bool>& left, vbl_array_2d<bool>& right)
 
   // find the first "true" pixel on both masks and use that pixel to centralize the second part on top of the other one
   bool found_it = false;
-  for (i1 = 0; i1 < left.rows(); i1++) {
-    for (j1 = 0; j1 < left.cols(); j1++) {
-      if (left.get_rows()[i1][j1]) {
+  for (i1 = 0; i1 < left_array.rows(); i1++) {
+    for (j1 = 0; j1 < left_array.cols(); j1++) {
+      if (left_array.get_rows()[i1][j1]) {
         found_it = true;
         break;
       }
@@ -56,9 +56,9 @@ bool check_equal(vbl_array_2d<bool>& left, vbl_array_2d<bool>& right)
 
   vbl_array_2d<bool>::size_type i2, j2;
   found_it = false;
-  for (i2 = 0; i2 < right.rows(); i2++) {
-    for (j2 = 0; j2 < right.cols(); j2++) {
-      if (right.get_rows()[i2][j2]) {
+  for (i2 = 0; i2 < right_array.rows(); i2++) {
+    for (j2 = 0; j2 < right_array.cols(); j2++) {
+      if (right_array.get_rows()[i2][j2]) {
         found_it = true;
         break;
       }
@@ -71,14 +71,14 @@ bool check_equal(vbl_array_2d<bool>& left, vbl_array_2d<bool>& right)
 
   // now we think i1,j1 and i2,j2 correspond
   vbl_array_2d<bool>::size_type i11, j11;
-  for (i11 = 0; i11 < left.rows(); i11++) {
-    for (j11 = 0; j11 < left.cols(); j11++) {
-      if (left.get_rows()[i11][j11]) {
-        // we expect right to have a true value at the corresponding spot when centered on i1, j2, otherwise they're not equal
+  for (i11 = 0; i11 < left_array.rows(); i11++) {
+    for (j11 = 0; j11 < left_array.cols(); j11++) {
+      if (left_array.get_rows()[i11][j11]) {
+        // we expect right_array to have a true value at the corresponding spot when centered on i1, j2, otherwise they're not equal
         int i22, j22;
         i22 = i11-i1+i2;
         j22 = j11-j1+j2;
-        if (i22 < 0 || i22 >= (int)right.rows() || j22 < 0 || j22 >= (int)right.cols() || !right.get_rows()[i22][j22])
+        if (i22 < 0 || i22 >= (int)right_array.rows() || j22 < 0 || j22 >= (int)right_array.cols() || !right_array.get_rows()[i22][j22])
           return false;
       }
     }
