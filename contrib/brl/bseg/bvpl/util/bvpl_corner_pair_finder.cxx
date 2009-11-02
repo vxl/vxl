@@ -8,7 +8,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 {
   //sanity check
   if (search_kernels->size() != corner_kernels->size()){
-    vcl_cerr << "Error: kernels have different size()" << vcl_endl;
+    vcl_cerr << "Error: kernels have different size()\n";
     return NULL;
   }
 
@@ -99,9 +99,9 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
           //get the box of kernel at this point for visualization purposes
           vgl_point_3d<int> local_min=this_search_kernel->min_point();
           vgl_point_3d<int> local_max=this_search_kernel->max_point();
-          vgl_point_3d<int> min(p1.x() + local_min.x(), p1.y()+local_min.y(), p1.z()-local_max.z());
-          vgl_point_3d<int> max(p1.x() + local_max.x(), p1.y()+local_max.y(), p1.z()-local_min.z());
-          boxes.push_back(vgl_box_3d<int>(min, max));
+          vgl_point_3d<int> min_pt(p1.x() + local_min.x(), p1.y()+local_min.y(), p1.z()-local_max.z());
+          vgl_point_3d<int> max_pt(p1.x() + local_max.x(), p1.y()+local_max.y(), p1.z()-local_min.z());
+          boxes.push_back(vgl_box_3d<int>(min_pt, max_pt));
 
           kernel_iter.begin();
           while (!kernel_iter.isDone()) {
@@ -123,7 +123,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
                                  << "; target angle " << target_corner_kernel->angle()
                                  << "; condition" << vcl_abs((this_corner_kernel->angle() - target_corner_kernel->angle()) - vnl_math::pi_over_2)
                                  << "; response " << this_response
-                                 << "; this_id " << this_id << "\n";
+                                 << "; this_id " << this_id << vcl_endl;
                         vgl_point_3d<int> p2(p1.x()+idx.x(), p1.y()+idx.y(), p1.z()-idx.z());
                         lines.push_back(vgl_line_segment_3d<int>(p1, p2));
                       }

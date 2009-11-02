@@ -12,9 +12,9 @@ bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
                                           vgl_point_3d<int> max_point)
 : bvpl_subgrid_base(center), slab_(slab)
 {
-  vgl_point_3d<int> min(center.x() + min_point.x(), center.y()+min_point.y(), center.z()-max_point.z());
-  vgl_point_3d<int> max(center.x() + max_point.x(), center.y()+max_point.y(), center.z()-min_point.z());
-  box_=(vgl_box_3d<int>(min, max));
+  vgl_point_3d<int> min_pt(center.x() + min_point.x(), center.y()+min_point.y(), center.z()-max_point.z());
+  vgl_point_3d<int> max_pt(center.x() + max_point.x(), center.y()+max_point.y(), center.z()-min_point.z());
+  box_=(vgl_box_3d<int>(min_pt, max_pt));
 }
 
 template <class T>
@@ -42,7 +42,9 @@ bool bvpl_voxel_subgrid<T>::voxel(int x, int y, int z, T& v)
     return false;
   }
   else {
-    //vcl_cout << "Slab idx " << x <<" " << y  <<" "<< z << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "Slab idx " << x << ' ' << y << ' ' << z << vcl_endl;
+#endif
     v = slab_(x,y,z);
     return true;
   }
@@ -52,16 +54,20 @@ template <class T>
 void bvpl_voxel_subgrid<T>::set_voxel(const T& v)
 {
   vgl_point_3d<int> c = center_;
-  //vcl_cout << "Setting " << c << " " << v << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "Setting " << c << ' ' << v << vcl_endl;
+#endif
   T& val = slab_(c.x(), c.y(), c.z());
   val = v;
 }
+
 template <class T>
 T bvpl_voxel_subgrid<T>::get_voxel()
 {
   vgl_point_3d<int> c = center_;
   return slab_(c.x(), c.y(), c.z());
 }
+
 #define BVPL_VOXEL_SUBGRID_INSTANTIATE(T) \
 template class bvpl_voxel_subgrid<T >
 

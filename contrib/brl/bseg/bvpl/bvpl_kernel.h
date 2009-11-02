@@ -139,13 +139,13 @@ class bvpl_kernel_vector : public vbl_ref_count
     int max_z = (*it)->max_point().z();
     for (; it!= kernels_.end(); ++it)
     {
-      vgl_point_3d<int> max = (*it)->max_point();
-      if (max.x() > max_x)
-        max_x = max.x();
-      if (max.y() > max_y)
-        max_y = max.y();
-      if (max.z() > max_z)
-        max_z = max.z();
+      vgl_point_3d<int> max_pt = (*it)->max_point();
+      if (max_pt.x() > max_x)
+        max_x = max_pt.x();
+      if (max_pt.y() > max_y)
+        max_y = max_pt.y();
+      if (max_pt.z() > max_z)
+        max_z = max_pt.z();
     }
     return vgl_point_3d<int>(max_x, max_y, max_z);
   }
@@ -157,13 +157,13 @@ class bvpl_kernel_vector : public vbl_ref_count
     int min_z = (*it)->min_point().z();
     for (; it!= kernels_.end(); ++it)
     {
-      vgl_point_3d<int> min = (*it)->min_point();
-      if (min.x() < min_x)
-        min_x = min.x();
-      if (min.y() < min_y)
-        min_y = min.y();
-      if (min.z() < min_z)
-        min_z = min.z();
+      vgl_point_3d<int> min_pt = (*it)->min_point();
+      if (min_pt.x() < min_x)
+        min_x = min_pt.x();
+      if (min_pt.y() < min_y)
+        min_y = min_pt.y();
+      if (min_pt.z() < min_z)
+        min_z = min_pt.z();
     }
     return vgl_point_3d<int>(min_x, min_y, min_z);
   }
