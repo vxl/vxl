@@ -95,7 +95,6 @@ void test_lda()
   double v1_array[2] = {20, 30};
   arr2vec(v1,2,v1_array);
 
-
   //sample some data
   int n_data=50;
   vcl_vector< vnl_vector<double> >d0,d1;
@@ -137,6 +136,17 @@ void test_lda()
   vcl_cout<<"c_m1= "<<c_m1<<vcl_endl;
   TEST("Test classifying mean 1", c_m1==1 , true);
 
+  // Project means into discriminant ("d") space and back to original ("x") space
+  vnl_vector<double> m0_d, m1_d;
+  lda.x_to_d(m0_d, m0);
+  lda.x_to_d(m1_d, m1);
+  vnl_vector<double> m0_x, m1_x;
+  lda.d_to_x(m0_x, m0_d);
+  lda.d_to_x(m1_x, m1_d);
+  TEST_NEAR("Mean 0 projects from discriminant to original space", (m0_x-m0).magnitude(), 0.0, 2.0);
+  TEST_NEAR("Mean 1 projects from discriminant to original space", (m1_x-m1).magnitude(), 0.0, 2.0);
+  vcl_cout << "m1: " << m1 << vcl_endl;
+  vcl_cout << "m1_x: " << m1_x << vcl_endl;
 
   //sample some test data
   vcl_vector< vnl_vector<double> > test_d0,test_d1;

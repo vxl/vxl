@@ -238,12 +238,11 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
 
   // Record n_classes-1 vector basis
   int m = EVecs.rows();
-
   int t = n_used_classes-1;
   if (t>m) t=m;
+  
   // Copy first t to basis_
   basis_.set_size(m,t);
-
   double **E = EVecs.data_array();
   double **b = basis_.data_array();
   vcl_size_t bytes_per_row = t * sizeof(double);
@@ -251,6 +250,9 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   {
     vcl_memcpy(b[i],E[i],bytes_per_row);
   }
+
+  // Normalize the basis vectors
+  basis_.normalize_columns();
 
   evals_.set_size(t);
   for (int i=0;i<t;++i)
