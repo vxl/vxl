@@ -555,22 +555,6 @@ static void test_line_3d()
   p2 = vgl_intersection(l,l2);
 
   bool intersection_ok = ( p2 == p1-dir*0.5 );
-  {
-    vgl_point_3d<double> q00( -0.475528, -0.823639, 0 );
-    vgl_point_3d<double> q01( -0.951057, -8.3144e-08, 0.309017 );
-    vgl_point_3d<double> q10( -0.713292, -0.41182, 0 );
-    vgl_point_3d<double> q11( -0.475528, -0.823639, 0.309017 );
-
-    vgl_line_3d_2_points<double> m0( q00, q01 );
-    vgl_line_3d_2_points<double> m1( q10, q11 );
-
-    vgl_point_3d<double> q_ref( -0.634038, -0.549093, 0.103006 );
-    vgl_point_3d<double> q = vgl_intersection( m0, m1 );
-    vgl_vector_3d<double> v = q - q_ref;
-
-    intersection_ok = intersection_ok && ( length( v ) < 0.000001 );
-  }
-
   TEST("intersection", intersection_ok, true);
 
   vcl_stringstream is; is << "4 5 6  (7, 8, 9)";
