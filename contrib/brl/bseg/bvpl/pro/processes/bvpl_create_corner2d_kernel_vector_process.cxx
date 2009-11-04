@@ -90,6 +90,12 @@ bool bvpl_create_corner2d_kernel_vector_process(bprb_func_process& pro)
     bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
     pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
   }
+  if(dir_type == "pi_over_2_corners"){
+    bvpl_pi_over_2_corner_dirs dir;
+    bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
+    pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
+  }
+  
   
   
   return true;
