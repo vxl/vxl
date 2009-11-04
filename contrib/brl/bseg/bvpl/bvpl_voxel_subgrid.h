@@ -66,6 +66,8 @@ class bvpl_voxel_subgrid : public bvpl_subgrid_base
   bool voxel(int x, int y, int z, T& v);
   bool voxel(vgl_point_3d<int> p, T& v) { return voxel(p.x(), p.y(), p.z(), v); }
   void set_voxel(const T& v);
+  void set_voxel_at(vgl_point_3d<int> p, T& v) { return set_voxel_at(p.x(), p.y(), p.z(), v); }
+  void set_voxel_at(int x, int y, int z, T const &v);
   T get_voxel();
 
  protected:
