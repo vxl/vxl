@@ -25,6 +25,7 @@
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
+#include <bvpl/bvpl_positive_gauss_conv_functor.h>
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 
@@ -147,6 +148,13 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       if(functor_name == "gauss_convolution"){
         bvpl_gauss_convolution_functor func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
+        oper.operate(gauss_input_grid, kernel, grid_out);
+        pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+        return true;
+      }
+      if(functor_name == "positive_gauss_convolution"){
+        bvpl_positive_gauss_conv_functor func;
+        bvpl_neighb_operator<gauss_type, bvpl_positive_gauss_conv_functor> oper(func);
         oper.operate(gauss_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;

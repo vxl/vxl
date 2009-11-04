@@ -20,9 +20,11 @@
 #include <bvpl/bvpl_kernel.h>
 #include <bvpl/bvpl_find_surface_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
+#include <bvpl/bvpl_positive_gauss_conv_functor.h>
+#include <bvpl/bvpl_negative_gauss_conv_functor.h>
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_combined_neighb_operator.h>
-#include <bvpl/bvpl_vector_operator.h>
+#include <bvpl/bvpl_discriminative_non_max_suppression.h>
 
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_f1.h>
@@ -107,7 +109,7 @@ bool bvpl_operate_ocp_and_app_process(bprb_func_process& pro)
         if (ocp_functor_name == "find_surface") {
           bvpl_find_surface_functor ocp_functor;
           bvpl_combined_neighb_operator<bvpl_find_surface_functor, bvpl_gauss_convolution_functor> oper(ocp_functor,app_func);
-          bvpl_vector_operator vector_oper;
+          bvpl_discriminative_non_max_suppression vector_oper;
           vector_oper.suppress_and_combine(ocp_grid, app_grid, kernel, &oper, grid_out, id_grid);
           pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
           pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
@@ -116,7 +118,49 @@ bool bvpl_operate_ocp_and_app_process(bprb_func_process& pro)
         if (ocp_functor_name == "edge_geometric_mean") {
           bvpl_edge_geometric_mean_functor<float>  ocp_functor;
           bvpl_combined_neighb_operator<bvpl_edge_geometric_mean_functor<float>, bvpl_gauss_convolution_functor> oper(ocp_functor,app_func);
-          bvpl_vector_operator vector_oper;
+          bvpl_discriminative_non_max_suppression vector_oper;
+          vector_oper.suppress_and_combine(ocp_grid, app_grid, kernel, &oper, grid_out, id_grid);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
+          return true;
+        }
+      }
+      if (app_functor_name == "positive_gauss_convolution") {
+        bvpl_positive_gauss_conv_functor app_func;
+        if (ocp_functor_name == "find_surface") {
+          bvpl_find_surface_functor ocp_functor;
+          bvpl_combined_neighb_operator<bvpl_find_surface_functor, bvpl_positive_gauss_conv_functor> oper(ocp_functor,app_func);
+          bvpl_discriminative_non_max_suppression vector_oper;
+          vector_oper.suppress_and_combine(ocp_grid, app_grid, kernel, &oper, grid_out, id_grid);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
+          return true;
+        }
+        if (ocp_functor_name == "edge_geometric_mean") {
+          bvpl_edge_geometric_mean_functor<float>  ocp_functor;
+          bvpl_combined_neighb_operator<bvpl_edge_geometric_mean_functor<float>, bvpl_positive_gauss_conv_functor> oper(ocp_functor,app_func);
+          bvpl_discriminative_non_max_suppression vector_oper;
+          vector_oper.suppress_and_combine(ocp_grid, app_grid, kernel, &oper, grid_out, id_grid);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
+          return true;
+        }
+      }
+      if (app_functor_name == "negative_gauss_convolution") {
+        bvpl_negative_gauss_conv_functor app_func;
+        if (ocp_functor_name == "find_surface") {
+          bvpl_find_surface_functor ocp_functor;
+          bvpl_combined_neighb_operator<bvpl_find_surface_functor, bvpl_negative_gauss_conv_functor> oper(ocp_functor,app_func);
+          bvpl_discriminative_non_max_suppression vector_oper;
+          vector_oper.suppress_and_combine(ocp_grid, app_grid, kernel, &oper, grid_out, id_grid);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+          pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
+          return true;
+        }
+        if (ocp_functor_name == "edge_geometric_mean") {
+          bvpl_edge_geometric_mean_functor<float>  ocp_functor;
+          bvpl_combined_neighb_operator<bvpl_edge_geometric_mean_functor<float>, bvpl_negative_gauss_conv_functor> oper(ocp_functor,app_func);
+          bvpl_discriminative_non_max_suppression vector_oper;
           vector_oper.suppress_and_combine(ocp_grid, app_grid, kernel, &oper, grid_out, id_grid);
           pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
           pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
