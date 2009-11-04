@@ -90,6 +90,11 @@ bool bvxm_load_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
+  if (datatype == "int"){
+    bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<int>(input_path);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
+    return true;
+  }
   else if (datatype == "bool"){
     bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<bool>(input_path);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
