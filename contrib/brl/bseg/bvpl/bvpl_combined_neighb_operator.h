@@ -48,23 +48,30 @@ class bvpl_combined_neighb_operator
       bvpl_kernel_iterator kernel_iter = kernel->iterator();
       bvpl_voxel_subgrid<float> ocp_subgrid = *ocp_iter;
       bvpl_voxel_subgrid<bsta_num_obs<bsta_gauss_f1> > app_subgrid = *app_iter;
-
-      //reset the kernel iterator
-      kernel_iter.begin();
-      while (!kernel_iter.isDone()) {
-        vgl_point_3d<int> idx = kernel_iter.index();
-        float ocp_val;
-        bsta_num_obs<bsta_gauss_f1> gauss_val;
-        if (ocp_subgrid.voxel(idx, ocp_val) && app_subgrid.voxel(idx, gauss_val)) {
-          //vcl_cout<< val << "at " << idx <<vcl_endl;
-          bvpl_kernel_dispatch d = *kernel_iter;
-          ocp_func_.apply(ocp_val, d);
-          app_func_.apply(gauss_val,d);
+      
+      if(ocp_subgrid.get_voxel()>0.0f)
+      {
+        //reset the kernel iterator
+        kernel_iter.begin();
+        while (!kernel_iter.isDone()) {
+          vgl_point_3d<int> idx = kernel_iter.index();
+          float ocp_val;
+          bsta_num_obs<bsta_gauss_f1> gauss_val;
+          if (ocp_subgrid.voxel(idx, ocp_val) && app_subgrid.voxel(idx, gauss_val)) {
+            //vcl_cout<< val << "at " << idx <<vcl_endl;
+            bvpl_kernel_dispatch d = *kernel_iter;
+            ocp_func_.apply(ocp_val, d);
+            app_func_.apply(gauss_val,d);
+          }
+          ++kernel_iter;
         }
-        ++kernel_iter;
+        // set the result at the output grid
+        (*output_iter).set_voxel(ocp_func_.result()* (app_func_.result().mean()));
+      }else {
+        // set the result to zero
+        (*output_iter).set_voxel(0.0f);
       }
-      // set the result at the output grid
-      (*output_iter).set_voxel(ocp_func_.result()* app_func_.result().mean());
+
       ++ocp_iter;
       ++app_iter;
       ++output_iter;
