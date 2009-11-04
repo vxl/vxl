@@ -29,4 +29,8 @@ DECLARE_FUNC_CONS(bvpl_operate_ocp_and_app_process);
 DECLARE_FUNC_CONS(bvpl_find_corner_pairs_process);
 DECLARE_FUNC_CONS(bvpl_visualize_corner_pairs_process);
 DECLARE_FUNC_CONS(bvpl_create_wc_kernel_vector_process);
+DECLARE_FUNC_CONS(bvpl_convert_pair_to_hue_process);
+DECLARE_FUNC_CONS(bvpl_load_pair_grid_process);
+DECLARE_FUNC_CONS(bvpl_find_pairs_process_process);
+DECLARE_FUNC_CONS(bvpl_pair_to_float_process);
 #endif

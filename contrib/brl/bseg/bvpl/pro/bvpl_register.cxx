@@ -41,4 +41,8 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_find_corner_pairs_process,"bvplFindCornerPairsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_visualize_corner_pairs_process, "bvplVisualizeCornerPairsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_wc_kernel_vector_process, "bvplCreateWCKernelVectorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_convert_pair_to_hue_process, "bvplConvertPairToHueProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_pair_grid_process, "bvplLoadPairGridProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_find_pairs_process_process, "bvplFindPairsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_pair_to_float_process, "bvplPairToFloatProcess");
 }
