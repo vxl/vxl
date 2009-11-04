@@ -104,6 +104,17 @@ public:
   
 };
 
+//: This class samples
+// phi = 0, theta= 0;
+// phi = pi/2 theta = [0, 2*pi)
+// rotation around the axis with resolution pi/2
+class bvpl_pi_over_2_corner_dirs: public bvpl_create_directions_base
+{
+public:
+  //: Default constructor
+  bvpl_pi_over_2_corner_dirs();
+  
+};
 
 
 #endif //bvpl_create_directions_h_
