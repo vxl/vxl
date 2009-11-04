@@ -313,7 +313,8 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
           alpha = (*response_slab_it)/max *255.0;
         else
           alpha=(((*response_slab_it)-min)/(max - min))*255.0f;
-        //float alpha = (*response_slab_it) > 1e-15 ? 255.0f:0.0f;
+        
+       //  alpha = (*response_slab_it) > 1e-15 ? 255.0f:0.0f;
         //vnl_float_4 this_feature(r,g,b,alpha);
         (*out_slab_it)=vnl_float_4(r,g,b,alpha);
       }
@@ -329,17 +330,17 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 {
   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
-  float min = vcl_abs((*(response_grid_it->begin())).mean());
-  float max = vcl_abs((*(response_grid_it->begin())).mean());
+  float min = ((*(response_grid_it->begin())).mean());
+  float max = ((*(response_grid_it->begin())).mean());
   for (; response_grid_it != response_grid->end(); ++response_grid_it)
   {
     bvxm_voxel_slab<bsta_num_obs<bsta_gauss_f1> >::iterator response_slab_it = (*response_grid_it).begin();
     for (; response_slab_it!=(*response_grid_it).end(); ++response_slab_it )
     {
-     if (vcl_abs((*response_slab_it).mean()) > max)
-       max = vcl_abs((*response_slab_it).mean());
-     if (vcl_abs((*response_slab_it).mean())< min)
-       min = vcl_abs((*response_slab_it).mean());
+     if (((*response_slab_it).mean()) > max)
+       max = ((*response_slab_it).mean());
+     if (((*response_slab_it).mean())< min)
+       min = ((*response_slab_it).mean());
     }
   }
 
@@ -363,8 +364,8 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
       col=colors[*id_slab_it]*360.0f;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
       //float alpha = vcl_abs((*response_slab_it).mean())>1e-15 ? 255.0f:0.0f;
-      //vnl_float_4 this_feature(r,g,b,alpha);
-      vnl_float_4 this_feature(r,g,b,((vcl_abs((*response_slab_it).mean())-min)/(max - min))*500.0f);
+      vnl_float_4 this_feature(r,g,b,255.0);
+      //vnl_float_4 this_feature(r,g,b,((vcl_abs((*response_slab_it).mean())-min)/(max - min))*500.0f);
       (*out_slab_it)=this_feature;
     }
   }
@@ -373,7 +374,8 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 
 void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<float> hue_vector, vcl_string outfile)
 {
-  bsvg_document doc(400, 400);
+  
+  bsvg_document doc(600, hue_vector.size()*20);
 
   vcl_vector<float>::iterator iter = hue_vector.begin();
 
@@ -390,13 +392,13 @@ void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<
 
     vcl_ostringstream os_dir;
     os_dir.precision(2);
-    os_dir<<'['<<i<<']'<< '['<<kernel_vector->kernels_[i]->axis()<<']'<<'['<<kernel_vector->kernels_[i]->angle()<<']' << '['<<(int)r << ',' << (int)g<< ',' << (int)b<<']';
+    os_dir<<'['<<i<<']'<< '['<<vcl_setw(2)<<kernel_vector->kernels_[i]->axis()<<']'<<'['<<vcl_setw(2)<<kernel_vector->kernels_[i]->angle()<<']' ;//<< '['<<(int)r << ',' << (int)g<< ',' << (int)b<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
     t->set_location(10.0f, 15.0f*(i+1));
 
     bsvg_ellipse* e1 = new bsvg_ellipse(25, 7);
-    e1->set_location(250.0f, 15.0f*(i+1));
+    e1->set_location(400.0f, 15.0f*(i+1));
     e1->set_fill_color(os.str());
     doc.add_element(e1);
     doc.add_element(t);
