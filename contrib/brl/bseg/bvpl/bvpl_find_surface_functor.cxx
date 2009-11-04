@@ -4,7 +4,7 @@
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-
+#include <vcl_iomanip.h>
 // Default constructor
 bvpl_find_surface_functor::bvpl_find_surface_functor()
 {
@@ -32,8 +32,9 @@ float bvpl_find_surface_functor::result()
 
   float result =0.0f;
 
-  if (vcl_exp(P1_) > 0.05f)
+  if (vcl_exp(P1_) > 0.005f)
     result = 1.0f;
+
 
   //reset all variables
   init();

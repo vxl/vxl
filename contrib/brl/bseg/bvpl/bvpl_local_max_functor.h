@@ -58,12 +58,6 @@ template <>
 void bvpl_local_max_functor<bvxm_opinion>::init();
 template <>
 void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init();
-//template <>
-//void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::apply(bsta_num_obs<bsta_gauss_f1>& val, bvpl_kernel_dispatch& d);
-//template <>
-//bvxm_opinion bvpl_local_max_functor<bvxm_opinion>::result(bvxm_opinion cur_val);
-//template <>
-//bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::result(bsta_num_obs<bsta_gauss_f1> cur_val);
 template <>
 bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(bsta_num_obs<bsta_gauss_f1>& g1, bsta_num_obs<bsta_gauss_f1>& g2);
 template <>
