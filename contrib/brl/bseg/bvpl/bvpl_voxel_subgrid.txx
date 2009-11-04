@@ -85,9 +85,9 @@ template <class T>
 void bvpl_voxel_subgrid<T>::set_voxel(const T& v)
 {
   vgl_point_3d<int> c = center_;
-#ifdef DEBUG
-  vcl_cout << "Setting " << c << ' ' << v << vcl_endl;
-#endif
+
+ //  vcl_cout << "Setting " << c << ' ' << v << vcl_endl;
+
   T& val = slab_(c.x(), c.y(), c.z());
   val = v;
 }
