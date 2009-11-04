@@ -20,6 +20,9 @@
 #include <vgl/vgl_line_segment_3d.h>
 #include <vnl/vnl_float_4.h>
 
+#include <bsta/bsta_attributes.h>
+#include <bsta/bsta_gauss_f1.h>
+
 class bvxm_vrml_voxel_grid
 {
 public:
@@ -27,6 +30,8 @@ public:
   bvxm_vrml_voxel_grid(){}
   
   static void write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold);
+  
+  static void write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid, float threshold);
   
   static void write_vrml_header(vcl_ofstream& str);
   

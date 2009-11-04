@@ -58,6 +58,43 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<fl
   str << "        ]\n     }\n   }\n}\n";
 }
 
+void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid, float threshold)
+{
+  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator grid_it = grid->begin();
+  
+  str << "Shape {\n"
+  << "  appearance NULL\n"
+  << "    geometry PointSet {\n"
+  << "      color Color{\n"
+  << "        color[\n";
+  //write the colors
+  for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
+    for (unsigned i=0; i<(*grid_it).nx(); ++i){
+      for (unsigned j=0; j < (*grid_it).ny(); ++j) {
+        if ((((*grid_it)(i,j)).mean() > threshold))
+          str <<"        " << ((*grid_it)(i,j)).mean() << ' '<< ((*grid_it)(i,j)).mean() << ' '<< ((*grid_it)(i,j)).mean()
+          << '\n';
+      }
+    }
+  }
+  str << "        ]\n     }\n"
+  << "      coord Coordinate{\n"
+  << "        point[\n";
+  
+  //write the coordinates
+  grid_it = grid->begin();
+  for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
+    vcl_cout << '.';
+    for (unsigned i=0; i<(*grid_it).nx(); ++i) {
+      for (unsigned j=0; j < (*grid_it).ny(); ++j) {
+        if (((*grid_it)(i,j)).mean() > threshold)
+          str<<"        " << i << ' ' <<j << ' ' << k <<  '\n';
+      }
+    }
+  }
+  str << "        ]\n     }\n   }\n}\n";
+}
+
 
 void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
 {
@@ -71,9 +108,13 @@ unsigned s=3;
     for (unsigned i=0; i<(*grid_it).nx(); ){
       for (unsigned j=0; j < (*grid_it).ny(); ) {
         if (((*grid_it)(i,j) > threshold)){
+         //vgl_sphere_3d<float> sphere((float)i,(float)j,(float)k,0.5f);
+         // write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),1-(*grid_it)(i,j));
+
 
           vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.4f);
           write_vrml_sphere(str, sphere, 1,0,0,0);
+
         }
         j+=s;
       }
