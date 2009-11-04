@@ -17,14 +17,18 @@ SET(bvpl_sources
     bvpl_gauss3d_xx_kernel_factory.h   bvpl_gauss3d_xx_kernel_factory.cxx
     bvpl_corner2d_kernel_factory.h     bvpl_corner2d_kernel_factory.cxx
     bvpl_weighted_cube_kernel_factory.h bvpl_weighted_cube_kernel_factory.cxx
+    bvpl_neighborhood_kernel_factory.h bvpl_neighborhood_kernel_factory.cxx
     bvpl_edge_algebraic_mean_functor.h bvpl_edge_algebraic_mean_functor.txx
     bvpl_edge_geometric_mean_functor.h bvpl_edge_geometric_mean_functor.txx
     bvpl_gauss_convolution_functor.h   bvpl_gauss_convolution_functor.cxx
+    bvpl_positive_gauss_conv_functor.h bvpl_positive_gauss_conv_functor.cxx
+    bvpl_negative_gauss_conv_functor.h bvpl_negative_gauss_conv_functor.cxx
     bvpl_find_surface_functor.h        bvpl_find_surface_functor.cxx
     bvpl_local_max_functor.h           bvpl_local_max_functor.cxx
     bvpl_neighb_operator.h
     bvpl_combined_neighb_operator.h
     bvpl_vector_operator.h
+    bvpl_discriminative_non_max_suppression.h
     bvpl_direction_to_color_map.h	   bvpl_direction_to_color_map.cxx
     bvpl_susan_opinion_operator.h
     bvpl_create_directions.h		   bvpl_create_directions.cxx
