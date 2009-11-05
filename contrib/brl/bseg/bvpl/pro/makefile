@@ -28,6 +28,10 @@ SOURCES += processes/util/bvpl_visualize_corner_pairs_process.cxx
 SOURCES += processes/util/bvpl_create_wc_kernel_vector_process.cxx
 SOURCES += processes/bvpl_operate_ocp_and_app_process.cxx
 SOURCES += processes/util/bvpl_find_90_degrees_corner_pairs_process.cxx
+SOURCES += processes/util/bvpl_pair_to_float_process.cxx
+SOURCES += processes/util/bvpl_find_pairs_process.cxx
+SOURCES += processes/util/bvpl_convert_pair_to_hue_process.cxx
+SOURCES += processes/util/bvpl_load_pair_grid_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

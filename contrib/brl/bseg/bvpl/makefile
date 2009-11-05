@@ -27,6 +27,10 @@ SOURCES += bvpl_corner2d_kernel_factory.cxx
 SOURCES += bvpl_find_surface_functor.cxx
 MANPAGE_SOURCES += bvpl_combined_neighb_operator.h
 SOURCES += bvpl_weighted_cube_kernel_factory.cxx
+SOURCES += bvpl_neighborhood_kernel_factory.cxx
+SOURCES += bvpl_positive_gauss_conv_functor.cxx
+SOURCES += bvpl_negative_gauss_conv_functor.cxx
+MANPAGE_SOURCES += bvpl_discriminative_non_max_suppression.h
 
 SUBDIRS += pro io util
 
