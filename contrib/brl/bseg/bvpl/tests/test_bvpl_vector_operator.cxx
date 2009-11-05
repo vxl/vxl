@@ -68,7 +68,7 @@ void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_fl
   }
 }
 
-bool check_data(bvxm_voxel_grid<unsigned> *grid, vnl_float_3 axis, unsigned id, int margin)
+bool check_data(bvxm_voxel_grid<int> *grid, vnl_float_3 axis, int id, int margin)
 {
   vgl_vector_3d<unsigned> grid_dim = grid->grid_size();
   unsigned ni=grid_dim.x();
@@ -82,7 +82,7 @@ bool check_data(bvxm_voxel_grid<unsigned> *grid, vnl_float_3 axis, unsigned id, 
   bool result = true;
 
   unsigned slab_idx = 0;
-  bvxm_voxel_grid<unsigned>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
+  bvxm_voxel_grid<int>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
   for (unsigned i=margin;i<ni-margin;i++)
   {
     for (unsigned j=margin;j<nj-margin;j++)
@@ -161,8 +161,8 @@ void test_vector_operator()
   vcl_string out_grid_expectation_path="out_grid_expectation.vox";
 
   bvxm_voxel_grid<bvxm_opinion> *grid_out=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, grid->grid_size());
-  bvxm_voxel_grid<unsigned > *id_grid
-  =new bvxm_voxel_grid<unsigned >(id_grid_path, grid->grid_size());
+  bvxm_voxel_grid<int > *id_grid
+  =new bvxm_voxel_grid<int >(id_grid_path, grid->grid_size());
   bvpl_opinion_functor func;
   bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
   bvpl_vector_operator vector_oper;
@@ -191,7 +191,7 @@ void test_non_max_suppression()
 
   //Run all the kernels
   bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(grid->grid_size());
-  bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(grid->grid_size());
+  bvxm_voxel_grid<int > *id_grid=new bvxm_voxel_grid<int >(grid->grid_size());
   id_grid->initialize_data(10);
   bvpl_edge_algebraic_mean_functor<float> func;
   bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);

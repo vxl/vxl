@@ -68,12 +68,12 @@ bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsign
     return true;
 }
 
-bool test_id_grid(bvxm_voxel_grid<unsigned> *grid,unsigned x, unsigned y, unsigned z, unsigned id)
+bool test_id_grid(bvxm_voxel_grid<int> *grid,unsigned x, unsigned y, unsigned z, int id)
 {
   vgl_vector_3d<unsigned> grid_dim = grid->grid_size();
   unsigned nk=grid_dim.z();
   unsigned slab_idx = 0;
-  bvxm_voxel_grid<unsigned>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
+  bvxm_voxel_grid<int>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
 
   return (*grid_it)(x,y,z)==id;
 }
@@ -146,7 +146,7 @@ MAIN(test_detect_corner)
 
   //create a functor
   bvpl_gauss_convolution_functor gauss_func(kernel->iterator());
-  bvxm_voxel_grid<unsigned > *id_grid=new bvxm_voxel_grid<unsigned >(grid->grid_size());
+  bvxm_voxel_grid<int > *id_grid=new bvxm_voxel_grid<int >(grid->grid_size());
   bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vector,&oper,grid_out,id_grid);
   TEST("Id at Corner 1", true, test_id_grid(id_grid,2,4,9,0));

@@ -78,7 +78,7 @@ bool bvpl_non_max_suppression_process(bprb_func_process& pro)
     return false;
   }
 
-  bvxm_voxel_grid<unsigned > *id_grid=dynamic_cast<bvxm_voxel_grid<unsigned >* >(id_grid_base.ptr());
+  bvxm_voxel_grid<int > *id_grid=dynamic_cast<bvxm_voxel_grid<int >* >(id_grid_base.ptr());
 
   if (bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr())) {
     bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(out_grid_path, grid->grid_size());

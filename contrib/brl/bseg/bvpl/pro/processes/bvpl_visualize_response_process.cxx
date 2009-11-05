@@ -77,7 +77,7 @@ bool bvpl_visualize_response_process(bprb_func_process& pro)
   }
   
  
-  bvxm_voxel_grid<unsigned > *id_grid=dynamic_cast<bvxm_voxel_grid<unsigned >* >(id_grid_base.ptr());
+  bvxm_voxel_grid<int > *id_grid=dynamic_cast<bvxm_voxel_grid<int >* >(id_grid_base.ptr());
   bvxm_voxel_grid<float> *temp_grid=new bvxm_voxel_grid<float>("filter_temp.vox", id_grid->grid_size());
   
   if(bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr())){
