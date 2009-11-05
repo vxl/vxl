@@ -240,12 +240,10 @@ void TC_MatXVec(const vnl_matrix<double>& M,
 
 
 //=======================================================================
-
-
+// Fast Compute R = V' * M = ( M.transpose() * V ).transpose()
 void mbl_matxvec_prod_vm(const vnl_vector<double>& V,
                          const vnl_matrix<double>& M,
                          vnl_vector<double>& R)
-// R = (V'M)' = M'V
 {
   R.fill(0.0);
   mbl_matxvec_add_prod_vm(V,M,R);
@@ -253,12 +251,10 @@ void mbl_matxvec_prod_vm(const vnl_vector<double>& V,
 
 
 //=======================================================================
-
-
+// Fast Compute R += V' * M = ( M.transpose() * V ).transpose()
 void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
                              const vnl_matrix<double>& M,
                              vnl_vector<double>& R)
-// R += M'V
 {
   unsigned int nr = M.rows();
 

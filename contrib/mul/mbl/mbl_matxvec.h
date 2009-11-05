@@ -51,7 +51,6 @@ void TC_MatXVec(const vnl_matrix<double>& M,
                 const vcl_vector<int>& index);
 #endif // commented out
 
-
   //: Fast Compute R = V' * M = ( M.transpose() * V ).transpose()
   // Only use the first R.size() columns of M
   // R is not resized - its size determines how many columns to use
