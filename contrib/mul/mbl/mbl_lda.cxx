@@ -22,22 +22,35 @@
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_matxvec.h>
+#include <mbl/mbl_log.h>
+#include <mbl/mbl_exception.h>
+
+
+//=========================================================================
+// Static function to create a static logger when first required
+//=========================================================================
+static mbl_logger& logger()
+{
+  static mbl_logger l("mul.mbl.lda");
+  return l;
+}
+
 
 //=======================================================================
-
 mbl_lda::mbl_lda()
 {
 }
 
-//=======================================================================
 
+//=======================================================================
 mbl_lda::~mbl_lda()
 {
 }
 
 
-//: Classify a new data point
-// projects into discriminant space and picks closest mean class vector
+//=======================================================================
+//: Classify a new data point.
+// Projects into discriminant space and picks closest mean class vector
 int mbl_lda::classify( const vnl_vector<double>& x )
 {
   vnl_vector<double> d;
@@ -54,6 +67,7 @@ int mbl_lda::classify( const vnl_vector<double>& x )
 }
 
 
+//=======================================================================
 //: Comparison
 bool mbl_lda::operator==(const mbl_lda& that) const
 {
@@ -68,8 +82,8 @@ bool mbl_lda::operator==(const mbl_lda& that) const
          d_m_mean_ == that.d_m_mean_;
 }
 
-//=======================================================================
 
+//=======================================================================
 void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
 {
   unsigned int n = V.size();
@@ -90,7 +104,8 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
   }
 }
 
-////////////////////////////////////////////////
+
+//=======================================================================
 // find out how many id in the label vector
 int mbl_lda::nDistinctIDs(const int* id, const int n)
 {
@@ -103,6 +118,7 @@ int mbl_lda::nDistinctIDs(const int* id, const int n)
 
   return dids.size();
 }
+
 
 //=======================================================================
 //: Perform LDA on data
@@ -128,14 +144,13 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     }
   }
 
-//  assert(lo_i==0);
-
+  //  assert(lo_i==0);
 
   // Compute mean of each class
   int n_classes = nDistinctIDs(label,n);
-  vcl_cout<<"There are "<<n_classes<<" classes to build LDA space\n"
-          <<"Mix label index is "<<hi_i<<vcl_endl
-          <<"Min label index is "<<lo_i<<vcl_endl;
+  MBL_LOG(INFO, logger(), "There are " <<n_classes << " classes to build LDA space");
+  MBL_LOG(INFO, logger(), "Max label index is " << hi_i);
+  MBL_LOG(INFO, logger(), "Min label index is " << lo_i);
 
   int n_size=hi_i+1;
   mean_.resize(n_size);
@@ -170,6 +185,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
       n_used_classes++;
     }
   }
+  MBL_LOG(INFO, logger(), "Number of used classes: " << n_used_classes);
 
   mean_class_mean_/=n_used_classes;
 
@@ -204,7 +220,6 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   else
     withinS_ = wS;
 
-
 #if 0
   vnl_matrix<double> wS_inv;
   //  NR_Inverse(wS_inv,withinS_);
@@ -231,17 +246,50 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   vnl_matrix<double> EVecs= gen_eigs.V;
   vnl_vector<double> evals= gen_eigs.D.diagonal();
 
+  // Log some information that might be helpful for debugging
+  if (logger().level()>=mbl_logger::DEBUG)
+  {
+    MBL_LOG(DEBUG, logger(), "eigen decomp in original order:");
+    unsigned nvec = EVecs.cols();
+    for (unsigned i=0; i<nvec; ++i)
+      MBL_LOG(DEBUG, logger(), "Col " << i << ": " << EVecs.get_column(i) 
+        << "(magn: " << EVecs.get_column(i).magnitude() << ")");
+    for (unsigned i=0; i<nvec; ++i)
+      MBL_LOG(DEBUG, logger(), "eval " << i << ": " << evals[i]);
+  }
 
-  //make the eigenvector matrix (columns) and eigenvalue vector in descending order.
+  // Re-arrange the eigenvector matrix (columns) and eigenvalue vector into descending order.
+  // Assume they are in order of increasing eigenvalue magnitude.
+  // NB The output from vnl_generalized_eigensystem above will be in order of 
+  // increasing (signed) eigenvalue, not magnitude. If we ever get negative eigenvalues,
+  // then the simple reversal of flip() and fliplr() will not be correct.
+  // Not sure whether we could get (significant) negative eigenvalues, but let's check.
+  for (unsigned i=0,n=evals.size(); i<n; ++i)
+  {
+    if (evals[i]<-1e-12) // tolerance?
+      throw mbl_exception_abort("mbl_lda::build(): found negative eigenvalue(s)");
+  }
   evals.flip();
   EVecs.fliplr();
+
+  // Log some information that might be helpful for debugging
+  if (logger().level()>=mbl_logger::DEBUG)
+  {
+    MBL_LOG(DEBUG, logger(), "eigen decomp in sorted order:");
+    unsigned nvec = EVecs.cols();
+    for (unsigned i=0; i<nvec; ++i)
+      MBL_LOG(DEBUG, logger(), "Col " << i << ": " << EVecs.get_column(i) 
+        << "(magn: " << EVecs.get_column(i).magnitude() << ")");
+    for (unsigned i=0; i<nvec; ++i)
+      MBL_LOG(DEBUG, logger(), "eval " << i << ": " << evals[i]);
+  }
 
   // Record n_classes-1 vector basis
   int m = EVecs.rows();
   int t = n_used_classes-1;
   if (t>m) t=m;
   
-  // Copy first t to basis_
+  // Copy first t eigenvectors to basis_
   basis_.set_size(m,t);
   double **E = EVecs.data_array();
   double **b = basis_.data_array();
@@ -252,8 +300,13 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   }
 
   // Normalize the basis vectors
+  MBL_LOG(DEBUG, logger(), "basis matrix before normalization:");
+  basis_.print(logger().log(mbl_logger::DEBUG));
   basis_.normalize_columns();
+  MBL_LOG(DEBUG, logger(), "basis matrix after normalization:");
+  basis_.print(logger().log(mbl_logger::DEBUG));
 
+  // Copy first t eigenvalues
   evals_.set_size(t);
   for (int i=0;i<t;++i)
     evals_[i] = evals[i];
@@ -268,6 +321,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     if (n_samples_[i]>0)
       x_to_d(d_mean_[i],mean_[i]);
 }
+
 
 //=======================================================================
 //: Perform LDA on data
@@ -351,7 +405,7 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label,
 void mbl_lda::x_to_d(vnl_vector<double>& d, const vnl_vector<double>& x) const
 {
   d.set_size(d_m_mean_.size());
-  mbl_matxvec_prod_vm(x,basis_,d);
+  mbl_matxvec_prod_vm(x,basis_,d); // d = x' * M
   d-=d_m_mean_;
 }
 
@@ -359,7 +413,7 @@ void mbl_lda::x_to_d(vnl_vector<double>& d, const vnl_vector<double>& x) const
 //: Project d from discriminant space into original space
 void mbl_lda::d_to_x(vnl_vector<double>& x, const vnl_vector<double>& d) const
 {
-  mbl_matxvec_prod_mv(basis_,d,x);
+  mbl_matxvec_prod_mv(basis_,d,x); // x = M * d
   x+=mean_class_mean_;
 }
 
@@ -390,9 +444,9 @@ void mbl_lda::print_summary(vcl_ostream& os) const
   os << "n_classes= "<<n_classes<<'\n';
   for (int i=0; i<n_classes; ++i)
   {
-    vcl_cout<<"n_samples_["<<i<<"]= "<<n_samples_[i]<<'\n'
-            <<"mean_["<<i<<"]= "<<mean_[i]<<'\n'
-            <<"d_mean_["<<i<<"]= "<<d_mean_[i]<<'\n';
+    os <<"n_samples_["<<i<<"]= "<<n_samples_[i]<<'\n'
+       <<"mean_["<<i<<"]= "<<mean_[i]<<'\n'
+       <<"d_mean_["<<i<<"]= "<<d_mean_[i]<<'\n';
   }
 
   os << "withinS_= "<<withinS_<<'\n'

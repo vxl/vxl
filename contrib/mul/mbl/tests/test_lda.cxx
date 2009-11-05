@@ -6,6 +6,7 @@
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <mbl/mbl_lda.h>
+#include <mbl/mbl_log.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -79,6 +80,8 @@ void test_lda()
   vcl_cout << "\n*****************\n"
            <<   " Testing mbl_lda\n"
            <<   "*****************\n";
+
+  mbl_logger::root().load_log_config_file();
 
   //create 2 gaussian distributions
   vnl_vector<double> m0,v0,m1,v1;
