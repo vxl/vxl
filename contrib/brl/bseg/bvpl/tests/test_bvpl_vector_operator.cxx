@@ -137,6 +137,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid, int margin)
   return result;
 }
 
+
 void test_vector_operator()
 {
   vcl_string grid_filename="grid_plane.vox";
@@ -207,6 +208,7 @@ void test_non_max_suppression()
   TEST("Non-max suppression", true, check_non_max(grid_out,2));
 }
 
+#if 0
 void test_keep_top_responses()
 {
   vgl_vector_3d<unsigned> grid_size(2,2,2);
@@ -248,6 +250,9 @@ void test_keep_top_responses()
   
 }
 
+#endif
+
+
 void test_local_non_max()
 {
 
@@ -258,7 +263,7 @@ MAIN(test_bvpl_vector_operator)
 {
   test_vector_operator();
   test_non_max_suppression();
-  test_keep_top_responses();
+  //test_keep_top_responses();
   test_local_non_max();
   return 0;
 }
