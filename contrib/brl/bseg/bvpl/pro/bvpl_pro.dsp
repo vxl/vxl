@@ -165,6 +165,18 @@ SOURCE=.\processes/util/bvpl_create_wc_kernel_vector_process.cxx
 SOURCE=.\processes/util/bvpl_find_90_degrees_corner_pairs_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/util/bvpl_pair_to_float_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/util/bvpl_find_pairs_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/util/bvpl_convert_pair_to_hue_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/util/bvpl_load_pair_grid_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # Begin Source File

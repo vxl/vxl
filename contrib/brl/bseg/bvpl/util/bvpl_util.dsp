@@ -101,6 +101,9 @@ SOURCE=.\bvpl_corner_search_functor.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_corner_pairs-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_x+bvpl_pair-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

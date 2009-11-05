@@ -132,6 +132,15 @@ SOURCE=.\bvpl_find_surface_functor.cxx
 SOURCE=.\bvpl_weighted_cube_kernel_factory.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_neighborhood_kernel_factory.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_positive_gauss_conv_functor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_negative_gauss_conv_functor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+int-.cxx
 # End Source File
 # Begin Source File
@@ -268,6 +277,18 @@ SOURCE=.\bvpl_combined_neighb_operator.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_weighted_cube_kernel_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_neighborhood_kernel_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_positive_gauss_conv_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_discriminative_non_max_suppression.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_negative_gauss_conv_functor.h
 # End Source File
 # End Group
 # End Target
