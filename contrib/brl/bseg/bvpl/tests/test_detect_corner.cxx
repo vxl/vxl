@@ -80,12 +80,13 @@ bool test_id_grid(bvxm_voxel_grid<int> *grid,unsigned x, unsigned y, unsigned z,
 
 bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
 {
+  vcl_cout << vcl_endl;
   bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->begin();
   unsigned count = 0;
   for (unsigned k=0; k <grid->grid_size().z()-2; ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny() -2; ++j) {
-        if (vcl_abs(((*grid_it)(i,j)).mean())> 1.0e-15){
+        if (vcl_abs(((*grid_it)(i,j)).mean())> 1.0e-7){
           vcl_cout << "Response at " << i << ',' << j << ',' << k << " is " <<vcl_abs(((*grid_it)(i,j)).mean())
                    << vcl_endl;
           ++count;
@@ -124,31 +125,32 @@ MAIN(test_detect_corner)
   oper.operate(grid, kernel, grid_out);
 
   //run several kernels and determine which window is being found
-  TEST("Position Corner1", true, test_result(grid_out,6,2,6));
+  TEST("Position Corner1", true, test_result(grid_out,2,4,9));
 
   factory.set_angle(float(vnl_math::pi_over_2));
   kernel = new bvpl_kernel(factory.create());
   kernel_vector->kernels_.push_back(kernel);
   oper.operate(grid, kernel, grid_out);
-  TEST("Position Corner2", true, test_result(grid_out,4,2,6));
+  TEST("Position Corner2", true, test_result(grid_out,2,8,9));
 
   factory.set_angle(float(vnl_math::pi));
   kernel = new bvpl_kernel(factory.create());
   kernel_vector->kernels_.push_back(kernel);
   oper.operate(grid, kernel, grid_out);
-  TEST("Position Corner3", true, test_result(grid_out,4,2,4));
+  TEST("Position Corner3", true, test_result(grid_out,2,8,4));
 
   factory.set_angle(float(3.0*vnl_math::pi_over_2));
   kernel = new bvpl_kernel(factory.create());
   kernel_vector->kernels_.push_back(kernel);
   oper.operate(grid, kernel, grid_out);
-  TEST("Position Corner 4", true, test_result(grid_out,6,2,4));
+  TEST("Position Corner 4", true, test_result(grid_out,2,4,4));
 
   //create a functor
   bvpl_gauss_convolution_functor gauss_func(kernel->iterator());
   bvxm_voxel_grid<int > *id_grid=new bvxm_voxel_grid<int >(grid->grid_size());
   bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vector,&oper,grid_out,id_grid);
+  vcl_cout << vcl_endl;
   TEST("Id at Corner 1", true, test_id_grid(id_grid,2,4,9,0));
   TEST("Id at Corner 2", true, test_id_grid(id_grid,2,9,9,1));
   TEST("Id at Corner 3", true, test_id_grid(id_grid,2,9,4,2));
@@ -158,6 +160,8 @@ MAIN(test_detect_corner)
   //bvxm_voxel_grid<gauss_f1> *non_max_grid= new bvxm_voxel_grid<gauss_f1>(grid->grid_size());
   //bvxm_voxel_grid_copy<gauss_f1> (grid_out, non_max_grid);
   vector_oper.non_maxima_suppression(grid_out,id_grid,kernel_vector);
+  vcl_cout << vcl_endl;
   TEST("Number of corners after non_max", true, test_non_max_grid(grid_out));
+  SUMMARY();
   return 0;
 }

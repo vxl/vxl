@@ -29,7 +29,9 @@ class bvpl_kernel: public vbl_ref_count
   bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt)
   : kernel_(kernel),axis_(axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt)
   {
+#ifdef DEBUG
     vcl_cout << "Creating kernel with axis, anle, dim, max, min =\n" << axis_ << '\n' << angle_<< '\n' << dim_<< '\n' <<max_point_<< '\n' << min_point_ << '\n';
+#endif
     id_=++id_cnt;
   }
   //: Destructor

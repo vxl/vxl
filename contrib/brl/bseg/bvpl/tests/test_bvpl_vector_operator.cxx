@@ -7,6 +7,7 @@
 #include <bvpl/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
+#include <bvpl/bvpl_discriminative_non_max_suppression.h>
 #include <bvpl/bvpl_create_directions.h>
 
 #include <bvxm/grid/bvxm_opinion.h>
@@ -89,10 +90,11 @@ bool check_data(bvxm_voxel_grid<int> *grid, vnl_float_3 axis, int id, int margin
     {
       for (unsigned k=margin;k<nk-margin;k++)
       {
-        if (((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=-1) && ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2] <=1))
+        if (((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>-1) && ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2] <1))
         {
           result = result && (*grid_it)(i,j,k)==id;
           vcl_cout << "id at center " << i << j << k << " is " <<(*grid_it)(i,j,k) << vcl_endl;
+
         }
       }
     }
@@ -121,7 +123,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid, int margin)
     {
       for (unsigned k=margin;k<nk-margin;k++)
       {
-        if ( i == (unsigned int)ci && j == (unsigned int)cj && k == (unsigned int)ck)
+       if ( i == (unsigned int)ci && j == (unsigned int)cj && k == (unsigned int)ck)
         {
           vcl_cout << "Response at center " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
           result = result && ((*grid_it)(i,j,k) > 1e-2);
@@ -129,7 +131,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid, int margin)
         else if (!((*grid_it)(i,j,k) < 1e-2) )
         {
           result = false;
-          vcl_cout <<  "Response at " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
+          //vcl_cout <<  "Response at " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
         }
       }
     }
@@ -177,38 +179,41 @@ void test_vector_operator()
 void test_non_max_suppression()
 {
   //Create vector of kernels
-  bvpl_edge3d_kernel_factory kernels_3d(3,3,3);
+  bvpl_edge3d_kernel_factory kernels_3d(2,2,2);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
 
   //Create an in memory grid and filled it with a plane
-  bvxm_voxel_grid<float> *grid = new bvxm_voxel_grid<float> (vgl_vector_3d<unsigned>(5,5,5));
-  unsigned target_id = 9;
+  bvxm_voxel_grid<float> *grid = new bvxm_voxel_grid<float> (vgl_vector_3d<unsigned>(4,4,4));
+  int target_id = 9;
   vnl_float_3 target_axis = kernel_vec->kernels_[target_id]->axis();
   vcl_cout << "taget axis " << target_axis << vcl_endl;
-  fill_in_data(grid, 0.01f, 0.99f, target_axis,1);
+  vcl_cout << "taget axis " << kernel_vec->kernels_[1]->axis() << vcl_endl;
+  fill_in_data(grid, 0.01f, 0.99f, target_axis,0);
 
   //Run all the kernels
   bvxm_voxel_grid<float> *grid_out=new bvxm_voxel_grid<float>(grid->grid_size());
   bvxm_voxel_grid<int > *id_grid=new bvxm_voxel_grid<int >(grid->grid_size());
-  id_grid->initialize_data(10);
-  bvpl_edge_algebraic_mean_functor<float> func;
-  bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
+  id_grid->initialize_data(-1);
+  bvpl_edge_geometric_mean_functor<float> func;
+  bvpl_neighb_operator<float, bvpl_edge_geometric_mean_functor<float> > oper(func);
   bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vec,&oper,grid_out, id_grid);
 
   //along the plane the winner should be the target axis
+  vcl_cout << vcl_endl;
   TEST("Directions", true,  check_data(id_grid, target_axis, target_id, 2));
 
 
   vector_oper.non_maxima_suppression(grid_out, id_grid, kernel_vec);
 
   //after non-maxima suppression the center voxel should be the winner
+  vcl_cout << vcl_endl;
   TEST("Non-max suppression", true, check_non_max(grid_out,2));
 }
 
-#if 0
+
 void test_keep_top_responses()
 {
   vgl_vector_3d<unsigned> grid_size(2,2,2);
@@ -224,7 +229,7 @@ void test_keep_top_responses()
   bvxm_voxel_grid<vnl_vector_fixed<float,3> > *resp = new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(grid_size);
   bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid = new bvxm_voxel_grid<vnl_vector_fixed<int,3> >(grid_size);
   
-  bvpl_vector_operator vec_oper;
+  bvpl_discriminative_non_max_suppression vec_oper;
   vec_oper.keep_top_responses(resp, grid1,id_grid, 1);
   vec_oper.keep_top_responses(resp, grid2,id_grid, 2);
   vec_oper.keep_top_responses(resp, grid3,id_grid, 3);
@@ -250,7 +255,7 @@ void test_keep_top_responses()
   
 }
 
-#endif
+
 
 
 void test_local_non_max()

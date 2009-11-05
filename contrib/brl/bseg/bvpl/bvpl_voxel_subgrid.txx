@@ -4,7 +4,7 @@
 #include "bvpl_voxel_subgrid.h"
 
 #include <vcl_iostream.h>
-#define DEBUG
+
 template <class T>
 bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
                                           vgl_point_3d<int> center,
@@ -42,7 +42,7 @@ bool bvpl_voxel_subgrid<T>::voxel(int x, int y, int z, T& v)
     return false;
   }
   else {
-#ifdef DEBUG
+#if 0
     vcl_cout << "Slab idx " << x << ' ' << y << ' ' << z << vcl_endl;
 #endif
     v = slab_(x,y,z);
