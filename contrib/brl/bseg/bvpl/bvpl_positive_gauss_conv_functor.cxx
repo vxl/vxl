@@ -2,7 +2,6 @@
 //:
 // \file
 
-
 //: Default Constructor
 bvpl_positive_gauss_conv_functor::bvpl_positive_gauss_conv_functor()
 {
@@ -31,7 +30,7 @@ bsta_gauss_f1 bvpl_positive_gauss_conv_functor::result()
   //we are only interested in positive responses
   final_gauss.set_mean((mean_>0.0f)?mean_:0.0f);
   final_gauss.set_var(var_);
-  
+
   init();
   return final_gauss;
 }
