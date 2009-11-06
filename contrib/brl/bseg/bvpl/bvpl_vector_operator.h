@@ -53,12 +53,10 @@ class bvpl_vector_operator
                     unsigned idx,
                     bvxm_voxel_grid<float>* out_grid, bvxm_voxel_grid<int>* out_id_grid);
 
-
   template<class T>
   void get_max_orientation_grid(bvxm_voxel_grid<T>* out_grid, bvxm_voxel_grid<T>* temp_grid,
                                 bvxm_voxel_grid<int >* id_grid,
                                 int temp_orientation);
-
 };
 
 
@@ -146,7 +144,6 @@ void bvpl_vector_operator::local_non_maxima_suppression(bvxm_voxel_grid<T>* grid
 }
 
 
-
 template<class T, class F>
 void bvpl_vector_operator::apply_and_suppress(bvxm_voxel_grid<T>* grid,
                                               bvpl_kernel_vector_sptr kernel_vector,
@@ -160,7 +157,7 @@ void bvpl_vector_operator::apply_and_suppress(bvxm_voxel_grid<T>* grid,
   out_grid->initialize_data(func_max.min_response());
   id_grid->initialize_data(-1);
 
-  for (int id = 0; id < kernel_vector->kernels_.size(); ++id)
+  for (unsigned int id = 0; id < kernel_vector->kernels_.size(); ++id)
   {
     bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
 #if 0
