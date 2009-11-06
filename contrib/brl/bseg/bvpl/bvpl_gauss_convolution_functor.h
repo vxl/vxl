@@ -44,7 +44,8 @@ class bvpl_gauss_convolution_functor
 
   //: Initializes class variables
   void init();
-  void max(bvpl_kernel_iterator kernel);
+  //: Sets max response (member \p max_) from convolution kernel
+  void set_max(bvpl_kernel_iterator kernel);
 };
 
 #endif
