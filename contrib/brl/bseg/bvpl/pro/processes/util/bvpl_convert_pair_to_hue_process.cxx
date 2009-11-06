@@ -1,4 +1,4 @@
-// This is brl/bseg/bvpl/pro/processes/bvpl_convert_pair_to_hue_process.cxx
+// This is brl/bseg/bvpl/pro/processes/util/bvpl_convert_pair_to_hue_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -36,7 +36,7 @@ bool bvpl_convert_pair_to_hue_process_cons(bprb_func_process& pro)
   input_types_[i++]="bvpl_kernel_vector_sptr"; // a vector of kernels
   input_types_[i++]="vcl_string"; //path to output grid
   input_types_[i++]="vcl_string"; //output file for map
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -44,7 +44,7 @@ bool bvpl_convert_pair_to_hue_process_cons(bprb_func_process& pro)
   output_types_[i++]="bvxm_voxel_grid_base_sptr"; //the output grid
   if (!pro.set_output_types(output_types_))
     return false;
-  
+
   return true;
 }
 
@@ -59,20 +59,19 @@ bool bvpl_convert_pair_to_hue_process(bprb_func_process& pro)
     vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
     return false;
   }
-  
+
   bvxm_voxel_grid_base_sptr pair_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   bvpl_kernel_vector_sptr kernel_vector = pro.get_input<bvpl_kernel_vector_sptr>(1);
   vcl_string output_world_dir = pro.get_input<vcl_string>(2);
   vcl_string map_output_file = pro.get_input<vcl_string>(3);
-  
-  
+
+
   if ((!pair_base.ptr())) {
     vcl_cerr << "In bvpl_convert_pair_to_hue_process -- input grid is not valid!\n";
     return false;
   }
   if (bvxm_voxel_grid<bvpl_pair> *pair_grid = dynamic_cast< bvxm_voxel_grid<bvpl_pair >* >(pair_base.ptr()))
   {
-    
     //assign hue values evenly dristributed on the color wheel
     //the wheel starts and ends on red, so we don't want to get back to the end
     vcl_vector<float> colors;
