@@ -1,17 +1,15 @@
-// This is brcv/dbdet/edge/bil_nms.cxx
-
+// This is brl/bbas/bil/algo/bil_nms.cxx
+#include "bil_nms.h"
 //:
 // \file
 
-#include "bil_nms.h"
 #include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_sqrt()
-#include <vnl/vnl_math.h>
+#include <vcl_cmath.h>   // for vcl_abs(double)
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 //---------------------------------------------------------------
@@ -19,14 +17,14 @@
 //----------------------------------------------------------------
 
 //: default constructor
-bil_nms::bil_nms(): 
-  thresh_(0.0), 
+bil_nms::bil_nms()
+: thresh_(0.0),
   parabola_fit_type_(bil_nms_params::PFIT_3_POINTS),
   margin_(1),
   rel_thresh_(2.5),
   use_adaptive_thresh_(true),
-  dir_x_(vil_image_view<double>(0,0,1)), 
-  dir_y_(vil_image_view<double>(0,0,1)), 
+  dir_x_(vil_image_view<double>(0,0,1)),
+  dir_y_(vil_image_view<double>(0,0,1)),
   grad_mag_(vil_image_view<double>(0,0,1)),
   x_(0,0, 0.0),
   y_(0,0, 0.0),
@@ -37,15 +35,15 @@ bil_nms::bil_nms():
 }
 
 //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
-bil_nms::bil_nms(const bil_nms_params& nsp, const vil_image_view<double>& dir_x, 
-                     const vil_image_view<double>& dir_y, const vil_image_view<float>& grad_mag) : 
-  thresh_(nsp.thresh_), 
-  parabola_fit_type_(nsp.pfit_type_), 
+bil_nms::bil_nms(const bil_nms_params& nsp, const vil_image_view<double>& dir_x,
+                 const vil_image_view<double>& dir_y, const vil_image_view<float>& grad_mag)
+: thresh_(nsp.thresh_),
+  parabola_fit_type_(nsp.pfit_type_),
   margin_(nsp.margin_),
   rel_thresh_(nsp.rel_thresh_),
   use_adaptive_thresh_(nsp.use_adaptive_thresh_),
-  dir_x_(dir_x), 
-  dir_y_(dir_y), 
+  dir_x_(dir_x),
+  dir_y_(dir_y),
   grad_mag_(grad_mag),
   x_(grad_mag.nj(), grad_mag.ni(), 0.0),
   y_(grad_mag.nj(), grad_mag.ni(), 0.0),
@@ -61,13 +59,13 @@ void bil_nms::apply()
 {
   double f[3], s_list[3];
   vcl_vector<vgl_point_2d<double> > loc;
-  vcl_vector<double> orientation; 
+  vcl_vector<double> orientation;
   vcl_vector<double> mag;
   vcl_vector<double> d2f;
   vcl_vector<vgl_point_2d<int> > pix_loc;
   // run non-maximum suppression at every point inside the margins
-  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++){
-    for (unsigned y = margin_; y < grad_mag_.nj()-margin_; y++)
+  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; ++x) {
+    for (unsigned y = margin_; y < grad_mag_.nj()-margin_; ++y)
     {
       if (grad_mag_(x,y) < thresh_) //threshold by gradient magnitude
         continue;
@@ -94,7 +92,7 @@ void bil_nms::apply()
         double grad_val = 0.0; //should be updated by parabola fit
 
         //compute location of extrema
-        double s_star = (parabola_fit_type_ == bil_nms_params::PFIT_3_POINTS) ? 
+        double s_star = (parabola_fit_type_ == bil_nms_params::PFIT_3_POINTS) ?
                             subpixel_s(s_list, f, max_val, grad_val) : subpixel_s(x, y, direction, max_val);
 
         if (vcl_fabs(s_star)< 0.7)
@@ -110,8 +108,9 @@ void bil_nms::apply()
   }
 
   //post-process the NMS edgel map to reduce the occurrence of duplicate edgels
-  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++){
-    for (unsigned y = margin_; y < grad_mag_.nj()-margin_; y++)
+  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; ++x)
+  {
+    for (unsigned y = margin_; y < grad_mag_.nj()-margin_; ++y)
     {
       if (mag_(x,y)==0.0)
         continue;
@@ -119,27 +118,22 @@ void bil_nms::apply()
       //use the orientation of the edgel to determine the closest neighbors that could produce a duplicate edgel
 
       //Hack: for now just look over all the 8-neighbors
-      for (int ii=-1; ii<2; ii++){
-        for (int jj=-1; jj<2; jj++){
-
+      for (int ii=-1; ii<2; ++ii) {
+        for (int jj=-1; jj<2; ++jj) {
           if (ii==0 && jj==0) continue;
-
           //if there is an edgel at this location, compute the distance to the current edgel
-          if (mag_(x+ii,y+jj)>0.0){
+          if (mag_(x+ii,y+jj)>0.0) {
             double dx = x_(y+jj,x+ii) - x_(y,x);
             double dy = y_(y+jj,x+ii) - y_(y,x);
-
-            if ((dx*dx+dy*dy)<0.1){ //closeness threshold, may be made into a parameter if anyone cares
+            if (dx*dx+dy*dy<0.1) { //closeness threshold, may be made into a parameter if anyone cares
               mag_(x,y)=0.0; //kill the current edgel
-              continue; 
+              continue;
             }
           }
         }
       }
     }
   }
-
-
 }
 
 int bil_nms::intersected_face_number(const vgl_vector_2d<double>& direction)
@@ -278,8 +272,6 @@ void bil_nms::get_relative_corner_coordinates(int face_num, int *corners)
 
 double bil_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
 {
-
-
   //new version: assumes s[1]=0 and s[2]=-s[0]
   double A = -(f[1] - (f[0]+f[2])/2.0)/(s[2]*s[2]);
   double B = -(f[0]-f[2])/(2*s[2]);
@@ -289,18 +281,20 @@ double bil_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
 
   max_f = A*s_star*s_star + B*s_star + C;
 
-  //derivatives at f+ and f- 
-  double d2fp = 2*A*s[2] + B;
-  double d2fm = 2*A*s[0] + B;
-
   //second derivative
   double d2f = 2*A;
   max_d = d2f;
 
-  if (A<0){ //make sure this is a maximum
-    if (use_adaptive_thresh_){
-      //if (vcl_fabs(d2fp)>rel_thresh_ || vcl_fabs(d2fm)>rel_thresh_)
-      if (d2f<-rel_thresh_)//d2f is always negative at a maxima
+  if (A<0) { //make sure this is a maximum
+    if (use_adaptive_thresh_) {
+#if 0
+      //derivatives at f+ and f-
+      double d2fp = 2*A*s[2] + B;
+      double d2fm = 2*A*s[0] + B;
+      if (vcl_fabs(d2fp)>rel_thresh_ || vcl_fabs(d2fm)>rel_thresh_)
+        return s_star;
+#endif // 0
+      if (d2f<-rel_thresh_)//d2f is always negative at a maximum
         return s_star;
       else
         return 5.0; //not reliable
@@ -310,7 +304,6 @@ double bil_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
   }
   else
     return 5.0; //not a maxima
-
 }
 
 double bil_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction, double &max_f)
@@ -326,9 +319,9 @@ double bil_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction,
   vnl_matrix<double> B(9, 1);
   vnl_matrix<double> P(3, 1);
   int index = 0;
-  for (int j = -1; j <= 1; j++)
+  for (int j = -1; j <= 1; ++j)
   {
-    for (int i = -1; i <= 1; i++)
+    for (int i = -1; i <= 1; ++i)
     {
       find_distance_s_and_f_for_point(i, j, line1, d, s, direction);
       f = grad_mag_(x+i,y+j);
@@ -336,29 +329,29 @@ double bil_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction,
       A(index, 1) = s;
       A(index, 2) = 1.0;
       B(index, 0) = f;
-      index++;
+      ++index;
     }
   }
-//  vnl_matrix<double> A_trans = A.transpose();
-//  vnl_matrix<double> temp = vnl_matrix_inverse<double> (A_trans*A);
-//  vnl_matrix<double> temp2 = temp * A_trans;
-//  P = temp2 * B;
+#if 0
+  vnl_matrix<double> A_trans = A.transpose();
+  vnl_matrix<double> temp = vnl_matrix_inverse<double> (A_trans*A);
+  vnl_matrix<double> temp2 = temp * A_trans;
+  P = temp2 * B;
+#endif // 0
   vnl_svd<double> svd(A);
   P = svd.solve(B);
   double s_star = -P(1,0)/(2*P(0,0));
 
-  
   max_f = P(0,0)*s_star*s_star + P(1,0)*s_star + P(2,0);
 
   if (P(0,0)<0)
     return s_star;
   else
     return 5.0; //not a maxima
-
 }
 
 void bil_nms::find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line,
-                                                double &d, double &s, const vgl_vector_2d<double>& direction)
+                                              double &d, double &s, const vgl_vector_2d<double>& direction)
 {
   vgl_homg_point_2d<double> point(x,y);
   vgl_homg_line_2d<double> perp_line = vgl_homg_operators_2d<double>::perp_line_through_point(line, point);
