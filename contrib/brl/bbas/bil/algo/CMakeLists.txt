@@ -20,13 +20,15 @@ SET( bil_algo_sources
      bil_edge_indicator.h
      bil_color_conversions.cxx          bil_color_conversions.h
      bil_scale_image.txx                bil_scale_image.h
+     bil_compass_edge_detector.cxx		bil_compass_edge_detector.h
+     bil_nms.cxx						bil_nms.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates bil_algo_sources)
 
 ADD_LIBRARY( bil_algo ${bil_algo_sources} )
 
-TARGET_LINK_LIBRARIES( bil_algo vil_algo)
+TARGET_LINK_LIBRARIES( bil_algo vil_algo vgl_algo)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
