@@ -56,9 +56,6 @@ bil_nms::bil_nms(const bil_nms_params& nsp, const vil_image_view<double>& dir_x,
     mag_.fill(0.0);
 }
 
-//-------------------------------------------------------------------------
-
-
 //: Apply the algorithm
 void bil_nms::apply()
 {

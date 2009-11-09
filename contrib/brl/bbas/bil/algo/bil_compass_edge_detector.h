@@ -18,11 +18,9 @@
 #define GAMMA 14.0
 
 //: Function to find edges using a compass operator
-void
-bil_detect_compass_edges(vil_image_view<vxl_byte>& image, int spacing, int n_wedges, int weight_type, double sigma, 
-                           int dist_op, bool SG_filter, double threshold, bool third_order, vil_image_view<float>& hist_grad,
-                           bool output_orientation_map);
-
+void bil_detect_compass_edges(vil_image_view<vxl_byte>& image, 
+                              int n_wedges,double sigma,
+                              double threshold,vil_image_view<float>& hist_grad);
 
 
 //supporting functions

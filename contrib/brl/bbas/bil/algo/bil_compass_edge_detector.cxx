@@ -578,9 +578,10 @@ void compute_strength_and_orient(double* dist, int n_orient, float& strength, do
 
 //: Detect edges using the compass operator
 // Note: # of orientations = 2*n_wedges
-void bil_detect_compass_edges(vil_image_view<vxl_byte>& image, int spacing, int n_wedges, 
-                              int weight_type, double sigma, int dist_op, bool SG_filter, double threshold,
-                              bool third_order, vil_image_view<float>& hist_grad,  bool output_orientation_map)
+void bil_detect_compass_edges(vil_image_view<vxl_byte>& image, 
+                              int n_wedges, 
+                              double sigma,   double threshold,
+                              vil_image_view<float>& hist_grad)
 {
   //convert to grayscale
   vil_image_view<vxl_byte> img;
@@ -608,7 +609,7 @@ void bil_detect_compass_edges(vil_image_view<vxl_byte>& image, int spacing, int 
 
   //create the wedge masks
   double *mask, *masksum;
-  double wedge_wt = CreateMask(sigma, n_wedges, masksz, weight_type, &mask, &masksum);
+  double wedge_wt = CreateMask(sigma, n_wedges, masksz, 0, &mask, &masksum);
 
   //allocate space for the histograms
   bil_bin* wHist = new bil_bin[4*n_wedges*NBINS];       // All wedge histograms
@@ -619,8 +620,8 @@ void bil_detect_compass_edges(vil_image_view<vxl_byte>& image, int spacing, int 
   bil_signature qhist1_norm, qhist2_norm, qhist3_norm, qhist4_norm;
 
   //loop over all the pixels in the image
-  for (unsigned x = masksz; x < img.ni()-masksz; x+= spacing){
-    for (unsigned y = masksz; y < img.nj()-masksz; y+=spacing)
+  for (unsigned x = masksz; x < img.ni()-masksz; x++){
+    for (unsigned y = masksz; y < img.nj()-masksz; y++)
     {
       //Create wedge histograms (ouput in hist)
       CreateWedgeHistograms(img, mask, y, x, masksz, n_wedges, wHist);
@@ -665,6 +666,8 @@ void bil_detect_compass_edges(vil_image_view<vxl_byte>& image, int spacing, int 
  
         //compute distance between the normalized histograms
         double d = 0.0;
+        //: TO FIX: hardcoded 
+        int dist_op=2;
         if (dist_op==0)
           d = bil_chi_sq_dist(hist1norm.bins, hist2norm.bins); //compute chi^2 dist
         else if (dist_op==1)
