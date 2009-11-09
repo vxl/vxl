@@ -132,6 +132,7 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
     if (bvxm_voxel_grid<bvxm_opinion> * bvxm_opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
     {
       bvxm_voxel_grid<bvxm_opinion> * grid_out= new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, bvxm_opinion_input_grid->grid_size());
+      grid_out->initialize_data(bvxm_opinion(0.005f));
       bvpl_opinion_functor func;
       bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
       oper.operate(bvxm_opinion_input_grid, kernel, grid_out);
