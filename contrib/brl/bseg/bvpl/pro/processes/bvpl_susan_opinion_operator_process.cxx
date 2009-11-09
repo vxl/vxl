@@ -46,7 +46,7 @@ bool bvpl_susan_opinion_operator_process_cons(bprb_func_process& pro)
   input_types_[0] = "bvxm_voxel_grid_base_sptr"; //: normals grid
   input_types_[1] = "bvxm_voxel_grid_base_sptr"; //: response grid
   input_types_[2] = "vcl_string";                //: path for the output grid
-  input_types_[3] = "bvpl_kernel_sptr";          //: pointer to a kernel
+  input_types_[3] = "bvpl_kernel_vector_sptr";          //: pointer to a kernel
   if (!pro.set_input_types(input_types_))
     return false;
 
