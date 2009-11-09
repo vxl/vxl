@@ -9,6 +9,7 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h> // for vnl_math::pi
 #include <vil/vil_convert.h>
+#include <vil/vil_save.h>
 
 #define MAX_VAL 255.0
 
@@ -561,8 +562,9 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
 
 //: Detect edges using the compass operator
 // Note: # of orientations = 2*n_wedges
-void bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
-                              int n_wedges,
+
+vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image, 
+                              int n_wedges, 
                               double sigma,   double threshold,
                               vil_image_view<float>& hist_grad)
 {
@@ -682,20 +684,29 @@ void bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
     }
   }
 
-  //garbage collection
-  delete mask;
-  delete masksum;
-  delete wHist;
-  delete dist;
-
-  vcl_vector<double> orientation, mag, d2f;
-
   //TODO: when spacing>1, the NMS has to be done on the coarser grid
   vil_image_view<double> dx(img.ni(), img.nj());
   vil_image_view<double> dy(img.ni(), img.nj());
+    double* Ori = hist_ori.top_left_ptr();
+  double* Gx = dx.top_left_ptr();
+  double* Gy = dy.top_left_ptr();
+
+  for(unsigned long i=0; i<hist_ori.size(); i++){
+    Gx[i] = vcl_sin(Ori[i]);
+    Gy[i] = vcl_cos(Ori[i]);
+  }
   bil_nms NMS(bil_nms_params(threshold, bil_nms_params::PFIT_3_POINTS), dx, dy, hist_grad);
   NMS.apply();
-  hist_grad=NMS.mag();
+
+  //garbage collection
+  delete mask, masksum;
+  delete wHist;
+  delete dist;
+  vil_image_view<float> magimg=NMS.mag();
+
+  return  magimg;
+
+
 }
 
 

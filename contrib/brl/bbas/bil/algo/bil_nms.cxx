@@ -11,6 +11,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
+#include <vil/vil_save.h>
 
 //---------------------------------------------------------------
 // Constructors
@@ -62,14 +63,15 @@ void bil_nms::apply()
   vcl_vector<double> orientation;
   vcl_vector<double> mag;
   vcl_vector<double> d2f;
+
   vcl_vector<vgl_point_2d<int> > pix_loc;
   // run non-maximum suppression at every point inside the margins
   for (unsigned x = margin_; x < grad_mag_.ni()-margin_; ++x) {
     for (unsigned y = margin_; y < grad_mag_.nj()-margin_; ++y)
     {
+
       if (grad_mag_(x,y) < thresh_) //threshold by gradient magnitude
         continue;
-
       double gx = dir_x_(x,y);
       double gy = dir_y_(x,y);
       vgl_vector_2d<double> direction(gx,gy);
@@ -94,7 +96,6 @@ void bil_nms::apply()
         //compute location of extrema
         double s_star = (parabola_fit_type_ == bil_nms_params::PFIT_3_POINTS) ?
                             subpixel_s(s_list, f, max_val, grad_val) : subpixel_s(x, y, direction, max_val);
-
         if (vcl_fabs(s_star)< 0.7)
         {
           //record this edgel
@@ -103,37 +104,13 @@ void bil_nms::apply()
           dir_(y,x) = vcl_atan2(direction.x(), -direction.y());
           mag_(x,y) = max_val; //the mag at the max of the parabola
           deriv_(y,x) = grad_val;
+
         }
     }
   }
 
-  //post-process the NMS edgel map to reduce the occurrence of duplicate edgels
-  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; ++x)
-  {
-    for (unsigned y = margin_; y < grad_mag_.nj()-margin_; ++y)
-    {
-      if (mag_(x,y)==0.0)
-        continue;
 
-      //use the orientation of the edgel to determine the closest neighbors that could produce a duplicate edgel
 
-      //Hack: for now just look over all the 8-neighbors
-      for (int ii=-1; ii<2; ++ii) {
-        for (int jj=-1; jj<2; ++jj) {
-          if (ii==0 && jj==0) continue;
-          //if there is an edgel at this location, compute the distance to the current edgel
-          if (mag_(x+ii,y+jj)>0.0) {
-            double dx = x_(y+jj,x+ii) - x_(y,x);
-            double dy = y_(y+jj,x+ii) - y_(y,x);
-            if (dx*dx+dy*dy<0.1) { //closeness threshold, may be made into a parameter if anyone cares
-              mag_(x,y)=0.0; //kill the current edgel
-              continue;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 int bil_nms::intersected_face_number(const vgl_vector_2d<double>& direction)
