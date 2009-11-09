@@ -33,9 +33,9 @@ class bvpl_susan_opinion_operator
                bvpl_kernel_vector_sptr kernel, 
                bvxm_voxel_grid<bvxm_opinion>* out_grid)
   {
-    bvpl_subgrid_iterator<int > sub_dir_iter(dirgrid, kernel->max(), kernel->min());
-    bvpl_subgrid_iterator<bvxm_opinion> sub_opn_iter(opngrid, kernel->max(), kernel->min());
-    bvpl_subgrid_iterator<bvxm_opinion> output_iter(out_grid, kernel->max(), kernel->min());
+    bvpl_subgrid_iterator<int > sub_dir_iter(dirgrid, kernel->min(), kernel->max());
+    bvpl_subgrid_iterator<bvxm_opinion> sub_opn_iter(opngrid, kernel->min(), kernel->max());
+    bvpl_subgrid_iterator<bvxm_opinion> output_iter(out_grid, kernel->min(), kernel->max());
     while (!sub_dir_iter.isDone()) {
        bvpl_voxel_subgrid<int> dirsubgrid = *sub_dir_iter;
        bvpl_voxel_subgrid<bvxm_opinion> opnsubgrid = *sub_opn_iter;
