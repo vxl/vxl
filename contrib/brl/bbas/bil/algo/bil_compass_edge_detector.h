@@ -2,15 +2,16 @@
 #ifndef bil_compass_edge_detector_h
 #define bil_compass_edge_detector_h
 //:
-//\file
-//\brief An implementation of the Compass Edge detector By Ruzon and Tomasi, PAMI 01
-//       For Grayscale edge detection
-//\author Amir Tamrakar and moved by Vishal jain from lemsvxl
-//\date 11/7/07
+// \file
+// \brief An implementation of the Compass Edge detector By Ruzon and Tomasi, PAMI 01
+// For Grayscale edge detection
+// \author Amir Tamrakar
+// \date November 7, 2009
 //
-//\verbatim
+// \verbatim
 //  Modifications
-//\endverbatim
+//   Vishal Jain moved the code from lemsvxl to vxl
+// \endverbatim
 
 #include <vil/vil_image_view.h>
 
@@ -22,19 +23,16 @@ void bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
                               int n_wedges,double sigma,
                               double threshold,vil_image_view<float>& hist_grad);
 
-
 //supporting functions
 inline double CArea(double Xhigh, double Xlow, double Y, double r);
 
 double* MakeQtrMask(double r, int n_wedges);
 
-//: compute the optimal orientation and edge strength from the vector of edge strengths
-//  at computed at discrete orientations
+//: compute the optimal orientation and edge strength from the vector of edge strengths computed at discrete orientations
 void compute_strength_and_orient(double* dist, int n_orient, float& strength, double& orientation);
 
-
-
-typedef struct bin_struct{
+typedef struct bin_struct
+{
   double wsum;
   double weight;
   double value;
@@ -50,7 +48,8 @@ double bil_chi_sq_dist(const bil_bin hist1[], const bil_bin hist2[]);
 double bil_bhat_dist(const bil_bin hist1[], const bil_bin hist2[]);
 
 
-//: This code implements the basic Binary Splitting algorithm described in 
+//:
+// This code implements the basic Binary Splitting algorithm described in 
 // the 1991 IEEE Trans. on Sig. Proc. article "Color Quantization of Images"
 // by Michael Orchard and Charles Bouman, pp. 2677-90.
 //
@@ -60,11 +59,11 @@ double bil_bhat_dist(const bil_bin hist1[], const bil_bin hist2[]);
 void bs(float *, int, int, int *, float **, int *);
 
 //: This class represents an intensity distribution as a signature (an adaptive histogram)
-//  The bin centers of this adaptive histogram are dynamically determined. The weight parameter stores
-//  mass of that bin.
+//  The bin centers of this adaptive histogram are dynamically determined.
+//  The weight parameter stores mass of that bin.
 class bil_signature
 {
-public:
+ public:
   bil_bin bins[NBINS]; //fixed number of bins for now (this is not strictly required)
 
   bil_signature()
@@ -75,7 +74,8 @@ public:
       bins[i].wsum=0;
     }
   }
-  ~bil_signature(){}
+
+  ~bil_signature() {}
 
   //: The EMD dist is the default distance between two signatures
   double operator-(const bil_signature& sig) const 
@@ -95,9 +95,7 @@ public:
       bins[i].value = sig.bins[i].wsum/bins[i].weight; 
     }
   }
-
 };
-
 
 
 #endif // bil_compass_edge_detector_h
