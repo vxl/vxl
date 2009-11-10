@@ -42,7 +42,7 @@ fd.close();
 # load scene 
 print("Creating a Scene");
 boxm_batch.init_process("boxmCreateSceneProcess");
-boxm_batch.set_input_string(0, "./scene.xml");
+boxm_batch.set_input_string(0, "./batch_scene.xml");
 boxm_batch.run_process();
 (scene_id, scene_type) = boxm_batch.commit_output(0);
 scene = dbvalue(scene_id, scene_type);
