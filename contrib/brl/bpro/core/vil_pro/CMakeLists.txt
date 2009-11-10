@@ -18,7 +18,7 @@ AUX_SOURCE_DIRECTORY(processes vil_pro_sources)
 
 ADD_LIBRARY(vil_pro ${vil_pro_sources})
 
-TARGET_LINK_LIBRARIES(vil_pro bprb vul vsl vil_algo vil vil_io)
+TARGET_LINK_LIBRARIES(vil_pro bprb vul vsl vil_algo vil vil_io bil_algo)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
