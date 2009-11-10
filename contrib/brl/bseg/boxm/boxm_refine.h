@@ -31,7 +31,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
       split_list.push_back(cell);
       // make sure neighbor cells are not already coarser than this cell
       // get all the faces;
-#if 1
+#if 0
       boct_face_idx faces = ALL;
       vcl_vector<boct_tree_cell<T_loc, T_data >*> neighbors;
       cell->find_neighbors(faces, neighbors, cell->level()+1);
