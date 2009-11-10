@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<bvxmCreateVoxelWorldProcess>
+  <input_directory type="string" value="D:/tests/lidar_edge_reg"></input_directory>
+  <corner_x type="float" value="0"></corner_x>
+  <corner_y type="float" value="0"></corner_y>
+  <corner_z type="float" value="1300"></corner_z>
+  <voxel_dim_x type="unsigned" value="400"></voxel_dim_x>
+  <voxel_dim_y type="unsigned" value="400"></voxel_dim_y>
+  <voxel_dim_z type="unsigned" value="200"></voxel_dim_z>
+  <voxel_length type="float" value="1"></voxel_length>
+  <lvcs type="string" value="./bvxmCreateVoxelWorldProcess.lvcs"></lvcs>
+  <apm_type type="unsigned" value="1"></apm_type>
+  <min_ocp_prob type="float" value="0.001"></min_ocp_prob>
+  <max_ocp_prob type="float" value="0.999"></max_ocp_prob>
+  <max_scale type="unsigned" value="1"></max_scale>
+</bvxmCreateVoxelWorldProcess>
