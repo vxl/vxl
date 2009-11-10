@@ -38,10 +38,10 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
   vcl_string vox_dir;
   pro.parameters()->get_value(param_input_directory_, vox_dir);
   if (!vul_file::is_directory(vox_dir) || !vul_file::exists(vox_dir)) {
-    vcl_cerr << "In bvxm_create_voxel_world_process::execute() -- input directory "<< vul_file::get_cwd() << '/' << vox_dir << "is not valid!\n";
+    vcl_cerr << "In bvxm_create_voxel_world_process::execute() -- input directory "  << vox_dir << "is not valid!\n";
     return false;
   }
-  vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: " <<  vul_file::get_cwd() << vox_dir << vcl_endl;
+  vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: "  << vox_dir << vcl_endl;
 
 
   float corner_x = 0.0f;
