@@ -9,7 +9,6 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h> // for vnl_math::pi
 #include <vil/vil_convert.h>
-#include <vil/vil_save.h>
 
 #define MAX_VAL 255.0
 
@@ -563,10 +562,10 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
 //: Detect edges using the compass operator
 // Note: # of orientations = 2*n_wedges
 
-vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image, 
-                              int n_wedges, 
-                              double sigma,   double threshold,
-                              vil_image_view<float>& hist_grad)
+vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
+                                               int n_wedges,
+                                               double sigma,   double threshold,
+                                               vil_image_view<float>& hist_grad)
 {
   //convert to grayscale
   vil_image_view<vxl_byte> img;
@@ -691,7 +690,7 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
   double* Gx = dx.top_left_ptr();
   double* Gy = dy.top_left_ptr();
 
-  for(unsigned long i=0; i<hist_ori.size(); i++){
+  for (unsigned long i=0; i<hist_ori.size(); i++){
     Gx[i] = vcl_sin(Ori[i]);
     Gy[i] = vcl_cos(Ori[i]);
   }
@@ -699,14 +698,13 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
   NMS.apply();
 
   //garbage collection
-  delete mask, masksum;
+  delete mask;
+  delete masksum;
   delete wHist;
   delete dist;
   vil_image_view<float> magimg=NMS.mag();
 
   return  magimg;
-
-
 }
 
 
