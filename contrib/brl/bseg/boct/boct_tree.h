@@ -67,7 +67,7 @@ class boct_tree
 
   void b_write(vsl_b_ostream & os);
   void b_read(vsl_b_istream & is);
-  static short version_no() { return 1; }
+  static short version_no() { return 2; }
  private:
   short max_level_;
   boct_tree_cell<T_loc,T_data>* root_;

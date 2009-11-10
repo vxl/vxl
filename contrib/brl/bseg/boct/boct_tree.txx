@@ -58,7 +58,6 @@ boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, sho
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes,
                                                                       unsigned max_level)
-  // : max_level_(max_level)
 {
   // create an empty tree
   boct_loc_code<T_loc> code;
@@ -87,7 +86,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector
         curr_cell->split();
       }
       short child_index=loccode.child_index(curr_level);
-      if (child_index >7)
+      if (child_index < 0)
         vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
       curr_cell=curr_cell->children()+child_index;
       --curr_level;
@@ -323,15 +322,28 @@ void boct_tree<T_loc,T_data>::print()
 template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os)
 {
-  vsl_b_write(os, version_no());
-  vsl_b_write(os, max_level_);
-  vsl_b_write(os, global_bbox_);
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
-  vsl_b_write(os, cells.size());
-  for (unsigned i=0; i<cells.size(); i++) {
-    vsl_b_write(os, cells[i]->code_);
-    vsl_b_write(os, cells[i]->data());
-  }
+  //new version where we only save the leaf nodes
+  short v = version_no();
+  if (v == 2) {
+	vsl_b_write(os, v);
+	vsl_b_write(os, max_level_);
+	vsl_b_write(os, global_bbox_);
+	vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
+	vsl_b_write(os, cells.size());
+	for (unsigned i=0; i<cells.size(); i++) {
+      vsl_b_write(os, cells[i]->code_);
+	  vsl_b_write(os, cells[i]->data());
+	}
+  } 
+  // older version, the whole tree structure is written
+  else if (v == 1) {
+    vsl_b_write(os, v);
+    vsl_b_write(os, max_level_);
+    vsl_b_write(os, global_bbox_);
+    if (root_)
+      vsl_b_write(os, *root_);
+  } else
+    vcl_cerr << "boct_tree<T_loc,T_data>::b_write -- undefined version number!" << vcl_endl;
 }
 
 template <class T_loc,class T_data>
@@ -339,80 +351,46 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
 {
   // read header info
   if (!is) return;
-
   short v;
   vsl_b_read(is, v);
-  switch (v)
-  {
+  
+  switch (v) {
    case 1:
-    //short max_level;
-    vsl_b_read(is, max_level_);
-    vsl_b_read(is, global_bbox_);
-    unsigned num_cells;
-    vsl_b_read(is, num_cells);
-    boct_loc_code<T_loc> code;
-    T_data data;
-    vcl_vector<boct_tree_cell<T_loc,T_data> > cells;
-    for (unsigned i=0; i<num_cells; i++) {
-      vsl_b_read(is, code);
-      vsl_b_read(is, data);
-      boct_tree_cell<T_loc,T_data> cell(code);
-      cell.set_data(data);
-      cells.push_back(cell);
+     {
+     vsl_b_read(is, max_level_);
+     vsl_b_read(is, global_bbox_);
+     root_ = new boct_tree_cell<T_loc,T_data>();
+     vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
+     break;
+     }
+   case 2:
+     {
+     vsl_b_read(is, max_level_);
+     vsl_b_read(is, global_bbox_);
+     unsigned num_cells;
+     vsl_b_read(is, num_cells);
+     boct_loc_code<T_loc> code;     
+     vcl_vector<boct_tree_cell<T_loc,T_data> > cells;
+     T_data data;
+     for (unsigned i=0; i<num_cells; i++) {
+       vsl_b_read(is, code);
+       vsl_b_read(is, data);
+       boct_tree_cell<T_loc,T_data> cell(code);
+       cell.set_data(data);
+       cells.push_back(cell);
+     }
+     boct_tree_cell<T_loc,T_data>* root = construct_tree(cells,max_level_);
+     this->root_=root; 
+     break;
     }
-    //boct_tree<T_loc,T_data> tree(cells,max_level_);
-    //boct_tree_cell<T_loc,T_data>* root = tree.root()->clone(0);
-    boct_tree_cell<T_loc,T_data>* root = construct_tree(cells,max_level_);
-    this->root_=root; 
-    break;
 
-#if 0 // commented out
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
-#endif // 0
   }
 }
-
-#if 0
-template <class T_loc,class T_data>
-void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os)
-{
-  vsl_b_write(os, version_no());
-  vsl_b_write(os, max_level_);
-  vsl_b_write(os, global_bbox_);
-  if (root_)
-    vsl_b_write(os, *root_);
-}
-
-template <class T_loc,class T_data>
-void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
-{
-  // read header info
-  if (!is) return;
-
-  short v;
-  vsl_b_read(is, v);
-  switch (v)
-  {
-   case (1):
-     //short max_level;
-     vsl_b_read(is, max_level_);
-     vsl_b_read(is, global_bbox_);
-
-     root_ = new boct_tree_cell<T_loc,T_data>();
-     vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
-     break;
-   default:
-     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
-              << "           Unknown version number "<< v << '\n';
-     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-     return;
-  }
-}
-#endif 
 
 #define BOCT_TREE_INSTANTIATE(T_loc,T_data) \
 template class boct_tree<T_loc,T_data >; \

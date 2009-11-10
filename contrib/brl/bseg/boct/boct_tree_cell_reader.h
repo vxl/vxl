@@ -39,6 +39,7 @@ class boct_tree_cell_reader
   //: input binary stream of octree
   vsl_b_ifstream* is_;
   unsigned num_cells_;
+  unsigned version_;    // the binary version of the tree
 };
 
 
