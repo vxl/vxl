@@ -27,6 +27,7 @@ SET(vimt3d_sources
                                          vimt3d_resample_trilinear.h
                                          vimt3d_gauss_reduce.h
                                          vimt3d_resample_tricubic.h
+                                         vimt3d_sample_transformed_blob.h
 )
 AUX_SOURCE_DIRECTORY(Templates vimt3d_sources)
 
