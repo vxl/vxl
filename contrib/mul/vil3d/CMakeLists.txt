@@ -37,6 +37,7 @@ SET(vil3d_sources
     vil3d_scan_image.h
     vil3d_resample_tricubic.h        vil3d_resample_tricubic.txx
     vil3d_tricub_interp.h            vil3d_tricub_interp.txx
+    vil3d_chord.h
 
     file_formats/vil3d_gipl_format.h     file_formats/vil3d_gipl_format.cxx
     file_formats/vil3d_dicom.h           file_formats/vil3d_dicom.cxx
