@@ -14,12 +14,15 @@
 // Expects format of data:
 // \verbatim
 // {
-//   string1 string2 string3 ...
+//   string1 string2 string3 // Comment ignored
+//   string4 string5
 // }
+// \param comment_str defines string indicating comments
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_string_list(vcl_istream& is,
-                          vcl_vector<vcl_string>& items);
+                          vcl_vector<vcl_string>& items,
+                          const vcl_string& comment_str="//");
 
 //: Parse list of strings
 // Expects format of data:
@@ -28,9 +31,11 @@ void mbl_parse_string_list(vcl_istream& is,
 //   string1 string2 string3 ...
 // }
 // \endverbatim
+// \param comment_str defines string indicating comments
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_string_list(const vcl_string& data,
-                          vcl_vector<vcl_string>& items);
+                          vcl_vector<vcl_string>& items,
+                          const vcl_string& comment_str="//");
 
 
 #endif // mbl_parse_string_list_h_
