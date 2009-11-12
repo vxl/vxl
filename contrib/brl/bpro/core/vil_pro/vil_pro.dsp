@@ -162,6 +162,9 @@ SOURCE=.\processes/vil_filter_image_process.cxx
 SOURCE=.\processes/vil_resample_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bil_compass_edge_detector_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group

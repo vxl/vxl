@@ -368,6 +368,9 @@ SOURCE=.\file_formats/vil3d_analyze_format.h
 # Begin Source File
 SOURCE=.\file_formats/vil3d_gen_synthetic.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_chord.h
+# End Source File
 # End Group
 # End Target
 # End Project

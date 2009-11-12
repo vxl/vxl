@@ -231,6 +231,9 @@ SOURCE=.\mbl_sample_stats_1d.cxx
 SOURCE=.\mbl_parse_colon_pairs_list.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_parse_string_list.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 # End Source File
 # Begin Source File
@@ -649,6 +652,9 @@ SOURCE=.\mbl_sample_stats_1d.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_parse_colon_pairs_list.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_string_list.h
 # End Source File
 # End Group
 # End Target
