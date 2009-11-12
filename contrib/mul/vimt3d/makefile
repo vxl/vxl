@@ -23,6 +23,7 @@ MANPAGE_SOURCES += vimt3d_gauss_reduce.h
 MANPAGE_SOURCES += vimt3d_resample_trilinear.h
 SOURCES += vimt3d_save.cxx
 MANPAGE_SOURCES += vimt3d_resample_tricubic.h
+MANPAGE_SOURCES += vimt3d_sample_transformed_blob.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

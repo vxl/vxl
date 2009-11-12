@@ -41,6 +41,7 @@ MANPAGE_SOURCES += vil3d_from_image_2d.h
 MANPAGE_SOURCES += vil3d_reflect.h
 MANPAGE_SOURCES += vil3d_decimate.h
 MANPAGE_SOURCES += vil3d_scan_image.h
+MANPAGE_SOURCES += vil3d_chord.h
 
 SUBDIRS += algo io tools
 
