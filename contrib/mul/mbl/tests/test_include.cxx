@@ -38,6 +38,7 @@
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_sequence.h>
+#include <mbl/mbl_parse_string_list.h>
 #include <mbl/mbl_parse_tuple.h>
 #include <mbl/mbl_print.h>
 #include <mbl/mbl_priority_bounded_queue.h>

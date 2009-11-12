@@ -10,6 +10,7 @@
 #include <vimt3d/vimt3d_resample_trilinear.h>
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
 #include <vimt3d/vimt3d_sample_profile_trilin.h>
+#include <vimt3d/vimt3d_sample_transformed_blob.h>
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_slice.h>
 #include <vimt3d/vimt3d_transform_3d.h>

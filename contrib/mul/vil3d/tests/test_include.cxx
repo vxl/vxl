@@ -29,6 +29,7 @@
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/algo/vil3d_threshold.h>
 
+#include <vil3d/vil3d_chord.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_clamp.h>
 #include <vil3d/vil3d_copy.h>
