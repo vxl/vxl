@@ -301,6 +301,18 @@ void test_math()
 
   testlib_test_assert("!isfinite(huge_val(double))", !vnl_math_isfinite(vnl_huge_val(double())));
   testlib_test_assert("!isfinite(huge_val(float))", !vnl_math_isfinite(vnl_huge_val(float())));
+
+// NA
+  double na_d = vnl_math_na();
+  testlib_test_assert("isnan(NA)", vnl_math_isnan(vnl_math_na()));
+  testlib_test_assert("isnan(NA2)", vnl_math_isnan(na_d));
+  testlib_test_assert("isnan(1/NA2)", vnl_math_isnan(1.0/na_d));
+  testlib_test_assert("isna(NA)", vnl_math_isna(vnl_math_na()));
+  testlib_test_assert("isna(NA2)", vnl_math_isna(na_d));
+  testlib_test_assert("isna(1/NA2)", vnl_math_isna(1.0/na_d));
+  testlib_test_assert("!isfinite(NA)", !vnl_math_isfinite(na_d));
+  testlib_test_assert("!isinf(NA)", !vnl_math_isinf(na_d));
+
 }
 
 TESTMAIN(test_math);
