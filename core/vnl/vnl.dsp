@@ -177,6 +177,9 @@ SOURCE=.\vnl_nonlinear_minimizer.cxx
 SOURCE=.\vnl_numeric_traits.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_na.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_rank+double-.cxx
 # End Source File
 # Begin Source File
@@ -1207,6 +1210,9 @@ SOURCE=.\vnl_fortran_copy_fixed.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_fortran_copy_fixed.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_na.h
 # End Source File
 # End Group
 # End Target
