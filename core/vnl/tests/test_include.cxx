@@ -88,6 +88,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_matrix_fixed_ref.h>
+#include <vnl/vnl_na.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_operators.h>
