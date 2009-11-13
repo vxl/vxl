@@ -75,17 +75,6 @@ int      vnl_huge_val(int);
 short    vnl_huge_val(short);
 char     vnl_huge_val(char);
 
-//: qNaN to indicate not available.
-// This returns the bit pattern 0x7ff00000000007a2, as used by Octave and R
-// Don't assume that any VXL functions will do something sensible in the face of NA, unless
-// explicitly documented.
-double   vnl_math_na();
-
-//: True if parameter is specific NA qNaN.
-// Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
-bool vnl_math_isna(double);
-
-
 //: real numerical constants
 class vnl_math
 {

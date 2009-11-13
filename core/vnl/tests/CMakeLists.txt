@@ -13,6 +13,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_file_matrix.cxx
   test_finite.cxx
   test_math.cxx
+  test_na.cxx
   test_matlab.cxx
   test_matrix.cxx
   test_matrix_exp.cxx
