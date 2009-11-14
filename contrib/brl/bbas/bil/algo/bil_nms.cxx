@@ -30,7 +30,7 @@ bil_nms::bil_nms()
   x_(0,0, 0.0),
   y_(0,0, 0.0),
   dir_(0,0, 0.0),
-  mag_(0,0, 0.0),
+  mag_(0,0), // there's no vil_image_view constructor to fill the image with zeroes; adding a third arg sets planestep!
   deriv_(0,0, 0.0)
 {
 }
@@ -52,7 +52,7 @@ bil_nms::bil_nms(const bil_nms_params& nsp, const vil_image_view<double>& dir_x,
   mag_(grad_mag.ni(), grad_mag.nj()),
   deriv_(grad_mag.nj(), grad_mag.ni(), 0.0)
 {
-    mag_.fill(0.0);
+    mag_.fill(0.0f);
 }
 
 //: Apply the algorithm
