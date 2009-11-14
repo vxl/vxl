@@ -792,8 +792,7 @@ template <class T, unsigned M, unsigned N>
 inline
 vnl_vector_fixed<T, N>
 vnl_matrix_fixed_vec_mat_mult(const vnl_vector_fixed<T, M>& a,
-                              const vnl_matrix_fixed<T, M, N>& b
-                              )
+                              const vnl_matrix_fixed<T, M, N>& b)
 {
   vnl_vector_fixed<T, N> out;
   for (unsigned i = 0; i < N; ++i)

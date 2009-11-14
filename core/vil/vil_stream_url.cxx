@@ -234,7 +234,7 @@ vil_stream_url::vil_stream_url(char const *url)
   vcl_snprintf(buffer, 4090, "GET /%s / HTTP/1.1\r\n", path.c_str());
   if (auth != "")
     vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
-      "Authorization:  Basic %s\n", encode_base64(auth).c_str());
+                 "Authorization:  Basic %s\n", encode_base64(auth).c_str());
 
   if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
   {

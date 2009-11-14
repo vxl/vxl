@@ -62,8 +62,8 @@ void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
 
 //: Compute finite differences gradient using forward differences.
 void vnl_least_squares_function::ffdgradf(vnl_vector<double> const& x,
-                                         vnl_matrix<double>& jacobian,
-                                         double stepsize)
+                                          vnl_matrix<double>& jacobian,
+                                          double stepsize)
 {
   unsigned int dim = x.size();
   unsigned int n = jacobian.rows();

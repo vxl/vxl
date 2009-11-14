@@ -75,7 +75,7 @@ class vnl_least_squares_function
   //: Use this to compute a finite-forward-difference gradient other than lmdif
   // This takes about half as many estimates as fdgradf
   void ffdgradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian,
-               double stepsize);
+                double stepsize);
 
   //: Called after each LM iteration to print debugging etc.
   virtual void trace(int iteration,

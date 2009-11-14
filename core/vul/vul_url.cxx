@@ -173,13 +173,13 @@ vcl_istream * vul_http_open(char const *url)
 
   // send HTTP 1.1 request.
   vcl_snprintf(buffer, 4090-vcl_strlen(buffer),
-    "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
-    url, host.c_str());
+               "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
+               url, host.c_str());
 
   if (auth != "")
     vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
-                "Authorization: Basic %s\r\n",
-                vul_url::encode_base64(auth).c_str());
+                 "Authorization: Basic %s\r\n",
+                 vul_url::encode_base64(auth).c_str());
 
   if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
   {
@@ -371,12 +371,12 @@ bool vul_http_exists(char const *url)
 
   // send HTTP 1.1 request.
   vcl_snprintf(buffer, 4090,
-    "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
-    url, host.c_str());
+               "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
+               url, host.c_str());
   if (auth != "")
     vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
-      "Authorization: Basic %s\r\n",
-      vul_url::encode_base64(auth).c_str() );
+                 "Authorization: Basic %s\r\n",
+                 vul_url::encode_base64(auth).c_str() );
 
   if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
   {
