@@ -51,10 +51,8 @@ bool vgl_plane_3d<T>::contains(vgl_point_3d<T> const& p, T tol)
 {
   //to maintain a consistent distance metric the plane should be normalized
   vgl_vector_3d<T> n(a_, b_, c_), pv(p.x(), p.y(), p.z());
-  T len = static_cast<T>(length(n));
-  T dist = dot_product(n,pv);
-  dist = (dist + d_)/len;
-  return (dist<-tol || dist>tol);
+  T dist = (dot_product(n,pv) + d_) / static_cast<T>(length(n));
+  return dist >= -tol && dist <= tol;
 }
 
 template <class T>
