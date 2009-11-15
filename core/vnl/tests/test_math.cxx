@@ -243,7 +243,7 @@ void test_math()
 
 #define print_hex(p) \
   vcl_hex<<vcl_setfill('0')<<vcl_setw(2)<<(short)reinterpret_cast<unsigned char*>(&p)[sizeof(p)-1]; \
-  for (int i=2; i<=sizeof(p); ++i) \
+  for (unsigned int i=2; i<=sizeof(p); ++i) \
     vcl_cout<<vcl_setfill('0')<<vcl_setw(2)<<(short)(reinterpret_cast<unsigned char*>(&p))[sizeof(p)-i]; \
   vcl_cout<<vcl_dec
 
