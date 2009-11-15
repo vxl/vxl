@@ -66,11 +66,14 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
   //get inputs:
   unsigned i = 0;
   bvpl_corner_pairs_sptr pairs =pro.get_input<bvpl_corner_pairs_sptr>(i++);
-  unsigned lines_id = pro.get_input<unsigned>(i++);
-  vcl_string vrml_path =pro.get_input<vcl_string>(i++);
-  bool write_header = pro.get_input<bool>(i++);
-  float hue = pro.get_input<float>(i++)*360.0f;
-  
+#if 0
+  unsigned lines_id =
+#endif
+                         pro.get_input<unsigned>(i++);
+  vcl_string vrml_path = pro.get_input<vcl_string>(i++);
+  bool write_header    = pro.get_input<bool>(i++);
+  float hue            = pro.get_input<float>(i++)*360.0f;
+
   vcl_ofstream os;
 
   if (write_header) {
@@ -84,11 +87,13 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
   }
    float r, g, b;
    vil_colour_space_HSV_to_RGB<float>(hue,1.0f,255.0f,&r,&g,&b);
-   //for (unsigned j=0; j<pairs->pairs_[lines_id].size(); ++j)
-     //bvxm_vrml_voxel_grid::write_vrml_line_segment(os, pairs->pairs_[lines_id][j],r/255.0,g/255.0,b/255.0,0);
-  
-   //for (unsigned j=0; j<pairs->boxes_[lines_id].size(); ++j)
-     //bvxm_vrml_voxel_grid::write_vrml_box(os, pairs->boxes_[lines_id][j],r/255.0,g/255.0,b/255.0,0.9);
+#if 0
+   for (unsigned j=0; j<pairs->pairs_[lines_id].size(); ++j)
+     bvxm_vrml_voxel_grid::write_vrml_line_segment(os, pairs->pairs_[lines_id][j],r/255.0,g/255.0,b/255.0,0);
+
+   for (unsigned j=0; j<pairs->boxes_[lines_id].size(); ++j)
+     bvxm_vrml_voxel_grid::write_vrml_box(os, pairs->boxes_[lines_id][j],r/255.0,g/255.0,b/255.0,0.9);
+#endif // 0
 
   return true;
 }
