@@ -19,18 +19,17 @@ double vnl_na()
   double a;
 
 #if VXL_HAS_INT_64
-  *reinterpret_cast<vxl_uint_64*>(&a) = 0x7ff00000000007a2;
-
+  *reinterpret_cast<vxl_uint_64*>(&a) = 0x7ff00000000007a2LL;
 #else
 # if VXL_BIG_ENDIAN
-#  define vnl_math_hw 0;
-#  define vnl_math_lw 1;
+#  define hw 0
+#  define lw 1
 # else  // VXL_LITTLE_ENDIAN
-#  define vnl_math_hw 1;
-#  define vnl_math_lw 0;
+#  define hw 1
+#  define lw 0
 # endif
-  *reinterpret_cast<vxl_uint_32*>(&a)[hi]=0x7ff00000
-  *reinterpret_cast<vxl_uint_32*>(&a)[lo]=0x000007a2
+  reinterpret_cast<vxl_uint_32*>(&a)[hw]=0x7ff00000;
+  reinterpret_cast<vxl_uint_32*>(&a)[lw]=0x000007a2;
 #endif
 
   return a;
@@ -41,13 +40,11 @@ double vnl_na()
 bool vnl_na_isna(double x)
 {
 #if VXL_HAS_INT_64
-  return ((*reinterpret_cast<vxl_uint_64*>(&x))&0xfff7ffffffffffff)
-    == 0x7ff00000000007a2;
-
+  return ((*reinterpret_cast<vxl_uint_64*>(&x))&0xfff7ffffffffffffLL)
+    == 0x7ff00000000007a2LL;
 #else
-
-  return ((reinterpret_cast<vxl_int_32*>(&a)[hi])&0fff7ffff))==0x7ff00000 &&
-  reinterpret_cast<vxl_int_32*>(&a)[lo]==0x000007a2
+  return ((reinterpret_cast<vxl_int_32*>(&x)[hw]) & 0xffffffff) == 0x7ff00000 &&
+         reinterpret_cast<vxl_int_32*>(&x)[lw] == 0x000007a2;
 #endif
 }
 
@@ -77,7 +74,6 @@ void vnl_na_double_parse(vcl_istream &is, double& x)
     return;
   }
   x = vnl_na();
-
 }
 
 //----------------------------------------------------------------------
