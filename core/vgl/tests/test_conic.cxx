@@ -360,9 +360,9 @@ static void test_conic()
   npt = vgl_homg_point_2d<double>(-3,5,1); // this point lies on the symmetry axis
   dst = vgl_homg_operators_2d<double>::distance_squared(c,npt);
   TEST_NEAR("distance point to parabola (outside)", dst, 25, 1e-6);
-  if (dst < 24) // debugging output
+  if (dst < 24 || dst > 26) // debugging output
   {
-    vcl_cout << "   c   = " << c << "\n   npt = " << npt << '\n';
+    vcl_cout << "   closest point = " << vgl_homg_operators_2d<double>::closest_point(c,npt) << '\n';
   }
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count = 2", lines.size(), 2);
@@ -380,9 +380,9 @@ static void test_conic()
   TEST("closest_point to centre", npt, c.centre());
   npt = vgl_homg_operators_2d<double>::closest_point(c, vgl_homg_point_2d<double>(-3,5,1));
   TEST_NEAR("closest point (outside)", npt, top, 1e-6);
-  if (npt.x()/npt.w() < 0.9 || npt.x()/npt.w() > 1.1) // debugging output
+  if (vgl_homg_operators_2d<double>::distance_squared(npt,top) > 0.1) // debugging output
   {
-    vcl_cout << "   top = " << top << "\n   npt = " << npt << '\n';
+    vcl_cout << "   closest point = " << npt << '\n';
   }
 
   l = vgl_homg_line_2d<double>(1,-1,0); // line x=y
