@@ -2,6 +2,15 @@
 #define boct_tree_cell_h_
 //:
 // \file
+// \brief  Generic octree cell, travesal operations as described in 
+//         [Simple and Efficient Travessal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
+//
+// \author Gamze Tunali/Vishal Jain
+// \date   July 31, 2009
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
@@ -24,19 +33,20 @@ template <class T_loc,class T_data>
 class boct_tree_cell
 {
  public:
-             //constructors
+  //: Default Constructor
   boct_tree_cell<T_loc,T_data>()
   : children_(0), parent_(0), vis_node_(0) {}
 
+  //: Constructor from locational code and octree cell
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T_data>* p)
   : code_(code), children_(0), parent_(p), vis_node_(0) {}
 
-  //: constructor given code and level
+  //: Constructor given code and level
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code);
 
   ~boct_tree_cell<T_loc,T_data>();
 
-  //: creates a new cell with the same data
+  //: Creates a new cell with the same data
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
   template <class T_data_to>
@@ -57,6 +67,7 @@ class boct_tree_cell
     return cell;
   }
 
+  
   void set_parent(boct_tree_cell<T_loc,T_data>* p) {parent_ = p; }
   void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) {if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl;}
   void set_children_null() { children_=0; }
@@ -64,6 +75,9 @@ class boct_tree_cell
 
   //: adds a pointer for each leaf children to v
   void leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
+  
+  //: adds a pointer to vector v, for each leaf children at a particular level
+  void leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, T_loc level);
 
   const boct_loc_code<T_loc> get_code();
 
@@ -81,9 +95,9 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>* children() { return children_; }
   boct_tree_cell<T_loc,T_data>* parent() { return parent_; }
 
-  void  find_neighbors(boct_face_idx face,vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,short max_level);
+  void  find_neighbors(boct_face_idx face,vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,short root_level);
   //: at the same level or coarser level
-  bool  find_neighbor(boct_face_idx face, boct_tree_cell<T_loc,T_data>* &neighbor,short max_level);
+  bool  find_neighbor(boct_face_idx face, boct_tree_cell<T_loc,T_data>* &neighbor,short root_level);
 
   boct_tree_cell<T_loc,T_data>* get_common_ancestor(short binarydiff);
 
