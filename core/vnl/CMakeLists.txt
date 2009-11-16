@@ -215,6 +215,7 @@ SET( vnl_sources
   vnl_bessel.cxx               vnl_bessel.h
                                vnl_cross.h
   vnl_gamma.cxx                vnl_gamma.h
+                               vnl_beta.h
   vnl_erf.cxx                  vnl_erf.h
   vnl_sample.cxx               vnl_sample.h
   vnl_unary_function.txx       vnl_unary_function.h
@@ -228,8 +229,6 @@ SET( vnl_sources
 
   # hardware optimisation
                                vnl_sse.h
-                                
-                               vnl_beta.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)

@@ -4,6 +4,7 @@
 #include <vnl/vnl_alloc.h>
 #include <vnl/vnl_analytic_integrant.h>
 #include <vnl/vnl_bessel.h>
+#include <vnl/vnl_beta.h>
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_block.h>
