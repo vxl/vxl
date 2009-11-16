@@ -28,8 +28,8 @@ class boct_loc_code
   //: copy constructor
   boct_loc_code(const boct_loc_code& rhs);
 
-  //: Constructor from a point and a max_level (= root_level+1) of the tree
-  boct_loc_code(vgl_point_3d<double> p, short max_level);
+  //: Constructor from a poin, the root level of a tree (num_levels -1) and a max_val( 2^(root_level)
+  boct_loc_code(vgl_point_3d<double> p, short root_level, double max_val);
 
   //: set code from the dimensional data
   void set_code(T x_loc, T y_loc, T z_loc) { x_loc_=x_loc; y_loc_=y_loc; z_loc_=z_loc; }
