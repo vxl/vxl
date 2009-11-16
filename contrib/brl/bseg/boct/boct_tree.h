@@ -1,7 +1,18 @@
+//This is brl/bseg/boct/boc_tree.h
 #ifndef boct_tree_h_
 #define boct_tree_h_
 //:
 // \file
+// \brief  A generic octree templated on locational code and datatype. Travesal operations are inplemented as described in 
+//         [Simple and Efficient Travessal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
+//
+// \author Gamze Tunali/Vishal Jain
+// \date   July 31, 2009
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
+
 #include "boct_tree_cell.h"
 #include "boct_loc_code.h"
 
@@ -13,72 +24,132 @@ template <class T_loc, class T_data>
 class boct_tree
 {
  public:
-  boct_tree(): root_(0),global_bbox_(){}
-  boct_tree(short max_level, short init_levels=1);
-  boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels=1);
-  boct_tree(boct_tree_cell<T_loc, T_data>* root, short max_level) {root_=root; max_level_=max_level;}
-  //: constructs the tree from leaf nodes
-  boct_tree_cell<T_loc, T_data>* construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes, unsigned max_level);
+  //: Default constructor
+  boct_tree(): root_(0),root_level_(-1),num_levels_(0), max_val_(0), global_bbox_(){}
+  
+  //: Construct an empty tree from maximum number of levels and levels, to initialize
+  boct_tree(short num_levels, short init_levels=1);
+  
+  //: Construct from bounding box, maximum number of levels and levels to initialize
+  boct_tree(vgl_box_3d<double>  bbox,short num_levels, short init_levels=1);
+  
+  //: Constructs form root ceel and maximum number of levels
+  boct_tree(boct_tree_cell<T_loc, T_data>* root, short num_levels)
+  {
+    root_ = root;
+    root_level_ = num_levels -1;
+    num_levels_ = num_levels;
+    max_val_ = (double)(1 << root_level_);
+  }
+  
+  //: Destructor
   ~boct_tree();
 
-  //clones with the same data
+  //: Clones with the same data
   boct_tree<T_loc,T_data>* clone();
 
-  //: clones the tree structure with a different data type
+  //: Dlones the tree structure with a different data type
   template <class T_data_to>
   boct_tree<T_loc,T_data_to>* clone_to_type() {
     // clone the tree
     boct_tree_cell<T_loc, T_data_to>* root = root_->clone_to_type<T_data_to>(0);
     // create a new tree tree only with the root node
-    boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(root,max_level_);
+    boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(root,num_levels_);
   
     return tree;
   }
 
+  //: Initialize all cells with a value
   void init_cells(T_data val);
+  
+  //: Returns the leaf cell that contains the 3d point specified in global coordinates
   boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p);
   
+  //: Returns the leaf cell that contains the 3d point specified in octree-coordinates i.e. [0,1)x[0,1)x[0,1)
   boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p);
+  
+  //: Returns the cell at a particular level(not necessarly a leaf) containing teh 3d point in octree-coordinates i.e. [0,1)x[0,1)x[0,1)
   boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level);
 
-  //: box dimension should be scaled to [0,1], TODO: accept local coordinates in meters
+  //: Returns the smallest cell that entirely contains a 3d region in octree coordinates [0,1)x[0,1)x[0,1)
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r);
+  
+  //: Return cell with a partcular locational code
   boct_tree_cell<T_loc,T_data>* get_cell(  boct_loc_code<T_loc>& code) { return root_->traverse(code); }
+  
+  //: Return root of the tree
   boct_tree_cell<T_loc,T_data>* root(){return root_;}
+  
+  //: Split the tree
   bool split();
+  
+  //: Returns a vector of all leaf cells of the tree
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
+  
+  //: Returns all leaf cells at a specified level of the tree
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells_at_level(T_loc l);
 
-  //: return the max level, which is root_level+1
-  short num_levels() const { return max_level_; }
-
-  //: The possible finest level is 0, but it does not have to split up to level 0, this method
+  //: Return the maximum number of levels, which is root_level+1
+  short number_levels() const { return num_levels_; }
+  
+  //: Return the levels of the root, which is number_levels-1
+  short root_level() const { return root_level_; }
+  
+  //: Return a value for converting positions to locational codes 2^(root_level)
+  double max_val() const {return max_val_;}
+ 
+  //: Return the finest level the tree has been split down to (not necessarly 0)
   short finest_level();
 
+  //: Set the global-coordinates bounding box for the tree
   void set_bbox(vgl_box_3d<double> & bbox){global_bbox_=bbox;}
 
+  //: Return the bounding box of a cell
   vgl_box_3d<double> cell_bounding_box(boct_tree_cell<T_loc,T_data>* const cell);
 
-  //: returns the location of the cell in the block, with respect to blocks min point
+  //: Returns the location of the cell in the block, with respect to blocks min point
   vgl_box_3d<double> cell_bounding_box_local(boct_tree_cell<T_loc,T_data>* const cell);
 
+  //: Returns bounding box of the tree
   vgl_box_3d<double> bounding_box() const {return global_bbox_;}
 
+  //: Returns the length of a cell, assuming cell is cubical
+  double cell_size(boct_tree_cell<T_loc,T_data>* const cell);
+  
+  //: Print tree
   void print();
 
+  // Binary I/O
   void b_write(vsl_b_ostream & os);
   void b_read(vsl_b_istream & is);
   static short version_no() { return 2; }
+  
  private:
-  short max_level_;
+  //: Maximum number of levels in the octree
+  short num_levels_;
+  
+  //: Level of the root cell i.e root_level = num_level - 1
+  short root_level_;
+  
+  //: Value for converting positions to locational codes 2^(root_level)
+  double max_val_;
+  
+  //: The root cell
   boct_tree_cell<T_loc,T_data>* root_;
 
-  //: the local coordinates are from 0 to 1; that's why we need the global coordinates
+  //: The local coordinates are from 0 to 1; that's why we need the global coordinates
   vgl_box_3d<double> global_bbox_;
+  
+public: //should be made private
+  //: Constructs the tree from leaf nodes and number of levels, returns the root cell. This function is used by b_read
+  boct_tree_cell<T_loc, T_data>* construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes, short num_levels);
 };
 
+//: Binary write
 template <class T_loc,class T_data>
 void vsl_b_write(vsl_b_ostream & os, boct_tree<T_loc,T_data>& tree) { tree.b_write(os); }
 
+//: Binary read
 template <class T_loc,class T_data>
 void vsl_b_read(vsl_b_istream & is, boct_tree<T_loc,T_data>& tree) { tree.b_read(is); }
 
