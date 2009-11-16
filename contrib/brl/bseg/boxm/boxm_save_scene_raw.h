@@ -75,7 +75,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     // get origin of block
     vgl_point_3d<double> min = block_bb.min_point();
 
-    ncells = 1 << (tree->num_levels() - 1 - (int)resolution_level);
+    ncells = 1 << (tree->root_level() - (int)resolution_level);
 
     // assume that bounding box is a cube
     const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
@@ -98,7 +98,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       *dp = 0.0f;
     }
 
-    double out_cell_norm_volume = (tree->num_levels() - (int)resolution_level + 1);
+    double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
     out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
     vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();

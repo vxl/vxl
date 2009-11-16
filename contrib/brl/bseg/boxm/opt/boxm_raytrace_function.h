@@ -223,9 +223,9 @@ class boxm_raytrace_function
                                                               (exit_pt.y()-block_bb.min_y())/block_bb.height(),
                                                               (exit_pt.z()-block_bb.min_z())/block_bb.depth());
                             //: obtian the code for the exit point
-                            boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->num_levels());
+                            boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->root_level(), tree->max_val());
                             cell_type *neighborcell=NULL;
-                            if (curr_cell->find_neighbor(face_id,neighborcell,tree->num_levels()))
+                            if (curr_cell->find_neighbor(face_id,neighborcell,tree->root_level()))
                                 curr_cell=neighborcell->traverse_force(exit_loc_code);
                             else
                                 break;

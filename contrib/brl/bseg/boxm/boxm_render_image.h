@@ -71,7 +71,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
       boxm_block<tree_type> * curr_block=scene.get_active_block();
       vcl_cout<<"Block: "<<curr_block->bounding_box()<<vcl_endl
-              <<"Tree: "<<curr_block->get_tree()->num_levels()
+              <<"Tree: "<<curr_block->get_tree()->number_levels()
               << " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<vcl_endl;
 
       t.mark();
