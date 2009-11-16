@@ -129,7 +129,7 @@ SOURCE=.\processes/boxm_upload_mesh_process.cxx
 SOURCE=.\processes/boxm_replace_const_app_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+boxm_scene_base--.cxx
+SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

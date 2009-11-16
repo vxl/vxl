@@ -1214,6 +1214,9 @@ SOURCE=.\vnl_fortran_copy_fixed.txx
 # Begin Source File
 SOURCE=.\vnl_na.h
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_beta.h
+# End Source File
 # End Group
 # End Target
 # End Project

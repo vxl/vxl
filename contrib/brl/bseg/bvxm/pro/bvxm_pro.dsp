@@ -219,6 +219,12 @@ SOURCE=.\processes/bvxm_mog_to_mpm_process.cxx
 SOURCE=.\processes/bvxm_create_synth_lidar_data_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_update_point_cloud_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_report_statistics_point_cloud_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -355,6 +361,12 @@ SOURCE=.\processes/bvxm_detect_scale_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_create_synth_lidar_data_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_point_cloud_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_report_statistics_point_cloud_process.h
 # End Source File
 # End Group
 # End Target

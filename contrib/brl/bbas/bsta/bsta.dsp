@@ -93,6 +93,18 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\bsta_gauss.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_k_medoid.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_int_histogram_1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_int_histogram_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bsta_histogram+double-.cxx
 # End Source File
 # Begin Source File
@@ -171,16 +183,7 @@ SOURCE=.\Templates/bsta_parzen_sphere+float.3-.cxx
 SOURCE=.\Templates/bsta_gaussian_full+float.2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bsta_gauss.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bsta_k_medoid.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bsta_int_histogram_1d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bsta_int_histogram_2d.cxx
+SOURCE=.\Templates/bsta_beta+double-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -319,6 +322,12 @@ SOURCE=.\bsta_parzen_sf1.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_parzen_sf3.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_beta.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_beta.txx
 # End Source File
 # End Group
 # End Target
