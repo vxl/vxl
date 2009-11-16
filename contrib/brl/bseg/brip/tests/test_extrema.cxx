@@ -170,6 +170,32 @@ static void test_extrema()
   }
   rc = max;
   TEST_NEAR("-45 degrees fast vs. composed", rf, rc, 0.01);
+
+  vcl_cout << " test rotational extrema\n";
+
+  im.fill(0.0f);
+  im(13,14) = 1.0f;  im(14,14) = 1.0f;   im(15,14) = 1.0f;
+  im(14,15) = 1.0f;  im(15,15) = 1.0f;   im(16,15) = 1.0f;
+  im(15,16) = 1.0f;  im(16,16) = 1.0f;   im(17,16) = 1.0f;
+  im(16,17) = 1.0f;  im(17,17) = 1.0f;   im(18,17) = 1.0f;
+  im(17,18) = 1.0f;  im(18,18) = 1.0f;   im(19,18) = 1.0f;
+
+  for(unsigned j = 13; j<20; ++j){
+    for(unsigned i = 12; i<20; ++i){
+      vcl_cout << vcl_fixed << im(i,j) << ' ';
+    }
+    vcl_cout << '\n';
+  }
+  vcl_cout << "----------\n";
+  lambda0 = 1.0f; lambda1 = 3.0f;
+  vil_image_view<float> output = brip_vil_float_ops::extrema_rotational(im, lambda0, lambda1, 15.0f, true);
+  for(unsigned j = 13; j<20; ++j){
+    for(unsigned i = 12; i<20; ++i){
+      vcl_cout << vcl_fixed << output(i,j,1) << ' ';
+    }
+    vcl_cout << '\n';
+  }
+  vcl_cout << "----------\n";
 }
  
 
