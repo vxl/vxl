@@ -73,7 +73,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
           else
           {
             vcl_vector<boct_tree_cell<T_loc,T_data > * > neighbors;
-            curr_cell->find_neighbors(face_id,neighbors,tree->num_levels());
+            curr_cell->find_neighbors(face_id,neighbors,tree->root_level());
 
             vgl_vector_3d<double> len(exit_point-entry_point);
             T_data data=curr_cell->data();
