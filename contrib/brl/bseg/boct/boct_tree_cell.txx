@@ -196,7 +196,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::get_common_ancestor(
 template<class T_loc,class T_data>
 void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
                                                    vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,
-                                                   short max_level)
+                                                   short root_level)
 {
   short cellsize=1<<this->level();
 
@@ -244,7 +244,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
     }
     case X_HIGH:
     {
-      if ((this->code_.x_loc_+cellsize)>=(1<<(max_level-1)))
+      if ((this->code_.x_loc_+cellsize)>=(1<<(root_level)))
         return ;
       short xhighcode=this->code_.x_loc_+cellsize;
       short diff=this->code_.x_loc_^xhighcode;
@@ -316,7 +316,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
     }
     case Y_HIGH:
     {
-      if ((this->code_.y_loc_+cellsize)>=(1<<(max_level-1)))
+      if ((this->code_.y_loc_+cellsize)>=(1<<(root_level)))
         return ;
       short yhighcode=this->code_.y_loc_+cellsize;
       short diff=this->code_.y_loc_^yhighcode;
@@ -388,7 +388,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
     }
     case Z_HIGH:
     {
-      if ((this->code_.z_loc_+cellsize)>=(1<<(max_level-1)))
+      if ((this->code_.z_loc_+cellsize)>=(1<<(root_level)))
         return ;
       short zhighcode=this->code_.z_loc_+cellsize;
       short diff=this->code_.z_loc_^zhighcode;
@@ -430,7 +430,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 template<class T_loc,class T_data>
 bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
                                                    boct_tree_cell<T_loc,T_data>* &neighbor,
-                                                   short max_level)
+                                                   short root_level)
 {
   short cellsize=1<<this->level();
 
@@ -460,7 +460,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
     }
     case X_HIGH:
     {
-      if ((this->code_.x_loc_+cellsize)>=(1<<(max_level-1)))
+      if ((this->code_.x_loc_+cellsize)>=(1<<root_level))
         return false ;
       short xhighcode=this->code_.x_loc_+cellsize;
       short diff=this->code_.x_loc_^xhighcode;
@@ -499,7 +499,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
     }
     case Y_HIGH:
     {
-      if ((this->code_.y_loc_+cellsize)>=(1<<(max_level-1)))
+      if ((this->code_.y_loc_+cellsize)>=(1<<(root_level)))
         return false ;
       short yhighcode=this->code_.y_loc_+cellsize;
       short diff=this->code_.y_loc_^yhighcode;
@@ -537,7 +537,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
     }
     case Z_HIGH:
     {
-      if ((this->code_.z_loc_+cellsize)>=(1<<(max_level-1)))
+      if ((this->code_.z_loc_+cellsize)>=(1<<(root_level)))
         return false ;
       short zhighcode=this->code_.z_loc_+cellsize;
       short diff=this->code_.z_loc_^zhighcode;
@@ -576,6 +576,30 @@ void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc
       children_[i].leaf_children(v);
     }
   }
+}
+
+template<class T_loc,class T_data>
+void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, T_loc target_level)
+{
+   
+  T_loc curr_level = code_.level;
+  
+  if(curr_level > target_level+1){
+    for (unsigned i=0; i<8; i++) {
+      if (!children_[i].is_leaf())
+        children_[i].leaf_children_at_level(v,target_level);
+    }
+  }
+  
+  if(curr_level == target_level+1){
+    for (unsigned i=0; i<8; i++) {
+      if (children_[i].is_leaf())
+        v.push_back(&children_[i]);
+    }
+  }
+
+  
+  
 }
 
 template<class T_loc,class T_data>
