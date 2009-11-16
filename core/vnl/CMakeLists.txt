@@ -244,6 +244,8 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx PROPERTIES COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector+vnl_rational-.cxx PROPERTIES COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector_fixed+vnl_rational.3-.cxx PROPERTIES COMPILE_FLAGS -O0)
+  # with optimisation, the vnl_na etc functions fail on x86_64:
+  SET_SOURCE_FILES_PROPERTIES(vnl_na.cxx PROPERTIES COMPILE_FLAGS -O1)
   # gcc must have -msse2 option to enable sse2 support
   IF(VNL_CONFIG_ENABLE_SSE2)
     ADD_DEFINITIONS( -msse2 )
