@@ -33,16 +33,20 @@ class bvpl_susan_opinion_operator
                bvpl_kernel_vector_sptr kernel, 
                bvxm_voxel_grid<bvxm_opinion>* out_grid)
   {
+  vcl_cout<<"Operator"<<vcl_endl;
+  vcl_cout<<"Min "<<kernel->min()<<" Max "<< kernel->max()<<vcl_endl;
     bvpl_subgrid_iterator<int > sub_dir_iter(dirgrid, kernel->min(), kernel->max());
     bvpl_subgrid_iterator<bvxm_opinion> sub_opn_iter(opngrid, kernel->min(), kernel->max());
     bvpl_subgrid_iterator<bvxm_opinion> output_iter(out_grid, kernel->min(), kernel->max());
     while (!sub_dir_iter.isDone()) {
        bvpl_voxel_subgrid<int> dirsubgrid = *sub_dir_iter;
        bvpl_voxel_subgrid<bvxm_opinion> opnsubgrid = *sub_opn_iter;
-
        int id=(*sub_dir_iter).get_voxel();
+       if(id>-1)
+       {
        bvpl_kernel_sptr cur_kernel=kernel->kernels_[id];
        vnl_float_3 cur_normal=cur_kernel->axis();
+
        bvpl_kernel_iterator kernel_iter = cur_kernel->iterator();
 
        bvxm_opinion cur_opn=(*sub_opn_iter).get_voxel();
@@ -53,6 +57,8 @@ class bvpl_susan_opinion_operator
        kernel_iter.begin();
        float tot=0.0;
        float mu=0;
+
+
        while (!kernel_iter.isDone()) {
          vgl_point_3d<int> idx = kernel_iter.index();
          int kernel_id;
@@ -61,6 +67,8 @@ class bvpl_susan_opinion_operator
          {
              bvpl_kernel_dispatch d = *kernel_iter;
 
+             if(kernel_id>-1)
+             {
              vnl_float_3 normal=kernel->kernels_[kernel_id]->axis();
              float dot_prod=dot_product<float,3>(cur_normal,normal);
              float measure_dot_prod=1-vcl_fabs(dot_prod);
@@ -69,6 +77,7 @@ class bvpl_susan_opinion_operator
              wi.push_back(opn.b());
              mu+=measure_dot_prod*opn.b();
              tot+=opn.b();
+             }
          }
          ++kernel_iter;
        }
@@ -91,6 +100,9 @@ class bvpl_susan_opinion_operator
         weight_sig=1-vcl_exp(-mu*mu/(sig));
        // set the result at the output grid
        (*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*weight_sig));
+       }
+       else
+            (*output_iter).set_voxel(bvxm_opinion(0));
        ++sub_dir_iter;
        ++sub_opn_iter;
        ++output_iter;

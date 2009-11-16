@@ -72,7 +72,7 @@ void bvpl_edge3d_kernel_factory::create_canonical()
   typedef bvpl_kernel_dispatch dispatch;
 
   int min_x= -1*(length_/2);
-  int max_x =length_/2;
+  int max_x =vcl_ceil((float)length_/2);
   int min_y= -1*(width_/2);
   int max_y =vcl_ceil((float)width_/2);
   int min_z= -1*(height_/2);
