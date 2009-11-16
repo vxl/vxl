@@ -3917,6 +3917,155 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
   return res_mask;
 }
 
+
+//: Find anisotropic intensity extrema at a range of orientations and return the maximal response at the best orientation. Theta interval is in degrees
+//  if lambda0 == lambda1 then reduces to the normal extrema operator
+vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<float> const& input,
+                                       float lambda0, float lambda1,
+                                       float theta_interval, bool bright)
+{
+  unsigned ni = input.ni(); 
+  unsigned nj = input.nj();
+
+  vil_image_view<float> output(ni, nj, 3); // the first plane is the response strength, the second is the best angle and the third is the mask for that angle
+  output.fill(0.0f);
+
+  if (lambda0 == lambda1) {  // if isotropic reduces to normal extrema calculation (perfect orientation symmetry)
+    vil_image_view<float> res_mask_current = extrema(input, lambda0, lambda1, 0.0f, bright, true, true);
+    for (unsigned j = 0; j<nj; j++)
+      for (unsigned i = 0; i<ni; i++) {
+        output(i,j,0) = res_mask_current(i,j,0);  // return the non-max supressed for angle 0
+        output(i,j,1) = 0.0f;
+        output(i,j,2) = res_mask_current(i,j,1);
+      }
+    return output;
+  }
+
+  //: the kernel generator does not treat the x and y axis symetrically, the method works correctly only when lambda0 > lambda1
+  //  theoretically one can always call this method by switching the lambdas but the caller of the method should make this switch if needed hence the assertion
+  if (lambda0 < lambda1) {
+    vcl_cout << "In brip_vil_float_ops::extrema_rotational() - ERROR! rotational extrema operator requires lambda0 to be larger than lambda1! switch the lambdas and use the output angle map accordingly!\n";
+    throw 0; 
+  }
+  if (theta_interval < vcl_numeric_limits<float>::epsilon()) {
+    vcl_cout << "In brip_vil_float_ops::extrema_rotational() - ERROR! theta_interval needs to be larger than 0!\n";
+    throw 0; 
+  }
+   
+  vil_image_view<float> res_img(ni, nj);
+  vil_image_view<int> res_angle(ni, nj);
+  res_img.fill(0.0f); res_angle.fill(0);
+
+  vcl_vector<float> angles;
+  angles.push_back(-1.0f);
+  for (float theta = 0; theta < 180; theta += theta_interval) { angles.push_back(theta); }
+
+  vcl_vector<vbl_array_2d<bool> > mask_vect(angles.size(), vbl_array_2d<bool>());
+  int max_rji = 0;
+  //: elliptical operator has 180 degree rotational symmetry, so only the angles in the range [0,180] matter
+  float theta = 0; unsigned theta_i = 1;
+  for ( ; theta < 180; theta += theta_interval, theta_i++) {
+    
+    //: compute the response
+    vbl_array_2d<float> fa; vbl_array_2d<bool> mask;
+    brip_vil_float_ops::extrema_kernel_mask(lambda0, lambda1, theta, fa, mask);
+    mask_vect[theta_i] = mask;
+    unsigned nrows = fa.rows(), ncols = fa.cols();
+    int rj = (nrows-1)/2, ri = (ncols-1)/2;
+    if (rj > max_rji) max_rji = rj;
+    if (ri > max_rji) max_rji = ri;
+
+    for (unsigned j = rj; j<(nj-rj); j++)
+      for (unsigned i = ri; i<(ni-ri); i++) {
+        float res = 0.0f;
+        double sum = 0;
+        for (int jj=-rj; jj<=rj; ++jj)
+          for (int ii=-ri; ii<=ri; ++ii)
+            if (mask[jj+rj][ii+ri])
+              sum += double(fa[jj+rj][ii+ri])*input(i+ii, j+jj);
+        
+        if (bright) { // coefficients are negative at center
+          if (sum<0) res = static_cast<float>(-sum);
+        }
+        else {
+          if (sum>0) res = static_cast<float>(sum);
+        }
+
+        if (res_img(i,j) < res) {
+          res_img(i,j) = res;
+          res_angle(i,j) = theta_i;
+        }
+      }
+
+  }
+
+  //: now we have pixel-wise best angle, run the non-max suppression around each non-zero pixel using the angles mask
+  vil_image_view<float> res(res_img);
+
+  for (unsigned j = max_rji; j<(nj-max_rji); j++)
+    for (unsigned i = max_rji; i<(ni-max_rji); i++)
+    {
+      float cv = res_img(i,j);
+      if (!cv)
+        continue;
+      int theta_i = res_angle(i,j);
+      vbl_array_2d<bool> mask = mask_vect[theta_i];
+      unsigned nrows = mask.rows(), ncols = mask.cols();
+      int rj = (nrows-1)/2, ri = (ncols-1)/2;
+
+      bool max = true;
+      for (int jj=-rj; jj<=rj; ++jj) {
+        for (int ii=-ri; ii<=ri; ++ii) {
+          if ((ii==0&&jj==0)||!mask[jj+rj][ii+ri])
+            continue;
+          else if (res_img(i+ii, j+jj)>cv) {
+            max = false;
+            break;
+          }
+        }
+        if (!max)
+          break;
+      }
+      if (!max) {
+        res(i,j) = 0.0f;
+        res_angle(i, j) = 0; // the zeroth angle is -1.0f, so invalid
+      }
+    }
+
+  vil_image_view<float> res_mask(ni, nj);
+  res_mask.fill(0.0f);
+  // now all the non-zero elements in res are our responses, create the mask image using the angle info
+  for (unsigned j = max_rji; j<(nj-max_rji); j++)
+    for (unsigned i = max_rji; i<(ni-max_rji); i++)
+    {
+      float rv = res(i,j);
+      if (!rv)
+        continue;
+      int theta_i = res_angle(i,j);
+      //: get the mask for this angle
+      vbl_array_2d<bool> mask = mask_vect[theta_i];
+      unsigned nrows = mask.rows(), ncols = mask.cols();
+      int rj = (nrows-1)/2, ri = (ncols-1)/2;
+
+      for (int jj=-rj; jj<=rj; ++jj)
+        for (int ii=-ri; ii<=ri; ++ii)
+          if (mask[jj+rj][ii+ri])
+            if (rv>res_mask(i+ii,j+jj))
+              res_mask(i+ii,j+jj) = rv;
+    }
+
+  //: now prepare the output accordingly
+  for (unsigned j = max_rji; j<(nj-max_rji); j++)
+    for (unsigned i = max_rji; i<(ni-max_rji); i++)
+    {
+      output(i,j,0) = res(i,j);
+      output(i,j,1) = angles[res_angle(i,j)];
+      output(i,j,2) = res_mask(i,j);
+    }
+  return output;
+}
+
+
 //: theta and phi are in radians
 float brip_vil_float_ops::elu(float phi, float lamda0,
                               float lambda1, float theta)

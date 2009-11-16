@@ -137,6 +137,12 @@ class brip_vil_float_ops
                                        bool output_response_mask = true,
                                        bool unclipped_response = false);
 
+  //: Find ansiotropic intensity extrema at a range of orientations and return the maximal response at the best orientation. Theta interval is in degrees
+  //  if lambda0 == lambda1 then reduces to the normal extrema operator
+  static vil_image_view<float> extrema_rotational(vil_image_view<float> const& input,
+                                       float lambda0, float lambda1,
+                                       float theta_interval, bool bright = true);
+
   //: compute the inscribed rectangle in an ellipse with largest (1+h)(1+w). Needed for fast non-maximal suppression. Theta is in degrees.
   static void max_inscribed_rect(float lambda0, float lambda1, float theta,
                                float& u_rect, float& v_rect);
