@@ -44,6 +44,7 @@ MANPAGE_SOURCES += bsta_parzen_sphere.txx
 MANPAGE_SOURCES += bsta_parzen.h
 MANPAGE_SOURCES += bsta_parzen_sf1.h
 MANPAGE_SOURCES += bsta_parzen_sf3.h
+MANPAGE_SOURCES += bsta_beta.txx
 
 SUBDIRS += algo io vis
 

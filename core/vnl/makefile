@@ -145,6 +145,7 @@ SOURCES += vnl_bessel.cxx
 MANPAGE_SOURCES += vnl_cross.h
 SOURCES += vnl_erf.cxx
 SOURCES += vnl_gamma.cxx
+MANPAGE_SOURCES += vnl_beta.h
 SOURCES += vnl_sample.cxx
 SOURCES += vnl_random.cxx
 MANPAGE_SOURCES += vnl_unary_function.txx

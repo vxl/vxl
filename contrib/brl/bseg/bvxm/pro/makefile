@@ -46,6 +46,8 @@ SOURCES += processes/bvxm_merge_mog_process.cxx
 SOURCES += processes/bvxm_get_grid_process.cxx
 SOURCES += processes/bvxm_mog_to_mpm_process.cxx
 SOURCES += processes/bvxm_create_synth_lidar_data_process.cxx
+SOURCES += processes/bvxm_update_point_cloud_process.cxx
+SOURCES += processes/bvxm_report_statistics_point_cloud_process.cxx
 
 MANPAGE_SOURCES += bvxm_processes.h
 
