@@ -40,7 +40,7 @@ void test_na()
   {
     double x=0.0;
     vcl_istringstream ss("NA");
-    vnl_na_double_parse(ss, x);
+    vnl_na_double_extract(ss, x);
     testlib_test_assert("x=\"NA\"", vnl_na_isna(x));
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -48,7 +48,7 @@ void test_na()
   {
     double x=0.0;
     vcl_istringstream ss("NA  ");
-    vnl_na_double_parse(ss, x);
+    vnl_na_double_extract(ss, x);
     testlib_test_assert("x=\"NA  \"", vnl_na_isna(x));
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -56,7 +56,7 @@ void test_na()
   {
     double x=0.0;
     vcl_istringstream ss("1.0   ");
-    vnl_na_double_parse(ss, x);
+    vnl_na_double_extract(ss, x);
     testlib_test_assert("x=\"1.0\"", x==1.0);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -64,8 +64,8 @@ void test_na()
   {
     double x=0.0, y=0.0;
     vcl_istringstream ss("NA1.0");
-    vnl_na_double_parse(ss, x);
-    vnl_na_double_parse(ss, y);
+    vnl_na_double_extract(ss, x);
+    vnl_na_double_extract(ss, y);
     testlib_test_assert("x,y=\"NA1.0\"", vnl_na_isna(x) && y==1.0);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -73,8 +73,8 @@ void test_na()
   {
     double x=0.0, y=0.0;
     vcl_istringstream ss("1.0NA");
-    vnl_na_double_parse(ss, x);
-    vnl_na_double_parse(ss, y);
+    vnl_na_double_extract(ss, x);
+    vnl_na_double_extract(ss, y);
     testlib_test_assert("x,y=\"1.0NA\"", vnl_na_isna(y) && x==1.0);
     vcl_cout << "y = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -82,8 +82,8 @@ void test_na()
   {
     double x=0.0, y=0.0;
     vcl_istringstream ss("NANA");
-    vnl_na_double_parse(ss, x);
-    vnl_na_double_parse(ss, y);
+    vnl_na_double_extract(ss, x);
+    vnl_na_double_extract(ss, y);
     testlib_test_assert("x,y=\"NANA\"", vnl_na_isna(x) && vnl_na_isna(y));
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -91,8 +91,8 @@ void test_na()
   {
     double x=0.0, y=0.0;
     vcl_istringstream ss("NA 1.0");
-    vnl_na_double_parse(ss, x);
-    vnl_na_double_parse(ss, y);
+    vnl_na_double_extract(ss, x);
+    vnl_na_double_extract(ss, y);
     testlib_test_assert("x,y=\"NA 1.0\"", vnl_na_isna(x) && y==1.0);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -100,8 +100,8 @@ void test_na()
   {
     double x=0.0, y=0.0;
     vcl_istringstream ss("1.0 NA");
-    vnl_na_double_parse(ss, x);
-    vnl_na_double_parse(ss, y);
+    vnl_na_double_extract(ss, x);
+    vnl_na_double_extract(ss, y);
     testlib_test_assert("x,y=\"1.0 NA\"", vnl_na_isna(y) && x==1.0);
     vcl_cout << "y = " << y << " = " << print_hex(y) << vcl_endl;
   }
@@ -109,8 +109,8 @@ void test_na()
   {
     double x=0.0, y=0.0;
     vcl_istringstream ss("NA NA");
-    vnl_na_double_parse(ss, x);
-    vnl_na_double_parse(ss, y);
+    vnl_na_double_extract(ss, x);
+    vnl_na_double_extract(ss, y);
     testlib_test_assert("x,y=\"NA NA\"", vnl_na_isna(x) && vnl_na_isna(y));
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
@@ -118,11 +118,31 @@ void test_na()
   {
     double x=0.0, y=0.0;
     vcl_istringstream ss("-1.0-1.0");
-    vnl_na_double_parse(ss, x);
-    vnl_na_double_parse(ss, y);
+    vnl_na_double_extract(ss, x);
+    vnl_na_double_extract(ss, y);
     testlib_test_assert("x,y=\"-1.0-1.0\"", x==-1.0 && y==-1.0);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
+
+
+  {
+    vcl_ostringstream ss;
+    vnl_na_double_insert(ss, -1.5);
+    vnl_na_double_insert(ss, vnl_na());
+    testlib_test_assert("output \"-1.5NA\"", ss.str()=="-1.5NA");
+    vcl_cout << "ss = " << ss.str() << vcl_endl;
+  }
+
+  {
+    vcl_stringstream ss;
+    ss << vnl_na_stream(-1.0) << ' ' << vnl_na_stream(vnl_na());
+    double x=0.0, y=0.0;
+    ss >> vnl_na_stream(x) >> vnl_na_stream(y);
+    testlib_test_assert("x,y=\"-1.0 NA\"", vnl_na_isna(y) && x==-1.0);
+    vcl_cout << "y = " << y << " = " << print_hex(y) << vcl_endl;
+    vcl_cout << "ss = " << ss.str() << vcl_endl;
+  }
+
 }
 #undef print_hex
 

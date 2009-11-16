@@ -50,7 +50,7 @@ bool vnl_na_isna(double x)
 
 
 //: Read a floating point number or "NA" from a stream.
-void vnl_na_double_parse(vcl_istream &is, double& x)
+void vnl_na_double_extract(vcl_istream &is, double& x)
 {
   if (!is) return;
   is >> x;
@@ -76,4 +76,14 @@ void vnl_na_double_parse(vcl_istream &is, double& x)
   x = vnl_na();
 }
 
+
+
+//: Write a floating point number or "NA" to a stream.
+void vnl_na_double_insert(vcl_ostream &os, double x)
+{
+  if (vnl_na_isna(x))
+    os << "NA";
+  else
+    os << x;
+}
 //----------------------------------------------------------------------
