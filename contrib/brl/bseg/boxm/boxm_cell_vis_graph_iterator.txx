@@ -108,7 +108,7 @@ void boxm_cell_vis_graph_iterator<T_loc,T_data>::form_graph_per_cell(boct_tree_c
 {
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node=cell->vis_node();
   vcl_vector<boct_tree_cell<T_loc,T_data>*> neighbors;
-  cell->find_neighbors(face_idx, neighbors,tree->num_levels());
+  cell->find_neighbors(face_idx, neighbors,tree->root_level());
   typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator neighbor_it = neighbors.begin();
   bool visible_neighbors=false;
   for (; neighbor_it != neighbors.end(); ++neighbor_it) {
