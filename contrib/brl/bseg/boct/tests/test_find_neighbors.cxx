@@ -81,7 +81,7 @@ MAIN( test_find_neighbors )
   boct_tree_cell<short,vgl_point_3d<double> >* cell=block->locate_point(p1);
 
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n;
-  cell->find_neighbors(X_HIGH,n,10);
+  cell->find_neighbors(X_HIGH,n,9);
 
   // ground truth for the code of the neighbor
   boct_loc_code<short> gt_code;
@@ -93,7 +93,7 @@ MAIN( test_find_neighbors )
   boct_tree_cell<short,vgl_point_3d<double> >* cell_xlow=block->locate_point(p_x_low);
 
   n.clear();
-  cell_xlow->find_neighbors(X_LOW,n,10);
+  cell_xlow->find_neighbors(X_LOW,n,9);
 
   // ground truth for the code of the neighbor
   boct_loc_code<short> gt_code_x_low;
@@ -110,7 +110,7 @@ MAIN( test_find_neighbors )
   boct_tree_cell<short,vgl_point_3d<double> >* cell_zlow=tree3->locate_point(p_z_low);
 
   n.clear();
-  cell_zlow->find_neighbors(Y_HIGH,n,10);
+  cell_zlow->find_neighbors(Y_HIGH,n,9);
 
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n_brute_force;
 
