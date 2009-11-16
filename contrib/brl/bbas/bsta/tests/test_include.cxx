@@ -16,6 +16,7 @@
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_gauss_sd3.h>
 #include <bsta/bsta_gauss_sf3.h>
+#include <bsta/bsta_beta.h>
 
 #include <bsta/bsta_detector_gaussian.h>
 #include <bsta/bsta_detector_mixture.h>

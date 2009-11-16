@@ -10,6 +10,7 @@ DECLARE( test_bsta_histogram );
 DECLARE( test_k_medoid );
 DECLARE( test_otsu_threshold );
 DECLARE( test_sampler );
+DECLARE( test_beta );
 
 void
 register_tests()
@@ -24,6 +25,7 @@ register_tests()
   REGISTER( test_k_medoid );
   REGISTER( test_otsu_threshold );
   REGISTER( test_sampler );
+  REGISTER( test_beta );
 }
 
 DEFINE_MAIN;
