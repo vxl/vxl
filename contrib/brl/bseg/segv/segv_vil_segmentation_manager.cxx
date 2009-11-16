@@ -1864,6 +1864,43 @@ void segv_vil_segmentation_manager::extrema()
   }
 }
 
+void segv_vil_segmentation_manager::rot_extrema()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout<< "In segv_vil_segmentation_manager::extrema - no image\n";
+    return;
+  }
+  static float lambda0 = 1.0f;
+  static float lambda1 = 1.0f;
+  static float theta_inc = 0.0f;
+  static bool bright = true;
+  vgui_dialog extrema_dialog("Detect Extrema");
+  extrema_dialog.field("lambda0",lambda0);
+  extrema_dialog.field("lambda1",lambda1);
+  extrema_dialog.field("theta increment",theta_inc);
+  extrema_dialog.checkbox("Bright Extrema?(check)",bright);
+  if (!extrema_dialog.ask())
+    return;
+  vul_timer t;
+  vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
+  vil_image_view<float> output = brip_vil_float_ops::extrema_rotational(fimg, lambda0, lambda1, theta_inc, bright);
+  unsigned ni = output.ni(), nj = output.nj();
+  vil_image_view<float> res(ni, nj), mask(ni, nj);
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
+    {
+      res(i,j) = output(i,j,0);
+      mask(i,j) = output(i,j,2);
+    }
+    
+  vil_image_resource_sptr res_resc = vil_new_image_resource_of_view(res);
+  vil_image_resource_sptr msk_resc = vil_new_image_resource_of_view(mask);
+  vil_image_view<vil_rgb<vxl_byte> > rgb = brip_vil_float_ops::combine_color_planes(img, res_resc, msk_resc);
+  this->add_image(vil_new_image_resource_of_view(rgb));
+}
+
 void segv_vil_segmentation_manager::beaudet()
 {
   vil_image_resource_sptr img = selected_image();

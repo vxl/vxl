@@ -58,6 +58,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void mser_conics_callback();
   SEGV_VIL_DLL_DATA static void image_as_vrml_points_callback();
   SEGV_VIL_DLL_DATA static void extrema_callback();
+  SEGV_VIL_DLL_DATA static void rot_extrema_callback();
   SEGV_VIL_DLL_DATA static void beaudet_callback();
   SEGV_VIL_DLL_DATA static void parallel_coverage_callback();
   //JIM METHOD

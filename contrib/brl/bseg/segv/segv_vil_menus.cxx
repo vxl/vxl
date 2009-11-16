@@ -151,6 +151,12 @@ void segv_vil_menus::extrema_callback()
   segv_vil_segmentation_manager::instance()->extrema();
 }
 
+void segv_vil_menus::rot_extrema_callback()
+{
+  segv_vil_segmentation_manager::instance()->rot_extrema();
+}
+
+
 void segv_vil_menus::beaudet_callback()
 {
   segv_vil_segmentation_manager::instance()->beaudet();
@@ -265,6 +271,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Max Trace Scale",  max_trace_scale_callback);
   menuops.add("Color Order",  color_order_callback);
   menuops.add("Extrema", extrema_callback);
+  menuops.add("Rotational Extrema", rot_extrema_callback);
 
   //Top level menu layout
   menubar.add( "File", menufile);
