@@ -97,7 +97,7 @@ inline vcl_ostream& operator <<(vcl_ostream &os, const vnl_na_stream_const_t& ns
 }
 
 //: Extract wrapped double from stream, whilst handling NA.
-inline vcl_istream& operator >>(vcl_istream &is, vnl_na_stream_t& ns)
+inline vcl_istream& operator >>(vcl_istream &is, const vnl_na_stream_t& ns)
 {
   vnl_na_double_extract(is, ns.x_);
   return is;

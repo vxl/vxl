@@ -70,6 +70,7 @@ ADD_TEST( vnl_test_matrix_fixed         ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all t
 ADD_TEST( vnl_test_vector_fixed_ref     ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_vector_fixed_ref     )
 ADD_TEST( vnl_test_matrix_fixed_ref     ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_matrix_fixed_ref     )
 ADD_TEST( vnl_test_numeric_traits       ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_numeric_traits       )
+ADD_TEST( vnl_test_na                   ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_na                 )
 ADD_TEST( vnl_test_random               ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_random               )
 ADD_TEST( vnl_test_rational             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_rational             )
 ADD_TEST( vnl_test_real_polynomial      ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_real_polynomial      )
