@@ -27,7 +27,7 @@ MAIN( test_binary_io )
   boct_tree<short,vgl_point_3d<double> > *tree_out=new boct_tree<short,vgl_point_3d<double> >();
   vsl_b_ifstream is("tree.bin", vcl_ios_binary);
   tree_out->b_read(is);
-  TEST("Returns the correct level", tree_out->num_levels(), tree_in->num_levels());
+  TEST("Returns the correct level", tree_out->number_levels(), tree_in->number_levels());
   //tree_out->print();
   leaves.empty();
   leaves = tree_out->leaf_cells();
