@@ -144,6 +144,9 @@ class bvxm_voxel_world: public vbl_ref_count
                           vil_image_view_base_sptr& lidar_edges_prob,
                           vpgl_camera_double_sptr& camera,
                           unsigned scale_idx=0);
+  //: update voxel grid edge probabilities with data from LIDAR/camera pair
+  template<bvxm_voxel_type APM_T>
+  bool update_point_cloud(vcl_vector<vgl_point_3d<float> > & points);
 
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
@@ -330,6 +333,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
 {
   assert(scale_idx <= params_->max_scale());
 
+  
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
   //retrieve map for current bvxm_voxel_type
   //if no map found create a new one
@@ -370,6 +374,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
       if (scale < 0 || bin_idx <0) {
         vcl_cerr << "error parsing filename " << file_it() << vcl_endl;
       } else {
+
         vgl_vector_3d<unsigned int> grid_size_scale = params_->num_voxels(scale);
         // create voxel grid and insert into map
         bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size_scale);
@@ -1010,6 +1015,97 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   // increment the observation count
   //this->increment_observations<APM_T>(bin_index);
 
+  return true;
+}
+
+template<bvxm_voxel_type APM_T>
+bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & points)
+{
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
+  // parameters
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+  ocp_datatype min_vox_prob = params_->min_occupancy_prob();
+  ocp_datatype max_vox_prob = params_->max_occupancy_prob();
+
+  vcl_cout<<"Get Grid"<<vcl_endl;
+  // get ocuppancy probability grid
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<APM_T>(0,0);
+  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+  typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it = ocp_grid->begin();
+  //: intiializing the grid with 1
+  for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it)
+    ocp_slab_it->fill(ocp_datatype(1.0f));
+
+  unsigned slab_z=0;
+  float xy_spacing=params_->voxel_length();
+  vnl_vector_fixed<float,3> cov(xy_spacing,xy_spacing,xy_spacing/2);
+
+  int kernel_size=2;
+
+  
+  int z=0;
+
+  unsigned minz=z-kernel_size<0?0:z-kernel_size;
+  unsigned maxz=z+kernel_size>grid_size.z()-1?grid_size.z()-1:z+kernel_size;
+  ocp_slab_it=ocp_grid->slab_iterator(minz,maxz-minz+1);
+
+
+  for(unsigned i=0;i<points.size();i++)
+  {
+      vgl_vector_3d<float> index=(points[i]-params_->corner())/params_->voxel_length();
+
+      unsigned k=vcl_floor(grid_size.z()-1-index.z());
+      unsigned x=vcl_floor(index.x());
+      unsigned y=vcl_floor(index.y());
+
+      if(k>=0 && k<grid_size.z()  && x>=0 && x<grid_size.x()  && y>=0 && y<grid_size.y()  ) 
+      {
+          minz=k-kernel_size<0?0:k-kernel_size;
+          maxz=k+kernel_size>grid_size.z()-1?grid_size.z()-1:k+kernel_size;
+
+          unsigned minx=x-kernel_size<0?0:x-kernel_size;
+          unsigned miny=y-kernel_size<0?0:y-kernel_size;
+          unsigned maxx=x+kernel_size>grid_size.x()-1?grid_size.x()-1:x+kernel_size;
+          unsigned maxy=y+kernel_size>grid_size.y()-1?grid_size.y()-1:y+kernel_size;
+          //: go to the next slab
+          if(z<k)
+          {
+              z=k;
+
+              ocp_slab_it.write_slab();
+              ocp_slab_it=ocp_grid->slab_iterator(minz,maxz-minz+1);
+          }
+
+          vnl_vector_fixed<float,3> m(index.x(), index.y(),grid_size.z()-1- index.z());
+          bsta_gauss_if3 gauss(m, cov);
+          for(unsigned ind_k=minz;ind_k<=maxz;ind_k++)
+          {
+              for(unsigned ind_i=minx;ind_i<=maxx;ind_i++)
+              {
+                  for(unsigned ind_j=miny;ind_j<=maxy;ind_j++)
+                  {
+
+                      vnl_vector_fixed<float,3> min_vec(ind_i-0.5,ind_j-0.5,ind_k-0.5);
+                      vnl_vector_fixed<float,3> max_vec(ind_i+0.5,ind_j+0.5,ind_k+0.5);
+
+                      float p1 = gauss.probability(min_vec,max_vec);
+                      (*ocp_slab_it)(ind_i,ind_j,ind_k-minz)*=1-p1;  
+                  }
+              }
+          }
+      }
+      if(i%10000==0)vcl_cout<<".";
+
+  }
+  ocp_slab_it = ocp_grid->begin();
+  //: intiializing the grid with 1
+  for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it)
+  {
+    typename bvxm_voxel_slab<ocp_datatype>::iterator slab_it = ocp_slab_it->begin();
+    for (; slab_it != ocp_slab_it->end(); ++slab_it) {
+      *slab_it = ocp_datatype(1)-*slab_it;
+    }
+  }
   return true;
 }
 
