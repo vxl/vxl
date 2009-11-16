@@ -228,6 +228,8 @@ SET( vnl_sources
 
   # hardware optimisation
                                vnl_sse.h
+                                
+                               vnl_beta.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
