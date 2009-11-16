@@ -68,6 +68,8 @@ class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
   bvxm_voxel_slab<T>& operator*(){return this->slab_;}
 
   bvxm_voxel_slab<T>* operator->(){return &(this->slab_);}
+
+  void write_slab(){storage_->put_slab();}
 };
 
 
