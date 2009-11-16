@@ -42,11 +42,13 @@ DECLARE_FUNC_CONS(bvxm_test_process);
 DECLARE_FUNC_CONS(bvxm_update_edges_lidar_process);
 DECLARE_FUNC_CONS(bvxm_update_edges_process);
 DECLARE_FUNC_CONS(bvxm_update_lidar_process);
+DECLARE_FUNC_CONS(bvxm_update_point_cloud_process);
 DECLARE_FUNC_CONS(bvxm_lidar_edge_detection_process);
 DECLARE_FUNC_CONS(bvxm_lidar_init_process);
 DECLARE_FUNC_CONS(bvxm_detect_edges_process);
 DECLARE_FUNC_CONS(bvxm_create_synth_lidar_data_process);
 DECLARE_FUNC_CONS(bvxm_save_edges_raw_process);
+DECLARE_FUNC_CONS(bvxm_report_statistics_point_cloud_process);
 
 //algo
 DECLARE_FUNC_CONS(bvxm_merge_mog_process);
