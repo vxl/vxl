@@ -10,7 +10,7 @@ MAIN( test_block_iter )
   START ("CREATE SCENE");
   short nlevels=5;
   tree_type * block = new tree_type(nlevels);
-  TEST("No of Max levels of tree",nlevels, block->num_levels());
+  TEST("No of Max levels of tree",nlevels, block->number_levels());
 
   block->split();
   block->print();
