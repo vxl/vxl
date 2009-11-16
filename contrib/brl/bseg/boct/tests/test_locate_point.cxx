@@ -8,7 +8,9 @@ boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(vcl_vector
                                                                       vgl_point_3d<double> p,
                                                                       int max_level)
 {
- boct_loc_code<short> code(p,max_level);
+  short root_level = max_level-1;
+  double max_val = (double)(1<<root_level);
+ boct_loc_code<short> code(p,root_level, max_val);
 
  boct_tree_cell<short,vgl_point_3d<double> >* point_container=0;
 

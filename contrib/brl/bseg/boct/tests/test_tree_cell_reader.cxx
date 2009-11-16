@@ -12,7 +12,7 @@ MAIN( test_tree_cell_reader )
   START ("TREE CELL READER");
   short nlevels=5;
   boct_tree<short,float> * block=new boct_tree<short,float>(nlevels,3);
-  TEST("No of Max levels of tree",nlevels, block->num_levels());
+  TEST("No of Max levels of tree",nlevels, block->number_levels());
 
   block->split();
 

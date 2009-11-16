@@ -8,7 +8,7 @@ MAIN( test_create_tree )
   START ("CREATE TREE");
   short nlevels=5;
   boct_tree<short,vgl_point_3d<double> > * tree=new boct_tree<short,vgl_point_3d<double> >(nlevels);
-  TEST("No of Max levels of tree",nlevels, tree->num_levels());
+  TEST("No of Max levels of tree",nlevels, tree->number_levels());
 
   tree->split(); 
 
@@ -30,8 +30,8 @@ MAIN( test_create_tree )
     leaf_nodes[i].set_data(vgl_point_3d<double>(i,i,i));
   }
     
-  boct_tree_cell<short,vgl_point_3d<double> > *root = init_tree->construct_tree(leaf_nodes, init_tree->num_levels());
-  boct_tree<short,vgl_point_3d<double> > new_tree(root, init_tree->num_levels());
+  boct_tree_cell<short,vgl_point_3d<double> > *root = init_tree->construct_tree(leaf_nodes, init_tree->root_level() + 1);
+  boct_tree<short,vgl_point_3d<double> > new_tree(root, init_tree->number_levels());
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> new_leaves=new_tree.leaf_cells();
   bool good=true;
   for (unsigned i=0; i<leaves2.size(); i++) {
