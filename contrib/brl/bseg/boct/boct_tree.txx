@@ -7,16 +7,16 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/io/vgl_io_box_3d.h>
 
-//; constructor initializes an empty tree
+//: Construct an empty tree from maximum number of levels and levels, to initialize
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels): max_level_(max_level)
+boct_tree<T_loc,T_data>::boct_tree(short num_levels, short init_levels): root_level_(num_levels-1), num_levels_(num_levels), max_val_((double)(1 << root_level_))
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
   if (init_levels>0)
   {
     code.set_code(0,0,0);
-    code.set_level(max_level_-1);
+    code.set_level(root_level_);
     root_=new boct_tree_cell<T_loc,T_data>( code);
   }
   init_levels--;
@@ -31,16 +31,17 @@ boct_tree<T_loc,T_data>::boct_tree(short max_level, short init_levels): max_leve
   }
 }
 
+//: Construct from bounding box, maximum number of levels and levels to initialize
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, short init_levels)
-: max_level_(max_level),global_bbox_(bbox)
+boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short num_levels, short init_levels)
+: root_level_(num_levels-1), num_levels_(num_levels), max_val_((double)(1 << root_level_)),global_bbox_(bbox)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
-  if (max_level_>0)
+  if (num_levels_>0)
   {
     code.set_code(0,0,0);
-    code.set_level(max_level_-1);
+    code.set_level(root_level_);
     root_=new boct_tree_cell<T_loc,T_data>( code);
   }
   init_levels--;
@@ -57,14 +58,14 @@ boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short max_level, sho
 
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes,
-                                                                      unsigned max_level)
+                                                                      short num_levels)
 {
   // create an empty tree
   boct_loc_code<T_loc> code;
   boct_tree_cell<T_loc,T_data>* root;
-  if (max_level>0) {
+  if (num_levels>0) {
     code.set_code(0,0,0);
-    code.set_level(max_level-1);
+    code.set_level(num_levels-1);
     root=new boct_tree_cell<T_loc,T_data>( code);
   }
   else {
@@ -80,7 +81,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector
 
     // temporary pointer to traverse
     boct_tree_cell<T_loc,T_data>* curr_cell=root;
-    short curr_level=max_level-1;
+    short curr_level=num_levels-1;
 
     while (curr_level>level)
     {
@@ -103,6 +104,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector
   return root;
 }
 
+//: Destructor. Deleted all cells
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>::~boct_tree()
 {
@@ -118,14 +120,16 @@ boct_tree<T_loc,T_data>::~boct_tree()
   }
 }
 
+//: Clones with the same data
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
 {
   boct_tree_cell<T_loc, T_data>* root = root_->clone(0);
-  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root,max_level_);
+  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root,num_levels_);
   return tree;
 }
 
+//: Initialize all cells with a value
 template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::init_cells(T_data val)
 {
@@ -135,12 +139,13 @@ void boct_tree<T_loc,T_data>::init_cells(T_data val)
   }
 }
 
+//: Returns the leaf cell that contains the 3d point specified in octree-coordinates i.e. [0,1)x[0,1)x[0,1)
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_point_3d<double>& p)
 {
-  short curr_level=max_level_-1;
+  short curr_level=root_level_;
   // convert point to location code.
-  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, max_level_);
+  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, root_level_,max_val_);
 #if 0
   // check to see if point is contained in the octree
   if (!root_->code_.isequal(loccode_,curr_level))
@@ -148,12 +153,12 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
 #endif
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
-
+  
   while (curr_cell->children()&& curr_level>0)
   {
     short index_child=loccode_->child_index(curr_level);
     if (index_child >7)
-        vcl_cout << "ERROR 2: child_index is " << index_child << vcl_endl;
+      vcl_cout << "ERROR 2: child_index is " << index_child << vcl_endl;
     curr_cell=curr_cell->children()+index_child;
     --curr_level;
   }
@@ -162,23 +167,24 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
   return curr_cell;
 }
 
+//: Returns the leaf cell that contains the 3d point specified in global coordinates
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const vgl_point_3d<double>& p)
 {
-  short curr_level=max_level_-1;
+  short curr_level=root_level_;
   vgl_point_3d<double> norm_p((p.x()-global_bbox_.min_x())/global_bbox_.width(),
                               (p.y()-global_bbox_.min_y())/global_bbox_.height(),
                               (p.z()-global_bbox_.min_z())/global_bbox_.depth());
-
-
+  
+  
 #if 0
   // make sure that coordinates of norm_p lie between 0 (inclusive) and 1 (exclusive)
   if (norm_p.x()>=1.0||norm_p.y()>=1.0||norm_p.z()>=1.0||
       norm_p.x() <0.0||norm_p.y() <0.0||norm_p.z() <0.0)
     return 0;
 #endif // 0
-  // convert point to location code.
-  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, max_level_);
+       // convert point to location code.
+  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, root_level_, max_val_);
 #if 0
   // check to see if point is contained in the octree
   if (!root_->code_.isequal(loccode_,curr_level))
@@ -186,13 +192,13 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
 #endif
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
-
+  
   while (curr_cell->children()&& curr_level>0)
-  {
+  { 
     short index_child=loccode_->child_index(curr_level);
     if (index_child >7) {
       vcl_cout << loccode_ << vcl_endl
-               << "ERROR 3: child_index is " << index_child << vcl_endl;
+      << "ERROR 3: child_index is " << index_child << vcl_endl;
     }
     curr_cell=curr_cell->children()+index_child;
     --curr_level;
@@ -205,9 +211,9 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(const vgl_point_3d<double>& p, short level)
 {
-  short curr_level=max_level_-1;
+  short curr_level=root_level_;
   // convert point to location code.
-  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, max_level_);
+  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, root_level_, max_val_);
 #if 0
   // check to see if point is contained in the octree
   if (!root_->code_.isequal(loccode_,curr_level))
@@ -215,7 +221,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
 #endif
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
-
+  
   while (curr_cell->children()&& curr_level>level)
   {
     short child_index=loccode_->child_index(curr_level);
@@ -227,31 +233,34 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
   return curr_cell;
 }
 
+//: Returns the smallest cell that entirely contains a 3d regionin octree coordinates [0,1)x[0,1)x[0,1)
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_box_3d<double>& r)
 {
-  boct_loc_code<T_loc>* mincode=new boct_loc_code<T_loc>(r.min_point(), max_level_);
-  boct_loc_code<T_loc>* maxcode=new boct_loc_code<T_loc>(r.max_point(), max_level_);
-
+  boct_loc_code<T_loc>* mincode=new boct_loc_code<T_loc>(r.min_point(), root_level_, max_val_);
+  boct_loc_code<T_loc>* maxcode=new boct_loc_code<T_loc>(r.max_point(), root_level_, max_val_);
+  
   boct_loc_code<T_loc>* xorcode=mincode->XOR(maxcode);
-
-  short level_x=max_level_-1;
-  short level_y=max_level_-1;
-  short level_z=max_level_-1;
+  
+  short level_x=root_level_;
+  short level_y=root_level_;
+  short level_z=root_level_;
   while (!(xorcode->x_loc_&(1<<level_x))&& level_x) level_x--;
   while (!(xorcode->y_loc_&(1<<level_y))&& level_y>level_x) level_y--;
   while (!(xorcode->z_loc_&(1<<level_z))&& level_z>level_y) level_z--;
-
+  
   level_z++;
   return locate_point_at_level(r.min_point(),level_z);
 }
 
+//: Split the tree
 template <class T_loc,class T_data>
 bool boct_tree<T_loc,T_data>::split()
 {
   return root_->split();
 }
 
+//: Returns a vector of all leaf cells of the tree
 template <class T_loc,class T_data>
 vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells()
 {
@@ -268,10 +277,31 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells()
   return v;
 }
 
+//: Returns all leaf cells at a specified level of the tree
+template <class T_loc,class T_data>
+vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells_at_level(T_loc level)
+{
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> v;
+  if (root_)
+  {
+    if (root_->is_leaf()) {
+      if (root_->level() == level)
+        v.push_back(root_);
+      else
+        return v;
+    }
+    else {
+      root_->leaf_children_at_level(v, level);
+    }
+  }
+  return v;
+}
+
+//: Return the finest level the tree has been split down to (not necessarly 0)
 template <class T_loc,class T_data>
 short boct_tree<T_loc,T_data>::finest_level()
 {
-  short min_level = max_level_;
+  short min_level = num_levels_;
   vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
   for (unsigned i=0; i<cells.size(); i++) {
     if (cells[i]->code_.level < min_level)
@@ -281,15 +311,21 @@ short boct_tree<T_loc,T_data>::finest_level()
 }
 
 template <class T_loc,class T_data>
+double boct_tree<T_loc,T_data>::cell_size(boct_tree_cell<T_loc,T_data>* const cell)
+{
+  return 1.0/(double)(1<<(root_level_-cell->level())); 
+}
+
+template <class T_loc,class T_data>
 vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box(boct_tree_cell<T_loc,T_data>* const cell)
 {
-  double treesize=(double)(1<<(max_level_-1));
-  double cellsize=(double)(1<<cell->level())/treesize;
+  
+  double cellsize=(double)(1<<cell->level())/max_val_;
   vgl_point_3d<double> local_origin(cell->code_.x_loc_,cell->code_.y_loc_,cell->code_.z_loc_);
-  vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/treesize*global_bbox_.width(),
-                                     global_bbox_.min_y()+local_origin.y()/treesize*global_bbox_.height(),
-                                     global_bbox_.min_z()+local_origin.z()/treesize*global_bbox_.depth());
-
+  vgl_point_3d<double> global_origin(global_bbox_.min_x()+local_origin.x()/max_val_*global_bbox_.width(),
+                                     global_bbox_.min_y()+local_origin.y()/max_val_*global_bbox_.height(),
+                                     global_bbox_.min_z()+local_origin.z()/max_val_*global_bbox_.depth());
+  
   return vgl_box_3d<double>(global_origin,
                             cellsize*global_bbox_.width(),
                             cellsize*global_bbox_.height(),
@@ -300,14 +336,13 @@ vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box(boct_tree_cell<T_l
 template <class T_loc,class T_data>
 vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box_local(boct_tree_cell<T_loc,T_data>* const cell)
 {
-  double treesize=(double)(1<<(max_level_-1));
-  double cellsize=(double)(1<<cell->level())/treesize;
+  double cellsize=(double)(1<<cell->level())/max_val_;
   vgl_point_3d<double> local_origin(cell->code_.x_loc_,cell->code_.y_loc_,cell->code_.z_loc_);
-
-  vgl_point_3d<double> global_origin(local_origin.x()/treesize*global_bbox_.width(),
-                                     local_origin.y()/treesize*global_bbox_.height(),
-                                     local_origin.z()/treesize*global_bbox_.depth());
-
+  
+  vgl_point_3d<double> global_origin(local_origin.x()/max_val_*global_bbox_.width(),
+                                     local_origin.y()/max_val_*global_bbox_.height(),
+                                     local_origin.z()/max_val_*global_bbox_.depth());
+  
   return vgl_box_3d<double>(global_origin,
                             cellsize*global_bbox_.width(),
                             cellsize*global_bbox_.height(),
@@ -318,7 +353,7 @@ vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box_local(boct_tree_ce
 template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::print()
 {
-  vcl_cout << "Octree Max Level=" << max_level_ << vcl_endl;
+  vcl_cout << "Octree Max Number of Levels=" << num_levels_ << vcl_endl;
   root_->print();
 }
 
@@ -329,7 +364,7 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os)
   short v = version_no();
   if (v == 2) {
     vsl_b_write(os, v);
-    vsl_b_write(os, max_level_);
+    vsl_b_write(os, num_levels_);
     vsl_b_write(os, global_bbox_);
     vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
     vsl_b_write(os, cells.size());
@@ -341,7 +376,7 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os)
   // older version, the whole tree structure is written
   else if (v == 1) {
     vsl_b_write(os, v);
-    vsl_b_write(os, max_level_);
+    vsl_b_write(os, num_levels_);
     vsl_b_write(os, global_bbox_);
     if (root_)
       vsl_b_write(os, *root_);
@@ -361,14 +396,16 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
   switch (v)
   {
    case 1:
-     vsl_b_read(is, max_level_);
+     vsl_b_read(is, num_levels_);
      vsl_b_read(is, global_bbox_);
      root_ = new boct_tree_cell<T_loc,T_data>();
      vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
+     this->root_level_ = num_levels_ -1;
+     this->max_val_ = (double)(1<<root_level_);
      break;
    case 2:
    {
-     vsl_b_read(is, max_level_);
+     vsl_b_read(is, num_levels_);
      vsl_b_read(is, global_bbox_);
      unsigned num_cells;
      vsl_b_read(is, num_cells);
@@ -382,8 +419,10 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
        cell.set_data(data);
        cells.push_back(cell);
      }
-     boct_tree_cell<T_loc,T_data>* root = construct_tree(cells,max_level_);
+     boct_tree_cell<T_loc,T_data>* root = construct_tree(cells,num_levels_);
      this->root_=root;
+     this->root_level_ = num_levels_ -1;
+     this->max_val_ = (double)(1<<root_level_);
      break;
    }
 
