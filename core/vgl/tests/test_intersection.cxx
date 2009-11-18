@@ -2,6 +2,7 @@
 // Gamze Tunali, Jan 2007.
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
+#include <vcl_list.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_2d.h>
