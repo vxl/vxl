@@ -16,10 +16,10 @@
 
 struct compare_point_3d
 {
-bool operator()(const vgl_point_3d<float> &a, vgl_point_3d<float>  &b) const
-{
-return a.z() > b.z();
-}
+    bool operator()(const vgl_point_3d<float> &a, vgl_point_3d<float>  &b) 
+    {
+        return a.z() > b.z();
+    }
 };
 bool bvxm_update_point_cloud_process_cons(bprb_func_process& pro)
 {
