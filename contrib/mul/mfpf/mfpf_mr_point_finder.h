@@ -22,6 +22,10 @@ class mfpf_mr_point_finder
   //: Set of cost function objects.
   vcl_vector<mbl_cloneable_ptr<mfpf_point_finder> > finders_;
 
+  //: Maximum number of candidates to retain during multi_search_and_prune
+  //  If zero, then refine all.
+  unsigned max_after_pruning_;
+
  public:
 
   //: Dflt ctor
@@ -43,6 +47,16 @@ class mfpf_mr_point_finder
 
   //: Define point finders.  Clone of each taken
   void set(const vcl_vector<mfpf_point_finder*>& finders);
+
+
+  //: Maximum number of candidates to retain during multi_search_and_prune
+  //  If zero, then refine all.
+  unsigned max_after_pruning() const { return max_after_pruning_; }
+
+  //: Maximum number of candidates to retain during multi_search_and_prune
+  //  If zero, then refine all.
+  void set_max_after_pruning(unsigned max_n);
+
 
   //: Select best level for searching around pose with finder \p i
   //  Selects pyramid level with pixel sizes best matching

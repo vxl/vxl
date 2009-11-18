@@ -22,6 +22,7 @@
 //=======================================================================
 
 mfpf_mr_point_finder::mfpf_mr_point_finder()
+  : max_after_pruning_(0)
 {
 }
 
@@ -32,6 +33,13 @@ mfpf_mr_point_finder::mfpf_mr_point_finder()
 
 mfpf_mr_point_finder::~mfpf_mr_point_finder()
 {
+}
+
+//: Maximum number of candidates to retain during multi_search_and_prune
+//  If zero, then refine all.
+void mfpf_mr_point_finder::set_max_after_pruning(unsigned max_n)
+{
+  max_after_pruning_=max_n;
 }
 
 //: Define point finders.  Clone of each taken
@@ -246,7 +254,8 @@ void mfpf_mr_point_finder::multi_search_and_prune(
   }
 
   if (L0==prune_level)
-    mfpf_prune_overlaps(finder(L0),poses,fits);
+    mfpf_prune_and_sort_overlaps(finder(L0),poses,fits,max_after_pruning_);
+//    mfpf_prune_overlaps(finder(L0),poses,fits);
 
   if (L0==0) return;
 
@@ -261,7 +270,8 @@ void mfpf_mr_point_finder::multi_search_and_prune(
     // Remove overlaps if we are at prune_level
     if (L==prune_level)
     {
-      mfpf_prune_overlaps(finder(L),poses,fits);
+      mfpf_prune_and_sort_overlaps(finder(L),poses,fits,max_after_pruning_);
+//      mfpf_prune_overlaps(finder(L),poses,fits);
     }
   }
 }
@@ -290,7 +300,7 @@ void mfpf_mr_point_finder::save_images_of_models(const vcl_string& basepath) con
 
 short mfpf_mr_point_finder::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 
@@ -330,6 +340,7 @@ void mfpf_mr_point_finder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,finders_.size());
   for (unsigned i=0;i<finders_.size();++i)
     vsl_b_write(bfs,finders_[i]);
+  vsl_b_write(bfs,max_after_pruning_);
 }
 
 //=======================================================================
@@ -345,9 +356,12 @@ void mfpf_mr_point_finder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
+    case (2):
       vsl_b_read(bfs,n);
       finders_.resize(n);
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,finders_[i]);
+      if (version==1) max_after_pruning_=0;
+      else vsl_b_read(bfs,max_after_pruning_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

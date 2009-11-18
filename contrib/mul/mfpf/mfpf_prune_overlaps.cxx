@@ -4,6 +4,8 @@
 // \brief Function to remove any overlapping matching responses
 // \author Tim Cootes
 
+#include <mbl/mbl_index_sort.h>
+
 //: Find list of poses overlapping given pose
 void mfpf_find_overlaps(mfpf_point_finder& pf,
                         const vcl_vector<mfpf_pose>& poses,
@@ -118,3 +120,42 @@ void mfpf_prune_overlaps(mfpf_point_finder& pf,
     }
   }
 }
+
+//: Return true if pose overlaps with any of poses
+bool mfpf_any_overlaps(mfpf_point_finder& pf,
+                        const vcl_vector<mfpf_pose>& poses,
+                        const mfpf_pose& pose)
+{
+  for (unsigned i=0;i<poses.size();++i)
+  {
+    if (pf.overlap(poses[i],pose)) return true;
+  }
+  return false;
+}
+
+
+//:  Sort responses and return list of non-overlapping responses
+//  If max_n>0 then return at most max_n
+void mfpf_prune_and_sort_overlaps(mfpf_point_finder& pf,
+                         vcl_vector<mfpf_pose>& poses,
+                         vcl_vector<double>& fits,
+                         unsigned max_n)
+{
+  vcl_vector<mfpf_pose> poses0 = poses;
+  vcl_vector<double> fits0 = fits;
+
+  poses.resize(0); fits.resize(0);
+
+  vcl_vector<int> index;
+  mbl_index_sort(fits0,index);
+  for (unsigned i=0;i<index.size();++i)
+  {
+    if (!mfpf_any_overlaps(pf,poses,poses0[index[i]]))
+    {
+      poses.push_back(poses0[index[i]]);
+      fits.push_back(fits0[index[i]]);
+    }
+    if (max_n>0 && poses.size()>=max_n) return;
+  }
+}
+

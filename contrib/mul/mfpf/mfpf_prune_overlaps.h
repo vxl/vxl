@@ -19,5 +19,18 @@ void mfpf_find_overlaps(mfpf_point_finder& pf,
                         const mfpf_pose& pose, 
                         vcl_vector<unsigned>& overlaps);
 
+//: Return true if pose overlaps with any of poses
+bool mfpf_any_overlaps(mfpf_point_finder& pf,
+                        const vcl_vector<mfpf_pose>& poses,
+                        const mfpf_pose& pose);
+
+//:  Sort responses and return list of non-overlapping responses
+//  If max_n>0 then return at most max_n
+void mfpf_prune_and_sort_overlaps(mfpf_point_finder& pf,
+                         vcl_vector<mfpf_pose>& poses,
+                         vcl_vector<double>& fits,
+                         unsigned max_n=0);
+
+
 #endif // mfpf_prune_overlaps_h_
 
