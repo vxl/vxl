@@ -77,7 +77,10 @@ class boct_tree_cell
   void leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
   
   //: adds a pointer to vector v, for each leaf children at a particular level
-  void leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, T_loc level);
+  void leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
+  
+  //: adds a pointer to vector v, for each children at a particular level
+  void children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
 
   const boct_loc_code<T_loc> get_code();
 

@@ -561,6 +561,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
   return true;
 }
 
+//: adds a pointer for each leaf children to v
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
 {
@@ -578,11 +579,12 @@ void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc
   }
 }
 
+//: adds a pointer to vector v, for each leaf children at a particular level
 template<class T_loc,class T_data>
-void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, T_loc target_level)
+void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
 {
    
-  T_loc curr_level = code_.level;
+  short curr_level = code_.level;
   
   if(curr_level > target_level+1){
     for (unsigned i=0; i<8; i++) {
@@ -597,9 +599,31 @@ void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_c
         v.push_back(&children_[i]);
     }
   }
+}
 
+//: adds a pointer to vector v, for each children at a particular level
+template<class T_loc,class T_data>
+void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
+{
   
+  short curr_level = code_.level;
   
+  if(curr_level > target_level+1){
+    for (unsigned i=0; i<8; i++) {
+      if (!children_[i].is_leaf())
+        children_[i].children_at_level(v,target_level);
+    }
+  }
+  
+  else if(curr_level == target_level+1){
+    for (unsigned i=0; i<8; i++) {
+       v.push_back(&children_[i]);
+    }
+  }
+  else{
+    vcl_cerr << "Inconsintent case in cell::children_at_level" << vcl_endl;
+    return; 
+  }
 }
 
 template<class T_loc,class T_data>
