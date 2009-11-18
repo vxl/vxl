@@ -141,7 +141,7 @@ void boct_tree<T_loc,T_data>::init_cells(T_data val)
 
 //: Returns the leaf cell that contains the 3d point specified in octree-coordinates i.e. [0,1)x[0,1)x[0,1)
 template <class T_loc,class T_data>
-boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_point_3d<double>& p)
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_point_3d<double>& p, bool check_out_of_bounds)
 {
   short curr_level=root_level_;
   // convert point to location code.
@@ -209,16 +209,21 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
 }
 
 template <class T_loc,class T_data>
-boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(const vgl_point_3d<double>& p, short level)
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(const vgl_point_3d<double>& p, short level, bool check_out_of_bounds)
 {
   short curr_level=root_level_;
   // convert point to location code.
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, root_level_, max_val_);
-#if 0
-  // check to see if point is contained in the octree
-  if (!root_->code_.isequal(loccode_,curr_level))
-    return 0;
-#endif
+  
+  if(check_out_of_bounds)
+  {
+    if((loccode_->x_loc_ >> root_level_)^ 0)
+      return 0;
+    if((loccode_->y_loc_ >> root_level_)^ 0)
+      return 0;
+    if((loccode_->y_loc_ >> root_level_)^ 0)
+      return 0;
+  }
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
   
@@ -279,7 +284,7 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells()
 
 //: Returns all leaf cells at a specified level of the tree
 template <class T_loc,class T_data>
-vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells_at_level(T_loc level)
+vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells_at_level(short level)
 {
   vcl_vector<boct_tree_cell<T_loc,T_data>*> v;
   if (root_)
@@ -297,6 +302,21 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells_at
   return v;
 }
 
+//: Returns all cells at a specified level of the tree (wheather or not they are leafs)
+template <class T_loc,class T_data>
+vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::cells_at_level(short level)
+{
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> v;
+  if (root_)
+  {
+    if (root_->level() == level)
+       v.push_back(root_);
+    else 
+      root_->children_at_level(v, level);
+  }
+  return v;
+}
+
 //: Return the finest level the tree has been split down to (not necessarly 0)
 template <class T_loc,class T_data>
 short boct_tree<T_loc,T_data>::finest_level()
@@ -308,12 +328,6 @@ short boct_tree<T_loc,T_data>::finest_level()
       min_level = cells[i]->code_.level;
   }
   return min_level;
-}
-
-template <class T_loc,class T_data>
-double boct_tree<T_loc,T_data>::cell_size(boct_tree_cell<T_loc,T_data>* const cell)
-{
-  return 1.0/(double)(1<<(root_level_-cell->level())); 
 }
 
 template <class T_loc,class T_data>

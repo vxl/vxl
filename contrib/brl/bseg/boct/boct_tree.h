@@ -65,11 +65,11 @@ class boct_tree
   //: Returns the leaf cell that contains the 3d point specified in global coordinates
   boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p);
   
-  //: Returns the leaf cell that contains the 3d point specified in octree-coordinates i.e. [0,1)x[0,1)x[0,1)
-  boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p);
+  //: Returns the leaf cell that contains the 3d point specified in octree-coordinates i.e. [0,1)x[0,1)x[0,1), with optional safe check for out of bounds
+  boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p, bool check_out_of_bounds = false);
   
-  //: Returns the cell at a particular level(not necessarly a leaf) containing teh 3d point in octree-coordinates i.e. [0,1)x[0,1)x[0,1)
-  boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level);
+  //: Returns the cell at a particular level(not necessarly a leaf) containing teh 3d point in octree-coordinates i.e. [0,1)x[0,1)x[0,1),with optional safe check for out of bounds
+  boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level, bool check_out_of_bounds = false);
 
   //: Returns the smallest cell that entirely contains a 3d region in octree coordinates [0,1)x[0,1)x[0,1)
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r);
@@ -80,15 +80,18 @@ class boct_tree
   //: Return root of the tree
   boct_tree_cell<T_loc,T_data>* root(){return root_;}
   
-  //: Split the tree
+  //: Split the tree, this only splits the root cell
   bool split();
   
   //: Returns a vector of all leaf cells of the tree
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
   
   //: Returns all leaf cells at a specified level of the tree
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells_at_level(T_loc l);
-
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells_at_level(short l);
+  
+  //: Returns all cells at a specified level of the tree (wheather or not they are leafs)
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> cells_at_level(short l);
+  
   //: Return the maximum number of levels, which is root_level+1
   short number_levels() const { return num_levels_; }
   
@@ -114,7 +117,17 @@ class boct_tree
   vgl_box_3d<double> bounding_box() const {return global_bbox_;}
 
   //: Returns the length of a cell, assuming cell is cubical
-  double cell_size(boct_tree_cell<T_loc,T_data>* const cell);
+  double cell_size(boct_tree_cell<T_loc,T_data>* const cell)
+  {
+    return 1.0/(double)(1<<(root_level_-cell->level())); 
+  }
+  
+  //: Return cell's local origin
+  vgl_point_3d<double> local_origin(boct_tree_cell<T_loc,T_data>* const cell)
+  {
+    return vgl_point_3d<double> (cell->code_.x_loc_/max_val_,cell->code_.y_loc_/max_val_,cell->code_.z_loc_/max_val_);
+  }
+
   
   //: Print tree
   void print();
