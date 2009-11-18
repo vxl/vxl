@@ -43,6 +43,7 @@ TARGET_LINK_LIBRARIES(bvpl bvxm_grid vgl bdgl bxml bsvg bsta vpl)
 SUBDIRS( pro )
 SUBDIRS( io )
 SUBDIRS( util )
+SUBDIRS( bvpl_octree )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
