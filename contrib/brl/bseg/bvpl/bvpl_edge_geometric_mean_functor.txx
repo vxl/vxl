@@ -41,6 +41,12 @@ void bvpl_edge_geometric_mean_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 template <class T>
 T bvpl_edge_geometric_mean_functor<T>::result()
 {
+  //avoid division by zero
+  if(!((n0_ | 0 ) | (n1_ | 0)))
+  {
+    init();
+    return (T)0;
+  }
   
   P0_/=(T)n0_;
   P1_/=(T)n1_;
