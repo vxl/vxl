@@ -12,34 +12,6 @@ boct_loc_code<T>::boct_loc_code(const boct_loc_code<T>& rhs)
   z_loc_ = rhs.z_loc_;
   level  = rhs.level;
 }
-template <class T>
-boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short root_level)
-{
-  // root level r = n -1
-  int max_val = 1 << (root_level-1);
-
-  x_loc_ = (T) (p.x()*max_val);
-  //: boundary case
-  if (p.x()>=1)
-    x_loc_=(T) (root_level);
-  if (p.x()<0)
-    x_loc_=(T) (0);
-    
-  y_loc_ = (T) (p.y()*max_val);
-  if (p.y()>=1)
-    y_loc_=(T) (root_level);
-  if (p.y()<0)
-    y_loc_=(T) (0);
-
-  z_loc_ = (T) (p.z()*max_val);
-  if (p.z()<0)
-    z_loc_=(T) (0);
-
-  if (p.z()>=1)
-    z_loc_=(T) (root_level);
-    
-  level=0;
-}
 
 template <class T>
 boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short root_level)
