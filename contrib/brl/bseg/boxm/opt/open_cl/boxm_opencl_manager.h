@@ -18,7 +18,7 @@
 #include <vcl_map.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <CL/cl.h>
+#include <cl.h>
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
 #define GROUP_SIZE 64
