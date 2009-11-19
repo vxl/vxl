@@ -9,7 +9,7 @@
 #include <vcl_cassert.h>
 
 #include "octree_test_driver.h"
-#include <malloc.h>
+#include <stdlib.h>
 
 
 
@@ -188,7 +188,7 @@ int octree_test_driver::run_tree_test_kernels()
                                   1,
                                   NULL,
                                   globalThreads,
-                                  localThreads,
+                                  NULL,
                                   0,
                                   NULL,
                                   NULL);
@@ -316,7 +316,7 @@ int octree_test_driver::run_ray_trace_test_kernels()
       vcl_cout << "Unsupported: Insufficient local memory on device.\n";
       return SDK_FAILURE;
     }
-  //  vcl_cout << "Local memory used: " << usedLocalMemory << '\n';
+  //vcl_cout << localThreads[] << vcl_endl;
 
   status = clEnqueueNDRangeKernel(
                                   command_queue_,
@@ -324,7 +324,7 @@ int octree_test_driver::run_ray_trace_test_kernels()
                                   1,
                                   NULL,
                                   globalThreads,
-                                  localThreads,
+                                  NULL,
                                   0,
                                   NULL,
                                   NULL);

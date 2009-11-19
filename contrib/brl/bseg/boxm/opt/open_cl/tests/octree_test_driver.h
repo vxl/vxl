@@ -4,7 +4,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <CL/cl.h>
+#include <cl.h>
 #include <boct/boct_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
@@ -40,14 +40,14 @@ class octree_test_driver
   bool init()
     {
 		if(setup_cl()!=SDK_SUCCESS){
-        vcl_cout << "In octree_test_driver::constructor - setup_cl failed\n";
+      vcl_cout << "In octree_test_driver::constructor - setup_cl failed" << vcl_endl;
         return false;}
     return true;
     }
 
 	int check_val(cl_int status, cl_int result, std::string message){
 		if(status != result){
-		  vcl_cout << message << '\n';
+		  vcl_cout << message << vcl_endl;
 		  return 0;
 		}
 	  return 1;

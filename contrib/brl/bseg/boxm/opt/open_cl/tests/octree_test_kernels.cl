@@ -83,7 +83,7 @@ test_traverse_to_level(__global int4* cells, __global float2* cell_data,
       int level = 1;
       int cell_ptr = traverse_to_level(cells, 0, root , code,
                                        level, &found_loc_code);
-      int4 res = (int4)(found_loc_code);
+      int4 res = convert_int4(found_loc_code);
       results[2*i]=res;
       res = (int4)cell_ptr;
       results[2*i+1]=res;
