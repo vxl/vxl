@@ -16,7 +16,7 @@
 
 struct compare_point_3d
 {
-    bool operator()(const vgl_point_3d<float> &a, vgl_point_3d<float>  &b) 
+    bool operator()(const vgl_point_3d<float> &a, const vgl_point_3d<float>  &b) 
     {
         return a.z() > b.z();
     }
