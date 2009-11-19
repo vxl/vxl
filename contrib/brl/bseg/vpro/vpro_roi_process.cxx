@@ -15,8 +15,10 @@ vpro_roi_process::vpro_roi_process(vcl_string const & video_file,
                                    const unsigned x0,
                                    const unsigned y0,
                                    const unsigned xsize,
-                                   const unsigned ysize) :
-  x0_(x0), y0_(y0), xsize_(xsize), ysize_(ysize), video_file_(video_file)
+                                   const unsigned ysize,
+                                   vcl_string const& type) :
+  x0_(x0), y0_(y0), xsize_(xsize), ysize_(ysize), video_file_(video_file),
+  type_(type)
 {
 }
 
@@ -54,7 +56,7 @@ bool vpro_roi_process::finish()
   vidl1_clip_sptr clip = new vidl1_clip(out_frames_);
   vidl1_movie_sptr mov= new vidl1_movie();
   mov->add_clip(clip);
-  if (!vidl1_io::save(mov.ptr(), video_file_.c_str(), "ImageList")) {
+  if (!vidl1_io::save(mov.ptr(), video_file_.c_str(), type_)) {
     vcl_cerr << "In vpro_roi_process::finish() - failed to save video\n";
     return false;
   }

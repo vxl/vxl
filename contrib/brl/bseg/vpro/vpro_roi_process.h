@@ -24,7 +24,8 @@ class vpro_roi_process : public vpro_vil_video_process
                    const unsigned x0,
                    const unsigned y0,
                    const unsigned xsize,
-                   const unsigned ysize);
+                   const unsigned ysize,
+                   vcl_string const& type = "ImageList");
   ~vpro_roi_process();
   virtual process_data_type get_output_type() const { return IMAGE; }
   virtual bool execute();
@@ -36,6 +37,7 @@ class vpro_roi_process : public vpro_vil_video_process
   unsigned y0_;
   unsigned xsize_;
   unsigned ysize_;
+  vcl_string type_;
   vcl_string video_file_;//output file name
   vcl_list<vil_image_resource_sptr> out_frames_;
 };
