@@ -26,3 +26,6 @@ SUBDIRS(pro)
 
 #tests
 SUBDIRS(tests)
+
+#open_cl parallel computation
+SUBDIRS(open_cl)
