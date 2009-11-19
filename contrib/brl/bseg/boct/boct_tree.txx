@@ -9,7 +9,7 @@
 
 //: Construct an empty tree from maximum number of levels and levels, to initialize
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(short num_levels, short init_levels): root_level_(num_levels-1), num_levels_(num_levels), max_val_((double)(1 << root_level_))
+boct_tree<T_loc,T_data>::boct_tree(short num_levels, short init_levels): root_(0),root_level_(num_levels-1), num_levels_(num_levels), max_val_((double)(1 << root_level_))
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;

@@ -66,6 +66,12 @@ class boct_loc_code
 
   //: the level of the tree where this loc code belongs to
   short level;
+
+  inline bool operator==(boct_loc_code<T>const& code) const
+    {
+      return (code.x_loc_==x_loc_&&code.y_loc_==y_loc_&&code.z_loc_==z_loc_&&
+        code.level == level);
+    }
 };
 
 template<class T>
