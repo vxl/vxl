@@ -17,7 +17,7 @@
 //-------------------------------------------------------------
 short4 loc_code(float4 point, short root_level)
 {
-  ushort max_val = 1 << root_level; // index of root
+  float max_val = 1 << root_level; // index of root
   ushort4 maxl = (ushort4)max_val;
   ushort4 temp = convert_ushort4_sat(max_val*point);
   ushort4 ret = min(temp, maxl);
@@ -204,8 +204,8 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
 //---------------------------------------------------------------------
 short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
 {
-  short4 min_cmp = (short4)(exit_point == cell_min);
-  short4 max_cmp = (short4)(exit_point == cell_max);
+  short4 min_cmp = convert_short4(exit_point == cell_min);
+  short4 max_cmp = convert_short4(exit_point == cell_max);
   min_cmp.w = 0;   max_cmp.w = 0; 
   //min has priority over max in case of multiple hits
   //X has priority over Y which has priority over Z in case of multiple hits
