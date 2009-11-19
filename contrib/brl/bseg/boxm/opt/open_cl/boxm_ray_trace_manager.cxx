@@ -9,7 +9,8 @@
 #include <vcl_cassert.h>
 #include <vbl/io/vbl_io_array_2d.h>
 #include "boxm_ray_trace_manager.h"
-#include <malloc.h>
+#include <stdlib.h>
+
 
 //allocate child cells on the array
 static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
@@ -86,6 +87,9 @@ bool boxm_ray_trace_manager::setup_tree()
     (cl_int*)_aligned_malloc(cell_input_.size() * sizeof(cl_int4), 16);
   cell_data_ = 
     (cl_float*)_aligned_malloc(data_input_.size() * sizeof(cl_float2), 16);
+#elif defined(__APPLE__)
+  cells_ = (cl_int*)malloc(cell_input_.size() * sizeof(cl_int4));
+  cell_data_ = (cl_float*)malloc(data_input_.size() * sizeof(cl_float2));
 #else
   cells_ = (cl_int*)memalign(16, cell_input_.size() * sizeof(cl_int4));
   cell_data_ = (cl_float*)memalign(16, data_input_.size() * sizeof(cl_float2));
@@ -110,8 +114,10 @@ bool boxm_ray_trace_manager::setup_tree()
 
 #if defined (_WIN32)
   tree_results_ = (cl_int*)_aligned_malloc(this->tree_result_size()* sizeof(cl_int4), 16);
+#elif defined(__APPLE__)
+  tree_results_ = (cl_int*)malloc(this->tree_result_size() * sizeof(cl_int4));
 #else
-  tree_results_ = (cl_float*)memalign(16, result_size_ * sizeof(cl_int4));
+  tree_results_ = (cl_int*)memalign(16, this->tree_result_size() * sizeof(cl_int4));
 #endif
 
 	if(tree_results_ == NULL)	
@@ -161,6 +167,11 @@ bool boxm_ray_trace_manager::setup_rays()
     (cl_float*)_aligned_malloc(nrays * sizeof(cl_float4), 16);
   ray_dir_ = 
     (cl_float*)_aligned_malloc(nrays * sizeof(cl_float4), 16);
+#elif defined(__APPLE__)
+  ray_origin_ = 
+  (cl_float*)malloc(nrays * sizeof(cl_float4));
+  ray_dir_ = 
+  (cl_float*)malloc(nrays * sizeof(cl_float4));
 #else
   ray_origin_ = (cl_float*)memalign(16, nrays * sizeof(cl_float4));
   ray_dir_ = (cl_float*)memalign(16, nrays * sizeof(cl_float4));
@@ -189,6 +200,8 @@ bool boxm_ray_trace_manager::setup_rays()
       }
 #if defined (_WIN32)
   ray_results_ = (cl_float*)_aligned_malloc(this->n_rays()* sizeof(cl_float4), 16);
+#elif defined(__APPLE__)
+  ray_results_ = (cl_float*)malloc(this->n_rays()* sizeof(cl_float4));
 #else
   ray_results_ = (cl_float*)memalign(16, this->n_rays()) * sizeof(cl_float4));
 #endif
@@ -547,7 +560,7 @@ void boxm_ray_trace_manager::delete_memory()
 #ifdef _WIN32
       _aligned_free(cells_);
 #else
-      free(cell_);
+      free(cells_);
 #endif
       cells_ = NULL;
     }
