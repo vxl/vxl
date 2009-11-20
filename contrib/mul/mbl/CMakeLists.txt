@@ -108,6 +108,8 @@ SET(mbl_sources
   mbl_save_text_file.txx               mbl_save_text_file.h
   mbl_load_text_file.txx               mbl_load_text_file.h
   mbl_sample_stats_1d.cxx              mbl_sample_stats_1d.h
+
+  mbl_mask.cxx                         mbl_mask.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)

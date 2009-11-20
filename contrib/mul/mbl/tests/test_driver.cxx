@@ -51,6 +51,7 @@ DECLARE( test_cluster_tree );
 DECLARE( test_dyn_prog );
 DECLARE( test_progress );
 DECLARE( test_text_file );
+DECLARE( test_mask );
 // DECLARE( test_convert_vector_ims );
 
 void
@@ -107,6 +108,7 @@ register_tests()
   REGISTER( test_dyn_prog );
   REGISTER( test_progress );
   REGISTER( test_text_file );
+  REGISTER( test_mask );
   // REGISTER( test_convert_vector_ims );
 }
 
