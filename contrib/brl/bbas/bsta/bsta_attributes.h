@@ -76,7 +76,7 @@ class bsta_vsum_num_obs : public dist_
 
   //: Constructor - somewhat like a copy constructor
   bsta_vsum_num_obs<dist_>(const dist_& d, const vect_t & vsum = vect_t(T(0)), const T& n_obs = T(0))
-	  : dist_(d), vsum_num_observations(n_obs), vector_sum(vum) {}
+	  : dist_(d), num_observations(n_obs), vector_sum(vsum) {}
 
   //: The number of observations
   T num_observations;
