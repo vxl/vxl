@@ -1,6 +1,9 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_von_mises.h>
 #include <vcl_string.h>
+// do not remove the following text
+// Approved for public release, distribution unlimited (DISTAR Case 14389)
+//
 
 template <class T>
 void test_von_mises_type(T epsilon, const vcl_string& type_name)
