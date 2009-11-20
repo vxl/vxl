@@ -7,9 +7,12 @@
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date January 26, 2006
 //
-// Some algorithms require distributions to maintain additions
+// Some algorithms require distributions to maintain additional
 // attributes.  Attributes inherit from a distribution and
 // add new functionality.
+//
+// do not remove the following text
+// Approved for public release, distribution unlimited (DISTAR Case 14389)
 //
 
 #include "bsta_distribution.h"
@@ -54,5 +57,49 @@ struct vpdt_is_mixture<bsta_num_obs<dist> >
 {
   static const bool value = vpdt_is_mixture<dist>::value;
 };
+
+
+//: maintains a vector sum and number of observations
+// needed for the von mises distribution
+template <class dist_>
+class bsta_vsum_num_obs : public dist_
+{
+  typedef typename dist_::math_type T;
+  typedef typename dist_::vector_type vect_t;
+
+ public:
+
+  typedef dist_ contained_type;
+
+  //: Constructor
+  bsta_vsum_num_obs<dist_>() : dist_(), num_observations(T(0)), vector_sum(vect_t(T(0))) {}
+
+  //: Constructor - somewhat like a copy constructor
+  bsta_vsum_num_obs<dist_>(const dist_& d, const vect_t & vsum = vect_t(T(0)), const T& n_obs = T(0))
+	  : dist_(d), vsum_num_observations(n_obs), vector_sum(vum) {}
+
+  //: The number of observations
+  T num_observations;
+  vect_t vector_sum;
+};
+
+template <class dist_>
+inline vcl_ostream& operator<< (vcl_ostream& os,
+                                bsta_vsum_num_obs<dist_> const& vno)
+{
+  dist_ const& dist = static_cast<dist_ const&>(vno);
+  os << "n_obs:" << vno.num_observations << '\n'
+     << "vector_sum:" << vno.vector_sum << '\n'
+     << dist ;
+  return os;
+}
+
+//: for compatibility with vpdl/vpdt
+template <class dist>
+struct vpdt_is_mixture<bsta_vsum_num_obs<dist> >
+{
+  static const bool value = vpdt_is_mixture<dist>::value;
+};
+
 
 #endif // bsta_attributes_h_
