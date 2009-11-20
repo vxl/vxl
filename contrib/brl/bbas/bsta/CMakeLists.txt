@@ -32,6 +32,7 @@ SET(bsta_sources
   bsta_parzen_sf3.h
   bsta_gauss_f1.h
   bsta_gauss_f2.h
+  bsta_gauss_sf2.h               
   bsta_gauss_sf3.h               bsta_gauss_sd3.h
   bsta_gauss_if3.h               bsta_gauss_id3.h
   bsta_gauss_ff3.h               bsta_gauss_fd3.h
@@ -44,6 +45,7 @@ SET(bsta_sources
   bsta_detector_mixture.h
   bsta_weibull.h   bsta_weibull.txx
   bsta_sampler.h   bsta_sampler.txx
+  bsta_von_mises.h
   bsta_beta.h      bsta_beta.txx
 )
 
