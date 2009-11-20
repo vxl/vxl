@@ -114,6 +114,9 @@ SOURCE=.\bsta_io_histogram.h
 # Begin Source File
 SOURCE=.\bsta_io_parzen_sphere.h
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_io_von_mises.h
+# End Source File
 # End Group
 # End Target
 # End Project

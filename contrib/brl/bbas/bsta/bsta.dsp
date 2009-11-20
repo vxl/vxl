@@ -185,6 +185,21 @@ SOURCE=.\Templates/bsta_gaussian_full+float.2-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_beta+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_von_mises+float.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_von_mises+double.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_sphere+double.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_von_mises+double.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_von_mises+float.2-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -328,6 +343,15 @@ SOURCE=.\bsta_beta.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_beta.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_sf2.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_von_mises.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_von_mises.txx
 # End Source File
 # End Group
 # End Target
