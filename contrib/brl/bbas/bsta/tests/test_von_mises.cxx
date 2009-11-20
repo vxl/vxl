@@ -10,14 +10,14 @@ void test_von_mises_type(T epsilon, const vcl_string& type_name)
 {
   //test default constructor
   bsta_von_mises<T,2> vm2;
-  const bsta_von_mises<T,2>::vect_t& mean2 = vm2.mean();
-  bsta_von_mises<T,2>::vect_t v02(T(0));
+  const bsta_von_mises<T,2>::vector_type& mean2 = vm2.mean();
+  bsta_von_mises<T,2>::vector_type v02(T(0));
   v02[1]=T(1);
   T kappa2 = vm2.kappa();
 
   bsta_von_mises<T,3> vm3;
-  const bsta_von_mises<T,3>::vect_t& mean3 = vm3.mean();
-  bsta_von_mises<T,3>::vect_t v03(T(0)),v03a(T(0));
+  const bsta_von_mises<T,3>::vector_type& mean3 = vm3.mean();
+  bsta_von_mises<T,3>::vector_type v03(T(0)),v03a(T(0));
   v03[2]=T(1);
   T kappa3 = vm3.kappa();
   bool good = mean2 == v02 && mean3 == v03 && kappa2 == 1 && kappa3 == 1;
@@ -25,7 +25,7 @@ void test_von_mises_type(T epsilon, const vcl_string& type_name)
 
   //test probability density
   //  2-d case
-  bsta_von_mises<T,2>::vect_t v12(T(0)), v22(T(0)), v32(T(0));
+  bsta_von_mises<T,2>::vector_type v12(T(0)), v22(T(0)), v32(T(0));
   v12[0]=T(1); v22[1]=T(1); v32[1]=T(1);
   T r1 = vm2.prob_density(v12)/T(0.12570826359722015);
   T r2 = vm2.prob_density(v22)/T(0.3417104886234632);
@@ -34,7 +34,7 @@ void test_von_mises_type(T epsilon, const vcl_string& type_name)
   vcl_string test = "Probability density 2-d <"+type_name+">";
   TEST_NEAR(test.c_str(), r1+r2+r3, 3, epsilon); 
   //  3-d case
-  bsta_von_mises<T,3>::vect_t v13(T(0));
+  bsta_von_mises<T,3>::vector_type v13(T(0));
   double s2d = 1.0/vcl_sqrt(2.0);
   T s2 = static_cast<T>(s2d);
   v13[0]=s2; v13[2]=s2;
