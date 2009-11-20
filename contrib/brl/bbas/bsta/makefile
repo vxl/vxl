@@ -45,6 +45,8 @@ MANPAGE_SOURCES += bsta_parzen.h
 MANPAGE_SOURCES += bsta_parzen_sf1.h
 MANPAGE_SOURCES += bsta_parzen_sf3.h
 MANPAGE_SOURCES += bsta_beta.txx
+MANPAGE_SOURCES += bsta_gauss_sf2.h
+MANPAGE_SOURCES += bsta_von_mises.txx
 
 SUBDIRS += algo io vis
 

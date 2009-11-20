@@ -14,6 +14,7 @@ TESTS += test_weibull.cxx
 TESTS += test_sampler.cxx
 TESTS += test_parzen_sphere.cxx
 TESTS += test_beta.cxx
+TESTS += test_von_mises.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

@@ -32,7 +32,7 @@ SOURCES += bvpl_positive_gauss_conv_functor.cxx
 SOURCES += bvpl_negative_gauss_conv_functor.cxx
 MANPAGE_SOURCES += bvpl_discriminative_non_max_suppression.h
 
-SUBDIRS += pro io util
+SUBDIRS += pro io util bvpl_octree
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

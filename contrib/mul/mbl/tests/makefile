@@ -62,6 +62,7 @@ TESTS += test_text_file.cxx
 TESTS += test_parse_int_list.cxx
 TESTS += test_sample_stats_1d.cxx
 TESTS += test_parse_colon_pairs_list.cxx
+TESTS += test_mask.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

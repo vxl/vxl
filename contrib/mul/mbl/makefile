@@ -51,6 +51,7 @@ SOURCES += mbl_progress_hierarchy.cxx
 SOURCES += mbl_sample_stats_1d.cxx
 SOURCES += mbl_parse_colon_pairs_list.cxx
 SOURCES += mbl_parse_string_list.cxx
+SOURCES += mbl_mask.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
