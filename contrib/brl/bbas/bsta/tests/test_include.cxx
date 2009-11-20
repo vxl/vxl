@@ -15,6 +15,7 @@
 #include <bsta/bsta_gauss_id3.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_gauss_sd3.h>
+#include <bsta/bsta_gauss_sf2.h>
 #include <bsta/bsta_gauss_sf3.h>
 #include <bsta/bsta_beta.h>
 
@@ -36,6 +37,7 @@
 #include <bsta/bsta_parzen_sf1.h>
 #include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_sampler.h>
+#include <bsta/bsta_von_mises.h>
 #include <bsta/bsta_weibull.h>
 
 #include <bsta/io/bsta_io_attributes.h>
@@ -46,5 +48,6 @@
 #include <bsta/io/bsta_io_mixture.h>
 #include <bsta/io/bsta_io_mixture_fixed.h>
 #include <bsta/io/bsta_io_parzen_sphere.h>
+#include <bsta/io/bsta_io_von_mises.h>
 
 int main() { return 0; }

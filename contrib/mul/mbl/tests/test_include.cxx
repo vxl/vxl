@@ -28,8 +28,10 @@
 #include <mbl/mbl_k_means.h>
 #include <mbl/mbl_lda.h>
 #include <mbl/mbl_linear_interpolator.h>
+#include <mbl/mbl_load_text_file.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_lru_cache.h>
+#include <mbl/mbl_mask.h>
 #include <mbl/mbl_matrix_products.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_minimum_spanning_tree.h>
@@ -59,6 +61,7 @@
 #include <mbl/mbl_read_yes.h>
 #include <mbl/mbl_rvm_regression_builder.h>
 #include <mbl/mbl_sample_stats_1d.h>
+#include <mbl/mbl_save_text_file.h>
 #include <mbl/mbl_screen_counter.h>
 #include <mbl/mbl_selected_data_wrapper.h>
 #include <mbl/mbl_select_n_from_m.h>
@@ -76,7 +79,5 @@
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
 #include <mbl/mbl_vector_distance.h>
 #include <mbl/mbl_wt_histogram.h>
-#include <mbl/mbl_save_text_file.h>
-#include <mbl/mbl_load_text_file.h>
 
 int main() { return 0; }
