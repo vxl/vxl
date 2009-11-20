@@ -3,8 +3,8 @@
 # http://developer.amd.com/gpu/ATIStreamSDKBetaProgram/Pages/default.aspx
 # Undoubtedly a different setup is required for the Nvidia SDK
 #
+SET(OPENCL_FOUND "NO")	
 IF(WIN_32)
-	SET(OPENCL_FOUND "NO")
 	FIND_PATH( OPENCL_INCLUDE_PATH calcl.h )
 	
 	IF(OPENCL_INCLUDE_PATH)
