@@ -31,15 +31,24 @@ public:
   //: constructs from a set of sample values
   bsta_beta(vcl_vector<T> x);
 
+  T alpha() const { return alpha_; }
+
+  T beta() const { return beta_; }
+
   void set_alpha_beta(T alpha, T beta)
-     { if (alpha_ = alpha < 0) alpha_=T(0); if (beta_ = beta <0) beta_=T(0); }
+  { alpha_=alpha; beta_=beta;
+    if (alpha_ < 0) 
+      alpha_=T(0); 
+    if (beta_ <0) 
+      beta_=T(0); 
+  }
 
   //: pre: x should be in [0,1]
-  T prob_density(T x) const 
-     { if (x >=0 && x<=1) return (vcl_pow(x, alpha_-1)*vcl_pow(1-x,beta_-1))/vnl_beta(alpha_,beta_);
-       else return T(0); }
+  T prob_density(T x) const ;
 
-  T mean() {return alpha_/(alpha_+beta_); }
+  T cum_dist_funct(T x);
+
+  T mean() { return alpha_/(alpha_+beta_); }
 
   T var() { T t=alpha_+beta_; return (alpha_*beta_)/(t*t*(t+1)); }
 
@@ -48,5 +57,13 @@ private:
   T beta_;
 
 };
+
+template <class T>
+inline vcl_ostream& operator<< (vcl_ostream& os,
+                                bsta_beta<T> const& b)
+{
+  return
+  os << "beta: (alpha,beta) = (" << b.alpha() << "  " << b.beta() << ")\n";
+}
 
 #endif

@@ -19,6 +19,8 @@ ADD_EXECUTABLE( bsta_test_all
 
 TARGET_LINK_LIBRARIES( bsta_test_all bsta vpl vsl vbl vbl_io testlib)
 
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_2_2.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_2_2.txt COPYONLY )
+
 ADD_TEST( bsta_test_gaussian_full           ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_gaussian_full )
 ADD_TEST( bsta_test_gaussian_indep          ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_gaussian_indep )
 ADD_TEST( bsta_test_gaussian_sphere         ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_gaussian_sphere )

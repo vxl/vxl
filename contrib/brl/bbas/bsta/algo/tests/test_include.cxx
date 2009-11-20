@@ -8,5 +8,6 @@
 #include <bsta/algo/bsta_parzen_updater.h>
 #include <bsta/algo/bsta_sample_set.h>
 #include <bsta/algo/bsta_truth_updater.h>
+#include <bsta/algo/bsta_beta_updater.h>
 
 int main() { return 0; }
