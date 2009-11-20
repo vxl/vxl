@@ -6,6 +6,7 @@ TESTMAIN := test_driver.cxx
 TESTS += test_fit_weibull.cxx
 TESTS += test_gaussian_model.cxx
 TESTS += test_mean_shift.cxx
+TESTS += test_beta_updater.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
