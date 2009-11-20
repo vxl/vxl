@@ -94,6 +94,9 @@ LIB32=link.exe -lib
 SOURCE=.\bsta_fit_weibull.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bsta_beta_updater.txx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_f1---.cxx
 # End Source File
 # Begin Source File
@@ -159,6 +162,9 @@ SOURCE=.\Templates/bsta_sample_set+float.3-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_sample_set+double.2-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_mix_beta_updater+bsta_mixture_fixed+bsta_num_obs+bsta_beta+float-.3---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -206,6 +212,9 @@ SOURCE=.\bsta_sample_set.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_sample_set.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_beta_updater.h
 # End Source File
 # End Group
 # End Target

@@ -184,6 +184,9 @@ SOURCE=.\test_gaussian_model.cxx
 SOURCE=.\test_mean_shift.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_beta_updater.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
