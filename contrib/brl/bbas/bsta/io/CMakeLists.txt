@@ -9,6 +9,7 @@ SET(bsta_io_sources
   bsta_io_gaussian_indep.h
   bsta_io_gaussian_sphere.h
   bsta_io_parzen_sphere.h
+  bsta_io_von_mises.h
   bsta_io_histogram.h
 )
 
