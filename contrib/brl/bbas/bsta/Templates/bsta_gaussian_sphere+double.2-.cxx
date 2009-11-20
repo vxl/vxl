@@ -3,4 +3,4 @@
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 //
 
-BSTA_GAUSSIAN_SPHERE_INSTANTIATE(float, 2);
+BSTA_GAUSSIAN_SPHERE_INSTANTIATE(double, 2);
