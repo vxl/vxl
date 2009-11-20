@@ -13,6 +13,7 @@ ADD_EXECUTABLE( bsta_test_all
   test_parzen_sphere.cxx
   test_weibull.cxx
   test_sampler.cxx
+  test_von_mises.cxx
   test_beta.cxx
 )
 
@@ -23,6 +24,7 @@ ADD_TEST( bsta_test_gaussian_indep          ${EXECUTABLE_OUTPUT_PATH}/bsta_test_
 ADD_TEST( bsta_test_gaussian_sphere         ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_gaussian_sphere )
 ADD_TEST( bsta_test_parzen_sphere           ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_parzen_sphere )
 ADD_TEST( bsta_test_weibull                 ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_weibull )
+ADD_TEST( bsta_test_von_mises                 ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_von_mises )
 ADD_TEST( bsta_test_mixture                 ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_mixture )
 ADD_TEST( bsta_test_histogram               ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_bsta_histogram )
 ADD_TEST( bsta_test_k_medoid                ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_k_medoid )
