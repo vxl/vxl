@@ -333,7 +333,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
 {
   assert(scale_idx <= params_->max_scale());
 
-  
+
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
   //retrieve map for current bvxm_voxel_type
   //if no map found create a new one
@@ -372,9 +372,10 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
       bin_idx_str >> bin_idx;
 
       if (scale < 0 || bin_idx <0) {
-        vcl_cerr << "error parsing filename " << file_it() << vcl_endl;
-      } else {
-
+        vcl_cerr << "error parsing filename " << file_it() << '\n';
+      }
+      else
+      {
         vgl_vector_3d<unsigned int> grid_size_scale = params_->num_voxels(scale);
         // create voxel grid and insert into map
         bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size_scale);
@@ -412,7 +413,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
 
     // fill grid with default value
-    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
+    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
       vcl_cerr << "error initializing voxel grid\n";
       return bvxm_voxel_grid_base_sptr(0);
     }
@@ -441,7 +442,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
 
     // fill grid with default value
-    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
+    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
       vcl_cerr << "error initializing voxel grid\n";
       return bvxm_voxel_grid_base_sptr(0);
     }
@@ -520,7 +521,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)APM_T << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)APM_T << '\n';
     return false;
   }
 
@@ -566,7 +567,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     vcl_cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -616,7 +617,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     // transform (1-P(X)) to image plane to accumulate visX for next level
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], PX_img);
 
-    if (return_mask){
+    if (return_mask) {
       bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
     }
 
@@ -639,7 +640,8 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   PIvisX_slab_it = PIvisX.begin();
   preX_slab_it = preX.begin();
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
-  for (unsigned z = 0; z < (unsigned)grid_size.z(); ++z, ++PIvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2) {
+  for (unsigned z = 0; z < (unsigned)grid_size.z(); ++z, ++PIvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2)
+  {
     vcl_cout << '.';
 
     // transform preX_sum to current level
@@ -735,7 +737,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   vpgl_camera_double_sptr dummy_cam = metadata.camera;
   double lidar_pixel_size = 1.0;
-  if (dummy_cam->type_name()=="vpgl_geo_camera"){
+  if (dummy_cam->type_name()=="vpgl_geo_camera") {
     vpgl_geo_camera* lcam = static_cast<vpgl_geo_camera*>(dummy_cam.ptr());
     vcl_cout << "Lidar Camera\n" << *lcam << vcl_endl;
     lidar_pixel_size = lcam->pixel_spacing();
@@ -843,8 +845,10 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
     vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx,scale);
 
-    for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++) {
-      for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++) {
+    for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++)
+    {
+      for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++)
+      {
         vcl_vector<vgl_homg_point_2d<double> > vp(4);
         int i = i_idx+1;
         int j = j_idx-1;
@@ -954,7 +958,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   PLvisX_slab_it = PLvisX.begin();
   preX_slab_it = preX.begin();
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
-  for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++PLvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2) {
+  for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++PLvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2)
+  {
     vcl_cout << '.';
 
     // transform preX_sum to current level
@@ -1032,7 +1037,7 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<APM_T>(0,0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it = ocp_grid->begin();
-  //: intiializing the grid with 1
+  //: initializing the grid with 1
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it)
     ocp_slab_it->fill(ocp_datatype(1.0f));
 
@@ -1042,7 +1047,7 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
 
   int kernel_size=2;
 
-  
+
   int z=0;
 
   unsigned minz=z-kernel_size<0?0:z-kernel_size;
@@ -1050,55 +1055,53 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   ocp_slab_it=ocp_grid->slab_iterator(minz,maxz-minz+1);
 
 
-  for(unsigned i=0;i<points.size();i++)
+  for (unsigned i=0;i<points.size();i++)
   {
-      vgl_vector_3d<float> index=(points[i]-params_->corner())/params_->voxel_length();
+    vgl_vector_3d<float> index=(points[i]-params_->corner())/params_->voxel_length();
 
-      unsigned k=vcl_floor(grid_size.z()-1-index.z());
-      unsigned x=vcl_floor(index.x());
-      unsigned y=vcl_floor(index.y());
+    unsigned k=vcl_floor(grid_size.z()-1-index.z());
+    unsigned x=vcl_floor(index.x());
+    unsigned y=vcl_floor(index.y());
 
-      if(k>=0 && k<grid_size.z()  && x>=0 && x<grid_size.x()  && y>=0 && y<grid_size.y()  ) 
+    if (k>=0 && k<grid_size.z()  && x>=0 && x<grid_size.x()  && y>=0 && y<grid_size.y()  )
+    {
+      minz=k-kernel_size<0?0:k-kernel_size;
+      maxz=k+kernel_size>grid_size.z()-1?grid_size.z()-1:k+kernel_size;
+
+      unsigned minx=x-kernel_size<0?0:x-kernel_size;
+      unsigned miny=y-kernel_size<0?0:y-kernel_size;
+      unsigned maxx=x+kernel_size>grid_size.x()-1?grid_size.x()-1:x+kernel_size;
+      unsigned maxy=y+kernel_size>grid_size.y()-1?grid_size.y()-1:y+kernel_size;
+      //: go to the next slab
+      if (z<k)
       {
-          minz=k-kernel_size<0?0:k-kernel_size;
-          maxz=k+kernel_size>grid_size.z()-1?grid_size.z()-1:k+kernel_size;
-
-          unsigned minx=x-kernel_size<0?0:x-kernel_size;
-          unsigned miny=y-kernel_size<0?0:y-kernel_size;
-          unsigned maxx=x+kernel_size>grid_size.x()-1?grid_size.x()-1:x+kernel_size;
-          unsigned maxy=y+kernel_size>grid_size.y()-1?grid_size.y()-1:y+kernel_size;
-          //: go to the next slab
-          if(z<k)
-          {
-              z=k;
-
-              ocp_slab_it.write_slab();
-              ocp_slab_it=ocp_grid->slab_iterator(minz,maxz-minz+1);
-          }
-
-          vnl_vector_fixed<float,3> m(index.x(), index.y(),grid_size.z()-1- index.z());
-          bsta_gauss_if3 gauss(m, cov);
-          for(unsigned ind_k=minz;ind_k<=maxz;ind_k++)
-          {
-              for(unsigned ind_i=minx;ind_i<=maxx;ind_i++)
-              {
-                  for(unsigned ind_j=miny;ind_j<=maxy;ind_j++)
-                  {
-
-                      vnl_vector_fixed<float,3> min_vec(ind_i-0.5,ind_j-0.5,ind_k-0.5);
-                      vnl_vector_fixed<float,3> max_vec(ind_i+0.5,ind_j+0.5,ind_k+0.5);
-
-                      float p1 = gauss.probability(min_vec,max_vec);
-                      (*ocp_slab_it)(ind_i,ind_j,ind_k-minz)*=1-p1;  
-                  }
-              }
-          }
+        z=k;
+        ocp_slab_it.write_slab();
+        ocp_slab_it=ocp_grid->slab_iterator(minz,maxz-minz+1);
       }
-      if(i%10000==0)vcl_cout<<".";
 
+      vnl_vector_fixed<float,3> m(index.x(), index.y(),grid_size.z()-1- index.z());
+      bsta_gauss_if3 gauss(m, cov);
+      for (unsigned ind_k=minz;ind_k<=maxz;ind_k++)
+      {
+        for (unsigned ind_i=minx;ind_i<=maxx;ind_i++)
+        {
+          for (unsigned ind_j=miny;ind_j<=maxy;ind_j++)
+          {
+            vnl_vector_fixed<float,3> min_vec(ind_i-0.5,ind_j-0.5,ind_k-0.5);
+            vnl_vector_fixed<float,3> max_vec(ind_i+0.5,ind_j+0.5,ind_k+0.5);
+
+            float p1 = gauss.probability(min_vec,max_vec);
+            (*ocp_slab_it)(ind_i,ind_j,ind_k-minz)*=1-p1;
+          }
+        }
+      }
+    }
+    if (i%10000==0)
+      vcl_cout<<".";
   }
   ocp_slab_it = ocp_grid->begin();
-  //: intiializing the grid with 1
+  //: initializing the grid with 1
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it)
   {
     typename bvxm_voxel_slab<ocp_datatype>::iterator slab_it = ocp_slab_it->begin();
@@ -1166,7 +1169,8 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
   vcl_cout << "Generating Expected Image: " << vcl_endl;
-  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it) {
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
+  {
     vcl_cout << '.';
 
     // get expected observation
@@ -1227,8 +1231,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& observation,
                                                    vil_image_view<float> &inv_prob,
-                                                   unsigned bin_index,unsigned scale_idx, float pixel_range
-                                                  )
+                                                   unsigned bin_index,unsigned scale_idx, float pixel_range)
 {
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
@@ -1293,7 +1296,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
     vcl_cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -1411,7 +1414,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
     vcl_cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -1518,13 +1521,15 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
   vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
 
-  //for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
-  //{
-  //  vgl_h_matrix_2d<double> Hp2i, Hi2p;
-  //  compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
-  //  H_plane_to_img.push_back(Hp2i);
-  //  H_img_to_plane.push_back(Hi2p);
-  //}
+#if 0
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
+    H_plane_to_img.push_back(Hp2i);
+    H_img_to_plane.push_back(Hi2p);
+  }
+#endif // 0
 
   // convert images to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(observation.img->ni(), observation.img->nj(), 1);
@@ -1563,7 +1568,7 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
     compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -1571,7 +1576,7 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
     bvxm_util::warp_slab_bilinear(image_slab, Hp2i, frame_backproj);
     bvxm_util::warp_slab_bilinear(mask_slab, Hp2i, mask_backproj);
 
-    if (debug){
+    if (debug) {
       vcl_stringstream file;
       file << "./warped" <<z << ".tif";
       bvxm_util::write_slab_as_image( mask_backproj, file.str());
@@ -1653,7 +1658,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
 
 #if 0 // do the following update operation from Thom's code
     float hard_mult = 1;
-    for ( unsigned v = 0; v < voxels.size(); v++ ){
+    for ( unsigned v = 0; v < voxels.size(); v++ ) {
       float this_color = voxels[v]->appearance->expected_color( light );
       if ( this_color >= 0 )
         mog->update( this_color, hard_mult*voxels[v]->occupancy_prob[0], light );
@@ -1743,7 +1748,7 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
 
 #if 0 // do the following update operation from Thom's code
     float hard_mult = 1;
-    for ( unsigned v = 0; v < voxels.size(); v++ ){
+    for ( unsigned v = 0; v < voxels.size(); v++ ) {
       float this_color = voxels[v]->appearance->expected_color( light );
       if ( this_color >= 0 )
         mog->update( this_color, hard_mult*voxels[v]->occupancy_prob[0], light );
@@ -2129,7 +2134,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(virtual_camera.img->ni(), virtual_camera.img->nj(), 1);
   if (!bvxm_util::img_to_slab(virtual_camera.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << APM_T << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << APM_T << '\n';
     return false;
   }
 
@@ -2163,7 +2168,8 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
   vcl_cout << "generating height map from virtual camera: " << vcl_endl;
-  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it) {
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
+  {
     vcl_cout << '.';
 
     // backproject image onto voxel plane
@@ -2335,5 +2341,7 @@ class bvxm_mog_image_creation_methods
     SAMPLING,   // randomly sample voxels wrt to visibility probabilities and sample from their mixtures to update a mog image
   };
 };
+
 #include <bvxm/bvxm_voxel_world_sptr.h>
+
 #endif // bvxm_voxel_world_h_

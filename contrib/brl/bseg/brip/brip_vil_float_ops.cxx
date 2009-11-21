@@ -729,7 +729,7 @@ brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
         lambda0 = tr+vcl_sqrt(arg);
         lambda1 = tr-vcl_sqrt(arg);
       }
-      if(determinant)
+      if (determinant)
         output(x,y) = det;
       else
         output(x,y) = tr;
@@ -3921,10 +3921,10 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
 //: Find anisotropic intensity extrema at a range of orientations and return the maximal response at the best orientation. Theta interval is in degrees
 //  if lambda0 == lambda1 then reduces to the normal extrema operator
 vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<float> const& input,
-                                       float lambda0, float lambda1,
-                                       float theta_interval, bool bright)
+                                                             float lambda0, float lambda1,
+                                                             float theta_interval, bool bright)
 {
-  unsigned ni = input.ni(); 
+  unsigned ni = input.ni();
   unsigned nj = input.nj();
 
   vil_image_view<float> output(ni, nj, 3); // the first plane is the response strength, the second is the best angle and the third is the mask for that angle
@@ -3934,24 +3934,24 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
     vil_image_view<float> res_mask_current = extrema(input, lambda0, lambda1, 0.0f, bright, true, true);
     for (unsigned j = 0; j<nj; j++)
       for (unsigned i = 0; i<ni; i++) {
-        output(i,j,0) = res_mask_current(i,j,0);  // return the non-max supressed for angle 0
+        output(i,j,0) = res_mask_current(i,j,0);  // return the non-max suppressed for angle 0
         output(i,j,1) = 0.0f;
         output(i,j,2) = res_mask_current(i,j,1);
       }
     return output;
   }
 
-  //: the kernel generator does not treat the x and y axis symetrically, the method works correctly only when lambda0 > lambda1
+  //: the kernel generator does not treat the x and y axis symmetrically, the method works correctly only when lambda0 > lambda1
   //  theoretically one can always call this method by switching the lambdas but the caller of the method should make this switch if needed hence the assertion
   if (lambda0 < lambda1) {
     vcl_cout << "In brip_vil_float_ops::extrema_rotational() - ERROR! rotational extrema operator requires lambda0 to be larger than lambda1! switch the lambdas and use the output angle map accordingly!\n";
-    throw 0; 
+    throw 0;
   }
   if (theta_interval < vcl_numeric_limits<float>::epsilon()) {
     vcl_cout << "In brip_vil_float_ops::extrema_rotational() - ERROR! theta_interval needs to be larger than 0!\n";
-    throw 0; 
+    throw 0;
   }
-   
+
   vil_image_view<float> res_img(ni, nj);
   vil_image_view<int> res_angle(ni, nj);
   res_img.fill(0.0f); res_angle.fill(0);
@@ -3964,8 +3964,8 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
   int max_rji = 0;
   //: elliptical operator has 180 degree rotational symmetry, so only the angles in the range [0,180] matter
   float theta = 0; unsigned theta_i = 1;
-  for ( ; theta < 180; theta += theta_interval, theta_i++) {
-    
+  for ( ; theta < 180; theta += theta_interval, theta_i++)
+  {
     //: compute the response
     vbl_array_2d<float> fa; vbl_array_2d<bool> mask;
     brip_vil_float_ops::extrema_kernel_mask(lambda0, lambda1, theta, fa, mask);
@@ -3983,7 +3983,7 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
           for (int ii=-ri; ii<=ri; ++ii)
             if (mask[jj+rj][ii+ri])
               sum += double(fa[jj+rj][ii+ri])*input(i+ii, j+jj);
-        
+
         if (bright) { // coefficients are negative at center
           if (sum<0) res = static_cast<float>(-sum);
         }
@@ -3996,7 +3996,6 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
           res_angle(i,j) = theta_i;
         }
       }
-
   }
 
   //: now we have pixel-wise best angle, run the non-max suppression around each non-zero pixel using the angles mask
