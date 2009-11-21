@@ -81,7 +81,7 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
   }
   ksum /=norm; msum /=norm;
   vcl_cout << "normalized kappa "<< ksum << "  normalized mean z "<< msum << '\n';
-  TEST_NEAR("Estimate Von Mises 3-d Kappa", ksum, T(1), T(0.1));
+  TEST_NEAR("Estimate Von Mises 3-d Kappa", ksum, T(1), T(0.15));
   TEST_NEAR("Estimate Von Mises 3-d Mean z", msum, T(1), T(0.1));
 }
 
@@ -89,8 +89,10 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
 MAIN( test_von_mises_update )
 {
   START ("von_mises_update");
+#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
   test_von_mises_update_type(float(1e-5),"float");
   test_von_mises_update_type(double(1e-8),"double");
+#endif
   SUMMARY();
 }
 
