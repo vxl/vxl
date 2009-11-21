@@ -10,10 +10,7 @@
 #include <vcl_stdexcept.h>
 #include <vcl_iterator.h>
 #include <vcl_string.h>
-
-class vcl_ostream;
-class vcl_istream;
-
+#include <vcl_iosfwd.h>
 
 //: Defines a binary mask
 class mbl_mask : public vcl_vector<bool>
@@ -31,7 +28,7 @@ void mbl_mask_merge_values(const mbl_mask & mask,
                            ForwardIterator first2, ForwardIterator last2,
                            ForwardIterator result)
 {
-  if (vcl_distance(first1, last1) != mask.size() || vcl_distance(first2, last2) != mask.size())
+  if (vcl_distance(first1, last1) != (int)mask.size() || vcl_distance(first2, last2) != (int)mask.size())
     throw vcl_runtime_error("Values and mask lengths differ");
 
   for (unsigned n = 0 ; first1 != last1 ; ++first1, ++first2, ++n)
@@ -65,10 +62,10 @@ void mbl_mask_logic_nand(const mbl_mask & A, mbl_mask & B);
 template <typename ForwardIterator, typename InputIterator>
 void mbl_apply_mask(const mbl_mask & mask, ForwardIterator first, ForwardIterator last, InputIterator target)
 {
-  if (vcl_distance(first, last) != mask.size())
+  if (vcl_distance(first, last) != (int)mask.size())
     throw vcl_runtime_error("Values and mask lengths differ");
 
-  for (unsigned n = 0 ; first != last ; ++first, ++n)
+  for (unsigned n = 0; first != last ; ++first, ++n)
     if (mask[n]) *target++ = *first;
 }
 
