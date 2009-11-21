@@ -7,6 +7,7 @@ TESTS += test_fit_weibull.cxx
 TESTS += test_gaussian_model.cxx
 TESTS += test_mean_shift.cxx
 TESTS += test_beta_updater.cxx
+TESTS += test_von_mises_update.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
