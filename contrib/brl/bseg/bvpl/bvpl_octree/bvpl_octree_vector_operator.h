@@ -14,7 +14,7 @@
 
 #include <bvpl/bvpl_kernel.h>
 #include <bvpl/bvpl_local_max_functor.h>
-#include <bvpl/bvpl_octree_kernel_operator.h>
+#include <bvpl/bvpl_octree/bvpl_octree_kernel_operator.h>
 #include <boct/boct_tree.h>
 #if 0
 #include <vcl_iostream.h>
