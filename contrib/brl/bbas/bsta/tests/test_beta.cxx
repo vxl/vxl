@@ -2,9 +2,10 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_beta.h>
-#include <vcl_iostream.h>
 #include <vnl/vnl_random.h>
 #include <bsta/bsta_histogram.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 //: Test bsta beta distribution
 void test_beta()

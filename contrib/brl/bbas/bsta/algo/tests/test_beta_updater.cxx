@@ -6,6 +6,7 @@
 #include <bsta/algo/bsta_adaptive_updater.h>
 
 #include <vcl_string.h>
+#include <vcl_fstream.h>
 
 void load_samples(vcl_string file, vcl_vector<float>& samples)
 {
@@ -28,8 +29,6 @@ MAIN( test_beta_updater)
   typedef bsta_num_obs<bsta_beta<float> > beta_type;
   typedef bsta_mixture_fixed<beta_type, 3> mix_beta;
   typedef bsta_num_obs<mix_beta> mix_beta_type;
-  typedef float T;
-  unsigned n=3;
 
   bsta_beta<float> beta(2.0, 2.0);
   bsta_num_obs<bsta_beta<float> > init_beta(beta,1);
