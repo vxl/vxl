@@ -14,7 +14,7 @@
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_algorithm.h>
-
+#include <vcl_iostream.h>
 
 //: Update the statistics given a 1D beta distribution and a learning rate
 // \note if rho = 1/(num observations) then this just an online cumulative average
@@ -41,60 +41,60 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample )
 template <class beta_>
 struct bsta_beta_fitness
 {
-  private:
-    typedef typename beta_::math_type T;
-    enum { n = beta_::dimension };
-  public:
-    static bool order (const beta_& d1, const T& w1,
-                       const beta_& d2, const T& w2)
-    {
-      return (w1>w2);
-    }
+ private:
+  typedef typename beta_::math_type T;
+  enum { n = beta_::dimension };
+ public:
+  static bool order (const beta_& d1, const T& w1,
+                     const beta_& d2, const T& w2)
+  {
+    return w1>w2;
+  }
 };
 
 //: An updater for statistically updating beta distributions
 template <class beta_>
 class bsta_beta_updater
 {
-    typedef bsta_num_obs<beta_> obs_beta_;
-    typedef typename beta_::math_type T;
-    typedef typename beta_::vector_type vector_;
-  public:
+  typedef bsta_num_obs<beta_> obs_beta_;
+  typedef typename beta_::math_type T;
+  typedef typename beta_::vector_type vector_;
+ public:
 
-    //: for compatiblity with vpdl/vpdt
-    typedef typename beta_::field_type field_type;
-    typedef beta_ distribution_type;
+  //: for compatiblity with vpdl/vpdt
+  typedef typename beta_::field_type field_type;
+  typedef beta_ distribution_type;
 
 
-    //: The main function
-    // make the appropriate type casts and call a helper function
-    void operator() ( obs_beta_& d, const vector_& sample ) const
-    {
-      d.num_observations += T(1);
-      bsta_update_beta(d, T(1)/d.num_observations, sample);
-    }
+  //: The main function
+  // make the appropriate type casts and call a helper function
+  void operator() ( obs_beta_& d, const vector_& sample ) const
+  {
+    d.num_observations += T(1);
+    bsta_update_beta(d, T(1)/d.num_observations, sample);
+  }
 };
 
 template <class mix_dist_>
 class bsta_mix_beta_updater
-{   
-private:
+{
+ private:
   typedef typename mix_dist_::dist_type obs_dist_; //mixture comp type
   typedef typename obs_dist_::contained_type dist_; //num_obs parent
   typedef typename dist_::math_type T;//the field type, e.g. float
   typedef typename dist_::vector_type vector_;// the vector type
   typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
 
-  
-public:
+
+ public:
   //: Constructor
   bsta_mix_beta_updater(const dist_& model, T thresh, unsigned int max_cmp = 5)
-   : init_dist_(model,T(1)), p_thresh_(thresh), max_components_(max_cmp) {}
+   : init_dist_(model,T(1)), max_components_(max_cmp), p_thresh_(thresh) {}
 
   //: for compatiblity with vpdl/vpdt
   typedef typename dist_::field_type field_type;
   typedef mix_dist_ distribution_type;
- 
+
   //: The main function
   void operator() ( obs_mix_dist_& mix, const vector_& sample ) const
   {
@@ -104,9 +104,7 @@ public:
 
   void update( mix_dist_& mix, const vector_& sample, T alpha ) const;
 
-
  protected:
-  
 
   //: insert a sample in the mixture
   void insert(mix_dist_& mixture, const vector_& sample, T init_weight) const
