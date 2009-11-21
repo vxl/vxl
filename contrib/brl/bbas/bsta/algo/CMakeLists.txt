@@ -9,6 +9,7 @@ SET( bsta_algo_sources
    bsta_adaptive_updater.txx  bsta_adaptive_updater.h
    bsta_truth_updater.txx     bsta_truth_updater.h
    bsta_parzen_updater.txx    bsta_parzen_updater.h
+   bsta_von_mises_updater.txx    bsta_von_mises_updater.h
    bsta_fit_weibull.cxx       bsta_fit_weibull.h
    bsta_mean_shift.txx        bsta_mean_shift.h
    bsta_sample_set.txx        bsta_sample_set.h
