@@ -311,7 +311,12 @@ void bwm_tableau_cam::show_geo_position()
 
 void bwm_tableau_cam::geo_position_vertex()
 {
-  my_observer_->geo_position_vertex();
+  my_observer_->position_vertex(true);
+}
+
+void bwm_tableau_cam::local_position_vertex()
+{
+  my_observer_->position_vertex(false);
 }
 
 void bwm_tableau_cam::create_terrain()

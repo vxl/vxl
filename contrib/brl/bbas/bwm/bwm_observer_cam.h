@@ -158,7 +158,8 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void show_geo_position();
 
-  void geo_position_vertex();
+  //: displays position at vertex as text, either geo or local coordinates
+  void position_vertex(bool show_as_geo = true);
 
   void create_terrain();
 

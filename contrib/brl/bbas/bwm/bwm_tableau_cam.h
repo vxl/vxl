@@ -79,6 +79,8 @@ class bwm_tableau_cam : public bwm_tableau_img
 
   void geo_position_vertex();
 
+  void local_position_vertex();
+
   void create_terrain();
 
   void create_circular_polygon();

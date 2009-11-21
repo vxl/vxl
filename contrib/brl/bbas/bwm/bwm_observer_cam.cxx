@@ -1380,11 +1380,12 @@ void bwm_observer_cam::show_geo_position()
   bwm_observer_img::set_vgui_status_on(true);
 }
 
-void  bwm_observer_cam::geo_position_vertex()
+
+void  bwm_observer_cam::position_vertex(bool show_as_geo)
 {
   vcl_vector<vgui_soview2D*> vertices = this->get_selected_objects(VERTEX_TYPE);
   if (vertices.size()  != 1) {
-    vcl_cerr << "Please select exactly 1 vertex for geo_position!\n";
+    vcl_cerr << "Please select exactly 1 vertex for vertex_position!\n";
     return;
   }
   bwm_soview2D_vertex* vert = static_cast<bwm_soview2D_vertex*>(vertices[0]);
@@ -1402,14 +1403,18 @@ void  bwm_observer_cam::geo_position_vertex()
   tt->clear();
   tt->set_colour(1.0, 1.0, 0.0);
   vcl_stringstream str;
-  str << vcl_fixed << vcl_setprecision(6)<< '(' << p3d->y()
-      << ' '  << p3d->x() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
-
+  if(show_as_geo)
+    str << vcl_fixed << vcl_setprecision(6)<< '(' << p3d->y()
+        << ' '  << p3d->x() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
+  else
+    str << vcl_fixed << vcl_setprecision(6)<< '(' << p3d->x()
+        << ' '  << p3d->y() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
   float x = static_cast<float>(u+2.0);
   float y = static_cast<float>(v-2.0);
   tt->add(x, y, str.str());
   img_tab_->post_redraw();
 }
+
 
 //: Creates a terrain from a given boundary and the building bottoms and correspondence points
 void bwm_observer_cam::create_terrain()
