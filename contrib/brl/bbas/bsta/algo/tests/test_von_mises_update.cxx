@@ -14,8 +14,8 @@ T sample_2d()
   T F[63]={0.,T(2.6095722659260293e-10),T(5.495264987441105e-10),T(9.020304479490863e-10),T(1.3767321561343852e-9),T(2.0793149411956304e-9),T(3.2176050649407998e-9),T(5.226452812295283e-9),T(9.065857218918642e-9),T(1.6960623731203717e-8),T(3.42983263259157e-8),T(7.46401210328259e-8),T(1.7324941502870866e-7),T(4.2418306188751966e-7),T(1.0827355917064834e-6),T(2.84795706721355e-6),T(7.633043295732147e-6),T(0.0000206206),T(0.0000555655),T(0.00014786),T(0.000384842),T(0.000970898),T(0.00235433),T(0.00544528),T(0.0119301),T(0.0246132),T(0.0475855),T(0.0858954),T(0.144425),T(0.22601),T(0.329426),T(0.448365),T(0.572307),T(0.689283),T(0.78933),T(0.866992),T(0.921841),T(0.957206),T(0.978112),T(0.989501),T(0.995254),T(0.997965),T(0.999167),T(0.999672),T(0.999874),T(0.999953),T(0.999983),T(0.999994),T(0.999998),T(0.999999),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.),T(1.)};
 
   double x = vcl_rand()/(1.0+RAND_MAX);
-  for(unsigned i = 0; i<63; ++i)
-    if(F[i]>=x)
+  for (unsigned i = 0; i<63; ++i)
+    if (F[i]>=x)
       return th[i];
   return T(0);
 };
@@ -25,7 +25,6 @@ T sample_2d()
 template <class T>
 vgl_point_2d<T> sample_3d(T kappa)
 {
-	double x = vcl_rand()/(1.0+RAND_MAX);
   double phi = 2.0*vnl_math::pi*(vcl_rand()/(1.0+RAND_MAX));
   T phi_T = static_cast<T>(phi);
   double p = vcl_rand()/(1.0+RAND_MAX);
@@ -44,12 +43,12 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
   //Test 2-d von mises update
   bsta_von_mises_updater<bsta_von_mises<T, 2> > vm_2d_updater;
   bsta_vsum_num_obs<bsta_von_mises<T, 2> > obvm2;
-  for(unsigned i = 0; i<50; ++i){
+  for (unsigned i = 0; i<50; ++i){
     T theta  = sample_2d<T>();
-    bsta_von_mises<T, 2>::vector_type s(T(0));//sample
+    typename bsta_von_mises<T, 2>::vector_type s(T(0));//sample
     s[0]=vcl_cos(theta);
     s[1]=vcl_sin(theta);
-    vm_2d_updater(obvm2, s);    
+    vm_2d_updater(obvm2, s);
     }
   vcl_cout << obvm2.kappa() << ' ' << (obvm2.mean())[0] << '\n';
   TEST_NEAR("Estimate Von Mises 2-d Kappa",obvm2.kappa()/T(10), T(1), T(0.2));
@@ -57,23 +56,23 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
   //Test 3-d von mises update
   bsta_von_mises_updater<bsta_von_mises<T, 3> > vm_3d_updater;
   //A set of random samples for theta and phi about the mean
-  //without loss of generality it can be assumed that the mean 
+  //without loss of generality it can be assumed that the mean
   //direction is (0, 0, 1)^t.
   unsigned n = 50;
   vcl_cout << "Test parameter estimation for 3-d von mises distribution\n";
   vcl_cout << "kappa" << ' ' << "est_kappa" << ' ' << "mean z, "<< n << " samples, type =" << type_name << '\n';
   T ksum = T(0), msum = T(0);
   T norm = T(0);
-  for(T kappa = T(1); kappa<=T(20); kappa+=2){
+  for (T kappa = T(1); kappa<=T(20); kappa+=2){
     bsta_vsum_num_obs<bsta_von_mises<T, 3> > obvm3;
-    for(unsigned i = 0; i<50; ++i){
-      vgl_point_2d<T>& p  = sample_3d(kappa);
+    for (unsigned i = 0; i<50; ++i){
+      vgl_point_2d<T> p = sample_3d(kappa);
       T theta = p.x(), phi = p.y();
-      bsta_von_mises<T, 3>::vector_type s(T(0));//sample
+      typename bsta_von_mises<T, 3>::vector_type s(T(0));//sample
       s[0]=vcl_sin(theta)*vcl_cos(phi);
       s[1]=vcl_sin(theta)*vcl_sin(phi);
       s[2]=vcl_cos(theta);
-      vm_3d_updater(obvm3, s);    
+      vm_3d_updater(obvm3, s);
     }
     vcl_cout << kappa << ' ' << obvm3.kappa() << ' ' << (obvm3.mean())[2] << '\n';
     ksum += obvm3.kappa()/kappa;
