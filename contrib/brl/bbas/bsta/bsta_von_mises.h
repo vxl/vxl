@@ -42,7 +42,7 @@ class bsta_von_mises : public bsta_distribution<T,n>
   void set_kappa(T kappa) {kappa_=kappa;}
 
   //: The probability density at a given unit vector
-  T prob_density(vector_type const& v) const;
+  T prob_density(vector_type const& v) const{vcl_cerr << "not implemented\n"; return 0;}
 
   //:Probability of an angular range of vectors about v, which defines a cone.
   T probability(vector_type const& v,const T theta_max) const {vcl_cerr << "not implemented\n"; return 0;}
@@ -54,7 +54,8 @@ class bsta_von_mises : public bsta_distribution<T,n>
   T kappa_;
 };
 
-VCL_DEFINE_SPECIALIZATION
+
+#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 template <class T>
 class bsta_von_mises<T,3>
 {
@@ -87,7 +88,7 @@ class bsta_von_mises<T,3>
   T kappa_;
 };
 
-VCL_DEFINE_SPECIALIZATION
+
 template <class T>
 class bsta_von_mises<T,2>
 {
@@ -119,6 +120,8 @@ class bsta_von_mises<T,2>
   //: The concentration parameter (kappa)
   T kappa_;
 };
+
+#endif //VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
 template <class T , unsigned n>
 inline vcl_ostream& operator<< (vcl_ostream& os,

@@ -60,8 +60,10 @@ void test_von_mises_type(T epsilon, const vcl_string& type_name)
 MAIN( test_von_mises )
 {
   START ("von_mises");
+#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
   test_von_mises_type(float(1e-5),"float");
   test_von_mises_type(double(1e-13),"double");
+#endif
   SUMMARY();
 }
 
