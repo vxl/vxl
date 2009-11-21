@@ -45,101 +45,25 @@ namespace
     { return v0*v1; }
   };
 
-double pow_di (double ap, int bp)
-{
-  double pow, x;
-  int n;
-  unsigned long u;
-
-  pow = 1;
-  x = ap;
-  n = bp;
-  if (n != 0)
-  {
-    if (n < 0)
-    {
-      n = -n;
-      x = 1 / x;
-    }
-    for (u = n;;)
-    {
-      if (u & 01)
-        pow *= x;
-      if (u >>= 1)
-        x *= x;
-      else
-        break;
-    }
+double I0(double X) {
+      double Y,P1,P2,P3,P4,P5,P6,P7,Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,AX,BX;
+      P1=1.0; P2=3.5156229; P3=3.0899424; P4=1.2067429;
+      P5=0.2659732; P6=0.360768e-1; P7=0.45813e-2;
+      Q1=0.39894228; Q2=0.1328592e-1; Q3=0.225319e-2;
+      Q4=-0.157565e-2; Q5=0.916281e-2; Q6=-0.2057706e-1;
+      Q7=0.2635537e-1; Q8=-0.1647633e-1; Q9=0.392377e-2;
+      if (vcl_fabs(X) < 3.75) {
+        Y=(X/3.75)*(X/3.75);
+        return (P1+Y*(P2+Y*(P3+Y*(P4+Y*(P5+Y*(P6+Y*P7))))));
+      }
+      else {
+        AX=vcl_fabs(X);
+        Y=3.75/AX;
+        BX=vcl_exp(AX)/vcl_sqrt(AX);
+        AX=Q1+Y*(Q2+Y*(Q3+Y*(Q4+Y*(Q5+Y*(Q6+Y*(Q7+Y*(Q8+Y*Q9)))))));
+        return (AX*BX);
+      }
   }
-  return pow;
-}
-
-//       =============================================================
-//       Purpose: This program computes the modified Bessel function
-//                I0(x)
-//       Input :  x
-//       Output:  I0(x)
-//
-//       Example:
-//         x      I0(x)
-//       -------------------
-//        1.0  .1266066E+01
-//       10.0  .2815717E+04
-//       20.0  .4355828E+08
-//       30.0  .7816723E+12
-//       40.0  .1489477E+17
-//       50.0  .2932554E+21
-//       =============================================================
-
-bool I0(double x, double& bi0)
-{
-    // Initialized data
-
-    static double a[12] = { .125,.0703125,.0732421875,.11215209960938,
-                            .22710800170898,.57250142097473,1.7277275025845,6.0740420012735,
-                            24.380529699556,110.01714026925,551.33589612202,3038.0905109224 };
-    int i__1;
-    double d__1;
-
-    // Local variables
-    static int k;
-    static double r__;
-    static int k0;
-
-    static double x2 = x * x;
-    if (x == 0.) {
-      bi0 = 1.;
-      return true;
-    }
-    else if (x <= 18.) {
-      bi0 = 1.;
-      r__ = 1.;
-      for (k = 1; k <= 50; ++k) {
-        r__ = r__ * .25 * x2 / (k * k);
-        bi0 += r__;
-        if ((d__1 = r__ / bi0, vcl_abs(d__1)) < 1e-15)
-        return true;
-      }
-    }
-    else {
-      k0 = 12;
-      if (x >= 35.0) {
-        k0 = 9;
-      }
-      if (x >= 50.0) {
-        k0 = 7;
-      }
-      static double ca = vcl_exp(x) / vcl_sqrt(vnl_math::pi * 2. * x);
-      bi0 = 1.;
-      static double xr = 1. / x;
-      i__1 = k0;
-      for (k = 1; k <= i__1; ++k)
-        bi0 += a[k - 1] * pow_di(xr, k);
-      bi0 = ca * bi0;
-      return true;
-    }
-    return false;
-}
 
 }//namespace
 #if VCL_CAN_DO_PARTIAL_SPECIALIZATION
@@ -216,8 +140,7 @@ T bsta_von_mises<T,2>::prob_density(typename bsta_von_mises<T,2>::vector_type co
   double dp = static_cast<double>(dpt);
   double k = static_cast<double>(kappa_);
   double ex = vcl_exp(k*dp);
-  double i0 = 1.0;
-  if (!I0(k,i0)) return T(0);
+  double i0 = I0(k);
   double norm = 1.0/i0;
   norm /= 2.0*vnl_math::pi;
   return static_cast<T>(norm*ex);
