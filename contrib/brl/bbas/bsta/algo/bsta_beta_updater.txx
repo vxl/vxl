@@ -1,6 +1,7 @@
 #ifndef bsta_beta_updater_txx_
 #define bsta_beta_updater_txx_
-
+//:
+// \file
 #include "bsta_beta_updater.h"
 #include <vcl_limits.h>
 
@@ -17,9 +18,7 @@ bsta_mix_beta_updater<mix_dist_>::update( mix_dist_& mix, const vector_& sample,
   probs.resize(num_components,T(0));
   static vcl_vector<unsigned int> matched;
   matched.clear();
- 
-  T max_prob=0;
-  unsigned dist=0;
+
   for (unsigned int i=0; i<num_components; ++i) {
     obs_dist_& d = mix.distribution(i);
     T p = d.prob_density(sample);
@@ -56,8 +55,8 @@ bsta_mix_beta_updater<mix_dist_>::update( mix_dist_& mix, const vector_& sample,
       T sum_probs = T(0);
       for (m_itr itr = matched.begin(); itr != matched.end(); ++itr) {
         const unsigned int i = *itr;
-        obs_dist_& b = mix.distribution(i);
-        probs[i] = probs[i] * mix.weight(i); //?????? b.dist_prob_density(probs[i]) * mix.weight(i);
+                                   // obs_dist_& b = mix.distribution(i);
+        probs[i] *= mix.weight(i); //?????? b.dist_prob_density(probs[i]) * mix.weight(i);
         sum_probs += probs[i];
       }
       // update each match
@@ -90,6 +89,6 @@ bsta_mix_beta_updater<mix_dist_>::update( mix_dist_& mix, const vector_& sample,
 }
 
 #define BSTA_MIX_BETA_UPDATER_INSTANTIATE(T) \
-template class bsta_mix_beta_updater<T >; \
+template class bsta_mix_beta_updater<T >
 
 #endif
