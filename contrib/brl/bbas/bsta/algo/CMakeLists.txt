@@ -25,7 +25,3 @@ TARGET_LINK_LIBRARIES( bsta_algo bsta)
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
-
-
-
