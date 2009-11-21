@@ -57,7 +57,7 @@ template <class T>
 T bsta_beta<T>::prob_density(T x) const
 {
   if (x >=T(0) && x<=T(1))
-    return (vcl_pow(x, alpha_-T(1))*vcl_pow(1-x,beta_-T(1)))/vnl_beta(alpha_,beta_);
+    return (vcl_pow(x, alpha_-1)*vcl_pow(1-x,beta_-1))/vnl_beta(alpha_,beta_);
   else return T(0);
 }
 
@@ -71,7 +71,7 @@ T bsta_beta<T>::cum_dist_funct(T x) const
   T val;
   for (unsigned j=a; j<=a+b-1; j++) {
     val = factorial(a+b-1)/(factorial(j)*factorial(a+b-1-j));
-    val *= vcl_pow(x,j)*vcl_pow(1.0-x, a+b-1-j);
+    val *= vcl_pow(x,T(j))*vcl_pow(1-x, T(a+b-1-j));
     Ix+=val;
   }
   return Ix;
