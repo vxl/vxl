@@ -12,7 +12,7 @@ AUX_SOURCE_DIRECTORY(Templates boct_sources)
 
 ADD_LIBRARY(boct  ${boct_sources})
 
-TARGET_LINK_LIBRARIES(boct vcl vgl vgl_io vbl vnl)
+TARGET_LINK_LIBRARIES(boct vcl vgl vgl_io vnl_io vbl vnl)
 
 #tests
 SUBDIRS(tests)
