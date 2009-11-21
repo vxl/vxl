@@ -926,6 +926,9 @@ foreach $f (@FILES)
   &msg(1, "should maybe use vnl_math::pi instead of $1")
     if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
         $cpp_file && $file_s =~ m!\b(3\.14159\d*)!);
+  &msg(1, "should maybe use vnl_math::euler instead of $1")
+    if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
+        $cpp_file && $file_s =~ m!(0?\.5772[12]\d*)!);
 
 # 14. Instantiation macro stuff
   &msg(1, "definition of $1 ends with ;")

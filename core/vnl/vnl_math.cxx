@@ -95,6 +95,7 @@ const double vnl_math::two_over_sqrtpi  VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.1283
 const double vnl_math::one_over_sqrt2pi VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.39894228040143267794 );
 const double vnl_math::sqrt2            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.41421356237309504880 );
 const double vnl_math::sqrt1_2          VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.70710678118654752440 );
+const double vnl_math::euler            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.57721566490153286061 );
 
 //: IEEE double machine precision
 const double vnl_math::eps              VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.2204460492503131e-16 );
