@@ -20,9 +20,6 @@
 #include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-//: forward declare vnl_vector_fixed
-template<class T, unsigned n> class vnl_vector_fixed;
-
 
 //: A Von_Mises distribution
 template <class T, unsigned n>
@@ -48,7 +45,7 @@ class bsta_von_mises : public bsta_distribution<T,n>
   T prob_density(vector_type const& v) const;
 
   //:Probability of an angular range of vectors about v, which defines a cone.
-  T probability(vector_type const& v,const T theta_max) const {vcl_cerr "not implemented\n"; return 0;}
+  T probability(vector_type const& v,const T theta_max) const {vcl_cerr << "not implemented\n"; return 0;}
 
  protected:
   //: The mean vector
@@ -57,6 +54,7 @@ class bsta_von_mises : public bsta_distribution<T,n>
   T kappa_;
 };
 
+VCL_DEFINE_SPECIALIZATION
 template <class T>
 class bsta_von_mises<T,3>
 {
@@ -89,6 +87,7 @@ class bsta_von_mises<T,3>
   T kappa_;
 };
 
+VCL_DEFINE_SPECIALIZATION
 template <class T>
 class bsta_von_mises<T,2>
 {
