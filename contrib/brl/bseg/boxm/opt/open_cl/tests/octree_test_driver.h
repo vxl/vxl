@@ -13,13 +13,13 @@
 #define SDK_FAILURE 1
 #define VECTOR_SIZE 4
 
-class octree_test_driver 
+class octree_test_driver
 {
   boxm_ray_trace_manager* cl_manager_;
   cl_ulong used_local_memory_;       /**< Used local memory */
   cl_command_queue command_queue_;      /**< CL command queue */
-  cl_mem   input_cell_buf_; 
-  cl_mem   input_data_buf_;    
+  cl_mem   input_cell_buf_;
+  cl_mem   input_data_buf_;
   cl_mem   input_ray_origin_buf_;
   cl_mem   input_ray_dir_buf_;
 
@@ -27,8 +27,8 @@ class octree_test_driver
   cl_mem   tree_test_output_;
 
  public:
-  /** 
-   * Constructor 
+  /**
+   * Constructor
    * Initialize member variables
    * @param name name of sample (string)
    */
@@ -38,22 +38,25 @@ class octree_test_driver
   ~octree_test_driver();
 
   bool init()
-    {
-		if(setup_cl()!=SDK_SUCCESS){
+  {
+    if (setup_cl()!=SDK_SUCCESS) {
       vcl_cout << "In octree_test_driver::constructor - setup_cl failed" << vcl_endl;
-        return false;}
-    return true;
+      return false;
     }
-
-	int check_val(cl_int status, cl_int result, std::string message){
-		if(status != result){
-		  vcl_cout << message << vcl_endl;
-		  return 0;
-		}
-	  return 1;
+    else
+      return true;
   }
-  cl_int* tree_results(){return cl_manager_->tree_results();}
-  size_t tree_result_size_bytes(){return 4*cl_manager_->tree_result_size();}
+
+  int check_val(cl_int status, cl_int result, std::string message) {
+    if (status != result) {
+      vcl_cout << message << vcl_endl;
+      return 0;
+    }
+    else
+      return 1;
+  }
+  cl_int* tree_results() {return cl_manager_->tree_results();}
+  vcl_size_t tree_result_size_bytes() const {return 4*cl_manager_->tree_result_size();}
 
   void set_buffers();
 
@@ -71,7 +74,7 @@ class octree_test_driver
 
   int cleanup_ray_test();
 
-  size_t n_rays(){return cl_manager_->n_rays();}
+  vcl_size_t n_rays() const {return cl_manager_->n_rays();}
  private:
   int set_tree_args();
   int set_ray_trace_args();

@@ -1,16 +1,16 @@
-// This is brl/bseg/boxm/opt/boxm_opencl_manager.h
+// This is brl/bseg/boxm/opt/open_cl/boxm_opencl_manager.h
 #ifndef boxm_opencl_manager_h_
 #define boxm_opencl_manager_h_
-
 //:
 // \file
-// \brief 
+// \brief
 //  A parent class for singleton opencl managers
 // \author J. Mundy
 // \date November 13, 2009
 //
 // \verbatim
-//  Modifications - None
+//  Modifications
+//   <none yet>
 // \endverbatim
 
 
@@ -25,28 +25,27 @@
 #define VECTOR_SIZE 4
 
 
-
 template <class T>
-class boxm_opencl_manager 
+class boxm_opencl_manager
 {
  protected:
-  size_t device_list_size_;
-  size_t max_work_group_size_;        /**< Max allowed work-items in a group */
-  cl_uint max_dimensions_;          /**< Max group dimensions allowed */
-  size_t * max_work_item_sizes_;      /**< Max work-items sizes in each dimension*/
-  cl_ulong total_local_memory_;      /**< Max local memory allowed */
-  cl_ulong total_global_memory_;     /**< Max global memory allowed */
-  cl_uint max_compute_units_;        /**< Max compute units */
-  cl_uint vector_width_short_;       /**< Ideal short vector size*/
-  cl_uint vector_width_float_;       /**< Ideal float vector size*/
-  cl_uint max_clock_freq_;           /**< Maximum clock frequencey*/
-  cl_bool image_support_;           /**< image support*/
-  cl_context context_;                 /**< CL context */
-  cl_device_id *devices_;              /**< CL device list */
+  vcl_size_t device_list_size_;
+  vcl_size_t max_work_group_size_;   //!< Max allowed work-items in a group
+  cl_uint max_dimensions_;           //!< Max group dimensions allowed
+  vcl_size_t * max_work_item_sizes_; //!< Max work-items sizes in each dimension
+  cl_ulong total_local_memory_;      //!< Max local memory allowed
+  cl_ulong total_global_memory_;     //!< Max global memory allowed
+  cl_uint max_compute_units_;        //!< Max compute units
+  cl_uint vector_width_short_;       //!< Ideal short vector size
+  cl_uint vector_width_float_;       //!< Ideal float vector size
+  cl_uint max_clock_freq_;           //!< Maximum clock frequency
+  cl_bool image_support_;            //!< image support
+  cl_context context_;               //!< CL context
+  cl_device_id *devices_;            //!< CL device list
 
  public:
 
-   //: Destructor
+  //: Destructor
   virtual ~boxm_opencl_manager();
 
   //: Use this instead of constructor
@@ -59,23 +58,22 @@ class boxm_opencl_manager
   bool initialize_cl();
 
   //: Check for error returns
-	int check_val(cl_int status, cl_int result, std::string message){
-		if(status != result){
-		  vcl_cout << message << '\n';
-		  return 0;
-		}
-	  return 1;
- 
+  int check_val(cl_int status, cl_int result, std::string message) {
+    if (status != result) {
+      vcl_cout << message << '\n';
+      return 0;
+    }
+    return 1;
   }
-  size_t group_size(){return GROUP_SIZE;}
-  cl_ulong total_local_memory(){return total_local_memory_;}
-  cl_context context(){return context_;}
-  cl_device_id * devices(){return devices_;}
+  vcl_size_t group_size() const {return GROUP_SIZE;}
+  cl_ulong total_local_memory() const {return total_local_memory_;}
+  cl_context context() {return context_;}
+  cl_device_id * devices() {return devices_;}
 
  protected:
 
   //: Constructor
-  boxm_opencl_manager() : devices_(0),max_work_item_sizes_(0){}
+  boxm_opencl_manager() : devices_(0),max_work_item_sizes_(0) {}
 
   static T* instance_;
 };
