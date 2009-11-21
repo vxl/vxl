@@ -1,6 +1,7 @@
 #ifndef boct_tree_cell_txx_
 #define boct_tree_cell_txx_
-
+//:
+// \file
 #include "boct_tree_cell.h"
 
 #include <vcl_iostream.h>
@@ -35,7 +36,6 @@ boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
 {
   delete_children();
   if (vis_node_) {
-
     delete vis_node_;
     vis_node_ = NULL;
   }
@@ -429,8 +429,8 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
 template<class T_loc,class T_data>
 bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
-                                                   boct_tree_cell<T_loc,T_data>* &neighbor,
-                                                   short root_level)
+                                                  boct_tree_cell<T_loc,T_data>* &neighbor,
+                                                  short root_level)
 {
   short cellsize=1<<this->level();
 
@@ -583,17 +583,16 @@ void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
 {
-   
   short curr_level = code_.level;
-  
-  if(curr_level > target_level+1){
+
+  if (curr_level > target_level+1) {
     for (unsigned i=0; i<8; i++) {
       if (!children_[i].is_leaf())
         children_[i].leaf_children_at_level(v,target_level);
     }
   }
-  
-  if(curr_level == target_level+1){
+
+  if (curr_level == target_level+1) {
     for (unsigned i=0; i<8; i++) {
       if (children_[i].is_leaf())
         v.push_back(&children_[i]);
@@ -605,24 +604,22 @@ void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_c
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
 {
-  
   short curr_level = code_.level;
-  
-  if(curr_level > target_level+1){
+
+  if (curr_level > target_level+1) {
     for (unsigned i=0; i<8; i++) {
       if (!children_[i].is_leaf())
         children_[i].children_at_level(v,target_level);
     }
   }
-  
-  else if(curr_level == target_level+1){
+  else if (curr_level == target_level+1) {
     for (unsigned i=0; i<8; i++) {
        v.push_back(&children_[i]);
     }
   }
   else{
-    vcl_cerr << "Inconsintent case in cell::children_at_level" << vcl_endl;
-    return; 
+    vcl_cerr << "Inconsintent case in cell::children_at_level\n";
+    return;
   }
 }
 
