@@ -16,18 +16,19 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_beta.h>
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 
 template <class T>
 class bsta_beta : public bsta_distribution<T,1>
 {
-public:
+ public:
   //: default construtor
   bsta_beta() : alpha_(T(0)), beta_(T(0)) {}
 
   //: pre: alpha>0 and beta>0
-  bsta_beta(T alpha, T beta) : alpha_(alpha), beta_(beta) 
+  bsta_beta(T alpha, T beta) : alpha_(alpha), beta_(beta)
      { if (alpha_< 0) alpha_=T(0); if (beta_<0) beta_=T(0); }
-  
+
   //: constructs from a set of sample values
   bsta_beta(vcl_vector<T> x);
 
@@ -37,25 +38,24 @@ public:
 
   void set_alpha_beta(T alpha, T beta)
   { alpha_=alpha; beta_=beta;
-    if (alpha_ < 0) 
-      alpha_=T(0); 
-    if (beta_ <0) 
-      beta_=T(0); 
+    if (alpha_ < 0)
+      alpha_=T(0);
+    if (beta_ <0)
+      beta_=T(0);
   }
 
   //: pre: x should be in [0,1]
-  T prob_density(T x) const ;
+  T prob_density(T x) const;
 
-  T cum_dist_funct(T x);
+  T cum_dist_funct(T x) const;
 
-  T mean() { return alpha_/(alpha_+beta_); }
+  T mean() const { return alpha_/(alpha_+beta_); }
 
-  T var() { T t=alpha_+beta_; return (alpha_*beta_)/(t*t*(t+1)); }
+  T var() const { T t=alpha_+beta_; return (alpha_*beta_)/(t*t*(t+1)); }
 
-private:
+ private:
   T alpha_;
   T beta_;
-
 };
 
 template <class T>
