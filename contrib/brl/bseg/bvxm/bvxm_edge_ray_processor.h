@@ -13,10 +13,15 @@
 // \endverbatim
 #include <bvxm/bvxm_voxel_world_sptr.h>
 #include <bvxm/bvxm_image_metadata.h>
+#include <bvxm/bvxm_von_mises_tangent_processor.h>
 #include <vcl_string.h>
 class  bvxm_edge_ray_processor
 {
  public:
+  typedef bvxm_von_mises_tangent_processor<float>::dir_dist_t dir_dist_t;
+  typedef bvxm_von_mises_tangent_processor<float>::pos_dist_t pos_dist_t;
+  typedef bvxm_von_mises_tangent_processor<float>::pos_t pos_t;
+  typedef bvxm_von_mises_tangent_processor<float>::dir_t dir_t;
 
   bvxm_edge_ray_processor(): world_(0){}
   bvxm_edge_ray_processor(bvxm_voxel_world_sptr& world): world_(world){}
@@ -41,6 +46,28 @@ class  bvxm_edge_ray_processor
   //: save the edge probability grid as a 3-d tiff image
   bool save_edges_vff(vcl_string filename, unsigned scale_idx=0);
 
+  //: initialize a von_mises edge tangent world from two images
+  bool init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
+                                    bvxm_image_metadata const& metadata1,
+                                    double initial_sd_ratio = 1.0,
+                                    double initial_kappa = 10000.0,
+                                    unsigned scale=0);
+
+  //: update a von_mises edge tangent world. 
+  //  x0 interval is a radius in voxel units. cone angle (in radians) describes 
+  //  a region around the new tangent vector sample. Together these intervals 
+  //  are used to compute the probability of the sample.
+  bool update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
+                                      double x0_interval = 1.0,
+                                      double cone_angle = 0.1,
+                                      unsigned scale=0);
+
+  //: Display edge tangent world as vrml
+  void display_edge_tangent_world_vrml(vcl_string const& vrml_path);
+
+  //: Display manually constructed ground truth
+  void display_ground_truth(vcl_string const& gnd_truth_path,
+                            vcl_string const& vrml_path);
 
  private:
   bvxm_voxel_world_sptr world_;

@@ -253,6 +253,22 @@ void bvxm_util::warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
   vnl_matrix_fixed<double,3,3>::iterator Hdit = Hd.begin();
   for (; Hit != H.end(); ++Hit, ++Hdit)
     *Hit = (float)(*Hdit);
+  //JLM DEBUG
+#if 0
+  vnl_vector_fixed<float, 3> h00(0.0f,0.0f,1.0f), h01(0.0f,slab_out.ny(),1.0f);
+  vnl_vector_fixed<float, 3> h10(slab_out.nx(),0.0f, 1.0f),
+    h11(slab_out.nx(),slab_out.ny(), 1.0f);
+  vnl_vector_fixed<float, 3> th00=H*h00, th01=H*h01, th10=H*h10, th11=H*h11;
+  float x00 = th00[0]/th00[2], y00 = th00[1]/th00[2];
+  float x01 = th01[0]/th01[2], y01 = th01[1]/th01[2];
+  float x10 = th10[0]/th10[2], y10 = th10[1]/th10[2];
+  float x11 = th11[0]/th11[2], y11 = th11[1]/th11[2];
+  vcl_cout << "Warp slab\n";
+  vcl_cout << "(" << 0.0 << ' ' << 0.0 << ")->(" << x00 << ' ' << y00 << ")\n";
+  vcl_cout << "(" << 0.0 << ' ' << slab_out.ny() << ")->(" << x01 << ' ' << y01 << ")\n";
+  vcl_cout << "(" << slab_out.nx() << ' ' << 0.0 << ")->(" << x10 << ' ' << y10 << ")\n";
+  vcl_cout << "(" << slab_out.nx() << ' ' << slab_out.ny() << ")->(" << x11 << ' ' << y11 << ")\n";
+#endif
 
   //slab_out.fill(T(0.0)); // this should work whether T is a vector_fixed or a scalar
 

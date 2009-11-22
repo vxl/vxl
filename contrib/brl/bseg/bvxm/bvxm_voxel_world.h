@@ -258,6 +258,10 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type VOX_T>
   void increment_observations( unsigned int bin_idx = 0, unsigned scale = 0);
 
+  //: zero the number of obserevations at a specific bin
+  template<bvxm_voxel_type VOX_T>
+  void zero_observations( unsigned int bin_idx = 0, unsigned scale = 0);
+
   vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k, unsigned scale=0);
 
   void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
@@ -326,6 +330,15 @@ void bvxm_voxel_world::increment_observations(unsigned int bin_idx, unsigned int
   grid->increment_observations();
 }
 
+//: zero the observation count at a specific bin
+template<bvxm_voxel_type VOX_T>
+void bvxm_voxel_world::zero_observations(unsigned int bin_idx, unsigned int scale_idx)
+{
+  // call get_grid so data will be loaded from disk if necessary.
+  typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
+  bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx,scale_idx).ptr());
+  grid->zero_observations();
+}
 
 //: Returns the voxel_grid that corresponds to a given bvxm_voxel_type and a bin number
 template<bvxm_voxel_type VOX_T>

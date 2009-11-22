@@ -5,6 +5,7 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_camera.h>
+#include <vil/vil_new.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel.h>
@@ -21,6 +22,10 @@
 #include <vil/vil_new.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vnl/algo/vnl_chi_squared.h>
+#include <vnl/vnl_math.h>
+#include <bsta/bsta_gaussian_sphere.h>
+#include <brip/brip_vil_float_ops.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
@@ -111,7 +116,112 @@ vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> i
 
   return img_edge;
 }
+static double angle_0_360(double angle)
+{
+  double ang = angle;
+  while(ang<0)
+    ang += (2.0*vnl_math::pi);
+  while(ang > 2.0*vnl_math::pi)
+    ang -= (2.0*vnl_math::pi);
+  return ang;
+}
+vil_image_view<float> 
+bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
+                             double noise_multiplier,
+                             double smooth,
+                             bool automatic_threshold,
+                             bool junctionp,
+                             bool aggressive_junction_closure)
+{
+  // set parameters for the edge detector
+  sdet_detector_params dp;
+  dp.noise_multiplier = (float)noise_multiplier;
+  dp.smooth = (float)smooth;
+  dp.automatic_threshold = automatic_threshold;
+  dp.junctionp = junctionp;
+  dp.aggressive_junction_closure = aggressive_junction_closure;
 
+  // detect edgels from the input image
+  sdet_detector detector(dp);
+  vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
+  detector.SetImage(img_res_sptr);
+  detector.DoContour();
+  vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
+
+  // initialize the output edge image
+  vil_image_view<float> edge_img(img.ni(),img.nj(),3);
+  edge_img.fill(-1.0f);
+
+  // iterate over each connected edge component
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  {
+    vsol_curve_2d_sptr c = (*eit)->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
+    if (!dc)
+      continue;
+    vdgl_interpolator_sptr intp = dc->get_interpolator();
+    vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+    unsigned n = ec->size();
+    if(n<3) continue; //can't estimate edge tangent on short chains
+    //special case at start
+    vdgl_edgel e0 = ec->edgel(0);
+    vdgl_edgel e1 = ec->edgel(1);
+    double e0x  = e0.x(), e0y = e0.y();
+    double e1x  = e1.x(), e1y = e0.y();
+    if(e0x<0||e0y<0) continue;
+    double ang = angle_0_360(vcl_atan2(e1y-e0y, e1x-e0x));
+    unsigned x0 = static_cast<unsigned>(e0x);
+    unsigned y0 = static_cast<unsigned>(e0y);
+    edge_img(x0, y0, 0) = static_cast<float>(e0x);
+    edge_img(x0, y0, 1) = static_cast<float>(e0y);
+    edge_img(x0, y0, 2) = static_cast<float>(ang);
+    //special case at end of chain
+    vdgl_edgel enm2 = ec->edgel(n-2);
+    vdgl_edgel enm1 = ec->edgel(n-1);
+    double enm2x  = enm2.x(), enm2y = enm2.y();
+    double enm1x  = enm1.x(), enm1y = enm1.y();
+    if(enm1x<0||enm1y<0) continue;
+    double angnm1 = angle_0_360(vcl_atan2(enm1y-enm2y, enm1x-enm2x));
+    unsigned xnm1 = static_cast<unsigned>(enm1x);
+    unsigned ynm1 = static_cast<unsigned>(enm1y);
+    edge_img(xnm1, ynm1, 0) = static_cast<float>(enm1x);
+    edge_img(xnm1, ynm1, 1) = static_cast<float>(enm1y);
+    edge_img(xnm1, ynm1, 2) = static_cast<float>(angnm1);
+    // the general case
+    for (unsigned j=1; j<n-1; j++) {
+      vdgl_edgel pe = ec->edgel(j-1);
+      vdgl_edgel ce = ec->edgel(j);
+      vdgl_edgel ne = ec->edgel(j+1);
+      double pex  = pe.x(), pey = pe.y();
+      double cex  = ce.x(), cey = ce.y();
+      double nex  = ne.x(), ney = ne.y();
+      if(cex<0||cey<0) continue;
+      double angle = angle_0_360(vcl_atan2(ney-pey, nex-pex));
+      unsigned xc = static_cast<unsigned>(cex);
+      unsigned yc = static_cast<unsigned>(cey);
+      // set the current edge pixel in the edge image
+      edge_img(xc, yc, 0) = static_cast<float>(cex);
+      edge_img(xc, yc, 1) = static_cast<float>(cey);
+      edge_img(xc, yc, 2) = static_cast<float>(angle);
+
+    }
+  }
+  
+  // Following loop removes the edges in the image boundary
+  int temp_index = edge_img.nj()-1;
+  for (unsigned i=0; i<edge_img.ni(); i++) {
+    edge_img(i,0,0) = -1;     edge_img(i,0,1) = -1;
+    edge_img(i,temp_index,0) = -1;
+    edge_img(i,temp_index,1) = -1;
+  }
+  temp_index = edge_img.ni()-1;
+  for (unsigned j=0; j<edge_img.nj(); j++) {
+    edge_img(0,j,0) = -1;     edge_img(0,j,1) = -1;
+    edge_img(temp_index,j,0) = -1;
+    edge_img(temp_index,j,1) = -1;
+  }
+  return edge_img;
+}
 void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
 {
   vil_image_view<vxl_byte> edge_image_negated(inp_image);
