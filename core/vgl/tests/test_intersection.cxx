@@ -76,6 +76,7 @@ static void test_three_planes()
    TEST("three planes intersecting", pj, pi);
   }
 }
+
 static void test_plane_plane()
 {
   vgl_plane_3d<double> planex(1,0,0,-2),planey(0,1,0,-3), planez(0,0,1,-1);
@@ -87,7 +88,7 @@ static void test_plane_plane()
   //intersecting y-z
   good = good && vgl_intersection(planey, planez, lineyz);
   TEST("plane-plane intersections", good, true);
-  if(good){
+  if (good) {
     TEST("x-y intersection", linexy.point1()==vgl_point_3d<double>(2,3,0)&&
          linexy.point2()==vgl_point_3d<double>(2,3,1), true);
     TEST("x-z intersection", linexz.point1()==vgl_point_3d<double>(2,0,1)&&
@@ -96,6 +97,7 @@ static void test_plane_plane()
          lineyz.point2()==vgl_point_3d<double>(1,3,1), true);
   }
 }
+
 static void test_multiple_planes()
 {
   //The line passes through (2,1,1), with direction (0.577, 0.577, 0.577)
@@ -113,6 +115,7 @@ static void test_multiple_planes()
   bool is_on = line.contains(p0);
   TEST("intersection of multiple planes -> line", is_on, true );
 }
+
 static void test_lines_intersection()
 {
   bool is_intersection;
@@ -259,16 +262,16 @@ static void test_box_3d_intersection()
   TEST("x-y plane intersect box z=0.5", vgl_intersection<double>(bd0, plane_5), true);
   //Test intersection of infinite line with box_3d.
   vgl_infinite_line_3d<double> l3da(vgl_point_3d<double>(-1, 0.5, 0.5),
-                                   vgl_vector_3d<double>(1, 0, 0));
+                                    vgl_vector_3d<double>(1, 0, 0));
   vgl_point_3d<double> ip0, ip1;
   bool good = vgl_intersection<double>(bd0, l3da, ip0, ip1);
   TEST_NEAR("box_inf_line_xdir", ip0.x()+ip1.x(), 1.0, 1.0e-7);
   vgl_infinite_line_3d<double> l3db(vgl_point_3d<double>(0.5, -1.0, 0.5),
-                                   vgl_vector_3d<double>(0, 1.0, 0));
+                                    vgl_vector_3d<double>(0, 1.0, 0));
   good = vgl_intersection<double>(bd0, l3db, ip0, ip1);
   TEST_NEAR("box_inf_line_ydir", ip0.y()+ip1.y(), 1.0, 1.0e-7);
   vgl_infinite_line_3d<double> l3dc(vgl_point_3d<double>(0.5, 0.5, -1.0),
-                                   vgl_vector_3d<double>(0, 0, 1.0));
+                                    vgl_vector_3d<double>(0, 0, 1.0));
   good = vgl_intersection<double>(bd0, l3dc, ip0, ip1);
   TEST_NEAR("box_inf_line_zdir", ip0.z()+ip1.z(), 1.0, 1.0e-7);
 
@@ -282,7 +285,9 @@ static void test_box_3d_intersection()
                                                          0.5773502691896257));
   good = vgl_intersection<double>(bg0, l3g, ip0, ip1);
   TEST("generic line intersect box", good, true);
-  if(good) TEST_NEAR("generic line interesection points",length(ip0-ip1),3.464101615137,1.0e-6);
+  if (good) {
+    TEST_NEAR("generic line interesection points",length(ip0-ip1),3.464101615137,1.0e-6);
+  }
 }
 
 static void test_box_poly_intersection()

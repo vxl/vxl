@@ -236,7 +236,7 @@ vil_j2k_image::vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
 
   //String names for each band, should specialize according to color space
   mBandinfo[0].szDesc ="grey";
-  if (nplanes==3){
+  if (nplanes==3) {
     mBandinfo[0].szDesc = "Red";
     mBandinfo[1].szDesc = "Green";
     mBandinfo[2].szDesc = "Blue";
@@ -266,20 +266,20 @@ vil_j2k_image::vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
     mFileResource = 0;
   }
   Error = mFileResource->SetFileInfo(finfo);
-  if (Error != NCS_SUCCESS){
+  if (Error != NCS_SUCCESS) {
     if (mFileResource)
       delete mFileResource;
     mFileResource = 0;
   }
   Error = mStr->Open(vs, true);
-  if (Error != NCS_SUCCESS){
+  if (Error != NCS_SUCCESS) {
     if (mFileResource)
       delete mFileResource;
     mFileResource = 0;
   }
   CNCSJP2FileView* fview = static_cast<CNCSJP2FileView*>(mFileResource);
   Error = fview->Open(static_cast<CNCSJPCIOStream*>(mStr));
-  if (Error != NCS_SUCCESS){
+  if (Error != NCS_SUCCESS) {
     if (mFileResource)
       delete mFileResource;
     mFileResource = 0;
@@ -289,7 +289,7 @@ vil_j2k_image::vil_j2k_image( vil_stream* vs, unsigned ni, unsigned nj,
 
 vil_j2k_image::~vil_j2k_image()
 {
-  if ( mFileResource ){
+  if ( mFileResource ) {
     mFileResource->Close( true );
   }
   if (mStr)
@@ -370,7 +370,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   //(or would take too long to download in the remote case).
   //We don't want infinite hangs or application crashes.
   unsigned int maxDim = mRemoteFile ? mMaxRemoteDimension : mMaxLocalDimension;
-  if ( output_width > maxDim || output_height > maxDim ){
+  if ( output_width > maxDim || output_height > maxDim ) {
     unsigned int biggestDim = vcl_max( output_width, output_height );
     double zoomFactor = ((double)maxDim) / ((double)biggestDim);
     output_width  = (unsigned int) ( ((double)output_width)  * zoomFactor );
@@ -383,7 +383,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
 
   NCSError setViewError = mFileResource->SetView( nBands, bandMap, output_width, output_height,
                                                   (INT32)sample0, (INT32)line0, (INT32)(sample0+num_samples-1), (INT32)(line0+numLines-1) );
-  if ( setViewError != NCS_SUCCESS ){
+  if ( setViewError != NCS_SUCCESS ) {
     free( bandMap );
     return 0;
   }
@@ -398,12 +398,12 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   vil_memory_chunk_sptr data_ptr = new vil_memory_chunk( dataPtrSizeBytes, convertType( mFileResource->GetFileInfo()->eCellType ) );
   void** linePtrPtr = (void**)vcl_malloc( nBands * sizeof( int* /*all pointers have same size, so eg char* would work too*/ ) );
   //now read all the lines that we want
-  for ( unsigned int currLine = 0 ; currLine < output_height ; currLine++ ){
-    for (int currBand = 0 ; currBand < nBands ; currBand++ ){
+  for ( unsigned int currLine = 0 ; currLine < output_height ; currLine++ ) {
+    for (int currBand = 0 ; currBand < nBands ; currBand++ ) {
       linePtrPtr[currBand] = (void*) ( ((char*)data_ptr->data()) + currLine * allBandLineSizeBytes + currBand * singleBandLineSizeBytes );
     }
     NCSEcwReadStatus readStatus = mFileResource->ReadLineBIL( mFileResource->GetFileInfo()->eCellType, nBands, linePtrPtr, 0);
-    if ( readStatus != NCSECW_READ_OK ){
+    if ( readStatus != NCSECW_READ_OK ) {
       free( bandMap );
       free( linePtrPtr );
       return 0;
@@ -531,7 +531,7 @@ vil_j2k_image::put_line(const vil_image_view_base& im)
     return false;
   vil_pixel_format format = this->pixel_format();
   unsigned ni = this->ni(), nj = this->nj(), nplanes = this->nplanes();
-  if (line_index_>=nj){
+  if (line_index_>=nj) {
     mFileResource->Close(true);
     if (mFileResource)
       delete mFileResource;
@@ -587,7 +587,7 @@ put_view(const vil_image_view_base& im)
   vil_image_resource_sptr mem_res =
     vil_new_image_resource_of_view(im);
     vil_image_view_base_sptr view;
-  for (unsigned j = 0; j<nj; ++j){
+  for (unsigned j = 0; j<nj; ++j) {
     view = mem_res->get_copy_view(0, ni, j, 1);
     if (!this->put_line(*view)) return false;
   }
@@ -599,12 +599,11 @@ bool vil_j2k_image::
 view_fits(const vil_image_view_base& im, unsigned i0, unsigned j0)
 {
   unsigned ni_view = im.ni(), nj_view = im.nj(), nplanes_view = im.nplanes();
-  if (i0>=ni_view-1||j0>=nj_view-1)
-    return false;
-  if (ni_view > this->ni() || nj_view > this->nj() ||
-     nplanes_view > this->nplanes())
-    return false;
-  return true;
+  return i0+1 < ni_view
+      && j0+1 < nj_view
+      && ni_view <= this->ni()
+      && nj_view <= this->nj()
+      && nplanes_view <= this->nplanes();
 }
 
 //:
@@ -647,7 +646,7 @@ bool vil_j2k_image::s_encode_jpeg2000(vil_stream* vs,
       vil_new_image_resource_of_view(*block_view);
 
     //compress the block, line by line
-    for (unsigned j = 0; j<num_lines_block; ++j){
+    for (unsigned j = 0; j<num_lines_block; ++j) {
       vil_image_view_base_sptr line_view =
         block_res->get_copy_view(0, ni, j, 1);
       if (!j2k_img->put_line(*line_view)) return false;
@@ -658,7 +657,7 @@ bool vil_j2k_image::s_encode_jpeg2000(vil_stream* vs,
   }
   //output the remaining lines left over after loading block-sized chunks
   unsigned remaining_lines = nj-jb;
-  if (remaining_lines){
+  if (remaining_lines) {
     vil_image_view_base_sptr residual_view =
       in_res->get_view(0, ni, jb, remaining_lines);
     vil_image_resource_sptr residual_res =

@@ -94,10 +94,9 @@ void test_string()
   // replaces instances "find_str" in "full_str" with "replace_str"
   // a given "num_times"
   vul_string_replace( vcl_string& full_str,
-                              const vcl_string& find_str,
-                                const vcl_string& replace_str,
-                                  int num_times=1000);
-
+                      const vcl_string& find_str,
+                      const vcl_string& replace_str,
+                      int num_times=1000);
 #endif // 0
   {
     vcl_string s("I hate mices to pieces");

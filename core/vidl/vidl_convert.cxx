@@ -538,7 +538,7 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base& image)
   // if the image could not be wrapped convert it
   unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
 
-  // use the pixel component format to account for 
+  // use the pixel component format to account for
   // images of type vil_rgb<T>, vil_rgba<T>, etc.
   vil_pixel_format cmp_format =
       vil_pixel_format_component_format(image.pixel_format());
@@ -553,13 +553,13 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base& image)
       vil_image_view<vxl_uint_16> img(ni,nj);
       img.deep_copy(vil_image_view<vxl_uint_16>(image));
       return new vidl_memory_chunk_frame(ni, nj, VIDL_PIXEL_FORMAT_MONO_16,
-                                        img.memory_chunk());
+                                         img.memory_chunk());
     }
   }
   // special case for 32 bit float images
   else if (cmp_format == VIL_PIXEL_FORMAT_FLOAT)
   {
-    if(num_channels == 1 || num_channels == 3)
+    if (num_channels == 1 || num_channels == 3)
     {
       vidl_pixel_format format = VIDL_PIXEL_FORMAT_UNKNOWN;
       if (num_channels == 1)
