@@ -122,7 +122,8 @@ class brip_vil_float_ops
     std_dev_operator(vil_image_view<float> const& sd_image,
                      vbl_array_2d<float> const& kernel);
 
-  // Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel, uses a modified formula to compute std_dev
+  //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
+  //  Uses a modified formula to compute std_dev
   static vil_image_view<float> 
     std_dev_operator_method2(vil_image_view<float> const& sd_image,
                              vbl_array_2d<float> const& kernel);
@@ -137,17 +138,19 @@ class brip_vil_float_ops
                                        bool output_response_mask = true,
                                        bool unclipped_response = false);
 
-  //: Find ansiotropic intensity extrema at a range of orientations and return the maximal response at the best orientation. Theta interval is in degrees
-  //  if lambda0 == lambda1 then reduces to the normal extrema operator
+  //: Find ansiotropic intensity extrema at a range of orientations and return the maximal response at the best orientation.
+  //  Theta interval is in degrees
+  //  If lambda0 == lambda1 then reduces to the normal extrema operator
   static vil_image_view<float> extrema_rotational(vil_image_view<float> const& input,
-                                       float lambda0, float lambda1,
-                                       float theta_interval, bool bright = true);
+                                                  float lambda0, float lambda1,
+                                                  float theta_interval, bool bright = true);
 
   //: compute the inscribed rectangle in an ellipse with largest (1+h)(1+w). Needed for fast non-maximal suppression. Theta is in degrees.
   static void max_inscribed_rect(float lambda0, float lambda1, float theta,
-                               float& u_rect, float& v_rect);
+                                 float& u_rect, float& v_rect);
 
-//: Find intensity extrema using kernel decomposition. Theta is in degrees. Image rotation is applied then separated u, v kernels produce the response.
+  //: Find intensity extrema using kernel decomposition.
+  // Theta is in degrees. Image rotation is applied then separated u, v kernels produce the response.
   static vil_image_view<float> fast_extrema(vil_image_view<float> const& input,
                                             float lambda0, float lambda1,
                                             float theta, bool bright = true,
@@ -193,12 +196,12 @@ class brip_vil_float_ops
                                  vil_image_view<float>& vy);
 
   //: computes velocity of a region(view) using Lucas Kanade
-  static
-    void lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
-                                     vil_image_view<float> const& prev_frame,
-                                     const double thresh,
-                                     float& vx,
-                                     float& vy);
+  static void
+    lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
+                                vil_image_view<float> const& prev_frame,
+                                const double thresh,
+                                float& vx,
+                                float& vy);
 
   //: computes velocity of a region(view) using correlation
   static void
@@ -262,7 +265,7 @@ class brip_vil_float_ops
   //: converts a vil_image_resource to a float image (preferred interface)
   static vil_image_view<float>
     convert_to_float(vil_image_resource_sptr const& image)
-    {return brip_vil_float_ops::convert_to_float(*image);}
+  { return brip_vil_float_ops::convert_to_float(*image); }
 
   static vil_image_view<float>
     convert_to_float(vil_image_view<unsigned char> const& image);
@@ -307,9 +310,9 @@ class brip_vil_float_ops
   //: Create a unsigned char color image from multiple resource channels
   // Images do not have to be the same size arraysp
   static vil_image_view<vil_rgb<vxl_byte> >
-   combine_color_planes(vil_image_resource_sptr const& R,
-                        vil_image_resource_sptr const& G,
-                        vil_image_resource_sptr const& B);
+    combine_color_planes(vil_image_resource_sptr const& R,
+                         vil_image_resource_sptr const& G,
+                         vil_image_resource_sptr const& B);
 
   //: converts a generic image to greyscale (RGB<unsigned char>)
   static vil_image_view<unsigned char>
@@ -488,7 +491,7 @@ class brip_vil_float_ops
                     const bool gradient = true,
                     const bool ihs = false);
 
-  // Arithmetic operations
+  //  ===  Arithmetic operations  ===
 
   //: Add two images from a general resource (forces types to be the same)
   static vil_image_resource_sptr sum(vil_image_resource_sptr const& img0,
@@ -550,7 +553,9 @@ class brip_vil_float_ops
 
   //: u-coordinate of an ellipse defined by lambda0, lambda1 and theta, vs. phi
   static float elu(float phi, float lamda0, float lambda1, float theta);
+  //: v-coordinate of an ellipse defined by lambda0, lambda1 and theta, vs. phi
   static float elv(float phi, float lamda0, float lambda1, float theta);
+
   //: Default constructor is private
   brip_vil_float_ops() {}
 };
