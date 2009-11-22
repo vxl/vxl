@@ -5,6 +5,9 @@
 #include <vgl/vgl_point_2d.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vnl/vnl_math.h>
+// do not remove the following text
+// Approved for public release, distribution unlimited (DISTAR Case 14389)
+
 // The 2-d von mises cumulative distribution cannot be expressed in
 // closed form. The table below for F(theta) is based on kappa = 10.
 template <class T>

@@ -15,6 +15,10 @@
 //   (none yet)
 // \endverbatim
 //
+// do not remove the following text
+// Approved for public release, distribution unlimited (DISTAR Case 14389)
+//
+
 #include <bsta/bsta_von_mises.h>
 #include <bsta/bsta_attributes.h>
 #include <vnl/vnl_numeric_traits.h>
