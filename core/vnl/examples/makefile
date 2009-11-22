@@ -11,6 +11,7 @@ MINI_PROG_SOURCES += vnl_rosenbrock.cxx
 MINI_PROG_SOURCES += vnl_svd.cxx
 MINI_PROG_SOURCES += vnl_lsqr_test.cxx
 MINI_PROG_SOURCES += vnl_svd_economy.cxx
+MINI_PROG_SOURCES += vnl_sample_beta.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
