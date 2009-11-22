@@ -55,7 +55,7 @@ void test_diag_matrix_fixed()
   vnl_vector_fixed<double, N> th; th(0)=2.0; th(1)=-3.0; th(2)=6.0;
   vcl_cout << "vector = " << th << '\n';
 
-  vnl_vector<double> vec = m1 * th;
+  vnl_vector_fixed<double, N> vec = m1 * th;
   vcl_cout << "vector product (post-multiplied) = " << vec << '\n';
   TEST("vector product", vec(0) == -0.5 && vec(1) == 0.0 && vec(2) == 1.5, true);
 
