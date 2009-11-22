@@ -28,6 +28,7 @@
 #include "bvxm_lidar_processor.h"
 #include "bvxm_float_processor.h"
 #include "grid/bvxm_opinion.h"
+#include "bvxm_von_mises_tangent_processor.h"
 
 enum bvxm_voxel_type
 {
@@ -41,6 +42,8 @@ enum bvxm_voxel_type
   EDGES,
   LIDAR,
   FLOAT,
+  TANGENT_POS,
+  TANGENT_DIR,
   UNKNOWN
 };
 
@@ -194,9 +197,41 @@ class bvxm_voxel_traits<FLOAT>
     voxel_datatype init_val = 0.0f;
     return init_val;
   }
+};
+//: Voxel traits for tangent vector position
+template<>
+class bvxm_voxel_traits<TANGENT_POS>
+{
+ public:
+  typedef bvxm_von_mises_tangent_processor<float> tangent_processor;
+  typedef bvxm_von_mises_tangent_processor<float>::pos_dist_t voxel_datatype;
+  typedef bvxm_von_mises_tangent_processor<float>::pos_t obs_type;
+  typedef bvxm_von_mises_tangent_processor<float>::obs_math_t math_type;
+  static inline vcl_string filename_prefix(){ return "tan_pos"; }
+  static inline bool is_multibin() { return false; }
+  static inline voxel_datatype initial_val()
+  {
+    voxel_datatype init_val;
+    return init_val;
+  }
+};
+//: Voxel traits for tangent vector direction
+template<>
+class bvxm_voxel_traits<TANGENT_DIR>
+{
 
-
-
+ public:
+  typedef bvxm_von_mises_tangent_processor<float> tangent_processor;
+  typedef bvxm_von_mises_tangent_processor<float>::dir_dist_t voxel_datatype;
+  typedef bvxm_von_mises_tangent_processor<float>::dir_t obs_type;
+  typedef bvxm_von_mises_tangent_processor<float>::obs_math_t math_type;
+  static inline vcl_string filename_prefix(){ return "tan_dir"; }
+  static inline bool is_multibin() { return false; }
+  static inline voxel_datatype initial_val()
+  {
+    voxel_datatype init_val;
+    return init_val;
+  }
 };
 
 #endif // bvxm_voxel_traits_h_
