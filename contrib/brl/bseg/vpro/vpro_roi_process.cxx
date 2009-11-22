@@ -11,21 +11,6 @@
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_roi.h>
 
-vpro_roi_process::vpro_roi_process(vcl_string const & video_file,
-                                   const unsigned x0,
-                                   const unsigned y0,
-                                   const unsigned xsize,
-                                   const unsigned ysize,
-                                   vcl_string const& type) :
-  x0_(x0), y0_(y0), xsize_(xsize), ysize_(ysize), video_file_(video_file),
-  type_(type)
-{
-}
-
-vpro_roi_process::~vpro_roi_process()
-{
-}
-
 bool vpro_roi_process::execute()
 {
   if (this->get_N_input_images()!=1)
@@ -62,5 +47,4 @@ bool vpro_roi_process::finish()
   }
   out_frames_.clear();
   return true;
- }
-
+}

@@ -25,13 +25,14 @@ class vpro_roi_process : public vpro_vil_video_process
                    const unsigned y0,
                    const unsigned xsize,
                    const unsigned ysize,
-                   vcl_string const& type = "ImageList");
-  ~vpro_roi_process();
+                   vcl_string const& type = "ImageList")
+  : x0_(x0), y0_(y0), xsize_(xsize), ysize_(ysize), type_(type), video_file_(video_file) {}
+  ~vpro_roi_process() {}
   virtual process_data_type get_output_type() const { return IMAGE; }
   virtual bool execute();
   virtual bool finish();
  private:
-  vpro_roi_process();
+  vpro_roi_process() {}
   //members
   unsigned x0_;
   unsigned y0_;
