@@ -13,6 +13,7 @@
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #define DEBUG
+
 bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
                                              vcl_string name,
                                              vcl_string& image_path,
@@ -29,8 +30,8 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
   vil_image_resource_sptr img_res = bwm_utils::load_image(image_path, params);
 
   if (!img_res) {
-     bwm_utils::show_error("Image [" + image_path + "] is NOT found");
-     return;
+    bwm_utils::show_error("Image [" + image_path + "] is NOT found");
+    return;
   }
 
   img->set_image_resource(img_res, params);
@@ -81,38 +82,38 @@ vgl_vector_3d<double> bwm_observer_proj_cam::camera_direction(vgl_point_3d<doubl
   return direction;
 }
 // It could be that the camera is perspective and stored as vsl binary.
-// with no distinguishing characteristics So the only option is to 
-// assume that binary perspective cameras always have the extension 
+// with no distinguishing characteristics So the only option is to
+// assume that binary perspective cameras always have the extension
 // *.vsl and the user is responsible to guarantee the proper name.
 vpgl_proj_camera<double>
 bwm_observer_proj_cam::read_projective_camera(vcl_string cam_path)
 {
-  if(subtype_=="perspective"){
+  if (subtype_=="perspective"){
   vcl_string ext = vul_file_extension(cam_path);
-  if(ext == ".vsl") // binary form
-    {
-	  vpgl_perspective_camera<double> pcam;
-      vsl_b_ifstream bp_in(cam_path.c_str());
-	  if(!bp_in){
-       vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
-		  << " invalid binary camera file " << cam_path.data() << '\n';
-       return vpgl_proj_camera<double>(pcam.get_matrix());
-	  }
-      pcam.b_read(bp_in);
-      bp_in.close();
-      vpgl_proj_camera<double> cam(pcam.get_matrix());
-      return cam;
+  if (ext == ".vsl") // binary form
+  {
+    vpgl_perspective_camera<double> pcam;
+    vsl_b_ifstream bp_in(cam_path.c_str());
+    if (!bp_in){
+      vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
+               << " invalid binary camera file " << cam_path.data() << '\n';
+      return vpgl_proj_camera<double>(pcam.get_matrix());
     }
+    pcam.b_read(bp_in);
+    bp_in.close();
+    vpgl_proj_camera<double> cam(pcam.get_matrix());
+    return cam;
+  }
   //An ASCII stream for perspective camera
   vpgl_perspective_camera<double> pcam;
   vcl_ifstream cam_stream(cam_path.data());
-  if(!cam_stream.is_open())
+  if (!cam_stream.is_open())
   {
-	  vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
-		  << " invalid camera file " << cam_path.data() << '\n';
-		  return vpgl_proj_camera<double>(pcam.get_matrix());
+    vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
+             << " invalid camera file " << cam_path.data() << '\n';
+    return vpgl_proj_camera<double>(pcam.get_matrix());
   }
-  
+
   cam_stream >> pcam;
 #ifdef DEBUG
   vcl_cout << pcam << vcl_endl;
@@ -128,7 +129,6 @@ bwm_observer_proj_cam::read_projective_camera(vcl_string cam_path)
   vcl_cout << cam << vcl_endl;
 #endif
   return cam;
-
 }
 
 vcl_ostream& bwm_observer_proj_cam::print_camera(vcl_ostream& s)
