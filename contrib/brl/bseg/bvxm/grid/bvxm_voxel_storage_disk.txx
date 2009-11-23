@@ -340,6 +340,50 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
   return;
 }
 
+template <class T>
+void bvxm_voxel_storage_disk<T>::zero_observations()
+{
+  // read header from disk
+  // check to see if file is already open
+  if (!fio_) {
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
+#endif
+    if (!fio_->ok()) {
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
+      return;
+    }
+  }
+  // seek to beginning of file
+  fio_->seek(0);
+  vil_streampos pos = fio_->tell();
+  if (pos != 0) {
+    vcl_cerr << "error seeking to beginning of file\n";
+    return;
+  }
+  bvxm_voxel_storage_header<T> header;
+  // read
+  fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
+
+  // increment observations
+  header.nobservations_=0;
+
+  // write header back to disk
+  // seek to beginning of file
+  fio_->seek(0);
+  pos = fio_->tell();
+  if (pos != 0) {
+    vcl_cerr << "error seeking to beggining of file\n";
+    return;
+  }
+  // write
+  fio_->write(reinterpret_cast<char*>(&header),sizeof(header));
+
+  return;
+}
+
 //: convert slab start index to file position
 template<class T>
 vil_streampos bvxm_voxel_storage_disk<T>::slab_filepos(unsigned slab_index)

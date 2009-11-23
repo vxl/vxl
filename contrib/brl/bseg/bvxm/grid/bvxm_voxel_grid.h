@@ -66,7 +66,8 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
   unsigned num_observations() const {return storage_->num_observations();}
   //: increment the number of observations
   void increment_observations(){storage_->increment_observations();}
-
+  //: zero the number of observations
+  void zero_observations(){storage_->zero_observations();}
   // access to data via iterators
   typedef bvxm_voxel_slab_iterator<T> iterator;
   typedef bvxm_voxel_slab_const_iterator<T> const_iterator;

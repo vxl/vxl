@@ -32,7 +32,8 @@ class bvxm_voxel_storage_disk_cached : public bvxm_voxel_storage<T>
   virtual unsigned num_observations() const;
   //: increment the number of observations
   virtual void increment_observations();
-
+  //: zero the number of observations
+  virtual void zero_observations();
  protected:
 
    bool fill_cache(unsigned start_slice_idx);

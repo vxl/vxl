@@ -52,7 +52,8 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
   virtual unsigned num_observations() const;
   //: increment the number of observations
   virtual void increment_observations();
-
+  //: zero the number of observations
+  virtual void zero_observations();
  private:
 
   vcl_string storage_fname_;

@@ -27,7 +27,8 @@ class bvxm_voxel_storage
   virtual unsigned num_observations() const = 0;
   //: increment the number of observations
   virtual void increment_observations() = 0;
-
+  //: zero the number of observations
+  virtual void zero_observations() = 0;
   //: return grid length in x dimension
   inline unsigned nx() const {return grid_size_.x();}
   //: return grid length in y dimension

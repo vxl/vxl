@@ -20,7 +20,8 @@ class bvxm_voxel_storage_mem : public bvxm_voxel_storage<T>
   virtual unsigned num_observations() const {return nobservations_;}
   //: increment the number of observations
   virtual void increment_observations(){++nobservations_;}
-
+  //: zero the number of observations
+  virtual void zero_observations(){nobservations_=0;}
  private:
 
   bvxm_memory_chunk_sptr mem_;
