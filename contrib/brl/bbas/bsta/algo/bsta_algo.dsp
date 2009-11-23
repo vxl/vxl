@@ -160,7 +160,7 @@ SOURCE=.\Templates/bsta_sample_set+float.3-.cxx
 SOURCE=.\Templates/bsta_sample_set+double.2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_mix_beta_updater+bsta_mixture_fixed+bsta_num_obs+bsta_beta+float-.3---.cxx
+SOURCE=.\Templates/bsta_mix_beta_updater+bsta_mixture_fixed+bsta_num_obs+bsta_beta+float--.3--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bsta_von_mises_updater+bsta_von_mises+float.3--.cxx

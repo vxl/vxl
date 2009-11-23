@@ -134,6 +134,12 @@ SOURCE=.\Templates/bvxm_mog_mc_processor+3.3-.cxx
 # Begin Source File
 SOURCE=.\Templates/bvxm_mog_mc_processor+4.3-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_von_mises_tangent_processor+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_von_mises_tangent_processor+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -180,6 +186,12 @@ SOURCE=.\bvxm_edge_ray_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_voxel_world_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_von_mises_tangent_processor.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_von_mises_tangent_processor.h
 # End Source File
 # End Group
 # End Target
