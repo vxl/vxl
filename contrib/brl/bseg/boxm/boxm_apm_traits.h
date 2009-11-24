@@ -11,6 +11,8 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_gauss_if3.h>
+#include <bsta/bsta_beta.h>
+#include <bsta/bsta_beta_f1.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_rgb.h>
 #include <vsl/vsl_binary_io.h>
@@ -19,6 +21,7 @@
 class boxm_mog_grey_processor;
 class boxm_mog_rgb_processor;
 class boxm_simple_grey_processor;
+class boxm_mob_grey_processor;
 
 enum boxm_apm_type
 {
@@ -26,6 +29,7 @@ enum boxm_apm_type
   BOXM_APM_MOG_RGB,
   BOXM_APM_SIMPLE_GREY,
   BOXM_APM_SIMPLE_RGB,
+  BOXM_APM_MOB_GREY,
   BOXM_APM_NA,
   BOXM_APM_UNKNOWN
 };
@@ -123,53 +127,24 @@ class boxm_apm_traits<BOXM_APM_SIMPLE_GREY>
   typedef boxm_simple_grey_processor apm_processor;
 };
 
-#if 0
-//: traits for a simple one-valued appearance model of rgb images
-class boxm_simple_rgb
-{
- public:
-  boxm_simple_rgb() : color_(0.5f), one_over_sigma_(0.1f) {}
-  boxm_simple_rgb(vil_rgb<float> color, vnl_vector_fixed<float,3> std_dev) : color_(color.r, color.g, color.b), one_over_sigma_(1.0f/std_dev[0], 1.0f/std_dev[1], 1.0f/std_dev[2]) { check_vals(); }
-  boxm_simple_rgb(vnl_vector_fixed<float,4> &params) : color_(params.extract(3,0)), one_over_sigma_(1.0f/params[3], 1.0f/params[4], 1.0f/params[5]) {check_vals();}
 
-
-  inline vil_rgb<float> color() const {return vil_rgb<float>(color_[0], color_[1], color_[2]);}
-  inline vnl_vector_fixed<float,3> color_vec() const {return color_;}
-  inline vnl_vector_fixed<float,3> sigma() const {return vnl_vector_fixed<float,3>(1.0f/one_over_sigma_[0], 1.0f/one_over_sigma_[1], 1.0f/one_over_sigma_[2]);}
-  inline vnl_vector_fixed<float,3> one_over_sigma() const {return one_over_sigma_;}
-
- protected:
-  inline void check_vals()
-  {
-    for (unsigned int i=0; i<3; ++i) {
-      if (!(color_[i] > 0.0f))
-        color_[i] = 0.0f;
-      if (!(color_[i] < 1.0f))
-        color_[i] = 1.0f;
-      if (!(one_over_sigma_[i] < 1e3))
-        one_over_sigma_[i] = 1e3f;
-      if (!(one_over_sigma_[i] > 0.1))
-        one_over_sigma_[i] = 0.1f;
-    }
-  }
-
-  vnl_vector_fixed<float,3> color_;
-  vnl_vector_fixed<float,3> one_over_sigma_;
-};
-
+//: traits for a mixture of beta appearance model of gray-scale images
 template<>
-class boxm_apm_traits<BOXM_APM_SIMPLE_RGB>
+class boxm_apm_traits<BOXM_APM_MOB_GREY>
 {
  public:
-  static const unsigned int obs_dim = 3;
-  static const unsigned int n_params = 4;
-  typedef boxm_simple_rgb apm_datatype;
-  typedef vil_rgb<float> obs_datatype;
-  typedef float obs_mathtype;
-  typedef boxm_simple_rgb_processor apm_processor;
-};
+  static const unsigned int n_beta_modes_ = 3;
 
-#endif // 0
+  typedef bsta_num_obs<bsta_beta_f1> beta_type;
+  typedef bsta_num_obs<bsta_mixture_fixed<beta_type, n_beta_modes_> > mix_beta_type;
+
+ public:
+  static const unsigned int obs_dim = 1;
+  typedef  mix_beta_type apm_datatype;
+  typedef float obs_datatype;
+  typedef float obs_mathtype;
+  typedef boxm_mob_grey_processor apm_processor;
+};
 
 void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const &sample);
 void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const * &sample);
