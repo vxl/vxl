@@ -1066,9 +1066,9 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   {
     vgl_vector_3d<float> index=(points[i]-params_->corner())/params_->voxel_length();
 
-    unsigned k=vcl_floor(grid_size.z()-1-index.z());
-    unsigned x=vcl_floor(index.x());
-    unsigned y=vcl_floor(index.y());
+    unsigned k=(unsigned)vcl_floor(grid_size.z()-1-index.z());
+    unsigned x=(unsigned)vcl_floor(index.x());
+    unsigned y=(unsigned)vcl_floor(index.y());
 
     if (k>=0 && k<grid_size.z()  && x>=0 && x<grid_size.x()  && y>=0 && y<grid_size.y()  )
     {
