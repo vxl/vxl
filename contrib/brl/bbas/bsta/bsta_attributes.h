@@ -58,8 +58,7 @@ struct vpdt_is_mixture<bsta_num_obs<dist> >
 };
 
 
-//: maintains a vector sum and number of observations
-// needed for the von mises distribution
+//: maintains a vector sum and number of observations needed for the von mises distribution
 template <class dist_>
 class bsta_vsum_num_obs : public dist_
 {
