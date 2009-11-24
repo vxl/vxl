@@ -68,32 +68,32 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
 {
   unsigned int na = jh.nbins_a();
   unsigned int nb = jh.nbins_b();
-  
+
   vcl_set<vcl_pair<float, vcl_pair<unsigned, unsigned> >, first_less<vcl_pair<unsigned, unsigned> > > accum_p;
   vcl_pair<unsigned, unsigned> pi(0,0);
   float p_0 = jh.p((unsigned)0,(unsigned)0);
   accum_p.insert(vcl_pair<float, vcl_pair<unsigned, unsigned> >(p_0, pi));  // put the id of the sample
-  
+
   //: first scan the first row
   for (unsigned ib = 1; ib < nb; ib++) {
     vcl_pair<unsigned, unsigned> pi(0,ib);
-    
+
     float accum = (*(accum_p.rbegin())).first + jh.p(0, ib);
     accum_p.insert(vcl_pair<float, vcl_pair<unsigned, unsigned> >(accum, pi));
   }
-  
+
   //: now do the rest of the rows
   for (unsigned ia = 1; ia < na; ia++)
     for (unsigned ib = 0; ib < nb; ib++) {
       vcl_pair<unsigned, unsigned> pi(ia,ib);
-      
+
       float accum = (*(accum_p.rbegin())).first + jh.p(ia, ib);
       accum_p.insert(vcl_pair<float, vcl_pair<unsigned, unsigned> >(accum, pi));
     }
-    
+
   float last_val = (*(accum_p.rbegin())).first;
   //unsigned last_id = (*(accum_p.rbegin())).second;
-  
+
   if (last_val > 1.015625f || last_val < 0.984375f)
     return false;
 
@@ -116,7 +116,7 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
 }
 
 bool first_greater(const vcl_pair<float,vcl_pair<unsigned, unsigned> >& left_pair,
-                 const vcl_pair<float,vcl_pair<unsigned, unsigned> >& right_pair )
+                   const vcl_pair<float,vcl_pair<unsigned, unsigned> >& right_pair )
 {
   return left_pair.first > right_pair.first;
 }
@@ -136,7 +136,7 @@ bool bsta_sampler<T>::sample_in_likelihood_order(const bsta_joint_histogram<floa
       arr.push_back(val);
     }
   }
- 
+
   vcl_sort(arr.begin(), arr.end(), first_greater);
   unsigned size = arr.size() < cnt ? arr.size() : cnt;
   for (unsigned i = 0; i < size; i++) {
@@ -144,9 +144,10 @@ bool bsta_sampler<T>::sample_in_likelihood_order(const bsta_joint_histogram<floa
     vcl_pair<float, float> out_p(jh.min_a() + (arr[i].second.first+1)*jh.delta_a(), jh.min_b() + (arr[i].second.second+1)*jh.delta_b());
     out.push_back(out_p);
   }
-  
+
   return true;
 }
+
 //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
 template <class T>
 bool bsta_sampler<T>::sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<unsigned, unsigned> >& out_indices)
@@ -162,7 +163,7 @@ bool bsta_sampler<T>::sample_in_likelihood_order(const bsta_joint_histogram<floa
       arr.push_back(val);
     }
   }
- 
+
   vcl_sort(arr.begin(), arr.end(), first_greater);
   unsigned size = arr.size() < cnt ? arr.size() : cnt;
   for (unsigned i = 0; i < size; i++) {
@@ -170,10 +171,9 @@ bool bsta_sampler<T>::sample_in_likelihood_order(const bsta_joint_histogram<floa
     vcl_pair<unsigned, unsigned> out_p(arr[i].second.first, arr[i].second.second);
     out_indices.push_back(out_p);
   }
-  
+
   return true;
 }
-
 
 
 #undef BSTA_SAMPLER_INSTANTIATE
