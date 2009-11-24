@@ -31,27 +31,30 @@ template <class T>
 class boxm_scene :public boxm_scene_base
 {
  public:
+  //: Default constructor
   boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
 
+  //: Constructor from lvcs, world origin, dimension of the block (in world coordinates) and number of blocks(world_dim)
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim);
 
+  //: Constructor from lvcs, world origin, dimension of the block, number of blocks and initialization level
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
              unsigned max_level, unsigned init_level);
 
-  //: when lvcs is not avialable
+  //: Constructor when lvcs is not avialable. World origin, block dimensions and number of blocks
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<unsigned>& world_dim);
 
+  //: Destructor
   ~boxm_scene();
 
-  //void delete_blocks();
   bool discover_block(unsigned i, unsigned j, unsigned k);
 
   bool load_block(unsigned i, unsigned j, unsigned k);
@@ -121,6 +124,8 @@ class boxm_scene :public boxm_scene_base
  protected:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
+  
+  //: World dimensions of a block .e.g 1 meter x 1 metere x 1 meter
   vgl_vector_3d<double> block_dim_;
   vbl_array_3d<boxm_block<T>*> blocks_;
 
