@@ -317,7 +317,7 @@ class bbgm_pair_group_feature
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
-  virtual ~bbgm_pair_group_feature(); // virtual destructor, because presence of virtual methods
+  virtual ~bbgm_pair_group_feature() {} // virtual destructor, because presence of virtual methods
  protected:
   static unsigned uid_; //!< a unique id
   unsigned id_;
