@@ -1,7 +1,6 @@
 // This is brl/bbas/bsta/io/bsta_io_von_mises.h
 #ifndef bsta_io_von_mises_h_
 #define bsta_io_von_mises_h_
-
 //:
 // \file
 // \brief Binary I/O for spherical parzen windows
@@ -32,8 +31,7 @@ template <class T, unsigned n>
 void
 vsl_b_read(vsl_b_istream &is, bsta_von_mises<T,n>& vm)
 {
-  typedef typename bsta_parzen<T,n>::vector_type vector_;
-  vector_ mean;
+  typename bsta_parzen<T,n>::vector_type vector_ mean;
   T kappa;
   vsl_b_read(is, kappa);
   vsl_b_read(is, mean);
