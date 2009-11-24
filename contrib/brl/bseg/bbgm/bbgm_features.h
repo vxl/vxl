@@ -317,8 +317,8 @@ class bbgm_pair_group_feature
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
- protected:
   virtual ~bbgm_pair_group_feature(); // virtual destructor, because presence of virtual methods
+ protected:
   static unsigned uid_; //!< a unique id
   unsigned id_;
   brip_rect_mask::mask_id mid_; //!< the mask type of the group
