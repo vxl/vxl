@@ -5,7 +5,6 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_camera.h>
-#include <vil/vil_new.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel.h>
@@ -16,16 +15,12 @@
 #include <bil/algo/bil_edt.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_chi_squared.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_new.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vnl/algo/vnl_chi_squared.h>
 #include <vnl/vnl_math.h>
-#include <bsta/bsta_gaussian_sphere.h>
-#include <brip/brip_vil_float_ops.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
@@ -116,22 +111,25 @@ vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> i
 
   return img_edge;
 }
+
 static double angle_0_360(double angle)
 {
   double ang = angle;
-  while(ang<0)
+  while (ang<0)
     ang += (2.0*vnl_math::pi);
-  while(ang > 2.0*vnl_math::pi)
+  while (ang > 2.0*vnl_math::pi)
     ang -= (2.0*vnl_math::pi);
   return ang;
 }
-vil_image_view<float> 
+
+#if 0 // This method does not exist!
+vil_image_view<float>
 bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
-                             double noise_multiplier,
-                             double smooth,
-                             bool automatic_threshold,
-                             bool junctionp,
-                             bool aggressive_junction_closure)
+                                    double noise_multiplier,
+                                    double smooth,
+                                    bool automatic_threshold,
+                                    bool junctionp,
+                                    bool aggressive_junction_closure)
 {
   // set parameters for the edge detector
   sdet_detector_params dp;
@@ -162,13 +160,13 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
     vdgl_interpolator_sptr intp = dc->get_interpolator();
     vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
     unsigned n = ec->size();
-    if(n<3) continue; //can't estimate edge tangent on short chains
+    if (n<3) continue; //can't estimate edge tangent on short chains
     //special case at start
     vdgl_edgel e0 = ec->edgel(0);
     vdgl_edgel e1 = ec->edgel(1);
     double e0x  = e0.x(), e0y = e0.y();
     double e1x  = e1.x(), e1y = e0.y();
-    if(e0x<0||e0y<0) continue;
+    if (e0x<0||e0y<0) continue;
     double ang = angle_0_360(vcl_atan2(e1y-e0y, e1x-e0x));
     unsigned x0 = static_cast<unsigned>(e0x);
     unsigned y0 = static_cast<unsigned>(e0y);
@@ -180,7 +178,7 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
     vdgl_edgel enm1 = ec->edgel(n-1);
     double enm2x  = enm2.x(), enm2y = enm2.y();
     double enm1x  = enm1.x(), enm1y = enm1.y();
-    if(enm1x<0||enm1y<0) continue;
+    if (enm1x<0||enm1y<0) continue;
     double angnm1 = angle_0_360(vcl_atan2(enm1y-enm2y, enm1x-enm2x));
     unsigned xnm1 = static_cast<unsigned>(enm1x);
     unsigned ynm1 = static_cast<unsigned>(enm1y);
@@ -195,7 +193,7 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
       double pex  = pe.x(), pey = pe.y();
       double cex  = ce.x(), cey = ce.y();
       double nex  = ne.x(), ney = ne.y();
-      if(cex<0||cey<0) continue;
+      if (cex<0||cey<0) continue;
       double angle = angle_0_360(vcl_atan2(ney-pey, nex-pex));
       unsigned xc = static_cast<unsigned>(cex);
       unsigned yc = static_cast<unsigned>(cey);
@@ -203,10 +201,9 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
       edge_img(xc, yc, 0) = static_cast<float>(cex);
       edge_img(xc, yc, 1) = static_cast<float>(cey);
       edge_img(xc, yc, 2) = static_cast<float>(angle);
-
     }
   }
-  
+
   // Following loop removes the edges in the image boundary
   int temp_index = edge_img.nj()-1;
   for (unsigned i=0; i<edge_img.ni(); i++) {
@@ -222,6 +219,8 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
   }
   return edge_img;
 }
+#endif // 0
+
 void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
 {
   vil_image_view<vxl_byte> edge_image_negated(inp_image);
