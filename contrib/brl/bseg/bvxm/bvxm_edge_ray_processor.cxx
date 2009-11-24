@@ -16,6 +16,7 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_fstream.h>
+
 static const bool edge_debug = false;
 static const bool print_arrays = false;
 static vcl_string base = "";
@@ -26,7 +27,7 @@ static vcl_ofstream dos((base + "bproj_planes_44_24.txt").c_str());
 // initialize the voxel grid for edges
 bool bvxm_edge_ray_processor::init_edges(unsigned scale)
 {
-  if (world_->num_observations<EDGES>(0,scale)!=0){
+  if (world_->num_observations<EDGES>(0,scale)!=0) {
     return false;
   }
 
@@ -61,10 +62,11 @@ bool bvxm_edge_ray_processor::init_edges(unsigned scale)
 
   return true;
 }
+
 // update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
 bool bvxm_edge_ray_processor::update_edges(bvxm_image_metadata const& metadata, unsigned scale)
 {
-  if (world_->num_observations<EDGES>(0,scale)==0){
+  if (world_->num_observations<EDGES>(0,scale)==0) {
     this->init_edges(scale);
   }
 
@@ -127,7 +129,7 @@ bool bvxm_edge_ray_processor::update_edges(bvxm_image_metadata const& metadata, 
 
 bool bvxm_edge_ray_processor::update_edges_with_Lidar_surface(bvxm_image_metadata const& metadata, unsigned scale)
 {
-  if (world_->num_observations<EDGES>(0,scale)==0){
+  if (world_->num_observations<EDGES>(0,scale)==0) {
     this->init_edges(scale);
   }
 
@@ -366,6 +368,7 @@ bool bvxm_edge_ray_processor::save_edges_raw(vcl_string filename, float n_normal
 
   return true;
 }
+
 bool bvxm_edge_ray_processor::
 init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
                              bvxm_image_metadata const& metadata1,
@@ -384,23 +387,23 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
   unsigned nx = static_cast<unsigned>(grid_size.x()),
     ny = static_cast<unsigned>(grid_size.y()), nz = static_cast<unsigned>(grid_size.z());
   double radius = 0.866*params->voxel_length()*initial_sd_ratio;
-  if(edge_debug)
-    vcl_cout << "Initializing a world " << nx << 'x' 
+  if (edge_debug)
+    vcl_cout << "Initializing a world " << nx << 'x'
              << ny << 'x' << nz << '\n';
   bvxm_voxel_grid_base_sptr tangent_pos_base = world_->get_grid<TANGENT_POS>(0, scale);
-  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  = 
+  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  =
     static_cast<bvxm_voxel_grid<pos_dist_t>*>(tangent_pos_base.ptr());
   //3-d tangent direction grid distributions
   bvxm_voxel_grid_base_sptr tangent_dir_base = world_->get_grid<TANGENT_DIR>(0, scale);
-  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  = 
+  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  =
     static_cast<bvxm_voxel_grid<dir_dist_t>*>(tangent_dir_base.ptr());
 
-  if (world_->num_observations<TANGENT_POS>(0,scale)!=0){
+  if (world_->num_observations<TANGENT_POS>(0,scale)!=0) {
     bvxm_voxel_grid<pos_dist_t>::iterator pos_dist_it=pos_dist_grid->begin();
-    for(unsigned z = 0; z<nz; ++z, ++pos_dist_it){
+    for (unsigned z = 0; z<nz; ++z, ++pos_dist_it) {
       // go through the grid and reset
-      for(unsigned r = 0; r<ny; ++r)
-        for(unsigned c = 0; c<nx; ++c){
+      for (unsigned r = 0; r<ny; ++r)
+        for (unsigned c = 0; c<nx; ++c) {
           ((*pos_dist_it)(c, r)).set_mean(pos_t(static_cast<math_t>(0)));
           ((*pos_dist_it)(c, r)).set_var(static_cast<math_t>(radius*radius));
           ((*pos_dist_it)(c, r)).num_observations = static_cast<math_t>(0);
@@ -408,12 +411,12 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
     }
     world_->zero_observations<TANGENT_POS>(0,scale);
   }
-  if (world_->num_observations<TANGENT_DIR>(0,scale)!=0){
+  if (world_->num_observations<TANGENT_DIR>(0,scale)!=0) {
     bvxm_voxel_grid<dir_dist_t>::iterator dir_dist_it=dir_dist_grid->begin();
-    for(unsigned z = 0; z<(unsigned)grid_size.z(); ++z, ++dir_dist_it){
+    for (unsigned z = 0; z<(unsigned)grid_size.z(); ++z, ++dir_dist_it) {
       // go through the grid and reset
-      for(unsigned r = 0; r<ny; ++r)
-        for(unsigned c = 0; c<nx; ++c){
+      for (unsigned r = 0; r<ny; ++r)
+        for (unsigned c = 0; c<nx; ++c) {
           ((*dir_dist_it)(c, r)).set_mean(dir_t(static_cast<math_t>(0)));
           ((*dir_dist_it)(c, r)).set_kappa(static_cast<math_t>(initial_kappa));
           ((*dir_dist_it)(c, r)).num_observations = static_cast<math_t>(0);
@@ -423,9 +426,9 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
     world_->zero_observations<TANGENT_DIR>(0,scale);
   }
   //extract the tangent-point images
-  vil_image_view<float>* tan_image0 = 
+  vil_image_view<float>* tan_image0 =
     static_cast<vil_image_view<float>*>(metadata0.img.ptr());
-  vil_image_view<float>* tan_image1 = 
+  vil_image_view<float>* tan_image1 =
     static_cast<vil_image_view<float>*>(metadata1.img.ptr());
 
   //ray processor for update and utilities
@@ -437,30 +440,30 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
   {
     vgl_h_matrix_2d<double> Hp2i0, Hi2p0,Hp2i1, Hi2p1;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
-      {
-        world_->compute_plane_image_H(metadata0.camera,z,Hp2i0,Hi2p0,scale);
-        world_->compute_plane_image_H(metadata1.camera,z,Hp2i1,Hi2p1,scale);
-        H_plane_to_img0.push_back(Hp2i0);
-        H_img_to_plane0.push_back(Hi2p0);
-        H_plane_to_img1.push_back(Hp2i1);
-        H_img_to_plane1.push_back(Hi2p1);
-      }
+    {
+      world_->compute_plane_image_H(metadata0.camera,z,Hp2i0,Hi2p0,scale);
+      world_->compute_plane_image_H(metadata1.camera,z,Hp2i1,Hi2p1,scale);
+      H_plane_to_img0.push_back(Hp2i0);
+      H_img_to_plane0.push_back(Hi2p0);
+      H_plane_to_img1.push_back(Hp2i1);
+      H_img_to_plane1.push_back(Hi2p1);
+    }
   }
   //get projective cameras (warning! needs to be upgraded for RPC -- later)
-  vpgl_proj_camera<double>* cam0 = 
+  vpgl_proj_camera<double>* cam0 =
     static_cast<vpgl_proj_camera<double>*>(metadata0.camera.ptr());
-  vpgl_proj_camera<double>* cam1 = 
+  vpgl_proj_camera<double>* cam1 =
     static_cast<vpgl_proj_camera<double>*>(metadata1.camera.ptr());
 
-  
+
   //extract slabs from tangent-point images
   unsigned ni0 = metadata0.img->ni(), nj0 = metadata0.img->nj();
   unsigned ni1 = metadata1.img->ni(), nj1 = metadata1.img->nj();
   bvxm_voxel_slab<float> image_a_slab0(ni0, nj0 , 1);
   bvxm_voxel_slab<float> image_b_slab0(ni0, nj0 , 1);
   bvxm_voxel_slab<float> image_c_slab0(ni0, nj0 , 1);
-  for(unsigned j = 0; j<nj0; ++j)
-    for(unsigned i = 0; i<ni0; ++i){
+  for (unsigned j = 0; j<nj0; ++j)
+    for (unsigned i = 0; i<ni0; ++i) {
       image_a_slab0(i,j)=(*tan_image0)(i,j,0);
       image_b_slab0(i,j)=(*tan_image0)(i,j,1);
       image_c_slab0(i,j)=(*tan_image0)(i,j,2);
@@ -468,8 +471,8 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
   bvxm_voxel_slab<float> image_a_slab1(ni1, nj1 , 1);
   bvxm_voxel_slab<float> image_b_slab1(ni1, nj1 , 1);
   bvxm_voxel_slab<float> image_c_slab1(ni1, nj1 , 1);
-  for(unsigned j = 0; j<nj1; ++j)
-    for(unsigned i = 0; i<ni1; ++i){
+  for (unsigned j = 0; j<nj1; ++j)
+    for (unsigned i = 0; i<ni1; ++i) {
       image_a_slab1(i,j)=(*tan_image1)(i,j,0);
       image_b_slab1(i,j)=(*tan_image1)(i,j,1);
       image_c_slab1(i,j)=(*tan_image1)(i,j,2);
@@ -488,167 +491,169 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
 
   // 3-d tangent position grid distributions
 
-  if(edge_debug)
+  if (edge_debug)
     vcl_cout << "Initializing the tangent world:" << vcl_endl;
   bvxm_voxel_grid<pos_dist_t>::iterator pos_dist_it = pos_dist_grid->begin();
   bvxm_voxel_grid<dir_dist_t>::iterator dir_dist_it = dir_dist_grid->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z();++z,++pos_dist_it,++dir_dist_it)
-    {
-      if(edge_debug)
-        vcl_cout << "processing slab " << z << '\n';
-      if ( (pos_dist_it == pos_dist_grid->end())||
-           (dir_dist_it == dir_dist_grid->end()) ) {
-        vcl_cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
-        return false;
-      }
-      voxel_pos_slab.fill(pos_t(0.0f));
-      voxel_dir_slab.fill(dir_t(0.0f));
-      voxel_flag_slab.fill(false);
-      // backproject image line coeficients
-      bvxm_util::warp_slab_nearest_neighbor(image_a_slab0, H_plane_to_img0[z],
-                                            bproj_image_a_slab0);
-      bvxm_util::warp_slab_nearest_neighbor(image_b_slab0, H_plane_to_img0[z],
-                                            bproj_image_b_slab0);
-      bvxm_util::warp_slab_nearest_neighbor(image_c_slab0, H_plane_to_img0[z],
-                                            bproj_image_c_slab0);
-      if(true||edge_debug){
-        bvxm_util::write_slab_as_image(bproj_image_a_slab0,
-                                       base+"Img0a.tiff");
-        bvxm_util::write_slab_as_image(bproj_image_b_slab0,
-                                       base+"Img0b.tiff");
-        bvxm_util::write_slab_as_image(bproj_image_c_slab0,
-                                       base+"Img0c.tiff");
-      }
-      if(edge_debug&&print_arrays){
-        vcl_cout.precision(2);
-        vcl_cout << "back proj view 0\n";
-        for(unsigned j = 0; j<ny; j++){
-          for(unsigned i = 0; i<nx; i++)
-            vcl_cout << bproj_image_a_slab0(i,j) << ' ';
-          vcl_cout << '\n';
-        }
-      }
-      bvxm_util::warp_slab_nearest_neighbor(image_a_slab1, H_plane_to_img1[z],
-                                            bproj_image_a_slab1);
-      bvxm_util::warp_slab_nearest_neighbor(image_b_slab1, H_plane_to_img1[z],
-                                            bproj_image_b_slab1);
-      bvxm_util::warp_slab_nearest_neighbor(image_c_slab1, H_plane_to_img1[z],
-                                            bproj_image_c_slab1);
-      if(true||edge_debug){
-        bvxm_util::write_slab_as_image(bproj_image_a_slab1,
-                                       base+"Img1a.tiff");
-        bvxm_util::write_slab_as_image(bproj_image_b_slab1,
-                                       base+"Img1b.tiff");
-        bvxm_util::write_slab_as_image(bproj_image_c_slab1,
-                                       base+"Img1c.tiff");
-      }
-      if(edge_debug&&print_arrays){
-        vcl_cout << "back proj view 1\n";
-        for(unsigned j = 0; j<ny; j++){
-          for(unsigned i = 0; i<nx; i++)
-            vcl_cout << bproj_image_a_slab1(i,j) << ' ';
-          vcl_cout << '\n';
-        }
-      }
-      bsta_histogram<double> h(0.0, 2.0, 10);
-      //jointly iterate through the slabs looking for intersecting
-      //rays
-      unsigned n_init_trials = 0;
-      unsigned n_init_hits = 0;
-      for(unsigned r=0; r<ny; ++r)
-        for(unsigned c=0; c<nx; ++c){
-          float img_a0 = bproj_image_a_slab0(c, r);
-          float img_b0 = bproj_image_b_slab0(c, r);
-          float img_a1 = bproj_image_a_slab1(c, r);
-          float img_b1 = bproj_image_b_slab1(c, r);
-          //valid line normal coefficients can't be smaller than -1
-          if(img_a0!=-2.0f && img_b0!=-2.0f && img_a1!=-2.0f && img_b1!=-2.0f)
-            {        
-              //found a voxel where rays from both tangent images intersect
-              //compute 3-d sub-voxel position and direction of the corresponding
-              //3-d line
-              float img_c0 = bproj_image_c_slab0(c, r);
-              float img_c1 = bproj_image_c_slab1(c, r);
-              vgl_infinite_line_3d<float> line_3d;
-              if(!bvxm_von_mises_tangent_processor<float>::
-                 tangent_3d_from_2d(img_a0, img_b0, img_c0, *cam0,
-                                    img_a1, img_b1, img_c1, *cam1,
-                                    line_3d))
-                continue;
-              //check if intersecting line passes through the voxel
-              //the voxel corners
-              vgl_point_3d<float> local_xyz_00 = 
-                world_->voxel_index_to_xyz(c, r, z,scale);
-              vgl_point_3d<float> local_xyz_11 = 
-                world_->voxel_index_to_xyz(c+1, r+1, z+1,scale);
-              
-              //The voxel diagonal radius
-              math_t diag = 
-                static_cast<math_t>((local_xyz_11-local_xyz_00).length()/2.0);
-
-              //define the 3-d box corresponding to the voxel
-              vgl_box_3d<float> b;
-              b.add(local_xyz_00); b.add(local_xyz_11);
-              if(edge_debug)
-                vcl_cout << "\n===>checking\n" << b << '\n';
-              n_init_trials++;
-              //check intersection
-#if 0 //JLM mod
-              vgl_point_3d<float> ip0, ip1;
-              if(!vgl_intersection<float>(b, line_3d, ip0, ip1))
-                continue;
-#endif
-              //get the closest point on the line as the display origin
-              vgl_point_3d<math_t> cc = b.centroid(); 
-              vgl_point_3d<math_t> pc = vgl_closest_point<math_t>(line_3d, cc);
-              math_t dist = static_cast<math_t>((pc-cc).length());
-              h.upcount(dist, 1.0);
-              if(dist>diag)
-                continue;
-              n_init_hits++;
-              // intersection line does pass through the voxel 
-              vgl_vector_2d<float> x0 = line_3d.x0();
-              vgl_vector_3d<float> dir = line_3d.direction();
-              (voxel_pos_slab(c, r))[0]=x0.x();
-              (voxel_pos_slab(c, r))[1]=x0.y();
-              (voxel_dir_slab(c, r))[0]=dir.x();
-              (voxel_dir_slab(c, r))[1]=dir.y();
-              (voxel_dir_slab(c, r))[2]=dir.z();
-              if(edge_debug){
-                vcl_cout << "\n===>does intersect\n" << x0 << '\n' 
-                         << dir << '\n';
-              }
-              //a flag to indicate that the voxel contains update information
-              voxel_flag_slab(c, r) = true;
-            }
-        }
-      if(edge_debug){
-        vcl_cout << "Number of init trials: " << n_init_trials << '\n';
-        vcl_cout << "Number of init intersections: " << n_init_hits << '\n';
-        vcl_cout << "Distance histogram\n";
-        h.print();
-      }
-      
-      if(!tan_proc.update(*dir_dist_it, *pos_dist_it,
-                          voxel_dir_slab, voxel_pos_slab, voxel_flag_slab))
-        return false;
-      if(edge_debug&&print_arrays){
-        vcl_cout << "grid contents after initialization \n";
-        for(unsigned r=0; r<ny; ++r){
-          for(unsigned c=0; c<nx; ++c){
-            pos_dist_t pos_dist = (*pos_dist_it)(c,r);
-            dir_dist_t dir_dist = (*dir_dist_it)(c,r);
-            vcl_cout << "(" << pos_dist.num_observations << ' ' 
-                     << dir_dist.num_observations << ") ";
-          }
-          vcl_cout << '\n';
-        }
+  {
+    if (edge_debug)
+      vcl_cout << "processing slab " << z << '\n';
+    if ( (pos_dist_it == pos_dist_grid->end())||
+         (dir_dist_it == dir_dist_grid->end()) ) {
+      vcl_cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      return false;
+    }
+    voxel_pos_slab.fill(pos_t(0.0f));
+    voxel_dir_slab.fill(dir_t(0.0f));
+    voxel_flag_slab.fill(false);
+    // backproject image line coefficients
+    bvxm_util::warp_slab_nearest_neighbor(image_a_slab0, H_plane_to_img0[z],
+                                          bproj_image_a_slab0);
+    bvxm_util::warp_slab_nearest_neighbor(image_b_slab0, H_plane_to_img0[z],
+                                          bproj_image_b_slab0);
+    bvxm_util::warp_slab_nearest_neighbor(image_c_slab0, H_plane_to_img0[z],
+                                          bproj_image_c_slab0);
+    if (true||edge_debug) {
+      bvxm_util::write_slab_as_image(bproj_image_a_slab0,
+                                     base+"Img0a.tiff");
+      bvxm_util::write_slab_as_image(bproj_image_b_slab0,
+                                     base+"Img0b.tiff");
+      bvxm_util::write_slab_as_image(bproj_image_c_slab0,
+                                     base+"Img0c.tiff");
+    }
+    if (edge_debug&&print_arrays) {
+      vcl_cout.precision(2);
+      vcl_cout << "back proj view 0\n";
+      for (unsigned j = 0; j<ny; j++) {
+        for (unsigned i = 0; i<nx; i++)
+          vcl_cout << bproj_image_a_slab0(i,j) << ' ';
+        vcl_cout << '\n';
       }
     }
+    bvxm_util::warp_slab_nearest_neighbor(image_a_slab1, H_plane_to_img1[z],
+                                          bproj_image_a_slab1);
+    bvxm_util::warp_slab_nearest_neighbor(image_b_slab1, H_plane_to_img1[z],
+                                          bproj_image_b_slab1);
+    bvxm_util::warp_slab_nearest_neighbor(image_c_slab1, H_plane_to_img1[z],
+                                          bproj_image_c_slab1);
+    if (true||edge_debug) {
+      bvxm_util::write_slab_as_image(bproj_image_a_slab1,
+                                     base+"Img1a.tiff");
+      bvxm_util::write_slab_as_image(bproj_image_b_slab1,
+                                     base+"Img1b.tiff");
+      bvxm_util::write_slab_as_image(bproj_image_c_slab1,
+                                     base+"Img1c.tiff");
+    }
+    if (edge_debug&&print_arrays) {
+      vcl_cout << "back proj view 1\n";
+      for (unsigned j = 0; j<ny; j++) {
+        for (unsigned i = 0; i<nx; i++)
+          vcl_cout << bproj_image_a_slab1(i,j) << ' ';
+        vcl_cout << '\n';
+      }
+    }
+    bsta_histogram<double> h(0.0, 2.0, 10);
+    //jointly iterate through the slabs looking for intersecting
+    //rays
+    unsigned n_init_trials = 0;
+    unsigned n_init_hits = 0;
+    for (unsigned r=0; r<ny; ++r)
+      for (unsigned c=0; c<nx; ++c)
+      {
+        float img_a0 = bproj_image_a_slab0(c, r);
+        float img_b0 = bproj_image_b_slab0(c, r);
+        float img_a1 = bproj_image_a_slab1(c, r);
+        float img_b1 = bproj_image_b_slab1(c, r);
+        //valid line normal coefficients can't be smaller than -1
+        if (img_a0!=-2.0f && img_b0!=-2.0f && img_a1!=-2.0f && img_b1!=-2.0f)
+        {
+          //found a voxel where rays from both tangent images intersect
+          //compute 3-d sub-voxel position and direction of the corresponding
+          //3-d line
+          float img_c0 = bproj_image_c_slab0(c, r);
+          float img_c1 = bproj_image_c_slab1(c, r);
+          vgl_infinite_line_3d<float> line_3d;
+          if (!bvxm_von_mises_tangent_processor<float>::
+             tangent_3d_from_2d(img_a0, img_b0, img_c0, *cam0,
+                                img_a1, img_b1, img_c1, *cam1,
+                                line_3d))
+            continue;
+          //check if intersecting line passes through the voxel
+          //the voxel corners
+          vgl_point_3d<float> local_xyz_00 =
+            world_->voxel_index_to_xyz(c, r, z,scale);
+          vgl_point_3d<float> local_xyz_11 =
+            world_->voxel_index_to_xyz(c+1, r+1, z+1,scale);
+
+          //The voxel diagonal radius
+          math_t diag =
+            static_cast<math_t>((local_xyz_11-local_xyz_00).length()/2.0);
+
+          //define the 3-d box corresponding to the voxel
+          vgl_box_3d<float> b;
+          b.add(local_xyz_00); b.add(local_xyz_11);
+          if (edge_debug)
+            vcl_cout << "\n===>checking\n" << b << '\n';
+          n_init_trials++;
+          //check intersection
+#if 0 //LJM mod
+          vgl_point_3d<float> ip0, ip1;
+          if (!vgl_intersection<float>(b, line_3d, ip0, ip1))
+            continue;
+#endif
+          //get the closest point on the line as the display origin
+          vgl_point_3d<math_t> cc = b.centroid();
+          vgl_point_3d<math_t> pc = vgl_closest_point<math_t>(line_3d, cc);
+          math_t dist = static_cast<math_t>((pc-cc).length());
+          h.upcount(dist, 1.0);
+          if (dist>diag)
+            continue;
+          n_init_hits++;
+          // intersection line does pass through the voxel
+          vgl_vector_2d<float> x0 = line_3d.x0();
+          vgl_vector_3d<float> dir = line_3d.direction();
+          (voxel_pos_slab(c, r))[0]=x0.x();
+          (voxel_pos_slab(c, r))[1]=x0.y();
+          (voxel_dir_slab(c, r))[0]=dir.x();
+          (voxel_dir_slab(c, r))[1]=dir.y();
+          (voxel_dir_slab(c, r))[2]=dir.z();
+          if (edge_debug) {
+            vcl_cout << "\n===>does intersect\n" << x0 << '\n'
+                     << dir << '\n';
+          }
+          //a flag to indicate that the voxel contains update information
+          voxel_flag_slab(c, r) = true;
+        }
+      }
+    if (edge_debug) {
+      vcl_cout << "Number of init trials: " << n_init_trials << '\n'
+               << "Number of init intersections: " << n_init_hits << '\n'
+               << "Distance histogram\n";
+      h.print();
+    }
+
+    if (!tan_proc.update(*dir_dist_it, *pos_dist_it,
+                        voxel_dir_slab, voxel_pos_slab, voxel_flag_slab))
+      return false;
+    if (edge_debug&&print_arrays) {
+      vcl_cout << "grid contents after initialization\n";
+      for (unsigned r=0; r<ny; ++r) {
+        for (unsigned c=0; c<nx; ++c) {
+          pos_dist_t pos_dist = (*pos_dist_it)(c,r);
+          dir_dist_t dir_dist = (*dir_dist_it)(c,r);
+          vcl_cout << '(' << pos_dist.num_observations << ' '
+                   << dir_dist.num_observations << ") ";
+        }
+        vcl_cout << '\n';
+      }
+    }
+  }
   world_->increment_observations<TANGENT_POS>(0,scale);
   world_->increment_observations<TANGENT_DIR>(0,scale);
   return true;
 }
+
 //: update a von_mises edge tangent world
 bool bvxm_edge_ray_processor::
 update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
@@ -657,7 +662,7 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
                                unsigned scale)
 {
   //extract the tangent-point images
-  vil_image_view<float>* tan_image = 
+  vil_image_view<float>* tan_image =
     static_cast<vil_image_view<float>*>(metadata.img.ptr());
 
   //grid size
@@ -675,14 +680,14 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
-      {
-        world_->compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p,scale);
-        H_plane_to_img.push_back(Hp2i);
-        H_img_to_plane.push_back(Hi2p);
-      }
+    {
+      world_->compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p,scale);
+      H_plane_to_img.push_back(Hp2i);
+      H_img_to_plane.push_back(Hi2p);
+    }
   }
   //get projective cameras (warning! needs to be upgraded for RPC -- later)
-  vpgl_proj_camera<double>* cam = 
+  vpgl_proj_camera<double>* cam =
     static_cast<vpgl_proj_camera<double>*>(metadata.camera.ptr());
 
   // datatype for current disributions
@@ -691,22 +696,22 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
   typedef bvxm_voxel_traits<TANGENT_DIR>::voxel_datatype dir_dist_t;
   typedef bvxm_voxel_traits<TANGENT_DIR>::obs_type dir_t;
   typedef bvxm_voxel_traits<TANGENT_DIR>::math_type math_t;
-  
-  
+
+
   //extract tangent line slabs from tangent-point image
   unsigned ni = metadata.img->ni(), nj = metadata.img->nj();
   bvxm_voxel_slab<math_t> image_a_slab(ni, nj , 1);
   bvxm_voxel_slab<math_t> image_b_slab(ni, nj , 1);
   bvxm_voxel_slab<math_t> image_c_slab(ni, nj , 1);
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i){
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i) {
       image_a_slab(i,j)=(*tan_image)(i,j,0);
       image_b_slab(i,j)=(*tan_image)(i,j,1);
       image_c_slab(i,j)=(*tan_image)(i,j,2);
     }
 
   unsigned nx = static_cast<unsigned>(grid_size.x()),
-    ny = static_cast<unsigned>(grid_size.y());
+           ny = static_cast<unsigned>(grid_size.y());
 
 
   //slabs for later backprojection
@@ -722,146 +727,147 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
 
   // 3-d tangent position grid distributions
   bvxm_voxel_grid_base_sptr tangent_pos_base = world_->get_grid<TANGENT_POS>(0, scale);
-  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  = 
+  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  =
     static_cast<bvxm_voxel_grid<pos_dist_t>*>(tangent_pos_base.ptr());
   //3-d tangent direction grid distributions
   bvxm_voxel_grid_base_sptr tangent_dir_base = world_->get_grid<TANGENT_DIR>(0, scale);
-  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  = 
+  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  =
     static_cast<bvxm_voxel_grid<dir_dist_t>*>(tangent_dir_base.ptr());
 
-  if(edge_debug)
+  if (edge_debug)
     vcl_cout << "Updating the tangent world:" << vcl_endl;
   bvxm_voxel_grid<pos_dist_t>::iterator pos_dist_it = pos_dist_grid->begin();
   bvxm_voxel_grid<dir_dist_t>::iterator dir_dist_it = dir_dist_grid->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z();++z,++pos_dist_it,++dir_dist_it)
-    {
-      if(edge_debug)
-        vcl_cout << "processing slab " << z << '\n';
-      if ( (pos_dist_it == pos_dist_grid->end())||
-           (dir_dist_it == dir_dist_grid->end()) ) {
-        vcl_cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
-        return false;
-      }
-      voxel_pos_slab.fill(pos_t(0.0f));
-      voxel_dir_slab.fill(dir_t(0.0f));
-      voxel_flag_slab.fill(false);
-      // backproject image line coeficients
-      bvxm_util::warp_slab_nearest_neighbor(image_a_slab, H_plane_to_img[z],
-                                            bproj_image_a_slab);
-      bvxm_util::warp_slab_nearest_neighbor(image_b_slab, H_plane_to_img[z],
-                                            bproj_image_b_slab);
-      bvxm_util::warp_slab_nearest_neighbor(image_c_slab, H_plane_to_img[z],
-                                            bproj_image_c_slab);
-      if(edge_debug&&print_arrays){
-        vcl_cout.precision(2);
-        vcl_cout << "back proj view\n";
-        for(unsigned j = 0; j<ny; j++){
-          for(unsigned i = 0; i<nx; i++)
-            vcl_cout << bproj_image_a_slab(i,j) << ' ';
-          vcl_cout << '\n';
-        }
-      }
-      bvxm_voxel_slab<pos_dist_t>& pos_dist_slab = (*pos_dist_it);
-      bvxm_voxel_slab<dir_dist_t>& dir_dist_slab = (*dir_dist_it);
-
-      unsigned n_update_trials = 0;
-      unsigned n_update_hits = 0;
-      for(unsigned r=0; r<ny; ++r)
-        for(unsigned c=0; c<nx; ++c){
-          math_t img_a = bproj_image_a_slab(c, r);
-          math_t img_b = bproj_image_b_slab(c, r);
-          pos_dist_t pos_dist = pos_dist_slab(c,r);
-          dir_dist_t dir_dist = dir_dist_slab(c,r);
-          //valid line normal coefficients can't be smaller than -1
-          if(img_a!=-2.0f && img_b!=-2.0f && 
-             pos_dist.num_observations > 0 && dir_dist.num_observations > 0) 
-            {        
-              //found a voxel which intersects the 3-d tangent plane
-              //backprojected from the image tangent
-              //compute the 3-d sub-voxel tangent line position and direction
-              math_t img_c = bproj_image_c_slab(c, r);
-              vgl_infinite_line_3d<math_t> line_3d;
-              if(!bvxm_von_mises_tangent_processor<math_t>::
-                 pos_dir_from_image_tangent(img_a, img_b, img_c, *cam,
-                                            pos_dist, dir_dist,
-                                            line_3d))
-                continue;
-              // JLM =============Debug===================
-              if(r == 44 && c == 24){
-#if 0
-              pos_t pm = pos_dist.mean();
-              math_t psd = vcl_sqrt(pos_dist.var());
-              dir_t dm = dir_dist.mean();
-              math_t ka = dir_dist.kappa();
-              dos << pm[0] << ' ' << pm[1] << ' ' << psd << ' ' 
-                  << dm[0] << ' ' << dm[1] << ' ' << dm[2] << ' '
-                  << ka << '\n' << vcl_flush;
-#endif
-              vgl_homg_line_2d<double> img_l(img_a, img_b, img_c);
-              vgl_plane_3d<double> pl = cam->backproject(img_l);
-              double pa = pl.a(), pb = pl.b(), pc = pl.c(), pd = pl.d();
-              double nm = vcl_sqrt(pa*pa + pb*pb + pc*pc);
-              pa/=nm; pb/=nm; pc/=nm; pd/=nm;
-#if 0
-              dos << pa << ' ' << pb << ' ' << pc << ' ' << pd 
-                  << '\n' << vcl_flush;
-#endif
-              }
-              //========================================
-              //check if intersecting line passes through the voxel
-              //the voxel corners
-              vgl_point_3d<math_t> local_xyz_00 = 
-                world_->voxel_index_to_xyz(c, r, z,scale);
-              vgl_point_3d<math_t> local_xyz_11 = 
-                world_->voxel_index_to_xyz(c+1, r+1, z+1,scale);
-              //The voxel diagonal radius
-              math_t diag = 
-                static_cast<math_t>((local_xyz_11-local_xyz_00).length()/2.0);
-              //define the 3-d box corresponding to the voxel
-              vgl_box_3d<math_t> b;
-              b.add(local_xyz_00); b.add(local_xyz_11);
-              if(edge_debug)
-                vcl_cout << "\n===>checking\n" << b << '\n';
-              n_update_trials++;
-              vgl_point_3d<math_t> cc = b.centroid(); 
-              vgl_point_3d<math_t> pc = vgl_closest_point<math_t>(line_3d, cc);
-              math_t dist = static_cast<math_t>((pc-cc).length());
-              if(dist>diag) continue;
-#if 0 //jlm debug
-              //check intersection
-              vgl_point_3d<math_t> ip0, ip1;
-              if(!vgl_intersection<math_t>(b, line_3d, ip0, ip1))
-                continue;
-#endif
-              n_update_hits++;
-              if(edge_debug){
-                vgl_vector_2d<math_t> x0 = line_3d.x0();
-                vgl_vector_3d<math_t> dir = line_3d.direction();
-                vcl_cout << "\n===>does intersect\n" << x0 << '\n' 
-                         << dir << '\n';
-              }
-              // intersection line does pass through the voxel 
-              // update the distribution position mean and sample line means
-              // to match 
-              vgl_vector_2d<math_t> x0 = line_3d.x0();
-              vgl_vector_3d<math_t> dir = line_3d.direction();
-              (voxel_pos_slab(c, r))[0]=x0.x();
-              (voxel_pos_slab(c, r))[1]=x0.y();
-              (voxel_dir_slab(c, r))[0]=dir.x();
-              (voxel_dir_slab(c, r))[1]=dir.y();
-              (voxel_dir_slab(c, r))[2]=dir.z();
-              //a flag to indicate that the voxel contains update information
-              voxel_flag_slab(c, r) = true;
-            }
-        }
-      if(edge_debug){
-        vcl_cout << "ntrials for update: " << n_update_trials << '\n';
-        vcl_cout << "nhits for update: " << n_update_hits << '\n';
-      }
-      if(!tan_proc.update(*dir_dist_it, *pos_dist_it,
-                          voxel_dir_slab, voxel_pos_slab, voxel_flag_slab))
-        return false;
+  {
+    if (edge_debug)
+      vcl_cout << "processing slab " << z << '\n';
+    if ( (pos_dist_it == pos_dist_grid->end())||
+         (dir_dist_it == dir_dist_grid->end()) ) {
+      vcl_cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      return false;
     }
+    voxel_pos_slab.fill(pos_t(0.0f));
+    voxel_dir_slab.fill(dir_t(0.0f));
+    voxel_flag_slab.fill(false);
+    // backproject image line coefficients
+    bvxm_util::warp_slab_nearest_neighbor(image_a_slab, H_plane_to_img[z],
+                                          bproj_image_a_slab);
+    bvxm_util::warp_slab_nearest_neighbor(image_b_slab, H_plane_to_img[z],
+                                          bproj_image_b_slab);
+    bvxm_util::warp_slab_nearest_neighbor(image_c_slab, H_plane_to_img[z],
+                                          bproj_image_c_slab);
+    if (edge_debug&&print_arrays) {
+      vcl_cout.precision(2);
+      vcl_cout << "back proj view\n";
+      for (unsigned j = 0; j<ny; j++) {
+        for (unsigned i = 0; i<nx; i++)
+          vcl_cout << bproj_image_a_slab(i,j) << ' ';
+        vcl_cout << '\n';
+      }
+    }
+    bvxm_voxel_slab<pos_dist_t>& pos_dist_slab = (*pos_dist_it);
+    bvxm_voxel_slab<dir_dist_t>& dir_dist_slab = (*dir_dist_it);
+
+    unsigned n_update_trials = 0;
+    unsigned n_update_hits = 0;
+    for (unsigned r=0; r<ny; ++r)
+      for (unsigned c=0; c<nx; ++c)
+      {
+        math_t img_a = bproj_image_a_slab(c, r);
+        math_t img_b = bproj_image_b_slab(c, r);
+        pos_dist_t pos_dist = pos_dist_slab(c,r);
+        dir_dist_t dir_dist = dir_dist_slab(c,r);
+        //valid line normal coefficients can't be smaller than -1
+        if (img_a!=-2.0f && img_b!=-2.0f &&
+            pos_dist.num_observations > 0 && dir_dist.num_observations > 0)
+        {
+          //found a voxel which intersects the 3-d tangent plane
+          //backprojected from the image tangent
+          //compute the 3-d sub-voxel tangent line position and direction
+          math_t img_c = bproj_image_c_slab(c, r);
+          vgl_infinite_line_3d<math_t> line_3d;
+          if (!bvxm_von_mises_tangent_processor<math_t>::
+             pos_dir_from_image_tangent(img_a, img_b, img_c, *cam,
+                                        pos_dist, dir_dist,
+                                        line_3d))
+            continue;
+          // JLM =============Debug===================
+          if (r == 44 && c == 24) {
+#if 0
+            pos_t pm = pos_dist.mean();
+            math_t psd = vcl_sqrt(pos_dist.var());
+            dir_t dm = dir_dist.mean();
+            math_t ka = dir_dist.kappa();
+            dos << pm[0] << ' ' << pm[1] << ' ' << psd << ' '
+                << dm[0] << ' ' << dm[1] << ' ' << dm[2] << ' '
+                << ka << '\n' << vcl_flush;
+#endif
+            vgl_homg_line_2d<double> img_l(img_a, img_b, img_c);
+            vgl_plane_3d<double> pl = cam->backproject(img_l);
+            double pa = pl.a(), pb = pl.b(), pc = pl.c(), pd = pl.d();
+            double nm = vcl_sqrt(pa*pa + pb*pb + pc*pc);
+            pa/=nm; pb/=nm; pc/=nm; pd/=nm;
+#if 0
+            dos << pa << ' ' << pb << ' ' << pc << ' ' << pd
+                << '\n' << vcl_flush;
+#endif
+          }
+          //========================================
+          //check if intersecting line passes through the voxel
+          //the voxel corners
+          vgl_point_3d<math_t> local_xyz_00 =
+            world_->voxel_index_to_xyz(c, r, z,scale);
+          vgl_point_3d<math_t> local_xyz_11 =
+            world_->voxel_index_to_xyz(c+1, r+1, z+1,scale);
+          //The voxel diagonal radius
+          math_t diag =
+            static_cast<math_t>((local_xyz_11-local_xyz_00).length()/2.0);
+          //define the 3-d box corresponding to the voxel
+          vgl_box_3d<math_t> b;
+          b.add(local_xyz_00); b.add(local_xyz_11);
+          if (edge_debug)
+            vcl_cout << "\n===>checking\n" << b << '\n';
+          n_update_trials++;
+          vgl_point_3d<math_t> cc = b.centroid();
+          vgl_point_3d<math_t> pc = vgl_closest_point<math_t>(line_3d, cc);
+          math_t dist = static_cast<math_t>((pc-cc).length());
+          if (dist>diag) continue;
+#if 0 //jlm debug
+          //check intersection
+          vgl_point_3d<math_t> ip0, ip1;
+          if (!vgl_intersection<math_t>(b, line_3d, ip0, ip1))
+            continue;
+#endif
+          n_update_hits++;
+          if (edge_debug) {
+            vgl_vector_2d<math_t> x0 = line_3d.x0();
+            vgl_vector_3d<math_t> dir = line_3d.direction();
+            vcl_cout << "\n===>does intersect\n" << x0 << '\n'
+                     << dir << '\n';
+          }
+          // intersection line does pass through the voxel
+          // update the distribution position mean and sample line means
+          // to match
+          vgl_vector_2d<math_t> x0 = line_3d.x0();
+          vgl_vector_3d<math_t> dir = line_3d.direction();
+          (voxel_pos_slab(c, r))[0]=x0.x();
+          (voxel_pos_slab(c, r))[1]=x0.y();
+          (voxel_dir_slab(c, r))[0]=dir.x();
+          (voxel_dir_slab(c, r))[1]=dir.y();
+          (voxel_dir_slab(c, r))[2]=dir.z();
+          //a flag to indicate that the voxel contains update information
+          voxel_flag_slab(c, r) = true;
+        }
+      }
+    if (edge_debug) {
+      vcl_cout << "ntrials for update: " << n_update_trials << '\n'
+               << "nhits for update: " << n_update_hits << '\n';
+    }
+    if (!tan_proc.update(*dir_dist_it, *pos_dist_it,
+                         voxel_dir_slab, voxel_pos_slab, voxel_flag_slab))
+      return false;
+  }
   world_->increment_observations<TANGENT_POS>(0,scale);
   world_->increment_observations<TANGENT_DIR>(0,scale);
   return true;
@@ -872,18 +878,14 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
 {
   // open the file
   vcl_ofstream os(vrml_path.c_str());
-  if(!os.is_open())
-    {
-      vcl_cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml - " 
-               << " invalid path " << vrml_path << '\n';
-      return;
-    }
+  if (!os.is_open())
+  {
+    vcl_cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml - "
+             << " invalid path " << vrml_path << '\n';
+    return;
+  }
   //write the vrml header
-  os << "#VRML V2.0 utf8\n"
-     << "Background {\n"
-     << "  skyColor [ 0 0 0 ]\n"
-     << "  groundColor [ 0 0 0 ]\n"
-     << "}\n";
+  os << "#VRML V2.0 utf8\nBackground {\n  skyColor [ 0 0 0 ]\n  groundColor [ 0 0 0 ]\n}\n";
   // typedefs for tangent disributions and data
   typedef bvxm_voxel_traits<TANGENT_POS>::voxel_datatype pos_dist_t;
   typedef bvxm_voxel_traits<TANGENT_POS>::obs_type pos_t;
@@ -893,11 +895,11 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
   unsigned scale = 0;
   // 3-d tangent position distribution grid
   bvxm_voxel_grid_base_sptr tangent_pos_base = world_->get_grid<TANGENT_POS>(0, scale);
-  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  = 
+  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  =
     static_cast<bvxm_voxel_grid<pos_dist_t>*>(tangent_pos_base.ptr());
-  //3-d tangent direction distribution grid 
+  //3-d tangent direction distribution grid
   bvxm_voxel_grid_base_sptr tangent_dir_base = world_->get_grid<TANGENT_DIR>(0, scale);
-  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  = 
+  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  =
     static_cast<bvxm_voxel_grid<dir_dist_t>*>(tangent_dir_base.ptr());
 
   // extract grid dimensions
@@ -906,8 +908,8 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
   double radius = params->voxel_length()*0.1;
   math_t len = static_cast<math_t>(params->voxel_length());
   unsigned nx = static_cast<unsigned>(grid_size.x()),
-    ny = static_cast<unsigned>(grid_size.y()),
-    nz = static_cast<unsigned>(grid_size.z());
+                                      ny = static_cast<unsigned>(grid_size.y()),
+                                      nz = static_cast<unsigned>(grid_size.z());
   double ssd = 0.0, skap = 0;
   double min_sd = 1000.0, max_sd = 0.0;
   double min_kappa = 20000.0, max_kappa = 0.0;
@@ -921,135 +923,112 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
   bvxm_voxel_grid<pos_dist_t>::iterator pos_dist_it = pos_dist_grid->begin();
   bvxm_voxel_grid<dir_dist_t>::iterator dir_dist_it = dir_dist_grid->begin();
   for (unsigned z=0; z<nz; ++z,++pos_dist_it,++dir_dist_it)
-    {
-      if ( (pos_dist_it == pos_dist_grid->end())||
-           (dir_dist_it == dir_dist_grid->end()) ) {
-        vcl_cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml- reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
-        return;
-      }
-      bvxm_voxel_slab<pos_dist_t>& pos_dist_slab = (*pos_dist_it);
-      bvxm_voxel_slab<dir_dist_t>& dir_dist_slab = (*dir_dist_it);
-      for(unsigned r=0; r<ny; ++r)
-        for(unsigned c=0; c<nx; ++c){
-          pos_dist_t pos_dist = pos_dist_slab(c,r);
-          dir_dist_t dir_dist = dir_dist_slab(c,r);
-          double pnobs = pos_dist.num_observations;
-          double dnobs = dir_dist.num_observations;
+  {
+    if ( (pos_dist_it == pos_dist_grid->end())||
+         (dir_dist_it == dir_dist_grid->end()) ) {
+      vcl_cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml- reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      return;
+    }
+    bvxm_voxel_slab<pos_dist_t>& pos_dist_slab = (*pos_dist_it);
+    bvxm_voxel_slab<dir_dist_t>& dir_dist_slab = (*dir_dist_it);
+    for (unsigned r=0; r<ny; ++r)
+      for (unsigned c=0; c<nx; ++c)
+      {
+        pos_dist_t pos_dist = pos_dist_slab(c,r);
+        dir_dist_t dir_dist = dir_dist_slab(c,r);
+        double pnobs = pos_dist.num_observations;
+        double dnobs = dir_dist.num_observations;
+        pos_t pos_mean = pos_dist.mean();
+        dir_t dir_mean = dir_dist.mean();
+        if (pnobs > 0 && dnobs > 0)
+        {
+          h.upcount(pnobs,1.0);
+          nobs += pnobs;
+          if (pnobs<min_nobs)
+            min_nobs = pnobs;
+          //get the infinite 3-d line corresponding to the tangent dist
           pos_t pos_mean = pos_dist.mean();
           dir_t dir_mean = dir_dist.mean();
-          if(pnobs > 0 && dnobs > 0) 
-            {        
-              h.upcount(pnobs,1.0);
-              nobs += pnobs;
-              if(pnobs<min_nobs)
-                min_nobs = pnobs;
-              //get the infinite 3-d line corresponding to the tangent dist
-              pos_t pos_mean = pos_dist.mean();
-              dir_t dir_mean = dir_dist.mean();
-              double sd = vcl_sqrt(pos_dist.var());
-              ssd += sd;
-              if(sd<min_sd)
-                min_sd = sd;
-              if(sd>max_sd)
-                max_sd = sd;
-              double kap = dir_dist.kappa(); 
-              if(kap<50000.0){
-                if(kap<min_kappa)
-                  min_kappa = kap;
-                if(kap>max_kappa)
-                  max_kappa = kap;
-                skap += kap;
-                kappa_count++;
-              }
-              sd_count ++;
+          double sd = vcl_sqrt(pos_dist.var());
+          ssd += sd;
+          if (sd<min_sd)
+            min_sd = sd;
+          if (sd>max_sd)
+            max_sd = sd;
+          double kap = dir_dist.kappa();
+          if (kap<50000.0) {
+            if (kap<min_kappa)
+              min_kappa = kap;
+            if (kap>max_kappa)
+              max_kappa = kap;
+            skap += kap;
+            kappa_count++;
+          }
+          sd_count ++;
 #if 0
-              double red = 0.0418941/sd;
-              double green = kap/49687.8;
-              double blue = pnobs/5;
+          double red = 0.0418941/sd;
+          double green = kap/49687.8;
+          double blue = pnobs/5;
 #endif
-              double red = 1, green = 1, blue = 0;
-              vgl_vector_2d<math_t> posv(pos_mean[0], pos_mean[1]);
-              vgl_vector_3d<math_t> dirv(dir_mean[0],dir_mean[1], dir_mean[2]);
-              vgl_infinite_line_3d<math_t> line_3d(posv, dirv);
-              // get the current voxel corners
-              vgl_point_3d<math_t> local_xyz_00 = 
-                world_->voxel_index_to_xyz(c, r, z,scale);
-              vgl_point_3d<math_t> local_xyz_11 = 
-                world_->voxel_index_to_xyz(c+1, r+1, z+1,scale);
-              //define the 3-d box corresponding to the voxel
-              vgl_box_3d<math_t> b;
-              b.add(local_xyz_00); b.add(local_xyz_11);
-              //get the closest point on the line as the display origin
-              vgl_point_3d<math_t> cc = b.centroid(); 
-              vgl_point_3d<math_t> pc = vgl_closest_point<math_t>(line_3d, cc);
-              // the tangent line cylinder rotation
-              if(pnobs>max_nobs){
-                max_nobs = pnobs;
-                max_nobs_r = r;
-                max_nobs_c = c;
-                max_pc = pc;
-              }
-              vnl_double_3 yaxis(0.0, 1.0, 0.0), 
-                pvec(dirv.x(), dirv.y(), dirv.z());
-              vgl_rotation_3d<double> rot(yaxis, pvec);
-              vnl_quaternion<double> q = rot.as_quaternion();
-              vnl_double_3 axis = q.axis();
-              double ang = q.angle();
-              os <<  "Transform {\n"
-                 << " translation " << pc.x() << ' ' << pc.y() << ' ' << pc.z() << '\n'
-                 << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
-                 << "children [ \n"
-                 << " Shape {\n"
-                 << " appearance Appearance{\n"
-                 << "  material Material\n"
-                 << "   {\n"
-                 << "     diffuseColor " << red << ' ' << green << ' ' << blue <<'\n'
-                 << "     transparency 0\n"
-                 << "    }\n"
-                 << "  }\n"
-                 << " geometry Cylinder\n"
-                 << "{\n"
-                 << " radius " << radius << '\n'
-                 << " height " << len << '\n'
-                 << " }\n"
-                 << " }\n"
-                 << "]\n"
-                 << "}\n";
-            }
+          double red = 1, green = 1, blue = 0;
+          vgl_vector_2d<math_t> posv(pos_mean[0], pos_mean[1]);
+          vgl_vector_3d<math_t> dirv(dir_mean[0],dir_mean[1], dir_mean[2]);
+          vgl_infinite_line_3d<math_t> line_3d(posv, dirv);
+          // get the current voxel corners
+          vgl_point_3d<math_t> local_xyz_00 =
+            world_->voxel_index_to_xyz(c, r, z,scale);
+          vgl_point_3d<math_t> local_xyz_11 =
+            world_->voxel_index_to_xyz(c+1, r+1, z+1,scale);
+          //define the 3-d box corresponding to the voxel
+          vgl_box_3d<math_t> b;
+          b.add(local_xyz_00); b.add(local_xyz_11);
+          //get the closest point on the line as the display origin
+          vgl_point_3d<math_t> cc = b.centroid();
+          vgl_point_3d<math_t> pc = vgl_closest_point<math_t>(line_3d, cc);
+          // the tangent line cylinder rotation
+          if (pnobs>max_nobs) {
+            max_nobs = pnobs;
+            max_nobs_r = r;
+            max_nobs_c = c;
+            max_pc = pc;
+          }
+          vnl_double_3 yaxis(0.0, 1.0, 0.0),
+            pvec(dirv.x(), dirv.y(), dirv.z());
+          vgl_rotation_3d<double> rot(yaxis, pvec);
+          vnl_quaternion<double> q = rot.as_quaternion();
+          vnl_double_3 axis = q.axis();
+          double ang = q.angle();
+          os <<  "Transform {\n"
+             << " translation " << pc.x() << ' ' << pc.y() << ' ' << pc.z() << '\n'
+             << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
+             << "children [\n Shape {\n appearance Appearance{\n"
+             << "  material Material\n   {\n"
+             << "     diffuseColor " << red << ' ' << green << ' ' << blue <<'\n'
+             << "     transparency 0\n    }\n  }\n"
+             << " geometry Cylinder\n{\n radius " << radius << '\n'
+             << " height " << len << "\n }\n }\n]\n}\n";
         }
-    }
+      }
+  }
 
   os << "Transform {\n"
      << "translation " << max_pc.x()<< ' ' << max_pc.y()<< ' ' << max_pc.z() <<'\n'
-     << "children [\n"
-     << "Shape {\n"
-     << "appearance Appearance{\n"
-     << "  material Material\n"
-     << "   {\n"
-     << "     diffuseColor 0 1 0\n"
-     << "      transparency 0\n"
-     << "   }\n"
-     << " }\n"
-     << "geometry Sphere\n"
-     << "{\n"
-     << "  radius .05 \n"
-     << "   }\n"
-     << "  }\n"
-     << " ]\n"
-     << "}\n";
+     << "children [\nShape {\nappearance Appearance{\n"
+     << "  material Material\n   {\n     diffuseColor 0 1 0\n"
+     << "      transparency 0\n   }\n }\n"
+     << "geometry Sphere\n{\n  radius .05\n   }\n  }\n ]\n}\n";
   os.close();
-  if(edge_debug){
-    vcl_cout << "min sd " << min_sd << "mean sd " << ssd/sd_count 
-             << " max sd " << max_sd << '\n';
-    vcl_cout << "min kappa " << min_kappa << "mean kappa " << skap/kappa_count
-             << " max kappa " << max_kappa << '\n';
-    vcl_cout << "min nobs " << min_nobs << "mean nobs " << nobs/sd_count << " max nobs " << max_nobs << '\n';
+  if (edge_debug) {
+    vcl_cout << "min sd " << min_sd << "mean sd " << ssd/sd_count
+             << " max sd " << max_sd << '\n'
+             << "min kappa " << min_kappa << "mean kappa " << skap/kappa_count
+             << " max kappa " << max_kappa << '\n'
+             << "min nobs " << min_nobs << "mean nobs " << nobs/sd_count << " max nobs " << max_nobs << '\n';
     h.print();
   }
 
-  vcl_cout << "Max nobs, " << max_nobs << " at (" << max_nobs_c << ' ' 
+  vcl_cout << "Max nobs, " << max_nobs << " at (" << max_nobs_c << ' '
            << max_nobs_r << ") 3d pos: " << max_pc << '\n';
-
 }
 
 void bvxm_edge_ray_processor::
@@ -1058,19 +1037,19 @@ display_ground_truth(vcl_string const& gnd_truth_path,
 {
   // open the files
   vcl_ifstream is(gnd_truth_path.c_str());
-  if(!is.is_open())
-    {
-      vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - " 
-               << " invalid input path " << vrml_path << '\n';
-      return;
-    }
+  if (!is.is_open())
+  {
+    vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
+             << " invalid input path " << vrml_path << '\n';
+    return;
+  }
   vcl_ofstream os(vrml_path.c_str());
-  if(!os.is_open())
-    {
-      vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - " 
-               << " invalid output path " << vrml_path << '\n';
-      return;
-    }
+  if (!os.is_open())
+  {
+    vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
+             << " invalid output path " << vrml_path << '\n';
+    return;
+  }
   //write the vrml header
   os << "#VRML V2.0 utf8\n"
      << "Background {\n"
@@ -1080,15 +1059,15 @@ display_ground_truth(vcl_string const& gnd_truth_path,
   // read the file
   vcl_string temp;
   is >> temp;
-  if(temp!="nlines:")
-    {
-      vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - " 
-               << " parse of input failed\n";
-      return;
-    }
+  if (temp!="nlines:")
+  {
+    vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
+             << " parse of input failed\n";
+    return;
+  }
   unsigned nlines = 0;
   is >> nlines;
-  for(unsigned i = 0; i<nlines; ++i){
+  for (unsigned i = 0; i<nlines; ++i) {
     vnl_double_3 v0, v1, dir, pc;
     is >> v0; is >> v1;
     pc = (v0+v1)/2.0;
@@ -1096,33 +1075,22 @@ display_ground_truth(vcl_string const& gnd_truth_path,
     double len = dir.magnitude();
     dir /= len;
     double red = 0, green = 1, blue = 0;
-	double radius = 0.025;
-  // the tangent line cylinder rotation
-    vnl_double_3 yaxis(0.0, 1.0, 0.0); 
+    double radius = 0.025;
+    // the tangent line cylinder rotation
+    vnl_double_3 yaxis(0.0, 1.0, 0.0);
     vgl_rotation_3d<double> rot(yaxis, dir);
     vnl_quaternion<double> q = rot.as_quaternion();
     vnl_double_3 axis = q.axis();
     double ang = q.angle();
-  os <<  "Transform {\n"
-     << " translation " << pc[0] << ' ' << pc[1] << ' ' << pc[2] << '\n'
-     << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
-     << "children [ \n"
-     << " Shape {\n"
-     << " appearance Appearance{\n"
-     << "  material Material\n"
-     << "   {\n"
-     << "     diffuseColor " << red << ' ' << green << ' ' << blue <<'\n'
-     << "     transparency 0\n"
-     << "    }\n"
-     << "  }\n"
-     << " geometry Cylinder\n"
-     << "{\n"
-     << " radius " << radius << '\n'
-     << " height " << len << '\n'
-     << " }\n"
-     << " }\n"
-     << "]\n"
-     << "}\n";
+    os <<  "Transform {\n"
+       << " translation " << pc[0] << ' ' << pc[1] << ' ' << pc[2] << '\n'
+       << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
+       << "children [\n Shape {\n appearance Appearance{\n"
+       << "  material Material\n   {\n"
+       << "     diffuseColor " << red << ' ' << green << ' ' << blue <<'\n'
+       << "     transparency 0\n    }\n  }\n"
+       << " geometry Cylinder\n{\n radius " << radius << '\n'
+       << " height " << len << "\n }\n }\n]\n}\n";
   }
   os.close();
 }
