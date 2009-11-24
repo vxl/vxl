@@ -13,7 +13,8 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_closest_point.h>
+#include <vnl/vnl_math.h>
+
 const bool von_mises_debug = false;
 template <class T>
 bool bvxm_von_mises_tangent_processor<T>::
@@ -32,7 +33,7 @@ tangent_3d_from_2d(T img_a0, T img_b0, T img_c0,
   vgl_plane_3d<double> plane1 = cam1.backproject(l1);
 
   vgl_infinite_line_3d<double> line_3d_dbl;
-  if(!vgl_intersection(plane0, plane1, line_3d_dbl))
+  if (!vgl_intersection(plane0, plane1, line_3d_dbl))
     return false;
   //cast back to type
   vgl_point_3d<double> lp0d = line_3d_dbl.point();
@@ -42,6 +43,7 @@ tangent_3d_from_2d(T img_a0, T img_b0, T img_c0,
   line_3d = vgl_infinite_line_3d<T>(lp0, dir0);
   return true;
 }
+
 template <class T>
 bool bvxm_von_mises_tangent_processor<T>::
 pos_dir_from_tangent_plane(vgl_plane_3d<T> const& plane,
@@ -60,7 +62,7 @@ pos_dir_from_tangent_plane(vgl_plane_3d<T> const& plane,
   // the current mean x0 for the tangent line
   pos_t pos_mean = pos_dist.mean();
   vgl_vector_2d<T> pos_meanv(pos_mean[0], pos_mean[1]);
-  // current mean tangent line 
+  // current mean tangent line
   vgl_infinite_line_3d<T> tan_line0(pos_meanv, muv);
 
   // the point on the line closest to the origin
@@ -91,6 +93,7 @@ pos_dir_from_image_tangent(T img_a, T img_b, T img_c,
   return bvxm_von_mises_tangent_processor<T>::
     pos_dir_from_tangent_plane(plane_T, pos_dist, dir_dist, line_3d);
 }
+
 template <class T>
 bool bvxm_von_mises_tangent_processor<T>::
 update(  bvxm_voxel_slab<dir_dist_t> & dir_dist,
@@ -102,25 +105,26 @@ update(  bvxm_voxel_slab<dir_dist_t> & dir_dist,
   //the updater
   bsta_von_mises_updater<bsta_von_mises<T, 3> > vm_3d_updater;
   //the slab iterators
-  bvxm_voxel_slab<dir_dist_t>::iterator dir_dist_it = dir_dist.begin();
-  bvxm_voxel_slab<pos_dist_t>::iterator pos_dist_it = pos_dist.begin();
-  bvxm_voxel_slab<dir_t>::const_iterator dir_it = dir.begin();
-  bvxm_voxel_slab<pos_t>::const_iterator pos_it = pos.begin();
-  bvxm_voxel_slab<bool>::const_iterator flag_it = flag.begin();
-  for(; (dir_dist_it!=dir_dist.end())&&(pos_dist_it!=pos_dist.end())&&
-        (dir_it!=dir.end())&&(pos_it!=pos.end())&&(flag_it!=flag.end());
-      ++dir_dist_it, ++pos_dist_it, ++dir_it, ++pos_it, ++flag_it)
-    if(*flag_it)
+  typename bvxm_voxel_slab<dir_dist_t>::iterator dir_dist_it = dir_dist.begin();
+  typename bvxm_voxel_slab<pos_dist_t>::iterator pos_dist_it = pos_dist.begin();
+  typename bvxm_voxel_slab<dir_t>::const_iterator dir_it = dir.begin();
+  typename bvxm_voxel_slab<pos_t>::const_iterator pos_it = pos.begin();
+  typename bvxm_voxel_slab<bool>::const_iterator flag_it = flag.begin();
+  for (;
+       (dir_dist_it!=dir_dist.end())&&(pos_dist_it!=pos_dist.end())&&
+       (dir_it!=dir.end())&&(pos_it!=pos.end())&&(flag_it!=flag.end());
+       ++dir_dist_it, ++pos_dist_it, ++dir_it, ++pos_it, ++flag_it)
+    if (*flag_it)
     {
       T npos = (*pos_dist_it).num_observations + T(1.0);
       T ndir = (*dir_dist_it).num_observations + T(1.0);
-      if(ndir != npos)
+      if (ndir != npos)
         return false;
       T alpha = T(1);
       //case I - initial stage with no learning acceleration
-      if(npos <= k_){
+      if (npos <= k_) {
         alpha = T(1)/npos;
-        if(npos ==1){
+        if (npos ==1) {
           T init_kap = (*dir_dist_it).kappa();//override updater initialization
           vm_3d_updater(*dir_dist_it, *dir_it, alpha);
           (*dir_dist_it).set_kappa(init_kap);
@@ -143,33 +147,33 @@ update(  bvxm_voxel_slab<dir_dist_t> & dir_dist,
       pos_t maxp = s+delta;
       double pos_prob = (*pos_dist_it).probability(minp, maxp);
       double prob = vcl_pow(dir_prob*pos_prob, 0.125);
-      if(prob<0.05) continue;//JLM temporary hardcoded threshold
+      if (prob<0.05) continue;//JLM temporary hardcoded threshold
       //update the number of observations on the pos distribution
       (*pos_dist_it).num_observations = npos;
       //note that von mises does its own attribute updating
       // previous mean direction
       dir_t mean_dir = (*dir_dist_it).mean();
-      vgl_vector_3d<T> mean_dirv(mean_dir[0], mean_dir[1], mean_dir[2]); 
+      vgl_vector_3d<T> mean_dirv(mean_dir[0], mean_dir[1], mean_dir[2]);
       //update the direction
       vm_3d_updater(*dir_dist_it, *dir_it, alpha);
 
       // the updated direction
       dir_t updt_mean = (*dir_dist_it).mean();
       vgl_vector_3d<T> updt_mean_dirv(updt_mean[0], updt_mean[1],
-                                       updt_mean[2]); 
+                                      updt_mean[2]);
       // the current mean position before update
       pos_t mean_pos = (*pos_dist_it).mean();
       vgl_vector_2d<T> mean_posv(mean_pos[0], mean_pos[1]);
 
       // The mean tangent line before update
       vgl_infinite_line_3d<T> mean_line(mean_posv, mean_dirv);
-      
+
       // The sample tangent line
-      vgl_vector_3d<T> samp_dirv((*dir_it)[0],(*dir_it)[1], (*dir_it)[2]); 
+      vgl_vector_3d<T> samp_dirv((*dir_it)[0],(*dir_it)[1], (*dir_it)[2]);
       vgl_vector_2d<T> samp_posv((*pos_it)[0], (*pos_it)[1]);
       vgl_infinite_line_3d<T> samp_line(samp_posv, samp_dirv);
 
-      //Find the endpoints of the line joining the closest points 
+      //Find the endpoints of the line joining the closest points
       //on the mean tangent line and the sample tangent line
       bool u = false;
       vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > closest
@@ -191,10 +195,10 @@ update(  bvxm_voxel_slab<dir_dist_t> & dir_dist,
       bsta_update_gaussian<T, 2>(*pos_dist_it, alpha, adj_samp_pos);
       pos_t diff = mean_pos-(*pos_dist_it).mean();
       double dist = diff.magnitude();
-      if(von_mises_debug)
-        vcl_cout  << vcl_fabs(angle(updt_mean_dirv, mean_dirv))*180/3.14159 
+      if (von_mises_debug)
+        vcl_cout  << vcl_fabs(angle(updt_mean_dirv, mean_dirv))*180*vnl_math::one_over_pi
                   <<' ' << dir_prob << ' ' << pdist << ' ' <<  pos_prob <<'\n';
-        }
+    }
   return true;
 }
 
