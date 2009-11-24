@@ -20,7 +20,7 @@ IF( PYTHON_FOUND )
        reg_boxm.h   reg_boxm.cxx
      )
 
-    ADD_LIBRARY(boxm_batch SHARED ${boxm_batch_sources})
+    ADD_LIBRARY(boxm_batch MODULE ${boxm_batch_sources})
 
     #library has to have different name depending on debug or release version.
     IF(WIN32)
@@ -29,7 +29,7 @@ IF( PYTHON_FOUND )
     SET_TARGET_PROPERTIES(boxm_batch PROPERTIES PREFIX "")
 
 
-    TARGET_LINK_LIBRARIES(boxm_batch bprb brdb bpro_batch vbl boxm boxm_pro boxm_io boxm_opt boxm_opt_pro vpgl_io vpgl_pro vil_io vil_pro)
+    TARGET_LINK_LIBRARIES(boxm_batch bpro_batch boxm_pro boxm_opt_pro vpgl_io vpgl_pro vil_io vil_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm_batch debug ${PYTHON_DEBUG_LIBRARY})
