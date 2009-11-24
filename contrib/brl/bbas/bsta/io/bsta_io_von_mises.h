@@ -31,7 +31,7 @@ template <class T, unsigned n>
 void
 vsl_b_read(vsl_b_istream &is, bsta_von_mises<T,n>& vm)
 {
-  typename bsta_parzen<T,n>::vector_type vector_ mean;
+  typename bsta_parzen<T,n>::vector_type mean;
   T kappa;
   vsl_b_read(is, kappa);
   vsl_b_read(is, mean);
