@@ -12,11 +12,11 @@ SET(boxm_io_sources
    boxm_io_scene_base.cxx   boxm_io_scene_base.h
 )
 
-#AUX_SOURCE_DIRECTORY(Templates boxm_io_sources)
+AUX_SOURCE_DIRECTORY(Templates boxm_io_sources)
 
 ADD_LIBRARY(boxm_io ${boxm_io_sources})
 
-TARGET_LINK_LIBRARIES(boxm_io vcl vgl bgeo ${EXPAT_LIBRARIES} expatpp)
+TARGET_LINK_LIBRARIES(boxm_io boxm ${EXPAT_LIBRARIES} expatpp)
 IF ( APPLE )
   TARGET_LINK_LIBRARIES(boxm_io expat)
 ENDIF ( APPLE )
