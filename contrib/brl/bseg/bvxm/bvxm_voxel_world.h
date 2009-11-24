@@ -1042,8 +1042,6 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
   // parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
-  ocp_datatype min_vox_prob = params_->min_occupancy_prob();
-  ocp_datatype max_vox_prob = params_->max_occupancy_prob();
 
   vcl_cout<<"Get Grid"<<vcl_endl;
   // get ocuppancy probability grid
@@ -1054,21 +1052,17 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it)
     ocp_slab_it->fill(ocp_datatype(1.0f));
 
-  unsigned slab_z=0;
   float xy_spacing=params_->voxel_length();
   vnl_vector_fixed<float,3> cov(xy_spacing,xy_spacing,xy_spacing/2);
 
-  int kernel_size=2;
+  unsigned int kernel_size=2;
+  unsigned int z=0;
 
-
-  int z=0;
-
-  unsigned minz=z-kernel_size<0?0:z-kernel_size;
-  unsigned maxz=z+kernel_size>grid_size.z()-1?grid_size.z()-1:z+kernel_size;
+  unsigned minz=z<kernel_size?0:z-kernel_size;
+  unsigned maxz=z+kernel_size+1>grid_size.z()?grid_size.z()-1:z+kernel_size;
   ocp_slab_it=ocp_grid->slab_iterator(minz,maxz-minz+1);
 
-
-  for (unsigned i=0;i<points.size();i++)
+  for (unsigned i=0;i<points.size();++i)
   {
     vgl_vector_3d<float> index=(points[i]-params_->corner())/params_->voxel_length();
 
@@ -1261,8 +1255,6 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
   }
 
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale_idx);
-  ocp_datatype min_vox_prob = params->min_occupancy_prob();
-  ocp_datatype max_vox_prob = params->max_occupancy_prob();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;

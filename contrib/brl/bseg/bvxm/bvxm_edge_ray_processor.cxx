@@ -668,8 +668,10 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
   //grid size
   bvxm_world_params_sptr params = world_->get_params();
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
+#if 0 // unused variable
   //voxel diagonal radius
   double radius = 0.866*params->voxel_length()*x0_interval;
+#endif // 0
 
   //ray processor for update and utilities
   bvxm_von_mises_tangent_processor<float> tan_proc;

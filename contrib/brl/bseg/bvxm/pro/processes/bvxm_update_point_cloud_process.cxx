@@ -59,8 +59,8 @@ bool bvxm_update_point_cloud_process(bprb_func_process& pro)
   unsigned i = 0;
   vcl_string point_filename = pro.get_input<vcl_string>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  float xy_spacing = pro.get_input<float>(i++);
-  float z_spacing = pro.get_input<float>(i++);
+  /* float xy_spacing = */ pro.get_input<float>(i++);
+  /* float z_spacing  = */ pro.get_input<float>(i++);
   bool use_opinion = pro.get_input<bool>(i++);
 
   vcl_ifstream ifile(point_filename.c_str());

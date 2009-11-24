@@ -189,7 +189,9 @@ static void test_tangent_update()
   bvxm_image_metadata obs2(view_2, c2);
 
   bool init_success = edge_proc.init_von_mises_edge_tangents(obs0, obs1);
+  TEST("init", init_success, true);
   bool update_success = edge_proc.update_von_mises_edge_tangents(obs2);
+  TEST("update", update_success, true);
   //test the resulting grid
   // 3-d tangent position grid distributions
   typedef bvxm_voxel_traits<TANGENT_POS>::voxel_datatype upos_dist_t;
@@ -366,7 +368,7 @@ static void test_tangent_update()
              << ' ' << d0.length() << '\n';
   }
   double final = vsum.length()/cnt;
+  vcl_cout << "Final: " << final << '\n';
 }
 
 TESTMAIN( test_tangent_update );
-
