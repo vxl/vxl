@@ -21,6 +21,7 @@
 #include <boxm/boxm_save_scene_raw.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_base.h>
+#include <boxm/boxm_scene_parser.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <boxm/boxm_triangle_interpolation_iterator.h>
 #include <boxm/boxm_triangle_scan_iterator.h>
@@ -35,6 +36,5 @@
 #include <boxm/pro/boxm_register.h>
 
 #include <boxm/io/boxm_io_scene_base.h>
-#include <boxm/io/boxm_scene_parser.h>
 
 int main() { return 0; }

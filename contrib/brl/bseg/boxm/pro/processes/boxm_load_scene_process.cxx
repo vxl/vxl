@@ -11,7 +11,7 @@
 #include <vcl_fstream.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/io/boxm_scene_parser.h>
+#include <boxm/boxm_scene_parser.h>
 
 namespace boxm_load_scene_process_globals
 {

@@ -27,7 +27,7 @@
 #include <vcl_fstream.h>
 
 #include <boxm/boxm_sample_multi_bin.h>
-#include <boxm/io/boxm_scene_parser.h>
+#include <boxm/boxm_scene_parser.h>
 
 //:global variables
 namespace boxm_create_scene_process_globals

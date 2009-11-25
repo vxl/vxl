@@ -11,6 +11,7 @@ SET(boxm_sources
     boxm_block.txx                         boxm_block.h
     boxm_scene_base.cxx                    boxm_scene_base.h
     boxm_scene.txx                         boxm_scene.h
+    boxm_scene_parser.cxx                  boxm_scene_parser.h
     boxm_sample.txx                        boxm_sample.h
     boxm_sample_multi_bin.txx              boxm_sample_multi_bin.h
  
@@ -47,7 +48,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct vcl vgl vgl_io vgl_xio vbl vsl vpgl vpgl_algo vsol bgeo bsta bsta_algo vul vil imesh)
+TARGET_LINK_LIBRARIES(boxm boct vcl vgl vgl_io vgl_xio vbl vsl vpgl vpgl_algo vsol bgeo bsta bsta_algo vul vil imesh expatpp)
 
 #processes
 SUBDIRS(pro)

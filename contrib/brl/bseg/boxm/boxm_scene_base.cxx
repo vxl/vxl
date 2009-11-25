@@ -1,5 +1,5 @@
 #include "boxm_scene_base.h"
-#include "io/boxm_scene_parser.h"
+#include "boxm_scene_parser.h"
 #include <vcl_cstdio.h>
 
 bool boxm_scene_base::load_scene(vcl_string filename, boxm_scene_parser& parser)

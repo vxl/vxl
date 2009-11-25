@@ -4,7 +4,7 @@
 // \file
 #include "boxm_scene.h"
 #include "boxm_apm_traits.h"
-#include "io/boxm_scene_parser.h"
+#include "boxm_scene_parser.h"
 
 #include <vcl_cmath.h>
 #include <vcl_cstdio.h>

@@ -8,7 +8,6 @@ INCLUDE_DIRECTORIES (${BRL_INCLUDE_DIR}/b3p/expatpp )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
 SET(boxm_io_sources
-   boxm_scene_parser.cxx    boxm_scene_parser.h
    boxm_io_scene_base.cxx   boxm_io_scene_base.h
 )
 
