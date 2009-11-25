@@ -41,7 +41,9 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
     vcl_cerr << "In bvxm_create_voxel_world_process::execute() -- input directory "  << vox_dir << "is not valid!\n";
     return false;
   }
+
   vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: "  << vox_dir << vcl_endl;
+
 
 
   float corner_x = 0.0f;

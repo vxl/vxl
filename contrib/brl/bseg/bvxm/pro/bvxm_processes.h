@@ -31,6 +31,7 @@ DECLARE_FUNC_CONS(bvxm_compare_3d_voxels_process);
 DECLARE_FUNC_CONS(bvxm_create_mog_image_process);
 DECLARE_FUNC_CONS(bvxm_locate_region_process);
 DECLARE_FUNC_CONS(bvxm_get_grid_process);
+DECLARE_FUNC_CONS(bvxm_expected_edge_image_process);
 
 
 //io
@@ -41,14 +42,18 @@ DECLARE_FUNC_CONS(bvxm_test_process);
 //Edges and lidar
 DECLARE_FUNC_CONS(bvxm_update_edges_lidar_process);
 DECLARE_FUNC_CONS(bvxm_update_edges_process);
+DECLARE_FUNC_CONS_INIT(bvxm_update_edge_tangent_process);
 DECLARE_FUNC_CONS(bvxm_update_lidar_process);
 DECLARE_FUNC_CONS(bvxm_update_point_cloud_process);
 DECLARE_FUNC_CONS(bvxm_lidar_edge_detection_process);
 DECLARE_FUNC_CONS(bvxm_lidar_init_process);
 DECLARE_FUNC_CONS(bvxm_detect_edges_process);
+DECLARE_FUNC_CONS(bvxm_detect_edge_tangent_process);
 DECLARE_FUNC_CONS(bvxm_create_synth_lidar_data_process);
 DECLARE_FUNC_CONS(bvxm_save_edges_raw_process);
+DECLARE_FUNC_CONS(bvxm_display_edge_tangent_world_vrml_process);
 DECLARE_FUNC_CONS(bvxm_report_statistics_point_cloud_process);
+
 
 //algo
 DECLARE_FUNC_CONS(bvxm_merge_mog_process);

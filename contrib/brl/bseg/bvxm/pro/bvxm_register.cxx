@@ -28,6 +28,9 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_changes_process, "bvxmDetectChangesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_change_detection_display_process, "bvxmChangeDetectionDisplayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_edges_process, "bvxmDetectEdgesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_expected_edge_image_process, "bvxmExpectedEdgeImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_edge_tangent_process, "bvxmDetectEdgeTangentProcess");
+  REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, bvxm_update_edge_tangent_process, "bvxmUpdateEdgeTangentProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_virtual_view_process, "bvxmRenderVirtualViewProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_render_expected_image_process,"bvxmRenderExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_process, "bvxmUpdateProcess");
@@ -61,6 +64,7 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_mog_image_process,"bvxmCreateMOGImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_locate_region_process,"bvxmLocateRegionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_get_grid_process,"bvxmGetGridProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_display_edge_tangent_world_vrml_process,"bvxmDisplayEdgeTangentWorldVRMLProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_point_cloud_process,"bvxmUpdatePointCloudProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_report_statistics_point_cloud_process,"bvxmReportStatisticsPointCloudProcess");
 }
