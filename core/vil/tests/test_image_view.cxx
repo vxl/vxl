@@ -498,10 +498,13 @@ static void test_image_view_assignment_operator()
 
 
 }
+static void test_non_standard_type();
+
 
 
 static void test_image_view()
 {
+  test_non_standard_type();
   vcl_cout << "****************************************\n"
            << " Testing vil_image_view<byte and float>\n"
            << "****************************************\n";
@@ -531,3 +534,79 @@ static void test_image_view()
 }
 
 TESTMAIN(test_image_view);
+
+
+#include <vil/vil_image_view.txx>
+
+class my_int
+{
+  int a;
+public:
+  my_int(): a(0) {};
+  my_int(const my_int& i): a(i.a) {};
+  explicit my_int(int i): a(i) {};
+  my_int operator +(const my_int& rhs) const
+  {
+    my_int rv;
+    rv.a = this->a + rhs.a;
+    return rv;
+  }
+  my_int operator -(const my_int& rhs) const
+  {
+    my_int rv;
+    rv.a = this->a - rhs.a;
+    return rv;
+  }
+  const my_int& operator -()
+  {
+    this->a = -this->a;
+    return *this;
+  }
+  my_int operator *(int s) const
+  {
+    my_int rv;
+    rv.a = this->a*s;
+    return rv;
+  }
+  const my_int& operator =(double v)
+  {
+    this->a = static_cast<int>(v);
+    return *this;
+  }
+  operator double () const { return (double) this->a; }
+};
+
+
+VIL_IMAGE_VIEW_INSTANTIATE( my_int );
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_components_from_planes(vil_image_view<my_int> &,
+                                           const vil_image_view_base &)
+{ return false; }  // when lhs has scalar pixels, don't attempt conversion
+
+
+VCL_DEFINE_SPECIALIZATION
+void vil_print_value(vcl_ostream& os, const my_int& v)
+{ os<<double(v); }
+
+
+static void test_non_standard_type()
+{
+  vcl_cout << "********************************\n"
+           << " Testing vil_image_view<my_int>\n"
+           << "********************************\n";
+
+  vil_image_view<my_int> my_int_image(3,4);
+
+
+  TEST("vil_image_view<my_int> construction", !my_int_image, false);
+
+  my_int_image.fill(my_int(1));
+  my_int_image(0,0) = my_int(100);
+  my_int_image(2,3) = my_int(100);
+
+  vil_math_scale_values(my_int_image, 2.0);
+  vil_print_all(vcl_cout, my_int_image);
+
+}
+

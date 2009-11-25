@@ -38,7 +38,8 @@ vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes,
 : top_left_(0), istep_(n_interleaved_planes)
 {
   assert(n_planes==1 || n_interleaved_planes==1);
-  assert(n_planes * n_interleaved_planes == 1 ||
+  assert(vil_pixel_format_of(T()) == VIL_PIXEL_FORMAT_UNKNOWN ||
+         n_planes * n_interleaved_planes == 1 ||
          vil_pixel_format_num_components(vil_pixel_format_of(T())) == 1);
   set_size(n_i,n_j,n_planes*n_interleaved_planes);
 }
