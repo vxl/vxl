@@ -18,6 +18,33 @@ void load_samples(vcl_string file, vcl_vector<float>& samples)
   }
 }
 
+void random_sampling(vcl_vector<float> &samples, vcl_vector<float> in_samples, 
+                     int num, bsta_beta<float>& beta)
+{
+  vcl_vector<float> s;
+  vnl_random rand;
+  for (unsigned i=0; i<num; i++) {
+    int index=rand.lrand32(0,in_samples.size()-1);
+    samples.push_back(in_samples[index]);
+    s.push_back(in_samples[index]);
+  }
+  bsta_beta<float> b(s);
+  beta.set_alpha_beta(b.alpha(),b.beta());
+  vcl_cout << beta;
+}
+
+float compare_betas(bsta_beta<float>& beta1, bsta_beta<float>& beta2)
+{
+  float val=0, inc=0.01, total_diff=0;
+  while (val < 1.0) {
+    float diff = beta1.prob_density(val)-beta2.prob_density(val);
+    diff*=diff;
+    total_diff += diff;
+    val+=inc;
+  }
+  return total_diff;
+}
+
 MAIN( test_beta_updater)
 {
   START ("test_beta_model");
@@ -30,14 +57,14 @@ MAIN( test_beta_updater)
   typedef bsta_mixture_fixed<beta_type, 3> mix_beta;
   typedef bsta_num_obs<mix_beta> mix_beta_type;
 
-  bsta_beta<float> beta(2.0, 2.0);
+  bsta_beta<float> beta(100.0, 100.0);
   bsta_num_obs<bsta_beta<float> > init_beta(beta,1);
 
   // single distribution update
   bsta_beta_updater<bsta_beta<float> > updater;
 
-  vcl_ifstream is("beta_distr_2_2.txt");
-  double alpha_=2, beta_=2;
+  vcl_ifstream is("beta_distr_100_100.txt");
+  double alpha_=100, beta_=100;
   while (!is.eof()) {
     float sample;
     is >> sample;
@@ -46,40 +73,37 @@ MAIN( test_beta_updater)
   }
 
   vcl_cout << init_beta;
-  TEST_NEAR("extracting alpha and beta from samples (2,2) - alpha", init_beta.alpha(), alpha_ ,1e-01);
-  TEST_NEAR("extracting alpha and beta from samples (2,2) - beta ", init_beta.beta(), beta_ ,1e-01);
-
-  vcl_cout << "VAR=" << init_beta.var() <<vcl_endl;
+  TEST_NEAR("extracting alpha and beta from samples (100,100) - alpha", init_beta.alpha(), alpha_ ,10.0);
+  TEST_NEAR("extracting alpha and beta from samples (100,100) - beta ", init_beta.beta(), beta_ ,10.0);
 
   mix_beta mix;
   bsta_beta<float> beta1;
   bsta_num_obs<mix_beta_type> model;
 
-  bsta_mix_beta_updater<mix_beta> mix_updater(beta1,0.6f,3);
-  vcl_vector<float> samples2_2, samples2_7, samples7_2;
-  load_samples("beta_distr_2_2.txt", samples2_2);
-  load_samples("beta_distr_2_7.txt", samples2_7);
-  load_samples("beta_distr_7_2.txt", samples7_2);
+  bsta_mix_beta_updater<mix_beta> mix_updater(beta1,0.5f,3);
+  vcl_vector<float> samples100_100, samples10_100, samples100_10, samples;
+  load_samples("beta_distr_100_100.txt", samples100_100);
+  load_samples("beta_distr_10_100.txt", samples10_100);
+  load_samples("beta_distr_100_10.txt", samples100_10);
 
-  int size=samples2_2.size();
+  // get random samples to feed the mixture
+  bsta_beta<float> beta100_100, beta10_100, beta100_10;
+  random_sampling(samples, samples100_100, 1000, beta100_100);
+  random_sampling(samples, samples10_100, 1000, beta10_100);
+  //random_sampling(samples, samples100_10, 200, beta100_10);
 
-  // get random samples tt feed the mixture
+  // shuffle the samples so we get a random mix of 3 distributions
   vnl_random rand;
-  for (unsigned i=0; i<600; i++) {
-    int index=rand.lrand32(0,size-1);
-    beta_type::vector_type obs(samples2_2[index]);
-    mix_updater(model, obs);
+  for (unsigned i=0; i<samples.size(); i++) {
+    int i1=rand.lrand32(0,samples.size()-1);
+    int i2=rand.lrand32(0,samples.size()-1);
+    float temp = samples[i1];
+    samples[i1] = samples[i2];
+    samples[i2] = temp;
   }
-
-  for (unsigned i=0; i<200; i++) {
-    int index=rand.lrand32(0,size-1);
-    beta_type::vector_type obs(samples2_2[index]);
-    mix_updater(model, obs);
-  }
-
-  for (unsigned i=0; i<200; i++) {
-    int index=rand.lrand32(0,size-1);
-    beta_type::vector_type obs(samples7_2[index]);
+  
+  for (unsigned i=0; i<samples.size(); i++) {
+    beta_type::vector_type obs(samples[i]);
     mix_updater(model, obs);
   }
 
@@ -88,8 +112,10 @@ MAIN( test_beta_updater)
   vcl_cout << "W3=" << model.weight(2) << vcl_endl << vcl_endl;
 
   beta_type d1 = model.distribution(0);
+  float diff1 = compare_betas(d1, beta100_100);
   vcl_cout << d1;
   beta_type d2 = model.distribution(1);
+  float diff2 = compare_betas(d2, beta10_100);
   vcl_cout << d2;
   beta_type d3 = model.distribution(2);
   vcl_cout << d3;

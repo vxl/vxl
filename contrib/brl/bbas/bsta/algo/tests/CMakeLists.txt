@@ -12,9 +12,9 @@ ADD_EXECUTABLE( bsta_algo_test_all
 
 TARGET_LINK_LIBRARIES( bsta_algo_test_all bsta_algo testlib)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_2_2.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_2_2.txt COPYONLY )
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_2_7.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_2_7.txt COPYONLY )
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_7_2.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_7_2.txt COPYONLY )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_100_100.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_100_100.txt COPYONLY )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_10_100.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_10_100.txt COPYONLY )
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_100_10.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_100_10.txt COPYONLY )
 
 ADD_TEST( bsta_algo_test_fit_weibull  ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_all test_fit_weibull )
 ADD_TEST( bsta_algo_test_gaussian_model ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_all test_gaussian_model )
