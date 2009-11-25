@@ -3,9 +3,9 @@
 #define bsta_beta_f1_h_
 //:
 // \file
-// \brief beta distribution with float type
-// \author Peter Vanroose
-// \date September 25, 2009
+// \brief A beta distribution in 1D with type float
+// \author Gamze Tunali (gtunali@brown.edu)
+// \date June 13, 2006
 
 #include "bsta_beta.h"
 

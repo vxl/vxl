@@ -32,6 +32,8 @@ class bsta_beta : public bsta_distribution<T,1>
   //: constructs from a set of sample values
   bsta_beta(vcl_vector<T> x);
 
+  static bool bsta_beta_from_moments(T mean, T var, T& alpha, T& beta);
+
   T alpha() const { return alpha_; }
 
   T beta() const { return beta_; }

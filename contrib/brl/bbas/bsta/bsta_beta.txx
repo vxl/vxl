@@ -41,6 +41,18 @@ bsta_beta<T>::bsta_beta(vcl_vector<T> x)
   beta_=(1-mean)*t;
 }
 
+template <class T>
+bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
+{
+  if (var == 0)
+    return false;
+    
+  T t = (mean*(1-mean)/var)-1;
+  alpha=mean*t;
+  beta=(1-mean)*t;
+  return true;
+}
+
 #if 0
 template <class T>
 void bsta_beta<T>::set_alpha_beta(T alpha, T beta)

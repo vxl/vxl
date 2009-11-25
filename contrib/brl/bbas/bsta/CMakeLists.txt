@@ -47,6 +47,7 @@ SET(bsta_sources
   bsta_sampler.h   bsta_sampler.txx
   bsta_von_mises.h
   bsta_beta.h      bsta_beta.txx
+  bsta_beta_f1.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_sources)
