@@ -5,9 +5,18 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+
 ******************************
 VXL 1.14.0      - January 2010
 ******************************
+
+      - Added some greyscale morphology functionality to vil3d
+      
+      - vil has been relaxed to allow use of user-defined types as pixels.
+      
+      - Added some simple support for NA value to represent missing data in vnl
+      
+      - Added a vnl_svd_fixed which avoids use of heap memory.
 
       - Added core/vgl/algo/vgl_orient_box_3d_operators: non-axis-aligned
         minimal-volume bounding box calculations. (Currently just a stub.)
@@ -16,6 +25,9 @@ VXL 1.14.0      - January 2010
 VXL 1.13.0    - September 2009
 ******************************
 
+      - Created a command-line tool image3d_math to manipulate 3D images a little like
+        ImageMagick does with 2D.
+        
       - Promoted brl/bbas/vidl2 to core/vidl.  This replaces the old vidl (now vidl1).
 
       - Renamed core/vidl to core/vidl1.  vidl1 is now deprecated.
@@ -36,6 +48,8 @@ VXL 1.13.0    - September 2009
       - Added class vgl_ellipsoid_3d to vgl/algo.
 
       - Added vnl_power.h : function to raise square matrix to integer power.
+      
+      - Add header-only loading capabilities to the v3i loader (VXL's native 3D image format).
 
       - Bug fixes in the TIFF, PNM and IRIS image file format writers which
         allows them now to correctly write cropped images.
