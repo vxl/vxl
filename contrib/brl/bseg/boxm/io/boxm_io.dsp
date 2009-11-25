@@ -98,6 +98,9 @@ SOURCE=.\boxm_scene_parser.cxx
 # Begin Source File
 SOURCE=.\boxm_io_scene_base.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+boxm_scene_base-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
