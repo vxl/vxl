@@ -122,7 +122,7 @@ static double angle_0_360(double angle)
   return ang;
 }
 
-#if 0 // This method does not exist!
+
 vil_image_view<float>
 bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
                                     double noise_multiplier,
@@ -219,7 +219,7 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
   }
   return edge_img;
 }
-#endif // 0
+
 
 void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
 {

@@ -28,8 +28,26 @@ class bvxm_edge_util
 
   static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
 
+  //returns a binary map of edges with pixel resolution
   static vil_image_view<vxl_byte> detect_edges(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth, bool automatic_threshold, bool junctionp, bool aggressive_junction_closure);
 
+  // return image has three planes:
+  // plane 0 - sub-pixel column position of the edge.
+  //           Negative value indicates no edge is present
+  // plane 1 - sub-pixel row position of the edge.
+  //           Negative value indicates no edge is present
+  // plane 2 - Orientation of local edge tangent direction in radians
+  // range is [0, 2pi). 
+  static 
+vil_image_view<float>
+bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
+                                    double noise_multiplier,
+                                    double smooth,
+                                    bool automatic_threshold,
+                                    bool junctionp,
+                                    bool aggressive_junction_closure);
+
+  
   static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
 
   static int convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
