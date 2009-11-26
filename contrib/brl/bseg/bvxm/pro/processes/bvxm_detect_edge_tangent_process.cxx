@@ -45,12 +45,12 @@ bool bvxm_detect_edge_tangent_process_cons(bprb_func_process& pro)
   // plane 1 - sub-pixel row position of the edge.
   //           Negative value indicates no edge is present
   // plane 2 - Orientation of local edge tangent direction in radians
-  // range is [0, 2pi). 
+  // range is [0, 2pi).
   // case line_2d
   // plane 0 - line coefficient a --
   //                                |-- components of line normal vector
   // plane 1 - line coefficient b --
-  //           
+  //
   // plane 2 - line coefficient c
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -79,7 +79,7 @@ bool bvxm_detect_edge_tangent_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view<vxl_byte> input_image = 
+  vil_image_view<vxl_byte> input_image =
     *vil_convert_cast(vxl_byte(), input_image_sptr);
 
   vcl_string out_type = pro.get_input<vcl_string>(1);
@@ -96,7 +96,7 @@ bool bvxm_detect_edge_tangent_process(bprb_func_process& pro)
   vcl_cout << "Edge detection parameters\n";
   pro.parameters()->print_all(vcl_cout);
 #endif
-  vil_image_view<float> edge_image = 
+  vil_image_view<float> edge_image =
     bvxm_edge_util::detect_edge_tangent(input_image,
                                         noise_multiplier,
                                         smooth,
@@ -105,25 +105,25 @@ bool bvxm_detect_edge_tangent_process(bprb_func_process& pro)
                                         aggressive_junction_closure);
 
   // return the output edge image in pos_dir format
-  if(out_type=="pos_dir"){
+  if (out_type=="pos_dir") {
     pro.set_output_val<vil_image_view_base_sptr>(0,new vil_image_view<float>(edge_image));
     return true;
   }
   //else convert to line format
-  if(out_type == "line_2d"){
+  if (out_type == "line_2d") {
     unsigned ni = edge_image.ni(), nj = edge_image.nj();
     vil_image_view<float>* line_image = new vil_image_view<float>(ni, nj, 3);
     line_image->fill(-2.0f);
-    for(unsigned j = 0; j<nj; ++j)
-      for(unsigned i = 0; i<ni; ++i){
+    for (unsigned j = 0; j<nj; ++j)
+      for (unsigned i = 0; i<ni; ++i) {
         float x = edge_image(i,j,0);
         float y = edge_image(i,j,1);
-        if(x<0||y<0)
+        if (x<0||y<0)
           continue;
         float angle = edge_image(i,j,2);
-        vgl_vector_2d<float> tan(vcl_cos(angle), vcl_sin(angle));
+        vgl_vector_2d<float> tangent(vcl_cos(angle), vcl_sin(angle));
         vgl_point_2d<float> pt(x,y);
-        vgl_line_2d<float> l(pt, tan);
+        vgl_line_2d<float> l(pt, tangent);
         float a = l.a(), b = l.b(), c = l.c();
         float norm = vcl_sqrt(a*a+b*b);
         a/=norm; b/=norm; c/=norm;
