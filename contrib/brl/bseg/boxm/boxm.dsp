@@ -120,6 +120,12 @@ SOURCE=.\boxm_triangle_scan_iterator.cxx
 SOURCE=.\boxm_simple_grey_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_scene_parser.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_mob_grey_processor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
@@ -364,6 +370,12 @@ SOURCE=.\boxm_depth_image_triangle.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_save_scene_raw.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_scene_parser.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_mob_grey_processor.h
 # End Source File
 # End Group
 # End Target

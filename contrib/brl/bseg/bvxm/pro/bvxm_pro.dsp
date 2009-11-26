@@ -225,6 +225,18 @@ SOURCE=.\processes/bvxm_update_point_cloud_process.cxx
 SOURCE=.\processes/bvxm_report_statistics_point_cloud_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_display_edge_tangent_world_vrml_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_expected_edge_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_edge_tangent_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_edge_tangent_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -367,6 +379,18 @@ SOURCE=.\processes/bvxm_update_point_cloud_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_report_statistics_point_cloud_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_display_edge_tangent_world_vrml_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_update_edge_tangent_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_expected_edge_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_detect_edge_tangent_process.h
 # End Source File
 # End Group
 # End Target
