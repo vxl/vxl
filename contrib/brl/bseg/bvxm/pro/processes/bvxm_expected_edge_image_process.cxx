@@ -1,4 +1,4 @@
-// This is brl/bseg/bvxm/pro/processes/bvxm_rpc_registration_process.cxx
+// This is brl/bseg/bvxm/pro/processes/bvxm_expected_edge_image_process.cxx
 #include "bvxm_expected_edge_image_process.h"
 //:
 // \file
@@ -58,7 +58,7 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   using namespace bvxm_expected_edge_image_process_globals;
 
   //check number of inputs
-  if ( !pro.verify_inputs()){
+  if ( !pro.verify_inputs()) {
     vcl_cout << pro.name() << " - invalid inputs " << vcl_endl;
     return false;
   }
@@ -70,9 +70,6 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(1);
   bvxm_edge_ray_processor edge_proc(vox_world);
 
-
-  
-
   unsigned ni = pro.get_input<unsigned>(2);
   unsigned nj = pro.get_input<unsigned>(3);
 
@@ -81,7 +78,7 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   // scale of image
   unsigned scale = pro.get_input<unsigned>(5);
 
-int num_observations = vox_world->num_observations<EDGES>(0,scale);
+  int num_observations = vox_world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
 
   // render the expected edge image
@@ -90,14 +87,13 @@ int num_observations = vox_world->num_observations<EDGES>(0,scale);
   vil_image_view<float>* fimg = new vil_image_view<float>(ni,nj,1);
   fimg->fill(0.0f);
   vil_image_view_base_sptr expected_edge_image_sptr = fimg;
-  
+
   edge_proc.expected_edge_image(camera_metadata_inp,
                                 expected_edge_image_sptr,
                                 n_normal,scale);
 
   for (unsigned i=0; i<ni; i++) {
     for (unsigned j=0; j<nj; j++) {
-
       (*fimg)(i,j) = static_cast<unsigned char>(255.0*((*fimg)(i,j)));
     }
   }
