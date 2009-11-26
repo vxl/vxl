@@ -944,6 +944,7 @@ template bool vgl_intersection(vgl_line_2d<T > const&,vgl_line_2d<T > const&,vgl
 template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double); \
 template bool vgl_intersection(vgl_box_2d<T > const&,vgl_polygon<T > const&); \
 template bool vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_line_segment_3d<T > &); \
+template bool vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_infinite_line_3d<T >&); \
 VGL_INTERSECTION_BOX_INSTANTIATE(T)
 
 #endif // vgl_intersection_txx_
