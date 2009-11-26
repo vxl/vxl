@@ -93,9 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm_scene_parser.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_io_scene_base.cxx
 # End Source File
 # Begin Source File
@@ -104,9 +101,6 @@ SOURCE=.\Templates/vbl_io_smart_ptr+boxm_scene_base-.cxx
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\boxm_scene_parser.h
-# End Source File
 # Begin Source File
 SOURCE=.\boxm_io_scene_base.h
 # End Source File

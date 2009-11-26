@@ -356,6 +356,9 @@ SOURCE=.\bsta_von_mises.h
 # Begin Source File
 SOURCE=.\bsta_von_mises.txx
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_beta_f1.h
+# End Source File
 # End Group
 # End Target
 # End Project
