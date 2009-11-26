@@ -23,8 +23,8 @@ inline double vil3d_abs_shuffle_distance(T1 v0, const T2* im,
   return min_v;
 }
 
-//: Return min difference of pixels under structuring element centred at (i0,j0)
-//  I.e., returns minimum of |v0-image(i,j,plane)| over (i,j) in element.
+//: Return min difference of pixels under structuring element centred at (i0,j0,k0)
+//  I.e., returns minimum of |v0-image(i,j,k,plane)| over (i,j,k) in element.
 //  Checks boundary overlap.
 template <class T1, class T2>
 inline double vil3d_abs_shuffle_distance(T1 v0, const vil3d_image_view<T2>& image,
