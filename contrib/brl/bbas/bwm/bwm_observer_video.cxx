@@ -766,8 +766,7 @@ save_as_image_list(vcl_string const& path)
   if(!os.is_open())
     return false;
 
- video_istr_->seek_frame(0);
-    unsigned index = 0;
+  video_istr_->seek_frame(0);
     while(true){
       vidl_frame_sptr frame = video_istr_->current_frame();
       if(!frame)
