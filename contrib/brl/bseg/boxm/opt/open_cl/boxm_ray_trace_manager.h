@@ -3,7 +3,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <cl.h>
+#include <CL/cl.h>
 #include <boct/boct_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_array_2d.h>

@@ -95,7 +95,7 @@ MAIN( test_ray_trace )
   if (!test_driver.init())
     return 0;
   ray_trace_tests(test_driver);
-  //ray_mgr->print_ray_results();
+  test_driver.print_kernel_usage_info();
    open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_dalmation.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());
 #if 0
    open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_lena.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());

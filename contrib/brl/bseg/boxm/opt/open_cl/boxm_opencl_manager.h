@@ -18,7 +18,8 @@
 #include <vcl_map.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <cl.h>
+#include <CL/cl.h>
+#include <vcl_cstddef.h>
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
 #define GROUP_SIZE 64
@@ -29,7 +30,7 @@ template <class T>
 class boxm_opencl_manager
 {
  protected:
-  vcl_size_t device_list_size_;
+  vcl_size_t number_devices_;
   vcl_size_t max_work_group_size_;   //!< Max allowed work-items in a group
   cl_uint max_dimensions_;           //!< Max group dimensions allowed
   vcl_size_t * max_work_item_sizes_; //!< Max work-items sizes in each dimension

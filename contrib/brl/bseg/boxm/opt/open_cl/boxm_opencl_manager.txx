@@ -62,41 +62,42 @@ bool boxm_opencl_manager<T>::initialize_cl()
   {
     return false;
   }
-
+  vcl_size_t device_list_size = 0;
   // First, get the size of device list data
   status = clGetContextInfo(context_,
                             CL_CONTEXT_DEVICES,
                             0,
                             NULL,
-                            &device_list_size_);
+                            &device_list_size);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clGetContextInfo failed."))
     return false;
+  number_devices_ = device_list_size/sizeof(cl_device_id);
 
   // Now allocate memory for device list based on the size we got earlier
-  devices_ = (cl_device_id *)malloc(device_list_size_);
+  devices_ = (cl_device_id *)malloc(device_list_size);
   if (devices_==NULL) {
     vcl_cout << "Failed to allocate memory (devices).\n";
     return false;
   }
-
+  
   // Now, get the device list data
   status = clGetContextInfo(context_,
                             CL_CONTEXT_DEVICES,
-                            device_list_size_,
+                            device_list_size,
                             devices_,
                             NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clGetGetContextInfo failed."))
     return false;
-
+  vcl_size_t max_work_group_size = 0;
   // Get Device specific Information
   status = clGetDeviceInfo(devices_[0],
                            CL_DEVICE_MAX_WORK_GROUP_SIZE,
                            sizeof(vcl_size_t),
-                           (void*)&max_work_group_size_,
+                           (void*)&max_work_group_size,
                            NULL);
 
   if (!this->check_val(status,
@@ -104,6 +105,7 @@ bool boxm_opencl_manager<T>::initialize_cl()
                        "clGetDeviceInfo CL_DEVICE_MAX_WORK_GROUP_SIZE failed."))
     return false;
 
+  max_work_group_size_ = max_work_group_size/sizeof(vcl_size_t);
 
   status = clGetDeviceInfo(devices_[0],
                            CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS,
@@ -111,7 +113,7 @@ bool boxm_opencl_manager<T>::initialize_cl()
                            (void*)&max_dimensions_,
                            NULL);
 
-  i f(!this->check_val(status,
+  if(!this->check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS failed."))
     return false;
@@ -210,22 +212,22 @@ bool boxm_opencl_manager<T>::initialize_cl()
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
     return false;
-
+  unsigned size = sizeof(vcl_size_t);
   vcl_cout << "Context Description\n"
-           << " Number of devices: " << device_list_size_ << '\n'
+           << " Number of devices: " << number_devices_ << '\n'
            << " Number of compute units: " << max_compute_units_ << '\n'
            << " Maximum clock frequency: " << max_clock_freq_/1000.0 << " GHz\n"
            <<" Total global memory: "<<total_global_memory_/1.0e9 << " GBytes\n"
            <<" Total local memory: "<< total_local_memory_/1000.0 << " KBytes\n"
            << " Maximum work group size: " << max_work_group_size_ << '\n'
-           << " Maximum work item sizes: (" << (cl_uint)max_work_item_sizes_[0] << ','
-           << (cl_uint)max_work_item_sizes_[1] << ','
-           << (cl_uint)max_work_item_sizes_[2] << ")\n"
+           << " Maximum work item sizes: (" << (cl_uint)max_work_item_sizes_[0]/size << ','
+           << (cl_uint)max_work_item_sizes_[1]/size << ','
+           << (cl_uint)max_work_item_sizes_[2]/size << ")\n"
            << " Preferred short vector length: " << vector_width_short_ << '\n'
            << " Preferred float vector length: " << vector_width_float_ << '\n'
-           << " image support " << image_support_ << '\n'
-           << " Device ids: (" << devices_[0] << ','
-           << devices_[1] << ','<< devices_[2] << ','<< devices_[3] << ")\n";
+           << " image support " << image_support_ << '\n';
+  for(unsigned id = 0; id<number_devices_; ++id)
+    vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
 
   return true;
 }

@@ -1,17 +1,17 @@
-void expected_image_funct(__global int4* cells, __global float2* cell_data,
-                          int cell_ptr, float d, float4* data_return)
+void expected_image_funct(__global float2* cell_data, int data_ptr,
+                          float d, float4* data_return)
 {
-  int data_ptr = cells[cell_ptr].z;
-  if(data_ptr<0)
-    return;
+
   float2 data = cell_data[data_ptr];
   float alpha = data.x;
   if(alpha<0) return;
+
   float expected_int_cell = data.y;
   float alpha_integral = (*data_return).x;
-  float vis = (*data_return).y;
-  float expected_int = (*data_return).z;
-  float norm = (*data_return).w;
+  float vis            = (*data_return).y;
+  float expected_int   = (*data_return).z;
+  float intensity_norm = (*data_return).w;
+
   alpha_integral += alpha*d;
   float vis_prob_end = exp(-alpha_integral);
   float omega = vis - vis_prob_end;
@@ -19,11 +19,8 @@ void expected_image_funct(__global int4* cells, __global float2* cell_data,
   (*data_return).x = alpha_integral;
   (*data_return).y = vis_prob_end;
   (*data_return).z = expected_int;
-  (*data_return).w = norm + omega;
-#if 0
-  float result = (data.x)*(data.y);
-  (*data_return) += (float4)result;
-#endif
+  (*data_return).w = intensity_norm + omega;
+
 }
 
 __kernel 
@@ -74,37 +71,47 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
     //current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
 
-    //exit point of ray
+    //exit point of ray (if not found, terminate ray)
     if(!cell_exit_point(ray_o, ray_d, cell_min, cell_max, &exit_pt)){
       break;
     }
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
 
-    float d = distance(entry_pt, exit_pt);
-    expected_image_funct(cells, cell_data, curr_cell_ptr, d, &data_return);
-
+    data_ptr = cells[curr_cell_ptr].z;
+    if(data_ptr>=0){
+      float d = distance(entry_pt, exit_pt);
+      expected_image_funct(cell_data, data_ptr, d, &data_return);
+    }
     ////////////////////////////////////////////////////////
+
+    //if the ray pierces the volume surface then terminate the ray
     if(exit_pt.x>=1.0f||exit_pt.y>=1.0f||exit_pt.z>=1.0f)
       break;
     if(exit_pt.x<=0.0f||exit_pt.y<=0.0f||exit_pt.z<=0.0f)
       break;
 
+    //ray continues: make the current entry point the previous exit point
     entry_pt = exit_pt;
+
     //location code of exit point
     short4 exit_loc_code = loc_code(exit_pt, root.w);
     //the exit face mask
     short4 exit_face = cell_exit_face(exit_pt, cell_min, cell_max);
-    if(exit_face.x<0)
+
+    if(exit_face.x<0)//exit face not defined
       {
         //need to traverse from root to get to exit_pt
         curr_cell_ptr = traverse(cells, root_ptr, root, 
                                  exit_loc_code, &curr_loc_code);
         goto done; 
       }
+
     //find the neighboring cell at the exit face
     neighbor_ptr =   neighbor(cells, curr_cell_ptr, curr_loc_code,
                                  exit_face, n_levels, &neighbor_code);
+
+    //if no neighbor then terminate ray
     if(neighbor_ptr<0)
       break;
 
@@ -113,10 +120,16 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
     curr_cell_ptr = traverse_force(cells, neighbor_ptr, neighbor_code,
                                    exit_loc_code, &curr_loc_code);
       
-    //the current cell is now the cell reached by the neighbor's traverse
+    //the current cell (cells[curr_cell_ptr])is the cell reached by 
+    //the neighbor's traverse
+
   done:
     count++;
   }
+  // note that the following code is application dependent
+  // should have a cleanup functor for expected image
+  // also it is not necessary to have a full float4 as the 
+  // output type a single scalar float array is sufficient
 
   //output data
   float expected = data_return.z;

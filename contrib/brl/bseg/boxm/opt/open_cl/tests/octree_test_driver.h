@@ -4,7 +4,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <cl.h>
+#include <CL/cl.h>
 #include <boct/boct_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
@@ -16,8 +16,9 @@
 class octree_test_driver
 {
   boxm_ray_trace_manager* cl_manager_;
-  cl_ulong used_local_memory_;       /**< Used local memory */
-  cl_command_queue command_queue_;      /**< CL command queue */
+  cl_ulong used_local_memory_;      
+  cl_ulong kernel_work_group_size_; 
+  cl_command_queue command_queue_;  
   cl_mem   input_cell_buf_;
   cl_mem   input_data_buf_;
   cl_mem   input_ray_origin_buf_;
@@ -75,6 +76,8 @@ class octree_test_driver
   int cleanup_ray_test();
 
   vcl_size_t n_rays() const {return cl_manager_->n_rays();}
+
+  void print_kernel_usage_info();
  private:
   int set_tree_args();
   int set_ray_trace_args();
