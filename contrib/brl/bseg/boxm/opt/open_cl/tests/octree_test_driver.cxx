@@ -135,13 +135,12 @@ int octree_test_driver::run_tree_test_kernels()
                                     &used_local_memory_,
                                     NULL);
 
-  if(!this->check_val(
-                      status,
-                      CL_SUCCESS, 
-                      "clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
-    {
-      return SDK_FAILURE;
-    }
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+  {
+    return SDK_FAILURE;
+  }
 
   status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
                                     cl_manager_->devices()[0],
@@ -149,19 +148,16 @@ int octree_test_driver::run_tree_test_kernels()
                                     sizeof(cl_ulong),
                                     &kernel_work_group_size_,
                                     NULL);
-  if(!this->check_val(
-                      status,
-                      CL_SUCCESS, 
+  if (!this->check_val(status,
+                      CL_SUCCESS,
                       "clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
-    {
-      return SDK_FAILURE;
-    }
+  {
+    return SDK_FAILURE;
+  }
 
-
-
-  size_t globalThreads[]= {cl_manager_->n_ray_groups()*
-                           cl_manager_->group_size()};
-  size_t localThreads[] = {cl_manager_->group_size()};
+  vcl_size_t globalThreads[]= {cl_manager_->n_ray_groups()*
+                               cl_manager_->group_size()};
+  vcl_size_t localThreads[] = {cl_manager_->group_size()};
 
   if (used_local_memory_ > cl_manager_->total_local_memory())
   {
@@ -263,13 +259,12 @@ int octree_test_driver::run_ray_trace_test_kernels()
                                     &used_local_memory_,
                                     NULL);
 
-  if(!this->check_val(
-                      status,
-                      CL_SUCCESS, 
-                      "clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
-    {
-      return SDK_FAILURE;
-    }
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+  {
+    return SDK_FAILURE;
+  }
 
   status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
                                     cl_manager_->devices()[0],
@@ -277,18 +272,15 @@ int octree_test_driver::run_ray_trace_test_kernels()
                                     sizeof(cl_ulong),
                                     &kernel_work_group_size_,
                                     NULL);
-  if(!this->check_val(
-                      status,
-                      CL_SUCCESS, 
-                      "clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
-    {
-      return SDK_FAILURE;
-    }
-
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+  {
+    return SDK_FAILURE;
+  }
 
   vcl_size_t globalThreads[]= {cl_manager_->n_ray_groups()*
                                cl_manager_->group_size()};
-
   vcl_size_t localThreads[] = {cl_manager_->group_size()};
 
   if (used_local_memory_ > cl_manager_->total_local_memory())
@@ -401,6 +393,6 @@ octree_test_driver::~octree_test_driver()
 
 void octree_test_driver::print_kernel_usage_info()
 {
-  vcl_cout << "Used Local Memory: " << used_local_memory_ << "\n";
-  vcl_cout << "Kernel Vetted Work Group Size: " << kernel_work_group_size_ << "\n";
+  vcl_cout << "Used Local Memory: " << used_local_memory_ << '\n'
+           << "Kernel Vetted Work Group Size: " << kernel_work_group_size_ << vcl_endl;
 }
