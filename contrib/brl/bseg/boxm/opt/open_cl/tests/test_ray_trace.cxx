@@ -76,34 +76,12 @@ MAIN( test_ray_trace )
   boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
     create_test_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation.tif", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_tree.vsl", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_rays.vsl");
 
-#if 0
-  create_test_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/lena-std-gray.tif", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/lena_tree.vsl",root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/lena_rays.vsl");
-
-    create_test_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/lena-std-gray-small.tif",
-                     root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/lena_small_tree.vsl");
-
-    create_test_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation.tif",
-                     root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_tree.vsl");
-
-  ray_mgr->load_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_tree.vsl");
-#endif
-#if 0
-  ray_mgr->load_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/lena_tree.vsl");
-  ray_mgr->load_rays(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/lena_rays.vsl");
-#endif
   octree_test_driver test_driver;
   if (!test_driver.init())
     return 0;
   ray_trace_tests(test_driver);
   test_driver.print_kernel_usage_info();
    open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_dalmation.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());
-#if 0
-   open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_lena.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());
 
-   open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_lena_small.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());
-
-   open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_dalmation.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());
-
-#endif
   SUMMARY();
 }
