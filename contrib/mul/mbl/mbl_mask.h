@@ -15,7 +15,19 @@
 //: Defines a binary mask
 class mbl_mask : public vcl_vector<bool>
 {
+public:
+  mbl_mask() : vcl_vector<bool>() {}
+  mbl_mask(unsigned n, bool val = false) : vcl_vector<bool>(n, false) {}
 };
+
+    //: Given a collection of indices, produce a collection of masks that isolate each indexed set
+    //    The input index set does not need to be zero based or continuous
+    //    The output vector of masks is sorted by corresponding index
+    //    for example: (1,4,2,1,2) will make three masks: (1,0,0,1,0), (0,0,1,0,1) and (0,1,0,0,0)
+    //    which correspond to the index sets 1,2,4
+void mbl_masks_from_index_set(const vcl_vector<unsigned> & indices,
+                              vcl_vector<mbl_mask> & masks);
+
 
     //: Replace 'true' values in B with values taken from A. size of A must match 'true' count in B
 void mbl_mask_on_mask(const mbl_mask & A, mbl_mask & B);

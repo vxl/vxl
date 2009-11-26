@@ -6,9 +6,41 @@
 // \brief Class representing a binary mask, and related functions
 
 #include "mbl_mask.h"
+#include <vcl_set.h>
+#include <vcl_map.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <mbl/mbl_exception.h>
+
+
+
+    //: Given a collection of indices, produce a collection of masks that isolate each indexed set
+    //    The input index set does not need to be zero based or continuous
+    //    The output vector of masks is sorted such that 
+    //    for example: (1,4,2,1,2) will make three masks: (1,0,0,1,0), (0,0,1,0,1) and (0,1,0,0,0)
+    //    which correspond to the sorted index sets 1,2,4
+void mbl_masks_from_index_set(const vcl_vector<unsigned> & indices,
+                              vcl_vector<mbl_mask> & masks)
+{
+  masks.clear();
+  unsigned n = indices.size(), n_masks = 0;
+  vcl_set<unsigned> used_indices;
+  vcl_map<unsigned, unsigned> ordering;
+
+  for (unsigned i = 0 ; i < n ; ++i)
+    used_indices.insert(indices[i]);
+
+  for (vcl_set<unsigned>::const_iterator it = used_indices.begin(),
+                                         end = used_indices.end();
+                                         it != end; ++it)
+  {
+    ordering[*it] = n_masks++;
+    masks.push_back(mbl_mask(n));
+  }
+
+  for (unsigned i = 0 ; i < n ; ++i)
+    masks[ordering[indices[i]]][i] = true;
+}
 
 
     //: Replace 'true' values in B with values taken from A. size of A must match 'true' count in B

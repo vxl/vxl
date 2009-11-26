@@ -209,6 +209,30 @@ void test_mask()
   TEST("Expected fail of mask-on-mask due to count mismatch", mask_mask_failure, true);
   TEST("Result invariant on failure of mask-on-mask operation", (m2 == m_op), true);
 
+
+
+
+  // Test mbl_masks_from_index_set
+  vcl_cout << "\nTesting mbl_masks_from_index_set" << vcl_endl;
+  vcl_vector<unsigned> index_set(5);
+  index_set[0] = 1;
+  index_set[1] = 4;
+  index_set[2] = 2;
+  index_set[3] = 1;
+  index_set[4] = 2;
+  vcl_vector<mbl_mask> masks;
+  mbl_masks_from_index_set(index_set, masks);
+  mbl_mask mask1(5), mask2(5), mask4(5);
+  mask1[0] = true;
+  mask4[1] = true;
+  mask2[2] = true;
+  mask1[3] = true;
+  mask2[4] = true;
+  bool index_masks_match = true;
+  index_masks_match &= (masks[0] == mask1);
+  index_masks_match &= (masks[1] == mask2);
+  index_masks_match &= (masks[2] == mask4);
+  TEST("Correctness of masks from index set", index_masks_match, true);
 }
 
 TESTMAIN(test_mask);
