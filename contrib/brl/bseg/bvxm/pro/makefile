@@ -48,6 +48,10 @@ SOURCES += processes/bvxm_mog_to_mpm_process.cxx
 SOURCES += processes/bvxm_create_synth_lidar_data_process.cxx
 SOURCES += processes/bvxm_update_point_cloud_process.cxx
 SOURCES += processes/bvxm_report_statistics_point_cloud_process.cxx
+SOURCES += processes/bvxm_display_edge_tangent_world_vrml_process.cxx
+SOURCES += processes/bvxm_expected_edge_image_process.cxx
+SOURCES += processes/bvxm_update_edge_tangent_process.cxx
+SOURCES += processes/bvxm_detect_edge_tangent_process.cxx
 
 MANPAGE_SOURCES += bvxm_processes.h
 
