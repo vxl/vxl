@@ -49,6 +49,10 @@ class bwm_observer_video : public bwm_observer_cam
   void play();
   void stop();
   void pause();
+
+  // Save a video as image list
+  bool save_as_image_list(vcl_string const& path);
+
   //correspondence edit methods
 
   //: add a match to an existing correspondence in the current frame

@@ -2,6 +2,7 @@
 #include "bwm_popup_menu.h"
 #include <vsol/vsol_point_2d.h>
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_dialog_extensions.h>
 #include <vnl/vnl_double_4.h>
 bool bwm_tableau_video::handle(const vgui_event &e)
 {
@@ -152,4 +153,18 @@ void bwm_tableau_video::extract_neighborhoods()
   for(unsigned i = 0; i< n1; ++i)
     os << c1_nhd[i] << '\n';
   os.close();
+}
+
+void bwm_tableau_video::save_as_image_list()
+{
+  vcl_string path = "";
+  vcl_string ext = "";
+  static int junk = 0;
+  vgui_dialog_extensions save_dlg("Save Video (Image List)");
+  save_dlg.dir("Video Directory", ext, path);
+  save_dlg.line_break();
+  if (!save_dlg.ask())
+    return;
+  if(!my_observer_->save_as_image_list(path))
+    vcl_cerr << " Unable to save video as image list\n";
 }

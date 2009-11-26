@@ -17,6 +17,7 @@
 #include <vil/vil_convert.h>
 #include <vidl/vidl_config.h>
 #include <vidl/vidl_image_list_istream.h>
+#include <vidl/vidl_image_list_ostream.h>
 #if VIDL_HAS_DSHOW
 #include <vidl/vidl_dshow_file_istream.h>
 #endif
@@ -754,4 +755,28 @@ extract_neighborhoods(unsigned nhd_radius,
     }
   }
   return true;
+}
+
+bool bwm_observer_video::
+save_as_image_list(vcl_string const& path)
+{
+  if(!vul_file::is_directory(path))
+    return false;
+  vidl_image_list_ostream os(path);
+  if(!os.is_open())
+    return false;
+
+ video_istr_->seek_frame(0);
+    unsigned index = 0;
+    while(true){
+      vidl_frame_sptr frame = video_istr_->current_frame();
+      if(!frame)
+        return false;
+      if(!os.write_frame(frame))
+        return false;
+      if(!video_istr_->advance())
+        break;
+    }
+    os.close();
+	return true;
 }

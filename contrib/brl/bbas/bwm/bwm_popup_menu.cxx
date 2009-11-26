@@ -384,6 +384,12 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
     video_submenu.add( "Previous Frame",
       new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::previous_frame));
+
+    video_submenu.separator();
+
+    video_submenu.add( "Save as Image List",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::save_as_image_list));
+
     menu.add("Video", video_submenu);
     menu.separator();
 

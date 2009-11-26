@@ -28,6 +28,8 @@ class bwm_tableau_video : public bwm_tableau_cam
   void play();
   void stop();
   void pause();
+  void save_as_image_list();
+
   //correspondence actions
   void add_match();
   void remove_selected_corr_match();
