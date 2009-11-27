@@ -64,4 +64,17 @@ double vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
                                 const vil3d_structuring_element& element,
                                 bool include_borders=true);
 
+//: Computes shuffle distance between image1 and image2
+// For each pixel in image1 it finds the pixel in image2 with
+// the closest value in an offset area defined by the element.
+// If include_borders is false then only include pixels
+// for which the structuring element is entirely within the image.
+// \relates vil_image_view
+// \relates vil_structuring_element
+template <class T1, class T2>
+void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
+                                const vil3d_image_view<T2>& image2,
+                                const vil3d_structuring_element& element,
+                                vil3d_image_view<T1>& image3);
+
 #endif // vil3d_abs_shuffle_distance_h_
