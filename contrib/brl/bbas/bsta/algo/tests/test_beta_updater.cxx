@@ -18,12 +18,12 @@ void load_samples(vcl_string file, vcl_vector<float>& samples)
   }
 }
 
-void random_sampling(vcl_vector<float> &samples, vcl_vector<float> in_samples, 
+void random_sampling(vcl_vector<float> &samples, vcl_vector<float> in_samples,
                      int num, bsta_beta<float>& beta)
 {
   vcl_vector<float> s;
   vnl_random rand;
-  for (unsigned i=0; i<num; i++) {
+  for (int i=0; i<num; ++i) {
     int index=rand.lrand32(0,in_samples.size()-1);
     samples.push_back(in_samples[index]);
     s.push_back(in_samples[index]);
@@ -101,24 +101,27 @@ MAIN( test_beta_updater)
     samples[i1] = samples[i2];
     samples[i2] = temp;
   }
-  
+
   for (unsigned i=0; i<samples.size(); i++) {
     beta_type::vector_type obs(samples[i]);
     mix_updater(model, obs);
   }
 
-  vcl_cout << "W1=" << model.weight(0) << vcl_endl;
-  vcl_cout << "W2=" << model.weight(1) << vcl_endl;
-  vcl_cout << "W3=" << model.weight(2) << vcl_endl << vcl_endl;
+  vcl_cout << "W1=" << model.weight(0) << vcl_endl
+           << "W2=" << model.weight(1) << vcl_endl
+           << "W3=" << model.weight(2) << vcl_endl << vcl_endl;
 
   beta_type d1 = model.distribution(0);
   float diff1 = compare_betas(d1, beta100_100);
   vcl_cout << d1;
+  TEST_NEAR("diff1", diff1, 0, 0.1);
   beta_type d2 = model.distribution(1);
   float diff2 = compare_betas(d2, beta10_100);
   vcl_cout << d2;
+  TEST_NEAR("diff2", diff1, 0, 0.1);
   beta_type d3 = model.distribution(2);
   vcl_cout << d3;
-  
+  TEST_NEAR("diff3", d3, 0, 0.1);
+
   SUMMARY();
 }

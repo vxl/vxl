@@ -185,7 +185,7 @@ int main(int argc, char** argv)
     vimt_image_pyramid image_pyr;
     pyr_builder.build(image_pyr,image);
 
-    assert(params.res_level<=image_pyr.hi());
+    assert(int(params.res_level)<=image_pyr.hi());
 
     // Select relevant level from pyramid
     const vimt_image_2d_of<float>& imageL
