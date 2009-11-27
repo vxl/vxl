@@ -1133,7 +1133,6 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
   if (vcl_fabs(p2_d) < sqrteps) p2_d = 0.0;
   if (vcl_fabs(p3_d) < sqrteps) p3_d = 0.0;
 
-  vgl_point_3d<double> i_pnt1, i_pnt2;
   vgl_line_3d_2_points<double> edge;
 
   if (p1_d*p2_d > 0 && p1_d*p3_d > 0) // all distances strictly same sign => no intersection
@@ -1143,66 +1142,64 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
   }
   else if (p1_d == 0 && p2_d == 0 && p3_d == 0) //triangle lies in plane
   {
-    i_pnt1.set(vgl_nan, vgl_nan, vgl_nan);
+    vgl_point_3d<double> i_pnt1; i_pnt1.set(vgl_nan, vgl_nan, vgl_nan);
     i_line.set(i_pnt1,i_pnt1);
     return Coplanar;
   }
   else if (p1_d*p2_d > 0) //p1, p2 on same side, p3 on the other
   {
     edge.set(p1,p3);
-    i_pnt1 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt1 = vgl_intersection(edge, i_plane);
     edge.set(p2,p3);
-    i_pnt2 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt2 = vgl_intersection(edge, i_plane);
+    i_line.set(i_pnt1,i_pnt2);
   }
   else if (p1_d*p3_d > 0) //p1, p3 on same side, p2 on the other
   {
     edge.set(p1,p2);
-    i_pnt1 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt1 = vgl_intersection(edge, i_plane);
     edge.set(p3,p2);
-    i_pnt2 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt2 = vgl_intersection(edge, i_plane);
+    i_line.set(i_pnt1,i_pnt2);
   }
   else if (p2_d*p3_d > 0) //p2, p3 on same side, p1 on the other
   {
     edge.set(p2,p1);
-    i_pnt1 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt1 = vgl_intersection(edge, i_plane);
     edge.set(p3,p1);
-    i_pnt2 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt2 = vgl_intersection(edge, i_plane);
+    i_line.set(i_pnt1,i_pnt2);
   }
   else if (p1_d == 0 && p2_d == 0) //edge p1,p2 in plane
   {
-    i_pnt1 = p1;
-    i_pnt2 = p2;
+    i_line.set(p1,p2);
   }
   else if (p1_d == 0 && p3_d == 0) //edge p1,p3 in plane
   {
-    i_pnt1 = p1;
-    i_pnt2 = p3;
+    i_line.set(p1,p3);
   }
   else if (p3_d == 0 && p2_d == 0) //edge p2,p3 in plane
   {
-    i_pnt1 = p2;
-    i_pnt2 = p3;
+    i_line.set(p2,p3);
   }
   else if (p1_d == 0) //just p1 in plane
   {
-    i_pnt1 = p1;
     edge.set(p3,p2);
-    i_pnt2 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt2 = vgl_intersection(edge, i_plane);
+    i_line.set(p1,i_pnt2);
   }
   else if (p2_d == 0) //just p2 in plane
   {
-    i_pnt1 = p2;
     edge.set(p3,p1);
-    i_pnt2 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt2 = vgl_intersection(edge, i_plane);
+    i_line.set(p2,i_pnt2);
   }
   else if (p3_d == 0) //just p3 in plane
   {
-    i_pnt1 = p3;
     edge.set(p2,p1);
-    i_pnt2 = vgl_intersection(edge, i_plane);
+    vgl_point_3d<double> i_pnt2 = vgl_intersection(edge, i_plane);
+    i_line.set(p3,i_pnt2);
   }
-
-  i_line.set(i_pnt1,i_pnt2);
   return Skew;
 }
 

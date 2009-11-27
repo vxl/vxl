@@ -48,10 +48,10 @@ double* MakeQtrMask(double r, int n_wedges)
   for (int i=0; i<R*R*n_wedges; ++i)
     mask[i] = 0.0;
 
-  int ULC, URC, URL, URH, LRC, LLL, LLH;
+  int ULC=0, URL=0, URH=0, LRC=0, LLL=0, LLH=0;
   int InCircle, NoLine, LowLine, HighLine, LowIntersect, HighIntersect;
   double mlow, mhigh, lowangle, highangle;
-  double CA, BA, AA, LA, BXC, BXL, BXH, TXC, TXL, TXH, LYC, LYL, LYH;
+  double CA, BA, AA, LA, BXC=0, BXL, BXH, TXC=0, TXL, TXH, LYC, LYL=0, LYH;
   double RYC, RYL, RYH, AAC, BAC, AAN, BAN, XLC, YLC, XHC, YHC;
 
   //Iterate over the lower left hand corner of each pixel
@@ -64,10 +64,8 @@ double* MakeQtrMask(double r, int n_wedges)
       if ((x+1) * (x+1) + (y+1) * (y+1) <= r * r) { /* Pixel entirely inside */
         CA = 1.0;
         InCircle = 1;
-        URC = 1;
       }
       else { /* Tricky part; circle intersects pixel */
-        URC = 0;
         ULC = x * x + (y+1) * (y+1) <= r * r;
         LRC = (x+1) * (x+1) + y * y <= r * r;
         BXC = vcl_sqrt(r * r - y * y);
