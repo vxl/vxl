@@ -11,7 +11,7 @@
 #include <vil/io/vil_io_memory_chunk.h>
 
 //: Binary save vil_image_view<T> to stream.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vsl_b_write(vsl_b_ostream &os, const vil_image_view<T>& image)
 {
@@ -35,7 +35,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil_image_view<T>& image)
 
 
 //: Binary load vil_image_view<T> from stream.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
 {
@@ -85,7 +85,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
 }
 
 //: Binary load vil_image_view<T> from stream onto the heap
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>*& p)
 {
@@ -102,7 +102,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>*& p)
 }
 
 //: Print human readable summary of a vil_image_view<T> object to a stream
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vsl_print_summary(vcl_ostream& os,const vil_image_view<T>& image)
 {

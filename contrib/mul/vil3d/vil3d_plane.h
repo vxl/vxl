@@ -14,7 +14,7 @@
 
 //: Return a view of im's plane p.
 //  O(1).
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_plane(const vil3d_image_view<T> &im, unsigned p)
 {

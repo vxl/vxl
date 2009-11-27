@@ -25,7 +25,7 @@
 //  both (ie an edge is eliminated if it is strictly lower than a neighbour,
 //  but not if it is the same as two neighbours).
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class srcT, class destT>
 void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
                                 const vil_image_view<srcT>& grad_j,
@@ -62,7 +62,7 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
 //  both (ie an edge is eliminated if it is strictly lower than a neighbour,
 //  but not if it is the same as two neighbours).
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class srcT, class destT>
 void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i,
                                          const vil_image_view<srcT>& grad_j,

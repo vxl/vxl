@@ -140,7 +140,7 @@ class vnl_diag_matrix_fixed
 };
 
 //:
-// \relates vnl_diag_matrix_fixed
+// \relatesalso vnl_diag_matrix_fixed
 template <class T, unsigned int N>
 vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix_fixed<T,N> const&);
 
@@ -184,7 +184,7 @@ inline T vnl_diag_matrix_fixed<T,N>::determinant() const
 }
 
 //: Multiply two vnl_diag_matrices.  Just multiply the diag elements - n flops
-// \relates vnl_diag_matrix_fixed
+// \relatesalso vnl_diag_matrix_fixed
 template <class T, unsigned int N>
 inline vnl_diag_matrix_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& B)
 {
@@ -195,8 +195,8 @@ inline vnl_diag_matrix_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& A
 }
 
 //: Multiply a vnl_matrix by a vnl_diag_matrix_fixed.  Just scales the columns - mn flops
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_matrix
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_matrix
 template <class T, unsigned int R, unsigned int C>
 inline vnl_matrix_fixed<T,R,C> operator* (vnl_matrix_fixed<T,R,C> const& A, vnl_diag_matrix_fixed<T,C> const& D)
 {
@@ -208,8 +208,8 @@ inline vnl_matrix_fixed<T,R,C> operator* (vnl_matrix_fixed<T,R,C> const& A, vnl_
 }
 
 //: Multiply a vnl_diag_matrix_fixed by a vnl_matrix.  Just scales the rows - mn flops
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_matrix
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_matrix
 template <class T, unsigned int R, unsigned int C>
 inline vnl_matrix_fixed<T,R,C> operator* (vnl_diag_matrix_fixed<T,R> const& D, vnl_matrix_fixed<T,R,C> const& A)
 {
@@ -222,7 +222,7 @@ inline vnl_matrix_fixed<T,R,C> operator* (vnl_diag_matrix_fixed<T,R> const& D, v
 }
 
 //: Add two vnl_diag_matrices.  Just add the diag elements - n flops
-// \relates vnl_diag_matrix_fixed
+// \relatesalso vnl_diag_matrix_fixed
 template <class T, unsigned int N>
 inline vnl_diag_matrix_fixed<T,N> operator+ (vnl_diag_matrix_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& B)
 {
@@ -233,8 +233,8 @@ inline vnl_diag_matrix_fixed<T,N> operator+ (vnl_diag_matrix_fixed<T,N> const& A
 }
 
 //: Add a vnl_diag_matrix_fixed to a vnl_matrix.  n adds, mn copies.
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_matrix
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_matrix
 template <class T, unsigned int N>
 inline vnl_matrix_fixed<T,N,N> operator+ (vnl_matrix_fixed<T,N,N> const& A, vnl_diag_matrix_fixed<T,N> const& D)
 {
@@ -246,8 +246,8 @@ inline vnl_matrix_fixed<T,N,N> operator+ (vnl_matrix_fixed<T,N,N> const& A, vnl_
 }
 
 //: Add a vnl_matrix to a vnl_diag_matrix_fixed.  n adds, mn copies.
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_matrix
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_matrix
 template <class T, unsigned int N>
 inline vnl_matrix_fixed<T,N,N> operator+ (vnl_diag_matrix_fixed<T,N> const& D, vnl_matrix_fixed<T,N,N> const& A)
 {
@@ -255,7 +255,7 @@ inline vnl_matrix_fixed<T,N,N> operator+ (vnl_diag_matrix_fixed<T,N> const& D, v
 }
 
 //: Subtract two vnl_diag_matrices.  Just subtract the diag elements - n flops
-// \relates vnl_diag_matrix_fixed
+// \relatesalso vnl_diag_matrix_fixed
 template <class T, unsigned int N>
 inline vnl_diag_matrix_fixed<T,N> operator- (vnl_diag_matrix_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& B)
 {
@@ -266,8 +266,8 @@ inline vnl_diag_matrix_fixed<T,N> operator- (vnl_diag_matrix_fixed<T,N> const& A
 }
 
 //: Subtract a vnl_diag_matrix_fixed from a vnl_matrix.  n adds, mn copies.
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_matrix
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_matrix
 template <class T, unsigned int N>
 inline vnl_matrix_fixed<T,N,N> operator- (vnl_matrix_fixed<T,N,N> const& A, vnl_diag_matrix_fixed<T,N> const& D)
 {
@@ -279,8 +279,8 @@ inline vnl_matrix_fixed<T,N,N> operator- (vnl_matrix_fixed<T,N,N> const& A, vnl_
 }
 
 //: Subtract a vnl_matrix from a vnl_diag_matrix_fixed.  n adds, mn copies.
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_matrix
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_matrix
 template <class T, unsigned int N>
 inline vnl_matrix_fixed<T,N,N> operator- (vnl_diag_matrix_fixed<T,N> const& D, vnl_matrix_fixed<T,N,N> const& A)
 {
@@ -298,8 +298,8 @@ inline vnl_matrix_fixed<T,N,N> operator- (vnl_diag_matrix_fixed<T,N> const& D, v
 }
 
 //: Multiply a vnl_diag_matrix_fixed by a vnl_vector_fixed.  n flops.
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_vector_fixed
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_vector_fixed
 template <class T, unsigned int N>
 inline vnl_vector_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& D, vnl_vector_fixed<T,N> const& A)
 {
@@ -307,8 +307,8 @@ inline vnl_vector_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& D, vnl
 }
 
 //: Multiply a vnl_vector_fixed by a vnl_diag_matrix_fixed.  n flops.
-// \relates vnl_diag_matrix_fixed
-// \relates vnl_vector_fixed
+// \relatesalso vnl_diag_matrix_fixed
+// \relatesalso vnl_vector_fixed
 template <class T, unsigned int N>
 inline vnl_vector_fixed<T,N> operator* (vnl_vector_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& D)
 {

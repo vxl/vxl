@@ -318,7 +318,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vil_image_view<T> const& im)
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
 // The data may be formatted differently in each memory chunk.
 //  O(size).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 bool vil_image_view_deep_equality(const vil_image_view<T> &lhs, const vil_image_view<T> &rhs);
 

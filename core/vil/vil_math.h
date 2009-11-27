@@ -76,7 +76,7 @@ inline void vil_math_value_range(const vil_image_view<vil_rgb<float> >& rgb_view
 // \param im The image to examine.
 // \param fraction The fractions of the data range (from the lower end).
 // \retval value The image data values corresponding to the specified percentiles.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 template <class T>
@@ -141,7 +141,7 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
 // \param im The image to examine.
 // \param fraction The fraction of the data range (from the lower end).
 // \retval value The image data value corresponding to the specified percentile.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 template <class T>
@@ -158,7 +158,7 @@ inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
 
 
 //: Sum of squared differences between two images
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class imT, class sumT>
 inline sumT vil_math_ssd(const vil_image_view<imT>& imA, const vil_image_view<imT>& imB, sumT /*dummy*/)
 {
@@ -175,7 +175,7 @@ inline sumT vil_math_ssd(const vil_image_view<imT>& imA, const vil_image_view<im
 }
 
 //: Sum squared magnitude differences between two complex images
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class imT, class sumT>
 inline sumT
 vil_math_ssd_complex(const vil_image_view<vcl_complex<imT> >& imA,
@@ -195,7 +195,7 @@ vil_math_ssd_complex(const vil_image_view<vcl_complex<imT> >& imA,
 }
 
 //: Calc the mean of each pixel over all the planes.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class sumT>
 inline void vil_math_mean_over_planes(const vil_image_view<aT>& src,
                                       vil_image_view<sumT>& dest)
@@ -217,7 +217,7 @@ inline void vil_math_mean_over_planes(const vil_image_view<aT>& src,
 }
 
 //: Calc the mean of each pixel over all the planes.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class inT, class outT, class sumT>
 inline void vil_math_mean_over_planes(const vil_image_view<inT>& src,
                                       vil_image_view<outT>& dest,
@@ -235,7 +235,7 @@ inline void vil_math_mean_over_planes(const vil_image_view<inT>& src,
 }
 
 //: Sum of elements in plane p of image
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class imT, class sumT>
 inline void vil_math_sum(sumT& sum, const vil_image_view<imT>& im, unsigned p)
 {
@@ -252,7 +252,7 @@ inline void vil_math_sum(sumT& sum, const vil_image_view<imT>& im, unsigned p)
 }
 
 //: Mean of elements in plane p of image
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class imT, class sumT>
 inline void vil_math_mean(sumT& mean, const vil_image_view<imT>& im, unsigned p)
 {
@@ -270,7 +270,7 @@ void vil_math_median_unimplemented();
 // For integral types, if the the median is half way between two
 // values, the result will be the floor of the average.
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class imT>
 inline void vil_math_median(imT& median, const vil_image_view<imT>& im, unsigned p)
 {
@@ -285,7 +285,7 @@ void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsig
 
 
 //: Sum of squares of elements in plane p of image
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class imT, class sumT>
 inline void vil_math_sum_squares(sumT& sum, sumT& sum_sq, const vil_image_view<imT>& im, unsigned p)
 {
@@ -302,7 +302,7 @@ inline void vil_math_sum_squares(sumT& sum, sumT& sum_sq, const vil_image_view<i
 }
 
 //: Mean and variance of elements in plane p of image
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class imT, class sumT>
 inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_view<imT>& im, unsigned p)
 {
@@ -326,7 +326,7 @@ class vil_math_sqrt_functor
 };
 
 //: Compute square-root of each pixel element (or zero if negative)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vil_math_sqrt(vil_image_view<T>& image)
 {
@@ -337,7 +337,7 @@ inline void vil_math_sqrt(vil_image_view<T>& image)
 //: Truncate each pixel value so it fits into range [min_v,max_v]
 //  If value < min_v value=min_v
 //  If value > max_v value=max_v
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vil_math_truncate_range(vil_image_view<T>& image, T min_v, T max_v)
 {
@@ -416,7 +416,7 @@ class vil_math_log_functor
 
 
 //: Multiply values in-place in image view by scale
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vil_math_scale_values(vil_image_view<T>& image, double scale)
 {
@@ -424,7 +424,7 @@ inline void vil_math_scale_values(vil_image_view<T>& image, double scale)
 }
 
 //: Multiply values in-place in image view by scale and add offset
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class imT, class offsetT>
 inline void vil_math_scale_and_offset_values(vil_image_view<imT>& image, double scale, offsetT offset)
 {
@@ -600,7 +600,7 @@ void vil_math_sum_sqr(const vil_image_view<srcT>& src,
 }
 
 //: Compute sum of two images (im_sum = imA+imB)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil_math_image_sum(const vil_image_view<aT>& imA,
                                const vil_image_view<bT>& imB,
@@ -636,7 +636,7 @@ inline void vil_math_image_sum(const vil_image_view<aT>& imA,
 //  If images have the same number of planes,
 //  then im_prod(i,j,p) = imA(i,j,p)*imB(i,j,p).
 //  If imB only has one plane, then im_prod(i,j,p) = imA(i,j,p)*imB(i,j,0).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil_math_image_product(const vil_image_view<aT>& imA,
                                    const vil_image_view<bT>& imB,
@@ -675,7 +675,7 @@ inline void vil_math_image_product(const vil_image_view<aT>& imA,
 }
 
 //: Compute the max of two images (im_max = max(imA, imB))
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class maxT>
 inline void vil_math_image_max(const vil_image_view<aT>& imA,
                                const vil_image_view<bT>& imB,
@@ -708,7 +708,7 @@ inline void vil_math_image_max(const vil_image_view<aT>& imA,
 }
 
 //: Compute the min of two images (im_min = min(imA, imB))
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class minT>
 inline void vil_math_image_min(const vil_image_view<aT>& imA,
                                const vil_image_view<bT>& imB,
@@ -747,7 +747,7 @@ inline void vil_math_image_min(const vil_image_view<aT>& imA,
 //  If images have the same number of planes,
 //  then im_ratio(i,j,p) = imA(i,j,p)/imB(i,j,p).
 //  If imB only has one plane, then im_ratio(i,j,p) = imA(i,j,p)/imB(i,j,0).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil_math_image_ratio(const vil_image_view<aT>& imA,
                                  const vil_image_view<bT>& imB,
@@ -788,7 +788,7 @@ inline void vil_math_image_ratio(const vil_image_view<aT>& imA,
 }
 
 //: Compute difference of two images (im_sum = imA-imB)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil_math_image_difference(const vil_image_view<aT>& imA,
                                       const vil_image_view<bT>& imB,
@@ -821,7 +821,7 @@ inline void vil_math_image_difference(const vil_image_view<aT>& imA,
 }
 
 //: Compute absolute difference of two images (im_sum = |imA-imB|)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
                                           const vil_image_view<bT>& imB,
@@ -857,7 +857,7 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
 }
 
 //: Compute  sum of absolute difference between two images (|imA-imB|)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT>
 inline double vil_math_image_abs_difference(const vil_image_view<aT>& imA,
                                             const vil_image_view<bT>& imB)
@@ -889,7 +889,7 @@ inline double vil_math_image_abs_difference(const vil_image_view<aT>& imA,
 }
 
 //: Compute magnitude of two images taken as vector components, sqrt(A^2 + B^2)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class magT>
 inline void vil_math_image_vector_mag(const vil_image_view<aT>& imA,
                                       const vil_image_view<bT>& imB,
@@ -929,7 +929,7 @@ inline void vil_math_image_vector_mag(const vil_image_view<aT>& imA,
 //: imA = fa*imA + fb*imB  (Useful for moving averages!)
 // Can do running sum using vil_add_image_fraction(running_mean,1-f,new_im,f)
 // to update current mean by a fraction f of new_im
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class scaleT>
 inline void vil_math_add_image_fraction(vil_image_view<aT>& imA, scaleT fa,
                                         const vil_image_view<bT>& imB, scaleT fb)
@@ -960,7 +960,7 @@ inline void vil_math_add_image_fraction(vil_image_view<aT>& imA, scaleT fa,
 //  as demonstrated in Viola and Jones (CVPR01).
 // The sum of elements in the ni x nj square with corner (i,j)
 // is given by im_sum(i,j)+im_sum(i+ni,j+nj)-im_sum(i+ni,j)-im_sum(i,j+nj)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class sumT>
 inline void vil_math_integral_image(const vil_image_view<aT>& imA,
                                     vil_image_view<sumT>& im_sum)
@@ -1010,7 +1010,7 @@ inline void vil_math_integral_image(const vil_image_view<aT>& imA,
 // is given by im_sum(i,j)+im_sum(i+ni,j+nj)-im_sum(i+ni,j)-im_sum(i,j+nj)
 //
 // Similar result holds for sum of squares, allowing rapid calculation of variance etc.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class sumT>
 inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
                                         vil_image_view<sumT>& im_sum,

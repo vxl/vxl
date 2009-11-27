@@ -878,7 +878,7 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
 }
 
 //: Transform a point through a 3x3 projective transformation matrix
-// \relates vgl_homg_point_2d
+// \relatesalso vgl_homg_point_2d
 template <class T>
 vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                                vgl_homg_point_2d<T> const& p)
@@ -889,7 +889,7 @@ vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
 }
 
 //: Transform a line through a 3x3 projective transformation matrix
-// \relates vgl_homg_line_2d
+// \relatesalso vgl_homg_line_2d
 template <class T>
 vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                               vgl_homg_line_2d<T> const& l)

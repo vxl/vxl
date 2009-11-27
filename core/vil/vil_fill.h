@@ -12,7 +12,7 @@
 
 //: Fill view with given value
 //  O(size).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_fill(vil_image_view<T>& view, T value)
 {
@@ -50,7 +50,7 @@ void vil_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
 
 //: Fill line from (ai,aj) to (bi,bj) using Bresenham's algorithm.
 // Only modifies first plane.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_fill_line(vil_image_view<T> &im,
                    int ai, int aj, int bi, int bj,
@@ -125,7 +125,7 @@ void vil_fill_line(vil_image_view<T> &im,
 
 //: Fill row j in view with given value
 //  O(ni).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_fill_row(vil_image_view<T>& view, unsigned j, T value)
 {
@@ -140,7 +140,7 @@ void vil_fill_row(vil_image_view<T>& view, unsigned j, T value)
 
 //: Fill column i in view with given value
 //  O(nj).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
 {
@@ -156,7 +156,7 @@ void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
 //: Writes given value into each pixel of image under the elements of the mask set to b
 //  If mask.nplanes()==1 then the same mask is applied to every image plane, otherwise
 //  there must be the same number of mask planes as image planes.
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 template<class srcT>
 inline
 void vil_fill_mask(vil_image_view<srcT>& image,
@@ -192,7 +192,7 @@ void vil_fill_mask(vil_image_view<srcT>& image,
 
 //: Fills pixels in disk with centre (ci,cj), radius r, with given value
 //  Fills all planes of image with the value.
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 template<class T>
 inline
 void vil_fill_disk(vil_image_view<T>& image, double ci, double cj, double r, T value)

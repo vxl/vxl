@@ -15,7 +15,7 @@
 //: Create a reflected view in which i -> ni-1-i.
 //  i.e. vil_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
 //  O(1).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vil_image_view<T> vil_flip_lr(const vil_image_view<T>& v)
 {
@@ -28,7 +28,7 @@ inline vil_image_view<T> vil_flip_lr(const vil_image_view<T>& v)
 //: Create a reflected view in which y -> nj-1-j.
 //  i.e. vil_flip_ud(view)(i,j,p) = view(i,nj-1-j,p)
 //  O(1).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vil_image_view<T> vil_flip_ud(const vil_image_view<T>& v)
 {
@@ -40,7 +40,7 @@ inline vil_image_view<T> vil_flip_ud(const vil_image_view<T>& v)
 
 
 //: Flip an image resource left to right.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_flip_lr(const vil_image_resource_sptr &src);
 
 
@@ -81,7 +81,7 @@ class vil_flip_lr_image_resource : public vil_image_resource
 
 
 //: Flip an image resource left to right.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_flip_ud(const vil_image_resource_sptr &src);
 
 

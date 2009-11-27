@@ -19,7 +19,7 @@
 // dest_im.world2im() is set up so that vimt_bilin_interp(dest_im,p) is the convolution
 // of the kernel with the source image when the kernel's reference point is
 // placed at p in src_im
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vimt_correlate_2d(const vimt_image_2d_of<srcT>& src_im,
                               vimt_image_2d_of<destT>& dest_im,

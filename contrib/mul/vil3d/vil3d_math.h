@@ -15,7 +15,7 @@
 
 
 //: Compute minimum and maximum values over im
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
                                    T& min_value, T& max_value)
@@ -62,7 +62,7 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
 // \param im The image to examine.
 // \param fraction The fraction of the data range (from the lower end).
 // \retval value The image data value corresponding to the specified percentile.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 // \sa vil3d_math_value_range_percentiles()
@@ -84,7 +84,7 @@ inline void vil3d_math_value_range_percentile(const vil3d_image_view<T>& im,
 // \param im The image to examine.
 // \param fraction The fraction of the data range (from the lower end).
 // \retval value The image data value corresponding to the specified percentiles.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 template <class T>
@@ -151,7 +151,7 @@ inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
 
 
 //: Calc the mean of each pixel over all the planes.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class aT, class sumT>
 inline void vil3d_math_mean_over_planes(const vil3d_image_view<aT>& src,
                                         vil3d_image_view<sumT>& dest)
@@ -169,7 +169,7 @@ inline void vil3d_math_mean_over_planes(const vil3d_image_view<aT>& src,
 }
 
 //: Calc the mean of each pixel over all the planes.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class inT, class outT, class sumT>
 inline void vil3d_math_mean_over_planes(const vil3d_image_view<inT>& src,
                                         vil3d_image_view<outT>& dest,
@@ -188,7 +188,7 @@ inline void vil3d_math_mean_over_planes(const vil3d_image_view<inT>& src,
 }
 
 //: Calculate the rms of each pixel over all the planes.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class inT, class outT, class sumT>
 inline void vil3d_math_rms(const vil3d_image_view<inT>& src,
                            vil3d_image_view<outT>& dest,
@@ -208,7 +208,7 @@ inline void vil3d_math_rms(const vil3d_image_view<inT>& src,
 
 
 //: Compute sum of values in plane p
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class imT, class sumT>
 inline void vil3d_math_sum(sumT& sum, const vil3d_image_view<imT>& im,
                            unsigned p)
@@ -239,7 +239,7 @@ inline void vil3d_math_sum(sumT& sum, const vil3d_image_view<imT>& im,
 }
 
 //: Mean of elements in plane p of image
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class imT, class sumT>
 inline void vil3d_math_mean(sumT& mean, const vil3d_image_view<imT>& im,
                             unsigned p)
@@ -251,7 +251,7 @@ inline void vil3d_math_mean(sumT& mean, const vil3d_image_view<imT>& im,
 
 
 //: Sum of squares of elements in plane p of image
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class imT, class sumT>
 inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
                               const vil3d_image_view<imT>& im, unsigned p)
@@ -284,7 +284,7 @@ inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
 
 
 //: Sum of squared differences between two images
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class imT, class sumT>
 inline sumT vil3d_math_ssd(const vil3d_image_view<imT>& imA,
                            const vil3d_image_view<imT>& imB, sumT /*dummy*/)
@@ -305,7 +305,7 @@ inline sumT vil3d_math_ssd(const vil3d_image_view<imT>& imA,
 
 
 //: Multiply values in-place in image view by scale and add offset
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class imT, class offsetT>
 inline void vil3d_math_scale_and_offset_values(vil3d_image_view<imT>& image,
 double scale, offsetT offset)
@@ -333,7 +333,7 @@ double scale, offsetT offset)
 
 
 //: Mean and variance of elements in plane p of image
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class imT, class sumT>
 inline void vil3d_math_mean_and_variance(sumT& mean, sumT& var,
                                          const vil3d_image_view<imT>& im,
@@ -348,7 +348,7 @@ inline void vil3d_math_mean_and_variance(sumT& mean, sumT& var,
 
 
 //: Mean and variance of elements in plane p of image
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class imT, class sumT>
 inline sumT vil3d_math_dot_product(const vil3d_image_view<imT>& imA,
                                   const vil3d_image_view<imT>& imB, sumT)
@@ -366,7 +366,7 @@ inline sumT vil3d_math_dot_product(const vil3d_image_view<imT>& imA,
 
 
 //: Compute difference of two images (im_sum = imA-imB)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil3d_math_image_difference(const vil3d_image_view<aT>& imA,
                                         const vil3d_image_view<bT>& imB,
@@ -405,7 +405,7 @@ inline void vil3d_math_image_difference(const vil3d_image_view<aT>& imA,
 }
 
 //: Compute sum of two images (im_sum = imA+imB)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil3d_math_image_sum(const vil3d_image_view<aT>& imA,
                                         const vil3d_image_view<bT>& imB,
@@ -444,7 +444,7 @@ inline void vil3d_math_image_sum(const vil3d_image_view<aT>& imA,
 }
 
 //: Compute pixel-wise product of two images (im_prod = imA*imB)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class prodT>
 inline void vil3d_math_image_product(const vil3d_image_view<aT>& imA,
                                         const vil3d_image_view<bT>& imB,
@@ -486,7 +486,7 @@ inline void vil3d_math_image_product(const vil3d_image_view<aT>& imA,
 //: imA = fa*imA + fb*imB  (Useful for moving averages!)
 // Can do running sum using vil_add_image_fraction(running_mean,1-f,new_im,f)
 // to update current mean by a fraction f of new_im
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class aT, class bT, class scaleT>
 inline void vil3d_math_add_image_fraction(vil3d_image_view<aT>& imA, scaleT fa,
                                         const vil3d_image_view<bT>& imB, scaleT fb)
@@ -520,7 +520,7 @@ inline void vil3d_math_add_image_fraction(vil3d_image_view<aT>& imA, scaleT fa,
 //: Truncate each pixel value so it fits into range [min_v,max_v]
 //  If value < min_v value=min_v
 //  If value > max_v value=max_v
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline void vil3d_math_truncate_range(vil3d_image_view<T>& image, 
                                       T min_v, T max_v)

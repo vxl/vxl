@@ -257,12 +257,12 @@ class vgl_conic_segment_2d
 };
 
 //: Write to stream
-// \relates vgl_conic_segment_2d
+// \relatesalso vgl_conic_segment_2d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_conic_segment_2d<Type>& c_s);
 
 //: Read from stream
-// \relates vgl_conic_segment_2d
+// \relatesalso vgl_conic_segment_2d
 template <class Type>
 vcl_istream& operator>>(vcl_istream& is, vgl_conic_segment_2d<Type>& c_s);
 

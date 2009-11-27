@@ -24,7 +24,7 @@
 //  This is useful for finding locally interesting points and their
 //  associated scales - see "Object Recognition from Scale Invariant Features"
 //  D.Lowe, ICCV1999, pp.1150-1157.
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 template<class T>
 void vil_dog_pyramid(const vil_image_view<T>& src_image,
                      vcl_vector<vil_image_view<T> >& smooth_pyramid,

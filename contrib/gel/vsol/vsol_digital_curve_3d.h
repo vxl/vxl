@@ -18,7 +18,7 @@
 
 //: Digital curve class, part of the vsol_curve_3d hierarchy
 // The curve is made up of vsol points and has no addition data members
-// \relates vdgl_digital_curve
+// \relatesalso vdgl_digital_curve
 
 class vsol_digital_curve_3d : public vsol_curve_3d
 {

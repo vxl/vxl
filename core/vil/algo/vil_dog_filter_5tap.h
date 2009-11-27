@@ -14,7 +14,7 @@
 //  \param sigma     Width of gaussian
 //  \param smooth_im Result of smoothing the src_im
 //  \param dog_im    src_im - smooth_im
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 template <class T>
 void vil_dog_filter_5tap(const vil_image_view<T>& src_im,
                          vil_image_view<T>& smooth_im,

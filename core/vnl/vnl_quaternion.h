@@ -166,7 +166,7 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
 };
 
 //: operator<<
-// \relates vnl_quaternion
+// \relatesalso vnl_quaternion
 template <class T>
 inline vcl_ostream& operator<< (vcl_ostream& os, vnl_quaternion<T> const& q)
 {

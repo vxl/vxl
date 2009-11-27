@@ -13,13 +13,13 @@
 #include <vil3d/vil3d_image_view.h>
 
 //: Make a new image of given format.
-// \relates vil3d_image_resource
+// \relatesalso vil3d_image_resource
 vil3d_image_resource_sptr vil3d_new_image_resource(unsigned ni, unsigned nj, unsigned nk,
                                                   unsigned nplanes, vil_pixel_format format);
 
 
 //: Make a new image on disk.
-// \relates vil3d_image_resource
+// \relatesalso vil3d_image_resource
 vil3d_image_resource_sptr vil3d_new_image_resource(const char* filename, unsigned ni, unsigned nj,
                                                    unsigned nk, unsigned nplanes,
                                                    vil_pixel_format format,

@@ -10,8 +10,8 @@
 
 //: Applies morphological opening operation with given structuring element
 //  Applies erosion followed by dilation
-// \relates vil3d_image_view
-// \relates vil3d_structuring_element
+// \relatesalso vil3d_image_view
+// \relatesalso vil3d_structuring_element
 inline void vil3d_binary_opening(const vil3d_image_view<bool>& src_image,
                                 vil3d_image_view<bool>& dest_image,
                                 const vil3d_structuring_element& element)

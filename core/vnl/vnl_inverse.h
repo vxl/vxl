@@ -29,7 +29,7 @@
 // which makes it much faster than the vnl_matrix_inverse class in vnl/algo
 // since that one is using svd.
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,1,1> vnl_inverse(vnl_matrix_fixed<T,1,1> const& m)
@@ -46,7 +46,7 @@ vnl_matrix_fixed<T,1,1> vnl_inverse(vnl_matrix_fixed<T,1,1> const& m)
 // which makes it much faster than the vnl_matrix_inverse class in vnl/algo
 // since that one is using svd.
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,2,2> vnl_inverse(vnl_matrix_fixed<T,2,2> const& m)
@@ -72,7 +72,7 @@ vnl_matrix_fixed<T,2,2> vnl_inverse(vnl_matrix_fixed<T,2,2> const& m)
 // which makes it much faster than the vnl_matrix_inverse class in vnl/algo
 // since that one is using svd.
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,3,3> vnl_inverse(vnl_matrix_fixed<T,3,3> const& m)
@@ -105,7 +105,7 @@ vnl_matrix_fixed<T,3,3> vnl_inverse(vnl_matrix_fixed<T,3,3> const& m)
 // which makes it much faster than the vnl_matrix_inverse class in vnl/algo
 // since that one is using svd.
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,4,4> vnl_inverse(vnl_matrix_fixed<T,4,4> const& m)
@@ -161,7 +161,7 @@ vnl_matrix_fixed<T,4,4> vnl_inverse(vnl_matrix_fixed<T,4,4> const& m)
 // which makes it much faster than the vnl_matrix_inverse class in vnl/algo
 // since that one is using svd.
 //
-//  \relates vnl_matrix
+//  \relatesalso vnl_matrix
 
 template <class T>
 vnl_matrix<T> vnl_inverse(vnl_matrix<T> const& m)
@@ -189,7 +189,7 @@ vnl_matrix<T> vnl_inverse(vnl_matrix<T> const& m)
 //
 //  x = vnl_inverse(A).transpose() * b;
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,1,1> vnl_inverse_transpose(vnl_matrix_fixed<T,1,1> const& m)
@@ -208,7 +208,7 @@ vnl_matrix_fixed<T,1,1> vnl_inverse_transpose(vnl_matrix_fixed<T,1,1> const& m)
 //
 //  x = vnl_inverse(A).transpose() * b;
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,2,2> vnl_inverse_transpose(vnl_matrix_fixed<T,2,2> const& m)
@@ -236,7 +236,7 @@ vnl_matrix_fixed<T,2,2> vnl_inverse_transpose(vnl_matrix_fixed<T,2,2> const& m)
 //
 //  x = vnl_inverse(A).transpose() * b;
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,3,3> vnl_inverse_transpose(vnl_matrix_fixed<T,3,3> const& m)
@@ -271,7 +271,7 @@ vnl_matrix_fixed<T,3,3> vnl_inverse_transpose(vnl_matrix_fixed<T,3,3> const& m)
 //
 //  x = vnl_inverse(A).transpose() * b;
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T>
 vnl_matrix_fixed<T,4,4> vnl_inverse_transpose(vnl_matrix_fixed<T,4,4> const& m)
@@ -329,7 +329,7 @@ vnl_matrix_fixed<T,4,4> vnl_inverse_transpose(vnl_matrix_fixed<T,4,4> const& m)
 //
 //  x = vnl_inverse(A).transpose() * b;
 //
-//  \relates vnl_matrix
+//  \relatesalso vnl_matrix
 
 template <class T>
 vnl_matrix<T> vnl_inverse_transpose(vnl_matrix<T> const& m)

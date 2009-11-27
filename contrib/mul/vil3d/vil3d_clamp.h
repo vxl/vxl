@@ -13,7 +13,7 @@
 #include <vcl_cassert.h>
 
 //: Clamp an image view between two values.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_clamp(vil3d_image_view<T >&src, vil3d_image_view<T >&dest, T lo, T hi)
 {
@@ -33,7 +33,7 @@ inline void vil3d_clamp(vil3d_image_view<T >&src, vil3d_image_view<T >&dest, T l
 }
 
 //: Clamp an image view above a given value t, setting it to v if below or on t
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_clamp_below(vil3d_image_view<T>& src, T t, T v)
 {
@@ -58,7 +58,7 @@ inline void vil3d_clamp_below(vil3d_image_view<T>& src, T t, T v)
 }
 
 //: Clamp an image view above a given value t, setting it to this t if below t
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_clamp_below(vil3d_image_view<T>& src, T t)
 {
@@ -66,7 +66,7 @@ inline void vil3d_clamp_below(vil3d_image_view<T>& src, T t)
 }
 
 //: Clamp an image view below a given value t, setting it to v if above or on t
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_clamp_above(vil3d_image_view<T>& src, T t, T v)
 {
@@ -91,7 +91,7 @@ inline void vil3d_clamp_above(vil3d_image_view<T>& src, T t, T v)
 }
 
 //: Clamp an image view below a given value t, setting it to this t if above t
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_clamp_above(vil3d_image_view<T>& src, T t)
 {

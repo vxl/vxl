@@ -160,7 +160,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
                            vcl_vector<vcl_pair<unsigned,unsigned> >& e2,
                            vcl_vector<vgl_point_2d<T> >& ip);
 
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T>
 vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon<T> const& p) { return p.print(os); }
 

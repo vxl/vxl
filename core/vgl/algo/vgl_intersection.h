@@ -23,21 +23,21 @@
 #include <vcl_list.h>
 
 //: Return the intersection point of vector of planes.
-// \relates vgl_plane_3d
+// \relatesalso vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p);
 
 //: Return the intersection line of a set of planes, use list to distinguish from point return
-// \relates vgl_plane_3d
-// \relates vgl_infinite_line_3d
+// \relatesalso vgl_plane_3d
+// \relatesalso vgl_infinite_line_3d
 template <class T>
 vgl_infinite_line_3d<T> 
 vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes);
 
 //: Return true if the box and polygon intersect in 3-d, regions include boundaries
 // Polygon is represented as an ordered vector of 3-d points
-// \relates vgl_point_3d
-// \relates vgl_box_3d
+// \relatesalso vgl_point_3d
+// \relatesalso vgl_box_3d
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& p);
 

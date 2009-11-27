@@ -143,7 +143,7 @@ class vnl_sym_matrix
 };
 
 //:
-// \relates vnl_sym_matrix
+// \relatesalso vnl_sym_matrix
 template <class T> vcl_ostream& operator<< (vcl_ostream&, vnl_sym_matrix<T> const&);
 
 
@@ -231,7 +231,7 @@ template <class T>
 bool operator==(const vnl_matrix<T> &a, const vnl_sym_matrix<T> &b);
 
 //: Swap the contents of a and b.
-// \relates vnl_sym_matrix
+// \relatesalso vnl_sym_matrix
 template <class T>
 void swap(vnl_sym_matrix<T> &a, vnl_sym_matrix<T> &b)
 { a.swap(b); }

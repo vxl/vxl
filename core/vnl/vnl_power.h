@@ -26,7 +26,7 @@
 // which makes it much faster than a full-fledged square matrix power
 // implementation using svd, which belongs in vnl/algo.
 //
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 
 template <class T, unsigned int d>
 vnl_matrix_fixed<T,d,d> vnl_power(vnl_matrix_fixed<T,d,d> const& m, int n)
@@ -53,7 +53,7 @@ vnl_matrix_fixed<T,d,d> vnl_power(vnl_matrix_fixed<T,d,d> const& m, int n)
 // which makes it much faster than a full-fledged square matrix power
 // implementation using svd, which belongs in vnl/algo.
 //
-//  \relates vnl_matrix
+//  \relatesalso vnl_matrix
 
 template <class T>
 vnl_matrix<T> vnl_power(vnl_matrix<T> const& m, int n)

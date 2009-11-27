@@ -428,7 +428,7 @@ class vnl_vector_fixed_ref : public vnl_vector_fixed_ref_const<T,n>
 // --- Vector-scalar operators ----------------------------------------
 
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed_ref_const<T,n>& v, T s )
 {
@@ -437,7 +437,7 @@ inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed_ref_const<T,n>& v
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator+( T s, const vnl_vector_fixed_ref_const<T,n>& v )
 {
@@ -446,7 +446,7 @@ inline vnl_vector_fixed<T,n> operator+( T s, const vnl_vector_fixed_ref_const<T,
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed_ref_const<T,n>& v, T s )
 {
@@ -455,7 +455,7 @@ inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed_ref_const<T,n>& v
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator-( T s, const vnl_vector_fixed_ref_const<T,n>& v )
 {
@@ -464,7 +464,7 @@ inline vnl_vector_fixed<T,n> operator-( T s, const vnl_vector_fixed_ref_const<T,
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator*( const vnl_vector_fixed_ref_const<T,n>& v, T s )
 {
@@ -473,7 +473,7 @@ inline vnl_vector_fixed<T,n> operator*( const vnl_vector_fixed_ref_const<T,n>& v
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator*( T s, const vnl_vector_fixed_ref_const<T,n>& v )
 {
@@ -482,7 +482,7 @@ inline vnl_vector_fixed<T,n> operator*( T s, const vnl_vector_fixed_ref_const<T,
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator/( const vnl_vector_fixed_ref_const<T,n>& v, T s )
 {
@@ -495,7 +495,7 @@ inline vnl_vector_fixed<T,n> operator/( const vnl_vector_fixed_ref_const<T,n>& v
 // --- Vector-vector operators ----------------------------------------
 
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed_ref_const<T,n>& a, const vnl_vector_fixed_ref_const<T,n>& b )
 {
@@ -504,7 +504,7 @@ inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed_ref_const<T,n>& a
   return r;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed_ref_const<T,n>& a, const vnl_vector_fixed_ref_const<T,n>& b )
 {
@@ -660,7 +660,7 @@ inline T vnl_vector_ssd( const vnl_vector<T>& a, const vnl_vector_fixed_ref_cons
 // --- I/O operators -------------------------------------------------
 
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline
 vcl_ostream& operator<<(vcl_ostream& o,const vnl_vector_fixed_ref_const<T,n>& v)
@@ -669,7 +669,7 @@ vcl_ostream& operator<<(vcl_ostream& o,const vnl_vector_fixed_ref_const<T,n>& v)
   return o;
 }
 
-//: \relates vnl_vector_fixed
+//: \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline
 vcl_istream& operator>>(vcl_istream& i, const vnl_vector_fixed_ref<T,n>& v)

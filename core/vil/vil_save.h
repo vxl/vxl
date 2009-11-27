@@ -12,20 +12,20 @@
 #include <vxl_config.h>
 
 //: Send a vil_image_view to disk, deducing format from filename
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_save(const vil_image_view_base &, char const* filename);
 
 //: Send a vil_image_view to disk, given filename
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_save(const vil_image_view_base &, char const* filename, char const* file_format);
 
 //: Send vil_image_resource to disk.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename,
                              char const* file_format);
 
 //: Save vil_image_resource to file, deducing format from filename.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename);
 
 //: Given a filename, guess the file format tag
@@ -35,20 +35,20 @@ char const *vil_save_guess_file_format(char const* filename);
 
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 //: Send a vil_image_view to disk, deducing format from filename
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_save(const vil_image_view_base &, wchar_t const* filename);
 
 //: Send a vil_image_view to disk, given filename
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_save(const vil_image_view_base &, wchar_t const* filename, wchar_t const* file_format);
 
 //: Send vil_image_resource to disk.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, wchar_t const* filename,
                              wchar_t const* file_format);
 
 //: Save vil_image_resource to file, deducing format from filename.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, wchar_t const* filename);
 
 //: Given a filename, guess the file format tag

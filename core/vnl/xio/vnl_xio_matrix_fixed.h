@@ -11,7 +11,7 @@
 #include <vcl_iosfwd.h>
 
 //: XML save vnl_matrix_fixed to stream.
-// \relates vnl_matrix_fixed
+// \relatesalso vnl_matrix_fixed
 template <class T, unsigned m, unsigned n>
 void x_write(vcl_ostream & os, const vnl_matrix_fixed<T,m,n> & v,
              vcl_string name="vnl_matrix_fixed");

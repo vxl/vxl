@@ -23,25 +23,25 @@
 class vil_stream;
 
 //:
-// \relates vil_stream
+// \relatesalso vil_stream
 void vil_stream_write_big_endian_uint_16(vil_stream *, vxl_uint_16);
 //:
-// \relates vil_stream
+// \relatesalso vil_stream
 void vil_stream_write_little_endian_uint_16(vil_stream *, vxl_uint_16);
 
 //:
-// \relates vil_stream
+// \relatesalso vil_stream
 void vil_stream_write_big_endian_uint_32(vil_stream *, vxl_uint_32);
 //:
-// \relates vil_stream
+// \relatesalso vil_stream
 void vil_stream_write_little_endian_uint_32(vil_stream *, vxl_uint_32);
 
 #if VXL_HAS_INT_64
 //:
-// \relates vil_stream
+// \relatesalso vil_stream
 void vil_stream_write_big_endian_uint_64(vil_stream *, vxl_uint_64);
 //:
-// \relates vil_stream
+// \relatesalso vil_stream
 void vil_stream_write_little_endian_uint_64(vil_stream *, vxl_uint_64);
 #endif
 

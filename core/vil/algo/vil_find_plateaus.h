@@ -30,7 +30,7 @@ inline bool vil_is_plateau_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t 
 //  Compute position of all local plateau points (pi[k],pj[k]) above given threshold value.
 // \param clear_list  If true (the default) then empty lists before adding new examples
 // \sa vil_find_peaks_3x3()
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline void vil_find_plateaus_3x3(vcl_vector<unsigned>& pi,
                                   vcl_vector<unsigned>& pj,

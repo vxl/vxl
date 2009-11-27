@@ -14,8 +14,8 @@
 
 //: Return a 2D view of slice k of 3D image aligned as (j,i).
 //  result(x,y,p)=im(y,x,k,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline vil_image_view<T> vil3d_slice_ji(const vil3d_image_view<T> &im, unsigned k)
 {
@@ -31,8 +31,8 @@ inline vil_image_view<T> vil3d_slice_ji(const vil3d_image_view<T> &im, unsigned 
 
 //: Return a 2D view of slice k of 3D image aligned as (i,j).
 //  result(x,y,p)=im(x,y,k,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline vil_image_view<T> vil3d_slice_ij(const vil3d_image_view<T> &im, unsigned k)
 {
@@ -48,8 +48,8 @@ inline vil_image_view<T> vil3d_slice_ij(const vil3d_image_view<T> &im, unsigned 
 
 //: Return a 2D view of slice i of 3D image aligned as (j,k).
 //  result(x,y,p)=im(i,x,y,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline vil_image_view<T> vil3d_slice_jk(const vil3d_image_view<T> &im, unsigned i)
 {
@@ -65,8 +65,8 @@ inline vil_image_view<T> vil3d_slice_jk(const vil3d_image_view<T> &im, unsigned 
 
 //: Return a 2D view of slice i of 3D image aligned as (k,j).
 //  result(x,y,p)=im(i,y,x,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline vil_image_view<T> vil3d_slice_kj(const vil3d_image_view<T> &im, unsigned i)
 {
@@ -82,8 +82,8 @@ inline vil_image_view<T> vil3d_slice_kj(const vil3d_image_view<T> &im, unsigned 
 
 //: Return a 2D view of slice j of 3D image aligned as (k,i).
 //  result(x,y,p)=im(y,i,x,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline vil_image_view<T> vil3d_slice_ki(const vil3d_image_view<T> &im, unsigned j)
 {
@@ -99,8 +99,8 @@ inline vil_image_view<T> vil3d_slice_ki(const vil3d_image_view<T> &im, unsigned 
 
 //: Return a 2D view of slice j of 3D image aligned as (i,k).
 //  result(x,y,p)=im(x,i,y,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline vil_image_view<T> vil3d_slice_ik(const vil3d_image_view<T> &im, unsigned j)
 {
@@ -127,8 +127,8 @@ enum vil3d_slice_format
 
 //: Return a 2D view of slice of a 3D image aligned as defined by slice_format.
 //  Thus if slice_format==VIL3D_SLICE_FORMAT_IJ then i-j slice returned at z=slice_index.
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline vil_image_view<T> vil3d_slice(const vil3d_image_view<T> &im, unsigned slice_index,
                                      vil3d_slice_format slice_format)

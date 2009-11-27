@@ -105,12 +105,12 @@ class vpgl_comp_rational_camera : public vpgl_rational_camera<T>
 };
 
 //: Write to stream
-// \relates vpgl_comp_rational_camera
+// \relatesalso vpgl_comp_rational_camera
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vpgl_comp_rational_camera<T>& p);
 
 //: Read from stream
-// \relates vpgl_comp_rational_camera
+// \relatesalso vpgl_comp_rational_camera
 template <class T>
 vcl_istream& operator>>(vcl_istream& is, vpgl_comp_rational_camera<T>& p);
 

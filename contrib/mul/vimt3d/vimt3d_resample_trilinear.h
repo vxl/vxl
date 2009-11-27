@@ -84,7 +84,7 @@ inline void vimt3d_resample_trilinear(
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
 //  Points outside image return the value of the nearest valid pixel.
-// \relates vimt3d_image_3d_of
+// \relatesalso vimt3d_image_3d_of
 template <class sType, class dType>
 inline void vimt3d_resample_trilin_edge_extend(
   const vimt3d_image_3d_of<sType>& src_image,
@@ -123,7 +123,7 @@ inline void vimt3d_resample_trilin_edge_extend(
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
 //  Points outside image return the value of the nearest valid pixel.
-// \relates vimt3d_image_3d_of
+// \relatesalso vimt3d_image_3d_of
 template <class sType, class dType>
 inline void vimt3d_resample_trilin_smoothing_edge_extend(
   const vimt3d_image_3d_of<sType>& src_image,
@@ -169,7 +169,7 @@ inline void vimt3d_resample_trilin_smoothing_edge_extend(
 //  dest is not resized, nor has its world2im transform modified.
 //
 //  Points outside src return the value of the nearest valid pixel.
-// \relates vimt3d_image_3d_of
+// \relatesalso vimt3d_image_3d_of
 template <class sType, class dType>
 inline void vimt3d_resample_trilin_smoothing_edge_extend(
   const vimt3d_image_3d_of<sType>& src,

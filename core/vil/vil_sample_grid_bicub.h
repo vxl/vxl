@@ -19,7 +19,7 @@
 //  v[0]..v[np-1] are the values from point (x0,y0)
 //  Samples are taken along direction (dx2,dy2) first, then along (dx1,dy1).
 //  Points outside image return zero.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class imType, class vecType>
 void vil_sample_grid_bicub(vecType* v,
                            const vil_image_view<imType>& image,

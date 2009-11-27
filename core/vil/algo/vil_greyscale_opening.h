@@ -10,8 +10,8 @@
 
 //: Applies morphological opening operation with given structuring element
 //  Applies erosion followed by dilation
-// \relates vil_image_view
-// \relates vil_structuring_element
+// \relatesalso vil_image_view
+// \relatesalso vil_structuring_element
 template <class T>
 inline void vil_greyscale_opening(const vil_image_view<T>& src_image,
                                   vil_image_view<T>& dest_image,

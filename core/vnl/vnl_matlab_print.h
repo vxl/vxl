@@ -40,7 +40,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
 //-------------------- "named" forms.
 
 //: print a vnl_diagonal_matrix<T>.
-//  \relates vnl_diag_matrix
+//  \relatesalso vnl_diag_matrix
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_diag_matrix<T> const&,
@@ -48,7 +48,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_matrix<T>.
-//  \relates vnl_matrix
+//  \relatesalso vnl_matrix
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matrix<T> const&,
@@ -56,7 +56,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_matrix_fixed<T>.
-//  \relates vnl_matrix_fixed
+//  \relatesalso vnl_matrix_fixed
 template <class T, unsigned int n, unsigned int m>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matrix_fixed<T,n,m> const&,
@@ -64,7 +64,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_matrix_ref<T>.
-//  \relates vnl_matrix_ref
+//  \relatesalso vnl_matrix_ref
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matrix_ref<T> const &,
@@ -72,7 +72,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_vector<T>.
-//  \relates vnl_vector
+//  \relatesalso vnl_vector
 template <class T>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_vector<T> const &,
@@ -80,7 +80,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_vector_fixed<T>.
-//  \relates vnl_vector_fixed
+//  \relatesalso vnl_vector_fixed
 template <class T, unsigned int n>
 vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               vnl_vector_fixed<T,n> const &,

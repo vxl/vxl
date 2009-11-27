@@ -237,7 +237,7 @@ inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const
 //
 // If the two pixel types are the same, the destination may only be a shallow
 // copy of the source.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class inP, class outP>
 inline void vil_convert_cast(const vil_image_view<inP >&src,
                              vil_image_view<outP >&dest)
@@ -258,7 +258,7 @@ inline void vil_convert_cast(const vil_image_view<inP >&src,
 // However, the destination image will have a plane step of 1 if the source
 // image is RGB or RGBA, i.e., the pixel layout will still be RGBRGB...
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 //
 template <class outP>
 inline void vil_convert_cast(const vil_image_view_base_sptr&src, vil_image_view<outP >&dest)
@@ -435,7 +435,7 @@ inline void vil_convert_round_pixel<In, Out>::operator () (In v, Out &d) const
 //
 // If the two pixel types are the same, the destination may only be a
 // shallow copy of the source.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class inP, class outP>
 inline void vil_convert_round(const vil_image_view<inP >&src,
                               vil_image_view<outP >&dest)
@@ -503,7 +503,7 @@ inline void vil_convert_planes_to_grey(const vil_image_view<inP>&src,
 
 
 //: Convert src to byte image dest by stretching to range [0,255]
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline void vil_convert_stretch_range(const vil_image_view<T>& src,
                                       vil_image_view<vxl_byte>& dest)

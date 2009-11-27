@@ -12,7 +12,7 @@
 
 //: Search along i direction either side for limits of pixels matching v
 //  Fills in all such pixels with new_v.  Returns limits in ilo and ihi
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vil_flood_fill_row(vil_image_view<T>& image,
                                unsigned i, unsigned j,
@@ -36,7 +36,7 @@ inline void vil_flood_fill_row(vil_image_view<T>& image,
 //
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_flood_fill4(vil_image_view<T>& image,
                      unsigned seed_i, unsigned seed_j,
@@ -89,7 +89,7 @@ void vil_flood_fill4(vil_image_view<T>& image,
 //
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_flood_fill4(vil_image_view<T>& image,
                      unsigned seed_i, unsigned seed_j,
@@ -144,7 +144,7 @@ void vil_flood_fill4(vil_image_view<T>& image,
 //
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_flood_fill8(vil_image_view<T>& image,
                      unsigned seed_i, unsigned seed_j,
@@ -200,7 +200,7 @@ void vil_flood_fill8(vil_image_view<T>& image,
 //
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_flood_fill8(vil_image_view<T>& image,
                      unsigned seed_i, unsigned seed_j,

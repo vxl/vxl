@@ -833,8 +833,8 @@ vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed_ref_const<T, M, N>& a,
 // The version for correct compilers
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
-// \relates vnl_vector_fixed
-// \relates vnl_matrix_fixed
+// \relatesalso vnl_vector_fixed
+// \relatesalso vnl_matrix_fixed
 template <class T, unsigned M, unsigned N>
 inline
 vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed_ref_const<T, M, N>& a, const vnl_vector_fixed_ref_const<T, N>& b)
@@ -843,7 +843,7 @@ vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed_ref_const<T, M, N>& a, c
 }
 
 //: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
-// \relates vnl_matrix_fixed
+// \relatesalso vnl_matrix_fixed
 template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed_ref_const<T, M, N>& a, const vnl_matrix_fixed_ref_const<T, N, O>& b)

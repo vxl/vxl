@@ -18,8 +18,8 @@
 
 //: Return a 2D view of slice k of 3D image aligned as (j,i).
 //  result(x,y,p)=im(y,x,k,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vimt_image_2d_of<T> vimt3d_slice_ji(const vimt3d_image_3d_of<T> &im, unsigned k)
 {
@@ -44,8 +44,8 @@ inline vimt_image_2d_of<T> vimt3d_slice_ji(const vimt3d_image_3d_of<T> &im, unsi
 
 //: Return a 2D view of slice k of 3D image aligned as (i,j)
 //  result(x,y,p)=im(x,y,k,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vimt_image_2d_of<T> vimt3d_slice_ij(const vimt3d_image_3d_of<T> &im, unsigned k)
 {
@@ -70,8 +70,8 @@ inline vimt_image_2d_of<T> vimt3d_slice_ij(const vimt3d_image_3d_of<T> &im, unsi
 
 //: Return a 2D view of slice i of 3D image aligned as (j,k)
 //  result(x,y,p)=im(i,x,y,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vimt_image_2d_of<T> vimt3d_slice_jk(const vimt3d_image_3d_of<T> &im, unsigned i)
 {
@@ -96,8 +96,8 @@ inline vimt_image_2d_of<T> vimt3d_slice_jk(const vimt3d_image_3d_of<T> &im, unsi
 
 //: Return a 2D view of slice i of 3D image aligned as (k,j)
 //  result(x,y,p)=im(i,y,x,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vimt_image_2d_of<T> vimt3d_slice_kj(const vimt3d_image_3d_of<T> &im, unsigned i)
 {
@@ -122,8 +122,8 @@ inline vimt_image_2d_of<T> vimt3d_slice_kj(const vimt3d_image_3d_of<T> &im, unsi
 
 //: Return a 2D view of slice j of 3D image aligned as (k,i)
 //  result(x,y,p)=im(y,i,x,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vimt_image_2d_of<T> vimt3d_slice_ki(const vimt3d_image_3d_of<T> &im, unsigned j)
 {
@@ -148,8 +148,8 @@ inline vimt_image_2d_of<T> vimt3d_slice_ki(const vimt3d_image_3d_of<T> &im, unsi
 
 //: Return a 2D view of slice j of 3D image aligned as (i,k)
 //  result(x,y,p)=im(x,i,y,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vimt_image_2d_of<T> vimt3d_slice_ik(const vimt3d_image_3d_of<T> &im, unsigned j)
 { 

@@ -16,7 +16,7 @@
 //: Create a reflected view in which i -> ni-1-i.
 //  i.e. vil3d_reflect_i(view)(i, j, k, p) = view(ni-1-i, j, k, p)
 //  O(1).
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_reflect_i(const vil3d_image_view<T>& v)
 {
@@ -30,7 +30,7 @@ inline vil3d_image_view<T> vil3d_reflect_i(const vil3d_image_view<T>& v)
 //: Create a reflected view in which j -> nj-1-j.
 //  i.e. vil3d_reflect_j(view)(i, j, k, p) = view(i, nj-1-j, k, p)
 //  O(1).
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_reflect_j(const vil3d_image_view<T>& v)
 {
@@ -44,7 +44,7 @@ inline vil3d_image_view<T> vil3d_reflect_j(const vil3d_image_view<T>& v)
 //: Create a reflected view in which k -> nk-1-k.
 //  i.e. vil3d_reflect_k(view)(i, j, k, p) = view(i, j, nk-1-k, p)
 //  O(1).
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_reflect_k(const vil3d_image_view<T>& v)
 {

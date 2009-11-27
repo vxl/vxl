@@ -69,7 +69,7 @@
 //
 // If the two pixel types are the same, the destination may only be a shallow
 // copy of the source.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class inP, class outP>
 inline void vil3d_convert_cast(const vil3d_image_view<inP >&src,
                                vil3d_image_view<outP >&dest)
@@ -88,7 +88,7 @@ inline void vil3d_convert_cast(const vil3d_image_view<inP >&src,
 //
 // If the two pixel types are the same, the destination may only be a
 // shallow copy of the source.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class inP, class outP>
 inline void vil3d_convert_round(const vil3d_image_view<inP >&src,
                                 vil3d_image_view<outP >&dest)
@@ -101,7 +101,7 @@ inline void vil3d_convert_round(const vil3d_image_view<inP >&src,
 
 
 //: Convert src to byte image dest by stretching to range [0,255]
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_convert_stretch_range(const vil3d_image_view<T>& src,
                                         vil3d_image_view<vxl_byte>& dest)

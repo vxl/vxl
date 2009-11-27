@@ -26,7 +26,7 @@
 //  Implementation influenced by the LTI lib, which is licensed under LGPL:
 //    http://ltilib.sourceforge.net
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im);
 
 //: Same as vil_exact_distance_transform_maurer, but also returns a label array indicating the closest 0-pixel.
@@ -35,7 +35,7 @@ bool vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im);
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
 // im[i] will contain the corresponding distance.
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool
 vil_exact_distance_transform_maurer_label( vil_image_view<vxl_uint_32> &im,
                                            vil_image_view<vxl_uint_32> &imlabel);
@@ -62,7 +62,7 @@ vil_exact_distance_transform_maurer_label( vil_image_view<vxl_uint_32> &im,
 // based on two independent implementations by Olivier Cuisenaire
 // and Julio Torelli.
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 
 //: Overload that assumes given a Lookup table of integer squares.
@@ -71,7 +71,7 @@ bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigne
 // \sa see documentation of vil_exact_distance_transform_saito(
 // vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
                                         unsigned plane_idx, const vcl_vector<unsigned > &sq);
 
@@ -79,7 +79,7 @@ bool vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im,
 //
 // \remarks See comment on vil_exact_distance_transform_saito
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im);
 
 //: Computes signed Euclidean distance transform by using the unsigned EDT of an image and its binary complement.
@@ -96,7 +96,7 @@ bool vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im);
 // has been blindly adapted from a previous implementation; the original code was from
 // a legacy repository at Brown University (algo/contourtracing/signed_dt.cpp)
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_signed( vil_image_view<vxl_uint_32>& input_image,
                                           vil_image_view<float>& signed_edt_image);
 
@@ -112,7 +112,7 @@ bool vil_exact_distance_transform_signed( vil_image_view<vxl_uint_32>& input_ima
 // squared distance map is output to the same array, since the squared Euclidean
 // distances are integers, assuming pixels are unit distance apart.
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_brute_force(vil_image_view<vxl_uint_32> &im);
 
 //: Another Naive implementation of exact Euclidean distance transform (for ground-truth).
@@ -124,7 +124,7 @@ bool vil_exact_distance_transform_brute_force(vil_image_view<vxl_uint_32> &im);
 //
 // \sa description of vil_exact_distance_transform_brute_force
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &im);
 
 //: Same as vil_exact_distance_transform_brute_force_with_list, but also returns a label array indicating the closest 0-pixel.
@@ -133,7 +133,7 @@ bool vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_
 // index of the closest feature voxel. Assuming the image \p im is also stored in row_major order,
 // im[i] will contain the corresponding distance.
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 bool vil_exact_distance_transform_brute_force_with_list_label(
     vil_image_view<vxl_uint_32> &im,
     vil_image_view<vxl_uint_32> &imlabel);
@@ -153,7 +153,7 @@ bool vil_exact_distance_transform_brute_force_with_list_label(
 // Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
 // and Image Processing, pages 100-105. IEEE Computer Society, 2001.
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 void vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im);
 
 

@@ -10,7 +10,7 @@
 #include <vil3d/vil3d_image_view.h>
 
 //: Change axes so that result(j,i,k)==im(i,j,k)
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_switch_axes_jik(const vil3d_image_view<T> &im)
 {
@@ -20,7 +20,7 @@ inline vil3d_image_view<T> vil3d_switch_axes_jik(const vil3d_image_view<T> &im)
 }
 
 //: Change axes so that result(j,k,i)==im(i,j,k)
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_switch_axes_jki(const vil3d_image_view<T> &im)
 {
@@ -30,7 +30,7 @@ inline vil3d_image_view<T> vil3d_switch_axes_jki(const vil3d_image_view<T> &im)
 }
 
 //: Change axes so that result(k,i,j)==im(i,j,k)
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_switch_axes_kij(const vil3d_image_view<T> &im)
 {
@@ -40,7 +40,7 @@ inline vil3d_image_view<T> vil3d_switch_axes_kij(const vil3d_image_view<T> &im)
 }
 
 //: Change axes so that result(k,j,i)==im(i,j,k)
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_switch_axes_kji(const vil3d_image_view<T> &im)
 {
@@ -50,7 +50,7 @@ inline vil3d_image_view<T> vil3d_switch_axes_kji(const vil3d_image_view<T> &im)
 }
 
 //: Change axes so that result(i,k,j)==im(i,j,k)
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class T>
 inline vil3d_image_view<T> vil3d_switch_axes_ikj(const vil3d_image_view<T> &im)
 {

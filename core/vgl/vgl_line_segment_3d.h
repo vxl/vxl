@@ -73,12 +73,12 @@ class vgl_line_segment_3d
 };
 
 //: Write to stream
-// \relates vgl_line_segment_3d
+// \relatesalso vgl_line_segment_3d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_3d<Type>& p);
 
 //: Read from stream
-// \relates vgl_line_segment_3d
+// \relatesalso vgl_line_segment_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_3d<Type>& p);
 #define VGL_LINE_SEGMENT_3D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_3d.txx first"

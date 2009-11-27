@@ -89,7 +89,7 @@ class vgl_homg_operators_1d
 };
 
 //: Transform a point through a 2x2 projective transformation matrix
-// \relates vgl_homg_point_1d
+// \relatesalso vgl_homg_point_1d
 template <class T>
 vgl_homg_point_1d<T> operator*(vnl_matrix_fixed<T,2,2> const& m,
                                vgl_homg_point_1d<T> const& p);

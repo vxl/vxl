@@ -18,7 +18,7 @@ inline bool vil_binary_dilate(const bool* im, const vcl_ptrdiff_t* offset, unsig
 
 //: Return true if any image pixel under element centred at (i0,j0) is non-zero
 //  Checks boundary overlap
-// \relates vil_structuring_element
+// \relatesalso vil_structuring_element
 template <class imAccessorT>
 inline bool vil_binary_dilate(const imAccessorT& image, unsigned plane,
                               const vil_structuring_element& element, int i0, int j0)
@@ -35,16 +35,16 @@ inline bool vil_binary_dilate(const imAccessorT& image, unsigned plane,
 }
 
 //: Dilates src_image to produce dest_image (assumed single plane)
-// \relates vil_image_view
-// \relates vil_structuring_element
+// \relatesalso vil_image_view
+// \relatesalso vil_structuring_element
 void vil_binary_dilate(const vil_image_view<bool>& src_image,
                        vil_image_view<bool>& dest_image,
                        const vil_structuring_element& element);
 
 //: Dilates src_image to produce dest_image (assumed single plane)
-// \relates vil_image_view
-// \relates vil_structuring_element
-// \relates vil_border
+// \relatesalso vil_image_view
+// \relatesalso vil_structuring_element
+// \relatesalso vil_border
 void vil_binary_dilate(const vil_image_view<bool>& src_image,
                        vil_image_view<bool>& dest_image,
                        const vil_structuring_element& element,

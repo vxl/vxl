@@ -15,7 +15,7 @@
 // dest is resized to (1+src_im.ni()-kernel.ni())x(1+src_im.nj()-kernel.nj())
 // (a one plane image).
 // On exit dest(x,y) = sum_ij src_im(x-i,y-j)*kernel(i,j)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_2d(const vil_image_view<srcT>& src_im,
                             vil_image_view<destT>& dest_im,

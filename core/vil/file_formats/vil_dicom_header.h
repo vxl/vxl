@@ -444,7 +444,7 @@ struct vil_dicom_header_info
 
 
 //: Clears a header info struct
-// \relates vil_dicom_header_info
+// \relatesalso vil_dicom_header_info
 void vil_dicom_header_info_clear( vil_dicom_header_info& info );
 
 

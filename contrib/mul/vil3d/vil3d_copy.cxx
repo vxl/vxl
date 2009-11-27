@@ -21,7 +21,7 @@ static const unsigned long large_image_limit = 1024ul * 1024ul * 16ul; //16M Pix
 // src and dest must have identical sizes, and pixel-types. Returns false if the copy
 // failed.
 //  O(size).
-// \relates vil3d_image_resource
+// \relatesalso vil3d_image_resource
 bool vil3d_copy_deep(const vil3d_image_resource_sptr &src, vil3d_image_resource_sptr &dest)
 {
   if (dest->ni() != src->ni() || dest->nj() != src->nj() || dest->nk() != src->nk() ||

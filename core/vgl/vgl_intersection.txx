@@ -30,7 +30,7 @@ inline bool vgl_near_zero(double x) { return x < eps && x > -eps; }
 inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
 
 //: Return the intersection of two boxes (which is itself either a box, or empty)
-// \relates vgl_box_2d
+// \relatesalso vgl_box_2d
 template <class T>
 vgl_box_2d<T> vgl_intersection(vgl_box_2d<T> const& b1,vgl_box_2d<T> const& b2)
 {
@@ -42,7 +42,7 @@ vgl_box_2d<T> vgl_intersection(vgl_box_2d<T> const& b1,vgl_box_2d<T> const& b2)
 }
 
 //: Return true if line intersects box. If so, compute intersection points.
-// \relates vgl_infinite_line_3d
+// \relatesalso vgl_infinite_line_3d
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& box,
                       vgl_infinite_line_3d<T> const& line_3d,
@@ -150,8 +150,8 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
 }
 
 //: Return true if a box and plane intersect in 3D
-// \relates vgl_plane_3d
-// \relates vgl_box_3d
+// \relatesalso vgl_plane_3d
+// \relatesalso vgl_box_3d
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
 {
@@ -185,7 +185,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
 }
 
 //: Return the intersection of two boxes (which is itself either a box, or empty)
-// \relates vgl_box_3d
+// \relatesalso vgl_box_3d
 template <class T>
 vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& b1,vgl_box_3d<T> const& b2)
 {
@@ -429,7 +429,7 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
 }
 
 //: Return the intersection point of segments of two concurrent lines
-// \relates vgl_line_segment_3d
+// \relatesalso vgl_line_segment_3d
 template <class T>
 bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
                       vgl_line_segment_3d<T> const& l2,
@@ -449,7 +449,7 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
 }
 
 //: Return the intersection point of segments of two concurrent lines
-// \relates vgl_line_segment_3d
+// \relatesalso vgl_line_segment_3d
 template <class T>
 bool vgl_intersection(vgl_line_3d_2_points<T> const& l1,
                       vgl_line_segment_3d<T> const& l2,
@@ -469,7 +469,7 @@ bool vgl_intersection(vgl_line_3d_2_points<T> const& l1,
 }
 
 //: Return the intersection point of infinite lines, if concurrent.
-// \relates vgl_infinite_line_3d
+// \relatesalso vgl_infinite_line_3d
 template <class T>
 bool vgl_intersection(vgl_infinite_line_3d<T> const& l1,
                       vgl_infinite_line_3d<T> const& l2,
@@ -486,8 +486,8 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& l1,
 }
 
 //: Return the intersection point of a line and a plane.
-// \relates vgl_line_3d_2_points
-// \relates vgl_plane_3d
+// \relatesalso vgl_line_3d_2_points
+// \relatesalso vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
                                  vgl_plane_3d<T> const& plane)
@@ -526,8 +526,8 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
 }
 
 //: Return the intersection point of a line and a plane.
-// \relates vgl_line_segment_3d
-// \relates vgl_plane_3d
+// \relatesalso vgl_line_segment_3d
+// \relatesalso vgl_plane_3d
 template <class T>
 bool vgl_intersection(vgl_line_segment_3d<T> const& line,
                       vgl_plane_3d<T> const& plane,
@@ -631,8 +631,8 @@ bool vgl_intersection( const vgl_line_2d<T> &line0,
 
 //: Return the intersection line of two planes. Returns false if planes
 // are effectively parallel
-// \relates vgl_infinite_line_3d
-// \relates vgl_plane_3d
+// \relatesalso vgl_infinite_line_3d
+// \relatesalso vgl_plane_3d
 template <class T>
 bool vgl_intersection(vgl_plane_3d<T> const& plane0,
                       vgl_plane_3d<T> const& plane1,
@@ -709,7 +709,7 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
 }
 
 //: Return the intersection point of three planes.
-// \relates vgl_plane_3d
+// \relatesalso vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
                                  const vgl_plane_3d<T>& p2,
@@ -861,8 +861,8 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
 }
 
 //: Return the points from the list that lie inside the box
-// \relates vgl_point_2d
-// \relates vgl_box_2d
+// \relatesalso vgl_point_2d
+// \relatesalso vgl_box_2d
 template <class T>
 vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, vcl_vector<vgl_point_2d<T> > const& p)
 {
@@ -875,8 +875,8 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, vcl_vector
 }
 
 //: Return the points from the list that lie inside the box
-// \relates vgl_point_2d
-// \relates vgl_box_2d
+// \relatesalso vgl_point_2d
+// \relatesalso vgl_box_2d
 template <class T>
 vcl_vector<vgl_point_2d<T> > vgl_intersection(vcl_vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b)
 {
@@ -889,8 +889,8 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vcl_vector<vgl_point_2d<T> > const
 }
 
 //: Return the points from the list that lie inside the box
-// \relates vgl_point_3d
-// \relates vgl_box_3d
+// \relatesalso vgl_point_3d
+// \relatesalso vgl_box_3d
 template <class T>
 vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& p)
 {
@@ -903,8 +903,8 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector
 }
 
 //: Return the points from the list that lie inside the box
-// \relates vgl_point_3d
-// \relates vgl_box_3d
+// \relatesalso vgl_point_3d
+// \relatesalso vgl_box_3d
 template <class T>
 vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b)
 {

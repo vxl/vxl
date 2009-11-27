@@ -19,7 +19,7 @@
 //  dest_image resized to (n1,n2,src_image.nplanes())
 //  Points outside image return zero.
 // \sa vil_resample_bilin
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class sType, class dType>
 void vil_resample_bicub(const vil_image_view<sType>& src_image,
                         vil_image_view<dType>& dest_image,
@@ -28,7 +28,7 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
 
 //: Resample image to a specified width (n1) and height (n2)
 // \sa vil_resample_bilin
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class sType, class dType>
 void vil_resample_bicub(const vil_image_view<sType>& src_image,
                         vil_image_view<dType>& dest_image,

@@ -13,7 +13,7 @@
 
 //: Create a view which is a decimated version of src.
 // Doesn't modify underlying data. O(1).
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 // The factor describes the number of input rows (or columns)
 // that are equivalent to one output.
 // If you don't specify the j_factor or k_factor, they will be set equal to i_factor.

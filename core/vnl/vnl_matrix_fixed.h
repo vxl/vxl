@@ -828,8 +828,8 @@ vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a,
 // The version for correct compilers
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
-// \relates vnl_vector_fixed
-// \relates vnl_matrix_fixed
+// \relatesalso vnl_vector_fixed
+// \relatesalso vnl_matrix_fixed
 template <class T, unsigned M, unsigned N>
 inline
 vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
@@ -838,8 +838,8 @@ vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_v
 }
 
 //: Multiply  conformant vector_fixed (M) and vnl_matrix_fixed (M x N)
-// \relates vnl_vector_fixed
-// \relates vnl_matrix_fixed
+// \relatesalso vnl_vector_fixed
+// \relatesalso vnl_matrix_fixed
 template <class T, unsigned M, unsigned N>
 inline
 vnl_vector_fixed<T, N> operator*(const vnl_vector_fixed<T, M>& a, const vnl_matrix_fixed<T, M, N>& b)
@@ -848,7 +848,7 @@ vnl_vector_fixed<T, N> operator*(const vnl_vector_fixed<T, M>& a, const vnl_matr
 }
 
 //: Multiply two conformant vnl_matrix_fixed (M x N) times (N x O)
-// \relates vnl_matrix_fixed
+// \relatesalso vnl_matrix_fixed
 template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
@@ -962,7 +962,7 @@ outer_product(vnl_vector_fixed<T,m> const& a, SecondFixedVector const& b)
 #else // no need for VC6 workaround for outer_product
 
 //:
-// \relates vnl_vector_fixed
+// \relatesalso vnl_vector_fixed
 template <class T, unsigned m, unsigned n>
 vnl_matrix_fixed<T,m,n> outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b);
 

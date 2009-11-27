@@ -15,7 +15,7 @@
 
 //: Return a view of im's plane p.
 //  O(1).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vil_image_view<T> vil_plane(const vil_image_view<T> &im, unsigned p)
 {
@@ -47,7 +47,7 @@ inline vil_image_view<T> vil_planes(const vil_image_view<T> &im,
 
 
 //: Return a specific plane of an image.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_plane(const vil_image_resource_sptr &src, unsigned p);
 
 

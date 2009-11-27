@@ -118,7 +118,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_3d<T> const& p)
 //  Either just reads three blank-separated numbers,
 //  or reads three comma-separated numbers,
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
-// \relates vgl_vector_3d
+// \relatesalso vgl_vector_3d
 template <class T>
 vcl_istream& vgl_vector_3d<T>::read(vcl_istream& is)
 {
@@ -148,7 +148,7 @@ vcl_istream& vgl_vector_3d<T>::read(vcl_istream& is)
 //  Either just reads three blank-separated numbers,
 //  or reads three comma-separated numbers,
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
-// \relates vgl_vector_3d
+// \relatesalso vgl_vector_3d
 template <class T>
 vcl_istream&  operator>>(vcl_istream& is, vgl_vector_3d<T>& p)
 {

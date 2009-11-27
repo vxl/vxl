@@ -58,7 +58,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p)
 //  Either just reads three blank-separated numbers,
 //  or reads three comma-separated numbers,
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
-// \relates vgl_point_3d
+// \relatesalso vgl_point_3d
 template <class Type>
 vcl_istream& vgl_point_3d<Type>::read(vcl_istream& is)
 {
@@ -88,7 +88,7 @@ vcl_istream& vgl_point_3d<Type>::read(vcl_istream& is)
 //  Either just reads three blank-separated numbers,
 //  or reads three comma-separated numbers,
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
-// \relates vgl_point_3d
+// \relatesalso vgl_point_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is, vgl_point_3d<Type>& p)
 {

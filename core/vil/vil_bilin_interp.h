@@ -108,7 +108,7 @@ inline double vil_bilin_interp_safe(double x, double y, const T* data,
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline double vil_bilin_interp_safe(const vil_image_view<T> &view,
                                     double x, double y, unsigned p=0)
@@ -140,7 +140,7 @@ inline double vil_bilin_interp(double x, double y, const T* data,
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline double vil_bilin_interp(const vil_image_view<T> &view,
                                double x, double y, unsigned p=0)
@@ -170,7 +170,7 @@ inline double vil_bilin_interp_safe_extend(double x, double y, const T* data,
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline double vil_bilin_interp_safe_extend(const vil_image_view<T> &view,
                                            double x, double y, unsigned p=0)

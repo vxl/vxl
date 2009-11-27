@@ -28,7 +28,7 @@
 // a multi-component image in this way, the vil_image_resource API will treat
 // it as a scalar pixel image with multiple planes. (This doesn't affect the
 // underlying data storage.)
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
                                                vil_pixel_format format)
 {
@@ -40,7 +40,7 @@ vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigne
 
 //: Make a new image of given format with interleaved planes.
 // The format must be scalar.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource_interleaved(unsigned ni, unsigned nj,
                                                            unsigned nplanes,
                                                            vil_pixel_format format)
@@ -58,14 +58,14 @@ vil_image_resource_sptr vil_new_image_resource_interleaved(unsigned ni, unsigned
 // a multi-component image in this way, the vil_image_resource API will treat
 // it as a scalar pixel image with multiple planes. (This doesn't affect the
 // underlying data storage.)
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource_of_view(vil_image_view_base const& view)
 {
   return new vil_memory_image(view);
 }
 
 //: Make a new image, similar format to the prototype.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, vil_image_resource_sptr const& prototype)
 {
   return vil_new_image_resource(ni, nj, prototype->nplanes(),
@@ -73,7 +73,7 @@ vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, vil_ima
 }
 
 //: Make a new image.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                unsigned ni, unsigned nj,
                                                unsigned nplanes,
@@ -100,7 +100,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
 }
 
 //: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(char const* filename,
                                                unsigned ni, unsigned nj,
                                                vil_image_resource_sptr const& prototype,
@@ -119,7 +119,7 @@ vil_image_resource_sptr vil_new_image_resource(char const* filename,
 }
 
 //: Make a new image.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(char const* filename,
                                                unsigned ni, unsigned nj,
                                                unsigned nplanes,
@@ -139,7 +139,7 @@ vil_image_resource_sptr vil_new_image_resource(char const* filename,
 
 
 //: Make a new vil_image_resource, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                unsigned ni, unsigned nj,
                                                vil_image_resource_sptr const& prototype,
@@ -309,7 +309,7 @@ vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&
 #include <windows.h>
 
 //: Make a new image.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                unsigned ni, unsigned nj,
                                                unsigned nplanes,
@@ -331,7 +331,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
 }
 
 //: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
                                                unsigned ni, unsigned nj,
                                                vil_image_resource_sptr const& prototype,
@@ -361,7 +361,7 @@ vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
 }
 
 //: Make a new image.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
                                                unsigned ni, unsigned nj,
                                                unsigned nplanes,

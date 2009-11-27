@@ -11,7 +11,7 @@
 #include <vcl_algorithm.h>
 
 //: Construct histogram from pixels in given image
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 template<class T>
 inline
 void vil_histogram(const vil_image_view<T>& image,
@@ -43,7 +43,7 @@ void vil_histogram(const vil_image_view<T>& image,
 
 //: Construct histogram from pixels in given image of bytes
 //  Resulting histogram has 256 bins
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 void vil_histogram_byte(const vil_image_view<vxl_byte>& image,
                         vcl_vector<double>& histo);
 

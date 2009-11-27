@@ -80,13 +80,13 @@ class vgl_line_3d_2_points
 #define l vgl_line_3d_2_points<Type>
 
 //: Return true iff line is at infinity (which is always false)
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class Type>
 inline bool is_ideal(l const&, Type=(Type)0) { return false; }
 
 //: Does a line pass through a point, i.e., are the point and the line collinear?
-// \relates vgl_line_3d_2_points
-// \relates vgl_point_3d
+// \relatesalso vgl_line_3d_2_points
+// \relatesalso vgl_point_3d
 template <class Type>
 inline bool collinear(l const& l1, vgl_point_3d<Type> const& p)
 {
@@ -94,13 +94,13 @@ inline bool collinear(l const& l1, vgl_point_3d<Type> const& p)
 }
 
 //: Are two lines coplanar, i.e., do they either intersect or are parallel?
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class Type>
 inline bool coplanar(l const& l1, l const& l2)
 { return coplanar(l1.point1(),l1.point2(),l2.point1(),l2.point2()); }
 
 //: Are two lines concurrent, i.e., do they intersect in a finite point?
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class Type>
 inline bool concurrent(l const& l1, l const& l2)
 {
@@ -108,14 +108,14 @@ inline bool concurrent(l const& l1, l const& l2)
 }
 
 //: Are two points coplanar with a line?
-// \relates vgl_line_3d_2_points
-// \relates vgl_point_3d
+// \relatesalso vgl_line_3d_2_points
+// \relatesalso vgl_point_3d
 template <class Type>
 inline bool coplanar(l const& l1, vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2)
 { return coplanar(l1.point1(),l1.point2(),p1,p2); }
 
 //: Are three lines coplanar, i.e., are they in a common plane?
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class Type>
 inline bool coplanar(l const& l1, l const& l2, l const& l3)
 {
@@ -127,7 +127,7 @@ inline bool coplanar(l const& l1, l const& l2, l const& l3)
 
 #if 0 // deprecated
 //: Return the intersection point of two concurrent lines
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 // \deprecated in favour of vgl_intersection.
 // Can be removed after the relase of VXL 1.8
 template <class Type>
@@ -135,7 +135,7 @@ vgl_point_3d<Type> intersection(l const& l1, l const& l2)
 { return vgl_intersection(l1, l2); }
 
 //: Return the intersection point of a line and a plane.
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 // \deprecated in favour of vgl_intersection.
 // Can be removed after the relase of VXL 1.8
 template <class Type>
@@ -144,7 +144,7 @@ vgl_point_3d<Type> intersection(l const& line, vgl_plane_3d<Type> const& plane)
 #endif // 0
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class Type>
 inline bool concurrent(l const& l1, l const& l2, l const& l3)
 {
@@ -157,12 +157,12 @@ inline bool concurrent(l const& l1, l const& l2, l const& l3)
 //+****************************************************************************
 
 //: Write to stream (verbose)
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class Type>
 vcl_ostream &operator<<(vcl_ostream&s, l const& );
 
 //: Read parameters from stream
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class Type>
 vcl_istream &operator>>(vcl_istream &is, l &);
 

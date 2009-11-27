@@ -34,7 +34,7 @@
 //  smoothed3_im = vil3d_switch_axes_jki(smoothed3);
 //
 // \endverbatim
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil3d_convolve_1d(const vil3d_image_view<srcT>& src_im,

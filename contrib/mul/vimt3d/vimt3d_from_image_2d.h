@@ -21,10 +21,10 @@
 
 //: Return a 3D image containing a single slice obtained from a 2D image.
 //  result(x,y,0,p)=im(x,y,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
-// \relates vimt_image
-// \relates vimt3d_image
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
+// \relatesalso vimt_image
+// \relatesalso vimt3d_image
 // \note Currently only implemented for some transform types i.e. Identity, Translation and ZoomOnly
 template <class T>
 inline vimt3d_image_3d_of<T> vimt3d_from_image_2d(const vimt_image_2d_of<T>& img)

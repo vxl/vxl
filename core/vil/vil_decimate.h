@@ -14,7 +14,7 @@
 
 //: Create a view which is a decimated version of src.
 // Doesn't modify underlying data. O(1).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 // The factor describes the number of input rows (or columns)
 // that are equivalent to one output.
 // If you don't specify the j_factor, it will be set equal to i_factor.
@@ -32,7 +32,7 @@ vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigne
                                       unsigned j_factor=0);
 
 //: decimate to a region of src.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_decimate(const vil_image_resource_sptr &src,
                                      unsigned i_factor, unsigned j_factor=0);
 

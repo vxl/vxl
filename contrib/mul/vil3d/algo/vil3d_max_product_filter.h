@@ -65,8 +65,8 @@ inline T vil3d_max_product_filter(const vil3d_image_view<T>& image,
 // If a suitable combination of se and f is chosen,
 // this performs half an 'exponential distance transform'.
 // For an example of use, see vil3d_exp_distance_transform.
-// \relates vil3d_image_view
-// \relates vil3d_structuring_element
+// \relatesalso vil3d_image_view
+// \relatesalso vil3d_structuring_element
 template<class T>
 void vil3d_max_product_filter(vil3d_image_view<T>& image,
                         const vil3d_structuring_element& se,

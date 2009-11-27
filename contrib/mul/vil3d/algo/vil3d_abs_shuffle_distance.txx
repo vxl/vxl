@@ -12,8 +12,8 @@
 // For each pixel in image1 it finds the pixel in image2 with
 // the closest value in an offset area defined by the element.
 // Returns mean over all pixels of this minimum value.
-// \relates vil3d_image_view
-// \relates vil3d_structuring_element
+// \relatesalso vil3d_image_view
+// \relatesalso vil3d_structuring_element
 template <class T1, class T2>
 double vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
                                   const vil3d_image_view<T2>& image2,
@@ -107,8 +107,8 @@ double vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
 //: Computes shuffle distance between image1 and image2
 // For each pixel in image1 it finds the pixel in image2 with
 // the closest value in an offset area defined by the element.
-// \relates vil3d_image_view
-// \relates vil3d_structuring_element
+// \relatesalso vil3d_image_view
+// \relatesalso vil3d_structuring_element
 template <class T1, class T2>
 void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
                                 const vil3d_image_view<T2>& image2,

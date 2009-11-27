@@ -11,7 +11,7 @@
 #include <vcl_iosfwd.h>
 
 //: XML save vnl_quaternion to stream.
-// \relates vnl_quaternion
+// \relatesalso vnl_quaternion
 template <class T>
 void x_write(vcl_ostream & os, const vnl_quaternion<T> & v,
              vcl_string name="vnl_quaternion");

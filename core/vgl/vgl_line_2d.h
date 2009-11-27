@@ -130,12 +130,12 @@ class vgl_line_2d
 #define l vgl_line_2d<Type>
 
 //: Return true iff line is the line at infinity
-// \relates vgl_line_2d
+// \relatesalso vgl_line_2d
 template <class Type> inline
 bool is_ideal(l const&, Type = (Type)0) { return false; }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
-// \relates vgl_line_2d
+// \relatesalso vgl_line_2d
 template <class Type> inline
 bool concurrent(l const& l1, l const& l2, l const& l3)
 {
@@ -145,7 +145,7 @@ bool concurrent(l const& l1, l const& l2, l const& l3)
 }
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c>"
-// \relates vgl_line_2d
+// \relatesalso vgl_line_2d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, l const& line);
 
@@ -154,7 +154,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, l const& line);
 //  or reads three comma-separated numbers,
 //  or reads three numbers in parenthesized form "(123, 321, -456)"
 //  or reads a formatted line equation "123x+321y-456=0"
-// \relates vgl_line_2d
+// \relatesalso vgl_line_2d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, l& line);
 

@@ -41,7 +41,6 @@ $verbatim = 0;
 $should_end_verbatim = 0;
 
 $debug = 0;
-$replace_relates = $ENV{"REPLACE_RELATES_WITH_RELATESALSO"};
 
 # mainloop
 while (<>)
@@ -54,13 +53,6 @@ while (<>)
     s/\bVCL_DFL_TYPE_PARAM_STLDECL\s*\(([^,()]*),([^,()]*)\)/class $1 = $2 /g;
     s/\bDECLARE_DYNCREATE\s*\([^()]*\)//g; # for MFC
     s/\bTODO\b/\\todo/g;
-
-    # perform this replacement temporarily. Make it permanent in the code
-    # when doxygen 1.3.4 is more widely distributed
-    if ( defined($replace_relates) && $replace_relates ne "")
-    {
-        s/\\relates\b/\\relatesalso/;
-    }
 
     if ( $should_end_verbatim )
     {

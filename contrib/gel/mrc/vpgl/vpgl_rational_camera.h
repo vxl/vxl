@@ -233,22 +233,22 @@ class vpgl_rational_camera : public vpgl_camera<T>
 };
 
 //: Write to stream
-// \relates vpgl_rational_camera
+// \relatesalso vpgl_rational_camera
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vpgl_rational_camera<T>& p);
 
 //: Read from stream
-// \relates vpgl_rational_camera
+// \relatesalso vpgl_rational_camera
 template <class T>
 vcl_istream& operator>>(vcl_istream& is, vpgl_rational_camera<T>& p);
 
 //: Creates a rational camera from a file
-// \relates vpgl_rational_camera
+// \relatesalso vpgl_rational_camera
 template <class T>
 vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path);
 
 //: Creates a rational camera from a stream
-// \relates vpgl_rational_camera
+// \relatesalso vpgl_rational_camera
 template <class T>
 vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr);
 

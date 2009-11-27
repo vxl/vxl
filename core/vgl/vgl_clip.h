@@ -45,8 +45,8 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line equation ax+by+c=0.
 
 
 //: clip given line to given box, and return resulting line segment
-// \relates vgl_line_2d
-// \relates vgl_box_2d
+// \relatesalso vgl_line_2d
+// \relatesalso vgl_box_2d
 
 template <class T>
 inline
@@ -70,7 +70,7 @@ vgl_line_segment_2d<T> vgl_clip_line_to_box(vgl_line_2d<T> const& l,
 // library (http://www.cs.man.ac.uk/aig/staff/alan/software/gpc.html)
 // which is free for non-commercial use.
 //
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T>
 vgl_polygon<T>
 vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
@@ -84,7 +84,7 @@ vgl_clip( const vgl_polygon<T>& poly1, const vgl_polygon<T>& poly2,
 //  handled. In this case, it might be necessary to perturb the input with
 //  a tiny amount of random noise and try again.
 //
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T>
 vgl_polygon<T>
 vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval);

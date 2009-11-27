@@ -95,12 +95,12 @@ class vgl_line_segment_2d
 };
 
 //: Write to stream
-// \relates vgl_line_segment_2d
+// \relatesalso vgl_line_segment_2d
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_2d<Type>& p);
 
 //: Read from stream
-// \relates vgl_line_segment_2d
+// \relatesalso vgl_line_segment_2d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_2d<Type>& p);
 

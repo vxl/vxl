@@ -12,7 +12,7 @@
 //  Vector v is filled with n*np elements, where np=image.nplanes()*image.ncomponents()
 //  v[0]..v[np-1] are the values from point (x0,y0,z0)
 //  Points outside image return zero.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class imType, class vecType>
 void vil3d_sample_profile_trilin(
   vecType* v,
@@ -26,7 +26,7 @@ void vil3d_sample_profile_trilin(
 //  Vector v is resized to n*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
 //  Points outside image return zero.
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class imType, class vecType>
 void vil3d_sample_profile_trilin_extend(
   vecType* v,

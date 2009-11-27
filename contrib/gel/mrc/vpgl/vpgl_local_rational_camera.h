@@ -85,22 +85,22 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
 };
 
 //: Creates a local rational camera from a file
-  // \relates vpgl_local_rational_camera
+  // \relatesalso vpgl_local_rational_camera
 template <class T>
   vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_string cam_path);
 
 //: Creates a local rational camera from a file
-  // \relates vpgl_local_rational_camera
+  // \relatesalso vpgl_local_rational_camera
  template <class T>
 vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_istream& istr);
 
 //: Write to stream
-// \relates vpgl_local_rational_camera
+// \relatesalso vpgl_local_rational_camera
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vpgl_local_rational_camera<T>& p);
 
 //: Read from stream
-// \relates vpgl_local_rational_camera
+// \relatesalso vpgl_local_rational_camera
 template <class T>
 vcl_istream& operator>>(vcl_istream& is, vpgl_local_rational_camera<T>& p);
 

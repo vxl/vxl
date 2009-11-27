@@ -10,7 +10,7 @@
 //: Apply exponential filter along i and j to src_im to produce dest_im
 //  Symmetric exponential filter of the form exp(c*|j|) applied. c=log(k)
 //  Uses fast recursive implementation.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil_exp_filter_2d(const vil_image_view<srcT>& src_im,
                               vil_image_view<destT>& dest_im,

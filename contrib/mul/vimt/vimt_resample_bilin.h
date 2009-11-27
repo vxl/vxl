@@ -21,7 +21,7 @@
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
 //  Points outside image return zero.
-// \relates vimt_image_view
+// \relatesalso vimt_image_view
 template <class sType, class dType>
 inline void vimt_resample_bilin(
   const vimt_image_2d_of<sType>& src_image,
@@ -60,7 +60,7 @@ inline void vimt_resample_bilin(
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
 //  Points outside image return the value of the nearest valid pixel.
-// \relates vimt_image_view
+// \relatesalso vimt_image_view
 template <class sType, class dType>
 inline void vimt_resample_bilin_edge_extend(
   const vimt_image_2d_of<sType>& src_image,
@@ -99,7 +99,7 @@ inline void vimt_resample_bilin_edge_extend(
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
 //  Points outside image return the value of the nearest valid pixel.
-// \relates vimt_image_view
+// \relatesalso vimt_image_view
 template <class sType, class dType>
 inline void vimt_resample_bilin_smoothing_edge_extend(
   const vimt_image_2d_of<sType>& src_image,
@@ -148,7 +148,7 @@ inline void vimt_resample_bilin_smoothing_edge_extend(
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
 //  Points outside image return 0.
-// \relates vimt_image_view
+// \relatesalso vimt_image_view
 template <class sType, class dType>
 inline void vimt_resample_bilin_smoothing(
   const vimt_image_2d_of<sType>& src_image,

@@ -273,14 +273,14 @@ class vnl_rational
 };
 
 //: formatted output
-// \relates vnl_rational
+// \relatesalso vnl_rational
 inline vcl_ostream& operator<<(vcl_ostream& s, vnl_rational const& r)
 {
   return s << r.numerator() << '/' << r.denominator();
 }
 
 //: simple input
-// \relates vnl_rational
+// \relatesalso vnl_rational
 inline vcl_istream& operator>>(vcl_istream& s, vnl_rational& r)
 {
   long n, d; s >> n >> d;
@@ -288,7 +288,7 @@ inline vcl_istream& operator>>(vcl_istream& s, vnl_rational& r)
 }
 
 //: Returns the sum of two rational numbers.
-// \relates vnl_rational
+// \relatesalso vnl_rational
 inline vnl_rational operator+(vnl_rational const& r1, vnl_rational const& r2)
 {
   vnl_rational result(r1); return result += r2;
@@ -315,7 +315,7 @@ inline vnl_rational operator+(int r2, vnl_rational const& r1)
 }
 
 //: Returns the difference of two rational numbers.
-// \relates vnl_rational
+// \relatesalso vnl_rational
 inline vnl_rational operator-(vnl_rational const& r1, vnl_rational const& r2)
 {
   vnl_rational result(r1); return result -= r2;
@@ -342,7 +342,7 @@ inline vnl_rational operator-(int r2, vnl_rational const& r1)
 }
 
 //: Returns the product of two rational numbers.
-// \relates vnl_rational
+// \relatesalso vnl_rational
 inline vnl_rational operator*(vnl_rational const& r1, vnl_rational const& r2)
 {
   vnl_rational result(r1); return result *= r2;
@@ -369,7 +369,7 @@ inline vnl_rational operator*(int r2, vnl_rational const& r1)
 }
 
 //: Returns the quotient of two rational numbers.
-// \relates vnl_rational
+// \relatesalso vnl_rational
 inline vnl_rational operator/(vnl_rational const& r1, vnl_rational const& r2)
 {
   vnl_rational result(r1); return result /= r2;
@@ -396,7 +396,7 @@ inline vnl_rational operator/(int r1, vnl_rational const& r2)
 }
 
 //: Returns the remainder of r1 divided by r2.
-// \relates vnl_rational
+// \relatesalso vnl_rational
 inline vnl_rational operator%(vnl_rational const& r1, vnl_rational const& r2)
 {
   vnl_rational result(r1); return result %= r2;

@@ -17,7 +17,7 @@
 //  operator to the gradient images.
 //
 //  The local peaks of the output image correspond to corner candidates.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 void vil_corners(const vil_image_view<float>& grad_i,
                  const vil_image_view<float>& grad_j,
                  vil_image_view<float>& dest, double k)

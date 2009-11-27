@@ -241,7 +241,7 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
 // not be larger than src_im.ni()
 // \param kernel should point to tap 0.
 // \param dest_im will be resized to size of src_im.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
                             vil_image_view<destT>& dest_im,
@@ -398,7 +398,7 @@ class vil_convolve_1d_resource : public vil_image_resource
 // \note  This function reverses the kernel. If you don't want the
 // kernel reversed, use vil_correlate_1d instead.
 // \param kernel should point to tap 0.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 template <class destT, class kernelT, class accumT>
 vil_image_resource_sptr vil_convolve_1d(
                          const vil_image_resource_sptr& src_im,

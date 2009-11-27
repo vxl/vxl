@@ -12,7 +12,7 @@
 //: Apply exponential filter along i to src_im to produce dest_im
 //  Symmetric exponential filter of the form exp(c*|i|) applied. c=log(kf)
 //  Uses fast recursive implementation.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
                                vil3d_image_view<destT>& dest_im,
@@ -47,7 +47,7 @@ inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
 //  Symmetric exponential filter of the form exp(c*|i|) applied. 
 //  c=log(ki) along i, log(kj) along j, log(kk) along k.
 //  Uses fast recursive implementation.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil3d_exp_filter(const vil3d_image_view<srcT>& src_im,
                              vil3d_image_view<destT>& dest_im,
@@ -74,7 +74,7 @@ inline void vil3d_exp_filter(const vil3d_image_view<srcT>& src_im,
 //: Apply exponential filter along each axis of src_im in turn
 //  Symmetric exponential filter of the form exp(c*|i|) applied. c=log(kf)
 //  Uses fast recursive implementation.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil3d_exp_filter(const vil3d_image_view<srcT>& src_im,
                              vil3d_image_view<destT>& dest_im,

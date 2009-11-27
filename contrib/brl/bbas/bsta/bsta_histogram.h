@@ -152,12 +152,12 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 };
 
 //: Write histogram to stream
-// \relates bsta_histogram
+// \relatesalso bsta_histogram
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, bsta_histogram<T> const& h);
 
 //: Read histogram from stream
-// \relates bsta_histogram
+// \relatesalso bsta_histogram
 template <class T>
 vcl_istream&  operator>>(vcl_istream& is,  bsta_histogram<T>& h);
 

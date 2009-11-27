@@ -16,7 +16,7 @@
 //  square grid.
 //  If there are n small images, the grid will have sqrt(n) columns.
 // \sa contrib/mul/tools/tile_images_2d
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vil_tile_images(vil_image_view<T>& big_image,
                             const vcl_vector<vil_image_view<T> >& patches)

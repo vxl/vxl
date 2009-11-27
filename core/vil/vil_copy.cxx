@@ -40,7 +40,7 @@ static bool copy_resource_by_blocks(const vil_image_resource_sptr& src,
 // src and dest must have identical sizes, and pixel-types. Returns false if the copy
 // failed.
 //  O(size).
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &dest)
 {
   if (dest->ni() != src->ni() || dest->nj() != src->nj() ||

@@ -10,7 +10,7 @@
 #include <vcl_cassert.h>
 
 //: Equalize the pixels values relative to a model image
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
                                      const vil_image_view<dT>& data,
@@ -59,7 +59,7 @@ inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
 
 
 //: Equalize the pixels values relative to a model image
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear(const vil_image_view<mT>& model,
                                       vil_image_view<dT>& data)
@@ -75,7 +75,7 @@ inline void bil_equalize_linear(const vil_image_view<mT>& model,
 
 
 //: Equalize the pixels values relative to a model image
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_planes(const vil_image_view<mT>& model,
                                              vil_image_view<dT>& data)
@@ -91,7 +91,7 @@ inline void bil_equalize_linear_planes(const vil_image_view<mT>& model,
 
 
 //: Equalize the pixels values relative to a model image with a mask
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
                                      const vil_image_view<dT>& data,
@@ -143,7 +143,7 @@ inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
 
 
 //: Equalize the pixels values relative to a model image with a mask
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear(const vil_image_view<mT>& model,
                                       vil_image_view<dT>& data,
@@ -160,7 +160,7 @@ inline void bil_equalize_linear(const vil_image_view<mT>& model,
 
 
 //: Equalize the pixels values relative to a model image with a mask
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_planes(const vil_image_view<mT>& model,
                                              vil_image_view<dT>& data,

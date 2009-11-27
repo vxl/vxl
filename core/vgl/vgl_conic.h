@@ -272,12 +272,12 @@ class vgl_conic
 };
 
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2>" to stream
-// \relates vgl_conic
+// \relatesalso vgl_conic
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_conic<T> const& c);
 
 //: Read a b c d e f from stream
-// \relates vgl_conic
+// \relatesalso vgl_conic
 template <class T>
 vcl_istream&  operator>>(vcl_istream& s, vgl_conic<T>& c);
 

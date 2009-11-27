@@ -55,7 +55,7 @@ T vgl_area( const vgl_polygon<T>& poly )
 //  and the correct orientation is 'enforced' on the polygon (i.e. holes are
 //  given negative area) to ensure that the resultant area is correct
 // \sa vgl_area
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
 {
   T area = T(0);

@@ -68,44 +68,44 @@ int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
                                         T x, T y, T z);
 
 //: Return the point on the given line closest to the origin
-// \relates vgl_line_2d
-// \relates vgl_point_2d
+// \relatesalso vgl_line_2d
+// \relatesalso vgl_point_2d
 template <class T>
 vgl_point_2d<T> vgl_closest_point_origin(vgl_line_2d<T> const& l);
 
 //: Return the point on the given line closest to the origin
-// \relates vgl_homg_line_2d
-// \relates vgl_homg_point_2d
+// \relatesalso vgl_homg_line_2d
+// \relatesalso vgl_homg_point_2d
 template <class T>
 vgl_homg_point_2d<T> vgl_closest_point_origin(vgl_homg_line_2d<T> const& l);
 
 //: Return the point on the given plane closest to the origin
-// \relates vgl_plane_3d
-// \relates vgl_point_3d
+// \relatesalso vgl_plane_3d
+// \relatesalso vgl_point_3d
 template <class T>
 vgl_point_3d<T> vgl_closest_point_origin(vgl_plane_3d<T> const& pl);
 
 //: Return the point on the given plane closest to the origin
-// \relates vgl_homg_plane_3d
-// \relates vgl_homg_point_3d
+// \relatesalso vgl_homg_plane_3d
+// \relatesalso vgl_homg_point_3d
 template <class T>
 vgl_homg_point_3d<T> vgl_closest_point_origin(vgl_homg_plane_3d<T> const& pl);
 
 //: Return the point on the given line closest to the origin
-// \relates vgl_line_3d_2_points
-// \relates vgl_point_3d
+// \relatesalso vgl_line_3d_2_points
+// \relatesalso vgl_point_3d
 template <class T>
 vgl_point_3d<T> vgl_closest_point_origin(vgl_line_3d_2_points<T> const& l);
 
 //: Return the point on the given line closest to the origin
-// \relates vgl_homg_line_3d_2_points
-// \relates vgl_homg_point_3d
+// \relatesalso vgl_homg_line_3d_2_points
+// \relatesalso vgl_homg_point_3d
 template <class T>
 vgl_homg_point_3d<T> vgl_closest_point_origin(vgl_homg_line_3d_2_points<T> const& l);
 
 //: Return the point on the given line closest to the given point
-// \relates vgl_point_2d
-// \relates vgl_line_2d
+// \relatesalso vgl_point_2d
+// \relatesalso vgl_line_2d
 template <class T>
 vgl_point_2d<T> vgl_closest_point(vgl_line_2d<T> const& l,
                                   vgl_point_2d<T> const& p);
@@ -115,8 +115,8 @@ vgl_point_2d<T> vgl_closest_point(vgl_point_2d<T> const& p,
 { return vgl_closest_point(l,p); }
 
 //: Return the point on the given line closest to the given point
-// \relates vgl_homg_point_2d
-// \relates vgl_homg_line_2d
+// \relatesalso vgl_homg_point_2d
+// \relatesalso vgl_homg_line_2d
 template <class T>
 vgl_homg_point_2d<T> vgl_closest_point(vgl_homg_line_2d<T> const& l,
                                        vgl_homg_point_2d<T> const& p);
@@ -126,8 +126,8 @@ vgl_homg_point_2d<T> vgl_closest_point(vgl_homg_point_2d<T> const& p,
 { return vgl_closest_point(l,p); }
 
 //: Return the point on the given plane closest to the given point
-// \relates vgl_point_3d
-// \relates vgl_plane_3d
+// \relatesalso vgl_point_3d
+// \relatesalso vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_plane_3d<T> const& pl,
                                   vgl_point_3d<T> const& p);
@@ -137,8 +137,8 @@ vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
 { return vgl_closest_point(pl,p); }
 
 //: Return the point on the given plane closest to the given point
-// \relates vgl_homg_point_3d
-// \relates vgl_homg_plane_3d
+// \relatesalso vgl_homg_point_3d
+// \relatesalso vgl_homg_plane_3d
 template <class T>
 vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_plane_3d<T> const& pl,
                                        vgl_homg_point_3d<T> const& p);
@@ -150,8 +150,8 @@ vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_point_3d<T> const& p,
 //: Return the point on the given polygon closest to the given point
 //  If the third argument is "false", the edge from last to first point of
 //  each polygon sheet is not considered part of the polygon.
-// \relates vgl_point_2d
-// \relates vgl_polygon
+// \relatesalso vgl_point_2d
+// \relatesalso vgl_polygon
 template <class T>
 vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
                                   vgl_point_2d<T> const& point,
@@ -180,7 +180,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_point_2d<T> const& point,
 // \param line2
 //
 // \return vcl_pair<vgl_homg_point_3d<T>,vgl_homg_point_3d<T> >
-// \relates vgl_homg_line_3d_2_points
+// \relatesalso vgl_homg_line_3d_2_points
 //
 // \author Paul Bourke, modified for use in VXL by Brendan McCane
 //
@@ -195,8 +195,8 @@ vgl_closest_points(vgl_homg_line_3d_2_points<T> const& line1,
 
 //: Return the point on the given line which is closest to the given point.
 //  If the given point is at infinity, the point at infinity of the line is returned.
-// \relates vgl_homg_line_3d_2_points
-// \relates vgl_homg_point_3d
+// \relatesalso vgl_homg_line_3d_2_points
+// \relatesalso vgl_homg_point_3d
 template <class T>
 vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_line_3d_2_points<T> const& l,
                                        vgl_homg_point_3d<T> const& p);
@@ -207,8 +207,8 @@ vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_point_3d<T> const& p,
 { return vgl_closest_point(l,p); }
 
 //: Return the point on the given line which is closest to the given point.
-// \relates vgl_line_3d_2_points
-// \relates vgl_point_3d
+// \relatesalso vgl_line_3d_2_points
+// \relatesalso vgl_point_3d
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
                                   vgl_point_3d<T> const& p);
@@ -231,8 +231,8 @@ vgl_point_3d<T> vgl_closest_point(vgl_infinite_line_3d<T> const& l,
 
 //: Return the point on the given line which is closest to the given point.
 // The closest point is expressed in parametric form.
-// \relates vgl_line_3d_2_points
-// \relates vgl_point_3d
+// \relatesalso vgl_line_3d_2_points
+// \relatesalso vgl_point_3d
 // \sa vgl_line_3d_2_points::point_t()
 // \sa vgl_closest_point(vgl_line_3d_2_points<T> const&, vgl_point_3d<T> const&)
 template <class T>
@@ -251,7 +251,7 @@ double vgl_closest_point_t(vgl_point_3d<T> const& p,
 // \retval unique If provided, will be set to true if the returned points are unique,
 // otherwise many solutions exist and the returned points are an arbitrary choice.
 // The distance between the points is still valid, however.
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class T>
 vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
@@ -265,7 +265,7 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
 // \retval unique If provided, will be set to true if the returned points are unique,
 // otherwise many solutions exist and the returned points are an arbitrary choice.
 // The distance between the points is still valid, however.
-// \relates vgl_line_3d_2_points
+// \relatesalso vgl_line_3d_2_points
 template <class T>
 vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_infinite_line_3d<T>& l1,
@@ -283,7 +283,7 @@ vgl_closest_points(const vgl_infinite_line_3d<T>& l1,
 // \retval unique If provided, will be set to true if the returned points are unique,
 // otherwise many solutions exist and the returned points are an arbitrary choice.
 // The distance between the points is still valid, however.
-// \relates vgl_line_segment_3d
+// \relatesalso vgl_line_segment_3d
 template <class T>
 vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_line_segment_3d<T>& l1,

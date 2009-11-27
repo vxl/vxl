@@ -14,7 +14,7 @@
 
 //: Create a view which appears as the transpose of this view.
 //  i.e. transpose(i,j,p) = view(j,i,p). O(1).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vil_image_view<T> vil_transpose(const vil_image_view<T>& v)
 {
@@ -26,7 +26,7 @@ inline vil_image_view<T> vil_transpose(const vil_image_view<T>& v)
 
 
 //: Transpose an image.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_transpose(const vil_image_resource_sptr &src);
 
 

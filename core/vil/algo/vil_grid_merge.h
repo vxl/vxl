@@ -12,7 +12,7 @@
 //  image1 and image2 are merged by copying boxes of size (box_ni x box_nj)
 //  alternatively from each one.
 //  Useful for comparing two images.
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 template <class T>
 inline void vil_grid_merge(const vil_image_view<T>& image1,
                            const vil_image_view<T>& image2,

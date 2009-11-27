@@ -17,8 +17,8 @@
 
 //: Return a 3D image view containing a single slice obtained from a 2D image.
 //  result(x,y,0,p)=im(x,y,p)
-// \relates vil3d_image_view
-// \relates vil_image_view
+// \relatesalso vil3d_image_view
+// \relatesalso vil_image_view
 // \note Assumes that input image planes (if more than 1) are stored separately,
 // i.e. that im.planestep()==im.ni()*im.nj()
 template <class T>

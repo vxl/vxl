@@ -12,8 +12,8 @@
 // For each pixel in image1 it finds the pixel in image2 with
 // the closest value in an offset area defined by the element.
 // Returns mean over all pixels of this minimum value.
-// \relates vil_image_view
-// \relates vil_structuring_element
+// \relatesalso vil_image_view
+// \relatesalso vil_structuring_element
 template <class T1, class T2>
 double vil_abs_shuffle_distance(const vil_image_view<T1>& image1,
                                 const vil_image_view<T2>& image2,

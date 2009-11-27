@@ -484,8 +484,8 @@ inline void vnl_vector<T>::put(unsigned int index, T const& value)
 }
 
 //: multiply matrix and (column) vector. O(m*n).
-// \relates vnl_vector
-// \relates vnl_matrix
+// \relatesalso vnl_vector
+// \relatesalso vnl_matrix
 template<class T>
 inline vnl_vector<T> operator*(vnl_matrix<T> const& m, vnl_vector<T> const& v)
 {
@@ -493,7 +493,7 @@ inline vnl_vector<T> operator*(vnl_matrix<T> const& m, vnl_vector<T> const& v)
 }
 
 //: add scalar and vector. O(n).
-// \relates vnl_vector
+// \relatesalso vnl_vector
 template<class T>
 inline vnl_vector<T> operator+(T s, vnl_vector<T> const& v)
 {
@@ -501,7 +501,7 @@ inline vnl_vector<T> operator+(T s, vnl_vector<T> const& v)
 }
 
 //: subtract vector from scalar. O(n).
-// \relates vnl_vector
+// \relatesalso vnl_vector
 template<class T>
 inline vnl_vector<T> operator-(T s, vnl_vector<T> const& v)
 {
@@ -509,7 +509,7 @@ inline vnl_vector<T> operator-(T s, vnl_vector<T> const& v)
 }
 
 //: multiply scalar and vector. O(n).
-// \relates vnl_vector
+// \relatesalso vnl_vector
 template<class T>
 inline vnl_vector<T> operator*(T s, vnl_vector<T> const& v)
 {
@@ -517,13 +517,13 @@ inline vnl_vector<T> operator*(T s, vnl_vector<T> const& v)
 }
 
 //: Interchange the two vectors
-// \relates vnl_vector
+// \relatesalso vnl_vector
 template<class T>
 inline void swap(vnl_vector<T> &a, vnl_vector<T> &b) { a.swap(b); }
 
 //: Euclidean Distance between two vectors.
 // Sum of Differences squared.
-// \relates vnl_vector
+// \relatesalso vnl_vector
 template<class T>
 inline T vnl_vector_ssd(vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 {
@@ -537,10 +537,10 @@ inline T vnl_vector_ssd(vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 // Non-vector functions which are nevertheless very useful.
 
 //: Write vector to a vcl_ostream
-// \relates vnl_vector
+// \relatesalso vnl_vector
 export template <class T> vcl_ostream& operator<<(vcl_ostream &, vnl_vector<T> const&);
 //: Read vector from a vcl_istream
-// \relates vnl_vector
+// \relatesalso vnl_vector
 export template <class T> vcl_istream& operator>>(vcl_istream &, vnl_vector<T>      &);
 
 #endif // vnl_vector_h_

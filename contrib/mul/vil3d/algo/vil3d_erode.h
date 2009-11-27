@@ -20,8 +20,8 @@ inline T vil3d_erode(const T* im, const vcl_ptrdiff_t* offset, unsigned n)
 }
 
 //: Erodes src_image to produce dest_image (assumed single plane)
-// \relates vil3d_image_view
-// \relates vil3d_structuring_element
+// \relatesalso vil3d_image_view
+// \relatesalso vil3d_structuring_element
 template <class T>
 void vil3d_erode(const vil3d_image_view<T>& src_image,
                  vil3d_image_view<T>& dest_image,

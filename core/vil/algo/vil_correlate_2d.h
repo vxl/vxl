@@ -12,7 +12,7 @@
 
 //: Evaluate dot product between kernel and src_im
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
                                      vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
@@ -49,7 +49,7 @@ inline accumT vil_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
 // dest is resized to (1+src_im.ni()-kernel.ni())x(1+src_im.nj()-kernel.nj())
 // (a one plane image).
 // On exit dest(x,y) = sum_ij src_im(x+i,y+j)*kernel(i,j)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_correlate_2d(const vil_image_view<srcT>& src_im,
                              vil_image_view<destT>& dest_im,

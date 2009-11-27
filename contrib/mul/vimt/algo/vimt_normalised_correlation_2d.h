@@ -13,7 +13,7 @@
 //: Evaluate dot product between kernel and (normalised) src_im
 // Assumes that the kernel has been normalised to have zero mean
 // and unit variance.
-// \relates vimt_image_2d_of
+// \relatesalso vimt_image_2d_of
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vimt_normalised_correlation_2d(const vimt_image_2d_of<srcT>& src_im,
                                            vimt_image_2d_of<destT>& dest_im,

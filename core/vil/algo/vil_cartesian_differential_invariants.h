@@ -21,7 +21,7 @@
 // if you want to restrict the size of the kernel. 0 will
 // let the function choose an appropriate kernel size for the \p scale.
 //
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class S, class T>
 void vil_cartesian_differential_invariants_3(const vil_image_view<S>& src,
                                              vil_image_view<T>& dest, double scale,

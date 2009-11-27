@@ -17,7 +17,7 @@
 //  operator to the gradient images.
 //
 //  The local peaks of the output image correspond to corner candidates.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 void vil_corners(const vil_image_view<float>& grad_i,
                  const vil_image_view<float>& grad_j,
                  vil_image_view<float>& dest, double k=0.04);
@@ -31,7 +31,7 @@ void vil_corners(const vil_image_view<double>& grad_i,
 //  after the elements of C have been smoothed.
 //  g is the vector of first derivatives (gx,gy)'
 //  It relies only on first derivatives.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 void vil_corners_rohr(const vil_image_view<float>& grad_i,
                       const vil_image_view<float>& grad_j,
                       vil_image_view<float>& dest);
@@ -43,7 +43,7 @@ void vil_corners_rohr(const vil_image_view<float>& grad_i,
 //  operator twice.  The filters thus effectively have 5x5 support.
 //
 //  The local peaks of the output image correspond to corner candidates.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline
 void vil_corners(const vil_image_view<T>& src,
@@ -59,7 +59,7 @@ void vil_corners(const vil_image_view<T>& src,
 //  after the elements of C have been smoothed.
 //  g is the vector of first derivatives (gx,gy)'
 //  It relies only on first derivatives.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline
 void vil_corners_rohr(const vil_image_view<T>& src,

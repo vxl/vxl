@@ -604,7 +604,7 @@ inline void vnl_matrix<T>::put(unsigned row, unsigned column, T const& value)
 // non-member arithmetical operators.
 
 //:
-// \relates vnl_matrix
+// \relatesalso vnl_matrix
 template<class T>
 inline vnl_matrix<T> operator*(T const& value, vnl_matrix<T> const& m)
 {
@@ -612,7 +612,7 @@ inline vnl_matrix<T> operator*(T const& value, vnl_matrix<T> const& m)
 }
 
 //:
-// \relates vnl_matrix
+// \relatesalso vnl_matrix
 template<class T>
 inline vnl_matrix<T> operator+(T const& value, vnl_matrix<T> const& m)
 {
@@ -620,7 +620,7 @@ inline vnl_matrix<T> operator+(T const& value, vnl_matrix<T> const& m)
 }
 
 //: Swap two matrices
-// \relates vnl_matrix
+// \relatesalso vnl_matrix
 template<class T>
 inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) { A.swap(B); }
 

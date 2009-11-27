@@ -18,7 +18,7 @@
 //  Vector v is filled with n*np elements, where np=image.nplanes()*image.ncomponents()
 //  v[0]..v[np-1] are the values from point (x0,y0)
 //  Points outside image return zero.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class imType, class vecType>
 void vil_sample_profile_bicub(vecType* v,
                               const vil_image_view<imType>& image,

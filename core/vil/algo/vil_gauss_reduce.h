@@ -19,7 +19,7 @@
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-5-8-5-1 smoothing filter in x and y, then samples every other pixel.
 //  work_im provides workspace
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_gauss_reduce(const vil_image_view<T>& src,
                       vil_image_view<T>& dest,
@@ -28,7 +28,7 @@ void vil_gauss_reduce(const vil_image_view<T>& src,
 //: Smooth and subsample src_im to produce dest_im (2/3 size)
 //  Applies filter in x and y, then samples every other pixel.
 //  work_im provides workspace
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_gauss_reduce_2_3(const vil_image_view<T>& src_im,
                           vil_image_view<T>& dest_im,
@@ -36,7 +36,7 @@ void vil_gauss_reduce_2_3(const vil_image_view<T>& src_im,
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-2-1 smoothing filter in x and y, then samples every other pixel.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_gauss_reduce_121(const vil_image_view<T>& src,
                           vil_image_view<T>& dest);
@@ -105,7 +105,7 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src_im,
                               const vil_gauss_reduce_params& params);
 
 //: Smooth and subsample src_im by an arbitrary factor to produce dest_im
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline void vil_gauss_reduce_general(const vil_image_view<T>& src_im,
                                      vil_image_view<T>& dest_im,

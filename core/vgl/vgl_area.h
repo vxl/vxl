@@ -13,12 +13,12 @@ template <class T> class vgl_point_2d;
 // the contours are oriented consistently. That is, an enclosed
 // contour must have opposite orientation to the enclosing contour.
 // \sa vgl_area
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T> T vgl_area_signed(vgl_polygon<T> const& poly);
 
 //: The area of a polygon.
 // \sa vgl_area_signed
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T> T vgl_area(vgl_polygon<T> const& poly);
 
 //: The orientation enforced area of a polygon.
@@ -26,12 +26,12 @@ template <class T> T vgl_area(vgl_polygon<T> const& poly);
 //  and the correct orientation is 'enforced' on the polygon (i.e. holes are
 //  given negative area) to ensure that the resultant area is correct
 // \sa vgl_area
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly);
 
 //: The area weighted center of a polygon
 //  In general this is different than the mean of the polygon's vertices
-// \relates vgl_polygon
+// \relatesalso vgl_polygon
 template <class T> vgl_point_2d<T> vgl_centroid(vgl_polygon<T> const& poly);
 
 #define VGL_AREA_INSTANTIATE(T) extern "please include vgl/vgl_area.txx instead"

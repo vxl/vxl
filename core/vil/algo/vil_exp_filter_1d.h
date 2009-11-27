@@ -47,7 +47,7 @@ inline void vil_exp_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
 //: Apply exponential filter along i to src_im to produce dest_im
 //  Symmetric exponential filter of the form exp(c*|i|) applied. c=log(k)
 //  Uses fast recursive implementation.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil_exp_filter_i(const vil_image_view<srcT>& src_im,
                              vil_image_view<destT>& dest_im,
@@ -72,7 +72,7 @@ inline void vil_exp_filter_i(const vil_image_view<srcT>& src_im,
 //: Apply exponential filter along j to src_im to produce dest_im
 //  Symmetric exponential filter of the form exp(c*|j|) applied. c=log(k)
 //  Uses fast recursive implementation.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class accumT>
 inline void vil_exp_filter_j(const vil_image_view<srcT>& src_im,
                              vil_image_view<destT>& dest_im,

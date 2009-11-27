@@ -10,8 +10,8 @@
 
 //: Applies morphological closing operation with given structuring element
 //  Applies dilation followed by erosion
-// \relates vil_image_view
-// \relates vil_structuring_element
+// \relatesalso vil_image_view
+// \relatesalso vil_structuring_element
 template <class T>
 inline void vil_greyscale_closing(const vil_image_view<T>& src_image,
                                   vil_image_view<T>& dest_image,

@@ -15,17 +15,17 @@
 #include <vil/vil_smart_ptr.h>
 
 //: Binary save vil_smart_ptr to stream.
-// \relates vil_smart_ptr
+// \relatesalso vil_smart_ptr
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> & v);
 
 //: Binary load vil_smart_ptr from stream.
-// \relates vil_smart_ptr
+// \relatesalso vil_smart_ptr
 template <class T>
 void vsl_b_read(vsl_b_istream & is, vil_smart_ptr<T> & v);
 
 //: Print human readable summary of object to a stream
-// \relates vil_smart_ptr
+// \relatesalso vil_smart_ptr
 template <class T>
 void vsl_print_summary(vcl_ostream & os,const vil_smart_ptr<T> & b);
 

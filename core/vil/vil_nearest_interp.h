@@ -31,7 +31,7 @@ inline T vil_nearest_interp_unsafe(double x, double y, const T* data,
 
 //: Compute nearest neighbour interpolation at (x,y), no bound checks. Requires -0.5<=x<ni-0.5, -0.5<=y<nj-0.5
 //  No bound checks are done.
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 template<class T>
 inline T vil_nearest_interp_unsafe(const vil_image_view<T>& view, double x, double y, unsigned p=0)
 {
@@ -58,7 +58,7 @@ inline T vil_nearest_interp_safe(double x, double y, const T* data,
 //: Compute nearest neighbour interpolation at (x,y), with bound checks
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[0,view.nj()-0.5).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline T vil_nearest_interp_safe(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)
@@ -92,7 +92,7 @@ inline T vil_nearest_interp(double x, double y, const T* data,
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[0.5,view.nj()-0.5).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline T vil_nearest_interp(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)
@@ -130,7 +130,7 @@ inline T vil_nearest_interp_safe_extend(double x, double y, const T* data,
 //: Compute nearest_neighbourear interpolation at (x,y), with bound checks
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[-0.5,view.nj()-0.5).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline T vil_nearest_interp_safe_extend(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)

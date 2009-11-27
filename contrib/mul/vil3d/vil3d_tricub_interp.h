@@ -93,7 +93,7 @@ double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
 // //: Compute tricubic interpolation at (x,y,z), with bound checks
 // //  If (x,y,z) is outside safe interpolatable image region, nearest pixel value is returned.
 // //  The safe interpolatable region is [1,view.ni()-2]*[1,view.nj()-2]*[1,view.nk()-2].
-// // \relates vil3d_image_view
+// // \relatesalso vil3d_image_view
 // template<class T>
 // inline double vil3d_tricub_interp_safe_extend(const vil3d_image_view<T> &view,
 //                                               double x, double y, double z, unsigned p=0)

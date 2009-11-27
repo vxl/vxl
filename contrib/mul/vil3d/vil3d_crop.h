@@ -28,7 +28,7 @@ vil3d_image_view<T> vil3d_crop(const vil3d_image_view<T>& im,
 }
 
 //: Crop to a region of src.
-// \relates vil3d_image_resource
+// \relatesalso vil3d_image_resource
 vil3d_image_resource_sptr vil3d_crop(const vil3d_image_resource_sptr &src,
                                      unsigned i0, unsigned ni, 
                                      unsigned j0, unsigned nj,

@@ -18,7 +18,7 @@
 #endif
 
 //: Print all image data to os in a grid (rounds output to int)
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template <class T>
 inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
 {

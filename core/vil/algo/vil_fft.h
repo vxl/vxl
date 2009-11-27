@@ -10,8 +10,8 @@
 #include <vil/vil_image_view.h>
 
 //: Perform in place forward FFT.
-// \relates vil_image_view
-// \relates vil_fft_2d_bwd
+// \relatesalso vil_image_view
+// \relatesalso vil_fft_2d_bwd
 template<class T>
 void
 vil_fft_2d_fwd (vil_image_view<vcl_complex<T> > & img);
@@ -20,8 +20,8 @@ vil_fft_2d_fwd (vil_image_view<vcl_complex<T> > & img);
 // Unlike vnl_fft_2d, scaling is done properly, so using
 // vil_fft_2d_fwd(), then vil_fft_2d_bwd() gets back the original
 // image.
-// \relates vil_image_view
-// \relates vil_fft_2d_fwd
+// \relatesalso vil_image_view
+// \relatesalso vil_fft_2d_fwd
 template<class T>
 void
 vil_fft_2d_bwd (vil_image_view<vcl_complex<T> > & img);

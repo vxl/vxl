@@ -27,8 +27,8 @@ inline T vil_sorted_value(const T* im, const vcl_ptrdiff_t* offset, Iter values,
 // \param r in [0,1].
 // \param values used to store values sampled from image before sorting
 // Checks boundary overlap
-// \relates vil_image_view
-// \relates vil_structuring_element
+// \relatesalso vil_image_view
+// \relatesalso vil_structuring_element
 template <class T>
 inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
                           const vil_structuring_element& element, int i0, int j0,
@@ -51,8 +51,8 @@ inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
 //: Computes median value of pixels under structuring element.
 // dest_image(i0,j0) is the median value of the pixels under the
 // structuring element when it is centred on src_image(i0,j0)
-// \relates vil_image_view
-// \relates vil_structuring_element
+// \relatesalso vil_image_view
+// \relatesalso vil_structuring_element
 template <class T>
 void vil_median(const vil_image_view<T>& src_image,
                 vil_image_view<T>& dest_image,

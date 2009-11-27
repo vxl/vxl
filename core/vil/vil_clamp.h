@@ -18,7 +18,7 @@
 #include <vcl_cassert.h>
 
 //: Clamp an image view between two values.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline void vil_clamp(const vil_image_view<T >&src, vil_image_view<T >&dest, T lo, T hi)
 {
@@ -37,7 +37,7 @@ inline void vil_clamp(const vil_image_view<T >&src, vil_image_view<T >&dest, T l
 
 
 //: Clamp an image resource between two values.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_clamp(const vil_image_resource_sptr &src, double low, double hi);
 
 
@@ -80,7 +80,7 @@ class vil_clamp_image_resource : public vil_image_resource
 };
 
 //: Clamp an image view above a given value t, setting it to v if below or on t
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline void vil_clamp_below(vil_image_view<T>& src, T t, T v)
 {
@@ -100,7 +100,7 @@ inline void vil_clamp_below(vil_image_view<T>& src, T t, T v)
 }
 
 //: Clamp an image view above a given value t, setting it to this t if below t
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class T>
 inline void vil_clamp_below(vil_image_view<T>& src, T t)
 {

@@ -13,7 +13,7 @@
 #include <vcl_iostream.h>
 
 //: How to print value in vil_print_all(image_view)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 void vil_print_value(vcl_ostream& s, const T& value);
 
@@ -72,7 +72,7 @@ vil_print_declare_specialization( vil_rgba<double> );
 
 
 //: Print all image data to os in a grid (rounds output to int)
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
 {
@@ -97,7 +97,7 @@ inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
 }
 
 //: Print all image data to os in a grid
-// \relates vil_image_view
+// \relatesalso vil_image_view
 void vil_print_all(vcl_ostream& os, vil_image_view_base_sptr const& view);
 
 #endif // vil_print_h_

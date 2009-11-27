@@ -34,8 +34,8 @@ bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4);
 
 //: true if the line meets the linesegment.
 // End points are considered to belong to a line segment.
-// \relates vgl_line_2d
-// \relates vgl_line_segment_2d
+// \relatesalso vgl_line_2d
+// \relatesalso vgl_line_segment_2d
 template <class T>
 inline bool vgl_lineseg_test_line(vgl_line_2d<T> const& l1,
                                   vgl_line_segment_2d<T> const& l2)
@@ -49,8 +49,8 @@ inline bool vgl_lineseg_test_line(vgl_line_2d<T> const& l1,
 }
 
 //: true if the point lies on the line segment and is between the endpoints
-// \relates vgl_point_2d
-// \relates vgl_line_segment_2d
+// \relatesalso vgl_point_2d
+// \relatesalso vgl_line_segment_2d
 template <class T>
 inline bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
                                    vgl_line_segment_2d<T> const& lseg)
@@ -70,7 +70,7 @@ inline bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
 
 //: return true if the two linesegments meet.
 // End points are considered to belong to a line segment.
-// \relates vgl_line_segment_2d
+// \relatesalso vgl_line_segment_2d
 template <class T>
 inline bool vgl_lineseg_test_lineseg(vgl_line_segment_2d<T> const& l1,
                                      vgl_line_segment_2d<T> const& l2)

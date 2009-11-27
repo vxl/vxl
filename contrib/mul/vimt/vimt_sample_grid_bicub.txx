@@ -29,7 +29,7 @@ inline bool vimt_grid_corner_in_image(const vgl_point_2d<double>& p,
 //  vec[0]..vec[np-1] are the values from point p0
 //  Samples are taken along direction v first, then along u.
 //  Points outside image return zero.
-// \relates vimt_image_2d_of
+// \relatesalso vimt_image_2d_of
 template <class imType, class vecType>
 void vimt_sample_grid_bicub(vnl_vector<vecType>& vec,
                             const vimt_image_2d_of<imType>& image,

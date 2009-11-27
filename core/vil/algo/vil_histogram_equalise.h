@@ -9,7 +9,7 @@
 #include <vxl_config.h>
 
 //: Apply histogram equalisation to given image
-//  \relates vil_image_view
+//  \relatesalso vil_image_view
 void vil_histogram_equalise(vil_image_view<vxl_byte>& image);
 
 

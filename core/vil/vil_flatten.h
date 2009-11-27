@@ -13,7 +13,7 @@
 //: Rearrange multiple planes into a multiple tiles of a single-plane image.
 // A ni x nj x nplanes images will be arranged into an ni x (nj*nplanes) x 1 image.
 // A view transformation will be used if possible.
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template<class T>
 inline vil_image_view<T> vil_flatten_planes(const vil_image_view<T> &im)
 {

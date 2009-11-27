@@ -15,7 +15,7 @@
 #include <vnl/vnl_math.h>
 
 //: Create SVG document from histogram
-// \relates bsta_histogram
+// \relatesalso bsta_histogram
 template <class T>
 void write_svg(const bsta_histogram<T>& h, const vcl_string& outfile,
                float width = 600.0f, float height = 600.0f, float margin = 40.0f, int font_size = 30)

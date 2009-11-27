@@ -13,7 +13,7 @@
 //: Evaluate dot product between kernel and src_im
 // Assumes that the kernel has been normalised to have zero mean
 // and unit variance
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
                                      vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
@@ -62,7 +62,7 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
 //
 // Assumes that the kernel has been normalised to have zero mean
 // and unit variance
-// \relates vil_image_view
+// \relatesalso vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_normalised_correlation_2d(const vil_image_view<srcT>& src_im,
                                           vil_image_view<destT>& dest_im,

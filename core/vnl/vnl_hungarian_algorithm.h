@@ -23,7 +23,7 @@
 // column will be assigned to some row. If N \< M then every row will
 // be assigned to some column.
 //
-//  \relates vnl_matrix
+//  \relatesalso vnl_matrix
 vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost );
 
 #endif // vnl_hungarian_algorithm_h_

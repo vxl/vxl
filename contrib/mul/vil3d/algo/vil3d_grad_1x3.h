@@ -12,7 +12,7 @@
 //: Compute gradients of an image using (-0.5 0 0.5) Sobel filters
 //  Computes both i,j and k gradients of an ni x nj x nk plane of data
 //  1 pixel border around grad images is set to zero
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class srcT, class destT>
 void vil3d_grad_1x3(const vil3d_image_view<srcT>& src,
                     vil3d_image_view<destT>& grad_i,
@@ -24,7 +24,7 @@ void vil3d_grad_1x3(const vil3d_image_view<srcT>& src,
 //  grad_ijk has three times as many planes as src, with dest plane (3i) being the i-gradient
 //  of source plane i and dest plane (3i+1) being the j-gradient etc
 //  1 pixel border around grad images is set to zero
-// \relates vil3d_image_view
+// \relatesalso vil3d_image_view
 template<class srcT, class destT>
 void vil3d_grad_1x3(const vil3d_image_view<srcT>& src,
                     vil3d_image_view<destT>& grad_ijk);

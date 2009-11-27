@@ -13,7 +13,7 @@
 
 //: Type of connectivity to use in finding the regions
 //
-// \relates vil_region_finder
+// \relatesalso vil_region_finder
 //
 enum vil_region_finder_connectivity
 {

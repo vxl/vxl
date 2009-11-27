@@ -15,7 +15,7 @@
 
 //: Create a view which is a cropped version of src.
 // Doesn't modify underlying data. O(1).
-// \relates vil_image_view
+// \relatesalso vil_image_view
 // \return an n_i x n_j window of im with offset (i0,j0)
 template<class T>
 inline vil_image_view<T> vil_crop(const vil_image_view<T> &im, unsigned i0,
@@ -28,7 +28,7 @@ inline vil_image_view<T> vil_crop(const vil_image_view<T> &im, unsigned i0,
 }
 
 //: Crop to a region of src.
-// \relates vil_image_resource
+// \relatesalso vil_image_resource
 vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0,
                                  unsigned n_i, unsigned j0, unsigned n_j);
 

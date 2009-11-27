@@ -85,7 +85,7 @@ class bgrl_edge : public vbl_ref_count
 void vsl_add_to_binary_loader(const bgrl_edge& e);
 
 //: Print an ASCII summary to the stream
-// \relates bgrl_edge
+// \relatesalso bgrl_edge
 void vsl_print_summary(vcl_ostream &os, const bgrl_edge* e);
 
 #endif // bgrl_edge_h_

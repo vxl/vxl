@@ -146,8 +146,8 @@ bool vimt3d_image_3d_of<T>::operator==(const vimt3d_image_3d_of<T> &other) const
 //: True if the transforms and the actual image data are identical.
 // The image pointers need not be identical,
 // provided that the underlying image data are the same.
-// \relates vimt3d_image_3d_of<T>
-// \relates vil3d_image_view
+// \relatesalso vimt3d_image_3d_of<T>
+// \relatesalso vil3d_image_view
 template<class T>
 bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs,
                                    const vimt3d_image_3d_of<T>& rhs)

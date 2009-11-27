@@ -17,7 +17,7 @@
 // The ordering itself is implementation defined - so don't rely
 // on the meaning of less here.
 //
-// \relates vnl_vector
+// \relatesalso vnl_vector
 
 template<class T>
 bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
@@ -41,7 +41,7 @@ bool operator<(vnl_vector<T> const& lhs, vnl_vector<T> const& rhs)
 // The ordering itself is implementation defined - so don't rely
 // on the meaning of less here.
 //
-// \relates vnl_matrix
+// \relatesalso vnl_matrix
 
 template<class T>
 bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
@@ -64,7 +64,7 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
 //: Define a complete ordering on vnl_vector_fixed
 // This is useful to create a set, or map of vectors.
 //
-// \relates vnl_vector_fixed
+// \relatesalso vnl_vector_fixed
 
 template<class T, unsigned int n>
 bool operator<(vnl_vector_fixed<T,n> const& lhs, vnl_vector_fixed<T,n> const& rhs)
@@ -75,7 +75,7 @@ bool operator<(vnl_vector_fixed<T,n> const& lhs, vnl_vector_fixed<T,n> const& rh
 //: Define a complete ordering on vnl_matrix_fixed
 // This is useful to create a set, or map of matrices.
 //
-// \relates vnl_matrix_fixed
+// \relatesalso vnl_matrix_fixed
 
 template<class T, unsigned int n, unsigned int m>
 bool operator<(vnl_matrix_fixed<T,n,m> const& lhs, vnl_matrix_fixed<T,n,m> const& rhs)

@@ -36,8 +36,8 @@ inline bool vil3d_binary_dilate(const vil3d_image_view<bool>& image, unsigned pl
 }
 
 //: Dilates src_image to produce dest_image (assumed single plane)
-// \relates vil3d_image_view
-// \relates vil3d_structuring_element
+// \relatesalso vil3d_image_view
+// \relatesalso vil3d_structuring_element
 void vil3d_binary_dilate(const vil3d_image_view<bool>& src_image,
                         vil3d_image_view<bool>& dest_image,
                         const vil3d_structuring_element& element);

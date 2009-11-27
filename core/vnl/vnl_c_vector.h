@@ -147,7 +147,7 @@ class vnl_c_vector
 };
 
 //: Input & output
-// \relates vnl_c_vector
+// \relatesalso vnl_c_vector
 template <class T>
 vcl_ostream& print_vector(vcl_ostream&, T const*, unsigned);
 

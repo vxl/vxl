@@ -12,7 +12,7 @@
 
 //: Perform rank 1 update of M:   M+=(a*b')
 //  Requires a.size()==M.rows(),  b.size()==M.columns()
-//  \relates vnl_matrix
+//  \relatesalso vnl_matrix
 template<class T>
 inline void vnl_matrix_update(vnl_matrix<T>& M,
                               const vnl_vector<T>& a,

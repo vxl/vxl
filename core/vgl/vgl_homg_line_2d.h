@@ -120,12 +120,12 @@ class vgl_homg_line_2d
 
 //: Return true iff line is the line at infinity
 //  This version checks (max(|a|,|b|) <= tol * |c|
-// \relates vgl_homg_line_2d
+// \relatesalso vgl_homg_line_2d
 template <class T>
 inline bool is_ideal(l const& line, T tol = (T)0) { return line.ideal(tol); }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
-// \relates vgl_homg_line_2d
+// \relatesalso vgl_homg_line_2d
 template <class T>
 inline bool concurrent(l const& l1, l const& l2, l const& l3)
 {
@@ -135,12 +135,12 @@ inline bool concurrent(l const& l1, l const& l2, l const& l3)
 }
 
 //: Print line equation to stream
-// \relates vgl_homg_line_2d
+// \relatesalso vgl_homg_line_2d
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, l const& line);
 
 //: Load in line parameters from stream
-// \relates vgl_homg_line_2d
+// \relatesalso vgl_homg_line_2d
 template <class T>
 vcl_istream& operator>>(vcl_istream& s, l& line);
 

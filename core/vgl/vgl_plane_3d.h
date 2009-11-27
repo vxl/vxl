@@ -121,7 +121,7 @@ bool is_ideal(vgl_plane_3d<T> const&, T tol=(T)0) { return false; }
 
 
 //: Write to stream
-// \relates vgl_plane_3d
+// \relatesalso vgl_plane_3d
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vgl_plane_3d<T>& p);
 
@@ -130,7 +130,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vgl_plane_3d<T>& p);
 //  or reads four comma-separated numbers,
 //  or reads four numbers in parenthesized form "(123, 321, -456, 777)"
 //  or reads a formatted line equation "123x+321y-456z+777=0"
-// \relates vgl_plane_3d
+// \relatesalso vgl_plane_3d
 template <class T>
 vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p);
 

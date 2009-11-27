@@ -65,7 +65,7 @@ inline void vimt3d_resample_tricubic(
 //  dest_image.world2im() set up so that the world co-ordinates in src and dest match
 //
 //  Points outside image return the value of the nearest valid pixel.
-// \relates vimt3d_image_3d_of
+// \relatesalso vimt3d_image_3d_of
 template <class sType, class dType>
 inline void vimt3d_resample_tricubic_edge_extend(
   const vimt3d_image_3d_of<sType>& src_image,
