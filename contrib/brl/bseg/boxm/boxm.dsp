@@ -240,7 +240,7 @@ SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_sample+BOX
 SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array+boxm_block+boct_tree+short.float---.cxx
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.float--~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.float--.cxx

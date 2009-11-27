@@ -427,7 +427,7 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_vsum_num_obs+bsta_von_mises+doub
 SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator_base+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx

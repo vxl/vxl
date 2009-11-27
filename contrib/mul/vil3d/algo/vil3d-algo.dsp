@@ -176,6 +176,9 @@ SOURCE=.\Templates/vil3d_abs_shuffle_distance+int_16.int_16-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil3d_gauss_reduce+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_abs_shuffle_distance+float.float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
