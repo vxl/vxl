@@ -150,12 +150,6 @@ IF( BUILD_CONTRIB AND BUILD_CORE_ALL)
   SUBDIRS( contrib )
 ENDIF( BUILD_CONTRIB AND BUILD_CORE_ALL)
 
-OPTION(BUILD_TARGETJR "Should the TargetJr packages be built?" NO)
-
-IF(BUILD_TARGETJR)
-  SUBDIRS(COOL GeneralUtility Image SpatialObjects Photogrammetry Database MultiView Segmentation Recognition)
-ENDIF(BUILD_TARGETJR)
-
 # Use the old configure script if the cache tells us to do so.
 IF(VXL_NO_CMAKE_CONFIGURE)
   IF(RUN_CONFIGURE)
