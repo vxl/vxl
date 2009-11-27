@@ -118,10 +118,11 @@ MAIN( test_beta_updater)
   beta_type d2 = model.distribution(1);
   float diff2 = compare_betas(d2, beta10_100);
   vcl_cout << d2;
-  TEST_NEAR("diff2", diff1, 0, 0.1);
+  TEST_NEAR("diff2", diff2, 0, 0.1);
   beta_type d3 = model.distribution(2);
+  float diff3 = compare_betas(d3, beta100_10);
   vcl_cout << d3;
-  TEST_NEAR("diff3", d3, 0, 0.1);
+  TEST_NEAR("diff3", diff3, 0, 0.1);
 
   SUMMARY();
 }
