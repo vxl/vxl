@@ -90,6 +90,51 @@ void vil3d_structuring_element::set_to_sphere(double r)
   set(px,py,pz);
 }
 
+//: Set to circle of radius r
+//  Select pixels in circle s.t. y*y+z*z<=r^r
+void vil3d_structuring_element::set_to_circle_i(double r)
+{
+  vcl_vector<int> px,py,pz;
+  double r2 = r*r;
+  int r0 = int(r+1);
+  const int i = 0;
+  for (int k=-r0;k<=r0;++k)
+    for (int j=-r0;j<=r0;++j)
+      if (i*i+j*j+k*k<r2)
+      { px.push_back(i); py.push_back(j); pz.push_back(k); }
+  set(px,py,pz);
+}
+
+//: Set to circle of radius r
+//  Select pixels in circle s.t. x*x+z*z<=r^r
+void vil3d_structuring_element::set_to_circle_j(double r)
+{
+  vcl_vector<int> px,py,pz;
+  double r2 = r*r;
+  int r0 = int(r+1);
+  const int j = 0;
+  for (int k=-r0;k<=r0;++k)
+    for (int i=-r0;i<=r0;++i)
+      if (i*i+j*j+k*k<r2)
+        { px.push_back(i); py.push_back(j); pz.push_back(k); }
+  set(px,py,pz);
+}
+
+//: Set to circle of radius r
+//  Select pixels in circle s.t. y*y+z*z<=r^r
+void vil3d_structuring_element::set_to_circle_k(double r)
+{
+  vcl_vector<int> px,py,pz;
+  double r2 = r*r;
+  int r0 = int(r+1);
+  const int k = 0;
+  for (int j=-r0;j<=r0;++j)
+    for (int i=-r0;i<=r0;++i)
+      if (i*i+j*j+k*k<r2)
+      { px.push_back(i); py.push_back(j); pz.push_back(k); }
+  set(px,py,pz);
+}
+
 //: Set to sphere of radius r, but with non isotropic voxel sizes
 //  Voxel size supplied in sx,sy and sz. r then becomes an absolute radius
 //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r

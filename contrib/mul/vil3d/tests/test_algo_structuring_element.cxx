@@ -36,6 +36,25 @@ static void test_algo_structuring_element()
   se.set_to_sphere_noniso(1.9,1.0,1.5,1.0);
   TEST("Number of elements in non-iso (1x1.5x1) sphere",se.p_i().size(),19);
 
+  vcl_cout<<"set_to_circle_i():\n";
+  se.set_to_circle_i(1.1);
+  TEST("Number of elements in circle",se.p_i().size(),5);
+  bool plane_i_ok = ( se.min_i() == 0 && se.max_i() == 0 );
+  TEST("Circle in j,k plane",plane_i_ok,true);
+
+  vcl_cout<<"set_to_circle_j():\n";
+  se.set_to_circle_j(1.1);
+  TEST("Number of elements in circle",se.p_j().size(),5);
+  bool plane_j_ok = ( se.min_j() == 0 && se.max_j() == 0 );
+  TEST("Circle in i,k plane",plane_j_ok,true);
+
+  vcl_cout<<"set_to_circle_k():\n";
+  se.set_to_circle_k(1.1);
+  TEST("Number of elements in circle",se.p_k().size(),5);
+  bool plane_k_ok = ( se.min_k() == 0 && se.max_k() == 0 );
+  TEST("Circle in i,j plane",plane_k_ok,true);
+
+
   vcl_cout<<"set_to_line_i():\n";
   se.set_to_line_i(-2,7);
   TEST("Number of elements",se.p_i().size(),10);

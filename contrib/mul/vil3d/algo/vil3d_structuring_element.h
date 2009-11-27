@@ -51,6 +51,18 @@ class vil3d_structuring_element
   //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
   void set_to_sphere(double r);
 
+  //: Set to circle of radius r
+  //  Select pixels in circle s.t. y*y+z*z<=r^r
+  void set_to_circle_i(double r);
+
+  //: Set to circle of radius r
+  //  Select pixels in circle s.t. y*y+z*z<=r^r
+  void set_to_circle_j(double r);
+
+  //: Set to circle of radius r
+  //  Select pixels in circle s.t. y*y+z*z<=r^r
+  void set_to_circle_k(double r);
+
   //: Set to 6 axis-aligned neighbours plus self
   void set_to_7();
 
