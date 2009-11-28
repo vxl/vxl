@@ -80,7 +80,7 @@ open(const vcl_string& glob)
       vcl_cerr << *fit << '\n';
     return false;
   }
-
+  this->image_paths_ = filenames;
   return true;
 }
 
