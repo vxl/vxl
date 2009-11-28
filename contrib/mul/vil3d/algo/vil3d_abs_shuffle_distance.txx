@@ -163,13 +163,13 @@ void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
     // Deal with bottom edge
     for (unsigned int i=ilo; int(i)<=ihi; ++i)
       for (unsigned int j=0; int(j)<jlo; ++j)
-        for (unsigned int k=0; int(k)<nk; ++k)
+        for (unsigned int k=0; k<nk; ++k)
           image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with top edge
     for (unsigned int i=ilo; int(i)<=ihi; ++i)
       for (unsigned int j=jhi+1; j<nj; ++j)
-        for (unsigned int k=0; int(k)<nk; ++k)
+        for (unsigned int k=0; k<nk; ++k)
           image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with front edge
