@@ -78,15 +78,15 @@ bool bwm_observer_video::open_video_stream(vcl_string const& video_path)
   bool glob = false;
   if (vul_file::is_directory(video_path)) glob = true;
   else
-    for(vcl_string::const_iterator cit = video_path.begin(); 
-		cit != video_path.end()&&!glob; ++cit){
-	  char x = *cit;
-      if(x=='*')
+    for (vcl_string::const_iterator cit = video_path.begin(); 
+         cit != video_path.end()&&!glob; ++cit) {
+      char x = *cit;
+      if (x=='*')
         glob = true;
     }
   //try to open the path as an image 
   //if successful, then open the directory as an image list
-  if(!glob){
+  if (!glob) {
     vil_image_resource_sptr resc = vil_load_image_resource(video_path.c_str());
     if (resc) {
       vpath = vul_file::dirname(video_path);
@@ -103,7 +103,7 @@ bool bwm_observer_video::open_video_stream(vcl_string const& video_path)
 #endif
   if (!video_istr_) return false;
   bool open = video_istr_->is_open();
-  if  (open&&video_istr_->is_seekable())
+  if (open&&video_istr_->is_seekable())
     this->seek(0);
   this->range_map();
   return open;
