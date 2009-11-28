@@ -115,8 +115,8 @@ void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
                                 const vil3d_structuring_element& element,
                                 vil3d_image_view<T1>& image3)
 {
-  vcl_cout << "image1: " << image1 << vcl_endl;
-  vcl_cout << "image2: " << image2 << vcl_endl;
+  vcl_cout << "image1: " << image1 << vcl_endl
+           << "image2: " << image2 << vcl_endl;
 
   // Get image dimensions
   unsigned ni = image1.ni();
@@ -146,45 +146,44 @@ void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
   int klo = -element.min_k();
   int khi = nk-1-element.max_k();
 
-//   if (include_borders)
+  // if (include_borders)
   {
     // Deal with left edge
     for (unsigned int i=0; int(i)<ilo; ++i)
       for (unsigned int j=0; j<nj; ++j)
         for (unsigned int k=0; k<nk; ++k)
-          image3(i,j,k)=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
+          image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with right edge
     for (unsigned int i=ihi+1; i<ni; ++i)
       for (unsigned int j=0;j<nj;++j)
         for (unsigned int k=0; k<nk; ++k)
-          image3(i,j,k)=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
+          image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with bottom edge
     for (unsigned int i=ilo; int(i)<=ihi; ++i)
       for (unsigned int j=0; int(j)<jlo; ++j)
         for (unsigned int k=0; int(k)<nk; ++k)
-          image3(i,j,k)=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
+          image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with top edge
     for (unsigned int i=ilo; int(i)<=ihi; ++i)
       for (unsigned int j=jhi+1; j<nj; ++j)
         for (unsigned int k=0; int(k)<nk; ++k)
-          image3(i,j,k)=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
+          image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with front edge
     for (unsigned int i=ilo; int(i)<=ihi; ++i)
       for (unsigned int j=jlo; int(j)<=jhi; ++j)
         for (unsigned int k=0; int(k)<klo; ++k)
-          image3(i,j,k)=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
+          image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with back edge
     for (unsigned int i=ilo; int(i)<=ihi; ++i)
       for (unsigned int j=jlo; int(j)<=jhi; ++j)
         for (unsigned int k=khi+1; k<nk; ++k)
-          image3(i,j,k)=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
+          image3(i,j,k)=(T1)vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
   }
-
 
   const T1* image1_start = image1.origin_ptr();
   const T2* image2_start = image2.origin_ptr();
@@ -206,15 +205,15 @@ void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
 #undef VIL3D_ABS_SHUFFLE_DISTANCE_INSTANTIATE
 #define VIL3D_ABS_SHUFFLE_DISTANCE_INSTANTIATE( T1, T2 ) \
 template double vil3d_abs_shuffle_distance(const vil3d_image_view< T1 >& image1, \
-                                  const vil3d_image_view< T2 >& image2, \
-                                  const vil3d_structuring_element& element, \
-                                  bool include_borders)
+                                           const vil3d_image_view< T2 >& image2, \
+                                           const vil3d_structuring_element& element, \
+                                           bool include_borders)
 
 #undef VIL3D_ABS_SHUFFLE_DISTANCE_INSTANTIATE2
 #define VIL3D_ABS_SHUFFLE_DISTANCE_INSTANTIATE2( T1, T2 ) \
 template void vil3d_abs_shuffle_distance(const vil3d_image_view< T1 >& image1, \
-                                  const vil3d_image_view< T2 >& image2, \
-                                  const vil3d_structuring_element& element, \
-                                  vil3d_image_view< T1 >& image3)
+                                         const vil3d_image_view< T2 >& image2, \
+                                         const vil3d_structuring_element& element, \
+                                         vil3d_image_view< T1 >& image3)
 
 #endif // vil3d_abs_shuffle_distance_txx_
