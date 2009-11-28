@@ -52,7 +52,7 @@ double* MakeQtrMask(double r, int n_wedges)
   int InCircle, NoLine, LowLine, HighLine, LowIntersect, HighIntersect;
   double mlow, mhigh, lowangle, highangle;
   double CA, BA, AA, LA, BXC=0, BXL, BXH, TXC=0, TXL, TXH, LYC, LYL=0, LYH;
-  double RYC, RYL, RYH, AAC, BAC, AAN, BAN, XLC, YLC, XHC, YHC;
+  double RYC, RYL=0, RYH, AAC=0, BAC=0, AAN=0, BAN=0, XLC, YLC, XHC, YHC;
 
   //Iterate over the lower left hand corner of each pixel
   for (int x = 0; x <= R - 1; ++x) {
@@ -170,12 +170,12 @@ double* MakeQtrMask(double r, int n_wedges)
             AAC = CA - 0.5 * (XLC - BXL) * (YLC - y) - CArea(BXC, XLC, y, r);
           else if (!LRC && !LLL)
             AAC = CA - 0.5 * (XLC - x) * (YLC + LYL - 2 * y) -
-            CArea(BXC, XLC, y, r);
+                  CArea(BXC, XLC, y, r);
           else if (LRC && LLL)
             AAC = CArea(XLC, x, y, r) - 0.5 * (YLC - y) * (XLC - BXL);
           else /* if (LRC && !LLL) */
             AAC = CA - CArea(x+1, XLC, y, r) -
-            0.5 * (YLC + LYL - 2 * y) * (XLC - x);
+                  0.5 * (YLC + LYL - 2 * y) * (XLC - x);
         }
 
         if (HighIntersect) {
@@ -185,10 +185,10 @@ double* MakeQtrMask(double r, int n_wedges)
             BAC = 0.5 * (XHC - BXH) * (YHC - y) + CArea(BXC, XHC, y, r);
           else if (!LRC && LLH)
             BAC = 0.5 * (XHC - x) * (YHC + LYH - 2 * y) +
-            CArea(BXC, XHC, y, r);
+                  CArea(BXC, XHC, y, r);
           else if (LRC && LLH)
             BAC = CArea(x+1, XHC, y, r) +
-            0.5 * (YHC + LYH - 2 * y) * (XHC - x);
+                  0.5 * (YHC + LYH - 2 * y) * (XHC - x);
           else /* if (LRC && !LLH) */
             BAC = CArea(x+1, XHC, y, r) + 0.5 * (YHC - y) * (XHC - BXH);
         }
