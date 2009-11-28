@@ -144,10 +144,10 @@ foreach $f (@FILES)
   }
 
 # 6. Quick consistency check of Doxygen structured comments, including ambiguous \date
-  &msg(1, "doxygen comments will not be shown without \\file")
+  &msg(1, "Doxygen comments will not be shown without \\file")
     if ($file =~ m!\n\s*//:! && $file !~ m!\n\s*//:(\s*\n\s*//)?\s*\\file\b! &&
                                 $file !~ m!^\s*//:(\s*\n\s*//)?\s*\\file\b!);
-  &msg(1, "doxygen \\file better not have an argument, so remove \"$1\"")
+  &msg(1, "Doxygen \\file better not have an argument, so remove \"$1\"")
     if ($file =~ m!//\s*\\file[ \t]+(\S.*)!);
   if ($file =~ m!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *// *([a-z].*)!)
   {
@@ -155,13 +155,13 @@ foreach $f (@FILES)
     unless ($first =~ m/[.?!]$/ || $second =~ m!^v[bcginpsu]l_!)
     {
       $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *//[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
-      &msg($tmp, "brief comment possibly continued on next line");
+      &msg($tmp, "brief Doxygen comment possibly continued on next line");
     }
   }
   elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)!i)
   {
     $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)[^\000]*!!i; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
-    &msg($tmp, "brief comment possibly continued on next line");
+    &msg($tmp, "brief Doxygen comment possibly continued on next line");
   }
   &msg(1, "Ambiguous \\date $1")
     if ($file =~ m!\n\s*//\s*\\date\s+\b((\d\d)?[/.-](\d\d?)[/.-](\d\d+))! && (($2 <= 12 && $3 <= 12 && $2 != $3) || $printed));
@@ -221,6 +221,7 @@ foreach $f (@FILES)
           $f !~ m!\bcmake/config/vxl_platform_tests\.cxx$! &&
           $f !~ m!\bv.l/io/tests/golden_test_v.l_io\.cxx$! &&
           $f !~ m!\bvnl/vnl_sse.h$! &&
+         "$f-$j" !~ m!\bvnl/vnl_math\.cxx-float\.h$! &&
          "$f-$j" !~ m!\bv3p/netlib/triangle\.c\-math\.h$! &&
          "$f-$j" !~ m!\bv3p/png/tests/pngtest\.c\-time\.h$! &&
          "$f-$j" !~ m!\bbgui3d_file_io\.cxx-Inventor/! &&
@@ -596,6 +597,7 @@ foreach $f (@FILES)
               ($f =~ m!\bvcl/tests/test_driver\.cxx$! && $t eq "math") ||
               ($f =~ m!\bcore/testlib/testlib_main\.cxx$! && $t eq "math") ||
               ($f =~ m!\bcore/vnl/vnl_sample\.cxx$! && $t eq "stdlib") ||
+              ($f =~ m!\bcore/vnl/vnl_math\.cxx$! && $t eq "float") ||
               ($f =~ m!\bcore/vpl/os_unix/vpl\.cxx$! && $t eq "stdlib") ||
               ($f =~ m!\bcmake/config/vxl_platform_tests\.cxx$!) ||
               ($f =~ m!\bvidl/vidl_v4l_istream\.h$! && $t eq "errno") ||
