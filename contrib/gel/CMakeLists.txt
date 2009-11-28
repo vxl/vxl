@@ -53,7 +53,8 @@ SUBDIRS(mrc)
 
 # Experiments with the vidl library and vgui (JLM)
 IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-  SUBDIRS(jvid)
+# TEST IF ANYONE USES jvid
+#  SUBDIRS(jvid)
 ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 # Intensity face attributes (MPP)
