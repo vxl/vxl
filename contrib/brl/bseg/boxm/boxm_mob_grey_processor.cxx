@@ -46,7 +46,6 @@ bool boxm_mob_grey_processor::update( apm_datatype &appear, obs_datatype const& 
 {
   // the model
   float init_variance = 0.008f;
-  float min_stddev = 0.030f; //TO UNDERSTAND: changed from 0.02 for dinoRing dataset -dec
   float g_thresh = 2.5; // number of std devs from mean sample must be
   bsta_beta_f1 this_beta(0.0f, init_variance);
 
