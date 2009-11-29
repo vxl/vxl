@@ -41,9 +41,7 @@ static bool generate_rset(vcl_string const& dirpath,
   vil_pyramid_image_resource_sptr pir =
     vil_new_pyramid_image_list_from_base(dirpath.c_str(), base_image, nlevels,
                                          false, "tiff", dir.c_str());
-  if (!pir)
-    return false;
-  return true;
+  return (bool)pir;
 }
 
 // -------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 // \brief  See vgui_tview_launcher.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   21 Oct 99
-// 
+//
 // \verbatim
 //  Modifications
 //   04-OCT-2002 K.Y.McGaul - Sort out bug in vgui_event_condition.
@@ -31,17 +31,14 @@ vcl_string vgui_tview_launcher_tableau::type_name() const
   return "vgui_tview_launcher_tableau";
 }
 
-bool vgui_tview_launcher_tableau::handle(const vgui_event& e) 
+bool vgui_tview_launcher_tableau::handle(const vgui_event& e)
 {
   if (c_graph(e)) {
     go(e.origin);
     return true;
   }
 
-  if (e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY)
-    return true;
-
-  return false;
+  return e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY;
 }
 
 static void launch(const void* t)
@@ -69,6 +66,6 @@ void vgui_tview_launcher_tableau::go(vgui_adaptor* a)
   tview_dialog.inline_tableau(viewer, 300,300);
   tview_dialog.set_ok_button("close");
   tview_dialog.set_cancel_button(0);
-  tview_dialog.ask(); 
+  tview_dialog.ask();
   this->post_redraw();
 }

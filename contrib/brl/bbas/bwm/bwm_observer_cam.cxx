@@ -844,10 +844,7 @@ bool bwm_observer_cam::find_intersection_point(vgl_point_2d<double> img_point,
 #ifdef DEBUG
   vcl_cout << "dist = "<<dist<<vcl_endl;
 #endif
-  if (dist)
-    return false;
-
-  return true;
+  return !dist;
 }
 
 #if 0 // commented out
@@ -1403,7 +1400,7 @@ void  bwm_observer_cam::position_vertex(bool show_as_geo)
   tt->clear();
   tt->set_colour(1.0, 1.0, 0.0);
   vcl_stringstream str;
-  if(show_as_geo)
+  if (show_as_geo)
     str << vcl_fixed << vcl_setprecision(6)<< '(' << p3d->y()
         << ' '  << p3d->x() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
   else

@@ -55,9 +55,7 @@ bool bgui_image_utils::range(double& min_value, double& max_value,
 
   min_value = this->compute_lower_bound(plane);
   max_value = this->compute_upper_bound(plane);
-  if (min_value>=max_value)
-    return false;
-  return true;
+  return min_value < max_value;
 }
 
 // fill the histogram by randomly sampling pixels from the image

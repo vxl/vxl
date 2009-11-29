@@ -172,10 +172,7 @@ class bmsh3d_vertex : public vispt_elm
   }
   //: if i_value_ less than i_traverse_flag, it's not visited
   bool is_visited(const int traverse_value) const {
-    if (i_value_ < traverse_value)
-      return false;
-    else
-      return true;
+    return i_value_ >= traverse_value;
   }
   void set_i_visited(const int traverse_value) {
     i_value_ = traverse_value;

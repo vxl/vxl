@@ -138,8 +138,7 @@ template < class DataType >
   // silly, the only time the test below is true is the test above is true!
   // if (hsthe == b.hsthe) return true;
   // FIXME below
-  if (hsimgptr == b.hsimgptr) return true;
-  return false;
+  return hsimgptr == b.hsimgptr;
 }
 
 template < class DataType >

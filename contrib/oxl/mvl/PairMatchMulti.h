@@ -104,8 +104,7 @@ class PairMatchMulti
 
   // Data Access---------------------------------------------------------------
   bool operator==(PairMatchMulti const& that) const {
-    if (this == &that) return true;
-    return false; // always false, except when identical memory location
+    return this == &that; // always false, except when identical memory location
   }
 
   bool load(char const* filename);

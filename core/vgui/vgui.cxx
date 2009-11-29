@@ -116,10 +116,7 @@ bool vgui::select(int &argc, char **argv)
       instance_ = vgui_toolkit::lookup(env_name);
   }
 
-  if (instance_)
-    return true;
-  else
-    return false;
+  return (bool)instance_;
 }
 
 

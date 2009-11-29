@@ -81,11 +81,8 @@ bool bsol_algs::in(vsol_box_2d_sptr const & b, double x, double y)
     return false;
   double xmin = b->get_min_x(), ymin = b->get_min_y();
   double xmax = b->get_max_x(), ymax = b->get_max_y();
-  if (x<xmin||x>xmax)
-    return false;
-  if (y<ymin||y>ymax)
-    return false;
-  return true;
+  return x >= xmin && x <= xmax
+      && y >= ymin && y <= ymax;
 }
 
 //: returns true if the boxes a and b intersect
@@ -95,11 +92,8 @@ bool bsol_algs::meet(vsol_box_2d_sptr const & a, vsol_box_2d_sptr const & b)
   double min_y_a = a->get_min_y(), max_y_a = a->get_max_y();
   double min_x_b = b->get_min_x(), max_x_b = b->get_max_x();
   double min_y_b = b->get_min_y(), max_y_b = b->get_max_y();
-  if (min_x_b>max_x_a||min_x_a>max_x_b)
-    return false;
-  if (min_y_b>max_y_a||min_y_a>max_y_b)
-    return false;
-  return true;
+  return min_x_b <= max_x_a && min_x_a <= max_x_b
+      && min_y_b <= max_y_a && min_y_a <= max_y_b;
 }
 
 //: find the intersection of two boxes. Return false if no intersection
@@ -207,13 +201,9 @@ bool bsol_algs::in(vsol_box_3d_sptr const & b,
     return false;
   double xmin = b->get_min_x(), ymin = b->get_min_y(), zmin = b->get_min_z();
   double xmax = b->get_max_x(), ymax = b->get_max_y(), zmax = b->get_max_z();
-  if (x<xmin||x>xmax)
-    return false;
-  if (y<ymin||y>ymax)
-    return false;
-  if (z<zmin||z>zmax)
-    return false;
-  return true;
+  return x >= xmin && x <= xmax
+      && y >= ymin && y <= ymax
+      && z >= zmin && z <= zmax;
 }
 
 vsol_polygon_2d_sptr bsol_algs::poly_from_box(vsol_box_2d_sptr const& box)

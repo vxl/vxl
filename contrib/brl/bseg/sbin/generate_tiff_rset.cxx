@@ -29,9 +29,7 @@ static bool generate_rset(vcl_string const& dirpath,
   vil_pyramid_image_resource_sptr pir =
     vil_new_pyramid_image_list_from_base(dirpath.c_str(), base_image, nlevels,
                                          false, "tiff", dir.c_str());
-  if (!pir)
-    return false;
-  return true;
+  return (bool)pir;
 }
 
 int main(int argc,char * argv[])
@@ -47,9 +45,9 @@ int main(int argc,char * argv[])
       vcl_string base_image_extension(argv[2]);
       unsigned nlevels = vcl_atoi(argv[3]);
 
-      vcl_cout << base_image_dir << vcl_endl;
-      vcl_cout << base_image_extension << vcl_endl;
-      vcl_cout << nlevels << vcl_endl;
+      vcl_cout << base_image_dir << vcl_endl
+               << base_image_extension << vcl_endl
+               << nlevels << vcl_endl;
       if (nlevels<2)
       {
         vcl_cout << "Must have at least 2 levels\n";

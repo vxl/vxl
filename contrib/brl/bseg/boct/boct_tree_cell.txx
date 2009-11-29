@@ -19,9 +19,7 @@ boct_tree_cell<T_loc,T_data>::boct_tree_cell(const boct_loc_code<T_loc>& code)
 template<class T_loc,class T_data>
 bool boct_tree_cell<T_loc,T_data>::is_leaf()
 {
-  if (children_== NULL)
-    return true;
-  return false;
+  return children_== NULL;
 }
 
 template<class T_loc,class T_data>
@@ -146,25 +144,25 @@ bool boct_tree_cell<T_loc,T_data>::split()
 {
   // create new children if there is none
   if (is_leaf()) {
-  children_ = (boct_tree_cell<T_loc,T_data>*) new boct_tree_cell<T_loc,T_data>[8];
-  short child_level = this->level()-1;
+    children_ = (boct_tree_cell<T_loc,T_data>*) new boct_tree_cell<T_loc,T_data>[8];
+    short child_level = this->level()-1;
 
-  // make sure that it does not go below level 0, which is the min possible level
-  if (child_level < 0) {
-    vcl_cout << "boct_tree_cell: Cannot split the cell, already at the min level" << vcl_endl;
+    // make sure that it does not go below level 0, which is the min possible level
+    if (child_level < 0) {
+      vcl_cout << "boct_tree_cell: Cannot split the cell, already at the min level" << vcl_endl;
+      return false;
+    }
+    for (unsigned i=0; i<8; i++) {
+      children_[i].code_ = code_.child_loc_code(i, child_level);
+      children_[i].code_.level = child_level;
+      children_[i].set_parent(this);
+      children_[i].data_ = this->data_;
+      children_[i].children_ = 0;
+    }
+    return true;
+  }
+  else
     return false;
-  }
-
-  for (unsigned i=0; i<8; i++) {
-    children_[i].code_ = code_.child_loc_code(i, child_level);
-    children_[i].code_.level = child_level;
-    children_[i].set_parent(this);
-    children_[i].data_ = this->data_;
-    children_[i].children_ = 0;
-  }
-  return true;
-  }
-  return false;
 }
 
 template<class T_loc,class T_data>
@@ -177,7 +175,8 @@ bool boct_tree_cell<T_loc,T_data>::split(T_data data)
     }
     return true;
   }
-  return false;
+  else
+    return false;
 }
 
 template<class T_loc,class T_data>

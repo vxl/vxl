@@ -137,9 +137,7 @@ bool bwm_reg_matcher::match(int& tcol, int& trow, double distance_threshold,
   print_hist();
 
   vcl_cout << vcl_flush;
-  if (max_prob>distance_threshold)
-    return false;
-  return true;
+  return max_prob <= distance_threshold;
 }
 
 bool bwm_reg_matcher::
@@ -198,7 +196,5 @@ close_edges(double filter_distance, double angle_threshold,
         close_edges.push_back(new vsol_digital_curve_2d(temp));
     }
   }
-  if (!close_edges.size())
-    return false;
-  return true;
+  return close_edges.size() != 0;
 }

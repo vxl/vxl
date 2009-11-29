@@ -85,19 +85,16 @@ class bsta_mix_any_less_index_detector
       for (unsigned int i=0; i<mix.num_components(); ++i){
         if (mix.weight(i) > weight_thresh)
         {
-            flag=true;
-        if ( !detect(mix.distribution(i),sample,result) )
-          return false;
-        if (result)
-          return true;
+          flag=true;
+          if ( !detect(mix.distribution(i),sample,result) )
+            return false;
+          if (result)
+            return true;
         }
         //total_weight += mix.weight(i);
       }
 
-      if (flag)
-         return false;
-      else
-         return true;
+      return !flag;
     }
 
     //: The detector to apply to components

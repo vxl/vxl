@@ -149,9 +149,7 @@ bool brip_watershed::compute_seeds()
         }
       }
     }
-  if (!max_region_label_)
-    return false;
-  return true;
+  return max_region_label_ != 0;
 }
 
 //==============================================================
@@ -299,7 +297,8 @@ bool brip_watershed::adjacent_regions(const unsigned int reg,
     adj_regs = *(region_adjacency_[reg]);
     return true;
   }
-  return false;
+  else
+    return false;
 }
 
 bool brip_watershed::compute_regions()

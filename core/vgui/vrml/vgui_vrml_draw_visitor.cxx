@@ -153,9 +153,7 @@ bool vgui_vrml_draw_visitor::Visit(QvTransformSeparator* node)
 
 bool vgui_vrml_draw_visitor::Visit(QvShapeHints* /*node*/)
 {
-  if (gl_mode == wireframe)
-    return false;
-  return true;
+  return gl_mode != wireframe;
 }
 
 

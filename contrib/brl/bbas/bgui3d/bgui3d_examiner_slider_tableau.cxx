@@ -145,11 +145,7 @@ bgui3d_examiner_slider_tableau::render()
   positionSlider();
 
   // call the super class method
-  bool result = bgui3d_examiner_tableau::render();
-  if (!result)
-    return false;
-
-  return true;
+  return bgui3d_examiner_tableau::render();
 }
 
 //: it only handles the slider events and leaves the rest to the parent class
@@ -204,7 +200,7 @@ bgui3d_examiner_slider_tableau::handle(const vgui_event& e)
 //: Called by biov_transfer_function if a change is made
 void
 bgui3d_examiner_slider_tableau::transfer_callback(const bool & remap, const int & n_min,
-                                              const int & n_max)
+                                                  const int & n_max)
 {
   if (remap && n_min<=n_max && n_min>=0 && n_max <=255) {
     this->min = n_min;

@@ -362,16 +362,9 @@ bil_edt_maurer(vil_image_view<vxl_uint_32> &im)
       if (data[i])
          data[i] = infty_;
 
-   bool stat;
-
    // Vertical row-wise EDT
-   stat = bil_edt_1d_horizontal(im);
-   if (!stat) return false;
-
-   stat = edt_maurer_2D_from_1D(im);
-   if (!stat) return false;
-
-   return true;
+   return bil_edt_1d_horizontal(im)
+       && edt_maurer_2D_from_1D(im);
 }
 
 static inline bool maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h);

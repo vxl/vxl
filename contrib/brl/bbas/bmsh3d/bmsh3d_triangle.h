@@ -43,10 +43,7 @@ inline bool bmsh3d_footpt_on_line(const vgl_point_3d<double>& P,
   double l = vgl_distance (A, B);
   double t = dot_product (AP, AB) / l;
 
-  if (0<=t && t<=l)
-    return true;
-  else
-    return false;
+  return 0<=t && t<=l;
 }
 
 inline bool bmsh3d_footpt_on_line(const vgl_point_3d<double>& P,
@@ -59,10 +56,7 @@ inline bool bmsh3d_footpt_on_line(const vgl_point_3d<double>& P,
   l = vgl_distance (A, B);
   t = dot_product (AP, AB) / l;
 
-  if (0<=t && t<=l)
-    return true;
-  else
-    return false;
+  return 0<=t && t<=l;
 }
 
 #endif // bmsh3d_triangle_h_

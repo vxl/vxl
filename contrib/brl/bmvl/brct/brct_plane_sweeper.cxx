@@ -273,7 +273,7 @@ overlapping_projections(vcl_vector<vgl_h_matrix_2d<double> > const& homgs,
   {
     vcl_cout << "In brct_plane_sweeper::overlapping_projections(.._)-"
              << " no cameras\n";
-  return false;
+    return false;
   }
   imgs.clear();
   //get the bounding box of the overlapping region
@@ -282,7 +282,7 @@ overlapping_projections(vcl_vector<vgl_h_matrix_2d<double> > const& homgs,
   {
     vcl_cout << "In brct_plane_sweeper::overlapping_projections(.._)-"
              << " no overlap\n";
-  return false;
+    return false;
   }
   //The min corner must be mapped to (0,0) to form an image
   tx  = -(intersection->get_min_x()), ty = -(intersection->get_min_y());
@@ -314,7 +314,7 @@ overlapping_projections(vcl_vector<vgl_h_matrix_2d<double> > const& homgs,
                         double& tx, double& ty)
 {
   if (!overlapping_projections(homgs, imgs, tx, ty))
-     return false;
+    return false;
   corners.clear();
   //project the harris corners
   for (int cam =0; cam<n_cams_; cam++)
@@ -327,7 +327,7 @@ overlapping_projections(vcl_vector<vgl_h_matrix_2d<double> > const& homgs,
       this->project_corners(Hinvt, hc);
     corners.push_back(pcs);
   }
- return true;
+  return true;
 }
 
 
@@ -338,9 +338,7 @@ overlapping_projections(const int plane,
 {
   vcl_vector<vgl_h_matrix_2d<double> > homgs = homographies_[plane];
   double tx=0, ty=0;
-  if (!overlapping_projections(homgs, imgs, tx, ty))
-    return false;
-  return true;
+  return overlapping_projections(homgs, imgs, tx, ty);
 }
 
 //:compute the projections of left and right images that overlap on the plane at depth z
@@ -351,9 +349,7 @@ overlapping_projections(const double z,
   vcl_vector<vgl_h_matrix_2d<double> > homgs;
   this->homographies_at_z(z, homgs);
   double tx=0, ty=0;
-  if (!overlapping_projections(homgs, imgs, tx, ty))
-    return false;
-  return true;
+  return overlapping_projections(homgs, imgs, tx, ty);
 }
 
 bool brct_plane_sweeper::
@@ -364,9 +360,7 @@ overlapping_projections(const double z,
   vcl_vector<vgl_h_matrix_2d<double> > homgs;
   this->homographies_at_z(z, homgs);
   double tx=0, ty=0;
-  if (!overlapping_projections(homgs, imgs, corners, tx, ty))
-    return false;
-  return true;
+  return overlapping_projections(homgs, imgs, corners, tx, ty);
 }
 
 //:
@@ -868,9 +862,7 @@ bool brct_plane_sweeper::map_image(const int from_cam, const double z,
     bsol_algs::print(inter_box);
 
   mapped_image.resize(temp.width(), temp.height());
-  if (!brip_vil1_float_ops::homography(temp, Hcomp, mapped_image, true, 0))
-    return false;
-  return true;
+  return brip_vil1_float_ops::homography(temp, Hcomp, mapped_image, true, 0);
 }
 
 //: Map the image of the from_cam to the image space of the to_cam.
@@ -897,11 +889,8 @@ intersecting_bounding_box(vgl_h_matrix_2d<double> const& Hcomp,
 {
   vsol_box_2d_sptr intersection = new vsol_box_2d();
   vsol_box_2d_sptr mapped_box;
-  if (!bsol_algs::homography(from_box, Hcomp, mapped_box))
-    return false;
-  if (!bsol_algs::intersection(mapped_box, to_box, box))
-    return false;
-  return true;
+  return bsol_algs::homography(from_box, Hcomp, mapped_box)
+      && bsol_algs::intersection(mapped_box, to_box, box);
 }
 
 bool brct_plane_sweeper::
