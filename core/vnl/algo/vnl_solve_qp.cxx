@@ -326,7 +326,8 @@ bool vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double>& H,
       vcl_cerr<<"Oops: Final x does not satisfy equality constraints\n";
     return false;
   }
-  return true;
+  else
+    return true;
 }
 
 //: Find non-negative solution to a constrained quadratic programming problem

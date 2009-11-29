@@ -19,11 +19,10 @@
 inline bool vil_grid_corner_in_image(double x0, double y0,
                                      const vil_image_view_base& image)
 {
-  if (x0<0.0) return false;
-  if (x0>image.ni()-1.0) return false;
-  if (y0<0.0) return false;
-  if (y0>image.nj()-1.0) return false;
-  return true;
+  return x0 >= 0.0
+      && y0 >= 0.0
+      && x0+1 <= image.ni()
+      && y0+1 <= image.nj();
 }
 
 //: Sample grid of points in one image and place in another, using bilinear interpolation.

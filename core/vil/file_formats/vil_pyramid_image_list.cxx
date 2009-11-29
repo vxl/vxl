@@ -71,9 +71,7 @@ static bool copy_base_resc(vil_image_resource_sptr const& base_image,
   //reopen the resource for reading.
   vil_image_resource_sptr temp = vil_load_image_resource(full_filename.c_str());
   copy = blocked_image_resource(temp);
-  if (!copy)
-    return false;
-  return true;
+  return (bool)copy;
 }
 
 static vcl_string level_filename(vcl_string& directory, vcl_string& filename,

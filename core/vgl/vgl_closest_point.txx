@@ -392,7 +392,7 @@ double vgl_closest_point_t(vgl_line_3d_2_points<T> const& l,
   vgl_vector_3d<T> v = p-q;
   // The plane through p and orthogonal to l is a(x-px)+b(y-py)+c(z-pz)=0
   // where (a,b,c,0) is the direction of l.
-  double a = l.point2().x()-q.x(), b = l.point2().y()-q.y(), 
+  double a = l.point2().x()-q.x(), b = l.point2().y()-q.y(),
          c = l.point2().z()-q.z(), d = a*a+b*b+c*c;
   // The closest point is then the intersection of this plane with the line l.
   // This point equals l.point1 + lambda * l.direction, with lambda:
@@ -443,7 +443,7 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
 
   // Calculate the parameters s,t for the closest point on each line
   double denom = a*c - b*b; // should always be non-negative
-  if(denom<0.0) denom = 0.0;
+  if (denom<0.0) denom = 0.0;
   if (denom>SMALL_DOUBLE)
   {
     double s = (b*e - c*d) / denom;
@@ -577,7 +577,7 @@ vgl_closest_points(vgl_line_segment_3d<T> const& l1,
 
   // Need to verify whether returned closest points are unique
   // in the case of parallel/collinear line segments
-  if (unique && *unique==false)
+  if (unique && ! *unique)
   {
     if ((s==0.0 || s==1.0) && (t==0.0 || t==1.0))
       *unique = true;

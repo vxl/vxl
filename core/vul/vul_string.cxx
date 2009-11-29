@@ -227,8 +227,8 @@ static bool myequals(IT b1, IT e1,
 {
   for (;b1 != e1 && b2 != e2; ++b1, ++b2)
     if (vcl_toupper(*b1) != *b2) return false;
-  if (b1 == e1 && b2 == e2) return true;
-  return false;
+  return b1 == e1
+      && b2 == e2;
 }
 
 bool vul_string_to_bool(const vcl_string &str)

@@ -352,12 +352,13 @@ set_rotation_euler(T rz1, T ry, T rz2)
     for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
 }
+
 template <class T>
 void 
 vgl_h_matrix_3d<T>::set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R)
 {
-  for(unsigned r = 0; r<3; ++r)
-    for(unsigned c = 0; c<3; ++c)
+  for (unsigned r = 0; r<3; ++r)
+    for (unsigned c = 0; c<3; ++c)
       t12_matrix_[r][c] = R[r][c];
 }
 
@@ -365,13 +366,10 @@ template <class T>
 bool vgl_h_matrix_3d<T>::is_rotation() const
 {
   const vnl_matrix_fixed<T,4,4>& H = t12_matrix_;
-  if ( H.get(0,3) == (T)0 &&
-       H.get(1,3) == (T)0 &&
-       H.get(2,3) == (T)0 &&
-       this->is_euclidean() )
-    return true;
-
-  return false;
+  return H.get(0,3) == (T)0
+      && H.get(1,3) == (T)0
+      && H.get(2,3) == (T)0
+      && this->is_euclidean();
 }
 
 

@@ -91,19 +91,9 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
       return i_pnt == p1;
     }
 
-    vgl_line_segment_3d<double> test_line(p1,p2);
-    if (test_line.contains(i_pnt))
-      return true;
-
-    test_line.set(p2,p3);
-    if (test_line.contains(i_pnt))
-      return true;
-
-    test_line.set(p1,p3);
-    if (test_line.contains(i_pnt))
-      return true;
-
-    return false;
+    return vgl_line_segment_3d<double>(p1,p2).contains(i_pnt) ||
+           vgl_line_segment_3d<double>(p2,p3).contains(i_pnt) ||
+           vgl_line_segment_3d<double>(p1,p3).contains(i_pnt);
   }
 
   // use badouel's algorithm ( a barycentric method)
@@ -164,10 +154,8 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
     alpha = (u0 - beta * u2) / u1;
   }
 
-  if (alpha < -sqrteps/*0*/ || (alpha + beta) > 1.0+sqrteps)
-    return false;
-
-  return true;
+  return alpha        >=    -sqrteps /*0*/
+      && alpha + beta <= 1.0+sqrteps;
 }
 
 //=======================================================================
@@ -1304,7 +1292,9 @@ bool vgl_triangle_3d_triangle_coplanar(
                             const vgl_point_3d<double>& b_p2,
                             const vgl_point_3d<double>& b_p3)
 {
-  return coplanar(a_p1,b_p1,b_p2,b_p3) && coplanar(a_p2,b_p1,b_p2,b_p3) && coplanar(a_p3,b_p1,b_p2,b_p3);
+  return coplanar(a_p1,b_p1,b_p2,b_p3)
+      && coplanar(a_p2,b_p1,b_p2,b_p3)
+      && coplanar(a_p3,b_p1,b_p2,b_p3);
 }
 
 //=======================================================================

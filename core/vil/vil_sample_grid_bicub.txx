@@ -17,11 +17,10 @@
 inline bool vil_grid_corner_in_image(double x0, double y0,
                                      const vil_image_view_base& image)
 {
-  if (x0<2) return false;
-  if (y0<2) return false;
-  if (x0+3>image.ni()) return false;
-  if (y0+3>image.nj()) return false;
-  return true;
+  return x0 >= 2
+      && y0 >= 2
+      && x0+3 <= image.ni()
+      && y0+3 <= image.nj();
 }
 
 //: Sample along profile, using safe bicubic interpolation

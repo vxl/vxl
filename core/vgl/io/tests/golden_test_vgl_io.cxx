@@ -75,7 +75,7 @@ bool almost_equal_helper(const T& real1, const T& real2)
   }
   factor=epsilon(min);
   result=((max-min)<=factor*(max>0?max:-max));
-  if (result==false)
+  if (!result)
   {
     vcl_cout << factor << " : " << min << " -- " << max << " -- "
              << (max>0?max:-max) << " -- "
@@ -97,103 +97,103 @@ bool almost_equal(const float& a, const float& b)
 template <class T>
 inline bool almost_equal(const vgl_point_2d<T>& p1, const vgl_point_2d<T>& p2)
 {
-  return almost_equal(p1.x(), p2.x()) &&
-         almost_equal(p1.y(), p2.y());
+  return almost_equal(p1.x(), p2.x())
+      && almost_equal(p1.y(), p2.y());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_point_3d<T>& p1, const vgl_point_3d<T>& p2)
 {
-  return almost_equal(p1.x(), p2.x()) &&
-         almost_equal(p1.y(), p2.y()) &&
-         almost_equal(p1.z(), p2.z());
+  return almost_equal(p1.x(), p2.x())
+      && almost_equal(p1.y(), p2.y())
+      && almost_equal(p1.z(), p2.z());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_homg_point_2d<T>& p1, const vgl_homg_point_2d<T>& p2)
 {
-  return almost_equal(p1.x()*p2.w(), p2.x()*p1.w()) &&
-         almost_equal(p1.y()*p2.w(), p2.y()*p1.w()) &&
-         almost_equal(p1.y()*p2.x(), p2.y()*p1.x());
+  return almost_equal(p1.x()*p2.w(), p2.x()*p1.w())
+      && almost_equal(p1.y()*p2.w(), p2.y()*p1.w())
+      && almost_equal(p1.y()*p2.x(), p2.y()*p1.x());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_homg_point_3d<T>& p1, const vgl_homg_point_3d<T>& p2)
 {
-  return almost_equal(p1.x()*p2.w(), p2.x()*p1.w()) &&
-         almost_equal(p1.y()*p2.w(), p2.y()*p1.w()) &&
-         almost_equal(p1.z()*p2.w(), p2.z()*p1.w()) &&
-         almost_equal(p1.x()*p2.z(), p2.x()*p1.z()) &&
-         almost_equal(p1.y()*p2.z(), p2.y()*p1.z()) &&
-         almost_equal(p1.x()*p2.y(), p2.x()*p1.y());
+  return almost_equal(p1.x()*p2.w(), p2.x()*p1.w())
+      && almost_equal(p1.y()*p2.w(), p2.y()*p1.w())
+      && almost_equal(p1.z()*p2.w(), p2.z()*p1.w())
+      && almost_equal(p1.x()*p2.z(), p2.x()*p1.z())
+      && almost_equal(p1.y()*p2.z(), p2.y()*p1.z())
+      && almost_equal(p1.x()*p2.y(), p2.x()*p1.y());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_line_2d<T>& l1, const vgl_line_2d<T>& l2)
 {
-  return almost_equal(l1.a()*l2.c(), l2.a()*l1.c()) &&
-         almost_equal(l1.b()*l2.c(), l2.b()*l1.c()) &&
-         almost_equal(l1.b()*l2.a(), l2.b()*l1.a());
+  return almost_equal(l1.a()*l2.c(), l2.a()*l1.c())
+      && almost_equal(l1.b()*l2.c(), l2.b()*l1.c())
+      && almost_equal(l1.b()*l2.a(), l2.b()*l1.a());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_homg_line_2d<T>& l1, const vgl_homg_line_2d<T>& l2)
 {
-  return almost_equal(l1.a()*l2.c(), l2.a()*l1.c()) &&
-         almost_equal(l1.b()*l2.c(), l2.b()*l1.c()) &&
-         almost_equal(l1.b()*l2.a(), l2.b()*l1.a());
+  return almost_equal(l1.a()*l2.c(), l2.a()*l1.c())
+      && almost_equal(l1.b()*l2.c(), l2.b()*l1.c())
+      && almost_equal(l1.b()*l2.a(), l2.b()*l1.a());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_homg_plane_3d<T>& p1, const vgl_homg_plane_3d<T>& p2)
 {
-  return almost_equal(p1.nx()*p2.d(), p2.nx()*p1.d()) &&
-         almost_equal(p1.ny()*p2.d(), p2.ny()*p1.d()) &&
-         almost_equal(p1.nz()*p2.d(), p2.nz()*p1.d()) &&
-         almost_equal(p1.nx()*p2.nz(), p2.nx()*p1.nz()) &&
-         almost_equal(p1.ny()*p2.nz(), p2.ny()*p1.nz()) &&
-         almost_equal(p1.nx()*p2.ny(), p2.nx()*p1.ny());
+  return almost_equal(p1.nx()*p2.d(), p2.nx()*p1.d())
+      && almost_equal(p1.ny()*p2.d(), p2.ny()*p1.d())
+      && almost_equal(p1.nz()*p2.d(), p2.nz()*p1.d())
+      && almost_equal(p1.nx()*p2.nz(), p2.nx()*p1.nz())
+      && almost_equal(p1.ny()*p2.nz(), p2.ny()*p1.nz())
+      && almost_equal(p1.nx()*p2.ny(), p2.nx()*p1.ny());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_homg_line_3d_2_points<T>& l1, const vgl_homg_line_3d_2_points<T>& l2)
 {
-  return almost_equal(l1.point_finite(),  l2.point_finite()) &&
-         almost_equal(l1.point_infinite(),l2.point_infinite());
+  return almost_equal(l1.point_finite(),  l2.point_finite())
+      && almost_equal(l1.point_infinite(),l2.point_infinite());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_line_segment_2d<T>& l1, const vgl_line_segment_2d<T>& l2)
 {
-  return almost_equal(l1.point1(),l2.point1()) &&
-         almost_equal(l1.point2(),l2.point2());
+  return almost_equal(l1.point1(),l2.point1())
+      && almost_equal(l1.point2(),l2.point2());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_line_segment_3d<T>& l1, const vgl_line_segment_3d<T>& l2)
 {
-  return almost_equal(l1.point1(),l2.point1()) &&
-         almost_equal(l1.point2(),l2.point2());
+  return almost_equal(l1.point1(),l2.point1())
+      && almost_equal(l1.point2(),l2.point2());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_box_2d<T>& b1, const vgl_box_2d<T>& b2)
 {
-  return almost_equal(b1.min_x(), b2.min_x()) &&
-         almost_equal(b1.min_y(), b2.min_y()) &&
-         almost_equal(b1.max_x(), b2.max_x()) &&
-         almost_equal(b1.max_y(), b2.max_y());
+  return almost_equal(b1.min_x(), b2.min_x())
+      && almost_equal(b1.min_y(), b2.min_y())
+      && almost_equal(b1.max_x(), b2.max_x())
+      && almost_equal(b1.max_y(), b2.max_y());
 }
 
 template <class T>
 inline bool almost_equal(const vgl_box_3d<T>& b1, const vgl_box_3d<T>& b2)
 {
-  return almost_equal(b1.min_x(), b2.min_x()) &&
-         almost_equal(b1.min_y(), b2.min_y()) &&
-         almost_equal(b1.min_z(), b2.min_z()) &&
-         almost_equal(b1.max_x(), b2.max_x()) &&
-         almost_equal(b1.max_y(), b2.max_y()) &&
-         almost_equal(b1.max_z(), b2.max_z());
+  return almost_equal(b1.min_x(), b2.min_x())
+      && almost_equal(b1.min_y(), b2.min_y())
+      && almost_equal(b1.min_z(), b2.min_z())
+      && almost_equal(b1.max_x(), b2.max_x())
+      && almost_equal(b1.max_y(), b2.max_y())
+      && almost_equal(b1.max_z(), b2.max_z());
 }
 
 template <class T>

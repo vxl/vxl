@@ -15,15 +15,14 @@ template <class T>
 inline bool vil_is_plateau_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {
   T v = *im;
-  if (v<im[i_step]) return false;
-  if (v<im[-i_step]) return false;
-  if (v<im[j_step]) return false;
-  if (v<im[-j_step]) return false;
-  if (v<im[i_step+j_step]) return false;
-  if (v<im[i_step-j_step]) return false;
-  if (v<im[j_step-i_step]) return false;
-  if (v<im[-i_step-j_step]) return false;
-  return true;
+  return v >= im[i_step]
+      && v >= im[-i_step]
+      && v >= im[j_step]
+      && v >= im[-j_step]
+      && v >= im[i_step+j_step]
+      && v >= im[i_step-j_step]
+      && v >= im[j_step-i_step]
+      && v >= im[-i_step-j_step];
 }
 
 //: Return (pi,pj) for all points in image greater than or equal to all 8 neighbours.

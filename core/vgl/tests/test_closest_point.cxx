@@ -312,7 +312,7 @@ static void testLine3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
-                    u==true);
+                    u);
     TEST("Non-parallel, non-intersecting", success, true);
   }
 
@@ -324,7 +324,7 @@ static void testLine3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
-                    u==true);
+                    u);
     TEST("Non-parallel, intersecting", success, true);
   }
 
@@ -336,7 +336,7 @@ static void testLine3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
-                    u==false);
+                    !u);
     TEST("Parallel, non-collinear", success, true);
   }
 
@@ -348,7 +348,7 @@ static void testLine3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
-                    u==false);
+                    !u);
     TEST("Collinear", success, true);
   }
 }
@@ -368,7 +368,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
-                    u==true);
+                    u);
     TEST("Non-parallel, non-intersecting, internal points", success, true);
   }
 
@@ -380,7 +380,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(0,1,1) &&
-                    u==true);
+                    u);
     TEST("Non-parallel, non-intersecting, end points", success, true);
   }
 
@@ -392,7 +392,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
-                    u==true);
+                    u);
     TEST("Non-parallel, non-intersecting, endpoint/internal", success, true);
   }
 
@@ -404,7 +404,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
-                    u==true);
+                    u);
     TEST("Non-parallel, intersecting", success, true);
   }
 
@@ -416,7 +416,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(-1,0,1) &&
-                    u==true);
+                    u);
     TEST("Parallel, non-collinear, endpoints", success, true);
   }
 
@@ -428,7 +428,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
-                    u==false);
+                    !u);
     TEST("Parallel, non-collinear, non-unique internal points", success, true);
   }
 
@@ -440,7 +440,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(-1,0,0) &&
-                    u==true);
+                    u);
     TEST("Collinear, non-overlapping", success, true);
   }
 
@@ -452,7 +452,7 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
-                    u==true);
+                    u);
     TEST("Collinear, touching at endpoints", success, true);
   }
 
@@ -464,16 +464,17 @@ static void testLineSegment3DClosestPoints()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(-1,0,0) &&
                     c.second==vgl_point_3d<double>(-1,0,0) &&
-                    u==false);
+                    !u);
     TEST("Collinear, overlapping", success, true);
   }
 }
+
 // Test for closest points on two 3D line segments
 static void test_infinite_line_3d_closest_points()
 {
-  vcl_cout << "-----------------------------------------------\n"
+  vcl_cout << "-------------------------------------------------\n"
            << " Testing vgl_closest_points(3-d infinite lines):\n"
-           << "-----------------------------------------------\n";
+           << "-------------------------------------------------\n";
 
   // Test general case of non-parallel, non-intersecting lines, with internal points closest
 
@@ -483,9 +484,10 @@ static void test_infinite_line_3d_closest_points()
     vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
-                    u==true);
-    TEST("Non-parallel, non-intersecting infinite lines", success, true);    
+                    u);
+    TEST("Non-parallel, non-intersecting infinite lines", success, true);
 }
+
 static void test_closest_point()
 {
   testHomgLine2DClosestPoint();

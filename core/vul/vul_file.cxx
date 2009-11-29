@@ -69,14 +69,18 @@ bool vul_file::make_directory(char const* name)
 bool vul_file::is_directory(char const* fn)
 {
   struct stat fs;
-  return stat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
+  return stat(fn, &fs) == 0
+      && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 bool vul_file::is_drive(char const* fn)
 {
   // a drive string looks like "c:", "z:"
-  return fn && vcl_isalpha(fn[0]) && fn[1]==':' && fn[2]=='\0';
+  return fn
+      && vcl_isalpha(fn[0])
+      && fn[1]==':'
+      && fn[2]=='\0';
 }
 #endif
 
@@ -90,8 +94,8 @@ bool vul_file::make_directory_path(char const* filename)
 #else
   if (is_directory(filename)) return true;
 #endif
-  if (!make_directory_path(dirname(filename))) return false;
-  return make_directory(filename);
+  return make_directory_path(dirname(filename))
+      && make_directory(filename);
 }
 
 
@@ -297,13 +301,17 @@ bool vul_file::make_directory(wchar_t const* name)
 bool vul_file::is_directory(wchar_t const* fn)
 {
   struct _stat fs;
-  return _wstat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
+  return _wstat(fn, &fs) == 0
+      && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
 bool vul_file::is_drive(wchar_t const* fn)
 {
   // a drive string looks like "c:", "z:"
-  return fn && iswalpha(fn[0]) && fn[1]==L':' && fn[2]==L'\0';
+  return fn
+      && iswalpha(fn[0])
+      && fn[1]==L':'
+      && fn[2]==L'\0';
 }
 
 //: Make a writable directory, including any necessary parents.
@@ -312,8 +320,8 @@ bool vul_file::make_directory_path(wchar_t const* filename)
 {
   if (is_directory(filename) || is_drive(filename)) return true;
 
-  if (!make_directory_path(dirname(filename))) return false;
-  return make_directory(filename);
+  return make_directory_path(dirname(filename))
+      && make_directory(filename);
 }
 
 bool vul_file::exists(wchar_t const* fn)

@@ -1200,10 +1200,10 @@ bool handle(vgui_event const& e)
   vgui_modifier m = e.modifier;
   if (m & vgui_CTRL)
     if (k == 's')
-     @{
+    @{
       // Do something appropriate for CTRL + 's'
       ...
-     @}
+    @}
   return true;
 @}
 @end example
@@ -1266,14 +1266,14 @@ The transformation is illustrated by this code fragment:
 // in image coordinates
 bool my_image_tableau::handle(vgui_event const& e)
 @{
-  if (e.type == vgui_MOTION && button_down == false)
-   @{
+  if (e.type == vgui_MOTION && !button_down)
+  @{
     float pointx, pointy;
     vgui_projection_inspector p_insp;
     p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
     int intx = (int)vcl_floor(pointx), inty = (int)vcl_floor(pointy);
     vgui::out << '(' << intx << ' ' << inty << ")\n";
-   @}
+  @}
   return vgui_image_tableau::handle(e);
 @}
 @end example

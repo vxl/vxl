@@ -167,8 +167,8 @@ bool vgl_p_matrix<T>::read_ascii(vcl_istream& f)
     vcl_cerr << "vgl_p_matrix::read_ascii: Failed to load P matrix\n";
     return false;
   }
-
-  return true;
+  else
+    return true;
 }
 
 template <class T>

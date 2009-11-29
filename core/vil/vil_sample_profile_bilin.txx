@@ -19,16 +19,14 @@ inline bool vil_profile_in_image(double x0, double y0,
                                  double x1, double y1,
                                  const vil_image_view_base& image)
 {
-  if (x0<1) return false;
-  if (y0<1) return false;
-  if (x0+2>image.ni()) return false;
-  if (y0+2>image.nj()) return false;
-  if (x1<1) return false;
-  if (y1<1) return false;
-  if (x1+2>image.ni()) return false;
-  if (y1+2>image.nj()) return false;
-
-  return true;
+  return x0 >= 1
+      && y0 >= 1
+      && x1 >= 1
+      && y1 >= 1
+      && x0+2 <= image.ni()
+      && y0+2 <= image.nj()
+      && x1+2 <= image.ni()
+      && y1+2 <= image.nj();
 }
 
 //: Sample along profile, using safe bilinear interpolation

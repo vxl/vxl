@@ -18,16 +18,14 @@ inline bool vil_profile_in_image(double x0, double y0,
                                  double x1, double y1,
                                  const vil_image_view_base& image)
 {
-  if (x0<2) return false;
-  if (y0<2) return false;
-  if (x0+3>image.ni()) return false;
-  if (y0+3>image.nj()) return false;
-  if (x1<2) return false;
-  if (y1<2) return false;
-  if (x1+3>image.ni()) return false;
-  if (y1+3>image.nj()) return false;
-
-  return true;
+  return x0 >= 2
+      && y0 >= 2
+      && x1 >= 2
+      && y1 >= 2
+      && x0+3 <= image.ni()
+      && y0+3 <= image.nj()
+      && x1+3 <= image.ni()
+      && y1+3 <= image.nj();
 }
 
 //: Sample along profile, using safe bicubic interpolation

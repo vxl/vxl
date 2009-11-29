@@ -332,16 +332,13 @@ bool vul_sequence_filename_map::filter_dirent(char const* name_string, vcl_strin
   static unsigned int expected_length = 0;
   if (expected_length == 0)
     expected_length = basename_.size() +
-    (vcl_string(vul_sprintf(index_format_.c_str(),0)) + extension).size();
+                      (vcl_string(vul_sprintf(index_format_.c_str(),0)) + extension).size();
 
   vcl_string name_str(name_string);
 
-  if (name_str.size() != expected_length) return false;
-
-  if (name_str.substr(0,basename_.size()) == basename_ &&
-      name_str.substr(expected_length-extension.size(), vcl_string::npos) == extension) return true;
-
-  return false;
+  return name_str.size() == expected_length
+      && name_str.substr(0,basename_.size()) == basename_
+      && name_str.substr(expected_length-extension.size(), vcl_string::npos) == extension;
 }
 
 int vul_sequence_filename_map::extract_index(char const* name_string)
