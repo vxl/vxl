@@ -47,7 +47,10 @@ bool boxm_mob_grey_processor::update( apm_datatype &appear, obs_datatype const& 
   // the model
   float init_variance = 0.008f;
   float g_thresh = 2.5; // number of std devs from mean sample must be
-  bsta_beta_f1 this_beta(0.0f, init_variance);
+
+  float alpha, beta;
+  bsta_beta<float>::bsta_beta_from_moments(0.0f, init_variance,alpha,beta);
+  bsta_beta_f1 this_beta(alpha,beta);
 
   const unsigned int nmodes = boxm_apm_traits<BOXM_APM_MOB_GREY>::n_beta_modes_;
 
