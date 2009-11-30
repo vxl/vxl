@@ -11,6 +11,7 @@ SET(bsta_io_sources
   bsta_io_parzen_sphere.h
   bsta_io_von_mises.h
   bsta_io_histogram.h
+  bsta_io_beta.h
 )
 
 #AUX_SOURCE_DIRECTORY(Templates bsta_io_sources)

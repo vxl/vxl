@@ -104,7 +104,7 @@ MAIN( test_beta_updater)
 
   for (unsigned i=0; i<samples.size(); i++) {
     beta_type::vector_type obs(samples[i]);
-    mix_updater(model, obs);
+    mix_updater(model, obs, 0.05);
   }
 
   vcl_cout << "W1=" << model.weight(0) << vcl_endl

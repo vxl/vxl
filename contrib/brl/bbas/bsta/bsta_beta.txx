@@ -53,17 +53,6 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
   return true;
 }
 
-#if 0
-template <class T>
-void bsta_beta<T>::set_alpha_beta(T alpha, T beta)
-{
-  if (alpha_ = alpha < 0)
-    alpha_=T(0);
-  if (beta_ = beta <0)
-    beta_=T(0);
-}
-#endif // 0
-
 //: pre: x should be in [0,1]
 template <class T>
 T bsta_beta<T>::prob_density(T x) const

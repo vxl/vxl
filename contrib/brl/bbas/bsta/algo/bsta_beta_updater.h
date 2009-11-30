@@ -61,7 +61,7 @@ class bsta_beta_updater
   typedef typename beta_::vector_type vector_;
  public:
 
-  //: for compatiblity with vpdl/vpdt
+  //: for compatibility with vpdl/vpdt
   typedef typename beta_::field_type field_type;
   typedef beta_ distribution_type;
 
@@ -88,15 +88,15 @@ class bsta_mix_beta_updater
 
  public:
   //: Constructor
-  bsta_mix_beta_updater(const dist_& model, T thresh, unsigned int max_cmp = 5)
-   : init_dist_(model,T(1)), max_components_(max_cmp), p_thresh_(thresh) {}
+  bsta_mix_beta_updater(const dist_& model, T thresh,  T var, unsigned int max_cmp = 5)
+   : init_dist_(model,T(1)), var_(var), max_components_(max_cmp), p_thresh_(thresh) {}
 
   //: for compatiblity with vpdl/vpdt
   typedef typename dist_::field_type field_type;
   typedef mix_dist_ distribution_type;
 
   //: The main function
-  void operator() ( obs_mix_dist_& mix, const vector_& sample ) const
+  void operator() ( obs_mix_dist_& mix, const vector_& sample) const
   {
     mix.num_observations += T(1);
     this->update(mix, sample, T(1)/mix.num_observations);
@@ -127,12 +127,11 @@ class bsta_mix_beta_updater
         mixture.set_weight(i, mixture.weight(i)*adjust);
     }
 
-    T var = 0.05f;
-    T t = (sample*(1-sample)/var)-1;
+    //T var = 0.05f;
+    T t = (sample*(1-sample)/var_)-1;
     T alpha=sample*t;
     T beta=(1-sample)*t;
     init_dist_.set_alpha_beta(alpha,beta); ///??? this was setting mean
-    vcl_cout << init_dist_;
     mixture.insert(init_dist_,init_weight);
   }
 
@@ -142,6 +141,7 @@ class bsta_mix_beta_updater
   unsigned int max_components_;
   //: probability threshold
   T p_thresh_;
+  T var_;
 };
 
 #endif
