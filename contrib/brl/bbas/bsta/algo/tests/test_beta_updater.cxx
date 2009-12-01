@@ -35,8 +35,8 @@ void random_sampling(vcl_vector<float> &samples, vcl_vector<float> in_samples,
 
 float compare_betas(bsta_beta<float>& beta1, bsta_beta<float>& beta2)
 {
-  float val=0, inc=0.01, total_diff=0;
-  while (val < 1.0) {
+  float val=0, inc=0.01f, total_diff=0;
+  while (val < 1.0f) {
     float diff = beta1.prob_density(val)-beta2.prob_density(val);
     diff*=diff;
     total_diff += diff;
@@ -48,16 +48,16 @@ float compare_betas(bsta_beta<float>& beta1, bsta_beta<float>& beta2)
 MAIN( test_beta_updater)
 {
   START ("test_beta_model");
-  vcl_cout << "----------------------------------\n"
+  vcl_cout << "-------------------------------\n"
            << " float, 1-dimensional, 3-modal\n"
-           << "-----------------------------------" <<vcl_endl;
+           << "-------------------------------" <<vcl_endl;
 
   //A tri-mixture of 1 dimensional beta distribution
   typedef bsta_num_obs<bsta_beta<float> > beta_type;
   typedef bsta_mixture_fixed<beta_type, 3> mix_beta;
   typedef bsta_num_obs<mix_beta> mix_beta_type;
 
-  bsta_beta<float> beta(100.0, 100.0);
+  bsta_beta<float> beta(100.0f, 100.0f);
   bsta_num_obs<bsta_beta<float> > init_beta(beta,1);
 
   // single distribution update
@@ -73,8 +73,8 @@ MAIN( test_beta_updater)
   }
 
   vcl_cout << init_beta;
-  TEST_NEAR("extracting alpha and beta from samples (100,100) - alpha", init_beta.alpha(), alpha_ ,10.0);
-  TEST_NEAR("extracting alpha and beta from samples (100,100) - beta ", init_beta.beta(), beta_ ,10.0);
+  TEST_NEAR("extracting alpha and beta from samples (100,100) - alpha", init_beta.alpha(), alpha_ ,10.0f);
+  TEST_NEAR("extracting alpha and beta from samples (100,100) - beta ", init_beta.beta(), beta_ ,10.0f);
 
   mix_beta mix;
   bsta_beta<float> beta1;
