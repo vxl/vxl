@@ -137,7 +137,7 @@ unsigned int bmsh3d_ifs_mesh::_count_visited_faces_indices_ifs()
   vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
-    if (F->b_visited() == false)
+    if (! F->b_visited())
       continue; //skip the unmarked F.
 
     unsigned int nVer = F->vertices().size();
@@ -203,7 +203,7 @@ void bmsh3d_ifs_mesh::delete_unmeshed_pts ()
   vcl_map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
   while (vit != vertexmap_.end()) {
     bmsh3d_vertex* V = (*vit).second;
-    if (V->b_meshed() == false) {
+    if (! V->b_meshed()) {
       vit++;
       remove_vertex (V);
     }
@@ -216,7 +216,7 @@ void bmsh3d_ifs_mesh::delete_unmeshed_pts ()
 
 double bmsh3d_mesh::get_avg_edge_len_from_F ()
 {
-  if (is_MHE() == false)
+  if (! is_MHE())
     return bmsh3d_ifs_mesh::get_avg_edge_len_from_F ();
 
   double avg_len = 0;
@@ -741,7 +741,7 @@ void manifold_fix_faces_orientation (bmsh3d_mesh* mesh, int sfaceid, bool b_use_
       bmsh3d_edge* edge = HE->edge();
       // assume 2-manifold mesh
       if (edge->halfedge()->face() != front_face) {
-        if (edge->halfedge()->face()->is_visited (mesh->i_traverse_flag()) == false)
+        if (! edge->halfedge()->face()->is_visited(mesh->i_traverse_flag()))
           he_queue.push (edge->halfedge());
       }
       else if (edge->halfedge()->pair()) {

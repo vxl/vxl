@@ -466,7 +466,7 @@ void _draw_M_visited_ifs_geom(bmsh3d_mesh* M, SoVertexProperty* vp, int* ind)
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
-    if (F->b_visited() == false)
+    if (! F->b_visited())
       continue; //skip the unmarked F.
     assert (F->vertices().size() > 2);
 
@@ -896,7 +896,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
       bmsh3d_face* F = (*it).second;
       vcl_vector<bmsh3d_vertex*> vertices;
       F->get_ordered_Vs(vertices);
-      if (is_tri_non_acute(vertices) == false) {
+      if (! is_tri_non_acute(vertices)) {
         n_acute++;
         F->set_visited(1);
       }
@@ -984,13 +984,13 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
     }
 
     //Skip drawing individual 222 triangles
-    if (draw_idv == false && type == TRIFACE_222) {
+    if (!draw_idv && type == TRIFACE_222) {
       F->set_i_visited(1);
     }
     else {
       F->set_i_visited(0);
       color = color_from_code(colorcode);
-      if (showid == false)
+      if (!showid)
         root->addChild(draw_F(F, color, transp, user_defined_class));
       else
         root->addChild(draw_F_with_id(F, color, idbasecolor, transp, user_defined_class));
@@ -998,7 +998,7 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
   }
 
   //draw all 2-2-2 triangles in a batch.
-  if (draw_idv == false) {
+  if (!draw_idv) {
     colorcode = get_M_face_topo_color(TRIFACE_222);
     root->addChild(draw_M_ifs_visited(M, colorcode, false, transp));
   }

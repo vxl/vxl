@@ -320,7 +320,8 @@ void bvxm_synth_world_generator::gen_texture_map(vgl_box_3d<double> box,
           intens_map_side2[i][j] = 0.99f;
       }
     }
-  } else {
+  }
+  else {
     for (unsigned i=0; i<upw;i++) {
       intens_map_bt[i].resize(uph);
       for (unsigned j=0; j<uph;j++) {
@@ -401,11 +402,14 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> gr
       {
         int face1 = on_box_surface(box, vgl_point_3d<double>(i,j,z));
         int face2 = on_box_surface(top_box, vgl_point_3d<double>(i,j,z));
-        
-        if ((face1 != -1) || (face2 != -1)) {
-          if (texture_map_ == false) {
-            (*intensity_slab_it)(i,j,0) = 1.0f; 
-          } else { // texture map set to true
+
+        if ((face1 != -1) || (face2 != -1))
+        {
+          if (!texture_map_) {
+            (*intensity_slab_it)(i,j,0) = 1.0f;
+          }
+          else // texture map set to true
+          {
             // create a checkerboard intensity
             if (face1 != -1) {
               if (face1 == 0) {
@@ -444,7 +448,7 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> gr
           }
           (*ocp_slab_it)(i,j,0) = 1.0f;
           is << " x" ;
-          }
+        }
          else
            is << " 0";
       }
@@ -453,11 +457,11 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> gr
   vcl_cout << "grid done." << vcl_endl;
 }
 
-void bvxm_synth_world_generator::gen_voxel_world_plane( vgl_vector_3d<unsigned> grid_size,
-                                                        vgl_box_3d<double> voxel_world,
-                                                        bvxm_voxel_grid<float>* ocp_grid,
-                                                        bvxm_voxel_grid<float>* intensity_grid,
-                                                        unsigned nx, unsigned ny, unsigned nz)
+void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
+                                                       vgl_box_3d<double> voxel_world,
+                                                       bvxm_voxel_grid<float>* ocp_grid,
+                                                       bvxm_voxel_grid<float>* intensity_grid,
+                                                       unsigned nx, unsigned ny, unsigned nz)
 {
   // fill with test data
   float init_val = 0.0;

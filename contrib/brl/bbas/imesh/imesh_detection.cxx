@@ -13,7 +13,7 @@ imesh_detect_boundary_loops(const imesh_half_edge_set& half_edges)
   vcl_vector<bool> visited(half_edges.size(),false);
   vcl_vector<vcl_vector<unsigned int> > loops;
   for (unsigned int i=0; i<half_edges.size(); ++i) {
-    if (visited[i] == true)
+    if (visited[i])
       continue;
     if (half_edges[i].is_boundary()) {
       visited[i] = true;

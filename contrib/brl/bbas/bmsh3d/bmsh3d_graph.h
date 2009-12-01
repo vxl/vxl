@@ -159,7 +159,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
   //: delete vertex from the map and release its memory
   virtual void remove_vertex (bmsh3d_vertex* V) {
     //The vertex can be deleted only when there's no incident edges or faces.
-    assert (V->has_incident_Es() == false);
+    assert (! V->has_incident_Es());
     vertexmap_.erase (V->id());
     //Delete the vertex using the virtual del function.
     _del_vertex (V);
@@ -189,7 +189,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
 
   //: if the vertex is isolated, it will be removed, else, it is connected to some edge and will be kept.
   bool try_remove_vertex (bmsh3d_vertex* V) {
-    if (V->has_incident_Es() == false) {
+    if (! V->has_incident_Es()) {
       remove_vertex (V->id());
       return true;
     }

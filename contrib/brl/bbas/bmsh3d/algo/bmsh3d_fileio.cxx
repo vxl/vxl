@@ -555,7 +555,7 @@ bool save_unmeshed_p3d(bmsh3d_mesh* M, const char* file)
   unsigned int count=0;
   for (; it != M->vertexmap().end(); ++it) {
     bmsh3d_vertex* v = (*it).second;
-    if (v->b_meshed() == false) {
+    if (! v->b_meshed()) {
       vcl_fprintf(fp, "%f %f %f\n", v->pt().x(), v->pt().y(), v->pt().z());
       ++count;
     }
@@ -844,7 +844,7 @@ void setup_IFS_M_label_Fs_vids(bmsh3d_mesh* M, const int label,
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); ++fit) {
     bmsh3d_face* F = (*fit).second;
-    if (F->is_visited(label) == false)
+    if (! F->is_visited(label))
       continue;
 
     faces.push_back(F);
@@ -1027,7 +1027,7 @@ bool bmsh3d_read_list_file(const char* file,
   vcl_ifstream  in;
   vcl_string    linestr;
   in.open (filename.c_str());
-  if (in == false) {
+  if (!in) {
     vcl_cerr << "Can't open listfile " << filename.c_str() << '\n';
     return false;
   }

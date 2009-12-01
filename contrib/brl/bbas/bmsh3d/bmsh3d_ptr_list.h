@@ -116,7 +116,7 @@ inline void add_to_ptr_list_head_ (bmsh3d_ptr_node*& head, bmsh3d_ptr_node* curr
 
 inline void add_ptr_to_list (bmsh3d_ptr_node*& head, const void* input)
 {
-  assert (is_in_ptr_list (head, input) == false);
+  assert (! is_in_ptr_list (head, input));
   assert (input != NULL);
   bmsh3d_ptr_node* curr = new bmsh3d_ptr_node (input);
   add_to_ptr_list_head_ (head, curr);
@@ -124,7 +124,7 @@ inline void add_ptr_to_list (bmsh3d_ptr_node*& head, const void* input)
 
 inline void add_ptr_check (bmsh3d_ptr_node*& head, const void* input)
 {
-  assert (is_in_ptr_list (head, input) == false);
+  assert (! is_in_ptr_list (head, input));
   add_ptr_to_list (head, input);
 }
 

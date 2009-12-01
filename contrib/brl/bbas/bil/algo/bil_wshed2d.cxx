@@ -343,7 +343,7 @@ bil_wshed_2d::process_connected_pixels_in_queue()
 
     if (pos_x == -1)
     {
-      if (queue_x.empty() == true)
+      if (queue_x.empty())
         break;
       else
       {

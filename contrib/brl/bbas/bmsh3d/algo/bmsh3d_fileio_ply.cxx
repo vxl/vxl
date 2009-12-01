@@ -58,16 +58,18 @@ bool bmsh3d_load_ply (bmsh3d_mesh* M, const char* file)
   if (!ply_read_header(ply)) return false;
 
   // vertex
-  nvertices = ply_set_read_cb(ply, "vertex", "x",
-    bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 0);
+  nvertices =
+  ply_set_read_cb(ply, "vertex", "x",
+                  bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 0);
   ply_set_read_cb(ply, "vertex", "y",
-    bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 1);
+                  bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 1);
   ply_set_read_cb(ply, "vertex", "z",
-    bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 2);
+                  bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 2);
 
   // face: some 3rd party program (3D object converter) use "vertex_index"!
-  ntriangles = ply_set_read_cb(ply, "face", "vertex_indices",
-    bmsh3d_fileio_face_cb_, (void*) (&parsed_mesh), 0);
+  ntriangles =
+  ply_set_read_cb(ply, "face", "vertex_indices",
+                  bmsh3d_fileio_face_cb_, (void*) (&parsed_mesh), 0);
 
   vcl_cerr << "  loading " << file << " :\n\t"
            << nvertices << " points, " << ntriangles << " faces ...\n";
@@ -99,16 +101,18 @@ bool bmsh3d_load_ply_v (bmsh3d_mesh* M, const char* file)
     return false;
 
   // vertex
-  nvertices = ply_set_read_cb(ply, "vertex", "x",
-    bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 0);
+  nvertices =
+  ply_set_read_cb(ply, "vertex", "x",
+                  bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 0);
   ply_set_read_cb(ply, "vertex", "y",
-    bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 1);
+                  bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 1);
   ply_set_read_cb(ply, "vertex", "z",
-    bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 2);
+                  bmsh3d_fileio_vertex_cb_, (void*) (&parsed_mesh), 2);
 
   // face: some 3rd party program (3D object converter) use "vertex_index"!
-  ntriangles = ply_set_read_cb(ply, "face", "vertex_indices",
-    bmsh3d_fileio_face_cb_, (void*) (&parsed_mesh), 0);
+  ntriangles =
+  ply_set_read_cb(ply, "face", "vertex_indices",
+                  bmsh3d_fileio_face_cb_, (void*) (&parsed_mesh), 0);
 
   vcl_cerr << "  loading " << file << " :\n\t"
            << nvertices << " points, " << ntriangles << " faces ...\n";
@@ -128,7 +132,7 @@ bool bmsh3d_load_ply_f (bmsh3d_mesh* M, const char* file)
 {
   //Temp solution: load to a tmpM and copy faces to M.
   bmsh3d_mesh* tmpM = new bmsh3d_mesh;
-  if (bmsh3d_load_ply (tmpM, file) == false)
+  if (! bmsh3d_load_ply(tmpM, file))
     return false;
 
   //Copy faces from tmpM to M.
@@ -376,7 +380,7 @@ int bmsh3d_fileio_richvertex_cb_(p_ply_argument argument)
 
   // insert vertex into the mesh if we're at the end of property list
   if (parsed_mesh->num_vertex_values_read ==
-    (3 + parsed_mesh->vertex_property_list.size()))
+      (3 + parsed_mesh->vertex_property_list.size()))
   {
     // INSERT VERTEX INTO THE MESH
     // i. create new
@@ -388,7 +392,7 @@ int bmsh3d_fileio_richvertex_cb_(p_ply_argument argument)
     for (unsigned int i=0; i < parsed_mesh->vertex_property_list.size(); ++i)
     {
       V->add_scalar_property(parsed_mesh->vertex_property_list[i],
-        parsed_mesh->vertex_property_values[i]);
+                             parsed_mesh->vertex_property_values[i]);
     }
     // iii. push into the mesh
     parsed_mesh->mesh->_add_vertex (V);
@@ -462,7 +466,7 @@ int bmsh3d_fileio_richface_cb_ (p_ply_argument argument)
     // b. extra properties
     for (unsigned i=0; i < parsed_mesh->face_property_list.size(); ++i) {
       F->add_scalar_property(parsed_mesh->face_property_list[i],
-        parsed_mesh->face_property_values[i]);
+                             parsed_mesh->face_property_values[i]);
     }
 
     M->_add_face (F);
@@ -512,33 +516,32 @@ bool bmsh3d_load_ply(bmsh3d_richmesh* M,
   if (!ply_read_header(ply)) return false;
 
   // vertex
-  nvertices = ply_set_read_cb(ply, "vertex", "x",
-    bmsh3d_fileio_richvertex_cb_, (void*) (&parsed_mesh), 0);
+  nvertices =
+  ply_set_read_cb(ply, "vertex", "x",
+                  bmsh3d_fileio_richvertex_cb_, (void*) (&parsed_mesh), 0);
   ply_set_read_cb(ply, "vertex", "y",
-    bmsh3d_fileio_richvertex_cb_, (void*) (&parsed_mesh), 1);
+                  bmsh3d_fileio_richvertex_cb_, (void*) (&parsed_mesh), 1);
   ply_set_read_cb(ply, "vertex", "z",
-    bmsh3d_fileio_richvertex_cb_, (void*) (&parsed_mesh), 2);
+                  bmsh3d_fileio_richvertex_cb_, (void*) (&parsed_mesh), 2);
 
   for (unsigned int i=0; i<vertex_property_list.size(); ++i) {
     ply_set_read_cb(ply, "vertex",
-      vertex_property_list[i].c_str(),
-      bmsh3d_fileio_richvertex_cb_,
-      (void*)(&parsed_mesh), 3+i);
+                    vertex_property_list[i].c_str(),
+                    bmsh3d_fileio_richvertex_cb_,
+                    (void*)(&parsed_mesh), 3+i);
   }
 
   // face
-  //ntriangles = ply_set_read_cb(ply, "face", "vertex_indices",
-    //bmsh3d_fileio_face_cb_, (void*) (&parsed_mesh), 0);
-
-  ntriangles = ply_set_read_cb(ply, "face", "vertex_indices",
-    bmsh3d_fileio_richface_cb_, (void*) (&parsed_mesh), 0);
+  ntriangles =
+  ply_set_read_cb(ply, "face", "vertex_indices",
+                  bmsh3d_fileio_richface_cb_, (void*) (&parsed_mesh), 0);
 
   for (unsigned int i=0; i<face_property_list.size(); ++i)
   {
     ply_set_read_cb(ply, "face",
-      face_property_list[i].c_str(),
-      bmsh3d_fileio_richface_cb_,
-      (void*)(&parsed_mesh), 1+i);
+                    face_property_list[i].c_str(),
+                    bmsh3d_fileio_richface_cb_,
+                    (void*)(&parsed_mesh), 1+i);
   }
 
   // Read DATA
@@ -555,10 +558,10 @@ bool bmsh3d_load_ply(bmsh3d_richmesh* M,
 // ----------------------------------------------------------------------------
 //: Save a rich mesh given a list of vertex properties and face properties to read
 bool bmsh3d_save_ply (bmsh3d_richmesh* mesh,
-                       const char* file,
-                       const vcl_vector<vcl_string >& vertex_property_list,
-                       const vcl_vector<vcl_string >& face_property_list,
-                       bmsh3d_storage_mode mode)
+                      const char* file,
+                      const vcl_vector<vcl_string >& vertex_property_list,
+                      const vcl_vector<vcl_string >& face_property_list,
+                      bmsh3d_storage_mode mode)
 {
   if (!face_property_list.empty())
   {

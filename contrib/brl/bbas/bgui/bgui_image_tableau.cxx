@@ -254,28 +254,30 @@ get_pixel_info_from_image(const int x, const int y,
                     v(0,0).R(), v(0,0).G(),v(0,0).B() );
       return;
     }
-    return; }
-    case  VIL_PIXEL_FORMAT_UINT_32: {
-      if (n_p==1)
-      {
-        vil_image_view<vxl_uint_32> v = r->get_view(x,1,y,1);
-        if (!v)
-          vcl_sprintf(msg, "Pixel Not Available");
-        else
-          vcl_sprintf(msg, "(%d, %d)   (uint32) %d", x, y, v(0,0));
-        return;
-      }
-      else if (n_p==3)
-      {
-        vil_image_view<vil_rgb<vxl_uint_32> > v = r->get_view(x,1,y,1);
-        if (!v)
-          vcl_sprintf(msg, "Pixel Not Available");
-        else
-          vcl_sprintf(msg, "(%d, %d)   (uint32)[ R=%d,G=%d,B=%d]", x, y,
-                      v(0,0).R(), v(0,0).G(),v(0,0).B() );
-        return;
-      }
-    return; }
+    return;
+   }
+   case  VIL_PIXEL_FORMAT_UINT_32: {
+    if (n_p==1)
+    {
+      vil_image_view<vxl_uint_32> v = r->get_view(x,1,y,1);
+      if (!v)
+        vcl_sprintf(msg, "Pixel Not Available");
+      else
+        vcl_sprintf(msg, "(%d, %d)   (uint32) %d", x, y, v(0,0));
+      return;
+    }
+    else if (n_p==3)
+    {
+      vil_image_view<vil_rgb<vxl_uint_32> > v = r->get_view(x,1,y,1);
+      if (!v)
+        vcl_sprintf(msg, "Pixel Not Available");
+      else
+        vcl_sprintf(msg, "(%d, %d)   (uint32)[ R=%d,G=%d,B=%d]", x, y,
+                    v(0,0).R(), v(0,0).G(),v(0,0).B() );
+      return;
+    }
+    return;
+   }
    case  VIL_PIXEL_FORMAT_FLOAT: {
     vil_image_view<float> v = r->get_view(x,1,y,1);
     if (!v)
@@ -285,14 +287,16 @@ get_pixel_info_from_image(const int x, const int y,
     else if (n_p ==3)
       vcl_sprintf(msg, "(%d, %d)   (float)[ R=%6.3f,G=%6.3f,B=%6.3f]", x, y,
                   v(0,0,0), v(0,0,1), v(0,0,2) );
-    return; }
+    return;
+   }
    case  VIL_PIXEL_FORMAT_DOUBLE: {
     vil_image_view<double> v = r->get_view(x,1,y,1);
     if (!v)
       vcl_sprintf(msg, "Pixel Not Available");
     else
       vcl_sprintf(msg, "(%d, %d)   (double) %g", x, y, v(0,0));
-    return; }
+    return;
+   }
    case VIL_PIXEL_FORMAT_RGB_BYTE: {
     vil_image_view<vil_rgb<vxl_byte> > v = r->get_view(x,1,y,1);
     if (!v)
@@ -300,7 +304,8 @@ get_pixel_info_from_image(const int x, const int y,
     else
       vcl_sprintf(msg, "(%d, %d)   (ubyte)[ R=%d,G=%d,B=%d]", x, y,
                   v(0,0).R(), v(0,0).G(),v(0,0).B() );
-      return; }
+      return;
+   }
    case VIL_PIXEL_FORMAT_RGB_UINT_16: {
     vil_image_view<vil_rgb<vxl_uint_16> > v = r->get_view(x,1,y,1);
     if (!v)
@@ -308,7 +313,8 @@ get_pixel_info_from_image(const int x, const int y,
     else
       vcl_sprintf(msg, "(%d, %d)   (uint16)[ R=%d,G=%d,B=%d]", x, y,
                   v(0,0).R(), v(0,0).G(),v(0,0).B() );
-    return; }
+    return;
+   }
 #if 0
    case VIL_PIXEL_FORMAT_UINT_32:
    case VIL_PIXEL_FORMAT_INT_32:
@@ -575,7 +581,7 @@ bool bgui_image_tableau::handle(vgui_event const &e)
   {
     button_down = false;
   }
-  else if (e.type == vgui_MOTION && handle_motion_&&button_down == false)
+  else if (e.type == vgui_MOTION && handle_motion_ && !button_down)
   {
     // Get X,Y position to display on status bar:
     float pointx, pointy;

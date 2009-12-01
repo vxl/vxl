@@ -65,7 +65,7 @@ bool bgui_picker_tableau::pick_point(float* x, float* y)
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
 
   *x = pointx;
@@ -82,7 +82,7 @@ void bgui_picker_tableau::pick_box(float* x1, float* y1, float *x2, float* y2)
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
 
   *x1 = pointx1;
@@ -153,7 +153,7 @@ void bgui_picker_tableau::pick_line(float* x1, float* y1, float* x2, float* y2)
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
 
   *x1 = pointx1;
@@ -182,7 +182,7 @@ void bgui_picker_tableau::anchored_pick_point(const float anch_x,
   picking_completed = false;
   vgui::flush();  // handle any pending events before we grab the event loop.
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
 
   *x = pointx1;
@@ -199,7 +199,7 @@ void bgui_picker_tableau::pick_polygon(vsol_polygon_2d_sptr& poly)
   active = true;
   vgui::flush();  // handle any pending events before we grab the event loop.
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
   if (point_list.size() >=3)
     poly =  new vsol_polygon_2d( point_list );
@@ -214,7 +214,7 @@ void bgui_picker_tableau::pick_polyline(vsol_polyline_2d_sptr& poly)
   active = true;
   vgui::flush();  // handle any pending events before we grab the event loop.
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
   if (point_list.size() >=2)
     poly =  new vsol_polyline_2d( point_list );
@@ -235,7 +235,7 @@ bool bgui_picker_tableau::pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_li
   ps_list.clear();
 
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
      next();
 
   if (point_set_list.size() <= max)

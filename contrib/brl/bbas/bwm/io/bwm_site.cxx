@@ -62,7 +62,7 @@ void bwm_site::x_write(vcl_ostream& s)
       bool active = img_tab->status;
       vsl_basic_xml_element tab(IMAGE_TABLEAU_TAG);
       tab.add_attribute("name", img_tab->name);
-      tab.add_attribute("status", active == true ? "active" : "inactive");
+      tab.add_attribute("status", active ? "active" : "inactive");
       tab.x_write_open(s);
 
       vsl_basic_xml_element img_path(IMAGE_PATH_TAG);
@@ -76,7 +76,7 @@ void bwm_site::x_write(vcl_ostream& s)
       bool active = cam_tab->status;
       vsl_basic_xml_element tab(CAMERA_TABLEAU_TAG);
       tab.add_attribute("name", cam_tab->name);
-      tab.add_attribute("status", active == true ? "active" : "inactive");
+      tab.add_attribute("status", active ? "active" : "inactive");
       tab.x_write_open(s);
 
       vsl_basic_xml_element img_path(IMAGE_PATH_TAG);
@@ -138,7 +138,7 @@ void bwm_site::x_write(vcl_ostream& s)
      }
 
      vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > c_list = corresp_[i];
-    
+
      for (unsigned c=0; c<c_list.size(); c++) {
        vsl_basic_xml_element corr_elm(CORRESP_ELM_TAG);
        corr_elm.x_write_open(s);

@@ -118,7 +118,7 @@ bool vgui_qt_dialog_impl::ask()
 
    bool result = exec();
 
-   if (result == true)
+   if (result)
    {
       for (vcl_vector<element>::iterator ei = elements.begin();
            ei != elements.end(); ++ei)

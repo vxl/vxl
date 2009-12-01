@@ -144,7 +144,7 @@ bmsh3d_vertex* bmsh3d_face::get_next_V_via_HE (const bmsh3d_vertex* inputV) cons
 
 //: Given a vertex V and an edge of this face incident to V, find the other edge of this face incident to V.
 bmsh3d_edge* bmsh3d_face::find_other_E (const bmsh3d_vertex* inputV,
-                                          const bmsh3d_edge* inputE) const
+                                        const bmsh3d_edge* inputE) const
 {
   bmsh3d_halfedge* HE = halfedge_;
   do {
@@ -160,7 +160,7 @@ bmsh3d_edge* bmsh3d_face::find_other_E (const bmsh3d_vertex* inputV,
 
 //: Given a vertex V and a halfedge of this face incident to V, find the other halfedge of this face incident of V.
 bmsh3d_halfedge* bmsh3d_face::find_other_HE (const bmsh3d_vertex* inputV,
-                                               const bmsh3d_halfedge* inputHE) const
+                                             const bmsh3d_halfedge* inputHE) const
 {
   bmsh3d_halfedge* HE = halfedge_;
   do {
@@ -176,7 +176,7 @@ bmsh3d_halfedge* bmsh3d_face::find_other_HE (const bmsh3d_vertex* inputV,
 
 //: Given a vertex V and an edge of this face incident to V, find the next edge (following the circular halfedge list) of this face incident to V.
 bmsh3d_edge* bmsh3d_face::find_next_E (const bmsh3d_vertex* inputV,
-                                         const bmsh3d_edge* inputE) const
+                                       const bmsh3d_edge* inputE) const
 {
   if (halfedge_ == NULL)
     return NULL;
@@ -207,8 +207,8 @@ bmsh3d_edge* bmsh3d_face::find_next_E (const bmsh3d_vertex* inputV,
 //: Given a vertex V and a halfedge of this face incident to V, find the next halfedge (following the circular halfedge list) of this face incident to V.
 //  Note that there can exist multiple answers if inputV is multiply (>2) connected.
 //  This function returns the first qualify halfedge.
-bmsh3d_halfedge* bmsh3d_face::find_next_HE (const bmsh3d_vertex* inputV,
-                                              const bmsh3d_halfedge* inputHE) const
+bmsh3d_halfedge* bmsh3d_face::find_next_HE(const bmsh3d_vertex* inputV,
+                                           const bmsh3d_halfedge* inputHE) const
 {
   if (halfedge_ == NULL)
     return NULL;
@@ -413,7 +413,7 @@ bool bmsh3d_face::_is_ifs_valid (bmsh3d_mesh* M)
   //Check if each V is inside M.
   for (unsigned int i=0; i<vertices_.size(); i++) {
     const bmsh3d_vertex* V = vertices_[i];
-    if (M->contains_V (V->id()) == false)
+    if (! M->contains_V (V->id()))
       return false;
   }
   return true;
@@ -660,8 +660,8 @@ void bmsh3d_face::_reverse_HE_chain ()
   assert (HE == halfedge_);
 }
 
-void bmsh3d_face::set_orientation (bmsh3d_halfedge* new_start_he,
-                                    bmsh3d_vertex*   new_next_v)
+void bmsh3d_face::set_orientation(bmsh3d_halfedge* new_start_he,
+                                  bmsh3d_vertex*   new_next_v)
 {
   if (halfedge_ == NULL)
     return;
@@ -1063,9 +1063,9 @@ void _delete_HE_chain (bmsh3d_halfedge* & headHE,
 }
 
 //: Given the face, current halfedge, and current eV, find the next halfedge in the input storage.
-bmsh3d_halfedge* _find_next_halfedge (bmsh3d_halfedge* input_he,
-                                       bmsh3d_vertex* eV,
-                                       vcl_vector<bmsh3d_halfedge*>& incident_HEs)
+bmsh3d_halfedge* _find_next_halfedge(bmsh3d_halfedge* input_he,
+                                     bmsh3d_vertex* eV,
+                                     vcl_vector<bmsh3d_halfedge*>& incident_HEs)
 {
   //Search for the next halfedge that's not the input_he
   for (unsigned int i=0; i<incident_HEs.size(); i++) {

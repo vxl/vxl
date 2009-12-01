@@ -783,6 +783,7 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
 
   print_faces();
 }
+
 void bwm_observable_mesh::create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices,
                                               vcl_vector<vgl_point_3d<int> > triangles)
 {
@@ -824,7 +825,7 @@ void bwm_observable_mesh::create_mesh_surface(vcl_vector<vgl_point_3d<double> > 
     object_->_add_face (f0);
     f0->_sort_HEs_circular();
   }
-  
+
   send_update();
 }
 
@@ -1170,7 +1171,7 @@ SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
                                                  float transp,
                                                  int colorcode)
 {
-  if (object_->is_MHE() == false)
+  if (! object_->is_MHE())
     object_->IFS_to_MHE();
   object_->orient_face_normals();
   object_->build_face_IFS ();
@@ -1190,7 +1191,7 @@ void bwm_observable_mesh::load_from(vcl_string filename)
 
   object_ = new bmsh3d_mesh_mc();
   if (!bmsh3d_load_ply(object_,filename.data())) {
-    vcl_cerr << "Error loading mesh from " << filename << vcl_endl;
+    vcl_cerr << "Error loading mesh from " << filename << '\n';
     return;
   }
 

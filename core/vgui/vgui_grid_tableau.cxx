@@ -155,7 +155,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab, unsigned& col,
     for (unsigned i = 0; i < nb_cols; i++)
     {
        // Find the next space in the grid without a tableau:
-       if (grid_pos(i,j).is_default == true)
+       if (grid_pos(i,j).is_default)
        {
          this->remove(grid_pos(i,j).handle);
          grid_pos(i,j).handle = this->add(tab, get_x(i), get_y(j), get_w(), get_h());
@@ -171,11 +171,11 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab, unsigned& col,
   }
   // fsm: this flag should control how events are handled, not whether a client
   // can change the layout of the grid tableau.
-  //if (uses_plus_minus_events == true)
+  //if (uses_plus_minus_events)
 
   // kym: only because you gave it that funny name!!!  I'm putting this back in here
   // (with its original name) because I think it is needed. Events are handled separately
-  if (grid_size_changeable == true)
+  if (grid_size_changeable)
   {
     // If we have got here then there are no free spaces in the grid.
 #ifdef DEBUG
@@ -248,7 +248,7 @@ void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 #endif
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
-    if (grid_pos(col_pos, row_pos).is_default == false)
+    if (! grid_pos(col_pos, row_pos).is_default)
     {
       this->remove(grid_pos(col_pos, row_pos).handle);
       tabs.erase(tabs.begin() + grid_pos(col_pos, row_pos).tab_pos);
@@ -272,7 +272,7 @@ void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned row_pos)
 {
   if (col_pos < nb_cols && row_pos < nb_rows &&
-      grid_pos(col_pos, row_pos).is_default == false)
+      ! grid_pos(col_pos, row_pos).is_default)
     return this->get(grid_pos(col_pos, row_pos).handle);
 
   if (col_pos >= nb_cols)
@@ -535,7 +535,8 @@ void vgui_grid_tableau::page_up()
     // Get the index of the tableau currently in that position:
     unsigned tab_index = grid_pos(col_pos, row_pos).tab_pos;
 
-    if (tab_index < (tabs.size() - 1) && grid_pos(col_pos, row_pos).is_default == false)
+    if (tab_index < (tabs.size() - 1) &&
+        ! grid_pos(col_pos, row_pos).is_default)
     {
       this->replace(grid_pos(col_pos, row_pos).handle, tabs[tab_index + 1]);
       grid_pos(col_pos, row_pos).tab_pos++;
@@ -565,7 +566,8 @@ void vgui_grid_tableau::page_down()
     // Get the index of the tableau currently in that position:
     unsigned tab_index = grid_pos(col_pos, row_pos).tab_pos;
 
-    if (tab_index > 0 && grid_pos(col_pos, row_pos).is_default == false)
+    if (tab_index > 0 &&
+        ! grid_pos(col_pos, row_pos).is_default)
     {
       this->replace(grid_pos(col_pos, row_pos).handle, tabs[tab_index - 1]);
       grid_pos(col_pos, row_pos).tab_pos--;

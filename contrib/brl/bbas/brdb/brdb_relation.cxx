@@ -544,7 +544,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
         }
 
         // find a matched tuple
-        if (isMatched == true)
+        if (isMatched)
         {
           // create a new empty tuple and add into the resulting relation.
           brdb_tuple_sptr new_tup = new brdb_tuple();

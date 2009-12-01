@@ -297,7 +297,7 @@ void bmsh3d_mesh::sort_V_incident_Es()
 bool bmsh3d_mesh::valid_conn()
 {
   bool result = bmsh3d_ifs_mesh::valid_conn();
-  if (result == false)
+  if (!result)
     return result;
 
   // go through each linkElm and validate the halfedge list and incident faces

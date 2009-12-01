@@ -64,7 +64,7 @@ int vgui_mfc_statusbar::write(const char* text, int n)
       // to clear the buffer before we start a new message.
       start_new = true;
     }
-    else if (start_new == true){
+    else if (start_new){
       statusbar->SetWindowText(linebuffer.c_str());
       statusbar->SetPaneText(0,linebuffer.c_str());
       linebuffer = "";

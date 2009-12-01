@@ -254,7 +254,7 @@ vidl1_mpegcodec::get_view( int position,
                            int x0, int width,
                            int y0, int height) const
 {
-  assert(inited == true);
+  assert(inited);
   assert(x0+width  <= this->width());
   assert(y0+height <= this->height());
 

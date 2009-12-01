@@ -257,7 +257,7 @@ vidl_vil1_mpegcodec::get_section(int position,
                                  int width,
                                  int height) const
 {
-  assert(inited == true);
+  assert(inited);
   assert(x0+width  <= this->width());
   assert(y0+height <= this->height());
 

@@ -114,7 +114,7 @@ void bwm_corr::x_write(vcl_ostream &os)
    vsl_basic_xml_element corr(CORRESPONDENCES_TAG);
    corr.x_write_open(os);
 
-   if (mode() == false) {
+   if (! mode()) {
     vsl_basic_xml_element xml_element(CORRESP_PT_TAG);
     xml_element.add_attribute("X", world_pt().x());
     xml_element.add_attribute("Y", world_pt().y());

@@ -350,7 +350,7 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
 #if 0
       s << obs.size() << vcl_endl;
 #endif
-      if (corr->mode() == false) { // WORLD TO IMAGE
+      if (! corr->mode()) { // WORLD TO IMAGE
         s << "WORLD_POINT: " << corr->world_pt().x() << ' ' << corr->world_pt().y()
           << ' ' << corr->world_pt().z() << vcl_endl;
       }

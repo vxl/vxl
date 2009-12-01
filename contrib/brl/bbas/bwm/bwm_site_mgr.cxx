@@ -161,7 +161,8 @@ void bwm_site_mgr::create_site()
   if (!site_dialog.ask()) {
     return;
   }
-  else {
+  else
+  {
     // collect the paramaters
     vcl_cout << "name:" << site_name << vcl_endl
              << "dir:" << site_dir << vcl_endl;
@@ -171,7 +172,7 @@ void bwm_site_mgr::create_site()
       vgui_dialog error ("Error");
       error.message ("Please enter a valid SITE NAME!            " );
       error.ask();
-      if (site_dialog.ask() == false)
+      if (! site_dialog.ask())
         return;
     }
 
@@ -180,7 +181,7 @@ void bwm_site_mgr::create_site()
       vgui_dialog error ("Error");
       error.message ("Please enter a valid SITE DIRECTORY!            " );
       error.ask();
-      if (site_dialog.ask() == false)
+      if (! site_dialog.ask())
         return;
     }
 
@@ -199,7 +200,7 @@ void bwm_site_mgr::create_site()
         vgui_dialog error ("Error");
         error.message ("Please enter an integer level value!            " );
         error.ask();
-        if (site_dialog.ask() == false)
+        if (! site_dialog.ask())
           return;
       }
       else {
@@ -269,7 +270,8 @@ void bwm_site_mgr::edit_site()
   vcl_vector<bwm_io_tab_config* > tableaus;
   site->tableaus(tableaus);
   cam.resize(tableaus.size());
-  if (tableaus.size() > 0) {
+  if (tableaus.size() > 0)
+  {
     site_edit_dialog.message("EXISTING IMAGES:");
     site_edit_dialog.line_break();
 
@@ -460,7 +462,7 @@ void bwm_site_mgr::load_site()
     for (unsigned i=0; i<tableaus.size(); i++)
     {
       bwm_io_tab_config* t = tableaus[i];
-      if (t->status == true) {
+      if (t->status) {
         // create an active tableau
         bwm_tableau_img* tab = tableau_factory_.create_tableau(t);
         bwm_tableau_mgr::instance()->add_tableau(tab, t->name);
@@ -481,7 +483,7 @@ void bwm_site_mgr::load_site()
     else if (type.compare("SINGLE") == 0)
       bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::SINGLE_PT_CORR);
     else
-      vcl_cerr << "ERROR: Undefined Correspondence type=" << type << vcl_endl;
+      vcl_cerr << "ERROR: Undefined Correspondence type=" << type << '\n';
 
     if (mode == "WORLD_TO_IMAGE") {
       if (corresp.size() > 0) {
@@ -631,7 +633,6 @@ void bwm_site_mgr::save_site()
       vcl_string new_cam_path = bwm_tableau_mgr::instance()->save_camera(active_tableaus_[i]->name);
       bwm_io_tab_config_cam* t  = static_cast<bwm_io_tab_config_cam*> (active_tableaus_[i]);
       t->cam_path = new_cam_path;
-
     }
     site->tableaus_.push_back(active_tableaus_[i]->clone());
   }
@@ -863,26 +864,20 @@ void bwm_site_mgr::load_cam_tableau()
   }
 
   vcl_string cam_str;
-  switch(camera_type)
-    {
+  switch (camera_type)
+  {
     case 0:
-      {
-        cam_str = "rational";
-        break;
-      }
+      cam_str = "rational";
+      break;
     case 1:
-      {
-        cam_str = "projective";
-        break;
-      }
+      cam_str = "projective";
+      break;
     case 2:
-      {
-        cam_str = "perspective";
-        break;
-      }
+      cam_str = "perspective";
+      break;
     default:
       cam_str = "unknown";
-    }
+  }
 
   bwm_io_tab_config_cam* cam = new bwm_io_tab_config_cam(name, true, img_file, cam_file, cam_str);
   active_tableaus_.push_back(cam);
@@ -925,8 +920,7 @@ static void write_vrml_header(vcl_ofstream& str)
 }
 
 static void write_vrml_points(vcl_ofstream& str,
-                              vcl_vector<vgl_point_3d<double> > const& pts3d
-                              )
+                              vcl_vector<vgl_point_3d<double> > const& pts3d)
 {
   int n = pts3d.size();
   for (int i =0; i<n; i++)
@@ -951,7 +945,7 @@ static void write_vrml_points(vcl_ofstream& str,
       << "}\n";
 }
 
-static void 
+static void
 write_vrml_cameras(vcl_ofstream& str,
                    vcl_vector<vpgl_perspective_camera<double> > const& cams)
 {
@@ -990,10 +984,10 @@ write_vrml_cameras(vcl_ofstream& str,
   double ang = q.angle();
   double rad = 15.0;
   str <<  "Transform {\n"
-      << " translation " << cent.x()+ rad*r.x() << ' ' << cent.y()+rad*r.y() 
+      << " translation " << cent.x()+ rad*r.x() << ' ' << cent.y()+rad*r.y()
       << ' ' << cent.z()+rad*r.z() << '\n'
       << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
-      << "children [ \n"
+      << "children [\n"
       << " Shape {\n"
       << " appearance Appearance{\n"
       << "  material Material\n"
@@ -1036,16 +1030,15 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os)
   }
   vcl_vector<vgl_point_3d<double> > pts;
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
-  for(vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
-      cit!= corrs.end(); ++cit)
-    {
-      bwm_video_corr_sptr corr = *cit;
-      if(!corr) continue;
-      if(!corr->world_pt_valid()) continue;
-      vgl_point_3d<double> pt = corr->world_pt();
-      pts.push_back(pt);
-    }
-  if(!pts.size())
+  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
+       cit!= corrs.end(); ++cit)
+  {
+    bwm_video_corr_sptr corr = *cit;
+    if (!corr || !corr->world_pt_valid()) continue;
+    vgl_point_3d<double> pt = corr->world_pt();
+    pts.push_back(pt);
+  }
+  if (!pts.size())
     return;
   write_vrml_header(os);
   write_vrml_points(os, pts);
@@ -1085,23 +1078,23 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os)
     return;
   }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
-  if(!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()){
-      vcl_cerr << "Invalid or non-seekable camera stream\n";
-      return;
-    }
+  if (!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()) {
+    vcl_cerr << "Invalid or non-seekable camera stream\n";
+    return;
+  }
   //to return to starting state
   unsigned cam_number = cam_istr->camera_number();
   cam_istr->seek_camera(0);
   vcl_vector<vpgl_perspective_camera<double> > cams;
-  while(true){
+  while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
     cams.push_back(*cam);
-    if(!cam_istr->advance())
+    if (!cam_istr->advance())
       break;
   }
   //restore the camera stream to initial position
   cam_istr->seek_camera(cam_number);
-  if(!cams.size())
+  if (!cams.size())
     return;
   write_vrml_cameras(os, cams);
 }
@@ -1129,7 +1122,7 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
     return;
   vcl_ofstream os(path.c_str());
   write_vrml_header(os);
-  save_video_world_points_vrml_impl(os);  
+  save_video_world_points_vrml_impl(os);
   save_video_cameras_vrml_impl(os);
 }
 //: compute 3-d parameters, site bounding box and GSD
@@ -1164,15 +1157,15 @@ void bwm_site_mgr::compute_3d_world_params()
     return;
   }
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
-   if (!corrs.size()){
+   if (!corrs.size()) {
      vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
-       << "no correspondences\n";
+              << "no correspondences\n";
      return;
    }
    bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
-   if(!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()){
+   if (!cam_istr || !cam_istr->is_valid() || !cam_istr->is_seekable()) {
      vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
-       << "no correspondences\n";
+              << "no correspondences\n";
      return;
    }
   //Add world points to bounding box
@@ -1180,14 +1173,14 @@ void bwm_site_mgr::compute_3d_world_params()
   for (; cit != corrs.end(); ++cit)
   {
     bwm_video_corr_sptr c = *cit;
-    if(!c) continue;
-    if(c->world_pt_valid())
+    if (!c) continue;
+    if (c->world_pt_valid())
       bb.add(c->world_pt());
   }
   //to resore cam stream state
   unsigned cam_number = cam_istr->camera_number();
   cam_istr->seek_camera(0);
-  vpgl_perspective_camera<double>* cam = cam_istr->current_camera();  
+  vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
   //project the bounding box
   vgl_box_2d<double> bb_2d = vpgl_project::project_bounding_box(*cam, bb);
   //get the number of pixels on the diagonal
@@ -1198,16 +1191,16 @@ void bwm_site_mgr::compute_3d_world_params()
   double diag3 = vcl_sqrt(w3*w3 + h3*h3 + d3*d3);
   gsd = diag3/diag2;
   vcl_ofstream os(path.c_str());
-  if(!os.is_open()){
+  if (!os.is_open()) {
      vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
-       << "invalid parameter output path\n";
+              << "invalid parameter output path\n";
      return;
-   }
-  os << "World Bounding Box\n";
-  os << bb << '\n';
-  os << "Ground Sample Distance(GSD): " << gsd << '\n';
-  os << "Bounding box size in GSD units\n"
-     << "Xsize:" << static_cast<unsigned>(bb.width()/gsd) 
+  }
+  os << "World Bounding Box\n"
+     << bb << '\n'
+     << "Ground Sample Distance(GSD): " << gsd << '\n'
+     << "Bounding box size in GSD units\n"
+     << "Xsize:" << static_cast<unsigned>(bb.width()/gsd)
      << " Ysize:" << static_cast<unsigned>(bb.height()/gsd)
      << " Zsize:" << static_cast<unsigned>(bb.depth()/gsd) << '\n';
   os.close();

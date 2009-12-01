@@ -201,7 +201,7 @@ bool bsta_int_histogram_1d::find_peaks( float perct, int &n_peaks, vcl_vector<un
     if (delta < 0) direction = false;
     // delta = 0, leave direction the same
 
-    if (direction == true)      // we are looking for next peak
+    if (direction)      // we are looking for next peak
     {
       if (counts_[i] - last_v_val > hysteresis)
       {

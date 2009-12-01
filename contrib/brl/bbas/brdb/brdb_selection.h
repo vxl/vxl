@@ -26,7 +26,7 @@ typedef vcl_set<vcl_vector<brdb_tuple_sptr>::iterator> selection_t;
 
 class brdb_selection : public vbl_ref_count
 {
-public:
+ public:
 
   //: Constructor
   brdb_selection(const brdb_relation_sptr& relation, brdb_query_aptr query);
@@ -72,7 +72,7 @@ public:
   bool get(const vcl_string& attribute_name, T& value)
   {
     brdb_value_t<T> val;
-    if(this->get_value(attribute_name, static_cast<brdb_value&>(val)) == false)
+    if (! this->get_value(attribute_name, static_cast<brdb_value&>(val)))
       return false;
     else
     {
@@ -89,7 +89,7 @@ public:
   bool get(const vcl_string& attribute_name, unsigned int index, T& value)
   {
     brdb_value_t<T> val;
-    if(this->get_value(attribute_name, index, static_cast<brdb_value&>(val)) == false)
+    if (! this->get_value(attribute_name, index, static_cast<brdb_value&>(val)))
       return false;
     else
     {
@@ -125,8 +125,7 @@ public:
   //: return the size of selection;
   unsigned int size();
 
-
-private:
+ private:
   //: Constructor with no query
   brdb_selection(const brdb_relation_sptr& relation);
 
@@ -145,7 +144,7 @@ private:
   //: see whether the selection contains a relation iterator
   bool contains(const vcl_vector<brdb_tuple_sptr>::iterator& relation_itr) const;
 
-private:
+ private:
   //: time stamp
   unsigned long time_stamp_;
 
@@ -157,10 +156,7 @@ private:
 
   //: store the original query which generate this selection, need this information for update selection
   brdb_query_aptr query_;
-
 };
-
-
 
 
 //: and operator
@@ -183,7 +179,6 @@ inline brdb_selection_sptr operator ^ (const brdb_selection_sptr& lhs,
 {
   return lhs->selection_xor(rhs);
 }
-
 
 //: not operator
 inline brdb_selection_sptr operator ~ (const brdb_selection_sptr& rhs)

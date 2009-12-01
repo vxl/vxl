@@ -183,7 +183,7 @@ inline void bil_malladi_image_force_with_feature_map(
     {
       for (unsigned i=0; i<grad_mag.ni(); ++i)
       {
-        if (feature_map(i, j, p) == true)
+        if (feature_map(i, j, p))
         {
           grad_mag(i, j, p) = max_value;
         }

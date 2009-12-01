@@ -185,7 +185,7 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
     unsigned int count=0;
     for (; it != vertexmap_.end(); it++) {
       bmsh3d_vertex* V = (*it).second;
-      if (V->b_meshed() == false)
+      if (! V->b_meshed())
         count++;
     }
     return count;
@@ -396,7 +396,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
   virtual void remove_vertex(bmsh3d_vertex* V)
   {
     //Delete a vertex only when there's no incident edges or faces.
-    assert(V->has_incident_Es() == false);
+    assert(! V->has_incident_Es());
     vertexmap_.erase(V->id());
     //Delete V using the virtual del function.
     _del_vertex(V);

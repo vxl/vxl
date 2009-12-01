@@ -24,7 +24,7 @@ int vgui_qt_statusbar::write(const char* text, int n)
       // to clear the buffer before we start a new message.
       start_new = true;
     }
-    else if (start_new == true){
+    else if (start_new){
       parent_->statusBar()->message(linebuffer.c_str());
       linebuffer = "";
       linebuffer += text[0];
