@@ -89,7 +89,7 @@ class bsta_mix_beta_updater
  public:
   //: Constructor
   bsta_mix_beta_updater(const dist_& model, T thresh,  T var, unsigned int max_cmp = 5)
-   : init_dist_(model,T(1)), var_(var), max_components_(max_cmp), p_thresh_(thresh) {}
+   : init_dist_(model,T(1)), max_components_(max_cmp), p_thresh_(thresh), var_(var) {}
 
   //: for compatiblity with vpdl/vpdt
   typedef typename dist_::field_type field_type;
@@ -109,16 +109,14 @@ class bsta_mix_beta_updater
   //: insert a sample in the mixture
   void insert(mix_dist_& mixture, const vector_& sample, T init_weight) const
   {
-    bool removed = false;
-    if (mixture.num_components() >= max_components_){
-      removed = true;
-      do {
-        mixture.remove_last();
-      } while (mixture.num_components() >= max_components_);
+    bool removed = mixture.num_components() >= max_components_;
+    while (mixture.num_components() >= max_components_)
+    {
+      mixture.remove_last();
     }
 
     // if a mixture is removed renormalize the rest
-    if (removed){
+    if (removed) {
       T adjust = T(0);
       for (unsigned int i=0; i<mixture.num_components(); ++i)
         adjust += mixture.weight(i);
@@ -127,7 +125,7 @@ class bsta_mix_beta_updater
         mixture.set_weight(i, mixture.weight(i)*adjust);
     }
 
-    //T var = 0.05f;
+    //T var = T(0.05);
     T t = (sample*(1-sample)/var_)-1;
     T alpha=sample*t;
     T beta=(1-sample)*t;
