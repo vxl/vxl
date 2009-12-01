@@ -113,6 +113,8 @@ class boct_tree
   //: Returns the location of the cell in the block, with respect to blocks min point
   vgl_box_3d<double> cell_bounding_box_local(boct_tree_cell<T_loc,T_data>* const cell);
 
+  //: Returns the location of the cell in the block, [0,1]x[0,1]x[0,1]
+  vgl_box_3d<double> cell_bounding_box_canonical(boct_tree_cell<T_loc,T_data>* const cell);
   //: Returns bounding box of the tree
   vgl_box_3d<double> bounding_box() const {return global_bbox_;}
 
