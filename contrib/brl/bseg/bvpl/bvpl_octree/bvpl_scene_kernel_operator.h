@@ -6,7 +6,7 @@
 // \file
 // \brief: A class that operates a bvpl_kernel on a boxm_scene 
 // \author Isabel Restrepo mir@lems.brown.edu
-// \date  11/18/09
+// \date  November 18, 2009
 //
 // \verbatim
 //  Modifications
