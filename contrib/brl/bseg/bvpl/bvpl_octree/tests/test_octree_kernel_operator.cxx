@@ -27,7 +27,7 @@ void fill_sample_octree(boct_tree<short,float>* tree)
     tree->init_cells(0.1f);
     leaves[1]->set_data(0.5);
 #if debug
-    for (unsigned i=0; i<leaves.size(); i++) {
+    for (unsigned i=0; i<leaves.size(); ++i) {
           vcl_cout << leaves[i]->get_code().x_loc_ << ','
                    << leaves[i]->get_code().y_loc_ << ','
                    << leaves[i]->get_code().z_loc_ << ','
@@ -39,11 +39,10 @@ void fill_sample_octree(boct_tree<short,float>* tree)
     //leaves[1]->set_data(0.6);
   }
 
-
 #if 0
   {
     vcl_vector<boct_tree_cell<short,float>*> leaves = tree->cells_at_level((short)0);
-    for (unsigned i=0; i<leaves.size(); i++) {
+    for (unsigned i=0; i<leaves.size(); ++i) {
       vcl_cout << leaves[i]->get_code().x_loc_ << ','
                << leaves[i]->get_code().y_loc_ << ','
                << leaves[i]->get_code().z_loc_ << ','
@@ -61,20 +60,20 @@ void fill_edge3d_tree(boct_tree<short,float>* tree)
 {
   tree-> split();
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
-  for (unsigned i= 0; i<4; i++)
+  for (unsigned i= 0; i<4; ++i)
   {
-    leaves[i]->set_data(0.2);
+    leaves[i]->set_data(0.2f);
     leaves[i]->split();
     {
-    boct_tree_cell<short,float>* cc =leaves[i]->children();
-    for (unsigned j1=0; j1<8; j1++)
-      cc[j1].split();
+      boct_tree_cell<short,float>* cc =leaves[i]->children();
+      for (unsigned j1=0; j1<8; ++j1)
+        cc[j1].split();
     }
-    leaves[i+4]->set_data(0.9);
+    leaves[i+4]->set_data(0.9f);
     leaves[i+4]->split();
     {
       boct_tree_cell<short,float>* cc =leaves[i+4]->children();
-      for (unsigned j1=0; j1<8; j1++)
+      for (unsigned j1=0; j1<8; ++j1)
         cc[j1].split();
     }
     //split children
@@ -144,9 +143,9 @@ bool octree_vector_operator()
   boct_loc_code<short> loc_code;
 
   bool result = true;
-  for (short x=3; x<5; x++)
-    for (short y=3; y<5; y++)
-      for (short z=3; z<5; z++)
+  for (short x=3; x<5; ++x)
+    for (short y=3; y<5; ++y)
+      for (short z=3; z<5; ++z)
       {
         loc_code.set_code(x,y,z);
         loc_code.set_level(0);
