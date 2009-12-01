@@ -363,7 +363,15 @@ vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box_local(boct_tree_ce
                             cellsize*global_bbox_.depth(),
                             vgl_box_3d<double>::min_pos);
 }
-
+template <class T_loc,class T_data>
+vgl_box_3d<double> boct_tree<T_loc,T_data>::cell_bounding_box_canonical(boct_tree_cell<T_loc,T_data>* const cell)
+{
+  double onebymaxval=1/max_val_;
+  double cellsize=(double)(1<<cell->level())*onebymaxval;
+  vgl_point_3d<double> local_origin(cell->code_.x_loc_*onebymaxval,cell->code_.y_loc_*onebymaxval,cell->code_.z_loc_*onebymaxval);
+  
+  return vgl_box_3d<double>(local_origin,cellsize,cellsize,cellsize,vgl_box_3d<double>::min_pos);
+}
 template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::print()
 {
