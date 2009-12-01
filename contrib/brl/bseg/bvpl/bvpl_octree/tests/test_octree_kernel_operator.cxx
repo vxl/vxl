@@ -7,7 +7,6 @@
 #include <testlib/testlib_test.h>
 
 #include "../bvpl_octree_kernel_operator.h"
-#include "../bvpl_octree_vector_operator.h"
 #include "../bvpl_scene_kernel_operator.h"
 #include "../bvpl_octree_vector_operator_impl.h"
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>

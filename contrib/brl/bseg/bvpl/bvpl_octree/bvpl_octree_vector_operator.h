@@ -13,7 +13,7 @@
 //   <none yet>
 // \endverbatim
 
-
+#include "bvpl_octree_kernel_operator.h"
 #include <bvpl/bvpl_kernel.h>
 #include <bvpl/bvpl_local_max_functor.h>
 #include <boct/boct_tree.h>
@@ -43,7 +43,7 @@ class bvpl_octree_vector_operator
       temp_tree->init_cells(func_max.min_response());
       bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
       oper.operate(functor, kernel, temp_tree,level, cell_length);
-      this->combine_kernel_responses(response_tree, temp_tree, id_tree, id);
+      combine_kernel_responses(response_tree, temp_tree, id_tree, id);
     }
     return true;
   }
@@ -52,7 +52,7 @@ protected:
   //: Abstract function to be implemented on children on how to combine current kernel response with output response
  
   virtual bool combine_kernel_responses(boct_tree<short ,T_data>* tree_out, boct_tree<short ,T_data>* tree_curr,
-                                boct_tree<short ,int>* id_out, int id_curr);
+                                boct_tree<short ,int>* id_out, int id_curr)=0;
   
   //: Compares response grids and stores in out, the maximum responses. This function gets called in subclasses when
   //  implementin combine_kernel_responses
