@@ -22,10 +22,11 @@ template <class T_data>
 class bvpl_max_vector_operator: public bvpl_octree_vector_operator<T_data>
 {
 public:
-  virtual bool combine_kernel_responses(boct_tree<short ,T_data>* tree_out, boct_tree<short ,T_data>* tree_curr,
+  virtual void combine_kernel_responses(boct_tree<short ,T_data>* tree_out, boct_tree<short ,T_data>* tree_curr,
                                         boct_tree<short ,int>* id_out, int id_curr)
   {
     this->keep_max_response_tree(tree_out, tree_curr, id_out, id_curr);
+    
     
   }
   

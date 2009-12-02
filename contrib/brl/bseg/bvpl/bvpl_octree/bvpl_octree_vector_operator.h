@@ -51,7 +51,7 @@ class bvpl_octree_vector_operator
 protected:
   //: Abstract function to be implemented on children on how to combine current kernel response with output response
  
-  virtual bool combine_kernel_responses(boct_tree<short ,T_data>* tree_out, boct_tree<short ,T_data>* tree_curr,
+  virtual void combine_kernel_responses(boct_tree<short ,T_data>* tree_out, boct_tree<short ,T_data>* tree_curr,
                                 boct_tree<short ,int>* id_out, int id_curr)=0;
   
   //: Compares response grids and stores in out, the maximum responses. This function gets called in subclasses when
