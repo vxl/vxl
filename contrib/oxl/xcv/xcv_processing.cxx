@@ -24,7 +24,7 @@ void xcv_processing::xcv_processing_dup()
   get_current(&col, &row);
   vil1_image img;
   bool image_ok = get_image_at(&img, col, row);
-  if (image_ok == false)
+  if (!image_ok)
     return;
   static double sigma = 1.0;
 

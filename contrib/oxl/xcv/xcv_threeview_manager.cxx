@@ -49,10 +49,7 @@ void xcv_threeview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned t
 //-----------------------------------------------------------------------------
 void xcv_threeview_manager::toggle_tri_tensor_display()
 {
-  if (tri_tensor_is_displayed == false)
-    tri_tensor_is_displayed = true;
-  else
-    tri_tensor_is_displayed = false;
+  tri_tensor_is_displayed = !tri_tensor_is_displayed;
 }
 
 //-----------------------------------------------------------------------------
@@ -97,7 +94,7 @@ void xcv_threeview_manager::handle_tjunction_event(vgui_event const& e, vgui_tab
     dragging = false;
     rubberbands[0]->post_redraw();
   }
-  if (e.type == vgui_MOTION && dragging == true)
+  if (e.type == vgui_MOTION && dragging)
   {
     if (tri_tensor != 0 && tri_tensor_is_displayed)
     {

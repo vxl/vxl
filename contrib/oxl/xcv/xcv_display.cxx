@@ -85,7 +85,7 @@ void xcv_display::toggle_enhance()
   if (is_magnifying)
     toggle_magnify();
 
-  if (is_enhancing == false)
+  if (!is_enhancing)
   {
     unsigned col, row;
     get_current(&col, &row);
@@ -132,7 +132,7 @@ void xcv_display::toggle_magnify()
   if (is_enhancing)
     toggle_enhance();
 
-  if (is_magnifying == false)
+  if (!is_magnifying)
   {
     if (debug) vcl_cerr << "adding magnify lens\n";
 

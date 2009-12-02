@@ -117,7 +117,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
   double std_in = 0.0;
 
   for (int k = 0; k < data_size_; k++) {
-    if (inlier_list[k] == true) {
+    if (inlier_list[k]) {
       std_in += residualsF[k];
     }
   }
@@ -128,7 +128,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
   matches.set(inlier_list, point1_int, point2_int);
 #if 0
   for (int z=0, k=0; z < inlier_list.size(); z++)
-    if (inlier_list[z] == true) {
+    if (inlier_list[z]) {
       vcl_cerr << "residualsF[" << z << "] : " << residualsF[z] << vcl_endl;
       vcl_cerr << k++ << vcl_endl;
     }

@@ -134,7 +134,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
   {
     button_down = false;
   }
-  else if (e.type == vgui_MOTION && button_down == false)
+  else if (e.type == vgui_MOTION && !button_down)
   {
     // Get X,Y position to display on status bar:
     float pointx, pointy;

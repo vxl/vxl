@@ -58,7 +58,7 @@ void xcv_segmentation::perform_harris(osl_harris_params& params,
 {
   vil1_image img;
   bool image_ok = get_image_at(&img, col, row);
-  if (image_ok == false)
+  if (!image_ok)
     return;
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
@@ -210,7 +210,7 @@ void xcv_segmentation::canny_ox()
   get_current(&col, &row);
   vil1_image img;
   bool image_ok = get_image_at(&img, col, row);
-  if (image_ok == false)
+  if (!image_ok)
     return;
 
   osl_canny_ox_params params;

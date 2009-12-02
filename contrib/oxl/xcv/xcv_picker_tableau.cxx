@@ -48,7 +48,7 @@ bool xcv_picker_tableau::pick_point(float* x, float* y)
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
 
   *x = pointx;
@@ -87,7 +87,7 @@ void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
-  while (picking_completed == false)
+  while (!picking_completed)
     next();
 
   *x1 = pointx1;

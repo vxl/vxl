@@ -81,7 +81,7 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::toggle_f_matrix_display()
 {
-  if (f_matrix_is_displayed == false)
+  if (!f_matrix_is_displayed)
     f_matrix_is_displayed = true;
   else
     f_matrix_is_displayed = false;
@@ -92,7 +92,7 @@ void xcv_twoview_manager::toggle_f_matrix_display()
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::toggle_h_matrix_display()
 {
-  if (h_matrix_is_displayed == false)
+  if (!h_matrix_is_displayed)
     h_matrix_is_displayed = true;
   else
     h_matrix_is_displayed = false;
@@ -103,7 +103,7 @@ void xcv_twoview_manager::toggle_h_matrix_display()
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::toggle_corner_match_display()
 {
-  if (corner_matches_are_displayed == false)
+  if (!corner_matches_are_displayed)
     corner_matches_are_displayed = true;
   else
     corner_matches_are_displayed = false;
@@ -355,7 +355,7 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
     dragging = false;
     rubberbands[0]->post_redraw();
   }
-  if ((e.type == vgui_MOTION || e.type == vgui_BUTTON_DOWN) && dragging == true)
+  if ((e.type == vgui_MOTION || e.type == vgui_BUTTON_DOWN) && dragging)
   {
     if (f_matrix != 0 && f_matrix_is_displayed)
       draw_f_matrix(e, child_tab, false);
@@ -373,7 +373,7 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
     if (h_matrix != 0 && h_matrix_is_displayed)
       draw_h_matrix(e, child_tab, true);
   }
-  if (dragging == true)
+  if (dragging)
   {
     if ((use_overlays && e.type == vgui_DRAW_OVERLAY) 
       || (!use_overlays && e.type == vgui_DRAW))
