@@ -37,9 +37,9 @@ class bvpl_kernel: public vbl_ref_count
   //: Destructor
   ~bvpl_kernel() {}
   bvpl_kernel_iterator iterator(){return kernel_;}
-  vnl_float_3 axis(){return axis_;}
-  float angle(){return angle_;}
-  vnl_float_3 scale(){return scale_;}
+  vnl_float_3 axis() const {return axis_;}
+  float angle() const {return angle_;}
+  vnl_float_3 scale() const {return scale_;}
   vgl_vector_3d<int> dim()const {return dim_;}
   vgl_point_3d<int> min_point() const {return min_point_;}
   vgl_point_3d<int> max_point() const {return max_point_;}
@@ -88,7 +88,7 @@ class bvpl_kernel: public vbl_ref_count
     return val;
   }
 
-  unsigned id(){return id_;}
+  unsigned id() const {return id_;}
   static unsigned id_cnt;
 
  private:
@@ -114,7 +114,7 @@ class bvpl_kernel_vector : public vbl_ref_count
 
   iterator begin() { return kernels_.begin(); }
   iterator end()   { return kernels_.end(); }
-  int size() {return kernels_.size(); }
+  int size() const {return kernels_.size(); }
 
   vgl_vector_3d<int> max_dim(){
     iterator it =  kernels_.begin();

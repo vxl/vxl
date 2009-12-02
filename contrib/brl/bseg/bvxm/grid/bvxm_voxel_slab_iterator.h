@@ -22,9 +22,9 @@ class bvxm_voxel_slab_iterator_base
                                 unsigned slice_idx, unsigned slab_thickness);
 
   ~bvxm_voxel_slab_iterator_base() {}
-   
-  int slice_idx() {return slice_idx_;}
-  
+
+  int slice_idx() const {return slice_idx_;}
+
   void write_slab(){storage_->put_slab();}
 
  protected:
@@ -70,7 +70,6 @@ class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
   bvxm_voxel_slab<T>& operator*(){return this->slab_;}
 
   bvxm_voxel_slab<T>* operator->(){return &(this->slab_);}
-
 };
 
 

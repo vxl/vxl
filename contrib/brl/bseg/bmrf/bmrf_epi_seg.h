@@ -76,8 +76,8 @@ class bmrf_epi_seg : public vbl_ref_count
 
   void set_min_index(int index) { min_index_ = index; }
   void set_max_index(int index) { max_index_ = index; }
-  int min_index() { return min_index_; }
-  int max_index() { return max_index_; }
+  int min_index() const { return min_index_; }
+  int max_index() const { return max_index_; }
 
   void add_point(bmrf_epi_point_sptr ep);
 

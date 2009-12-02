@@ -52,11 +52,11 @@ class bvxm_world_params : public vbl_ref_count
     vgl_vector_3d<float> basey = vgl_vector_3d<float>(0.0f,1.0f,0.0f),
     vgl_vector_3d<float> basez = vgl_vector_3d<float>(0.0f,0.0f,1.0f));
 
-  inline vcl_string model_dir() { return model_dir_; }
-  inline vgl_point_3d<float> corner() { return corner_; }
+  inline vcl_string model_dir() const { return model_dir_; }
+  inline vgl_point_3d<float> corner() const { return corner_; }
   inline void set_corner(vgl_point_3d<float>& new_c) { corner_ = new_c; }
 
-  inline vgl_point_3d<float> rpc_origin() { return rpc_origin_; }
+  inline vgl_point_3d<float> rpc_origin() const { return rpc_origin_; }
   inline void set_rpc_origin(vgl_point_3d<float>& new_rpc_origin) {
     vgl_point_3d<float> old_corner = corner();
     vgl_point_3d<float> new_corner(
@@ -79,9 +79,9 @@ class bvxm_world_params : public vbl_ref_count
   inline float voxel_length(unsigned scale=0) {
     return (float)vcl_pow(2.0,(double)scale)*voxel_length_; }
 
-  inline vgl_vector_3d<float> base_x() { return base_x_; }
-  inline vgl_vector_3d<float> base_y() { return base_y_; }
-  inline vgl_vector_3d<float> base_z() { return base_z_; }
+  inline vgl_vector_3d<float> base_x() const { return base_x_; }
+  inline vgl_vector_3d<float> base_y() const { return base_y_; }
+  inline vgl_vector_3d<float> base_z() const { return base_z_; }
 
   inline void set_base_x(vgl_vector_3d<float>& basex) { base_x_ = basex; }
   inline void set_base_y(vgl_vector_3d<float>& basey) { base_y_ = basey; }
@@ -89,11 +89,11 @@ class bvxm_world_params : public vbl_ref_count
 
   inline void set_model_dir(vcl_string model_dir) {model_dir_ = model_dir;}
 
-  inline float min_occupancy_prob() { return min_occupancy_prob_; }
-  inline float max_occupancy_prob() { return max_occupancy_prob_; }
+  inline float min_occupancy_prob() const { return min_occupancy_prob_; }
+  inline float max_occupancy_prob() const { return max_occupancy_prob_; }
   inline bgeo_lvcs_sptr lvcs() { return lvcs_; }
 
-  inline unsigned max_scale() { return max_scale_; }
+  inline unsigned max_scale() const { return max_scale_; }
   vgl_box_3d<double> world_box_local();
 
   vgl_point_3d<float> center();

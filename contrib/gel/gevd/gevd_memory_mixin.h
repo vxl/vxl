@@ -97,7 +97,7 @@ class gevd_memory_mixin : public gevd_status_mixin
 
   // Methods for moving about the file.
   //
-  int  GetOffset()       { return offset;                            }
+  int  GetOffset() const { return offset;                            }
   void SetOffset()       { offset = curr_into;                       }
 #define min_(a,b) ((a)<(b)?a:b)
   void SkipBytes(int b)  { int skip = min_(b,size-curr_into);

@@ -146,8 +146,8 @@ class bcal_camera_graph
   virtual ~bcal_camera_graph() { erase_graph(); }
 
  public: // operations
-  S* get_source() {  return source_;}
-  int get_source_id() { return 0;}
+  S* get_source() {  return source_; }
+  int get_source_id() const { return 0; }
 
   // get vertex at position of
   V* get_vertex_from_pos(int pos)
@@ -233,7 +233,7 @@ class bcal_camera_graph
     return 0; // cannot find edge
   }
 
-  int num_vertice() { return vertice_.size() - 1; }
+  int num_vertice() const { return vertice_.size() - 1; }
 
 
   // for debug

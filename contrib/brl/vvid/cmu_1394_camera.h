@@ -78,32 +78,32 @@ class cmu_1394_camera : public cmu_1394_camera_params, public C1394Camera
   void update_settings();
 
   //: get string values for valid camera video configurations
-  vcl_vector<vcl_string> get_capability_descriptions(){return capability_desc_;}
+  vcl_vector<vcl_string> get_capability_descriptions() const {return capability_desc_;}
 
   //: get the set of valid 1394 camera format values
-  vcl_vector<int> get_valid_formats(){return format_;}
+  vcl_vector<int> get_valid_formats() const {return format_;}
 
   //: get the set of valid 1394 camera mode values
-  vcl_vector<int> get_valid_modes(){return mode_;}
+  vcl_vector<int> get_valid_modes() const {return mode_;}
 
   //: get the set of valid 1394 frame rate codes
-  vcl_vector<int> get_valid_rates(){return rate_;}
+  vcl_vector<int> get_valid_rates() const {return rate_;}
 
   //: get the index of the current valid configuration
-  int get_current(){return current_;}
+  int get_current() const {return current_;}
 
   //: set the index of the current valid configuration
   void set_current(int current){current_ = current;}
 
   //: get the string description of the currently selected configuration
-  vcl_string current_capability_desc(){return capability_desc_[current_];}
+  vcl_string current_capability_desc() const {return capability_desc_[current_];}
 
   //: code value for the current configuration
-  int current_format(){return format_[current_];}
+  int current_format() const {return format_[current_];}
   //: code value for the current configuration
-  int current_mode(){return mode_[current_];}
+  int current_mode() const {return mode_[current_];}
   //: code value for the current configuration
-  int current_rate(){return rate_[current_];}
+  int current_rate() const {return rate_[current_];}
 
   //: stream output of the camera properties
   friend vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera& c);

@@ -39,15 +39,15 @@ class bwm_observable_mesh : public bwm_observable
 
   void set_mesh_type(BWM_MESH_TYPES type) { mesh_type_ = type; }
 
-  int obj_type() { return mesh_type_; }
+  int obj_type() const { return mesh_type_; }
 
   void remove();
 
   vgl_box_3d<double> bounding_box();
 
-  unsigned num_faces() { return object_->facemap().size(); }
-  unsigned num_edges() { return object_->edgemap().size(); }
-  unsigned num_vertices() { return object_->vertexmap().size(); }
+  unsigned num_faces() const { return object_->facemap().size(); }
+  unsigned num_edges() const { return object_->edgemap().size(); }
+  unsigned num_vertices() const { return object_->vertexmap().size(); }
 
   void translate(vgl_vector_3d<double> T);
 
