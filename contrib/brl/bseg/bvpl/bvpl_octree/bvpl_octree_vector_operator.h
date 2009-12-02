@@ -27,8 +27,8 @@ class bvpl_octree_vector_operator
 
   //: Applies a vector of kernels and functor to a grid. Returns a grid that combines the responses of the kernels as specified in the subclass
   template <class F>
-  bool operate(F functor,
-               boct_tree<short ,T_data>* tree_in,
+  bool operate(boct_tree<short ,T_data>* tree_in,
+               F functor,
                bvpl_kernel_vector_sptr kernel_vector,
                boct_tree<short ,T_data>* response_tree,
                boct_tree<short ,int>* id_tree, short level, double cell_length)
@@ -43,6 +43,7 @@ class bvpl_octree_vector_operator
       oper.operate(functor, kernel, temp_tree,level, cell_length);
       combine_kernel_responses(response_tree, temp_tree, id_tree, id);
     }
+
     return true;
   }
 
@@ -80,6 +81,7 @@ void bvpl_octree_vector_operator<T_data>::keep_max_response_tree(boct_tree<short
       id1_leaves[i]->set_data(id2);
     }
   }
+  
 }
 
 #endif

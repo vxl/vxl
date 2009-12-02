@@ -34,6 +34,7 @@ public:
   template<class F>
   void operate(F functor, bvpl_kernel_sptr kernel, tree_type* out_tree, short level, double cell_length)
   {
+    
     //get all cells at given scale
     vcl_vector<cell_type* > cells = tree_in_->cells_at_level(level);
     vcl_vector<cell_type* > out_cells = out_tree->cells_at_level(level);
@@ -78,6 +79,7 @@ public:
       out_cells[i]->set_data(functor.result());
       
     }
+    
   }
   
 private:
