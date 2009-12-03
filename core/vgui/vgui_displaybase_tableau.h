@@ -34,7 +34,7 @@ class vgui_event;
 //: Implement one of these to be told about picking etc.
 struct vgui_displaybase_tableau_selection_callback
 {
-  virtual ~vgui_displaybase_tableau_selection_callback() { }
+  virtual ~vgui_displaybase_tableau_selection_callback() {}
   virtual bool select(unsigned id);
   virtual bool deselect(unsigned id);
   virtual bool deselect_all();
@@ -92,8 +92,8 @@ class vgui_displaybase_tableau : public vgui_tableau
   bool deselect_all();
 
   // highlighting
-  bool is_highlighted(unsigned id) { return id == highlighted; }
-  unsigned get_highlighted() { return highlighted; }
+  bool is_highlighted(unsigned id) const { return id == highlighted; }
+  unsigned get_highlighted() const { return highlighted; }
   vgui_soview* get_highlighted_soview();
   bool highlight(unsigned id) { highlighted = id; return true; }
 
@@ -110,7 +110,7 @@ class vgui_displaybase_tableau : public vgui_tableau
 
   // grouping
   void set_current_grouping(vcl_string name) { current_grouping = name; }
-  vcl_string get_current_grouping() { return current_grouping; }
+  vcl_string get_current_grouping() const { return current_grouping; }
   vgui_displaybase_tableau_grouping* get_grouping_ptr( vcl_string name );
   vcl_vector< vcl_string > get_grouping_names();
 
@@ -119,11 +119,11 @@ class vgui_displaybase_tableau : public vgui_tableau
   void set_selection_callback(vgui_displaybase_tableau_selection_callback* cb);
 
   vcl_vector<vgui_soview*> const &get_all() const { return objects; }
-  vcl_vector<unsigned>     const  get_all_ids() const;
+  vcl_vector<unsigned>            get_all_ids() const;
 
   vgui_soview* contains_hit(vcl_vector<unsigned> hit);
 
-  unsigned get_id() const {return id;}
+  unsigned get_id() const { return id; }
 
  protected:
   vcl_vector<vgui_soview*> objects;

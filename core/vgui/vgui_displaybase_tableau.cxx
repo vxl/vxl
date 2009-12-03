@@ -270,11 +270,11 @@ vcl_vector<vgui_soview*> vgui_displaybase_tableau::get_selected_soviews() const
   return svs;
 }
 
-vcl_vector<unsigned> const vgui_displaybase_tableau::get_all_ids() const
+vcl_vector<unsigned> vgui_displaybase_tableau::get_all_ids() const
 {
   vcl_vector<unsigned> ids;
-  for (unsigned int i=0; i< objects.size(); i++)
-    ids.push_back( objects[i]->get_id());
+  for (unsigned int i=0; i< objects.size(); ++i)
+    ids.push_back(objects[i]->get_id());
 
   return ids;
 }
