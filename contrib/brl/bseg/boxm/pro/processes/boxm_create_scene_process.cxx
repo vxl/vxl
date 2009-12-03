@@ -75,6 +75,17 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       vcl_cout<<"Multi Bin set"<<vcl_endl;
       scene_ptr = scene;
     }
+  } else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
+    if (!scene_ptr->multi_bin())
+    {
+      typedef boct_tree<short,boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
+      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      scene->load_scene(parser);
+      scene_ptr = scene;
+    }
+    else {
+      vcl_cout<<"Multi Bin for BOXM_APM_MOB_GREY is not defined yet "<<vcl_endl;
+    }
   } else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     if (!scene_ptr->multi_bin())
     {

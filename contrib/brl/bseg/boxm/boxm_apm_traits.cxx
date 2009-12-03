@@ -1,6 +1,6 @@
 #include "boxm_apm_traits.h"
 
-const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey", "apm_mog_rgb", "apm_simple_grey", "apm_simple_rgb"};
+const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey", "apm_mog_rgb", "apm_simple_grey", "apm_simple_rgb", "apm_mob_grey"};
 
 boxm_apm_type boxm_apm_types::str_to_enum(const char* s)
 {

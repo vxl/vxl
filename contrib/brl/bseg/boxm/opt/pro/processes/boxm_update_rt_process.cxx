@@ -18,6 +18,7 @@
 #include <boxm/opt/boxm_update_image_functor.h>
 #include <boxm/boxm_apm_traits.h> // for BOXM_APM_MOG_GREY
 #include <boxm/boxm_simple_grey_processor.h>
+#include <boxm/boxm_mob_grey_processor.h>
 
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
@@ -75,6 +76,7 @@ bool boxm_update_rt_process(bprb_func_process& pro)
      return false;
   }
 
+  // Mixture of Gaussians
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     vil_image_view<vxl_byte> *img_byte
         = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
@@ -84,15 +86,29 @@ bool boxm_update_rt_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      //boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
       boxm_update_image_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, camera,img, use_black_background);
     }
     else
     {
       vcl_cout<<"Not yet implemented"<<vcl_endl;
     }
-  }
-  else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+  // Mixture of Beta's
+  } else if (scene->appearence_model() == BOXM_APM_MOB_GREY) {
+    vil_image_view<vxl_byte> *img_byte
+        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+    vil_image_view<boxm_apm_traits<BOXM_APM_MOB_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
+    vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    if (!scene->multi_bin())
+    {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      boxm_update_image_rt<short, boxm_sample<BOXM_APM_MOB_GREY> >(*s, camera,img, use_black_background);
+    }
+    else
+    {
+      vcl_cout<<"Not yet implemented"<<vcl_endl;
+    }
+  } else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     vil_image_view<vxl_byte> *img_byte
         = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);

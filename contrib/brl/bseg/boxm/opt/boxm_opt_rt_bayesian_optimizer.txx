@@ -57,6 +57,7 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
       aux_samples.clear();
       boct_tree_cell<T_loc,boxm_sample<APM> >* cell = cells[i];
       boxm_sample<APM> data = cell->data();
+      //vcl_cout << "cell IN " << data.alpha << data.appearence_<< vcl_endl;
       for (unsigned j=0; j<aux_readers.size(); j++) {
         boct_tree_cell<T_loc, aux_type> temp_cell;
 
@@ -83,7 +84,7 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
       for (unsigned int s=0; s<aux_samples.size(); ++s) {
         float seg_len = aux_samples[s].seg_len_;
         if (seg_len > 1e-5) {
-          Beta *= aux_samples[s].Beta_ / seg_len;
+          Beta *= (aux_samples[s].Beta_ / seg_len);
           obs_vector[s] = aux_samples[s].obs_ / seg_len;
           pre_vector[s] = aux_samples[s].pre_ / seg_len;
           vis_vector[s] = aux_samples[s].vis_ / seg_len;
@@ -119,6 +120,7 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
       }
       // update with new appearance
       boxm_opt_compute_appearance<APM>(obs_vector, pre_vector, vis_vector, data.appearance_);
+      //vcl_cout << "cell OUT " << data.alpha << data.appearence_ << vcl_endl << vcl_endl;
       cell->set_data(data);
     }
     scene_.write_active_block();

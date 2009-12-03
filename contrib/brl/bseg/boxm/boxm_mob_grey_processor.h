@@ -12,13 +12,9 @@
 //   <none yet>
 // \endverbatim
 
-//#include <bsta/algo/bsta_adaptive_updater.h>
 #include <bsta/bsta_distribution.h>
-//#include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
-//#include <bsta/bsta_gaussian_indep.h>
-
 #include "boxm_apm_traits.h"
 
 

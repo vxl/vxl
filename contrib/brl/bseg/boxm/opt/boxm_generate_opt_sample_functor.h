@@ -218,10 +218,12 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vil_math_image_product<float,float,float>(vis_inf,PI_inf,inf_term);
     vil_image_view<float> Beta_denom_img(obs.ni(), obs.nj());
     vil_math_image_sum<float,float,float>(pre_inf,inf_term,Beta_denom_img);
+#if 0
     vil_save(vis_inf, "e:\\tests\\capitol\\vis_inf.tiff");
     vil_save(pre_inf, "e:\\tests\\capitol\\pre_inf.tiff");
     vil_save(Beta_denom_img, "e:\\tests\\capitol\\Beta_denom_img.tiff");
     vil_save(pass_1_functor.alpha_integral_, "e:\\tests\\capitol\\alpha_integr.tiff");
+#endif
     vcl_cout<<"PASS 2"<<vcl_endl;
     typedef boxm_generate_opt_sample_functor_pass_2<T_data::apm_type, sample_datatype> pass_2;
     boxm_raytrace_function<pass_2,T_loc, T_data, sample_datatype> raytracer_2(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());

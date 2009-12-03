@@ -127,8 +127,6 @@ class boxm_apm_traits<BOXM_APM_SIMPLE_GREY>
   typedef boxm_simple_grey_processor apm_processor;
 };
 
-
-//: traits for a mixture of beta appearance model of gray-scale images
 template<>
 class boxm_apm_traits<BOXM_APM_MOB_GREY>
 {

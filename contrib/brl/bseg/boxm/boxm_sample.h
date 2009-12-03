@@ -24,6 +24,8 @@ class boxm_sample
   //: constructor
   boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance_(apm_val) {}
 
+  virtual ~boxm_sample() {}
+
   short version_no() const{ return 1; }
 
   //: bin is to imitate the bin number of multiple_bin case 

@@ -42,14 +42,25 @@ float boxm_mob_grey_processor::prob_density(apm_datatype const& appear, obs_data
 }
 
 //: Update with a new sample image
-bool boxm_mob_grey_processor::update( apm_datatype &appear, obs_datatype const& obs, float const& weight)
+bool boxm_mob_grey_processor::update( apm_datatype &appear, 
+                                      obs_datatype const& obs, 
+                                      float const& weight)
 {
   // the model
   float init_variance = 0.008f;
   float g_thresh = 2.5; // number of std devs from mean sample must be
+  
+  float lower = (1.0-vcl_sqrt(1.0-4.0*init_variance))/2.0;
+  float upper = (1.0+vcl_sqrt(1.0-4.0*init_variance))/2.0;
 
+  obs_datatype val = obs;
   float alpha, beta;
-  bsta_beta<float>::bsta_beta_from_moments(0.0f, init_variance,alpha,beta);
+  if (obs < lower)
+    val = lower+0.000001;
+  else if (obs > upper)
+    val = upper-0.000001;
+
+  bsta_beta<float>::bsta_beta_from_moments(val, init_variance,alpha,beta);
   bsta_beta_f1 this_beta(alpha,beta);
 
   const unsigned int nmodes = boxm_apm_traits<BOXM_APM_MOB_GREY>::n_beta_modes_;
@@ -58,7 +69,7 @@ bool boxm_mob_grey_processor::update( apm_datatype &appear, obs_datatype const& 
   typedef bsta_mixture_fixed<beta_type, nmodes> mix_beta;
 
   // the updater
-  bsta_mix_beta_updater<mix_beta> updater(this_beta, g_thresh, nmodes );
+  bsta_mix_beta_updater<mix_beta> updater(this_beta, g_thresh, init_variance, nmodes );
 
   if (weight > 0) {
     updater(appear, obs);

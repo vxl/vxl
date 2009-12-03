@@ -6,6 +6,7 @@
 #include <boxm/opt/boxm_raytrace_function.h>
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_simple_grey_processor.h>
+#include <boxm/boxm_mob_grey_processor.h>
 #include <vil/vil_transform.h>
 
 template <boxm_apm_type APM, class T_aux>

@@ -83,6 +83,15 @@ bool boxm_render_expected_depth_rt_process(bprb_func_process& pro)
       boxm_render_depth_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
       img_mask = new vil_image_view<float>(mask);
       img = new vil_image_view<float>(expected);
+  } else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
+      vil_image_view<float> mask(ni,nj,1);
+      vil_image_view<float> expected(ni,nj,1);
+
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > type;
+      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      boxm_render_depth_rt<short, boxm_sample<BOXM_APM_MOB_GREY> >(*scene, camera, expected, mask);
+      img_mask = new vil_image_view<float>(mask);
+      img = new vil_image_view<float>(expected);
   }
   else {
     vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;
