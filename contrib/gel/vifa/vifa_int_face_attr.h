@@ -71,36 +71,36 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
   edge_2d_list&             GetEdges();
 
   //: Centroid X
-  float  Xo() { return face_->Xo(); }
+  float  Xo() const { return face_->Xo(); }
 
   //: Centroid Y
-  float  Yo() { return face_->Yo(); }
+  float  Yo() const { return face_->Yo(); }
 
   //: Centroid Z
-  float  Zo() { return face_->Zo(); }
+  float  Zo() const { return face_->Zo(); }
 
   // ---
   // Intensity attribute computations
   // ---
 
   //: Min intensity
-  float  IntMin() { return cached_min_; }
+  float  IntMin() const { return cached_min_; }
 
   //: Max intensity
-  float  IntMax() { return cached_max_; }
+  float  IntMax() const { return cached_max_; }
 
   //: Mean intensity
-  float  IntMean() { return cached_mean_; }
+  float  IntMean() const { return cached_mean_; }
 
   //: Intensity variance
-  float  IntVar() { return cached_var_; }
+  float  IntVar() const { return cached_var_; }
 
   // ---
   // Geometric attribute computations
   // ---
 
   //: Area
-  float  Area() { return (float)(GetFace() ? face_->Npix() : -1); }
+  float  Area() const { return (float)(GetFace() ? face_->Npix() : -1); }
 
   //: Ratio of major moments
   float  AspectRatio();

@@ -200,7 +200,7 @@ class mbl_logger
   //: logger will take ownership of output
   void set(int level, mbl_log_output_base* output);
   //: Higher means more output.
-  int level() { return level_; }
+  int level() const { return level_; }
   vcl_ostream &log(int level, const char * srcfile="", int srcline=0);
 
   //: A log with manual event start and stop requirements.

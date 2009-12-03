@@ -80,9 +80,9 @@ class gevd_memory_mixin : public gevd_status_mixin
   void                    SetMemoryPtr(int s, void* ib = 0);
 
   inline unsigned char*   GetBufferPtr()  { return buffer;    }
+  const  unsigned char* GetBufferPtr() const { return buffer; }
   inline unsigned char*   GetCurrentPtr() { return current;   }
-  inline int              GetSize()       { return size;      }
-  inline int              GetSize()const  { return size;      }
+  inline int              GetSize() const { return size;      }
   inline void SetStatus(int x=0)  {gevd_status_mixin::SetStatus(x); }
   inline void ClearStatus(int x=0) {gevd_status_mixin::ClearStatus(x);}
  public:
@@ -93,12 +93,11 @@ class gevd_memory_mixin : public gevd_status_mixin
 
   virtual ~gevd_memory_mixin();
   gevd_memory_mixin(gevd_memory_mixin const&);
-  inline const unsigned char* GetBufferPtr() const { return buffer; }
 
   // Methods for moving about the file.
   //
-  int  GetOffset() const { return offset;                            }
-  void SetOffset()       { offset = curr_into;                       }
+  int  GetOffset() const { return offset;      }
+  void SetOffset()       { offset = curr_into; }
 #define min_(a,b) ((a)<(b)?a:b)
   void SkipBytes(int b)  { int skip = min_(b,size-curr_into);
                            current += skip; curr_into += skip;

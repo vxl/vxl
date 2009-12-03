@@ -88,26 +88,20 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
 
   virtual bool  ComputeAttributes();
   virtual bool  GetAttributes(vcl_vector<float>&  attrs);
-  static void    GetAttributeNames(vcl_vector<vcl_string>&  names);
+  static  void  GetAttributeNames(vcl_vector<vcl_string>&  names);
   virtual bool  GetNativeAttributes(vcl_vector<float>&  attrs);
 
-  vtol_intensity_face_sptr  GetSeed() const
-    { return seed_; }
-  void            SetSeed(vtol_intensity_face_sptr  seed);
+  vtol_intensity_face_sptr  GetSeed() { return seed_; }
+  void                      SetSeed(vtol_intensity_face_sptr  seed);
 
-  int    GetDepth() const
-    { return depth_; }
-  void  SetDepth(int depth)
-    { depth_ = depth; closure_valid_ = false; }
+  int    GetDepth() const { return depth_; }
+  void   SetDepth(int depth) { depth_ = depth; closure_valid_ = false; }
 
   int    NeighborhoodSize();
 
-  int    GetJunkCount()
-    { return junk_count_; }
-  float  GetJunkPercent()
-    { return junk_percent_; }
-  float  GetJunkAreaRatio()
-    { return junk_area_ratio_; }
+  int    GetJunkCount()     const { return junk_count_; }
+  float  GetJunkPercent()   const { return junk_percent_; }
+  float  GetJunkAreaRatio() const { return junk_area_ratio_; }
 
   bool  compute_closure();
   float  Collinearity();
@@ -126,11 +120,9 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   virtual void  init();
   bool  add_unique_face(iface_list&               facelist,
                         vtol_intensity_face_sptr  face,
-                        int                       size_filter
-                       );
+                        int                       size_filter);
   void  compute_closure_step(int                       current_depth,
-                             vtol_intensity_face_sptr  seed
-                            );
+                             vtol_intensity_face_sptr  seed);
 
   // Retrieve the iface adjacent to a given iface at an edge (if available)
   vtol_intensity_face_sptr
