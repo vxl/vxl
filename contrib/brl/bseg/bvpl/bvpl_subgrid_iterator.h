@@ -24,25 +24,23 @@ class bvpl_subgrid_iterator_base : public vbl_ref_count
 {
  public:
   bvpl_subgrid_iterator_base() {}
-  
-  bvpl_subgrid_iterator_base(vgl_point_3d<int> min,  vgl_point_3d<int> max){
-    
+
+  bvpl_subgrid_iterator_base(vgl_point_3d<int> min,  vgl_point_3d<int> max)
+  {
     max_point_=max;
-    min_point_=min; 
-    
-    int x,y,z;
-    x= max.x()-min.x()+1;
-    y= max.y()-min.y()+1;
-    z= max.z()-min.z()+1;   //no need to check min this coordinate is inverted
-  
+    min_point_=min;
+
+    int x= max.x()-min.x()+1;
+    int y= max.y()-min.y()+1;
+    int z= max.z()-min.z()+1;   //no need to check min this coordinate is inverted
+
     dim_ = vgl_vector_3d<int>(x,y,z);
-    
-    x= (min.x() < 0)? -1*min.x():0;
-    y= (min.y() < 0)? -1*min.y():0;
-    z= (max.z() > 0)? max.z():0;
-    
+
+    x= min.x() < 0 ? - min.x() : 0;
+    y= min.y() < 0 ? - min.y() : 0;
+    z= max.z() > 0 ? max.z()   : 0;
+
     offset_ = vgl_point_3d<int>(x,y,z);
-    
   }
   ~bvpl_subgrid_iterator_base() {}
 
@@ -51,7 +49,6 @@ class bvpl_subgrid_iterator_base : public vbl_ref_count
   vgl_point_3d<int> offset_;
   vgl_point_3d<int> max_point_;
   vgl_point_3d<int> min_point_;
-  
 };
 
 template <class T>
@@ -64,27 +61,27 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
 
   bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid, vgl_point_3d<int> min_point,  vgl_point_3d<int> max_point);
 
-  ~bvpl_subgrid_iterator(){}
+  ~bvpl_subgrid_iterator() {}
 
   bvpl_subgrid_iterator<T>& operator++();
- 
+
   bvpl_subgrid_iterator<T>& operator--();
-  
+
   bvpl_voxel_subgrid<T> operator*();
 
   bvpl_voxel_subgrid<T> operator->();
 
   void begin();
-  
-  bool isDone();
-  
-  vgl_point_3d<int> global_cur_voxel(){ return global_cur_voxel_;  }
 
-  vgl_point_3d<int> cur_voxel(){return cur_voxel_;}
+  bool isDone();
+
+  vgl_point_3d<int> global_cur_voxel() const { return global_cur_voxel_; }
+
+  vgl_point_3d<int> cur_voxel() const { return cur_voxel_; }
  private:
   bvxm_voxel_grid<T>* grid_;
   //the z-coordinate of cur_voxel_ is always with respect to the local slab chunck
-  vgl_point_3d<int> cur_voxel_; 
+  vgl_point_3d<int> cur_voxel_;
   //the z-coordinate of global_cur_voxel_ is with respect to the grid
   vgl_point_3d<int> global_cur_voxel_;
   bvxm_voxel_slab_iterator<T> iter_;

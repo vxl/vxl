@@ -26,7 +26,7 @@ class boxm_scene_base : public vbl_ref_count
   : app_model_(BOXM_APM_UNKNOWN), multi_bin_(false), tree_level_set_(false),
     scene_path_(""), block_pref_(""), max_tree_level_(0), init_tree_level_(0) {}
 
-  virtual ~boxm_scene_base(){}
+  virtual ~boxm_scene_base() {}
 
   bool load_scene(vcl_string filename, boxm_scene_parser& parser);
 
@@ -45,9 +45,9 @@ class boxm_scene_base : public vbl_ref_count
 
   bool parse_config(vcl_string xml, boxm_scene_parser& parser, bool filename);
 
-  unsigned max_level(){return max_tree_level_;}
+  unsigned max_level() const { return max_tree_level_; }
 
-  unsigned init_level(){return init_tree_level_;}
+  unsigned init_level() const { return init_tree_level_; }
  protected:
   boxm_apm_type app_model_;
 

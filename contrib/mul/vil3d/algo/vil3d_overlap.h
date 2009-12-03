@@ -47,14 +47,14 @@ class vil3d_overlap_functor
     if (vox1>t1)
     {
       if (vox2>t2) n1and2++;
-      else      n1not2++;
+      else         n1not2++;
     }
     else
       if (vox2>t2) n2not1++;
   }
 
-  unsigned n_union() { return n1not2+ n2not1 + n1and2; }
-  unsigned n_intersection() { return n1and2; }
+  unsigned n_union() const { return n1not2+ n2not1 + n1and2; }
+  unsigned n_intersection() const { return n1and2; }
 };
 
 //: Dice overlap = 2*intersection/(intersection+union)
@@ -67,7 +67,7 @@ double vil3d_overlap_dice(const vil3d_image_view<T1>& im1, T1 t1,
   vil3d_scan_image(im1,im2,f);
   unsigned d=f.n_intersection()+f.n_union();
   if (d==0) return 0.0;
-  return double(2*f.n_intersection())/d;
+  return (2.0*f.n_intersection())/d;
 }
 
 //: Jaccard overlap = intersection/union

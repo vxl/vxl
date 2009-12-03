@@ -35,9 +35,9 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual ~bwm_observable() {}
 
-  virtual vcl_string type_name() const {return "bwm_observable"; }
+  virtual vcl_string type_name() const { return "bwm_observable"; }
 
-  virtual int obj_type() = 0;
+  virtual int obj_type()=0;
 
   // removes the object from 3D scene by notifiying the observers of deletion
   virtual void remove()=0;
@@ -85,7 +85,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual void create_interior()=0;
 
-  vgl_vector_3d<double> last_translation() { return last_translation_;}
+  vgl_vector_3d<double> last_translation() const { return last_translation_; }
 
   virtual void label_roof(unsigned face_id)=0;
 

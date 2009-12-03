@@ -25,7 +25,7 @@ class boct_tree
 {
  public:
   //: Default constructor
-  boct_tree(): num_levels_(0), root_level_(-1), max_val_(0), root_(0), global_bbox_() {}
+  boct_tree() : num_levels_(0), root_level_(-1), max_val_(0), root_(0), global_bbox_() {}
 
   //: Construct an empty tree from maximum number of levels and levels, to initialize
   boct_tree(short num_levels, short init_levels=1);
@@ -78,7 +78,7 @@ class boct_tree
   boct_tree_cell<T_loc,T_data>* get_cell(  boct_loc_code<T_loc>& code) { return root_->traverse(code); }
 
   //: Return root of the tree
-  boct_tree_cell<T_loc,T_data>* root(){return root_;}
+  boct_tree_cell<T_loc,T_data>* root() { return root_; }
 
   //: Split the tree, this only splits the root cell
   bool split();
@@ -99,13 +99,13 @@ class boct_tree
   short root_level() const { return root_level_; }
 
   //: Return a value for converting positions to locational codes 2^(root_level)
-  double max_val() const {return max_val_;}
+  double max_val() const { return max_val_; }
 
   //: Return the finest level the tree has been split down to (not necessarly 0)
   short finest_level();
 
   //: Set the global-coordinates bounding box for the tree
-  void set_bbox(vgl_box_3d<double> & bbox){global_bbox_=bbox;}
+  void set_bbox(vgl_box_3d<double> & bbox) { global_bbox_=bbox; }
 
   //: Return the bounding box of a cell
   vgl_box_3d<double> cell_bounding_box(boct_tree_cell<T_loc,T_data>* const cell);
@@ -116,20 +116,19 @@ class boct_tree
   //: Returns the location of the cell in the block, [0,1]x[0,1]x[0,1]
   vgl_box_3d<double> cell_bounding_box_canonical(boct_tree_cell<T_loc,T_data>* const cell);
   //: Returns bounding box of the tree
-  vgl_box_3d<double> bounding_box() const {return global_bbox_;}
+  vgl_box_3d<double> bounding_box() const { return global_bbox_; }
 
   //: Returns the length of a cell, assuming cell is cubical
-  double cell_size(boct_tree_cell<T_loc,T_data>* const cell)
+  double cell_size(boct_tree_cell<T_loc,T_data>* const cell) const
   {
     return 1.0/(double)(1<<(root_level_-cell->level()));
   }
 
   //: Return cell's local origin
-  vgl_point_3d<double> local_origin(boct_tree_cell<T_loc,T_data>* const cell)
+  vgl_point_3d<double> local_origin(boct_tree_cell<T_loc,T_data>* const cell) const
   {
     return vgl_point_3d<double> (cell->code_.x_loc_/max_val_,cell->code_.y_loc_/max_val_,cell->code_.z_loc_/max_val_);
   }
-
 
   //: Print tree
   void print();

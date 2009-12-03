@@ -29,7 +29,7 @@ class bwm_video_corr : public vbl_ref_count
   // Constructors/Initializers/Destructors-------------------------------------
 
   //: Constructor - default
-  bwm_video_corr(): observer_(0), world_pt_valid_(false), id_(unique_id_++){}
+  bwm_video_corr() : observer_(0), world_pt_valid_(false), id_(unique_id_++) {}
 
   //: Constructor - from data
   bwm_video_corr(bwm_observer_video* obs, unsigned frame_index,
@@ -38,7 +38,7 @@ class bwm_video_corr : public vbl_ref_count
     { matches_[frame_index]=pt; }
 
   //: Constructor - don't copy the ref count
-  bwm_video_corr(bwm_video_corr const& c):vbl_ref_count() {}
+  bwm_video_corr(bwm_video_corr const& c) : vbl_ref_count() {}
 
   // Destructor
   ~bwm_video_corr() {}
@@ -46,8 +46,8 @@ class bwm_video_corr : public vbl_ref_count
   // Accessors-----------------------------------------------------------------
 
   //: the video observer generating the correspondences
-  void set_observer(bwm_observer_video* obs){observer_ = obs;}
-  bwm_observer_video* observer(){return observer_;}
+  void set_observer(bwm_observer_video* obs) { observer_ = obs; }
+  bwm_observer_video* observer() { return observer_; }
 
   //: get the matching image location in a given frame
   bool match(unsigned frame, vgl_point_2d<double> &pt);
@@ -59,14 +59,12 @@ class bwm_video_corr : public vbl_ref_count
   bool add(unsigned frame, vgl_point_2d<double> const& pt);
 
   //: remove a match
-  void remove(unsigned frame)
-  { matches_.erase(frame);}
+  void remove(unsigned frame) { matches_.erase(frame); }
 
   //: Number of matches assigned, i.e. number of matched video frames.
-  unsigned num_matches()
-  { return matches_.size();}
+  unsigned num_matches() const { return matches_.size(); }
 
-  unsigned id(){return id_;}
+  unsigned id() const { return id_; }
 
   //: the lowest frame number for which there is a match
   unsigned min_frame();
@@ -83,10 +81,11 @@ class bwm_video_corr : public vbl_ref_count
 
   vgl_point_3d<double> world_pt() const { return world_pt_; }
 
-  bool world_pt_valid() {return world_pt_valid_;}
+  bool world_pt_valid() const { return world_pt_valid_; }
 
   //: Write the correspondence as xml
   void x_write(vcl_ostream &os);
+
  protected:
 
   // INTERNALS-----------------------------------------------------------------
@@ -96,7 +95,7 @@ class bwm_video_corr : public vbl_ref_count
  private:
   BWM_VIDEO_DLL_DATA static unsigned unique_id_;
   bwm_observer_video* observer_;
-  vcl_map<unsigned, vgl_point_2d<double> > matches_;//match in each frame
+  vcl_map<unsigned, vgl_point_2d<double> > matches_; // match in each frame
   bool world_pt_valid_;
   vgl_point_3d<double> world_pt_;
 };
