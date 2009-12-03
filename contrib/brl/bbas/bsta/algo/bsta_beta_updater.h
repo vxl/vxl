@@ -132,16 +132,16 @@ class bsta_mix_beta_updater
     T beta=(1-sample)*t;
     init_dist_.set_alpha_beta(alpha,beta); ///??? this was setting mean
 #endif
-    T lower = (1.0-vcl_sqrt(1.0-4.0*var_))/2.0;
-    T upper = (1.0+vcl_sqrt(1.0-4.0*var_))/2.0;
+    T lower = T(0.5-vcl_sqrt(1-4*var_)/2);
+    T upper = T(0.5+vcl_sqrt(1-4*var_)/2);
 
     vector_ val = sample;
-    T alpha, beta;
     if (sample < lower)
-      val = lower+0.000001;
+      val = lower+T(1e-6);
     else if (sample > upper)
-      val = upper-0.000001;
+      val = upper-T(1e-6);
 
+    T alpha, beta;
     bsta_beta<T>::bsta_beta_from_moments(val, var_,alpha, beta);
     init_dist_.set_alpha_beta(alpha,beta);
     mixture.insert(init_dist_,init_weight);
