@@ -63,23 +63,26 @@ class boxm_scene :public boxm_scene_base
 
   void write_active_block();
 
-  bgeo_lvcs lvcs() const { return lvcs_;}
+  bgeo_lvcs lvcs() const { return lvcs_; }
 
   boxm_block<T>* get_active_block();
 
-  vgl_point_3d<double> origin() const {return origin_;}
+  vgl_point_3d<double> origin() const { return origin_; }
 
-  vgl_vector_3d<double> block_dim() const {return block_dim_;}
+  vgl_vector_3d<double> block_dim() const { return block_dim_; }
 
-  void block_num(int &x, int &y, int &z) {x=(int) blocks_.get_row1_count();
-                                          y=(int) blocks_.get_row2_count();
-                                          z=(int) blocks_.get_row3_count();}
+  void block_num(int &x, int &y, int &z) {
+    x=(int) blocks_.get_row1_count();
+    y=(int) blocks_.get_row2_count();
+    z=(int) blocks_.get_row3_count();
+  }
 
-  vgl_vector_3d<unsigned> world_dim() const {unsigned x, y, z;
-                                     x=(unsigned) blocks_.get_row1_count();
-                                     y=(unsigned) blocks_.get_row2_count();
-                                     z=(unsigned) blocks_.get_row3_count();
-                                     return vgl_vector_3d<unsigned>(x,y,z); }
+  vgl_vector_3d<unsigned> world_dim() const {
+    unsigned x=(unsigned) blocks_.get_row1_count();
+    unsigned y=(unsigned) blocks_.get_row2_count();
+    unsigned z=(unsigned) blocks_.get_row3_count();
+    return vgl_vector_3d<unsigned>(x,y,z);
+  }
 
   vcl_string path() const { return scene_path_; }
 
@@ -97,7 +100,7 @@ class boxm_scene :public boxm_scene_base
 
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
-  boxm_block<T>* get_block(vgl_point_3d<int>& idx) {return blocks_(idx.x(), idx.y(), idx.z()); }
+  boxm_block<T>* get_block(vgl_point_3d<int>& idx) { return blocks_(idx.x(), idx.y(), idx.z()); }
 
   void set_block(vgl_point_3d<int> const& idx, boxm_block<T>* block)
   { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx; }
@@ -110,7 +113,7 @@ class boxm_scene :public boxm_scene_base
 
   static short version_no() { return 1; }
 
-  boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter;}
+  boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter; }
 
   vgl_box_3d<double> get_world_bbox();
 
@@ -124,7 +127,7 @@ class boxm_scene :public boxm_scene_base
  protected:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
-  
+
   //: World dimensions of a block .e.g 1 meter x 1 metere x 1 meter
   vgl_vector_3d<double> block_dim_;
   vbl_array_3d<boxm_block<T>*> blocks_;
@@ -136,7 +139,6 @@ class boxm_scene :public boxm_scene_base
   void create_block(unsigned i, unsigned j, unsigned k);
 
   void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim);
- // void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim);
   bool parse_config(boxm_scene_parser& parser);
 
   bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);
@@ -148,7 +150,7 @@ class boxm_block_iterator
  public:
   boxm_block_iterator(boxm_scene<T>* const scene): i_(0), j_(0), k_(0), scene_(scene) {}
 
-  ~boxm_block_iterator(){}
+  ~boxm_block_iterator() {}
 
   boxm_block_iterator<T>& begin();
 
@@ -170,10 +172,9 @@ class boxm_block_iterator
 
   boxm_block<T>* operator->();
 
-  vgl_point_3d<int> index() const {return vgl_point_3d<int>(i_,j_,k_);}
+  vgl_point_3d<int> index() const { return vgl_point_3d<int>(i_,j_,k_); }
 
  private:
-
   int i_;
   int j_;
   int k_;
