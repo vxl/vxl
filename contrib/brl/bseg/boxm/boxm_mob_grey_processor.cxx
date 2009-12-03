@@ -42,24 +42,25 @@ float boxm_mob_grey_processor::prob_density(apm_datatype const& appear, obs_data
 }
 
 //: Update with a new sample image
-bool boxm_mob_grey_processor::update( apm_datatype &appear, 
-                                      obs_datatype const& obs, 
+bool boxm_mob_grey_processor::update( apm_datatype &appear,
+                                      obs_datatype const& obs,
                                       float const& weight)
 {
   // the model
   float init_variance = 0.008f;
-  float g_thresh = 2.5; // number of std devs from mean sample must be
-  
-  float lower = (1.0-vcl_sqrt(1.0-4.0*init_variance))/2.0;
-  float upper = (1.0+vcl_sqrt(1.0-4.0*init_variance))/2.0;
+  float g_thresh = 2.5f; // number of std devs from mean sample must be
+
+  float t_l_u = float(vcl_sqrt(1-4*init_variance)*0.5);
+  float lower = 0.5f-t_l_u;
+  float upper = 0.5f+t_l_u;
 
   obs_datatype val = obs;
-  float alpha, beta;
   if (obs < lower)
-    val = lower+0.000001;
+    val = lower+0.000001f;
   else if (obs > upper)
-    val = upper-0.000001;
+    val = upper-0.000001f;
 
+  float alpha, beta;
   bsta_beta<float>::bsta_beta_from_moments(val, init_variance,alpha,beta);
   bsta_beta_f1 this_beta(alpha,beta);
 
