@@ -92,7 +92,7 @@ class wxVideoControl: public wxPanel, public vgui_observable
   void pause();
 
   //: Return true if in play mode
-  bool is_playing() { return is_playing_; }
+  bool is_playing() const { return is_playing_; }
 
   //: Should we show tooltips?
   static bool ShowToolTips();

@@ -47,9 +47,9 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
   //: kernel bandwidth
   T bandwidth() const {return bandwidth_;}
 
-  void set_bandwidth(T bandwidth) {bandwidth_ = bandwidth ;}
+  void set_bandwidth(T bandwidth) { bandwidth_ = bandwidth; }
 
-  bool bandwidth_adapted() {return bandwidth_adapted_;}
+  bool bandwidth_adapted() const { return bandwidth_adapted_; }
 
   void set_bandwidth_adapted(bool bandwidth_adapted)
     {bandwidth_adapted_=bandwidth_adapted;}
@@ -95,9 +95,9 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
   //: kernel bandwidth
   T bandwidth() const {return bandwidth_;}
 
-  void set_bandwidth(T bandwidth) {bandwidth_ = bandwidth ;}
+  void set_bandwidth(T bandwidth) { bandwidth_ = bandwidth; }
 
-  bool bandwidth_adapted() {return bandwidth_adapted_;}
+  bool bandwidth_adapted() const { return bandwidth_adapted_; }
 
   void set_bandwidth_adapted(bool bandwidth_adapted)
     {bandwidth_adapted_=bandwidth_adapted;}

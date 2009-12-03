@@ -46,7 +46,7 @@ class bprb_func_process: public bprb_process_ext
 
   void set_finish_func(bool(*fpt)(bprb_func_process&)) { fpt_finish_ = fpt; }
 
-  vcl_string name() { return name_; }
+  vcl_string name() const { return name_; }
 
   template <class T>
   T get_input(unsigned i)

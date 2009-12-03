@@ -44,9 +44,9 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bgui_image_tableau_sptr image_tableau() { return img_tab_; }
 
-  vcl_string camera_path() { return cam_path_; }
+  vcl_string camera_path() const { return cam_path_; }
 
-  void set_camera_path(vcl_string const& cam_path) {cam_path_=cam_path;}
+  void set_camera_path(vcl_string const& cam_path) { cam_path_=cam_path; }
 
   bool handle(const vgui_event &e);
 
@@ -55,14 +55,13 @@ class bwm_observer_cam : public bwm_observer_vgui
   void set_camera(vpgl_camera<double> *camera, vcl_string cam_path)
   { camera_ = camera; cam_path_ = cam_path; cam_adjusted_ = false;}
 
-  vpgl_camera<double> * camera(){return camera_;}
+  vpgl_camera<double> * camera() { return camera_; }
 
-  bool camera_adjusted() { return cam_adjusted_; }
+  bool camera_adjusted() const { return cam_adjusted_; }
 
   void set_camera_adjusted(bool status) { cam_adjusted_ = status; }
 
-  void set_proj_plane(vgl_plane_3d<double> proj_plane)
-  { proj_plane_ = proj_plane; }
+  void set_proj_plane(vgl_plane_3d<double> proj_plane) { proj_plane_ = proj_plane; }
 
   void select_proj_plane();
 
@@ -73,7 +72,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   void translate_along_optical_axis(double da);
 
 
-  vgl_plane_3d<double> get_proj_plane() { return proj_plane_; }
+  vgl_plane_3d<double> get_proj_plane() const { return proj_plane_; }
 
   void set_ground_plane(double x1, double y1, double x2, double y2);
 
@@ -125,7 +124,7 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   virtual void camera_center(vgl_point_3d<double> &center) {}
 
-  bool corr_pt(vgl_point_2d<double> &p)
+  bool corr_pt(vgl_point_2d<double> &p) const
   { if (corr_.size()>0) {p = corr_[corr_.size()-1].first; return true;} else return false; }
 
   //virtual vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin)=0;
