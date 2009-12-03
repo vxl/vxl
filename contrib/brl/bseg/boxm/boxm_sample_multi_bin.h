@@ -22,7 +22,7 @@ class boxm_sample_multi_bin
   //: constructor
   boxm_sample_multi_bin(float alpha_val,vcl_map<int,apm_datatype> apm_val): alpha(alpha_val), appearance_(apm_val) {}
 
-  short version_no() const{ return 1; }
+  static short version_no() { return 1; }
 
   //: the occlusion density at the sample point
   float alpha;
@@ -33,10 +33,8 @@ class boxm_sample_multi_bin
   vcl_map<int,apm_datatype> appearance_;
 
   void  print(vcl_ostream& os) const;
-private:
+ private:
   //: the appearance model at the sample point
-
-  
 };
 
 template <boxm_apm_type APM_MODEL>

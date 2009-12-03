@@ -17,7 +17,7 @@ class boxm_sample
   typedef typename boxm_apm_traits<APM_MODEL>::obs_mathtype obs_mathtype;
   typedef typename boxm_apm_traits<APM_MODEL>::apm_processor apm_processor;
 
-  //: default constructor
+  //: default constructor: alpha is set to 0.0015.
   boxm_sample() : alpha(0.0015f), appearance_() {}
 
   boxm_sample(float alpha_val): alpha(alpha_val), appearance_() {}
@@ -26,13 +26,12 @@ class boxm_sample
 
   virtual ~boxm_sample() {}
 
-  short version_no() const{ return 1; }
+  static short version_no() { return 1; }
 
-  //: bin is to imitate the bin number of multiple_bin case 
+  //: bin is to imitate the bin number of multiple_bin case
   apm_datatype & appearance(int bin=-1) {return appearance_;}
 
-  void set_appearance(apm_datatype  app,int bin=-1){appearance_=app;}
-
+  void set_appearance(apm_datatype  app,int bin=-1) { appearance_=app; }
 
   //: the occlusion density at the sample point
   float alpha;
@@ -57,6 +56,5 @@ void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> *&sample);
 
 template <boxm_apm_type APM_MODEL>
 vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample);
-
 
 #endif

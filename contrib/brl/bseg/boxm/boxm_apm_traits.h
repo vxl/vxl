@@ -91,7 +91,7 @@ class boxm_simple_grey
   boxm_simple_grey() : color_(0.5f), one_over_sigma_(1.0f) {}
   boxm_simple_grey(float color, float std_dev, float gauss_weight=1.0f) : color_(color), one_over_sigma_(1/std_dev)  { check_vals(); }
   boxm_simple_grey(vnl_vector_fixed<float,3> const& params) : color_(params[0]), one_over_sigma_(1.0f/params[1])  { check_vals(); }
-  short version_no() const { return 1; }
+  static short version_no() { return 1; }
   inline float color() const {return color_;}
   inline float sigma() const {return 1.0f/one_over_sigma_;}
   inline float gauss_weight() const {return 1.0f;}
@@ -108,9 +108,9 @@ class boxm_simple_grey
       one_over_sigma_ = 1e4f;
     if (!(one_over_sigma_ > 1e-4))
       one_over_sigma_ = 1e-4f;
-
   }
-public:
+
+ public:
   float color_;
   float one_over_sigma_;
 };
