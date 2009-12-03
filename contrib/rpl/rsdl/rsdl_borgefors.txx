@@ -97,15 +97,9 @@ template <class T>
 bool
 rsdl_borgefors<T>::in_map(int x, int y) const
 {
-  if ( x < org_x_ || x >= size_x_ + org_x_ ||
-       y < org_y_ || y >= size_y_ + org_y_ )
-    return false;
-
-  int index = index_map_[ y - org_y_][x - org_x_];
-  if (index < 0)
-    return false;
-
-  return true;
+  return x >= org_x_ && x < size_x_ + org_x_
+      && y >= org_y_ && y < size_y_ + org_y_
+      && index_map_[ y - org_y_][x - org_x_] >= 0;
 }
 
 //: Returns the approximated distance data between (x,y) and closest data record.

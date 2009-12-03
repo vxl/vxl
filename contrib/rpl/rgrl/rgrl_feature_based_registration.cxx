@@ -82,15 +82,15 @@ run( rgrl_initializer_sptr initializer )
   rgrl_mask_box                     current_region(0); // not used
   rgrl_mask_box                     global_region(0);
 
-  while ( initializer->next_initial( from_image_roi, to_image_roi, 
-                                     current_region, global_region, 
+  while ( initializer->next_initial( from_image_roi, to_image_roi,
+                                     current_region, global_region,
                                      init_xform_estimator, init_xform_estimate,
                                      init_resolution, prior_scale ) ) {
     DebugMacro(  1, "Try "<< num_xforms_tested_ << " initial estimate\n" );
 
     // Use the estimated overlap region (global_region) of the
     // from_image, instead of the entire ROI of the from_image.
-    this->run( global_region, to_image_roi-> bounding_box(),  
+    this->run( global_region, to_image_roi-> bounding_box(),
                init_xform_estimator, init_xform_estimate,
                prior_scale, init_resolution );
 
@@ -117,13 +117,13 @@ run( rgrl_mask_box              from_image_region,
   if ( data_->is_multi_feature() ) {
     DebugMacro(1, " Multi-feature Registration:\n");
     this->register_multi_feature(from_image_region, to_image_region,
-                                 init_xform_estimator, initial_xform, 
+                                 init_xform_estimator, initial_xform,
                                  prior_scale, init_resolution);
   }
   else {
     DebugMacro(  1, " Single-feature Registration:\n" );
 
-    this->register_single_feature(from_image_region, to_image_region, 
+    this->register_single_feature(from_image_region, to_image_region,
                                   init_xform_estimator,
                                   initial_xform, prior_scale, init_resolution);
   }
@@ -192,8 +192,7 @@ bool
 rgrl_feature_based_registration::
 has_final_transformation() const
 {
-  if ( best_xform_estimate_ ) return true;
-  return false;
+  return best_xform_estimate_ != 0;
 }
 
 //: Set the max number of icp iteration per level
@@ -432,12 +431,12 @@ register_single_feature( rgrl_mask_box            from_image_region,
       match_set->remap_from_features( *current_xform_estimate_ );
       weighter->compute_weights( *scale, *match_set );
 
-      // compute the scaling factors  
+      // compute the scaling factors
       {
         bool ret_success;
         vnl_vector<double> scaling;
         ret_success = rgrl_util_geometric_scaling_factors( *match_set, scaling );
-        if( ret_success ) {
+        if ( ret_success ) {
           current_xform_estimate_->set_scaling_factors( scaling );
           if (should_penalize_scaling_) {
             for ( unsigned ds=0; ds < scaling.size(); ++ds ) {
@@ -448,10 +447,10 @@ register_single_feature( rgrl_mask_box            from_image_region,
             }
           }
         }
-        else 
+        else
           WarningMacro( "cannot compute scaling factors!!!" );
       }
-      
+
 #if 0
       // CT: this step seems redundant, since the scale is re-computed
       // at the beginning of next iteration.
@@ -476,16 +475,16 @@ register_single_feature( rgrl_mask_box            from_image_region,
                                       xform_estimator,
                                       match_set, scale,
                                       should_penalize_scaling_);
-      DebugMacro(  3, "run: (iterations = " << iterations_at_stage_
-                   << ") oscillation count = " << current_status->oscillation_count() << '\n' );
+      DebugMacro(  3, "run: (iterations = " << iterations_at_stage_ << ") oscillation count = " << current_status->oscillation_count() << '\n' );
       DebugMacro(  3, "run: error = " << current_status->error() << vcl_endl );
       DebugMacro(  3, "run: error_diff = " << current_status->error_diff() << vcl_endl );
 
       ++iterations_at_stage_;
-    } while ( !failed &&
-             !current_status->has_converged() &&
-             !current_status->has_stagnated() &&
-             iterations_at_stage_ < max_icp_iter_ );
+    }
+    while ( !failed &&
+            !current_status->has_converged() &&
+            !current_status->has_stagnated() &&
+            iterations_at_stage_ < max_icp_iter_ );
 
     if ( failed ) {
       if ( !scale_in_range )
@@ -505,17 +504,15 @@ register_single_feature( rgrl_mask_box            from_image_region,
     // at the finest level
     //
     prev_resol = resolution;
-    initialize_for_next_resolution( from_image_region, to_image_region, 
+    initialize_for_next_resolution( from_image_region, to_image_region,
                                     current_xform_estimate_, resolution );
     int level_diff = prev_resol - resolution;
     double dim_increase = data_->dimension_increase_for_next_stage(prev_resol);
 //  double scale_multipler = vcl_pow(dim_increase, level_diff);
     scale->set_geometric_scale( scale->geometric_scale()*
                                 vcl_pow(dim_increase, level_diff) );
-
-  } while ( !failed &&
-            ( !resolution == 0 ||
-              !prev_resol == 0 ) );
+  }
+  while ( !failed && ( resolution != 0 || prev_resol != 0 ) );
 
   DebugMacro( 1, "Estimation complete\n" );
 
@@ -724,12 +721,12 @@ register_multi_feature( rgrl_mask_box            from_image_region,
           current_match_sets_[fs]->remap_from_features( *current_xform_estimate_ );
           weighters[fs]->compute_weights( *scales[fs], *current_match_sets_[fs] );
 
-      // compute image scaling factors  
+      // compute image scaling factors
       {
         bool ret_success;
         vnl_vector<double> scaling;
         ret_success = rgrl_util_geometric_scaling_factors( current_match_sets_, scaling );
-        if( ret_success ) {
+        if ( ret_success ) {
           current_xform_estimate_->set_scaling_factors( scaling );
           if (should_penalize_scaling_) {
             for ( unsigned ds=0; ds < scaling.size(); ++ds ) {
@@ -740,7 +737,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
             }
           }
         }
-        else 
+        else
           WarningMacro( "cannot compute scaling factors!!!" );
       }
 
@@ -768,16 +765,16 @@ register_multi_feature( rgrl_mask_box            from_image_region,
                                       xform_estimator,
                                       current_match_sets_, scales,
                                       should_penalize_scaling_);
-      DebugMacro( 3, "run: (iterations = " << iterations_at_stage_
-                  << ") oscillation count = " << current_status->oscillation_count() << '\n' );
+      DebugMacro( 3, "run: (iterations = " << iterations_at_stage_ << ") oscillation count = " << current_status->oscillation_count() << '\n' );
       DebugMacro( 3, "run: error = " << current_status->error() << vcl_endl );
       DebugMacro( 3, "run: error_diff = " << current_status->error_diff() << vcl_endl );
 
       ++iterations_at_stage_;
-    } while ( !failed &&
-             !current_status->has_converged() &&
-             !current_status->has_stagnated() &&
-             iterations_at_stage_ < max_icp_iter_ );
+    }
+    while ( !failed &&
+            !current_status->has_converged() &&
+            !current_status->has_stagnated() &&
+            iterations_at_stage_ < max_icp_iter_ );
 
       if ( failed ) {
         if ( !scale_in_range )
@@ -797,7 +794,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
       // already at the finest level
       //
       prev_resol = resolution;
-      initialize_for_next_resolution( from_image_region, to_image_region, 
+      initialize_for_next_resolution( from_image_region, to_image_region,
                                       current_xform_estimate_, resolution );
       int level_diff = prev_resol - resolution;
       double dim_increase = data_->dimension_increase_for_next_stage(prev_resol);
@@ -808,10 +805,8 @@ register_multi_feature( rgrl_mask_box            from_image_region,
 
       use_prior_scale = true;
       prior_scale = scales[0]; //Assuming scales[0] is a good approximate
-
-  } while ( !failed &&
-            ( !resolution == 0 ||
-              !prev_resol == 0) );
+  }
+  while ( !failed && ( resolution != 0 || prev_resol != 0) );
 
   DebugMacro( 1, "Estimation complete\n" );
 

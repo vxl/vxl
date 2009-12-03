@@ -57,7 +57,7 @@ class rrel_kernel_density_obj : public rrel_objective
   //: Depends on the scale type used.
   //  \sa rrel_objective::requires_prior_scale.
   virtual bool requires_prior_scale() const
-  { if (scale_type_ == RREL_KERNEL_PRIOR) return true; return false; }
+  { return scale_type_ == RREL_KERNEL_PRIOR; }
 
   //: x is set to 0;
   void fix_x() { fix_x_ = true; }

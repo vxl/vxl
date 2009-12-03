@@ -67,10 +67,7 @@ void gmvl_node_cache::remove( const gmvl_node_sptr node)
 
 bool gmvl_node_cache::cached( const gmvl_node_sptr node) const
 {
-  if (node->ref_== -1)
-    return false;
-
-  return true;
+  return node->ref_!= -1;
 }
 
 // clever accessors

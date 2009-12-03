@@ -207,11 +207,10 @@ next_initial( rgrl_invariant_match_sptr& best_match )
     matches_[current_moving_image_ind_].pop_back();
     ++num_matches_tried_;
     found_best_match = best_match->estimate();
-  } while ( !found_best_match && !matches_[current_moving_image_ind_].empty());
+  }
+  while ( !found_best_match && !matches_[current_moving_image_ind_].empty());
 
-  if ( !found_best_match ) return false;
-
-  return true;
+  return found_best_match;
 }
 
 int
