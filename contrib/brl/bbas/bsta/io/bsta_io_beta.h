@@ -22,8 +22,8 @@ template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_beta<T>& g)
 {
-  vsl_b_write(os,g.beta());
   vsl_b_write(os,g.alpha());
+  vsl_b_write(os,g.beta());
 }
 
 //: Binary load bsta_beta from stream.
