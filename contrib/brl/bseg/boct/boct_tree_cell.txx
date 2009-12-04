@@ -5,7 +5,6 @@
 #include "boct_tree_cell.h"
 
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for std::malloc and std::free
 
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>::boct_tree_cell(const boct_loc_code<T_loc>& code)
@@ -588,7 +587,7 @@ void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_c
     v.push_back(this);
     return;
   }
-  
+
   if (curr_level > target_level+1) {
     for (unsigned i=0; i<8; i++) {
       if (!children_[i].is_leaf())
@@ -598,11 +597,11 @@ void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_c
 
   if (curr_level == target_level+1) {
     if (!this->is_leaf()) {
-	  for (unsigned i=0; i<8; i++) {
-	    if (children_[i].is_leaf())
-		  v.push_back(&children_[i]);
-	  }
-	}
+      for (unsigned i=0; i<8; i++) {
+        if (children_[i].is_leaf())
+          v.push_back(&children_[i]);
+      }
+    }
   }
 }
 
@@ -616,7 +615,7 @@ void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T
     v.push_back(this);
     return;
   }
-  
+
   if (curr_level > target_level+1) {
     for (unsigned i=0; i<8; i++) {
       if (!children_[i].is_leaf())
