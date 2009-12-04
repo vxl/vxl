@@ -47,7 +47,7 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
   if (var == 0)
     return false;
     
-  T t = (mean*(1-mean)/var)-1;
+  T t = ((mean*(1-mean))/var)-1.0;
   alpha=mean*t;
   beta=(1-mean)*t;
   return true;
@@ -57,8 +57,20 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
 template <class T>
 T bsta_beta<T>::prob_density(T x) const
 {
+ 
+  T a = vnl_beta(alpha_,beta_);
+  T b = vcl_pow(x, alpha_-1);
+  T c = vcl_pow(1-x,beta_-1);
+  
+  if (x == 0 && alpha_<T(1)){
+    return T(10000);
+  } else if (x == 1 && beta_<T(1)) {
+    return T(10000);
+  }
+  if (a == T(0))
+    vcl_cout << "...........Division by 0" << vcl_endl;
   if (x >=T(0) && x<=T(1))
-    return (vcl_pow(x, alpha_-1)*vcl_pow(1-x,beta_-1))/vnl_beta(alpha_,beta_);
+    return (b*c)/a;
   else return T(0);
 }
 
