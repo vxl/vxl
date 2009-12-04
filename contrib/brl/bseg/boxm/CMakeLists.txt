@@ -62,4 +62,7 @@ SUBDIRS(tests)
 #opt
 SUBDIRS(opt)
 
+#basic algorithms involving scenes
+SUBDIRS(algo)
+
 ENDIF(EXPAT_FOUND)
