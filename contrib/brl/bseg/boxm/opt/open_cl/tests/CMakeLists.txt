@@ -13,4 +13,4 @@ ADD_TEST( test_octree     ${EXECUTABLE_OUTPUT_PATH}/boxm_opt_opencl_test_all tes
 ADD_TEST( test_ray_trace     ${EXECUTABLE_OUTPUT_PATH}/boxm_opt_opencl_test_all test_ray_trace  )
 
 ADD_EXECUTABLE( open_cl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( open_cl_test_include open_cl )
+TARGET_LINK_LIBRARIES( open_cl_test_include boxm_opt_opencl )
