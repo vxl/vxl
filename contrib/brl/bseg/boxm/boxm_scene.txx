@@ -327,10 +327,10 @@ void boxm_scene<T>::b_write(vsl_b_ostream & s) const
 }
 
 template <class T>
-void boxm_scene<T>::write_scene()
+void boxm_scene<T>::write_scene(vcl_string filename)
 {
-  vcl_string filename=scene_path_+"/scene.xml";
-  vcl_ofstream os(filename.c_str());
+  vcl_string fullpath=scene_path_+ filename;
+  vcl_ofstream os(fullpath.c_str());
   x_write(os, *this, "boxm_scene");
   os.close();
 }
