@@ -1,6 +1,6 @@
-/*
- * Tool to apply mask-based merge operation between two value files
- */
+//:
+// \file
+// \brief Tool to apply mask-based merge operation between two value files
 
 #include <vcl_string.h>
 #include <vul/vul_arg.h>
@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <mbl/mbl_mask.h>
+#include <vcl_fstream.h>
 
 // IO helpers - see below for definition
 bool load_values(const vcl_string & filename, vcl_vector<vcl_string> & values, bool ignore_blanks = true);
@@ -15,7 +16,7 @@ void write_vals(const vcl_vector<vcl_string> & values, vcl_ostream & os);
 
 int main(int argc, char **argv)
 {
- 	vul_arg_base::set_help_description(
+  vul_arg_base::set_help_description(
     "Merge two files according to a mask.\n"
     "------------------------------------\n"
     "The two value files and the mask must be the same length N\n"
@@ -76,13 +77,9 @@ int main(int argc, char **argv)
     write_vals(valuesB, val_out);
     val_out.close();
   }
-  else write_vals(valuesB, vcl_cout);
-
+  else
+    write_vals(valuesB, vcl_cout);
 }
-
-
-
-
 
 
 // io helpers
