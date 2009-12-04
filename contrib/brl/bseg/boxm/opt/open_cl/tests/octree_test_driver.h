@@ -4,7 +4,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <CL/cl.h>
+#include <bcl/bcl_cl.h>
 #include <boct/boct_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
