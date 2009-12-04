@@ -105,7 +105,7 @@ class boxm_scene :public boxm_scene_base
   void set_block(vgl_point_3d<int> const& idx, boxm_block<T>* block)
   { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx; }
 
-  void write_scene();
+  void write_scene(vcl_string filename = "/scene.xml");
 
   void load_scene(vcl_string filename);
 
