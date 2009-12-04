@@ -635,6 +635,23 @@ void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T
   }
 }
 
+//: adds a pointer to vector v, for each children in a recursivve fashion
+template<class T_loc,class T_data>
+void boct_tree_cell<T_loc,T_data>::all_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
+{
+  if(this-> is_leaf())
+    return;
+
+  for (unsigned i=0; i<8; i++) {
+    v.push_back(&children_[i]);
+    if(!children_[i]. is_leaf())
+      children_[i].all_children(v);
+  }
+
+}
+
+
+
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::print()
 {

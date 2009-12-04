@@ -81,6 +81,9 @@ class boct_tree_cell
   
   //: adds a pointer to vector v, for each children at a particular level
   void children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
+  
+    //: adds a pointer to vector v, for each children in a recursive fashion
+  void all_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
 
   const boct_loc_code<T_loc> get_code();
 

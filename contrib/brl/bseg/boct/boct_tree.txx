@@ -318,6 +318,21 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::cells_at_leve
   return v;
 }
 
+//: Returns all cells on the tree
+template<class T_loc, class T_data>
+vcl_vector<boct_tree_cell<T_loc,T_data>*>  boct_tree<T_loc,T_data>::all_cells()
+{
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> v;
+  if (root_)
+  {
+    v.push_back(root_);
+    if(!root_->is_leaf())
+     root_->all_children(v);
+  }
+  return v;
+
+}
+
 //: Return the finest level the tree has been split down to (not necessarly 0)
 template <class T_loc,class T_data>
 short boct_tree<T_loc,T_data>::finest_level()
