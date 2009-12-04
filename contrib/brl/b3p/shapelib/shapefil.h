@@ -2,8 +2,6 @@
 #define _SHAPEFILE_H_INCLUDED
 
 /******************************************************************************
- * Id
- *
  * Project:  Shapelib
  * Purpose:  Primary include file for Shapelib.
  * Author:   Frank Warmerdam, warmerdam@pobox.com
@@ -35,83 +33,6 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- *
- * $Log$
- * Revision 1.26  2002/09/29 00:00:08  warmerda
- * added FTLogical and logical attribute read/write calls
- *
- * Revision 1.25  2002/05/07 13:46:30  warmerda
- * added DBFWriteAttributeDirectly().
- *
- * Revision 1.24  2002/04/10 16:59:54  warmerda
- * added SHPRewindObject
- *
- * Revision 1.23  2002/01/15 14:36:07  warmerda
- * updated email address
- *
- * Revision 1.22  2002/01/15 14:32:00  warmerda
- * try to improve SHPAPI_CALL docs
- *
- * Revision 1.21  2001/11/01 16:29:55  warmerda
- * move pabyRec into SHPInfo for thread safety
- *
- * Revision 1.20  2001/07/20 13:06:02  warmerda
- * fixed SHPAPI attribute for SHPTreeFindLikelyShapes
- *
- * Revision 1.19  2001/05/31 19:20:13  warmerda
- * added DBFGetFieldIndex()
- *
- * Revision 1.18  2001/05/31 18:15:40  warmerda
- * Added support for NULL fields in DBF files
- *
- * Revision 1.17  2001/05/23 13:36:52  warmerda
- * added use of SHPAPI_CALL
- *
- * Revision 1.16  2000/09/25 14:15:59  warmerda
- * added DBFGetNativeFieldType()
- *
- * Revision 1.15  2000/02/16 16:03:51  warmerda
- * added null shape support
- *
- * Revision 1.14  1999/11/05 14:12:05  warmerda
- * updated license terms
- *
- * Revision 1.13  1999/06/02 18:24:21  warmerda
- * added trimming code
- *
- * Revision 1.12  1999/06/02 17:56:12  warmerda
- * added quad'' subnode support for trees
- *
- * Revision 1.11  1999/05/18 19:11:11  warmerda
- * Added example searching capability
- *
- * Revision 1.10  1999/05/18 17:49:38  warmerda
- * added initial quadtree support
- *
- * Revision 1.9  1999/05/11 03:19:28  warmerda
- * added new Tuple api, and improved extension handling - add from candrsn
- *
- * Revision 1.8  1999/03/23 17:22:27  warmerda
- * Added extern "C" protection for C++ users of shapefil.h.
- *
- * Revision 1.7  1998/12/31 15:31:07  warmerda
- * Added the TRIM_DBF_WHITESPACE and DISABLE_MULTIPATCH_MEASURE options.
- *
- * Revision 1.6  1998/12/03 15:48:15  warmerda
- * Added SHPCalculateExtents().
- *
- * Revision 1.5  1998/11/09 20:57:16  warmerda
- * Altered SHPGetInfo() call.
- *
- * Revision 1.4  1998/11/09 20:19:33  warmerda
- * Added 3D support, and use of SHPObject.
- *
- * Revision 1.3  1995/08/23 02:24:05  warmerda
- * Added support for reading bounds.
- *
- * Revision 1.2  1995/08/04  03:17:39  warmerda
- * Added header.
- *
  */
 
 #include <stdio.h>
