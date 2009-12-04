@@ -58,20 +58,24 @@ template <class T>
 T bsta_beta<T>::prob_density(T x) const
 {
  
-  T a = vnl_beta(alpha_,beta_);
-  T b = vcl_pow(x, alpha_-1);
-  T c = vcl_pow(1-x,beta_-1);
-  
-  if (x == 0 && alpha_<T(1)){
-    return T(10000);
-  } else if (x == 1 && beta_<T(1)) {
-    return T(10000);
-  }
-  if (a == T(0))
-    vcl_cout << "...........Division by 0" << vcl_endl;
-  if (x >=T(0) && x<=T(1))
-    return (b*c)/a;
-  else return T(0);
+    if(x<T(0)||x>T(1))
+        return 0;
+    else if (x == 0 && alpha_<T(1)){
+        return T(1e10);
+    } 
+    else if (x == 1 && beta_<T(1)) {
+        return T(1e10);
+    }
+    else
+    {
+        T a = vnl_log_beta(alpha_,beta_);
+
+        T b = (alpha_-1)*vcl_log(x) ;
+        T c = (beta_-1)*vcl_log(1-x) ;
+
+        T ans=vcl_exp(b+c-a);
+        return ans;
+    }
 }
 
 // cumulative distribution function
