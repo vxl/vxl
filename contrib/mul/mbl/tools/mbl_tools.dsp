@@ -189,6 +189,18 @@ SOURCE=.\print_log_properties.cxx
 # Begin Source File
 SOURCE=.\sample_stats.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_masked_file_merge.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_mask_logic.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_mask_on_mask.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_apply_mask_to_file.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
