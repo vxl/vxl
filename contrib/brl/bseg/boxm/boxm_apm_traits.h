@@ -2,7 +2,7 @@
 #define boxm_appearance_model_traits_h_
 //:
 // \file
-// \brief A class for a grey-scale-mixture-of-gaussian processor
+// \brief A class for appearance model traits
 //
 // \author Daniel Crispell
 // \date April 03, 2009
