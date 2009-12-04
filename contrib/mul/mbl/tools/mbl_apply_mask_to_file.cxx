@@ -1,0 +1,122 @@
+/*
+ * Tool to apply a mask to a file
+ * This is a purely text-based operation
+ */
+
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vcl_sstream.h>
+#include <vcl_algorithm.h>
+#include <vul/vul_arg.h>
+#include <vcl_exception.h>
+#include <mbl/mbl_mask.h>
+
+// IO helpers - see below for definition
+bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename, const vcl_string & delim);
+void write_vals(const vcl_vector<vcl_string> & values, vcl_ostream & os);
+
+
+int main(int argc, char **argv)
+{
+  vul_arg<vcl_string> mask_filename(0, "Input mask file");
+  vul_arg<vcl_string> values_filename(0, "Input values file");
+  vul_arg<vcl_string> output_filename("-out", "Output values file - write to standard out if not set");
+  vul_arg<vcl_string> delim("-delim", "Delimiter character for values file - one entry per line if not set");
+  vul_arg_parse(argc, argv);
+
+  if (delim.set() && delim().length() != 1)
+  {
+    vcl_cout << "User-defined delimiter should be one character" << vcl_endl;
+    return 1;
+  }
+
+  mbl_mask mask;
+  mbl_load_mask(mask, mask_filename().c_str());
+
+  vcl_vector<vcl_string> values;
+  bool loaded_vals;
+  vcl_string del = delim.set() ? delim() : " ";
+  loaded_vals = load_vals(values, values_filename(), del);
+  if (!loaded_vals)
+  {
+    vcl_cout << "Unable to load input data from " << values_filename() << vcl_endl;
+    return 1;
+  }
+
+  try { mbl_apply_mask(mask, values); }
+  catch (vcl_exception & e)
+  {
+    vcl_cout << "An error occurred while applying the mask.\n" << e.what() << vcl_endl;
+    return 1;
+  }
+  catch (...)
+  {
+    vcl_cout << "An unknown error occurred while applying the mask." << vcl_endl;
+    return 1;
+  }
+
+  if (output_filename.set())
+  {
+    vcl_ofstream val_out(output_filename().c_str());
+    if (!val_out)
+    {
+      vcl_cout << "Unable to save output data to " << output_filename() << vcl_endl;
+      return 1;
+    }
+    write_vals(values, val_out);
+    val_out.close();
+  }
+  else write_vals(values, vcl_cout);
+}
+
+
+
+
+
+
+// io helpers below this point
+
+vcl_string trim(const vcl_string & s)
+{
+  unsigned start = s.find_first_not_of(" ");
+  if (start == vcl_string::npos) return "";
+  unsigned end = s.find_last_not_of(" ");
+  return s.substr(start, 1+end-start);
+}
+
+void split_and_add(vcl_vector<vcl_string> & values, const vcl_string & string, const vcl_string & delim)
+{
+  unsigned start, next = -1;
+  while (start = next+1, next = string.find_first_of(delim, start), vcl_string::npos != next)
+  {
+    vcl_string token = string.substr(start, next-start);
+    values.push_back(trim(token));
+  }
+  vcl_string last = trim(string.substr(start));
+  if (last.length() != 0) values.push_back(last);
+  
+}
+
+bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename, const vcl_string & delim)
+{
+  vcl_ifstream fin(filename.c_str());
+  if (!fin) return false;
+
+  values.clear();
+
+  vcl_string line, token;
+  while (vcl_getline(fin, line))
+  {
+    line = trim(line);
+    if (line.length() == 0) continue;
+    split_and_add(values, line, delim);
+  }
+
+  return true;
+}
+
+void write_vals(const vcl_vector<vcl_string> & values, vcl_ostream & os)
+{
+  vcl_copy(values.begin(), values.end(), vcl_ostream_iterator<vcl_string>(os, "\n"));
+}
