@@ -1,6 +1,4 @@
 /******************************************************************************
- * Id
- *
  * Project:  libgeotiff
  * Purpose:  CGI BIN to view CSV files on the web.
  * Author:   Frank Warmerdam, warmerda@home.com

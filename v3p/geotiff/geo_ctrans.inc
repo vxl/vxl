@@ -1,6 +1,4 @@
 /******************************************************************************
- * Id
- *
  * Project:  libgeotiff
  * Purpose:  GeoTIFF Projection Method codes. 
  * Author:   Frank Warmerdam, warmerdam@pobox.com

@@ -1,6 +1,4 @@
 /******************************************************************************
- * Id
- *
  * Project:  libgeotiff
  * Purpose:  Include file related to geo_normalize.c containing Code to
  *           normalize PCS and other composite codes in a GeoTIFF file.

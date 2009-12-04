@@ -1,6 +1,4 @@
 /******************************************************************************
- * Id
- *
  * Project:  libgeotiff
  * Purpose:  Code to abstract translation between pixel/line and PCS
  *           coordinates.
