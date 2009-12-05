@@ -78,7 +78,7 @@ class bprb_process : public vbl_ref_count
   bool parse_params_XML(const vcl_string& xml_path);
 
   //: The name of the process
-  virtual vcl_string name() = 0;
+  virtual vcl_string name() const = 0;
 
   //: The number of inputs
   unsigned n_inputs() const;
@@ -109,7 +109,7 @@ class bprb_process : public vbl_ref_count
 
   //: get a particular output
   brdb_value_sptr output(unsigned i)
-    { if (i<n_outputs()) return output_data_[i]; return 0; }
+  { if (i<n_outputs()) return output_data_[i]; else return 0; }
 
   //: Insure that inputs are valid
   bool verify_inputs();

@@ -46,7 +46,7 @@ class bprb_func_process: public bprb_process_ext
 
   void set_finish_func(bool(*fpt)(bprb_func_process&)) { fpt_finish_ = fpt; }
 
-  virtual vcl_string name() { return name_; }
+  virtual vcl_string name() const { return name_; }
 
   template <class T>
   T get_input(unsigned i)
@@ -74,13 +74,13 @@ class bprb_func_process: public bprb_process_ext
   }
 
   //: Execute the process
-  bool execute() { return fpt_(*this); }
+  virtual bool execute() { return fpt_(*this); }
 
   //: Perform any initialization required by the process
-  bool init() { if (fpt_init_) return fpt_init_(*this); else return false; }
+  virtual bool init() { if (fpt_init_) return fpt_init_(*this); else return false; }
 
   //: Perform any clean up or final computation
-  bool finish() { if (fpt_finish_) return fpt_finish_(*this); else return false; }
+  virtual bool finish() { if (fpt_finish_) return fpt_finish_(*this); else return false; }
 
  private:
   bool (*fpt_)(bprb_func_process&);        // pointer to execute method

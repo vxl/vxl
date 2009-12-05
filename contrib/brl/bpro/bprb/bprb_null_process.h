@@ -27,7 +27,7 @@ class bprb_null_process : public bprb_process
   virtual bprb_null_process* clone() const { return new bprb_null_process(*this); }
 
   //: The name of the process
-  virtual vcl_string name() { return "NullProcess"; }
+  virtual vcl_string name() const { return "NullProcess"; }
 
   //: Perform any initialization required by the process
   virtual bool init() { return true; }
