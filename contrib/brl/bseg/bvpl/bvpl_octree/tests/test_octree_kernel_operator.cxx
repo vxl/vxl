@@ -264,7 +264,7 @@ bool scene_vector_operator()
 
   /***********Part2 operate on scene*******************/
 
-    //Crete the input scene
+  //Crete the input scene
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(10,10,20);
 
