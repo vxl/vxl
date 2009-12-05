@@ -36,6 +36,9 @@
 #include <boxm/pro/boxm_processes.h>
 #include <boxm/pro/boxm_register.h>
 
+#include <boxm/algo/boxm_merge_mog_functor.h>
+#include <boxm/algo/boxm_split_sample.h>
+
 #include <boxm/io/boxm_io_scene_base.h>
 
 int main() { return 0; }

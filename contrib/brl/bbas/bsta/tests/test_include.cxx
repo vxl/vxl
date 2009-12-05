@@ -42,6 +42,7 @@
 #include <bsta/bsta_weibull.h>
 
 #include <bsta/io/bsta_io_attributes.h>
+#include <bsta/io/bsta_io_beta.h>
 #include <bsta/io/bsta_io_gaussian_full.h>
 #include <bsta/io/bsta_io_gaussian_indep.h>
 #include <bsta/io/bsta_io_gaussian_sphere.h>
