@@ -26,12 +26,12 @@
 #include <vil/vil_math.h>
 #include <vcl_iostream.h>
 
-template <boxm_apm_type GAUSS, class boxm_apm_type MOG >
+template <enum boxm_apm_type APM>
 class boxm_merge_mog_functor
 {
  public:
-  boxm_merge_mog_functor_pass_0(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &observation,
-                                   unsigned int ni,unsigned nj)
+  boxm_merge_mog_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &observation,
+                         unsigned int ni,unsigned nj)
     : obs_(observation)
   {
     scene_read_only_=true;
@@ -39,7 +39,7 @@ class boxm_merge_mog_functor
   }
 
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1,
-                        boxm_sample<APM> &cell_value,T_aux &aux_val)
+                        boxm_sample<APM> &cell_value, typename boxm_apm_traits<APM>::obs_datatype &aux_val)
   {
     const float seg_len = (float)(s1 - s0).length();
     aux_val.obs_ += obs_(i,j) * seg_len;
@@ -54,7 +54,5 @@ class boxm_merge_mog_functor
  private:
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &obs_;
 };
-
-
 
 #endif // boxm_merge_mog_functor_h
