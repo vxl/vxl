@@ -10,8 +10,8 @@ class bwm_load_img_command: public bwm_command
  public:
   bwm_load_img_command() {}
   ~bwm_load_img_command() {}
-  void execute() { bwm_site_mgr::instance()->load_img_tableau(); }
-  vcl_string name() const {return "bwm_tableau_img"; }
+  virtual void execute() { bwm_site_mgr::instance()->load_img_tableau(); }
+  virtual vcl_string name() const {return "bwm_tableau_img"; }
 };
 
 class bwm_load_rat_cam_command: public bwm_command
@@ -19,8 +19,8 @@ class bwm_load_rat_cam_command: public bwm_command
  public:
   bwm_load_rat_cam_command() {}
   ~bwm_load_rat_cam_command() {}
-  vcl_string name() const {return "bwm_tableau_rat_cam"; }
-  void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
+  virtual vcl_string name() const {return "bwm_tableau_rat_cam"; }
+  virtual void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
 };
 
 class bwm_load_proj_cam_command: public bwm_command
@@ -28,8 +28,8 @@ class bwm_load_proj_cam_command: public bwm_command
  public:
   bwm_load_proj_cam_command() {}
   ~bwm_load_proj_cam_command() {}
-  vcl_string name() const {return "bwm_tableau_proj_cam"; }
-  void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
+  virtual vcl_string name() const {return "bwm_tableau_proj_cam"; }
+  virtual void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
 };
 
 class bwm_load_video_command: public bwm_command
@@ -37,8 +37,8 @@ class bwm_load_video_command: public bwm_command
  public:
   bwm_load_video_command() {}
   ~bwm_load_video_command() {}
-  vcl_string name() const {return "bwm_tableau_video"; }
-  void execute() { bwm_site_mgr::instance()->load_video_tableau(); }
+  virtual vcl_string name() const {return "bwm_tableau_video"; }
+  virtual void execute() { bwm_site_mgr::instance()->load_video_tableau(); }
 };
 
 #if 0
@@ -47,8 +47,8 @@ class bwm_load_coin3d_command: public bwm_command
  public:
   bwm_load_coin3d_command() {}
   ~bwm_load_coin3d_command() {}
-  vcl_string name() const {return "bwm_tableau_coin3d"; }
-  void execute() { bwm_tableau_mgr::instance()->load_coin3d_tableau(); }
+  virtual vcl_string name() const {return "bwm_tableau_coin3d"; }
+  virtual void execute() { bwm_tableau_mgr::instance()->load_coin3d_tableau(); }
 };
 #endif // 0
 
@@ -58,8 +58,8 @@ class bwm_load_proj2d_command: public bwm_command
  public:
   bwm_load_proj2d_command() {}
   ~bwm_load_proj2d_command() {}
-  vcl_string name() const {return "bwm_tableau_proj2"; }
-  void execute() { bwm_tableau_mgr::instance()->load_proj2d_tableau(); }
+  virtual vcl_string name() const {return "bwm_tableau_proj2"; }
+  virtual void execute() { bwm_tableau_mgr::instance()->load_proj2d_tableau(); }
 };
 #endif // 0
 
@@ -69,8 +69,8 @@ class bwm_load_lidar_command: public bwm_command
  public:
   bwm_load_lidar_command() {}
   ~bwm_load_lidar_command() {}
-  vcl_string name() const {return "bwm_tableau_lidar"; }
-  void execute() { bwm_tableau_mgr::instance()->load_lidar_tableau(); }
+  virtual vcl_string name() const {return "bwm_tableau_lidar"; }
+  virtual void execute() { bwm_tableau_mgr::instance()->load_lidar_tableau(); }
 };
 #endif // 0
 

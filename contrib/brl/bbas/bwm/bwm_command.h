@@ -28,7 +28,7 @@ class bwm_command : public vgui_command
   bwm_command() {}
   virtual ~bwm_command() {}
   virtual vcl_string name() const { return "bwm_command"; }
-  void execute() {}
+  virtual void execute() {}
 };
 
 class bwm_tab_process_command : public bwm_command
