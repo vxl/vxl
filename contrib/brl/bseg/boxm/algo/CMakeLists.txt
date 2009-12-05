@@ -2,8 +2,8 @@
 
 SET(boxm_algo_sources
     boxm_split_sample.h
-    test.cxx
-  )
+    dummy.cxx
+   )
 
 #AUX_SOURCE_DIRECTORY(Templates boxm_opt_sources)
 
@@ -13,5 +13,4 @@ TARGET_LINK_LIBRARIES(boxm_algo boxm)
 
 #processes
 SUBDIRS(pro)
-
 
