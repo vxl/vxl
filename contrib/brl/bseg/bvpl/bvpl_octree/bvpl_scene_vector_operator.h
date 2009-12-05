@@ -13,6 +13,10 @@
 //   <none yet>
 // \endverbatim
 
+#include "bvpl_octree_vector_operator.h"
+
+#include <boxm/boxm_scene.h>
+#include <bvpl/bvpl_kernel.h>
 
 
 class bvpl_scene_vector_operator
@@ -55,21 +59,7 @@ public:
       (*iter_id)->init_tree(id_tree);
       id_scene.write_active_block();
     }
-    
-//    boxm_block_iterator<boct_tree<short,T_data> >  iter2 =scene_out.iterator();
-//    iter2.begin();
-//    for (; !iter2.end(); iter2++) {
-//      scene_out.load_block(iter2.index());
-//      boxm_block<boct_tree<short,T_data> > *block = scene_out.get_active_block();
-//      boct_tree<short,T_data> *temp_tree = block->get_tree();
-//      vcl_vector<boct_tree_cell<short,float>* > temp_leaves = temp_tree->leaf_cells();
-//      // compare tree values
-//      for (unsigned i=0; i<temp_leaves.size(); i++) {
-//        vcl_cout << "scene data: " << temp_leaves[i]->data() << vcl_endl;
-//      }
-//}
-    
-    
+ 
     return true;
     
   }
