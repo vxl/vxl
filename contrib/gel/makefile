@@ -33,7 +33,7 @@ SUBDIRS += mrc
 # coordinate systems add-on in mrc/vcsl
 
 # Experiments with the vidl_vil1 library and vgui (JLM)
-SUBDIRS += jvid
+#SUBDIRS += jvid
 
 # Intensity face attributes (MPP)
 SUBDIRS += vifa

@@ -41,7 +41,7 @@ MANPAGE_SOURCES += boxm_save_scene_raw.h
 SOURCES += boxm_scene_parser.cxx
 SOURCES += boxm_mob_grey_processor.cxx
 
-SUBDIRS += io pro opt
+SUBDIRS += io pro opt algo
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
