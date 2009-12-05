@@ -117,6 +117,9 @@ SOURCE=.\bsta_io_parzen_sphere.h
 # Begin Source File
 SOURCE=.\bsta_io_von_mises.h
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_io_beta.h
+# End Source File
 # End Group
 # End Target
 # End Project

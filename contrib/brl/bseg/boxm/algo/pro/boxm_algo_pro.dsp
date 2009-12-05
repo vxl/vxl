@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="bvpl_octree" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="boxm_algo_pro" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# bvpl_octree  == name of output library
+# boxm_algo_pro  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=bvpl_octree - Win32 Debug
+CFG=boxm_algo_pro - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "bvpl_octree.mak".
+!MESSAGE NMAKE /f "boxm_algo_pro.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bvpl_octree.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE NMAKE /f "boxm_algo_pro.mak" CFG="bmrf - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "bvpl_octree - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "bvpl_octree - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_algo_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_algo_pro - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=bvpl_octree - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bvpl_octree - Win32 Release"
+!IF  "$(CFG)" == "boxm_algo_pro - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvpl_octree_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "bvpl_octree - Win32 Debug"
+!ELSEIF  "$(CFG)" == "boxm_algo_pro - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvpl_octree_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,31 +87,25 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "bvpl_octree - Win32 Release"
-# Name "bvpl_octree - Win32 Debug"
+# Name "boxm_algo_pro - Win32 Release"
+# Name "boxm_algo_pro - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\temp.cxx
+SOURCE=.\boxm_algo_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_split_scene_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bvpl_octree_vector_operator.h
+SOURCE=.\boxm_algo_processes.h
 # End Source File
 # Begin Source File
-SOURCE=.\bvpl_octree_kernel_operator.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvpl_scene_kernel_operator.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvpl_scene_vector_operator.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvpl_octree_vector_operator_impl.h
+SOURCE=.\boxm_algo_register.h
 # End Source File
 # End Group
 # End Target

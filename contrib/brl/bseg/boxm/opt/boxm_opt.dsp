@@ -125,6 +125,12 @@ SOURCE=.\Templates/boxm_rt_sample+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_rt_sample+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOB_GREY-.boxm_rt_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_sample+BOXM_APM_MOB_GREY--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

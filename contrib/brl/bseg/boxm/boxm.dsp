@@ -248,6 +248,45 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.float--.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm_scene+boct_tree+short.float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_sample+BOXM_APM_MOB_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.int--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOB_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.int--~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY---~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.int--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.int--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.boxm_sample+BOXM_APM_MOB_GREY--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
