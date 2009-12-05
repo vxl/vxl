@@ -7,6 +7,6 @@
 // tree with alpha and appearance combined
 BOCT_TREE_INSTANTIATE(short, boxm_sample<BOXM_APM_MOG_GREY>);
 
-// tree with appearance 
+// tree with appearance
 typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype apm_datatype;
 BOCT_TREE_INSTANTIATE(short, apm_datatype);
