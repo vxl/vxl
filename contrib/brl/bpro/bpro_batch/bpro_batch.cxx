@@ -30,56 +30,78 @@ static PyObject *remove_data(PyObject *self, PyObject *args);
 static PyObject *remove_data_obj(PyObject *self, PyObject *args);
 static PyObject *print_db(PyObject *self, PyObject *args);
 static PyObject *clear(PyObject *self, PyObject *args);
+vcl_string initp = "init_process";
+vcl_string initp_com = "init_process(s) create a new process instance by name";
+vcl_string proc_print_def = "process_print_default_params";
+vcl_string proc_print_def_com = "process_print_default_params(s,s) print the default values of the process by name";
+vcl_string set_prm_proc = "set_params_process";
+vcl_string set_prm_proc_com = "set_params_process(s) set the parameter values of the current process from the XML file";
+vcl_string set_in_bool = "set_input_bool";
+vcl_string set_in_bool_com = "set_input_(i,b) set input i on current process to a bool value";
+vcl_string set_in_string = "set_input_string";
+vcl_string set_in_string_com = "set_input_(i,s) set input i on current process to a string value";
+vcl_string set_in_int ="set_input_int";
+vcl_string set_in_int_com ="set_input_(i,i) set input i on current process to an int value";
+vcl_string set_in_unsign ="set_input_unsigned";
+vcl_string set_in_unsign_com ="set_input_(i,i) set input i on current process to an unsigned value";
+vcl_string set_in_long ="set_input_long";
+vcl_string set_in_long_com ="set_input_(i,l) set input i on current process to a long value";
+vcl_string set_in_float = "set_input_float";
+vcl_string set_in_float_com ="set_input_(i,f) set input i on current process to a float value";
+vcl_string set_in_double = "set_input_double";
+vcl_string set_in_double_com ="set_input_(i,d) set input i on current process to a double value";
+vcl_string get_in_float = "get_input_float";
+vcl_string get_in_float_com ="get_input_(i) return value of output i in the database";
+vcl_string get_in_unsigned ="get_input_unsigned";
+vcl_string get_in_unsigned_com ="get_input_(i) return value of output i in the database";
+vcl_string proc_init ="process_init";
+vcl_string proc_init_com ="process_init() initialize the current process state before execution";
+vcl_string run_proc ="run_process";
+vcl_string run_proc_com ="run_process() run the current process";
+vcl_string comt_out ="commit_output";
+vcl_string comt_out_com ="commit_output(i) put output i in the database ";
+vcl_string set_idb ="set_input_from_db";
+vcl_string set_idb_com ="set_input_from_db(i, i) set input i of the current process to db id value";
+vcl_string rm_dat ="remove_data";
+vcl_string rm_dat_com ="remove_data(i) remove data with id from db";
+vcl_string rm_dato ="remove_data_obj";
+vcl_string rm_dato_com ="remove_data_obj(i) remove data with obj.id from db";
+vcl_string pdb ="print_db";
+vcl_string pdb_com ="print_db() print the database";
+vcl_string clr ="clear";
+vcl_string clr_com ="clear() clear the database tables";
 
 PyMethodDef batch_methods[] =
-{
+  {
 #if 0
-  {"register_processes", register_processes, METH_VARARGS,
-  "register_processes() create instances of each defined process"},
-  {"register_datatypes", register_datatypes, METH_VARARGS,
-  "register_datatypes() insert tables in the database for each type"},
+    {"register_processes", register_processes, METH_VARARGS,
+     "register_processes() create instances of each defined process"},
+    {"register_datatypes", register_datatypes, METH_VARARGS,
+     "register_datatypes() insert tables in the database for each type"},
 #endif // 0
-  {"init_process", init_process, METH_VARARGS,
-  "init_process(s) create a new process instance by name"},
-  {"process_print_default_params", process_print_default_params, METH_VARARGS,
-  "process_print_default_params(s,s) print the default values of the process by name"},
-  {"set_params_process", set_params_process, METH_VARARGS,
-  "set_params_process(s) set the parameter values of the current process from the XML file"},
-  {"set_input_bool", set_input_bool, METH_VARARGS,
-  "set_input_(i,b) set input i on current process to a bool value"},
-  {"set_input_string", set_input_string, METH_VARARGS,
-  "set_input_(i,s) set input i on current process to a string value"},
-  {"set_input_int", set_input_int, METH_VARARGS,
-  "set_input_(i,i) set input i on current process to an int value"},
-  {"set_input_unsigned", set_input_unsigned, METH_VARARGS,
-  "set_input_(i,i) set input i on current process to an unsigned value"},
-  {"set_input_long", set_input_long, METH_VARARGS,
-  "set_input_(i,l) set input i on current process to a long value"},
-  {"set_input_float", set_input_float, METH_VARARGS,
-  "set_input_(i,f) set input i on current process to a float value"},
-  {"set_input_double", set_input_double, METH_VARARGS,
-  "set_input_(i,d) set input i on current process to a double value"},
-  {"get_input_float", get_input_float, METH_VARARGS,
-  "get_input_(i) return value of output i in the database"},
-  {"get_input_unsigned", get_input_unsigned, METH_VARARGS,
-  "get_input_(i) return value of output i in the database"},
-  {"process_init", process_init, METH_VARARGS,
-  "process_init() initialize the current process state before execution"},
-  {"run_process", run_process, METH_VARARGS,
-  "run_process() run the current process"},
-  {"commit_output", commit_output, METH_VARARGS,
-  "commit_output(i) put output i in the database "},
-  {"set_input_from_db", set_input_from_db, METH_VARARGS,
-  "set_input_from_db(i, i) set input i of the current process to db id value"},
-  {"remove_data", remove_data, METH_VARARGS,
-  "remove_data(i) remove data with id from db"},
-  {"remove_data_obj", remove_data_obj, METH_VARARGS,
-  "remove_data_obj(i) remove data with obj.id from db"},
-  {"print_db", print_db, METH_VARARGS, "print_db() print the database"},
-  {"clear", clear, METH_VARARGS, "clear() clear the database tables"},
-  {NULL, NULL},
-  {NULL, NULL}
-};
+    {initp.c_str(), init_process, METH_VARARGS,  initp_com.c_str()},
+    {proc_print_def.c_str(), process_print_default_params, METH_VARARGS, proc_print_def_com.c_str()},
+    {set_prm_proc.c_str(), set_params_process, METH_VARARGS, set_prm_proc_com.c_str()},
+    {set_in_bool.c_str(), set_input_bool, METH_VARARGS, set_in_bool_com.c_str()},
+    {set_in_string.c_str(), set_input_string, METH_VARARGS, set_in_string_com.c_str()},
+    {set_in_int.c_str(), set_input_int, METH_VARARGS,set_in_int_com.c_str()},
+    {set_in_unsign.c_str(), set_input_unsigned, METH_VARARGS,set_in_unsign_com.c_str()},
+    {set_in_long.c_str(), set_input_long, METH_VARARGS,set_in_long_com.c_str()},
+    {set_in_float.c_str(), set_input_float, METH_VARARGS,set_in_float_com.c_str()},
+    {set_in_double.c_str(), set_input_double, METH_VARARGS,set_in_double_com.c_str()},
+    {get_in_float.c_str(), get_input_float, METH_VARARGS,get_in_float_com.c_str()},
+    {get_in_unsigned.c_str(), get_input_unsigned, METH_VARARGS,get_in_unsigned_com.c_str()},
+    {proc_init.c_str(), process_init, METH_VARARGS,proc_init_com.c_str()},
+    {run_proc.c_str(), run_process, METH_VARARGS,run_proc_com.c_str()},
+    {comt_out.c_str(), commit_output, METH_VARARGS,comt_out_com.c_str()},
+    {set_idb.c_str(), set_input_from_db, METH_VARARGS,set_idb_com.c_str()},
+    {rm_dat.c_str(), remove_data, METH_VARARGS,rm_dat_com.c_str()},
+    {rm_dato.c_str(), remove_data_obj, METH_VARARGS, rm_dato_com.c_str()},
+    {pdb.c_str(), print_db, METH_VARARGS,pdb_com.c_str() },
+    {clr.c_str(), clear, METH_VARARGS, clr_com.c_str()},
+    {NULL, NULL},
+    {NULL, NULL}
+  };
 
 PyObject *init_process(PyObject *self, PyObject *args)
 {
@@ -204,7 +226,7 @@ PyObject *get_input_float(PyObject *self, PyObject *args)
 
   if (!brdb_value) {
     vcl_cout << "in get_input_float() - null value\n";
-      return Py_BuildValue("f",-1.0);
+    return Py_BuildValue("f",-1.0);
   }
   brdb_value_t<float>* result_out = static_cast<brdb_value_t<float>* >(brdb_value.ptr());
   value = result_out->value();
@@ -239,7 +261,7 @@ PyObject *get_input_unsigned(PyObject *self, PyObject *args)
 
   if (!brdb_value) {
     vcl_cout << "in get_input_unsigned() - null value\n";
-      return Py_BuildValue("b",1000);
+    return Py_BuildValue("b",1000);
   }
   brdb_value_t<unsigned>* result_out = static_cast<brdb_value_t<unsigned>* >(brdb_value.ptr());
   value = result_out->value();
